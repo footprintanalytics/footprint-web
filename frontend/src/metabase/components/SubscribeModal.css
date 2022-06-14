@@ -1,0 +1,16 @@
+.subscribe-model .Modal {
+  width: 500px;
+}
+
+.subscribe-model__root {
+  padding-top: 60px;
+}
+
+.subscribe-model__email {
+  height: 60px;
+}
+
+.subscribe-model__tip {
+  margin-bottom: 10px;
+  color: #888888;
+}

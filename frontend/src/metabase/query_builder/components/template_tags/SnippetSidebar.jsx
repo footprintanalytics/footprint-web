@@ -13,7 +13,7 @@ import {
   PLUGIN_SNIPPET_SIDEBAR_HEADER_BUTTONS,
 } from "metabase/plugins";
 import Icon from "metabase/components/Icon";
-import TippyPopoverWithTrigger from "metabase/components/PopoverWithTrigger/TippyPopoverWithTrigger";
+import PopoverWithTrigger from "metabase/components/PopoverWithTrigger";
 import SidebarContent from "metabase/query_builder/components/SidebarContent";
 import SidebarHeader from "metabase/query_builder/components/SidebarHeader";
 import SnippetRow from "./snippet-sidebar/SnippetRow";
@@ -21,20 +21,55 @@ import { color } from "metabase/lib/colors";
 
 import Snippets from "metabase/entities/snippets";
 import SnippetCollections from "metabase/entities/snippet-collections";
-import { canonicalCollectionId } from "metabase/collections/utils";
-
+import { canonicalCollectionId } from "metabase/entities/collections";
 import Search from "metabase/entities/search";
+
+import type { Snippet } from "metabase-types/types/Snippet";
+
+type Props = {
+  onClose: () => void,
+  setModalSnippet: () => void,
+  openSnippetModalWithSelectedText: () => void,
+  insertSnippet: () => void,
+  snippets: Snippet[],
+  snippetCollection: any,
+  snippetCollections: any[],
+  search: any[],
+  setSnippetCollectionId: () => void,
+};
+
+type State = {
+  showSearch: boolean,
+  searchString: string,
+  showArchived: boolean,
+};
 
 const ICON_SIZE = 16;
 const HEADER_ICON_SIZE = 18;
 const MIN_SNIPPETS_FOR_SEARCH = 15;
 
-class SnippetSidebar extends React.Component {
-  state = {
+@Snippets.loadList()
+@SnippetCollections.loadList()
+@SnippetCollections.load({
+  id: (state, props) =>
+    props.snippetCollectionId === null ? "root" : props.snippetCollectionId,
+  wrapped: true,
+})
+@Search.loadList({
+  query: (state, props) => ({
+    collection:
+      props.snippetCollectionId === null ? "root" : props.snippetCollectionId,
+    namespace: "snippets",
+  }),
+})
+export default class SnippetSidebar extends React.Component {
+  props: Props;
+  state: State = {
     showSearch: false,
     searchString: "",
     showArchived: false,
   };
+  searchBox: ?HTMLInputElement;
 
   static propTypes = {
     onClose: PropTypes.func.isRequired,
@@ -188,20 +223,20 @@ class SnippetSidebar extends React.Component {
                 )}
 
                 {snippetCollection.can_write && (
-                  <TippyPopoverWithTrigger
+                  <PopoverWithTrigger
                     triggerClasses="flex"
-                    triggerContent={
+                    triggerElement={
                       <Icon
                         className={cx(
                           { hide: showSearch },
                           "text-brand bg-light-hover rounded p1 cursor-pointer",
                         )}
                         name="add"
-                        size={HEADER_ICON_SIZE}
+                        size={28}
                       />
                     }
-                    placement="bottom-end"
-                    popoverContent={({ closePopover }) => (
+                  >
+                    {({ onClose }) => (
                       <div className="flex flex-column">
                         {[
                           {
@@ -215,10 +250,10 @@ class SnippetSidebar extends React.Component {
                         ].map(({ icon, name, onClick }) => (
                           <div
                             key={name}
-                            className="p2 bg-medium-hover flex cursor-pointer text-brand-hover"
+                            className="p2 bg-medium-hover flex align-center cursor-pointer text-brand-hover"
                             onClick={() => {
                               onClick();
-                              closePopover();
+                              onClose();
                             }}
                           >
                             <Icon
@@ -231,7 +266,7 @@ class SnippetSidebar extends React.Component {
                         ))}
                       </div>
                     )}
-                  />
+                  </PopoverWithTrigger>
                 )}
                 <Icon
                   className={cx(
@@ -266,24 +301,11 @@ class SnippetSidebar extends React.Component {
   }
 }
 
-export default _.compose(
-  Snippets.loadList(),
-  SnippetCollections.loadList(),
-  SnippetCollections.load({
-    id: (state, props) =>
-      props.snippetCollectionId === null ? "root" : props.snippetCollectionId,
-    wrapped: true,
-  }),
-  Search.loadList({
-    query: (state, props) => ({
-      collection:
-        props.snippetCollectionId === null ? "root" : props.snippetCollectionId,
-      namespace: "snippets",
-    }),
-  }),
-)(SnippetSidebar);
-
-class ArchivedSnippetsInner extends React.Component {
+@SnippetCollections.loadList({ query: { archived: true }, wrapped: true })
+@connect((state, { list }) => ({ archivedSnippetCollections: list }))
+@SnippetCollections.loadList()
+@Snippets.loadList({ query: { archived: true }, wrapped: true })
+class ArchivedSnippets extends React.Component {
   render() {
     const {
       onBack,
@@ -328,13 +350,6 @@ class ArchivedSnippetsInner extends React.Component {
     );
   }
 }
-
-const ArchivedSnippets = _.compose(
-  SnippetCollections.loadList({ query: { archived: true }, wrapped: true }),
-  connect((state, { list }) => ({ archivedSnippetCollections: list })),
-  SnippetCollections.loadList(),
-  Snippets.loadList({ query: { archived: true }, wrapped: true }),
-)(ArchivedSnippetsInner);
 
 function Row(props) {
   const Component = {

@@ -7,14 +7,15 @@ import MetabaseUtils from "metabase/lib/utils";
 import SettingsSetting from "./SettingsSetting";
 import { updateSlackSettings } from "../settings";
 
-import Button from "metabase/core/components/Button";
+import Button from "metabase/components/Button";
 import Icon from "metabase/components/Icon";
-import ExternalLink from "metabase/core/components/ExternalLink";
+import ExternalLink from "metabase/components/ExternalLink";
 
 import _ from "underscore";
 import { t, jt } from "ttag";
 
-class SettingsSlackForm extends Component {
+@connect(null, { updateSettings: updateSlackSettings })
+export default class SettingsSlackForm extends Component {
   constructor(props, context) {
     super(props, context);
 
@@ -32,8 +33,18 @@ class SettingsSlackForm extends Component {
     updateSettings: PropTypes.func.isRequired,
   };
 
+  UNSAFE_componentWillMount() {
+    // this gives us an opportunity to load up our formData with any existing values for elements
+    const formData = {};
+    this.props.elements.forEach(function(element) {
+      formData[element.key] =
+        element.value == null ? element.defaultValue : element.value;
+    });
+
+    this.setState({ formData });
+  }
+
   componentDidMount() {
-    this.setFormData();
     this.validateForm();
   }
 
@@ -65,17 +76,6 @@ class SettingsSlackForm extends Component {
           ? validationMessage || t`That's not a valid integer`
           : null;
     }
-  }
-
-  setFormData() {
-    // this gives us an opportunity to load up our formData with any existing values for elements
-    const formData = {};
-    this.props.elements.forEach(function(element) {
-      formData[element.key] =
-        element.value == null ? element.defaultValue : element.value;
-    });
-
-    this.setState({ formData });
   }
 
   validateForm() {
@@ -120,6 +120,14 @@ class SettingsSlackForm extends Component {
         [element.key]: MetabaseUtils.isEmpty(value) ? null : value,
       },
     });
+
+    if (element.key === "metabot-enabled") {
+      MetabaseAnalytics.trackStructEvent(
+        "Slack Settings",
+        "Toggle Metabot",
+        value,
+      );
+    }
   }
 
   handleFormErrors(error) {
@@ -201,7 +209,7 @@ class SettingsSlackForm extends Component {
           ? element.defaultValue
           : formData[element.key];
 
-      if (element.key === "slack-app-token") {
+      if (element.key === "slack-token") {
         return (
           <SettingsSetting
             key={element.key}
@@ -209,6 +217,16 @@ class SettingsSlackForm extends Component {
             onChange={value => this.handleChangeEvent(element, value)}
             errorMessage={errorMessage}
             fireOnChange
+          />
+        );
+      } else if (element.key === "metabot-enabled") {
+        return (
+          <SettingsSetting
+            key={element.key}
+            setting={{ ...element, value }}
+            onChange={value => this.handleChangeEvent(element, value)}
+            errorMessage={errorMessage}
+            disabled={!this.state.formData["slack-token"]}
           />
         );
       }
@@ -286,7 +304,3 @@ class SettingsSlackForm extends Component {
     );
   }
 }
-
-export default connect(null, { updateSettings: updateSlackSettings })(
-  SettingsSlackForm,
-);

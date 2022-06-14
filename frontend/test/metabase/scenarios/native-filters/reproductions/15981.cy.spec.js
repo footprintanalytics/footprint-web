@@ -1,45 +1,58 @@
-import { restore, openNativeEditor } from "__support__/e2e/cypress";
+import {
+  restore,
+  mockSessionProperty,
+  openNativeEditor,
+} from "__support__/e2e/cypress";
 
 import * as SQLFilter from "../helpers/e2e-sql-filter-helpers";
 
-describe("issue 15981", () => {
-  beforeEach(() => {
-    restore();
-    cy.signInAsAdmin();
+["off", "on"].forEach(testCase => {
+  const isFeatureFlagTurnedOn = testCase === "off" ? false : true;
 
-    openNativeEditor();
+  describe("issue 15981", () => {
+    beforeEach(() => {
+      restore();
+      cy.signInAsAdmin();
 
-    cy.intercept("POST", "/api/dataset").as("dataset");
-  });
+      mockSessionProperty(
+        "field-filter-operators-enabled?",
+        isFeatureFlagTurnedOn,
+      );
 
-  it(`"Text" filter should work (metabase#15981-1)`, () => {
-    SQLFilter.enterParameterizedQuery(
-      "select * from PRODUCTS where CATEGORY = {{text_filter}}",
-    );
+      openNativeEditor();
 
-    SQLFilter.setWidgetValue("Gizmo");
+      cy.intercept("POST", "/api/dataset").as("dataset");
+    });
 
-    SQLFilter.runQuery();
+    it(`"Text" filter should work with the feature flag turned ${testCase} (metabase#15981-1)`, () => {
+      SQLFilter.enterParameterizedQuery(
+        "select * from PRODUCTS where CATEGORY = {{text_filter}}",
+      );
 
-    cy.get(".Visualization").contains("Rustic Paper Wallet");
+      SQLFilter.setWidgetValue("Gizmo");
 
-    cy.icon("contract").click();
-    cy.findByText("Showing 51 rows");
-    cy.icon("play").should("not.exist");
-  });
+      SQLFilter.runQuery();
 
-  it(`"Number" filter should work (metabase#15981-2)`, () => {
-    SQLFilter.enterParameterizedQuery(
-      "select * from ORDERS where QUANTITY = {{number_filter}}",
-    );
+      cy.get(".Visualization").contains("Rustic Paper Wallet");
 
-    SQLFilter.openTypePickerFromDefaultFilterType();
-    SQLFilter.chooseType("Number");
+      cy.icon("contract").click();
+      cy.findByText("Showing 51 rows");
+      cy.icon("play").should("not.exist");
+    });
 
-    SQLFilter.setWidgetValue("20");
+    it(`"Number" filter should work with the feature flag turned ${testCase} (metabase#15981-2)`, () => {
+      SQLFilter.enterParameterizedQuery(
+        "select * from ORDERS where QUANTITY = {{number_filter}}",
+      );
 
-    SQLFilter.runQuery();
+      SQLFilter.openTypePickerFromDefaultFilterType();
+      SQLFilter.chooseType("Number");
 
-    cy.get(".Visualization").contains("23.54");
+      SQLFilter.setWidgetValue("20");
+
+      SQLFilter.runQuery();
+
+      cy.get(".Visualization").contains("23.54");
+    });
   });
 });

@@ -1,6 +1,4 @@
-/* eslint-disable react/prop-types */
 import React from "react";
-import { t } from "ttag";
 
 import AuditContent from "../components/AuditContent";
 import AuditDashboard from "../containers/AuditDashboard";
@@ -8,7 +6,11 @@ import AuditTableWithSearch from "../containers/AuditTableWithSearch";
 
 import * as DatabasesCards from "../lib/cards/databases";
 
-const AuditDatabases = props => (
+type Props = {
+  params: { [key: string]: string },
+};
+
+const AuditDatabases = (props: Props) => (
   <AuditContent {...props} title="Databases" tabs={AuditDatabases.tabs} />
 );
 
@@ -26,18 +28,14 @@ const AuditDatabasesOverviewTab = () => (
 
 const AuditDatabasesAllTab = () => (
   <AuditTableWithSearch
-    placeholder={t`Database name`}
+    placeholder={`Database name`}
     table={DatabasesCards.table()}
   />
 );
 
 AuditDatabases.tabs = [
-  {
-    path: "overview",
-    title: t`Overview`,
-    component: AuditDatabasesOverviewTab,
-  },
-  { path: "all", title: t`All databases`, component: AuditDatabasesAllTab },
+  { path: "overview", title: "Overview", component: AuditDatabasesOverviewTab },
+  { path: "all", title: "All databases", component: AuditDatabasesAllTab },
 ];
 
 export default AuditDatabases;

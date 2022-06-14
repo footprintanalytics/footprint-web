@@ -1,4 +1,4 @@
-/* eslint-disable react/prop-types */
+/* eslint "react/prop-types": "warn" */
 import React from "react";
 import PropTypes from "prop-types";
 import DatabaseSchemasPane from "./DatabaseSchemasPane";
@@ -6,7 +6,11 @@ import DatabaseTablesPane from "./DatabaseTablesPane";
 import LoadingSpinner from "metabase/components/LoadingSpinner";
 import Databases from "metabase/entities/databases";
 
-class DatabasePaneInner extends React.Component {
+@Databases.load({
+  id: (state, { database }) => database && database.id,
+  wrapped: true,
+})
+class DatabasePane extends React.Component {
   componentDidMount() {
     const { database } = this.props;
     if (database.schemas.length === 0) {
@@ -31,11 +35,6 @@ class DatabasePaneInner extends React.Component {
     return <Component {...this.props} />;
   }
 }
-
-const DatabasePane = Databases.load({
-  id: (state, { database }) => database && database.id,
-  wrapped: true,
-})(DatabasePaneInner);
 
 DatabasePane.propTypes = {
   show: PropTypes.func.isRequired,

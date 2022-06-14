@@ -4,7 +4,9 @@ import {
   handleActions,
   combineReducers,
 } from "metabase/lib/redux";
+
 import { SettingsApi, EmailApi, SlackApi, LdapApi } from "metabase/services";
+
 import { refreshSiteSettings } from "metabase/redux/settings";
 
 // ACITON TYPES AND ACTION CREATORS

@@ -36,7 +36,7 @@
 }
 
 :local(.tableActualName) {
-  font-family: "Lucida Console", Monaco, monospace;
+  font-family: Arial, "Lucida Console", Monaco, monospace;
   font-size: 13px;
   line-height: 1.4em;
   letter-spacing: 1px;

@@ -1,11 +1,11 @@
 import {
   restore,
   popover,
+  mockSessionProperty,
   filterWidget,
   editDashboard,
   saveDashboard,
   setFilter,
-  visitDashboard,
 } from "__support__/e2e/cypress";
 
 import { DASHBOARD_LOCATION_FILTERS } from "./helpers/e2e-dashboard-filter-data-objects";
@@ -18,12 +18,17 @@ Object.entries(DASHBOARD_LOCATION_FILTERS).forEach(
         restore();
         cy.signInAsAdmin();
 
-        visitDashboard(1);
+        mockSessionProperty("field-filter-operators-enabled?", true);
+
+        cy.visit("/dashboard/1");
 
         editDashboard();
         setFilter("Location", filter);
 
-        cy.findByText("Select…").click();
+        cy.findByText("Column to filter on")
+          .next("a")
+          .click();
+
         popover()
           .contains("City")
           .click();

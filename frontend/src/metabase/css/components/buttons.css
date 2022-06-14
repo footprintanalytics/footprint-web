@@ -8,29 +8,20 @@
   text-decoration: none;
   padding: 0.5rem 0.75rem;
   background: transparent;
-  border: 1px solid color-mod(var(--color-border) blackness(5%));
+  border: 1px solid color(var(--color-border) blackness(+ 5%));
   color: var(--color-text-dark);
   cursor: pointer;
   text-decoration: none;
-  font-weight: bold;
-  font-family: var(--default-font-family), sans-serif;
+  font-weight: normal;
+  font-family: Arial, "Lato", sans-serif;
   border-radius: var(--default-button-border-radius);
 }
 
 .Button:hover {
-  color: var(--color-brand);
-  border-color: color-mod(var(--color-border) blackness(12%));
+  /* color: var(--color-brand);
+  border-color: color(var(--color-border) blackness(+ 12%));
   background: var(--color-bg-light);
-  transition: all 200ms linear;
-  transition-property: color, border-color, background-color;
-}
-
-.Button:focus {
-  outline: 2px solid var(--color-focus);
-}
-
-.Button:focus:not(:focus-visible) {
-  outline: none;
+  transition: all 200ms linear; */
 }
 
 @media screen and (--breakpoint-min-lg) {
@@ -61,6 +52,21 @@
   border-radius: 99px;
 }
 
+.Button--edit-cancel {
+  color: var(--footprint-color-secondary-text1) !important;
+  border: 1px solid var(--footprint-color-secondary-text1);
+}
+
+/* .Button--edit-save {
+  color: var(--color-brand) !important;
+  border: 1px solid var(--color-brand);
+} */
+
+/* .Button--edit-cancel:hover,
+.Button--edit-save:hover {
+  color: white !important;
+} */
+
 .Button--primary {
   color: var(--color-text-white);
   background: var(--color-brand);
@@ -70,7 +76,7 @@
 .Button--primary:hover {
   color: var(--color-text-white);
   border-color: var(--color-brand);
-  background-color: color-mod(var(--color-brand) alpha(-12%));
+  background-color: color(var(--color-brand) alpha(-12%));
 }
 
 .Button--warning {
@@ -103,8 +109,8 @@
 
 .Button--purple:hover {
   color: white;
-  background-color: color-mod(var(--color-accent7) alpha(-12%));
-  border-color: color-mod(var(--color-accent7) alpha(-12%));
+  background-color: color(var(--color-accent7) alpha(-12%));
+  border-color: color(var(--color-accent7) alpha(-12%));
 }
 
 .Button--borderless {
@@ -118,10 +124,21 @@
 }
 
 .Button--onlyIcon {
-  border: none;
+  border: 1px solid #dcdde5;
   background: transparent;
   color: var(--color-text-dark);
   padding: 0;
+}
+
+.Button--disabled {
+  opacity: 0.3;
+  cursor: not-allowed;
+}
+
+.Button--disabled:hover {
+  background: #f5f5f5;
+  border-color: #d9d9d9;
+  color: rgba(0, 0, 0, 0.4);
 }
 
 .Button-group {
@@ -215,8 +232,4 @@
 
 .Button--withIcon {
   line-height: 1;
-}
-
-.Button--fullWidth {
-  width: 100%;
 }

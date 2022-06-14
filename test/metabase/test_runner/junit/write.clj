@@ -2,7 +2,7 @@
   "Logic related to writing test results for a namespace to a JUnit XML file. See
   https://stackoverflow.com/a/9410271/1198455 for the JUnit output spec."
   (:require [clojure.java.io :as io]
-            [clojure.pprint :as pprint]
+            [clojure.pprint :as pp]
             [clojure.string :as str]
             [pjstadig.print :as p])
   (:import [java.util.concurrent Executors ThreadFactory ThreadPoolExecutor TimeUnit]
@@ -42,15 +42,15 @@
 (defn- print-result-description [{:keys [file line message testing-contexts], :as result}]
   (println (format "%s:%d" file line))
   (doseq [s (reverse testing-contexts)]
-    (println (str/trim (decolorize-and-escape (str s)))))
+    (println (str/trim (decolorize-and-escape s))))
   (when message
     (println (decolorize-and-escape message))))
 
 (defn- print-expected [expected actual]
   (p/rprint "expected: ")
-  (pprint/pprint expected)
+  (pp/pprint expected)
   (p/rprint "  actual: ")
-  (pprint/pprint actual)
+  (pp/pprint actual)
   (p/clear))
 
 (defn- write-result-output!
@@ -68,11 +68,11 @@
                     (p/rprint "    diff:")
                     (if a
                       (do (p/rprint " - ")
-                          (pprint/pprint a)
+                          (pp/pprint a)
                           (p/rprint "          + "))
                       (p/rprint " + "))
                     (when b
-                      (pprint/pprint b))
+                      (pp/pprint b))
                     (p/clear))
                   (print-expected expected actual)))))]
     (.writeCData w (decolorize-and-escape s))))

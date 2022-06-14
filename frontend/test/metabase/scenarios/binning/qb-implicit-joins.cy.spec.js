@@ -1,16 +1,4 @@
-import {
-  restore,
-  changeBinningForDimension,
-  visualize,
-  summarize,
-  visitQuestion,
-} from "__support__/e2e/cypress";
-
-/**
- * The list of issues this spec covers:
- *  - metabase#15648
- *  -
- */
+import { restore, popover, visualize } from "__support__/e2e/cypress";
 
 describe("scenarios > binning > from a saved QB question using implicit joins", () => {
   beforeEach(() => {
@@ -22,24 +10,23 @@ describe("scenarios > binning > from a saved QB question using implicit joins", 
 
   context("via simple question", () => {
     beforeEach(() => {
-      visitQuestion(1);
-      summarize();
+      cy.visit("/question/1");
+      cy.findByText("Summarize").click();
     });
 
     it("should work for time series", () => {
-      changeBinningForDimension({
-        name: "Birth Date",
-        fromBinning: "by month",
-        toBinning: "Year",
+      cy.findByTestId("sidebar-right").within(() => {
+        openPopoverFromDefaultBucketSize("Birth Date", "by month");
       });
 
-      assertQueryBuilderState({
+      chooseBucketAndAssert({
+        bucketSize: "Year",
         title: "Count by User → Birth Date: Year",
         values: ["1958", "313"],
       });
 
-      // Make sure time series assertQueryBuilderState works as well
-      cy.findAllByTestId("select-button-content")
+      // Make sure time series chooseBucketAndAssertter works as well
+      cy.get(".AdminSelect-content")
         .contains("Year")
         .click();
       cy.findByText("Month").click();
@@ -50,28 +37,26 @@ describe("scenarios > binning > from a saved QB question using implicit joins", 
     });
 
     it("should work for number", () => {
-      changeBinningForDimension({
-        name: "Price",
-        fromBinning: "Auto binned",
-        toBinning: "50 bins",
+      cy.findByTestId("sidebar-right").within(() => {
+        openPopoverFromDefaultBucketSize("Price", "Auto bin");
       });
 
-      assertQueryBuilderState({
+      chooseBucketAndAssert({
+        bucketSize: "50 bins",
         title: "Count by Product → Price: 50 bins",
         values: ["14  –  16", "96"],
       });
     });
 
     it("should work for longitude", () => {
-      changeBinningForDimension({
-        name: "Longitude",
-        fromBinning: "Auto binned",
-        // Test is currently incorrect in that it displays wrong binning options (please see: https://github.com/metabase/metabase/issues/16674)
-        // Once #16674 gets fixed, update the following line to say: `bucketSize: "Bin every 20 degrees"`
-        toBinning: "20°",
+      cy.findByTestId("sidebar-right").within(() => {
+        openPopoverFromDefaultBucketSize("Longitude", "Auto bin");
       });
 
-      assertQueryBuilderState({
+      chooseBucketAndAssert({
+        // Test is currently incorrect in that it displays wrong binning options (please see: https://github.com/metabase/metabase/issues/16674)
+        // Once #16674 gets fixed, update the following line to say: `bucketSize: "Bin every 20 degrees"`
+        bucketSize: "20°",
         title: "Count by User → Longitude: 20°",
         values: ["180° W  –  160° W", "75"],
       });
@@ -81,7 +66,7 @@ describe("scenarios > binning > from a saved QB question using implicit joins", 
   context("via custom question", () => {
     beforeEach(() => {
       cy.visit("/question/1/notebook");
-      summarize({ mode: "notebook" });
+      cy.findByText("Summarize").click();
       cy.findByText("Count of rows").click();
       cy.findByText("Pick a column to group by").click();
       // Click "Order" accordion to collapse it and expose the other tables
@@ -91,21 +76,17 @@ describe("scenarios > binning > from a saved QB question using implicit joins", 
     it("should work for time series", () => {
       cy.findByText("User").click();
       cy.findByPlaceholderText("Find...").type("birth");
+      openPopoverFromDefaultBucketSize("Birth Date", "by month");
 
-      changeBinningForDimension({
-        name: "Birth Date",
-        fromBinning: "by month",
-        toBinning: "Year",
-      });
-
-      assertQueryBuilderState({
+      chooseBucketAndAssert({
+        bucketSize: "Year",
         title: "Count by User → Birth Date: Year",
         mode: "notebook",
         values: ["1958", "313"],
       });
 
-      // Make sure time series assertQueryBuilderStateter works as well
-      cy.findAllByTestId("select-button-content")
+      // Make sure time series chooseBucketAndAssertter works as well
+      cy.get(".AdminSelect-content")
         .contains("Year")
         .click();
       cy.findByText("Month").click();
@@ -118,13 +99,10 @@ describe("scenarios > binning > from a saved QB question using implicit joins", 
     it("should work for number", () => {
       cy.findByText("Product").click();
 
-      changeBinningForDimension({
-        name: "Price",
-        fromBinning: "Auto binned",
-        toBinning: "50 bins",
-      });
+      openPopoverFromDefaultBucketSize("Price", "Auto bin");
 
-      assertQueryBuilderState({
+      chooseBucketAndAssert({
+        bucketSize: "50 bins",
         title: "Count by Product → Price: 50 bins",
         mode: "notebook",
         values: ["14  –  16", "96"],
@@ -135,15 +113,12 @@ describe("scenarios > binning > from a saved QB question using implicit joins", 
       cy.findByText("User").click();
       cy.findByPlaceholderText("Find...").type("longitude");
 
-      changeBinningForDimension({
-        name: "Longitude",
-        fromBinning: "Auto binned",
+      openPopoverFromDefaultBucketSize("Longitude", "Auto bin");
+
+      chooseBucketAndAssert({
         // Test is currently incorrect in that it displays wrong binning options (please see: https://github.com/metabase/metabase/issues/16674)
         // Once #16674 gets fixed, update the following line to say: `bucketSize: "Bin every 20 degrees"`
-        toBinning: "20°",
-      });
-
-      assertQueryBuilderState({
+        bucketSize: "20°",
         title: "Count by User → Longitude: 20°",
         mode: "notebook",
         values: ["180° W  –  160° W", "75"],
@@ -152,14 +127,37 @@ describe("scenarios > binning > from a saved QB question using implicit joins", 
   });
 });
 
+function openPopoverFromDefaultBucketSize(column, bucket) {
+  cy.findByText(column)
+    .closest(".List-item")
+    .as("targetListItem");
+
+  cy.get("@targetListItem")
+    .find(".Field-extra")
+    .as("listItemSelectedBinning")
+    .should("contain", bucket)
+    .click();
+}
+
 function waitAndAssertOnRequest(requestAlias) {
   cy.wait(requestAlias).then(xhr => {
     expect(xhr.response.body.error).to.not.exist;
   });
 }
 
-function assertQueryBuilderState({ title, mode = null, values } = {}) {
+function chooseBucketAndAssert({
+  bucketSize,
+  title,
+  mode = null,
+  values,
+} = {}) {
   const [firstValue, lastValue] = values;
+
+  popover()
+    .last()
+    .within(() => {
+      cy.findByText(bucketSize).click();
+    });
 
   mode === "notebook" ? visualize() : waitAndAssertOnRequest("@dataset");
 

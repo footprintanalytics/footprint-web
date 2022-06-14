@@ -1,3 +1,5 @@
+import type { DatasetData, Column } from "metabase-types/types/Dataset";
+import type { ClickObject } from "metabase-types/types/Visualization";
 import { isNumber, isCoordinate } from "metabase/lib/schema_metadata";
 
 export function getTableClickedObjectRowData(
@@ -74,7 +76,11 @@ export function getTableCellClickedObject(
   }
 }
 
-export function getTableHeaderClickedObject(data, columnIndex, isPivoted) {
+export function getTableHeaderClickedObject(
+  data: DatasetData,
+  columnIndex: number,
+  isPivoted: boolean,
+): ?ClickObject {
   const column = data.cols[columnIndex];
   if (isPivoted) {
     // if it's a pivot table, the first column is
@@ -92,7 +98,7 @@ export function getTableHeaderClickedObject(data, columnIndex, isPivoted) {
  * Returns whether the column should be right-aligned in a table.
  * Includes numbers and lat/lon coordinates, but not zip codes, IDs, etc.
  */
-export function isColumnRightAligned(column) {
+export function isColumnRightAligned(column: Column) {
   // handle remapped columns
   if (column && column.remapped_to_column) {
     column = column.remapped_to_column;

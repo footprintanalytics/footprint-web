@@ -1,13 +1,26 @@
 /* eslint-disable react/prop-types */
 import React from "react";
 
-import Subhead from "metabase/components/type/Subhead";
-import { ViewSectionRoot } from "metabase/query_builder/components/view/ViewSection.styled";
+import { Flex } from "grid-styled";
 
-const ViewSection = ({ className, style, children, ...rest }) => (
-  <ViewSectionRoot className={className} style={style} {...rest}>
-    {children}
-  </ViewSectionRoot>
+import Subhead from "metabase/components/type/Subhead";
+
+const ViewSection = ({
+  align = "center",
+  bottom,
+  trim,
+  style,
+  className,
+  ...props
+}) => (
+  <Flex
+    align={align}
+    pl={[1, 3]}
+    pr={[1, 2]}
+    style={style}
+    {...props}
+    className={className}
+  />
 );
 
 export const ViewHeading = ({ ...props }) => <Subhead {...props} />;

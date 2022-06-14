@@ -2,6 +2,10 @@
   background-color: white;
 }
 
+.chart-buttons {
+  margin-top: 0;
+}
+
 .EmbedFrame-header,
 .EmbedFrame-footer {
   color: var(--color-text-dark);
@@ -15,18 +19,18 @@
 
 .Theme--night .EmbedFrame-header,
 .Theme--night .EmbedFrame-footer {
-  color: color-mod(var(--color-text-white) alpha(-14%));
+  color: color(var(--color-text-white) alpha(-14%));
   background-color: var(--color-bg-black);
   border-color: var(--color-bg-dark);
 }
 
 .Theme--night.EmbedFrame .fullscreen-night-text {
-  color: color-mod(var(--color-text-white) alpha(-14%));
+  color: color(var(--color-text-white) alpha(-14%));
   transition: color 1s linear;
 }
 
 .Theme--night.EmbedFrame svg text {
-  fill: color-mod(var(--color-text-white) alpha(-14%)) !important;
+  fill: color(var(--color-text-white) alpha(-14%)) !important;
 }
 
 .Theme--night.EmbedFrame .DashCard .Card {
@@ -37,4 +41,53 @@
 .Theme--night.EmbedFrame .enable-dots-onhover .dc-tooltip circle.dot:hover,
 .Theme--night.EmbedFrame .enable-dots .dc-tooltip circle.dot {
   fill: currentColor;
+}
+
+.Theme--coin360.EmbedFrame {
+  background-color: var(--coin360-black);
+  border: 1px solid var(--coin360-border);
+}
+
+.Theme--coin360 .EmbedFrame-header,
+.Theme--coin360 .footprint-title1,
+.Theme--coin360 .EmbedFrame-footer {
+  color: color(var(--color-text-white) alpha(-14%));
+  background-color: var(--coin360-black);
+  border-color: var(--coin360-border);
+}
+
+.Theme--coin360.EmbedFrame .fullscreen-night-text {
+  color: color(var(--color-text-white) alpha(-14%));
+  transition: color 1s linear;
+}
+
+.Theme--coin360.EmbedFrame svg text {
+  fill: color(var(--color-text-white) alpha(-14%)) !important;
+}
+
+.Theme--coin360.EmbedFrame .DashCard .Card {
+  background-color: var(--coin360-black);
+  border: 1px solid var(--coin360-border);
+}
+
+.Theme--coin360.EmbedFrame .enable-dots-onhover .dc-tooltip circle.dot:hover,
+.Theme--coin360.EmbedFrame .enable-dots .dc-tooltip circle.dot {
+  fill: currentColor;
+}
+
+.DashboardHeader {
+  padding: 18px;
+}
+
+@media screen and (--footprint-breakpoint-max-mobile) {
+  .EmbedFrame-header {
+    flex-direction: column;
+  }
+  .chart-buttons {
+    margin-top: 10px;
+    margin-left: -8px;
+  }
+  .DashboardHeader {
+    padding: 6px 12px;
+  }
 }

@@ -17,10 +17,3 @@ Cypress.Commands.add(
     });
   },
 );
-
-Cypress.Commands.add("archiveCollection", id => {
-  cy.log(`Archiving a collection with id: ${id}`);
-  return cy.request("PUT", `/api/collection/${id}`, {
-    archived: true,
-  });
-});

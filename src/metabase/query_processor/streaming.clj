@@ -2,23 +2,22 @@
   (:require [clojure.core.async :as a]
             [metabase.async.streaming-response :as streaming-response]
             [metabase.mbql.util :as mbql.u]
-            [metabase.query-processor.context :as qp.context]
-            [metabase.query-processor.context.default :as context.default]
-            [metabase.query-processor.streaming.csv :as qp.csv]
-            [metabase.query-processor.streaming.interface :as qp.si]
-            [metabase.query-processor.streaming.json :as qp.json]
-            [metabase.query-processor.streaming.xlsx :as qp.xlsx]
+            [metabase.query-processor.context :as context]
+            [metabase.query-processor.streaming.csv :as streaming.csv]
+            [metabase.query-processor.streaming.interface :as i]
+            [metabase.query-processor.streaming.json :as streaming.json]
+            [metabase.query-processor.streaming.xlsx :as streaming.xlsx]
             [metabase.shared.models.visualization-settings :as mb.viz]
             [metabase.util :as u])
   (:import clojure.core.async.impl.channels.ManyToManyChannel
            java.io.OutputStream
            metabase.async.streaming_response.StreamingResponse))
 
-;; these are loaded for side-effects so their impls of `qp.si/results-writer` will be available
+;; these are loaded for side-effects so their impls of `i/results-writer` will be available
 ;; TODO - consider whether we should lazy-load these!
-(comment qp.csv/keep-me
-         qp.json/keep-me
-         qp.xlsx/keep-me)
+(comment streaming.csv/keep-me
+         streaming.json/keep-me
+         streaming.xlsx/keep-me)
 
 (defn- deduplicate-col-names
   "Deduplicate column names that would otherwise conflict.
@@ -34,25 +33,13 @@
        cols
        (mbql.u/uniquify-names (map :name cols))))
 
-(defn- validate-table-columms
-  "Validate that all of the columns in `table-columns` correspond to actual columns in `cols`, correlating them by
-  field ref or name. Returns `nil` if any do not, so that we fall back to using `cols` directly for the export (#19465).
-  Otherwise returns `table-columns`."
-  [table-columns cols]
-  (let [col-field-refs (set (remove nil? (map :field_ref cols)))
-        col-names      (set (remove nil? (map :name cols)))]
-    (when (every? (fn [table-col] (or (col-field-refs (::mb.viz/table-column-field-ref table-col))
-                                      (col-names (::mb.viz/table-column-name table-col))))
-                  table-columns)
-      table-columns)))
-
 (defn- export-column-order
   "For each entry in `table-columns` that is enabled, finds the index of the corresponding
   entry in `cols` by name or id. If a col has been remapped, uses the index of the new column.
 
   The resulting list of indices determines the order of column names and data in exports."
   [cols table-columns]
-  (let [table-columns'     (or (validate-table-columms table-columns cols)
+  (let [table-columns'     (or table-columns
                                ;; If table-columns is not provided (e.g. for saved cards), we can construct a fake one
                                ;; that retains the original column ordering in `cols`
                                (for [col cols]
@@ -109,9 +96,9 @@
           row-count                   (volatile! 0)]
       (fn
         ([]
-         (qp.si/begin! results-writer
-                       {:data (assoc initial-metadata :ordered-cols ordered-cols)}
-                       viz-settings')
+         (i/begin! results-writer
+                   {:data (assoc initial-metadata :ordered-cols ordered-cols)}
+                   viz-settings')
          {:data initial-metadata})
 
         ([metadata]
@@ -120,16 +107,16 @@
                 :status :completed))
 
         ([metadata row]
-         (qp.si/write-row! results-writer row (dec (vswap! row-count inc)) ordered-cols viz-settings')
+         (i/write-row! results-writer row (dec (vswap! row-count inc)) ordered-cols viz-settings')
          metadata)))))
 
 (defn- streaming-reducedf [results-writer ^OutputStream os]
-  (fn [final-metadata context]
-    (qp.si/finish! results-writer final-metadata)
+  (fn [_ final-metadata context]
+    (i/finish! results-writer final-metadata)
     (u/ignore-exceptions
       (.flush os)
       (.close os))
-    (qp.context/resultf final-metadata context)))
+    (context/resultf final-metadata context)))
 
 (defn streaming-context
   "Context to pass to the QP to streaming results as `export-format` to an output stream. Can be used independently of
@@ -138,10 +125,9 @@
     (with-open [os ...]
       (qp/process-query query (qp.streaming/streaming-context :csv os canceled-chan)))"
   ([export-format os]
-   (let [results-writer (qp.si/streaming-results-writer export-format os)]
-     (merge (context.default/default-context)
-            {:rff      (streaming-rff results-writer)
-             :reducedf (streaming-reducedf results-writer os)})))
+   (let [results-writer (i/streaming-results-writer export-format os)]
+     {:rff      (streaming-rff results-writer)
+      :reducedf (streaming-reducedf results-writer os)}))
 
   ([export-format os canceled-chan]
    (assoc (streaming-context export-format os) :canceled-chan canceled-chan)))
@@ -157,7 +143,7 @@
 (defn streaming-response*
   "Impl for `streaming-response`."
   ^StreamingResponse [export-format filename-prefix f]
-  (streaming-response/streaming-response (qp.si/stream-options export-format filename-prefix) [os canceled-chan]
+  (streaming-response/streaming-response (i/stream-options export-format filename-prefix) [os canceled-chan]
     (let [result (try
                    (f (streaming-context export-format os canceled-chan))
                    (catch Throwable e
@@ -184,10 +170,10 @@
   cancelations properly."
   {:style/indent 1}
   [[context-binding export-format filename-prefix] & body]
-  `(streaming-response* ~export-format ~filename-prefix (bound-fn [~context-binding] ~@body)))
+  `(streaming-response* ~export-format ~filename-prefix (fn [~context-binding] ~@body)))
 
 (defn export-formats
   "Set of valid streaming response formats. Currently, `:json`, `:csv`, `:xlsx`, and `:api` (normal JSON API results
   with extra metadata), but other types may be available if plugins are installed. (The interface is extensible.)"
   []
-  (set (keys (methods qp.si/stream-options))))
+  (set (keys (methods i/stream-options))))

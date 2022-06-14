@@ -1,7 +1,6 @@
 import _ from "underscore";
 import { assoc } from "icepick";
-import { restore, visitDashboard } from "__support__/e2e/cypress";
-import { SAMPLE_DB_ID } from "__support__/e2e/cypress_data";
+import { restore } from "__support__/e2e/cypress";
 
 describe("scenarios > dashboard > permissions", () => {
   let dashboardId;
@@ -17,7 +16,7 @@ describe("scenarios > dashboard > permissions", () => {
 
     cy.request("POST", "/api/collection", {
       name: "locked down collection",
-      color: "#509EE3",
+      color: "#7355FA",
       parent_id: null,
     }).then(({ body: { id: collection_id } }) => {
       cy.request("GET", "/api/collection/graph").then(
@@ -39,7 +38,7 @@ describe("scenarios > dashboard > permissions", () => {
 
       cy.request("POST", "/api/card", {
         dataset_query: {
-          database: SAMPLE_DB_ID,
+          database: 1,
           type: "native",
           native: { query: "select 'foo'" },
         },
@@ -51,7 +50,7 @@ describe("scenarios > dashboard > permissions", () => {
 
       cy.request("POST", "/api/card", {
         dataset_query: {
-          database: SAMPLE_DB_ID,
+          database: 1,
           type: "native",
           native: { query: "select 'bar'" },
         },
@@ -63,8 +62,6 @@ describe("scenarios > dashboard > permissions", () => {
     });
 
     cy.createDashboard().then(({ body: { id: dashId } }) => {
-      dashboardId = dashId;
-
       cy.request("POST", `/api/dashboard/${dashId}/cards`, {
         cardId: firstQuestionId,
       }).then(({ body: { id: dashCardIdA } }) => {
@@ -93,11 +90,12 @@ describe("scenarios > dashboard > permissions", () => {
           });
         });
       });
+      dashboardId = dashId;
+      cy.visit(`/dashboard/${dashId}`);
     });
   });
 
   it("should let admins view all cards in a dashboard", () => {
-    visitDashboard(dashboardId);
     // Admin can see both questions
     cy.findByText("First Question");
     cy.findByText("foo");
@@ -107,7 +105,7 @@ describe("scenarios > dashboard > permissions", () => {
 
   it("should display dashboards with some cards locked down", () => {
     cy.signIn("nodata");
-    visitDashboard(dashboardId);
+    cy.visit(`/dashboard/${dashboardId}`);
     cy.findByText("Sorry, you don't have permission to see this card.");
     cy.findByText("Second Question");
     cy.findByText("bar");
@@ -115,7 +113,7 @@ describe("scenarios > dashboard > permissions", () => {
 
   it("should display an error if they don't have perms for the dashboard", () => {
     cy.signIn("nocollection");
-    visitDashboard(dashboardId);
+    cy.visit(`/dashboard/${dashboardId}`);
     cy.findByText("Sorry, you don’t have permission to see that.");
   });
 });

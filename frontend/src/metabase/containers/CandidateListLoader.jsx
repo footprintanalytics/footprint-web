@@ -1,8 +1,27 @@
-/* eslint-disable react/prop-types */
 import React from "react";
 import _ from "underscore";
 
 import { MetabaseApi, AutoApi } from "metabase/services";
+
+import type { DatabaseCandidates } from "metabase-types/types/Auto";
+
+type Props = {
+  databaseId: number,
+  children: (props: RenderProps) => ?React.Element,
+};
+
+type RenderProps = {
+  candidates: ?DatabaseCandidates,
+  sampleCandidates: ?DatabaseCandidates,
+  isSample: ?boolean,
+};
+
+type State = {
+  databaseId: ?number,
+  isSample: ?boolean,
+  candidates: ?DatabaseCandidates,
+  sampleCandidates: ?DatabaseCandidates,
+};
 
 const CANDIDATES_POLL_INTERVAL = 2000;
 // ensure this is 1 second offset from CANDIDATES_POLL_INTERVAL due to
@@ -10,16 +29,20 @@ const CANDIDATES_POLL_INTERVAL = 2000;
 const CANDIDATES_TIMEOUT = 11000;
 
 class CandidateListLoader extends React.Component {
-  state = {
+  props: Props;
+  state: State = {
     databaseId: null,
     isSample: null,
     candidates: null,
     sampleCandidates: null,
   };
 
+  _sampleTimeout: ?number;
+  _pollTimer: ?number;
+
   async UNSAFE_componentWillMount() {
     // If we get passed in a database id, just use that.
-    // Don't fall back to the sample database
+    // Don't fall back to the sample dataset
     if (this.props.databaseId) {
       this.setState({ databaseId: this.props.databaseId }, () => {
         this._loadCandidates();
@@ -35,7 +58,7 @@ class CandidateListLoader extends React.Component {
           this._loadCandidates();
         });
         // If things are super slow for whatever reason,
-        // just load candidates for sample database
+        // just load candidates for sample dataset
         this._sampleTimeout = setTimeout(async () => {
           this._sampleTimeout = null;
           this.setState({
@@ -72,15 +95,12 @@ class CandidateListLoader extends React.Component {
     try {
       const { databaseId } = this.state;
       if (databaseId != null) {
-        const database = await MetabaseApi.db_get({
-          dbId: databaseId,
-        });
         const candidates = await AutoApi.db_candidates({
           id: databaseId,
         });
         if (candidates && candidates.length > 0) {
           this._clearTimers();
-          this.setState({ candidates, isSample: database.is_sample });
+          this.setState({ candidates });
         }
       }
     } catch (e) {

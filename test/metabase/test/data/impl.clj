@@ -5,17 +5,15 @@
             [clojure.tools.reader.edn :as edn]
             [metabase.api.common :as api]
             [metabase.config :as config]
-            [metabase.db.connection :as mdb.conn]
             [metabase.driver :as driver]
             [metabase.models :refer [Database Field FieldValues Table]]
             [metabase.plugins.classloader :as classloader]
             [metabase.sync :as sync]
-            [metabase.sync.util :as sync-util]
             [metabase.test.data.dataset-definitions :as defs]
             [metabase.test.data.impl.verify :as verify]
             [metabase.test.data.interface :as tx]
             [metabase.test.initialize :as initialize]
-            [metabase.test.util.timezone :as test.tz]
+            [metabase.test.util.timezone :as tu.tz]
             [metabase.util :as u]
             [potemkin :as p]
             [toucan.db :as db]))
@@ -94,13 +92,13 @@
     ;; Create the database and load its data
     ;; ALWAYS CREATE DATABASE AND LOAD DATA AS UTC! Unless you like broken tests
     (u/with-timeout create-database-timeout-ms
-      (test.tz/with-system-timezone-id "UTC"
+      (tu.tz/with-system-timezone-id "UTC"
         (tx/create-db! driver database-definition)))
     ;; Add DB object to Metabase DB
     (let [connection-details (tx/dbdef->connection-details driver :db database-definition)
           db                 (db/insert! Database
                                :name    database-name
-                               :engine  (u/qualified-name driver)
+                               :engine  (name driver)
                                :details connection-details)]
       (try
         ;; sync newly added DB
@@ -111,13 +109,13 @@
             (u/profile (format "%s %s Database %s (reference H2 duration: %s)"
                                (if quick-sync? "QUICK sync" "Sync") driver database-name reference-duration)
               ;; only do "quick sync" for non `test-data` datasets, because it can take literally MINUTES on CI.
-              (binding [sync-util/*log-exceptions-and-continue?* false]
+              (binding [metabase.sync.util/*log-exceptions-and-continue?* false]
                 (sync/sync-database! db (when quick-sync? {:scan :schema})))
               ;; add extra metadata for fields
               (try
                 (add-extra-metadata! database-definition db)
                 (catch Throwable e
-                  (log/error e "Error adding extra metadata"))))))
+                  (println "Error adding extra metadata:" e))))))
         ;; make sure we're returing an up-to-date copy of the DB
         (Database (u/the-id db))
         (catch Throwable e
@@ -126,16 +124,16 @@
                             :database-name      database-name
                             :connection-details connection-details}
                            e)]
-            (log/error e "Failed to create test database")
+            (println (u/pprint-to-str 'red (Throwable->map e)))
             (db/delete! Database :id (u/the-id db))
             (throw e)))))
     (catch Throwable e
       (let [message (format "Failed to create %s '%s' test database: %s" driver database-name (ex-message e))]
-        (log/fatal e message)
+        (println message "\n" e)
         (if config/is-test?
           (System/exit -1)
           (do
-            (log/errorf e "create-database! failed; destroying %s database %s" driver (pr-str database-name))
+            (println (u/format-color 'red "create-database! failed; destroying %s database %s" driver (pr-str database-name)))
             (tx/destroy-db! driver database-definition)
             (throw (ex-info message
                             {:driver        driver
@@ -295,15 +293,15 @@
   (copy-db-fks! old-db-id new-db-id))
 
 (def ^:dynamic *db-is-temp-copy?*
-    "Whether the current test database is a temp copy created with the [[metabase.test/with-temp-copy-of-db]] macro."
+  "Whether the current test database is a temp copy created with the `with-temp-copy-of-db` macro."
   false)
 
 (defn do-with-temp-copy-of-db
-  "Internal impl of [[metabase.test/with-temp-copy-of-db]]. Run `f` with a temporary Database that copies the details
-  from the standard test database, and syncs it."
+  "Internal impl of `data/with-temp-copy-of-db`. Run `f` with a temporary Database that copies the details from the
+  standard test database, and syncs it."
   [f]
-  (let [{old-db-id :id, :as old-db} (*get-db*)
-        original-db                 (select-keys old-db [:details :engine :name])]
+  (let [{old-db-id :id, :as old-db}                            (*get-db*)
+        {:keys [engine], original-name :name, :as original-db} (select-keys old-db [:details :engine :name])]
     (let [{new-db-id :id, :as new-db} (db/insert! Database original-db)]
       (try
         (copy-db-tables-and-fields! old-db-id new-db-id)
@@ -318,8 +316,8 @@
 ;;; +----------------------------------------------------------------------------------------------------------------+
 
 (defn resolve-dataset-definition
-  "Impl for [[metabase.test/dataset]] macro. Resolve a dataset definition (e.g. `test-data` or `sad-toucan-incidents` in
-  a namespace."
+  "Impl for `data/dataset` macro. Resolve a dataset definition (e.g. `test-data` or `sad-toucan-incidents` in a
+  namespace."
   [namespace-symb symb]
   @(or (ns-resolve namespace-symb symb)
        (do
@@ -329,10 +327,11 @@
                                   namespace-symb symb symb)))))
 
 (defn do-with-dataset
-  "Impl for [[metabase.test/dataset]] macro."
+  "Impl for `data/dataset` macro."
+  {:style/indent 1}
   [dataset-definition f]
   (let [dbdef             (tx/get-dataset-definition dataset-definition)
-        get-db-for-driver (mdb.conn/memoize-for-application-db
+        get-db-for-driver (memoize
                            (fn [driver]
                              (binding [db/*disable-db-logging* true]
                                (let [db (get-or-create-database! driver dbdef)]

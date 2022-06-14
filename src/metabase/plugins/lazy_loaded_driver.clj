@@ -11,14 +11,14 @@
             [metabase.driver.common :as driver.common]
             [metabase.plugins.init-steps :as init-steps]
             [metabase.util :as u]
-            [metabase.util.i18n :refer [trs]])
+            [metabase.util.i18n :refer [trs]]
+            [metabase.util.ssh :as ssh])
   (:import clojure.lang.MultiFn))
 
 (defn- parse-connection-property [prop]
   (cond
     (string? prop)
     (or (driver.common/default-options (keyword prop))
-        (driver.common/default-connection-info-fields (keyword prop))
         (throw (Exception. (trs "Default connection property {0} does not exist." prop))))
 
     (not (map? prop))
@@ -34,10 +34,12 @@
   "Parse the connection properties included in the plugin manifest. These can be one of several things -- a key
   referring to one of the default maps in `driver.common`, a entire custom map, or a list of maps to `merge:` (e.g.
   for overriding part, but not all, of a default option)."
-  [{:keys [connection-properties]}]
-  (->> (map parse-connection-property connection-properties)
-       (map u/one-or-many)
-       (apply concat)))
+  [{:keys [connection-properties connection-properties-include-tunnel-config]}]
+  (cond-> (for [prop connection-properties]
+            (parse-connection-property prop))
+
+    connection-properties-include-tunnel-config
+    ssh/with-tunnel-config))
 
 (defn- make-initialize! [driver add-to-classpath! init-steps]
   (fn [_]
@@ -61,8 +63,6 @@
   "Register a basic shell of a Metabase driver using the information from its Metabase plugin"
   [{:keys                                                                                            [add-to-classpath!]
     init-steps                                                                                       :init
-    contact-info                                                                                     :contact-info
-    superseded-by                                                                                    :superseded-by
     {driver-name :name, :keys [abstract display-name parent], :or {abstract false}, :as driver-info} :driver}]
   {:pre [(map? driver-info)]}
   (let [driver           (keyword driver-name)
@@ -81,9 +81,7 @@
     (doseq [[^MultiFn multifn, f]
             {driver/initialize!           (make-initialize! driver add-to-classpath! init-steps)
              driver/display-name          (when display-name (constantly display-name))
-             driver/contact-info          (constantly contact-info)
-             driver/connection-properties (constantly connection-props)
-             driver/superseded-by         (constantly (keyword superseded-by))}]
+             driver/connection-properties (constantly connection-props)}]
       (when f
         (.addMethod multifn driver f)))
     ;; finally, register the Metabase driver

@@ -11,6 +11,7 @@ import { t } from "ttag";
 
 import CustomForm from "metabase/components/form/CustomForm";
 import StandardForm from "metabase/components/form/StandardForm";
+import { message } from "antd";
 
 export {
   CustomFormField as FormField,
@@ -19,6 +20,79 @@ export {
   CustomFormFooter as FormFooter,
   CustomFormSection as FormSection,
 } from "metabase/components/form/CustomForm";
+
+type FormFieldName = string;
+type FormFieldTitle = string;
+type FormFieldDescription = string;
+type FormFieldType =
+  | "input"
+  | "password"
+  | "select"
+  | "text"
+  | "color"
+  | "hidden"
+  | "collection"
+  | "snippetCollection"
+  | "avatar";
+
+type FormValue = any;
+type FormError = string;
+type FormValues = { [name: FormFieldName]: FormValue };
+type FormErrors = { [name: FormFieldName]: FormError };
+
+export type FormFieldDefinition = {
+  name: FormFieldName,
+  type?: FormFieldType,
+  title?: FormFieldTitle,
+  description?: FormFieldDescription,
+  initial?: FormValue | (() => FormValue),
+  normalize?: (value: FormValue) => FormValue,
+  validate?: (value: FormValue, props: FormProps) => ?FormError | boolean,
+  readOnly?: boolean,
+};
+
+export type FormDefinition = {
+  fields:
+    | ((values: FormValues) => FormFieldDefinition[])
+    | FormFieldDefinition[],
+  initial?: FormValues | (() => FormValues),
+  normalize?: (values: FormValues) => FormValues,
+  validate?: (values: FormValues, props: FormProps) => FormErrors,
+};
+
+type FormObject = {
+  fields: (values: FormValues) => FormFieldDefinition[],
+  fieldNames: (values: FormValues) => FormFieldName[],
+  initial: () => FormValues,
+  normalize: (values: FormValues) => FormValues,
+  validate: (values: FormValues, props: FormProps) => FormErrors,
+  disablePristineSubmit?: boolean,
+};
+
+type FormProps = {
+  values?: FormValues,
+};
+
+type Props = {
+  form: FormDefinition,
+  initialValues?: ?FormValues,
+  formName?: string,
+  onSubmit: (values: FormValues) => Promise<any>,
+  onSubmitSuccess: (action: any) => Promise<any>,
+  formComponent?: React.Component,
+  dispatch: Function,
+  values: FormValues,
+};
+
+type State = {
+  inlineFields: { [name: FormFieldName]: FormFieldDefinition },
+};
+
+type SubmitState = {
+  submitting: boolean,
+  failed: boolean,
+  result: any,
+};
 
 let FORM_ID = 0;
 // use makeMapStateToProps so each component gets it's own unique formId
@@ -41,7 +115,12 @@ const ReduxFormComponent = reduxForm()(
       <FormComponent
         {...props}
         handleSubmit={async (...args) => {
+          if (props.submitting) {
+            return;
+          }
+          const hide = message.loading("Loading...", 0);
           await handleSubmit(...args);
+          hide();
           // normally handleSubmit swallows the result/error, but we want to make it available to things like ActionButton
           if (submitState.failed) {
             throw submitState.result;
@@ -54,14 +133,23 @@ const ReduxFormComponent = reduxForm()(
   },
 );
 
-class Form extends React.Component {
-  _state = {
+@connect(makeMapStateToProps)
+export default class Form extends React.Component {
+  props: Props;
+  state: State;
+
+  _state: SubmitState = {
     submitting: false,
     failed: false,
     result: undefined,
   };
 
-  constructor(props) {
+  _getFormDefinition: () => FormDefinition;
+  _getFormObject: () => FormObject;
+  _getInitialValues: () => FormValues;
+  _getFieldNames: () => FormFieldName[];
+
+  constructor(props: Props) {
     super(props);
 
     this.state = {
@@ -158,7 +246,7 @@ class Form extends React.Component {
     fieldNames: PropTypes.array,
   };
 
-  componentDidUpdate(prevProps, prevState) {
+  componentDidUpdate(prevProps: Props, prevState: State) {
     // HACK: when new fields are added they aren't initialized with their intialValues, so we have to force it here:
     const newFields = _.difference(
       Object.keys(this.state.inlineFields),
@@ -169,10 +257,9 @@ class Form extends React.Component {
         initialize(this.props.formName, this._getInitialValues(), newFields),
       );
     }
-    this.props.onChange?.(this.props.values);
   }
 
-  _registerFormField = field => {
+  _registerFormField = (field: FormFieldDefinition) => {
     if (!_.isEqual(this.state.inlineFields[field.name], field)) {
       this.setState(prevState =>
         assocIn(prevState, ["inlineFields", field.name], field),
@@ -180,7 +267,7 @@ class Form extends React.Component {
     }
   };
 
-  _unregisterFormField = field => {
+  _unregisterFormField = (field: FormFieldDefinition) => {
     if (this.state.inlineFields[field.name]) {
       // this.setState(prevState =>
       //   dissocIn(prevState, ["inlineFields", field.name]),
@@ -195,7 +282,7 @@ class Form extends React.Component {
     };
   }
 
-  _validate = (values, props) => {
+  _validate = (values: FormValues, props: any) => {
     // HACK: clears failed state for global error
     if (!this._state.submitting && this._state.failed) {
       this._state.failed = false;
@@ -205,15 +292,19 @@ class Form extends React.Component {
     return formObject.validate(values, props);
   };
 
-  _onSubmit = async values => {
+  _onSubmit = async (values: FormValues) => {
     const formObject = this._getFormObject();
     // HACK: clears failed state for global error
     this._state.submitting = true;
     try {
       const normalized = formObject.normalize(values);
-      return (this._state.result = await this.props.onSubmit(normalized));
+      this._state.result = await this.props.onSubmit(normalized);
+      if (this._state.result?.payload?.object?.code === -1) {
+        throw null;
+      }
+      return this._state.result;
     } catch (error) {
-      console.error("Form submission error:", error);
+      console.error("Form submission error", error);
       this._state.failed = true;
       this._state.result = error;
       // redux-form expects { "FIELD NAME": "FIELD ERROR STRING" } or {"_error": "GLOBAL ERROR STRING" }
@@ -227,19 +318,12 @@ class Form extends React.Component {
         const errorNames = Object.keys(error.data.errors);
         const hasUnknownFields = errorNames.some(name => !fieldNames.has(name));
         throw {
-          _error:
-            error.data?.message ||
-            error.message ||
-            (hasUnknownFields ? t`An error occurred` : null),
+          _error: hasUnknownFields ? t`An error occurred` : null,
           ...error.data.errors,
         };
       } else if (error) {
         throw {
-          _error:
-            error.data?.message ||
-            error.message ||
-            error.data ||
-            t`An error occurred`,
+          _error: error?.data?.message || error?.data || error,
         };
       }
     } finally {
@@ -247,8 +331,8 @@ class Form extends React.Component {
     }
   };
 
-  _handleSubmitSuccess = async action => {
-    if (this.props.onSubmitSuccess) {
+  _handleSubmitSuccess = async (action: any) => {
+    if (action && this.props.onSubmitSuccess) {
       await this.props.onSubmitSuccess(action);
     }
     this.props.dispatch(
@@ -256,7 +340,7 @@ class Form extends React.Component {
     );
   };
 
-  _handleChangeField = (fieldName, value) => {
+  _handleChangeField = (fieldName: FormFieldName, value: FormValue) => {
     return this.props.dispatch(change(this.props.formName, fieldName, value));
   };
 
@@ -286,8 +370,6 @@ class Form extends React.Component {
   }
 }
 
-export default connect(makeMapStateToProps)(Form);
-
 // returns a function that takes an object
 // apply the top level method (if any) to the whole object
 // then apply each field's method (if any) to each value in object, setting the result if not undefined
@@ -299,7 +381,12 @@ export default connect(makeMapStateToProps)(Form);
 // form.fields[0] is { name: "foo", initial: "bar" }
 // form.fields[0] is { name: "foo", initial: () => "bar" }
 //
-function makeFormMethod(form, methodName, defaultValues = {}, mergeFn) {
+function makeFormMethod(
+  form: FormObject,
+  methodName: string,
+  defaultValues: any = {},
+  mergeFn,
+) {
   const originalMethod = form[methodName];
   form[methodName] = (object, ...args) => {
     // make a copy
@@ -321,10 +408,10 @@ function makeFormMethod(form, methodName, defaultValues = {}, mergeFn) {
   };
 }
 // if the first arg is a function, call it, otherwise return it.
-function getValue(fnOrValue, ...args) {
+function getValue(fnOrValue, ...args): any {
   return typeof fnOrValue === "function" ? fnOrValue(...args) : fnOrValue;
 }
-function makeFormObject(formDef) {
+function makeFormObject(formDef: FormDefinition): FormObject {
   const form = {
     ...formDef,
     fields: values => getValue(formDef.fields, values),

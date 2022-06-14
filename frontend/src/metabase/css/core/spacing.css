@@ -1,5 +1,5 @@
 :root {
-  --padding-1: 0.5rem;
+  --padding-1: 0.438rem;
   --padding-2: 1rem;
   --padding-3: 1.5rem;
   --padding-4: 2rem;
@@ -8,6 +8,372 @@
   --margin-2: 1rem;
   --margin-3: 1.5rem;
   --margin-4: 2rem;
+
+  --footprint-spacing-xs: 6px;
+  --footprint-spacing-s: 12px;
+  --footprint-spacing-m: 18px;
+  --footprint-spacing-l: 24px;
+  --footprint-spacing-xl: 40px;
+}
+
+/* padding xs:6px */
+.footprint-p-xs,
+:local(.footprint-p-xs) {
+  padding: var(--footprint-spacing-xs);
+}
+
+.footprint-px-xs,
+:local(.footprint-px-xs) {
+  padding: 0 var(--footprint-spacing-xs);
+}
+
+.footprint-py-xs,
+:local(.footprint-py-xs) {
+  padding: var(--footprint-spacing-xs) 0;
+}
+
+.footprint-pt-xs,
+:local(.footprint-pt-xs) {
+  padding: var(--footprint-spacing-xs) 0 0 0;
+}
+
+.footprint-pb-xs,
+:local(.footprint-pb-xs) {
+  padding: 0 0 var(--footprint-spacing-xs) 0;
+}
+
+.footprint-pl-xs,
+:local(.footprint-pl-xs) {
+  padding: 0 0 0 var(--footprint-spacing-xs);
+}
+
+.footprint-pr-xs,
+:local(.footprint-pr-xs) {
+  padding: 0 var(--footprint-spacing-xs) 0 0;
+}
+
+/* padding s: 12px */
+.footprint-p-s,
+:local(.footprint-p-s) {
+  padding: var(--footprint-spacing-s);
+}
+
+.footprint-px-s,
+:local(.footprint-px-s) {
+  padding: 0 var(--footprint-spacing-s);
+}
+
+.footprint-py-s,
+:local(.footprint-py-s) {
+  padding: var(--footprint-spacing-s) 0;
+}
+
+.footprint-pt-s,
+:local(.footprint-pt-s) {
+  padding: var(--footprint-spacing-s) 0 0 0;
+}
+
+.footprint-pb-s,
+:local(.footprint-pb-s) {
+  padding: 0 0 var(--footprint-spacing-s) 0;
+}
+
+.footprint-pl-s,
+:local(.footprint-pl-s) {
+  padding: 0 0 0 var(--footprint-spacing-s);
+}
+
+.footprint-pr-s,
+:local(.footprint-pr-s) {
+  padding: 0 var(--footprint-spacing-s) 0 0;
+}
+
+/* padding m: 18px */
+.footprint-p-m,
+:local(.footprint-p-m) {
+  padding: var(--footprint-spacing-m);
+}
+
+.footprint-px-m,
+:local(.footprint-px-m) {
+  padding: 0 var(--footprint-spacing-m);
+}
+
+.footprint-py-m,
+:local(.footprint-py-m) {
+  padding: var(--footprint-spacing-m) 0;
+}
+
+.footprint-pt-m,
+:local(.footprint-pt-m) {
+  padding: var(--footprint-spacing-m) 0 0 0;
+}
+
+.footprint-pb-m,
+:local(.footprint-pb-m) {
+  padding: 0 0 var(--footprint-spacing-m) 0;
+}
+
+.footprint-pl-m,
+:local(.footprint-pl-m) {
+  padding: 0 0 0 var(--footprint-spacing-m);
+}
+
+.footprint-pr-m,
+:local(.footprint-pr-m) {
+  padding: 0 var(--footprint-spacing-m) 0 0;
+}
+
+/* padding l: 24px */
+.footprint-p-l,
+:local(.footprint-p-l) {
+  padding: var(--footprint-spacing-l);
+}
+
+.footprint-px-l,
+:local(.footprint-px-l) {
+  padding: 0 var(--footprint-spacing-l);
+}
+
+.footprint-py-l,
+:local(.footprint-py-l) {
+  padding: var(--footprint-spacing-l) 0;
+}
+
+.footprint-pt-l,
+:local(.footprint-pt-l) {
+  padding: var(--footprint-spacing-l) 0 0 0;
+}
+
+.footprint-pb-l,
+:local(.footprint-pb-l) {
+  padding: 0 0 var(--footprint-spacing-l) 0;
+}
+
+.footprint-pl-l,
+:local(.footprint-pl-l) {
+  padding: 0 0 0 var(--footprint-spacing-l);
+}
+
+.footprint-pr-l,
+:local(.footprint-pr-l) {
+  padding: 0 var(--footprint-spacing-l) 0 0;
+}
+
+/* padding xl: 40px */
+.footprint-p-xl,
+:local(.footprint-p-xl) {
+  padding: var(--footprint-spacing-xl);
+}
+
+.footprint-px-xl,
+:local(.footprint-px-xl) {
+  padding: 0 var(--footprint-spacing-xl);
+}
+
+.footprint-py-xl,
+:local(.footprint-py-xl) {
+  padding: var(--footprint-spacing-xl) 0;
+}
+
+.footprint-pt-xl,
+:local(.footprint-pt-xl) {
+  padding: var(--footprint-spacing-xl) 0 0 0;
+}
+
+.footprint-pb-xl,
+:local(.footprint-pb-xl) {
+  padding: 0 0 var(--footprint-spacing-xl) 0;
+}
+
+.footprint-pl-xl,
+:local(.footprint-pl-xl) {
+  padding: 0 0 0 var(--footprint-spacing-xl);
+}
+
+.footprint-pr-xl,
+:local(.footprint-pr-xl) {
+  padding: 0 var(--footprint-spacing-xl) 0 0;
+}
+
+/* margin xs: 6px */
+.footprint-m-xs,
+:local(.footprint-m-xs) {
+  margin: var(--footprint-spacing-xs);
+}
+
+.footprint-mx-xs,
+:local(.footprint-mx-xs) {
+  margin: 0 var(--footprint-spacing-xs);
+}
+
+.footprint-my-xs,
+:local(.footprint-my-xs) {
+  margin: var(--footprint-spacing-xs) 0;
+}
+
+.footprint-mt-xs,
+:local(.footprint-mt-xs) {
+  margin: var(--footprint-spacing-xs) 0 0 0;
+}
+
+.footprint-mb-xs,
+:local(.footprint-mb-xs) {
+  margin: 0 0 var(--footprint-spacing-xs) 0;
+}
+
+.footprint-ml-xs,
+:local(.footprint-ml-xs) {
+  margin: 0 0 0 var(--footprint-spacing-xs);
+}
+
+.footprint-mr-xs,
+:local(.footprint-mr-xs) {
+  margin: 0 var(--footprint-spacing-xs) 0 0;
+}
+
+/* margin s: 12px */
+.footprint-m-s,
+:local(.footprint-m-s) {
+  margin: var(--footprint-spacing-s);
+}
+
+.footprint-mx-s,
+:local(.footprint-mx-s) {
+  margin: 0 var(--footprint-spacing-s);
+}
+
+.footprint-my-s,
+:local(.footprint-my-s) {
+  margin: var(--footprint-spacing-s) 0;
+}
+
+.footprint-mt-s,
+:local(.footprint-mt-s) {
+  margin: var(--footprint-spacing-s) 0 0 0;
+}
+
+.footprint-mb-s,
+:local(.footprint-mb-s) {
+  margin: 0 0 var(--footprint-spacing-s) 0;
+}
+
+.footprint-ml-s,
+:local(.footprint-ml-s) {
+  margin: 0 0 0 var(--footprint-spacing-s);
+}
+
+.footprint-mr-s,
+:local(.footprint-mr-s) {
+  margin: 0 var(--footprint-spacing-s) 0 0;
+}
+
+/* margin m: 18px */
+.footprint-m-m,
+:local(.footprint-m-m) {
+  margin: var(--footprint-spacing-m);
+}
+
+.footprint-mx-m,
+:local(.footprint-mx-m) {
+  margin: 0 var(--footprint-spacing-m);
+}
+
+.footprint-my-m,
+:local(.footprint-my-m) {
+  margin: var(--footprint-spacing-m) 0;
+}
+
+.footprint-mt-m,
+:local(.footprint-mt-m) {
+  margin: var(--footprint-spacing-m) 0 0 0;
+}
+
+.footprint-mb-m,
+:local(.footprint-mb-m) {
+  margin: 0 0 var(--footprint-spacing-m) 0;
+}
+
+.footprint-ml-m,
+:local(.footprint-ml-m) {
+  margin: 0 0 0 var(--footprint-spacing-m);
+}
+
+.footprint-mr-m,
+:local(.footprint-mr-m) {
+  margin: 0 var(--footprint-spacing-m) 0 0;
+}
+
+/* margin l: 24px */
+.footprint-m-l,
+:local(.footprint-m-l) {
+  margin: var(--footprint-spacing-l);
+}
+
+.footprint-mx-l,
+:local(.footprint-mx-l) {
+  margin: 0 var(--footprint-spacing-l);
+}
+
+.footprint-my-l,
+:local(.footprint-my-l) {
+  margin: var(--footprint-spacing-l) 0;
+}
+
+.footprint-mt-l,
+:local(.footprint-mt-l) {
+  margin: var(--footprint-spacing-l) 0 0 0;
+}
+
+.footprint-mb-l,
+:local(.footprint-mb-l) {
+  margin: 0 0 var(--footprint-spacing-l) 0;
+}
+
+.footprint-ml-l,
+:local(.footprint-ml-l) {
+  margin: 0 0 0 var(--footprint-spacing-l);
+}
+
+.footprint-mr-l,
+:local(.footprint-mr-l) {
+  margin: 0 var(--footprint-spacing-l) 0 0;
+}
+
+/* margin xl: 40px */
+.footprint-m-xl,
+:local(.footprint-m-xl) {
+  margin: var(--footprint-spacing-xl);
+}
+
+.footprint-mx-xl,
+:local(.footprint-mx-xl) {
+  margin: 0 var(--footprint-spacing-xl);
+}
+
+.footprint-my-xl,
+:local(.footprint-my-xl) {
+  margin: var(--footprint-spacing-xl) 0;
+}
+
+.footprint-mt-xl,
+:local(.footprint-mt-xl) {
+  margin: var(--footprint-spacing-xl) 0 0 0;
+}
+
+.footprint-mb-xl,
+:local(.footprint-mb-xl) {
+  margin: 0 0 var(--footprint-spacing-xl) 0;
+}
+
+.footprint-ml-xl,
+:local(.footprint-ml-xl) {
+  margin: 0 0 0 var(--footprint-spacing-xl);
+}
+
+.footprint-mr-xl,
+:local(.footprint-mr-xl) {
+  margin: 0 var(--footprint-spacing-xl) 0 0;
 }
 
 .ml-auto,
@@ -362,29 +728,29 @@
 
 /* negative margin (mainly for correction of horizontal positioning) */
 .mln1 {
-  margin-left: calc(-1 * var(--margin-1));
+  margin-left: -var(--margin-1);
 }
 .mln2 {
-  margin-left: calc(-1 * var(--margin-2));
+  margin-left: -var(--margin-2);
 }
 .mln3 {
-  margin-left: calc(-1 * var(--margin-3));
+  margin-left: -var(--margin-3);
 }
 .mln4 {
-  margin-left: calc(-1 * var(--margin-4));
+  margin-left: -var(--margin-4);
 }
 
 .mbn1 {
-  margin-bottom: calc(-1 * var(--margin-1));
+  margin-bottom: -var(--margin-1);
 }
 .mbn2 {
-  margin-bottom: calc(-1 * var(--margin-2));
+  margin-bottom: -var(--margin-2);
 }
 .mbn3 {
-  margin-bottom: calc(-1 * var(--margin-3));
+  margin-bottom: -var(--margin-3);
 }
 .mbn4 {
-  margin-bottom: calc(-1 * var(--margin-4));
+  margin-bottom: -var(--margin-4);
 }
 
 /* responsive spacing */

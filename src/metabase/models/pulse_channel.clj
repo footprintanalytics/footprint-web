@@ -2,9 +2,8 @@
   (:require [cheshire.generate :refer [add-encoder encode-map]]
             [clojure.set :as set]
             [medley.core :as m]
-            [metabase.models.interface :as mi]
+            [metabase.models.interface :as i]
             [metabase.models.pulse-channel-recipient :refer [PulseChannelRecipient]]
-            [metabase.models.serialization.hash :as serdes.hash]
             [metabase.models.user :as user :refer [User]]
             [metabase.plugins.classloader :as classloader]
             [metabase.util :as u]
@@ -189,14 +188,11 @@
     :pre-insert     validate-email-domains
     :pre-update     validate-email-domains})
 
-  mi/IObjectPermissions
+  i/IObjectPermissions
   (merge
-   mi/IObjectPermissionsDefaults
+   i/IObjectPermissionsDefaults
    {:can-read?  (constantly true)
-    :can-write? mi/superuser?})
-
-  serdes.hash/IdentityHashable
-  {:identity-hash-fields (constantly [(serdes.hash/hydrated-hash :pulse) :channel_type :details])})
+    :can-write? i/superuser?}))
 
 (defn will-delete-recipient
   "This function is called by [[metabase.models.pulse-channel-recipient/pre-delete]] when a `PulseChannelRecipient` is

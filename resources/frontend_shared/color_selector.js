@@ -4385,15 +4385,15 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
 // NOTE: KEEP SYNCRONIZED WITH COLORS.CSS
 /* eslint-disable no-color-literals */
 var colors = {
-  brand: "#509EE3",
+  brand: "#7355FA",
   accent1: "#88BF4D",
   accent2: "#A989C5",
   accent3: "#EF8C8C",
   accent4: "#F9D45C",
   accent5: "#F2A86F",
   accent6: "#98D9D9",
-  accent7: "#7172AD",
-  "admin-navbar": "#7172AD",
+  accent7: "#3434B2",
+  "admin-navbar": "#3434B2",
   white: "#FFFFFF",
   black: "#2E353B",
   success: "#84BB4C",

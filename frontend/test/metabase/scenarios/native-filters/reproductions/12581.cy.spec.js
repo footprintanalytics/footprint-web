@@ -1,7 +1,7 @@
 import { restore, modal, filterWidget } from "__support__/e2e/cypress";
-import { SAMPLE_DATABASE } from "__support__/e2e/cypress_sample_database";
+import { SAMPLE_DATASET } from "__support__/e2e/cypress_sample_dataset";
 
-const { ORDERS } = SAMPLE_DATABASE;
+const { ORDERS } = SAMPLE_DATASET;
 
 const ORIGINAL_QUERY = "SELECT * FROM ORDERS WHERE {{filter}} LIMIT 2";
 
@@ -30,7 +30,9 @@ describe("issue 12581", () => {
     restore();
     cy.signInAsAdmin();
 
-    cy.createNativeQuestion(nativeQuery, { visitQuestion: true });
+    cy.createNativeQuestion(nativeQuery).then(({ body }) => {
+      cy.visit(`/question/${body.id}`);
+    });
   });
 
   it("should correctly display a revision state after a restore (metabase#12581)", () => {
@@ -56,7 +58,7 @@ describe("issue 12581", () => {
     cy.reload();
 
     cy.findByTestId("revision-history-button").click();
-    cy.findByTestId("question-revert-button").click(); // Revert to the first revision
+    cy.findByText(/Revert/i).click(); // Revert to the first revision
     cy.findByText(/Open Editor/i).click();
 
     cy.log("Reported failing on v0.35.3");

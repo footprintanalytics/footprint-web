@@ -1,19 +1,23 @@
 import React from "react";
+import { Provider } from "react-redux";
+import { reducer as form } from "redux-form";
+import { Router, Route } from "react-router";
+import { createMemoryHistory } from "history";
 import {
-  renderWithProviders,
+  render,
   screen,
   waitForElementToBeRemoved,
-} from "__support__/ui";
+} from "@testing-library/react";
 import admin from "metabase/admin/admin";
 import MetabaseSettings from "metabase/lib/settings";
-import { setupEnterpriseTest } from "__support__/enterprise";
+import { PLUGIN_CACHING } from "metabase/plugins";
+import { getStore } from "__support__/entities-store";
 import DatabaseEditApp from "./DatabaseEditApp";
 
 const ENGINES_MOCK = {
   h2: {
     "details-fields": [
       { "display-name": "Connection String", name: "db", required: true },
-      { name: "advanced-options", type: "section", default: true },
     ],
     "driver-name": "H2",
     "superseded-by": null,
@@ -21,19 +25,13 @@ const ENGINES_MOCK = {
   sqlite: {
     "details-fields": [
       { "display-name": "Filename", name: "db", required: true },
-      { name: "advanced-options", type: "section", default: true },
     ],
     "driver-name": "SQLite",
     "superseded-by": null,
   },
 };
 
-const ComponentMock = () => <div />;
-jest.mock("metabase/containers/DatabaseHelpCard", () => ComponentMock);
-jest.mock("metabase/containers/DriverWarning", () => ComponentMock);
-
 function mockSettings({ cachingEnabled = false }) {
-  const original = MetabaseSettings.get.bind(MetabaseSettings);
   const spy = jest.spyOn(MetabaseSettings, "get");
   spy.mockImplementation(key => {
     if (key === "engines") {
@@ -45,32 +43,19 @@ function mockSettings({ cachingEnabled = false }) {
     if (key === "site-url") {
       return "http://localhost:3333";
     }
-    if (key === "application-name") {
-      return "Metabase Test";
-    }
-    if (key === "is-hosted?") {
-      return false;
-    }
-    if (key === "cloud-gateway-ips") {
-      return [];
-    }
-    return original(key);
   });
 }
 
 async function setup({ cachingEnabled = false } = {}) {
   mockSettings({ cachingEnabled });
 
-  const settingsReducer = () => ({
-    values: {
-      "persisted-models-enabled": false,
-    },
-  });
-
-  renderWithProviders(<DatabaseEditApp />, {
-    withRouter: true,
-    reducers: { admin, settings: settingsReducer },
-  });
+  render(
+    <Provider store={getStore({ admin, form })}>
+      <Router history={createMemoryHistory()}>
+        <Route path="/" component={DatabaseEditApp} />
+      </Router>
+    </Provider>,
+  );
 
   await waitForElementToBeRemoved(() => screen.queryByText("Loading..."));
 }
@@ -89,7 +74,15 @@ describe("DatabaseEditApp", () => {
 
     describe("EE", () => {
       beforeEach(() => {
-        setupEnterpriseTest();
+        PLUGIN_CACHING.databaseCacheTTLFormField = {
+          name: "cache_ttl",
+          type: "integer",
+          title: "Default result cache duration",
+        };
+      });
+
+      afterEach(() => {
+        PLUGIN_CACHING.databaseCacheTTLFormField = null;
       });
 
       it("is visible", async () => {

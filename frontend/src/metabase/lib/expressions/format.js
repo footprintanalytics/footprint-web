@@ -4,7 +4,6 @@ import {
   MBQL_CLAUSES,
   OPERATOR_PRECEDENCE,
   isNumberLiteral,
-  isBooleanLiteral,
   isStringLiteral,
   isOperator,
   isFunction,
@@ -19,17 +18,24 @@ import {
   formatStringLiteral,
   hasOptions,
 } from ".";
+import type StructuredQuery from "metabase-lib/lib/queries/StructuredQuery";
 
 export { DISPLAY_QUOTES, EDITOR_QUOTES } from "./config";
 
+type QuotesConfig = {};
+
+type FormatterOptions = {
+  query: StructuredQuery,
+  quotes: QuotesConfig,
+  parens: Boolean,
+};
+
 // convert a MBQL expression back into an expression string
-export function format(mbql, options = {}) {
+export function format(mbql: any, options: FormatterOptions = {}) {
   if (mbql == null || _.isEqual(mbql, [])) {
     return "";
   } else if (isNumberLiteral(mbql)) {
     return formatNumberLiteral(mbql, options);
-  } else if (isBooleanLiteral(mbql)) {
-    return formatBooleanLiteral(mbql, options);
   } else if (isStringLiteral(mbql)) {
     return formatStringLiteral(mbql, options);
   } else if (isOperator(mbql)) {
@@ -50,10 +56,6 @@ export function format(mbql, options = {}) {
   throw new Error("Unknown MBQL clause " + JSON.stringify(mbql));
 }
 
-function formatBooleanLiteral(mbql) {
-  return mbql ? "True" : "False";
-}
-
 function formatNumberLiteral(mbql) {
   return JSON.stringify(mbql);
 }
@@ -64,7 +66,7 @@ function formatDimension(fieldRef, options) {
     const dimension = query.parseFieldReference(fieldRef);
     return formatDimensionName(dimension, options);
   } else {
-    throw new Error("`query` is a required parameter to format expressions");
+    throw new Error("`chart` is a required parameter to format expressions");
   }
 }
 
@@ -86,28 +88,10 @@ function formatSegment([, segmentId], options) {
   return formatSegmentName(segment, options);
 }
 
-// HACK: very specific to some string/time functions for now
-function formatFunctionOptions(fnOptions) {
-  if (Object.prototype.hasOwnProperty.call(fnOptions, "case-sensitive")) {
-    const caseSensitive = fnOptions["case-sensitive"];
-    if (!caseSensitive) {
-      return "case-insensitive";
-    }
-  }
-  if (Object.prototype.hasOwnProperty.call(fnOptions, "include-current")) {
-    const includeCurrent = fnOptions["include-current"];
-    if (includeCurrent) {
-      return "include-current";
-    }
-  }
-}
-
 function formatFunction([fn, ...args], options) {
   if (hasOptions(args)) {
-    const fnOptions = formatFunctionOptions(args.pop());
-    if (fnOptions) {
-      args = [...args, fnOptions];
-    }
+    // FIXME: how should we format args?
+    args = args.slice(0, -1);
   }
   const formattedName = getExpressionName(fn);
   const formattedArgs = args.map(arg => format(arg, options));

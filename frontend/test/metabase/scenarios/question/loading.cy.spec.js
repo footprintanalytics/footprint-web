@@ -1,4 +1,4 @@
-import { restore, startNewQuestion } from "__support__/e2e/cypress";
+import { restore } from "__support__/e2e/cypress";
 
 describe("scenarios > question > loading behavior", () => {
   beforeEach(() => {
@@ -16,12 +16,13 @@ describe("scenarios > question > loading behavior", () => {
     });
     // let the other preload happen since it matches the actual call from the component
     cy.route({ url: "/api/database?saved=true" }).as("fetch1");
-    startNewQuestion();
+    cy.visit("/question/new");
+    cy.contains("Simple question").click();
 
     cy.route({ url: "/api/database/1/schemas" }).as("fetch2");
     cy.route({ url: "/api/database/1/schema/PUBLIC" }).as("fetch3");
 
-    cy.contains("Sample Database").click();
+    cy.contains("Sample Dataset").click();
     cy.contains("Orders");
 
     // confirm that schemas and schema tables were fetched individually,

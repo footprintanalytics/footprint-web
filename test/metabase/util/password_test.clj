@@ -2,13 +2,13 @@
   (:require [clojure.test :refer :all]
             [metabase.test :as mt]
             [metabase.test.fixtures :as fixtures]
-            [metabase.util.password :as u.password]))
+            [metabase.util.password :as pwu]))
 
 (use-fixtures :once (fixtures/initialize :db))
 
 ;; Password Complexity testing
 
-(deftest ^:parallel count-occurrences-test
+(deftest count-occurrences-test
   (testing "Check that password occurance counting works"
     (doseq [[input expected] {"abc"        {:total 3, :lower 3, :upper 0, :letter 3, :digit 0, :special 0}
                               "PASSWORD"   {:total 8, :lower 0, :upper 8, :letter 8, :digit 0, :special 0}
@@ -18,9 +18,9 @@
                               "^^Wut4nG^^" {:total 10, :lower 3, :upper 2, :letter 5, :digit 1, :special 4}}]
       (testing (pr-str (list 'count-occurrences input))
         (is (= expected
-               (#'u.password/count-occurrences input)))))))
+               (#'pwu/count-occurrences input)))))))
 
-(deftest ^:parallel password-has-char-counts?-test
+(deftest password-has-char-counts?-test
   (doseq [[group input->expected]
           {"Check that password length complexity applies"
            {[{:total 3} "god1"] true
@@ -49,9 +49,9 @@
       (doseq [[input expected] input->expected]
         (testing (pr-str (cons 'password-has-char-counts? input))
           (is (= expected
-                 (apply #'u.password/password-has-char-counts? input))))))))
+                 (apply #'pwu/password-has-char-counts? input))))))))
 
-(deftest ^:parallel is-valid?-normal-test
+(deftest is-valid?-normal-test
   (testing "Do some tests with the default (:normal) password requirements"
     (doseq [[input expected] {"ABC"           false
                               "ABCDEF"        false
@@ -64,7 +64,7 @@
                               "s6n!8z-6.gcJe" true}]
       (testing (pr-str (list 'is-valid? input))
         (is (= expected
-               (u.password/is-valid? input)))))))
+               (pwu/is-valid? input)))))))
 
 (deftest is-valid?-weak-test
   (testing "Do some tests with password complexity requirements set to :weak.
@@ -76,4 +76,4 @@
                                 "passw0rd" true}]
         (testing (pr-str (list 'is-valid? input))
           (is (= expected
-                 (u.password/is-valid? input))))))))
+                 (pwu/is-valid? input))))))))

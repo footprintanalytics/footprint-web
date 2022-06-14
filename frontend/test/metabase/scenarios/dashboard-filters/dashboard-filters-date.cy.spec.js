@@ -1,11 +1,11 @@
 import {
   restore,
   popover,
+  mockSessionProperty,
   filterWidget,
   editDashboard,
   saveDashboard,
   setFilter,
-  visitDashboard,
 } from "__support__/e2e/cypress";
 
 import { DASHBOARD_DATE_FILTERS } from "./helpers/e2e-dashboard-filter-data-objects";
@@ -13,19 +13,24 @@ import * as DateFilter from "../native-filters/helpers/e2e-date-filter-helpers";
 
 Object.entries(DASHBOARD_DATE_FILTERS).forEach(
   ([filter, { value, representativeResult }]) => {
-    describe("scenarios > dashboard > filters > date", () => {
+    describe(`should work for ${filter}`, () => {
       beforeEach(() => {
         cy.intercept("GET", "/api/table/*/query_metadata").as("metadata");
 
         restore();
         cy.signInAsAdmin();
 
-        visitDashboard(1);
+        mockSessionProperty("field-filter-operators-enabled?", true);
+
+        cy.visit("/dashboard/1");
 
         editDashboard();
         setFilter("Time", filter);
 
-        cy.findByText("Select…").click();
+        cy.findByText("Column to filter on")
+          .next("a")
+          .click();
+
         popover()
           .contains("Created At")
           .first()
@@ -56,7 +61,6 @@ Object.entries(DASHBOARD_DATE_FILTERS).forEach(
           filterType: filter,
           filterValue: value,
         });
-
         saveDashboard();
 
         cy.get(".Card").within(() => {
@@ -79,12 +83,10 @@ function dateFilterSelector({ filterType, filterValue } = {}) {
 
     case "Single Date":
       DateFilter.setSingleDate(filterValue);
-      cy.findByText("Update filter").click();
       break;
 
     case "Date Range":
       DateFilter.setDateRange(filterValue);
-      cy.findByText("Update filter").click();
       break;
 
     case "Relative Date":

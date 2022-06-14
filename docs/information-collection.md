@@ -1,8 +1,4 @@
----
-title: About the Information we collect
----
-
-# About the Information we collect
+# About the Information we collect:
 
 Metabase uses Google Analytics and Snowplow to collect anonymous usage information from the installed servers that enable this feature. Below is a representative list of the events we have instrumented, as well as the information we collect about the user performing the action and the instance being used.
 
@@ -95,4 +91,4 @@ NOTE: We never capture any specific details in any of our tracking methodology s
 | Language                                          | How many non-English speaking users do we have? How fast should we be pushing internationalization?                                                     |
 | OS and JVM Version                                | Can we deprecate Java 7 yet?                                                                                                                        |
 
-Note this is meant to be representative. The actual code that is running to generate this can be audited at [https://github.com/metabase/metabase/blob/master/src/metabase/analytics/](https://github.com/metabase/metabase/blob/master/src/metabase/analytics).
+Note this is meant to be representative. The actual code that is running to generate this can be audited at [https://github.com/metabase/metabase/blob/master/src/metabase/util/stats.clj](https://github.com/metabase/metabase/blob/master/src/metabase/util/stats.clj).

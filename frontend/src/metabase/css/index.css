@@ -10,7 +10,6 @@
 @import "./components/modal.css";
 @import "./components/select.css";
 @import "./components/table.css";
-@import "./components/tippy.css";
 @import "./components/token.css";
 @import "./components/grabber.css";
 
@@ -23,4 +22,8 @@
 @import "./login.css";
 @import "./pulse.css";
 @import "./query_builder.css";
+@import "./sider_bar.css";
 @import "./setup.css";
+@import "./icon.css";
+@import "./share_button.css";
+@import "./media.css";

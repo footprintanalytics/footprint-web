@@ -1,15 +1,15 @@
 (ns metabase.driver.druid.sync
   (:require [medley.core :as m]
-            [metabase.driver.druid.client :as druid.client]
+            [metabase.driver.druid.client :as client]
             [metabase.util.ssh :as ssh]))
 
 (defn- do-segment-metadata-query [details datasource]
   {:pre [(map? details) (string? datasource)]}
-  (druid.client/do-query details {"queryType"     :segmentMetadata
-                                  "dataSource"    datasource
-                                  "intervals"     ["1999-01-01/2114-01-01"]
-                                  "analysisTypes" [:aggregators]
-                                  "merge"         true}))
+  (client/do-query details {"queryType"     :segmentMetadata
+                            "dataSource"    datasource
+                            "intervals"     ["1999-01-01/2114-01-01"]
+                            "analysisTypes" [:aggregators]
+                            "merge"         true}))
 
 (defn- druid-type->base-type [field-type]
   (case field-type
@@ -50,6 +50,6 @@
   [database]
   {:pre [(map? (:details database))]}
   (ssh/with-ssh-tunnel [details-with-tunnel (:details database)]
-    (let [druid-datasources (druid.client/GET (druid.client/details->url details-with-tunnel "/druid/v2/datasources"))]
+    (let [druid-datasources (client/GET (client/details->url details-with-tunnel "/druid/v2/datasources"))]
       {:tables (set (for [table-name druid-datasources]
                       {:schema nil, :name table-name}))})))

@@ -1,15 +1,13 @@
 (ns metabase.models.field-values-test
-  "Tests for specific behavior related to FieldValues and functions in the [[metabase.models.field-values]] namespace."
+  "Tests for specific behavior related to FieldValues and functions in the `metabase.models.field-values` namespace."
   (:require [cheshire.core :as json]
             [clojure.java.jdbc :as jdbc]
             [clojure.string :as str]
             [clojure.test :refer :all]
             [metabase.db.metadata-queries :as metadata-queries]
             [metabase.models.database :refer [Database]]
-            [metabase.models.dimension :refer [Dimension]]
             [metabase.models.field :refer [Field]]
-            [metabase.models.field-values :as field-values :refer [FieldValues]]
-            [metabase.models.serialization.hash :as serdes.hash]
+            [metabase.models.field-values :as field-values :refer :all]
             [metabase.models.table :refer [Table]]
             [metabase.sync :as sync]
             [metabase.test :as mt]
@@ -208,33 +206,3 @@
              clojure.lang.ExceptionInfo
              #"Invalid human-readable-values"
              (db/update! FieldValues id :human_readable_values {"1" "A", "2", "B"})))))))
-
-(deftest rescanned-human-readable-values-test
-  (testing "Make sure FieldValues are calculated and saved correctly when remapping is in place (#13235)"
-    (mt/dataset sample-dataset
-      (mt/with-temp-copy-of-db
-        (letfn [(field-values []
-                  (db/select-one FieldValues :field_id (mt/id :orders :product_id)))]
-          (testing "Should have no FieldValues initially"
-            (is (= nil
-                   (field-values))))
-          (mt/with-temp Dimension [_ {:field_id                (mt/id :orders :product_id)
-                                      :human_readable_field_id (mt/id :products :title)
-                                      :type                    "external"}]
-            (mt/with-temp-vals-in-db Field (mt/id :orders :product_id) {:has_field_values "list"}
-              (is (= ::field-values/fv-created
-                     (field-values/create-or-update-field-values! (Field (mt/id :orders :product_id)))))
-              (is (partial= {:field_id              (mt/id :orders :product_id)
-                             :values                [1 2 3 4]
-                             :human_readable_values []}
-                            (field-values))))))))))
-
-(deftest identity-hash-test
-  (testing "Field hashes are composed of the name and the table's identity-hash"
-    (mt/with-temp* [Database    [db    {:name "field-db" :engine :h2}]
-                    Table       [table {:schema "PUBLIC" :name "widget" :db_id (:id db)}]
-                    Field       [field {:name "sku" :table_id (:id table)}]
-                    FieldValues [fv    {:field_id (:id field)}]]
-      (is (= "6f5bb4ba"
-             (serdes.hash/raw-hash [(serdes.hash/identity-hash field)])
-             (serdes.hash/identity-hash fv))))))

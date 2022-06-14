@@ -1,6 +1,8 @@
 import { getDefaultDrills } from "../drill";
 
-const DefaultMode = {
+import type { QueryMode } from "metabase-types/types/Visualization";
+
+const DefaultMode: QueryMode = {
   name: "default",
   drills: getDefaultDrills,
 };

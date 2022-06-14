@@ -1,5 +1,5 @@
 (ns metabase.events.sync-database
-  (:require [clojure.core.async :as a]
+  (:require [clojure.core.async :as async]
             [clojure.tools.logging :as log]
             [metabase.events :as events]
             [metabase.models.database :refer [Database]]
@@ -16,7 +16,7 @@
 
 (defonce ^:private ^{:doc "Channel for receiving event notifications we want to subscribe to for database sync events."}
   sync-database-channel
-  (a/chan))
+  (async/chan))
 
 
 ;;; ------------------------------------------------ EVENT PROCESSING ------------------------------------------------

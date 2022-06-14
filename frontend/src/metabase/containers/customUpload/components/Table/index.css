@@ -1,0 +1,78 @@
+.custom-upload__table {
+  position: relative;
+  width: max-content;
+  border: 1px solid #b3b3b3;
+  position: relative;
+}
+
+.custom-upload__table-reset {
+  position: absolute;
+  right: 0;
+  top: -40px;
+  height: 20px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  color: #84848a;
+  font-size: 14px;
+}
+
+.custom-upload__table-reset span {
+  margin-right: 7px;
+}
+
+.custom-upload__table table {
+  display: block;
+  max-width: 1100px;
+  overflow-x: scroll;
+}
+
+.custom-upload__table td {
+  min-width: 200px;
+  min-height: 32px;
+  padding: 8px 10px;
+  line-height: 1;
+}
+
+.custom-upload__table--edit-td {
+  padding: 3px !important;
+}
+
+.custom-upload__table thead,
+.custom-upload__table tbody tr {
+  border-bottom: 1px solid #dcdee4;
+}
+
+.custom-upload__table tbody tr:last-child {
+  border-bottom: 0;
+}
+
+.custom-upload__table thead td,
+.custom-upload__table tbody td {
+  border-right: 1px solid #dcdee4;
+}
+
+.custom-upload__table thead td:last-child,
+.custom-upload__table tbody td:last-child {
+  border-right: 0;
+}
+
+.custom-upload__table thead {
+  background-color: #f6f6fe;
+  font-weight: bold;
+  text-align: center;
+}
+
+.custom-upload__table img {
+  position: absolute;
+  right: -18px;
+  bottom: -18px;
+  width: 36px;
+  height: 36px;
+}
+
+@media screen and (max-width: 1440px) {
+  .custom-upload__table table {
+    max-width: 750px !important;
+  }
+}

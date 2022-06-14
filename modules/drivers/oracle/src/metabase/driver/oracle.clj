@@ -8,9 +8,7 @@
             [metabase.config :as config]
             [metabase.driver :as driver]
             [metabase.driver.common :as driver.common]
-            [metabase.driver.impl :as driver.impl]
             [metabase.driver.sql :as sql]
-            [metabase.driver.sql-jdbc.common :as sql-jdbc.common]
             [metabase.driver.sql-jdbc.connection :as sql-jdbc.conn]
             [metabase.driver.sql-jdbc.execute :as sql-jdbc.execute]
             [metabase.driver.sql-jdbc.sync :as sql-jdbc.sync]
@@ -18,7 +16,6 @@
             [metabase.driver.sql.query-processor.empty-string-is-null :as sql.qp.empty-string-is-null]
             [metabase.driver.sql.util :as sql.u]
             [metabase.driver.sql.util.unprepare :as unprepare]
-            [metabase.models.secret :as secret]
             [metabase.util :as u]
             [metabase.util.honeysql-extensions :as hx]
             [metabase.util.i18n :refer [trs]]
@@ -26,6 +23,7 @@
   (:import com.mchange.v2.c3p0.C3P0ProxyConnection
            [java.sql Connection ResultSet Types]
            [java.time Instant OffsetDateTime ZonedDateTime]
+           metabase.util.honeysql_extensions.Identifier
            [oracle.jdbc OracleConnection OracleTypes]
            oracle.sql.TIMESTAMPTZ))
 
@@ -68,7 +66,7 @@
   [_ column-type]
   (database-type->base-type column-type))
 
-(defn- non-ssl-spec [details spec host port sid service-name]
+(defn- non-ssl-spec [spec host port sid service-name]
   (assoc spec :subname (str "@" host
                             ":" port
                             (when sid
@@ -76,45 +74,17 @@
                             (when service-name
                               (str "/" service-name)))))
 
-(defn- ssl-spec [details spec host port sid service-name]
-  (-> (assoc spec :subname
-                  (format "@(DESCRIPTION=(ADDRESS=(PROTOCOL=tcps)(HOST=%s)(PORT=%d))(CONNECT_DATA=%s%s))"
-                          host
-                          port
-                          (if sid (str "(SID=" sid ")") "")
-                          (if service-name (str "(SERVICE_NAME=" service-name ")") "")))
-      (sql-jdbc.common/handle-additional-options details)))
+(defn- ssl-spec [spec host port sid service-name]
+  (assoc spec :subname
+              (format "@(DESCRIPTION=(ADDRESS=(PROTOCOL=tcps)(HOST=%s)(PORT=%d))(CONNECT_DATA=%s%s))"
+                      host
+                      port
+                      (if sid (str "(SID=" sid ")") "")
+                      (if service-name (str "(SERVICE_NAME=" service-name ")") ""))))
 
 (def ^:private ^:const prog-name-property
   "The connection property used by the Oracle JDBC Thin Driver to control the program name."
   "v$session.program")
-
-(defn- handle-ssl-options [{:keys [ssl ssl-use-keystore ssl-use-truststore] :as details}]
-  (if ssl
-    (cond-> details
-
-      ssl-use-keystore
-      (-> ; from outer cond->
-        (assoc :javax.net.ssl.keyStoreType "JKS"
-               :javax.net.ssl.keyStore (-> (secret/db-details-prop->secret-map details "ssl-keystore")
-                                           (secret/value->file! :oracle))
-               :javax.net.ssl.keyStorePassword (-> (secret/db-details-prop->secret-map details "ssl-keystore-password")
-                                                   secret/value->string))
-        (dissoc :ssl-use-keystore :ssl-keystore-value :ssl-keystore-path :ssl-keystore-password-value))
-
-      ssl-use-truststore
-      (-> ; from outer cond->
-        (assoc :javax.net.ssl.trustStoreType "JKS"
-               :javax.net.ssl.trustStore (-> (secret/db-details-prop->secret-map details "ssl-truststore")
-                                             (secret/value->file! :oracle))
-               :javax.net.ssl.trustStorePassword (-> (secret/db-details-prop->secret-map details
-                                                                                         "ssl-truststore-password")
-                                                     secret/value->string))
-        (dissoc :ssl-use-truststore :ssl-truststore-value :ssl-truststore-path :ssl-truststore-password-value))
-
-      true
-      (dissoc :ssl))
-    details))
 
 (defmethod sql-jdbc.conn/connection-details->spec :oracle
   [_ {:keys [host port sid service-name]
@@ -122,15 +92,14 @@
       :as   details}]
   (assert (or sid service-name))
   (let [spec      {:classname "oracle.jdbc.OracleDriver", :subprotocol "oracle:thin"}
-        finish-fn (partial (if (:ssl details) ssl-spec non-ssl-spec) details)
+        finish-fn (if (:ssl details) ssl-spec non-ssl-spec)
         ;; the v$session.program value has a max length of 48 (see T4Connection), so we have to make it more terse than
         ;; the usual config/mb-version-and-process-identifier string and ensure we truncate to a length of 48
         prog-nm   (as-> (format "MB %s %s" (config/mb-version-info :tag) config/local-process-uuid) s
                     (subs s 0 (min 48 (count s))))]
     (-> (merge spec details)
-        (assoc prog-name-property prog-nm)
-        handle-ssl-options
         (dissoc :host :port :sid :service-name :ssl)
+        (assoc prog-name-property prog-nm)
         (finish-fn host port sid service-name))))
 
 (defmethod driver/can-connect? :oracle
@@ -153,9 +122,7 @@
 
       (trunc :day v) -> TRUNC(v, 'day')"
   [format-template v]
-  (-> (hsql/call :trunc v (hx/literal format-template))
-      ;; trunc() returns a date -- see https://docs.oracle.com/cd/E11882_01/server.112/e10729/ch4datetime.htm#NLSPG253
-      (hx/with-database-type-info "date")))
+  (hsql/call :trunc v (hx/literal format-template)))
 
 (defmethod sql.qp/date [:oracle :minute]         [_ _ v] (trunc :mi v))
 ;; you can only extract minute + hour from TIMESTAMPs, even though DATEs still have them (WTF), so cast first
@@ -204,12 +171,26 @@
   "Maximal identifier length for Oracle < 12.2"
   30)
 
-(defmethod driver/escape-alias :oracle
-  [_driver s]
-  ;; Oracle identifiers are not allowed to contain double quote marks or the NULL character; just strip them out.
-  ;; (https://docs.oracle.com/cd/B19306_01/server.102/b14200/sql_elements008.htm)
-  (let [s (str/replace s #"[\"\u0000]" "_")]
-    (driver.impl/truncate-alias s legacy-max-identifier-length)))
+(defn- truncate-identifier
+  [identifier]
+  (->> identifier
+       hash
+       str
+       (map (fn [digit]
+              (-> digit
+                  int
+                  (+ 65)
+                  char)))
+       (apply str "identifier_")))
+
+(defmethod sql.qp/->honeysql [:oracle Identifier]
+  [_ identifier]
+  (let [field-identifier (last (:components identifier))]
+    (if (> (count field-identifier) legacy-max-identifier-length)
+      (update identifier :components (fn [components]
+                                       (concat (butlast components)
+                                               [(truncate-identifier field-identifier)])))
+      identifier)))
 
 (defmethod sql.qp/->honeysql [:oracle :substring]
   [driver [_ arg start length]]
@@ -227,36 +208,19 @@
   [driver [_ arg pattern]]
   (hsql/call :regexp_substr (sql.qp/->honeysql driver arg) (sql.qp/->honeysql driver pattern)))
 
-(def ^:private timestamp-types
-  #{"timestamp" "timestamp with time zone" "timestamp with local time zone"})
-
-(defn- cast-to-timestamp-if-needed
-  "If `hsql-form` isn't already one of the [[timestamp-types]], cast it to `timestamp`."
-  [hsql-form]
-  (hx/cast-unless-type-in "timestamp" timestamp-types hsql-form))
-
-(defn- cast-to-date-if-needed
-  "If `hsql-form` isn't already one of the [[timestamp-types]] *or* `date`, cast it to `date`."
-  [hsql-form]
-  (hx/cast-unless-type-in "date" (conj timestamp-types "date") hsql-form))
-
-(defn- add-months [hsql-form amount]
-  (-> (hsql/call :add_months (cast-to-date-if-needed hsql-form) amount)
-      (hx/with-database-type-info "date")))
-
 (defmethod sql.qp/add-interval-honeysql-form :oracle
-  [driver hsql-form amount unit]
-  ;; use add_months() for months since Oracle will barf if you try to do something like 2022-03-31 + 3 months since
-  ;; June 31st doesn't exist. add_months() can figure it out tho.
-  (case unit
-    :quarter (recur driver hsql-form (* 3 amount) :month)
-    :month   (add-months hsql-form amount)
-    :second  (hx/+ (cast-to-timestamp-if-needed hsql-form) (num-to-ds-interval :second amount))
-    :minute  (hx/+ (cast-to-timestamp-if-needed hsql-form) (num-to-ds-interval :minute amount))
-    :hour    (hx/+ (cast-to-timestamp-if-needed hsql-form) (num-to-ds-interval :hour   amount))
-    :day     (hx/+ (cast-to-date-if-needed hsql-form)      (num-to-ds-interval :day    amount))
-    :week    (hx/+ (cast-to-date-if-needed hsql-form)      (num-to-ds-interval :day    (hx/* amount (hsql/raw 7))))
-    :year    (hx/+ (cast-to-date-if-needed hsql-form)      (num-to-ym-interval :year   amount))))
+  [_ hsql-form amount unit]
+  (hx/+
+   (hx/->timestamp hsql-form)
+   (case unit
+     :second  (num-to-ds-interval :second amount)
+     :minute  (num-to-ds-interval :minute amount)
+     :hour    (num-to-ds-interval :hour   amount)
+     :day     (num-to-ds-interval :day    amount)
+     :week    (num-to-ds-interval :day    (hx/* amount (hsql/raw 7)))
+     :month   (num-to-ym-interval :month  amount)
+     :quarter (num-to-ym-interval :month  (hx/* amount (hsql/raw 3)))
+     :year    (num-to-ym-interval :year   amount))))
 
 (defmethod sql.qp/unix-timestamp->honeysql [:oracle :seconds]
   [_ _ field-or-value]

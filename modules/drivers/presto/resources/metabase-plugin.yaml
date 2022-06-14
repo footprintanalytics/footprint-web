@@ -17,16 +17,11 @@ driver:
     - merge:
         - dbname
         - name: catalog
-          display-name: Catalog
-          helper-text: Presto Catalogs contain schemas and reference data sources via a connector.
-          placeholder: european_birds
+          placeholder: hive
     - user
     - password
-    - cloud-ip-address-info
     - ssl
-    - ssh-tunnel
-    - advanced-options-start
-    - default-advanced-options
+  connection-properties-include-tunnel-config: true
 init:
   - step: load-namespace
     namespace: metabase.driver.presto-common

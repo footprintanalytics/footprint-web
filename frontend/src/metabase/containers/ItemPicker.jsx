@@ -5,10 +5,10 @@ import cx from "classnames";
 
 import { t } from "ttag";
 import _ from "underscore";
+import { Box, Flex } from "grid-styled";
 import Icon from "metabase/components/Icon";
 import Breadcrumbs from "metabase/components/Breadcrumbs";
 import LoadingAndErrorWrapper from "metabase/components/LoadingAndErrorWrapper";
-import { getCrumbs } from "metabase/lib/collections";
 
 import { color } from "metabase/lib/colors";
 
@@ -20,18 +20,40 @@ import EntityListLoader, {
 } from "metabase/entities/containers/EntityListLoader";
 
 import Collections from "metabase/entities/collections";
-import {
-  ItemContent,
-  ItemPickerHeader,
-  ItemPickerList,
-  ItemRoot,
-} from "./ItemPicker.styled";
+import { getPersonalCollectionId } from "metabase/lib/collection";
+import { getUser } from "metabase/home/selectors";
+import { getProject } from "metabase/lib/project_info";
 
-const getCollectionIconColor = () => color("text-light");
+const COLLECTION_ICON_COLOR = color("text-light");
 
 const isRoot = collection => collection.id === "root" || collection.id == null;
 
-class ItemPicker extends React.Component {
+const createEntityQuery = (state, props) => {
+  return {
+    project: getProject(),
+    ...(props.models && props.models.includes("dashboard")
+      ? { queryType: "dashboard" }
+      : {}),
+  };
+};
+
+@entityListLoader({
+  entityType: (state, props) => {
+    return props.entity ? props.entity.name : "collections";
+  },
+  entityQuery: (state, props) => createEntityQuery(state, props),
+  loadingAndErrorWrapper: false,
+})
+@connect((state, props) => ({
+  collectionsById: (
+    props.entity || Collections
+  ).selectors.getExpandedCollectionsById(state, {
+    collectionsIdsKey: JSON.stringify(createEntityQuery(state, props)),
+  }),
+  getCollectionIcon: (props.entity || Collections).objectSelectors.getIcon,
+  user: getUser(state),
+}))
+export default class ItemPicker extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
@@ -48,8 +70,28 @@ class ItemPicker extends React.Component {
     value: PropTypes.number,
     types: PropTypes.array,
     showSearch: PropTypes.bool,
-    showScroll: PropTypes.bool,
   };
+
+  // returns a list of "crumbs" starting with the "root" collection
+  getCrumbs(collection, collectionsById) {
+    if (collection && collection.path) {
+      return [
+        ...collection.path.map(id => [
+          collectionsById[id].name,
+          () => this.setState({ parentId: id }),
+        ]),
+        [collection.name],
+      ];
+    } else {
+      return [
+        [
+          collectionsById["root"].name,
+          () => this.setState({ parentId: collectionsById["root"].id }),
+        ],
+        ["Unknown"],
+      ];
+    }
+  }
 
   checkHasWritePermissionForItem(item, models) {
     const { collectionsById } = this.props;
@@ -64,7 +106,7 @@ class ItemPicker extends React.Component {
     const collection = item.collection_id
       ? collectionsById[item.collection_id]
       : collectionsById["root"];
-    return collection.can_write;
+    return collection && collection.can_write;
   }
 
   checkCanWriteToCollectionOrItsChildren(collection) {
@@ -76,6 +118,50 @@ class ItemPicker extends React.Component {
     );
   }
 
+  initDashboardAndCardParentId(props) {
+    const { models, collections, user } = props;
+    if (
+      (models.includes("dashboard") || models.includes("card")) &&
+      collections
+    ) {
+      this.setState({ parentId: getPersonalCollectionId(user) });
+    }
+  }
+
+  initCollectionParentId(props) {
+    const { collections, value } = props;
+    let parentId = this.state.parentId;
+    if (!value) {
+      return;
+    }
+    const { model, id } = value;
+    if (model !== "collection") {
+      return;
+    }
+    if (id && collections) {
+      const { location } = collections.find(item => item.id === id) || {};
+      if (location && location !== "/") {
+        const words = location.split("/");
+        if (words && words.length > 1) {
+          parentId = words[words.length - 2];
+          this.setState({ parentId: parentId });
+        }
+      }
+    }
+  }
+
+  UNSAFE_componentWillReceiveProps(nextProps) {
+    if (!this.props.collections && nextProps.collections) {
+      this.initCollectionParentId(nextProps);
+      this.initDashboardAndCardParentId(nextProps);
+    }
+  }
+
+  componentDidMount() {
+    this.initCollectionParentId(this.props);
+    this.initDashboardAndCardParentId(this.props);
+  }
+
   render() {
     const {
       value,
@@ -85,7 +171,6 @@ class ItemPicker extends React.Component {
       style,
       className,
       showSearch = true,
-      showScroll = true,
     } = this.props;
     const { parentId, searchMode, searchString } = this.state;
 
@@ -94,16 +179,14 @@ class ItemPicker extends React.Component {
       this.props.models.filter(model => model !== "collection").length > 0;
 
     const collection = collectionsById[parentId];
-    const crumbs = getCrumbs(collection, collectionsById, id =>
-      this.setState({ parentId: id }),
-    );
+    const crumbs = this.getCrumbs(collection, collectionsById);
 
     let allCollections = (collection && collection.children) || [];
 
     // show root in itself if we can pick it
-    if (collection && isRoot(collection) && models.has("collection")) {
+    /*    if (collection && isRoot(collection) && models.has("collection")) {
       allCollections = [collection, ...allCollections];
-    }
+    }*/
 
     // ensure we only display collections a user can write to
     allCollections = allCollections.filter(collection =>
@@ -128,13 +211,12 @@ class ItemPicker extends React.Component {
       (models.size === 1 || item.model === value.model);
 
     return (
-      <LoadingAndErrorWrapper
-        loading={!collectionsById}
-        className={cx({ "scroll-y": showScroll })}
-      >
-        <div style={style} className={cx(className, "scroll-y")}>
+      <LoadingAndErrorWrapper loading={!collectionsById} className="scroll-y">
+        <Box style={style} className={cx(className, "scroll-y")}>
           {searchMode ? (
-            <ItemPickerHeader
+            <Box
+              pb={1}
+              mb={2}
               className="border-bottom flex align-center"
               data-testid="item-picker-header"
             >
@@ -156,9 +238,11 @@ class ItemPicker extends React.Component {
                   this.setState({ searchMode: null, searchString: null })
                 }
               />
-            </ItemPickerHeader>
+            </Box>
           ) : (
-            <ItemPickerHeader
+            <Box
+              pb={1}
+              mb={2}
               className="border-bottom flex align-center"
               data-testid="item-picker-header"
             >
@@ -170,9 +254,9 @@ class ItemPicker extends React.Component {
                   onClick={() => this.setState({ searchMode: true })}
                 />
               )}
-            </ItemPickerHeader>
+            </Box>
           )}
-          <ItemPickerList data-testid="item-picker-list">
+          <Box className="scroll-y" data-testid="item-picker-list">
             {!searchString
               ? allCollections.map(collection => {
                   const hasChildren =
@@ -195,7 +279,7 @@ class ItemPicker extends React.Component {
                       key={`collection-${collection.id}`}
                       item={collection}
                       name={collection.name}
-                      color={color(icon.color) || getCollectionIconColor()}
+                      color={color(icon.color) || COLLECTION_ICON_COLOR}
                       icon={icon}
                       selected={canSelect && isSelected(collection)}
                       canSelect={canSelect}
@@ -256,27 +340,12 @@ class ItemPicker extends React.Component {
                 )}
               </EntityListLoader>
             )}
-          </ItemPickerList>
-        </div>
+          </Box>
+        </Box>
       </LoadingAndErrorWrapper>
     );
   }
 }
-
-export default _.compose(
-  entityListLoader({
-    entityType: (state, props) => {
-      return props.entity ? props.entity.name : "collections";
-    },
-    loadingAndErrorWrapper: false,
-  }),
-  connect((state, props) => ({
-    collectionsById: (
-      props.entity || Collections
-    ).selectors.getExpandedCollectionsById(state),
-    getCollectionIcon: (props.entity || Collections).objectSelectors.getIcon,
-  })),
-)(ItemPicker);
 
 const Item = ({
   item,
@@ -291,7 +360,7 @@ const Item = ({
 }) => {
   const iconProps = _.isObject(icon) ? icon : { name: icon };
   return (
-    <ItemRoot
+    <Box
       mt={1}
       p={1}
       onClick={
@@ -308,7 +377,7 @@ const Item = ({
       })}
       data-testid="item-picker-item"
     >
-      <ItemContent>
+      <Flex align="center">
         <Icon size={22} {...iconProps} color={selected ? "white" : color} />
         <h4 className="mx1">{name}</h4>
         {hasChildren && (
@@ -326,7 +395,7 @@ const Item = ({
             }}
           />
         )}
-      </ItemContent>
-    </ItemRoot>
+      </Flex>
+    </Box>
   );
 };

@@ -1,21 +1,23 @@
 import {
   restore,
   popover,
+  mockSessionProperty,
   filterWidget,
   editDashboard,
   cancelEditingDashboard,
   saveDashboard,
   checkFilterLabelAndValue,
-  visitDashboard,
 } from "__support__/e2e/cypress";
 
 import { setMonthAndYear } from "../../native-filters/helpers/e2e-date-filter-helpers";
 
-describe("issue 17139", () => {
+describe.skip("issue 17139", () => {
   beforeEach(() => {
     restore();
     cy.signInAsAdmin();
-    visitDashboard(1);
+    mockSessionProperty("field-filter-operators-enabled?", true);
+
+    cy.visit("/dashboard/1");
 
     editDashboard();
 
@@ -35,7 +37,7 @@ describe("issue 17139", () => {
     saveDashboard();
   });
 
-  it("should not reset previously defined filters when exiting 'edit' mode without making any changes (metabase#5332, metabase#17139)", () => {
+  it("should not reset previously defined filters when exiting 'edit' mode without making any changes (metabase#17139)", () => {
     filterWidget()
       .contains("Month and Year")
       .click();

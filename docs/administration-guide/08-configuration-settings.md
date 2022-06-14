@@ -1,7 +1,3 @@
----
-title: General settings
----
-
 ## General settings
 
 This section contains settings for your whole instance, like its URL, the reporting timezone, and toggles for disabling or enabling some of Metabase's optional features.

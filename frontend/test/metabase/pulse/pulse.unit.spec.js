@@ -16,7 +16,7 @@ const TEST_USERS = [
 
 describe("recipient picker", () => {
   describe("focus", () => {
-    it("should be focused if there are no recipients", async () => {
+    it("should be focused if there are no recipients", () => {
       render(
         <RecipientPicker
           recipients={[]}
@@ -26,8 +26,8 @@ describe("recipient picker", () => {
         />,
       );
       // Popover with all names should be open on focus
-      await screen.findByText("Barb");
-      await screen.findByText("Dustin");
+      screen.getByText("Barb");
+      screen.getByText("Dustin");
     });
     it("should not be focused if there are existing recipients", () => {
       render(

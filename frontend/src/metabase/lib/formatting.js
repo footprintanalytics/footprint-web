@@ -9,14 +9,14 @@ import { msgid, ngettext } from "ttag";
 import Mustache from "mustache";
 import ReactMarkdown from "react-markdown";
 
-import ExternalLink from "metabase/core/components/ExternalLink";
+import ExternalLink from "metabase/components/ExternalLink";
 
 import {
-  isBoolean,
   isCoordinate,
   isDate,
-  isDateWithoutTime,
   isEmail,
+  isImageURL,
+  isDateWithoutTime,
   isLatitude,
   isLongitude,
   isNumber,
@@ -33,6 +33,11 @@ import {
   getDataFromClicked,
 } from "metabase/lib/click-behavior";
 
+import type {
+  DateStyle,
+  TimeEnabled,
+  TimeStyle,
+} from "metabase/lib/formatting/date";
 import {
   DEFAULT_DATE_STYLE,
   DEFAULT_TIME_STYLE,
@@ -45,15 +50,72 @@ import {
   renderLinkURLForClick,
 } from "metabase/lib/formatting/link";
 import { NULL_DISPLAY_VALUE, NULL_NUMERIC_VALUE } from "metabase/lib/constants";
-import { currency } from "cljs/metabase.shared.util.currency";
+
+import type Field from "metabase-lib/lib/metadata/Field";
+import type { Column, Value } from "metabase-types/types/Dataset";
+import type { DatetimeUnit } from "metabase-types/types/Query";
+import type { Moment } from "metabase-types/types";
+import type { ClickObject } from "metabase-types/types/Visualization";
+import upperFirst from "lodash/upperFirst";
+import { getProject, isDefi360 } from "./project_info";
 
 // a one or two character string specifying the decimal and grouping separator characters
+export type NumberSeparators = ".," | ", " | ",." | "." | ".’";
 
 // single character string specifying date separators
+export type DateSeparator = "/" | "-" | ".";
+
+export type FormattingOptions = {
+  // GENERIC
+  column?: Column | Field,
+  majorWidth?: number,
+  type?: "axis" | "cell" | "tooltip",
+  jsx?: boolean,
+  remap?: boolean,
+  // render links for type/URLs, type/Email, etc
+  rich?: boolean,
+  compact?: boolean,
+  // always format as the start value rather than the range, e.x. for bar histogram
+  noRange?: boolean,
+  // NUMBER
+  // TODO: docoument these:
+  number_style?: null | "decimal" | "percent" | "scientific" | "currency",
+  prefix?: string,
+  suffix?: string,
+  scale?: number,
+  negativeInParentheses?: boolean,
+  // https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number/toLocaleString
+  scale?: number,
+  number_separators?: NumberSeparators,
+  minimumFractionDigits?: number,
+  maximumFractionDigits?: number,
+  // decimals sets both minimumFractionDigits and maximumFractionDigits
+  decimals?: number,
+  // STRING
+  view_as?: null | "link" | "email_link" | "image" | "auto",
+  link_text?: string,
+  link_template?: string,
+  clicked?: ClickObject,
+  // DATE/TIME
+  // date/timeout style string that is used to derive a date_format or time_format for different units, see metabase/lib/formatting/date
+  date_style?: DateStyle,
+  date_separator?: DateSeparator,
+  date_abbreviate?: boolean,
+  date_format?: string,
+  time_style?: TimeStyle,
+  time_enabled?: TimeEnabled,
+  time_format?: string,
+  // display in local timezone or parsed timezone
+  local?: boolean,
+  // markdown template
+  markdown_template?: string,
+};
+
+type FormattedString = string | React.Element;
 
 export const FK_SYMBOL = "→";
 
-const DEFAULT_NUMBER_OPTIONS = {
+const DEFAULT_NUMBER_OPTIONS: FormattingOptions = {
   compact: false,
   maximumFractionDigits: 2,
 };
@@ -92,7 +154,7 @@ const NUMBER_REGEX = /([\+\-])?[^0-9]*([0-9\., ]+)/;
 
 const DEFAULT_NUMBER_SEPARATORS = ".,";
 
-export function numberFormatterForOptions(options) {
+export function numberFormatterForOptions(options: FormattingOptions) {
   options = { ...getDefaultNumberOptions(options), ...options };
   // always use "en" locale so we have known number separators we can replace depending on number_separators option
   // TODO: if we do that how can we get localized currency names?
@@ -110,16 +172,7 @@ export function numberFormatterForOptions(options) {
   });
 }
 
-let currencyMapCache;
-export function getCurrencySymbol(currencyCode) {
-  if (!currencyMapCache) {
-    // only turn the array into a map if we call this function
-    currencyMapCache = Object.fromEntries(currency);
-  }
-  return currencyMapCache[currencyCode]?.symbol || currencyCode || "$";
-}
-
-export function formatNumber(number, options = {}) {
+export function formatNumber(number: number, options: FormattingOptions = {}) {
   options = { ...getDefaultNumberOptions(options), ...options };
 
   if (typeof options.scale === "number" && !isNaN(options.scale)) {
@@ -193,7 +246,10 @@ export function formatNumber(number, options = {}) {
 }
 
 // replaces the decimale and grouping separators with those specified by a NumberSeparators option
-function replaceNumberSeparators(formatted, separators) {
+function replaceNumberSeparators(
+  formatted: string,
+  separators: NumberSeparators,
+) {
   const [decimalSeparator, groupingSeparator] = (separators || ".,").split("");
 
   const separatorMap = {
@@ -204,14 +260,14 @@ function replaceNumberSeparators(formatted, separators) {
   return formatted.replace(/,|\./g, separator => separatorMap[separator]);
 }
 
-function formatNumberScientific(value, options) {
+function formatNumberScientific(
+  value: number,
+  options: FormattingOptions,
+): FormattedString {
   if (options.maximumFractionDigits) {
     value = d3.round(value, options.maximumFractionDigits);
   }
-  const exp = replaceNumberSeparators(
-    value.toExponential(options.minimumFractionDigits),
-    options?.number_separators,
-  );
+  const exp = value.toExponential(options.minimumFractionDigits);
   if (options.jsx) {
     const [m, n] = exp.split("e");
     return (
@@ -233,7 +289,7 @@ export const COMPACT_CURRENCY_OPTIONS = {
   currency_style: "symbol",
 };
 
-function formatNumberCompact(value, options) {
+function formatNumberCompact(value: number, options: FormattingOptions) {
   if (options.number_style === "percent") {
     return formatNumberCompactWithoutOptions(value * 100) + "%";
   }
@@ -267,7 +323,7 @@ function formatNumberCompact(value, options) {
   return formatNumberCompactWithoutOptions(value);
 }
 
-function formatNumberCompactWithoutOptions(value) {
+function formatNumberCompactWithoutOptions(value: number) {
   if (value === 0) {
     // 0 => 0
     return "0";
@@ -281,7 +337,10 @@ function formatNumberCompactWithoutOptions(value) {
   }
 }
 
-export function formatCoordinate(value, options = {}) {
+export function formatCoordinate(
+  value: number,
+  options: FormattingOptions = {},
+) {
   const binWidth =
     options.column &&
     options.column.binning_info &&
@@ -303,7 +362,11 @@ export function formatCoordinate(value, options = {}) {
   return formattedValue + "°" + direction;
 }
 
-export function formatRange(range, formatter, options = {}) {
+export function formatRange(
+  range: [number, number],
+  formatter: (value: number) => any,
+  options: FormattingOptions = {},
+) {
   const [start, end] = range.map(value => formatter(value, options));
   if ((options.jsx && typeof start !== "string") || typeof end !== "string") {
     return (
@@ -341,7 +404,11 @@ function formatMajorMinor(major, minor, options = {}) {
 }
 
 /** This formats a time with unit as a date range */
-export function formatDateTimeRangeWithUnit(value, unit, options = {}) {
+export function formatDateTimeRangeWithUnit(
+  value: Value,
+  unit: DatetimeUnit,
+  options: FormattingOptions = {},
+) {
   const m = parseTimestamp(value, unit, options.local);
   if (!m.isValid()) {
     return String(value);
@@ -388,7 +455,7 @@ export function formatDateTimeRangeWithUnit(value, unit, options = {}) {
   }
 }
 
-function formatWeek(m, options = {}) {
+function formatWeek(m: Moment, options: FormattingOptions = {}) {
   return formatMajorMinor(m.format("wo"), m.format("gggg"), options);
 }
 
@@ -422,16 +489,15 @@ function formatDateTimeWithFormats(value, dateFormat, timeFormat, options) {
   return m.format(format.join(", "));
 }
 
-export function formatDateTimeWithUnit(value, unit, options = {}) {
-  if (options.isExclude && unit === "hour-of-day") {
-    return moment.utc(value).format("h A");
-  } else if (options.isExclude && unit === "day-of-week") {
-    const date = moment.utc(value);
-    if (date.isValid()) {
-      return date.format("dddd");
-    }
-  }
+function formatDateTime(value, options) {
+  return formatDateTimeWithUnit(value, "minute", options);
+}
 
+export function formatDateTimeWithUnit(
+  value: Value,
+  unit: DatetimeUnit,
+  options: FormattingOptions = {},
+) {
   const m = parseTimestamp(value, unit, options.local);
   if (!m.isValid()) {
     return String(value);
@@ -477,16 +543,20 @@ export function formatDateTimeWithUnit(value, unit, options = {}) {
   return formatDateTimeWithFormats(m, dateFormat, timeFormat, options);
 }
 
-export function formatTime(value) {
+export function formatTime(value: Value) {
   const m = parseTime(value);
   if (!m.isValid()) {
     return String(value);
+  } else {
+    return m.format("LT");
   }
-
-  return m.format("LT");
 }
 
-export function formatTimeWithUnit(value, unit, options = {}) {
+export function formatTimeWithUnit(
+  value: Value,
+  unit: DatetimeUnit,
+  options: FormattingOptions = {},
+) {
   const m = parseTimestamp(value, unit, options.local);
   if (!m.isValid()) {
     return String(value);
@@ -513,8 +583,8 @@ export function formatTimeWithUnit(value, unit, options = {}) {
 const EMAIL_ALLOW_LIST_REGEX = /^(?=.{1,254}$)(?=.{1,64}@)[-!#$%&'*+/0-9=?A-Z^_`a-z{|}~]+(\.[-!#$%&'*+/0-9=?A-Z^_`a-z{|}~]+)*@[A-Za-z0-9]([A-Za-z0-9-]{0,61}[A-Za-z0-9])?(\.[A-Za-z0-9]([A-Za-z0-9-]{0,61}[A-Za-z0-9])?)*$/;
 
 export function formatEmail(
-  value,
-  { jsx, rich, view_as = "auto", link_text, clicked } = {},
+  value: Value,
+  { jsx, rich, view_as = "auto", link_text, clicked }: FormattingOptions = {},
 ) {
   const email = String(value);
   const label =
@@ -605,11 +675,27 @@ function getLinkText(value, options) {
     formatValue(value, { ...options, view_as: null })
   );
 }
+export function formatUrlIfDefi(value) {
+  if (isDefi360() && !value.includes("/defi360/")) {
+    return value.includes("footprint.network/")
+      ? value.replace("footprint.network/", "footprint.network/defi360/")
+      : value.replace("localhost:8081/", "localhost:8081/defi360/");
+  } else {
+    return value;
+  }
+}
 
 export function formatUrl(value, options = {}) {
   const { jsx, rich } = options;
 
-  const url = getLinkUrl(value, options);
+  let url = getLinkUrl(value, options);
+
+  if (url && getProject() === "defi360") {
+    url = url.replace(
+      "footprint.network/guest",
+      "footprint.network/defi360/guest",
+    );
+  }
 
   if (jsx && rich && url) {
     const text = getLinkText(value, options);
@@ -624,21 +710,28 @@ export function formatUrl(value, options = {}) {
 }
 
 export function formatImage(
-  value,
-  { jsx, rich, view_as = "auto", link_text } = {},
+  value: Value,
+  { jsx, rich, view_as = "auto", link_text }: FormattingOptions = {},
 ) {
   const url = String(value);
   const protocol = getUrlProtocol(url);
   const acceptedProtocol = protocol === "http:" || protocol === "https:";
   if (jsx && rich && view_as === "image" && acceptedProtocol) {
-    return <img src={url} style={{ height: 30 }} />;
+    return (
+      <img
+        src={url + "?" + new Date().valueOf()}
+        style={{ height: 30 }}
+        // crossOrigin="anonymous"
+        alt={value}
+      />
+    );
   } else {
     return url;
   }
 }
 
 // fallback for formatting a string without a column semantic_type
-function formatStringFallback(value, options = {}) {
+function formatStringFallback(value: Value, options: FormattingOptions = {}) {
   if (options.view_as !== null) {
     value = formatUrl(value, options);
     if (typeof value === "string") {
@@ -658,7 +751,7 @@ const MARKDOWN_RENDERERS = {
   ),
 };
 
-export function formatValue(value, options = {}) {
+export function formatValue(value: Value, options: FormattingOptions = {}) {
   // avoid rendering <ExternalLink> if we have click_behavior set
   if (
     options.click_behavior &&
@@ -715,7 +808,10 @@ export function formatValue(value, options = {}) {
   }
 }
 
-export function getRemappedValue(value, { remap, column } = {}) {
+export function getRemappedValue(
+  value: Value,
+  { remap, column }: FormattingOptions = {},
+): ?string {
   if (remap && column) {
     if (column.hasRemappedValue && column.hasRemappedValue(value)) {
       return column.remappedValue(value);
@@ -728,7 +824,7 @@ export function getRemappedValue(value, { remap, column } = {}) {
   }
 }
 
-export function formatValueRaw(value, options = {}) {
+export function formatValueRaw(value: Value, options: FormattingOptions = {}) {
   options = {
     jsx: false,
     remap: true,
@@ -767,6 +863,8 @@ export function formatValueRaw(value, options = {}) {
       options.click_behavior.linkTextTemplate,
       getDataFromClicked(options.clicked),
     );
+  } else if (isImageURL(column)) {
+    return formatImage(value, options);
   } else if (
     (isURL(column) && options.view_as !== null) ||
     options.view_as === "link"
@@ -784,7 +882,7 @@ export function formatValueRaw(value, options = {}) {
     moment.isMoment(value) ||
     moment(value, ["YYYY-MM-DD'T'HH:mm:ss.SSSZ"], true).isValid()
   ) {
-    return formatDateTimeWithUnit(value, "minute", options);
+    return formatDateTime(value, options);
   } else if (typeof value === "string") {
     if (column && column.semantic_type != null) {
       return value;
@@ -805,8 +903,6 @@ export function formatValueRaw(value, options = {}) {
     } else {
       return formatNumber(value, options);
     }
-  } else if (typeof value === "boolean" && isBoolean(column)) {
-    return JSON.stringify(value);
   } else if (typeof value === "object") {
     // no extra whitespace for table cells
     return JSON.stringify(value);
@@ -815,7 +911,7 @@ export function formatValueRaw(value, options = {}) {
   }
 }
 
-export function formatColumn(column) {
+export function formatColumn(column: Column): string {
   if (!column) {
     return "";
   } else if (column.remapped_to_column != null) {
@@ -830,7 +926,7 @@ export function formatColumn(column) {
   }
 }
 
-export function formatField(field) {
+export function formatField(field: Field): string {
   if (!field) {
     return "";
   } else if (field.dimensions && field.dimensions.name) {
@@ -848,13 +944,8 @@ export function pluralize(...args) {
   return inflection.pluralize(...args);
 }
 
-export function capitalize(str, { lowercase = true } = {}) {
-  const firstChar = str.charAt(0).toUpperCase();
-  let rest = str.slice(1);
-  if (lowercase) {
-    rest = rest.toLowerCase();
-  }
-  return firstChar + rest;
+export function capitalize(...args) {
+  return inflection.capitalize(...args);
 }
 
 export function inflect(...args) {
@@ -869,7 +960,7 @@ export function humanize(...args) {
   return inflection.humanize(...args);
 }
 
-export function conjunct(list, conjunction) {
+export function conjunct(list: string[], conjunction: string) {
   return (
     list.slice(0, -1).join(`, `) +
     (list.length > 2 ? `,` : ``) +
@@ -878,7 +969,7 @@ export function conjunct(list, conjunction) {
   );
 }
 
-export function duration(milliseconds) {
+export function duration(milliseconds: number) {
   const SECOND = 1000;
   const MINUTE = 60 * SECOND;
   const HOUR = 60 * MINUTE;
@@ -896,18 +987,18 @@ export function duration(milliseconds) {
 }
 
 // Removes trailing "id" from field names
-export function stripId(name) {
+export function stripId(name: string) {
   return name && name.replace(/ id$/i, "").trim();
 }
 
-export function slugify(name) {
+export function slugify(name: string) {
   return name && encodeURIComponent(name.toLowerCase().replace(/\s/g, "_"));
 }
 
 export function assignUserColors(
-  userIds,
-  currentUserId,
-  colorClasses = [
+  userIds: number[],
+  currentUserId: number,
+  colorClasses: string[] = [
     "bg-brand",
     "bg-purple",
     "bg-error",
@@ -936,7 +1027,7 @@ export function assignUserColors(
   return assignments;
 }
 
-export function formatSQL(sql) {
+export function formatSQL(sql: string) {
   if (typeof sql === "string") {
     sql = sql.replace(/\sFROM/, "\nFROM");
     sql = sql.replace(/\sLEFT JOIN/, "\nLEFT JOIN");
@@ -949,4 +1040,98 @@ export function formatSQL(sql) {
 
     return sql;
   }
+}
+
+export function formatTitle(title) {
+  if (!title) {
+    return title;
+  }
+  const ignoreArray = [
+    "a",
+    "all",
+    "the",
+    "at",
+    "with",
+    "of",
+    "in",
+    "or",
+    "and",
+    "to",
+    "about",
+    "but",
+    "by",
+    "on",
+    "vs",
+  ];
+  const titleBlock = title.split(" ");
+  if (titleBlock && titleBlock.length > 0) {
+    return titleBlock
+      .map(item => (ignoreArray.includes(item) ? item : upperFirst(item)))
+      .join(" ")
+      .trim();
+  }
+
+  return title.trim();
+}
+
+export function formatTableTitle(title) {
+  if (!title) {
+    return title;
+  }
+  return formatTitle(title.replaceAll("_", " "));
+}
+
+export function formatSectionTitle(title) {
+  if (!title) {
+    return title;
+  }
+  return formatTitle(title.replaceAll("-", " "));
+}
+
+export function formatDashboardChartSaveTitle(name) {
+  if (!name) {
+    return name;
+  }
+  return name.replaceAll(/\s+/g, " ").trim();
+}
+
+export function formatArticleSaveTitle(name) {
+  if (!name) {
+    return name;
+  }
+  return name.replaceAll(/\s+/g, " ").trim();
+}
+
+export function formatArticleTitle(title) {
+  return formatTitle(title);
+}
+
+export function articleTitle(item) {
+  if (!item) {
+    return item;
+  }
+  return item.type === "article" ? formatArticleTitle(item.title) : item.title;
+}
+
+export function getDescription({ description, orderedCards }) {
+  if (description) {
+    return description;
+  }
+
+  if (orderedCards) {
+    const textCard = orderedCards
+      ?.sort((a, b) => a.row - b.row)
+      ?.find(item => item.card.display === "text");
+    if (textCard) {
+      return textCard.visualization_settings?.text
+        ?.replace(/#/g, "")
+        ?.replace(/\s+/g, " ")
+        ?.trim()
+        ?.slice(0, 500);
+    } else {
+      return orderedCards?.find(item => item.card.name)?.card?.name;
+    }
+  }
+
+  return "";
 }

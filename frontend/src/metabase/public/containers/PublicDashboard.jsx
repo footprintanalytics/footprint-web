@@ -34,13 +34,20 @@ import {
   setEmbedDashboardEndpoints,
 } from "metabase/services";
 
+import type { Dashboard } from "metabase-types/types/Dashboard";
+import type { Parameter } from "metabase-types/types/Parameter";
+
 import _ from "underscore";
+import { parseTitleId } from "metabase/lib/urls";
+import { parseHashOptions } from "metabase/lib/browser";
+import MetabaseUtils from "metabase/lib/utils";
 
 const mapStateToProps = (state, props) => {
   return {
     metadata: getMetadata(state, props),
-    dashboardId:
+    dashboardId: parseTitleId(
       props.params.dashboardId || props.params.uuid || props.params.token,
+    ).id,
     dashboard: getDashboardComplete(state, props),
     dashcardData: getCardData(state, props),
     slowCards: getSlowCards(state, props),
@@ -56,17 +63,50 @@ const mapDispatchToProps = {
   onChangeLocation: push,
 };
 
+type Props = {
+  params: { uuid?: string, token?: string },
+  location: { query: { [key: string]: string } },
+  dashboardId: string,
+
+  dashboard?: Dashboard,
+  parameters: Parameter[],
+  parameterValues: { [key: string]: string },
+
+  initialize: () => void,
+  isFullscreen: boolean,
+  isNightMode: boolean,
+  fetchDashboard: (
+    dashId: string,
+    query: { [key: string]: string },
+  ) => Promise<void>,
+  fetchDashboardCardData: (options: {
+    reload: boolean,
+    clear: boolean,
+  }) => Promise<void>,
+  cancelFetchDashboardCardData: () => Promise<void>,
+  setParameterValue: (id: string, value: string) => void,
+  setErrorPage: (error: { status: number }) => void,
+};
+
+@connect(mapStateToProps, mapDispatchToProps)
+@title(({ dashboard }) => dashboard && dashboard.name)
+@DashboardControls
 // NOTE: this should use DashboardData HoC
-class PublicDashboard extends Component {
-  _initialize = async () => {
+export default class PublicDashboard extends Component {
+  props: Props;
+
+  async UNSAFE_componentWillMount() {
     const {
       initialize,
       fetchDashboard,
       fetchDashboardCardData,
       setErrorPage,
       location,
-      params: { uuid, token },
+      params,
     } = this.props;
+
+    const uuid = parseTitleId(params.uuid).id;
+    const token = params.token;
 
     if (uuid) {
       setPublicDashboardEndpoints();
@@ -82,22 +122,14 @@ class PublicDashboard extends Component {
       console.error(error);
       setErrorPage(error);
     }
-  };
-
-  async componentDidMount() {
-    this._initialize();
   }
 
   componentWillUnmount() {
     this.props.cancelFetchDashboardCardData();
   }
 
-  async componentDidUpdate(prevProps) {
-    if (this.props.dashboardId !== prevProps.dashboardId) {
-      return this._initialize();
-    }
-
-    if (!_.isEqual(this.props.parameterValues, prevProps.parameterValues)) {
+  UNSAFE_componentWillReceiveProps(nextProps: Props) {
+    if (!_.isEqual(this.props.parameterValues, nextProps.parameterValues)) {
       this.props.fetchDashboardCardData({ reload: false, clear: true });
     }
   }
@@ -109,37 +141,51 @@ class PublicDashboard extends Component {
       parameterValues,
       isFullscreen,
       isNightMode,
+      router,
     } = this.props;
     const buttons = !IFRAMED
       ? getDashboardActions(this, { ...this.props, isPublic: true })
       : [];
+
+    const { chart_style } = {
+      ...parseHashOptions(location.hash),
+    };
 
     return (
       <EmbedFrame
         name={dashboard && dashboard.name}
         description={dashboard && dashboard.description}
         dashboard={dashboard}
+        creatorId={dashboard && dashboard.creator_id}
         parameters={parameters}
         parameterValues={parameterValues}
         setParameterValue={this.props.setParameterValue}
         actionButtons={
           buttons.length > 0 && <div className="flex">{buttons}</div>
         }
+        creator={dashboard && dashboard.creator}
+        statistics={dashboard && dashboard.statistics}
+        createdAt={dashboard && dashboard.createdAt}
+        isFavorite={dashboard && dashboard.isFavorite}
+        router={router}
       >
         <LoadingAndErrorWrapper
           className={cx("Dashboard p1 flex-full", {
             "Dashboard--fullscreen": isFullscreen,
             "Dashboard--night": isNightMode,
+            "Dashboard--coin360": MetabaseUtils.isCoin360(),
           })}
           loading={!dashboard}
         >
           {() => (
             <DashboardGrid
               {...this.props}
-              className="spread"
+              className={"spread"}
               mode={PublicMode}
               metadata={this.props.metadata}
               navigateToNewCardFromDashboard={() => {}}
+              hideWatermark={dashboard && dashboard.hideWatermark}
+              chartStyle={chart_style}
             />
           )}
         </LoadingAndErrorWrapper>
@@ -147,9 +193,3 @@ class PublicDashboard extends Component {
     );
   }
 }
-
-export default _.compose(
-  connect(mapStateToProps, mapDispatchToProps),
-  title(({ dashboard }) => dashboard && dashboard.name),
-  DashboardControls,
-)(PublicDashboard);

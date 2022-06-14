@@ -1,4 +1,3 @@
-/* eslint-disable react/prop-types */
 import React from "react";
 import PropTypes from "prop-types";
 import { connect } from "react-redux";
@@ -9,19 +8,15 @@ import { createMemoizedSelector } from "metabase/lib/redux";
 import entityType from "./EntityType";
 import paginationState from "metabase/hoc/PaginationState";
 import LoadingAndErrorWrapper from "metabase/components/LoadingAndErrorWrapper";
-import { capitalize } from "metabase/lib/formatting";
 
 const propTypes = {
   entityType: PropTypes.string,
   entityQuery: PropTypes.oneOfType([PropTypes.func, PropTypes.object]),
   reload: PropTypes.bool,
-  reloadInterval: PropTypes.oneOfType([PropTypes.number, PropTypes.func]),
   wrapped: PropTypes.bool,
   debounced: PropTypes.bool,
   loadingAndErrorWrapper: PropTypes.bool,
-  LoadingAndErrorWrapper: PropTypes.elementType,
   keepListWhileLoading: PropTypes.bool,
-  listName: PropTypes.string,
   selectorName: PropTypes.string,
   children: PropTypes.func,
 
@@ -44,7 +39,6 @@ const propTypes = {
 
 const defaultProps = {
   loadingAndErrorWrapper: true,
-  LoadingAndErrorWrapper: LoadingAndErrorWrapper,
   keepListWhileLoading: false,
   reload: false,
   wrapped: false,
@@ -56,11 +50,9 @@ const CONSUMED_PROPS = [
   "entityType",
   "entityQuery",
   // "reload", // Masked by `reload` function. Should we rename that?
-  "reloadInterval",
   "wrapped",
   "debounced",
   "loadingAndErrorWrapper",
-  "LoadingAndErrorWrapper",
   "selectorName",
 ];
 
@@ -78,7 +70,50 @@ const getMemoizedEntityQuery = createMemoizedSelector(
   entityQuery => entityQuery,
 );
 
-class EntityListLoaderInner extends React.Component {
+@entityType()
+@paginationState()
+@connect((state, props) => {
+  let {
+    entityDef,
+    entityQuery,
+    page,
+    pageSize,
+    allLoading,
+    allLoaded,
+    allFetched,
+    allError,
+    selectorName = "getList",
+  } = props;
+  if (typeof entityQuery === "function") {
+    entityQuery = entityQuery(state, props);
+  }
+  if (typeof pageSize === "number" && typeof page === "number") {
+    entityQuery = { limit: pageSize, offset: pageSize * page, ...entityQuery };
+  }
+  entityQuery = getMemoizedEntityQuery(state, { entityQuery });
+
+  const loading = entityDef.selectors.getLoading(state, { entityQuery });
+  const loaded = entityDef.selectors.getLoaded(state, { entityQuery });
+  const fetched = entityDef.selectors.getFetched(state, { entityQuery });
+  const error = entityDef.selectors.getError(state, { entityQuery });
+  const metadata = entityDef.selectors.getListMetadata(state, { entityQuery });
+
+  return {
+    entityQuery,
+    list: entityDef.selectors[selectorName](state, { entityQuery }),
+    metadata,
+    loading,
+    loaded,
+    fetched,
+    error,
+    // merge props passed in from stacked Entity*Loaders:
+    allLoading: loading || (allLoading == null ? false : allLoading),
+    allLoaded: loaded && (allLoaded == null ? true : allLoaded),
+    allFetched: fetched && (allFetched == null ? true : allFetched),
+    allError: error || (allError == null ? null : allError),
+  };
+})
+class EntityListLoader extends React.Component {
   state = {
     previousList: [],
     isReloading: this.props.reload,
@@ -121,13 +156,8 @@ class EntityListLoaderInner extends React.Component {
     250,
   );
 
-  componentDidMount() {
-    const { loaded, reload, reloadInterval } = this.props;
-    this.fetchList(this.props, { reload });
-
-    if (loaded && reloadInterval) {
-      this.reloadTimeout = setTimeout(this.reload, reloadInterval);
-    }
+  UNSAFE_componentWillMount() {
+    this.fetchList(this.props, { reload: this.props.reload });
   }
 
   UNSAFE_componentWillReceiveProps(nextProps) {
@@ -143,7 +173,7 @@ class EntityListLoaderInner extends React.Component {
   }
 
   componentDidUpdate(prevProps) {
-    const { loaded, reloadInterval, keepListWhileLoading } = this.props;
+    const { keepListWhileLoading } = this.props;
     const { previousList } = this.state;
 
     const shouldUpdatePrevList =
@@ -154,18 +184,6 @@ class EntityListLoaderInner extends React.Component {
     if (shouldUpdatePrevList) {
       this.setState({ previousList: prevProps.list });
     }
-
-    if (loaded && !prevProps.loaded) {
-      clearTimeout(this.reloadTimeout);
-
-      if (reloadInterval) {
-        this.reloadTimeout = setTimeout(this.reload, reloadInterval);
-      }
-    }
-  }
-
-  componentWillUnmount() {
-    clearTimeout(this.reloadTimeout);
   }
 
   renderChildren = () => {
@@ -174,7 +192,6 @@ class EntityListLoaderInner extends React.Component {
       entityDef,
       wrapped,
       list: currentList,
-      listName = entityDef.nameMany,
       loading,
       reload, // eslint-disable-line no-unused-vars
       keepListWhileLoading,
@@ -194,19 +211,13 @@ class EntityListLoaderInner extends React.Component {
       list,
       loading,
       // alias the entities name:
-      [listName]: list,
+      [entityDef.nameMany]: list,
       reload: this.reload,
-      [`reload${capitalize(listName)}`]: this.reload,
     });
   };
 
   render() {
-    const {
-      allFetched,
-      allError,
-      loadingAndErrorWrapper,
-      LoadingAndErrorWrapper,
-    } = this.props;
+    const { allFetched, allError, loadingAndErrorWrapper } = this.props;
     const { isReloading } = this.state;
 
     return loadingAndErrorWrapper ? (
@@ -226,65 +237,6 @@ class EntityListLoaderInner extends React.Component {
     this.fetchList(this.props, { reload: true });
   };
 }
-
-const EntityListLoader = _.compose(
-  entityType(),
-  paginationState(),
-  connect((state, props) => {
-    let {
-      entityDef,
-      entityQuery,
-      reloadInterval,
-      page,
-      pageSize,
-      allLoading,
-      allLoaded,
-      allFetched,
-      allError,
-      selectorName = "getList",
-    } = props;
-    if (typeof entityQuery === "function") {
-      entityQuery = entityQuery(state, props);
-    }
-    if (typeof pageSize === "number" && typeof page === "number") {
-      entityQuery = {
-        limit: pageSize,
-        offset: pageSize * page,
-        ...entityQuery,
-      };
-    }
-    entityQuery = getMemoizedEntityQuery(state, { entityQuery });
-
-    const list = entityDef.selectors[selectorName](state, { entityQuery });
-    if (typeof reloadInterval === "function") {
-      reloadInterval = reloadInterval(state, props, list);
-    }
-
-    const loading = entityDef.selectors.getLoading(state, { entityQuery });
-    const loaded = entityDef.selectors.getLoaded(state, { entityQuery });
-    const fetched = entityDef.selectors.getFetched(state, { entityQuery });
-    const error = entityDef.selectors.getError(state, { entityQuery });
-    const metadata = entityDef.selectors.getListMetadata(state, {
-      entityQuery,
-    });
-
-    return {
-      list,
-      entityQuery,
-      reloadInterval,
-      metadata,
-      loading,
-      loaded,
-      fetched,
-      error,
-      // merge props passed in from stacked Entity*Loaders:
-      allLoading: loading || (allLoading == null ? false : allLoading),
-      allLoaded: loaded && (allLoaded == null ? true : allLoaded),
-      allFetched: fetched && (allFetched == null ? true : allFetched),
-      allError: error || (allError == null ? null : allError),
-    };
-  }),
-)(EntityListLoaderInner);
 
 EntityListLoader.propTypes = propTypes;
 EntityListLoader.defaultProps = defaultProps;

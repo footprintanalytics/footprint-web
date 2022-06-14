@@ -1,3 +1,8 @@
+.DashboardHeader {
+  background-color: white;
+  /*border-bottom: var(--border-size) var(--border-style) var(--color-border);*/
+}
+
 .Dash-wrapper {
   width: 100%;
 }
@@ -52,12 +57,12 @@
 }
 
 .Dashboard.Dashboard--night.Dashboard--fullscreen .fullscreen-night-text {
-  color: color-mod(var(--color-text-white) alpha(-14%));
+  color: color(var(--color-text-white) alpha(-14%));
   transition: color 1s linear;
 }
 
 .Dashboard.Dashboard--night .DashCard .Card svg text {
-  fill: color-mod(var(--color-text-white) alpha(-14%)) !important;
+  fill: color(var(--color-text-white) alpha(-14%)) !important;
 }
 
 .Dashboard.Dashboard--night .DashCard .Card {
@@ -95,6 +100,10 @@
   transition: background-color 1s linear, border 1s linear;
 }
 
+.DashboardGrid {
+  margin-top: 1em;
+}
+
 .Dash--editing {
   margin-top: 1.5em;
 }
@@ -123,7 +132,7 @@
 }
 
 .Dash--editing .Card-title:first-of-type {
-  margin-top: 0.5rem;
+  /*margin-top: 0.5rem;*/
 }
 
 .Dash--editing .DashCard:hover .Card .Card-heading {
@@ -156,16 +165,8 @@
 }
 
 .DashCard .Card {
-  border: none;
+  border: 1px solid #f0f0f0;
   border-radius: 8px;
-  box-shadow: 0px 1px 3px var(--color-shadow);
-}
-
-@media (prefers-reduced-motion) {
-  /* short duration (instead of none) to still trigger transition events */
-  .DashCard {
-    transition-duration: 10ms !important;
-  }
 }
 
 .Dash--editing .DashCard.react-draggable-dragging .Card {
@@ -251,9 +252,9 @@
 
 .Modal.AddSeriesModal {
   height: 80%;
-  max-height: 600px;
+  /* max-height: 600px; */
   width: 80%;
-  max-width: 1024px;
+  /* max-width: 1024px; */
 }
 
 /*
@@ -330,26 +331,28 @@
 
 /* when in night mode code snippets should have a more readable background-color */
 .Dashboard--night pre code {
-  background-color: color-mod(var(--color-bg-white) alpha(-86%));
+  background-color: color(var(--color-bg-white) alpha(-86%));
 }
 
-.Dashboard--night .text-card-markdown code {
-  background-color: color-mod(var(--color-bg-white) alpha(-86%));
+.Dashboard--night text.value-label-outline {
+  stroke: var(--night-mode-card);
 }
 
 .Dashboard text.value-label,
+.Dashboard text.value-label-outline,
 .Dashboard text.value-label-white,
 .Dashboard .LineAreaBarChart .dc-chart .axis text {
   font-size: 12px;
 }
 
 .ScalarValue {
-  font-weight: 900;
-  white-space: pre;
+  font-weight: normal;
+  font-size: 22px;
 }
 
 .SmartWrapper {
-  font-size: 1.4em;
+  font-size: 14px;
+  color: #84848a;
 }
 
 .Dashboard .SmartWrapper {
@@ -362,6 +365,9 @@
 }
 
 @media screen and (min-width: 1280px) {
+  .ScalarValue {
+    font-size: 28px;
+  }
   .AutomaticDashboard.AutomaticDashboard--withSidebar
     #SmartScalar-PreviousValue {
     display: none;
@@ -369,16 +375,142 @@
 }
 
 @media screen and (min-width: 1540px) {
+  .ScalarValue {
+    font-size: 36px;
+  }
   .AutomaticDashboard.AutomaticDashboard--withSidebar
     #SmartScalar-PreviousValue {
     display: inherit;
   }
 }
 
-/*
- * Override d3 styles so the chart axis labels are selectable. See issue #17613
- */
-.dc-chart g.axis g.tick text {
-  pointer-events: all;
-  user-select: auto;
+@media screen and (min-width: 2048px) {
+  .ScalarValue {
+    font-size: 48px;
+  }
+  .AutomaticDashboard.AutomaticDashboard--withSidebar
+    #SmartScalar-PreviousValue {
+    display: inherit;
+  }
+}
+
+.dashboardCopyModalRoot {
+  margin: auto;
+  width: 700px;
+  max-height: 90%;
+  overflow-y: auto;
+}
+
+#html2canvas-Dashboard {
+  overflow-y: scroll;
+  overflow-x: hidden;
+}
+
+/* coin360 mode */
+.Dashboard.Dashboard--coin360 {
+  background-color: var(--coin360-black);
+}
+
+.Dashboard.Dashboard--coin360 .Card {
+  color: var(--color-text-white);
+}
+
+.Dashboard.Dashboard--coin360 .Header-button {
+  color: var(--color-text-medium);
+}
+
+.Dashboard.Dashboard--fullscreen .fullscreen-normal-text {
+  color: var(--color-text-dark);
+  transition: color 1s linear;
+}
+
+.Dashboard.Dashboard--coin360.Dashboard--fullscreen .fullscreen-night-text {
+  color: color(var(--color-text-white) alpha(-14%));
+  transition: color 1s linear;
+}
+
+.Dashboard.Dashboard--coin360 .DashCard .Card svg text {
+  fill: color(var(--color-text-white) alpha(-14%)) !important;
+}
+
+.Dashboard.Dashboard--coin360 .DashCard .Card {
+  background-color: var(--coin360-card);
+  border-color: var(--coin360-card);
+}
+
+.Dashboard.Dashboard--coin360 .enable-dots-onhover .dc-tooltip circle.dot:hover,
+.Dashboard.Dashboard--coin360 .enable-dots .dc-tooltip circle.dot {
+  fill: currentColor;
+}
+
+.Dashboard.Dashboard--coin360 .bg-light {
+  background-color: var(--coin360-black);
+}
+
+.Dashboard.Dashboard--coin360 .bg-medium {
+  background-color: var(--coin360-black);
+}
+
+.Dashboard.Dashboard--coin360 .text-dark {
+  color: var(--coin360-light);
+}
+
+.Dashboard.Dashboard--coin360 .border-top,
+.Dashboard.Dashboard--coin360 .border-left,
+.Dashboard.Dashboard--coin360 .border-bottom,
+.Dashboard.Dashboard--coin360 .border-right {
+  border-color: var(--coin360-black);
+}
+
+.Dashboard--coin360 .goal .line,
+.Dashboard--coin360 .trend .line {
+  stroke: white;
+}
+
+.Dashboard--coin360 .Scalar-title,
+.Dashboard--coin360 .ScalarValue,
+.Dashboard--coin360 .text-card-markdown h1 {
+  color: white !important;
+}
+
+.Dashboard--coin360 .CardVisualization thead {
+  background: rgba(255, 255, 255, 0.03) !important;
+}
+
+.Dashboard--coin360 .Table__Table___CtorL th {
+  border-bottom-color: rgba(255, 255, 255, 0.03) !important;
+}
+
+.FieldSet--coin360 {
+  border-color: white !important;
+}
+
+.ParameterFieldWidget--coin360,
+.FieldSet--coin360 .Icon-close {
+  color: white !important;
+}
+
+/* when in night mode code snippets should have a more readable background-color */
+.Dashboard--coin360 pre code {
+  background-color: rgba(255, 255, 255, 0.03);
+  color: hsla(0, 0%, 100%, 0.5);
+}
+
+.Dashboard--coin360 text.value-label-outline {
+  stroke: var(--coin360-card);
+}
+
+.Theme--coin360 .text-brand {
+  color: var(--color-white);
+}
+
+.Theme--coin360 .LoadingSpinner__title {
+  color: var(--color-white);
+}
+
+@media screen and (--footprint-breakpoint-max-mobile) {
+  .CardsContainer,
+  .TagWidgetContainer {
+    padding: 0 10px !important;
+  }
 }

@@ -4,9 +4,9 @@
             [clojure.tools.logging :as log]
             [compojure.core :refer [DELETE GET POST PUT]]
             [metabase.api.common :as api]
-            [metabase.api.query-description :as api.qd]
+            [metabase.api.query-description :as qd]
             [metabase.events :as events]
-            [metabase.mbql.normalize :as mbql.normalize]
+            [metabase.mbql.normalize :as normalize]
             [metabase.models.interface :as mi]
             [metabase.models.metric :as metric :refer [Metric]]
             [metabase.models.revision :as revision]
@@ -49,7 +49,7 @@
       (let [table (Table (:table_id metric))]
         (assoc metric
                :query_description
-               (api.qd/generate-query-description table (:definition metric)))))))
+               (qd/generate-query-description table (:definition metric)))))))
 
 (api/defendpoint GET "/:id"
   "Fetch `Metric` with ID."
@@ -66,7 +66,7 @@
 
 (api/defendpoint GET "/"
   "Fetch *all* `Metrics`."
-  []
+  [id]
   (as-> (db/select Metric, :archived false, {:order-by [:%lower.name]}) metrics
     (hydrate metrics :creator)
     (add-db-ids metrics)
@@ -76,12 +76,12 @@
 (defn- write-check-and-update-metric!
   "Check whether current user has write permissions, then update Metric with values in `body`. Publishes appropriate
   event and returns updated/hydrated Metric."
-  [id {:keys [revision_message] :as body}]
+  [id {:keys [revision_message archived], :as body}]
   (let [existing   (api/write-check Metric id)
         clean-body (u/select-keys-when body
                      :present #{:description :caveats :how_is_this_calculated :points_of_interest}
                      :non-nil #{:archived :definition :name :show_in_getting_started})
-        new-def    (->> clean-body :definition (mbql.normalize/normalize-fragment []))
+        new-def    (->> clean-body :definition (normalize/normalize-fragment []))
         new-body   (merge
                      (dissoc clean-body :revision_message)
                      (when new-def {:definition new-def}))

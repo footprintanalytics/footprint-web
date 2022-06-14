@@ -4,12 +4,18 @@ import { t } from "ttag";
 
 import cx from "classnames";
 import Icon from "metabase/components/Icon";
-import Button from "metabase/core/components/Button";
+import Button from "metabase/components/Button";
 import Snippets from "metabase/entities/snippets";
 
 const ICON_SIZE = 16;
 
-class SnippetRowInner extends React.Component {
+@Snippets.load({
+  id: (state, props) => props.item.id,
+  wrapped: true,
+})
+class SnippetRow extends React.Component {
+  state: { isOpen: boolean };
+
   constructor(props) {
     super(props);
     this.state = { isOpen: false };
@@ -32,7 +38,7 @@ class SnippetRowInner extends React.Component {
           onClick={() => this.setState({ isOpen: !isOpen })}
         >
           <div
-            className="flex text-brand-hover"
+            className="flex align-center text-brand-hover"
             onClick={
               snippet.archived
                 ? () => this.setState({ isOpen: true })
@@ -64,7 +70,7 @@ class SnippetRowInner extends React.Component {
           <div className="px3 pb2 pt1">
             {description && <p className="text-medium mt0">{description}</p>}
             <pre
-              className="bg-light bordered rounded p1 text-monospace text-small text-pre-wrap overflow-auto"
+              className="bg-light bordered rounded p1 text-monospace text-small text-pre-wrap overflow-scroll overflow-x-scroll"
               style={{ maxHeight: 320 }}
             >
               {content}
@@ -90,10 +96,5 @@ class SnippetRowInner extends React.Component {
     );
   }
 }
-
-const SnippetRow = Snippets.load({
-  id: (state, props) => props.item.id,
-  wrapped: true,
-})(SnippetRowInner);
 
 export default SnippetRow;

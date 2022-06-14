@@ -1,7 +1,11 @@
 import React from "react";
-import { renderWithProviders } from "__support__/ui";
+import { render } from "@testing-library/react";
 import mockDate from "mockdate";
+
 import moment from "moment";
+import { Provider } from "react-redux";
+import { getStore } from "metabase/store";
+
 import LastEditInfoLabel from "metabase/components/LastEditInfoLabel";
 
 describe("LastEditInfoLabel", () => {
@@ -30,11 +34,13 @@ describe("LastEditInfoLabel", () => {
       return isLastEditedByCurrentUser ? TEST_USER : { id: TEST_USER.id + 1 };
     }
 
-    return renderWithProviders(<LastEditInfoLabel item={testItem} />, {
-      reducers: {
-        currentUser: userReducer,
-      },
-    });
+    const store = getStore({ currentUser: userReducer });
+
+    return render(
+      <Provider store={store}>
+        <LastEditInfoLabel item={testItem} />
+      </Provider>,
+    );
   }
 
   const A_FEW_SECONDS_AGO = moment().add(5, "seconds");

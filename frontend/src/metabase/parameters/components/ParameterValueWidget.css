@@ -1,0 +1,30 @@
+.parameter-value-widget__series-date-group {
+  padding: 5px 0px 5px 0px;
+  margin-right: 4px;
+}
+
+.parameter-value-widget__series-category-group {
+  padding: 4px 0px 4px 0px;
+  margin-right: 4px;
+}
+
+.parameter-value-widget__series-category-group-more {
+  padding: 0 4px;
+  color: var(--footprint-color-secondary-text1);
+}
+
+.parameter-value-widget__series-category-group-loading {
+  color: var(--footprint-color-secondary-text1);
+}
+
+.parameter-value-widget__series-date-group-item {
+  height: 20px;
+  line-height: 20px;
+  font-size: 14px;
+}
+
+.parameter-value-widget__series-category-group
+  .ant-checkbox-wrapper
+  + .ant-checkbox-wrapper {
+  margin-left: 0;
+}

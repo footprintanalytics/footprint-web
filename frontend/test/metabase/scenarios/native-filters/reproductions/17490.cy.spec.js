@@ -1,21 +1,32 @@
-import { openNativeEditor, restore } from "__support__/e2e/cypress";
+import {
+  restore,
+  mockSessionProperty,
+  openNativeEditor,
+} from "__support__/e2e/cypress";
 
 import * as SQLFilter from "../helpers/e2e-sql-filter-helpers";
 
 describe("issue 17490", () => {
   beforeEach(() => {
-    mockDatabaseTables();
+    mockSessionProperty("field-filter-operators-enabled?", true);
 
     restore();
     cy.signInAsAdmin();
+
+    populateStubbedTables();
   });
 
-  it.skip("nav bar shouldn't cut off the popover with the tables for field filter selection (metabase#17490)", () => {
+  it("nav bar shouldn't cut off the popover with the tables for field filter selection (metabase#17490)", () => {
+    cy.visit("/");
+    cy.icon("sql").click();
+
     openNativeEditor();
     SQLFilter.enterParameterizedQuery("{{f}}");
 
     SQLFilter.openTypePickerFromDefaultFilterType();
     SQLFilter.chooseType("Field Filter");
+
+    cy.wait("@tables");
 
     /**
      * Although `.click()` isn't neccessary for Cypress to fill out this input field,
@@ -32,21 +43,19 @@ describe("issue 17490", () => {
   });
 });
 
-function mockDatabaseTables() {
-  cy.intercept("GET", "/api/database?include=tables", req => {
+function populateStubbedTables() {
+  cy.intercept("GET", "/api/database/1/schema/PUBLIC", req => {
     req.reply(res => {
-      const mockTables = new Array(7).fill({
-        id: 42, // id is hard coded, but it doesn't matter for this repro
-        db_id: 1,
+      const fauxTable = {
         name: "Z",
         display_name: "ZZZ",
-        schema: "PUBLIC",
-      });
+        id: 42, // id is hard coded, but it doesn't matter for this repro
+      };
 
-      res.body.data = res.body.data.map(d => ({
-        ...d,
-        tables: [...d.tables, ...mockTables],
-      }));
+      const fauxTables = new Array(7).fill(fauxTable);
+      const stubbedResponseBody = res.body.concat(fauxTables);
+
+      res.body = stubbedResponseBody;
     });
-  });
+  }).as("tables");
 }

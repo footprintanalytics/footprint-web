@@ -13,9 +13,52 @@ import Utils from "metabase/lib/utils";
 
 import cx from "classnames";
 
+import Question from "metabase-lib/lib/Question";
+import type Database from "metabase-lib/lib/metadata/Database";
+import type Table from "metabase-lib/lib/metadata/Table";
+import type { DatasetQuery } from "metabase-types/types/Card";
+
+import type { ParameterValues } from "metabase-types/types/Parameter";
+
 import { HARD_ROW_LIMIT } from "metabase/lib/query";
+import { debounce } from "underscore";
+import { get } from "lodash";
+import { newGuideHighlight } from "metabase/containers/newguide/newGuide";
+
+type Props = {
+  question: Question,
+  originalQuestion: Question,
+  result?: Object,
+  databases?: Database[],
+  tableMetadata?: Table,
+  tableForeignKeys?: [],
+  tableForeignKeyReferences?: {},
+  onUpdateVisualizationSettings: any => void,
+  onReplaceAllVisualizationSettings: any => void,
+  onOpenChartSettings: any => void,
+  cellIsClickableFn?: any => void,
+  cellClickedFn?: any => void,
+  isRunning: boolean,
+  isRunnable: boolean,
+  isAdmin: boolean,
+  isResultDirty: boolean,
+  isObjectDetail: boolean,
+  isNativeEditorOpen: boolean,
+  runQuestionQuery: any => void,
+  cancelQuery?: any => void,
+  className: string,
+};
+
+type State = {
+  lastRunDatasetQuery: DatasetQuery,
+  lastRunParameterValues: ParameterValues,
+  warnings: string[],
+};
 
 export default class QueryVisualization extends Component {
+  props: Props;
+  state: State;
+
   constructor(props, context) {
     super(props, context);
     this.state = this._getStateFromProps(props);
@@ -31,6 +74,12 @@ export default class QueryVisualization extends Component {
       lastRunDatasetQuery: Utils.copy(props.question.query().datasetQuery()),
       lastRunParameterValues: Utils.copy(props.parameterValues),
     };
+  }
+
+  componentDidUpdate() {
+    this.handleAddFilter();
+    this.handleEditSummarize();
+    this.handleNewGuide();
   }
 
   UNSAFE_componentWillReceiveProps(nextProps) {
@@ -49,6 +98,62 @@ export default class QueryVisualization extends Component {
   handleUpdateWarnings = warnings => {
     this.setState({ warnings });
   };
+
+  handleAddFilter = debounce(() => {
+    const { result, hasSidebar, onAddFilter, queryBuilderMode } = this.props;
+    if (
+      result &&
+      result.data &&
+      !hasSidebar &&
+      queryBuilderMode !== "notebook"
+    ) {
+      onAddFilter();
+    }
+  }, 1000);
+
+  handleEditSummarize = debounce(() => {
+    const {
+      result,
+      isShowingSummarySidebar,
+      onEditSummary,
+      queryBuilderMode,
+      getNewGuideInfo,
+      setNewGuideInfo,
+    } = this.props;
+    const newGuideShowSummary = getNewGuideInfo && getNewGuideInfo["summary"];
+    if (
+      result &&
+      get(result, "json_query.query.filter") &&
+      !isShowingSummarySidebar &&
+      newGuideShowSummary &&
+      queryBuilderMode !== "notebook"
+    ) {
+      onEditSummary();
+      setTimeout(() => {
+        newGuideHighlight({ key: "summary", getNewGuideInfo, setNewGuideInfo });
+      }, 1000);
+    }
+  }, 1000);
+
+  handleNewGuide = debounce(() => {
+    const { result, getNewGuideInfo, setNewGuideInfo } = this.props;
+    const newGuideShowSaveChart =
+      getNewGuideInfo && getNewGuideInfo["saveChart"];
+    if (
+      result &&
+      get(result, "json_query.query.filter") &&
+      get(result, "json_query.query.breakout") &&
+      newGuideShowSaveChart
+    ) {
+      setTimeout(() => {
+        newGuideHighlight({
+          key: "saveChart",
+          getNewGuideInfo,
+          setNewGuideInfo,
+        });
+      }, 1000);
+    }
+  }, 1000);
 
   render() {
     const {
@@ -119,10 +224,7 @@ export const VisualizationRunningState = ({ className }) => (
       "Loading flex flex-column layout-centered text-brand",
     )}
   >
-    <LoadingSpinner />
-    <h2 className="Loading-message text-brand text-uppercase my3">
-      {t`Doing science`}...
-    </h2>
+    <LoadingSpinner message="GETTING INSIGHTS..." />
   </div>
 );
 
@@ -151,7 +253,9 @@ export const VisualizationDirtyState = ({
       hidden={!isRunnable || hidden}
       isRunning={isRunning}
       isDirty={isResultDirty}
-      onRun={() => runQuestionQuery({ ignoreCache: true })}
+      onRun={() =>
+        runQuestionQuery({ ignoreCache: true, shouldUpdateUrl: false })
+      }
       onCancel={() => cancelQuery()}
     />
   </div>

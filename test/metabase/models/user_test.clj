@@ -2,7 +2,7 @@
   (:require [clojure.set :as set]
             [clojure.string :as str]
             [clojure.test :refer :all]
-            [metabase.http-client :as client]
+            [metabase.http-client :as http]
             [metabase.models
              :refer
              [Collection
@@ -18,11 +18,10 @@
             [metabase.models.collection :as collection]
             [metabase.models.collection-test :as collection-test]
             [metabase.models.permissions :as perms]
-            [metabase.models.permissions-group :as perms-group]
-            [metabase.models.serialization.hash :as serdes.hash]
+            [metabase.models.permissions-group :as group]
             [metabase.models.user :as user]
             [metabase.test :as mt]
-            [metabase.test.data.users :as test.users]
+            [metabase.test.data.users :as test-users]
             [metabase.util :as u]
             [metabase.util.password :as u.password]
             [toucan.db :as db]
@@ -77,7 +76,7 @@
                     Table                      [table {:name "Round Table", :db_id db-id}]
                     PermissionsGroup           [{group-id :id}]
                     PermissionsGroupMembership [_ {:group_id group-id, :user_id (mt/user->id :rasta)}]]
-      (perms/revoke-data-perms! (perms-group/all-users) db-id (:schema table) (:id table))
+      (perms/revoke-data-perms! (group/all-users) db-id (:schema table) (:id table))
       (perms/grant-permissions! group-id (perms/table-read-path table))
       (is (set/subset?
            #{(perms/table-read-path table)}
@@ -91,8 +90,8 @@
   [new-user-email-address]
   (when-let [[{[{invite-email :content}] :body}] (get @mt/inbox new-user-email-address)]
     (let [[_ reset-token] (re-find #"/auth/reset_password/(\d+_[\w_-]+)#new" invite-email)]
-      (client/client :post 200 "session/reset_password" {:token    reset-token
-                                                         :password "p@ssword1"}))))
+      (http/client :post 200 "session/reset_password" {:token    reset-token
+                                                       :password "p@ssword1"}))))
 
 (defn sent-emails
   "Fetch the emails that have been sent in the form of a map of email address -> sequence of email subjects.
@@ -122,7 +121,7 @@
         (try
           (if google-auth?
             (user/create-new-google-auth-user! (dissoc new-user :password))
-            (user/create-and-invite-user! new-user invitor false))
+            (user/create-and-invite-user! new-user invitor))
           (when accept-invite?
             (maybe-accept-invite! new-user-email))
           (sent-emails new-user-email new-user-first-name new-user-last-name)
@@ -202,7 +201,7 @@
                 "PermissionsGroupMembership object")
     (mt/with-temp User [user {:is_superuser true}]
       (is (= true
-             (db/exists? PermissionsGroupMembership :user_id (u/the-id user), :group_id (u/the-id (perms-group/admin))))))))
+             (db/exists? PermissionsGroupMembership :user_id (u/the-id user), :group_id (u/the-id (group/admin))))))))
 
 (deftest ldap-sequential-login-attributes-test
   (testing "You should be able to create a new LDAP user if some `login_attributes` are vectors (#10291)"
@@ -271,7 +270,7 @@
       (with-groups [_ {:name "Group 1"} #{:lucky :rasta}
                     _ {:name "Group 2"} #{:lucky}
                     _ {:name "Group 3"} #{}]
-        (let [users (user/add-group-ids (map test.users/fetch-user [:lucky :rasta]))]
+        (let [users (user/add-group-ids (map test-users/fetch-user [:lucky :rasta]))]
           (is (= {"Lucky" #{"All Users" "Group 1" "Group 2"}
                   "Rasta" #{"All Users" "Group 1"}}
                  (zipmap (map :first_name users)
@@ -290,7 +289,7 @@
         (testing "for multiple Users"
           (is (= '[(user/add-group-ids <users>)
                    (user/add-group-ids <users>)]
-                 (as-> (map test.users/fetch-user [:rasta :lucky]) users
+                 (as-> (map test-users/fetch-user [:rasta :lucky]) users
                    (hydrate users :group_ids)
                    (mapv :group_ids users)))))))
 
@@ -298,7 +297,7 @@
       (with-groups [_ {:name "Group 1"} #{:lucky :rasta}
                     _ {:name "Group 2"} #{:lucky}
                     _ {:name "Group 3"} #{}]
-        (let [users (mapv test.users/fetch-user [:lucky :rasta])]
+        (let [users (mapv test-users/fetch-user [:lucky :rasta])]
           (db/with-call-counting [call-count]
             (dorun (user/add-group-ids users))
             (is (= 1
@@ -310,7 +309,7 @@
 
 (defn user-group-names [user-or-id-or-kw]
   (group-names (user/group-ids (if (keyword? user-or-id-or-kw)
-                                 (test.users/fetch-user user-or-id-or-kw)
+                                 (test-users/fetch-user user-or-id-or-kw)
                                  user-or-id-or-kw))))
 
 (deftest set-permissions-groups-test
@@ -318,21 +317,21 @@
     (testing "should be able to add a User to new groups"
       (with-groups [group-1 {:name "Group 1"} #{}
                     group-2 {:name "Group 2"} #{}]
-        (user/set-permissions-groups! (mt/user->id :lucky) #{(perms-group/all-users) group-1 group-2})
+        (user/set-permissions-groups! (mt/user->id :lucky) #{(group/all-users) group-1 group-2})
         (is (= #{"All Users" "Group 1" "Group 2"}
                (user-group-names :lucky)))))
 
     (testing "should be able to remove a User from groups"
       (with-groups [group-1 {:name "Group 1"} #{:lucky}
                     group-2 {:name "Group 2"} #{:lucky}]
-        (user/set-permissions-groups! (mt/user->id :lucky) #{(perms-group/all-users)})
+        (user/set-permissions-groups! (mt/user->id :lucky) #{(group/all-users)})
         (is (= #{"All Users"}
                (user-group-names :lucky)))))
 
     (testing "should be able to add & remove groups at the same time! :wow:"
       (with-groups [group-1 {:name "Group 1"} #{:lucky}
                     group-2 {:name "Group 2"} #{}]
-        (user/set-permissions-groups! (mt/user->id :lucky) #{(perms-group/all-users) group-2})
+        (user/set-permissions-groups! (mt/user->id :lucky) #{(group/all-users) group-2})
         (is (= #{"All Users" "Group 2"}
                (user-group-names :lucky)))))
 
@@ -343,7 +342,7 @@
 
     (testing "should be able to add someone to the Admin group"
       (mt/with-temp User [user]
-        (user/set-permissions-groups! user #{(perms-group/all-users) (perms-group/admin)})
+        (user/set-permissions-groups! user #{(group/all-users) (group/admin)})
         (is (= #{"Administrators" "All Users"}
                (user-group-names user)))
 
@@ -353,7 +352,7 @@
 
     (testing "should be able to remove someone from the Admin group"
       (mt/with-temp User [user {:is_superuser true}]
-        (user/set-permissions-groups! user #{(perms-group/all-users)})
+        (user/set-permissions-groups! user #{(group/all-users)})
         (is (= #{"All Users"}
                (user-group-names user)))
 
@@ -367,7 +366,7 @@
         ;; should fail, causing the entire transaction to fail
         (mt/with-temp User [user {:is_superuser true}]
           (u/ignore-exceptions
-            (user/set-permissions-groups! user #{(perms-group/all-users) Integer/MAX_VALUE}))
+            (user/set-permissions-groups! user #{(group/all-users) Integer/MAX_VALUE}))
           (is (= true
                  (db/select-one-field :is_superuser User :id (u/the-id user))))))
 
@@ -376,7 +375,7 @@
         (mt/with-temp User [user]
           (with-groups [group {:name "Group"} {}]
             (u/ignore-exceptions
-              (user/set-permissions-groups! (test.users/fetch-user :lucky) #{group})))
+              (user/set-permissions-groups! (test-users/fetch-user :lucky) #{group})))
           (is (= #{"All Users"}
                  (user-group-names :lucky))
               "If an INVALID REMOVE is attempted, valid adds should not be persisted"))))))
@@ -462,10 +461,3 @@
           (is (db/update! User user-id :is_active false)))
         (testing "subscription should no longer exist"
           (is (not (subscription-exists?))))))))
-
-(deftest identity-hash-test
-  (testing "User hashes are based on the email address"
-    (mt/with-temp User  [user  {:email "fred@flintston.es"}]
-      (is (= "e8d63472"
-             (serdes.hash/raw-hash ["fred@flintston.es"])
-             (serdes.hash/identity-hash user))))))

@@ -1,4 +1,4 @@
-import { restore, setupSMTP, visitQuestion } from "__support__/e2e/cypress";
+import { restore, setupSMTP } from "__support__/e2e/cypress";
 
 describe("scenarios > alert > alert permissions", () => {
   // Intentional use of before (not beforeEach) hook because the setup is quite long.
@@ -10,16 +10,16 @@ describe("scenarios > alert > alert permissions", () => {
     setupSMTP();
 
     // Create alert as admin
-    visitQuestion(1);
+    cy.visit("/question/1");
     createBasicAlert({ firstAlert: true });
 
     // Create alert as admin that user can see
-    visitQuestion(2);
+    cy.visit("/question/2");
     createBasicAlert({ includeNormal: true });
 
     // Create alert as normal user
     cy.signInAsNormalUser();
-    visitQuestion(3);
+    cy.visit("/question/3");
     createBasicAlert();
   });
 
@@ -36,7 +36,7 @@ describe("scenarios > alert > alert permissions", () => {
       cy.intercept("PUT", "/api/alert/1").as("updatedAlert");
 
       // Change alert
-      visitQuestion(1);
+      cy.visit(`/question/1`);
       cy.icon("bell").click();
       cy.findByText("Edit").click();
 
@@ -56,7 +56,7 @@ describe("scenarios > alert > alert permissions", () => {
     beforeEach(cy.signInAsNormalUser);
 
     it("should not let you see other people's alerts", () => {
-      visitQuestion(1);
+      cy.visit("/question/1");
       cy.icon("bell").click();
 
       cy.findByText("Unsubscribe").should("not.exist");
@@ -64,15 +64,15 @@ describe("scenarios > alert > alert permissions", () => {
     });
 
     it("should let you see other alerts where you are a recipient", () => {
-      visitQuestion(2);
+      cy.visit("/question/2");
       cy.icon("bell").click();
 
-      cy.findByText("You're receiving Bobby Tables's alerts");
+      cy.findByText("You're receiving Bobby's alerts");
       cy.findByText("Set up your own alert");
     });
 
     it("should let you see your own alerts", () => {
-      visitQuestion(3);
+      cy.visit("/question/3");
       cy.icon("bell").click();
 
       cy.findByText("You set up an alert");
@@ -80,14 +80,14 @@ describe("scenarios > alert > alert permissions", () => {
 
     it("should let you unsubscribe from both your own and others' alerts", () => {
       // Unsubscribe from your own alert
-      visitQuestion(3);
+      cy.visit("/question/3");
       cy.icon("bell").click();
       cy.findByText("Unsubscribe").click();
 
       cy.findByText("Okay, you're unsubscribed");
 
       // Unsubscribe from others' alerts
-      visitQuestion(2);
+      cy.visit("/question/2");
       cy.icon("bell").click();
       cy.findByText("Unsubscribe").click();
 

@@ -1,11 +1,6 @@
 (ns metabase.models.dependency-test
   (:require [clojure.test :refer :all]
-            [metabase.models.collection :refer [Collection]]
-            [metabase.models.database :refer [Database]]
-            [metabase.models.dependency :as dependency :refer [Dependency]]
-            [metabase.models.metric :refer [Metric]]
-            [metabase.models.serialization.hash :as serdes.hash]
-            [metabase.models.table :refer [Table]]
+            [metabase.models.dependency :as dep :refer [Dependency]]
             [metabase.test :as mt]
             [metabase.test.fixtures :as fixtures]
             [toucan.db :as db]
@@ -16,7 +11,7 @@
 (models/defmodel ^:private Mock :mock)
 
 (extend (class Mock)
-  dependency/IDependent
+  dep/IDependent
   {:dependencies
    (constantly
     {:a [1 2]
@@ -25,7 +20,7 @@
 (deftest dependencies-test
   (is (= {:a [1 2]
           :b [3 4 5]}
-         (dependency/dependencies Mock 7 {}))))
+         (dep/dependencies Mock 7 {}))))
 
 (defn format-dependencies [deps]
   (->> deps
@@ -53,18 +48,18 @@
                 :model_id           4
                 :dependent_on_model "foobar"
                 :dependent_on_id    13}}
-             (format-dependencies (dependency/retrieve-dependencies Mock 4)))))))
+             (format-dependencies (dep/retrieve-dependencies Mock 4)))))))
 
 (deftest update-dependencies!-test
   (testing "we skip over values which aren't integers"
     (mt/with-model-cleanup [Dependency]
-      (dependency/update-dependencies! Mock 2 {:test ["a" "b" "c"]})
+      (dep/update-dependencies! Mock 2 {:test ["a" "b" "c"]})
       (is (= #{}
              (set (db/select Dependency, :model "Mock", :model_id 2))))))
 
   (testing "valid working dependencies list"
     (mt/with-model-cleanup [Dependency]
-      (dependency/update-dependencies! Mock 7 {:test [1 2 3]})
+      (dep/update-dependencies! Mock 7 {:test [1 2 3]})
       (is (= #{{:model              "Mock"
                 :model_id           7
                 :dependent_on_model "test"
@@ -86,7 +81,7 @@
                                  :dependent_on_id    5
                                  :created_at         :%now}]
       (mt/with-model-cleanup [Dependency]
-        (dependency/update-dependencies! Mock 1 {:test [1 2]})
+        (dep/update-dependencies! Mock 1 {:test [1 2]})
         (is (= #{{:model              "Mock"
                   :model_id           1
                   :dependent_on_model "test"
@@ -96,20 +91,3 @@
                   :dependent_on_model "test"
                   :dependent_on_id    2}}
                (format-dependencies (db/select Dependency, :model "Mock", :model_id 1))))))))
-
-(deftest identity-hash-test
-  (testing "Dependency hashes are composed of the two model names and hashes of the target entities"
-    (mt/with-temp* [Collection [coll   {:name "some collection" :location "/"}]
-                    Database   [db     {:name "field-db" :engine :h2}]
-                    Table      [table  {:schema "PUBLIC" :name "widget" :db_id (:id db)}]
-                    Metric     [metric {:name "measured" :table_id (:id table)}]
-                    Dependency [dep    {:model              "Collection"
-                                        :model_id           (:id coll)
-                                        :dependent_on_model "Metric"
-                                        :dependent_on_id    (:id metric)
-                                        :created_at         :%now}]]
-      (is (= "cd893624"
-             ; Note the extra vector here - dependencies have one complex hash extractor that returns a list of results.
-             (serdes.hash/raw-hash [["Collection" (serdes.hash/identity-hash coll)
-                                     "Metric"     (serdes.hash/identity-hash metric)]])
-             (serdes.hash/identity-hash dep))))))

@@ -3,6 +3,7 @@ import React, { Component } from "react";
 import { connect } from "react-redux";
 import { t } from "ttag";
 import _ from "underscore";
+import { Box } from "grid-styled";
 
 import { updateSettings } from "metabase/admin/settings/settings";
 import { settingToFormField } from "metabase/admin/settings/utils";
@@ -20,9 +21,9 @@ import CopyWidget from "metabase/components/CopyWidget";
 import GroupMappingsWidget from "metabase/admin/settings/components/widgets/GroupMappingsWidget";
 
 import MetabaseSettings from "metabase/lib/settings";
-import { SAMLFormSection } from "./SettingsSAMLForm.styled";
 
-class SettingsSAMLForm extends Component {
+@connect(null, { updateSettings })
+export default class SettingsSAMLForm extends Component {
   render() {
     const { elements, settingValues, updateSettings } = this.props;
     // TODO: move these to an outer component so we don't have to do it in every form page
@@ -66,7 +67,7 @@ class SettingsSAMLForm extends Component {
           type="boolean"
           showEnabledLabel={false}
         />
-        <SAMLFormSection>
+        <Box className="bordered rounded" px={3} pt={3} pb={2} mb={2}>
           <h3 className="mb0">{t`Configure your identity provider (IdP)`}</h3>
           <p className="mb4 mt1 text-medium">{t`Your identity provider will need the following info about Metabase.`}</p>
 
@@ -96,9 +97,9 @@ class SettingsSAMLForm extends Component {
             title={t`User's last name attribute`}
             type={({ field }) => <CopyWidget {...field} />}
           />
-        </SAMLFormSection>
+        </Box>
 
-        <SAMLFormSection>
+        <Box className="bordered rounded" px={3} pt={3} pb={2} mb={2}>
           <h3 className="mb0">{t`Tell Metabase about your identity provider`}</h3>
           <p className="mb4 mt1 text-medium">{t`Metabase will need the following info about your provider.`}</p>
           <FormField
@@ -123,9 +124,9 @@ class SettingsSAMLForm extends Component {
             {...settingField("saml-identity-provider-issuer")}
             title={t`SAML Identity Provider Issuer`}
           />
-        </SAMLFormSection>
+        </Box>
 
-        <SAMLFormSection isSSLSection={true}>
+        <Box className="bordered rounded" px={3} pt={3} pb={1} mb={2}>
           <FormSection title={t`Sign SSO requests (optional)`} collapsible>
             <FormField
               {...settingField("saml-keystore-path")}
@@ -142,9 +143,9 @@ class SettingsSAMLForm extends Component {
               title={t`SAML Keystore Alias`}
             />
           </FormSection>
-        </SAMLFormSection>
+        </Box>
 
-        <SAMLFormSection>
+        <Box className="bordered rounded" px={3} pt={3} pb={2} mb={2}>
           <h3 className="mb0">{t`Synchronize group membership with your SSO`}</h3>
           <p className="mb4 mt1 text-medium">
             {t`To enable this, you'll need to create mappings to tell Metabase which group(s) your users should
@@ -172,7 +173,7 @@ class SettingsSAMLForm extends Component {
             {...settingField("saml-attribute-group")}
             title={t`Group attribute name`}
           />
-        </SAMLFormSection>
+        </Box>
 
         <div>
           <FormMessage />
@@ -184,5 +185,3 @@ class SettingsSAMLForm extends Component {
     );
   }
 }
-
-export default connect(null, { updateSettings })(SettingsSAMLForm);

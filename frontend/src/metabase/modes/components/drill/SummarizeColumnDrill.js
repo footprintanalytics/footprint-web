@@ -1,10 +1,14 @@
-/* eslint-disable react/prop-types */
 import { fieldRefForColumn } from "metabase/lib/dataset";
 import {
   getAggregationOperator,
   isCompatibleAggregationOperatorForField,
 } from "metabase/lib/schema_metadata";
 import { t } from "ttag";
+import type {
+  ClickAction,
+  ClickActionProps,
+} from "metabase-types/types/Visualization";
+import StructuredQuery from "metabase-lib/lib/queries/StructuredQuery";
 
 const AGGREGATIONS = {
   sum: {
@@ -20,18 +24,23 @@ const AGGREGATIONS = {
   distinct: {
     section: "sum",
     buttonType: "token",
-    title: t`Distinct values`,
+    title: t`Distincts`,
   },
 };
 
-export default ({ question, clicked = {} }) => {
+export default ({
+  question,
+  clicked = {},
+}: ClickActionProps): ClickAction[] => {
   const { column, value } = clicked;
-  if (!column || value !== undefined) {
+  if (!column || column.source !== "fields" || value !== undefined) {
+    // TODO Atte Keinänen 7/21/17: Does it slow down the drill-through option calculations remarkably
+    // that I removed the `isSummable` condition from here and use `isCompatibleAggregator` method below instead?
     return [];
   }
 
   const query = question.query();
-  if (!question.isStructured() || !query.isEditable()) {
+  if (!(query instanceof StructuredQuery)) {
     return [];
   }
 
@@ -43,7 +52,7 @@ export default ({ question, clicked = {} }) => {
     .filter(([aggregator]) =>
       isCompatibleAggregationOperatorForField(aggregator, column),
     )
-    .map(([aggregator, action]) => ({
+    .map(([aggregator, action]: [any, { section: string, title: string }]) => ({
       name: action.title.toLowerCase(),
       ...action,
       question: () =>

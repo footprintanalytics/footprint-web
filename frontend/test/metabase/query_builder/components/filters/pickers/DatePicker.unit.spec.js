@@ -1,6 +1,6 @@
 import React from "react";
 import { fireEvent, render, screen } from "@testing-library/react";
-import DatePicker from "metabase/query_builder/components/filters/pickers/LegacyDatePicker/DatePicker";
+import DatePicker from "metabase/query_builder/components/filters/pickers/DatePicker";
 
 const nop = () => {};
 
@@ -15,7 +15,7 @@ describe("DatePicker", () => {
 
     screen.getByText("Previous");
     screen.getByDisplayValue("30");
-    screen.getByText("days");
+    screen.getByText("Days");
   });
 
   it("should render 'Next 1 Month'", () => {
@@ -27,7 +27,7 @@ describe("DatePicker", () => {
     );
     screen.getByText("Next");
     screen.getByDisplayValue("1");
-    screen.getByText("month");
+    screen.getByText("Month");
   });
 
   it("should render 'Current Week'", () => {
@@ -38,7 +38,7 @@ describe("DatePicker", () => {
       />,
     );
     screen.getByText("Current");
-    screen.getByText("week");
+    screen.getByText("Week");
   });
 
   it("should render 'Between'", () => {

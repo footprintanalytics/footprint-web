@@ -7,14 +7,13 @@ import { t } from "ttag";
 import S from "../components/Detail.css";
 import List from "metabase/components/List";
 import LoadingAndErrorWrapper from "metabase/components/LoadingAndErrorWrapper";
-import _ from "underscore";
 
 import EditHeader from "metabase/reference/components/EditHeader";
 import EditableReferenceHeader from "metabase/reference/components/EditableReferenceHeader";
 import Detail from "metabase/reference/components/Detail";
 import UsefulQuestions from "metabase/reference/components/UsefulQuestions";
 import Formula from "metabase/reference/components/Formula";
-import Link from "metabase/core/components/Link";
+import Link from "metabase/components/Link";
 
 import { getQuestionUrl } from "../utils";
 
@@ -83,7 +82,20 @@ const validate = (values, props) =>
     ? { revision_message: t`Please enter a revision message` }
     : {};
 
-class SegmentDetail extends Component {
+@connect(mapStateToProps, mapDispatchToProps)
+@reduxForm({
+  form: "details",
+  fields: [
+    "name",
+    "display_name",
+    "description",
+    "revision_message",
+    "points_of_interest",
+    "caveats",
+  ],
+  validate,
+})
+export default class SegmentDetail extends Component {
   static propTypes = {
     style: PropTypes.object.isRequired,
     entity: PropTypes.object.isRequired,
@@ -261,19 +273,3 @@ class SegmentDetail extends Component {
     );
   }
 }
-
-export default _.compose(
-  connect(mapStateToProps, mapDispatchToProps),
-  reduxForm({
-    form: "details",
-    fields: [
-      "name",
-      "display_name",
-      "description",
-      "revision_message",
-      "points_of_interest",
-      "caveats",
-    ],
-    validate,
-  }),
-)(SegmentDetail);

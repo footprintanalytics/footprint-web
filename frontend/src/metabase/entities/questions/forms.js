@@ -1,6 +1,7 @@
 import { t } from "ttag";
 import MetabaseSettings from "metabase/lib/settings";
 import { PLUGIN_CACHING } from "metabase/plugins";
+import { formatDashboardChartSaveTitle } from "metabase/lib/formatting";
 
 const FORM_FIELDS = [
   { name: "name", title: t`Name` },
@@ -38,5 +39,40 @@ export default {
       }
       return fields;
     },
+  },
+  details: {
+    fields: [
+      {
+        name: "name",
+        title: t`Name`,
+        normalize: name => formatDashboardChartSaveTitle(name),
+      },
+      {
+        name: "description",
+        title: t`Description`,
+        type: "text",
+        placeholder: t`It's optional but oh, so helpful`,
+      },
+      {
+        name: "collection_id",
+        title: t`Collection`,
+        type: "collection",
+      },
+    ],
+  },
+  details_without_collection: {
+    fields: [
+      {
+        name: "name",
+        title: t`Name`,
+        normalize: name => formatDashboardChartSaveTitle(name),
+      },
+      {
+        name: "description",
+        title: t`Description`,
+        type: "text",
+        placeholder: t`It's optional but oh, so helpful`,
+      },
+    ],
   },
 };

@@ -11,7 +11,9 @@ import {
   GRAPH_AXIS_SETTINGS,
   GRAPH_DISPLAY_VALUES_SETTINGS,
 } from "../lib/settings/graph";
+import VizControls from "metabase/visualizations/hoc/VizControls";
 
+@VizControls
 export default class BarChart extends LineAreaBarChart {
   static uiName = t`Bar`;
   static identifier = "bar";

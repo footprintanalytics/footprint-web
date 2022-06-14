@@ -2,6 +2,7 @@ import _ from "underscore";
 
 import { GET, PUT, POST, DELETE } from "metabase/lib/api";
 import { IS_EMBED_PREVIEW } from "metabase/lib/embed";
+import Metadata from "metabase-lib/lib/metadata/Metadata";
 import Question from "metabase-lib/lib/Question";
 import { FieldDimension } from "metabase-lib/lib/Dimension";
 
@@ -10,25 +11,16 @@ const embedBase = IS_EMBED_PREVIEW ? "/api/preview_embed" : "/api/embed";
 
 import getGAMetadata from "promise-loader?global!metabase/lib/ga-metadata"; // eslint-disable-line import/default
 
+import type { Data, Options, APIMethod } from "metabase/lib/api";
+
+import type { Card } from "metabase-types/types/Card";
+import type { DatabaseId } from "metabase-types/types/Database";
+import type { DatabaseCandidates } from "metabase-types/types/Auto";
+import type { DashboardWithCards } from "metabase-types/types/Dashboard";
+
 export const ActivityApi = {
   list: GET("/api/activity"),
   recent_views: GET("/api/activity/recent_views"),
-};
-
-export const BookmarkApi = {
-  card: {
-    create: POST("/api/bookmark/card/:id"),
-    delete: DELETE("/api/bookmark/card/:id"),
-  },
-  collection: {
-    create: POST("/api/bookmark/collection/:id"),
-    delete: DELETE("/api/bookmark/collection/:id"),
-  },
-  dashboard: {
-    create: POST("/api/bookmark/dashboard/:id"),
-    delete: DELETE("/api/bookmark/dashboard/:id"),
-  },
-  reorder: PUT("/api/bookmark/ordering"),
 };
 
 // only available with token loaded
@@ -39,15 +31,15 @@ export const GTAPApi = {
   attributes: GET("/api/mt/user/attributes"),
 };
 
-export const StoreApi = {
-  tokenStatus: GET("/api/premium-features/token/status"),
-};
-
 // Pivot tables need extra data beyond what's described in the MBQL query itself.
 // To fetch that extra data we rely on specific APIs for pivot tables that mirrow the normal endpoints.
 // Those endpoints take the query along with `pivot_rows` and `pivot_cols` to return the subtotal data.
 // If we add breakout/grouping sets to MBQL in the future we can remove this API switching.
-export function maybeUsePivotEndpoint(api, card, metadata) {
+export function maybeUsePivotEndpoint(
+  api: APIMethod,
+  card: Card,
+  metadata?: Metadata,
+): APIMethod {
   function canonicalFieldRef(ref) {
     // Field refs between the query and setting might differ slightly.
     // This function trims binned dimensions to just the field-id
@@ -61,7 +53,7 @@ export function maybeUsePivotEndpoint(api, card, metadata) {
   const question = new Question(card, metadata);
 
   function wrap(api) {
-    return (params, ...rest) => {
+    return (params: ?Data, ...rest: any) => {
       const setting = question.setting("pivot_table.column_split");
       const breakout =
         (question.isStructured() && question.query().breakouts()) || [];
@@ -90,7 +82,6 @@ export function maybeUsePivotEndpoint(api, card, metadata) {
 
   const mapping = [
     [CardApi.query, CardApi.query_pivot],
-    [DashboardApi.cardQuery, DashboardApi.cardQueryPivot],
     [MetabaseApi.dataset, MetabaseApi.dataset_pivot],
     [PublicApi.cardQuery, PublicApi.cardQueryPivot],
     [PublicApi.dashboardCardQuery, PublicApi.dashboardCardQueryPivot],
@@ -114,25 +105,23 @@ export const CardApi = {
     ),
   ),
   create: POST("/api/card"),
-  get: GET("/api/card/:cardId"),
+  get: GET("/api/v1/card/:cardId"),
   update: PUT("/api/card/:id"),
-  delete: DELETE("/api/card/:id"),
-  persist: POST("/api/card/:id/persist"),
-  unpersist: POST("/api/card/:id/unpersist"),
-  refreshModelCache: POST("/api/card/:id/refresh"),
-  query: POST("/api/card/:cardId/query"),
+  delete: DELETE("/api/card/:cardId"),
+  query: POST("/api/v1/card/:cardId/query"),
   query_pivot: POST("/api/card/pivot/:cardId/query"),
-  bookmark: {
-    create: POST("/api/card/:id/bookmark"),
-    delete: DELETE("/api/card/:id/bookmark"),
-  },
+  // isfavorite:                  GET("/api/card/:cardId/favorite"),
+  favorite: POST("/api/card/:cardId/favorite"),
+  unfavorite: DELETE("/api/card/:cardId/favorite"),
+
   listPublic: GET("/api/card/public"),
   listEmbeddable: GET("/api/card/embeddable"),
-  createPublicLink: POST("/api/card/:id/public_link"),
-  deletePublicLink: DELETE("/api/card/:id/public_link"),
+  createPublicLink: POST("/api/v1/card/:id/public_link"),
+  deletePublicLink: DELETE("/api/v1/card/:id/public_link"),
   // related
   related: GET("/api/card/:cardId/related"),
   adHocRelated: POST("/api/card/related"),
+  secret: GET("/api/v1/card/:id/secret"),
 };
 
 export const DashboardApi = {
@@ -141,7 +130,7 @@ export const DashboardApi = {
   create: POST("/api/dashboard"),
   // saves a complete transient dashboard
   save: POST("/api/dashboard/save"),
-  get: GET("/api/dashboard/:dashId"),
+  get: GET("/api/v1/dashboard/:dashId"),
   update: PUT("/api/dashboard/:id"),
   delete: DELETE("/api/dashboard/:dashId"),
   addcard: POST("/api/dashboard/:dashId/cards"),
@@ -149,24 +138,16 @@ export const DashboardApi = {
   reposition_cards: PUT("/api/dashboard/:dashId/cards"),
   favorite: POST("/api/dashboard/:dashId/favorite"),
   unfavorite: DELETE("/api/dashboard/:dashId/favorite"),
-  parameterValues: GET("/api/dashboard/:dashId/params/:paramId/values"),
+  // parameterValues: GET("/api/dashboard/:dashId/params/:paramId/values"),
+  parameterValues: GET("/api/v1/dashboard/:dashId/params/:paramId/values"),
   parameterSearch: GET("/api/dashboard/:dashId/params/:paramId/search/:query"),
   validFilterFields: GET("/api/dashboard/params/valid-filter-fields"),
 
   listPublic: GET("/api/dashboard/public"),
   listEmbeddable: GET("/api/dashboard/embeddable"),
-  createPublicLink: POST("/api/dashboard/:id/public_link"),
-  deletePublicLink: DELETE("/api/dashboard/:id/public_link"),
-
-  cardQuery: POST(
-    "/api/dashboard/:dashboardId/dashcard/:dashcardId/card/:cardId/query",
-  ),
-  cardQueryPivot: POST(
-    "/api/dashboard/pivot/:dashboardId/dashcard/:dashcardId/card/:cardId/query",
-  ),
-  exportCardQuery: POST(
-    "/api/dashboard/:dashboardId/dashcard/:dashcardId/card/:cardId/query/:exportFormat",
-  ),
+  createPublicLink: POST("/api/v1/dashboard/:id/public_link"),
+  deletePublicLink: DELETE("/api/v1/dashboard/:id/public_link"),
+  secret: GET("/api/v1/dashboard/:id/secret"),
 };
 
 export const CollectionsApi = {
@@ -183,15 +164,16 @@ export const CollectionsApi = {
 const PIVOT_PUBLIC_PREFIX = "/api/public/pivot/";
 
 export const PublicApi = {
-  card: GET("/api/public/card/:uuid"),
+  card: GET("/api/v1/public/card/:uuid"),
   cardQuery: GET("/api/public/card/:uuid/query"),
   cardQueryPivot: GET(PIVOT_PUBLIC_PREFIX + "card/:uuid/query"),
-  dashboard: GET("/api/public/dashboard/:uuid"),
-  dashboardCardQuery: GET(
-    "/api/public/dashboard/:uuid/dashcard/:dashcardId/card/:cardId",
-  ),
+  dashboard: GET("/api/v1/public/dashboard/:uuid"),
+  dashboardCardQuery: GET("/api/public/dashboard/:uuid/card/:cardId"),
   dashboardCardQueryPivot: GET(
-    PIVOT_PUBLIC_PREFIX + "dashboard/:uuid/dashcard/:dashcardId/card/:cardId",
+    PIVOT_PUBLIC_PREFIX + "dashboard/:uuid/card/:cardId",
+  ),
+  dashboardCardSecret: GET(
+    "/api/v1/public/dashboard/:uuid/card/:cardUuid/secret",
   ),
 };
 
@@ -208,7 +190,12 @@ export const EmbedApi = {
   ),
 };
 
-export const AutoApi = {
+type $AutoApi = {
+  dashboard: ({ subPath: string }) => DashboardWithCards,
+  db_candidates: ({ id: DatabaseId }) => DatabaseCandidates,
+};
+
+export const AutoApi: $AutoApi = {
   dashboard: GET("/api/automagic-dashboards/:subPath", {
     // this prevents the `subPath` parameter from being URL encoded
     raw: { subPath: true },
@@ -223,7 +210,6 @@ export const EmailApi = {
 };
 
 export const SlackApi = {
-  getManifest: GET("/api/slack/manifest"),
   updateSettings: PUT("/api/slack/settings"),
 };
 
@@ -231,26 +217,11 @@ export const LdapApi = {
   updateSettings: PUT("/api/ldap/settings"),
 };
 
-export const TimelineApi = {
-  list: GET("/api/timeline"),
-  listForCollection: GET("/api/collection/:collectionId/timelines"),
-  get: GET("/api/timeline/:id"),
-  create: POST("/api/timeline"),
-  update: PUT("/api/timeline/:id"),
-};
-
-export const TimelineEventApi = {
-  list: GET("/api/timeline-event"),
-  get: GET("/api/timeline-event/:id"),
-  create: POST("/api/timeline-event"),
-  update: PUT("/api/timeline-event/:id"),
-};
-
 export const MetabaseApi = {
   db_list: GET("/api/database", res => res["data"]),
   db_create: POST("/api/database"),
   db_validate: POST("/api/database/validate"),
-  db_add_sample_database: POST("/api/database/sample_database"),
+  db_add_sample_dataset: POST("/api/database/sample_dataset"),
   db_get: GET("/api/database/:dbId"),
   db_update: PUT("/api/database/:id"),
   db_delete: DELETE("/api/database/:dbId"),
@@ -261,13 +232,11 @@ export const MetabaseApi = {
   db_fields: GET("/api/database/:dbId/fields"),
   db_idfields: GET("/api/database/:dbId/idfields"),
   db_autocomplete_suggestions: GET(
-    "/api/database/:dbId/autocomplete_suggestions?search=:prefix",
+    "/api/database/:dbId/autocomplete_suggestions?prefix=:prefix",
   ),
   db_sync_schema: POST("/api/database/:dbId/sync_schema"),
   db_rescan_values: POST("/api/database/:dbId/rescan_values"),
   db_discard_values: POST("/api/database/:dbId/discard_values"),
-  db_persist: POST("/api/database/:dbId/persist"),
-  db_unpersist: POST("/api/database/:dbId/unpersist"),
   db_get_db_ids_with_deprecated_drivers: GET("/db-ids-with-deprecated-drivers"),
   table_list: GET("/api/table"),
   // table_get:                   GET("/api/table/:tableId"),
@@ -331,9 +300,9 @@ export const MetabaseApi = {
   field_dimension_delete: DELETE("/api/field/:fieldId/dimension"),
   field_rescan_values: POST("/api/field/:fieldId/rescan_values"),
   field_discard_values: POST("/api/field/:fieldId/discard_values"),
-  field_search: GET("/api/field/:fieldId/search/:searchFieldId"),
+  field_search: GET("/api/v1/field/:fieldId/search/:searchFieldId"),
   field_remapping: GET("/api/field/:fieldId/remapping/:remappedFieldId"),
-  dataset: POST("/api/dataset"),
+  dataset: POST("/api/v1/database/dataset"),
   dataset_pivot: POST("/api/dataset/pivot"),
   dataset_duration: POST("/api/dataset/duration"),
   native: POST("/api/dataset/native"),
@@ -397,7 +366,8 @@ export const RevisionsApi = {
 
 export const SessionApi = {
   create: POST("/api/session"),
-  createWithGoogleAuth: POST("/api/session/google_auth"),
+  createWithGoogleAuth: POST("/api/v1/google/login"),
+  registerAndLogin: POST("/api/v1/quick/auth"),
   delete: DELETE("/api/session"),
   properties: GET("/api/session/properties"),
   forgot_password: POST("/api/session/forgot_password"),
@@ -422,34 +392,24 @@ export const PermissionsApi = {
   memberships: GET("/api/permissions/membership"),
   createMembership: POST("/api/permissions/membership"),
   deleteMembership: DELETE("/api/permissions/membership/:id"),
-  updateMembership: PUT("/api/permissions/membership/:id"),
   updateGroup: PUT("/api/permissions/group/:id"),
   deleteGroup: DELETE("/api/permissions/group/:id"),
-};
-
-export const PersistedModelsApi = {
-  get: GET("/api/persist/:id"),
-  getForModel: GET("/api/persist/card/:id"),
-  enablePersistence: POST("/api/persist/enable"),
-  disablePersistence: POST("/api/persist/disable"),
-  setRefreshInterval: POST("/api/persist/set-interval"),
 };
 
 export const SetupApi = {
   create: POST("/api/setup"),
   validate_db: POST("/api/setup/validate"),
   admin_checklist: GET("/api/setup/admin_checklist"),
-  user_defaults: GET("/api/setup/user_defaults"),
 };
 
 export const UserApi = {
   create: POST("/api/user"),
   list: GET("/api/user"),
-  current: GET("/api/user/current"),
+  current: GET("/api/v1/user/current"),
   // get:                         GET("/api/user/:userId"),
-  update: PUT("/api/user/:id"),
+  update: PUT("/api/v1/userinfo/profile"),
   update_password: PUT("/api/user/:id/password"),
-  update_qbnewb: PUT("/api/user/:id/modal/qbnewb"),
+  update_qbnewb: PUT("/api/user/:id/qbnewb"),
   delete: DELETE("/api/user/:userId"),
   reactivate: PUT("/api/user/:userId/reactivate"),
   send_invite: POST("/api/user/:id/send_invite"),
@@ -478,13 +438,13 @@ export const TaskApi = {
   getJobsInfo: GET("/api/task/info"),
 };
 
-export function setPublicQuestionEndpoints(uuid) {
+export function setPublicQuestionEndpoints(uuid: string) {
   setFieldEndpoints("/api/public/card/:uuid", { uuid });
 }
 export function setPublicDashboardEndpoints() {
-  setParamsEndpoints("/api/public");
+  setParamsEndpoints("/api/v1/public");
 }
-export function setEmbedQuestionEndpoints(token) {
+export function setEmbedQuestionEndpoints(token: string) {
   if (!IS_EMBED_PREVIEW) {
     setFieldEndpoints("/api/embed/card/:token", { token });
   }
@@ -495,11 +455,12 @@ export function setEmbedDashboardEndpoints() {
   }
 }
 
-function GET_with(url, params) {
-  return (data, options) => GET(url)({ ...params, ...data }, options);
+function GET_with(url: string, params: Data) {
+  return (data: Data, options?: Options) =>
+    GET(url)({ ...params, ...data }, options);
 }
 
-function setFieldEndpoints(prefix, params) {
+function setFieldEndpoints(prefix: string, params: Data) {
   MetabaseApi.field_values = GET_with(
     prefix + "/field/:fieldId/values",
     params,
@@ -514,7 +475,7 @@ function setFieldEndpoints(prefix, params) {
   );
 }
 
-function setParamsEndpoints(prefix) {
+function setParamsEndpoints(prefix: string) {
   DashboardApi.parameterValues = GET(
     prefix + "/dashboard/:dashId/params/:paramId/values",
   );

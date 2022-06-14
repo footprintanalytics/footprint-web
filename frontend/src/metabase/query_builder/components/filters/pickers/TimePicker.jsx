@@ -2,12 +2,12 @@
 import React from "react";
 import { t } from "ttag";
 
-import DatePicker, {
-  getDateTimeFieldTarget,
-} from "./LegacyDatePicker/DatePicker";
-import HoursMinutesInput from "./LegacyDatePicker/HoursMinutesInput";
+import DatePicker, { getDateTimeFieldTarget } from "./DatePicker";
+import HoursMinutesInput from "./HoursMinutesInput";
 
 import { parseTime } from "metabase/lib/time";
+
+import type { Operator } from "./DatePicker";
 
 const TimeInput = ({ value, onChange }) => {
   const time = parseTime(value);
@@ -45,7 +45,7 @@ const MultiTimePicker = ({ filter, onFilterChange }) => (
         onFilterChange([filter[0], filter[1], ...sortTimes(time, filter[3])])
       }
     />
-    <span className="h3">{t`and`}</span>
+    <span className="h3">and</span>
     <TimeInput
       value={getTime(filter[3])}
       onChange={time =>
@@ -70,7 +70,7 @@ const getTime = value => {
   }
 };
 
-export const TIME_OPERATORS = [
+export const TIME_OPERATORS: Operator[] = [
   {
     name: "before",
     displayName: t`Before`,

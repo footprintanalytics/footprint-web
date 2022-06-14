@@ -1,4 +1,4 @@
-import "__support__/ui-mocks";
+import "__support__/mocks";
 
 import {
   createFixture,

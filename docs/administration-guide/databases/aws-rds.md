@@ -1,7 +1,3 @@
----
-title: Connecting to AWS's Relational Database Service (RDS)
----
-
 ## Connecting to AWS's Relational Database Service (RDS)
 
 RDS offers several databases that Metabase officially supports, including PostgreSQL, MySQL, MariaDB, Oracle, and SQL server.
@@ -19,3 +15,4 @@ Here's how to get connection information for databases on Amazon's RDS:
    - **Username**. Find this under Configuration Details.
    - **Database Name**. Find this under Configuration Details
    - **Password**. Ask your database administrator for the password.
+

@@ -13,7 +13,7 @@ import {
   PermissionsEditorEmptyState,
   permissionEditorPropTypes,
 } from "../../components/PermissionsEditor";
-import PermissionsPageLayout from "../../components/PermissionsPageLayout";
+import PermissionsPageLayout from "../../components/PermissionsPageLayout/PermissionsPageLayout";
 import {
   initializeCollectionPermissions,
   updateCollectionPermission,
@@ -25,9 +25,11 @@ import {
   getCollectionsPermissionEditor,
   getCollectionEntity,
   getIsDirty,
-  collectionsQuery,
 } from "../../selectors/collection-permissions";
-import { PermissionsSidebar } from "../../components/PermissionsSidebar";
+import {
+  PermissionsSidebar,
+  permissionSidebarPropTypes,
+} from "../../components/PermissionsSidebar";
 
 const mapDispatchToProps = {
   initialize: initializeCollectionPermissions,
@@ -51,7 +53,7 @@ const propTypes = {
     collectionId: PropTypes.string,
   }),
   children: PropTypes.node.isRequired,
-  sidebar: PropTypes.object,
+  sidebar: PropTypes.shape(permissionSidebarPropTypes),
   permissionEditor: PropTypes.shape(permissionEditorPropTypes),
   collection: PropTypes.object,
   navigateToItem: PropTypes.func.isRequired,
@@ -103,7 +105,7 @@ function CollectionsPermissionsPage({
 
       {!permissionEditor && (
         <PermissionsEditorEmptyState
-          icon="folder"
+          icon="all"
           message={t`Select a collection to see its permissions`}
         />
       )}
@@ -122,7 +124,7 @@ CollectionsPermissionsPage.propTypes = propTypes;
 
 export default _.compose(
   Collections.loadList({
-    entityQuery: collectionsQuery,
+    query: () => ({ tree: true }),
   }),
   Groups.loadList(),
   connect(mapStateToProps, mapDispatchToProps),

@@ -1,5 +1,4 @@
-import styled from "@emotion/styled";
-import { css } from "@emotion/react";
+import styled, { css } from "styled-components";
 
 import { color } from "metabase/lib/colors";
 
@@ -27,10 +26,4 @@ export const NotebookContainer = styled.div`
       opacity: 1;
       transform: translateY(0);
     `}
-
-  @media (prefers-reduced-motion) {
-    // Must have some transition time, if tiny,
-    // so that it will trigger 'onTransitionEnd' in the component
-    transition: transform 10ms, opacity 10ms;
-  }
 `;

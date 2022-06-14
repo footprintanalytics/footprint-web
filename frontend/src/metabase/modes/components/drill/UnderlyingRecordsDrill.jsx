@@ -1,15 +1,22 @@
 import { ngettext, msgid } from "ttag";
 import { inflect } from "metabase/lib/formatting";
 
+import StructuredQuery from "metabase-lib/lib/queries/StructuredQuery";
+
+import type {
+  ClickAction,
+  ClickActionProps,
+} from "metabase-types/types/Visualization";
+
 import { AggregationDimension } from "metabase-lib/lib/Dimension";
 
-export default ({ question, clicked }) => {
+export default ({ question, clicked }: ClickActionProps): ClickAction[] => {
   // removes post-aggregation filter stage
   clicked = clicked && question.topLevelClicked(clicked);
   question = question.topLevelQuestion();
 
   const query = question.query();
-  if (!question.isStructured() || !query.isEditable()) {
+  if (!(query instanceof StructuredQuery)) {
     return [];
   }
 

@@ -1,24 +1,15 @@
 /* eslint-disable react/prop-types */
-import React, { useCallback, useEffect, useState } from "react";
+import React, { Component } from "react";
 import { connect } from "react-redux";
 import { push } from "react-router-redux";
-import _ from "underscore";
-
-import { t } from "ttag";
-
+import fitViewport from "metabase/hoc/FitViewPort";
 import title from "metabase/hoc/Title";
-import favicon from "metabase/hoc/Favicon";
-import titleWithLoadingTime from "metabase/hoc/TitleWithLoadingTime";
+// import titleWithLoadingTime from "metabase/hoc/TitleWithLoadingTime";
 
 import Dashboard from "metabase/dashboard/components/Dashboard/Dashboard";
-import Toaster from "metabase/components/Toaster";
-
-import { useLoadingTimer } from "metabase/hooks/use-loading-timer";
-import { useWebNotification } from "metabase/hooks/use-web-notification";
-import { useOnUnmount } from "metabase/hooks/use-on-unmount";
 
 import { fetchDatabaseMetadata } from "metabase/redux/metadata";
-import { getIsNavbarOpen, setErrorPage } from "metabase/redux/app";
+import { setErrorPage } from "metabase/redux/app";
 
 import {
   getIsEditing,
@@ -37,32 +28,29 @@ import {
   getIsAddParameterPopoverOpen,
   getSidebar,
   getShowAddQuestionSidebar,
-  getFavicon,
-  getDocumentTitle,
-  getIsRunning,
-  getIsLoadingComplete,
-  getIsHeaderVisible,
-  getIsAdditionalInfoVisible,
 } from "../selectors";
 import { getDatabases, getMetadata } from "metabase/selectors/metadata";
-import {
-  getUserIsAdmin,
-  canManageSubscriptions,
-} from "metabase/selectors/user";
+import { getUser, getUserIsAdmin } from "metabase/selectors/user";
 
 import * as dashboardActions from "../actions";
 import { parseHashOptions } from "metabase/lib/browser";
 import * as Urls from "metabase/lib/urls";
 
 import Dashboards from "metabase/entities/dashboards";
+import QueryCopyModal from "metabase/components/QueryCopyModal";
+import {
+  loginModalShowAction,
+  setIsCancelFeedbackBlockAction,
+} from "metabase/redux/control";
+import userCancelFeedbackUtil from "metabase/dashboard/components/utils/userCancelFeedbackUtil";
 
 const mapStateToProps = (state, props) => {
   return {
     dashboardId: props.dashboardId || Urls.extractEntityId(props.params.slug),
+    urlDashboardName: props.params.dashboardName,
+    urlUserName: props.params.name,
 
-    canManageSubscriptions: canManageSubscriptions(state, props),
     isAdmin: getUserIsAdmin(state, props),
-    isNavbarOpen: getIsNavbarOpen(state),
     isEditing: getIsEditing(state, props),
     isSharing: getIsSharing(state, props),
     dashboardBeforeEditing: getDashboardBeforeEditing(state, props),
@@ -79,14 +67,9 @@ const mapStateToProps = (state, props) => {
     loadingStartTime: getLoadingStartTime(state),
     clickBehaviorSidebarDashcard: getClickBehaviorSidebarDashcard(state),
     isAddParameterPopoverOpen: getIsAddParameterPopoverOpen(state),
+    user: getUser(state),
     sidebar: getSidebar(state),
     showAddQuestionSidebar: getShowAddQuestionSidebar(state),
-    pageFavicon: getFavicon(state),
-    documentTitle: getDocumentTitle(state),
-    isRunning: getIsRunning(state),
-    isLoadingComplete: getIsLoadingComplete(state),
-    isHeaderVisible: getIsHeaderVisible(state),
-    isAdditionalInfoVisible: getIsAdditionalInfoVisible(state),
   };
 };
 
@@ -96,85 +79,99 @@ const mapDispatchToProps = {
   fetchDatabaseMetadata,
   setErrorPage,
   onChangeLocation: push,
+  setLoginModalShow: loginModalShowAction,
+  setIsCancelFeedbackBlockAction,
 };
 
+type DashboardAppState = {
+  addCardOnLoad: number | null,
+  cardId: String | "",
+  cardName: String | "",
+};
+
+@connect(mapStateToProps, mapDispatchToProps)
+@fitViewport
+@title(({ dashboard }) => dashboard && dashboard.name)
+// @titleWithLoadingTime("loadingStartTime")
 // NOTE: should use DashboardControls and DashboardData HoCs here?
-const DashboardApp = props => {
-  const options = parseHashOptions(window.location.hash);
+export default class DashboardApp extends Component {
+  state: DashboardAppState = {
+    addCardOnLoad: null,
+    defaultEdit: false,
+    cardId: "",
+    cardName: "",
+  };
 
-  const { isRunning, isLoadingComplete, dashboard } = props;
-
-  const [editingOnLoad] = useState(options.edit);
-  const [addCardOnLoad] = useState(options.add && parseInt(options.add));
-
-  const [isShowingToaster, setIsShowingToaster] = useState(false);
-
-  const onTimeout = useCallback(() => {
-    if ("Notification" in window && Notification.permission === "default") {
-      setIsShowingToaster(true);
+  UNSAFE_componentWillMount() {
+    const options = parseHashOptions(window.location.hash);
+    if (options.add) {
+      this.setState({ addCardOnLoad: parseInt(options.add) });
     }
-  }, []);
-
-  useLoadingTimer(isRunning, {
-    timer: 15000,
-    onTimeout,
-  });
-
-  const [requestPermission, showNotification] = useWebNotification();
-
-  useOnUnmount(props.reset);
-
-  useEffect(() => {
-    if (isLoadingComplete) {
-      setIsShowingToaster(false);
-      if (
-        "Notification" in window &&
-        Notification.permission === "granted" &&
-        document.hidden
-      ) {
-        showNotification(
-          t`All Set! ${dashboard?.name} is ready.`,
-          t`All questions loaded`,
-        );
-      }
+    const { location } = this.props;
+    if (location && location.query && location.query.defaultEdit === "true") {
+      this.setState({ defaultEdit: true });
     }
-  }, [isLoadingComplete, showNotification, dashboard?.name]);
 
-  const onConfirmToast = useCallback(async () => {
-    await requestPermission();
-    setIsShowingToaster(false);
-  }, [requestPermission]);
+    this.props.setIsCancelFeedbackBlockAction({
+      isUserFeedbackBlock: this.isCancelFeedbackBlock,
+    });
+  }
 
-  const onDismissToast = useCallback(() => {
-    setIsShowingToaster(false);
-  }, []);
+  isCancelFeedbackBlock = () => {
+    const scene = "new-dashboard-leave";
+    return {
+      isBlock:
+        ((this.props.dashboardBeforeEditing &&
+          this.props.dashboardBeforeEditing.ordered_cards.length === 0) ||
+          (this.props.dashboard &&
+            this.props.dashboard.ordered_cards.length === 0)) &&
+        userCancelFeedbackUtil.canBlock(scene, true),
+      scene,
+    };
+  };
 
-  return (
-    <div className="shrink-below-content-size full-height">
-      <Dashboard
-        editingOnLoad={editingOnLoad}
-        addCardOnLoad={addCardOnLoad}
-        {...props}
-      />
-      {/* For rendering modal urls */}
-      {props.children}
-      <Toaster
-        message={t`Would you like to be notified when this dashboard is done loading?`}
-        isShown={isShowingToaster}
-        onDismiss={onDismissToast}
-        onConfirm={onConfirmToast}
-        fixed
-      />
-    </div>
-  );
-};
+  componentWillUnmount = () => {
+    this.props.setIsCancelFeedbackBlockAction({
+      isCancelFeedbackBlock: undefined,
+    });
+  };
 
-export default _.compose(
-  connect(mapStateToProps, mapDispatchToProps),
-  favicon(({ pageFavicon }) => pageFavicon),
-  title(({ dashboard, documentTitle }) => ({
-    title: documentTitle || dashboard?.name,
-    titleIndex: 1,
-  })),
-  titleWithLoadingTime("loadingStartTime"),
-)(DashboardApp);
+  duplicateAction = async item => {
+    if (this.props.user) {
+      this.setState({
+        cardId: item.id,
+        cardName: item.name,
+      });
+    } else {
+      this.props.setLoginModalShow({
+        show: true,
+        from: "publicDashboard_query_duplicate",
+      });
+    }
+  };
+
+  render() {
+    return (
+      <div className="shrink-below-content-size flex-full">
+        <Dashboard
+          addCardOnLoad={this.state.addCardOnLoad}
+          duplicateAction={this.duplicateAction}
+          defaultEdit={this.state.defaultEdit}
+          {...this.props}
+        />
+        <QueryCopyModal
+          open={this.state.cardId}
+          cardId={this.state.cardId}
+          name={this.state.cardName}
+          onClose={() =>
+            this.setState({
+              cardId: null,
+            })
+          }
+        />
+        {/* For rendering modal urls */}
+        {this.props.children}
+      </div>
+    );
+  }
+}

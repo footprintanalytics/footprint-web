@@ -14,12 +14,28 @@ const EntityCopyModal = ({
   onSaved,
   ...props
 }) => (
-  <ModalContent title={t`Duplicate "${entityObject.name}"`} onClose={onClose}>
+  <ModalContent
+    title={
+      entityObject.name
+        ? entityObject.name + " - " + t`Duplicate`
+        : t`Duplicate`
+    }
+    titleDesc={
+      <div style={{ color: "#FFBC4C", fontSize: 12, padding: "8px 0" }}>
+        {`Tips: You can view & edit the copied ${
+          entityType === "dashboards" ? "dashboard" : "query"
+        } in My Analytics`}
+      </div>
+    }
+    onClose={onClose}
+  >
     <EntityForm
       entityType={entityType}
       entityObject={{
         ...dissoc(entityObject, "id"),
-        name: entityObject.name + " - " + t`Duplicate`,
+        name: entityObject.name
+          ? entityObject.name + " - " + t`Duplicate`
+          : t`Duplicate`,
       }}
       onSubmit={copy}
       onClose={onClose}

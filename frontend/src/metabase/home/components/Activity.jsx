@@ -82,7 +82,7 @@ export default class Activity extends Component {
     if (user && currentUser && user.id === currentUser.id) {
       return t`You`;
     } else if (user) {
-      return user.common_name;
+      return user.first_name;
     } else {
       return t`Metabase`;
     }
@@ -152,9 +152,7 @@ export default class Activity extends Component {
         if (item.table) {
           description.summary = (
             <span>
-              {item.model === "dataset"
-                ? t`saved a model based on `
-                : t`saved a question about `}
+              {t`saved a question about `}
               <Link
                 to={Urls.tableRowsQuery(item.database_id, item.table_id)}
                 data-metabase-event={
@@ -167,13 +165,11 @@ export default class Activity extends Component {
             </span>
           );
         } else {
-          description.summary =
-            item.model === "dataset" ? t`saved a model` : t`saved a question`;
+          description.summary = t`saved a chart`;
         }
         break;
       case "card-delete":
-        description.summary =
-          item.model === "dataset" ? t`deleted a model` : t`deleted a question`;
+        description.summary = t`deleted a chart`;
         break;
       case "dashboard-create":
         description.summary = t`created a dashboard`;
@@ -528,7 +524,7 @@ export default class Activity extends Component {
           <div className="full flex flex-column">
             <div className="">
               {activity.length === 0 ? (
-                <div className="flex flex-column layout-centered my4">
+                <div className="flex flex-column layout-centered mt4">
                   <span className="QuestionCircle">!</span>
                   <div className="text-normal mt3 mb1">
                     {t`Hmmm, looks like nothing has happened yet.`}

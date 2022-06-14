@@ -25,7 +25,8 @@ const mapStateToProps = (state, props) => ({
   metadata: getMetadata(state, props),
 });
 
-class SegmentPane extends Component {
+@connect(mapStateToProps, mapDispatchToProps)
+export default class SegmentPane extends Component {
   constructor(props, context) {
     super(props, context);
 
@@ -84,7 +85,7 @@ class SegmentPane extends Component {
       return card;
     } else {
       throw new Error(
-        t`Could not find the table metadata prior to creating a new question`,
+        t`Could not find the table metadata prior to creating a new chart`,
       );
     }
   }
@@ -155,5 +156,3 @@ class SegmentPane extends Component {
     );
   }
 }
-
-export default connect(mapStateToProps, mapDispatchToProps)(SegmentPane);

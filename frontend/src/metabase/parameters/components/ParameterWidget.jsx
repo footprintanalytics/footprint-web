@@ -9,6 +9,7 @@ import S from "./ParameterWidget.css";
 import cx from "classnames";
 
 import FieldSet from "../../components/FieldSet";
+import MetabaseUtils from "metabase/lib/utils";
 
 export default class ParameterWidget extends Component {
   state = {
@@ -72,21 +73,29 @@ export default class ParameterWidget extends Component {
       dragHandle,
     } = this.props;
 
+    const isSeriesType =
+      parameter.type === "date/series-date" ||
+      parameter.type === "series_category";
+
     const isEditingParameter =
       editingParameter && editingParameter.id === parameter.id;
 
     const renderFieldInNormalMode = () => {
       const fieldHasValueOrFocus =
         parameter.value != null || this.state.isFocused;
-      const legend = fieldHasValueOrFocus ? parameter.name : "";
+      const legend = fieldHasValueOrFocus || isSeriesType ? parameter.name : "";
 
       return (
         <FieldSet
           legend={legend}
           noPadding={true}
-          className={cx(className, S.container, {
-            "border-brand": fieldHasValueOrFocus,
-          })}
+          className={cx(
+            className,
+            S.container,
+            MetabaseUtils.isCoin360()
+              ? {}
+              : { "border-brand": fieldHasValueOrFocus },
+          )}
         >
           {this.renderPopover(
             parameter.value,

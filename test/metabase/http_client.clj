@@ -1,15 +1,14 @@
 (ns metabase.http-client
   "HTTP client for making API calls against the Metabase API. For test/REPL purposes."
   (:require [cheshire.core :as json]
-            [clj-http.client :as http]
-            [clojure.edn :as edn]
+            [clj-http.client :as client]
             [clojure.string :as str]
             [clojure.test :as t]
             [clojure.tools.logging :as log]
-            java-time
+            [clojure.walk :as walk]
+            [java-time :as java-time]
             [metabase.config :as config]
             [metabase.server.middleware.session :as mw.session]
-            [metabase.test-runner.assert-exprs :as test-runner.assert-exprs]
             [metabase.test.initialize :as initialize]
             [metabase.test.util.log :as tu.log]
             [metabase.util :as u]
@@ -77,27 +76,17 @@
         :else
         response))
 
-(defn- parse-response-key
-  "Parse JSON keys as numbers if possible, else convert them to keywords indiscriminately."
-  [json-key]
-  (try
-    (let [parsed-key (edn/read-string json-key)]
-      (if (number? parsed-key)
-        parsed-key
-        (keyword json-key)))
-    (catch Throwable _
-      (keyword json-key))))
-
 (defn- parse-response
   "Deserialize the JSON response or return as-is if that fails."
   [body]
   (if-not (string? body)
     body
     (try
-      (auto-deserialize-dates (json/parse-string body parse-response-key))
-      (catch Throwable _
+      (auto-deserialize-dates (json/parse-string body keyword))
+      (catch Throwable e
         (when-not (str/blank? body)
           body)))))
+
 
 ;;; authentication
 
@@ -138,7 +127,6 @@
                      (if (map? credentials)
                        (authenticate credentials)
                        credentials))}
-    :cookie-policy :standard
     :content-type :json}
    (when (seq http-body)
      {:body (json/generate-string http-body)})))
@@ -167,10 +155,10 @@
                   method-name url expected-status-code actual-status-code))))
 
 (def ^:private method->request-fn
-  {:get    http/get
-   :post   http/post
-   :put    http/put
-   :delete http/delete})
+  {:get    client/get
+   :post   client/post
+   :put    client/put
+   :delete client/delete})
 
 (def ^:private ClientParamsMap
   {(s/optional-key :credentials)      (s/maybe (s/cond-pre UUIDString Credentials))
@@ -181,11 +169,21 @@
    (s/optional-key :query-parameters) (s/maybe su/Map)
    (s/optional-key :request-options)  (s/maybe su/Map)})
 
+(defn derecordize
+  "Convert all record types in `form` to plain maps, so tests won't fail."
+  [form]
+  (walk/postwalk
+   (fn [form]
+     (if (record? form)
+       (into {} form)
+       form))
+   form))
+
 (s/defn ^:private -client
   ;; Since the params for this function can get a little complicated make sure we validate them
   [{:keys [credentials method expected-status url http-body query-parameters request-options]} :- ClientParamsMap]
   (initialize/initialize-if-needed! :db :web-server)
-  (let [http-body   (test-runner.assert-exprs/derecordize http-body)
+  (let [http-body   (derecordize http-body)
         request-map (merge (build-request-map credentials http-body) request-options)
         request-fn  (method->request-fn method)
         url         (build-url url query-parameters)

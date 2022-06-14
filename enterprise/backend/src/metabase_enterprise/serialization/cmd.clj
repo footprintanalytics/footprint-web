@@ -47,18 +47,19 @@
                         :on-error :continue}
                        context)]
     (try
-      (log/info (trs "BEGIN LOAD from {0} with context {1}" path context))
-      (let [all-res    [(load/load (str path "/users") context)
-                        (load/load (str path "/databases") context)
-                        (load/load (str path "/collections") context)
-                        (load/load-settings path context)
-                        (load/load-dependencies path context)]
-            reload-fns (filter fn? all-res)]
-        (when (seq reload-fns)
-          (log/info (trs "Finished first pass of load; now performing second pass"))
-          (doseq [reload-fn reload-fns]
-            (reload-fn)))
-        (log/info (trs "END LOAD from {0} with context {1}" path context)))
+      (do
+        (log/info (trs "BEGIN LOAD from {0} with context {1}" path context))
+        (let [all-res    [(load/load (str path "/users") context)
+                          (load/load (str path "/databases") context)
+                          (load/load (str path "/collections") context)
+                          (load/load-settings path context)
+                          (load/load-dependencies path context)]
+              reload-fns (filter fn? all-res)]
+          (when (seq reload-fns)
+            (log/info (trs "Finished first pass of load; now performing second pass"))
+            (doseq [reload-fn reload-fns]
+              (reload-fn)))
+          (log/info (trs "END LOAD from {0} with context {1}" path context))))
       (catch Throwable e
         (log/error e (trs "ERROR LOAD from {0}: {1}" path (.getMessage e)))
         (throw e)))))

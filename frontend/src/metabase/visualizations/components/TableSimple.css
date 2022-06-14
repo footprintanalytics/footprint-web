@@ -1,0 +1,26 @@
+.table-transpose {
+  display: flex;
+  border-top: 1px solid #f4f5f7;
+}
+.table-transpose tr {
+  display: block;
+  float: left;
+  flex: 1;
+  border-bottom: 0;
+}
+.table-transpose th,
+.table-transpose td {
+  display: block;
+  padding-left: 1.44em !important;
+  height: 40px;
+  line-height: 20px;
+}
+.table-transpose tbody {
+  display: flex;
+  width: 100%;
+  overflow-x: auto;
+}
+.table-simple-title {
+  padding: 2px;
+  white-space: nowrap;
+}

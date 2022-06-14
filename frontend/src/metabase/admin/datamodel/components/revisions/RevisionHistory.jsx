@@ -10,7 +10,8 @@ import Tables from "metabase/entities/tables";
 
 import { assignUserColors } from "metabase/lib/formatting";
 
-class RevisionHistory extends Component {
+@Tables.load({ id: (state, { object: { table_id } }) => table_id })
+export default class RevisionHistory extends Component {
   static propTypes = {
     object: PropTypes.object,
     revisions: PropTypes.array,
@@ -64,7 +65,3 @@ class RevisionHistory extends Component {
     );
   }
 }
-
-export default Tables.load({
-  id: (state, { object: { table_id } }) => table_id,
-})(RevisionHistory);

@@ -4,32 +4,89 @@ import PropTypes from "prop-types";
 
 import { t } from "ttag";
 import _ from "underscore";
-import AceEditor from "react-ace";
+import cx from "classnames";
 
 import { format } from "metabase/lib/expressions/format";
-import { suggest } from "metabase/lib/expressions/suggest";
 import { processSource } from "metabase/lib/expressions/process";
-import { diagnose } from "metabase/lib/expressions/diagnostics";
-import { tokenize } from "metabase/lib/expressions/tokenizer";
+import {
+  tokenize,
+  countMatchingParentheses,
+  TOKEN,
+  OPERATOR as OP,
+} from "metabase/lib/expressions/tokenizer";
+import MetabaseSettings from "metabase/lib/settings";
+import colors from "metabase/lib/colors";
 
+import memoize from "lodash.memoize";
+
+import { setCaretPosition, getSelectionPosition } from "metabase/lib/dom";
+
+import {
+  KEYCODE_ENTER,
+  KEYCODE_ESCAPE,
+  KEYCODE_LEFT,
+  KEYCODE_UP,
+  KEYCODE_RIGHT,
+  KEYCODE_DOWN,
+} from "metabase/lib/keyboard";
+
+import ExternalLink from "metabase/components/ExternalLink";
+import Icon from "metabase/components/Icon";
+import Popover from "metabase/components/Popover";
 import ExplicitSize from "metabase/components/ExplicitSize";
 
-import { isExpression } from "metabase/lib/expressions";
+import TokenizedInput from "./TokenizedInput";
 
-import HelpText from "./ExpressionEditorHelpText";
+import { getMBQLName, isExpression } from "metabase/lib/expressions";
+
 import ExpressionEditorSuggestions from "./ExpressionEditorSuggestions";
-import {
-  EditorContainer,
-  EditorEqualsSign,
-} from "./ExpressionEditorTextfield.styled";
+import { uniqBy } from "lodash";
 
-import ExpressionMode from "./ExpressionMode";
-
-import "./expressions.css";
-
-import * as ace from "ace-builds/src-noconflict/ace";
-
-ace.config.set("basePath", "/assets/ui/");
+const HelpText = ({ helpText, width, mode }) =>
+  helpText ? (
+    <Popover
+      tetherOptions={{
+        attachment: "top left",
+        targetAttachment: "bottom left",
+      }}
+      style={{ width: width }}
+      isOpen
+    >
+      {/* Prevent stealing focus from input box causing the help text to be closed (metabase#17548) */}
+      <div onMouseDown={e => e.preventDefault()}>
+        <p
+          className="p2 m0 text-monospace text-bold"
+          style={{ background: colors["bg-yellow"] }}
+        >
+          {helpText.structure}
+        </p>
+        <div className="p2 border-top">
+          <p className="mt0 text-bold">{helpText.description}</p>
+          <p className="text-code m0 text-body">{helpText.example}</p>
+        </div>
+        <div className="p2 border-top">
+          {helpText.args.map(({ name, description }, index) => (
+            <div key={index}>
+              <h4 className="text-medium">{name}</h4>
+              <p className="mt1 text-bold">{description}</p>
+            </div>
+          ))}
+          <ExternalLink
+            className="link text-bold block my1"
+            target="_blank"
+            href={
+              mode
+                ? "https://pandas.pydata.org/docs/reference/frame.html"
+                : MetabaseSettings.docsUrl("users-guide/expressions")
+            }
+          >
+            <Icon name="reference" size={12} className="mr1" />
+            {t`Learn more`}
+          </ExternalLink>
+        </div>
+      </div>
+    </Popover>
+  ) : null;
 
 const ErrorMessage = ({ error }) => {
   return (
@@ -43,25 +100,25 @@ const ErrorMessage = ({ error }) => {
   );
 };
 
-class ExpressionEditorTextfield extends React.Component {
+@ExplicitSize()
+export default class ExpressionEditorTextfield extends React.Component {
   constructor() {
     super();
+    // memoize processSource for performance when editing previously seen source/targetOffset
+    this._processSource = memoize(processSource, ({ source, targetOffset }) =>
+      // resovle should include anything that affect the results of processSource
+      // except currently we exclude `startRule` and `query` since they shouldn't change
+      [source, targetOffset].join(","),
+    );
     this.input = React.createRef();
-    this.suggestionTarget = React.createRef();
   }
 
   static propTypes = {
-    expression: PropTypes.oneOfType([
-      PropTypes.number,
-      PropTypes.number,
-      PropTypes.array,
-    ]),
-    name: PropTypes.string,
+    expression: PropTypes.array, // should be an array like [expressionObj, source]
     onChange: PropTypes.func.isRequired,
     onError: PropTypes.func.isRequired,
     startRule: PropTypes.string.isRequired,
     onBlankChange: PropTypes.func,
-    helpTextTarget: PropTypes.instanceOf(Element).isRequired,
   };
 
   static defaultProps = {
@@ -70,7 +127,12 @@ class ExpressionEditorTextfield extends React.Component {
     placeholder: "write some math!",
   };
 
-  state = null;
+  _getParserOptions(props = this.props) {
+    return {
+      query: props.query,
+      startRule: props.startRule,
+    };
+  }
 
   UNSAFE_componentWillMount() {
     this.UNSAFE_componentWillReceiveProps(this.props);
@@ -78,56 +140,51 @@ class ExpressionEditorTextfield extends React.Component {
 
   UNSAFE_componentWillReceiveProps(newProps) {
     // we only refresh our state if we had no previous state OR if our expression changed
-    const { expression, query, startRule } = newProps;
-    if (!this.state || !_.isEqual(this.props.expression, expression)) {
-      const source = format(expression, { query, startRule });
-      const currentSource = this.state?.source;
-      this.setState({ source, expression });
-      this.clearSuggestions();
+    if (!this.state || !_.isEqual(this.props.expression, newProps.expression)) {
+      const parserOptions = this._getParserOptions(newProps);
+      const source = format(newProps.expression, parserOptions);
 
-      // Reset caret position due to reformatting
-      if (currentSource !== source && this.input.current) {
-        const { editor } = this.input.current;
-        setTimeout(() => editor.gotoLine(1, source.length), 0);
-      }
+      const { expression, compileError, syntaxTree } =
+        source && source.length
+          ? this._processSource({
+              source,
+              ...this._getParserOptions(newProps),
+            })
+          : {
+              expression: null,
+              tokenizerError: [],
+              compileError: null,
+              syntaxTree: null,
+            };
+      this.setState({
+        source,
+        expression,
+        tokenizeError: [],
+        compileError,
+        syntaxTree,
+        suggestions: [],
+        highlightedSuggestionIndex: 0,
+      });
     }
   }
 
   componentDidMount() {
-    const { editor } = this.input.current;
-    editor.getSession().setMode(new ExpressionMode());
-
-    editor.setOptions({
-      fontFamily: "Monaco, monospace",
-      fontSize: "12px",
-    });
-
-    const passKeysToBrowser = editor.commands.byName.passKeysToBrowser;
-    editor.commands.bindKey("Tab", passKeysToBrowser);
-    editor.commands.bindKey("Shift-Tab", passKeysToBrowser);
-    editor.commands.removeCommand(editor.commands.byName.indent);
-    editor.commands.removeCommand(editor.commands.byName.outdent);
-
-    this.setCaretPosition(
+    this._setCaretPosition(
       this.state.source.length,
       this.state.source.length === 0,
     );
 
-    this.triggerAutosuggest();
+    this._triggerAutosuggest();
   }
 
   onSuggestionSelected = index => {
+    const { onValueChange } = this.props;
     const { source, suggestions } = this.state;
     const suggestion = suggestions && suggestions[index];
-
-    const { editor } = this.input.current;
 
     if (suggestion) {
       const { tokens } = tokenize(source);
       const token = tokens.find(t => t.end >= suggestion.index);
-
-      const { row } = editor.getCursorPosition();
-
       if (token) {
         const prefix = source.slice(0, token.start);
         const postfix = source.slice(token.end);
@@ -140,85 +197,75 @@ class ExpressionEditorTextfield extends React.Component {
         const extraTrim = openParen && alreadyOpenParen ? 1 : 0;
         const replacement = suggested.slice(0, suggested.length - extraTrim);
 
-        const updatedExpression = prefix + replacement + postfix;
-        this.handleExpressionChange(updatedExpression);
+        const updatedExpression = prefix + replacement.trim() + postfix;
+        onValueChange && onValueChange(updatedExpression);
+        this.onExpressionChange(updatedExpression);
         const caretPos = updatedExpression.length - postfix.length;
-
-        // setTimeout solves a race condition that happens only
-        // when a suggestion has been selected by
-        // clicking on the autocomplete
-        setTimeout(() => editor.moveCursorTo(row, caretPos));
+        setTimeout(() => {
+          this._setCaretPosition(caretPos, true);
+        });
       } else {
         const newExpression = source + suggestion.text;
-        this.handleExpressionChange(newExpression);
-        editor.moveCursorTo(row, newExpression.length);
+        onValueChange && onValueChange(newExpression);
+        this.onExpressionChange(newExpression);
+        setTimeout(() => this._setCaretPosition(newExpression.length, true));
       }
     }
   };
 
-  handleArrowUp = () => {
-    const { highlightedSuggestionIndex, suggestions } = this.state;
+  onInputKeyDown = e => {
+    const { suggestions, highlightedSuggestionIndex } = this.state;
 
-    if (suggestions.length) {
+    if (e.keyCode === KEYCODE_LEFT || e.keyCode === KEYCODE_RIGHT) {
+      setTimeout(() => this._triggerAutosuggest());
+      return;
+    }
+    if (e.keyCode === KEYCODE_ESCAPE) {
+      e.stopPropagation();
+      e.preventDefault();
+      this.clearSuggestions();
+      return;
+    }
+
+    if (!suggestions.length) {
+      if (
+        e.keyCode === KEYCODE_ENTER &&
+        this.props.onCommit &&
+        this.state.expression != null
+      ) {
+        this.props.onCommit(this.state.expression);
+      }
+      return;
+    }
+    if (e.keyCode === KEYCODE_ENTER) {
+      this.onSuggestionSelected(highlightedSuggestionIndex);
+      e.preventDefault();
+    } else if (e.keyCode === KEYCODE_UP) {
       this.setState({
         highlightedSuggestionIndex:
           (highlightedSuggestionIndex + suggestions.length - 1) %
           suggestions.length,
       });
-    } else {
-      this.input.current.editor.navigateLineEnd();
-    }
-  };
-
-  handleArrowDown = () => {
-    const { highlightedSuggestionIndex, suggestions } = this.state;
-
-    if (suggestions.length) {
+      e.preventDefault();
+    } else if (e.keyCode === KEYCODE_DOWN) {
       this.setState({
         highlightedSuggestionIndex:
           (highlightedSuggestionIndex + suggestions.length + 1) %
           suggestions.length,
       });
-    } else {
-      this.input.current.editor.navigateLineEnd();
+      e.preventDefault();
     }
   };
 
-  handleEnter = () => {
-    const { highlightedSuggestionIndex, suggestions } = this.state;
+  clearSuggestions() {
+    this.setState({
+      suggestions: [],
+      highlightedSuggestionIndex: 0,
+      helpText: null,
+    });
+  }
 
-    if (suggestions.length) {
-      this.onSuggestionSelected(highlightedSuggestionIndex);
-    } else {
-      this.commitExpression();
-    }
-  };
-
-  chooseSuggestion = () => {
-    const { highlightedSuggestionIndex, suggestions } = this.state;
-
-    if (suggestions.length) {
-      this.onSuggestionSelected(highlightedSuggestionIndex);
-    }
-  };
-
-  handleFocus = () => {
-    this.setState({ isFocused: true });
-    if (this.input.current) {
-      const { editor } = this.input.current;
-      this.handleCursorChange(editor.selection);
-
-      // workaround some unknown issue on Firefox
-      // without explicit focus, the editor is vertically shifted
-      setTimeout(() => {
-        editor.focus();
-      }, 0);
-    }
-  };
-
-  handleInputBlur = e => {
-    this.setState({ isFocused: false });
-
+  onInputBlur = e => {
     // Switching to another window also triggers the blur event.
     // When our window gets focus again, the input will automatically
     // get focus, so ignore the blue event to avoid showing an
@@ -229,237 +276,228 @@ class ExpressionEditorTextfield extends React.Component {
 
     this.clearSuggestions();
 
-    const errorMessage = this.diagnoseExpression();
-    this.setState({ errorMessage });
+    const { tokenizerError, compileError } = this.state;
+    let displayError = [...tokenizerError];
+    if (compileError) {
+      if (Array.isArray(compileError)) {
+        displayError = [...displayError, ...compileError];
+      } else {
+        displayError.push(compileError);
+      }
+    }
+    if (location.pathname.includes("/chart/buffet")) {
+      displayError = displayError.filter(item => {
+        return !item.message.includes("Unknown Field");
+      });
+    }
+    this.setState({ displayError });
 
     // whenever our input blurs we push the updated expression to our parent if valid
-    if (errorMessage) {
-      this.props.onError(errorMessage);
-    } else {
-      const expression = this.compileExpression();
-      if (expression) {
-        if (!isExpression(expression)) {
-          console.warn("isExpression=false", expression);
-        }
-        this.props.onChange(expression);
-      } else {
-        this.props.onError({ message: t`Invalid expression` });
+    if (this.state.expression) {
+      if (!isExpression(this.state.expression)) {
+        console.warn("isExpression=false", this.state.expression);
       }
+      this.props.onChange(this.state.expression);
+    } else if (displayError && displayError.length > 0) {
+      this.props.onError(displayError);
+    } else {
+      this.props.onError({ message: t`Invalid expression` });
     }
   };
 
-  clearSuggestions() {
-    this.setState({
-      highlightedSuggestionIndex: 0,
-      helpText: null,
-    });
-    this.updateSuggestions([]);
-  }
-
-  updateSuggestions(suggestions = []) {
-    this.setState({ suggestions });
-
-    // Correctly bind Tab depending on whether suggestions are available or not
-    if (this.input.current) {
-      const { editor } = this.input.current;
-      const { suggestions } = this.state;
-      const tabBinding = editor.commands.commandKeyBinding.tab;
-      if (suggestions.length > 0) {
-        // Something to suggest? Tab is for choosing one of them
-        editor.commands.bindKey("Tab", editor.commands.byName.chooseSuggestion);
-      } else {
-        if (Array.isArray(tabBinding) && tabBinding.length > 1) {
-          // No more suggestions? Keep a single binding and remove the
-          // second one (added to choose a suggestion)
-          editor.commands.commandKeyBinding.tab = tabBinding.shift();
-        }
-      }
-    }
-  }
-
-  compileExpression() {
-    const { source } = this.state;
-    const { query, startRule, name } = this.props;
-    if (!source || source.length === 0) {
-      return null;
-    }
-    const { expression } = processSource({ name, source, query, startRule });
-
-    return expression;
-  }
-
-  diagnoseExpression() {
-    const { source } = this.state;
-    const { query, startRule, name } = this.props;
-    if (!source || source.length === 0) {
-      return { message: "Empty expression" };
-    }
-    return diagnose(source, startRule, query, name);
-  }
-
-  commitExpression() {
-    const { query, startRule } = this.props;
-    const { source } = this.state;
-    const errorMessage = diagnose(source, startRule, query);
-    this.setState({ errorMessage });
-
-    if (errorMessage) {
-      this.props.onError(errorMessage);
-    } else {
-      const expression = this.compileExpression();
-
-      if (isExpression(expression)) {
-        this.props.onCommit(expression);
-      }
-    }
-  }
-
-  triggerAutosuggest = () => {
-    this.handleExpressionChange(this.state.source);
+  onInputClick = () => {
+    this._triggerAutosuggest();
   };
 
-  setCaretPosition = (position, autosuggest) => {
-    // FIXME setCaretPosition(this.input.current, position);
+  _triggerAutosuggest = () => {
+    setTimeout(() => this.onExpressionChange(this.state.source));
+  };
+
+  _setCaretPosition = (position, autosuggest) => {
+    setCaretPosition(this.input.current, position);
     if (autosuggest) {
-      setTimeout(() => this.triggerAutosuggest());
+      setTimeout(() => this._triggerAutosuggest());
     }
   };
 
-  handleExpressionChange(source) {
-    this.setState({ source, errorMessage: null });
+  onExpressionChange(source) {
+    const inputElement = this.input.current;
+    if (!inputElement) {
+      return;
+    }
+
+    const [selectionStart, selectionEnd] = getSelectionPosition(inputElement);
+    const hasSelection = selectionStart !== selectionEnd;
+    const isAtEnd = selectionEnd === source.length;
+    const endsWithWhitespace = /\s$/.test(source);
+    const targetOffset = !hasSelection ? selectionEnd : null;
+
+    const {
+      expression,
+      compileError,
+      suggestions,
+      helpText,
+      syntaxTree,
+    } = source
+      ? this._processSource({
+          source,
+          targetOffset,
+          customColsMap: this.props.customColsMap,
+          ...this._getParserOptions(),
+        })
+      : {
+          expression: null,
+          compileError: null,
+          suggestions: [],
+          helpText: null,
+          syntaxTree: null,
+        };
+
+    const isValid = expression !== undefined;
     if (this.props.onBlankChange) {
       this.props.onBlankChange(source.length === 0);
     }
-  }
+    // don't show suggestions if
+    // * there's a selection
+    // * we're at the end of a valid expression, unless the user has typed another space
+    const showSuggestions =
+      !hasSelection && !(isValid && isAtEnd && !endsWithWhitespace);
 
-  handleCursorChange(selection) {
-    const cursor = selection.getCursor();
+    const { tokens, errors: tokenizerError } = tokenize(source);
+    const mismatchedParentheses = countMatchingParentheses(tokens);
+    const mismatchedError =
+      mismatchedParentheses === 1
+        ? t`Expecting a closing parenthesis`
+        : mismatchedParentheses > 1
+        ? t`Expecting ${mismatchedParentheses} closing parentheses`
+        : mismatchedParentheses === -1
+        ? t`Expecting an opening parenthesis`
+        : mismatchedParentheses < -1
+        ? t`Expecting ${-mismatchedParentheses} opening parentheses`
+        : null;
+    if (mismatchedError) {
+      tokenizerError.push({
+        message: mismatchedError,
+      });
+    }
 
-    const { query, startRule } = this.props;
-    const { source } = this.state;
-    const { suggestions, helpText } = suggest({
-      query,
-      startRule,
-      source,
-      targetOffset: cursor.column,
-    });
-
-    this.setState({ helpText });
-    this.updateSuggestions(suggestions);
-  }
-
-  errorAsMarkers(errorMessage = null) {
-    if (errorMessage) {
-      const { pos, len } = errorMessage;
-      // Because not every error message offers location info (yet)
-      if (typeof pos === "number") {
-        return [
-          {
-            startRow: 0,
-            startCol: pos,
-            endRow: 0,
-            endCol: pos + len,
-            className: "error",
-            type: "text",
-          },
-        ];
+    for (let i = 0; i < tokens.length - 1; ++i) {
+      const token = tokens[i];
+      if (token.type === TOKEN.Identifier && source[token.start] !== "[") {
+        const functionName = source.slice(token.start, token.end);
+        if (getMBQLName(functionName)) {
+          const next = tokens[i + 1];
+          if (next.op !== OP.OpenParenthesis) {
+            tokenizerError.unshift({
+              message: t`Expecting an opening parenthesis after function ${functionName}`,
+            });
+          }
+        }
       }
     }
-    return [];
+
+    this.setState({
+      source,
+      expression,
+      syntaxTree,
+      tokenizerError,
+      compileError,
+      displayError: null,
+      suggestions: showSuggestions ? this.filterSuggestions(suggestions) : [],
+      helpText,
+      highlightedSuggestionIndex: 0,
+    });
+
+    if (!source || source.length <= 0) {
+      const { suggestions } = this._processSource({
+        source,
+        targetOffset,
+        customColsMap: this.props.customColsMap,
+        ...this._getParserOptions(),
+      });
+      this.setState({ suggestions: this.filterSuggestions(suggestions) });
+    }
   }
 
-  commands = [
-    {
-      name: "arrowDown",
-      bindKey: { win: "Down", mac: "Down" },
-      exec: () => {
-        this.handleArrowDown();
-      },
-    },
-    {
-      name: "arrowUp",
-      bindKey: { win: "Up", mac: "Up" },
-      exec: () => {
-        this.handleArrowUp();
-      },
-    },
-    {
-      name: "enter",
-      bindKey: { win: "Enter", mac: "Enter" },
-      exec: () => {
-        this.handleEnter();
-      },
-    },
-    {
-      name: "chooseSuggestion",
-      bindKey: null,
-      exec: () => {
-        this.chooseSuggestion();
-      },
-    },
-    {
-      name: "clearSuggestions",
-      bindKey: { win: "Esc", mac: "Esc" },
-      exec: () => {
-        this.clearSuggestions();
-      },
-    },
-  ];
+  filterSuggestions = suggestions => {
+    const { mode, colsMap } = this.props;
+
+    if (mode) {
+      const res = suggestions.filter(
+        item =>
+          item.type === "fields" ||
+          (item.type === "functions" && item.mode === mode),
+      );
+      res.forEach(item => {
+        const name = colsMap[item.name] || item.name;
+        item.name = name;
+        if (item.type === "fields") {
+          item.text = `[${name}]`;
+          item.alternates = [name, name];
+        }
+      });
+      return uniqBy(res, "name");
+    }
+
+    return suggestions.filter(item => !item.mode);
+  };
 
   render() {
-    const { source, suggestions, errorMessage, isFocused } = this.state;
+    const { placeholder, onValueChange, mode, fixedWidth } = this.props;
+    const { displayError, source, suggestions, syntaxTree } = this.state;
+
+    const inputClassName = cx("input text-bold text-monospace", {
+      "text-dark": source,
+      "text-light": !source,
+    });
+    const inputStyle = { fontSize: 12 };
+    const priorityError = _.first(displayError);
 
     return (
-      <React.Fragment>
-        <EditorContainer
-          isFocused={isFocused}
-          hasError={Boolean(errorMessage)}
-          ref={this.suggestionTarget}
+      <div className={cx(`relative ${mode ? "" : "my1"}`)}>
+        <div
+          className={cx(inputClassName, "absolute top left")}
+          style={{
+            ...inputStyle,
+            pointerEvents: "none",
+            borderColor: "transparent",
+          }}
         >
-          <EditorEqualsSign>=</EditorEqualsSign>
-          <AceEditor
-            commands={this.commands}
-            mode="text"
-            ref={this.input}
-            value={source}
-            markers={this.errorAsMarkers(errorMessage)}
-            focus={true}
-            highlightActiveLine={false}
-            wrapEnabled={true}
-            fontSize={12}
-            onBlur={this.handleInputBlur}
-            onFocus={this.handleFocus}
-            role="ace-editor"
-            setOptions={{
-              behavioursEnabled: false,
-              indentedSoftWrap: false,
-              minLines: 1,
-              maxLines: 9,
-              showLineNumbers: false,
-              showGutter: false,
-              showFoldWidgets: false,
-              showPrintMargin: false,
-            }}
-            onChange={source => this.handleExpressionChange(source)}
-            onCursorChange={selection => this.handleCursorChange(selection)}
-            width="100%"
-          />
-          <ExpressionEditorSuggestions
-            target={this.suggestionTarget.current}
-            suggestions={suggestions}
-            onSuggestionMouseDown={this.onSuggestionSelected}
-            highlightedIndex={this.state.highlightedSuggestionIndex}
-          />
-        </EditorContainer>
-        <ErrorMessage error={errorMessage} />
-        <HelpText
-          target={this.props.helpTextTarget}
-          helpText={this.state.helpText}
-          width={this.props.width}
+          {"= "}
+        </div>
+        <TokenizedInput
+          ref={this.input}
+          type="text"
+          className={cx(inputClassName, {
+            "border-error": priorityError,
+          })}
+          style={{ ...inputStyle, paddingLeft: 26, whiteSpace: "pre-wrap" }}
+          placeholder={placeholder}
+          value={source}
+          syntaxTree={syntaxTree}
+          parserOptions={this._getParserOptions()}
+          onChange={e => {
+            onValueChange && onValueChange(e.target.value);
+            this.onExpressionChange(e.target.value);
+          }}
+          onKeyDown={this.onInputKeyDown}
+          onBlur={this.onInputBlur}
+          onFocus={e => this._triggerAutosuggest()}
+          onClick={this.onInputClick}
+          autoFocus
         />
-      </React.Fragment>
+        <ErrorMessage error={priorityError} />
+        <HelpText
+          helpText={this.state.helpText}
+          width={fixedWidth || this.props.width}
+          mode={mode}
+        />
+        <ExpressionEditorSuggestions
+          suggestions={suggestions}
+          onSuggestionMouseDown={this.onSuggestionSelected}
+          highlightedIndex={this.state.highlightedSuggestionIndex}
+        />
+      </div>
     );
   }
 }
-
-export default ExplicitSize()(ExpressionEditorTextfield);

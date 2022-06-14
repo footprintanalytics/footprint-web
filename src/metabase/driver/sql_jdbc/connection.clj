@@ -11,9 +11,7 @@
             [metabase.util :as u]
             [metabase.util.i18n :refer [trs tru]]
             [metabase.util.ssh :as ssh]
-            [toucan.db :as db])
-  (:import com.mchange.v2.c3p0.DataSources
-           javax.sql.DataSource))
+            [toucan.db :as db]))
 
 ;;; +----------------------------------------------------------------------------------------------------------------+
 ;;; |                                                   Interface                                                    |
@@ -21,7 +19,7 @@
 
 (defmulti connection-details->spec
   "Given a Database `details-map`, return a JDBC connection spec."
-  {:arglists '([driver details-map])}
+  {:arglists '([driver details-map]), :style/indent 1}
   driver/dispatch-on-initialized-driver
   :hierarchy #'driver/hierarchy)
 
@@ -89,32 +87,16 @@
                                                                                                          :sid
                                                                                                          :catalog))))})
 
-(defn- connection-pool-spec
-  "Like [[connection-pool/connection-pool-spec]] but also handles situations when the unpooled spec is a `:datasource`."
-  [{:keys [^DataSource datasource], :as spec} pool-properties]
-  (if datasource
-    {:datasource (DataSources/pooledDataSource datasource (connection-pool/map->properties pool-properties))}
-    (connection-pool/connection-pool-spec spec pool-properties)))
-
-(defn ^:private default-ssh-tunnel-target-port  [driver]
-  (when-let [port-info (some
-                        #(when (= "port" (:name %)) %)
-                        (driver/connection-properties driver))]
-    (or (:default port-info)
-        (:placeholder port-info))))
-
 (defn- create-pool!
   "Create a new C3P0 `ComboPooledDataSource` for connecting to the given `database`."
   [{:keys [id details], driver :engine, :as database}]
   {:pre [(map? database)]}
   (log/debug (u/format-color 'cyan (trs "Creating new connection pool for {0} database {1} ..." driver id)))
-  (let [details-with-tunnel (driver/incorporate-ssh-tunnel-details  ;; If the tunnel is disabled this returned unchanged
-                             driver
-                             (update details :port #(or % (default-ssh-tunnel-target-port driver))))
+  (let [details-with-tunnel (driver/incorporate-ssh-tunnel-details driver details) ;; If the tunnel is disabled this returned unchanged
         spec                (connection-details->spec driver details-with-tunnel)
         properties          (data-warehouse-connection-pool-properties driver database)]
     (merge
-      (connection-pool-spec spec properties)
+      (connection-pool/connection-pool-spec spec properties)
       ;; also capture entries related to ssh tunneling for later use
       (select-keys spec [:tunnel-enabled :tunnel-session :tunnel-tracker :tunnel-entrance-port :tunnel-entrance-host]))))
 
@@ -128,21 +110,22 @@
   (atom {}))
 
 (defonce ^:private ^{:doc "A map of DB details hash values, keyed by Database `:id`."}
-  database-id->jdbc-spec-hash
+  database-id->db-details-hashes
   (atom {}))
 
-(defn- jdbc-spec-hash
-  "Computes a hash value for the JDBC connection spec based on `database`'s `:details` map, for the purpose of
-  determining if details changed and therefore the existing connection pool needs to be invalidated."
-  [{driver :engine, :keys [details], :as database}]
+(defn- db-details-hash
+  "Computes a hash value for the given `database`'s `:details` map, for the purpose of determining if details changed
+  and therefore the existing connection pool needs to be invalidated."
+  [database]
   {:pre [(or nil? (instance? (type Database) database))]}
-  (when (some? database)
-    (hash (connection-details->spec driver details))))
+  (if (some? database)
+    (hash (:details database))
+    nil))
 
 (defn- set-pool!
   "Atomically update the current connection pool for Database `database` with `database-id`. Use this function instead
   of modifying database-id->connection-pool` directly because it properly closes down old pools in a thread-safe way,
-  ensuring no more than one pool is ever open for a single database. Also modifies the [[database-id->jdbc-spec-hash]]
+  ensuring no more than one pool is ever open for a single database. Also modifies the database-id->db-details-hashes
   map with the hash value of the given DB's details map."
   [database-id pool-spec-or-nil database]
   {:pre [(integer? database-id)]}
@@ -154,7 +137,7 @@
       (when-not (identical? old-pool-spec pool-spec-or-nil)
         (destroy-pool! database-id old-pool-spec))))
   ;; update the db details hash cache with the new hash value
-  (swap! database-id->jdbc-spec-hash assoc database-id (jdbc-spec-hash database))
+  (swap! database-id->db-details-hashes assoc database-id (db-details-hash database))
   nil)
 
 (defn invalidate-pool-for-db!
@@ -163,7 +146,7 @@
   (set-pool! (u/the-id database) nil nil))
 
 (defn notify-database-updated
-  "Default implementation of [[driver/notify-database-updated]] for JDBC SQL drivers. We are being informed that a
+  "Default implementation of `driver/notify-database-updated` for JDBC SQL drivers. We are being informed that a
   `database` has been updated, so lets shut down the connection pool (if it exists) under the assumption that the
   connection details have changed."
   [database]
@@ -174,7 +157,7 @@
                                       db-id)))
   nil)
 
-(defn- log-jdbc-spec-hash-change-msg! [db-id]
+(defn- log-db-details-hash-change-msg! [db-id]
   (log/warn (u/format-color 'yellow (trs "Hash of database {0} details changed; marking pool invalid to reopen it"
                                           db-id)))
   nil)
@@ -198,16 +181,16 @@
                         (when-let [details (get @database-id->connection-pool db-id)]
                           (cond
                             ;; details hash changed from what is cached; invalid
-                            (let [curr-hash (get @database-id->jdbc-spec-hash db-id)
-                                  new-hash  (jdbc-spec-hash db)]
+                            (let [curr-hash (get @database-id->db-details-hashes db-id)
+                                  new-hash  (db-details-hash db)]
                               (when (and (some? curr-hash) (not= curr-hash new-hash))
                                 ;; the hash didn't match, but it's possible that a stale instance of `DatabaseInstance`
                                 ;; was passed in (ex: from a long-running sync operation); fetch the latest one from
                                 ;; our app DB, and see if it STILL doesn't match
                                 (not= curr-hash (-> (db/select-one [Database :id :engine :details] :id database-id)
-                                                    jdbc-spec-hash))))
+                                                    db-details-hash))))
                             (if log-invalidation?
-                              (log-jdbc-spec-hash-change-msg! db-id)
+                              (log-db-details-hash-change-msg! db-id)
                               nil)
 
                             (nil? (:tunnel-session details)) ; no tunnel in use; valid
@@ -253,9 +236,7 @@
   "Return an appropriate JDBC connection spec to test whether a set of connection details is valid (i.e., implementing
   `can-connect?`)."
   [driver details]
-  (let [details-with-tunnel (driver/incorporate-ssh-tunnel-details
-                             driver
-                             (update details :port #(or % (default-ssh-tunnel-target-port driver))))]
+  (let [details-with-tunnel (driver/incorporate-ssh-tunnel-details driver details)]
     (connection-details->spec driver details-with-tunnel)))
 
 (defn can-connect-with-spec?

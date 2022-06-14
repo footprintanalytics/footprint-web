@@ -1,7 +1,7 @@
-import { restore, visitDashboard } from "__support__/e2e/cypress";
-import { SAMPLE_DATABASE } from "__support__/e2e/cypress_sample_database";
+import { restore } from "__support__/e2e/cypress";
+import { SAMPLE_DATASET } from "__support__/e2e/cypress_sample_dataset";
 
-const { ORDERS_ID } = SAMPLE_DATABASE;
+const { ORDERS_ID } = SAMPLE_DATASET;
 
 const questionDetails = {
   query: { "source-table": ORDERS_ID },
@@ -14,7 +14,7 @@ describe("visual tests > dashboard > filter sidebar", () => {
 
     cy.createQuestionAndDashboard({ questionDetails }).then(
       ({ body: { card_id, dashboard_id } }) => {
-        visitDashboard(dashboard_id);
+        cy.visit(`/dashboard/${dashboard_id}`);
       },
     );
   });

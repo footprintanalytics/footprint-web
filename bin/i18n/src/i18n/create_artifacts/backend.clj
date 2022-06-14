@@ -12,30 +12,12 @@
            (fn [dir]
              (str/starts-with? path dir))
            ["src" "backend" "enterprise/backend" "shared"]))
-        ;; sometimes 2 paths exist in a single string, space separated
-        ;; if a backend path is second, it is missed if we don't str/split
-        (mapcat #(str/split % #" ") source-references)))
-
-(defn- plural->singular [{:keys [str-plural] :as message}]
-  (merge message
-         (when str-plural {:str (first str-plural)
-                           :id-plural nil
-                           :str-plural nil
-                           :plural? false})))
-
-(def ^:private apostrophe-regex
-  "Regex that matches incorrectly escaped apostrophe characters.
-  Matches on a single apostrophe surrounded by any letter, number, space, or diacritical character (chars with accents like é) and is case-insensitive"
-  #"(?<![^a-zA-Z0-9\s\u00C0-\u017F])'(?![^a-zA-Z0-9\s\u00C0-\u017F])")
-
-(defn- fix-unescaped-apostrophes [message]
-  (update message :str str/replace apostrophe-regex "''"))
+        source-references))
 
 (defn- ->edn [{:keys [messages]}]
   (eduction
    (filter backend-message?)
-   (map plural->singular)
-   (map fix-unescaped-apostrophes)
+   (remove :plural?)
    i18n/print-message-count-xform
    messages))
 

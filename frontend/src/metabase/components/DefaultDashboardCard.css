@@ -1,0 +1,24 @@
+.default-dashboard-card__empty {
+  height: 180px;
+  border: 1px #dcdde5 solid;
+  margin: 10px 0;
+  border-radius: 4px;
+  overflow: hidden;
+  position: relative;
+}
+
+.default-dashboard-card__empty-text {
+  position: absolute;
+  bottom: 30px;
+  color: #b5bad2;
+  font-size: 16px;
+  width: 100%;
+  text-align: center;
+}
+
+.default-dashboard-card__default-thumb {
+  height: 100%;
+  background-size: 50%;
+  background-repeat: no-repeat;
+  background-position: center 40px;
+}

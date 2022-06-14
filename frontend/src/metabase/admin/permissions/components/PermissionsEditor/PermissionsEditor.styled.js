@@ -1,8 +1,7 @@
-import styled from "@emotion/styled";
+import styled from "styled-components";
 
 export const PermissionsEditorRoot = styled.div`
   flex-grow: 1;
-  position: relative;
   overflow: auto;
-  padding: 1rem 0 0 0;
+  padding: 1rem 0 2rem 0;
 `;

@@ -1,58 +1,94 @@
+/* eslint-disable curly */
 /* eslint-disable react/prop-types */
 import React, { Component } from "react";
 import PropTypes from "prop-types";
 import { connect } from "react-redux";
 import { withRouter } from "react-router";
 import { push } from "react-router-redux";
-import _ from "underscore";
-
-import * as Urls from "metabase/lib/urls";
-
 import Collection from "metabase/entities/collections";
 import Dashboard from "metabase/entities/dashboards";
+import { loadCurrentUserVip } from "metabase/redux/user";
+import { getUserCreateDashboardPermission } from "metabase/selectors/user";
+import NeedPermissionModal from "./NeedPermissionModal";
+import { getUser } from "metabase/reference/selectors";
 
 const mapStateToProps = (state, props) => ({
   initialCollectionId: Collection.selectors.getInitialCollectionId(
     state,
     props,
   ),
+  canCreate: getUserCreateDashboardPermission(state),
+  user: getUser(state, props),
 });
 
-const mapDispatchToProps = {
-  onChangeLocation: push,
-};
+const mapDispatchToProps = dispatch => ({
+  loadVip: () => dispatch(loadCurrentUserVip()),
+  onChangeLocation: url => dispatch(push(url)),
+});
 
-class CreateDashboardModal extends Component {
+@withRouter
+@connect(mapStateToProps, mapDispatchToProps)
+export default class CreateDashboardModal extends Component {
   static propTypes = {
     onSaved: PropTypes.func,
     onClose: PropTypes.func,
   };
 
+  state = {
+    showVip: false,
+  };
+
   onSaved = dashboard => {
-    const { onClose, onChangeLocation } = this.props;
-    if (onClose) {
-      onClose();
+    const { loadVip, onClose, onSavedOtherAction } = this.props;
+    loadVip && loadVip();
+
+    if (onSavedOtherAction) {
+      onSavedOtherAction(dashboard);
     }
 
-    const url = Urls.dashboard(dashboard, { editMode: true });
-    onChangeLocation(url);
+    if (onClose) onClose();
+  };
+
+  onBeforeSubmit = async () => {
+    const { loadVip } = this.props;
+    await loadVip();
+    const { canCreate } = this.props;
+    if (!canCreate) {
+      this.setState({ showVip: true });
+    }
+    return canCreate;
   };
 
   render() {
-    const { initialCollectionId, onSaved, onClose } = this.props;
+    const { initialCollectionId, onSaved, onClose, user } = this.props;
+    const publicAnalyticPermission = user && user.publicAnalytic === "write";
+    const renderModal = context => {
+      return (
+        context.state.showVip && (
+          <NeedPermissionModal
+            title="Your account has reached the limit of number of dashboard, please upgrade the account to unlock more"
+            onClose={() => context.setState({ showVip: false })}
+          />
+        )
+      );
+    };
     return (
-      <Dashboard.ModalForm
-        form={Dashboard.forms.create}
-        overwriteOnInitialValuesChange
-        dashboard={{ collection_id: initialCollectionId }}
-        onClose={onClose}
-        onSaved={typeof onSaved === "function" ? onSaved : this.onSaved}
-      />
+      <div>
+        <Dashboard.ModalForm
+          overwriteOnInitialValuesChange
+          form={
+            publicAnalyticPermission
+              ? Dashboard.form.adminDashboardFields
+              : Dashboard.form.userDashboardFields
+          }
+          user={user}
+          dashboard={{ collection_id: initialCollectionId }}
+          onBeforeSubmit={this.onBeforeSubmit}
+          onClose={onClose}
+          onSaved={typeof onSaved === "function" ? onSaved : this.onSaved}
+        />
+        {renderModal(this)}
+      </div>
     );
   }
 }
-
-export default _.compose(
-  withRouter,
-  connect(mapStateToProps, mapDispatchToProps),
-)(CreateDashboardModal);

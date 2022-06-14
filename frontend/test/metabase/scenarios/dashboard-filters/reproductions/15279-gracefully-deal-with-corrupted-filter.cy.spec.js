@@ -1,7 +1,7 @@
-import { restore, filterWidget, visitDashboard } from "__support__/e2e/cypress";
-import { SAMPLE_DATABASE } from "__support__/e2e/cypress_sample_database";
+import { restore, filterWidget } from "__support__/e2e/cypress";
+import { SAMPLE_DATASET } from "__support__/e2e/cypress_sample_dataset";
 
-const { PEOPLE, PEOPLE_ID } = SAMPLE_DATABASE;
+const { PEOPLE, PEOPLE_ID } = SAMPLE_DATASET;
 
 const firstFilter = {
   name: "List",
@@ -38,7 +38,7 @@ describe("issue 15279", () => {
     cy.signInAsAdmin();
   });
 
-  it("a corrupted parameter filter should still appear in the UI (metabase #15279)", () => {
+  it("filters should work even if one of them is corrupted (metabase #15279)", () => {
     cy.createQuestionAndDashboard({ questionDetails }).then(
       ({ body: { id, card_id, dashboard_id } }) => {
         // Add filters to the dashboard
@@ -74,19 +74,14 @@ describe("issue 15279", () => {
           ],
         });
 
-        visitDashboard(dashboard_id);
+        cy.visit(`/dashboard/${dashboard_id}`);
       },
     );
-
-    cy.intercept("GET", "/api/dashboard/*/params/*/values").as("values");
 
     // Check that list filter works
     filterWidget()
       .contains("List")
       .click();
-
-    cy.wait("@values");
-    cy.findByTextEnsureVisible("Add filter");
 
     cy.findByPlaceholderText("Enter some text")
       .type("Organic")
@@ -99,6 +94,9 @@ describe("issue 15279", () => {
       .click();
     cy.findByPlaceholderText("Search by Name").type("Lora Cronin");
     cy.button("Add filter").click();
+
+    cy.findByText("Gold Beach");
+    cy.findByText("Arcadia").should("not.exist");
 
     // The corrupted filter is now present in the UI, but it doesn't work (as expected)
     // People can now easily remove it

@@ -40,7 +40,7 @@
   :setter  (fn [new-value]
              (when (some? new-value)
                (assert (#{:tls :ssl :none :starttls} (keyword new-value))))
-             (setting/set-value-of-type! :keyword :email-smtp-security new-value)))
+             (setting/set-keyword! :email-smtp-security new-value)))
 
 ;; ## PUBLIC INTERFACE
 
@@ -92,7 +92,7 @@
   {:style/indent 0}
   [{:keys [subject recipients message-type message]} :- EmailMessage]
   (when-not (email-smtp-host)
-    (throw (ex-info (tru "SMTP host is not set.") {:cause :smtp-host-not-set})))
+    (throw (Exception. (tru "SMTP host is not set."))))
   ;; Now send the email
   (send-email! (smtp-settings)
     {:from    (email-from-address)
@@ -201,7 +201,7 @@
 
   Attempts to connect with different `:security` options. If able to connect successfully, returns working
   [[SMTPSettings]]. If unable to connect with any `:security` options, returns an [[SMTPStatus]] with the `::error`."
-  [details :- SMTPSettings]
+  [{:keys [port security], :as details} :- SMTPSettings]
   (let [initial-attempt (test-smtp-settings details)]
     (if-not (::error initial-attempt)
       details

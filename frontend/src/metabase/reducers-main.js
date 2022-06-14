@@ -1,9 +1,7 @@
 // Reducers needed for main application
 
 import { combineReducers } from "redux";
-import _ from "underscore";
 
-import { PLUGIN_REDUCERS } from "metabase/plugins";
 import commonReducers from "./reducers-common";
 
 /* admin */
@@ -44,5 +42,4 @@ export default {
   revisions,
   setup: combineReducers(setup),
   admin,
-  plugins: combineReducers(PLUGIN_REDUCERS),
 };

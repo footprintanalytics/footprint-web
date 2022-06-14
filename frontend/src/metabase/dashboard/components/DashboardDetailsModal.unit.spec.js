@@ -1,10 +1,14 @@
 import React from "react";
 import _ from "underscore";
-import { fireEvent, renderWithProviders, screen } from "__support__/ui";
+import { Provider } from "react-redux";
+import { reducer as form } from "redux-form";
+import { fireEvent, render, screen } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import xhrMock from "xhr-mock";
-import { setupEnterpriseTest } from "__support__/enterprise";
+import { getStore } from "__support__/entities-store";
 import MetabaseSettings from "metabase/lib/settings";
+import { PLUGIN_CACHING, PLUGIN_FORM_WIDGETS } from "metabase/plugins";
+import NumericFormField from "metabase/components/form/widgets/FormNumericInputWidget";
 import DashboardDetailsModal from "./DashboardDetailsModal";
 
 const DASHBOARD = {
@@ -18,14 +22,11 @@ const DASHBOARD = {
 };
 
 function mockCachingEnabled(enabled = true) {
-  const original = MetabaseSettings.get.bind(MetabaseSettings);
+  const original = MetabaseSettings.get;
   const spy = jest.spyOn(MetabaseSettings, "get");
   spy.mockImplementation(key => {
     if (key === "enable-query-caching") {
       return enabled;
-    }
-    if (key === "application-name") {
-      return "Test Metabase";
     }
     return original(key);
   });
@@ -47,11 +48,11 @@ function setup({ mockDashboardUpdateResponse = true } = {}) {
     },
   });
 
-  renderWithProviders(<DashboardDetailsModal onClose={onClose} />, {
-    reducers: {
-      dashboard: dashboardReducer,
-    },
-  });
+  render(
+    <Provider store={getStore({ form, dashboard: dashboardReducer })}>
+      <DashboardDetailsModal onClose={onClose} />
+    </Provider>,
+  );
 
   return {
     onClose,
@@ -95,7 +96,7 @@ function fillForm({ name, description, cache_ttl } = {}) {
     nextDashboardState.description = description;
   }
   if (cache_ttl) {
-    const input = screen.getByTestId("cache-ttl-input");
+    const input = screen.getByLabelText("Cache TTL");
     userEvent.clear(input);
     userEvent.type(input, String(cache_ttl));
     input.blur();
@@ -184,7 +185,16 @@ describe("DashboardDetailsModal", () => {
 
     describe("EE", () => {
       beforeEach(() => {
-        setupEnterpriseTest();
+        PLUGIN_CACHING.cacheTTLFormField = {
+          name: "cache_ttl",
+          title: "Cache TTL",
+        };
+        PLUGIN_FORM_WIDGETS.dashboardCacheTTL = NumericFormField;
+      });
+
+      afterEach(() => {
+        PLUGIN_CACHING.cacheTTLFormField = null;
+        PLUGIN_FORM_WIDGETS.dashboardCacheTTL = null;
       });
 
       describe("caching enabled", () => {
@@ -195,7 +205,7 @@ describe("DashboardDetailsModal", () => {
         it("is shown", () => {
           setup();
           fireEvent.click(screen.queryByText("More options"));
-          expect(screen.queryByTestId("cache-ttl-input")).toHaveValue("0");
+          expect(screen.queryByLabelText("Cache TTL")).toHaveValue("0");
         });
 
         it("can be changed", done => {
@@ -213,11 +223,8 @@ describe("DashboardDetailsModal", () => {
       });
 
       describe("caching disabled", () => {
-        beforeEach(() => {
-          mockCachingEnabled(false);
-        });
-
         it("is not shown if caching is disabled", () => {
+          mockCachingEnabled(false);
           setup();
           expect(screen.queryByText("More options")).not.toBeInTheDocument();
           expect(

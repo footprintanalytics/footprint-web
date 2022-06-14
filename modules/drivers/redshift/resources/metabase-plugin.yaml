@@ -17,19 +17,13 @@ driver:
     - merge:
         - dbname
         - name: db
-          placeholder: birds_of_the_world
-    - name: schema-filters
-      type: schema-filters
-      display-name: Schemas
+          placeholder: toucan_sightings
     - user
     - password
-    - cloud-ip-address-info
-    - ssh-tunnel
-    - advanced-options-start
     - merge:
       - additional-options
       - placeholder: 'SocketTimeout=0'
-    - default-advanced-options
+  connection-properties-include-tunnel-config: true
 init:
   - step: load-namespace
     namespace: metabase.driver.postgres

@@ -74,31 +74,8 @@ export function setLocalization(translationsObject) {
   // eslint-disable-next-line react-hooks/rules-of-hooks
   useLocale(locale);
 
-  updateMomentLocale(locale);
+  moment.locale(locale);
   updateMomentStartOfWeek(locale);
-}
-
-function updateMomentLocale(locale) {
-  const momentLocale = mapToMomentLocale(locale);
-  try {
-    if (momentLocale !== "en") {
-      require("moment/locale/" + momentLocale);
-    }
-    moment.locale(momentLocale);
-  } catch (e) {
-    console.warn(`Could not set moment locale to ${momentLocale}`);
-    moment.locale("en");
-  }
-}
-
-function mapToMomentLocale(locale = "") {
-  switch (locale) {
-    case "zh":
-    case "zh-Hans":
-      return "zh-cn";
-    default:
-      return locale.toLowerCase();
-  }
 }
 
 // Format a fixed timestamp in local time to see if the current locale defaults

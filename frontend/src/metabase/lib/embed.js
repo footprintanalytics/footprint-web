@@ -1,8 +1,10 @@
 import { push } from "react-router-redux";
+
 import _ from "underscore";
-import { parseSearchOptions, parseHashOptions } from "metabase/lib/browser";
+
 import { IFRAMED, IFRAMED_IN_SELF } from "metabase/lib/dom";
-import { setOptions } from "metabase/redux/embed";
+import MetabaseSettings from "metabase/lib/settings";
+
 import { isFitViewportMode } from "metabase/hoc/FitViewPort";
 
 // detect if this page is embedded in itself, i.e. it's a embed preview
@@ -41,24 +43,14 @@ export function initializeEmbedding(store) {
         }
       }
     });
-    store.dispatch(
-      setOptions({
-        ...parseSearchOptions(window.location.search),
-        ...parseHashOptions(window.location.hash),
-      }),
-    );
   }
 }
 
 function sendMessage(message) {
-  // Reason for using "*" (see #18824)
-  //  1) We cannot use MetabaseSettings.get("embedding-app-origin") because the format is different
-  //      - the setting value can have multiple URLs but postMessage only supports one URL
-  //      - the setting value support wildcard in subdomain but postMessage does not
-  //  2) The risk should be very low because
-  //      - the data we sent is not sensitive data (frame size, current URL)
-  //      - we are already using frame ancestor policy to limit domains that can embed metabase
-  window.parent.postMessage({ metabase: message }, "*");
+  window.parent.postMessage(
+    { metabase: message },
+    MetabaseSettings.get("embedding-app-origin"),
+  );
 }
 
 function getFrameSpec() {

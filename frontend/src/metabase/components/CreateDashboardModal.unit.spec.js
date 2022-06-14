@@ -1,29 +1,20 @@
 import React from "react";
-import { fireEvent, renderWithProviders, screen } from "__support__/ui";
+import { Provider } from "react-redux";
+import { reducer as form } from "redux-form";
+import { fireEvent, render, screen } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import xhrMock from "xhr-mock";
-import { setupEnterpriseTest } from "__support__/enterprise";
+import { getStore } from "__support__/entities-store";
 import MetabaseSettings from "metabase/lib/settings";
+import { PLUGIN_CACHING } from "metabase/plugins";
 import CreateDashboardModal from "./CreateDashboardModal";
 
 function mockCachingEnabled(enabled = true) {
-  const original = MetabaseSettings.get.bind(MetabaseSettings);
+  const original = MetabaseSettings.get;
   const spy = jest.spyOn(MetabaseSettings, "get");
   spy.mockImplementation(key => {
     if (key === "enable-query-caching") {
       return enabled;
-    }
-    if (key === "application-name") {
-      return "Metabase Test";
-    }
-    if (key === "version") {
-      return { tag: "" };
-    }
-    if (key === "is-hosted?") {
-      return false;
-    }
-    if (key === "enable-enhancements?") {
-      return false;
     }
     return original(key);
   });
@@ -38,7 +29,11 @@ function setup({ mockCreateDashboardResponse = true } = {}) {
     );
   }
 
-  renderWithProviders(<CreateDashboardModal onClose={onClose} />);
+  render(
+    <Provider store={getStore({ form })}>
+      <CreateDashboardModal onClose={onClose} />
+    </Provider>,
+  );
 
   return {
     onClose,
@@ -153,7 +148,14 @@ describe("CreateDashboardModal", () => {
 
     describe("EE", () => {
       beforeEach(() => {
-        setupEnterpriseTest();
+        PLUGIN_CACHING.cacheTTLFormField = {
+          name: "cache_ttl",
+          type: "integer",
+        };
+      });
+
+      afterEach(() => {
+        PLUGIN_CACHING.cacheTTLFormField = null;
       });
 
       it("is not shown", () => {

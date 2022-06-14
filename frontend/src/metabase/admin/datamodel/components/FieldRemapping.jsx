@@ -4,9 +4,10 @@ import React from "react";
 import { t } from "ttag";
 import _ from "underscore";
 import cx from "classnames";
+import { Flex } from "grid-styled";
 
-import SelectButton from "metabase/core/components/SelectButton";
-import Select from "metabase/core/components/Select";
+import SelectButton from "metabase/components/SelectButton";
+import Select from "metabase/components/Select";
 import PopoverWithTrigger from "metabase/components/PopoverWithTrigger";
 import FieldList from "metabase/query_builder/components/FieldList";
 import InputBlurChange from "metabase/components/InputBlurChange";
@@ -18,7 +19,6 @@ import * as MetabaseAnalytics from "metabase/lib/analytics";
 
 import Dimension, { FieldDimension } from "metabase-lib/lib/Dimension";
 import Question from "metabase-lib/lib/Question";
-import { FieldMappingContainer } from "./FieldRemapping.styled";
 
 const MAP_OPTIONS = {
   original: { type: "original", name: t`Use original value` },
@@ -56,37 +56,25 @@ export default class FieldRemapping extends React.Component {
     throw new Error(t`Unrecognized mapping type`);
   };
 
-  hasForeignKeys = () =>
-    this.props.field.semantic_type === "type/FK" &&
-    this.getForeignKeys().length > 0;
-
-  hasMappableNumeralValues = () => {
+  getAvailableMappingTypes = () => {
     const { field } = this.props;
+
+    const hasForeignKeys =
+      field.semantic_type === "type/FK" && this.getForeignKeys().length > 0;
 
     // Only show the "custom" option if we have some values that can be mapped to user-defined custom values
     // (for a field without user-defined remappings, every key of `field.remappings` has value `undefined`)
-    return (
+    const hasMappableNumeralValues =
       field.remapping.size > 0 &&
       [...field.remapping.keys()].every(
         key => typeof key === "number" || key === null,
-      )
-    );
-  };
+      );
 
-  getAvailableMappingTypes = () => {
-    const mappingTypes = [
+    return [
       MAP_OPTIONS.original,
-      ...(this.hasForeignKeys() ? [MAP_OPTIONS.foreign] : []),
-      ...(this.hasMappableNumeralValues() > 0 ? [MAP_OPTIONS.custom] : []),
+      ...(hasForeignKeys ? [MAP_OPTIONS.foreign] : []),
+      ...(hasMappableNumeralValues > 0 ? [MAP_OPTIONS.custom] : []),
     ];
-
-    const selectedType = this.getMappingTypeForField(this.props.field);
-
-    if (!mappingTypes.includes(selectedType)) {
-      mappingTypes.push(selectedType);
-    }
-
-    return mappingTypes;
   };
 
   getFKTargetTableEntityNameOrNull = () => {
@@ -259,14 +247,12 @@ export default class FieldRemapping extends React.Component {
   };
 
   render() {
-    const { field, table, fields, fieldsError } = this.props;
+    const { field, table, fields } = this.props;
     const {
       isChoosingInitialFkTarget,
       hasChanged,
       dismissedInitialFkTargetPopover,
     } = this.state;
-
-    const isFieldsAccessRestricted = fieldsError?.status === 403;
 
     const mappingType = this.getMappingTypeForField(field);
     const isFKMapping = mappingType === MAP_OPTIONS.foreign;
@@ -277,7 +263,7 @@ export default class FieldRemapping extends React.Component {
 
     return (
       <div>
-        <FieldMappingContainer>
+        <Flex align="center">
           <Select
             value={mappingType}
             onChange={this.handleChangeMappingType}
@@ -285,64 +271,57 @@ export default class FieldRemapping extends React.Component {
             optionValueFn={o => o}
             className="inline-block"
           />
-          {mappingType === MAP_OPTIONS.foreign && (
-            <>
-              <SelectSeparator classname="flex" key="foreignKeySeparator" />
-              <PopoverWithTrigger
-                key="foreignKeyName"
-                ref={this.fkPopover}
-                triggerElement={
-                  <SelectButton
-                    hasValue={hasFKMappingValue}
-                    className={cx({
-                      "border-error": dismissedInitialFkTargetPopover,
-                      "border-dark": !dismissedInitialFkTargetPopover,
-                    })}
-                  >
-                    {fkMappingField ? (
-                      fkMappingField.display_name
-                    ) : (
-                      <span className="text-medium">{t`Choose a field`}</span>
-                    )}
-                  </SelectButton>
-                }
-                isInitiallyOpen={isChoosingInitialFkTarget}
-                onClose={this.onFkPopoverDismiss}
-              >
-                <FieldList
-                  className="text-purple"
-                  field={fkMappingField}
-                  fieldOptions={{
-                    count: 0,
-                    dimensions: [],
-                    fks: this.getForeignKeys(),
-                  }}
-                  table={table}
-                  onFieldChange={this.onForeignKeyFieldChange}
-                  hideSingleSectionTitle
-                />
-              </PopoverWithTrigger>
-              {dismissedInitialFkTargetPopover && (
-                <div className="text-error ml2">{t`Please select a column to use for display.`}</div>
-              )}
-            </>
-          )}
-        </FieldMappingContainer>
-        {hasChanged && hasFKMappingValue && <RemappingNamingTip />}
-        {mappingType === MAP_OPTIONS.custom &&
-          (isFieldsAccessRestricted ? (
-            <div className="pt2 text-error">
-              {t`You need unrestricted data access on this table to map custom display values.`}
-            </div>
-          ) : (
-            <div className="mt3">
-              {hasChanged && <RemappingNamingTip />}
-              <ValueRemappings
-                remappings={field && field.remapping}
-                updateRemappings={this.onUpdateRemappings}
+          {mappingType === MAP_OPTIONS.foreign && [
+            <SelectSeparator classname="flex" key="foreignKeySeparator" />,
+            <PopoverWithTrigger
+              key="foreignKeyName"
+              ref={this.fkPopover}
+              triggerElement={
+                <SelectButton
+                  hasValue={hasFKMappingValue}
+                  className={cx("flex inline-block no-decoration", {
+                    "border-error": dismissedInitialFkTargetPopover,
+                    "border-dark": !dismissedInitialFkTargetPopover,
+                  })}
+                >
+                  {fkMappingField ? (
+                    fkMappingField.display_name
+                  ) : (
+                    <span className="text-medium">{t`Choose a field`}</span>
+                  )}
+                </SelectButton>
+              }
+              isInitiallyOpen={isChoosingInitialFkTarget}
+              onClose={this.onFkPopoverDismiss}
+            >
+              <FieldList
+                className="text-purple"
+                field={fkMappingField}
+                fieldOptions={{
+                  count: 0,
+                  dimensions: [],
+                  fks: this.getForeignKeys(),
+                }}
+                table={table}
+                onFieldChange={this.onForeignKeyFieldChange}
+                hideSingleSectionTitle
               />
-            </div>
-          ))}
+            </PopoverWithTrigger>,
+            dismissedInitialFkTargetPopover && (
+              <div className="text-error ml2">{t`Please select a column to use for display.`}</div>
+            ),
+          ]}
+        </Flex>
+        {hasChanged && hasFKMappingValue && <RemappingNamingTip />}
+        {mappingType === MAP_OPTIONS.custom && (
+          <div className="mt3">
+            {hasChanged && <RemappingNamingTip />}
+            <ValueRemappings
+              remappings={field && field.remapping}
+              updateRemappings={this.onUpdateRemappings}
+            />
+          </div>
+        )}
       </div>
     );
   }
@@ -354,7 +333,7 @@ export class ValueRemappings extends React.Component {
     editingRemappings: new Map(),
   };
 
-  componentDidMount() {
+  UNSAFE_componentWillMount() {
     this._updateEditingRemappings(this.props.remappings);
   }
 

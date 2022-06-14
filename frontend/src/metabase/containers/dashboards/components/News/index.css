@@ -1,0 +1,64 @@
+.dashboards__news {
+  width: 100%;
+}
+
+.dashboards__news-list {
+  height: 1000px;
+  overflow-y: scroll;
+  border: 1px solid #dcdee4;
+  border-radius: 4px;
+  background-color: #fff;
+}
+
+.dashboards__news-list::-webkit-scrollbar {
+  display: none;
+}
+
+.dashboards__news-item {
+  display: block;
+  border-bottom: 1px solid #dcdee4;
+  padding: 20px;
+}
+
+.dashboards__news-list li:last-child .dashboards__news-item {
+  border-bottom: 0;
+}
+
+.dashboards__news-item h3 {
+  font-size: 14px;
+  color: #303440;
+  line-height: 20px;
+  margin-bottom: 2px;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  -webkit-box-orient: vertical;
+}
+
+.dashboards__news-item span {
+  font-size: 12px;
+  color: #acacb2;
+}
+
+.dashboards__news-item-thumb {
+  width: 100%;
+  height: 150px;
+  background-image: url("https://static.footprint.network/article/5c7281d6-872c-4011-9def-d42a9712a041.jpg");
+  background-size: cover;
+  background-position: center center;
+  border-radius: 4px;
+  margin-bottom: 20px;
+}
+
+@media screen and (max-width: 1440px) {
+  .dashboards__news {
+    margin-left: 0;
+  }
+  .dashboards__news .ant-skeleton {
+    padding: 0 20px;
+  }
+  .dashboards__news-list {
+    height: auto;
+  }
+}

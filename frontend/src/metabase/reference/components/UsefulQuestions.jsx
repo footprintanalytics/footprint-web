@@ -10,7 +10,7 @@ const UsefulQuestions = ({ questions }) => (
   <div className={D.detail}>
     <div className={D.detailBody}>
       <div className={D.detailTitle}>
-        <span className={D.detailName}>{t`Potentially useful questions`}</span>
+        <span className={D.detailName}>{t`Potentially useful queries`}</span>
       </div>
       <div className={S.usefulQuestions}>
         {questions.map((question, index, questions) => (

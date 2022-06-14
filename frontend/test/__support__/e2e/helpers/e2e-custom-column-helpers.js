@@ -1,12 +1,7 @@
 export function enterCustomColumnDetails({ formula, name } = {}) {
-  cy.get(".ace_text-input")
-    .first()
+  cy.get("[contenteditable='true']")
     .as("formula")
-    .should("exist")
-    .focus()
     .type(formula);
 
-  if (name) {
-    cy.findByPlaceholderText("Something nice and descriptive").type(name);
-  }
+  cy.findByPlaceholderText("Something nice and descriptive").type(name);
 }

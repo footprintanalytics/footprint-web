@@ -1,6 +1,5 @@
 import "core-js/stable";
 import "regenerator-runtime/runtime";
-import { GoogleOAuthProvider } from "@react-oauth/google";
 
 // Use of classList.add and .remove in Background and FitViewPort Hocs requires
 // this polyfill so that those work in older browsers
@@ -13,7 +12,7 @@ import "number-to-locale-string";
 import "metabase/lib/i18n-debug";
 
 // set the locale before loading anything else
-import "metabase/lib/i18n";
+import { loadLocalization } from "metabase/lib/i18n";
 
 // NOTE: why do we need to load this here?
 import "metabase/lib/colors";
@@ -32,7 +31,7 @@ import registerVisualizations from "metabase/visualizations/register";
 import React from "react";
 import ReactDOM from "react-dom";
 import { Provider } from "react-redux";
-import { ThemeProvider } from "@emotion/react";
+import { ThemeProvider } from "styled-components";
 
 import { createTracker } from "metabase/lib/analytics";
 import MetabaseSettings from "metabase/lib/settings";
@@ -52,8 +51,22 @@ import { syncHistoryWithStore } from "react-router-redux";
 // drag and drop
 import HTML5Backend from "react-dnd-html5-backend";
 import { DragDropContextProvider } from "react-dnd";
+// import { AliveScope } from "react-activation";
 
-import GlobalStyles from "metabase/styled-components/theme/global";
+// antd
+import { message, ConfigProvider } from "antd";
+message.config({ top: 53 });
+ConfigProvider.config({ theme: { primaryColor: "#3434B2" } });
+
+import { ApolloClient, InMemoryCache, ApolloProvider } from "@apollo/client";
+import { hasuraUrl } from "./env";
+import { QueryClient, QueryClientProvider } from "react-query";
+
+const apolloClient = new ApolloClient({
+  uri: hasuraUrl,
+  cache: new InMemoryCache(),
+});
+const queryClient = new QueryClient();
 
 // remove trailing slash
 const BASENAME = window.MetabaseRoot.replace(/\/+$/, "");
@@ -73,23 +86,23 @@ function _init(reducers, getRoutes, callback) {
   const store = getStore(reducers, browserHistory);
   const routes = getRoutes(store);
   const history = syncHistoryWithStore(browserHistory, store);
-  const googleAuthClientId = MetabaseSettings.get("google-auth-client-id");
-
-  let root;
-
   createTracker(store);
 
+  let root;
   ReactDOM.render(
-    <GoogleOAuthProvider clientId={googleAuthClientId}>
-      <Provider store={store} ref={ref => (root = ref)}>
-        <DragDropContextProvider backend={HTML5Backend} context={{ window }}>
-          <ThemeProvider theme={theme}>
-            <GlobalStyles />
-            <Router history={history}>{routes}</Router>
-          </ThemeProvider>
-        </DragDropContextProvider>
-      </Provider>
-    </GoogleOAuthProvider>,
+    <Provider store={store} ref={ref => (root = ref)}>
+      <DragDropContextProvider backend={HTML5Backend} context={{ window }}>
+        <ThemeProvider theme={theme}>
+          <QueryClientProvider client={queryClient}>
+            <ApolloProvider client={apolloClient}>
+              {/* <AliveScope> */}
+              <Router history={history}>{routes}</Router>
+              {/* </AliveScope> */}
+            </ApolloProvider>
+          </QueryClientProvider>
+        </ThemeProvider>
+      </DragDropContextProvider>
+    </Provider>,
     document.getElementById("root"),
   );
 
@@ -98,6 +111,16 @@ function _init(reducers, getRoutes, callback) {
   initializeEmbedding(store);
 
   store.dispatch(refreshSiteSettings());
+
+  MetabaseSettings.on("user-locale", async locale => {
+    // reload locale definition and site settings with the new locale
+    await Promise.all([
+      loadLocalization(locale),
+      store.dispatch(refreshSiteSettings({ locale })),
+    ]);
+    // force re-render of React application
+    root.forceUpdate();
+  });
 
   PLUGIN_APP_INIT_FUCTIONS.forEach(init => init({ root }));
 
@@ -111,9 +134,14 @@ function _init(reducers, getRoutes, callback) {
 }
 
 export function init(...args) {
-  if (document.readyState !== "loading") {
+  function run() {
     _init(...args);
+    setTimeout(() => document.getElementById("skeleton").remove(), 1000);
+  }
+
+  if (document.readyState !== "loading") {
+    run();
   } else {
-    document.addEventListener("DOMContentLoaded", () => _init(...args));
+    document.addEventListener("DOMContentLoaded", run);
   }
 }

@@ -1,31 +1,34 @@
 /* eslint-disable react/prop-types */
 import React, { Component } from "react";
 import { connect } from "react-redux";
-import _ from "underscore";
 
 import Visualization from "metabase/visualizations/components/Visualization";
-import QueryDownloadWidget from "metabase/query_builder/components/QueryDownloadWidget";
+// import QueryDownloadWidget from "metabase/query_builder/components/QueryDownloadWidget";
 import LoadingAndErrorWrapper from "metabase/components/LoadingAndErrorWrapper";
 import ExplicitSize from "metabase/components/ExplicitSize";
 import EmbedFrame from "../components/EmbedFrame";
-import title from "metabase/hoc/Title";
+import title, { updateTitle } from "metabase/hoc/Title";
+
+import type { Card } from "metabase-types/types/Card";
+import type { Dataset } from "metabase-types/types/Dataset";
+import type { ParameterValues } from "metabase-types/types/Parameter";
 
 import {
   getParameterValuesBySlug,
-  getParameterValuesByIdFromQueryParams,
-} from "metabase/parameters/utils/parameter-values";
-import { applyParameters } from "metabase/meta/Card";
+  // getParameterValuesByIdFromQueryParams,
+} from "metabase/meta/Parameter";
 import {
-  getValueAndFieldIdPopulatedParametersFromCard,
   getParametersFromCard,
-} from "metabase/parameters/utils/cards";
+  getValueAndFieldIdPopulatedParametersFromCard,
+  applyParameters,
+} from "metabase/meta/Card";
 
 import {
-  PublicApi,
   EmbedApi,
-  setPublicQuestionEndpoints,
-  setEmbedQuestionEndpoints,
   maybeUsePivotEndpoint,
+  PublicApi,
+  setEmbedQuestionEndpoints,
+  setPublicQuestionEndpoints,
 } from "metabase/services";
 
 import { setErrorPage } from "metabase/redux/app";
@@ -35,6 +38,26 @@ import { getMetadata } from "metabase/selectors/metadata";
 import PublicMode from "metabase/modes/components/modes/PublicMode";
 
 import { updateIn } from "icepick";
+import querystring from "querystring";
+import { b64url_to_utf8 } from "metabase/lib/card";
+import { parseTitleId } from "metabase/lib/urls";
+
+type Props = {
+  params: { uuid?: string, token?: string, titleAndId?: string },
+  location: { query: { [key: string]: string } },
+  width: number,
+  height: number,
+  setErrorPage: (error: { status: number }) => void,
+  addParamValues: any => void,
+  addFields: any => void,
+};
+
+type State = {
+  card: ?Card,
+  result: ?Dataset,
+  parameterValues: ParameterValues,
+  secret: ?String,
+};
 
 const mapStateToProps = state => ({
   metadata: getMetadata(state),
@@ -46,24 +69,53 @@ const mapDispatchToProps = {
   addFields,
 };
 
-class PublicQuestion extends Component {
-  constructor(props) {
+@connect(mapStateToProps, mapDispatchToProps)
+@title(({ card }) => card && card.name)
+@ExplicitSize()
+export default class PublicQuestion extends Component {
+  props: Props;
+  state: State;
+
+  constructor(props: Props) {
     super(props);
     this.state = {
       card: null,
       result: null,
       initialized: false,
       parameterValues: {},
+      parameters: null,
+      parameter_mappings: null,
+      secret: "",
     };
+    this.hasUrlParam = false;
   }
 
   async UNSAFE_componentWillMount() {
     const {
       setErrorPage,
-      params: { uuid, token },
+      params,
       location: { query },
-      metadata,
     } = this.props;
+
+    const uuid = params.uuid || parseTitleId(params.titleAndId).id;
+    const token = params.token;
+
+    let secret = undefined;
+    if (location.hash) {
+      const hash = location.hash.replace(/^#/, "");
+      const hashObject = querystring.parse(hash);
+      secret = hashObject.secret;
+      const key = hashObject.key;
+      if (key) {
+        const { parameters, parameterValues, parameter_mappings } = JSON.parse(
+          b64url_to_utf8(key),
+        );
+        this.state.parameters = parameters;
+        this.state.parameterValues = parameterValues;
+        this.state.parameter_mappings = parameter_mappings;
+        this.hasUrlParam = true;
+      }
+    }
 
     if (uuid) {
       setPublicQuestionEndpoints(uuid);
@@ -76,7 +128,8 @@ class PublicQuestion extends Component {
       if (token) {
         card = await EmbedApi.card({ token });
       } else if (uuid) {
-        card = await PublicApi.card({ uuid });
+        const { data } = await PublicApi.card({ uuid, secret: secret });
+        card = data;
       } else {
         throw { status: 404 };
       }
@@ -88,25 +141,37 @@ class PublicQuestion extends Component {
         this.props.addFields(card.param_fields);
       }
 
-      const parameters = getValueAndFieldIdPopulatedParametersFromCard(
-        card,
-        metadata,
-        {},
-        card.parameters || undefined,
-      );
-      const parameterValuesById = getParameterValuesByIdFromQueryParams(
-        parameters,
-        query,
-        this.props.metadata,
-      );
-
-      this.setState(
-        { card, parameterValues: parameterValuesById },
-        async () => {
+      if (this.hasUrlParam) {
+        this.setState({ card }, async () => {
           await this.run();
           this.setState({ initialized: true });
-        },
-      );
+          updateTitle(card.name);
+        });
+      } else {
+        const parameterValues = {};
+        for (const parameter of getParametersFromCard(card)) {
+          parameterValues[String(parameter.id)] = query[parameter.slug];
+        }
+        this.setState({ card, parameterValues }, async () => {
+          await this.run();
+          this.setState({ initialized: true });
+          updateTitle(card.name);
+        });
+      }
+      // const parameters = getValueAndFieldIdPopulatedParametersFromCard(card);
+      // const parameterValuesById = getParameterValuesByIdFromQueryParams(
+      //   parameters,
+      //   query,
+      //   this.props.metadata,
+      // );
+
+      // this.setState(
+      //   { card, parameterValues: parameterValuesById },
+      //   async () => {
+      //     await this.run();
+      //     this.setState({ initialized: true });
+      //   },
+      // );
     } catch (error) {
       console.error("error", error);
       setErrorPage(error);
@@ -125,18 +190,23 @@ class PublicQuestion extends Component {
     );
   };
 
-  run = async () => {
-    const {
-      setErrorPage,
-      params: { uuid, token },
-    } = this.props;
-    const { card, parameterValues } = this.state;
+  run = async (): void => {
+    const { setErrorPage, params } = this.props;
+
+    const uuid = params.uuid || parseTitleId(params.titleAndId).id;
+
+    const token = params.token;
+
+    const { card, parameterValues, parameter_mappings } = this.state;
+    let parameters = this.state.parameters;
 
     if (!card) {
       return;
     }
 
-    const parameters = card.parameters || getParametersFromCard(card);
+    if (!this.hasUrlParam) {
+      parameters = getParametersFromCard(card);
+    }
 
     try {
       this.setState({ result: null });
@@ -153,7 +223,17 @@ class PublicQuestion extends Component {
         });
       } else if (uuid) {
         // public links currently apply parameters client-side
-        const datasetQuery = applyParameters(card, parameters, parameterValues);
+        let datasetQuery;
+        if (this.hasUrlParam) {
+          datasetQuery = applyParameters(
+            card,
+            parameters,
+            parameterValues,
+            parameter_mappings,
+          );
+        } else {
+          datasetQuery = applyParameters(card, parameters, parameterValues);
+        }
         newResult = await maybeUsePivotEndpoint(
           PublicApi.cardQuery,
           card,
@@ -173,38 +253,39 @@ class PublicQuestion extends Component {
   };
 
   render() {
-    const {
-      params: { uuid, token },
-      metadata,
-    } = this.props;
+    // const {
+    //   params: { uuid, token },
+    // } = this.props;
     const { card, result, initialized, parameterValues } = this.state;
 
-    const actionButtons = result && (
-      <QueryDownloadWidget
-        className="m1 text-medium-hover"
-        uuid={uuid}
-        token={token}
-        result={result}
-      />
-    );
+    // const actionButtons = result && (
+    //   <QueryDownloadWidget
+    //     className="m1 text-medium-hover"
+    //     uuid={uuid}
+    //     token={token}
+    //     result={result}
+    //     iconSize={28}
+    //   />
+    // );
+    const actionButtons = [];
 
     const parameters =
-      card &&
-      getValueAndFieldIdPopulatedParametersFromCard(
-        card,
-        metadata,
-        {},
-        card.parameters || undefined,
-      );
+      card && getValueAndFieldIdPopulatedParametersFromCard(card);
 
     return (
       <EmbedFrame
         name={card && card.name}
         description={card && card.description}
-        actionButtons={actionButtons}
+        creatorId={card && card.creator_id}
         parameters={initialized ? parameters : []}
+        actionButtons={actionButtons}
         parameterValues={parameterValues}
         setParameterValue={this.setParameterValue}
+        setMultipleParameterValues={this.setMultipleParameterValues}
+        creator={card && card.creator}
+        statistics={card && card.statistics}
+        createdAt={card && card.createdAt}
+        isFavorite={card && card.isFavorite}
       >
         <LoadingAndErrorWrapper
           className="flex-full"
@@ -232,6 +313,8 @@ class PublicQuestion extends Component {
               mode={PublicMode}
               metadata={this.props.metadata}
               onChangeCardAndRun={() => {}}
+              hideWatermark={card && card.hideWatermark}
+              showDataUpdateTime={true}
             />
           )}
         </LoadingAndErrorWrapper>
@@ -239,9 +322,3 @@ class PublicQuestion extends Component {
     );
   }
 }
-
-export default _.compose(
-  connect(mapStateToProps, mapDispatchToProps),
-  title(({ card }) => card && card.name),
-  ExplicitSize({ refreshMode: "debounceLeading" }),
-)(PublicQuestion);

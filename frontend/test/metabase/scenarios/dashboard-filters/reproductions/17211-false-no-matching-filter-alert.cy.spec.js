@@ -1,8 +1,8 @@
-import { restore, filterWidget, visitDashboard } from "__support__/e2e/cypress";
+import { restore, filterWidget } from "__support__/e2e/cypress";
 
-import { SAMPLE_DATABASE } from "__support__/e2e/cypress_sample_database";
+import { SAMPLE_DATASET } from "__support__/e2e/cypress_sample_dataset";
 
-const { ORDERS, ORDERS_ID, PEOPLE } = SAMPLE_DATABASE;
+const { ORDERS, ORDERS_ID, PEOPLE } = SAMPLE_DATASET;
 
 const questionDetails = {
   query: {
@@ -58,7 +58,7 @@ describe("issue 17211", () => {
           ],
         });
 
-        visitDashboard(dashboard_id);
+        cy.visit(`/dashboard/${dashboard_id}`);
       },
     );
   });

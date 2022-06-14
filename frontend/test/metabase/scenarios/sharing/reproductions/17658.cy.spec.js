@@ -1,4 +1,4 @@
-import { restore, setupSMTP, visitDashboard } from "__support__/e2e/cypress";
+import { restore, setupSMTP } from "__support__/e2e/cypress";
 
 describe("issue 17658", () => {
   beforeEach(() => {
@@ -12,9 +12,10 @@ describe("issue 17658", () => {
   });
 
   it("should delete dashboard subscription from any collection (metabase#17658)", () => {
-    visitDashboard(1);
+    cy.visit("/dashboard/1");
 
-    cy.icon("subscription").click();
+    cy.icon("share").click();
+    cy.findByText("Dashboard subscriptions").click();
 
     cy.findByText(/^Emailed monthly/).click();
 

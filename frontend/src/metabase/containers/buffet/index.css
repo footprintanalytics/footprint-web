@@ -1,0 +1,30 @@
+.buffet {
+  background-color: #fff;
+  margin: 40px;
+  padding: 80px;
+  width: 100%;
+  overflow-y: scroll;
+}
+
+.buffet h3 {
+  font-size: 16px;
+  color: #3c3c3c;
+  margin-bottom: 20px;
+}
+
+.buffet h3 b {
+  color: #ff0000;
+}
+
+.buffet__input {
+  width: 380px;
+  margin-bottom: 40px;
+}
+
+.buffet .ant-skeleton {
+  margin-bottom: 24px;
+}
+
+.buffet .ace_gutter {
+  z-index: 0;
+}

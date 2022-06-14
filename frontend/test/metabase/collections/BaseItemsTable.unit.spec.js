@@ -1,7 +1,10 @@
 import React from "react";
-import { renderWithProviders } from "__support__/ui";
+import { render } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import moment from "moment";
+
+import HTML5Backend from "react-dnd-html5-backend";
+import { DragDropContextProvider } from "react-dnd";
 
 import {
   DEFAULT_DATE_STYLE,
@@ -28,20 +31,21 @@ describe("Collections BaseItemsTable", () => {
   };
 
   function setup({ items = [ITEM], ...props } = {}) {
-    return renderWithProviders(
-      <BaseItemsTable
-        items={items}
-        sortingOptions={{ sort_column: "name", sort_direction: "asc" }}
-        onSortingOptionsChange={jest.fn()}
-        {...props}
-      />,
-      { withDND: true },
+    return render(
+      <DragDropContextProvider backend={HTML5Backend}>
+        <BaseItemsTable
+          items={items}
+          sortingOptions={{ sort_column: "name", sort_direction: "asc" }}
+          onSortingOptionsChange={jest.fn()}
+          {...props}
+        />
+      </DragDropContextProvider>,
     );
   }
 
   it("displays item data", () => {
     const { getByText } = setup();
-    const lastEditedAt = moment(timestamp).format("MMMM DD, YYYY");
+    const lastEditedAt = moment(timestamp).format("YYYY-MM-DD");
 
     expect(getByText(ITEM.name)).toBeInTheDocument();
     expect(getByText("John Doe")).toBeInTheDocument();
@@ -50,7 +54,7 @@ describe("Collections BaseItemsTable", () => {
 
   it("displays last edit time on hover", () => {
     const { getByText, getByRole } = setup();
-    const lastEditedAt = moment(timestamp).format("MMMM DD, YYYY");
+    const lastEditedAt = moment(timestamp).format("YYYY-MM-DD");
 
     userEvent.hover(getByText(lastEditedAt));
 

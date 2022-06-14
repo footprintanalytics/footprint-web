@@ -5,7 +5,7 @@ import {
   hasDefaultParameterValue,
   hasParameterValue,
   normalizeParameterValue,
-} from "metabase/parameters/utils/parameter-values";
+} from "metabase/meta/Parameter";
 
 export const NEW_PULSE_TEMPLATE = {
   name: null,

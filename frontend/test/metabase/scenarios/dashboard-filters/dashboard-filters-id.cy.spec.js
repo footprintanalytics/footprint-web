@@ -1,12 +1,12 @@
 import {
   restore,
   popover,
+  mockSessionProperty,
   filterWidget,
   editDashboard,
   saveDashboard,
   setFilter,
   checkFilterLabelAndValue,
-  visitDashboard,
 } from "__support__/e2e/cypress";
 
 import { addWidgetStringFilter } from "../native-filters/helpers/e2e-field-filter-helpers";
@@ -16,13 +16,18 @@ describe("scenarios > dashboard > filters > ID", () => {
     restore();
     cy.signInAsAdmin();
 
-    visitDashboard(1);
+    mockSessionProperty("field-filter-operators-enabled?", true);
+
+    cy.visit("/dashboard/1");
 
     editDashboard();
     setFilter("ID");
 
-    cy.findByText("Select…").click();
+    cy.findByText("Column to filter on")
+      .next("a")
+      .click();
   });
+
   describe("should work for the primary key", () => {
     beforeEach(() => {
       popover()

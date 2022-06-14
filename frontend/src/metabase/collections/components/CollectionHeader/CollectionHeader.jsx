@@ -1,49 +1,41 @@
 /* eslint-disable react/prop-types */
-import React, { useState } from "react";
+import React from "react";
+import { Flex } from "grid-styled";
 import { t } from "ttag";
 
 import * as Urls from "metabase/lib/urls";
 import { isPersonalCollection } from "metabase/collections/utils";
 import Icon, { IconWrapper } from "metabase/components/Icon";
-import Link from "metabase/core/components/Link";
+import Link from "metabase/components/Link";
 import PageHeading from "metabase/components/type/PageHeading";
 import Tooltip from "metabase/components/Tooltip";
-
 import CollectionEditMenu from "metabase/collections/components/CollectionEditMenu";
-import NewCollectionItemMenu from "metabase/collections/components/NewCollectionItemMenu";
-import { color } from "metabase/lib/colors";
 
 import { PLUGIN_COLLECTION_COMPONENTS } from "metabase/plugins";
 
 import {
-  BookmarkIcon,
-  BookmarkIconWrapper,
   Container,
-  DescriptionHeading,
+  DescriptionTooltipIcon,
   MenuContainer,
-  TitleContent,
+  ToggleMobileSidebarIcon,
 } from "./CollectionHeader.styled";
 
-function Title({ collection }) {
+function Title({ collection, handleToggleMobileSidebar }) {
   return (
-    <div>
-      <TitleContent>
-        <PLUGIN_COLLECTION_COMPONENTS.CollectionAuthorityLevelIcon
-          collection={collection}
-          mr={1}
-          size={24}
-        />
-        <PageHeading
-          data-testid="collection-name-heading"
-          className="text-wrap"
-        >
-          {collection.name}
-        </PageHeading>
-      </TitleContent>
+    <Flex align="center">
+      <ToggleMobileSidebarIcon onClick={handleToggleMobileSidebar} />
+      <PLUGIN_COLLECTION_COMPONENTS.CollectionAuthorityLevelIcon
+        collection={collection}
+        mr={1}
+        size={24}
+      />
+      <PageHeading className="text-wrap">{collection.name}</PageHeading>
       {collection.description && (
-        <DescriptionHeading>{collection.description}</DescriptionHeading>
+        <Tooltip tooltip={collection.description}>
+          <DescriptionTooltipIcon />
+        </Tooltip>
       )}
-    </div>
+    </Flex>
   );
 }
 
@@ -56,8 +48,8 @@ function PermissionsLink({
   const tooltip = t`Edit the permissions for this collection`;
   const link = `${Urls.collection(collection)}/permissions`;
 
-  const canChangePermissions =
-    isAdmin && !isPersonal && !isPersonalCollectionChild;
+  const canChangePermissions = false;
+  // isAdmin && !isPersonal && !isPersonalCollectionChild;
 
   return canChangePermissions ? (
     <Tooltip tooltip={tooltip}>
@@ -68,21 +60,6 @@ function PermissionsLink({
       </Link>
     </Tooltip>
   ) : null;
-}
-
-function TimelinesLink({ collection }) {
-  const title = t`Events`;
-  const link = Urls.timelinesInCollection(collection);
-
-  return (
-    <Tooltip tooltip={title}>
-      <Link to={link}>
-        <IconWrapper>
-          <Icon name="calendar" size={20} />
-        </IconWrapper>
-      </Link>
-    </Tooltip>
-  );
 }
 
 function EditMenu({
@@ -106,45 +83,32 @@ function EditMenu({
   ) : null;
 }
 
-function Bookmark({ isBookmarked, onClickBookmark }) {
-  const title = isBookmarked ? t`Remove from bookmarks` : t`Bookmark`;
-  const iconColor = isBookmarked ? color("brand") : "";
-  const [animation, setAnimation] = useState(null);
+function CreateCollectionLink({
+  collection,
+  collectionId,
+  hasWritePermission,
+  isPersonal,
+}) {
+  const tooltip = t`New collection`;
+  const link = Urls.newCollection(collectionId);
 
-  const handleClickBookmark = () => {
-    onClickBookmark();
-    setAnimation(isBookmarked ? "shrink" : "expand");
-  };
-
-  return (
-    <Tooltip tooltip={title}>
-      <BookmarkIconWrapper
-        isBookmarked={isBookmarked}
-        onClick={handleClickBookmark}
-      >
-        <BookmarkIcon
-          name="bookmark"
-          color={iconColor}
-          size={20}
-          animation={animation}
-        />
-      </BookmarkIconWrapper>
+  return hasWritePermission && !isPersonal ? (
+    <Tooltip tooltip={tooltip}>
+      <Link to={link}>
+        <IconWrapper>
+          <Icon name="new_folder" />
+        </IconWrapper>
+      </Link>
     </Tooltip>
-  );
+  ) : null;
 }
 
 function Menu(props) {
-  const { collectionId, hasWritePermission } = props;
-
-  const shouldBeBookmarkable = collectionId !== "root";
-
   return (
-    <MenuContainer data-testid="collection-menu">
-      {hasWritePermission && <NewCollectionItemMenu {...props} />}
+    <MenuContainer>
       <EditMenu {...props} />
+      <CreateCollectionLink {...props} />
       <PermissionsLink {...props} />
-      <TimelinesLink {...props} />
-      {shouldBeBookmarkable && <Bookmark {...props} />}
     </MenuContainer>
   );
 }

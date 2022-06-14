@@ -1,7 +1,3 @@
----
-title: Dashboard subscriptions
----
-
 ## Dashboard subscriptions
 
 Dashboard subscriptions are a great way to keep you and your team up to date on the data that matters most. They allow you to send all of the questions on a dashboard via email or Slack. If your Metabase has email or Slack set up, all you need to do is create a dashboard, add subscribers to it, and tell Metabase how often you'd like the send out an update. You can set up as many subscriptions to a dashboard as you like, and if you make any changes to the dashboard, Metabase will update the subscriptions the next time they're delivered.
@@ -58,9 +54,9 @@ You can add multiple subscriptions to a single dashboard. To add a subscription,
 
 To remove a subscription from a dashboard, select the subscription you'd like to remove. At the bottom of the sidebar, select **Delete this subscription**. Follow the instructions on the modal that pops up to confirm you'd like to delete the subscription.
 
-## Customize filter values for each dashboard subscription
+## Enterprise Edition: customize filter values for each dashboard subscription
 
-Some plans allow you to [customize filter values for each subscription](../enterprise-guide/dashboard-subscriptions.md), so you can set up subscriptions with different filter values applied for different subscribers.
+Metabase Enterprise Edition allows you to [customize filter values for each subscription](../enterprise-guide/dashboard-subscriptions.md), so you can set up subscriptions with different filter values applied for different subscribers.
 
 ### Related reading
 
@@ -69,6 +65,6 @@ Some plans allow you to [customize filter values for each subscription](../enter
 
 ---
 
-## Next: data model reference
+## Next: Getting reports with Pulses
 
-Sometimes you’ll need help understanding what data is available to you and what it means. Metabase provides a way for your administrators and data experts to build a [data model reference](12-data-model-reference.md) to help you make sense of your data.
+Pulses let you send out a group of saved questions on a schedule via email or Slack. [Get started with Pulses](10-pulses.md).

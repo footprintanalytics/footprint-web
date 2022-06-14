@@ -1,8 +1,6 @@
 :root {
-  --modal-background-color: color-mod(var(--color-bg-black) alpha(-40%));
-  --modal-background-color-transition: color-mod(
-    var(--color-bg-black) alpha(-99%)
-  );
+  --modal-background-color: color(var(--color-bg-black) alpha(-40%));
+  --modal-background-color-transition: color(var(--color-bg-black) alpha(-99%));
 }
 
 .ModalContainer {
@@ -23,6 +21,10 @@
  */
 .Modal-backdrop > .Modal {
   margin: 0;
+}
+
+.Modal.Modal--normal {
+  width: 600px;
 }
 
 .Modal.Modal--small {
@@ -50,7 +52,7 @@
 }
 
 .Modal-backdrop {
-  background-color: color-mod(var(--color-bg-black) alpha(-40%));
+  background-color: color(var(--color-bg-black) alpha(-40%));
 }
 
 /* TRANSITIONS */
@@ -60,21 +62,21 @@
 .Modal-backdrop.Modal-appear,
 .Modal-backdrop.Modal-enter {
   transition: background-color 200ms ease-in-out;
-  background-color: color-mod(var(--color-bg-black) alpha(-99%));
+  background-color: color(var(--color-bg-black) alpha(-99%));
 }
 
 .Modal-backdrop.Modal-appear-active,
 .Modal-backdrop.Modal-enter-active {
-  background-color: color-mod(var(--color-bg-black) alpha(-40%));
+  background-color: color(var(--color-bg-black) alpha(-40%));
 }
 
 .Modal-backdrop.Modal-leave {
   transition: background-color 200ms ease-in-out 100ms;
-  background-color: color-mod(var(--color-bg-black) alpha(-40%));
+  background-color: color(var(--color-bg-black) alpha(-40%));
 }
 
 .Modal-backdrop.Modal-leave-active {
-  background-color: color-mod(var(--color-bg-black) alpha(-99%));
+  background-color: color(var(--color-bg-black) alpha(-99%));
 }
 
 /* modal */
@@ -101,15 +103,4 @@
 .Modal-backdrop.Modal-leave-active .Modal {
   opacity: 0.01;
   transform: translate(0, -40px);
-}
-
-@media (prefers-reduced-motion) {
-  .Modal-backdrop.Modal-appear,
-  .Modal-backdrop.Modal-enter,
-  .Modal-backdrop.Modal-leave,
-  .Modal-backdrop.Modal-appear .Modal,
-  .Modal-backdrop.Modal-enter .Modal,
-  .Modal-backdrop.Modal-leave .Modal {
-    transition: none;
-  }
 }

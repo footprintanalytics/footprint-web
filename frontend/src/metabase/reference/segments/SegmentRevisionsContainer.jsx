@@ -31,7 +31,8 @@ const mapDispatchToProps = {
   ...actions,
 };
 
-class SegmentRevisionsContainer extends Component {
+@connect(mapStateToProps, mapDispatchToProps)
+export default class SegmentRevisionsContainer extends Component {
   static propTypes = {
     params: PropTypes.object.isRequired,
     location: PropTypes.object.isRequired,
@@ -75,8 +76,3 @@ class SegmentRevisionsContainer extends Component {
     );
   }
 }
-
-export default connect(
-  mapStateToProps,
-  mapDispatchToProps,
-)(SegmentRevisionsContainer);

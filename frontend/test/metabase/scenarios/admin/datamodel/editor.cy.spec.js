@@ -1,9 +1,8 @@
 import { restore, popover, visitAlias } from "__support__/e2e/cypress";
 
-import { SAMPLE_DB_ID } from "__support__/e2e/cypress_data";
-import { SAMPLE_DATABASE } from "__support__/e2e/cypress_sample_database";
+import { SAMPLE_DATASET } from "__support__/e2e/cypress_sample_dataset";
 
-const { ORDERS_ID } = SAMPLE_DATABASE;
+const { ORDERS_ID } = SAMPLE_DATASET;
 
 const SAMPLE_DB_URL = "/admin/datamodel/database/1";
 
@@ -148,7 +147,7 @@ describe.skip("scenarios > admin > datamodel > editor", () => {
     cy.route("PUT", "/api/table/2/fields/order").as("fieldReorder");
 
     visitAlias("@ORDERS_URL");
-    cy.icon("sort_arrows").click();
+    cy.contains("Column order:").click();
 
     // switch to alphabetical ordering
     popover()
@@ -170,7 +169,7 @@ describe.skip("scenarios > admin > datamodel > editor", () => {
 
     // check that new order is obeyed in queries
     cy.request("POST", "/api/dataset", {
-      database: SAMPLE_DB_ID,
+      database: 1,
       query: { "source-table": ORDERS_ID },
       type: "query",
     }).then(resp => {

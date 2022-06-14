@@ -6,9 +6,8 @@
             [medley.core :as m]
             [metabase.mbql.util :as mbql.u]
             [metabase.models.field :as field]
-            [metabase.sync.analyze.fingerprint.fingerprinters :as fingerprinters]
+            [metabase.sync.analyze.fingerprint.fingerprinters :as f]
             [metabase.sync.util :as sync-util]
-            [metabase.util :as u]
             [metabase.util.date-2 :as u.date]
             [metabase.util.i18n :refer [trs]]
             [redux.core :as redux])
@@ -104,13 +103,13 @@
    sampling, and use it to calculate RMSE."
   [fx fy]
   (redux/post-complete
-   (fingerprinters/robust-fuse
+   (f/robust-fuse
     {:fits           (->> (for [{:keys [x-link-fn y-link-fn formula model]} trendline-function-families]
                             (redux/post-complete
                              (stats/simple-linear-regression (comp (stats/somef x-link-fn) fx)
                                                              (comp (stats/somef y-link-fn) fy))
                              (fn [[offset slope]]
-                               (when (every? u/real-number? [offset slope])
+                               (when (every? f/real-number? [offset slope])
                                  {:model   (model offset slope)
                                   :formula (formula offset slope)}))))
                           (apply redux/juxt))
@@ -126,7 +125,7 @@
               (map #(assoc % :mae (transduce identity
                                              (mae (comp (:model %) first) second)
                                              validation-set)))
-              (filter (comp u/real-number? :mae))
+              (filter (comp f/real-number? :mae))
               not-empty
               (apply min-key :mae)
               :formula))))
@@ -186,16 +185,16 @@
         xfn        #(some-> %
                             (nth x-position)
                             ;; at this point in the pipeline, dates are still stings
-                            fingerprinters/->temporal
+                            f/->temporal
                             ->millis-from-epoch
                             ms->day)]
-    (fingerprinters/with-error-handling
+    (f/with-error-handling
       (apply redux/juxt
              (for [number-col numbers]
                (redux/post-complete
                 (let [y-position (:position number-col)
                       yfn        #(nth % y-position)]
-                  ((filter (comp u/real-number? yfn))
+                  ((filter (comp f/real-number? yfn))
                    (redux/juxt ((map yfn) (last-n 2))
                                ((map xfn) (last-n 2))
                                (stats/simple-linear-regression xfn yfn)
@@ -207,7 +206,7 @@
                                          (infer-unit x-previous x-current)
                                          unit))
                         show-change? (valid-period? x-previous x-current unit)]
-                    (fingerprinters/robust-map
+                    (f/robust-map
                      :last-value     y-current
                      :previous-value (when show-change?
                                        y-previous)
@@ -240,4 +239,4 @@
                                         :else                                               :others))))]
     (cond
       (timeseries? cols-by-type) (timeseries-insight cols-by-type)
-      :else                      (fingerprinters/constant-fingerprinter nil))))
+      :else                      (f/constant-fingerprinter nil))))

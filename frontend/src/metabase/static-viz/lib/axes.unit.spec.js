@@ -1,6 +1,4 @@
-import { getRotatedXTickHeight, getXTickWidth, getYTickWidth } from "./axes";
-
-const fontSize = 11;
+import { getXTickHeight, getXTickWidth, getYTickWidth } from "./axes";
 
 describe("getXTickWidth", () => {
   it("should get tick width for x axis assuming 6px char width", () => {
@@ -8,15 +6,15 @@ describe("getXTickWidth", () => {
     const accessors = { x: d => d.x };
     const maxWidth = 20;
 
-    const xTickHeight = getXTickWidth(data, accessors, maxWidth, fontSize);
+    const xTickHeight = getXTickWidth(data, accessors, maxWidth);
 
-    expect(Math.round(xTickHeight)).toBe(15);
+    expect(xTickHeight).toBe(18);
   });
 });
 
-describe("getRotatedXTickHeight", () => {
+describe("getXTickHeight", () => {
   it("should get tick height by width assuming 45deg rotation", () => {
-    expect(getRotatedXTickHeight(12)).toBe(9);
+    expect(getXTickHeight(12)).toBe(9);
   });
 });
 
@@ -25,8 +23,8 @@ describe("getYTickWidth", () => {
     const data = [{ y: 1 }, { y: 20 }, { y: 15 }];
     const accessors = { y: d => d.y };
 
-    const yTickHeight = getYTickWidth(data, accessors, null, fontSize);
+    const yTickHeight = getYTickWidth(data, accessors);
 
-    expect(Math.round(yTickHeight)).toBe(10);
+    expect(yTickHeight).toBe(12);
   });
 });

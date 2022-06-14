@@ -12,7 +12,7 @@
 .eastwood
 .idea/
 .nrepl-port
-.vscode
+# .vscode
 /*.h2.db
 /*.lock.db
 /*.mv.db
@@ -40,6 +40,7 @@
 /modules/drivers/*/resources/namespaces.edn
 /modules/drivers/*/target
 /node_modules/
+/osx-artifacts
 /plugins
 /process.yml
 /reset-password-artifacts
@@ -57,9 +58,13 @@
 /screenshots
 /sqlite.db
 /stats.json
-/storybook-static
 /target
 /test-report-*
+OSX/.cpcache
+OSX/Metabase/jre
+OSX/Resources/metabase.jar
+OSX/build
+OSX/dsa_priv.pem
 \#*\#
 bin/node_modules/
 bin/release/aws-eb/metabase-aws-eb.zip
@@ -72,14 +77,14 @@ xcshareddata
 xcuserdata
 dev/src/dev/nocommit/
 *~
-**/cypress_sample_database.json
+**/cypress_sample_dataset.json
 /frontend/src/cljs
 .shadow-cljs
+.clj-kondo/cache/
 
 # lsp: ignore all but the config file
 .lsp/*
 !.lsp/config.edn
-.clj-kondo/.cache
-*.code-workspace
-
-.calva/
+${env:MB_LOG_DIR}/*.log.1
+resources/license-backend-third-party.txt
+resources/license-frontend-third-party.txt

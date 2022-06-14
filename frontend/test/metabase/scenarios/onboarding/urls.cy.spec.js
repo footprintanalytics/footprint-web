@@ -1,5 +1,5 @@
-import { restore, navigationSidebar, popover } from "__support__/e2e/cypress";
-import { SAVED_QUESTIONS_VIRTUAL_DB_ID } from "metabase/lib/saved-questions";
+import { restore } from "__support__/e2e/cypress";
+import { SAVED_QUESTIONS_VIRTUAL_DB_ID } from "metabase/lib/constants";
 
 describe("URLs", () => {
   beforeEach(() => {
@@ -8,11 +8,13 @@ describe("URLs", () => {
   });
 
   describe("browse databases", () => {
-    it(`should slugify database name when opening it from /browse"`, () => {
-      cy.visit("/browse");
-      cy.findByTextEnsureVisible("Sample Database").click();
-      cy.findByText("Sample Database");
-      cy.location("pathname").should("eq", "/browse/1-sample-database");
+    ["/", "/browse"].forEach(url => {
+      it(`should slugify database name when opening it from "${url}"`, () => {
+        cy.visit(url);
+        cy.findByText("Sample Dataset").click();
+        cy.findByText("Sample Dataset");
+        cy.location("pathname").should("eq", "/browse/1-sample-dataset");
+      });
     });
 
     [
@@ -47,10 +49,12 @@ describe("URLs", () => {
   });
 
   describe("collections", () => {
-    it("should slugify collection name", () => {
-      cy.visit("/collection/root");
-      cy.findByText("First collection").click();
-      cy.location("pathname").should("eq", "/collection/9-first-collection");
+    ["/", "/collection/root"].forEach(url => {
+      it(`should slugify collection name when opening it from "${url}"`, () => {
+        cy.visit(url);
+        cy.findByText("First collection").click();
+        cy.location("pathname").should("eq", "/collection/9-first-collection");
+      });
     });
 
     it("should slugify current user's personal collection name correctly", () => {
@@ -64,12 +68,7 @@ describe("URLs", () => {
 
     it("should not slugify users' collections page URL", () => {
       cy.visit("/collection/root");
-      navigationSidebar().within(() => {
-        cy.icon("ellipsis").click();
-      });
-      popover()
-        .findByText("Other users' personal collections")
-        .click();
+      cy.findByText("Other users' personal collections").click();
       cy.findByText("All personal collections");
       cy.location("pathname").should("eq", "/collection/users");
     });
@@ -85,19 +84,16 @@ describe("URLs", () => {
 
     it("should open slugified URLs correctly", () => {
       cy.visit("/collection/9-first-collection");
-      cy.findByTestId("collection-name-heading").should(
-        "have.text",
-        "First collection",
-      );
+      cy.get("[class*=PageHeading]").should("have.text", "First collection");
 
       cy.visit("/collection/1-bobby-tables-s-personal-collection");
-      cy.findByTestId("collection-name-heading").should(
+      cy.get("[class*=PageHeading]").should(
         "have.text",
         "Bobby Tables's Personal Collection",
       );
 
       cy.visit("/collection/8-robert-tableton-s-personal-collection");
-      cy.findByTestId("collection-name-heading").should(
+      cy.get("[class*=PageHeading]").should(
         "have.text",
         "Robert Tableton's Personal Collection",
       );

@@ -10,7 +10,7 @@ import { filterWidget, popover } from "__support__/e2e/cypress";
 export function setWidgetType(type) {
   cy.findByText("Filter widget type")
     .parent()
-    .findByTestId("select-button")
+    .find(".AdminSelect")
     .click();
 
   popover()
@@ -28,36 +28,8 @@ export function setWidgetType(type) {
 export function addWidgetStringFilter(value) {
   popover()
     .find("input")
-    .type(`${value}{enter}`);
+    .type(value);
   cy.button("Add filter").click();
-}
-
-/**
- * Selectes value from the field values list filter widget
- *
- * @param {string} value
- */
-
-export function selectFilterValueFromList(value) {
-  popover().within(() => {
-    cy.findByText(value).click();
-    cy.button("Add filter").click();
-  });
-}
-
-/**
- * Applies filter value by filter type
- *
- * @param {string} filter
- * @param {string} value
- */
-
-export function applyFilterByType(filter, value) {
-  if (["Dropdown", "Is not"].includes(filter)) {
-    selectFilterValueFromList(value);
-  } else {
-    addWidgetStringFilter(value);
-  }
 }
 
 /**
@@ -121,7 +93,7 @@ export function mapTo({ table, field } = {}) {
  */
 export function openEntryForm(isFilterRequired) {
   const selector = isFilterRequired
-    ? cy.findByText("Enter a default value…")
+    ? cy.findByText("Enter a default value...")
     : filterWidget();
 
   selector.click();
@@ -137,11 +109,11 @@ function addBetweenFilter([low, high] = []) {
   popover().within(() => {
     cy.get("input")
       .first()
-      .type(`${low}{enter}`);
+      .type(low);
 
     cy.get("input")
       .last()
-      .type(`${high}{enter}`);
+      .type(high);
   });
 
   cy.button("Add filter").click();
@@ -152,7 +124,7 @@ function addBetweenFilter([low, high] = []) {
  * @param {string} value
  */
 function addSimpleNumberFilter(value) {
-  cy.findByPlaceholderText("Enter a number").type(`${value}{enter}`);
+  cy.findByPlaceholderText("Enter a number").type(value);
   cy.button("Add filter").click();
 }
 
@@ -161,7 +133,7 @@ function addSimpleNumberFilter(value) {
  * @param {string} value
  */
 function enterDefaultValue(value) {
-  cy.findByPlaceholderText("Enter a default value…").type(`${value}{enter}`);
+  cy.findByPlaceholderText("Enter a default value...").type(value);
   cy.button("Add filter").click();
 }
 
@@ -170,10 +142,8 @@ function enterDefaultValue(value) {
  * @param {string} result
  */
 export function pickDefaultValue(searchTerm, result) {
-  cy.findByPlaceholderText("Enter a default value…").type(searchTerm);
-  popover()
-    .findByText(result)
-    .click();
+  cy.findByPlaceholderText("Enter a default value...").type(searchTerm);
+  cy.findByText(result).click();
 
   cy.button("Add filter").click();
 }
@@ -185,11 +155,4 @@ export function pickDefaultValue(searchTerm, result) {
  */
 function isBetweenFilter(value) {
   return Array.isArray(value) && value.length === 2;
-}
-
-export function clearDefaultFilterValue() {
-  cy.findByText("Default filter widget value")
-    .parent()
-    .find(".Icon-close")
-    .click();
 }

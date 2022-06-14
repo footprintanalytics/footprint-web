@@ -11,7 +11,7 @@ import { getIn } from "icepick";
 import S from "metabase/components/List.css";
 import F from "./Field.css";
 
-import Select from "metabase/core/components/Select";
+import Select from "metabase/components/Select";
 import Icon from "metabase/components/Icon";
 
 import cx from "classnames";
@@ -44,18 +44,14 @@ const Field = ({ field, foreignKeys, url, icon, isEditing, formField }) => (
           {isEditing ? (
             <Select
               placeholder={t`Select a field type`}
-              value={
-                formField.semantic_type.value !== ""
-                  ? formField.semantic_type.value
-                  : field.semantic_type
-              }
+              value={formField.semantic_type.value || field.semantic_type}
               onChange={({ target: { value } }) =>
                 formField.semantic_type.onChange(value)
               }
               options={MetabaseCore.field_semantic_types.concat({
                 id: null,
                 name: t`No field type`,
-                section: t`Other`,
+                section: "Other",
               })}
               optionValueFn={o => o.id}
               optionSectionFn={o => o.section}

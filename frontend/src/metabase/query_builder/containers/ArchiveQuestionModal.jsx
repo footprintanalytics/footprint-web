@@ -7,7 +7,7 @@ import { t } from "ttag";
 
 import ArchiveModal from "metabase/components/ArchiveModal";
 
-import * as Urls from "metabase/lib/urls";
+// import * as Urls from "metabase/lib/urls";
 import Questions from "metabase/entities/questions";
 
 const mapDispatchToProps = {
@@ -16,28 +16,31 @@ const mapDispatchToProps = {
 
 class ArchiveQuestionModal extends Component {
   onArchive = () => {
-    const { question, archive, router } = this.props;
+    const {
+      cardId,
+      question,
+      archive,
+      router,
+      otherSuccessAction,
+    } = this.props;
+    if (cardId) {
+      archive(cardId);
+    } else {
+      const card = question.card();
+      archive(card.id);
+    }
+    // router.push(Urls.collection(card.collection));
+    router.push("/mine");
 
-    const card = question.card();
-    archive(card.id);
-    router.push(Urls.collection(card.collection));
+    otherSuccessAction && otherSuccessAction();
   };
 
   render() {
-    const { onClose, question } = this.props;
-
-    const isModel = question.isDataset();
-
-    const title = isModel ? t`Archive this model?` : t`Archive this question?`;
-
-    const message = isModel
-      ? t`This model will be removed from any dashboards or pulses using it.`
-      : t`This question will be removed from any dashboards or pulses using it.`;
-
+    const { onClose } = this.props;
     return (
       <ArchiveModal
-        title={title}
-        message={message}
+        title={t`Delete this chart?`}
+        message={t`This chart will be removed from any dashboards or pulses using it.`}
         onArchive={this.onArchive}
         onClose={onClose}
       />

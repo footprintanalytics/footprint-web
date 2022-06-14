@@ -1,4 +1,4 @@
-import { restore, startNewQuestion } from "__support__/e2e/cypress";
+import { restore } from "__support__/e2e/cypress";
 
 const ORDERS_URL = "/admin/datamodel/database/1/table/2";
 
@@ -39,8 +39,9 @@ describe("scenarios > admin > datamodel > hidden tables (metabase#9759)", () => 
 
     // It shouldn't show up as a normal user either
     cy.signInAsNormalUser();
-    startNewQuestion();
-    cy.contains("Sample Database").click();
+    cy.visit("/question/new");
+    cy.contains("Simple question").click();
+    cy.contains("Sample Dataset").click();
     cy.contains("Products");
     cy.contains("Orders").should("not.exist");
   });

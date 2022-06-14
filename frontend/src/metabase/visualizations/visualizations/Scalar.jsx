@@ -1,8 +1,7 @@
-/* eslint-disable react/prop-types */
 import React, { Component } from "react";
 import { t } from "ttag";
 
-import Ellipsified from "metabase/core/components/Ellipsified";
+import Ellipsified from "metabase/components/Ellipsified";
 
 import { formatValue } from "metabase/lib/formatting";
 import { TYPE } from "metabase/lib/types";
@@ -13,10 +12,15 @@ import { columnSettings } from "metabase/visualizations/lib/settings/column";
 import cx from "classnames";
 import _ from "underscore";
 
+import type { VisualizationProps } from "metabase-types/types/Visualization";
+import type { Column } from "metabase-types/types/Dataset";
+import type { VisualizationSettings } from "metabase-types/types/Card";
+
 import ScalarValue, {
   ScalarWrapper,
   ScalarTitle,
 } from "metabase/visualizations/components/ScalarValue";
+import VizControls from "metabase/visualizations/hoc/VizControls";
 
 // convert legacy `scalar.*` visualization settings to format options
 function legacyScalarSettingsToFormatOptions(settings) {
@@ -35,7 +39,10 @@ const COMPACT_MIN_LENGTH = 6;
 
 // Scalar visualization shows a single number
 // Multiseries Scalar is transformed to a Funnel
+@VizControls
 export default class Scalar extends Component {
+  props: VisualizationProps;
+
   static uiName = t`Number`;
   static identifier = "scalar";
   static iconName = "number";
@@ -44,6 +51,8 @@ export default class Scalar extends Component {
   static supportsSeries = true;
 
   static minSize = { width: 3, height: 3 };
+
+  _scalar: ?HTMLElement;
 
   static isSensible({ cols, rows }) {
     return rows.length === 1 && cols.length === 1;
@@ -151,10 +160,22 @@ export default class Scalar extends Component {
       // title: t`Multiply by a number`,
       // widget: "number",
     },
+    "graph.value_formatting": {
+      section: t`Display`,
+      title: t`Value formatting`,
+      widget: "radio",
+      props: {
+        options: [
+          { name: t`Auto`, value: "auto" },
+          { name: t`Compact`, value: "compact" },
+        ],
+      },
+      default: "auto",
+    },
     click_behavior: {},
   };
 
-  _getColumnIndex(cols, settings) {
+  _getColumnIndex(cols: Column[], settings: VisualizationSettings) {
     const columnIndex = _.findIndex(
       cols,
       col => col.name === settings["scalar.field"],
@@ -177,9 +198,6 @@ export default class Scalar extends Component {
       visualizationIsClickable,
       onVisualizationClick,
       width,
-      height,
-      gridSize,
-      totalNumGridCols,
     } = this.props;
 
     const columnIndex = this._getColumnIndex(cols, settings);
@@ -202,10 +220,11 @@ export default class Scalar extends Component {
     // the cutoff and the formatted value is longer than the cutoff
     // also if the width is less than a certain multiplier of the number of digits
     const displayCompact =
-      fullScalarValue !== null &&
-      fullScalarValue.length > COMPACT_MIN_LENGTH &&
-      (width < COMPACT_MAX_WIDTH ||
-        width < COMPACT_WIDTH_PER_DIGIT * fullScalarValue.length);
+      settings["graph.value_formatting"] === "compact" ||
+      (fullScalarValue !== null &&
+        fullScalarValue.length > COMPACT_MIN_LENGTH &&
+        (width < COMPACT_MAX_WIDTH ||
+          width < COMPACT_WIDTH_PER_DIGIT * fullScalarValue.length));
     const displayValue = displayCompact ? compactScalarValue : fullScalarValue;
 
     const clicked = {
@@ -215,40 +234,14 @@ export default class Scalar extends Component {
       settings,
     };
     const isClickable = visualizationIsClickable(clicked);
+    const handleClick = () => {
+      if (isClickable && this._scalar) {
+        onVisualizationClick({ ...clicked, element: this._scalar });
+      }
+    };
 
     return (
-      <ScalarWrapper>
-        <div className="Card-title absolute top right p1 px2">
-          {actionButtons}
-        </div>
-        <Ellipsified
-          className={cx("fullscreen-normal-text fullscreen-night-text", {
-            "text-brand-hover cursor-pointer": isClickable,
-          })}
-          tooltip={fullScalarValue}
-          alwaysShowTooltip={fullScalarValue !== displayValue}
-          style={{ maxWidth: "100%" }}
-        >
-          <span
-            onClick={
-              isClickable &&
-              (() =>
-                this._scalar &&
-                onVisualizationClick({ ...clicked, element: this._scalar }))
-            }
-            ref={scalar => (this._scalar = scalar)}
-          >
-            <ScalarValue
-              isDashboard={isDashboard}
-              gridSize={gridSize}
-              minGridSize={Scalar.minSize}
-              width={width}
-              height={height}
-              value={displayValue}
-              totalNumGridCols={totalNumGridCols}
-            />
-          </span>
-        </Ellipsified>
+      <div className="full-height full flex-wrap relative">
         {isDashboard && (
           <ScalarTitle
             title={settings["card.title"]}
@@ -259,7 +252,24 @@ export default class Scalar extends Component {
             }
           />
         )}
-      </ScalarWrapper>
+        <ScalarWrapper>
+          <div className="Card-title absolute top right p1 px2">
+            {actionButtons}
+          </div>
+          <Ellipsified
+            className={cx("fullscreen-normal-text fullscreen-night-text", {
+              "text-brand-hover cursor-pointer": isClickable,
+            })}
+            tooltip={fullScalarValue}
+            alwaysShowTooltip={fullScalarValue !== displayValue}
+            style={{ maxWidth: "100%" }}
+          >
+            <span onClick={handleClick} ref={scalar => (this._scalar = scalar)}>
+              <ScalarValue value={displayValue} />
+            </span>
+          </Ellipsified>
+        </ScalarWrapper>
+      </div>
     );
   }
 }

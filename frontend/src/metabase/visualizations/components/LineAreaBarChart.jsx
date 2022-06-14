@@ -74,9 +74,15 @@ for (let i = 0; i < MAX_SERIES; i++) {
   addCSSRule(`.LineAreaBarChart.mute-${i} svg:not(.stacked) .row`, MUTE_STYLE);
 }
 
-import { getAccentColors } from "metabase/lib/colors/groups";
+import type { VisualizationProps } from "metabase-types/types/Visualization";
+import { normal } from "metabase/lib/colors";
 
 export default class LineAreaBarChart extends Component {
+  props: VisualizationProps;
+
+  static identifier: string;
+  static renderer: (element: Element, props: VisualizationProps) => any;
+
   static noHeader = true;
   static supportsSeries = true;
 
@@ -297,7 +303,7 @@ export default class LineAreaBarChart extends Component {
       : series.map(single => single.card.name);
     const colors = seriesSettings
       ? seriesSettings.map(s => s.color)
-      : Object.values(getAccentColors());
+      : Object.values(normal);
 
     return {
       title,
@@ -318,6 +324,7 @@ export default class LineAreaBarChart extends Component {
       onChangeCardAndRun({
         nextCard: card,
         seriesIndex: 0,
+        unAuth: true,
       });
     }
   };
@@ -340,6 +347,7 @@ export default class LineAreaBarChart extends Component {
     } else if (single.clicked && visualizationIsClickable(single.clicked)) {
       onVisualizationClick({
         ...single.clicked,
+        seriesIndex: index,
         element: event.currentTarget,
       });
     } else if (onChangeCardAndRun) {
@@ -361,6 +369,7 @@ export default class LineAreaBarChart extends Component {
       onHoverChange,
       onAddSeries,
       onRemoveSeries,
+      dashcard,
     } = this.props;
 
     const {
@@ -374,10 +383,19 @@ export default class LineAreaBarChart extends Component {
       canSelectTitle,
     } = this.getLegendSettings();
 
+    // const showTopLegendHeader =
+    //   (hasMultiSeriesHeaderSeries && series && series.length <= 10) ||
+    //   (!hasTitle && actionButtons);
+    // const showRightLegendHeader =
+    //   !showTopLegendHeader &&
+    //   hasMultiSeriesHeaderSeries &&
+    //   series &&
+    //   series.length > 10;
+
     return (
       <LineAreaBarChartRoot
         className={cx(
-          "LineAreaBarChart",
+          "LineAreaBarChart flex flex-column",
           this.getHoverClasses(),
           this.props.className,
         )}
@@ -390,6 +408,7 @@ export default class LineAreaBarChart extends Component {
             icon={headerIcon}
             actionButtons={actionButtons}
             onSelectTitle={canSelectTitle ? this.handleSelectTitle : undefined}
+            dashcard={dashcard}
           />
         )}
         <LegendLayout
@@ -404,6 +423,7 @@ export default class LineAreaBarChart extends Component {
           onAddSeries={!hasBreakout ? onAddSeries : undefined}
           onRemoveSeries={!hasBreakout ? onRemoveSeries : undefined}
           onSelectSeries={this.handleSelectSeries}
+          maxSeries={MAX_SERIES}
         >
           <CardRenderer
             {...this.props}
@@ -492,7 +512,6 @@ function transformSingleSeries(s, series, seriesIndex) {
         ]
           .filter(n => n)
           .join(": "),
-        originalCardName: card.name,
         _breakoutValue: breakoutValue,
         _breakoutColumn: cols[seriesColumnIndex],
       },
@@ -536,7 +555,6 @@ function transformSingleSeries(s, series, seriesIndex) {
         card: {
           ...card,
           name: name,
-          originalCardName: card.name,
           _seriesIndex: seriesIndex,
           // use underlying column name as the seriesKey since it should be unique
           // EXCEPT for dashboard multiseries, so check seriesIndex == 0

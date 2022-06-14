@@ -1,25 +1,26 @@
 import React from "react";
 import { Route } from "metabase/hoc/Title";
 import { ModalRoute } from "metabase/hoc/ModalRoute";
-import NotificationsApp from "./containers/NotificationsApp";
-import HelpModal from "./components/HelpModal";
-import ArchiveAlertModal from "./containers/ArchiveAlertModal";
-import ArchivePulseModal from "./containers/ArchivePulseModal";
-import UnsubscribeAlertModal from "./containers/UnsubscribeAlertModal";
-import UnsubscribePulseModal from "./containers/UnsubscribePulseModal";
+import LazyLoad from "../../routesLazyLoad";
 
 const getRoutes = () => (
-  <Route path="notifications" component={NotificationsApp}>
-    <ModalRoute path="help" modal={HelpModal} />
-    <ModalRoute path="alert/:alertId/archive" modal={ArchiveAlertModal} />
-    <ModalRoute path="pulse/:pulseId/archive" modal={ArchivePulseModal} />
+  <Route path="notifications" component={LazyLoad.NotificationsApp}>
+    <ModalRoute path="help" modal={LazyLoad.HelpModal} />
+    <ModalRoute
+      path="alert/:alertId/archive"
+      modal={LazyLoad.ArchiveAlertModal}
+    />
+    <ModalRoute
+      path="pulse/:pulseId/archive"
+      modal={LazyLoad.ArchivePulseModal}
+    />
     <ModalRoute
       path="alert/:alertId/unsubscribe"
-      modal={UnsubscribeAlertModal}
+      modal={LazyLoad.UnsubscribeAlertModal}
     />
     <ModalRoute
       path="pulse/:pulseId/unsubscribe"
-      modal={UnsubscribePulseModal}
+      modal={LazyLoad.UnsubscribePulseModal}
     />
   </Route>
 );

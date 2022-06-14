@@ -5,7 +5,8 @@ import BodyComponent from "metabase/components/BodyComponent";
 import cx from "classnames";
 import { t } from "ttag";
 
-class HeaderModal extends Component {
+@BodyComponent
+export default class HeaderModal extends Component {
   constructor(props, context) {
     super(props, context);
     this.state = {
@@ -41,7 +42,7 @@ class HeaderModal extends Component {
             className="Button Button--borderless text-brand bg-white text-bold"
             onClick={onDone}
           >{t`Done`}</button>
-          {onCancel && <span className="text-white mx1">{t`or`}</span>}
+          {onCancel && <span className="text-white mx1">or</span>}
           {onCancel && (
             <a
               className="cursor-pointer text-white text-bold"
@@ -53,5 +54,3 @@ class HeaderModal extends Component {
     );
   }
 }
-
-export default BodyComponent(HeaderModal);

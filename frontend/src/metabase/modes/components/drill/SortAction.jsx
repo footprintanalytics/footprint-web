@@ -1,9 +1,15 @@
 import { t } from "ttag";
+import StructuredQuery from "metabase-lib/lib/queries/StructuredQuery";
 import Dimension from "metabase-lib/lib/Dimension";
 
-export default ({ question, clicked }) => {
+import type {
+  ClickAction,
+  ClickActionProps,
+} from "metabase-types/types/Visualization";
+
+export default ({ question, clicked }: ClickActionProps): ClickAction[] => {
   const query = question.query();
-  if (!question.isStructured() || !query.isEditable()) {
+  if (!(query instanceof StructuredQuery)) {
     return [];
   }
 

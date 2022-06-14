@@ -1,10 +1,10 @@
 (ns metabase.logger
   (:require [amalloy.ring-buffer :refer [ring-buffer]]
-            [clj-time.coerce :as time.coerce]
-            [clj-time.format :as time.format]
+            [clj-time.coerce :as coerce]
+            [clj-time.format :as time]
             [metabase.config :refer [local-process-uuid]])
   (:import org.apache.commons.lang3.exception.ExceptionUtils
-           [org.apache.logging.log4j.core Appender LogEvent LoggerContext]
+           [org.apache.logging.log4j.core Appender Filter Layout LogEvent LoggerContext]
            org.apache.logging.log4j.core.config.LoggerConfig
            org.apache.logging.log4j.LogManager))
 
@@ -18,8 +18,8 @@
   (reverse (seq @messages*)))
 
 (defn- event->log-data [^LogEvent event]
-  {:timestamp    (time.format/unparse (time.format/formatter :date-time)
-                                      (time.coerce/from-long (.getTimeMillis event)))
+  {:timestamp    (time/unparse (time/formatter :date-time)
+                               (coerce/from-long (.getTimeMillis event)))
    :level        (.getLevel event)
    :fqns         (.getLoggerName event)
    :msg          (.getMessage event)
@@ -43,6 +43,7 @@
   (when-not @has-added-appender?
     (reset! has-added-appender? true)
     (let [^LoggerContext ctx                           (LogManager/getContext true)
+          root-logger                                  (LogManager/getRootLogger)
           config                                       (.getConfiguration ctx)
           appender                                     (metabase-appender)
           ^org.apache.logging.log4j.Level level        nil

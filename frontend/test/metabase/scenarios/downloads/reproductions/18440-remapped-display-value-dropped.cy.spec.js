@@ -2,13 +2,10 @@ import {
   restore,
   visitQuestionAdhoc,
   downloadAndAssert,
-  visitQuestion,
 } from "__support__/e2e/cypress";
+import { SAMPLE_DATASET } from "__support__/e2e/cypress_sample_dataset";
 
-import { SAMPLE_DB_ID } from "__support__/e2e/cypress_data";
-import { SAMPLE_DATABASE } from "__support__/e2e/cypress_sample_database";
-
-const { ORDERS, ORDERS_ID, PRODUCTS } = SAMPLE_DATABASE;
+const { ORDERS, ORDERS_ID, PRODUCTS } = SAMPLE_DATASET;
 
 const query = { "source-table": ORDERS_ID, limit: 5 };
 
@@ -16,7 +13,7 @@ const questionDetails = {
   dataset_query: {
     type: "query",
     query,
-    database: SAMPLE_DB_ID,
+    database: 1,
   },
 };
 
@@ -25,6 +22,7 @@ const testCases = ["csv", "xlsx"];
 describe("issue 18440", () => {
   beforeEach(() => {
     cy.intercept("POST", "/api/card").as("saveQuestion");
+    cy.intercept("POST", "/api/dataset").as("dataset");
 
     restore();
     cy.signInAsAdmin();
@@ -40,6 +38,7 @@ describe("issue 18440", () => {
   testCases.forEach(fileType => {
     it(`export should include a column with remapped values for ${fileType} (metabase#18440-1)`, () => {
       visitQuestionAdhoc(questionDetails);
+      cy.wait("@dataset");
 
       cy.findByText("Product ID");
       cy.findByText("Awesome Concrete Shoes");
@@ -49,7 +48,10 @@ describe("issue 18440", () => {
 
     it(`export should include a column with remapped values for ${fileType} for a saved question (metabase#18440-2)`, () => {
       cy.createQuestion({ query }).then(({ body: { id } }) => {
-        visitQuestion(id);
+        cy.intercept("POST", `/api/card/${id}/query`).as("cardQuery");
+
+        cy.visit(`/question/${id}`);
+        cy.wait("@cardQuery");
 
         cy.findByText("Product ID");
         cy.findByText("Awesome Concrete Shoes");

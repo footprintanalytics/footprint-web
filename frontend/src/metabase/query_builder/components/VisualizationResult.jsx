@@ -1,26 +1,50 @@
-/* eslint-disable react/prop-types */
+/* eslint "react/prop-types": "warn" */
+
 import React, { Component } from "react";
 import { t, jt } from "ttag";
 import cx from "classnames";
-import _ from "underscore";
-
+import { connect } from "react-redux";
 import ErrorMessage from "metabase/components/ErrorMessage";
 import Visualization from "metabase/visualizations/components/Visualization";
 import { datasetContainsNoResults } from "metabase/lib/dataset";
+import { DatasetQuery } from "metabase-types/types/Card";
 import { CreateAlertModalContent } from "metabase/query_builder/components/AlertModals";
 import Modal from "metabase/components/Modal";
 import { ALERT_TYPE_ROWS } from "metabase-lib/lib/Alert";
+import StructuredQuery from "metabase-lib/lib/queries/StructuredQuery";
+// import { get } from "lodash";
+import { getUserClearWatermarkPermission } from "metabase/selectors/user";
+import type { Question } from "metabase-lib/lib/Question";
 
-const ALLOWED_VISUALIZATION_PROPS = [
-  // Table Interactive
-  "hasMetadataPopovers",
-  "tableHeaderHeight",
-  "scrollToColumn",
-  "renderTableHeaderWrapper",
-  "mode",
-];
+type Props = {
+  className?: string,
+  question: Question,
+  isObjectDetail: boolean,
+  result: any,
+  results: any[],
+  isDirty: boolean,
+  lastRunDatasetQuery: DatasetQuery,
+  navigateToNewCardInsideQB: any => void,
+  rawSeries: any,
+  user: any,
+  clearWatermark: boolean,
 
+  onOpenChartSettings: () => void,
+  onUpdateWarnings: () => void,
+  onUpdateVisualizationSettings: (settings: any) => void,
+  query?: StructuredQuery,
+};
+
+const mapStateToProps = state => {
+  return {
+    user: state.currentUser,
+    clearWatermark: getUserClearWatermarkPermission(state),
+  };
+};
+
+@connect(mapStateToProps)
 export default class VisualizationResult extends Component {
+  props: Props;
   state = {
     showCreateAlertModal: false,
   };
@@ -33,28 +57,19 @@ export default class VisualizationResult extends Component {
     this.setState({ showCreateAlertModal: false });
   };
 
-  getObjectDetailData = series => {
-    return [
-      {
-        ...series[0],
-        card: { ...series[0].card, display: "object" },
-      },
-    ];
-  };
-
   render() {
     const {
       question,
       isDirty,
-      queryBuilderMode,
       navigateToNewCardInsideQB,
       result,
       rawSeries,
-      timelineEvents,
-      selectedTimelineEventIds,
       className,
+      user,
+      clearWatermark,
     } = this.props;
     const { showCreateAlertModal } = this.state;
+    const isOwner = user.is_superuser || user.id === question.card().creator_id;
 
     const noResults = datasetContainsNoResults(result.data);
     if (noResults) {
@@ -98,46 +113,32 @@ export default class VisualizationResult extends Component {
         </div>
       );
     } else {
-      const vizSpecificProps = _.pick(
-        this.props,
-        ...ALLOWED_VISUALIZATION_PROPS,
-      );
-      const hasDrills = this.props.query.isEditable();
       return (
-        <>
-          <Visualization
-            className={className}
-            rawSeries={rawSeries}
-            onChangeCardAndRun={
-              hasDrills ? navigateToNewCardInsideQB : undefined
-            }
-            isEditing={true}
-            isObjectDetail={false}
-            isQueryBuilder={true}
-            queryBuilderMode={queryBuilderMode}
-            showTitle={false}
-            metadata={question.metadata()}
-            timelineEvents={timelineEvents}
-            selectedTimelineEventIds={selectedTimelineEventIds}
-            handleVisualizationClick={this.props.handleVisualizationClick}
-            onOpenTimelines={this.props.onOpenTimelines}
-            onSelectTimelineEvents={this.props.selectTimelineEvents}
-            onDeselectTimelineEvents={this.props.deselectTimelineEvents}
-            onOpenChartSettings={this.props.onOpenChartSettings}
-            onUpdateWarnings={this.props.onUpdateWarnings}
-            onUpdateVisualizationSettings={
-              this.props.onUpdateVisualizationSettings
-            }
-            query={this.props.query}
-            {...vizSpecificProps}
-          />
-          {this.props.isObjectDetail && (
-            <Visualization
-              isObjectDetail={true}
-              rawSeries={this.getObjectDetailData(rawSeries)}
-            />
-          )}
-        </>
+        <Visualization
+          className={className}
+          rawSeries={rawSeries}
+          onChangeCardAndRun={arg => {
+            const { unAuth } = arg;
+            const isOwner =
+              unAuth ||
+              user.is_superuser ||
+              user.id === question.card().creator_id;
+            isOwner && navigateToNewCardInsideQB(arg);
+          }}
+          clickable={isOwner}
+          isEditing={true}
+          isQueryBuilder={true}
+          showTitle={false}
+          metadata={question.metadata()}
+          hideWatermark={clearWatermark}
+          onOpenChartSettings={this.props.onOpenChartSettings}
+          onUpdateWarnings={this.props.onUpdateWarnings}
+          onUpdateVisualizationSettings={
+            this.props.onUpdateVisualizationSettings
+          }
+          query={this.props.query}
+          showDataUpdateTime={true}
+        />
       );
     }
   }

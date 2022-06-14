@@ -1,6 +1,8 @@
 import { t } from "ttag";
 import _ from "underscore";
 
+import type { Series } from "metabase-types/types/Visualization";
+
 const visualizations = new Map();
 const aliases = new Map();
 visualizations.get = function(key) {
@@ -49,16 +51,16 @@ export function registerVisualization(visualization) {
   }
 }
 
-export function getVisualizationRaw(series) {
+export function getVisualizationRaw(series: Series) {
   return {
     series: series,
     visualization: visualizations.get(series[0].card.display),
   };
 }
 
-export function getVisualizationTransformed(series) {
+export function getVisualizationTransformed(series: Series) {
   // don't transform if we don't have the data
-  if (_.any(series, s => s.data == null) || _.any(series, s => s.error)) {
+  if (_.any(series, s => s.data == null)) {
     return getVisualizationRaw(series);
   }
 

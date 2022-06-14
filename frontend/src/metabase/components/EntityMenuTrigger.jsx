@@ -3,6 +3,8 @@ import React from "react";
 
 import Icon, { IconWrapper } from "metabase/components/Icon";
 import Tooltip from "metabase/components/Tooltip";
+import UserAvatar from "metabase/components/UserAvatar";
+import VipIcon from "metabase/components/VipIcon";
 
 const EntityMenuTrigger = ({
   icon,
@@ -10,23 +12,29 @@ const EntityMenuTrigger = ({
   open,
   tooltip,
   triggerProps,
-  trigger,
+  user,
+  homeSetting,
 }) => {
-  const triggerContent = trigger ? (
-    <span onClick={onClick} {...triggerProps}>
-      {trigger}
-    </span>
-  ) : (
+  const trigger = (
     <IconWrapper onClick={onClick} {...triggerProps}>
-      <Icon size={18} name={icon} m={1} />
+      {homeSetting ? (
+        <div className="relative" style={{ padding: 10 }}>
+          <UserAvatar user={user} size={["2.5em", "2.5em"]} />
+          <div className="absolute right bottom mb1" style={{ marginRight: 2 }}>
+            <VipIcon user={user} />
+          </div>
+        </div>
+      ) : (
+        <Icon size={18} name={icon} m={1} />
+      )}
     </IconWrapper>
   );
   return tooltip ? (
     <Tooltip tooltip={tooltip} isEnabled={!open}>
-      {triggerContent}
+      {trigger}
     </Tooltip>
   ) : (
-    triggerContent
+    trigger
   );
 };
 

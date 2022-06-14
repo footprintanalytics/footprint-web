@@ -78,10 +78,9 @@ function GridLayout({
         item,
         gridItemWidth,
         breakpoint: currentBreakpoint,
-        totalNumGridCols: cols,
       });
     },
-    [layout, cellSize, itemRenderer, currentBreakpoint, cols],
+    [layout, cellSize, itemRenderer, currentBreakpoint],
   );
 
   const height = useMemo(() => {
@@ -115,6 +114,7 @@ function GridLayout({
 
   return (
     <ReactGridLayout
+      useCSSTransforms={false}
       breakpoints={breakpoints}
       cols={columnsMap}
       layouts={layouts}

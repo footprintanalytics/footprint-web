@@ -1,6 +1,6 @@
-import { restore, describeEE } from "__support__/e2e/cypress";
+import { restore, describeWithToken } from "__support__/e2e/cypress";
 
-describeEE("scenarios > admin > settings > SSO > JWT", () => {
+describeWithToken("scenarios > admin > settings > SSO > JWT", () => {
   beforeEach(() => {
     restore();
     cy.signInAsAdmin();
@@ -14,7 +14,7 @@ describeEE("scenarios > admin > settings > SSO > JWT", () => {
       .closest("li")
       .within(() => {
         cy.findByText("Disabled")
-          .siblings("input")
+          .siblings("a")
           .click();
       });
     cy.findByText("Enabled");

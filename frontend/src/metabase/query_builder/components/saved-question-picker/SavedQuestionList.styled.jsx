@@ -1,4 +1,4 @@
-import styled from "@emotion/styled";
+import styled from "styled-components";
 import { SelectList } from "metabase/components/select-list";
 import { breakpointMaxSmall } from "metabase/styled-components/theme/media-queries";
 
@@ -16,8 +16,4 @@ export const SavedQuestionListItem = styled(SelectList.Item)`
   .Icon:last-child {
     justify-self: start;
   }
-`;
-
-export const SavedQuestionListEmptyState = styled.div`
-  margin: 7.5rem 0;
 `;

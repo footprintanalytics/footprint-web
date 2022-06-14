@@ -1,4 +1,4 @@
-export const details = queryHash => ({
+export const details = (queryHash: string) => ({
   card: {
     name: "Query details",
     display: "table",

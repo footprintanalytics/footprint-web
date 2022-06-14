@@ -10,6 +10,9 @@
 
 (defn add-timezone-info
   "Add `:results_timezone` and `:requested_timezone` info to query results."
-  [_query rff]
-  (fn add-timezone-info-rff* [metadata]
-    (rff (add-timezone-metadata metadata))))
+  [qp]
+  (fn [query rff context]
+    (qp query
+        (fn [metadata]
+          (rff (add-timezone-metadata metadata)))
+        context)))

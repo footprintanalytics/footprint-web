@@ -3,21 +3,24 @@ import React from "react";
 import { connect } from "react-redux";
 import { bindActionCreators } from "redux";
 
-export default () => ComposedComponent => {
+export default (entityType?: string) => (
+  ComposedComponent: React.ComponentClass,
+) => {
   const mapStateToProps = (state, props) => ({
     entityDef:
       // dynamic require due to dependency load order issues
       require("metabase/entities")[
-        typeof props.entityType === "function"
-          ? props.entityType(state, props)
-          : props.entityType
+        entityType ||
+          (typeof props.entityType === "function"
+            ? props.entityType(state, props)
+            : props.entityType)
       ],
   });
   return connect(mapStateToProps)(
     class extends React.Component {
       static displayName = "EntityType";
 
-      _boundActionCreators = {};
+      _boundActionCreators: { [key: string]: Function } = {};
 
       constructor(props) {
         super(props);

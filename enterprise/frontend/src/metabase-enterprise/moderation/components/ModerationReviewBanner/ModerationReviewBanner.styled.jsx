@@ -1,37 +1,31 @@
-import styled from "@emotion/styled";
+import styled from "styled-components";
 import { color } from "metabase/lib/colors";
-import Button from "metabase/core/components/Button";
+import Button from "metabase/components/Button";
+import Icon from "metabase/components/Icon";
 
 export const Container = styled.div`
-  padding: 1rem 0.5rem;
+  padding: 1rem 1rem 1rem 0.5rem;
+  background-color: ${props => props.backgroundColor};
   display: flex;
   justify-content: space-between;
-  align-items: start;
-  column-gap: 1rem;
-  border-radius: 8px;
-`;
-
-export const TextContainer = styled.div`
-  flex: 1;
-  display: flex;
-  flex-direction: column;
+  align-items: center;
+  column-gap: 0.5rem;
+  border-radius: 4px;
 `;
 
 export const Text = styled.span`
-  font-size: 0.875rem;
-  line-height: 1rem;
-  margin-bottom: 0.25rem;
+  flex: 1;
+  font-size: 14px;
   font-weight: 700;
 `;
 
 export const Time = styled.time`
   color: ${color("text-medium")};
-  font-size: 0.875rem;
-  line-height: 1.25rem;
+  font-size: 12px;
 `;
 
 export const IconButton = styled(Button)`
-  padding: 0 !important;
+  padding: 0 0 0 0.5rem !important;
   border: none;
   background-color: transparent;
 
@@ -39,4 +33,8 @@ export const IconButton = styled(Button)`
     background-color: transparent;
     color: ${color("danger")};
   }
+`;
+
+export const StatusIcon = styled(Icon)`
+  padding: 0 0.5rem;
 `;

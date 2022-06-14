@@ -2,9 +2,9 @@
   composes: flex align-center from "style";
   transition: opacity 500ms linear;
   border: 2px solid var(--color-border);
-  margin: 0 0 0.5em 0;
-  padding: 0.25em 1em;
-  width: 100%;
+  margin-right: 0.85em;
+  margin-bottom: 0.85em;
+  padding: 0.25em 1em 0.25em 1em;
 }
 
 :local(.container) legend {
@@ -14,6 +14,7 @@
   line-height: 0;
   margin-left: -0.45em;
   padding: 0 0.5em;
+  background-color: #f9fbfc;
 }
 
 :local(.container.deemphasized) {
@@ -63,7 +64,8 @@
 }
 
 :local(.parameter.noPopover) input {
-  width: 100%;
+  /* NOTE: Fixed with to circumvent issues with flexbox with container having a min-width */
+  width: 115px;
   font-size: 1em;
   font-weight: 600;
   border: none;
@@ -101,6 +103,9 @@
 .Dashboard--night :local(.parameter.noPopover) input:focus,
 .Theme--night :local(.parameter.noPopover) input:focus {
   color: var(--color-text-white);
+}
+
+:local(.input) {
 }
 
 :local(.nameInput:focus),
@@ -144,16 +149,4 @@
 :local(.editNameIconContainer) > svg {
   position: absolute;
   top: -6px;
-}
-
-@media screen and (min-width: 440px) {
-  :local(.container) {
-    margin-right: 0.85em;
-    width: auto;
-  }
-
-  :local(.parameter.noPopover) input {
-    /* NOTE: Fixed with to circumvent issues with flexbox with container having a min-width */
-    width: 115px;
-  }
 }

@@ -2,3 +2,16 @@
 :local(.w-full) {
   width: 100%;
 }
+
+.w-auto,
+:local(.w-auto) {
+  width: auto;
+}
+
+.max-w-100-percent {
+  max-width: 100%;
+}
+
+.max-w-95-percent {
+  max-width: 95%;
+}

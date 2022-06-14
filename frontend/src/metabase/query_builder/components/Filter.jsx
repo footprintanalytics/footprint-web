@@ -11,11 +11,29 @@ import { getFilterArgumentFormatOptions } from "metabase/lib/schema_metadata";
 
 import { t, ngettext, msgid } from "ttag";
 
-import { color } from "metabase/lib/colors";
+import type { Filter as FilterObject } from "metabase-types/types/Query";
+import type { Value as ValueType } from "metabase-types/types/Dataset";
+import Metadata from "metabase-lib/lib/metadata/Metadata";
+import FilterWrapper from "metabase-lib/lib/queries/structured/Filter";
 
-import ViewPill from "metabase/query_builder/components/view/ViewPill";
+export type FilterRenderer = ({
+  field?: React.Element,
+  operator: ?string,
+  values: (React.Element | string)[],
+}) => React.Element;
 
-const DEFAULT_FILTER_RENDERER = ({ field, operator, values }) => {
+type Props = {
+  filter: FilterObject | FilterWrapper,
+  metadata: Metadata,
+  maxDisplayValues?: number,
+  children?: FilterRenderer,
+};
+
+const DEFAULT_FILTER_RENDERER: FilterRenderer = ({
+  field,
+  operator,
+  values,
+}) => {
   const items = [field, operator, ...values];
   // insert an "and" at the end if multiple values
   // NOTE: works for "between", not sure about others
@@ -36,16 +54,14 @@ const DEFAULT_FILTER_RENDERER = ({ field, operator, values }) => {
   );
 };
 
-const FilterPill = props => <ViewPill color={color("filter")} {...props} />;
-
-export const SimpleOperatorFilter = ({
+export const OperatorFilter = ({
   filter,
   metadata,
   maxDisplayValues,
   children = DEFAULT_FILTER_RENDERER,
-}) => {
+}: Props) => {
   const [op, field] = filter;
-  const values = hasFilterOptions(filter)
+  const values: ValueType[] = hasFilterOptions(filter)
     ? filter.slice(2, -1)
     : filter.slice(2);
 
@@ -86,26 +102,12 @@ export const SimpleOperatorFilter = ({
   });
 };
 
-export const ComplexOperatorFilter = ({ index, filter, removeFilter }) => {
-  return (
-    <FilterPill onRemove={() => removeFilter(index)}>
-      {filter.displayName()}
-    </FilterPill>
-  );
-};
-
-export const OperatorFilter = ({ filter, ...props }) =>
-  filter.displayName ? (
-    <ComplexOperatorFilter filter={filter} {...props} />
-  ) : (
-    <SimpleOperatorFilter filter={filter} {...props} />
-  );
-
 export const SegmentFilter = ({
   filter,
   metadata,
+  maxDisplayValues,
   children = DEFAULT_FILTER_RENDERER,
-}) => {
+}: Props) => {
   const segment = metadata.segment(filter[1]);
   return children({
     operator: t`Matches`,
@@ -113,7 +115,7 @@ export const SegmentFilter = ({
   });
 };
 
-const Filter = ({ filter, ...props }) =>
+const Filter = ({ filter, ...props }: Props) =>
   filter[0] === "segment" ? (
     <SegmentFilter filter={filter} {...props} />
   ) : (

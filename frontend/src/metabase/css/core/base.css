@@ -1,4 +1,58 @@
+/* lato-regular - latin */
+@font-face {
+  font-display: swap;
+  font-family: Arial, "Lato";
+  font-style: normal;
+  font-weight: 400;
+  src: url("~fonts/lato-v16-latin/lato-v16-latin-regular.eot"); /* IE9 Compat Modes */
+  src: local("Lato Regular"), local("Lato-Regular"),
+    url("~fonts/lato-v16-latin/lato-v16-latin-regular.eot?#iefix")
+      format("embedded-opentype"),
+    /* IE6-IE8 */ url("~fonts/lato-v16-latin/lato-v16-latin-regular.woff")
+      format("woff"),
+    /* Modern Browsers */
+      url("~fonts/lato-v16-latin/lato-v16-latin-regular.ttf") format("truetype"),
+    /* Safari, Android, iOS */
+      url("~fonts/lato-v16-latin/lato-v16-latin-regular.svg#Lato") format("svg"); /* Legacy iOS */
+}
+
+/* lato-700 - latin */
+@font-face {
+  font-display: swap;
+  font-family: Arial, "Lato";
+  font-style: normal;
+  font-weight: 700;
+  src: url("~fonts/lato-v16-latin/lato-v16-latin-700.eot"); /* IE9 Compat Modes */
+  src: local("Lato Bold"), local("Lato-Bold"),
+    url("~fonts/lato-v16-latin/lato-v16-latin-700.eot?#iefix")
+      format("embedded-opentype"),
+    /* IE6-IE8 */ url("~fonts/lato-v16-latin/lato-v16-latin-700.woff")
+      format("woff"),
+    /* Modern Browsers */ url("~fonts/lato-v16-latin/lato-v16-latin-700.ttf")
+      format("truetype"),
+    /* Safari, Android, iOS */
+      url("~fonts/lato-v16-latin/lato-v16-latin-700.svg#Lato") format("svg"); /* Legacy iOS */
+}
+/* lato-900 - latin */
+@font-face {
+  font-display: swap;
+  font-family: Arial, "Lato";
+  font-style: normal;
+  font-weight: 900;
+  src: url("~fonts/lato-v16-latin/lato-v16-latin-900.eot"); /* IE9 Compat Modes */
+  src: local("Lato Black"), local("Lato-Black"),
+    url("~fonts/lato-v16-latin/lato-v16-latin-900.eot?#iefix")
+      format("embedded-opentype"),
+    /* IE6-IE8 */ url("~fonts/lato-v16-latin/lato-v16-latin-900.woff")
+      format("woff"),
+    /* Modern Browsers */ url("~fonts/lato-v16-latin/lato-v16-latin-900.ttf")
+      format("truetype"),
+    /* Safari, Android, iOS */
+      url("~fonts/lato-v16-latin/lato-v16-latin-900.svg#Lato") format("svg"); /* Legacy iOS */
+}
+
 :root {
+  --default-font-family: "Arial";
   --default-font-size: 0.875em;
   --default-font-color: var(--color-text-dark);
   --default-bg-color: var(--color-bg-light);
@@ -20,7 +74,8 @@ body {
   display: flex;
   flex-direction: column;
   background-color: var(--color-bg-light);
-
+  min-width: 375px;
+  overflow-x: hidden;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
@@ -46,6 +101,7 @@ button {
   margin: 0;
   outline: none;
   background-color: transparent;
+  line-height: initial;
 }
 
 a {
@@ -54,7 +110,6 @@ a {
   text-decoration: none;
 }
 
-button,
 input,
 textarea {
   font-family: var(--default-font-family), "Helvetica Neue", Helvetica,
@@ -100,6 +155,6 @@ textarea {
   outline: none;
 }
 
-.outline-none {
-  outline: none;
+.bg-gray {
+  background-color: #f9fbfc;
 }

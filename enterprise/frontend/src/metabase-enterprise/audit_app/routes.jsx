@@ -2,7 +2,6 @@ import React from "react";
 
 import { Route } from "metabase/hoc/Title";
 import { ModalRoute } from "metabase/hoc/ModalRoute";
-import { createAdminRouteGuard } from "metabase/admin/utils";
 import { IndexRoute, IndexRedirect } from "react-router";
 import { t } from "ttag";
 import _ from "underscore";
@@ -28,7 +27,17 @@ import AuditUserDetail from "./pages/AuditUserDetail";
 import AuditDownloads from "./pages/AuditDownloads";
 import AuditSubscriptions from "./pages/AuditSubscriptions";
 
-function getPageRoutes(path, page) {
+type Page = {
+  tabs?: Tab[],
+};
+
+type Tab = {
+  path: string,
+  title: string,
+  component?: any,
+};
+
+function getPageRoutes(path, page: Page) {
   const subRoutes = [];
   // add a redirect for the default tab
   const defaultTab = getDefaultTab(page);
@@ -64,7 +73,7 @@ function getPageRoutes(path, page) {
   );
 }
 
-function getDefaultTab(page) {
+function getDefaultTab(page: Page): ?Tab {
   // use the tab with "default = true" or the first
   return (
     _.findWhere(page.tabs, { default: true }) ||
@@ -73,13 +82,8 @@ function getDefaultTab(page) {
   );
 }
 
-const getRoutes = store => (
-  <Route
-    key="audit"
-    path="audit"
-    title={t`Audit`}
-    component={createAdminRouteGuard("audit", AuditApp)}
-  >
+const getRoutes = (store: any) => (
+  <Route key="audit" path="audit" title={t`Audit`} component={AuditApp}>
     {/* <IndexRedirect to="overview" /> */}
     <IndexRedirect to="members" />
 

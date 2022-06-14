@@ -13,8 +13,8 @@ const DEBOUNCE_PERIOD = 300;
  * Useful for rendering components that maybe take a long time to render but you still wnat to allow their container to be resized fluidly
  * We also fade the component out and block mouse events while it's transitioning
  */
-
-class DebouncedFrame extends React.Component {
+@ExplicitSize()
+export default class DebouncedFrame extends React.Component {
   // NOTE: don't keep `_transition` in component state because we don't want to trigger a rerender when we update it
   // Instead manually modify the style in _updateTransitionStyle
   // There's probably a better way to block renders of children though
@@ -32,18 +32,12 @@ class DebouncedFrame extends React.Component {
     };
   }
 
-  updateSize = () => {
+  setSize = (width, height) => {
     this._transition = false;
-
-    const { width, height } = this.props;
-    if (width !== this.state.width || height !== this.state.height) {
-      this.setState({ width, height }, this._updateTransitionStyle);
-    } else {
-      this._updateTransitionStyle();
-    }
+    this.setState({ width, height }, this._updateTransitionStyle);
   };
 
-  updateSizeDebounced = _.debounce(this.updateSize, DEBOUNCE_PERIOD);
+  setSizeDebounced = _.debounce(this.setSize, DEBOUNCE_PERIOD);
 
   UNSAFE_componentWillReceiveProps(nextProps) {
     if (!nextProps.enabled) {
@@ -51,15 +45,15 @@ class DebouncedFrame extends React.Component {
       return;
     }
     if (
-      this.state.width !== nextProps.width ||
-      this.state.height !== nextProps.height
+      this.props.width !== nextProps.width ||
+      this.props.height !== nextProps.height
     ) {
       if (this.state.width == null || this.state.height == null) {
-        this.updateSizeDebounced();
+        this.setSize(nextProps.width, nextProps.height);
       } else {
+        this.setSizeDebounced(nextProps.width, nextProps.height);
         this._transition = true;
         this._updateTransitionStyle();
-        this.updateSizeDebounced();
       }
     }
   }
@@ -104,5 +98,3 @@ class DebouncedFrame extends React.Component {
     );
   }
 }
-
-export default ExplicitSize()(DebouncedFrame);

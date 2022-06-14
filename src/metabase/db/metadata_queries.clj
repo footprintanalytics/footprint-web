@@ -8,8 +8,8 @@
             [metabase.driver.util :as driver.u]
             [metabase.models.table :as table :refer [Table]]
             [metabase.query-processor :as qp]
-            [metabase.query-processor.interface :as qp.i]
-            [metabase.sync.interface :as i]
+            [metabase.query-processor.interface :as qpi]
+            [metabase.sync.interface :as si]
             [metabase.util :as u]
             [metabase.util.schema :as su]
             [schema.core :as s]
@@ -17,12 +17,11 @@
 
 (defn- qp-query [db-id mbql-query]
   {:pre [(integer? db-id)]}
-  (-> (binding [qp.i/*disable-qp-logging* true]
+  (-> (binding [qpi/*disable-qp-logging* true]
         (qp/process-query
-         {:type       :query
-          :database   db-id
-          :query      mbql-query
-          :middleware {:disable-remaps? true}}))
+         {:type     :query
+          :database db-id
+          :query    mbql-query}))
       :data
       :rows))
 
@@ -61,10 +60,10 @@
 
   This number should be a balance of:
 
-  * Not being too low, which would definitely result in GitHub issues along the lines of 'My 500-distinct-value Field
+  * Not being too low, which would definitly result in GitHub issues along the lines of 'My 500-distinct-value Field
     that I marked as List is not showing all values in the List Widget'
   * Not being too high, which would result in Metabase running out of memory dealing with too many values"
-  (int 1000))
+  (int 5000))
 
 (s/defn field-distinct-values
   "Return the distinct values of `field`.
@@ -72,9 +71,9 @@
   ([field]
    (field-distinct-values field absolute-max-distinct-values-limit))
 
-  ([field max-results :- su/IntGreaterThanZero]
+  ([field, max-results :- su/IntGreaterThanZero]
    (mapv first (field-query field {:breakout [[:field (u/the-id field) nil]]
-                                   :limit    (min max-results absolute-max-distinct-values-limit)}))))
+                                   :limit    max-results}))))
 
 (defn field-distinct-count
   "Return the distinct count of `field`."
@@ -137,9 +136,9 @@
   `:rff`: [optional] a reducing function function (a function that given initial results metadata returns a reducing
   function) to reduce over the result set in the the query-processor rather than realizing the whole collection"
   {:style/indent 1}
-  ([table :- i/TableInstance, fields :- [i/FieldInstance], rff]
+  ([table :- si/TableInstance, fields :- [si/FieldInstance], rff]
    (table-rows-sample table fields rff nil))
-  ([table :- i/TableInstance, fields :- [i/FieldInstance], rff, opts :- TableRowsSampleOptions]
+  ([table :- si/TableInstance, fields :- [si/FieldInstance], rff, opts :- TableRowsSampleOptions]
    (let [query   (table-rows-sample-query table fields opts)
          qp      (resolve 'metabase.query-processor/process-query)]
      (qp query {:rff rff}))))

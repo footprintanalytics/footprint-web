@@ -12,29 +12,23 @@ const propTypes = {
   initialState: PropTypes.oneOf(["expanded", "collapsed"]),
   iconVariant: PropTypes.oneOf(["right-down", "up-down"]),
   iconPosition: PropTypes.oneOf(["left", "right"]),
-  iconSize: PropTypes.number,
-  onToggle: PropTypes.func,
 };
 
 function CollapseSection({
   initialState = "collapsed",
   iconVariant = "right-down",
   iconPosition = "left",
-  iconSize = 12,
   header,
   headerClass,
   className,
   bodyClass,
   children,
-  onToggle,
 }) {
   const [isExpanded, setIsExpanded] = useState(initialState === "expanded");
 
   const toggle = useCallback(() => {
-    const nextState = !isExpanded;
-    setIsExpanded(!isExpanded);
-    onToggle?.(nextState);
-  }, [isExpanded, onToggle]);
+    setIsExpanded(isExpanded => !isExpanded);
+  }, []);
 
   const onKeyDown = useCallback(
     e => {
@@ -50,7 +44,6 @@ function CollapseSection({
       isExpanded={isExpanded}
       variant={iconVariant}
       position={iconPosition}
-      size={iconSize}
     />
   );
 

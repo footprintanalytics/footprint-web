@@ -5,11 +5,12 @@ import { t } from "ttag";
 
 import Icon from "metabase/components/Icon";
 import Modal from "metabase/components/Modal";
-import Link from "metabase/core/components/Link";
+import Link from "metabase/components/Link";
 import Snippets from "metabase/entities/snippets";
 import SnippetCollections from "metabase/entities/snippet-collections";
 
-class SnippetModal extends React.Component {
+@SnippetCollections.loadList()
+export default class SnippetModal extends React.Component {
   render() {
     const {
       insertSnippet,
@@ -54,7 +55,7 @@ class SnippetModal extends React.Component {
                 }}
                 className="flex align-center text-medium text-bold"
               >
-                <Icon name="archive" className="mr1" />
+                <Icon name="archive" className="mr1" size={16} />
                 {t`Archive`}
               </Link>
             ) : null
@@ -64,5 +65,3 @@ class SnippetModal extends React.Component {
     );
   }
 }
-
-export default SnippetCollections.loadList()(SnippetModal);

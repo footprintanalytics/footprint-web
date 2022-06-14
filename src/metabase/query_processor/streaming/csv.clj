@@ -2,14 +2,14 @@
   (:require [clojure.data.csv :as csv]
             [java-time :as t]
             [metabase.query-processor.streaming.common :as common]
-            [metabase.query-processor.streaming.interface :as qp.si]
+            [metabase.query-processor.streaming.interface :as i]
             [metabase.util.date-2 :as u.date])
   (:import [java.io BufferedWriter OutputStream OutputStreamWriter]
            java.nio.charset.StandardCharsets))
 
-(defmethod qp.si/stream-options :csv
+(defmethod i/stream-options :csv
   ([_]
-   (qp.si/stream-options :csv "query_result"))
+   (i/stream-options :csv "query_result"))
   ([_ filename-prefix]
    {:content-type              "text/csv"
     :status                    200
@@ -18,15 +18,15 @@
                                                               (u.date/format (t/zoned-date-time)))}
     :write-keepalive-newlines? false}))
 
-(defmethod qp.si/streaming-results-writer :csv
+(defmethod i/streaming-results-writer :csv
   [_ ^OutputStream os]
   (let [writer (BufferedWriter. (OutputStreamWriter. os StandardCharsets/UTF_8))]
-    (reify qp.si/StreamingResultsWriter
+    (reify i/StreamingResultsWriter
       (begin! [_ {{:keys [ordered-cols]} :data} _]
         (csv/write-csv writer [(map (some-fn :display_name :name) ordered-cols)])
         (.flush writer))
 
-      (write-row! [_ row _row-num _ {:keys [output-order]}]
+      (write-row! [_ row row-num _ {:keys [output-order]}]
         (let [ordered-row (if output-order
                             (let [row-v (into [] row)]
                               (for [i output-order] (row-v i)))

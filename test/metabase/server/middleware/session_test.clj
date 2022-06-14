@@ -7,13 +7,11 @@
             [metabase.core.initialization-status :as init-status]
             [metabase.db :as mdb]
             [metabase.driver.sql.query-processor :as sql.qp]
-            [metabase.models :refer [PermissionsGroupMembership Session User]]
-            [metabase.public-settings.premium-features :as premium-features]
-            [metabase.public-settings.premium-features-test :as premium-features-test]
+            [metabase.models :refer [Session User]]
             [metabase.server.middleware.session :as mw.session]
             [metabase.test :as mt]
             [metabase.util.i18n :as i18n]
-            [ring.mock.request :as ring.mock]
+            [ring.mock.request :as mock]
             [toucan.db :as db])
   (:import clojure.lang.ExceptionInfo
            java.util.UUID))
@@ -136,20 +134,7 @@
                        :http-only true
                        :path      "/"}}
             :headers {anti-csrf-token-header test-anti-csrf-token}}
-           (mw.session/set-session-cookie {} {} test-full-app-embed-session))))
-  (testing "test that we can set a full-app-embedding session cookie with SameSite=None over HTTPS"
-    (is (= {:body    {}
-            :status  200
-            :cookies {embedded-session-cookie
-                      {:value     "092797dd-a82a-4748-b393-697d7bb9ab65"
-                       :http-only true
-                       :path      "/"
-                       :same-site :none
-                       :secure    true}}
-            :headers {anti-csrf-token-header test-anti-csrf-token}}
-           (mw.session/set-session-cookie {:headers {"x-forwarded-protocol" "https"}}
-                                          {}
-                                          test-full-app-embed-session)))))
+           (mw.session/set-session-cookie {} {} test-full-app-embed-session)))))
 
 
 ;;; ---------------------------------------- TEST wrap-session-id middleware -----------------------------------------
@@ -168,7 +153,7 @@
 (deftest no-session-id-in-request-test
   (testing "no session-id in the request"
     (is (= nil
-           (-> (wrapped-handler (ring.mock/request :get "/anyurl"))
+           (-> (wrapped-handler (mock/request :get "/anyurl") )
                :metabase-session-id)))))
 
 (deftest header-test
@@ -176,14 +161,14 @@
     (is (= "foobar"
            (:metabase-session-id
             (wrapped-handler
-             (ring.mock/header (ring.mock/request :get "/anyurl") session-header "foobar")))))))
+             (mock/header (mock/request :get "/anyurl") session-header "foobar")))))))
 
 (deftest cookie-test
   (testing "extract session-id from cookie"
     (is (= "cookie-session"
            (:metabase-session-id
             (wrapped-handler
-             (assoc (ring.mock/request :get "/anyurl")
+             (assoc (mock/request :get "/anyurl")
                     :cookies {session-cookie {:value "cookie-session"}})))))))
 
 (deftest both-header-and-cookie-test
@@ -191,12 +176,12 @@
     (is (= "cookie-session"
            (:metabase-session-id
             (wrapped-handler
-             (assoc (ring.mock/header (ring.mock/request :get "/anyurl") session-header "foobar")
+             (assoc (mock/header (mock/request :get "/anyurl") session-header "foobar")
                     :cookies {session-cookie {:value "cookie-session"}})))))))
 
 (deftest anti-csrf-headers-test
   (testing "`wrap-session-id` should handle anti-csrf headers they way we'd expect"
-    (let [request (-> (ring.mock/request :get "/anyurl")
+    (let [request (-> (mock/request :get "/anyurl")
                       (assoc :cookies {embedded-session-cookie {:value (str test-uuid)}})
                       (assoc-in [:headers anti-csrf-token-header] test-anti-csrf-token))]
       (is (= {:anti-csrf-token     "84482ddf1bb178186ed9e1c0b1e05a2d"
@@ -211,7 +196,7 @@
     ;; the way we'd expect :/
     (try
       (mt/with-temp Session [session {:id (str test-uuid), :user_id (mt/user->id :lucky)}]
-        (is (= {:metabase-user-id (mt/user->id :lucky), :is-superuser? false, :is-group-manager? false, :user-locale nil}
+        (is (= {:metabase-user-id (mt/user->id :lucky), :is-superuser? false, :user-locale nil}
                (#'mw.session/current-user-info-for-session (str test-uuid) nil))))
       (finally
         (db/delete! Session :id (str test-uuid)))))
@@ -219,34 +204,10 @@
   (testing "superusers should come back as `:is-superuser?`"
     (try
       (mt/with-temp Session [session {:id (str test-uuid), :user_id (mt/user->id :crowberto)}]
-        (is (= {:metabase-user-id (mt/user->id :crowberto), :is-superuser? true, :is-group-manager? false, :user-locale nil}
+        (is (= {:metabase-user-id (mt/user->id :crowberto), :is-superuser? true, :user-locale nil}
                (#'mw.session/current-user-info-for-session (str test-uuid) nil))))
       (finally
         (db/delete! Session :id (str test-uuid)))))
-
-  (testing "If user is a group manager of at least one group, `:is-group-manager?` "
-    (try
-     (mt/with-user-in-groups
-       [group-1 {:name "New Group 1"}
-        group-2 {:name "New Group 2"}
-        user    [group-1 group-2]]
-       (db/update-where! PermissionsGroupMembership {:user_id (:id user), :group_id (:id group-2)}
-                         :is_group_manager true)
-       (mt/with-temp Session [_session {:id      (str test-uuid)
-                                        :user_id (:id user)}]
-         (testing "is `false` if advanced-permisison is disabled"
-           (premium-features-test/with-premium-features #{}
-           (is (= false
-                  (:is-group-manager? (#'mw.session/current-user-info-for-session (str test-uuid) nil))))))
-
-         (testing "is `true` if advanced-permisison is enabled"
-           ;; a trick to run this test in OSS because even if advanced-permisison is enabled but EE ns is not evailable
-           ;; `enable-advanced-permissions?` will still return false
-           (with-redefs [premium-features/enable-advanced-permissions? (fn [& _args] true)]
-             (is (= true
-                    (:is-group-manager? (#'mw.session/current-user-info-for-session (str test-uuid) nil))))))))
-         (finally
-          (db/delete! Session :id (str test-uuid)))))
 
   (testing "full-app-embed sessions shouldn't come back if we don't explicitly specifiy the anti-csrf token"
     (try
@@ -263,7 +224,7 @@
         (mt/with-temp Session [session {:id              (str test-uuid)
                                         :user_id         (mt/user->id :lucky)
                                         :anti_csrf_token test-anti-csrf-token}]
-          (is (= {:metabase-user-id (mt/user->id :lucky), :is-superuser? false, :is-group-manager? false, :user-locale nil}
+          (is (= {:metabase-user-id (mt/user->id :lucky), :is-superuser? false, :user-locale nil}
                  (#'mw.session/current-user-info-for-session (str test-uuid) test-anti-csrf-token))))
         (finally
           (db/delete! Session :id (str test-uuid))))
@@ -320,7 +281,7 @@
 (defn- request-with-user-id
   "Creates a mock Ring request with the given user-id applied"
   [user-id]
-  (-> (ring.mock/request :get "/anyurl")
+  (-> (mock/request :get "/anyurl")
       (assoc :metabase-user-id user-id)))
 
 (deftest add-user-id-key-test

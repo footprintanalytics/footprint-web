@@ -26,11 +26,19 @@
   overflow-x: scroll;
 }
 
-.bounded-overflow-x-auto {
+.bounded-overflow-x-scroll {
   width: 100%;
-  overflow-x: auto;
+  overflow-x: scroll;
 }
 
 .overflow-y-scroll {
   overflow-y: scroll;
+}
+
+.side_menu_trigger {
+  position: fixed;
+  top: 50%;
+  background: white;
+  padding-top: 6px;
+  border-radius: 0px 10px 10px 0px;
 }

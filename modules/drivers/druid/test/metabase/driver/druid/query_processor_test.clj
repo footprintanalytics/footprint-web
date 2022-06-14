@@ -90,7 +90,7 @@
   (driver/with-driver :druid
     (tqpt/with-flattened-dbdef
       (with-redefs [druid.qp/random-query-id (constantly "<Query ID>")]
-        (qp/compile query)))))
+        (qp/query->native query)))))
 
 (defmacro ^:private query->native [query]
   `(do-query->native
@@ -106,7 +106,7 @@
                             :granularity      :all
                             :dataSource       "checkins"
                             :dimension        "venue_price"
-                            :context          {:queryId "<Query ID>"}
+                            :context          {:timeout 60000, :queryId "<Query ID>"}
                             :postAggregations [{:type   :arithmetic
                                                 :name   "expression"
                                                 :fn     :*
@@ -122,7 +122,6 @@
               :query-type  ::druid.qp/topN
               :mbql?       true}
              (query->native
-              #_:clj-kondo/ignore
               {:aggregation [[:* [:count $id] 10]]
                :breakout    [$venue_price]}))))))
 
@@ -135,7 +134,7 @@
                             :granularity  :all
                             :dataSource   "checkins"
                             :dimension    "venue_category_name"
-                            :context      {:queryId "<Query ID>"}
+                            :context      {:timeout 60000, :queryId "<Query ID>"}
                             :intervals    ["1900-01-01/2100-01-01"]
                             :metric       "__count_0"
                             :aggregations [{:type       :cardinality
@@ -146,7 +145,6 @@
               :query-type  ::druid.qp/topN
               :mbql?       true}
              (query->native
-              #_:clj-kondo/ignore
               {:aggregation [[:aggregation-options [:distinct $checkins.venue_name] {:name "__count_0"}]]
                :breakout    [$venue_category_name]
                :order-by    [[:desc [:aggregation 0]] [:asc $checkins.venue_category_name]]}))))))
@@ -159,7 +157,7 @@
                             :granularity  :all
                             :dataSource   "checkins"
                             :dimensions   ["venue_category_name", "user_name"]
-                            :context      {:queryId "<Query ID>"}
+                            :context      {:timeout 60000, :queryId "<Query ID>"}
                             :intervals    ["1900-01-01/2100-01-01"]
                             :aggregations [{:type       :cardinality
                                             :name       "__count_0"
@@ -173,7 +171,6 @@
               :query-type  ::druid.qp/groupBy
               :mbql?       true}
              (query->native
-              #_:clj-kondo/ignore
               {:aggregation [[:aggregation-options [:distinct $checkins.venue_name] {:name "__count_0"}]]
                :breakout    [$venue_category_name $user_name]
                :order-by    [[:desc [:aggregation 0]] [:asc $checkins.venue_category_name]]}))))))
@@ -186,7 +183,7 @@
                             :granularity  :all
                             :dataSource   "checkins"
                             :dimensions   ["venue_category_name", "user_name"]
-                            :context      {:queryId "<Query ID>"}
+                            :context      {:timeout 60000, :queryId "<Query ID>"}
                             :intervals    ["1900-01-01/2100-01-01"]
                             :aggregations [{:type       :cardinality
                                             :name       "__count_0"
@@ -214,7 +211,7 @@
                 :query       {:queryType        :timeseries
                               :granularity      :all
                               :dataSource       "checkins"
-                              :context          {:queryId "<Query ID>"}
+                              :context          {:timeout 60000, :queryId "<Query ID>"}
                               :intervals        ["1900-01-01/2100-01-01"]
                               :aggregations     [{:type       :cardinality
                                                   :name       "__distinct_0"
@@ -283,45 +280,44 @@
 
 (deftest native-query-test
   (mt/test-driver :druid
-    (is (partial=
-         {:row_count 2
-          :status    :completed
-          :data      {:rows             [[931 "Simcha Yan" 1 "Kinaree Thai Bistro"       1]
-                                         [285 "Kfir Caj"   2 "Ruen Pair Thai Restaurant" 1]]
-                      :cols             [{:name         "id"
-                                          :source       :native
-                                          :display_name "id"
-                                          :field_ref    [:field "id" {:base-type :type/Integer}]
-                                          :base_type    :type/Integer
-                                          :effective_type :type/Integer}
-                                         {:name         "user_name"
-                                          :source       :native
-                                          :display_name "user_name"
-                                          :base_type    :type/Text
-                                          :effective_type :type/Text
-                                          :field_ref    [:field "user_name" {:base-type :type/Text}]}
-                                         {:name         "venue_price"
-                                          :source       :native
-                                          :display_name "venue_price"
-                                          :base_type    :type/Integer
-                                          :effective_type :type/Integer
-                                          :field_ref    [:field "venue_price" {:base-type :type/Integer}]}
-                                         {:name         "venue_name"
-                                          :source       :native
-                                          :display_name "venue_name"
-                                          :base_type    :type/Text
-                                          :effective_type :type/Text
-                                          :field_ref    [:field "venue_name" {:base-type :type/Text}]}
-                                         {:name         "count"
-                                          :source       :native
-                                          :display_name "count"
-                                          :base_type    :type/Integer
-                                          :effective_type :type/Integer
-                                          :field_ref    [:field "count" {:base-type :type/Integer}]}]
-                      :native_form      {:query native-query-1}
-                      :results_timezone "UTC"}}
-         (-> (process-native-query native-query-1)
-             (m/dissoc-in [:data :insights]))))))
+    (is (= {:row_count 2
+            :status    :completed
+            :data      {:rows             [[931 "Simcha Yan" 1 "Kinaree Thai Bistro"       1]
+                                           [285 "Kfir Caj"   2 "Ruen Pair Thai Restaurant" 1]]
+                        :cols             [{:name         "id"
+                                            :source       :native
+                                            :display_name "id"
+                                            :field_ref    [:field "id" {:base-type :type/Integer}]
+                                            :base_type    :type/Integer
+                                            :effective_type :type/Integer}
+                                           {:name         "user_name"
+                                            :source       :native
+                                            :display_name "user_name"
+                                            :base_type    :type/Text
+                                            :effective_type :type/Text
+                                            :field_ref    [:field "user_name" {:base-type :type/Text}]}
+                                           {:name         "venue_price"
+                                            :source       :native
+                                            :display_name "venue_price"
+                                            :base_type    :type/Integer
+                                            :effective_type :type/Integer
+                                            :field_ref    [:field "venue_price" {:base-type :type/Integer}]}
+                                           {:name         "venue_name"
+                                            :source       :native
+                                            :display_name "venue_name"
+                                            :base_type    :type/Text
+                                            :effective_type :type/Text
+                                            :field_ref    [:field "venue_name" {:base-type :type/Text}]}
+                                           {:name         "count"
+                                            :source       :native
+                                            :display_name "count"
+                                            :base_type    :type/Integer
+                                            :effective_type :type/Integer
+                                            :field_ref    [:field "count" {:base-type :type/Integer}]}]
+                        :native_form      {:query native-query-1}
+                        :results_timezone "UTC"}}
+           (-> (process-native-query native-query-1)
+               (m/dissoc-in [:data :insights]))))))
 
 (def ^:private native-query-2
   (json/generate-string
@@ -592,7 +588,7 @@
   (mt/test-driver :druid
     (tqpt/with-flattened-dbdef
       (letfn [(compiled [query]
-                (-> (qp/compile query) :query (select-keys [:filter :queryType])))]
+                (-> (qp/query->native query) :query (select-keys [:filter :queryType])))]
         (doseq [[message field] {"Make sure we can filter by numeric columns (#10935)" :venue_price
                                  "We should be able to filter by Metrics (#11823)"     :count}
                 :let            [field-clause [:field (mt/id :checkins field) nil]

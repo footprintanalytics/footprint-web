@@ -1,5 +1,5 @@
 (ns metabase.events.last-login
-  (:require [clojure.core.async :as a]
+  (:require [clojure.core.async :as async]
             [clojure.tools.logging :as log]
             [metabase.events :as events]
             [metabase.models.user :refer [User]]
@@ -11,7 +11,7 @@
 
 (defonce ^:private ^{:doc "Channel for receiving event notifications we want to subscribe to for last login events."}
   last-login-channel
-  (a/chan))
+  (async/chan))
 
 
 ;;; ## ---------------------------------------- EVENT PROCESSING ----------------------------------------

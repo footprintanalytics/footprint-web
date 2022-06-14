@@ -21,7 +21,6 @@ describe("time", () => {
       ["2015-01-01T00:00:00.000+00:00", 0, NY15_UTC],
       ["2015-01-01T00:00:00.000+0000", 0, NY15_UTC],
       ["2015-01-01T00:00:00Z", 0, NY15_UTC],
-      [2015, 0, NY15_UTC],
 
       ["2015-01-01T00:00:00.000+09:00", 540, NY15_TOKYO],
       ["2015-01-01T00:00:00.000+0900", 540, NY15_TOKYO],
@@ -60,26 +59,19 @@ describe("time", () => {
   });
 
   describe("parseTime", () => {
-    const PARSE_TIME_TESTS = [
-      ["01:02:03.456+07:00", "1:02 AM"],
-      ["01:02", "1:02 AM"],
-      ["22:29:59.26816+01:00", "10:29 PM"],
-      ["22:29:59.412459+01:00", "10:29 PM"],
-      ["19:14:42.926221+01:00", "7:14 PM"],
-      ["19:14:42.13202+01:00", "7:14 PM"],
-      ["13:38:58.987352+01:00", "1:38 PM"],
-      ["13:38:58.001001+01:00", "1:38 PM"],
-      ["17:01:23+01:00", "5:01 PM"],
-    ];
+    it("parse timezones", () => {
+      const result = parseTime("01:02:03.456+07:00");
 
-    test.each(PARSE_TIME_TESTS)(
-      `parseTime(%p) to be %p`,
-      (value, resultStr) => {
-        const result = parseTime(value);
-        expect(moment.isMoment(result)).toBe(true);
-        expect(result.format("h:mm A")).toBe(resultStr);
-      },
-    );
+      expect(moment.isMoment(result)).toBe(true);
+      expect(result.format("h:mm A")).toBe("1:02 AM");
+    });
+
+    it("parse time without seconds", () => {
+      const result = parseTime("01:02");
+
+      expect(moment.isMoment(result)).toBe(true);
+      expect(result.format("h:mm A")).toBe("1:02 AM");
+    });
   });
 
   describe("getRelativeTimeAbbreviated", () => {

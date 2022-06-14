@@ -7,8 +7,8 @@ import cx from "classnames";
 
 import { color, darken } from "metabase/lib/colors";
 
-import AccordionList from "metabase/core/components/AccordionList";
-import Button from "metabase/core/components/Button";
+import AccordionList from "metabase/components/AccordionList";
+import Button from "metabase/components/Button";
 import Icon from "metabase/components/Icon";
 import ModalWithTrigger from "metabase/components/ModalWithTrigger";
 import ModalContent from "metabase/components/ModalContent";
@@ -20,7 +20,6 @@ import DashboardPicker from "metabase/containers/DashboardPicker";
 import Questions from "metabase/entities/questions";
 import QuestionPicker from "metabase/containers/QuestionPicker";
 import Sidebar from "metabase/dashboard/components/Sidebar";
-import CheckBox from "metabase/core/components/CheckBox";
 import ClickMappings, {
   withUserAttributes,
   clickTargetObjectType,
@@ -566,7 +565,7 @@ function CrossfilterOptions({
 function LinkOptions({ clickBehavior, updateSettings, dashcard, parameters }) {
   const linkTypeOptions = [
     { type: "dashboard", icon: "dashboard", name: t`Dashboard` },
-    { type: "question", icon: "bar", name: t`Saved question` },
+    { type: "question", icon: "bar", name: t`Saved chart` },
     { type: "url", icon: "link", name: t`URL` },
   ];
 
@@ -790,24 +789,12 @@ function QuestionDashboardPicker({ dashcard, clickBehavior, updateSettings }) {
         <Entity.Loader id={clickBehavior.targetId}>
           {({ object }) => (
             <div className="pt1">
-              {object.public_uuid && (
-                <CheckBox
-                  label={t`Use public link`}
-                  checked={clickBehavior.use_public_link}
-                  onChange={e =>
-                    updateSettings({
-                      ...clickBehavior,
-                      use_public_link: e.target.checked,
-                    })
-                  }
-                />
-              )}
               <Heading>
                 {
                   {
                     dashboard: t`Pass values to this dashboard's filters (optional)`,
-                    native: t`Pass values to this question's variables (optional)`,
-                    gui: t`Pass values to filter this question (optional)`,
+                    native: t`Pass values to this query's variables (optional)`,
+                    gui: t`Pass values to filter this query (optional)`,
                   }[clickTargetObjectType(object)]
                 }
               </Heading>

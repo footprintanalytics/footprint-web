@@ -13,8 +13,27 @@ import Popover from "metabase/components/Popover";
 
 import * as MetabaseAnalytics from "metabase/lib/analytics";
 
+import StructuredQuery from "metabase-lib/lib/queries/StructuredQuery";
+import type { DatasetQuery } from "metabase-types/types/Card";
+import type { GuiQueryEditorFeatures } from "./GuiQueryEditor";
+
+type Props = {
+  query: StructuredQuery,
+  setDatasetQuery: (
+    datasetQuery: DatasetQuery,
+    options: { run: boolean },
+  ) => void,
+  features: GuiQueryEditorFeatures,
+  onClose?: () => void,
+};
+
+type State = {
+  editExpression: any,
+};
+
 export class ExtendedOptionsPopover extends Component {
-  state = {
+  props: Props;
+  state: State = {
     editExpression: null,
   };
 

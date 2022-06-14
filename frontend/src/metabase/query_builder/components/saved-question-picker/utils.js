@@ -1,4 +1,17 @@
-import _ from "underscore";
+import { getCollectionIcon } from "metabase/entities/collections";
+
+export function buildCollectionTree(collections) {
+  if (collections == null) {
+    return [];
+  }
+  return collections.map(collection => ({
+    id: collection.id,
+    name: collection.name,
+    schemaName: collection.originalName || collection.name,
+    icon: getCollectionIcon(collection),
+    children: buildCollectionTree(collection.children),
+  }));
+}
 
 export const findCollectionByName = (collections, name) => {
   if (!collections || collections.length === 0) {

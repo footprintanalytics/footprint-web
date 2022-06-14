@@ -6,30 +6,7 @@ import { getEmptyImage } from "react-dnd-html5-backend";
 
 import { dragTypeForItem } from ".";
 
-class ItemDragSource extends React.Component {
-  componentDidMount() {
-    // Use empty image as a drag preview so browsers don't draw it
-    // and we can draw whatever we want on the custom drag layer instead.
-    if (this.props.connectDragPreview) {
-      this.props.connectDragPreview(getEmptyImage(), {
-        // IE fallback: specify that we'd rather screenshot the node
-        // when it already knows it's being dragged so we can hide it with CSS.
-        captureDraggingState: true,
-      });
-    }
-  }
-  render() {
-    const { connectDragSource, children, ...props } = this.props;
-    return connectDragSource(
-      // must be a native DOM element or use innerRef which appears to be broken
-      // https://github.com/react-dnd/react-dnd/issues/1021
-      // https://github.com/jxnblk/styled-system/pull/188
-      typeof children === "function" ? children(props) : children,
-    );
-  }
-}
-
-export default DragSource(
+@DragSource(
   props => dragTypeForItem(props.item),
   {
     canDrag({ isSelected, selected, collection, item }, monitor) {
@@ -38,9 +15,7 @@ export default DragSource(
         return false;
       }
 
-      const numSelected = selected?.length ?? 0;
-
-      return isSelected || numSelected === 0;
+      return isSelected || selected.length === 0;
     },
     beginDrag(props, monitor, component) {
       return { item: props.item };
@@ -66,7 +41,7 @@ export default DragSource(
 
           onDrop && onDrop();
         } catch (e) {
-          console.error("There was a problem moving these items: " + e);
+          alert("There was a problem moving these items: " + e);
         }
       }
     },
@@ -76,4 +51,26 @@ export default DragSource(
     connectDragPreview: connect.dragPreview(),
     isDragging: monitor.isDragging(),
   }),
-)(ItemDragSource);
+)
+export default class ItemDragSource extends React.Component {
+  componentDidMount() {
+    // Use empty image as a drag preview so browsers don't draw it
+    // and we can draw whatever we want on the custom drag layer instead.
+    if (this.props.connectDragPreview) {
+      this.props.connectDragPreview(getEmptyImage(), {
+        // IE fallback: specify that we'd rather screenshot the node
+        // when it already knows it's being dragged so we can hide it with CSS.
+        captureDraggingState: true,
+      });
+    }
+  }
+  render() {
+    const { connectDragSource, children, ...props } = this.props;
+    return connectDragSource(
+      // must be a native DOM element or use innerRef which appears to be broken
+      // https://github.com/react-dnd/react-dnd/issues/1021
+      // https://github.com/jxnblk/styled-system/pull/188
+      typeof children === "function" ? children(props) : children,
+    );
+  }
+}

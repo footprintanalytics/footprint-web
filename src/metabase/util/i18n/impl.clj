@@ -183,23 +183,16 @@
      (when-let [db-is-set-up? (resolve 'metabase.db/db-is-set-up?)]
        (when (and (bound? db-is-set-up?)
                   (db-is-set-up?))
-         (when-let [get-value-of-type (resolve 'metabase.models.setting/get-value-of-type)]
-           (when (bound? get-value-of-type)
-             (let [f (fn [] (get-value-of-type :string :site-locale))]
+         (when-let [get-string (resolve 'metabase.models.setting/get-string)]
+           (when (bound? get-string)
+             (let [f (fn [] (get-string :site-locale))]
                (reset! site-locale-from-setting-fn f)
                (f)))))))))
 
 (defn site-locale-from-setting
-  "Fetch the value of the `site-locale` Setting.
-  When metabase is shutting down, we need to log some messages after the db connection is closed, so we keep around a
-  cached-site-locale for that purpose."
+  "Fetch the value of the `site-locale` Setting."
   []
-  (let [cached-site-locale (atom "en")]
-    (try
-      (let [site-locale (@site-locale-from-setting-fn)]
-        (reset! cached-site-locale site-locale)
-        site-locale)
-      (catch Exception _ @cached-site-locale))))
+  (@site-locale-from-setting-fn))
 
 (defmethod print-method Locale
   [locale ^java.io.Writer writer]

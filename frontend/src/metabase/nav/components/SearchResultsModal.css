@@ -1,0 +1,123 @@
+.search-results-modal {
+  position: absolute;
+  top: 50px;
+  width: 600px;
+  left: 50%;
+  margin-left: -300px;
+}
+
+.search-results-modal__card {
+  max-height: 600px;
+  border-radius: 0;
+  overflow-y: auto;
+}
+
+.search-results-modal__tabs {
+}
+
+.search-results-modal__tabs .ant-tabs-nav-list {
+  background-color: #f8f8fc;
+  width: 100%;
+  display: flex;
+  justify-content: center;
+}
+
+.search-results-modal__tabs .ant-tabs-nav {
+  margin-bottom: 10px;
+}
+
+.search-results-modal__tabs .ant-tabs-tab {
+  margin: 0;
+  font-size: 14px;
+  color: #84848a;
+  width: 60px;
+  display: flex;
+  justify-content: center;
+}
+
+.search-results-modal__tabs .ant-tabs-tab .ant-tabs-tab-btn {
+  width: 100%;
+  height: 100%;
+  text-align: center;
+}
+
+.search-results-modal__recommend {
+  font-size: 14px;
+  padding: 10px 12px;
+  color: #84848a;
+}
+
+.search-results-modal__list {
+  color: #303440;
+  font-size: 14px;
+}
+
+.search-results-modal__list-more {
+  color: #303440;
+  font-size: 12px;
+  line-height: 1;
+  padding: 15px 0;
+  display: inline-block;
+  text-align: center;
+  width: 100%;
+  border-top: var(--footprint-border);
+}
+
+.search-results-modal__list-item {
+  display: flex;
+  padding: 12px;
+}
+
+.search-results-modal__list-outer {
+  border-bottom: 1px solid #dcdee4;
+}
+
+.search-results-modal__list-outer:last-child {
+  border-bottom: 0;
+}
+
+.search-results-modal__list-item:hover {
+  background: #8f8f9422;
+}
+
+.search-results-modal__list-item:hover,
+.search-results-modal__list-more:hover {
+  background: #8f8f9422;
+}
+
+.search-results-modal__list-item svg {
+  color: #a6aabe;
+  margin-right: 12px;
+}
+
+.search-results-modal__list-title {
+  line-height: 1;
+  font-weight: normal;
+  margin-bottom: 3px;
+  display: -webkit-box;
+  -webkit-line-clamp: 1;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  font-size: 14px;
+  padding: 1px 0;
+}
+
+.search-results-modal__list-date {
+  color: #84848a;
+  font-size: 12px;
+  line-height: 1;
+}
+
+.dashboards-nodata {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  align-items: center;
+  padding: var(--footprint-spacing-m);
+}
+
+.dashboards-nodata span {
+  color: #84848a;
+  size: 18px;
+  margin: var(--footprint-spacing-m) 0 0 0;
+}

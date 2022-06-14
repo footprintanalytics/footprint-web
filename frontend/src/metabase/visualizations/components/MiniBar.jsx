@@ -15,7 +15,7 @@ const MiniBar = ({ value, extent: [min, max], options, cellHeight }) => {
   const isNegative = value < 0;
   const barPercent =
     (Math.abs(value) / Math.max(Math.abs(min), Math.abs(max))) * 100;
-  const barColor = isNegative ? color("error") : color("brand");
+  const barColor = isNegative ? color("error") : color("success");
 
   const barStyle = !hasNegative
     ? {
@@ -52,7 +52,6 @@ const MiniBar = ({ value, extent: [min, max], options, cellHeight }) => {
       </div>
       {/* OUTER CONTAINER BAR */}
       <div
-        data-testid="mini-bar"
         className="ml1"
         style={{
           position: "relative",

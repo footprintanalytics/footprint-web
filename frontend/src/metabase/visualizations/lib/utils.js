@@ -9,7 +9,6 @@ export const MAX_SERIES = 100;
 
 const SPLIT_AXIS_UNSPLIT_COST = -100;
 const SPLIT_AXIS_COST_FACTOR = 2;
-const SPLIT_AXIS_MAX_DEPTH = 8;
 
 // NOTE Atte Keinänen 8/3/17: Moved from settings.js because this way we
 // are able to avoid circular dependency errors in e2e tests
@@ -60,24 +59,14 @@ export function getAvailableCanvasWidth(element) {
   return parentWidth - parentPaddingLeft - parentPaddingRight;
 }
 
-function generateSplits(list, left = [], right = [], depth = 0) {
+function generateSplits(list, left = [], right = []) {
   // NOTE: currently generates all permutations, some of which are equivalent
-  if (list.length === 0 || depth > SPLIT_AXIS_MAX_DEPTH) {
+  if (list.length === 0) {
     return [[left, right]];
   } else {
     return [
-      ...generateSplits(
-        list.slice(1),
-        left.concat([list[0]]),
-        right,
-        depth + 1,
-      ),
-      ...generateSplits(
-        list.slice(1),
-        left,
-        right.concat([list[0]]),
-        depth + 1,
-      ),
+      ...generateSplits(list.slice(1), left.concat([list[0]]), right),
+      ...generateSplits(list.slice(1), left, right.concat([list[0]])),
     ];
   }
 }
@@ -151,6 +140,9 @@ const AGGREGATION_NAME_REGEX = new RegExp(
 );
 
 export function getFriendlyName(column) {
+  if (!column) {
+    return "";
+  }
   if (AGGREGATION_NAME_REGEX.test(column.name)) {
     const friendly = AGGREGATION_NAME_MAP[column.display_name.toLowerCase()];
     if (friendly) {
@@ -173,6 +165,24 @@ export function isSameSeries(seriesA, seriesB) {
       return acc && sameData && sameDisplay && sameVizSettings;
     }, true)
   );
+}
+
+export function isSameSize(width, nextWidth, height, nextHeight) {
+  return (
+    isSameSingleSize(width, nextWidth) && isSameSingleSize(height, nextHeight)
+  );
+}
+
+export function isSameParam(props, nextProps, params) {
+  const result = params.map(p => props[p] === nextProps[p]);
+  return !result.includes(false);
+}
+
+function isSameSingleSize(p1, p2) {
+  if (!p1 && p1 === p2) {
+    return true;
+  }
+  return p1 && p2 && Math.abs(p1.toFixed(2) - p2.toFixed(2)) < 0.5;
 }
 
 export function colorShades(color, count) {
@@ -355,39 +365,3 @@ export function computeMaxDecimalsForValues(values, options) {
     return undefined;
   }
 }
-
-export const preserveExistingColumnsOrder = (prevColumns, newColumns) => {
-  if (!prevColumns || prevColumns.length === 0) {
-    return newColumns;
-  }
-
-  const newSet = new Set(newColumns);
-  const prevSet = new Set(prevColumns);
-
-  const addedColumns = newColumns.filter(column => !prevSet.has(column));
-  const prevOrderedColumnsExceptRemoved = prevColumns.map(column =>
-    newSet.has(column) ? column : null,
-  );
-
-  const mergedColumnsResult = [];
-
-  while (
-    prevOrderedColumnsExceptRemoved.length > 0 ||
-    addedColumns.length > 0
-  ) {
-    const column = prevOrderedColumnsExceptRemoved.shift();
-
-    if (column != null) {
-      mergedColumnsResult.push(column);
-      continue;
-    }
-
-    const addedColumn = addedColumns.shift();
-
-    if (addedColumn != null) {
-      mergedColumnsResult.push(addedColumn);
-    }
-  }
-
-  return mergedColumnsResult;
-};

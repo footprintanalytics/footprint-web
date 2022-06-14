@@ -1,7 +1,3 @@
----
-title: Operations Guide
----
-
 # Operations Guide
 
 This guide contains detailed information about how to install and configure Metabase for production use. If you'd prefer we take care of the details of running Metabase for you, check out our [paid plans](https://www.metabase.com/pricing/).
@@ -14,7 +10,7 @@ This guide contains detailed information about how to install and configure Meta
 ## Metabase application database
 
 -  [Configuring the application database](configuring-application-database.html)
--  [Migrating from the default H2 database to a production database](migrating-from-h2.html)
+-  [Migrating from using the H2 database to MySQL or Postgres](migrating-from-h2.html)
 -  [Backing up Metabase Application Data](backing-up-metabase-application-data.html)
 -  [Running database migrations manually](running-migrations-manually.html)
 

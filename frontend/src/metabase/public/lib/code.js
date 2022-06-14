@@ -1,6 +1,17 @@
 import { optionsToHashParams } from "./embed";
 
-export const getPublicEmbedOptions = ({ iframeUrl }) => [
+export type CodeSampleOption = {
+  name: string,
+  source: () => string,
+  mode?: string,
+  embedOption?: string,
+};
+
+export const getPublicEmbedOptions = ({
+  iframeUrl,
+}: {
+  iframeUrl: string,
+}): CodeSampleOption[] => [
   {
     name: "HTML",
     source: () => html({ iframeUrl: `"${iframeUrl}"` }),
@@ -8,7 +19,7 @@ export const getPublicEmbedOptions = ({ iframeUrl }) => [
   },
 ];
 
-export const getSignedEmbedOptions = () => [
+export const getSignedEmbedOptions = (): CodeSampleOption[] => [
   {
     name: "Mustache",
     source: () => html({ iframeUrl: `"{{iframeUrl}}"`, mode: "ace/mode/html" }),
@@ -21,7 +32,7 @@ export const getSignedEmbedOptions = () => [
   },
 ];
 
-export const getSignTokenOptions = params => [
+export const getSignTokenOptions = (params: any): CodeSampleOption[] => [
   {
     name: "Node.js",
     source: () => node(params),
@@ -38,7 +49,7 @@ export const getSignTokenOptions = params => [
   { name: "Clojure", source: () => clojure(params), mode: "ace/mode/clojure" },
 ];
 
-export const getPublicEmbedHTML = iframeUrl =>
+export const getPublicEmbedHTML = (iframeUrl: string): string =>
   html({ iframeUrl: JSON.stringify(iframeUrl) });
 
 const html = ({ iframeUrl }) =>

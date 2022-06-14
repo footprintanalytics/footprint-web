@@ -1,0 +1,24 @@
+.login-modal-slider {
+  width: 220px;
+  background: #f0f0ff;
+
+  background-size: 128px 37px, 33px 28px, 33px 30px, 220px 222px;
+  background-repeat: no-repeat, no-repeat, no-repeat, no-repeat;
+  background-position: left 24% top 8%, top 20% left 10%, top 50% right 10%,
+    bottom center;
+}
+
+@media screen and (max-width: 800px) {
+  .login-modal-slider {
+    width: 0;
+  }
+}
+
+.login-modal-slider__slogan {
+  color: #43437e;
+  font-size: 16px;
+  font-weight: bold;
+  margin-top: 65%;
+  margin-left: 10%;
+  width: 80%;
+}

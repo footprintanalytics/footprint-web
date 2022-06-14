@@ -45,14 +45,15 @@
         (catch Throwable e
           (log/error "Problem sending follow-up email:" e))
         (finally
-          (follow-up-email-sent! true))))))
+          (follow-up-email-sent true))))))
 
 (defn- instance-creation-timestamp
   "The date this Metabase instance was created. We use the `:date_joined` of the first `User` to determine this."
   ^java.time.temporal.Temporal []
   (db/select-one-field :date_joined User, {:order-by [[:date_joined :asc]]}))
 
-(jobs/defjob ^{:doc "Sends out a general 2 week email follow up email"} FollowUpEmail [_]
+;; this sends out a general 2 week email follow up email
+(jobs/defjob FollowUpEmail [_]
   ;; if we've already sent the follow-up email then we are done
   (when-not (follow-up-email-sent)
     ;; figure out when we consider the instance created
@@ -89,17 +90,11 @@
 
 (s/defn ^:private should-send-abandoment-email?
   ([]
-   (let [[last-user last-activity last-view]
-         (map :last (db/query
-                     {:union-all
-                      [{:select [[:%max.date_joined :last]], :from [User]}
-                       {:select [[:%max.timestamp :last]], :from [Activity]}
-                       {:select [[:%max.timestamp :last]], :from [ViewLog]}]}))]
-     (should-send-abandoment-email?
-      (instance-creation-timestamp)
-      last-user
-      last-activity
-      last-view)))
+   (should-send-abandoment-email?
+    (instance-creation-timestamp)
+    (db/select-one [User [:%max.date_joined :last-user]])
+    (db/select-one [Activity [:%max.timestamp :last-activity]])
+    (db/select-one [ViewLog [:%max.timestamp :last-view]])))
 
   ([instance-creation :- (s/maybe Temporal)
     last-user         :- (s/maybe Temporal)
@@ -124,13 +119,10 @@
         (catch Throwable e
           (log/error e (trs "Problem sending abandonment email")))
         (finally
-          (abandonment-email-sent! true))))))
+          (abandonment-email-sent true))))))
 
-
-(jobs/defjob
-  ^{:doc "Sends out an email any time after 30 days if the instance has stopped being used for 14 days"}
-  AbandonmentEmail
-  [_]
+;; this sends out an email any time after 30 days if the instance has stopped being used for 14 days
+(jobs/defjob AbandonmentEmail [_]
   ;; if we've already sent the abandonment email then we are done
   (when-not (abandonment-email-sent)
     ;; we need access to email AND the instance must be opted into anonymous tracking

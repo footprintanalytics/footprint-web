@@ -22,7 +22,8 @@ const mapDispatchToProps = {
   ...actions,
 };
 
-class MetricListContainer extends Component {
+@connect(mapStateToProps, mapDispatchToProps)
+export default class MetricListContainer extends Component {
   static propTypes = {
     params: PropTypes.object.isRequired,
     location: PropTypes.object.isRequired,
@@ -60,8 +61,3 @@ class MetricListContainer extends Component {
     );
   }
 }
-
-export default connect(
-  mapStateToProps,
-  mapDispatchToProps,
-)(MetricListContainer);

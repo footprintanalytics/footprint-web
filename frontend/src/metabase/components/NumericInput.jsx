@@ -1,9 +1,13 @@
-/* eslint-disable react/prop-types */
 import React from "react";
 
 import InputBlurChange from "metabase/components/InputBlurChange";
 
-const NumericInput = ({ value, onChange, ...props }) => (
+type Props = {
+  value: ?(number | string),
+  onChange: (value: ?number) => void,
+};
+
+const NumericInput = ({ value, onChange, ...props }: Props) => (
   <InputBlurChange
     value={value == null ? "" : String(value)}
     onBlurChange={({ target: { value } }) => {

@@ -1,28 +1,25 @@
 /* eslint-disable react/prop-types */
 import React from "react";
 
-import styled from "@emotion/styled";
-import { css } from "@emotion/react";
+import { Flex } from "grid-styled";
+import styled, { css } from "styled-components";
 
 import Icon from "metabase/components/Icon";
 
 import { alpha } from "metabase/lib/colors";
 
-export const NotebookCell = styled.div`
-  display: flex;
-  align-items: center;
-  flex-wrap: wrap;
+export const NotebookCell = styled(Flex).attrs({
+  align: "center",
+  flexWrap: "wrap",
+})`
   border-radius: 8px;
   background-color: ${props => alpha(props.color, 0.1)};
   padding: ${props => props.padding || "14px"};
-  color: ${props => props.color};
 `;
 
 NotebookCell.displayName = "NotebookCell";
 
-const NotebookCellItemContainer = styled.div`
-  display: flex;
-  align-items: center;
+const NotebookCellItemContainer = styled(Flex).attrs({ align: "center" })`
   font-weight: bold;
   color: ${props => (props.inactive ? props.color : "white")};
   border-radius: 6px;
@@ -93,12 +90,7 @@ export function NotebookCellItem({
     mainContentRoundedCorners.push("right");
   }
   return (
-    <NotebookCellItemContainer
-      inactive={inactive}
-      color={color}
-      {...props}
-      data-testid={props["data-testid"] ?? "notebook-cell-item"}
-    >
+    <NotebookCellItemContainer inactive={inactive} color={color} {...props}>
       <NotebookCellItemContentContainer
         inactive={inactive}
         color={color}
@@ -125,10 +117,11 @@ export function NotebookCellItem({
 NotebookCellItem.displayName = "NotebookCellItem";
 NotebookCell.CONTAINER_PADDING = CONTAINER_PADDING;
 
-export const NotebookCellAdd = ({ initialAddText, ...props }) => (
-  <NotebookCellItem {...props} inactive={initialAddText}>
-    {initialAddText || <Icon name="add" className="text-white" />}
-  </NotebookCellItem>
-);
+export const NotebookCellAdd = styled(NotebookCellItem).attrs({
+  inactive: ({ initialAddText }) => initialAddText,
+  // eslint-disable-next-line react/display-name
+  children: ({ initialAddText }) =>
+    initialAddText || <Icon name="add" className="text-white" />,
+})``;
 
 NotebookCellAdd.displayName = "NotebookCellAdd";

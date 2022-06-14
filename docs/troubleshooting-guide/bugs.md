@@ -1,7 +1,3 @@
----
-title: Reporting a bug
----
-
 # Reporting a bug
 
 If you come across something that looks like a bug, please start by searching our [Github issues][metabase-issues] to see if it has already been reported. If it has, please let us know you're experiencing the same issue by reacting with a thumbs up emoji or adding a comment providing additional information.
@@ -10,7 +6,7 @@ If the bug has not yet been reported, go ahead and [open a bug report][metabase-
 
 1. Metabase server logs
 2. Javascript console logs
-3. Whether it can be reproduced on the sample database
+3. Whether it can be reproduced on the sample dataset
 4. Your Metabase version
 5. Where Metabase is running (Docker image, AWS Elastic Beanstalk, Heroku, Linux/Ubuntu, etc.)
 6. Which database you are using

@@ -1,4 +1,4 @@
-import { restore, startNewQuestion, visualize } from "__support__/e2e/cypress";
+import { restore } from "__support__/e2e/cypress";
 
 const PG_DB_NAME = "QA Postgres12";
 
@@ -7,10 +7,10 @@ describe("postgres > user > query", () => {
     restore("postgres-12");
     cy.signInAsAdmin();
 
-    startNewQuestion();
-    cy.findByTextEnsureVisible(PG_DB_NAME).click();
-    cy.findByTextEnsureVisible("Orders").click();
-    visualize();
+    cy.visit("/question/new");
+    cy.findByText("Simple question").click();
+    cy.findByText(PG_DB_NAME).click();
+    cy.findByText("Orders").click();
   });
 
   it("should show row details when clicked on its entity key (metabase#13263)", () => {
@@ -22,7 +22,7 @@ describe("postgres > user > query", () => {
 
     // Wait until "doing science" spinner disappears (DOM is ready for assertions)
     // TODO: if this proves to be reliable, extract it as a helper function for waiting on DOM to render
-    cy.findByTestId("loading-spinner").should("not.exist");
+    cy.get(".LoadingSpinner").should("not.exist");
 
     // Assertions
     cy.log("Fails in v0.36.6");

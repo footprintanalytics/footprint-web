@@ -15,16 +15,15 @@ const propTypes = {
   validateValue: PropTypes.func,
   users: PropTypes.array.isRequired,
   onChange: PropTypes.func,
-  canAddItems: PropTypes.bool,
 };
 
-const UserPicker = ({ value, validateValue, users, canAddItems, onChange }) => {
+const UserPicker = ({ value, validateValue, users, onChange }) => {
   const placeholder = !value.length
     ? t`Enter user names or email addresses`
     : null;
 
   const options = useMemo(() => {
-    return users.map(user => ({ value: user }));
+    return users.map(user => ({ label: user.common_name, value: user }));
   }, [users]);
 
   const idKey = useCallback(value => {
@@ -32,7 +31,7 @@ const UserPicker = ({ value, validateValue, users, canAddItems, onChange }) => {
   }, []);
 
   const valueRenderer = useCallback(value => {
-    return value.common_name;
+    return value.common_name || value.email;
   }, []);
 
   const optionRenderer = useCallback(option => {
@@ -72,14 +71,13 @@ const UserPicker = ({ value, validateValue, users, canAddItems, onChange }) => {
         multi
         updateOnInputBlur
         onChange={onChange}
-        canAddItems={canAddItems}
       />
     </UserPickerRoot>
   );
 };
 
-const includesIgnoreCase = (sourceText, searchText) => {
-  return sourceText.toLowerCase().includes(searchText.toLowerCase());
+const includesIgnoreCase = (s1, s2) => {
+  return s1.toLowerCase().includes(s2.toLowerCase());
 };
 
 UserPicker.propTypes = propTypes;

@@ -7,7 +7,6 @@ import { t } from "ttag";
 import S from "metabase/components/List.css";
 import R from "metabase/reference/Reference.css";
 import F from "metabase/reference/components/Field.css";
-import _ from "underscore";
 
 import Field from "metabase/reference/components/Field";
 import List from "metabase/components/List";
@@ -64,7 +63,12 @@ const validate = (values, props) => {
   return {};
 };
 
-class SegmentFieldList extends Component {
+@connect(mapStateToProps, mapDispatchToProps)
+@reduxForm({
+  form: "fields",
+  validate,
+})
+export default class SegmentFieldList extends Component {
   static propTypes = {
     segment: PropTypes.object.isRequired,
     style: PropTypes.object.isRequired,
@@ -186,11 +190,3 @@ class SegmentFieldList extends Component {
     );
   }
 }
-
-export default _.compose(
-  connect(mapStateToProps, mapDispatchToProps),
-  reduxForm({
-    form: "fields",
-    validate,
-  }),
-)(SegmentFieldList);

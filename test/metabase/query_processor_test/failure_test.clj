@@ -7,10 +7,6 @@
             [metabase.util.schema :as su]
             [schema.core :as s]))
 
-(use-fixtures :each (fn [thunk]
-                      (mt/with-log-level :fatal
-                        (thunk))))
-
 (defn- bad-query []
   {:database (mt/id)
    :type     :query
@@ -28,8 +24,7 @@
    :type                    (s/eq :query)
    :query                   {:source-table (s/eq (mt/id :venues))
                              :fields       (s/eq [[:field (mt/id :venues :id) {:temporal-unit :month}]])
-                             :limit        (s/eq qp.i/absolute-max-results)
-                             s/Keyword     s/Any}
+                             :limit        (s/eq qp.i/absolute-max-results)}
    (s/optional-key :driver) (s/eq :h2)
    s/Keyword                s/Any})
 

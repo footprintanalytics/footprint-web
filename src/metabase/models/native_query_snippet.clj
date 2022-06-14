@@ -1,14 +1,18 @@
 (ns metabase.models.native-query-snippet
   (:require [metabase.models.collection :as collection]
-            [metabase.models.interface :as mi]
+            [metabase.models.interface :as i]
             [metabase.models.native-query-snippet.permissions :as snippet.perms]
-            [metabase.models.serialization.hash :as serdes.hash]
+            [metabase.plugins.classloader :as classloader]
             [metabase.util :as u]
             [metabase.util.i18n :refer [deferred-tru tru]]
             [metabase.util.schema :as su]
             [schema.core :as s]
             [toucan.db :as db]
             [toucan.models :as models]))
+
+;; Load the EE implementation of snippet permissions, if they exist (if we're running with EE code available).
+(u/ignore-exceptions
+  (classloader/require 'metabase-enterprise.enhancements.models.native-query-snippet.permissions))
 
 ;;; ----------------------------------------------- Entity & Lifecycle -----------------------------------------------
 
@@ -34,21 +38,17 @@
   models/IModel
   (merge
    models/IModelDefaults
-   {:properties (constantly {:timestamped? true
-                             :entity_id    true})
+   {:properties (constantly {:timestamped? true})
     :pre-insert pre-insert
     :pre-update pre-update})
 
-  mi/IObjectPermissions
+  i/IObjectPermissions
   (merge
-   mi/IObjectPermissionsDefaults
+   i/IObjectPermissionsDefaults
    {:can-read?   snippet.perms/can-read?
     :can-write?  snippet.perms/can-write?
     :can-create? snippet.perms/can-create?
-    :can-update? snippet.perms/can-update?})
-
-  serdes.hash/IdentityHashable
-  {:identity-hash-fields (constantly [:name (serdes.hash/hydrated-hash :collection)])})
+    :can-update? snippet.perms/can-update?}))
 
 
 ;;; ---------------------------------------------------- Schemas -----------------------------------------------------

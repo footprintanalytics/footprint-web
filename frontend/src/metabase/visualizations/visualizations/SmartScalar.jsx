@@ -1,5 +1,6 @@
 /* eslint-disable react/prop-types */
 import React from "react";
+import { Box, Flex } from "grid-styled";
 import { t, jt } from "ttag";
 import _ from "underscore";
 
@@ -18,14 +19,9 @@ import ScalarValue, {
   ScalarWrapper,
   ScalarTitle,
 } from "metabase/visualizations/components/ScalarValue";
+import VizControls from "metabase/visualizations/hoc/VizControls";
 
-import {
-  PreviousValueContainer,
-  PreviousValueSeparator,
-  PreviousValueVariation,
-  Variation,
-} from "./SmartScalar.styled";
-
+@VizControls
 export default class Smart extends React.Component {
   static uiName = t`Trend`;
   static identifier = "smartscalar";
@@ -34,6 +30,8 @@ export default class Smart extends React.Component {
   static minSize = { width: 3, height: 3 };
 
   static noHeader = true;
+
+  _scalar: ?HTMLElement;
 
   static settings = {
     ...columnSettings({
@@ -56,6 +54,30 @@ export default class Smart extends React.Component {
     "scalar.switch_positive_negative": {
       title: t`Switch positive / negative colors?`,
       widget: "toggle",
+    },
+    "scalar.show_last_change": {
+      section: t`Display`,
+      title: t`Show Last Change`,
+      widget: "radio",
+      props: {
+        options: [
+          { name: "Show", value: true },
+          { name: "Hide", value: false },
+        ],
+      },
+      default: true,
+    },
+    "graph.value_formatting": {
+      section: t`Display`,
+      title: t`Value formatting`,
+      widget: "radio",
+      props: {
+        options: [
+          { name: t`Auto`, value: "auto" },
+          { name: t`Compact`, value: "compact" },
+        ],
+      },
+      default: "auto",
     },
     click_behavior: {},
   };
@@ -86,6 +108,7 @@ export default class Smart extends React.Component {
       onChangeCardAndRun,
       onVisualizationClick,
       isDashboard,
+      isFullscreen,
       settings,
       visualizationIsClickable,
       series: [
@@ -95,10 +118,6 @@ export default class Smart extends React.Component {
         },
       ],
       rawSeries,
-      gridSize,
-      width,
-      height,
-      totalNumGridCols,
     } = this.props;
 
     const metricIndex = cols.findIndex(col => !isDate(col));
@@ -122,6 +141,11 @@ export default class Smart extends React.Component {
 
     const isNegative = lastChange < 0;
     const isSwapped = settings["scalar.switch_positive_negative"];
+    const showLastChange = settings["scalar.show_last_change"];
+
+    const isCompact = settings["graph.value_formatting"] === "compact";
+
+    const extraOptions = { compact: isCompact };
 
     // if the number is negative but thats been identified as a good thing (e.g. decreased latency somehow?)
     const changeColor = (isSwapped
@@ -135,11 +159,24 @@ export default class Smart extends React.Component {
         {formatNumber(Math.abs(lastChange), { number_style: "percent" })}
       </span>
     );
-    const separator = (
-      <PreviousValueSeparator gridSize={gridSize}>•</PreviousValueSeparator>
-    );
+    /*const separator = (
+      <span
+        key="separator"
+        style={{
+          color: color("text-light"),
+          fontSize: "0.7rem",
+          marginLeft: 4,
+          marginRight: 4,
+        }}
+      >
+        •
+      </span>
+    );*/
     const granularityDisplay = (
-      <span style={{ marginLeft: 5 }}>{jt`last ${granularity}`}</span>
+      <span
+        key="granularity"
+        style={{ marginLeft: 5 }}
+      >{jt`last ${granularity}`}</span>
     );
 
     const clicked = {
@@ -160,30 +197,14 @@ export default class Smart extends React.Component {
 
     const isClickable = visualizationIsClickable(clicked);
 
+    const handleClick = () => {
+      if (isClickable && this._scalar) {
+        onVisualizationClick({ ...clicked, element: this._scalar });
+      }
+    };
+
     return (
-      <ScalarWrapper>
-        <div className="Card-title absolute top right p1 px2">
-          {actionButtons}
-        </div>
-        <span
-          onClick={
-            isClickable &&
-            (() =>
-              this._scalar &&
-              onVisualizationClick({ ...clicked, element: this._scalar }))
-          }
-          ref={scalar => (this._scalar = scalar)}
-        >
-          <ScalarValue
-            isDashboard={isDashboard}
-            gridSize={gridSize}
-            minGridSize={Smart.minSize}
-            width={width}
-            height={height}
-            totalNumGridCols={totalNumGridCols}
-            value={formatValue(insight["last-value"], settings.column(column))}
-          />
-        </span>
+      <div className="full-height full flex-wrap relative">
         {isDashboard && (
           <ScalarTitle
             title={settings["card.title"]}
@@ -194,34 +215,74 @@ export default class Smart extends React.Component {
             }
           />
         )}
-        <div className="SmartWrapper">
-          {lastChange == null || previousValue == null ? (
-            <div
-              className="text-centered text-bold mt1"
-              style={{ color: color("text-medium") }}
-            >{jt`Nothing to compare for the previous ${granularity}.`}</div>
-          ) : lastChange === 0 ? (
-            t`No change from last ${granularity}`
-          ) : (
-            <PreviousValueContainer gridSize={gridSize}>
-              <Variation color={changeColor}>
+        <ScalarWrapper>
+          <div className="Card-title absolute top right p1 px2">
+            {actionButtons}
+          </div>
+          <Flex flexDirection="column">
+            <Flex>
+              <span
+                onClick={handleClick}
+                ref={scalar => (this._scalar = scalar)}
+              >
+                <ScalarValue
+                  value={formatValue(insight["last-value"], {
+                    ...settings.column(column),
+                    ...extraOptions,
+                  })}
+                />
+              </span>
+              <Flex
+                align="center"
+                color={changeColor}
+                style={{ height: 50, fontSize: 14, marginLeft: 14 }}
+              >
                 <Icon
-                  size={13}
-                  pr={1}
+                  size={"12px"}
+                  style={{ marginRight: "2px" }}
                   name={isNegative ? "arrow_down" : "arrow_up"}
                 />
                 {changeDisplay}
-              </Variation>
-              <PreviousValueVariation id="SmartScalar-PreviousValue">
-                {jt`${separator} was ${formatValue(
-                  previousValue,
-                  settings.column(column),
-                )} ${granularityDisplay}`}
-              </PreviousValueVariation>
-            </PreviousValueContainer>
-          )}
-        </div>
-      </ScalarWrapper>
+              </Flex>
+            </Flex>
+            {showLastChange && (
+              <Box className="SmartWrapper">
+                {lastChange == null || previousValue == null ? (
+                  <Box
+                    className="text-centered text-bold"
+                    style={{ marginTop: "0px" }}
+                    color={color("text-medium")}
+                  >{jt`Nothing to compare for the previous ${granularity}.`}</Box>
+                ) : lastChange === 0 ? (
+                  t`No change from last ${granularity}`
+                ) : (
+                  <Flex
+                    align="center"
+                    style={{ marginTop: "0px" }}
+                    flexWrap="wrap"
+                  >
+                    <h4
+                      id="SmartScalar-PreviousValue"
+                      className="flex align-center hide lg-show"
+                      style={{
+                        color: "#84848A",
+                        fontWeight: "normal",
+                        fontSize: 14,
+                      }}
+                    >
+                      {!isFullscreen &&
+                        jt`was ${formatValue(previousValue, {
+                          ...settings.column(column),
+                          ...extraOptions,
+                        })} ${granularityDisplay}`}
+                    </h4>
+                  </Flex>
+                )}
+              </Box>
+            )}
+          </Flex>
+        </ScalarWrapper>
+      </div>
     );
   }
 }

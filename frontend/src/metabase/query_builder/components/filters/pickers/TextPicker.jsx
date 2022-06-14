@@ -1,4 +1,3 @@
-/* eslint-disable react/prop-types */
 import React, { Component } from "react";
 import PropTypes from "prop-types";
 import AutosizeTextarea from "react-textarea-autosize";
@@ -6,7 +5,23 @@ import { t } from "ttag";
 import cx from "classnames";
 import _ from "underscore";
 
+type Props = {
+  values: Array<string>,
+  onValuesChange: (values: any[]) => void,
+  validations: boolean[],
+  placeholder?: string,
+  multi?: boolean,
+  onCommit: () => void,
+};
+
+type State = {
+  fieldString: string,
+};
+
 export default class TextPicker extends Component {
+  props: Props;
+  state: State;
+
   static propTypes = {
     values: PropTypes.array.isRequired,
     onValuesChange: PropTypes.func.isRequired,
@@ -14,23 +29,21 @@ export default class TextPicker extends Component {
     validations: PropTypes.array,
     multi: PropTypes.bool,
     onCommit: PropTypes.func,
-    isSingleLine: PropTypes.bool,
   };
 
   static defaultProps = {
     validations: [],
     placeholder: t`Enter desired text`,
-    autoFocus: true,
   };
 
-  constructor(props) {
+  constructor(props: Props) {
     super(props);
     this.state = {
       fieldString: props.values.join(", "),
     };
   }
 
-  setValue(fieldString) {
+  setValue(fieldString: ?string) {
     if (fieldString != null) {
       // Only strip newlines from field string to not interfere with copy-pasting
       const newLineRegex = /\r?\n|\r/g;
@@ -50,14 +63,7 @@ export default class TextPicker extends Component {
   }
 
   render() {
-    const {
-      validations,
-      multi,
-      onCommit,
-      isSingleLine,
-      autoFocus,
-      prefix,
-    } = this.props;
+    const { validations, multi, onCommit } = this.props;
     const hasInvalidValues = _.some(validations, v => v === false);
 
     const commitOnEnter = e => {
@@ -68,50 +74,20 @@ export default class TextPicker extends Component {
 
     return (
       <div>
-        <div className="FilterInput px1 pt1 relative flex align-center">
-          {!!prefix && (
-            <span
-              data-testid="input-prefix"
-              className="text-medium px1"
-              style={{ marginRight: -30, width: 30, zIndex: 2 }}
-            >
-              {prefix}
-            </span>
-          )}
-          {!isSingleLine && (
-            <AutosizeTextarea
-              className={cx("input block full border-purple", {
-                "border-error": hasInvalidValues,
-              })}
-              type="text"
-              value={this.state.fieldString}
-              onChange={e => this.setValue(e.target.value)}
-              onKeyPress={commitOnEnter}
-              placeholder={this.props.placeholder}
-              autoFocus={autoFocus}
-              style={{ resize: "none" }}
-              maxRows={8}
-            />
-          )}
-
-          {isSingleLine && (
-            <input
-              className={cx("input block full border-purple", {
-                "border-error": hasInvalidValues,
-              })}
-              style={{
-                paddingLeft: this.props.prefix
-                  ? `${this.props.prefix.length}.2rem`
-                  : "",
-              }}
-              type="text"
-              value={this.state.fieldString}
-              onChange={e => this.setValue(e.target.value)}
-              onKeyPress={commitOnEnter}
-              placeholder={this.props.placeholder}
-              autoFocus={autoFocus}
-            />
-          )}
+        <div className="FilterInput px1 pt1 relative">
+          <AutosizeTextarea
+            className={cx("input block full border-purple", {
+              "border-error": hasInvalidValues,
+            })}
+            type="text"
+            value={this.state.fieldString}
+            onChange={e => this.setValue(e.target.value)}
+            onKeyPress={commitOnEnter}
+            placeholder={this.props.placeholder}
+            autoFocus={true}
+            style={{ resize: "none" }}
+            maxRows={8}
+          />
         </div>
 
         {multi ? (

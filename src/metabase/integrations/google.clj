@@ -10,7 +10,7 @@
             [metabase.models.user :as user :refer [User]]
             [metabase.plugins.classloader :as classloader]
             [metabase.util :as u]
-            [metabase.util.i18n :refer [deferred-tru trs tru]]
+            [metabase.util.i18n :as ui18n :refer [deferred-tru trs tru]]
             [schema.core :as s]
             [toucan.db :as db]))
 
@@ -24,21 +24,21 @@
   (deferred-tru "Client ID for Google Sign-In. If this is set, Google Sign-In is considered to be enabled.")
   :visibility :public
   :setter (fn [client-id]
-            (if (seq client-id)
+            (if client-id
               (let [trimmed-client-id (str/trim client-id)]
                 (when-not (str/ends-with? trimmed-client-id ".apps.googleusercontent.com")
                   (throw (ex-info (tru "Invalid Google Sign-In Client ID: must end with \".apps.googleusercontent.com\"")
                                   {:status-code 400})))
-                (setting/set-value-of-type! :string :google-auth-client-id trimmed-client-id))
-              (setting/set-value-of-type! :string :google-auth-client-id nil))))
+                (setting/set-string! :google-auth-client-id trimmed-client-id))
+              (setting/set-string! :google-auth-client-id nil))))
 
 (define-multi-setting-impl google.i/google-auth-auto-create-accounts-domain :oss
-  :getter (fn [] (setting/get-value-of-type :string :google-auth-auto-create-accounts-domain))
+  :getter (fn [] (setting/get-string :google-auth-auto-create-accounts-domain))
   :setter (fn [domain]
               (when (and domain (str/includes? domain ","))
                 ;; Multiple comma-separated domains is EE-only feature
                 (throw (ex-info (tru "Invalid domain") {:status-code 400})))
-              (setting/set-value-of-type! :string :google-auth-auto-create-accounts-domain domain)))
+              (setting/set-string! :google-auth-auto-create-accounts-domain domain)))
 
 (def ^:private google-auth-token-info-url "https://www.googleapis.com/oauth2/v3/tokeninfo?id_token=%s")
 
@@ -92,7 +92,7 @@
 
 (defn do-google-auth
   "Call to Google to perform an authentication"
-  [{{:keys [token]} :body, :as _request}]
+  [{{:keys [token]} :body, :as request}]
   (let [token-info-response                    (http/post (format google-auth-token-info-url token))
         {:keys [given_name family_name email]} (google-auth-token-info token-info-response)]
     (log/info (trs "Successfully authenticated Google Sign-In token for: {0} {1}" given_name family_name))

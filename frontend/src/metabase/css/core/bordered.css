@@ -3,6 +3,11 @@
   --border-size-medium: 2px;
   --border-style: solid;
   --border-color: var(--color-border);
+
+  --footprint-border-style: solid;
+  --footprint-border-size: 1px;
+  --footprint-border: var(--footprint-border-size) var(--footprint-border-style)
+    var(--footprint-color-border);
 }
 
 .bordered,
@@ -55,12 +60,12 @@
 }
 
 .border-light {
-  border-color: color-mod(var(--color-border) alpha(-80%)) !important;
+  border-color: color(var(--color-border) alpha(-80%)) !important;
 }
 
 .border-dark,
 .border-dark-hover:hover {
-  border-color: color-mod(var(--color-accent2) alpha(-80%)) !important;
+  border-color: color(var(--color-accent2) alpha(-80%)) !important;
 }
 
 .border-purple {

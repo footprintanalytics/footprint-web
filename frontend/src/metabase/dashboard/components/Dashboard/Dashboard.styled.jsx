@@ -1,31 +1,22 @@
-import React from "react";
-import cx from "classnames";
-import styled from "@emotion/styled";
-import { css } from "@emotion/react";
-import { IFRAMED } from "metabase/lib/dom";
+import styled, { css } from "styled-components";
+
 import { color } from "metabase/lib/colors";
 import { space } from "metabase/styled-components/theme";
 
 import { FullWidthContainer } from "metabase/styled-components/layout/FullWidthContainer";
 
 import LoadingAndErrorWrapper from "metabase/components/LoadingAndErrorWrapper";
-import { APP_BAR_HEIGHT, NAV_SIDEBAR_WIDTH } from "metabase/nav/constants";
+import MetabaseUtils from "metabase/lib/utils";
 
 // Class names are added here because we still use traditional css,
 // see dashboard.css
 export const DashboardLoadingAndErrorWrapper = styled(
-  ({ isFullscreen, isNightMode, className, ...props }) => {
-    return (
-      <LoadingAndErrorWrapper
-        className={cx(className, "Dashboard", {
-          "Dashboard--fullscreen": isFullscreen,
-          "Dashboard--night": isNightMode,
-        })}
-        {...props}
-      />
-    );
-  },
-)`
+  LoadingAndErrorWrapper,
+).attrs({
+  className: ({ isFullscreen, isNightMode }) =>
+    `Dashboard ${isFullscreen && "Dashboard--fullscreen"} ${isNightMode &&
+      "Dashboard--night"} ${MetabaseUtils.isCoin360() && "Dashboard--coin360"}`,
+})`
   flex: 1 0 auto;
 
   // prevents header from scrolling so we can have a fixed sidebar
@@ -53,13 +44,13 @@ export const DashboardBody = styled.div`
   ${({ isEditingOrSharing }) =>
     isEditingOrSharing &&
     css`
-      flex-basis: 0;
+      /* flex-basis: 0; */
     `}
 `;
 
 export const HeaderContainer = styled.header`
   background-color: white;
-  border-bottom: 1px solid ${color("border")};
+  /* border-bottom: 1px solid ${color("border")}; */
   position: relative;
   z-index: 2;
 
@@ -84,18 +75,19 @@ export const ParametersAndCardsContainer = styled.div`
 
 export const ParametersWidgetContainer = styled(FullWidthContainer)`
   align-items: flex-start;
-  background-color: ${color("bg-light")};
-  border-bottom: 1px solid ${color("bg-light")};
+  background-color: ${color("white")};
+  // border-bottom: 1px solid ${color("border")};
   display: flex;
   flex-direction: column;
-  padding-top: ${space(2)};
-  padding-bottom: ${space(1)};
+  /* padding-top: ${space(2)}; */
+  /* padding-bottom: ${space(1)}; */
   z-index: 4;
+  padding: 1rem 0;
 
   ${({ isEditing }) =>
     isEditing &&
     css`
-      border-top: 1px solid ${color("border")};
+      /* border-top: 1px solid ${color("border")}; */
     `}
 
   ${({ isSticky }) =>
@@ -105,16 +97,6 @@ export const ParametersWidgetContainer = styled(FullWidthContainer)`
       position: fixed;
       top: 0;
       left: 0;
-    `}
-
-  ${({ isSticky, isNavbarOpen }) =>
-    isSticky &&
-    isNavbarOpen &&
-    !IFRAMED &&
-    css`
-      width: calc(100% - ${NAV_SIDEBAR_WIDTH});
-      left: ${NAV_SIDEBAR_WIDTH};
-      top: ${APP_BAR_HEIGHT};
     `}
 `;
 

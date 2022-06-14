@@ -1,7 +1,7 @@
 import React from "react";
 import PropTypes from "prop-types";
 import { t } from "ttag";
-import Button from "metabase/core/components/Button";
+import Button from "metabase/components/Button";
 
 const WIDTH = 384;
 
@@ -18,7 +18,10 @@ function Sidebar({ closeIsDisabled, children, onClose, onCancel }) {
       style={{ width: WIDTH, minWidth: WIDTH }}
       className="flex flex-column border-left bg-white"
     >
-      <div className="flex flex-column flex-auto overflow-y-auto">
+      <div
+        className="flex flex-column flex-auto overflow-y-auto"
+        style={{ height: 0 }}
+      >
         {children}
       </div>
       {(onClose || onCancel) && (

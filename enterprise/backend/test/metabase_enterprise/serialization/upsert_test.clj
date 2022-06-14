@@ -1,5 +1,5 @@
 (ns metabase-enterprise.serialization.upsert-test
-  (:require [clojure.data :as data]
+  (:require [clojure.data :as diff]
             [clojure.test :refer :all]
             [metabase-enterprise.serialization.upsert :as upsert]
             [metabase.models :refer [Card Collection Dashboard DashboardCard Database Field Metric NativeQuerySnippet
@@ -8,7 +8,7 @@
             [metabase.util :as u]
             [toucan.db :as db]))
 
-(def ^:private same? (comp nil? second data/diff))
+(def ^:private same? (comp nil? second diff/diff))
 
 (defn- mutate
   [model e]

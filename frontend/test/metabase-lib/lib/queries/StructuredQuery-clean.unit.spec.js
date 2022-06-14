@@ -1,8 +1,8 @@
 import {
-  SAMPLE_DATABASE,
+  SAMPLE_DATASET,
   ORDERS,
   PRODUCTS,
-} from "__support__/sample_database_fixture";
+} from "__support__/sample_dataset_fixture";
 
 const ORDERS_PRODUCT_ID_FIELD_REF = ["field", ORDERS.ID.id, null];
 const PRODUCT_ID_FIELD_REF = [
@@ -287,13 +287,13 @@ describe("StructuredQuery", () => {
   describe("cleanNesting", () => {
     it("should not modify empty queries with no source-query", () => {
       expect(
-        SAMPLE_DATABASE.question()
+        SAMPLE_DATASET.question()
           .query()
           .cleanNesting()
           .datasetQuery(),
       ).toEqual({
         type: "query",
-        database: SAMPLE_DATABASE.id,
+        database: SAMPLE_DATASET.id,
         query: { "source-table": null },
       });
     });

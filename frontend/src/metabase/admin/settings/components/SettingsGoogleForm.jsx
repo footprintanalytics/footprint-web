@@ -13,7 +13,7 @@ import Form, {
 import { updateSettings } from "metabase/admin/settings/settings";
 import { settingToFormField } from "metabase/admin/settings/utils";
 import Breadcrumbs from "metabase/components/Breadcrumbs";
-import ExternalLink from "metabase/core/components/ExternalLink";
+import ExternalLink from "metabase/components/ExternalLink";
 import MetabaseSettings from "metabase/lib/settings";
 
 const settingsGoogleFormPropTypes = {
@@ -22,7 +22,8 @@ const settingsGoogleFormPropTypes = {
   updateSettings: PropTypes.func,
 };
 
-class SettingsGoogleForm extends Component {
+@connect(null, { updateSettings })
+export default class SettingsGoogleForm extends Component {
   render() {
     const { elements, settingValues, updateSettings } = this.props;
 
@@ -85,7 +86,5 @@ class SettingsGoogleForm extends Component {
     );
   }
 }
-
-export default connect(null, { updateSettings })(SettingsGoogleForm);
 
 SettingsGoogleForm.propTypes = settingsGoogleFormPropTypes;

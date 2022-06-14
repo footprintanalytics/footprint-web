@@ -9,7 +9,11 @@ import EntityName from "metabase/entities/containers/EntityName";
 
 import * as UserDetailCards from "../lib/cards/user_detail";
 
-const AuditUserDetail = ({ params, ...props }) => {
+type Props = {
+  params: { [key: string]: string },
+};
+
+const AuditUserDetail = ({ params, ...props }: Props) => {
   const userId = parseInt(params.userId);
   return (
     <AuditContent
@@ -18,7 +22,7 @@ const AuditUserDetail = ({ params, ...props }) => {
         <EntityName
           entityType="users"
           entityId={userId}
-          property="common_name"
+          property={"common_name"}
         />
       }
       tabs={AuditUserDetail.tabs}

@@ -1,7 +1,3 @@
----
-title: User Guide
----
-
 # User Guide
 
 ## Some basics
@@ -14,17 +10,16 @@ title: User Guide
 ## Asking questions with the query builder
 
 - [Asking questions in Metabase](04-asking-questions.md)
+- [Using the notebook editor to ask custom questions](custom-questions.md)
 - [Writing custom expressions in the notebook editor](expressions.md)
 - [Full list of expressions: aggregations and functions](expressions-list.md)
 - [How to visualize the answers to questions](05-visualizing-results.md)
 - [Referencing saved question in queries](referencing-saved-questions-in-queries.md)
-- [Joining data](join.md)
 
-## Saving questions in collections
+## Saving questions in Collections
 
 - [Sharing and organizing your saved questions](06-sharing-answers.md)
 - [Collections](collections.md)
-- [Events and timelines](events-and-timelines.md)
 
 ## Dashboards
 
@@ -35,8 +30,10 @@ title: User Guide
 
 ## Setting up subscriptions and alerts
 
-- [Dashboard subscriptions](dashboard-subscriptions.md)
-- [Question alerts](15-alerts.md)
+- [Setting up dashboard subscriptions](dashboard-subscriptions.md)
+- [Setting and getting alerts](15-alerts.md)
+- [Get answers in Slack with Metabot](11-metabot.md)
+- [Using Pulses for daily emails](10-pulses.md)
 
 ## Writing SQL
 

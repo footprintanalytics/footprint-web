@@ -55,18 +55,16 @@
   [:id
    :engine
    :name
-   :details
-   :settings])
+   :details])
 
 (def ^:private DatabaseInstanceWithRequiredStoreKeys
   (s/both
    (class Database)
-   {:id       su/IntGreaterThanZero
-    :engine   s/Keyword
-    :name     su/NonBlankString
-    :details  su/Map
-    :settings (s/maybe su/Map)
-    s/Any     s/Any}))
+   {:id      su/IntGreaterThanZero
+    :engine  s/Keyword
+    :name    su/NonBlankString
+    :details su/Map
+    s/Any    s/Any}))
 
 (def ^:private table-columns-to-fetch
   "Columns you should fetch for any Table you want to stash in the Store."
@@ -96,7 +94,6 @@
    :fingerprint
    :id
    :name
-   :nfc_path
    :parent_id
    :semantic_type
    :settings
@@ -118,7 +115,6 @@
     :semantic_type                      (s/maybe su/FieldSemanticOrRelationType)
     :fingerprint                        (s/maybe su/Map)
     :parent_id                          (s/maybe su/IntGreaterThanZero)
-    :nfc_path                           (s/maybe [su/NonBlankString])
     s/Any                               s/Any}))
 
 
@@ -233,35 +229,17 @@
   (or (:database @*store*)
       (throw (Exception. (tru "Error: Database is not present in the Query Processor Store.")))))
 
-(defn- default-table
-  "Default implementation of [[table]]."
-  [table-id]
-  (or (get-in @*store* [:tables table-id])
-      (throw (Exception. (tru "Error: Table {0} is not present in the Query Processor Store." table-id)))))
-
-(def ^:dynamic *table*
-  "Implementation of [[table]]. Dynamic so this can be overridden as needed by tests."
-  default-table)
-
 (s/defn table :- TableInstanceWithRequiredStoreKeys
   "Fetch Table with `table-id` from the QP Store. Throws an Exception if valid item is not returned."
   [table-id :- su/IntGreaterThanZero]
-  (*table* table-id))
-
-(defn- default-field
-  "Default implementation of [[field]]."
-  [field-id]
-  (or (get-in @*store* [:fields field-id])
-      (throw (Exception. (tru "Error: Field {0} is not present in the Query Processor Store." field-id)))))
-
-(def ^:dynamic *field*
-  "Implementation of [[field]]. Dynamic so this can be overridden as needed by tests."
-  default-field)
+  (or (get-in @*store* [:tables table-id])
+      (throw (Exception. (tru "Error: Table {0} is not present in the Query Processor Store." table-id)))))
 
 (s/defn field :- FieldInstanceWithRequiredStorekeys
   "Fetch Field with `field-id` from the QP Store. Throws an Exception if valid item is not returned."
   [field-id :- su/IntGreaterThanZero]
-  (*field* field-id))
+  (or (get-in @*store* [:fields field-id])
+      (throw (Exception. (tru "Error: Field {0} is not present in the Query Processor Store." field-id)))))
 
 
 ;;; ------------------------------------------ Caching Miscellaneous Values ------------------------------------------

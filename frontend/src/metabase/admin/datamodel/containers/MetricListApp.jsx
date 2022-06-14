@@ -1,16 +1,17 @@
 /* eslint-disable react/prop-types */
 import React from "react";
 import { t } from "ttag";
-import _ from "underscore";
 
 import Metrics from "metabase/entities/metrics";
 import MetricItem from "metabase/admin/datamodel/components/MetricItem";
 import FilteredToUrlTable from "metabase/admin/datamodel/hoc/FilteredToUrlTable";
 
-import Button from "metabase/core/components/Button";
-import Link from "metabase/core/components/Link";
+import Button from "metabase/components/Button";
+import Link from "metabase/components/Link";
 
-class MetricListAppInner extends React.Component {
+@Metrics.loadList({ wrapped: true })
+@FilteredToUrlTable("metrics")
+class MetricListApp extends React.Component {
   render() {
     const { metrics, tableSelector } = this.props;
 
@@ -18,7 +19,7 @@ class MetricListAppInner extends React.Component {
       <div className="px3 pb2">
         <div className="flex py2">
           {tableSelector}
-          <Link to="/admin/datamodel/metric/create" className="ml-auto">
+          <Link to={`/admin/datamodel/metric/create`} className="ml-auto">
             <Button primary>{t`New metric`}</Button>
           </Link>
         </div>
@@ -49,10 +50,5 @@ class MetricListAppInner extends React.Component {
     );
   }
 }
-
-const MetricListApp = _.compose(
-  Metrics.loadList({ wrapped: true }),
-  FilteredToUrlTable("metrics"),
-)(MetricListAppInner);
 
 export default MetricListApp;

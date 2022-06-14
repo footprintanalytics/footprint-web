@@ -5,7 +5,7 @@
 
 (defn- add-default-temporal-unit [query]
   (mt/with-everything-store
-    (add-default-temporal-unit/add-default-temporal-unit query)))
+    (:pre (mt/test-qp-middleware add-default-temporal-unit/add-default-temporal-unit query))))
 
 (deftest add-default-temporal-unit-test
   (testing "Should add temporal-unit :default to a :field clause"

@@ -9,7 +9,7 @@ import _ from "underscore";
 export function getOptionFromColumn(col) {
   return {
     name: getFriendlyName(col),
-    value: col.name,
+    value: col ? col.name : "",
   };
 }
 

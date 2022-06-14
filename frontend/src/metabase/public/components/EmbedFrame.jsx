@@ -1,4 +1,3 @@
-/* eslint-disable react/prop-types */
 import React, { Component } from "react";
 import { withRouter } from "react-router";
 
@@ -6,23 +5,49 @@ import { IFRAMED, initializeIframeResizer } from "metabase/lib/dom";
 import { parseHashOptions } from "metabase/lib/browser";
 
 import MetabaseSettings from "metabase/lib/settings";
-import { getValuePopulatedParameters } from "metabase/parameters/utils/parameter-values";
+import { getValuePopulatedParameters } from "metabase/meta/Parameter";
 
 import TitleAndDescription from "metabase/components/TitleAndDescription";
-import SyncedParametersList from "metabase/parameters/components/SyncedParametersList/SyncedParametersList";
+import Parameters from "metabase/parameters/components/Parameters/Parameters";
 import LogoBadge from "./LogoBadge";
 
 import cx from "classnames";
 
 import "./EmbedFrame.css";
+import type { DashboardWithCards } from "metabase-types/types/Dashboard";
+import type { Parameter } from "metabase-types/types/Parameter";
+import PublicBackButton from "metabase/public/components/widgets/PublicBackButton";
+import { isPublicScenePath } from "metabase/lib/urls";
+import { isDefi360 } from "metabase/lib/project_info";
+import MetabaseUtils from "metabase/lib/utils";
 
 const DEFAULT_OPTIONS = {
   bordered: IFRAMED,
   titled: true,
 };
 
-class EmbedFrame extends Component {
-  state = {
+type Props = {
+  className?: string,
+  router?: any,
+  children?: any,
+  actionButtons?: any[],
+  name?: string,
+  description?: string,
+  dashboard?: DashboardWithCards,
+  location: { query: { [key: string]: string }, hash: string },
+  parameters?: Parameter[],
+  parameterValues?: { [key: string]: string },
+  setParameterValue: (id: string, value: string) => void,
+};
+
+type State = {
+  innerScroll: boolean,
+};
+
+@withRouter
+export default class EmbedFrame extends Component {
+  props: Props;
+  state: State = {
     innerScroll: true,
   };
 
@@ -40,12 +65,13 @@ class EmbedFrame extends Component {
       parameters,
       parameterValues,
       setParameterValue,
+      router,
     } = this.props;
     const { innerScroll } = this.state;
 
     const showFooter = !MetabaseSettings.hideEmbedBranding() || actionButtons;
 
-    const { bordered, titled, theme, hide_parameters } = {
+    const { bordered, titled, theme, hide_parameters, no_params } = {
       ...DEFAULT_OPTIONS,
       ...parseHashOptions(location.hash),
     };
@@ -54,10 +80,12 @@ class EmbedFrame extends Component {
 
     return (
       <div
+        id="html2canvas-Dashboard"
         className={cx("EmbedFrame flex flex-column", className, {
           spread: innerScroll,
           "bordered rounded shadowed": bordered,
           [`Theme--${theme}`]: !!theme,
+          [`Theme--coin360`]: MetabaseUtils.isCoin360(),
         })}
       >
         <div
@@ -65,26 +93,28 @@ class EmbedFrame extends Component {
             "scroll-y": innerScroll,
           })}
         >
-          {name || parameters?.length > 0 ? (
-            <div className="EmbedFrame-header flex flex-column p1 sm-p2 lg-p3">
+          {name || (parameters && parameters.length > 0) ? (
+            <div className="EmbedFrame-header flex align-center p1 sm-p2 lg-p3">
+              {isPublicScenePath() && <PublicBackButton router={router} />}
               {name && (
-                <TitleAndDescription
-                  title={name}
-                  description={description}
-                  className="my2"
-                />
+                <TitleAndDescription title={name} description={description} />
               )}
-              {parameters?.length > 0 ? (
-                <div className="flex">
-                  <SyncedParametersList
-                    className="mt1"
+              {parameters && parameters.length > 0 ? (
+                <div
+                  className="flex ml-auto"
+                  style={{ display: no_params ? "none" : "" }}
+                >
+                  <Parameters
                     dashboard={this.props.dashboard}
                     parameters={getValuePopulatedParameters(
                       parameters,
                       parameterValues,
                     )}
+                    query={location.query}
                     setParameterValue={setParameterValue}
+                    syncQueryString
                     hideParameters={hide_parameters}
+                    isQB
                   />
                 </div>
               ) : null}
@@ -96,7 +126,7 @@ class EmbedFrame extends Component {
         </div>
         {showFooter && (
           <div className="EmbedFrame-footer p1 md-p2 lg-p3 border-top flex-no-shrink flex align-center">
-            {!MetabaseSettings.hideEmbedBranding() && (
+            {!MetabaseSettings.hideEmbedBranding() && !isDefi360() && (
               <LogoBadge dark={theme} />
             )}
             {actionButtons && (
@@ -110,5 +140,3 @@ class EmbedFrame extends Component {
     );
   }
 }
-
-export default withRouter(EmbedFrame);

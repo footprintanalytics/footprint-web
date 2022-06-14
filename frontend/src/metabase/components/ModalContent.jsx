@@ -8,7 +8,7 @@ export default class ModalContent extends Component {
   static propTypes = {
     id: PropTypes.string,
     title: PropTypes.string,
-    centeredTitle: PropTypes.bool,
+    titleDesc: PropTypes.string,
     onClose: PropTypes.func,
     // takes over the entire screen
     fullPageModal: PropTypes.bool,
@@ -31,7 +31,7 @@ export default class ModalContent extends Component {
   render() {
     const {
       title,
-      centeredTitle,
+      titleDesc,
       footer,
       onClose,
       children,
@@ -53,19 +53,16 @@ export default class ModalContent extends Component {
       >
         {onClose && (
           <Icon
-            className="text-light text-medium-hover cursor-pointer absolute z2 m2 p2 top right"
+            className="text-light text-medium-hover cursor-pointer absolute z2 m2 top right"
             name="close"
-            size={fullPageModal ? 24 : 16}
+            size={fullPageModal ? 28 : 20}
             onClick={onClose}
           />
         )}
         {title && (
-          <ModalHeader
-            fullPageModal={fullPageModal}
-            centeredTitle={centeredTitle}
-            formModal={formModal}
-          >
+          <ModalHeader fullPageModal={fullPageModal} formModal={formModal}>
             {title}
+            {titleDesc}
           </ModalHeader>
         )}
         <ModalBody fullPageModal={fullPageModal} formModal={formModal}>
@@ -83,12 +80,12 @@ export default class ModalContent extends Component {
 
 const FORM_WIDTH = 500 + 32 * 2; // includes padding
 
-export const ModalHeader = ({ children, fullPageModal, centeredTitle }) => (
+export const ModalHeader = ({ children, fullPageModal, formModal }) => (
   <div className={cx("ModalHeader flex-no-shrink px4 py4 full")}>
     <h2
       className={cx(
         "text-bold",
-        { "text-centered": fullPageModal || centeredTitle },
+        { "text-centered": fullPageModal },
         { mr4: !fullPageModal },
       )}
     >

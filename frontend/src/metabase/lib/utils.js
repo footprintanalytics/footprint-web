@@ -26,6 +26,10 @@ const LAYOUT_PROPS = [
 
 const EMAIL_REGEX = /^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
 
+const USERNAME_REGEX = /^[a-zA-Z0-9]{2,20}$/;
+
+const DASHBOARD_REGEX = /[a-zA-Z0-9]/;
+
 export function stripLayoutProps(props) {
   return _.omit(props, LAYOUT_PROPS);
 }
@@ -145,6 +149,14 @@ const MetabaseUtils = {
     );
   },
 
+  isValidUserName(name) {
+    return USERNAME_REGEX.test(name);
+  },
+
+  isValidDashboardTitle(name) {
+    return DASHBOARD_REGEX.test(name);
+  },
+
   isEmail(email) {
     return EMAIL_REGEX.test(email);
   },
@@ -212,6 +224,10 @@ const MetabaseUtils = {
       }
     }
     return 0;
+  },
+
+  isCoin360() {
+    return location.hash === "#coin360";
   },
 };
 

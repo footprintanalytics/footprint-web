@@ -2,16 +2,13 @@ import {
   browse,
   restore,
   openOrdersTable,
-  openNavigationSidebar,
   visitQuestionAdhoc,
   popover,
   sidebar,
 } from "__support__/e2e/cypress";
 
-import { SAMPLE_DB_ID } from "__support__/e2e/cypress_data";
-import { SAMPLE_DATABASE } from "__support__/e2e/cypress_sample_database";
-
-const { ORDERS, ORDERS_ID, PRODUCTS, PRODUCTS_ID } = SAMPLE_DATABASE;
+import { SAMPLE_DATASET } from "__support__/e2e/cypress_sample_dataset";
+const { ORDERS, ORDERS_ID, PRODUCTS, PRODUCTS_ID } = SAMPLE_DATASET;
 
 describe("scenarios > question > settings", () => {
   beforeEach(() => {
@@ -34,7 +31,10 @@ describe("scenarios > question > settings", () => {
         .invoke("width")
         .should("be.gt", 350);
 
-      cy.findByTestId("sidebar-content").as("tableOptions");
+      cy.contains("Table options")
+        .parents(".scroll-y")
+        .first()
+        .as("tableOptions");
 
       // remove Total column
       cy.get("@tableOptions")
@@ -92,16 +92,20 @@ describe("scenarios > question > settings", () => {
                 alias: "Products",
               },
             ],
-            limit: 5,
           },
-          database: SAMPLE_DB_ID,
+          database: 1,
         },
         display: "table",
       });
 
       cy.findByText("Settings").click();
+      cy.findByText("Click and drag to change their order")
+        .should("be.visible")
+        .parent()
+        .find(".cursor-grab")
+        .as("sidebarColumns"); // Store all columns in an array
 
-      getSidebarColumns()
+      cy.get("@sidebarColumns")
         .eq("12")
         .as("prod-category")
         .contains(/Products? → Category/);
@@ -114,60 +118,22 @@ describe("scenarios > question > settings", () => {
         .trigger("mouseup", 0, -300, { force: true });
 
       reloadResults();
-
       findColumnAtIndex("Products → Category", 5);
-
       // Remove "Total"
-      getSidebarColumns()
+      cy.get("@sidebarColumns")
         .contains("Total")
         .closest(".cursor-grab")
         .find(".Icon-close")
         .click();
-
       reloadResults();
-
       cy.findByText("117.03").should("not.exist");
-
       // This click doesn't do anything, but simply allows the array to be updated (test gives false positive without this step)
       cy.findByText("Visible columns").click();
-
       findColumnAtIndex("Products → Category", 5);
-
-      // We need to do some additional checks. Please see:
-      // https://github.com/metabase/metabase/pull/21338#pullrequestreview-928807257
-
-      // Add "Address"
-      cy.findByText("Address")
-        .siblings(".Icon-add")
-        .click();
-
-      // The result automatically load when adding new fields but two requests are fired.
-      // Please see: https://github.com/metabase/metabase/pull/21338#discussion_r842816687
-      cy.wait(["@dataset", "@dataset"]);
-
-      findColumnAtIndex("User → Address", -1).as("user-address");
-
-      // Move it one place up
-      cy.get("@user-address")
-        .trigger("mousedown", 0, 0, { force: true })
-        .trigger("mousemove", 5, 5, { force: true })
-        .trigger("mousemove", 0, -50, { force: true })
-        .trigger("mouseup", 0, -50, { force: true });
-
-      findColumnAtIndex("User → Address", -2);
 
       /**
        * Helper functions related to THIS test only
        */
-
-      function getSidebarColumns() {
-        return cy
-          .findByText("Click and drag to change their order")
-          .scrollIntoView()
-          .should("be.visible")
-          .parent()
-          .find(".cursor-grab");
-      }
 
       function reloadResults() {
         cy.icon("play")
@@ -176,7 +142,7 @@ describe("scenarios > question > settings", () => {
       }
 
       function findColumnAtIndex(column_name, index) {
-        return getSidebarColumns()
+        cy.get("@sidebarColumns")
           .eq(index)
           .contains(column_name);
       }
@@ -187,7 +153,7 @@ describe("scenarios > question > settings", () => {
         dataset_query: {
           type: "query",
           query: { "source-table": ORDERS_ID },
-          database: SAMPLE_DB_ID,
+          database: 1,
         },
       });
 
@@ -213,7 +179,7 @@ describe("scenarios > question > settings", () => {
 
       const questionDetails = {
         dataset_query: {
-          database: SAMPLE_DB_ID,
+          database: 1,
           query: { "source-table": 2 },
           type: "query",
         },
@@ -248,12 +214,10 @@ describe("scenarios > question > settings", () => {
         .click();
       cy.contains("Yes please!").click();
       cy.contains("Orders in a dashboard").click();
-      cy.findByText("Cancel").click();
 
       // create a new question to see if the "add to a dashboard" modal is still there
-      openNavigationSidebar();
       browse().click();
-      cy.contains("Sample Database").click();
+      cy.contains("Sample Dataset").click();
       cy.contains("Orders").click();
 
       // This next assertion might not catch bugs where the modal displays after

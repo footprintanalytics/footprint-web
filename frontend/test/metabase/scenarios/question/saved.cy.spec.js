@@ -3,16 +3,7 @@ import {
   popover,
   modal,
   openOrdersTable,
-  summarize,
-  visitQuestion,
-  startNewQuestion,
-  visualize,
-  openQuestionActions,
 } from "__support__/e2e/cypress";
-import {
-  questionInfoButton,
-  rightSidebar,
-} from "../../../__support__/e2e/helpers/e2e-ui-elements-helpers";
 
 describe("scenarios > question > saved", () => {
   beforeEach(() => {
@@ -21,14 +12,11 @@ describe("scenarios > question > saved", () => {
   });
 
   it("should should correctly display 'Save' modal (metabase#13817)", () => {
-    openOrdersTable();
-    cy.icon("notebook").click();
-    summarize({ mode: "notebook" });
+    openOrdersTable({ mode: "notebook" });
+    cy.findByText("Summarize").click();
     cy.findByText("Count of rows").click();
     cy.findByText("Pick a column to group by").click();
-    popover()
-      .findByText("Total")
-      .click();
+    cy.findByText("Total").click();
     // Save the question
     cy.findByText("Save").click();
     modal().within(() => {
@@ -39,9 +27,7 @@ describe("scenarios > question > saved", () => {
 
     // Add a filter in order to be able to save question again
     cy.findByText("Filter").click();
-    popover()
-      .findByText(/^Total$/)
-      .click();
+    cy.findByText(/^Total$/).click();
     cy.findByText("Equal to").click();
     cy.findByText("Greater than").click();
     cy.findByPlaceholderText("Enter a number").type("60");
@@ -72,7 +58,7 @@ describe("scenarios > question > saved", () => {
   });
 
   it("view and filter saved question", () => {
-    visitQuestion(1);
+    cy.visit("/question/1");
     cy.findAllByText("Orders"); // question and table name appears
 
     // filter to only orders with quantity=100
@@ -80,8 +66,7 @@ describe("scenarios > question > saved", () => {
     popover().within(() => cy.findByText("Filter by this column").click());
     popover().within(() => {
       cy.findByPlaceholderText("Search the list").type("100");
-      cy.findByText("100").click();
-      cy.findByText("Add filter").click();
+      cy.findByText("Update filter").click();
     });
     cy.findByText("Quantity is equal to 100");
     cy.findByText("Showing 2 rows"); // query updated
@@ -106,13 +91,11 @@ describe("scenarios > question > saved", () => {
     cy.route("POST", "/api/card").as("cardCreate");
     cy.route("POST", "/api/card/1/query").as("query");
 
-    visitQuestion(1);
+    cy.visit("/question/1");
     cy.wait("@query");
 
-    openQuestionActions();
-    popover().within(() => {
-      cy.icon("segment").click();
-    });
+    cy.findByTestId("saved-question-header-button").click();
+    cy.icon("segment").click();
 
     modal().within(() => {
       cy.findByLabelText("Name").should("have.value", "Orders - Duplicate");
@@ -124,54 +107,46 @@ describe("scenarios > question > saved", () => {
   it("should revert a saved question to a previous version", () => {
     cy.intercept("PUT", "/api/card/**").as("updateQuestion");
 
-    visitQuestion(1);
-    questionInfoButton().click();
+    cy.visit("/question/1");
+    cy.findByTestId("saved-question-header-button").click();
+    cy.findByText("History").click();
 
-    rightSidebar().within(() => {
-      cy.findByText("History");
+    cy.findByTestId("edit-details-button").click();
+    cy.findByLabelText("Description")
+      .click()
+      .type("This is a question");
 
-      cy.findByPlaceholderText("Description")
-        .type("This is a question")
-        .blur();
+    cy.button("Save").click();
+    cy.wait("@updateQuestion");
 
-      cy.wait("@updateQuestion");
+    cy.findByText(/changed description/i);
 
-      cy.findByText(/added a description/i);
+    cy.findByRole("button", { name: "Revert" }).click();
 
-      cy.findByTestId("question-revert-button").click();
-    });
-
-    cy.findByText(/reverted to an earlier revision/i);
-    cy.findByText(/This is a question/i).should("not.exist");
+    cy.findByText(/^Reverted to an earlier revision/i);
   });
 
-  it("should be able to use integer filter on a nested query based on a saved native question (metabase#15808)", () => {
+  it("should be able to use integer filter on a saved native query (metabase#15808)", () => {
     cy.createNativeQuestion({
       name: "15808",
       native: { query: "select * from products" },
     });
-    startNewQuestion();
+    cy.visit("/question/new");
+    cy.findByText("Simple question").click();
     cy.findByText("Saved Questions").click();
     cy.findByText("15808").click();
-    visualize();
     cy.findAllByText("Filter")
       .first()
       .click();
     cy.findByTestId("sidebar-right")
       .findByText(/Rating/i)
       .click();
-    cy.findByTestId("select-button").findByText("Equal to");
+    cy.get(".AdminSelect").findByText("Equal to");
     cy.findByPlaceholderText("Enter a number").type("4");
     cy.button("Add filter")
       .should("not.be.disabled")
       .click();
     cy.findByText("Synergistic Granite Chair");
     cy.findByText("Rustic Paper Wallet").should("not.exist");
-  });
-
-  it("should show table name in header with a table info popover on hover", () => {
-    visitQuestion(1);
-    cy.findByTestId("question-table-badges").trigger("mouseenter");
-    cy.findByText("9 columns");
   });
 });

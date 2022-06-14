@@ -1,8 +1,10 @@
 import React, { useState } from "react";
 import PropTypes from "prop-types";
 
-import { jt, t } from "ttag";
-import Link from "metabase/core/components/Link";
+import { t, jt } from "ttag";
+import Link from "metabase/components/Link";
+
+import { Box, Flex } from "grid-styled";
 
 import Search from "metabase/entities/search";
 
@@ -16,14 +18,8 @@ import Icon from "metabase/components/Icon";
 import NoResults from "assets/img/no_results.svg";
 import PaginationControls from "metabase/components/PaginationControls";
 import { usePagination } from "metabase/hooks/use-pagination";
-import {
-  SearchBody,
-  SearchControls,
-  SearchEmptyState,
-  SearchHeader,
-  SearchMain,
-  SearchRoot,
-} from "./SearchApp.styled";
+
+const PAGE_PADDING = [1, 2, 4];
 
 const PAGE_SIZE = 50;
 
@@ -36,7 +32,7 @@ const SEARCH_FILTERS = [
   {
     name: t`Collections`,
     filter: "collection",
-    icon: "folder",
+    icon: "all",
   },
   {
     name: t`Databases`,
@@ -44,17 +40,12 @@ const SEARCH_FILTERS = [
     icon: "database",
   },
   {
-    name: t`Models`,
-    filter: "dataset",
-    icon: "model",
-  },
-  {
-    name: t`Raw Tables`,
+    name: t`Tables`,
     filter: "table",
     icon: "table",
   },
   {
-    name: t`Questions`,
+    name: t`Queries`,
     filter: "card",
     icon: "bar",
   },
@@ -95,18 +86,18 @@ export default function SearchApp({ location }) {
   }
 
   return (
-    <SearchRoot>
+    <Box mx={PAGE_PADDING}>
       {location.query.q && (
-        <SearchHeader>
+        <Flex align="center" py={[2, 3]}>
           <Subhead>{jt`Results for "${location.query.q}"`}</Subhead>
-        </SearchHeader>
+        </Flex>
       )}
-      <div>
+      <Box>
         <Search.ListLoader query={query} wrapped>
           {({ list, metadata }) => {
             if (list.length === 0) {
               return (
-                <SearchEmptyState>
+                <Box width={2 / 3}>
                   <Card>
                     <EmptyState
                       title={t`Didn't find anything`}
@@ -114,7 +105,7 @@ export default function SearchApp({ location }) {
                       illustrationElement={<img src={NoResults} />}
                     />
                   </Card>
-                </SearchEmptyState>
+                </Box>
               );
             }
 
@@ -125,8 +116,8 @@ export default function SearchApp({ location }) {
             );
 
             return (
-              <SearchBody>
-                <SearchMain>
+              <Flex align="top">
+                <Box width={2 / 3}>
                   <React.Fragment>
                     <SearchResultSection items={list} />
                     <div className="flex justify-end my2">
@@ -141,8 +132,8 @@ export default function SearchApp({ location }) {
                       />
                     </div>
                   </React.Fragment>
-                </SearchMain>
-                <SearchControls>
+                </Box>
+                <Box ml={[1, 2]} pt={2} px={2}>
                   {filters.length > 0 ? (
                     <Link
                       className="flex align-center"
@@ -173,18 +164,18 @@ export default function SearchApp({ location }) {
                           query: { ...location.query, type: f.filter },
                         }}
                       >
-                        <Icon mr={1} name={f.icon} size={16} />
+                        <Icon mr={1} name={f.icon} />
                         <h4>{f.name}</h4>
                       </Link>
                     );
                   })}
-                </SearchControls>
-              </SearchBody>
+                </Box>
+              </Flex>
             );
           }}
         </Search.ListLoader>
-      </div>
-    </SearchRoot>
+      </Box>
+    </Box>
   );
 }
 

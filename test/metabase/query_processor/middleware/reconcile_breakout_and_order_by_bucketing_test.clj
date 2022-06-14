@@ -1,6 +1,7 @@
 (ns metabase.query-processor.middleware.reconcile-breakout-and-order-by-bucketing-test
   (:require [clojure.test :refer :all]
-            [metabase.query-processor.middleware.reconcile-breakout-and-order-by-bucketing :as reconcile-bucketing]))
+            [metabase.query-processor.middleware.reconcile-breakout-and-order-by-bucketing :as reconcile-bucketing]
+            [metabase.test :as mt]))
 
 (defn- mbql-query {:style/indent 0} [& clauses]
   {:database 1
@@ -8,7 +9,7 @@
    :query    (apply assoc {:source-table 1} clauses)})
 
 (defn- reconcile-breakout-and-order-by-bucketing [& clauses]
-  (reconcile-bucketing/reconcile-breakout-and-order-by-bucketing (apply mbql-query clauses)))
+  (:pre (mt/test-qp-middleware reconcile-bucketing/reconcile-breakout-and-order-by-bucketing (apply mbql-query clauses))))
 
 (deftest bucket-unbucketed-temporal-fields-test
   (testing "will unbucketed datetime order-bys get bucketed if Field it references is bucketed in a `breakout` clause?"

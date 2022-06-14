@@ -1,7 +1,3 @@
-import { isSmallScreen, getMainElement } from "metabase/lib/dom";
-
-export const MAXIMUM_PARAMETERS_FOR_STICKINESS = 6;
-
 export const updateParametersWidgetStickiness = dashboard => {
   initializeWidgetOffsetTop(dashboard);
 
@@ -36,15 +32,11 @@ const checkIfShouldToggleStickiness = (dashboard, shouldBeSticky) => {
 };
 
 const checkIfParametersWidgetShouldBeSticky = dashboard => {
-  const isStickyForDevice = !(
-    dashboard.state.parametersListLength > MAXIMUM_PARAMETERS_FOR_STICKINESS &&
-    isSmallScreen()
-  );
   const offsetTop =
     dashboard.state.parametersWidgetOffsetTop ||
     dashboard.parametersWidgetRef.offsetTop;
 
-  return isStickyForDevice && getMainElement().scrollTop >= offsetTop;
+  return window.scrollY >= offsetTop;
 };
 
 const updateParametersAndCardsContainerStyle = (dashboard, shouldBeSticky) => {

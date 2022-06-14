@@ -7,9 +7,7 @@ describe("visual tests > onboarding > URLs", () => {
   });
 
   it("home", () => {
-    cy.intercept("GET", `/api/automagic-dashboards/**`).as(
-      "automagic-dashboards",
-    );
+    cy.intercept("GET", `/api/automagic-dashboards`).as("automagic-dashboards");
 
     cy.visit("/", {
       // to give predictable messages based on randomization
@@ -20,14 +18,15 @@ describe("visual tests > onboarding > URLs", () => {
 
     cy.wait("@automagic-dashboards");
 
-    cy.findByText("Reviews");
+    cy.findByText("Reviews table");
     cy.findByText("First collection");
+    cy.findByText("Sample Dataset");
 
     cy.percySnapshot();
   });
 
   it("root collection", () => {
-    cy.intercept("GET", `api/collection/root/items*`).as("collection-items");
+    cy.intercept("GET", `api/collection/root/items`).as("collection-items");
     cy.visit("/collection/root");
 
     // Twice, one for pinned items and another for dashboard
@@ -45,17 +44,17 @@ describe("visual tests > onboarding > URLs", () => {
     cy.visit("/browse/");
 
     cy.wait("@database");
-    cy.findByText("Sample Database");
+    cy.findByText("Sample Dataset");
 
     cy.percySnapshot();
   });
 
-  it("browse/1 (Sample Database)", () => {
+  it("browse/1 (Sample Dataset)", () => {
     cy.intercept("GET", `api/database/1/schemas`).as("schemas");
     cy.visit("/browse/1");
 
     cy.wait("@schemas");
-    cy.findByText("Sample Database");
+    cy.findByText("Sample Dataset");
     cy.findByText("Reviews");
 
     cy.percySnapshot();

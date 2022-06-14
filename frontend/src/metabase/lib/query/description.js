@@ -168,15 +168,12 @@ export function getOrderByDescription(tableMetadata, query, options) {
     return [
       t`Sorted by `,
       joinList(
-        orderBy.map(([direction, field]) => {
-          const name = FIELD_REF.isAggregateField(field)
-            ? getAggregationDescription(tableMetadata, query, options)
-            : getFieldName(tableMetadata, field, options);
-
-          return (
-            name + " " + (direction === "asc" ? "ascending" : "descending")
-          );
-        }),
+        orderBy.map(
+          ([direction, field]) =>
+            getFieldName(tableMetadata, field, options) +
+            " " +
+            (direction === "asc" ? "ascending" : "descending"),
+        ),
         " and ",
       ),
     ];
@@ -246,10 +243,6 @@ export function formatTableDescription({ table }, options = {}) {
 }
 
 export function formatAggregationDescription({ aggregation }, options = {}) {
-  if (!aggregation || !aggregation.length) {
-    return [];
-  }
-
   return conjunctList(
     aggregation.map(agg => {
       switch (agg["type"]) {
@@ -289,69 +282,69 @@ export function formatAggregationDescription({ aggregation }, options = {}) {
 }
 
 export function formatBreakoutDescription({ breakout }, options = {}) {
-  if (!breakout || !breakout.length) {
+  if (breakout && breakout.length > 0) {
+    return [
+      t`Grouped by `,
+      joinList(
+        breakout.map(b => b),
+        " and ",
+      ),
+    ];
+  } else {
     return [];
   }
-
-  return [
-    t`Grouped by `,
-    joinList(
-      breakout.map(b => b),
-      " and ",
-    ),
-  ];
 }
 
 export function formatFilterDescription({ filter }, options = {}) {
-  if (!filter || !filter.length) {
+  if (filter && filter.length > 0) {
+    return [
+      t`Filtered by `,
+      joinList(
+        filter.map(f => {
+          if (f["segment"] != null) {
+            return options.jsx ? (
+              <span className="text-purple text-bold">{f["segment"]}</span>
+            ) : (
+              f["segment"]
+            );
+          } else if (f["field"] != null) {
+            return f["field"];
+          }
+        }),
+        ", ",
+      ),
+    ];
+  } else {
     return [];
   }
-
-  return [
-    t`Filtered by `,
-    joinList(
-      filter.map(f => {
-        if (f["segment"] != null) {
-          return options.jsx ? (
-            <span className="text-purple text-bold">{f["segment"]}</span>
-          ) : (
-            f["segment"]
-          );
-        } else if (f["field"] != null) {
-          return f["field"];
-        }
-      }),
-      ", ",
-    ),
-  ];
 }
 
 export function formatOrderByDescription(parts, options = {}) {
   const orderBy = parts["order-by"];
-  if (!orderBy || !orderBy.length) {
+  if (orderBy && orderBy.length > 0) {
+    return [
+      t`Sorted by `,
+      joinList(
+        orderBy.map(
+          field =>
+            field["field"] +
+            " " +
+            (field["direction"] === "asc" ? "ascending" : "descending"),
+        ),
+        " and ",
+      ),
+    ];
+  } else {
     return [];
   }
-
-  return [
-    t`Sorted by `,
-    joinList(
-      orderBy.map(
-        field =>
-          field["field"] +
-          " " +
-          (field["direction"] === "asc" ? "ascending" : "descending"),
-      ),
-      " and ",
-    ),
-  ];
 }
 
 export function formatLimitDescription({ limit }, options = {}) {
-  if (limit == null) {
+  if (limit != null) {
+    return [limit, " ", inflection.inflect("row", limit)];
+  } else {
     return [];
   }
-
-  return [limit, " ", inflection.inflect("row", limit)];
 }
 
 export function formatQueryDescription(parts, options = {}) {

@@ -7,18 +7,17 @@
             [metabase.db.metadata-queries :as metadata-queries]
             [metabase.driver :as driver]
             [metabase.driver.mongo :as mongo]
-            [metabase.driver.mongo.util :as mongo.util]
+            [metabase.driver.mongo.util :as mongo.u]
             [metabase.driver.util :as driver.u]
             [metabase.mbql.util :as mbql.u]
             [metabase.models.database :refer [Database]]
             [metabase.models.field :refer [Field]]
             [metabase.models.table :as table :refer [Table]]
             [metabase.query-processor :as qp]
-            [metabase.query-processor-test :as qp.test :refer [rows]]
+            [metabase.query-processor-test :as qp.t :refer [rows]]
             [metabase.sync :as sync]
             [metabase.test :as mt]
             [metabase.test.data.interface :as tx]
-            [metabase.test.data.mongo :as tdm]
             [monger.collection :as mc]
             [taoensso.nippy :as nippy]
             [toucan.db :as db])
@@ -45,13 +44,9 @@
                                                 :expected false}
                                                {:details  {:host   "localhost"
                                                            :port   27017
-                                                           :user   "metabase"
-                                                           :pass   "metasample123"
                                                            :dbname "metabase-test"}
                                                 :expected true}
                                                {:details  {:host   "localhost"
-                                                           :user   "metabase"
-                                                           :pass   "metasample123"
                                                            :dbname "metabase-test"}
                                                 :expected true
                                                 :message  "should use default port 27017 if not specified"}
@@ -62,40 +57,36 @@
                                                            :port   3000
                                                            :dbname "bad-db-name?connectTimeoutMS=50"}
                                                 :expected false}
-                                               {:details  {:conn-uri "mongodb://metabase:metasample123@localhost:27017/metabase-test?authSource=admin"}
-                                                :expected (not (tdm/ssl-required?))}
+                                               {:details  {:conn-uri "mongodb://localhost:27017/metabase-test"}
+                                                :expected true}
                                                {:details  {:conn-uri "mongodb://localhost:3000/bad-db-name?connectTimeoutMS=50"}
-                                                :expected false}]
-           :let [ssl-details (tdm/conn-details details)]]
+                                                :expected false}]]
      (testing (str "connect with " details)
        (is (= expected
-              (driver.u/can-connect-with-details? :mongo ssl-details))
+              (driver.u/can-connect-with-details? :mongo details))
            (str message))))))
 
 (deftest database-supports?-test
- (mt/test-driver
-    :mongo
-    (doseq [{:keys [details expected]} [{:details  {:host    "localhost"
-                                                    :port    3000
-                                                    :user   "metabase"
-                                                    :pass   "metasample123"
-                                                    :dbname  "bad-db-name"
-                                                    :version "5.0.0"}
-                                         :expected true}
-                                        {:details  {}
-                                         :expected false}
-                                        {:details  {:version nil}
-                                         :expected false}
-                                        {:details  {:host    "localhost"
-                                                    :port    27017
-                                                    :dbname  "metabase-test"
-                                                    :version "2.2134234.lol"}
-                                         :expected false}]
-           :let [ssl-details (tdm/conn-details details)]]
-      (testing (str "connect with " details)
-        (is (= expected
-               (let [db (db/insert! Database {:name "dummy", :engine "mongo", :details ssl-details})]
-                 (driver/database-supports? :mongo :expressions db))))))))
+(mt/test-driver
+   :mongo
+   (doseq [{:keys [details expected]} [{:details  {:host    "localhost"
+                                                   :port    3000
+                                                   :dbname  "bad-db-name"
+                                                   :version "5.0.0"}
+                                        :expected true}
+                                       {:details  {}
+                                        :expected false}
+                                       {:details  {:version nil}
+                                        :expected false}
+                                       {:details  {:host    "localhost"
+                                                   :port    27017
+                                                   :dbname  "metabase-test"
+                                                   :version "2.2134234.lol"}
+                                        :expected false}]]
+     (testing (str "connect with " details)
+       (is (= expected
+              (let [db (db/insert! Database {:name "dummy", :engine "mongo", :details details})]
+                (driver/database-supports? :mongo :expressions db))))))))
 
 
 (def ^:private native-query
@@ -107,24 +98,23 @@
 
 (deftest native-query-test
   (mt/test-driver :mongo
-    (is (partial=
-         {:status    :completed
-          :row_count 1
-          :data      {:rows             [[1]]
-                      :cols             [{:name         "count"
-                                          :display_name "count"
-                                          :base_type    :type/Integer
-                                          :effective_type :type/Integer
-                                          :source       :native
-                                          :field_ref    [:field "count" {:base-type :type/Integer}]}]
-                      :native_form      {:collection "venues"
-                                         :query      native-query}
-                      :results_timezone "UTC"}}
-         (-> (qp/process-query {:native   {:query      native-query
-                                           :collection "venues"}
-                                :type     :native
-                                :database (mt/id)})
-             (m/dissoc-in [:data :results_metadata] [:data :insights]))))))
+    (is (= {:status    :completed
+            :row_count 1
+            :data      {:rows             [[1]]
+                        :cols             [{:name         "count"
+                                            :display_name "count"
+                                            :base_type    :type/Integer
+                                            :effective_type :type/Integer
+                                            :source       :native
+                                            :field_ref    [:field "count" {:base-type :type/Integer}]}]
+                        :native_form      {:collection "venues"
+                                           :query      native-query}
+                        :results_timezone "UTC"}}
+           (-> (qp/process-query {:native   {:query      native-query
+                                             :collection "venues"}
+                                  :type     :native
+                                  :database (mt/id)})
+               (m/dissoc-in [:data :results_metadata] [:data :insights]))))))
 
 ;; ## Tests for individual syncing functions
 
@@ -134,7 +124,7 @@
              {:schema nil, :name "categories"}
              {:schema nil, :name "users"}
              {:schema nil, :name "venues"}}
-            (:tables (driver/describe-database :mongo (mt/db)))))))
+             (:tables (driver/describe-database :mongo (mt/db)))))))
 
 (deftest describe-table-test
   (mt/test-driver :mongo
@@ -341,7 +331,7 @@
                   (mt/run-mbql-query categories
                     {:order-by [[:asc $id]]
                      :limit    3})
-                  qp.test/data
+                  qp.t/data
                   (select-keys [:columns :rows])))))))))
 
 ;; Make sure we correctly (un-)freeze BSON IDs
@@ -372,7 +362,7 @@
         (tx/destroy-db! :mongo dbdef)
         (let [details (tx/dbdef->connection-details :mongo :db dbdef)]
           ;; load rows
-          (mongo.util/with-mongo-connection [conn details]
+          (mongo.u/with-mongo-connection [conn details]
             (doseq [[i row] (map-indexed vector row-maps)
                     :let    [row (assoc row :_id (inc i))]]
               (try

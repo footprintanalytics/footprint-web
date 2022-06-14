@@ -23,7 +23,7 @@ export const examples = {
         triggerIcon="pencil"
         items={[
           {
-            title: t`Edit this question`,
+            title: t`Edit this chart`,
             icon: "edit_document",
             action: () => alert(t`Action type`),
           },
@@ -79,7 +79,7 @@ export const examples = {
         triggerIcon="pencil"
         items={[
           {
-            title: t`Edit this question`,
+            title: t`Edit this chart`,
             icon: "edit_document",
             action: () => alert(t`Action type`),
           },

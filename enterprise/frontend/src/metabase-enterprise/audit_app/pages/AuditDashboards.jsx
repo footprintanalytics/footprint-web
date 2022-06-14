@@ -1,6 +1,4 @@
-/* eslint-disable react/prop-types */
 import React from "react";
-import { t } from "ttag";
 
 import AuditContent from "../components/AuditContent";
 import AuditDashboard from "../containers/AuditDashboard";
@@ -8,7 +6,11 @@ import AuditTableWithSearch from "../containers/AuditTableWithSearch";
 
 import * as DashboardCards from "../lib/cards/dashboards";
 
-const AuditDashboards = props => (
+type Props = {
+  params: { [key: string]: string },
+};
+
+const AuditDashboards = (props: Props) => (
   <AuditContent {...props} title="Dashboards" tabs={AuditDashboards.tabs} />
 );
 
@@ -24,7 +26,7 @@ const AuditDashboardsOverviewTab = () => (
 
 const AuditDashboardsAllTab = () => (
   <AuditTableWithSearch
-    placeholder={t`Dashboard name`}
+    placeholder={`Dashboard name`}
     table={DashboardCards.table()}
   />
 );
@@ -32,12 +34,12 @@ const AuditDashboardsAllTab = () => (
 AuditDashboards.tabs = [
   {
     path: "overview",
-    title: t`Overview`,
+    title: "Overview",
     component: AuditDashboardsOverviewTab,
   },
   {
     path: "all",
-    title: t`All dashboards`,
+    title: "All dashboards",
     component: AuditDashboardsAllTab,
   },
 ];

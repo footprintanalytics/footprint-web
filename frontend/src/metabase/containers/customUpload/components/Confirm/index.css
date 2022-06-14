@@ -1,0 +1,47 @@
+.custom-upload__confirm {
+}
+
+.custom-upload__confirm h3 {
+  font-size: 16px;
+  color: #3c3c3c;
+  margin-bottom: 20px;
+}
+
+.custom-upload__confirm h3 b {
+  color: #ff0000;
+}
+
+.custom-upload__confirm-input-wrap {
+  position: relative;
+}
+
+.custom-upload__confirm-input {
+  width: 380px;
+  margin-bottom: 40px;
+}
+
+.custom-upload__confirm-input .ant-input-prefix {
+  font-size: 14px;
+  color: #acacb2;
+  margin-right: 5px;
+}
+
+.custom-upload__confirm-input-wrap .ant-alert {
+  position: absolute;
+  left: 0;
+  bottom: -10px;
+}
+
+.custom-upload__table-select {
+  width: 100%;
+}
+
+.custom-upload__table-select .ant-select-selector {
+  background-color: #f9f9f9 !important;
+  height: 26px !important;
+  border-color: #b3b3b3 !important;
+}
+
+.custom-upload__table-select .ant-select-selection-item {
+  line-height: 26px !important;
+}

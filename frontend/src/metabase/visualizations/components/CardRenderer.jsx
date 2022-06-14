@@ -8,7 +8,16 @@ import ExplicitSize from "metabase/components/ExplicitSize";
 import * as MetabaseAnalytics from "metabase/lib/analytics";
 import { startTimer } from "metabase/lib/performance";
 
-import { isSameSeries } from "metabase/visualizations/lib/utils";
+import { isSameSeries, isSameSize } from "metabase/visualizations/lib/utils";
+
+import type { VisualizationProps } from "metabase-types/types/Visualization";
+
+type DeregisterFunction = () => void;
+
+type Props = VisualizationProps & {
+  renderer: (element: Element, props: VisualizationProps) => DeregisterFunction,
+  style?: any,
+};
 
 // We track this as part of the render loop.
 // It's throttled to prevent pounding GA on every prop update.
@@ -17,7 +26,10 @@ const trackEventThrottled = _.throttle(
   10000,
 );
 
-class CardRenderer extends Component {
+@ExplicitSize({ wrapped: true })
+export default class CardRenderer extends Component {
+  props: Props;
+
   static propTypes = {
     className: PropTypes.string,
     series: PropTypes.array.isRequired,
@@ -27,16 +39,30 @@ class CardRenderer extends Component {
     isDashboard: PropTypes.bool,
   };
 
-  shouldComponentUpdate(nextProps) {
+  _deregister: ?DeregisterFunction;
+
+  shouldComponentUpdate(nextProps: Props) {
     // a chart only needs re-rendering when the result itself changes OR the chart type is different
-    const sameSize =
-      this.props.width === nextProps.width &&
-      this.props.height === nextProps.height;
+    const sameSize = isSameSize(
+      this.props.width,
+      nextProps.width,
+      this.props.height,
+      nextProps.height,
+    );
     const sameSeries = isSameSeries(this.props.series, nextProps.series);
     return !(sameSize && sameSeries);
   }
 
+  initView() {
+    // create a loading element
+    this.loading = this.createLoading();
+
+    // create a hidden loading text element
+    this.hiddenLoadingText = this.createHiddenLoadingText();
+  }
+
   componentDidMount() {
+    this.initView();
     this.renderChart();
   }
 
@@ -56,11 +82,51 @@ class CardRenderer extends Component {
     }
   }
 
-  renderChart() {
+  showRenderLoading() {
+    return (
+      this.props.series &&
+      this.props.series.map(item => item.data.rows).flat().length > 2000
+    );
+  }
+
+  showErrorPanel(parent, err) {
+    const errorDiv = this.createDiv();
+    errorDiv.appendChild(document.createTextNode(err));
+    parent.appendChild(errorDiv);
+  }
+
+  createDiv() {
+    const div = document.createElement("div");
+    div.style.cssText =
+      "display: flex;justify-content: center;align-items: center;height: 100%;font-size: 20px;white-space: pre-line;color: #888888";
+    return div;
+  }
+
+  createLoading() {
+    let loading = null;
+    if (this.showRenderLoading()) {
+      loading = this.createDiv();
+      loading.appendChild(
+        document.createTextNode("The chart is being rendered, please wait."),
+      );
+    }
+    return loading;
+  }
+
+  createHiddenLoadingText() {
+    const hiddenLoading = document.createElement("div");
+    hiddenLoading.className = "waiting-rendered-div";
+    hiddenLoading.style.cssText = "display: none;";
+    return hiddenLoading;
+  }
+
+  renderChart = _.debounce(() => {
     const { width, height, isDashboard, isEditing, isSettings } = this.props;
     if (width == null || height == null) {
       return;
     }
+    const loading = this.loading;
+    const hiddenLoadingText = this.hiddenLoadingText;
 
     const parent = ReactDOM.findDOMNode(this);
 
@@ -88,7 +154,18 @@ class CardRenderer extends Component {
 
     try {
       const t = startTimer();
-      this._deregister = this.props.renderer(element, this.props);
+      loading && parent.appendChild(loading);
+      hiddenLoadingText && parent.appendChild(hiddenLoadingText);
+      setTimeout(() => {
+        try {
+          this._deregister = this.props.renderer(element, this.props);
+        } catch (err) {
+          this.showErrorPanel(parent, err.toString().replace("Error: ", ""));
+          console.error(err);
+        }
+        loading && parent.removeChild(loading);
+        hiddenLoadingText && parent.removeChild(hiddenLoadingText);
+      }, 100);
       t(duration => {
         const { display } = this.props.card;
         trackEventThrottled("Visualization", "Render Card", display, duration);
@@ -97,14 +174,9 @@ class CardRenderer extends Component {
       console.error(err);
       this.props.onRenderError(err.message || err);
     }
-  }
+  }, 500);
 
   render() {
     return <div className={this.props.className} style={this.props.style} />;
   }
 }
-
-export default ExplicitSize({
-  wrapped: true,
-  refreshMode: props => (props.isDashboard ? "debounce" : "throttle"),
-})(CardRenderer);

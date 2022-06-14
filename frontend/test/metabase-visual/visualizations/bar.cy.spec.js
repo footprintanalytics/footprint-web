@@ -1,10 +1,11 @@
 import { restore, visitQuestionAdhoc } from "__support__/e2e/cypress";
-import { SAMPLE_DB_ID } from "__support__/e2e/cypress_data";
 
 describe("visual tests > visualizations > bar", () => {
   beforeEach(() => {
     restore();
     cy.signInAsNormalUser();
+    cy.server();
+    cy.route("POST", "/api/dataset").as("dataset");
   });
 
   it("with stacked series", () => {
@@ -15,7 +16,7 @@ describe("visual tests > visualizations > bar", () => {
           "SELECT X, A, B, C " +
           "FROM (VALUES (1,20,30,30),(2,10,-40,-20),(3,20,10,30)) T (X, A, B, C)",
       },
-      database: SAMPLE_DB_ID,
+      database: 1,
     };
 
     visitQuestionAdhoc({
@@ -27,6 +28,8 @@ describe("visual tests > visualizations > bar", () => {
         "stackable.stack_type": "stacked",
       },
     });
+
+    cy.wait("@dataset");
 
     cy.percySnapshot();
   });
@@ -39,7 +42,7 @@ describe("visual tests > visualizations > bar", () => {
           .fill("SELECT A, B, C FROM EXAMPLE")
           .join(" UNION ALL\n"),
       },
-      database: SAMPLE_DB_ID,
+      database: 1,
     };
 
     visitQuestionAdhoc({
@@ -51,6 +54,8 @@ describe("visual tests > visualizations > bar", () => {
         "stackable.stack_type": "stacked",
       },
     });
+
+    cy.wait("@dataset");
 
     cy.percySnapshot();
   });

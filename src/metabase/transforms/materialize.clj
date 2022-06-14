@@ -41,7 +41,7 @@
   (let [location "/"
         name     "Automatically Generated Transforms"]
     (or (get-collection name location)
-        (create-collection! name "#509EE3" nil location))))
+        (create-collection! name "#7355FA" nil location))))
 
 (defn fresh-collection-for-transform!
   "Create a new collection for all the artefacts belonging to transform, or reset it if it already
@@ -49,7 +49,7 @@
   [{:keys [name description]}]
   (if-let [collection-id (get-collection name)]
     (db/delete! Card :collection_id collection-id)
-    (create-collection! name "#509EE3" description)))
+    (create-collection! name "#7355FA" description)))
 
 (defn make-card-for-step!
   "Make and save a card for a given transform step and query."

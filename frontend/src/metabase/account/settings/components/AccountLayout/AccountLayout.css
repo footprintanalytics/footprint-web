@@ -1,0 +1,25 @@
+.AccountLayout__content {
+  border: 1px solid #dcdee4;
+  border-radius: 2px;
+  padding: 20px;
+  background-color: #fff;
+}
+
+.AccountLayout__content .Form-label {
+  font-size: 16px;
+  color: #89898f;
+}
+
+.AccountLayout__content .Form-input {
+  border: 1px solid #dcdee4;
+  border-radius: 2px;
+}
+
+.AccountLayout {
+  background-color: white;
+}
+
+.AccountLayout__header {
+  width: 640px;
+  margin: 0 auto;
+}

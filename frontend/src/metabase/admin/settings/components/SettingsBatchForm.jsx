@@ -7,7 +7,7 @@ import _ from "underscore";
 import Collapse from "react-collapse";
 import { t } from "ttag";
 import Breadcrumbs from "metabase/components/Breadcrumbs";
-import Button from "metabase/core/components/Button";
+import Button from "metabase/components/Button";
 import DisclosureTriangle from "metabase/components/DisclosureTriangle";
 import MetabaseUtils from "metabase/lib/utils";
 import SettingsSetting from "./SettingsSetting";
@@ -31,7 +31,16 @@ const SAVE_SETTINGS_BUTTONS_STATES = {
   success: t`Changes saved!`,
 };
 
-class SettingsBatchForm extends Component {
+@connect(
+  null,
+  (dispatch, { updateSettings }) => ({
+    updateSettings:
+      updateSettings || (settings => dispatch(defaultUpdateSettings(settings))),
+  }),
+  null,
+  { withRef: true }, // HACK: needed so consuming components can call methods on the component :-/
+)
+export default class SettingsBatchForm extends Component {
   constructor(props, context) {
     super(props, context);
     this.state = {
@@ -49,25 +58,29 @@ class SettingsBatchForm extends Component {
     updateSettings: PropTypes.func.isRequired,
   };
 
-  componentDidMount() {
-    this.updateFormData();
-    this.validateForm();
+  UNSAFE_componentWillMount() {
+    // this gives us an opportunity to load up our formData with any existing values for elements
+    this.updateFormData(this.props);
   }
 
-  componentDidUpdate(prevProps) {
-    if (this.props.elements !== prevProps.elements) {
-      this.updateFormData();
-    }
-
-    this.validateForm();
+  UNSAFE_componentWillReceiveProps(nextProps) {
+    this.updateFormData(nextProps);
   }
 
-  updateFormData() {
+  updateFormData(props) {
     const formData = {};
-    for (const element of this.props.elements) {
+    for (const element of props.elements) {
       formData[element.key] = element.value;
     }
     this.setState({ formData, pristine: true });
+  }
+
+  componentDidMount() {
+    this.validateForm();
+  }
+
+  componentDidUpdate() {
+    this.validateForm();
   }
 
   setSubmitting(submitting) {
@@ -301,16 +314,6 @@ class SettingsBatchForm extends Component {
     );
   }
 }
-
-export default connect(
-  null,
-  (dispatch, { updateSettings }) => ({
-    updateSettings:
-      updateSettings || (settings => dispatch(defaultUpdateSettings(settings))),
-  }),
-  null,
-  { withRef: true }, // HACK: needed so consuming components can call methods on the component :-/
-)(SettingsBatchForm);
 
 const StandardSection = ({ title, children }) => (
   <div>

@@ -1,10 +1,10 @@
-import styled from "@emotion/styled";
+import styled from "styled-components";
 import PropTypes from "prop-types";
-import Button from "metabase/core/components/Button";
+import Button from "metabase/components/Button";
 import { color } from "metabase/lib/colors";
 
 const FONT_SIZE_VARIANTS = {
-  small: "0.875em",
+  small: "12px",
   medium: "1em",
 };
 
@@ -15,11 +15,6 @@ export const TextButton = styled(Button)`
   border: none;
   padding: 0;
   background-color: transparent;
-
-  &:hover {
-    background-color: transparent;
-    color: ${color("text-brand")};
-  }
 `;
 
 TextButton.propTypes = {

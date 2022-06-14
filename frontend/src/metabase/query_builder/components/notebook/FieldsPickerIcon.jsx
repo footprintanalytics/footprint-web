@@ -1,6 +1,6 @@
 import React from "react";
 import PropTypes from "prop-types";
-import styled from "@emotion/styled";
+import styled from "styled-components";
 import { t } from "ttag";
 
 import Icon from "metabase/components/Icon";
@@ -25,7 +25,7 @@ export function FieldsPickerIcon({ isTriggeredComponentOpen }) {
       tooltip={<span>{t`Pick columns`}</span>}
       isEnabled={!isTriggeredComponentOpen}
     >
-      <FieldPickerContentContainer data-testid="fields-picker">
+      <FieldPickerContentContainer>
         <StyledIcon name="table" size={14} />
       </FieldPickerContentContainer>
     </Tooltip>
@@ -40,7 +40,7 @@ export const FIELDS_PICKER_STYLES = {
   },
   notebookRightItemContainer: {
     width: 37,
-    height: 37,
+    height: 42,
     padding: 0,
   },
   trigger: {

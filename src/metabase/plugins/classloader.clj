@@ -64,14 +64,14 @@
   [^ClassLoader classloader]
   (has-classloader-as-ancestor? classloader @shared-context-classloader))
 
-(defn the-classloader
+(defn ^ClassLoader the-classloader
   "Fetch the context classloader for the current thread; ensure it has a our shared context classloader as an ancestor
   somewhere in its hierarchy, changing the thread's context classloader when needed.
 
   This function should be used when loading classes (such as JDBC drivers) with `Class/forName`; and for side-effects
   before calling `require`, to ensure the context classloader for the current thread is one that has access to the JARs
   we've added to the classpath."
-  ^ClassLoader []
+  []
   (or
    ;; if the context classloader already has the classloader we'll add URLs to as an ancestor return it as-is
    (let [current-thread-context-classloader (.getContextClassLoader (Thread/currentThread))]
@@ -109,16 +109,20 @@
    (some #(when (instance? DynamicClassLoader %) %)
          (classloader-hierarchy classloader))))
 
-(defn- require* [& args]
+(defn require
+  "Just like vanilla `require`, but ensures we're using our shared classloader to do it. Always use this over vanilla
+  `require` -- otherwise namespaces might get loaded by the wrong ClassLoader, resulting in weird, hard-to-debug
+  errors.
+
+  Added benefit -- this is also thread-safe, unlike vanilla require."
+  [& args]
   ;; during compilation, don't load any namespaces. This is going to totally screw up our compilation because
-  ;; namespaces can end up being compiled twice because the topological sort in the build script doesn't take these
-  ;; calls into account
+  ;; namespaces can end up being compiled twice
   (when-not *compile-files*
+    ;; done for side-effects to ensure context classloader is the right one
+    (the-classloader)
     ;; as elsewhere make sure Clojure is using our context classloader (which should normally be true anyway) because
     ;; that's the one that will have access to the JARs we've added to the classpath at runtime
-    ;;
-    ;; this is done for side-effects
-    (the-classloader)
     (try
       (binding [*use-context-classloader* true]
         ;; serialize requires
@@ -130,23 +134,6 @@
                          :classpath-urls   (map str (dynapath/all-classpath-urls (the-classloader)))
                          :system-classpath (sort (str/split (System/getProperty "java.class.path") #"[:;]"))}
                         e))))))
-
-(defn require
-  "Just like vanilla `require`, but ensures we're using our shared classloader to do it. Always use this over vanilla
-  `require` -- otherwise namespaces might get loaded by the wrong ClassLoader, resulting in weird, hard-to-debug
-  errors.
-
-  Added benefit -- this is also thread-safe, unlike vanilla require."
-  ([x]
-   ;; Check whether the lib is already loaded (we only do this in simple cases where with just one arg -- this is
-   ;; most of the calls anyway). If the lib is already loaded we can skip acquiring the lock and expensive stuff like
-   ;; bindings and the try-catch
-   (let [already-loaded? (and (symbol? x)
-                              ((loaded-libs) x))]
-     (when-not already-loaded?
-       (require* x))))
-  ([x & more]
-   (apply require* x more)))
 
 (defonce ^:private already-added (atom #{}))
 

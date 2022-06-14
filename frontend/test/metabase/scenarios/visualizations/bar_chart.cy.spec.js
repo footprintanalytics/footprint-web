@@ -1,9 +1,7 @@
 import { restore, visitQuestionAdhoc } from "__support__/e2e/cypress";
+import { SAMPLE_DATASET } from "__support__/e2e/cypress_sample_dataset";
 
-import { SAMPLE_DB_ID } from "__support__/e2e/cypress_data";
-import { SAMPLE_DATABASE } from "__support__/e2e/cypress_sample_database";
-
-const { ORDERS, ORDERS_ID } = SAMPLE_DATABASE;
+const { ORDERS, ORDERS_ID } = SAMPLE_DATASET;
 
 describe("scenarios > visualizations > bar chart", () => {
   beforeEach(() => {
@@ -24,7 +22,7 @@ describe("scenarios > visualizations > bar chart", () => {
         dataset_query: {
           type: "native",
           native: { query, "template-tags": {} },
-          database: SAMPLE_DB_ID,
+          database: 1,
         },
         display: "bar",
         visualization_settings: visualizationSettings,
@@ -39,6 +37,7 @@ describe("scenarios > visualizations > bar chart", () => {
         }),
       );
 
+      cy.wait("@dataset");
       cy.findByText("(empty)").should("not.exist");
     });
 
@@ -51,6 +50,7 @@ describe("scenarios > visualizations > bar chart", () => {
         }),
       );
 
+      cy.wait("@dataset");
       cy.findByText("(empty)");
     });
   });
@@ -67,7 +67,7 @@ describe("scenarios > visualizations > bar chart", () => {
               ["field", ORDERS.DISCOUNT, { binning: { strategy: "default" } }],
             ],
           },
-          database: SAMPLE_DB_ID,
+          database: 1,
         },
       });
 
@@ -91,7 +91,7 @@ describe("scenarios > visualizations > bar chart", () => {
               "union all\n" +
               "select '2021-01-03' as x_axis_1, 'A' as x_axis_2, 20000000 as y_axis\n",
           },
-          database: SAMPLE_DB_ID,
+          database: 1,
         },
         visualization_settings: {
           "graph.show_values": true,
@@ -100,9 +100,8 @@ describe("scenarios > visualizations > bar chart", () => {
         },
       });
 
-      cy.get(".value-labels")
-        .should("contain", "19")
-        .and("contain", "20.0M");
+      cy.findByText("19");
+      cy.findAllByText("20.0M");
     });
   });
 });

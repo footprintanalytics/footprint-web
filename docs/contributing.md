@@ -1,7 +1,3 @@
----
-title: Thank you
----
-
 ## Thank you
 
 First off, thanks for your interest in Metabase and for wanting to contribute!
@@ -35,7 +31,7 @@ Once a feature has been defined, typically it will be taken on by a product desi
 
 Once the main UX flows have been dialed in, there will be a hi-fidelity visual design.
 
-Features that are ready for design are tagged [Design Needed](https://github.com/metabase/metabase/labels/.Design%20Needed). Once a feature has had a reasonably complete visual design it should be tagged [Help Wanted](https://github.com/metabase/metabase/labels/.Help%20Wanted).
+Features that are ready for design are are tagged [Design Needed](https://github.com/metabase/metabase/labels/.Design%20Needed). Once a feature has had a reasonably complete visual design it should be tagged [Help Wanted](https://github.com/metabase/metabase/labels/.Help%20Wanted).
 
 ### D) Build the feature
 
@@ -53,11 +49,11 @@ If all goes well, the feature gets coded up, verified and then the pull request 
 
 If there are tests missing, code style concerns or specific architectural issues in the pull request, they should be fixed before merging. We have a very high bar on both code and product quality and it's important that this be maintained going forward, so please be patient with us here.
 
-## Ways to help
+## Ways to help:
 
-The starting point would be to get familiar with Metabase the product, and know your way around. If you're using it at work, that's great! If not, [download Metabase](https://www.metabase.com/start/oss/) and play around with it. Read the docs and generally get a feel for the flow of the product.
+The starting point would be to get familiar with Metabase the product, and know your way around. If you're using it at work, that's great! If not, download the mac application or the jar and play around with it. Read the docs and generally get a feel for the flow of the product.
 
-Here are some ways you can help, in order of increasing coordination + interaction with us:
+If you want to help out, there are lots of ways. In order of increasing coordination + interaction with us:
 
 ### Help with identifying needs and problems Metabase can solve
 

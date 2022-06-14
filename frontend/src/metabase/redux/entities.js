@@ -1,15 +1,18 @@
 import { combineEntities } from "metabase/lib/entities";
+import type { Entity, Reducer } from "metabase/lib/entities";
 
 import * as entitiesMap from "metabase/entities";
 
-const entitiesArray = Object.values(entitiesMap);
+const entitiesArray: Entity[] = Object.values(entitiesMap);
 
 export const { entities, reducer, requestsReducer } = combineEntities(
   entitiesArray,
 );
 export default reducer;
 
-export const enhanceRequestsReducer = originalRequestsReducer => {
+export const enhanceRequestsReducer = (
+  originalRequestsReducer: Reducer,
+): Reducer => {
   return (state, action) =>
     originalRequestsReducer(requestsReducer(state, action), action);
 };

@@ -1,18 +1,34 @@
-import {
-  restore,
-  popover,
-  openPeopleTable,
-  summarize,
-} from "__support__/e2e/cypress";
+import { restore, popover, openPeopleTable } from "__support__/e2e/cypress";
 
-import { LONGITUDE_OPTIONS } from "./constants";
+const LONGITUDE_OPTIONS = {
+  "Auto bin": {
+    selected: "Auto binned",
+    representativeValues: ["170° W", "100° W", "60° W"],
+  },
+  "Bin every 0.1 degrees": {
+    selected: "0.1°",
+    representativeValues: null,
+  },
+  "Bin every 1 degree": {
+    selected: "1°",
+    representativeValues: ["167° W", "164° W", "67° W"],
+  },
+  "Bin every 10 degrees": {
+    selected: "10°",
+    representativeValues: ["170° W", "100° W", "60° W"],
+  },
+  "Bin every 20 degrees": {
+    selected: "20°",
+    representativeValues: ["180° W", "160° W", "100° W", "80° W", "60° W"],
+  },
+};
 
 describe("scenarios > binning > correctness > longitude", () => {
   beforeEach(() => {
     restore();
     cy.signInAsAdmin();
     openPeopleTable();
-    summarize();
+    cy.findByText("Summarize").click();
     openPopoverFromDefaultBucketSize("Longitude", "Auto bin");
   });
 
@@ -23,11 +39,12 @@ describe("scenarios > binning > correctness > longitude", () => {
           cy.findByText(bucketSize).click();
         });
 
-        cy.get("li[aria-selected='true']")
+        cy.get(".List-item--selected")
           .should("contain", "Longitude")
           .and("contain", selected);
 
         cy.findByText("Done").click();
+        cy.findByTestId("sidebar-right").should("not.be.visible");
 
         getTitle(`Count by Longitude: ${selected}`);
         cy.get(".bar");
@@ -43,11 +60,12 @@ describe("scenarios > binning > correctness > longitude", () => {
       cy.findByText("Don't bin").click();
     });
 
-    cy.get("li[aria-selected='true']")
+    cy.get(".List-item--selected")
       .should("contain", "Longitude")
       .and("contain", "Unbinned");
 
     cy.findByText("Done").click();
+    cy.findByTestId("sidebar-right").should("not.be.visible");
 
     getTitle("Count by Longitude");
     cy.get(".cellData")
@@ -59,16 +77,18 @@ describe("scenarios > binning > correctness > longitude", () => {
 });
 
 function openPopoverFromDefaultBucketSize(column, bucket) {
-  cy.findAllByTestId("dimension-list-item")
-    .filter(`:contains("${column}")`)
-    .as("targetListItem")
-    .realHover()
-    .within(() => {
-      cy.findByTestId("dimension-list-item-binning")
-        .as("listItemSelectedBinning")
-        .should("contain", bucket)
-        .click();
-    });
+  cy.findByTestId("sidebar-right")
+    .contains(column)
+    .first()
+    .closest(".List-item")
+    .should("be.visible")
+    .as("targetListItem");
+
+  cy.get("@targetListItem")
+    .find(".Field-extra")
+    .as("listItemSelectedBinning")
+    .should("contain", bucket)
+    .click();
 }
 
 function getTitle(title) {

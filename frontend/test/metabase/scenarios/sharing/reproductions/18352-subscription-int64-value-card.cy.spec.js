@@ -1,10 +1,4 @@
-import {
-  restore,
-  setupSMTP,
-  visitQuestion,
-  visitDashboard,
-  clickSend,
-} from "__support__/e2e/cypress";
+import { restore, setupSMTP } from "__support__/e2e/cypress";
 import { USERS } from "__support__/e2e/cypress_data";
 
 const {
@@ -27,15 +21,19 @@ describe("issue 18352", () => {
 
     cy.createNativeQuestionAndDashboard({ questionDetails }).then(
       ({ body: { card_id, dashboard_id } }) => {
-        visitQuestion(card_id);
+        cy.intercept("POST", `/api/card/${card_id}/query`).as("cardQuery");
 
-        visitDashboard(dashboard_id);
+        cy.visit(`/question/${card_id}`);
+        cy.wait("@cardQuery");
+
+        cy.visit(`/dashboard/${dashboard_id}`);
       },
     );
   });
 
   it("should send the card with the INT64 values (metabase#18352)", () => {
-    cy.icon("subscription").click();
+    cy.icon("share").click();
+    cy.findByText("Dashboard subscriptions").click();
 
     cy.findByText("Email it").click();
 
@@ -44,7 +42,8 @@ describe("issue 18352", () => {
     // Click this just to close the popover that is blocking the "Send email now" button
     cy.findByText(`To:`).click();
 
-    clickSend();
+    cy.button("Send email now").click();
+    cy.findByText("Email sent");
 
     cy.request("GET", "http://localhost:80/email").then(
       ({ body: [{ html }] }) => {

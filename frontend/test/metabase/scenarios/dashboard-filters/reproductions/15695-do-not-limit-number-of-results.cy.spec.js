@@ -1,7 +1,7 @@
-import { restore, filterWidget, visitDashboard } from "__support__/e2e/cypress";
-import { SAMPLE_DATABASE } from "__support__/e2e/cypress_sample_database";
+import { restore, filterWidget } from "__support__/e2e/cypress";
+import { SAMPLE_DATASET } from "__support__/e2e/cypress_sample_dataset";
 
-const { PRODUCTS, PRODUCTS_ID } = SAMPLE_DATABASE;
+const { PRODUCTS, PRODUCTS_ID } = SAMPLE_DATASET;
 
 const filter = {
   name: "Text",
@@ -54,7 +54,7 @@ describe("issue 15695", () => {
           ],
         });
 
-        visitDashboard(dashboard_id);
+        cy.visit(`/dashboard/${dashboard_id}`);
       },
     );
 

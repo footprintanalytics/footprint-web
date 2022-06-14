@@ -1,7 +1,3 @@
----
-title: Metabase logs
----
-
 # Metabase logs
 
 Metabase logs quite a bit of information by default. It uses [Log4j 2][log4j] under the hood, so you can configure how much information Metabase logs.
@@ -58,7 +54,7 @@ docker run -p 3000:3000 -v $PWD/my_log4j2.xml:/tmp/my_log4j2.xml -e JAVA_OPTS=-D
 
 ## Disable emoji or colorized logging
 
-By default Metabase will include emoji characters in logs. You can disable emoji by using the `MB_EMOJI_IN_LOGS` environment variable:
+By default Metabase will include emoji characters in logs. You can disable emoji by using the `MB_EMOJIN_IN_LOGS` environment variable:
 
 ### Configuring Emoji Logging
 
@@ -70,4 +66,4 @@ java -jar metabase.jar
 [default-log-config]: https://github.com/metabase/metabase/blob/master/resources/log4j2.xml
 [levels]: https://logging.apache.org/log4j/2.x/manual/customloglevels.html
 [log4j]: https://logging.apache.org/log4j/2.x/
-[read-logs]: ../troubleshooting-guide/server-logs.html
+[read-logs]: ../troubleshooting-guide/server-logs.html 

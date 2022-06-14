@@ -1,19 +1,10 @@
 import _ from "underscore";
 import { restore } from "__support__/e2e/cypress";
-import { SAMPLE_DATABASE } from "__support__/e2e/cypress_sample_database";
+import { SAMPLE_DATASET } from "__support__/e2e/cypress_sample_dataset";
 
-const { ORDERS, ORDERS_ID } = SAMPLE_DATABASE;
+const { ORDERS, ORDERS_ID } = SAMPLE_DATASET;
 
 describe("scenarios > collection items listing", () => {
-  beforeEach(() => {
-    cy.intercept("GET", "/api/collection/root/items?*").as(
-      "getCollectionItems",
-    );
-
-    restore();
-    cy.signInAsAdmin();
-  });
-
   const TEST_QUESTION_QUERY = {
     "source-table": ORDERS_ID,
     aggregation: [["count"]],
@@ -31,8 +22,11 @@ describe("scenarios > collection items listing", () => {
     const TOTAL_ITEMS = ADDED_DASHBOARDS + ADDED_QUESTIONS;
 
     beforeEach(() => {
-      // Removes questions and dashboards included in the default database,
-      // so the test won't fail if we change the default database
+      restore();
+      cy.signInAsAdmin();
+
+      // Removes questions and dashboards included in a default dataset,
+      // so the test won't fail if we change the default dataset
       cy.request("GET", "/api/collection/root/items").then(response => {
         response.body.data.forEach(({ model, id }) => {
           if (model !== "collection") {
@@ -55,7 +49,7 @@ describe("scenarios > collection items listing", () => {
     });
 
     it("should allow to navigate back and forth", () => {
-      visitRootCollection();
+      cy.visit("/collection/root");
 
       // First page
       cy.findByText(`1 - ${PAGE_SIZE}`);
@@ -63,7 +57,6 @@ describe("scenarios > collection items listing", () => {
       cy.findAllByTestId("collection-entry").should("have.length", PAGE_SIZE);
 
       cy.findByTestId("next-page-btn").click();
-      cy.wait("@getCollectionItems");
 
       // Second page
       cy.findByText(`${PAGE_SIZE + 1} - ${TOTAL_ITEMS}`);
@@ -85,6 +78,9 @@ describe("scenarios > collection items listing", () => {
 
   describe("sorting", () => {
     beforeEach(() => {
+      restore();
+      cy.signInAsAdmin();
+
       // Removes questions and dashboards included in a default dataset,
       // so it's easier to test sorting
       cy.request("GET", "/api/collection/root/items").then(response => {
@@ -98,110 +94,171 @@ describe("scenarios > collection items listing", () => {
       });
     });
 
-    it("should allow to sort unpinned items by columns asc and desc", () => {
-      ["A", "B", "C"].forEach((letter, i) => {
-        cy.createDashboard({
-          name: `${letter} Dashboard`,
-          collection_position: null,
+    [true, false].forEach(pinned => {
+      const testName = pinned
+        ? "should allow to sort pinned items by columns asc and desc"
+        : "should allow to sort items by columns asc and desc";
+
+      it(testName, () => {
+        ["A", "B", "C"].forEach((letter, i) => {
+          cy.createDashboard({
+            name: `${letter} Dashboard`,
+            collection_position: pinned ? i + 1 : null,
+          });
+
+          // Signing in as a different users, so we have different names in "Last edited by"
+          // In that way we can test sorting by this column correctly
+          cy.signIn("normal");
+
+          cy.createQuestion({
+            name: `${letter} Question`,
+            collection_position: pinned ? i + 1 : null,
+            query: TEST_QUESTION_QUERY,
+          });
         });
 
-        // Signing in as a different users, so we have different names in "Last edited by"
-        // In that way we can test sorting by this column correctly
-        cy.signIn("normal");
+        cy.visit("/collection/root");
+
+        getAllCollectionItemNames({ pinned }).then(
+          ({ actualNames, sortedNames }) => {
+            expect(
+              actualNames,
+              "sorted alphabetically by default",
+            ).to.deep.equal(sortedNames);
+          },
+        );
+
+        toggleSortingFor(/Name/i, { pinned });
+        getAllCollectionItemNames({ pinned }).then(
+          ({ actualNames, sortedNames }) => {
+            expect(actualNames, "sorted alphabetically reversed").to.deep.equal(
+              sortedNames.reverse(),
+            );
+          },
+        );
+
+        toggleSortingFor(/Name/i, { pinned });
+        getAllCollectionItemNames({ pinned }).then(
+          ({ actualNames, sortedNames }) => {
+            expect(actualNames, "sorted alphabetically").to.deep.equal(
+              sortedNames,
+            );
+          },
+        );
+
+        toggleSortingFor(/Type/i, { pinned });
+        getAllCollectionItemNames({ pinned }).then(
+          ({ actualNames, sortedNames }) => {
+            const dashboardsFirst = _.sortBy(sortedNames, name =>
+              name.toLowerCase().includes("question"),
+            );
+            expect(actualNames, "sorted dashboards first").to.deep.equal(
+              dashboardsFirst,
+            );
+          },
+        );
+
+        toggleSortingFor(/Type/i, { pinned });
+        getAllCollectionItemNames({ pinned }).then(
+          ({ actualNames, sortedNames }) => {
+            const questionsFirst = _.sortBy(sortedNames, name =>
+              name.toLowerCase().includes("dashboard"),
+            );
+            expect(actualNames, "sorted questions first").to.deep.equal(
+              questionsFirst,
+            );
+          },
+        );
+
+        const lastEditedByColumnTestId = pinned
+          ? "pinned-collection-entry-last-edited-by"
+          : "collection-entry-last-edited-by";
+
+        toggleSortingFor(/Last edited by/i, { pinned });
+        cy.findAllByTestId(lastEditedByColumnTestId).then(nodes => {
+          const actualNames = _.map(nodes, "innerText");
+          const sortedNames = _.sortBy(actualNames);
+          expect(
+            actualNames,
+            "sorted by last editor name alphabetically",
+          ).to.deep.equal(sortedNames);
+        });
+
+        toggleSortingFor(/Last edited by/i, { pinned });
+        cy.findAllByTestId(lastEditedByColumnTestId).then(nodes => {
+          const actualNames = _.map(nodes, "innerText");
+          const sortedNames = _.sortBy(actualNames);
+          expect(
+            actualNames,
+            "sorted by last editor name alphabetically reversed",
+          ).to.deep.equal(sortedNames.reverse());
+        });
+
+        toggleSortingFor(/Last edited at/i, { pinned });
+        getAllCollectionItemNames({ pinned }).then(
+          ({ actualNames, sortedNames }) => {
+            expect(actualNames, "sorted newest last").to.deep.equal(
+              sortedNames,
+            );
+          },
+        );
+
+        toggleSortingFor(/Last edited at/i, { pinned });
+        getAllCollectionItemNames({ pinned }).then(
+          ({ actualNames, sortedNames }) => {
+            expect(actualNames, "sorted newest first").to.deep.equal(
+              sortedNames.reverse(),
+            );
+          },
+        );
+      });
+    });
+
+    it("should allow to separately sort pinned and not pinned items", () => {
+      ["A", "B", "C"].forEach((letter, i) => {
+        cy.createDashboard({ name: `${letter} Dashboard` });
+
+        cy.createDashboard({
+          name: `${letter} Dashboard (pinned)`,
+          collection_position: i + 1,
+        });
 
         cy.createQuestion({
           name: `${letter} Question`,
           collection_position: null,
           query: TEST_QUESTION_QUERY,
         });
+
+        cy.createQuestion({
+          name: `${letter} Question (pinned)`,
+          collection_position: i + 1,
+          query: TEST_QUESTION_QUERY,
+        });
       });
 
-      visitRootCollection();
+      cy.visit("/collection/root");
 
-      getAllCollectionItemNames().then(({ actualNames, sortedNames }) => {
-        expect(actualNames, "sorted alphabetically by default").to.deep.equal(
-          sortedNames,
-        );
-      });
+      toggleSortingFor(/Type/i, { pinned: true });
+      toggleSortingFor(/Name/, { pinned: false });
 
-      toggleSortingFor(/Name/i);
-      cy.wait("@getCollectionItems");
+      getAllCollectionItemNames({ pinned: true }).then(
+        ({ actualNames, sortedNames }) => {
+          const dashboardsFirst = _.sortBy(sortedNames, name =>
+            name.toLowerCase().includes("question"),
+          );
+          expect(actualNames, "sorted dashboards first").to.deep.equal(
+            dashboardsFirst,
+          );
+        },
+      );
 
-      getAllCollectionItemNames().then(({ actualNames, sortedNames }) => {
-        expect(actualNames, "sorted alphabetically reversed").to.deep.equal(
-          sortedNames.reverse(),
-        );
-      });
-
-      toggleSortingFor(/Name/i);
-      // Not sure why the same XHR doesn't happen after we click the "Name" sorting again?
-      getAllCollectionItemNames().then(({ actualNames, sortedNames }) => {
-        expect(actualNames, "sorted alphabetically").to.deep.equal(sortedNames);
-      });
-
-      toggleSortingFor(/Type/i);
-      cy.wait("@getCollectionItems");
-      getAllCollectionItemNames().then(({ actualNames, sortedNames }) => {
-        const dashboardsFirst = _.sortBy(sortedNames, name =>
-          name.toLowerCase().includes("question"),
-        );
-        expect(actualNames, "sorted dashboards first").to.deep.equal(
-          dashboardsFirst,
-        );
-      });
-
-      toggleSortingFor(/Type/i);
-      cy.wait("@getCollectionItems");
-      getAllCollectionItemNames().then(({ actualNames, sortedNames }) => {
-        const questionsFirst = _.sortBy(sortedNames, name =>
-          name.toLowerCase().includes("dashboard"),
-        );
-        expect(actualNames, "sorted questions first").to.deep.equal(
-          questionsFirst,
-        );
-      });
-
-      const lastEditedByColumnTestId = "collection-entry-last-edited-by";
-
-      toggleSortingFor(/Last edited by/i);
-      cy.wait("@getCollectionItems");
-
-      cy.findAllByTestId(lastEditedByColumnTestId).then(nodes => {
-        const actualNames = _.map(nodes, "innerText");
-        const sortedNames = _.sortBy(actualNames);
-        expect(
-          actualNames,
-          "sorted by last editor name alphabetically",
-        ).to.deep.equal(sortedNames);
-      });
-
-      toggleSortingFor(/Last edited by/i);
-      cy.wait("@getCollectionItems");
-
-      cy.findAllByTestId(lastEditedByColumnTestId).then(nodes => {
-        const actualNames = _.map(nodes, "innerText");
-        const sortedNames = _.sortBy(actualNames);
-        expect(
-          actualNames,
-          "sorted by last editor name alphabetically reversed",
-        ).to.deep.equal(sortedNames.reverse());
-      });
-
-      toggleSortingFor(/Last edited at/i);
-      cy.wait("@getCollectionItems");
-
-      getAllCollectionItemNames().then(({ actualNames, sortedNames }) => {
-        expect(actualNames, "sorted newest last").to.deep.equal(sortedNames);
-      });
-
-      toggleSortingFor(/Last edited at/i);
-      cy.wait("@getCollectionItems");
-
-      getAllCollectionItemNames().then(({ actualNames, sortedNames }) => {
-        expect(actualNames, "sorted newest first").to.deep.equal(
-          sortedNames.reverse(),
-        );
-      });
+      getAllCollectionItemNames({ pinned: false }).then(
+        ({ actualNames, sortedNames }) => {
+          expect(actualNames, "sorted alphabetically reversed").to.deep.equal(
+            sortedNames.reverse(),
+          );
+        },
+      );
     });
 
     it("should reset pagination if sorting applied on not first page", () => {
@@ -213,38 +270,32 @@ describe("scenarios > collection items listing", () => {
         }),
       );
 
-      visitRootCollection();
+      cy.visit("/collection/root");
 
       cy.findByText(`1 - ${PAGE_SIZE}`);
-
       cy.findByTestId("next-page-btn").click();
-      cy.wait("@getCollectionItems");
 
       toggleSortingFor(/Last edited at/i);
-      cy.wait("@getCollectionItems");
 
       cy.findByText(`1 - ${PAGE_SIZE}`);
     });
   });
 });
 
-function toggleSortingFor(columnName) {
-  const testId = "items-table-head";
+function toggleSortingFor(columnName, { pinned = false } = {}) {
+  const testId = pinned ? "pinned-items-table-head" : "items-table-head";
   cy.findByTestId(testId)
     .findByText(columnName)
     .click();
 }
 
-function getAllCollectionItemNames() {
-  const testId = "collection-entry-name";
+function getAllCollectionItemNames({ pinned = false } = {}) {
+  const testId = pinned
+    ? "pinned-collection-entry-name"
+    : "collection-entry-name";
   return cy.findAllByTestId(testId).then(nodes => {
     const actualNames = _.map(nodes, "innerText");
     const sortedNames = _.sortBy(actualNames);
     return { actualNames, sortedNames };
   });
-}
-
-function visitRootCollection() {
-  cy.visit("/collection/root");
-  cy.wait(["@getCollectionItems", "@getCollectionItems"]);
 }

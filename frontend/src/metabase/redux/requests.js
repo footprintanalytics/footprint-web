@@ -1,17 +1,17 @@
 import { handleActions, createAction } from "redux-actions";
-import { updateIn, assoc, getIn } from "icepick";
+import { updateIn, assoc } from "icepick";
 
 export const setRequestLoading = createAction(
   "metabase/requests/SET_REQUEST_LOADING",
-  (statePath, queryKey) => ({ statePath, queryKey }),
+  statePath => ({ statePath }),
 );
 export const setRequestLoaded = createAction(
   "metabase/requests/SET_REQUEST_LOADED",
-  (statePath, queryKey) => ({ statePath, queryKey }),
+  statePath => ({ statePath }),
 );
 export const setRequestError = createAction(
   "metabase/requests/SET_REQUEST_ERROR",
-  (statePath, queryKey, error) => ({ statePath, queryKey, error }),
+  (statePath, error) => ({ statePath, error }),
 );
 export const setRequestUnloaded = createAction(
   "metabase/requests/SET_REQUEST_UNLOADED",
@@ -29,18 +29,16 @@ const initialRequestState = {
 const requestStateReducer = handleActions(
   {
     [setRequestLoading]: {
-      next: (state, { payload: { queryKey } }) => ({
+      next: state => ({
         ...state,
-        queryKey,
         loading: true,
         loaded: false,
         error: null,
       }),
     },
     [setRequestLoaded]: {
-      next: (state, { payload: { queryKey } }) => ({
+      next: state => ({
         ...state,
-        queryKey,
         loading: false,
         loaded: true,
         error: null,
@@ -48,9 +46,8 @@ const requestStateReducer = handleActions(
       }),
     },
     [setRequestError]: {
-      next: (state, { payload: { queryKey, error } }) => ({
+      next: (state, { payload: { error } }) => ({
         ...state,
-        queryKey,
         loading: false,
         loaded: false,
         error: error,
@@ -78,21 +75,11 @@ function requestStateReducerRecursive(state, action) {
   }
 }
 
-const isBulkInvalidation = statePath => {
-  // Bulk invalidations only have a statePath with a length of 2
-  return statePath.length <= 2;
-};
-
 export default (state = {}, action) => {
   if (action && action.payload && action.payload.statePath) {
-    const statePath = action.payload.statePath;
-    const hasStateToUpdate = !!getIn(state, statePath);
-
-    if (hasStateToUpdate || !isBulkInvalidation(statePath)) {
-      state = updateIn(state, action.payload.statePath, subState =>
-        requestStateReducerRecursive(subState, action),
-      );
-    }
+    state = updateIn(state, action.payload.statePath, subState =>
+      requestStateReducerRecursive(subState, action),
+    );
   }
   return state;
 };

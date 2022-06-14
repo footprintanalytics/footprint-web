@@ -40,7 +40,7 @@ export const averageExecutionTime = questionId => ({
   },
 });
 
-export const revisionHistory = questionId => ({
+export const revisionHistory = (questionId: number) => ({
   card: {
     name: "Revision history",
     display: "table",
@@ -61,7 +61,7 @@ export const revisionHistory = questionId => ({
   },
 });
 
-export const auditLog = questionId => ({
+export const auditLog = (questionId: number) => ({
   card: {
     name: "Audit log",
     display: "table",

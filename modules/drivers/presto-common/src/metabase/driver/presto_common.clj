@@ -4,7 +4,7 @@
   (:require [buddy.core.codecs :as codecs]
             [honeysql.core :as hsql]
             [honeysql.format :as hformat]
-            [honeysql.helpers :as hh]
+            [honeysql.helpers :as h]
             [java-time :as t]
             [metabase.driver :as driver]
             [metabase.driver.common :as driver.common]
@@ -151,16 +151,16 @@
   (let [offset (* (dec page) items)]
     (if (zero? offset)
       ;; if there's no offset we can simply use limit
-      (hh/limit honeysql-query items)
+      (h/limit honeysql-query items)
       ;; if we need to do an offset we have to do nesting to generate a row number and where on that
       (let [over-clause (format "row_number() OVER (%s)"
                                 (first (hsql/format (select-keys honeysql-query [:order-by])
                                                     :allow-dashed-names? true
                                                     :quoting :ansi)))]
-        (-> (apply hh/select (map last (:select honeysql-query)))
-            (hh/from (hh/merge-select honeysql-query [(hsql/raw over-clause) :__rownum__]))
-            (hh/where [:> :__rownum__ offset])
-            (hh/limit items))))))
+        (-> (apply h/select (map last (:select honeysql-query)))
+            (h/from (h/merge-select honeysql-query [(hsql/raw over-clause) :__rownum__]))
+            (h/where [:> :__rownum__ offset])
+            (h/limit items))))))
 
 (defmethod sql.qp/date [:presto-common :default]         [_ _ expr] expr)
 (defmethod sql.qp/date [:presto-common :minute]          [_ _ expr] (hsql/call :date_trunc (hx/literal :minute) expr))

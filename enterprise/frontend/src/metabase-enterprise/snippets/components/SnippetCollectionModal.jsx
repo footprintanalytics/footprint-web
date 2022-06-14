@@ -6,7 +6,8 @@ import Modal from "metabase/components/Modal";
 
 import SnippetCollections from "metabase/entities/snippet-collections";
 
-class SnippetCollectionModal extends React.Component {
+@SnippetCollections.load({ id: (state, props) => props.collection.id })
+export default class SnippetCollectionModal extends React.Component {
   render() {
     const {
       snippetCollection,
@@ -31,7 +32,3 @@ class SnippetCollectionModal extends React.Component {
     );
   }
 }
-
-export default SnippetCollections.load({
-  id: (state, props) => props.collection.id,
-})(SnippetCollectionModal);

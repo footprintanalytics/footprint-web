@@ -11,7 +11,7 @@
             [metabase.models.table :refer [Table]]
             [metabase.sync :as sync]
             [metabase.test :as mt]
-            [metabase.test.mock.util :as mock.util]
+            [metabase.test.mock.util :as mock.u]
             [metabase.test.util :as tu]
             [metabase.util :as u]
             [toucan.db :as db]))
@@ -81,7 +81,7 @@
 
 (defmethod driver/execute-reducible-query ::sync-test
   [_ query _ respond]
-  (mock.util/mock-execute-reducible-query query respond))
+  (mock.u/mock-execute-reducible-query query respond))
 
 (defn- table-details [table]
   (into {} (-> (dissoc table :db :pk_field :field_values)
@@ -190,19 +190,17 @@
       (testing "`movie` Table"
         (is (= (merge
                 (table-defaults)
-                {:schema              "default"
-                 :name                "movie"
-                 :display_name        "Movie"
-                 :initial_sync_status "complete"
-                 :fields              [(field:movie-id) (field:movie-studio) (field:movie-title)]})
+                {:schema       "default"
+                 :name         "movie"
+                 :display_name "Movie"
+                 :fields       [(field:movie-id) (field:movie-studio) (field:movie-title)]})
                movie)))
       (testing "`studio` Table"
         (is (= (merge
                 (table-defaults)
-                {:name                "studio"
-                 :display_name        "Studio"
-                 :initial_sync_status "complete"
-                 :fields              [(field:studio-name) (field:studio-studio)]})
+                {:name         "studio"
+                 :display_name "Studio"
+                 :fields       [(field:studio-name) (field:studio-studio)]})
                studio)))))
   (testing "Returns results from sync-database step"
     (mt/with-temp Database [db {:engine ::sync-test}]

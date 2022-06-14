@@ -1,5 +1,4 @@
-import { t } from "ttag";
-import { createEntity, notify } from "metabase/lib/entities";
+import { createEntity } from "metabase/lib/entities";
 import {
   compose,
   withAction,
@@ -53,7 +52,16 @@ const Fields = createEntity({
     // getMetadata filters out sensitive fields by default.
     // This selector is used in the data model when we want to show them.
     getObjectUnfiltered: (state, { entityId }) => {
-      const field = state.entities.fields[entityId];
+      let field;
+      if (typeof entityId === "string") {
+        field = state.entities.fields[entityId];
+      } else {
+        const key = Object.keys(state.entities.fields)?.find(id => {
+          const idArray = id?.split("-");
+          return idArray?.length > 0 && idArray[0] === `${entityId}`;
+        });
+        field = !!key && state.entities.fields[key];
+      }
       return (
         field && {
           ...field,
@@ -62,10 +70,6 @@ const Fields = createEntity({
           target: state.entities.fields[field.fk_target_field_id],
         }
       );
-    },
-    getFieldValues: (state, { entityId }) => {
-      const field = state.entities.fields[entityId];
-      return field ? getFieldValues(field) : [];
     },
   },
 
@@ -77,32 +81,15 @@ const Fields = createEntity({
       withCachedDataAndRequestState(
         ({ id }) => [...Fields.getObjectStatePath(id)],
         ({ id }) => [...Fields.getObjectStatePath(id), "values"],
-        entityQuery => Fields.getQueryKey(entityQuery),
       ),
       withNormalize(FieldSchema),
-    )(({ id: fieldId }) => async (dispatch, getState) => {
+    )(({ id: fieldId, table_id }) => async (dispatch, getState) => {
       const { field_id: id, values } = await MetabaseApi.field_values({
         fieldId,
       });
-      return { id, values };
+      return { id, table_id, values };
     }),
 
-    updateField(field, opts) {
-      return async dispatch => {
-        const result = await dispatch(
-          Fields.actions.update(
-            { id: field.id },
-            field,
-            notify(opts, field.display_name, t`updated`),
-          ),
-        );
-        // Field values needs to be fetched again once the field is updated metabase#16322
-        await dispatch(
-          Fields.actions.fetchFieldValues(field, { reload: true }),
-        );
-        return result;
-      };
-    },
     // Docstring from m.api.field:
     // Update the human-readable values for a `Field` whose semantic type is
     // `category`/`city`/`state`/`country` or whose base type is `type/Boolean`."

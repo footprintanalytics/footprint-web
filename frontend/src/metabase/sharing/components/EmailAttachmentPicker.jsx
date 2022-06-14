@@ -5,10 +5,10 @@ import _ from "underscore";
 import { t } from "ttag";
 
 import { SegmentedControl } from "metabase/components/SegmentedControl";
-import CheckBox from "metabase/core/components/CheckBox";
+import CheckBox from "metabase/components/CheckBox";
 import Label from "metabase/components/type/Label";
 import StackedCheckBox from "metabase/components/StackedCheckBox";
-import Toggle from "metabase/core/components/Toggle";
+import Toggle from "metabase/components/Toggle";
 
 export default class EmailAttachmentPicker extends Component {
   DEFAULT_ATTACHMENT_TYPE = "csv";
@@ -208,7 +208,7 @@ export default class EmailAttachmentPicker extends Component {
               <ul className="full">
                 <li className="mb2 pb1 flex align-center cursor-pointer border-bottom">
                   <StackedCheckBox
-                    label={t`Questions to attach`}
+                    label={t`Queries to attach`}
                     checked={this.areAllSelected(cards, selectedCardIds)}
                     indeterminate={this.areOnlySomeSelected(
                       cards,

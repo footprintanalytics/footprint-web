@@ -1,16 +1,15 @@
 /* eslint-disable react/prop-types */
 import React, { Component } from "react";
 import styles from "./RefreshWidget.css";
-
+import Button from "metabase/components/Button";
 import PopoverWithTrigger from "metabase/components/PopoverWithTrigger";
 import Tooltip from "metabase/components/Tooltip";
 import Icon from "metabase/components/Icon";
-import ClockIcon from "metabase/components/icons/ClockIcon";
-import CountdownIcon from "metabase/components/icons/CountdownIcon";
+// import ClockIcon from "metabase/components/icons/ClockIcon";
+// import CountdownIcon from "metabase/components/icons/CountdownIcon";
 import { t } from "ttag";
 import cx from "classnames";
-
-import { DashboardHeaderButton } from "metabase/dashboard/containers/DashboardHeader.styled";
+// import { DashboardHeaderButton } from "./DashboardHeader.styled";
 
 const OPTIONS = [
   { name: t`Off`, period: null },
@@ -48,7 +47,11 @@ export default class RefreshWidget extends Component {
   }
 
   render() {
-    const { period, onChangePeriod, className } = this.props;
+    const {
+      period,
+      onChangePeriod,
+      // className
+    } = this.props;
     const { elapsed } = this.state;
     const remaining = period - elapsed;
     return (
@@ -57,9 +60,16 @@ export default class RefreshWidget extends Component {
         triggerElement={
           elapsed == null ? (
             <Tooltip tooltip={t`Auto-refresh`}>
-              <DashboardHeaderButton>
-                <ClockIcon width={18} height={18} className={className} />
-              </DashboardHeaderButton>
+              {/* <DashboardHeaderButton>
+                <Icon size={28} className={className} name={"clock"} />
+              </DashboardHeaderButton> */}
+              <Button
+                onlyIcon
+                className="ml1 Question-header-btn"
+                iconColor="#7A819B"
+                icon="clock"
+                iconSize={16}
+              />
             </Tooltip>
           ) : (
             <Tooltip
@@ -72,21 +82,28 @@ export default class RefreshWidget extends Component {
                 Math.round(remaining % 60)
               }
             >
-              <DashboardHeaderButton>
+              {/* <DashboardHeaderButton>
                 <CountdownIcon
                   width={18}
                   height={18}
                   className="text-green"
                   percent={Math.min(0.95, (period - elapsed) / period)}
                 />
-              </DashboardHeaderButton>
+              </DashboardHeaderButton> */}
+              <Button
+                onlyIcon
+                className="ml1 Question-header-btn"
+                iconColor="#7A819B"
+                icon="clock"
+                iconSize={16}
+              />
             </Tooltip>
           )
         }
         targetOffsetY={10}
       >
         <div className={styles.popover}>
-          <div className={styles.title}>{t`Auto Refresh`}</div>
+          <div className={styles.title}>Auto Refresh</div>
           <RefreshOptionList>
             {OPTIONS.map(option => (
               <RefreshOption

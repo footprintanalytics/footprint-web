@@ -4,9 +4,9 @@ import PropTypes from "prop-types";
 import { t } from "ttag";
 
 import Utils from "metabase/lib/utils";
-import Select, { Option } from "metabase/core/components/Select";
+import Select, { Option } from "metabase/components/Select";
 import Confirm from "metabase/components/Confirm";
-import Ellipsified from "metabase/core/components/Ellipsified";
+import Ellipsified from "metabase/components/Ellipsified";
 import Modal from "metabase/components/Modal";
 import LoadingAndErrorWrapper from "metabase/components/LoadingAndErrorWrapper";
 
@@ -137,10 +137,6 @@ export default class CustomGeoJSONWidget extends Component {
 
   render() {
     const { setting } = this.props;
-
-    if (!setting.value || setting.is_env_setting) {
-      return null;
-    }
 
     return (
       <div className="flex-full">
@@ -274,7 +270,7 @@ const GeoJsonPropertySelect = ({ value, onChange, geoJson }) => {
       {Object.entries(options).map(([name, values]) => (
         <Option key={name} value={name}>
           <div>
-            <div style={{ textAlign: "left" }}>{name}</div>
+            <div>{name}</div>
             <div
               className="mt1 h6"
               style={{
@@ -377,15 +373,11 @@ const EditMap = ({
           </SettingContainer>
         </div>
       </div>
-      <div className="flex-auto ml4 relative bordered rounded flex my4 overflow-hidden">
+      <div className="flex-auto ml4 relative bordered rounded flex my4">
         {geoJson || geoJsonLoading || geoJsonError ? (
-          <LoadingAndErrorWrapper
-            className="flex full-height full-width"
-            loading={geoJsonLoading}
-            error={geoJsonError}
-          >
+          <LoadingAndErrorWrapper loading={geoJsonLoading} error={geoJsonError}>
             {() => (
-              <div className="spread relative">
+              <div className="m4 spread relative">
                 <ChoroplethPreview geoJson={geoJson} />
               </div>
             )}

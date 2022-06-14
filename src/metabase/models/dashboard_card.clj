@@ -4,9 +4,8 @@
             [metabase.events :as events]
             [metabase.models.card :refer [Card]]
             [metabase.models.dashboard-card-series :refer [DashboardCardSeries]]
-            [metabase.models.interface :as mi]
+            [metabase.models.interface :as i]
             [metabase.models.pulse-card :refer [PulseCard]]
-            [metabase.models.serialization.hash :as serdes.hash]
             [metabase.util :as u]
             [metabase.util.schema :as su]
             [schema.core :as s]
@@ -26,8 +25,8 @@
                    (db/select-one [Card :dataset_query] :id (u/the-id (:card_id dashcard))))
         series (or (:series dashcard)
                    (series dashcard))]
-    (apply set/union (mi/perms-objects-set card read-or-write) (for [series-card series]
-                                                                 (mi/perms-objects-set series-card read-or-write)))))
+    (apply set/union (i/perms-objects-set card read-or-write) (for [series-card series]
+                                                                (i/perms-objects-set series-card read-or-write)))))
 
 (defn- pre-insert [dashcard]
   (let [defaults {:sizeX                  2
@@ -39,24 +38,16 @@
 (u/strict-extend (class DashboardCard)
   models/IModel
   (merge models/IModelDefaults
-         {:properties  (constantly {:timestamped? true
-                                    :entity_id    true})
-          :types       (constantly {:parameter_mappings     :parameters-list
+         {:properties  (constantly {:timestamped? true})
+          :types       (constantly {:parameter_mappings     :parameter-mappings
                                     :visualization_settings :visualization-settings})
           :pre-insert  pre-insert
           :post-select #(set/rename-keys % {:sizex :sizeX, :sizey :sizeY})})
-  mi/IObjectPermissions
-  (merge mi/IObjectPermissionsDefaults
+  i/IObjectPermissions
+  (merge i/IObjectPermissionsDefaults
          {:perms-objects-set perms-objects-set
-          :can-read?         (partial mi/current-user-has-full-permissions? :read)
-          :can-write?        (partial mi/current-user-has-full-permissions? :write)})
-
-  serdes.hash/IdentityHashable
-  {:identity-hash-fields (constantly [(serdes.hash/hydrated-hash :card)
-                                      (comp serdes.hash/identity-hash
-                                            #(db/select-one 'Dashboard :id %)
-                                            :dashboard_id)
-                                      :visualization_settings])})
+          :can-read?         (partial i/current-user-has-full-permissions? :read)
+          :can-write?        (partial i/current-user-has-full-permissions? :write)}))
 
 
 ;;; --------------------------------------------------- HYDRATION ----------------------------------------------------
@@ -66,6 +57,7 @@
   [{:keys [dashboard_id]}]
   {:pre [(integer? dashboard_id)]}
   (db/select-one 'Dashboard, :id dashboard_id))
+
 
 (defn ^:hydrate series
   "Return the `Cards` associated as additional series on this DashboardCard."
@@ -83,29 +75,6 @@
   [id :- su/IntGreaterThanZero]
   (-> (DashboardCard id)
       (hydrate :series)))
-
-(defn dashcard->multi-cards
-  "Return the cards which are other cards with respect to this dashboard card
-  in multiple series display for dashboard
-
-  Dashboard (and dashboard only) has this thing where you're displaying multiple cards entirely.
-
-  This is actually completely different from the combo display,
-  which is a visualization type in visualization option.
-
-  This is also actually completely different from having multiple series display
-  from the visualization with same type (line bar or whatever),
-  which is a separate option in line area or bar visualization"
-  [dashcard]
-  (db/query {:select [:newcard.*]
-             :from [[:report_dashboardcard :dashcard]]
-             :left-join [[:dashboardcard_series :dashcardseries]
-                         [:= :dashcard.id :dashcardseries.dashboardcard_id]
-                         [:report_card :newcard]
-                         [:= :dashcardseries.card_id :newcard.id]]
-             :where [:and
-                     [:= :newcard.archived false]
-                     [:= :dashcard.id (:id dashcard)]]}))
 
 (s/defn update-dashboard-card-series!
   "Update the DashboardCardSeries for a given DashboardCard.
@@ -137,7 +106,7 @@
 (s/defn update-dashboard-card!
   "Update an existing DashboardCard` including all DashboardCardSeries.
    Returns the updated DashboardCard or throws an Exception."
-  [{:keys [id parameter_mappings visualization_settings] :as dashboard-card} :- DashboardCardUpdates]
+  [{:keys [id series parameter_mappings visualization_settings] :as dashboard-card} :- DashboardCardUpdates]
   (let [{:keys [sizeX sizeY row col series]} (merge {:series []} dashboard-card)]
     (db/transaction
      ;; update the dashcard itself (positional attributes)
@@ -156,18 +125,10 @@
        (update-dashboard-card-series! dashboard-card series)))
     (retrieve-dashboard-card id)))
 
-(def ParamMapping
-  "Schema for a parameter mapping as it would appear in the DashboardCard `:parameter_mappings` column."
-  {:parameter_id su/NonBlankString
-   ;; TODO -- validate `:target` as well... breaks a few tests tho so those will have to be fixed
-   #_:target       #_s/Any
-   s/Keyword     s/Any})
-
 (def ^:private NewDashboardCard
   {:dashboard_id                            su/IntGreaterThanZero
    (s/optional-key :card_id)                (s/maybe su/IntGreaterThanZero)
-   ;; TODO - use ParamMapping. Breaks too many tests right now tho
-   (s/optional-key :parameter_mappings)     (s/maybe [#_ParamMapping su/Map])
+   (s/optional-key :parameter_mappings)     (s/maybe [su/Map])
    (s/optional-key :visualization_settings) (s/maybe su/Map)
    ;; TODO - make the rest of the options explicit instead of just allowing whatever for other keys
    s/Keyword                                s/Any})
@@ -176,7 +137,7 @@
   "Create a new DashboardCard by inserting it into the database along with all associated pieces of data such as
    DashboardCardSeries. Returns the newly created DashboardCard or throws an Exception."
   [dashboard-card :- NewDashboardCard]
-  (let [{:keys [dashboard_id card_id parameter_mappings visualization_settings sizeX sizeY row col series]
+  (let [{:keys [dashboard_id card_id creator_id parameter_mappings visualization_settings sizeX sizeY row col series]
          :or   {sizeX 2, sizeY 2, series []}} dashboard-card]
     (db/transaction
      (let [dashboard-card (db/insert! DashboardCard

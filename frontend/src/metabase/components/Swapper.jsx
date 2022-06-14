@@ -2,9 +2,12 @@
 import React from "react";
 import { Motion, spring } from "react-motion";
 
-import { isReducedMotionPreferred } from "metabase/lib/dom";
-
 class Swapper extends React.Component {
+  props: {
+    defaultElement: React.Element,
+    swappedElement: React.Element,
+  };
+
   state = {
     hovered: false,
   };
@@ -21,11 +24,6 @@ class Swapper extends React.Component {
     const { defaultElement, swappedElement, startSwapped } = this.props;
     const { hovered } = this.state;
 
-    const preferReducedMotion = isReducedMotionPreferred();
-    const springOpts = preferReducedMotion
-      ? { stiffness: 500 }
-      : { stiffness: 170 };
-
     return (
       <span
         onMouseEnter={() => this._onMouseEnter()}
@@ -38,22 +36,12 @@ class Swapper extends React.Component {
             scale: 1,
           }}
           style={{
-            scale:
-              hovered || startSwapped
-                ? spring(0, springOpts)
-                : spring(1, springOpts),
+            scale: hovered || startSwapped ? spring(0) : spring(1),
           }}
         >
           {({ scale }) => {
-            const snapScale = scale < 0.5 ? 0 : 1;
-            const _scale = preferReducedMotion ? snapScale : scale;
             return (
-              <span
-                style={{
-                  display: "block",
-                  transform: `scale(${_scale})`,
-                }}
-              >
+              <span style={{ display: "block", transform: `scale(${scale})` }}>
                 {defaultElement}
               </span>
             );
@@ -64,19 +52,14 @@ class Swapper extends React.Component {
             scale: 0,
           }}
           style={{
-            scale:
-              hovered || startSwapped
-                ? spring(1, springOpts)
-                : spring(0, springOpts),
+            scale: hovered || startSwapped ? spring(1) : spring(0),
           }}
         >
           {({ scale }) => {
-            const snapScale = scale < 0.5 ? 0 : 1;
-            const _scale = preferReducedMotion ? snapScale : scale;
             return (
               <span
                 className="absolute top left bottom right"
-                style={{ display: "block", transform: `scale(${_scale})` }}
+                style={{ display: "block", transform: `scale(${scale})` }}
               >
                 {swappedElement}
               </span>

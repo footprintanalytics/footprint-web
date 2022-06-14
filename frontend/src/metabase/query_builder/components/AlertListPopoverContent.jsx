@@ -20,7 +20,17 @@ import {
   UpdateAlertModalContent,
 } from "metabase/query_builder/components/AlertModals";
 
-class AlertListPopoverContent extends Component {
+@connect(
+  state => ({ questionAlerts: getQuestionAlerts(state), user: getUser(state) }),
+  null,
+)
+export default class AlertListPopoverContent extends Component {
+  props: {
+    questionAlerts: any[],
+    setMenuFreeze: boolean => void,
+    closeMenu: () => void,
+  };
+
   state = {
     adding: false,
     hasJustUnsubscribedFromOwnAlert: false,
@@ -106,12 +116,19 @@ class AlertListPopoverContent extends Component {
   }
 }
 
-export default connect(
-  state => ({ questionAlerts: getQuestionAlerts(state), user: getUser(state) }),
-  null,
-)(AlertListPopoverContent);
+@connect(state => ({ user: getUser(state) }), {
+  unsubscribeFromAlert,
+  deleteAlert,
+})
+export class AlertListItem extends Component {
+  props: {
+    alert: any,
+    user: any,
+    setMenuFreeze: boolean => void,
+    closeMenu: () => void,
+    onUnsubscribe: () => void,
+  };
 
-class AlertListItemInner extends Component {
   state = {
     unsubscribingProgress: null,
     hasJustUnsubscribed: false,
@@ -173,7 +190,7 @@ class AlertListItemInner extends Component {
               <AlertCreatorTitle alert={alert} user={user} />
             </div>
             <div
-              className="ml-auto text-bold text-small"
+              className={`ml-auto text-bold text-small`}
               style={{
                 transform: `translateY(4px)`,
               }}
@@ -235,18 +252,13 @@ class AlertListItemInner extends Component {
   }
 }
 
-export const AlertListItem = connect(state => ({ user: getUser(state) }), {
-  unsubscribeFromAlert,
-  deleteAlert,
-})(AlertListItemInner);
-
 export const UnsubscribedListItem = () => (
   <li className="border-bottom flex align-center py4 text-bold">
     <div className="circle flex align-center justify-center p1 bg-light ml2">
       <Icon name="check" className="text-success" />
     </div>
     <h3
-      className="text-dark"
+      className={`text-dark`}
       style={{ marginLeft: 10 }}
     >{jt`Okay, you're unsubscribed`}</h3>
   </li>
@@ -316,7 +328,7 @@ export class AlertCreatorTitle extends Component {
     const isAdmin = user.is_superuser;
     const isCurrentUser = alert.creator.id === user.id;
     const creator =
-      alert.creator.id === user.id ? t`You` : alert.creator.common_name;
+      alert.creator.id === user.id ? t`You` : alert.creator.first_name;
     const text =
       !isCurrentUser && !isAdmin
         ? t`You're receiving ${creator}'s alerts`

@@ -6,7 +6,6 @@ import { reduxForm } from "redux-form";
 import { push } from "react-router-redux";
 import { t } from "ttag";
 import S from "metabase/reference/Reference.css";
-import _ from "underscore";
 
 import List from "metabase/components/List";
 import LoadingAndErrorWrapper from "metabase/components/LoadingAndErrorWrapper";
@@ -101,7 +100,22 @@ const validate = (values, props) => {
   return {};
 };
 
-class FieldDetail extends Component {
+@connect(mapStateToProps, mapDispatchToProps)
+@reduxForm({
+  form: "details",
+  fields: [
+    "name",
+    "display_name",
+    "description",
+    "revision_message",
+    "points_of_interest",
+    "caveats",
+    "semantic_type",
+    "fk_target_field_id",
+  ],
+  validate,
+})
+export default class FieldDetail extends Component {
   static propTypes = {
     style: PropTypes.object.isRequired,
     entity: PropTypes.object.isRequired,
@@ -272,21 +286,3 @@ class FieldDetail extends Component {
     );
   }
 }
-
-export default _.compose(
-  connect(mapStateToProps, mapDispatchToProps),
-  reduxForm({
-    form: "details",
-    fields: [
-      "name",
-      "display_name",
-      "description",
-      "revision_message",
-      "points_of_interest",
-      "caveats",
-      "semantic_type",
-      "fk_target_field_id",
-    ],
-    validate,
-  }),
-)(FieldDetail);

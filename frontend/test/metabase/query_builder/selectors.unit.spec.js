@@ -1,126 +1,19 @@
-import Question from "metabase-lib/lib/Question";
 import {
-  getQuestion,
   getIsResultDirty,
   getNativeEditorCursorOffset,
   getNativeEditorSelectedText,
   getQuestionDetailsTimelineDrawerState,
 } from "metabase/query_builder/selectors";
-import { state as sampleState } from "__support__/sample_database_fixture";
-
-function getBaseState({ uiControls = {}, ...state } = {}) {
-  return {
-    ...sampleState,
-    qb: {
-      ...state,
-      uiControls: {
-        queryBuilderMode: "view",
-        ...uiControls,
-      },
-    },
-  };
-}
-
-function getBaseCard(opts) {
-  return {
-    ...opts,
-    dataset_query: {
-      database: 1,
-      ...opts.dataset_query,
-    },
-  };
-}
-
-describe("getQuestion", () => {
-  it("should be nothing if card data is missing", () => {
-    const state = getBaseState({ card: null });
-    expect(getQuestion(state)).toBe(undefined);
-  });
-
-  it("should return question instance correctly", () => {
-    const card = {
-      id: 5,
-      dataset_query: {
-        database: 1,
-        type: "query",
-        query: {
-          "source-table": 1,
-        },
-      },
-    };
-
-    const question = getQuestion(getBaseState({ card }));
-
-    expect(question).toBeInstanceOf(Question);
-    expect(question.card()).toEqual(card);
-  });
-
-  it("should return composed dataset when dataset is open", () => {
-    const card = {
-      id: 5,
-      dataset: true,
-      dataset_query: {
-        database: 1,
-        type: "query",
-        query: {
-          "source-table": 1,
-        },
-      },
-    };
-
-    const question = getQuestion(getBaseState({ card }));
-
-    expect(question.card()).toEqual({
-      ...card,
-      dataset_query: {
-        ...card.dataset_query,
-        query: {
-          "source-table": "card__5",
-        },
-      },
-    });
-  });
-
-  it("should return real dataset when dataset is open in 'dataset' QB mode", () => {
-    const card = {
-      id: 5,
-      dataset: true,
-      dataset_query: {
-        database: 1,
-        type: "query",
-        query: {
-          "source-table": 1,
-        },
-      },
-    };
-
-    const question = getQuestion(
-      getBaseState({
-        card,
-        uiControls: {
-          queryBuilderMode: "dataset",
-        },
-      }),
-    );
-
-    expect(question.card()).toEqual({
-      ...card,
-      displayIsLocked: true,
-    });
-  });
-});
+import { state as sampleState } from "__support__/sample_dataset_fixture";
 
 describe("getIsResultDirty", () => {
   describe("structure query", () => {
-    function getCard(query) {
-      return getBaseCard({ dataset_query: { type: "query", query } });
-    }
-
-    function getState(lastRunCardQuery, cardQuery) {
-      return getBaseState({
-        card: getCard(cardQuery),
-        lastRunCard: getCard(lastRunCardQuery),
+    function getState(q1, q2) {
+      const card = query => ({
+        dataset_query: { database: 1, type: "query", query },
       });
+      const qb = { lastRunCard: card(q1), card: card(q2) };
+      return { ...sampleState, qb };
     }
 
     it("should not be dirty for empty queries", () => {
@@ -200,17 +93,13 @@ describe("getIsResultDirty", () => {
       expect(getIsResultDirty(state)).toBe(false);
     });
   });
-
   describe("native query", () => {
-    function getCard(native) {
-      return getBaseCard({ dataset_query: { type: "native", native } });
-    }
-
-    function getState(lastRunCardQuery, cardQuery) {
-      return getBaseState({
-        card: getCard(cardQuery),
-        lastRunCard: getCard(lastRunCardQuery),
+    function getState(q1, q2) {
+      const card = native => ({
+        dataset_query: { database: 1, type: "query", native },
       });
+      const qb = { lastRunCard: card(q1), card: card(q2) };
+      return { ...sampleState, qb };
     }
 
     it("should not be dirty if template-tags is empty vs an empty object", () => {
@@ -227,20 +116,22 @@ describe("getIsResultDirty", () => {
     });
 
     describe("native editor selection/cursor", () => {
-      function getStateWithSelectedQueryText(start, end) {
-        return getBaseState({
-          card: getBaseCard({
-            dataset_query: {
-              type: "native",
-              native: { query: "1\n22\n333" },
+      function getState(start, end) {
+        return {
+          qb: {
+            card: {
+              dataset_query: {
+                database: 1,
+                type: "query",
+                native: { query: "1\n22\n333" },
+              },
             },
-          }),
-          uiControls: {
-            nativeEditorSelectedRange: { start, end },
+            uiControls: {
+              nativeEditorSelectedRange: { start, end },
+            },
           },
-        });
+        };
       }
-
       [
         [{ row: 0, column: 0 }, 0],
         [{ row: 1, column: 1 }, 3],
@@ -249,7 +140,7 @@ describe("getIsResultDirty", () => {
         it(`should correctly determine the cursor offset for ${JSON.stringify(
           position,
         )}`, () => {
-          const state = getStateWithSelectedQueryText(position, position);
+          const state = getState(position, position);
           expect(getNativeEditorCursorOffset(state)).toBe(offset);
         }),
       );
@@ -262,72 +153,10 @@ describe("getIsResultDirty", () => {
         it(`should correctly get selected text from ${JSON.stringify(
           start,
         )} to ${JSON.stringify(end)}`, () => {
-          const state = getStateWithSelectedQueryText(start, end);
+          const state = getState(start, end);
           expect(getNativeEditorSelectedText(state)).toBe(text);
         }),
       );
-    });
-  });
-
-  describe("models", () => {
-    function getDataset(query) {
-      return getBaseCard({
-        id: 1,
-        dataset: true,
-        dataset_query: { type: "query", query },
-      });
-    }
-
-    function getState(state) {
-      return getBaseState(state);
-    }
-
-    const dataset = getDataset({ "source-table": 1 });
-
-    it("should not be dirty if model is not changed", () => {
-      const state = getState({
-        card: dataset,
-        originalCard: dataset,
-        lastRunCard: dataset,
-      });
-      expect(getIsResultDirty(state)).toBe(false);
-    });
-
-    it("should be dirty if model is changed", () => {
-      const state = getState({
-        card: dataset,
-        originalCard: dataset,
-        lastRunCard: getDataset({ "source-table": 2 }),
-      });
-      expect(getIsResultDirty(state)).toBe(false);
-    });
-
-    it("should not be dirty if model simple mode is active", () => {
-      const adHocDatasetCard = getDataset({ "source-table": "card__1" });
-      const state = getState({
-        card: adHocDatasetCard,
-        originalCard: dataset,
-        lastRunCard: adHocDatasetCard,
-      });
-      expect(getIsResultDirty(state)).toBe(false);
-    });
-
-    it("should be dirty when building a new question on a model", () => {
-      const card = getBaseCard({
-        dataset_query: {
-          type: "query",
-          query: {
-            aggregate: [["count"]],
-            "source-table": "card__1",
-          },
-        },
-      });
-      const state = getState({
-        card,
-        originalCard: dataset,
-        lastRunCard: dataset,
-      });
-      expect(getIsResultDirty(state)).toBe(true);
     });
   });
 });

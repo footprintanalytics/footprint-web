@@ -1,25 +1,16 @@
 /* eslint-disable react/prop-types */
 import React from "react";
+import { Box, Flex } from "grid-styled";
 import _ from "underscore";
 import moment from "moment";
-import { t } from "ttag";
-
 import Card from "metabase/components/Card";
 import Label from "metabase/components/type/Label";
 import Text from "metabase/components/type/Text";
-import EmptyState from "metabase/components/EmptyState";
-import NoResults from "assets/img/no_results.svg";
-
-import {
-  LoginGroup,
-  LoginItemContent,
-  LoginItemInfo,
-} from "./LoginHistory.styled";
 
 const LoginHistoryItem = item => (
   <Card py={1} px="20px" my={2}>
-    <LoginItemContent>
-      <div>
+    <Flex align="center">
+      <Box>
         <Label mb="0">
           {item.location} -{" "}
           <span className="text-medium">{item.ip_address}</span>
@@ -27,24 +18,24 @@ const LoginHistoryItem = item => (
         <Text color="medium" mt="-2px">
           {item.device_description}
         </Text>
-      </div>
-      <LoginItemInfo>
+      </Box>
+      <Flex ml="auto">
         {item.active && (
           <Label pr={2} className="text-data">
             Active
           </Label>
         )}
         <Label>{item.time}</Label>
-      </LoginItemInfo>
-    </LoginItemContent>
+      </Flex>
+    </Flex>
   </Card>
 );
 
 const LoginHistoryGroup = (items, date) => (
-  <LoginGroup>
+  <Box py={2}>
     <Label>{date}</Label>
-    <div>{items.map(LoginHistoryItem)}</div>
-  </LoginGroup>
+    <Box>{items.map(LoginHistoryItem)}</Box>
+  </Box>
 );
 
 const formatItems = items =>
@@ -62,16 +53,7 @@ function LoginHistoryList({ loginHistory }) {
   const items = formatItems(loginHistory);
   const groups = _.groupBy(items, item => item.date);
 
-  if (!items || !items.length) {
-    return (
-      <EmptyState
-        title={t`No logins`}
-        illustrationElement={<img src={NoResults} />}
-      />
-    );
-  }
-
-  return <div>{_.map(groups, LoginHistoryGroup)}</div>;
+  return <Box>{_.map(groups, LoginHistoryGroup)}</Box>;
 }
 
 export default LoginHistoryList;

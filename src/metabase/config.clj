@@ -1,9 +1,8 @@
 (ns metabase.config
-  (:require [cheshire.core :as json]
-            [clojure.java.io :as io]
+  (:require [clojure.java.io :as io]
             [clojure.string :as str]
             [clojure.tools.logging :as log]
-            [environ.core :as env]
+            [environ.core :as environ]
             [metabase.plugins.classloader :as classloader])
   (:import clojure.lang.Keyword
            java.util.UUID))
@@ -58,7 +57,7 @@
    3.  hard coded `app-defaults`"
   [k]
   (let [k       (keyword k)
-        env-val (k env/env)]
+        env-val (k environ/env)]
     (or (when-not (str/blank? env-val) env-val)
         (k app-defaults))))
 
@@ -68,9 +67,9 @@
 ;; TODO - These names are bad. They should be something like `int`, `boolean`, and `keyword`, respectively. See
 ;; https://github.com/metabase/metabase/wiki/Metabase-Clojure-Style-Guide#dont-repeat-namespace-alias-in-function-names
 ;; for discussion
-(defn config-int  "Fetch a configuration key and parse it as an integer." ^Integer [k] (some-> k config-str Integer/parseInt))
-(defn config-bool "Fetch a configuration key and parse it as a boolean."  ^Boolean [k] (some-> k config-str Boolean/parseBoolean))
-(defn config-kw   "Fetch a configuration key and parse it as a keyword."  ^Keyword [k] (some-> k config-str keyword))
+(defn ^Integer config-int  "Fetch a configuration key and parse it as an integer." [k] (some-> k config-str Integer/parseInt))
+(defn ^Boolean config-bool "Fetch a configuration key and parse it as a boolean."  [k] (some-> k config-str Boolean/parseBoolean))
+(defn ^Keyword config-kw   "Fetch a configuration key and parse it as a keyword."  [k] (some-> k config-str keyword))
 
 (def ^Boolean is-dev?  "Are we running in `dev` mode (i.e. in a REPL or via `clojure -M:run`)?" (= :dev  (config-kw :mb-run-mode)))
 (def ^Boolean is-prod? "Are we running in `prod` mode (i.e. from a JAR)?"                       (= :prod (config-kw :mb-run-mode)))
@@ -144,9 +143,3 @@
         "Environ will use values from it in preference to env var or Java system properties you've specified.\n"
         "You should delete it; it will be recreated as needed when switching to a branch still using Leiningen.\n"
         "See https://github.com/metabase/metabase/wiki/Migrating-from-Leiningen-to-tools.deps#custom-env-var-values for more details.")))
-
-(defn mb-user-defaults
-  "Default user details provided as a JSON string at launch time for first-user setup flow."
-  []
-  (when-let [user-json (env/env :mb-user-defaults)]
-    (json/parse-string user-json true)))

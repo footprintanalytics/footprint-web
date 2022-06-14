@@ -1,24 +1,21 @@
 import { DropTarget } from "react-dnd";
-import { canonicalCollectionId } from "metabase/collections/utils";
+
 import DropArea from "./DropArea";
 import { MoveableDragTypes } from ".";
 
 const CollectionDropTarget = DropTarget(
   MoveableDragTypes,
   {
-    drop(props) {
+    drop(props, monitor, component) {
       return { collection: props.collection };
     },
     canDrop(props, monitor) {
-      const { collection } = props;
       const { item } = monitor.getItem();
-      if (collection.can_write === false) {
+      // can't drop if can't write the  collection
+      if (props.collection.can_write === false) {
         return false;
       }
-      const droppingToSameCollection =
-        canonicalCollectionId(item.collection_id) ===
-        canonicalCollectionId(collection.id);
-      return item.model !== "collection" && !droppingToSameCollection;
+      return item.model !== "collection" || item.id !== props.collection.id;
     },
   },
   (connect, monitor) => ({

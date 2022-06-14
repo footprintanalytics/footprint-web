@@ -1,16 +1,13 @@
 import {
   restore,
   setupSMTP,
-  describeEE,
+  describeWithToken,
   popover,
+  mockSessionProperty,
   sidebar,
   mockSlackConfigured,
-  isOSS,
-  visitDashboard,
-  clickSend,
 } from "__support__/e2e/cypress";
 import { USERS } from "__support__/e2e/cypress_data";
-
 const { admin } = USERS;
 
 describe("scenarios > dashboard > subscriptions", () => {
@@ -19,9 +16,9 @@ describe("scenarios > dashboard > subscriptions", () => {
     cy.signInAsAdmin();
   });
 
-  it.skip("should not allow sharing if there are no dashboard cards", () => {
+  it("should not allow sharing if there are no dashboard cards", () => {
     cy.createDashboard().then(({ body: { id: DASHBOARD_ID } }) => {
-      visitDashboard(DASHBOARD_ID);
+      cy.visit(`/dashboard/${DASHBOARD_ID}`);
     });
     cy.findByText("This dashboard is looking empty.");
 
@@ -30,13 +27,14 @@ describe("scenarios > dashboard > subscriptions", () => {
       .should("have.attr", "aria-disabled", "true")
       .click();
 
-    cy.icon("subscription").should("not.exist");
+    cy.findByText("Dashboard subscriptions").should("not.exist");
+    cy.findByText("Sharing and embedding").should("not.exist");
     cy.findByText(/Share this dashboard with people *./i).should("not.exist");
   });
 
   it("should allow sharing if dashboard contains only text cards (metabase#15077)", () => {
     cy.createDashboard().then(({ body: { id: DASHBOARD_ID } }) => {
-      visitDashboard(DASHBOARD_ID);
+      cy.visit(`/dashboard/${DASHBOARD_ID}`);
     });
     cy.icon("pencil").click();
     cy.icon("string").click();
@@ -53,7 +51,8 @@ describe("scenarios > dashboard > subscriptions", () => {
     // without a menu with sharing and dashboard subscription options.
     // Dashboard subscriptions are not shown because
     // getting notifications with static text-only cards doesn't make a lot of sense
-    cy.icon("subscription").should("not.exist");
+    cy.findByText("Dashboard subscriptions").should("not.exist");
+    cy.findByText("Sharing and embedding").should("not.exist");
     cy.findByText(/Share this dashboard with people *./i);
   });
 
@@ -102,6 +101,15 @@ describe("scenarios > dashboard > subscriptions", () => {
 
         popover().isRenderedWithinViewport();
       });
+
+      it("should not render people dropdown outside of the borders of the screen (metabase#17186)", () => {
+        openDashboardSubscriptions();
+
+        cy.findByText("Email it").click();
+        cy.findByPlaceholderText("Enter user names or email addresses").click();
+
+        popover().isRenderedWithinViewport();
+      });
     });
 
     describe("with existing subscriptions", () => {
@@ -120,7 +128,7 @@ describe("scenarios > dashboard > subscriptions", () => {
         .parent()
         .parent()
         .next()
-        .find("input") // Toggle
+        .find("a") // Toggle
         .click();
       cy.findByText("Questions to attach").click();
       clickButton("Done");
@@ -138,15 +146,15 @@ describe("scenarios > dashboard > subscriptions", () => {
     it("should not display 'null' day of the week (metabase#14405)", () => {
       assignRecipient();
       cy.findByText("To:").click();
-      cy.findAllByTestId("select-button")
+      cy.get(".AdminSelect")
         .contains("Hourly")
         .click();
       cy.findByText("Monthly").click();
-      cy.findAllByTestId("select-button")
+      cy.get(".AdminSelect")
         .contains("First")
         .click();
       cy.findByText("15th (Midpoint)").click();
-      cy.findAllByTestId("select-button")
+      cy.get(".AdminSelect")
         .contains("15th (Midpoint)")
         .click();
       cy.findByText("First").click();
@@ -156,6 +164,9 @@ describe("scenarios > dashboard > subscriptions", () => {
     });
 
     it("should work when using dashboard default filter value on native query with required parameter (metabase#15705)", () => {
+      // In order to reproduce this test, we need to use the old syntac for dashboard filters
+      mockSessionProperty("field-filter-operators-enabled?", false);
+
       cy.createNativeQuestion({
         name: "15705",
         native: {
@@ -218,7 +229,8 @@ describe("scenarios > dashboard > subscriptions", () => {
       });
       // Click anywhere outside to close the popover
       cy.findByText("15705D").click();
-      clickSend();
+      cy.findByText("Send email now").click();
+      cy.findByText("Email sent");
       cy.request("GET", "http://localhost:80/email").then(({ body }) => {
         expect(body[0].html).not.to.include(
           "An error occurred while displaying this card.",
@@ -230,7 +242,7 @@ describe("scenarios > dashboard > subscriptions", () => {
     it("should include text cards (metabase#15744)", () => {
       const TEXT_CARD = "FooBar";
 
-      visitDashboard(1);
+      cy.visit("/dashboard/1");
       cy.icon("pencil").click();
       cy.icon("string").click();
       cy.findByPlaceholderText(
@@ -241,7 +253,9 @@ describe("scenarios > dashboard > subscriptions", () => {
       assignRecipient();
       // Click outside popover to close it and at the same time check that the text card content is shown as expected
       cy.findByText(TEXT_CARD).click();
-      clickSend();
+      cy.findByText("Send email now").click();
+      cy.findByText(/^Sending/);
+      cy.findByText("Email sent");
       cy.request("GET", "http://localhost:80/email").then(({ body }) => {
         expect(body[0].html).to.include(TEXT_CARD);
       });
@@ -273,9 +287,9 @@ describe("scenarios > dashboard > subscriptions", () => {
     });
   });
 
-  describe("OSS email subscriptions", { tags: "@OSS" }, () => {
+  describe("OSS email subscriptions", () => {
     beforeEach(() => {
-      cy.onlyOn(isOSS);
+      cy.skipOn(!!Cypress.env("HAS_ENTERPRISE_TOKEN"));
       cy.visit(`/dashboard/1`);
       setupSMTP();
     });
@@ -295,7 +309,7 @@ describe("scenarios > dashboard > subscriptions", () => {
     });
   });
 
-  describeEE("EE email subscriptions", () => {
+  describeWithToken("EE email subscriptions", () => {
     beforeEach(() => {
       cy.visit(`/dashboard/1`);
       setupSMTP();
@@ -366,8 +380,9 @@ describe("scenarios > dashboard > subscriptions", () => {
 // Helper functions
 function openDashboardSubscriptions(dashboard_id = 1) {
   // Orders in a dashboard
-  visitDashboard(dashboard_id);
-  cy.icon("subscription").click();
+  cy.visit(`/dashboard/${dashboard_id}`);
+  cy.icon("share").click();
+  cy.findByText("Dashboard subscriptions").click();
 }
 
 function assignRecipient({ user = admin, dashboard_id = 1 } = {}) {

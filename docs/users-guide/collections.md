@@ -1,14 +1,10 @@
----
-title: Collections
----
-
 # Collections
 
  After your team has been using Metabase for a while, you’ll probably end up with lots of saved questions.
 
 ![Our analytics](images/collections/our-analytics-page.png)
 
-Collections are the main way to organize questions, dashboards, and [models][models]. You can think of them like folders or directories. You can nest collections in other collections, and move collections around. One thing to note is that a single item, like a question or dashboard, can only be in one collection at a time (excluding parent collections).
+Collections are the main way to organize questions, as well as dashboards and pulses. You can think of them like folders or directories. You can nest collections in other collections, and move collections around. One thing to note is that a single item, like a question or dashboard, can only be in one collection at a time (excluding parent collections).
 
 ## Collection types
 
@@ -18,7 +14,7 @@ They're just basic collections. You can put stuff in them.
 
 ### Official collections
 
-{% include plans-blockquote.html feature="Official collections" %}
+{% include plans-blockquote.html %}
 
 These are special collections, in that they have a badge to let people know that the items in this collection are the ones people should be looking at (or whatever "official" means to you). Questions and dashboards in official collections are also more likely to show up at the top of search results.
 
@@ -42,11 +38,9 @@ You can use your personal collection as a scratch space to put experiments and e
 
 ![Pins](images/collections/pinned-items.png)
 
-In each collection, you can pin important or useful dashboards, models, and questions to make them stick to the top of the screen. Pinned items will also be displayed as large cards to make them stand out well. If you have Curate permissions for a collection, you can pin and un-pin things, and drag and drop pins to change their order.
+In each collection, you can pin important or useful dashboards or questions to make them stick to the top of the screen. Pinned items will also be displayed as large cards to make them stand out well. If you have Curate permissions for a collection, you can pin and un-pin things, and drag and drop pins to change their order.
 
 Any dashboards that are pinned in the main "Our analytics" collection will also show up on the homepage.
-
-If you just want to organize _your_ favorite items, you should [bookmark them](03-basic-exploration.md#bookmarks) (only you can see your bookmarks).
 
 ## Moving items from collection to collection
 
@@ -64,13 +58,9 @@ You can also archive _collections_ if you have curate permissions for the collec
 
 If you have second thoughts and want to bring an archived item back, you can see all your archived questions from the archive; click the menu icon in the top-right of any collection page to get to the archive. To unarchive a question, hover over it and click the unarchive icon that appears on the far right.
 
-## Events and timelines
-
-You can add events to collections, and organize those events into timelines. See [Events and timelines](events-and-timelines.md).
-
 ## Next: creating dashboards
 
 Next, we'll learn about [creating dashboards and adding questions to them][dashboards].
 
 [dashboards]: 07-dashboards.md
-[models]: models.md
+

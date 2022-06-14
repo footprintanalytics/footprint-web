@@ -3,25 +3,22 @@ import PropTypes from "prop-types";
 import _ from "underscore";
 import { connect } from "react-redux";
 import { t } from "ttag";
+import { Box } from "grid-styled";
 
 import Icon from "metabase/components/Icon";
 import Breadcrumbs from "metabase/components/Breadcrumbs";
 import { entityListLoader } from "metabase/entities/containers/EntityListLoader";
 import Collections, { ROOT_COLLECTION } from "metabase/entities/collections";
-import { getCrumbs } from "metabase/lib/collections";
 import { useDebouncedValue } from "metabase/hooks/use-debounced-value";
 
 import { PLUGIN_COLLECTIONS } from "metabase/plugins";
 
 import { QuestionList } from "./QuestionList";
 
-import {
-  BreadcrumbsWrapper,
-  QuestionPickerRoot,
-  SearchInput,
-} from "./QuestionPicker.styled";
+import { BreadcrumbsWrapper, SearchInput } from "./QuestionPicker.styled";
 import { SEARCH_DEBOUNCE_DURATION } from "metabase/lib/constants";
 import { SelectList } from "metabase/components/select-list";
+import { getProject } from "metabase/lib/project_info";
 
 const { isRegularCollection } = PLUGIN_COLLECTIONS;
 
@@ -48,14 +45,28 @@ function QuestionPicker({
   );
 
   const collection = collectionsById[currentCollectionId];
-  const crumbs = getCrumbs(collection, collectionsById, setCurrentCollectionId);
+
+  const getCrumbs = collection => {
+    if (collection && collection.path) {
+      return [
+        ...collection.path.map(id => [
+          collectionsById[id] ? collectionsById[id].name : "",
+          () => setCurrentCollectionId(id),
+        ]),
+        [collection.name],
+      ];
+    }
+
+    return [];
+  };
+  const crumbs = getCrumbs(collection);
 
   const handleSearchTextChange = value => setSearchText(value);
 
   const collections = (collection && collection.children) || [];
 
   return (
-    <QuestionPickerRoot>
+    <Box p={2}>
       <SearchInput
         autoFocus
         hasClearButton
@@ -66,37 +77,35 @@ function QuestionPicker({
       />
 
       {!debouncedSearchText && (
-        <>
+        <React.Fragment>
           <BreadcrumbsWrapper>
             <Breadcrumbs crumbs={crumbs} />
           </BreadcrumbsWrapper>
 
-          {collections.length > 0 && (
-            <SelectList>
-              {collections.map(collection => {
-                const icon = getCollectionIcon(collection);
-                const iconColor = isRegularCollection(collection)
-                  ? "text-light"
-                  : icon.color;
-                return (
-                  <SelectList.Item
-                    key={collection.id}
-                    id={collection.id}
-                    name={collection.name}
-                    icon={{
-                      ...icon,
-                      color: iconColor,
-                    }}
-                    rightIcon="chevronright"
-                    onSelect={collectionId =>
-                      setCurrentCollectionId(collectionId)
-                    }
-                  />
-                );
-              })}
-            </SelectList>
-          )}
-        </>
+          <SelectList>
+            {collections.map(collection => {
+              const icon = getCollectionIcon(collection);
+              const iconColor = isRegularCollection(collection)
+                ? "text-light"
+                : icon.color;
+              return (
+                <SelectList.Item
+                  key={collection.id}
+                  id={collection.id}
+                  name={collection.name}
+                  icon={{
+                    ...icon,
+                    color: iconColor,
+                  }}
+                  rightIcon="chevronright"
+                  onSelect={collectionId =>
+                    setCurrentCollectionId(collectionId)
+                  }
+                />
+              );
+            })}
+          </SelectList>
+        </React.Fragment>
       )}
 
       <QuestionList
@@ -105,7 +114,7 @@ function QuestionPicker({
         collectionId={currentCollectionId}
         onSelect={onSelect}
       />
-    </QuestionPickerRoot>
+    </Box>
   );
 }
 
@@ -113,11 +122,14 @@ export default _.compose(
   entityListLoader({
     entityType: "collections",
     loadingAndErrorWrapper: false,
+    entityQuery: () => ({ project: getProject() }),
   }),
   connect((state, props) => ({
     collectionsById: (
       props.entity || Collections
-    ).selectors.getExpandedCollectionsById(state),
+    ).selectors.getExpandedCollectionsById(state, {
+      collectionsIdsKey: JSON.stringify({ project: getProject() }),
+    }),
     getCollectionIcon: (props.entity || Collections).objectSelectors.getIcon,
   })),
 )(QuestionPicker);

@@ -3,12 +3,12 @@
    used for classification. This fingerprint is saved as a column on the Field it belongs to."
   (:require [clojure.set :as set]
             [clojure.tools.logging :as log]
-            [honeysql.helpers :as hh]
+            [honeysql.helpers :as h]
             [metabase.db.metadata-queries :as metadata-queries]
             [metabase.db.util :as mdb.u]
             [metabase.models.field :as field :refer [Field]]
             [metabase.query-processor.store :as qp.store]
-            [metabase.sync.analyze.fingerprint.fingerprinters :as fingerprinters]
+            [metabase.sync.analyze.fingerprint.fingerprinters :as f]
             [metabase.sync.interface :as i]
             [metabase.sync.util :as sync-util]
             [metabase.util :as u]
@@ -47,7 +47,7 @@
   [table :- i/TableInstance, fields :- [i/FieldInstance]]
   (let [rff (fn [_metadata]
               (redux/post-complete
-                (fingerprinters/fingerprint-fields fields)
+                (f/fingerprint-fields fields)
                 (fn [fingerprints]
                   (reduce (fn [count-info [field fingerprint]]
                             (cond
@@ -156,8 +156,8 @@
              (not *refingerprint?*) (conj (cons :or (versions-clauses))))})
 
   ([table :- i/TableInstance]
-   (hh/merge-where (honeysql-for-fields-that-need-fingerprint-updating)
-                   [:= :table_id (u/the-id table)])))
+   (h/merge-where (honeysql-for-fields-that-need-fingerprint-updating)
+                  [:= :table_id (u/the-id table)])))
 
 ;;; +----------------------------------------------------------------------------------------------------------------+
 ;;; |                                      FINGERPRINTING ALL FIELDS IN A TABLE                                      |

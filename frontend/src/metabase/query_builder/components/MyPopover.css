@@ -1,0 +1,43 @@
+.my-popover {
+  max-width: 240px;
+  min-width: 200px;
+}
+
+.my-popover__title {
+  font-size: 18px;
+  color: white;
+  font-weight: bold;
+}
+
+.my-popover__content {
+  font-size: 14px;
+  color: white;
+  line-height: 20px;
+  margin: 6px 0;
+}
+
+.my-popover__buttons {
+  margin-top: 20px;
+  text-align: right;
+  display: flex;
+  justify-content: space-between;
+}
+
+.my-popover__never-show {
+  color: white;
+  cursor: pointer;
+  height: 25px;
+  line-height: 25px;
+  padding: 0 10px;
+  border-radius: 2px;
+}
+
+.my-popover__close {
+  width: 60px;
+  text-align: center;
+  font-size: 16px;
+  color: var(--color-brand);
+  cursor: pointer;
+  background: #fff;
+  border-radius: 2px;
+}

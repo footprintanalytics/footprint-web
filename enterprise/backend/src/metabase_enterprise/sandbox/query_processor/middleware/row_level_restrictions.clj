@@ -6,7 +6,6 @@
             [clojure.tools.logging :as log]
             [metabase-enterprise.sandbox.models.group-table-access-policy :as gtap :refer [GroupTableAccessPolicy]]
             [metabase.api.common :as api :refer [*current-user* *current-user-id* *current-user-permissions-set*]]
-            [metabase.db.connection :as mdb.connection]
             [metabase.mbql.schema :as mbql.s]
             [metabase.mbql.util :as mbql.u]
             [metabase.models.card :refer [Card]]
@@ -15,18 +14,14 @@
             [metabase.models.permissions-group-membership :refer [PermissionsGroupMembership]]
             [metabase.models.query.permissions :as query-perms]
             [metabase.models.table :refer [Table]]
-            [metabase.plugins.classloader :as classloader]
             [metabase.query-processor.error-type :as qp.error-type]
             [metabase.query-processor.middleware.fetch-source-query :as fetch-source-query]
-            [metabase.query-processor.middleware.permissions :as qp.perms]
             [metabase.query-processor.store :as qp.store]
             [metabase.util :as u]
             [metabase.util.i18n :refer [tru]]
             [metabase.util.schema :as su]
             [schema.core :as s]
             [toucan.db :as db]))
-
-(comment mdb.connection/keep-me) ; used for [[memoize/ttl]]
 
 ;;; +----------------------------------------------------------------------------------------------------------------+
 ;;; |                                                  query->gtap                                                   |
@@ -140,11 +135,10 @@
                         :type     :query
                         :query    source-query}
           preprocessed (binding [api/*current-user-id* nil]
-                         (classloader/require 'metabase.query-processor)
-                         ((resolve 'metabase.query-processor/preprocess) query))]
+                         ((requiring-resolve 'metabase.query-processor/query->preprocessed) query))]
       (select-keys (:query preprocessed) [:source-query :source-metadata]))
     (catch Throwable e
-      (throw (ex-info (tru "Error preprocessing source query when applying GTAP: {0}" (ex-message e))
+      (throw (ex-info (tru "Error preprocessing source query when applying GTAP")
                       {:source-query source-query}
                       e)))))
 
@@ -169,8 +163,6 @@
 ;; cache the original metadata for a little bit so we don't have to preprocess a query every time we apply sandboxing
 (def ^:private ^{:arglists '([table-id])} original-table-metadata
   (memoize/ttl
-   ^{::memoize/args-fn (fn [[table-id]]
-                         [(mdb.connection/unique-identifier) table-id])}
    (fn [table-id]
      (mbql-query-metadata {:source-table table-id}))
    :ttl/threshold (u/minutes->ms 1)))
@@ -309,48 +301,38 @@
         (_ :guard (every-pred map? :source-table))
         (assoc &match ::gtap? true)))))
 
-(defn- expected-cols [query]
-  (binding [*current-user-permissions-set* (atom #{"/"})]
-    ((requiring-resolve 'metabase.query-processor/query->expected-cols) query)))
-
-(defn- gtapped-query
-  "Apply GTAPs to `query` and return the updated version of `query`."
-  [original-query table-id->gtap]
-  (let [sandboxed-query (apply-gtaps original-query table-id->gtap)]
-    (if (= sandboxed-query original-query)
-      original-query
-      (-> sandboxed-query
-          (assoc ::original-metadata (expected-cols original-query))
-          (update-in [::qp.perms/perms :gtaps] (fn [perms] (into (set perms) (gtaps->perms-set (vals table-id->gtap)))))))))
-
-(defn apply-sandboxing
-  "Pre-processing middleware. Replaces source tables a User was querying against with source queries that (presumably)
-  restrict the rows returned, based on presence of segmented permission GTAPs."
-  [query]
-  (or (when-let [table-id->gtap (when *current-user-id*
-                                  (query->table-id->gtap query))]
-        (gtapped-query query table-id->gtap))
-      query))
-
-
-;;;; Post-processing
-
 (defn- merge-metadata
   "Merge column metadata from the non-GTAPped version of the query into the GTAPped results `metadata`. This way the
   final results metadata coming back matches what we'd get if the query was not running with a GTAP."
-  [original-metadata metadata]
+  [original-query metadata]
   (letfn [(merge-cols [cols]
-            (let [col-name->expected-col (u/key-by :name original-metadata)]
+            (let [expected-cols          (binding [*current-user-permissions-set* (atom #{"/"})]
+                                           ((requiring-resolve 'metabase.query-processor/query->expected-cols) original-query))
+                  col-name->expected-col (u/key-by :name expected-cols)]
               (for [col cols]
                 (merge
                  col
                  (get col-name->expected-col (:name col))))))]
     (update metadata :cols merge-cols)))
 
-(defn merge-sandboxing-metadata
-  "Post-processing middleware. Merges in column metadata from the original, unsandboxed version of the query."
-  [{::keys [original-metadata]} rff]
-  (if original-metadata
-    (fn merge-sandboxing-metadata-rff* [metadata]
-      (rff (merge-metadata original-metadata metadata)))
-    rff))
+(defn- gtapped-query
+  "Apply GTAPs to `query` and return the updated version of `query`."
+  [query table-id->gtap context]
+  {:query   (apply-gtaps query table-id->gtap)
+   :context (update context :gtap-perms (fn [perms]
+                                          (into (set perms) (gtaps->perms-set (vals table-id->gtap)))))})
+
+(defn apply-row-level-permissions
+  "Does the work of swapping the given table the user was querying against with a nested subquery that restricts the
+  rows returned. Will return the original query if there are no segmented permissions found."
+  [qp]
+  (fn [query rff context]
+    (if-let [table-id->gtap (when *current-user-id*
+                              (query->table-id->gtap query))]
+      (let [{query' :query, context' :context} (gtapped-query query table-id->gtap context)]
+        (qp
+         query'
+         (fn [metadata]
+           (rff (merge-metadata query metadata)))
+         context'))
+      (qp query rff context))))

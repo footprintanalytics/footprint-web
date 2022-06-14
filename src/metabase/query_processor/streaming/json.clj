@@ -4,14 +4,14 @@
   (:require [cheshire.core :as json]
             [java-time :as t]
             [metabase.query-processor.streaming.common :as common]
-            [metabase.query-processor.streaming.interface :as qp.si]
+            [metabase.query-processor.streaming.interface :as i]
             [metabase.util.date-2 :as u.date])
   (:import [java.io BufferedWriter OutputStream OutputStreamWriter]
            java.nio.charset.StandardCharsets))
 
-(defmethod qp.si/stream-options :json
+(defmethod i/stream-options :json
   ([_]
-   (qp.si/stream-options :json "query_result"))
+   (i/stream-options :json "query_result"))
   ([_ filename-prefix]
    {:content-type "application/json; charset=utf-8"
     :status       200
@@ -19,11 +19,11 @@
                                                  (or filename-prefix "query_result")
                                                  (u.date/format (t/zoned-date-time)))}}))
 
-(defmethod qp.si/streaming-results-writer :json
+(defmethod i/streaming-results-writer :json
   [_ ^OutputStream os]
   (let [writer    (BufferedWriter. (OutputStreamWriter. os StandardCharsets/UTF_8))
         col-names (volatile! nil)]
-    (reify qp.si/StreamingResultsWriter
+    (reify i/StreamingResultsWriter
       (begin! [_ {{:keys [ordered-cols]} :data} _]
         ;; TODO -- wouldn't it make more sense if the JSON downloads used `:name` preferentially? Seeing how JSON is
         ;; probably going to be parsed programatically
@@ -47,8 +47,8 @@
         (.flush os)
         (.close writer)))))
 
-(defmethod qp.si/stream-options :api
-  ([_]   (qp.si/stream-options :api nil))
+(defmethod i/stream-options :api
+  ([_]   (i/stream-options :api nil))
   ([_ _] {:content-type "application/json; charset=utf-8"}))
 
 (defn- map->serialized-json-kvs
@@ -58,10 +58,10 @@
     (let [s (json/generate-string m)]
       (.substring s 1 (dec (count s))))))
 
-(defmethod qp.si/streaming-results-writer :api
+(defmethod i/streaming-results-writer :api
   [_ ^OutputStream os]
   (let [writer (BufferedWriter. (OutputStreamWriter. os StandardCharsets/UTF_8))]
-    (reify qp.si/StreamingResultsWriter
+    (reify i/StreamingResultsWriter
       (begin! [_ _ _]
         (.write writer "{\"data\":{\"rows\":[\n"))
 

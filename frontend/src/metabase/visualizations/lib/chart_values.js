@@ -283,7 +283,11 @@ export function onRenderValueLabels(
         return transforms.join(" ");
       });
 
-    ["value-label", "value-label-white"].forEach(klass =>
+    // Labels are either white inside the bar or black with white outline.
+    // For outlined labels, Safari had an issue with rendering paint-order: stroke.
+    // To work around that, we create two text labels: one for the the black text
+    // and another for the white outline behind it.
+    ["value-label-outline", "value-label", "value-label-white"].forEach(klass =>
       labelGroups
         .append("text")
         // only create labels for the correct class(es) given the type of label
@@ -316,7 +320,7 @@ export function onRenderValueLabels(
     addLabels(sample, compactForSeries[index]);
     const totalWidth = chart
       .svg()
-      .selectAll(".value-label, .value-label-white")
+      .selectAll(".value-label-outline")
       .flat()
       .reduce((sum, label) => sum + label.getBoundingClientRect().width, 0);
     const labelWidth = totalWidth / sample.length + LABEL_PADDING;

@@ -60,7 +60,11 @@ export default class RecipientPicker extends Component {
         <div className="bordered rounded" style={{ padding: "2px" }}>
           <TokenField
             value={recipients}
-            options={users ? users.map(user => ({ value: user })) : []}
+            options={
+              users
+                ? users.map(user => ({ label: user.common_name, value: user }))
+                : []
+            }
             onChange={this.handleOnChange}
             placeholder={
               recipients.length === 0
@@ -69,7 +73,7 @@ export default class RecipientPicker extends Component {
             }
             autoFocus={autoFocus && recipients.length === 0}
             multi
-            valueRenderer={value => value.common_name}
+            valueRenderer={value => value.common_name || value.email}
             optionRenderer={option => (
               <div className="flex align-center">
                 <span className="text-white">
@@ -78,7 +82,15 @@ export default class RecipientPicker extends Component {
                 <span className="ml1">{option.value.common_name}</span>
               </div>
             )}
-            filterOption={filterOption}
+            filterOption={(option, filterString) =>
+              // case insensitive search of name or email
+              ~option.value.common_name
+                .toLowerCase()
+                .indexOf(filterString.toLowerCase()) ||
+              ~option.value.email
+                .toLowerCase()
+                .indexOf(filterString.toLowerCase())
+            }
             validateValue={value => recipientIsValid(value)}
             parseFreeformValue={inputValue => {
               if (MetabaseUtils.isEmail(inputValue)) {
@@ -95,14 +107,3 @@ export default class RecipientPicker extends Component {
     );
   }
 }
-
-const filterOption = (option, text) => {
-  return (
-    includesIgnoreCase(option.value.common_name, text) ||
-    includesIgnoreCase(option.value.email, text)
-  );
-};
-
-const includesIgnoreCase = (sourceText, searchText) => {
-  return sourceText.toLowerCase().includes(searchText.toLowerCase());
-};

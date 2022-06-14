@@ -10,19 +10,17 @@ import {
   getXTickLabelProps,
   getYTickLabelProps,
   getYTickWidth,
-  getRotatedXTickHeight,
-  getLabelProps,
+  getXTickHeight,
 } from "../../lib/axes";
 import { formatNumber } from "../../lib/numbers";
 import { truncateText } from "../../lib/text";
-import { POSITIONAL_ACCESSORS } from "../../constants/accessors";
 
 const propTypes = {
   data: PropTypes.array.isRequired,
   accessors: PropTypes.shape({
     x: PropTypes.func.isRequired,
     y: PropTypes.func.isRequired,
-  }),
+  }).isRequired,
   settings: PropTypes.shape({
     x: PropTypes.object,
     y: PropTypes.object,
@@ -53,29 +51,18 @@ const layout = {
     textMedium: "#949aab",
   },
   barPadding: 0.2,
-  labelFontWeight: 700,
   labelPadding: 12,
   maxTickWidth: 100,
   areaOpacity: 0.2,
   strokeDasharray: "4",
 };
 
-const CategoricalAreaChart = ({
-  data,
-  accessors = POSITIONAL_ACCESSORS,
-  settings,
-  labels,
-}) => {
+const CategoricalAreaChart = ({ data, accessors, settings, labels }) => {
   const colors = settings?.colors;
   const isVertical = data.length > 10;
-  const xTickWidth = getXTickWidth(
-    data,
-    accessors,
-    layout.maxTickWidth,
-    layout.font.size,
-  );
-  const xTickHeight = getRotatedXTickHeight(xTickWidth);
-  const yTickWidth = getYTickWidth(data, accessors, settings, layout.font.size);
+  const xTickWidth = getXTickWidth(data, accessors, layout.maxTickWidth);
+  const xTickHeight = getXTickHeight(xTickWidth);
+  const yTickWidth = getYTickWidth(data, accessors, settings);
   const xLabelOffset = xTickHeight + layout.labelPadding + layout.font.size;
   const yLabelOffset = yTickWidth + layout.labelPadding;
   const xMin = yLabelOffset + layout.font.size * 1.5;
@@ -103,11 +90,7 @@ const CategoricalAreaChart = ({
 
   const getXTickProps = ({ x, y, formattedValue, ...props }) => {
     const textWidth = isVertical ? xTickWidth : xScale.bandwidth();
-    const truncatedText = truncateText(
-      formattedValue,
-      textWidth,
-      layout.font.size,
-    );
+    const truncatedText = truncateText(formattedValue, textWidth);
     const transform = isVertical
       ? `rotate(45, ${x} ${y}) translate(-${textBaseline} 0)`
       : undefined;
@@ -138,7 +121,6 @@ const CategoricalAreaChart = ({
         labelOffset={yLabelOffset}
         hideTicks
         hideAxisLine
-        labelProps={getLabelProps(layout)}
         tickFormat={value => formatNumber(value, settings?.y)}
         tickLabelProps={() => getYTickLabelProps(layout)}
       />
@@ -156,7 +138,6 @@ const CategoricalAreaChart = ({
         numTicks={data.length}
         stroke={palette.textLight}
         tickStroke={palette.textLight}
-        labelProps={getLabelProps(layout)}
         tickComponent={props => <Text {...getXTickProps(props)} />}
         tickLabelProps={() => getXTickLabelProps(layout, isVertical)}
       />

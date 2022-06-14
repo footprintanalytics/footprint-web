@@ -1,98 +1,59 @@
-/* eslint-disable react/prop-types */
 import React from "react";
-import _ from "underscore";
-import { connect } from "react-redux";
 
-import Radio from "metabase/core/components/Radio/";
-import CheckBox from "metabase/core/components/CheckBox";
-import Select from "metabase/core/components/Select";
-import MetabaseSettings from "metabase/lib/settings";
-import { PLUGIN_SELECTORS } from "metabase/plugins";
+import EmbedSelect from "./EmbedSelect";
+import CheckBox from "metabase/components/CheckBox";
 import { t } from "ttag";
+import type { DisplayOptions } from "./EmbedModalContent";
 
-import {
-  StyleContainer,
-  DisplayOption,
-  DisplayOptionTitle,
-} from "./DisplayOptionsPane.styled";
+type Props = {
+  className?: string,
+  displayOptions: DisplayOptions,
+  onChangeDisplayOptions: (displayOptions: DisplayOptions) => void,
+};
 
 const THEME_OPTIONS = [
-  { name: t`Light`, value: null },
-  { name: t`Dark`, value: "night" },
+  { name: t`Light`, value: null, icon: "sun" },
+  { name: t`Dark`, value: "night", icon: "moon" },
 ];
-
-const mapStateToProps = state => ({
-  canWhitelabel: PLUGIN_SELECTORS.canWhitelabel(state),
-});
 
 const DisplayOptionsPane = ({
   className,
   displayOptions,
   onChangeDisplayOptions,
-  canWhitelabel,
-}) => (
+}: Props) => (
   <div className={className}>
-    <DisplayOptionSection title={t`Style`}>
-      <StyleContainer>
-        <CheckBox
-          label={t`Border`}
-          checked={displayOptions.bordered}
-          onChange={e =>
-            onChangeDisplayOptions({
-              ...displayOptions,
-              bordered: e.target.checked,
-            })
-          }
-        />
-        <CheckBox
-          label={t`Title`}
-          checked={displayOptions.titled}
-          onChange={e =>
-            onChangeDisplayOptions({
-              ...displayOptions,
-              titled: e.target.checked,
-            })
-          }
-        />
-      </StyleContainer>
-    </DisplayOptionSection>
-    <DisplayOptionSection title={t`Appearance`}>
-      <Radio
-        value={displayOptions.theme}
-        options={THEME_OPTIONS}
-        onChange={value =>
-          onChangeDisplayOptions({ ...displayOptions, theme: value })
+    <div className="flex align-center my1">
+      <CheckBox
+        label={t`Border`}
+        checked={displayOptions.bordered}
+        onChange={e =>
+          onChangeDisplayOptions({
+            ...displayOptions,
+            bordered: e.target.checked,
+          })
         }
-        variant="normal"
-        showButtons
-        vertical
       />
-    </DisplayOptionSection>
-    {canWhitelabel && (
-      <DisplayOptionSection title={t`Font`}>
-        <Select
-          value={displayOptions.font}
-          options={MetabaseSettings.get("available-fonts").map(font => ({
-            name: font,
-            value: font,
-          }))}
-          onChange={e => {
-            onChangeDisplayOptions({
-              ...displayOptions,
-              font: e.target.value,
-            });
-          }}
-        />
-      </DisplayOptionSection>
-    )}
+    </div>
+    <div className="flex align-center my1">
+      <CheckBox
+        label={t`Title`}
+        checked={displayOptions.titled}
+        onChange={e =>
+          onChangeDisplayOptions({
+            ...displayOptions,
+            titled: e.target.checked,
+          })
+        }
+      />
+    </div>
+    <EmbedSelect
+      value={displayOptions.theme}
+      options={THEME_OPTIONS}
+      onChange={value =>
+        onChangeDisplayOptions({ ...displayOptions, theme: value })
+      }
+    />
   </div>
 );
 
-const DisplayOptionSection = ({ title, children }) => (
-  <DisplayOption>
-    <DisplayOptionTitle>{title}</DisplayOptionTitle>
-    {children}
-  </DisplayOption>
-);
-
-export default _.compose(connect(mapStateToProps))(DisplayOptionsPane);
+export default DisplayOptionsPane;

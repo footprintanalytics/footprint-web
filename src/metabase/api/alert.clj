@@ -1,11 +1,9 @@
 (ns metabase.api.alert
   "/api/alert endpoints"
   (:require [clojure.data :as data]
-            [clojure.set :refer [difference]]
             [compojure.core :refer [DELETE GET POST PUT]]
             [medley.core :as m]
             [metabase.api.common :as api]
-            [metabase.api.common.validation :as validation]
             [metabase.email :as email]
             [metabase.email.messages :as messages]
             [metabase.models.card :refer [Card]]
@@ -13,17 +11,12 @@
             [metabase.models.pulse :as pulse]
             [metabase.models.pulse-channel :refer [PulseChannel]]
             [metabase.models.pulse-channel-recipient :refer [PulseChannelRecipient]]
-            [metabase.plugins.classloader :as classloader]
-            [metabase.public-settings.premium-features :as premium-features]
             [metabase.util :as u]
             [metabase.util.i18n :refer [tru]]
             [metabase.util.schema :as su]
             [schema.core :as s]
             [toucan.db :as db]
             [toucan.hydrate :refer [hydrate]]))
-
-(u/ignore-exceptions
- (classloader/require 'metabase-enterprise.advanced-permissions.common))
 
 (api/defendpoint GET "/"
   "Fetch all alerts"
@@ -55,14 +48,10 @@
   (u/select-keys-when request
     :present [:alert_condition :alert_first_only :alert_above_goal :archived]))
 
-(defn email-channel
-  "Get email channel from an alert."
-  [alert]
+(defn- email-channel [alert]
   (m/find-first #(= :email (keyword (:channel_type %))) (:channels alert)))
 
-(defn- slack-channel
-  "Get slack channel from an alert."
-  [alert]
+(defn- slack-channel [alert]
   (m/find-first #(= :slack (keyword (:channel_type %))) (:channels alert)))
 
 (defn- key-by [key-fn coll]
@@ -136,9 +125,9 @@
    alert_above_goal (s/maybe s/Bool)
    card             pulse/CardRef
    channels         (su/non-empty [su/Map])}
-  (validation/check-has-application-permission :subscription false)
-  ;; To create an Alert you need read perms for its Card
-  (api/read-check Card (u/the-id card))
+  ;; do various perms checks as needed. Perms for an Alert == perms for its Card. So to create an Alert you need write
+  ;; perms for its Card
+  (api/write-check Card (u/the-id card))
   ;; ok, now create the Alert
   (let [alert-card (-> card (maybe-include-csv alert_condition) pulse/card->ref)
         new-alert  (api/check-500
@@ -150,7 +139,7 @@
     new-alert))
 
 (defn- notify-on-archive-if-needed!
-  "When an alert is archived, we notify all recipients that they are no longer receiving that alert."
+  "When an alert is archived, we notify any recipients that they are no longer going to be receiving that alert"
   [alert]
   (when (email/email-configured?)
     (doseq [recipient (collect-alert-recipients alert)]
@@ -158,7 +147,7 @@
 
 (api/defendpoint PUT "/:id"
   "Update a `Alert` with ID."
-  [id :as {{:keys [alert_condition alert_first_only alert_above_goal card channels archived]
+  [id :as {{:keys [alert_condition card channels alert_first_only alert_above_goal card channels archived]
             :as alert-updates} :body}]
   {alert_condition  (s/maybe pulse/AlertConditions)
    alert_first_only (s/maybe s/Bool)
@@ -166,48 +155,26 @@
    card             (s/maybe pulse/CardRef)
    channels         (s/maybe (su/non-empty [su/Map]))
    archived         (s/maybe s/Bool)}
-  (try
-   (validation/check-has-application-permission :monitoring)
-   (catch clojure.lang.ExceptionInfo _e
-     (validation/check-has-application-permission :subscription false)))
-
   ;; fetch the existing Alert in the DB
-  (let [alert-before-update                   (api/check-404 (pulse/retrieve-alert id))
-        current-user-has-application-permissions? (and (premium-features/enable-advanced-permissions?)
-                                                   (resolve 'metabase-enterprise.advanced-permissions.common/current-user-has-application-permissions?))
-        has-subscription-perms?               (and current-user-has-application-permissions?
-                                                   (current-user-has-application-permissions? :subscription))
-        has-monitoring-permissions?           (and current-user-has-application-permissions?
-                                                   (current-user-has-application-permissions? :monitoring))]
+  (let [alert-before-update (api/check-404 (pulse/retrieve-alert id))]
     (assert (:card alert-before-update)
             (tru "Invalid Alert: Alert does not have a Card associated with it"))
     ;; check permissions as needed.
     ;; Check permissions to update existing Card
-    (api/read-check Card (u/the-id (:card alert-before-update)))
+    (api/write-check Card (u/the-id (:card alert-before-update)))
     ;; if trying to change the card, check perms for that as well
     (when card
       (api/write-check Card (u/the-id card)))
-
-    (when-not (or api/*is-superuser?*
-                  has-monitoring-permissions?
-                  has-subscription-perms?)
+    ;; Make sure that non-admins cannot explicitly archive an alert or change recipients
+    (when (not api/*is-superuser?*)
       (api/check (= (-> alert-before-update :creator :id) api/*current-user-id*)
-                 [403 (tru "Non-admin users without monitoring or subscription permissions are only allowed to update alerts that they created")])
+                 [400 "Non-admin users are only allowed to update alerts that they created"])
       (api/check (or (not (contains? alert-updates :channels))
                      (and (= 1 (count channels))
                           ;; Non-admin alerts can only include the creator as a recipient
                           (= [api/*current-user-id*]
                              (map :id (:recipients (email-channel alert-updates))))))
-                 [403 (tru "Non-admin users without monitoring or subscription permissions are not allowed to modify the channels for an alert")]))
-
-    ;; only admin or users with subscription permissions can add recipients
-    (let [to-add-recipients (difference (set (map :id (:recipients (email-channel alert-updates))))
-                                        (set (map :id (:recipients (email-channel alert-before-update)))))]
-      (api/check (or api/*is-superuser?*
-                     has-subscription-perms?
-                     (empty? to-add-recipients))
-                 [403 (tru "Non-admin users without subscription permissions are not allowed to add recipients")]))
-
+                 [400 "Non-admin users are not allowed to modify the channels for an alert"]))
     ;; now update the Alert
     (let [updated-alert (pulse/update-alert!
                          (merge
@@ -223,12 +190,8 @@
                                      (not (slack-channel alert-updates)))
                             {:archived true})))]
 
-      ;; Only admins or users has subscription or monitoring perms
-      ;; can update recipients or explicitly archive an alert
-      (when (and (or api/*is-superuser?*
-                     has-subscription-perms?
-                     has-monitoring-permissions?)
-                 (email/email-configured?))
+      ;; Only admins can update recipients or explicitly archive an alert
+      (when (and api/*is-superuser?* (email/email-configured?))
         (if archived
           (notify-on-archive-if-needed! updated-alert)
           (notify-recipient-changes! alert-before-update updated-alert)))
@@ -236,9 +199,8 @@
       updated-alert)))
 
 (api/defendpoint DELETE "/:id/subscription"
-  "For users to unsubscribe themselves from the given alert."
+  "Unsubscribes a user from the given alert"
   [id]
-  (validation/check-has-application-permission :subscription false)
   (let [alert (pulse/retrieve-alert id)]
     (api/read-check alert)
     (api/let-404 [alert-id (u/the-id alert)

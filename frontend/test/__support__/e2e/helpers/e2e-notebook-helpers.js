@@ -1,7 +1,3 @@
-export function openNotebook() {
-  return cy.icon("notebook").click();
-}
-
 /**
  * Helps to select specific notebook steps like filters, joins, break outs, etc.
  *

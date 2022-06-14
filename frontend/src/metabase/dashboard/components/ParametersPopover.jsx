@@ -1,24 +1,38 @@
-/* eslint-disable react/prop-types */
 import React, { Component } from "react";
 import { t } from "ttag";
-import { getDashboardParameterSections } from "metabase/parameters/utils/dashboard-options";
+import { getParameterSections } from "metabase/meta/Dashboard";
 import Icon from "metabase/components/Icon";
-import { getParameterIconName } from "metabase/parameters/utils/ui";
-import styled from "@emotion/styled";
+import { getParameterIconName } from "metabase/meta/Parameter";
+import styled from "styled-components";
+
+import type {
+  Parameter,
+  ParameterOption,
+} from "metabase-types/types/Parameter";
 
 import _ from "underscore";
+
+import type { ParameterSection } from "metabase/meta/Dashboard";
 
 const PopoverBody = styled.div`
   max-width: 300px;
 `;
 
 export default class ParametersPopover extends Component {
-  constructor(props, context) {
+  props: {
+    onAddParameter: (option: ParameterOption) => Promise<Parameter>,
+    onClose: () => void,
+  };
+  state: {
+    section?: string,
+  };
+
+  constructor(props: any, context: any) {
     super(props, context);
     this.state = {};
   }
 
-  PARAMETER_SECTIONS = getDashboardParameterSections();
+  PARAMETER_SECTIONS = getParameterSections();
 
   render() {
     const { section } = this.state;
@@ -57,7 +71,13 @@ export default class ParametersPopover extends Component {
   }
 }
 
-export const ParameterOptionsSection = ({ section, onClick }) => (
+export const ParameterOptionsSection = ({
+  section,
+  onClick,
+}: {
+  section: ParameterSection,
+  onClick: () => any,
+}) => (
   <li onClick={onClick} className="p1 px3 cursor-pointer brand-hover">
     <div
       className="text-brand text-bold flex align-center"
@@ -70,7 +90,13 @@ export const ParameterOptionsSection = ({ section, onClick }) => (
   </li>
 );
 
-export const ParameterOptionsSectionsPane = ({ sections, onSelectSection }) => (
+export const ParameterOptionsSectionsPane = ({
+  sections,
+  onSelectSection,
+}: {
+  sections: Array<ParameterSection>,
+  onSelectSection: ParameterSection => any,
+}) => (
   <PopoverBody className="pb2">
     <h3 className="pb2 pt3 px3">{t`What do you want to filter?`}</h3>
     <ul>
@@ -85,7 +111,13 @@ export const ParameterOptionsSectionsPane = ({ sections, onSelectSection }) => (
   </PopoverBody>
 );
 
-export const ParameterOptionItem = ({ option, onClick }) => (
+export const ParameterOptionItem = ({
+  option,
+  onClick,
+}: {
+  option: ParameterOption,
+  onClick: () => any,
+}) => (
   <li onClick={onClick} className="p1 px3 cursor-pointer brand-hover">
     <div className="text-brand text-bold" style={{ marginBottom: 4 }}>
       {option.menuName || option.name}
@@ -94,7 +126,13 @@ export const ParameterOptionItem = ({ option, onClick }) => (
   </li>
 );
 
-export const ParameterOptionsPane = ({ options, onSelectOption }) => (
+export const ParameterOptionsPane = ({
+  options,
+  onSelectOption,
+}: {
+  options: ?Array<ParameterOption>,
+  onSelectOption: ParameterOption => any,
+}) => (
   <PopoverBody className="pb2">
     <h3 className="pb2 pt3 px3">{t`What kind of filter?`}</h3>
     <ul>

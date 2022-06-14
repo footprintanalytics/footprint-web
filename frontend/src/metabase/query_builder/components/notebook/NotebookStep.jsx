@@ -2,16 +2,18 @@
 import React from "react";
 
 import { t } from "ttag";
-import _ from "underscore";
+// import _ from "underscore";
 
-import styled from "@emotion/styled";
+import styled from "styled-components";
 
 import { color as c, lighten, darken } from "metabase/lib/colors";
 
 import Tooltip from "metabase/components/Tooltip";
 import Icon from "metabase/components/Icon";
-import Button from "metabase/core/components/Button";
+import Button from "metabase/components/Button";
 import ExpandingContent from "metabase/components/ExpandingContent";
+
+import { Box, Flex } from "grid-styled";
 
 import NotebookStepPreview from "./NotebookStepPreview";
 
@@ -24,76 +26,77 @@ import BreakoutStep from "./steps/BreakoutStep";
 import SummarizeStep from "./steps/SummarizeStep";
 import SortStep from "./steps/SortStep";
 import LimitStep from "./steps/LimitStep";
-import {
-  StepActionsContainer,
-  StepBody,
-  StepContent,
-  StepHeader,
-  StepButtonContainer,
-  StepRoot,
-} from "./NotebookStep.styled";
+import MyPopover from "metabase/query_builder/components/MyPopover";
 
-// TODO
 const STEP_UI = {
   data: {
     title: t`Data`,
+    name: "dataStep",
+    color: c("brand"),
     component: DataStep,
-    getColor: () => c("brand"),
   },
   join: {
     title: t`Join data`,
+    name: "joinDataStep",
+    color: c("brand"),
     icon: "join_left_outer",
     component: JoinStep,
     priority: 1,
-    getColor: () => c("brand"),
   },
   expression: {
     title: t`Custom column`,
+    name: "customColumnStep",
+    color: c("bg-dark"),
     icon: "add_data",
     component: ExpressionStep,
-    getColor: () => c("bg-dark"),
   },
   filter: {
     title: t`Filter`,
+    name: "filterStep",
+    color: c("accent7"),
     icon: "filter",
     component: FilterStep,
     priority: 10,
-    getColor: () => c("filter"),
   },
   summarize: {
     title: t`Summarize`,
+    name: "summarizeStep",
+    color: c("accent1"),
     icon: "sum",
     component: SummarizeStep,
     priority: 5,
-    getColor: () => c("summarize"),
   },
   aggregate: {
     title: t`Aggregate`,
+    name: "aggregateStep",
+    color: c("accent1"),
     icon: "sum",
     component: AggregateStep,
     priority: 5,
-    getColor: () => c("summarize"),
   },
   breakout: {
     title: t`Breakout`,
+    name: "breakoutStep",
+    color: c("accent4"),
     icon: "segment",
     component: BreakoutStep,
     priority: 1,
-    getColor: () => c("accent4"),
   },
   sort: {
     title: t`Sort`,
+    name: "sortStep",
+    color: c("bg-dark"),
     icon: "smartscalar",
     component: SortStep,
     compact: true,
-    getColor: () => c("bg-dark"),
   },
   limit: {
     title: t`Row limit`,
+    name: "rowLimitStep",
+    color: c("bg-dark"),
     icon: "list",
     component: LimitStep,
     compact: true,
-    getColor: () => c("bg-dark"),
   },
 };
 
@@ -101,6 +104,8 @@ function getTestId(step) {
   const { type, stageIndex, itemIndex } = step;
   return `step-${type}-${stageIndex || 0}-${itemIndex || 0}`;
 }
+
+const CONTENT_WIDTH = [11 / 12, 8 / 12];
 
 export default class NotebookStep extends React.Component {
   state = {
@@ -114,40 +119,43 @@ export default class NotebookStep extends React.Component {
       isLastStep,
       isLastOpened,
       updateQuery,
+      enabledPopover,
     } = this.props;
     const { showPreview } = this.state;
 
-    const { title, getColor, component: NotebookStepComponent } =
+    const { title, color, component: NotebookStepComponent } =
       STEP_UI[step.type] || {};
 
-    const color = getColor();
     const canPreview = step.previewQuery && step.previewQuery.isValid();
     const showPreviewButton = !showPreview && canPreview;
 
-    const largeActionButtons =
-      isLastStep &&
-      _.any(step.actions, action => !STEP_UI[action.type].compact);
+    // const largeActionButtons =
+    //   isLastStep &&
+    //   _.any(step.actions, action => !STEP_UI[action.type].compact);
 
     const actions = [];
     actions.push(
-      ...step.actions.map(action => {
-        const stepUi = STEP_UI[action.type];
-
-        return {
-          priority: stepUi.priority,
-          button: (
+      ...step.actions.map(action => ({
+        priority: (STEP_UI[action.type] || {}).priority,
+        button: (
+          <MyPopover
+            name={STEP_UI[action.type].name}
+            enabled={enabledPopover}
+            placement="bottom"
+            delayModel={STEP_UI[action.type].component !== JoinStep}
+          >
             <ActionButton
               mr={isLastStep ? 2 : 1}
               mt={isLastStep ? 2 : null}
-              color={stepUi.getColor()}
-              large={largeActionButtons}
-              {...stepUi}
-              key={`actionButton_${stepUi.title}`}
+              // large={largeActionButtons}
+              large={true}
+              {...(STEP_UI[action.type] || {})}
+              key={`actionButton_${STEP_UI[action.type].title}`}
               onClick={() => action.action({ query: step.query, openStep })}
             />
-          ),
-        };
-      }),
+          </MyPopover>
+        ),
+      })),
     );
 
     actions.sort((a, b) => (b.priority || 0) - (a.priority || 0));
@@ -155,11 +163,18 @@ export default class NotebookStep extends React.Component {
 
     return (
       <ExpandingContent isInitiallyOpen={!isLastOpened} isOpen>
-        <StepRoot
+        <Box
+          mb={[1, 2]}
+          pb={[1, 2]}
           className="hover-parent hover--visibility"
           data-testid={getTestId(step)}
         >
-          <StepHeader color={color}>
+          <Flex
+            mb={1}
+            width={CONTENT_WIDTH}
+            className="text-bold"
+            style={{ color }}
+          >
             {title}
             <Icon
               name="close"
@@ -168,11 +183,11 @@ export default class NotebookStep extends React.Component {
               onClick={() => step.revert(step.query).update(updateQuery)}
               data-testid="remove-step"
             />
-          </StepHeader>
+          </Flex>
 
           {NotebookStepComponent && (
-            <StepBody>
-              <StepContent>
+            <Flex align="center">
+              <Box width={CONTENT_WIDTH}>
                 <NotebookStepComponent
                   color={color}
                   step={step}
@@ -180,20 +195,21 @@ export default class NotebookStep extends React.Component {
                   updateQuery={updateQuery}
                   isLastOpened={isLastOpened}
                 />
-              </StepContent>
-              <StepButtonContainer>
+              </Box>
+              <Box width={[1 / 12]}>
                 <ActionButton
                   ml={[1, 2]}
                   className={
                     !showPreviewButton ? "hidden disabled" : "text-brand-hover"
                   }
+                  large={false}
                   icon="play"
                   title={t`Preview`}
                   color={c("text-light")}
                   onClick={() => this.setState({ showPreview: true })}
                 />
-              </StepButtonContainer>
-            </StepBody>
+              </Box>
+            </Flex>
           )}
 
           {showPreview && canPreview && (
@@ -204,11 +220,11 @@ export default class NotebookStep extends React.Component {
           )}
 
           {actionButtons.length > 0 && (
-            <StepActionsContainer data-testid="action-buttons">
+            <Box mt={1} data-testid="action-buttons">
               {actionButtons}
-            </StepActionsContainer>
+            </Box>
           )}
-        </StepRoot>
+        </Box>
       </ExpandingContent>
     );
   }
@@ -216,8 +232,6 @@ export default class NotebookStep extends React.Component {
 
 const ColorButton = styled(Button)`
   border: none;
-  color: ${({ color }) => (color ? color : c("text-medium"))};
-  background-color: ${({ color }) => (color ? lighten(color, 0.61) : null)};
   &:hover {
     color: ${({ color }) => (color ? darken(color, 0.115) : color("brand"))};
     background-color: ${({ color }) =>
@@ -233,7 +247,7 @@ const ActionButton = ({ icon, title, color, large, onClick, ...props }) => {
       icon={icon}
       small={!large}
       iconVertical={large}
-      iconSize={large ? 18 : 14}
+      iconSize={18}
       onClick={onClick}
       {...props}
     >

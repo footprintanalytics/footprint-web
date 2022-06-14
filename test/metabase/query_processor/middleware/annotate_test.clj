@@ -1,7 +1,7 @@
 (ns metabase.query-processor.middleware.annotate-test
   (:require [clojure.test :refer :all]
             [metabase.driver :as driver]
-            [metabase.models :refer [Card Field]]
+            [metabase.models :refer [Field]]
             [metabase.query-processor :as qp]
             [metabase.query-processor.middleware.annotate :as annotate]
             [metabase.query-processor.store :as qp.store]
@@ -13,7 +13,7 @@
 (defn- add-column-info [query metadata]
   (mt/with-everything-store
     (driver/with-driver :h2
-      ((annotate/add-column-info query identity) metadata))))
+      (-> (mt/test-qp-middleware annotate/add-column-info query metadata []) :metadata :data))))
 
 ;;; +----------------------------------------------------------------------------------------------------------------+
 ;;; |                                             column-info (:native)                                              |
@@ -52,8 +52,7 @@
 
 (defn- info-for-field
   ([field-id]
-   (into {} (db/select-one (into [Field] (disj (set @#'qp.store/field-columns-to-fetch) :database_type))
-                           :id field-id)))
+   (into {} (db/select-one (into [Field] (disj (set @#'qp.store/field-columns-to-fetch) :database_type)) :id field-id)))
 
   ([table-key field-key]
    (info-for-field (mt/id table-key field-key))))
@@ -220,7 +219,6 @@
                 :name            "parent.child"
                 :settings        nil
                 :field_ref       [:field (u/the-id child) nil]
-                :nfc_path        nil
                 :parent_id       (u/the-id parent)
                 :id              (u/the-id child)
                 :visibility_type :normal
@@ -242,7 +240,6 @@
                 :name            "grandparent.parent.child"
                 :settings        nil
                 :field_ref       [:field (u/the-id child) nil]
-                :nfc_path        nil
                 :parent_id       (u/the-id parent)
                 :id              (u/the-id child)
                 :visibility_type :normal
@@ -612,7 +609,7 @@
 
 (deftest mbql-cols-nested-queries-test
   (testing "Should be able to infer MBQL columns with nested queries"
-    (let [base-query (qp/preprocess
+    (let [base-query (qp/query->preprocessed
                       (mt/mbql-query venues
                         {:joins [{:fields       :all
                                   :source-table $$categories
@@ -644,7 +641,7 @@
                   (get result "EAN")
                   (select-keys result [:name :display_name :base_type :semantic_type :id :field_ref])))]
         (testing "Make sure metadata is correct for the 'EAN' column with"
-          (let [base-query (qp/preprocess
+          (let [base-query (qp/query->preprocessed
                             (mt/mbql-query orders
                               {:joins [{:fields       :all
                                         :source-table $$products
@@ -663,59 +660,3 @@
                               :id           %ean
                               :field_ref    &Products.ean})
                            (ean-metadata (add-column-info nested-query {}))))))))))))))
-
-;; metabase#14787
-(deftest col-info-for-fields-from-card-test
-  (mt/dataset sample-dataset
-    (let [card-1-query (mt/mbql-query orders
-                         {:joins [{:fields       :all
-                                   :source-table $$products
-                                   :condition    [:= $product_id &Products.products.id]
-                                   :alias        "Products"}]})]
-      (mt/with-temp* [Card [{card-1-id :id} {:dataset_query card-1-query}]
-                      Card [{card-2-id :id} {:dataset_query (mt/mbql-query people)}]]
-        (testing "when a nested query is from a saved question, there should be no `:join-alias` on the left side"
-          (mt/$ids nil
-            (let [base-query (qp/preprocess
-                              (mt/mbql-query nil
-                                {:source-table (str "card__" card-1-id)
-                                 :joins        [{:fields       :all
-                                                 :source-table (str "card__" card-2-id)
-                                                 :condition    [:= $orders.user_id &Products.products.id]
-                                                 :alias        "Q"}]
-                                 :limit        1}))
-                  fields     #{%orders.discount %products.title %people.source}]
-              (is (= [{:display_name "Discount" :field_ref [:field %orders.discount nil]}
-                      {:display_name "Products → Title" :field_ref [:field %products.title nil]}
-                      {:display_name "Q → Source" :field_ref [:field %people.source {:join-alias "Q"}]}]
-                     (->> (:cols (add-column-info base-query {}))
-                          (filter #(fields (:id %)))
-                          (map #(select-keys % [:display_name :field_ref])))))))))))
-
-  (testing "Has the correct display names for joined fields from cards"
-    (letfn [(native [query] {:type :native
-                             :native {:query query :template-tags {}}
-                             :database (mt/id)})]
-      (mt/with-temp* [Card [{card1-id :id} {:dataset_query
-                                            (native "select 'foo' as A_COLUMN")}]
-                      Card [{card2-id :id} {:dataset_query
-                                            (native "select 'foo' as B_COLUMN")}]]
-        (doseq [card-id [card1-id card2-id]]
-          ;; populate metadata
-          (mt/user-http-request :rasta :post 202 (format "card/%d/query" card-id)))
-        (let [query {:database (mt/id)
-                     :type :query
-                     :query {:source-table (str "card__" card1-id)
-                             :joins [{:fields "all"
-                                      :source-table (str "card__" card2-id)
-                                      :condition [:=
-                                                  [:field "A_COLUMN" {:base-type :type/Text}]
-                                                  [:field "B_COLUMN" {:base-type :type/Text
-                                                                      :join-alias "alias"}]]
-                                      :alias "alias"}]}}
-              results (qp/process-query query)]
-          (is (= "alias → B Column" (-> results :data :cols second :display_name))
-              "cols has wrong display name")
-          (is (= "alias → B Column" (-> results :data :results_metadata
-                                        :columns second :display_name))
-              "Results metadata cols has wrong display name"))))))

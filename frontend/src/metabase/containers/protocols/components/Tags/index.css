@@ -1,0 +1,24 @@
+.protocols__tags .ant-tag {
+  background-color: transparent;
+  border: 0;
+  font-size: 14px;
+  color: #303440;
+  margin: 0 6px 6px 0;
+  padding: 1px 12px 1px 0;
+}
+
+.protocols__tags-v2 .ant-tag {
+  background-color: #f1f1f1;
+  border: 1px solid #dcdee4;
+  border-radius: 2px;
+  font-size: 14px;
+  color: #303440;
+  margin: 0 6px 6px 0;
+  padding: 1px 7px;
+}
+
+.protocols__tags .ant-tag-close-icon {
+  font-size: 12px;
+  color: #2f3441;
+  margin-left: 8px;
+}

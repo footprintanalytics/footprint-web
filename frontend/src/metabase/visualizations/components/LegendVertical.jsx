@@ -16,6 +16,10 @@ export default class LegendVertical extends Component {
     this.state = {
       overflowCount: 0,
       size: null,
+      current: 0,
+      itemHeight: 20,
+      showPrev: false,
+      showNext: false,
     };
   }
 
@@ -26,7 +30,6 @@ export default class LegendVertical extends Component {
     // Get the bounding rectangle of the chart widget to determine if
     // legend items will overflow the widget area
     const size = ReactDOM.findDOMNode(this).getBoundingClientRect();
-
     // check the height, width may flucatuate depending on the browser causing an infinite loop
     // check overflowCount, because after setting overflowCount the height changes and it causing an infinite loop too
     if (
@@ -36,18 +39,24 @@ export default class LegendVertical extends Component {
     ) {
       this.setState({ overflowCount: 0, size });
     } else if (this.state.overflowCount === 0) {
-      let overflowCount = 0;
-      for (let i = 0; i < this.props.titles.length; i++) {
+      // let overflowCount = 0;
+      // if (this.state.current * pageSize < titlesLength) {
+      //   this.setState({
+      //     showNext: true
+      //   })
+      // }
+      /*for (let i = 0; i < this.props.titles.length; i++) {
         const itemSize = ReactDOM.findDOMNode(
           this.refs["item" + i],
         ).getBoundingClientRect();
+        console.log("index=" + i, itemSize, size)
         if (size.top > itemSize.top || size.bottom < itemSize.bottom) {
           overflowCount++;
         }
       }
       if (this.state.overflowCount !== overflowCount) {
         this.setState({ overflowCount, size });
-      }
+      }*/
     }
   }
 
@@ -55,6 +64,8 @@ export default class LegendVertical extends Component {
     const { className, titles, colors, hovered, onHoverChange } = this.props;
     const { overflowCount } = this.state;
     let items, extraItems, extraColors;
+    // pageSize = 6
+    // let showPrev, showNext;
     if (overflowCount > 0) {
       items = titles.slice(0, -overflowCount - 1);
       extraItems = titles.slice(-overflowCount - 1);
@@ -64,6 +75,19 @@ export default class LegendVertical extends Component {
     } else {
       items = titles;
     }
+    /*if ((this.state.current + 1) * pageSize < titles.length) {
+      items = titles.slice(this.state.current * pageSize, (this.state.current + 1) * pageSize)
+      showNext = true;
+    } else {
+      items = titles.slice(this.state.current * pageSize, titles.length);
+      showNext = false;
+    }
+    if (this.state.current > 0) {
+      showPrev = true;
+    } else {
+      showPrev = false;
+    }*/
+
     return (
       <ol className={cx(className, styles.Legend, styles.vertical)}>
         {items.map((title, index) => (
@@ -91,7 +115,7 @@ export default class LegendVertical extends Component {
             />
             {Array.isArray(title) && (
               <span
-                className={cx("LegendItem", "flex-align-right pl1", {
+                className={cx("LegendItemValue", "flex-align-right pl1", {
                   muted:
                     hovered && hovered.index != null && index !== hovered.index,
                 })}
@@ -101,6 +125,14 @@ export default class LegendVertical extends Component {
             )}
           </li>
         ))}
+        {/* <Flex justifyContent="end">
+          {showPrev && <div className="LegendNextPrev" onClick={() => {
+            this.setState({ current: this.state.current - 1 })
+          }}>prev</div>}
+          {showNext && <div className="LegendNextPrev" onClick={() => {
+            this.setState({ current: this.state.current + 1})
+          }}>next</div>}
+        </Flex>*/}
         {overflowCount > 0 ? (
           <li key="extra" className="flex flex-no-shrink">
             <Tooltip

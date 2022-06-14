@@ -1,4 +1,4 @@
-import { restore, visitQuestion } from "__support__/e2e/cypress";
+import { restore } from "__support__/e2e/cypress";
 
 describe("scenarios > question > native subquery", () => {
   beforeEach(() => {
@@ -37,7 +37,7 @@ describe("scenarios > question > native subquery", () => {
       .then(response => {
         cy.wrap(response.body.id).as("toplevelQuestionId");
 
-        visitQuestion(response.body.id);
+        cy.visit(`/question/${response.body.id}`);
         cy.contains("41");
       });
 
@@ -46,12 +46,12 @@ describe("scenarios > question > native subquery", () => {
 
     // They should be able to access both questions
     cy.get("@nestedQuestionId").then(nestedQuestionId => {
-      visitQuestion(nestedQuestionId);
+      cy.visit(`/question/${nestedQuestionId}`);
       cy.contains("Showing 41 rows");
     });
 
     cy.get("@toplevelQuestionId").then(toplevelQuestionId => {
-      visitQuestion(toplevelQuestionId);
+      cy.visit(`/question/${toplevelQuestionId}`);
       cy.contains("41");
     });
   });

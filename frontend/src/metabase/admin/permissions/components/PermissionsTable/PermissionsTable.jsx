@@ -1,36 +1,31 @@
 import React, { useState, useRef } from "react";
 import PropTypes from "prop-types";
 
+import Label from "metabase/components/type/Label";
 import Tooltip from "metabase/components/Tooltip";
 import Modal from "metabase/components/Modal";
 import ConfirmContent from "metabase/components/ConfirmContent";
-import Ellipsified from "metabase/core/components/Ellipsified";
 
 import { PermissionsSelect } from "../PermissionsSelect";
 import {
   PermissionsTableRoot,
   PermissionsTableRow,
   PermissionsTableCell,
-  PermissionTableHeaderCell,
+  EntityNameCell,
   EntityNameLink,
   EntityName,
   HintIcon,
-  ColumnName,
 } from "./PermissionsTable.styled";
 
 const propTypes = {
   entities: PropTypes.arrayOf(PropTypes.object),
-  columns: PropTypes.arrayOf(
-    PropTypes.shape({
-      name: PropTypes.string.isRequired,
-      hint: PropTypes.string,
-    }),
-  ),
+  columns: PropTypes.arrayOf(PropTypes.string),
   emptyState: PropTypes.node,
   onSelect: PropTypes.func,
   onChange: PropTypes.func,
   onAction: PropTypes.func,
   colorScheme: PropTypes.oneOf(["default", "admin"]),
+  horizontalPadding: PropTypes.oneOf(["sm", "lg"]),
 };
 
 export function PermissionsTable({
@@ -39,6 +34,7 @@ export function PermissionsTable({
   onSelect,
   onAction,
   onChange,
+  horizontalPadding = "sm",
   colorScheme,
   emptyState = null,
 }) {
@@ -76,53 +72,51 @@ export function PermissionsTable({
   const hasItems = entities.length > 0;
 
   return (
-    <>
+    <React.Fragment>
       <PermissionsTableRoot data-testid="permission-table">
         <thead>
           <tr>
-            {columns.map(({ name, hint }) => {
+            {columns.map(column => {
               return (
-                <PermissionTableHeaderCell key={name}>
-                  <ColumnName>
-                    {name}{" "}
-                    {hint && (
-                      <Tooltip placement="right" tooltip={hint}>
-                        <HintIcon />
-                      </Tooltip>
-                    )}
-                  </ColumnName>
-                </PermissionTableHeaderCell>
+                <PermissionsTableCell
+                  key={column}
+                  horizontalPadding={horizontalPadding}
+                >
+                  <Label>{column}</Label>
+                </PermissionsTableCell>
               );
             })}
+            <PermissionsTableCell
+              style={{ width: "100%", minWidth: "unset" }}
+            />
           </tr>
         </thead>
         <tbody>
           {entities.map(entity => {
-            const entityName = (
-              <span className="flex align-center">
-                <Ellipsified>{entity.name}</Ellipsified>
-                {entity.hint && (
-                  <Tooltip tooltip={entity.hint}>
-                    <HintIcon />
-                  </Tooltip>
-                )}
-              </span>
-            );
             return (
               <PermissionsTableRow key={entity.id}>
-                <PermissionsTableCell>
+                <EntityNameCell horizontalPadding={horizontalPadding}>
                   {entity.canSelect ? (
                     <EntityNameLink onClick={() => onSelect(entity)}>
-                      {entityName}
+                      {entity.name}
                     </EntityNameLink>
                   ) : (
-                    <EntityName>{entityName}</EntityName>
+                    <EntityName>{entity.name}</EntityName>
                   )}
-                </PermissionsTableCell>
+
+                  {entity.hint && (
+                    <Tooltip tooltip={entity.hint}>
+                      <HintIcon />
+                    </Tooltip>
+                  )}
+                </EntityNameCell>
 
                 {entity.permissions.map(permission => {
                   return (
-                    <PermissionsTableCell key={permission.type}>
+                    <PermissionsTableCell
+                      key={permission.name}
+                      horizontalPadding={horizontalPadding}
+                    >
                       <PermissionsSelect
                         {...permission}
                         onChange={(value, toggleState) =>
@@ -151,7 +145,7 @@ export function PermissionsTable({
           />
         </Modal>
       )}
-    </>
+    </React.Fragment>
   );
 }
 

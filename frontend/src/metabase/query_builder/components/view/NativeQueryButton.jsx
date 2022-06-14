@@ -3,29 +3,27 @@ import React from "react";
 import { t } from "ttag";
 import _ from "underscore";
 
-import Modal from "metabase/components/Modal";
-import Button from "metabase/core/components/Button";
-import LoadingAndErrorWrapper from "metabase/components/LoadingAndErrorWrapper";
 import Tooltip from "metabase/components/Tooltip";
-import { formatNativeQuery, getEngineNativeType } from "metabase/lib/engine";
-import { MetabaseApi } from "metabase/services";
+import Modal from "metabase/components/Modal";
+import Button from "metabase/components/Button";
+import LoadingAndErrorWrapper from "metabase/components/LoadingAndErrorWrapper";
 
-import {
-  NativeCodeWrapper,
-  NativeCodeContainer,
-  SqlIconButton,
-} from "./NativeQueryButton.styled";
+import { formatNativeQuery, getEngineNativeType } from "metabase/lib/engine";
+
+import { MetabaseApi } from "metabase/services";
+import NeedPermissionModal from "metabase/components/NeedPermissionModal";
+import { trackStructEvent } from "metabase/lib/analytics";
 
 const STRINGS = {
   "": {
-    tooltip: t`View the native query`,
-    title: t`Native query for this question`,
-    button: t`Convert this question to a native query`,
+    tooltip: t`View the SQL query`,
+    title: t`SQL query for this chart`,
+    button: t`Convert this chart to a SQL query`,
   },
   sql: {
     tooltip: t`View the SQL`,
-    title: t`SQL for this question`,
-    button: t`Convert this question to SQL`,
+    title: t`SQL for this chart`,
+    button: t`Convert this chart to SQL`,
   },
 };
 
@@ -35,10 +33,16 @@ export default class NativeQueryButton extends React.Component {
     loading: false,
     native: null,
     datasetQuery: null,
+    showVip: false,
   };
 
   handleOpen = async () => {
-    const { question } = this.props;
+    trackStructEvent(`click NativeQuery edit chart`);
+    const { question, canNativeQuery } = this.props;
+    if (!canNativeQuery) {
+      this.setState({ showVip: true });
+      return;
+    }
     const datasetQuery = question.datasetQuery();
     this.setState({ open: true });
     if (!_.isEqual(datasetQuery, this.state.datasetQuery)) {
@@ -75,7 +79,7 @@ export default class NativeQueryButton extends React.Component {
   }
 
   render() {
-    const { question, size, ...props } = this.props;
+    const { question, btnString } = this.props;
     const { loading, error } = this.state;
 
     const engineType = getEngineNativeType(question.database().engine);
@@ -83,12 +87,21 @@ export default class NativeQueryButton extends React.Component {
       STRINGS[engineType] || Object.values(STRINGS)[0];
 
     return (
-      <span {...props}>
-        <Tooltip tooltip={tooltip} placement="bottom">
-          <SqlIconButton iconSize={size} onClick={this.handleOpen} />
+      <div>
+        <Tooltip tooltip={tooltip}>
+          <Button
+            // onlyIcon
+            className={`${btnString ? "" : "Question-header-btn"}`}
+            iconColor="#7A819B"
+            icon="cmd"
+            iconSize={16}
+            onClick={this.handleOpen}
+            {...this.props}
+          >
+            {btnString}
+          </Button>
         </Tooltip>
         <Modal
-          style={{ padding: "1em" }}
           isOpen={this.state.open}
           title={title}
           footer={
@@ -101,20 +114,24 @@ export default class NativeQueryButton extends React.Component {
           onClose={this.handleClose}
         >
           <LoadingAndErrorWrapper loading={loading} error={error}>
-            <NativeCodeWrapper>
-              <NativeCodeContainer className="p2 sql-code">
-                {this.getFormattedQuery()}
-              </NativeCodeContainer>
-            </NativeCodeWrapper>
+            <pre className="mb3 p2 sql-code">{this.getFormattedQuery()}</pre>
           </LoadingAndErrorWrapper>
         </Modal>
-      </span>
+        {this.state.showVip && (
+          <NeedPermissionModal
+            title="Upgrade your account to access SQL query"
+            onClose={() => this.setState({ showVip: false })}
+            afterChangeLocation={() => {
+              this.setState({ showVip: false });
+            }}
+          />
+        )}
+      </div>
     );
   }
 }
 
 NativeQueryButton.shouldRender = ({ question, queryBuilderMode }) =>
-  queryBuilderMode === "notebook" &&
-  question.isStructured() &&
-  question.database() &&
-  question.database().native_permissions === "write";
+  // queryBuilderMode === "notebook" &&
+  question.isStructured() && question.database();
+// question.database().native_permissions === "write";

@@ -1,4 +1,3 @@
-/* eslint-disable react/prop-types */
 import React, { Component } from "react";
 import { connect } from "react-redux";
 
@@ -12,6 +11,7 @@ import FieldToGroupBy from "metabase/reference/components/FieldToGroupBy";
 
 import { fetchTableMetadata } from "metabase/redux/metadata";
 import { getMetadata } from "metabase/selectors/metadata";
+import Metadata from "metabase-lib/lib/metadata/Metadata";
 
 const mapDispatchToProps = {
   fetchTableMetadata,
@@ -21,7 +21,17 @@ const mapStateToProps = (state, props) => ({
   metadata: getMetadata(state, props),
 });
 
-class FieldsToGroupBy extends Component {
+@connect(mapStateToProps, mapDispatchToProps)
+export default class FieldsToGroupBy extends Component {
+  props: {
+    fields: Object,
+    databaseId: number,
+    metric: Object,
+    title: string,
+    onChangeLocation: string => void,
+    metadata: Metadata,
+  };
+
   render() {
     const {
       fields,
@@ -72,5 +82,3 @@ class FieldsToGroupBy extends Component {
     );
   }
 }
-
-export default connect(mapStateToProps, mapDispatchToProps)(FieldsToGroupBy);

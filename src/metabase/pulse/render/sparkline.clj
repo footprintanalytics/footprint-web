@@ -102,12 +102,13 @@
   (or (types/temporal-field? column)
       (types/field-is-type? :type/Number column)))
 
+
 (s/defn cleaned-rows
   "Get sorted rows from query results, with nils removed, appropriate for rendering as a sparkline."
   [timezone-id :- (s/maybe s/Str) card {:keys [rows cols], :as data}]
   (let [[x-axis-rowfn y-axis-rowfn] (common/graphing-column-row-fns card data)
         format-val                  (format-val-fn timezone-id cols x-axis-rowfn)
-        present-rows                (common/row-preprocess x-axis-rowfn y-axis-rowfn rows)
+        present-rows                (common/non-nil-rows x-axis-rowfn y-axis-rowfn rows)
         formatted-value             (comp format-val x-axis-rowfn)
         x-col                       (x-axis-rowfn cols)]
     (if (and (comparable? x-col)

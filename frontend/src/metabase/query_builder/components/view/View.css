@@ -1,0 +1,8 @@
+.chart-edit__right-side-bar {
+  opacity: 1;
+  height: 100%;
+  right: 0;
+  z-index: 2;
+  position: absolute;
+  width: 355px;
+}

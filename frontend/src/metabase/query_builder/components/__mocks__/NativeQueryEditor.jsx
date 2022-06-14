@@ -1,13 +1,15 @@
 /* eslint-disable react/prop-types */
 import React from "react";
 
-import SyncedParametersList from "metabase/parameters/components/SyncedParametersList/SyncedParametersList";
+import Parameters from "metabase/parameters/components/Parameters/Parameters";
 
 const MockNativeQueryEditor = ({ location, query, setParameterValue }) => (
-  <SyncedParametersList
-    className="mt1"
+  <Parameters
     parameters={query.question().parameters()}
+    query={location.query}
     setParameterValue={setParameterValue}
+    syncQueryString
+    isQB
     commitImmediately
   />
 );

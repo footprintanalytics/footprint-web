@@ -1,0 +1,42 @@
+.protocols__cell {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 48px 0 20px 0;
+}
+
+.protocols__cell h2 {
+  font-size: 24px;
+  color: #303440;
+  font-weight: 700;
+}
+
+.protocols__cell a {
+  font-size: 14px;
+}
+
+.protocols__wrap {
+  background-color: #fafafc;
+  min-height: 1000px;
+}
+
+.protocols__wrap .ant-table-row {
+  cursor: pointer;
+}
+
+.protocols__header {
+  max-width: 1440px;
+  margin: 0 auto;
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  padding: 0 20px 18px 20px;
+}
+
+.protocols__middle {
+  max-width: 1440px;
+  margin: 0 auto;
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+}

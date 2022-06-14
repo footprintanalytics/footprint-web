@@ -1,0 +1,96 @@
+.article-detail {
+  background: white;
+  height: calc(100vh - 60px);
+  overflow: auto;
+  padding: 40px 0;
+}
+
+.article-detail .article-recommend {
+  margin-top: 50px;
+}
+
+.article-detail__inner {
+  max-width: 1000px;
+  overflow: hidden;
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+}
+
+.article-detail__style {
+  max-width: 800px;
+}
+
+.article-detail .dashboard-card-display-info {
+  justify-content: left;
+  padding: 0;
+  margin: 0;
+  color: #8693a1;
+  font-weight: normal;
+}
+
+.article-detail__title {
+  font-size: 32px;
+  line-height: 36px;
+  margin: 10px 0;
+  font-weight: bold;
+  color: #313541;
+  text-overflow: ellipsis;
+  overflow: hidden;
+  word-wrap: break-word;
+}
+
+.article-detail__desc {
+  font-size: 14px;
+  color: #63727f;
+  display: -webkit-box;
+  -webkit-line-clamp: 3;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  margin-top: 40px;
+}
+
+.article-detail__time {
+  color: #8693a1;
+}
+
+.article-detail__thumb {
+  width: 100%;
+  height: auto;
+  margin: 40px auto;
+}
+
+.article-detail__content {
+  margin-top: 30px !important;
+}
+
+.article-detail__no-data {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  font-size: 20px;
+  height: 80vh;
+}
+
+.article-detail__no-data button {
+  width: 100px;
+  margin-top: 20px;
+}
+
+.article-detail .toastui-editor-contents {
+  z-index: 0;
+  font-size: 14px;
+}
+
+.markdown img + em {
+  color: #737373;
+  display: inline-block;
+  font-size: 0.7rem;
+  text-align: center;
+  width: 100%;
+}
+
+.article-detail article header {
+  display: flex;
+}

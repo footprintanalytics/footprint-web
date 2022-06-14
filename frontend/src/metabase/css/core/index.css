@@ -9,7 +9,6 @@
 @import "./cursor.css";
 @import "./flex.css";
 @import "./float.css";
-@import "./fonts.css";
 @import "./grid.css";
 @import "./headings.css";
 @import "./hide.css";
@@ -25,3 +24,7 @@
 @import "./text.css";
 @import "./transitions.css";
 @import "./width.css";
+@import "./z_index.css";
+@import "@fontsource/montserrat/400.css";
+@import "@fontsource/montserrat/500.css";
+@import "@fontsource/montserrat/700.css";

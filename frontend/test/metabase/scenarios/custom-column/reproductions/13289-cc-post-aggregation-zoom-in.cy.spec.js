@@ -4,7 +4,6 @@ import {
   popover,
   enterCustomColumnDetails,
   visualize,
-  summarize,
 } from "__support__/e2e/cypress";
 
 const CC_NAME = "Math";
@@ -25,7 +24,7 @@ describe("issue 13289", () => {
   });
 
   it("should allow 'zoom in' drill-through when grouped by custom column (metabase#13289) (metabase#13289)", () => {
-    summarize({ mode: "notebook" });
+    cy.findByText("Summarize").click();
     cy.findByText("Count of rows").click();
 
     cy.findByText("Pick a column to group by").click();

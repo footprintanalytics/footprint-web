@@ -5,16 +5,11 @@
   (:require [clojure.string :as str]
             [metabase.config :as config]))
 
-(defmulti spec
-  "Create a [[clojure.java.jdbc]] spec map from broken-out database `details`."
-  {:arglists '([db-type details])}
-  (fn [db-type _details]
-    (keyword db-type)))
-
-(defmethod spec :h2
-  [_ {:keys [db]
-      :or   {db "h2.db"}
-      :as   opts}]
+(defn h2
+  "Create a Clojure JDBC database specification for a H2 database."
+  [{:keys [db]
+    :or   {db "h2.db"}
+    :as   opts}]
   (merge {:classname   "org.h2.Driver"
           :subprotocol "h2"
           :subname     db}
@@ -27,10 +22,11 @@
   [host port db]
   (str "//" host ":" port (if-not (str/blank? db) (str "/" db) "/")))
 
-(defmethod spec :postgres
-  [_ {:keys [host port db]
-      :or   {host "localhost", port 5432, db ""}
-      :as   opts}]
+(defn postgres
+  "Create a Clojure JDBC database specification for a Postgres database."
+  [{:keys [host port db]
+    :or   {host "localhost", port 5432, db ""}
+    :as   opts}]
   (merge
    {:classname                     "org.postgresql.Driver"
     :subprotocol                   "postgresql"
@@ -40,10 +36,11 @@
     :ApplicationName               config/mb-version-and-process-identifier}
    (dissoc opts :host :port :db)))
 
-(defmethod spec :mysql
-  [_ {:keys [host port db]
-      :or   {host "localhost", port 3306, db ""}
-      :as   opts}]
+(defn mysql
+  "Create a Clojure JDBC database specification for a MySQL or MariaDB database."
+  [{:keys [host port db]
+    :or   {host "localhost", port 3306, db ""}
+    :as   opts}]
   (merge
    {:classname   "org.mariadb.jdbc.Driver"
     :subprotocol "mysql"

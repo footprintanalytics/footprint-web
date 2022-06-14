@@ -1,14 +1,14 @@
 import { restore, visitQuestionAdhoc } from "__support__/e2e/cypress";
+import { SAMPLE_DATASET } from "__support__/e2e/cypress_sample_dataset";
 
-import { SAMPLE_DB_ID } from "__support__/e2e/cypress_data";
-import { SAMPLE_DATABASE } from "__support__/e2e/cypress_sample_database";
-
-const { ORDERS, ORDERS_ID, PEOPLE } = SAMPLE_DATABASE;
+const { ORDERS, ORDERS_ID, PEOPLE } = SAMPLE_DATASET;
 
 describe("visual tests > visualizations > line", () => {
   beforeEach(() => {
     restore();
     cy.signInAsNormalUser();
+    cy.server();
+    cy.route("POST", "/api/dataset").as("dataset");
   });
 
   it("with data points", () => {
@@ -28,7 +28,7 @@ describe("visual tests > visualizations > line", () => {
             ],
           ],
         },
-        database: SAMPLE_DB_ID,
+        database: 1,
       },
       display: "line",
       visualization_settings: {
@@ -38,13 +38,15 @@ describe("visual tests > visualizations > line", () => {
       },
     });
 
+    cy.wait("@dataset");
+
     cy.percySnapshot();
   });
 
   it("with vertical legends", () => {
     visitQuestionAdhoc({
       dataset_query: {
-        database: SAMPLE_DB_ID,
+        database: 1,
         type: "query",
         query: {
           "source-table": ORDERS_ID,
@@ -74,13 +76,15 @@ describe("visual tests > visualizations > line", () => {
       },
     });
 
+    cy.wait("@dataset");
+
     cy.percySnapshot();
   });
 
   it("with vertical legends", () => {
     visitQuestionAdhoc({
       dataset_query: {
-        database: SAMPLE_DB_ID,
+        database: 1,
         type: "query",
         query: {
           "source-table": ORDERS_ID,
@@ -109,6 +113,8 @@ describe("visual tests > visualizations > line", () => {
         "graph.metrics": ["count"],
       },
     });
+
+    cy.wait("@dataset");
 
     cy.percySnapshot();
   });
@@ -130,7 +136,7 @@ describe("visual tests > visualizations > line", () => {
             ],
           ],
         },
-        database: SAMPLE_DB_ID,
+        database: 1,
       },
       display: "line",
       visualization_settings: {
@@ -149,45 +155,7 @@ describe("visual tests > visualizations > line", () => {
       },
     });
 
-    cy.percySnapshot();
-  });
-
-  it("with missing values and duplicate x (metabase#11076)", () => {
-    visitQuestionAdhoc({
-      dataset_query: {
-        type: "native",
-        native: {
-          query: `
-            SELECT CAST('2010-10-01' AS DATE) as d, null as v1, 1 as v2
-            UNION ALL
-            SELECT CAST('2010-10-01' AS DATE), 2, null
-            UNION ALL
-            SELECT CAST('2010-10-02' AS DATE), 3, null
-            UNION ALL
-            SELECT CAST('2010-10-02' AS DATE), null, 4
-            UNION ALL
-            SELECT CAST('2010-10-03' AS DATE), null, 5
-            UNION ALL
-            SELECT CAST('2010-10-03' AS DATE), 6, null
-          `,
-        },
-        database: SAMPLE_DB_ID,
-      },
-      display: "line",
-      visualization_settings: {
-        "graph.dimensions": ["D"],
-        "graph.show_values": true,
-        "graph.metrics": ["V1", "V2"],
-        series_settings: {
-          V1: {
-            "line.missing": "zero",
-          },
-          V2: {
-            "line.missing": "none",
-          },
-        },
-      },
-    });
+    cy.wait("@dataset");
 
     cy.percySnapshot();
   });

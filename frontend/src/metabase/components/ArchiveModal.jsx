@@ -3,7 +3,7 @@ import React from "react";
 
 import { t } from "ttag";
 
-import Button from "metabase/core/components/Button";
+import Button from "metabase/components/Button";
 import ModalContent from "metabase/components/ModalContent";
 import FormMessage from "metabase/components/form/FormMessage";
 
@@ -31,14 +31,14 @@ class ArchiveModal extends React.Component {
     const { error } = this.state;
     return (
       <ModalContent
-        title={title || t`Archive this?`}
+        title={title || t`Delete this?`}
         footer={[
           error ? <FormMessage formError={error} /> : null,
           <Button key="cancel" onClick={onClose}>
             {t`Cancel`}
           </Button>,
           <Button key="archive" warning onClick={this.archive}>
-            {t`Archive`}
+            {t`Delete`}
           </Button>,
         ]}
       >

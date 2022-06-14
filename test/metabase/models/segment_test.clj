@@ -2,7 +2,6 @@
   (:require [clojure.test :refer :all]
             [metabase.models.database :refer [Database]]
             [metabase.models.segment :as segment :refer [Segment]]
-            [metabase.models.serialization.hash :as serdes.hash]
             [metabase.models.table :refer [Table]]
             [metabase.test :as mt]
             [metabase.util :as u]
@@ -33,8 +32,7 @@
   (mt/with-temp* [Database [{database-id :id}]
                   Table    [{table-id-1 :id}    {:db_id database-id}]
                   Table    [{table-id-2 :id}    {:db_id database-id}]
-                  Segment  [{segement-id-1 :id
-                             :as segment-1}     {:table_id table-id-1, :name "Segment 1", :description nil}]
+                  Segment  [{segement-id-1 :id} {:table_id table-id-1, :name "Segment 1", :description nil}]
                   Segment  [{segment-id-2 :id}  {:table_id table-id-2}]
                   Segment  [{segment-id3 :id}   {:table_id table-id-1, :archived true}]]
     (is (= [{:creator_id              (mt/user->id :rasta)
@@ -45,8 +43,7 @@
              :caveats                 nil
              :points_of_interest      nil
              :archived                false
-             :definition              nil
-             :entity_id               (:entity_id segment-1)}]
+             :definition              nil}]
            (for [segment (u/prog1 (segment/retrieve-segments table-id-1)
                            (assert (= 1 (count <>))))]
              (-> (dissoc (into {} segment) :id :table_id :created_at :updated_at)
@@ -65,7 +62,6 @@
             :show_in_getting_started false
             :caveats                 nil
             :points_of_interest      nil
-            :entity_id               (:entity_id segment)
             :definition              {:filter [:> [:field 4 nil] "2014-10-19"]}
             :archived                false}
            (into {} (-> (#'segment/serialize-segment Segment (:id segment) segment)
@@ -125,12 +121,3 @@
             {:name        "A"
              :description "Unchanged"
              :definition  {:filter [:and [:> [:field 4 nil] "2014-10-19"]]}})))))
-
-(deftest identity-hash-test
-  (testing "Segment hashes are composed of the segment name and table identity-hash"
-    (mt/with-temp* [Database [db      {:name "field-db" :engine :h2}]
-                    Table    [table   {:schema "PUBLIC" :name "widget" :db_id (:id db)}]
-                    Segment  [segment {:name "big customers" :table_id (:id table)}]]
-      (is (= "a40066a4"
-             (serdes.hash/raw-hash ["big customers" (serdes.hash/identity-hash table)])
-             (serdes.hash/identity-hash segment))))))

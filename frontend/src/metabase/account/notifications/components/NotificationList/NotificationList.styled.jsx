@@ -1,4 +1,4 @@
-import styled from "@emotion/styled";
+import styled from "styled-components";
 import { color } from "metabase/lib/colors";
 import Label from "metabase/components/type/Label";
 import { TextButton } from "metabase/components/Button.styled";
@@ -15,11 +15,9 @@ export const NotificationLabel = styled(Label)`
   margin: 0;
 `;
 
-export const NotificationButton = styled(TextButton)``;
-
-NotificationButton.defaultProps = {
+export const NotificationButton = styled(TextButton).attrs({
   size: "small",
-};
+})``;
 
 export const NotificationSection = styled.div`
   display: flex;

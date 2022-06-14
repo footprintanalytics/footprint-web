@@ -1,4 +1,4 @@
-export const table = userId => ({
+export const table = (userId: number) => ({
   card: {
     name: "Most-viewed Dashboards",
     display: "table",
@@ -10,7 +10,7 @@ export const table = userId => ({
   },
 });
 
-export const mostViewedDashboards = userId => ({
+export const mostViewedDashboards = (userId: number) => ({
   card: {
     name: "Most-viewed Dashboards",
     display: "row",
@@ -27,7 +27,7 @@ export const mostViewedDashboards = userId => ({
   },
 });
 
-export const mostViewedQuestions = userId => ({
+export const mostViewedQuestions = (userId: number) => ({
   card: {
     name: "Most-viewed Queries",
     display: "row",
@@ -44,7 +44,7 @@ export const mostViewedQuestions = userId => ({
   },
 });
 
-export const objectViewsByTime = userId => ({
+export const objectViewsByTime = (userId: number) => ({
   card: {
     name: "Query views",
     display: "line",
@@ -69,7 +69,7 @@ export const objectViewsByTime = userId => ({
   ],
 });
 
-export const queryViews = userId => ({
+export const queryViews = (userId: number) => ({
   card: {
     name: "Query views",
     display: "table",
@@ -91,7 +91,7 @@ export const queryViews = userId => ({
   },
 });
 
-export const dashboardViews = userId => ({
+export const dashboardViews = (userId: number) => ({
   card: {
     name: "Dashboard views",
     display: "table",
@@ -110,7 +110,7 @@ export const dashboardViews = userId => ({
   },
 });
 
-export const createdDashboards = userId => ({
+export const createdDashboards = (userId: number) => ({
   card: {
     name: "Created dashboards",
     display: "table",
@@ -122,7 +122,7 @@ export const createdDashboards = userId => ({
   },
 });
 
-export const createdQuestions = userId => ({
+export const createdQuestions = (userId: number) => ({
   card: {
     name: "Created questions",
     display: "table",
@@ -134,7 +134,7 @@ export const createdQuestions = userId => ({
   },
 });
 
-export const downloads = userId => ({
+export const downloads = (userId: number) => ({
   card: {
     name: "Downloads",
     display: "table",

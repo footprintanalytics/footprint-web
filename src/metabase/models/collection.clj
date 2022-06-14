@@ -4,21 +4,17 @@
   `metabase.models.collection.graph`. `metabase.models.collection.graph`"
   (:refer-clojure :exclude [ancestors descendants])
   (:require [clojure.core.memoize :as memoize]
-            [clojure.set :as set]
             [clojure.string :as str]
             [clojure.tools.logging :as log]
             [honeysql.core :as hsql]
-            [medley.core :as m]
             [metabase.api.common :as api :refer [*current-user-id* *current-user-permissions-set*]]
-            [metabase.db.connection :as mdb.connection]
             [metabase.models.collection.root :as collection.root]
-            [metabase.models.interface :as mi]
+            [metabase.models.interface :as i]
             [metabase.models.permissions :as perms :refer [Permissions]]
-            [metabase.models.serialization.hash :as serdes.hash]
-            [metabase.public-settings.premium-features :as premium-features]
+            [metabase.public-settings.premium-features :as settings.premium-features]
             [metabase.util :as u]
             [metabase.util.honeysql-extensions :as hx]
-            [metabase.util.i18n :refer [trs tru]]
+            [metabase.util.i18n :as ui18n :refer [trs tru]]
             [metabase.util.schema :as su]
             [potemkin :as p]
             [schema.core :as s]
@@ -28,7 +24,6 @@
   (:import metabase.models.collection.root.RootCollection))
 
 (comment collection.root/keep-me)
-(comment mdb.connection/keep-me) ;; for [[memoize/ttl]]
 
 (p/import-vars [collection.root root-collection])
 
@@ -183,12 +178,11 @@
 (defn root-collection-with-ui-details
   "The special Root Collection placeholder object with some extra details to facilitate displaying it on the FE."
   [collection-namespace]
-  (m/assoc-some root-collection
-                :name (case (keyword collection-namespace)
-                        :snippets (tru "Top folder")
-                        (tru "Our analytics"))
-                :namespace collection-namespace
-                :id   "root"))
+  (assoc root-collection
+         :name (case (keyword collection-namespace)
+                 :snippets (tru "Top folder")
+                 (tru "Public analytics"))
+         :id   "root"))
 
 (def ^:private CollectionWithLocationOrRoot
   (s/cond-pre
@@ -250,7 +244,7 @@
   Because the result may include `nil` for the Root Collection, or may be `:all`, MAKE SURE YOU HANDLE THOSE
   SITUATIONS CORRECTLY before using these IDs to make a DB call. Better yet, use
   [[visible-collection-ids->honeysql-filter-clause]] to generate appropriate HoneySQL."
-  [permissions-set]
+  [permissions-set :- #{perms/Path}]
   (if (contains? permissions-set "/")
     :all
     (set
@@ -368,7 +362,7 @@
   [collection :- CollectionWithLocationAndIDOrRoot]
   (if (collection.root/is-root-collection? collection)
     []
-    (filter mi/can-read? (cons (root-collection-with-ui-details (:namespace collection)) (ancestors collection)))))
+    (filter i/can-read? (cons (root-collection-with-ui-details (:namespace collection)) (ancestors collection)))))
 
 (s/defn parent-id :- (s/maybe su/IntGreaterThanZero)
   "Get the immediate parent `collection` id, if set."
@@ -639,6 +633,7 @@
       :id                (first (location-path->ids (:location collection)))
       :personal_owner_id [:not= nil]))))
 
+
 ;;; ----------------------------------------------------- INSERT -----------------------------------------------------
 
 (defn- pre-insert [{collection-name :name, color :color, :as collection}]
@@ -866,10 +861,8 @@
                      (db/select-one [Collection :id :namespace] :id (collection-or-id))
                      collection-or-id)]
     ;; HACK Collections in the "snippets" namespace have no-op permissions unless EE enhancements are enabled
-    ;;
-    ;; TODO -- Pretty sure snippet perms should be feature flagged by `advanced-permissions` instead
     (if (and (= (u/qualified-name (:namespace collection)) "snippets")
-             (not (premium-features/enable-enhancements?)))
+             (not (settings.premium-features/enable-enhancements?)))
       #{}
       ;; This is not entirely accurate as you need to be a superuser to modifiy a collection itself (e.g., changing its
       ;; name) but if you have write perms you can add/remove cards
@@ -877,33 +870,21 @@
           :read  (perms/collection-read-path collection-or-id)
           :write (perms/collection-readwrite-path collection-or-id))})))
 
-(defn- parent-identity-hash [coll]
-  (let [parent-id (-> coll
-                      (hydrate :parent_id)
-                      :parent_id)]
-   (if parent-id
-     (serdes.hash/identity-hash (Collection parent-id))
-     "ROOT")))
-
 (u/strict-extend (class Collection)
   models/IModel
   (merge models/IModelDefaults
          {:hydration-keys (constantly [:collection])
           :types          (constantly {:namespace       :keyword
                                        :authority_level :keyword})
-          :properties     (constantly {:entity_id true})
           :pre-insert     pre-insert
           :post-insert    post-insert
           :pre-update     pre-update
           :pre-delete     pre-delete})
-  mi/IObjectPermissions
-  (merge mi/IObjectPermissionsDefaults
-         {:can-read?         (partial mi/current-user-has-full-permissions? :read)
-          :can-write?        (partial mi/current-user-has-full-permissions? :write)
-          :perms-objects-set perms-objects-set})
-
-  serdes.hash/IdentityHashable
-  {:identity-hash-fields (constantly [:name :namespace parent-identity-hash])})
+  i/IObjectPermissions
+  (merge i/IObjectPermissionsDefaults
+         {:can-read?         (partial i/current-user-has-full-permissions? :read)
+          :can-write?        (partial i/current-user-has-full-permissions? :write)
+          :perms-objects-set perms-objects-set}))
 
 
 ;;; +----------------------------------------------------------------------------------------------------------------+
@@ -914,16 +895,10 @@
   "Check that we have write permissions for Collection with `collection-id`, or throw a 403 Exception. If
   `collection-id` is `nil`, this check is done for the Root Collection."
   [collection-or-id-or-nil]
-  (let [actual-perms   @*current-user-permissions-set*
-        required-perms (perms/collection-readwrite-path (if collection-or-id-or-nil
-                                                          collection-or-id-or-nil
-                                                          root-collection))]
-    (when-not (perms/set-has-full-permissions? actual-perms required-perms)
-      (throw (ex-info (tru "You do not have curate permissions for this Collection.")
-                      {:status-code    403
-                       :collection     collection-or-id-or-nil
-                       :required-perms required-perms
-                       :actual-perms   actual-perms})))))
+  (api/check-403 (perms/set-has-full-permissions? @*current-user-permissions-set*
+                   (perms/collection-readwrite-path (if collection-or-id-or-nil
+                                                      collection-or-id-or-nil
+                                                      root-collection)))))
 
 
 (defn check-allowed-to-change-collection
@@ -952,42 +927,19 @@
 ;;; |                                              Personal Collections                                              |
 ;;; +----------------------------------------------------------------------------------------------------------------+
 
-(s/defn format-personal-collection-name :- su/NonBlankString
-  "Constructs the personal collection name from user name.
-  When displaying to users we'll tranlsate it to user's locale,
-  but to keeps things consistent in the database, we'll store the name in site's locale.
+(defn format-personal-collection-name
+  "Constructs the personal collection name from user name."
+  [first-name last-name]
+  (tru "{0} {1}''s Personal Collection" first-name last-name))
 
-  Practically, use `user-or-site` = `:site` when insert or update the name in database,
-  and `:user` when we need the name for displaying purposes"
-  [first-name last-name email user-or-site]
-  {:pre [(#{:user :site} user-or-site)]}
-  (if (= :user user-or-site)
-    (cond
-      (and first-name last-name) (tru "{0} {1}''s Personal Collection" first-name last-name)
-      :else                      (tru "{0}''s Personal Collection" (or first-name last-name email)))
-    (cond
-      (and first-name last-name) (trs "{0} {1}''s Personal Collection" first-name last-name)
-      :else                      (trs "{0}''s Personal Collection" (or first-name last-name email)))))
-
-(s/defn user->personal-collection-name :- su/NonBlankString
+(s/defn ^:private user->personal-collection-name :- su/NonBlankString
   "Come up with a nice name for the Personal Collection for `user-or-id`."
-  [user-or-id user-or-site]
-  (let [{first-name :first_name
-         last-name  :last_name
-         email      :email} (db/select-one ['User :first_name :last_name :email]
-                              :id (u/the-id user-or-id))]
-    (format-personal-collection-name first-name last-name email user-or-site)))
-
-(defn personal-collection-with-ui-details
-  "For Personal collection, we make sure the collection's name and slug is translated to user's locale
-  This is only used for displaying purposes, For insertion or updating  the name, use site's locale instead"
-  [{:keys [personal_owner_id] :as collection}]
-  (if-not personal_owner_id
-    collection
-    (let [collection-name (user->personal-collection-name personal_owner_id :user)]
-      (assoc collection
-             :name collection-name
-             :slug (u/slugify collection-name)))))
+  [user-or-id]
+  ;; TODO - we currently enforce a unique constraint on Collection names... what are we going to do if two Users have
+  ;; the same first & last name! This will *ruin* their lives :(
+  (let [{first-name :first_name, last-name :last_name} (db/select-one ['User :first_name :last_name]
+                                                         :id (u/the-id user-or-id))]
+    (format-personal-collection-name first-name last-name)))
 
 (s/defn user->existing-personal-collection :- (s/maybe CollectionInstance)
   "For a `user-or-id`, return their personal Collection, if it already exists.
@@ -1002,7 +954,7 @@
   (or (user->existing-personal-collection user-or-id)
       (try
         (db/insert! Collection
-          :name              (user->personal-collection-name user-or-id :site)
+          :name              (user->personal-collection-name user-or-id)
           :personal_owner_id (u/the-id user-or-id)
           ;; a nice slate blue color
           :color             "#31698A")
@@ -1017,10 +969,8 @@
   required to caclulate the Current User's permissions set, which is done for every API call; thus it is cached to
   save a DB call for *every* API call."
   (memoize/ttl
-   ^{::memoize/args-fn (fn [[user-id]]
-                         [(mdb.connection/unique-identifier) user-id])}
-   (fn user->personal-collection-id*
-     [user-id]
+   (s/fn user->personal-collection-id* :- su/IntGreaterThanZero
+     [user-id :- su/IntGreaterThanZero]
      (u/the-id (user->personal-collection user-id)))
    ;; cache the results for 60 minutes; TTL is here only to eventually clear out old entries/keep it from growing too
    ;; large
@@ -1088,50 +1038,20 @@
                                :allowed-namespaces   allowed-namespaces
                                :collection-namespace collection-namespace})))))))
 
-(defn annotate-collections
-  "Annotate collections with `:below` and `:here` keys to indicate which types are in their subtree and which types are
-  in the collection at that level."
-  [{:keys [dataset card] :as _coll-type-ids} collections]
-  (let [parent-info (reduce (fn [m {:keys [location id] :as _collection}]
-                              (let [parent-ids (set (location-path->ids location))]
-                                (cond-> m
-                                  (contains? dataset id)
-                                  (update :dataset set/union parent-ids)
-                                  (contains? card id)
-                                  (update :card set/union parent-ids))))
-                            {:dataset #{} :card #{}}
-                            collections)]
-    (map (fn [{:keys [id] :as collection}]
-           (let [types (cond-> #{}
-                         (contains? (:dataset parent-info) id)
-                         (conj :dataset)
-                         (contains? (:card parent-info) id)
-                         (conj :card))]
-             (cond-> collection
-               (seq types) (assoc :below types)
-               (contains? dataset id) (update :here (fnil conj #{}) :dataset)
-               (contains? card id) (update :here (fnil conj #{}) :card))))
-         collections)))
-
 (defn collections->tree
   "Convert a flat sequence of Collections into a tree structure e.g.
 
-    (collections->tree {:dataset #{C D} :card #{F C} [A B C D E F G])
+    (collections->tree [A B C D E F G])
     ;; ->
     [{:name     \"A\"
-      :below    #{:card :dataset}
       :children [{:name \"B\"}
                  {:name     \"C\"
-                  :here     #{:dataset :card}
-                  :below    #{:dataset :card}
                   :children [{:name     \"D\"
-                              :here     #{:dataset}
                               :children [{:name \"E\"}]}
                              {:name     \"F\"
-                              :here     #{:card}
                               :children [{:name \"G\"}]}]}]}
      {:name \"H\"}]"
-  [coll-type-ids collections]
+  [collections]
   (let [all-visible-ids (set (map :id collections))]
     (transduce
      identity
@@ -1167,4 +1087,4 @@
              (map #(update % :children ->tree))
              (sort-by (fn [{coll-name :name, coll-id :id}]
                         [((fnil u/lower-case-en "") coll-name) coll-id])))))
-     (annotate-collections coll-type-ids collections))))
+     collections)))

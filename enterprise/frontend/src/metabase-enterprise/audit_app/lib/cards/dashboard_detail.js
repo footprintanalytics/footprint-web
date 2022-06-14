@@ -1,4 +1,4 @@
-export const viewsByTime = dashboardId => ({
+export const viewsByTime = (dashboardId: number) => ({
   card: {
     name: "Views per day",
     display: "line",
@@ -10,7 +10,7 @@ export const viewsByTime = dashboardId => ({
   },
 });
 
-export const revisionHistory = dashboardId => ({
+export const revisionHistory = (dashboardId: number) => ({
   card: {
     name: "Revision history",
     display: "table",
@@ -31,7 +31,7 @@ export const revisionHistory = dashboardId => ({
   },
 });
 
-export const cards = dashboardId => ({
+export const cards = (dashboardId: number) => ({
   card: {
     name: "Cards",
     display: "table",
@@ -43,7 +43,7 @@ export const cards = dashboardId => ({
   },
 });
 
-export const auditLog = dashboardId => ({
+export const auditLog = (dashboardId: number) => ({
   card: {
     name: "Audit log",
     display: "table",

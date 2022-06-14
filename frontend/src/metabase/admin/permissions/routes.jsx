@@ -2,44 +2,37 @@ import React from "react";
 import { Route } from "metabase/hoc/Title";
 import { IndexRedirect } from "react-router";
 import { t } from "ttag";
-
-import CollectionPermissionsPage from "./pages/CollectionPermissionsPage/CollectionPermissionsPage";
-import DatabasesPermissionsPage from "./pages/DatabasePermissionsPage/DatabasesPermissionsPage";
-import GroupsPermissionsPage from "./pages/GroupDataPermissionsPage/GroupsPermissionsPage";
-import DataPermissionsPage from "./pages/DataPermissionsPage";
+import LazyLoad from "../../routesLazyLoad";
 import {
   PLUGIN_ADMIN_PERMISSIONS_TABLE_ROUTES,
   PLUGIN_ADMIN_PERMISSIONS_TABLE_GROUP_ROUTES,
-  PLUGIN_APPLICATION_PERMISSIONS,
 } from "metabase/plugins";
 
 const getRoutes = () => (
-  <Route title={t`Permissions`}>
+  <Route title={t`Permissions`} path="permissions">
     <IndexRedirect to="data" />
 
-    <Route path="data" component={DataPermissionsPage}>
+    <Route path="data" component={LazyLoad.DataPermissionsPage}>
       <IndexRedirect to="group" />
 
       <Route
         path="database(/:databaseId)(/schema/:schemaName)(/table/:tableId)"
-        component={DatabasesPermissionsPage}
+        component={LazyLoad.DatabasesPermissionsPage}
       >
         {PLUGIN_ADMIN_PERMISSIONS_TABLE_GROUP_ROUTES}
       </Route>
 
       <Route
         path="group(/:groupId)(/database/:databaseId)(/schema/:schemaName)"
-        component={GroupsPermissionsPage}
+        component={LazyLoad.GroupsPermissionsPage}
       >
         {PLUGIN_ADMIN_PERMISSIONS_TABLE_ROUTES}
       </Route>
     </Route>
 
-    <Route path="collections" component={CollectionPermissionsPage}>
+    <Route path="collections" component={LazyLoad.CollectionPermissionsPage}>
       <Route path=":collectionId" />
     </Route>
-
-    {PLUGIN_APPLICATION_PERMISSIONS.getRoutes()}
   </Route>
 );
 

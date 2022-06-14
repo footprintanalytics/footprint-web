@@ -3,43 +3,40 @@ import React from "react";
 
 import { t } from "ttag";
 import cx from "classnames";
-import styled from "@emotion/styled";
+import styled from "styled-components";
+import { Flex } from "grid-styled";
 import { color, darken } from "metabase/lib/colors";
 
-import Icon from "metabase/components/Icon";
+// import Icon from "metabase/components/Icon";
 
 import ButtonBar from "metabase/components/ButtonBar";
 
+import ViewSection from "./ViewSection";
 import ViewButton from "./ViewButton";
 
-import QuestionAlertWidget from "./QuestionAlertWidget";
-import QuestionTimelineWidget from "./QuestionTimelineWidget";
-import QueryDownloadWidget from "metabase/query_builder/components/QueryDownloadWidget";
-import QuestionEmbedWidget, {
-  QuestionEmbedWidgetTrigger,
-} from "metabase/query_builder/containers/QuestionEmbedWidget";
+// import QuestionAlertWidget from "./QuestionAlertWidget";
+// import QueryDownloadWidget from "metabase/query_builder/components/QueryDownloadWidget";
+// import QuestionEmbedWidget, {
+//   QuestionEmbedWidgetTrigger,
+// } from "metabase/query_builder/containers/QuestionEmbedWidget";
 
-import {
-  QuestionFilterWidget,
-  MobileQuestionFilterWidget,
-} from "./QuestionFilters";
-import {
-  QuestionSummarizeWidget,
-  MobileQuestionSummarizeWidget,
-} from "./QuestionSummaries";
+// import { QuestionFilterWidget } from "./QuestionFilters";
+// import { QuestionSummarizeWidget } from "./QuestionSummaries";
 
 import QuestionRowCount from "./QuestionRowCount";
-import QuestionLastUpdated from "./QuestionLastUpdated";
-import { ViewFooterRoot } from "./ViewFooter.styled";
+// import QuestionLastUpdated from "./QuestionLastUpdated";
 
 import {
   getVisualizationRaw,
-  getIconForVisualizationType,
+  // getIconForVisualizationType,
 } from "metabase/visualizations";
+
+import Button from "metabase/components/Button";
 
 const ViewFooter = ({
   question,
   result,
+  user,
   className,
   isShowingChartTypeSidebar,
   isShowingChartSettingsSidebar,
@@ -54,175 +51,153 @@ const ViewFooter = ({
   questionAlerts,
   visualizationSettings,
   isAdmin,
-  canManageSubscriptions,
   isPreviewing,
   isResultDirty,
   isVisualized,
-  isTimeseries,
   queryBuilderMode,
+
   isShowingFilterSidebar,
   onAddFilter,
   onCloseFilter,
   isShowingSummarySidebar,
   onEditSummary,
   onCloseSummary,
-  isShowingTimelineSidebar,
-  onOpenTimelines,
-  onCloseTimelines,
 }) => {
-  if (!result) {
+  if (!result || isObjectDetail) {
     return null;
   }
 
-  const hasDataPermission = question.query().isEditable();
-  const hideChartSettings = result.error && !hasDataPermission;
-
   return (
-    <ViewFooterRoot
+    <ViewSection
       className={cx(className, "text-medium border-top")}
-      data-testid="view-footer"
+      style={{ padding: "14px 32px" }}
     >
       <ButtonBar
         className="flex-full"
-        left={[
-          QuestionFilterWidget.shouldRender({
-            question,
-            queryBuilderMode,
-          }) && (
-            <MobileQuestionFilterWidget
-              className="sm-hide"
-              mr={1}
-              p={2}
-              isShowingFilterSidebar={isShowingFilterSidebar}
-              onAddFilter={onAddFilter}
-              onCloseFilter={onCloseFilter}
-            />
-          ),
-          QuestionSummarizeWidget.shouldRender({
-            question,
-            queryBuilderMode,
-          }) && (
-            <MobileQuestionSummarizeWidget
-              className="sm-hide"
-              mr={1}
-              p={2}
-              isShowingSummarySidebar={isShowingSummarySidebar}
-              onEditSummary={onEditSummary}
-              onCloseSummary={onCloseSummary}
-            />
-          ),
-          !hideChartSettings && (
-            <VizTypeButton
-              key="viz-type"
-              question={question}
-              result={result}
-              active={isShowingChartTypeSidebar}
-              onClick={
-                isShowingChartTypeSidebar ? onCloseChartType : onOpenChartType
-              }
-            />
-          ),
-          !hideChartSettings && (
-            <VizSettingsButton
-              key="viz-settings"
-              ml={1}
-              mr={[3, 0]}
-              active={isShowingChartSettingsSidebar}
-              onClick={
-                isShowingChartSettingsSidebar
-                  ? onCloseChartSettings
-                  : onOpenChartSettings
-              }
-            />
-          ),
-        ]}
-        center={
-          isVisualized && (
-            <VizTableToggle
-              key="viz-table-toggle"
-              className="mx1"
-              question={question}
-              isShowingRawTable={isShowingRawTable}
-              onShowTable={isShowingRawTable => {
-                setUIControls({ isShowingRawTable });
-              }}
-            />
-          )
+        left={
+          [
+            // QuestionFilterWidget.shouldRender({ question, queryBuilderMode }) && (
+            //   <QuestionFilterWidget
+            //     key="question-filter-widget"
+            //     className="sm-hide"
+            //     mr={1}
+            //     p={2}
+            //     isShowingFilterSidebar={isShowingFilterSidebar}
+            //     onAddFilter={onAddFilter}
+            //     onCloseFilter={onCloseFilter}
+            //   />
+            // ),
+            // QuestionSummarizeWidget.shouldRender({
+            //   question,
+            //   queryBuilderMode,
+            // }) && (
+            //   <QuestionSummarizeWidget
+            //     key="question-summarize-widget"
+            //     className="sm-hide"
+            //     mr={1}
+            //     p={2}
+            //     isShowingSummarySidebar={isShowingSummarySidebar}
+            //     onEditSummary={onEditSummary}
+            //     onCloseSummary={onCloseSummary}
+            //   />
+            // ),
+            // <VizTypeButton
+            //   key="viz-type"
+            //   question={question}
+            //   result={result}
+            //   active={isShowingChartTypeSidebar}
+            //   onClick={
+            //     isShowingChartTypeSidebar ? onCloseChartType : onOpenChartType
+            //   }
+            // />,
+            // <VizSettingsButton
+            //   key="viz-settings"
+            //   ml={1}
+            //   mr={[3, 0]}
+            //   active={isShowingChartSettingsSidebar}
+            //   onClick={
+            //     isShowingChartSettingsSidebar
+            //       ? onCloseChartSettings
+            //       : onOpenChartSettings
+            //   }
+            // />,
+          ]
         }
+        // center={
+        //   isVisualized && (
+        //     <VizTableToggle
+        //       key="viz-table-toggle"
+        //       className="mx1"
+        //       question={question}
+        //       isShowingRawTable={isShowingRawTable}
+        //       onShowTable={isShowingRawTable => {
+        //         setUIControls({ isShowingRawTable });
+        //       }}
+        //     />
+        //   )
+        // }
         right={[
-          QuestionRowCount.shouldRender({
-            question,
-            result,
-            isObjectDetail,
-          }) &&
+          QuestionRowCount.shouldRender({ question, result, isObjectDetail }) &&
             !isPreviewing && (
               <QuestionRowCount
                 key="row_count"
-                className="mx1"
                 question={question}
                 isResultDirty={isResultDirty}
                 result={result}
               />
             ),
-          QuestionLastUpdated.shouldRender({ result }) && (
-            <QuestionLastUpdated
-              key="last-updated"
-              className="mx1 hide sm-show"
-              result={result}
-            />
-          ),
-          QueryDownloadWidget.shouldRender({ result, isResultDirty }) && (
-            <QueryDownloadWidget
-              key="download"
-              className="mx1 hide sm-show"
-              card={question.card()}
-              result={result}
-              visualizationSettings={visualizationSettings}
-            />
-          ),
-          QuestionAlertWidget.shouldRender({
-            question,
-            visualizationSettings,
-          }) && (
-            <QuestionAlertWidget
-              key="alerts"
-              className="mx1 hide sm-show"
-              canManageSubscriptions={canManageSubscriptions}
-              question={question}
-              questionAlerts={questionAlerts}
-              onCreateAlert={() =>
-                question.isSaved()
-                  ? onOpenModal("create-alert")
-                  : onOpenModal("save-question-before-alert")
-              }
-            />
-          ),
-          QuestionEmbedWidget.shouldRender({ question, isAdmin }) && (
-            <QuestionEmbedWidgetTrigger
-              key="embeds"
-              onClick={() =>
-                question.isSaved()
-                  ? onOpenModal("embed")
-                  : onOpenModal("save-question-before-embed")
-              }
-            />
-          ),
-          QuestionTimelineWidget.shouldRender({ isTimeseries }) && (
-            <QuestionTimelineWidget
-              key="timelines"
-              className="mx1 hide sm-show"
-              isShowingTimelineSidebar={isShowingTimelineSidebar}
-              onOpenTimelines={onOpenTimelines}
-              onCloseTimelines={onCloseTimelines}
-            />
-          ),
+          // QuestionLastUpdated.shouldRender({ result }) && (
+          //   <QuestionLastUpdated
+          //     key="last-updated"
+          //     className="mx1 hide sm-show"
+          //     result={result}
+          //   />
+          // ),
+          // QueryDownloadWidget.shouldRender({ result, isResultDirty }) && (
+          //   <QueryDownloadWidget
+          //     key="download"
+          //     className="mx1 hide sm-show"
+          //     card={question.card()}
+          //     result={result}
+          //     visualizationSettings={visualizationSettings}
+          //   />
+          // ),
+          // QuestionAlertWidget.shouldRender({
+          //   question,
+          //   visualizationSettings,
+          // }) && (
+          //   <QuestionAlertWidget
+          //     key="alerts"
+          //     className="mx1 hide sm-show"
+          //     question={question}
+          //     questionAlerts={questionAlerts}
+          //     onCreateAlert={() =>
+          //       question.isSaved()
+          //         ? onOpenModal("create-alert")
+          //         : onOpenModal("save-question-before-alert")
+          //     }
+          //   />
+          // ),
+          // QuestionEmbedWidget.shouldRender({ question, isAdmin }) && (
+          //   <QuestionEmbedWidgetTrigger
+          //     onClick={() =>
+          //       question.isSaved()
+          //         ? onOpenModal("embed")
+          //         : onOpenModal("save-question-before-embed")
+          //     }
+          //   />
+          // ),
         ]}
       />
-    </ViewFooterRoot>
+    </ViewSection>
   );
 };
 
-const VizTypeButton = ({ question, result, ...props }) => {
+export const VizTypeButton = ({ question, result, ...props }) => {
+  if (!result) {
+    return null;
+  }
+
   // TODO: move this to QuestionResult or something
   const { visualization } = getVisualizationRaw([
     { card: question.card(), data: result.data },
@@ -238,12 +213,12 @@ const VizTypeButton = ({ question, result, ...props }) => {
       data-testid="viz-type-button"
       {...props}
     >
-      {t`Visualization`}
+      {/* {t`Visualization`} */}
     </ViewButton>
   );
 };
 
-const VizSettingsButton = ({ ...props }) => (
+export const VizSettingsButton = ({ ...props }) => (
   <ViewButton
     medium
     p={[2, 1]}
@@ -256,46 +231,64 @@ const VizSettingsButton = ({ ...props }) => (
   </ViewButton>
 );
 
-const Well = styled.div`
-  display: flex;
-  align-items: center;
-  padding: 4px 6px;
+const Well = styled(Flex)`
   border-radius: 99px;
-  background-color: ${color("bg-medium")};
   &:hover {
     background-color: ${darken(color("bg-medium"), 0.05)};
   }
   transition: background 300ms linear;
 `;
 
-const ToggleIcon = styled.div`
-  display: flex;
-  padding: 4px 8px;
+Well.defaultProps = {
+  px: "6px",
+  py: "4px",
+  align: "center",
+  bg: color("bg-medium"),
+};
+
+const ToggleIcon = styled(Flex)`
   cursor: pointer;
   background-color: ${props => (props.active ? color("brand") : "transparent")};
   color: ${props => (props.active ? "white" : "inherit")};
   border-radius: 99px;
 `;
 
-const VizTableToggle = ({
+ToggleIcon.defaultProps = {
+  p: "4px",
+  px: "8px",
+};
+
+export const VizTableToggle = ({
   className,
   question,
   isShowingRawTable,
   onShowTable,
 }) => {
-  const vizIcon = getIconForVisualizationType(question.display());
+  // const vizIcon = getIconForVisualizationType(question.display());
   return (
-    <Well className={className} onClick={() => onShowTable(!isShowingRawTable)}>
-      <ToggleIcon active={isShowingRawTable} aria-label={t`Switch to data`}>
-        <Icon name="table2" />
-      </ToggleIcon>
-      <ToggleIcon
-        active={!isShowingRawTable}
-        aria-label={t`Switch to visualization`}
-      >
-        <Icon name={vizIcon} />
-      </ToggleIcon>
-    </Well>
+    <div
+      className={`ml1 Question-header-btns ${className}`}
+      onClick={() => onShowTable(!isShowingRawTable)}
+    >
+      <Button
+        onlyIcon
+        className={`Question-header-btn ${
+          isShowingRawTable ? "Question-header-btn--info" : ""
+        }`}
+        iconColor="#ACACB2"
+        icon="table2"
+        iconSize={16}
+      />
+      <Button
+        onlyIcon
+        className={`Question-header-btn ${
+          !isShowingRawTable ? "Question-header-btn--info" : ""
+        }`}
+        iconColor="#ACACB2"
+        icon="charts"
+        iconSize={16}
+      />
+    </div>
   );
 };
 

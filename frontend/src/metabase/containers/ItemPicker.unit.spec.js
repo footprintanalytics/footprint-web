@@ -1,12 +1,14 @@
 import React from "react";
+import { Provider } from "react-redux";
 import {
-  renderWithProviders,
+  render,
   screen,
   waitForElementToBeRemoved,
   within,
-} from "__support__/ui";
+} from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import xhrMock from "xhr-mock";
+import { getStore } from "__support__/entities-store";
 import ItemPicker from "./ItemPicker";
 
 function collection({
@@ -134,11 +136,14 @@ async function setup({
 
   const onChange = jest.fn();
 
-  renderWithProviders(
-    <ItemPicker models={models} onChange={onChange} {...props} />,
-    {
-      currentUser: CURRENT_USER,
-    },
+  const store = getStore({
+    currentUser: () => CURRENT_USER,
+  });
+
+  render(
+    <Provider store={store}>
+      <ItemPicker models={models} onChange={onChange} {...props} />
+    </Provider>,
   );
 
   await waitForElementToBeRemoved(() => screen.queryByText("Loading..."));

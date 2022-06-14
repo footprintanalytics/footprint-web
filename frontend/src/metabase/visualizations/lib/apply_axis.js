@@ -15,13 +15,12 @@ import timeseriesScale from "./timeseriesScale";
 import { isMultipleOf } from "./numeric";
 import { getFriendlyName } from "./utils";
 import { isHistogram } from "./renderer_utils";
-import { hasEventAxis } from "metabase/visualizations/lib/timelines";
+
+import type { SingleSeries } from "metabase-types/types/Visualization";
 
 // label offset (doesn't increase padding)
 const X_LABEL_PADDING = 10;
 const Y_LABEL_PADDING = 22;
-const X_AXIS_PADDING = 3;
-const X_AXIS_PADDING_WITH_EVENT_AXIS = 20;
 
 /// d3.js is dumb and sometimes numTicks is a number like 10 and other times it is an Array like [10]
 /// if it's an array then convert to a num. Use this function so you're guaranteed to get a number;
@@ -90,10 +89,12 @@ export function applyChartTimeseriesXAxis(
   chart,
   series,
   { xValues, xDomain, xInterval },
-  timelineEvents,
 ) {
   // find the first nonempty single series
-  const firstSeries = _.find(series, s => !datasetContainsNoResults(s.data));
+  const firstSeries: SingleSeries = _.find(
+    series,
+    s => !datasetContainsNoResults(s.data),
+  );
 
   // setup an x-axis where the dimension is a timeseries
   let dimensionColumn = firstSeries.data.cols[0];
@@ -101,8 +102,6 @@ export function applyChartTimeseriesXAxis(
   // compute the data interval
   const dataInterval = xInterval;
   let tickInterval = dataInterval;
-  let tickFormat = () => "";
-  const { timezone } = tickInterval;
 
   if (chart.settings["graph.x_axis.labels_enabled"]) {
     chart.xAxisLabel(
@@ -125,10 +124,13 @@ export function applyChartTimeseriesXAxis(
         ? xValues[xValues.length - 1]
         : null;
 
+    // extract xInterval timezone for updating tickInterval
+    const { timezone } = tickInterval;
+
     // special handling for weeks
     // TODO: are there any other cases where we should do this?
     let tickFormatUnit = dimensionColumn.unit;
-    tickFormat = timestamp => {
+    const tickFormat = timestamp => {
       const { column, ...columnSettings } = chart.settings.column(
         dimensionColumn,
       );
@@ -164,24 +166,18 @@ export function applyChartTimeseriesXAxis(
 
     chart.xAxis().tickFormat(tickFormat);
 
-    if (hasEventAxis({ timelineEvents, xDomain, isTimeseries: true })) {
-      chart.xAxis().tickPadding(X_AXIS_PADDING_WITH_EVENT_AXIS);
-    } else {
-      chart.xAxis().tickPadding(X_AXIS_PADDING);
-    }
+    // Compute a sane interval to display based on the data granularity, domain, and chart width
+    tickInterval = {
+      ...tickInterval,
+      ...computeTimeseriesTicksInterval(
+        xDomain,
+        tickInterval,
+        chart.width(),
+        tickFormat,
+      ),
+      timezone,
+    };
   }
-
-  // Compute a sane interval to display based on the data granularity, domain, and chart width
-  tickInterval = {
-    ...tickInterval,
-    ...computeTimeseriesTicksInterval(
-      xDomain,
-      tickInterval,
-      chart.width(),
-      tickFormat,
-    ),
-    timezone,
-  };
 
   // pad the domain slightly to prevent clipping
   xDomain = stretchTimeseriesDomain(xDomain, dataInterval);
@@ -226,7 +222,10 @@ export function applyChartQuantitativeXAxis(
   { xValues, xDomain, xInterval },
 ) {
   // find the first nonempty single series
-  const firstSeries = _.find(series, s => !datasetContainsNoResults(s.data));
+  const firstSeries: SingleSeries = _.find(
+    series,
+    s => !datasetContainsNoResults(s.data),
+  );
   const dimensionColumn = firstSeries.data.cols[0];
 
   const waterfallTotalX =
@@ -284,8 +283,7 @@ export function applyChartQuantitativeXAxis(
   }
 
   // pad the domain slightly to prevent clipping
-  const pad = Math.round(xInterval * 0.75 * 10) / 10;
-  xDomain = [xDomain[0] - pad, xDomain[1] + pad];
+  xDomain = [xDomain[0] - xInterval * 0.75, xDomain[1] + xInterval * 0.75];
 
   chart.x(scale.domain(xDomain)).xUnits(dc.units.fp.precision(xInterval));
 }
@@ -296,7 +294,10 @@ export function applyChartOrdinalXAxis(
   { xValues, isHistogramBar },
 ) {
   // find the first nonempty single series
-  const firstSeries = _.find(series, s => !datasetContainsNoResults(s.data));
+  const firstSeries: SingleSeries = _.find(
+    series,
+    s => !datasetContainsNoResults(s.data),
+  );
 
   const dimensionColumn = firstSeries.data.cols[0];
 
@@ -390,7 +391,12 @@ export function applyChartYAxis(chart, series, yExtent, axisName) {
   }
 
   if (axis.setting("axis_enabled")) {
-    axis.axis().tickFormat(getYValueFormatter(chart, series, yExtent));
+    const extraOptions = {
+      compact: chart.settings["graph.y_axis.axis_enabled"] === "compact",
+    };
+    axis
+      .axis()
+      .tickFormat(getYValueFormatter(chart, series, yExtent, extraOptions));
     chart.renderHorizontalGridLines(true);
     adjustYAxisTicksIfNeeded(axis.axis(), chart.height());
   } else {
@@ -478,7 +484,7 @@ export function applyChartYAxis(chart, series, yExtent, axisName) {
   }
 }
 
-export function getYValueFormatter(chart, series, yExtent) {
+export function getYValueFormatter(chart, series, yExtent, extraOptions) {
   // special case for normalized stacked charts
   // for normalized stacked charts the y-axis is a percentage number. In Javascript, 0.07 * 100.0 = 7.000000000000001 (try it) so we
   // round that number to get something nice like "7". Then we append "%" to get a nice tick like "7%"
@@ -491,6 +497,10 @@ export function getYValueFormatter(chart, series, yExtent) {
     const columnSettings = chart.settings.column(metricColumn);
     const columnExtent = options.extent ?? yExtent;
     const roundedValue = maybeRoundValueToZero(value, columnExtent);
-    return formatValue(roundedValue, { ...columnSettings, ...options });
+    return formatValue(roundedValue, {
+      ...columnSettings,
+      ...options,
+      ...extraOptions,
+    });
   };
 }

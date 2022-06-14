@@ -19,7 +19,17 @@
       </PatternLayout>
     </RollingFile>
     -->
+    <RollingFile name="LOG_FILE" fileName="${env:MB_LOG_DIR}/metabase.log" filePattern="${env:MB_LOG_DIR}/%d{MM-dd-yyyy}-metabase.log.%i">
+      <Policies>
+        <TimeBasedTriggeringPolicy interval="1" modulate="true"/>
+      </Policies>
+      <PatternLayout pattern="%date %level %logger{2} :: %message%n%throwable">
+        <replace regex=":basic-auth \\[.*\\]" replacement=":basic-auth [redacted]"/>
+      </PatternLayout>
+    </RollingFile>
   </Appenders>
+
+
 
   <Loggers>
     <Logger name="metabase" level="INFO"/>
@@ -28,11 +38,13 @@
     <Logger name="metabase.server.middleware" level="DEBUG"/>
     <Logger name="metabase.query-processor.async" level="DEBUG"/>
     <Logger name="com.mchange" level="ERROR"/>
-    <Logger name="org.quartz" level="INFO"/>
-    <Logger name="liquibase" level="ERROR"/>
 
-    <Root level="WARN">
-      <AppenderRef ref="STDOUT"/>
-    </Root>
+<!--    <Root level="WARN">-->
+<!--      <AppenderRef ref="STDOUT"/>-->
+<!--    </Root>-->
+      <Root level="WARN">
+          <AppenderRef ref="STDOUT"/>
+          <AppenderRef ref="LOG_FILE"/>
+      </Root>
   </Loggers>
 </Configuration>

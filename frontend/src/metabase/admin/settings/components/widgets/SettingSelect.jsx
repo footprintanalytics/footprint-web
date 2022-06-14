@@ -1,23 +1,20 @@
 /* eslint-disable react/prop-types */
 import React from "react";
 
-import Select, { Option } from "metabase/core/components/Select";
+import Select, { Option } from "metabase/components/Select";
 
 const SettingSelect = ({
-  setting: { placeholder, value, options, defaultValue, searchProp, key },
+  setting: { placeholder, value, options, defaultValue, searchProp },
   onChange,
   disabled,
 }) => (
   <Select
-    className="SettingsInput"
+    className="full-width"
     placeholder={placeholder}
     value={value}
     defaultValue={defaultValue}
     searchProp={searchProp}
     onChange={e => onChange(e.target.value)}
-    buttonProps={{
-      dataTestId: key,
-    }}
   >
     {options.map(option => {
       const name = typeof option === "object" ? option.name : option;

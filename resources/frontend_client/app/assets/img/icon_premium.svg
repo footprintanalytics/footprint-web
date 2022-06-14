@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="32px" height="33px" viewBox="0 0 32 33" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <defs>
+        <linearGradient x1="50%" y1="0.923775338%" x2="50%" y2="99.2002745%" id="linearGradient-1">
+            <stop stop-color="#FF9300" offset="0%"></stop>
+            <stop stop-color="#FF5000" offset="44.8242188%"></stop>
+            <stop stop-color="#FFCC00" offset="100%"></stop>
+        </linearGradient>
+        <path d="M31.831693,9.21879301 C31.7851504,9.06586747 31.7153366,8.91959088 31.6122781,8.78661215 L25.3988472,0.541931304 C25.1295653,0.186213219 24.7173313,-0.00328146222 24.3017727,0 L7.59964509,0 C7.087677,0 6.64219828,0.282622793 6.40948551,0.701505772 L0.289139768,8.8231813 C0.189405725,8.95616003 0.116267427,9.10576109 0.069724874,9.25536215 C-0.0798761898,9.70748981 0.00988444846,10.2227824 0.352304661,10.6017717 L14.7771717,26.5160005 C14.8403366,26.6157345 14.9167993,26.7054951 15.0098844,26.7886068 C15.0796983,26.8517717 15.1528366,26.9049632 15.2292993,26.9515058 C15.737943,27.2906015 16.4261079,27.2540324 16.8981823,26.8285005 C17.0444589,26.6955217 17.1541664,26.5392717 17.2273047,26.3730483 L31.5524376,10.5652026 C31.8915334,10.1862132 31.9846185,9.67092067 31.831693,9.21879301 Z" id="path-2"></path>
+        <linearGradient x1="15.4956055%" y1="53.31014%" x2="82.6635742%" y2="53.8920085%" id="linearGradient-4">
+            <stop stop-color="#FF9300" offset="0%"></stop>
+            <stop stop-color="#FFC200" offset="100%"></stop>
+        </linearGradient>
+        <linearGradient x1="50%" y1="0%" x2="50%" y2="100%" id="linearGradient-5">
+            <stop stop-color="#FFBE22" offset="0%"></stop>
+            <stop stop-color="#FFEB71" offset="100%"></stop>
+        </linearGradient>
+    </defs>
+    <g id="ym1" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <g id="hb" transform="translate(-1691.000000, -16.000000)">
+            <g id="bz-9" transform="translate(1691.000000, 16.570312)">
+                <rect id="jxbf-4" x="0" y="0" width="32" height="32"></rect>
+                <g id="bz-8bf" transform="translate(0.000000, 2.400000)">
+                    <g id="sjx-+-jxmb">
+                        <mask id="mask-3" fill="white">
+                            <use xlink:href="#path-2"></use>
+                        </mask>
+                        <use id="mb" fill="url(#linearGradient-1)" fill-rule="nonzero" xlink:href="#path-2"></use>
+                        <rect id="jx" fill="url(#linearGradient-4)" mask="url(#mask-3)" x="-4.76595745" y="-6.80851064" width="40.8510638" height="17.0212766" rx="3"></rect>
+                        <polygon id="sjx" fill="url(#linearGradient-5)" opacity="0.518554688" mask="url(#mask-3)" transform="translate(16.000000, 13.617021) rotate(-180.000000) translate(-16.000000, -13.617021) " points="16 -1.36170213 25.1914894 28.5957447 6.80851064 28.5957447"></polygon>
+                    </g>
+                    <polygon id="xx" fill="#FFFFFF" transform="translate(10.212766, 10.212766) rotate(-315.000000) translate(-10.212766, -10.212766) " points="10.212766 12.3472644 6.36129072 14.0642412 8.07826748 10.212766 6.36129072 6.36129072 10.212766 8.07826748 14.0642412 6.36129072 12.3472644 10.212766 14.0642412 14.0642412"></polygon>
+                </g>
+            </g>
+        </g>
+    </g>
+</svg>

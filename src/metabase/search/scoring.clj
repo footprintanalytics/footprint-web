@@ -2,11 +2,13 @@
   (:require [cheshire.core :as json]
             [clojure.core.memoize :as memoize]
             [clojure.string :as str]
+            [clojure.tools.logging :as log]
             [java-time :as t]
-            [metabase.mbql.normalize :as mbql.normalize]
-            [metabase.public-settings.premium-features :refer [defenterprise]]
+            [metabase.mbql.normalize :as normalize]
+            [metabase.plugins.classloader :as classloader]
             [metabase.search.config :as search-config]
             [metabase.util :as u]
+            [potemkin.types :as p.types]
             [schema.core :as s]))
 
 ;;; Utility functions
@@ -84,7 +86,7 @@
 (defn- text-score-with
   [weighted-scorers query-tokens search-result]
   (let [total-weight (reduce + (map :weight weighted-scorers))
-        scores       (for [column (search-config/searchable-columns-for-model (:model search-result))
+        scores       (for [column (search-config/searchable-columns-for-model (search-config/model-name->class (:model search-result)))
                            :let   [matched-text (-> search-result
                                                     (get column)
                                                     (search-config/column->string (:model search-result) column))
@@ -155,7 +157,10 @@
     :weight 2}])
 
 (def ^:private model->sort-position
-  (zipmap (reverse search-config/all-models) (range)))
+  (into {} (map-indexed (fn [i model]
+                          [(str/lower-case (name model)) i])
+                        ;; Reverse so that they're in descending order
+                        (reverse search-config/searchable-models))))
 
 (defn- model-score
   [{:keys [model]}]
@@ -178,13 +183,6 @@
   ;; So instead, just give a bonus for items that are pinned at all
   (when (#{"card" "dashboard" "pulse"} model)
     (if ((fnil pos? 0) collection_position)
-      1
-      0)))
-
-(defn- bookmarked-score
-  [{:keys [model bookmark]}]
-  (when (#{"card" "collection" "dashboard"} model)
-    (if bookmark
       1
       0)))
 
@@ -231,21 +229,17 @@
                           :name            collection_name
                           :authority_level collection_authority_level}
          :scores          scores)
-        (update :dataset_query #(some-> % json/parse-string mbql.normalize/normalize))
+        (update :dataset_query #(some-> % json/parse-string normalize/normalize))
         (dissoc
          :collection_id
          :collection_name
          :display_name))))
 
-(defn weights-and-scores
-  "Default weights and scores for a given result."
+(defn- weights-and-scores
   [result]
   [{:weight 2
     :score  (pinned-score result)
     :name   "pinned"}
-   {:weight 2
-    :score  (bookmarked-score result)
-    :name   "bookmarked"}
    {:weight 3/2
     :score  (recency-score result)
     :name   "recency"}
@@ -256,22 +250,38 @@
     :score  (model-score result)
     :name   "model"}])
 
-(defenterprise score-result
-  "Score a result, returning a collection of maps with score and weight. Should not include the text scoring, done
-   separately. Should return a sequence of maps with
+(p.types/defprotocol+ ResultScore
+  "Protocol to score a result in search beyond the text scoring."
+  (score-result [_ result]
+    "Score a result, returning a collection of maps with score and weight. Should not include the text scoring, done
+    separately. Should return a sequence of maps with
 
-    {:weight number,
-     :score  number,
-     :name   string}"
-   metabase-enterprise.search.scoring
-   [result]
-   (weights-and-scores result))
+     {:weight number,
+      :score  number,
+      :name   string}"))
+
+(def oss-score-impl
+  "Default open source scoring implementation."
+  (reify ResultScore
+    (score-result [_ result]
+      (weights-and-scores result))))
+
+(def score-impl
+  "Default scoring implementation, using ee if present, or oss otherwise"
+  (u/prog1 (or (u/ignore-exceptions
+                (classloader/require 'metabase-enterprise.search.scoring)
+                (some-> (resolve 'metabase-enterprise.search.scoring/ee-scoring)
+                        var-get))
+               oss-score-impl)
+           (log/debugf "Scoring implementation set to %s" <>)))
 
 (defn score-and-result
   "Returns a map with the `:score` and `:result`—or nil. The score is a vector of comparable things in priority order."
   ([raw-search-string result]
+   (score-and-result score-impl raw-search-string result))
+  ([scorer raw-search-string result]
    (let [text-score (text-score-with-match raw-search-string result)
-         scores     (->> (conj (score-result result)
+         scores     (->> (conj (score-result scorer result)
                                {:score (:score text-score), :weight 10 :name "text score"})
                          (filter :score))]
      {:score  (/ (reduce + (map (fn [{:keys [weight score]}] (* weight score)) scores))

@@ -1,0 +1,88 @@
+.create_image {
+  width: 40px;
+  height: 37px;
+  background-image: url("~assets/img/icon_create.svg");
+}
+
+.take_a_tour_image {
+  width: 32px;
+  height: 32px;
+  background-image: url("~assets/img/icon_take_a_tour.svg");
+}
+
+.premium_image {
+  width: 32px;
+  height: 32px;
+  background-image: url("~assets/img/icon_premium.svg");
+}
+
+/*.ant-menu-submenu-open.sideBarOpenItem {*/
+/*  background-color: #3434b2;*/
+/*  color: white;*/
+/*}*/
+
+.ant-menu-submenu-active .ant-menu-submenu-arrow {
+  color: white !important;
+}
+
+.ant-menu-submenu-arrow {
+  color: #3434b2 !important;
+}
+
+/*.ant-menu-item:hover .ant-menu-submenu-arrow {*/
+/*  color: white !important;*/
+/*}*/
+
+.ant-menu-sub,
+.ant-menu-inline.sideBarOpenItem {
+  background: #f7f5ff !important;
+}
+
+.ant-menu-item:hover a {
+  color: white !important;
+}
+
+.ant-menu-item:hover,
+.ant-menu-light .ant-menu-item-active,
+.ant-menu-light .ant-menu:not(.ant-menu-inline) .ant-menu-submenu-open,
+.ant-menu-light .ant-menu-submenu-active,
+.ant-menu-light .ant-menu-submenu-title:hover {
+  background: #3434b2 !important;
+}
+
+.ant-menu-item-selected {
+  background: #3434b2 !important;
+}
+
+.ant-menu-light .ant-menu-item:hover,
+.ant-menu-light .ant-menu-item-active,
+.ant-menu-light .ant-menu:not(.ant-menu-inline) .ant-menu-submenu-open,
+.ant-menu-light .ant-menu-submenu-active,
+.ant-menu-light .ant-menu-submenu-title:hover {
+  color: white !important;
+}
+
+.ant-menu-item-selected {
+  color: white !important;
+}
+
+.ant-menu-item-selected a {
+  color: white !important;
+}
+
+.ant-menu-vertical .ant-menu-item::after,
+.ant-menu-vertical-left .ant-menu-item::after,
+.ant-menu-vertical-right .ant-menu-item::after,
+.ant-menu-inline .ant-menu-item::after {
+  border-right: 0px;
+}
+
+.ant-menu,
+.ant-menu-item::after {
+  border-right: 0px;
+}
+
+.side-menu-bottom-button {
+  position: absolute;
+  bottom: 40px;
+}

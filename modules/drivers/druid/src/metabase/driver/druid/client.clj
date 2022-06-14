@@ -18,6 +18,7 @@
 
 (defn- do-request
   "Perform a JSON request using `request-fn` against `url`.
+   Tho
 
      (do-request http/get \"http://my-json-api.net\")"
   [request-fn url & {:as options}]
@@ -38,7 +39,7 @@
                             e)))))
       (catch Throwable e
         (let [response (u/ignore-exceptions
-                         (when-let [body (:body (ex-data e))]
+                         (when-let [body (:body (:object (ex-data e)))]
                            (json/parse-string body keyword)))]
           (throw (ex-info (or (:errorMessage response)
                               (.getMessage e))

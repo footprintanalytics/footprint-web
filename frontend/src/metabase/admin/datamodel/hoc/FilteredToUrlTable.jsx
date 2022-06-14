@@ -47,7 +47,11 @@ const FilteredToUrlTable = propName => ComposedComponent =>
 
 export default FilteredToUrlTable;
 
-class TableSelectorInner extends React.Component {
+@Tables.load({
+  id: (state, props) => props.tableId,
+  loadingAndErrorWrapper: false,
+})
+class TableSelector extends React.Component {
   render() {
     const { table, tableId, setTableId } = this.props;
     return (
@@ -85,8 +89,3 @@ class TableSelectorInner extends React.Component {
     );
   }
 }
-
-const TableSelector = Tables.load({
-  id: (state, props) => props.tableId,
-  loadingAndErrorWrapper: false,
-})(TableSelectorInner);

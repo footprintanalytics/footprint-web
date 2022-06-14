@@ -5,8 +5,8 @@
             [clojure.string :as str]
             [clojure.test :refer :all]
             [java-time :as t]
-            [metabase.driver.common.parameters :as params]
-            [metabase.driver.mongo.parameters :as mongo.params]
+            [metabase.driver.common.parameters :as common.params]
+            [metabase.driver.mongo.parameters :as params]
             [metabase.query-processor :as qp]
             [metabase.test :as mt])
   (:import com.fasterxml.jackson.core.JsonGenerator))
@@ -18,28 +18,28 @@
              #t "2020-03-13T17:00:00-07:00[America/Los_Angeles]"]]
     (testing (format "%s %s" (class t) (pr-str t))
       (is (= (t/instant "2020-03-14T00:00:00Z")
-             (#'mongo.params/->utc-instant t))))))
+             (#'params/->utc-instant t))))))
 
 (defn- substitute [param->value xs]
-  (#'mongo.params/substitute param->value xs))
+  (#'params/substitute param->value xs))
 
 (defn- param [k]
-  (params/->Param k))
+  (common.params/->Param k))
 
 (defn- optional [& xs]
-  (params/->Optional xs))
+  (common.params/->Optional xs))
 
 (defn- field-filter
   ([field-name value-type value]
    (field-filter field-name nil value-type value))
   ([field-name base-type value-type value]
-   (params/->FieldFilter (cond-> {:name (name field-name)}
-                           base-type
-                           (assoc :base_type base-type))
-                         {:type value-type, :value value})))
+   (common.params/->FieldFilter (cond-> {:name (name field-name)}
+                                  base-type
+                                  (assoc :base_type base-type))
+                                {:type value-type, :value value})))
 
 (defn- comma-separated-numbers [nums]
-  (params/->CommaSeparatedNumbers nums))
+  (common.params/->CommaSeparatedNumbers nums))
 
 (deftest substitute-test
   (testing "non-parameterized strings should not be substituted"
@@ -162,7 +162,7 @@
                        ["[{$match: " (param :date) "}]"]))))
   (testing "parameter not supplied"
     (is (= (to-bson [{:$match {}}])
-           (substitute {:date (params/->FieldFilter {:name "date"} params/no-value)} ["[{$match: " (param :date) "}]"]))))
+           (substitute {:date (common.params/->FieldFilter {:name "date"} common.params/no-value)} ["[{$match: " (param :date) "}]"]))))
   (testing "operators"
     (testing "string"
       (doseq [[operator form input] [[:string/starts-with {"$regex" "^foo"} ["foo"]]
@@ -243,7 +243,6 @@
                                  :template-tags {"date" {:name         "date"
                                                          :display-name "Date"
                                                          :type         :dimension
-                                                         :widget-type  :date/all-options
                                                          :dimension    $date}}}
                     :parameters [{:type   :date/range
                                   :target [:dimension [:template-tag "date"]]
@@ -262,7 +261,6 @@
                                  :template-tags {"id" {:name         "id"
                                                        :display-name "ID"
                                                        :type         :dimension
-                                                       :widget-type  :number
                                                        :dimension    $id}}}
                     :parameters [{:type   :number
                                   :target [:dimension [:template-tag "id"]]
@@ -281,7 +279,6 @@
                              :template-tags {"date" {:name         "date"
                                                      :display-name "Date"
                                                      :type         :dimension
-                                                     :widget-type  :date/all-options
                                                      :dimension    $date}}}}))))))
     (testing "text params"
       (testing "using nested fields as parameters (#11597)"
@@ -300,7 +297,6 @@
                                      :template-tags {"username" {:name         "username"
                                                                  :display-name "Username"
                                                                  :type         :dimension
-                                                                 :widget-type  :text
                                                                  :dimension    $tips.source.username}}}
                         :parameters [{:type   :text
                                       :target [:dimension [:template-tag "username"]]
@@ -326,7 +322,6 @@
                                          :template-tags {"username" {:name         "username"
                                                                      :display-name "Username"
                                                                      :type         :dimension
-                                                                     :widget-type  :text
                                                                      :dimension    $tips.source.username}}}
                             :parameters [{:type   operator
                                           :target [:dimension [:template-tag "username"]]
@@ -351,7 +346,6 @@
                                             :template-tags {"price" {:name "price"
                                                                      :display-name "Price"
                                                                      :type         :dimension
-                                                                     :widget-type  :number
                                                                      :dimension    $price}}}
                                :parameters [{:type   operator
                                              :target [:dimension [:template-tag "price"]]
@@ -372,7 +366,6 @@
                                                    :template-tags {"username" {:name         "username"
                                                                                :display-name "Username"
                                                                                :type         :dimension
-                                                                               :widget-type  :text
                                                                                :dimension    $tips.source.username}}}
                                       :parameters [{:type   operator
                                                     :target [:dimension [:template-tag "username"]]

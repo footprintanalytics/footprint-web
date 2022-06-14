@@ -3,8 +3,9 @@ import React from "react";
 
 import { t } from "ttag";
 
+import Input from "metabase/components/Input";
+
 import { NotebookCell } from "../NotebookCell";
-import LimitInput from "metabase/query_builder/components/LimitInput";
 
 export default function LimitStep({
   color,
@@ -15,7 +16,7 @@ export default function LimitStep({
 }) {
   return (
     <NotebookCell color={color}>
-      <LimitInput
+      <Input
         small
         className="mb1"
         type="number"

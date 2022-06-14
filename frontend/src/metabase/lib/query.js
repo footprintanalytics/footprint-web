@@ -3,13 +3,14 @@ import Utils from "metabase/lib/utils";
 
 import * as QUERY from "./query/query";
 import * as FieldRef from "./query/field_ref";
+// import { SORTABLE_AGGREGATION_TYPES } from "./query/aggregation";
 
 export * from "./query/query";
 export * from "./query/field_ref";
 
 // The backend won't return more than 2,000 rows so in cases where we
 // need to communicate or use that, use this constant
-export const HARD_ROW_LIMIT = 2000;
+export const HARD_ROW_LIMIT = 10000;
 
 export const NEW_QUERY_TEMPLATES = {
   query: {

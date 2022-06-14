@@ -1,8 +1,20 @@
 import React, { Component } from "react";
-import PropTypes from "prop-types";
 
-import Select, { Option } from "metabase/core/components/Select";
+import Select, { Option } from "./Select";
 import InputBlurChange from "./InputBlurChange";
+
+type Props = {
+  onChange: (value: any) => void,
+  value: string,
+  prefixes: string[],
+  defaultPrefix: string,
+  caseInsensitivePrefix?: boolean,
+};
+
+type State = {
+  prefix: string,
+  rest: string,
+};
 
 function splitValue({
   value,
@@ -23,17 +35,11 @@ function splitValue({
   return prefix ? [prefix, value.slice(prefix.length)] : [defaultPrefix, value];
 }
 
-const propTypes = {
-  value: PropTypes.string,
-  prefixes: PropTypes.arrayOf(PropTypes.string),
-  defaultPrefix: PropTypes.string,
-  caseInsensitivePrefix: PropTypes.bool,
-  onChange: PropTypes.func,
-  placeholder: PropTypes.string,
-};
-
 export default class InputWithSelectPrefix extends Component {
-  constructor(props) {
+  props: Props;
+  state: State;
+
+  constructor(props: Props) {
     super(props);
 
     const [prefix, rest] = splitValue(props);
@@ -49,7 +55,7 @@ export default class InputWithSelectPrefix extends Component {
     }
   }
 
-  componentDidUpdate(prevProps, prevState) {
+  componentDidUpdate(prevProps: Props, prevState: State) {
     const { prefix, rest } = this.state;
     if (prevState.rest !== rest || prevState.prefix !== prefix) {
       const value = prefix + rest;
@@ -81,12 +87,10 @@ export default class InputWithSelectPrefix extends Component {
           type="text"
           className="Form-input flex-full borderless"
           value={rest}
-          placeholder={this.props.placeholder}
+          placeholder={"foo"}
           onBlurChange={e => this.setState({ rest: e.target.value })}
         />
       </div>
     );
   }
 }
-
-InputWithSelectPrefix.propTypes = propTypes;

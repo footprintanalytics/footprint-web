@@ -311,7 +311,7 @@
       (let [join-vec    [{:source-table (mt/id :categories)
                           :condition    [:= [:field (mt/id :categories :id) nil] 1]
                           :strategy     :left-join
-                          :alias        "Dealios"}]
+                          :alias        "Dealios" }]
             q           (query/adhoc-query {:query {:source-table (mt/id :venues)
                                                     :joins join-vec
                                                     :aggregation [[:sum [:field (mt/id :categories :id) {:join-alias "Dealios"}]]]}
@@ -484,7 +484,8 @@
 ;;; ------------------- Datetime humanization (for chart and dashboard titles) -------------------
 
 (deftest temporal-humanization-test
-  (let [dt    #t "1990-09-09T12:30"
+  (let [tz    "UTC"
+        dt    #t "1990-09-09T12:30"
         t-str "1990-09-09T12:30:00"]
     (doseq [[unit expected] {:minute          (tru "at {0}" (t/format "h:mm a, MMMM d, YYYY" dt))
                              :hour            (tru "at {0}" (t/format "h a, MMMM d, YYYY" dt))

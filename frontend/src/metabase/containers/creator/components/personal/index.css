@@ -1,0 +1,136 @@
+.creator__personal {
+  display: -ms-flexbox;
+  display: flex;
+  width: 100%;
+  max-width: 1120px;
+  margin: 0 auto;
+  justify-content: space-between;
+  align-items: center;
+  padding: 40px 0;
+}
+
+.creator__personal-base {
+  display: flex;
+  align-items: flex-start;
+}
+
+.creator__personal-base-logo {
+  width: 120px;
+  height: 120px;
+  min-width: 120px;
+  border-radius: 50%;
+  margin-left: 10px;
+}
+
+.creator__personal-base .ant-avatar-lg {
+  height: 120px;
+  width: 120px;
+  min-width: 120px;
+  font-size: 40px;
+  line-height: 120px;
+  margin-left: 10px;
+  font-weight: 700;
+}
+
+.creator__personal-base .ant-avatar-string {
+  color: var(--color-brand);
+}
+
+.creator__personal-cell {
+  display: flex;
+  flex-direction: column;
+  margin-left: 20px;
+}
+
+.creator__personal-cell-social {
+  display: flex;
+  margin: 12px 0;
+}
+
+.creator__personal-cell-social li {
+  margin-right: 10px;
+}
+
+.creator__personal-cell-social li.creator__personal-cell-social--empty {
+  filter: grayscale(1);
+}
+
+.creator__personal-cell-social li img {
+  width: 24px;
+  height: 24px;
+}
+
+.creator__personal-cell-buttons {
+  margin-top: 12px;
+}
+
+.creator__personal-cell-buttons .ant-btn {
+  margin-right: 10px;
+}
+
+.creator__personal-cell h3 {
+  font-size: 36px;
+  font-weight: bold;
+  color: var(--footprint-color-title);
+}
+
+.creator__personal-cell-desc {
+  font-size: 16px;
+  color: var(--footprint-color-primary-text);
+  margin-right: 20px;
+  white-space: pre-wrap;
+}
+
+.creator__personal-cell-social--with {
+  display: flex;
+  align-items: center;
+  font-size: 14px;
+  color: #84848a;
+}
+
+.creator__personal-cell-social--with img {
+  margin-right: 4px;
+}
+
+.creator__personal-social-item {
+  margin-right: 12px;
+}
+
+.creator__personal-right {
+  display: flex;
+}
+
+.creator__personal-right-item {
+  display: flex;
+  padding: 24px 0;
+  font-size: 14px;
+  text-align: center;
+  color: #84848a;
+  align-items: center;
+}
+
+.creator__personal-right-item-left {
+}
+
+.creator__personal-right-item-split {
+  height: 20px;
+  width: 1px;
+  border-left: var(--footprint-border);
+  margin: 0 36px;
+}
+
+.creator__personal-right-item h3 {
+  font-size: 20px;
+  font-weight: bold;
+}
+
+@media screen and (--footprint-breakpoint-max-mobile) {
+  .creator__personal {
+    width: 100%;
+    flex-direction: column;
+    padding: 20px 0;
+  }
+  .creator__personal-right-item-split {
+    margin: 0 12px;
+  }
+}

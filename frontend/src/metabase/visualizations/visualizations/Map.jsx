@@ -17,7 +17,6 @@ import {
   isState,
   isCountry,
 } from "metabase/lib/schema_metadata";
-import { isSameSeries } from "metabase/visualizations/lib/utils";
 import {
   metricSetting,
   dimensionSetting,
@@ -31,9 +30,12 @@ import _ from "underscore";
 
 const PIN_MAP_TYPES = new Set(["pin", "heat", "grid"]);
 
-import { getAccentColors } from "metabase/lib/colors/groups";
-import ColorRangeSelector from "metabase/core/components/ColorRangeSelector";
+import { desaturated } from "metabase/lib/colors";
 
+import ColorRangePicker from "metabase/components/ColorRangePicker";
+import VizControls from "metabase/visualizations/hoc/VizControls";
+
+@VizControls
 export default class Map extends Component {
   static uiName = t`Map`;
   static identifier = "map";
@@ -255,18 +257,15 @@ export default class Map extends Component {
     }),
     "map.colors": {
       title: t`Color`,
-      widget: ColorRangeSelector,
+      widget: ColorRangePicker,
       props: {
-        colors: getAccentColors(),
-        colorMapping: Object.fromEntries(
-          getAccentColors().map(color => [
-            color,
-            getColorplethColorScale(color),
-          ]),
+        ranges: Object.values(desaturated).map(color =>
+          getColorplethColorScale(color),
         ),
-        isQuantile: true,
+        quantile: true,
+        columns: 1,
       },
-      default: getColorplethColorScale(getAccentColors()[0]),
+      default: getColorplethColorScale(Object.values(desaturated)[0]),
       getHidden: (series, vizSettings) => vizSettings["map.type"] !== "region",
     },
     "map.zoom": {},
@@ -322,14 +321,6 @@ export default class Map extends Component {
         );
       }
     }
-  }
-
-  shouldComponentUpdate(nextProps, nextState) {
-    const sameSize =
-      this.props.width === nextProps.width &&
-      this.props.height === nextProps.height;
-    const sameSeries = isSameSeries(this.props.series, nextProps.series);
-    return !(sameSize && sameSeries);
   }
 
   render() {

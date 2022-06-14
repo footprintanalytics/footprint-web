@@ -8,16 +8,12 @@ import ExpressionEditorTextfield from "./ExpressionEditorTextfield";
 import { isExpression } from "metabase/lib/expressions";
 import MetabaseSettings from "metabase/lib/settings";
 
-import ExternalLink from "metabase/core/components/ExternalLink";
+import ExternalLink from "metabase/components/ExternalLink";
 
 // TODO: combine with ExpressionPopover
 export default class ExpressionWidget extends Component {
   static propTypes = {
-    expression: PropTypes.oneOfType([
-      PropTypes.number,
-      PropTypes.string,
-      PropTypes.array,
-    ]),
+    expression: PropTypes.array,
     name: PropTypes.string,
     query: PropTypes.object.isRequired,
     onChangeExpression: PropTypes.func.isRequired,
@@ -29,8 +25,6 @@ export default class ExpressionWidget extends Component {
     expression: null,
     name: "",
   };
-
-  helpTextTarget = React.createRef();
 
   UNSAFE_componentWillMount() {
     this.UNSAFE_componentWillReceiveProps(this.props);
@@ -57,17 +51,15 @@ export default class ExpressionWidget extends Component {
 
   render() {
     const { query } = this.props;
-    const { expression, name } = this.state;
+    const { expression } = this.state;
 
     return (
       <div style={{ maxWidth: "600px" }}>
         <div className="p2">
           <div className="h5 text-uppercase text-medium text-bold">{t`Field formula`}</div>
-          <div ref={this.helpTextTarget}>
+          <div>
             <ExpressionEditorTextfield
-              helpTextTarget={this.helpTextTarget.current}
               expression={expression}
-              name={name}
               query={query}
               onChange={parsedExpression =>
                 this.setState({ expression: parsedExpression, error: null })
@@ -80,7 +72,10 @@ export default class ExpressionWidget extends Component {
               <ExternalLink
                 className="link"
                 target="_blank"
-                href={MetabaseSettings.docsUrl("users-guide/expressions")}
+                href={MetabaseSettings.docsUrl(
+                  "users-guide/custom-questions",
+                  "creating-custom-columns",
+                )}
               >{t`Learn more`}</ExternalLink>
             </p>
           </div>

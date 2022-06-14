@@ -1,7 +1,3 @@
----
-title: Running Metabase
----
-
 # Running Metabase
 
 <div class='doc-toc' markdown=1>

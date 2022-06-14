@@ -30,7 +30,7 @@ export const leastQueried = () => ({
   },
 });
 
-export const table = searchString => ({
+export const table = (searchString?: string) => ({
   card: {
     name: "Tables",
     display: "table",

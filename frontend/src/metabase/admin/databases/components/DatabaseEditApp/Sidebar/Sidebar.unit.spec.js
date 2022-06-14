@@ -6,12 +6,7 @@ import Sidebar from "./Sidebar";
 
 it("syncs database schema", () => {
   const databaseId = 1;
-  const database = {
-    id: databaseId,
-    initial_sync_status: "complete",
-    supportsPersistence: () => true,
-    isPersisted: () => false,
-  };
+  const database = { id: databaseId };
   const syncDatabaseSchema = jest.fn();
 
   render(
@@ -27,12 +22,7 @@ it("syncs database schema", () => {
 
 it("rescans database field values", () => {
   const databaseId = 1;
-  const database = {
-    id: databaseId,
-    initial_sync_status: "complete",
-    supportsPersistence: () => true,
-    isPersisted: () => false,
-  };
+  const database = { id: databaseId };
   const rescanDatabaseFields = jest.fn();
 
   render(
@@ -48,12 +38,7 @@ it("rescans database field values", () => {
 
 it("discards saved field values", () => {
   const databaseId = 1;
-  const database = {
-    id: databaseId,
-    initial_sync_status: "complete",
-    supportsPersistence: () => true,
-    isPersisted: () => false,
-  };
+  const database = { id: databaseId };
   const discardSavedFieldValues = jest.fn();
 
   render(
@@ -85,17 +70,10 @@ it("discards saved field values", () => {
 it("removes database", () => {
   const databaseId = 1;
   const name = "DB Name";
-  const database = {
-    id: databaseId,
-    name,
-    supportsPersistence: () => true,
-    isPersisted: () => false,
-  };
+  const database = { id: databaseId, name };
   const deleteDatabase = jest.fn();
 
-  render(
-    <Sidebar database={database} deleteDatabase={deleteDatabase} isAdmin />,
-  );
+  render(<Sidebar database={database} deleteDatabase={deleteDatabase} />);
 
   const removeDBButton = screen.getByText("Remove this database");
 
@@ -118,25 +96,4 @@ it("removes database", () => {
   fireEvent.click(deleteButton);
 
   expect(deleteDatabase).toHaveBeenCalled();
-});
-
-it("does not allow to remove databases for non-admins", () => {
-  const database = { id: 1, name: "DB Name" };
-  render(<Sidebar database={database} deleteDatabase={jest.fn()} />);
-  expect(screen.queryByText("Remove this database")).toBeNull();
-});
-
-it("shows loading indicator when a sync is in progress", () => {
-  const databaseId = 1;
-  const database = {
-    id: databaseId,
-    initial_sync_status: "incomplete",
-    supportsPersistence: () => true,
-    isPersisted: () => false,
-  };
-
-  render(<Sidebar database={database} />);
-
-  const statusButton = screen.getByText("Syncing database…");
-  expect(statusButton).toBeInTheDocument();
 });

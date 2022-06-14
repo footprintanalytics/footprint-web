@@ -1,6 +1,3 @@
----
-title: Monitoring Your Metabase Instance
----
 
 ## Monitoring Your Metabase Instance
 

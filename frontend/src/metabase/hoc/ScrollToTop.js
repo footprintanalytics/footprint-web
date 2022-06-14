@@ -2,7 +2,8 @@
 import React from "react";
 import { withRouter } from "react-router";
 
-class ScrollToTopInner extends React.Component {
+@withRouter
+class ScrollToTop extends React.Component {
   componentDidUpdate(prevProps) {
     // Compare location.pathame to see if we're on a different URL. Do this to ensure
     // that query strings don't cause a scroll to the top
@@ -14,7 +15,5 @@ class ScrollToTopInner extends React.Component {
     return this.props.children;
   }
 }
-
-const ScrollToTop = withRouter(ScrollToTopInner);
 
 export default ScrollToTop;

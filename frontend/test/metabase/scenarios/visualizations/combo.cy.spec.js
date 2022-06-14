@@ -1,9 +1,7 @@
 import { restore, visitQuestionAdhoc } from "__support__/e2e/cypress";
+import { SAMPLE_DATASET } from "__support__/e2e/cypress_sample_dataset";
 
-import { SAMPLE_DB_ID } from "__support__/e2e/cypress_data";
-import { SAMPLE_DATABASE } from "__support__/e2e/cypress_sample_database";
-
-const { PRODUCTS, PRODUCTS_ID } = SAMPLE_DATABASE;
+const { PRODUCTS, PRODUCTS_ID } = SAMPLE_DATASET;
 
 describe("scenarios > visualizations > combo", () => {
   beforeEach(() => {
@@ -14,7 +12,7 @@ describe("scenarios > visualizations > combo", () => {
   it(`should render values on data points`, () => {
     visitQuestionAdhoc({
       dataset_query: {
-        database: SAMPLE_DB_ID,
+        database: 1,
         query: {
           "source-table": PRODUCTS_ID,
           aggregation: [["count"], ["sum", ["field", PRODUCTS.PRICE, null]]],

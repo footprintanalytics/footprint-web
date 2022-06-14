@@ -1,6 +1,5 @@
 import _ from "underscore";
 import { isCypressActive } from "metabase/env";
-import MetabaseSettings from "metabase/lib/settings";
 
 // IE doesn't support scrollX/scrollY:
 export const getScrollX = () =>
@@ -246,11 +245,6 @@ export function constrainToScreen(element, direction, padding) {
   return false;
 }
 
-function getWithSiteUrl(url) {
-  const siteUrl = MetabaseSettings.get("site-url");
-  return url.startsWith("/") ? siteUrl + url : url;
-}
-
 // Used for tackling Safari rendering issues
 // http://stackoverflow.com/a/3485654
 export function forceRedraw(domNode) {
@@ -271,10 +265,9 @@ export function moveToFront(element) {
   }
 }
 
-// need to keep track of the latest click's state because sometimes
+// need to keep track of the latest click's metaKey state because sometimes
 // `open` is called asynchronously, thus window.event isn't the click event
-let metaKey;
-let ctrlKey;
+let metaKey, ctrlKey;
 window.addEventListener(
   "mouseup",
   e => {
@@ -295,21 +288,14 @@ export function open(
     openInSameWindow = url => clickLink(url, false),
     // custom function for opening in new window
     openInBlankWindow = url => clickLink(url, true),
-    ignoreSiteUrl = false,
     ...options
   } = {},
 ) {
-  url = ignoreSiteUrl ? url : getWithSiteUrl(url);
-
   if (shouldOpenInBlankWindow(url, options)) {
     openInBlankWindow(url);
   } else {
     openInSameWindow(url);
   }
-}
-
-export function openInBlankWindow(url) {
-  clickLink(getWithSiteUrl(url), true);
 }
 
 function clickLink(url, blank = false) {
@@ -318,7 +304,6 @@ function clickLink(url, blank = false) {
   document.body.appendChild(a);
   try {
     a.href = url;
-    a.rel = "noopener";
     if (blank) {
       a.target = "_blank";
     }
@@ -335,17 +320,22 @@ export function shouldOpenInBlankWindow(
     // always open in new window
     blank = false,
     // open in new window if command-click
-    blankOnMetaOrCtrlKey = true,
+    blankOnMetaKey = true,
     // open in new window for different origin
     blankOnDifferentOrigin = true,
   } = {},
 ) {
-  const isMetaKey = event && event.metaKey != null ? event.metaKey : metaKey;
-  const isCtrlKey = event && event.ctrlKey != null ? event.ctrlKey : ctrlKey;
-
   if (blank) {
     return true;
-  } else if (blankOnMetaOrCtrlKey && (isMetaKey || isCtrlKey)) {
+  } else if (
+    blankOnMetaKey &&
+    (event && event.metaKey != null ? event.metaKey : metaKey)
+  ) {
+    return true;
+  } else if (
+    blankOnMetaKey &&
+    (event && event.ctrlKey != null ? event.ctrlKey : ctrlKey)
+  ) {
     return true;
   } else if (blankOnDifferentOrigin && !isSameOrigin(url)) {
     return true;
@@ -391,7 +381,7 @@ export function parseDataUri(url) {
 /**
  * @returns the clip-path CSS property referencing the clip path in the current document, taking into account the <base> tag.
  */
-export function clipPathReference(id) {
+export function clipPathReference(id: string): string {
   // add the current page URL (with fragment removed) to support pages with <base> tag.
   // https://stackoverflow.com/questions/18259032/using-base-tag-on-a-page-that-contains-svg-marker-elements-fails-to-render-marke
   const url = window.location.href.replace(/#.*$/, "") + "#" + id;
@@ -440,19 +430,4 @@ export function isEventOverElement(event, element) {
   const { top, bottom, left, right } = element.getBoundingClientRect();
 
   return y >= top && y <= bottom && x >= left && x <= right;
-}
-
-export function isReducedMotionPreferred() {
-  const mediaQuery = window.matchMedia("(prefers-reduced-motion: reduce)");
-  return mediaQuery && mediaQuery.matches;
-}
-
-export function getMainElement() {
-  const [main] = document.getElementsByTagName("main");
-  return main;
-}
-
-export function isSmallScreen() {
-  const mediaQuery = window.matchMedia("(max-width: 40em)");
-  return mediaQuery && mediaQuery.matches;
 }

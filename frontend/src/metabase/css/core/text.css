@@ -3,6 +3,42 @@
   --70-percent-black: var(--color-text-dark);
 }
 
+.footprint-title1,
+:local(.footprint-title1) {
+  font-size: 18px;
+  color: var(--footprint-color-title);
+  font-weight: 600;
+}
+
+.footprint-title2,
+:local(.footprint-title2) {
+  font-size: 16px;
+  color: var(--footprint-color-title);
+  font-weight: 600;
+}
+
+.footprint-primary-text,
+:local(.footprint-primary-text) {
+  font-size: 14px;
+  color: var(--footprint-color-primary-text);
+  font-weight: 500;
+  line-height: 20px;
+}
+
+.footprint-secondary-text1,
+:local(.footprint-secondary-text1) {
+  font-size: 14px;
+  color: var(--footprint-color-secondary-text1);
+  font-weight: 500;
+}
+
+.footprint-secondary-text2,
+:local(.footprint-secondary-text2) {
+  font-size: 12px;
+  color: var(--footprint-color-secondary-text2);
+  font-weight: 500;
+}
+
 /* center */
 .text-centered,
 :local(.text-centered) {
@@ -140,10 +176,6 @@
   color: var(--color-text-medium); /* TODO - is this bad? */
 }
 
-.text-list {
-  font-size: 1em;
-}
-
 .text-paragraph,
 :local(.text-paragraph) {
   font-size: 1.143em;
@@ -195,7 +227,7 @@
 }
 
 .text-code {
-  font-family: monospace;
+  font-family: Arial, monospace;
   color: var(--color-text-medium);
   background-color: var(--color-bg-medium);
   border-radius: 2px;
@@ -204,7 +236,7 @@
   white-space: pre-wrap;
 }
 .text-code-plain {
-  font-family: monospace;
+  font-family: Arial, monospace;
   color: var(--color-text-dark);
   line-height: 1.4em;
   white-space: pre-wrap;
@@ -212,7 +244,7 @@
 
 .text-monospace,
 :local(.text-monospace) {
-  font-family: Monaco, monospace;
+  font-family: Arial, Monaco, monospace;
 }
 
 .text-pre-wrap {
@@ -221,8 +253,4 @@
 
 .text-measure {
   max-width: 620px;
-}
-
-.break-anywhere {
-  line-break: anywhere;
 }

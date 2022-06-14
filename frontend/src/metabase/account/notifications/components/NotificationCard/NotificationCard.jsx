@@ -24,17 +24,9 @@ const propTypes = {
   user: PropTypes.object.isRequired,
   onUnsubscribe: PropTypes.func,
   onArchive: PropTypes.func,
-  isEditable: PropTypes.bool,
 };
 
-const NotificationCard = ({
-  item,
-  type,
-  user,
-  isEditable,
-  onUnsubscribe,
-  onArchive,
-}) => {
+const NotificationCard = ({ item, type, user, onUnsubscribe, onArchive }) => {
   const hasArchive = canArchive(item, user);
 
   const onUnsubscribeClick = useCallback(() => {
@@ -62,15 +54,14 @@ const NotificationCard = ({
           </NotificationMessage>
         </NotificationDescription>
       </NotificationContent>
-
-      {isEditable && !hasArchive && (
+      {!hasArchive && (
         <NotificationIcon
           name="close"
           tooltip={t`Unsubscribe`}
           onClick={onUnsubscribeClick}
         />
       )}
-      {isEditable && hasArchive && (
+      {hasArchive && (
         <NotificationIcon
           name="close"
           tooltip={t`Delete`}

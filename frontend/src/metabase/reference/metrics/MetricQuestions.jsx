@@ -31,9 +31,9 @@ import * as metadataActions from "metabase/redux/metadata";
 
 const emptyStateData = (table, metric) => {
   return {
-    message: t`Questions about this metric will appear here as they're added`,
+    message: t`Queries about this metric will appear here as they're added`,
     icon: "all",
-    action: t`Ask a question`,
+    action: t`Ask a chart`,
     link: getQuestionUrl({
       dbId: table && table.db_id,
       tableId: metric.table_id,
@@ -54,7 +54,8 @@ const mapDispatchToProps = {
   ...metadataActions,
 };
 
-class MetricQuestions extends Component {
+@connect(mapStateToProps, mapDispatchToProps)
+export default class MetricQuestions extends Component {
   static propTypes = {
     style: PropTypes.object.isRequired,
     entities: PropTypes.object.isRequired,
@@ -116,5 +117,3 @@ class MetricQuestions extends Component {
     );
   }
 }
-
-export default connect(mapStateToProps, mapDispatchToProps)(MetricQuestions);

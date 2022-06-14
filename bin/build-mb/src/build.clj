@@ -5,7 +5,6 @@
             [clojure.edn :as edn]
             [clojure.java.io :as io]
             [clojure.string :as str]
-            [clojure.tools.build.api :as b]
             [environ.core :as env]
             [flatland.ordered.map :as ordered-map]
             [i18n.create-artifacts :as i18n]
@@ -29,33 +28,45 @@
             (u/announce "CI run: enforce the lockfile")
             (u/sh {:dir u/project-root-directory} "yarn" "--frozen-lockfile"))
           (u/sh {:dir u/project-root-directory} "yarn")))
-      (u/step "Build frontend"
+      ;; TODO -- I don't know why it doesn't work if we try to combine the two steps below by calling `yarn build`,
+      ;; which does the same thing.
+      (u/step "Build frontend (ClojureScript)"
         (u/sh {:dir u/project-root-directory
                :env {"PATH"       (env/env :path)
                      "HOME"       (env/env :user-home)
-                     "WEBPACK_BUNDLE"   "production"
+                     "NODE_ENV"   "production"
                      "MB_EDITION" mb-edition}}
-              "yarn" "build"))
+              "./node_modules/.bin/shadow-cljs" "release" "app"))
+      (u/step "Run 'webpack' with NODE_ENV=production to assemble and minify frontend assets"
+        (u/sh {:dir u/project-root-directory
+               :env {"PATH"       (env/env :path)
+                     "HOME"       (env/env :user-home)
+                     "NODE_ENV"   "production"
+                     "MB_EDITION" mb-edition}}
+              "./node_modules/.bin/webpack" "--bail"))
+      ;; related to the above TODO -- not sure why `yarn build-static-viz` fails here
       (u/step "Build static viz"
         (u/sh {:dir u/project-root-directory
                :env {"PATH"       (env/env :path)
                      "HOME"       (env/env :user-home)
-                     "WEBPACK_BUNDLE"   "production"
+                     "NODE_ENV"   "production"
                      "MB_EDITION" mb-edition}}
-              "yarn" "build-static-viz"))
+              "./node_modules/.bin/webpack" "--bail" "--config" "webpack.static-viz.config.js"))
       (u/announce "Frontend built successfully."))))
 
 (defn- build-licenses!
   [edition]
   {:pre [(#{:oss :ee} edition)]}
   (u/step "Generate backend license information from jar files"
-    (let [basis                     (b/create-basis {:project (u/filename u/project-root-directory "deps.edn")})
+    (let [[classpath]               (u/sh {:dir    u/project-root-directory
+                                           :quiet? true}
+                                          "clojure" (str "-A" edition) "-Spath")
           output-filename           (u/filename u/project-root-directory
                                                 "resources"
                                                 "license-backend-third-party.txt")
-          {:keys [without-license]} (license/generate {:basis           basis
+          {:keys [without-license]} (license/generate {:classpath       classpath
                                                        :backfill        (edn/read-string
-                                                                         (slurp (io/resource "overrides.edn")))
+                                                                          (slurp (io/resource "overrides.edn")))
                                                        :output-filename output-filename
                                                        :report?         false})]
       (when (seq without-license)

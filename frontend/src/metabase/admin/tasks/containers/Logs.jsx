@@ -12,7 +12,7 @@ import _ from "underscore";
 import moment from "moment";
 import { t } from "ttag";
 
-import Select, { Option } from "metabase/core/components/Select";
+import Select, { Option } from "metabase/components/Select";
 import { addCSSRule } from "metabase/lib/dom";
 import { color } from "metabase/lib/colors";
 
@@ -75,9 +75,11 @@ export default class Logs extends Component {
     this.setState({ logs: mergeLogs(this.state.logs, logs.reverse()) });
   }
 
-  componentDidMount() {
+  UNSAFE_componentWillMount() {
     this.timer = setInterval(this.fetchLogs.bind(this), 1000);
+  }
 
+  componentDidMount() {
     const elem = ReactDOM.findDOMNode(this).parentNode;
     elem.addEventListener("scroll", this._onScroll, false);
   }
@@ -153,7 +155,7 @@ export default class Logs extends Component {
             <div
               className="rounded bordered bg-light"
               style={{
-                fontFamily: '"Lucida Console", Monaco, monospace',
+                fontFamily: 'Arial,"Lucida Console", Monaco, monospace',
                 fontSize: "14px",
                 whiteSpace: "pre",
                 padding: "1em",

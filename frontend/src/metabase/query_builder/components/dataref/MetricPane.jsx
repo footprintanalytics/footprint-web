@@ -23,7 +23,8 @@ const mapStateToProps = (state, props) => ({
   metadata: getMetadata(state, props),
 });
 
-class MetricPane extends Component {
+@connect(mapStateToProps, mapDispatchToProps)
+export default class MetricPane extends Component {
   constructor(props, context) {
     super(props, context);
 
@@ -58,7 +59,7 @@ class MetricPane extends Component {
       return card;
     } else {
       throw new Error(
-        t`Could not find the table metadata prior to creating a new question`,
+        t`Could not find the table metadata prior to creating a new chart`,
       );
     }
   }
@@ -101,5 +102,3 @@ class MetricPane extends Component {
     );
   }
 }
-
-export default connect(mapStateToProps, mapDispatchToProps)(MetricPane);

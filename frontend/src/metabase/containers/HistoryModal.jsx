@@ -5,7 +5,14 @@ import PropTypes from "prop-types";
 import HistoryModal from "metabase/components/HistoryModal";
 import Revision from "metabase/entities/revisions";
 
-class HistoryModalContainer extends React.Component {
+@Revision.loadList({
+  query: (state, props) => ({
+    model_type: props.modelType,
+    model_id: props.modelId,
+  }),
+  wrapped: true,
+})
+export default class HistoryModalContainer extends React.Component {
   static propTypes = {
     canRevert: PropTypes.bool.isRequired,
   };
@@ -30,11 +37,3 @@ class HistoryModalContainer extends React.Component {
     );
   }
 }
-
-export default Revision.loadList({
-  query: (state, props) => ({
-    model_type: props.modelType,
-    model_id: props.modelId,
-  }),
-  wrapped: true,
-})(HistoryModalContainer);

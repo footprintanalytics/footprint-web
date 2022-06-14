@@ -1,24 +1,44 @@
-/* eslint-disable react/prop-types */
 import React from "react";
 
 import { ModalFooter } from "metabase/components/ModalContent";
 import AdminContentTable from "metabase/components/AdminContentTable";
-import Button from "metabase/core/components/Button";
+import Button from "metabase/components/Button";
 import GroupSelect from "metabase/admin/people/components/GroupSelect";
 import LoadingSpinner from "metabase/components/LoadingSpinner";
 import Modal from "metabase/components/Modal";
 import { t } from "ttag";
 import { PermissionsApi, SettingsApi } from "metabase/services";
-import { isDefaultGroup } from "metabase/lib/groups";
+import { isSpecialGroup } from "metabase/lib/groups";
 
 import _ from "underscore";
 
 import SettingToggle from "./SettingToggle";
 
-const groupIsMappable = group => !isDefaultGroup(group);
+type Props = {
+  setting: any,
+  onChange: (value: any) => void,
+  settingValues: { [key: string]: any },
+  onChangeSetting: (key: string, value: any) => void,
+  mappingSetting: string,
+  groupHeading: string,
+  groupPlaceholder: string,
+};
+
+type State = {
+  showEditModal: boolean,
+  showAddRow: boolean,
+  groups: ?(Object[]),
+  mappings: { [string]: number[] },
+  saveError: ?Object,
+};
+
+const groupIsMappable = group => !isSpecialGroup(group);
 
 export default class GroupMappingsWidget extends React.Component {
-  constructor(props, context) {
+  props: Props;
+  state: State;
+
+  constructor(props: Props, context: any) {
     super(props, context);
     this.state = {
       showEditModal: false,
@@ -29,7 +49,7 @@ export default class GroupMappingsWidget extends React.Component {
     };
   }
 
-  _showEditModal = async e => {
+  _showEditModal = async (e: Event) => {
     e.preventDefault();
     // just load the setting again to make sure it's up to date
     const setting = _.findWhere(await SettingsApi.list(), {
@@ -44,7 +64,7 @@ export default class GroupMappingsWidget extends React.Component {
     );
   };
 
-  _showAddRow = e => {
+  _showAddRow = (e: Event) => {
     e.preventDefault();
     this.setState({ showAddRow: true });
   };
@@ -53,23 +73,26 @@ export default class GroupMappingsWidget extends React.Component {
     this.setState({ showAddRow: false });
   };
 
-  _addMapping = dn => {
-    this.setState(prevState => ({
+  _addMapping = (dn: string) => {
+    this.setState((prevState: State) => ({
       mappings: { ...prevState.mappings, [dn]: [] },
       showAddRow: false,
     }));
   };
 
-  _changeMapping = dn => (group, selected) => {
+  _changeMapping = (dn: string) => (
+    group: { id: number },
+    selected: boolean,
+  ) => {
     if (selected) {
-      this.setState(prevState => ({
+      this.setState((prevState: State) => ({
         mappings: {
           ...prevState.mappings,
           [dn]: [...prevState.mappings[dn], group.id],
         },
       }));
     } else {
-      this.setState(prevState => ({
+      this.setState((prevState: State) => ({
         mappings: {
           ...prevState.mappings,
           [dn]: prevState.mappings[dn].filter(id => id !== group.id),
@@ -78,19 +101,19 @@ export default class GroupMappingsWidget extends React.Component {
     }
   };
 
-  _deleteMapping = dn => e => {
+  _deleteMapping = (dn: string) => (e: Event) => {
     e.preventDefault();
-    this.setState(prevState => ({
+    this.setState((prevState: State) => ({
       mappings: _.omit(prevState.mappings, dn),
     }));
   };
 
-  _cancelClick = e => {
+  _cancelClick = (e: Event) => {
     e.preventDefault();
     this.setState({ showEditModal: false, showAddRow: false });
   };
 
-  _saveClick = e => {
+  _saveClick = (e: Event) => {
     e.preventDefault();
     const {
       state: { mappings },
@@ -143,7 +166,8 @@ export default class GroupMappingsWidget extends React.Component {
                 >{t`Create a mapping`}</Button>
                 <p className="text-measure">
                   {t`Mappings allow Metabase to automatically add and remove users from groups based on the membership information provided by the
-                     directory server. Users are only ever added to or removed from mapped groups.`}
+                                    directory server. Membership to the Admin group can be granted through mappings, but will not be automatically removed as a
+                                    failsafe measure.`}
                 </p>
                 <AdminContentTable
                   columnTitles={[this.props.groupHeading, t`Groups`, ""]}
@@ -156,7 +180,9 @@ export default class GroupMappingsWidget extends React.Component {
                       placeholder={this.props.groupPlaceholder}
                     />
                   ) : null}
-                  {Object.entries(mappings).map(([dn, ids]) => (
+                  {((Object.entries(mappings): any): Array<
+                    [string, number[]],
+                  >).map(([dn, ids]) => (
                     <MappingRow
                       key={dn}
                       dn={dn}
@@ -188,25 +214,39 @@ export default class GroupMappingsWidget extends React.Component {
   }
 }
 
+type AddMappingRowProps = {
+  mappings: { [string]: number[] },
+  onAdd?: (dn: string) => void,
+  onCancel?: () => void,
+  placeholder?: string,
+};
+
+type AddMappingRowState = {
+  value: "",
+};
+
 class AddMappingRow extends React.Component {
-  constructor(props, context) {
+  props: AddMappingRowProps;
+  state: AddMappingRowState;
+
+  constructor(props: AddMappingRowProps, context: any) {
     super(props, context);
     this.state = {
       value: "",
     };
   }
 
-  _handleSubmit = e => {
-    e.preventDefault();
-    const { onAdd } = this.props;
-    onAdd && onAdd(this.state.value);
-    this.setState({ value: "" });
-  };
-
-  _handleCancelClick = e => {
+  _handleCancelClick = (e: Event) => {
     e.preventDefault();
     const { onCancel } = this.props;
     onCancel && onCancel();
+    this.setState({ value: "" });
+  };
+
+  _handleAddClick = (e: Event) => {
+    e.preventDefault();
+    const { onAdd } = this.props;
+    onAdd && onAdd(this.state.value);
     this.setState({ value: "" });
   };
 
@@ -218,10 +258,7 @@ class AddMappingRow extends React.Component {
     return (
       <tr>
         <td colSpan="3" style={{ padding: 0 }}>
-          <form
-            className="my2 pl1 p1 bordered border-brand rounded relative flex align-center"
-            onSubmit={isValid ? this._handleSubmit : undefined}
-          >
+          <div className="my2 pl1 p1 bordered border-brand rounded relative flex align-center">
             <input
               className="input--borderless h3 ml1 flex-full"
               type="text"
@@ -236,11 +273,11 @@ class AddMappingRow extends React.Component {
             >{t`Cancel`}</span>
             <Button
               className="ml2"
-              type="submit"
               primary={!!isValid}
               disabled={!isValid}
+              onClick={this._handleAddClick}
             >{t`Add`}</Button>
-          </form>
+          </div>
         </td>
       </tr>
     );
@@ -248,6 +285,12 @@ class AddMappingRow extends React.Component {
 }
 
 class MappingGroupSelect extends React.Component {
+  props: {
+    groups: Array<{ id: number }>,
+    selectedGroups: number[],
+    onGroupChange?: (group: { id: number }, selected: boolean) => void,
+  };
+
   render() {
     const { groups, selectedGroups, onGroupChange } = this.props;
 
@@ -267,6 +310,14 @@ class MappingGroupSelect extends React.Component {
 }
 
 class MappingRow extends React.Component {
+  props: {
+    dn: string,
+    groups: Array<{ id: number }>,
+    selectedGroups: number[],
+    onChange?: (group: { id: number }, selected: boolean) => void,
+    onDelete?: (e: Event) => void,
+  };
+
   render() {
     const { dn, groups, selectedGroups, onChange, onDelete } = this.props;
 

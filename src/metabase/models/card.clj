@@ -3,24 +3,23 @@
   is a historical name, but is the same thing; both terms are used interchangeably in the backend codebase."
   (:require [clojure.set :as set]
             [clojure.tools.logging :as log]
-            [metabase.mbql.normalize :as mbql.normalize]
+            [metabase.mbql.normalize :as normalize]
             [metabase.mbql.util :as mbql.u]
             [metabase.models.collection :as collection]
-            [metabase.models.dependency :as dependency]
+            [metabase.models.dependency :as dependency :refer [Dependency]]
             [metabase.models.field-values :as field-values]
-            [metabase.models.interface :as mi]
+            [metabase.models.interface :as i]
             [metabase.models.params :as params]
             [metabase.models.permissions :as perms]
             [metabase.models.query :as query]
             [metabase.models.revision :as revision]
-            [metabase.models.serialization.hash :as serdes.hash]
             [metabase.moderation :as moderation]
             [metabase.plugins.classloader :as classloader]
             [metabase.public-settings :as public-settings]
-            [metabase.query-processor.util :as qp.util]
-            [metabase.server.middleware.session :as mw.session]
+            [metabase.query-processor.util :as qputil]
+            [metabase.server.middleware.session :as session]
             [metabase.util :as u]
-            [metabase.util.i18n :refer [tru]]
+            [metabase.util.i18n :as ui18n :refer [tru]]
             [toucan.db :as db]
             [toucan.models :as models]))
 
@@ -83,8 +82,6 @@
       :Segment (extract-ids :segment inner-query)})))
 
 
-
-
 ;;; --------------------------------------------------- Revisions ----------------------------------------------------
 
 (defn serialize-instance
@@ -92,10 +89,7 @@
   ([instance]
    (serialize-instance nil nil instance))
   ([_ _ instance]
-   (cond-> (dissoc instance :created_at :updated_at)
-     ;; datasets should preserve edits to metadata
-     (not (:dataset instance))
-     (dissoc :result_metadata))))
+   (dissoc instance :created_at :updated_at :result_metadata)))
 
 
 ;;; --------------------------------------------------- Lifecycle ----------------------------------------------------
@@ -148,7 +142,7 @@
     :else
     (do
       (log/debug "Attempting to infer result metadata for Card")
-      (let [inferred-metadata (not-empty (mw.session/with-current-user nil
+      (let [inferred-metadata (not-empty (session/with-current-user nil
                                            (classloader/require 'metabase.query-processor)
                                            (u/ignore-exceptions
                                              ((resolve 'metabase.query-processor/query->expected-cols) query))))]
@@ -160,7 +154,7 @@
   forth.)"
   [{query :dataset_query, id :id}]      ; don't use `u/the-id` here so that we can use this with `pre-insert` too
   (loop [query query, ids-already-seen #{id}]
-    (let [source-card-id (qp.util/query->source-card-id query)]
+    (let [source-card-id (qputil/query->source-card-id query)]
       (cond
         (not source-card-id)
         :ok
@@ -178,50 +172,13 @@
 
 (defn- maybe-normalize-query [card]
   (cond-> card
-    (seq (:dataset_query card)) (update :dataset_query mbql.normalize/normalize)))
+    (seq (:dataset_query card)) (update :dataset_query normalize/normalize)))
 
-(defn- check-field-filter-fields-are-from-correct-database
-  "Check that all native query Field filter parameters reference Fields belonging to the Database the query points
-  against. This is done when saving a Card. The goal here is to prevent people from saving Cards with invalid queries
-  -- it's better to error now then to error down the road in Query Processor land.
-
-  The usual way a user gets into the situation of having a mismatch between the Database and Field Filters is by
-  creating a native query in the Query Builder UI, adding parameters, and *then* changing the Database that the query
-  targets. See https://github.com/metabase/metabase/issues/14145 for more details."
-  [{{query-db-id :database, :as query} :dataset_query, :as card}]
-  ;; for updates if `query` isn't being updated we don't need to validate anything.
-  (when query
-    (when-let [field-ids (not-empty (params/card->template-tag-field-ids card))]
-      (doseq [{:keys [field-id field-name table-name field-db-id]} (db/query {:select    [[:field.id :field-id]
-                                                                                          [:field.name :field-name]
-                                                                                          [:table.name :table-name]
-                                                                                          [:table.db_id :field-db-id]]
-                                                                              :from      [[(db/resolve-model 'Field) :field]]
-                                                                              :left-join [[(db/resolve-model 'Table) :table]
-                                                                                          [:= :field.table_id :table.id]]
-                                                                              :where     [:in :field.id (set field-ids)]})]
-        (when-not (= field-db-id query-db-id)
-          (throw (ex-info (letfn [(describe-database [db-id]
-                                    (format "%d %s" db-id (pr-str (db/select-one-field :name 'Database :id db-id))))]
-                            (tru "Invalid Field Filter: Field {0} belongs to Database {1}, but the query is against Database {2}"
-                                 (format "%d %s.%s" field-id (pr-str table-name) (pr-str field-name))
-                                 (describe-database field-db-id)
-                                 (describe-database query-db-id)))
-                          {:status-code 400})))))))
-
-;; TODO -- consider whether we should validate the Card query when you save/update it??
-(defn- pre-insert [card]
-  (let [defaults {:parameters         []
-                  :parameter_mappings []}
-        card     (merge defaults card)]
-   (u/prog1 card
-     ;; make sure this Card doesn't have circular source query references
-     (check-for-circular-source-query-references card)
-     (check-field-filter-fields-are-from-correct-database card)
-     ;; TODO: add a check to see if all id in :parameter_mappings are in :parameters
-     (params/assert-valid-parameters card)
-     (params/assert-valid-parameter-mappings card)
-     (collection/check-collection-namespace Card (:collection_id card)))))
+(defn- pre-insert [{query :dataset_query, :as card}]
+  (u/prog1 card
+    ;; make sure this Card doesn't have circular source query references
+    (check-for-circular-source-query-references card)
+    (collection/check-collection-namespace Card (:collection_id card))))
 
 (defn- post-insert [card]
   ;; if this Card has any native template tag parameters we need to update FieldValues for any Fields that are
@@ -238,8 +195,7 @@
   For the OSS edition, there is no implementation for this function -- it is a no-op. For Metabase Enterprise Edition,
   the implementation of this function is
   [[metabase-enterprise.sandbox.models.group-table-access-policy/update-card-check-gtaps]] and is installed by that
-  namespace."}
-  pre-update-check-sandbox-constraints
+  namespace."} pre-update-check-sandbox-constraints
   (atom identity))
 
 (defn- pre-update [{archived? :archived, id :id, :as changes}]
@@ -265,12 +221,7 @@
     ;; make sure this Card doesn't have circular source query references if we're updating the query
     (when (:dataset_query changes)
       (check-for-circular-source-query-references changes))
-    ;; Make sure any native query template tags match the DB in the query.
-    (check-field-filter-fields-are-from-correct-database changes)
-    ;; Make sure the Collection is in the default Collection namespace (e.g. as opposed to the Snippets Collection namespace)
     (collection/check-collection-namespace Card (:collection_id changes))
-    (params/assert-valid-parameters changes)
-    (params/assert-valid-parameter-mappings changes)
     ;; additional checks (Enterprise Edition only)
     (@pre-update-check-sandbox-constraints changes)))
 
@@ -283,11 +234,11 @@
 (defn- result-metadata-out
   "Transform the Card result metadata as it comes out of the DB. Convert columns to keywords where appropriate."
   [metadata]
-  (when-let [metadata (not-empty (mi/json-out-with-keywordization metadata))]
-    (seq (map mbql.normalize/normalize-source-metadata metadata))))
+  (when-let [metadata (not-empty (i/json-out-with-keywordization metadata))]
+    (seq (map normalize/normalize-source-metadata metadata))))
 
 (models/add-type! ::result-metadata
-  :in mi/json-in
+  :in i/json-in
   :out result-metadata-out)
 
 (u/strict-extend (class Card)
@@ -299,11 +250,8 @@
                                        :embedding_params       :json
                                        :query_type             :keyword
                                        :result_metadata        ::result-metadata
-                                       :visualization_settings :visualization-settings
-                                       :parameters             :parameters-list
-                                       :parameter_mappings     :parameters-list})
-          :properties     (constantly {:timestamped? true
-                                       :entity_id    true})
+                                       :visualization_settings :visualization-settings})
+          :properties     (constantly {:timestamped? true})
           ;; Make sure we normalize the query before calling `pre-update` or `pre-insert` because some of the
           ;; functions those fns call assume normalized queries
           :pre-update     (comp populate-query-fields pre-update populate-result-metadata maybe-normalize-query)
@@ -313,7 +261,7 @@
           :post-select    public-settings/remove-public-uuid-if-public-sharing-is-disabled})
 
   ;; You can read/write a Card if you can read/write its parent Collection
-  mi/IObjectPermissions
+  i/IObjectPermissions
   perms/IObjectPermissionsForParentCollection
 
   revision/IRevisioned
@@ -321,7 +269,4 @@
          :serialize-instance serialize-instance)
 
   dependency/IDependent
-  {:dependencies card-dependencies}
-
-  serdes.hash/IdentityHashable
-  {:identity-hash-fields (constantly [:name (serdes.hash/hydrated-hash :collection)])})
+  {:dependencies card-dependencies})

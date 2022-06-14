@@ -7,7 +7,7 @@ import * as MetabaseCore from "metabase/lib/core";
 import { isNumericBaseType } from "metabase/lib/schema_metadata";
 import { isFK } from "metabase/lib/types";
 
-import Select from "metabase/core/components/Select";
+import Select from "metabase/components/Select";
 
 import D from "metabase/reference/components/Detail.css";
 
@@ -33,7 +33,7 @@ const FieldTypeDetail = ({
                 .concat({
                   id: null,
                   name: t`No field type`,
-                  section: t`Other`,
+                  section: "Other",
                 })
                 .filter(type =>
                   !isNumericBaseType(field)

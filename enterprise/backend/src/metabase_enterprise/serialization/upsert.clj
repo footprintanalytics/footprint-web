@@ -1,7 +1,7 @@
 (ns metabase-enterprise.serialization.upsert
   "Upsert-or-skip functionality for our models."
   (:require [cheshire.core :as json]
-            [clojure.data :as data]
+            [clojure.data :as diff]
             [clojure.tools.logging :as log]
             [medley.core :as m]
             [metabase-enterprise.serialization.names :refer [name-for-logging]]
@@ -99,8 +99,8 @@
 
 (defn- group-by-action
   "Return `entities` grouped by the action that needs to be done given the `context`."
-  [{:keys [mode]} model entities]
-  (let [same? (comp nil? second data/diff)]
+  [{:keys [mode on-error]} model entities]
+  (let [same?                        (comp nil? second diff/diff)]
     (->> entities
          (map-indexed (fn [position entity]
                         [position
@@ -139,6 +139,7 @@
         (log/info (trs "Skipping {0} (nothing to update)" (name-for-logging (name model) existing)))))
     (doseq [[_ _ existing] update]
       (log/info (trs "Updating {0}" (name-for-logging (name model) existing))))
+
     (->> (concat (for [[position _ existing] skip]
                    [(u/the-id existing) position])
                  (map vector (map post-insert-fn

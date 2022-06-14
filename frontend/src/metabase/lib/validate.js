@@ -8,8 +8,15 @@ export const validators = {
     !Utils.isEmail(value) && t`must be a valid email address`,
   maxLength: max => value =>
     value && value.length > max && t`must be ${max} characters or less`,
+  minLength: min => value =>
+    value && value.length < min && t`must be ${min} characters or more`,
   passwordComplexity: () => value =>
     Settings.passwordComplexityDescription(value),
+  checkUserName: () => value =>
+    !Utils.isValidUserName(value) && "must be a name(a-z,A-Z,0-9)",
+  checkDashboardTitle: () => value =>
+    !Utils.isValidDashboardTitle(value) &&
+    "dashboard name must contains letters or numbers",
 };
 
 function makeValidate(steps = []) {

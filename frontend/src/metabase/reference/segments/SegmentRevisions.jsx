@@ -44,7 +44,8 @@ const mapDispatchToProps = {
   ...metadataActions,
 };
 
-class SegmentRevisions extends Component {
+@connect(mapStateToProps, mapDispatchToProps)
+export default class SegmentRevisions extends Component {
   static propTypes = {
     style: PropTypes.object.isRequired,
     revisions: PropTypes.object.isRequired,
@@ -127,5 +128,3 @@ class SegmentRevisions extends Component {
     );
   }
 }
-
-export default connect(mapStateToProps, mapDispatchToProps)(SegmentRevisions);

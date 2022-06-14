@@ -1,6 +1,6 @@
 (ns metabase-enterprise.audit-app.pages.common.dashboards
   (:require [honeysql.core :as hsql]
-            [honeysql.helpers :as hh]
+            [honeysql.helpers :as h]
             [metabase-enterprise.audit-app.pages.common :as common]
             [metabase.util.honeysql-extensions :as hx]
             [metabase.util.urls :as urls]))
@@ -62,4 +62,4 @@
                  :order-by  [[:%lower.d.name :asc]
                              [:dashboard_id :asc]]}
                 (common/add-search-clause query-string :d.name)
-                (hh/merge-where where-clause)))})
+                (h/merge-where where-clause)))})

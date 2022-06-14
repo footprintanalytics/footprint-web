@@ -2,10 +2,11 @@
 import React, { Component } from "react";
 import { connect } from "react-redux";
 import { t } from "ttag";
-import _ from "underscore";
+
+import { Box, Flex } from "grid-styled";
 
 import ArchivedItem from "../../components/ArchivedItem";
-import Button from "metabase/core/components/Button";
+import Button from "metabase/components/Button";
 import BulkActionBar from "metabase/components/BulkActionBar";
 import Card from "metabase/components/Card";
 import PageHeading from "metabase/components/type/PageHeading";
@@ -15,41 +16,25 @@ import VirtualizedList from "metabase/components/VirtualizedList";
 import Search from "metabase/entities/search";
 import listSelect from "metabase/hoc/ListSelect";
 
-import { getIsNavbarOpen, openNavbar } from "metabase/redux/app";
 import { getUserIsAdmin } from "metabase/selectors/user";
-import { isSmallScreen } from "metabase/lib/dom";
-
-import {
-  ArchiveBarContent,
-  ArchiveBarText,
-  ArchiveBody,
-  ArchiveEmptyState,
-  ArchiveHeader,
-  ArchiveRoot,
-} from "./ArchiveApp.styled";
 
 const mapStateToProps = (state, props) => ({
-  isNavbarOpen: getIsNavbarOpen(state),
   isAdmin: getUserIsAdmin(state, props),
 });
 
-const mapDispatchToProps = {
-  openNavbar,
-};
-
 const ROW_HEIGHT = 68;
 
-class ArchiveApp extends Component {
-  componentDidMount() {
-    if (!isSmallScreen()) {
-      this.props.openNavbar();
-    }
-  }
-
+@Search.loadList({
+  query: { archived: true },
+  reload: true,
+  wrapped: true,
+})
+@listSelect({ keyForItem: item => `${item.model}:${item.id}` })
+@connect(mapStateToProps, null)
+export default class ArchiveApp extends Component {
   render() {
     const {
       isAdmin,
-      isNavbarOpen,
       list,
       reload,
 
@@ -58,11 +43,11 @@ class ArchiveApp extends Component {
       onToggleSelected,
     } = this.props;
     return (
-      <ArchiveRoot>
-        <ArchiveHeader>
+      <Box mx={4}>
+        <Box mt={2} py={2}>
           <PageHeading>{t`Archive`}</PageHeading>
-        </ArchiveHeader>
-        <ArchiveBody>
+        </Box>
+        <Box width={2 / 3} pb={4}>
           <Card
             style={{
               height: list.length > 0 ? ROW_HEIGHT * list.length : "auto",
@@ -72,7 +57,7 @@ class ArchiveApp extends Component {
               <VirtualizedList
                 items={list}
                 rowHeight={ROW_HEIGHT}
-                renderItem={({ item }) => (
+                renderItem={({ item, index }) => (
                   <ArchivedItem
                     type={item.type}
                     name={item.getName()}
@@ -102,36 +87,23 @@ class ArchiveApp extends Component {
                 )}
               />
             ) : (
-              <ArchiveEmptyState>
+              <Flex p={5} align="center" justify="center">
                 <h2>{t`Items you archive will appear here.`}</h2>
-              </ArchiveEmptyState>
+              </Flex>
             )}
           </Card>
-        </ArchiveBody>
-        <BulkActionBar
-          isNavbarOpen={isNavbarOpen}
-          showing={selected.length > 0}
-        >
-          <ArchiveBarContent>
+        </Box>
+        <BulkActionBar showing={selected.length > 0}>
+          <Flex align="center" py={2} px={4}>
             <SelectionControls {...this.props} />
             <BulkActionControls {...this.props} />
-            <ArchiveBarText>{t`${selected.length} items selected`}</ArchiveBarText>
-          </ArchiveBarContent>
+            <Box ml="auto">{t`${selected.length} items selected`}</Box>
+          </Flex>
         </BulkActionBar>
-      </ArchiveRoot>
+      </Box>
     );
   }
 }
-
-export default _.compose(
-  Search.loadList({
-    query: { archived: true },
-    reload: true,
-    wrapped: true,
-  }),
-  listSelect({ keyForItem: item => `${item.model}:${item.id}` }),
-  connect(mapStateToProps, mapDispatchToProps),
-)(ArchiveApp);
 
 const BulkActionControls = ({ selected, reload }) => (
   <span>
@@ -162,7 +134,12 @@ const BulkActionControls = ({ selected, reload }) => (
   </span>
 );
 
-const SelectionControls = ({ deselected, onSelectAll, onSelectNone }) =>
+const SelectionControls = ({
+  selected,
+  deselected,
+  onSelectAll,
+  onSelectNone,
+}) =>
   deselected.length === 0 ? (
     <StackedCheckBox checked={true} onChange={onSelectNone} />
   ) : (

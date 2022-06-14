@@ -3,14 +3,14 @@ import React from "react";
 
 import { t } from "ttag";
 import cx from "classnames";
-import Radio from "metabase/core/components/Radio";
+import Input from "metabase/components/Input";
+import Radio from "metabase/components/Radio";
 import { HARD_ROW_LIMIT } from "metabase/lib/query";
 import { formatNumber } from "metabase/lib/formatting";
-import LimitInput from "metabase/query_builder/components/LimitInput";
 
 const CustomRowLimit = ({ limit, onChangeLimit, onClose }) => {
   return (
-    <LimitInput
+    <Input
       small
       defaultValue={limit}
       className={cx({ "text-brand border-brand": limit != null })}
@@ -55,7 +55,9 @@ const LimitPopover = ({ limit, onChangeLimit, onClose, className }) => (
         },
       ]}
       onChange={value =>
-        value === "maximum" ? onChangeLimit(null) : onChangeLimit(2000)
+        value === "maximum"
+          ? onChangeLimit(null)
+          : onChangeLimit(HARD_ROW_LIMIT)
       }
     />
   </div>

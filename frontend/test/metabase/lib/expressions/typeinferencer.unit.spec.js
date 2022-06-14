@@ -1,15 +1,14 @@
-import { parse } from "metabase/lib/expressions/recursive-parser";
-import { resolve } from "metabase/lib/expressions/resolver";
+import { compile } from "metabase/lib/expressions/compile";
 import { infer } from "metabase/lib/expressions/typeinferencer";
 
 describe("metabase/lib/expressions/typeinferencer", () => {
-  function mockResolve(kind, name) {
+  function resolve(kind, name) {
     return ["field", name];
   }
   function compileAs(source, startRule) {
     let mbql = null;
     try {
-      mbql = resolve(parse(source), startRule, mockResolve);
+      mbql = compile({ source, startRule, resolve });
     } catch (e) {}
     return mbql;
   }
@@ -17,7 +16,7 @@ describe("metabase/lib/expressions/typeinferencer", () => {
   // workaround the limitation of the parsing expecting a strict top-level grammar rule
   function tryCompile(source) {
     let mbql = compileAs(source, "expression");
-    if (mbql === null) {
+    if (!mbql) {
       mbql = compileAs(source, "boolean");
     }
     return mbql;
@@ -44,8 +43,6 @@ describe("metabase/lib/expressions/typeinferencer", () => {
   }
 
   it("should infer the type of primitives", () => {
-    expect(type("true")).toEqual("boolean");
-    expect(type("false")).toEqual("boolean");
     expect(type("0")).toEqual("number");
     expect(type("1")).toEqual("number");
     expect(type("3.14159")).toEqual("number");
@@ -61,7 +58,7 @@ describe("metabase/lib/expressions/typeinferencer", () => {
   it("should infer the result of comparisons", () => {
     expect(type("[Discount] > 0")).toEqual("boolean");
     expect(type("[Revenue] <= [Limit] * 2")).toEqual("boolean");
-    expect(type("[Price] != 2")).toEqual("boolean");
+    expect(type("1 != 2")).toEqual("boolean");
   });
 
   it("should infer the result of logical operations", () => {

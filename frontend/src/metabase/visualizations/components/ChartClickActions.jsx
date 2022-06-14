@@ -14,6 +14,11 @@ import * as MetabaseAnalytics from "metabase/lib/analytics";
 
 import { performAction } from "metabase/visualizations/lib/action";
 
+import type {
+  ClickObject,
+  ClickAction,
+} from "metabase-types/types/Visualization";
+
 import cx from "classnames";
 import _ from "underscore";
 
@@ -71,8 +76,21 @@ Object.values(SECTIONS).map((section, index) => {
 const getGALabelForAction = action =>
   action ? `${action.section || ""}:${action.name || ""}` : null;
 
-class ChartClickActions extends Component {
-  state = {
+type Props = {
+  clicked: ?ClickObject,
+  clickActions: ?(ClickAction[]),
+  onChangeCardAndRun: Object => void,
+  onClose: () => void,
+};
+
+type State = {
+  popoverAction: ?ClickAction,
+};
+
+@connect()
+export default class ChartClickActions extends Component {
+  props: Props;
+  state: State = {
     popoverAction: null,
   };
 
@@ -83,7 +101,7 @@ class ChartClickActions extends Component {
     }
   };
 
-  handleClickAction = action => {
+  handleClickAction = (action: ClickAction) => {
     const { dispatch, onChangeCardAndRun } = this.props;
     if (action.popover) {
       MetabaseAnalytics.trackStructEvent(
@@ -155,8 +173,11 @@ class ChartClickActions extends Component {
       });
       delete groupedClickActions["sum"];
     }
-    const hasOnlyOneSortAction = groupedClickActions["sort"]?.length === 1;
-    if (clicked.column?.source === "native" && hasOnlyOneSortAction) {
+    if (
+      clicked.column &&
+      clicked.column.source === "native" &&
+      groupedClickActions["sort"]
+    ) {
       // restyle the Formatting action for SQL columns
       groupedClickActions["sort"][0] = {
         ...groupedClickActions["sort"][0],
@@ -167,8 +188,6 @@ class ChartClickActions extends Component {
       .pairs()
       .sortBy(([key]) => (SECTIONS[key] ? SECTIONS[key].index : 99))
       .value();
-
-    const hasOnlyOneSection = sections.length === 1;
 
     return (
       <Popover
@@ -200,9 +219,7 @@ class ChartClickActions extends Component {
                     ml1:
                       SECTIONS[key].icon === "bolt" ||
                       SECTIONS[key].icon === "sum" ||
-                      SECTIONS[key].icon === "breakout" ||
-                      (SECTIONS[key].icon === "funnel_outline" &&
-                        !hasOnlyOneSection),
+                      SECTIONS[key].icon === "breakout",
                   },
                 )}
               >
@@ -218,13 +235,7 @@ class ChartClickActions extends Component {
                   </p>
                 )}
                 {SECTIONS[key].icon === "funnel_outline" && (
-                  <p
-                    className={cx(
-                      "text-small",
-                      hasOnlyOneSection ? "mt0" : "mt2",
-                      hasOnlyOneSection ? "text-dark" : "text-medium",
-                    )}
-                  >
+                  <p className="mt0 text-dark text-small">
                     {t`Filter by this value`}
                   </p>
                 )}
@@ -260,9 +271,15 @@ class ChartClickActions extends Component {
   }
 }
 
-export default connect()(ChartClickActions);
-
-export const ChartClickAction = ({ action, isLastItem, handleClickAction }) => {
+export const ChartClickAction = ({
+  action,
+  isLastItem,
+  handleClickAction,
+}: {
+  action: any,
+  isLastItem: any,
+  handleClickAction: any,
+}) => {
   // This is where all the different action button styles get applied.
   // Some of them have bespoke classes defined in ChartClickActions.css,
   // like for cases when we needed to really dial in the spacing.
@@ -278,13 +295,20 @@ export const ChartClickAction = ({ action, isLastItem, handleClickAction }) => {
     "token token-filter text-small text-white-hover mr1":
       action.buttonType === "token-filter",
   });
+  // NOTE: Tom Robinson 4/16/2018: disabling <Link> for `question` click actions
+  // for now since on dashboards currently they need to go through
+  // navigateToNewCardFromDashboard to merge in parameters.,
+  // Also need to sort out proper logic in QueryBuilder's UNSAFE_componentWillReceiveProps
+  // if (action.question) {
+  //   return (
+  //     <Link to={action.question().getUrl()} className={className}>
+  //       {action.title}
+  //     </Link>
+  //   );
+  // } else
   if (action.url) {
     return (
-      <div
-        className={cx({
-          full: action.buttonType === "horizontal",
-        })}
-      >
+      <div>
         <Link
           to={action.url()}
           className={className}

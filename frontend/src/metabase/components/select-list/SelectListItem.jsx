@@ -3,24 +3,39 @@ import PropTypes from "prop-types";
 import _ from "underscore";
 
 import { iconPropTypes } from "metabase/components/Icon";
+import { useScrollOnMount } from "metabase/hooks/use-scroll-on-mount";
 
-import { BaseSelectListItem } from "./BaseSelectListItem";
 import { ItemRoot, ItemIcon, ItemTitle } from "./SelectListItem.styled";
 
-const iconPropType = PropTypes.oneOfType([
-  PropTypes.string,
-  PropTypes.shape(iconPropTypes),
-]);
-
 const propTypes = {
-  ...BaseSelectListItem.propTypes,
-  icon: iconPropType.isRequired,
+  id: PropTypes.string.isRequired,
+  name: PropTypes.string.isRequired,
+  icon: PropTypes.oneOfType([PropTypes.string, PropTypes.shape(iconPropTypes)])
+    .isRequired,
   iconColor: PropTypes.string,
-  rightIcon: iconPropType,
+  onSelect: PropTypes.func.isRequired,
+  isSelected: PropTypes.bool,
+  rightIcon: PropTypes.oneOfType([
+    PropTypes.string,
+    PropTypes.shape({
+      name: PropTypes.name,
+    }),
+  ]),
+  size: PropTypes.oneOf(["small", "medium"]),
+  className: PropTypes.string,
 };
 
-export function SelectListItem(props) {
-  const { name, icon, rightIcon } = props;
+export function SelectListItem({
+  id,
+  name,
+  icon,
+  onSelect,
+  isSelected = false,
+  rightIcon,
+  size = "medium",
+  className,
+}) {
+  const ref = useScrollOnMount();
 
   const iconProps = _.isObject(icon) ? icon : { name: icon };
   const rightIconProps = _.isObject(rightIcon)
@@ -28,11 +43,20 @@ export function SelectListItem(props) {
     : { name: rightIcon };
 
   return (
-    <BaseSelectListItem as={ItemRoot} {...props}>
+    <ItemRoot
+      innerRef={isSelected ? ref : null}
+      isSelected={isSelected}
+      role="menuitem"
+      tabIndex={0}
+      size={size}
+      onClick={() => onSelect(id)}
+      onKeyDown={e => e.key === "Enter" && onSelect(id)}
+      className={className}
+    >
       <ItemIcon color="brand" {...iconProps} />
       <ItemTitle>{name}</ItemTitle>
       {rightIconProps.name && <ItemIcon {...rightIconProps} />}
-    </BaseSelectListItem>
+    </ItemRoot>
   );
 }
 

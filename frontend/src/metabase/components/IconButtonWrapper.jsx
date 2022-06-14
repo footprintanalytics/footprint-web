@@ -1,13 +1,11 @@
-import styled from "@emotion/styled";
+import styled from "styled-components";
 
-const IconButtonWrapper = styled.button`
+const IconButtonWrapper = styled.button.attrs({ type: "button" })`
   display: flex;
   align-items: center;
   justify-content: center;
   border-radius: ${props => (props.circle ? "50%" : "6px")};
   cursor: pointer;
 `;
-
-IconButtonWrapper.defaultProps = { type: "button" };
 
 export default IconButtonWrapper;

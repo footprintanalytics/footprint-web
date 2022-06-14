@@ -5,9 +5,8 @@
   (:require [medley.core :as m]
             [metabase.mbql.util :as mbql.u]
             [metabase.models.dependency :as dependency :refer [Dependency]]
-            [metabase.models.interface :as mi]
+            [metabase.models.interface :as i]
             [metabase.models.revision :as revision]
-            [metabase.models.serialization.hash :as serdes.hash]
             [metabase.util :as u]
             [metabase.util.i18n :refer [tru]]
             [metabase.util.schema :as su]
@@ -19,7 +18,7 @@
 (models/defmodel Metric :metric)
 
 (defn- pre-delete [{:keys [id]}]
-  (db/delete! Dependency :model "Metric", :model_id id))
+  (db/delete! 'Dependency :model "Metric", :model_id id))
 
 (defn- pre-update [{:keys [creator_id id], :as updates}]
   (u/prog1 updates
@@ -31,29 +30,25 @@
 (defn- perms-objects-set [metric read-or-write]
   (let [table (or (:table metric)
                   (db/select-one ['Table :db_id :schema :id] :id (u/the-id (:table_id metric))))]
-    (mi/perms-objects-set table read-or-write)))
+    (i/perms-objects-set table read-or-write)))
 
 (u/strict-extend (class Metric)
   models/IModel
   (merge
    models/IModelDefaults
    {:types      (constantly {:definition :metric-segment-definition})
-    :properties (constantly {:timestamped? true
-                             :entity_id    true})
+    :properties (constantly {:timestamped? true})
     :pre-update pre-update
     :pre-delete pre-delete})
-  mi/IObjectPermissions
+  i/IObjectPermissions
   (merge
-   mi/IObjectPermissionsDefaults
+   i/IObjectPermissionsDefaults
    {:perms-objects-set perms-objects-set
-    :can-read?         (partial mi/current-user-has-full-permissions? :read)
+    :can-read?         (partial i/current-user-has-full-permissions? :read)
     ;; for the time being you need to be a superuser in order to create or update Metrics because the UI for doing so
     ;; is only exposed in the admin panel
-    :can-write?        mi/superuser?
-    :can-create?       mi/superuser?})
-
-  serdes.hash/IdentityHashable
-  {:identity-hash-fields (constantly [:name (serdes.hash/hydrated-hash :table)])})
+    :can-write?        i/superuser?
+    :can-create?       i/superuser?}))
 
 
 ;;; --------------------------------------------------- REVISIONS ----------------------------------------------------

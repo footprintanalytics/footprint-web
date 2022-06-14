@@ -88,7 +88,7 @@ export const queryExecutionTimePerUser = () => ({
   },
 });
 
-export const table = searchString => ({
+export const table = (searchString?: string) => ({
   card: {
     name: "Users",
     display: "table",

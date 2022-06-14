@@ -4,9 +4,8 @@ import _ from "underscore";
 import { t } from "ttag";
 import { connect } from "react-redux";
 import { push } from "react-router-redux";
-import { withRouter } from "react-router";
 
-import Button from "metabase/core/components/Button";
+import Button from "metabase/components/Button";
 import fitViewport from "metabase/hoc/FitViewPort";
 import Modal from "metabase/components/Modal";
 import ModalContent from "metabase/components/ModalContent";
@@ -16,15 +15,16 @@ import {
   FullHeightContainer,
   TabsContainer,
   PermissionPageRoot,
+  HelpButton,
   PermissionPageContent,
   PermissionPageSidebar,
   CloseSidebarButton,
-  ToolbarButtonsContainer,
 } from "./PermissionsPageLayout.styled";
 import { PermissionsEditBar } from "./PermissionsEditBar";
 import { useLeaveConfirmation } from "../../hooks/use-leave-confirmation";
+import { withRouter } from "react-router";
 import { clearSaveError } from "../../permissions";
-import { ToolbarButton } from "../ToolbarButton";
+import Icon from "metabase/components/Icon";
 
 const mapDispatchToProps = {
   navigateToTab: tab => push(`/admin/permissions/${tab}`),
@@ -53,7 +53,6 @@ const propTypes = {
   route: PropTypes.object,
   navigateToTab: PropTypes.func.isRequired,
   helpContent: PropTypes.node,
-  toolbarRightContent: PropTypes.node,
 };
 
 function PermissionsPageLayout({
@@ -69,7 +68,6 @@ function PermissionsPageLayout({
   route,
   navigateToLocation,
   navigateToTab,
-  toolbarRightContent,
   helpContent,
 }) {
   const [shouldShowHelp, setShouldShowHelp] = useState(false);
@@ -109,16 +107,12 @@ function PermissionsPageLayout({
 
         <TabsContainer className="border-bottom">
           <PermissionsTabs tab={tab} onChangeTab={navigateToTab} />
-          <ToolbarButtonsContainer>
-            {toolbarRightContent}
-            {helpContent && !shouldShowHelp && (
-              <ToolbarButton
-                text={t`Permission help`}
-                icon="info"
-                onClick={() => setShouldShowHelp(prev => !prev)}
-              />
-            )}
-          </ToolbarButtonsContainer>
+          {helpContent && !shouldShowHelp && (
+            <HelpButton onClick={() => setShouldShowHelp(prev => !prev)}>
+              <Icon name="info" size={20} mr={1} />
+              {t`Permission help`}
+            </HelpButton>
+          )}
         </TabsContainer>
 
         <FullHeightContainer>{children}</FullHeightContainer>

@@ -1,7 +1,6 @@
-/* eslint-disable react/prop-types */
 import React, { Component } from "react";
 
-import TableInteractive from "../components/TableInteractive/TableInteractive.jsx";
+import TableInteractive from "../components/TableInteractive.jsx";
 import TableSimple from "../components/TableSimple";
 import { t } from "ttag";
 import * as DataGrid from "metabase/lib/data_grid";
@@ -34,12 +33,31 @@ import cx from "classnames";
 
 import { getIn } from "icepick";
 
+import type { DatasetData } from "metabase-types/types/Dataset";
+import type { VisualizationSettings } from "metabase-types/types/Card";
+import type { Series } from "metabase-types/types/Visualization";
+import type { SettingDefs } from "metabase/visualizations/lib/settings";
+import VizControls from "metabase/visualizations/hoc/VizControls";
+
+type Props = {
+  series: Series,
+  settings: VisualizationSettings,
+  isDashboard: boolean,
+};
+type State = {
+  data: ?DatasetData,
+};
+
+@VizControls
 export default class Table extends Component {
+  props: Props;
+  state: State;
+
   static uiName = t`Table`;
   static identifier = "table";
   static iconName = "table";
 
-  static minSize = { width: 4, height: 3 };
+  static minSize = { width: 4, height: 2 };
 
   static isSensible({ cols, rows }) {
     return true;
@@ -80,7 +98,7 @@ export default class Table extends Component {
     return pivotIndex >= 0 && cellIndex >= 0 && normalIndex >= 0;
   }
 
-  static settings = {
+  static settings: SettingDefs = {
     ...columnSettings({ hidden: true }),
     "table.pivot": {
       section: t`Columns`,
@@ -166,17 +184,25 @@ export default class Table extends Component {
       title: t`Visible columns`,
       widget: ChartSettingOrderedColumns,
       getHidden: (series, vizSettings) => vizSettings["table.pivot"],
-      isValid: ([{ card, data }]) =>
+      isValid: ([{ card, data }]) => {
         // If "table.columns" happened to be an empty array,
         // it will be treated as "all columns are hidden",
         // This check ensures it's not empty,
         // otherwise it will be overwritten by `getDefault` below
-        card.visualization_settings["table.columns"].length !== 0 &&
-        _.all(
-          card.visualization_settings["table.columns"],
-          columnSetting =>
-            findColumnIndexForColumnSetting(data.cols, columnSetting) >= 0,
-        ),
+        // Handle the issue of adding invalid fields
+        const dataColCount = data?.cols?.length || 0;
+        const tableColumnsCount =
+          card?.visualization_settings["table.columns"]?.length || 0;
+        return (
+          dataColCount === tableColumnsCount &&
+          tableColumnsCount !== 0 &&
+          _.all(
+            card.visualization_settings["table.columns"],
+            columnSetting =>
+              findColumnIndexForColumnSetting(data.cols, columnSetting) >= 0,
+          )
+        );
+      },
       getDefault: ([
         {
           data: { cols },
@@ -228,10 +254,22 @@ export default class Table extends Component {
       },
       readDependencies: ["table.column_formatting", "table.pivot"],
     },
+    "table.table_transpose": {
+      section: t`Columns`,
+      title: t`Table transpose`,
+      widget: "radio",
+      props: {
+        options: [
+          { name: t`Auto`, value: "auto" },
+          { name: t`Transpose`, value: "transpose" },
+        ],
+      },
+      default: "auto",
+    },
   };
 
   static columnSettings = column => {
-    const settings = {
+    const settings: SettingDefs = {
       column_title: {
         title: t`Column title`,
         widget: "input",
@@ -249,7 +287,7 @@ export default class Table extends Component {
     let defaultValue = !column.semantic_type || isURL(column) ? "link" : null;
 
     const options = [
-      { name: t`Text`, value: null },
+      { name: t`Off`, value: null },
       { name: t`Link`, value: "link" },
     ];
 
@@ -258,7 +296,8 @@ export default class Table extends Component {
       options.push({ name: t`Email link`, value: "email_link" });
     }
     if (!column.semantic_type || isImageURL(column) || isAvatarURL(column)) {
-      defaultValue = isAvatarURL(column) ? "image" : "link";
+      defaultValue =
+        isAvatarURL(column) || isImageURL(column) ? "image" : "link";
       options.push({ name: t`Image`, value: "image" });
     }
     if (!column.semantic_type) {
@@ -268,8 +307,8 @@ export default class Table extends Component {
 
     if (options.length > 1) {
       settings["view_as"] = {
-        title: t`Display as`,
-        widget: options.length === 2 ? "radio" : "select",
+        title: t`View as link or image`,
+        widget: "select",
         default: defaultValue,
         props: {
           options,
@@ -301,7 +340,7 @@ export default class Table extends Component {
     return settings;
   };
 
-  constructor(props) {
+  constructor(props: Props) {
     super(props);
 
     this.state = {
@@ -313,7 +352,7 @@ export default class Table extends Component {
     this._updateData(this.props);
   }
 
-  UNSAFE_componentWillReceiveProps(newProps) {
+  UNSAFE_componentWillReceiveProps(newProps: Props) {
     if (
       newProps.series !== this.props.series ||
       !_.isEqual(newProps.settings, this.props.settings)
@@ -322,7 +361,13 @@ export default class Table extends Component {
     }
   }
 
-  _updateData({ series, settings }) {
+  _updateData({
+    series,
+    settings,
+  }: {
+    series: Series,
+    settings: VisualizationSettings,
+  }) {
     const [{ data }] = series;
 
     if (Table.isPivoted(series, settings)) {
@@ -368,7 +413,7 @@ export default class Table extends Component {
 
   // shared helpers for table implementations
 
-  getColumnTitle = columnIndex => {
+  getColumnTitle = (columnIndex: number): ?string => {
     const cols = this.state.data && this.state.data.cols;
     if (!cols) {
       return null;

@@ -1,0 +1,242 @@
+.Nav {
+  z-index: 4;
+  flex-shrink: 0;
+  height: 60px;
+  padding: 0 20px;
+  border-bottom: 1px solid #dcdde5;
+  position: sticky;
+  top: 0;
+  line-height: 60px;
+  align-items: center;
+  justify-content: space-between;
+  background-color: #fff;
+}
+
+.Nav .ant-drawer-content-wrapper {
+  width: 280px;
+}
+
+.Nav__side-menu-icon {
+  display: none;
+  padding-right: var(--footprint-spacing-l);
+  cursor: pointer;
+  align-items: center;
+  font-size: 18px;
+  color: var(--footprint-color-primary-text);
+}
+
+.Nav__side-menu-icon span {
+  margin-left: var(--footprint-spacing-s);
+}
+
+.Nav__side-menu {
+  flex-direction: column;
+  padding: 0;
+  align-items: flex-start;
+}
+
+.Nav__side-menu .Nav__menu-item {
+  width: 100%;
+  margin-right: 0;
+  padding: 20px 0;
+  border-bottom: 1px solid #dcdde5;
+}
+
+.Nav__side-menu.links {
+  display: flex;
+}
+
+.Nav__side-menu .Nav__right-menu {
+  width: 100%;
+  margin-right: 0;
+  padding: 20px 0;
+  border-bottom: 1px solid #dcdde5;
+  line-height: initial;
+  display: block;
+}
+
+.Nav__menu {
+  display: flex;
+  align-items: center;
+  margin-left: 28px;
+}
+
+.Nav__menu-item {
+  display: flex;
+  align-items: center;
+  position: relative;
+  height: 60px;
+  cursor: pointer;
+  margin-right: 28px;
+}
+
+.Nav__menu-item svg {
+  height: 16px;
+}
+
+.Nav__menu-item-color {
+  color: var(--footprint-color-primary-text);
+}
+
+.Nav__menu-item-color--select {
+  color: var(--footprint-color-main);
+}
+
+.Nav__menu-item img {
+  width: 16px;
+}
+
+.Nav__menu-item span {
+  margin-left: 10px;
+  white-space: nowrap;
+}
+
+.Nav__menu-item--select {
+  background-color: #3434b2;
+  height: 4px;
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+}
+
+.Nav__search-bar {
+  min-width: 100px;
+  max-width: 360px;
+  margin: 0 12px;
+  flex: 1;
+}
+
+.Nav__right-menu-mobile {
+  display: none;
+}
+
+.Nav__search-bar input {
+  height: 100%;
+}
+
+.Nav__left,
+.Nav__right {
+  display: flex;
+  align-items: center;
+}
+
+.Nav__right-menus {
+  display: flex;
+  align-items: center;
+}
+
+.Nav__right-menu {
+  margin-right: var(--footprint-spacing-l);
+  cursor: pointer;
+  white-space: nowrap;
+  height: 60px;
+  line-height: 60px;
+}
+
+.Nav__right-menu:hover {
+  color: #3434b2;
+}
+
+.Nav__right-menu-select {
+  border-bottom: 4px solid #3434b2 !important;
+}
+
+.Nav__menu-create {
+  display: flex;
+  align-items: center;
+  color: white;
+  padding: var(--footprint-spacing-xs) var(--footprint-spacing-s);
+  border-radius: 4px;
+  cursor: pointer;
+  margin: 0 var(--footprint-spacing-s);
+}
+
+.Nav__menu-create span {
+  margin-left: var(--footprint-spacing-xs);
+}
+
+.Nav__sign-up {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: 1px solid #3434b2;
+  color: #3434b2;
+  font-size: 14px;
+  padding: 0 18px;
+  cursor: pointer;
+  border-radius: 6px;
+  white-space: nowrap;
+  height: 32px;
+}
+
+.Nav__sign-up:hover {
+  color: #3434b2;
+}
+
+.Nav__right-mobile-icon,
+.Nav__right-pad-icon {
+  margin: 0 var(--footprint-spacing-xs);
+  display: none;
+}
+
+.Nav__right-mobile-icon a,
+.Nav__right-pad-icon a {
+  display: flex;
+  align-items: center;
+  padding: 0 var(--footprint-spacing-s);
+}
+
+.Nav__mobile-logo {
+  display: none;
+  position: unset;
+  left: unset;
+}
+
+.dashboards__news {
+  max-width: 300px;
+}
+
+@media screen and (--footprint-breakpoint-max-pad) {
+  .Nav__menu,
+  .Nav__menu-create,
+  .Nav__search-bar,
+  .Nav__right-menus,
+  .Nav__left .Nav__logo,
+  .Nav__right-mobile-icon,
+  .Nav__right-menu {
+    display: none;
+  }
+
+  .Nav__right-pad-icon,
+  .Nav__side-menu-icon {
+    display: flex;
+  }
+
+  .Nav__mobile-logo {
+    display: flex;
+    position: absolute;
+    left: 50%;
+    margin-left: -20px;
+  }
+
+  .dashboards__news {
+    max-width: 100%;
+  }
+
+  .Nav__sign-up {
+    padding: 0 8px;
+    height: 28px;
+    font-size: 12px;
+  }
+}
+
+@media screen and (--footprint-breakpoint-max-mobile) {
+  .Nav__right-mobile-icon {
+    display: flex;
+  }
+
+  .Nav__right-pad-icon {
+    display: none;
+  }
+}

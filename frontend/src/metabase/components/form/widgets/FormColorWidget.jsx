@@ -1,15 +1,16 @@
 /* eslint-disable react/prop-types */
 import React from "react";
 
-import { getAccentColors } from "metabase/lib/colors/groups";
-import ColorSelector from "metabase/core/components/ColorSelector";
+import ColorPicker from "metabase/components/ColorPicker";
 
 const FormColorWidget = ({ field, initial }) => (
   <div>
-    <ColorSelector
+    <ColorPicker
       {...field}
-      value={field.value || initial()}
-      colors={getAccentColors()}
+      value={
+        // if the field has a value use that, otherwise use the initial
+        field.value || initial()
+      }
     />
   </div>
 );

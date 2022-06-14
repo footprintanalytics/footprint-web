@@ -7,14 +7,15 @@
             [clojure.tools.logging :as log]
             [medley.core :as m]
             [metabase.driver :as driver]
+            [metabase.driver.common :as driver.common]
             [metabase.driver.presto-common :as presto-common]
             [metabase.driver.sql-jdbc.sync.describe-database :as sql-jdbc.describe-database]
             [metabase.driver.sql.util :as sql.u]
             [metabase.driver.sql.util.unprepare :as unprepare]
-            [metabase.query-processor.context :as qp.context]
+            [metabase.query-processor.context :as context]
             [metabase.query-processor.store :as qp.store]
             [metabase.query-processor.timezone :as qp.timezone]
-            [metabase.query-processor.util :as qp.util]
+            [metabase.query-processor.util :as qputil]
             [metabase.util :as u]
             [metabase.util.date-2 :as u.date]
             [metabase.util.i18n :refer [trs tru]]
@@ -237,23 +238,24 @@
    context
    respond]
   (let [sql     (str "-- "
-                     (qp.util/query->remark :presto outer-query) "\n"
+                     (qputil/query->remark :presto outer-query) "\n"
                      (binding [presto-common/*param-splice-style* :paranoid]
                        (unprepare/unprepare driver (cons sql params))))
         details (merge (:details (qp.store/database))
                        settings)]
-    (execute-presto-query details sql (qp.context/canceled-chan context) respond)))
+    (execute-presto-query details sql (context/canceled-chan context) respond)))
 
 (defmethod driver/humanize-connection-error-message :presto
   [_ message]
   (condp re-matches message
     #"^java.net.ConnectException: Connection refused.*$"
-    :cannot-connect-check-host-and-port
+    (driver.common/connection-error-messages :cannot-connect-check-host-and-port)
 
     #"^clojure.lang.ExceptionInfo: Catalog .* does not exist.*$"
-    :database-name-incorrect
+    (driver.common/connection-error-messages :database-name-incorrect)
 
     #"^java.net.UnknownHostException.*$"
-    :invalid-hostname
+    (driver.common/connection-error-messages :invalid-hostname)
 
+    #".*"                               ; default
     message))

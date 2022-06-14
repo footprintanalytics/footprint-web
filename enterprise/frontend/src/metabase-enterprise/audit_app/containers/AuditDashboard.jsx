@@ -1,4 +1,3 @@
-/* eslint-disable react/prop-types */
 import React from "react";
 
 import { connect } from "react-redux";
@@ -12,9 +11,15 @@ const DashboardWithData = DashboardData(Dashboard);
 
 import { AuditMode } from "../lib/mode";
 
-import { getAccentColors } from "metabase/lib/colors/groups";
+import type { AuditCard } from "../types";
 
-const AuditDashboard = ({ cards, ...props }) => (
+import { harmony } from "metabase/lib/colors";
+
+type Props = {
+  cards: AuditCard[],
+};
+
+const AuditDashboard = ({ cards, ...props }: Props) => (
   <DashboardWithData
     style={{ backgroundColor: "transparent", padding: 0 }}
     // HACK: to get inline dashboards working quickly
@@ -26,7 +31,7 @@ const AuditDashboard = ({ cards, ...props }) => (
         sizeY: h,
         visualization_settings: {
           // use the legacy "graph.colors" settings with color harmony to force brand color, etc
-          "graph.colors": getAccentColors({ harmony: true }),
+          "graph.colors": harmony,
           // we want to hide the background to help make the charts feel
           // like they're part of the page, so turn off the background
           "dashcard.background": false,

@@ -10,14 +10,14 @@
 (defn- add-source-metadata [query]
   (driver/with-driver :h2
     (mt/with-everything-store
-      (add-source-metadata/add-source-metadata-for-source-queries query))))
+      (:pre (mt/test-qp-middleware add-source-metadata/add-source-metadata-for-source-queries query)))))
 
 (defn- results-metadata [query-results]
   (for [col (-> query-results :data :cols)]
     (select-keys
      col
      [:id :table_id :name :display_name :base_type :effective_type :coercion_strategy
-      :semantic_type :unit :fingerprint :settings :field_ref :nfc_path :parent_id])))
+      :semantic_type :unit :fingerprint :settings :field_ref :parent_id])))
 
 (defn- venues-source-metadata
   ([]

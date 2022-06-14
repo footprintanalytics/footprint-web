@@ -4,16 +4,16 @@ import {
   modal,
   popover,
   setupSMTP,
-  describeEE,
+  describeWithToken,
 } from "__support__/e2e/cypress";
 import { USERS, USER_GROUPS } from "__support__/e2e/cypress_data";
-import { SAMPLE_DATABASE } from "__support__/e2e/cypress_sample_database";
+import { SAMPLE_DATASET } from "__support__/e2e/cypress_sample_dataset";
 
 const { normal, admin } = USERS;
 const { DATA_GROUP } = USER_GROUPS;
 const TOTAL_USERS = Object.entries(USERS).length;
 const TOTAL_GROUPS = Object.entries(USER_GROUPS).length;
-const { ORDERS_ID } = SAMPLE_DATABASE;
+const { ORDERS_ID } = SAMPLE_DATASET;
 
 describe("scenarios > admin > people", () => {
   beforeEach(() => {
@@ -100,7 +100,7 @@ describe("scenarios > admin > people", () => {
       cy.contains("Email address already in use.");
     });
 
-    it("'Invite someone' button shouldn't be covered/blocked on smaller screen sizes (metabase#16350)", () => {
+    it.skip("'Invite someone' button shouldn't be covered/blocked on smaller screen sizes (metabase#16350)", () => {
       cy.viewport(1000, 600);
 
       cy.visit("/admin/people");
@@ -173,7 +173,7 @@ describe("scenarios > admin > people", () => {
       cy.findByText("Reset password").click();
       cy.findByText(`Reset ${FULL_NAME}'s password?`);
       clickButton("Reset password");
-      cy.findByText(`${FULL_NAME}'s password has been reset`);
+      cy.findByText(`${first_name}'s password has been reset`);
       cy.findByText(/^temporary password$/i);
       clickButton("Done");
     });
@@ -189,7 +189,7 @@ describe("scenarios > admin > people", () => {
       cy.findByText("Reset password").click();
       cy.findByText(`Reset ${FULL_NAME}'s password?`);
       clickButton("Reset password");
-      cy.findByText(`${FULL_NAME}'s password has been reset`).should(
+      cy.findByText(`${first_name}'s password has been reset`).should(
         "not.exist",
       );
       cy.findByText(/^temporary password$/i).should("not.exist");
@@ -215,7 +215,7 @@ describe("scenarios > admin > people", () => {
       generateGroups(51);
 
       cy.visit("/admin/people/groups");
-      cy.get("main").scrollTo("bottom");
+      cy.scrollTo("bottom");
       cy.findByText("readonly");
     });
 
@@ -223,24 +223,14 @@ describe("scenarios > admin > people", () => {
       const NEW_USERS = 18;
       const NEW_TOTAL_USERS = TOTAL_USERS + NEW_USERS;
 
-      const waitForUserRequests = () => {
-        cy.wait("@users");
-        cy.wait("@memberships");
-      };
-
       beforeEach(() => {
         generateUsers(NEW_USERS);
-
-        cy.intercept("GET", "/api/user*").as("users");
-        cy.intercept("GET", "/api/permissions/membership").as("memberships");
       });
 
       it("should allow paginating people forward and backward", () => {
         const PAGE_SIZE = 25;
 
         cy.visit("/admin/people");
-
-        waitForUserRequests();
 
         // Total
         cy.findByText(`${NEW_TOTAL_USERS} people found`);
@@ -251,17 +241,13 @@ describe("scenarios > admin > people", () => {
         cy.findByTestId("previous-page-btn").should("be.disabled");
 
         cy.findByTestId("next-page-btn").click();
-        waitForUserRequests();
-        cy.findByText("Loading...").should("not.exist");
 
         // Page 2
-        cy.findByTextEnsureVisible(`${PAGE_SIZE + 1} - ${NEW_TOTAL_USERS}`);
+        cy.findByText(`${PAGE_SIZE + 1} - ${NEW_TOTAL_USERS}`);
         assertTableRowsCount(NEW_TOTAL_USERS % PAGE_SIZE);
         cy.findByTestId("next-page-btn").should("be.disabled");
 
         cy.findByTestId("previous-page-btn").click();
-        cy.wait("@users");
-        cy.findByText("Loading...").should("not.exist");
 
         // Page 1
         cy.findByText(`1 - ${PAGE_SIZE}`);
@@ -281,17 +267,13 @@ describe("scenarios > admin > people", () => {
         cy.findByTestId("previous-page-btn").should("be.disabled");
 
         cy.findByTestId("next-page-btn").click();
-        waitForUserRequests();
-        cy.findByText("Loading...").should("not.exist");
 
         // Page 2
-        cy.findByTextEnsureVisible(`${PAGE_SIZE + 1} - ${NEW_TOTAL_USERS}`);
+        cy.findByText(`${PAGE_SIZE + 1} - ${NEW_TOTAL_USERS}`);
         assertTableRowsCount(NEW_TOTAL_USERS % PAGE_SIZE);
         cy.findByTestId("next-page-btn").should("be.disabled");
 
         cy.findByTestId("previous-page-btn").click();
-        cy.wait("@users");
-        cy.findByText("Loading...").should("not.exist");
 
         // Page 1
         cy.findByText(`1 - ${PAGE_SIZE}`);
@@ -301,7 +283,7 @@ describe("scenarios > admin > people", () => {
   });
 });
 
-describeEE("scenarios > admin > people", () => {
+describeWithToken("scenarios > admin > people", () => {
   beforeEach(() => {
     restore();
     cy.signInAsAdmin();

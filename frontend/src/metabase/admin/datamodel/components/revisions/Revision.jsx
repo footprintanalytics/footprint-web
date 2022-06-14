@@ -46,7 +46,7 @@ export default class Revision extends Component {
     if (user.id === currentUser.id) {
       return t`You`;
     } else {
-      return user.common_name;
+      return user.first_name;
     }
   }
 
@@ -79,7 +79,7 @@ export default class Revision extends Component {
               <strong>{this.getName()}</strong> {this.getAction()}
             </span>
             <span className="flex-align-right h5">
-              {moment(revision.timestamp).format("MMMM DD, YYYY")}
+              {moment(revision.timestamp).format("YYYY-MM-DD")}
             </span>
           </div>
           {message && <p>&quot;{message}&quot;</p>}

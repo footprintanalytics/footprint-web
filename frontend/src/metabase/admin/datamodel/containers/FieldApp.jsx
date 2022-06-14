@@ -16,7 +16,7 @@ import { humanizeCoercionStrategy } from "./humanizeCoercionStrategy";
 
 import Icon from "metabase/components/Icon";
 import InputBlurChange from "metabase/components/InputBlurChange";
-import Select from "metabase/core/components/Select";
+import Select from "metabase/components/Select";
 import SaveStatus from "metabase/components/SaveStatus";
 import Breadcrumbs from "metabase/components/Breadcrumbs";
 import LoadingAndErrorWrapper from "metabase/components/LoadingAndErrorWrapper";
@@ -44,10 +44,15 @@ import { getMetadata } from "metabase/selectors/metadata";
 import { rescanFieldValues, discardFieldValues } from "../field";
 
 // LIB
+import Metadata from "metabase-lib/lib/metadata/Metadata";
 import { has_field_values_options } from "metabase/lib/core";
 import { getGlobalSettingsForColumn } from "metabase/visualizations/lib/settings/column";
 import { isCurrency } from "metabase/lib/schema_metadata";
 
+import type { ColumnSettings as ColumnSettingsType } from "metabase-types/types/Dataset";
+import type { DatabaseId } from "metabase-types/types/Database";
+import type { TableId } from "metabase-types/types/Table";
+import type { FieldId } from "metabase-types/types/Field";
 import Databases from "metabase/entities/databases";
 import Tables from "metabase/entities/tables";
 import Fields from "metabase/entities/fields";
@@ -59,10 +64,6 @@ const mapStateToProps = (state, props) => {
     databaseId,
     fieldId,
     field: Fields.selectors.getObjectUnfiltered(state, { entityId: fieldId }),
-    fieldsError: Fields.selectors.getError(state, {
-      entityId: fieldId,
-      requestType: "values",
-    }),
     tableId: parseInt(props.params.tableId),
     metadata: getMetadata(state),
     idfields: Databases.selectors.getIdfields(state, { databaseId }),
@@ -73,7 +74,7 @@ const mapDispatchToProps = {
   fetchDatabaseMetadata: Databases.actions.fetchDatabaseMetadata,
   fetchTableMetadata: Tables.actions.fetchMetadataAndForeignTables,
   fetchFieldValues: Fields.actions.fetchFieldValues,
-  updateField: Fields.actions.updateField,
+  updateField: Fields.actions.update,
   updateFieldValues: Fields.actions.updateFieldValues,
   updateFieldDimension: Fields.actions.updateFieldDimension,
   deleteFieldDimension: Fields.actions.deleteFieldDimension,
@@ -81,9 +82,33 @@ const mapDispatchToProps = {
   discardFieldValues,
 };
 
-class FieldApp extends React.Component {
+@connect(mapStateToProps, mapDispatchToProps)
+export default class FieldApp extends React.Component {
   state = {
     tab: "general",
+  };
+
+  props: {
+    databaseId: DatabaseId,
+    tableId: TableId,
+    fieldId: FieldId,
+    field: Object,
+    metadata: Metadata,
+    idfields: Object[],
+
+    fetchDatabaseMetadata: Object => Promise<void>,
+    fetchTableMetadata: Object => Promise<void>,
+    fetchFieldValues: Object => Promise<void>,
+    updateField: any => Promise<void>,
+    updateFieldValues: any => Promise<void>,
+    updateFieldDimension: (Object, any) => Promise<void>,
+    deleteFieldDimension: Object => Promise<void>,
+
+    rescanFieldValues: FieldId => Promise<void>,
+    discardFieldValues: FieldId => Promise<void>,
+
+    location: any,
+    params: any,
   };
 
   constructor(props) {
@@ -91,7 +116,7 @@ class FieldApp extends React.Component {
     this.saveStatusRef = React.createRef();
   }
 
-  async componentDidMount() {
+  async UNSAFE_componentWillMount() {
     const {
       databaseId,
       tableId,
@@ -118,11 +143,11 @@ class FieldApp extends React.Component {
 
       // always load field values even though it's only needed if
       // has_field_values === "list"
-      fetchFieldValues({ id: fieldId }),
+      fetchFieldValues({ id: fieldId, table_id: tableId }),
     ]);
   }
 
-  linkWithSaveStatus = saveMethod => async (...args) => {
+  linkWithSaveStatus = (saveMethod: Function) => async (...args: any[]) => {
     this.saveStatusRef.current && this.saveStatusRef.current.setSaving();
     await saveMethod(...args);
     this.saveStatusRef.current && this.saveStatusRef.current.setSaved();
@@ -152,7 +177,7 @@ class FieldApp extends React.Component {
     this.props.deleteFieldDimension,
   );
 
-  onUpdateFieldSettings = settings => {
+  onUpdateFieldSettings = (settings: ColumnSettingsType): void => {
     return this.onUpdateFieldProperties({ settings });
   };
 
@@ -160,7 +185,6 @@ class FieldApp extends React.Component {
     const {
       metadata,
       field,
-      fieldsError,
       databaseId,
       tableId,
       idfields,
@@ -221,7 +245,6 @@ class FieldApp extends React.Component {
               {section == null || section === "general" ? (
                 <FieldGeneralPane
                   field={field}
-                  fieldsError={fieldsError}
                   idfields={idfields}
                   table={table}
                   metadata={metadata}
@@ -247,11 +270,8 @@ class FieldApp extends React.Component {
   }
 }
 
-export default connect(mapStateToProps, mapDispatchToProps)(FieldApp);
-
 const FieldGeneralPane = ({
   field,
-  fieldsError,
   idfields,
   table,
   metadata,
@@ -351,7 +371,6 @@ const FieldGeneralPane = ({
         field={field}
         table={table}
         fields={metadata.fields}
-        fieldsError={fieldsError}
         updateFieldProperties={onUpdateFieldProperties}
         updateFieldValues={onUpdateFieldValues}
         updateFieldDimension={onUpdateFieldDimension}
@@ -385,14 +404,19 @@ const FieldSettingsPane = ({ field, onUpdateFieldSettings }) => (
         )
       }
       inheritedSettings={getGlobalSettingsForColumn(field)}
-      forcefullyShowHiddenSettings
     />
   </Section>
 );
 
 // TODO: Should this invoke goBack() instead?
 // not sure if it's possible to do that neatly with Link component
-export const BackButton = ({ databaseId, tableId }) => (
+export const BackButton = ({
+  databaseId,
+  tableId,
+}: {
+  databaseId: DatabaseId,
+  tableId: TableId,
+}) => (
   <Link
     to={`/admin/datamodel/database/${databaseId}/table/${tableId}`}
     className="circle text-white p2 flex align-center justify-center bg-dark bg-brand-hover"
@@ -402,7 +426,15 @@ export const BackButton = ({ databaseId, tableId }) => (
 );
 
 export class FieldHeader extends React.Component {
-  onNameChange = async e => {
+  onNameChange = (e: { target: HTMLInputElement }) => {
+    this.updateNameDebounced(e.target.value);
+  };
+  onDescriptionChange = (e: { target: HTMLInputElement }) => {
+    this.updateDescriptionDebounced(e.target.value);
+  };
+
+  // Separate update methods because of throttling the input
+  updateNameDebounced = _.debounce(async name => {
     const { field, updateFieldProperties, updateFieldDimension } = this.props;
 
     // Update the dimension name if it exists
@@ -413,19 +445,19 @@ export class FieldHeader extends React.Component {
         {
           type: field.dimensions.type,
           human_readable_field_id: field.dimensions.human_readable_field_id,
-          name: e.target.value,
+          name,
         },
       );
     }
 
     // todo: how to treat empty / too long strings? see how this is done in Column
-    updateFieldProperties({ display_name: e.target.value });
-  };
+    updateFieldProperties({ display_name: name });
+  }, 300);
 
-  onDescriptionChange = e => {
+  updateDescriptionDebounced = _.debounce(description => {
     const { updateFieldProperties } = this.props;
-    updateFieldProperties({ description: e.target.value });
-  };
+    updateFieldProperties({ description });
+  }, 300);
 
   render() {
     return (
@@ -434,14 +466,14 @@ export class FieldHeader extends React.Component {
           name="display_name"
           className="h2 AdminInput bordered rounded border-dark block mb1"
           value={this.props.field.display_name}
-          onBlurChange={this.onNameChange}
+          onChange={this.onNameChange}
           placeholder={this.props.field.name}
         />
         <InputBlurChange
           name="description"
           className="text AdminInput bordered input text-measure block full"
           value={this.props.field.description}
-          onBlurChange={this.onDescriptionChange}
+          onChange={this.onDescriptionChange}
           placeholder={t`No description for this field yet`}
         />
       </div>

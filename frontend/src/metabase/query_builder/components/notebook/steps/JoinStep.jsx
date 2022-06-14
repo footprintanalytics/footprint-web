@@ -5,12 +5,16 @@ import { t } from "ttag";
 
 import PopoverWithTrigger from "metabase/components/PopoverWithTrigger";
 
-import { DataSourceSelector } from "metabase/query_builder/components/DataSelector";
+import { DatabaseSchemaAndTableDataSelector } from "metabase/query_builder/components/DataSelector";
 import FieldList from "metabase/query_builder/components/FieldList";
 import Join from "metabase-lib/lib/queries/structured/Join";
 import { isDateTimeField } from "metabase/lib/query/field_ref";
 
-import { NotebookCellItem, NotebookCellAdd } from "../NotebookCell";
+import {
+  NotebookCell,
+  NotebookCellItem,
+  NotebookCellAdd,
+} from "../NotebookCell";
 import {
   FieldsPickerIcon,
   FieldPickerContentContainer,
@@ -35,8 +39,6 @@ import {
   RemoveDimensionIcon,
   RemoveJoinIcon,
   Row,
-  PrimaryJoinCell,
-  SecondaryJoinCell,
 } from "./JoinStep.styled";
 
 const stepShape = {
@@ -209,7 +211,7 @@ function JoinClause({ color, join, updateQuery, showRemove }) {
 
   return (
     <JoinClauseRoot>
-      <PrimaryJoinCell color={color}>
+      <NotebookCell color={color} flex={1} alignSelf="start">
         <NotebookCellItem color={color}>
           {lhsTable?.displayName() || t`Previous results`}
         </NotebookCellItem>
@@ -224,15 +226,18 @@ function JoinClause({ color, join, updateQuery, showRemove }) {
           updateQuery={updateQuery}
           onSourceTableSet={onSourceTableSet}
         />
-      </PrimaryJoinCell>
+      </NotebookCell>
 
       {joinedTable && (
         <React.Fragment>
           <JoinWhereConditionLabelContainer>
             <JoinWhereConditionLabel />
           </JoinWhereConditionLabelContainer>
-          <SecondaryJoinCell
+          <NotebookCell
             color={color}
+            flex={1}
+            flexDirection="column"
+            align="start"
             padding={hasAtLeastOneDimensionSelected && "8px"}
           >
             {displayConditions.map((condition, index) => {
@@ -315,7 +320,7 @@ function JoinClause({ color, join, updateQuery, showRemove }) {
                 </JoinDimensionControlsContainer>
               );
             })}
-          </SecondaryJoinCell>
+          </NotebookCell>
         </React.Fragment>
       )}
 
@@ -394,7 +399,9 @@ function JoinTablePicker({
     newJoin.parent().update(updateQuery);
     onSourceTableSet(newJoin);
   }
-
+  // const showSavedChart = isDefi360();
+  // const databaseQuery = showSavedChart ? { saved: true } : {};
+  const databaseQuery = {};
   return (
     <NotebookCellItem
       color={color}
@@ -412,11 +419,12 @@ function JoinTablePicker({
       containerStyle={FIELDS_PICKER_STYLES.notebookItemContainer}
       rightContainerStyle={FIELDS_PICKER_STYLES.notebookRightItemContainer}
     >
-      <DataSourceSelector
+      <DatabaseSchemaAndTableDataSelector
         hasTableSearch
         canChangeDatabase={false}
         databases={databases}
         tableFilter={table => table.db_id === query.database().id}
+        databaseQuery={databaseQuery}
         selectedDatabaseId={query.databaseId()}
         selectedTableId={join.joinSourceTableId()}
         setSourceTableFn={onChange}
@@ -459,7 +467,7 @@ function JoinTypePicker({ join, color, updateQuery }) {
           />
         ) : (
           <NotebookCellItem color={color}>
-            {t`Choose a join type`}
+            {`Choose a join type`}
           </NotebookCellItem>
         )
       }
@@ -598,7 +606,10 @@ class JoinDimensionPicker extends React.Component {
 
     return (
       <PopoverWithTrigger
+        id="DataPopover"
+        autoWidth
         ref={ref => (this._popover = ref)}
+        sizeToFit
         triggerElement={
           <JoinDimensionCellItem
             dimension={dimension}

@@ -5,7 +5,7 @@
             [metabuild-common.files :as files]
             [metabuild-common.input :as input]
             [metabuild-common.misc :as misc]
-            [metabuild-common.output :as out]
+            [metabuild-common.output :as output]
             [metabuild-common.shell :as shell]
             [metabuild-common.steps :as steps]
             [potemkin :as p]))
@@ -19,7 +19,7 @@
          files/keep-me
          input/keep-me
          misc/keep-me
-         out/keep-me
+         output/keep-me
          shell/keep-me
          steps/keep-me)
 
@@ -60,7 +60,7 @@
   parse-as-keyword
   varargs]
 
- [out
+ [output
   announce
   error
   pretty-print-exception

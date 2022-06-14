@@ -17,7 +17,7 @@
   (throw (RuntimeException. "You cannot update a Session.")))
 
 (defn- pre-insert [session]
-  (cond-> session
+  (cond-> (assoc session :created_at :%now)
     (some-> mw.misc/*request* request.u/embedded?) (assoc :anti_csrf_token (random-anti-csrf-token))))
 
 (defn- post-insert [{anti-csrf-token :anti_csrf_token, :as session}]
@@ -30,5 +30,4 @@
    models/IModelDefaults
    {:pre-insert  pre-insert
     :post-insert post-insert
-    :pre-update  pre-update
-    :properties  (constantly {:created-at-timestamped? true})}))
+    :pre-update  pre-update}))

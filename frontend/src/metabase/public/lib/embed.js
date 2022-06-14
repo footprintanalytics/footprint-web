@@ -1,7 +1,7 @@
 import querystring from "querystring";
 
 // using jsrsasign because jsonwebtoken doesn't work on the web :-/
-import KJUR from "jsrsasign";
+import KJUR from "jsrsasign/lib/jsrsasign-jwths-min";
 
 export function getSignedToken(
   resourceType,
@@ -52,6 +52,12 @@ export function getUnsignedPreviewUrl(
   options,
 ) {
   return `${siteUrl}/public/${resourceType}/${resourceId}${optionsToHashParams(
+    options,
+  )}`;
+}
+
+export function getGuestPreviewUrl(siteUrl, resourceType, resourceId, options) {
+  return `${siteUrl}/guest/${resourceType}/${resourceId}${optionsToHashParams(
     options,
   )}`;
 }

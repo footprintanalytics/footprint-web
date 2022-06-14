@@ -1,0 +1,266 @@
+.defi-dashboard {
+  min-width: 900px;
+}
+
+.defi-dashboard__select .ant-select-selector,
+.defi-dashboard__submit {
+  border-radius: 4px !important;
+}
+
+.defi-dashboard__upload {
+  background-color: #fff;
+  padding: 40px 100px;
+}
+
+.defi-dashboard__upload-title {
+  font-size: 30px;
+  color: #313541;
+  padding-bottom: 40px;
+  border-bottom: 1px solid #d8d8d8;
+  margin-bottom: 40px;
+}
+
+.defi-dashboard__upload-btn {
+  width: 180px;
+  height: 48px;
+  font-size: 16px;
+  border-radius: 2px;
+  margin-bottom: 20px;
+}
+
+.defi-dashboard__upload-template {
+  font-size: 16px;
+  color: #666c80;
+  margin-bottom: 0;
+  line-height: 1;
+}
+
+.defi-dashboard__upload-template a {
+  color: #5c5ce0;
+  text-decoration: underline;
+}
+
+.defi-dashboard__upload-wrap {
+  display: flex;
+}
+
+@media (max-width: 1500px) {
+  .defi-dashboard__upload-wrap {
+    flex-direction: column;
+  }
+
+  .defi-dashboard__upload-wrap-left {
+    margin-right: 0;
+    margin-bottom: 40px;
+  }
+}
+
+.defi-dashboard__upload-wrap-left {
+  width: 480px;
+  height: 480px;
+  margin-right: 40px;
+}
+
+.defi-dashboard__upload-dragger {
+  border-radius: 8px !important;
+  border-color: #979797 !important;
+  background-color: #fafafc !important;
+}
+
+.defi-dashboard__upload-dragger img {
+  width: 95px;
+  height: 96px;
+}
+
+.defi-dashboard__upload-dragger .defi-dashboard__upload-dragger-msg {
+  font-size: 18px;
+  color: #313541;
+  text-align: center;
+  margin: 20px 0;
+}
+
+.defi-dashboard__upload-wrap-right {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  height: 480px;
+}
+
+.defi-dashboard__upload-tips h4 {
+  font-size: 18px;
+  color: #313541;
+  margin-bottom: 20px;
+}
+
+.defi-dashboard__upload-tips h4 span {
+  color: #ff4d4f;
+  font-weight: 400;
+  font-size: 14px;
+}
+
+.defi-dashboard__upload-tips-table {
+  position: relative;
+  width: max-content;
+}
+
+.defi-dashboard__upload-tips-table table,
+.defi-dashboard__upload-tips-table td {
+  border: 1px solid #dcdee4;
+}
+
+.defi-dashboard__upload-tips-table td {
+  padding: 10px 15px;
+  line-height: 1;
+}
+
+.defi-dashboard__upload-tips-table thead {
+  background-color: #e6fff5;
+}
+
+.defi-dashboard__upload-tips-table thead span {
+  color: #ff4d4f;
+}
+
+.defi-dashboard__upload-tips-table img {
+  position: absolute;
+  right: -18px;
+  bottom: -18px;
+  width: 36px;
+  height: 36px;
+}
+
+.defi-dashboard__sider {
+  position: fixed;
+  left: 0;
+  bottom: 0;
+  top: 60px;
+  width: 340px;
+  overflow: hidden;
+  background-color: #fff;
+  border-right: 1px solid #dcdee4;
+  display: flex;
+  justify-content: space-between;
+}
+
+.defi-dashboard__sider-main-menu {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+
+.defi-dashboard__sider-main-menu-toggle {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-color: #f9f9f9;
+  height: 28px;
+  cursor: pointer;
+}
+
+.defi-dashboard__sider-main-menu-toggle img {
+  width: 20px;
+  height: 13px;
+  user-select: none;
+}
+
+.defi-dashboard__sider-main-menu-toggle--right img {
+  transform: rotate(180deg);
+}
+
+.defi-dashboard__sider-main-menu-top {
+  width: 100px;
+  padding: 10px;
+}
+
+.defi-dashboard__sider-main-menu-top-item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  cursor: pointer;
+  margin-bottom: 10px;
+  padding: 16px 4px;
+}
+
+.defi-dashboard__sider-main-menu-top-item h2 {
+  font-size: 14px;
+  color: #acacb2;
+  font-weight: 400;
+  margin-top: 8px;
+  line-height: 16px;
+}
+
+.defi-dashboard__sider-main-menu-top-item svg {
+  fill: #303440;
+}
+
+.defi-dashboard__sider-main-menu-top-item:hover,
+.defi-dashboard__sider-main-menu-top-item--active {
+  background-color: #f6f6fe;
+  border-radius: 4px;
+}
+
+.defi-dashboard__sider-main-menu-top-item:hover h2,
+.defi-dashboard__sider-main-menu-top-item--active h2 {
+  color: #3434b2;
+}
+
+.defi-dashboard__sider-main-menu-top-item:hover svg,
+.defi-dashboard__sider-main-menu-top-item--active svg {
+  fill: #3434b2;
+}
+
+.defi-dashboard__sider-main-menu-tool {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.defi-dashboard__sider-main-menu-tool li {
+  margin-bottom: 24px;
+}
+
+.defi-dashboard__sider-sub-menu {
+  width: 240px;
+  border-left: 1px solid #dcdee4;
+  padding: 0 10px;
+}
+
+.defi-dashboard__sider-sub-menu-parent h3 {
+  font-size: 16px;
+  color: #303440;
+  padding-left: 10px;
+  margin-top: 15px;
+}
+
+.defi-dashboard__sider-sub-menu-children {
+  line-height: 30px;
+  height: 30px;
+  cursor: pointer;
+  margin: 10px 0;
+}
+
+.defi-dashboard__sider-sub-menu-children h4 {
+  font-weight: 400;
+  font-size: 14px;
+  color: #666c80;
+  padding-left: 30px;
+}
+
+.defi-dashboard__sider-sub-menu-children:hover,
+.defi-dashboard__sider-sub-menu-children--active {
+  background-color: #f6f6fe;
+  border-radius: 4px;
+}
+
+.defi-dashboard__sider-sub-menu-children:hover h4,
+.defi-dashboard__sider-sub-menu-children--active h4 {
+  color: #3434b2;
+}
+
+.defi-dashboard__content {
+  padding: 20px;
+  background-color: #fafafc;
+  margin-left: 340px;
+}

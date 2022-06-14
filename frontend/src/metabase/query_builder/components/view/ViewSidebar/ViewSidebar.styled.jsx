@@ -1,22 +1,23 @@
-import styled from "@emotion/styled";
-import { css } from "@emotion/react";
+import styled, { css } from "styled-components";
 
 import { color } from "metabase/lib/colors";
 
 export const ViewSidebarAside = styled.aside`
   overflow-x: hidden;
   overflow-y: auto;
+  opacity: 0;
   position: relative;
+  transition: width 0.3s, opacity 0.3s;
   width: 0;
 
-  ${({ isOpen, side }) =>
+  ${({ side }) =>
     side === "left"
       ? css`
-          border-right: ${isOpen ? `1px solid ${color("border")}` : "none"};
+          border-right: 1px solid ${color("border")};
           left: 0;
         `
       : css`
-          border-left: ${isOpen ? `1px solid ${color("border")}` : "none"};
+          border-left: 1px solid ${color("border")};
           right: 0;
         `}
 
@@ -24,17 +25,17 @@ export const ViewSidebarAside = styled.aside`
     isOpen &&
     width &&
     css`
+      opacity: 1;
       width: ${width}px;
     `}
+
+  @media (prefers-reduced-motion) {
+    transition: none;
+  }
 `;
 
 export const ViewSidebarContent = styled.div`
   position: absolute;
   height: 100%;
-
-  ${({ widthProp: width }) =>
-    width &&
-    css`
-      width: ${width}px;
-    `}
+  width: 100%;
 `;

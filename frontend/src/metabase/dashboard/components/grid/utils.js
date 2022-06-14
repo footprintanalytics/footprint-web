@@ -1,3 +1,4 @@
+/* eslint-disable curly */
 import _ from "underscore";
 import { color } from "metabase/lib/colors";
 
@@ -13,7 +14,9 @@ export function generateMobileLayout({
   const mobile = [];
   desktopLayout.forEach(item => {
     const card = item.dashcard.card;
-    const height = heightByDisplayType[card.display] || defaultCardHeight;
+    let height = heightByDisplayType[card.display] || defaultCardHeight;
+    const text = item.dashcard?.visualization_settings?.text;
+    if (text?.length >= 80) height += 2;
     mobile.push({
       ...item,
       x: 0,

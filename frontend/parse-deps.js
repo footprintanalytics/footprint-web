@@ -5,10 +5,11 @@ const path = require("path");
 
 const glob = require("glob");
 const minimatch = require("minimatch");
-const babel = require("@babel/core");
+const parser = require("@babel/parser");
+const traverse = require("@babel/traverse").default;
 const readline = require("readline");
 
-const PATTERN = "{enterprise/,}frontend/src/**/*.{js,jsx,ts,tsx}";
+const PATTERN = "{enterprise/,}frontend/src/**/*.{js,jsx}";
 
 // after webpack.config.js
 const ALIAS = {
@@ -23,19 +24,19 @@ function files() {
 }
 
 function dependencies() {
-  const deps = files().map(filename => {
-    const contents = fs.readFileSync(filename, "utf-8");
-
+  const deps = files().map(fileName => {
+    const contents = fs.readFileSync(fileName, "utf-8");
+    const options = {
+      allowImportExportEverywhere: true,
+      allowReturnOutsideFunction: true,
+      decoratorsBeforeExport: true,
+      sourceType: "unambiguous",
+      plugins: ["jsx", "flow", "decorators-legacy", "exportDefaultFrom"],
+    };
     const importList = [];
     try {
-      const file = babel.transformSync(contents, {
-        filename,
-        presets: ["@babel/preset-typescript"],
-        ast: true,
-        code: false,
-      });
-
-      babel.traverse(file.ast, {
+      const ast = parser.parse(contents, options);
+      traverse(ast, {
         enter(path) {
           if (path.node.type === "ImportDeclaration") {
             importList.push(path.node.source.value);
@@ -52,11 +53,11 @@ function dependencies() {
         },
       });
     } catch (e) {
-      console.error(filename, e.toString());
+      console.error(fileName, e.toString());
       process.exit(-1);
       n;
     }
-    const base = path.dirname(filename) + path.sep;
+    const base = path.dirname(fileName) + path.sep;
     const absoluteImportList = importList
       .map(name => {
         const absName = name[0] === "." ? path.normalize(base + name) : name;
@@ -66,37 +67,27 @@ function dependencies() {
         const realName = parts.join(path.sep);
         return realName;
       })
-      .map(getFilePathFromImportPath)
+      .map(name => {
+        if (fs.existsSync(name)) {
+          if (
+            fs.lstatSync(name).isDirectory() &&
+            fs.existsSync(name + "/index.js")
+          ) {
+            return name + "/index.js";
+          }
+          return name;
+        } else if (fs.existsSync(name + ".js")) {
+          return name + ".js";
+        } else if (fs.existsSync(name + ".jsx")) {
+          return name + ".jsx";
+        }
+        return name;
+      })
       .filter(name => minimatch(name, PATTERN));
 
-    return { source: filename, dependencies: absoluteImportList.sort() };
+    return { source: fileName, dependencies: absoluteImportList.sort() };
   });
   return deps;
-}
-
-function getFilePathFromImportPath(name) {
-  const scriptsExtensions = ["js", "ts"];
-  const scriptsExtensionsWithJsx = [...scriptsExtensions, "jsx", "tsx"];
-
-  for (let extension of scriptsExtensionsWithJsx) {
-    const path = `${name}.${extension}`;
-
-    if (fs.existsSync(path)) {
-      return path;
-    }
-  }
-
-  const isDirectory = fs.existsSync(name) && fs.lstatSync(name).isDirectory();
-
-  for (let extension of scriptsExtensions) {
-    const indexScriptPath = `${name}/index.${extension}`;
-
-    if (isDirectory && fs.existsSync(indexScriptPath)) {
-      return indexScriptPath;
-    }
-  }
-
-  return name;
 }
 
 function dependents() {

@@ -1,0 +1,51 @@
+.custom-upload__step {
+  min-width: 750px;
+}
+
+.custom-upload__step-info {
+  margin-bottom: 40px;
+}
+
+.custom-upload__step-info h2 {
+  font-size: 30px;
+  color: #313541;
+  margin-bottom: 6px;
+}
+
+.custom-upload__step-info h2 span {
+  margin-right: 12px;
+}
+
+.custom-upload__step-info p {
+  font-size: 16px;
+  color: #313541;
+  margin-bottom: 0;
+}
+
+.custom-upload__step-action {
+  white-space: nowrap;
+  margin-top: 68px;
+}
+
+.custom-upload__step-action button:first-child {
+  margin-right: 10px;
+}
+
+.custom-upload__step-prev {
+  min-width: 104px;
+  border-color: #303542;
+}
+
+.custom-upload__step-next {
+  min-width: 160px;
+}
+
+.custom-upload__step-next .anticon-right {
+  margin-left: 8px;
+}
+
+.custom-upload__step-next[disabled] {
+  background-color: #e6e6ff !important;
+  color: #fff !important;
+  border: 0;
+}

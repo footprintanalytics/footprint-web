@@ -3,8 +3,6 @@ import {
   editDashboard,
   saveDashboard,
   setupSMTP,
-  visitDashboard,
-  clickSend,
 } from "__support__/e2e/cypress";
 
 import { USERS } from "__support__/e2e/cypress_data";
@@ -21,7 +19,7 @@ describe("issue 18344", () => {
     setupSMTP();
 
     // Rename the question
-    visitDashboard(1);
+    cy.visit("/dashboard/1");
 
     editDashboard();
 
@@ -41,7 +39,8 @@ describe("issue 18344", () => {
 
   it("subscription should not include original question name when it's been renamed in the dashboard (metabase#18344)", () => {
     // Send a test email subscription
-    cy.icon("subscription").click();
+    cy.icon("share").click();
+    cy.findByText("Dashboard subscriptions").click();
     cy.findByText("Email it").click();
 
     cy.findByPlaceholderText("Enter user names or email addresses").click();
@@ -49,7 +48,8 @@ describe("issue 18344", () => {
     // Click this just to close the popover that is blocking the "Send email now" button
     cy.findByText(`To:`).click();
 
-    clickSend();
+    cy.button("Send email now").click();
+    cy.findByText("Email sent");
 
     cy.request("GET", "http://localhost:80/email").then(({ body }) => {
       expect(body[0].html).to.include("OrdersFoo");

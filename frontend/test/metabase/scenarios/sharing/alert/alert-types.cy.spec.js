@@ -1,8 +1,8 @@
-import { restore, setupSMTP, visitQuestion } from "__support__/e2e/cypress";
+import { restore, setupSMTP } from "__support__/e2e/cypress";
 
-import { SAMPLE_DATABASE } from "__support__/e2e/cypress_sample_database";
+import { SAMPLE_DATASET } from "__support__/e2e/cypress_sample_dataset";
 
-const { PEOPLE, PEOPLE_ID } = SAMPLE_DATABASE;
+const { PEOPLE, PEOPLE_ID } = SAMPLE_DATASET;
 
 const multiSeriesQuestionWithGoal = {
   name: "multi",
@@ -49,7 +49,7 @@ describe("scenarios > alert > types", () => {
   describe("rows based alerts", () => {
     rawTestCases.forEach(({ questionType, questionId }) => {
       it(`should be supported for ${questionType}`, () => {
-        visitQuestion(questionId);
+        cy.visit(`/question/${questionId}`);
 
         openAlertModal();
 
@@ -65,7 +65,7 @@ describe("scenarios > alert > types", () => {
   describe("goal based alerts", () => {
     it("should work for timeseries questions with a set goal", () => {
       // Set goal on timeseries question
-      visitQuestion(timeSeriesQuestionId);
+      cy.visit(`/question/${timeSeriesQuestionId}`);
 
       cy.findByText("Settings").click();
       cy.findByText("Line options");
@@ -81,7 +81,7 @@ describe("scenarios > alert > types", () => {
 
       openAlertModal();
 
-      cy.findByText("Reaches the goal line").click();
+      cy.findByText("Goes above the goal line").click();
       cy.findByText("The first time").click();
 
       cy.button("Done").click();

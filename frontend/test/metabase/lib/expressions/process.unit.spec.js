@@ -8,18 +8,23 @@ describe("metabase/lib/expressions/process", () => {
       ).not.toThrow();
     });
     it("should handle valid input", () => {
-      const { compileError } = processSource({
+      const { compileError, syntaxTree } = processSource({
         source: "1",
         targetOffset: null,
       });
       expect(compileError).toBeUndefined();
+      expect(syntaxTree).toBeDefined();
+      expect(syntaxTree.children).toBeDefined();
+      expect(syntaxTree.children.length).toEqual(1);
     });
     it("should handle invalid input", () => {
       const { compileError } = processSource({
         source: "1+",
         targetOffset: null,
       });
-      expect(compileError.toString()).toEqual("Error: Unexpected end of input");
+      expect(compileError.toString()).toEqual(
+        "NoViableAltException: Expected expression",
+      );
     });
   });
 });

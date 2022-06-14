@@ -4,10 +4,12 @@ import { render, screen } from "@testing-library/react";
 import GuiQueryEditor from "metabase/query_builder/components/GuiQueryEditor";
 import Question from "metabase-lib/lib/Question";
 import {
-  SAMPLE_DATABASE,
+  SAMPLE_DATASET,
   ORDERS,
   metadata,
-} from "__support__/sample_database_fixture";
+} from "__support__/sample_dataset_fixture";
+
+import StructuredQuery from "metabase-lib/lib/queries/StructuredQuery";
 
 const getGuiQueryEditor = query => (
   <GuiQueryEditor
@@ -23,8 +25,8 @@ const getGuiQueryEditor = query => (
 
 describe("GuiQueryEditor", () => {
   it("should allow adding the first breakout", () => {
-    const query = Question.create({
-      databaseId: SAMPLE_DATABASE.id,
+    const query: StructuredQuery = Question.create({
+      databaseId: SAMPLE_DATASET.id,
       tableId: ORDERS.id,
       metadata,
     })
@@ -40,8 +42,8 @@ describe("GuiQueryEditor", () => {
   });
 
   it("should allow adding more than one breakout", () => {
-    const query = Question.create({
-      databaseId: SAMPLE_DATABASE.id,
+    const query: StructuredQuery = Question.create({
+      databaseId: SAMPLE_DATASET.id,
       tableId: ORDERS.id,
       metadata,
     })

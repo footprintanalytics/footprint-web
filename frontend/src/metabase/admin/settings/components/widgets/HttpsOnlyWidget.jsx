@@ -4,13 +4,26 @@ import { t } from "ttag";
 
 import SettingToggle from "./SettingToggle";
 
+type Props = {
+  onChange: (value: any) => void,
+  setting: {},
+  settingValues: { "site-url": string },
+};
+
+type State = {
+  status: string,
+};
+
 const VERIFIED = "verified";
 const CHECKING = "checking";
 const NOT_CHECKED = "not_checked";
 const FAILED = "failed";
 
 export default class HttpsOnlyWidget extends Component {
-  constructor(props) {
+  props: Props;
+  state: State;
+
+  constructor(props: Props) {
     super(props);
     this.state = {
       status: NOT_CHECKED,
@@ -31,7 +44,7 @@ export default class HttpsOnlyWidget extends Component {
     this.checkHttps();
   }
 
-  componentDidUpdate(prevProps) {
+  componentDidUpdate(prevProps: Props) {
     if (
       prevProps.settingValues["site-url"] !==
       this.props.settingValues["site-url"]

@@ -7,6 +7,7 @@ import SidebarContent from "metabase/query_builder/components/SidebarContent";
 import FilterPopover from "metabase/query_builder/components/filters/FilterPopover";
 
 import { color } from "metabase/lib/colors";
+import { closeNewGuide } from "metabase/containers/newguide/newGuide";
 
 /** FilterSidebar operates on filters from topLevelFilters */
 export default class FilterSidebar extends React.Component {
@@ -16,18 +17,26 @@ export default class FilterSidebar extends React.Component {
 
   handleCommit(filter) {
     if (filter && filter.isValid()) {
+      closeNewGuide({ key: "filterFieldValueConfirm" });
       filter.add().update(null, { run: true });
     }
     this.props.onClose();
   }
 
   render() {
-    const { className, question, onClose } = this.props;
+    const {
+      className,
+      question,
+      onClose,
+      getNewGuideInfo,
+      setNewGuideInfo,
+      optionDefaultFirstKey,
+    } = this.props;
     const { filter } = this.state;
     const valid = filter && filter.isValid();
     return (
       <SidebarContent
-        className={cx(className, "spread")}
+        className={cx(className, "spread", "filterSidebar")}
         color={color("filter")}
         onDone={valid ? () => this.handleCommit(filter) : onClose}
         doneButtonText={valid ? t`Add filter` : t`Cancel`}
@@ -35,6 +44,7 @@ export default class FilterSidebar extends React.Component {
         <FilterPopover
           isTopLevel
           isSidebar
+          className="mx2 pt1"
           fieldPickerTitle={t`Filter by`}
           query={question.query()}
           // fires every time the filter is changed:
@@ -42,7 +52,9 @@ export default class FilterSidebar extends React.Component {
           // fires when a segment or "add" button is clicked:
           onChangeFilter={filter => this.handleCommit(filter)}
           noCommitButton
-          primaryColor={color("filter")}
+          getNewGuideInfo={getNewGuideInfo}
+          setNewGuideInfo={setNewGuideInfo}
+          optionDefaultFirstKey={optionDefaultFirstKey}
         />
       </SidebarContent>
     );

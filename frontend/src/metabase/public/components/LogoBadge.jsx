@@ -1,23 +1,27 @@
-/* eslint-disable react/prop-types */
 import React from "react";
-import LogoIcon from "metabase/components/LogoIcon";
-import ExternalLink from "metabase/core/components/ExternalLink";
+import LogoIconNoText from "metabase/components/LogoIconNoText";
+import ExternalLink from "metabase/components/ExternalLink";
 
-import { t, jt } from "ttag";
+type Props = {
+  dark: boolean,
+};
 
-const LogoBadge = ({ dark }) => (
+const LogoBadge = ({ dark }: Props) => (
   <ExternalLink
-    href="https://metabase.com/"
+    href="https://www.footprint.network/"
     target="_blank"
     className="h4 flex text-bold align-center no-decoration"
   >
-    <LogoIcon height={28} dark={dark} />
-    <span className="text-small">
-      <span className="ml1 md-ml2 text-medium">{jt`Powered by ${(
-        <span className={dark ? "text-white" : "text-brand"}>
-          {t`Metabase`}
-        </span>
-      )}`}</span>
+    <span className="text-small flex align-center">
+      <span className="mr1 md-ml2 text-medium">Powered by</span>
+      <LogoIconNoText height={28} dark={dark} />
+      <span className="ml1 text-medium">
+        {
+          <span className={dark ? "text-white" : "text-brand"}>
+            Footprint Analytics
+          </span>
+        }
+      </span>
     </span>
   </ExternalLink>
 );

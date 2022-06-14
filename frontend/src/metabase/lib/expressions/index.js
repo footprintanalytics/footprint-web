@@ -1,6 +1,6 @@
 export * from "./config";
 
-import Dimension, { ExpressionDimension } from "metabase-lib/lib/Dimension";
+import Dimension from "metabase-lib/lib/Dimension";
 import { FK_SYMBOL } from "metabase/lib/formatting";
 import {
   OPERATORS,
@@ -9,34 +9,6 @@ import {
   EDITOR_FK_SYMBOLS,
   getMBQLName,
 } from "./config";
-
-// Return a copy with brackets (`[` and `]`) being escaped
-function escapeString(string) {
-  let str = "";
-  for (let i = 0; i < string.length; ++i) {
-    const ch = string[i];
-    if (ch === "[" || ch === "]") {
-      str += "\\";
-    }
-    str += ch;
-  }
-  return str;
-}
-
-// The opposite of escapeString
-export function unescapeString(string) {
-  let str = "";
-  for (let i = 0; i < string.length; ++i) {
-    const ch1 = string[i];
-    const ch2 = string[i + 1];
-    if (ch1 === "\\" && (ch2 === "[" || ch2 === "]")) {
-      // skip
-    } else {
-      str += ch1;
-    }
-  }
-  return str;
-}
 
 // IDENTIFIERS
 
@@ -77,20 +49,11 @@ export function formatMetricName(metric, options) {
 // SEGMENTS
 
 export function parseSegment(segmentName, { query }) {
-  const table = query.table();
-  const segment = table.segments.find(
-    segment => segment.name.toLowerCase() === segmentName.toLowerCase(),
-  );
-  if (segment) {
-    return segment;
-  }
-
-  const field = table.fields.find(
-    field => field.name.toLowerCase() === segmentName.toLowerCase(),
-  );
-  if (field?.isBoolean()) {
-    return field;
-  }
+  return query
+    .table()
+    .segments.find(
+      segment => segment.name.toLowerCase() === segmentName.toLowerCase(),
+    );
 }
 
 export function formatSegmentName(segment, options) {
@@ -102,16 +65,11 @@ export function formatSegmentName(segment, options) {
 /**
  * Find dimension with matching `name` in query. TODO - How is this "parsing" a dimension? Not sure about this name.
  */
-export function parseDimension(name, { reference, query }) {
+export function parseDimension(name, { query }) {
   // FIXME: this is pretty inefficient, create a lookup table?
   return query
     .dimensionOptions()
     .all()
-    .filter(
-      d =>
-        !(d instanceof ExpressionDimension) ||
-        getDimensionName(d) !== reference,
-    )
     .find(d =>
       EDITOR_FK_SYMBOLS.symbols.some(
         separator => getDimensionName(d, separator) === name,
@@ -146,72 +104,41 @@ export function parseStringLiteral(expressionString) {
   return unquoteString(expressionString);
 }
 
-const DOUBLE_QUOTE = '"';
-const SINGLE_QUOTE = "'";
-const BACKSLASH = "\\";
-
-const STRING_ESCAPE = {
-  "\b": "\\b",
-  "\t": "\\t",
-  "\n": "\\n",
-  "\f": "\\f",
-  "\r": "\\r",
-};
-
-const STRING_UNESCAPE = {
-  b: "\b",
-  t: "\t",
-  n: "\n",
-  f: "\f",
-  r: "\r",
-};
-
-export function quoteString(string, quote) {
-  if (quote === DOUBLE_QUOTE || quote === SINGLE_QUOTE) {
-    let str = "";
-    for (let i = 0; i < string.length; ++i) {
-      const ch = string[i];
-      if (ch === quote && string[i - 1] !== BACKSLASH) {
-        str += BACKSLASH + ch;
-      } else {
-        const sub = STRING_ESCAPE[ch];
-        str += sub ? sub : ch;
-      }
+function quoteString(string, character) {
+  if (character === '"') {
+    return JSON.stringify(string);
+  } else if (character === "'") {
+    return swapQuotes(JSON.stringify(swapQuotes(string)));
+  } else if (character === "[") {
+    // TODO: escape brackets
+    if (string.match(/\[|\]/)) {
+      throw new Error("String currently can't contain brackets: " + string);
     }
-    return quote + str + quote;
-  } else if (quote === "[") {
-    return "[" + escapeString(string) + "]";
-  } else if (quote === "") {
+    return `[${string}]`;
+  } else if (character === "") {
     // unquoted
     return string;
   } else {
-    throw new Error("Unknown quoting: " + quote);
+    throw new Error("Unknown quoting: " + character);
   }
 }
-
-export function unquoteString(string) {
-  const quote = string.charAt(0);
-  if (quote === DOUBLE_QUOTE || quote === SINGLE_QUOTE) {
-    let str = "";
-    for (let i = 1; i < string.length - 1; ++i) {
-      const ch = string[i];
-      if (ch === BACKSLASH) {
-        const seq = string[i + 1];
-        const unescaped = STRING_UNESCAPE[seq];
-        if (unescaped) {
-          str += unescaped;
-          ++i;
-          continue;
-        }
-      }
-      str += ch;
-    }
-    return str;
-  } else if (quote === "[") {
-    return unescapeString(string).slice(1, -1);
+function unquoteString(string) {
+  const character = string.charAt(0);
+  if (character === '"') {
+    return JSON.parse(string);
+  } else if (character === "'") {
+    return swapQuotes(JSON.parse(swapQuotes(string)));
+  } else if (character === "[") {
+    // TODO: unescape brackets
+    return string.slice(1, -1);
   } else {
     throw new Error("Unknown quoting: " + string);
   }
+}
+
+// HACK: use JSON.stringify to escape single quotes by swapping single and doulble quotes before/after
+function swapQuotes(str) {
+  return str.replace(/['"]/g, q => (q === "'" ? '"' : "'"));
 }
 
 // move to query lib
@@ -222,7 +149,6 @@ export function isExpression(expr) {
     isOperator(expr) ||
     isFunction(expr) ||
     isDimension(expr) ||
-    isBooleanLiteral(expr) ||
     isMetric(expr) ||
     isSegment(expr) ||
     isCase(expr)
@@ -235,10 +161,6 @@ export function isLiteral(expr) {
 
 export function isStringLiteral(expr) {
   return typeof expr === "string";
-}
-
-export function isBooleanLiteral(expr) {
-  return typeof expr === "boolean";
 }
 
 export function isNumberLiteral(expr) {

@@ -50,7 +50,8 @@ const renderTriggersTable = triggers => {
   );
 };
 
-class JobTriggersModal extends React.Component {
+@connect(null, { fetchJobInfo, goBack })
+export default class JobTriggersModal extends React.Component {
   state = {
     triggers: null,
     error: null,
@@ -85,5 +86,3 @@ class JobTriggersModal extends React.Component {
     );
   }
 }
-
-export default connect(null, { fetchJobInfo, goBack })(JobTriggersModal);

@@ -1,7 +1,7 @@
-import { restore, filterWidget, visitDashboard } from "__support__/e2e/cypress";
-import { SAMPLE_DATABASE } from "__support__/e2e/cypress_sample_database";
+import { restore, filterWidget } from "__support__/e2e/cypress";
+import { SAMPLE_DATASET } from "__support__/e2e/cypress_sample_dataset";
 
-const { PRODUCTS, PRODUCTS_ID } = SAMPLE_DATABASE;
+const { PRODUCTS, PRODUCTS_ID } = SAMPLE_DATASET;
 
 const questionDetails = {
   name: "13960",
@@ -55,7 +55,11 @@ describe("issue 13960", () => {
 
         cy.editDashboardCard(dashboardCard, mapFiltersToCard);
 
-        visitDashboard(dashboard_id);
+        cy.intercept("POST", `/api/card/${card_id}/query`).as("cardQuery");
+
+        cy.visit(`/dashboard/${dashboard_id}`);
+
+        cy.wait("@cardQuery");
       },
     );
 
@@ -79,12 +83,7 @@ describe("issue 13960", () => {
 
     cy.location("search").should("eq", "?category=&id=1");
 
-    cy.intercept("POST", "/api/dashboard/*/dashcard/*/card/*/query").as(
-      "dashcardQuery",
-    );
-
     cy.reload();
-    cy.wait("@dashcardQuery");
 
     cy.findByText("13960");
     cy.findAllByText("Doohickey").should("not.exist");

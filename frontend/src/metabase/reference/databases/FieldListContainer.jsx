@@ -29,7 +29,8 @@ const mapDispatchToProps = {
   ...actions,
 };
 
-class FieldListContainer extends Component {
+@connect(mapStateToProps, mapDispatchToProps)
+export default class FieldListContainer extends Component {
   static propTypes = {
     params: PropTypes.object.isRequired,
     location: PropTypes.object.isRequired,
@@ -72,5 +73,3 @@ class FieldListContainer extends Component {
     );
   }
 }
-
-export default connect(mapStateToProps, mapDispatchToProps)(FieldListContainer);

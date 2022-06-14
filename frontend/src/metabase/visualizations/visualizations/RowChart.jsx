@@ -6,7 +6,9 @@ import {
   GRAPH_DATA_SETTINGS,
   GRAPH_COLORS_SETTINGS,
 } from "metabase/visualizations/lib/settings/graph";
+import VizControls from "metabase/visualizations/hoc/VizControls";
 
+@VizControls
 export default class RowChart extends LineAreaBarChart {
   static uiName = t`Row`;
   static identifier = "row";

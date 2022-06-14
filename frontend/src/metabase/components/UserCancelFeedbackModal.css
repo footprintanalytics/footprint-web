@@ -1,0 +1,37 @@
+.cancel-feedback {
+  border-radius: 4px;
+  overflow: auto;
+  padding-bottom: 0;
+}
+
+.cancel-feedback-title {
+  color: #3c3c3c;
+  font-size: 24px;
+  font-weight: bold;
+}
+
+.cancel-feedback-question {
+  color: #848484;
+  font-size: 16px;
+  margin-top: 10px;
+  margin-bottom: 20px;
+}
+
+.cancel-feedback-answer {
+  color: #3c3c3c;
+  font-size: 16px;
+  line-height: 25px;
+  margin: 15px 0;
+}
+
+.cancel-feedback-other {
+  width: calc(100% - 25px);
+  margin-left: 25px;
+}
+
+.cancel-feedback-submit {
+  border-radius: 4px;
+  background: #3434b2;
+  /*margin-top: 30px;*/
+  width: 300px;
+}

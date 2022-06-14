@@ -1,0 +1,65 @@
+.zkspace-submit-model .Modal {
+  background-image: url("https://static.footprint.network/activity-zkspace/img-signup-success-bg.png");
+  background-size: 480px 520px;
+  background-repeat: no-repeat;
+  background-position: bottom right;
+  width: 480px;
+  height: 520px;
+}
+
+.zkspace-submit-model__root {
+  padding-top: 10px;
+}
+
+.zkspace-submit-model__logo {
+  text-align: left;
+  margin-top: 10px;
+  margin-bottom: 20px;
+}
+
+.zkspace-submit-model__line {
+  border-left: #ffffff 1px solid;
+  margin: 0 15px;
+}
+
+.zkspace-submit-model__button {
+  width: 300px;
+  font-size: 18px;
+  color: white;
+  background: #ff861e;
+  margin: 20px auto 20px;
+}
+
+.zkspace-submit-model__title {
+  font-size: 32px;
+  width: 360px;
+  color: white;
+  line-height: 40px;
+  text-align: center;
+  white-space: pre-line;
+  margin: 10px 0;
+  font-weight: bold;
+}
+
+.zkspace-submit-model__desc {
+  font-size: 16px;
+  width: 390px;
+  color: #8f8f8f;
+  line-height: 20px;
+  text-align: center;
+  white-space: pre-line;
+}
+
+.zkspace-submit-model__tip {
+  font-size: 16px;
+  width: 390px;
+  color: white;
+  margin: 10px 0;
+  line-height: 20px;
+  text-align: center;
+  white-space: pre-line;
+}
+
+.zkspace-submit-model__address {
+  width: 390px;
+}

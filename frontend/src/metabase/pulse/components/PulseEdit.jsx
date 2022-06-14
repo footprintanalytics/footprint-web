@@ -1,5 +1,6 @@
 /* eslint-disable react/prop-types */
 import React, { Component } from "react";
+import { Box, Flex } from "grid-styled";
 import PropTypes from "prop-types";
 import { t, jt, ngettext, msgid } from "ttag";
 
@@ -11,7 +12,7 @@ import PulseEditSkip from "./PulseEditSkip";
 import WhatsAPulse from "./WhatsAPulse";
 
 import ActionButton from "metabase/components/ActionButton";
-import Button from "metabase/core/components/Button";
+import Button from "metabase/components/Button";
 import DeleteModalWithConfirm from "metabase/components/DeleteModalWithConfirm";
 import Icon from "metabase/components/Icon";
 import * as MetabaseAnalytics from "metabase/lib/analytics";
@@ -28,9 +29,13 @@ import * as Urls from "metabase/lib/urls";
 import Collections from "metabase/entities/collections";
 
 import cx from "classnames";
-import { PulseHeader, PulseHeaderContent } from "./PulseEdit.styled";
 
-class PulseEdit extends Component {
+@Collections.load({
+  id: (state, { pulse, initialCollectionId }) =>
+    pulse.collection_id || initialCollectionId,
+  loadingAndErrorWrapper: false,
+})
+export default class PulseEdit extends Component {
   static propTypes = {
     pulse: PropTypes.object.isRequired,
     pulseId: PropTypes.number,
@@ -169,13 +174,20 @@ class PulseEdit extends Component {
           </ModalWithTrigger>
         </div>
         <div className="PulseEdit-content pt2 pb4">
-          <PulseHeader className="hover-parent hover--visibility">
+          <Flex
+            bg={color("bg-medium")}
+            p={2}
+            my={3}
+            align="top"
+            style={{ borderRadius: 8 }}
+            className="hover-parent hover--visibility"
+          >
             <Icon name="warning" color={color("warning")} size={24} mr={1} />
-            <PulseHeaderContent>
+            <Box ml={1}>
               <Subhead>{t`Pulses are being phased out`}</Subhead>
               <Text>{jt`You can now set up ${link} instead. We'll remove Pulses in a future release, and help you migrate any that you still have.`}</Text>
-            </PulseHeaderContent>
-          </PulseHeader>
+            </Box>
+          </Flex>
 
           <PulseEditName {...this.props} setPulse={this.setPulse} />
           <PulseEditCollection {...this.props} setPulse={this.setPulse} />
@@ -244,9 +256,3 @@ class PulseEdit extends Component {
     );
   }
 }
-
-export default Collections.load({
-  id: (state, { pulse, initialCollectionId }) =>
-    pulse.collection_id || initialCollectionId,
-  loadingAndErrorWrapper: false,
-})(PulseEdit);

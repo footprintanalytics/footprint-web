@@ -1,16 +1,17 @@
 /* eslint-disable react/prop-types */
 import React from "react";
 import { t } from "ttag";
-import _ from "underscore";
 
 import Segment from "metabase/entities/segments";
 import SegmentItem from "metabase/admin/datamodel/components/SegmentItem";
 import FilteredToUrlTable from "metabase/admin/datamodel/hoc/FilteredToUrlTable";
 
-import Button from "metabase/core/components/Button";
-import Link from "metabase/core/components/Link";
+import Button from "metabase/components/Button";
+import Link from "metabase/components/Link";
 
-class SegmentListAppInner extends React.Component {
+@Segment.loadList({ wrapped: true })
+@FilteredToUrlTable("segments")
+class SegmentListApp extends React.Component {
   render() {
     const { segments, tableSelector } = this.props;
 
@@ -18,7 +19,7 @@ class SegmentListAppInner extends React.Component {
       <div className="px3 pb2">
         <div className="flex py2">
           {tableSelector}
-          <Link to="/admin/datamodel/segment/create" className="ml-auto">
+          <Link to={`/admin/datamodel/segment/create`} className="ml-auto">
             <Button primary>{t`New segment`}</Button>
           </Link>
         </div>
@@ -49,10 +50,5 @@ class SegmentListAppInner extends React.Component {
     );
   }
 }
-
-const SegmentListApp = _.compose(
-  Segment.loadList({ wrapped: true }),
-  FilteredToUrlTable("segments"),
-)(SegmentListAppInner);
 
 export default SegmentListApp;

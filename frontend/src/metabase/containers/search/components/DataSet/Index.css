@@ -1,0 +1,32 @@
+.dashboards__table-content {
+  text-overflow: ellipsis;
+  overflow: hidden;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+}
+
+.dashboards__web-url {
+  margin: 6px 0;
+}
+
+.dataset__field-grid-container {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+  border: var(--footprint-border);
+}
+
+.dataset__field-grid-item {
+  background-color: rgba(255, 255, 255, 0.8);
+  border: var(--footprint-border);
+  padding: 4px 0;
+  font-size: 14px;
+  text-align: center;
+}
+
+.search .dashboards__list-item:hover .dashboards__dataset-title {
+  text-decoration: underline;
+  text-decoration-color: #3434b2;
+}
+.search .dashboards__list-item a:hover {
+  color: var(--footprint-color-primary-text);
+}

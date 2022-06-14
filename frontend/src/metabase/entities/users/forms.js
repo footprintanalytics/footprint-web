@@ -1,36 +1,105 @@
-import _ from "underscore";
-
 import { t } from "ttag";
-import MetabaseSettings from "metabase/lib/settings";
-import MetabaseUtils from "metabase/lib/utils";
 import { PLUGIN_ADMIN_USER_FORM_FIELDS } from "metabase/plugins";
 import validate from "metabase/lib/validate";
 import FormGroupsWidget from "metabase/components/form/widgets/FormGroupsWidget";
 
-const getNameFields = () => [
+import type { FormFieldDefinition } from "metabase/containers/Form";
+
+const USER_NAME_FIELD: () => FormFieldDefinition[] = () => [
   {
-    name: "first_name",
-    title: t`First name`,
-    placeholder: "Johnny",
+    name: "name",
+    title: t`Name`,
+    placeholder: "Your Name",
+    description:
+      "Tip: Name is a unique certificate for your account. It can only be changed once!",
+    descriptionPosition: "bottom",
     autoFocus: true,
-    validate: validate.required().maxLength(100),
-  },
-  {
-    name: "last_name",
-    title: t`Last name`,
-    placeholder: "Appleseed",
-    validate: validate.required().maxLength(100),
+    validate: validate
+      .required()
+      .minLength(2)
+      .maxLength(20)
+      .checkUserName(),
+    normalize: value => value.trim(),
   },
 ];
 
-const getEmailField = () => ({
-  name: "email",
-  title: t`Email`,
-  placeholder: "youlooknicetoday@email.com",
-  validate: validate.required().email(),
-});
+const USER_AVATAR_FIELD: () => FormFieldDefinition[] = () => [
+  {
+    name: "avatar",
+    title: t`Profile Photo`,
+    type: "avatar",
+  },
+];
 
-const getLocaleField = () => ({
+const USER_INFO_FIELD: () => FormFieldDefinition[] = () => [
+  {
+    name: "twitter",
+    title: t`Twitter`,
+    placeholder: "@Footprint_DeFi or https://twitter.com/Footprint_DeFi",
+  },
+  {
+    name: "telegram",
+    title: t`Telegram`,
+    placeholder:
+      "@FootprintAnalytics or https://t.me/joinchat/4-ocuURAr2thODFh",
+  },
+  {
+    name: "discord",
+    title: t`Discord`,
+    placeholder: "@FootprintOfficial#5374 or https://discord.gg/3HYaR6USM7",
+  },
+  {
+    name: "bio",
+    title: t`A Short Bio`,
+    placeholder:
+      "Brief description for your profile or add your wallet address...",
+    type: "text",
+  },
+];
+
+const DETAILS_FORM_FIELDS: () => FormFieldDefinition[] = () => [
+  ...USER_NAME_FIELD(),
+  {
+    name: "email",
+    title: t`Email`,
+    placeholder: "youlooknicetoday@email.com",
+    validate: validate.required().email(),
+  },
+];
+
+const DETAILS_FORM_FIELDS_USER_VIP: () => FormFieldDefinition[] = () => [
+  ...USER_AVATAR_FIELD(),
+  ...USER_NAME_FIELD(),
+  {
+    name: "email",
+    title: t`Email`,
+    placeholder: "youlooknicetoday@email.com",
+    readOnly: true,
+    validate: validate.required().email(),
+  },
+  ...USER_INFO_FIELD(),
+  {
+    name: "hideWatermark",
+    title: t`Remove watermarks from all the dashboards and charts you create`,
+    checkboxCss: true,
+    type: "checkbox",
+  },
+];
+
+const DETAILS_FORM_FIELDS_USER: () => FormFieldDefinition[] = () => [
+  ...USER_AVATAR_FIELD(),
+  ...USER_NAME_FIELD(),
+  {
+    name: "email",
+    title: t`Email`,
+    placeholder: "youlooknicetoday@email.com",
+    readOnly: true,
+    validate: validate.required().email(),
+  },
+  ...USER_INFO_FIELD(),
+];
+
+/*const LOCALE_FIELD: FormFieldDefinition = {
   name: "locale",
   title: t`Language`,
   type: "select",
@@ -41,9 +110,9 @@ const getLocaleField = () => ({
       ([code, name]) => name,
     ),
   ].map(([code, name]) => ({ name, value: code })),
-});
+};*/
 
-const getPasswordFields = () => [
+const PASSWORD_FORM_FIELDS: () => FormFieldDefinition[] = () => [
   {
     name: "password",
     title: t`Create a password`,
@@ -56,23 +125,18 @@ const getPasswordFields = () => [
     title: t`Confirm your password`,
     type: "password",
     placeholder: t`Shhh... but one more time so we get it right`,
-    validate: (password_confirm, { values: { password } = {} }) => {
-      if (!password_confirm) {
-        return t`required`;
-      } else if (password_confirm !== password) {
-        return t`passwords do not match`;
-      }
-    },
+    validate: (password_confirm, { values: { password } = {} }) =>
+      (!password_confirm && t`required`) ||
+      (password_confirm !== password && t`passwords do not match`),
   },
 ];
 
 export default {
   admin: {
     fields: [
-      ...getNameFields(),
-      getEmailField(),
+      ...DETAILS_FORM_FIELDS(),
       {
-        name: "user_group_memberships",
+        name: "group_ids",
         title: t`Groups`,
         type: FormGroupsWidget,
       },
@@ -80,74 +144,25 @@ export default {
     ],
   },
   user: {
-    fields: [...getNameFields(), getEmailField(), getLocaleField()],
+    fields: [...DETAILS_FORM_FIELDS_USER()],
+    disablePristineSubmit: true,
+  },
+  vipUser: {
+    fields: [...DETAILS_FORM_FIELDS_USER_VIP()],
     disablePristineSubmit: true,
   },
   setup: () => ({
     fields: [
-      ...getNameFields(),
-      getEmailField(),
+      ...DETAILS_FORM_FIELDS(),
+      ...PASSWORD_FORM_FIELDS(),
       {
         name: "site_name",
-        title: t`Company or team name`,
+        title: t`Your company or team name`,
         placeholder: t`Department of Awesome`,
         validate: validate.required(),
       },
-      ...getPasswordFields(),
     ],
   }),
-  setup_invite: user => ({
-    fields: [
-      ...getNameFields(),
-      {
-        name: "email",
-        title: t`Email`,
-        placeholder: "youlooknicetoday@email.com",
-        validate: email => {
-          if (!email) {
-            return t`required`;
-          } else if (!MetabaseUtils.isEmail(email)) {
-            return t`must be a valid email address`;
-          } else if (email === user.email) {
-            return t`must be different from the email address you used in setup`;
-          }
-        },
-      },
-    ],
-  }),
-  login: () => {
-    const ldap = MetabaseSettings.ldapEnabled();
-    const cookies = MetabaseSettings.get("session-cookies");
-
-    return {
-      fields: [
-        {
-          name: "username",
-          type: ldap ? "input" : "email",
-          title: ldap ? t`Username or email address` : t`Email address`,
-          placeholder: t`youlooknicetoday@email.com`,
-          validate: ldap ? validate.required() : validate.required().email(),
-          autoFocus: true,
-        },
-        {
-          name: "password",
-          type: "password",
-          title: t`Password`,
-          placeholder: t`Shhh...`,
-          validate: validate.required(),
-        },
-        {
-          name: "remember",
-          type: "checkbox",
-          title: t`Remember me`,
-          initial: true,
-          hidden: cookies,
-          horizontal: true,
-          align: "left",
-        },
-      ],
-    };
-  },
   password: {
     fields: [
       {
@@ -157,30 +172,10 @@ export default {
         placeholder: t`Shhh...`,
         validate: validate.required(),
       },
-      ...getPasswordFields(),
-    ],
-  },
-  password_forgot: {
-    fields: [
-      {
-        name: "email",
-        title: t`Email address`,
-        placeholder: t`The email you use for your Metabase account`,
-        validate: validate.required().email(),
-      },
+      ...PASSWORD_FORM_FIELDS(),
     ],
   },
   password_reset: {
-    fields: [...getPasswordFields()],
-  },
-  newsletter: {
-    fields: [
-      {
-        name: "email",
-        placeholder: "youlooknicetoday@email.com",
-        autoFocus: true,
-        validate: validate.required().email(),
-      },
-    ],
+    fields: [...PASSWORD_FORM_FIELDS()],
   },
 };

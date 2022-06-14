@@ -1,14 +1,8 @@
-import {
-  restore,
-  popover,
-  modal,
-  visitQuestion,
-  visitDashboard,
-} from "__support__/e2e/cypress";
+import { restore, popover, modal } from "__support__/e2e/cypress";
 
-import { SAMPLE_DATABASE } from "__support__/e2e/cypress_sample_database";
+import { SAMPLE_DATASET } from "__support__/e2e/cypress_sample_dataset";
 
-const { PRODUCTS } = SAMPLE_DATABASE;
+const { PRODUCTS } = SAMPLE_DATASET;
 
 const COUNT_ALL = "200";
 const COUNT_DOOHICKEY = "42";
@@ -59,13 +53,15 @@ describe.skip("scenarios > public", () => {
   });
 
   let questionPublicLink;
+  let questionEmbedUrl;
   let dashboardId;
   let dashboardPublicLink;
+  let dashboardEmbedUrl;
 
   describe("questions", () => {
     // Note: Test suite is sequential, so individual test cases can't be run individually
     it("should allow users to create parameterized dashboards", () => {
-      visitQuestion(questionId);
+      cy.visit(`/question/${questionId}`);
 
       cy.findByTestId("saved-question-header-button").click();
       cy.findByTestId("add-to-dashboard-button").click();
@@ -120,7 +116,7 @@ describe.skip("scenarios > public", () => {
     it("should allow users to create public questions", () => {
       cy.request("PUT", "/api/setting/enable-public-sharing", { value: true });
 
-      visitQuestion(questionId);
+      cy.visit(`/question/${questionId}`);
 
       cy.icon("share").click();
 
@@ -138,12 +134,36 @@ describe.skip("scenarios > public", () => {
         });
     });
 
+    it("should allow users to create embedded questions", () => {
+      cy.request("PUT", "/api/setting/enable-embedding", { value: true });
+      cy.request("PUT", "/api/setting/site-url", {
+        value: "http://localhost:4000/", // Cypress.config().baseUrl
+      });
+
+      cy.visit(`/question/${questionId}`);
+
+      cy.icon("share").click();
+
+      cy.contains(".cursor-pointer", "Embed this question")
+        .should("not.be.disabled")
+        .click();
+      cy.contains("Disabled").click();
+      cy.contains("Editable").click();
+
+      cy.contains("Publish").click();
+
+      cy.get("iframe").then($iframe => {
+        questionEmbedUrl = $iframe[0].src;
+      });
+    });
+
     it("should allow users to create public dashboards", () => {
       cy.request("PUT", "/api/setting/enable-public-sharing", { value: true });
 
-      visitDashboard(dashboardId);
+      cy.visit(`/dashboard/${dashboardId}`);
 
       cy.icon("share").click();
+      cy.contains("Sharing and embedding").click();
 
       cy.contains("Enable sharing")
         .parent()
@@ -157,6 +177,30 @@ describe.skip("scenarios > public", () => {
           expect($input[0].value).to.match(PUBLIC_URL_REGEX);
           dashboardPublicLink = $input[0].value.match(PUBLIC_URL_REGEX)[0];
         });
+    });
+
+    it("should allow users to create embedded dashboards", () => {
+      cy.request("PUT", "/api/setting/enable-embedding", { value: true });
+      cy.request("PUT", "/api/setting/site-url", {
+        value: "http://localhost:4000/", // Cypress.config().baseUrl
+      });
+
+      cy.visit(`/dashboard/${dashboardId}`);
+
+      cy.icon("share").click();
+      cy.contains("Sharing and embedding").click();
+
+      cy.contains(".cursor-pointer", "Embed this dashboard")
+        .should("not.be.disabled")
+        .click();
+      cy.contains("Disabled").click();
+      cy.contains("Editable").click();
+
+      cy.contains("Publish").click();
+
+      cy.get("iframe").then($iframe => {
+        dashboardEmbedUrl = $iframe[0].src;
+      });
     });
 
     Object.entries(USERS).map(([userType, setUser]) =>
@@ -174,8 +218,31 @@ describe.skip("scenarios > public", () => {
           cy.contains(COUNT_DOOHICKEY);
         });
 
+        // [quarantine]: failing almost consistently in CI
+        it(`should be able to view embedded questions`, () => {
+          cy.visit(questionEmbedUrl);
+          cy.contains(COUNT_ALL);
+
+          cy.contains("Category").click();
+          cy.contains("Doohickey").click();
+          cy.contains("Add filter").click();
+
+          cy.contains(COUNT_DOOHICKEY);
+        });
+
         it(`should be able to view public dashboards`, () => {
           cy.visit(dashboardPublicLink);
+          cy.contains(COUNT_ALL);
+
+          cy.contains("Category").click();
+          cy.contains("Doohickey").click();
+          cy.contains("Add filter").click();
+
+          cy.contains(COUNT_DOOHICKEY);
+        });
+
+        it(`should be able to view embedded dashboards`, () => {
+          cy.visit(dashboardEmbedUrl);
           cy.contains(COUNT_ALL);
 
           cy.contains("Category").click();

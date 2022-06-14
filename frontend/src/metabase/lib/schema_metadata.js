@@ -6,7 +6,6 @@ import {
   isPK as isTypePK,
   TYPE,
 } from "metabase/lib/types";
-import { field_semantic_types_map } from "metabase/lib/core";
 
 // primary field types used for picking operators, etc
 export const NUMBER = "NUMBER";
@@ -22,8 +21,8 @@ export const PRIMARY_KEY = "PRIMARY_KEY";
 // other types used for various purporses
 export const ENTITY = "ENTITY";
 export const SUMMABLE = "SUMMABLE";
-export const SCOPE = "SCOPE";
 export const CATEGORY = "CATEGORY";
+export const SERIES_CATEGORY = "SERIES_CATEGORY";
 export const DIMENSION = "DIMENSION";
 
 export const UNKNOWN = "UNKNOWN";
@@ -44,7 +43,7 @@ const TYPES = {
   [STRING]: {
     base: [TYPE.Text],
     effective: [TYPE.Text],
-    semantic: [TYPE.Text, TYPE.Category],
+    semantic: [TYPE.Text],
   },
   [STRING_LIKE]: {
     base: [TYPE.TextLike],
@@ -73,11 +72,13 @@ const TYPES = {
     include: [NUMBER],
     exclude: [ENTITY, LOCATION, TEMPORAL],
   },
-  [SCOPE]: {
-    include: [NUMBER, TEMPORAL, CATEGORY, ENTITY, STRING],
-    exclude: [LOCATION],
-  },
   [CATEGORY]: {
+    base: [TYPE.Boolean],
+    effective: [TYPE.Boolean],
+    semantic: [TYPE.Category],
+    include: [LOCATION],
+  },
+  [SERIES_CATEGORY]: {
     base: [TYPE.Boolean],
     effective: [TYPE.Boolean],
     semantic: [TYPE.Category],
@@ -137,9 +138,9 @@ export function getFieldType(field) {
     COORDINATE,
     FOREIGN_KEY,
     PRIMARY_KEY,
+    NUMBER,
     STRING,
     STRING_LIKE,
-    NUMBER,
     BOOLEAN,
   ]) {
     if (isFieldType(type, field)) {
@@ -153,8 +154,8 @@ export const isNumeric = isFieldType.bind(null, NUMBER);
 export const isBoolean = isFieldType.bind(null, BOOLEAN);
 export const isString = isFieldType.bind(null, STRING);
 export const isSummable = isFieldType.bind(null, SUMMABLE);
-export const isScope = isFieldType.bind(null, SCOPE);
 export const isCategory = isFieldType.bind(null, CATEGORY);
+export const isSeriesCategory = isFieldType.bind(null, SERIES_CATEGORY);
 export const isLocation = isFieldType.bind(null, LOCATION);
 
 export const isDimension = col =>
@@ -462,13 +463,12 @@ const FILTER_OPERATORS_BY_TYPE_ORDERED = {
     { name: "not-empty", verboseName: t`Not empty` },
   ],
   [TEMPORAL]: [
-    { name: "!=", verboseName: t`Excludes` },
     { name: "=", verboseName: t`Is` },
     { name: "<", verboseName: t`Before` },
     { name: ">", verboseName: t`After` },
     { name: "between", verboseName: t`Between` },
     { name: "is-null", verboseName: t`Is empty` },
-    { name: "not-null", verboseName: t`Is not empty` },
+    { name: "not-null", verboseName: t`Not empty` },
   ],
   [LOCATION]: [
     { name: "=", verboseName: t`Is` },
@@ -589,10 +589,6 @@ function summableFields(fields) {
   return _.filter(fields, isSummable);
 }
 
-function scopeFields(fields) {
-  return _.filter(fields, isScope);
-}
-
 const AGGREGATION_OPERATORS = [
   {
     // DEPRECATED: "rows" is equivalent to no aggregations
@@ -671,7 +667,7 @@ const AGGREGATION_OPERATORS = [
     name: t`Minimum of ...`,
     columnName: t`Min`,
     description: t`Minimum value of a column`,
-    validFieldsFilters: [scopeFields],
+    validFieldsFilters: [summableFields],
     requiresField: true,
     requiredDriverFeature: "basic-aggregations",
   },
@@ -680,7 +676,7 @@ const AGGREGATION_OPERATORS = [
     name: t`Maximum of ...`,
     columnName: t`Max`,
     description: t`Maximum value of a column`,
-    validFieldsFilters: [scopeFields],
+    validFieldsFilters: [summableFields],
     requiresField: true,
     requiredDriverFeature: "basic-aggregations",
   },
@@ -695,27 +691,32 @@ function populateFields(aggregationOperator, fields) {
   };
 }
 
-export function getSupportedAggregationOperators(table) {
-  return AGGREGATION_OPERATORS.filter(operator => {
-    if (!operator.requiredDriverFeature) {
-      return true;
-    }
-    return (
-      table.db && table.db.features.includes(operator.requiredDriverFeature)
-    );
-  });
-}
-
+// TODO: unit test
 export function getAggregationOperators(table) {
-  return getSupportedAggregationOperators(table)
-    .map(operator => populateFields(operator, table.fields))
-    .filter(
-      aggregation =>
-        !aggregation.requiresField ||
-        aggregation.fields.every(fields => fields.length > 0),
-    );
+  return AGGREGATION_OPERATORS.filter(
+    aggregationOperator =>
+      !(
+        aggregationOperator.requiredDriverFeature &&
+        table.db &&
+        !_.contains(
+          table.db.features,
+          aggregationOperator.requiredDriverFeature,
+        )
+      ),
+  ).map(aggregationOperator =>
+    populateFields(aggregationOperator, table.fields),
+  );
 }
 
+export function getAggregationOperatorsWithFields(table) {
+  return getAggregationOperators(table).filter(
+    aggregation =>
+      !aggregation.requiresField ||
+      aggregation.fields.every(fields => fields.length > 0),
+  );
+}
+
+// TODO: unit test
 export function getAggregationOperator(short) {
   return _.findWhere(AGGREGATION_OPERATORS, { short: short });
 }
@@ -733,7 +734,7 @@ export function addValidOperatorsToFields(table) {
   for (const field of table.fields) {
     field.filter_operators = getFilterOperators(field, table);
   }
-  table.aggregation_operators = getAggregationOperators(table);
+  table.aggregation_operators = getAggregationOperatorsWithFields(table);
   return table;
 }
 
@@ -785,16 +786,6 @@ export const ICON_MAPPING = {
 
 export function getIconForField(field) {
   return ICON_MAPPING[getFieldType(field)] || "unknown";
-}
-
-export function getSemanticTypeIcon(semanticType, fallback) {
-  const semanticTypeMetadata = field_semantic_types_map[semanticType];
-  return semanticTypeMetadata?.icon ?? fallback;
-}
-
-export function getSemanticTypeName(semanticType) {
-  const semanticTypeMetadata = field_semantic_types_map[semanticType];
-  return semanticTypeMetadata?.name;
 }
 
 export function getFilterArgumentFormatOptions(filterOperator, index) {

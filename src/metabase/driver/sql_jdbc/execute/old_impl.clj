@@ -41,7 +41,7 @@
   :hierarchy #'driver/hierarchy)
 
 (defmethod read-column :default
-  [_ _col-type ^ResultSet rs _ ^Integer i]
+  [_ col-type ^ResultSet rs _ ^Integer i]
   (.getObject rs i))
 
 (defn- get-object-of-class [^ResultSet rs, ^Integer index, ^Class klass]

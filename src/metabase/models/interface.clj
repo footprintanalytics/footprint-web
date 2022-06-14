@@ -1,15 +1,14 @@
 (ns metabase.models.interface
-  (:require [buddy.core.codecs :as codecs]
-            [cheshire.core :as json]
+  (:require [cheshire.core :as json]
             [clojure.core.memoize :as memoize]
             [clojure.tools.logging :as log]
             [clojure.walk :as walk]
             [metabase.db.connection :as mdb.connection]
-            [metabase.mbql.normalize :as mbql.normalize]
+            [metabase.mbql.normalize :as normalize]
             [metabase.mbql.schema :as mbql.s]
             [metabase.plugins.classloader :as classloader]
             [metabase.util :as u]
-            [metabase.util.cron :as u.cron]
+            [metabase.util.cron :as cron-util]
             [metabase.util.encryption :as encryption]
             [metabase.util.i18n :refer [trs tru]]
             [potemkin.types :as p.types]
@@ -67,9 +66,9 @@
 ;; `metabase-query` type is for *outer* queries like Card.dataset_query. Normalizes them on the way in & out
 (defn- maybe-normalize [query]
   (cond-> query
-    (seq query) mbql.normalize/normalize))
+    (seq query) normalize/normalize))
 
-(defn catch-normalization-exceptions
+(defn- catch-normalization-exceptions
   "Wraps normalization fn `f` and returns a version that gracefully handles Exceptions during normalization. When
   invalid queries (etc.) come out of the Database, it's best we handle normalization failures gracefully rather than
   letting the Exception cause the entire API call to fail because of one bad object. (See #8914 for more details.)"
@@ -86,16 +85,6 @@
   :in  (comp json-in maybe-normalize)
   :out (comp (catch-normalization-exceptions maybe-normalize) json-out-with-keywordization))
 
-(defn normalize-parameters-list
-  "Normalize `parameters` or `parameter-mappings` when coming out of the application database or in via an API request."
-  [parameters]
-  (or (mbql.normalize/normalize-fragment [:parameters] parameters)
-      []))
-
-(models/add-type! :parameters-list
-  :in  (comp json-in normalize-parameters-list)
-  :out (comp (catch-normalization-exceptions normalize-parameters-list) json-out-with-keywordization))
-
 (def ^:private MetricSegmentDefinition
   {(s/optional-key :filter)      (s/maybe mbql.s/Filter)
    (s/optional-key :aggregation) (s/maybe [mbql.s/Aggregation])
@@ -107,7 +96,7 @@
 ;; `metric-segment-definition` is, predictably, for Metric/Segment `:definition`s, which are just the inner MBQL query
 (defn- normalize-metric-segment-definition [definition]
   (when (seq definition)
-    (u/prog1 (mbql.normalize/normalize-fragment [:query] definition)
+    (u/prog1 (normalize/normalize-fragment [:query] definition)
       (validate-metric-segment-definition <>))))
 
 ;; For inner queries like those in Metric definitions
@@ -119,7 +108,7 @@
   ;; frontend uses JSON-serialized versions of MBQL clauses as keys in `:column_settings`; we need to normalize them
   ;; to modern MBQL clauses so things work correctly
   (letfn [(normalize-column-settings-key [k]
-            (some-> k u/qualified-name json/parse-string mbql.normalize/normalize json/generate-string))
+            (some-> k u/qualified-name json/parse-string normalize/normalize json/generate-string))
           (normalize-column-settings [column-settings]
             (into {} (for [[k v] column-settings]
                        [(normalize-column-settings-key k) (walk/keywordize-keys v)])))
@@ -132,7 +121,7 @@
             (walk/postwalk
              (fn [form]
                (cond-> form
-                 (mbql-field-clause? form) mbql.normalize/normalize))
+                 (mbql-field-clause? form) normalize/normalize))
              form))]
     (cond-> (walk/keywordize-keys (dissoc viz-settings "column_settings" "graph.metrics"))
       (get viz-settings "column_settings") (assoc :column_settings (normalize-column-settings (get viz-settings "column_settings")))
@@ -144,6 +133,16 @@
 (models/add-type! :visualization-settings
   :in  json-in
   :out (comp normalize-visualization-settings json-out-without-keywordization))
+
+;; For DashCard parameter lists
+(defn- normalize-parameter-mapping-targets [parameter-mappings]
+  (or (normalize/normalize-fragment [:parameters] parameter-mappings)
+      []))
+
+(models/add-type! :parameter-mappings
+  :in  (comp json-in normalize-parameter-mapping-targets)
+  :out (comp (catch-normalization-exceptions normalize-parameter-mapping-targets) json-out-with-keywordization))
+
 
 ;; json-set is just like json but calls `set` on it when coming out of the DB. Intended for storing things like a
 ;; permissions set
@@ -166,23 +165,11 @@
   :in  encryption/maybe-encrypt
   :out encryption/maybe-decrypt)
 
-(defn- blob->bytes [^Blob b]
-  (.getBytes ^Blob b 0 (.length ^Blob b)))
-
-(defn- maybe-blob->bytes [v]
-  (if (instance? Blob v)
-    (blob->bytes v)
-    v))
-
-(models/add-type! :secret-value
-  :in  (comp encryption/maybe-encrypt-bytes codecs/to-bytes)
-  :out (comp encryption/maybe-decrypt maybe-blob->bytes))
-
 (defn decompress
   "Decompress `compressed-bytes`."
   [compressed-bytes]
   (if (instance? Blob compressed-bytes)
-    (recur (blob->bytes compressed-bytes))
+    (recur (.getBytes ^Blob compressed-bytes 0 (.length ^Blob compressed-bytes)))
     (with-open [bis     (ByteArrayInputStream. compressed-bytes)
                 bif     (BufferedInputStream. bis)
                 gz-in   (GZIPInputStream. bif)
@@ -194,7 +181,7 @@
   :out decompress)
 
 (defn- validate-cron-string [s]
-  (s/validate (s/maybe u.cron/CronScheduleString) s))
+  (s/validate (s/maybe cron-util/CronScheduleString) s))
 
 (models/add-type! :cron-string
   :in  validate-cron-string
@@ -209,11 +196,9 @@
 
 ;;; properties
 
-(defn now
-  "Return a HoneySQL form for a SQL function call to get current moment in time. Currently this is `now()` for Postgres
-  and H2 and `now(6)` for MySQL/MariaDB (`now()` for MySQL only return second resolution; `now(6)` uses the
-  max (nanosecond) resolution)."
-  []
+;; use now() for Postgres and H2. now() for MySQL/MariaDB only returns second resolution. So use now(6) which uses the
+;; max (nanosecond) resolution.
+(defn- now []
   (classloader/require 'metabase.driver.sql.query-processor)
   ((resolve 'metabase.driver.sql.query-processor/current-datetime-honeysql-form) (mdb.connection/db-type)))
 
@@ -227,20 +212,11 @@
   :insert (comp add-created-at-timestamp add-updated-at-timestamp)
   :update add-updated-at-timestamp)
 
-;; like `timestamped?`, but for models that only have an `:created_at` column
-(models/add-property! :created-at-timestamped?
-  :insert add-created-at-timestamp)
-
 ;; like `timestamped?`, but for models that only have an `:updated_at` column
 (models/add-property! :updated-at-timestamped?
   :insert add-updated-at-timestamp
   :update add-updated-at-timestamp)
 
-(defn- add-entity-id [obj & _]
-  (assoc obj :entity_id (u/generate-nano-id)))
-
-(models/add-property! :entity_id
-  :insert add-entity-id)
 
 ;;; +----------------------------------------------------------------------------------------------------------------+
 ;;; |                                             New Permissions Stuff                                              |
@@ -257,8 +233,7 @@
     this param).")
 
   (can-read? [instance] [entity ^Integer id]
-    "Return whether `*current-user*` has *read* permissions for an object. You should typically use one of these
-    implementations:
+    "Return whether `*current-user*` has *read* permissions for an object. You should use one of these implmentations:
 
   *  `(constantly true)`
   *  `superuser?`
@@ -267,8 +242,7 @@
      this)")
 
   (^{:hydrate :can_write} can-write? [instance] [entity ^Integer id]
-   "Return whether `*current-user*` has *write* permissions for an object. You should typically use one of these
-   implmentations:
+   "Return whether `*current-user*` has *write* permissions for an object. You should use one of these implmentations:
 
   *  `(constantly true)`
   *  `superuser?`

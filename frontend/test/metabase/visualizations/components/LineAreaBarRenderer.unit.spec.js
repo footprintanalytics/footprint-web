@@ -1,4 +1,4 @@
-import "__support__/ui-mocks"; // included explicitly whereas with e2e tests it comes with __support__/e2e
+import "__support__/mocks"; // included explicitly whereas with e2e tests it comes with __support__/e2e
 
 import {
   NumberColumn,
@@ -489,7 +489,7 @@ describe("LineAreaBarRenderer", () => {
           visualization_settings: {
             "bar.scalar_series": true,
             "funnel.type": "bar",
-            "graph.colors": ["#509ee3", "#9cc177", "#a989c5", "#ef8c8c"],
+            "graph.colors": ["#7355FA", "#9cc177", "#a989c5", "#ef8c8c"],
             "graph.x_axis.axis_enabled": true,
             "graph.x_axis.scale": "ordinal",
           },

@@ -1,54 +1,38 @@
-import {
-  restore,
-  visitQuestion,
-  visitDashboard,
-} from "__support__/e2e/cypress";
+import { restore } from "__support__/e2e/cypress";
 
 describe(`search > recently viewed`, () => {
   beforeEach(() => {
     restore();
     cy.signInAsAdmin();
-    cy.intercept("POST", "/api/dataset").as("dataset");
-    cy.visit("/browse/1-sample-database");
+  });
 
-    // "People" table
-    cy.findByTextEnsureVisible("People").click();
-    cy.wait("@dataset");
-    cy.findByTextEnsureVisible("Address");
+  it("shows list of recently viewed items", () => {
+    cy.visit("/browse/1-sample-dataset");
+    cy.findByText("People").click();
 
     // "Orders" question
-    visitQuestion(1);
+    cy.visit("/question/1");
 
     // "Orders in a dashboard" dashboard
-    visitDashboard(1);
-    cy.findByTextEnsureVisible("Product ID");
+    cy.visit("/dashboard/1");
+    cy.findByText("Product ID");
 
     // inside the "Orders in a dashboard" dashboard, the order is queried again,
     // which elicits a ViewLog entry
 
     cy.visit("/");
+
     cy.findByPlaceholderText("Search…").click();
-  });
+    cy.get(".LoadingSpinner").should("not.exist");
 
-  it("shows list of recently viewed items", () => {
-    cy.findByTestId("loading-spinner").should("not.exist");
-
+    assertRecentlyViewedItem(0, "Orders", "Question", "/question/1-orders");
     assertRecentlyViewedItem(
-      0,
+      1,
       "Orders in a dashboard",
       "Dashboard",
       "/dashboard/1-orders-in-a-dashboard",
     );
-    assertRecentlyViewedItem(1, "Orders", "Question", "/question/1-orders");
     assertRecentlyViewedItem(2, "People", "Table", "/question#?db=1&table=3");
-  });
-
-  it("allows to select an item from keyboard", () => {
-    cy.get("body").trigger("keydown", { key: "ArrowDown" });
-    cy.get("body").trigger("keydown", { key: "ArrowDown" });
-    cy.get("body").trigger("keydown", { key: "Enter" });
-
-    cy.url().should("match", /\/question\/1-orders$/);
   });
 });
 

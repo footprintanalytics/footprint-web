@@ -5,7 +5,6 @@
 
 :local .ChartWithLegend .Legend {
   display: flex;
-  justify-content: center;
   max-width: 100%;
 }
 
@@ -25,7 +24,6 @@
 
 :local .ChartWithLegend .LegendWrapper {
   display: flex;
-  justify-content: center;
   flex-shrink: 1;
 }
 
@@ -44,7 +42,7 @@
 
 /* VERTICAL */
 :local .ChartWithLegend.vertical {
-  flex-direction: column-reverse;
+  flex-direction: column;
 }
 :local .ChartWithLegend.vertical .Legend {
   flex-shrink: 1;
@@ -65,15 +63,26 @@
 
 /* HORIZONTAL */
 :local .ChartWithLegend.horizontal {
-  flex-direction: row;
+  flex-direction: row-reverse;
 }
 :local .ChartWithLegend.horizontal .Legend {
   flex-grow: 0;
   flex-shrink: 1;
+  padding-left: 10px;
   overflow: hidden;
 }
 :local .ChartWithLegend.horizontal .LegendWrapper {
+  align-items: center;
   flex-direction: row;
+  justify-content: center;
+}
+
+.LegendNextPrev {
+  color: #84848a;
+  font-size: 12px;
+  font-weight: normal;
+  font-family: Arial, Lato, sans-serif;
+  margin: 0 20px;
 }
 :local .ChartWithLegend.horizontal.flexChart .Legend {
   flex-grow: 0;
@@ -88,12 +97,12 @@
 /* DEBUG */
 /*
 :local .ChartWithLegend .Legend {
-  background-color: color-mod(var(--color-bg-black) alpha(-90%));
+  background-color: color(var(--color-bg-black) alpha(-90%));
 }
 :local .ChartWithLegend .Chart {
-  background-color: color-mod(var(--color-success) alpha(-90%));
+  background-color: color(var(--color-success) alpha(-90%));
 }
 :local .ChartWithLegend.flexChart .Chart {
-  background-color: color-mod(var(--color-error) alpha(-90%));
+  background-color: color(var(--color-error) alpha(-90%));
 }
 */

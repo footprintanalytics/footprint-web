@@ -5,7 +5,7 @@ import { t } from "ttag";
 import cx from "classnames";
 
 import Tooltip from "metabase/components/Tooltip";
-import Button from "metabase/core/components/Button";
+import Button from "metabase/components/Button";
 
 export default function QuestionNotebookButton({
   className,
@@ -14,29 +14,25 @@ export default function QuestionNotebookButton({
   setQueryBuilderMode,
   ...props
 }) {
-  return (
-    <Tooltip
-      tooltip={isShowingNotebook ? t`Hide editor` : t`Show editor`}
-      placement="bottom"
-    >
+  return QuestionNotebookButton.shouldRender({ question }) ? (
+    <Tooltip tooltip={isShowingNotebook ? t`Hide editor` : t`Show editor`}>
       <Button
         borderless={!isShowingNotebook}
         primary={isShowingNotebook}
         medium
-        className={cx(className, isShowingNotebook ? undefined : "text-dark", {
+        className={cx(className, {
           "text-brand-hover": !isShowingNotebook,
         })}
         icon="notebook"
+        iconSize={16}
         onClick={() =>
           setQueryBuilderMode(isShowingNotebook ? "view" : "notebook")
         }
         {...props}
       />
     </Tooltip>
-  );
+  ) : null;
 }
 
-QuestionNotebookButton.shouldRender = ({ question, isActionListVisible }) =>
-  question.isStructured() &&
-  question.query().isEditable() &&
-  isActionListVisible;
+QuestionNotebookButton.shouldRender = ({ question }) =>
+  question.isStructured() && question.query().isEditable();

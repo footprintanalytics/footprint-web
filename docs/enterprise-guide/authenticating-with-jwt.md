@@ -1,7 +1,3 @@
----
-title: JWT-based authentication
----
-
 # JWT-based authentication
 
 {% include plans-blockquote.html feature="JWT-based authentication" %}

@@ -1,10 +1,8 @@
 // Imported from drillthroughs.e2e.spec.js
-import { restore, visitDashboard } from "__support__/e2e/cypress";
+import { restore } from "__support__/e2e/cypress";
+import { SAMPLE_DATASET } from "__support__/e2e/cypress_sample_dataset";
 
-import { SAMPLE_DB_ID } from "__support__/e2e/cypress_data";
-import { SAMPLE_DATABASE } from "__support__/e2e/cypress_sample_database";
-
-const { ORDERS, ORDERS_ID, PRODUCTS, PEOPLE, PEOPLE_ID } = SAMPLE_DATABASE;
+const { ORDERS, ORDERS_ID, PRODUCTS, PEOPLE, PEOPLE_ID } = SAMPLE_DATASET;
 
 // This question is part of our pre-defined data set used for testing
 const Q2 = {
@@ -49,7 +47,7 @@ describe("scenarios > visualizations > drillthroughs > dash_drill", () => {
         // Convert Q2 to a scalar with a filter applied
         cy.request("PUT", `/api/card/${Q2.id}`, {
           dataset_query: {
-            database: SAMPLE_DB_ID,
+            database: 1,
             query: {
               aggregation: [["count"]],
               filter: [">", ["field", ORDERS.TOTAL, null], 100],
@@ -92,6 +90,13 @@ describe("scenarios > visualizations > drillthroughs > dash_drill", () => {
         }).then(({ body: { id: CARD_ID } }) => {
           cy.createDashboard({ name: DASHBOARD_NAME }).then(
             ({ body: { id: DASHBOARD_ID } }) => {
+              // Prepare to wait for this specific XHR:
+              // We need to do this because Cypress sees the string that is "card title" before card is fully rendered.
+              // That string then gets detached from DOM just prior to this XHR and gets re-rendered again inside a new DOM element.
+              // Cypress was complaining it cannot click on a detached element.
+              cy.server();
+              cy.route("POST", `/api/card/${CARD_ID}/query`).as("cardQuery");
+
               // Add previously created question to the new dashboard
               cy.request("POST", `/api/dashboard/${DASHBOARD_ID}/cards`, {
                 cardId: CARD_ID,
@@ -99,15 +104,11 @@ describe("scenarios > visualizations > drillthroughs > dash_drill", () => {
                 sizeY: 12,
               });
 
-              visitDashboard(DASHBOARD_ID);
+              cy.visit(`/dashboard/${DASHBOARD_ID}`);
               cy.findByText(DASHBOARD_NAME);
 
-              cy.intercept("POST", `/api/card/${CARD_ID}/query`).as(
-                "cardQuery",
-              );
-
+              cy.wait("@cardQuery"); // wait for the title to be re-rendered before we can click on it
               cy.findByText(CARD_NAME).click();
-              cy.wait("@cardQuery");
             },
           );
         });
@@ -175,11 +176,7 @@ describe("scenarios > visualizations > drillthroughs > dash_drill", () => {
                         card_id: QUESTION_ID,
                         target: [
                           "dimension",
-                          [
-                            "field",
-                            PRODUCTS.CATEGORY,
-                            { "source-field": ORDERS.PRODUCT_ID },
-                          ],
+                          ["field", PRODUCTS.CATEGORY, null],
                         ],
                       },
                     ],
@@ -187,11 +184,13 @@ describe("scenarios > visualizations > drillthroughs > dash_drill", () => {
                 ],
               });
             });
+            cy.server();
+            cy.route("POST", `/api/card/${QUESTION_ID}/query`).as("cardQuery");
+            cy.route("POST", `/api/dataset`).as("dataset");
 
-            cy.intercept("POST", "/api/dataset").as("dataset");
+            cy.visit(`/dashboard/${DASHBOARD_ID}`);
 
-            visitDashboard(DASHBOARD_ID);
-
+            cy.wait("@cardQuery");
             cy.findByText(QUESTION_NAME).click();
 
             cy.wait("@dataset");
@@ -222,7 +221,7 @@ function addCardToNewDashboard(dashboard_name, card_id) {
         sizeY: 4,
       });
       // Visit newly created dashboard
-      visitDashboard(DASHBOARD_ID);
+      cy.visit(`/dashboard/${DASHBOARD_ID}`);
     },
   );
 }

@@ -4,11 +4,10 @@ import React from "react";
 import { t } from "ttag";
 import _ from "underscore";
 
-import { color } from "metabase/lib/colors";
-import { getAccentColors } from "metabase/lib/colors/groups";
+import { color, normal } from "metabase/lib/colors";
 
-import ColorSelector from "metabase/core/components/ColorSelector";
-import Button from "metabase/core/components/Button";
+import ColorPicker from "metabase/components/ColorPicker";
+import Button from "metabase/components/Button";
 import Icon from "metabase/components/Icon";
 import NumericInput from "metabase/components/NumericInput";
 
@@ -24,9 +23,9 @@ const ChartSettingGaugeSegments = ({ value: segments, onChange }) => {
       <table>
         <thead>
           <tr>
-            <th>{t`Color`}</th>
-            <th>{t`Min`}</th>
-            <th>{t`Max`}</th>
+            <th>Color</th>
+            <th>Min</th>
+            <th>Max</th>
           </tr>
         </thead>
         <tbody>
@@ -34,11 +33,12 @@ const ChartSettingGaugeSegments = ({ value: segments, onChange }) => {
             <React.Fragment key={segment.index}>
               <tr>
                 <td>
-                  <ColorSelector
-                    className="mr1"
+                  <ColorPicker
                     value={segment.color}
-                    colors={getColorPalette()}
                     onChange={color => onChangeProperty(index, "color", color)}
+                    triggerSize={28}
+                    padding={2}
+                    colors={getColorPalette()}
                   />
                 </td>
                 <td>
@@ -101,10 +101,10 @@ const ChartSettingGaugeSegments = ({ value: segments, onChange }) => {
 
 function getColorPalette() {
   return [
-    ...getAccentColors(),
     color("error"),
     color("warning"),
     color("success"),
+    ...Object.values(normal).slice(0, 9),
     color("bg-medium"),
   ];
 }
@@ -117,7 +117,7 @@ function newSegment(segments) {
     : -1;
   const nextColor =
     lastColorIndex >= 0
-      ? palette[(lastColorIndex + 1) % palette.length]
+      ? palette[lastColorIndex + (1 % palette.length)]
       : palette[0];
 
   return {

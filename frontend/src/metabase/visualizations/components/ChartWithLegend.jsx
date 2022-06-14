@@ -10,11 +10,12 @@ import ExplicitSize from "metabase/components/ExplicitSize";
 import cx from "classnames";
 
 const GRID_ASPECT_RATIO = 4 / 3;
-const PADDING = 14;
+const PADDING = 4;
 
 const DEFAULT_GRID_SIZE = 100;
 
-class ChartWithLegend extends Component {
+@ExplicitSize({ wrapped: true })
+export default class ChartWithLegend extends Component {
   static defaultProps = {
     aspectRatio: 1,
     style: {},
@@ -117,9 +118,6 @@ class ChartWithLegend extends Component {
         )}
         style={{
           ...style,
-          paddingBottom: PADDING,
-          paddingLeft: PADDING,
-          paddingRight: PADDING,
         }}
       >
         {legend && <div className={cx(styles.LegendWrapper)}>{legend}</div>}
@@ -143,8 +141,3 @@ class ChartWithLegend extends Component {
     );
   }
 }
-
-export default ExplicitSize({
-  wrapped: true,
-  refreshMode: props => (props.isDashboard ? "debounce" : "throttle"),
-})(ChartWithLegend);

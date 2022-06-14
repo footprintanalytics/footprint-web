@@ -1,4 +1,3 @@
-/* eslint-disable react/prop-types */
 import React from "react";
 import { connect } from "react-redux";
 
@@ -10,6 +9,30 @@ import { getMetadata } from "metabase/selectors/metadata";
 import Question from "metabase-lib/lib/Question";
 
 // type annotations
+import type Metadata from "metabase-lib/lib/metadata/Metadata";
+import type { Card } from "metabase-types/types/Card";
+
+type ChildProps = {
+  loading: boolean,
+  error: ?any,
+  question: ?Question,
+};
+
+type Props = {
+  questionHash?: string,
+  children?: (props: ChildProps) => React.Element,
+  // provided by redux
+  loadMetadataForCard: (card: Card) => Promise<void>,
+  metadata: Metadata,
+};
+
+type State = {
+  // the question should be of type Question if it is set
+  question: ?Question,
+  card: ?Card,
+  loading: boolean,
+  error: ?any,
+};
 
 /*
  * AdHocQuestionLoader
@@ -41,7 +64,9 @@ import Question from "metabase-lib/lib/Question";
  * without the redux store.
  */
 export class AdHocQuestionLoader extends React.Component {
-  state = {
+  props: Props;
+
+  state: State = {
     // this will store the loaded question
     question: null,
     // keep a reference to the card as well to help with re-creating question
@@ -56,7 +81,7 @@ export class AdHocQuestionLoader extends React.Component {
     this._loadQuestion(this.props.questionHash);
   }
 
-  UNSAFE_componentWillReceiveProps(nextProps) {
+  UNSAFE_componentWillReceiveProps(nextProps: Props) {
     // if the questionHash changes (this will most likely be the result of a
     // url change) then we need to load this new question
     if (nextProps.questionHash !== this.props.questionHash) {
@@ -81,7 +106,7 @@ export class AdHocQuestionLoader extends React.Component {
    *    be used
    * 4. Set the component state to the new Question
    */
-  async _loadQuestion(questionHash) {
+  async _loadQuestion(questionHash: ?string) {
     if (!questionHash) {
       this.setState({
         loading: false,

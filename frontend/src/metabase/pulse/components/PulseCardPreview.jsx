@@ -3,7 +3,7 @@
 import React, { Component } from "react";
 import PropTypes from "prop-types";
 
-import ExternalLink from "metabase/core/components/ExternalLink";
+import ExternalLink from "metabase/components/ExternalLink";
 import Icon from "metabase/components/Icon";
 import LoadingSpinner from "metabase/components/LoadingSpinner";
 import Tooltip from "metabase/components/Tooltip";
@@ -124,8 +124,8 @@ export default class PulseCardPreview extends Component {
               </RenderedPulseCardPreviewHeader>
               <RenderedPulseCardPreviewMessage>
                 {isAttachmentOnly
-                  ? t`This question will be added as a file attachment`
-                  : t`This question won't be included in your Pulse`}
+                  ? t`This query will be added as a file attachment`
+                  : t`This query won't be included in your Pulse`}
               </RenderedPulseCardPreviewMessage>
             </RenderedPulseCardPreview>
           ) : (
@@ -151,7 +151,7 @@ const RenderedPulseCardPreview = ({ href, children }) => (
   <ExternalLink
     href={href}
     style={{
-      fontFamily: 'Lato, "Helvetica Neue", Helvetica, Arial, sans-serif',
+      fontFamily: 'Arial,Lato, "Helvetica Neue", Helvetica, sans-serif',
       margin: 16,
       marginBottom: 16,
       display: "block",
@@ -176,8 +176,7 @@ const RenderedPulseCardPreviewHeader = ({ children }) => (
         <td>
           <span
             style={{
-              fontFamily:
-                'Lato, "Helvetica Neue", Helvetica, Arial, sans-serif',
+              fontFamily: 'Arial,Lato, "Helvetica Neue", Helvetica, sans-serif',
               fontSize: 16,
               fontWeight: 700,
               color: color("text-dark"),

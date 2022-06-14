@@ -5,12 +5,12 @@
             [compojure.core :as compojure]
             [honeysql.types :as htypes]
             [medley.core :as m]
-            [metabase.api.common.internal
-             :refer
-             [add-route-param-regexes auto-parse route-dox route-fn-name validate-params wrap-response-if-needed]]
+            [metabase.api.common.internal :refer [add-route-param-regexes auto-parse route-dox route-fn-name
+                                                  validate-params wrap-response-if-needed]]
             [metabase.models.interface :as mi]
+            [metabase.public-settings :as public-settings]
             [metabase.util :as u]
-            [metabase.util.i18n :as i18n :refer [deferred-tru tru]]
+            [metabase.util.i18n :as ui18n :refer [deferred-tru tru]]
             [metabase.util.schema :as su]
             [schema.core :as s]
             [toucan.db :as db]))
@@ -33,10 +33,6 @@
   "Is the current user a superuser?"
   false)
 
-(def ^:dynamic ^Boolean *is-group-manager?*
-  "Is the current user a group manager of at least one group?"
-  false)
-
 (def ^:dynamic *current-user-permissions-set*
   "Delay to the set of permissions granted to the current user. See documentation in [[metabase.models.permissions]] for
   more information about the Metabase permissions system."
@@ -48,7 +44,7 @@
 (defn- check-one [condition code message]
   (when-not condition
     (let [[message info] (if (and (map? message)
-                                  (not (i18n/localized-string? message)))
+                                  (not (ui18n/localized-string? message)))
                            [(:message message) message]
                            [message])]
       (throw (ex-info (str message) (assoc info :status-code code)))))
@@ -97,6 +93,7 @@
   "Check that `*current-user*` is a superuser or throw a 403. This doesn't require a DB call."
   []
   (check-403 *is-superuser?*))
+
 
 ;; checkp- functions: as in "check param". These functions expect that you pass a symbol so they can throw exceptions
 ;; w/ relevant error messages.
@@ -249,7 +246,7 @@
 
 (defmacro defendpoint*
   "Impl macro for `defendpoint`; don't use this directly."
-  [{:keys [method route fn-name docstr args body]}]
+  [{:keys [method route fn-name docstr args arg->schema original-body body]}]
   {:pre [(or (string? route) (vector? route))]}
   `(def ~(vary-meta fn-name
                     assoc
@@ -324,10 +321,8 @@
   {:style/indent 0}
   [& middleware]
   (let [api-route-fns (namespace->api-route-fns *ns*)
-        routes        `(compojure/routes ~@api-route-fns)
-        docstring     (str "Routes for " *ns*)]
+        routes        `(compojure/routes ~@api-route-fns)]
     `(def ~(vary-meta 'routes assoc :doc (api-routes-docstring *ns* api-route-fns middleware))
-       ~docstring
        ~(if (seq middleware)
           `(-> ~routes ~@middleware)
           routes))))
@@ -361,6 +356,22 @@
   ([obj]
    (check-404 obj)
    (check-403 (mi/can-read? obj))
+   obj)
+
+  ([entity id]
+   (read-check (entity id)))
+
+  ([entity id & other-conditions]
+   (read-check (apply db/select-one entity :id id other-conditions))))
+
+(defn read-check-not-403
+  "Check whether we can read an existing `obj`, or `entity` with `id`. If the object doesn't exist, throw a 404; if we
+  don't have proper permissions, throw a 403. This will fetch the object if it was not already fetched, and returns
+  `obj` if the check is successful."
+  {:style/indent 2}
+  ([obj]
+   (check-404 obj)
+;   (check-403 (mi/can-read? obj))
    obj)
 
   ([entity id]
@@ -405,6 +416,18 @@
 
 ;;; ------------------------------------------------ OTHER HELPER FNS ------------------------------------------------
 
+(defn check-public-sharing-enabled
+  "Check that the `public-sharing-enabled` Setting is `true`, or throw a `400`."
+  []
+  (check (public-settings/enable-public-sharing)
+    [400 (tru "Public sharing is not enabled.")]))
+
+(defn check-embedding-enabled
+  "Is embedding of Cards or Objects (secured access via `/api/embed` endpoints with a signed JWT enabled?"
+  []
+  (check (public-settings/enable-embedding)
+    [400 (tru "Embedding is not enabled.")]))
+
 (defn check-not-archived
   "Check that the `object` exists and is not `:archived`, or throw a `404`. Returns `object` as-is if check passes."
   [object]
@@ -416,8 +439,9 @@
 (defn check-valid-page-params
   "Check on paginated stuff that, if the limit exists, the offset exists, and vice versa."
   [limit offset]
-  (check (not (and limit (not offset))) [400 (tru "When including a limit, an offset must also be included.")])
-  (check (not (and offset (not limit))) [400 (tru "When including an offset, a limit must also be included.")]))
+  (do
+    (check (not (and limit (not offset))) [400 (tru "When including a limit, an offset must also be included.")])
+    (check (not (and offset (not limit))) [400 (tru "When including an offset, a limit must also be included.")])))
 
 (s/defn column-will-change? :- s/Bool
   "Helper for PATCH-style operations to see if a column is set to change when `object-updates` (i.e., the input to the
@@ -483,7 +507,7 @@
   updating an existing instance, but creating a new one)."
   ([new-model-data :- ModelWithPosition]
    (maybe-reconcile-collection-position! nil new-model-data))
-  ([{old-collection-id :collection_id, old-position :collection_position, :as _before-update} :- (s/maybe ModelWithPosition)
+  ([{old-collection-id :collection_id, old-position :collection_position, :as before-update} :- (s/maybe ModelWithPosition)
     {new-collection-id :collection_id, new-position :collection_position, :as model-updates} :- ModelWithOptionalPosition]
    (let [updated-collection? (and (contains? model-updates :collection_id)
                                   (not= old-collection-id new-collection-id))

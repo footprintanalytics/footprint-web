@@ -40,8 +40,7 @@ describe("visual tests > admin > permissions", () => {
       cy.percySnapshot();
     });
 
-    // This revealed the infinite loop which resulted in metabase#21026
-    it.skip("modal", () => {
+    it("modal", () => {
       cy.visit("/collection/root/permissions");
       cy.findByText("Group name");
       cy.percySnapshot();

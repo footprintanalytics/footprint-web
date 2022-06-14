@@ -1,9 +1,9 @@
 // Ported from `segments.e2e.spec.js`
 import { restore, popover, modal } from "__support__/e2e/cypress";
 
-import { SAMPLE_DATABASE } from "__support__/e2e/cypress_sample_database";
+import { SAMPLE_DATASET } from "__support__/e2e/cypress_sample_dataset";
 
-const { ORDERS, ORDERS_ID } = SAMPLE_DATABASE;
+const { ORDERS, ORDERS_ID } = SAMPLE_DATASET;
 
 describe("scenarios > admin > datamodel > segments", () => {
   beforeEach(() => {
@@ -21,7 +21,7 @@ describe("scenarios > admin > datamodel > segments", () => {
       );
     });
 
-    it("should have 'Custom expression' in a filter list (metabase#13069)", () => {
+    it.skip("should have 'Custom expression' in a filter list (metabase#13069)", () => {
       cy.visit("/admin/datamodel/segments");
       cy.findByText("New segment").click();
       cy.findByText("Select a table").click();

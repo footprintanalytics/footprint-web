@@ -1,0 +1,17 @@
+.dashboard-card-display-info {
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+  padding: 0 var(--footprint-spacing-s) 0 var(--footprint-spacing-l);
+  cursor: default !important;
+  margin-top: 0;
+}
+
+@media screen and (--footprint-breakpoint-max-mobile) {
+  .dashboard-card-display-info {
+    justify-content: left;
+    padding: 0;
+    margin-top: 6px;
+  }
+}

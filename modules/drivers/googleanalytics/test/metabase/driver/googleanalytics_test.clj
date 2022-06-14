@@ -225,9 +225,9 @@
   (doseq [system-timezone-id ["UTC" "US/Pacific"]]
     (mt/with-system-timezone-id system-timezone-id
       (mt/with-clock (t/mock-clock (t/instant (t/zoned-date-time
-                                               (t/local-date "2019-11-18")
-                                               (t/local-time 0)
-                                               (t/zone-id system-timezone-id)))
+                                              (t/local-date "2019-11-18")
+                                              (t/local-time 0)
+                                              (t/zone-id system-timezone-id)))
                                   (t/zone-id system-timezone-id))
         (is (= expected-ga-query
                (do-with-some-fields
@@ -256,13 +256,13 @@
   (doseq [system-timezone-id ["UTC" "US/Pacific"]]
     (mt/with-system-timezone-id system-timezone-id
       (mt/with-clock (t/mock-clock (t/instant (t/zoned-date-time
-                                               (t/local-date "2019-11-18")
-                                               (t/local-time 0)
-                                               (t/zone-id system-timezone-id)))
+                                              (t/local-date "2019-11-18")
+                                              (t/local-time 0)
+                                              (t/zone-id system-timezone-id)))
                                   (t/zone-id system-timezone-id))
         (is (= expected-ga-query
                (do-with-some-fields
-                (comp qp/compile query-with-some-fields))))))))
+                (comp qp/query->native query-with-some-fields))))))))
 
 ;; ok, now do the same query again, but run the entire QP pipeline, swapping out a few things so nothing is actually
 ;; run externally.
@@ -292,45 +292,43 @@
                                            (qp.context/reducef rff context metadata rows)))}
                      qp      (fn [query]
                                (qp/process-query query context))]
-                 (is (partial=
-                      {:row_count 1
-                       :status    :completed
-                       :data      {:rows             [["Toucan Sighting" 1000]]
-                                   :native_form      expected-ga-query
-                                   :cols             [{:description       "This is ga:eventLabel"
-                                                       :semantic_type     nil
-                                                       :name              "ga:eventLabel"
-                                                       :settings          nil
-                                                       :source            :breakout
-                                                       :nfc_path          nil
-                                                       :parent_id         nil
-                                                       :visibility_type   :normal
-                                                       :display_name      "ga:eventLabel"
-                                                       :fingerprint       nil
-                                                       :base_type         :type/Text
-                                                       :effective_type    :type/Text
-                                                       :coercion_strategy nil}
-                                                      {:name         "metric"
-                                                       :display_name "ga:totalEvents"
-                                                       :source       :aggregation
-                                                       :description  "This is ga:totalEvents"
-                                                       :base_type    :type/Text
-                                                       :effective_type    :type/Text}]
-                                   :results_timezone system-timezone-id}}
-                      (-> (tu/doall-recursive (qp query))
-                          (update-in [:data :cols] #(for [col %]
-                                                      (dissoc col :table_id :id :field_ref)))
-                          (m/dissoc-in [:data :results_metadata])
-                          (m/dissoc-in [:data :insights])))))))))))))
+                 (is (= {:row_count 1
+                         :status    :completed
+                         :data      {:rows             [["Toucan Sighting" 1000]]
+                                     :native_form      expected-ga-query
+                                     :cols             [{:description       "This is ga:eventLabel"
+                                                         :semantic_type     nil
+                                                         :name              "ga:eventLabel"
+                                                         :settings          nil
+                                                         :source            :breakout
+                                                         :parent_id         nil
+                                                         :visibility_type   :normal
+                                                         :display_name      "ga:eventLabel"
+                                                         :fingerprint       nil
+                                                         :base_type         :type/Text
+                                                         :effective_type    :type/Text
+                                                         :coercion_strategy nil}
+                                                        {:name         "metric"
+                                                         :display_name "ga:totalEvents"
+                                                         :source       :aggregation
+                                                         :description  "This is ga:totalEvents"
+                                                         :base_type    :type/Text
+                                                         :effective_type    :type/Text}]
+                                     :results_timezone system-timezone-id}}
+                        (-> (tu/doall-recursive (qp query))
+                            (update-in [:data :cols] #(for [col %]
+                                                        (dissoc col :table_id :id :field_ref)))
+                            (m/dissoc-in [:data :results_metadata])
+                            (m/dissoc-in [:data :insights])))))))))))))
 
 (deftest almost-e2e-time-interval-test
   (testing "Make sure filtering by the previous 4 months actually filters against the right months (#10701)"
     (doseq [system-timezone-id ["UTC" "US/Pacific"]]
       (mt/with-system-timezone-id system-timezone-id
         (mt/with-clock (t/mock-clock (t/instant (t/zoned-date-time
-                                                 (t/local-date "2019-11-18")
-                                                 (t/local-time 0)
-                                                 (t/zone-id system-timezone-id)))
+                                                (t/local-date "2019-11-18")
+                                                (t/local-time 0)
+                                                (t/zone-id system-timezone-id)))
                                     (t/zone-id system-timezone-id))
           (do-with-some-fields
            (fn [{:keys [db table date-field]}]
@@ -345,7 +343,7 @@
                                     :breakout     [[:field (:id date-field) {:temporal-unit :day}]]}
                          :type     :query
                          :database (:id db)}
-                        qp/compile
+                        qp/query->native
                         :query
                         (select-keys [:start-date :end-date :dimensions :metrics :sort])))
                  "Last 4 months should includy July, August, September, and October (July 1st - October 31st)"))))))))

@@ -1,14 +1,14 @@
 (ns metabase.models.interface-test
   (:require [cheshire.core :as json]
             [clojure.test :refer :all]
-            [metabase.mbql.normalize :as mbql.normalize]
-            [toucan.models :as models]))
+            [metabase.mbql.normalize :as normalize]
+            [toucan.models :as t.models]))
 
-;; let's make sure the `:metabase-query`/`:metric-segment-definition`/`::dashboard-card/parameter-mappings`
-;; normalization functions respond gracefully to invalid stuff when pulling them out of the Database. See #8914
+;; let's make sure the `:metabase-query`/`:metric-segment-definition`/`:parameter-mappings` normalization functions
+;; respond gracefully to invalid stuff when pulling them out of the Database. See #8914
 
-(defn type-fn [toucan-type in-or-out]
-  (-> @@#'models/type-fns toucan-type in-or-out))
+(defn- type-fn [toucan-type in-or-out]
+  (-> @@#'t.models/type-fns toucan-type in-or-out))
 
 (deftest handle-bad-template-tags-test
   (testing (str "an malformed template tags map like the one below is invalid. Rather than potentially destroy an entire API "
@@ -53,9 +53,9 @@
 (deftest handle-errors-gracefully-test
   (testing (str "Cheat and override the `normalization-tokens` function to always throw an Exception so we can make "
                 "sure the Toucan type fn handles the error gracefully")
-    (with-redefs [mbql.normalize/normalize-tokens (fn [& _] (throw (Exception. "BARF")))]
+    (with-redefs [normalize/normalize-tokens (fn [& _] (throw (Exception. "BARF")))]
       (is (= nil
-             ((type-fn :parameters-list :out)
+             ((type-fn :parameter-mappings :out)
               (json/generate-string
                [{:target [:dimension [:field "ABC" nil]]}])))))))
 
@@ -63,6 +63,26 @@
   (testing "should not eat Exceptions if normalization barfs when saving"
     (is (thrown?
          Exception
-         (with-redefs [mbql.normalize/normalize-tokens (fn [& _] (throw (Exception. "BARF")))]
-           ((type-fn :parameters-list :in)
+         (with-redefs [normalize/normalize-tokens (fn [& _] (throw (Exception. "BARF")))]
+           ((type-fn :parameter-mappings :in)
             [{:target [:dimension [:field "ABC" nil]]}]))))))
+
+(deftest normalize-parameter-mappings-test
+  (testing "make sure parameter mappings correctly normalize things like legacy MBQL clauses"
+    (is (= [{:target [:dimension [:field 30 {:source-field 23}]]}]
+           ((type-fn :parameter-mappings :out)
+            (json/generate-string
+             [{:target [:dimension [:fk-> 23 30]]}]))))
+
+    (testing "...but parameter mappings we should not normalize things like :target"
+      (is (= [{:card-id 123, :hash "abc", :target "foo"}]
+             ((type-fn :parameter-mappings :out)
+              (json/generate-string
+               [{:card-id 123, :hash "abc", :target "foo"}])))))))
+
+(deftest keep-empty-parameter-mappings-empty-test
+  (testing (str "we should keep empty parameter mappings as empty instead of making them nil (if `normalize` removes "
+                "them because they are empty) (I think this is to prevent NPEs on the FE? Not sure why we do this)")
+    (is (= []
+           ((type-fn :parameter-mappings :out)
+            (json/generate-string []))))))

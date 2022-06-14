@@ -1,9 +1,4 @@
-import {
-  restore,
-  downloadAndAssert,
-  startNewQuestion,
-  visualize,
-} from "__support__/e2e/cypress";
+import { restore, downloadAndAssert } from "__support__/e2e/cypress";
 
 const testCases = ["csv", "xlsx"];
 
@@ -15,11 +10,11 @@ describe("scenarios > question > download", () => {
 
   testCases.forEach(fileType => {
     it(`downloads ${fileType} file`, () => {
-      startNewQuestion();
+      cy.visit("/question/new");
+      cy.findByText("Simple question").click();
       cy.findByText("Saved Questions").click();
       cy.findByText("Orders, Count").click();
 
-      visualize();
       cy.contains("18,760");
 
       downloadAndAssert({ fileType }, sheet => {

@@ -1,0 +1,9 @@
+.favorite-normal {
+  border: 1px solid #dcdde5;
+  background: transparent;
+}
+
+.favorite-active {
+  border: 1px solid #ffcc00;
+  background: #fffcee;
+}

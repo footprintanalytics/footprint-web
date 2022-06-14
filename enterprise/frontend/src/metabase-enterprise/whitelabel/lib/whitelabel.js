@@ -2,10 +2,9 @@ import MetabaseSettings from "metabase/lib/settings";
 
 import Color from "color";
 
-import { colors, lighten } from "metabase/lib/colors/palette";
+import colors, { syncColors } from "metabase/lib/colors";
 import { addCSSRule } from "metabase/lib/dom";
 
-import { omit } from "lodash";
 import memoize from "lodash.memoize";
 
 export const originalColors = { ...colors };
@@ -62,7 +61,7 @@ function walkStyleSheets(sheets, fn) {
 const replaceColors = (cssValue, matchColor, replacementColor) => {
   return cssValue.replace(COLOR_REGEX, colorString => {
     const color = Color(colorString);
-    if (color.hex() === Color(matchColor).hex()) {
+    if (color.hex() === matchColor.hex()) {
       if (color.alpha() < 1) {
         return Color(replacementColor)
           .alpha(color.alpha())
@@ -89,22 +88,6 @@ const getColorStyleProperties = memoize(function() {
   return properties;
 });
 
-const COLOR_MAPPINGS = {
-  brand: [
-    ["#509ee3", color => color], // brand
-    ["#cbe2f7", color => lighten(color, 0.465)], // focus
-    ["#ddecfa", color => lighten(color, 0.532)], // brand-light
-  ],
-};
-
-function getCSSColorMapping(colorName) {
-  if (colorName in COLOR_MAPPINGS) {
-    return COLOR_MAPPINGS[colorName];
-  } else {
-    return [[originalColors[colorName], color => color]];
-  }
-}
-
 function initColorCSS(colorName) {
   if (CSS_COLOR_UPDATORS_BY_COLOR_NAME[colorName]) {
     return;
@@ -116,7 +99,7 @@ function initColorCSS(colorName) {
     initCSSBrandHueUpdator();
   }
 
-  const colorMappings = getCSSColorMapping(colorName);
+  const originalColor = Color(originalColors[colorName]);
   // look for CSS rules which have colors matching the brand colors or very light or desaturated
   for (const {
     style,
@@ -124,15 +107,12 @@ function initColorCSS(colorName) {
     cssValue,
     cssPriority,
   } of getColorStyleProperties()) {
-    for (const [originalColor, colorMapping] of colorMappings) {
-      // try replacing with a random color to see if we actually need to
-      if (cssValue !== replaceColors(cssValue, originalColor, RANDOM_COLOR)) {
-        CSS_COLOR_UPDATORS_BY_COLOR_NAME[colorName].push(themeColor => {
-          const newColor = colorMapping(themeColor);
-          const newCssValue = replaceColors(cssValue, originalColor, newColor);
-          style.setProperty(cssProperty, newCssValue, cssPriority);
-        });
-      }
+    // try replacing with a random color to see if we actually need to
+    if (cssValue !== replaceColors(cssValue, originalColor, RANDOM_COLOR)) {
+      CSS_COLOR_UPDATORS_BY_COLOR_NAME[colorName].push(themeColor => {
+        const newCssValue = replaceColors(cssValue, originalColor, themeColor);
+        style.setProperty(cssProperty, newCssValue, cssPriority);
+      });
     }
   }
 }
@@ -154,7 +134,6 @@ function initColorJS(colorName) {
   if (JS_COLOR_UPDATORS_BY_COLOR_NAME[colorName]) {
     return;
   }
-
   JS_COLOR_UPDATORS_BY_COLOR_NAME[colorName] = [];
   JS_COLOR_UPDATORS_BY_COLOR_NAME[colorName].push(themeColor => {
     colors[colorName] = themeColor;
@@ -166,6 +145,7 @@ function updateColorJS(colorName, themeColor) {
   for (const colorUpdator of JS_COLOR_UPDATORS_BY_COLOR_NAME[colorName]) {
     colorUpdator(themeColor);
   }
+  syncColors();
 }
 
 function updateColorCSS(colorName, themeColor) {
@@ -183,16 +163,8 @@ function updateColorsJS() {
 }
 
 function updateColorsCSS() {
-  /*
-    Currently, CSS variables are not preserved in the build and are replaced
-    by computed values. Therefore, there is no way to distinguish different
-    variables based on their names only. We should omit new configurable colors
-    with the same values as old ones until `color-mod` function is no longer
-    used in CSS and variables are preserved during the build.
-   */
   const scheme = colorScheme();
-  const colors = omit(scheme, ["filter", "summarize", "accent0"]);
-  for (const [colorName, themeColor] of Object.entries(colors)) {
+  for (const [colorName, themeColor] of Object.entries(scheme)) {
     updateColorCSS(colorName, themeColor);
   }
 }
@@ -232,6 +204,4 @@ export function enabledApplicationNameReplacement() {
 // Don't update CSS colors yet since all the CSS hasn't been loaded yet
 try {
   updateColorsJS();
-} catch (e) {
-  console.log(e);
-}
+} catch (e) {}

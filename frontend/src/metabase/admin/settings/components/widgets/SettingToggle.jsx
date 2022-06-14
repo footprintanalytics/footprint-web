@@ -1,17 +1,14 @@
 /* eslint-disable react/prop-types */
 import React from "react";
 import { t } from "ttag";
-import Toggle from "metabase/core/components/Toggle";
-import Tooltip from "metabase/components/Tooltip";
+import Toggle from "metabase/components/Toggle";
 
-const SettingToggle = ({ setting, onChange, disabled, tooltip }) => {
+const SettingToggle = ({ setting, onChange, disabled }) => {
   const value = setting.value == null ? setting.default : setting.value;
   const on = value === true || value === "true";
   return (
     <div className="flex align-center pt1">
-      <Tooltip tooltip={tooltip} isEnabled={!!tooltip}>
-        <Toggle value={on} onChange={!disabled ? () => onChange(!on) : null} />
-      </Tooltip>
+      <Toggle value={on} onChange={!disabled ? () => onChange(!on) : null} />
       <span className="text-bold mx1">{on ? t`Enabled` : t`Disabled`}</span>
     </div>
   );

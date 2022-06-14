@@ -1,10 +1,7 @@
----
-title: Running Metabase on Heroku
----
-
 # Running Metabase on Heroku
 
-Currently in beta. We've run Metabase on Heroku and it works just fine, but it's not hardened for production use just yet. If you're up for it then give it a shot and let us know how we can make it better!
+Heroku is a great place to evaluate Metabase and take it for a quick spin with just a click of a button and a couple minutes of waiting time.  If you decide to keep your Metabase running long term we recommend some upgrades as noted below to avoid limitations of the Heroku free tier.
+
 
 ### Launching Metabase
 

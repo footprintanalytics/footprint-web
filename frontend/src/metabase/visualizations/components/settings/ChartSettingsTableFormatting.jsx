@@ -3,20 +3,16 @@ import React from "react";
 
 import { t, jt } from "ttag";
 
-import {
-  getAccentColors,
-  getStatusColorRanges,
-} from "metabase/lib/colors/groups";
-
-import Button from "metabase/core/components/Button";
+import Button from "metabase/components/Button";
 import Icon from "metabase/components/Icon";
-import Select, { Option } from "metabase/core/components/Select";
-import Radio from "metabase/core/components/Radio";
-import Toggle from "metabase/core/components/Toggle";
-import ColorRange from "metabase/core/components/ColorRange";
-import ColorSelector from "metabase/core/components/ColorSelector";
-import ColorRangeSelector from "metabase/core/components/ColorRangeSelector";
+import Select, { Option } from "metabase/components/Select";
+import Radio from "metabase/components/Radio";
+import Toggle from "metabase/components/Toggle";
+import ColorPicker from "metabase/components/ColorPicker";
 
+import ColorRangePicker, {
+  ColorRangePreview,
+} from "metabase/components/ColorRangePicker";
 import NumericInput from "metabase/components/NumericInput";
 import {
   SortableContainer,
@@ -56,9 +52,22 @@ export const ALL_OPERATOR_NAMES = {
   ...STRING_OPERATOR_NAMES,
 };
 
-// TODO
-const COLORS = getAccentColors({ dark: false });
-const COLOR_RANGES = getStatusColorRanges();
+import { color, harmony } from "metabase/lib/colors";
+
+const COLORS = Object.values(harmony.slice(0, 10));
+
+const COLOR_RANGES = [].concat(
+  ...COLORS.map(color => [
+    ["white", color],
+    [color, "white"],
+  ]),
+  [
+    [color("error"), "white", color("success")],
+    [color("success"), "white", color("error")],
+    [color("error"), color("warning"), color("success")],
+    [color("success"), color("warning"), color("error")],
+  ],
+);
 
 const DEFAULTS_BY_TYPE = {
   single: {
@@ -77,6 +86,7 @@ const DEFAULTS_BY_TYPE = {
     max_type: null,
     min_value: 0,
     max_value: 100,
+    null_color: null,
   },
 };
 
@@ -84,9 +94,6 @@ const DEFAULTS_BY_TYPE = {
 export const isFormattable = field => isNumeric(field) || isString(field);
 
 const INPUT_CLASSNAME = "AdminSelect input mt1 full";
-
-const getValueForDescription = rule =>
-  ["is-null", "not-null"].includes(rule.operator) ? "" : ` ${rule.value}`;
 
 export default class ChartSettingsTableFormatting extends React.Component {
   state = {
@@ -199,7 +206,7 @@ const RuleListing = ({ rules, cols, onEdit, onAdd, onRemove, onMove }) => (
         borderless
         icon="add"
         onClick={onAdd}
-        data-metabase-event="Chart Settings;Table Formatting;Add Rule"
+        data-metabase-event={`Chart Settings;Table Formatting;Add Rule`}
       >
         {t`Add a rule`}
       </Button>
@@ -267,7 +274,11 @@ const RulePreview = ({ rule, cols, onClick, onRemove }) => (
 
 const RuleBackground = ({ rule, className, style }) =>
   rule.type === "range" ? (
-    <ColorRange colors={rule.colors} className={className} style={style} />
+    <ColorRangePreview
+      colors={rule.colors}
+      className={className}
+      style={style}
+    />
   ) : rule.type === "single" ? (
     <SinglePreview color={rule.color} className={className} style={style} />
   ) : null;
@@ -280,22 +291,19 @@ const SinglePreview = ({ color, className, style, ...props }) => (
   />
 );
 
-const RuleDescription = ({ rule }) => {
-  return (
-    <span>
-      {rule.type === "range"
-        ? t`Cells in this column will be tinted based on their values.`
-        : rule.type === "single"
-        ? jt`When a cell in these columns ${(
-            <span className="text-bold">
-              {ALL_OPERATOR_NAMES[rule.operator]}
-              {getValueForDescription(rule)}
-            </span>
-          )} it will be tinted this color.`
-        : null}
-    </span>
-  );
-};
+const RuleDescription = ({ rule }) => (
+  <span>
+    {rule.type === "range"
+      ? t`Cells in this column will be tinted based on their values.`
+      : rule.type === "single"
+      ? jt`When a cell in these columns ${(
+          <span className="text-bold">
+            {ALL_OPERATOR_NAMES[rule.operator]} {rule.value}
+          </span>
+        )} it will be tinted this color.`
+      : null}
+  </span>
+);
 
 const RuleEditor = ({ rule, cols, isNew, onChange, onDone, onRemove }) => {
   const selectedColumns = rule.columns.map(name => _.findWhere(cols, { name }));
@@ -376,7 +384,7 @@ const RuleEditor = ({ rule, cols, isNew, onChange, onDone, onRemove }) => {
             />
           ) : null}
           <h3 className="mt3 mb1">{t`…turn its background this color:`}</h3>
-          <ColorSelector
+          <ColorPicker
             value={rule.color}
             colors={COLORS}
             onChange={color => onChange({ ...rule, color })}
@@ -390,7 +398,7 @@ const RuleEditor = ({ rule, cols, isNew, onChange, onDone, onRemove }) => {
       ) : rule.type === "range" ? (
         <div>
           <h3 className="mt3 mb1">{t`Colors`}</h3>
-          <ColorRangeSelector
+          <ColorRangePicker
             value={rule.colors}
             onChange={colors => {
               MetabaseAnalytics.trackStructEvent(
@@ -401,8 +409,7 @@ const RuleEditor = ({ rule, cols, isNew, onChange, onDone, onRemove }) => {
               );
               onChange({ ...rule, colors });
             }}
-            colors={COLORS}
-            colorRanges={COLOR_RANGES}
+            ranges={COLOR_RANGES}
           />
           <h3 className="mt3 mb1">{t`Start the range at`}</h3>
           <Radio
@@ -452,6 +459,19 @@ const RuleEditor = ({ rule, cols, isNew, onChange, onDone, onRemove }) => {
               onChange={max_value => onChange({ ...rule, max_value })}
             />
           )}
+          <h3 className="mt3 mb1">{t`Blank value color`}</h3>
+          <Radio
+            value={rule.null_color}
+            onChange={null_color => onChange({ ...rule, null_color })}
+            options={[
+              { name: t`Blank value can be colored`, value: null },
+              {
+                name: t`Blank value can not be colored`,
+                value: "transparent",
+              },
+            ]}
+            vertical
+          />
         </div>
       ) : null}
       <div className="mt4">
@@ -459,7 +479,7 @@ const RuleEditor = ({ rule, cols, isNew, onChange, onDone, onRemove }) => {
           <Button
             primary
             onClick={onRemove}
-            data-metabase-event="Chart Settings;Table Formatting;"
+            data-metabase-event={`Chart Settings;Table Formatting;`}
           >
             {isNew ? t`Cancel` : t`Delete`}
           </Button>

@@ -5,16 +5,17 @@
             [i18n.create-artifacts.frontend :as frontend]
             [metabuild-common.core :as u]))
 
-(defn- locales-dot-edn []
+;; TODO -- shouldn't this be `locales.edn`?
+(defn- locales-dot-clj []
   {:locales  (conj (i18n/locales) "en")
    :packages ["metabase"]
    :bundle   "metabase.Messages"})
 
-(defn- generate-locales-dot-edn! []
+(defn- generate-locales-dot-clj! []
   (u/step "Create resources/locales.clj"
     (let [file (u/filename u/project-root-directory "resources" "locales.clj")]
       (u/delete-file-if-exists! file)
-      (spit file (with-out-str (pprint/pprint (locales-dot-edn))))
+      (spit file (with-out-str (pprint/pprint (locales-dot-clj))))
       (u/assert-file-exists file))))
 
 (defn- create-artifacts-for-locale! [locale]
@@ -32,7 +33,7 @@
 
 (defn create-all-artifacts! []
   (u/step "Create i18n artifacts"
-    (generate-locales-dot-edn!)
+    (generate-locales-dot-clj!)
     (create-artifacts-for-all-locales!)
     (u/announce "Translation resources built successfully.")))
 

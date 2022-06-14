@@ -14,9 +14,15 @@ import cx from "classnames";
 
 import { regexpEscape } from "metabase/lib/string";
 import { color } from "metabase/lib/colors";
-import { isSyncCompleted } from "metabase/lib/syncing";
 
-class MetadataTableList extends Component {
+@connect(null, {
+  setVisibilityForTables: (tables, visibility_type) =>
+    Tables.actions.bulkUpdate({
+      ids: tables.map(t => t.id),
+      visibility_type,
+    }),
+})
+export default class MetadataTableList extends Component {
   constructor(props, context) {
     super(props, context);
 
@@ -64,7 +70,7 @@ class MetadataTableList extends Component {
 
     if (queryableTables.length > 0) {
       queryableTablesHeader = (
-        <li className="AdminList-section flex justify-between align-center">
+        <li className="AdminList-section">
           {(n =>
             ngettext(msgid`${n} Queryable Table`, `${n} Queryable Tables`, n))(
             queryableTables.length,
@@ -110,7 +116,7 @@ class MetadataTableList extends Component {
           />
         </div>
         {(this.props.onBack || this.props.schema) && (
-          <h4 className="p2 border-bottom break-anywhere">
+          <h4 className="p2 border-bottom">
             {this.props.onBack && (
               <span
                 className="text-brand cursor-pointer"
@@ -154,14 +160,6 @@ class MetadataTableList extends Component {
   }
 }
 
-export default connect(null, {
-  setVisibilityForTables: (tables, visibility_type) =>
-    Tables.actions.bulkUpdate({
-      ids: tables.map(t => t.id),
-      visibility_type,
-    }),
-})(MetadataTableList);
-
 function TableRow({
   table,
   selectTable,
@@ -174,20 +172,18 @@ function TableRow({
       <a
         className={cx(
           "AdminList-item flex align-center no-decoration text-wrap justify-between",
-          { selected, disabled: !isSyncCompleted(table) },
+          { selected },
         )}
         onClick={() => selectTable(table)}
       >
         {table.display_name}
-        {isSyncCompleted(table) && (
-          <div className="hover-child float-right">
-            <ToggleHiddenButton
-              tables={[table]}
-              isHidden={table.visibility_type != null}
-              setVisibilityForTables={setVisibilityForTables}
-            />
-          </div>
-        )}
+        <div className="hover-child float-right">
+          <ToggleHiddenButton
+            tables={[table]}
+            isHidden={table.visibility_type != null}
+            setVisibilityForTables={setVisibilityForTables}
+          />
+        </div>
       </a>
     </li>
   );

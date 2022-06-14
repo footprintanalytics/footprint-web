@@ -4,7 +4,6 @@
             [metabase.models.task-history :refer [TaskHistory]]
             [metabase.test :as mt]
             [metabase.util :as u]
-            [schema.core :as s]
             [toucan.db :as db]))
 
 (def ^:private default-task-history
@@ -104,13 +103,3 @@
       (is (= (merge default-task-history {:task "Test Task", :duration 100})
              (mt/boolean-ids-and-timestamps
               (mt/user-http-request :crowberto :get 200 (format "task/%s" (u/the-id task)))))))))
-
-(deftest fetch-info-test
-  (testing "Regular user can't get task info"
-    (is (= "You don't have permissions to do that."
-           (mt/user-http-request :rasta :get 403 "task/info"))))
-
-  (testing "Superusers could get task info"
-    (is (schema= {:scheduler s/Any
-                  :jobs      [{s/Any s/Any}]}
-                 (mt/user-http-request :crowberto :get 200 "task/info")))))

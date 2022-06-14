@@ -10,7 +10,9 @@ import {
 } from "../lib/settings/graph";
 
 import { color } from "metabase/lib/colors";
+import VizControls from "metabase/visualizations/hoc/VizControls";
 
+@VizControls
 export default class WaterfallChart extends LineAreaBarChart {
   static uiName = t`Waterfall`;
   static identifier = "waterfall";
@@ -25,13 +27,13 @@ export default class WaterfallChart extends LineAreaBarChart {
       section: t`Display`,
       props: { title: t`Increase color` },
       widget: "color",
-      getDefault: () => color("accent1"),
+      default: color("accent1"),
     },
     "waterfall.decrease_color": {
       section: t`Display`,
       props: { title: t`Decrease color` },
       widget: "color",
-      getDefault: () => color("accent3"),
+      default: color("accent3"),
     },
     "waterfall.show_total": {
       section: t`Display`,
@@ -43,7 +45,7 @@ export default class WaterfallChart extends LineAreaBarChart {
       section: t`Display`,
       props: { title: t`Total color` },
       widget: "color",
-      getDefault: () => color("text-dark"),
+      default: color("text-dark"),
       getHidden: (series, vizSettings) =>
         vizSettings["waterfall.show_total"] !== true,
       readDependencies: ["waterfall.show_total"],

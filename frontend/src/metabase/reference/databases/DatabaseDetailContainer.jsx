@@ -23,7 +23,8 @@ const mapDispatchToProps = {
   ...actions,
 };
 
-class DatabaseDetailContainer extends Component {
+@connect(mapStateToProps, mapDispatchToProps)
+export default class DatabaseDetailContainer extends Component {
   static propTypes = {
     params: PropTypes.object.isRequired,
     location: PropTypes.object.isRequired,
@@ -65,8 +66,3 @@ class DatabaseDetailContainer extends Component {
     );
   }
 }
-
-export default connect(
-  mapStateToProps,
-  mapDispatchToProps,
-)(DatabaseDetailContainer);

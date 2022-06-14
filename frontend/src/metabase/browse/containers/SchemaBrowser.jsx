@@ -1,5 +1,6 @@
 /* eslint-disable react/prop-types */
 import React from "react";
+import { Box, Flex } from "grid-styled";
 import { t } from "ttag";
 
 import Schema from "metabase/entities/schemas";
@@ -7,23 +8,24 @@ import Database from "metabase/entities/databases";
 
 import Card from "metabase/components/Card";
 import EntityItem from "metabase/components/EntityItem";
-import { Grid } from "metabase/components/Grid";
-import Link from "metabase/core/components/Link";
+import { Grid, GridItem } from "metabase/components/Grid";
+import Icon from "metabase/components/Icon";
+import Link from "metabase/components/Link";
+import Tooltip from "metabase/components/Tooltip";
 
 import TableBrowser from "metabase/browse/containers/TableBrowser";
 import * as Urls from "metabase/lib/urls";
 import { color } from "metabase/lib/colors";
 
 import BrowseHeader from "metabase/browse/components/BrowseHeader";
-import { ANALYTICS_CONTEXT } from "metabase/browse/constants";
-import { SchemaGridItem } from "./SchemaBrowser.styled";
+import { ANALYTICS_CONTEXT, ITEM_WIDTHS } from "metabase/browse/constants";
 
 function SchemaBrowser(props) {
   const { schemas, params } = props;
   const { slug } = params;
   const dbId = Urls.extractEntityId(slug);
   return (
-    <div>
+    <Box>
       {schemas.length === 1 ? (
         <TableBrowser
           {...props}
@@ -33,7 +35,7 @@ function SchemaBrowser(props) {
           showSchemaInHeader={false}
         />
       ) : (
-        <div>
+        <Box>
           <BrowseHeader
             crumbs={[
               { title: t`Our data`, to: "browse" },
@@ -45,32 +47,38 @@ function SchemaBrowser(props) {
           ) : (
             <Grid>
               {schemas.map(schema => (
-                <SchemaGridItem key={schema.id}>
+                <GridItem width={ITEM_WIDTHS} key={schema.id}>
                   <Link
-                    to={`/browse/${dbId}/schema/${encodeURIComponent(
-                      schema.name,
-                    )}`}
+                    to={`/browse/${dbId}/schema/${schema.name}`}
                     mb={1}
                     hover={{ color: color("accent2") }}
                     data-metabase-event={`${ANALYTICS_CONTEXT};Schema Click`}
                     className="overflow-hidden"
                   >
                     <Card hoverable px={1}>
-                      <EntityItem
-                        name={schema.name}
-                        iconName="folder"
-                        iconColor={color("accent2")}
-                        item={schema}
-                      />
+                      <Flex align="center">
+                        <EntityItem
+                          name={schema.name}
+                          iconName="folder"
+                          iconColor={color("accent2")}
+                          item={schema}
+                        />
+                        <Box ml="auto">
+                          <Icon name="reference" />
+                          <Tooltip tooltip={t`X-ray this schema`}>
+                            <Icon name="bolt" mx={1} />
+                          </Tooltip>
+                        </Box>
+                      </Flex>
                     </Card>
                   </Link>
-                </SchemaGridItem>
+                </GridItem>
               ))}
             </Grid>
           )}
-        </div>
+        </Box>
       )}
-    </div>
+    </Box>
   );
 }
 

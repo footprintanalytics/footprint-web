@@ -1,5 +1,4 @@
-import { t } from "ttag";
-import { createEntity, notify } from "metabase/lib/entities";
+import { createEntity } from "metabase/lib/entities";
 import {
   createThunkAction,
   compose,
@@ -20,13 +19,8 @@ import { TableSchema } from "metabase/schema";
 import Metrics from "metabase/entities/metrics";
 import Segments from "metabase/entities/segments";
 import Fields from "metabase/entities/fields";
-import Questions from "metabase/entities/questions";
 
 import { GET, PUT } from "metabase/lib/api";
-import {
-  convertSavedQuestionToVirtualTable,
-  getQuestionVirtualTableId,
-} from "metabase/lib/saved-questions";
 
 import { getMetadata } from "metabase/selectors/metadata";
 
@@ -74,20 +68,12 @@ const Tables = createEntity({
 
   // ACTION CREATORS
   objectActions: {
-    updateProperty(entityObject, name, value, opts) {
-      return Tables.actions.update(
-        entityObject,
-        { [name]: value },
-        notify(opts, `Table ${name}`, t`updated`),
-      );
-    },
     // loads `query_metadata` for a single table
     fetchMetadata: compose(
       withAction(FETCH_METADATA),
       withCachedDataAndRequestState(
         ({ id }) => [...Tables.getObjectStatePath(id)],
         ({ id }) => [...Tables.getObjectStatePath(id), "fetchMetadata"],
-        entityQuery => Tables.getQueryKey(entityQuery),
       ),
       withNormalize(TableSchema),
     )(({ id }, options = {}) => (dispatch, getState) =>
@@ -119,7 +105,6 @@ const Tables = createEntity({
       withCachedDataAndRequestState(
         ({ id }) => [...Tables.getObjectStatePath(id)],
         ({ id }) => [...Tables.getObjectStatePath(id), "fetchForeignKeys"],
-        entityQuery => Tables.getQueryKey(entityQuery),
       ),
       withNormalize(TableSchema),
     )(entityObject => async (dispatch, getState) => {
@@ -140,39 +125,6 @@ const Tables = createEntity({
   },
 
   reducer: (state = {}, { type, payload, error }) => {
-    if (type === Questions.actionTypes.CREATE) {
-      const card = payload.question;
-      const virtualQuestionTable = convertSavedQuestionToVirtualTable(card);
-
-      if (state[virtualQuestionTable.id]) {
-        return state;
-      }
-
-      return {
-        ...state,
-        [virtualQuestionTable.id]: virtualQuestionTable,
-      };
-    }
-
-    if (type === Questions.actionTypes.UPDATE) {
-      const card = payload.question;
-      const virtualQuestionId = getQuestionVirtualTableId(card);
-
-      if (card.archived && state[virtualQuestionId]) {
-        delete state[virtualQuestionId];
-        return state;
-      }
-
-      if (state[virtualQuestionId]) {
-        return state;
-      }
-
-      return {
-        ...state,
-        [virtualQuestionId]: convertSavedQuestionToVirtualTable(card),
-      };
-    }
-
     if (type === Segments.actionTypes.CREATE) {
       const { table_id: tableId, id: segmentId } = payload.segment;
       const table = state[tableId];
@@ -228,9 +180,7 @@ const Tables = createEntity({
   objectSelectors: {
     getUrl: table =>
       Urls.tableRowsQuery(table.database_id, table.table_id, null),
-    getIcon: (table, { variant = "primary" } = {}) => ({
-      name: variant === "primary" ? "table" : "database",
-    }),
+    getIcon: table => ({ name: "table" }),
     getColor: table => color("accent2"),
   },
 

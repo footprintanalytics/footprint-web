@@ -1,11 +1,17 @@
-/* eslint-disable react/prop-types */
 import React from "react";
 
 import RemappedValue from "metabase/containers/RemappedValue";
 
 import { formatValue } from "metabase/lib/formatting";
 
-const Value = ({ value, ...options }) => {
+import type { Value as ValueType } from "metabase-types/types/Dataset";
+import type { FormattingOptions } from "metabase/lib/formatting";
+
+type Props = {
+  value: ValueType,
+} & FormattingOptions;
+
+const Value = ({ value, ...options }: Props) => {
   if (options.hide) {
     return null;
   }

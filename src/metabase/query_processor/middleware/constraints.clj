@@ -1,29 +1,19 @@
 (ns metabase.query-processor.middleware.constraints
   "Middleware that adds default constraints to limit the maximum number of rows returned to queries that specify the
-  `:add-default-userland-constraints?` `:middleware` option."
-  (:require [metabase.models.setting :as setting]
-            [metabase.util.i18n :refer [deferred-tru]]))
+  `:add-default-userland-constraints?` `:middleware` option.")
 
-(def ^:private ^:const default-max-results-bare-rows 2000)
-
-;; NOTE: this was changed from a hardcoded var with value of 2000 (now moved to [[default-max-results-bare-rows]])
-;; to a setting in 0.43 the setting, which allows for DB local value, can still be nil, so any places below that used
-;; to reference the former constant value have to expect it could return nil instead
-(setting/defsetting max-results-bare-rows
-  (deferred-tru "Maximum number of rows to return specifically on :rows type queries via the API.")
-  :visibility     :authenticated
-  :type           :integer
-  :database-local :allowed)
+(def ^:private max-results-bare-rows
+  "Maximum number of rows to return specifically on :rows type queries via the API."
+  10000)
 
 (def ^:private max-results
   "General maximum number of rows to return from an API query."
   10000)
 
-(defn default-query-constraints
+(def default-query-constraints
   "Default map of constraints that we apply on dataset queries executed by the api."
-  []
   {:max-results           max-results
-   :max-results-bare-rows (or (max-results-bare-rows) default-max-results-bare-rows)})
+   :max-results-bare-rows max-results-bare-rows})
 
 (defn- ensure-valid-constraints
   "`:max-results-bare-rows` must be less than or equal to `:max-results`, so if someone sets `:max-results` but not
@@ -36,7 +26,7 @@
     (assoc constraints :max-results-bare-rows max-results)))
 
 (defn- merge-default-constraints [constraints]
-  (merge (default-query-constraints) constraints))
+  (merge default-query-constraints constraints))
 
 (defn- add-default-userland-constraints*
   "Add default values of `:max-results` and `:max-results-bare-rows` to `:constraints` map `m`."
@@ -46,8 +36,7 @@
 
 (defn add-default-userland-constraints
   "Middleware that optionally adds default `max-results` and `max-results-bare-rows` constraints to queries, meant for
-  use with [[metabase.query-processor/process-query-and-save-with-max-results-constraints!]], which ultimately powers
-  most QP API endpoints."
+  use with `process-query-and-save-with-max-results-constraints!`, which ultimately powers most QP API endpoints."
   [qp]
   (fn [query rff context]
     (qp (add-default-userland-constraints* query) rff context)))

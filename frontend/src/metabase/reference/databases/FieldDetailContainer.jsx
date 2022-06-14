@@ -33,7 +33,8 @@ const mapDispatchToProps = {
   ...actions,
 };
 
-class FieldDetailContainer extends Component {
+@connect(mapStateToProps, mapDispatchToProps)
+export default class FieldDetailContainer extends Component {
   static propTypes = {
     params: PropTypes.object.isRequired,
     location: PropTypes.object.isRequired,
@@ -80,8 +81,3 @@ class FieldDetailContainer extends Component {
     );
   }
 }
-
-export default connect(
-  mapStateToProps,
-  mapDispatchToProps,
-)(FieldDetailContainer);

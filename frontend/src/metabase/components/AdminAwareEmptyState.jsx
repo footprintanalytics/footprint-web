@@ -13,7 +13,8 @@ const mapStateToProps = (state, props) => ({
   user: getUser(state, props),
 });
 
-class AdminAwareEmptyStateInner extends Component {
+@connect(mapStateToProps, null)
+class AdminAwareEmptyState extends Component {
   render() {
     const {
       user,
@@ -47,10 +48,5 @@ class AdminAwareEmptyStateInner extends Component {
     );
   }
 }
-
-const AdminAwareEmptyState = connect(
-  mapStateToProps,
-  null,
-)(AdminAwareEmptyStateInner);
 
 export default AdminAwareEmptyState;

@@ -1,8 +1,4 @@
-import {
-  restore,
-  withDatabase,
-  startNewQuestion,
-} from "__support__/e2e/cypress";
+import { restore, withDatabase } from "__support__/e2e/cypress";
 import { USER_GROUPS } from "__support__/e2e/cypress_data";
 
 const { ALL_USERS_GROUP } = USER_GROUPS;
@@ -18,8 +14,8 @@ describe.skip("issue 13347", () => {
 
     cy.updatePermissionsGraph({
       [ALL_USERS_GROUP]: {
-        1: { data: { schemas: "all", native: "write" } },
-        [PG_DB_ID]: { data: { schemas: "none", native: "none" } },
+        1: { schemas: "all", native: "write" },
+        [PG_DB_ID]: { schemas: "none", native: "none" },
       },
     });
 
@@ -48,7 +44,8 @@ describe.skip("issue 13347", () => {
     it(`${test.toUpperCase()} version:\n should be able to select question (from "Saved Questions") which belongs to the database user doesn't have data-permissions for (metabase#13347)`, () => {
       cy.signIn("none");
 
-      startNewQuestion();
+      cy.visit("/question/new");
+      cy.findByText("Simple question").click();
       cy.findByText("Saved Questions").click();
 
       test === "QB" ? cy.findByText("Q1").click() : cy.findByText("Q2").click();

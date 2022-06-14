@@ -1,22 +1,21 @@
-/* eslint-disable react/prop-types */
 import { getIn } from "icepick";
 import _ from "underscore";
-import querystring from "querystring";
 
 import Question from "metabase-lib/lib/Question";
-import {
-  setOrUnsetParameterValues,
-  setParameterValue,
-} from "metabase/dashboard/actions";
+import { setOrUnsetParameterValues } from "metabase/dashboard/actions";
 import {
   getDataFromClicked,
   getTargetForQueryParams,
   formatSourceForTarget,
 } from "metabase/lib/click-behavior";
 import { renderLinkURLForClick } from "metabase/lib/formatting/link";
-import * as Urls from "metabase/lib/urls";
 
-export default ({ question, clicked }) => {
+import type {
+  ClickAction,
+  ClickActionProps,
+} from "metabase-types/types/Visualization";
+
+export default ({ question, clicked }: ClickActionProps): ClickAction[] => {
   const settings = (clicked && clicked.settings) || {};
   const columnSettings =
     (clicked &&
@@ -42,88 +41,53 @@ export default ({ question, clicked }) => {
   }
 
   if (type === "crossfilter") {
-    const parameterIdValuePairs = getParameterIdValuePairs(parameterMapping, {
-      data,
-      extraData,
-      clickBehavior,
-    });
-
-    behavior = {
-      action: () => setOrUnsetParameterValues(parameterIdValuePairs),
-    };
-  } else if (type === "link") {
-    if (linkType === "url") {
-      behavior = {
-        ignoreSiteUrl: true,
-        url: () =>
-          renderLinkURLForClick(clickBehavior.linkTemplate || "", data),
-      };
-    } else if (linkType === "dashboard") {
-      if (extraData.dashboard.id === targetId) {
-        const parameterIdValuePairs = getParameterIdValuePairs(
-          parameterMapping,
-          { data, extraData, clickBehavior },
-        );
-
-        behavior = {
-          action: () => {
-            return dispatch =>
-              parameterIdValuePairs.forEach(([id, value]) => {
-                setParameterValue(id, value)(dispatch);
-              });
-          },
-        };
-      } else {
-        const targetDashboard = extraData.dashboards[targetId];
-        const queryParams = getParameterValuesBySlug(parameterMapping, {
+    const valuesToSet = _.chain(parameterMapping)
+      .values()
+      .map(({ source, target, id }) => {
+        const value = formatSourceForTarget(source, target, {
           data,
           extraData,
           clickBehavior,
         });
+        return [id, value];
+      })
+      .value();
 
-        const path =
-          clickBehavior.use_public_link && targetDashboard.public_uuid
-            ? Urls.publicDashboard(targetDashboard.public_uuid)
-            : Urls.dashboard({ id: targetId });
-        const url = `${path}?${querystring.stringify(queryParams)}`;
+    behavior = { action: () => setOrUnsetParameterValues(valuesToSet) };
+  } else if (type === "link") {
+    if (linkType === "url") {
+      behavior = {
+        url: () =>
+          renderLinkURLForClick(clickBehavior.linkTemplate || "", data),
+      };
+    } else if (linkType === "dashboard") {
+      const url = new URL(`/dashboard/${targetId}`, location.href);
+      Object.entries(
+        getQueryParams(parameterMapping, { data, extraData, clickBehavior }),
+      ).forEach(([k, v]) => url.searchParams.append(k, v));
 
-        behavior = { url: () => url };
-      }
+      behavior = { url: () => url.toString() };
     } else if (linkType === "question" && extraData && extraData.questions) {
-      const queryParams = getParameterValuesBySlug(parameterMapping, {
-        data,
-        extraData,
-        clickBehavior,
-      });
-
-      const targetQuestion = new Question(
+      let targetQuestion = new Question(
         extraData.questions[targetId],
         question.metadata(),
+        getQueryParams(parameterMapping, { data, extraData, clickBehavior }),
       ).lockDisplay();
 
-      const parameters = _.chain(parameterMapping)
-        .values()
-        .map(({ target, id, source }) => ({
-          target: target.dimension,
-          id,
-          slug: id,
-          type: getTypeForSource(source, extraData),
-        }))
-        .value();
-
-      let url = null;
-      if (clickBehavior.use_public_link && targetQuestion.publicUUID()) {
-        url = Urls.publicQuestion(
-          targetQuestion.publicUUID(),
-          null,
-          querystring.stringify(queryParams),
+      if (targetQuestion.isStructured()) {
+        targetQuestion = targetQuestion.setParameters(
+          _.chain(parameterMapping)
+            .values()
+            .map(({ target, id, source }) => ({
+              target: target.dimension,
+              id,
+              type: getTypeForSource(source, extraData),
+            }))
+            .value(),
         );
-      } else {
-        url = targetQuestion.isStructured()
-          ? targetQuestion.getUrlWithParameters(parameters, queryParams)
-          : `${targetQuestion.getUrl()}?${querystring.stringify(queryParams)}`;
       }
 
+      const url = targetQuestion.getUrlWithParameters();
       behavior = { url: () => url };
     }
   }
@@ -137,28 +101,7 @@ export default ({ question, clicked }) => {
   ];
 };
 
-function getParameterIdValuePairs(
-  parameterMapping,
-  { data, extraData, clickBehavior },
-) {
-  const value = _.values(parameterMapping).map(({ source, target, id }) => {
-    return [
-      id,
-      formatSourceForTarget(source, target, {
-        data,
-        extraData,
-        clickBehavior,
-      }),
-    ];
-  });
-
-  return value;
-}
-
-function getParameterValuesBySlug(
-  parameterMapping,
-  { data, extraData, clickBehavior },
-) {
+function getQueryParams(parameterMapping, { data, extraData, clickBehavior }) {
   return _.chain(parameterMapping)
     .values()
     .map(({ source, target }) => [

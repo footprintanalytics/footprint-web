@@ -1,0 +1,133 @@
+.zkspace {
+  background: #0b0b0b;
+  min-height: calc(100vh - 60px);
+  margin: 0 auto;
+  color: white;
+  text-align: center;
+  background-image: url("https://static.footprint.network/activity-zkspace/img-landing-bg-left-sub.png"),
+    url("https://static.footprint.network/activity-zkspace/img-landing-bg-left.png"),
+    url("https://static.footprint.network/activity-zkspace/img-landing-bg-right-sub.png"),
+    url("https://static.footprint.network/activity-zkspace/img-landing-bg-right.png");
+  background-size: 102px 95px, 795px 403px, 156px 171px, 291px 197px;
+  background-repeat: no-repeat, no-repeat, no-repeat, no-repeat;
+  background-position: bottom 5% left 12%, top left, bottom 15% right 10%,
+    top right;
+}
+
+.zkspace__task-title {
+  font-size: 24px;
+  font-weight: bold;
+  margin: 16px 0 8px 0;
+}
+
+.zkspace__item-todo {
+  font-size: 16px;
+  color: #8f8f8f;
+  line-height: 24px;
+  margin-left: 24px;
+  font-weight: normal;
+  white-space: pre-line;
+}
+
+.zkspace__item-todo a {
+  text-decoration: underline;
+  color: #8f8f8f;
+}
+
+.zkspace__item {
+  font-size: 18px;
+  line-height: 36px;
+  font-weight: bold;
+  margin-top: 4px;
+}
+
+.zkspace__item:before {
+  content: "";
+  display: inline-block;
+  width: 12px;
+  height: 12px;
+  background-color: #ff861e;
+  border-radius: 50%;
+  margin-right: 12px;
+}
+
+.zkspace__button {
+  width: 280px;
+  font-size: 18px;
+  color: white;
+  background: #ff861e;
+  margin: 30px auto;
+}
+
+.zkspace__head {
+  height: 380px;
+  width: 1000px;
+  margin: 0 auto;
+  padding-top: 60px;
+  background: url("https://static.footprint.network/activity-zkspace/img-landing-computer.png");
+  background-size: 541px 373px;
+  background-repeat: no-repeat;
+  background-position: bottom right;
+}
+
+.zkspace__box {
+  height: 490px;
+  width: 1000px;
+  border: 1px #ff861e solid;
+  margin: 0 auto;
+}
+
+.zkspace__task-list {
+  width: 760px;
+  margin: 0 auto;
+  text-align: left;
+}
+
+.zkspace__media {
+  display: flex;
+  color: white;
+  font-size: 16px;
+  margin-left: 10px;
+}
+
+.zkspace__slogan {
+  font-size: 36px;
+  width: 400px;
+  line-height: 40px;
+  text-align: left;
+}
+
+.zkspace__logo {
+  text-align: left;
+  margin: 60px 0 20px;
+}
+
+.zkspace__line {
+  border-left: #ffffff 1px solid;
+  margin: 0 15px;
+}
+
+.zkspace__submit-tip {
+  font-size: 16px;
+  color: white;
+  margin-bottom: 6px;
+  margin-top: 12px;
+}
+
+.zkspace__button-submit {
+  width: 280px;
+  font-size: 18px;
+  color: white;
+  background: #ff861e;
+  margin: 6px auto 0;
+}
+
+.zkspace__address {
+  width: 420px;
+}
+
+.zkspace__star {
+  color: red;
+  font-size: 20px;
+  margin-right: 6px;
+}

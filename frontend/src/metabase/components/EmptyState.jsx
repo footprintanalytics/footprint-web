@@ -1,16 +1,21 @@
 /* eslint-disable react/prop-types */
 import React from "react";
+import { Box, Flex } from "grid-styled";
 
-import Button from "metabase/core/components/Button";
+import Button from "metabase/components/Button";
 import Icon from "metabase/components/Icon";
-import Link from "metabase/core/components/Link";
+import Link from "metabase/components/Link";
 import Text from "metabase/components/type/Text";
-import {
-  EmptyStateActions,
-  EmptyStateFooter,
-  EmptyStateHeader,
-  EmptyStateIllustration,
-} from "./EmptyState.styled";
+// import SvgEmpty from "metabase/components/SvgEmpty";
+
+type EmptyStateProps = {
+  message?: React.Element,
+  title?: string,
+  action?: string,
+  link?: string,
+  illustrationElement: React.Element,
+  onActionClick?: () => void,
+};
 
 // Don't break existing empty states
 // TODO - remove these and update empty states with proper usage of illustrationElement
@@ -29,18 +34,7 @@ const LegacyImage = props =>
       className={props.imageClassName}
     />
   ) : null;
-/**
- * @typedef {Record<string, any>} EmptyStateProps
- * @property {import("react").ReactNode} message
- * @property {import("react").ReactNode} [title]
- * @property {import("react").ReactNode} [action]
- * @property {import("react-router").IndexLinkProps["to"]} [link]
- * @property {import("react").ReactNode} [illustrationElement]
- * @property {function} [onActionClick]
- *
- * @param {EmptyStateProps} props
- * @returns {import("react").ReactElement}
- */
+
 const EmptyState = ({
   title,
   message,
@@ -48,25 +42,25 @@ const EmptyState = ({
   link,
   illustrationElement,
   onActionClick,
+  showCreateButton,
+  setCreateModalShow,
   ...rest
-}) => (
-  <div>
-    <EmptyStateHeader>
-      {illustrationElement && (
-        <EmptyStateIllustration>{illustrationElement}</EmptyStateIllustration>
-      )}
-      <div>
+}: EmptyStateProps) => (
+  <Box>
+    <Flex justify="center" flexDirection="column" align="center">
+      {illustrationElement && <Box mb={[2, 3]}>{illustrationElement}</Box>}
+      <Box>
         <LegacyIcon {...rest} />
         <LegacyImage {...rest} />
-      </div>
-      {title && <h2 className="text-medium">{title}</h2>}
+      </Box>
+      {title && <h2 className="text-dark">{title}</h2>}
       {message && <Text color="medium">{message}</Text>}
-    </EmptyStateHeader>
+    </Flex>
     {/* TODO - we should make this children or some other more flexible way to
       add actions
       */}
-    <EmptyStateFooter>
-      <EmptyStateActions>
+    <Flex mt={2}>
+      <Flex align="center" ml="auto" mr="auto">
         {action && link && (
           <Link to={link} target={link.startsWith("http") ? "_blank" : ""}>
             <Button primary>{action}</Button>
@@ -77,9 +71,22 @@ const EmptyState = ({
             {action}
           </Button>
         )}
-      </EmptyStateActions>
-    </EmptyStateFooter>
-  </div>
+      </Flex>
+    </Flex>
+    {showCreateButton && (
+      <Flex mt={2}>
+        <Flex align="center" ml="auto" mr="auto">
+          <Link
+            onClick={() =>
+              setCreateModalShow && setCreateModalShow({ show: true })
+            }
+          >
+            <Button>+ Create My Dashboard/Chart</Button>
+          </Link>
+        </Flex>
+      </Flex>
+    )}
+  </Box>
 );
 
 export default EmptyState;

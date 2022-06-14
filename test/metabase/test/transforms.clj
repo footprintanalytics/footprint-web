@@ -1,6 +1,6 @@
 (ns metabase.test.transforms
   (:require [clojure.test :refer :all]
-            [metabase.transforms.specs :as tf.specs]))
+            [metabase.transforms.specs :as t.specs]))
 
 (def test-transform-spec
   "A test transform spec written against our test DB."
@@ -20,12 +20,12 @@
                                                                 [:dimension "FK"]
                                                                 [:dimension "CategoriesStats.FK"]]}]
                                      :limit       3}}}
-      (#'tf.specs/add-metadata-to-steps)
-      (#'tf.specs/transform-spec-parser)))
+      (#'t.specs/add-metadata-to-steps)
+      (#'t.specs/transform-spec-parser)))
 
 (defmacro with-test-transform-specs
   "Evaluate `body` in a context where `transforms.specs/transform-specs` have been swapped for `test-transform-specs`"
   [& body]
   `(testing "with-test-transform-specs\n"
-     (with-redefs [tf.specs/transform-specs (delay [test-transform-spec])]
+     (with-redefs [t.specs/transform-specs (delay [test-transform-spec])]
        ~@body)))

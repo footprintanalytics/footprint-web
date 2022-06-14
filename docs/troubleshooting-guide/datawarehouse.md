@@ -1,8 +1,4 @@
----
-title: Connecting to databases
----
-
-# Connecting to databases
+# Connecting to data warehouses with Metabase
 
 <div class='doc-toc' markdown=1>
 - [The data warehouse server is down](#server-down)

@@ -8,11 +8,11 @@ const DatabaseSchemasPane = ({ database, show, ...props }) => {
     <div>
       <div className="ml1 my2 flex align-center justify-between border-bottom pb1">
         <div className="flex align-center">
-          <Icon name="database" className="text-medium pr1" size={14} />
+          <Icon name="database" className="text-medium pr1" size={22} />
           <h3 className="text-wrap">{database.name}</h3>
         </div>
         <div className="flex align-center">
-          <Icon name="folder" className="text-light pr1" size={12} />
+          <Icon name="folder" className="text-light pr1" size={22} />
           <span className="text-medium">{database.schemas.length}</span>
         </div>
       </div>

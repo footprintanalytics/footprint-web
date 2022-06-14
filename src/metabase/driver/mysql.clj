@@ -5,26 +5,21 @@
             [clojure.string :as str]
             [clojure.tools.logging :as log]
             [honeysql.core :as hsql]
-            [honeysql.format :as hformat]
             [java-time :as t]
-            [metabase.config :as config]
-            [metabase.db.spec :as mdb.spec]
+            [metabase.db.spec :as dbspec]
             [metabase.driver :as driver]
             [metabase.driver.common :as driver.common]
             [metabase.driver.sql-jdbc.common :as sql-jdbc.common]
             [metabase.driver.sql-jdbc.connection :as sql-jdbc.conn]
             [metabase.driver.sql-jdbc.execute :as sql-jdbc.execute]
             [metabase.driver.sql-jdbc.sync :as sql-jdbc.sync]
-            [metabase.driver.sql-jdbc.sync.describe-table :as sql-jdbc.describe-table]
             [metabase.driver.sql.query-processor :as sql.qp]
             [metabase.driver.sql.util.unprepare :as unprepare]
-            [metabase.models.field :as field]
-            [metabase.query-processor.store :as qp.store]
             [metabase.query-processor.timezone :as qp.timezone]
-            [metabase.query-processor.util.add-alias-info :as add]
             [metabase.util :as u]
             [metabase.util.honeysql-extensions :as hx]
-            [metabase.util.i18n :refer [deferred-tru trs]])
+            [metabase.util.i18n :refer [deferred-tru trs]]
+            [metabase.util.ssh :as ssh])
   (:import [java.sql DatabaseMetaData ResultSet ResultSetMetaData Types]
            [java.time LocalDateTime OffsetDateTime OffsetTime ZonedDateTime]))
 
@@ -35,10 +30,9 @@
 
 (defmethod driver/display-name :mysql [_] "MySQL")
 
-(defmethod driver/database-supports? [:mysql :nested-field-columns] [_ _ _] true)
-
 (defmethod driver/supports? [:mysql :regex] [_ _] false)
 (defmethod driver/supports? [:mysql :percentile-aggregations] [_ _] false)
+
 
 
 ;;; +----------------------------------------------------------------------------------------------------------------+
@@ -86,26 +80,21 @@
   {:name         "ssl-cert"
    :display-name (deferred-tru "Server SSL certificate chain")
    :placeholder  ""
-   :visible-if   {"ssl" true}})
+   :visible-if   {"ssl" true}}
+)
 
 (defmethod driver/connection-properties :mysql
   [_]
-  (->>
-   [driver.common/default-host-details
-    (assoc driver.common/default-port-details :placeholder 3306)
-    driver.common/default-dbname-details
-    driver.common/default-user-details
-    driver.common/default-password-details
-    driver.common/cloud-ip-address-info
-    driver.common/default-ssl-details
-    default-ssl-cert-details
-    driver.common/ssh-tunnel-preferences
-    driver.common/advanced-options-start
-    (assoc driver.common/additional-options
-           :placeholder  "tinyInt1isBit=false")
-    driver.common/default-advanced-options]
-   (map u/one-or-many)
-   (apply concat)))
+  (ssh/with-tunnel-config
+    [driver.common/default-host-details
+     (assoc driver.common/default-port-details :placeholder 3306)
+     driver.common/default-dbname-details
+     driver.common/default-user-details
+     driver.common/default-password-details
+     driver.common/default-ssl-details
+     default-ssl-cert-details
+     (assoc driver.common/default-additional-options-details
+       :placeholder  "tinyInt1isBit=false")]))
 
 (defmethod sql.qp/add-interval-honeysql-form :mysql
   [driver hsql-form amount unit]
@@ -117,24 +106,24 @@
 ;; now() returns current timestamp in seconds resolution; now(6) returns it in nanosecond resolution
 (defmethod sql.qp/current-datetime-honeysql-form :mysql
   [_]
-  (hsql/call :now 6))
+  (hsql/call :now))
 
 (defmethod driver/humanize-connection-error-message :mysql
   [_ message]
   (condp re-matches message
     #"^Communications link failure\s+The last packet sent successfully to the server was 0 milliseconds ago. The driver has not received any packets from the server.$"
-    :cannot-connect-check-host-and-port
+    (driver.common/connection-error-messages :cannot-connect-check-host-and-port)
 
     #"^Unknown database .*$"
-    :database-name-incorrect
+    (driver.common/connection-error-messages :database-name-incorrect)
 
     #"Access denied for user.*$"
-    :username-or-password-incorrect
+    (driver.common/connection-error-messages :username-or-password-incorrect)
 
     #"Must specify port after ':' in connection string"
-    :invalid-hostname
+    (driver.common/connection-error-messages :invalid-hostname)
 
-    ;; else
+    #".*"                               ; default
     message))
 
 (defmethod sql-jdbc.sync/db-default-timezone :mysql
@@ -174,18 +163,6 @@
   [_]
   :sunday)
 
-(def ^:const max-nested-field-columns
-  "Maximum number of nested field columns."
-  100)
-
-(defmethod sql-jdbc.sync/describe-nested-field-columns :mysql
-  [driver database table]
-  (let [spec   (sql-jdbc.conn/db->pooled-connection-spec database)
-        fields (sql-jdbc.describe-table/describe-nested-field-columns driver spec table)]
-    (if (> (count fields) max-nested-field-columns)
-      #{}
-      fields)))
-
 
 ;;; +----------------------------------------------------------------------------------------------------------------+
 ;;; |                                           metabase.driver.sql impls                                            |
@@ -222,31 +199,6 @@
 (defmethod sql.qp/->honeysql [:mysql :length]
   [driver [_ arg]]
   (hsql/call :char_length (sql.qp/->honeysql driver arg)))
-
-(defmethod sql.qp/json-query :mysql
-  [_ identifier stored-field]
-  (letfn [(handle-name [x] (str "\"" (if (number? x) (str x) (name x)) "\""))]
-    (let [nfc-path             (:nfc_path stored-field)
-          unwrapped-identifier (:form identifier)
-          parent-identifier    (field/nfc-field->parent-identifier unwrapped-identifier stored-field)
-          jsonpath-query       (format "$.%s" (str/join "." (map handle-name (rest nfc-path))))]
-      (reify
-        hformat/ToSql
-        (to-sql [_]
-          (hformat/to-params-default jsonpath-query "nfc_path")
-          (format "JSON_EXTRACT(%s, ?)" (hformat/to-sql parent-identifier)))))))
-
-(defmethod sql.qp/->honeysql [:mysql :field]
-  [driver [_ id-or-name opts :as clause]]
-  (let [stored-field (when (integer? id-or-name)
-                       (qp.store/field id-or-name))
-        parent-method (get-method sql.qp/->honeysql [:sql :field])
-        identifier    (parent-method driver clause)]
-    (if (field/json-field? stored-field)
-      (if (::sql.qp/forced-alias opts)
-        (keyword (::add/source-alias opts))
-        (sql.qp/json-query :mysql identifier stored-field))
-      identifier)))
 
 ;; Since MySQL doesn't have date_trunc() we fake it by formatting a date to an appropriate string and then converting
 ;; back to a date. See http://dev.mysql.com/doc/refman/5.6/en/date-and-time-functions.html#function_date-format for an
@@ -350,13 +302,6 @@
    ;; strip off " UNSIGNED" from end if present
    (keyword (str/replace (name database-type) #"\sUNSIGNED$" ""))))
 
-(defmethod sql-jdbc.sync/column->semantic-type :mysql
-  [_ database-type _]
-  ;; More types to be added when we start caring about them
-  (case database-type
-    "JSON"  :type/SerializedJSON
-    nil))
-
 (def ^:private default-connection-args
   "Map of args for the MySQL/MariaDB JDBC connection string."
   { ;; 0000-00-00 dates are valid in MySQL; convert these to `null` when they come back because they're illegal in Java
@@ -368,28 +313,16 @@
    ;; GZIP compress packets sent between Metabase server and MySQL/MariaDB database
    :useCompression       true})
 
-(defn- maybe-add-program-name-option [jdbc-spec additional-options-map]
-  ;; connectionAttributes (if multiple) are separated by commas, so values that contain spaces are OK, so long as they
-  ;; don't contain a comma; our mb-version-and-process-identifier shouldn't contain one, but just to be on the safe side
-  (let [set-prog-nm-fn (fn []
-                         (let [prog-name (str/replace config/mb-version-and-process-identifier "," "_")]
-                           (assoc jdbc-spec :connectionAttributes (str "program_name:" prog-name))))]
-    (if-let [conn-attrs (get additional-options-map "connectionAttributes")]
-      (if (str/includes? conn-attrs "program_name")
-        jdbc-spec ; additional-options already includes the program_name; don't set it here
-        (set-prog-nm-fn))
-      (set-prog-nm-fn)))) ; additional-options did not contain connectionAttributes at all; set it
-
 (defmethod sql-jdbc.conn/connection-details->spec :mysql
   [_ {ssl? :ssl, :keys [additional-options ssl-cert], :as details}]
   ;; In versions older than 0.32.0 the MySQL driver did not correctly save `ssl?` connection status. Users worked
   ;; around this by including `useSSL=true`. Check if that's there, and if it is, assume SSL status. See #9629
   ;;
   ;; TODO - should this be fixed by a data migration instead?
-  (let [addl-opts-map (sql-jdbc.common/additional-options->map additional-options :url "=" false)
-        ssl?          (or ssl? (= "true" (get addl-opts-map "useSSL")))
-        ssl-cert?     (and ssl? (some? ssl-cert))]
-    (when (and ssl? (not (contains? addl-opts-map "trustServerCertificate")))
+  (let [ssl?      (or ssl? (some-> additional-options (str/includes? "useSSL=true")))
+        ssl-cert? (and ssl? (some? ssl-cert))]
+    (when (and ssl?
+               (not (some->  additional-options (str/includes? "trustServerCertificate"))))
       (log/info (trs "You may need to add 'trustServerCertificate=true' to the additional connection options to connect with SSL.")))
     (merge
      default-connection-args
@@ -398,8 +331,7 @@
      (let [details (-> (if ssl-cert? (set/rename-keys details {:ssl-cert :serverSslCert}) details)
                        (set/rename-keys {:dbname :db})
                        (dissoc :ssl))]
-       (-> (mdb.spec/spec :mysql details)
-           (maybe-add-program-name-option addl-opts-map)
+       (-> (dbspec/mysql details)
            (sql-jdbc.common/handle-additional-options details))))))
 
 (defmethod sql-jdbc.sync/active-tables :mysql

@@ -1,8 +1,8 @@
 import React from "react";
 import { t } from "ttag";
-import styled from "@emotion/styled";
+import styled from "styled-components";
 import { space } from "metabase/styled-components/theme";
-import Radio from "metabase/core/components/Radio";
+import Radio from "metabase/components/Radio";
 import { CacheTTLField } from "../CacheTTLField";
 
 export function CacheTTLInput(props) {

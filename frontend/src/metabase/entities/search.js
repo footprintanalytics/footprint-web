@@ -1,16 +1,19 @@
 import { createEntity } from "metabase/lib/entities";
 
-import { GET } from "metabase/lib/api";
-import { entityTypeForObject } from "metabase/lib/schema";
+import { GET, POST } from "metabase/lib/api";
 
-import { ObjectUnionSchema, ENTITIES_SCHEMA_MAP } from "metabase/schema";
+import {
+  ObjectUnionSchema,
+  ENTITIES_SCHEMA_MAP,
+  entityTypeForObject,
+} from "metabase/schema";
 
-import { canonicalCollectionId } from "metabase/collections/utils";
+import { canonicalCollectionId } from "metabase/entities/collections";
 
 const ENTITIES_TYPES = Object.keys(ENTITIES_SCHEMA_MAP);
 
-const searchList = GET("/api/search");
-const collectionList = GET("/api/collection/:collection/items");
+const searchList = POST("/api/v1/database/dataset/search");
+const collectionList = GET("/api/v1/collection/:collection/items");
 
 export default createEntity({
   name: "search",
@@ -41,7 +44,7 @@ export default createEntity({
         const { data, ...rest } = await collectionList({
           collection,
           archived,
-          models,
+          models: models ? models : ["no_models"],
           namespace,
           pinned_state,
           limit,
@@ -49,11 +52,15 @@ export default createEntity({
           sort_column,
           sort_direction,
         });
-
+        let tempData = data;
+        // eslint-disable-next-line no-prototype-builtins
+        if (rest.hasOwnProperty("code") && data) {
+          tempData = data.data;
+        }
         return {
           ...rest,
-          data: data
-            ? data.map(item => ({
+          data: tempData
+            ? tempData.map(item => ({
                 collection_id: canonicalCollectionId(collection),
                 archived: archived || false,
                 ...item,

@@ -1,15 +1,20 @@
-/* eslint-disable react/prop-types */
 import React from "react";
 import cx from "classnames";
 
 import Icon from "metabase/components/Icon";
 import Tooltip from "metabase/components/Tooltip";
+import { formatTitle } from "metabase/lib/formatting";
 
-const TitleAndDescription = ({ title, description, className }) => (
+type Attributes = {
+  title: string,
+  description?: string,
+  className?: string,
+};
+const TitleAndDescription = ({ title, description, className }: Attributes) => (
   <div className={cx("flex align-center", className)}>
-    <h2 className="h2 mr1 text-wrap">{title}</h2>
+    <h2 className="footprint-title1 text-pre-wrap ">{formatTitle(title)}</h2>
     {description && (
-      <Tooltip tooltip={description} maxWidth="22em">
+      <Tooltip tooltip={description} maxWidth={"22em"}>
         <Icon name="info" className="mx1" />
       </Tooltip>
     )}

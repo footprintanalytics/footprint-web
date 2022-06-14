@@ -1,4 +1,4 @@
-import { restore, describeEE } from "__support__/e2e/cypress";
+import { restore, describeWithToken } from "__support__/e2e/cypress";
 
 const TOOLS_ERRORS_URL = "/admin/tools/errors";
 
@@ -20,7 +20,7 @@ const brokenQuestionDetails = {
   display: "scalar",
 };
 
-describeEE("admin > tools > erroring questions ", () => {
+describeWithToken("admin > tools > erroring questions ", () => {
   beforeEach(() => {
     restore();
     cy.signInAsAdmin();
@@ -113,7 +113,7 @@ function fixQuestion(name) {
   cy.findByText("Open Editor").click();
 
   cy.icon("variable").click();
-  cy.findByPlaceholderText("Enter a default value…").type("Foo");
+  cy.findByPlaceholderText("Enter a default value...").type("Foo");
 
   cy.findByText("Save").click();
 

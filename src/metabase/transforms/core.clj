@@ -8,7 +8,7 @@
             [metabase.models.field :refer [Field]]
             [metabase.models.table :as table :refer [Table]]
             [metabase.query-processor :as qp]
-            [metabase.transforms.materialize :as tf.materialize]
+            [metabase.transforms.materialize :as materialize]
             [metabase.transforms.specs :refer [Step transform-specs TransformSpec]]
             [metabase.util :as u]
             [metabase.util.i18n :refer [tru]]
@@ -62,7 +62,8 @@
     (-> query
         (assoc :expressions (->> expressions
                                  keys
-                                 (select-keys (get-in bindings [name :dimensions]))))
+                                 (select-keys (get-in bindings [name :dimensions]))
+                                 (m/map-keys keyword)))
         (update :fields concat (for [expression (keys expressions)]
                                  [:expression expression])))
     query))
@@ -103,7 +104,7 @@
   (m/assoc-some query :filter (de/resolve-dimension-clauses bindings name filter)))
 
 (defn- maybe-add-limit
-  [_bindings {:keys [limit]} query]
+  [bindings {:keys [limit]} query]
   (m/assoc-some query :limit limit))
 
 (s/defn ^:private transform-step! :- Bindings
@@ -123,7 +124,7 @@
                                        (maybe-add-filter local-bindings step)
                                        (maybe-add-limit local-bindings step))
                         :database ((some-fn :db_id :database_id) source-entity)}]
-    (assoc bindings name {:entity     (tf.materialize/make-card-for-step! step query)
+    (assoc bindings name {:entity     (materialize/make-card-for-step! step query)
                           :dimensions (infer-resulting-dimensions local-bindings step query)})))
 
 (def ^:private Tableset [(type Table)])
@@ -140,7 +141,7 @@
                :entity     table}])))
 
 (s/defn ^:private apply-transform-to-tableset! :- Bindings
-  [tableset :- Tableset, {:keys [steps _provides]} :- TransformSpec]
+  [tableset :- Tableset, {:keys [steps provides]} :- TransformSpec]
   (driver/with-driver (-> tableset first table/database :engine)
     (reduce transform-step! (tableset->bindings tableset) (vals steps))))
 
@@ -182,7 +183,7 @@
   4) Check that all output cards have the expected result shape.
   5) Return the output cards."
   [db-id :- su/IntGreaterThanZero, schema :- (s/maybe s/Str), spec :- TransformSpec]
-  (tf.materialize/fresh-collection-for-transform! spec)
+  (materialize/fresh-collection-for-transform! spec)
   (some-> (tableset db-id schema)
           (tables-matching-requirements spec)
           (apply-transform-to-tableset! spec)

@@ -1,7 +1,7 @@
-import { restore, visitDashboard } from "__support__/e2e/cypress";
-import { SAMPLE_DATABASE } from "__support__/e2e/cypress_sample_database";
+import { restore } from "__support__/e2e/cypress";
+import { SAMPLE_DATASET } from "__support__/e2e/cypress_sample_dataset";
 
-const { ORDERS } = SAMPLE_DATABASE;
+const { ORDERS } = SAMPLE_DATASET;
 
 // After January 1st, 2020
 const dashboardFilter = {
@@ -32,9 +32,7 @@ const questionDetails = {
 
 describe.skip("issue 12720", () => {
   beforeEach(() => {
-    cy.intercept("POST", "/api/dashboard/1/dashcard/1/card/1/query").as(
-      "cardQuery",
-    );
+    cy.intercept("POST", "/api/card/1/query").as("cardQuery");
 
     restore();
     cy.signInAsAdmin();
@@ -103,7 +101,7 @@ describe.skip("issue 12720", () => {
 });
 
 function clickThrough(title) {
-  visitDashboard(1);
+  cy.visit("/dashboard/1");
   cy.wait("@cardQuery");
   cy.wait("@sqlQuery");
   cy.get(".LegendItem")

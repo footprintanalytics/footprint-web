@@ -1,9 +1,6 @@
 // various Metabase-specific "scoping" functions like inside popover/modal/navbar/main/sidebar content area
-export const POPOVER_ELEMENT = ".popover[data-state~='visible']";
-
 export function popover() {
-  cy.get(POPOVER_ELEMENT).should("be.visible");
-  return cy.get(POPOVER_ELEMENT);
+  return cy.get(".PopoverContainer.PopoverContainer--open");
 }
 
 export function modal() {
@@ -11,36 +8,12 @@ export function modal() {
 }
 
 export function sidebar() {
-  return cy.get("main aside");
-}
-
-export function rightSidebar() {
-  return cy.findAllByTestId("sidebar-right");
-}
-
-export function navigationSidebar() {
-  return cy.get("#root aside").first();
-}
-
-export function appBar() {
-  return cy.get("#root header").first();
-}
-
-export function openNavigationSidebar() {
-  appBar()
-    .findByTestId("sidebar-toggle-button")
-    .click();
-}
-
-export function closeNavigationSidebar() {
-  appBar()
-    .findByTestId("sidebar-toggle-button")
-    .click();
+  return cy.get("aside");
 }
 
 export function browse() {
   // takes you to `/browse` (reflecting changes made in `0.38-collection-redesign)
-  return navigationSidebar().findByText("Browse data");
+  return cy.get(".Nav .Icon-table_spaced");
 }
 
 /**
@@ -65,19 +38,3 @@ export function browse() {
 export function filterWidget() {
   return cy.get("fieldset");
 }
-
-export const openQuestionActions = () => {
-  cy.findByTestId("question-action-buttons-container").within(() => {
-    cy.icon("ellipsis").click();
-  });
-};
-
-export const closeQuestionActions = () => {
-  cy.findByTestId("qb-header").click();
-};
-
-export const questionInfoButton = () => {
-  return cy.findByTestId("question-action-buttons-container").within(() => {
-    return cy.icon("info");
-  });
-};

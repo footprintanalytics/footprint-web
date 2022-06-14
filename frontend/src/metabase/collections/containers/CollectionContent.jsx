@@ -1,77 +1,55 @@
 /* eslint-disable react/prop-types */
-import React, { useEffect, useState, useCallback } from "react";
+import React, { useState, useCallback } from "react";
+import { Box } from "grid-styled";
 import _ from "underscore";
 import { connect } from "react-redux";
 
-import Bookmark from "metabase/entities/bookmarks";
 import Collection from "metabase/entities/collections";
 import Search from "metabase/entities/search";
 
 import { getUserIsAdmin } from "metabase/selectors/user";
-import { getMetadata } from "metabase/selectors/metadata";
-import { getIsBookmarked } from "metabase/collections/selectors";
-import { getIsNavbarOpen, openNavbar } from "metabase/redux/app";
 
 import BulkActions from "metabase/collections/components/BulkActions";
 import CollectionEmptyState from "metabase/components/CollectionEmptyState";
-import Header from "metabase/collections/containers/CollectionHeader";
+import Header from "metabase/collections/components/CollectionHeader/CollectionHeader";
 import ItemsTable from "metabase/collections/components/ItemsTable";
-import PinnedItemOverview from "metabase/collections/components/PinnedItemOverview";
+import PinnedItemsTable from "metabase/collections/components/PinnedItemsTable";
 import { isPersonalCollectionChild } from "metabase/collections/utils";
 
 import ItemsDragLayer from "metabase/containers/dnd/ItemsDragLayer";
 import PaginationControls from "metabase/components/PaginationControls";
 
-import { useOnMount } from "metabase/hooks/use-on-mount";
 import { usePagination } from "metabase/hooks/use-pagination";
-import { usePrevious } from "metabase/hooks/use-previous";
 import { useListSelect } from "metabase/hooks/use-list-select";
-import { isSmallScreen } from "metabase/lib/dom";
-import {
-  CollectionEmptyContent,
-  CollectionMain,
-  CollectionRoot,
-  CollectionTable,
-} from "./CollectionContent.styled";
 
-const PAGE_SIZE = 25;
+const PAGE_SIZE = 100;
 
-const ALL_MODELS = ["dashboard", "dataset", "card", "snippet", "pulse"];
+const ALL_MODELS = ["dashboard", "card", "snippet", "pulse"];
 
 const itemKeyFn = item => `${item.id}:${item.model}`;
 
-function mapStateToProps(state, props) {
+function mapStateToProps(state) {
   return {
     isAdmin: getUserIsAdmin(state),
-    isBookmarked: getIsBookmarked(state, props),
-    metadata: getMetadata(state),
-    isNavbarOpen: getIsNavbarOpen(state),
   };
 }
 
-const mapDispatchToProps = {
-  openNavbar,
-  createBookmark: (id, type) => Bookmark.actions.create({ id, type }),
-  deleteBookmark: (id, type) => Bookmark.actions.delete({ id, type }),
-};
-
 function CollectionContent({
-  bookmarks,
   collection,
   collections: collectionList = [],
   collectionId,
-  createBookmark,
-  deleteBookmark,
   isAdmin,
   isRoot,
-  metadata,
-  isNavbarOpen,
-  openNavbar,
+  handleToggleMobileSidebar,
+  shouldDisplayMobileSidebar,
 }) {
-  const [isBookmarked, setIsBookmarked] = useState(false);
   const [selectedItems, setSelectedItems] = useState(null);
   const [selectedAction, setSelectedAction] = useState(null);
   const [unpinnedItemsSorting, setUnpinnedItemsSorting] = useState({
+    sort_column: "name",
+    sort_direction: "asc",
+  });
+  const [pinnedItemsSorting, setPinnedItemsSorting] = useState({
     sort_column: "name",
     sort_direction: "asc",
   });
@@ -83,28 +61,6 @@ function CollectionContent({
     getIsSelected,
     clear,
   } = useListSelect(itemKeyFn);
-  const previousCollection = usePrevious(collection);
-
-  useOnMount(() => {
-    if (!isSmallScreen()) {
-      openNavbar();
-    }
-  });
-
-  useEffect(() => {
-    if (previousCollection && previousCollection.id !== collection.id) {
-      clear();
-    }
-  }, [previousCollection, collection, clear]);
-
-  useEffect(() => {
-    const shouldBeBookmarked = bookmarks.some(
-      bookmark =>
-        bookmark.type === "collection" && bookmark.item_id === collectionId,
-    );
-
-    setIsBookmarked(shouldBeBookmarked);
-  }, [bookmarks, collectionId]);
 
   const handleBulkArchive = useCallback(async () => {
     try {
@@ -141,6 +97,10 @@ function CollectionContent({
     [setPage],
   );
 
+  const handlePinnedItemsSortingChange = useCallback(sortingOpts => {
+    setPinnedItemsSorting(sortingOpts);
+  }, []);
+
   const handleCloseModal = () => {
     setSelectedItems(null);
     setSelectedAction(null);
@@ -156,11 +116,6 @@ function CollectionContent({
     setSelectedAction("copy");
   };
 
-  const handleClickBookmark = () => {
-    const toggleBookmark = isBookmarked ? deleteBookmark : createBookmark;
-    toggleBookmark(collectionId, "collection");
-  };
-
   const unpinnedQuery = {
     collection: collectionId,
     models: ALL_MODELS,
@@ -173,8 +128,7 @@ function CollectionContent({
   const pinnedQuery = {
     collection: collectionId,
     pinned_state: "is_pinned",
-    sort_column: "name",
-    sort_direction: "asc",
+    ...pinnedItemsSorting,
   };
 
   return (
@@ -188,11 +142,9 @@ function CollectionContent({
         const hasPinnedItems = pinnedItems.length > 0;
 
         return (
-          <CollectionRoot>
-            <CollectionMain>
+          <Box pt={2}>
+            <Box width="90%" ml="auto" mr="auto">
               <Header
-                onClickBookmark={handleClickBookmark}
-                isBookmarked={isBookmarked}
                 isRoot={isRoot}
                 isAdmin={isAdmin}
                 collectionId={collectionId}
@@ -201,18 +153,22 @@ function CollectionContent({
                   collection,
                   collectionList,
                 )}
+                handleToggleMobileSidebar={handleToggleMobileSidebar}
               />
-              <PinnedItemOverview
-                bookmarks={bookmarks}
-                createBookmark={createBookmark}
-                deleteBookmark={deleteBookmark}
+
+              <PinnedItemsTable
                 items={pinnedItems}
                 collection={collection}
-                metadata={metadata}
+                sortingOptions={pinnedItemsSorting}
+                onSortingOptionsChange={handlePinnedItemsSortingChange}
+                selectedItems={selected}
+                getIsSelected={getIsSelected}
+                onToggleSelected={toggleItem}
+                onDrop={clear}
                 onMove={handleMove}
                 onCopy={handleCopy}
-                onToggleSelected={toggleItem}
               />
+
               <Search.ListLoader
                 query={unpinnedQuery}
                 loadingAndErrorWrapper={false}
@@ -239,20 +195,17 @@ function CollectionContent({
                   const isEmpty =
                     !loading && !hasPinnedItems && unpinnedItems.length === 0;
 
-                  if (isEmpty && !loadingUnpinnedItems) {
+                  if (isEmpty) {
                     return (
-                      <CollectionEmptyContent>
+                      <Box mt="120px">
                         <CollectionEmptyState />
-                      </CollectionEmptyContent>
+                      </Box>
                     );
                   }
 
                   return (
-                    <CollectionTable>
+                    <Box mt={hasPinnedItems ? 3 : 0}>
                       <ItemsTable
-                        bookmarks={bookmarks}
-                        createBookmark={createBookmark}
-                        deleteBookmark={deleteBookmark}
                         items={unpinnedItems}
                         collection={collection}
                         sortingOptions={unpinnedItemsSorting}
@@ -291,19 +244,17 @@ function CollectionContent({
                         hasUnselected={hasUnselected}
                         selectedItems={selectedItems}
                         selectedAction={selectedAction}
-                        isNavbarOpen={isNavbarOpen}
                       />
-                    </CollectionTable>
+                    </Box>
                   );
                 }}
               </Search.ListLoader>
-            </CollectionMain>
+            </Box>
             <ItemsDragLayer
               selectedItems={selected}
               pinnedItems={pinnedItems}
-              collection={collection}
             />
-          </CollectionRoot>
+          </Box>
         );
       }}
     </Search.ListLoader>
@@ -311,7 +262,6 @@ function CollectionContent({
 }
 
 export default _.compose(
-  Bookmark.loadList(),
   Collection.loadList({
     query: () => ({ tree: true }),
     loadingAndErrorWrapper: false,
@@ -320,5 +270,5 @@ export default _.compose(
     id: (_, props) => props.collectionId,
     reload: true,
   }),
-  connect(mapStateToProps, mapDispatchToProps),
+  connect(mapStateToProps),
 )(CollectionContent);

@@ -13,6 +13,7 @@ import SettingRadio from "./widgets/SettingRadio";
 import SettingToggle from "./widgets/SettingToggle";
 import SettingSelect from "./widgets/SettingSelect";
 import SettingText from "./widgets/SettingText";
+import SettingColor from "./widgets/SettingColor";
 import { settingToFormFieldId } from "./../../settings/utils";
 
 const SETTING_WIDGET_MAP = {
@@ -23,6 +24,7 @@ const SETTING_WIDGET_MAP = {
   radio: SettingRadio,
   boolean: SettingToggle,
   text: SettingText,
+  color: SettingColor,
 };
 
 const updatePlaceholderForEnvironmentVars = props => {
@@ -58,13 +60,6 @@ export default class SettingsSetting extends Component {
       );
       Widget = SettingInput;
     }
-
-    const widgetProps = {
-      ...setting.getProps?.(setting),
-      ...setting.props,
-      ...updatePlaceholderForEnvironmentVars(this.props),
-    };
-
     return (
       // TODO - this formatting needs to be moved outside this component
       <li className="m2 mb4">
@@ -72,7 +67,11 @@ export default class SettingsSetting extends Component {
           <SettingHeader id={settingId} setting={setting} />
         )}
         <div className="flex">
-          <Widget id={settingId} {...widgetProps} />
+          <Widget
+            id={settingId}
+            {...(setting.props || {})}
+            {...updatePlaceholderForEnvironmentVars(this.props)}
+          />
         </div>
         {errorMessage && (
           <div className="text-error text-bold pt1">{errorMessage}</div>

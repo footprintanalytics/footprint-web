@@ -1,7 +1,6 @@
 // Migrated from frontend/test/metabase/user/UserSettings.integ.spec.js
-import { restore, popover } from "__support__/e2e/cypress";
+import { restore } from "__support__/e2e/cypress";
 import { USERS } from "__support__/e2e/cypress_data";
-
 const { first_name, last_name, email, password } = USERS.normal;
 
 const CURRENT_USER = {
@@ -13,11 +12,7 @@ const CURRENT_USER = {
   is_active: true,
   is_qbnewb: false,
   updated_at: "2021-02-08T15:09:33.918",
-  user_group_memberships: [
-    { id: 1, is_group_manager: false },
-    { id: 4, is_group_manager: false },
-    { id: 5, is_group_manager: false },
-  ],
+  group_ids: [1, 4, 5],
   is_superuser: false,
   login_attributes: null,
   id: 2,
@@ -91,64 +86,6 @@ describe("user > settings", () => {
     cy.findByLabelText("gear icon").click();
     cy.findByText("Sign out").click();
     cy.findByText("Sign in to Metabase");
-  });
-
-  it("should validate form values (metabase#23259)", () => {
-    cy.signInAsNormalUser();
-    cy.visit("/account/password");
-
-    // Validate common passwords
-    cy.findByLabelText("Create a password")
-      .as("passwordInput")
-      .type("qwerty123")
-      .blur();
-
-    cy.contains("password is too common");
-    cy.get("@passwordInput").clear();
-
-    // Validate invalid current password
-    cy.findByLabelText("Current password")
-      .as("currentPassword")
-      .type("invalid");
-
-    cy.get("@passwordInput").type("new_password1");
-    cy.findByLabelText("Confirm your password").type("new_password1");
-
-    cy.button("Save").click();
-    cy.contains("Invalid password");
-  });
-
-  it("should be able to change a language (metabase#22192)", () => {
-    cy.intercept("PUT", "/api/user/*").as("updateUserSettings");
-
-    cy.visit("/account/profile");
-
-    cy.findByText("Use site default").click();
-    popover().within(() => cy.findByText("Indonesian").click());
-
-    cy.button("Update").click();
-    cy.wait("@updateUserSettings");
-
-    // We need some UI element other than a string
-    cy.icon("gear").should("exist");
-  });
-
-  it("should be able to open the app with every locale from the available locales (metabase#22192)", () => {
-    cy.request("GET", "/api/user/current").then(({ body: user }) => {
-      cy.intercept("GET", "/api/user/current").as("getUser");
-
-      cy.request("GET", "/api/session/properties").then(
-        ({ body: settings }) => {
-          cy.wrap(settings["available-locales"]).each(([locale]) => {
-            cy.log(`Using ${locale} locale`);
-            cy.request("PUT", `/api/user/${user.id}`, { locale });
-            cy.visit("/");
-            cy.wait("@getUser");
-            cy.icon("gear").should("exist");
-          });
-        },
-      );
-    });
   });
 
   describe("when user is authenticated via ldap", () => {

@@ -22,7 +22,7 @@ export const slowestSchemas = () => ({
   },
 });
 
-export const table = searchString => ({
+export const table = (searchString?: string) => ({
   card: {
     name: "Schemas",
     display: "table",

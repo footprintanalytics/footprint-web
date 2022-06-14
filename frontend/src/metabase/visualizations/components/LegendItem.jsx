@@ -4,9 +4,11 @@ import PropTypes from "prop-types";
 
 import Icon, { iconPropTypes } from "metabase/components/Icon";
 import Tooltip from "metabase/components/Tooltip";
-import Ellipsified from "metabase/core/components/Ellipsified";
+import Ellipsified from "metabase/components/Ellipsified";
 
 import cx from "classnames";
+import { formatTitle } from "metabase/lib/formatting";
+import { commonD3LegendSetting } from "metabase/visualizations/lib/legend";
 
 import { IconContainer } from "./LegendItem.styled";
 
@@ -44,6 +46,7 @@ export default class LegendItem extends Component {
       description,
       onClick,
       infoClassName,
+      isNarrow,
     } = this.props;
 
     return (
@@ -58,7 +61,16 @@ export default class LegendItem extends Component {
             "cursor-pointer": onClick,
           },
         )}
-        style={{ overflowX: "hidden", flex: "0 1 auto" }}
+        style={{
+          overflowX: "hidden",
+          flex: "0 1 auto",
+          fontSize: showDot ? 12 : isNarrow ? 14 : 18,
+          fontWeight: "normal",
+          fontFamily: "Arial,sans-serif",
+          alignItems: "center",
+          marginRight: description ? 20 : 6,
+          color: showDot ? "#84848A" : "#303440",
+        }}
         onMouseEnter={onMouseEnter}
         onMouseLeave={onMouseLeave}
         onClick={onClick}
@@ -71,12 +83,9 @@ export default class LegendItem extends Component {
         {showDot && (
           <Tooltip tooltip={title} isEnabled={showTooltip && showDotTooltip}>
             <div
-              className={cx("flex-no-shrink", "inline-block circular")}
+              className={cx("flex-no-shrink", "inline-block")}
               style={{
-                width: 13,
-                height: 13,
-                margin: 4,
-                marginRight: 8,
+                ...commonD3LegendSetting(),
                 backgroundColor: color,
               }}
             />
@@ -84,10 +93,17 @@ export default class LegendItem extends Component {
         )}
         {showTitle && (
           <div className="flex align-center overflow-hidden">
-            <Ellipsified showTooltip={showTooltip}>{title}</Ellipsified>
+            <Ellipsified showTooltip={showTooltip}>
+              <span
+                // className="text-pre-wrap"
+                style={{ lineHeight: showDot ? "20px" : "" }}
+              >
+                {formatTitle(title)}{" "}
+              </span>
+            </Ellipsified>
             {description && (
-              <div className="hover-child ml1 flex align-center text-medium">
-                <Tooltip tooltip={description} maxWidth="22em">
+              <div className="hover-child ml2 flex align-center text-medium">
+                <Tooltip tooltip={description} maxWidth={"22em"}>
                   <Icon className={infoClassName} name="info" />
                 </Tooltip>
               </div>

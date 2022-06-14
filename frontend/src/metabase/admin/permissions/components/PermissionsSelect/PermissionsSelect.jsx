@@ -4,7 +4,7 @@ import PropTypes from "prop-types";
 import PopoverWithTrigger from "metabase/components/PopoverWithTrigger";
 import { lighten } from "metabase/lib/colors";
 import Icon from "metabase/components/Icon";
-import Toggle from "metabase/core/components/Toggle";
+import Toggle from "metabase/components/Toggle";
 import Tooltip from "metabase/components/Tooltip";
 
 import {
@@ -21,7 +21,6 @@ import {
   ToggleLabel,
   WarningIcon,
   DisabledPermissionOption,
-  SelectedOption,
 } from "./PermissionsSelect.styled";
 
 const propTypes = {
@@ -67,7 +66,7 @@ export const PermissionsSelect = memo(function PermissionsSelect({
           iconColor="text-light"
         />
       ) : (
-        <SelectedOption {...selectedOption} />
+        <PermissionsSelectOption {...selectedOption} />
       )}
 
       {warning && (

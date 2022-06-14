@@ -1,10 +1,10 @@
 (ns metabase.troubleshooting
   (:require [clojure.java.jdbc :as jdbc]
             [clojure.java.jmx :as jmx]
-            [metabase.analytics.stats :as stats]
-            [metabase.config :as config]
+            [metabase.config :as mc]
             [metabase.db :as mdb]
             [metabase.driver :as driver]
+            [metabase.util.stats :as mus]
             [toucan.db :as db])
   (:import javax.management.ObjectName))
 
@@ -29,15 +29,15 @@
   "Make it easy for the user to tell us what they're using"
   []
   {:databases                    (->> (db/select 'Database) (map :engine) distinct)
-   :hosting-env                  (stats/environment-type)
+   :hosting-env                  (mus/environment-type)
    :application-database         (mdb/db-type)
    :application-database-details (jdbc/with-db-metadata [metadata (db/connection)]
                                    {:database    {:name    (.getDatabaseProductName metadata)
                                                   :version (.getDatabaseProductVersion metadata)}
                                     :jdbc-driver {:name    (.getDriverName metadata)
                                                   :version (.getDriverVersion metadata)}})
-   :run-mode                     (config/config-kw :mb-run-mode)
-   :version                      config/mb-version-info
+   :run-mode                     (mc/config-kw :mb-run-mode)
+   :version                      mc/mb-version-info
    :settings                     {:report-timezone (driver/report-timezone)}})
 
 (defn- conn-pool-bean-diag-info [acc ^ObjectName jmx-bean]

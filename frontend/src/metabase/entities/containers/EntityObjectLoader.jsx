@@ -5,42 +5,82 @@ import { createSelector } from "reselect";
 import _ from "underscore";
 
 import entityType from "./EntityType";
-import { createMemoizedSelector } from "metabase/lib/redux";
 import LoadingAndErrorWrapper from "metabase/components/LoadingAndErrorWrapper";
 
+export type Props = {
+  // Entity ID, such as a database ID
+  entityId: any,
+  // Entity type name (e.x. "databases", "questions", etc)
+  entityType: string,
+  // Reload the object when the component is mounted (or entityId changes)
+  reload?: boolean,
+  // Wrap the object in the a class that contains helper functions
+  wrapped?: boolean,
+  // List of required properties, if the object is loaded and they are all
+  // present don't bother loading as the object has been loaded by some other means
+  properties?: string[],
+  // Wrap the children in LoadingAndErrorWrapper to display loading and error states
+  // When true (default) the children render prop won't be called until loaded
+  loadingAndErrorWrapper: boolean,
+  // selectorName overrides the default getObject selector
+  selectorName?: string,
+  // Children render prop
+  children?: (props: RenderProps) => ?React.Element,
+};
+
+export type RenderProps = {
+  // the loaded objecvt itself
+  object: ?any,
+  // data was loaded at least once
+  fetched: boolean,
+  // data is loaded and no pending requests
+  loaded: boolean,
+  //  request is pending
+  loading: boolean,
+  // error occured
+  error: ?any,
+  remove: () => Promise<void>,
+};
+
 // props that shouldn't be passed to children in order to properly stack
-const CONSUMED_PROPS = [
+const CONSUMED_PROPS: string[] = [
   "entityType",
   "entityId",
-  "entityQuery",
-  "entityAlias",
   // "reload", // Masked by `reload` function. Should we rename that?
   "wrapped",
   "properties",
   "loadingAndErrorWrapper",
-  "LoadingAndErrorWrapper",
   "selectorName",
 ];
 
-// NOTE: Memoize entityQuery so we don't re-render even if a new but identical
-// object is created. This works because entityQuery must be JSON serializable
-const getMemoizedEntityQuery = createMemoizedSelector(
-  (state, entityQuery) => entityQuery,
-  entityQuery => entityQuery,
-);
+@entityType()
+@connect(
+  (state, { entityDef, entityId, selectorName = "getObject", ...props }) => {
+    if (typeof entityId === "function") {
+      entityId = entityId(state, props);
+    }
 
-class EntityObjectLoaderInner extends React.Component {
+    return {
+      entityId,
+      object: entityDef.selectors[selectorName](state, { entityId }),
+      fetched: entityDef.selectors.getFetched(state, { entityId }),
+      loading: entityDef.selectors.getLoading(state, { entityId }),
+      error: entityDef.selectors.getError(state, { entityId }),
+    };
+  },
+)
+export default class EntityObjectLoader extends React.Component {
+  props: Props;
+
   static defaultProps = {
     loadingAndErrorWrapper: true,
-    LoadingAndErrorWrapper: LoadingAndErrorWrapper,
     reload: false,
     wrapped: false,
-    dispatchApiErrorEvent: true,
   };
 
-  _getWrappedObject;
+  _getWrappedObject: ?(props: Props) => any;
 
-  constructor(props) {
+  constructor(props: Props) {
     super(props);
 
     this._getWrappedObject = createSelector(
@@ -55,38 +95,27 @@ class EntityObjectLoaderInner extends React.Component {
   }
 
   UNSAFE_componentWillMount() {
-    const { entityId, entityQuery, fetch, dispatchApiErrorEvent } = this.props;
+    const { entityId, fetch } = this.props;
     if (entityId != null) {
       fetch(
-        { id: entityId, ...entityQuery },
-        {
-          reload: this.props.reload,
-          properties: this.props.properties,
-          noEvent: !dispatchApiErrorEvent,
-        },
+        { id: entityId },
+        { reload: this.props.reload, properties: this.props.properties },
       );
     }
   }
-  UNSAFE_componentWillReceiveProps(nextProps) {
+  UNSAFE_componentWillReceiveProps(nextProps: Props) {
     if (
       nextProps.entityId !== this.props.entityId &&
       nextProps.entityId != null
     ) {
       nextProps.fetch(
-        { id: nextProps.entityId, ...nextProps.entityQuery },
+        { id: nextProps.entityId },
         { reload: nextProps.reload, properties: nextProps.properties },
       );
     }
   }
   renderChildren = () => {
-    let {
-      children,
-      entityDef,
-      entityAlias,
-      wrapped,
-      object,
-      ...props
-    } = this.props; // eslint-disable-line no-unused-vars
+    let { children, entityDef, wrapped, object, ...props } = this.props; // eslint-disable-line no-unused-vars
 
     if (wrapped) {
       object = this._getWrappedObject(this.props);
@@ -96,20 +125,13 @@ class EntityObjectLoaderInner extends React.Component {
       ..._.omit(props, ...CONSUMED_PROPS),
       object,
       // alias the entities name:
-      [entityAlias || entityDef.nameOne]: object,
+      [entityDef.nameOne]: object,
       reload: this.reload,
       remove: this.remove,
     });
   };
   render() {
-    const {
-      entityId,
-      fetched,
-      error,
-      loadingAndErrorWrapper,
-      LoadingAndErrorWrapper,
-    } = this.props;
-
+    const { entityId, fetched, error, loadingAndErrorWrapper } = this.props;
     return loadingAndErrorWrapper ? (
       <LoadingAndErrorWrapper
         loading={!fetched && entityId != null}
@@ -126,11 +148,7 @@ class EntityObjectLoaderInner extends React.Component {
   reload = () => {
     return this.props.fetch(
       { id: this.props.entityId },
-      {
-        reload: true,
-        properties: this.props.properties,
-        noEvent: !this.props.dispatchApiErrorEvent,
-      },
+      { reload: true, properties: this.props.properties },
     );
   };
 
@@ -139,45 +157,11 @@ class EntityObjectLoaderInner extends React.Component {
   };
 }
 
-const EntityObjectLoader = _.compose(
-  entityType(),
-  connect(
-    (
-      state,
-      {
-        entityDef,
-        entityId,
-        entityQuery,
-        selectorName = "getObject",
-        ...props
-      },
-    ) => {
-      if (typeof entityId === "function") {
-        entityId = entityId(state, props);
-      }
-      if (typeof entityQuery === "function") {
-        entityQuery = entityQuery(state, props);
-      }
-
-      return {
-        entityId,
-        entityQuery: getMemoizedEntityQuery(state, entityQuery),
-        object: entityDef.selectors[selectorName](state, { entityId }),
-        fetched: entityDef.selectors.getFetched(state, { entityId }),
-        loading: entityDef.selectors.getLoading(state, { entityId }),
-        error: entityDef.selectors.getError(state, { entityId }),
-      };
-    },
-  ),
-)(EntityObjectLoaderInner);
-
-export default EntityObjectLoader;
-
-export const entityObjectLoader = eolProps =>
+export const entityObjectLoader = (eolProps: Props) =>
   // eslint-disable-line react/display-name
-  ComposedComponent =>
+  (ComposedComponent: any) =>
     // eslint-disable-next-line react/display-name
-    props => (
+    (props: Props) => (
       <EntityObjectLoader {...props} {...eolProps}>
         {childProps => (
           <ComposedComponent

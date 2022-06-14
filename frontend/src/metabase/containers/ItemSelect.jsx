@@ -6,7 +6,7 @@ import PropTypes from "prop-types";
 import { t } from "ttag";
 
 import PopoverWithTrigger from "metabase/components/PopoverWithTrigger";
-import SelectButton from "metabase/core/components/SelectButton";
+import SelectButton from "metabase/components/SelectButton";
 
 const MIN_POPOVER_WIDTH = 300;
 
@@ -58,6 +58,7 @@ export default (PickerComponent, NameComponent, type) =>
         <PopoverWithTrigger
           pinInitialAttachment // keep the popover from jumping if content height changes
           triggerClasses={className}
+          zIndexTop={5}
           triggerElement={
             <SelectButton style={style}>
               {value !== undefined && value !== "" ? (

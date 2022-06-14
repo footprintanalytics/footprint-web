@@ -18,6 +18,8 @@ QuestionList.propTypes = {
   hasCollections: PropTypes.bool,
 };
 
+// const SEARCH_LIMIT = 1000;
+
 export function QuestionList({
   searchText,
   collectionId,
@@ -32,12 +34,12 @@ export function QuestionList({
   const isSearching = !!trimmedSearchText;
 
   let query = isSearching
-    ? { q: trimmedSearchText }
-    : { collection: collectionId };
+    ? { q: trimmedSearchText, limit: 500 }
+    : { collection: collectionId, limit: 500 };
 
   query = {
     ...query,
-    models: ["card", "dataset"],
+    models: "card",
     limit: DEFAULT_SEARCH_LIMIT,
   };
 
@@ -61,10 +63,7 @@ export function QuestionList({
                 key={item.id}
                 id={item.id}
                 name={item.getName()}
-                icon={{
-                  name: item.getIcon().name,
-                  size: item.model === "dataset" ? 18 : 16,
-                }}
+                icon={item.getIcon().name}
                 onSelect={onSelect}
                 rightIcon={PLUGIN_MODERATION.getStatusIcon(
                   item.moderated_status,

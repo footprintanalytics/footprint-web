@@ -10,14 +10,16 @@ import MappingEditor from "./MappingEditor";
 
 import QuestionPicker from "metabase/containers/QuestionPicker";
 import QuestionParameterTargetWidget from "../containers/QuestionParameterTargetWidget";
-import Button from "metabase/core/components/Button";
+import Button from "metabase/components/Button";
 import ActionButton from "metabase/components/ActionButton";
 import LoadingAndErrorWrapper from "metabase/components/LoadingAndErrorWrapper";
-import Select, { Option } from "metabase/core/components/Select";
-import Radio from "metabase/core/components/Radio";
+import Select, { Option } from "metabase/components/Select";
+import Radio from "metabase/components/Radio";
 import Icon from "metabase/components/Icon";
 import Tooltip from "metabase/components/Tooltip";
 import { GTAPApi } from "metabase/services";
+
+import { UNKNOWN_ERROR_MESSAGE } from "metabase/components/form/FormMessage";
 
 import EntityObjectLoader from "metabase/entities/containers/EntityObjectLoader";
 import QuestionLoader from "metabase/containers/QuestionLoader";
@@ -33,8 +35,29 @@ const mapDispatchToProps = {
   updateTableSandboxingPermission,
 };
 
-class GTAPModal extends React.Component {
-  state = {
+type GTAP = {
+  table_id: ?number,
+  group_id: ?number,
+  card_id: ?number,
+  attribute_remappings: { [attribute: string]: any },
+};
+
+type Props = {
+  params: { [name: string]: string },
+  push: (url: string) => void,
+};
+type State = {
+  gtap: ?GTAP,
+  attributesOptions: ?(string[]),
+  simple: boolean,
+  error: ?string,
+};
+
+@withRouter
+@connect(mapStateToProps, mapDispatchToProps)
+export default class GTAPModal extends React.Component {
+  props: Props;
+  state: State = {
     gtap: null,
     attributesOptions: null,
     simple: true,
@@ -105,7 +128,7 @@ class GTAPModal extends React.Component {
         ? error.data
           ? error.data.message || JSON.stringify(error.data)
           : JSON.stringify(error)
-        : t`Unknown error encountered`;
+        : UNKNOWN_ERROR_MESSAGE;
       this.setState({ error: message });
       throw new Error(message);
     }
@@ -248,11 +271,6 @@ class GTAPModal extends React.Component {
   }
 }
 
-export default _.compose(
-  withRouter,
-  connect(mapStateToProps, mapDispatchToProps),
-)(GTAPModal);
-
 const AttributePicker = ({ value, onChange, attributesOptions }) => (
   <div style={{ minWidth: 200 }}>
     <Select
@@ -310,7 +328,7 @@ const SummaryRow = ({ icon, content }) => (
   </div>
 );
 
-const GTAPSummary = ({ gtap }) => {
+const GTAPSummary = ({ gtap }: { gtap: GTAP }) => {
   return (
     <div>
       <div className="px1 pb2 text-uppercase text-small text-grey-4">
@@ -389,7 +407,7 @@ const TableName = ({ tableId }) => (
   </EntityObjectLoader>
 );
 
-const TargetName = ({ gtap, target }) => {
+const TargetName = ({ gtap, target }: { gtap: GTAP, target: any }) => {
   if (Array.isArray(target)) {
     if (
       (target[0] === "variable" || target[0] === "dimension") &&

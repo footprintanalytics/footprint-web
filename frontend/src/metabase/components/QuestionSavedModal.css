@@ -1,0 +1,39 @@
+.question-save-modal {
+  padding: 40px;
+}
+
+.question-save-modal__title {
+  font-size: 22px;
+  font-weight: bold;
+  text-align: center;
+}
+
+.question-save-modal__content {
+  font-size: 14px;
+  text-align: center;
+  margin-top: 16px;
+  white-space: nowrap;
+}
+
+.question-save-modal__buttons {
+  display: flex;
+  justify-content: center;
+  margin-top: 40px;
+}
+
+.question-save-modal__share {
+  background: #3434b2;
+  color: white;
+  font-size: 16px;
+  border-radius: 4px;
+  width: 180px;
+}
+
+.question-save-modal__add-dashboard {
+  background: #42c090;
+  color: white;
+  font-size: 16px;
+  border-radius: 4px;
+  width: 180px;
+  margin-left: 20px;
+}

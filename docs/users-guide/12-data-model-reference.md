@@ -1,8 +1,4 @@
----
-title: Data reference
----
-
-## Data reference
+## Data Model Reference
 
 Sometimes when you're writing a SQL query, you might forget the exact names of different tables or columns, or which table contains what. That’s where the _data reference_ comes in handy. You can open the data reference panel from the SQL editor by clicking on the book icon in the top right corner of the editor when it's open.
 
@@ -18,9 +14,7 @@ If you click on a column you’re interested in, you’ll see a description of i
 
 ![Column detail](images/data-reference-column-detail.png)
 
-### Foreign keys
-
-You can find a list of connections to other tables (i.e., [foreign key](/glossary/foreign_key) relationships) under **Connected to these tables**. If there’s a column in the table you’re looking at that’s included in another table, Metabase will display this section in the sidebar. Note that connections are managed by your Metabase admin. If a foreign key relationship exists in your database, but not in your Metabase, your Metabase admin will need to update your [Metabase data model](../administration-guide/03-metadata-editing.md).
+In addition to looking at a table's column, you can also look at its connections if your table includes any. Connections show up here if there’s a column in the table you’re looking at that’s included in another table (i.e., a foreign key relationship). Click on **Connections** (located next to the **Fields** button) to view the connected tables.
 
 ---
 

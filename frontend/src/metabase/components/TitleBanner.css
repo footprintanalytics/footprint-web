@@ -1,0 +1,28 @@
+.TitleBanner {
+  height: 200px;
+  background-color: #f3f4ff;
+  background-size: cover;
+  background-position: right center;
+}
+
+.TitleBanner-wrap {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  max-width: 1350px;
+  height: 100%;
+  margin: 0 auto;
+}
+
+.TitleBanner h3 {
+  /* color: #383838; */
+  font-size: 24px;
+  /* font-weight: 900; */
+  margin-bottom: var(--footprint-spacing-xs);
+}
+
+.TitleBanner p {
+  /* color: #898da1; */
+  /* font-size: 16px; */
+  max-width: 720px;
+}

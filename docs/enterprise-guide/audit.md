@@ -1,26 +1,22 @@
----
-title: Audit logs
----
-
 # Audit logs
 
 {% include plans-blockquote.html feature="Audit logs" %}
 
-As an administrator of Metabase, you already know the importance of using data to understand your how people interact with your products or services. With the Audit tool, you can use Metabase to understand how people in your organization use Metabase. It's, well, meta! 
+As an administrator of Metabase, you already know the importance of using data to understand your how people interact with your products or services. With the Audit tool, you can use Metabase to understand how people in your organization use Metabase. It's, well, meta!
 
-To view the audit logs, click on the **gear** icon at the bottom of the navigation sidebar, and click **Admin settings** > **Audit**. There's a lot of data available, not only about your people, but also about your questions, dashboards, databases and more! We'll walk you through each of the sections below.
+Access the tool by clicking the gear icon in the upper right and then clicking **Audit** in the top navigation. There's a lot of data available, not only about your people, but also about your questions, dashboards, databases and more! We'll walk you through each of the sections below.
 
 ## People
 
 ### Team members
 
-Use the __People__ section to gain a better understanding of how people are interacting with Metabase. You'll want to pay attention to the __Overview__ tab, especially when you first launch Metabase at your organization — it will give you data around how many active and newly created accounts you have each day. Further down the page, you'll see charts showing you which people are most engaged.
+Use the **People** section to gain a better understanding of how people are interacting with Metabase. You'll want to pay attention to the **Overview** tab, especially when you first launch Metabase at your organization — it will give you data around how many active and newly created accounts you have each day. Further down the page, you'll see charts showing you which people are most engaged.
 
 ![Team Members](./images/audit-team.png)
 
-The __Team Members__ panel has a view of other options for viewing your team's usage data. The __All Members__ tab will give you a list of your team members, and stats about their activity, such as when they were last active.
+The **Team Members** panel has a view of other options for viewing your team's usage data. The **All Members** tab will give you a list of your team members, and stats about their activity, such as when they were last active.
 
-The __Audit Log__ tab will display, in chronological order, each query, who viewed it, and when. Note that if the person didn't save their query, its name will be listed as `Ad-hoc`. Each query name can be clicked to view more details about the person's interactions with it, including a full revision history. You'll also be able to view the query in Metabase. Note that this link will always show the latest version of the query - use the revision history to see changes over time.
+The **Audit Log** tab will display, in chronological order, each query, who viewed it, and when. Note that if the person didn't save their query, its name will be listed as `Ad-hoc`. Each query name can be clicked to view more details about the person's interactions with it, including a full revision history. You'll also be able to view the query in Metabase. Note that this link will always show the latest version of the query - use the revision history to see changes over time.
 
 Throughout the People section, names can be clicked to access the profile of a specific person’s activity. This profile includes:
 
@@ -39,7 +35,7 @@ The Data section focuses on your databases, schemas and tables, and is divided i
 
 ## Items
 
-The __Items__ section focuses on questions, dashboards, downloads, and Subscriptions and Alerts. 
+The **Items** section focuses on questions, dashboards, downloads, and Subscriptions and Alerts.
 
 ### Questions
 
@@ -52,7 +48,7 @@ If important queries are appearing on the list of slowest queries, you will want
 A list of all of your questions is available as well, and you can see various data points about each question at a glance:
 
 - Query Runs
-- Average Runtime 
+- Average Runtime
 - Cache Duration
 - Total Runtime
 - Database
@@ -68,7 +64,7 @@ You can also click on any question to drill into a more detailed profile showing
 
 ### Dashboards
 
-The __Dashboards__ section helps you understand what dashboards people are looking at, and to make sure they're having a smooth experience. If you notice that a popular dashboard has a high average question loading time, you can investigate further using the Questions section outlined above.
+The **Dashboards** section helps you understand what dashboards people are looking at, and to make sure they're having a smooth experience. If you notice that a popular dashboard has a high average question loading time, you can investigate further using the Questions section outlined above.
 
 ![Items](./images/audit-dashboards.png)
 
@@ -85,7 +81,7 @@ A list of all of your dashboards is available as well, and you can see various d
 
 ### Downloads
 
-Use the __Downloads__ section to understand which people are downloading (or exporting) data, and the size (number of rows) of the downloads they're performing. This section contains some visualizations, as well as a list of all downloads.
+Use the **Downloads** section to understand which people are downloading (or exporting) data, and the size (number of rows) of the downloads they're performing. This section contains some visualizations, as well as a list of all downloads.
 
 ### Subscriptions & Alerts
 
@@ -100,7 +96,7 @@ Here Admins can get an overview of all of the [Dashboard subscriptions][dashboar
 - Created At
 - Filters
 
-Admins can add and remove people from a subscription or alert by clicking on the item's __Recipients__. Admins can also delete the subscription or alert entirely by clicking on the **X** on the relevant line.
+Admins can add and remove people from a subscription or alert by clicking on the item's **Recipients**. Admins can also delete the subscription or alert entirely by clicking on the **X** on the relevant line.
 
 [alerts]: ../users-guide/15-alerts.md
 [dashboard-subscriptions]: ../users-guide/dashboard-subscriptions.md

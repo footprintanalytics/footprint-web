@@ -1,5 +1,6 @@
 /* eslint-disable react/prop-types */
 import React from "react";
+import { Box } from "grid-styled";
 import { t } from "ttag";
 
 import Database from "metabase/entities/databases";
@@ -8,25 +9,24 @@ import { color } from "metabase/lib/colors";
 import * as Urls from "metabase/lib/urls";
 
 import Card from "metabase/components/Card";
-import { Grid } from "metabase/components/Grid";
+import { Grid, GridItem } from "metabase/components/Grid";
 import Icon from "metabase/components/Icon";
-import Link from "metabase/core/components/Link";
+import Link from "metabase/components/Link";
 
 import BrowseHeader from "metabase/browse/components/BrowseHeader";
 
-import { ANALYTICS_CONTEXT } from "metabase/browse/constants";
-import { DatabaseGridItem } from "./DatabaseBrowser.styled";
+import { ANALYTICS_CONTEXT, ITEM_WIDTHS } from "metabase/browse/constants";
 
 function DatabaseBrowser({ databases }) {
   return (
-    <div>
+    <Box>
       <BrowseHeader crumbs={[{ title: t`Our data` }]} />
 
       <Grid>
         {databases.map(database => (
-          <DatabaseGridItem key={database.id}>
+          <GridItem width={ITEM_WIDTHS} key={database.id}>
             <Link
-              to={Urls.browseDatabase(database)}
+              to={Urls.questionWithDatabase(database)}
               data-metabase-event={`${ANALYTICS_CONTEXT};Database Click`}
               display="block"
               hover={{ color: color("brand") }}
@@ -41,10 +41,10 @@ function DatabaseBrowser({ databases }) {
                 <h3 className="text-wrap">{database.name}</h3>
               </Card>
             </Link>
-          </DatabaseGridItem>
+          </GridItem>
         ))}
       </Grid>
-    </div>
+    </Box>
   );
 }
 

@@ -1,7 +1,3 @@
----
-title: X-rays
----
-
 ## X-rays
 
 X-rays are a fast and easy way to get automatic insights and explorations of your data.
@@ -35,17 +31,17 @@ From the Browse Data page, you can also click on `Learn about our data` to view 
 
 ![Data Reference X-ray](images/x-rays/data-reference.png)
 
-### Exploring newly added data sources
+### Exploring newly added datasets
 
 If you're an administrator, when you first connect a database to Metabase, Metabot will offer to show you some automated explorations of your newly-connected data.
 
 ![X-ray example](images/x-rays/suggestions.png)
 
-Click on one of these to see an X-ray.
+Click on one of these to see an x-ray.
 
 ![X-ray example](images/x-rays/x-rays-browse.png)
 
-You can see more suggested X-rays over on the right-hand side of the screen. Browsing through X-rays like this is a pretty fun way of getting a quick overview of your data.
+You can see more suggested x-rays over on the right-hand side of the screen. Browsing through x-rays like this is a pretty fun way of getting a quick overview of your data.
 
 ### Browsing through suggested X-rays
 
@@ -69,3 +65,4 @@ The X-ray suggestions that appear on the homepage of Metabase will be hidden if 
 ### Need help?
 
 If you still have questions about X-rays or comparisons, you can head over to our [discussion forum](https://discourse.metabase.com/). See you there!
+

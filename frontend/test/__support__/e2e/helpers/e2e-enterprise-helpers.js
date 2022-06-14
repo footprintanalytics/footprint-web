@@ -1,6 +1,7 @@
-export const isEE = Cypress.env("HAS_ENTERPRISE_TOKEN");
-export const isOSS = !isEE;
+export const describeWithToken = Cypress.env("HAS_ENTERPRISE_TOKEN")
+  ? describe
+  : describe.skip;
 
-export const describeEE = isEE ? describe : describe.skip;
-
-export const describeOSS = isOSS ? describe : describe.skip;
+export const describeWithoutToken = !Cypress.env("HAS_ENTERPRISE_TOKEN")
+  ? describe
+  : describe.skip;

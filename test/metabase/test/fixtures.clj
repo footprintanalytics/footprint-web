@@ -1,8 +1,5 @@
 (ns metabase.test.fixtures
-  (:require [metabase.test-runner.assert-exprs :as assert-exprs]
-            [metabase.test.initialize :as initialize]))
-
-(comment assert-exprs/keep-me) ; just to make sure stuff like `re=` and `schema=` get loaded
+  (:require [metabase.test.initialize :as initialize]))
 
 (defn initialize
   [& what]

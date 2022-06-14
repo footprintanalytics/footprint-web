@@ -11,7 +11,7 @@ const getApplicationColors = state =>
   state.settings.values["application-colors"] ||
   state.settings.values.application_colors;
 
-export const getHasCustomColors = createSelector(
+const getHasCustomColors = createSelector(
   [getApplicationColors],
   applicationColors => Object.keys(applicationColors || {}).length > 0,
 );
@@ -21,7 +21,7 @@ export const getHasCustomLogo = createSelector(
   logoUrl => logoUrl !== DEFAULT_LOGO_URL,
 );
 
-export const getHasCustomBranding = createSelector(
+export const getIsWhitelabeled = createSelector(
   [getHasCustomLogo, getHasCustomColors],
   (hasCustomLogo, hasCustomColors) => hasCustomLogo || hasCustomColors,
 );

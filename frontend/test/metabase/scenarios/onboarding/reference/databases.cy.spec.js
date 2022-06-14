@@ -1,4 +1,4 @@
-import { popover, restore, startNewQuestion } from "__support__/e2e/cypress";
+import { popover, restore } from "__support__/e2e/cypress";
 
 describe("scenarios > reference > databases", () => {
   beforeEach(() => {
@@ -8,12 +8,12 @@ describe("scenarios > reference > databases", () => {
 
   it("should see the listing", () => {
     cy.visit("/reference/databases");
-    cy.contains("Sample Database");
+    cy.contains("Sample Dataset");
   });
 
   xit("should let the user navigate to details", () => {
     cy.visit("/reference/databases");
-    cy.contains("Sample Database").click();
+    cy.contains("Sample Dataset").click();
     cy.contains("Why this database is interesting");
   });
 
@@ -56,7 +56,7 @@ describe("scenarios > reference > databases", () => {
   describe("multiple databases sorting order", () => {
     beforeEach(() => {
       ["d", "b", "a", "c"].forEach(name => {
-        cy.addH2SampleDatabase({ name });
+        cy.addH2SampleDataset({ name });
       });
     });
 
@@ -69,7 +69,8 @@ describe("scenarios > reference > databases", () => {
     });
 
     it("should sort databases in new UI based question data selection popover", () => {
-      checkQuestionSourceDatabasesOrder();
+      checkQuestionSourceDatabasesOrder("Simple question");
+      checkQuestionSourceDatabasesOrder("Custom question");
     });
 
     it.skip("should sort databases in new native question data selection popover", () => {
@@ -85,7 +86,7 @@ function checkReferenceDatabasesOrder() {
     .should("have.text", "a");
   cy.get("@databaseCard")
     .last()
-    .should("have.text", "Sample Database");
+    .should("have.text", "Sample Dataset");
 }
 
 function checkQuestionSourceDatabasesOrder(question_type) {
@@ -96,7 +97,8 @@ function checkQuestionSourceDatabasesOrder(question_type) {
       ? ".List-item-title"
       : ".List-section-title";
 
-  startNewQuestion();
+  cy.visit("/question/new");
+  cy.findByText(question_type).click();
   popover().within(() => {
     cy.get(selector)
       .as("databaseName")
@@ -104,6 +106,6 @@ function checkQuestionSourceDatabasesOrder(question_type) {
       .should("have.text", "a");
     cy.get("@databaseName")
       .eq(lastDatabaseIndex)
-      .should("have.text", "Sample Database");
+      .should("have.text", "Sample Dataset");
   });
 }

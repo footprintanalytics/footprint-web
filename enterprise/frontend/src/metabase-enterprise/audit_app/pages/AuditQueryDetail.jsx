@@ -1,7 +1,5 @@
 /* eslint-disable react/prop-types */
 import React from "react";
-import { t } from "ttag";
-import _ from "underscore";
 
 import AuditContent from "../components/AuditContent";
 import AuditCustomView from "../containers/AuditCustomView";
@@ -16,7 +14,11 @@ import * as QueryDetailCards from "../lib/cards/query_detail";
 
 import { serializeCardForUrl } from "metabase/lib/card";
 
-const AuditQueryDetail = ({ params: { queryHash } }) => (
+type Props = {
+  params: { [key: string]: string },
+};
+
+const AuditQueryDetail = ({ params: { queryHash } }: Props) => (
   <AuditCustomView card={QueryDetailCards.details(queryHash)}>
     {({ result }) => {
       if (!result) {
@@ -24,12 +26,12 @@ const AuditQueryDetail = ({ params: { queryHash } }) => (
       }
       const datasetQuery = result.data.rows[0][0];
       if (!datasetQuery) {
-        return <div>{t`Query Not Recorded, sorry`}</div>;
+        return <div>Query Not Recorded, sorry</div>;
       }
 
       return (
         <AuditContent
-          title="Query"
+          title="Chart"
           subtitle={
             <OpenInMetabase
               to={
@@ -68,7 +70,9 @@ import { loadMetadataForCard } from "metabase/query_builder/actions";
 const mapStateToProps = state => ({ metadata: getMetadata(state) });
 const mapDispatchToProps = { loadMetadataForCard };
 
-class QueryBuilderReadOnlyInner extends React.Component {
+@connect(mapStateToProps, mapDispatchToProps)
+@ExplicitSize()
+class QueryBuilderReadOnly extends React.Component {
   state = {
     isNativeEditorOpen: false,
   };
@@ -114,10 +118,5 @@ class QueryBuilderReadOnlyInner extends React.Component {
     }
   }
 }
-
-const QueryBuilderReadOnly = _.compose(
-  connect(mapStateToProps, mapDispatchToProps),
-  ExplicitSize(),
-)(QueryBuilderReadOnlyInner);
 
 export default AuditQueryDetail;

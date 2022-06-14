@@ -1,11 +1,28 @@
-/* eslint-disable react/prop-types */
 import React from "react";
 import { findDOMNode } from "react-dom";
 import { t } from "ttag";
 import FilterWidget from "./FilterWidget";
 
+import StructuredQuery from "metabase-lib/lib/queries/StructuredQuery";
+import Filter from "metabase-lib/lib/queries/structured/Filter";
+
+type Props = {
+  query: StructuredQuery,
+  filters: Filter[],
+  removeFilter?: (index: number) => void,
+  updateFilter?: (index: number, filter: Filter) => void,
+  maxDisplayValues?: number,
+};
+
+type State = {
+  shouldScroll: boolean,
+};
+
 export default class FilterWidgetList extends React.Component {
-  constructor(props) {
+  props: Props;
+  state: State;
+
+  constructor(props: Props) {
     super(props);
     this.state = {
       shouldScroll: false,
@@ -18,7 +35,7 @@ export default class FilterWidgetList extends React.Component {
       : null;
   }
 
-  UNSAFE_componentWillReceiveProps(nextProps) {
+  UNSAFE_componentWillReceiveProps(nextProps: Props) {
     // only scroll when a filter is added
     if (nextProps.filters.length > this.props.filters.length) {
       this.setState({ shouldScroll: true });
@@ -34,7 +51,7 @@ export default class FilterWidgetList extends React.Component {
   render() {
     const { query, filters } = this.props;
     return (
-      <div className="Query-filterList ml2 scroll-x scroll-show">
+      <div className="Query-filterList scroll-x scroll-show">
         {filters.map((filter, index) => (
           <FilterWidget
             key={index}

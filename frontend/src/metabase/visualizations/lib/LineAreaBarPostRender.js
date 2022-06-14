@@ -5,7 +5,6 @@ import { color } from "metabase/lib/colors";
 import { clipPathReference, moveToFront } from "metabase/lib/dom";
 import { adjustYAxisTicksIfNeeded } from "./apply_axis";
 import { onRenderValueLabels } from "./chart_values";
-import { hasEventAxis, renderEvents } from "./timelines";
 
 const X_LABEL_MIN_SPACING = 2; // minimum space we want to leave between labels
 const X_LABEL_ROTATE_90_THRESHOLD = 24; // tick width breakpoint for switching from 45° to 90°
@@ -168,10 +167,9 @@ function dispatchUIEvent(element, eventName) {
 
 // logic for determining the bounding shapes for showing tooltips for a given point.
 // Wikipedia has a good explanation here: https://en.wikipedia.org/wiki/Voronoi_diagram
-function onRenderVoronoiHover(chart, { hasDrills }) {
+function onRenderVoronoiHover(chart) {
   const parent = chart.svg().select("svg > g");
   const dots = chart.svg().selectAll(".sub .dc-tooltip .dot")[0];
-  const axis = chart.svg().select(".axis.x");
 
   if (dots.length === 0 || dots.length > VORONOI_MAX_POINTS) {
     return;
@@ -190,12 +188,13 @@ function onRenderVoronoiHover(chart, { hasDrills }) {
 
   // HACK Atte Keinänen 8/8/17: For some reason the parent node is not present in Jest/Enzyme tests
   // so simply return empty width and height for preventing the need to do bigger hacks in test code
-  const axisRect = axis?.node()?.getBBox() ?? { width: 0, height: 0 };
-  const parentRect = parent.node()?.getBBox() ?? { width: 0, height: 0 };
+  const { width, height } = parent.node()
+    ? parent.node().getBBox()
+    : { width: 0, height: 0 };
 
   const voronoi = d3.geom.voronoi().clipExtent([
     [0, 0],
-    [parentRect.width, parentRect.height - axisRect.height],
+    [width, height],
   ]);
 
   // circular clip paths to limit distance from actual point
@@ -215,7 +214,6 @@ function onRenderVoronoiHover(chart, { hasDrills }) {
   parent
     .append("svg:g")
     .classed("voronoi", true)
-    .classed("voronoi-drill", hasDrills)
     .selectAll("path")
     .data(voronoi(vertices), d => d && d.join(","))
     .enter()
@@ -389,50 +387,17 @@ function onRenderSetZeroGridLineClassName(chart) {
     .attr("class", "zero");
 }
 
-function onRenderAddTimelineEvents(
-  chart,
-  {
-    timelineEvents,
-    selectedTimelineEventIds,
-    xInterval,
-    isTimeseries,
-    onHoverChange,
-    onOpenTimelines,
-    onSelectTimelineEvents,
-    onDeselectTimelineEvents,
-  },
-) {
-  renderEvents(chart, {
-    events: timelineEvents,
-    selectedEventIds: selectedTimelineEventIds,
-    xInterval,
-    isTimeseries,
-    onHoverChange,
-    onOpenTimelines,
-    onSelectTimelineEvents,
-    onDeselectTimelineEvents,
-  });
-}
-
 // the various steps that get called
 function onRender(
   chart,
   {
-    datas,
-    timelineEvents,
-    selectedTimelineEventIds,
+    onGoalHover,
     isSplitAxis,
     xInterval,
     yAxisSplit,
     isStacked,
-    isTimeseries,
-    hasDrills,
     formatYValue,
-    onGoalHover,
-    onHoverChange,
-    onOpenTimelines,
-    onSelectTimelineEvents,
-    onDeselectTimelineEvents,
+    datas,
   },
 ) {
   onRenderRemoveClipPath(chart);
@@ -441,7 +406,7 @@ function onRender(
   onRenderSetDotStyle(chart);
   onRenderSetLineWidth(chart);
   onRenderEnableDots(chart);
-  onRenderVoronoiHover(chart, { hasDrills });
+  onRenderVoronoiHover(chart);
   onRenderCleanupGoalAndTrend(chart, onGoalHover, isSplitAxis); // do this before hiding x-axis
   onRenderValueLabels(chart, { formatYValue, xInterval, yAxisSplit, datas });
   onRenderHideDisabledLabels(chart);
@@ -453,16 +418,6 @@ function onRender(
   onRenderRotateAxis(chart);
   onRenderAddExtraClickHandlers(chart);
   onRenderSetZeroGridLineClassName(chart);
-  onRenderAddTimelineEvents(chart, {
-    timelineEvents,
-    selectedTimelineEventIds,
-    xInterval,
-    isTimeseries,
-    onHoverChange,
-    onOpenTimelines,
-    onSelectTimelineEvents,
-    onDeselectTimelineEvents,
-  });
 }
 
 // +-------------------------------------------------------------------------------------------------------------------+
@@ -479,7 +434,6 @@ function beforeRenderHideDisabledAxesAndLabels(chart) {
 // min margin
 const MARGIN_TOP_MIN = 20; // needs to be large enough for goal line text
 const MARGIN_BOTTOM_MIN = 10;
-const MARGIN_BOTTOM_MIN_WITH_EVENT_AXIS = 80;
 const MARGIN_HORIZONTAL_MIN = 20;
 
 // extra padding for axis
@@ -623,13 +577,13 @@ function beforeRenderComputeXAxisLabelType(chart) {
           }
         }
       } else {
-        chart.settings["graph.x_axis.axis_enabled"] = false;
+        chart.settings["graph.x_axis.axis_enabled"] = "rotate-45";
       }
     }
   }
 }
 
-function beforeRenderFixMargins(chart, args) {
+function beforeRenderFixMargins(chart) {
   // run before adjusting margins
   const mins = computeMinHorizontalMargins(chart);
   const xAxisMargin = computeXAxisMargin(chart);
@@ -676,18 +630,14 @@ function beforeRenderFixMargins(chart, args) {
     chart.margins().right,
     mins.right,
   );
-
-  const minBottomMargin = hasEventAxis(chart, args)
-    ? MARGIN_BOTTOM_MIN_WITH_EVENT_AXIS
-    : MARGIN_BOTTOM_MIN;
-  chart.margins().bottom = Math.max(minBottomMargin, chart.margins().bottom);
+  chart.margins().bottom = Math.max(MARGIN_BOTTOM_MIN, chart.margins().bottom);
 }
 
 // collection of function calls that get made *before* we tell the Chart to render
-function beforeRender(chart, { timelineEvents, xDomain, isTimeseries }) {
+function beforeRender(chart) {
   beforeRenderComputeXAxisLabelType(chart);
   beforeRenderHideDisabledAxesAndLabels(chart);
-  beforeRenderFixMargins(chart, { timelineEvents, xDomain, isTimeseries });
+  beforeRenderFixMargins(chart);
 }
 
 // +-------------------------------------------------------------------------------------------------------------------+
@@ -696,7 +646,7 @@ function beforeRender(chart, { timelineEvents, xDomain, isTimeseries }) {
 
 /// once chart has rendered and we can access the SVG, do customizations to axis labels / etc that you can't do through dc.js
 export default function lineAndBarOnRender(chart, args) {
-  beforeRender(chart, args);
+  beforeRender(chart);
   chart.on("renderlet.on-render", () => onRender(chart, args));
   chart.render();
 }

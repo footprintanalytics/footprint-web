@@ -6,7 +6,10 @@ import { push } from "react-router-redux";
 
 import { t } from "ttag";
 
-import { Grid } from "metabase/components/Grid";
+import fitViewport from "metabase/hoc/FitViewPort";
+
+import { Box } from "grid-styled";
+import { Grid, GridItem } from "metabase/components/Grid";
 
 import NewQueryOption from "metabase/new_query/components/NewQueryOption";
 import NoDatabasesEmptyState from "metabase/reference/databases/NoDatabasesEmptyState";
@@ -17,12 +20,17 @@ import {
   getHasDataAccess,
   getHasNativeWrite,
 } from "metabase/new_query/selectors";
-import {
-  QueryOptionsGridItem,
-  QueryOptionsRoot,
-} from "./NewQueryOptions.styled";
 
 import Database from "metabase/entities/databases";
+
+import type { NestedObjectKey } from "metabase/visualizations/lib/settings/nested";
+
+type Props = {
+  hasDataAccess: Boolean,
+  hasNativeWrite: Boolean,
+  prefetchDatabases: Function,
+  initialKey?: NestedObjectKey,
+};
 
 const mapStateToProps = state => ({
   hasDataAccess: getHasDataAccess(state),
@@ -34,7 +42,13 @@ const mapDispatchToProps = {
   push,
 };
 
-class NewQueryOptions extends Component {
+const PAGE_PADDING = [1, 4];
+
+@fitViewport
+@connect(mapStateToProps, mapDispatchToProps)
+export default class NewQueryOptions extends Component {
+  props: Props;
+
   componentDidMount() {
     // We need to check if any databases exist otherwise show an empty state.
     // Be aware that the embedded version does not have the Navbar, which also
@@ -68,57 +82,50 @@ class NewQueryOptions extends Component {
     {
       /* Determine how many items will be shown based on permissions etc so we can make sure the layout adapts */
     }
-    const itemsCount = (hasDataAccess ? 2 : 0) + (hasNativeWrite ? 1 : 0);
+    const NUM_ITEMS = (hasDataAccess ? 2 : 0) + (hasNativeWrite ? 1 : 0);
+    const ITEM_WIDTHS = [1, 1 / 2, 1 / NUM_ITEMS];
 
     return (
-      <QueryOptionsRoot>
+      <Box my="auto" mx={PAGE_PADDING}>
         <Grid className="justifyCenter">
           {hasDataAccess && (
-            <QueryOptionsGridItem itemsCount={itemsCount}>
+            <GridItem width={ITEM_WIDTHS}>
               <NewQueryOption
                 image="app/img/simple_mode_illustration"
-                title={t`Simple question`}
+                title={t`New Chart`}
                 description={t`Pick some data, view it, and easily filter, summarize, and visualize it.`}
                 width={180}
-                to={Urls.newQuestion({ creationType: "simple_question" })}
-                data-metabase-event="New Question; Simple Question Start"
+                to={Urls.newQuestion()}
+                data-metabase-event={`New Question; Simple Query Start`}
               />
-            </QueryOptionsGridItem>
+            </GridItem>
           )}
           {hasDataAccess && (
-            <QueryOptionsGridItem itemsCount={itemsCount}>
+            <GridItem width={ITEM_WIDTHS}>
               <NewQueryOption
                 image="app/img/notebook_mode_illustration"
-                title={t`Custom question`}
+                title={t`Custom chart`}
                 description={t`Use the advanced notebook editor to join data, create custom columns, do math, and more.`}
                 width={180}
-                to={Urls.newQuestion({
-                  mode: "notebook",
-                  creationType: "custom_question",
-                })}
-                data-metabase-event="New Question; Custom Question Start"
+                to={Urls.newQuestion({ mode: "notebook" })}
+                data-metabase-event={`New Query; Custom Query Start`}
               />
-            </QueryOptionsGridItem>
+            </GridItem>
           )}
           {hasNativeWrite && (
-            <QueryOptionsGridItem itemsCount={itemsCount}>
+            <GridItem width={ITEM_WIDTHS}>
               <NewQueryOption
                 image="app/img/sql_illustration"
-                title={t`Native query`}
-                description={t`For more complicated questions, you can write your own SQL or native query.`}
-                to={Urls.newQuestion({
-                  type: "native",
-                  creationType: "native_question",
-                })}
+                title={t`SQL query`}
+                description={t`For more complicated queries, you can write your own SQL or native query.`}
+                to={Urls.newQuestion({ type: "native" })}
                 width={180}
-                data-metabase-event="New Question; Native Query Start"
+                data-metabase-event={`New Query; Native Query Start`}
               />
-            </QueryOptionsGridItem>
+            </GridItem>
           )}
         </Grid>
-      </QueryOptionsRoot>
+      </Box>
     );
   }
 }
-
-export default connect(mapStateToProps, mapDispatchToProps)(NewQueryOptions);

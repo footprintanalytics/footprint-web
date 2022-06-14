@@ -1,0 +1,16 @@
+.dashboards__tags .ant-tag {
+  background-color: #f2f2f2;
+  border-radius: 2px;
+  font-size: 13px;
+  line-height: 1;
+  color: #404040;
+  margin: 0 2px 2px 0;
+  padding: 2px 4px;
+  border: 0;
+}
+
+.dashboards__tags .ant-tag-close-icon {
+  font-size: 12px;
+  color: #2f3441;
+  margin-left: 8px;
+}

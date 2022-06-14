@@ -9,7 +9,47 @@ import {
   SortableElement,
   SortableHandle,
 } from "metabase/components/sortable";
-import { getVisibleParameters } from "metabase/parameters/utils/ui";
+import {
+  getValuePopulatedParameters,
+  getVisibleParameters,
+} from "metabase/meta/Parameter";
+
+import type {
+  ParameterId,
+  Parameter,
+  ParameterValues,
+} from "metabase-types/types/Parameter";
+import type { DashboardWithCards } from "metabase-types/types/Dashboard";
+
+type Props = {
+  className?: string,
+
+  parameters: Parameter[],
+  dashboard?: DashboardWithCards,
+  editingParameter?: ?Parameter,
+  parameterValues?: ParameterValues,
+
+  isFullscreen?: boolean,
+  isNightMode?: boolean,
+  hideParameters?: ?string, // comma separated list of slugs
+  isEditing?: boolean,
+  isQB?: boolean,
+  vertical?: boolean,
+  commitImmediately?: boolean,
+  isPublic?: boolean,
+  auth?: boolean,
+
+  setLoginModalShow?: Function,
+  setParameterName?: (parameterId: ParameterId, name: string) => void,
+  setParameterValue?: (parameterId: ParameterId, value: string) => void,
+  setParameterDefaultValue?: (
+    parameterId: ParameterId,
+    defaultValue: string,
+  ) => void,
+  setParameterIndex?: (parameterId: ParameterId, index: number) => void,
+  removeParameter?: (parameterId: ParameterId) => void,
+  setEditingParameter?: (parameterId: ParameterId) => void,
+};
 
 const StaticParameterWidgetList = ({
   children,
@@ -37,32 +77,51 @@ function ParametersList({
   parameters,
   dashboard,
   editingParameter,
+  parameterValues,
 
   isFullscreen,
   isNightMode,
   hideParameters,
   isEditing,
+  isQB,
   vertical,
   commitImmediately,
+  isPublic,
+  auth,
 
+  setLoginModalShow,
+
+  setParameterName,
   setParameterValue,
+  setParameterDefaultValue,
   setParameterIndex,
   removeParameter,
   setEditingParameter,
-}) {
+}: Props) {
   const handleSortStart = () => {
     document.body.classList.add("grabbing");
   };
 
-  const handleSortEnd = ({ oldIndex, newIndex }) => {
+  const handleSortEnd = ({
+    oldIndex,
+    newIndex,
+  }: {
+    oldIndex: number,
+    newIndex: number,
+  }) => {
     document.body.classList.remove("grabbing");
     if (setParameterIndex) {
       setParameterIndex(parameters[oldIndex].id, newIndex);
     }
   };
 
-  const visibleValuePopulatedParameters = getVisibleParameters(
+  const valuePopulatedParameters = getValuePopulatedParameters(
     parameters,
+    parameterValues,
+  );
+
+  const visibleValuePopulatedParameters = getVisibleParameters(
+    valuePopulatedParameters,
     hideParameters,
   );
 
@@ -75,19 +134,27 @@ function ParametersList({
     ParameterWidget = StaticParameterWidget;
     ParameterWidgetList = StaticParameterWidgetList;
   }
-
-  return visibleValuePopulatedParameters.length > 0 ? (
+  return (
     <ParameterWidgetList
       className={cx(
         className,
-        "flex align-end flex-wrap",
+        "flex align-end flex-wrap relative",
         vertical ? "flex-column" : "flex-row",
+        // { mt1: isQB },
       )}
       axis="x"
       distance={9}
       onSortStart={handleSortStart}
       onSortEnd={handleSortEnd}
     >
+      {!isPublic && !auth && (
+        <a
+          className="spread"
+          onClick={() => {
+            setLoginModalShow({ show: true, from: "filter" });
+          }}
+        />
+      )}
       {visibleValuePopulatedParameters.map((valuePopulatedParameter, index) => (
         <ParameterWidget
           key={valuePopulatedParameter.id}
@@ -96,14 +163,27 @@ function ParametersList({
           isFullscreen={isFullscreen}
           isNightMode={isNightMode}
           parameter={valuePopulatedParameter}
-          parameters={parameters}
+          parameters={valuePopulatedParameters}
           dashboard={dashboard}
           editingParameter={editingParameter}
           setEditingParameter={setEditingParameter}
           index={index}
+          setName={
+            setParameterName &&
+            (name => setParameterName(valuePopulatedParameter.id, name))
+          }
           setValue={
             setParameterValue &&
             (value => setParameterValue(valuePopulatedParameter.id, value))
+          }
+          setDefaultValue={
+            setParameterDefaultValue &&
+            (value =>
+              setParameterDefaultValue(valuePopulatedParameter.id, value))
+          }
+          remove={
+            removeParameter &&
+            (() => removeParameter(valuePopulatedParameter.id))
           }
           commitImmediately={commitImmediately}
           dragHandle={
@@ -112,12 +192,13 @@ function ParametersList({
         />
       ))}
     </ParameterWidgetList>
-  ) : null;
+  );
 }
 
 ParametersList.defaultProps = {
   vertical: false,
   commitImmediately: false,
+  isPublic: true,
 };
 
 export default ParametersList;

@@ -1,38 +1,32 @@
 /* eslint-disable react/prop-types */
 import React from "react";
-import { t } from "ttag";
 
 import cx from "classnames";
 import _ from "underscore";
 
-import { isReducedMotionPreferred } from "metabase/lib/dom";
-
 import Icon from "metabase/components/Icon";
-import Button from "metabase/core/components/Button";
+import Button from "metabase/components/Button";
+import { Box, Flex } from "grid-styled";
 import { Motion, spring } from "react-motion";
 
 import QuestionResultLoader from "metabase/containers/QuestionResultLoader";
 import Visualization from "metabase/visualizations/components/Visualization";
 
 import Question from "metabase-lib/lib/Question";
-import {
-  PreviewButtonContainer,
-  PreviewHeader,
-  PreviewIconContainer,
-  PreviewRoot,
-} from "./NotebookStepPreview.styled";
 
 class NotebookStepPreview extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      question: this.getPreviewQuestion(props.step),
+      question: props.question || this.getPreviewQuestion(props.step),
     };
   }
 
-  refresh = () => {
+  refresh = props => {
+    const question = props?.question || this.props?.question;
+    const step = props?.step || this.props?.step;
     this.setState({
-      question: this.getPreviewQuestion(this.props.step),
+      question: question || this.getPreviewQuestion(step),
     });
   };
 
@@ -44,74 +38,81 @@ class NotebookStepPreview extends React.Component {
       .setSettings({ "table.pivot": false });
   }
 
-  getIsDirty() {
-    const newQuestion = this.getPreviewQuestion(this.props.step);
+  getIsDirty(props) {
+    const question = props?.question || this.props?.question;
+    const step = props?.step || this.props?.step;
+    const newQuestion = question || this.getPreviewQuestion(step);
     return !_.isEqual(newQuestion.card(), this.state.question.card());
   }
 
+  UNSAFE_componentWillReceiveProps(nextProps) {
+    if (this.props.fromQueryPreview && this.getIsDirty(nextProps)) {
+      this.refresh(nextProps);
+    }
+  }
+
+  getHeight = result => {
+    return this.props.height || getPreviewHeightForResult(result);
+  };
+
   render() {
-    const { onClose } = this.props;
+    const { onClose, fromQueryPreview, className } = this.props;
     const { question } = this.state;
 
     const isDirty = this.getIsDirty();
 
-    const preferReducedMotion = isReducedMotionPreferred();
-    const springOpts = preferReducedMotion
-      ? { stiffness: 500 }
-      : { stiffness: 170 };
-
     return (
-      <PreviewRoot>
-        <PreviewHeader>
-          <span className="text-bold">{t`Preview`}</span>
-          <PreviewIconContainer>
-            <Icon
-              name="close"
-              onClick={onClose}
-              className="text-light text-medium-hover cursor-pointer ml1"
-            />
-          </PreviewIconContainer>
-        </PreviewHeader>
-        {isDirty ? (
-          <PreviewButtonContainer className="bordered shadowed rounded bg-white p4">
-            <Button onClick={this.refresh}>{t`Refresh`}</Button>
-          </PreviewButtonContainer>
+      <Box className={className} pt={fromQueryPreview ? 0 : 2}>
+        {!fromQueryPreview && (
+          <Flex align="center" justify="space-between" mb={1}>
+            <span className="text-bold">{`Preview`}</span>
+            <Flex align="right">
+              <Icon
+                name="close"
+                onClick={onClose}
+                className="text-light text-medium-hover cursor-pointer ml1"
+              />
+            </Flex>
+          </Flex>
+        )}
+        {!fromQueryPreview && isDirty ? (
+          <Flex
+            align="center"
+            justify="center"
+            className="bordered shadowed rounded bg-white p4"
+          >
+            <Button onClick={this.refresh}>Refresh</Button>
+          </Flex>
         ) : (
           <QuestionResultLoader question={question}>
             {({ rawSeries, result }) => (
               <Motion
                 defaultStyle={{ height: 36 }}
-                style={{
-                  height: spring(getPreviewHeightForResult(result), springOpts),
-                }}
+                style={{ height: spring(this.getHeight(result)) }}
               >
-                {({ height }) => {
-                  const targetHeight = getPreviewHeightForResult(result);
-                  const snapHeight =
-                    height > targetHeight / 2 ? targetHeight : 0;
-                  const minHeight = preferReducedMotion ? snapHeight : height;
-                  return (
-                    <Visualization
-                      rawSeries={rawSeries}
-                      error={result && result.error}
-                      className={cx("bordered shadowed rounded bg-white", {
-                        p2: result && result.error,
-                      })}
-                      style={{ minHeight }}
-                    />
-                  );
-                }}
+                {({ height }) => (
+                  <Visualization
+                    rawSeries={rawSeries}
+                    error={result && result.error}
+                    className={cx("bg-white", {
+                      p2: result && result.error,
+                      bordered: !fromQueryPreview,
+                      shadowed: !fromQueryPreview,
+                    })}
+                    style={{ minHeight: height }}
+                  />
+                )}
               </Motion>
             )}
           </QuestionResultLoader>
         )}
-      </PreviewRoot>
+      </Box>
     );
   }
 }
 
 function getPreviewHeightForResult(result) {
-  const rowCount = result ? result.data.rows.length : 1;
+  const rowCount = result && result.data ? result.data.rows.length : 1;
   return rowCount * 36 + 36 + 2;
 }
 

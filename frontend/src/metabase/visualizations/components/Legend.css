@@ -3,15 +3,24 @@ legend item needs to be in the scope in order to control the font size in
 fullscreen dashboard mode
 */
 .LegendItem {
-  font-size: 1.2em;
-  font-weight: bold;
+  font-size: 12px;
+  font-weight: normal;
+  color: #303440;
+  transition: opacity 0.25s linear;
+  opacity: 1;
+}
+
+.LegendItemValue {
+  font-size: 14px;
+  font-weight: normal;
+  color: #303440;
   transition: opacity 0.25s linear;
   opacity: 1;
 }
 
 :local .LegendHeader {
-  margin-top: 0.25em;
-  margin-bottom: 0.25em;
+  margin-bottom: 12px;
+  z-index: 0;
 }
 
 :local(.LegendItem).muted {
@@ -32,5 +41,5 @@ fullscreen dashboard mode
   display: flex;
   flex-direction: row;
   flex-wrap: wrap;
-  margin-top: 1em;
+  margin: 2px 0;
 }

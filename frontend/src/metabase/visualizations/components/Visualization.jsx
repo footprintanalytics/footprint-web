@@ -1,6 +1,7 @@
+/* eslint-disable curly */
+/* eslint-disable react/jsx-no-target-blank */
 /* eslint-disable react/prop-types */
 import React from "react";
-import { connect } from "react-redux";
 
 import ExplicitSize from "metabase/components/ExplicitSize";
 import ChartCaption from "metabase/visualizations/components/ChartCaption";
@@ -39,13 +40,129 @@ export const ERROR_MESSAGE_GENERIC = t`There was a problem displaying this chart
 export const ERROR_MESSAGE_PERMISSION = t`Sorry, you don't have permission to see this card.`;
 
 import Question from "metabase-lib/lib/Question";
+import Query from "metabase-lib/lib/queries/Query";
 import Mode from "metabase-lib/lib/Mode";
-import { memoizeClass } from "metabase-lib/lib/utils";
+import type {
+  Card as CardObject,
+  VisualizationSettings,
+} from "metabase-types/types/Card";
+import type {
+  HoverObject,
+  ClickObject,
+  Series,
+  RawSeries,
+  OnChangeCardAndRun,
+} from "metabase-types/types/Visualization";
+import Metadata from "metabase-lib/lib/metadata/Metadata";
+import { memoize } from "metabase-lib/lib/utils";
+import { connect } from "react-redux";
+import DataUpdateTime from "metabase/components/DataUpdateTime";
+import "./Visualization.css";
+import { isDefi360 } from "metabase/lib/project_info";
+import { getOssUrl } from "metabase/lib/image";
+import { Avatar } from "antd";
+import ErrorGuide from "metabase/query_builder/components/ErrorGuide";
+
+type Props = {
+  rawSeries: RawSeries,
+
+  className: string,
+  style: { [key: string]: any },
+
+  showTitle: boolean,
+  isDashboard: boolean,
+  isEditing: boolean,
+  isSettings: boolean,
+  clickable: boolean,
+  hideWatermark: boolean,
+  chartStyle: string,
+  isQueryBuilder: boolean,
+
+  headerIcon?: {
+    name: string,
+    color?: string,
+    size?: Number,
+    tooltip?: string,
+  },
+
+  actionButtons: React.Element<any>,
+
+  // errors
+  error: string,
+  errorIcon: string,
+
+  // slow card warnings
+  isSlow: boolean,
+  expectedDuration: number,
+
+  // injected by ExplicitSize
+  width: number,
+  height: number,
+
+  // settings overrides from settings panel
+  settings: VisualizationSettings,
+
+  // for click actions
+  metadata: Metadata,
+  dispatch: Function,
+  onChangeCardAndRun: OnChangeCardAndRun,
+  onChangeLocation: (url: string) => void,
+
+  // for checking renderability
+  query: Query,
+
+  mode?: Mode,
+
+  // used for showing content in place of visualization, e.x. dashcard filter mapping
+  replacementContent: React.Element<any>,
+
+  // misc
+  onUpdateWarnings: (string[]) => void,
+  onOpenChartSettings: ({ section?: ?string, widget?: ?any }) => void,
+  onUpdateVisualizationSettings: (settings: { [key: string]: any }) => void,
+
+  // number of grid cells wide and tall
+  gridSize?: { width: number, height: number },
+  // if gridSize isn't specified, compute using this gridSize (4x width, 3x height)
+  gridUnit?: number,
+
+  classNameWidgets?: string,
+
+  getExtraDataForClick?: Function,
+};
+
+type State = {
+  series: ?Series,
+  visualization: ?(React.Component<void, VisualizationSettings, void> & {
+    checkRenderable: (any, any, any) => void,
+    noHeader: boolean,
+  }),
+  computedSettings: VisualizationSettings,
+
+  hovered: ?HoverObject,
+  clicked: ?ClickObject,
+
+  error: ?Error,
+  warnings: string[],
+  yAxisSplit: ?(number[][]),
+};
+
+const mapStateToProps = state => {
+  return {
+    user: state.currentUser,
+  };
+};
 
 // NOTE: pass `CardVisualization` so that we don't include header when providing size to child element
+@ExplicitSize({ selector: ".CardVisualization" })
+@connect(mapStateToProps)
+export default class Visualization extends React.PureComponent {
+  state: State;
+  props: Props;
 
-class Visualization extends React.PureComponent {
-  constructor(props) {
+  _resetHoverTimer: ?number;
+
+  constructor(props: Props) {
     super(props);
 
     this.state = {
@@ -65,6 +182,8 @@ class Visualization extends React.PureComponent {
     isDashboard: false,
     isEditing: false,
     isSettings: false,
+    clickable: false,
+    hideWatermark: false,
     isQueryBuilder: false,
     onUpdateVisualizationSettings: () => {},
     // prefer passing in a function that doesn't cause the application to reload
@@ -80,12 +199,7 @@ class Visualization extends React.PureComponent {
   UNSAFE_componentWillReceiveProps(newProps) {
     if (
       !isSameSeries(newProps.rawSeries, this.props.rawSeries) ||
-      !Utils.equals(newProps.settings, this.props.settings) ||
-      !Utils.equals(newProps.timelineEvents, this.props.timelineEvents) ||
-      !Utils.equals(
-        newProps.selectedTimelineEventIds,
-        this.props.selectedTimelineEventIds,
-      )
+      !Utils.equals(newProps.settings, this.props.settings)
     ) {
       this.transform(newProps);
     }
@@ -101,6 +215,10 @@ class Visualization extends React.PureComponent {
     ) {
       this.updateWarnings();
     }
+  }
+
+  componentWillUnmount() {
+    this.setState = () => false;
   }
 
   componentDidCatch(error, info) {
@@ -141,6 +259,7 @@ class Visualization extends React.PureComponent {
       ? getVisualizationTransformed(extractRemappings(newProps.rawSeries))
       : null;
     const series = transformed && transformed.series;
+
     const visualization = transformed && transformed.visualization;
     const computedSettings = series
       ? getComputedSettingsForSeries(series)
@@ -184,24 +303,12 @@ class Visualization extends React.PureComponent {
     }
   };
 
+  @memoize
   _getQuestionForCardCached(metadata, card) {
-    if (!metadata || !card) {
-      return;
-    }
-    const { isQueryBuilder, queryBuilderMode } = this.props;
-    const question = new Question(card, metadata);
-
-    // Datasets in QB should behave as raw tables opened in simple mode
-    // composeDataset replaces the dataset_query with a clean query using the dataset as a source table
-    // Ideally, this logic should happen somewhere else
-    return question.isDataset() &&
-      isQueryBuilder &&
-      queryBuilderMode !== "dataset"
-      ? question.composeDataset()
-      : question;
+    return metadata && card && new Question(card, metadata);
   }
 
-  getClickActions(clicked) {
+  getClickActions(clicked: ?ClickObject) {
     if (!clicked) {
       return [];
     }
@@ -222,7 +329,7 @@ class Visualization extends React.PureComponent {
       : [];
   }
 
-  visualizationIsClickable = clicked => {
+  visualizationIsClickable = (clicked: ClickObject) => {
     const { onChangeCardAndRun } = this.props;
     if (!onChangeCardAndRun) {
       return false;
@@ -235,9 +342,10 @@ class Visualization extends React.PureComponent {
     }
   };
 
-  handleVisualizationClick = clicked => {
-    const { handleVisualizationClick } = this.props;
-
+  handleVisualizationClick = (clicked: ClickObject) => {
+    if (!this.props.clickable) {
+      return;
+    }
     if (clicked) {
       MetabaseAnalytics.trackStructEvent(
         "Actions",
@@ -248,20 +356,12 @@ class Visualization extends React.PureComponent {
       );
     }
 
-    if (typeof handleVisualizationClick === "function") {
-      handleVisualizationClick(clicked);
-      return;
-    }
-
-    const didPerformDefaultAction = performDefaultAction(
-      this.getClickActions(clicked),
-      {
+    if (
+      performDefaultAction(this.getClickActions(clicked), {
         dispatch: this.props.dispatch,
         onChangeCardAndRun: this.handleOnChangeCardAndRun,
-      },
-    );
-
-    if (didPerformDefaultAction) {
+      })
+    ) {
       return;
     }
 
@@ -272,13 +372,22 @@ class Visualization extends React.PureComponent {
   };
 
   // Add the underlying card of current series to onChangeCardAndRun if available
-  handleOnChangeCardAndRun = ({ nextCard, seriesIndex, objectId }) => {
+  handleOnChangeCardAndRun = ({
+    nextCard,
+    seriesIndex,
+    unAuth,
+  }: {
+    nextCard: CardObject,
+    seriesIndex: number,
+    unAuth: boolean,
+  }) => {
     const { series, clicked } = this.state;
 
     const index = seriesIndex || (clicked && clicked.seriesIndex) || 0;
-    const previousCard = series && series[index] && series[index].card;
+    const previousCard: ?CardObject =
+      series && series[index] && series[index].card;
 
-    this.props.onChangeCardAndRun({ nextCard, previousCard, objectId });
+    this.props.onChangeCardAndRun({ nextCard, previousCard, unAuth });
   };
 
   onRender = ({ yAxisSplit, warnings = [] } = {}) => {
@@ -296,6 +405,7 @@ class Visualization extends React.PureComponent {
     }
   };
 
+  // eslint-disable-next-line complexity
   render() {
     const {
       actionButtons,
@@ -307,9 +417,11 @@ class Visualization extends React.PureComponent {
       headerIcon,
       errorIcon,
       isSlow,
+      hideWatermark,
       expectedDuration,
       replacementContent,
       onOpenChartSettings,
+      dashcard,
     } = this.props;
     const { visualization } = this.state;
     const small = width < 330;
@@ -403,7 +515,7 @@ class Visualization extends React.PureComponent {
       </span>
     );
 
-    let { gridSize, gridUnit } = this.props;
+    let { gridSize, gridUnit, dynamicParams, showDataUpdateTime } = this.props;
     if (
       !gridSize &&
       gridUnit &&
@@ -430,6 +542,7 @@ class Visualization extends React.PureComponent {
 
     const CardVisualization = visualization;
 
+    const isEditing = location.hash;
     const title = settings["card.title"];
     const hasHeaderContent = title || extra;
     const isHeaderEnabled = !(visualization && visualization.noHeader);
@@ -437,28 +550,54 @@ class Visualization extends React.PureComponent {
     const hasHeader =
       (showTitle &&
         hasHeaderContent &&
-        (loading || error || noResults || isHeaderEnabled)) ||
+        (error || noResults || isHeaderEnabled)) ||
       replacementContent;
+
+    const isText =
+      dashcard?.visualization_settings?.virtual_card?.display === "text";
+    const isImage =
+      dashcard?.visualization_settings?.virtual_card?.display === "image";
+    const isVideo =
+      dashcard?.visualization_settings?.virtual_card?.display === "video";
 
     return (
       <div
+        id="html2canvas-Card"
         className={cx(className, "flex flex-column full-height")}
-        style={style}
+        style={{ ...style, position: "relative" }}
       >
+        {showDataUpdateTime && !isEditing && !Utils.isCoin360() && (
+          <DataUpdateTime />
+        )}
+        {/* {!hideWatermark && !isDefi360() && <div className="waterMarkHome" />} */}
+        {!hideWatermark &&
+          !isDefi360() &&
+          !isText &&
+          !isImage &&
+          !isVideo &&
+          !noResults && (
+            <div className="waterMarkHome">
+              <span
+                style={{
+                  filter: Utils.isCoin360() ? "brightness(0) invert(1)" : "",
+                }}
+              />
+            </div>
+          )}
+        {/*{!isText && <div className="waterMarkHome" />}*/}
         {!!hasHeader && (
-          <div className="p1 flex-no-shrink">
-            <ChartCaption
-              series={series}
-              settings={settings}
-              icon={headerIcon}
-              actionButtons={extra}
-              onChangeCardAndRun={
-                this.props.onChangeCardAndRun && !replacementContent
-                  ? this.handleOnChangeCardAndRun
-                  : null
-              }
-            />
-          </div>
+          <ChartCaption
+            series={series}
+            settings={settings}
+            icon={headerIcon}
+            actionButtons={extra}
+            onChangeCardAndRun={arg => {
+              this.props.onChangeCardAndRun && !replacementContent
+                ? this.handleOnChangeCardAndRun({ ...arg, unAuth: true })
+                : null;
+            }}
+            dashcard={dashcard}
+          />
         )}
         {replacementContent ? (
           replacementContent
@@ -470,10 +609,37 @@ class Visualization extends React.PureComponent {
               (isDashboard ? "text-slate-light" : "text-slate")
             }
           >
-            <Tooltip tooltip={t`No results!`} isEnabled={small}>
-              <img data-testid="no-results-image" src={NoResults} />
-            </Tooltip>
-            {!small && <span className="h4 text-bold">{t`No results!`}</span>}
+            <div style={{ display: "none" }}>
+              <Tooltip tooltip={t`No results!`} isEnabled={small}>
+                <img src={NoResults} />
+              </Tooltip>
+              {
+                <span
+                  className="h4 text-bold"
+                  style={{ display: small ? "none" : "" }}
+                >
+                  No results!
+                </span>
+              }
+            </div>
+            <div className="noResults">
+              <h4>No results!</h4>
+              <ol>
+                <li>You can try refreshing your browser.</li>
+                <li>You can try changing your filters.</li>
+                <li>
+                  You can try contacting us on{" "}
+                  <a
+                    href="https://discord.gg/3HYaR6USM7"
+                    rel="nofollow"
+                    target="_blank"
+                  >
+                    Discord
+                  </a>
+                  .
+                </li>
+              </ol>
+            </div>
           </div>
         ) : error ? (
           <div
@@ -485,7 +651,15 @@ class Visualization extends React.PureComponent {
             <Tooltip tooltip={error} isEnabled={small}>
               <Icon className="mb2" name={errorIcon || "warning"} size={50} />
             </Tooltip>
-            {!small && <span className="h4 text-bold">{error}</span>}
+            {
+              <div
+                className="h4 text-bold flex-column"
+                style={{ display: small ? "none" : "" }}
+              >
+                <div>{error}</div>
+                <ErrorGuide />
+              </div>
+            }
           </div>
         ) : loading ? (
           <div className="flex-full p1 text-centered text-brand flex flex-column layout-centered">
@@ -495,7 +669,10 @@ class Visualization extends React.PureComponent {
                 {isSlow === "usually-slow" ? (
                   <div>
                     {jt`This usually takes an average of ${(
-                      <span style={{ whiteSpace: "nowrap" }}>
+                      <span
+                        key="expectedDuration"
+                        style={{ whiteSpace: "nowrap" }}
+                      >
                         {duration(expectedDuration)}
                       </span>
                     )}.`}
@@ -522,7 +699,6 @@ class Visualization extends React.PureComponent {
             card={series[0].card} // convenience for single-series visualizations
             data={series[0].data} // convenience for single-series visualizations
             hovered={hovered}
-            clicked={clicked}
             headerIcon={hasHeader ? null : headerIcon}
             onHoverChange={this.handleHoverChange}
             onVisualizationClick={this.handleVisualizationClick}
@@ -531,6 +707,7 @@ class Visualization extends React.PureComponent {
             onRender={this.onRender}
             onActionDismissal={this.hideActions}
             gridSize={gridSize}
+            dynamicParams={dynamicParams}
             onChangeCardAndRun={
               this.props.onChangeCardAndRun
                 ? this.handleOnChangeCardAndRun
@@ -547,16 +724,78 @@ class Visualization extends React.PureComponent {
             onClose={this.hideActions}
           />
         )}
+        {location.pathname.startsWith("/guest/chart") && (
+          <VisualizationShareFoot location={this.props.location} />
+        )}
       </div>
     );
   }
 }
 
-export default _.compose(
-  ExplicitSize({
-    selector: ".CardVisualization",
-    refreshMode: props => (props.isDashboard ? "debounce" : "throttle"),
-  }),
-  connect(),
-  memoizeClass("_getQuestionForCardCached"),
-)(Visualization);
+export const VisualizationShareFoot = ({ location }) => {
+  let user = location?.query?.userSocial;
+
+  if (!user) return null;
+  user = JSON.parse(user);
+
+  return (
+    <div className="Visualization__share-foot">
+      <img
+        className="Visualization__share-foot-logo"
+        src={getOssUrl("img_nav_logo_v5.svg")}
+      />
+      {user ? (
+        <div className="Visualization__share-foot-user">
+          <div className="Visualization__share-foot-user-avatar">
+            {user.avatar ? (
+              <img
+                src={
+                  user.avatar + "?x-oss-process=image/resize,m_fill,h_500,w_500"
+                }
+              />
+            ) : (
+              <Avatar style={{ backgroundColor: "#E3E3FF" }}>
+                <span data-nosnippet>{String(user.name[0]).toUpperCase()}</span>
+              </Avatar>
+            )}
+            <span>{user.name}</span>
+          </div>
+          <ul className="Visualization__share-foot-user-social">
+            {user.twitter && (
+              <li>
+                <img src={getOssUrl("20220516201254.png")} />
+                <span>
+                  {user.twitter.startsWith("http")
+                    ? user.twitter.replace("https://twitter.com/", "@")
+                    : user.twitter.startsWith("@")
+                    ? user.twitter
+                    : "@" + user.twitter}
+                </span>
+              </li>
+            )}
+            {user.telegram && (
+              <li>
+                <img src={getOssUrl("20220516201327.png")} />
+                <span>
+                  {user.telegram.startsWith("@")
+                    ? user.telegram
+                    : "@" + user.telegram}
+                </span>
+              </li>
+            )}
+            {user.discord && (
+              <li>
+                <img src={getOssUrl("20220516201343.png")} />
+                <span>
+                  {user.discord.startsWith("@")
+                    ? user.discord
+                    : "@" + user.discord}
+                </span>
+              </li>
+            )}
+          </ul>
+        </div>
+      ) : null}
+    </div>
+  );
+};

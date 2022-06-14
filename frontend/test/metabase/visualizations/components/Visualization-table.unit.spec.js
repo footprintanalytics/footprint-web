@@ -1,5 +1,5 @@
 import React from "react";
-import { renderWithProviders } from "__support__/ui";
+import { render } from "@testing-library/react";
 
 import { NumberColumn } from "../__support__/visualizations";
 
@@ -19,10 +19,6 @@ const series = (rows, settings = {}) => {
 };
 
 describe("Table", () => {
-  beforeEach(() => {
-    jest.useFakeTimers();
-  });
-
   it("should render correct background colors", () => {
     const rows = [[1], [2], [3], [4]];
     const settings = {
@@ -37,10 +33,9 @@ describe("Table", () => {
         },
       ],
     };
-    const { getByText } = renderWithProviders(
+    const { getByText } = render(
       <Visualization rawSeries={series(rows, settings)} />,
     );
-    jest.runAllTimers();
     const bgColors = rows.map(
       ([v]) => getByText(String(v)).parentNode.style["background-color"],
     );

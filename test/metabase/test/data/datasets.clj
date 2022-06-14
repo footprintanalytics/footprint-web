@@ -48,8 +48,8 @@
   `(do-with-driver-when-testing ~driver (fn [] ~@body)))
 
 (defmacro test-driver
-  "Like [[test-drivers]], but for a single driver."
-  {:style/indent :defn}
+  "Like `test-drivers`, but for a single driver."
+  {:style/indent 1}
   [driver & body]
   `(with-driver-when-testing ~driver
      (t/testing (str "\n" (colorize/cyan ~driver))
@@ -58,7 +58,7 @@
 (defmacro test-drivers
   "Execute body (presumably containing tests) against the drivers in `drivers` that  we're currently testing against
   (i.e., if they're listed in the env var `DRIVERS`)."
-  {:style/indent :defn}
+  {:style/indent 1}
   [drivers & body]
   `(doseq [driver# ~drivers]
      (test-driver driver#

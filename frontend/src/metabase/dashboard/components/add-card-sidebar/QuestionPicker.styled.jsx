@@ -1,9 +1,5 @@
-import styled from "@emotion/styled";
+import styled from "styled-components";
 import TextInput from "metabase/components/TextInput";
-
-export const QuestionPickerRoot = styled.div`
-  padding: 1rem;
-`;
 
 export const BreadcrumbsWrapper = styled.div`
   margin-bottom: 0.5rem;
@@ -11,5 +7,5 @@ export const BreadcrumbsWrapper = styled.div`
 `;
 
 export const SearchInput = styled(TextInput)`
-  margin-bottom: 1rem;
+  margin-bottom: 0;
 `;

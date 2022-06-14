@@ -9,22 +9,22 @@
 :local(.wrapper) {
   width: 100%;
   margin: 0 auto;
-  padding: 0 1em;
+  padding: 0 10px;
 }
 
 @media screen and (--breakpoint-min-sm) {
   .wrapper,
   :local(.wrapper) {
-    padding-left: 2em;
-    padding-right: 2em;
+    padding-left: 20px;
+    padding-right: 20px;
   }
 }
 
 @media screen and (--breakpoint-min-md) {
   .wrapper,
   :local(.wrapper) {
-    padding-left: 3em;
-    padding-right: 3em;
+    padding-left: 20px;
+    padding-right: 20px;
   }
 }
 
@@ -67,9 +67,7 @@
 }
 
 .full,
-.full-width,
-:local(.full),
-:local(.full-width) {
+:local(.full) {
   width: 100%;
 }
 .half {

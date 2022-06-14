@@ -1,18 +1,10 @@
----
-title: Administration Guide
----
-
 # Administration Guide
 
 Are you in charge of managing Metabase for your organization? Then you're in the right spot. You are the chosen one.
 
-## Admin overview
-
-Here's an [Admin overview](/learn/administration/guide.html) that gives you a map of the territory. The article is part of a larger [course on Administration](/learn/administration).
-
 ## Installing Metabase
 
-See [how to install Metabase](../operations-guide/installing-metabase.md).
+See our Operations Guide to learn [how to install Metabase](../operations-guide/installing-metabase.md).
 
 ## Getting things set up
 
@@ -39,10 +31,8 @@ See [how to install Metabase](../operations-guide/installing-metabase.md).
 
 ## Setting permissions and access
 
-- [Permissions overview](05-setting-permissions.md)
-- [Setting data permissions](data-permissions.md)
+- [Setting data permissions](05-setting-permissions.md)
 - [Creating and managing collections](06-collections.md)
-- [Application permissions](application-permissions.md)
 
 ## Embedding and sharing with public links
 

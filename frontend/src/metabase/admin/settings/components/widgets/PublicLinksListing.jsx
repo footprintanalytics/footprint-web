@@ -1,9 +1,8 @@
-/* eslint-disable react/prop-types */
 import React, { Component } from "react";
 
 import Icon from "metabase/components/Icon";
-import Link from "metabase/core/components/Link";
-import ExternalLink from "metabase/core/components/ExternalLink";
+import Link from "metabase/components/Link";
+import ExternalLink from "metabase/components/ExternalLink";
 import Confirm from "metabase/components/Confirm";
 import LoadingAndErrorWrapper from "metabase/components/LoadingAndErrorWrapper";
 import { t } from "ttag";
@@ -12,8 +11,31 @@ import * as Urls from "metabase/lib/urls";
 
 import * as MetabaseAnalytics from "metabase/lib/analytics";
 
+type PublicLink = {
+  id: string,
+  name: string,
+  public_uuid: string,
+};
+
+type Props = {
+  load: () => Promise<PublicLink[]>,
+  revoke?: (link: PublicLink) => Promise<void>,
+  getUrl: (link: PublicLink) => string,
+  getPublicUrl?: (link: PublicLink) => string,
+  noLinksMessage: string,
+  type: string,
+};
+
+type State = {
+  list: ?(PublicLink[]),
+  error: ?any,
+};
+
 export default class PublicLinksListing extends Component {
-  constructor(props) {
+  props: Props;
+  state: State;
+
+  constructor(props: Props) {
     super(props);
     this.state = {
       list: null,
@@ -21,7 +43,7 @@ export default class PublicLinksListing extends Component {
     };
   }
 
-  componentDidMount() {
+  UNSAFE_componentWillMount() {
     this.load();
   }
 
@@ -34,7 +56,7 @@ export default class PublicLinksListing extends Component {
     }
   }
 
-  async revoke(link) {
+  async revoke(link: PublicLink) {
     if (!this.props.revoke) {
       return;
     }
@@ -46,7 +68,7 @@ export default class PublicLinksListing extends Component {
     }
   }
 
-  trackEvent(label) {
+  trackEvent(label: string) {
     MetabaseAnalytics.trackStructEvent(`Admin ${this.props.type}`, label);
   }
 
@@ -126,7 +148,9 @@ export const PublicLinksDashboardListing = () => (
     revoke={DashboardApi.deletePublicLink}
     type={t`Public Dashboard Listing`}
     getUrl={dashboard => Urls.dashboard(dashboard)}
-    getPublicUrl={({ public_uuid }) => Urls.publicDashboard(public_uuid)}
+    getPublicUrl={({ public_uuid }) =>
+      Urls.publicDashboard({ uuid: public_uuid })
+    }
     noLinksMessage={t`No dashboards have been publicly shared yet.`}
   />
 );
@@ -137,8 +161,10 @@ export const PublicLinksQuestionListing = () => (
     revoke={CardApi.deletePublicLink}
     type={t`Public Card Listing`}
     getUrl={question => Urls.question(question)}
-    getPublicUrl={({ public_uuid }) => Urls.publicQuestion(public_uuid)}
-    noLinksMessage={t`No questions have been publicly shared yet.`}
+    getPublicUrl={({ public_uuid }) =>
+      Urls.publicQuestion({ uuid: public_uuid })
+    }
+    noLinksMessage={t`No queries have been publicly shared yet.`}
   />
 );
 
@@ -159,7 +185,7 @@ export const EmbeddedQuestionListing = () => (
       load={CardApi.listEmbeddable}
       getUrl={question => Urls.question(question)}
       type={t`Embedded Card Listing`}
-      noLinksMessage={t`No questions have been embedded yet.`}
+      noLinksMessage={t`No queries have been embedded yet.`}
     />
   </div>
 );

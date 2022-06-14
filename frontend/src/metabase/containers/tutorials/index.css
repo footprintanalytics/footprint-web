@@ -1,0 +1,188 @@
+.tutorials {
+  padding-bottom: 30px;
+  min-height: 100vh;
+}
+
+.tutorials .explore__wrap {
+  max-width: 1350px;
+  padding: 0;
+}
+
+.tutorials__body {
+  max-width: 1350px;
+  margin: 0 auto;
+  padding: var(--footprint-spacing-xl) 0;
+}
+
+.tutorials__visualizations {
+  display: grid;
+  grid-row-gap: var(--footprint-spacing-l);
+  grid-column-gap: var(--footprint-spacing-l);
+  grid-template-columns: 1fr 1fr 1fr;
+}
+
+.tutorials__visualizations-thumb {
+  display: flex;
+  justify-content: center;
+  box-shadow: 0 2px 30px 0 rgba(90, 97, 123, 0.05);
+  border-radius: 4px;
+  height: 240px;
+  box-sizing: border-box;
+  background-color: #fff;
+  overflow: hidden;
+}
+
+.tutorials__visualizations-thumb a {
+  display: block;
+  width: 100%;
+  height: 100%;
+  background-size: 100%;
+  background-repeat: no-repeat;
+  background-position: center;
+}
+
+.tutorials__visualizations-thumb a img {
+  display: none;
+  width: 100%;
+}
+
+.tutorials__visualizations li h3 {
+  /* color: #444444; */
+  /* font-size: 18px; */
+  /* margin-top: 20px; */
+  text-align: center;
+}
+
+.tutorials__videos li {
+  display: flex;
+  border-bottom: var(--footprint-border);
+  margin-bottom: var(--footprint-spacing-xl);
+  padding-bottom: var(--footprint-spacing-l);
+}
+
+.tutorials__videos-play {
+  flex: 1;
+  border-radius: 4px;
+  margin-right: var(--footprint-spacing-l);
+  background-color: #fff;
+  height: 200px;
+  width: 346px;
+  position: relative;
+  overflow: hidden;
+}
+
+.tutorials__videos-play .LoadingSpinner {
+  position: absolute;
+  left: 0;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.tutorials__videos-info {
+  flex: 2;
+}
+
+.tutorials__videos-info h3 {
+  /* color: #444444; */
+  /* font-size: 24px; */
+  /* font-weight: 700; */
+  margin-bottom: 10px;
+}
+
+.tutorials__videos-info p {
+  /* color: #737373; */
+  /* font-size: 14px; */
+  margin-bottom: 30px;
+}
+
+.tutorials__videos-info a {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: var(--footprint-color-main);
+  border-radius: 4px;
+  height: 32px;
+  color: #fff;
+  font-size: 13px;
+  width: 118px;
+}
+
+.tutorials__videos-info a img {
+  width: 10px;
+  height: 10px;
+  margin-right: var(--footprint-spacing-xs);
+}
+
+.tutorials__indicators .ant-table {
+  font-size: 14px;
+  color: var(--footprint-color-title);
+}
+
+.tutorials__indicators .ant-table-thead > tr > th {
+  font-weight: 500;
+}
+
+.tutorials__indicators .ant-table-thead > tr > th,
+.tutorials__indicators .ant-table-tbody > tr > td {
+  padding: var(--footprint-spacing-l) 80px;
+}
+
+.tutorials__indicators
+  .ant-table-thead
+  > tr
+  > th:not(:last-child):not(.ant-table-selection-column):not(.ant-table-row-expand-icon-cell):not([colspan])::before {
+  display: none;
+}
+
+.tutorials__indicators .ant-table-footer {
+  color: #b9b9b9;
+  padding: var(--footprint-spacing-l) 80px;
+}
+
+.tutorials__indicators-item {
+  margin-bottom: var(--footprint-spacing-xl);
+}
+
+.tutorials__indicators-item-title {
+  /* color: #444; */
+  /* font-size: 24px; */
+  /* font-weight: 700; */
+  margin-bottom: var(--footprint-spacing-l);
+}
+
+.tutorials__indicators-wrap {
+  display: flex;
+  align-items: center;
+  color: var(--footprint-color-secondary-text2);
+  font-size: 14px;
+}
+
+.tutorials__indicators-wrap span {
+  margin-left: var(--footprint-spacing-xs);
+}
+
+.tutorials__indicators-check {
+  width: 14px;
+}
+
+.tutorials__indicators-soon,
+.tutorials__indicators-empty {
+  color: var(--footprint-color-secondary-text2);
+}
+
+.tutorials__indicators-dataset {
+  display: flex;
+}
+
+.tutorials__indicators-dataset li span {
+  cursor: pointer;
+  text-decoration: underline;
+}
+
+.tutorials__indicators-dataset li small {
+  font-size: 16px;
+}

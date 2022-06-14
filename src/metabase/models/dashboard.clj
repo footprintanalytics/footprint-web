@@ -4,25 +4,24 @@
             [clojure.set :as set]
             [clojure.string :as str]
             [clojure.tools.logging :as log]
-            [metabase.automagic-dashboards.populate :as populate]
+            [metabase.automagic-dashboards.populate :as magic.populate]
             [metabase.events :as events]
             [metabase.models.card :as card :refer [Card]]
             [metabase.models.collection :as collection :refer [Collection]]
             [metabase.models.dashboard-card :as dashboard-card :refer [DashboardCard]]
             [metabase.models.field-values :as field-values]
-            [metabase.models.interface :as mi]
+            [metabase.models.interface :as i]
             [metabase.models.params :as params]
             [metabase.models.permissions :as perms]
             [metabase.models.pulse :as pulse :refer [Pulse]]
             [metabase.models.pulse-card :as pulse-card :refer [PulseCard]]
             [metabase.models.revision :as revision]
             [metabase.models.revision.diff :refer [build-sentence]]
-            [metabase.models.serialization.hash :as serdes.hash]
             [metabase.moderation :as moderation]
             [metabase.public-settings :as public-settings]
             [metabase.query-processor.async :as qp.async]
             [metabase.util :as u]
-            [metabase.util.i18n :as i18n :refer [tru]]
+            [metabase.util.i18n :as ui18n :refer [tru]]
             [metabase.util.schema :as su]
             [schema.core :as s]
             [toucan.db :as db]
@@ -65,6 +64,11 @@
 (models/defmodel Dashboard :report_dashboard)
 ;;; ----------------------------------------------- Entity & Lifecycle -----------------------------------------------
 
+(defn- assert-valid-parameters [{:keys [parameters]}]
+  (when (s/check (s/maybe [{:id su/NonBlankString, s/Keyword s/Any}]) parameters)
+    (throw (ex-info (tru ":parameters must be a sequence of maps with String :id keys")
+                    {:parameters parameters}))))
+
 (defn- pre-delete [dashboard]
   (db/delete! 'Revision :model "Dashboard" :model_id (u/the-id dashboard)))
 
@@ -72,12 +76,12 @@
   (let [defaults  {:parameters []}
         dashboard (merge defaults dashboard)]
     (u/prog1 dashboard
-      (params/assert-valid-parameters dashboard)
+      (assert-valid-parameters dashboard)
       (collection/check-collection-namespace Dashboard (:collection_id dashboard)))))
 
 (defn- pre-update [dashboard]
   (u/prog1 dashboard
-    (params/assert-valid-parameters dashboard)
+    (assert-valid-parameters dashboard)
     (collection/check-collection-namespace Dashboard (:collection_id dashboard))))
 
 (defn- update-dashboard-subscription-pulses!
@@ -130,9 +134,8 @@
 (u/strict-extend (class Dashboard)
   models/IModel
   (merge models/IModelDefaults
-         {:properties  (constantly {:timestamped? true
-                                    :entity_id    true})
-          :types       (constantly {:parameters :parameters-list, :embedding_params :json})
+         {:properties  (constantly {:timestamped? true})
+          :types       (constantly {:parameters :json, :embedding_params :json})
           :pre-delete  pre-delete
           :pre-insert  pre-insert
           :pre-update  pre-update
@@ -140,11 +143,8 @@
           :post-select public-settings/remove-public-uuid-if-public-sharing-is-disabled})
 
   ;; You can read/write a Dashboard if you can read/write its parent Collection
-  mi/IObjectPermissions
-  perms/IObjectPermissionsForParentCollection
-
-  serdes.hash/IdentityHashable
-  {:identity-hash-fields (constantly [:name (serdes.hash/hydrated-hash :collection)])})
+  i/IObjectPermissions
+  perms/IObjectPermissionsForParentCollection)
 
 
 ;;; --------------------------------------------------- Revisions ----------------------------------------------------
@@ -291,11 +291,8 @@
         dashcard-ids        (db/select-ids DashboardCard, :dashboard_id (u/the-id dashboard-or-id))]
     (doseq [{dashcard-id :id, :as dashboard-card} dashcards]
       ;; ensure the dashcard we are updating is part of the given dashboard
-      (if (contains? dashcard-ids dashcard-id)
-        (dashboard-card/update-dashboard-card! (update dashboard-card :series #(filter identity (map :id %))))
-        (throw (ex-info (tru "Dashboard {0} does not have a DashboardCard with ID {1}"
-                             (u/the-id dashboard-or-id) dashcard-id)
-                        {:status-code 404}))))
+      (when (contains? dashcard-ids dashcard-id)
+        (dashboard-card/update-dashboard-card! (update dashboard-card :series #(filter identity (map :id %))))))
     (let [new-param-field-ids (dashboard-id->param-field-ids dashboard-or-id)]
       (update-field-values-for-on-demand-dbs! old-param-field-ids new-param-field-ids))))
 
@@ -346,11 +343,11 @@
 (defn save-transient-dashboard!
   "Save a denormalized description of `dashboard`."
   [dashboard parent-collection-id]
-  (let [dashboard  (i18n/localized-strings->strings dashboard)
+  (let [dashboard  (ui18n/localized-strings->strings dashboard)
         dashcards  (:ordered_cards dashboard)
-        collection (populate/create-collection!
+        collection (magic.populate/create-collection!
                     (ensure-unique-collection-name (:name dashboard) parent-collection-id)
-                    (rand-nth (populate/colors))
+                    (rand-nth magic.populate/colors)
                     "Automatically generated cards."
                     parent-collection-id)
         dashboard  (db/insert! Dashboard
@@ -375,42 +372,3 @@
                          (assoc :series series))]
         (add-dashcard! dashboard card dashcard)))
     dashboard))
-
-(def ^:private ParamWithMapping
-  {:name     su/NonBlankString
-   :id       su/NonBlankString
-   :mappings (s/maybe #{dashboard-card/ParamMapping})
-   s/Keyword s/Any})
-
-(s/defn ^{:hydrate :resolved-params} dashboard->resolved-params :- (let [param-id su/NonBlankString]
-                                                                     {param-id ParamWithMapping})
-  "Return map of Dashboard parameter key -> param with resolved `:mappings`.
-
-    (dashboard->resolved-params (Dashboard 62))
-    ;; ->
-    {\"ee876336\" {:name     \"Category Name\"
-                   :slug     \"category_name\"
-                   :id       \"ee876336\"
-                   :type     \"category\"
-                   :mappings #{{:parameter_id \"ee876336\"
-                                :card_id      66
-                                :dashcard     ...
-                                :target       [:dimension [:fk-> [:field-id 263] [:field-id 276]]]}}},
-     \"6f10a41f\" {:name     \"Price\"
-                   :slug     \"price\"
-                   :id       \"6f10a41f\"
-                   :type     \"category\"
-                   :mappings #{{:parameter_id \"6f10a41f\"
-                                :card_id      66
-                                :dashcard     ...
-                                :target       [:dimension [:field-id 264]]}}}}"
-  [dashboard :- {(s/optional-key :parameters) (s/maybe [su/Map])
-                 s/Keyword                    s/Any}]
-  (let [dashboard           (hydrate dashboard [:ordered_cards :card])
-        param-key->mappings (apply
-                             merge-with set/union
-                             (for [dashcard (:ordered_cards dashboard)
-                                   param    (:parameter_mappings dashcard)]
-                               {(:parameter_id param) #{(assoc param :dashcard dashcard)}}))]
-    (into {} (for [{param-key :id, :as param} (:parameters dashboard)]
-               [(u/qualified-name param-key) (assoc param :mappings (get param-key->mappings param-key))]))))

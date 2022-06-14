@@ -1,7 +1,7 @@
 (ns metabase.automagic-dashboards.comparison-test
   (:require [clojure.test :refer :all]
             [metabase.automagic-dashboards.comparison :as c :refer :all]
-            [metabase.automagic-dashboards.core :as magic]
+            [metabase.automagic-dashboards.core :as automagic-dashboards]
             [metabase.models :refer [Card Segment Table]]
             [metabase.models.query :as query]
             [metabase.test :as mt]
@@ -15,7 +15,7 @@
 (defn- test-comparison
   [left right]
   (-> left
-      (magic/automagic-analysis {})
+      (automagic-dashboards/automagic-analysis {})
       (c/comparison-dashboard left right {})
       :ordered_cards
       count

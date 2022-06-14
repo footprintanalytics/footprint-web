@@ -35,11 +35,15 @@ export function setAdHocFilter({
   timeBucket,
   includeCurrent = false,
 } = {}) {
-  cy.findByText("Relative dates...").click();
   if (condition) {
-    cy.findByText(condition).click({ force: true });
-  } else {
-    cy.findByText("Past").click({ force: true });
+    cy.get(".AdminSelect")
+      .contains("Previous")
+      .click();
+
+    popover()
+      .last()
+      .contains(condition)
+      .click();
   }
 
   if (quantity) {
@@ -49,8 +53,8 @@ export function setAdHocFilter({
   }
 
   if (timeBucket) {
-    cy.findAllByTestId("relative-datetime-unit")
-      .contains("days")
+    cy.get(".AdminSelect")
+      .contains("Days")
       .click();
 
     popover()
@@ -59,12 +63,7 @@ export function setAdHocFilter({
       .click();
   }
 
-  if (includeCurrent) {
-    popover().within(() => {
-      cy.icon("ellipsis").click();
-    });
-    cy.findByText(/^Include/).click();
-  }
+  includeCurrent && cy.findByText(/^Include/).click();
 
   cy.button("Update filter").click();
 }

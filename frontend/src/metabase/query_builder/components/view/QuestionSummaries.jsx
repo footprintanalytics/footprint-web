@@ -6,15 +6,25 @@ import PopoverWithTrigger from "metabase/components/PopoverWithTrigger";
 
 import ViewPill from "./ViewPill";
 import ViewButton from "./ViewButton";
-import { HeaderButton } from "./ViewHeader.styled";
 
-import SummarizeSidebar from "./sidebars/SummarizeSidebar/SummarizeSidebar";
+import SummarizeSidebar from "./sidebars/SummarizeSidebar";
 
 import { color } from "metabase/lib/colors";
 
 const SummarizePill = props => (
-  <ViewPill icon="insight" color={color("summarize")} {...props} />
+  <ViewPill icon="insight" color={color("accent1")} {...props} />
 );
+
+const SummarizeButton = props => (
+  <ViewButton
+    medium
+    icon="insight"
+    color={color("accent1")}
+    labelBreakpoint="sm"
+    {...props}
+  />
+);
+
 export default function QuestionSummaries({
   question,
   onEditSummary,
@@ -37,11 +47,7 @@ export function QuestionSummarizeWidget({
   ...props
 }) {
   return (
-    <HeaderButton
-      large
-      data-testid="toggle-summarize-sidebar-button"
-      color={color("summarize")}
-      labelBreakpoint="sm"
+    <SummarizeButton
       onClick={async () => {
         if (isShowingSummarySidebar) {
           onCloseSummary();
@@ -53,36 +59,7 @@ export function QuestionSummarizeWidget({
       {...props}
     >
       {t`Summarize`}
-    </HeaderButton>
-  );
-}
-
-export function MobileQuestionSummarizeWidget({
-  isShowingSummarySidebar,
-  onEditSummary,
-  onCloseSummary,
-  ...props
-}) {
-  return (
-    <ViewButton
-      medium
-      primary
-      icon="insight"
-      data-testid="toggle-summarize-sidebar-button"
-      color={color("summarize")}
-      labelBreakpoint="sm"
-      onClick={async () => {
-        if (isShowingSummarySidebar) {
-          onCloseSummary();
-        } else {
-          onEditSummary();
-        }
-      }}
-      active={isShowingSummarySidebar}
-      {...props}
-    >
-      &nbsp;
-    </ViewButton>
+    </SummarizeButton>
   );
 }
 
@@ -91,7 +68,7 @@ QuestionSummaries.shouldRender = ({
   queryBuilderMode,
   isObjectDetail,
 }) =>
-  queryBuilderMode === "view" &&
+  // queryBuilderMode === "view" &&
   question &&
   question.isStructured() &&
   question
@@ -104,12 +81,10 @@ QuestionSummarizeWidget.shouldRender = ({
   question,
   queryBuilderMode,
   isObjectDetail,
-  isActionListVisible,
 }) =>
-  queryBuilderMode === "view" &&
+  // queryBuilderMode === "view" &&
   question &&
   question.isStructured() &&
   question.query().isEditable() &&
   question.query().table() &&
-  !isObjectDetail &&
-  isActionListVisible;
+  !isObjectDetail;

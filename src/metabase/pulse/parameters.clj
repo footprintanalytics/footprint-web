@@ -1,16 +1,18 @@
 (ns metabase.pulse.parameters
   "Utilities for processing parameters for inclusion in dashboard subscriptions."
   (:require [clojure.string :as str]
-            [metabase.public-settings.premium-features :refer [defenterprise]]
+            [metabase.plugins.classloader :as classloader]
+            [metabase.pulse.interface :as i]
             [metabase.util :as u]
-            [metabase.util.urls :as urls]
+            [metabase.util.urls :as url]
             [ring.util.codec :as codec]))
 
-(defenterprise the-parameters
-  "OSS way of getting filter parameters for a dashboard subscription"
-  metabase-enterprise.pulse
-  [_pulse dashboard]
-  (:parameters dashboard))
+(def ^:private parameters-impl
+  (u/prog1 (or (u/ignore-exceptions
+                 (classloader/require 'metabase-enterprise.pulse)
+                 (some-> (resolve 'metabase-enterprise.pulse/ee-strategy-parameters-impl)
+                         var-get))
+               i/default-parameters-impl)))
 
 (defn parameters
   "Returns the list of parameters applied to a dashboard subscription, filtering out ones
@@ -18,7 +20,7 @@
   [subscription dashboard]
   (filter
    #(or (:value %) (:default %))
-   (the-parameters subscription dashboard)))
+   (i/the-parameters parameters-impl subscription dashboard)))
 
 (defn value-string
   "Returns the value of a dashboard filter as a comma-separated string"
@@ -29,7 +31,7 @@
 (defn dashboard-url
   "Given a dashboard's ID and parameters, returns a URL for the dashboard with filters included"
   [dashboard-id parameters]
-  (let [base-url   (urls/dashboard-url dashboard-id)
+  (let [base-url   (url/dashboard-url dashboard-id)
         url-params (flatten
                     (for [param parameters]
                       (for [value (u/one-or-many (or (:value param) (:default param)))]

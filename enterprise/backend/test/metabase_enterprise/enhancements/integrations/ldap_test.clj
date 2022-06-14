@@ -44,11 +44,12 @@
                 :first-name "Fred"
                 :last-name  "Taylor"
                 :email      "fred.taylor@metabase.com"
-                :attributes {:mail      "fred.taylor@metabase.com"
+                :attributes {:uid       "ftaylor300"
+                             :mail      "fred.taylor@metabase.com"
                              :cn        "Fred Taylor"
                              :givenname "Fred"
                              :sn        "Taylor"}
-                :groups     ["cn=Accounting,ou=Groups,dc=metabase,dc=com"]}
+                :groups     []}
                (ldap/find-user "fred.taylor@metabase.com"))))
 
       (testing "find by email, no givenName"

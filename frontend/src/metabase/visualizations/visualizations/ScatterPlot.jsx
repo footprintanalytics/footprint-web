@@ -9,11 +9,13 @@ import {
   GRAPH_COLORS_SETTINGS,
   GRAPH_AXIS_SETTINGS,
 } from "../lib/settings/graph";
+import VizControls from "metabase/visualizations/hoc/VizControls";
 
+@VizControls
 export default class ScatterPlot extends LineAreaBarChart {
   static uiName = t`Scatter`;
   static identifier = "scatter";
-  static iconName = "bubble";
+  static iconName = "scatter";
   static noun = t`scatter plot`;
 
   static renderer = scatterRenderer;

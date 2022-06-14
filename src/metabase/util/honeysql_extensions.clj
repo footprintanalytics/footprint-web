@@ -8,7 +8,7 @@
             [metabase.util :as u]
             [metabase.util.schema :as su]
             [potemkin.types :as p.types]
-            [pretty.core :as pretty]
+            [pretty.core :as pretty :refer [PrettyPrintable]]
             [schema.core :as s])
   (:import honeysql.format.ToSql
            java.util.Locale))
@@ -26,7 +26,7 @@
 
 ;; Add an `:h2` quote style that uppercases the identifier
 (let [{ansi-quote-fn :ansi} @#'honeysql.format/quote-fns]
-  (alter-var-root #'hformat/quote-fns assoc :h2 (comp english-upper-case ansi-quote-fn)))
+  (alter-var-root #'honeysql.format/quote-fns assoc :h2 (comp english-upper-case ansi-quote-fn)))
 
 ;; register the `extract` function with HoneySQL
 ;; (hsql/format (hsql/call :extract :a :b)) -> "extract(a from b)"
@@ -82,12 +82,9 @@
        \.
        (for [component components]
          (hformat/quote-identifier component, :split false)))))
-  pretty/PrettyPrintable
-  (pretty [this]
-    (if (= (set (keys this)) #{:identifier-type :components})
-      (cons `identifier (cons identifier-type components))
-      ;; if there's extra info beyond the usual two keys print with the record type reader literal syntax e.g. #metabase..Identifier {...}
-      (list (symbol (str \# `Identifier)) (into {} this)))))
+  PrettyPrintable
+  (pretty [_]
+    (cons 'hx/identifier (cons identifier-type components))))
 
 ;; don't use `->Identifier` or `map->Identifier`. Use the `identifier` function instead, which cleans up its input
 (alter-meta! #'->Identifier    assoc :private true)
@@ -119,9 +116,9 @@
     (as-> literal <>
       (str/replace <> #"(?<![\\'])'(?![\\'])"  "''")
       (str \' <> \')))
-  pretty/PrettyPrintable
+  PrettyPrintable
   (pretty [_]
-    (list `literal literal)))
+    (list 'literal literal)))
 
 ;; as with `Identifier` you should use the the `literal` function below instead of the auto-generated factory functions.
 (alter-meta! #'->Literal    assoc :private true)
@@ -137,6 +134,16 @@
   [s]
   (Literal. (u/qualified-name s)))
 
+
+(def ^{:arglists '([& exprs])}  +  "Math operator. Interpose `+` between `exprs` and wrap in parentheses." (partial hsql/call :+))
+(def ^{:arglists '([& exprs])}  -  "Math operator. Interpose `-` between `exprs` and wrap in parentheses." (partial hsql/call :-))
+(def ^{:arglists '([& exprs])}  /  "Math operator. Interpose `/` between `exprs` and wrap in parentheses." (partial hsql/call :/))
+(def ^{:arglists '([& exprs])}  *  "Math operator. Interpose `*` between `exprs` and wrap in parentheses." (partial hsql/call :*))
+(def ^{:arglists '([& exprs])} mod "Math operator. Interpose `%` between `exprs` and wrap in parentheses." (partial hsql/call :%))
+
+(defn inc "Add 1 to `x`."        [x] (+ x 1))
+(defn dec "Subtract 1 from `x`." [x] (- x 1))
+
 (p.types/defprotocol+ TypedHoneySQL
   "Protocol for a HoneySQL form that has type information such as `::database-type`. See #15115 for background."
   (type-info [honeysql-form]
@@ -150,7 +157,7 @@
 
 ;; a wrapped for any HoneySQL form that records additional type information in an `info` map.
 (p.types/defrecord+ TypedHoneySQLForm [form info]
-  pretty/PrettyPrintable
+  PrettyPrintable
   (pretty [_]
     `(with-type-info ~form ~info))
 
@@ -211,7 +218,7 @@
 
     (is-of-type? expr \"datetime\") ; -> true"
   [honeysql-form database-type]
-  (= (some-> honeysql-form type-info type-info->db-type str/lower-case)
+  (= (type-info->db-type (type-info honeysql-form))
      (some-> database-type name str/lower-case)))
 
 (s/defn with-database-type-info
@@ -228,9 +235,9 @@
 
 (s/defn cast :- TypedHoneySQLForm
   "Generate a statement like `cast(expr AS sql-type)`. Returns a typed HoneySQL form."
-  [database-type expr]
-  (-> (hsql/call :cast expr (hsql/raw (name database-type)))
-      (with-type-info {::database-type database-type})))
+  [sql-type expr]
+  (-> (hsql/call :cast expr (hsql/raw (name sql-type)))
+      (with-type-info {::database-type sql-type})))
 
 (s/defn quoted-cast :- TypedHoneySQLForm
   "Generate a statement like `cast(expr AS \"sql-type\")`.
@@ -249,36 +256,6 @@
   (if (is-of-type? expr sql-type)
       expr
       (cast sql-type expr)))
-
-(defn cast-unless-type-in
-  "Cast `expr` to `desired-type` unless `expr` is of one of the `acceptable-types`. Returns a typed HoneySQL form.
-
-    ;; cast to TIMESTAMP unless form is already a TIMESTAMP, TIMESTAMPTZ, or DATE
-    (cast-unless-type-in \"timestamp\" #{\"timestamp\" \"timestamptz\" \"date\"} form)"
-  {:added "0.42.0"}
-  [desired-type acceptable-types expr]
-  {:pre [(string? desired-type) (set? acceptable-types)]}
-  (if (some (partial is-of-type? expr)
-            acceptable-types)
-    expr
-    (cast desired-type expr)))
-
-(defn- math-operator [operator]
-  (fn [& args]
-    (let [arg-db-type (some (fn [arg]
-                              (-> arg type-info type-info->db-type))
-                            args)]
-      (cond-> (apply hsql/call operator args)
-        arg-db-type (with-database-type-info arg-db-type)))))
-
-(def ^{:arglists '([& exprs])}  +  "Math operator. Interpose `+` between `exprs` and wrap in parentheses." (math-operator :+))
-(def ^{:arglists '([& exprs])}  -  "Math operator. Interpose `-` between `exprs` and wrap in parentheses." (math-operator :-))
-(def ^{:arglists '([& exprs])}  /  "Math operator. Interpose `/` between `exprs` and wrap in parentheses." (math-operator :/))
-(def ^{:arglists '([& exprs])}  *  "Math operator. Interpose `*` between `exprs` and wrap in parentheses." (math-operator :*))
-(def ^{:arglists '([& exprs])} mod "Math operator. Interpose `%` between `exprs` and wrap in parentheses." (math-operator :%))
-
-(defn inc "Add 1 to `x`."        [x] (+ x 1))
-(defn dec "Subtract 1 from `x`." [x] (- x 1))
 
 (defn format
   "SQL `format` function."
@@ -310,17 +287,19 @@
 (def ^{:arglists '([& exprs])} concat  "SQL `concat` function."  (partial hsql/call :concat))
 
 ;; Etc (Dev Stuff)
+(alter-meta! #'honeysql.core/format assoc :style/indent :defn)
+(alter-meta! #'honeysql.core/call   assoc :style/indent :defn)
 
-(extend-protocol pretty/PrettyPrintable
+(extend-protocol PrettyPrintable
   honeysql.types.SqlCall
   (pretty [{fn-name :name, args :args, :as this}]
-    (with-meta (apply list `hsql/call fn-name args)
+    (with-meta (apply list 'hsql/call fn-name args)
       (meta this))))
 
 (defmethod print-method honeysql.types.SqlCall
   [call writer]
   (print-method (pretty/pretty call) writer))
 
-(defmethod pprint/simple-dispatch honeysql.types.SqlCall
+(defmethod clojure.pprint/simple-dispatch honeysql.types.SqlCall
   [call]
-  (pprint/write-out (pretty/pretty call)))
+  (clojure.pprint/write-out (pretty/pretty call)))

@@ -1,7 +1,9 @@
+/* eslint-disable react/prop-types */
 import React, { useCallback } from "react";
 import PropTypes from "prop-types";
 import { iconPropTypes } from "metabase/components/Icon";
 import { ChartCaptionRoot } from "./ChartCaption.styled";
+import { formatTitle } from "../../lib/formatting";
 
 const propTypes = {
   series: PropTypes.array.isRequired,
@@ -17,8 +19,9 @@ const ChartCaption = ({
   icon,
   actionButtons,
   onChangeCardAndRun,
+  dashcard,
 }) => {
-  const title = settings["card.title"] ?? series[0].card.name;
+  const title = formatTitle(settings["card.title"] || series[0].card.name);
   const description = settings["card.description"];
   const data = series._raw || series;
   const card = data[0].card;
@@ -43,6 +46,7 @@ const ChartCaption = ({
       icon={icon}
       actionButtons={actionButtons}
       onSelectTitle={canSelectTitle ? handleSelectTitle : undefined}
+      dashcard={dashcard}
     />
   );
 };

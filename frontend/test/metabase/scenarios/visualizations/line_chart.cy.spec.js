@@ -1,14 +1,7 @@
-import {
-  restore,
-  visitQuestionAdhoc,
-  popover,
-  visitDashboard,
-} from "__support__/e2e/cypress";
+import { restore, visitQuestionAdhoc, popover } from "__support__/e2e/cypress";
+import { SAMPLE_DATASET } from "__support__/e2e/cypress_sample_dataset";
 
-import { SAMPLE_DB_ID } from "__support__/e2e/cypress_data";
-import { SAMPLE_DATABASE } from "__support__/e2e/cypress_sample_database";
-
-const { ORDERS, ORDERS_ID, PRODUCTS, PRODUCTS_ID } = SAMPLE_DATABASE;
+const { ORDERS, ORDERS_ID, PRODUCTS, PRODUCTS_ID } = SAMPLE_DATASET;
 
 const Y_AXIS_RIGHT_SELECTOR = ".axis.yr";
 
@@ -19,21 +12,25 @@ const testQuery = {
     aggregation: [["count"]],
     breakout: [["datetime-field", ["field-id", ORDERS.CREATED_AT], "month"]],
   },
-  database: SAMPLE_DB_ID,
+  database: 1,
 };
 
 describe("scenarios > visualizations > line chart", () => {
   beforeEach(() => {
     restore();
     cy.signInAsNormalUser();
+    cy.server();
   });
 
   it("should be able to change y axis position (metabase#13487)", () => {
+    cy.route("POST", "/api/dataset").as("dataset");
+
     visitQuestionAdhoc({
       dataset_query: testQuery,
       display: "line",
     });
 
+    cy.wait("@dataset");
     cy.findByText("Settings").click();
     cy.findByText("Right").click();
     cy.get(Y_AXIS_RIGHT_SELECTOR);
@@ -55,7 +52,7 @@ describe("scenarios > visualizations > line chart", () => {
           ],
           breakout: [["field", ORDERS.CREATED_AT, { "temporal-unit": "year" }]],
         },
-        database: SAMPLE_DB_ID,
+        database: 1,
       },
       display: "line",
       visualization_settings: {
@@ -75,7 +72,7 @@ describe("scenarios > visualizations > line chart", () => {
     visitQuestionAdhoc({
       display: "line",
       dataset_query: {
-        database: SAMPLE_DB_ID,
+        database: 1,
         type: "query",
         query: {
           "source-table": PRODUCTS_ID,
@@ -100,7 +97,7 @@ describe("scenarios > visualizations > line chart", () => {
   it("should correctly display tooltip values when X-axis is numeric and style is 'Ordinal' (metabase#15998)", () => {
     visitQuestionAdhoc({
       dataset_query: {
-        database: SAMPLE_DB_ID,
+        database: 1,
         query: {
           "source-table": ORDERS_ID,
           aggregation: [
@@ -121,7 +118,6 @@ describe("scenarios > visualizations > line chart", () => {
         "graph.metrics": ["count", "sum", "avg"],
       },
     });
-
     cy.get(".Visualization .enable-dots")
       .last()
       .find(".dot")
@@ -144,7 +140,7 @@ describe("scenarios > visualizations > line chart", () => {
             "SELECT '2020-03-01'::date as date, 'cat1' as category, 23 as value\nUNION ALL\nSELECT '2020-03-01'::date, '', 44\nUNION ALL\nSELECT  '2020-03-01'::date, 'cat3', 58\n\nUNION ALL\n\nSELECT '2020-03-02'::date as date, 'cat1' as category, 20 as value\nUNION ALL\nSELECT '2020-03-02'::date, '', 50\nUNION ALL\nSELECT  '2020-03-02'::date, 'cat3', 58",
           "template-tags": {},
         },
-        database: SAMPLE_DB_ID,
+        database: 1,
       },
       display: "line",
       visualization_settings: {
@@ -191,7 +187,7 @@ describe("scenarios > visualizations > line chart", () => {
           `,
           "template-tags": {},
         },
-        database: SAMPLE_DB_ID,
+        database: 1,
       },
       display: "line",
     });
@@ -201,7 +197,7 @@ describe("scenarios > visualizations > line chart", () => {
       .should("have.length", 2);
   });
 
-  describe("tooltip of combined dashboard cards (multi-series) should show the correct column title (metabase#16249", () => {
+  describe.skip("tooltip of combined dashboard cards (multi-series) should show the correct column title (metabase#16249", () => {
     const RENAMED_FIRST_SERIES = "Foo";
     const RENAMED_SECOND_SERIES = "Bar";
 
@@ -232,7 +228,7 @@ describe("scenarios > visualizations > line chart", () => {
               firstCardId: question1Id,
               secondCardId: question2Id,
             });
-            visitDashboard(dashboardId);
+            cy.visit(`/dashboard/${dashboardId}`);
 
             // Rename both series
             renameSeries([
@@ -282,7 +278,7 @@ describe("scenarios > visualizations > line chart", () => {
               secondCardId: question2Id,
             });
 
-            visitDashboard(dashboardId);
+            cy.visit(`/dashboard/${dashboardId}`);
 
             renameSeries([
               ["16249_Q3", RENAMED_FIRST_SERIES],
@@ -397,7 +393,7 @@ describe("scenarios > visualizations > line chart", () => {
     beforeEach(() => {
       visitQuestionAdhoc({
         dataset_query: {
-          database: SAMPLE_DB_ID,
+          database: 1,
           query: {
             "source-table": PRODUCTS_ID,
             aggregation: [["avg", ["field", PRODUCTS.PRICE, null]]],
@@ -441,5 +437,5 @@ function showTooltipForFirstCircleInSeries(series_index) {
     .as("firstSeries")
     .find("circle")
     .first()
-    .trigger("mousemove", { force: true });
+    .realHover();
 }

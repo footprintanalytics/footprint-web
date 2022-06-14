@@ -1,15 +1,14 @@
-import styled from "@emotion/styled";
+import styled from "styled-components";
 import { color } from "metabase/lib/colors";
 import Icon from "metabase/components/Icon";
-import Button from "metabase/core/components/Button";
 
-export const TimelineContainer = styled.ul`
+export const TimelineContainer = styled.div`
   position: relative;
   margin-left: ${props => props.leftShift}px;
   margin-bottom: ${props => props.bottomShift}px;
 `;
 
-export const TimelineItem = styled.li`
+export const TimelineItem = styled.div`
   display: flex;
   align-items: start;
   justify-content: start;
@@ -31,17 +30,10 @@ export const ItemBody = styled.div`
 
 export const ItemHeader = styled.div`
   font-weight: 700;
-  display: flex;
-  justify-content: space-between;
-  align-items: start;
-
-  ${Button} {
-    padding: 0;
-  }
 `;
 
 export const Timestamp = styled.time`
-  color: ${color("text-medium")};
+  color: ${color("text-medium")}
   font-size: 0.875em;
   padding-bottom: 0.5rem;
 `;

@@ -2,15 +2,18 @@
 import React, { Component } from "react";
 import { connect } from "react-redux";
 import { t } from "ttag";
+import { Flex } from "grid-styled";
 
 import Icon from "metabase/components/Icon";
-import Link from "metabase/core/components/Link";
+import Link from "metabase/components/Link";
 import ModalContent from "metabase/components/ModalContent";
 import CreateDashboardModal from "metabase/components/CreateDashboardModal";
 import DashboardPicker from "metabase/containers/DashboardPicker";
 
 import * as Urls from "metabase/lib/urls";
-import { LinkContent } from "./AddToDashSelectDashModal.styled";
+
+import type { Dashboard as DashboardType } from "metabase-types/types/Dashboard";
+import type { Card } from "metabase-types/types/Card";
 
 function mapStateToProps(state) {
   return {
@@ -18,19 +21,22 @@ function mapStateToProps(state) {
   };
 }
 
-class AddToDashSelectDashModal extends Component {
+@connect(mapStateToProps)
+export default class AddToDashSelectDashModal extends Component {
   state = {
     shouldCreateDashboard: false,
   };
 
-  navigateToDashboard = dashboard => {
-    const { card, onChangeLocation } = this.props;
+  props: {
+    card: Card,
+    onClose: () => void,
+    onChangeLocation: string => void,
+    createDashboard: DashboardType => any,
+  };
 
-    onChangeLocation(
-      Urls.dashboard(dashboard, {
-        editMode: true,
-        addCardWithId: card.id,
-      }),
+  navigateToDashboard = dashboard => {
+    this.props.onChangeLocation(
+      Urls.dashboard(dashboard, { addCardWithId: this.props.card.id }),
     );
   };
 
@@ -52,11 +58,7 @@ class AddToDashSelectDashModal extends Component {
       return (
         <ModalContent
           id="AddToDashSelectDashModal"
-          title={
-            this.props.card.dataset
-              ? t`Add this model to a dashboard`
-              : t`Add this question to a dashboard`
-          }
+          title={t`Add this query to a dashboard`}
           onClose={this.props.onClose}
         >
           <DashboardPicker onChange={this.onDashboardSelected} />
@@ -64,15 +66,13 @@ class AddToDashSelectDashModal extends Component {
             mt={1}
             onClick={() => this.setState({ shouldCreateDashboard: true })}
           >
-            <LinkContent>
+            <Flex align="center" className="text-brand" py={2}>
               <Icon name="add" mx={1} bordered />
               <h4>{t`Create a new dashboard`}</h4>
-            </LinkContent>
+            </Flex>
           </Link>
         </ModalContent>
       );
     }
   }
 }
-
-export default connect(mapStateToProps)(AddToDashSelectDashModal);

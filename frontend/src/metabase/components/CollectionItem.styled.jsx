@@ -1,6 +1,6 @@
-import styled from "@emotion/styled";
+import styled from "styled-components";
 import Icon from "metabase/components/Icon";
-import Link from "metabase/core/components/Link";
+import Link from "metabase/components/Link";
 import { space } from "metabase/styled-components/theme";
 import { color } from "metabase/lib/colors";
 
@@ -24,7 +24,7 @@ export const IconContainer = styled.div`
   width: 42px;
   background-color: ${props => color(props.color || "bg-dark")};
   margin-right: ${space(1)};
-  border-radius: 6px;
+  border-radius: 4px;
 `;
 
 export const CardContent = styled.div`

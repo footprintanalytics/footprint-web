@@ -1,10 +1,4 @@
-import {
-  restore,
-  sidebar,
-  visualize,
-  startNewQuestion,
-  summarize,
-} from "__support__/e2e/cypress";
+import { restore, sidebar, visualize } from "__support__/e2e/cypress";
 import { USERS } from "__support__/e2e/cypress_data";
 
 const { admin } = USERS;
@@ -23,7 +17,7 @@ describe("metabase-smoketest > admin", () => {
       cy.visit("/");
       cy.findByText("Welcome to Metabase");
       cy.url().should("not.include", "login");
-      cy.findByTextEnsureVisible("Let's get started").click();
+      cy.findByText("Let's get started").click();
 
       // Language
 
@@ -38,7 +32,7 @@ describe("metabase-smoketest > admin", () => {
       cy.findByLabelText("First name").type(admin.first_name);
       cy.findByLabelText("Last name").type(admin.last_name);
       cy.findByLabelText("Email").type(admin.email);
-      cy.findByLabelText("Company or team name").type("Epic Team");
+      cy.findByLabelText("Your company or team name").type("Epic Team");
 
       cy.findByLabelText("Create a password")
         .clear()
@@ -53,14 +47,14 @@ describe("metabase-smoketest > admin", () => {
       cy.findByText("Add your data");
       cy.findByText("I'll add my data later");
 
-      cy.findByText("Show more options").click();
+      cy.findByText("Select a database").click();
       cy.findByText("H2").click();
-      cy.findByLabelText("Display name").type("Metabase H2");
+      cy.findByLabelText("Name").type("Metabase H2");
 
       const dbFilename = "frontend/test/__runner__/empty.db";
       const dbPath = Cypress.config("fileServerFolder") + "/" + dbFilename;
       cy.findByLabelText("Connection String").type(`file:${dbPath}`);
-      cy.findByText("Connect database").click();
+      cy.findByText("Next").click();
 
       // Turns off anonymous data collection
       cy.findByLabelText(
@@ -69,7 +63,7 @@ describe("metabase-smoketest > admin", () => {
       cy.findByText("All collection is completely anonymous.").should(
         "not.exist",
       );
-      cy.findByText("Finish").click();
+      cy.findByText("Next").click();
 
       // Finish & Subscribe
 
@@ -89,14 +83,14 @@ describe("metabase-smoketest > admin", () => {
 
       // Following section is repeated-- turn into callback function?
       // Also, selecting Metabase H2 doesn't do anything
-      cy.findByText("New").click();
+      cy.findByText("Ask a question").click();
 
-      cy.findByText("Question");
-      cy.findByText("SQL query");
+      cy.findByText("Custom question");
+      cy.findByText("Native query");
 
-      cy.findByText("Question").click();
-      cy.findByTextEnsureVisible("Sample Database").click();
-      cy.findByTextEnsureVisible("People").click();
+      cy.findByText("Simple question").click();
+      cy.findByText("Sample Dataset").click();
+      cy.findByText("People").click();
 
       cy.findByText("Save");
 
@@ -107,8 +101,8 @@ describe("metabase-smoketest > admin", () => {
         .last()
         .click();
       cy.get("input[type='text']").type("{selectall}{del}5");
-      cy.findByText("days").click();
-      cy.findByText("years").click();
+      cy.findByText("Days").click();
+      cy.findByText("Years").click();
       sidebar()
         .findByText("Add filter")
         .click();
@@ -155,9 +149,16 @@ describe("metabase-smoketest > admin", () => {
     });
 
     it.skip("should add a simple JOINed question as admin", () => {
-      startNewQuestion();
-      cy.findByTextEnsureVisible("Sample Database").click();
-      cy.findByTextEnsureVisible("Orders").click();
+      cy.visit("/");
+      cy.findByText("Ask a question");
+
+      cy.findByText("Ask a question").click();
+      cy.findByText("Simple question").click();
+      cy.findByText("Sample Dataset").click();
+      cy.findByText("Orders").click();
+
+      // Join tables
+      cy.icon("notebook").click();
 
       cy.findByText("Data");
       cy.findByText("Showing").should("not.exist");
@@ -189,17 +190,23 @@ describe("metabase-smoketest > admin", () => {
     });
 
     it("should add a question with a default line visualization as admin", () => {
-      startNewQuestion();
-      cy.findByTextEnsureVisible("Sample Database").click();
-      cy.findByTextEnsureVisible("Orders").click();
+      cy.visit("/");
+      cy.findByText("Ask a question").click();
 
-      visualize();
+      cy.findByText("Native query");
+
+      cy.findByText("Ask a question").click();
+      cy.findByText("Simple question").click();
+      cy.findByText("Sample Dataset").click();
+      cy.findByText("Orders").click();
 
       cy.findByText("Product ID");
       cy.findByText("Pick your data").should("not.exist");
 
       // Summarize by date ordered
-      summarize();
+      cy.findAllByText("Summarize")
+        .first()
+        .click();
       sidebar()
         .contains("Created At")
         .click();
@@ -223,7 +230,7 @@ describe("metabase-smoketest > admin", () => {
       cy.visit("/");
       // New dashboard
       cy.icon("add").click();
-      cy.findByText("Dashboard").click();
+      cy.findByText("New dashboard").click();
 
       cy.findByText("Which collection should this go in?");
 
@@ -322,13 +329,13 @@ describe("metabase-smoketest > admin", () => {
         // =================
         // should create my own question as user
         // =================
-        cy.findByText("New").click();
+        cy.findByText("Ask a question").click();
 
-        cy.findByText("SQL query");
+        cy.findByText("Native query");
 
-        cy.findByText("Visual question").click();
-        cy.findByTextEnsureVisible("Sample Database").click();
-        cy.findByTextEnsureVisible("Reviews").click();
+        cy.findByText("Simple question").click();
+        cy.findByText("Sample Dataset").click();
+        cy.findByText("Reviews").click();
 
         cy.get(".Button")
           .findByText("Summarize")
@@ -360,7 +367,7 @@ describe("metabase-smoketest > admin", () => {
         // should create my own dashboard as user
         // =================
         cy.icon("add").click();
-        cy.findByText("Dashboard").click();
+        cy.findByText("New dashboard").click();
         cy.findByLabelText("Name").type("New User Demo Dash");
         cy.findByLabelText("Description").type("This is my own demo dash!");
         cy.get(".ModalBody")

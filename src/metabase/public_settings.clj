@@ -1,18 +1,16 @@
 (ns metabase.public-settings
-  (:require [cheshire.core :as json]
-            [clj-http.client :as http]
-            [clojure.core.memoize :as memoize]
-            [clojure.string :as str]
+  (:require [clojure.string :as str]
             [clojure.tools.logging :as log]
             [java-time :as t]
             [metabase.config :as config]
+            [metabase.driver :as driver]
+            [metabase.driver.util :as driver.u]
             [metabase.models.setting :as setting :refer [defsetting]]
             [metabase.plugins.classloader :as classloader]
             [metabase.public-settings.premium-features :as premium-features]
             [metabase.util :as u]
-            [metabase.util.fonts :as u.fonts]
             [metabase.util.i18n :as i18n :refer [available-locales-with-names deferred-tru trs tru]]
-            [metabase.util.password :as u.password]
+            [metabase.util.password :as password]
             [toucan.db :as db])
   (:import java.util.UUID))
 
@@ -23,8 +21,8 @@
   (boolean (setting/get :google-auth-client-id)))
 
 (defn- ldap-configured? []
-  (classloader/require 'metabase.integrations.ldap)
-  ((resolve 'metabase.integrations.ldap/ldap-configured?)))
+  (do (classloader/require 'metabase.integrations.ldap)
+      ((resolve 'metabase.integrations.ldap/ldap-configured?))))
 
 (defn- ee-sso-configured? []
   (u/ignore-exceptions
@@ -55,31 +53,17 @@
   :type       :timestamp
   :default    nil)
 
-(defsetting startup-time-millis
-  (deferred-tru "The startup time in milliseconds")
-  :visibility :public
-  :type       :double
-  :default    0.0)
-
 (defsetting site-name
   (deferred-tru "The name used for this instance of Metabase.")
   :default "Metabase")
 
-;; `::uuid-nonce` is a Setting that sets a site-wide random UUID value the first time it is fetched.
-(defmethod setting/get-value-of-type ::uuid-nonce
-  [_ setting]
-  (or (setting/get-value-of-type :string setting)
+(defn- uuid-nonce
+  "Getter for settings that should be set to a UUID the first time they are fetched."
+  [setting]
+  (or (setting/get-string setting)
       (let [value (str (UUID/randomUUID))]
-        (setting/set-value-of-type! :string setting value)
+        (setting/set-string! setting value)
         value)))
-
-(defmethod setting/set-value-of-type! ::uuid-nonce
-  [_ setting new-value]
-  (setting/set-value-of-type! :string setting new-value))
-
-(defmethod setting/default-tag-for-type ::uuid-nonce
-  [_]
-  `String)
 
 (defsetting site-uuid
   ;; Don't i18n this docstring because it's not user-facing! :)
@@ -88,18 +72,35 @@
   :visibility :internal
   :setter     :none
   ;; magic getter will either fetch value from DB, or if no value exists, set the value to a random UUID.
-  :type       ::uuid-nonce)
+  :getter     #(uuid-nonce :site-uuid))
 
-(defsetting site-uuid-for-premium-features-token-checks
-  "In the interest of respecting everyone's privacy and keeping things as anonymous as possible we have a *different*
-  site-wide UUID that we use for the EE/premium features token feature check API calls. It works in fundamentally the
-  same way as [[site-uuid]] but should only be used by the token check logic
-  in [[metabase.public-settings.premium-features/fetch-token-status]]. (`site-uuid` is used for anonymous
-  analytics/stats and if we sent it along with the premium features token check API request it would no longer be
-  anonymous.)"
-  :visibility :internal
+(defsetting analytics-uuid
+  (str (deferred-tru "Unique identifier to be used in Snowplow analytics, to identify this instance of Metabase.")
+       " "
+       (deferred-tru "This is a public setting since some analytics events are sent prior to initial setup."))
+  :visibility :public
   :setter     :none
-  :type       ::uuid-nonce)
+  :getter     #(uuid-nonce :analytics-uuid))
+
+(defn- first-user-creation
+  "Returns the timestamp at which the first user was created."
+  []
+  (:min (db/select-one ['User [:%min.date_joined :min]])))
+
+(defsetting instance-creation
+  (deferred-tru "The approximate timestamp at which this instance of Metabase was created, for inclusion in analytics.")
+  :visibility :public
+  :type       :timestamp
+  :setter     :none
+  :getter     (fn []
+                (if-let [value (setting/get-timestamp :instance-creation)]
+                  value
+                  ;; For instances that were started before this setting was added (in 0.41.3), use the creation
+                  ;; timestamp of the first user. For all new instances, use the timestamp at which this setting
+                  ;; is first read.
+                  (do (setting/set-timestamp! :instance-creation (or (first-user-creation)
+                                                                     (java-time/offset-date-time)))
+                      (setting/get-timestamp :instance-creation)))))
 
 (defn- normalize-site-url [^String s]
   (let [ ;; remove trailing slashes
@@ -113,18 +114,18 @@
       (throw (ex-info (tru "Invalid site URL: {0}" (pr-str s)) {:url (pr-str s)})))
     s))
 
-(declare redirect-all-requests-to-https!)
+(declare redirect-all-requests-to-https)
 
 ;; This value is *guaranteed* to never have a trailing slash :D
 ;; It will also prepend `http://` to the URL if there's no protocol when it comes in
 (defsetting site-url
-  (deferred-tru
-   (str "This URL is used for things like creating links in emails, auth redirects, and in some embedding scenarios, "
-        "so changing it could break functionality or get you locked out of this instance."))
+  (str (deferred-tru "This URL is used for things like creating links in emails, auth redirects,")
+       " "
+       (deferred-tru "and in some embedding scenarios, so changing it could break functionality or get you locked out of this instance."))
   :visibility :public
   :getter (fn []
             (try
-              (some-> (setting/get-value-of-type :string :site-url) normalize-site-url)
+              (some-> (setting/get-string :site-url) normalize-site-url)
               (catch clojure.lang.ExceptionInfo e
                 (log/error e (trs "site-url is invalid; returning nil for now. Will be reset on next request.")))))
   :setter (fn [new-value]
@@ -132,20 +133,20 @@
                   https?    (some-> new-value (str/starts-with?  "https:"))]
               ;; if the site URL isn't HTTPS then disable force HTTPS redirects if set
               (when-not https?
-                (redirect-all-requests-to-https! false))
-              (setting/set-value-of-type! :string :site-url new-value))))
+                (redirect-all-requests-to-https false))
+              (setting/set-string! :site-url new-value))))
 
 (defsetting site-locale
-  (deferred-tru
-    (str "The default language for all users across the Metabase UI, system emails, pulses, and alerts. "
-         "Users can individually override this default language from their own account settings."))
+  (str (deferred-tru "The default language for all users across the Metabase UI, system emails, pulses, and alerts.")
+       " "
+       (deferred-tru "Users can individually override this default language from their own account settings."))
   :default    "en"
   :visibility :public
   :setter     (fn [new-value]
                 (when new-value
                   (when-not (i18n/available-locale? new-value)
                     (throw (ex-info (tru "Invalid locale {0}" (pr-str new-value)) {:status-code 400}))))
-                (setting/set-value-of-type! :string :site-locale (some-> new-value i18n/normalized-locale-string))))
+                (setting/set-string! :site-locale (some-> new-value i18n/normalized-locale-string))))
 
 (defsetting admin-email
   (deferred-tru "The email address users should be referred to if they encounter a problem.")
@@ -160,13 +161,6 @@
 (defsetting ga-code
   (deferred-tru "Google Analytics tracking code.")
   :default    "UA-60817802-1"
-  :visibility :public)
-
-(defsetting ga-enabled
-  (deferred-tru "Boolean indicating whether analytics data should be sent to Google Analytics on the frontend")
-  :type       :boolean
-  :setter     :none
-  :getter     (fn [] (and config/is-prod? (anon-tracking-enabled)))
   :visibility :public)
 
 (defsetting map-tile-server-url
@@ -197,33 +191,14 @@
   :visibility :public)
 
 (defsetting enable-nested-queries
-  (deferred-tru "Allow using a saved question or Model as the source for other queries?")
+  (deferred-tru "Allow using a saved question as the source for other queries?")
   :type    :boolean
-  :default true
-  :visibility :authenticated)
+  :default true)
 
 (defsetting enable-query-caching
   (deferred-tru "Enabling caching will save the results of queries that take a long time to run.")
   :type    :boolean
   :default false)
-
-(defsetting persisted-models-enabled
-  (deferred-tru "Allow persisting models into the source database.")
-  :type       :boolean
-  :default    false
-  :visibility :authenticated)
-
-(defsetting persisted-model-refresh-interval-hours
-  (deferred-tru "Hour interval to refresh persisted models.")
-  :type       :integer
-  :default    6
-  :visibility :admin)
-
-(defsetting persisted-model-refresh-anchor-time
-  (deferred-tru "Anchor time to begin refreshing persisted models.")
-  :type       :string
-  :default    "00:00"
-  :visibility :admin)
 
 (def ^:private ^:const global-max-caching-kb
   "Although depending on the database, we can support much larger cached values (1GB for PG, 2GB for H2 and 4GB for
@@ -250,7 +225,7 @@
                         " "
                         (tru "Values greater than {0} ({1}) are not allowed."
                              global-max-caching-kb (u/format-bytes (* global-max-caching-kb 1024)))))))
-             (setting/set-value-of-type! :integer :query-caching-max-kb new-value)))
+             (setting/set-integer! :query-caching-max-kb new-value)))
 
 (defsetting query-caching-max-ttl
   (deferred-tru "The absolute maximum time to keep any cached query results, in seconds.")
@@ -264,55 +239,41 @@
   :default 60.0)
 
 (defsetting query-caching-ttl-ratio
-  (deferred-tru
-   (str "To determine how long each saved question''s cached result should stick around, we take the query''s average "
-        "execution time and multiply that by whatever you input here. So if a query takes on average 2 minutes to run, "
-        "and you input 10 for your multiplier, its cache entry will persist for 20 minutes."))
+  (str (deferred-tru "To determine how long each saved question''s cached result should stick around, we take the query''s average execution time and multiply that by whatever you input here.")
+       " "
+       (deferred-tru "So if a query takes on average 2 minutes to run, and you input 10 for your multiplier, its cache entry will persist for 20 minutes."))
   :type    :integer
   :default 10)
-
-(defsetting deprecation-notice-version
-  (deferred-tru "Metabase version for which a notice about usage of deprecated features has been shown.")
-  :visibility :admin)
 
 (defsetting application-name
   (deferred-tru "This will replace the word \"Metabase\" wherever it appears.")
   :visibility :public
   :type       :string
-  :default    "Metabase")
+  :default    "Footprint")
 
 (defsetting application-colors
-  (deferred-tru
-   (str "These are the primary colors used in charts and throughout Metabase. "
-        "You might need to refresh your browser to see your changes take effect."))
+  (deferred-tru "These are the primary colors used in charts and throughout Metabase. You might need to refresh your browser to see your changes take effect.")
   :visibility :public
   :type       :json
   :default    {})
 
-(defsetting application-font
-  (deferred-tru
-   (str "This is the primary font used in charts and throughout Metabase. "
-        "You might need to refresh your browser to see your changes take effect."))
-  :visibility :public
-  :type       :string
-  :default    "Lato"
-  :setter (fn [new-value]
-              (when new-value
-                (when-not (u.fonts/available-font? new-value)
-                  (throw (ex-info (tru "Invalid font {0}" (pr-str new-value)) {:status-code 400}))))
-              (setting/set-value-of-type! :string :application-font new-value)))
-
 (defn application-color
   "The primary color, a.k.a. brand color"
   []
-  (or (:brand (setting/get-value-of-type :json :application-colors)) "#509EE3"))
+  (or (:brand (setting/get-json :application-colors)) "#7355FA"))
 
 (defn secondary-chart-color
   "The first 'Additional chart color'"
   []
-  (or (:accent3 (setting/get-value-of-type :json :application-colors)) "#EF8C8C"))
+  (or (:accent3 (setting/get-json :application-colors)) "#EF8C8C"))
 
 (defsetting application-logo-url
+  (deferred-tru "For best results, use an SVG file with a transparent background.")
+  :visibility :public
+  :type       :string
+  :default    "app/assets/img/logo.svg")
+
+(defsetting application-logo-slogan-url
   (deferred-tru "For best results, use an SVG file with a transparent background.")
   :visibility :public
   :type       :string
@@ -322,7 +283,7 @@
   (deferred-tru "The url or image that you want to use as the favicon.")
   :visibility :public
   :type       :string
-  :default    "app/assets/img/favicon.ico")
+  :default    "/app/assets/img/favicon.ico")
 
 (defsetting enable-password-login
   (deferred-tru "Allow logging in by email and password.")
@@ -332,23 +293,19 @@
   :getter     (fn []
                 ;; if `:enable-password-login` has an *explict* (non-default) value, and SSO is configured, use that;
                 ;; otherwise this always returns true.
-                (let [v (setting/get-value-of-type :boolean :enable-password-login)]
+                (let [v (setting/get-boolean :enable-password-login)]
                   (if (and (some? v)
                            (sso-configured?))
                     v
                     true))))
 
 (defsetting breakout-bins-num
-  (deferred-tru
-    (str "When using the default binning strategy and a number of bins is not provided, "
-         "this number will be used as the default."))
+  (deferred-tru "When using the default binning strategy and a number of bins is not provided, this number will be used as the default.")
   :type :integer
   :default 8)
 
 (defsetting breakout-bin-width
-  (deferred-tru
-   (str "When using the default binning strategy for a field of type Coordinate (such as Latitude and Longitude), "
-        "this number will be used as the default bin width (in degrees)."))
+  (deferred-tru "When using the default binning strategy for a field of type Coordinate (such as Latitude and Longitude), this number will be used as the default bin width (in degrees).")
   :type :double
   :default 10.0)
 
@@ -365,25 +322,13 @@
   :visibility :authenticated)
 
 (defsetting show-homepage-data
-  (deferred-tru
-   (str "Whether or not to display data on the homepage. "
-        "Admins might turn this off in order to direct users to better content than raw data"))
+  (deferred-tru "Whether or not to display data on the homepage. Admins might turn this off in order to direct users to better content than raw data")
   :type       :boolean
   :default    true
   :visibility :authenticated)
 
 (defsetting show-homepage-xrays
-  (deferred-tru
-    (str "Whether or not to display x-ray suggestions on the homepage. They will also be hidden if any dashboards are "
-         "pinned. Admins might hide this to direct users to better content than raw data"))
-  :type       :boolean
-  :default    true
-  :visibility :authenticated)
-
-(defsetting show-homepage-pin-message
-  (deferred-tru
-   (str "Whether or not to display a message about pinning dashboards. It will also be hidden if any dashboards are "
-        "pinned. Admins might hide this to direct users to better content than raw data"))
+  (deferred-tru "Whether or not to display x-ray suggestions on the homepage. They will also be hidden if any dashboards are pinned. Admins might hide this to direct users to better content than raw data")
   :type       :boolean
   :default    true
   :visibility :authenticated)
@@ -391,7 +336,7 @@
 (defsetting source-address-header
   (deferred-tru "Identify the source of HTTP requests by this header's value, instead of its remote address.")
   :default "X-Forwarded-For"
-  :getter  (fn [] (some-> (setting/get-value-of-type :string :source-address-header)
+  :getter  (fn [] (some-> (setting/get-string :source-address-header)
                           u/lower-case-en)))
 
 (defn remove-public-uuid-if-public-sharing-is-disabled
@@ -403,11 +348,14 @@
     (assoc object :public_uuid nil)
     object))
 
-(defsetting available-fonts
-  "Available fonts"
-  :visibility :public
-  :setter     :none
-  :getter     u.fonts/available-fonts)
+(defn- short-timezone-name [timezone-id]
+  (let [^java.time.ZoneId zone (if (seq timezone-id)
+                                 (t/zone-id timezone-id)
+                                 (t/zone-id))]
+    (.getDisplayName
+     zone
+     java.time.format.TextStyle/SHORT
+     (java.util.Locale/getDefault))))
 
 (defsetting available-locales
   "Available i18n locales"
@@ -421,8 +369,14 @@
   :setter     :none
   :getter     (comp sort t/available-zone-ids))
 
-(defsetting has-sample-database?
-  "Whether this instance has a Sample Database database"
+(defsetting engines
+  "Available database engines"
+  :visibility :public
+  :setter     :none
+  :getter     driver.u/available-drivers-info)
+
+(defsetting has-sample-dataset?
+  "Whether this instance has a Sample Dataset database"
   :visibility :authenticated
   :setter     :none
   :getter     (fn [] (db/exists? 'Database, :is_sample true)))
@@ -431,13 +385,19 @@
   "Current password complexity requirements"
   :visibility :public
   :setter     :none
-  :getter     u.password/active-password-complexity)
+  :getter     password/active-password-complexity)
 
 (defsetting session-cookies
   (deferred-tru "When set, enforces the use of session cookies for all users which expire when the browser is closed.")
   :type       :boolean
   :visibility :public
   :default    nil)
+
+(defsetting report-timezone-short
+  "Current report timezone abbreviation"
+  :visibility :public
+  :setter     :none
+  :getter     (fn [] (short-timezone-name (driver/report-timezone))))
 
 (defsetting version
   "Metabase's version info"
@@ -471,15 +431,11 @@
                         new-value)
                   (assert (some-> (site-url) (str/starts-with? "https:"))
                           (tru "Cannot redirect requests to HTTPS unless `site-url` is HTTPS.")))
-                (setting/set-value-of-type! :boolean :redirect-all-requests-to-https new-value)))
+                (setting/set-boolean! :redirect-all-requests-to-https new-value)))
 
 (defsetting start-of-week
-  (str
-    (deferred-tru "This will affect things like grouping by week or filtering in GUI queries.")
-    " "
-    (deferred-tru "It won''t affect most SQL queries,")
-    " "
-    (deferred-tru " although it is used to set the WEEK_START session variable in Snowflake."))
+  (deferred-tru "This will affect things like grouping by week or filtering in GUI queries.
+  It won''t affect SQL queries.")
   :visibility :public
   :type       :keyword
   :default    :sunday)
@@ -489,43 +445,3 @@
   :visibility :public
   :type       :integer
   :default    180)
-
-(defsetting cloud-gateway-ips-url
-  "Store URL for fetching the list of Cloud gateway IP addresses"
-  :visibility :internal
-  :setter     :none
-  :default    (str premium-features/store-url "/static/cloud_gateways.json"))
-
-(def ^:private fetch-cloud-gateway-ips-fn
-  (memoize/ttl
-   (fn []
-     (try
-       (-> (http/get (cloud-gateway-ips-url))
-           :body
-           (json/parse-string keyword)
-           :ip_addresses)
-       (catch Exception e
-         (log/error e (trs "Error fetching Metabase Cloud gateway IP addresses:")))))
-   :ttl/threshold (* 1000 60 60 24)))
-
-(defsetting cloud-gateway-ips
-  (deferred-tru "Metabase Cloud gateway IP addresses, to configure connections to DBs behind firewalls")
-  :visibility :public
-  :type       :json
-  :setter     :none
-  :getter     (fn []
-                (when (premium-features/is-hosted?)
-                  (fetch-cloud-gateway-ips-fn))))
-
-(defsetting show-database-syncing-modal
-  (deferred-tru
-    (str "Whether an introductory modal should be shown after the next database connection is added. "
-         "Defaults to false if any non-default database has already finished syncing for this instance."))
-  :visibility :admin
-  :type       :boolean
-  :getter     (fn []
-                (let [v (setting/get-value-of-type :boolean :show-database-syncing-modal)]
-                  (if (nil? v)
-                    (not (db/exists? 'Database :is_sample false, :initial_sync_status "complete"))
-                    ;; frontend should set this value to `true` after the modal has been shown once
-                    v))))

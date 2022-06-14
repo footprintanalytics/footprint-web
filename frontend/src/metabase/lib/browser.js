@@ -1,8 +1,7 @@
 import querystring from "querystring";
 
-function parseQueryStringOptions(s) {
-  const options = querystring.parse(s);
-
+export function parseHashOptions(hash) {
+  const options = querystring.parse(hash.replace(/^#/, ""));
   for (const name in options) {
     if (options[name] === "") {
       options[name] = true;
@@ -10,16 +9,7 @@ function parseQueryStringOptions(s) {
       options[name] = JSON.parse(options[name]);
     }
   }
-
   return options;
-}
-
-export function parseHashOptions(hash) {
-  return parseQueryStringOptions(hash.replace(/^#/, ""));
-}
-
-export function parseSearchOptions(search) {
-  return parseQueryStringOptions(search.replace(/^\?/, ""));
 }
 
 export function stringifyHashOptions(options) {

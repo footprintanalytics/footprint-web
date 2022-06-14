@@ -1,19 +1,36 @@
+/* eslint-disable curly */
 import React from "react";
 
 import _ from "underscore";
 
 const componentStack = [];
-
-const SEPARATOR = " · ";
+const ignoreTitles = ["Dashboard", "Guest", "Question"];
+const SEPARATOR = " - ";
 
 const updateDocumentTitle = _.debounce(() => {
-  document.title = componentStack
-    .sort((a, b) => (a._titleIndex || 0) - (b._titleIndex || 0))
-    .map(component => component._documentTitle)
-    .filter(title => title)
-    .reverse()
-    .join(SEPARATOR);
-});
+  const mainTitle = componentStack[0]._documentTitle;
+
+  let title = mainTitle;
+  if (componentStack.length > 1) {
+    const subTitle = componentStack[componentStack.length - 1]._documentTitle;
+    if (!subTitle || ignoreTitles.includes(subTitle)) return;
+    if (subTitle.includes(" | ")) {
+      title = subTitle;
+    } else {
+      title = subTitle + SEPARATOR + title;
+    }
+  }
+  document.title = title;
+
+  // for SEO
+  try {
+    const ogTitle = document.head.querySelector('meta[property="og:title"]');
+    ogTitle.content = title;
+
+    const mainTitle = document.getElementsByClassName("main-title");
+    mainTitle.forEach(item => (item.innerText = title));
+  } catch (error) {}
+}, 300);
 
 const title = documentTitleOrGetter => ComposedComponent =>
   class extends React.Component {
@@ -54,12 +71,7 @@ const title = documentTitleOrGetter => ComposedComponent =>
           // the title. When that promise resolves, we call
           // `documentTitleOrGetter` again.
           this._documentTitle = result.title;
-          result.refresh?.then(() => this._updateDocumentTitle());
-
-          // Getter can also return a priority index used for sorting the component stack
-          if (result.titleIndex) {
-            this._titleIndex = result.titleIndex;
-          }
+          result.refresh.then(() => this._updateDocumentTitle());
         }
       }
       updateDocumentTitle();
@@ -69,6 +81,13 @@ const title = documentTitleOrGetter => ComposedComponent =>
       return <ComposedComponent {...this.props} />;
     }
   };
+
+export const updateTitle = title => {
+  const r = componentStack.pop();
+  r._documentTitle = title;
+  componentStack.push(r);
+  updateDocumentTitle();
+};
 
 export default title;
 

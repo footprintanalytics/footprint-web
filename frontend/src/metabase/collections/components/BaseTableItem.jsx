@@ -1,29 +1,25 @@
-import React, { useState, useCallback } from "react";
+import React, { useCallback } from "react";
 import PropTypes from "prop-types";
 import moment from "moment";
 
 import { PLUGIN_MODERATION } from "metabase/plugins";
+import { color } from "metabase/lib/colors";
 
 import ItemDragSource from "metabase/containers/dnd/ItemDragSource";
 
 import EntityItem from "metabase/components/EntityItem";
 import DateTime from "metabase/components/DateTime";
 import Tooltip from "metabase/components/Tooltip";
-import ActionMenu from "metabase/collections/components/ActionMenu";
 
-import { color } from "metabase/lib/colors";
+import { ANALYTICS_CONTEXT } from "metabase/collections/constants";
 
 import {
-  ItemCell,
   EntityIconCheckBox,
   ItemLink,
   TableItemSecondaryField,
 } from "./BaseItemsTable.styled";
 
 BaseTableItem.propTypes = {
-  bookmarks: PropTypes.arrayOf(PropTypes.object),
-  createBookmark: PropTypes.func,
-  deleteBookmark: PropTypes.func,
   item: PropTypes.object,
   draggable: PropTypes.bool,
   collection: PropTypes.object,
@@ -31,6 +27,7 @@ BaseTableItem.propTypes = {
   isSelected: PropTypes.bool,
   isPinned: PropTypes.bool,
   linkProps: PropTypes.object,
+  hasBottomBorder: PropTypes.bool,
   onCopy: PropTypes.func,
   onMove: PropTypes.func,
   onDrop: PropTypes.func,
@@ -38,9 +35,6 @@ BaseTableItem.propTypes = {
 };
 
 export function BaseTableItem({
-  bookmarks,
-  createBookmark,
-  deleteBookmark,
   item,
   draggable = true,
   collection = {},
@@ -48,114 +42,109 @@ export function BaseTableItem({
   isSelected,
   isPinned,
   linkProps = {},
+  hasBottomBorder = true,
   onCopy,
   onMove,
   onDrop,
   onToggleSelected,
 }) {
-  const [isHoveringOverRow, setIsHoveringOverRow] = useState(false);
-
   const handleSelectionToggled = useCallback(() => {
     onToggleSelected(item);
   }, [item, onToggleSelected]);
 
+  const handlePin = useCallback(() => {
+    item.setPinned(!isPinned);
+  }, [item, isPinned]);
+
+  const handleMove = useCallback(() => onMove([item]), [item, onMove]);
+  const handleCopy = useCallback(() => onCopy([item]), [item, onCopy]);
+  const handleArchive = useCallback(() => item.setArchived(true), [item]);
+
   const renderRow = useCallback(() => {
-    const canSelect =
-      collection.can_write && typeof onToggleSelected === "function";
+    const canSelect = typeof onToggleSelected === "function";
 
     const lastEditInfo = item["last-edit-info"];
 
     // We don't keep last edit info for pulses
     // TODO Remove ternary when Pulses are gone (metabase#16519-1)
-    const lastEditedBy = getLastEditedBy(lastEditInfo);
+    const lastEditedBy = lastEditInfo
+      ? `${lastEditInfo.name}`
+      : // ? `${lastEditInfo.first_name} ${lastEditInfo.last_name}`
+        "";
     const lastEditedAt = lastEditInfo
-      ? moment(lastEditInfo.timestamp).format("MMMM DD, YYYY")
+      ? moment(lastEditInfo.timestamp).format("YYYY-MM-DD")
       : "";
 
     const testId = isPinned ? "pinned-collection-entry" : "collection-entry";
 
     const trStyles = {
-      height: 48,
+      height: 80,
+      borderBottom: hasBottomBorder ? `1px solid ${color("border")}` : "",
     };
-
-    const icon = { name: item.getIcon().name };
-    if (item.model === "card") {
-      icon.color = color("bg-dark");
-    }
 
     // Table row can be wrapped with ItemDragSource,
     // that only accepts native DOM elements as its children
     // So styled-components can't be used here
     return (
-      <tr
-        onMouseEnter={() => {
-          setIsHoveringOverRow(true);
-        }}
-        onMouseLeave={() => {
-          setIsHoveringOverRow(false);
-        }}
-        key={item.id}
-        data-testid={testId}
-        style={trStyles}
-      >
-        <ItemCell data-testid={`${testId}-type`}>
+      <tr key={item.id} data-testid={testId} style={trStyles}>
+        <td data-testid={`${testId}-type`}>
           <EntityIconCheckBox
             item={item}
             variant="list"
-            icon={icon}
+            iconName={item.getIcon().name}
             pinned={isPinned}
             selectable={canSelect}
             selected={isSelected}
-            disabled={!canSelect}
             onToggleSelected={handleSelectionToggled}
-            showCheckbox={isHoveringOverRow}
           />
-        </ItemCell>
-        <ItemCell data-testid={`${testId}-name`}>
+        </td>
+        <td data-testid={`${testId}-name`}>
           <ItemLink {...linkProps} to={item.getUrl()}>
-            <EntityItem.Name name={item.name} variant="list" />
+            <EntityItem.Name name={item.name} />
             <PLUGIN_MODERATION.ModerationStatusIcon
               status={item.moderated_status}
             />
           </ItemLink>
-        </ItemCell>
-        <ItemCell data-testid={`${testId}-last-edited-by`}>
+        </td>
+        <td data-testid={`${testId}-last-edited-by`}>
           <TableItemSecondaryField>{lastEditedBy}</TableItemSecondaryField>
-        </ItemCell>
-        <ItemCell data-testid={`${testId}-last-edited-at`}>
+        </td>
+        <td data-testid={`${testId}-last-edited-at`}>
           {lastEditInfo && (
             <Tooltip tooltip={<DateTime value={lastEditInfo.timestamp} />}>
               <TableItemSecondaryField>{lastEditedAt}</TableItemSecondaryField>
             </Tooltip>
           )}
-        </ItemCell>
-        <ItemCell>
-          <ActionMenu
-            createBookmark={createBookmark}
-            deleteBookmark={deleteBookmark}
-            bookmarks={bookmarks}
+        </td>
+        <td>
+          <EntityItem.Menu
             item={item}
-            collection={collection}
-            onCopy={onCopy}
-            onMove={onMove}
+            onPin={collection.can_write ? handlePin : null}
+            onMove={
+              collection.can_write && item.setCollection ? handleMove : null
+            }
+            onCopy={item.copy ? handleCopy : null}
+            onArchive={
+              collection.can_write && item.setArchived ? handleArchive : null
+            }
+            ANALYTICS_CONTEXT={ANALYTICS_CONTEXT}
           />
-        </ItemCell>
+        </td>
       </tr>
     );
   }, [
-    bookmarks,
-    createBookmark,
-    deleteBookmark,
-    onToggleSelected,
+    collection,
     item,
     isPinned,
     isSelected,
-    handleSelectionToggled,
-    isHoveringOverRow,
     linkProps,
-    collection,
-    onCopy,
-    onMove,
+    hasBottomBorder,
+    handleArchive,
+    handleCopy,
+    handleMove,
+    handlePin,
+    handleSelectionToggled,
+    onToggleSelected,
   ]);
 
   if (!draggable) {
@@ -173,17 +162,6 @@ export function BaseTableItem({
       {renderRow()}
     </ItemDragSource>
   );
-}
-
-function getLastEditedBy(lastEditInfo) {
-  if (!lastEditInfo) {
-    return "";
-  }
-
-  const name = [lastEditInfo.first_name, lastEditInfo.last_name]
-    .join(" ")
-    .trim();
-  return name || lastEditInfo.email;
 }
 
 export default BaseTableItem;

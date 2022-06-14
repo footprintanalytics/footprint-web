@@ -24,7 +24,6 @@ export default class LoadingAndErrorWrapper extends Component {
     loadingMessages: PropTypes.array,
     messageInterval: PropTypes.number,
     loadingScenes: PropTypes.array,
-    renderError: PropTypes.func,
   };
 
   static defaultProps = {
@@ -33,27 +32,9 @@ export default class LoadingAndErrorWrapper extends Component {
     noBackground: true,
     noWrapper: false,
     showSpinner: true,
-    loadingMessages: [t`Loading...`],
+    loadingMessages: [t`GETTING INSIGHTS...`],
     messageInterval: 6000,
   };
-
-  renderError(contentClassName) {
-    if (this.props.renderError) {
-      return (
-        <div className="py4">
-          {this.props.renderError(this.getErrorMessage())}
-        </div>
-      );
-    }
-
-    return (
-      <div className={contentClassName}>
-        <h2 className="text-normal text-light ie-wrap-content-fix">
-          {this.getErrorMessage()}
-        </h2>
-      </div>
-    );
-  }
 
   getErrorMessage() {
     const { error } = this.props;
@@ -134,16 +115,23 @@ export default class LoadingAndErrorWrapper extends Component {
       return React.Children.only(children);
     }
     return (
-      <div className={this.props.className} style={this.props.style}>
+      <div
+        // id="html2canvas-Dashboard"
+        className={this.props.className}
+        style={this.props.style}
+      >
         {error ? (
-          this.renderError(contentClassName)
+          <div className={contentClassName}>
+            <h2 className="text-normal text-light ie-wrap-content-fix">
+              {this.getErrorMessage()}
+            </h2>
+          </div>
         ) : loading ? (
           <div className={contentClassName}>
             {loadingScenes && loadingScenes[sceneIndex]}
-            {!loadingScenes && showSpinner && <LoadingSpinner />}
-            <h2 className="text-normal text-light mt1">
-              {loadingMessages[messageIndex]}
-            </h2>
+            {!loadingScenes && showSpinner && (
+              <LoadingSpinner message={loadingMessages[messageIndex]} />
+            )}
           </div>
         ) : (
           this.getChildren()

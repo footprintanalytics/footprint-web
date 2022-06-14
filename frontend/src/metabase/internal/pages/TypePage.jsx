@@ -1,4 +1,5 @@
 import React from "react";
+import { Box } from "grid-styled";
 
 import Heading from "metabase/components/type/Heading";
 import Subhead from "metabase/components/type/Subhead";
@@ -6,24 +7,21 @@ import Label from "metabase/components/type/Label";
 import Text from "metabase/components/type/Text";
 
 import Example from "metabase/internal/components/Example";
-import { PageSection } from "./TypePage.styled";
 
 const TypePage = () => (
-  <div className="wrapper wrapper--trim">
+  <Box className="wrapper wrapper--trim">
     <Heading mt="32px">Typography</Heading>
     <Text>Components for headings and text.</Text>
-    <div>
+    <Box>
       <Subhead mt="32px" mb="32px">
         Reference
       </Subhead>
 
       <table className="Table">
         <thead>
-          <tr>
-            <th>Name</th>
-            <th>Size</th>
-            <th>Weight</th>
-          </tr>
+          <th>Name</th>
+          <th>Size</th>
+          <th>Weight</th>
         </thead>
         <tbody>
           <tr>
@@ -72,20 +70,20 @@ const TypePage = () => (
           </tr>
         </tbody>
       </table>
-    </div>
-    <div>
+    </Box>
+    <Box>
       <Subhead mt="32px" mb="32px" id="components">
         Components
       </Subhead>
-      <PageSection>
+      <Box mb={3}>
         <Subhead>Heading</Subhead>
         <Text>Used for page headings, etc</Text>
 
         <Example>
           <Heading>Title o&apos; the page</Heading>
         </Example>
-      </PageSection>
-      <PageSection>
+      </Box>
+      <Box mb={3}>
         <Subhead>Subhead</Subhead>
         <Text>
           A smaller, but still noticeable heading. Good to use for section
@@ -94,8 +92,8 @@ const TypePage = () => (
         <Example>
           <Subhead>An interesting section</Subhead>
         </Example>
-      </PageSection>
-      <PageSection>
+      </Box>
+      <Box mb={3}>
         <Subhead>Label</Subhead>
         <Text>
           A UI label style type element. Good to use for most anything that
@@ -104,9 +102,9 @@ const TypePage = () => (
         <Example>
           <Label>This will do a thing.</Label>
         </Example>
-      </PageSection>
-    </div>
-  </div>
+      </Box>
+    </Box>
+  </Box>
 );
 
 export default TypePage;

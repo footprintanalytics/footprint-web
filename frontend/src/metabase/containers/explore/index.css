@@ -1,0 +1,124 @@
+.explore {
+  padding-bottom: 30px;
+  min-height: 100vh;
+}
+
+.explore__category {
+  width: 100%;
+  background-color: #fff;
+  position: sticky;
+  left: 0;
+  top: 60px;
+  right: 0;
+  z-index: 1;
+}
+
+.explore__wrap {
+  margin: 0 auto;
+  align-items: center;
+}
+
+.explore__category-list {
+  max-width: 1350px;
+  margin: 0 auto;
+  display: flex;
+  align-items: center;
+  height: 60px;
+}
+
+.explore__category-list li {
+  display: flex;
+  align-items: center;
+  margin-right: 80px;
+  cursor: pointer;
+  white-space: nowrap;
+  height: 60px;
+}
+
+.explore__category-list li a {
+  width: 100%;
+}
+
+.explore__category-list--selected {
+  border-bottom: 4px solid #3434b2;
+  color: #313541;
+}
+
+.explore__tag {
+  padding: 20px 0 20px;
+  background-color: white;
+}
+
+.explore__tag_content {
+  max-width: 1350px;
+  margin: 0 auto;
+}
+
+.explore__tag-list {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+}
+
+.explore__tag-list li a {
+  color: #a7aabc;
+}
+
+.explore__tag-list li {
+  border: var(--footprint-border);
+  border-radius: 4px;
+  padding: var(--footprint-spacing-xs) var(--footprint-spacing-s);
+  line-height: 14px;
+  margin-right: var(--footprint-spacing-xs);
+  cursor: pointer;
+}
+
+.explore__tag-list li.explore__tag-list--selected {
+  background-color: #3434b2;
+  border: 0;
+  color: #fff;
+}
+
+.explore__tag-list li.explore__tag-list--selected a {
+  color: #fff;
+}
+
+.explore__list {
+  max-width: 1350px;
+  margin: 0 auto;
+  display: grid;
+  padding: var(--footprint-spacing-m) 0;
+  grid-row-gap: var(--footprint-spacing-m);
+  grid-column-gap: var(--footprint-spacing-m);
+  grid-template-columns: 1fr 1fr 1fr;
+}
+
+.explore__list-item {
+  height: 340px;
+}
+
+.infinite-scroll-component {
+  overflow: initial !important;
+}
+
+.explore__list-create-border {
+  border: 1px dashed var(--footprint-color-border);
+  border-radius: 4px;
+}
+
+.explore__list-create-title {
+  margin-top: 40px;
+}
+
+.explore__search {
+  margin: 20px 0;
+}
+
+.explore__search-button {
+  margin-left: var(--footprint-spacing-xs);
+  height: 40px;
+  display: flex;
+  border-radius: 4px;
+  justify-content: center;
+  align-items: center;
+}

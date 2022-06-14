@@ -22,9 +22,7 @@
          (trs "Task history cleanup successful, rows were deleted")
          (trs "Task history cleanup successful, no rows were deleted"))))))
 
-(jobs/defjob
-  ^{:doc "Delete older TaskHistory rows -- see docstring of `task-history/cleanup-task-history!` for more details."}
-  TaskHistoryCleanup [_]
+(jobs/defjob TaskHistoryCleanup [_]
   (task-history-cleanup!))
 
 (def ^:private job-key     "metabase.task.task-history-cleanup.job")

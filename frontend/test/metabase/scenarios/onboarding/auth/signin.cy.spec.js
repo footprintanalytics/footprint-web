@@ -11,7 +11,6 @@ describe("scenarios > auth > signin", () => {
   beforeEach(() => {
     restore();
     cy.signOut();
-    cy.intercept("POST", "/api/dataset").as("dataset");
   });
 
   it("should redirect to  /auth/login", () => {
@@ -53,24 +52,13 @@ describe("scenarios > auth > signin", () => {
     cy.contains(/[a-z ]+, Bob/i);
   });
 
-  it("should allow toggling of Remember Me", () => {
-    cy.visit("/auth/login");
-
-    // default initial state
-    cy.findByRole("checkbox").should("be.checked");
-
-    cy.findByLabelText("Remember me").click();
-    cy.findByRole("checkbox").should("not.be.checked");
-  });
-
   it("should redirect to a unsaved question after login", () => {
     cy.signInAsAdmin();
     cy.visit("/");
     // Browse data moved to an icon
     browse().click();
-    cy.contains("Sample Database").click();
+    cy.contains("Sample Dataset").click();
     cy.contains("Orders").click();
-    cy.wait("@dataset");
     cy.contains("37.65");
 
     // signout and reload page with question hash in url
@@ -83,13 +71,12 @@ describe("scenarios > auth > signin", () => {
     cy.findByText("Sign in").click();
 
     // order table should load after login
-    cy.wait("@dataset");
     cy.contains("37.65");
   });
 
   sizes.forEach(size => {
     it(`should redirect from /auth/forgot_password back to /auth/login (viewport: ${size}) (metabase#12658)`, () => {
-      if (Array.isArray(size)) {
+      if (Cypress._.isArray(size)) {
         cy.viewport(size[0], size[1]);
       } else {
         cy.viewport(size);
@@ -99,7 +86,7 @@ describe("scenarios > auth > signin", () => {
       cy.url().should("contain", "auth/login");
       cy.findByText("I seem to have forgotten my password").click();
       cy.url().should("contain", "auth/forgot_password");
-      cy.findByText("Back to sign in").click();
+      cy.findByText("Back to login").click();
       cy.url().should("contain", "auth/login");
     });
   });

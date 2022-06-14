@@ -3,7 +3,7 @@
    heuristics."
   (:require [buddy.core.codecs :as codecs]
             [cheshire.core :as json]
-            [clojure.math.combinatorics :as math.combo]
+            [clojure.math.combinatorics :as combo]
             [clojure.string :as str]
             [clojure.tools.logging :as log]
             [clojure.walk :as walk]
@@ -17,7 +17,7 @@
             [metabase.automagic-dashboards.rules :as rules]
             [metabase.automagic-dashboards.visualization-macros :as visualization]
             [metabase.driver :as driver]
-            [metabase.mbql.normalize :as mbql.normalize]
+            [metabase.mbql.normalize :as normalize]
             [metabase.mbql.schema :as mbql.s]
             [metabase.mbql.util :as mbql.u]
             [metabase.models.card :as card :refer [Card]]
@@ -33,7 +33,7 @@
             [metabase.sync.analyze.classify :as classify]
             [metabase.util :as u]
             [metabase.util.date-2 :as u.date]
-            [metabase.util.i18n :as i18n :refer [deferred-tru trs tru]]
+            [metabase.util.i18n :as ui18n :refer [deferred-tru trs tru]]
             [metabase.util.schema :as su]
             [ring.util.codec :as codec]
             [schema.core :as s]
@@ -44,32 +44,23 @@
 (def ^:private ^{:arglists '([field])} id-or-name
   (some-fn :id :name))
 
-(s/defn ->field :- (s/maybe (type Field))
+(s/defn ->field
   "Return `Field` instance for a given ID or name in the context of root."
-  [{{result-metadata :result_metadata} :source, :as root}
-   field-id-or-name-or-clause :- (s/cond-pre su/IntGreaterThanZero su/NonBlankString mbql.s/Field)]
-  (let [id-or-name (if (sequential? field-id-or-name-or-clause)
-                     (filters/field-reference->id field-id-or-name-or-clause)
-                     field-id-or-name-or-clause)]
-    (or
-     ;; Handle integer Field IDs.
-     (when (integer? id-or-name)
-       (Field id-or-name))
-     ;; handle field string names. Only if we have result metadata. (Not sure why)
-     (when (string? id-or-name)
-       (when-not result-metadata
-         (log/warn (trs "Warning: Automagic analysis context is missing result metadata. Unable to resolve Fields by name.")))
-       (when-let [field (m/find-first #(= (:name %) id-or-name)
-                                      result-metadata)]
-         (-> field
-             (update :base_type keyword)
-             (update :semantic_type keyword)
-             field/map->FieldInstance
-             (classify/run-classifiers {}))))
-     ;; otherwise this isn't returning something, and that's probably an error. Log it.
-     (log/warn (str (trs "Cannot resolve Field {0} in automagic analysis context" field-id-or-name-or-clause)
-                    \newline
-                    (u/pprint-to-str root))))))
+  [root id-or-name :- (s/cond-pre su/IntGreaterThanZero su/NonBlankString mbql.s/Field)]
+  (let [id-or-name (if (sequential? id-or-name)
+                     (filters/field-reference->id id-or-name)
+                     id-or-name)]
+    (if (->> root :source (instance? (type Table)))
+      (Field id-or-name)
+      (when-let [field (->> root
+                            :source
+                            :result_metadata
+                            (m/find-first (comp #{id-or-name} :name)))]
+        (-> field
+            (update :base_type keyword)
+            (update :semantic_type keyword)
+            field/map->FieldInstance
+            (classify/run-classifiers {}))))))
 
 (def ^{:arglists '([root])} source-name
   "Return the (display) name of the soruce of a given root object."
@@ -153,12 +144,10 @@
   [table]
   (isa? (:entity_type table) :entity/GoogleAnalyticsTable))
 
-(defmulti ->root
-  "root is a datatype that is an entity augmented with metadata for the purposes of creating an automatic dashboard with
-  respect to that entity. It is called a root because the automated dashboard uses productions to recursively create a
-  tree of dashboard cards to fill the dashboards. This multimethod is for turning a given entity into a root."
-  {:arglists '([entity])}
-  type)
+(defmulti
+  ^{:doc ""
+    :arglists '([entity])}
+  ->root type)
 
 (defmethod ->root (type Table)
   [table]
@@ -304,7 +293,7 @@
 
 (defmethod ->reference [:mbql (type Field)]
   [_ {:keys [fk_target_field_id id link aggregation name base_type] :as field}]
-  (let [reference (mbql.normalize/normalize
+  (let [reference (normalize/normalize
                    (cond
                      link               [:field id {:source-field link}]
                      fk_target_field_id [:field fk_target_field_id {:source-field id}]
@@ -323,7 +312,7 @@
       reference)))
 
 (defmethod ->reference [:string (type Field)]
-  [_ {:keys [display_name full-name link]}]
+  [_ {:keys [display_name full-name link table_id]}]
   (cond
     full-name full-name
     link      (format "%s → %s"
@@ -468,7 +457,7 @@
                   (hash-map (name identifier))))))
 
 (def ^:private ^{:arglists '([definitions])} most-specific-definition
-  "Return the most specific definition among `definitions`.
+  "Return the most specific defintion among `definitions`.
    Specificity is determined based on:
    1) how many ancestors `field_type` has (if field_type has a table prefix,
       ancestors for both table and field are counted);
@@ -487,7 +476,7 @@
   "Bind fields to dimensions and resolve overloading.
    Each field will be bound to only one dimension. If multiple dimension definitions
    match a single field, the field is bound to the most specific definition used
-   (see `most-specific-definition` for details)."
+   (see `most-specific-defintion` for details)."
   [context dimensions]
   (->> dimensions
        (mapcat (comp (partial make-binding context) first))
@@ -528,7 +517,7 @@
                  (assoc :filter (apply
                                  vector
                                  :and
-                                 (map (comp (partial mbql.normalize/normalize-fragment [:query :filter])
+                                 (map (comp (partial normalize/normalize-fragment [:query :filter])
                                             :filter)
                                       filters)))
 
@@ -585,7 +574,7 @@
   [x context bindings]
   (-> (walk/postwalk
        (fn [form]
-         (if (i18n/localized-string? form)
+         (if (ui18n/localized-string? form)
            (let [s     (str form)
                  new-s (fill-templates :string context bindings s)]
              (if (not= new-s s)
@@ -636,7 +625,7 @@
     (->> used-dimensions
          (map (some-fn #(get-in (:dimensions context) [% :matches])
                        (comp #(filter-tables % (:tables context)) rules/->entity)))
-         (apply math.combo/cartesian-product)
+         (apply combo/cartesian-product)
          (map (partial zipmap used-dimensions))
          (filter (fn [bindings]
                    (->> dimensions
@@ -1023,12 +1012,11 @@
                :transient_filters (:query-filter context)
                :param_fields      (->> context :query-filter (filter-referenced-fields root))))))
 
-
-(defmulti automagic-analysis
-  "Create a transient dashboard analyzing given entity."
-  {:arglists '([entity opts])}
-  (fn [entity _]
-    (type entity)))
+(defmulti
+  ^{:doc "Create a transient dashboard analyzing given entity."
+    :arglists '([entity opts])}
+  automagic-analysis (fn [entity _]
+                       (type entity)))
 
 (defmethod automagic-analysis (type Table)
   [table opts]
@@ -1042,7 +1030,7 @@
   [metric opts]
   (automagic-dashboard (merge (->root metric) opts)))
 
-(s/defn ^:private collect-metrics :- (s/maybe [(type Metric)])
+(defn- collect-metrics
   [root question]
   (map (fn [aggregation-clause]
          (if (-> aggregation-clause
@@ -1057,30 +1045,21 @@
                                           :table_id   table-id}))))
        (get-in question [:dataset_query :query :aggregation])))
 
-(s/defn ^:private collect-breakout-fields :- (s/maybe [(type Field)])
+(defn- collect-breakout-fields
   [root question]
-  (for [breakout     (get-in question [:dataset_query :query :breakout])
-        field-clause (take 1 (filters/collect-field-references breakout))
-        :let         [field (->field root field-clause)]
-        :when        field]
-    field))
+  (map (comp (partial ->field root)
+             first
+             filters/collect-field-references)
+       (get-in question [:dataset_query :query :breakout])))
 
 (defn- decompose-question
   [root question opts]
-  (letfn [(analyze [x]
-            (try
-              (automagic-analysis x (assoc opts
-                                           :source       (:source root)
-                                           :query-filter (:query-filter root)
-                                           :database     (:database root)))
-              (catch Throwable e
-                (throw (ex-info (tru "Error decomposing question: {0}" (ex-message e))
-                                {:root root, :question question, :object x}
-                                e)))))]
-    (into []
-          (comp cat (map analyze))
-          [(collect-metrics root question)
-           (collect-breakout-fields root question)])))
+  (map #(automagic-analysis % (assoc opts
+                                :source       (:source root)
+                                :query-filter (:query-filter root)
+                                :database     (:database root)))
+       (concat (collect-metrics root question)
+               (collect-breakout-fields root question))))
 
 (defn- pluralize
   [x]
@@ -1118,7 +1097,7 @@
 
 (defn- field-reference->field
   [root field-reference]
-  (let [normalized-field-reference (mbql.normalize/normalize field-reference)
+  (let [normalized-field-reference (normalize/normalize field-reference)
         temporal-unit              (mbql.u/match-one normalized-field-reference
                                      [:field _ (opts :guard :temporal-unit)]
                                      (:temporal-unit opts))]
@@ -1132,7 +1111,7 @@
 (defmulti
   ^{:private true
     :arglists '([fieldset [op & args]])}
-  humanize-filter-value (fn [_ [op & _args]]
+  humanize-filter-value (fn [_ [op & args]]
                           (qp.util/normalize-token op)))
 
 (def ^:private unit-name (comp {:minute-of-hour  (deferred-tru "minute")
@@ -1148,7 +1127,7 @@
 (defn- field-name
   ([root field-reference]
    (->> field-reference (field-reference->field root) field-name))
-  ([{:keys [display_name unit] :as _field}]
+  ([{:keys [display_name unit] :as field}]
    (cond->> display_name
      (some-> unit u.date/extract-units) (tru "{0} of {1}" (unit-name unit)))))
 
@@ -1190,7 +1169,7 @@
   (boolean (let [coll-zip (zip/zipper coll? #(if (map? %) (vals %) %) nil coll)]
             (loop [x coll-zip]
               (when-not (zip/end? x)
-                (if (k (zip/node x)) true (recur (zip/next x))))))))
+                (if-let [v (k (zip/node x))] true (recur (zip/next x))))))))
 
 (defn- splice-in
   [join-statement card-member]
@@ -1235,7 +1214,7 @@
 (defmethod automagic-analysis (type Query)
   [query {:keys [cell-query] :as opts}]
   (let [root     (->root query)
-        cell-query (when cell-query (mbql.normalize/normalize-fragment [:query :filter] cell-query))
+        cell-query (when cell-query (normalize/normalize-fragment [:query :filter] cell-query))
         opts       (cond-> opts
                      cell-query (assoc :cell-query cell-query))
         cell-url (format "%sadhoc/%s/cell/%s" public-endpoint
@@ -1335,7 +1314,7 @@
                                       first)
                        dashboard (make-dashboard root rule)]
                    {:url         (format "%stable/%s" public-endpoint (u/the-id table))
-                    :title       (:short-name root)
+                    :title       (:full-name root)
                     :score       (+ (math/sq (:specificity rule))
                                     (math/log (-> table :stats :num-fields))
                                     (if (-> table :stats :list-like?)
@@ -1349,8 +1328,7 @@
                  (let [tables (->> tables
                                    (sort-by :score >)
                                    (take max-candidate-tables))]
-                   {:id     (format "%s/%s" (u/the-id database) schema)
-                    :tables tables
+                   {:tables tables
                     :schema schema
                     :score  (+ (math/sq (transduce (m/distinct-by :rule)
                                                    stats/count

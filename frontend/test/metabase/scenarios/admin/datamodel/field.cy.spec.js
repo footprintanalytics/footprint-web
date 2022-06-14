@@ -3,12 +3,11 @@ import {
   withDatabase,
   visitAlias,
   popover,
-  startNewQuestion,
 } from "__support__/e2e/cypress";
 
-import { SAMPLE_DATABASE } from "__support__/e2e/cypress_sample_database";
+import { SAMPLE_DATASET } from "__support__/e2e/cypress_sample_dataset";
 
-const { ORDERS, ORDERS_ID } = SAMPLE_DATABASE;
+const { ORDERS, ORDERS_ID } = SAMPLE_DATASET;
 
 // [quarantine] - intermittently failing, possibly due to a "flickering" element (re-rendering)
 describe.skip("scenarios > admin > datamodel > field", () => {
@@ -132,7 +131,8 @@ describe.skip("scenarios > admin > datamodel > field", () => {
       cy.findByText("Saved!");
 
       // check that it appears in QB
-      startNewQuestion();
+      cy.visit("/question/new");
+      cy.findByText("Simple question").click();
       cy.findByText("sqlite").click();
       cy.findByText("Number With Nulls").click();
       cy.findByText("nothin");

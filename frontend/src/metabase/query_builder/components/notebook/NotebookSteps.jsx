@@ -5,6 +5,7 @@ import NotebookStep from "./NotebookStep";
 
 import cx from "classnames";
 import { getQuestionSteps } from "./lib/steps";
+import { get } from "lodash";
 
 export default class NotebookSteps extends React.Component {
   constructor(props) {
@@ -40,6 +41,7 @@ export default class NotebookSteps extends React.Component {
   render() {
     const { question, className } = this.props;
     const { openSteps, lastOpenedStep } = this.state;
+    const enabledPopover = !get(question, "_card.original_card_id");
 
     if (!question) {
       return null;
@@ -65,6 +67,7 @@ export default class NotebookSteps extends React.Component {
               closeStep={this.closeStep}
               isLastStep={index === steps.length - 1}
               isLastOpened={lastOpenedStep === step.id}
+              enabledPopover={enabledPopover}
             />
           );
         })}

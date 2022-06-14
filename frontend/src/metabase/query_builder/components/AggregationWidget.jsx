@@ -3,9 +3,10 @@ import React from "react";
 import PropTypes from "prop-types";
 import { t } from "ttag";
 
+import Popover from "metabase/components/Popover";
+
 import Clearable from "./Clearable";
 import AggregationPopover from "./AggregationPopover";
-import ControlledPopoverWithTrigger from "metabase/components/PopoverWithTrigger/ControlledPopoverWithTrigger";
 
 // NOTE: lots of duplication between AggregationWidget and BreakoutWidget
 
@@ -48,6 +49,16 @@ export default class AggregationWidget extends React.Component {
       className,
     } = this.props;
 
+    const popover = this.state.isOpen && (
+      <Popover onClose={this.handleClose}>
+        <AggregationPopover
+          query={query}
+          aggregation={aggregation}
+          onChangeAggregation={this.handleChangeAggregation}
+          showMetrics={this.props.showMetrics}
+        />
+      </Popover>
+    );
     const trigger = aggregation ? (
       <Clearable
         onClear={
@@ -64,30 +75,16 @@ export default class AggregationWidget extends React.Component {
       children
     );
 
-    if (!trigger) {
+    if (trigger) {
+      return (
+        <div onClick={this.handleOpen}>
+          {trigger}
+          {popover}
+        </div>
+      );
+    } else {
       return null;
     }
-
-    return (
-      <ControlledPopoverWithTrigger
-        disableContentSandbox
-        placement="bottom-start"
-        visible={this.state.isOpen}
-        onClose={this.handleClose}
-        onOpen={this.handleOpen}
-        triggerContent={trigger}
-        popoverContent={
-          <AggregationPopover
-            query={query}
-            aggregation={aggregation}
-            onChangeAggregation={this.handleChangeAggregation}
-            showMetrics={this.props.showMetrics}
-          />
-        }
-      >
-        {trigger}
-      </ControlledPopoverWithTrigger>
-    );
   }
 }
 

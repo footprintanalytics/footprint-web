@@ -1,6 +1,3 @@
----
-title: How to read the server logs
----
 
 # How to read the server logs
 

@@ -6,13 +6,11 @@
 
   TODO - We should rename this namespace to `metabase.driver.test-extensions` or something like that."
   (:require [clojure.string :as str]
-            [clojure.tools.logging :as log]
             [clojure.tools.reader.edn :as edn]
             [environ.core :refer [env]]
             [medley.core :as m]
             [metabase.db :as mdb]
             [metabase.driver :as driver]
-            [metabase.driver.ddl.interface :as ddl.i]
             [metabase.models.database :refer [Database]]
             [metabase.models.field :as field :refer [Field]]
             [metabase.models.table :refer [Table]]
@@ -95,7 +93,7 @@
   ;; no-op during AOT compilation
   (when-not *compile-files*
     (driver/add-parent! driver ::test-extensions)
-    (log/infof "Added test extensions for %s 💯" driver)))
+    (println "Added test extensions for" driver "💯")))
 
 
 ;;; +----------------------------------------------------------------------------------------------------------------+
@@ -112,7 +110,7 @@
     (locking has-done-before-run
       (when-not (@has-done-before-run driver)
         (when (not= (get-method before-run driver) (get-method before-run ::test-extensions))
-          (log/infof "doing before-run for %s" driver))
+          (println "doing before-run for" driver))
         ;; avoid using the dispatch fn here because it dispatches on driver with test extensions which would result in
         ;; a circular call back to this function
         ((get-method before-run driver) driver)
@@ -122,8 +120,8 @@
 (defn- require-driver-test-extensions-ns [driver & require-options]
   (let [expected-ns (symbol (or (namespace driver)
                                 (str "metabase.test.data." (name driver))))]
-    (log/infof "Loading driver %s test extensions %s"
-               (u/format-color 'blue driver) (apply list 'require expected-ns require-options))
+    (println (format "Loading driver %s test extensions %s"
+                     (u/format-color 'blue driver) (apply list 'require expected-ns require-options)))
     (apply classloader/require expected-ns require-options)))
 
 (defonce ^:private has-loaded-extensions (atom #{}))
@@ -184,14 +182,6 @@
   {:pre [(string? database-name)]}
   (str/replace database-name #"\s+" "_"))
 
-(def ^:dynamic *database-name-override*
-  "Bind this to a string to override the database name, for the purpose of calculating the qualified table name. The
-  purpose of this is to allow for a new Database to clone an existing one with the same details (ex: to test different
-  connection methods with syncing, etc.).
-
-  Currently, this only affects `db-qualified-table-name`."
-  nil)
-
 (defn db-qualified-table-name
   "Return a combined table name qualified with the name of its database, suitable for use as an identifier.
   Provided for drivers where testing wackiness makes it hard to actually create separate Databases, such as Oracle,
@@ -200,13 +190,7 @@
   ^String [^String database-name, ^String table-name]
   {:pre [(string? database-name) (string? table-name)]}
   ;; take up to last 30 characters because databases like Oracle have limits on the lengths of identifiers
-  (-> (or *database-name-override* database-name)
-      (str \_ table-name)
-      str/lower-case
-      (str/replace #"-" "_")
-      (->>
-        (take-last 30)
-        (apply str))))
+  (apply str (take-last 30 (str/replace (str/lower-case (str database-name \_ table-name)) #"-" "_"))))
 
 (defn single-db-qualified-name-components
   "Implementation of `qualified-name-components` for drivers like Oracle and Redshift that must use a single existing
@@ -306,7 +290,17 @@
   dispatch-on-driver-with-test-extensions
   :hierarchy #'driver/hierarchy)
 
-(defmethod ddl.i/format-name ::test-extensions [_ table-or-field-name] table-or-field-name)
+
+(defmulti format-name
+  "Transform a lowercase string Table or Field name in a way appropriate for this dataset (e.g., `h2` would want to
+  upcase these names; `mongo` would want to use `\"_id\"` in place of `\"id\"`. This method should return a string.
+  Defaults to an identity implementation."
+  {:arglists '([driver table-or-field-name])}
+  dispatch-on-driver-with-test-extensions
+  :hierarchy #'driver/hierarchy)
+
+(defmethod format-name ::test-extensions [_ table-or-field-name] table-or-field-name)
+
 
 (defmulti has-questionable-timezone-support?
   "Does this driver have \"questionable\" timezone support? (i.e., does it group things by UTC instead of the
@@ -400,7 +394,7 @@
 ;; TODO - not sure everything below belongs in this namespace
 
 (s/defn ^:private dataset-field-definition :- ValidFieldDefinition
-  [field-definition-map :- DatasetFieldDefinition]
+  [{:keys [coercion-strategy base-type] :as field-definition-map} :- DatasetFieldDefinition]
   "Parse a Field definition (from a `defdatset` form or EDN file) and return a FieldDefinition instance for
   comsumption by various test-data-loading methods."
   ;; if definition uses a coercion strategy they need to provide the effective-type
@@ -421,12 +415,13 @@
 (s/defn dataset-definition :- ValidDatabaseDefinition
   "Parse a dataset definition (from a `defdatset` form or EDN file) and return a DatabaseDefinition instance for
   comsumption by various test-data-loading methods."
-  [database-name :- su/NonBlankString & table-definitions]
+  {:style/indent 1}
+  [database-name :- su/NonBlankString, & definition]
   (s/validate
    DatabaseDefinition
    (map->DatabaseDefinition
     {:database-name     database-name
-     :table-definitions (for [table table-definitions]
+     :table-definitions (for [table definition]
                           (dataset-table-definition table))})))
 
 (defmacro defdataset
@@ -464,7 +459,7 @@
 (p.types/deftype+ ^:private EDNDatasetDefinition [dataset-name def]
   pretty/PrettyPrintable
   (pretty [_]
-    (list `edn-dataset-definition dataset-name)))
+    (list 'edn-dataset-definition dataset-name)))
 
 (defmethod get-dataset-definition EDNDatasetDefinition
   [^EDNDatasetDefinition this]
@@ -496,7 +491,7 @@
 (p.types/deftype+ ^:private TransformedDatasetDefinition [new-name wrapped-definition def]
   pretty/PrettyPrintable
   (pretty [_]
-    (list `transformed-dataset-definition new-name (pretty/pretty wrapped-definition))))
+    (list 'transformed-dataset-definition new-name (pretty/pretty wrapped-definition))))
 
 (s/defn transformed-dataset-definition
   "Create a dataset definition that is a transformation of an some other one, seqentially applying `transform-fns` to
@@ -659,5 +654,5 @@
    (or (db-test-env-var driver env-var default)
        (throw (Exception. (format "In order to test %s, you must specify the env var MB_%s_TEST_%s."
                                   (name driver)
-                                  (str/upper-case (str/replace (name driver) #"-" "_"))
+                                  (str/upper-case (name driver))
                                   (to-system-env-var-str env-var)))))))

@@ -1,11 +1,16 @@
+import StructuredQuery from "metabase-lib/lib/queries/StructuredQuery";
 import { t } from "ttag";
+import type {
+  ClickAction,
+  ClickActionProps,
+} from "metabase-types/types/Visualization";
 
 import { isExpressionField } from "metabase/lib/query/field_ref";
 import MetabaseSettings from "metabase/lib/settings";
 
-export default ({ question, clicked }) => {
+export default ({ question, clicked }: ClickActionProps): ClickAction[] => {
   const query = question.query();
-  if (!question.isStructured() || !query.isEditable()) {
+  if (!(query instanceof StructuredQuery)) {
     return [];
   }
 

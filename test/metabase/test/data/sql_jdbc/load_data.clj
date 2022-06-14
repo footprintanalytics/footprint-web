@@ -5,7 +5,6 @@
             [clojure.tools.reader.edn :as edn]
             [medley.core :as m]
             [metabase.driver :as driver]
-            [metabase.driver.ddl.interface :as ddl.i]
             [metabase.driver.sql-jdbc.execute :as sql-jdbc.execute]
             [metabase.driver.sql.query-processor :as sql.qp]
             [metabase.test :as mt]
@@ -108,7 +107,7 @@
   described above."
   [driver conn {:keys [database-name], :as dbdef} {:keys [table-name], :as tabledef}]
   (let [components       (for [component (sql.tx/qualified-name-components driver database-name table-name)]
-                           (ddl.i/format-name driver (u/qualified-name component)))
+                           (tx/format-name driver (u/qualified-name component)))
         table-identifier (sql.qp/->honeysql driver (apply hx/identifier :table components))]
     (partial do-insert! driver conn table-identifier)))
 
@@ -225,7 +224,7 @@
       (load-data! driver dbdef tabledef))))
 
 (defn destroy-db!
-  "Default impl of [[metabase.test.data.interface/destroy-db!]] for SQL drivers."
+  "Default impl of `destroy-db!` for SQL drivers."
   [driver dbdef]
   (try
     (doseq [statement (ddl/drop-db-ddl-statements driver dbdef)]

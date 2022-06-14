@@ -1,24 +1,14 @@
-import styled from "@emotion/styled";
-
+import styled from "styled-components";
 import Label from "metabase/components/type/Label";
 import { color, lighten } from "metabase/lib/colors";
 import Icon from "metabase/components/Icon";
-
 import { PermissionsSelectOption } from "./PermissionsSelectOption";
 
 export const PermissionsSelectRoot = styled.div`
   display: flex;
   align-items: center;
-  min-width: 180px;
+  width: 180px;
   cursor: ${props => (props.isDisabled ? "default" : "pointer")};
-`;
-
-export const SelectedOption = styled(PermissionsSelectOption)`
-  transition: color 200ms;
-
-  &:hover {
-    color: ${color("accent7")};
-  }
 `;
 
 export const PermissionsSelectText = styled(Label)`
@@ -57,15 +47,13 @@ export const ToggleLabel = styled.label`
   margin-right: 1rem;
 `;
 
-export const WarningIcon = styled(Icon)`
+export const WarningIcon = styled(Icon).attrs({
+  size: 18,
+  name: "warning",
+})`
   margin-right: 0.25rem;
   color: ${color("text-light")};
 `;
-
-WarningIcon.defaultProps = {
-  size: 18,
-  name: "warning",
-};
 
 export const DisabledPermissionOption = styled(PermissionsSelectOption)`
   color: ${props =>

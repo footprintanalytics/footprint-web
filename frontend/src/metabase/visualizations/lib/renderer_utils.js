@@ -23,6 +23,8 @@ import { computeNumericDataInverval, dimensionIsNumeric } from "./numeric";
 import { getAvailableCanvasWidth, getAvailableCanvasHeight } from "./utils";
 import { invalidDateWarning, nullDimensionWarning } from "./warnings";
 
+import type { Value } from "metabase-types/types/Dataset";
+
 export function initChart(chart, element) {
   // set the bounds
   chart.width(getAvailableCanvasWidth(element));
@@ -35,7 +37,7 @@ export function initChart(chart, element) {
   }
 }
 
-export function makeIndexMap(values) {
+export function makeIndexMap(values: Array<Value>): Map<Value, number> {
   const indexMap = new Map();
   for (const [index, key] of values.entries()) {
     indexMap.set(key, index);
@@ -43,10 +45,18 @@ export function makeIndexMap(values) {
   return indexMap;
 }
 
+type CrossfilterGroup = {
+  top: (n: number) => { key: any, value: any },
+  all: () => { key: any, value: any },
+};
+
 // HACK: This ensures each group is sorted by the same order as xValues,
 // otherwise we can end up with line charts with x-axis labels in the correct order
 // but the points in the wrong order. There may be a more efficient way to do this.
-export function forceSortedGroup(group, indexMap) {
+export function forceSortedGroup(
+  group: CrossfilterGroup,
+  indexMap: Map<Value, number>,
+): void {
   const sorted = group
     .top(Infinity)
     .sort((a, b) => indexMap.get(a.key) - indexMap.get(b.key));
@@ -56,7 +66,10 @@ export function forceSortedGroup(group, indexMap) {
   group.all = () => sorted;
 }
 
-export function forceSortedGroupsOfGroups(groupsOfGroups, indexMap) {
+export function forceSortedGroupsOfGroups(
+  groupsOfGroups: CrossfilterGroup[][],
+  indexMap: Map<Value, number>,
+): void {
   for (const groups of groupsOfGroups) {
     for (const group of groups) {
       forceSortedGroup(group, indexMap);
@@ -161,13 +174,7 @@ export function getDatas({ settings, series }, warn) {
 
     return rows.map(row => {
       const [x, ...rest] = row;
-      const { unit } = parseOptions;
-      const xValue = parseXValue(x, parseOptions, warn);
-      const formattedXValue =
-        xValue && unit && typeof xValue.startOf === "function"
-          ? xValue.startOf(unit)
-          : xValue;
-      const newRow = [formattedXValue, ...rest];
+      const newRow = [parseXValue(x, parseOptions, warn), ...rest];
       newRow._origin = row._origin;
       return newRow;
     });

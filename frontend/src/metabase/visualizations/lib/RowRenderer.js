@@ -19,10 +19,12 @@ import { checkXAxisLabelOverlap } from "./LineAreaBarPostRender";
 const ROW_GAP = 5;
 const ROW_MAX_HEIGHT = 30;
 
+type DeregisterFunction = () => void;
+
 export default function rowRenderer(
   element,
   { settings, series, onHoverChange, onVisualizationClick, height },
-) {
+): DeregisterFunction {
   const { cols } = series[0].data;
 
   const chart = dc.rowChart(element);
@@ -56,7 +58,6 @@ export default function rowRenderer(
   forceSortedGroup(group, makeIndexMap(yValues));
 
   initChart(chart, element);
-
   chart.on("renderlet.tooltips", chart => {
     const getData = d => [
       {
@@ -105,7 +106,6 @@ export default function rowRenderer(
       });
     }
   });
-
   chart
     .ordinalColors([settings.series(series[0]).color])
     .x(d3.scale.linear().domain(xDomain))
@@ -150,7 +150,6 @@ export default function rowRenderer(
 
   // inital render
   chart.render();
-
   // bottom label height
   let axisLabelHeight = 0;
   if (settings["graph.y_axis.labels_enabled"]) {
@@ -188,6 +187,13 @@ export default function rowRenderer(
 
   if (labelsOutside) {
     chart.margins().left += maxTextWidth;
+    chart.render();
+  }
+
+  if (settings.column(cols[1])) {
+    chart.xAxis().tickFormat(v => {
+      return formatValue(v, settings.column(cols[1]));
+    });
     chart.render();
   }
 

@@ -2,12 +2,12 @@
   (:require [clojure.java.io :as io]
             [clojure.string :as str]
             [clojure.tools.build.api :as b]
-            [clojure.tools.build.util.zip :as build.zip]
+            [clojure.tools.build.util.zip :as b.zip]
             [clojure.tools.namespace.dependency :as ns.deps]
             [clojure.tools.namespace.find :as ns.find]
             [clojure.tools.namespace.parse :as ns.parse]
-            [hf.depstar.api :as depstar]
-            [metabuild-common.core :as u])
+            [hf.depstar.api :as d]
+            [metabuild-common.core :as c])
   (:import java.io.OutputStream
            java.net.URI
            [java.nio.file Files FileSystems OpenOption StandardOpenOption]
@@ -40,10 +40,10 @@
           (get-in basis [:classpath-args :extra-paths])))
 
 (defn clean! []
-  (u/step "Clean"
-    (u/step (format "Delete %s" class-dir)
+  (c/step "Clean"
+    (c/step (format "Delete %s" class-dir)
       (b/delete {:path class-dir}))
-    (u/step (format "Delete %s" uberjar-filename)
+    (c/step (format "Delete %s" uberjar-filename)
       (b/delete {:path uberjar-filename}))))
 
 ;; this topo sort order stuff is required for stuff to work correctly... I copied it from my Cloverage PR
@@ -72,42 +72,60 @@
          (filter ns-symbols))))
 
 (defn compile-sources! [basis]
-  (u/step "Compile Clojure source files"
+  (c/step "Compile Clojure source files"
     (let [paths    (all-paths basis)
-          _        (u/announce "Compiling Clojure files in %s" (pr-str paths))
-          ns-decls (u/step "Determine compilation order for Metabase files"
+          _        (c/announce "Compiling Clojure files in %s" (pr-str paths))
+          ns-decls (c/step "Determine compilation order for Metabase files"
                      (metabase-namespaces-in-topo-order basis))]
       (with-duration-ms [duration-ms]
         (b/compile-clj {:basis      basis
                         :src-dirs   paths
                         :class-dir  class-dir
                         :ns-compile ns-decls})
-        (u/announce "Finished compilation in %.1f seconds." (/ duration-ms 1000.0))))))
+        (c/announce "Finished compilation in %.1f seconds." (/ duration-ms 1000.0))))))
 
 (defn copy-resources! [edition basis]
-  (u/step "Copy resources"
+  (c/step "Copy resources"
     ;; technically we don't NEED to copy the Clojure source files but it doesn't really hurt anything IMO.
     (doseq [path (all-paths basis)]
-      (u/step (format "Copy %s" path)
+      (c/step (format "Copy %s" path)
         (b/copy-dir {:target-dir class-dir, :src-dirs [path]})))))
 
 (defn create-uberjar! [basis]
-  (u/step "Create uberjar"
+  (c/step "Create uberjar"
     (with-duration-ms [duration-ms]
-      (depstar/uber {:class-dir class-dir
-                     :uber-file uberjar-filename
-                     :basis     basis})
-      (u/announce "Created uberjar in %.1f seconds." (/ duration-ms 1000.0)))))
+      (d/uber {:class-dir class-dir
+               :uber-file uberjar-filename
+               :basis     basis})
+      (c/announce "Created uberjar in %.1f seconds." (/ duration-ms 1000.0)))))
 
 (def manifest-entries
   {"Manifest-Version" "1.0"
    "Created-By"       "Metabase build.clj"
    "Build-Jdk-Spec"   (System/getProperty "java.specification.version")
-   "Main-Class"       "metabase.core"})
+   "Main-Class"       "metabase.core"
+   "Liquibase-Package" (str/join ","
+                                 ["liquibase.change"
+                                  "liquibase.changelog"
+                                  "liquibase.database"
+                                  "liquibase.datatype"
+                                  "liquibase.diff"
+                                  "liquibase.executor"
+                                  "liquibase.ext"
+                                  "liquibase.lockservice"
+                                  "liquibase.logging"
+                                  "liquibase.parser"
+                                  "liquibase.precondition"
+                                  "liquibase.sdk"
+                                  "liquibase.serializer"
+                                  "liquibase.snapshot"
+                                  "liquibase.sqlgenerator"
+                                  "liquibase.structure"
+                                  "liquibase.structurecompare"])})
 
 (defn manifest ^Manifest []
   (doto (Manifest.)
-    (build.zip/fill-manifest! manifest-entries)))
+    (b.zip/fill-manifest! manifest-entries)))
 
 (defn write-manifest! [^OutputStream os]
   (.write (manifest) os)
@@ -117,7 +135,7 @@
 ;; https://ask.clojure.org/index.php/10827/ability-customize-manifest-created-clojure-tools-build-uber -- so we need
 ;; to do it by hand for the time being.
 (defn update-manifest! []
-  (u/step "Update META-INF/MANIFEST.MF"
+  (c/step "Update META-INF/MANIFEST.MF"
     (with-open [fs (FileSystems/newFileSystem (URI. (str "jar:file:" (.getAbsolutePath (io/file "target/uberjar/metabase.jar"))))
                                               Collections/EMPTY_MAP)]
       (let [manifest-path (.getPath fs "META-INF" (into-array String ["MANIFEST.MF"]))]
@@ -127,7 +145,7 @@
 
 ;; clojure -T:build uberjar :edition <edition>
 (defn uberjar [{:keys [edition], :or {edition :oss}}]
-  (u/step (format "Build %s uberjar" edition)
+  (c/step (format "Build %s uberjar" edition)
     (with-duration-ms [duration-ms]
       (clean!)
       (let [basis (create-basis edition)]
@@ -135,7 +153,7 @@
         (copy-resources! edition basis)
         (create-uberjar! basis)
         (update-manifest!))
-      (u/announce "Built target/uberjar/metabase.jar in %.1f seconds."
+      (c/announce "Built target/uberjar/metabase.jar in %.1f seconds."
                   (/ duration-ms 1000.0)))))
 
 ;; TODO -- add `jar` and `install` commands to install Metabase to the local Maven repo (?) could make it easier to

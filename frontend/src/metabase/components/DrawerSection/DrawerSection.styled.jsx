@@ -1,4 +1,4 @@
-import styled from "@emotion/styled";
+import styled from "styled-components";
 
 import { color } from "metabase/lib/colors";
 
@@ -30,7 +30,10 @@ export const Children = styled.div`
   padding: 0 1.5rem;
 `;
 
-export const Header = styled.div`
+export const Header = styled.div.attrs({
+  role: "button",
+  tabIndex: "0",
+})`
   height: ${HEADER_HEIGHT};
   cursor: pointer;
   display: flex;
@@ -44,8 +47,3 @@ export const Header = styled.div`
     color: ${color("brand")};
   }
 `;
-
-Header.defaultProps = {
-  role: "button",
-  tabIndex: "0",
-};

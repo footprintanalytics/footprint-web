@@ -1,4 +1,4 @@
-import styled from "@emotion/styled";
+import styled from "styled-components";
 
 export const ModalMessage = styled.div`
   &:not(:last-child) {

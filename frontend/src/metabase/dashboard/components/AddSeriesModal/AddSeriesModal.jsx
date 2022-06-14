@@ -5,7 +5,6 @@ import { t } from "ttag";
 import { getIn } from "icepick";
 import { connect } from "react-redux";
 import { createSelector } from "reselect";
-import _ from "underscore";
 
 import Visualization from "metabase/visualizations/components/Visualization";
 
@@ -29,8 +28,14 @@ const getQuestions = createSelector(
 );
 
 // TODO: rework this so we don't have to load all cards up front
-
-class AddSeriesModal extends Component {
+@Questions.loadList({ query: { f: "mine" } })
+@connect(
+  (state, ownProps) => ({
+    questions: getQuestions(state, ownProps),
+  }),
+  { loadMetadataForQueries },
+)
+export default class AddSeriesModal extends Component {
   constructor(props, context) {
     super(props, context);
 
@@ -178,7 +183,9 @@ class AddSeriesModal extends Component {
               showTitle
               isDashboard
               isMultiseries
-              onRemoveSeries={this.handleRemoveSeries}
+              onRemoveSeries={(e, index) => {
+                this.handleRemoveSeries(e, index);
+              }}
             />
             {this.state.state && (
               <div
@@ -187,7 +194,7 @@ class AddSeriesModal extends Component {
               >
                 {this.state.state === "loading" ? (
                   <div className="h3 rounded bordered p3 bg-white shadowed">
-                    {t`Applying Question`}
+                    {t`Applying Chart`}
                   </div>
                 ) : this.state.state === "incompatible" ? (
                   <div className="h3 rounded bordered p3 bg-error border-error text-white">
@@ -205,7 +212,7 @@ class AddSeriesModal extends Component {
               {t`Done`}
             </button>
             <button
-              data-metabase-event="Dashboard;Edit Series Modal;cancel"
+              data-metabase-event={"Dashboard;Edit Series Modal;cancel"}
               className="Button ml2"
               onClick={this.props.onClose}
             >
@@ -238,13 +245,3 @@ class AddSeriesModal extends Component {
     );
   }
 }
-
-export default _.compose(
-  Questions.loadList({ query: { f: "all" } }),
-  connect(
-    (state, ownProps) => ({
-      questions: getQuestions(state, ownProps),
-    }),
-    { loadMetadataForQueries },
-  ),
-)(AddSeriesModal);

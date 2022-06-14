@@ -14,7 +14,10 @@ import {
 } from "../../selectors/data-permissions";
 import { updateDataPermission } from "../../permissions";
 
-import { PermissionsSidebar } from "../../components/PermissionsSidebar";
+import {
+  PermissionsSidebar,
+  permissionSidebarPropTypes,
+} from "../../components/PermissionsSidebar";
 import {
   PermissionsEditor,
   PermissionsEditorEmptyState,
@@ -55,7 +58,7 @@ const propTypes = {
     tableId: PropTypes.string,
   }),
   children: PropTypes.node,
-  sidebar: PropTypes.object,
+  sidebar: PropTypes.shape(permissionSidebarPropTypes),
   permissionEditor: PropTypes.shape(permissionEditorPropTypes),
   navigateToItem: PropTypes.func.isRequired,
   switchView: PropTypes.func.isRequired,

@@ -1,0 +1,16 @@
+.dash-card__buttons {
+  display: none;
+}
+
+.Card:hover .dash-card__buttons {
+  display: flex;
+}
+
+@media screen and (--footprint-breakpoint-max-mobile) {
+  .dash-card__buttons {
+    display: none !important;
+  }
+  .LegendLabel {
+    max-width: 100% !important;
+  }
+}

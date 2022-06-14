@@ -1,5 +1,5 @@
-import styled from "@emotion/styled";
-import { color } from "metabase/lib/colors";
+import styled from "styled-components";
+import colors, { color } from "metabase/lib/colors";
 
 export const PermissionsSelectOptionRoot = styled.div`
   display: flex;
@@ -11,10 +11,10 @@ export const IconContainer = styled.div`
   display: flex;
   align-items: center;
   justify-content: center;
-  border-radius: 3px;
+  border-radius: 4px;
   width: 20px;
   height: 20px;
-  color: ${color("white")};
+  color: ${colors["white"]};
   background-color: ${props => color(props.color)};
 `;
 

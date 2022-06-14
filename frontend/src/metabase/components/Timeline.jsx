@@ -3,8 +3,6 @@ import PropTypes from "prop-types";
 import _ from "underscore";
 import { getRelativeTime } from "metabase/lib/time";
 
-import Button from "metabase/core/components/Button";
-
 import {
   TimelineContainer,
   TimelineItem,
@@ -23,23 +21,17 @@ Timeline.propTypes = {
       timestamp: PropTypes.number.isRequired,
       icon: PropTypes.oneOfType([PropTypes.string, PropTypes.object])
         .isRequired,
-      title: PropTypes.node.isRequired,
+      title: PropTypes.string.isRequired,
       description: PropTypes.string,
       renderFooter: PropTypes.bool,
     }),
   ),
   renderFooter: PropTypes.func,
-  revertFn: PropTypes.func,
-  "data-testid": PropTypes.string,
 };
 
-function Timeline({
-  className,
-  items = [],
-  renderFooter,
-  revertFn,
-  "data-testid": dataTestId,
-}) {
+export default Timeline;
+
+function Timeline({ className, items = [], renderFooter }) {
   const iconSize = 16;
   const halfIconSize = iconSize / 2;
 
@@ -59,7 +51,6 @@ function Timeline({
       leftShift={halfIconSize}
       bottomShift={halfIconSize}
       className={className}
-      data-testid={dataTestId}
     >
       {sortedFormattedItems.map((item, index) => {
         const {
@@ -68,8 +59,6 @@ function Timeline({
           description,
           timestamp,
           formattedTimestamp,
-          isRevertable,
-          revision,
         } = item;
         const key = item.key == null ? index : item.key;
         const isNotLastEvent = index !== sortedFormattedItems.length - 1;
@@ -84,18 +73,7 @@ function Timeline({
             {isNotLastEvent && <Border borderShift={halfIconSize} />}
             <ItemIcon {...iconProps} size={iconSize} />
             <ItemBody>
-              <ItemHeader>
-                {title}
-                {isRevertable && revertFn && (
-                  <Button
-                    icon="revert"
-                    onlyIcon
-                    borderless
-                    onClick={() => revertFn(revision)}
-                    data-testid="question-revert-button"
-                  />
-                )}
-              </ItemHeader>
+              <ItemHeader>{title}</ItemHeader>
               <Timestamp datetime={timestamp}>{formattedTimestamp}</Timestamp>
               <div>{description}</div>
               {_.isFunction(renderFooter) && (
@@ -108,9 +86,3 @@ function Timeline({
     </TimelineContainer>
   );
 }
-
-export default Object.assign(Timeline, {
-  ItemBody,
-  ItemHeader,
-  ItemIcon,
-});

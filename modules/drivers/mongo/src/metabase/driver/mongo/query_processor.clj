@@ -10,13 +10,13 @@
             [metabase.mbql.schema :as mbql.s]
             [metabase.mbql.util :as mbql.u]
             [metabase.models.field :refer [Field]]
-            [metabase.query-processor.interface :as qp.i]
+            [metabase.query-processor.interface :as i]
             [metabase.query-processor.middleware.annotate :as annotate]
             [metabase.query-processor.store :as qp.store]
             [metabase.query-processor.timezone :as qp.timezone]
             [metabase.util :as u]
             [metabase.util.date-2 :as u.date]
-            [metabase.util.i18n :refer [tru]]
+            [metabase.util.i18n :as ui18n :refer [tru]]
             [metabase.util.schema :as su]
             [monger.operators :refer :all]
             [schema.core :as s])
@@ -157,17 +157,11 @@
             (name id-or-name))
     temporal-unit (with-lvalue-temporal-bucketing temporal-unit)))
 
-(defn- add-start-of-week-offset [expr offset]
-  (cond
-    (zero? offset) expr
-    (neg? offset)  (recur expr (+ offset 7))
-    :else          {$mod [{$add [expr offset]}
-                          7]}))
-
 (defn- day-of-week
   [column]
-  (mongo-let [day_of_week (add-start-of-week-offset {$dayOfWeek column}
-                                                    (driver.common/start-of-week-offset :mongo))]
+  (mongo-let [day_of_week {$mod [{$add [{$dayOfWeek column}
+                                        (driver.common/start-of-week-offset :mongo)]}
+                                 7]}]
     {$cond {:if   {$eq [day_of_week 0]}
             :then 7
             :else day_of_week}}))
@@ -334,7 +328,7 @@
 (defmethod ->lvalue :* [[_ & args]] (->lvalue (first args)))
 (defmethod ->lvalue :/ [[_ & args]] (->lvalue (first args)))
 
-(defmethod ->lvalue :coalesce [[_ & args]] (->lvalue (first args)))
+(defmethod ->rvalue :coalesce [[_ & args]] (->lvalue (first args)))
 
 (defmethod ->rvalue :avg       [[_ inp]] {"$avg" (->rvalue inp)})
 (defmethod ->rvalue :stddev    [[_ inp]] {"$stdDevPop" (->rvalue inp)})
@@ -424,7 +418,6 @@
   (let [field-rvalue (->rvalue field)
         value-rvalue (->rvalue value)]
     (if (and (rvalue-is-field? field-rvalue)
-             (not (rvalue-is-field? value-rvalue))
              (rvalue-can-be-compared-directly? value-rvalue))
       ;; if we don't need to do anything fancy with field we can generate a clause like
       ;;
@@ -585,11 +578,11 @@
 (s/defn ^:private breakouts-and-ags->projected-fields :- [(s/pair su/NonBlankString "projected-field-name"
                                                                   s/Any             "source")]
   "Determine field projections for MBQL breakouts and aggregations. Returns a sequence of pairs like
-  `[projected-field-name source]`."
+  `[projectied-field-name source]`."
   [breakout-fields aggregations]
   (concat
-   (for [field-or-expr breakout-fields]
-     [(->lvalue field-or-expr) (format "$_id.%s" (->lvalue field-or-expr))])
+   (for [field breakout-fields]
+     [(->lvalue field) (format "$_id.%s" (->lvalue field))])
    (for [ag aggregations
          :let [ag-name (annotate/aggregation-name ag)]]
      [ag-name (if (mbql.u/is-clause? :distinct (unwrap-named-ag ag))
@@ -614,10 +607,10 @@
   [[[(annotate/aggregation-name ag) (aggregation->rvalue ag)]]])
 
 (defn- group-and-post-aggregations
-  "Mongo is picky about which top-level aggregations it allows with groups. Eg. even
-   though [:/ [:count-if ...] [:count]] is a perfectly fine reduction, it's not allowed. Therefore
+  "Mongo is picky (and somewhat stupid) which top-level aggregations it alows with groups. Eg. even
+   though [:/ [:coun-if ...] [:count]] is a perfectly fine reduction, it's not allowed. Therefore
    more complex aggregations are split in two: the reductions are done in `$group` stage after which
-   we do postprocessing in `$addFields` stage to arrive at the final result. The intermittent results
+   we do postprocessing in `$addFields` stage to arrive at the final result. The intermitent results
    accrued in `$group` stage are discarded in the final `$project` stage."
   [id aggregations]
   (let [expanded-ags (map expand-aggregation aggregations)
@@ -645,10 +638,7 @@
         (str/split (->lvalue field-clause) #"\.")
 
         [:field (field-name :guard string?) _]
-        [field-name]
-
-        [:expression expr-name]
-        [expr-name])
+        [field-name])
       (->rvalue field-clause)))
    (ordered-map/ordered-map)
    fields))
@@ -678,14 +668,13 @@
     ;; if both aggregations and breakouts are empty, there's nothing to do...
     pipeline-ctx
     ;; determine the projections we'll need. projected-fields is like [[projected-field-name source]]`
-    (let [projected-fields (breakouts-and-ags->projected-fields breakout-fields aggregations)
-          pipeline-stages  (breakouts-and-ags->pipeline-stages projected-fields breakout-fields aggregations)]
+    (let [projected-fields (breakouts-and-ags->projected-fields breakout-fields aggregations)]
       (-> pipeline-ctx
           ;; add :projections key which is just a sequence of the names of projections from above
           (assoc :projections (vec (for [[field] projected-fields]
                                      field)))
           ;; now add additional clauses to the end of :query as applicable
-          (update :query into pipeline-stages)))))
+          (update :query into (breakouts-and-ags->pipeline-stages projected-fields breakout-fields aggregations))))))
 
 
 ;;; ---------------------------------------------------- order-by ----------------------------------------------------
@@ -705,31 +694,10 @@
 
 ;;; ----------------------------------------------------- fields -----------------------------------------------------
 
-(defn- remove-parent-fields
-  "Removes any and all entries in `fields` that are parents of another field in `fields`. This is necessary because as
-  of MongoDB 4.4, including both will result in an error (see:
-  `https://docs.mongodb.com/manual/release-notes/4.4-compatibility/#path-collision-restrictions`).
-
-  To preserve the previous behavior, we will include only the child fields (since the parent field always appears first
-  in the projection/field order list, and that is the stated behavior according to the link above)."
-  [fields]
-  (let [parent->child-id (reduce (fn [acc [_ field-id & _]]
-                                   (if (integer? field-id)
-                                     (let [field (qp.store/field field-id)]
-                                       (if-let [parent-id (:parent_id field)]
-                                         (update acc parent-id conj (u/the-id field))
-                                         acc))
-                                     acc))
-                                 {}
-                                 fields)]
-    (remove (fn [[_ field-id & _]]
-              (and (integer? field-id) (contains? parent->child-id field-id)))
-            fields)))
-
 (defn- handle-fields [{:keys [fields]} pipeline-ctx]
   (if-not (seq fields)
     pipeline-ctx
-    (let [new-projections (for [field (remove-parent-fields fields)]
+    (let [new-projections (for [field fields]
                             [(->lvalue field) (->rvalue field)])]
       (-> pipeline-ctx
           (assoc :projections (map first new-projections))
@@ -784,7 +752,7 @@
       (:collection &match))))
 
 (defn- log-aggregation-pipeline [form]
-  (when-not qp.i/*disable-qp-logging*
+  (when-not i/*disable-qp-logging*
     (log/tracef "\nMongo aggregation pipeline:\n%s\n"
                 (u/pprint-to-str 'green (walk/postwalk #(if (symbol? %) (symbol (name %)) %) form)))))
 

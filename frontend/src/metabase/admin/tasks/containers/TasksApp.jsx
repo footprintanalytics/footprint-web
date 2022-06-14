@@ -1,7 +1,7 @@
 /* eslint-disable react/prop-types */
 import React from "react";
 import { t } from "ttag";
-import _ from "underscore";
+import { Box, Flex } from "grid-styled";
 
 import Database from "metabase/entities/databases";
 import Task from "metabase/entities/tasks";
@@ -9,20 +9,17 @@ import Task from "metabase/entities/tasks";
 import PaginationControls from "metabase/components/PaginationControls";
 import AdminHeader from "metabase/components/AdminHeader";
 import Icon from "metabase/components/Icon";
-import Link from "metabase/core/components/Link";
+import Link from "metabase/components/Link";
 import Tooltip from "metabase/components/Tooltip";
-import {
-  SectionControls,
-  SectionHeader,
-  SectionRoot,
-  SectionTitle,
-} from "./TasksApp.styled";
 
 // Please preserve the following 2 @ calls in this order.
 // Otherwise @Database.loadList overrides pagination props
 // that come from @Task.LoadList
-
-class TasksAppInner extends React.Component {
+@Database.loadList()
+@Task.loadList({
+  pageSize: 50,
+})
+class TasksApp extends React.Component {
   render() {
     const {
       tasks,
@@ -39,9 +36,9 @@ class TasksAppInner extends React.Component {
       databaseByID[db.id] = db;
     }
     return (
-      <SectionRoot>
-        <SectionHeader>
-          <SectionTitle>
+      <Box p={3}>
+        <Flex align="center">
+          <Flex align="center">
             <AdminHeader title={t`Troubleshooting logs`} />
             <Tooltip
               tooltip={t`Trying to get to the bottom of something? This section shows logs of Metabase's background tasks, which can help shed light on what's going on.`}
@@ -53,8 +50,8 @@ class TasksAppInner extends React.Component {
                 className="text-brand-hover cursor-pointer text-medium"
               />
             </Tooltip>
-          </SectionTitle>
-          <SectionControls>
+          </Flex>
+          <Flex align="center" ml="auto">
             <PaginationControls
               onPreviousPage={onPreviousPage}
               onNextPage={onNextPage}
@@ -62,8 +59,8 @@ class TasksAppInner extends React.Component {
               pageSize={pageSize}
               itemsLength={tasks.length}
             />
-          </SectionControls>
-        </SectionHeader>
+          </Flex>
+        </Flex>
 
         <table className="ContentTable mt2">
           <thead>
@@ -106,16 +103,9 @@ class TasksAppInner extends React.Component {
           // render 'children' so that the invididual task modals show up
           children
         }
-      </SectionRoot>
+      </Box>
     );
   }
 }
-
-const TasksApp = _.compose(
-  Database.loadList(),
-  Task.loadList({
-    pageSize: 50,
-  }),
-)(TasksAppInner);
 
 export default TasksApp;

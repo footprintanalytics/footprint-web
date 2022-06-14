@@ -21,12 +21,11 @@
             [metabase.models.card :refer [Card]]
             [metabase.models.collection :as collection]
             [metabase.models.dashboard-card :as dashboard-card :refer [DashboardCard]]
-            [metabase.models.interface :as mi]
+            [metabase.models.interface :as i]
             [metabase.models.permissions :as perms]
             [metabase.models.pulse-card :refer [PulseCard]]
             [metabase.models.pulse-channel :as pulse-channel :refer [PulseChannel]]
             [metabase.models.pulse-channel-recipient :refer [PulseChannelRecipient]]
-            [metabase.models.serialization.hash :as serdes.hash]
             [metabase.util :as u]
             [metabase.util.i18n :refer [deferred-tru tru]]
             [metabase.util.schema :as su]
@@ -107,7 +106,7 @@
   an Alert cannot be put into a Collection."
   [notification read-or-write]
   (if (is-alert? notification)
-    (mi/perms-objects-set (alert->card notification) read-or-write)
+    (i/perms-objects-set (alert->card notification) read-or-write)
     (perms/perms-objects-set-for-parent-collection notification read-or-write)))
 
 (defn- can-write?
@@ -115,30 +114,26 @@
   subscriptions that they created, but not edit anyone else's subscriptions."
   [notification]
   (if (and (is-dashboard-subscription? notification)
-           (mi/current-user-has-full-permissions? :read notification)
-           (not (mi/current-user-has-full-permissions? :write notification)))
+           (i/current-user-has-full-permissions? :read notification)
+           (not (i/current-user-has-full-permissions? :write notification)))
     (= api/*current-user-id* (:creator_id notification))
-    (mi/current-user-has-full-permissions? :write notification)))
+    (i/current-user-has-full-permissions? :write notification)))
 
 (u/strict-extend (class Pulse)
   models/IModel
   (merge
    models/IModelDefaults
    {:hydration-keys (constantly [:pulse])
-    :properties     (constantly {:timestamped? true
-                                 :entity_id    true})
+    :properties     (constantly {:timestamped? true})
     :pre-insert     pre-insert
     :pre-update     pre-update
     :types          (constantly {:parameters :json})})
-  mi/IObjectPermissions
+  i/IObjectPermissions
   (merge
-   mi/IObjectPermissionsDefaults
-   {:can-read?         (partial mi/current-user-has-full-permissions? :read)
+   i/IObjectPermissionsDefaults
+   {:can-read?         (partial i/current-user-has-full-permissions? :read)
     :can-write?        can-write?
-    :perms-objects-set perms-objects-set})
-
-  serdes.hash/IdentityHashable
-  {:identity-hash-fields (constantly [:name (serdes.hash/hydrated-hash :collection)])})
+    :perms-objects-set perms-objects-set}))
 
 (def ^:private ^:dynamic *automatically-archive-when-last-channel-is-deleted*
   "Should we automatically archive a Pulse when its last `PulseChannel` is deleted? Normally we do, but this is disabled
@@ -148,7 +143,7 @@
 (defn will-delete-channel
   "This function is called by [[metabase.models.pulse-channel/pre-delete]] when the `PulseChannel` is about to be
   deleted. Archives `Pulse` if the channel being deleted is its last channel."
-  [{pulse-id :pulse_id, pulse-channel-id :id}]
+  [{pulse-id :pulse_id, pulse-channel-id :id, :as pulse-channel}]
   (when *automatically-archive-when-last-channel-is-deleted*
     (let [other-channels-count (db/count PulseChannel :pulse_id pulse-id, :id [:not= pulse-channel-id])]
       (when (zero? other-channels-count)

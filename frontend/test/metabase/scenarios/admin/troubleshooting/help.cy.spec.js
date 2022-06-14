@@ -1,6 +1,6 @@
 import {
-  isOSS,
-  describeEE,
+  describeWithoutToken,
+  describeWithToken,
   restore,
   setupMetabaseCloud,
 } from "__support__/e2e/cypress";
@@ -11,8 +11,7 @@ describe("scenarios > admin > troubleshooting > help", () => {
     cy.signInAsAdmin();
   });
 
-  // Unskip when mocking Cloud in Cypress is fixed (#18289)
-  it.skip("should add the support link when running Metabase Cloud", () => {
+  it("should add the support link when running Metabase Cloud", () => {
     setupMetabaseCloud();
     cy.visit("/admin/troubleshooting/help");
 
@@ -21,44 +20,30 @@ describe("scenarios > admin > troubleshooting > help", () => {
   });
 });
 
-describe("scenarios > admin > troubleshooting > help", { tags: "@OSS" }, () => {
+describeWithoutToken("scenarios > admin > troubleshooting > help", () => {
   beforeEach(() => {
-    cy.onlyOn(isOSS);
-
     restore();
     cy.signInAsAdmin();
   });
 
-  it("should link `Get Help` to help", () => {
+  it("should hide the support link when running Metabase OSS", () => {
     cy.visit("/admin/troubleshooting/help");
 
     cy.findByText("Metabase Admin");
-    cy.findByText("Get Help")
-      .parents("a")
-      .should("have.prop", "href")
-      .and(
-        "match",
-        /^https:\/\/www\.metabase\.com\/help\?utm_source=in-product&utm_medium=troubleshooting&utm_campaign=help&instance_version=v(?:(?!diag=).)+$/,
-      );
+    cy.findByText("Contact support").should("not.exist");
   });
 });
 
-describeEE("scenarios > admin > troubleshooting > help (EE)", () => {
+describeWithToken("scenarios > admin > troubleshooting > help (EE)", () => {
   beforeEach(() => {
     restore();
     cy.signInAsAdmin();
   });
 
-  it("should link `Get Help` to help-premium", () => {
+  it("should add the support link when running Metabase EE", () => {
     cy.visit("/admin/troubleshooting/help");
 
     cy.findByText("Metabase Admin");
-    cy.findByText("Get Help")
-      .parents("a")
-      .should("have.prop", "href")
-      .and(
-        "match",
-        /^https:\/\/www\.metabase\.com\/help-premium\?utm_source=in-product&utm_medium=troubleshooting&utm_campaign=help&instance_version=v.+&diag=%7B.+%7D$/,
-      );
+    cy.findByText("Contact support");
   });
 });

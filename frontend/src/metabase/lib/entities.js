@@ -1,73 +1,3 @@
-/*
- * # Entities abstract the interface between the back-end and the front-end.
- *
- * ## Endpoint requirements for entities:
- *
- * When fetching a list, each item of the list must include an `id` key/value pair.
- *
- * JSON must wrap response inside a `{ "data" : { …your data } }` structure.
- *
- * ## Required Properties:
- *
- * name:
- *   a string in plural form
- *   examples:
- *     "questions", "dashboards"
- *
- * path:
- *   a uri
- *     starting with "/api/"
- *     conventionally followed by the entity name in singular form
- *   examples:
- *     "/api/card", "/api/dashboard"
- *
- * ## Optional properties:
- *
- * api:
- *
- * here you can override the basic entity methods like `list`, `create`, `get`, `update`, `delete` (OR see `path` below)
- *
- * schema:
- *   normalizr schema
- *   default:
- *     `new schema.Entity(entity.name)`
- *
- * ## How to create a bare-bones entity
- *
- * Say we want to create a "books" entity, to be able to fetch a list of "books".
- *
- * Add the following line to `frontend/src/metabase/entities.index.js`:
- *
- *   export { default as books } from "./books"
- *
- * Create file `frontend/src/metabase/entities/books.js`
- *
- * Add the following to it:
- *
- *   import { createEntity } from "metabase/lib/entities";
-
- *   const Books = createEntity({
- *     name: "books",
- *     nameOne: "book",
- *     path: "/api/book",
- *   });
- *
- *   export default Books;
- *
- * ## How to consume an entity:
- *
- * Near the top of a container file, import the entity:
- *
- *   import Book from "metabase/entities/books";
- *
- * Near the bottom of the container file, add the entity to a `compose` statement:
- *
- *   export default _.compose(
- *     Book.loadList(),
- *     connect(mapStateToProps),
- *   )(BookContainer);
- */
-
 import {
   combineReducers,
   handleEntities,
@@ -92,8 +22,170 @@ import { normalize, denormalize, schema } from "normalizr";
 import { getIn, merge } from "icepick";
 import _ from "underscore";
 
-export function createEntity(def) {
-  const entity = { ...def };
+// entity defintions export the following properties (`name`, and `api` or `path` are required)
+//
+// name: plural, like "questions" or "dashboards"
+// api: object containing `list`, `create`, `get`, `update`, `delete` methods (OR see `path` below)
+// path: API endpoint to create default `api` object
+// schema: normalizr schema, defaults to `new schema.Entity(entity.name)`
+//
+
+import type { APIMethod } from "metabase/lib/api";
+import type { FormDefinition } from "metabase/containers/Form";
+import { getProject } from "metabase/lib/project_info";
+import { message } from "antd";
+
+type EntityName = string;
+
+type ActionType = string;
+type ActionCreator = Function;
+type ObjectActionCreator = Function;
+type ObjectSelector = Function;
+
+type Action = any;
+export type Reducer = (state: any, action: Action) => any;
+
+type EntityDefinition = {
+  name: EntityName,
+
+  nameOne?: string,
+  nameMany?: string,
+
+  form?: FormDefinition,
+  forms?: { [key: string]: FormDefinition },
+
+  displayNameOne?: string,
+  displayNameMany?: string,
+
+  schema?: schema.Entity,
+  path?: string,
+  api?: { [method: string]: APIMethod },
+  actions?: {
+    [name: string]: ActionCreator,
+  },
+  selectors?: {
+    [name: string]: Function,
+  },
+  createSelectors?: ({ [name: string]: Function }) => {
+    [name: string]: Function,
+  },
+  objectActions?: {
+    [name: string]: ObjectActionCreator,
+  },
+  objectSelectors?: {
+    [name: string]: ObjectSelector,
+  },
+  reducer?: Reducer,
+  wrapEntity?: (object: EntityObject) => any,
+  actionShouldInvalidateLists?: (action: Action) => boolean,
+
+  // list of properties for this object which should be persisted
+  writableProperties?: string[],
+};
+
+type EntityObject = any;
+
+type EntityQuery = {
+  [name: string]: string | number | boolean | null,
+};
+
+type FetchOptions = {
+  reload?: boolean,
+};
+type UpdateOptions = {
+  notify?:
+    | { verb?: string, subject?: string, undo?: boolean, message?: any }
+    | false,
+};
+
+type Result = any; // FIXME
+
+export type Entity = {
+  name: EntityName,
+
+  nameOne: string,
+  nameMany: string,
+
+  displayNameOne: string,
+  displayNameMany: string,
+
+  form?: FormDefinition,
+  forms?: { [key: string]: FormDefinition },
+
+  path?: string,
+  api: {
+    list: APIMethod,
+    create: APIMethod,
+    get: APIMethod,
+    update: APIMethod,
+    delete: APIMethod,
+    [method: string]: APIMethod,
+  },
+  schema: schema.Entity,
+  actionTypes: {
+    [name: string]: ActionType,
+    CREATE: ActionType,
+    FETCH: ActionType,
+    UPDATE: ActionType,
+    DELETE: ActionType,
+    FETCH_LIST: ActionType,
+  },
+  actionDecorators: {
+    [name: string]: Function, // TODO: better type
+  },
+  actions: {
+    [name: string]: ActionCreator,
+    fetchList: (
+      entityQuery?: EntityQuery,
+      options?: FetchOptions,
+    ) => Promise<Result>,
+  },
+  reducers: { [name: string]: Reducer },
+  selectors: {
+    getList: Function,
+    getObject: Function,
+    getLoading: Function,
+    getLoaded: Function,
+    getFetched: Function,
+    getError: Function,
+    [name: string]: Function,
+  },
+  objectActions: {
+    [name: string]: ObjectActionCreator,
+    create: (entityObject: EntityObject) => Promise<Result>,
+    fetch: (
+      entityObject: EntityObject,
+      options?: FetchOptions,
+    ) => Promise<Result>,
+    update: (
+      entityObject: EntityObject,
+      updatedObject: EntityObject,
+      options?: UpdateOptions,
+    ) => Promise<Result>,
+    delete: (entityObject: EntityObject) => Promise<Result>,
+  },
+  objectSelectors: {
+    [name: string]: ObjectSelector,
+  },
+  wrapEntity: (object: EntityObject) => any,
+
+  requestsReducer: Reducer,
+  actionShouldInvalidateLists: (action: Action) => boolean,
+
+  writableProperties?: string[],
+  getAnalyticsMetadata?: () => any,
+
+  normalize: (object: EntityObject, schema?: schema.Entity) => any, // FIXME: return type
+  normalizeList: (list: EntityObject[], schema?: schema.Entity) => any, // FIXME: return type
+
+  getObjectStatePath: Function,
+  getListStatePath: Function,
+
+  HACK_getObjectFromAction: (action: Action) => any,
+};
+
+export function createEntity(def: EntityDefinition): Entity {
+  const entity: Entity = { ...def };
 
   if (!entity.nameOne) {
     entity.nameOne = inflection.singularize(entity.name);
@@ -130,12 +222,12 @@ export function createEntity(def) {
     };
   }
 
-  const getQueryKey = entityQuery => JSON.stringify(entityQuery || null);
+  const getIdForQuery = entityQuery => JSON.stringify(entityQuery || null);
+
   const getObjectStatePath = entityId => ["entities", entity.name, entityId];
   const getListStatePath = entityQuery =>
-    ["entities", entity.name + "_list"].concat(getQueryKey(entityQuery));
+    ["entities", entity.name + "_list"].concat(getIdForQuery(entityQuery));
 
-  entity.getQueryKey = getQueryKey;
   entity.getObjectStatePath = getObjectStatePath;
   entity.getListStatePath = getListStatePath;
 
@@ -208,19 +300,16 @@ export function createEntity(def) {
     return entity.actionDecorators[action] || (_ => _);
   }
 
-  // `objectActions` are for actions that accept an entity as their first argument,
-  // and they are bound to instances when `wrapped: true` is passed to `EntityListLoader`
   entity.objectActions = {
     fetch: compose(
       withAction(FETCH_ACTION),
       withCachedDataAndRequestState(
         ({ id }) => [...getObjectStatePath(id)],
         ({ id }) => [...getObjectStatePath(id), "fetch"],
-        entityQuery => getQueryKey(entityQuery),
       ),
       withEntityActionDecorators("fetch"),
-    )((entityQuery, options = {}) => async (dispatch, getState) =>
-      entity.normalize(await entity.api.get(entityQuery, options)),
+    )((entityObject, options = {}) => async (dispatch, getState) =>
+      entity.normalize(await entity.api.get({ id: entityObject.id }, options)),
     ),
 
     create: compose(
@@ -229,9 +318,15 @@ export function createEntity(def) {
       withEntityRequestState(() => ["create"]),
       withEntityActionDecorators("create"),
     )(entityObject => async (dispatch, getState) => {
-      return entity.normalize(
-        await entity.api.create(getWritableProperties(entityObject)),
+      const result = entity.normalize(
+        await entity.api.create(
+          getWritableProperties({ ...entityObject, project: getProject() }),
+        ),
       );
+      if (result && result.object && result.object.code === -1) {
+        result.object.message && message.error(result.object.message);
+      }
+      return result;
     }),
 
     update: compose(
@@ -259,6 +354,10 @@ export function createEntity(def) {
         const result = entity.normalize(
           await entity.api.update(getWritableProperties(entityObject)),
         );
+
+        if (result && result.object && result.object.code === -1) {
+          result.object.message && message.error(result.object.message);
+        }
 
         if (notify) {
           if (notify.undo) {
@@ -294,7 +393,7 @@ export function createEntity(def) {
       withEntityRequestState(object => [object.id, "delete"]),
       withEntityActionDecorators("delete"),
     )(entityObject => async (dispatch, getState) => {
-      await entity.api.delete(entityObject);
+      await entity.api.delete({ id: entityObject.id });
       return {
         entities: { [entity.name]: { [entityObject.id]: null } },
         result: entityObject.id,
@@ -314,14 +413,23 @@ export function createEntity(def) {
         entityQuery => [...getListStatePath(entityQuery), "fetch"],
       ),
     )((entityQuery = null) => async (dispatch, getState) => {
-      const fetched = await entity.api.list(entityQuery || {});
+      let fetched = await entity.api.list(entityQuery || {});
       // for now at least paginated endpoints have a 'data' property that
       // contains the actual entries, if that is on the response we should
       // use that as the 'results'
 
       let results;
       let metadata = {};
-
+      if (
+        entity &&
+        entity.path &&
+        entity.path.includes("api/v1") &&
+        fetched.data &&
+        // eslint-disable-next-line no-prototype-builtins
+        fetched.data.hasOwnProperty("code")
+      ) {
+        fetched = fetched.data;
+      }
       if (fetched.data) {
         const { data, ...rest } = fetched;
         results = data;
@@ -329,7 +437,6 @@ export function createEntity(def) {
       } else {
         results = fetched;
       }
-
       if (!Array.isArray(results)) {
         throw `Invalid response listing ${entity.name}`;
       }
@@ -339,11 +446,6 @@ export function createEntity(def) {
         entityQuery,
       };
     }),
-
-    invalidateLists: compose(
-      withAction(INVALIDATE_LISTS_ACTION),
-      withEntityActionDecorators("invalidateLists"),
-    )(() => null),
 
     // user defined actions should override defaults
     ...entity.objectActions,
@@ -393,14 +495,14 @@ export function createEntity(def) {
   const getObject = createCachedSelector(
     [getEntities, getEntityId],
     (entities, entityId) => denormalize(entityId, entity.schema, entities),
-  )((state, { entityId } = {}) =>
+  )((state, { entityId }) =>
     typeof entityId === "object" ? JSON.stringify(entityId) : entityId,
   ); // must stringify objects
 
   // LIST SELECTORS
 
   const getEntityQueryId = (state, props) =>
-    getQueryKey(props && props.entityQuery);
+    getIdForQuery(props && props.entityQuery);
 
   const getEntityLists = createSelector(
     [getEntities],
@@ -422,17 +524,15 @@ export function createEntity(def) {
     entities => entities && entities.metadata,
   );
 
-  const getList = createCachedSelector(
-    [getEntities, getEntityIds],
+  const getList = createSelector(
+    [state => state, getEntityIds],
     // delegate to getObject
-    (entities, entityIds) =>
+    (state, entityIds) =>
       entityIds &&
       entityIds
-        .map(entityId => entity.selectors.getObject({ entities }, { entityId }))
-        .filter(e => e != null), // deleted entities might remain in lists,
-  )((state, { entityQuery } = {}) => {
-    return entityQuery ? JSON.stringify(entityQuery) : "";
-  });
+        .map(entityId => entity.selectors.getObject(state, { entityId }))
+        .filter(e => e != null), // deleted entities might remain in lists
+  );
 
   // REQUEST STATE SELECTORS
 
@@ -524,7 +624,7 @@ export function createEntity(def) {
         const { entityQuery, metadata, result: list } = payload;
         return {
           ...state,
-          [getQueryKey(entityQuery)]: {
+          [getIdForQuery(entityQuery)]: {
             list,
             metadata,
           },
@@ -580,7 +680,7 @@ export function createEntity(def) {
     // dispatched using it, otherwise the actions will be returned
     //
     class EntityWrapper {
-      _dispatch;
+      _dispatch: ?(action: any) => any;
 
       constructor(object, dispatch = null) {
         Object.assign(this, object);
@@ -620,7 +720,14 @@ export function createEntity(def) {
   return entity;
 }
 
-export function combineEntities(entities) {
+type CombinedEntities = {
+  entities: { [key: EntityName]: Entity },
+  reducers: { [name: string]: Reducer },
+  reducer: Reducer,
+  requestsReducer: Reducer,
+};
+
+export function combineEntities(entities: Entity[]): CombinedEntities {
   const entitiesMap = {};
   const reducersMap = {};
 
@@ -652,10 +759,10 @@ export function combineEntities(entities) {
 
 // OBJECT ACTION DECORATORS
 
-export const notify = (opts = {}, subject, verb) =>
+export const notify = (opts: any = {}, subject: string, verb: string) =>
   merge({ notify: { subject, verb, undo: false } }, opts || {});
 
-export const undo = (opts = {}, subject, verb) =>
+export const undo = (opts: any = {}, subject: string, verb: string) =>
   merge({ notify: { subject, verb, undo: true } }, opts || {});
 
 // decorator versions disabled due to incompatibility with current version of flow

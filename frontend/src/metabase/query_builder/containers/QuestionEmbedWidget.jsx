@@ -5,15 +5,16 @@ import { connect } from "react-redux";
 import { t } from "ttag";
 
 import Icon from "metabase/components/Icon";
+import Button from "metabase/components/Button";
+import Tooltip from "metabase/components/Tooltip";
 
 import EmbedModalContent from "metabase/public/components/widgets/EmbedModalContent";
 
 import * as Urls from "metabase/lib/urls";
 import MetabaseSettings from "metabase/lib/settings";
 import * as MetabaseAnalytics from "metabase/lib/analytics";
-import { getValueAndFieldIdPopulatedParametersFromCard } from "metabase/parameters/utils/cards";
-import { getMetadata } from "metabase/selectors/metadata";
 
+import { getParametersFromCard } from "metabase/meta/Card";
 import {
   createPublicLink,
   deletePublicLink,
@@ -28,16 +29,11 @@ const QuestionEmbedWidgetPropTypes = {
   deletePublicLink: PropTypes.func,
   updateEnableEmbedding: PropTypes.func,
   updateEmbeddingParams: PropTypes.func,
-  metadata: PropTypes.object,
 };
 
 const QuestionEmbedWidgetTriggerPropTypes = {
   onClick: PropTypes.func,
 };
-
-const mapStateToProps = (state, props) => ({
-  metadata: getMetadata(state),
-});
 
 const mapDispatchToProps = {
   createPublicLink,
@@ -46,7 +42,8 @@ const mapDispatchToProps = {
   updateEmbeddingParams,
 };
 
-class QuestionEmbedWidget extends Component {
+@connect(null, mapDispatchToProps)
+export default class QuestionEmbedWidget extends Component {
   render() {
     const {
       className,
@@ -55,7 +52,6 @@ class QuestionEmbedWidget extends Component {
       deletePublicLink,
       updateEnableEmbedding,
       updateEmbeddingParams,
-      metadata,
       ...props
     } = this.props;
     return (
@@ -64,10 +60,7 @@ class QuestionEmbedWidget extends Component {
         className={className}
         resource={card}
         resourceType="question"
-        resourceParameters={getValueAndFieldIdPopulatedParametersFromCard(
-          card,
-          metadata,
-        )}
+        resourceParameters={getParametersFromCard(card)}
         onCreatePublicLink={() => createPublicLink(card)}
         onDisablePublicLink={() => deletePublicLink(card)}
         onUpdateEnableEmbedding={enableEmbedding =>
@@ -77,7 +70,7 @@ class QuestionEmbedWidget extends Component {
           updateEmbeddingParams(card, embeddingParams)
         }
         getPublicUrl={({ public_uuid }, extension) =>
-          Urls.publicQuestion(public_uuid, extension)
+          Urls.publicQuestion({ uuid: public_uuid, options: extension })
         }
         extensions={Urls.exportFormats}
       />
@@ -86,31 +79,26 @@ class QuestionEmbedWidget extends Component {
 
   static shouldRender({
     question,
+    user,
     isAdmin,
     // preferably this would come from props
     isPublicLinksEnabled = MetabaseSettings.get("enable-public-sharing"),
     isEmbeddingEnabled = MetabaseSettings.get("enable-embedding"),
   }) {
-    if (question.isDataset()) {
-      return false;
-    }
-
+    const isOwner =
+      user && (user.id === question._card.creator_id || user.is_superuser);
     return (
-      (isPublicLinksEnabled && (isAdmin || question.publicUUID())) ||
+      (isPublicLinksEnabled && (isAdmin || isOwner)) ||
       (isEmbeddingEnabled && isAdmin)
     );
   }
 }
 
-export default connect(
-  mapStateToProps,
-  mapDispatchToProps,
-)(QuestionEmbedWidget);
-
 export function QuestionEmbedWidgetTrigger({ onClick }) {
   return (
     <Icon
       name="share"
+      size={16}
       tooltip={t`Sharing`}
       className="mx1 hide sm-show text-brand-hover cursor-pointer"
       onClick={() => {
@@ -125,5 +113,45 @@ export function QuestionEmbedWidgetTrigger({ onClick }) {
   );
 }
 
+export function QuestionEmbedWidgetButton({ onClick }) {
+  return (
+    <>
+      <Tooltip tooltip={t`Embed Widget`}>
+        <Button
+          onlyIcon
+          className="ml1 Question-header-btn"
+          icon="embed"
+          iconSize={16}
+          onClick={() => {
+            MetabaseAnalytics.trackStructEvent(
+              "Sharing / Embedding",
+              "question",
+              "Sharing Link Clicked",
+            );
+            onClick({ onlyEmbed: true });
+          }}
+        />
+      </Tooltip>
+      <Tooltip tooltip={t`Sharing`}>
+        <Button
+          onlyIcon
+          className="ml1 Question-header-btn"
+          icon="share"
+          iconSize={16}
+          onClick={() => {
+            MetabaseAnalytics.trackStructEvent(
+              "Sharing / Embedding",
+              "question",
+              "Sharing Link Clicked",
+            );
+            onClick({ onlyEmbed: false });
+          }}
+        />
+      </Tooltip>
+    </>
+  );
+}
+
 QuestionEmbedWidgetTrigger.propTypes = QuestionEmbedWidgetTriggerPropTypes;
+QuestionEmbedWidgetButton.propTypes = QuestionEmbedWidgetTriggerPropTypes;
 QuestionEmbedWidget.propTypes = QuestionEmbedWidgetPropTypes;

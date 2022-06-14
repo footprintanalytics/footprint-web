@@ -3,13 +3,12 @@
   page tasks."
   (:require [compojure.core :refer [GET POST]]
             [crypto.random :as crypto-random]
-            [metabase.analytics.stats :as stats]
             [metabase.api.common :as api]
-            [metabase.api.common.validation :as validation]
             [metabase.logger :as logger]
             [metabase.troubleshooting :as troubleshooting]
             [metabase.util.schema :as su]
-            [ring.util.response :as response]))
+            [metabase.util.stats :as stats]
+            [ring.util.response :as ring.response]))
 
 (api/defendpoint POST "/password_check"
   "Endpoint that checks if the supplied password meets the currently configured password complexity rules."
@@ -20,14 +19,14 @@
 (api/defendpoint GET "/logs"
   "Logs."
   []
-  (validation/check-has-application-permission :monitoring)
+  (api/check-superuser)
   (logger/messages))
 
 (api/defendpoint GET "/stats"
   "Anonymous usage stats. Endpoint for testing, and eventually exposing this to instance admins to let them see
   what is being phoned home."
   []
-  (validation/check-has-application-permission :monitoring)
+  (api/check-superuser)
   (stats/anonymous-usage-stats))
 
 (api/defendpoint GET "/random_token"
@@ -39,16 +38,16 @@
 (api/defendpoint GET "/bug_report_details"
   "Returns version and system information relevant to filing a bug report against Metabase."
   []
-  (validation/check-has-application-permission :monitoring)
+  (api/check-superuser)
   {:system-info   (troubleshooting/system-info)
    :metabase-info (troubleshooting/metabase-info)})
 
 (api/defendpoint GET "/diagnostic_info/connection_pool_info"
   "Returns database connection pool info for the current Metabase instance."
   []
-  (validation/check-has-application-permission :monitoring)
+  (api/check-superuser)
   (let [pool-info (troubleshooting/connection-pool-info)
         headers   {"Content-Disposition" "attachment; filename=\"connection_pool_info.json\""}]
-    (assoc (response/response pool-info) :headers headers, :status 200)))
+    (assoc (ring.response/response pool-info) :headers headers, :status 200)))
 
 (api/define-routes)

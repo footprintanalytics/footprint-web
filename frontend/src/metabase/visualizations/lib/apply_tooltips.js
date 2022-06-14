@@ -3,32 +3,12 @@
 import d3 from "d3";
 import moment from "moment";
 import { getIn } from "icepick";
-import _ from "underscore";
 
 import { formatValue } from "metabase/lib/formatting";
 
 import { isNormalized, isStacked, formatNull } from "./renderer_utils";
 import { determineSeriesIndexFromElement } from "./tooltip";
 import { getFriendlyName } from "./utils";
-
-function isDashboardAddedSeries(series, seriesIndex, dashboard) {
-  // the first series by definition can't be an "added" series
-  if (!dashboard || seriesIndex === 0) {
-    return false;
-  }
-
-  const { card: firstCardInSeries } = series[0];
-  const { card: addedSeriesCard } = series[seriesIndex];
-
-  // find the dashcard associated with the first series
-  const dashCard = dashboard.ordered_cards.find(
-    dashCard => dashCard.card_id === firstCardInSeries.id,
-  );
-
-  // evaluate whether the added series exists in its series array
-  // the "series" array on a dashcard is where "added" series are stored
-  return (dashCard?.series || []).some(card => card.id === addedSeriesCard.id);
-}
 
 export function getClickHoverObject(
   d,
@@ -42,7 +22,6 @@ export function getClickHoverObject(
     event,
     element,
     settings,
-    dashboard,
   },
 ) {
   let { cols } = series[seriesIndex].data;
@@ -53,16 +32,11 @@ export function getClickHoverObject(
   const isBar = classList.includes("bar");
   const isSingleSeriesBar = isBar && !isMultiseries;
 
-  function getColumnDisplayName(col, colVizSettingsKey = col.name) {
-    const colTitle = getIn(settings, [
-      "series_settings",
-      colVizSettingsKey,
-      "title",
-    ]);
-
+  function getColumnDisplayName(col) {
+    const title = getIn(settings, ["series_settings", col.name, "title"]);
     // don't replace with series title for breakout multiseries since the series title is shown in the breakout value
-    if (!isBreakoutMultiseries && colTitle) {
-      return colTitle;
+    if (!isBreakoutMultiseries && title) {
+      return title;
     }
 
     return getFriendlyName(col);
@@ -115,42 +89,6 @@ export function getClickHoverObject(
       ([x]) => key === x || (moment.isMoment(key) && key.isSame(x)),
     );
 
-    const isAddedSeriesOnDashcard = isDashboardAddedSeries(
-      series,
-      seriesIndex,
-      dashboard,
-    );
-    const isCardNameTakenFromColumnName = cols.some(
-      col => col.name === card.name,
-    );
-    const isCardNameCombinedWithColumnDisplayName = cols.some(
-      col => card.name === `${card.originalCardName}: ${col.display_name}`,
-    );
-    const colVizSettingsKeys = rawCols.map((rawCol, colIndex) => {
-      // Series that have been added to dashcards as "additional series" can have weird viz settings keys.
-      // Typically the viz settings key is the column name, but to avoid scenarios where the added series
-      // repeats column names, the card name is used OR some combo of the card name and column display_name is used.
-      if (
-        isAddedSeriesOnDashcard &&
-        // Sometimes (bar charts only?), the card name is set to one of the column names (not necessarily the `rawCol` in this function).
-        // In that scenario, we can probably be confident that the viz settings key for the column is the column name.
-        !isCardNameTakenFromColumnName &&
-        // the x axis (first) column uses the column name
-        colIndex >= 1
-      ) {
-        // When there are multiple series in a card, the column name is combined with the card name,
-        // (remember: this `card` object has a `name` property that has been changed in `LineAreaBarChart`),
-        // so we need to reconstruct the viz settings key using the original card name and the column display name
-        if (isCardNameCombinedWithColumnDisplayName) {
-          return `${card.originalCardName}: ${rawCol.display_name}`;
-        } else {
-          return card.originalCardName;
-        }
-      }
-
-      return rawCol.name;
-    });
-
     // try to get rows from _origin
     const rawRows = rows
       .map(row => {
@@ -163,24 +101,34 @@ export function getClickHoverObject(
 
     // Loop over *all* of the columns and create the new array
     if (aggregatedRow) {
-      data = rawCols.map((col, i) => {
-        if (isNormalized && cols[1].field_ref === col.field_ref) {
+      // aggregate rows too many，so just show metrics and dimensions
+      const filterMetricsAndDimensions = [
+        ...settings["graph.metrics"],
+        ...settings["graph.dimensions"],
+      ];
+      data = rawCols
+        .map((col, i) => {
+          if (!filterMetricsAndDimensions.includes(col.name)) {
+            return null;
+          }
+          if (isNormalized && cols[1].field_ref === col.field_ref) {
+            return {
+              key: getColumnDisplayName(cols[1]),
+              value: formatValue(d.data.value, {
+                number_style: "percent",
+                column: cols[1],
+                decimals: cols[1].decimals,
+              }),
+              col: col,
+            };
+          }
           return {
-            key: getColumnDisplayName(cols[1]),
-            value: formatValue(d.data.value, {
-              number_style: "percent",
-              column: cols[1],
-              decimals: cols[1].decimals,
-            }),
+            key: getColumnDisplayName(col),
+            value: formatNull(aggregatedRow[i]),
             col: col,
           };
-        }
-        return {
-          key: getColumnDisplayName(col, colVizSettingsKeys[i]),
-          value: formatNull(aggregatedRow[i]),
-          col: col,
-        };
-      });
+        })
+        .filter(col => col);
       dimensions = rawCols.map((column, i) => ({
         column,
         value: aggregatedRow[i],
@@ -284,14 +232,7 @@ function aggregateRows(rows) {
 }
 
 export function setupTooltips(
-  {
-    settings,
-    series,
-    isScalarSeries,
-    onHoverChange,
-    onVisualizationClick,
-    dashboard,
-  },
+  { settings, series, isScalarSeries, onHoverChange, onVisualizationClick },
   datas,
   chart,
   { isBrushing },
@@ -326,7 +267,6 @@ export function setupTooltips(
       event: d3.event,
       element: target,
       settings,
-      dashboard,
     });
   };
 

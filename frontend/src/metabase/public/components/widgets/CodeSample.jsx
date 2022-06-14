@@ -1,15 +1,30 @@
-/* eslint-disable react/prop-types */
 import React, { Component } from "react";
 
-import Select, { Option } from "metabase/core/components/Select";
+import Select, { Option } from "metabase/components/Select";
 import CopyButton from "metabase/components/CopyButton";
 
 import AceEditor from "metabase/components/TextEditor";
 
 import _ from "underscore";
 
+import type { CodeSampleOption } from "metabase/public/lib/code";
+
+type Props = {
+  className?: string,
+  title?: string,
+  options?: Array<CodeSampleOption>,
+  onChangeOption?: (option: ?CodeSampleOption) => void,
+};
+
+type State = {
+  name: ?string,
+};
+
 export default class CodeSample extends Component {
-  constructor(props) {
+  props: Props;
+  state: State;
+
+  constructor(props: Props) {
     super(props);
     this.state = {
       name:
@@ -19,11 +34,11 @@ export default class CodeSample extends Component {
     };
   }
 
-  setOption(name) {
+  setOption(name: string) {
     this.setState({ name });
   }
 
-  handleChange(name) {
+  handleChange(name: string) {
     const { options, onChangeOption } = this.props;
     this.setState({ name });
     if (onChangeOption) {
@@ -32,7 +47,7 @@ export default class CodeSample extends Component {
   }
 
   render() {
-    const { className, title, options, dataTestId } = this.props;
+    const { className, title, options } = this.props;
     const { name } = this.state;
     const selected = _.findWhere(options, { name });
     const source = selected && selected.source();
@@ -46,9 +61,6 @@ export default class CodeSample extends Component {
                 className="AdminSelect--borderless ml-auto pt1 pb1"
                 value={name}
                 onChange={e => this.handleChange(e.target.value)}
-                buttonProps={{
-                  dataTestId,
-                }}
               >
                 {options.map(option => (
                   <Option key={option.name} value={option.name}>

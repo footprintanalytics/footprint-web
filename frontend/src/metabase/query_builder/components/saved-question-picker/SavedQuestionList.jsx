@@ -1,22 +1,21 @@
 import React from "react";
 import { t } from "ttag";
 import PropTypes from "prop-types";
-import _ from "underscore";
+import { Box } from "grid-styled";
 
 import { PLUGIN_MODERATION } from "metabase/plugins";
 import Schemas from "metabase/entities/schemas";
-import { getCollectionVirtualSchemaId } from "metabase/lib/saved-questions";
+import { SAVED_QUESTIONS_VIRTUAL_DB_ID } from "metabase/lib/constants";
 import EmptyState from "metabase/components/EmptyState";
+import { generateSchemaId } from "metabase/schema";
 
 import {
   SavedQuestionListRoot,
   SavedQuestionListItem,
-  SavedQuestionListEmptyState,
 } from "./SavedQuestionList.styled";
 import { PERSONAL_COLLECTIONS } from "metabase/entities/collections";
 
 const propTypes = {
-  isDatasets: PropTypes.bool,
   databaseId: PropTypes.string,
   schema: PropTypes.object.isRequired,
   onSelect: PropTypes.func.isRequired,
@@ -30,26 +29,29 @@ const propTypes = {
   }).isRequired,
 };
 
-function SavedQuestionList({
-  isDatasets,
+export default function SavedQuestionList({
   onSelect,
   databaseId,
   selectedId,
   collection,
 }) {
   const emptyState = (
-    <SavedQuestionListEmptyState>
+    <Box my="120px">
       <EmptyState message={t`Nothing here`} icon="all" />
-    </SavedQuestionListEmptyState>
+    </Box>
   );
 
   const isVirtualCollection = collection.id === PERSONAL_COLLECTIONS.id;
-  const schemaId = getCollectionVirtualSchemaId(collection, { isDatasets });
 
   return (
     <SavedQuestionListRoot>
       {!isVirtualCollection && (
-        <Schemas.Loader id={schemaId}>
+        <Schemas.Loader
+          id={generateSchemaId(
+            SAVED_QUESTIONS_VIRTUAL_DB_ID,
+            collection.schemaName,
+          )}
+        >
           {({ schema }) => {
             const tables =
               databaseId != null
@@ -57,17 +59,14 @@ function SavedQuestionList({
                 : schema.tables;
             return (
               <React.Fragment>
-                {_.sortBy(tables, "display_name").map(t => (
+                {tables.map(t => (
                   <SavedQuestionListItem
                     id={t.id}
                     isSelected={selectedId === t.id}
                     key={t.id}
                     size="small"
                     name={t.display_name}
-                    icon={{
-                      name: isDatasets ? "model" : "table2",
-                      size: 16,
-                    }}
+                    icon="table2"
                     onSelect={() => onSelect(t)}
                     rightIcon={PLUGIN_MODERATION.getStatusIcon(
                       t.moderated_status,
@@ -87,5 +86,3 @@ function SavedQuestionList({
 }
 
 SavedQuestionList.propTypes = propTypes;
-
-export default SavedQuestionList;

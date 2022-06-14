@@ -1,0 +1,59 @@
+.new-guide-start__modal {
+  padding: 30px 0;
+}
+
+.new-guide-start {
+  display: flex;
+  flex-direction: column;
+  padding: 16px;
+}
+
+.new-guide-start__title {
+  font-size: 24px;
+  font-weight: bold;
+  color: #303440;
+  margin-bottom: 12px;
+}
+
+.new-guide-start__item {
+  font-size: 16px;
+  font-weight: 500;
+  color: #303440;
+  padding: 8px 0;
+  display: flex;
+}
+
+.new-guide-start__item-inx {
+  background: #45bf8e;
+  height: 26px;
+  line-height: 26px;
+  text-align: center;
+  width: 26px;
+  border-radius: 13px;
+  color: white;
+  font-size: 14px;
+  margin-right: 12px;
+}
+
+.new-guide-start__buttons {
+  display: flex;
+  justify-content: center;
+  margin-top: 24px;
+  height: 48px;
+}
+
+.new-guide-start__buttons-skip {
+  background: #f6f6fe;
+  font-size: 14px;
+  color: var(--color-brand);
+  border-radius: 2px;
+  margin: 0 9px;
+}
+
+.new-guide-start__buttons-start {
+  background: var(--color-brand);
+  font-size: 18px;
+  color: white;
+  border-radius: 2px;
+  margin: 0 9px;
+}

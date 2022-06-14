@@ -1,8 +1,18 @@
-import _ from "underscore";
-
 import { open } from "metabase/lib/dom";
 
-export function performAction(action, { dispatch, onChangeCardAndRun }) {
+import _ from "underscore";
+
+import type { ClickAction } from "metabase-types/types/Visualization";
+
+type PerformActionProps = {
+  dispatch: Function,
+  onChangeCardAndRun: Function,
+};
+
+export function performAction(
+  action: ClickAction,
+  { dispatch, onChangeCardAndRun }: PerformActionProps,
+) {
   let didPerform = false;
   if (action.action) {
     const reduxAction = action.action();
@@ -13,28 +23,25 @@ export function performAction(action, { dispatch, onChangeCardAndRun }) {
   }
   if (action.url) {
     const url = action.url();
-    const ignoreSiteUrl = action.ignoreSiteUrl;
     if (url) {
-      open(url, { ignoreSiteUrl });
+      open(url);
       didPerform = true;
     }
   }
   if (action.question) {
     const question = action.question();
-    const extra = action?.extra?.() ?? {};
     if (question) {
-      onChangeCardAndRun({
-        nextCard: question.card(),
-        ...extra,
-        objectId: extra.objectId,
-      });
+      onChangeCardAndRun({ nextCard: question.card() });
       didPerform = true;
     }
   }
   return didPerform;
 }
 
-export function performDefaultAction(actions, props) {
+export function performDefaultAction(
+  actions: ClickAction[],
+  props: PerformActionProps,
+) {
   if (!actions) {
     return false;
   }

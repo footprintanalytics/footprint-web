@@ -9,7 +9,7 @@ import { filterWidget, popover } from "__support__/e2e/cypress";
  * @param {("Text"|"Number"|"Date"|"Field Filter")} filterType
  */
 export function openTypePickerFromSelectedFilterType(filterType) {
-  cy.findAllByTestId("select-button-content")
+  cy.get(".AdminSelect-content")
     .contains(filterType)
     .click();
 }
@@ -57,7 +57,7 @@ export function setWidgetValue(value) {
  * @param {string} value
  */
 export function setDefaultValue(value) {
-  cy.findByPlaceholderText("Enter a default value…").type(value);
+  cy.findByPlaceholderText("Enter a default value...").type(value);
 }
 
 // UI PATTERNS
@@ -68,7 +68,7 @@ export function setDefaultValue(value) {
 export function toggleRequired() {
   cy.findByText("Required?")
     .parent()
-    .find("input")
+    .find("a")
     .click();
 }
 

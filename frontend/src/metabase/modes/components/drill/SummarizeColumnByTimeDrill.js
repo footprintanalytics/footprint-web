@@ -1,6 +1,6 @@
-/* eslint-disable react/prop-types */
 import React from "react";
 import { t } from "ttag";
+import StructuredQuery from "metabase-lib/lib/queries/StructuredQuery";
 import { fieldRefForColumn } from "metabase/lib/dataset";
 import {
   getAggregationOperator,
@@ -8,11 +8,18 @@ import {
 } from "metabase/lib/schema_metadata";
 import { capitalize } from "metabase/lib/formatting";
 
-export default ({ question, clicked = {} }) => {
+import type {
+  ClickAction,
+  ClickActionProps,
+} from "metabase-types/types/Visualization";
+
+export default ({
+  question,
+  clicked = {},
+}: ClickActionProps): ClickAction[] => {
   const { column, value } = clicked;
   const query = question.query();
-  const isStructured = question.isStructured();
-  if (!column || value !== undefined || !isStructured || !query.isEditable()) {
+  if (!column || value !== undefined || !(query instanceof StructuredQuery)) {
     return [];
   }
   const dateDimension = query

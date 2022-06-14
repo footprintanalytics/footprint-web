@@ -2,7 +2,7 @@
   composes: inline-block from "style";
   width: 18px;
   height: 18px;
-  border-radius: 3px;
+  border-radius: 2px;
 }
 
 :local(.emojiIcon) {

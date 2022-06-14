@@ -1,15 +1,8 @@
-import {
-  restore,
-  openOrdersTable,
-  popover,
-  sidebar,
-  summarize,
-  visitDashboard,
-} from "__support__/e2e/cypress";
+import { restore, openOrdersTable, popover } from "__support__/e2e/cypress";
 
-import { SAMPLE_DATABASE } from "__support__/e2e/cypress_sample_database";
+import { SAMPLE_DATASET } from "__support__/e2e/cypress_sample_dataset";
 
-const { ORDERS, ORDERS_ID } = SAMPLE_DATABASE;
+const { ORDERS, ORDERS_ID } = SAMPLE_DATASET;
 
 describe("scenarios > question > null", () => {
   beforeEach(() => {
@@ -22,10 +15,7 @@ describe("scenarios > question > null", () => {
       name: "13571",
       query: {
         "source-table": ORDERS_ID,
-        fields: [
-          ["field", ORDERS.ID, null],
-          ["field", ORDERS.DISCOUNT, null],
-        ],
+        fields: [["field", ORDERS.DISCOUNT, null]],
         filter: ["=", ["field", ORDERS.ID, null], 1],
       },
     });
@@ -35,7 +25,6 @@ describe("scenarios > question > null", () => {
     cy.findByText("13571").click();
 
     cy.log("'No Results since at least v0.34.3");
-    cy.get("#detail-shortcut").click();
     cy.findByText("Discount");
     cy.findByText("Empty");
   });
@@ -110,7 +99,7 @@ describe("scenarios > question > null", () => {
 
           cy.log("Reported failing in v0.37.0.2");
           cy.get(".DashCard").within(() => {
-            cy.findByTestId("loading-spinner").should("not.exist");
+            cy.get(".LoadingSpinner").should("not.exist");
             cy.findByText("13626");
             // [quarantine]: flaking in CircleCI, passing locally
             // TODO: figure out the cause of the failed test in CI after #13721 is merged
@@ -159,11 +148,11 @@ describe("scenarios > question > null", () => {
             });
           });
 
-          visitDashboard(DASHBOARD_ID);
+          cy.visit(`/dashboard/${DASHBOARD_ID}`);
           cy.log("P0 regression in v0.37.1!");
-          cy.findByTestId("loading-spinner").should("not.exist");
+          cy.get(".LoadingSpinner").should("not.exist");
           cy.findByText("13801_Q1");
-          cy.get(".ScalarValue").should("contain", "0");
+          cy.get(".ScalarValue").contains("0");
           cy.findByText("13801_Q2");
         });
       });
@@ -192,15 +181,17 @@ describe("scenarios > question > null", () => {
   });
 
   describe("aggregations with null values", () => {
+    beforeEach(() => {
+      cy.server();
+      cy.route("POST", "/api/dataset").as("dataset");
+    });
+
     it("summarize with null values (metabase#12585)", () => {
       openOrdersTable();
-
-      summarize();
-      sidebar().within(() => {
-        // remove pre-selected "Count"
-        cy.icon("close").click();
-      });
-      cy.findByText("Add a metric").click();
+      cy.wait("@dataset");
+      cy.contains("Summarize").click();
+      // remove pre-selected "Count"
+      cy.icon("close").click();
       // dropdown immediately opens with the new set of metrics to choose from
       popover().within(() => {
         cy.findByText("Cumulative sum of ...").click();
@@ -209,6 +200,10 @@ describe("scenarios > question > null", () => {
       // Group by
       cy.contains("Created At").click();
       cy.contains("Cumulative sum of Discount by Created At: Month");
+      cy.wait(["@dataset", "@dataset"]).then(xhrs => {
+        expect(xhrs[0].status).to.equal(202);
+        expect(xhrs[1].status).to.equal(202);
+      });
 
       cy.findByText("There was a problem with your question").should(
         "not.exist",

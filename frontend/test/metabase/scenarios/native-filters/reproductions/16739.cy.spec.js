@@ -1,7 +1,7 @@
-import { restore, visitQuestion } from "__support__/e2e/cypress";
-import { SAMPLE_DATABASE } from "__support__/e2e/cypress_sample_database";
+import { restore, mockSessionProperty } from "__support__/e2e/cypress";
+import { SAMPLE_DATASET } from "__support__/e2e/cypress_sample_dataset";
 
-const { PRODUCTS } = SAMPLE_DATABASE;
+const { PRODUCTS } = SAMPLE_DATASET;
 
 const filter = {
   id: "7795c137-a46c-3db9-1930-1d690c8dbc03",
@@ -17,6 +17,8 @@ describe("issue 16739", () => {
   beforeEach(() => {
     restore();
     cy.signInAsAdmin();
+
+    mockSessionProperty("field-filter-operators-enabled?", true);
   });
 
   ["normal", "nodata"].forEach(user => {
@@ -28,12 +30,15 @@ describe("issue 16739", () => {
           "template-tags": { filter },
         },
       }).then(({ body: { id } }) => {
+        cy.intercept("POST", `/api/card/${id}/query`).as("cardQuery");
+
         if (user === "nodata") {
           cy.signOut();
           cy.signIn(user);
         }
 
-        visitQuestion(id);
+        cy.visit(`/question/${id}`);
+        cy.wait("@cardQuery");
       });
 
       cy.icon("play").should("not.exist");

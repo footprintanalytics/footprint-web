@@ -1,20 +1,14 @@
 import React from "react";
-
 import { Route } from "react-router";
-
-import PublicNotFound from "metabase/public/components/PublicNotFound";
-
-import PublicApp from "metabase/public/containers/PublicApp";
-import PublicQuestion from "metabase/public/containers/PublicQuestion";
-import PublicDashboard from "metabase/public/containers/PublicDashboard";
+import LazyLoad from "./routesLazyLoad";
 
 export const getRoutes = store => (
   <Route>
-    <Route path="embed" component={PublicApp}>
-      <Route path="question/:token" component={PublicQuestion} />
-      <Route path="dashboard/:token" component={PublicDashboard} />
-      <Route path="*" component={PublicNotFound} />
+    <Route path="embed" component={LazyLoad.PublicApp}>
+      <Route path="question/:token" component={LazyLoad.PublicQuestion} />
+      <Route path="dashboard/:token" component={LazyLoad.PublicDashboard} />
+      <Route path="*" component={LazyLoad.PublicNotFound} />
     </Route>
-    <Route path="*" component={PublicNotFound} />
+    <Route path="*" component={LazyLoad.PublicNotFound} />
   </Route>
 );

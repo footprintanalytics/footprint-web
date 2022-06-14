@@ -3,7 +3,8 @@
   either encode the image inline in a URL (when `render-type` is `:inline`), or create the hashes/references needed
   for an attached image (`render-type` of `:attachment`)"
   (:require [clojure.java.io :as io])
-  (:import java.util.Arrays
+  (:import java.net.URL
+           java.util.Arrays
            org.apache.commons.io.IOUtils
            org.fit.cssbox.misc.Base64Coder))
 

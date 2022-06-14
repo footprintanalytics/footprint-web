@@ -6,6 +6,8 @@
     "enterprise/frontend/test/**/*"
   ],
   "compilerOptions": {
+    "experimentalDecorators": true,
+    "strictBindCallApply": true,
     "baseUrl": ".",
     "paths": {
       "*": [

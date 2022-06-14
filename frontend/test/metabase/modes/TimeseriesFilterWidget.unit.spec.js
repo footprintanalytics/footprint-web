@@ -4,23 +4,22 @@ import { render, screen } from "@testing-library/react";
 
 import Question from "metabase-lib/lib/Question";
 import {
-  SAMPLE_DATABASE,
+  SAMPLE_DATASET,
   ORDERS,
   metadata,
-} from "__support__/sample_database_fixture";
+} from "__support__/sample_dataset_fixture";
 
 const getTimeseriesFilterWidget = question => (
   <TimeseriesFilterWidget
-    question={question}
     card={question.card()}
-    query={question.query()}
+    datasetQuery={question.query().datasetQuery()}
     setDatasetQuery={() => {}}
   />
 );
 
 describe("TimeseriesFilterWidget", () => {
   const questionWithoutFilter = Question.create({
-    databaseId: SAMPLE_DATABASE.id,
+    databaseId: SAMPLE_DATASET.id,
     tableId: ORDERS.id,
     metadata,
   })

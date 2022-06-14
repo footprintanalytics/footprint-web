@@ -1,4 +1,4 @@
-import styled from "@emotion/styled";
+import styled from "styled-components";
 import { space } from "metabase/styled-components/theme";
 
 export const AlertModalFooter = styled.div`

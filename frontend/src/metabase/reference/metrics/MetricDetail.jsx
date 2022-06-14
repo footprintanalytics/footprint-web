@@ -64,7 +64,21 @@ const validate = (values, props) =>
     ? { revision_message: t`Please enter a revision message` }
     : {};
 
-class MetricDetail extends Component {
+@connect(mapStateToProps, mapDispatchToProps)
+@reduxForm({
+  form: "details",
+  fields: [
+    "name",
+    "display_name",
+    "description",
+    "revision_message",
+    "points_of_interest",
+    "caveats",
+    "how_is_this_calculated",
+  ],
+  validate,
+})
+export default class MetricDetail extends Component {
   static propTypes = {
     style: PropTypes.object.isRequired,
     entity: PropTypes.object.isRequired,
@@ -244,20 +258,3 @@ class MetricDetail extends Component {
     );
   }
 }
-
-export default _.compose(
-  connect(mapStateToProps, mapDispatchToProps),
-  reduxForm({
-    form: "details",
-    fields: [
-      "name",
-      "display_name",
-      "description",
-      "revision_message",
-      "points_of_interest",
-      "caveats",
-      "how_is_this_calculated",
-    ],
-    validate,
-  }),
-)(MetricDetail);

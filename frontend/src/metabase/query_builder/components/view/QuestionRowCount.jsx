@@ -10,6 +10,7 @@ import PopoverWithTrigger from "metabase/components/PopoverWithTrigger";
 import LimitPopover from "metabase/query_builder/components/LimitPopover";
 
 import StructuredQuery from "metabase-lib/lib/queries/StructuredQuery";
+import Button from "metabase/components/Button";
 
 const QuestionRowCount = ({
   question,
@@ -25,7 +26,7 @@ const QuestionRowCount = ({
 
   const query = question.query();
 
-  const cappedMessage = t`Showing first ${HARD_ROW_LIMIT} rows`;
+  const cappedMessage = t`Showing ${HARD_ROW_LIMIT} rows`;
 
   // Shown based on a query that has been altered
   let limitMessage = null;
@@ -46,7 +47,7 @@ const QuestionRowCount = ({
   // Shown based on a query that has been run
   let resultMessage;
   if (result.data.rows_truncated != null) {
-    resultMessage = t`Showing first ${formatRowCount(result.row_count)}`;
+    resultMessage = t`Showing ${formatRowCount(result.row_count)}`;
   } else if (result.row_count === HARD_ROW_LIMIT) {
     resultMessage = cappedMessage;
   } else {
@@ -61,7 +62,14 @@ const QuestionRowCount = ({
     content = (
       <PopoverWithTrigger
         triggerElement={
-          <span className="text-brand-hover text-bold">{message}</span>
+          <Button
+            iconColor="#7A819B"
+            icon="row"
+            iconSize={16}
+            className="Question-header-btn Question-header-btn--auto"
+          >
+            {message}
+          </Button>
         }
         triggerClasses={limit != null ? "text-brand" : ""}
       >

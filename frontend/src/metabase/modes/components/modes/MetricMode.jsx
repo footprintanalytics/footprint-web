@@ -4,7 +4,9 @@ import PivotByCategoryDrill from "../drill/PivotByCategoryDrill";
 import PivotByLocationDrill from "../drill/PivotByLocationDrill";
 import PivotByTimeDrill from "../drill/PivotByTimeDrill";
 
-const MetricMode = {
+import type { QueryMode } from "metabase-types/types/Visualization";
+
+const MetricMode: QueryMode = {
   name: "metric",
   drills: () => [
     ...getDefaultDrills(),

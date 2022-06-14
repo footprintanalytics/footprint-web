@@ -2,45 +2,17 @@ import { isElementOfType } from "react-dom/test-utils";
 import moment from "moment-timezone";
 
 import {
-  capitalize,
   formatNumber,
   formatValue,
   formatUrl,
   formatDateTimeWithUnit,
-  formatTime,
   formatTimeWithUnit,
   slugify,
-  getCurrencySymbol,
 } from "metabase/lib/formatting";
-import ExternalLink from "metabase/core/components/ExternalLink";
+import ExternalLink from "metabase/components/ExternalLink";
 import { TYPE } from "metabase/lib/types";
 
 describe("formatting", () => {
-  describe("capitalize", () => {
-    it("capitalizes a single word", () => {
-      expect(capitalize("hello")).toBe("Hello");
-    });
-
-    it("capitalizes only the first char of a string", () => {
-      expect(capitalize("hello world")).toBe("Hello world");
-    });
-
-    it("converts a string to lowercase by default", () => {
-      expect(capitalize("heLLo")).toBe("Hello");
-    });
-
-    it("doesn't lowercase the string if option provided", () => {
-      expect(capitalize("hellO WoRlD", { lowercase: false })).toBe(
-        "HellO WoRlD",
-      );
-    });
-
-    it("doesn't break on an empty string", () => {
-      expect(capitalize("")).toBe("");
-      expect(capitalize("", { lowercase: false })).toBe("");
-    });
-  });
-
   describe("formatNumber", () => {
     it("should format 0 correctly", () => {
       expect(formatNumber(0)).toEqual("0");
@@ -122,19 +94,6 @@ describe("formatting", () => {
         expect(formatNumber(0.5, options)).toEqual("5.0e-1");
         expect(formatNumber(123456.78, options)).toEqual("1.2e+5");
         expect(formatNumber(-123456.78, options)).toEqual("-1.2e+5");
-      });
-      it("should obey custom separators in scientific notiation", () => {
-        const options = {
-          compact: true,
-          number_style: "scientific",
-          number_separators: ",.",
-        };
-        expect(formatNumber(0, options)).toEqual("0,0e+0");
-        expect(formatNumber(0.0001, options)).toEqual("1,0e-4");
-        expect(formatNumber(0.01, options)).toEqual("1,0e-2");
-        expect(formatNumber(0.5, options)).toEqual("5,0e-1");
-        expect(formatNumber(123456.78, options)).toEqual("1,2e+5");
-        expect(formatNumber(-123456.78, options)).toEqual("-1,2e+5");
       });
       it("should format currency values", () => {
         const options = {
@@ -535,52 +494,6 @@ describe("formatting", () => {
         "Sun",
       );
     });
-
-    it("should format days of week with exclude option", () => {
-      const options = {
-        isExclude: true,
-      };
-
-      expect(
-        formatDateTimeWithUnit("2022-04-25", "day-of-week", options),
-      ).toEqual("Monday");
-    });
-
-    it("should format hours of day with exclude option", () => {
-      const options = {
-        isExclude: true,
-      };
-
-      expect(
-        formatDateTimeWithUnit(
-          "2022-04-27T06:00:00.000Z",
-          "hour-of-day",
-          options,
-        ),
-      ).toEqual("6 AM");
-    });
-  });
-
-  describe("formatTime", () => {
-    const FORMAT_TIME_TESTS = [
-      ["01:02:03.456+07:00", "1:02 AM"],
-      ["01:02", "1:02 AM"],
-      ["22:29:59.26816+01:00", "10:29 PM"],
-      ["22:29:59.412459+01:00", "10:29 PM"],
-      ["19:14:42.926221+01:00", "7:14 PM"],
-      ["19:14:42.13202+01:00", "7:14 PM"],
-      ["13:38:58.987352+01:00", "1:38 PM"],
-      ["13:38:58.001001+01:00", "1:38 PM"],
-      ["17:01:23+01:00", "5:01 PM"],
-    ];
-
-    test.each(FORMAT_TIME_TESTS)(
-      `parseTime(%p) to be %p`,
-      (value, resultStr) => {
-        const result = formatTime(value);
-        expect(result).toBe(resultStr);
-      },
-    );
   });
 
   describe("formatTimeWithUnit", () => {
@@ -641,28 +554,6 @@ describe("formatting", () => {
 
     it("should slugify diacritics", () => {
       expect(slugify("än umlaut")).toEqual("%C3%A4n_umlaut");
-    });
-  });
-
-  describe("getCurrencySymbol", () => {
-    const currencySymbols = [
-      ["USD", "$"],
-      ["EUR", "€"],
-      ["GBP", "£"],
-      ["JPY", "¥"],
-      ["CNY", "CN¥"],
-      ["CAD", "CA$"],
-      ["AUD", "AU$"],
-      ["NZD", "NZ$"],
-      ["HKD", "HK$"],
-      ["BTC", "₿"],
-      ["OOPS", "OOPS"],
-    ];
-
-    currencySymbols.forEach(([currency, symbol]) => {
-      it(`should get a ${symbol} for ${currency}`, () => {
-        expect(getCurrencySymbol(currency)).toEqual(symbol);
-      });
     });
   });
 });

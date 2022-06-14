@@ -8,9 +8,9 @@
             [metabase.db.metadata-queries :as metadata-queries]
             [metabase.driver :as driver]
             [metabase.driver.common :as driver.common]
-            [metabase.driver.mongo.execute :as mongo.execute]
-            [metabase.driver.mongo.parameters :as mongo.params]
-            [metabase.driver.mongo.query-processor :as mongo.qp]
+            [metabase.driver.mongo.execute :as execute]
+            [metabase.driver.mongo.parameters :as parameters]
+            [metabase.driver.mongo.query-processor :as qp]
             [metabase.driver.mongo.util :refer [with-mongo-connection]]
             [metabase.query-processor.store :as qp.store]
             [metabase.query-processor.timezone :as qp.timezone]
@@ -55,37 +55,31 @@
                   :ok))
        1.0)))
 
-(defmethod driver/humanize-connection-error-message
-  :mongo
+(defmethod driver/humanize-connection-error-message :mongo
   [_ message]
   (condp re-matches message
     #"^Timed out after \d+ ms while waiting for a server .*$"
-    :cannot-connect-check-host-and-port
+    (driver.common/connection-error-messages :cannot-connect-check-host-and-port)
 
     #"^host and port should be specified in host:port format$"
-    :invalid-hostname
+    (driver.common/connection-error-messages :invalid-hostname)
 
     #"^Password can not be null when the authentication mechanism is unspecified$"
-    :password-required
+    (driver.common/connection-error-messages :password-required)
 
     #"^org.apache.sshd.common.SshException: No more authentication methods available$"
-    :ssh-tunnel-auth-fail
+    (driver.common/connection-error-messages :ssh-tunnel-auth-fail)
 
     #"^java.net.ConnectException: Connection refused$"
-    :ssh-tunnel-connection-fail
+    (driver.common/connection-error-messages :ssh-tunnel-connection-fail)
 
     #".*javax.net.ssl.SSLHandshakeException: PKIX path building failed.*"
-    :certificate-not-trusted
+    (driver.common/connection-error-messages :certificate-not-trusted)
 
     #".*MongoSocketReadException: Prematurely reached end of stream.*"
-    :requires-ssl
+    (driver.common/connection-error-messages :requires-ssl)
 
-    #".* KeyFactory not available"
-    :unsupported-ssl-key-type
-
-    #"java.security.InvalidKeyException: invalid key format"
-    :invalid-key-format
-
+    #".*"                               ; default
     message))
 
 
@@ -228,20 +222,20 @@
                         (str/split #"\.")
                         first
                         Integer/parseInt)]
-    (and (some? version) (<= 4 version))))
+    (and (some? version) (<= 5 version))))
 
 (defmethod driver/mbql->native :mongo
   [_ query]
-  (mongo.qp/mbql->native query))
+  (qp/mbql->native query))
 
 (defmethod driver/execute-reducible-query :mongo
   [_ query context respond]
   (with-mongo-connection [_ (qp.store/database)]
-    (mongo.execute/execute-reducible-query query context respond)))
+    (execute/execute-reducible-query query context respond)))
 
 (defmethod driver/substitute-native-parameters :mongo
   [driver inner-query]
-  (mongo.params/substitute-native-parameters driver inner-query))
+  (parameters/substitute-native-parameters driver inner-query))
 
 ;; It seems to be the case that the only thing BSON supports is DateTime which is basically the equivalent of Instant;
 ;; for the rest of the types, we'll have to fake it
@@ -286,66 +280,3 @@
 (defmethod driver/db-start-of-week :mongo
   [_]
   :sunday)
-
-(comment
-  (require '[metabase.driver.util :as driver.u]
-           '[monger.credentials :as mcred]
-           '[clojure.java.io :as io])
-  (import javax.net.ssl.SSLSocketFactory)
-
-  ;; The following forms help experimenting with the behaviour of Mongo
-  ;; servers with different configurations. They can be used to check if
-  ;; the environment has been set up correctly (or at least according to
-  ;; the expectations), as well as the exceptions thrown in various
-  ;; constellations.
-
-  ;; Test connection to Mongo with client and server SSL authentication.
-  (let [ssl-socket-factory
-        (driver.u/ssl-socket-factory
-         :private-key (-> "ssl/mongo/metabase.key" io/resource slurp)
-         :password "passw"
-         :own-cert (-> "ssl/mongo/metabase.crt" io/resource slurp)
-         :trust-cert (-> "ssl/mongo/metaca.crt" io/resource slurp))
-        connection-options
-        (mg/mongo-options {:ssl-enabled true
-                           :ssl-invalid-host-name-allowed false
-                           :socket-factory ssl-socket-factory})
-        credentials
-        (mcred/create "metabase" "admin" "metasample123")]
-    (with-open [connection (mg/connect (mg/server-address "127.0.0.1")
-                                       connection-options
-                                       credentials)]
-      (mg/get-db-names connection)))
-
-  ;; Test what happens if the client only support server authentication.
-  (let [server-auth-ssl-socket-factory
-        (driver.u/ssl-socket-factory
-         :trust-cert (-> "ssl/mongo/metaca.crt" io/resource slurp))
-        server-auth-connection-options
-        (mg/mongo-options {:ssl-enabled true
-                           :ssl-invalid-host-name-allowed false
-                           :socket-factory server-auth-ssl-socket-factory
-                           :server-selection-timeout 200})
-        credentials
-        (mcred/create "metabase" "admin" "metasample123")]
-    (with-open [server-auth-connection
-                (mg/connect (mg/server-address "127.0.0.1")
-                            server-auth-connection-options
-                            credentials)]
-      (mg/get-db-names server-auth-connection)))
-
-  ;; Test what happens if the client support only server authentication
-  ;; with well known (default) CAs.
-  (let [unauthenticated-connection-options
-        (mg/mongo-options {:ssl-enabled true
-                           :ssl-invalid-host-name-allowed false
-                           :socket-factory (SSLSocketFactory/getDefault)
-                           :server-selection-timeout 200})
-        credentials
-        (mcred/create "metabase" "admin" "metasample123")]
-    (with-open [unauthenticated-connection
-                (mg/connect (mg/server-address "127.0.0.1")
-                            unauthenticated-connection-options
-                            credentials)]
-      (mg/get-db-names unauthenticated-connection)))
-  :.)

@@ -1,7 +1,7 @@
-import { restore, filter, visitQuestion } from "__support__/e2e/cypress";
-import { SAMPLE_DATABASE } from "__support__/e2e/cypress_sample_database";
+import { restore } from "__support__/e2e/cypress";
+import { SAMPLE_DATASET } from "__support__/e2e/cypress_sample_dataset";
 
-const { ORDERS, ORDERS_ID, PRODUCTS, PRODUCTS_ID } = SAMPLE_DATABASE;
+const { ORDERS, ORDERS_ID, PRODUCTS, PRODUCTS_ID } = SAMPLE_DATASET;
 
 describe("scenarios > admin > databases > table", () => {
   beforeEach(() => {
@@ -26,7 +26,7 @@ describe("scenarios > admin > databases > table", () => {
       "Select any table to see its schema and add or edit metadata.",
     ).should("not.exist");
     cy.get(
-      "input[value='Confirmed Sample Company orders for a product, from a user.']",
+      "input[value='This is a confirmed order for a product from a user.']",
     );
   });
 
@@ -67,8 +67,8 @@ describe("scenarios > admin > databases > table", () => {
   describe.skip("turning table visibility off shouldn't prevent editing related question (metabase#15947)", () => {
     it("simple question (metabase#15947-1)", () => {
       turnTableVisibilityOff(ORDERS_ID);
-      visitQuestion(1);
-      filter();
+      cy.visit("/question/1");
+      cy.findByText("Filter");
     });
 
     it("question with joins (metabase#15947-2)", () => {

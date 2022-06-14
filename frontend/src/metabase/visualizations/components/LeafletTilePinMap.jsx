@@ -51,6 +51,11 @@ export default class LeafletTilePinMap extends LeafletMap {
       (latitudeField.id || encodeURIComponent(latitudeField.name)) +
       "/" +
       (longitudeField.id || encodeURIComponent(longitudeField.name)) +
+      "/" +
+      latitudeIndex +
+      "/" +
+      longitudeIndex +
+      "/" +
       "?query=" +
       encodeURIComponent(JSON.stringify(dataset_query))
     );

@@ -2,8 +2,8 @@
  * NOTE: KEEP SYNCRONIZED WITH COLORS.JS
  */
 :root {
-  --color-brand: #509ee3;
-  --color-brand-light: #ddecfa;
+  --color-brand: #3434b2;
+  --color-brand-light: #f2effe;
   --color-accent1: #88bf4d;
   --color-accent2: #a989c5;
   --color-accent3: #ef8c8c;
@@ -16,21 +16,31 @@
   --color-black: #2e353b;
   --color-success: #84bb4c;
   --color-error: #ed6e6e;
-  --color-error-background: #ed6e6e55;
   --color-warning: #f9cf48;
-  --color-text-dark: #4c5773;
+  --color-text-second: #667697;
+  --color-text-dark: #303440;
   --color-text-medium: #949aab;
-  --color-text-light: #b8bbc3;
+  --color-text-light: #84848a;
   --color-text-white: #ffffff;
+  --color-text-axis: #00000070;
   --color-bg-black: #2e353b;
   --color-bg-dark: #93a1ab;
   --color-bg-medium: #edf2f5;
   --color-bg-light: #f9fbfc;
   --color-bg-white: #ffffff;
   --color-bg-yellow: #fffcf2;
-  --color-focus: #cbe2f7;
   --color-shadow: rgba(0, 0, 0, 0.13);
-  --color-border: #eeecec;
+  --color-border: #dcdee4;
+  /* footprint colors */
+  --footprint-color-main: #3434b2;
+  --footprint-color-bg: #f7f7f9;
+  --footprint-color-title: #303440;
+  --footprint-color-primary-text: #303440;
+  --footprint-color-secondary-text1: #666c80;
+  --footprint-color-secondary-text2: #acacb2;
+  --footprint-color-border: #dcdee4;
+  --footprint-color-background: #fafafc;
+  --footprint-color-edit-bar: #f6f6fe;
 
   /* Saturated colors for the SQL editor. Shouldn't be used elsewhere since they're not white-labelable. */
   --color-saturated-blue: #2d86d4;
@@ -40,8 +50,14 @@
   --color-saturated-yellow: #f9cf48;
 
   /* night mode colors */
-  --night-mode-color: color-mod(var(--color-text-white) alpha(-14%));
+  --night-mode-color: color(var(--color-text-white) alpha(-14%));
   --night-mode-card: #42484e;
+
+  /* coin360 color */
+  --coin360-black: #1d1d1e;
+  --coin360-card: #1d1d1e;
+  --coin360-light: #f9fbfc;
+  --coin360-border: #2e2d2f;
 }
 
 /* NOTE: DEPRECATED, replaced with colors above
@@ -87,6 +103,35 @@
 }
 */
 
+/* .fp-title,
+:local(.fp-title) {
+  color: var(--color-title);
+}
+
+.fp-rimary-text,
+:local(.fp-rimary-text) {
+  color: var(--color-primary-text);
+}
+
+.fp-secondary-text1,
+:local(.fp-secondary-text1) {
+  color: var(--color-secondary-text1);
+}
+
+.fp-secondary-text2,
+:local(.fp-secondary-text2) {
+  color: var(--color-secondary-text2);
+} */
+
+.text-second,
+:local(.text-second) {
+  color: var(--color-text-second);
+}
+
+.text-second-hover:hover {
+  color: var(--color-text-second);
+}
+
 .text-default,
 :local(.text-default) {
   color: var(--color-text-dark);
@@ -122,17 +167,17 @@
 
 .bg-brand-dark,
 .bg-brand-dark-hover:hover {
-  background-color: color-mod(var(--color-brand) blackness(12%));
+  background-color: color(var(--color-brand) blackness(+12%));
 }
 
 .bg-brand-dark,
 .bg-brand-dark-hover:hover {
-  background-color: color-mod(var(--color-brand) blackness(12%));
+  background-color: color(var(--color-brand) blackness(+12%));
 }
 
 .bg-brand-dark,
 .bg-brand-dark-hover:hover {
-  background-color: color-mod(var(--color-brand) blackness(12%));
+  background-color: color(var(--color-brand) blackness(+12%));
 }
 
 .bg-brand,
@@ -218,7 +263,7 @@
 }
 
 .bg-purple-light {
-  background-color: color-mod(var(--color-accent7) alpha(-85%));
+  background-color: color(var(--color-accent7) alpha(-85%));
 }
 
 .bg-green,
@@ -278,6 +323,10 @@
 .text-white,
 :local(.text-white),
 .text-white-hover:hover {
+  color: var(--color-text-white);
+}
+
+.Field-extra .text-white-hover h4 {
   color: var(--color-text-white);
 }
 
@@ -374,4 +423,15 @@
 }
 .text-dark {
   color: var(--color-text-dark);
+}
+
+.footprint-color-background,
+:local(.footprint-color-background) {
+  background-color: var(--footprint-color-background);
+}
+
+.highlight {
+  background-color: transparent;
+  color: var(--color-brand);
+  padding: 0;
 }

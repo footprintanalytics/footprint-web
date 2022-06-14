@@ -7,16 +7,14 @@
   (:require [clojure.string :as str]
             [compojure.core :refer [GET POST PUT]]
             [honeysql.core :as hsql]
-            [honeysql.helpers :as hh]
+            [honeysql.helpers :as h]
             [medley.core :as m]
-            [metabase.api.card :as api.card]
+            [metabase.api.card :as card-api]
             [metabase.api.common :as api]
-            [metabase.api.timeline :as api.timeline]
-            [metabase.db :as mdb]
+            [metabase.db.env :as mdb.env]
             [metabase.models.card :refer [Card]]
             [metabase.models.collection :as collection :refer [Collection]]
-            [metabase.models.collection.graph :as graph]
-            #_:clj-kondo/ignore ;; bug: when alias defined for namespaced keywords is run through kondo macro, ns should be regarded as used
+            [metabase.models.collection.graph :as collection.graph]
             [metabase.models.collection.root :as collection.root]
             [metabase.models.dashboard :refer [Dashboard]]
             [metabase.models.interface :as mi]
@@ -25,8 +23,7 @@
             [metabase.models.pulse :as pulse :refer [Pulse]]
             [metabase.models.pulse-card :refer [PulseCard]]
             [metabase.models.revision.last-edit :as last-edit]
-            [metabase.models.timeline :as timeline :refer [Timeline]]
-            [metabase.server.middleware.offset-paging :as mw.offset-paging]
+            [metabase.server.middleware.offset-paging :as offset-paging]
             [metabase.util :as u]
             [metabase.util.honeysql-extensions :as hx]
             [metabase.util.schema :as su]
@@ -60,67 +57,43 @@
         (cons (root-collection namespace) collections))
       (hydrate collections :can_write)
       ;; remove the :metabase.models.collection.root/is-root? tag since FE doesn't need it
-      ;; and for personal collections we translate the name to user's locale
       (for [collection collections]
-        (-> collection
-            (dissoc ::collection.root/is-root?)
-            collection/personal-collection-with-ui-details)))))
+        (dissoc collection ::collection.root/is-root?)))))
 
 (api/defendpoint GET "/tree"
   "Similar to `GET /`, but returns Collections in a tree structure, e.g.
 
-  ```
-  [{:name     \"A\"
-  :below    #{:card :dataset}
-  :children [{:name \"B\"}
-             {:name     \"C\"
-              :here     #{:dataset :card}
-              :below    #{:dataset :card}
-              :children [{:name     \"D\"
-                          :here     #{:dataset}
-                          :children [{:name \"E\"}]}
-                         {:name     \"F\"
-                          :here     #{:card}
-                          :children [{:name \"G\"}]}]}]}
-  {:name \"H\"}]
-  ```
+    [{:name     \"A\"
+      :children [{:name \"B\"}
+                 {:name     \"C\"
+                  :children [{:name     \"D\"
+                              :children [{:name \"E\"}]}
+                             {:name     \"F\"
+                              :children [{:name \"G\"}]}]}]}
+     {:name \"H\"}]"
+  [namespace]
+  {namespace (s/maybe su/NonBlankString)}
+  (collection/collections->tree
+   (db/select Collection
+     {:where [:and
+              [:= :namespace namespace]
+              (collection/visible-collection-ids->honeysql-filter-clause
+               :id
+               (collection/permissions-set->visible-collection-ids @api/*current-user-permissions-set*))]})))
 
-  The here and below keys indicate the types of items at this particular level of the tree (here) and in its
-  subtree (below)."
-  [exclude-archived namespace]
-  {exclude-archived (s/maybe su/BooleanString)
-   namespace        (s/maybe su/NonBlankString)}
-  (let [coll-type-ids (reduce (fn [acc {:keys [collection_id dataset] :as _x}]
-                                (update acc (if dataset :dataset :card) conj collection_id))
-                              {:dataset #{}
-                               :card    #{}}
-                              (db/reducible-query {:select    [:collection_id :dataset]
-                                                   :modifiers [:distinct]
-                                                   :from      [:report_card]
-                                                   :where     [:= :archived false]}))]
-    (->> (db/select Collection
-                    {:where [:and
-                             (when exclude-archived
-                               [:= :archived false])
-                             [:= :namespace namespace]
-                             (collection/visible-collection-ids->honeysql-filter-clause
-                              :id
-                              (collection/permissions-set->visible-collection-ids @api/*current-user-permissions-set*))]})
-         (map collection/personal-collection-with-ui-details)
-         (collection/collections->tree coll-type-ids))))
 
 ;;; --------------------------------- Fetching a single Collection & its 'children' ----------------------------------
 
 (def ^:private valid-model-param-values
   "Valid values for the `?model=` param accepted by endpoints in this namespace.
   `no_models` is for nilling out the set because a nil model set is actually the total model set"
-  #{"card" "dataset" "collection" "dashboard" "pulse" "snippet" "no_models" "timeline"})
+  #{"card" "collection" "dashboard" "pulse" "snippet" "no_models"})
 
 (def ^:private ModelString
   (apply s/enum valid-model-param-values))
 
 ; This is basically a union type. defendpoint splits the string if it only gets one
-(def ^:private models-schema (s/conditional vector? [ModelString] :else ModelString))
+(def ^:private models-schema (s/conditional #(vector? %) [ModelString] :else ModelString))
 
 (def ^:private valid-pinned-state-values
   "Valid values for the `?pinned_state` param accepted by endpoints in this namespace."
@@ -164,14 +137,6 @@
      :is_not_pinned [:= col nil]
      [:= 1 1])))
 
-(defn- poison-when-pinned-clause
-  "Poison a query to return no results when filtering to pinned items. Use for items that do not have a notion of
-  pinning so that no results return when asking for pinned items."
-  [pinned-state]
-  (if (= pinned-state :is_pinned)
-    [:= 1 2]
-    [:= 1 1]))
-
 (defmulti ^:private post-process-collection-children
   {:arglists '([model rows])}
   (fn [model _]
@@ -185,7 +150,6 @@
   [_ collection {:keys [archived? pinned-state]}]
   (-> {:select    [:p.id
                    :p.name
-                   :p.entity_id
                    :p.collection_position
                    [(hx/literal "pulse") :model]]
        :modifiers [:distinct]
@@ -198,45 +162,29 @@
                    [:= :p.alert_condition    nil]
                    ;; exclude dashboard subscriptions
                    [:= :p.dashboard_id nil]]}
-      (hh/merge-where (pinned-state->clause pinned-state :p.collection_position))))
+      (h/merge-where (pinned-state->clause pinned-state :p.collection_position))))
 
 (defmethod post-process-collection-children :pulse
   [_ rows]
   (for [row rows]
-    (dissoc row :description :display :authority_level :moderated_status :icon :personal_owner_id)))
+    (dissoc row :description :display :authority_level :moderated_status)))
 
 (defmethod collection-children-query :snippet
-  [_ collection {:keys [archived?]}]
-  {:select [:id :name :entity_id [(hx/literal "snippet") :model]]
-   :from   [[NativeQuerySnippet :nqs]]
-   :where  [:and
-            [:= :collection_id (:id collection)]
-            [:= :archived (boolean archived?)]]})
-
-(defmethod collection-children-query :timeline
   [_ collection {:keys [archived? pinned-state]}]
-  {:select [:id :name [(hx/literal "timeline") :model] :description :entity_id :icon]
-   :from   [[Timeline :timeline]]
-   :where  [:and
-            (poison-when-pinned-clause pinned-state)
-            [:= :collection_id (:id collection)]
-            [:= :archived (boolean archived?)]]})
-
-(defmethod post-process-collection-children :timeline
-  [_ rows]
-  (for [row rows]
-    (dissoc row :description :display :collection_position :authority_level :moderated_status)))
+  {:select [:id :name [(hx/literal "snippet") :model]]
+       :from   [[NativeQuerySnippet :nqs]]
+       :where  [:and
+                [:= :collection_id (:id collection)]
+                [:= :archived (boolean archived?)]]})
 
 (defmethod post-process-collection-children :snippet
   [_ rows]
   (for [row rows]
-    (dissoc row
-            :description :collection_position :display :authority_level
-            :moderated_status :icon :personal_owner_id)))
+    (dissoc row :description :collection_position :display :authority_level :moderated_status)))
 
-(defn- card-query [dataset? collection {:keys [archived? pinned-state]}]
-  (-> {:select    [:c.id :c.name :c.description :c.entity_id :c.collection_position :c.display
-                   [(hx/literal (if dataset? "dataset" "card")) :model]
+(defmethod collection-children-query :card
+  [_ collection {:keys [archived? pinned-state]}]
+  (-> {:select    [:c.id :c.name :c.description :c.collection_position :c.display [(hx/literal "card") :model]
                    [:u.id :last_edit_user] [:u.email :last_edit_email]
                    [:u.first_name :last_edit_first_name] [:u.last_name :last_edit_last_name]
                    [:r.timestamp :last_edit_timestamp]
@@ -266,29 +214,16 @@
                    [:core_user :u] [:= :u.id :r.user_id]]
        :where     [:and
                    [:= :collection_id (:id collection)]
-                   [:= :archived (boolean archived?)]
-                   [:= :dataset dataset?]]}
-      (hh/merge-where (pinned-state->clause pinned-state))))
-
-(defmethod collection-children-query :dataset
-  [_ collection options]
-  (card-query true collection options))
-
-(defmethod post-process-collection-children :dataset
-  [_ rows]
-  (post-process-collection-children :card rows))
-
-(defmethod collection-children-query :card
-  [_ collection options]
-  (card-query false collection options))
+                   [:= :archived (boolean archived?)]]}
+      (h/merge-where (pinned-state->clause pinned-state))))
 
 (defmethod post-process-collection-children :card
   [_ rows]
-  (map #(dissoc % :authority_level :icon :personal_owner_id) rows))
+  (hydrate (map #(dissoc % :authority_level) rows) :favorite))
 
 (defmethod collection-children-query :dashboard
   [_ collection {:keys [archived? pinned-state]}]
-  (-> {:select    [:d.id :d.name :d.description :d.entity_id :d.collection_position [(hx/literal "dashboard") :model]
+  (-> {:select    [:d.id :d.name :d.description :d.collection_position [(hx/literal "dashboard") :model]
                    [:u.id :last_edit_user] [:u.email :last_edit_email]
                    [:u.first_name :last_edit_first_name] [:u.last_name :last_edit_last_name]
                    [:r.timestamp :last_edit_timestamp]]
@@ -307,11 +242,11 @@
        :where     [:and
                    [:= :collection_id (:id collection)]
                    [:= :archived (boolean archived?)]]}
-      (hh/merge-where (pinned-state->clause pinned-state))))
+      (h/merge-where (pinned-state->clause pinned-state))))
 
 (defmethod post-process-collection-children :dashboard
   [_ rows]
-  (map #(dissoc % :display :authority_level :moderated_status :icon :personal_owner_id) rows))
+  (hydrate (map #(dissoc % :display :authority_level :moderated_status) rows) :favorite))
 
 (defmethod collection-children-query :collection
   [_ collection {:keys [archived? collection-namespace pinned-state]}]
@@ -324,12 +259,10 @@
              :select [:id
                       :name
                       :description
-                      :entity_id
-                      :personal_owner_id
                       [(hx/literal "collection") :model]
                       :authority_level])
       ;; the nil indicates that collections are never pinned.
-      (hh/merge-where (pinned-state->clause pinned-state nil))))
+      (h/merge-where (pinned-state->clause pinned-state nil))))
 
 (defmethod post-process-collection-children :collection
   [_ rows]
@@ -338,11 +271,9 @@
     ;; don't get models back from ulterior over-query
     ;; Previous examination with logging to DB says that there's no N+1 query for this.
     ;; However, this was only tested on H2 and Postgres
-    (cond-> row
-      ;; when fetching root collection, we might have personal collection
-      (:personal_owner_id row) (assoc :name (collection/user->personal-collection-name (:personal_owner_id row) :user))
-      true                     (assoc :can_write (mi/can-write? Collection (:id row)))
-      true                     (dissoc :collection_position :display :moderated_status :icon :personal_owner_id))))
+    (assoc (dissoc row :collection_position :display :moderated_status)
+           :can_write
+           (mi/can-write? Collection (:id row)))))
 
 (s/defn ^:private coalesce-edit-info :- last-edit/MaybeAnnotated
   "Hoist all of the last edit information into a map under the key :last-edit-info. Considers this information present
@@ -378,11 +309,9 @@
   (case (keyword model-name)
     :collection Collection
     :card       Card
-    :dataset    Card
     :dashboard  Dashboard
     :pulse      Pulse
-    :snippet    NativeQuerySnippet
-    :timeline   Timeline))
+    :snippet    NativeQuerySnippet))
 
 (defn- select-name
   "Takes a honeysql select column and returns a keyword of which column it is.
@@ -400,8 +329,8 @@
   "All columns that need to be present for the union-all. Generated with the comment form below. Non-text columns that
   are optional (not id, but last_edit_user for example) must have a type so that the union-all can unify the nil with
   the correct column type."
-  [:id :name :description :entity_id :display :model :collection_position :authority_level [:personal_owner_id :integer]
-   :last_edit_email :last_edit_first_name :last_edit_last_name :moderated_status :icon
+  [:id :name :description :display :model :collection_position :authority_level
+   :last_edit_email :last_edit_first_name :last_edit_last_name :moderated_status
    [:last_edit_user :integer] [:last_edit_timestamp :timestamp]])
 
 (defn- add-missing-columns
@@ -410,7 +339,7 @@
   (let [columns (m/index-by select-name select-columns)]
     (map (fn [col]
            (let [[col-name typpe] (u/one-or-many col)]
-             (get columns col-name (if (and typpe (= (mdb/db-type) :postgres))
+             (get columns col-name (if (and typpe (= @mdb.env/db-type :postgres))
                                      [(hx/cast typpe nil) col-name]
                                      [nil col-name]))))
          necessary-columns)))
@@ -419,11 +348,9 @@
   [select-clause model]
   (let [rankings {:dashboard  1
                   :pulse      2
-                  :dataset    3
-                  :card       4
-                  :snippet    5
-                  :collection 6
-                  :timeline   7}]
+                  :card       3
+                  :snippet    4
+                  :collection 5}]
     (conj select-clause [(get rankings model 100)
                          :model_ranking])))
 
@@ -431,7 +358,7 @@
   ;; generate the set of columns across all child queries. Remember to add type info if not a text column
   (into []
         (comp cat (map select-name) (distinct))
-        (for [model [:card :dashboard :snippet :pulse :collection :timeline]]
+        (for [model [:card :dashboard :snippet :pulse :collection]]
           (:select (collection-children-query model {:id 1 :location "/"} nil)))))
 
 
@@ -480,8 +407,8 @@
     [:model :desc]          [[:model_ranking :desc] [:%lower.name :asc]]))
 
 (defn- collection-children*
-  [collection models {:keys [sort-info] :as options}]
-  (let [sql-order   (children-sort-clause sort-info (mdb/db-type))
+  [collection models {:keys [collection-namespace sort-info] :as options}]
+  (let [sql-order   (children-sort-clause sort-info @mdb.env/db-type)
         models      (sort (map keyword models))
         queries     (for [model models]
                       (-> (collection-children-query model collection options)
@@ -495,28 +422,28 @@
         ;; We didn't implement collection pagination for snippets namespace for root/items
         ;; Rip out the limit for now and put it back in when we want it
         limit-query (if (or
-                          (nil? mw.offset-paging/*limit*)
-                          (nil? mw.offset-paging/*offset*)
+                          (nil? offset-paging/*limit*)
+                          (nil? offset-paging/*offset*)
                           (= (:collection-namespace options) "snippets"))
                       rows-query
                       (assoc rows-query
-                             :limit  mw.offset-paging/*limit*
-                             :offset mw.offset-paging/*offset*))
+                             :limit  offset-paging/*limit*
+                             :offset offset-paging/*offset*))
         res          {:total  (->> (db/query total-query) first :count)
                       :data   (->> (db/query limit-query) post-process-rows)
                       :models models}
         limit-res   (assoc res
-                           :limit  mw.offset-paging/*limit*
-                           :offset mw.offset-paging/*offset*)]
+                           :limit  offset-paging/*limit*
+                           :offset offset-paging/*offset*)]
     (if (= (:collection-namespace options) "snippets")
       res
       limit-res)))
 
 (s/defn ^:private collection-children
   "Fetch a sequence of 'child' objects belonging to a Collection, filtered using `options`."
-  [{collection-namespace :namespace, :as collection} :- collection/CollectionWithLocationAndIDOrRoot
-   {:keys [models], :as options}                     :- CollectionChildrenOptions]
-  (let [valid-models (for [model-kw [:collection :dataset :card :dashboard :pulse :snippet :timeline]
+  [{collection-namespace :namespace, :as collection}            :- collection/CollectionWithLocationAndIDOrRoot
+   {:keys [models collections-only? pinned-state], :as options} :- CollectionChildrenOptions]
+  (let [valid-models (for [model-kw [:collection :card :dashboard :pulse :snippet]
                            ;; only fetch models that are specified by the `model` param; or everything if it's empty
                            :when    (or (empty? models) (contains? models model-kw))
                            :let     [toucan-model       (model-name->toucan-model model-kw)
@@ -528,8 +455,8 @@
       (collection-children* collection valid-models (assoc options :collection-namespace collection-namespace))
       {:total  0
        :data   []
-       :limit  mw.offset-paging/*limit*
-       :offset mw.offset-paging/*offset*
+       :limit  offset-paging/*limit*
+       :offset offset-paging/*offset*
        :models valid-models})))
 
 (s/defn ^:private collection-detail
@@ -537,31 +464,12 @@
   Works for either a normal Collection or the Root Collection."
   [collection :- collection/CollectionWithLocationAndIDOrRoot]
   (-> collection
-      collection/personal-collection-with-ui-details
       (hydrate :parent_id :effective_location [:effective_ancestors :can_write] :can_write)))
 
 (api/defendpoint GET "/:id"
   "Fetch a specific Collection with standard details added"
   [id]
   (collection-detail (api/read-check Collection id)))
-
-(api/defendpoint GET "/root/timelines"
-  "Fetch the root Collection's timelines."
-  [include archived]
-  {include  (s/maybe api.timeline/Include)
-   archived (s/maybe su/BooleanString)}
-  (let [archived? (Boolean/parseBoolean archived)]
-    (timeline/timelines-for-collection nil {:timeline/events?   (= include "events")
-                                            :timeline/archived? archived?})))
-
-(api/defendpoint GET "/:id/timelines"
-  "Fetch a specific Collection's timelines."
-  [id include archived]
-  {include  (s/maybe api.timeline/Include)
-   archived (s/maybe su/BooleanString)}
-  (let [archived? (Boolean/parseBoolean archived)]
-    (timeline/timelines-for-collection id {:timeline/events?   (= include "events")
-                                           :timeline/archived? archived?})))
 
 (api/defendpoint GET "/:id/items"
   "Fetch a specific Collection's items with the following options:
@@ -723,7 +631,7 @@
   (when (api/column-will-change? :archived collection-before-update collection-updates)
     (when-let [alerts (seq (pulse/retrieve-alerts-for-cards
                             {:card-ids (db/select-ids Card :collection_id (u/the-id collection-before-update))}))]
-      (api.card/delete-alert-and-notify-archived! alerts))))
+      (card-api/delete-alert-and-notify-archived! alerts))))
 
 (api/defendpoint PUT "/:id"
   "Modify an existing Collection, including archiving or unarchiving it, or moving it."
@@ -775,7 +683,7 @@
   [namespace]
   {namespace (s/maybe su/NonBlankString)}
   (api/check-superuser)
-  (graph/graph namespace))
+  (collection.graph/graph namespace))
 
 (defn- ->int [id] (Integer/parseInt (name id)))
 
@@ -804,7 +712,7 @@
   (api/check-superuser)
   (->> (dissoc body :namespace)
        dejsonify-graph
-       (graph/update-graph! namespace))
-  (graph/graph namespace))
+       (collection.graph/update-graph! namespace))
+  (collection.graph/graph namespace))
 
 (api/define-routes)

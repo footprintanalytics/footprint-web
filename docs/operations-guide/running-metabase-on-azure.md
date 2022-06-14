@@ -1,7 +1,3 @@
----
-title: Running Metabase on Microsoft Azure
----
-
 # Running Metabase on Microsoft Azure
 
 This guide covers the basics for running your Metabase instance in Microsoft Azure using Docker.
@@ -132,7 +128,7 @@ Return to the application configuration page and click on **Settings** -> **Conf
 
 You'll need to add the [Environment Variables]() for connecting Metabase to its [PostgreSQL Application Database](https://www.metabase.com/docs/latest/operations-guide/configuring-application-database.html#postgres). Make sure that you use the full **MB_DB_CONNECTION_URI**.
 
-Also, take into account that the username in Azure PostgreSQL is `user@name_of_your_database_engine` so in this case the entire connection uri would be as follows: 
+Also, take into account that the username in Azure PostgreSQL is `user@name_of_your_database_engine` so in this case the entire connection uri would be as follows:
 
 ```
 postgresql://databasePrivateIPAddress:port/postgres?user=user@name_of_your_database_engine&password=configuredpassword&ssl=true&sslmode=required
@@ -146,18 +142,17 @@ For example, if your values are:
 4) **username of the database**: metabase
 5) **password**: Password1!
 
-then your connection string would be: 
+then your connection string would be:
 
 ```
 postgresql://10.0.2.4:5432/postgres?user=metabase@metabase-app-database&password=Password1!&ssl=true&sslmode=require
 ```
 
-Click **Save** and the instance will restart. 
+Click **Save** and the instance will restart.
 
-Once it finishes, you should be able to visit your Metabase at the URL shown in the "Overview" tab in the web app (under the URL section). 
+Once it finishes, you should be able to visit your Metabase at the URL shown in the the "Index" tab in the web app (under the URL section).
 
 ## Additional configurations
-
 ### How to enable Health checks
 
 Enabling health checking in Metabase is a good practice.  Go to your **web app** -> **Monitoring** -> **Health Check** -> **Enable health check**, and include in the path `/api/health`.
@@ -200,7 +195,7 @@ In case you're embedding Metabase, you might need to enable CORS in **Settings**
 ### Database name
 
 Azure does not let users create a database upon service creation, that's the reason why we used `postgres` as the database to install Metabase. Althought this shouldn't be a problem, a good practice would be to install the database in a separate database named `metabase`. If you are not in a hurry to try the product, you should create a database named `metabase` as soon as you create the database and then use the appropiate connection string when deploying the docker container.
-In the example above the connection string would be 
+In the example above the connection string would be
 
 ```
 postgresql://10.0.2.4:5432/metabase?user=metabase@metabase-app-database&password=Password1!&ssl=true&sslmode=require

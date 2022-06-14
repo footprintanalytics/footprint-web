@@ -8,7 +8,11 @@ import EntityName from "metabase/entities/containers/EntityName";
 
 import * as DatabaseDetailCards from "../lib/cards/database_detail";
 
-const AuditDatabaseDetail = ({ params, ...props }) => {
+type Props = {
+  params: { [key: string]: string },
+};
+
+const AuditDatabaseDetail = ({ params, ...props }: Props) => {
   const databaseId = parseInt(params.databaseId);
   return (
     <AuditContent
@@ -17,7 +21,7 @@ const AuditDatabaseDetail = ({ params, ...props }) => {
         <EntityName
           entityType="databases"
           entityId={databaseId}
-          property="name"
+          property={"name"}
         />
       }
       tabs={AuditDatabaseDetail.tabs}

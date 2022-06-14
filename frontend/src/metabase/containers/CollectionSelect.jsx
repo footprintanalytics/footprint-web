@@ -1,9 +1,10 @@
 /* eslint-disable react/prop-types */
-import Collection from "metabase/entities/collections";
-
 import ItemSelect from "./ItemSelect";
 import CollectionPicker from "./CollectionPicker";
 import CollectionName from "./CollectionName";
+import { getProject } from "metabase/lib/project_info";
+import { compose } from "underscore";
+import { entityListLoader } from "metabase/entities/containers/EntityListLoader";
 
 const CollectionSelect = ItemSelect(
   CollectionPicker,
@@ -20,6 +21,10 @@ const CollectionSelect = ItemSelect(
  * This component is wrapped with @Collection.loadList
  * to ensure collection are fetched and permissions can be checked.
  */
-export default Collection.loadList({
-  loadingAndErrorWrapper: false,
-})(CollectionSelect);
+export default compose(
+  entityListLoader({
+    entityType: "collections",
+    // loadingAndErrorWrapper: false,
+    entityQuery: () => ({ project: getProject() }),
+  }),
+)(CollectionSelect);

@@ -1,4 +1,3 @@
-/* eslint-disable react/prop-types */
 import React from "react";
 
 import Collection from "metabase/entities/collections";
@@ -6,7 +5,12 @@ import Search from "metabase/entities/search";
 
 const PINNED_DASHBOARDS_LOAD_LIMIT = 500;
 
-const CollectionItemsLoader = ({ collectionId, children, ...props }) => (
+type Props = {
+  collectionId: number,
+  children: () => void,
+};
+
+const CollectionItemsLoader = ({ collectionId, children, ...props }: Props) => (
   <Collection.Loader {...props} id={collectionId}>
     {({ object }) => (
       <Search.ListLoader

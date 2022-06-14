@@ -1,7 +1,6 @@
 import { restore, setupMetabaseCloud } from "__support__/e2e/cypress";
 
-// Unskip when mocking Cloud in Cypress is fixed (#18289)
-describe.skip("Cloud settings section", () => {
+describe("Cloud settings section", () => {
   beforeEach(() => {
     restore();
     cy.signInAsAdmin();

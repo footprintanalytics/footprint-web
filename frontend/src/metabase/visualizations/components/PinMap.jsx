@@ -1,4 +1,3 @@
-/* eslint-disable react/prop-types */
 import React, { Component } from "react";
 import { t } from "ttag";
 import { hasLatitudeAndLongitudeColumns } from "metabase/lib/schema_metadata";
@@ -15,10 +14,27 @@ import d3 from "d3";
 
 import L from "leaflet";
 
+import type { VisualizationProps } from "metabase-types/types/Visualization";
+
 const WORLD_BOUNDS = [
   [-90, -180],
   [90, 180],
 ];
+
+type Props = VisualizationProps;
+
+type State = {
+  lat: ?number,
+  lng: ?number,
+  min: ?number,
+  max: ?number,
+  binHeight: ?number,
+  binWidth: ?number,
+  zoom: ?number,
+  points: L.Point[],
+  bounds: L.Bounds,
+  filtering: boolean,
+};
 
 const MAP_COMPONENTS_BY_TYPE = {
   markers: LeafletMarkerPinMap,
@@ -28,6 +44,9 @@ const MAP_COMPONENTS_BY_TYPE = {
 };
 
 export default class PinMap extends Component {
+  props: Props;
+  state: State;
+
   static uiName = t`Pin Map`;
   static identifier = "pin_map";
   static iconName = "pinmap";
@@ -46,10 +65,10 @@ export default class PinMap extends Component {
     }
   }
 
-  state;
-  _map = null;
+  state: State;
+  _map: ?(LeafletMarkerPinMap | LeafletTilePinMap) = null;
 
-  constructor(props) {
+  constructor(props: Props) {
     super(props);
     this.state = {
       lat: null,
@@ -60,7 +79,7 @@ export default class PinMap extends Component {
     };
   }
 
-  UNSAFE_componentWillReceiveProps(newProps) {
+  UNSAFE_componentWillReceiveProps(newProps: Props) {
     const SETTINGS_KEYS = [
       "map.latitude_column",
       "map.longitude_column",
@@ -92,15 +111,15 @@ export default class PinMap extends Component {
     this.setState({ lat: null, lng: null, zoom: null });
   };
 
-  onMapCenterChange = (lat, lng) => {
+  onMapCenterChange = (lat: number, lng: number) => {
     this.setState({ lat, lng });
   };
 
-  onMapZoomChange = zoom => {
+  onMapZoomChange = (zoom: number) => {
     this.setState({ zoom });
   };
 
-  _getPoints(props) {
+  _getPoints(props: Props) {
     const {
       settings,
       series: [
@@ -130,11 +149,9 @@ export default class PinMap extends Component {
     ]);
 
     // only use points with numeric coordinates & metric
-    const validPoints = allPoints.map(
+    const points = allPoints.filter(
       ([lat, lng, metric]) => lat != null && lng != null && metric != null,
     );
-    const points = allPoints.filter((_, i) => validPoints[i]);
-    const updatedRows = rows.filter((_, i) => validPoints[i]);
 
     const warnings = [];
     const filteredRows = allPoints.length - points.length;
@@ -168,7 +185,7 @@ export default class PinMap extends Component {
       bounds._northEast.lat += binHeight;
     }
 
-    return { rows: updatedRows, points, bounds, min, max, binWidth, binHeight };
+    return { points, bounds, min, max, binWidth, binHeight };
   }
 
   render() {
@@ -178,10 +195,7 @@ export default class PinMap extends Component {
 
     const Map = MAP_COMPONENTS_BY_TYPE[settings["map.pin_type"]];
 
-    const { rows, points, bounds, min, max, binHeight, binWidth } = this.state;
-
-    const mapProps = { ...this.props };
-    mapProps.series[0].data.rows = rows;
+    const { points, bounds, min, max, binHeight, binWidth } = this.state;
 
     return (
       <div
@@ -193,7 +207,7 @@ export default class PinMap extends Component {
       >
         {Map ? (
           <Map
-            {...mapProps}
+            {...this.props}
             ref={map => (this._map = map)}
             className="absolute top left bottom right z1"
             onMapCenterChange={this.onMapCenterChange}

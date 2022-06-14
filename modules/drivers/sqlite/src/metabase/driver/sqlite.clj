@@ -11,7 +11,7 @@
             [metabase.driver.sql-jdbc.connection :as sql-jdbc.conn]
             [metabase.driver.sql-jdbc.execute :as sql-jdbc.execute]
             [metabase.driver.sql-jdbc.sync :as sql-jdbc.sync]
-            [metabase.driver.sql.parameters.substitution :as sql.params.substitution]
+            [metabase.driver.sql.parameters.substitution :as params.substitution]
             [metabase.driver.sql.query-processor :as sql.qp]
             [metabase.util.date-2 :as u.date]
             [metabase.util.honeysql-extensions :as hx]
@@ -54,7 +54,7 @@
   [driver details]
   (if (confirm-file-is-sqlite (:db details))
     (sql-jdbc.conn/can-connect? driver details)
-    false))
+    false ))
 
 (defmethod driver/db-start-of-week :sqlite
   [_]
@@ -66,9 +66,7 @@
       :as   details}]
   (merge {:subprotocol "sqlite"
           :subname     db}
-         (dissoc details :db)
-         ;; disallow "FDW" (connecting to other SQLite databases on the local filesystem) -- see https://github.com/metabase/metaboat/issues/152
-         {:limit_attached 0}))
+         (dissoc details :db)))
 
 ;; We'll do regex pattern matching here for determining Field types because SQLite types can have optional lengths,
 ;; e.g. NVARCHAR(100) or NUMERIC(10,5) See also http://www.sqlite.org/datatype3.html
@@ -104,9 +102,8 @@
                                   :from   [(sql.qp/->honeysql driver (hx/identifier :table schema table))]
                                   :limit  1}))
 
-;; register the SQLite concatenation operator `||` with HoneySQL as `sqlite-concat`
-;;
-;;    (hsql/format (hsql/call :sqlite-concat :a :b)) -> "(a || b)"
+;; register the SQLite concatnation operator `||` with HoneySQL as `sqlite-concat`
+;; (hsql/format (hsql/call :sqlite-concat :a :b)) -> "(a || b)"
 (defmethod hformat/fn-handler "sqlite-concat"
   [_ & args]
   (str "(" (str/join " || " (map hformat/to-sql args)) ")"))
@@ -217,7 +214,20 @@
                                    :month   [1 "months"]
                                    :quarter [3 "months"]
                                    :year    [1 "years"])]
-    (->datetime hsql-form (hx/literal (format "%+d %s" (* amount multiplier) sqlite-unit)))))
+    ;; Make a string like DATETIME(DATE('now', 'start of month'), '-1 month') The date bucketing will end up being
+    ;; done twice since `date` is called on the results of `date-interval` automatically. This shouldn't be a big deal
+    ;; because it's used for relative dates and only needs to be done once.
+    ;;
+    ;; It's important to call `date` on 'now' to apply bucketing *before* adding/subtracting dates to handle certain
+    ;; edge cases as discussed in issue #2275 (https://github.com/metabase/metabase/issues/2275).
+    ;;
+    ;; Basically, March 30th minus one month becomes Feb 30th in SQLite, which becomes March 2nd.
+    ;; DATE(DATETIME('2016-03-30', '-1 month'), 'start of month') is thus March 1st.
+    ;; The SQL we produce instead (for "last month") ends up looking something like:
+    ;; DATE(DATETIME(DATE('2015-03-30', 'start of month'), '-1 month'), 'start of month').
+    ;; It's a little verbose, but gives us the correct answer (Feb 1st).
+    (->datetime (sql.qp/date driver unit hsql-form)
+                (hx/literal (format "%+d %s" (* amount multiplier) sqlite-unit)))))
 
 (defmethod sql.qp/unix-timestamp->honeysql [:sqlite :seconds]
   [_ _ expr]
@@ -248,7 +258,7 @@
   ;; for anything that's a Temporal value convert it to a yyyy-MM-dd formatted date literal
   ;; string For whatever reason the SQL generated from parameters ends up looking like `WHERE date(some_field) = ?`
   ;; sometimes so we need to use just the date rather than a full ISO-8601 string
-  (sql.params.substitution/make-stmt-subs "?" [(t/format "yyyy-MM-dd" date)]))
+  (params.substitution/make-stmt-subs "?" [(t/format "yyyy-MM-dd" date)]))
 
 ;; SQLite doesn't support `TRUE`/`FALSE`; it uses `1`/`0`, respectively; convert these booleans to numbers.
 (defmethod sql.qp/->honeysql [:sqlite Boolean]
@@ -263,9 +273,12 @@
 
 (defmethod sql.qp/->honeysql [:sqlite :concat]
   [driver [_ & args]]
-  (apply
-   hsql/call :sqlite-concat
-   (mapv (partial sql.qp/->honeysql driver) args)))
+  (hsql/raw (str/join " || " (for [arg args]
+                               (let [arg (sql.qp/->honeysql driver arg)]
+                                 (hformat/to-sql
+                                  (if (string? arg)
+                                    (hx/literal arg)
+                                    arg)))))))
 
 (defmethod sql.qp/->honeysql [:sqlite :floor]
   [driver [_ arg]]

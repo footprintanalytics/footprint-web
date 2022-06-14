@@ -1,7 +1,7 @@
 import { restore } from "__support__/e2e/helpers/e2e-setup-helpers";
-import { SAMPLE_DATABASE } from "__support__/e2e/cypress_sample_database";
+import { SAMPLE_DATASET } from "__support__/e2e/cypress_sample_dataset";
 
-const { ORDERS_ID } = SAMPLE_DATABASE;
+const { ORDERS_ID } = SAMPLE_DATASET;
 
 const getQuestionDetails = () => ({
   name: "Question",

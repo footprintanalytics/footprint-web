@@ -1,8 +1,4 @@
----
-title: Running Metabase on AWS Elastic Beanstalk
----
-
-# Running Metabase on AWS Elastic Beanstalk
+**Covered in this guide:**
 
 - [Running Metabase on AWS Elastic Beanstalk](#running-metabase-on-aws-elastic-beanstalk)
   - [Quick Launch](#quick-launch)
@@ -23,6 +19,9 @@ title: Running Metabase on AWS Elastic Beanstalk
   - [Notifications](#notifications)
 - [Deploying New Versions of Metabase on Elastic Beanstalk](#deploying-new-versions-of-metabase-on-elastic-beanstalk)
 
+# Running Metabase on AWS Elastic Beanstalk
+
+
 This quick launch setup is intended for testing purposes only, and is not intended for production use. We'll focus on deploying Metabase with a single instance and the embedded H2 database with the following components:
 - a region (where your Metabase application will exist)
 - a network (where your application will reside and interact with other applications or servers if needed)
@@ -30,7 +29,7 @@ This quick launch setup is intended for testing purposes only, and is not intend
 - a load balancer (to make this deployment future proof and also provide features like HTTPS or Web Application Firewall security features)
 If you want to see a high-level architectural diagram of what you will achieve once you follow this guide, [click here](images/Metabase-AWS-H2.png).
 
-If you would like a reliable, scalable and fully managed Metabase, please consider [Metabase Cloud](https://www.metabase.com/start/).
+If you would like a reliable, scalable and fully managed Metabase, please consider [Metabase Cloud](https://www.metabase.com/start/hosted/).
 
 ## Quick Launch
 
@@ -54,7 +53,7 @@ Choose your region based on the proximity of your users, or if you have strict r
 - AP-Northeast-1 [Tokyo](https://console.aws.amazon.com/elasticbeanstalk/home?region=ap-northeast-1#/newApplication?applicationName=Metabase&platform=Docker&environmentType=LoadBalancing&tierName=WebServer&instanceType=t3a.small&withVpc=true)
 - AP-Northeast-2 [Seoul](https://console.aws.amazon.com/elasticbeanstalk/home?region=ap-northeast-2#/newApplication?applicationName=Metabase&platform=Docker&environmentType=LoadBalancing&tierName=WebServer&instanceType=t3a.small&withVpc=true)
 - AP-Southeast-1 [Singapore](https://console.aws.amazon.com/elasticbeanstalk/home?region=ap-southeast-1#/newApplication?applicationName=Metabase&platform=Docker&environmentType=LoadBalancing&tierName=WebServer&instanceType=t3a.small&withVpc=true)
-- AP-Southeast-2 [Sydney](https://console.aws.amazon.com/elasticbeanstalk/home?region=ap-southeast-2#/newApplication?applicationName=Metabase&platform=Docker&environmentType=LoadBalancing&tierName=WebServer&instanceType=t3a.small&withVpc=true)
+- AP-Southeast-2 [Sydney](https://console.aws.amazon.com/elasticbeanstalk/home?region=ap-southeast-1#/newApplication?applicationName=Metabase&platform=Docker&environmentType=LoadBalancing&tierName=WebServer&instanceType=t3a.small&withVpc=true)
 - SA-east-1 [São Paulo](https://console.aws.amazon.com/elasticbeanstalk/home?region=sa-east-1#/newApplication?applicationName=Metabase&platform=Docker&environmentType=LoadBalancing&tierName=WebServer&instanceType=t3a.small&withVpc=true)
 
 After clicking any launch URL, you should see a screen that looks like this:

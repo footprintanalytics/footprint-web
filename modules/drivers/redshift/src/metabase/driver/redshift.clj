@@ -2,6 +2,7 @@
   "Amazon Redshift Driver."
   (:require [cheshire.core :as json]
             [clojure.java.jdbc :as jdbc]
+            [clojure.string :as str]
             [clojure.tools.logging :as log]
             [honeysql.core :as hsql]
             [metabase.driver :as driver]
@@ -9,19 +10,20 @@
             [metabase.driver.sql-jdbc.common :as sql-jdbc.common]
             [metabase.driver.sql-jdbc.connection :as sql-jdbc.conn]
             [metabase.driver.sql-jdbc.execute :as sql-jdbc.execute]
-            [metabase.driver.sql-jdbc.execute.legacy-impl :as sql-jdbc.legacy]
+            [metabase.driver.sql-jdbc.execute.legacy-impl :as legacy]
             [metabase.driver.sql-jdbc.sync :as sql-jdbc.sync]
+            [metabase.driver.sql-jdbc.sync.describe-database :as sync.describe-database]
             [metabase.driver.sql.query-processor :as sql.qp]
             [metabase.mbql.util :as mbql.u]
-            [metabase.public-settings :as public-settings]
+            [metabase.public-settings :as pubset]
             [metabase.query-processor.store :as qp.store]
-            [metabase.query-processor.util :as qp.util]
+            [metabase.query-processor.util :as qputil]
             [metabase.util.honeysql-extensions :as hx]
             [metabase.util.i18n :refer [trs]])
   (:import [java.sql Connection PreparedStatement ResultSet Types]
            java.time.OffsetTime))
 
-(driver/register! :redshift, :parent #{:postgres ::sql-jdbc.legacy/use-legacy-classes-for-read-and-set})
+(driver/register! :redshift, :parent #{:postgres ::legacy/use-legacy-classes-for-read-and-set})
 
 ;;; +----------------------------------------------------------------------------------------------------------------+
 ;;; |                                             metabase.driver impls                                              |
@@ -64,6 +66,10 @@
           :dest-table       {:name   (:dest-table-name fk)
                              :schema (:dest-table-schema fk)}
           :dest-column-name (:dest-column-name fk)})))
+
+(defmethod driver/format-custom-field-name :redshift
+  [_ custom-field-name]
+  (str/lower-case custom-field-name))
 
 ;; The docs say TZ should be allowed at the end of the format string, but it doesn't appear to work
 ;; Redshift is always in UTC and doesn't return it's timezone
@@ -208,17 +214,17 @@
 
 (prefer-method
  sql-jdbc.execute/read-column-thunk
- [::sql-jdbc.legacy/use-legacy-classes-for-read-and-set Types/TIMESTAMP]
+ [::legacy/use-legacy-classes-for-read-and-set Types/TIMESTAMP]
  [:postgres Types/TIMESTAMP])
 
 (prefer-method
  sql-jdbc.execute/read-column-thunk
- [::sql-jdbc.legacy/use-legacy-classes-for-read-and-set Types/TIME]
+ [::legacy/use-legacy-classes-for-read-and-set Types/TIME]
  [:postgres Types/TIME])
 
 (prefer-method
  sql-jdbc.execute/set-parameter
- [::sql-jdbc.legacy/use-legacy-classes-for-read-and-set OffsetTime]
+ [::legacy/use-legacy-classes-for-read-and-set OffsetTime]
  [:postgres OffsetTime])
 
 (defn- field->parameter-value
@@ -236,16 +242,16 @@
                     [(:name (qp.store/field field-id)) (:value param)]))))
         user-parameters))
 
-(defmethod qp.util/query->remark :redshift
+(defmethod qputil/query->remark :redshift
   [_ {{:keys [executed-by query-hash card-id]} :info, :as query}]
   (str "/* partner: \"metabase\", "
        (json/generate-string {:dashboard_id        nil ;; requires metabase/metabase#11909
                               :chart_id            card-id
                               :optional_user_id    executed-by
-                              :optional_account_id (public-settings/site-uuid)
+                              :optional_account_id (pubset/site-uuid)
                               :filter_values       (field->parameter-value query)})
        " */ "
-       (qp.util/default-query->remark query)))
+       (qputil/default-query->remark query)))
 
 (defn- reducible-schemas-with-usage-permissions
   "Takes something `reducible` that returns a collection of string schema names (e.g. an `Eduction`) and returns an
@@ -270,11 +276,10 @@
                         false))))
           reducible))))))
 
-(defmethod sql-jdbc.sync/filtered-syncable-schemas :redshift
-  [driver conn metadata schema-inclusion-patterns schema-exclusion-patterns]
-  (let [parent-method (get-method sql-jdbc.sync/filtered-syncable-schemas :sql-jdbc)]
-    (reducible-schemas-with-usage-permissions conn (parent-method driver
-                                                                  conn
-                                                                  metadata
-                                                                  schema-inclusion-patterns
-                                                                  schema-exclusion-patterns))))
+(defmethod sql-jdbc.sync/syncable-schemas :redshift
+  [driver conn metadata]
+  (reducible-schemas-with-usage-permissions
+   conn
+   (eduction
+    (remove (set (sql-jdbc.sync/excluded-schemas driver)))
+    (sync.describe-database/all-schemas metadata))))

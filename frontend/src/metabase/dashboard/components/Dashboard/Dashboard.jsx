@@ -1,37 +1,67 @@
 // TODO: merge with metabase/dashboard/containers/Dashboard.jsx
+/* eslint-disable react/prop-types */
 import React, { Component } from "react";
 import PropTypes from "prop-types";
 import _ from "underscore";
-
-import { getMainElement } from "metabase/lib/dom";
+import { throttle, get } from "lodash";
 
 import DashboardControls from "../../hoc/DashboardControls";
 import { DashboardSidebars } from "../DashboardSidebars";
-import DashboardHeader from "metabase/dashboard/containers/DashboardHeader";
+import DashboardHeader from "../DashboardHeader";
 import {
   CardsContainer,
-  DashboardStyled,
-  DashboardLoadingAndErrorWrapper,
   DashboardBody,
+  DashboardLoadingAndErrorWrapper,
+  DashboardStyled,
   HeaderContainer,
   ParametersAndCardsContainer,
   ParametersWidgetContainer,
 } from "./Dashboard.styled";
 import DashboardGrid from "../DashboardGrid";
-import SyncedParametersList from "metabase/parameters/components/SyncedParametersList/SyncedParametersList";
+import ParametersWidget from "./ParametersWidget/ParametersWidget";
 import DashboardEmptyState from "./DashboardEmptyState/DashboardEmptyState";
-import { updateParametersWidgetStickiness } from "./stickyParameters";
-import { getValuePopulatedParameters } from "metabase/parameters/utils/parameter-values";
+// import { updateParametersWidgetStickiness } from "./stickyParameters";
+import ShareModal from "metabase/containers/home/components/ShareModal";
+import DashboardCopyModal from "metabase/dashboard/components/DashboardCopyModal";
+import RootOverviewControls from "metabase/dashboard/hoc/RootOverviewControls";
+import { DashboardLazyLoadContainer } from "./DashboardLazyLoadContainer";
+import Modal from "metabase/components/Modal";
+import CreateDashboardModal from "metabase/components/CreateDashboardModal";
+import { message } from "antd";
+import { createThumb } from "metabase/dashboard/components/utils/thumb";
+import { zkspaceDate } from "metabase/lib/register-activity";
+import { t } from "ttag";
+import ConfirmContent from "metabase/components/ConfirmContent";
+import * as Urls from "metabase/lib/urls";
+import TagsPanel from "metabase/query_builder/components/view/TagsPanel";
+import MetaViewportControls from "metabase/dashboard/hoc/MetaViewportControls";
+import { dashboardIdInfo } from "metabase/new-service";
+import MetabaseUtils from "metabase/lib/utils";
+import { isDefi360 } from "metabase/lib/project_info";
+import DashboardAd from "metabase/containers/news/components/DashboardAd";
+import { parseHashOptions } from "metabase/lib/browser";
+import { navigateToGuestQuery } from "metabase/guest/utils";
+import Meta from "metabase/components/Meta";
+import { getDescription } from "metabase/lib/formatting";
+import { getOssUrl } from "metabase/lib/image";
+import { ossPath } from "metabase/lib/ossPath";
 
-const SCROLL_THROTTLE_INTERVAL = 1000 / 24;
+// const SCROLL_THROTTLE_INTERVAL = 1000 / 24;
+const THROTTLE_PERIOD = 300;
 
 // NOTE: move DashboardControls HoC to container
-
-class Dashboard extends Component {
+@RootOverviewControls
+@DashboardControls
+@MetaViewportControls
+export default class Dashboard extends Component {
   state = {
     error: null,
     isParametersWidgetSticky: false,
-    parametersListLength: 0,
+    showAddQuestionSidebar: false,
+    shareModalResource: {},
+    showDashboardCopyModal: false,
+    newDashboardModal: false,
+    cancelModal: false,
   };
 
   static propTypes = {
@@ -45,18 +75,13 @@ class Dashboard extends Component {
     isEditing: PropTypes.oneOfType([PropTypes.bool, PropTypes.object])
       .isRequired,
     isEditingParameter: PropTypes.bool.isRequired,
-    isNavbarOpen: PropTypes.bool.isRequired,
-    isHeaderVisible: PropTypes.bool,
-    isAdditionalInfoVisible: PropTypes.bool,
 
     dashboard: PropTypes.object,
     dashboardId: PropTypes.number,
     parameters: PropTypes.array,
     parameterValues: PropTypes.object,
-    editingParameter: PropTypes.object,
 
-    editingOnLoad: PropTypes.bool,
-    addCardOnLoad: PropTypes.number,
+    addCardOnLoad: PropTypes.func,
     addCardToDashboard: PropTypes.func.isRequired,
     addParameter: PropTypes.func,
     archiveDashboard: PropTypes.func.isRequired,
@@ -70,9 +95,6 @@ class Dashboard extends Component {
     setEditingDashboard: PropTypes.func.isRequired,
     setErrorPage: PropTypes.func,
     setSharing: PropTypes.func.isRequired,
-    setParameterValue: PropTypes.func.isRequired,
-    setEditingParameter: PropTypes.func.isRequired,
-    setParameterIndex: PropTypes.func.isRequired,
 
     onUpdateDashCardVisualizationSettings: PropTypes.func.isRequired,
     onUpdateDashCardColumnSettings: PropTypes.func.isRequired,
@@ -101,71 +123,99 @@ class Dashboard extends Component {
     this.parametersAndCardsContainerRef = React.createRef();
   }
 
-  static getDerivedStateFromProps(props, state) {
-    return props.parameters.length !== state.parametersListLength
-      ? { parametersListLength: props.parameters.length }
-      : null;
-  }
+  fetchDashboardCardData = () => {
+    this.props.fetchDashboardCardData({ reload: false, clear: true });
+  };
 
-  throttleParameterWidgetStickiness = _.throttle(
-    () => updateParametersWidgetStickiness(this),
-    SCROLL_THROTTLE_INTERVAL,
+  fetchDashboardCardDataThrottle = throttle(
+    this.fetchDashboardCardData,
+    THROTTLE_PERIOD,
   );
 
   // NOTE: all of these lifecycle methods should be replaced with DashboardData HoC in container
   componentDidMount() {
-    this.loadDashboard(this.props.dashboardId);
+    const { dashboardId, urlDashboardName, urlUserName } = this.props;
+    this.loadDashboard({
+      dashboardId,
+      urlDashboardName,
+      urlUserName,
+    });
 
-    const main = getMainElement();
-    main.addEventListener("scroll", this.throttleParameterWidgetStickiness, {
-      passive: true,
-    });
-    main.addEventListener("resize", this.throttleParameterWidgetStickiness, {
-      passive: true,
-    });
+    // const throttleParameterWidgetStickiness = _.throttle(
+    //   () => updateParametersWidgetStickiness(this),
+    //   SCROLL_THROTTLE_INTERVAL,
+    // );
+
+    // window.addEventListener("scroll", throttleParameterWidgetStickiness, {
+    //   passive: true,
+    // });
+    // window.addEventListener("resize", throttleParameterWidgetStickiness, {
+    //   passive: true,
+    // });
   }
 
-  componentDidUpdate(prevProps) {
-    if (prevProps.dashboardId !== this.props.dashboardId) {
-      this.loadDashboard(this.props.dashboardId);
-    } else if (
-      !_.isEqual(prevProps.parameterValues, this.props.parameterValues) ||
-      (!prevProps.dashboard && this.props.dashboard)
+  UNSAFE_componentWillReceiveProps(nextProps) {
+    if (
+      this.props.dashboardId !== nextProps.dashboardId ||
+      this.props.urlDashboardName !== nextProps.urlDashboardName ||
+      this.props.urlUserName !== nextProps.urlUserName
     ) {
-      this.props.fetchDashboardCardData({ reload: false, clear: true });
+      this.loadDashboard({
+        dashboardId: nextProps.dashboardId,
+        urlDashboardName: nextProps.urlDashboardName,
+        urlUserName: nextProps.urlUserName,
+      });
+    } else if (
+      !_.isEqual(this.props.parameterValues, nextProps.parameterValues) ||
+      !this.props.dashboard
+    ) {
+      this.fetchDashboardCardDataThrottle();
     }
   }
 
   componentWillUnmount() {
     this.props.cancelFetchDashboardCardData();
-    const main = getMainElement();
-    main.removeEventListener("scroll", this.throttleParameterWidgetStickiness);
-    main.removeEventListener("resize", this.throttleParameterWidgetStickiness);
+
+    // window.removeEventListener("scroll", updateParametersWidgetStickiness);
+    // window.removeEventListener("resize", updateParametersWidgetStickiness);
   }
 
-  async loadDashboard(dashboardId) {
+  async loadDashboard({ dashboardId, urlDashboardName, urlUserName }) {
     const {
-      editingOnLoad,
       addCardOnLoad,
+      defaultEdit,
       addCardToDashboard,
       fetchDashboard,
       initialize,
       loadDashboardParams,
       location,
       setErrorPage,
+      user,
     } = this.props;
 
     initialize();
 
     loadDashboardParams();
-
     try {
-      await fetchDashboard(dashboardId, location.query);
-      if (editingOnLoad) {
-        this.setEditing(this.props.dashboard);
+      if (urlDashboardName && urlUserName) {
+        const { uuid, id, metabaseId } = await dashboardIdInfo({
+          dashboardName: encodeURIComponent(urlDashboardName),
+          userName: urlUserName,
+        });
+        if (user && (metabaseId === user.id || user.is_superuser)) {
+          dashboardId = id;
+        } else {
+          dashboardId = uuid;
+        }
       }
+      await fetchDashboard(dashboardId, location.query);
       if (addCardOnLoad != null) {
+        // if we destructure this.props.dashboard, for some reason
+        // if will render dashboards as empty
+        this.setEditing(this.props.dashboard);
         addCardToDashboard({ dashId: dashboardId, cardId: addCardOnLoad });
+      } else if (defaultEdit) {
+        this.setEditing(this.props.dashboard);
       }
     } catch (error) {
       if (error.status === 404) {
@@ -197,12 +247,190 @@ class Dashboard extends Component {
     }
   };
 
-  onCancel = () => {
-    this.props.setSharing(false);
+  onShowAddQuestionSidebar = () => {
+    this.setState({ showAddQuestionSidebar: true });
   };
 
-  onSharingClick = () => {
-    this.props.setSharing(true);
+  onHideAddQuestionSidebar = () => {
+    this.setState({ showAddQuestionSidebar: false });
+  };
+
+  onCancel = () => {
+    // this.props.setSharing(false);
+    this.setState({
+      shareModalResource: {},
+    });
+  };
+
+  onSharingClick = params => {
+    // this.props.setSharing(true);
+    const { dashboard } = this.props;
+    this.setState({
+      shareModalResource: {
+        open: true,
+        public_uuid: MetabaseUtils.isUUID(dashboard.id)
+          ? dashboard.id
+          : dashboard.public_uuid,
+        type: "dashboard",
+        name: dashboard.name,
+        id: dashboard.id,
+        creatorId: dashboard.creator_id,
+        creator: dashboard.creator,
+        uniqueName: dashboard.uniqueName,
+        onlyEmbed: params?.onlyEmbed,
+      },
+    });
+  };
+
+  onEmbeddingClick = () => {};
+
+  onCopyClick = () => {
+    this.setState({
+      showDashboardCopyModal: true,
+    });
+  };
+
+  onAfterChangePublicUuid = ({ newUuid }) => {
+    this.props.dashboard.public_uuid = newUuid;
+  };
+
+  renderNewDashboardModal = () => {
+    const { newDashboardModal } = this.state;
+    return (
+      newDashboardModal && (
+        <Modal
+          className="w-auto"
+          ModalClass="z-index-top"
+          onClose={() => this.setState({ newDashboardModal: false })}
+        >
+          <div style={{ width: "50vw", maxWidth: 600 }}>
+            <CreateDashboardModal
+              createDashboard={this.props.createDashboard}
+              onSavedOtherAction={dashboard => {
+                this.saveAction({ newDashboard: dashboard });
+              }}
+              onClose={() => this.setState({ newDashboardModal: false })}
+            />
+          </div>
+        </Modal>
+      )
+    );
+  };
+
+  onDoneEditing = () => {
+    this.setEditing(false);
+  };
+
+  saveAction = async props => {
+    const { newDashboard } = props || {};
+    const hide = message.loading("Saving...", 0);
+    const {
+      payload: { dashboard },
+    } = await this.props.saveDashboardAndCards({ newDashboard });
+    const { dashboardBeforeEditing, user, replace } = this.props;
+    const { id, public_uuid } = dashboard;
+    if (public_uuid) {
+      await createThumb({
+        elementId: "#html2canvas-Dashboard",
+        fileName: `dashboard/${id}.png`,
+        type: "dashboard",
+        publicUuid: public_uuid,
+        captureElementHeight: "630px",
+        cssAdjustments: [
+          {
+            selector: ".Dashboard",
+            css: "width: 1200px",
+          },
+        ],
+      });
+    }
+    this.onDoneEditing();
+
+    hide();
+
+    if (
+      zkspaceDate() &&
+      (!dashboardBeforeEditing ||
+        (dashboardBeforeEditing &&
+          dashboardBeforeEditing.ordered_cards.length === 0)) &&
+      dashboard.ordered_cards.length > 0
+    ) {
+      this.props.setSubmitAddrZkspaceModal({
+        submitAddrZkspaceModal: true,
+        email: user && user.email,
+      });
+    }
+
+    if (location.pathname.endsWith("/new")) {
+      replace({
+        pathname: Urls.dashboard({ ...dashboard, type: "dashboard" }),
+        state: { new: true },
+      });
+    }
+  };
+
+  onShowNewDashboardModal = () => {
+    this.setState({
+      newDashboardModal: true,
+    });
+  };
+
+  onRevert = () => {
+    this.setState({
+      cancelModal: true,
+    });
+  };
+
+  handleRevertAction = () => {
+    const { dashboard, onChangeLocation } = this.props;
+    if (dashboard.id === "new") {
+      onChangeLocation("/");
+      return;
+    }
+    this.props.fetchDashboard(
+      this.props.dashboard.id,
+      this.props.location.query,
+      true,
+    );
+  };
+
+  renderCancelModal = () => {
+    const isOpen = this.state.cancelModal;
+    return (
+      <Modal isOpen={isOpen}>
+        {isOpen && (
+          <ConfirmContent
+            title={t`You have unsaved changes`}
+            message={t`Do you want to leave this page and discard your changes?`}
+            onClose={() => {
+              this.setState({ cancelModal: false });
+            }}
+            onAction={() => {
+              this.setState({ cancelModal: false });
+              this.handleRevertAction();
+              this.setEditing(false);
+            }}
+          />
+        )}
+      </Modal>
+    );
+  };
+
+  tagPanel = () => {
+    const { dashboard, isEditable, user } = this.props;
+    const isLoaded = !!dashboard;
+    const canEdit =
+      isLoaded &&
+      isEditable &&
+      user &&
+      (user.is_superuser || user.isMarket || user.id === dashboard?.creator_id);
+    return (
+      <TagsPanel
+        tagEntityId={this.props.dashboard.entityId || this.props.dashboard.id}
+        isEditPermission={!this.props.isEditing && canEdit}
+        type="dashboard"
+      />
+    );
   };
 
   render() {
@@ -215,32 +443,17 @@ class Dashboard extends Component {
       isNightMode,
       isSharing,
       parameters,
-      parameterValues,
-      isNavbarOpen,
       showAddQuestionSidebar,
-      editingParameter,
-      setParameterValue,
-      setParameterIndex,
-      setEditingParameter,
-      isHeaderVisible,
     } = this.props;
-
-    const { error, isParametersWidgetSticky } = this.state;
+    const { error, shareModalResource, isParametersWidgetSticky } = this.state;
 
     const shouldRenderAsNightMode = isNightMode && isFullscreen;
     const dashboardHasCards = dashboard => dashboard.ordered_cards.length > 0;
 
     const parametersWidget = (
-      <SyncedParametersList
-        parameters={getValuePopulatedParameters(parameters, parameterValues)}
-        editingParameter={editingParameter}
-        dashboard={dashboard}
-        isFullscreen={isFullscreen}
-        isNightMode={shouldRenderAsNightMode}
-        isEditing={isEditing}
-        setParameterValue={setParameterValue}
-        setParameterIndex={setParameterIndex}
-        setEditingParameter={setEditingParameter}
+      <ParametersWidget
+        shouldRenderAsNightMode={shouldRenderAsNightMode}
+        {...this.props}
       />
     );
 
@@ -254,17 +467,33 @@ class Dashboard extends Component {
       !shouldRenderParametersWidgetInViewMode &&
       (!isEditing || isEditingParameter);
 
+    const { chart_style } = {
+      ...parseHashOptions(location.hash),
+    };
+
     return (
-      <DashboardLoadingAndErrorWrapper
-        isFullHeight={isEditing || isSharing}
-        isFullscreen={isFullscreen}
-        isNightMode={shouldRenderAsNightMode}
-        loading={!dashboard}
-        error={error}
-      >
-        {() => (
-          <DashboardStyled>
-            {isHeaderVisible && (
+      <>
+        {dashboard && (
+          <Meta
+            description={getDescription({
+              description: dashboard.description,
+              orderedCards: dashboard.ordered_cards,
+            })}
+            image={getOssUrl(
+              ossPath(`dashboard/${dashboard.entityId || dashboard.id}.png`),
+              { resize: true },
+            )}
+          />
+        )}
+        <DashboardLoadingAndErrorWrapper
+          isFullHeight={isEditing || isSharing}
+          isFullscreen={isFullscreen}
+          isNightMode={shouldRenderAsNightMode}
+          loading={!dashboard}
+          error={error}
+        >
+          {() => (
+            <DashboardStyled>
               <HeaderContainer
                 isFullscreen={isFullscreen}
                 isNightMode={shouldRenderAsNightMode}
@@ -277,63 +506,112 @@ class Dashboard extends Component {
                   parametersWidget={parametersWidget}
                   onSharingClick={this.onSharingClick}
                   onToggleAddQuestionSidebar={this.onToggleAddQuestionSidebar}
+                  onShowAddQuestionSidebar={this.onShowAddQuestionSidebar}
+                  onHideAddQuestionSidebar={this.onHideAddQuestionSidebar}
+                  showAddQuestionSidebar={showAddQuestionSidebar}
+                  onCopyClick={this.onCopyClick}
+                  showNewDashboardModal={this.onShowNewDashboardModal}
+                  saveAction={this.saveAction}
+                  onRevert={this.onRevert}
+                />
+              </HeaderContainer>
+              <div className="flex">
+                <DashboardLazyLoadContainer className="flex-full flex flex-column flex-basis-none">
+                  <DashboardBody isEditingOrSharing={isEditing || isSharing}>
+                    <ParametersAndCardsContainer
+                      data-testid="dashboard-parameters-and-cards"
+                      innerRef={element =>
+                        (this.parametersAndCardsContainerRef = element)
+                      }
+                    >
+                      <div className="TagWidgetContainer bg-white pl2 pr2 hove">
+                        <div style={{ display: isEditing ? "none" : "flex" }}>
+                          {this.tagPanel()}
+                        </div>
+                        {shouldRenderParametersWidgetInViewMode && (
+                          <ParametersWidgetContainer
+                            innerRef={element =>
+                              (this.parametersWidgetRef = element)
+                            }
+                            isSticky={isParametersWidgetSticky}
+                          >
+                            {parametersWidget}
+                          </ParametersWidgetContainer>
+                        )}
+                      </div>
+
+                      <CardsContainer
+                        className="CardsContainer"
+                        addMarginTop={cardsContainerShouldHaveMarginTop}
+                      >
+                        {shouldRenderParametersWidgetInEditMode && (
+                          <ParametersWidgetContainer isEditing={isEditing}>
+                            {parametersWidget}
+                          </ParametersWidgetContainer>
+                        )}
+                        {dashboardHasCards(dashboard) ? (
+                          <DashboardGrid
+                            {...this.props}
+                            onEditingChange={this.setEditing}
+                            hideWatermark={dashboard && dashboard.hideWatermark}
+                            navigateToNewCardFromDashboard={dashboard => {
+                              const user = this.props.user;
+                              const dashcard = dashboard && dashboard.dashcard;
+                              const isAdmin = user && user.is_superuser;
+                              const isOwner =
+                                user && user.id === get(dashcard, "creator.id");
+                              if (isAdmin || isOwner) {
+                                this.props.navigateToNewCardFromDashboard(
+                                  dashboard,
+                                );
+                              } else {
+                                navigateToGuestQuery(dashboard, this.props);
+                              }
+                            }}
+                            chartStyle={chart_style}
+                          />
+                        ) : (
+                          <DashboardEmptyState
+                            isEditing={isEditing}
+                            onToggleAddQuestionSidebar={
+                              this.onToggleAddQuestionSidebar
+                            }
+                            isNightMode={shouldRenderAsNightMode}
+                            {...this.props}
+                          />
+                        )}
+                      </CardsContainer>
+                    </ParametersAndCardsContainer>
+                  </DashboardBody>
+                  {!isEditing && !isDefi360() && (
+                    <div style={{ padding: "0 18px" }}>
+                      <DashboardAd dashboard={dashboard} />
+                    </div>
+                  )}
+                </DashboardLazyLoadContainer>
+                <DashboardSidebars
+                  {...this.props}
+                  onCancel={this.onCancel}
                   showAddQuestionSidebar={showAddQuestionSidebar}
                 />
-
-                {shouldRenderParametersWidgetInEditMode && (
-                  <ParametersWidgetContainer
-                    data-testid="edit-dashboard-parameters-widget-container"
-                    isEditing={isEditing}
-                  >
-                    {parametersWidget}
-                  </ParametersWidgetContainer>
-                )}
-              </HeaderContainer>
-            )}
-
-            <DashboardBody isEditingOrSharing={isEditing || isSharing}>
-              <ParametersAndCardsContainer
-                data-testid="dashboard-parameters-and-cards"
-                ref={element => (this.parametersAndCardsContainerRef = element)}
-              >
-                {shouldRenderParametersWidgetInViewMode && (
-                  <ParametersWidgetContainer
-                    data-testid="dashboard-parameters-widget-container"
-                    ref={element => (this.parametersWidgetRef = element)}
-                    isNavbarOpen={isNavbarOpen}
-                    isSticky={isParametersWidgetSticky}
-                  >
-                    {parametersWidget}
-                  </ParametersWidgetContainer>
-                )}
-
-                <CardsContainer
-                  addMarginTop={cardsContainerShouldHaveMarginTop}
-                >
-                  {dashboardHasCards(dashboard) ? (
-                    <DashboardGrid
-                      {...this.props}
-                      onEditingChange={this.setEditing}
-                    />
-                  ) : (
-                    <DashboardEmptyState
-                      isNightMode={shouldRenderAsNightMode}
-                    />
-                  )}
-                </CardsContainer>
-              </ParametersAndCardsContainer>
-
-              <DashboardSidebars
-                {...this.props}
-                onCancel={this.onCancel}
-                showAddQuestionSidebar={showAddQuestionSidebar}
-              />
-            </DashboardBody>
-          </DashboardStyled>
-        )}
-      </DashboardLoadingAndErrorWrapper>
+              </div>
+            </DashboardStyled>
+          )}
+          <ShareModal
+            resource={shareModalResource}
+            onAfterChangePublicUuid={this.onAfterChangePublicUuid}
+            onClose={() => this.setState({ shareModalResource: {} })}
+          />
+          <DashboardCopyModal
+            isOpen={this.state.showDashboardCopyModal}
+            onClose={() => this.setState({ showDashboardCopyModal: null })}
+            dashboardId={this.props.dashboardId}
+            fromRoute={false}
+          />
+          {this.renderNewDashboardModal()}
+          {this.renderCancelModal()}
+        </DashboardLoadingAndErrorWrapper>
+      </>
     );
   }
 }
-
-export default DashboardControls(Dashboard);

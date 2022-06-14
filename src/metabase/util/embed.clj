@@ -14,7 +14,7 @@
 ;;; --------------------------------------------- PUBLIC LINKS UTIL FNS ----------------------------------------------
 
 (defn- oembed-url
-  "Return an oEmbed URL for the `relative-path`.
+  "Return an oEmbed URL for the RELATIVE-PATH.
 
      (oembed-url \"/x\") -> \"http://localhost:3000/api/public/oembed?url=x&format=json\""
   ^String [^String relative-url]
@@ -52,17 +52,17 @@
 
 ;;; ----------------------------------------------- EMBEDDING UTIL FNS -----------------------------------------------
 
-(setting/defsetting embedding-secret-key
+(setting/defsetting ^:private embedding-secret-key
   (deferred-tru "Secret key used to sign JSON Web Tokens for requests to `/api/embed` endpoints.")
   :visibility :admin
   :setter (fn [new-value]
             (when (seq new-value)
               (assert (u/hexadecimal-string? new-value)
                 (tru "Invalid embedding-secret-key! Secret key must be a hexadecimal-encoded 256-bit key (i.e., a 64-character string).")))
-            (setting/set-value-of-type! :string :embedding-secret-key new-value)))
+            (setting/set-string! :embedding-secret-key new-value)))
 
 (defn- jwt-header
-  "Parse a JWT `message` and return the header portion."
+  "Parse a JWT MESSAGE and return the header portion."
   [^String message]
   (let [[header] (str/split message #"\.")]
     (json/parse-string (codecs/bytes->str (codec/base64-decode header)) keyword)))

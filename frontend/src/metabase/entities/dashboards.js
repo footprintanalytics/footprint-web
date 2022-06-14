@@ -13,18 +13,39 @@ import { t } from "ttag";
 
 import { addUndo } from "metabase/redux/undo";
 
-import { POST, DELETE } from "metabase/lib/api";
+import { POST, DELETE, PUT } from "metabase/lib/api";
 import {
+  canonicalCollectionId,
   getCollectionType,
   normalizedCollection,
 } from "metabase/entities/collections";
-import { canonicalCollectionId } from "metabase/collections/utils";
+import { formatDashboardChartSaveTitle } from "metabase/lib/formatting";
 
 import forms from "./dashboards/forms";
+import { getProject } from "metabase/lib/project_info";
+import validate from "metabase/lib/validate";
+import { message } from "antd";
 
 const FAVORITE_ACTION = `metabase/entities/dashboards/FAVORITE`;
 const UNFAVORITE_ACTION = `metabase/entities/dashboards/UNFAVORITE`;
 const COPY_ACTION = `metabase/entities/dashboards/COPY`;
+
+const formFields = [
+  {
+    name: "name",
+    title: t`Name`,
+    placeholder: t`What is the name of your dashboard?`,
+    autoFocus: true,
+    validate: validate.required().checkDashboardTitle(),
+    normalize: name => formatDashboardChartSaveTitle(name),
+  },
+  {
+    name: "description",
+    title: t`Description`,
+    type: "text",
+    placeholder: t`It's optional but oh, so helpful`,
+  },
+];
 
 const Dashboards = createEntity({
   name: "dashboards",
@@ -38,16 +59,19 @@ const Dashboards = createEntity({
     favorite: POST("/api/dashboard/:id/favorite"),
     unfavorite: DELETE("/api/dashboard/:id/favorite"),
     save: POST("/api/dashboard/save"),
-    copy: POST("/api/dashboard/:id/copy"),
+    copy: POST("/api/v1/dashboard/:id/copy"),
+    create: POST("/api/v1/dashboard"),
+    update: PUT("/api/v1/dashboard/:id"),
   },
 
   objectActions: {
-    setArchived: ({ id }, archived, opts) =>
-      Dashboards.actions.update(
+    setArchived: ({ id, name }, archived, opts) => {
+      return Dashboards.actions.update(
         { id },
-        { archived },
+        { archived, name },
         undo(opts, "dashboard", archived ? "archived" : "unarchived"),
-      ),
+      );
+    },
 
     setCollection: ({ id }, collection, opts) =>
       Dashboards.actions.update(
@@ -95,9 +119,14 @@ const Dashboards = createEntity({
         const result = Dashboards.normalize(
           await Dashboards.api.copy({
             id: entityObject.id,
+            project: getProject(),
             ...overrides,
           }),
         );
+        if (result && result.object && result.object.code === -1) {
+          result.object.message && message.error(result.object.message);
+          throw { data: result.object.message };
+        }
         if (notify) {
           dispatch(addUndo(notify));
         }
@@ -137,6 +166,34 @@ const Dashboards = createEntity({
       dashboard && normalizedCollection(dashboard.collection),
     getIcon: dashboard => ({ name: "dashboard" }),
     getColor: () => color("dashboard"),
+  },
+
+  form: {
+    fields: [
+      ...formFields,
+      {
+        name: "collection_id",
+        title: t`Which collection should this go in?`,
+        type: "collection",
+        validate: collectionId =>
+          collectionId === undefined ? "Collection is required" : null,
+      },
+    ],
+    adminDashboardFields: {
+      fields: [
+        ...formFields,
+        {
+          name: "collection_id",
+          title: t`Which collection should this go in?`,
+          type: "collection",
+          validate: collectionId =>
+            collectionId === undefined ? "Collection is required" : null,
+        },
+      ],
+    },
+    userDashboardFields: {
+      fields: formFields,
+    },
   },
 
   getAnalyticsMetadata([object], { action }, getState) {

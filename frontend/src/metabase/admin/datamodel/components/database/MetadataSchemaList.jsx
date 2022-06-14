@@ -59,7 +59,7 @@ export default class MetadataSchemaList extends Component {
             <li key={schema}>
               <a
                 className={cx(
-                  "AdminList-item flex align-center no-decoration text-wrap",
+                  "AdminList-item flex align-center no-decoration",
                   {
                     selected: selectedSchema && selectedSchema === schema,
                   },

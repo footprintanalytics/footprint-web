@@ -1,16 +1,26 @@
 (ns metabase.api.search-test
-  (:require [clojure.set :as set]
-            [clojure.string :as str]
+  (:require [clojure.string :as str]
             [clojure.test :refer :all]
             [honeysql.core :as hsql]
             [metabase.api.search :as api.search]
             [metabase.models
              :refer
-             [Card CardBookmark Collection Dashboard DashboardBookmark DashboardCard
-              Database Metric PermissionsGroup PermissionsGroupMembership Pulse PulseCard
-              Segment Table]]
+             [Card
+              CardFavorite
+              Collection
+              Dashboard
+              DashboardCard
+              DashboardFavorite
+              Database
+              Metric
+              PermissionsGroup
+              PermissionsGroupMembership
+              Pulse
+              PulseCard
+              Segment
+              Table]]
             [metabase.models.permissions :as perms]
-            [metabase.models.permissions-group :as perms-group]
+            [metabase.models.permissions-group :as group]
             [metabase.search.config :as search-config]
             [metabase.test :as mt]
             [metabase.util :as u]
@@ -27,15 +37,14 @@
    :moderated_status           nil
    :context                    nil
    :dashboardcard_count        nil
-   :bookmark                   nil
+   :favorite                   nil
    :table_id                   false
    :database_id                false
    :dataset_query              nil
    :table_schema               nil
    :table_name                 nil
    :table_description          nil
-   :updated_at                 true
-   :initial_sync_status        nil})
+   :updated_at                 true})
 
 (defn- table-search-results
   "Segments and Metrics come back with information about their Tables as of 0.33.0. The `model-defaults` for Segment and
@@ -59,17 +68,15 @@
    (apply array-map kvs)))
 
 (def ^:private test-collection (make-result "collection test collection"
-                                            :bookmark false
                                             :model "collection"
                                             :collection {:id true, :name true :authority_level nil}
                                             :updated_at false))
 
 (defn- default-search-results []
   (sorted-results
-   [(make-result "dashboard test dashboard", :model "dashboard", :bookmark false)
+   [(make-result "dashboard test dashboard", :model "dashboard", :favorite false)
     test-collection
-    (make-result "card test card", :model "card", :bookmark false, :dataset_query nil, :dashboardcard_count 0)
-    (make-result "dataset test dataset", :model "dataset", :bookmark false, :dataset_query nil, :dashboardcard_count 0)
+    (make-result "card test card", :model "card", :favorite false, :dataset_query nil, :dashboardcard_count 0)
     (make-result "pulse test pulse", :model "pulse", :archived nil, :updated_at false)
     (merge
      (make-result "metric test metric", :model "metric", :description "Lookin' for a blueberry")
@@ -93,7 +100,7 @@
       search-item)))
 
 (defn- default-results-with-collection []
-  (on-search-types #{"dashboard" "pulse" "card" "dataset"}
+  (on-search-types #{"dashboard" "pulse" "card"}
                    #(assoc % :collection {:id true, :name true :authority_level nil})
                    (default-search-results)))
 
@@ -106,15 +113,12 @@
                                  {:collection_id (u/the-id collection)})))]
     (mt/with-temp* [Collection [coll      (data-map "collection %s collection")]
                     Card       [card      (coll-data-map "card %s card" coll)]
-                    Card       [dataset   (assoc (coll-data-map "dataset %s dataset" coll)
-                                                 :dataset true)]
                     Dashboard  [dashboard (coll-data-map "dashboard %s dashboard" coll)]
                     Pulse      [pulse     (coll-data-map "pulse %s pulse" coll)]
                     Metric     [metric    (data-map "metric %s metric")]
                     Segment    [segment   (data-map "segment %s segment")]]
       (f {:collection coll
           :card       card
-          :dataset    dataset
           :dashboard  dashboard
           :pulse      pulse
           :metric     metric
@@ -147,7 +151,7 @@
         (dissoc :scores))))
 
 (defn- make-search-request [user-kwd params]
-  (apply mt/user-http-request user-kwd :get 200 "search" params))
+  (apply (partial mt/user-http-request user-kwd) :get 200 "search" params))
 
 (defn- search-request-data-with [xf user-kwd & params]
   (let [raw-results-data (:data (make-search-request user-kwd params))
@@ -221,7 +225,7 @@
       (is (<= 4 (count (search-request-data :crowberto :q "test" :limit "100" :offset "2"))))))
   (testing "It offsets without limit properly"
     (with-search-items-in-root-collection "test"
-      (is (= 5 (count (search-request-data :crowberto :q "test" :offset "2"))))))
+      (is (= 4 (count (search-request-data :crowberto :q "test" :offset "2"))))))
   (testing "It limits without offset properly"
     (with-search-items-in-root-collection "test"
       (is (= 2 (count (search-request-data :crowberto :q "test" :limit "2"))))))
@@ -229,14 +233,6 @@
     (with-search-items-in-root-collection "test"
       (is (= 0 (count (search-request-data :crowberto :q "test" :models "database"))))
       (is (= 1 (count (search-request-data :crowberto :q "test" :models "database" :models "card"))))))
-  (testing "It distinguishes datasets from cards"
-    (with-search-items-in-root-collection "test"
-      (let [results (search-request-data :crowberto :q "test" :models "dataset")]
-        (is (= 1 (count results)))
-        (is (= "dataset" (-> results first :model))))
-      (let [results (search-request-data :crowberto :q "test" :models "card")]
-        (is (= 1 (count results)))
-        (is (= "card" (-> results first :model))))))
   (testing "It returns limit and offset params in return result"
     (with-search-items-in-root-collection "test"
       (is (= 2 (:limit (search-request :crowberto :q "test" :limit "2" :offset "3"))))
@@ -245,11 +241,8 @@
 (deftest query-model-set
   (testing "It returns some stuff when you get results"
     (with-search-items-in-root-collection "test"
-      ;; sometimes there is a "table" in these responses. might be do to garbage in CI
-      (is (set/subset? #{"dashboard" "dataset" "segment" "collection" "pulse" "database" "metric" "card"}
-                       (-> (mt/user-http-request :crowberto :get 200 "search?q=test")
-                           :available_models
-                           set)))))
+      (is (contains? (apply hash-set (:available_models
+                       (mt/user-http-request :crowberto :get 200 "search?q=test"))) "dashboard"))))
   (testing "It returns nothing if there are no results"
     (with-search-items-in-root-collection "test"
       (is (= [] (:available_models (mt/user-http-request :crowberto :get 200 "search?q=noresults")))))))
@@ -257,7 +250,7 @@
 (def ^:private dashboard-count-results
   (letfn [(make-card [dashboard-count]
             (make-result (str "dashboard-count " dashboard-count) :dashboardcard_count dashboard-count,
-                         :model "card", :bookmark false, :dataset_query nil))]
+                         :model "card", :favorite false, :dataset_query nil))]
     (set [(make-card 5)
           (make-card 3)
           (make-card 0)])))
@@ -367,7 +360,7 @@
                                               :schema nil}]
                     Metric   [_ {:table_id table-id
                                  :name     "test metric"}]]
-      (perms/revoke-data-perms! (perms-group/all-users) db-id)
+      (perms/revoke-data-perms! (group/all-users) db-id)
       (is (= []
              (search-request-data :rasta :q "test")))))
 
@@ -377,28 +370,28 @@
                                               :schema nil}]
                     Segment  [_ {:table_id table-id
                                  :name     "test segment"}]]
-      (perms/revoke-data-perms! (perms-group/all-users) db-id)
+      (perms/revoke-data-perms! (group/all-users) db-id)
       (is (= []
              (search-request-data :rasta :q "test"))))))
 
-(deftest bookmarks-test
-  (testing "Bookmarks are per user, so other user's bookmarks don't cause search results to be altered"
+(deftest favorites-test
+  (testing "Favorites are per user, so other user's favorites don't cause search results to be favorited"
     (with-search-items-in-collection {:keys [card dashboard]} "test"
-      (mt/with-temp* [CardBookmark      [_ {:card_id (u/the-id card)
-                                            :user_id (mt/user->id :rasta)}]
-                      DashboardBookmark [_ {:dashboard_id (u/the-id dashboard)
+      (mt/with-temp* [CardFavorite      [_ {:card_id  (u/the-id card)
+                                            :owner_id (mt/user->id :rasta)}]
+                      DashboardFavorite [_ {:dashboard_id (u/the-id dashboard)
                                             :user_id      (mt/user->id :rasta)}]]
         (is (= (default-results-with-collection)
                (search-request-data :crowberto :q "test"))))))
 
-  (testing "Basic search, should find 1 of each entity type and include bookmarks when available"
+  (testing "Basic search, should find 1 of each entity type and include favorites when available"
     (with-search-items-in-collection {:keys [card dashboard]} "test"
-      (mt/with-temp* [CardBookmark      [_ {:card_id (u/the-id card)
-                                            :user_id (mt/user->id :crowberto)}]
-                      DashboardBookmark [_ {:dashboard_id (u/the-id dashboard)
+      (mt/with-temp* [CardFavorite      [_ {:card_id  (u/the-id card)
+                                            :owner_id (mt/user->id :crowberto)}]
+                      DashboardFavorite [_ {:dashboard_id (u/the-id dashboard)
                                             :user_id      (mt/user->id :crowberto)}]]
         (is (= (on-search-types #{"dashboard" "card"}
-                                #(assoc % :bookmark true)
+                                #(assoc % :favorite true)
                                 (default-results-with-collection))
                (search-request-data :crowberto :q "test")))))))
 
@@ -426,7 +419,6 @@
   (testing "Should return unarchived results by default"
     (with-search-items-in-root-collection "test"
       (mt/with-temp* [Card       [_ (archived {:name "card test card 2"})]
-                      Card       [_ (archived {:name "dataset test dataset" :dataset true})]
                       Dashboard  [_ (archived {:name "dashboard test dashboard 2"})]
                       Collection [_ (archived {:name "collection test collection 2"})]
                       Metric     [_ (archived {:name "metric test metric 2"})]
@@ -438,7 +430,6 @@
     (with-search-items-in-root-collection "test2"
       (mt/with-temp* [Card       [_ (archived {:name "card test card"})]
                       Card       [_ (archived {:name "card that will not appear in results"})]
-                      Card       [_ (archived {:name "dataset test dataset" :dataset true})]
                       Dashboard  [_ (archived {:name "dashboard test dashboard"})]
                       Collection [_ (archived {:name "collection test collection"})]
                       Metric     [_ (archived {:name "metric test metric"})]
@@ -448,7 +439,6 @@
   (testing "Should return archived results when specified without a search query"
     (with-search-items-in-root-collection "test2"
       (mt/with-temp* [Card       [_ (archived {:name "card test card"})]
-                      Card       [_ (archived {:name "dataset test dataset" :dataset true})]
                       Dashboard  [_ (archived {:name "dashboard test dashboard"})]
                       Collection [_ (archived {:name "collection test collection"})]
                       Metric     [_ (archived {:name "metric test metric"})]
@@ -472,13 +462,12 @@
 (defn- default-table-search-row [table-name]
   (merge
    default-search-row
-   {:name                table-name
-    :table_name          table-name
-    :table_id            true
-    :archived            nil
-    :model               "table"
-    :database_id         true
-    :initial_sync_status "incomplete"}))
+   {:name         table-name
+    :table_name   table-name
+    :table_id     true
+    :archived     nil
+    :model        "table"
+    :database_id  true}))
 
 (defmacro ^:private do-test-users {:style/indent 1} [[user-binding users] & body]
   `(doseq [user# ~users
@@ -519,7 +508,7 @@
   (testing "you should not be able to see a Table if the current user doesn't have permissions for that Table"
     (mt/with-temp* [Database [{db-id :id}]
                     Table    [table {:db_id db-id}]]
-      (perms/revoke-data-perms! (perms-group/all-users) db-id)
+      (perms/revoke-data-perms! (group/all-users) db-id)
       (is (= []
              (binding [*search-request-results-database-id* db-id]
                (search-request-data :rasta :q (:name table))))))))
@@ -531,7 +520,7 @@
                     Table                      [table {:name "Round Table", :db_id db-id}]
                     PermissionsGroup           [{group-id :id}]
                     PermissionsGroupMembership [_ {:group_id group-id, :user_id (mt/user->id :rasta)}]]
-      (perms/revoke-data-perms! (perms-group/all-users) db-id (:schema table) (:id table))
+      (perms/revoke-data-perms! (group/all-users) db-id (:schema table) (:id table))
       (perms/grant-permissions! group-id (perms/table-read-path table))
       (do-test-users [user [:crowberto :rasta]]
         (is (= [(default-table-search-row "Round Table")]
@@ -542,7 +531,7 @@
   (testing "If the All Users group doesn't have perms to view a Table they sholdn't see it (#16855)"
     (mt/with-temp* [Database                   [{db-id :id}]
                     Table                      [table {:name "Round Table", :db_id db-id}]]
-      (perms/revoke-data-perms! (perms-group/all-users) db-id (:schema table) (:id table))
+      (perms/revoke-data-perms! (group/all-users) db-id (:schema table) (:id table))
       (is (= []
              (filter #(= (:name %) "Round Table")
                      (binding [*search-request-results-database-id* db-id]

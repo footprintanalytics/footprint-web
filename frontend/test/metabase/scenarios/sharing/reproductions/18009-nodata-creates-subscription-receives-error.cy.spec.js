@@ -1,10 +1,4 @@
-import {
-  restore,
-  popover,
-  setupSMTP,
-  visitDashboard,
-  clickSend,
-} from "__support__/e2e/cypress";
+import { restore, popover, setupSMTP } from "__support__/e2e/cypress";
 
 describe.skip("issue 18009", () => {
   beforeEach(() => {
@@ -17,9 +11,10 @@ describe.skip("issue 18009", () => {
   });
 
   it("nodata user should be able to create and receive an email subscription without errors (metabase#18009)", () => {
-    visitDashboard(1);
+    cy.visit("/dashboard/1");
 
-    cy.icon("subscription").click();
+    cy.icon("share").click();
+    cy.findByText("Dashboard subscriptions").click();
 
     cy.findByText("Email it").click();
 
@@ -31,7 +26,8 @@ describe.skip("issue 18009", () => {
     // Click anywhere to close the popover that covers the "Send email now" button
     cy.findByText("To:").click();
 
-    clickSend();
+    cy.button("Send email now").click();
+    cy.findByText("Email sent");
 
     cy.request("GET", "http://localhost:80/email").then(({ body }) => {
       expect(body[0].html).not.to.include(

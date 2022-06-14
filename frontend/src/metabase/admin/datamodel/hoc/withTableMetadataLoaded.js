@@ -1,6 +1,5 @@
 /* eslint-disable react/prop-types */
 import React, { Component } from "react";
-import { PLUGIN_FEATURE_LEVEL_PERMISSIONS } from "metabase/plugins";
 
 export default ComposedComponent => {
   class TableMetadataLoader extends Component {
@@ -20,10 +19,7 @@ export default ComposedComponent => {
 
     fetch() {
       this.props.table.fetchMetadataAndForeignTables({
-        params: {
-          include_sensitive_fields: true,
-          ...PLUGIN_FEATURE_LEVEL_PERMISSIONS.dataModelQueryProps,
-        },
+        params: { include_sensitive_fields: true },
       });
     }
 

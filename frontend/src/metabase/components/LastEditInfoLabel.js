@@ -5,9 +5,8 @@ import { t } from "ttag";
 import moment from "moment";
 
 import { getUser } from "metabase/selectors/user";
+
 import { TextButton } from "metabase/components/Button.styled";
-import Tooltip from "metabase/components/Tooltip";
-import DateTime from "metabase/components/DateTime";
 
 function mapStateToProps(state) {
   return {
@@ -32,30 +31,41 @@ LastEditInfoLabel.propTypes = {
   className: PropTypes.string,
 };
 
-function formatEditorName(lastEditInfo) {
-  const name = [lastEditInfo.first_name, lastEditInfo.last_name]
-    .join(" ")
-    .trim();
-
-  return name || lastEditInfo.email;
+function formatEditorName(firstName, lastName) {
+  // const lastNameFirstLetter = lastName.charAt(0);
+  // return `${firstName} ${lastNameFirstLetter}.`;
+  return `${firstName} ${lastName}.`;
 }
 
-function LastEditInfoLabel({ item, user, onClick, className }) {
-  const lastEditInfo = item["last-edit-info"];
-  const { id: editorId, timestamp } = lastEditInfo;
-  const time = moment(timestamp).fromNow();
+function LastEditInfoLabel({ item, user, onClick, className, ...props }) {
+  const { first_name, last_name, timestamp } = item["last-edit-info"];
+  const time = moment.utc(timestamp).fromNow();
 
-  const editor = editorId === user.id ? t`you` : formatEditorName(lastEditInfo);
+  // const editor =
+  //   editorId === user.id ? t`you` : formatEditorName(first_name, last_name);
+  const editor = formatEditorName(first_name, last_name);
 
   return (
-    <Tooltip tooltip={<DateTime value={timestamp} />}>
-      <TextButton
-        size="small"
-        className={className}
-        onClick={onClick}
-        data-testid="revision-history-button"
-      >{t`Edited ${time} by ${editor}`}</TextButton>
-    </Tooltip>
+    <TextButton
+      style={{ marginLeft: 18, cursor: "default" }}
+      size="small"
+      className={className}
+      onClick={onClick}
+      data-testid="revision-history-button"
+      {...props}
+    >
+      {t`${editor}`}
+      <span
+        style={{
+          margin: "0 5px",
+          transform: "scale(0.5)",
+          display: "inline-block",
+        }}
+      >
+        •
+      </span>
+      {t`${time}`}
+    </TextButton>
   );
 }
 

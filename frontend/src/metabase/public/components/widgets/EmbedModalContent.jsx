@@ -1,4 +1,3 @@
-/* eslint-disable react/prop-types */
 import React, { Component } from "react";
 import { connect } from "react-redux";
 import { titleize } from "inflection";
@@ -13,6 +12,7 @@ import {
   getSignedPreviewUrl,
   getUnsignedPreviewUrl,
   getSignedToken,
+  getGuestPreviewUrl,
 } from "metabase/public/lib/embed";
 import { color } from "metabase/lib/colors";
 
@@ -22,14 +22,61 @@ import {
   getIsPublicSharingEnabled,
   getIsApplicationEmbeddingEnabled,
 } from "metabase/selectors/settings";
-
-import { PLUGIN_SELECTORS } from "metabase/plugins";
-
-import { getUserIsAdmin } from "metabase/selectors/user";
-
-import MetabaseSettings from "metabase/lib/settings";
+import { getUser, getUserIsAdmin } from "metabase/selectors/user";
 
 import * as MetabaseAnalytics from "metabase/lib/analytics";
+
+import type { Parameter, ParameterId } from "metabase-types/types/Parameter";
+import type {
+  EmbeddableResource,
+  EmbeddingParams,
+} from "metabase/public/lib/types";
+import { CardApi, DashboardApi } from "metabase/services";
+
+export type Pane = "preview" | "code";
+export type EmbedType = null | "simple" | "application";
+
+export type DisplayOptions = {
+  theme: ?string,
+  bordered: boolean,
+  titled: boolean,
+};
+
+type Props = {
+  className?: string,
+  resource: EmbeddableResource,
+  resourceType: string,
+  resourceParameters: Parameter[],
+
+  isAdmin: boolean,
+  siteUrl: string,
+  secretKey: string,
+  isPublicSharingEnabled: boolean,
+
+  user: any,
+  secret: string,
+
+  // Flow doesn't understand these are provided by @connect?
+  // isPublicSharingEnabled: bool,
+  // isApplicationEmbeddingEnabled: bool,
+
+  getPublicUrl: (resource: EmbeddableResource, extension: ?string) => string,
+
+  onUpdateEnableEmbedding: (enable_embedding: boolean) => Promise<void>,
+  onUpdateEmbeddingParams: (embedding_params: EmbeddingParams) => Promise<void>,
+  onCreatePublicLink: () => Promise<void>,
+  onDisablePublicLink: () => Promise<void>,
+  onClose: () => void,
+};
+
+type State = {
+  pane: Pane,
+  embedType: EmbedType,
+  embeddingParams: EmbeddingParams,
+  displayOptions: DisplayOptions,
+  parameterValues: { [id: ParameterId]: string },
+  isOwner: string,
+};
 
 const mapStateToProps = (state, props) => ({
   isAdmin: getUserIsAdmin(state, props),
@@ -37,27 +84,57 @@ const mapStateToProps = (state, props) => ({
   secretKey: getEmbeddingSecretKey(state, props),
   isPublicSharingEnabled: getIsPublicSharingEnabled(state, props),
   isApplicationEmbeddingEnabled: getIsApplicationEmbeddingEnabled(state, props),
-  canWhitelabel: PLUGIN_SELECTORS.canWhitelabel(state),
+  user: getUser(state, props),
 });
 
-class EmbedModalContent extends Component {
-  constructor(props) {
+@connect(mapStateToProps)
+export default class EmbedModalContent extends Component {
+  props: Props;
+  state: State;
+
+  constructor(props: Props) {
     super(props);
-    const displayOptions = {
-      theme: null,
-      bordered: true,
-      titled: true,
-    };
-    if (props.canWhitelabel) {
-      displayOptions.font = MetabaseSettings.get("application-font");
-    }
     this.state = {
       pane: "preview",
       embedType: null,
       embeddingParams: props.resource.embedding_params || {},
-      displayOptions,
+      displayOptions: {
+        theme: null,
+        bordered: true,
+        titled: true,
+      },
+
       parameterValues: {},
+      isOwner:
+        props.user &&
+        ((props.resource && props.user.id === props.resource.creator_id) ||
+          props.user.is_superuser),
+      secret: undefined,
     };
+  }
+
+  componentDidMount() {
+    const { id } = this.props.resource;
+    this.secretApi(id);
+  }
+
+  async secretApi(id) {
+    const { resourceType } = this.props;
+    if (resourceType === "dashboard") {
+      const { data } = await DashboardApi.secret({ id });
+      if (data.secret) {
+        this.setState({
+          secret: data.secret,
+        });
+      }
+    } else if (resourceType === "question") {
+      const { data } = await CardApi.secret({ id });
+      if (data.secret) {
+        this.setState({
+          secret: data.secret,
+        });
+      }
+    }
   }
 
   static defaultProps = {};
@@ -117,6 +194,14 @@ class EmbedModalContent extends Component {
     return Object.fromEntries(parameterSlugValuePairs);
   }
 
+  onCreatePublicLink = async () => {
+    const { onCreatePublicLink, resource } = this.props;
+    if (onCreatePublicLink) {
+      await onCreatePublicLink();
+      this.secretApi(resource.id);
+    }
+  };
+
   render() {
     const {
       siteUrl,
@@ -125,6 +210,7 @@ class EmbedModalContent extends Component {
       resourceType,
       resourceParameters,
       onClose,
+      isPublicSharingEnabled,
     } = this.props;
     const {
       pane,
@@ -132,6 +218,8 @@ class EmbedModalContent extends Component {
       embeddingParams,
       parameterValues,
       displayOptions,
+      isOwner,
+      secret,
     } = this.state;
 
     const previewParametersBySlug = this.getPreviewParamsBySlug();
@@ -158,7 +246,7 @@ class EmbedModalContent extends Component {
             />
           </h2>
           <Icon
-            className="text-light text-medium-hover cursor-pointer p2 ml-auto"
+            className="text-light text-medium-hover cursor-pointer ml-auto"
             name="close"
             size={24}
             onClick={() => {
@@ -176,18 +264,37 @@ class EmbedModalContent extends Component {
             <div className="ml-auto mr-auto" style={{ maxWidth: 1040 }}>
               <SharingPane
                 {...this.props}
+                isPublicSharingEnabled={isPublicSharingEnabled && isOwner}
                 publicUrl={getUnsignedPreviewUrl(
                   siteUrl,
                   resourceType,
                   resource.public_uuid,
-                  displayOptions,
+                  { secret },
                 )}
+                getGuestUrl={() =>
+                  getGuestPreviewUrl(
+                    siteUrl,
+                    resourceType,
+                    resource.public_uuid,
+                    { secret },
+                  )
+                }
+                getPublicUrl={() =>
+                  getUnsignedPreviewUrl(
+                    siteUrl,
+                    resourceType,
+                    resource.public_uuid,
+                    { secret },
+                  )
+                }
                 iframeUrl={getUnsignedPreviewUrl(
                   siteUrl,
                   resourceType,
                   resource.public_uuid,
-                  displayOptions,
+                  { secret },
                 )}
+                onCreatePublicLink={this.onCreatePublicLink}
+                sharePage="embed-modal-content"
                 onChangeEmbedType={embedType => this.setState({ embedType })}
               />
             </div>
@@ -249,9 +356,13 @@ class EmbedModalContent extends Component {
   }
 }
 
-export default connect(mapStateToProps)(EmbedModalContent);
-
-export const EmbedTitle = ({ type, onClick }) => (
+export const EmbedTitle = ({
+  type,
+  onClick,
+}: {
+  type: ?string,
+  onClick: () => any,
+}) => (
   <a className="flex align-center" onClick={onClick}>
     <span className="text-brand-hover">{t`Sharing`}</span>
     {type && <Icon name="chevronright" className="mx1 text-medium" />}

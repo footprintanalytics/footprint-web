@@ -1,5 +1,5 @@
 import {
-  describeEE,
+  describeWithToken,
   restore,
   mockCurrentUserProperty,
 } from "__support__/e2e/cypress";
@@ -32,10 +32,8 @@ describe("scenarios > auth > signin > SSO", () => {
     });
 
     it("should show SSO button", () => {
+      cy.findByText("Sign in with Google");
       cy.findByText("Sign in with email");
-
-      // Google SSO button is piped through an iframe
-      cy.get("iframe");
     });
 
     it("should show login form when directed to sign in with email", () => {
@@ -43,7 +41,7 @@ describe("scenarios > auth > signin > SSO", () => {
       cy.findByLabelText("Email address");
       cy.findByLabelText("Password");
       cy.button("Sign in").should("be.disabled");
-      cy.findByText("Sign in with Google");
+      cy.findByText("Sign in with Google").should("not.exist");
     });
 
     it("should surface login errors with Google sign in enabled (metabase#16122)", () => {
@@ -65,7 +63,7 @@ describe("scenarios > auth > signin > SSO", () => {
     });
   });
 
-  describeEE("EE", () => {
+  describeWithToken("EE", () => {
     beforeEach(() => {
       // Disable password log-in
       cy.request("PUT", "api/setting/enable-password-login", {
@@ -76,8 +74,7 @@ describe("scenarios > auth > signin > SSO", () => {
 
     it("should show the SSO button without an option to use password", () => {
       cy.visit("/");
-      // Google SSO button is piped through an iframe
-      cy.get("iframe");
+      cy.findByText("Sign in with Google");
       cy.findByText("Sign in with email").should("not.exist");
     });
   });

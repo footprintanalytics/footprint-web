@@ -3,8 +3,8 @@
             [clojure.tools.logging :as log]
             [honeysql.core :as hsql]
             [java-time :as t]
-            [metabase.db.jdbc-protocols :as mdb.jdbc-protocols]
-            [metabase.db.spec :as mdb.spec]
+            [metabase.db.jdbc-protocols :as jdbc-protocols]
+            [metabase.db.spec :as dbspec]
             [metabase.driver :as driver]
             [metabase.driver.common :as driver.common]
             [metabase.driver.sql-jdbc.connection :as sql-jdbc.conn]
@@ -12,7 +12,7 @@
             [metabase.driver.sql-jdbc.sync :as sql-jdbc.sync]
             [metabase.driver.sql.query-processor :as sql.qp]
             [metabase.plugins.classloader :as classloader]
-            [metabase.query-processor.error-type :as qp.error-type]
+            [metabase.query-processor.error-type :as error-type]
             [metabase.query-processor.store :as qp.store]
             [metabase.util :as u]
             [metabase.util.honeysql-extensions :as hx]
@@ -34,17 +34,10 @@
 
 (defmethod driver/connection-properties :h2
   [_]
-  (->>
-   [{:name         "db"
-     :display-name (tru "Connection String")
-     :helper-text (deferred-tru "The local path relative to where Metabase is running from. Your string should not include the .mv.db extension.")
-     :placeholder  (str "file:/" (deferred-tru "Users/camsaul/bird_sightings/toucans"))
-     :required     true}
-    driver.common/cloud-ip-address-info
-    driver.common/advanced-options-start
-    driver.common/default-advanced-options]
-   (map u/one-or-many)
-   (apply concat)))
+  [{:name         "db"
+    :display-name (tru "Connection String")
+    :placeholder  (str "file:/" (deferred-tru "Users/camsaul/bird_sightings/toucans"))
+    :required     true}])
 
 (defmethod driver/db-start-of-week :h2
   [_]
@@ -70,7 +63,7 @@
       (let [[_ {:strs [USER]}] (connection-string->file+options db)]
         USER)))
 
-(defn- check-native-query-not-using-default-user [{query-type :type, :as query}]
+(defn- check-native-query-not-using-default-user [{query-type :type, database-id :database, :as query}]
   (u/prog1 query
     ;; For :native queries check to make sure the DB in question has a (non-default) NAME property specified in the
     ;; connection string. We don't allow SQL execution on H2 databases for the default admin account for security
@@ -82,7 +75,7 @@
                   (= user "sa"))        ; "sa" is the default USER
           (throw
            (ex-info (tru "Running SQL queries against H2 databases using the default (admin) database user is forbidden.")
-             {:type qp.error-type/db})))))))
+             {:type error-type/db})))))))
 
 (defmethod driver/execute-reducible-query :h2
   [driver query chans respond]
@@ -108,14 +101,15 @@
   [_ message]
   (condp re-matches message
     #"^A file path that is implicitly relative to the current working directory is not allowed in the database URL .*$"
-    :cannot-connect-check-host-and-port
+    (driver.common/connection-error-messages :cannot-connect-check-host-and-port)
 
     #"^Database .* not found .*$"
-    :cannot-connect-check-host-and-port
+    (driver.common/connection-error-messages :cannot-connect-check-host-and-port)
 
     #"^Wrong user name or password .*$"
-    :username-or-password-incorrect
+    (driver.common/connection-error-messages :username-or-password-incorrect)
 
+    #".*"                               ; default
     message))
 
 (def ^:private date-format-str "yyyy-MM-dd HH:mm:ss.SSS zzz")
@@ -305,14 +299,14 @@
 (defmethod sql-jdbc.conn/connection-details->spec :h2
   [_ details]
   {:pre [(map? details)]}
-  (mdb.spec/spec :h2 (update details :db connection-string-set-safe-options)))
+  (dbspec/h2 (update details :db connection-string-set-safe-options)))
 
 (defmethod sql-jdbc.sync/active-tables :h2
   [& args]
   (apply sql-jdbc.sync/post-filtered-active-tables args))
 
 (defmethod sql-jdbc.execute/connection-with-timezone :h2
-  [driver database ^String _timezone-id]
+  [driver database ^String timezone-id]
   ;; h2 doesn't support setting timezones, or changing the transaction level without admin perms, so we can skip those
   ;; steps that are in the default impl
   (let [conn (.getConnection (sql-jdbc.execute/datasource-with-diagnostic-info! driver database))]
@@ -330,7 +324,7 @@
                           (Class/forName true (classloader/the-classloader)))]
     (if (isa? classname Clob)
       (fn []
-        (mdb.jdbc-protocols/clob->str (.getObject rs i)))
+        (jdbc-protocols/clob->str (.getObject rs i)))
       (fn []
         (.getObject rs i)))))
 

@@ -1,16 +1,39 @@
-/* eslint-disable react/prop-types */
 import React, { Component } from "react";
 import PropTypes from "prop-types";
 
 import Icon from "metabase/components/Icon";
-import Button from "metabase/core/components/Button";
+import Button from "metabase/components/Button";
 
 import { cancelable } from "metabase/lib/promise";
 import { t } from "ttag";
 import cx from "classnames";
 
+type Props = {
+  actionFn: (...args: any[]) => Promise<any>,
+  className?: string,
+  successClassName?: string,
+  failedClassName?: string,
+  children?: any,
+  normalText?: string,
+  activeText?: string,
+  failedText?: string,
+  successText?: string,
+  forceActiveStyle?: boolean,
+};
+
+type State = {
+  active: boolean,
+  result: null | "success" | "failed",
+};
+
 export default class ActionButton extends Component {
-  constructor(props) {
+  props: Props;
+  state: State;
+
+  timeout: ?any;
+  actionPromise: ?{ cancel: () => void };
+
+  constructor(props: Props) {
     super(props);
 
     this.state = {
@@ -54,7 +77,7 @@ export default class ActionButton extends Component {
     );
   };
 
-  onClick = event => {
+  onClick = (event: MouseEvent) => {
     event.preventDefault();
 
     // set state to active
@@ -62,6 +85,15 @@ export default class ActionButton extends Component {
       active: true,
       result: null,
     });
+
+    if (!this.props.actionFn.then) {
+      this.setState({
+        active: false,
+        result: null,
+      });
+      this.props.actionFn();
+      return;
+    }
 
     // run the function we want bound to this button
     this.actionPromise = cancelable(this.props.actionFn());

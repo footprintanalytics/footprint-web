@@ -3,12 +3,11 @@ import {
   openTable,
   popover,
   enterCustomColumnDetails,
-  filter,
 } from "__support__/e2e/cypress";
 
-import { SAMPLE_DATABASE } from "__support__/e2e/cypress_sample_database";
+import { SAMPLE_DATASET } from "__support__/e2e/cypress_sample_dataset";
 
-const { ORDERS_ID, PEOPLE_ID, PRODUCTS_ID } = SAMPLE_DATABASE;
+const { ORDERS_ID, PEOPLE_ID, PRODUCTS_ID } = SAMPLE_DATASET;
 
 describe("scenarios > question > custom column > data type", () => {
   beforeEach(() => {
@@ -26,8 +25,7 @@ describe("scenarios > question > custom column > data type", () => {
 
     cy.button("Done").click();
 
-    filter({ mode: "notebook" });
-
+    cy.findByText("Filter").click();
     popover()
       .findByText("CategoryTitle")
       .click();
@@ -42,16 +40,15 @@ describe("scenarios > question > custom column > data type", () => {
     enterCustomColumnDetails({ formula: "[Birth Date]", name: "DoB" });
     cy.button("Done").click();
 
-    filter({ mode: "notebook" });
+    cy.findByText("Filter").click();
     popover()
       .findByText("DoB")
       .click();
 
     cy.findByPlaceholderText("Enter a number").should("not.exist");
 
-    cy.findByText("Relative dates...").click();
-    cy.findByText("Past").click();
-    cy.findByText("days");
+    cy.findByText("Previous");
+    cy.findByText("Days");
   });
 
   it("should handle CASE (metabase#13122)", () => {
@@ -63,16 +60,15 @@ describe("scenarios > question > custom column > data type", () => {
     });
     cy.button("Done").click();
 
-    filter({ mode: "notebook" });
+    cy.findByText("Filter").click();
     popover()
       .findByText("MiscDate")
       .click();
 
     cy.findByPlaceholderText("Enter a number").should("not.exist");
 
-    cy.findByText("Relative dates...").click();
-    cy.findByText("Past").click();
-    cy.findByText("days");
+    cy.findByText("Previous");
+    cy.findByText("Days");
   });
 
   it("should handle COALESCE", () => {
@@ -84,16 +80,15 @@ describe("scenarios > question > custom column > data type", () => {
     });
     cy.button("Done").click();
 
-    filter({ mode: "notebook" });
+    cy.findByText("Filter").click();
     popover()
       .findByText("MiscDate")
       .click();
 
     cy.findByPlaceholderText("Enter a number").should("not.exist");
 
-    cy.findByText("Relative dates...").click();
-    cy.findByText("Past").click();
-    cy.findByText("days");
+    cy.findByText("Previous");
+    cy.findByText("Days");
   });
 });
 

@@ -2,13 +2,14 @@
 import React from "react";
 
 import Icon from "metabase/components/Icon";
-import { color as c, alpha } from "metabase/lib/colors";
+import { color as c } from "metabase/lib/colors";
 import cx from "classnames";
 
 export default function ViewPill({
   className,
   style = {},
   color = c("brand"),
+  backgroundColor = "#F6F6FE",
   invert,
   children,
   onClick,
@@ -28,7 +29,7 @@ export default function ViewPill({
         paddingRight: children ? 8 : 5,
         ...(invert
           ? { backgroundColor: color, color: "white" }
-          : { backgroundColor: alpha(color, 0.2), color: color }),
+          : { backgroundColor: backgroundColor, color: color }),
         ...style,
       }}
       onClick={onClick}

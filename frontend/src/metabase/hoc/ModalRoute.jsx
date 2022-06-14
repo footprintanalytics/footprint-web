@@ -1,7 +1,7 @@
 /* eslint-disable react/prop-types */
 import React, { Component } from "react";
 import { Route } from "react-router";
-import { push } from "react-router-redux";
+import { push, goBack } from "react-router-redux";
 import { connect } from "react-redux";
 import Modal from "metabase/components/Modal";
 
@@ -15,13 +15,18 @@ export const getParentPath = (route, location) => {
 };
 
 const ModalWithRoute = (ComposedModal, modalProps = {}) =>
-  connect(null, { onChangeLocation: push })(
+  connect(null, { onChangeLocation: push, onBack: goBack })(
     class extends Component {
       static displayName = `ModalWithRoute[${ComposedModal.displayName ||
         ComposedModal.name}]`;
 
       onClose = () => {
         const { location, route } = this.props;
+
+        if (location.pathname.indexOf("copy") > 0) {
+          this.props.onBack();
+          return;
+        }
 
         const parentPath = getParentPath(route, location);
         this.props.onChangeLocation(parentPath);

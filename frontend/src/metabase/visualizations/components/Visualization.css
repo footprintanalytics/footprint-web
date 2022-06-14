@@ -1,0 +1,98 @@
+.waterMarkHome {
+  display: block;
+  width: 100%;
+}
+
+.waterMarkHome span {
+  pointer-events: none;
+  content: " ";
+  font-size: 18px;
+  color: rgba(203, 203, 255, 0.5);
+  z-index: 9999;
+  display: block;
+  text-align: center;
+  line-height: 100%;
+  background-image: url("https://footprint-imgs.oss-accelerate.aliyuncs.com/20220224194139.png");
+  width: calc(100% - 40px);
+  background-size: 40%;
+  background-repeat: no-repeat;
+  background-position: center;
+  height: 100%;
+  position: absolute;
+
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+}
+
+.noResults {
+  margin-top: -12px;
+}
+
+.noResults h4 {
+  font-size: 16px;
+  margin-bottom: 4px;
+  color: #949aab;
+}
+
+.noResults ol {
+  text-align: left;
+  list-style: inside;
+  color: #949aab;
+}
+
+.noResults a {
+  color: #3434b2;
+}
+
+.Visualization__share-foot {
+  display: flex;
+  align-items: center;
+  padding: 16px;
+  line-height: 1;
+}
+
+.Visualization__share-foot-logo {
+  width: 250px;
+  margin-right: 24px;
+}
+
+.Visualization__share-foot-user {
+  display: flex;
+  align-items: center;
+}
+
+.Visualization__share-foot-user-avatar img {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  margin-right: 6px;
+}
+
+.Visualization__share-foot-user-avatar .ant-avatar {
+  width: 40px;
+  height: 40px;
+  margin-right: 6px;
+  line-height: 40px;
+  color: #3434b2;
+  font-weight: 700;
+}
+
+.Visualization__share-foot-user-social {
+  display: flex;
+  font-size: 14px;
+}
+
+.Visualization__share-foot-user-social li {
+  display: flex;
+  align-items: center;
+  margin-left: 24px;
+  color: #949aab;
+}
+
+.Visualization__share-foot-user-social img {
+  width: 20px;
+  height: 20px;
+  margin-right: 4px;
+}

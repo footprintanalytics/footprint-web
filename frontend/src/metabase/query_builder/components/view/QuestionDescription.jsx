@@ -6,13 +6,15 @@ import { t, ngettext, msgid } from "ttag";
 import QuestionDataSource from "./QuestionDataSource";
 
 import StructuredQuery from "metabase-lib/lib/queries/StructuredQuery";
+import { get } from "lodash";
 
-const QuestionDescription = ({
-  question,
-  originalQuestion,
-  isObjectDetail,
-}) => {
+const QuestionDescription = ({ question, isObjectDetail }) => {
   const query = question.query();
+  const createMethod = get(question, "_card.create_method");
+
+  if (createMethod === "template" || createMethod === "preview") {
+    return <span>{get(question, "_card.name")}</span>;
+  }
   if (query instanceof StructuredQuery) {
     const topQuery = query.topLevelQuery();
     const aggregations = topQuery.aggregations();
@@ -51,14 +53,10 @@ const QuestionDescription = ({
   }
   if (question.database()) {
     return (
-      <QuestionDataSource
-        question={question}
-        originalQuestion={originalQuestion}
-        isObjectDetail={isObjectDetail}
-      />
+      <QuestionDataSource question={question} isObjectDetail={isObjectDetail} />
     );
   } else {
-    return <span>{t`New question`}</span>;
+    return <span>{t`New chart`}</span>;
   }
 };
 

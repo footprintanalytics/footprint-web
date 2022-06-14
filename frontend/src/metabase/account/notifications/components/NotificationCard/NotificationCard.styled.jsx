@@ -1,14 +1,14 @@
-import styled from "@emotion/styled";
+import styled from "styled-components";
 import { color } from "metabase/lib/colors";
 import Icon from "metabase/components/Icon";
-import Link from "metabase/core/components/Link";
+import Link from "metabase/components/Link";
 
 export const NotificationCardRoot = styled.div`
   display: flex;
   align-items: center;
   padding: 1rem 1.5rem;
   border: 1px solid ${color("border")};
-  border-radius: 6px;
+  border-radius: 4px;
   background-color: ${color("white")};
 
   &:not(:last-child) {

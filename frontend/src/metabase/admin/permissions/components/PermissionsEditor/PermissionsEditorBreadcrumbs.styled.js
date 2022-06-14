@@ -1,4 +1,4 @@
-import styled from "@emotion/styled";
+import styled from "styled-components";
 import { color, lighten } from "metabase/lib/colors";
 
 export const BreadcrumbsSeparator = styled.div`

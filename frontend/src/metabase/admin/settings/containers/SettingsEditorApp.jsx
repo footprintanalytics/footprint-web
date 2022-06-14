@@ -21,7 +21,6 @@ import cx from "classnames";
 import {
   getSettings,
   getSettingValues,
-  getDerivedSettingValues,
   getSections,
   getActiveSection,
   getActiveSectionName,
@@ -33,7 +32,6 @@ const mapStateToProps = (state, props) => {
   return {
     settings: getSettings(state, props),
     settingValues: getSettingValues(state, props),
-    derivedSettingValues: getDerivedSettingValues(state, props),
     sections: getSections(state, props),
     activeSection: getActiveSection(state, props),
     activeSectionName: getActiveSectionName(state, props),
@@ -47,7 +45,9 @@ const mapDispatchToProps = {
   reloadSettings,
 };
 
-class SettingsEditorApp extends Component {
+@connect(mapStateToProps, mapDispatchToProps)
+@title(({ activeSection }) => activeSection && activeSection.name)
+export default class SettingsEditorApp extends Component {
   layout = null; // the reference to AdminLayout
 
   static propTypes = {
@@ -62,12 +62,12 @@ class SettingsEditorApp extends Component {
     this.saveStatusRef = React.createRef();
   }
 
-  componentDidMount() {
+  UNSAFE_componentWillMount() {
     this.props.initializeSettings();
   }
 
   updateSetting = async (setting, newValue) => {
-    const { settingValues, updateSetting, reloadSettings } = this.props;
+    const { settingValues, updateSetting } = this.props;
 
     this.saveStatusRef.current.setSaving();
 
@@ -85,9 +85,7 @@ class SettingsEditorApp extends Component {
         );
       }
 
-      if (!setting.disableDefaultUpdate) {
-        await updateSetting(setting);
-      }
+      await updateSetting(setting);
 
       if (setting.onChanged) {
         await setting.onChanged(
@@ -96,10 +94,6 @@ class SettingsEditorApp extends Component {
           settingValues,
           this.handleChangeSetting,
         );
-      }
-
-      if (setting.disableDefaultUpdate) {
-        await reloadSettings();
       }
 
       this.saveStatusRef.current.setSaved();
@@ -136,17 +130,7 @@ class SettingsEditorApp extends Component {
   };
 
   renderSettingsPane() {
-    const {
-      activeSection,
-      settings,
-      settingValues,
-      derivedSettingValues,
-    } = this.props;
-    const isLoading = settings.length === 0;
-
-    if (isLoading) {
-      return null;
-    }
+    const { activeSection, settingValues } = this.props;
 
     if (!activeSection) {
       return <NotFound />;
@@ -165,9 +149,7 @@ class SettingsEditorApp extends Component {
         <ul>
           {activeSection.settings
             .filter(setting =>
-              setting.getHidden
-                ? !setting.getHidden(settingValues, derivedSettingValues)
-                : true,
+              setting.getHidden ? !setting.getHidden(settingValues) : true,
             )
             .map((setting, index) => (
               <SettingsSetting
@@ -255,8 +237,3 @@ class SettingsEditorApp extends Component {
     );
   }
 }
-
-export default _.compose(
-  connect(mapStateToProps, mapDispatchToProps),
-  title(({ activeSection }) => activeSection && activeSection.name),
-)(SettingsEditorApp);

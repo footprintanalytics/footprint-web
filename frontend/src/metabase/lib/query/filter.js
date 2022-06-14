@@ -9,10 +9,15 @@ import {
 import { STRING, getOperatorByTypeAndName } from "metabase/lib/schema_metadata";
 
 import _ from "underscore";
-import { isStartingFrom } from "../query_time";
+
+import type {
+  FilterClause,
+  Filter,
+  FilterOptions,
+} from "metabase-types/types/Query";
 
 // returns canonical list of Filters
-export function getFilters(filter) {
+export function getFilters(filter: ?FilterClause): Filter[] {
   if (!filter || (Array.isArray(filter) && filter.length === 0)) {
     return [];
   } else if (op(filter) === "and") {
@@ -23,36 +28,42 @@ export function getFilters(filter) {
 }
 
 // turns a list of Filters into the canonical FilterClause, either `undefined`, `filter`, or `["and", filter...]`
-function getFilterClause(filters) {
+function getFilterClause(filters: Filter[]): ?FilterClause {
   if (filters.length === 0) {
     return undefined;
   } else if (filters.length === 1) {
     return filters[0];
   } else {
-    return ["and", ...filters];
+    return (["and", ...filters]: any);
   }
 }
 
-export function addFilter(filter, newFilter) {
+export function addFilter(
+  filter: ?FilterClause,
+  newFilter: FilterClause,
+): ?FilterClause {
   return getFilterClause(add(getFilters(filter), newFilter));
 }
-export function updateFilter(filter, index, updatedFilter) {
+export function updateFilter(
+  filter: ?FilterClause,
+  index: number,
+  updatedFilter: FilterClause,
+): ?FilterClause {
   return getFilterClause(update(getFilters(filter), index, updatedFilter));
 }
-export function removeFilter(filter, index) {
+export function removeFilter(
+  filter: ?FilterClause,
+  index: number,
+): ?FilterClause {
   return getFilterClause(remove(getFilters(filter), index));
 }
-export function clearFilters(filter) {
+export function clearFilters(filter: ?FilterClause): ?FilterClause {
   return getFilterClause(clear());
-}
-export function clearSegments(filters) {
-  const newFilters = filters.filter(f => !isSegment(f));
-  return getFilterClause(newFilters);
 }
 
 // MISC
 
-export function canAddFilter(filter) {
+export function canAddFilter(filter: ?FilterClause): boolean {
   const filters = getFilters(filter);
   if (filters.length > 0) {
     return noNullValues(filters[filters.length - 1]);
@@ -62,7 +73,7 @@ export function canAddFilter(filter) {
 
 // FILTER TYPES
 
-export function isStandard(filter) {
+export function isStandard(filter: FilterClause): boolean {
   if (!Array.isArray(filter)) {
     return false;
   }
@@ -74,9 +85,6 @@ export function isStandard(filter) {
 
   const [op, field, ...args] = filter;
 
-  if (isStartingFrom(filter)) {
-    return true;
-  }
   if (FILTER_OPERATORS.has(op) || op === "between") {
     // only allows constant argument(s), e.g. 42 in ["<", field, 42]
     return isValidField(field) && _.all(args, arg => isLiteralOrUndefined(arg));
@@ -98,29 +106,32 @@ export function isStandard(filter) {
   );
 }
 
-export function isSegment(filter) {
+export function isSegment(filter: FilterClause): boolean {
   return Array.isArray(filter) && filter[0] === "segment";
 }
 
-export function isCustom(filter) {
+export function isCustom(filter: FilterClause): boolean {
   return !isStandard(filter) && !isSegment(filter);
 }
 
-export function isFieldFilter(filter) {
+export function isFieldFilter(filter: FilterClause): boolean {
+  if (!filter || filter.length <= 1) {
+    return false;
+  }
   return !isSegment(filter) && isValidField(filter[1]);
 }
 
 // FILTER OPTIONS
 
 // TODO: is it safe to assume if the last item is an object then it's options?
-export function hasFilterOptions(filter) {
+export function hasFilterOptions(filter: Filter): boolean {
   const o = filter[filter.length - 1];
   return !!o && typeof o == "object" && o.constructor === Object;
 }
 
-export function getFilterOptions(filter) {
+export function getFilterOptions(filter: Filter): FilterOptions {
   // NOTE: just make a new "any" variable since getting flow to type checking this is a nightmare
-  const _filter = filter;
+  const _filter: any = filter;
   if (hasFilterOptions(filter)) {
     return _filter[_filter.length - 1];
   } else {
@@ -128,9 +139,12 @@ export function getFilterOptions(filter) {
   }
 }
 
-export function setFilterOptions(filter, options) {
+export function setFilterOptions<T: Filter>(
+  filter: T,
+  options: FilterOptions,
+): T {
   // NOTE: just make a new "any" variable since getting flow to type checking this is a nightmare
-  let _filter = filter;
+  let _filter: any = filter;
   // if we have option, strip it off for now
   if (hasFilterOptions(filter)) {
     _filter = _filter.slice(0, -1);

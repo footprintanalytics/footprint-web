@@ -1,4 +1,3 @@
-/* eslint-disable react/prop-types */
 import React, { Component } from "react";
 import cx from "classnames";
 import { connect } from "react-redux";
@@ -16,7 +15,16 @@ const mapDispatchToProps = {
   fetchTableMetadata,
 };
 
-class Formula extends Component {
+@connect(null, mapDispatchToProps)
+export default class Formula extends Component {
+  props: {
+    type: string,
+    entity: Object,
+    isExpanded: boolean,
+    expandFormula: any,
+    collapseFormula: any,
+  };
+
   render() {
     const {
       type,
@@ -36,7 +44,6 @@ class Formula extends Component {
           <span className={S.formulaTitle}>{t`View the ${type} formula`}</span>
         </div>
         <CSSTransitionGroup
-          component="div"
           transitionName="formulaDefinition"
           transitionEnterTimeout={300}
           transitionLeaveTimeout={300}
@@ -54,5 +61,3 @@ class Formula extends Component {
     );
   }
 }
-
-export default connect(null, mapDispatchToProps)(Formula);

@@ -55,16 +55,13 @@ export default class DropArea extends React.Component {
       children,
       className,
       style,
-      enableDropTargetBackground = true,
       ...props
     } = this.props;
     return this.state.show
       ? connectDropTarget(
           <div className={cx("relative", className)} style={style}>
             {typeof children === "function" ? children(props) : children}
-            {enableDropTargetBackground && (
-              <DropTargetBackgroundAndBorder {...props} />
-            )}
+            <DropTargetBackgroundAndBorder {...props} />
           </div>,
         )
       : null;

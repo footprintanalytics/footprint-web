@@ -1,0 +1,54 @@
+.FormAvatarWidget {
+  display: flex;
+  align-items: center;
+}
+
+.FormAvatarWidget__avatar {
+  width: 80px;
+  height: 80px;
+  border-radius: 50%;
+  font-size: 30px;
+  font-weight: 700;
+  color: #3434b2;
+  line-height: 80px;
+  background-color: rgb(227, 227, 255);
+}
+
+.FormAvatarWidget__avatar--loading {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  height: 100%;
+}
+
+.FormAvatarWidget__action {
+  margin-left: 28px;
+}
+
+.FormAvatarWidget__action-tip {
+  font-size: 14px;
+  color: #acacb2;
+  margin-bottom: 0;
+}
+
+.FormAvatarWidget__action-btn {
+  margin: 10px 0;
+}
+
+.FormAvatarWidget__action-screenshot {
+  display: flex;
+  align-items: center;
+}
+
+.FormAvatarWidget__action-screenshot .anticon {
+  margin-right: 4px;
+}
+
+.FormAvatarWidget__action-screenshot .ant-typography {
+  margin-left: 4px;
+}
+
+.FormAvatarWidget__action-screenshot-example {
+  max-width: max-content !important;
+}

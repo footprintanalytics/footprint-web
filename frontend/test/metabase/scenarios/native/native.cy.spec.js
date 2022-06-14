@@ -3,17 +3,10 @@ import {
   popover,
   modal,
   openNativeEditor,
-  visitQuestionAdhoc,
-  summarize,
-  sidebar,
 } from "__support__/e2e/cypress";
-
-import { SAMPLE_DB_ID } from "__support__/e2e/cypress_data";
 
 describe("scenarios > question > native", () => {
   beforeEach(() => {
-    cy.intercept("POST", "api/dataset").as("dataset");
-    cy.intercept("POST", "api/card").as("card");
     restore();
     cy.signInAsNormalUser();
   });
@@ -50,7 +43,7 @@ describe("scenarios > question > native", () => {
     cy.contains("Question #…")
       .parent()
       .parent()
-      .contains("Pick a question or a model")
+      .contains("Pick a saved question")
       .click({ force: true });
 
     // selecting a question should update the query
@@ -79,46 +72,6 @@ describe("scenarios > question > native", () => {
     cy.contains("18,760");
   });
 
-  it("should handle template tags", () => {
-    openNativeEditor().type("select * from PRODUCTS where RATING > {{Stars}}", {
-      parseSpecialCharSequences: false,
-    });
-    cy.get("input[placeholder*='Stars']").type("3");
-    cy.get(".NativeQueryEditor .Icon-play").click();
-    cy.wait("@dataset");
-    cy.contains("Showing 168 rows");
-  });
-
-  it("should modify parameters accordingly when tags are modified", () => {
-    openNativeEditor().type("select * from PRODUCTS where CATEGORY = {{cat}}", {
-      parseSpecialCharSequences: false,
-    });
-    cy.findByTestId("sidebar-right")
-      .findByText("Required?")
-      .parent()
-      .find("input")
-      .click();
-    cy.get("input[placeholder*='Enter a default value']").type("Gizmo");
-    cy.get(".NativeQueryEditor .Icon-play").click();
-    cy.wait("@dataset");
-
-    cy.contains("Save").click();
-
-    modal().within(() => {
-      cy.findByLabelText("Name").type("Products on Category");
-      cy.findByText("Save").click();
-
-      cy.wait("@card").should(xhr => {
-        const requestBody = xhr.request?.body;
-        expect(requestBody?.parameters?.length).to.equal(1);
-        const parameter = requestBody.parameters[0];
-        expect(parameter.default).to.equal("Gizmo");
-      });
-    });
-
-    cy.findByText("Not now").click();
-  });
-
   it("can save a question with no rows", () => {
     openNativeEditor().type("select * from people where false");
     cy.get(".NativeQueryEditor .Icon-play").click();
@@ -137,30 +90,35 @@ describe("scenarios > question > native", () => {
 
   it(`shouldn't remove rows containing NULL when using "Is not" or "Does not contain" filter (metabase#13332)`, () => {
     const FILTERS = ["Is not", "Does not contain"];
+    const QUESTION = "QQ";
 
-    const questionDetails = {
-      name: "13332",
-      native: {
-        query: `SELECT null AS "V", 1 as "N" UNION ALL SELECT 'This has a value' AS "V", 2 as "N"`,
-        "template-tags": {},
-      },
-    };
+    openNativeEditor().type(
+      `SELECT null AS "V", 1 as "N" UNION ALL SELECT 'This has a value' AS "V", 2 as "N"`,
+    );
+    cy.findByText("Save").click();
 
-    cy.createNativeQuestion(questionDetails).then(({ body: { id } }) => {
-      visitQuestionAdhoc({
-        dataset_query: {
-          database: SAMPLE_DB_ID,
-          query: {
-            "source-table": `card__${id}`,
-          },
-          type: "query",
-        },
-      });
+    modal().within(() => {
+      cy.findByLabelText("Name").type(QUESTION);
+      cy.findByText("Save").click();
+    });
+    cy.findByText("Not now").click();
+
+    cy.visit("/");
+    cy.findByText("Ask a question").click();
+    cy.findByText("Simple question").click();
+    popover().within(() => {
+      cy.findByText("Saved Questions").click();
+      cy.findByText(QUESTION).click();
     });
 
+    cy.url("should.contain", "/question#");
     cy.findByText("This has a value");
 
     FILTERS.forEach(filter => {
+      // Clicking on a question's name in UI resets previously applied filters
+      // We can ask variations of that question "on the fly"
+      cy.findByText(QUESTION).click();
+
       cy.log("Apply a filter");
       cy.findAllByText("Filter")
         .first()
@@ -185,18 +143,11 @@ describe("scenarios > question > native", () => {
         "**Final assertion: Count of rows with 'null' value should be 1**",
       );
       // "Count" is pre-selected option for "Summarize"
-      summarize();
+      cy.findAllByText("Summarize")
+        .first()
+        .click();
       cy.findByText("Done").click();
       cy.get(".ScalarValue").contains("1");
-
-      cy.findByTestId("qb-filters-panel").within(() => {
-        cy.icon("close").click();
-      });
-      summarize();
-      sidebar().within(() => {
-        cy.icon("close").click();
-      });
-      cy.findByText("Done").click();
     });
   });
 

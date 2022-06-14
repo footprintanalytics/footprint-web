@@ -1,0 +1,86 @@
+.mine {
+  padding-bottom: 30px;
+  min-height: 100vh;
+}
+
+.mine__category-list--selected {
+  border-bottom: 4px solid #3434b2;
+  color: #313541;
+}
+
+.mine__wrap {
+  max-width: 1350px;
+  margin: 0 auto;
+  /* padding: 0 20px; */
+}
+
+.mine__list {
+  display: grid;
+  grid-row-gap: 30px;
+  grid-column-gap: 30px;
+  grid-template-columns: 1fr 1fr 1fr;
+}
+
+.mine__list li {
+  height: 340px;
+}
+
+.infinite-scroll-component {
+  overflow: initial !important;
+}
+
+.mine__tag {
+  margin-top: 20px;
+  padding: 20px 0 20px 0;
+}
+
+.mine__tag h3 {
+  color: #313541;
+  font-size: 24px;
+  font-weight: 700;
+}
+
+.mine__tag p {
+  color: #a7aabc;
+  font-size: 16px;
+  margin-bottom: 0;
+}
+
+.mine__tag-list {
+  display: flex;
+  align-items: center;
+  color: #a7aabc;
+  flex: 1;
+}
+
+.mine__tag-list li {
+  border: var(--footprint-border);
+  border-radius: 4px;
+  padding: var(--footprint-spacing-xs) var(--footprint-spacing-s);
+  line-height: 14px;
+  margin-right: var(--footprint-spacing-xs);
+  cursor: pointer;
+}
+
+.mine__tag-list li.mine__tag-list--selected {
+  background-color: #3434b2;
+  border: 0;
+  color: #fff;
+}
+
+.mine__sort {
+  display: flex;
+  justify-content: end;
+}
+.mine__sort-item {
+  border: #dcdde5 2px solid;
+  padding: 6px;
+  margin: 0 5px;
+  border-radius: 5px;
+  display: flex;
+}
+
+.mine__tag-container {
+  display: flex;
+  align-items: center;
+}

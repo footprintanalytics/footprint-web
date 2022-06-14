@@ -30,11 +30,7 @@ import {
   HIDE_ADD_PARAMETER_POPOVER,
   SET_SIDEBAR,
   CLOSE_SIDEBAR,
-  FETCH_DASHBOARD_PARAMETER_FIELD_VALUES_WITH_CACHE,
-  SAVE_DASHBOARD_AND_CARDS,
-  SET_DOCUMENT_TITLE,
-  SET_SHOW_LOADING_COMPLETE_FAVICON,
-  RESET,
+  FETCH_DYNAMIC_PARAMS,
 } from "./actions";
 
 import { isVirtualDashCard, syncParametersAndEmbeddingParams } from "./utils";
@@ -45,7 +41,6 @@ const dashboardId = handleActions(
     [FETCH_DASHBOARD]: {
       next: (state, { payload: { dashboardId } }) => dashboardId,
     },
-    [RESET]: { next: state => null },
   },
   null,
 );
@@ -56,22 +51,6 @@ const isEditing = handleActions(
     [SET_EDITING_DASHBOARD]: {
       next: (state, { payload }) => (payload ? payload : null),
     },
-    [RESET]: { next: state => null },
-  },
-  null,
-);
-
-const loadingControls = handleActions(
-  {
-    [SET_DOCUMENT_TITLE]: (state, { payload }) => ({
-      ...state,
-      documentTitle: payload,
-    }),
-    [SET_SHOW_LOADING_COMPLETE_FAVICON]: (state, { payload }) => ({
-      ...state,
-      showLoadCompleteFavicon: payload,
-    }),
-    [RESET]: { next: state => ({}) },
   },
   {},
 );
@@ -220,7 +199,6 @@ const isAddParameterPopoverOpen = handleActions(
     [SHOW_ADD_PARAMETER_POPOVER]: () => true,
     [HIDE_ADD_PARAMETER_POPOVER]: () => false,
     [INITIALIZE]: () => false,
-    [RESET]: () => false,
   },
   false,
 );
@@ -244,7 +222,6 @@ const dashcardData = handleActions(
           .dissoc(oldDashcardId)
           .value(),
     },
-    [RESET]: { next: state => ({}) },
   },
   {},
 );
@@ -273,51 +250,24 @@ const parameterValues = handleActions(
     [FETCH_DASHBOARD]: {
       next: (state, { payload: { parameterValues } }) => parameterValues,
     },
-    [RESET]: { next: state => ({}) },
-  },
-  {},
-);
-
-const parameterValuesSearchCache = handleActions(
-  {
-    [INITIALIZE]: { next: () => ({}) },
-    [SAVE_DASHBOARD_AND_CARDS]: {
-      next: () => ({}),
-    },
-    [FETCH_DASHBOARD_PARAMETER_FIELD_VALUES_WITH_CACHE]: {
-      next: (state, { payload }) =>
-        payload ? assoc(state, payload.cacheKey, payload.results) : state,
-    },
-    [RESET]: { next: state => ({}) },
   },
   {},
 );
 
 const loadingDashCards = handleActions(
   {
-    [INITIALIZE]: {
-      next: state => ({
-        ...state,
-        loadingStatus: "idle",
-      }),
-    },
     [FETCH_DASHBOARD]: {
-      next: (state, { payload }) => {
-        const cardIds = Object.values(payload.entities.dashcard || {})
+      next: (state, { payload }) => ({
+        ...state,
+        dashcardIds: Object.values(payload.entities.dashcard || {})
           .filter(dc => !isVirtualDashCard(dc))
-          .map(dc => dc.id);
-        return {
-          ...state,
-          dashcardIds: cardIds,
-          loadingIds: cardIds,
-          loadingStatus: "idle",
-        };
-      },
+          .map(dc => dc.id),
+      }),
     },
     [FETCH_DASHBOARD_CARD_DATA]: {
       next: state => ({
         ...state,
-        loadingStatus: state.dashcardIds.length > 0 ? "running" : "idle",
+        loadingIds: state.dashcardIds,
         startTime:
           state.dashcardIds.length > 0 &&
           // check that performance is defined just in case
@@ -332,9 +282,7 @@ const loadingDashCards = handleActions(
         return {
           ...state,
           loadingIds,
-          ...(loadingIds.length === 0
-            ? { startTime: null, loadingStatus: "complete" }
-            : {}),
+          ...(loadingIds.length === 0 ? { startTime: null } : {}),
         };
       },
     },
@@ -348,27 +296,13 @@ const loadingDashCards = handleActions(
         };
       },
     },
-    [RESET]: {
-      next: state => ({
-        ...state,
-        loadingStatus: "idle",
-      }),
-    },
   },
-  {
-    dashcardIds: [],
-    loadingIds: [],
-    startTime: null,
-    loadingStatus: "idle",
-  },
+  { dashcardIds: [], loadingIds: [], startTime: null },
 );
 
 const DEFAULT_SIDEBAR = { props: {} };
 const sidebar = handleActions(
   {
-    [INITIALIZE]: {
-      next: () => DEFAULT_SIDEBAR,
-    },
     [SET_SIDEBAR]: {
       next: (state, { payload: { name, props } }) => ({
         name,
@@ -378,6 +312,9 @@ const sidebar = handleActions(
     [CLOSE_SIDEBAR]: {
       next: () => DEFAULT_SIDEBAR,
     },
+    [INITIALIZE]: {
+      next: () => DEFAULT_SIDEBAR,
+    },
     [SET_EDITING_DASHBOARD]: {
       next: (state, { payload: isEditing }) =>
         isEditing ? state : DEFAULT_SIDEBAR,
@@ -385,17 +322,24 @@ const sidebar = handleActions(
     [REMOVE_PARAMETER]: {
       next: () => DEFAULT_SIDEBAR,
     },
-    [RESET]: {
-      next: () => DEFAULT_SIDEBAR,
-    },
   },
   DEFAULT_SIDEBAR,
+);
+
+export const dynamicParams = handleActions(
+  {
+    [FETCH_DYNAMIC_PARAMS]: {
+      next: (state, { payload }) => {
+        return { ...state, ...payload };
+      },
+    },
+  },
+  {},
 );
 
 export default combineReducers({
   dashboardId,
   isEditing,
-  loadingControls,
   dashboards,
   dashcards,
   dashcardData,
@@ -404,5 +348,5 @@ export default combineReducers({
   loadingDashCards,
   isAddParameterPopoverOpen,
   sidebar,
-  parameterValuesSearchCache,
+  dynamicParams,
 });

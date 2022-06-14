@@ -3,10 +3,8 @@
   (:require [clojure.data :as data]
             [clojure.string :as str]
             [clojure.tools.logging :as log]
-            [metabase.models.database :refer [Database]]
+            [metabase.models.database :as db-model :refer [Database]]
             [metabase.models.humanization :as humanization]
-            [metabase.models.permissions :as perms]
-            [metabase.models.permissions-group :as perms-group]
             [metabase.models.table :as table :refer [Table]]
             [metabase.sync.fetch-metadata :as fetch-metadata]
             [metabase.sync.interface :as i]
@@ -125,7 +123,7 @@
   (log/info (trs "Marking tables as inactive:")
             (for [table old-tables]
               (sync-util/name-for-logging (table/map->TableInstance table))))
-  (doseq [{schema :schema, table-name :name, :as _table} old-tables]
+  (doseq [{schema :schema, table-name :name, :as table} old-tables]
     (db/update-where! Table {:db_id  (u/the-id database)
                              :schema schema
                              :name   table-name
@@ -198,12 +196,6 @@
     (when (seq changed-tables)
       (sync-util/with-error-handling (format "Error updating table description for %s" (sync-util/name-for-logging database))
         (update-table-description! database changed-tables)))
-
-    ;; update native download perms for all groups if any tables were added or removed
-    (when (or (seq new-tables) (seq old-tables))
-      (sync-util/with-error-handling (format "Error updating native download perms for %s" (sync-util/name-for-logging database))
-        (doseq [{id :id} (perms-group/non-admin-groups)]
-          (perms/update-native-download-permissions! id (u/the-id database)))))
 
     {:updated-tables (+ (count new-tables) (count old-tables))
      :total-tables   (count our-metadata)}))

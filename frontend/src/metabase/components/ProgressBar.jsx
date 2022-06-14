@@ -1,24 +1,20 @@
-/* eslint-disable react/prop-types */
 import React, { Component } from "react";
-import PropTypes from "prop-types";
-import styled from "@emotion/styled";
+import styled from "styled-components";
 
-import { color as c } from "metabase/lib/colors";
+import { color } from "metabase/lib/colors";
 
-const propTypes = {
-  percentage: PropTypes.number.isRequired,
-  animated: PropTypes.bool,
-  color: PropTypes.string,
-  height: PropTypes.oneOfType([PropTypes.number, PropTypes.string]),
-  className: PropTypes.string,
+type Props = {
+  percentage: number,
+  animated: boolean,
+  color: string,
+  height: number,
 };
 
 const ProgressWrapper = styled.div`
   position: relative;
   border: 1px solid ${props => props.color};
-  height: ${props => props.height};
+  height: 10px;
   border-radius: 99px;
-  transition: border-color 0.3s;
 `;
 
 const Progress = styled.div`
@@ -32,15 +28,14 @@ const Progress = styled.div`
       border-top-left-radius: 0;
       border-bottom-left-radius: 0;
       width: ${props => props.width}%;
-      transition: background-color 0.3s;
       ":before": {
         display: ${props => (props.animated ? "block" : "none")};
-        position: absolute;
+        position: absolute,
         content: "";
         left: 0;
         width: ${props => props.width / 4}%;
         height: 100%;
-        background-color: ${c("bg-black")};
+        background-color: ${color("bg-black")};
         animation: ${props =>
           props.animated ? "progress-bar 1.5s linear infinite" : "none"};
       },
@@ -48,28 +43,23 @@ const Progress = styled.div`
 
 // @Question - why is this separate from our progress Viz type?
 export default class ProgressBar extends Component {
+  props: Props;
+
   static defaultProps = {
     animated: false,
+    color: color("brand"),
     height: 10,
   };
 
   render() {
-    const {
-      percentage,
-      height,
-      animated,
-      color = c("brand"),
-      className,
-    } = this.props;
+    const { percentage, animated, color } = this.props;
 
     const width = percentage * 100;
 
     return (
-      <ProgressWrapper color={color} height={height} className={className}>
+      <ProgressWrapper color={color}>
         <Progress width={width} animated={animated} color={color} />
       </ProgressWrapper>
     );
   }
 }
-
-ProgressBar.propTypes = propTypes;

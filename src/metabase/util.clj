@@ -7,7 +7,7 @@
             [clojure.set :as set]
             [clojure.string :as str]
             [clojure.tools.logging :as log]
-            [clojure.tools.namespace.find :as ns.find]
+            [clojure.tools.namespace.find :as ns-find]
             [clojure.walk :as walk]
             [colorize.core :as colorize]
             [flatland.ordered.map :refer [ordered-map]]
@@ -15,15 +15,14 @@
             [metabase.config :as config]
             [metabase.shared.util :as shared.u]
             [metabase.util.i18n :refer [trs tru]]
-            [nano-id.core :refer [nano-id]]
             [potemkin :as p]
             [ring.util.codec :as codec]
             [weavejester.dependency :as dep])
-  (:import [java.math MathContext RoundingMode]
-           [java.net InetAddress InetSocketAddress Socket]
+  (:import [java.net InetAddress InetSocketAddress Socket]
            [java.text Normalizer Normalizer$Form]
-           [java.util Base64 Base64$Decoder Base64$Encoder Locale PriorityQueue]
+           (java.util Locale PriorityQueue)
            java.util.concurrent.TimeoutException
+           javax.xml.bind.DatatypeConverter
            [org.apache.commons.validator.routines RegexValidator UrlValidator]))
 
 (comment shared.u/keep-me)
@@ -39,15 +38,6 @@
           (#{\. \? \!} (last s)))
     s
     (str s ".")))
-
-(defn capitalize-first-char
-  "Like string/capitalize, only it ignores the rest of the string
-  to retain case-sensitive capitalization, e.g., PostgreSQL."
-  [s]
-  (if (< (count s) 2)
-    (str/upper-case s)
-    (str (str/upper-case (subs s 0 1))
-         (subs s 1))))
 
 (defn lower-case-en
   "Locale-agnostic version of `clojure.string/lower-case`.
@@ -197,6 +187,27 @@
       (.isReachable host-addr host-up-timeout))
     (catch Throwable _ false)))
 
+(defn ^:deprecated rpartial
+  "Like `partial`, but applies additional args *before* `bound-args`.
+   Inspired by [`-rpartial` from dash.el](https://github.com/magnars/dash.el#-rpartial-fn-rest-args)
+
+    ((partial - 5) 8)  -> (- 5 8) -> -3
+    ((rpartial - 5) 8) -> (- 8 5) -> 3
+
+  DEPRECATED: just use `#()` function literals instead. No need to be needlessly confusing."
+  [f & bound-args]
+  (fn [& args]
+    (apply f (concat args bound-args))))
+
+(defmacro pdoseq
+  "(Almost) just like `doseq` but runs in parallel. Doesn't support advanced binding forms like `:let` or `:when` and
+  only supports a single binding </3"
+  {:style/indent 1}
+  [[binding collection] & body]
+  `(dorun (pmap (fn [~binding]
+                  ~@body)
+                ~collection)))
+
 (defmacro prog1
   "Execute `first-form`, then any other expressions in `body`, presumably for side-effects; return the result of
   `first-form`.
@@ -240,7 +251,7 @@
     false
     (config/config-bool :mb-colorize-logs)))
 
-(def ^{:arglists '(^String [color-symb x])} colorize
+(def ^{:arglists '(^String [color-symb x]), :style/indent 1} colorize
   "Colorize string `x` using `color`, a symbol or keyword, but only if `MB_COLORIZE_LOGS` is enabled (the default).
   `color` can be `green`, `red`, `yellow`, `blue`, `cyan`, `magenta`, etc. See the entire list of avaliable
   colors [here](https://github.com/ibdknox/colorize/blob/master/src/colorize/core.clj)"
@@ -260,7 +271,7 @@
   the output.
 
     (format-color :red \"%d cans\" 2)"
-  {:arglists '(^String [color x] ^String [color format-string & args])}
+  {:arglists '(^String [color x] ^String [color format-string & args]), :style/indent 2}
   (^String [color x]
    (colorize color x))
 
@@ -273,6 +284,7 @@
   function from `colorize.core`.
 
      (pprint-to-str 'green some-obj)"
+  {:style/indent 1}
   (^String [x]
    (when x
      (with-open [w (java.io.StringWriter.)]
@@ -327,7 +339,7 @@
   [reff timeout-ms]
   (let [result (deref reff timeout-ms ::timeout)]
     (when (= result ::timeout)
-      (when (future? reff)
+      (when (instance? java.util.concurrent.Future reff)
         (future-cancel reff))
       (throw (TimeoutException. (tru "Timed out after {0}" (format-milliseconds timeout-ms)))))
     result))
@@ -335,10 +347,16 @@
 (defn do-with-timeout
   "Impl for `with-timeout` macro."
   [timeout-ms f]
-  (try
-    (deref-with-timeout (future-call f) timeout-ms)
-    (catch java.util.concurrent.ExecutionException e
-      (throw (.getCause e)))))
+  (let [result (deref-with-timeout
+                (future
+                  (try
+                    (f)
+                    (catch Throwable e
+                      e)))
+                timeout-ms)]
+    (if (instance? Throwable result)
+      (throw result)
+      result)))
 
 (defmacro with-timeout
   "Run `body` in a `future` and throw an exception if it fails to complete after `timeout-ms`."
@@ -348,32 +366,10 @@
 (defn round-to-decimals
   "Round (presumabily floating-point) `number` to `decimal-place`. Returns a `Double`.
 
-  Rounds by decimal places, no matter how many significant figures the number has. See [[round-to-precision]].
-
-    (round-to-decimals 2 35.5058998M) -> 35.51"
+     (round-to-decimals 2 35.5058998M) -> 35.51"
   ^Double [^Integer decimal-place, ^Number number]
   {:pre [(integer? decimal-place) (number? number)]}
   (double (.setScale (bigdec number) decimal-place BigDecimal/ROUND_HALF_UP)))
-
-(defn round-to-precision
-  "Round (presumably floating-point) `number` to a precision of `sig-figures`. Returns a `Double`.
-
-  This rounds by significant figures, not decimal places. See [[round-to-decimals]] for that.
-
-    (round-to-precision 4 1234567.89) -> 123500.0"
-  ^Double [^Integer sig-figures ^Number number]
-  {:pre [(integer? sig-figures) (number? number)]}
-  (-> number
-      bigdec
-      (.round (MathContext. sig-figures RoundingMode/HALF_EVEN))
-      double))
-
-(defn real-number?
-  "Is `x` a real number (i.e. not a `NaN` or an `Infinity`)?"
-  [x]
-  (and (number? x)
-       (not (Double/isNaN x))
-       (not (Double/isInfinite x))))
 
 (defn- check-protocol-impl-method-map
   "Check that the methods expected for `protocol` are all implemented by `method-map`, and that no extra methods are
@@ -469,10 +465,7 @@
   "Execute `f`, a function that takes no arguments, and return the results.
    If `f` fails with an exception, retry `f` up to `num-retries` times until it succeeds.
 
-   Consider using the `auto-retry` macro instead of calling this function directly.
-
-   For implementing more fine grained retry policies like exponential backoff,
-   consider using the `metabase.util.retry` namespace."
+   Consider using the `auto-retry` macro instead of calling this function directly."
   {:style/indent 1}
   [num-retries f]
   (if (<= num-retries 0)
@@ -490,10 +483,7 @@
   until it succeeds.
 
   You can disable auto-retries for a specific ExceptionInfo by including `{:metabase.util/no-auto-retry? true}` in its
-  data (or the data of one of its causes.)
-
-  For implementing more fine grained retry policies like exponential backoff,
-  consider using the `metabase.util.retry` namespace."
+  data (or the data of one of its causes.)"
   {:style/indent 1}
   [num-retries & body]
   `(do-with-auto-retries ~num-retries
@@ -531,14 +521,14 @@
   ;; TODO - lots of functions can be rewritten to use this, which would make them more flexible
   ^Integer [object-or-id]
   (or (id object-or-id)
-      (throw (Exception. (tru "Not something with an ID: {0}" (pr-str object-or-id))))))
+      (throw (Exception. (tru "Not something with an ID: {0}" object-or-id)))))
 
 ;; This is made `^:const` so it will get calculated when the uberjar is compiled. `find-namespaces` won't work if
 ;; source is excluded; either way this takes a few seconds, so doing it at compile time speeds up launch as well.
 (defonce ^:const ^{:doc "Vector of symbols of all Metabase namespaces, excluding test namespaces. This is intended for
   use by various routines that load related namespaces, such as task and events initialization."}
   metabase-namespace-symbols
-  (vec (sort (for [ns-symb (ns.find/find-namespaces (classpath/system-classpath))
+  (vec (sort (for [ns-symb (ns-find/find-namespaces (classpath/system-classpath))
                    :when   (and (.startsWith (name ns-symb) "metabase.")
                                 (not (.contains (name ns-symb) "test")))]
                ns-symb))))
@@ -587,28 +577,15 @@
                    (str/replace s #"\s" "")
                    (re-matches #"^(?:[A-Za-z0-9+/]{4})*(?:[A-Za-z0-9+/]{2}==|[A-Za-z0-9+/]{3}=)?$" s)))))
 
-(def ^Base64$Decoder base64-decoder
-  "A shared Base64 decoder instance."
-  (Base64/getDecoder))
-
-(defn decode-base64-to-bytes
-  "Decodes a Base64 string into bytes."
-  ^bytes [^String string]
-  (.decode base64-decoder string))
-
 (defn decode-base64
-  "Decodes the Base64 string `input` to a UTF-8 string."
+  "Decodes a Base64 string to a UTF-8 string"
   [input]
-  (new java.lang.String (decode-base64-to-bytes input) "UTF-8"))
-
-(def ^Base64$Encoder base64-encoder
-  "A shared Base64 encoder instance."
-  (Base64/getEncoder))
+  (new java.lang.String (DatatypeConverter/parseBase64Binary input) "UTF-8"))
 
 (defn encode-base64
-  "Encodes the UTF-8 encoding of the string `input` to a Base64 string."
-  ^String [^String input]
-  (.encodeToString base64-encoder (.getBytes input "UTF-8")))
+  "Encodes a string to a Base64 string"
+  [^String input]
+  (DatatypeConverter/printBase64Binary (.getBytes input "UTF-8")))
 
 (def ^{:arglists '([n])} safe-inc
   "Increment `n` if it is non-`nil`, otherwise return `1` (e.g. as if incrementing `0`)."
@@ -647,7 +624,7 @@
     (long (math/floor (/ (Math/log (math/abs x))
                          (Math/log 10))))))
 
-(defn update-if-exists
+(defn update-when
   "Like `clojure.core/update` but does not create a new key if it does not exist. Useful when you don't want to create
   cruft."
   [m k f & args]
@@ -655,7 +632,7 @@
     (apply update m k f args)
     m))
 
-(defn update-in-if-exists
+(defn update-in-when
   "Like `clojure.core/update-in` but does not create new keys if they do not exist. Useful when you don't want to create
   cruft."
   [m ks f & args]
@@ -829,25 +806,21 @@
   `profile` form or 1 for a form inside that."
   0)
 
-(defn -profile-print-time
-  "Impl for [[profile]] macro -- don't use this directly. Prints the `___ took ___` message at the conclusion of a
-  [[profile]]d form."
-  [message-thunk start-time]
-  ;; indent the message according to [[*profile-level*]] and add a little down-left arrow so it (hopefully) points to
+(defn profile-print-time
+  "Impl for `profile` macro -- don't use this directly. Prints the `___ took ___` message at the conclusion of a
+  `profile`d form."
+  [message start-time]
+  ;; indent the message according to `*profile-level*` and add a little down-left arrow so it (hopefully) points to
   ;; the parent form
-  (log/info (format-color (case (int (mod *profile-level* 4))
-                            0 :green
-                            1 :cyan
-                            2 :magenta
-                            3 :yellow) "%s%s took %s"
-                          (if (pos? *profile-level*)
-                            (str (str/join (repeat (dec *profile-level*) "  ")) " ⮦ ")
-                            "")
-                          (message-thunk)
-                          (format-nanoseconds (- (System/nanoTime) start-time)))))
+  (println (format-color :green "%s%s took %s"
+             (if (pos? *profile-level*)
+               (str (str/join (repeat (dec *profile-level*) "  ")) " ↙ ")
+               "")
+             message
+             (format-nanoseconds (- (System/nanoTime) start-time)))))
 
 (defmacro profile
-  "Like [[clojure.core/time]], but lets you specify a `message` that gets printed with the total time, formats the
+  "Like `clojure.core/time`, but lets you specify a `message` that gets printed with the total time, formats the
   time nicely using `format-nanoseconds`, and indents nested calls to `profile`.
 
     (profile \"top-level\"
@@ -861,13 +834,11 @@
   ([form]
    `(profile ~(str form) ~form))
   ([message & body]
-   ;; message is wrapped in a thunk so we don't incur the overhead of calculating it if the log level does not include
-   ;; INFO
-   `(let [message#    (fn [] ~message)
+   `(let [message#    ~message
           start-time# (System/nanoTime)
           result#     (binding [*profile-level* (inc *profile-level*)]
                         ~@body)]
-      (-profile-print-time message# start-time#)
+      (profile-print-time message# start-time#)
       result#)))
 
 (defn seconds->ms
@@ -917,7 +888,7 @@
 
 (defmacro or-with
   "Like or, but determines truthiness with `pred`."
-  ([_pred]
+  ([pred]
    nil)
   ([pred x & more]
    `(let [pred# ~pred
@@ -978,8 +949,3 @@
   [email-address domain]
   {:pre [(email? email-address)]}
   (= (email->domain email-address) domain))
-
-(defn generate-nano-id
-  "Generates a random NanoID string. Usually these are used for the entity_id field of various models."
-  []
-  (nano-id))

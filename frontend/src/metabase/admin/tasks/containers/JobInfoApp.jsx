@@ -3,23 +3,20 @@ import React from "react";
 import { t } from "ttag";
 import { connect } from "react-redux";
 
+import { Box, Flex } from "grid-styled";
+
 import LoadingAndErrorWrapper from "metabase/components/LoadingAndErrorWrapper";
 import AdminHeader from "metabase/components/AdminHeader";
-import Link from "metabase/core/components/Link";
+import Link from "metabase/components/Link";
 
 import { fetchJobInfo } from "../jobInfo";
-import {
-  JobInfoHeader,
-  JobInfoRoot,
-  JobSchedulerInfo,
-} from "./JobInfoApp.styled";
 
 const renderSchedulerInfo = scheduler => {
   return (
     scheduler && (
-      <JobSchedulerInfo>
+      <Flex align="center">
         <pre>{scheduler.join("\n")}</pre>
-      </JobSchedulerInfo>
+      </Flex>
     )
   );
 };
@@ -60,7 +57,8 @@ const renderJobsTable = jobs => {
   );
 };
 
-class JobInfoApp extends React.Component {
+@connect(null, { fetchJobInfo })
+export default class JobInfoApp extends React.Component {
   async componentDidMount() {
     try {
       const info = (await this.props.fetchJobInfo()).payload;
@@ -80,20 +78,18 @@ class JobInfoApp extends React.Component {
 
     return (
       <LoadingAndErrorWrapper loading={!scheduler} error={error}>
-        <JobInfoRoot>
-          <JobInfoHeader>
+        <Box p={3}>
+          <Flex align="center">
             <AdminHeader title={t`Scheduler Info`} />
-          </JobInfoHeader>
+          </Flex>
           {renderSchedulerInfo(scheduler)}
           {renderJobsTable(jobs)}
           {
             // render 'children' so that the invididual task modals show up
             children
           }
-        </JobInfoRoot>
+        </Box>
       </LoadingAndErrorWrapper>
     );
   }
 }
-
-export default connect(null, { fetchJobInfo })(JobInfoApp);

@@ -1,0 +1,11 @@
+FROM registry-intl.us-east-1.aliyuncs.com/mexl/metabase-v0-41-ci:circleci-java-11-clj-1.10.3.929-07-27-2021-node-browsers
+
+ARG MB_EDITION=oss
+
+WORKDIR /home/circleci
+
+COPY --chown=circleci . .
+RUN INTERACTIVE=false MB_EDITION=$MB_EDITION chmod +x bin/build && \
+    bin/build version drivers uberjar && \
+    chmod +x target/uberjar/metabase.jar && \
+    chmod +x bin/docker/run_metabase.sh

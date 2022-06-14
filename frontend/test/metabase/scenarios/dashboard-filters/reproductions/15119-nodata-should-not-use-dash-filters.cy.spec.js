@@ -1,12 +1,7 @@
-import {
-  restore,
-  filterWidget,
-  popover,
-  visitDashboard,
-} from "__support__/e2e/cypress";
-import { SAMPLE_DATABASE } from "__support__/e2e/cypress_sample_database";
+import { restore, filterWidget } from "__support__/e2e/cypress";
+import { SAMPLE_DATASET } from "__support__/e2e/cypress_sample_dataset";
 
-const { PRODUCTS, PRODUCTS_ID } = SAMPLE_DATABASE;
+const { PRODUCTS, PRODUCTS_ID } = SAMPLE_DATASET;
 
 describe("issue 15119", () => {
   beforeEach(() => {
@@ -54,7 +49,7 @@ describe("issue 15119", () => {
         });
 
         cy.signIn("nodata");
-        visitDashboard(dashboard_id);
+        cy.visit(`/dashboard/${dashboard_id}`);
       },
     );
 
@@ -62,10 +57,8 @@ describe("issue 15119", () => {
       .contains("Category")
       .click();
 
-    popover().within(() => {
-      cy.findByText("Gizmo").click();
-      cy.button("Add filter").click();
-    });
+    cy.findByPlaceholderText("Search the list").type("Gizmo");
+    cy.button("Add filter").click();
 
     cy.contains("Rustic Paper Wallet");
   });

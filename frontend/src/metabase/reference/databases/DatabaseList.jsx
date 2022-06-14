@@ -28,7 +28,8 @@ const mapDispatchToProps = {
   ...metadataActions,
 };
 
-class DatabaseList extends Component {
+@connect(mapStateToProps, mapDispatchToProps)
+export default class DatabaseList extends Component {
   static propTypes = {
     style: PropTypes.object.isRequired,
     entities: PropTypes.object.isRequired,
@@ -38,16 +39,6 @@ class DatabaseList extends Component {
 
   render() {
     const { entities, style, loadingError, loading } = this.props;
-
-    const databases = Object.values(entities)
-      .filter(database => {
-        const exists = Boolean(database?.id && database?.name);
-        return exists && !database.is_saved_questions;
-      })
-      .sort((a, b) => {
-        const compared = a.name.localeCompare(b.name);
-        return compared !== 0 ? compared : a.engine.localeCompare(b.engine);
-      });
 
     return (
       <div style={style} className="full">
@@ -60,18 +51,23 @@ class DatabaseList extends Component {
             Object.keys(entities).length > 0 ? (
               <div className="wrapper">
                 <List>
-                  {databases.map((database, index) => (
-                    <li className="relative" key={database.id}>
-                      <ListItem
-                        id={database.id}
-                        index={index}
-                        name={database.display_name || database.name}
-                        description={database.description}
-                        url={`/reference/databases/${database.id}`}
-                        icon="database"
-                      />
-                    </li>
-                  ))}
+                  {Object.values(entities).map(
+                    (entity, index) =>
+                      entity &&
+                      entity.id &&
+                      entity.name && (
+                        <li className="relative" key={entity.id}>
+                          <ListItem
+                            id={entity.id}
+                            index={index}
+                            name={entity.display_name || entity.name}
+                            description={entity.description}
+                            url={`/reference/databases/${entity.id}`}
+                            icon="database"
+                          />
+                        </li>
+                      ),
+                  )}
                 </List>
               </div>
             ) : (
@@ -85,5 +81,3 @@ class DatabaseList extends Component {
     );
   }
 }
-
-export default connect(mapStateToProps, mapDispatchToProps)(DatabaseList);

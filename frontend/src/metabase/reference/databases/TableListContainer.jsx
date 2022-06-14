@@ -23,7 +23,8 @@ const mapDispatchToProps = {
   ...actions,
 };
 
-class TableListContainer extends Component {
+@connect(mapStateToProps, mapDispatchToProps)
+export default class TableListContainer extends Component {
   static propTypes = {
     params: PropTypes.object.isRequired,
     location: PropTypes.object.isRequired,
@@ -65,5 +66,3 @@ class TableListContainer extends Component {
     );
   }
 }
-
-export default connect(mapStateToProps, mapDispatchToProps)(TableListContainer);

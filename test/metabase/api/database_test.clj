@@ -3,8 +3,8 @@
   (:require [clojure.string :as str]
             [clojure.test :refer :all]
             [medley.core :as m]
-            [metabase.api.database :as api.database]
-            [metabase.api.table :as api.table]
+            [metabase.api.database :as database-api]
+            [metabase.api.table :as table-api]
             [metabase.driver :as driver]
             [metabase.driver.util :as driver.u]
             [metabase.mbql.schema :as mbql.s]
@@ -19,7 +19,7 @@
             [metabase.test.fixtures :as fixtures]
             [metabase.test.util :as tu]
             [metabase.util :as u]
-            [metabase.util.cron :as u.cron]
+            [metabase.util.cron :as cron-util]
             [metabase.util.schema :as su]
             [ring.util.codec :as codec]
             [schema.core :as s]
@@ -45,21 +45,19 @@
 (defn- db-details
   "Return default column values for a database (either the test database, via `(mt/db)`, or optionally passed in)."
   ([]
-   (-> (db-details (mt/db))
-       (assoc :initial_sync_status "complete")))
+   (db-details (mt/db)))
 
   ([{driver :engine, :as db}]
    (merge
     (mt/object-defaults Database)
     (select-keys db [:created_at :id :details :updated_at :timezone :name])
-    {:engine (u/qualified-name (:engine db))
-     :features (map u/qualified-name (driver.u/features driver db))
-     :initial_sync_status "complete"})))
+    {:engine   (u/qualified-name (:engine db))
+     :features (map u/qualified-name (driver.u/features driver db))})))
 
 (defn- table-details [table]
   (-> (merge (mt/obj->json->obj (mt/object-defaults Table))
-             (select-keys table [:active :created_at :db_id :description :display_name :entity_type
-                                 :id :name :rows :schema :updated_at :visibility_type :initial_sync_status]))
+             (select-keys table [:active :created_at :db_id :description :display_name :entity_name :entity_type
+                                 :id :name :rows :schema :updated_at :visibility_type]))
       (update :entity_type #(when % (str "entity/" (name %))))
       (update :visibility_type #(when % (name %)))))
 
@@ -82,12 +80,12 @@
     (testing "DB details visibility"
       (testing "Regular users should not see DB details"
         (is (= (-> (db-details)
-                   (dissoc :details :schedules :settings))
+                   (dissoc :details :schedules))
                (-> (mt/user-http-request :rasta :get 200 (format "database/%d" (mt/id)))
                    (dissoc :schedules)))))
 
       (testing "Superusers should see DB details"
-        (is (= (assoc (db-details) :can-manage true)
+        (is (= (db-details)
                (-> (mt/user-http-request :crowberto :get 200 (format "database/%d" (mt/id)))
                    (dissoc :schedules))))))
 
@@ -151,8 +149,7 @@
                      :details    (s/eq {:db "my_db"})
                      :updated_at java.time.temporal.Temporal
                      :name       su/NonBlankString
-                     :features   (s/eq (driver.u/features ::test-driver (mt/db)))
-                     :creator_id (s/eq (mt/user->id :crowberto))})
+                     :features   (s/eq (driver.u/features ::test-driver (mt/db)))})
                    (create-db-via-api!))))
 
     (testing "can we set `is_full_sync` to `false` when we create the Database?"
@@ -164,8 +161,8 @@
             (create-db-via-api! {:schedules {:metadata_sync      monthly-schedule
                                              :cache_field_values monthly-schedule}})]
         (is (not (:let-user-control-scheduling details)))
-        (is (= "daily" (-> cache_field_values_schedule u.cron/cron-string->schedule-map :schedule_type)))
-        (is (= "hourly" (-> metadata_sync_schedule u.cron/cron-string->schedule-map :schedule_type)))))
+        (is (= "daily" (-> cache_field_values_schedule cron-util/cron-string->schedule-map :schedule_type)))
+        (is (= "hourly" (-> metadata_sync_schedule cron-util/cron-string->schedule-map :schedule_type)))))
     (testing "if `:let-user-control-scheduling` is true it will accept the schedules"
       (let [monthly-schedule {:schedule_type "monthly" :schedule_day "fri" :schedule_frame "last"}
             {:keys [details metadata_sync_schedule cache_field_values_schedule]}
@@ -173,41 +170,15 @@
                                  :schedules {:metadata_sync      monthly-schedule
                                              :cache_field_values monthly-schedule}})]
         (is (:let-user-control-scheduling details))
-        (is (= "monthly" (-> cache_field_values_schedule u.cron/cron-string->schedule-map :schedule_type)))
-        (is (= "monthly" (-> metadata_sync_schedule u.cron/cron-string->schedule-map :schedule_type)))))
-    (testing "well known connection errors are reported properly"
-      (let [dbname (mt/random-name)
-            exception (Exception. (format "FATAL: database \"%s\" does not exist" dbname))]
-        (is (= {:errors {:dbname "check your database name settings"},
-                :message "Looks like the Database name is incorrect."}
-               (with-redefs [driver/can-connect? (fn [& _] (throw exception))]
-                 (mt/user-http-request :crowberto :post 400 "database"
-                                       {:name         dbname
-                                        :engine       "postgres"
-                                        :details      {:host "localhost", :port 5432
-                                                       :dbname "fakedb", :user "rastacan"}}))))))
-    (testing "unknown connection errors are reported properly"
-      (let [exception (Exception. "Unknown driver message" (java.net.ConnectException. "Failed!"))]
-        (is (= {:errors  {:host "check your host settings"
-                          :port "check your port settings"}
-                :message "Hmm, we couldn't connect to the database. Make sure your Host and Port settings are correct"}
-               (with-redefs [driver/available?   (constantly true)
-                             driver/can-connect? (fn [& _] (throw exception))]
-                 (mt/user-http-request :crowberto :post 400 "database"
-                                       {:name    (mt/random-name)
-                                        :engine  (u/qualified-name ::test-driver)
-                                        :details {:db "my_db"}}))))))))
+        (is (= "monthly" (-> cache_field_values_schedule cron-util/cron-string->schedule-map :schedule_type)))
+        (is (= "monthly" (-> metadata_sync_schedule cron-util/cron-string->schedule-map :schedule_type)))))))
 
 (deftest delete-database-test
   (testing "DELETE /api/database/:id"
-    (testing "Check that a superuser can delete a Database"
+    (testing "Check that we can delete a Database"
       (mt/with-temp Database [db]
         (mt/user-http-request :crowberto :delete 204 (format "database/%d" (:id db)))
-        (is (false? (db/exists? Database :id (u/the-id db))))))
-
-    (testing "Check that a non-superuser cannot delete a Database"
-      (mt/with-temp Database [db]
-        (mt/user-http-request :rasta :delete 403 (format "database/%d" (:id db)))))))
+        (is (false? (db/exists? Database :id (u/the-id db))))))))
 
 (deftest update-database-test
   (testing "PUT /api/database/:id"
@@ -221,7 +192,9 @@
               update! (fn [expected-status-code]
                         (mt/user-http-request :crowberto :put expected-status-code (format "database/%d" db-id) updates))]
           (testing "Should check that connection details are valid on save"
-            (is (string? (:message (update! 400)))))
+            (mt/suppress-output
+              (is (= false
+                     (:valid (update! 400))))))
           (testing "If connection details are valid, we should be able to update the Database"
             (with-redefs [driver/can-connect? (constantly true)]
               (is (= nil
@@ -236,16 +209,17 @@
                       :features     (driver.u/features :h2 curr-db)}
                      (into {} curr-db)))))))))
 
-    (testing "should be able to set `auto_run_queries`"
-      (testing "when creating a Database"
-        (is (= {:auto_run_queries false}
-               (select-keys (create-db-via-api! {:auto_run_queries false}) [:auto_run_queries]))))
-      (testing "when updating a Database"
-        (mt/with-temp Database [{db-id :id} {:engine ::test-driver}]
-          (let [updates {:auto_run_queries false}]
-            (mt/user-http-request :crowberto :put 200 (format "database/%d" db-id) updates))
-          (is (= false
-                 (db/select-one-field :auto_run_queries Database, :id db-id))))))
+    (mt/with-log-level :info
+      (testing "should be able to set `auto_run_queries`"
+        (testing "when creating a Database"
+          (is (= {:auto_run_queries false}
+                 (select-keys (create-db-via-api! {:auto_run_queries false}) [:auto_run_queries]))))
+        (testing "when updating a Database"
+          (mt/with-temp Database [{db-id :id} {:engine ::test-driver}]
+            (let [updates {:auto_run_queries false}]
+              (mt/user-http-request :crowberto :put 200 (format "database/%d" db-id) updates))
+            (is (= false
+                   (db/select-one-field :auto_run_queries Database, :id db-id)))))))
     (testing "should be able to unset cache_ttl"
       (mt/with-temp Database [{db-id :id}]
         (let [updates1 {:cache_ttl    1337}
@@ -261,43 +235,42 @@
 
 (deftest fetch-database-metadata-test
   (testing "GET /api/database/:id/metadata"
-    (is (= (merge (dissoc (mt/object-defaults Database) :details :settings)
-                  (select-keys (mt/db) [:created_at :id :updated_at :timezone :initial_sync_status])
+    (is (= (merge (dissoc (mt/object-defaults Database) :details)
+                  (select-keys (mt/db) [:created_at :id :updated_at :timezone])
                   {:engine        "h2"
                    :name          "test-data"
                    :features      (map u/qualified-name (driver.u/features :h2 (mt/db)))
                    :tables        [(merge
                                     (mt/obj->json->obj (mt/object-defaults Table))
                                     (db/select-one [Table :created_at :updated_at] :id (mt/id :categories))
-                                    {:schema              "PUBLIC"
-                                     :name                "CATEGORIES"
-                                     :display_name        "Categories"
-                                     :entity_type         "entity/GenericTable"
-                                     :initial_sync_status "complete"
-                                     :fields              [(merge
-                                                            (field-details (Field (mt/id :categories :id)))
-                                                            {:table_id          (mt/id :categories)
-                                                             :semantic_type     "type/PK"
-                                                             :name              "ID"
-                                                             :display_name      "ID"
-                                                             :database_type     "BIGINT"
-                                                             :base_type         "type/BigInteger"
-                                                             :effective_type    "type/BigInteger"
-                                                             :visibility_type   "normal"
-                                                             :has_field_values  "none"
-                                                             :database_position 0})
-                                                           (merge
-                                                            (field-details (Field (mt/id :categories :name)))
-                                                            {:table_id          (mt/id :categories)
-                                                             :semantic_type     "type/Name"
-                                                             :name              "NAME"
-                                                             :display_name      "Name"
-                                                             :database_type     "VARCHAR"
-                                                             :base_type         "type/Text"
-                                                             :effective_type    "type/Text"
-                                                             :visibility_type   "normal"
-                                                             :has_field_values  "list"
-                                                             :database_position 1})]
+                                    {:schema       "PUBLIC"
+                                     :name         "CATEGORIES"
+                                     :display_name "Categories"
+                                     :entity_type  "entity/GenericTable"
+                                     :fields       [(merge
+                                                     (field-details (Field (mt/id :categories :id)))
+                                                     {:table_id          (mt/id :categories)
+                                                      :semantic_type     "type/PK"
+                                                      :name              "ID"
+                                                      :display_name      "ID"
+                                                      :database_type     "BIGINT"
+                                                      :base_type         "type/BigInteger"
+                                                      :effective_type    "type/BigInteger"
+                                                      :visibility_type   "normal"
+                                                      :has_field_values  "none"
+                                                      :database_position 0})
+                                                    (merge
+                                                     (field-details (Field (mt/id :categories :name)))
+                                                     {:table_id          (mt/id :categories)
+                                                      :semantic_type     "type/Name"
+                                                      :name              "NAME"
+                                                      :display_name      "Name"
+                                                      :database_type     "VARCHAR"
+                                                      :base_type         "type/Text"
+                                                      :effective_type    "type/Text"
+                                                      :visibility_type   "normal"
+                                                      :has_field_values  "list"
+                                                      :database_position 1})]
                                      :segments     []
                                      :metrics      []
                                      :id           (mt/id :categories)
@@ -306,7 +279,6 @@
              (assoc resp :tables (filter #(= "CATEGORIES" (:name %)) (:tables resp))))))))
 
 (deftest fetch-database-metadata-include-hidden-test
-  ;; NOTE: test for the exclude_uneditable parameter lives in metabase-enterprise.advanced-permissions.common-test
   (mt/with-temp-vals-in-db Table (mt/id :categories) {:visibility_type "hidden"}
     (mt/with-temp-vals-in-db Field (mt/id :venues :price) {:visibility_type "sensitive"}
       (testing "GET /api/database/:id/metadata?include_hidden=true"
@@ -331,14 +303,10 @@
                         (some (partial = "PRICE"))))))))))
 
 (deftest autocomplete-suggestions-test
-  (let [prefix-fn (fn [db-id prefix]
-                    (mt/user-http-request :rasta :get 200
-                                          (format "database/%d/autocomplete_suggestions" db-id)
-                                          :prefix prefix))
-        search-fn (fn [db-id search]
-                    (mt/user-http-request :rasta :get 200
-                                          (format "database/%d/autocomplete_suggestions" db-id)
-                                          :search search))]
+  (let [suggest-fn (fn [db-id prefix]
+                     (mt/user-http-request :rasta :get 200
+                                           (format "database/%d/autocomplete_suggestions" db-id)
+                                           :prefix prefix))]
     (testing "GET /api/database/:id/autocomplete_suggestions"
       (doseq [[prefix expected] {"u"   [["USERS" "Table"]
                                         ["USER_ID" "CHECKINS :type/Integer :type/FK"]]
@@ -347,8 +315,8 @@
                                         ["CATEGORY_ID" "VENUES :type/Integer :type/FK"]]
                                  "cat" [["CATEGORIES" "Table"]
                                         ["CATEGORY_ID" "VENUES :type/Integer :type/FK"]]}]
-        (is (= expected (prefix-fn (mt/id) prefix))))
-      (testing " handles large numbers of tables and fields sensibly with prefix"
+        (is (= expected (suggest-fn (mt/id) prefix))))
+      (testing " handles large numbers of tables and fields sensibly"
         (mt/with-model-cleanup [Field Table Database]
           (let [tmp-db (db/insert! Database {:name "Temp Autocomplete Pagination DB" :engine "h2" :details "{}"})]
             ;; insert more than 50 temporary tables and fields
@@ -356,23 +324,15 @@
               (let [tmp-tbl (db/insert! Table {:name (format "My Table %d" i) :db_id (u/the-id tmp-db) :active true})]
                 (db/insert! Field {:name (format "My Field %d" i) :table_id (u/the-id tmp-tbl) :base_type "type/Text" :database_type "varchar"})))
             ;; for each type-specific prefix, we should get 50 fields
-            (is (= 50 (count (prefix-fn (u/the-id tmp-db) "My Field"))))
-            (is (= 50 (count (prefix-fn (u/the-id tmp-db) "My Table"))))
-            (let [my-results (prefix-fn (u/the-id tmp-db) "My")]
+            (is (= 50 (count (suggest-fn (u/the-id tmp-db) "My Field"))))
+            (is (= 50 (count (suggest-fn (u/the-id tmp-db) "My Table"))))
+            (let [my-results (suggest-fn (u/the-id tmp-db) "My")]
               ;; for this prefix, we should a mixture of 25 fields and 25 tables
               (is (= 50 (count my-results)))
               (is (= 25 (-> (filter #(str/starts-with? % "My Field") (map first my-results))
                             count)))
               (is (= 25 (-> (filter #(str/starts-with? % "My Table") (map first my-results))
-                            count))))
-            (testing " behaves differently with search and prefix query params"
-              (is (= 0 (count (prefix-fn (u/the-id tmp-db) "a"))))
-              (is (= 50 (count (search-fn (u/the-id tmp-db) "a"))))
-              ;; setting both uses search:
-              (is (= 50 (count (mt/user-http-request :rasta :get 200
-                                                     (format "database/%d/autocomplete_suggestions" (u/the-id tmp-db))
-                                                     :prefix "a"
-                                                     :search "a")))))))))))
+                          count))))))))))
 
 
 (defn- card-with-native-query {:style/indent 1} [card-name & {:as kvs}]
@@ -415,9 +375,9 @@
 (deftest databases-list-test
   (testing "GET /api/database"
     (testing "Test that we can get all the DBs (ordered by name, then driver)"
-      (testing "Database details/settings *should not* come back for Rasta since she's not a superuser"
+      (testing "Database details *should not* come back for Rasta since she's not a superuser"
         (let [expected-keys (-> (into #{:features :native_permissions} (keys (Database (mt/id))))
-                                (disj :details :settings))]
+                                (disj :details))]
           (doseq [db (:data (mt/user-http-request :rasta :get 200 "database"))]
             (testing (format "Database %s %d %s" (:engine db) (u/the-id db) (pr-str (:name db)))
               (is (= expected-keys
@@ -621,7 +581,7 @@
                           :dimension_options        []}]))))
 
     (testing "\nif no eligible Saved Questions exist the endpoint should return empty tables"
-      (with-redefs [api.database/cards-virtual-tables (constantly [])]
+      (with-redefs [database-api/cards-virtual-tables (constantly [])]
         (is (= {:name               "Saved Questions"
                 :id                 mbql.s/saved-questions-virtual-database-id
                 :features           ["basic-aggregations"]
@@ -693,8 +653,8 @@
                                   (assoc-in db [:details :let-user-control-scheduling] false))
             (let [schedules (into {} (db/select-one [Database :cache_field_values_schedule :metadata_sync_schedule] :id (u/the-id db)))]
               (is (not= original-custom-schedules schedules))
-              (is (= "hourly" (-> schedules :metadata_sync_schedule u.cron/cron-string->schedule-map :schedule_type)))
-              (is (= "daily" (-> schedules :cache_field_values_schedule u.cron/cron-string->schedule-map :schedule_type))))))))))
+              (is (= "hourly" (-> schedules :metadata_sync_schedule cron-util/cron-string->schedule-map :schedule_type)))
+              (is (= "daily" (-> schedules :cache_field_values_schedule cron-util/cron-string->schedule-map :schedule_type))))))))))
 
 (deftest fetch-db-with-expanded-schedules
   (testing "If we FETCH a database will it have the correct 'expanded' schedules?"
@@ -775,44 +735,51 @@
     (is (= "You don't have permissions to do that."
            (mt/user-http-request :rasta :post 403 (format "database/%d/discard_values" (mt/id)))))))
 
+
+;; For some stupid reason the *real* version of `test-database-connection` is set up to do nothing for tests. I'm
+;; guessing it's done that way so we can save invalid DBs for some silly tests. Instead of doing it the right way
+;; and using `with-redefs` to disable it in the few tests where it makes sense, we actually have to use `with-redefs`
+;; here to simulate its *normal* behavior. :unamused:
+(defn- test-database-connection [engine details]
+  (if (driver.u/can-connect-with-details? (keyword engine) details)
+    nil
+    {:valid false, :message "Error!"}))
+
 (deftest validate-database-test
   (testing "POST /api/database/validate"
-    (testing "Should require superuser permissions"
-      (is (= "You don't have permissions to do that."
-             (mt/user-http-request :rasta :post 403 "database/validate"
-                                   {:details {:engine :h2, :details (:details (mt/db))}}))))
+    (with-redefs [database-api/test-database-connection test-database-connection]
+      (testing "Should require superuser permissions"
+        (is (= "You don't have permissions to do that."
+               (mt/user-http-request :rasta :post 403 "database/validate"
+                                     {:details {:engine :h2, :details (:details (mt/db))}}))))
 
-    (testing "Underlying `test-connection-details` function should work"
-      (is (= (:details (mt/db))
-             (#'api.database/test-connection-details "h2" (:details (mt/db))))))
+      (testing "Underlying `test-connection-details` function should work"
+        (is (= (:details (mt/db))
+               (#'database-api/test-connection-details "h2" (:details (mt/db))))))
 
-    (testing "Valid database connection details"
-      (is (= {:valid true}
-             (mt/user-http-request :crowberto :post 200 "database/validate"
-                                   {:details {:engine :h2, :details (:details (mt/db))}}))))
-
-    (testing "invalid database connection details"
-      (testing "calling test-connection-details directly"
-        (is (= {:errors {:host "check your host settings"
-                         :port "check your port settings"}
-                :message "Hmm, we couldn't connect to the database. Make sure your Host and Port settings are correct"
-                :valid   false}
-               (#'api.database/test-connection-details "h2" {:db "ABC"}))))
-
-      (testing "via the API endpoint"
-        (is (= {:valid false}
+      (testing "Valid database connection details"
+        (is (= {:valid true}
                (mt/user-http-request :crowberto :post 200 "database/validate"
-                                     {:details {:engine :h2, :details {:db "ABC"}}})))))
+                                     {:details {:engine :h2, :details (:details (mt/db))}}))))
+
+      (testing "invalid database connection details"
+        (testing "calling test-connection-details directly"
+          (is (= {:valid false, :message "Error!"}
+                 (#'database-api/test-connection-details "h2" {:db "ABC"}))))
+
+        (testing "via the API endpoint"
+          (is (= {:valid false}
+                 (mt/user-http-request :crowberto :post 200 "database/validate"
+                                       {:details {:engine :h2, :details {:db "ABC"}}}))))))
 
     (let [call-count (atom 0)
-          ssl-values (atom [])
-          valid?     (atom false)]
-      (with-redefs [api.database/test-database-connection (fn [_ details & _]
+          ssl-values (atom [])]
+      (with-redefs [database-api/test-database-connection (fn [_ details]
                                                             (swap! call-count inc)
                                                             (swap! ssl-values conj (:ssl details))
-                                                            (if @valid? nil {:valid false}))]
+                                                            {:valid true})]
         (testing "with SSL enabled, do not allow non-SSL connections"
-          (#'api.database/test-connection-details "postgres" {:ssl true})
+          (#'database-api/test-connection-details "postgres" {:ssl true})
           (is (= 1 @call-count))
           (is (= [true] @ssl-values)))
 
@@ -820,7 +787,7 @@
         (reset! ssl-values [])
 
         (testing "with SSL disabled, try twice (once with, once without SSL)"
-          (#'api.database/test-connection-details "postgres" {:ssl false})
+          (#'database-api/test-connection-details "postgres" {:ssl false})
           (is (= 2 @call-count))
           (is (= [true false] @ssl-values)))
 
@@ -828,19 +795,9 @@
         (reset! ssl-values [])
 
         (testing "with SSL unspecified, try twice (once with, once without SSL)"
-          (#'api.database/test-connection-details "postgres" {})
+          (#'database-api/test-connection-details "postgres" {})
           (is (= 2 @call-count))
-          (is (= [true nil] @ssl-values)))
-
-        (reset! call-count 0)
-        (reset! ssl-values [])
-        (reset! valid? true)
-
-        (testing "with SSL disabled, but working try once (since SSL work we don't try without SSL)"
-          (is (= {:ssl true}
-                 (#'api.database/test-connection-details "postgres" {:ssl false})))
-          (is (= 1 @call-count))
-          (is (= [true] @ssl-values)))))))
+          (is (= [true false] @ssl-values)))))))
 
 
 ;;; +----------------------------------------------------------------------------------------------------------------+
@@ -893,6 +850,7 @@
         (let [schemas (set (mt/user-http-request :lucky :get 200 (format "database/%d/schemas" mbql.s/saved-questions-virtual-database-id)))]
           (is (contains? schemas "Everything else"))
           (is (contains? schemas "My Collection")))))
+
     (testing "null and empty schemas should both come back as blank strings"
       (mt/with-temp* [Database [{db-id :id}]
                       Table    [_ {:db_id db-id, :schema ""}]
@@ -1019,12 +977,12 @@
 
         (testing "Should be able to get saved questions in the root collection"
           (let [response (mt/user-http-request :lucky :get 200
-                                               (format "database/%d/schema/%s" mbql.s/saved-questions-virtual-database-id (api.table/root-collection-schema-name)))]
+                                               (format "database/%d/schema/%s" mbql.s/saved-questions-virtual-database-id (table-api/root-collection-schema-name)))]
             (is (schema= [{:id               #"^card__\d+$"
                            :db_id            s/Int
                            :display_name     s/Str
                            :moderated_status (s/enum nil "verified")
-                           :schema           (s/eq (api.table/root-collection-schema-name))
+                           :schema           (s/eq (table-api/root-collection-schema-name))
                            :description      (s/maybe s/Str)}]
                          response))
             (is (contains? (set response)
@@ -1032,52 +990,7 @@
                             :db_id            (mt/id)
                             :display_name     "Card 2"
                             :moderated_status nil
-                            :schema           (api.table/root-collection-schema-name)
-                            :description      nil}))))
-
-        (testing "Should throw 404 if the schema/Collection doesn't exist"
-          (is (= "Not found."
-                 (mt/user-http-request :lucky :get 404
-                                       (format "database/%d/schema/Coin Collection" mbql.s/saved-questions-virtual-database-id)))))))
-    (testing "should work for the datasets in the 'virtual' database"
-      (mt/with-temp* [Collection [coll   {:name "My Collection"}]
-                      Card       [card-1 (assoc (card-with-native-query "Card 1")
-                                                :collection_id (:id coll)
-                                                :dataset true)]
-                      Card       [card-2 (assoc (card-with-native-query "Card 2")
-                                                :dataset true)]
-                      Card       [card-3 (assoc (card-with-native-query "error")
-                                                ;; regular saved question should not be in the results
-                                                :dataset false)]]
-        ;; run the cards to populate their result_metadata columns
-        (doseq [card [card-1 card-2]]
-          (mt/user-http-request :crowberto :post 202 (format "card/%d/query" (u/the-id card))))
-        (testing "Should be able to get datasets in a specific collection"
-          (is (= [{:id               (format "card__%d" (:id card-1))
-                   :db_id            (mt/id)
-                   :moderated_status nil
-                   :display_name     "Card 1"
-                   :schema           "My Collection"
-                   :description      nil}]
-                 (mt/user-http-request :lucky :get 200
-                                       (format "database/%d/datasets/My Collection" mbql.s/saved-questions-virtual-database-id)))))
-
-        (testing "Should be able to get datasets in the root collection"
-          (let [response (mt/user-http-request :lucky :get 200
-                                               (format "database/%d/datasets/%s" mbql.s/saved-questions-virtual-database-id (api.table/root-collection-schema-name)))]
-            (is (schema= [{:id               #"^card__\d+$"
-                           :db_id            s/Int
-                           :display_name     s/Str
-                           :moderated_status (s/enum nil "verified")
-                           :schema           (s/eq (api.table/root-collection-schema-name))
-                           :description      (s/maybe s/Str)}]
-                         response))
-            (is (contains? (set response)
-                           {:id               (format "card__%d" (:id card-2))
-                            :db_id            (mt/id)
-                            :display_name     "Card 2"
-                            :moderated_status nil
-                            :schema           (api.table/root-collection-schema-name)
+                            :schema           (table-api/root-collection-schema-name)
                             :description      nil}))))
 
         (testing "Should throw 404 if the schema/Collection doesn't exist"
@@ -1119,10 +1032,10 @@
 (deftest upsert-sensitive-values-test
   (testing "empty maps are okay"
     (is (= {}
-           (api.database/upsert-sensitive-fields {} {}))))
+           (database-api/upsert-sensitive-fields {} {}))))
   (testing "no details updates are okay"
     (is (= nil
-           (api.database/upsert-sensitive-fields nil nil))))
+           (database-api/upsert-sensitive-fields nil nil))))
   (testing "fields are replaced"
     (is (= {:use-service-account           nil
             :dataset-id                    "dacort"
@@ -1135,7 +1048,7 @@
             :tunnel-private-key-passphrase "fooquux"
             :access-token                  "foobarfoo"
             :refresh-token                 "foobarquux"}
-           (api.database/upsert-sensitive-fields {:description nil
+           (database-api/upsert-sensitive-fields {:description nil
                                                   :name        "customer success BQ"
                                                   :details     {:use-service-account           nil
                                                                 :dataset-id                    "dacort"
@@ -1169,7 +1082,7 @@
             :tunnel-private-key-passphrase "tunnel-private-key-passphrase"
             :access-token                  "access-token"
             :refresh-token                 "refresh-token"}
-           (api.database/upsert-sensitive-fields {:description nil
+           (database-api/upsert-sensitive-fields {:description nil
                                                   :name        "customer success BQ"
                                                   :details     {:use-service-account           nil
                                                                 :dataset-id                    "dacort"
@@ -1204,7 +1117,7 @@
             :tunnel-private-key-passphrase "tunnel-private-key-passphrase"
             :access-token                  "access-token"
             :refresh-token                 "refresh-token"}
-           (api.database/upsert-sensitive-fields {:description nil
+           (database-api/upsert-sensitive-fields {:description nil
                                                   :name        "customer success BQ"
                                                   :details     {:use-service-account           nil
                                                                 :dataset-id                    "dacort"
@@ -1237,82 +1150,3 @@
                                              :get
                                              200
                                              "database/db-ids-with-deprecated-drivers"))))))))
-
-(deftest secret-file-paths-returned-by-api-test
-  (mt/with-driver :secret-test-driver
-    (testing "File path values for secrets are returned as plaintext in the API (#20030)"
-      (mt/with-temp Database [database {:engine  :secret-test-driver
-                                        :name    "Test secret DB with password path"
-                                        :details {:host           "localhost"
-                                                  :password-path "/path/to/password.txt"}}]
-        (is (= {:password-source "file-path"
-                :password-value  "/path/to/password.txt"}
-               (as-> (u/the-id database) d
-                     (format "database/%d" d)
-                     (mt/user-http-request :crowberto :get 200 d)
-                     (:details d)
-                     (select-keys d [:password-source :password-value]))))))))
-
-(deftest database-local-settings-come-back-with-database-test
-  (testing "Database-local Settings should come back with"
-    (mt/with-temp-vals-in-db Database (mt/id) {:settings {:max-results-bare-rows 1337}}
-      ;; only returned for admin users at this point in time. See #22683 -- issue to return them for non-admins as well.
-      (doseq [{:keys [endpoint response]} [{:endpoint "GET /api/database/:id"
-                                            :response (fn []
-                                                        (mt/user-http-request :crowberto :get 200 (format "database/%d" (mt/id))))}
-                                           {:endpoint "GET /api/database"
-                                            :response (fn []
-                                                        (some
-                                                         (fn [database]
-                                                           (when (= (:id database) (mt/id))
-                                                             database))
-                                                         (:data (mt/user-http-request :crowberto :get 200 "database"))))}]]
-        (testing endpoint
-          (let [{:keys [settings], :as response} (response)]
-            (testing (format "\nresponse = %s" (u/pprint-to-str response))
-              (is (map? response))
-              (is (partial= {:max-results-bare-rows 1337}
-                            settings)))))))))
-
-(deftest admins-set-database-local-settings-test
-  (testing "Admins should be allowed to update Database-local Settings (#19409)"
-    (mt/with-temp-vals-in-db Database (mt/id) {:settings nil}
-      (letfn [(settings []
-                (db/select-one-field :settings Database :id (mt/id)))
-              (set-settings! [m]
-                (mt/user-http-request :crowberto :put 200 (format "database/%d" (mt/id))
-                                      {:settings m}))]
-        (testing "Should initially be nil"
-          (is (nil? (settings))))
-        (testing "Set initial value"
-          (testing "response"
-            (is (partial= {:settings {:max-results-bare-rows 1337}}
-                          (set-settings! {:max-results-bare-rows 1337}))))
-          (testing "App DB"
-            (is (= {:max-results-bare-rows 1337}
-                   (settings)))))
-        (testing "Setting a different value should not affect anything not specified (PATCH-style update)"
-          (testing "response"
-            (is (partial= {:settings {:max-results-bare-rows   1337
-                                      :database-enable-actions true}}
-                          (set-settings! {:database-enable-actions true}))))
-          (testing "App DB"
-            (is (= {:max-results-bare-rows   1337
-                    :database-enable-actions true}
-                   (settings)))))
-        (testing "Update existing value"
-          (testing "response"
-            (is (partial= {:settings {:max-results-bare-rows   1337
-                                      :database-enable-actions false}}
-                          (set-settings! {:database-enable-actions false}))))
-          (testing "App DB"
-            (is (= {:max-results-bare-rows   1337
-                    :database-enable-actions false}
-                   (settings)))))
-        (testing "Unset a value"
-          (testing "response"
-            (is (partial= {:settings {:database-enable-actions false}}
-                          (set-settings! {:max-results-bare-rows nil}))))
-          (testing "App DB"
-            (is (= {:database-enable-actions false}
-                   (settings)))))))))

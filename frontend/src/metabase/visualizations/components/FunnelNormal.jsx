@@ -1,16 +1,37 @@
-/* eslint-disable react/prop-types */
 import React, { Component } from "react";
 
 import cx from "classnames";
 import styles from "./FunnelNormal.css";
 
-import Ellipsified from "metabase/core/components/Ellipsified";
+import Ellipsified from "metabase/components/Ellipsified";
 import { formatValue } from "metabase/lib/formatting";
 import { getFriendlyName } from "metabase/visualizations/lib/utils";
 
-import { color } from "metabase/lib/colors";
+import { normal } from "metabase/lib/colors";
+
+const DEFAULT_COLORS = Object.values(normal);
+
+import type {
+  VisualizationProps,
+  HoverObject,
+  ClickObject,
+} from "metabase-types/types/Visualization";
+
+type StepInfo = {
+  value: number,
+  graph: {
+    startBottom: number,
+    startTop: number,
+    endBottom: number,
+    endTop: number,
+  },
+  hovered?: HoverObject,
+  clicked?: ClickObject,
+};
 
 export default class FunnelNormal extends Component {
+  props: VisualizationProps;
+
   render() {
     const {
       className,
@@ -26,7 +47,7 @@ export default class FunnelNormal extends Component {
     const dimensionIndex = 0;
     const metricIndex = 1;
     const cols = series[0].data.cols;
-    const rows = series.map(s => s.data.rows[0]);
+    const rows: number[][] = series.map(s => s.data.rows[0]);
 
     const isNarrow = gridSize && gridSize.width < 7;
     const isShort = gridSize && gridSize.height <= 5;
@@ -47,7 +68,7 @@ export default class FunnelNormal extends Component {
     const formatPercent = percent => `${(100 * percent).toFixed(2)} %`;
 
     // Initial infos (required for step calculation)
-    let infos = [
+    let infos: StepInfo[] = [
       {
         value: rows[0][metricIndex],
         graph: {
@@ -59,7 +80,7 @@ export default class FunnelNormal extends Component {
       },
     ];
 
-    let remaining = rows[0][metricIndex];
+    let remaining: number = rows[0][metricIndex];
 
     rows.map((row, rowIndex) => {
       remaining -= infos[rowIndex].value - row[metricIndex];
@@ -186,6 +207,14 @@ const GraphSection = ({
   onHoverChange,
   onVisualizationClick,
   className,
+}: {
+  className?: string,
+  index: number,
+  info: StepInfo,
+  infos: StepInfo[],
+  hovered: ?HoverObject,
+  onVisualizationClick: ?(clicked: ?ClickObject) => void,
+  onHoverChange: (hovered: ?HoverObject) => void,
 }) => {
   return (
     <div className="relative full-height">
@@ -215,7 +244,7 @@ const GraphSection = ({
       >
         <polygon
           opacity={1 - index * (0.9 / (infos.length + 1))}
-          fill={color("brand")}
+          fill={DEFAULT_COLORS[0]}
           points={`0 ${info.graph.startBottom}, 0 ${info.graph.startTop}, 1 ${info.graph.endTop}, 1 ${info.graph.endBottom}`}
         />
       </svg>

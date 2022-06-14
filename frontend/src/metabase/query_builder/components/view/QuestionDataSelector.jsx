@@ -1,11 +1,11 @@
 /* eslint-disable react/prop-types */
 import React from "react";
 
-import { DataSourceSelector } from "metabase/query_builder/components/DataSelector";
+import { DatabaseSchemaAndTableDataSelector } from "metabase/query_builder/components/DataSelector";
 
 export default function QuestionDataSelector({ query, triggerElement }) {
   return (
-    <DataSourceSelector
+    <DatabaseSchemaAndTableDataSelector
       containerClassName="DataPopoverContainer"
       hasTableSearch
       databaseQuery={{ saved: true }}

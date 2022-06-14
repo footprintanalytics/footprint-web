@@ -2,15 +2,18 @@
 
 set -euo pipefail
 
-script_dir=`dirname "${BASH_SOURCE[0]}"`
-cd "$script_dir/.."
-root=
+# switch to project root directory if we're not already there
+script_directory=`dirname "${BASH_SOURCE[0]}"`
+cd "$script_directory/.."
 
 source "./bin/check-clojure-cli.sh"
 check_clojure_cli
 
 source "./bin/clear-outdated-cpcaches.sh"
 clear_outdated_cpcaches
+
+source "./bin/prep.sh"
+prep_deps
 
 cd bin/lint-migrations-file
 clojure -M -m lint-migrations-file $@

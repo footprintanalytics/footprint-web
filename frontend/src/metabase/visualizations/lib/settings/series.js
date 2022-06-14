@@ -1,24 +1,33 @@
-/* eslint-disable react/prop-types */
 import { t } from "ttag";
 import _ from "underscore";
 import { getIn } from "icepick";
 
 import ChartNestedSettingSeries from "metabase/visualizations/components/settings/ChartNestedSettingSeries";
 import { nestedSettings } from "./nested";
-import { getColorsForValues } from "metabase/lib/colors/charts";
+import { getColorsForValues } from "metabase/lib/colors";
 
-export function keyForSingleSeries(single) {
+import type { SettingDef } from "../settings";
+import type { SingleSeries } from "metabase-types/types/Visualization";
+
+export function keyForSingleSeries(single: SingleSeries): string {
+  if (!single) {
+    return "";
+  }
   // _seriesKey is sometimes set by transformSeries
   return single.card._seriesKey || String(single.card.name);
 }
 
 const LINE_DISPLAY_TYPES = new Set(["line", "area"]);
 
+type SeriesSettingDef = SettingDef & {
+  noPadding?: boolean,
+};
+
 export function seriesSetting({
   readDependencies = [],
   noPadding,
   ...def
-} = {}) {
+}: SeriesSettingDef = {}) {
   const settingId = "series_settings";
   const colorSettingId = `${settingId}.colors`;
 
@@ -87,7 +96,7 @@ export function seriesSetting({
       getDefault: (single, settings, { settings: vizSettings }) =>
         // use legacy global line.marker_enabled setting if present
         vizSettings["line.marker_enabled"] == null
-          ? null
+          ? false
           : vizSettings["line.marker_enabled"],
       readDependencies: ["display"],
     },

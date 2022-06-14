@@ -12,28 +12,39 @@ import CollapseSection from "metabase/components/CollapseSection";
 
 import { setDashboardAttributes } from "../actions";
 import { getDashboardComplete } from "../selectors";
+import { getUser } from "metabase/reference/selectors";
 
 const mapStateToProps = (state, props) => ({
   dashboard: getDashboardComplete(state, props),
+  user: getUser(state, props),
 });
 
 const mapDispatchToProps = { setDashboardAttributes };
 
 const COLLAPSED_FIELDS = ["cache_ttl"];
 
-class DashboardDetailsModalInner extends React.Component {
+@withRouter
+@connect(mapStateToProps, mapDispatchToProps)
+class DashboardDetailsModal extends React.Component {
   render() {
     const {
       onClose,
       onChangeLocation,
       setDashboardAttributes,
       dashboard,
+      user,
       ...props
     } = this.props;
+    const publicAnalyticPermission = user && user.publicAnalytic === "write";
     return (
       <Dashboard.ModalForm
-        title={t`Edit dashboard details`}
-        form={Dashboard.forms.edit}
+        title={t`Change title and description`}
+        form={
+          publicAnalyticPermission
+            ? Dashboard.form.adminDashboardFields
+            : Dashboard.form.userDashboardFields
+        }
+        user={user}
         dashboard={dashboard}
         onClose={onClose}
         onSaved={dashboard => {
@@ -77,10 +88,5 @@ class DashboardDetailsModalInner extends React.Component {
     );
   }
 }
-
-const DashboardDetailsModal = _.compose(
-  withRouter,
-  connect(mapStateToProps, mapDispatchToProps),
-)(DashboardDetailsModalInner);
 
 export default DashboardDetailsModal;

@@ -7,7 +7,8 @@ import {
   LegendItemRoot,
   LegendItemTitle,
 } from "./LegendItem.styled";
-import Ellipsified from "metabase/core/components/Ellipsified";
+import Ellipsified from "metabase/components/Ellipsified";
+import { commonD3LegendSetting } from "metabase/visualizations/lib/legend";
 
 const propTypes = {
   label: PropTypes.string,
@@ -54,7 +55,13 @@ const LegendItem = ({
         onMouseEnter={onHoverChange && handleItemMouseEnter}
         onMouseLeave={onHoverChange && handleItemMouseLeave}
       >
-        <LegendItemDot color={color} />
+        <LegendItemDot
+          color={color}
+          style={{
+            ...commonD3LegendSetting(),
+            backgroundColor: color,
+          }}
+        />
         <LegendItemTitle className="fullscreen-normal-text fullscreen-night-text">
           <Ellipsified>{label}</Ellipsified>
         </LegendItemTitle>

@@ -24,7 +24,7 @@
 .QueryHeader-section {
   padding-right: 1em;
   margin-right: 1em;
-  border-right: 1px solid color-mod(var(--filter-color) alpha(-80%));
+  border-right: 1px solid color(var(--filter-color) alpha(-80%));
 }
 
 .QueryHeader-section:last-child {
@@ -77,11 +77,13 @@
   display: flex;
   overflow-y: hidden;
   white-space: nowrap;
+  min-height: 55px;
 }
 
 .Query-filter {
   display: flex;
   flex-shrink: 0;
+  font-size: 0.75em;
   border: 2px solid transparent;
   border-radius: var(--default-border-radius);
 }
@@ -216,14 +218,14 @@
 }
 
 .Loading {
-  background-color: color-mod(var(--color-bg-white) alpha(-28%));
+  background-color: color(var(--color-bg-white) alpha(-28%));
   transition: opacity 0.5s;
 }
 .Loading.Loading--hidden {
   background-color: transparent;
 }
 .Dirty {
-  background-color: color-mod(var(--color-bg-white) alpha(-28%));
+  background-color: color(var(--color-bg-white) alpha(-28%));
   transition: opacity 0.5s;
 }
 .Dirty.Loading--hidden {
@@ -282,7 +284,7 @@
 }
 
 .QueryError-adminEmail:before {
-  content: "Admin Email";
+  content: "Contact us";
   font-size: 10px;
   text-align: center;
   text-transform: uppercase;
@@ -486,7 +488,7 @@
 }
 
 .NativeQueryEditorDragHandle {
-  background: color-mod(var(--color-border) blackness(3%));
+  background: color(var(--color-border) blackness(+ 3%));
   width: 100px;
   height: 5px;
   border-radius: 4px;
@@ -532,20 +534,13 @@
 }
 
 .RunButton.RunButton--compact {
-  padding: 16px 32px;
+  padding: 0 32px;
+  background-color: #fff;
 }
 
 .RunButton.RunButton--hidden {
   transform: translateY(-20px);
   opacity: 0;
-}
-
-@media (prefers-reduced-motion) {
-  .RunButton,
-  .RunButton.RunButton--compact,
-  .RunButton.RunButton--hidden {
-    transition-duration: 10ms;
-  }
 }
 
 /* DATA REFERENCE */
@@ -605,8 +600,8 @@
 .FieldList-grouping-trigger {
   display: flex;
   visibility: hidden;
-  border-left: 2px solid color-mod(var(--filter-color) alpha(-90%));
-  color: color-mod(var(--color-text-white) alpha(-50%));
+  border-left: 2px solid color(var(--filter-color) alpha(-90%));
+  color: color(var(--color-text-white) alpha(-50%));
 }
 
 .List-item:not(.List-item--disabled):hover .FieldList-grouping-trigger,
@@ -661,7 +656,7 @@
 .sql-code {
   font-size: 90%;
   line-height: 1.2em;
-  font-family: "Courier 10 Pitch", Courier, monospace;
+  font-family: Arial, "Courier 10 Pitch", Courier, monospace;
   white-space: pre;
   white-space: pre-wrap;
   white-space: -moz-pre-wrap;
@@ -689,4 +684,149 @@
 
 .ParameterValuePickerNoPopover input::-webkit-input-placeholder {
   color: var(--color-text-medium);
+}
+
+.Question {
+  display: flex;
+  height: calc(100vh - 60px);
+  min-width: 1024px;
+}
+
+.Question-side {
+  width: 310px;
+  transition: 0.3s width;
+  background: white;
+  height: 100%;
+  border-right: 1px solid var(--color-border);
+  overflow-x: hidden;
+}
+
+.Question-main {
+  display: flex;
+  flex: 1;
+  position: relative;
+}
+
+.Question-main--empty {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  height: 100%;
+  min-height: 100px;
+}
+
+.Question-main--empty img {
+  width: 300px;
+}
+
+.Question-main--empty h3 {
+  font-size: 36px;
+  font-weight: bold;
+  color: #3d414c;
+  margin-top: 32px;
+}
+
+.Question-main--empty p {
+  color: #3d414c;
+  text-align: center;
+  line-height: 23px;
+  font-size: 20px;
+  margin: 12px 0;
+}
+
+.Question-main--empty-button {
+  height: 48px;
+  color: #3434b2;
+  border-radius: 4px;
+  border-color: #3434b2;
+  background-color: transparent;
+  font-weight: 700;
+  font-size: 16px;
+}
+
+.Question-header-btn {
+  width: 32px;
+  height: 32px;
+  font-size: 14px;
+  color: #7a819b;
+  border-radius: 4px;
+}
+
+.Question-header-btn-new {
+  height: 32px;
+  font-size: 14px;
+  color: #7a819b;
+  border-radius: 4px;
+  padding: 0 var(--footprint-spacing-s);
+}
+
+.Question-header-btn-with-text {
+  height: 32px;
+  font-size: 14px;
+  color: #7a819b;
+  border-radius: 4px;
+  padding: 0px 10px;
+}
+
+.Question-header-btns {
+  display: flex;
+  align-items: center;
+}
+
+.Question-header-btns .Question-header-btn:first-child {
+  border-top-right-radius: 0;
+  border-bottom-right-radius: 0;
+  border-right: 0;
+}
+
+.Question-header-btns .Question-header-btn:last-child {
+  border-top-left-radius: 0;
+  border-bottom-left-radius: 0;
+  border-left: 0;
+}
+
+.Question-header-btn--auto {
+  width: auto;
+  padding: 0 10px;
+}
+
+.Question-header-btn--full {
+  width: 100%;
+  padding: 0;
+  border: 0;
+  margin-bottom: 5px;
+}
+
+.Question-header-btn--full > div {
+  justify-content: flex-start;
+}
+
+.Question-header-btn--primary {
+  background-color: #3434b2;
+  border: 0;
+  color: #fff;
+}
+
+.Question-header-btn--primary-new {
+  background-color: #3434b2;
+  color: #fff;
+}
+
+.Question-header-btn--primary-new svg {
+  color: #fff;
+}
+
+.Question-header-btn--primary svg {
+  color: #fff;
+}
+
+.Question-header-btn--info {
+  background-color: #acacb2;
+  border: 0;
+}
+
+.Question-header-btn--info svg {
+  color: #fff;
 }

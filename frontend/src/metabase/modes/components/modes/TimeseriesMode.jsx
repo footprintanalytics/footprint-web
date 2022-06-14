@@ -1,6 +1,4 @@
-/* eslint-disable react/prop-types */
 import React from "react";
-import { t } from "ttag";
 
 // import TimeseriesGroupingWidget
 //     from "metabase/modes/components/TimeseriesGroupingWidget";
@@ -11,20 +9,31 @@ import { getDefaultDrills } from "../drill";
 import PivotByCategoryDrill from "../drill/PivotByCategoryDrill";
 import PivotByLocationDrill from "../drill/PivotByLocationDrill";
 
+import type { QueryMode } from "metabase-types/types/Visualization";
+import type {
+  Card as CardObject,
+  DatasetQuery,
+} from "metabase-types/types/Card";
 import TimeseriesGroupingWidget from "metabase/modes/components/TimeseriesGroupingWidget";
 
-export const TimeseriesModeFooter = props => {
+type Props = {
+  lastRunCard: CardObject,
+  setDatasetQuery: (datasetQuery: DatasetQuery) => void,
+  runQuestionQuery: () => void,
+};
+
+export const TimeseriesModeFooter = (props: Props) => {
   return (
     <div className="flex layout-centered">
-      <span className="mr1">{t`View`}</span>
+      <span className="mr1">View</span>
       <TimeseriesFilterWidget {...props} card={props.lastRunCard} />
-      <span className="mx1">{t`by`}</span>
+      <span className="mx1">by</span>
       <TimeseriesGroupingWidget {...props} card={props.lastRunCard} />
     </div>
   );
 };
 
-const TimeseriesMode = {
+const TimeseriesMode: QueryMode = {
   name: "timeseries",
   drills: () => [
     PivotByCategoryDrill,

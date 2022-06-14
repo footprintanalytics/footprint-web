@@ -1,13 +1,9 @@
 (ns metabase.driver.mongo.query-processor-test
-  (:require [clojure.set :as set]
-            [clojure.test :refer :all]
+  (:require [clojure.test :refer :all]
             [metabase.driver.mongo.query-processor :as mongo.qp]
-            [metabase.models :refer [Field Table]]
             [metabase.query-processor :as qp]
             [metabase.test :as mt]
-            [metabase.util :as u]
-            [schema.core :as s]
-            [toucan.db :as db]))
+            [schema.core :as s]))
 
 (deftest query->collection-name-test
   (testing "query->collection-name"
@@ -48,7 +44,7 @@
                                 {"$project" {"_id" false, "count" true}}]
                   :collection  "attempts"
                   :mbql?       true}
-                 (qp/compile
+                 (qp/query->native
                   (mt/mbql-query attempts
                     {:aggregation [[:count]]
                      :filter      [:time-interval $datetime :last :month]})))))))))
@@ -69,7 +65,7 @@
                                   {"$project" {"_id" false, "count" true}}]
                     :collection  "attempts"
                     :mbql?       true}
-                   (qp/compile
+                   (qp/query->native
                     (mt/mbql-query attempts
                       {:aggregation [[:count]]
                        :filter      [:time-interval $datetime :last :month]}))))
@@ -138,20 +134,7 @@
                  (mongo.qp/mbql->native
                   (mt/mbql-query tips
                     {:aggregation [[:count]]
-                     :breakout    [$tips.source.username]}))))
-          (testing "Parent fields are removed from projections when child fields are included (#19135)"
-            (let [table       (Table :db_id (mt/id))
-                  fields      (db/select Field :table_id (u/the-id table))
-                  projections (-> (mongo.qp/mbql->native
-                                    (mt/mbql-query tips {:fields (mapv (fn [f]
-                                                                         [:field (u/the-id f) nil])
-                                                                       fields)}))
-                                  :projections
-                                  set)]
-              ;; the "source", "url", and "venue" fields should NOT have been chosen as projections, since they have
-              ;; at least one child field selected as a projection, which is not allowed as of MongoDB 4.4
-              ;; see docstring on mongo.qp/remove-parent-fields for full details
-              (is (empty? (set/intersection projections #{"source" "url" "venue"}))))))))))
+                     :breakout    [$tips.source.username]})))))))))
 
 (deftest multiple-distinct-count-test
   (mt/test-driver :mongo
@@ -164,7 +147,7 @@
                {"$limit" 5}],
               :collection  "venues"
               :mbql?       true}
-             (qp/compile
+             (qp/query->native
               (mt/mbql-query venues
                 {:aggregation [[:distinct $name]
                                [:distinct $price]]
@@ -179,7 +162,7 @@
       (is (= {"bob" "$latitude", "cobb" "$name"}
              (extract-projections
                ["bob" "cobb"]
-               (qp/compile
+               (qp/query->native
                  (mt/mbql-query venues
                                 {:fields      [[:expression "bob"] [:expression "cobb"]]
                                  :expressions {:bob   [:field $latitude nil]
@@ -187,10 +170,10 @@
                                  :limit       5}))))))
     (testing "Should be able to deal with 1-arity functions"
       (is (= {"cobb" {"$toUpper" "$name"},
-              "bob" {"$abs" "$latitude"}}
+              "bob" {"$abs" "$latitude"} }
              (extract-projections
                ["bob" "cobb"]
-               (qp/compile
+               (qp/query->native
                  (mt/mbql-query venues
                                 {:filters     [[:expression "bob"] [:expression "cobb"]]
                                  :expressions {:bob   [:abs $latitude]
@@ -200,7 +183,7 @@
       (is (= {"bob" {"$add" ["$price" 300]}}
              (extract-projections
                ["bob"]
-               (qp/compile
+               (qp/query->native
                  (mt/mbql-query venues
                                 {:filters     [[:expression "bob"] [:expression "cobb"]]
                                  :expressions {:bob   [:+ $price 300]}
@@ -209,7 +192,7 @@
       (is (= {"bob" {"$abs" {"$subtract" ["$price" 300]}}}
              (extract-projections
                ["bob"]
-               (qp/compile
+               (qp/query->native
                  (mt/mbql-query venues
                                 {:filters     [[:expression "bob"] [:expression "cobb"]]
                                  :expressions {:bob   [:abs [:- $price 300]]}
@@ -219,7 +202,7 @@
               "cobb" {"$ceil" {"$abs" "$latitude"}}}
              (extract-projections
                ["bob" "cobb"]
-               (qp/compile
+               (qp/query->native
                  (mt/mbql-query venues
                                 {:filters     [[:expression "bob"] [:expression "cobb"]]
                                  :expressions {:bob  [:abs $latitude]
@@ -229,24 +212,10 @@
       (is (= {"bob" {"$ifNull" ["$latitude" "$price"]}}
              (extract-projections
                ["bob"]
-               (qp/compile
+               (qp/query->native
                  (mt/mbql-query venues
                                 {:expressions {:bob [:coalesce [:field $latitude nil] [:field $price nil]]}
-                                 :limit       5}))))))
-
-    (testing "Should be able to deal with group by expressions"
-      (is (= {:collection "venues",
-              :mbql? true,
-              :projections ["asdf" "count"],
-              :query [{"$group" {"_id" {"asdf" "$price"}, "count" {"$sum" 1}}}
-                      {"$sort" {"_id" 1}}
-                      {"$project" {"_id" false, "asdf" "$_id.asdf", "count" true}}
-                      {"$sort" {"asdf" 1}}]}
-             (qp/compile
-               (mt/mbql-query venues
-                              {:expressions {:asdf ["field" $price nil]},
-                               :aggregation [["count"]],
-                               :breakout [["expression" "asdf"]]})))))))
+                                 :limit       5}))))))))
 
 (deftest compile-time-interval-test
   (mt/test-driver :mongo
@@ -268,7 +237,7 @@
                   {"$sort" {"date~~~day" 1}}
                   {"$limit" 1048575}]
                  (:query
-                  (qp/compile
+                  (qp/query->native
                    (mt/mbql-query checkins
                      {:filter   [:time-interval $date -4 :month]
                       :breakout [[:datetime-field $date :day]]}))))))))))

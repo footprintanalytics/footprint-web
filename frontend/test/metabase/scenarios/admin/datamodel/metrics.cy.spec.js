@@ -1,80 +1,13 @@
-import {
-  restore,
-  popover,
-  modal,
-  openOrdersTable,
-  visualize,
-  summarize,
-} from "__support__/e2e/cypress";
-import { SAMPLE_DATABASE } from "__support__/e2e/cypress_sample_database";
+import { restore, popover, modal } from "__support__/e2e/cypress";
+import { SAMPLE_DATASET } from "__support__/e2e/cypress_sample_dataset";
 
-const { ORDERS, ORDERS_ID } = SAMPLE_DATABASE;
+const { ORDERS, ORDERS_ID } = SAMPLE_DATASET;
 
 describe("scenarios > admin > datamodel > metrics", () => {
   beforeEach(() => {
     restore();
     cy.signInAsAdmin();
     cy.viewport(1400, 860);
-  });
-
-  it("should be possible to sort by metric (metabase#8283)", () => {
-    cy.request("POST", "/api/metric", {
-      name: "Revenue",
-      description: "Sum of orders subtotal",
-      table_id: ORDERS_ID,
-      definition: {
-        "source-table": ORDERS_ID,
-        aggregation: [["sum", ["field", ORDERS.SUBTOTAL, null]]],
-      },
-    });
-
-    openOrdersTable({ mode: "notebook" });
-
-    summarize({ mode: "notebook" });
-    cy.findByText("Common Metrics").click();
-    cy.findByText("Revenue").click();
-
-    cy.findByText("Pick a column to group by").click();
-    cy.findByText("Created At").click();
-
-    cy.findByText("Sort").click();
-
-    // Sorts ascending by default
-    popover()
-      .contains("Revenue")
-      .click();
-
-    // Let's make sure it's possible to sort descending as well
-    cy.icon("arrow_up").click();
-
-    cy.icon("arrow_down")
-      .parent()
-      .contains("Revenue");
-
-    visualize();
-    // Visualization will render line chart by default. Switch to the table.
-    cy.icon("table2").click();
-
-    cy.findAllByRole("grid").as("table");
-    cy.get("@table")
-      .first()
-      .as("tableHeader")
-      .within(() => {
-        cy.get(".cellData")
-          .eq(1)
-          .invoke("text")
-          .should("eq", "Revenue");
-      });
-
-    cy.get("@table")
-      .last()
-      .as("tableBody")
-      .within(() => {
-        cy.get(".cellData")
-          .eq(1)
-          .invoke("text")
-          .should("eq", "50,072.98");
-      });
   });
 
   describe("with no metrics", () => {
@@ -85,49 +18,27 @@ describe("scenarios > admin > datamodel > metrics", () => {
       );
     });
 
+    it.skip("should have 'Custom expression' in a filter list (metabase#13069)", () => {
+      cy.visit("/admin/datamodel/metrics");
+      cy.findByText("New metric").click();
+      cy.findByText("Select a table").click();
+      popover().within(() => {
+        cy.findByText("Orders").click();
+      });
+      cy.findByText("Add filters to narrow your answer").click();
+
+      cy.log("Fails in v0.36.0 and v0.36.3. It exists in v0.35.4");
+      popover().within(() => {
+        cy.findByText("Custom Expression");
+      });
+    });
+
     it("should show how to create metrics", () => {
       cy.visit("/reference/metrics");
       cy.findByText(
         "Metrics are the official numbers that your team cares about",
       );
       cy.findByText("Learn how to create metrics");
-    });
-
-    it("custom expression aggregation should work in metrics (metabase#22700)", () => {
-      cy.intercept("POST", "/api/dataset").as("dataset");
-
-      const customExpression = "Count / Distinct([Product ID])";
-
-      cy.visit("/admin/datamodel/metrics");
-
-      cy.button("New metric").click();
-      cy.findByText("Select a table").click();
-      cy.findByText("Orders").click();
-      // It sees that there is one dataset query for each of the fields:
-      // `data`, `filtered by` and `view`
-      cy.wait(["@dataset", "@dataset", "@dataset"]);
-
-      cy.findByText("Count").click();
-      popover()
-        .contains("Custom Expression")
-        .click();
-
-      cy.get(".ace_text-input")
-        .click()
-        .type(`{selectall}{del}${customExpression}`)
-        .blur();
-
-      cy.findByPlaceholderText("Name (required)").type("Foo");
-
-      cy.button("Done").click();
-      cy.wait("@dataset");
-
-      // The test should fail on this step first
-      cy.findByText("Result: 93.8");
-
-      // Let's make sure the custom expression is still preserved
-      cy.findByText("Foo").click();
-      cy.get(".ace_content").should("contain", customExpression);
     });
   });
 
@@ -284,22 +195,6 @@ describe("scenarios > admin > datamodel > metrics", () => {
 
       cy.findByText("13022_Metric"); // Name
       cy.findByText("Orders, CE"); // Definition
-    });
-
-    it("should show CE that uses 'AND/OR' (metabase#13069, metabase#13070)", () => {
-      cy.visit("/admin/datamodel/metrics");
-      cy.findByText("New metric").click();
-      cy.findByText("Select a table").click();
-      cy.findByText("Orders").click();
-      cy.findByText("Add filters to narrow your answer").click();
-      cy.findByText("Custom Expression").click();
-      cy.get(".ace_text-input")
-        .clear()
-        .type("[ID] > 0 OR [ID] < 9876543210");
-      cy.button("Done").click();
-
-      cy.log("**Assert that there is a filter text visible**");
-      cy.findByText("ID > 0 OR ID < 9876543210");
     });
   });
 });

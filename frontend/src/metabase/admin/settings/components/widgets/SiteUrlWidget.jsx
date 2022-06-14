@@ -1,14 +1,15 @@
 import React, { Component } from "react";
-import PropTypes from "prop-types";
 
 import InputWithSelectPrefix from "metabase/components/InputWithSelectPrefix";
 
-const propTypes = {
-  setting: PropTypes.object.isRequired,
-  onChange: PropTypes.func.isRequired,
+type Props = {
+  onChange: (value: any) => void,
+  setting: { value: string },
 };
 
 export default class SiteUrlWidget extends Component {
+  props: Props;
+
   render() {
     const { setting, onChange } = this.props;
     return (
@@ -18,10 +19,7 @@ export default class SiteUrlWidget extends Component {
         prefixes={["https://", "http://"]}
         defaultPrefix="http://"
         caseInsensitivePrefix={true}
-        placeholder={setting.placeholder}
       />
     );
   }
 }
-
-SiteUrlWidget.propTypes = propTypes;

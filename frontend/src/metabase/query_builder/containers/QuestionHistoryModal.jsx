@@ -4,7 +4,10 @@ import PropTypes from "prop-types";
 import Questions from "metabase/entities/questions";
 import HistoryModal from "metabase/containers/HistoryModal";
 
-class QuestionHistoryModalInner extends React.Component {
+@Questions.load({
+  id: (state, props) => props.questionId,
+})
+class QuestionHistoryModal extends React.Component {
   static propTypes = {
     question: PropTypes.object.isRequired,
     questionId: PropTypes.number.isRequired,
@@ -16,7 +19,7 @@ class QuestionHistoryModalInner extends React.Component {
     const { question, onClose, onReverted } = this.props;
     return (
       <HistoryModal
-        modelType="card"
+        modelType={"card"}
         modelId={question.id}
         canRevert={question.can_write}
         onClose={onClose}
@@ -25,9 +28,5 @@ class QuestionHistoryModalInner extends React.Component {
     );
   }
 }
-
-const QuestionHistoryModal = Questions.load({
-  id: (state, props) => props.questionId,
-})(QuestionHistoryModalInner);
 
 export default QuestionHistoryModal;

@@ -2,13 +2,14 @@
 import React from "react";
 
 import { t } from "ttag";
+import cx from "classnames";
+import { Box } from "grid-styled";
 
-import Button from "metabase/core/components/Button";
+import Button from "metabase/components/Button";
 
 import NotebookSteps from "./NotebookSteps";
-import { NotebookRoot } from "./Notebook.styled";
 
-export default function Notebook({ className, ...props }) {
+export default React.memo(function Notebook({ className, ...props }) {
   const {
     question,
     isDirty,
@@ -16,7 +17,6 @@ export default function Notebook({ className, ...props }) {
     isResultDirty,
     runQuestionQuery,
     setQueryBuilderMode,
-    hasVisualizeButton = true,
   } = props;
 
   // When switching out of the notebook editor, cleanupQuestion accounts for
@@ -41,16 +41,17 @@ export default function Notebook({ className, ...props }) {
     if (isResultDirty) {
       await runQuestionQuery();
     }
+    props.onOpenChartType();
   }
 
   return (
-    <NotebookRoot className={className}>
+    <Box className={cx(className, "relative mb4")} px={[2, 3]}>
       <NotebookSteps {...props} />
-      {hasVisualizeButton && isRunnable && (
+      {isRunnable && (
         <Button medium primary style={{ minWidth: 220 }} onClick={visualize}>
           {t`Visualize`}
         </Button>
       )}
-    </NotebookRoot>
+    </Box>
   );
-}
+});

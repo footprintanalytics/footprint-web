@@ -14,10 +14,13 @@ it("should display collection name", () => {
 });
 
 describe("description tooltip", () => {
+  const ariaLabel = "info icon";
+
   describe("should not be displayed", () => {
     it("if description is not received", () => {
-      const { container } = render(<Header collection={collection} />);
-      expect(container.textContent).toEqual("Name");
+      render(<Header collection={collection} />);
+
+      expect(screen.queryByLabelText(ariaLabel)).not.toBeInTheDocument();
     });
   });
 
@@ -27,7 +30,7 @@ describe("description tooltip", () => {
 
       render(<Header collection={{ ...collection, description }} />);
 
-      screen.getByText(description);
+      screen.getByLabelText(ariaLabel);
     });
   });
 });
@@ -75,8 +78,8 @@ describe("permissions link", () => {
   });
 });
 
-describe("link to add new collection items", () => {
-  const ariaLabel = "add icon";
+describe("link to edit collection", () => {
+  const ariaLabel = "pencil icon";
 
   describe("should not be displayed", () => {
     it("when no detail is passed in the collection to determine if user can change collection", () => {
@@ -101,8 +104,8 @@ describe("link to add new collection items", () => {
   });
 });
 
-describe("link to add new collection items", () => {
-  const ariaLabel = "add icon";
+describe("link to create a new collection", () => {
+  const ariaLabel = "new_folder icon";
 
   describe("should not be displayed", () => {
     it("if user is not allowed to change collection", () => {

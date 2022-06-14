@@ -1,57 +1,51 @@
 import React from "react";
-import { renderWithProviders, screen } from "__support__/ui";
+import { Provider } from "react-redux";
+import { reducer as form } from "redux-form";
+import { render, screen } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import mock from "xhr-mock";
 
 import SaveQuestionModal from "metabase/containers/SaveQuestionModal";
 import Question from "metabase-lib/lib/Question";
 import MetabaseSettings from "metabase/lib/settings";
+import { PLUGIN_CACHING } from "metabase/plugins";
 
 import {
-  SAMPLE_DATABASE,
+  SAMPLE_DATASET,
   ORDERS,
   metadata,
-} from "__support__/sample_database_fixture";
-import { setupEnterpriseTest } from "__support__/enterprise";
+} from "__support__/sample_dataset_fixture";
+import { getStore } from "__support__/entities-store";
 
 function mockCachingEnabled(enabled = true) {
-  const original = MetabaseSettings.get.bind(MetabaseSettings);
+  const original = MetabaseSettings.get;
   const spy = jest.spyOn(MetabaseSettings, "get");
   spy.mockImplementation(key => {
     if (key === "enable-query-caching") {
       return enabled;
-    }
-    if (key === "application-name") {
-      return "Metabase Test";
-    }
-    if (key === "version") {
-      return { tag: "" };
-    }
-    if (key === "is-hosted?") {
-      return false;
-    }
-    if (key === "enable-enhancements?") {
-      return false;
     }
     return original(key);
   });
 }
 
 const renderSaveQuestionModal = (question, originalQuestion) => {
+  const store = getStore({ form });
   const onCreateMock = jest.fn(() => Promise.resolve());
   const onSaveMock = jest.fn(() => Promise.resolve());
   const onCloseMock = jest.fn();
-  renderWithProviders(
-    <SaveQuestionModal
-      card={question.card()}
-      originalCard={originalQuestion && originalQuestion.card()}
-      tableMetadata={question.table()}
-      onCreate={onCreateMock}
-      onSave={onSaveMock}
-      onClose={onCloseMock}
-    />,
+  render(
+    <Provider store={store}>
+      <SaveQuestionModal
+        card={question.card()}
+        originalCard={originalQuestion && originalQuestion.card()}
+        tableMetadata={question.table()}
+        onCreate={onCreateMock}
+        onSave={onSaveMock}
+        onClose={onCloseMock}
+      />
+    </Provider>,
   );
-  return { onSaveMock, onCreateMock, onCloseMock };
+  return { store, onSaveMock, onCreateMock, onCloseMock };
 };
 
 const EXPECTED_SUGGESTED_NAME = "Orders, Count";
@@ -61,7 +55,6 @@ function getQuestion({
   name = "Q1",
   description = "Example",
   collection_id = 12,
-  can_write = true,
 } = {}) {
   const extraCardParams = {};
 
@@ -70,7 +63,6 @@ function getQuestion({
     extraCardParams.name = name;
     extraCardParams.description = description;
     extraCardParams.collection_id = collection_id;
-    extraCardParams.can_write = can_write;
   }
 
   return new Question(
@@ -80,7 +72,7 @@ function getQuestion({
       visualization_settings: {},
       dataset_query: {
         type: "query",
-        database: SAMPLE_DATABASE.id,
+        database: SAMPLE_DATASET.id,
         query: {
           "source-table": ORDERS.id,
           aggregation: [["count"]],
@@ -198,7 +190,7 @@ describe("SaveQuestionModal", () => {
         ...question.card(),
         name: EXPECTED_SUGGESTED_NAME,
         description: null,
-        collection_id: null,
+        collection_id: undefined,
       });
     });
 
@@ -214,7 +206,7 @@ describe("SaveQuestionModal", () => {
         ...question.card(),
         name: "My favorite orders",
         description: "So many of them",
-        collection_id: null,
+        collection_id: undefined,
       });
     });
 
@@ -233,25 +225,7 @@ describe("SaveQuestionModal", () => {
         ...question.card(),
         name: "My favorite orders",
         description: "So many of them",
-        collection_id: null,
-      });
-    });
-
-    it('should correctly handle saving a question in the "root" collection', () => {
-      const question = getQuestion({
-        collection_id: "root",
-      });
-      const { onCreateMock } = renderSaveQuestionModal(question);
-
-      fillForm({ name: "foo", description: "bar" });
-      userEvent.click(screen.getByText("Save"));
-
-      expect(onCreateMock).toHaveBeenCalledTimes(1);
-      expect(onCreateMock).toHaveBeenCalledWith({
-        ...question.card(),
-        name: "foo",
-        description: "bar",
-        collection_id: null,
+        collection_id: undefined,
       });
     });
 
@@ -488,23 +462,6 @@ describe("SaveQuestionModal", () => {
 
       expect(screen.getByRole("button", { name: "Save" })).toBeEnabled();
     });
-
-    it("should not allow overwriting when user does not have curate permission on collection (metabase#20717)", () => {
-      const originalQuestion = getQuestion({
-        isSaved: true,
-        name: "Beautiful Orders",
-        can_write: false,
-      });
-      const dirtyQuestion = getDirtyQuestion(originalQuestion);
-      renderSaveQuestionModal(dirtyQuestion, originalQuestion);
-
-      expect(
-        screen.queryByText("Save as new question"),
-      ).not.toBeInTheDocument();
-      expect(
-        screen.queryByText(/Replace original question, ".*"/),
-      ).not.toBeInTheDocument();
-    });
   });
 
   it("should call onClose when Cancel button is clicked", () => {
@@ -525,7 +482,7 @@ describe("SaveQuestionModal", () => {
     });
 
     const question = Question.create({
-      databaseId: SAMPLE_DATABASE.id,
+      databaseId: SAMPLE_DATASET.id,
       tableId: ORDERS.id,
       metadata,
     })
@@ -545,7 +502,14 @@ describe("SaveQuestionModal", () => {
 
     describe("EE", () => {
       beforeEach(() => {
-        setupEnterpriseTest();
+        PLUGIN_CACHING.cacheTTLFormField = {
+          name: "cache_ttl",
+          type: "integer",
+        };
+      });
+
+      afterEach(() => {
+        PLUGIN_CACHING.cacheTTLFormField = null;
       });
 
       it("is not shown", () => {

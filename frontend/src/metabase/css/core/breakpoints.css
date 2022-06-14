@@ -11,3 +11,6 @@
 @custom-media --breakpoint-max-md (max-width: 60em);
 @custom-media --breakpoint-max-lg (max-width: 80em);
 @custom-media --breakpoint-max-xl (max-width: 120em);
+
+@custom-media --footprint-breakpoint-max-mobile (max-width: 750px);
+@custom-media --footprint-breakpoint-max-pad (max-width: 1200px);

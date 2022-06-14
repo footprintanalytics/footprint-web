@@ -1,5 +1,5 @@
-import { restore, visitDashboard } from "__support__/e2e/cypress";
-import { SAMPLE_DATABASE } from "__support__/e2e/cypress_sample_database";
+import { restore } from "__support__/e2e/cypress";
+import { SAMPLE_DATASET } from "__support__/e2e/cypress_sample_dataset";
 
 const {
   ORDERS,
@@ -8,7 +8,7 @@ const {
   PRODUCTS_ID,
   REVIEWS,
   REVIEWS_ID,
-} = SAMPLE_DATABASE;
+} = SAMPLE_DATASET;
 
 describe("scenarios > dashboard > dashboard cards > click behavior", () => {
   beforeEach(() => {
@@ -16,7 +16,7 @@ describe("scenarios > dashboard > dashboard cards > click behavior", () => {
     cy.signInAsAdmin();
   });
 
-  it("should show filters defined on a question with filter pass-thru (metabase#15993)", () => {
+  it.skip("should show filters defined on a question with filter pass-thru (metabase#15993)", () => {
     cy.createQuestion({
       name: "15993",
       query: {
@@ -47,7 +47,15 @@ describe("scenarios > dashboard > dashboard cards > click behavior", () => {
                 ],
               });
 
-              visitDashboard(dashboardId);
+              cy.visit(`/dashboard/${dashboardId}`);
+
+              cy.intercept("POST", `/api/card/${question1Id}/query`).as(
+                "cardQuery",
+              );
+
+              cy.intercept("POST", `/api/card/${nativeId}/query`).as(
+                "nativeQuery",
+              );
             });
           });
         },
@@ -55,11 +63,12 @@ describe("scenarios > dashboard > dashboard cards > click behavior", () => {
     });
 
     // Drill-through
-    cy.findAllByTestId("cell-data")
-      .get(".link")
+    cy.wait("@nativeQuery");
+    cy.get(".cellData .link")
       .contains("0")
       .realClick();
 
+    cy.wait("@cardQuery");
     cy.contains("117.03").should("not.exist"); // Total for the order in which quantity wasn't 0
     cy.findByText("Quantity is equal to 0");
 
@@ -124,12 +133,15 @@ describe("scenarios > dashboard > dashboard cards > click behavior", () => {
             ],
           });
 
-          visitDashboard(dashboard_id);
+          cy.visit(`/dashboard/${dashboard_id}`);
+
+          cy.intercept("POST", `/api/card/${card_id}/query`).as("cardQuery");
         },
       );
     });
 
-    cy.findAllByTestId("cell-data")
+    cy.wait("@cardQuery");
+    cy.get(".cellData")
       .contains("5")
       .first()
       .click();

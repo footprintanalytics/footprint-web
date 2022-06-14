@@ -1,12 +1,11 @@
 import {
   restore,
-  describeEE,
+  describeWithToken,
   mockSessionProperty,
   modal,
-  visitQuestion,
 } from "__support__/e2e/cypress";
 
-describeEE("scenarios > question > caching", () => {
+describeWithToken("scenarios > question > caching", () => {
   beforeEach(() => {
     restore();
     mockSessionProperty("enable-query-caching", true);
@@ -15,7 +14,7 @@ describeEE("scenarios > question > caching", () => {
 
   it("can set cache ttl for a saved question", () => {
     cy.intercept("PUT", "/api/card/1").as("updateQuestion");
-    visitQuestion(1);
+    cy.visit("/question/1");
 
     openEditingModalForm();
     modal().within(() => {
@@ -53,4 +52,5 @@ describeEE("scenarios > question > caching", () => {
 
 function openEditingModalForm() {
   cy.findByTestId("saved-question-header-button").click();
+  cy.findByTestId("edit-details-button").click();
 }

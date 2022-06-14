@@ -11,6 +11,7 @@
            org.apache.sshd.client.SshClient
            [org.apache.sshd.common.config.keys FilePasswordProvider FilePasswordProvider$ResourceDecodeResult]
            [org.apache.sshd.common.session
+            SessionHeartbeatController
             SessionHeartbeatController$HeartbeatType
             SessionHolder]
            org.apache.sshd.common.util.GenericUtils
@@ -50,7 +51,6 @@
   callers responsibility to call `close-tunnel` on the returned connection object."
   [{:keys [^String tunnel-host ^Integer tunnel-port ^String tunnel-user tunnel-pass tunnel-private-key
            tunnel-private-key-passphrase host port]}]
-  {:pre [(integer? port)]}
   (let [^ConnectFuture conn-future (.connect client tunnel-user tunnel-host tunnel-port)
         ^SessionHolder conn-status (.verify conn-future default-ssh-timeout)
         hb-sec                     (public-settings/ssh-heartbeat-interval-sec)
@@ -68,6 +68,60 @@
     (log/trace (u/format-color 'cyan "creating ssh tunnel (heartbeating every %d seconds) %s@%s:%s -L %s:%s:%s"
                                hb-sec tunnel-user tunnel-host tunnel-port input-port host port))
     [session tracker]))
+
+(def ssh-tunnel-preferences
+  "Configuration parameters to include in the add driver page on drivers that
+  support ssh tunnels"
+  [{:name         "tunnel-enabled"
+    :display-name "Use SSH tunnel"
+    :placeholder  "Enable this ssh tunnel?"
+    :type         :boolean
+    :default      false}
+   {:name         "tunnel-host"
+    :display-name "SSH tunnel host"
+    :placeholder  "What hostname do you use to connect to the SSH tunnel?"
+    :required     true
+    :visible-if   {"tunnel-enabled" true}}
+   {:name         "tunnel-port"
+    :display-name "SSH tunnel port"
+    :type         :integer
+    :default      22
+    :required     false
+    :visible-if   {"tunnel-enabled" true}}
+   {:name         "tunnel-user"
+    :display-name "SSH tunnel username"
+    :placeholder  "What username do you use to login to the SSH tunnel?"
+    :required     true
+    :visible-if   {"tunnel-enabled" true}}
+   ;; this is entirely a UI flag
+   {:name         "tunnel-auth-option"
+    :display-name "SSH Authentication"
+    :type         :select
+    :options      [{:name "SSH Key" :value "ssh-key"}
+                   {:name "Password" :value "password"}]
+    :default      "ssh-key"
+    :visible-if   {"tunnel-enabled" true}}
+   {:name         "tunnel-pass"
+    :display-name "SSH tunnel password"
+    :type         :password
+    :placeholder  "******"
+    :visible-if   {"tunnel-auth-option" "password"}}
+   {:name         "tunnel-private-key"
+    :display-name "SSH private key to connect to the tunnel"
+    :type         :string
+    :placeholder  "Paste the contents of an ssh private key here"
+    :required     true
+    :visible-if   {"tunnel-auth-option" "ssh-key"}}
+   {:name         "tunnel-private-key-passphrase"
+    :display-name "Passphrase for SSH private key"
+    :type         :password
+    :placeholder  "******"
+    :visible-if   {"tunnel-auth-option" "ssh-key"}}])
+
+(defn with-tunnel-config
+  "Add preferences for ssh tunnels to a drivers :connection-properties"
+  [driver-options]
+  (concat driver-options ssh-tunnel-preferences))
 
 (defn use-ssh-tunnel?
   "Is the SSH tunnel currently turned on for these connection details"
@@ -110,7 +164,7 @@
         (ssh-tunnel-open? db-details)
         ;; tunnel in use, and is open
         db-details
-        :else
+        :default
         ;; tunnel in use, and is not open
         (include-ssh-tunnel! db-details)))
 

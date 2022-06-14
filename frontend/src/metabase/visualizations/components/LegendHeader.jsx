@@ -1,17 +1,20 @@
 /* eslint-disable react/prop-types */
 import React, { Component } from "react";
 import PropTypes from "prop-types";
-import cx from "classnames";
-import { getAccentColors } from "metabase/lib/colors/groups";
-import Icon, { iconPropTypes } from "metabase/components/Icon";
-import ExplicitSize from "../../components/ExplicitSize";
-import LegendItem from "./LegendItem";
 import styles from "./Legend.css";
 
-const DEFAULT_COLORS = getAccentColors();
+import ExplicitSize from "../../components/ExplicitSize";
+import Icon, { iconPropTypes } from "metabase/components/Icon";
+import LegendItem from "./LegendItem";
+
+import cx from "classnames";
+
+import { normal } from "metabase/lib/colors";
+const DEFAULT_COLORS = Object.values(normal);
 const MIN_WIDTH_PER_SERIES = 100;
 
-class LegendHeader extends Component {
+@ExplicitSize()
+export default class LegendHeader extends Component {
   static propTypes = {
     series: PropTypes.array.isRequired,
     hovered: PropTypes.object,
@@ -36,7 +39,7 @@ class LegendHeader extends Component {
     const {
       series,
       hovered,
-
+      className,
       actionButtons,
       icon,
       onHoverChange,
@@ -58,7 +61,8 @@ class LegendHeader extends Component {
 
     const showDots = !!onAddSeries || series.length > 1;
     const isNarrow = width < MIN_WIDTH_PER_SERIES * series.length;
-    const showTitles = !showDots || !isNarrow;
+    // const showTitles = !showDots || !isNarrow;
+    const showTitles = true;
 
     const seriesSettings =
       settings.series && series.map(single => settings.series(single));
@@ -74,7 +78,8 @@ class LegendHeader extends Component {
       <div
         className={cx(
           styles.LegendHeader,
-          "Card-title mx1 flex flex-no-shrink flex-row align-center",
+          "Card-title flex flex-no-shrink align-center flex-wrap",
+          className,
         )}
       >
         {series.map((s, index) => [
@@ -90,6 +95,7 @@ class LegendHeader extends Component {
             isMuted={
               hovered && hovered.index != null && index !== hovered.index
             }
+            isNarrow={isNarrow}
             onMouseEnter={() => onHoverChange && onHoverChange({ index })}
             onMouseLeave={() => onHoverChange && onHoverChange(null)}
             onClick={
@@ -99,6 +105,7 @@ class LegendHeader extends Component {
                 ? e =>
                     onVisualizationClick({
                       ...s.clicked,
+                      seriesIndex: index,
                       element: e.currentTarget,
                     })
                 : onChangeCardAndRun
@@ -144,5 +151,3 @@ class LegendHeader extends Component {
     );
   }
 }
-
-export default ExplicitSize({ refreshMode: "debounce" })(LegendHeader);

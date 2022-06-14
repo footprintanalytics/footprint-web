@@ -1,7 +1,3 @@
----
-title: My dashboard is slow
----
-
 # My dashboard is slow
 
 You have created a dashboard that shows the right things but:

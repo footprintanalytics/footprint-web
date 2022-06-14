@@ -2,12 +2,11 @@
 import React, { Component } from "react";
 import { Link } from "react-router";
 import { t } from "ttag";
-import cx from "classnames";
 
 import Icon from "metabase/components/Icon";
 import QuestionPicker from "metabase/containers/QuestionPicker";
 import PopoverWithTrigger from "metabase/components/PopoverWithTrigger";
-import SelectButton from "metabase/core/components/SelectButton";
+import SelectButton from "metabase/components/SelectButton";
 import LoadingSpinner from "metabase/components/LoadingSpinner";
 
 import Questions from "metabase/entities/questions";
@@ -15,7 +14,11 @@ import * as Urls from "metabase/lib/urls";
 import { formatDateTimeWithUnit } from "metabase/lib/formatting";
 import MetabaseSettings from "metabase/lib/settings";
 
-class CardTagEditor extends Component {
+@Questions.load({
+  id: (state, { tag }) => tag["card-id"],
+  loadingAndErrorWrapper: false,
+})
+export default class CardTagEditor extends Component {
   handleQuestionSelection = id => {
     const { question, query, setDatasetQuery } = this.props;
     setDatasetQuery(
@@ -39,11 +42,11 @@ class CardTagEditor extends Component {
       question.database_id != null &&
       question.database_id !== query.databaseId()
     ) {
-      return t`This question can't be used because it's based on a different database.`;
+      return t`This query can't be used because it's based on a different database.`;
     }
     if (error) {
       return error.status === 404
-        ? t`Couldn't find a saved question with that ID number.`
+        ? t`Couldn't find a saved query with that ID number.`
         : error.data;
     }
     return null;
@@ -54,14 +57,17 @@ class CardTagEditor extends Component {
     return (
       <SelectButton>
         {tag["card-id"] == null ? (
-          <span className="text-medium">{t`Pick a question or a model`}</span>
+          <span className="text-medium">{t`Pick a saved chart`}</span>
         ) : this.errorMessage() ? (
-          <span className="text-medium">{t`Pick a different question or a model`}</span>
+          <span
+            className="text-medium"
+            style={{ fontSize: 12 }}
+          >{t`Pick a different chart`}</span>
         ) : question ? (
           question.name
         ) : (
           // we only hit this on the initial render before we fetch
-          t`Loading…`
+          t`GETTING INSIGHTS...`
         )}
       </SelectButton>
     );
@@ -78,11 +84,9 @@ class CardTagEditor extends Component {
       <div className="px3 py4 border-top">
         <h3 className="text-heavy text-brand mb1">
           {cardId == null ? (
-            t`Question #…`
+            t`Chart #…`
           ) : (
-            <Link to={this.getQuestionUrl()}>
-              {question?.dataset ? t`Model #${cardId}` : t`Question #${cardId}`}
-            </Link>
+            <Link to={this.getQuestionUrl()}>{t`Chart #${cardId}`}</Link>
           )}
         </h3>
         {loading ? (
@@ -114,9 +118,7 @@ class CardTagEditor extends Component {
                 <Icon name="all" size={12} mr={1} /> {question.collection.name}
               </div>
             )}
-            <div
-              className={cx("flex align-center", { mt1: question.collection })}
-            >
+            <div className="flex align-center mt1">
               <Icon name="calendar" size={12} mr={1} />{" "}
               {t`Last edited ${formatDate(question.updated_at)}`}
             </div>
@@ -126,11 +128,6 @@ class CardTagEditor extends Component {
     );
   }
 }
-
-export default Questions.load({
-  id: (state, { tag }) => tag["card-id"],
-  loadingAndErrorWrapper: false,
-})(CardTagEditor);
 
 // This formats a timestamp as a date using any custom formatting options.
 function formatDate(value) {

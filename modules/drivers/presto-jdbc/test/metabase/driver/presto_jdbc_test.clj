@@ -4,7 +4,7 @@
             [honeysql.core :as hsql]
             [honeysql.format :as hformat]
             [java-time :as t]
-            [metabase.api.database :as api.database]
+            [metabase.api.database :as database-api]
             [metabase.db.metadata-queries :as metadata-queries]
             [metabase.driver :as driver]
             [metabase.driver.presto-jdbc :as presto-jdbc]
@@ -135,7 +135,7 @@
         (is (= (str "SELECT count(*) AS \"count\" "
                     "FROM \"default\".\"venues\" "
                     "WHERE \"default\".\"venues\".\"name\" = 'wow'")
-               (:query (qp/compile-and-splice-parameters query))
+               (:query (qp/query->native-with-spliced-params query))
                (-> (qp/process-query query) :data :native_form :query)))))))
 
 (deftest connection-tests
@@ -199,7 +199,7 @@
       ;; the others (ex: :auto_run_queries and :refingerprint) are one level up (fields in the model, not in the details
       ;; JSON blob)
       (let [db-details (assoc (:details (mt/db)) :let-user-control-scheduling false)]
-        (is (nil? (api.database/test-database-connection :presto-jdbc db-details)))))))
+        (is (nil? (database-api/test-database-connection :presto-jdbc db-details)))))))
 
 (deftest kerberos-properties-test
   (testing "Kerberos related properties are set correctly"

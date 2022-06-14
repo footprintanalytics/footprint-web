@@ -29,12 +29,21 @@ const Users = createEntity({
 
   path: "/api/user",
 
+  objectSelectors: {
+    getName: user =>
+      user.name || user.common_name || `${user.first_name} ${user.last_name}`,
+  },
+
   actionTypes: {
     DEACTIVATE,
     REACTIVATE,
     PASSWORD_RESET_EMAIL,
     PASSWORD_RESET_MANUAL,
     RESEND_INVITE,
+  },
+
+  api: {
+    update: async (...args) => UserApi.update(...args),
   },
 
   actionDecorators: {
@@ -57,7 +66,7 @@ const Users = createEntity({
     },
     update: thunkCreator => user => async (dispatch, getState) => {
       const result = await thunkCreator(user)(dispatch, getState);
-      if (user.user_group_memberships) {
+      if (user.group_ids) {
         // group ids were just updated
         dispatch(loadMemberships());
       }
@@ -71,7 +80,7 @@ const Users = createEntity({
       await UserApi.send_invite({ id });
       return { type: RESEND_INVITE };
     },
-    resetPasswordEmail: async ({ email }) => {
+    passwordResetEmail: async ({ email }) => {
       MetabaseAnalytics.trackStructEvent(
         "People Admin",
         "Trigger User Password Reset",
@@ -79,7 +88,7 @@ const Users = createEntity({
       await SessionApi.forgot_password({ email });
       return { type: PASSWORD_RESET_EMAIL };
     },
-    resetPasswordManual: async (
+    passwordResetManual: async (
       { id },
       password = MetabaseUtils.generatePassword(),
     ) => {

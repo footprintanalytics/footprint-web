@@ -1,6 +1,8 @@
 import React from "react";
-import { renderWithProviders, screen, waitFor } from "__support__/ui";
+import { Provider } from "react-redux";
+import { render, screen, waitFor } from "@testing-library/react";
 import xhrMock from "xhr-mock";
+import { getStore } from "__support__/entities-store";
 
 import { InfoText } from "./InfoText";
 
@@ -17,7 +19,13 @@ async function setup(result) {
     body: JSON.stringify(database),
   });
 
-  renderWithProviders(<InfoText result={result} />);
+  const store = getStore();
+
+  render(
+    <Provider store={store}>
+      <InfoText result={result} />
+    </Provider>,
+  );
 }
 
 describe("InfoText", () => {

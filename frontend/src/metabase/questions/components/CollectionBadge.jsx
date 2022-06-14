@@ -8,7 +8,7 @@ import { PLUGIN_COLLECTIONS } from "metabase/plugins";
 
 const propTypes = {
   collection: PropTypes.object,
-  analyticsContext: PropTypes.string,
+  analyticsContext: PropTypes.string.isRequired,
   className: PropTypes.string,
 };
 
@@ -25,7 +25,6 @@ function CollectionBadge({ collection, analyticsContext, className }) {
   if (!collection) {
     return null;
   }
-
   const isRegular = PLUGIN_COLLECTIONS.isRegularCollection(collection);
   const icon = {
     ...collection.getIcon(),
@@ -36,7 +35,6 @@ function CollectionBadge({ collection, analyticsContext, className }) {
       to={collection.getUrl()}
       icon={icon}
       activeColor={icon.color}
-      inactiveColor="text-light"
       className={className}
       data-metabase-event={`${analyticsContext};Collection Badge Click`}
     >

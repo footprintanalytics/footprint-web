@@ -3,8 +3,14 @@ import React from "react";
 import { t } from "ttag";
 
 import { IndexLink } from "react-router";
-import Link from "metabase/core/components/Link";
+import Link from "metabase/components/Link";
 import cx from "classnames";
+
+type Props = {
+  className?: string,
+  style?: { [key: string]: any },
+  children?: React.Element,
+};
 
 const AuditSidebarSection = ({ title, children }) => (
   <div className="pb2">
@@ -41,13 +47,13 @@ const AuditSidebarItem = ({ title, path }) => (
   </div>
 );
 
-const AuditSidebar = ({ className, style, children }) => (
+const AuditSidebar = ({ className, style, children }: Props) => (
   <div style={style} className={cx("p4", className)}>
     {children}
   </div>
 );
 
-const AuditAppSidebar = props => (
+const AuditAppSidebar = (props: Props) => (
   <AuditSidebar {...props}>
     <AuditSidebarSection title={t`People`}>
       <AuditSidebarItem title={t`Team members`} path="/admin/audit/members" />

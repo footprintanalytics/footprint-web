@@ -60,7 +60,6 @@ class FormattingWidget extends React.Component {
               onChange={settings => onChange({ ...value, [type]: settings })}
               column={column}
               allowlist={new Set(settings)}
-              forcefullyShowHiddenSettings
             />
           </div>
         ))}

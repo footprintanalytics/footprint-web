@@ -2,6 +2,7 @@ import {
   tokenize,
   TOKEN as T,
   OPERATOR as OP,
+  countMatchingParentheses,
 } from "metabase/lib/expressions/tokenizer";
 
 describe("metabase/lib/expressions/tokenizer", () => {
@@ -32,9 +33,6 @@ describe("metabase/lib/expressions/tokenizer", () => {
   });
 
   it("should tokenize numeric literals", () => {
-    expect(types(".0")).toEqual([T.Number]);
-    expect(types(".5")).toEqual([T.Number]);
-    expect(types("9.")).toEqual([T.Number]);
     expect(types("42")).toEqual([T.Number]);
     expect(types("0")).toEqual([T.Number]);
     expect(types("123456789")).toEqual([T.Number]);
@@ -50,12 +48,6 @@ describe("metabase/lib/expressions/tokenizer", () => {
     expect(errors("2e")[0].message).toEqual("Missing exponent");
     expect(errors("3e+")[0].message).toEqual("Missing exponent");
     expect(errors("4E-")[0].message).toEqual("Missing exponent");
-    expect(errors("4E-")[0].len).toEqual(3);
-  });
-
-  it("should catch a lone decimal point", () => {
-    expect(errors(".")[0].message).toEqual("Invalid character: .");
-    expect(errors(".")[0].len).toEqual(1);
   });
 
   it("should tokenize string literals", () => {
@@ -75,18 +67,6 @@ describe("metabase/lib/expressions/tokenizer", () => {
     expect(errors('"double')[0].message).toEqual("Missing closing quotes");
   });
 
-  it("should continue to tokenize when encountering an unterminated string literal", () => {
-    expect(types("CONCAT(universe') = [answer]")).toEqual([
-      T.Identifier,
-      T.Operator,
-      T.Identifier,
-      T.String,
-      T.Operator,
-      T.Operator,
-      T.Identifier,
-    ]);
-  });
-
   it("should tokenize identifiers", () => {
     expect(types("Price")).toEqual([T.Identifier]);
     expect(types("Special_Deal")).toEqual([T.Identifier]);
@@ -95,15 +75,6 @@ describe("metabase/lib/expressions/tokenizer", () => {
     expect(types("[Deal]")).toEqual([T.Identifier]);
     expect(types("[Review → Rating]")).toEqual([T.Identifier]);
     expect(types("[Product.Vendor]")).toEqual([T.Identifier]);
-  });
-
-  it("should tokenize booleans", () => {
-    expect(types("true")).toEqual([T.Boolean]);
-    expect(types("True")).toEqual([T.Boolean]);
-    expect(types("TRUE")).toEqual([T.Boolean]);
-    expect(types("false")).toEqual([T.Boolean]);
-    expect(types("False")).toEqual([T.Boolean]);
-    expect(types("FALSE")).toEqual([T.Boolean]);
   });
 
   it("should catch unterminated bracket", () => {
@@ -168,6 +139,15 @@ describe("metabase/lib/expressions/tokenizer", () => {
     expect(errors("!")[0].message).toEqual("Invalid character: !");
     expect(errors(" % @")[1].message).toEqual("Invalid character: @");
     expect(errors("    #")[0].pos).toEqual(4);
-    expect(errors("    #")[0].len).toEqual(1);
+  });
+
+  it("should count matching parentheses", () => {
+    const count = expr => countMatchingParentheses(tokenize(expr).tokens);
+    expect(count("()")).toEqual(0);
+    expect(count("(")).toEqual(1);
+    expect(count(")")).toEqual(-1);
+    expect(count("(A+(")).toEqual(2);
+    expect(count("SUMIF(")).toEqual(1);
+    expect(count("COUNTIF(Deal))")).toEqual(-1);
   });
 });

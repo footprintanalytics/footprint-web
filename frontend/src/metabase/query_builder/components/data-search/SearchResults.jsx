@@ -1,12 +1,14 @@
 import React from "react";
-import styled from "@emotion/styled";
+import styled from "styled-components";
 import PropTypes from "prop-types";
 import { t } from "ttag";
 
 import Icon from "metabase/components/Icon";
-import SearchResult from "metabase/search/components/SearchResult";
-import { DEFAULT_SEARCH_LIMIT } from "metabase/lib/constants";
+// import { DEFAULT_SEARCH_LIMIT } from "metabase/lib/constants";
 import Search from "metabase/entities/search";
+
+import { SearchResultItem } from "./SearchResultItem";
+import { getProject } from "metabase/lib/project_info";
 
 const propTypes = {
   databaseId: PropTypes.string,
@@ -17,6 +19,8 @@ const propTypes = {
   ),
 };
 
+const SEARCH_LIMIT = 1000;
+
 export function SearchResults({
   searchQuery,
   onSelect,
@@ -26,7 +30,9 @@ export function SearchResults({
   const query = {
     q: searchQuery,
     models: searchModels,
-    limit: DEFAULT_SEARCH_LIMIT,
+    limit: SEARCH_LIMIT,
+    pageSize: 50,
+    project: getProject(),
   };
 
   if (databaseId) {
@@ -51,14 +57,11 @@ export function SearchResults({
           return (
             <ul>
               {list.map(item => (
-                <li key={`${item.id}_${item.model}`}>
-                  <SearchResult
-                    result={item}
-                    onClick={onSelect}
-                    compact
-                    hasDescription={false}
-                  />
-                </li>
+                <SearchResultItem
+                  key={`${item.id}_${item.model}`}
+                  item={item}
+                  onSelect={onSelect}
+                />
               ))}
             </ul>
           );

@@ -2,14 +2,16 @@
   "Tests for *MBQL* parameter substitution."
   (:require [clojure.test :refer :all]
             [metabase.driver :as driver]
-            [metabase.mbql.normalize :as mbql.normalize]
+            [metabase.driver.common.parameters :as params]
+            [metabase.mbql.normalize :as normalize]
             [metabase.query-processor :as qp]
-            [metabase.query-processor.middleware.parameters.mbql :as qp.mbql]
+            [metabase.query-processor.error-type :as qp.error-type]
+            [metabase.query-processor.middleware.parameters.mbql :as mbql-params]
             [metabase.test :as mt]))
 
 (defn- expand-parameters [query]
-  (let [query (mbql.normalize/normalize query)]
-    (qp.mbql/expand (dissoc query :parameters) (:parameters query))))
+  (let [query (normalize/normalize query)]
+    (mbql-params/expand (dissoc query :parameters) (:parameters query))))
 
 (defn- expanded-query-with-filter [filter-clause]
   {:database 1
@@ -159,7 +161,18 @@
                        :parameters [{:name   "name"
                                      :type   :string/starts-with
                                      :target $name
-                                     :value ["B"]}]})))))))))
+                                     :value ["B"]}]})))))
+        (with-redefs [params/field-filter-operators-enabled? (constantly false)]
+          (testing "Throws if not enabled (#15488)"
+            (is (= {:type     qp.error-type/invalid-parameter
+                    :operator :number/between}
+                   (try (f (mt/query venues
+                             {:query      {:aggregation [[:count]]}
+                              :parameters [{:name   "price"
+                                            :type   :number/between
+                                            :target $price
+                                            :value  [2 5]}]}))
+                        (catch Exception e (ex-data e)))))))))))
 
 (deftest basic-where-test
   (mt/test-drivers (params-test-drivers)
@@ -220,7 +233,7 @@
                              "FROM \"PUBLIC\".\"VENUES\" "
                              "WHERE (\"PUBLIC\".\"VENUES\".\"PRICE\" = 3 OR \"PUBLIC\".\"VENUES\".\"PRICE\" = 4)")
                 :params nil}
-               (qp/compile
+               (qp/query->native
                 (mt/query venues
                   {:query      {:aggregation [[:count]]}
                    :parameters [{:name   "price"
@@ -244,7 +257,7 @@
                              "FROM \"PUBLIC\".\"VENUES\" "
                              "WHERE \"PUBLIC\".\"VENUES\".\"PRICE\" BETWEEN 3 AND 4")
                 :params nil}
-               (qp/compile
+               (qp/query->native
                 (mt/query venues
                   {:query      {:aggregation [[:count]]}
                    :parameters [{:name   "price"
@@ -264,18 +277,18 @@
                    #t "2014-07-01T00:00Z[UTC]"
                    #t "2015-06-01T00:00Z[UTC]"
                    #t "2015-07-01T00:00Z[UTC]"]}
-         (qp/compile
+         (qp/query->native
            (mt/query checkins
              {:query      {:aggregation [[:count]]}
               :parameters [{:name   "date"
-                            :type   "date/month-year"
+                            :type   "date/month"
                             :target $date
                             :value  ["2014-06" "2015-06"]}]})))))
 
 (deftest convert-ids-to-numbers-test
   (is (= (mt/$ids venues
            [:= $id 1])
-         (#'qp.mbql/build-filter-clause
+         (#'mbql-params/build-filter-clause
           (mt/$ids venues
             {:type   :id
              :target [:dimension $id]

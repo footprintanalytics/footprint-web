@@ -1,4 +1,3 @@
-/* eslint-disable react/prop-types */
 import crossfilter from "crossfilter";
 import d3 from "d3";
 import dc from "dc";
@@ -70,6 +69,8 @@ import { lineAddons } from "./graph/addons";
 import { initBrush } from "./graph/brush";
 import { stack, stackOffsetDiverging } from "./graph/stack";
 
+import type { VisualizationProps } from "metabase-types/types/Visualization";
+
 const BAR_PADDING_RATIO = 0.2;
 const DEFAULT_INTERPOLATION = "linear";
 
@@ -126,11 +127,13 @@ function getXAxisProps(props, datas, warn) {
 ///------------------------------------------------------------ DIMENSIONS & GROUPS ------------------------------------------------------------///
 
 function getDimensionsAndGroupsForScatterChart(datas) {
-  const dataset = crossfilter(datas);
+  const dataset = crossfilter();
+  datas.map(data => dataset.add(data));
+
   const dimension = dataset.dimension(row => row);
   const groups = datas.map(data => {
     const dim = crossfilter(data).dimension(row => row);
-    return [dim.group().reduceSum(d => d[1] ?? 1)];
+    return [dim.group().reduceSum(d => d[2] || 1)];
   });
 
   return { dimension, groups };
@@ -453,7 +456,7 @@ function doScatterChartStuff(chart, datas, index, { yExtent, yExtents }) {
     if (isBubble) {
       const BUBBLE_SCALE_FACTOR_MAX = 64;
       chart
-        .radiusValueAccessor(d => d.key[2])
+        .radiusValueAccessor(d => d.value)
         .r(
           d3.scale
             .sqrt()
@@ -682,53 +685,47 @@ function addTrendlineChart(
   const insights = rawSeries[0].data.insights || [];
 
   for (const insight of insights) {
-    const index = findSeriesIndexForColumnName(series, insight.col);
+    if (insight.slope != null && insight.offset != null) {
+      const index = findSeriesIndexForColumnName(series, insight.col);
+      const seriesSettings = settings.series(series[index]);
+      const color = lighten(seriesSettings.color, 0.25);
 
-    const shouldShowSeries = index !== -1;
-    const hasTrendLineData = insight.slope != null && insight.offset != null;
+      const points = Math.round(parent.width() / TREND_LINE_POINT_SPACING);
+      const trendData = getTrendDataPointsFromInsight(insight, xDomain, points);
+      const trendDimension = crossfilter(trendData).dimension(d => d[0]);
 
-    if (!shouldShowSeries || !hasTrendLineData) {
-      continue;
+      // Take the last point rather than summing in case xDomain[0] === xDomain[1], e.x. when the chart
+      // has just a single row / datapoint
+      const trendGroup = trendDimension.group().reduce(
+        (p, d) => d[1],
+        (p, d) => p,
+        () => 0,
+      );
+      const trendIndex = charts.length;
+
+      const trendChart = dc
+        .lineChart(parent)
+        .dimension(trendDimension)
+        .group(trendGroup)
+        .on("renderlet", function(chart) {
+          // remove "sub" class so the trend is not used in voronoi computation
+          chart
+            .select(".sub._" + trendIndex)
+            .classed("sub", false)
+            .classed("trend", true);
+        })
+        .colors([color])
+        .useRightYAxis(yAxisSplit.length > 1 && yAxisSplit[1].includes(index))
+        .interpolate("cardinal");
+
+      charts.push(trendChart);
     }
-
-    const seriesSettings = settings.series(series[index]);
-    const color = lighten(seriesSettings.color, 0.25);
-
-    const points = Math.round(parent.width() / TREND_LINE_POINT_SPACING);
-    const trendData = getTrendDataPointsFromInsight(insight, xDomain, points);
-    const trendDimension = crossfilter(trendData).dimension(d => d[0]);
-
-    // Take the last point rather than summing in case xDomain[0] === xDomain[1], e.x. when the chart
-    // has just a single row / datapoint
-    const trendGroup = trendDimension.group().reduce(
-      (p, d) => d[1],
-      (p, d) => p,
-      () => 0,
-    );
-    const trendIndex = charts.length;
-
-    const trendChart = dc
-      .lineChart(parent)
-      .dimension(trendDimension)
-      .group(trendGroup)
-      .on("renderlet", function(chart) {
-        // remove "sub" class so the trend is not used in voronoi computation
-        chart
-          .select(".sub._" + trendIndex)
-          .classed("sub", false)
-          .classed("trend", true);
-      })
-      .colors([color])
-      .useRightYAxis(yAxisSplit.length > 1 && yAxisSplit[1].includes(index))
-      .interpolate("cardinal");
-
-    charts.push(trendChart);
   }
 }
 
-function applyXAxisSettings(parent, series, xAxisProps, timelineEvents) {
+function applyXAxisSettings(parent, series, xAxisProps) {
   if (isTimeseries(parent.settings)) {
-    applyChartTimeseriesXAxis(parent, series, xAxisProps, timelineEvents);
+    applyChartTimeseriesXAxis(parent, series, xAxisProps);
   } else if (isQuantitative(parent.settings)) {
     applyChartQuantitativeXAxis(parent, series, xAxisProps);
   } else {
@@ -808,19 +805,19 @@ function doHistogramBarStuff(parent) {
 
 /************************************************************ PUTTING IT ALL TOGETHER ************************************************************/
 
-export default function lineAreaBar(element, props) {
-  const {
-    isScalarSeries,
-    settings,
-    series,
-    timelineEvents,
-    selectedTimelineEventIds,
-    onRender,
-    onHoverChange,
-    onOpenTimelines,
-    onSelectTimelineEvents,
-    onDeselectTimelineEvents,
-  } = props;
+type LineAreaBarProps = VisualizationProps & {
+  chartType: "line" | "area" | "bar" | "waterfall" | "scatter",
+  isScalarSeries: boolean,
+  maxSeries: number,
+};
+
+type DeregisterFunction = () => void;
+
+export default function lineAreaBar(
+  element: Element,
+  props: LineAreaBarProps,
+): DeregisterFunction {
+  const { onRender, isScalarSeries, settings, series } = props;
 
   const warnings = {};
   // `text` is displayed to users, but we deduplicate based on `key`
@@ -905,7 +902,7 @@ export default function lineAreaBar(element, props) {
     parent._rangeBandPadding(hasBar ? BAR_PADDING_RATIO : 1);
   }
 
-  applyXAxisSettings(parent, props.series, xAxisProps, timelineEvents);
+  applyXAxisSettings(parent, props.series, xAxisProps);
 
   applyYAxisSettings(parent, yAxisProps);
 
@@ -923,22 +920,13 @@ export default function lineAreaBar(element, props) {
 
   // apply any on-rendering functions (this code lives in `LineAreaBarPostRenderer`)
   lineAndBarOnRender(parent, {
-    datas,
-    timelineEvents,
-    selectedTimelineEventIds,
+    onGoalHover,
     isSplitAxis: yAxisProps.isSplit,
     yAxisSplit: yAxisProps.yAxisSplit,
-    xDomain: xAxisProps.xDomain,
     xInterval: xAxisProps.xInterval,
     isStacked: isStacked(parent.settings, datas),
-    isTimeseries: isTimeseries(parent.settings),
-    hasDrills: typeof props.onChangeCardAndRun === "function",
     formatYValue: getYValueFormatter(parent, series, yAxisProps.yExtent),
-    onGoalHover,
-    onHoverChange,
-    onOpenTimelines,
-    onSelectTimelineEvents,
-    onDeselectTimelineEvents,
+    datas,
   });
 
   // only ordinal axis can display "null" values
@@ -949,7 +937,7 @@ export default function lineAreaBar(element, props) {
   if (onRender) {
     onRender({
       yAxisSplit: yAxisProps.yAxisSplit,
-      warnings: Object.values(warnings),
+      warnings: (Object.values(warnings): string[]),
     });
   }
 

@@ -1,3 +1,5 @@
+/* eslint-disable no-import-assign*/
+
 global.ga = () => {};
 global.snowplow = () => {};
 global.ace.define = () => {};
@@ -8,14 +10,10 @@ global.window.matchMedia = () => ({
   removeListener: () => {},
 });
 
-global.window.ResizeObserver = class ResizeObserver {
-  observe() {}
-  unobserve() {}
-  disconnect() {}
-};
-
+// Disable analytics
 jest.mock("metabase/lib/analytics");
 
+// Suppress ace import errors
 jest.mock("ace/ace", () => {}, { virtual: true });
 jest.mock("ace/mode-plain_text", () => {}, { virtual: true });
 jest.mock("ace/mode-javascript", () => {}, { virtual: true });
@@ -36,3 +34,23 @@ jest.mock("ace/snippets/sqlserver", () => {}, { virtual: true });
 jest.mock("ace/snippets/json", () => {}, { virtual: true });
 jest.mock("ace/snippets/json", () => {}, { virtual: true });
 jest.mock("ace/ext-language_tools", () => {}, { virtual: true });
+
+jest.mock("metabase/components/Popover");
+
+// Replace addEventListener with a test implementation which collects all event listeners to `eventListeners` map
+export const eventListeners = {};
+const testAddEventListener = jest.fn((event, listener) => {
+  eventListeners[event] = eventListeners[event]
+    ? [...eventListeners[event], listener]
+    : [listener];
+});
+const testRemoveEventListener = jest.fn((event, listener) => {
+  eventListeners[event] = (eventListeners[event] || []).filter(
+    l => l !== listener,
+  );
+});
+
+global.document.addEventListener = testAddEventListener;
+global.window.addEventListener = testAddEventListener;
+global.document.removeEventListener = testRemoveEventListener;
+global.window.removeEventListener = testRemoveEventListener;

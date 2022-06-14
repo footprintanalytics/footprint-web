@@ -1,5 +1,4 @@
-import styled from "@emotion/styled";
-import { css } from "@emotion/react";
+import styled, { css } from "styled-components";
 import { color } from "metabase/lib/colors";
 import NumericInput from "metabase/components/NumericInput";
 
@@ -27,7 +26,7 @@ export const Input = styled(NumericInput)`
 
   :focus,
   :hover {
-    border-color: ${() => color("brand")};
+    border-color: ${color("brand")};
   }
 
   transition: border 300ms ease-in-out;

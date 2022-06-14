@@ -35,13 +35,11 @@
                     :description nil
                     :id          true
                     :fields      [{:name "filming", :description nil}]}
-                   (get-table-and-fields-descriptions table)))
-            (is (nil? (:description (Database (u/the-id db))))))
+                   (get-table-and-fields-descriptions table))))
           (metabase-metadata/sync-metabase-metadata! db)
           (testing "after"
             (is (= {:name        "movies"
                     :description "A cinematic adventure."
                     :id          true
                     :fields      [{:name "filming", :description "If the movie is currently being filmed."}]}
-                   (get-table-and-fields-descriptions table)))
-            (is (= "Information about movies" (:description (Database (u/the-id db)))))))))))
+                   (get-table-and-fields-descriptions table)))))))))

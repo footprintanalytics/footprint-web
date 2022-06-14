@@ -1,30 +1,23 @@
 /* eslint-disable react/prop-types */
 import React, { Component } from "react";
 import ReactDOM from "react-dom";
+
+import ResizeObserver from "resize-observer-polyfill";
+
 import cx from "classnames";
 import _ from "underscore";
-
-import resizeObserver from "metabase/lib/resize-observer";
 import { isCypressActive } from "metabase/env";
 
-const WAIT_TIME = 300;
+// After adding throttling for resize re-renders, our Cypress tests became flaky
+// due to queried DOM elements are getting detached after re-renders
+const throttleDuration = isCypressActive ? 0 : 500;
 
-const REFRESH_MODE = {
-  throttle: fn => _.throttle(fn, WAIT_TIME),
-  debounce: fn => _.debounce(fn, WAIT_TIME),
-  debounceLeading: fn => _.debounce(fn, WAIT_TIME, true),
-  none: fn => fn,
-};
-
-export default ({
-  selector,
-  wrapped,
-  refreshMode = "throttle",
-} = {}) => ComposedComponent => {
-  const displayName = ComposedComponent.displayName || ComposedComponent.name;
-
-  class WrappedComponent extends Component {
-    static displayName = `ExplicitSize[${displayName}]`;
+export default ({ selector, wrapped } = {}) => ComposedComponent =>
+  class extends Component {
+    static displayName =
+      "ExplicitSize[" +
+      (ComposedComponent.displayName || ComposedComponent.name) +
+      "]";
 
     constructor(props, context) {
       super(props, context);
@@ -32,28 +25,22 @@ export default ({
         width: null,
         height: null,
       };
-
-      if (isCypressActive) {
-        this._updateSize = this.__updateSize;
-      } else {
-        this._refreshMode =
-          typeof refreshMode === "function" ? refreshMode(props) : refreshMode;
-        const refreshFn = REFRESH_MODE[this._refreshMode];
-        this._updateSize = refreshFn(this.__updateSize);
-      }
     }
 
     _getElement() {
-      const element = ReactDOM.findDOMNode(this);
-      if (selector) {
-        return element.querySelector(selector) || element;
-      }
-      return element;
+      try {
+        const element = ReactDOM.findDOMNode(this);
+        if (selector) {
+          return element.querySelector(selector) || element;
+        }
+        return element;
+      } catch (error) {}
     }
 
     componentDidMount() {
       this._initMediaQueryListener();
       this._initResizeObserver();
+      this._updateResizeObserver();
       // Set the size on the next tick. We had issues with wrapped components
       // not adjusting if the size was fixed during mounting.
       setTimeout(this._updateSize, 0);
@@ -62,9 +49,7 @@ export default ({
     componentDidUpdate() {
       // update ResizeObserver if element changes
       this._updateResizeObserver();
-      if (typeof refreshMode === "function" && !isCypressActive) {
-        this._updateRefreshMode();
-      }
+      this._updateSize();
     }
 
     componentWillUnmount() {
@@ -72,35 +57,30 @@ export default ({
       this._teardownQueryMediaListener();
     }
 
-    _updateRefreshMode = () => {
-      const nextMode = refreshMode(this.props);
-      if (nextMode === this._refreshMode) {
-        return;
-      }
-      resizeObserver.unsubscribe(this._currentElement, this._updateSize);
-      const refreshFn = REFRESH_MODE[nextMode];
-      this._updateSize = refreshFn(this.__updateSize);
-      resizeObserver.subscribe(this._currentElement, this._updateSize);
-      this._refreshMode = nextMode;
-    };
-
     // ResizeObserver, ensure re-layout when container element changes size
     _initResizeObserver() {
-      this._currentElement = this._getElement();
-      resizeObserver.subscribe(this._currentElement, this._updateSize);
+      this._ro = new ResizeObserver((entries, observer) => {
+        const element = this._getElement();
+        for (const entry of entries) {
+          if (entry.target === element) {
+            this._updateSize();
+            return;
+          }
+        }
+      });
     }
-
     _updateResizeObserver() {
       const element = this._getElement();
       if (this._currentElement !== element) {
-        resizeObserver.unsubscribe(this._currentElement, this._updateSize);
         this._currentElement = element;
-        resizeObserver.subscribe(this._currentElement, this._updateSize);
+        this._ro.observe(this._currentElement);
       }
     }
-
     _teardownResizeObserver() {
-      resizeObserver.unsubscribe(this._currentElement, this._updateSize);
+      if (this._ro) {
+        this._ro.disconnect();
+        this._ro = null;
+      }
     }
 
     // media query listener, ensure re-layout when printing
@@ -117,7 +97,9 @@ export default ({
       }
     }
 
-    __updateSize = () => {
+    // if _currentElement's dimensions change too frequently this function
+    // can freeze the application
+    _updateSize = _.throttle(() => {
       const element = this._getElement();
       if (element) {
         const { width, height } = element.getBoundingClientRect();
@@ -125,7 +107,7 @@ export default ({
           this.setState({ width, height });
         }
       }
-    };
+    }, throttleDuration);
 
     render() {
       if (wrapped) {
@@ -144,7 +126,4 @@ export default ({
         return <ComposedComponent {...this.props} {...this.state} />;
       }
     }
-  }
-
-  return WrappedComponent;
-};
+  };

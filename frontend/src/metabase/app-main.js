@@ -1,7 +1,3 @@
-// Enables hot reload in development and noop in production
-// MUST be imported BEFORE `react` and `react-dom`
-import "metabase-dev";
-
 import { push } from "react-router-redux";
 import _ from "underscore";
 
@@ -26,7 +22,10 @@ const NOT_AUTHORIZED_TRIGGERS = [
 init(reducers, getRoutes, store => {
   // received a 401 response
   api.on("401", url => {
-    if (url.indexOf("/api/user/current") >= 0) {
+    if (
+      url.indexOf("/api/user/current") >= 0 ||
+      url.indexOf("/api/v1/user/current") >= 0
+    ) {
       return;
     }
 
@@ -39,7 +38,7 @@ init(reducers, getRoutes, store => {
     }
 
     store.dispatch(clearCurrentUser());
-    store.dispatch(push("/auth/login"));
+    store.dispatch(push("/loginModal"));
   });
 
   // received a 403 response

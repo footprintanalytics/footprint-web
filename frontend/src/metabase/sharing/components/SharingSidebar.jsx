@@ -9,8 +9,7 @@ import PulsesListSidebar from "metabase/sharing/components/PulsesListSidebar";
 import {
   AddEditSlackSidebar,
   AddEditEmailSidebar,
-} from "metabase/sharing/components/AddEditSidebar/AddEditSidebar";
-import LoadingAndErrorWrapper from "metabase/components/LoadingAndErrorWrapper";
+} from "metabase/sharing/components/AddEditSidebar";
 import Sidebar from "metabase/dashboard/components/Sidebar";
 import Pulses from "metabase/entities/pulses";
 import User from "metabase/entities/users";
@@ -59,7 +58,12 @@ const cardsFromDashboard = dashboard => {
 };
 
 const nonTextCardsFromDashboard = dashboard => {
-  return cardsFromDashboard(dashboard).filter(card => card.display !== "text");
+  return cardsFromDashboard(dashboard).filter(
+    card =>
+      card.display !== "text" &&
+      card.display !== "image" &&
+      card.display !== "video",
+  );
 };
 
 const cardsToPulseCards = (cards, pulseCards) => {
@@ -105,7 +109,12 @@ const mapDispatchToProps = {
   testPulse,
 };
 
-class SharingSidebarInner extends React.Component {
+@Pulses.loadList({
+  query: (state, { dashboard }) => ({ dashboard_id: dashboard.id }),
+})
+@User.loadList({ loadingAndErrorWrapper: false })
+@connect(mapStateToProps, mapDispatchToProps)
+class SharingSidebar extends React.Component {
   state = {
     editingMode: "list-pulses",
     // use this to know where to go "back" to
@@ -129,10 +138,6 @@ class SharingSidebarInner extends React.Component {
     params: PropTypes.object,
   };
 
-  componentDidMount() {
-    this.props.fetchPulseFormInput();
-  }
-
   setPulse = pulse => {
     this.props.updateEditingPulse(pulse);
   };
@@ -153,6 +158,10 @@ class SharingSidebarInner extends React.Component {
       cards: nonTextCardsFromDashboard(dashboard),
     };
     this.setPulse(newPulse);
+  };
+
+  componentDidMount = async () => {
+    await this.props.fetchPulseFormInput();
   };
 
   onChannelPropertyChange = (index, name, value) => {
@@ -260,14 +269,9 @@ class SharingSidebarInner extends React.Component {
       dashboard,
     } = this.props;
 
-    const isLoading = !pulses || !users || !pulse || !formInput?.channels;
-
-    if (isLoading) {
-      return (
-        <Sidebar>
-          <LoadingAndErrorWrapper loading />
-        </Sidebar>
-      );
+    // protect from empty values that will mess this up
+    if (!formInput.channels || !pulse) {
+      return <Sidebar />;
     }
 
     if (editingMode === "list-pulses" && pulses.length > 0) {
@@ -406,14 +410,5 @@ class SharingSidebarInner extends React.Component {
     return <Sidebar />;
   }
 }
-
-const SharingSidebar = _.compose(
-  Pulses.loadList({
-    query: (state, { dashboard }) => ({ dashboard_id: dashboard.id }),
-    loadingAndErrorWrapper: false,
-  }),
-  User.loadList({ loadingAndErrorWrapper: false }),
-  connect(mapStateToProps, mapDispatchToProps),
-)(SharingSidebarInner);
 
 export default SharingSidebar;

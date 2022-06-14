@@ -1,3 +1,5 @@
+import * as python from "./config_python";
+
 export const DISPLAY_QUOTES = {
   identifierQuoteDefault: "",
   literalQuoteDefault: "",
@@ -81,11 +83,7 @@ export const MBQL_CLAUSES = {
     type: "aggregation",
     args: ["number"],
   },
-  distinct: {
-    displayName: `Distinct`,
-    type: "aggregation",
-    args: ["expression"],
-  },
+  distinct: { displayName: `Distinct`, type: "aggregation", args: ["number"] },
   stddev: {
     displayName: `StandardDeviation`,
     type: "aggregation",
@@ -93,8 +91,8 @@ export const MBQL_CLAUSES = {
     requiresFeature: "standard-deviation-aggregations",
   },
   avg: { displayName: `Average`, type: "aggregation", args: ["number"] },
-  min: { displayName: `Min`, type: "aggregation", args: ["expression"] },
-  max: { displayName: `Max`, type: "aggregation", args: ["expression"] },
+  min: { displayName: `Min`, type: "aggregation", args: ["number"] },
+  max: { displayName: `Max`, type: "aggregation", args: ["number"] },
   share: { displayName: `Share`, type: "aggregation", args: ["boolean"] },
   "count-where": {
     displayName: `CountIf`,
@@ -207,40 +205,26 @@ export const MBQL_CLAUSES = {
     displayName: `contains`,
     type: "boolean",
     args: ["string", "string"],
-    hasOptions: true,
   },
   "starts-with": {
     displayName: `startsWith`,
     type: "boolean",
     args: ["string", "string"],
-    hasOptions: true,
   },
   "ends-with": {
     displayName: `endsWith`,
     type: "boolean",
     args: ["string", "string"],
-    hasOptions: true,
   },
   between: {
     displayName: `between`,
     type: "boolean",
     args: ["expression", "expression", "expression"],
   },
-  interval: {
-    displayName: "timeSpan",
-    type: "number",
-    args: ["number", "string"],
-  },
   "time-interval": {
     displayName: `interval`,
     type: "boolean",
     args: ["expression", "number", "string"],
-    hasOptions: true,
-  },
-  "relative-datetime": {
-    displayName: "relativeDateTime",
-    type: "expression",
-    args: ["number", "string"],
   },
   "is-null": {
     displayName: `isnull`,
@@ -331,6 +315,8 @@ export const MBQL_CLAUSES = {
     type: "boolean",
     args: ["expression", "expression"],
   },
+  // python
+  ...python.MBQL_CLAUSES,
 };
 
 for (const [name, clause] of Object.entries(MBQL_CLAUSES)) {
@@ -408,12 +394,12 @@ export const EXPRESSION_FUNCTIONS = new Set([
   "starts-with",
   "between",
   "time-interval",
-  "relative-datetime",
-  "interval",
   "is-null",
   "is-empty",
   // other
   "coalesce",
+  // python
+  ...Object.keys(python.MBQL_CLAUSES),
 ]);
 
 export const EXPRESSION_OPERATORS = new Set(["+", "-", "*", "/"]);

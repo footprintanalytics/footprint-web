@@ -1,25 +1,17 @@
+/* eslint-disable react/prop-types */
 import React, { Component } from "react";
 import PropTypes from "prop-types";
+import { Box } from "grid-styled";
 import { t } from "ttag";
-import cx from "classnames";
-
 import { getScrollY } from "metabase/lib/dom";
-
-import CollectionBadge from "metabase/questions/components/CollectionBadge";
 import EditBar from "metabase/components/EditBar";
 import EditWarning from "metabase/components/EditWarning";
 import HeaderModal from "metabase/components/HeaderModal";
 import TitleAndDescription from "metabase/components/TitleAndDescription";
-import {
-  HeaderRoot,
-  HeaderBadges,
-  HeaderBadgesDivider,
-  HeaderContent,
-  HeaderButtonsContainer,
-  HeaderButtonSection,
-  StyledLastEditInfoLabel,
-  HeaderCaption,
-} from "./Header.styled";
+import Button from "metabase/components/Button";
+import { trackStructEvent } from "../lib/analytics";
+import "./Header.css";
+import { IconBack } from "./IconBack";
 
 const propTypes = {
   analyticsContext: PropTypes.string,
@@ -32,16 +24,15 @@ const propTypes = {
   headerModalMessage: PropTypes.string,
   isEditing: PropTypes.bool,
   isEditingInfo: PropTypes.bool,
-  isNavBarOpen: PropTypes.bool.isRequired,
   item: PropTypes.object.isRequired,
   objectType: PropTypes.string.isRequired,
-  isBadgeVisible: PropTypes.bool,
-  isLastEditInfoVisible: PropTypes.bool,
+  hasBadge: PropTypes.bool,
   children: PropTypes.node,
   setItemAttributeFn: PropTypes.func,
   onHeaderModalDone: PropTypes.func,
   onHeaderModalCancel: PropTypes.func,
-  onLastEditInfoClick: PropTypes.func,
+  router: PropTypes.object.isRequired,
+  titleRightPanel: PropTypes.node,
 };
 
 const defaultProps = {
@@ -96,6 +87,7 @@ class Header extends Component {
           title={this.props.editingTitle}
           subtitle={this.props.editingSubtitle}
           buttons={this.props.editingButtons}
+          style={{ marginTop: -14, marginBottom: 14 }}
         />
       );
     }
@@ -120,12 +112,7 @@ class Header extends Component {
   }
 
   render() {
-    const {
-      item,
-      isBadgeVisible,
-      isLastEditInfoVisible,
-      onLastEditInfoClick,
-    } = this.props;
+    const { router, titleRightPanel } = this.props;
 
     let titleAndDescription;
     if (this.props.item && this.props.item.id != null) {
@@ -147,61 +134,80 @@ class Header extends Component {
     const headerButtons = this.props.headerButtons.map(
       (section, sectionIndex) => {
         return (
-          section?.length > 0 && (
-            <HeaderButtonSection
+          section &&
+          section.length > 0 && (
+            <span
               key={sectionIndex}
-              className="Header-buttonSection"
-              isNavBarOpen={this.props.isNavBarOpen}
+              className="Header-buttonSection flex align-center"
             >
-              {section}
-            </HeaderButtonSection>
+              {section.map((button, buttonIndex) => (
+                <span key={buttonIndex}>{button}</span>
+              ))}
+            </span>
           )
         );
       },
     );
 
     return (
-      <div>
+      <div className="flex flex-column">
         {this.renderEditHeader()}
         {this.renderEditWarning()}
         {this.renderHeaderModal()}
-        <HeaderRoot
-          isNavBarOpen={this.props.isNavBarOpen}
-          className={cx("QueryBuilder-section", this.props.headerClassName)}
+        <div
+          className={"QueryBuilder-section flex " + this.props.headerClassName}
           ref={this.header}
         >
-          <HeaderContent>
-            <HeaderCaption>{titleAndDescription}</HeaderCaption>
-            <HeaderBadges>
-              {isBadgeVisible && (
-                <>
-                  <CollectionBadge
-                    collectionId={item.collection_id}
-                    analyticsContext={this.props.analyticsContext}
-                  />
-                </>
-              )}
-              {isBadgeVisible && isLastEditInfoVisible && (
-                <HeaderBadgesDivider>•</HeaderBadgesDivider>
-              )}
-              {isLastEditInfoVisible && (
-                <StyledLastEditInfoLabel
-                  item={item}
-                  onClick={onLastEditInfoClick}
-                />
-              )}
-            </HeaderBadges>
-          </HeaderContent>
-
-          <HeaderButtonsContainer isNavBarOpen={this.props.isNavBarOpen}>
+          <HeaderTitle
+            router={router}
+            titleAndDescription={titleAndDescription}
+            titleRightPanel={titleRightPanel}
+          />
+          <div
+            className="header-buttons flex align-center flex-align-right html2canvas-filter"
+            style={{ color: "#4C5773" }}
+          >
             {headerButtons}
-          </HeaderButtonsContainer>
-        </HeaderRoot>
+          </div>
+        </div>
         {this.props.children}
       </div>
     );
   }
 }
+
+export const HeaderTitle = ({
+  router,
+  titleAndDescription,
+  titleRightPanel,
+  featuresMode,
+  hideSide,
+  handleSideHide,
+}) => {
+  return (
+    <Box className="dashboard-header-title flex left">
+      <div className="flex align-center">
+        {!featuresMode && <IconBack router={router} />}
+        {featuresMode && handleSideHide && (
+          <Button
+            onlyIcon
+            className=" Question-header-btn footprint-mr-s"
+            iconColor="#5A617B"
+            icon={hideSide ? "menu_right" : "menu_left"}
+            iconSize={16}
+            onClick={() => {
+              trackStructEvent(`click toggleMenu`);
+              handleSideHide({ hide: !hideSide });
+            }}
+          />
+        )}
+        <span style={{ flex: 1 }}>{titleAndDescription}</span>
+      </div>
+      {titleRightPanel}
+      {/*{!!item && !!item["last-edit-info"] && <LastEditInfoLabel item={item} />}*/}
+    </Box>
+  );
+};
 
 Header.propTypes = propTypes;
 Header.defaultProps = defaultProps;

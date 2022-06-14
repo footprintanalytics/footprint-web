@@ -1,5 +1,5 @@
 :root {
-  --form-field-border-color: color-mod(var(--color-border) blackness(10%));
+  --form-field-border-color: color(var(--color-border) blackness(+10%));
 }
 ::-webkit-input-placeholder {
   color: var(--color-text-light);
@@ -12,7 +12,7 @@
 }
 
 .Form-field {
-  margin-bottom: 1.5em;
+  margin-bottom: 1em;
   color: var(--color-text-medium);
 }
 
@@ -20,9 +20,20 @@
   color: var(--color-error);
 }
 
+.Form-field.checkbox {
+  flex-direction: row-reverse;
+  display: flex;
+  justify-content: left;
+}
+
+.Form-field.checkbox .Form-label {
+  margin-left: 12px;
+  line-height: 1;
+}
+
 .Form-label {
   display: block;
-  font-weight: 900;
+  font-weight: normal;
   font-size: 0.88em;
   color: inherit;
   margin-bottom: 0.5em;
@@ -34,7 +45,7 @@
   font-size: 16px;
   color: var(--color-text-dark);
   background-color: var(--color-bg-white);
-  padding: 0.75em;
+  padding: 0.5em 16px;
 }
 
 .Form-input,
@@ -55,14 +66,14 @@
 }
 .Form-file-input::before {
   background: transparent;
-  border: 1px solid color-mod(var(--color-border) blackness(5%));
+  border: 1px solid color(var(--color-border) blackness(+ 5%));
   border-radius: 6px;
   box-sizing: border-box;
   color: var(--color-text-dark);
   content: "Select a file";
   cursor: pointer;
   display: inline-block;
-  font-family: var(--default-font-family), sans-serif;
+  font-family: Arial, "Lato", sans-serif;
   font-size: 14px;
   font-weight: bold;
   outline: none;
@@ -86,6 +97,16 @@
 
 .Form-field.Form--fieldError .Form-input {
   border-color: var(--color-error);
+}
+
+.Form-message {
+  opacity: 0;
+  transition: none;
+}
+
+.Form-message.Form-message--visible {
+  opacity: 1;
+  transition: opacity 500ms linear;
 }
 
 .Form-input:focus:not(.no-focus),
