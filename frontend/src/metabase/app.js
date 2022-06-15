@@ -128,6 +128,19 @@ function _init(reducers, getRoutes, callback) {
   window.Metabase.store = store;
   window.Metabase.settings = MetabaseSettings;
 
+  window.addEventListener("beforeunload", event => {
+    // prompt user to save
+    const isEditPaths = [
+      "/chart",
+      "/chart/notebook",
+      "/dashboard/new",
+    ].includes(location.pathname);
+    const isEditing = store.getState().dashboard?.isEditing?.id;
+    if (isEditPaths || isEditing) {
+      event.returnValue = "";
+    }
+  });
+
   if (callback) {
     callback(store);
   }
