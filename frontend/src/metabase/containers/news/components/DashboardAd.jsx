@@ -19,21 +19,21 @@ const DashboardAd = props => {
         router={router}
         dashboardId={dashboard?.entityId || dashboard?.id}
         entityKey="creatorRelatedDashboards"
-        title="Creator Related Dashboards"
+        title="More dashboards"
       />
       <RelatedDashboard
         type="list"
         router={router}
         dashboardId={dashboard?.entityId || dashboard?.id}
         entityKey="tableRelatedDashboards"
-        title="Table Related Dashboards"
+        title="Viewers also viewed"
       />
       <RelatedDashboard
         type="list"
         router={router}
         dashboardId={dashboard?.entityId || dashboard?.id}
         entityKey="tagRelatedDashboards"
-        title="Tag Related Dashboards"
+        title="You may like"
       />
     </div>
   );
