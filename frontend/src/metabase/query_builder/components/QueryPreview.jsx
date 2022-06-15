@@ -44,7 +44,6 @@ function QueryPreview(props) {
     originId: tableId,
     databaseId,
     description,
-    display_name: displayName,
     name: tableName,
     databaseName,
   } = showPreviewChart.data || {};
