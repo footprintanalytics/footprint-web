@@ -44,7 +44,6 @@ function QueryPreview(props) {
     originId: tableId,
     databaseId,
     description,
-    display_name: displayName,
     name: tableName,
     databaseName,
   } = showPreviewChart.data || {};
@@ -110,9 +109,7 @@ function QueryPreview(props) {
     <div className="query-preview">
       <div className="query-preview__head">
         <div className="flex flex-row">
-          {displayName && (
-            <div className="query-preview__title">{displayName}</div>
-          )}
+          {tableName && <div className="query-preview__title">{tableName}</div>}
           <Button
             className="query-preview__select"
             icon="add"
