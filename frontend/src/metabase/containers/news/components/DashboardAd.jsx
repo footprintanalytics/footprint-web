@@ -3,18 +3,38 @@ import React from "react";
 import connect from "react-redux/lib/connect/connect";
 import "./DashboardAd.css";
 import { push } from "react-router-redux";
-import Recommend from "metabase/containers/news/components/Recommend";
-import HotDashboard from "metabase/containers/news/components/HotDashboard";
+import RelatedDashboard from "metabase/containers/news/components/RelatedDashboard";
+import _ from "underscore";
+import fitViewport from "metabase/hoc/FitViewPort";
+import { withRouter } from "react-router";
+import "../../dashboards/components/Dashboards/index.css";
 
 const DashboardAd = props => {
+  const { dashboard, router } = props;
+
   return (
     <div className="dashboard-ad html2canvas-filter">
-      <div className="dashboard-ad__left">
-        <Recommend type="article" title="Top News" moreText="More" />
-      </div>
-      <div className="dashboard-ad__right">
-        <HotDashboard limit={5} tags={props?.dashboard?.name?.split(" ")} />
-      </div>
+      <RelatedDashboard
+        type="box"
+        router={router}
+        dashboardId={dashboard?.entityId || dashboard?.id}
+        entityKey="creatorRelatedDashboards"
+        title="Creator Related Dashboards"
+      />
+      <RelatedDashboard
+        type="list"
+        router={router}
+        dashboardId={dashboard?.entityId || dashboard?.id}
+        entityKey="tableRelatedDashboards"
+        title="Table Related Dashboards"
+      />
+      <RelatedDashboard
+        type="list"
+        router={router}
+        dashboardId={dashboard?.entityId || dashboard?.id}
+        entityKey="tagRelatedDashboards"
+        title="Tag Related Dashboards"
+      />
     </div>
   );
 };
@@ -29,4 +49,8 @@ const mapDispatchToProps = {
   onChangeLocation: push,
 };
 
-export default connect(mapStateToProps, mapDispatchToProps)(DashboardAd);
+export default _.compose(
+  connect(mapStateToProps, mapDispatchToProps),
+  fitViewport,
+  withRouter,
+)(DashboardAd);

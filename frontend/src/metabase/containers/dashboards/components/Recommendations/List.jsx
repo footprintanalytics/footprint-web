@@ -6,7 +6,7 @@ import { trackStructEvent } from "metabase/lib/analytics";
 import { LeftCircleFilled, RightCircleFilled } from "@ant-design/icons";
 import { useDeviceInfo } from "metabase-lib/lib/Device";
 
-const List = ({ recommends }) => {
+const List = ({ recommends, target }) => {
   const [left, setLeft] = useState(0);
   const ref = useRef(null);
   const { isPC } = useDeviceInfo();
@@ -46,7 +46,7 @@ const List = ({ recommends }) => {
               trackStructEvent("Dashboards Recommendations", item.name);
             }}
           >
-            <Item item={item} />
+            <Item item={item} target={target} />
           </li>
         ))}
       </ul>

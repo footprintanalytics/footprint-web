@@ -8,7 +8,7 @@ import ItemCommon from "./ItemCommon";
 import Favorite from "metabase/containers/explore/components/Favorite";
 import * as Urls from "metabase/lib/urls";
 
-const ItemDashboard = ({ item, showStat = true }) => {
+const ItemDashboard = ({ item, showStat = true, target }) => {
   const fileName =
     (isProduction ? ossPath(item.mode) : item.mode) +
     "/" +
@@ -32,6 +32,7 @@ const ItemDashboard = ({ item, showStat = true }) => {
         url={getUrl()}
         thumb={getOssUrl(fileName, { resize: true })}
         name={item.name}
+        target={target}
       />
       {showStat && (
         <div className="dashboards__recommendations-stat">

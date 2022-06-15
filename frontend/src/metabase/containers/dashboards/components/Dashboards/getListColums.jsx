@@ -27,6 +27,7 @@ export default ({
   onHomePriority,
   searchWords,
   device,
+  canSort = true,
 }) => {
   const isMarket = user && user.isMarket;
   const isAdmin = user && user.is_superuser;
@@ -119,7 +120,7 @@ export default ({
     key: "views",
     dataIndex: "statistics",
     width: 120,
-    sorter: !isProtocol(),
+    sorter: canSort && !isProtocol(),
     sortDirections: ["descend", "ascend", "descend"],
     sortOrder:
       query?.sortBy === "views"
@@ -138,7 +139,7 @@ export default ({
     title: "Date",
     key: "created_at",
     width: 120,
-    sorter: !isProtocol(),
+    sorter: canSort && !isProtocol(),
     sortDirections: ["descend", "ascend", "descend"],
     sortOrder:
       query?.sortBy === "created_at"
