@@ -668,7 +668,7 @@ export default class Visualization extends React.PureComponent {
                 <div className="h4 text-bold mb1">{t`Still Waiting...`}</div>
                 {isSlow === "usually-slow" ? (
                   <div>
-                    {jt`This usually takes an average of ${(
+                    {expectedDuration > 0 && jt`This usually takes an average of ${(
                       <span
                         key="expectedDuration"
                         style={{ whiteSpace: "nowrap" }}
