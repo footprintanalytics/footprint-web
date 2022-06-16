@@ -12,29 +12,36 @@ import "../../dashboards/components/Dashboards/index.css";
 const DashboardAd = props => {
   const { dashboard, router } = props;
 
+  const data = [
+    {
+      type: "box",
+      entityKey: "creatorRelatedDashboards",
+      title: "More dashboards",
+    },
+    {
+      type: "list",
+      entityKey: "tableRelatedDashboards",
+      title: "Viewers also viewed",
+    },
+    {
+      type: "list",
+      entityKey: "tagRelatedDashboards",
+      title: "You may like",
+    },
+  ];
+
   return (
     <div className="dashboard-ad html2canvas-filter">
-      <RelatedDashboard
-        type="box"
-        router={router}
-        dashboardId={dashboard?.entityId || dashboard?.id}
-        entityKey="creatorRelatedDashboards"
-        title="More dashboards"
-      />
-      <RelatedDashboard
-        type="list"
-        router={router}
-        dashboardId={dashboard?.entityId || dashboard?.id}
-        entityKey="tableRelatedDashboards"
-        title="Viewers also viewed"
-      />
-      <RelatedDashboard
-        type="list"
-        router={router}
-        dashboardId={dashboard?.entityId || dashboard?.id}
-        entityKey="tagRelatedDashboards"
-        title="You may like"
-      />
+      {data.map(item => (
+        <RelatedDashboard
+          key={item.entityKey}
+          type={item.type}
+          router={router}
+          dashboardId={dashboard?.entityId || dashboard?.id}
+          entityKey={item.entityKey}
+          title={item.title}
+        />
+      ))}
     </div>
   );
 };
