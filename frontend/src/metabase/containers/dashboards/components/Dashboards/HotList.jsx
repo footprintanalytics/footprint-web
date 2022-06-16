@@ -50,7 +50,6 @@ const HotList = ({ router, user, data, current, gaCategory }) => {
 
   return (
     <>
-      {/* 列表 */}
       <Table
         rowKey="publicUuid"
         className="dashboards__table"
@@ -59,7 +58,6 @@ const HotList = ({ router, user, data, current, gaCategory }) => {
         pagination={pagination}
         showHeader={showHeader}
       />
-      {/* 复制 */}
       <DashboardCopyModal
         isOpen={!!dashboardCopyModal.id}
         onClose={() => setDashboardCopyModal({})}
@@ -70,7 +68,6 @@ const HotList = ({ router, user, data, current, gaCategory }) => {
         }}
         fromRoute={false}
       />
-      {/* 复制 */}
       <QueryCopyModal
         open={!!cardCopyModal.id}
         cardId={cardCopyModal.id}
@@ -78,7 +75,6 @@ const HotList = ({ router, user, data, current, gaCategory }) => {
         description={cardCopyModal.description}
         onClose={() => setCardCopyModal({})}
       />
-      {/* 分享 */}
       <ShareModal
         resource={shareModalResource}
         onAfterChangePublicUuid={({ newUuid }) => {
@@ -88,7 +84,6 @@ const HotList = ({ router, user, data, current, gaCategory }) => {
         }}
         onClose={() => setShareModalResource({})}
       />
-      {/* seo 标签 keyword */}
       {seoTaggingModal.id && (
         <TaggingModal
           onClose={() => setSeoTaggingModal({})}
@@ -98,7 +93,6 @@ const HotList = ({ router, user, data, current, gaCategory }) => {
           type="dashboard"
         />
       )}
-      {/* dashboard 排序 */}
       {homePriorityModal.id && (
         <HomePriorityModal
           onClose={() => setHomePriorityModal({})}
