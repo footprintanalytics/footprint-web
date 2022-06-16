@@ -5,6 +5,8 @@ import { t } from "ttag";
 
 import EntityForm from "metabase/entities/containers/EntityForm";
 import ModalContent from "metabase/components/ModalContent";
+import { connect } from "react-redux";
+import { getUser } from "metabase/home/selectors";
 
 const EntityCopyModal = ({
   entityType,
@@ -12,13 +14,12 @@ const EntityCopyModal = ({
   copy,
   onClose,
   onSaved,
+  user,
   ...props
 }) => (
   <ModalContent
     title={
-      entityObject.name
-        ? entityObject.name + " - " + t`Duplicate`
-        : t`Duplicate`
+      entityObject.name ? entityObject.name + " - " + user?.name : user?.name
     }
     titleDesc={
       <div style={{ color: "#FFBC4C", fontSize: 12, padding: "8px 0" }}>
@@ -34,8 +35,8 @@ const EntityCopyModal = ({
       entityObject={{
         ...dissoc(entityObject, "id"),
         name: entityObject.name
-          ? entityObject.name + " - " + t`Duplicate`
-          : t`Duplicate`,
+          ? entityObject.name + " - " + user?.name
+          : user?.name,
       }}
       onSubmit={copy}
       onClose={onClose}
@@ -46,4 +47,8 @@ const EntityCopyModal = ({
   </ModalContent>
 );
 
-export default EntityCopyModal;
+const mapStateToProps = (state, props) => ({
+  user: getUser(state, props),
+});
+
+export default connect(mapStateToProps)(EntityCopyModal);
