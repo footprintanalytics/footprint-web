@@ -1,5 +1,6 @@
 .dashboard-ad {
   display: flex;
+  flex-direction: column;
   margin: var(--footprint-spacing-m) 0;
 }
 
@@ -29,23 +30,9 @@
   margin-top: var(--footprint-spacing-m);
 }
 
-.dashboard-ad__left {
-  flex: 1;
-}
-
-.dashboard-ad__right {
-  width: 300px;
-  margin: 0 0 0 12px;
-}
-
 @media screen and (--footprint-breakpoint-max-mobile) {
   .dashboard-ad {
     flex-direction: column;
-  }
-
-  .dashboard-ad__right {
-    margin: 20px 0;
-    width: 100%;
   }
 
   .dashboard-ad .hots {

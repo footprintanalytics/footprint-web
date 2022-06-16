@@ -374,3 +374,7 @@ export const tutorialsMenu = () => {
 export const tutorialsMenuDetail = params => {
   return GET(`api/v1/tutorials/menu/detail/list`, params);
 };
+
+export const relatedDashboard = params => {
+  return POST(`api/v1/dashboard/relatedDashboard`, params);
+};

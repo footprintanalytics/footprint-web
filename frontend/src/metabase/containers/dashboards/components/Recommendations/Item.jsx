@@ -4,11 +4,11 @@ import ItemCommon from "./ItemCommon";
 import ItemVideo from "./ItemVideo";
 import ItemDashboard from "./ItemDashboard";
 
-const Item = ({ item, showStat }) => {
+const Item = ({ item, showStat, target }) => {
   switch (item.mode) {
     case "dashboard":
     case "card":
-      return <ItemDashboard item={item} showStat={showStat} />;
+      return <ItemDashboard item={item} showStat={showStat} target={target} />;
     case "video":
       return <ItemVideo item={item} />;
     case "activity":
