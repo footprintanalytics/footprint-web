@@ -31,6 +31,7 @@ const RelatedDashboard = ({
         return {
           ...item,
           mode: "dashboard",
+          modelId: item?.id,
         };
       }) || []
     );

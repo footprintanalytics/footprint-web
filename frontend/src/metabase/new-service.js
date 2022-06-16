@@ -376,5 +376,5 @@ export const tutorialsMenuDetail = params => {
 };
 
 export const relatedDashboard = params => {
-  return POST(`api/v1/dashboard/relatedDashboard`, params);
+  return POST(`api/v1/dashboard/relatedDashboard`, params, { silent: true });
 };
