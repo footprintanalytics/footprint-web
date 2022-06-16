@@ -28,6 +28,7 @@ export default ({
   searchWords,
   device,
   canSort = true,
+  gaCategory = "Dashboards",
 }) => {
   const isMarket = user && user.isMarket;
   const isAdmin = user && user.is_superuser;
@@ -50,7 +51,7 @@ export default ({
           <Link
             to={`/@${creatorName}`}
             // target="_blank"
-            onClick={() => trackStructEvent("Dashboards Name", record.name)}
+            onClick={() => trackStructEvent(`${gaCategory} Name`, record.name)}
           >
             {get(record, "creator.avatar") ? (
               <img
@@ -72,7 +73,9 @@ export default ({
             <Link
               to={getLink(record)}
               // target="_blank"
-              onClick={() => trackStructEvent("Dashboards Name", record.name)}
+              onClick={() =>
+                trackStructEvent(`${gaCategory} Name`, record.name)
+              }
             >
               <h3 style={{ WebkitBoxOrient: "vertical" }}>
                 <Highlighter
@@ -198,7 +201,7 @@ export default ({
               default:
                 break;
             }
-            trackStructEvent("Dashboards Action", key);
+            trackStructEvent(`${gaCategory} Action`, key);
           }}
         >
           <Menu.Item key="favorite" style={{ marginLeft: -1 }}>

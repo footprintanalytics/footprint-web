@@ -24,7 +24,6 @@ const RelatedDashboard = ({
       }),
     QUERY_OPTIONS,
   );
-  console.log("data", data, entityKey, getIn(data, [entityKey]));
 
   const getData = () => {
     return (
@@ -44,9 +43,19 @@ const RelatedDashboard = ({
   return (
     <div className="relative-dashboard__wrap">
       <h2 className="relative-dashboard__title">{title}</h2>
-      {type === "box" && <List recommends={getData()} target="_blank" />}
+      {type === "box" && (
+        <List
+          recommends={getData()}
+          target="_blank"
+          gaCategory="related-dashboard"
+        />
+      )}
       {type === "list" && (
-        <HotList router={router} data={{ data: getData() }} />
+        <HotList
+          router={router}
+          data={{ data: getData() }}
+          gaCategory="related-dashboard"
+        />
       )}
     </div>
   );

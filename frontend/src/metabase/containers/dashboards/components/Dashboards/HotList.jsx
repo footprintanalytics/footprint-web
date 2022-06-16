@@ -10,7 +10,7 @@ import { useDeviceInfo } from "metabase-lib/lib/Device";
 import TaggingModal from "metabase/components/TaggingModal";
 import HomePriorityModal from "metabase/components/HomePriorityModal";
 
-const HotList = ({ router, user, data, current }) => {
+const HotList = ({ router, user, data, current, gaCategory }) => {
   const [dashboardCopyModal, setDashboardCopyModal] = useState({});
   const [cardCopyModal, setCardCopyModal] = useState({}); //query copy modal
   const [shareModalResource, setShareModalResource] = useState({});
@@ -36,6 +36,7 @@ const HotList = ({ router, user, data, current }) => {
     searchWords,
     device,
     canSort: false,
+    gaCategory: gaCategory,
   });
 
   const pagination =

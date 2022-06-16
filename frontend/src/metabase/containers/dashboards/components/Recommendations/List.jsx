@@ -6,7 +6,11 @@ import { trackStructEvent } from "metabase/lib/analytics";
 import { LeftCircleFilled, RightCircleFilled } from "@ant-design/icons";
 import { useDeviceInfo } from "metabase-lib/lib/Device";
 
-const List = ({ recommends, target }) => {
+const List = ({
+  recommends,
+  target,
+  gaCategory = "Dashboards Recommendations",
+}) => {
   const [left, setLeft] = useState(0);
   const ref = useRef(null);
   const { isPC } = useDeviceInfo();
@@ -21,7 +25,7 @@ const List = ({ recommends, target }) => {
       left: arrow === "prev" ? 0 : left + (288 + 28) * (isPC ? 4 : 1),
       behavior: "smooth",
     });
-    trackStructEvent("Dashboards Recommendations", arrow);
+    trackStructEvent(gaCategory, arrow);
   };
 
   return (
@@ -43,7 +47,7 @@ const List = ({ recommends, target }) => {
           <li
             key={item.configId}
             onClick={() => {
-              trackStructEvent("Dashboards Recommendations", item.name);
+              trackStructEvent(gaCategory, item.name);
             }}
           >
             <Item item={item} target={target} />
