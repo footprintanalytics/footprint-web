@@ -4,21 +4,36 @@ import React from "react";
 import Icon from "./Icon";
 import Link from "./Link";
 
-export const IconBack = ({ router, url = "/dashboards" }) => {
+const IconBackLink = ({ url, onClick }) => {
   return (
     <Link
       className="flex align-center"
       style={{ marginRight: 12, cursor: "pointer" }}
-      to={history.length > 2 ? undefined : url}
+      to={url}
       onClick={e => {
         trackStructEvent("Back");
-        if (history.length > 2) {
+        if (onClick) {
           e.preventDefault();
-          router.goBack();
+          onClick();
         }
       }}
     >
       <Icon name="back2" size={18} />
     </Link>
   );
+};
+
+export const IconBack = ({ router, url = "/dashboards" }) => {
+  const backUrl = router.location.query.back_url;
+  const hasPrev = history.length > 2;
+
+  if (backUrl) {
+    return <IconBackLink onClick={() => router.replace(backUrl)} />;
+  }
+
+  if (hasPrev) {
+    return <IconBackLink onClick={() => router.goBack()} />;
+  }
+
+  return <IconBackLink url={url} />;
 };
