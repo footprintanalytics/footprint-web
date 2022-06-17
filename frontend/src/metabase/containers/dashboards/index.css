@@ -34,18 +34,34 @@
   max-width: 300px;
 }
 
-@media screen and (--footprint-breakpoint-max-pad) {
+@media screen and (--footprint-breakpoint-max-home-width) {
   .dashboards__layout {
     width: 100%;
     flex-direction: column;
     padding: 0 20px;
   }
   .dashboards__cell {
+    padding: 48px 0 20px 0;
+  }
+  .dashboards__layout-side {
+    width: 100%;
+    margin-left: 0;
+    max-width: 1440px;
+  }
+}
+
+@media screen and (--footprint-breakpoint-max-pad) {
+  .dashboards__layout {
+    width: 100%;
+    flex-direction: column;
+    padding: 20px 0;
+  }
+  .dashboards__cell {
     padding: 48px 20px 20px 20px;
   }
   .dashboards__layout-side {
     margin-left: 0;
-    max-width: 1000px;
+    max-width: 1440px;
   }
 }
 

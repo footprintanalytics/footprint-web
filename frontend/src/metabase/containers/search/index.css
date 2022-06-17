@@ -94,6 +94,21 @@
   margin: 70px 0 0 18px;
 }
 
+@media screen and (--footprint-breakpoint-max-home-width) {
+  .search__wrap {
+    width: 100%;
+    flex-direction: column;
+  }
+
+  .search__header-wrap {
+    padding: 0 20px;
+  }
+
+  .search__header-input {
+    width: 100% !important;
+  }
+}
+
 @media screen and (--footprint-breakpoint-max-pad) {
   .search__wrap {
     width: 100%;

@@ -32,6 +32,12 @@
   margin-top: 10px;
 }
 
+@media screen and (--footprint-breakpoint-max-home-width) {
+  .search__tabs .ant-tabs-nav {
+    padding: 0 20px;
+  }
+}
+
 @media screen and (--footprint-breakpoint-max-pad) {
   .search__tabs .ant-tabs-nav {
     padding: 0 20px;
