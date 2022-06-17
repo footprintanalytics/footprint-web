@@ -66,6 +66,7 @@ import TaggingModal from "metabase/components/TaggingModal";
 import { closeNewGuide } from "metabase/containers/newguide/newGuide";
 import { InsertRowAboveOutlined, ScissorOutlined } from "@ant-design/icons";
 import QuestionRunningTime from "metabase/query_builder/components/view/QuestionRunningTime";
+import ResizeObserver from "resize-observer-polyfill";
 
 const viewTitleHeaderPropTypes = {
   question: PropTypes.object.isRequired,
@@ -136,8 +137,34 @@ export class ViewTitleHeader extends React.Component {
       showVip: false,
       confirmModal: false,
       showSeoTaggingModal: false,
+      width: 2000,
     };
   }
+
+  componentDidMount() {
+    this.handlerButtonScreenAdapter();
+  }
+
+  componentWillUnmount() {
+    if (this._ro && this.viewHeaderRef) {
+      this._ro.unobserve(this.viewHeaderRef);
+      this._ro.disconnect();
+      this._ro = null;
+    }
+  }
+
+  handlerButtonScreenAdapter = () => {
+    if (this.viewHeaderRef) {
+      this._ro = new ResizeObserver((entries, observer) => {
+        if (entries && entries.length > 0) {
+          this.setState({
+            width: entries[0]?.contentRect?.width || 2000,
+          });
+        }
+      });
+      this._ro.observe(this.viewHeaderRef);
+    }
+  };
 
   UNSAFE_componentWillReceiveProps(nextProps) {
     const query = this.props.question.query();
@@ -191,6 +218,10 @@ export class ViewTitleHeader extends React.Component {
       />,
     ];
   }
+
+  isSmallScreen = () => {
+    return this.state.width < 1200;
+  };
 
   // eslint-disable-next-line complexity
   render() {
@@ -339,6 +370,7 @@ export class ViewTitleHeader extends React.Component {
 
         <ViewSection className={cx("border-bottom", className)} style={style}>
           <div
+            ref={r => (this.viewHeaderRef = r)}
             style={{
               display: "flex",
               flexDirection: "column",
@@ -520,219 +552,235 @@ export class ViewTitleHeader extends React.Component {
               {!isSaved && isRunnable && isNative && (
                 <QuestionRunningTime {...this.props} />
               )}
-              <div className="ml-auto flex align-center html2canvas-filter">
+              <div
+                className={cx("ml-auto flex align-center html2canvas-filter", {
+                  "flex-column": this.isSmallScreen(),
+                })}
+              >
                 {this.state.expandEdit && (
                   <React.Fragment>
-                    {isOwner && QuestionFilterWidget.shouldRender(this.props) && (
-                      <Button
-                        disabled={queryBuilderMode !== "view"}
-                        onlyIcon
-                        className={`ml1 Question-header-btn-new ${
-                          isShowingChartSettingsSidebar
-                            ? "Question-header-btn--primary-new"
-                            : ""
-                        }`}
-                        onClick={
-                          isShowingChartSettingsSidebar
-                            ? onCloseChartSettings
-                            : onOpenChartSettings
-                        }
-                      >
-                        <div className="flex align-center">
-                          <ScissorOutlined
-                            style={{ fontSize: "16px" }}
-                            className="mr1"
-                          />
-                          Column
-                        </div>
-                      </Button>
-                    )}
-                    {isOwner && QuestionFilterWidget.shouldRender(this.props) && (
-                      <MyPopover
-                        name="filter"
-                        enabled={enabledPopover}
-                        placement="bottom"
-                        delayModel
-                        delayShow={!!result}
-                        next="summarize"
-                      >
-                        <Button
-                          disabled={queryBuilderMode !== "view"}
-                          onlyIcon
-                          className={`ml1 Question-header-btn-new ${
-                            isShowingFilterSidebar
-                              ? "Question-header-btn--primary-new"
-                              : ""
-                          }`}
-                          iconColor="#7A819B"
-                          icon="filter"
-                          iconSize={16}
-                          onClick={() => {
-                            trackStructEvent(`click Filter edit chart`);
-                            isShowingFilterSidebar
-                              ? onCloseFilter()
-                              : onAddFilter();
-                          }}
-                        >
-                          Filter
-                        </Button>
-                      </MyPopover>
-                    )}
-                    {isOwner &&
-                      QuestionSummarizeWidget.shouldRender(this.props) && (
+                    <div className={"ml-auto flex align-center"}>
+                      {isOwner &&
+                        QuestionFilterWidget.shouldRender(this.props) && (
+                          <Button
+                            disabled={queryBuilderMode !== "view"}
+                            onlyIcon
+                            className={`ml1 Question-header-btn-new ${
+                              isShowingChartSettingsSidebar
+                                ? "Question-header-btn--primary-new"
+                                : ""
+                            }`}
+                            onClick={
+                              isShowingChartSettingsSidebar
+                                ? onCloseChartSettings
+                                : onOpenChartSettings
+                            }
+                          >
+                            <div className="flex align-center">
+                              <ScissorOutlined
+                                style={{ fontSize: "16px" }}
+                                className="mr1"
+                              />
+                              Column
+                            </div>
+                          </Button>
+                        )}
+                      {isOwner &&
+                        QuestionFilterWidget.shouldRender(this.props) && (
+                          <MyPopover
+                            name="filter"
+                            enabled={enabledPopover}
+                            placement="bottom"
+                            delayModel
+                            delayShow={!!result}
+                            next="summarize"
+                          >
+                            <Button
+                              disabled={queryBuilderMode !== "view"}
+                              onlyIcon
+                              className={`ml1 Question-header-btn-new ${
+                                isShowingFilterSidebar
+                                  ? "Question-header-btn--primary-new"
+                                  : ""
+                              }`}
+                              iconColor="#7A819B"
+                              icon="filter"
+                              iconSize={16}
+                              onClick={() => {
+                                trackStructEvent(`click Filter edit chart`);
+                                isShowingFilterSidebar
+                                  ? onCloseFilter()
+                                  : onAddFilter();
+                              }}
+                            >
+                              Filter
+                            </Button>
+                          </MyPopover>
+                        )}
+                      {isOwner &&
+                        QuestionSummarizeWidget.shouldRender(this.props) && (
+                          <MyPopover
+                            name="summarize"
+                            enabled={enabledPopover}
+                            placement="bottom"
+                            delayModel
+                            next="visualization"
+                          >
+                            <Button
+                              disabled={queryBuilderMode !== "view"}
+                              onlyIcon
+                              className={`ml1 Question-header-btn-new ${
+                                isShowingSummarySidebar
+                                  ? "Question-header-btn--primary-new"
+                                  : ""
+                              }`}
+                              iconColor="#7A819B"
+                              icon="insight"
+                              iconSize={16}
+                              onClick={() => {
+                                trackStructEvent(`click Summary edit chart`);
+                                isShowingSummarySidebar
+                                  ? onCloseSummary()
+                                  : onEditSummary();
+                              }}
+                            >
+                              Summarize
+                            </Button>
+                          </MyPopover>
+                        )}
+                    </div>
+                    <div
+                      className={cx("ml-auto flex align-center", {
+                        mt1: this.isSmallScreen(),
+                      })}
+                    >
+                      {!result || isObjectDetail ? null : (
                         <MyPopover
-                          name="summarize"
+                          name="visualization"
                           enabled={enabledPopover}
                           placement="bottom"
                           delayModel
-                          next="visualization"
+                          next="advanced"
                         >
                           <Button
                             disabled={queryBuilderMode !== "view"}
                             onlyIcon
                             className={`ml1 Question-header-btn-new ${
-                              isShowingSummarySidebar
+                              isShowingChartTypeSidebar
                                 ? "Question-header-btn--primary-new"
                                 : ""
                             }`}
                             iconColor="#7A819B"
-                            icon="insight"
+                            icon={icon}
                             iconSize={16}
                             onClick={() => {
-                              trackStructEvent(`click Summary edit chart`);
-                              isShowingSummarySidebar
-                                ? onCloseSummary()
-                                : onEditSummary();
+                              trackStructEvent(
+                                `click Visualization edit chart`,
+                              );
+                              isShowingChartTypeSidebar
+                                ? onCloseChartType()
+                                : onOpenChartType();
                             }}
                           >
-                            Summarize
+                            Visualization
                           </Button>
                         </MyPopover>
                       )}
-                    {!result || isObjectDetail ? null : (
-                      <MyPopover
-                        name="visualization"
-                        enabled={enabledPopover}
-                        placement="bottom"
-                        delayModel
-                        next="advanced"
-                      >
+                      {isOwner &&
+                        QuestionNotebookButton.shouldRender({ question }) && (
+                          <MyPopover
+                            name="advanced"
+                            enabled={enabledPopover}
+                            placement="bottom"
+                            delayModel
+                          >
+                            <Button
+                              onlyIcon
+                              className={`ml1 Question-header-btn-new ${
+                                isShowingNotebook
+                                  ? "Question-header-btn--primary-new"
+                                  : ""
+                              }`}
+                              iconColor="#7A819B"
+                              icon="advanced"
+                              iconSize={16}
+                              onClick={() => {
+                                trackStructEvent(`click Advanced edit chart`);
+                                resetUIControls();
+                                setQueryBuilderMode(
+                                  isShowingNotebook ? "view" : "notebook",
+                                );
+                              }}
+                            >
+                              Advanced
+                            </Button>
+                          </MyPopover>
+                        )}
+                      {(isAdmin || user.groups.includes("Inner")) && (
                         <Button
-                          disabled={queryBuilderMode !== "view"}
                           onlyIcon
-                          className={`ml1 Question-header-btn-new ${
-                            isShowingChartTypeSidebar
-                              ? "Question-header-btn--primary-new"
-                              : ""
-                          }`}
+                          className="ml1 Question-header-btn-new"
                           iconColor="#7A819B"
-                          icon={icon}
                           iconSize={16}
                           onClick={() => {
-                            trackStructEvent(`click Visualization edit chart`);
-                            isShowingChartTypeSidebar
-                              ? onCloseChartType()
-                              : onOpenChartType();
+                            router.push(`/chart/buffet${location.hash}`);
+                            this.props.handleQuestionSideHide({ hide: false });
                           }}
                         >
-                          Visualization
+                          <div className="flex align-center">
+                            <InsertRowAboveOutlined
+                              style={{ fontSize: "16px" }}
+                              className="mr1"
+                            />
+                            Indicator
+                          </div>
                         </Button>
-                      </MyPopover>
-                    )}
-                    {isOwner &&
-                      QuestionNotebookButton.shouldRender({ question }) && (
-                        <MyPopover
-                          name="advanced"
-                          enabled={enabledPopover}
-                          placement="bottom"
-                          delayModel
+                      )}
+                      {menuMoreOptions.length > 0 && (
+                        <Dropdown
+                          overlay={<Menu>{menuMoreOptions}</Menu>}
+                          placement="bottomRight"
+                          trigger={["click"]}
                         >
                           <Button
                             onlyIcon
-                            className={`ml1 Question-header-btn-new ${
-                              isShowingNotebook
-                                ? "Question-header-btn--primary-new"
-                                : ""
-                            }`}
+                            className="Question-header-btn-new"
                             iconColor="#7A819B"
-                            icon="advanced"
+                            icon="edit_more"
+                            iconSize={16}
+                            ml={1}
+                          ></Button>
+                        </Dropdown>
+                      )}
+                      {question.query().database() && isNative && isSaved && (
+                        <Tooltip tooltip={t`Explore results`}>
+                          <Button
+                            onlyIcon
+                            className="ml1 Question-header-btn"
+                            iconColor="#7A819B"
+                            icon="sql_preview"
                             iconSize={16}
                             onClick={() => {
-                              trackStructEvent(`click Advanced edit chart`);
-                              resetUIControls();
-                              setQueryBuilderMode(
-                                isShowingNotebook ? "view" : "notebook",
-                              );
+                              const url = question
+                                .composeThisQuery()
+                                .setDisplay("table")
+                                .setSettings({})
+                                .getUrl();
+                              router.push(url);
                             }}
-                          >
-                            Advanced
-                          </Button>
-                        </MyPopover>
-                      )}
-                    {(isAdmin || user.groups.includes("Inner")) && (
-                      <Button
-                        onlyIcon
-                        className="ml1 Question-header-btn-new"
-                        iconColor="#7A819B"
-                        iconSize={16}
-                        onClick={() => {
-                          router.push(`/chart/buffet${location.hash}`);
-                          this.props.handleQuestionSideHide({ hide: false });
-                        }}
-                      >
-                        <div className="flex align-center">
-                          <InsertRowAboveOutlined
-                            style={{ fontSize: "16px" }}
-                            className="mr1"
                           />
-                          Indicator
-                        </div>
-                      </Button>
-                    )}
-                    {menuMoreOptions.length > 0 && (
-                      <Dropdown
-                        overlay={<Menu>{menuMoreOptions}</Menu>}
-                        placement="bottomRight"
-                        trigger={["click"]}
-                      >
-                        <Button
-                          onlyIcon
-                          className="Question-header-btn-new"
-                          iconColor="#7A819B"
-                          icon="edit_more"
-                          iconSize={16}
-                          ml={1}
-                        ></Button>
-                      </Dropdown>
-                    )}
-                    {question.query().database() && isNative && isSaved && (
-                      <Tooltip tooltip={t`Explore results`}>
-                        <Button
-                          onlyIcon
-                          className="ml1 Question-header-btn"
-                          iconColor="#7A819B"
-                          icon="sql_preview"
-                          iconSize={16}
-                          onClick={() => {
-                            const url = question
-                              .composeThisQuery()
-                              .setDisplay("table")
-                              .setSettings({})
-                              .getUrl();
-                            router.push(url);
+                        </Tooltip>
+                      )}
+                      {this.state.showVip && (
+                        <NeedPermissionModal
+                          title="Upgrade your account to access SQL query"
+                          onClose={() => this.setState({ showVip: false })}
+                          afterChangeLocation={() => {
+                            this.setState({ showVip: false });
                           }}
                         />
-                      </Tooltip>
-                    )}
-                    {this.state.showVip && (
-                      <NeedPermissionModal
-                        title="Upgrade your account to access SQL query"
-                        onClose={() => this.setState({ showVip: false })}
-                        afterChangeLocation={() => {
-                          this.setState({ showVip: false });
-                        }}
-                      />
-                    )}
+                      )}
+                    </div>
                   </React.Fragment>
                 )}
                 {!this.state.expandEdit && (
