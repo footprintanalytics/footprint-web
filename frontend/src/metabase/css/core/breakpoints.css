@@ -14,3 +14,4 @@
 
 @custom-media --footprint-breakpoint-max-mobile (max-width: 750px);
 @custom-media --footprint-breakpoint-max-pad (max-width: 1200px);
+@custom-media --footprint-breakpoint-max-home-width (max-width: 1440px);

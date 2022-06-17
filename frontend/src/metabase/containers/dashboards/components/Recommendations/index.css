@@ -100,3 +100,15 @@
 .dashboards__recommendations-stat {
   display: flex;
 }
+
+@media screen and (--footprint-breakpoint-max-home-width) {
+  .dashboards__recommendations {
+    padding: 48px 0;
+  }
+}
+
+@media screen and (--footprint-breakpoint-max-pad) {
+  .dashboards__recommendations {
+    padding: 48px 20px;
+  }
+}

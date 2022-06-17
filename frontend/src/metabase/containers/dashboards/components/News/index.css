@@ -53,6 +53,7 @@
 
 @media screen and (max-width: 1440px) {
   .dashboards__news {
+    max-width: 1440px;
     margin-left: 0;
   }
   .dashboards__news .ant-skeleton {

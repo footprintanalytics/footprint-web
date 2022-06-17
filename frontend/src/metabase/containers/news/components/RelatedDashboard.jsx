@@ -2,7 +2,6 @@
 import React from "react";
 import { relatedDashboard } from "metabase/new-service";
 import { useQuery } from "react-query";
-import { QUERY_OPTIONS } from "../../dashboards/shared/config";
 import "./RelatedDashboard.css";
 import List from "metabase/containers/dashboards/components/Recommendations/List";
 import "metabase/containers/dashboards/components/Recommendations/index.css";
@@ -17,12 +16,15 @@ const RelatedDashboard = ({
   type = "list",
 }) => {
   const { data } = useQuery(
-    "navigationSearch",
+    "relatedDashboard",
     async () =>
       relatedDashboard({
         dashboardId,
       }),
-    QUERY_OPTIONS,
+    {
+      refetchOnWindowFocus: false,
+      retry: false,
+    },
   );
 
   const getData = () => {
