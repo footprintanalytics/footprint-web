@@ -1,14 +1,44 @@
 import Link from "metabase/components/Link";
 import { elasticSearch } from "metabase/new-service";
 import React from "react";
-import { useQuery } from "react-query";
+import { useQueries } from "react-query";
 import "./index.css";
 import { QUERY_OPTIONS } from "../../shared/config";
 import { trackStructEvent } from "metabase/lib/analytics";
-import { Skeleton, Avatar } from "antd";
+import { Avatar, Skeleton } from "antd";
 import dayjs from "dayjs";
+import { every } from "lodash";
 
 const Creator = () => {
+  const hotsData = [
+    "Coin360",
+    "DeGame",
+    "Cao",
+    "Momo",
+    "ABGAofficial",
+    "EarnOnly",
+    "Penspencap",
+    "Victor",
+    "BG",
+    "cloudr3n",
+    "rogerD",
+    "DamonSalvatore",
+    "u7tkguSKt2",
+    "0x",
+    "Amwal",
+    "2H0j6vbqFL",
+    "Momir597295",
+  ];
+  const maxNums = 50;
+  const paramsHots = {
+    sortDirection: "desc",
+    sortBy: "dashboard_count",
+    current: 1,
+    pageSize: 100,
+    model: "creator",
+    qs: hotsData,
+  };
+
   const params = {
     sortDirection: "desc",
     sortBy: "dashboard_count",
@@ -18,11 +48,36 @@ const Creator = () => {
     qs: [],
   };
 
-  const { isLoading, data } = useQuery(
-    ["elasticSearch", params],
-    async () => elasticSearch(params),
+  const results = useQueries(
+    [
+      {
+        queryKey: ["elasticSearchHots", paramsHots],
+        queryFn: async () => elasticSearch(paramsHots),
+      },
+      {
+        queryKey: ["elasticSearch", params],
+        queryFn: async () => elasticSearch(params),
+      },
+    ],
     QUERY_OPTIONS,
   );
+
+  const getData = results => {
+    if (results.length < 2) {
+      return [];
+    }
+    //1.hot, 2.dashboard count sort
+    return [
+      ...(hotsData
+        ?.map(item => results[0]?.data?.data?.find(d => d?.user_name === item))
+        ?.filter(item => item) || []),
+      ...(results[1]?.data?.data?.filter(
+        item => !hotsData.includes(item?.user_name),
+      ) || []),
+    ].slice(0, maxNums);
+  };
+
+  const isLoading = every(results, ["isLoading", true]);
 
   return (
     <div className="dashboards__creator">
@@ -39,8 +94,8 @@ const Creator = () => {
         <Skeleton active />
       ) : (
         <ul className="dashboards__creator-list">
-          {data?.data.map(item => (
-            <li key={item.id}>
+          {getData(results)?.map((item, index) => (
+            <li key={index}>
               <Link
                 to={`/@${item.user_name}`}
                 className="dashboards__creator-list-item"
