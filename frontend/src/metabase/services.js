@@ -302,7 +302,7 @@ export const MetabaseApi = {
   field_discard_values: POST("/api/field/:fieldId/discard_values"),
   field_search: GET("/api/v1/field/:fieldId/search/:searchFieldId"),
   field_remapping: GET("/api/field/:fieldId/remapping/:remappedFieldId"),
-  dataset: POST("/api/v1/database/dataset"),
+  dataset: POST("/api/dataset"),
   dataset_pivot: POST("/api/dataset/pivot"),
   dataset_duration: POST("/api/dataset/duration"),
   native: POST("/api/dataset/native"),
