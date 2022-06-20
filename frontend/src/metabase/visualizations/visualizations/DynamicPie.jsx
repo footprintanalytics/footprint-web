@@ -130,6 +130,7 @@ export default class DynamicPie extends Component {
     this.option = {
       legend: commonEChartLegendSetting(),
       tooltip: {
+        trigger: "axis",
         showContent: true,
       },
       color: globalColors(),
