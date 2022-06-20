@@ -25,17 +25,6 @@ const propTypes = {
 export const AddToolPopover = props => {
   if (props.visible === false) return props.children;
   const dashId = props.dashboard.id;
-  let cacheSize = null;
-
-  if (props.getPopupContainer) {
-    const cardDom = props.getPopupContainer();
-    if (cardDom) {
-      cacheSize = {
-        width: cardDom.offsetWidth + "px",
-        height: cardDom.offsetHeight + "px",
-      };
-    }
-  }
 
   return (
     <Popover
@@ -43,10 +32,10 @@ export const AddToolPopover = props => {
       getPopupContainer={props.getPopupContainer}
       visible
       overlayClassName="AddToolPopover"
-      placement="rightTop"
+      placement="bottomLeft"
       zIndex={2}
       content={
-        <div className="AddToolPopover-content" style={cacheSize}>
+        <div className="AddToolPopover-content">
           <div
             className="AddToolPopover-content-l"
             onClick={() => {
