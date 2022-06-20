@@ -94,8 +94,8 @@ const Creator = () => {
         <Skeleton active />
       ) : (
         <ul className="dashboards__creator-list">
-          {getData(results)?.map((item, index) => (
-            <li key={index}>
+          {getData(results)?.map(item => (
+            <li key={item.id}>
               <Link
                 to={`/@${item.user_name}`}
                 className="dashboards__creator-list-item"
