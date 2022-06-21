@@ -16,12 +16,12 @@ const DashboardAd = props => {
     {
       type: "box",
       entityKey: "creatorRelatedDashboards",
-      title: "Recommended dashboards for you",
+      title: "More dashboards",
     },
     {
       type: "list",
       entityKey: "tableRelatedDashboards",
-      title: "More suggestions for you",
+      title: "People also viewed",
     },
     {
       type: "list",
