@@ -275,7 +275,7 @@ export default class PublicDashboard extends Component {
               <VisualizationShareFoot location={this.props.location} />
             )}
           </LoadingAndErrorWrapper>
-          {!isDefi360() && <DashboardAd dashboard={dashboard} />}
+          {!isDefi360() && <DashboardAd dashboardId={dashboard?.entityId} />}
           {children}
         </EmbedFrame>
       </LoadingAndErrorWrapper>

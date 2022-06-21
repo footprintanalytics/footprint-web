@@ -62,6 +62,7 @@ export default class Dashboard extends Component {
     showDashboardCopyModal: false,
     newDashboardModal: false,
     cancelModal: false,
+    id: null,
   };
 
   static propTypes = {
@@ -202,6 +203,7 @@ export default class Dashboard extends Component {
           dashboardName: encodeURIComponent(urlDashboardName),
           userName: urlUserName,
         });
+        this.setState({ id });
         if (user && (metabaseId === user.id || user.is_superuser)) {
           dashboardId = id;
         } else {
@@ -585,7 +587,9 @@ export default class Dashboard extends Component {
                   </DashboardBody>
                   {!isEditing && !isDefi360() && (
                     <div style={{ padding: "0 18px" }}>
-                      <DashboardAd dashboard={dashboard} />
+                      <DashboardAd
+                        dashboardId={this.state.id || this.props.dashboardId}
+                      />
                     </div>
                   )}
                 </DashboardLazyLoadContainer>
