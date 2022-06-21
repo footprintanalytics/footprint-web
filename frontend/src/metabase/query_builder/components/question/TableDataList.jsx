@@ -157,7 +157,7 @@ const TableDataList = props => {
               ? {
                   originId: `more`,
                   type: "more",
-                  display_name: "More",
+                  name: "More",
                   current: current,
                 }
               : null,
@@ -271,7 +271,7 @@ const TableDataList = props => {
                 highlightClassName="highlight"
                 searchWords={searchWords}
                 autoEscape={true}
-                textToHighlight={field.display_name}
+                textToHighlight={field.name}
               />
               {field.database_type && (
                 <span style={{ color: "#949aab", marginLeft: 5 }}>
