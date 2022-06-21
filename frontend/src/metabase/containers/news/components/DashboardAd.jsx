@@ -10,25 +10,29 @@ import { withRouter } from "react-router";
 import "../../dashboards/components/Dashboards/index.css";
 
 const DashboardAd = props => {
-  const { dashboard, router } = props;
+  const { dashboardId, router } = props;
 
   const data = [
     {
       type: "box",
       entityKey: "creatorRelatedDashboards",
-      title: "More dashboards",
+      title: "Recommended dashboards for you",
     },
     {
       type: "list",
       entityKey: "tableRelatedDashboards",
-      title: "Viewers also viewed",
+      title: "More suggestions for you",
     },
     {
       type: "list",
       entityKey: "tagRelatedDashboards",
-      title: "You may like",
+      title: "Dashboards you may be interested in",
     },
   ];
+
+  if (!dashboardId) {
+    return null;
+  }
 
   return (
     <div className="dashboard-ad html2canvas-filter">
@@ -37,7 +41,7 @@ const DashboardAd = props => {
           key={item.entityKey}
           type={item.type}
           router={router}
-          dashboardId={dashboard?.entityId || dashboard?.id}
+          dashboardId={dashboardId}
           entityKey={item.entityKey}
           title={item.title}
         />
