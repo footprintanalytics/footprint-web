@@ -32,7 +32,7 @@ export const AddToolPopover = props => {
       getPopupContainer={props.getPopupContainer}
       visible
       overlayClassName="AddToolPopover"
-      placement="bottomLeft"
+      placement="rightTop"
       zIndex={2}
       content={
         <div className="AddToolPopover-content">
@@ -44,11 +44,11 @@ export const AddToolPopover = props => {
             }}
           >
             <Icon name="explore_add" size={60} color={"#3334B2"} />
-          </div>
-          <div className="AddToolPopover-content-r">
             <h3>
               <span>👋</span>Hi, now you can
             </h3>
+          </div>
+          <div className="AddToolPopover-content-r">
             <Space className="AddToolPopover-tools" direction="vertical">
               <Button
                 icon={<LineChartOutlined />}

@@ -2,39 +2,43 @@
   padding: 0;
 }
 
+.AddToolPopover {
+  opacity: 0.9;
+}
+
 .AddToolPopover-content {
   display: flex;
   align-items: stretch;
-  padding: 16px;
-  width: 500px;
-  height: 330px;
+  padding: 10px;
 }
 
 .AddToolPopover-content-l {
   display: flex;
+  flex-direction: column;
   align-items: center;
   justify-content: center;
   border: 1px dashed #d9d9d9;
   border-radius: 2px;
   flex: 1;
-  margin-right: 16px;
+  margin-right: 10px;
   cursor: pointer;
+  padding: 0 30px;
+}
+
+.AddToolPopover-content-l h3 {
+  margin-top: 20px;
+  font-size: 14px;
+  white-space: nowrap;
+}
+
+.AddToolPopover-content-l h3 span {
+  margin-right: 10px;
 }
 
 .AddToolPopover-content-r {
   display: flex;
   flex-direction: column;
   justify-content: center;
-}
-
-.AddToolPopover-content-r h3 {
-  margin-bottom: 10px;
-  font-size: 14px;
-  white-space: nowrap;
-}
-
-.AddToolPopover-content-r h3 span {
-  margin-right: 10px;
 }
 
 .AddToolPopover-tools .ant-btn {
