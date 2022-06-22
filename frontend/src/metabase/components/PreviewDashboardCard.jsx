@@ -58,7 +58,7 @@ const PreviewDashboardCard = props => {
   const [showArchiveCard, setShowArchiveCard] = useState(null); //query archive modal
   const [showArchiveDashboard, setShowArchiveDashboard] = useState(null); //dashboad archive modal
   const [showDashboardCopyModal, setShowDashboardCopyModal] = useState(false); //dashboard copy modal
-  const thumbUrl = `${ossPath(item.type)}/${item.id}.png`;
+  const thumbUrl = `${ossPath(item.type || item.model)}/${item.id}.png`;
   const showButtons = !Urls.isPublicPath() && !hideButtons;
   const showCopyButton = true;
   // item.type === "card" ||

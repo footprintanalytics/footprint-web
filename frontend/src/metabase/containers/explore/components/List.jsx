@@ -18,7 +18,7 @@ import CreateActionModal from "metabase/components/CreateActionModal";
 import { isPublicPath } from "metabase/lib/urls";
 import { isDefi360 } from "metabase/lib/project_info";
 
-function List({
+function ExplorerList({
   exploreList,
   exploreTotal,
   type,
@@ -163,4 +163,4 @@ const mapDispatchToProps = {
   setLoginModalShow: loginModalShowAction,
 };
 
-export default connect(mapStateToProps, mapDispatchToProps)(List);
+export default connect(mapStateToProps, mapDispatchToProps)(ExplorerList);

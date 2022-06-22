@@ -1,8 +1,9 @@
 /* eslint-disable react/prop-types */
-import { Skeleton, Table } from "antd";
+import { Pagination, Skeleton, Table } from "antd";
 import {
   elasticSearch,
   fetchHomeNewCategoryDashboard,
+  getFavorite,
   getLandingDetailMore,
   navigationSearch,
 } from "metabase/new-service";
@@ -30,8 +31,10 @@ import { trackStructEvent } from "metabase/lib/analytics";
 import { useDeviceInfo } from "metabase-lib/lib/Device";
 import TaggingModal from "metabase/components/TaggingModal";
 import HomePriorityModal from "metabase/components/HomePriorityModal";
+import ExplorerList from "../../../explore/components/List";
+import "../../../explore/index.css";
 
-const List = ({ router, user, protocolName, name }) => {
+const List = ({ router, user, protocolName, name, isList = true }) => {
   const [dashboardCopyModal, setDashboardCopyModal] = useState({});
   const [cardCopyModal, setCardCopyModal] = useState({}); //query copy modal
   const [shareModalResource, setShareModalResource] = useState({});
@@ -64,6 +67,15 @@ const List = ({ router, user, protocolName, name }) => {
         return elasticSearch(params);
       }
       if (isCreator()) {
+        if (router?.location?.query?.model === "favorites") {
+          const favoriteParams = {
+            pageSize: params.pageSize,
+            current: params.current,
+            sortColumn: params.sortBy || "favoriteTime",
+            sortDirection: params.sortDirection,
+          };
+          return getFavorite({ params: favoriteParams });
+        }
         return navigationSearch(params);
       }
       return fetchHomeNewCategoryDashboard(params);
@@ -110,17 +122,28 @@ const List = ({ router, user, protocolName, name }) => {
   if (isProtocol() && data?.data.length === 0) {
     return null;
   }
-  return (
-    <>
-      {isSearch() && data?.isFeature && <NoData />}
-      {isSearch() && data?.isFeature && (
-        <div className="dashboards__recommend">Recommend</div>
-      )}
-      {isProtocol() && data?.total && (
-        <div className="dashboards__more-relevant-dashboard">
-          More Relevant Dashboard
-        </div>
-      )}
+
+  const renderGrid = () => {
+    return (
+      <div className="dashboards__grid">
+        <ExplorerList
+          location={router?.location}
+          exploreList={data?.data}
+          exploreTotal={data?.total}
+          createPanel={false}
+          showArchiveButton={false}
+          onAfterChangePublicUuid={false}
+          favoriteClickSuccess={false}
+          archiveSuccess={false}
+          loadMore={() => {}}
+        />
+        <Pagination className="dashboards__news-pagination" {...pagination} />
+      </div>
+    );
+  };
+
+  const renderTable = () => {
+    return (
       <Table
         rowKey="publicUuid"
         className="dashboards__table"
@@ -150,6 +173,22 @@ const List = ({ router, user, protocolName, name }) => {
           }
         }}
       />
+    );
+  };
+
+  return (
+    <>
+      {isSearch() && data?.isFeature && <NoData />}
+      {isSearch() && data?.isFeature && (
+        <div className="dashboards__recommend">Recommend</div>
+      )}
+      {isProtocol() && data?.total && (
+        <div className="dashboards__more-relevant-dashboard">
+          More Relevant Dashboard
+        </div>
+      )}
+      {isList ? renderTable() : renderGrid()}
+
       <DashboardCopyModal
         isOpen={!!dashboardCopyModal.id}
         onClose={() => setDashboardCopyModal({})}

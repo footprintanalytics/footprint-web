@@ -34,6 +34,16 @@
   max-width: 300px;
 }
 
+.dashboards__grid {
+  margin: 8px;
+  display: flex;
+  flex-direction: column;
+}
+
+.dashboards__grid .preview-dashboard-card {
+  height: 300px;
+}
+
 @media screen and (--footprint-breakpoint-max-home-width) {
   .dashboards__layout {
     width: 100%;

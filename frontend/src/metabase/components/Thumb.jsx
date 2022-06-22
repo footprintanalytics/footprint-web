@@ -11,6 +11,7 @@ const Thumb = ({
   defaultThumb = "default_thumb.png",
 }) => {
   const { loaded, errored } = useImage({ src });
+  console.log("src", src);
   if (loaded) {
     if (!backgroundModel) {
       return <img src={src} alt={name} />;

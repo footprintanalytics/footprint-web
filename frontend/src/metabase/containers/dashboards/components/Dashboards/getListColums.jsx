@@ -35,7 +35,7 @@ export default ({
   // const isInner = user?.groups?.includes("Inner");
   const query = router?.location?.query;
   const getLink = record => {
-    return record?.model === "dashboard"
+    return record?.model === "dashboard" || record?.type === "dashboard"
       ? Urls.dashboard(record)
       : Urls.guestUrl(record);
   };
@@ -77,7 +77,9 @@ export default ({
                 trackStructEvent(`${gaCategory} Name`, record.name)
               }
             >
-              <h3 style={{ WebkitBoxOrient: "vertical" }}>
+              <h3
+                style={{ WebkitBoxOrient: "vertical", wordBreak: "break-all" }}
+              >
                 <Highlighter
                   highlightClassName="highlight"
                   searchWords={searchWords}
@@ -138,7 +140,25 @@ export default ({
       );
     },
   };
-  const data = {
+  const favoriteTime = {
+    title: "Favorite Date",
+    key: "favorite_time",
+    width: 120,
+    sorter: canSort && !isProtocol(),
+    sortDirections: ["descend", "ascend", "descend"],
+    sortOrder:
+      query?.sortBy === "favorite_time"
+        ? sortMap[query?.sortDirection] || sortMap.desc
+        : undefined,
+    render: (_, record) => {
+      return (
+        <div className="dashboards__table-date">
+          {dayjs(record.favoriteTime).format("YYYY-MM-DD")}
+        </div>
+      );
+    },
+  };
+  const date = {
     title: "Date",
     key: "created_at",
     width: 120,
@@ -151,7 +171,7 @@ export default ({
     render: (_, record) => {
       return (
         <div className="dashboards__table-date">
-          {dayjs(record.updatedAt || record.createdAt).format("YYYY-MM-DD")}
+          {dayjs(record.createdAt).format("YYYY-MM-DD")}
         </div>
       );
     },
@@ -245,5 +265,12 @@ export default ({
       );
     },
   };
-  return device?.isMobile ? [name, views] : [name, tag, views, data, action];
+  if (device?.isMobile) {
+    return [name, views];
+  }
+
+  if (query?.model === "favorites") {
+    return [name, tag, views, favoriteTime, action];
+  }
+  return [name, tag, views, date, action];
 };

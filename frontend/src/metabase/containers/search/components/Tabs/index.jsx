@@ -1,7 +1,7 @@
 /* eslint-disable react/prop-types */
 /* eslint-disable react/display-name */
 import { Tabs } from "antd";
-import React from "react";
+import React, { useState } from "react";
 import { connect } from "react-redux";
 import "./index.css";
 import { getSearchQueryLink } from "../../shared/utils";
@@ -12,12 +12,15 @@ import DataSetList from "../DataSet/Index";
 import cx from "classnames";
 import {
   getCreatorQueryLink,
+  isCreator,
   isSearch,
 } from "metabase/containers/dashboards/shared/utils";
 import Link from "metabase/components/Link";
 import { useDeviceInfo } from "metabase-lib/lib/Device";
 import { loginModalShowAction } from "metabase/redux/control";
 import { trackStructEvent } from "metabase/lib/analytics";
+import Tooltip from "metabase/components/Tooltip";
+import Icon from "metabase/components/Icon";
 
 const Index = ({
   router,
@@ -28,7 +31,11 @@ const Index = ({
   className,
   setLoginModalShow,
 }) => {
+  const [isList, setIsList] = useState(true);
+  console.log("index router", router);
   const { isMobile } = useDeviceInfo();
+
+  const isOwnCreator = user && user.name === router?.params?.name;
 
   const tabData = [
     {
@@ -46,6 +53,14 @@ const Index = ({
         return <DashboardsList {...params} />;
       },
       show: true,
+    },
+    {
+      key: "favorites",
+      tab: "Favorites",
+      render: params => {
+        return <DashboardsList {...params} />;
+      },
+      show: isCreator() && isOwnCreator,
     },
     {
       key: "creator",
@@ -89,33 +104,63 @@ const Index = ({
     return linkFunc({
       ...router.location.query,
       model,
+      current: 1,
     });
   };
 
+  const renderSwitchGraph = () => {
+    return (
+      <div className="search__tabs-other flex justify-end">
+        <div
+          className="p1 cursor-pointer"
+          onClick={() => {
+            setIsList(!isList);
+          }}
+        >
+          <Tooltip tooltip={isList ? "Switch to graph" : "Switch to list"}>
+            <Icon
+              name={isList ? "switch_grid" : "switch_list"}
+              size={20}
+              color={"#A6AABE"}
+            />
+          </Tooltip>
+        </div>
+      </div>
+    );
+  };
+
   return (
-    <Tabs
-      className={cx("search__tabs", className)}
-      activeKey={model}
-      size="large"
-      tabBarGutter={isMobile ? 20 : 80}
-      animated={false}
-      destroyInactiveTabPane={true}
-      onChange={model => {
-        router.replace(getUrl(model));
-        trackStructEvent(`search tab click ${model}`);
-      }}
-    >
-      {tabData
-        .filter(item => item.show)
-        .map(item => {
-          return (
-            <Tabs.TabPane tab={getTab(item.key, item.tab)} key={item.key}>
-              {model === item.key &&
-                item.render({ router, user, name, setLoginModalShow })}
-            </Tabs.TabPane>
-          );
-        })}
-    </Tabs>
+    <div className={cx("search__tabs relative", className)}>
+      <Tabs
+        activeKey={model}
+        size="large"
+        tabBarGutter={isMobile ? 20 : 80}
+        animated={false}
+        destroyInactiveTabPane={true}
+        onChange={model => {
+          router.replace(getUrl(model));
+          trackStructEvent(`search tab click ${model}`);
+        }}
+      >
+        {tabData
+          .filter(item => item.show)
+          .map(item => {
+            return (
+              <Tabs.TabPane tab={getTab(item.key, item.tab)} key={item.key}>
+                {model === item.key &&
+                  item.render({
+                    router,
+                    user,
+                    name,
+                    setLoginModalShow,
+                    isList,
+                  })}
+              </Tabs.TabPane>
+            );
+          })}
+      </Tabs>
+      {isCreator() && renderSwitchGraph()}
+    </div>
   );
 };
 
