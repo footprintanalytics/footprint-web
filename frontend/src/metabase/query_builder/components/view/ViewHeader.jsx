@@ -67,6 +67,7 @@ import { closeNewGuide } from "metabase/containers/newguide/newGuide";
 import { InsertRowAboveOutlined, ScissorOutlined } from "@ant-design/icons";
 import QuestionRunningTime from "metabase/query_builder/components/view/QuestionRunningTime";
 import ResizeObserver from "resize-observer-polyfill";
+import TableDictionary from "metabase/query_builder/components/TableDictionary";
 
 const viewTitleHeaderPropTypes = {
   question: PropTypes.object.isRequired,
@@ -359,6 +360,14 @@ export class ViewTitleHeader extends React.Component {
         </Menu.Item>,
       );
     }
+    console.log(
+      "question",
+      question
+        .query()
+        .table()
+        .displayName(),
+      question?.query()?.table(),
+    );
     return (
       <React.Fragment>
         {!isSaved && (
@@ -487,6 +496,15 @@ export class ViewTitleHeader extends React.Component {
                     )}
                   </div>
                 </div>
+              )}
+              {!isSaved && (
+                <TableDictionary
+                  tableName={question
+                    ?.query()
+                    ?.table()
+                    ?.displayName()}
+                  tableId={question?.query()?.table()?.id}
+                />
               )}
               {location.hash && isVisualized && (
                 <VizTableToggle
