@@ -55,6 +55,8 @@ import NewGuideStartModal from "metabase/containers/newguide/NewGuideStartModal"
 import TableCategory from "metabase/query_builder/components/question/TableCategory";
 import { useQuery } from "react-query";
 import { QUERY_OPTIONS } from "metabase/containers/dashboards/shared/config";
+import TableSelect from "metabase/query_builder/components/question/TableSelect";
+import demoData from "metabase/query_builder/components/question/data";
 
 function QuestionSide({
   question,
@@ -234,21 +236,30 @@ function QuestionSide({
           databaseId={databaseId}
         />
       )}
-      <TableSearch
-        isEditing={isEditing}
-        setSearchKey={setSearchKey}
-        searchKey={searchKey}
-        searchKeyValue={searchKeyValue}
-        searchLoading={searchKeyValue.length > 0 && isLoading}
-        databaseId={databaseId}
-        formDataSelector={formDataSelector}
-        handleSelectTable={handleSelectTable}
-      />
       {!formDataSelector && (
         <TableCategory
           databaseId={databaseId}
           categoryChange={categoryChange}
           category={category}
+        />
+      )}
+      {dataSets && (
+        <div className="flex">
+          <TableSelect list={demoData().d1} placeholder={"Chains"} />
+          {/*<TableSelect list={demoData().d2} placeholder={"Protocol"}/>*/}
+          <TableSelect list={demoData().d3} placeholder={"Metrics"} />
+        </div>
+      )}
+      {dataSets && (
+        <TableSearch
+          isEditing={isEditing}
+          setSearchKey={setSearchKey}
+          searchKey={searchKey}
+          searchKeyValue={searchKeyValue}
+          searchLoading={searchKeyValue.length > 0 && isLoading}
+          databaseId={databaseId}
+          formDataSelector={formDataSelector}
+          handleSelectTable={handleSelectTable}
         />
       )}
       <>
