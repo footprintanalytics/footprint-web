@@ -21,6 +21,9 @@ import { loginModalShowAction } from "metabase/redux/control";
 import { trackStructEvent } from "metabase/lib/analytics";
 import Tooltip from "metabase/components/Tooltip";
 import Icon from "metabase/components/Icon";
+import Search from "antd/es/input/Search";
+import { debounce } from "lodash";
+import * as MetabaseAnalytics from "metabase/lib/analytics";
 
 const Index = ({
   router,
@@ -32,10 +35,12 @@ const Index = ({
   setLoginModalShow,
 }) => {
   const [isList, setIsList] = useState(true);
-  console.log("index router", router);
+
   const { isMobile } = useDeviceInfo();
 
   const isOwnCreator = user && user.name === router?.params?.name;
+
+  const isFavoritesTab = model === "favorites";
 
   const tabData = [
     {
@@ -102,15 +107,32 @@ const Index = ({
   const getUrl = model => {
     const linkFunc = isSearch() ? getSearchQueryLink : getCreatorQueryLink;
     return linkFunc({
-      ...router.location.query,
+      ...router?.location?.query,
       model,
       current: 1,
+      q: !isFavoritesTab ? router?.location?.query?.q : "",
     });
   };
 
   const renderSwitchGraph = () => {
+    const changeHandler = debounce(val => {
+      const link = getCreatorQueryLink({
+        ...router?.location?.query,
+        q: val,
+      });
+      router.replace(link);
+      MetabaseAnalytics.trackStructEvent(`creator tabs search ${val}`);
+    }, 1000);
     return (
       <div className="search__tabs-other flex justify-end">
+        {!isFavoritesTab && (
+          <Search
+            allowClear
+            placeholder="Search..."
+            onChange={e => changeHandler(e.target.value)}
+            className="search__tabs-search"
+          />
+        )}
         <div
           className="p1 cursor-pointer"
           onClick={() => {

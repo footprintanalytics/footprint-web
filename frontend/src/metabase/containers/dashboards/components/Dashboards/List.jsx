@@ -57,6 +57,7 @@ const List = ({ router, user, protocolName, name, isList = true }) => {
       "getLandingDetailMore",
       "protocol",
       router.location.pathname,
+      user?.id,
       params,
     ],
     async () => {

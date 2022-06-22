@@ -92,6 +92,9 @@ export default ({
                     alt={`Hot - ${record.name}`}
                   />
                 )}
+                {!record.publicUuid && (
+                  <span className="dashboards__table-private">Private</span>
+                )}
               </h3>
             </Link>
             <span className="dashboards__table-name-info-creator">

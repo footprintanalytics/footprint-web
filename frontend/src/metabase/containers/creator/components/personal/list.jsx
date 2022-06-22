@@ -8,7 +8,12 @@ import "../../../dashboards/components/Dashboards/index.css";
 import SearchTabs from "metabase/containers/search/components/Tabs";
 
 const List = ({ router, user, name }) => {
-  const model = router.location.query.model || "dashboard";
+  const isFavoritesTab = router.location.query.model === "favorites";
+  const defaultModel = "dashboard";
+  const model =
+    user || !isFavoritesTab
+      ? router.location.query.model || defaultModel
+      : defaultModel;
 
   const navigationNumQuery = null;
 

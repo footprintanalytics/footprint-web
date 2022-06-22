@@ -38,6 +38,10 @@
   right: 0;
 }
 
+.search__tabs-search {
+  width: 150px;
+}
+
 @media screen and (--footprint-breakpoint-max-home-width) {
   .search__tabs .ant-tabs-nav {
     padding: 0 20px;
