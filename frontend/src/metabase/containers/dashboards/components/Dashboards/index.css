@@ -148,17 +148,19 @@
 .dashboards__table-private {
   background: darkolivegreen;
   color: white;
-  font-size: 12px;
+  font-size: 11px;
+  border-radius: 2px;
   padding: 2px 4px;
-  margin: 0 4px;
+  margin: 2px 4px 0 0;
 }
 
 .dashboards__table-chart {
   background: #3434b2;
   color: white;
-  font-size: 12px;
-  padding: 2px 4px;
-  margin: 0 4px;
+  font-size: 11px;
+  border-radius: 2px;
+  padding: 1px 4px;
+  margin: 2px 4px 0 0;
 }
 
 .dashboards__table-name-info-creator {

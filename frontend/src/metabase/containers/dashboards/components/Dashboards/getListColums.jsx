@@ -93,14 +93,16 @@ export default ({
                     alt={`Hot - ${record.name}`}
                   />
                 )}
-                {isChart && (
-                  <span className="dashboards__table-chart">Chart</span>
-                )}
-                {!record.publicUuid && (
-                  <span className="dashboards__table-private">Private</span>
-                )}
               </h3>
             </Link>
+            <div className="flex">
+              {isChart && (
+                <span className="dashboards__table-chart">Chart</span>
+              )}
+              {!record.publicUuid && (
+                <span className="dashboards__table-private">Private</span>
+              )}
+            </div>
             <span className="dashboards__table-name-info-creator">
               <CreatorName creatorName={creatorName} />
             </span>
