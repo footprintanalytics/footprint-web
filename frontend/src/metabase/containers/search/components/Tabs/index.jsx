@@ -41,7 +41,7 @@ const Index = ({
 
   const isOwnCreator = user && user.name === router?.params?.name;
 
-  const isFavoritesTab = model === "favorites";
+  const isFavoritesTab = model === "favorite";
 
   const tabData = [
     {
