@@ -19,12 +19,12 @@ const List = ({ router, user, name }) => {
       : defaultModel;
 
   const navigationNumQuery = useQuery(
-    ["navigationNum"],
+    ["navigationNum", name],
     async () => {
       return await navigationNum({
         project: "footprint",
         qs: [],
-        name: user.name,
+        name: name,
       });
     },
     { ...QUERY_OPTIONS, retry: 0 },
