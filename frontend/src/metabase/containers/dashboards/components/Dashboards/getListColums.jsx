@@ -46,6 +46,7 @@ export default ({
     render: (_, record, index) => {
       const backgroundColor = colors[index % colors.length];
       const creatorName = get(record, "creator.name");
+      const isChart = record?.model === "card" || record?.type === "card";
       return (
         <div className="dashboards__table-name">
           <Link
@@ -92,7 +93,7 @@ export default ({
                     alt={`Hot - ${record.name}`}
                   />
                 )}
-                {record?.model === "card" && (
+                {isChart && (
                   <span className="dashboards__table-chart">Chart</span>
                 )}
                 {!record.publicUuid && (
