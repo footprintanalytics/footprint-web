@@ -4,7 +4,7 @@ import React from "react";
 import { Select } from "antd";
 
 const TableSelect = props => {
-  const { list, placeholder } = props;
+  const { list, placeholder, onSelect } = props;
 
   console.log("list", list);
   if (!list) {
@@ -14,10 +14,13 @@ const TableSelect = props => {
     <Select
       style={{ width: "100%", marginBottom: "15px" }}
       placeholder={placeholder}
+      onChange={value => {
+        onSelect(value);
+      }}
       allowClear
     >
       {list.map(n => (
-        <Select.Option key={`${n.id}-${n.name}`} value={n.id}>
+        <Select.Option key={`${n.id}-${n.name}`} value={n.name}>
           {n.name}
         </Select.Option>
       ))}

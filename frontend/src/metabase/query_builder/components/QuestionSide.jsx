@@ -57,6 +57,7 @@ import { useQuery } from "react-query";
 import { QUERY_OPTIONS } from "metabase/containers/dashboards/shared/config";
 import TableSelect from "metabase/query_builder/components/question/TableSelect";
 import demoData from "metabase/query_builder/components/question/data";
+import TableCategory2 from "metabase/query_builder/components/question/TableCategory2";
 
 function QuestionSide({
   question,
@@ -79,6 +80,7 @@ function QuestionSide({
   setNewGuideInfo,
   nextChartPopoverAction,
 }) {
+  const [status, setStatus] = useState(0);
   const [databaseId, setDatabaseId] = useState(dbId || 3);
   const [category, setCategory] = useState();
   const [moreParams, setMoreParams] = useState();
@@ -218,6 +220,9 @@ function QuestionSide({
 
   const categoryChange = value => {
     setCategory(value);
+    if (value) {
+      setStatus(1);
+    }
   };
 
   return (
@@ -236,21 +241,7 @@ function QuestionSide({
           databaseId={databaseId}
         />
       )}
-      {!formDataSelector && (
-        <TableCategory
-          databaseId={databaseId}
-          categoryChange={categoryChange}
-          category={category}
-        />
-      )}
-      {dataSets && (
-        <div className="flex">
-          <TableSelect list={demoData().d1} placeholder={"Chains"} />
-          {/*<TableSelect list={demoData().d2} placeholder={"Protocol"}/>*/}
-          <TableSelect list={demoData().d3} placeholder={"Metrics"} />
-        </div>
-      )}
-      {dataSets && (
+      {status === 0 && (
         <TableSearch
           isEditing={isEditing}
           setSearchKey={setSearchKey}
@@ -262,33 +253,72 @@ function QuestionSide({
           handleSelectTable={handleSelectTable}
         />
       )}
-      <>
-        <TableDataList
-          isLoading={isLoading}
-          isFeature={data?.isFeature}
-          dataSets={
-            canShowNewGuide ? handleNewGuideTableData(dataSets) : dataSets
-          }
-          isEditing={isEditing}
-          handleSelectTable={handleSelectTable}
-          setShowPreviewChart={setShowPreviewChart}
-          closeTemplateData={closeTemplateData}
+      {status === 1 && (
+        <div className="flex">
+          <TableSelect
+            list={demoData().d1}
+            placeholder={"Chains"}
+            onSelect={value => {
+              setSearchKey(value);
+            }}
+          />
+          {/*<TableSelect list={demoData().d2} placeholder={"Protocol"}/>*/}
+          <TableSelect
+            list={demoData().d3}
+            placeholder={"Metrics"}
+            onSelect={value => {
+              setSearchKey(value);
+            }}
+          />
+        </div>
+      )}
+      {status === 1 && category && (
+        <div className="flex">
+          <div
+            onClick={() => {
+              setCategory(null);
+              setStatus(0);
+            }}
+          >{`<-back`}</div>
+          <div className={"ml1"}>{category}</div>
+        </div>
+      )}
+      {!formDataSelector && status === 0 && (
+        <TableCategory2
           databaseId={databaseId}
-          databases={databases}
-          formDataSelector={formDataSelector}
-          sourceTableId={sourceTableId}
-          pageSize={pageSize}
-          updateMoreListData={params => setMoreParams(params)}
-          isTooMore={data?.isTooMore}
-          user={user}
-          searchKeyValue={searchKeyValue}
-          qs={qs}
-          isByCategory={isByCategory}
-          isNewQuestion={isNewQuestion}
-          setShowNewGuideStart={setShowNewGuideStart}
+          categoryChange={categoryChange}
+          category={category}
         />
-        <UploadData />
-      </>
+      )}
+      {status === 1 && (
+        <>
+          <TableDataList
+            isLoading={isLoading}
+            isFeature={data?.isFeature}
+            dataSets={
+              canShowNewGuide ? handleNewGuideTableData(dataSets) : dataSets
+            }
+            isEditing={isEditing}
+            handleSelectTable={handleSelectTable}
+            setShowPreviewChart={setShowPreviewChart}
+            closeTemplateData={closeTemplateData}
+            databaseId={databaseId}
+            databases={databases}
+            formDataSelector={formDataSelector}
+            sourceTableId={sourceTableId}
+            pageSize={pageSize}
+            updateMoreListData={params => setMoreParams(params)}
+            isTooMore={data?.isTooMore}
+            user={user}
+            searchKeyValue={searchKeyValue}
+            qs={qs}
+            isByCategory={isByCategory}
+            isNewQuestion={isNewQuestion}
+            setShowNewGuideStart={setShowNewGuideStart}
+          />
+          <UploadData />
+        </>
+      )}
       <Modal isOpen={confirmModal}>
         <ConfirmContent
           title={t`You have unsaved changes`}
