@@ -45,6 +45,14 @@ const Index = ({
 
   const tabData = [
     {
+      key: "all",
+      tab: "All",
+      render: params => {
+        return <DashboardsList {...params} />;
+      },
+      show: isCreator(),
+    },
+    {
       key: "dashboard",
       tab: "Dashboards",
       render: params => {
@@ -61,8 +69,8 @@ const Index = ({
       show: true,
     },
     {
-      key: "favorites",
-      tab: "Favorites",
+      key: "favorite",
+      tab: "My Favorites",
       render: params => {
         return <DashboardsList {...params} />;
       },

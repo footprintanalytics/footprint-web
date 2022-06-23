@@ -6,16 +6,29 @@ import "./list.css";
 import "../../../dashboards/index.css";
 import "../../../dashboards/components/Dashboards/index.css";
 import SearchTabs from "metabase/containers/search/components/Tabs";
+import { useQuery } from "react-query";
+import { navigationNum } from "metabase/new-service";
+import { QUERY_OPTIONS } from "metabase/containers/dashboards/shared/config";
 
 const List = ({ router, user, name }) => {
   const isFavoritesTab = router.location.query.model === "favorites";
-  const defaultModel = "dashboard";
+  const defaultModel = "all";
   const model =
     user || !isFavoritesTab
       ? router.location.query.model || defaultModel
       : defaultModel;
 
-  const navigationNumQuery = null;
+  const navigationNumQuery = useQuery(
+    ["navigationNum"],
+    async () => {
+      return await navigationNum({
+        project: "footprint",
+        qs: [],
+        name: user.name,
+      });
+    },
+    { ...QUERY_OPTIONS, retry: 0 },
+  );
 
   return (
     <div className="search" data-nosnippet>

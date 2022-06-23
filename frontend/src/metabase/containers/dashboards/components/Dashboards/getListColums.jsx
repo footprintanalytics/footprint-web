@@ -92,6 +92,9 @@ export default ({
                     alt={`Hot - ${record.name}`}
                   />
                 )}
+                {record?.model === "card" && (
+                  <span className="dashboards__table-chart">Chart</span>
+                )}
                 {!record.publicUuid && (
                   <span className="dashboards__table-private">Private</span>
                 )}

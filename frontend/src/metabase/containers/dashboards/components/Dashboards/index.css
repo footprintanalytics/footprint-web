@@ -153,6 +153,14 @@
   margin: 0 4px;
 }
 
+.dashboards__table-chart {
+  background: #3434b2;
+  color: white;
+  font-size: 12px;
+  padding: 2px 4px;
+  margin: 0 4px;
+}
+
 .dashboards__table-name-info-creator {
   display: block;
   font-size: 14px;
