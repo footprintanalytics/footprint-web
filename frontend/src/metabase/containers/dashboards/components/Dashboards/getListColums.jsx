@@ -275,7 +275,7 @@ export default ({
     return [name, views];
   }
 
-  if (query?.model === "favorites") {
+  if (query?.model === "favorite") {
     return [name, tag, views, favoriteTime, action];
   }
   return [name, tag, views, date, action];

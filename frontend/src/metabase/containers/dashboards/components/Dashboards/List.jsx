@@ -68,7 +68,7 @@ const List = ({ router, user, protocolName, name, isList = true }) => {
         return elasticSearch(params);
       }
       if (isCreator()) {
-        if (router?.location?.query?.model === "favorites") {
+        if (router?.location?.query?.model === "favorite") {
           const favoriteParams = {
             pageSize: params.pageSize,
             current: params.current,
