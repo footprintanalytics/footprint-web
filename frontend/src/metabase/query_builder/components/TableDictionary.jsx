@@ -6,6 +6,8 @@ import Icon from "metabase/components/Icon";
 import Link from "metabase/components/Link";
 import Tooltip from "metabase/components/Tooltip";
 import { isNumber } from "underscore";
+import Button from "metabase/components/Button";
+import cx from "classnames";
 
 const TableDictionary = ({ tableName, tableId }) => {
   const isUdTable = !!tableName?.toLowerCase()?.startsWith("ud");
@@ -22,7 +24,13 @@ const TableDictionary = ({ tableName, tableId }) => {
             to={`https://www.footprint.network/@Footprint/Table-Info-Dashboard?table_name=${tableName}`}
             target={"_blank"}
           >
-            <Icon name="data_dictionary" size={20} />
+            <Button
+              onlyIcon
+              iconColor="#ACACB2"
+              icon={"data_dictionary"}
+              iconSize={16}
+              className={`ml1 Question-header-btn--info`}
+            />
           </Link>
         </Tooltip>
       )}
