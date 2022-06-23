@@ -24,6 +24,7 @@ import Icon from "metabase/components/Icon";
 import Search from "antd/es/input/Search";
 import { debounce } from "lodash";
 import * as MetabaseAnalytics from "metabase/lib/analytics";
+import { sortMap } from "metabase/containers/dashboards/shared/config";
 
 const Index = ({
   router,
@@ -111,6 +112,8 @@ const Index = ({
       model,
       current: 1,
       q: !isFavoritesTab ? router?.location?.query?.q : "",
+      sortDirection: sortMap.descend,
+      sortBy: "views",
     });
   };
 

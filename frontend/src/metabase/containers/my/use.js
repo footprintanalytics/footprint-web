@@ -51,7 +51,7 @@ export const useGetCategory = ({ location }) => {
           return null;
         },
         sortMap: {
-          date: "favoriteTime",
+          date: "favorite_time",
         },
       },
     ];

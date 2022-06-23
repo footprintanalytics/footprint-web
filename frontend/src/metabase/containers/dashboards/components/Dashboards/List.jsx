@@ -72,7 +72,7 @@ const List = ({ router, user, protocolName, name, isList = true }) => {
           const favoriteParams = {
             pageSize: params.pageSize,
             current: params.current,
-            sortColumn: params.sortBy || "favoriteTime",
+            sortColumn: params.sortBy || "favorite_time",
             sortDirection: params.sortDirection,
           };
           return getFavorite({ params: favoriteParams });
@@ -132,11 +132,12 @@ const List = ({ router, user, protocolName, name, isList = true }) => {
           exploreList={data?.data}
           exploreTotal={data?.total}
           createPanel={false}
-          showArchiveButton={false}
-          onAfterChangePublicUuid={false}
-          favoriteClickSuccess={false}
-          archiveSuccess={false}
-          loadMore={() => {}}
+          showArchiveButton={
+            isCreator() && router?.location?.query?.model !== "favorites"
+          }
+          onAfterChangePublicUuid={() => refetch()}
+          favoriteClickSuccess={() => refetch()}
+          archiveSuccess={() => refetch()}
         />
         <Pagination className="dashboards__news-pagination" {...pagination} />
       </div>

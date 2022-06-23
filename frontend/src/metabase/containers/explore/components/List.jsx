@@ -109,11 +109,12 @@ function ExplorerList({
                 setShareModalResource({
                   open: true,
                   public_uuid: entity.publicUuid,
-                  type: entity.type,
+                  type: entity.type || entity.model,
                   name: entity.name,
                   id: entity.id,
-                  uniqueName: entity.uniqueName,
+                  uniqueName: entity.uniqueName || entity.unique_name,
                   creator: entity.creator,
+                  creatorId: entity.creator.id,
                 });
               }}
             />
