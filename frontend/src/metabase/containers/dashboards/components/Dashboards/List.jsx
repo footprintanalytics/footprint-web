@@ -133,7 +133,7 @@ const List = ({ router, user, protocolName, name, isList = true }) => {
           exploreTotal={data?.total}
           createPanel={false}
           showArchiveButton={
-            isCreator() && router?.location?.query?.model !== "favorites"
+            isCreator() && router?.location?.query?.model !== "favorite"
           }
           onAfterChangePublicUuid={() => refetch()}
           favoriteClickSuccess={() => refetch()}
