@@ -2,12 +2,10 @@
 /* eslint-disable react/prop-types */
 import React from "react";
 import "./QueryPreview.css";
-import Icon from "metabase/components/Icon";
 import Link from "metabase/components/Link";
 import Tooltip from "metabase/components/Tooltip";
 import { isNumber } from "underscore";
 import Button from "metabase/components/Button";
-import cx from "classnames";
 
 const TableDictionary = ({ tableName, tableId }) => {
   const isUdTable = !!tableName?.toLowerCase()?.startsWith("ud");
