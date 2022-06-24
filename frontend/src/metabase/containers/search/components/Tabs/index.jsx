@@ -151,10 +151,7 @@ const Index = ({
             setIsList(!isList);
             const newState = !isList ? "list" : "grid";
             trackStructEvent(`search click switch ${newState}`);
-            localStorage.setItem(
-              "creator-view-type",
-              newState,
-            );
+            localStorage.setItem("creator-view-type", newState);
           }}
         >
           <Tooltip tooltip={isList ? "Grid view" : "List view"}>
