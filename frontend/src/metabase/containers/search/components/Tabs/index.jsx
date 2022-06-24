@@ -34,8 +34,9 @@ const Index = ({
   name,
   className,
   setLoginModalShow,
+  creatorViewType,
 }) => {
-  const [isList, setIsList] = useState(true);
+  const [isList, setIsList] = useState(creatorViewType === "list");
 
   const { isMobile } = useDeviceInfo();
 
@@ -132,7 +133,7 @@ const Index = ({
         q: val,
       });
       router.replace(link);
-      MetabaseAnalytics.trackStructEvent(`creator tabs search ${val}`);
+      MetabaseAnalytics.trackStructEvent(`search tabs search ${val}`);
     }, 1000);
     return (
       <div className="search__tabs-other flex justify-end">
@@ -147,10 +148,16 @@ const Index = ({
         <div
           className="ml1 p1 cursor-pointer"
           onClick={() => {
-            setIsList(!isList);
+            const newState = !isList;
+            setIsList(newState);
+            trackStructEvent(`search click switch ${newState}`);
+            localStorage.setItem(
+              "creator-view-type",
+              newState ? "list" : "grid",
+            );
           }}
         >
-          <Tooltip tooltip={isList ? "Switch to graph" : "Switch to list"}>
+          <Tooltip tooltip={isList ? "Grid view" : "List view"}>
             <Icon
               name={isList ? "switch_grid" : "switch_list"}
               size={20}
@@ -200,6 +207,9 @@ const Index = ({
 const mapStateToProps = state => {
   return {
     user: state.currentUser,
+    creatorViewType: isCreator()
+      ? localStorage.getItem("creator-view-type") || "list"
+      : "list",
   };
 };
 

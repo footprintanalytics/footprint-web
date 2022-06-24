@@ -79,31 +79,26 @@ export default ({
                 trackStructEvent(`${gaCategory} Name`, record.name)
               }
             >
-              <h3
-                style={{ WebkitBoxOrient: "vertical", wordBreak: "break-all" }}
-              >
+              <h3 style={{ WebkitBoxOrient: "vertical" }}>
                 <Highlighter
                   highlightClassName="highlight"
                   searchWords={searchWords}
                   autoEscape={true}
                   textToHighlight={formatTitle(record.name)}
                 />
-              </h3>
-              {record.isHot && (
-                <img
-                  className="ml1"
-                  src={getOssUrl("icon_hot.svg")}
-                  alt={`Hot - ${record.name}`}
-                />
-              )}
-              <div className="flex ml1">
+                {record.isHot && (
+                  <img
+                    src={getOssUrl("icon_hot.svg")}
+                    alt={`Hot - ${record.name}`}
+                  />
+                )}
                 {isChart && (
-                  <div className="dashboards__table-chart">Chart</div>
+                  <span className="dashboards__table-chart">Chart</span>
                 )}
                 {!record.publicUuid && (
-                  <div className="dashboards__table-private">Private</div>
+                  <span className="dashboards__table-private">Private</span>
                 )}
-              </div>
+              </h3>
             </Link>
             <span className="dashboards__table-name-info-creator">
               <CreatorName creatorName={creatorName} />
