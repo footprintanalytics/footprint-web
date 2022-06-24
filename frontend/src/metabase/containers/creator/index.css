@@ -8,3 +8,7 @@
 .creator__wrap .search__wrap {
   width: 1120px;
 }
+
+.creator__wrap .explore__list {
+  padding: 0;
+}

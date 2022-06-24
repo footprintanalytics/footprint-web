@@ -1,6 +1,6 @@
 import { getProject } from "metabase/lib/project_info";
 import { sortMap } from "../../shared/config";
-import { getDashboardQueryTags, isSearch } from "../../shared/utils";
+import { getDashboardQueryTags, isCreator, isSearch } from "../../shared/utils";
 import { getSearchTexts } from "metabase/nav/components/utils";
 
 export default query => {
@@ -18,7 +18,7 @@ export default query => {
     tags: getDashboardQueryTags(tags),
     isSort: !!sortBy,
     project: getProject(),
-    model: model || "dashboard",
+    model: model || (isCreator() ? "all" : "dashboard"),
     qs: qs,
   };
 };

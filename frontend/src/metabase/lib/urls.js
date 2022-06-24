@@ -374,10 +374,11 @@ const articleType = type => {
 const divisionKey = "fp";
 
 export function guestUrl(detail) {
-  if (detail.cardId) {
+  const id = detail.cardId || detail.id;
+  if (id) {
     return `${dashboardQuestionUrl({
       ...detail,
-      id: detail.cardId,
+      id: id,
     })}`;
   }
   if (detail.publicUuid) {
