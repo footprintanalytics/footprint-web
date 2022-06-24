@@ -75,6 +75,10 @@ const footers = [
         label: "Pricing",
         url: "/pricing",
       },
+      {
+        label: "Contact Us",
+        url: "mailto:analytics@footprint.network",
+      },
     ],
   },
   {
