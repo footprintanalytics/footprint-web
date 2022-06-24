@@ -56,17 +56,20 @@ export default class SummarizeSidebar extends React.Component {
     // topLevelQuery ignores any query stages that don't aggregate, e.x. post-aggregation filters
     let query = question.query().topLevelQuery();
     // if the query hasn't been modified and doesn't have an aggregation, automatically add one
-    const tvlField = query
-      ?.table()
-      ?.fields?.find(field => field?.name === "tvl");
-    const addDefaultAggregation =
+    let addDefaultAggregation = false;
+    if (
       !this.state.modified &&
       !query.hasAggregations() &&
-      canShowNewGuideStart(user) &&
-      tvlField;
-    if (addDefaultAggregation) {
-      query = query.aggregate(["sum", ["field", tvlField.id, null]]);
-      // query = query.aggregate(["count"]);
+      canShowNewGuideStart(user)
+    ) {
+      const tvlField = query
+        ?.table()
+        ?.fields?.find(field => field?.name === "tvl");
+      if (tvlField) {
+        addDefaultAggregation = true;
+        query = query.aggregate(["sum", ["field", tvlField.id, null]]);
+        // query = query.aggregate(["count"]);
+      }
     }
     return (
       <SidebarContent
