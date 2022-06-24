@@ -148,12 +148,12 @@ const Index = ({
         <div
           className="ml1 p1 cursor-pointer"
           onClick={() => {
-            const newState = !isList;
-            setIsList(newState);
+            setIsList(!isList);
+            const newState = !isList ? "list" : "grid";
             trackStructEvent(`search click switch ${newState}`);
             localStorage.setItem(
               "creator-view-type",
-              newState ? "list" : "grid",
+              newState,
             );
           }}
         >
