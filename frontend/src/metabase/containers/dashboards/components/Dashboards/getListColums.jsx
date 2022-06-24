@@ -144,7 +144,7 @@ export default ({
       return (
         <IconValue
           iconName="read"
-          value={get(statistics, "view") || get(statistics, "views")}
+          value={get(statistics, "view") || get(statistics, "views") || 0}
         />
       );
     },
