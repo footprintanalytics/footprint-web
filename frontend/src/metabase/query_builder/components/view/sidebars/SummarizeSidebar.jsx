@@ -56,16 +56,19 @@ export default class SummarizeSidebar extends React.Component {
     // topLevelQuery ignores any query stages that don't aggregate, e.x. post-aggregation filters
     let query = question.query().topLevelQuery();
     // if the query hasn't been modified and doesn't have an aggregation, automatically add one
-    const addDefaultAggregation =
-      !this.state.modified && !query.hasAggregations();
-    if (addDefaultAggregation) {
+    let addDefaultAggregation = false;
+    if (
+      !this.state.modified &&
+      !query.hasAggregations() &&
+      canShowNewGuideStart(user)
+    ) {
       const tvlField = query
         ?.table()
-        ?.fields?.find(field => field.name === "tvl");
-      if (canShowNewGuideStart(user) && tvlField) {
+        ?.fields?.find(field => field?.name === "tvl");
+      if (tvlField) {
+        addDefaultAggregation = true;
         query = query.aggregate(["sum", ["field", tvlField.id, null]]);
-      } else {
-        query = query.aggregate(["count"]);
+        // query = query.aggregate(["count"]);
       }
     }
     return (
@@ -94,14 +97,14 @@ export default class SummarizeSidebar extends React.Component {
           ))}
           <SummarizeAggregationAdd query={query} />
         </div>
-        {query.hasAggregations() && (
-          <div className="border-top mt3 pt3 mx1">
-            <MyPopover enabled={enabledPopover} name="groupBy" placement="left">
-              <h3 className="text-heavy mb2 ml2">{t`Group by`}</h3>
-            </MyPopover>
-            <SummarizeBreakouts className="mx2" query={query} />
-          </div>
-        )}
+        {/*{query.hasAggregations() && (*/}
+        <div className="border-top mt3 pt3 mx1">
+          <MyPopover enabled={enabledPopover} name="groupBy" placement="left">
+            <h3 className="text-heavy mb2 ml2">{t`Group by`}</h3>
+          </MyPopover>
+          <SummarizeBreakouts className="mx2" query={query} />
+        </div>
+        {/*)}*/}
       </SidebarContent>
     );
   }
@@ -185,7 +188,7 @@ const SummarizeAggregationAdd = ({ className, query }) => {
           <span className="text-small">{t`Add a metric`}</span>
         </Flex>
       }
-      isInitiallyOpen={!query.hasAggregations()}
+      // isInitiallyOpen={!query.hasAggregations()}
     >
       {({ onClose }) => (
         <AggregationPopover
