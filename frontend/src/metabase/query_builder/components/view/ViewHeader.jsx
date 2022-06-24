@@ -360,14 +360,6 @@ export class ViewTitleHeader extends React.Component {
         </Menu.Item>,
       );
     }
-    console.log(
-      "question",
-      question
-        .query()
-        .table()
-        .displayName(),
-      question?.query()?.table(),
-    );
     return (
       <React.Fragment>
         {!isSaved && (
