@@ -53,12 +53,12 @@ const PreviewDashboardCard = props => {
 
   // const pathname = window.location.pathname;
   // const copyPathPrefix = pathname === "/" ? "preview" : pathname.split("/")[1];
-
+  const type = item.type || item.model;
   const [cardId, setCardId] = useState(null); //query copy modal
   const [showArchiveCard, setShowArchiveCard] = useState(null); //query archive modal
   const [showArchiveDashboard, setShowArchiveDashboard] = useState(null); //dashboad archive modal
   const [showDashboardCopyModal, setShowDashboardCopyModal] = useState(false); //dashboard copy modal
-  const thumbUrl = `${ossPath(item.type)}/${item.id}.png`;
+  const thumbUrl = `${ossPath(type)}/${item.id}.png`;
   const showButtons = !Urls.isPublicPath() && !hideButtons;
   const showCopyButton = true;
   // item.type === "card" ||
@@ -70,13 +70,13 @@ const PreviewDashboardCard = props => {
   if (item.menu && item.subMenu) {
     linkUrl = `/topic/${item.menu}/${item.subMenu}`;
   } else if (!user || (user.id !== item.creatorId && !user.is_superuser)) {
-    if (item.type === "dashboard") {
+    if (type === "dashboard") {
       linkUrl = Urls.dashboard(item);
     } else {
       linkUrl = Urls.guestUrl(item);
     }
   } else {
-    if (item.type === "dashboard") {
+    if (type === "dashboard") {
       linkUrl = Urls.dashboard(item);
     } else {
       linkUrl = Urls.dashboardQuestionUrl(item);
@@ -167,7 +167,7 @@ const PreviewDashboardCard = props => {
           >
             <img
               src={
-                item.type === "dashboard"
+                type === "dashboard"
                   ? getOssUrl("img_home_dashboard.png")
                   : getOssUrl("img_home_query.png")
               }
@@ -217,7 +217,7 @@ const PreviewDashboardCard = props => {
                           "click review Dashboard Card Duplicate",
                         );
                         if (user) {
-                          if (item.type === "dashboard") {
+                          if (type === "dashboard") {
                             setShowDashboardCopyModal(true);
                           } else {
                             setCardId(item.id);
@@ -239,7 +239,7 @@ const PreviewDashboardCard = props => {
                       className="p0 mr2 footprint-secondary-text1"
                       uuid={item.publicUuid}
                       id={item.id}
-                      type={item.type}
+                      type={type}
                       like={item.statistics && item.statistics.favorite}
                       isLike={item && item.isFavorite}
                       favoriteClickSuccess={data => {
@@ -284,7 +284,7 @@ const PreviewDashboardCard = props => {
                         trackStructEvent(
                           "click Preview Dashboard Card archive",
                         );
-                        if (item.type === "dashboard") {
+                        if (type === "dashboard") {
                           setShowArchiveDashboard(true);
                         } else {
                           setShowArchiveCard(true);

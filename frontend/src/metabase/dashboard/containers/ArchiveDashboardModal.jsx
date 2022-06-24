@@ -12,6 +12,7 @@ import * as Urls from "metabase/lib/urls";
 import Dashboard from "metabase/entities/dashboards";
 
 import ArchiveModal from "metabase/components/ArchiveModal";
+import { isCreator } from "metabase/containers/dashboards/shared/utils";
 
 const mapDispatchToProps = {
   setDashboardArchived: Dashboard.actions.setArchived,
@@ -39,9 +40,9 @@ export default class ArchiveDashboardModal extends Component {
     // we have to call this here first to unmount the modal and then push to the
     // parent collection
     this.props.onClose();
-    if (this.props.dashboard.archived) {
+    if (!isCreator() && this.props.dashboard.archived) {
       // this.props.push(Urls.collection(this.props.collection));
-      this.props.push("/mine");
+      this.props.push("/");
     }
   };
 

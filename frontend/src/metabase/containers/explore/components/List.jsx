@@ -18,7 +18,7 @@ import CreateActionModal from "metabase/components/CreateActionModal";
 import { isPublicPath } from "metabase/lib/urls";
 import { isDefi360 } from "metabase/lib/project_info";
 
-function List({
+function ExplorerList({
   exploreList,
   exploreTotal,
   type,
@@ -109,11 +109,12 @@ function List({
                 setShareModalResource({
                   open: true,
                   public_uuid: entity.publicUuid,
-                  type: entity.type,
+                  type: entity.type || entity.model,
                   name: entity.name,
                   id: entity.id,
-                  uniqueName: entity.uniqueName,
+                  uniqueName: entity.uniqueName || entity.unique_name,
                   creator: entity.creator,
+                  creatorId: entity.creator.id,
                 });
               }}
             />
@@ -163,4 +164,4 @@ const mapDispatchToProps = {
   setLoginModalShow: loginModalShowAction,
 };
 
-export default connect(mapStateToProps, mapDispatchToProps)(List);
+export default connect(mapStateToProps, mapDispatchToProps)(ExplorerList);

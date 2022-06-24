@@ -35,7 +35,7 @@ export default ({
   // const isInner = user?.groups?.includes("Inner");
   const query = router?.location?.query;
   const getLink = record => {
-    return record?.model === "dashboard"
+    return record?.model === "dashboard" || record?.type === "dashboard"
       ? Urls.dashboard(record)
       : Urls.guestUrl(record);
   };
@@ -46,6 +46,7 @@ export default ({
     render: (_, record, index) => {
       const backgroundColor = colors[index % colors.length];
       const creatorName = get(record, "creator.name");
+      const isChart = record?.model === "card" || record?.type === "card";
       return (
         <div className="dashboards__table-name">
           <Link
@@ -71,6 +72,7 @@ export default ({
           </Link>
           <div className="dashboards__table-name-info">
             <Link
+              className="flex"
               to={getLink(record)}
               // target="_blank"
               onClick={() =>
@@ -89,6 +91,12 @@ export default ({
                     src={getOssUrl("icon_hot.svg")}
                     alt={`Hot - ${record.name}`}
                   />
+                )}
+                {isChart && (
+                  <span className="dashboards__table-chart">Chart</span>
+                )}
+                {!record.publicUuid && (
+                  <span className="dashboards__table-private">Private</span>
                 )}
               </h3>
             </Link>
@@ -133,12 +141,30 @@ export default ({
       return (
         <IconValue
           iconName="read"
-          value={get(statistics, "view") || get(statistics, "views")}
+          value={get(statistics, "view") || get(statistics, "views") || 0}
         />
       );
     },
   };
-  const data = {
+  const favoriteTime = {
+    title: "Favorite Date",
+    key: "favorite_time",
+    width: 120,
+    sorter: canSort && !isProtocol(),
+    sortDirections: ["descend", "ascend", "descend"],
+    sortOrder:
+      query?.sortBy === "favorite_time"
+        ? sortMap[query?.sortDirection] || sortMap.desc
+        : undefined,
+    render: (_, record) => {
+      return (
+        <div className="dashboards__table-date">
+          {dayjs(record.favoriteTime).format("YYYY-MM-DD")}
+        </div>
+      );
+    },
+  };
+  const date = {
     title: "Date",
     key: "created_at",
     width: 120,
@@ -151,7 +177,7 @@ export default ({
     render: (_, record) => {
       return (
         <div className="dashboards__table-date">
-          {dayjs(record.updatedAt || record.createdAt).format("YYYY-MM-DD")}
+          {dayjs(record.createdAt).format("YYYY-MM-DD")}
         </div>
       );
     },
@@ -245,5 +271,12 @@ export default ({
       );
     },
   };
-  return device?.isMobile ? [name, views] : [name, tag, views, data, action];
+  if (device?.isMobile) {
+    return [name, views];
+  }
+
+  if (query?.model === "favorite") {
+    return [name, tag, views, favoriteTime, action];
+  }
+  return [name, tag, views, date, action];
 };

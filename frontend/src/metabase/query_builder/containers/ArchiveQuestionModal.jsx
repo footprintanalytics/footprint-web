@@ -9,6 +9,7 @@ import ArchiveModal from "metabase/components/ArchiveModal";
 
 // import * as Urls from "metabase/lib/urls";
 import Questions from "metabase/entities/questions";
+import { isCreator } from "metabase/containers/dashboards/shared/utils";
 
 const mapDispatchToProps = {
   archive: id => Questions.actions.setArchived({ id }, true),
@@ -30,7 +31,9 @@ class ArchiveQuestionModal extends Component {
       archive(card.id);
     }
     // router.push(Urls.collection(card.collection));
-    router.push("/mine");
+    if (!isCreator()) {
+      router.push("/");
+    }
 
     otherSuccessAction && otherSuccessAction();
   };
