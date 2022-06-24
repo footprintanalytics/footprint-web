@@ -72,6 +72,7 @@ export default ({
           </Link>
           <div className="dashboards__table-name-info">
             <Link
+              className="flex"
               to={getLink(record)}
               // target="_blank"
               onClick={() =>
@@ -87,22 +88,23 @@ export default ({
                   autoEscape={true}
                   textToHighlight={formatTitle(record.name)}
                 />
+              </h3>
                 {record.isHot && (
                   <img
+                    className="ml1"
                     src={getOssUrl("icon_hot.svg")}
                     alt={`Hot - ${record.name}`}
                   />
                 )}
-              </h3>
+                <div className="flex ml1">
+                  {isChart && (
+                    <div className="dashboards__table-chart">Chart</div>
+                  )}
+                  {!record.publicUuid && (
+                    <div className="dashboards__table-private">Private</div>
+                  )}
+                </div>
             </Link>
-            <div className="flex">
-              {isChart && (
-                <span className="dashboards__table-chart">Chart</span>
-              )}
-              {!record.publicUuid && (
-                <span className="dashboards__table-private">Private</span>
-              )}
-            </div>
             <span className="dashboards__table-name-info-creator">
               <CreatorName creatorName={creatorName} />
             </span>

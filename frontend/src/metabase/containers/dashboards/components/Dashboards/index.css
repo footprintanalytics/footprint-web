@@ -146,6 +146,7 @@
 }
 
 .dashboards__table-private {
+  height: 20px;
   background: darkolivegreen;
   color: white;
   font-size: 11px;
@@ -153,9 +154,12 @@
   padding: 2px 4px;
   margin: 2px 4px 0 0;
   cursor: default;
+  display: flex;
+  align-items: center;
 }
 
 .dashboards__table-chart {
+  height: 20px;
   background: #3434b2;
   color: white;
   font-size: 11px;
@@ -163,6 +167,8 @@
   padding: 1px 4px;
   margin: 2px 4px 0 0;
   cursor: default;
+  display: flex;
+  align-items: center;
 }
 
 .dashboards__table-name-info-creator {

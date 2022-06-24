@@ -145,7 +145,7 @@ const Index = ({
           />
         )}
         <div
-          className="p1 cursor-pointer"
+          className="ml1 p1 cursor-pointer"
           onClick={() => {
             setIsList(!isList);
           }}
@@ -167,7 +167,7 @@ const Index = ({
       <Tabs
         activeKey={model}
         size="large"
-        tabBarGutter={isMobile ? 20 : 80}
+        tabBarGutter={isMobile ? 20 : 60}
         animated={false}
         destroyInactiveTabPane={true}
         onChange={model => {
