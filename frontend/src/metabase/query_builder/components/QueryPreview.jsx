@@ -23,6 +23,7 @@ import connect from "react-redux/lib/connect/connect";
 import { updateNativeEditorSelect } from "metabase/query_builder/utils/handle";
 import NativeQuery from "metabase-lib/lib/queries/NativeQuery";
 import * as MetabaseAnalytics from "metabase/lib/analytics";
+import TableDictionary from "metabase/query_builder/components/TableDictionary";
 
 function QueryPreview(props) {
   const {
@@ -110,6 +111,8 @@ function QueryPreview(props) {
       <div className="query-preview__head">
         <div className="flex flex-row">
           {tableName && <div className="query-preview__title">{tableName}</div>}
+          <TableDictionary tableName={tableName} tableId={tableId} />
+
           <Button
             className="query-preview__select"
             icon="add"
