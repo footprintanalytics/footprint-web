@@ -32,7 +32,7 @@ class ArchiveQuestionModal extends Component {
     }
     // router.push(Urls.collection(card.collection));
     if (!isCreator()) {
-      router.push("/mine");
+      router.push("/");
     }
 
     otherSuccessAction && otherSuccessAction();

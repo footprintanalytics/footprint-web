@@ -11,7 +11,7 @@ import { navigationNum } from "metabase/new-service";
 import { QUERY_OPTIONS } from "metabase/containers/dashboards/shared/config";
 
 const List = ({ router, user, name }) => {
-  const isFavoritesTab = router.location.query.model === "favorites";
+  const isFavoritesTab = router.location.query.model === "favorite";
   const defaultModel = "all";
   const model =
     user || !isFavoritesTab

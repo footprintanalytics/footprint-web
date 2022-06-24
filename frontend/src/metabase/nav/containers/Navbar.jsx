@@ -419,7 +419,7 @@ export default class Navbar extends Component {
       //   open: true,
       // },
       { url: "https://docs.footprint.network/", name: "Docs", open: true },
-      { url: `/@${user?.name}`, name: "My Analytics", auth: true },
+      { url: `/@${user?.name}`, name: "My Profile", auth: true },
       // { url: "/widget", name: "Widget" },
     ];
 

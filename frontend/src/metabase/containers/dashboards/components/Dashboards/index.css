@@ -146,8 +146,8 @@
 }
 
 .dashboards__table-private {
-  color: #84848a;
-  background: #f2f2f2;
+  color: #3434b2;
+  background: #f6f6fe;
   font-weight: bold;
   font-size: 12px;
   border-radius: 2px;
@@ -157,8 +157,8 @@
 }
 
 .dashboards__table-chart {
-  color: #84848a;
-  background: #f2f2f2;
+  color: #3434b2;
+  background: #f6f6fe;
   font-weight: bold;
   font-size: 12px;
   border-radius: 2px;
