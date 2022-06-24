@@ -89,21 +89,21 @@ export default ({
                   textToHighlight={formatTitle(record.name)}
                 />
               </h3>
-                {record.isHot && (
-                  <img
-                    className="ml1"
-                    src={getOssUrl("icon_hot.svg")}
-                    alt={`Hot - ${record.name}`}
-                  />
+              {record.isHot && (
+                <img
+                  className="ml1"
+                  src={getOssUrl("icon_hot.svg")}
+                  alt={`Hot - ${record.name}`}
+                />
+              )}
+              <div className="flex ml1">
+                {isChart && (
+                  <div className="dashboards__table-chart">Chart</div>
                 )}
-                <div className="flex ml1">
-                  {isChart && (
-                    <div className="dashboards__table-chart">Chart</div>
-                  )}
-                  {!record.publicUuid && (
-                    <div className="dashboards__table-private">Private</div>
-                  )}
-                </div>
+                {!record.publicUuid && (
+                  <div className="dashboards__table-private">Private</div>
+                )}
+              </div>
             </Link>
             <span className="dashboards__table-name-info-creator">
               <CreatorName creatorName={creatorName} />
