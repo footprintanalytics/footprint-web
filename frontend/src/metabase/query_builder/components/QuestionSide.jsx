@@ -58,6 +58,7 @@ import { QUERY_OPTIONS } from "metabase/containers/dashboards/shared/config";
 import TableSelect from "metabase/query_builder/components/question/TableSelect";
 import demoData from "metabase/query_builder/components/question/data";
 import TableCategory2 from "metabase/query_builder/components/question/TableCategory2";
+import Icon from "metabase/components/Icon";
 
 function QuestionSide({
   question,
@@ -83,6 +84,8 @@ function QuestionSide({
   const [status, setStatus] = useState(0);
   const [databaseId, setDatabaseId] = useState(dbId || 3);
   const [category, setCategory] = useState();
+  const [s1, setS1] = useState("");
+  const [s2, setS2] = useState("");
   const [moreParams, setMoreParams] = useState();
   const [searchKey, setSearchKey] = useState("");
   // const [dataSets, setDatasets] = useState([]);
@@ -96,7 +99,7 @@ function QuestionSide({
   const newGuideShowTable = getNewGuideInfo && getNewGuideInfo["table"];
   const queryType = get(card, "dataset_query.type");
   const isNewQuestion = !get(question, "_card.original_card_id");
-  const searchKeyValue = searchKey.trim().toLowerCase();
+  const searchKeyValue = searchKey?.trim()?.toLowerCase() || "";
 
   const qString = words(searchKeyValue, /[^ ]+/g)
     .map(s => s.trim())
@@ -259,15 +262,19 @@ function QuestionSide({
             list={demoData().d1}
             placeholder={"Chains"}
             onSelect={value => {
-              setSearchKey(value);
+              setS1(value);
+              setSearchKey(`${value} ${s2}`);
             }}
           />
           {/*<TableSelect list={demoData().d2} placeholder={"Protocol"}/>*/}
           <TableSelect
-            list={demoData().d3}
             placeholder={"Metrics"}
+            dataSets={dataSets}
+            category={category}
+            searchKeyValue={searchKeyValue}
             onSelect={value => {
-              setSearchKey(value);
+              setS2(value);
+              setSearchKey(`${s1} ${value}`);
             }}
           />
         </div>
@@ -278,9 +285,12 @@ function QuestionSide({
             onClick={() => {
               setCategory(null);
               setStatus(0);
+              setSearchKey("");
             }}
-          >{`<-back`}</div>
-          <div className={"ml1"}>{category}</div>
+          >
+            <Icon name="back2" size={14} />
+          </div>
+          <div className={"ml1 footprint-primary-text"}>{category}</div>
         </div>
       )}
       {!formDataSelector && status === 0 && (
