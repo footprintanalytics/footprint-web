@@ -39,20 +39,21 @@ const TableCategory2 = props => {
   }
 
   const getList = list => {
-    const categories = [
-      "gamefi",
-      "nft",
-      "defi",
-      "protocol",
-      "token",
-      "address",
-      "personal upload",
-      "Custom Upload",
-      "My Charts",
-    ];
-    return list?.filter(dataSet => {
-      return categories.includes(dataSet.value);
-    });
+    // const categories = [
+    //   "gamefi",
+    //   "nft",
+    //   "defi",
+    //   "protocol",
+    //   "token",
+    //   "address",
+    //   "personal upload",
+    //   "Custom Upload",
+    //   "My Charts",
+    // ];
+    // return list?.filter(dataSet => {
+    //   return categories.includes(dataSet.value);
+    // });
+    return list;
   };
   return (
     <div className="flex flex-column">
