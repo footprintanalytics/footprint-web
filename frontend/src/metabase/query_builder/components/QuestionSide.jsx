@@ -263,7 +263,7 @@ function QuestionSide({
             placeholder={"Chains"}
             onSelect={value => {
               setS1(value);
-              setSearchKey(`${value} ${s2}`);
+              setSearchKey(`${value || ""} ${s2 || ""}`);
             }}
           />
           {/*<TableSelect list={demoData().d2} placeholder={"Protocol"}/>*/}
@@ -274,7 +274,7 @@ function QuestionSide({
             searchKeyValue={searchKeyValue}
             onSelect={value => {
               setS2(value);
-              setSearchKey(`${s1} ${value}`);
+              setSearchKey(`${s1 || ""} ${value || ""}`);
             }}
           />
         </div>
