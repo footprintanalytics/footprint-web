@@ -60,7 +60,7 @@ export default function QuestionFilters({
               key={index}
               triggerElement={
                 <FilterPill
-                  onRemove={() => filter.remove().update(null, { run: true })}
+                  onRemove={() => filter.remove().update(null)}
                 >
                   {filter.displayName()}
                 </FilterPill>
@@ -73,7 +73,7 @@ export default function QuestionFilters({
                 query={query}
                 filter={filter}
                 onChangeFilter={newFilter =>
-                  newFilter.replace().update(null, { run: true })
+                  newFilter.replace().update(null)
                 }
                 className="scroll-y"
               />

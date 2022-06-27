@@ -29,7 +29,7 @@ function updateAndRun(query) {
   query
     .question()
     .setDefaultDisplay()
-    .update(null, { run: true });
+    .update(null);
 }
 
 export default class SummarizeSidebar extends React.Component {

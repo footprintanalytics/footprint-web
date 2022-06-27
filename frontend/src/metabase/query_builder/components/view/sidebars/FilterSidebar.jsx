@@ -18,7 +18,7 @@ export default class FilterSidebar extends React.Component {
   handleCommit(filter) {
     if (filter && filter.isValid()) {
       closeNewGuide({ key: "filterFieldValueConfirm" });
-      filter.add().update(null, { run: true });
+      filter.add().update(null);
     }
     this.props.onClose();
   }
