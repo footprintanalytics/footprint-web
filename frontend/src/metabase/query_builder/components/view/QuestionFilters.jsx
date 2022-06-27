@@ -59,9 +59,7 @@ export default function QuestionFilters({
             <PopoverWithTrigger
               key={index}
               triggerElement={
-                <FilterPill
-                  onRemove={() => filter.remove().update(null)}
-                >
+                <FilterPill onRemove={() => filter.remove().update(null)}>
                   {filter.displayName()}
                 </FilterPill>
               }
@@ -72,9 +70,7 @@ export default function QuestionFilters({
                 isTopLevel
                 query={query}
                 filter={filter}
-                onChangeFilter={newFilter =>
-                  newFilter.replace().update(null)
-                }
+                onChangeFilter={newFilter => newFilter.replace().update(null)}
                 className="scroll-y"
               />
             </PopoverWithTrigger>

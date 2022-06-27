@@ -438,9 +438,7 @@ export default class View extends React.Component {
               }
               onChangeBreakout={breakout => {
                 if (breakoutIndex != null) {
-                  query
-                    .updateBreakout(breakoutIndex, breakout)
-                    .update(null);
+                  query.updateBreakout(breakoutIndex, breakout).update(null);
                 } else {
                   query.breakout(breakout).update(null);
                 }
