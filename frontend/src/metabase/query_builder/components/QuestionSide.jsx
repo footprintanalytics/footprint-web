@@ -86,6 +86,7 @@ function QuestionSide({
   const [category, setCategory] = useState();
   const [s1, setS1] = useState("");
   const [s2, setS2] = useState("");
+  const [s3, setS3] = useState("");
   const [moreParams, setMoreParams] = useState();
   const [searchKey, setSearchKey] = useState("");
   // const [dataSets, setDatasets] = useState([]);
@@ -257,30 +258,37 @@ function QuestionSide({
         />
       )}
       {status === 1 && (
-        <div className="flex">
+        <div className="flex flex-column">
           <TableSelect
             list={demoData().d1}
             placeholder={"Chains"}
             onSelect={value => {
               setS1(value);
-              setSearchKey(`${value || ""} ${s2 || ""}`);
+              setSearchKey(`${value || ""} ${s2 || ""} ${s3 || ""}`);
             }}
           />
-          {/*<TableSelect list={demoData().d2} placeholder={"Protocol"}/>*/}
+          <TableSelect
+            list={demoData().d2}
+            placeholder={"Protocol_slug"}
+            onSelect={value => {
+              setS2(value);
+              setSearchKey(`${s1 || ""} ${value || ""} ${s3 || ""}`);
+            }}
+          />
           <TableSelect
             placeholder={"Metrics"}
             dataSets={dataSets}
             category={category}
             searchKeyValue={searchKeyValue}
             onSelect={value => {
-              setS2(value);
-              setSearchKey(`${s1 || ""} ${value || ""}`);
+              setS3(value);
+              setSearchKey(`${s1 || ""} ${s2 || ""} ${value || ""}`);
             }}
           />
         </div>
       )}
       {status === 1 && category && (
-        <div className="flex">
+        <div className="flex mb1">
           <div
             onClick={() => {
               setCategory(null);
@@ -293,14 +301,14 @@ function QuestionSide({
           <div className={"ml1 footprint-primary-text"}>{category}</div>
         </div>
       )}
-      {!formDataSelector && status === 0 && (
+      {!formDataSelector && status === 0 && !searchKey && (
         <TableCategory2
           databaseId={databaseId}
           categoryChange={categoryChange}
           category={category}
         />
       )}
-      {status === 1 && (
+      {((status === 0 && searchKey) || status === 1) && (
         <>
           <TableDataList
             isLoading={isLoading}

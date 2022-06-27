@@ -50,10 +50,22 @@ const TableCategory2 = props => {
     //   "Custom Upload",
     //   "My Charts",
     // ];
-    // return list?.filter(dataSet => {
-    //   return categories.includes(dataSet.value);
-    // });
-    return list;
+    const categories = [
+      "gamefi",
+      "nft",
+      "defi",
+      "protocol",
+      "token",
+      "address",
+      "Community",
+      "Custom Upload",
+      "My Charts",
+    ];
+    return list?.filter(dataSet => {
+      return categories
+        .map(c => c.toLowerCase())
+        .includes(dataSet?.value?.toLowerCase());
+    });
   };
   return (
     <div className="flex flex-column">

@@ -18,7 +18,7 @@ const TableSelect = props => {
   useEffect(() => {
     if (category && !searchKeyValue && dataSets) {
       const array = uniq(
-        flatten(dataSets?.map(d => d.columns.map(c => c.name))),
+        flatten(dataSets?.map(d => d?.columns?.map(c => c.name))),
       );
       setCustomList(
         array.map((a, index) => {
