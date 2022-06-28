@@ -415,9 +415,9 @@ export default class View extends React.Component {
                 if (aggregationIndex != null) {
                   query
                     .updateAggregation(aggregationIndex, aggregation)
-                    .update(null, { run: true });
+                    .update(null);
                 } else {
-                  query.aggregate(aggregation).update(null, { run: true });
+                  query.aggregate(aggregation).update(null);
                 }
                 this.handleClosePopover();
               }}
@@ -438,11 +438,9 @@ export default class View extends React.Component {
               }
               onChangeBreakout={breakout => {
                 if (breakoutIndex != null) {
-                  query
-                    .updateBreakout(breakoutIndex, breakout)
-                    .update(null, { run: true });
+                  query.updateBreakout(breakoutIndex, breakout).update(null);
                 } else {
-                  query.breakout(breakout).update(null, { run: true });
+                  query.breakout(breakout).update(null);
                 }
                 this.handleClosePopover();
               }}
