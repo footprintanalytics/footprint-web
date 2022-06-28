@@ -8,7 +8,7 @@ import { getOssUrl } from "../../lib/image";
 import { StateContext } from "./StateProvider";
 import { message } from "antd";
 
-const DashboardSiderMainMenu = ({ userMenu, commonMenu, onClick }) => {
+const DashboardSiderMainMenu = ({ userMenu, commonMenu, onClick, user }) => {
   const { isOpenSubMenu, setIsOpenSubMenu } = useContext(StateContext);
 
   const iconMap = {
@@ -41,9 +41,8 @@ const DashboardSiderMainMenu = ({ userMenu, commonMenu, onClick }) => {
         {userMenu?.firstLevelList?.map(item => (
           <Item key={item.value} item={item} />
         ))}
-        {MENU_LIST.map(item => (
-          <Item key={item.value} item={item} />
-        ))}
+        {(!user?.id || user?.id !== 12432) &&
+          MENU_LIST.map(item => <Item key={item.value} item={item} />)}
       </ul>
       <div className="defi-dashboard__sider-main-menu-bottom">
         <ul className="defi-dashboard__sider-main-menu-tool">

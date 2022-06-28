@@ -28,7 +28,7 @@ export const useGetCategory = ({ location }) => {
         selected: true,
         withTag: true,
         sortMap: {
-          date: "last_edited_at",
+          date: "created_at",
         },
       },
       {
@@ -51,7 +51,7 @@ export const useGetCategory = ({ location }) => {
           return null;
         },
         sortMap: {
-          date: "favorite_time",
+          date: "views",
         },
       },
     ];
@@ -122,6 +122,7 @@ export const useGetMyInfo = ({
   collectionId,
   currentTag,
   currentSort,
+  user,
 }) => {
   const [myList, setMyList] = useState([]);
   const [myTotal, setMyTotal] = useState();
@@ -151,10 +152,11 @@ export const useGetMyInfo = ({
           valueX: currentTag.valueX,
           valueY: currentTag.valueY,
           params: {
+            name: user.name,
             pageSize: 40,
             current: currentPage,
             pinnedState: currentCategory.value,
-            sortColumn: sortColumn,
+            sortBy: sortColumn,
             sortDirection: currentSort.sort,
           },
         });
@@ -178,7 +180,14 @@ export const useGetMyInfo = ({
     };
 
     _getInfo();
-  }, [currentCategory, collectionId, currentPage, currentTag, currentSort]);
+  }, [
+    currentCategory,
+    collectionId,
+    currentPage,
+    currentTag,
+    currentSort,
+    user.name,
+  ]);
 
   return { myList, setMyList, myTotal, setMyTotal };
 };

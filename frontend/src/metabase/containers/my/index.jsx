@@ -30,6 +30,7 @@ const Index = ({ user, children, location }) => {
     currentTag,
     collectionId: getPersonalCollectionId(user),
     currentSort,
+    user,
   });
 
   const onCategoryClick = item => {

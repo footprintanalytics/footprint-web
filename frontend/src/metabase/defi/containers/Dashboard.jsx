@@ -155,6 +155,7 @@ const Dashboard = props => {
               userMenu={userMenu}
               commonMenu={commonMenu}
               onClick={hanldeSiderMainMenuClick}
+              user={user}
             />
           )}
           <DashboardSiderSubMenu

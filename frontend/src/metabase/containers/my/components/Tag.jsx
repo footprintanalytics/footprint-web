@@ -1,7 +1,7 @@
 /* eslint-disable react/prop-types */
 import React from "react";
 import cx from "classnames";
-import { getProject } from "metabase/lib/project_info";
+import { getProject, isDefi360 } from "metabase/lib/project_info";
 
 export default function Tag({
   className,
@@ -11,6 +11,10 @@ export default function Tag({
   tagRightPanel,
 }) {
   const project = getProject();
+
+  if (isDefi360(project)) {
+    return null;
+  }
 
   return (
     <div
