@@ -187,6 +187,25 @@ const HomeFooter = props => {
           ))}
         </div>
       </div>
+      <div style={{ display: "none" }}>
+        keywords：
+        <a
+          href="https://www.footprint.network/sitemap.html"
+          title="footprint"
+          rel="noreferrer"
+          target="_blank"
+        >
+          <strong>footprint</strong>
+        </a>
+        <a
+          href="https://www.footprint.network/sitemap.xml"
+          title="footprint"
+          rel="noreferrer"
+          target="_blank"
+        >
+          <strong>footprint</strong>
+        </a>
+      </div>
     </footer>
   );
 };
