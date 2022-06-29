@@ -287,6 +287,7 @@ export default class DashCard extends Component {
           }}
         >
           <TableChartInfo
+            tableName={dashcard.card.table_name}
             tableId={dashcard.card.table_id}
             card={dashcard?.card}
           />

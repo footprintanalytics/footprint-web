@@ -36,11 +36,29 @@ const TableChartInfo = ({ tableName, tableId, tableConfigList, card }) => {
     );
   };
 
+  const getUdTable = () => {
+    if (nativeQuery) {
+      return "";
+    }
+    if (tableName.includes("ud_")) {
+      return tableName;
+    }
+    return "";
+  };
+  const udTable = getUdTable();
   const betaTables = getTables("beta");
   const upgradeTables = getTables("upgrade");
   const deprecateTables = getTables("deprecate");
-  const getShowInfo = ({ betaTables, upgradeTables, deprecateTables }) => {
+  const getShowInfo = ({
+    udTable,
+    betaTables,
+    upgradeTables,
+    deprecateTables,
+  }) => {
     let result = "";
+    if (udTable) {
+      result += `This chart uses the ud table(ud table is contributed by the community): \n${udTable}\n`;
+    }
     if (betaTables?.length > 0) {
       result += "This chart uses the beta table(beta table is in progress):\n";
       result += `[${betaTables
@@ -59,7 +77,7 @@ const TableChartInfo = ({ tableName, tableId, tableConfigList, card }) => {
   };
   const showInfo =
     tableConfigList &&
-    getShowInfo({ betaTables, upgradeTables, deprecateTables });
+    getShowInfo({ udTable, betaTables, upgradeTables, deprecateTables });
 
   return (
     <React.Fragment>
