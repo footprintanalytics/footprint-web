@@ -22,6 +22,7 @@ export const NEXT_CHART_POPOVER_Action =
 export const CLOSE_ALL_CHART_POPOVER_Action =
   "metabase/control/closeAllChartPopoverAction";
 export const SET_NEW_GUIDE_INFO = "metabase/control/setNewGuideInfo";
+export const SET_DARK_MODE = "metabase/control/setDarkMode";
 
 export const loginModalShowAction = createAction(
   LOGIN_MODAL_SHOW,
@@ -118,6 +119,10 @@ export const setNewGuideInfo = createAction(
     return newGuideInfo;
   },
 );
+export const setDarkMode = createAction(SET_DARK_MODE, darkMode => {
+  localStorage.setItem("sql-editor-dark-mode", darkMode);
+  return darkMode;
+});
 
 export const control = handleActions(
   {
@@ -209,6 +214,17 @@ export const control = handleActions(
         };
       },
     },
+    [SET_DARK_MODE]: {
+      next: (state, { payload }) => {
+        return {
+          ...state,
+          darkMode: payload,
+        };
+      },
+    },
   },
-  { newGuideInfo: {} },
+  {
+    newGuideInfo: {},
+    darkMode: localStorage.getItem("sql-editor-dark-mode") === "true",
+  },
 );

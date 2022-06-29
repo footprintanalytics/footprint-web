@@ -78,3 +78,7 @@ export const getNewGuideInfo = createSelector(
     return newGuideInfo;
   },
 );
+
+export const getDarkMode = createSelector([getControl], ({ darkMode }) => {
+  return darkMode;
+});

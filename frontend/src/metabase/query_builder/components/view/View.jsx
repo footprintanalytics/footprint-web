@@ -237,7 +237,10 @@ export default class View extends React.Component {
 
     if (location.hash) {
       const json = deserializeCardFromUrl(location.hash);
-      const initShowHideSide = !get(json, "dataset_query.database") && hideSide;
+      const initShowHideSide =
+        !get(json, "dataset_query.database") &&
+        get(json, "dataset_query.type") !== "native" &&
+        hideSide;
       if (initShowHideSide) {
         this.props.questionSideHideAction({ hide: false });
       }
