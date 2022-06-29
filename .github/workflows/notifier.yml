@@ -8,10 +8,8 @@ jobs:
   notify:
     runs-on: ubuntu-latest
     steps:
-    - uses: Netail/webhook-notifier@v1
+    - uses: Ilshidur/action-discord@master
+      env:
+        DISCORD_WEBHOOK: ${{ secrets.DISCORD_URL }}
       with:
-        discord-url: ${{ secrets.DISCORD_URL }}
-        slack-url: ${{ secrets.SLACK_URL }}
-        color: 'info'
-        title: 'A new pull request has been made: '
-        text: ${{ github.event.pull_request.html_url }}
+        args: 'A new pull request has been made: ${{ github.event.pull_request.html_url }}'
