@@ -10,8 +10,8 @@ jobs:
     steps:
     - uses: Netail/webhook-notifier@v1
       with:
-        discord-url: ${{ github.event.inputs.discord-url }}
-        slack-url: ${{ github.event.inputs.slack-url }}
+        discord-url: ${{ secrets.DISCORD_URL }}
+        slack-url: ${{ secrets.SLACK_URL }}
         color: 'info'
         title: 'A new pull request has been made: '
         text: ${{ github.event.pull_request.html_url }}
