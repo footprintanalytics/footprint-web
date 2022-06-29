@@ -69,7 +69,6 @@ import QuestionRunningTime from "metabase/query_builder/components/view/Question
 import ResizeObserver from "resize-observer-polyfill";
 import TableDictionary from "metabase/query_builder/components/TableDictionary";
 import TableBeta from "metabase/query_builder/components/TableBeta";
-import TableUpgrade from "metabase/query_builder/components/TableUpgrade";
 
 const viewTitleHeaderPropTypes = {
   question: PropTypes.object.isRequired,
@@ -370,15 +369,15 @@ export class ViewTitleHeader extends React.Component {
             buttons={this.getEditingButtons()}
           />
         )}
-        {!isSaved && (
-          <TableUpgrade
-            tableName={question
-              ?.query()
-              ?.table()
-              ?.displayName()}
-            tableId={question?.query()?.table()?.id}
-          />
-        )}
+        {/*{!isSaved && (*/}
+        {/*  <TableUpgrade*/}
+        {/*    tableName={question*/}
+        {/*      ?.query()*/}
+        {/*      ?.table()*/}
+        {/*      ?.displayName()}*/}
+        {/*    tableId={question?.query()?.table()?.id}*/}
+        {/*  />*/}
+        {/*)}*/}
 
         <ViewSection className={cx("border-bottom", className)} style={style}>
           <div

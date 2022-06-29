@@ -8,6 +8,7 @@ import Icon from "metabase/components/Icon";
 import { get } from "lodash";
 import { Popconfirm } from "antd";
 import "./TableChartInfo.css";
+import Link from "metabase/components/Link";
 
 const TableChartInfo = ({ tableName, tableId, tableConfigList, card }) => {
   const nativeQuery =
@@ -65,15 +66,47 @@ const TableChartInfo = ({ tableName, tableId, tableConfigList, card }) => {
     deprecateTables,
   }) => {
     let result = "";
+    let udTableNode = null;
     if (udTables?.length > 0) {
-      result += `This chart uses the ud table(ud table is contributed by the community): \n`;
-      result += `[${udTables.join(", ")} ] \n\n`;
+      udTableNode = udTables.map(table => (
+        <div key={table}>
+          {table}:
+          <Link
+            to="https://docs.footprint.network/data-1/data-model"
+            target="_blank"
+            style={{
+              size: 11,
+              padding: "0 4px",
+              background: "#F6F6FE",
+              color: "#3434B2",
+              margin: "0 2px",
+            }}
+          >
+            ud
+          </Link>
+        </div>
+      ));
     }
+    let betaTableNode = null;
     if (betaTables?.length > 0) {
-      result += "This chart uses the beta table(beta table is in progress):\n";
-      result += `[${betaTables
-        .map(table => `${table?.name}`)
-        .join(", ")} ] \n\n`;
+      betaTableNode = betaTables.map(table => (
+        <div key={table.id}>
+          {table.name}:
+          <Link
+            to="https://docs.footprint.network/data-1/data-model"
+            target="_blank"
+            style={{
+              size: 11,
+              padding: "0 4px",
+              background: "#F6F6FE",
+              color: "#3434B2",
+              margin: "0 2px",
+            }}
+          >
+            beta
+          </Link>
+        </div>
+      ));
     }
     if (upgradeTables?.length > 0) {
       result += upgradeTables.map(table => `${table?.message}\n`).join("");
@@ -81,8 +114,12 @@ const TableChartInfo = ({ tableName, tableId, tableConfigList, card }) => {
     if (deprecateTables?.length > 0) {
       result += deprecateTables.map(table => `${table?.message}\n`).join("");
     }
-    return result ? (
-      <div style={{ whiteSpace: "pre-line" }}>{result}</div>
+    return udTableNode || betaTableNode || result ? (
+      <div style={{ whiteSpace: "pre-line" }}>
+        {udTableNode}
+        {betaTableNode}
+        {result}
+      </div>
     ) : null;
   };
   const showInfo =
