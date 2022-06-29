@@ -59,7 +59,7 @@ COPY --from=registry-intl.us-east-1.aliyuncs.com/mexl/foot-print-frontend:metaba
 # FE
 RUN NODE_ENV=production MB_EDITION=$MB_EDITION && \
     chmod +x bin/i18n/build-translation-resources && \
-    yarn build && yarn sitemap && yarn rss && yarn build-static-viz && bin/i18n/build-translation-resources && \
+    yarn build && yarn rss && yarn build-static-viz && bin/i18n/build-translation-resources && \
     chmod +x bin/build && \
     bin/build uberjar
 
