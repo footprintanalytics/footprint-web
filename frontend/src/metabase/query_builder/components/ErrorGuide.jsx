@@ -5,7 +5,7 @@ const ErrorGuide = () => {
   return (
     <div className="text-brand text-underline html2canvas-filter">
       <Link
-        to="https://docs.footprint.network/getting-started/tutorial/how-to-create-native-query"
+        to="https://docs.footprint.network/guides/charts/sql/upgrade-from-26.05.2022"
         target="_blank"
       >
         (Get help here.)
