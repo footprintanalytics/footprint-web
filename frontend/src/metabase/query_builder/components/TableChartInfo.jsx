@@ -36,28 +36,38 @@ const TableChartInfo = ({ tableName, tableId, tableConfigList, card }) => {
     );
   };
 
-  const getUdTable = () => {
+  const getUdTables = () => {
     if (nativeQuery) {
-      return "";
+      const reg = /(?<=from|join)(\s|`)+(\w|`)+/g;
+      return nativeQuery
+        .match(reg)
+        .map(s =>
+          s
+            .trim()
+            .toLowerCase()
+            .replace(/`/g, ""),
+        )
+        .filter(s => s.startsWith("ud_"));
     }
     if (tableName.includes("ud_")) {
-      return tableName;
+      return [tableName];
     }
-    return "";
+    return [];
   };
-  const udTable = getUdTable();
+  const udTables = getUdTables();
   const betaTables = getTables("beta");
   const upgradeTables = getTables("upgrade");
   const deprecateTables = getTables("deprecate");
   const getShowInfo = ({
-    udTable,
+    udTables,
     betaTables,
     upgradeTables,
     deprecateTables,
   }) => {
     let result = "";
-    if (udTable) {
-      result += `This chart uses the ud table(ud table is contributed by the community): \n${udTable}\n`;
+    if (udTables?.length > 0) {
+      result += `This chart uses the ud table(ud table is contributed by the community): \n`;
+      result += `[${udTables.join(", ")} ] \n\n`;
     }
     if (betaTables?.length > 0) {
       result += "This chart uses the beta table(beta table is in progress):\n";
@@ -77,7 +87,7 @@ const TableChartInfo = ({ tableName, tableId, tableConfigList, card }) => {
   };
   const showInfo =
     tableConfigList &&
-    getShowInfo({ udTable, betaTables, upgradeTables, deprecateTables });
+    getShowInfo({ udTables, betaTables, upgradeTables, deprecateTables });
 
   return (
     <React.Fragment>
