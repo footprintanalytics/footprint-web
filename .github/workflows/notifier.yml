@@ -12,4 +12,4 @@ jobs:
       env:
         DISCORD_WEBHOOK: ${{ secrets.DISCORD_URL }}
       with:
-        args: 'A new pull request has been made: ${{ github.event.pull_request.html_url }}'
+        args: 'A new pull request has been made: {{ EVENT_PAYLOAD.pull_request.html_url }}'
