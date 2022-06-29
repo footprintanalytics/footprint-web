@@ -16,6 +16,7 @@ import LazyLoad from "./routesLazyLoad";
 import { includes } from "lodash/collection";
 import { NotFound, Unauthorized } from "metabase/containers/ErrorPages";
 import { trackPageView } from "./lib/analytics";
+import { loadConfig } from "metabase/redux/config";
 
 const MetabaseIsSetup = UserAuthWrapper({
   predicate: authData => !authData.hasSetupToken,
@@ -158,6 +159,7 @@ export const getRoutes = store => (
     <Route
       onEnter={async (nextState, replace, done) => {
         await store.dispatch(loadCurrentUser());
+        await store.dispatch(loadConfig());
         if (store.getState().currentUser) {
           store.dispatch(loadCurrentUserVip());
         }

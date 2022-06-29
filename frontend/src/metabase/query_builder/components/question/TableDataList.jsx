@@ -17,6 +17,7 @@ import {
   getTreeLoadedKeys,
   NEW_GUIDE_CATEGORY,
 } from "metabase/query_builder/components/question/handle";
+import TableBeta from "metabase/query_builder/components/TableBeta";
 
 const TableDataList = props => {
   const {
@@ -218,19 +219,22 @@ const TableDataList = props => {
               });
             }}
           >
-            {n.type === "more" ? (
-              <Button className="table-node-more" loading={n.loading}>
-                More
-              </Button>
-            ) : (
-              <Highlighter
-                className="table-node-title"
-                highlightClassName="highlight"
-                searchWords={searchWords}
-                autoEscape={true}
-                textToHighlight={n.name}
-              />
-            )}
+            <div>
+              {n.type === "more" ? (
+                <Button className="table-node-more" loading={n.loading}>
+                  More
+                </Button>
+              ) : (
+                <Highlighter
+                  className="table-node-title"
+                  highlightClassName="highlight"
+                  searchWords={searchWords}
+                  autoEscape={true}
+                  textToHighlight={n.name}
+                />
+              )}
+              <TableBeta tableId={id} tableName={n.name} />
+            </div>
 
             {n.type !== "more" && !canShowNewGuide && (
               <Button
