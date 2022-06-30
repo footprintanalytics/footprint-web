@@ -105,7 +105,12 @@ const TableChartInfo = ({ tableName, tableId, tableConfigList, card }) => {
       ));
     }
     if (upgradeTables?.length > 0) {
-      upgradeNode = upgradeTables.map(table => (<div key={table?.id} dangerouslySetInnerHTML = {{__html: table?.message}}/>));
+      upgradeNode = upgradeTables.map(table => (
+        <div
+          key={table?.id}
+          dangerouslySetInnerHTML={{ __html: table?.message }}
+        />
+      ));
     }
     return udTableNode || betaTableNode || upgradeNode ? (
       <div style={{ whiteSpace: "pre-line" }}>

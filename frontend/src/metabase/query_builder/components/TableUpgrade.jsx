@@ -43,7 +43,12 @@ const TableUpgrade = ({ tableName, tableId, card, tableConfigList }) => {
   const getShowInfo = ({ upgradeTables }) => {
     let upgradeNode = null;
     if (upgradeTables?.length > 0) {
-      upgradeNode = upgradeTables.map(table => (<div key={table?.id} dangerouslySetInnerHTML = {{__html: table?.message}}/>));
+      upgradeNode = upgradeTables.map(table => (
+        <div
+          key={table?.id}
+          dangerouslySetInnerHTML={{ __html: table?.message }}
+        />
+      ));
     }
     return upgradeNode ? <div>{upgradeNode}</div> : null;
   };
