@@ -16,9 +16,10 @@ import LazyLoad from "./routesLazyLoad";
 import { includes } from "lodash/collection";
 import { NotFound, Unauthorized } from "metabase/containers/ErrorPages";
 import { trackPageView } from "./lib/analytics";
+import { isProduction } from "./env";
 
 const MetabaseIsSetup = UserAuthWrapper({
-  predicate: authData => !authData.hasSetupToken,
+  predicate: authData => (isProduction ? !authData.hasSetupToken : true),
   failureRedirectPath: "/setup",
   authSelector: state => ({ hasSetupToken: MetabaseSettings.hasSetupToken() }), // HACK
   wrapperDisplayName: "MetabaseIsSetup",
