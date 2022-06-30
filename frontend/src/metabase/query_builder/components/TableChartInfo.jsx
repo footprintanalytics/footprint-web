@@ -27,11 +27,11 @@ const TableChartInfo = ({ tableName, tableId, tableConfigList, card }) => {
     }
     return (
       (tableId &&
-        tableConfigList.filter(
+        tableConfigList?.filter(
           item => item.id === tableId && item.type === type,
         )) ||
       (tableName &&
-        tableConfigList.filter(
+        tableConfigList?.filter(
           item => item.name === tableName && item.type === type,
         ))
     );
@@ -57,14 +57,11 @@ const TableChartInfo = ({ tableName, tableId, tableConfigList, card }) => {
     }
     return [];
   };
-  const udTables = getUdTables();
-  const betaTables = getTables("beta");
-  const upgradeTables = getTables("upgrade");
   const getShowInfo = ({ udTables, betaTables, upgradeTables }) => {
     let upgradeNode = "";
     let udTableNode = null;
     if (udTables?.length > 0) {
-      udTableNode = udTables.map(table => (
+      udTableNode = udTables?.map(table => (
         <div key={table}>
           {table}:
           <Link
@@ -85,7 +82,7 @@ const TableChartInfo = ({ tableName, tableId, tableConfigList, card }) => {
     }
     let betaTableNode = null;
     if (betaTables?.length > 0) {
-      betaTableNode = betaTables.map(table => (
+      betaTableNode = betaTables?.map(table => (
         <div key={table.id}>
           {table.name}:
           <Link
@@ -105,7 +102,7 @@ const TableChartInfo = ({ tableName, tableId, tableConfigList, card }) => {
       ));
     }
     if (upgradeTables?.length > 0) {
-      upgradeNode = upgradeTables.map(table => (
+      upgradeNode = upgradeTables?.map(table => (
         <div
           key={table?.id}
           dangerouslySetInnerHTML={{ __html: table?.message }}
@@ -121,6 +118,10 @@ const TableChartInfo = ({ tableName, tableId, tableConfigList, card }) => {
       </div>
     ) : null;
   };
+
+  const udTables = getUdTables();
+  const betaTables = getTables("beta");
+  const upgradeTables = getTables("upgrade");
   const showInfo =
     tableConfigList && getShowInfo({ udTables, betaTables, upgradeTables });
 

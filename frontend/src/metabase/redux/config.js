@@ -14,8 +14,7 @@ export const questionSideHideAction = createAction(
 export const LOAD_CONFIG = "metabase/config/LOAD_CONFIG";
 export const loadConfig = createAction(LOAD_CONFIG, async () => {
   try {
-    const data = await loadAppConfig();
-    return data;
+    return await loadAppConfig();
   } catch (e) {
     return null;
   }

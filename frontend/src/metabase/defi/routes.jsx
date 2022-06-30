@@ -16,8 +16,8 @@ const getRoutes = (store, IsDefiAuthenticated, IsDefi360) => {
       <Route
         path="defi360"
         onEnter={async (nextState, replace, done) => {
+          store.dispatch(loadConfig());
           await store.dispatch(loadCurrentUser());
-          await store.dispatch(loadConfig());
           store.getState().currentUser && store.dispatch(loadCurrentUserVip());
           done();
         }}

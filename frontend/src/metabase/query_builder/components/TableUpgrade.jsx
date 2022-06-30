@@ -28,21 +28,20 @@ const TableUpgrade = ({ tableName, tableId, card, tableConfigList }) => {
     }
     return (
       (tableId &&
-        tableConfigList.filter(
+        tableConfigList?.filter(
           item => item.id === tableId && item.type === type,
         )) ||
       (tableName &&
-        tableConfigList.filter(
+        tableConfigList?.filter(
           item => item.name === tableName && item.type === type,
         ))
     );
   };
 
-  const upgradeTables = getTables("upgrade");
   const getShowInfo = ({ upgradeTables }) => {
     let upgradeNode = null;
     if (upgradeTables?.length > 0) {
-      upgradeNode = upgradeTables.map(table => (
+      upgradeNode = upgradeTables?.map(table => (
         <div
           key={table?.id}
           dangerouslySetInnerHTML={{ __html: table?.message }}
@@ -51,6 +50,8 @@ const TableUpgrade = ({ tableName, tableId, card, tableConfigList }) => {
     }
     return upgradeNode ? <div>{upgradeNode}</div> : null;
   };
+
+  const upgradeTables = getTables("upgrade");
   const showInfo = getShowInfo({ upgradeTables });
   return (
     <React.Fragment>

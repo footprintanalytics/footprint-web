@@ -159,8 +159,8 @@ export const getRoutes = store => (
     {/* APP */}
     <Route
       onEnter={async (nextState, replace, done) => {
+        store.dispatch(loadConfig());
         await store.dispatch(loadCurrentUser());
-        await store.dispatch(loadConfig());
         if (store.getState().currentUser) {
           store.dispatch(loadCurrentUserVip());
         }
