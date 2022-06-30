@@ -129,6 +129,7 @@ const TableChartInfo = ({ tableName, tableId, tableConfigList, card }) => {
           okText="OK"
           icon={false}
           showCancel={false}
+          okType="ghost"
         >
           <a
             className="html2canvas-filter"
@@ -140,7 +141,7 @@ const TableChartInfo = ({ tableName, tableId, tableConfigList, card }) => {
             }}
             onClick={() => {}}
           >
-            <Icon name={"info"} size={14} color={"#9AA0AF"} />
+            <Icon name={"dialogue"} size={16} color={"#9AA0AF"} />
           </a>
         </Popconfirm>
       )}
