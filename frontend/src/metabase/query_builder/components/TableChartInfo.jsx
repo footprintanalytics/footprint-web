@@ -58,13 +58,7 @@ const TableChartInfo = ({ tableName, tableId, tableConfigList, card }) => {
   const udTables = getUdTables();
   const betaTables = getTables("beta");
   const upgradeTables = getTables("upgrade");
-  const deprecateTables = getTables("deprecate");
-  const getShowInfo = ({
-    udTables,
-    betaTables,
-    upgradeTables,
-    deprecateTables,
-  }) => {
+  const getShowInfo = ({ udTables, betaTables, upgradeTables }) => {
     let result = "";
     let udTableNode = null;
     if (udTables?.length > 0) {
@@ -82,7 +76,7 @@ const TableChartInfo = ({ tableName, tableId, tableConfigList, card }) => {
               margin: "0 2px",
             }}
           >
-            ud
+            User Define
           </Link>
         </div>
       ));
@@ -103,7 +97,7 @@ const TableChartInfo = ({ tableName, tableId, tableConfigList, card }) => {
               margin: "0 2px",
             }}
           >
-            beta
+            Beta
           </Link>
         </div>
       ));
@@ -111,11 +105,9 @@ const TableChartInfo = ({ tableName, tableId, tableConfigList, card }) => {
     if (upgradeTables?.length > 0) {
       result += upgradeTables.map(table => `${table?.message}\n`).join("");
     }
-    if (deprecateTables?.length > 0) {
-      result += deprecateTables.map(table => `${table?.message}\n`).join("");
-    }
     return udTableNode || betaTableNode || result ? (
       <div style={{ whiteSpace: "pre-line" }}>
+        {"Table Info: \n"}
         {udTableNode}
         {betaTableNode}
         {result}
@@ -123,8 +115,7 @@ const TableChartInfo = ({ tableName, tableId, tableConfigList, card }) => {
     ) : null;
   };
   const showInfo =
-    tableConfigList &&
-    getShowInfo({ udTables, betaTables, upgradeTables, deprecateTables });
+    tableConfigList && getShowInfo({ udTables, betaTables, upgradeTables });
 
   return (
     <React.Fragment>

@@ -35,18 +35,14 @@ const TableUpgrade = ({ tableName, tableId, nativeQuery, tableConfigList }) => {
   };
 
   const upgradeTables = getTables("upgrade");
-  const deprecateTables = getTables("deprecate");
-  const getShowInfo = ({ upgradeTables, deprecateTables }) => {
+  const getShowInfo = ({ upgradeTables }) => {
     let result = "";
     if (upgradeTables?.length > 0) {
       result += upgradeTables.map(table => `${table?.message}`).join(",");
     }
-    if (deprecateTables?.length > 0) {
-      result += deprecateTables.map(table => `${table?.message}`).join(",");
-    }
     return result ? <span>{result}</span> : null;
   };
-  const showInfo = getShowInfo({ upgradeTables, deprecateTables });
+  const showInfo = getShowInfo({ upgradeTables });
   return (
     <React.Fragment>
       {showInfo && (

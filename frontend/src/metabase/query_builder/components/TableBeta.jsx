@@ -16,7 +16,7 @@ const TableBeta = ({ tableName, tableId, tableConfigList }) => {
       tableConfigList.find(
         item => item.name === tableName && item.type === "beta",
       ));
-  console.log("TableBeta", { tableId, tableConfigList, betaTable });
+
   return (
     <React.Fragment>
       {betaTable && (
@@ -33,7 +33,7 @@ const TableBeta = ({ tableName, tableId, tableConfigList }) => {
               margin: "0 2px",
             }}
           >
-            beta
+            Beta
           </span>
         </Tooltip>
       )}
