@@ -1,0 +1,7 @@
+.table-chart-info .ant-popover-message-title {
+  padding-left: 0;
+}
+
+.table-chart-info .ant-popover-inner-content {
+  max-width: 500px;
+}

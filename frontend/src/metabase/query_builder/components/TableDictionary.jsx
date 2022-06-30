@@ -18,7 +18,7 @@ const TableDictionary = ({ tableName, tableId }) => {
           verticalAttachments={["top", "bottom"]}
         >
           <Link
-            className="flex align-center px1 ml1"
+            className="flex align-center px1"
             to={`https://www.footprint.network/@Footprint/Table-Info-Dashboard?table_name=${tableName}`}
             target={"_blank"}
           >

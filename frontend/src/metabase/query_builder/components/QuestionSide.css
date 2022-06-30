@@ -17,6 +17,7 @@
 }
 
 .table-node {
+  word-break: break-all;
   min-height: 30px;
 }
 

@@ -68,6 +68,8 @@ import { InsertRowAboveOutlined, ScissorOutlined } from "@ant-design/icons";
 import QuestionRunningTime from "metabase/query_builder/components/view/QuestionRunningTime";
 import ResizeObserver from "resize-observer-polyfill";
 import TableDictionary from "metabase/query_builder/components/TableDictionary";
+import TableBeta from "metabase/query_builder/components/TableBeta";
+import TableUpgrade from "metabase/query_builder/components/TableUpgrade";
 
 const viewTitleHeaderPropTypes = {
   question: PropTypes.object.isRequired,
@@ -368,6 +370,16 @@ export class ViewTitleHeader extends React.Component {
             buttons={this.getEditingButtons()}
           />
         )}
+        {!isSaved && (
+          <TableUpgrade
+            tableName={question
+              ?.query()
+              ?.table()
+              ?.displayName()}
+            tableId={question?.query()?.table()?.id}
+            card={question?.card()}
+          />
+        )}
 
         <ViewSection className={cx("border-bottom", className)} style={style}>
           <div
@@ -488,6 +500,15 @@ export class ViewTitleHeader extends React.Component {
                     )}
                   </div>
                 </div>
+              )}
+              {!isSaved && (
+                <TableBeta
+                  tableName={question
+                    ?.query()
+                    ?.table()
+                    ?.displayName()}
+                  tableId={question?.query()?.table()?.id}
+                />
               )}
               {!isSaved && (
                 <TableDictionary

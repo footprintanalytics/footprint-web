@@ -24,6 +24,7 @@ import { updateNativeEditorSelect } from "metabase/query_builder/utils/handle";
 import NativeQuery from "metabase-lib/lib/queries/NativeQuery";
 import * as MetabaseAnalytics from "metabase/lib/analytics";
 import TableDictionary from "metabase/query_builder/components/TableDictionary";
+import TableBeta from "metabase/query_builder/components/TableBeta";
 
 function QueryPreview(props) {
   const {
@@ -111,6 +112,9 @@ function QueryPreview(props) {
       <div className="query-preview__head">
         <div className="flex flex-row">
           {tableName && <div className="query-preview__title">{tableName}</div>}
+          <div className="flex align-center">
+            <TableBeta tableName={tableName} tableId={tableId} />
+          </div>
           <TableDictionary tableName={tableName} tableId={tableId} />
 
           <Button

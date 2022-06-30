@@ -41,6 +41,7 @@ import { AddToolPopover } from "./Dashboard/DashboardEmptyState/DashboardEmptySt
 // import { snapshot } from "./utils/snapshot";
 import * as dashboardActions from "metabase/dashboard/actions";
 import { replaceTemplateCardUrl } from "metabase/guest/utils";
+import TableChartInfo from "metabase/query_builder/components/TableChartInfo";
 
 const DATASET_USUALLY_FAST_THRESHOLD = 15 * 1000;
 
@@ -241,6 +242,8 @@ export default class DashCard extends Component {
     const showPreview =
       !showEdit && !isTextDisplay && !isImageDisplay && !isVideoDisplay;
 
+    const showChartInfo = !isTextDisplay && !isImageDisplay && !isVideoDisplay;
+
     const wrappedVisualizationPadding = this.getWrappedVisualizationPadding({
       hideBackground,
       isEditing,
@@ -285,6 +288,13 @@ export default class DashCard extends Component {
             zIndex: 2,
           }}
         >
+          {showChartInfo && (
+            <TableChartInfo
+              tableName={dashcard?.card?.table_name}
+              tableId={dashcard?.card?.table_id}
+              card={dashcard?.card}
+            />
+          )}
           {showEdit && editAction && (
             <Tooltip key="ChartEdit" tooltip={t`Edit`}>
               <a
