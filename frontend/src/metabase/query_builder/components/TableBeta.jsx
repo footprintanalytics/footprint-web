@@ -18,7 +18,7 @@ const TableBeta = ({ tableName, tableId, tableConfigList }) => {
       ));
 
   const betaTip =
-    "Beta: data accuracy, stability, data period, update frequency,etc of this table is still on working.";
+    "Beta: data accuracy, stability, data period, update frequency, etc of this table is still on working.";
 
   return (
     <React.Fragment>
