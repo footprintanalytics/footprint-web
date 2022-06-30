@@ -61,7 +61,7 @@ const TableChartInfo = ({ tableName, tableId, tableConfigList, card }) => {
   const betaTables = getTables("beta");
   const upgradeTables = getTables("upgrade");
   const getShowInfo = ({ udTables, betaTables, upgradeTables }) => {
-    let result = "";
+    let upgradeNode = "";
     let udTableNode = null;
     if (udTables?.length > 0) {
       udTableNode = udTables.map(table => (
@@ -105,14 +105,14 @@ const TableChartInfo = ({ tableName, tableId, tableConfigList, card }) => {
       ));
     }
     if (upgradeTables?.length > 0) {
-      result += upgradeTables.map(table => `${table?.message}\n`).join("");
+      upgradeNode = upgradeTables.map(table => (<div key={table?.id} dangerouslySetInnerHTML = {{__html: table?.message}}/>));
     }
-    return udTableNode || betaTableNode || result ? (
+    return udTableNode || betaTableNode || upgradeNode ? (
       <div style={{ whiteSpace: "pre-line" }}>
         {"Table Info: \n"}
         {udTableNode}
         {betaTableNode}
-        {result}
+        {upgradeNode}
       </div>
     ) : null;
   };

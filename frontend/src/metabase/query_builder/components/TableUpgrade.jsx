@@ -41,11 +41,11 @@ const TableUpgrade = ({ tableName, tableId, card, tableConfigList }) => {
 
   const upgradeTables = getTables("upgrade");
   const getShowInfo = ({ upgradeTables }) => {
-    let result = "";
+    let upgradeNode = null;
     if (upgradeTables?.length > 0) {
-      result += upgradeTables.map(table => `${table?.message}`).join(",");
+      upgradeNode = upgradeTables.map(table => (<div key={table?.id} dangerouslySetInnerHTML = {{__html: table?.message}}/>));
     }
-    return result ? <span>{result}</span> : null;
+    return upgradeNode ? <div>{upgradeNode}</div> : null;
   };
   const showInfo = getShowInfo({ upgradeTables });
   return (
@@ -64,6 +64,7 @@ const TableUpgrade = ({ tableName, tableId, card, tableConfigList }) => {
         >
           {showInfo}
           <Icon
+            className="ml1"
             name="close"
             onClick={() => {
               setEnable(false);
