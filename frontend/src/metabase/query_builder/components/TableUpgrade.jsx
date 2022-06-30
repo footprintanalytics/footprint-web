@@ -15,16 +15,30 @@ const TableUpgrade = ({ tableName, tableId, card, tableConfigList }) => {
   if (!enable) {
     return null;
   }
-  const matchBetaTableFromNative = type => {
+  const matchNativeQuery = tableName => {
+    const reg = /(?<=from|join)(\s|`)+(\w|`)+/g;
+    return (
+      nativeQuery
+        ?.match(reg)
+        ?.map(s =>
+          s
+            .trim()
+            .toLowerCase()
+            .replace(/`/g, ""),
+        )
+        ?.filter(s => s === tableName.toLowerCase()) || []
+    );
+  };
+  const matchTableFromNative = type => {
     return tableConfigList
       .filter(item => item.type === type)
-      .map(item => (nativeQuery?.includes(item.name) ? item : null))
+      .map(item => (matchNativeQuery(item.name).length > 0 ? item : null))
       .filter(item => item);
   };
 
   const getTables = type => {
     if (nativeQuery) {
-      return matchBetaTableFromNative(type);
+      return matchTableFromNative(type);
     }
     return (
       (tableId &&
