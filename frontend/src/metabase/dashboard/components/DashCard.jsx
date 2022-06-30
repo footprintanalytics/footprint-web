@@ -242,6 +242,8 @@ export default class DashCard extends Component {
     const showPreview =
       !showEdit && !isTextDisplay && !isImageDisplay && !isVideoDisplay;
 
+    const showChartInfo = !isTextDisplay && !isImageDisplay && !isVideoDisplay;
+
     const wrappedVisualizationPadding = this.getWrappedVisualizationPadding({
       hideBackground,
       isEditing,
@@ -286,11 +288,13 @@ export default class DashCard extends Component {
             zIndex: 2,
           }}
         >
-          <TableChartInfo
-            tableName={dashcard.card.table_name}
-            tableId={dashcard.card.table_id}
-            card={dashcard?.card}
-          />
+          {showChartInfo && (
+            <TableChartInfo
+              tableName={dashcard.card.table_name}
+              tableId={dashcard.card.table_id}
+              card={dashcard?.card}
+            />
+          )}
           {showEdit && editAction && (
             <Tooltip key="ChartEdit" tooltip={t`Edit`}>
               <a

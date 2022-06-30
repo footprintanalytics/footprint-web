@@ -50,7 +50,7 @@ const TableChartInfo = ({ tableName, tableId, tableConfigList, card }) => {
         )
         .filter(s => s.startsWith("ud_"));
     }
-    if (tableName.includes("ud_")) {
+    if (tableName?.includes("ud_")) {
       return [tableName];
     }
     return [];
