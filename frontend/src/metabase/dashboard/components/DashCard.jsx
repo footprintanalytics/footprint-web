@@ -290,8 +290,8 @@ export default class DashCard extends Component {
         >
           {showChartInfo && (
             <TableChartInfo
-              tableName={dashcard.card.table_name}
-              tableId={dashcard.card.table_id}
+              tableName={dashcard?.card?.table_name}
+              tableId={dashcard?.card?.table_id}
               card={dashcard?.card}
             />
           )}

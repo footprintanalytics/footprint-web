@@ -8,7 +8,6 @@ import { getTableConfigList } from "metabase/selectors/config";
 import { get } from "lodash";
 
 const TableUpgrade = ({ tableName, tableId, card, tableConfigList }) => {
-  console.log("TableUpgrade", { tableName, tableId, card, tableConfigList });
   const nativeQuery =
     card?.dataset_query?.type === "native" &&
     get(card, "dataset_query.native.query");
