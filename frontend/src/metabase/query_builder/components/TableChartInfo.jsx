@@ -40,15 +40,17 @@ const TableChartInfo = ({ tableName, tableId, tableConfigList, card }) => {
   const getUdTables = () => {
     if (nativeQuery) {
       const reg = /(?<=from|join)(\s|`)+(\w|`)+/g;
-      return nativeQuery
-        .match(reg)
-        .map(s =>
-          s
-            .trim()
-            .toLowerCase()
-            .replace(/`/g, ""),
-        )
-        .filter(s => s.startsWith("ud_"));
+      return (
+        nativeQuery
+          ?.match(reg)
+          ?.map(s =>
+            s
+              .trim()
+              .toLowerCase()
+              .replace(/`/g, ""),
+          )
+          ?.filter(s => s.startsWith("ud_")) || []
+      );
     }
     if (tableName?.includes("ud_")) {
       return [tableName];

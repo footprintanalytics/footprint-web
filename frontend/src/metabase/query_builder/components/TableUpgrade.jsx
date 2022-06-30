@@ -5,8 +5,13 @@ import connect from "react-redux/lib/connect/connect";
 import _ from "underscore";
 import Icon from "metabase/components/Icon";
 import { getTableConfigList } from "metabase/selectors/config";
+import { get } from "lodash";
 
-const TableUpgrade = ({ tableName, tableId, nativeQuery, tableConfigList }) => {
+const TableUpgrade = ({ tableName, tableId, card, tableConfigList }) => {
+  console.log("TableUpgrade", { tableName, tableId, card, tableConfigList });
+  const nativeQuery =
+    card?.dataset_query?.type === "native" &&
+    get(card, "dataset_query.native.query");
   const [enable, setEnable] = useState(true);
   if (!enable) {
     return null;

@@ -377,6 +377,7 @@ export class ViewTitleHeader extends React.Component {
               ?.table()
               ?.displayName()}
             tableId={question?.query()?.table()?.id}
+            card={question?.card()}
           />
         )}
 
@@ -451,15 +452,6 @@ export class ViewTitleHeader extends React.Component {
                         />
                       }
                     />
-                    {
-                      <TableBeta
-                        tableName={question
-                          ?.query()
-                          ?.table()
-                          ?.displayName()}
-                        tableId={question?.query()?.table()?.id}
-                      />
-                    }
                   </div>
                   <ViewSubHeading className="flex align-center flex-wrap">
                     {QuestionDataSource.shouldRender({ question }) && (
@@ -489,15 +481,6 @@ export class ViewTitleHeader extends React.Component {
                         <QuestionDescription question={question} />
                       )}
                     </ViewHeading>
-                    {
-                      <TableBeta
-                        tableName={question
-                          ?.query()
-                          ?.table()
-                          ?.displayName()}
-                        tableId={question?.query()?.table()?.id}
-                      />
-                    }
                     {showFiltersInHeading &&
                       QuestionFilters.shouldRender(this.props) && (
                         <QuestionFilters
@@ -517,6 +500,15 @@ export class ViewTitleHeader extends React.Component {
                     )}
                   </div>
                 </div>
+              )}
+              {!isSaved && (
+                <TableBeta
+                  tableName={question
+                    ?.query()
+                    ?.table()
+                    ?.displayName()}
+                  tableId={question?.query()?.table()?.id}
+                />
               )}
               {!isSaved && (
                 <TableDictionary
