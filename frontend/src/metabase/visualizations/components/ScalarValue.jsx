@@ -24,7 +24,7 @@ export const ScalarWrapper = ({ children }) => (
 );
 
 const ScalarValue = ({ value, isFullscreen, isDashboard }) => (
-  <h1 className="ScalarValue cursor-pointer text-brand-hover text-centered">
+  <h1 className="ScalarValue cursor-pointer text-brand-hover text-centered overflow-x-scroll">
     {value}
   </h1>
 );

@@ -6,6 +6,7 @@ import LazyLoad from "../routesLazyLoad";
 import { loadCurrentUser, loadCurrentUserVip } from "metabase/redux/user";
 import { ModalRoute } from "metabase/hoc/ModalRoute";
 import getAccountRoutes from "metabase/account/routes";
+import { loadConfig } from "metabase/redux/config";
 
 const getRoutes = (store, IsDefiAuthenticated, IsDefi360) => {
   return (
@@ -16,6 +17,7 @@ const getRoutes = (store, IsDefiAuthenticated, IsDefi360) => {
         path="defi360"
         onEnter={async (nextState, replace, done) => {
           await store.dispatch(loadCurrentUser());
+          await store.dispatch(loadConfig());
           store.getState().currentUser && store.dispatch(loadCurrentUserVip());
           done();
         }}

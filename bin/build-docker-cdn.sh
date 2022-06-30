@@ -9,7 +9,6 @@ source "./bin/check-clojure-cli.sh"
 check_clojure_cli
 
 yarn build-cdn
-yarn sitemap
 yarn rss
 
 #bin/i18n/build-translation-resources

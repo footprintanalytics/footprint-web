@@ -33,9 +33,9 @@ function legacyScalarSettingsToFormatOptions(settings) {
 }
 
 // used below to determine whether we show compact formatting
-const COMPACT_MAX_WIDTH = 250;
-const COMPACT_WIDTH_PER_DIGIT = 25;
-const COMPACT_MIN_LENGTH = 6;
+// const COMPACT_MAX_WIDTH = 250;
+// const COMPACT_WIDTH_PER_DIGIT = 25;
+// const COMPACT_MIN_LENGTH = 6;
 
 // Scalar visualization shows a single number
 // Multiseries Scalar is transformed to a Funnel
@@ -197,7 +197,7 @@ export default class Scalar extends Component {
       settings,
       visualizationIsClickable,
       onVisualizationClick,
-      width,
+      // width,
     } = this.props;
 
     const columnIndex = this._getColumnIndex(cols, settings);
@@ -219,12 +219,13 @@ export default class Scalar extends Component {
     // use the compact version of formatting if the component is narrower than
     // the cutoff and the formatted value is longer than the cutoff
     // also if the width is less than a certain multiplier of the number of digits
-    const displayCompact =
-      settings["graph.value_formatting"] === "compact" ||
-      (fullScalarValue !== null &&
-        fullScalarValue.length > COMPACT_MIN_LENGTH &&
-        (width < COMPACT_MAX_WIDTH ||
-          width < COMPACT_WIDTH_PER_DIGIT * fullScalarValue.length));
+    // const displayCompact =
+    //   settings["graph.value_formatting"] === "compact" ||
+    //   (fullScalarValue !== null &&
+    //     fullScalarValue.length > COMPACT_MIN_LENGTH &&
+    //     (width < COMPACT_MAX_WIDTH ||
+    //       width < COMPACT_WIDTH_PER_DIGIT * fullScalarValue.length));
+    const displayCompact = settings["graph.value_formatting"] === "compact";
     const displayValue = displayCompact ? compactScalarValue : fullScalarValue;
 
     const clicked = {

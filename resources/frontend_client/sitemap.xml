@@ -1,67 +1,16 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
-  xmlns:news="http://www.google.com/schemas/sitemap-news/0.9"
-  xmlns:xhtml="http://www.w3.org/1999/xhtml"
-  xmlns:image="http://www.google.com/schemas/sitemap-image/1.1"
-  xmlns:video="http://www.google.com/schemas/sitemap-video/1.1">
-  <url>
-    <loc>https://www.footprint.network/</loc>
-    <lastmod>2022-04-08T06:44:09.000Z</lastmod>
-  </url>
-  <url>
-    <loc>https://www.footprint.network/dashboards</loc>
-    <lastmod>2022-04-08T06:44:09.000Z</lastmod>
-  </url>
-  <url>
-    <loc>https://www.footprint.network/search</loc>
-    <lastmod>2022-04-08T06:44:09.000Z</lastmod>
-  </url>
-  <url>
-    <loc>https://www.footprint.network/about</loc>
-    <lastmod>2022-04-08T06:44:09.000Z</lastmod>
-  </url>
-  <url>
-    <loc>https://www.footprint.network/tutorials/visualizations</loc>
-    <lastmod>2022-04-08T06:44:09.000Z</lastmod>
-  </url>
-  <url>
-    <loc>https://www.footprint.network/tutorials/videos</loc>
-    <lastmod>2022-04-08T06:44:09.000Z</lastmod>
-  </url>
-  <url>
-    <loc>https://www.footprint.network/tutorials/indicators</loc>
-    <lastmod>2022-04-08T06:44:09.000Z</lastmod>
-  </url>
-  <url>
-    <loc>https://www.footprint.network/pricing</loc>
-    <lastmod>2022-04-08T06:44:09.000Z</lastmod>
-  </url>
-  <url>
-    <loc>https://www.footprint.network/projects</loc>
-    <lastmod>2022-04-08T06:44:09.000Z</lastmod>
-  </url>
-  <url>
-    <loc>https://www.footprint.network/chains</loc>
-    <lastmod>2022-04-08T06:44:09.000Z</lastmod>
-  </url>
-  <url>
-    <loc>https://www.footprint.network/news/featured</loc>
-    <lastmod>2022-04-08T06:44:09.000Z</lastmod>
-  </url>
-  <url>
-    <loc>https://www.footprint.network/news/articles</loc>
-    <lastmod>2022-04-08T06:44:09.000Z</lastmod>
-  </url>
-  <url>
-    <loc>https://www.footprint.network/news/daily-news</loc>
-    <lastmod>2022-04-08T06:44:09.000Z</lastmod>
-  </url>
-  <url>
-    <loc>https://www.footprint.network/defi360</loc>
-    <lastmod>2022-04-08T06:44:09.000Z</lastmod>
-  </url>
-  <url>
-    <loc>https://www.footprint.network/defi360/demo</loc>
-    <lastmod>2022-04-08T06:44:09.000Z</lastmod>
-  </url>
+<urlset
+      xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
+      xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+      xsi:schemaLocation="http://www.sitemaps.org/schemas/sitemap/0.9
+            http://www.sitemaps.org/schemas/sitemap/0.9/sitemap.xsd">
+<!-- created with Free Online Sitemap Generator www.xml-sitemaps.com -->
+
+
+<url>
+  <loc>https://www.footprint.network/</loc>
+  <lastmod>2022-06-29T05:32:15+00:00</lastmod>
+</url>
+
+
 </urlset>

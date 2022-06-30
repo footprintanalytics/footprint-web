@@ -1,0 +1,15 @@
+name: 'Pull Request Notifier'
+
+on:
+  pull_request:
+    types: [opened]
+
+jobs:
+  notify:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: Ilshidur/action-discord@master
+      env:
+        DISCORD_WEBHOOK: ${{ secrets.DISCORD_URL }}
+      with:
+        args: 'A new pull request has been made: {{ EVENT_PAYLOAD.pull_request.html_url }}'
