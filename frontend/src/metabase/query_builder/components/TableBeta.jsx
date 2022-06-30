@@ -21,7 +21,9 @@ const TableBeta = ({ tableName, tableId, tableConfigList }) => {
     <React.Fragment>
       {betaTable && (
         <Tooltip
-          tooltip={"Beta: data accuracy, stability, data period, update frequency,etc of this table is still on working."}
+          tooltip={
+            "Beta: data accuracy, stability, data period, update frequency,etc of this table is still on working."
+          }
           verticalAttachments={["top", "bottom"]}
         >
           <span
