@@ -17,15 +17,13 @@ const TableBeta = ({ tableName, tableId, tableConfigList }) => {
         item => item.name === tableName && item.type === "beta",
       ));
 
-  const betaTip = "Beta: data accuracy, stability, data period, update frequency,etc of this table is still on working.";
+  const betaTip =
+    "Beta: data accuracy, stability, data period, update frequency,etc of this table is still on working.";
 
   return (
     <React.Fragment>
       {betaTable && (
-        <Tooltip
-          tooltip={betaTip}
-          verticalAttachments={["top", "bottom"]}
-        >
+        <Tooltip tooltip={betaTip} verticalAttachments={["top", "bottom"]}>
           <span
             style={{
               size: 11,
