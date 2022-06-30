@@ -3,6 +3,9 @@
   background-color: var(--color-bg-light);
   color: var(--color-text-dark);
 }
+.DarkMode .ace_editor {
+  filter: invert(1) hue-rotate(180deg);
+}
 .NativeQueryEditor .ace_editor .ace_keyword {
   color: var(--color-saturated-purple);
 }

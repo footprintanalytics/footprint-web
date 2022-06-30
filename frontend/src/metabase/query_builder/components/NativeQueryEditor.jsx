@@ -72,6 +72,9 @@ import RunButtonWithTooltip from "./RunButtonWithTooltip";
 import DataReferenceButton from "./view/DataReferenceButton";
 import NativeVariablesButton from "./view/NativeVariablesButton";
 import SnippetSidebarButton from "./view/SnippetSidebarButton";
+import DarkModeButton from "metabase/query_builder/components/view/DarkModeButton";
+import { getDarkMode } from "metabase/selectors/control";
+import { connect } from "react-redux";
 
 type AutoCompleteResult = [string, string, string];
 type AceEditor = any; // TODO;
@@ -119,6 +122,10 @@ type State = {
   isSelectedTextPopoverOpen: boolean,
 };
 
+const mapStateToProps = state => ({
+  darkMode: getDarkMode(state),
+});
+
 @ExplicitSize()
 @Snippets.loadList({ loadingAndErrorWrapper: false })
 @SnippetCollections.loadList({ loadingAndErrorWrapper: false })
@@ -126,6 +133,7 @@ type State = {
   loadingAndErrorWrapper: false,
   query: () => ({ project: getProject() }),
 })
+@connect(mapStateToProps, null)
 export default class NativeQueryEditor extends Component {
   props: Props;
   state: State;
@@ -495,6 +503,7 @@ export default class NativeQueryEditor extends Component {
       isPreviewing,
       snippetCollections,
       snippets,
+      darkMode,
     } = this.props;
 
     const database = query.database();
@@ -579,8 +588,14 @@ export default class NativeQueryEditor extends Component {
       </div>
     );
 
+    const showDarkModeButton = true;
+
     return (
-      <div className="NativeQueryEditor bg-light full">
+      <div
+        className={cx("NativeQueryEditor bg-light full", {
+          DarkMode: darkMode,
+        })}
+      >
         <div className="flex align-center" style={{ minHeight: 55 }}>
           {dataSelectors}
           <Parameters
@@ -604,6 +619,11 @@ export default class NativeQueryEditor extends Component {
               {showSnippetSidebarButton && (
                 <div className="mt1">
                   <SnippetSidebarButton {...this.props} />
+                </div>
+              )}
+              {showDarkModeButton && (
+                <div className="mt1">
+                  <DarkModeButton {...this.props} />
                 </div>
               )}
               {/* <RunButtonWithTooltip
