@@ -27,7 +27,9 @@ const CLJS_SRC_PATH = __dirname + "/frontend/src/cljs";
 const TEST_SUPPORT_PATH = __dirname + "/frontend/test/__support__";
 const BUILD_PATH = __dirname + "/resources/frontend_client";
 const PATH = "app/dist/";
-const CDN_PATH = `${process.env.STATIC_BUCKET_URL}/app/dist/`;
+const staticBucketUrl =
+  process.env.STATIC_BUCKET_URL || "https://static.footprint.network";
+const CDN_PATH = `${staticBucketUrl}/app/dist/`;
 
 const NODE_ENV = process.env.NODE_ENV || "development";
 const devMode = NODE_ENV !== "production";
@@ -45,9 +47,7 @@ const CSS_CONFIG = {
   importLoaders: 1,
 };
 
-const isUpgradeTest = process.env.STATIC_BUCKET_URL.includes(
-  "static-upgrade-test",
-);
+const isUpgradeTest = staticBucketUrl.includes("static-upgrade-test");
 
 const getEnv = envs => {
   const res = {};
@@ -211,9 +211,7 @@ const config = (module.exports = {
     //   inject: "body",
     //   alwaysWriteToDisk: true,
     // }),
-    new InterpolateHtmlPlugin({
-      STATIC_BUCKET_URL: process.env.STATIC_BUCKET_URL,
-    }),
+    new InterpolateHtmlPlugin({ STATIC_BUCKET_URL: staticBucketUrl }),
     new HtmlWebpackHarddiskPlugin({
       outputPath: __dirname + "/resources/frontend_client/app/dist",
     }),
