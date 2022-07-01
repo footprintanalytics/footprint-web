@@ -3,7 +3,7 @@
 import React, { Component } from "react";
 import PropTypes from "prop-types";
 import _ from "underscore";
-import { throttle, get } from "lodash";
+import { throttle, get, has } from "lodash";
 
 import DashboardControls from "../../hoc/DashboardControls";
 import { DashboardSidebars } from "../DashboardSidebars";
@@ -124,8 +124,27 @@ export default class Dashboard extends Component {
     this.parametersAndCardsContainerRef = React.createRef();
   }
 
+  //get cache option for admin to refresh cache of charts in dashboard
+  getCacheOption() {
+    const { user, location } = this.props;
+    const isAdmin = user && user.is_superuser;
+    const ignoreCache = get(location?.query, "ignore_cache");
+    if (
+      isAdmin &&
+      has(location?.query, "ignore_cache") &&
+      (!ignoreCache || ignoreCache === "true")
+    ) {
+      return { ignoreCache: true };
+    }
+    return null;
+  }
+
   fetchDashboardCardData = () => {
-    this.props.fetchDashboardCardData({ reload: false, clear: true });
+    this.props.fetchDashboardCardData({
+      reload: false,
+      clear: true,
+      ...this.getCacheOption(),
+    });
   };
 
   fetchDashboardCardDataThrottle = throttle(
