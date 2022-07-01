@@ -26,6 +26,10 @@
   overflow-x: scroll;
 }
 
+.scrollbar-hidden::-webkit-scrollbar {
+  display: none;
+}
+
 .bounded-overflow-x-scroll {
   width: 100%;
   overflow-x: scroll;
