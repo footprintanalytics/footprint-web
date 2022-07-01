@@ -93,8 +93,7 @@ const menus = [
       },
       {
         title: "API Upload",
-        link:
-          "https://docs.footprint.network/api/upload-data-to-footprint-by-using-the-api",
+        link: "https://docs.footprint.network/api",
         externalLink: true,
       },
     ],
