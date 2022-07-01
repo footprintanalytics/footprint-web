@@ -6,6 +6,7 @@ import { connect } from "react-redux";
 import { push } from "react-router-redux";
 import "./HomeFooter.css";
 import Link from "metabase/components/Link";
+import ExternalLink from "metabase/components/ExternalLink";
 // import { isDefi360 } from "metabase/lib/project_info";
 
 const footers = [
@@ -168,18 +169,24 @@ const HomeFooter = props => {
               >
                 {n.items.map(item => (
                   <li key={item.label} itemProp="name">
-                    <Link
-                      itemProp="url"
-                      to={item.url}
-                      target={
-                        item.url.startsWith("http") ||
-                        item.url.includes("defi360")
-                          ? "_blank"
-                          : ""
-                      }
-                    >
-                      {item.label}
-                    </Link>
+                    {item.url.startsWith("mailto") ? (
+                      <ExternalLink className="_" href={item.url}>
+                        {item.label}
+                      </ExternalLink>
+                    ) : (
+                      <Link
+                        itemProp="url"
+                        to={item.url}
+                        target={
+                          item.url.startsWith("http") ||
+                          item.url.includes("defi360")
+                            ? "_blank"
+                            : ""
+                        }
+                      >
+                        {item.label}
+                      </Link>
+                    )}
                   </li>
                 ))}
               </ul>
