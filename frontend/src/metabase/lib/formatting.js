@@ -117,7 +117,8 @@ export const FK_SYMBOL = "→";
 
 const DEFAULT_NUMBER_OPTIONS: FormattingOptions = {
   compact: false,
-  maximumFractionDigits: 2,
+  maximumFractionDigits: 8,
+  minimumFractionDigits: -1,
 };
 
 function getDefaultNumberOptions(options) {
@@ -200,7 +201,7 @@ export function formatNumber(number: number, options: FormattingOptions = {}) {
         nf = numberFormatterForOptions({
           ...options,
           maximumSignificantDigits: Math.max(
-            2,
+            8,
             options.minimumSignificantDigits || 0,
           ),
           maximumFractionDigits: undefined,
@@ -214,7 +215,7 @@ export function formatNumber(number: number, options: FormattingOptions = {}) {
       }
 
       let formatted = nf.format(number);
-
+      console.log("options.options", options)
       // extract number portion of currency if we're formatting a cell
       if (
         options["type"] === "cell" &&
