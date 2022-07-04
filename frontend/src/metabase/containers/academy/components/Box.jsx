@@ -47,7 +47,7 @@ const Box = ({ router, selectCategory }) => {
                   `academy click submenus ${selectCategory?.value}-${item?.value}`,
                 );
                 router.push(
-                  `${router.location.pathname}?category=${selectCategory?.value}&subMenu=${item?.value}`,
+                  `${router?.location?.pathname}?category=${selectCategory?.value}&subMenu=${item?.value}`,
                 );
               }}
             >
