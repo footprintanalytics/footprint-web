@@ -6,7 +6,6 @@ import { getUser } from "metabase/selectors/user";
 import { loginModalShowAction } from "metabase/redux/control";
 import Button from "metabase/components/Button";
 import { message } from "antd";
-import colors from "metabase/lib/colors";
 import cx from "classnames";
 import "./Favorite.css";
 import {
