@@ -409,7 +409,7 @@ export default class Navbar extends Component {
   renderLink({ className = "", fromDrawer = false }) {
     const { user, setLoginModalShow, location } = this.props;
     const links = [
-      { url: "/academy", name: "Academy" },
+      { url: "/news/featured", name: "Research" },
       // { url: "/about", name: "Why Footprint" },
       // { url: "/tutorials/visualizations", name: "Tutorials" },
       // {
