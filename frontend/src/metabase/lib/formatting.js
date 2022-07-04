@@ -200,7 +200,7 @@ export function formatNumber(number: number, options: FormattingOptions = {}) {
         nf = numberFormatterForOptions({
           ...options,
           maximumSignificantDigits: Math.max(
-            2,
+            4,
             options.minimumSignificantDigits || 0,
           ),
           maximumFractionDigits: undefined,
@@ -214,7 +214,7 @@ export function formatNumber(number: number, options: FormattingOptions = {}) {
       }
 
       let formatted = nf.format(number);
-
+      
       // extract number portion of currency if we're formatting a cell
       if (
         options["type"] === "cell" &&
