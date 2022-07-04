@@ -133,14 +133,8 @@ function Favorite({
       )}
       icon="star"
       iconSize={16}
-      color={colors["footprint-color-secondary-text2"]}
-      iconColor={
-        iconColor
-          ? iconColor
-          : isFavorite
-          ? "#FFCC00"
-          : colors["footprint-color-secondary-text2"]
-      }
+      color={"#7A819B"}
+      iconColor={iconColor ? iconColor : isFavorite ? "#FFCC00" : "#7A819B"}
       onClick={debounceEventHandler(onButtonClick, 100)}
     >
       {getFavoriteText()}
