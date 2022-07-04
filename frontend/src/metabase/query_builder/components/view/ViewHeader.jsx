@@ -70,6 +70,7 @@ import ResizeObserver from "resize-observer-polyfill";
 import TableDictionary from "metabase/query_builder/components/TableDictionary";
 import TableBeta from "metabase/query_builder/components/TableBeta";
 import TableUpgrade from "metabase/query_builder/components/TableUpgrade";
+import ToggleCreateType from "../ToggleCreateType";
 
 const viewTitleHeaderPropTypes = {
   question: PropTypes.object.isRequired,
@@ -518,6 +519,9 @@ export class ViewTitleHeader extends React.Component {
                     ?.displayName()}
                   tableId={question?.query()?.table()?.id}
                 />
+              )}
+              {!isSaved && (
+                <ToggleCreateType question={question} router={router} />
               )}
               {location.hash && isVisualized && (
                 <VizTableToggle
