@@ -279,6 +279,13 @@
   border: #dcdee4 1px solid;
 }
 
+.news .edu__left-item-select {
+  border-left: #dcdee4 1px solid;
+  border-top: #dcdee4 1px solid;
+  border-bottom: #dcdee4 1px solid;
+  border-right: 5px solid #3434b2;
+}
+
 .news-report__container .article-hot {
   margin-left: 0 !important;
 }
