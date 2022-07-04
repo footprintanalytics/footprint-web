@@ -214,7 +214,7 @@ export function formatNumber(number: number, options: FormattingOptions = {}) {
       }
 
       let formatted = nf.format(number);
-      console.log("options.options", options)
+      
       // extract number portion of currency if we're formatting a cell
       if (
         options["type"] === "cell" &&
