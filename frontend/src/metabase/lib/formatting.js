@@ -117,8 +117,7 @@ export const FK_SYMBOL = "→";
 
 const DEFAULT_NUMBER_OPTIONS: FormattingOptions = {
   compact: false,
-  maximumFractionDigits: 8,
-  minimumFractionDigits: -1,
+  maximumFractionDigits: 2,
 };
 
 function getDefaultNumberOptions(options) {
@@ -201,7 +200,7 @@ export function formatNumber(number: number, options: FormattingOptions = {}) {
         nf = numberFormatterForOptions({
           ...options,
           maximumSignificantDigits: Math.max(
-            8,
+            4,
             options.minimumSignificantDigits || 0,
           ),
           maximumFractionDigits: undefined,
