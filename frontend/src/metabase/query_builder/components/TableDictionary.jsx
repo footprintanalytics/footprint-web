@@ -1,7 +1,5 @@
-/* eslint-disable react-hooks/rules-of-hooks */
 /* eslint-disable react/prop-types */
 import React from "react";
-import "./QueryPreview.css";
 import Link from "metabase/components/Link";
 import Tooltip from "metabase/components/Tooltip";
 import { isNumber } from "underscore";
@@ -10,6 +8,7 @@ import Button from "metabase/components/Button";
 const TableDictionary = ({ tableName, tableId }) => {
   const isUdTable = !!tableName?.toLowerCase()?.startsWith("ud");
   const isTable = isNumber(tableId);
+
   return (
     <div className="flex align-center">
       {!isUdTable && isTable && (
@@ -18,7 +17,7 @@ const TableDictionary = ({ tableName, tableId }) => {
           verticalAttachments={["top", "bottom"]}
         >
           <Link
-            className="flex align-center px1"
+            className="flex align-center"
             to={`https://www.footprint.network/@Footprint/Table-Info-Dashboard?table_name=${tableName}`}
             target={"_blank"}
           >
@@ -27,7 +26,7 @@ const TableDictionary = ({ tableName, tableId }) => {
               iconColor="#ACACB2"
               icon={"data_dictionary"}
               iconSize={16}
-              className={`ml1 Question-header-btn--info`}
+              className="ml1 Question-header-btn"
             />
           </Link>
         </Tooltip>
