@@ -80,8 +80,8 @@ const ActionButtons = ({
             onlyIcon
             className="ml1 Question-header-btn-with-text"
             like={
-              -1
-              // statistics && statistics.favorite
+              // -1
+              statistics && statistics.favorite
             }
             isLike={isFavorite}
             type={type}

@@ -822,8 +822,8 @@ export class ViewTitleHeader extends React.Component {
                           onlyIcon
                           className="ml1 Question-header-btn-with-text"
                           like={
-                            -1
-                            // card && card.statistics && card.statistics.favorite
+                            // -1
+                            card && card.statistics && card.statistics.favorite
                           }
                           isLike={card.isFavorite}
                           type="card"

@@ -7,7 +7,6 @@ import Button from "metabase/components/Button";
 import moment from "moment";
 import colors from "metabase/lib/colors";
 import "./DashboardCardDisplayInfo.css";
-import { isDefi360 } from "metabase/lib/project_info";
 import CreatorName from "metabase/components/CreatorName";
 import cx from "classnames";
 
@@ -37,7 +36,7 @@ function DashboardCardDisplayInfo({ authorName, date, read, favorite }) {
           {`${read}`}
         </Button>
       )}
-      {favorite !== undefined && !isDefi360() && (
+      {/*{favorite !== undefined && !isDefi360() && (
         <Button
           small
           borderless
@@ -52,7 +51,7 @@ function DashboardCardDisplayInfo({ authorName, date, read, favorite }) {
         >
           {`${favorite}`}
         </Button>
-      )}
+      )}*/}
     </div>
   );
 }

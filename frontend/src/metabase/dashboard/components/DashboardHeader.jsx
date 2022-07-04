@@ -621,8 +621,8 @@ export default class DashboardHeader extends Component {
             onlyIcon
             className="ml1 Question-header-btn-with-text"
             like={
-              -1
-              // dashboard && dashboard.statistics && dashboard.statistics.favorite
+              // -1
+              dashboard && dashboard.statistics && dashboard.statistics.favorite
             }
             isLike={dashboard && dashboard.isFavorite}
             type={"dashboard"}

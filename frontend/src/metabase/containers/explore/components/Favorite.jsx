@@ -6,7 +6,6 @@ import { getUser } from "metabase/selectors/user";
 import { loginModalShowAction } from "metabase/redux/control";
 import Button from "metabase/components/Button";
 import { message } from "antd";
-import colors from "metabase/lib/colors";
 import cx from "classnames";
 import "./Favorite.css";
 import {
@@ -133,14 +132,8 @@ function Favorite({
       )}
       icon="star"
       iconSize={16}
-      color={colors["footprint-color-secondary-text2"]}
-      iconColor={
-        iconColor
-          ? iconColor
-          : isFavorite
-          ? "#FFCC00"
-          : colors["footprint-color-secondary-text2"]
-      }
+      color={"#7A819B"}
+      iconColor={iconColor ? iconColor : isFavorite ? "#FFCC00" : "#7A819B"}
       onClick={debounceEventHandler(onButtonClick, 100)}
     >
       {getFavoriteText()}
