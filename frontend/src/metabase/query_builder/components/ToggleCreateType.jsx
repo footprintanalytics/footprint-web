@@ -14,8 +14,8 @@ import { ExclamationCircleOutlined } from "@ant-design/icons";
 const ToggleCreateType = ({ question, router }) => {
   const isNative = question.isNative();
 
-  const title = isNative ? "SQL to Chart" : "Chart to SQL";
-  const tooltip = `${isNative ? "Chart" : "SQL"} Mode`;
+  const title = isNative ? "to chart mode" : "to SQL mode";
+  const tooltip = `Convert to ${isNative ? "Chart" : "SQL"} Mode`;
   const icon = isNative ? "search_chart" : "sql";
 
   const toggle = () => {
