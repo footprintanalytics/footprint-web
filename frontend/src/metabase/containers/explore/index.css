@@ -11,6 +11,7 @@
   top: 60px;
   right: 0;
   z-index: 1;
+  overflow-x: auto;
 }
 
 .explore__wrap {
@@ -29,7 +30,7 @@
 .explore__category-list li {
   display: flex;
   align-items: center;
-  margin-right: 80px;
+  margin-right: 60px;
   cursor: pointer;
   white-space: nowrap;
   height: 60px;

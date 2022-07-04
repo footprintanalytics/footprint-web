@@ -6,6 +6,8 @@ export default {
   News: loadable(() => import("metabase/containers/news")),
   Featured: loadable(() => import("metabase/containers/news/featured")),
   Articles: loadable(() => import("metabase/containers/news/articles")),
+  Reports: loadable(() => import("metabase/containers/news/reports")),
+  FeatureCharts: loadable(() => import("metabase/containers/news/feature_charts")),
   WriteForUs: loadable(() => import("metabase/containers/news/writeForUs")),
   ArticleDetail: loadable(() => import("metabase/containers/news/detail")),
   Publish: loadable(() => import("metabase/containers/news/publish")),

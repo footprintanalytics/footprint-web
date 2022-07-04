@@ -7,6 +7,7 @@ import Visualizations from "metabase/containers/tutorials/visualizations";
 import "../../tutorials/index.css";
 import { trackStructEvent } from "metabase/lib/analytics";
 import { updateTitle } from "metabase/hoc/Title";
+import Link from "metabase/components/Link";
 
 const Box = ({ router, selectCategory }) => {
   const { subMenu } = router?.location?.query;
@@ -35,8 +36,9 @@ const Box = ({ router, selectCategory }) => {
       <div className="edu__left-container">
         {subMenus?.map((item, index) => {
           return (
-            <div
+            <Link
               key={item.label}
+              to={`${router.location.pathname}?category=${selectCategory?.value}&subMenu=${item?.value}`}
               className={cx("edu__left-item", {
                 "edu__left-item-select": item.value === selectSubMenu?.value,
               })}
@@ -45,12 +47,12 @@ const Box = ({ router, selectCategory }) => {
                   `academy click submenus ${selectCategory?.value}-${item?.value}`,
                 );
                 router.push(
-                  `academy?category=${selectCategory?.value}&subMenu=${item?.value}`,
+                  `${router?.location?.pathname}?category=${selectCategory?.value}&subMenu=${item?.value}`,
                 );
               }}
             >
               {item.label}
-            </div>
+            </Link>
           );
         })}
       </div>
