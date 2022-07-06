@@ -1,6 +1,5 @@
 /* eslint-disable react/prop-types */
 import React from "react";
-import { t } from "ttag";
 import Tooltip from "metabase/components/Tooltip";
 import Button from "metabase/components/Button";
 import { connect } from "react-redux";
@@ -9,7 +8,7 @@ import { getDarkMode } from "metabase/selectors/control";
 import cx from "classnames";
 
 const DarkModeButton = ({ darkMode, setDarkMode }) => (
-  <Tooltip tooltip={t`Dark mode`}>
+  <Tooltip tooltip={darkMode ? "Light mode" : "Dark mode"}>
     <Button
       className={cx(`ml1 Question-header-btn`, {
         "Question-header-btn--primary": darkMode,
