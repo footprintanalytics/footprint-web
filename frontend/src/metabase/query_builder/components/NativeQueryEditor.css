@@ -121,3 +121,6 @@
 .DarkMode .ace_editor .ace_templateTag {
   color: #99cc00;
 }
+.DarkMode .ace-tm .ace_indent-guide {
+  opacity: 0.2;
+}
