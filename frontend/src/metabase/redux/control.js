@@ -225,6 +225,6 @@ export const control = handleActions(
   },
   {
     newGuideInfo: {},
-    darkMode: localStorage.getItem("sql-editor-dark-mode") === "true",
+    darkMode: localStorage.getItem("sql-editor-dark-mode") !== "false",
   },
 );
