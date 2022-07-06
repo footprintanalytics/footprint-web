@@ -25,7 +25,7 @@ import { connect } from "react-redux";
 import { getUser } from "metabase/selectors/user";
 import { push, replace } from "react-router-redux";
 import { mediaCreate, mediaDetail, mediaEdit } from "metabase/new-service";
-import { articleDetailUrl } from "metabase/lib/urls";
+import { articleDetailUrl, parseObjectByMediaId } from "metabase/lib/urls";
 import { trackStructEvent } from "metabase/lib/analytics";
 // eslint-disable-next-line import/named
 import {
@@ -88,7 +88,7 @@ const Publish = props => {
     const _getDetail = async () => {
       const hide = message.loading("Loading...");
       try {
-        const data = await mediaDetail({ mediaInfoId: id });
+        const data = await mediaDetail(parseObjectByMediaId(id));
         const mediaInfoJson = { ...data };
         mediaInfoJson.isRecommend = mediaInfoJson.isRecommend || false;
         mediaInfoJson.initialValue = mediaInfoJson.html || "";
@@ -168,11 +168,12 @@ const Publish = props => {
     try {
       let mediaInfoId;
       if (id) {
-        await mediaEdit({ mediaInfoId: id, update: data });
+        const mediaIdParams = parseObjectByMediaId(id);
+        await mediaEdit({ ...mediaIdParams, update: data });
         mediaInfoId = id;
       } else {
         const result = await mediaCreate(data);
-        mediaInfoId = result.mediaInfoId;
+        mediaInfoId = result.shortMediaInfoId || result.mediaInfoId;
       }
       onReplaceLocation(
         articleDetailUrl({ type: data.type, title: data.title, mediaInfoId }),

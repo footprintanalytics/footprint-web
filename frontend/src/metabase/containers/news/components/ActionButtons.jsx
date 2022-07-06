@@ -9,6 +9,7 @@ import { message, Modal } from "antd";
 import { mediaDelete } from "metabase/new-service";
 import { trackStructEvent } from "metabase/lib/analytics";
 import CopyShortLink from "metabase/components/CopyShortLink";
+import { parseObjectByMediaId } from "metabase/lib/urls";
 
 const ActionButtons = props => {
   const {
@@ -25,7 +26,7 @@ const ActionButtons = props => {
   } = props;
 
   const relatedDashboardUrl = item && item.relatedDashboardUrl;
-  const mediaInfoId = item && item.mediaInfoId;
+  const mediaInfoId = item && (item.shortMediaInfoId || item.mediaInfoId);
 
   const editAction = () => {
     onChangeLocation && onChangeLocation(`news/publish/${mediaInfoId}`);
@@ -46,7 +47,7 @@ const ActionButtons = props => {
   const removeApi = async () => {
     const hide = message.loading("Delete...");
     try {
-      await mediaDelete({ mediaInfoId: mediaInfoId });
+      await mediaDelete(parseObjectByMediaId(mediaInfoId));
       removeSuccess && removeSuccess(mediaInfoId);
     } catch (e) {
     } finally {

@@ -411,16 +411,24 @@ export function dashboardQuestionUrl({ type, name, id, checkDefi360 = true }) {
   return `${projectPath}${rType}/${[title, divisionKey, id].join("-")}`;
 }
 
-export function articleDetailUrl({ type, title, mediaInfoId }) {
-  if (!mediaInfoId) {
+export function articleDetailUrl({
+  type,
+  title,
+  mediaInfoId,
+  shortMediaInfoId,
+}) {
+  const mediaId = shortMediaInfoId || mediaInfoId;
+  if (!mediaId) {
     return "";
   }
   const rType = articleType(type);
-  const id = chunk(mediaInfoId.split(""), 8)
+  const id = chunk(mediaId.split(""), 8)
     .map(array => array.join(""))
     .join("-");
   const rTitle = fpKebabCase(title);
-  return `${rType}/${[rTitle, divisionKey, id].join("-")}`;
+  return `${rType}/${[rTitle, shortMediaInfoId ? null : divisionKey, id]
+    .filter(i => i)
+    .join("-")}`;
 }
 
 export function creatorUrl({ user_name }) {
@@ -439,13 +447,30 @@ export const parseTitleId = (titleAndId, type = "") => {
   if (!titleAndId) {
     return {};
   }
-  if (!titleAndId.includes(divisionKey)) {
-    return defaultTitleIdResult(titleAndId);
-  }
   if (type === "news") {
     return parseTitleIdFromArticle(titleAndId);
   }
+  if (!titleAndId.includes(divisionKey)) {
+    return defaultTitleIdResult(titleAndId);
+  }
   return parseTitleIdFromDashboard(titleAndId);
+};
+
+export const parseObjectByMediaId = mediaInfoId => {
+  if (!mediaInfoId) {
+    return {};
+  }
+  let params;
+  if (mediaInfoId.length === 8) {
+    params = {
+      shortMediaInfoId: mediaInfoId,
+    };
+  } else {
+    params = {
+      mediaInfoId: mediaInfoId,
+    };
+  }
+  return params;
 };
 
 const parseTitleIdFromDashboard = titleAndId => {
@@ -458,8 +483,13 @@ const parseTitleIdFromDashboard = titleAndId => {
 
 const parseTitleIdFromArticle = titleAndId => {
   const wordArray = titleAndId.split("-");
-  const division = wordArray.lastIndexOf(divisionKey);
+  let division = wordArray.lastIndexOf(divisionKey);
+  console.log("division", division);
+  if (division < 0) {
+    division = wordArray.length - 1;
+  }
   const id = wordArray.slice(division + 1, wordArray.length).join("");
+  console.log("id", id);
   const title = wordArray.slice(0, division).join("-");
   return { title, id };
 };
