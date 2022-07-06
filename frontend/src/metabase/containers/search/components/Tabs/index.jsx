@@ -6,9 +6,9 @@ import { connect } from "react-redux";
 import "./index.css";
 import { getSearchQueryLink } from "../../shared/utils";
 import DashboardsList from "../../../dashboards/components/Dashboards/List";
-import PageList from "../Page/Index";
 import CreatorList from "../Creator/Index";
 import DataSetList from "../DataSet/Index";
+import CommonList from "../CommonPage/Index";
 import cx from "classnames";
 import {
   getCreatorQueryLink,
@@ -49,9 +49,12 @@ const Index = ({
       key: "all",
       tab: "All",
       render: params => {
-        return <DashboardsList {...params} />;
+        if (isCreator()) {
+          return <DashboardsList {...params} />;
+        }
+        return <CommonList {...params} />;
       },
-      show: isCreator(),
+      show: true,
     },
     {
       key: "dashboard",
@@ -97,7 +100,7 @@ const Index = ({
       key: "page",
       tab: "Pages",
       render: params => {
-        return <PageList {...params} />;
+        return <CommonList {...params} />;
       },
       show: isSearch(),
     },

@@ -1,0 +1,16 @@
+/* eslint-disable react/prop-types */
+import React from "react";
+import "../DataSet/Index.css";
+
+const CreatorBox = ({ router, searchWords, item }) => {
+  return (
+    <>
+      <div className="dataset__field-grid-container">
+        <div>Dashboard count: {item?.dashboard_count}</div>
+        <div>Chart count: {item?.card_count}</div>
+      </div>
+    </>
+  );
+};
+
+export default CreatorBox;

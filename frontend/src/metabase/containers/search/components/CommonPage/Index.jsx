@@ -4,6 +4,7 @@ import { elasticSearch } from "metabase/new-service";
 import React from "react";
 import { useQuery } from "react-query";
 import Icon from "metabase/components/Icon";
+import formatDate from "metabase/containers/news/util/date";
 import { trackStructEvent } from "metabase/lib/analytics";
 import Link from "metabase/components/Link";
 import NoData from "metabase/containers/dashboards/components/Dashboards/nodata";
@@ -14,13 +15,17 @@ import getListQueryParams from "metabase/containers/dashboards/components/Dashbo
 import { QUERY_OPTIONS } from "metabase/containers/search/shared/config";
 import getListPagination from "metabase/containers/dashboards/components/Dashboards/getListPagination";
 import "./Index.css";
-import * as Urls from "metabase/lib/urls";
 import { isSearch } from "metabase/containers/dashboards/shared/utils";
+import DashboardBox from "metabase/containers/search/components/CommonPage/dashboardBox";
+import CreatorBox from "metabase/containers/search/components/CommonPage/creatorBox";
 import DataSetBox from "metabase/containers/search/components/CommonPage/dataSetBox";
+import PageBox from "metabase/containers/search/components/CommonPage/pageBox";
 
-const Index = ({ router, user, setLoginModalShow }) => {
+const CommonPage = ({ router }) => {
   const searchWords = getSearchTexts(router.location.query.q);
-  const params = getListQueryParams(router.location.query);
+  const params = {
+    ...getListQueryParams(router.location.query),
+  };
 
   const { isLoading, data, error } = useQuery(
     ["elasticSearch", params],
@@ -50,15 +55,27 @@ const Index = ({ router, user, setLoginModalShow }) => {
   });
 
   const getIcon = () => {
-    return "database";
+    return "search_article";
   };
 
-  const getUrl = item => {
-    return Urls.newQuestion({
-      databaseId: item.db_id,
-      tableId: item.id,
-      type: "query",
-    });
+  const renderCustom = item => {
+    if (item.model === "creator") {
+      return (
+        <CreatorBox router={router} searchWords={searchWords} item={item} />
+      );
+    }
+    if (item.model === "dataset") {
+      return (
+        <DataSetBox router={router} searchWords={searchWords} item={item} />
+      );
+    }
+    if (item.model === "page") {
+      return <PageBox router={router} searchWords={searchWords} item={item} />;
+    }
+
+    return (
+      <DashboardBox router={router} searchWords={searchWords} item={item} />
+    );
   };
 
   return (
@@ -72,38 +89,36 @@ const Index = ({ router, user, setLoginModalShow }) => {
           return (
             <article key={item.id} className="dashboards__list-item">
               <Link
-                to={getUrl(item)}
-                href={getUrl(item)}
-                hover={false}
+                to={item.url}
+                href={item.url}
                 onClick={e => {
                   e.preventDefault();
-                  trackStructEvent("search creator list click item");
-                  if (!user) {
-                    setLoginModalShow({ show: true, from: "search_creator" });
-                    return;
-                  }
-                  window.open(getUrl(item));
+                  trackStructEvent("search web list click item");
+                  window.open(item.url);
                 }}
               >
                 <div className="dashboards__news-top">
                   <Icon name={getIcon(item.type)} size={20} color={"#A6AABE"} />
                   <h1
-                    className="footprint-title1 title dashboards__dataset-title"
+                    className="footprint-title1 title dashboards__web-title"
                     style={{ WebkitBoxOrient: "vertical" }}
                   >
                     <Highlighter
                       highlightClassName="highlight"
                       searchWords={searchWords}
                       autoEscape={true}
-                      textToHighlight={formatArticleTitle(item.name)}
+                      textToHighlight={formatArticleTitle(
+                        item.title || item.name || item.user_name,
+                      )}
                     />
                   </h1>
                 </div>
-                <DataSetBox
-                  router={router}
-                  searchWords={searchWords}
-                  item={item}
-                />
+                {renderCustom(item)}
+                <div className="footprint-secondary-text2">
+                  {formatDate(
+                    item.last_crawled_at || item.updated_at || item.createdAt,
+                  )}
+                </div>
               </Link>
             </article>
           );
@@ -116,4 +131,4 @@ const Index = ({ router, user, setLoginModalShow }) => {
   );
 };
 
-export default Index;
+export default CommonPage;

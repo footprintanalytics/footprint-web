@@ -71,35 +71,35 @@ export default ({
             )}
           </Link>
           <div className="dashboards__table-name-info">
-            <Link
-              className="flex"
-              to={getLink(record)}
-              // target="_blank"
-              onClick={() =>
-                trackStructEvent(`${gaCategory} Name`, record.name)
-              }
-            >
-              <h3 style={{ WebkitBoxOrient: "vertical" }}>
-                <Highlighter
-                  highlightClassName="highlight"
-                  searchWords={searchWords}
-                  autoEscape={true}
-                  textToHighlight={formatTitle(record.name)}
-                />
-                {record.isHot && (
-                  <img
-                    src={getOssUrl("icon_hot.svg")}
-                    alt={`Hot - ${record.name}`}
-                  />
-                )}
-                {isChart && (
-                  <span className="dashboards__table-chart">Chart</span>
-                )}
-                {!record.publicUuid && (
-                  <span className="dashboards__table-private">Private</span>
-                )}
-              </h3>
-            </Link>
+            {/*<Link*/}
+            {/*  className="flex"*/}
+            {/*  to={getLink(record)}*/}
+            {/*  // target="_blank"*/}
+            {/*  onClick={() =>*/}
+            {/*    trackStructEvent(`${gaCategory} Name`, record.name)*/}
+            {/*  }*/}
+            {/*>*/}
+            {/*  <h3 style={{ WebkitBoxOrient: "vertical" }}>*/}
+            {/*    <Highlighter*/}
+            {/*      highlightClassName="highlight"*/}
+            {/*      searchWords={searchWords}*/}
+            {/*      autoEscape={true}*/}
+            {/*      textToHighlight={formatTitle(record.name)}*/}
+            {/*    />*/}
+            {/*    {record.isHot && (*/}
+            {/*      <img*/}
+            {/*        src={getOssUrl("icon_hot.svg")}*/}
+            {/*        alt={`Hot - ${record.name}`}*/}
+            {/*      />*/}
+            {/*    )}*/}
+            {/*    {isChart && (*/}
+            {/*      <span className="dashboards__table-chart">Chart</span>*/}
+            {/*    )}*/}
+            {/*    {!record.publicUuid && (*/}
+            {/*      <span className="dashboards__table-private">Private</span>*/}
+            {/*    )}*/}
+            {/*  </h3>*/}
+            {/*</Link>*/}
             <span className="dashboards__table-name-info-creator">
               <CreatorName creatorName={creatorName} />
             </span>
