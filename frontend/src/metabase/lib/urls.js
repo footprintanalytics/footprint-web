@@ -484,12 +484,10 @@ const parseTitleIdFromDashboard = titleAndId => {
 const parseTitleIdFromArticle = titleAndId => {
   const wordArray = titleAndId.split("-");
   let division = wordArray.lastIndexOf(divisionKey);
-  console.log("division", division);
   if (division < 0) {
-    division = wordArray.length - 1;
+    division = wordArray.length - 2;
   }
   const id = wordArray.slice(division + 1, wordArray.length).join("");
-  console.log("id", id);
   const title = wordArray.slice(0, division).join("-");
   return { title, id };
 };
