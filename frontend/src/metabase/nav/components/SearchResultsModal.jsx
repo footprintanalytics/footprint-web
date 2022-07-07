@@ -10,7 +10,6 @@ import { elasticSearch } from "metabase/new-service";
 import { useDebounce } from "ahooks";
 import { getProject } from "metabase/lib/project_info";
 import { formatTitle } from "metabase/lib/formatting";
-import dayjs from "dayjs";
 import * as Urls from "metabase/lib/urls";
 import { getSearchTexts } from "metabase/nav/components/utils";
 import NoData from "metabase/containers/dashboards/components/Dashboards/nodata";

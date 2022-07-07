@@ -6,8 +6,12 @@ const CreatorBox = ({ router, searchWords, item }) => {
   return (
     <>
       <div className="creator-box__container">
-        <div>Dashboard count: {item?.dashboard_count}</div>
-        <div>Chart count: {item?.card_count}</div>
+        <div>
+          Dashboard: <span className="bold">{item?.dashboard_count}</span>
+        </div>
+        <div>
+          Chart: <span className="bold">{item?.card_count}</span>
+        </div>
       </div>
     </>
   );

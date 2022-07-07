@@ -53,17 +53,6 @@ const Index = ({ router }) => {
     return "search_article";
   };
 
-  const formatBodyContent = body => {
-    return body
-      ?.map(text => {
-        const result = text.replaceAll("<em>", "").replaceAll("</em>", "");
-        return result.endsWith(".")
-          ? result.concat("..")
-          : result.concat("...");
-      })
-      ?.join();
-  };
-
   return (
     <>
       {isSearch() && data?.isFeature && <NoData />}

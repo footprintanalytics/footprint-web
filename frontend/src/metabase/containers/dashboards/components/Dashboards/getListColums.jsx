@@ -118,6 +118,7 @@ export default ({
     dataIndex: "tags",
     width: 400,
     render: tags => {
+      console.log("tags", tags);
       return tags?.length ? (
         <Tags
           router={router}
@@ -280,7 +281,7 @@ export default ({
   }
 
   if (isPlain) {
-    return [name, tag, views, action];
+    return [tag, views];
   }
 
   if (query?.model === "favorite") {

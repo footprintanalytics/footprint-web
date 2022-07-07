@@ -6,6 +6,7 @@ import { connect } from "react-redux";
 import "./index.css";
 import { getSearchQueryLink } from "../../shared/utils";
 import DashboardsList from "../../../dashboards/components/Dashboards/List";
+import PageList from "../Page/Index";
 import CreatorList from "../Creator/Index";
 import DataSetList from "../DataSet/Index";
 import CommonList from "../CommonPage/Index";
@@ -100,7 +101,7 @@ const Index = ({
       key: "page",
       tab: "Pages",
       render: params => {
-        return <CommonList {...params} />;
+        return <PageList {...params} />;
       },
       show: isSearch(),
     },

@@ -10,20 +10,12 @@
   margin: 6px 0;
   color: var(--footprint-color-secondary-text1);
 }
-
-.search .dashboards__list-item:hover .dashboards__web-title {
+.search .dashboards__list-item:hover .dashboards__web-title,
+.search .common-page__title:hover {
   text-decoration: underline;
   text-decoration-color: #3434b2;
 }
 
 .search .dashboards__table {
   margin: 0;
-}
-
-.dashboard-box__container .ant-table {
-  border: 0;
-}
-
-.dashboard-box__container .ant-table-tbody > tr > td {
-  border: 0 !important;
 }
