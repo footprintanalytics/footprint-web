@@ -25,5 +25,5 @@
 }
 
 .dashboard-box__container .ant-table-tbody > tr > td {
-  border-bottom: 0 !important;
+  border: 0 !important;
 }
