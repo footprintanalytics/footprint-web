@@ -16,6 +16,7 @@ import { getOssUrl } from "metabase/lib/image";
 import PaymentModal from "metabase/pricing/compoment/PaymentModal";
 import PaymentCallbackModal from "metabase/pricing/compoment/PaymentCallbackModal";
 import { trackStructEvent } from "metabase/lib/analytics";
+import Link from "metabase/components/Link";
 
 const Pricing = props => {
   const s_Tabs = {
@@ -135,6 +136,37 @@ const Pricing = props => {
     setShowPaymentModal(true);
   };
 
+  const showContactUs = item => {
+    return item?.title === "Data API (Download Data)";
+  };
+
+  const renderContactUs = () => {
+    return (
+      <Link
+        to="mailto:sales@footprint.network"
+        target="_blank"
+        style={{
+          width: 80,
+          textAlign: "center",
+          margin: "4px auto",
+          color: "#3434b2",
+        }}
+      >
+        Contact Us
+      </Link>
+    );
+  };
+
+  const renderIcon = item => {
+    return (
+      <Icon
+        name={item.value ? "check" : "close"}
+        size={14}
+        color={item.value ? "#3434b2" : "#AAAAAA"}
+      />
+    );
+  };
+
   return (
     <div style={{ background: "#ffffff", padding: "20px 0" }}>
       <Flex
@@ -239,11 +271,11 @@ const Pricing = props => {
                       className="access-list-item footprint-primary-text"
                     >
                       {isBoolean(n.value) ? (
-                        <Icon
-                          name={n.value ? "check" : "close"}
-                          size={14}
-                          color={n.value ? "#3434b2" : "#AAAAAA"}
-                        />
+                        showContactUs(n) && !n.value ? (
+                          renderContactUs()
+                        ) : (
+                          renderIcon(n)
+                        )
                       ) : (
                         <span>{n.value}</span>
                       )}

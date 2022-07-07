@@ -78,7 +78,7 @@ const AboutService = () => {
           blockchain data
         </>
       ),
-      url: "https://docs.footprint.network/api",
+      url: "https://docs.footprint.network/api/download-data",
       icon: getOssUrl("20220602192809.png"),
       width: "48px",
       height: "43px",
