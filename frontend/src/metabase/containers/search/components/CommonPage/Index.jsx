@@ -148,7 +148,7 @@ const CommonPage = ({ router }) => {
                         searchWords={searchWords}
                         autoEscape={true}
                         textToHighlight={formatArticleTitle(
-                          item.title || item.name || item.user_name,
+                          item.title || item.name || `@${item.user_name}`,
                         )}
                       />
                     </h1>

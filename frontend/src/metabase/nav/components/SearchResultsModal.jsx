@@ -16,6 +16,7 @@ import { getSearchTexts } from "metabase/nav/components/utils";
 import NoData from "metabase/containers/dashboards/components/Dashboards/nodata";
 import Highlighter from "react-highlight-words";
 import { trackStructEvent } from "metabase/lib/analytics";
+import formatDate from "metabase/containers/news/util/date";
 
 const SearchResultsModal = ({
   searchText,
@@ -24,6 +25,7 @@ const SearchResultsModal = ({
   setLoginModalShow,
 }) => {
   const tabsConfig = [
+    { key: "all", tab: "All", iconName: "search_dashboard" },
     { key: "dashboard", tab: "Dashboards", iconName: "search_dashboard" },
     { key: "card", tab: "Charts", iconName: "search_chart" },
     { key: "creator", tab: "Creators", iconName: "person" },
@@ -62,9 +64,20 @@ const SearchResultsModal = ({
   const navigationNumQuery = null;
 
   const getIcon = (key, iconName, inner, item) => {
-    return key === "news"
-      ? `${((inner && inner[item.type]) || {}).iconName || "search_article"}`
-      : iconName;
+    const model = item.model || key;
+    if (model === "creator") {
+      return "person";
+    }
+    if (model === "dataset") {
+      return "database";
+    }
+    if (model === "dashboard") {
+      return "search_dashboard";
+    }
+    if (model === "card") {
+      return "search_chart";
+    }
+    return "search_article";
   };
 
   if (isLoading) {
@@ -84,28 +97,26 @@ const SearchResultsModal = ({
   };
 
   const getUrl = ({ item, key }) => {
-    if (key === "news") {
-      return Urls.articleDetailUrl(item);
+    const model = item.model || params.model;
+    if (model === "creator") {
+      return `/@${item.user_name}`;
     }
-    if (key === "dashboard") {
-      return Urls.dashboard(item);
-    }
-    if (key === "creator") {
-      return Urls.creatorUrl(item);
-    }
-    if (key === "dataset") {
+    if (model === "dataset") {
       return Urls.newQuestion({
         databaseId: item.db_id,
         tableId: item.id,
         type: "query",
       });
     }
-    if (key === "page") {
-      return item?.url;
+    if (model === "dashboard") {
+      return Urls.dashboard(item);
     }
-    return Urls.guestUrl({ ...item, type: key });
+    if (model === "card") {
+      return Urls.guestUrl(item);
+    }
+    return item.url;
   };
-
+  console.log("tabsConfig", tabsConfig);
   return (
     <div className="search-results-modal">
       <Card className="search-results-modal__card">
@@ -168,8 +179,10 @@ const SearchResultsModal = ({
                           />
                         </h3>
                         <span className="search-results-modal__list-date">
-                          {dayjs(item.updatedAt || item.createdAt).format(
-                            "YYYY-MM-DD",
+                          {formatDate(
+                            item.last_crawled_at ||
+                              item.updated_at ||
+                              item.createdAt,
                           )}
                         </span>
                       </div>
