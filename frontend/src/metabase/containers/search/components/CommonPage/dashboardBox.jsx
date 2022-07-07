@@ -45,21 +45,19 @@ const DashboardBox = ({ router, user, searchWords, item, refetch }) => {
     onHomePriority: setHomePriorityModal,
     searchWords,
     device,
+    isPlain: true,
   });
-
-  const renderGrid = () => {
-    return <div className="dashboards__grid"></div>;
-  };
 
   const renderTable = () => {
     return (
       <Table
         rowKey="publicUuid"
-        className="dashboards__table"
+        className="dashboards__table dashboard-box__container"
         dataSource={[item]}
         columns={columns}
         showHeader={false}
         pagination={false}
+        bordered={false}
         onChange={(pagination, filters, sorter, extra) => {
           if (extra.action === "sort") {
             let linkFunc = isProtocol()

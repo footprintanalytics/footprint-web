@@ -20,6 +20,7 @@ import DashboardBox from "metabase/containers/search/components/CommonPage/dashb
 import CreatorBox from "metabase/containers/search/components/CommonPage/creatorBox";
 import DataSetBox from "metabase/containers/search/components/CommonPage/dataSetBox";
 import PageBox from "metabase/containers/search/components/CommonPage/pageBox";
+import * as Urls from "metabase/lib/urls";
 
 const CommonPage = ({ router }) => {
   const searchWords = getSearchTexts(router.location.query.q);
@@ -54,28 +55,63 @@ const CommonPage = ({ router }) => {
     total: data?.total,
   });
 
-  const getIcon = () => {
+  const getIcon = item => {
+    const model = item.model || params.model;
+    if (model === "creator") {
+      return "person";
+    }
+    if (model === "dataset") {
+      return "database";
+    }
+    if (model === "dashboard") {
+      return "search_dashboard";
+    }
+    if (model === "card") {
+      return "search_chart";
+    }
     return "search_article";
   };
 
   const renderCustom = item => {
-    if (item.model === "creator") {
+    const model = item.model || params.model;
+    if (model === "creator") {
       return (
         <CreatorBox router={router} searchWords={searchWords} item={item} />
       );
     }
-    if (item.model === "dataset") {
+    if (model === "dataset") {
       return (
         <DataSetBox router={router} searchWords={searchWords} item={item} />
       );
     }
-    if (item.model === "page") {
+    if (model === "page") {
       return <PageBox router={router} searchWords={searchWords} item={item} />;
     }
 
     return (
       <DashboardBox router={router} searchWords={searchWords} item={item} />
     );
+  };
+
+  const getUrl = item => {
+    const model = item.model || params.model;
+    if (model === "creator") {
+      return `/@${item.user_name}`;
+    }
+    if (model === "dataset") {
+      return Urls.newQuestion({
+        databaseId: item.db_id,
+        tableId: item.id,
+        type: "query",
+      });
+    }
+    if (model === "dashboard") {
+      return Urls.dashboard(item);
+    }
+    if (model === "card") {
+      return Urls.guestUrl(item);
+    }
+    return item.url;
   };
 
   return (
@@ -85,44 +121,48 @@ const CommonPage = ({ router }) => {
         <div className="dashboards__recommend">Recommend</div>
       )}
       <div className="dashboards__list">
-        {data?.data.map(item => {
-          return (
-            <article key={item.id} className="dashboards__list-item">
-              <Link
-                to={item.url}
-                href={item.url}
-                onClick={e => {
-                  e.preventDefault();
-                  trackStructEvent("search web list click item");
-                  window.open(item.url);
-                }}
+        {data?.data
+          ?.filter(item => item)
+          .map(item => {
+            return (
+              <article
+                key={`${item.id || item.title}`}
+                className="dashboards__list-item"
               >
-                <div className="dashboards__news-top">
-                  <Icon name={getIcon(item.type)} size={20} color={"#A6AABE"} />
-                  <h1
-                    className="footprint-title1 title dashboards__web-title"
-                    style={{ WebkitBoxOrient: "vertical" }}
+                <div>
+                  <Link
+                    className="dashboards__news-top"
+                    to={getUrl(item)}
+                    target="_blank"
+                    onClick={e => {
+                      trackStructEvent("search web list click item");
+                    }}
                   >
-                    <Highlighter
-                      highlightClassName="highlight"
-                      searchWords={searchWords}
-                      autoEscape={true}
-                      textToHighlight={formatArticleTitle(
-                        item.title || item.name || item.user_name,
-                      )}
-                    />
-                  </h1>
+                    <Icon name={getIcon(item)} size={20} color={"#A6AABE"} />
+                    <h1
+                      className="footprint-title1 title dashboards__web-title"
+                      style={{ WebkitBoxOrient: "vertical" }}
+                    >
+                      <Highlighter
+                        highlightClassName="highlight"
+                        searchWords={searchWords}
+                        autoEscape={true}
+                        textToHighlight={formatArticleTitle(
+                          item.title || item.name || item.user_name,
+                        )}
+                      />
+                    </h1>
+                  </Link>
+                  {renderCustom(item)}
+                  <div className="footprint-secondary-text2 mt1">
+                    {formatDate(
+                      item.last_crawled_at || item.updated_at || item.createdAt,
+                    )}
+                  </div>
                 </div>
-                {renderCustom(item)}
-                <div className="footprint-secondary-text2">
-                  {formatDate(
-                    item.last_crawled_at || item.updated_at || item.createdAt,
-                  )}
-                </div>
-              </Link>
-            </article>
-          );
-        })}
+              </article>
+            );
+          })}
       </div>
       {data?.total && (
         <Pagination className="dashboards__news-pagination" {...pagination} />

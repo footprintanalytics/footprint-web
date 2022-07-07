@@ -20,6 +20,10 @@
   margin: 0;
 }
 
-.search .ant-table {
+.dashboard-box__container .ant-table {
   border: 0;
+}
+
+.dashboard-box__container .ant-table-tbody > tr > td {
+  border-bottom: 0 !important;
 }

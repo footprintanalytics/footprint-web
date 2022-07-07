@@ -29,6 +29,7 @@ export default ({
   device,
   canSort = true,
   gaCategory = "Dashboards",
+  isPlain = false,
 }) => {
   const isMarket = user && user.isMarket;
   const isAdmin = user && user.is_superuser;
@@ -47,6 +48,7 @@ export default ({
       const backgroundColor = colors[index % colors.length];
       const creatorName = get(record, "creator.name");
       const isChart = record?.model === "card" || record?.type === "card";
+      const showName = !isPlain;
       return (
         <div className="dashboards__table-name">
           <Link
@@ -71,35 +73,37 @@ export default ({
             )}
           </Link>
           <div className="dashboards__table-name-info">
-            {/*<Link*/}
-            {/*  className="flex"*/}
-            {/*  to={getLink(record)}*/}
-            {/*  // target="_blank"*/}
-            {/*  onClick={() =>*/}
-            {/*    trackStructEvent(`${gaCategory} Name`, record.name)*/}
-            {/*  }*/}
-            {/*>*/}
-            {/*  <h3 style={{ WebkitBoxOrient: "vertical" }}>*/}
-            {/*    <Highlighter*/}
-            {/*      highlightClassName="highlight"*/}
-            {/*      searchWords={searchWords}*/}
-            {/*      autoEscape={true}*/}
-            {/*      textToHighlight={formatTitle(record.name)}*/}
-            {/*    />*/}
-            {/*    {record.isHot && (*/}
-            {/*      <img*/}
-            {/*        src={getOssUrl("icon_hot.svg")}*/}
-            {/*        alt={`Hot - ${record.name}`}*/}
-            {/*      />*/}
-            {/*    )}*/}
-            {/*    {isChart && (*/}
-            {/*      <span className="dashboards__table-chart">Chart</span>*/}
-            {/*    )}*/}
-            {/*    {!record.publicUuid && (*/}
-            {/*      <span className="dashboards__table-private">Private</span>*/}
-            {/*    )}*/}
-            {/*  </h3>*/}
-            {/*</Link>*/}
+            {showName && (
+              <Link
+                className="flex"
+                to={getLink(record)}
+                // target="_blank"
+                onClick={() =>
+                  trackStructEvent(`${gaCategory} Name`, record.name)
+                }
+              >
+                <h3 style={{ WebkitBoxOrient: "vertical" }}>
+                  <Highlighter
+                    highlightClassName="highlight"
+                    searchWords={searchWords}
+                    autoEscape={true}
+                    textToHighlight={formatTitle(record.name)}
+                  />
+                  {record.isHot && (
+                    <img
+                      src={getOssUrl("icon_hot.svg")}
+                      alt={`Hot - ${record.name}`}
+                    />
+                  )}
+                  {isChart && (
+                    <span className="dashboards__table-chart">Chart</span>
+                  )}
+                  {!record.publicUuid && (
+                    <span className="dashboards__table-private">Private</span>
+                  )}
+                </h3>
+              </Link>
+            )}
             <span className="dashboards__table-name-info-creator">
               <CreatorName creatorName={creatorName} />
             </span>
@@ -273,6 +277,10 @@ export default ({
   };
   if (device?.isMobile) {
     return [name, views];
+  }
+
+  if (isPlain) {
+    return [name, tag, views, action];
   }
 
   if (query?.model === "favorite") {

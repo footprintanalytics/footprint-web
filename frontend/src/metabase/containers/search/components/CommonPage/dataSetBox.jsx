@@ -7,18 +7,21 @@ const dataSetBox = ({ router, searchWords, item }) => {
   return (
     <>
       <div className="dataset__field-grid-container">
-        {item?.field_names?.split(",")?.map(field => {
-          return (
-            <div key={field} className="dataset__field-grid-item">
-              <Highlighter
-                highlightClassName="highlight"
-                searchWords={searchWords}
-                autoEscape={true}
-                textToHighlight={field}
-              />
-            </div>
-          );
-        })}
+        {item?.field_names
+          ?.replace(/"/g, "")
+          .split(",")
+          ?.map(field => {
+            return (
+              <div key={field} className="dataset__field-grid-item">
+                <Highlighter
+                  highlightClassName="highlight"
+                  searchWords={searchWords}
+                  autoEscape={true}
+                  textToHighlight={field}
+                />
+              </div>
+            );
+          })}
       </div>
     </>
   );

@@ -5,7 +5,7 @@ import "../DataSet/Index.css";
 const CreatorBox = ({ router, searchWords, item }) => {
   return (
     <>
-      <div className="dataset__field-grid-container">
+      <div className="creator-box__container">
         <div>Dashboard count: {item?.dashboard_count}</div>
         <div>Chart count: {item?.card_count}</div>
       </div>
