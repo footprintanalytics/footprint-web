@@ -45,6 +45,7 @@
   font-size: 14px;
   padding: 10px 12px;
   color: #84848a;
+  font-weight: bold;
 }
 
 .search-results-modal__list {
@@ -113,11 +114,10 @@
   flex-direction: column;
   width: 100%;
   align-items: center;
-  padding: var(--footprint-spacing-m);
 }
 
 .dashboards-nodata span {
   color: #84848a;
   size: 18px;
-  margin: var(--footprint-spacing-m) 0 0 0;
+  margin: 0 0 0 12px;
 }
