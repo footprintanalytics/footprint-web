@@ -5,7 +5,6 @@ import Icon from "metabase/components/Icon";
 const NoData = () => {
   return (
     <div className="dashboards-nodata">
-      <Icon name="chart_empty" size={32} color={"#84848A"} />
       <span>Sorry, no results found</span>
     </div>
   );
