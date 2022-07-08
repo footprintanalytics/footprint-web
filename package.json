@@ -12,6 +12,7 @@
   },
   "dependencies": {
     "@apollo/client": "^3.5.8",
+    "@fontsource/ibm-plex-mono": "^4.5.10",
     "@fontsource/montserrat": "^4.5.11",
     "@jupyterlab/services": "^6.3.3",
     "@loadable/component": "^5.15.0",

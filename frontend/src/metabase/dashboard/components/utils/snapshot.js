@@ -1,7 +1,7 @@
 /* eslint-disable no-undef */
 import { message } from "antd";
 import { isDev } from "metabase/env";
-import { slack } from "metabase/lib/slack";
+// import { slack } from "metabase/lib/slack";
 
 export const snapshot = ({ public_uuid, isDashboard = true, user }) => {
   const hide = message.loading(
@@ -34,12 +34,12 @@ export const snapshot = ({ public_uuid, isDashboard = true, user }) => {
     console.log(url);
     window.open(url);
 
-    slack([
-      { label: "Snapshot", value: url },
-      {
-        label: "User Social",
-        value: JSON.stringify({ name, twitter, telegram, discord, avatar }),
-      },
-    ]);
+    // slack([
+    //   { label: "Snapshot", value: url },
+    //   {
+    //     label: "User Social",
+    //     value: JSON.stringify({ name, twitter, telegram, discord, avatar }),
+    //   },
+    // ]);
   }, 2000);
 };
