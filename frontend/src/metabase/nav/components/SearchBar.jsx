@@ -4,7 +4,6 @@ import ReactDOM from "react-dom";
 import { Flex } from "grid-styled";
 import styled from "styled-components";
 import { space } from "styled-system";
-import { t } from "ttag";
 import Icon from "metabase/components/Icon";
 import OnClickOutsideWrapper from "metabase/components/OnClickOutsideWrapper";
 import "./SearchBar.css";
@@ -130,7 +129,7 @@ export default class SearchBar extends React.Component {
             ref={ref => (this.searchInput = ref)}
             value={searchText}
             maxLength={200}
-            placeholder={t`Search` + "…"}
+            placeholder={"Search chain/protocol/token/NFT/creator/dashboard…"}
             onClick={() => this.setState({ active: true })}
             onChange={e => this.setState({ searchText: e.target.value })}
             onKeyDown={e => this.onkeydown(e)}
