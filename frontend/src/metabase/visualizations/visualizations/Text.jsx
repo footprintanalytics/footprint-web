@@ -11,6 +11,8 @@ import type { VisualizationProps } from "metabase-types/types/Visualization";
 import ResizeObserver from "resize-observer-polyfill";
 import { debounce, mapKeys } from "lodash";
 import queryString from "query-string";
+import { CaretDownOutlined } from "@ant-design/icons";
+import { Popover } from "antd";
 
 type State = {
   isShowingRenderedOutput: boolean,
@@ -25,6 +27,87 @@ const getSettingsStyle = settings => ({
 });
 
 const REMARK_PLUGINS = [remarkGfm];
+
+const MARKDOWN_LIST = [
+  { type: "Bold", example: <b>**text**</b> },
+  { type: "Italic", example: <i>_text_</i> },
+  {
+    type: "Heading 1",
+    example: <span style={{ fontSize: 16 }}># Text</span>,
+  },
+  {
+    type: "Heading 2",
+    example: <span style={{ fontSize: 14 }}>## Text</span>,
+  },
+  {
+    type: "Heading 3",
+    example: <span>### Text</span>,
+  },
+  {
+    type: "Link",
+    example: (
+      <>
+        [Link](
+        <a
+          href="https://www.footprint.network/"
+          target="_blank"
+          rel="noreferrer"
+        >
+          https://www.footprint.network/
+        </a>
+        )
+      </>
+    ),
+  },
+  {
+    type: "Image or GIF",
+    example: (
+      <>
+        ![image](
+        <a
+          href="https://static.footprint.network/favicon.ico"
+          target="_blank"
+          rel="noreferrer"
+        >
+          https://static.footprint.network/favicon.ico
+        </a>
+        )
+      </>
+    ),
+  },
+  { type: "Inline code", example: "`code`" },
+  {
+    type: "Code block",
+    example: (
+      <>
+        <div>```</div>
+        <div>code</div>
+        <div>```</div>
+      </>
+    ),
+  },
+  { type: "Horizontal rule", example: "---" },
+  {
+    type: "Ordered list",
+    example: (
+      <ol style={{ listStyle: "decimal", listStylePosition: "inside" }}>
+        <li>First item</li>
+        <li>Second item</li>
+        <li>Third item</li>
+      </ol>
+    ),
+  },
+  {
+    type: "List",
+    example: (
+      <ul>
+        <li>- First item</li>
+        <li>- Second item</li>
+        <li>- Third item</li>
+      </ul>
+    ),
+  },
+];
 
 export default class Text extends Component {
   props: VisualizationProps;
@@ -186,19 +269,41 @@ export default class Text extends Component {
               {settings.text}
             </ReactMarkdown>
           ) : (
-            <textarea
-              className={cx(
-                "full flex-full flex flex-column bg-light bordered drag-disabled",
-                styles["text-card-textarea"],
-              )}
-              name="text"
-              placeholder={t`Write here, and use Markdown if you'd like`}
-              value={settings.text}
-              onChange={e => this.handleTextChange(e.target.value)}
-              // Prevents text cards from dragging when you actually want to select text
-              // See: https://github.com/metabase/metabase/issues/17039
-              onMouseDown={this.preventDragging}
-            />
+            <div className="Text-wrap">
+              <div className="full flex-full flex flex-column">
+                <textarea
+                  className={cx(
+                    "full flex-full flex flex-column bg-light bordered drag-disabled",
+                    styles["text-card-textarea"],
+                  )}
+                  name="text"
+                  placeholder={t`Write here, and use Markdown if you'd like`}
+                  value={settings.text}
+                  onChange={e => this.handleTextChange(e.target.value)}
+                  // Prevents text cards from dragging when you actually want to select text
+                  // See: https://github.com/metabase/metabase/issues/17039
+                  onMouseDown={this.preventDragging}
+                />
+              </div>
+              <div className="Text-wrap-tip">
+                <Popover
+                  placement="bottomLeft"
+                  content={
+                    <ul className="Text-wrap-tip-list">
+                      {MARKDOWN_LIST.map(item => (
+                        <li key={item.type} className="Text-wrap-tip-item">
+                          <b>{item.type}</b>
+                          <div>{item.example}</div>
+                        </li>
+                      ))}
+                    </ul>
+                  }
+                  trigger="hover"
+                >
+                  Some markdown is supported <CaretDownOutlined />
+                </Popover>
+              </div>
+            </div>
           )}
         </div>
       );

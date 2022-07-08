@@ -153,6 +153,48 @@
   margin: 0;
 }
 
+.Text-wrap {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  pointer-events: all;
+}
+
+.Text-wrap-tip {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  margin-top: 8px;
+  cursor: pointer;
+}
+
+.Text-wrap-tip .anticon {
+  margin-left: 4px;
+}
+
+.Text-wrap-tip-list {
+  width: 580px;
+  font-family: IBM Plex Mono;
+}
+
+.Text-wrap-tip-item {
+  display: flex;
+  align-items: center;
+  border-bottom: 1px dashed #d9d9d9;
+  padding: 6px 0;
+  font-size: 13px;
+  line-height: 1.2;
+  white-space: nowrap;
+}
+
+.Text-wrap-tip-item b {
+  width: 150px;
+}
+
+li.Text-wrap-tip-item:last-child {
+  border-bottom: 0;
+}
+
 @media screen and (--footprint-breakpoint-max-pad) {
   :local .Text {
     overflow-y: scroll;
