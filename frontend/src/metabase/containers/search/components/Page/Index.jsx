@@ -16,6 +16,7 @@ import { QUERY_OPTIONS } from "metabase/containers/search/shared/config";
 import getListPagination from "metabase/containers/dashboards/components/Dashboards/getListPagination";
 import "./Index.css";
 import { isSearch } from "metabase/containers/dashboards/shared/utils";
+import PageBox from "metabase/containers/search/components/CommonPage/pageBox";
 
 const Index = ({ router }) => {
   const searchWords = getSearchTexts(router.location.query.q);
@@ -52,17 +53,6 @@ const Index = ({ router }) => {
     return "search_article";
   };
 
-  const formatBodyContent = body => {
-    return body
-      ?.map(text => {
-        const result = text.replaceAll("<em>", "").replaceAll("</em>", "");
-        return result.endsWith(".")
-          ? result.concat("..")
-          : result.concat("...");
-      })
-      ?.join();
-  };
-
   return (
     <>
       {isSearch() && data?.isFeature && <NoData />}
@@ -96,22 +86,11 @@ const Index = ({ router }) => {
                     />
                   </h1>
                 </div>
-                <div
-                  className="dashboards__web-content"
-                  style={{ WebkitBoxOrient: "vertical" }}
-                >
-                  <Highlighter
-                    highlightClassName="highlight"
-                    searchWords={searchWords}
-                    autoEscape={true}
-                    textToHighlight={
-                      formatBodyContent(
-                        item?.highlight?.body_content?.slice(0, 2),
-                      ) || item?.body_content
-                    }
-                  />
-                </div>
-                <div className="dashboards__web-url">{`${item.url_host}${item.url_path}`}</div>
+                <PageBox
+                  router={router}
+                  searchWords={searchWords}
+                  item={item}
+                />
                 <div className="footprint-secondary-text2">
                   {formatDate(item.last_crawled_at)}
                 </div>

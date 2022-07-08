@@ -12,7 +12,8 @@ import { useQuery } from "react-query";
 import { QUERY_OPTIONS, sortMap } from "../../shared/config";
 import DashboardCopyModal from "metabase/dashboard/components/DashboardCopyModal";
 import ShareModal from "metabase/containers/home/components/ShareModal";
-import getListColums from "./getListColums";
+import getListColumns from "./getListColums";
+import getListColumnsCommonPage from "./getListColumsCommonPage";
 import getListPagination from "./getListPagination";
 import getListQueryParams from "./getListQueryParams";
 import NoData from "metabase/containers/dashboards/components/Dashboards/nodata";
@@ -34,7 +35,14 @@ import HomePriorityModal from "metabase/components/HomePriorityModal";
 import ExplorerList from "../../../explore/components/List";
 import "../../../explore/index.css";
 
-const List = ({ router, user, protocolName, name, isList = true }) => {
+const List = ({
+  router,
+  user,
+  protocolName,
+  name,
+  isList = true,
+  isCommon = false,
+}) => {
   const [dashboardCopyModal, setDashboardCopyModal] = useState({});
   const [cardCopyModal, setCardCopyModal] = useState({}); //query copy modal
   const [shareModalResource, setShareModalResource] = useState({});
@@ -95,7 +103,7 @@ const List = ({ router, user, protocolName, name, isList = true }) => {
     );
   }
 
-  const columns = getListColums({
+  const columns = (isCommon ? getListColumnsCommonPage : getListColumns)({
     router,
     user,
     onDuplicate: params => {

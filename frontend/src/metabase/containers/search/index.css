@@ -1,5 +1,6 @@
 .search {
   background: white;
+  min-height: calc(100vh - 60px);
 }
 
 .search .dashboards__cell {

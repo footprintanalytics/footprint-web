@@ -16,6 +16,7 @@ import getListPagination from "metabase/containers/dashboards/components/Dashboa
 import "./Index.css";
 import * as Urls from "metabase/lib/urls";
 import { isSearch } from "metabase/containers/dashboards/shared/utils";
+import DataSetBox from "metabase/containers/search/components/CommonPage/dataSetBox";
 
 const Index = ({ router, user, setLoginModalShow }) => {
   const searchWords = getSearchTexts(router.location.query.q);
@@ -98,20 +99,11 @@ const Index = ({ router, user, setLoginModalShow }) => {
                     />
                   </h1>
                 </div>
-                <div className="dataset__field-grid-container">
-                  {item?.field_names?.split(",")?.map(field => {
-                    return (
-                      <div key={field} className="dataset__field-grid-item">
-                        <Highlighter
-                          highlightClassName="highlight"
-                          searchWords={searchWords}
-                          autoEscape={true}
-                          textToHighlight={field}
-                        />
-                      </div>
-                    );
-                  })}
-                </div>
+                <DataSetBox
+                  router={router}
+                  searchWords={searchWords}
+                  item={item}
+                />
               </Link>
             </article>
           );

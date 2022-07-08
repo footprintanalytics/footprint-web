@@ -49,9 +49,9 @@ const Index = ({
       key: "all",
       tab: "All",
       render: params => {
-        return <DashboardsList {...params} />;
+        return <DashboardsList isCommon={isSearch()} {...params} />;
       },
-      show: isCreator(),
+      show: true,
     },
     {
       key: "dashboard",
