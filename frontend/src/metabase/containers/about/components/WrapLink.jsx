@@ -3,7 +3,7 @@ import React from "react";
 import Link from "metabase/components/Link";
 
 const WrapLink = ({ url, children, className, onClick = () => {} }) => {
-  return url.startsWith("https") ? (
+  return url.startsWith("https") || url.startsWith("mailto") ? (
     <Link
       href={url}
       target="_blank"
