@@ -1,12 +1,11 @@
 /* eslint-disable react/display-name */
-import { Avatar, Dropdown, Menu } from "antd";
+import { Avatar, Dropdown } from "antd";
 import dayjs from "dayjs";
 import Link from "metabase/components/Link";
 import { getOssUrl } from "metabase/lib/image";
 import React from "react";
 import IconValue from "../IconValue";
 import Tags from "../Tags";
-import Favorite from "metabase/containers/explore/components/Favorite";
 import { trackStructEvent } from "metabase/lib/analytics";
 import { formatTitle } from "metabase/lib/formatting";
 import { sortMap } from "../../shared/config";
@@ -15,6 +14,7 @@ import Highlighter from "react-highlight-words";
 import { isProtocol } from "metabase/containers/dashboards/shared/utils";
 import CreatorName from "metabase/components/CreatorName";
 import * as Urls from "metabase/lib/urls";
+import getActionMenus from "metabase/containers/dashboards/components/Dashboards/helper";
 
 const colors = ["#E4E4FE", "#D9F8F3", "#FFF5D9", "#FFDFE8"];
 
@@ -192,81 +192,17 @@ export default ({
     key: "action",
     align: "right",
     render: (_, record) => {
-      const menu = (
-        <Menu
-          onClick={({ key }) => {
-            switch (key) {
-              case "duplicate":
-                onDuplicate({
-                  name: record.name,
-                  description: record.description,
-                  id: record.id,
-                  type: record.model,
-                });
-                break;
-              case "share":
-                onShare({
-                  open: true,
-                  public_uuid: record.publicUuid,
-                  type: record.model,
-                  name: record.name,
-                  id: record.id,
-                  creatorId: record.creator.id,
-                  creator: record.creator,
-                  uniqueName: record.uniqueName || record.unique_name,
-                });
-                break;
-              case "seo":
-                onSeoTagging({
-                  id: record.id,
-                  name: record.name,
-                  creatorId: record.creator.id,
-                });
-                break;
-              case "priority":
-                onHomePriority({
-                  id: record.id,
-                  name: record.name,
-                });
-                break;
-              default:
-                break;
-            }
-            trackStructEvent(`${gaCategory} Action`, key);
-          }}
-        >
-          <Menu.Item key="favorite" style={{ marginLeft: -1 }}>
-            <Favorite
-              borderless
-              className="dashboards__icon-value"
-              uuid={record.publicUuid}
-              id={record.id}
-              type={record.model}
-              isLike={record.isFavorite}
-              hideNumber={true}
-            />
-          </Menu.Item>
-          {user && (
-            <Menu.Item key="duplicate">
-              <IconValue iconName="duplicate" value="Copy" />
-            </Menu.Item>
-          )}
-          <Menu.Item key="share">
-            <IconValue iconName="share" value="Sharing" />
-          </Menu.Item>
-          {(isMarket || isAdmin) && (
-            <Menu.Item key="seo">
-              <IconValue iconName="rose" value="Seo" />
-            </Menu.Item>
-          )}
-          {(isMarket || isAdmin) && (
-            <Menu.Item key="priority">
-              <IconValue iconName="tool_setting" value="Priority" />
-            </Menu.Item>
-          )}
-        </Menu>
-      );
-
+      const menu = getActionMenus({
+        onDuplicate: onDuplicate,
+        record: record,
+        onShare: onShare,
+        onSeoTagging: onSeoTagging,
+        onHomePriority: onHomePriority,
+        gaCategory: gaCategory,
+        user: user,
+        isAdmin: isAdmin,
+        isMarket: isMarket,
+      });
       return (
         <Dropdown overlay={menu} placement="bottomRight">
           <div className="dashboards__table-action">

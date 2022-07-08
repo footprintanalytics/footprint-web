@@ -178,11 +178,13 @@ const SearchResultsModal = ({
                           />
                         </h3>
                         <span className="search-results-modal__list-date">
-                          {formatDate(
-                            item.last_crawled_at ||
-                              item.updated_at ||
-                              item.createdAt,
-                          )}
+                          {item?.model === "dataset"
+                            ? "_"
+                            : formatDate(
+                                item.last_crawled_at ||
+                                  item.updated_at ||
+                                  item.createdAt,
+                              )}
                         </span>
                       </div>
                     </Link>

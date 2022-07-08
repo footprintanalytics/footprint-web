@@ -9,7 +9,6 @@ import DashboardsList from "../../../dashboards/components/Dashboards/List";
 import PageList from "../Page/Index";
 import CreatorList from "../Creator/Index";
 import DataSetList from "../DataSet/Index";
-import CommonList from "../CommonPage/Index";
 import cx from "classnames";
 import {
   getCreatorQueryLink,
@@ -50,10 +49,7 @@ const Index = ({
       key: "all",
       tab: "All",
       render: params => {
-        if (isCreator()) {
-          return <DashboardsList {...params} />;
-        }
-        return <CommonList {...params} />;
+        return <DashboardsList isCommon={true} {...params} />;
       },
       show: true,
     },

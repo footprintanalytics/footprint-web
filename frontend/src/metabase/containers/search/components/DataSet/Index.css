@@ -14,17 +14,26 @@
   grid-template-columns: 1fr 1fr 1fr;
   border: var(--footprint-border);
 }
+
 .creator-box__container {
   display: grid;
-  grid-template-columns: 1fr 1fr 1fr;
+  grid-template-columns: 1fr 1fr;
+}
+
+.dashboard-box__container {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
 }
 
 .dataset__field-grid-item {
   background-color: rgba(255, 255, 255, 0.8);
   border: var(--footprint-border);
-  padding: 4px 0;
+  padding: 4px;
   font-size: 14px;
   text-align: center;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
 }
 
 .search .dashboards__list-item:hover .dashboards__dataset-title {

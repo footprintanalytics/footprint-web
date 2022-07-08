@@ -97,6 +97,11 @@
   color: #84848a;
 }
 
+.dashboards__table-custom {
+  font-size: 14px;
+  color: #303440;
+}
+
 .dashboards__table-name {
   display: flex;
   align-items: center;
