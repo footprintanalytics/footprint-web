@@ -17,7 +17,7 @@ import Button from "metabase/components/Button";
 import { trackStructEvent } from "metabase/lib/analytics";
 import Meta from "metabase/components/Meta";
 import { getContentFirstImg } from "metabase/containers/news/util/image";
-import { parseTitleId } from "metabase/lib/urls";
+import { parseObjectByMediaId, parseTitleId } from "metabase/lib/urls";
 import ArticleHot from "metabase/containers/news/components/ArticleHot";
 import { formatImgAlt } from "metabase/containers/news/util/handle";
 import { articleTitle } from "metabase/lib/formatting";
@@ -52,7 +52,7 @@ const Detail = props => {
     const _getDetail = async () => {
       const hide = message.loading("Loading...");
       try {
-        const data = await mediaDetail({ mediaInfoId });
+        const data = await mediaDetail(parseObjectByMediaId(mediaInfoId));
         updateTitle(data?.title);
         setData(data);
       } catch (e) {
@@ -130,7 +130,7 @@ const Detail = props => {
     const isAdmin = user && user.is_superuser;
     return (
       <TagsPanel
-        tagEntityId={mediaInfoId}
+        tagEntityId={data.mediaInfoId}
         isEditPermission={isMarket || isAdmin}
         type="news"
         canClick={false}

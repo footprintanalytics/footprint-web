@@ -88,11 +88,11 @@ const menus = [
           "https://www.footprint.network/@Footprint/Footprint-Datasets-Data-Dictionary",
       },
       {
-        title: "CSV Upload",
+        title: "Upload CSV",
         link: "https://www.footprint.network/chart/custom-upload",
       },
       {
-        title: "API Upload",
+        title: "Upload API",
         link: "https://docs.footprint.network/api",
         externalLink: true,
       },

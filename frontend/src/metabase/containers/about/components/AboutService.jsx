@@ -5,6 +5,7 @@ import { trackStructEvent } from "metabase/lib/analytics";
 import { getOssUrl } from "metabase/lib/image";
 import React from "react";
 import WrapLink from "./WrapLink";
+import Button from "metabase/components/Button";
 
 const AboutService = () => {
   const list = [
@@ -78,10 +79,26 @@ const AboutService = () => {
           blockchain data
         </>
       ),
-      url: "https://docs.footprint.network/api",
+      url: "https://docs.footprint.network/api/download-data",
       icon: getOssUrl("20220602192809.png"),
       width: "48px",
       height: "43px",
+    },
+    {
+      title: (
+        <>
+          Contact us
+          <br />
+          <br />
+          <span className="text-normal">sales@footprint.network</span>
+        </>
+      ),
+      url: "mailto:sales@footprint.network",
+      button: (
+        <>
+          <Button className="About__service-button">Get Started</Button>
+        </>
+      ),
     },
   ];
 
@@ -95,13 +112,15 @@ const AboutService = () => {
         <ul>
           {list.map(item => (
             <li key={item.title}>
-              <div className="About__service-icon">
-                <img
-                  src={item.icon}
-                  alt={item.title}
-                  style={{ width: item.width, height: item.height }}
-                />
-              </div>
+              {item.icon && (
+                <div className="About__service-icon">
+                  <img
+                    src={item.icon}
+                    alt={item.title}
+                    style={{ width: item.width, height: item.height }}
+                  />
+                </div>
+              )}
               <h4>{item.title}</h4>
               <p>{item.desc}</p>
               <WrapLink
@@ -130,7 +149,13 @@ const AboutService = () => {
                   });
                 }}
               >
-                More <RightOutlined />
+                {item.button ? (
+                  item.button
+                ) : (
+                  <>
+                    More <RightOutlined />
+                  </>
+                )}
               </WrapLink>
             </li>
           ))}

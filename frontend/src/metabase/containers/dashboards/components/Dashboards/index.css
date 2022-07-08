@@ -244,14 +244,12 @@
   display: flex;
   flex-direction: column;
   width: 100%;
-  align-items: center;
-  padding: var(--footprint-spacing-m);
+  align-items: start;
 }
 
 .dashboards-nodata span {
   color: #84848a;
   size: 18px;
-  margin: var(--footprint-spacing-m) 0 0 0;
 }
 
 .dashboards__recommend {
