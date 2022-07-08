@@ -32,6 +32,39 @@ const SearchResultsModal = ({
     { key: "page", tab: "Pages", iconName: "docs" },
   ];
 
+  const array = [
+    {
+      model: "creator",
+      icon: "person",
+      getUrl: item => `/@${item.user_name}`,
+    },
+    {
+      model: "dataset",
+      icon: "database",
+      getUrl: item =>
+        Urls.newQuestion({
+          databaseId: item.db_id,
+          tableId: item.id,
+          type: "query",
+        }),
+    },
+    {
+      model: "dashboard",
+      icon: "search_dashboard",
+      getUrl: item => Urls.dashboard(item),
+    },
+    {
+      model: "card",
+      icon: "search_chart",
+      getUrl: item => Urls.guestUrl(item),
+    },
+    {
+      model: "page",
+      icon: "search_article",
+      getUrl: item => item.url,
+    },
+  ];
+
   const [tabKey, setTabKey] = useState(tabsConfig[0].key);
 
   const debouncedSearchText = useDebounce(searchText?.trim(), { wait: 500 });
@@ -64,19 +97,7 @@ const SearchResultsModal = ({
 
   const getIcon = (key, iconName, inner, item) => {
     const model = item.model || key;
-    if (model === "creator") {
-      return "person";
-    }
-    if (model === "dataset") {
-      return "database";
-    }
-    if (model === "dashboard") {
-      return "search_dashboard";
-    }
-    if (model === "card") {
-      return "search_chart";
-    }
-    return "search_article";
+    return array.find(i => i.model === model)?.icon || "search_article";
   };
 
   if (isLoading) {
@@ -95,25 +116,9 @@ const SearchResultsModal = ({
     return `${tab} ${numStr}`;
   };
 
-  const getUrl = ({ item, key }) => {
+  const getUrl = ({ item }) => {
     const model = item.model || params.model;
-    if (model === "creator") {
-      return `/@${item.user_name}`;
-    }
-    if (model === "dataset") {
-      return Urls.newQuestion({
-        databaseId: item.db_id,
-        tableId: item.id,
-        type: "query",
-      });
-    }
-    if (model === "dashboard") {
-      return Urls.dashboard(item);
-    }
-    if (model === "card") {
-      return Urls.guestUrl(item);
-    }
-    return item.url;
+    return array.find(i => i.model === model)?.getUrl(item) || item.url;
   };
   return (
     <div className="search-results-modal">

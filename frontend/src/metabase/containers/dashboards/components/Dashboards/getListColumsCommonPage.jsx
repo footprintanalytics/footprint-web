@@ -97,7 +97,7 @@ export default ({
             to={getUrl(record)}
             target="_blank"
             onClick={e => {
-              trackStructEvent("search web list click item");
+              trackStructEvent("common page list click item");
             }}
           >
             <h3

@@ -49,7 +49,7 @@ const Index = ({
       key: "all",
       tab: "All",
       render: params => {
-        return <DashboardsList isCommon={true} {...params} />;
+        return <DashboardsList isCommon={isSearch()} {...params} />;
       },
       show: true,
     },
