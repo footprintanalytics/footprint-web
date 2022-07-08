@@ -9,9 +9,7 @@ const dataSetBox = ({ router, searchWords, item, isPlain = false }) => {
   if (!data) {
     return null;
   }
-  console.log("isPlain", isPlain);
   const render = () => {
-    console.log("11");
     let isMore = false;
     if (data.length > 5) {
       isMore = true;

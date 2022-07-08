@@ -115,7 +115,6 @@ const SearchResultsModal = ({
     }
     return item.url;
   };
-  console.log("tabsConfig", tabsConfig);
   return (
     <div className="search-results-modal">
       <Card className="search-results-modal__card">

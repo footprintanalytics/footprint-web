@@ -118,7 +118,6 @@ export default ({
     dataIndex: "tags",
     width: 400,
     render: tags => {
-      console.log("tags", tags);
       return tags?.length ? (
         <Tags
           router={router}
