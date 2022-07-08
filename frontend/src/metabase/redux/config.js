@@ -34,7 +34,7 @@ export const config = handleActions(
       next: (state, { payload }) => {
         return {
           ...state,
-          tableConfigList: payload.tableConfigList,
+          tableConfigList: payload?.tableConfigList,
         };
       },
     },

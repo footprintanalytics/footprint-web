@@ -9,11 +9,11 @@ import Tooltip from "metabase/components/Tooltip";
 const TableBeta = ({ tableName, tableId, tableConfigList }) => {
   const betaTable =
     (tableId &&
-      tableConfigList.find(
+      tableConfigList?.find(
         item => item.id === tableId && item.type === "beta",
       )) ||
     (tableName &&
-      tableConfigList.find(
+      tableConfigList?.find(
         item => item.name === tableName && item.type === "beta",
       ));
 
