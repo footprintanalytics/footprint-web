@@ -120,6 +120,7 @@ const SearchResultsModal = ({
     const model = item.model || params.model;
     return array.find(i => i.model === model)?.getUrl(item) || item.url;
   };
+  
   return (
     <div className="search-results-modal">
       <Card className="search-results-modal__card">
