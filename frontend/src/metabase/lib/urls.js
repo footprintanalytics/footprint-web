@@ -1,3 +1,4 @@
+/* eslint-disable curly */
 import slugg from "slugg";
 import { serializeCardForUrl } from "metabase/lib/card";
 import { SAVED_QUESTIONS_VIRTUAL_DB_ID } from "metabase/lib/constants";
@@ -8,6 +9,7 @@ import chunk from "lodash/chunk";
 import querystring from "querystring";
 import { getProject, isDefi360 } from "metabase/lib/project_info";
 import { get } from "lodash";
+import getSlug from "speakingurl";
 
 function appendSlug(path, slug) {
   return slug ? `${path}-${slug}` : path;
@@ -18,6 +20,11 @@ function fpKebabCase(text) {
     return text;
   }
   return encodeURIComponent(text.trim().replaceAll(/[-_\s]+/g, "-"));
+}
+
+function speakingUrl(text) {
+  if (!text) return text;
+  return getSlug(text);
 }
 
 // provides functions for building urls to things we care about
@@ -425,7 +432,7 @@ export function articleDetailUrl({
   const id = chunk(mediaId.split(""), 8)
     .map(array => array.join(""))
     .join("-");
-  const rTitle = fpKebabCase(title);
+  const rTitle = speakingUrl(title);
   return `${rType}/${[rTitle, shortMediaInfoId ? null : divisionKey, id]
     .filter(i => i)
     .join("-")}`;
