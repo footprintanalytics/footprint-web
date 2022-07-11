@@ -1145,11 +1145,11 @@ export function getTableNameListFromSQL(nativeQuery) {
   return (
     nativeQuery?.match(/(?:from|join)(\s|`)+(\w|`)+/gi)?.map(item =>
       item
-        .trim()
         .toLowerCase()
         .replace(/from/g, "")
         .replace(/join/g, "")
-        .replace(/`/g, ""),
+        .replace(/`/g, "")
+        .trim(),
     ) || []
   );
 }
