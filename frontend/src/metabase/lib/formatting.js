@@ -214,7 +214,7 @@ export function formatNumber(number: number, options: FormattingOptions = {}) {
       }
 
       let formatted = nf.format(number);
-      
+
       // extract number portion of currency if we're formatting a cell
       if (
         options["type"] === "cell" &&
@@ -1143,10 +1143,12 @@ export function getDescription({ description, orderedCards }) {
 
 export function getTableNameListFromSQL(nativeQuery) {
   return (
-    nativeQuery?.match(/(?<=from|join)(\s|`)+(\w|`)+/gi)?.map(item =>
+    nativeQuery?.match(/(?:from|join)(\s|`)+(\w|`)+/gi)?.map(item =>
       item
         .trim()
         .toLowerCase()
+        .replace(/from/g, "")
+        .replace(/join/g, "")
         .replace(/`/g, ""),
     ) || []
   );

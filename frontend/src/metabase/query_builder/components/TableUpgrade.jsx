@@ -6,6 +6,7 @@ import _ from "underscore";
 import Icon from "metabase/components/Icon";
 import { getTableConfigList } from "metabase/selectors/config";
 import { get } from "lodash";
+import { getTableNameListFromSQL } from "metabase/lib/formatting";
 
 const TableUpgrade = ({ tableName, tableId, card, tableConfigList }) => {
   const nativeQuery =
@@ -16,18 +17,8 @@ const TableUpgrade = ({ tableName, tableId, card, tableConfigList }) => {
     return null;
   }
   const matchNativeQuery = tableName => {
-    const reg = /(?<=from|join)(\s|`)+(\w|`)+/g;
-    return (
-      nativeQuery
-        ?.match(reg)
-        ?.map(s =>
-          s
-            .trim()
-            .toLowerCase()
-            .replace(/`/g, ""),
-        )
-        ?.filter(s => s === tableName.toLowerCase()) || []
-    );
+    const tableNameList = getTableNameListFromSQL(nativeQuery);
+    return tableNameList?.filter(s => s === tableName.toLowerCase()) || [];
   };
   const matchTableFromNative = type => {
     return tableConfigList

@@ -9,6 +9,7 @@ import { get } from "lodash";
 import { Popconfirm } from "antd";
 import "./TableChartInfo.css";
 import Link from "metabase/components/Link";
+import { getTableNameListFromSQL } from "metabase/lib/formatting";
 
 const TableChartInfo = ({ tableName, tableId, tableConfigList, card }) => {
   const nativeQuery =
@@ -16,18 +17,8 @@ const TableChartInfo = ({ tableName, tableId, tableConfigList, card }) => {
     get(card, "dataset_query.native.query");
 
   const matchNativeQuery = tableName => {
-    const reg = /(?<=from|join)(\s|`)+(\w|`)+/g;
-    return (
-      nativeQuery
-        ?.match(reg)
-        ?.map(s =>
-          s
-            .trim()
-            .toLowerCase()
-            .replace(/`/g, ""),
-        )
-        ?.filter(s => s === tableName.toLowerCase()) || []
-    );
+    const tableNameList = getTableNameListFromSQL(nativeQuery);
+    return tableNameList?.filter(s => s === tableName.toLowerCase()) || [];
   };
 
   const matchTableFromNative = type => {
@@ -55,18 +46,8 @@ const TableChartInfo = ({ tableName, tableId, tableConfigList, card }) => {
 
   const getUdTables = () => {
     if (nativeQuery) {
-      const reg = /(?<=from|join)(\s|`)+(\w|`)+/g;
-      return (
-        nativeQuery
-          ?.match(reg)
-          ?.map(s =>
-            s
-              .trim()
-              .toLowerCase()
-              .replace(/`/g, ""),
-          )
-          ?.filter(s => s.startsWith("ud_")) || []
-      );
+      const tableNameList = getTableNameListFromSQL(nativeQuery);
+      return tableNameList?.filter(s => s.startsWith("ud_")) || [];
     }
     if (tableName?.includes("ud_")) {
       return [tableName];
