@@ -9,6 +9,7 @@ import { LOGOUT } from "metabase/auth/auth";
 
 import { UserApi } from "metabase/services";
 import { getUserVipInfo } from "metabase/new-service";
+import arms from "metabase/lib/arms";
 
 export const REFRESH_CURRENT_USER = "metabase/user/REFRESH_CURRENT_USER";
 export const refreshCurrentUser = createAction(
@@ -21,12 +22,14 @@ export const refreshCurrentUser = createAction(
           window.gtag("set", { user_id: res.email });
           window.gtag("set", "user_properties", {
             common_name: res.common_name,
-            // channel: res.channel,
             email: res.email,
           });
         }
         if (window.TINGYUN) {
           window.TINGYUN.setDid(res.email);
+        }
+        if (arms) {
+          arms.setConfig({ uid: res.email, setUsername: () => res.name });
         }
       }
       return res;
