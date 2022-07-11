@@ -1,3 +1,4 @@
+/* eslint-disable curly */
 import axios from "axios";
 import { message } from "antd";
 import api from "metabase/lib/api";
@@ -11,6 +12,9 @@ const getTime = () => {
 };
 
 const reportARMS = (response, success, status, message = "") => {
+  const userName = window.Metabase?.store?.getState()?.currentUser?.name;
+  if (userName === "refreshCache") return;
+
   const { config: conf } = response;
   const time = getTime() - conf.requestime;
   arms && arms.api(conf.url, success, time, status, message);
