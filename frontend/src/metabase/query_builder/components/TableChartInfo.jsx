@@ -46,11 +46,8 @@ const TableChartInfo = ({ tableName, tableId, tableConfigList, card }) => {
 
   const getUdTables = () => {
     if (nativeQuery) {
-      return (
-        getTableNameListFromSQL(nativeQuery)?.filter(s =>
-          s.startsWith("ud_"),
-        ) || []
-      );
+      const tableNameList = getTableNameListFromSQL(nativeQuery);
+      return tableNameList?.filter(s => s.startsWith("ud_")) || [];
     }
     if (tableName?.includes("ud_")) {
       return [tableName];
