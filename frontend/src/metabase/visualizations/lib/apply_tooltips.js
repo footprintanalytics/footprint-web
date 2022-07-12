@@ -9,6 +9,7 @@ import { formatValue } from "metabase/lib/formatting";
 import { isNormalized, isStacked, formatNull } from "./renderer_utils";
 import { determineSeriesIndexFromElement } from "./tooltip";
 import { getFriendlyName } from "./utils";
+import { checkIsLargeChart } from "./settings/series";
 
 export function getClickHoverObject(
   d,
@@ -184,10 +185,11 @@ export function getClickHoverObject(
   const isArea = classList.includes("area");
   const shouldUseMouseCoordinates =
     event.type === "mousemove" ? isArea : !isLine;
+  const isLargeChart = checkIsLargeChart(series);
 
   return {
     // for single series bar charts, fade the series and highlght the hovered element with CSS
-    index: isSingleSeriesBar ? -1 : seriesIndex,
+    index: isLargeChart ? null : isSingleSeriesBar ? -1 : seriesIndex,
     element: !shouldUseMouseCoordinates ? element : null,
     event: shouldUseMouseCoordinates ? event : null,
     data: data.length > 0 ? data : null,
