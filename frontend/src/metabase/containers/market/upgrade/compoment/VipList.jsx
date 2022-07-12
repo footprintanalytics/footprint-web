@@ -1,5 +1,5 @@
 /* eslint-disable react/prop-types */
-import React, { useEffect, useState } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 import { Button, message, Table } from "antd";
 import EditUserUpgradeModal from "metabase/containers/market/upgrade/compoment/edit";
 import { updateVipLevel, userList } from "metabase/new-service";
@@ -9,19 +9,28 @@ const VipList = props => {
   const [dataSource, setDataSource] = useState([]);
   const [visible, setVisible] = useState();
   const [currentItem, setCurrentItem] = useState({});
+  const [current, setCurrent] = useState(1);
+  const [total, setTotal] = useState(0);
+  const pageSize = 10;
 
-  async function getData(searchText) {
-    const { list } = await userList(searchText ? { q: searchText } : undefined);
-    setDataSource(list);
-  }
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  const getData = useCallback(async (searchText, current) => {
+    const { data, total } = await userList(
+      searchText ? { q: searchText, current, pageSize } : { current, pageSize },
+    );
+    setDataSource(data);
+    setTotal(total);
+  }, []);
 
   useEffect(() => {
     const run = async () => {
-      const hide = message.loading("Loading...", 0);
-      await getData(searchText || "");
-      hide();
+      await getData(searchText || "", current);
     };
     run();
+  }, [searchText, current, getData]);
+
+  useEffect(() => {
+    setCurrent(1);
   }, [searchText]);
 
   const columns = [
@@ -29,6 +38,7 @@ const VipList = props => {
       title: "name",
       dataIndex: "name",
       key: "name",
+      width: 200,
     },
     {
       title: "email",
@@ -39,12 +49,14 @@ const VipList = props => {
       title: "type",
       dataIndex: "type",
       key: "type",
+      width: 100,
       className: "upgrade__column-type",
     },
     {
       title: "validEndDate",
       dataIndex: "validEndDate",
       key: "validEndDate",
+      width: 200,
     },
     {
       title: "Action",
@@ -78,7 +90,17 @@ const VipList = props => {
   return (
     <div className="vip-list" style={{ padding: 20 }}>
       <Table
-        pagination={{ position: ["bottomCenter"] }}
+        pagination={{
+          position: ["bottomCenter"],
+          current,
+          pageSize,
+          total,
+          showSizeChanger: false,
+          onChange: page => {
+            window.scrollTo({ top: 0, behavior: "smooth" });
+            setCurrent(page);
+          },
+        }}
         size={"middle"}
         dataSource={dataSource}
         columns={columns}
