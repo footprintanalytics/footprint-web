@@ -76,6 +76,7 @@ for (let i = 0; i < MAX_SERIES; i++) {
 
 import type { VisualizationProps } from "metabase-types/types/Visualization";
 import { normal } from "metabase/lib/colors";
+import { checkIsLargeChart } from "../lib/settings/series";
 
 export default class LineAreaBarChart extends Component {
   props: VisualizationProps;
@@ -392,6 +393,8 @@ export default class LineAreaBarChart extends Component {
     //   series &&
     //   series.length > 10;
 
+    const isLargeChart = checkIsLargeChart(series);
+
     return (
       <LineAreaBarChartRoot
         className={cx(
@@ -414,12 +417,12 @@ export default class LineAreaBarChart extends Component {
         <LegendLayout
           labels={labels}
           colors={colors}
-          hovered={hovered}
+          hovered={!isLargeChart ? hovered : null}
           hasLegend={hasLegend}
           actionButtons={!hasTitle ? actionButtons : undefined}
           isFullscreen={isFullscreen}
           isQueryBuilder={isQueryBuilder}
-          onHoverChange={onHoverChange}
+          onHoverChange={!isLargeChart ? onHoverChange : undefined}
           onAddSeries={!hasBreakout ? onAddSeries : undefined}
           onRemoveSeries={!hasBreakout ? onRemoveSeries : undefined}
           onSelectSeries={this.handleSelectSeries}
