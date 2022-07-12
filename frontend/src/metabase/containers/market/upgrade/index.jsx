@@ -12,9 +12,11 @@ const Upgrade = props => {
   const { user, vip } = props;
 
   const [searchText, setSearchText] = useState();
+  const [current, setCurrent] = useState(1);
 
   const onSearch = text => {
     setSearchText(text);
+    setCurrent(1);
   };
 
   if (user && !user.isMarket) {
@@ -32,7 +34,13 @@ const Upgrade = props => {
         onSearch={onSearch}
         style={{ width: 400, padding: "0 20px" }}
       />
-      <VipList user={user} vip={vip} searchText={searchText} />
+      <VipList
+        user={user}
+        vip={vip}
+        searchText={searchText}
+        setCurrent={setCurrent}
+        current={current}
+      />
     </div>
   );
 };
