@@ -5,11 +5,10 @@ import EditUserUpgradeModal from "metabase/containers/market/upgrade/compoment/e
 import { updateVipLevel, userList } from "metabase/new-service";
 
 const VipList = props => {
-  const { user, vip, searchText } = props;
+  const { user, vip, searchText, current, setCurrent } = props;
   const [dataSource, setDataSource] = useState([]);
   const [visible, setVisible] = useState();
   const [currentItem, setCurrentItem] = useState({});
-  const [current, setCurrent] = useState(1);
   const [total, setTotal] = useState(0);
   const pageSize = 10;
 
@@ -28,10 +27,6 @@ const VipList = props => {
     };
     run();
   }, [searchText, current, getData]);
-
-  useEffect(() => {
-    setCurrent(1);
-  }, [searchText]);
 
   const columns = [
     {
