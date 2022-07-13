@@ -122,9 +122,9 @@ export default class DashboardApp extends Component {
     return {
       isBlock:
         ((this.props.dashboardBeforeEditing &&
-          this.props.dashboardBeforeEditing.ordered_cards.length === 0) ||
+          this.props.dashboardBeforeEditing.ordered_cards?.length === 0) ||
           (this.props.dashboard &&
-            this.props.dashboard.ordered_cards.length === 0)) &&
+            this.props.dashboard.ordered_cards?.length === 0)) &&
         userCancelFeedbackUtil.canBlock(scene, true),
       scene,
     };

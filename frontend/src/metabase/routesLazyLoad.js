@@ -1,4 +1,17 @@
 import loadable from "@loadable/component";
+import React from "react";
+import { DashboardLoadingAndErrorWrapper } from "metabase/dashboard/components/Dashboard/Dashboard.styled";
+
+const options = {
+  fallback: (
+    <DashboardLoadingAndErrorWrapper
+      loading={true}
+      isFullHeight={true}
+      isFullscreen=""
+      isNightMode={false}
+    />
+  ),
+};
 
 // prettier-ignore
 export default {
@@ -21,12 +34,13 @@ export default {
   Register: loadable(() => import("metabase/auth/containers/Register")),
   LogoutApp: loadable(() => import("metabase/auth/containers/LogoutApp")),
   PasswordResetApp: loadable(() => import("metabase/auth/containers/PasswordResetApp")),
-  DashboardApp: loadable(() => import("metabase/dashboard/containers/DashboardApp")),
+  DashboardApp: loadable(() => import("metabase/dashboard/containers/DashboardApp"), options),
+
   BrowseApp: loadable(() => import("metabase/browse/components/BrowseApp")),
   DatabaseBrowser: loadable(() => import("metabase/browse/containers/DatabaseBrowser")),
   SchemaBrowser: loadable(() => import("metabase/browse/containers/SchemaBrowser")),
   TableBrowser: loadable(() => import("metabase/browse/containers/TableBrowser")),
-  Question: loadable(() => import("metabase/query_builder/containers/Question")),
+  Question: loadable(() => import("metabase/query_builder/containers/Question"), options),
   CollectionEdit: loadable(() => import("metabase/collections/containers/CollectionEdit")),
   CollectionCreate: loadable(() => import("metabase/collections/containers/CollectionCreate")),
   ArchiveCollectionModal: loadable(() => import("metabase/components/ArchiveCollectionModal")),
@@ -65,11 +79,11 @@ export default {
   ProtocolDetail: loadable(() => import("metabase/containers/protocols/detail")),
   LoginModal: loadable(() => import("metabase/auth/containers/LoginModal")),
   ActivateAccount: loadable(() => import("metabase/containers/activate")),
-  Dashboards: loadable(() => import("metabase/containers/dashboards")),
+  Dashboards: loadable(() => import("metabase/containers/dashboards"), options),
   CustomUpload: loadable(() => import("metabase/containers/customUpload")),
   Search: loadable(() => import("metabase/containers/search")),
   Protocols: loadable(() => import("metabase/containers/protocols")),
-  Creator: loadable(() => import("metabase/containers/creator")),
+  Creator: loadable(() => import("metabase/containers/creator"), options),
   Widget: loadable(() => import("metabase/containers/widget")),
   About: loadable(() => import("metabase/containers/about")),
 
