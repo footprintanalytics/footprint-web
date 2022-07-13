@@ -18,6 +18,7 @@ import { NotFound, Unauthorized } from "metabase/containers/ErrorPages";
 import { trackPageView } from "./lib/analytics";
 import { loadConfig } from "metabase/redux/config";
 import { isProduction } from "./env";
+import DashboardApp from "metabase/dashboard/containers/DashboardApp";
 
 const MetabaseIsSetup = UserAuthWrapper({
   predicate: authData => (isProduction ? !authData.hasSetupToken : true),
@@ -474,7 +475,7 @@ export const getRoutes = store => (
         <Route
           title={t`Dashboard`}
           path="dashboard/:slug"
-          component={LazyLoad.DashboardApp}
+          component={DashboardApp}
         >
           <ModalRoute
             title={t`History`}
