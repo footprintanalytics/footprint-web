@@ -10,7 +10,7 @@ import type { SettingDef } from "../settings";
 import type { SingleSeries } from "metabase-types/types/Visualization";
 
 export function checkIsLargeChart(series) {
-  return series.length >= 10;
+  return series.length > 10;
 }
 
 export function keyForSingleSeries(single: SingleSeries): string {
