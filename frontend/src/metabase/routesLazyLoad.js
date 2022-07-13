@@ -1,4 +1,6 @@
 import loadable from "@loadable/component";
+import React from "react";
+import { Skeleton } from "antd";
 
 // prettier-ignore
 export default {
@@ -21,7 +23,11 @@ export default {
   Register: loadable(() => import("metabase/auth/containers/Register")),
   LogoutApp: loadable(() => import("metabase/auth/containers/LogoutApp")),
   PasswordResetApp: loadable(() => import("metabase/auth/containers/PasswordResetApp")),
-  DashboardApp: loadable(() => import("metabase/dashboard/containers/DashboardApp")),
+  // eslint-disable-next-line react/react-in-jsx-scope
+  DashboardApp: loadable(() => import("metabase/dashboard/containers/DashboardApp"), {
+    fallback: (<Skeleton active />)
+  }),
+
   BrowseApp: loadable(() => import("metabase/browse/components/BrowseApp")),
   DatabaseBrowser: loadable(() => import("metabase/browse/containers/DatabaseBrowser")),
   SchemaBrowser: loadable(() => import("metabase/browse/containers/SchemaBrowser")),

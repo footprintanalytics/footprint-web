@@ -8,7 +8,7 @@ const ignoreTitles = ["Dashboard", "Guest", "Question"];
 const SEPARATOR = " - ";
 
 const updateDocumentTitle = _.debounce(() => {
-  const mainTitle = componentStack[0]._documentTitle;
+  const mainTitle = componentStack[0]?._documentTitle;
 
   let title = mainTitle;
   if (componentStack.length > 1) {
