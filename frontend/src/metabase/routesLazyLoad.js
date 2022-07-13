@@ -7,7 +7,7 @@ const options = {
     <DashboardLoadingAndErrorWrapper
       loading={true}
       isFullHeight={true}
-      isFullscreen={true}
+      isFullscreen=""
       isNightMode={false}
     />
   ),
