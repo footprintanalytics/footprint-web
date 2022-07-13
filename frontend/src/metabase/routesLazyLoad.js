@@ -34,7 +34,6 @@ export default {
   Register: loadable(() => import("metabase/auth/containers/Register")),
   LogoutApp: loadable(() => import("metabase/auth/containers/LogoutApp")),
   PasswordResetApp: loadable(() => import("metabase/auth/containers/PasswordResetApp")),
-  // eslint-disable-next-line react/react-in-jsx-scope
   DashboardApp: loadable(() => import("metabase/dashboard/containers/DashboardApp"), options),
 
   BrowseApp: loadable(() => import("metabase/browse/components/BrowseApp")),
