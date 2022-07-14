@@ -29,7 +29,11 @@ export const refreshCurrentUser = createAction(
           window.TINGYUN.setDid(res.email);
         }
         if (arms) {
-          arms.setConfig({ uid: res.email, setUsername: () => res.name });
+          arms.setConfig({
+            uid: res.email,
+            setUsername: () => res.name,
+            disabled: ["refreshCache"].includes(res.name),
+          });
         }
       }
       return res;

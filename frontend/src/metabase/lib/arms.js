@@ -1,3 +1,4 @@
+/* eslint-disable curly */
 /* eslint-env node */
 import BrowserLogger from "alife-logger";
 import { isProduction, armsPid } from "metabase/env";
@@ -30,5 +31,12 @@ try {
     });
   }
 } catch (e) {}
+
+export const reportAPI = (url, success, time, status, message = "") => {
+  logger && logger.api(url, success, time, status, message);
+  if (!isProduction) {
+    console.log("[REPORT_API]", [url, success, time, status, message]);
+  }
+};
 
 export default logger;

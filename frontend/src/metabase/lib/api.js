@@ -2,7 +2,7 @@ import querystring from "querystring";
 
 import EventEmitter from "events";
 import isUrl from "metabase/lib/isUrl";
-import arms from "metabase/lib/arms";
+import { reportAPI } from "metabase/lib/arms";
 
 import { delay } from "metabase/lib/promise";
 import { IFRAMED } from "metabase/lib/dom";
@@ -197,16 +197,36 @@ export class Api extends EventEmitter {
       for (const headerName in headers) {
         xhr.setRequestHeader(headerName, headers[headerName]);
       }
+      let armsObject = null;
+
+      xhr.onloadend = () => {
+        if (armsObject) {
+          reportAPI(
+            armsObject.requestUrl,
+            armsObject.success,
+            armsObject.status,
+            armsObject.time,
+            armsObject.statusText,
+          );
+        }
+      };
       xhr.onreadystatechange = () => {
         if (xhr.readyState === XMLHttpRequest.DONE) {
-          const time = Date.now() - begin;
-          errorHandle(
-            requestUrl,
-            xhr.status,
-            time,
-            xhr.statusText,
-            isCancelled,
-          );
+          if (!isCancelled) {
+            const time = Date.now() - begin;
+            const status = xhr.status;
+            const success =
+              (status >= 200 && status < 300) ||
+              status === 304 ||
+              status === 401;
+            armsObject = {
+              requestUrl,
+              success: success,
+              status: status,
+              time: time,
+              statusText: xhr.statusText,
+            };
+          }
           // getResponseHeader() is case-insensitive
           const antiCsrfToken = xhr.getResponseHeader(ANTI_CSRF_HEADER);
           if (antiCsrfToken) {
@@ -250,7 +270,13 @@ export class Api extends EventEmitter {
       };
       xhr.onerror = e => {
         const time = Date.now() - begin;
-        arms && arms.api(requestUrl, false, time, "ERROR", e.message);
+        armsObject = {
+          requestUrl,
+          success: false,
+          status: xhr.status || 603,
+          time,
+          statusText: e.message,
+        };
       };
       xhr.send(body);
 
@@ -262,21 +288,6 @@ export class Api extends EventEmitter {
       }
     });
   }
-}
-
-function errorHandle(
-  requestUrl,
-  status,
-  time,
-  statusText = "",
-  isCancelled = false,
-) {
-  if (isCancelled) {
-    return;
-  }
-  const success =
-    (status >= 200 && status < 300) || status === 304 || status === 401;
-  arms && arms.api(requestUrl, success, time, status, statusText);
 }
 
 const instance = new Api();
