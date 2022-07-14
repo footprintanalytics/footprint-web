@@ -53,14 +53,14 @@ function errorHandle(err) {
           err.response.config.url,
           false,
           time,
-          err.response.status || -1,
+          err.response.status || 601,
           err.message,
         );
         message.error("Service exception, please contact the administrator");
     }
   } else {
     const time = getTime() - err.config.requestime;
-    reportAPI(err.config.url, false, time, err.code || -2, err.message);
+    reportAPI(err.config.url, false, time, err.code || 602, err.message);
   }
 }
 

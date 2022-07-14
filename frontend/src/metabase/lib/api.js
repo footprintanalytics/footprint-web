@@ -250,7 +250,7 @@ export class Api extends EventEmitter {
       };
       xhr.onerror = e => {
         const time = Date.now() - begin;
-        reportAPI(requestUrl, false, time, xhr.status || -3, e.message);
+        reportAPI(requestUrl, false, time, xhr.status || 603, e.message);
       };
       xhr.send(body);
 
@@ -276,7 +276,7 @@ function errorHandle(
   }
   const success =
     (status >= 200 && status < 300) || status === 304 || status === 401;
-  reportAPI(requestUrl, success, time, status || -4, statusText);
+  reportAPI(requestUrl, success, time, status || 604, statusText);
 }
 
 const instance = new Api();
