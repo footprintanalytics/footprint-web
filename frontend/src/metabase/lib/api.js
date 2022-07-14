@@ -204,8 +204,8 @@ export class Api extends EventEmitter {
           reportAPI(
             armsObject.requestUrl,
             armsObject.success,
-            armsObject.status,
             armsObject.time,
+            armsObject.status,
             armsObject.statusText,
           );
         }
