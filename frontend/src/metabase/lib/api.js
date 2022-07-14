@@ -2,7 +2,7 @@ import querystring from "querystring";
 
 import EventEmitter from "events";
 import isUrl from "metabase/lib/isUrl";
-import arms from "metabase/lib/arms";
+import { reportAPI } from "metabase/lib/arms";
 
 import { delay } from "metabase/lib/promise";
 import { IFRAMED } from "metabase/lib/dom";
@@ -250,7 +250,7 @@ export class Api extends EventEmitter {
       };
       xhr.onerror = e => {
         const time = Date.now() - begin;
-        arms && arms.api(requestUrl, false, time, "ERROR", e.message);
+        reportAPI(requestUrl, false, time, xhr.status || -3, e.message);
       };
       xhr.send(body);
 
@@ -276,7 +276,7 @@ function errorHandle(
   }
   const success =
     (status >= 200 && status < 300) || status === 304 || status === 401;
-  arms && arms.api(requestUrl, success, time, status, statusText);
+  reportAPI(requestUrl, success, time, status || -4, statusText);
 }
 
 const instance = new Api();

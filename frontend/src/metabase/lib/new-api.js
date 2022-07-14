@@ -2,7 +2,7 @@
 import axios from "axios";
 import { message } from "antd";
 import api from "metabase/lib/api";
-import arms from "metabase/lib/arms";
+import { reportAPI } from "metabase/lib/arms";
 
 axios.defaults.baseURL = api.basename;
 axios.defaults.headers.put["Content-Type"] = "application/json; charset=utf-8";
@@ -11,22 +11,14 @@ const getTime = () => {
   return Date.now();
 };
 
-const reportARMS = (response, success, status, message = "") => {
-  const userName = window.Metabase?.store?.getState()?.currentUser?.name;
-  if (userName === "refreshCache") return;
-
-  const { config: conf } = response;
-  const time = getTime() - conf.requestime;
-  arms && arms.api(conf.url, success, time, status, message);
-};
-
 axios.interceptors.request.use(config => {
   return { ...config, ...{ requestime: getTime() } };
 });
 
 axios.interceptors.response.use(
   response => {
-    reportARMS(response, true, response.status);
+    const time = getTime() - response.config.requestime;
+    reportAPI(response.config.url, true, time, response.status, "OK");
     const { data, config } = response;
     if (data.code) {
       if (!config.silent) {
@@ -44,17 +36,31 @@ axios.interceptors.response.use(
 
 function errorHandle(err) {
   if (err.response) {
+    const time = getTime() - err.response.config.requestime;
     switch (err.response.status) {
       case 401:
-        reportARMS(err.response, true, err.response.status);
+        reportAPI(
+          err.response.config.url,
+          true,
+          time,
+          err.response.status,
+          "OK",
+        );
         message.error("You does not have permission to access");
         break;
       default:
-        reportARMS(err.response, false, err.response.status, err.message);
+        reportAPI(
+          err.response.config.url,
+          false,
+          time,
+          err.response.status || -1,
+          err.message,
+        );
         message.error("Service exception, please contact the administrator");
     }
   } else {
-    reportARMS({ config: err.config }, false, "ERROR", err.message);
+    const time = getTime() - err.config.requestime;
+    reportAPI(err.config.url, false, time, err.code || -2, err.message);
   }
 }
 
