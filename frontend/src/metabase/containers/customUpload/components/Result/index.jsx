@@ -24,7 +24,7 @@ const Result = ({ prepareData = mockPrepareData, onNext }) => {
       <img
         width={384}
         height={449}
-        src={getOssUrl("20220421111719.png")}
+        src={getOssUrl("20220715113120.png")}
         alt="Custom Upload Guide"
       />
     </Step>
