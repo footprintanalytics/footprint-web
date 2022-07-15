@@ -14,7 +14,7 @@ const Result = ({ prepareData = mockPrepareData, onNext }) => {
         <>
           Successfully upload{" "}
           <b>ud_{String(prepareData.tableName).toLowerCase()}</b>, You can find
-          the data in <b>Personal Upload</b> after 3-5 minutes.
+          the data in <b>My Dataset</b> after 3-5 minutes.
         </>
       }
       nextText="Let’s create a new chart"
