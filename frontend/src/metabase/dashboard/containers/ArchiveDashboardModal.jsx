@@ -13,13 +13,19 @@ import Dashboard from "metabase/entities/dashboards";
 
 import ArchiveModal from "metabase/components/ArchiveModal";
 import { isCreator } from "metabase/containers/dashboards/shared/utils";
+import { getUser } from "metabase/selectors/user";
+import { message } from "antd";
+
+const mapStateToProps = state => ({
+  user: getUser(state),
+});
 
 const mapDispatchToProps = {
   setDashboardArchived: Dashboard.actions.setArchived,
   push,
 };
 
-@connect(null, mapDispatchToProps)
+@connect(mapStateToProps, mapDispatchToProps)
 @Dashboard.load({
   id: (state, props) =>
     props.id ||
@@ -51,7 +57,8 @@ export default class ArchiveDashboardModal extends Component {
   };
 
   archive = async () => {
-    const { otherSuccessAction, location } = this.props;
+    const hide = message.loading("Action in progress..", 0);
+    const { otherSuccessAction, location, router, user } = this.props;
     const dashboardId =
       this.props.id ||
       Urls.extractEntityId(this.props.params.slug) ||
@@ -61,6 +68,8 @@ export default class ArchiveDashboardModal extends Component {
       true,
     );
     otherSuccessAction && otherSuccessAction();
+    setTimeout(() => router.replace(`/@${user.name}?model=dashboard`));
+    hide();
   };
 
   render() {

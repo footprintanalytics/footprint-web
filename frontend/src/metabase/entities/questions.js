@@ -34,7 +34,7 @@ const Questions = createEntity({
       Questions.actions.update(
         { id },
         { archived },
-        undo(opts, "question", archived ? "archived" : "unarchived"),
+        // undo(opts, "question", archived ? "archived" : "unarchived"),
       ),
 
     setCollection: ({ id }, collection, opts) =>
