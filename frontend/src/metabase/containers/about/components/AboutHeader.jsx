@@ -19,7 +19,7 @@ const AboutHeader = ({ router, location, user }) => {
     { title: "Academy", url: "/academy" },
     { title: "Docs", url: "https://docs.footprint.network/" },
     { title: "Pricing", url: "/pricing" },
-    { title: "My Profile", url: `/@${user.name}` },
+    // { title: "My Profile", url: `/@${user.name}` },
   ];
 
   return (
