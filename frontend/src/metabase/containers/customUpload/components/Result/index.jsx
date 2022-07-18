@@ -14,7 +14,7 @@ const Result = ({ prepareData = mockPrepareData, onNext }) => {
         <>
           Successfully upload{" "}
           <b>ud_{String(prepareData.tableName).toLowerCase()}</b>, You can find
-          the data in <b>Personal Upload</b> after 3-5 minutes.
+          the data in <b>My Dataset</b> after 3-5 minutes.
         </>
       }
       nextText="Let’s create a new chart"
@@ -24,7 +24,7 @@ const Result = ({ prepareData = mockPrepareData, onNext }) => {
       <img
         width={384}
         height={449}
-        src={getOssUrl("20220421111719.png")}
+        src={getOssUrl("20220715113120.png")}
         alt="Custom Upload Guide"
       />
     </Step>
