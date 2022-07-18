@@ -69,7 +69,7 @@ const Dashboards = createEntity({
       return Dashboards.actions.update(
         { id },
         { archived, name },
-        undo(opts, "dashboard", archived ? "archived" : "unarchived"),
+        // undo(opts, "dashboard", archived ? "archived" : "unarchived"),
       );
     },
 
