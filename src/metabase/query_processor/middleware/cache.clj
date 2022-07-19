@@ -27,6 +27,9 @@
 
 (comment backend.db/keep-me)
 
+(def c (atom nil))
+(def last-ran-cache (atom nil))
+
 (def ^:private cache-version
   "Current serialization format version. Basically
 
@@ -96,9 +99,10 @@
        (let [duration-ms (- (System/currentTimeMillis) start-time)]
          (log/info (trs "Query took {0} to run; minimum for cache eligibility is {1}"
                         (u/format-milliseconds duration-ms) (u/format-milliseconds (min-duration-ms))))
-         (when (and @has-rows?
-                    (> duration-ms (min-duration-ms)))
-           (cache-results-async! query-hash out-chan dashboard-id card-id)))
+         (when @has-rows?
+           (cache-results-async! query-hash out-chan dashboard-id card-id))
+         )
+
        (rf result))
 
       ([acc row]
@@ -117,6 +121,7 @@
     (let [metadata       (dissoc metadata :last-ran :cache-version)
           rf             (rff metadata)
           final-metadata (volatile! nil)]
+      (reset! last-ran-cache (.toEpochMilli (.toInstant last-ran)))
       (fn
         ([]
          (rf))
@@ -128,6 +133,7 @@
                                     (merge-with merge @final-metadata (unreduced result))
                                     (unreduced result))
                                   (assoc :cached true, :updated_at last-ran))]
+           (reset! c result)
            (rf (cond-> result*
                  (reduced? result) reduced))))
 
@@ -162,8 +168,54 @@
                         (i/short-hex-hash query-hash)))
       ::miss)))
 
+(defn- save-results-xform-ok [start-time metadata query-hash rf dashboard-id card-id]
+  (log/info "save-results-xform 0 " metadata)
+  (let [{:keys [in-chan out-chan]} (impl/serialize-async)
+        has-rows?                  (volatile! false)]
+    (a/put! in-chan (assoc metadata
+                           :cache-version cache-version
+                           :last-ran      (t/zoned-date-time)))
+    (fn
+      ([]
+       (log/info "save-results-xform-ok []"))
+
+      ([result]
+       (let [data (if (map? @c)
+                    (m/dissoc-in @c [:data :rows])
+                    {})]
+         (reset! c nil)
+         (a/put! in-chan data)
+         (a/close! in-chan))
+       (let [duration-ms (- (System/currentTimeMillis) start-time)]
+         (log/info (trs "Query took {0} to run; minimum for cache eligibility is {1}"
+                        (u/format-milliseconds duration-ms) (u/format-milliseconds (min-duration-ms))))
+         (when @has-rows?
+           (cache-results-async! query-hash out-chan dashboard-id card-id))
+         ))
+
+      ([acc row]
+       ;; Blocking so we don't exceed async's MAX-QUEUE-SIZE when transducing a large result set
+       (a/>!! in-chan row)
+       (vreset! has-rows? true)
+
+       )
+      )
+    )
+  )
 
 ;;; --------------------------------------------------- Middleware ---------------------------------------------------
+
+(defn- myThread-ok [query query-hash context rff qp dashboard-id card-id]
+  (let [start-time-ms (System/currentTimeMillis)]
+    (log/info "Running query and saving cached results (if eligible).......................... ok")
+    (qp query
+        (fn [metadata]
+          (log/info "okok, metadata " + metadata)
+          (save-results-xform-ok start-time-ms metadata query-hash (rff metadata) dashboard-id card-id)
+          )
+        context)
+    )
+  )
 
 (defn- run-query-with-cache
   [qp {:keys [cache-ttl middleware info], :as query} rff context]
@@ -173,13 +225,22 @@
          dashboard-id (info :dashboard-id)
          query-hash (qputil/query-hash query)
          result     (maybe-reduce-cached-results (:ignore-cached-results? middleware) query-hash cache-ttl rff context)]
-    (when (= result ::miss)
+    (if (= result ::miss)
       (let [start-time-ms (System/currentTimeMillis)]
         (log/trace "Running query and saving cached results (if eligible)...")
         (qp query
             (fn [metadata]
               (save-results-xform start-time-ms metadata query-hash (rff metadata) dashboard-id card-id))
-            context)))))
+            context))
+      (
+        let [duration-ms (- (System/currentTimeMillis) @last-ran-cache)]
+        (when (and result ::ok (> duration-ms (min-duration-ms)))
+          (myThread-ok query query-hash context rff qp dashboard-id card-id)
+          )
+        )
+      )
+    )
+  )
 
 (defn- is-cacheable? {:arglists '([query])} [{:keys [cache-ttl]}]
   (and (public-settings/enable-query-caching)
