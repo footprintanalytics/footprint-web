@@ -14,6 +14,9 @@
             [clojure.tools.logging :as log]
             [java-time :as t]
             [medley.core :as m]
+            [metabase.query-processor.middleware.annotate :as annotate]
+            [metabase.query-processor.middleware.add-timezone-info :as add-timezone-info]
+            [metabase.query-processor.context.default :as context.default]
             [metabase.config :as config]
             [metabase.public-settings :as public-settings]
             [metabase.query-processor.context :as context]
@@ -27,7 +30,6 @@
 
 (comment backend.db/keep-me)
 
-(def c (atom nil))
 (def last-ran-cache (atom nil))
 
 (def ^:private cache-version
@@ -133,7 +135,6 @@
                                     (merge-with merge @final-metadata (unreduced result))
                                     (unreduced result))
                                   (assoc :cached true, :updated_at last-ran))]
-           (reset! c result)
            (rf (cond-> result*
                  (reduced? result) reduced))))
 
@@ -168,52 +169,21 @@
                         (i/short-hex-hash query-hash)))
       ::miss)))
 
-(defn- save-results-xform-ok [start-time metadata query-hash rf dashboard-id card-id]
-  (log/info "save-results-xform 0 " metadata)
-  (let [{:keys [in-chan out-chan]} (impl/serialize-async)
-        has-rows?                  (volatile! false)]
-    (a/put! in-chan (assoc metadata
-                           :cache-version cache-version
-                           :last-ran      (t/zoned-date-time)))
-    (fn
-      ([]
-       (log/info "save-results-xform-ok []"))
-
-      ([result]
-       (let [data (if (map? @c)
-                    (m/dissoc-in @c [:data :rows])
-                    {})]
-         (reset! c nil)
-         (a/put! in-chan data)
-         (a/close! in-chan))
-       (let [duration-ms (- (System/currentTimeMillis) start-time)]
-         (log/info (trs "Query took {0} to run; minimum for cache eligibility is {1}"
-                        (u/format-milliseconds duration-ms) (u/format-milliseconds (min-duration-ms))))
-         (when @has-rows?
-           (cache-results-async! query-hash out-chan dashboard-id card-id))
-         ))
-
-      ([acc row]
-       ;; Blocking so we don't exceed async's MAX-QUEUE-SIZE when transducing a large result set
-       (a/>!! in-chan row)
-       (vreset! has-rows? true)
-
-       )
-      )
-    )
-  )
-
 ;;; --------------------------------------------------- Middleware ---------------------------------------------------
 
 (defn- myThread-ok [query query-hash context rff qp dashboard-id card-id]
   (let [start-time-ms (System/currentTimeMillis)]
     (log/info "Running query and saving cached results (if eligible).......................... ok")
-    (qp query
-        (fn [metadata]
-          (log/info "okok, metadata " + metadata)
-          (save-results-xform-ok start-time-ms metadata query-hash (rff metadata) dashboard-id card-id)
-          )
-        context)
+    (log/info "Running query and saving cached results (if eligible)2.......................... ok")
+    (
+      (add-timezone-info/add-timezone-info
+       (annotate/add-column-info
+        qp
+        ))
+      query
+      (fn [metadata]
+        (save-results-xform start-time-ms metadata query-hash (((context.default/default-context) :rff) metadata) dashboard-id card-id))
+      context)
     )
   )
 
