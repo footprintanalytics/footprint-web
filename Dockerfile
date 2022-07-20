@@ -49,12 +49,12 @@ RUN yarn --frozen-lockfile
 COPY --chown=circleci . .
 
 # BE
-COPY --from=registry-intl.us-east-1.aliyuncs.com/mexl/foot-print-frontend:metabase-v0-41-drivers-builder /home/circleci/modules/ ./modules/
-COPY --from=registry-intl.us-east-1.aliyuncs.com/mexl/foot-print-frontend:metabase-v0-41-drivers-builder /home/circleci/.m2/ ./.m2/
-COPY --from=registry-intl.us-east-1.aliyuncs.com/mexl/foot-print-frontend:metabase-v0-41-drivers-builder /home/circleci/resources/modules/ ./resources/modules/
-COPY --from=registry-intl.us-east-1.aliyuncs.com/mexl/foot-print-frontend:metabase-v0-41-drivers-builder /home/circleci/shared/ ./shared/
-COPY --from=registry-intl.us-east-1.aliyuncs.com/mexl/foot-print-frontend:metabase-v0-41-drivers-builder /home/circleci/src/ ./src/
-COPY --from=registry-intl.us-east-1.aliyuncs.com/mexl/foot-print-frontend:metabase-v0-41-drivers-builder /home/circleci/java/ ./java/
+COPY --from=registry-intl.us-east-1.aliyuncs.com/mexl/foot-print-frontend:metabase-v0-41-drivers-builder-preview /home/circleci/modules/ ./modules/
+COPY --from=registry-intl.us-east-1.aliyuncs.com/mexl/foot-print-frontend:metabase-v0-41-drivers-builder-preview /home/circleci/.m2/ ./.m2/
+COPY --from=registry-intl.us-east-1.aliyuncs.com/mexl/foot-print-frontend:metabase-v0-41-drivers-builder-preview /home/circleci/resources/modules/ ./resources/modules/
+COPY --from=registry-intl.us-east-1.aliyuncs.com/mexl/foot-print-frontend:metabase-v0-41-drivers-builder-preview /home/circleci/shared/ ./shared/
+COPY --from=registry-intl.us-east-1.aliyuncs.com/mexl/foot-print-frontend:metabase-v0-41-drivers-builder-preview /home/circleci/src/ ./src/
+COPY --from=registry-intl.us-east-1.aliyuncs.com/mexl/foot-print-frontend:metabase-v0-41-drivers-builder-preview /home/circleci/java/ ./java/
 
 # FE
 RUN NODE_ENV=production MB_EDITION=$MB_EDITION && \
@@ -67,7 +67,7 @@ RUN NODE_ENV=production MB_EDITION=$MB_EDITION && \
 FROM registry-intl.us-east-1.aliyuncs.com/mexl/foot-print-frontend:metabase-v0-41-runtime
 
 COPY --from=frontend /home/circleci/target/uberjar/metabase.jar /app/
-COPY --from=registry-intl.us-east-1.aliyuncs.com/mexl/foot-print-frontend:metabase-v0-41-drivers-builder /home/circleci/bin/docker/run_metabase.sh /app/
+COPY --from=registry-intl.us-east-1.aliyuncs.com/mexl/foot-print-frontend:metabase-v0-41-drivers-builder-preview /home/circleci/bin/docker/run_metabase.sh /app/
 
 EXPOSE 3000
 
