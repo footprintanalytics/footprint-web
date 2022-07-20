@@ -191,7 +191,7 @@
         (log/trace "Running query and saving cached results (if eligible)...")
         (qp query
             (fn [metadata]
-              (save-results-xform start-time-ms metadata query-hash (rff metadata) dashboard-id card-id))
+              (save-results-xform start-time-ms metadata query-hash (rff metadata) dashboard-id card-id true))
             context))
       (let [duration-ms (- (System/currentTimeMillis) @last-ran-cache)
             start-time-ms (System/currentTimeMillis)]
