@@ -195,7 +195,7 @@ export default class Popover extends Component {
         attachment: `${o.attachmentY} ${o.attachmentX}`,
         targetAttachment: `${o.targetAttachmentY} ${o.targetAttachmentX}`,
         targetOffset: `${o.offsetY}px ${o.offsetX}px`,
-        constraints: [{ to: "scrollParent", pin: true }],
+        constraints: [{ to: "scrollParent", pin: ['right'] }],
       };
     }
     if (this._tether) {
