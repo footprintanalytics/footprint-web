@@ -89,7 +89,7 @@
 
         (log/error (trs "Cannot cache results: expected byte array, got {0}" (class x)))))))
 
-(defn- save-results-xform [start-time metadata query-hash rf dashboard-id card-id]
+(defn- save-results-xform [start-time metadata query-hash rf dashboard-id card-id mustRfReponse]
   (let [{:keys [in-chan out-chan]} (impl/serialize-async)
         has-rows?                  (volatile! false)]
     (a/put! in-chan (assoc metadata
@@ -110,7 +110,8 @@
            (cache-results-async! query-hash out-chan dashboard-id card-id))
          )
 
-       (rf result))
+         (when mustRfReponse (rf result))
+       )
 
       ([acc row]
        ;; Blocking so we don't exceed async's MAX-QUEUE-SIZE when transducing a large result set
@@ -176,18 +177,6 @@
 
 ;;; --------------------------------------------------- Middleware ---------------------------------------------------
 
-(defn- myThread-ok [query query-hash context rff qp dashboard-id card-id]
-  (let [start-time-ms (System/currentTimeMillis)]
-    (log/info "Running query and saving cached results (if eligible).......................... ok")
-    (
-      ((apply comp query-data-middleware) qp)
-      query
-      (fn [metadata]
-        (save-results-xform start-time-ms metadata query-hash (((context.default/default-context) :rff) metadata) dashboard-id card-id))
-      context)
-    )
-  )
-
 (defn- run-query-with-cache
   [qp {:keys [cache-ttl middleware info], :as query} rff context]
   ;; TODO - Query will already have `info.hash` if it's a userland query. I'm not 100% sure it will be the same hash,
@@ -204,13 +193,17 @@
             (fn [metadata]
               (save-results-xform start-time-ms metadata query-hash (rff metadata) dashboard-id card-id))
             context))
-      (
-        let [duration-ms (- (System/currentTimeMillis) @last-ran-cache)]
+      (let [duration-ms (- (System/currentTimeMillis) @last-ran-cache)
+            start-time-ms (System/currentTimeMillis)]
         (when (and result ::ok (> duration-ms (min-duration-ms)))
-          (myThread-ok query query-hash context rff qp dashboard-id card-id)
-          )
-        )
-      )
+          (((apply comp query-data-middleware) qp)
+            query
+            (fn [metadata]
+              (save-results-xform
+               start-time-ms metadata query-hash
+               (((context.default/default-context) :rff) metadata)
+               dashboard-id card-id, false))
+            context))))
     )
   )
 
