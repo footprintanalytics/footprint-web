@@ -179,7 +179,6 @@
 (defn- myThread-ok [query query-hash context rff qp dashboard-id card-id]
   (let [start-time-ms (System/currentTimeMillis)]
     (log/info "Running query and saving cached results (if eligible).......................... ok")
-    (log/info "Running query and saving cached results (if eligible)2.......................... ok")
     (
       ((apply comp query-data-middleware) qp)
       query
@@ -193,6 +192,7 @@
   [qp {:keys [cache-ttl middleware info], :as query} rff context]
   ;; TODO - Query will already have `info.hash` if it's a userland query. I'm not 100% sure it will be the same hash,
   ;; because this is calculated after normalization, instead of before
+  (log/info "run-query-with-cache info: " info)
   (let [ card-id (info :card-id)
          dashboard-id (info :dashboard-id)
          query-hash (qputil/query-hash query)
