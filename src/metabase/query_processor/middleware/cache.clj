@@ -32,6 +32,11 @@
 
 (def last-ran-cache (atom nil))
 
+(def query-data-middleware
+  "The middleware applied to queries ran via `process-query` with cache ."
+  [#'annotate/add-column-info
+   #'add-timezone-info/add-timezone-info])
+
 (def ^:private cache-version
   "Current serialization format version. Basically
 
@@ -176,10 +181,7 @@
     (log/info "Running query and saving cached results (if eligible).......................... ok")
     (log/info "Running query and saving cached results (if eligible)2.......................... ok")
     (
-      (add-timezone-info/add-timezone-info
-       (annotate/add-column-info
-        qp
-        ))
+      ((apply comp query-data-middleware) qp)
       query
       (fn [metadata]
         (save-results-xform start-time-ms metadata query-hash (((context.default/default-context) :rff) metadata) dashboard-id card-id))
