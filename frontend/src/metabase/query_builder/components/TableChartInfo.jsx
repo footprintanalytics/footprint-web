@@ -7,10 +7,11 @@ import { getTableConfigList } from "metabase/selectors/config";
 import { compose } from "underscore";
 import Icon from "metabase/components/Icon";
 import { get } from "lodash";
-import { Popconfirm } from "antd";
+import { Popover } from "antd";
 import "./TableChartInfo.css";
 import Link from "metabase/components/Link";
 import { getTableNameListFromSQL } from "metabase/lib/formatting";
+import { ExclamationCircleFilled } from "@ant-design/icons";
 
 const TableChartInfo = ({
   className = "",
@@ -68,7 +69,7 @@ const TableChartInfo = ({
     let udTableNode = null;
     if (udTables?.length > 0) {
       udTableNode = udTables?.map(table => (
-        <div key={table}>
+        <li key={table}>
           {table}:
           <Link
             to="https://docs.footprint.network/data-1/data-model"
@@ -83,14 +84,14 @@ const TableChartInfo = ({
           >
             User Define
           </Link>
-        </div>
+        </li>
       ));
     }
 
     let betaTableNode = null;
     if (betaTables?.length > 0) {
       betaTableNode = betaTables?.map(table => (
-        <div key={table.id}>
+        <li key={table.id}>
           {table.name}:
           <Link
             to="https://docs.footprint.network/data-1/data-model"
@@ -105,14 +106,14 @@ const TableChartInfo = ({
           >
             Beta
           </Link>
-        </div>
+        </li>
       ));
     }
 
     let upgradeNode = null;
     if (upgradeTables?.length > 0) {
       upgradeNode = upgradeTables?.map(table => (
-        <div
+        <li
           key={table?.id}
           dangerouslySetInnerHTML={{ __html: table?.message }}
         />
@@ -120,12 +121,18 @@ const TableChartInfo = ({
     }
 
     return udTableNode || betaTableNode || upgradeNode ? (
-      <div>
-        Table Info:
-        <br />
-        {udTableNode}
-        {betaTableNode}
-        {upgradeNode}
+      <div className="table-chart-info-show">
+        <div className="table-chart-info-show-l">
+          <ExclamationCircleFilled style={{ color: "#faad14" }} />
+        </div>
+        <div className="table-chart-info-show-r">
+          Table Info:
+          <ul>
+            {udTableNode}
+            {betaTableNode}
+            {upgradeNode}
+          </ul>
+        </div>
       </div>
     ) : null;
   };
@@ -139,21 +146,17 @@ const TableChartInfo = ({
   return (
     <>
       {showInfo && (
-        <Popconfirm
+        <Popover
           overlayClassName="table-chart-info"
-          placement="bottom"
-          title={showInfo}
-          okText="OK"
-          showCancel={false}
-          okType="ghost"
-          onConfirm={e => e.stopPropagation()}
+          placement="right"
+          content={showInfo}
         >
           <a
             className={`html2canvas-filter table-chart-info-icon ${className}`}
           >
             <Icon name={"dialogue"} size={16} color={"#9AA0AF"} />
           </a>
-        </Popconfirm>
+        </Popover>
       )}
     </>
   );
