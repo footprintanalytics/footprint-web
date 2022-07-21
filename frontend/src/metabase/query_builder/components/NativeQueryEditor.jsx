@@ -566,7 +566,7 @@ export default class NativeQueryEditor extends Component {
       //   );
       // }
       dataSelectors.push(
-        <span className="ml2 p2 text-medium">{database.name}</span>,
+        <span className="ml2 p2 text-medium">{database?.name}</span>,
       );
     } else {
       dataSelectors = (
