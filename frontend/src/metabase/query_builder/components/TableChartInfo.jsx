@@ -1,9 +1,10 @@
+/* eslint-disable curly */
 /* eslint-disable react-hooks/rules-of-hooks */
 /* eslint-disable react/prop-types */
-import React from "react";
+import React, { memo } from "react";
 import connect from "react-redux/lib/connect/connect";
 import { getTableConfigList } from "metabase/selectors/config";
-import _ from "underscore";
+import { compose } from "underscore";
 import Icon from "metabase/components/Icon";
 import { get } from "lodash";
 import { Popconfirm } from "antd";
@@ -11,7 +12,13 @@ import "./TableChartInfo.css";
 import Link from "metabase/components/Link";
 import { getTableNameListFromSQL } from "metabase/lib/formatting";
 
-const TableChartInfo = ({ tableName, tableId, tableConfigList, card }) => {
+const TableChartInfo = ({
+  tableName,
+  tableId,
+  tableConfigList,
+  deprecatedTableConfigList,
+  card,
+}) => {
   const nativeQuery =
     card?.dataset_query?.type === "native" &&
     get(card, "dataset_query.native.query");
@@ -29,6 +36,9 @@ const TableChartInfo = ({ tableName, tableId, tableConfigList, card }) => {
   };
 
   const getTables = type => {
+    if (type === "upgrade" && deprecatedTableConfigList?.length) {
+      return deprecatedTableConfigList;
+    }
     if (nativeQuery) {
       return matchTableFromNative(type);
     }
@@ -49,13 +59,11 @@ const TableChartInfo = ({ tableName, tableId, tableConfigList, card }) => {
       const tableNameList = getTableNameListFromSQL(nativeQuery);
       return tableNameList?.filter(s => s.startsWith("ud_")) || [];
     }
-    if (tableName?.includes("ud_")) {
-      return [tableName];
-    }
+    if (tableName?.includes("ud_")) return [tableName];
     return [];
   };
+
   const getShowInfo = ({ udTables, betaTables, upgradeTables }) => {
-    let upgradeNode = "";
     let udTableNode = null;
     if (udTables?.length > 0) {
       udTableNode = udTables?.map(table => (
@@ -77,6 +85,7 @@ const TableChartInfo = ({ tableName, tableId, tableConfigList, card }) => {
         </div>
       ));
     }
+
     let betaTableNode = null;
     if (betaTables?.length > 0) {
       betaTableNode = betaTables?.map(table => (
@@ -98,6 +107,8 @@ const TableChartInfo = ({ tableName, tableId, tableConfigList, card }) => {
         </div>
       ));
     }
+
+    let upgradeNode = null;
     if (upgradeTables?.length > 0) {
       upgradeNode = upgradeTables?.map(table => (
         <div
@@ -106,9 +117,11 @@ const TableChartInfo = ({ tableName, tableId, tableConfigList, card }) => {
         />
       ));
     }
+
     return udTableNode || betaTableNode || upgradeNode ? (
-      <div style={{ whiteSpace: "pre-line" }}>
-        {"Table Info: \n"}
+      <div>
+        Table Info:
+        <br />
         {udTableNode}
         {betaTableNode}
         {upgradeNode}
@@ -123,40 +136,28 @@ const TableChartInfo = ({ tableName, tableId, tableConfigList, card }) => {
     tableConfigList && getShowInfo({ udTables, betaTables, upgradeTables });
 
   return (
-    <React.Fragment>
+    <>
       {showInfo && (
         <Popconfirm
           overlayClassName="table-chart-info"
           placement="bottom"
           title={showInfo}
           okText="OK"
-          icon={false}
           showCancel={false}
           okType="ghost"
+          onConfirm={e => e.stopPropagation()}
         >
-          <a
-            className="html2canvas-filter"
-            style={{
-              display: "inline",
-              position: "relative",
-              cursor: "pointer",
-              margin: "0px 10px",
-            }}
-            onClick={() => {}}
-          >
+          <a className="html2canvas-filter table-chart-info-icon">
             <Icon name={"dialogue"} size={16} color={"#9AA0AF"} />
           </a>
         </Popconfirm>
       )}
-    </React.Fragment>
+    </>
   );
 };
+
 const mapStateToProps = state => ({
   tableConfigList: getTableConfigList(state),
 });
 
-const mapDispatchToProps = {};
-
-export default _.compose(connect(mapStateToProps, mapDispatchToProps))(
-  React.memo(TableChartInfo),
-);
+export default compose(connect(mapStateToProps, null))(memo(TableChartInfo));
