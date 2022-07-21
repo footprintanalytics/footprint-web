@@ -15,6 +15,7 @@ import { isProtocol } from "metabase/containers/dashboards/shared/utils";
 import CreatorName from "metabase/components/CreatorName";
 import * as Urls from "metabase/lib/urls";
 import getActionMenus from "metabase/containers/dashboards/components/Dashboards/helper";
+import TableChartInfo from "metabase/query_builder/components/TableChartInfo";
 
 const colors = ["#E4E4FE", "#D9F8F3", "#FFF5D9", "#FFDFE8"];
 
@@ -98,6 +99,11 @@ export default ({
                 )}
                 {!record.publicUuid && (
                   <span className="dashboards__table-private">Private</span>
+                )}
+                {!!record.hasDeprecated?.length && (
+                  <TableChartInfo
+                    deprecatedTableConfigList={record.hasDeprecated}
+                  />
                 )}
               </h3>
             </Link>

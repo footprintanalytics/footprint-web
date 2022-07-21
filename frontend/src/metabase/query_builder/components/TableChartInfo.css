@@ -1,7 +1,24 @@
-.table-chart-info .ant-popover-message-title {
-  padding-left: 0;
-}
-
 .table-chart-info .ant-popover-inner-content {
   max-width: 500px;
+}
+
+.table-chart-info-icon {
+  display: inline-flex;
+  cursor: pointer;
+  margin: 0 8px;
+  position: relative;
+  top: 2px;
+}
+
+.table-chart-info-icon--simple {
+  top: 0;
+  margin: 0;
+}
+
+.table-chart-info-show {
+  display: flex;
+}
+
+.table-chart-info-show-l {
+  margin-right: 10px;
 }

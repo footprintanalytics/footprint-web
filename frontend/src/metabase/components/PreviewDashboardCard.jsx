@@ -28,6 +28,7 @@ import ArchiveQuestionModal from "metabase/query_builder/containers/ArchiveQuest
 import Modal from "metabase/components/Modal";
 import ArchiveDashboardModal from "metabase/dashboard/containers/ArchiveDashboardModal";
 import * as Urls from "metabase/lib/urls";
+import TableChartInfo from "metabase/query_builder/components/TableChartInfo";
 
 const PreviewDashboardCard = props => {
   const {
@@ -290,6 +291,13 @@ const PreviewDashboardCard = props => {
                           setShowArchiveCard(true);
                         }
                       }}
+                    />
+                  )}
+
+                  {!!item.hasDeprecated?.length && (
+                    <TableChartInfo
+                      className="table-chart-info-icon--simple"
+                      deprecatedTableConfigList={item.hasDeprecated}
                     />
                   )}
                 </div>
