@@ -13,6 +13,7 @@ import Link from "metabase/components/Link";
 import { getTableNameListFromSQL } from "metabase/lib/formatting";
 
 const TableChartInfo = ({
+  className = "",
   tableName,
   tableId,
   tableConfigList,
@@ -147,7 +148,9 @@ const TableChartInfo = ({
           okType="ghost"
           onConfirm={e => e.stopPropagation()}
         >
-          <a className="html2canvas-filter table-chart-info-icon">
+          <a
+            className={`html2canvas-filter table-chart-info-icon ${className}`}
+          >
             <Icon name={"dialogue"} size={16} color={"#9AA0AF"} />
           </a>
         </Popconfirm>

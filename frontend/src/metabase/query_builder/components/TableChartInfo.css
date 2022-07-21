@@ -9,3 +9,8 @@
   position: relative;
   top: 2px;
 }
+
+.table-chart-info-icon--simple {
+  top: 0;
+  margin: 0;
+}
