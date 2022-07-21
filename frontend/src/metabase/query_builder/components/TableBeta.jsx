@@ -5,17 +5,10 @@ import connect from "react-redux/lib/connect/connect";
 import { getTableConfigList } from "metabase/selectors/config";
 import _ from "underscore";
 import Tooltip from "metabase/components/Tooltip";
+import getBetaTable from "metabase/query_builder/components/TableBetaHelper";
 
 const TableBeta = ({ tableName, tableId, tableConfigList }) => {
-  const betaTable =
-    (tableId &&
-      tableConfigList?.find(
-        item => item.id === tableId && item.type === "beta",
-      )) ||
-    (tableName &&
-      tableConfigList?.find(
-        item => item.name === tableName && item.type === "beta",
-      ));
+  const betaTable = getBetaTable({ tableName, tableId, tableConfigList });
 
   const betaTip =
     "Beta: data accuracy, stability, data period, update frequency, etc of this table is still on working.";
