@@ -4,10 +4,20 @@ import Link from "metabase/components/Link";
 import Tooltip from "metabase/components/Tooltip";
 import { isNumber } from "underscore";
 import Button from "metabase/components/Button";
+import connect from "react-redux/lib/connect/connect";
+import { getTableConfigList } from "metabase/selectors/config";
+import getBetaTable from "metabase/query_builder/components/TableBetaHelper";
 
-const TableDictionary = ({ tableName, tableId }) => {
+const TableDictionary = ({ tableName, tableId, tableConfigList }) => {
   const isUdTable = !!tableName?.toLowerCase()?.startsWith("ud");
   const isTable = isNumber(tableId);
+
+  const betaTable = getBetaTable({ tableName, tableId, tableConfigList });
+
+  // beta table can't be seen the dictionary entrance.
+  if (betaTable) {
+    return null;
+  }
 
   return (
     <div className="flex align-center">
@@ -35,4 +45,8 @@ const TableDictionary = ({ tableName, tableId }) => {
   );
 };
 
-export default TableDictionary;
+const mapStateToProps = state => ({
+  tableConfigList: getTableConfigList(state),
+});
+
+export default connect(mapStateToProps, null)(TableDictionary);
