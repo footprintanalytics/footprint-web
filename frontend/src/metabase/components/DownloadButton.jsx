@@ -7,7 +7,7 @@ import { color } from "metabase/lib/colors";
 import { extractQueryParams } from "metabase/lib/urls";
 import Icon from "metabase/components/Icon";
 import Label from "metabase/components/type/Label";
-import { getUserDownloadPermission } from "metabase/selectors/user";
+// import { getUserDownloadPermission } from "metabase/selectors/user";
 import NeedPermissionModal from "metabase/components/NeedPermissionModal";
 
 function colorForType(type) {
@@ -108,7 +108,8 @@ DownloadButton.defaultProps = {
 
 const mapStateToProps = state => {
   return {
-    canDownload: getUserDownloadPermission(state),
+    // canDownload: getUserDownloadPermission(state),
+    canDownload: true,
   };
 };
 export default connect(mapStateToProps)(DownloadButton);
