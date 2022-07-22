@@ -1,0 +1,278 @@
+.Pricing {
+  padding-bottom: 74px;
+  background-color: #fff;
+}
+
+.Pricing__title {
+  text-align: center;
+  padding: 74px 0;
+}
+
+.Pricing__title h1 {
+  font-size: 54px;
+  margin-bottom: 10px;
+}
+
+.Pricing__title p {
+  font-size: 18px;
+  margin-bottom: 0;
+}
+
+.Pricing__compare {
+  width: 1200px;
+  margin: 0 auto;
+}
+
+.Pricing__compare-head {
+  display: flex;
+  align-items: center;
+  margin-bottom: 30px;
+}
+
+.Pricing__compare-head h3 {
+  font-size: 24px;
+  flex: 2;
+}
+
+.Pricing__compare-head h4 {
+  font-size: 18px;
+  text-align: center;
+  flex: 1;
+}
+
+.Pricing__compare-body {
+}
+
+.Pricing__compare-body-list {
+}
+
+.Pricing__compare-body-list h5 {
+  font-size: 18px;
+  background-color: #f6f6fe;
+  border-radius: 4px;
+  height: 60px;
+  display: flex;
+  align-items: center;
+  padding: 0 20px;
+}
+
+.Pricing__compare-body-item {
+}
+
+.Pricing__compare-body-item li {
+  display: flex;
+  align-items: center;
+  height: 60px;
+  padding: 0 20px;
+}
+
+.Pricing__compare-body-item li h6 {
+  font-size: 16px;
+  font-weight: 400;
+  flex: 2;
+}
+
+.Pricing__compare-body-item li section {
+  flex: 1;
+  text-align: center;
+}
+
+.Pricing__compare-body-item li span {
+  font-size: 16px;
+}
+
+.Pricing__select {
+  display: flex;
+  align-items: center;
+  width: 1200px;
+  margin: 0 auto;
+  margin-bottom: 100px;
+}
+
+.Pricing__select-item {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 0 30px;
+  border: 1px solid #dcdee4;
+  border-radius: 24px;
+  height: 860px;
+  padding-top: 50px;
+}
+
+.Pricing__select-item:first-child {
+  border-right: 0;
+  border-top-right-radius: 0;
+  border-bottom-right-radius: 0;
+}
+
+.Pricing__select-item:nth-child(2) {
+  border: 2px solid #3434b2;
+  height: 920px;
+  padding-top: calc((920px - 860px) / 2px + 50px);
+}
+
+.Pricing__select-item:last-child {
+  border-left: 0;
+  border-top-left-radius: 0;
+  border-bottom-left-radius: 0;
+}
+
+.Pricing__select-item h2 {
+  font-size: 36px;
+}
+
+.Pricing__select-item p {
+  font-size: 16px;
+  text-align: center;
+  height: 52px;
+  margin-bottom: 0;
+}
+
+.Pricing__select-price {
+  height: 120px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+.Pricing__select-price-main {
+  text-align: center;
+}
+
+.Pricing__select-price-main b {
+  font-size: 48px;
+  line-height: 1;
+}
+
+.Pricing__select-item:last-child .Pricing__select-price-main b {
+  font-size: 36px;
+}
+
+.Pricing__select-price-main small {
+  font-size: 14px;
+  color: #84848a;
+  line-height: 1;
+  display: inline-block;
+  width: 43px;
+  margin-right: -43px;
+}
+
+.Pricing__select-price-sub {
+  display: block;
+  font-size: 16px;
+  margin-top: 8px;
+}
+
+.Pricing__select-price-sub i {
+  color: #f8525e;
+  font-style: normal;
+}
+
+.Pricing__select-btn {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 100%;
+  height: 130px;
+}
+
+.Pricing__select-btn .ant-btn {
+  height: 48px;
+  font-size: 18px;
+  border-radius: 4px;
+}
+
+.Pricing__select-btn a.ant-btn {
+  padding-top: 4px !important;
+}
+
+.Pricing__select-btn-tip {
+  font-size: 14px;
+  margin-top: 14px;
+  cursor: pointer;
+}
+
+.Pricing__select-btn-tip i {
+  color: #3434b2;
+  font-style: normal;
+}
+
+.Pricing__select-features {
+  width: 100%;
+  list-style: disc;
+  list-style-position: inside;
+  font-family: HelveticaNeue;
+  font-size: 16px;
+  line-height: 32px;
+  border-bottom: 1px solid #dcdee4;
+  padding-bottom: 30px;
+  margin-bottom: 30px;
+}
+
+.Pricing__select-benefits {
+  width: 100%;
+}
+
+.Pricing__select-benefits h3 {
+  font-size: 16px;
+  margin-bottom: 10px;
+}
+
+.Pricing__select-benefits ul {
+  font-size: 16px;
+  line-height: 32px;
+}
+
+.Pricing__select-benefits ul img {
+  margin-right: 16px;
+}
+
+.Pricing_modal {
+  padding: 16px;
+}
+
+.Pricing_modal h3 {
+  font-size: 24px;
+}
+
+.Pricing_modal ul {
+  margin-bottom: 40px;
+}
+
+.Pricing_modal li {
+  display: flex;
+  padding: 24px 0;
+  border-bottom: 1px solid #dcdee4;
+  cursor: pointer;
+}
+
+.Pricing_modal-option {
+  margin-left: 20px;
+}
+
+.Pricing_modal-option h4 {
+  font-size: 16px;
+  line-height: 1;
+  margin-bottom: 6px;
+}
+
+.Pricing_modal-option span {
+  font-size: 14px;
+  line-height: 1;
+}
+
+.Pricing_modal-option span i {
+  color: #f8525e;
+  font-style: normal;
+}
+
+.Pricing_modal .ant-btn {
+  display: block;
+  margin: 0 auto;
+  height: 48px;
+  border-radius: 4px;
+  font-size: 18px;
+  width: 176px;
+}

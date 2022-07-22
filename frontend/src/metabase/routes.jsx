@@ -254,7 +254,7 @@ export const getRoutes = store => (
       />
       <Route path="/protocols/:slug" component={LazyLoad.ProtocolDetail} />
 
-      <Route title={t`Pricing`} path="/pricing" component={LazyLoad.Plans} />
+      <Route title={t`Pricing`} path="/pricing" component={LazyLoad.Pricing} />
       <Route path="/about" component={LazyLoad.About} />
       <Route title={t`ZKSpace`} path="/zkspace" component={LazyLoad.Zkspace} />
       <Route title={t`News`} path="/news" component={LazyLoad.News}>

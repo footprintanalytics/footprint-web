@@ -4,8 +4,7 @@ import React from "react";
 import Modal from "metabase/components/Modal";
 import ModalContent from "metabase/components/ModalContent";
 import "./PaymentModal.css";
-import Button from "metabase/components/Button";
-import { Typography } from "antd";
+import { Typography, Button } from "antd";
 
 const PaymentCallbackModal = ({ onClose }) => {
   return (
@@ -37,7 +36,11 @@ const PaymentCallbackModal = ({ onClose }) => {
           .
         </p>
         <div className="payment-model__pay-button">
-          <Button primary onClick={() => window.location.reload()}>
+          <Button
+            type="primary"
+            size="large"
+            onClick={() => window.location.reload()}
+          >
             I have completed the payment
           </Button>
         </div>
