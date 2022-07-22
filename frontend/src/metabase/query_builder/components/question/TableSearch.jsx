@@ -1,29 +1,21 @@
 /* eslint-disable react-hooks/rules-of-hooks */
 /* eslint-disable react/prop-types */
-import React, { useEffect, useState } from "react";
+import React from "react";
 import { debounce } from "lodash";
 import * as MetabaseAnalytics from "metabase/lib/analytics";
 import Search from "antd/es/input/Search";
-import { Dropdown, Menu } from "antd";
-import moment from "moment";
-import { recentTableList } from "metabase/new-service";
 import MyPopover from "metabase/query_builder/components/MyPopover";
-import { getProject, isDefi360 } from "metabase/lib/project_info";
 
 const TableSearch = props => {
   const {
     isEditing,
     setSearchKey,
-    searchKeyValue,
     searchLoading,
-    databaseId,
-    handleSelectTable,
     databases,
     formDataSelector,
   } = props;
-  const [recentTable, setRecentTable] = useState([]);
 
-  useEffect(() => {
+  /*  useEffect(() => {
     const recentData = async () => {
       setRecentTable([]);
       const { list } = await recentTableList({
@@ -33,14 +25,14 @@ const TableSearch = props => {
       setRecentTable(list || []);
     };
     !isDefi360() && recentData();
-  }, [databaseId, setRecentTable]);
+  }, [databaseId, setRecentTable]);*/
 
   const changeHandler = debounce(val => {
     setSearchKey(val);
     MetabaseAnalytics.trackStructEvent(`question-side search ${val}`);
   }, 500);
 
-  const menu =
+  /* const menu =
     recentTable?.length && searchKeyValue?.length === 0 && !formDataSelector ? (
       <Menu className="question-side__recent">
         <div className="question-side__recent-title">Recent</div>
@@ -69,7 +61,7 @@ const TableSearch = props => {
       </Menu>
     ) : (
       <div />
-    );
+    );*/
 
   return (
     <MyPopover
@@ -79,15 +71,15 @@ const TableSearch = props => {
       delayModel
       delayShow={!!databases}
     >
-      <Dropdown overlay={menu} trigger={["click"]}>
-        <Search
-          allowClear
-          placeholder="Search dataset..."
-          onChange={e => changeHandler(e.target.value)}
-          className="question-side__search"
-          loading={searchLoading}
-        />
-      </Dropdown>
+      {/*<Dropdown overlay={menu} trigger={["click"]}>*/}
+      <Search
+        allowClear
+        placeholder="Search dataset..."
+        onChange={e => changeHandler(e.target.value)}
+        className="question-side__search"
+        loading={searchLoading}
+      />
+      {/*</Dropdown>*/}
     </MyPopover>
   );
 };
