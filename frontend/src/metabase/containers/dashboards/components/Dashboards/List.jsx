@@ -53,7 +53,11 @@ const List = ({
   const params = isProtocol()
     ? { protocol_name: protocolName }
     : {
-        ...getListQueryParams(router.location.query),
+        ...getListQueryParams({
+          ...router.location.query,
+          user,
+          params: router.params,
+        }),
         ...(name && { name: name }),
       };
 
