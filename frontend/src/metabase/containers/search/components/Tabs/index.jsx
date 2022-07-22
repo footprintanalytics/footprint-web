@@ -44,6 +44,10 @@ const Index = ({
 
   const isFavoritesTab = model === "favorite";
 
+  const isCreatorAndOwner = () => {
+    return isCreator() && router?.params?.name === user?.name;
+  };
+
   const tabData = [
     {
       key: "all",
@@ -116,13 +120,22 @@ const Index = ({
 
   const getUrl = model => {
     const linkFunc = isSearch() ? getSearchQueryLink : getCreatorQueryLink;
+    const getSortBy = () => {
+      if (model === "favorite") {
+        return "favorite_time";
+      }
+      if (isCreatorAndOwner()) {
+        return "created_at";
+      }
+      return "views";
+    };
     return linkFunc({
       ...router?.location?.query,
       model,
       current: 1,
       q: !isFavoritesTab ? router?.location?.query?.q : "",
       sortDirection: sortMap.descend,
-      sortBy: "views",
+      sortBy: getSortBy(),
     });
   };
 
