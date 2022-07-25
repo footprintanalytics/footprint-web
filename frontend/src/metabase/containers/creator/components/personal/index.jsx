@@ -88,7 +88,7 @@ const Index = ({ router, user, name }) => {
         )}
         <div className="creator__personal-cell">
           {userName && (
-            <div style={{ display: "flex" }}>
+            <div style={{ display: "flex", alignItems: "center" }}>
               <h3 style={{ WebkitBoxOrient: "vertical" }}>{userName}</h3>
               <VipIcon vipInfo={data.vipInfo} />
             </div>
@@ -115,7 +115,7 @@ const Index = ({ router, user, name }) => {
               >
                 <Button icon={<EditFilled />}>Edit Profile</Button>
               </Link>
-              {get(data, "vipInfo.type") !== "pro" && (
+              {get(data, "vipInfo.type") !== "business" && (
                 <Link
                   to="/pricing"
                   target="_blank"

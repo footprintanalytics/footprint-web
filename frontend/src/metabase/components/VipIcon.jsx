@@ -8,6 +8,7 @@ const VipIcon = ({ user }) => {
   const type = vipInfo && vipInfo.type;
   switch (type) {
     case VipLevel.BASIC:
+    case VipLevel.BUSINESS:
       return (
         <img
           alt="icon_vip_basic"
@@ -16,6 +17,7 @@ const VipIcon = ({ user }) => {
         />
       );
     case VipLevel.PRO:
+    case VipLevel.ENTERPRISE:
       return (
         <img
           alt="icon_vip_pro"
