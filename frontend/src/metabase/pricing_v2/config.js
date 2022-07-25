@@ -9,12 +9,12 @@ export const getSubscribeOptions = () => [
   {
     title: "$299 for Monthly Subscription",
     selected: false,
-    productId: "6100d2153ad9a2001e40b607",
+    productId: "6100d209444d4f0017c1008e",
   },
   {
     title: "$29 for 7-day Trial",
     selected: false,
-    productId: "6100d2153ad9a2001e40b607",
+    productId: "61013c30e0276a0010950ff9",
   },
 ];
 
