@@ -383,10 +383,10 @@ export const loadAppConfig = params => {
   return GET(`api/v1/config`, params, { silent: true });
 };
 
-export const cardDownload = (params, config) => {
-  const { cardId, parameters, type } = params;
-  const formData = new FormData();
-  formData.append("parameters", parameters || "");
-  formData.append("type", type);
-  return POST(`api/v1/card/${cardId}/download`, formData, config);
+export const cardDownload = ({ cardId, parameters, type }) => {
+  return POST(
+    `api/v1/card/${cardId}/download`,
+    { parameters, type },
+    { silent: true },
+  );
 };

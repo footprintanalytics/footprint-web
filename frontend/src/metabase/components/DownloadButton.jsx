@@ -72,11 +72,8 @@ const DownloadButton = ({
           {renderModal()}
           <Box
             onClick={async () => {
-              const config = {
-                headers: { "Content-Type": "multipart/form-data" },
-              };
               try {
-                await cardDownload(params, config);
+                await cardDownload(params);
               } catch (error) {
                 setNeedPermissionModal(true);
               }
