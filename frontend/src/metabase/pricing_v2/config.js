@@ -31,7 +31,7 @@ export const getComparePlans = user => ({
       btnAction: "sign",
       btnDisabled: user?.id,
       features: [
-        "Access to 90-days data",
+        // "Access to 90-days data",
         "1G data limit per query",
         "CSV upload 5 times",
       ],
@@ -60,7 +60,7 @@ export const getComparePlans = user => ({
       btnAction: "subscribe",
       btnDisabled: user && user.vipInfo?.type !== "free",
       features: [
-        "Access to full history data",
+        // "Access to full history data",
         "10G data limit per query",
         "Unlimited CSV uploads",
         "Unlimited API uploads",
@@ -83,7 +83,7 @@ export const getComparePlans = user => ({
       btnText: "Talk to us",
       btnLink: "https://discord.gg/3HYaR6USM7",
       features: [
-        "Access to full history data",
+        // "Access to full history data",
         "30G data limit per query",
         "Customized data",
         "Data API (download data)",
