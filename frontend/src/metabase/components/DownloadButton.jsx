@@ -10,6 +10,7 @@ import Label from "metabase/components/type/Label";
 // import { getUserDownloadPermission } from "metabase/selectors/user";
 import NeedPermissionModal from "metabase/components/NeedPermissionModal";
 import { cardDownload } from "metabase/new-service";
+import { message } from "antd";
 
 function colorForType(type) {
   switch (type) {
@@ -72,6 +73,7 @@ const DownloadButton = ({
           {renderModal()}
           <Box
             onClick={async () => {
+              const hide = message.loading("Downloading...", 0);
               const config = {
                 headers: { "Content-Type": "multipart/form-data" },
                 silent: true,
@@ -83,6 +85,8 @@ const DownloadButton = ({
                 await cardDownload(params, config);
               } catch (error) {
                 setNeedPermissionModal(true);
+              } finally {
+                hide();
               }
             }}
           >
