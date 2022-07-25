@@ -116,9 +116,9 @@ const Zkspace = props => {
               or the dashboard you created.
             </div>
             <div className="zkspace__item-todo">
-              2. You can also retweet this tweet from @Footprint_DeFi:
+              2. You can also retweet this tweet from @Footprint_Data:
               <ExternalLink
-                href="https://twitter.com/Footprint_DeFi/status/1486882251954528257?s=20&t=JPNHJwoSkBamxZxtd1Eosw"
+                href="https://twitter.com/Footprint_Data/status/1486882251954528257?s=20&t=JPNHJwoSkBamxZxtd1Eosw"
                 target="_blank"
                 style={{ marginLeft: 4 }}
               >
@@ -145,7 +145,7 @@ const Zkspace = props => {
               </Button>
             </ExternalLink>
             <ExternalLink
-              href={"https://twitter.com/Footprint_DeFi"}
+              href={"https://twitter.com/Footprint_Data"}
               target="_blank"
             >
               <Button icon="twitter_oppo" size={32} color={"#fff"} borderless>
