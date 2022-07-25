@@ -39,8 +39,8 @@ export default class ShareButton extends Component {
             url={shareUrl}
             title={shareTitle}
             hashtags={shareTag}
-            via={"Footprint_DeFi"}
-            related={["Footprint_DeFi"]}
+            via={"Footprint_Data"}
+            related={["Footprint_Data"]}
           >
             <Share.TwitterIcon size={32} round />
           </Share.TwitterShareButton>
