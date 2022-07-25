@@ -26,7 +26,11 @@
 .Pricing__compare-head {
   display: flex;
   align-items: center;
-  margin-bottom: 30px;
+  position: sticky;
+  top: 60px;
+  background-color: #fff;
+  padding: 30px 0;
+  border-bottom: 1px solid #f6f6fe;
 }
 
 .Pricing__compare-head h3 {
