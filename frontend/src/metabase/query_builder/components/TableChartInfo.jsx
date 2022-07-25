@@ -72,7 +72,7 @@ const TableChartInfo = ({
         <li key={table}>
           {table}:
           <Link
-            to="https://docs.footprint.network/data-1/data-model"
+            to="https://docs.footprint.network/data/data-sources"
             target="_blank"
             style={{
               size: 11,
@@ -94,7 +94,7 @@ const TableChartInfo = ({
         <li key={table.id}>
           {table.name}:
           <Link
-            to="https://docs.footprint.network/data-1/data-model"
+            to="https://docs.footprint.network/data/naming-convention"
             target="_blank"
             style={{
               size: 11,
