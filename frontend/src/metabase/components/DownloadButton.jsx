@@ -9,6 +9,7 @@ import Icon from "metabase/components/Icon";
 import Label from "metabase/components/type/Label";
 // import { getUserDownloadPermission } from "metabase/selectors/user";
 import NeedPermissionModal from "metabase/components/NeedPermissionModal";
+import { cardDownload } from "metabase/new-service";
 
 function colorForType(type) {
   switch (type) {
@@ -65,6 +66,27 @@ const DownloadButton = ({
     </Flex>
   );
   if (canDownload) {
+    if (url.includes("api/v1")) {
+      return (
+        <>
+          {renderModal()}
+          <Box
+            onClick={async () => {
+              const config = {
+                headers: { "Content-Type": "multipart/form-data" },
+              };
+              try {
+                await cardDownload(params, config);
+              } catch (error) {
+                setNeedPermissionModal(true);
+              }
+            }}
+          >
+            {element}
+          </Box>
+        </>
+      );
+    }
     return (
       <Box>
         <form method={method} action={url}>
