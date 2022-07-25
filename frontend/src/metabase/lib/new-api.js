@@ -34,10 +34,16 @@ axios.interceptors.request.use(config => {
 });
 
 axios.interceptors.response.use(
-  response => {
+  async response => {
     const time = getTime() - response.config.requestime;
     reportAPI(response.config.url, true, time, response.status, "OK");
     const { data, config, headers } = response;
+    if (data instanceof Blob) {
+      const text = await data.text();
+      if (text.includes('"code":-1')) {
+        return Promise.reject(text);
+      }
+    }
     if (headers["content-type"] === "application/octet-stream") {
       saveStream(headers, data);
       return data;
