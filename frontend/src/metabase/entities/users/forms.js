@@ -35,7 +35,7 @@ const USER_INFO_FIELD: () => FormFieldDefinition[] = () => [
   {
     name: "twitter",
     title: t`Twitter`,
-    placeholder: "@Footprint_DeFi or https://twitter.com/Footprint_DeFi",
+    placeholder: "@Footprint_Data or https://twitter.com/Footprint_Data",
   },
   {
     name: "telegram",

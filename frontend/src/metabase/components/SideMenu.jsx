@@ -159,7 +159,7 @@ const SideBarBottomButtonPanel = ({ collapsed }) => {
         <Icon name="medium" size={20} color={color("svg-color")} />
       </ExternalLink>
       <Box ml={20} mt={15} />
-      <ExternalLink href={"https://twitter.com/Footprint_DeFi"} target="_blank">
+      <ExternalLink href={"https://twitter.com/Footprint_Data"} target="_blank">
         <Icon name="twitter" size={20} color={color("svg-color")} />
       </ExternalLink>
     </Flex>

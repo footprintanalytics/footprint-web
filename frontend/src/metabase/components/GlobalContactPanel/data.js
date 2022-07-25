@@ -12,7 +12,7 @@ export const socialData = [
   {
     icon: "twitter",
     label: "Twitter",
-    url: "https://twitter.com/Footprint_DeFi",
+    url: "https://twitter.com/Footprint_Data",
   },
   {
     label: "Docs",

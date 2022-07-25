@@ -95,7 +95,7 @@ const footers = [
       },
       {
         label: "Twitter",
-        url: "https://twitter.com/Footprint_DeFi",
+        url: "https://twitter.com/Footprint_Data",
       },
       {
         label: "Medium",
