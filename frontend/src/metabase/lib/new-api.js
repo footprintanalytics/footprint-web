@@ -40,7 +40,7 @@ axios.interceptors.response.use(
     const { data, config, headers } = response;
     if (data instanceof Blob) {
       const text = await data.text();
-      if (text.includes('"code":-1')) {
+      if (text.includes('"code":1')) {
         return Promise.reject(text);
       }
     }
