@@ -3,12 +3,30 @@ import axios from "axios";
 import { message } from "antd";
 import api from "metabase/lib/api";
 import { reportAPI } from "metabase/lib/arms";
+import { saveAs } from "file-saver";
 
 axios.defaults.baseURL = api.basename;
 axios.defaults.headers.put["Content-Type"] = "application/json; charset=utf-8";
 
 const getTime = () => {
   return Date.now();
+};
+
+const saveStream = (headers, data) => {
+  const filename = headers["content-disposition"]
+    ?.match(/".*"/)[0]
+    ?.replace(/"/g, "");
+  let blob;
+  if (filename.endsWith("csv")) {
+    blob = new Blob([data]);
+  } else if (filename.endsWith("xlsx")) {
+    blob = new Blob([data], { type: "application/octet-stream" });
+  } else if (filename.endsWith("json")) {
+    blob = new Blob([JSON.stringify(data, null, 2)], {
+      type: "application/json",
+    });
+  }
+  saveAs(blob, filename);
 };
 
 axios.interceptors.request.use(config => {
@@ -19,7 +37,11 @@ axios.interceptors.response.use(
   response => {
     const time = getTime() - response.config.requestime;
     reportAPI(response.config.url, true, time, response.status, "OK");
-    const { data, config } = response;
+    const { data, config, headers } = response;
+    if (headers["content-type"] === "application/octet-stream") {
+      saveStream(headers, data);
+      return data;
+    }
     if (data.code) {
       if (!config.silent) {
         message.error(data.message);

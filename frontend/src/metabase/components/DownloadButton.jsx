@@ -74,7 +74,11 @@ const DownloadButton = ({
             onClick={async () => {
               const config = {
                 headers: { "Content-Type": "multipart/form-data" },
+                silent: true,
               };
+              if (params.type === "xlsx") {
+                config.responseType = "blob";
+              }
               try {
                 await cardDownload(params, config);
               } catch (error) {
