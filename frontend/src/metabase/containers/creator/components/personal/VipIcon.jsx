@@ -19,12 +19,12 @@ const VipIcon = ({ vipInfo }) => {
   switch (type) {
     case VipLevel.BASIC:
     case VipLevel.BUSINESS:
+    case VipLevel.PRO:
       return renderData({
         pic: "icon_vip_basic.png",
         text: capitalize(type),
         className: "vip-icon__basic",
       });
-    case VipLevel.PRO:
     case VipLevel.ENTERPRISE:
       return renderData({
         pic: "icon_vip_pro.png",

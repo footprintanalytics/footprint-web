@@ -9,6 +9,7 @@ const VipIcon = ({ user }) => {
   switch (type) {
     case VipLevel.BASIC:
     case VipLevel.BUSINESS:
+    case VipLevel.PRO:
       return (
         <img
           alt="icon_vip_basic"
@@ -16,7 +17,6 @@ const VipIcon = ({ user }) => {
           src={getOssUrl("icon_vip_basic.png")}
         />
       );
-    case VipLevel.PRO:
     case VipLevel.ENTERPRISE:
       return (
         <img
