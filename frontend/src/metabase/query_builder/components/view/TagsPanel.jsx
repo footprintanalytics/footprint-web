@@ -1,6 +1,6 @@
 import React from "react";
 import { connect } from "react-redux";
-import { Tag, Input, Tooltip } from "antd";
+import { Tag, Input, Tooltip, Skeleton } from "antd";
 import { PlusOutlined } from "../../../lib/ant-icon";
 import { addTagging, deleteTag, getEntityTag } from "metabase/new-service";
 import PropTypes from "prop-types";
@@ -12,8 +12,8 @@ import { deviceInfo } from "metabase-lib/lib/Device";
 
 class TagsPanel extends React.Component {
   state = {
-    tagEntityList: [],
-    seoTagEntityList: [],
+    tagEntityList: null,
+    seoTagEntityList: null,
     inputVisible: false,
     inputValue: "",
     editInputValue: "",
@@ -77,10 +77,13 @@ class TagsPanel extends React.Component {
   };
 
   getTagData = async () => {
+    const { showSeoTagEntityList } = this.props;
     const entityId = `${this.props.tagEntityId}`;
     const [tagEntityList, seoTagEntityList] = await Promise.all([
       getEntityTag({ entityId, entityTypeNsName: this.props.type }),
-      getEntityTag({ entityId, entityTypeNsName: `seo_${this.props.type}` }),
+      showSeoTagEntityList
+        ? getEntityTag({ entityId, entityTypeNsName: `seo_${this.props.type}` })
+        : null,
     ]);
     this.setState({ tagEntityList, seoTagEntityList });
   };
@@ -128,7 +131,7 @@ class TagsPanel extends React.Component {
   };
 
   canAdd = ({ tagName, entityId, entityTypeNsName, entityNsName }) => {
-    return !this.state.tagEntityList.find(
+    return !this.state.tagEntityList?.find(
       item =>
         item.tagName === tagName &&
         item.entityId === entityId &&
@@ -163,18 +166,28 @@ class TagsPanel extends React.Component {
       inputValue,
       hover,
     } = this.state;
-    const { tagEntityId, isEditPermission, user, type } = this.props;
+    const {
+      tagEntityId,
+      isEditPermission,
+      user,
+      type,
+      showSkeleton,
+    } = this.props;
 
     let keywords;
-    if (seoTagEntityList.length) {
-      keywords = seoTagEntityList.map(item => item.tagName).join(", ");
+    if (seoTagEntityList?.length) {
+      keywords = seoTagEntityList?.map(item => item.tagName).join(", ");
     } else {
-      if (tagEntityList.length) {
-        keywords = tagEntityList.map(item => item.tagName).join(", ");
+      if (tagEntityList?.length) {
+        keywords = tagEntityList?.map(item => item.tagName).join(", ");
       }
     }
 
     const isMobile = deviceInfo().isMobile;
+
+    if (showSkeleton && !this.state.tagEntityList) {
+      return <Skeleton active />;
+    }
 
     return (
       <>
@@ -299,12 +312,16 @@ TagsPanel.propTypes = {
   type: PropTypes.string,
   isEditPermission: PropTypes.bool,
   canClick: PropTypes.bool,
+  showSkeleton: PropTypes.bool,
+  showSeoTagEntityList: PropTypes.bool,
 };
 
 TagsPanel.defaultProps = {
   isEditPermission: true,
   type: "",
   canClick: true,
+  showSkeleton: false,
+  showSeoTagEntityList: false,
 };
 
 const mapStateToProps = state => {

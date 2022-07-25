@@ -2,13 +2,14 @@
 import React, { useCallback, useEffect, useState } from "react";
 import { Button, message, Table } from "antd";
 import EditUserUpgradeModal from "metabase/containers/market/upgrade/compoment/edit";
+import EditUserTagModal from "metabase/containers/market/upgrade/compoment/tag";
 import { updateVipLevel, userList } from "metabase/new-service";
 
 const VipList = props => {
   const { user, vip, searchText, current, setCurrent } = props;
   const [dataSource, setDataSource] = useState([]);
-  const [visible, setVisible] = useState();
-  const [currentItem, setCurrentItem] = useState({});
+  const [vipUpgradeItem, setVipUpgradeItem] = useState({});
+  const [tagItem, setTagItem] = useState({});
   const [total, setTotal] = useState(0);
   const pageSize = 10;
 
@@ -61,15 +62,25 @@ const VipList = props => {
       // eslint-disable-next-line react/display-name
       render: item => {
         return (
-          <a
-            onClick={e => {
-              e.preventDefault();
-              setCurrentItem(item);
-              setVisible(true);
-            }}
-          >
-            <Button type="primary">Upgrade</Button>
-          </a>
+          <div className="flex">
+            <a
+              onClick={e => {
+                e.preventDefault();
+                setVipUpgradeItem(item);
+              }}
+            >
+              <Button type="primary">Upgrade</Button>
+            </a>
+            <span className="ml1" />
+            <a
+              onClick={e => {
+                e.preventDefault();
+                setTagItem(item);
+              }}
+            >
+              <Button type="ghost">Tags</Button>
+            </a>
+          </div>
         );
       },
     },
@@ -100,11 +111,11 @@ const VipList = props => {
         dataSource={dataSource}
         columns={columns}
       />
-      {visible && (
+      {vipUpgradeItem?.id && (
         <EditUserUpgradeModal
           user={user}
           vip={vip}
-          item={currentItem}
+          item={vipUpgradeItem}
           onSubmit={(value, id) => {
             const data = {
               userId: id,
@@ -112,12 +123,20 @@ const VipList = props => {
               days: parseInt(value.days),
             };
             editApi(data);
-            setCurrentItem({});
-            setVisible(false);
+            setVipUpgradeItem({});
           }}
           onClose={() => {
-            setCurrentItem({});
-            setVisible(false);
+            setVipUpgradeItem({});
+          }}
+        />
+      )}
+      {tagItem?.id && (
+        <EditUserTagModal
+          user={user}
+          vip={vip}
+          item={tagItem}
+          onClose={() => {
+            setTagItem({});
           }}
         />
       )}

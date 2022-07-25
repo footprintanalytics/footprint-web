@@ -450,6 +450,7 @@ export default class Dashboard extends Component {
         tagEntityId={this.props.dashboard.entityId || this.props.dashboard.id}
         isEditPermission={!this.props.isEditing && canEdit}
         type="dashboard"
+        showSeoTagEntityList={true}
       />
     );
   };
