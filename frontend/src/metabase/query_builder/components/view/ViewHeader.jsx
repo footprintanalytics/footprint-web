@@ -557,7 +557,9 @@ export class ViewTitleHeader extends React.Component {
                           shouldUpdateUrl: false,
                         });
                       } else {
-                        runQuestionQuery();
+                        runQuestionQuery({
+                          ignoreCache: true,
+                        });
                       }
                     } else {
                       runQuestionQuery({
