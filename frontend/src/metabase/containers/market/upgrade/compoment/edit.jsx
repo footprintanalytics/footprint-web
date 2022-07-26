@@ -14,10 +14,13 @@ const EditUserUpgradeModal = props => {
   const renderTypeSelectData = () => {
     return (
       <React.Fragment>
-        <Select.Option value="business" disabled={type === "enterprise"}>
+        <Select.Option
+          value="business"
+          // disabled={type === "enterprise"}
+        >
           business
         </Select.Option>
-        <Select.Option value="enterprise">enterprise</Select.Option>
+        {/* <Select.Option value="enterprise">enterprise</Select.Option> */}
       </React.Fragment>
     );
   };
