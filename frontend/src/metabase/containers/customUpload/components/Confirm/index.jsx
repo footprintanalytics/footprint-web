@@ -11,6 +11,7 @@ import { mockPrepareData } from "../../utils/mock";
 import TableName from "./TableName";
 import TablePreview from "./TablePreview";
 import { useDebounce } from "ahooks";
+import NeedPermissionModal from "metabase/components/NeedPermissionModal";
 
 const Confirm = ({
   prepareData = mockPrepareData,
@@ -24,6 +25,7 @@ const Confirm = ({
   const checkMutate = useMutation(checkTableName);
   const confirmMutate = useMutation(uploadCSVConfirm);
   const debouncedTableName = useDebounce(tableName, { wait: 500 });
+  const [needPermissionModal, setNeedPermissionModal] = useState(false);
 
   useEffect(() => {
     if (!debouncedTableName) return;
@@ -31,37 +33,49 @@ const Confirm = ({
   }, [debouncedTableName]);
 
   return (
-    <Step
-      title="Step 2 of 2: Make sure the data looks right"
-      desc="Please make sure that Footprint interprets your data correctly."
-      onPrev={onPrev}
-      onNext={async () => {
-        try {
-          const { tableName, storageName, tableSchema } = prepareData;
-          const params = { tableName, storageName, tableSchema, project };
-          await confirmMutate.mutateAsync(params);
-          onNext();
-        } catch (error) {}
-      }}
-      nextText={checkMutate.isLoading ? "Checking" : "Finish Upload"}
-      disabledNext={!tableName || checkMutate.data?.result === 1}
-      loadingNext={checkMutate.isLoading || confirmMutate.isLoading}
-    >
-      <div className="custom-upload__confirm">
-        <TableName
-          value={tableName}
-          message={checkMutate.data?.message}
-          onChange={value => {
-            setTableName(value);
-            onPrepareDataChange({ ...prepareData, tableName: value });
-          }}
+    <>
+      <Step
+        title="Step 2 of 2: Make sure the data looks right"
+        desc="Please make sure that Footprint interprets your data correctly."
+        onPrev={onPrev}
+        onNext={async () => {
+          try {
+            const { tableName, storageName, tableSchema } = prepareData;
+            const params = { tableName, storageName, tableSchema, project };
+            await confirmMutate.mutateAsync(params);
+            onNext();
+          } catch (error) {
+            if (error.inclueds("upload times")) {
+              setNeedPermissionModal(true);
+            }
+          }
+        }}
+        nextText={checkMutate.isLoading ? "Checking" : "Finish Upload"}
+        disabledNext={!tableName || checkMutate.data?.result === 1}
+        loadingNext={checkMutate.isLoading || confirmMutate.isLoading}
+      >
+        <div className="custom-upload__confirm">
+          <TableName
+            value={tableName}
+            message={checkMutate.data?.message}
+            onChange={value => {
+              setTableName(value);
+              onPrepareDataChange({ ...prepareData, tableName: value });
+            }}
+          />
+          <TablePreview
+            prepareData={prepareData}
+            onPrepareDataChange={onPrepareDataChange}
+          />
+        </div>
+      </Step>
+      {needPermissionModal && (
+        <NeedPermissionModal
+          title="Upgrade your account to unlock upload"
+          onClose={() => setNeedPermissionModal(false)}
         />
-        <TablePreview
-          prepareData={prepareData}
-          onPrepareDataChange={onPrepareDataChange}
-        />
-      </div>
-    </Step>
+      )}
+    </>
   );
 };
 
