@@ -21,7 +21,7 @@ const Dragger = ({ user, setLoginModalShow, onSuccess }) => {
     withCredentials: true,
     data: { project },
     beforeUpload: () => {
-      if (user?.vipInfo?.limitDownload < 1) {
+      if (user?.limitUpload < 1) {
         setNeedPermissionModal(true);
         return false;
       }
