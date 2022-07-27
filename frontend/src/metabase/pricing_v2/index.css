@@ -280,3 +280,9 @@
   font-size: 18px;
   width: 176px;
 }
+
+.Pricing_modal .ant-checkbox-wrapper {
+  display: flex;
+  justify-content: center;
+  margin-top: 14px;
+}

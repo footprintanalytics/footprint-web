@@ -6,7 +6,7 @@ import { connect } from "react-redux";
 import { loginModalShowAction } from "metabase/redux/control";
 import { getSubscribeOptions, getComparePlans } from "./config";
 import { getOssUrl } from "metabase/lib/image";
-import { Button, Modal } from "antd";
+import { Button, Checkbox, Modal } from "antd";
 import { payProduct } from "metabase/new-service";
 import PaymentCallbackModal from "metabase/pricing/compoment/PaymentCallbackModal";
 
@@ -45,6 +45,7 @@ const PricingModal = ({ user, sign, visible, onClose }) => {
   const [options, setOptions] = useState(subscribeOptions);
   const [loading, setLoading] = useState(false);
   const [callback, setCallback] = useState(false);
+  const [auto, setAuto] = useState(true);
 
   const onPay = async () => {
     if (!user?.id) {
@@ -56,7 +57,12 @@ const PricingModal = ({ user, sign, visible, onClose }) => {
     try {
       const { productId } = options.find(item => item.selected);
       const paymentChannel = "stripe";
-      const { paymentLink } = await payProduct({ productId, paymentChannel });
+      const mode = auto ? "subscription" : "payment";
+      const { paymentLink } = await payProduct({
+        productId,
+        paymentChannel,
+        mode,
+      });
       window.open(paymentLink);
     } catch (e) {
     } finally {
@@ -111,6 +117,9 @@ const PricingModal = ({ user, sign, visible, onClose }) => {
           <Button type="primary" size="large" onClick={onPay} loading={loading}>
             Subscribe Now
           </Button>
+          <Checkbox checked={auto} onChange={e => setAuto(e.target.checked)}>
+            Automatic Renewal
+          </Checkbox>
         </div>
       </Modal>
       {callback && <PaymentCallbackModal onClose={() => setCallback(false)} />}
