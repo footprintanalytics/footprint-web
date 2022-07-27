@@ -48,14 +48,8 @@ const VipList = props => {
       key: "tags",
       width: 400,
       // eslint-disable-next-line react/display-name
-      render: tags => tags?.length ? (
-        <Tags
-          router={router}
-          list={tags.slice(0, 10)}
-        />
-      ) : (
-        "-"
-      )
+      render: tags =>
+        tags?.length ? <Tags router={router} list={tags.slice(0, 10)} /> : "-",
     },
     {
       title: "type",
