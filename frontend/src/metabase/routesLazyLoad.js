@@ -65,7 +65,7 @@ export default {
   Explore: loadable(() => import("metabase/containers/explore/index")),
   Features: loadable(() => import("metabase/containers/features/index")),
   GuestDashboard: loadable(() => import("metabase/guest/Dashboard")),
-GuestQuestion: loadable(() => import("metabase/guest/Question")),
+  GuestQuestion: loadable(() => import("metabase/guest/Question")),
   My: loadable(() => import("metabase/containers/my/index")),
   Why: loadable(() => import("metabase/containers/why/index")),
   Zkspace: loadable(() => import("metabase/containers/activity/zkspace/index")),
