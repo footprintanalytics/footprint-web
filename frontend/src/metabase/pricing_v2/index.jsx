@@ -7,13 +7,31 @@ import { loginModalShowAction } from "metabase/redux/control";
 import { getSubscribeOptions, getComparePlans } from "./config";
 import { getOssUrl } from "metabase/lib/image";
 import { Button, Checkbox, Modal } from "antd";
-import { payProduct } from "metabase/new-service";
+import { cancelSubscription, payProduct } from "metabase/new-service";
 import PaymentCallbackModal from "metabase/pricing/compoment/PaymentCallbackModal";
+import { ExclamationCircleOutlined } from "@ant-design/icons";
 
 const Pricing = ({ user, setLoginModalShow }) => {
   const [visible, setVisible] = useState(false);
+  const [loading, setLoading] = useState(false);
 
   const sign = () => setLoginModalShow({ show: true, from: "handle_pay" });
+
+  const onCancelSubscription = async () => {
+    Modal.confirm({
+      title: "Do you want to cancel automatic renewal?",
+      icon: <ExclamationCircleOutlined />,
+      confirmLoading: loading,
+      onOk: async () => {
+        setLoading(true);
+        const productId = user.vipInfo.subscriptionProductId;
+        await cancelSubscription({ productId });
+        setLoading(false);
+        location.reload();
+      },
+      onCancel: () => {},
+    });
+  };
 
   return (
     <div className="Pricing">
@@ -34,6 +52,7 @@ const Pricing = ({ user, setLoginModalShow }) => {
         user={user}
         onSign={sign}
         onSubscribe={() => setVisible(true)}
+        onCancelSubscription={onCancelSubscription}
       />
       <PricingCompare />
     </div>
@@ -127,7 +146,7 @@ const PricingModal = ({ user, sign, visible, onClose }) => {
   );
 };
 
-const PricingSelect = ({ user, onSign, onSubscribe }) => {
+const PricingSelect = ({ user, onSign, onSubscribe, onCancelSubscription }) => {
   const comparePlans = getComparePlans(user);
 
   return (
@@ -176,6 +195,16 @@ const PricingSelect = ({ user, onSign, onSubscribe }) => {
                 or skip and <i>pay yearly now</i>
               </span>
             )}
+            {item.yearlyPrice &&
+              item.btnDisabled &&
+              user?.vipInfo?.subscriptionProductId && (
+                <span
+                  className="Pricing__select-btn-tip"
+                  onClick={onCancelSubscription}
+                >
+                  <i>Cancel Automatic Renewal</i>
+                </span>
+              )}
           </div>
           <ul className="Pricing__select-features">
             {item.features.map(item => (
