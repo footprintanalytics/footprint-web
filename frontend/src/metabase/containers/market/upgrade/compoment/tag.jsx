@@ -16,7 +16,7 @@ const EditUserTagModal = props => {
         <div>Email: {item?.email}</div>
         <div className="mt1" />
         <TagsPanel
-          tagEntityId={item?.id}
+          tagEntityId={item?.metabaseId}
           isEditPermission={isMarket || isAdmin}
           type="user"
           showSkeleton={true}

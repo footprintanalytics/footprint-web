@@ -4,9 +4,10 @@ import { Button, message, Table } from "antd";
 import EditUserUpgradeModal from "metabase/containers/market/upgrade/compoment/edit";
 import EditUserTagModal from "metabase/containers/market/upgrade/compoment/tag";
 import { updateVipLevel, userList } from "metabase/new-service";
+import Tags from "metabase/containers/dashboards/components/Tags";
 
 const VipList = props => {
-  const { user, vip, searchText, current, setCurrent } = props;
+  const { user, vip, router, searchText, current, setCurrent } = props;
   const [dataSource, setDataSource] = useState([]);
   const [vipUpgradeItem, setVipUpgradeItem] = useState({});
   const [tagItem, setTagItem] = useState({});
@@ -40,6 +41,21 @@ const VipList = props => {
       title: "email",
       dataIndex: "email",
       key: "email",
+    },
+    {
+      title: "tags",
+      dataIndex: "tags",
+      key: "tags",
+      width: 400,
+      // eslint-disable-next-line react/display-name
+      render: tags => tags?.length ? (
+        <Tags
+          router={router}
+          list={tags.slice(0, 10)}
+        />
+      ) : (
+        "-"
+      )
     },
     {
       title: "type",
@@ -136,6 +152,7 @@ const VipList = props => {
           vip={vip}
           item={tagItem}
           onClose={() => {
+            getData(searchText || "", current);
             setTagItem({});
           }}
         />
