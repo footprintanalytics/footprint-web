@@ -84,7 +84,12 @@ const DownloadButton = ({
               try {
                 await cardDownload(params, config);
               } catch (error) {
-                setNeedPermissionModal(true);
+                if (
+                  typeof error === "string" &&
+                  error.includes("download times")
+                ) {
+                  setNeedPermissionModal(true);
+                }
               } finally {
                 hide();
               }
