@@ -7,10 +7,12 @@ import { saveAs } from "file-saver";
 import { getProject } from "metabase/lib/project_info";
 import { loginModalShowAction } from "metabase/redux/control";
 import { connect } from "react-redux";
+import NeedPermissionModal from "metabase/components/NeedPermissionModal";
 
 const Dragger = ({ user, setLoginModalShow, onSuccess }) => {
   const project = getProject();
   const [prepareRes, setPrepareRes] = useState({});
+  const [needPermissionModal, setNeedPermissionModal] = useState(false);
 
   const props = {
     action: "/api/v1/custom/data/upload/csv/prepare",
@@ -18,6 +20,12 @@ const Dragger = ({ user, setLoginModalShow, onSuccess }) => {
     showUploadList: false,
     withCredentials: true,
     data: { project },
+    beforeUpload: () => {
+      if (!user?.vipInfo && user?.limitUpload < 1) {
+        setNeedPermissionModal(true);
+        return false;
+      }
+    },
     onChange: ({ file }) => {
       setPrepareRes(file);
       if (file?.response?.code) return message.error(file.response.message);
@@ -26,16 +34,24 @@ const Dragger = ({ user, setLoginModalShow, onSuccess }) => {
   };
 
   return (
-    <div className="custom-upload__prepare-dragger">
-      <Upload.Dragger {...props}>
-        <UploadBrowse
-          prepareRes={prepareRes}
-          user={user}
-          setLoginModalShow={setLoginModalShow}
+    <>
+      <div className="custom-upload__prepare-dragger">
+        <Upload.Dragger {...props}>
+          <UploadBrowse
+            prepareRes={prepareRes}
+            user={user}
+            setLoginModalShow={setLoginModalShow}
+          />
+          <DownloadTemplate />
+        </Upload.Dragger>
+      </div>
+      {needPermissionModal && (
+        <NeedPermissionModal
+          title="Upgrade your account to unlock upload"
+          onClose={() => setNeedPermissionModal(false)}
         />
-        <DownloadTemplate />
-      </Upload.Dragger>
-    </div>
+      )}
+    </>
   );
 };
 

@@ -91,11 +91,13 @@
 
 .payment-model__pay-button {
   text-align: center;
+  margin: 48px 0 24px 0;
 }
 
-.payment-model__pay-button .Button {
-  min-width: 160px;
-  margin: 48px 0 24px 0;
+.payment-model__pay-button .ant-btn {
+  height: 48px;
+  font-size: 18px;
+  border-radius: 4px;
 }
 
 .payment-model__select {

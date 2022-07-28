@@ -122,8 +122,12 @@ const UnsavedQueryButton = ({
 
 const SavedQueryButton = ({ type, result: { json_query = {} }, card }) => (
   <DownloadButton
-    url={`api/card/${card.id}/query/${type}`}
-    params={{ parameters: JSON.stringify(json_query.parameters) }}
+    url={`api/v1/card/${card.id}/download`}
+    params={{
+      parameters: JSON.stringify(json_query.parameters),
+      type,
+      cardId: card.id,
+    }}
     extensions={[type]}
   >
     {type}

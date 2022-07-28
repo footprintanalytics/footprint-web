@@ -1,42 +1,27 @@
 .vip-icon {
   position: relative;
-  width: 80px;
+  height: 28px;
   margin-left: 12px;
   display: flex;
   align-items: center;
-  height: 56px;
-}
-
-.vip-icon__bg {
-  background: white;
   border-radius: 14px;
-  position: absolute;
-  width: 80px;
-  height: 28px;
-  top: 14px;
-  margin: 0 2px;
 }
 
 .vip-icon__img {
   height: 34px;
   width: 30px;
-  position: absolute;
 }
 
 .vip-icon__text {
-  height: 40px;
-  width: 56px;
-  position: absolute;
-  right: 0;
-  top: 17.5px;
-  text-align: center;
+  padding-left: 10px;
+  padding-right: 20px;
 }
 
 .vip-icon__basic {
   color: #24a8fe;
 }
 
-.vip-icon__basic .vip-icon__bg {
+.vip-icon__basic.vip-icon {
   background: #d9f3ff;
 }
 
@@ -44,6 +29,6 @@
   color: #f99b04;
 }
 
-.vip-icon__pro .vip-icon__bg {
+.vip-icon__pro.vip-icon {
   background: #fff2d4;
 }

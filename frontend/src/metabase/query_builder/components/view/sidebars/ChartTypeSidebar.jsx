@@ -100,14 +100,14 @@ const ChartTypeSidebar = ({
                     visualization.isSensible(result.data, props.query)
                   }
                   onClick={() => {
-                    if (
-                      visualization.checkPermisson &&
-                      visualization.checkPermisson() &&
-                      !canUse
-                    ) {
-                      setShowVip(true);
-                      return;
-                    }
+                    // if (
+                    //   visualization.checkPermisson &&
+                    //   visualization.checkPermisson() &&
+                    //   !canUse
+                    // ) {
+                    //   setShowVip(true);
+                    //   return;
+                    // }
                     question
                       .setDisplay(type)
                       .lockDisplay(true) // prevent viz auto-selection

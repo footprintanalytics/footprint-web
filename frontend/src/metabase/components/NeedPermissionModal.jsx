@@ -44,18 +44,13 @@ export default class NeedPermissionModal extends Component {
             </div>
             <Link
               className="Button Button--primary text-centered"
-              style={{
-                width: 200,
-                height: 50,
-                margin: "auto",
-                lineHeight: "30px",
-              }}
+              style={{ width: 200, margin: "auto" }}
               onClick={() => {
                 if (isDefi360()) {
                   message.info("Coming soon.");
                   return;
                 }
-                window.location.replace("/pricing");
+                window.location.href = "/pricing";
                 afterChangeLocation && afterChangeLocation();
               }}
             >
