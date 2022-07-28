@@ -57,7 +57,7 @@ export const getComparePlans = user => ({
       unit: "month",
       yearlyPrice: "$239",
       yearlySaving: "20%",
-      btnText: "Subscribe Now",
+      btnText: "$29 for 7-day Trial",
       btnAction: "subscribe",
       btnDisabled: user && user.vipInfo?.type !== "free",
       features: [
