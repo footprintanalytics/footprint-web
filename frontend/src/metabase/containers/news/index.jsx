@@ -30,7 +30,8 @@ const News = props => {
 
   const categoryList = routes
     .find(item => item.path === indexPath)
-    .childRoutes.map(item => ({
+    .childRoutes.filter(item => !item.hidden)
+    .map(item => ({
       label: item.title,
       path: item.path,
       selected: location.pathname.includes(item.path),
