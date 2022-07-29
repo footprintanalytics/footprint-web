@@ -40,7 +40,7 @@ axios.interceptors.response.use(
     const { data, config, headers } = response;
     if (data instanceof Blob) {
       const text = await data.text();
-      if (text.includes('"code":1')) {
+      if (text.includes('"code":-1')) {
         return Promise.reject(text);
       }
     }
@@ -89,6 +89,7 @@ function errorHandle(err) {
   } else {
     const time = getTime() - err.config.requestime;
     reportAPI(err.config.url, false, time, err.code || 602, err.message);
+    message.error("Service exception, please contact the administrator");
   }
 }
 
