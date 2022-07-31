@@ -288,13 +288,6 @@ export default class DashCard extends Component {
             zIndex: 2,
           }}
         >
-          {showChartInfo && (
-            <TableChartInfo
-              tableName={dashcard?.card?.table_name}
-              tableId={dashcard?.card?.table_id}
-              card={dashcard?.card}
-            />
-          )}
           {showEdit && editAction && (
             <Tooltip key="ChartEdit" tooltip={t`Edit`}>
               <a
@@ -350,6 +343,17 @@ export default class DashCard extends Component {
               >
                 <Icon name={"duplicate"} size={14} color={"#9AA0AF"} />
               </a>
+            </Tooltip>
+          )}
+          {showChartInfo && (
+            <Tooltip key="ChartInfo" tooltip={t`Chart Info`}>
+              <TableChartInfo
+                dashboard={dashboard}
+                card={dashcard?.card}
+                dashcard={dashcard}
+                tableName={dashcard?.card?.table_name}
+                tableId={dashcard?.card?.table_id}
+              />
             </Tooltip>
           )}
           {/* {!hideDownload && (
