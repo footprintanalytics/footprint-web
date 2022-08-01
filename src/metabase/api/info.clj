@@ -73,7 +73,7 @@
     (run query info)))
 
 (api/defendpoint ^:streaming POST "/card/:card-id/cache"
-  "Run the query associated with a Card."
+  "Get cache info based on card."
   [card-id :as {{:keys [parameters ignore_cache dashboard_id], :or {ignore_cache false dashboard_id nil}} :body}]
   {ignore_cache (s/maybe s/Bool)
    dashboard_id (s/maybe su/IntGreaterThanZero)}
