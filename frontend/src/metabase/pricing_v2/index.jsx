@@ -24,8 +24,7 @@ const Pricing = ({ user, setLoginModalShow }) => {
       confirmLoading: loading,
       onOk: async () => {
         setLoading(true);
-        const productId = user.vipInfo.subscriptionProductId;
-        await cancelSubscription({ productId });
+        await cancelSubscription();
         setLoading(false);
         location.reload();
       },
@@ -197,7 +196,7 @@ const PricingSelect = ({ user, onSign, onSubscribe, onCancelSubscription }) => {
             )}
             {item.yearlyPrice &&
               item.btnDisabled &&
-              user?.vipInfo?.subscriptionProductId && (
+              user?.stripeSubscribeStatus === "enable" && (
                 <span
                   className="Pricing__select-btn-tip"
                   onClick={onCancelSubscription}

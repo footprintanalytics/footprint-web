@@ -391,6 +391,6 @@ export const cardDownload = (params, config) => {
   return POST(`api/v1/card/${cardId}/download`, formData, config);
 };
 
-export const cancelSubscription = params => {
-  return POST(`api/v1/payment/subscription/cancel`, params);
+export const cancelSubscription = () => {
+  return POST(`api/v1/payment/subscription/cancel`);
 };
