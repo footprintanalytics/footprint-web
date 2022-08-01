@@ -42,6 +42,7 @@ import { AddToolPopover } from "./Dashboard/DashboardEmptyState/DashboardEmptySt
 import * as dashboardActions from "metabase/dashboard/actions";
 import { replaceTemplateCardUrl } from "metabase/guest/utils";
 import TableChartInfo from "metabase/query_builder/components/TableChartInfo";
+import PublicMode from "metabase/modes/components/modes/PublicMode";
 
 const DATASET_USUALLY_FAST_THRESHOLD = 15 * 1000;
 
@@ -157,6 +158,7 @@ export default class DashCard extends Component {
       chartStyle,
       headerIcon,
     } = this.props;
+    console.log("this.props", this.props);
     const mainCard = {
       ...dashcard.card,
       visualization_settings: mergeSettings(
@@ -239,10 +241,17 @@ export default class DashCard extends Component {
     const hideWatermark =
       clearWatermark || isTextDisplay || isImageDisplay || isVideoDisplay;
 
-    const showPreview =
-      !showEdit && !isTextDisplay && !isImageDisplay && !isVideoDisplay;
+    const isPublic = mode && mode.name === PublicMode.name;
 
-    const showChartInfo = !isTextDisplay && !isImageDisplay && !isVideoDisplay;
+    const showPreview =
+      !isPublic &&
+      !showEdit &&
+      !isTextDisplay &&
+      !isImageDisplay &&
+      !isVideoDisplay;
+
+    const showChartInfo =
+      !isPublic && !isTextDisplay && !isImageDisplay && !isVideoDisplay;
 
     const wrappedVisualizationPadding = this.getWrappedVisualizationPadding({
       hideBackground,

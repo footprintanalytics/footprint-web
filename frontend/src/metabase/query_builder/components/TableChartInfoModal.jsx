@@ -27,7 +27,7 @@ const TableChartInfoModel = ({
     parameters: parameters,
   };
 
-  const { isLoading, data, error } = useQuery(
+  const { data, error } = useQuery(
     ["chartInfo", params],
     async () => {
       return await chartInfo(params);
@@ -37,7 +37,7 @@ const TableChartInfoModel = ({
 
   const formatDate = date => {
     if (!date) {
-      return "none";
+      return "--";
     }
     return `${moment(date)
       .utc()
@@ -45,7 +45,6 @@ const TableChartInfoModel = ({
   };
 
   const renderTableInfo = () => {
-    console.log("showInfoshowInfoshowInfo", showInfo);
     return (
       <div>
         <h1>Chart info</h1>
@@ -70,9 +69,6 @@ const TableChartInfoModel = ({
       </div>
     );
   };
-
-  console.log("isLoading", isLoading);
-  console.log("data", data);
 
   return (
     <>

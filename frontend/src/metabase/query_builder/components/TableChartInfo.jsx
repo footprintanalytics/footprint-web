@@ -14,6 +14,7 @@ import { ExclamationCircleFilled } from "@ant-design/icons";
 import TableChartInfoModel from "metabase/query_builder/components/TableChartInfoModal";
 import { getDashboardParameters } from "metabase/dashboard/actions";
 import { Popover } from "antd";
+import { trackStructEvent } from "metabase/lib/analytics";
 
 const TableChartInfo = ({
   className = "",
@@ -152,17 +153,24 @@ const TableChartInfo = ({
 
   return (
     <>
-      {dashboard ? (
+      {card ? (
         <a
           className={`html2canvas-filter ${
             showInfo ? "table-chart-info-icon" : "dash-card__button"
           } ${className}`}
           onClick={async () => {
-            const result = (await getDashboardParameters(card, dashcard))
-              .payload;
+            const result =
+              dashboard && card && dashcard
+                ? (await getDashboardParameters(card, dashcard))?.payload
+                : {};
             setShowModal(result);
+            if (dashboard) {
+              trackStructEvent("dashboard click chart info");
+            } else {
+              trackStructEvent("chart click chart info");
+            }
           }}
-          style={{ top: 2 }}
+          style={{ top: 2, height: 18 }}
         >
           <Icon
             name={"table_info"}
