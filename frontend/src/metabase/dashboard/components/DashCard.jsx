@@ -279,7 +279,6 @@ export default class DashCard extends Component {
         }
       >
         <div
-          className="dash-card__buttons"
           style={{
             textAlign: "right",
             position: "absolute",
@@ -291,13 +290,7 @@ export default class DashCard extends Component {
           {showEdit && editAction && (
             <Tooltip key="ChartEdit" tooltip={t`Edit`}>
               <a
-                className="html2canvas-filter"
-                style={{
-                  display: "inline",
-                  position: "relative",
-                  cursor: "pointer",
-                  margin: "0px 10px",
-                }}
+                className="html2canvas-filter dash-card__button"
                 onClick={() => {
                   editAction && editAction(dashcard.card);
                   trackStructEvent(`dashcard click to edit`);
@@ -310,13 +303,7 @@ export default class DashCard extends Component {
           {showPreview && (
             <Tooltip key="ChartPreview" tooltip={t`Preview`}>
               <a
-                className="html2canvas-filter"
-                style={{
-                  display: "inline",
-                  position: "relative",
-                  cursor: "pointer",
-                  margin: "0px 10px",
-                }}
+                className="html2canvas-filter dash-card__button"
                 onClick={() => {
                   replaceTemplateCardUrl(this.props, dashcard.card.id);
                   trackStructEvent(`dashcard click to preview`);
@@ -329,13 +316,7 @@ export default class DashCard extends Component {
           {!hideDuplicate && duplicateAction && (
             <Tooltip key="ChartDuplicate" tooltip={t`Duplicate`}>
               <a
-                className="html2canvas-filter"
-                style={{
-                  display: "inline",
-                  position: "relative",
-                  cursor: "pointer",
-                  margin: "0px 10px",
-                }}
+                className="html2canvas-filter dash-card__button"
                 onClick={() => {
                   duplicateAction && duplicateAction(dashcard.card);
                   trackStructEvent(`dashcard click to copy`);

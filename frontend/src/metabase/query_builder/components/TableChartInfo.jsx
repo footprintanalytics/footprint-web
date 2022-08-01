@@ -154,12 +154,15 @@ const TableChartInfo = ({
     <>
       {dashboard ? (
         <a
-          className={`html2canvas-filter table-chart-info-icon ${className}`}
+          className={`html2canvas-filter ${
+            showInfo ? "table-chart-info-icon" : "dash-card__button"
+          } ${className}`}
           onClick={async () => {
             const result = (await getDashboardParameters(card, dashcard))
               .payload;
             setShowModal(result);
           }}
+          style={{ top: 2 }}
         >
           <Icon
             name={"table_info"}
