@@ -59,7 +59,7 @@ const Pricing = ({ user, setLoginModalShow }) => {
 };
 
 const PricingModal = ({ user, sign, visible, onClose }) => {
-  const subscribeOptions = getSubscribeOptions();
+  const subscribeOptions = getSubscribeOptions(user);
   const [options, setOptions] = useState(subscribeOptions);
   const [loading, setLoading] = useState(false);
   const [callback, setCallback] = useState(false);
