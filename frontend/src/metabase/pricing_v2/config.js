@@ -15,6 +15,7 @@ export const getSubscribeOptions = () => [
     title: "$29 for 7-day Trial",
     selected: false,
     productId: "61013c30e0276a0010950ff9",
+    disabledAuto: true,
   },
 ];
 

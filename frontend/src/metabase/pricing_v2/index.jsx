@@ -64,6 +64,7 @@ const PricingModal = ({ user, sign, visible, onClose }) => {
   const [loading, setLoading] = useState(false);
   const [callback, setCallback] = useState(false);
   const [auto, setAuto] = useState(true);
+  const { disabledAuto } = options.find(item => item.selected);
 
   const onPay = async () => {
     if (!user?.id) {
@@ -75,7 +76,7 @@ const PricingModal = ({ user, sign, visible, onClose }) => {
     try {
       const { productId } = options.find(item => item.selected);
       const paymentChannel = "stripe";
-      const mode = auto ? "subscription" : "payment";
+      const mode = auto && !disabledAuto ? "subscription" : "payment";
       const { paymentLink } = await payProduct({
         productId,
         paymentChannel,
@@ -135,9 +136,11 @@ const PricingModal = ({ user, sign, visible, onClose }) => {
           <Button type="primary" size="large" onClick={onPay} loading={loading}>
             Subscribe Now
           </Button>
-          <Checkbox checked={auto} onChange={e => setAuto(e.target.checked)}>
-            Automatic Renewal
-          </Checkbox>
+          {!disabledAuto && (
+            <Checkbox checked={auto} onChange={e => setAuto(e.target.checked)}>
+              Automatic Renewal
+            </Checkbox>
+          )}
         </div>
       </Modal>
       {callback && <PaymentCallbackModal onClose={() => setCallback(false)} />}
