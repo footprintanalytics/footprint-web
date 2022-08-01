@@ -272,6 +272,7 @@ export const getRoutes = store => (
         <Route
           title={t`Daily News`}
           path="daily-news"
+          hidden
           component={props => <LazyLoad.Articles {...props} type="dailyNews" />}
         />
         <Route

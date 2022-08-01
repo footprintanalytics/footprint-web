@@ -10,12 +10,12 @@ const Featured = props => {
     <div className="news-articles__featured">
       <div style={{ flex: 1, maxWidth: 1000 }}>
         <Recommend type="article" />
-        <Recommend
+        {/*<Recommend
           title="Daily News"
           type="dailyNews"
           seeAllLink="/news/daily-news"
           icon="recommendDailyNews"
-        />
+        />*/}
         <Flash
           {...props}
           loadedMediaData={loaded => {
