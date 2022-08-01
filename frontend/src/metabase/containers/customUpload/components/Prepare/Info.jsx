@@ -12,6 +12,9 @@ const Info = () => {
           should be less than <b>1 Million</b>
         </li>
         <li>
+          The data should be within <b>30 columns</b>
+        </li>
+        <li>
           Field and file name may only contain lowercase letters, numbers, and
           underscores
         </li>
