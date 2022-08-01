@@ -1,21 +1,23 @@
 /* eslint-disable react/jsx-no-target-blank */
 /* eslint-disable react/prop-types */
 
-import React from "react";
-import { Avatar, Skeleton, Button } from "antd";
+import React, { useState } from "react";
+import { Avatar, Skeleton, Button, Modal } from "antd";
 import "./index.css";
 import { getProject } from "metabase/lib/project_info";
 import { useQuery } from "react-query";
-import { personalInfo } from "metabase/new-service";
+import { cancelSubscription, personalInfo } from "metabase/new-service";
 import { get } from "lodash";
 import VipIcon from "metabase/containers/creator/components/personal/VipIcon";
 import Link from "metabase/components/Link";
 import { trackStructEvent } from "metabase/lib/analytics";
 import { IconBack } from "metabase/components/IconBack";
 import { getOssUrl } from "metabase/lib/image";
-import { EditFilled } from "@ant-design/icons";
+import { EditFilled, ExclamationCircleOutlined } from "@ant-design/icons";
 
 const Index = ({ router, user, name }) => {
+  const [loading, setLoading] = useState(false);
+
   const totalInfo = [
     {
       title: "Dashboards",
@@ -71,6 +73,21 @@ const Index = ({ router, user, name }) => {
   const discord = get(data, "userInfo.discord");
   // const email = get(data, "userInfo.email");
 
+  const onCancelSubscription = async () => {
+    Modal.confirm({
+      title: "Do you want to cancel automatic renewal?",
+      icon: <ExclamationCircleOutlined />,
+      confirmLoading: loading,
+      onOk: async () => {
+        setLoading(true);
+        await cancelSubscription();
+        setLoading(false);
+        location.reload();
+      },
+      onCancel: () => {},
+    });
+  };
+
   return (
     <div className="creator__personal">
       <div className="creator__personal-base">
@@ -113,7 +130,9 @@ const Index = ({ router, user, name }) => {
                 to="/account/profile"
                 onClick={() => trackStructEvent("creator click edit")}
               >
-                <Button icon={<EditFilled />}>Edit Profile</Button>
+                <Button type="primary" ghost icon={<EditFilled />}>
+                  Edit Profile
+                </Button>
               </Link>
               {get(data, "vipInfo.type") !== "business" && (
                 <Link
@@ -123,6 +142,11 @@ const Index = ({ router, user, name }) => {
                 >
                   <Button>Upgrade</Button>
                 </Link>
+              )}
+              {user?.stripeSubscribeStatus === "enable" && (
+                <Button onClick={onCancelSubscription}>
+                  Cancel Automatic Renewal
+                </Button>
               )}
             </div>
           )}
