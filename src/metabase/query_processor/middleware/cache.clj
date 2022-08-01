@@ -26,7 +26,8 @@
             [metabase.query-processor.util :as qputil]
             [metabase.util :as u]
             [metabase.util.i18n :refer [trs]])
-  (:import org.eclipse.jetty.io.EofException))
+  (:import org.eclipse.jetty.io.EofException
+           java.util.Base64))
 
 (comment backend.db/keep-me)
 
@@ -224,9 +225,15 @@
         running the query, satisfying this requirement.)
      *  The result *rows* of the query must be less than `query-caching-max-kb` when serialized (before compression)."
   [qp]
-  (fn [query rff context]
-    (let [cacheable? (is-cacheable? query)]
-      (log/tracef "Query is cacheable? %s" (boolean cacheable?))
-      (if cacheable?
-        (run-query-with-cache qp query rff context)
-        (qp query rff context)))))
+  (fn [{:keys [cache-ttl middleware info], :as query} rff context]
+    (if (:get-the-cache-info? middleware)
+      (context/reducef rff context {:query_hash_base64 (.encodeToString (Base64/getEncoder) (qputil/query-hash query))} [])
+      (let [cacheable? (is-cacheable? query)]
+        (log/tracef "Query is cacheable? %s" (boolean cacheable?))
+        (if cacheable?
+          (run-query-with-cache qp query rff context)
+          (qp query rff context))
+        )
+      )
+    )
+  )
