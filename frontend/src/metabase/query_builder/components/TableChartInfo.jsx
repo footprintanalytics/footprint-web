@@ -27,7 +27,6 @@ const TableChartInfo = ({
   dashboard,
   getDashboardParameters,
 }) => {
-  console.log("TableChartInfo", dashboard, card);
   const nativeQuery =
     card?.dataset_query?.type === "native" &&
     get(card, "dataset_query.native.query");
