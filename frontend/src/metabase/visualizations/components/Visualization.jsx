@@ -56,12 +56,13 @@ import type {
 import Metadata from "metabase-lib/lib/metadata/Metadata";
 import { memoize } from "metabase-lib/lib/utils";
 import { connect } from "react-redux";
-import DataUpdateTime from "metabase/components/DataUpdateTime";
 import "./Visualization.css";
 import { isDefi360 } from "metabase/lib/project_info";
 import { getOssUrl } from "metabase/lib/image";
 import { Avatar } from "antd";
 import ErrorGuide from "metabase/query_builder/components/ErrorGuide";
+import TableChartInfo from "metabase/query_builder/components/TableChartInfo";
+import PublicMode from "metabase/modes/components/modes/PublicMode";
 
 type Props = {
   rawSeries: RawSeries,
@@ -422,6 +423,7 @@ export default class Visualization extends React.PureComponent {
       replacementContent,
       onOpenChartSettings,
       dashcard,
+      mode,
     } = this.props;
     const { visualization } = this.state;
     const small = width < 330;
@@ -559,6 +561,7 @@ export default class Visualization extends React.PureComponent {
       dashcard?.visualization_settings?.virtual_card?.display === "image";
     const isVideo =
       dashcard?.visualization_settings?.virtual_card?.display === "video";
+    const isPublic = mode && mode.name === PublicMode.name;
 
     return (
       <div
@@ -566,9 +569,25 @@ export default class Visualization extends React.PureComponent {
         className={cx(className, "flex flex-column full-height")}
         style={{ ...style, position: "relative" }}
       >
-        {showDataUpdateTime && !isEditing && !Utils.isCoin360() && (
-          <DataUpdateTime />
+        {!isPublic && showDataUpdateTime && !isEditing && !Utils.isCoin360() && (
+          <div className="Visualization__table-chart-info">
+            <Tooltip key="ChartInfo" tooltip={t`Chart Info`}>
+              <TableChartInfo
+                className=""
+                style={{ width: 30 }}
+                card={series && series.length > 0 ? series[0]?.card : null}
+                dashcard={dashcard}
+                tableName={dashcard?.card?.table_name}
+                tableId={
+                  series && series.length > 0 ? series[0]?.card?.table_id : null
+                }
+              />
+            </Tooltip>
+          </div>
         )}
+        {/*{showDataUpdateTime && !isEditing && !Utils.isCoin360() && (
+          <DataUpdateTime />
+        )}*/}
         {/* {!hideWatermark && !isDefi360() && <div className="waterMarkHome" />} */}
         {!hideWatermark &&
           !isDefi360() &&
@@ -668,14 +687,15 @@ export default class Visualization extends React.PureComponent {
                 <div className="h4 text-bold mb1">{t`Still Waiting...`}</div>
                 {isSlow === "usually-slow" ? (
                   <div>
-                    {expectedDuration > 0 && jt`This usually takes an average of ${(
-                      <span
-                        key="expectedDuration"
-                        style={{ whiteSpace: "nowrap" }}
-                      >
-                        {duration(expectedDuration)}
-                      </span>
-                    )}.`}
+                    {expectedDuration > 0 &&
+                      jt`This usually takes an average of ${(
+                        <span
+                          key="expectedDuration"
+                          style={{ whiteSpace: "nowrap" }}
+                        >
+                          {duration(expectedDuration)}
+                        </span>
+                      )}.`}
                     <br />
                     {t`(This is a bit long for a dashboard)`}
                   </div>

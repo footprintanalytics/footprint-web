@@ -96,3 +96,9 @@
   height: 20px;
   margin-right: 4px;
 }
+
+.Visualization__table-chart-info {
+  display: flex;
+  justify-content: end;
+  margin: 0 20px;
+}

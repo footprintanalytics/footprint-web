@@ -1,13 +1,26 @@
 .dash-card__buttons {
   display: none;
 }
+.dash-card__button {
+  display: none;
+  position: relative;
+  cursor: pointer;
+  margin: 0 10px;
+}
 
 .Card:hover .dash-card__buttons {
   display: flex;
 }
 
+.Card:hover .dash-card__button {
+  display: inline;
+}
+
 @media screen and (--footprint-breakpoint-max-mobile) {
   .dash-card__buttons {
+    display: none !important;
+  }
+  .dash-card__button {
     display: none !important;
   }
   .LegendLabel {
