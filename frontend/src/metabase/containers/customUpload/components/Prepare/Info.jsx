@@ -16,6 +16,9 @@ const Info = () => {
           underscores
         </li>
         <li>The data will be visible to everyone</li>
+        <li>
+          The data should be within <b>30 columns</b>
+        </li>
       </ul>
       <Table
         prepareData={{
