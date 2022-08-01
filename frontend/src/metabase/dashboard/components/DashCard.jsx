@@ -158,7 +158,6 @@ export default class DashCard extends Component {
       chartStyle,
       headerIcon,
     } = this.props;
-    console.log("this.props", this.props);
     const mainCard = {
       ...dashcard.card,
       visualization_settings: mergeSettings(
