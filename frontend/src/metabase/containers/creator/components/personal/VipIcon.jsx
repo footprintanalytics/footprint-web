@@ -7,14 +7,14 @@ import cx from "classnames";
 import { capitalize } from "lodash";
 import dayjs from "dayjs";
 
-const VipIcon = ({ vipInfo }) => {
+const VipIcon = ({ vipInfo, isOwner }) => {
   const renderData = ({ pic, text, className }) => {
     return (
       <div className={cx("vip-icon", className)}>
         <img className="vip-icon__img" alt={pic} src={getOssUrl(pic)} />
         <div className="vip-icon__text">
           {text}
-          {vipInfo?.validEndDate ? (
+          {isOwner && vipInfo?.validEndDate ? (
             <> to {dayjs(vipInfo.validEndDate).format("YYYY-MM-DD")}</>
           ) : (
             ""

@@ -109,7 +109,10 @@ const Index = ({ router, user, name }) => {
           {userName && (
             <div style={{ display: "flex", alignItems: "center" }}>
               <h3 style={{ WebkitBoxOrient: "vertical" }}>{userName}</h3>
-              <VipIcon vipInfo={data.vipInfo} />
+              <VipIcon
+                vipInfo={data.vipInfo}
+                isOwner={user?.id === get(data, "userInfo.metabaseId")}
+              />
             </div>
           )}
           {desc && (
