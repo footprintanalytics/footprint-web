@@ -6,14 +6,33 @@ import { connect } from "react-redux";
 import { loginModalShowAction } from "metabase/redux/control";
 import { getSubscribeOptions, getComparePlans } from "./config";
 import { getOssUrl } from "metabase/lib/image";
-import { Button, Modal } from "antd";
-import { payProduct } from "metabase/new-service";
+import { Button, Checkbox, Modal } from "antd";
+import { cancelSubscription, payProduct } from "metabase/new-service";
 import PaymentCallbackModal from "metabase/pricing/compoment/PaymentCallbackModal";
+import { ExclamationCircleOutlined } from "@ant-design/icons";
+import { slack } from "metabase/lib/slack";
 
 const Pricing = ({ user, setLoginModalShow }) => {
   const [visible, setVisible] = useState(false);
+  const [loading, setLoading] = useState(false);
 
   const sign = () => setLoginModalShow({ show: true, from: "handle_pay" });
+
+  const onCancelSubscription = async () => {
+    Modal.confirm({
+      title: "Do you want to cancel automatic renewal?",
+      icon: <ExclamationCircleOutlined />,
+      confirmLoading: loading,
+      onOk: async () => {
+        setLoading(true);
+        await cancelSubscription();
+        setLoading(false);
+        slack([{ label: "Cancel Subscription", value: user?.email }]);
+        location.reload();
+      },
+      onCancel: () => {},
+    });
+  };
 
   return (
     <div className="Pricing">
@@ -34,6 +53,7 @@ const Pricing = ({ user, setLoginModalShow }) => {
         user={user}
         onSign={sign}
         onSubscribe={() => setVisible(true)}
+        onCancelSubscription={onCancelSubscription}
       />
       <PricingCompare />
     </div>
@@ -41,10 +61,12 @@ const Pricing = ({ user, setLoginModalShow }) => {
 };
 
 const PricingModal = ({ user, sign, visible, onClose }) => {
-  const subscribeOptions = getSubscribeOptions();
+  const subscribeOptions = getSubscribeOptions(user);
   const [options, setOptions] = useState(subscribeOptions);
   const [loading, setLoading] = useState(false);
   const [callback, setCallback] = useState(false);
+  const [auto, setAuto] = useState(true);
+  const { disabledAuto } = options.find(item => item.selected);
 
   const onPay = async () => {
     if (!user?.id) {
@@ -54,10 +76,20 @@ const PricingModal = ({ user, sign, visible, onClose }) => {
     }
     setLoading(true);
     try {
-      const { productId } = options.find(item => item.selected);
+      const { productId, title } = options.find(item => item.selected);
       const paymentChannel = "stripe";
-      const { paymentLink } = await payProduct({ productId, paymentChannel });
+      const mode = auto && !disabledAuto ? "subscription" : "payment";
+      const { paymentLink } = await payProduct({
+        productId,
+        paymentChannel,
+        mode,
+      });
       window.open(paymentLink);
+      slack([
+        { label: "Pay", value: user?.email },
+        { label: "Mode", value: mode },
+        { label: "Title", value: title },
+      ]);
     } catch (e) {
     } finally {
       setLoading(false);
@@ -111,6 +143,11 @@ const PricingModal = ({ user, sign, visible, onClose }) => {
           <Button type="primary" size="large" onClick={onPay} loading={loading}>
             Subscribe Now
           </Button>
+          {!disabledAuto && (
+            <Checkbox checked={auto} onChange={e => setAuto(e.target.checked)}>
+              Automatic Renewal
+            </Checkbox>
+          )}
         </div>
       </Modal>
       {callback && <PaymentCallbackModal onClose={() => setCallback(false)} />}
@@ -118,7 +155,7 @@ const PricingModal = ({ user, sign, visible, onClose }) => {
   );
 };
 
-const PricingSelect = ({ user, onSign, onSubscribe }) => {
+const PricingSelect = ({ user, onSign, onSubscribe, onCancelSubscription }) => {
   const comparePlans = getComparePlans(user);
 
   return (
@@ -167,6 +204,16 @@ const PricingSelect = ({ user, onSign, onSubscribe }) => {
                 or skip and <i>pay yearly now</i>
               </span>
             )}
+            {item.yearlyPrice &&
+              item.btnDisabled &&
+              user?.stripeSubscribeStatus === "enable" && (
+                <span
+                  className="Pricing__select-btn-tip"
+                  onClick={onCancelSubscription}
+                >
+                  <i>Cancel Automatic Renewal</i>
+                </span>
+              )}
           </div>
           <ul className="Pricing__select-features">
             {item.features.map(item => (

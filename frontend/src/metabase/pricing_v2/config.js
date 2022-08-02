@@ -1,22 +1,35 @@
-export const getSubscribeOptions = () => [
-  {
-    title: "$2,868 for Yearly Subscription",
-    yearlyPrice: "$239",
-    yearlySaving: "20%",
-    selected: true,
-    productId: "6100d2153ad9a2001e40b607",
-  },
-  {
-    title: "$299 for Monthly Subscription",
-    selected: false,
-    productId: "6100d209444d4f0017c1008e",
-  },
-  {
-    title: "$29 for 7-day Trial",
-    selected: false,
-    productId: "61013c30e0276a0010950ff9",
-  },
-];
+export const getSubscribeOptions = user => {
+  const options = [
+    {
+      title: "$2,868 for Yearly Subscription",
+      yearlyPrice: "$239",
+      yearlySaving: "20%",
+      selected: true,
+      productId: "6100d2153ad9a2001e40b607",
+    },
+    {
+      title: "$299 for Monthly Subscription",
+      selected: false,
+      productId: "6100d209444d4f0017c1008e",
+    },
+    {
+      title: "$29 for 7-day Trial",
+      selected: false,
+      productId: "61013c30e0276a0010950ff9",
+      disabledAuto: true,
+    },
+  ];
+
+  if (user?.groups.includes("Inner")) {
+    options.push({
+      title: "$1 for Monthly Subscription (Test)",
+      selected: false,
+      productId: "6100d04cf2c78d001ee5d494",
+    });
+  }
+
+  return options;
+};
 
 export const getComparePlans = user => ({
   title: "Compare plans",
