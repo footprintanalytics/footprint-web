@@ -187,14 +187,16 @@
 
 (defn- tableUpdatedTime
   [card-id]
+  (log/info "tableUpdatedTime url" (str (site-url) "/api/v1/dataDictionary/tableLastUpdate"))
   (try (let [result (client/post (str (site-url) "/api/v1/dataDictionary/tableLastUpdate")
                                  {:accept  :json
-                                  :form-params {:id card-id, :model "card"}})
-             resultMap (json/parse-string (result :body) true)]
-         (log/info "------------" "card-id" "tableLastUpdate" result)
-         (if (resultMap :data) (.toEpochMilli (.toInstant (.parse dateFormat ((resultMap :data) :tableUpdated)))) 0))
+                                  :form-params {:id card-id, :model "card"}})]
+         (log/info "------------" "tableUpdatedTime" card-id result)
+         (let [resultMap (json/parse-string (result :body) true)]
+         (log/info "------------" "tableLastUpdate" card-id resultMap)
+         (if (resultMap :data) (.toEpochMilli (.toInstant (.parse dateFormat ((resultMap :data) :tableUpdated)))) 0)))
     (catch Exception e
-      (log/info e)
+      (log/debug e)
       0
       )
     )
@@ -202,6 +204,7 @@
 
 (defn- canRunCache [duration-ms card-id]
   (let [chartUpdated (tableUpdatedTime card-id)]
+    (log/info "------------" "canRunCache" card-id (> chartUpdated @last-ran-cache) (> duration-ms (min-duration-ms)))
     (or (> chartUpdated @last-ran-cache) (> duration-ms (min-duration-ms)))
     )
   )
