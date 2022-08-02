@@ -14,6 +14,7 @@ import { trackStructEvent } from "metabase/lib/analytics";
 import { IconBack } from "metabase/components/IconBack";
 import { getOssUrl } from "metabase/lib/image";
 import { EditFilled, ExclamationCircleOutlined } from "@ant-design/icons";
+import { slack } from "metabase/lib/slack";
 
 const Index = ({ router, user, name }) => {
   const [loading, setLoading] = useState(false);
@@ -82,6 +83,7 @@ const Index = ({ router, user, name }) => {
         setLoading(true);
         await cancelSubscription();
         setLoading(false);
+        slack([{ label: "Cancel Subscription", value: user?.email }]);
         location.reload();
       },
       onCancel: () => {},

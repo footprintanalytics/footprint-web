@@ -10,6 +10,7 @@ import { Button, Checkbox, Modal } from "antd";
 import { cancelSubscription, payProduct } from "metabase/new-service";
 import PaymentCallbackModal from "metabase/pricing/compoment/PaymentCallbackModal";
 import { ExclamationCircleOutlined } from "@ant-design/icons";
+import { slack } from "metabase/lib/slack";
 
 const Pricing = ({ user, setLoginModalShow }) => {
   const [visible, setVisible] = useState(false);
@@ -26,6 +27,7 @@ const Pricing = ({ user, setLoginModalShow }) => {
         setLoading(true);
         await cancelSubscription();
         setLoading(false);
+        slack([{ label: "Cancel Subscription", value: user?.email }]);
         location.reload();
       },
       onCancel: () => {},
@@ -74,7 +76,7 @@ const PricingModal = ({ user, sign, visible, onClose }) => {
     }
     setLoading(true);
     try {
-      const { productId } = options.find(item => item.selected);
+      const { productId, title } = options.find(item => item.selected);
       const paymentChannel = "stripe";
       const mode = auto && !disabledAuto ? "subscription" : "payment";
       const { paymentLink } = await payProduct({
@@ -83,6 +85,11 @@ const PricingModal = ({ user, sign, visible, onClose }) => {
         mode,
       });
       window.open(paymentLink);
+      slack([
+        { label: "Pay", value: user?.email },
+        { label: "Mode", value: mode },
+        { label: "Title", value: title },
+      ]);
     } catch (e) {
     } finally {
       setLoading(false);
