@@ -115,6 +115,8 @@ export const UPDATE_DASHCARD_ID = "metabase/dashboard/UPDATE_DASHCARD_ID";
 export const FETCH_DASHBOARD_CARD_DATA =
   "metabase/dashboard/FETCH_DASHBOARD_CARD_DATA";
 export const FETCH_CARD_DATA = "metabase/dashboard/FETCH_CARD_DATA";
+export const GET_DASHBOARD_PARAMETERS =
+  "metabase/dashboard/GET_DASHBOARD_PARAMETERS";
 export const FETCH_DYNAMIC_PARAMS = "metabase/dashboard/FETCH_DYNAMIC_PARAMS";
 
 export const CANCEL_FETCH_DASHBOARD_CARD_DATA =
@@ -736,6 +738,40 @@ export const fetchCardData = createThunkAction(FETCH_CARD_DATA, function(
     };
   };
 });
+
+export const getDashboardParameters = createThunkAction(
+  GET_DASHBOARD_PARAMETERS,
+  function(card, dashcard) {
+    return async function(dispatch, getState) {
+      // If the dataset_query was filtered then we don't have permisison to view this card, so
+      // shortcircuit and return a fake 403
+      if (!card.dataset_query) {
+        return {
+          dashcard_id: dashcard.id,
+          card_id: card.id,
+          result: { error: { status: 403 } },
+        };
+      }
+
+      const { dashboardId, dashboards, parameterValues } = getState().dashboard;
+      const dashboard = dashboards[dashboardId];
+
+      // if we have a parameter, apply it to the card query before we execute
+      const datasetQuery = applyParameters(
+        card,
+        dashboard.parameters,
+        parameterValues,
+        dashcard && dashcard.parameter_mappings,
+      );
+
+      return {
+        dashcard_id: dashcard.id,
+        card_id: card.id,
+        parameters: datasetQuery.parameters,
+      };
+    };
+  },
+);
 
 export const markCardAsSlow = createAction(MARK_CARD_AS_SLOW, card => ({
   id: card.id,

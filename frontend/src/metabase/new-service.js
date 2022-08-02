@@ -383,6 +383,10 @@ export const loadAppConfig = params => {
   return GET(`api/v1/config`, params, { silent: true });
 };
 
+export const chartInfo = params => {
+  return POST(`api/v1/dataDictionary/chartInfo`, params);
+};
+
 export const cardDownload = (params, config) => {
   const { cardId, parameters, type } = params;
   const formData = new FormData();

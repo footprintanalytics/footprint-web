@@ -42,6 +42,7 @@ import { AddToolPopover } from "./Dashboard/DashboardEmptyState/DashboardEmptySt
 import * as dashboardActions from "metabase/dashboard/actions";
 import { replaceTemplateCardUrl } from "metabase/guest/utils";
 import TableChartInfo from "metabase/query_builder/components/TableChartInfo";
+import PublicMode from "metabase/modes/components/modes/PublicMode";
 
 const DATASET_USUALLY_FAST_THRESHOLD = 15 * 1000;
 
@@ -239,10 +240,17 @@ export default class DashCard extends Component {
     const hideWatermark =
       clearWatermark || isTextDisplay || isImageDisplay || isVideoDisplay;
 
-    const showPreview =
-      !showEdit && !isTextDisplay && !isImageDisplay && !isVideoDisplay;
+    const isPublic = mode && mode.name === PublicMode.name;
 
-    const showChartInfo = !isTextDisplay && !isImageDisplay && !isVideoDisplay;
+    const showPreview =
+      !isPublic &&
+      !showEdit &&
+      !isTextDisplay &&
+      !isImageDisplay &&
+      !isVideoDisplay;
+
+    const showChartInfo =
+      !isPublic && !isTextDisplay && !isImageDisplay && !isVideoDisplay;
 
     const wrappedVisualizationPadding = this.getWrappedVisualizationPadding({
       hideBackground,
@@ -279,7 +287,6 @@ export default class DashCard extends Component {
         }
       >
         <div
-          className="dash-card__buttons"
           style={{
             textAlign: "right",
             position: "absolute",
@@ -288,23 +295,10 @@ export default class DashCard extends Component {
             zIndex: 2,
           }}
         >
-          {showChartInfo && (
-            <TableChartInfo
-              tableName={dashcard?.card?.table_name}
-              tableId={dashcard?.card?.table_id}
-              card={dashcard?.card}
-            />
-          )}
           {showEdit && editAction && (
             <Tooltip key="ChartEdit" tooltip={t`Edit`}>
               <a
-                className="html2canvas-filter"
-                style={{
-                  display: "inline",
-                  position: "relative",
-                  cursor: "pointer",
-                  margin: "0px 10px",
-                }}
+                className="html2canvas-filter dash-card__button"
                 onClick={() => {
                   editAction && editAction(dashcard.card);
                   trackStructEvent(`dashcard click to edit`);
@@ -317,13 +311,7 @@ export default class DashCard extends Component {
           {showPreview && (
             <Tooltip key="ChartPreview" tooltip={t`Preview`}>
               <a
-                className="html2canvas-filter"
-                style={{
-                  display: "inline",
-                  position: "relative",
-                  cursor: "pointer",
-                  margin: "0px 10px",
-                }}
+                className="html2canvas-filter dash-card__button"
                 onClick={() => {
                   replaceTemplateCardUrl(this.props, dashcard.card.id);
                   trackStructEvent(`dashcard click to preview`);
@@ -336,13 +324,7 @@ export default class DashCard extends Component {
           {!hideDuplicate && duplicateAction && (
             <Tooltip key="ChartDuplicate" tooltip={t`Duplicate`}>
               <a
-                className="html2canvas-filter"
-                style={{
-                  display: "inline",
-                  position: "relative",
-                  cursor: "pointer",
-                  margin: "0px 10px",
-                }}
+                className="html2canvas-filter dash-card__button"
                 onClick={() => {
                   duplicateAction && duplicateAction(dashcard.card);
                   trackStructEvent(`dashcard click to copy`);
@@ -350,6 +332,17 @@ export default class DashCard extends Component {
               >
                 <Icon name={"duplicate"} size={14} color={"#9AA0AF"} />
               </a>
+            </Tooltip>
+          )}
+          {showChartInfo && (
+            <Tooltip key="ChartInfo" tooltip={t`Chart Info`}>
+              <TableChartInfo
+                dashboard={dashboard}
+                card={dashcard?.card}
+                dashcard={dashcard}
+                tableName={dashcard?.card?.table_name}
+                tableId={dashcard?.card?.table_id}
+              />
             </Tooltip>
           )}
           {/* {!hideDownload && (

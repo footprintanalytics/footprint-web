@@ -29,7 +29,6 @@ import { generateMobileLayout } from "./grid/utils";
 import AddSeriesModal from "./AddSeriesModal/AddSeriesModal";
 import RemoveFromDashboardModal from "./RemoveFromDashboardModal";
 import DashCard from "./DashCard";
-import DataUpdateTime from "metabase/components/DataUpdateTime";
 import LazyLoad from "react-lazyload";
 import { Skeleton } from "antd";
 import { getOrderedCards } from "metabase/dashboard/components/utils/card";
@@ -374,7 +373,7 @@ export default class DashboardGrid extends Component {
   }
 
   render() {
-    const { width, isEditing, children } = this.props;
+    const { width, children } = this.props;
     return (
       <div className="flex flex-column">
         <div className="flex layout-centered">
@@ -383,7 +382,7 @@ export default class DashboardGrid extends Component {
           {this.renderAddSeriesModal()}
         </div>
         {children}
-        {!isEditing && <DataUpdateTime />}
+        {/*{!isEditing && <DataUpdateTime />}*/}
       </div>
     );
   }
