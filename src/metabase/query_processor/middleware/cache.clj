@@ -193,7 +193,6 @@
                                   :form-params {:id card-id, :model "card"}})]
          (log/info "------------" "tableUpdatedTime" card-id result)
          (let [resultMap (json/parse-string (result :body) true)]
-         (log/info "------------" "tableLastUpdate" card-id resultMap)
          (if (resultMap :data) (.toEpochMilli (.toInstant (.parse dateFormat ((resultMap :data) :tableUpdated)))) 0)))
     (catch Exception e
       (log/debug e)
