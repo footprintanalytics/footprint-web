@@ -187,7 +187,6 @@
 
 (defn- tableUpdatedTime
   [card-id]
-  (log/info "tableUpdatedTime url" (str (site-url) "/api/v1/dataDictionary/tableLastUpdate"))
   (try (let [result (client/post (str (site-url) "/api/v1/dataDictionary/tableLastUpdate")
                                  {:accept  :json
                                   :form-params {:id card-id, :model "card"}})]
