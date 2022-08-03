@@ -25,6 +25,8 @@
             [metabase.query-processor.middleware.cache.impl :as impl]
             [metabase.query-processor.util :as qputil]
             [metabase.util :as u]
+            [clj-http.client :as client]
+            [cheshire.core :as json]
             [metabase.util.i18n :refer [trs]])
   (:import org.eclipse.jetty.io.EofException
            java.util.Base64))
@@ -62,6 +64,11 @@
   "Minimum duration it must take a query to complete in order for it to be eligible for caching."
   []
   (* (public-settings/query-caching-min-ttl) 1000))
+
+(defn- site-url
+  "site-url"
+  []
+  (public-settings/site-url))
 
 (defn- cache-results-async!
   "Save the results of a query asynchronously once they are delivered (as a byte array) to the promise channel
@@ -176,6 +183,30 @@
                         (i/short-hex-hash query-hash)))
       ::miss)))
 
+(def dateFormat (java.text.SimpleDateFormat. "yyyy-MM-dd'T'HH:mm:ss.SSS'Z'"))
+
+(defn- tableUpdatedTime
+  [card-id]
+  (try (let [result (client/post (str (site-url) "/api/v1/dataDictionary/tableLastUpdate")
+                                 {:accept  :json
+                                  :form-params {:id card-id, :model "card"}})]
+         (log/info "------------" "tableUpdatedTime" card-id result)
+         (let [resultMap (json/parse-string (result :body) true)]
+         (if (resultMap :data) (.toEpochMilli (.toInstant (.parse dateFormat ((resultMap :data) :tableUpdated)))) 0)))
+    (catch Exception e
+      (log/debug e)
+      0
+      )
+    )
+  )
+
+(defn- canRunCache [duration-ms card-id]
+  (let [chartUpdated (tableUpdatedTime card-id)]
+    (log/info "------------" "canRunCache" card-id (> chartUpdated @last-ran-cache) (> duration-ms (min-duration-ms)))
+    (or (> chartUpdated @last-ran-cache) (> duration-ms (min-duration-ms)))
+    )
+  )
+
 ;;; --------------------------------------------------- Middleware ---------------------------------------------------
 
 (defn- run-query-with-cache
@@ -196,7 +227,7 @@
             context))
       (let [duration-ms (- (System/currentTimeMillis) @last-ran-cache)
             start-time-ms (System/currentTimeMillis)]
-        (when (and result ::ok (> duration-ms (min-duration-ms)))
+        (when (and result ::ok (canRunCache duration-ms card-id))
           (((apply comp query-data-middleware) qp)
             query
             (fn [metadata]
