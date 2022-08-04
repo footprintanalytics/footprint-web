@@ -1,3 +1,4 @@
+/* eslint-disable react/prop-types */
 import React, { Component } from "react";
 
 import { connect } from "react-redux";
@@ -184,7 +185,7 @@ export default (ComposedComponent: React.Class) =>
         if (refreshPeriod && this._refreshElapsed >= refreshPeriod) {
           this._refreshElapsed = 0;
           await this.props.fetchDashboard(
-            this.props.dashboardId,
+            this.props.dashboard?.id,
             this.props.location.query,
             true,
           );
