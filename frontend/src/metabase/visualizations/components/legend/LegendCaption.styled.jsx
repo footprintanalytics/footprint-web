@@ -6,6 +6,7 @@ export const LegendCaptionRoot = styled.div`
   display: flex;
   align-items: center;
   min-width: 0;
+  max-width: 80%;
 `;
 
 export const LegendLabel = styled.div`
