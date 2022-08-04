@@ -49,9 +49,7 @@ const LegendCaption = ({
         className="fullscreen-normal-text fullscreen-night-text"
         // onClick={onSelectTitle}
       >
-        <Ellipsified style={{ maxWidth: "80%" }} className="LegendLabel">
-          {title}
-        </Ellipsified>
+        <Ellipsified className="LegendLabel">{title}</Ellipsified>
       </LegendLabel>
     );
   };
@@ -60,7 +58,7 @@ const LegendCaption = ({
     <LegendCaptionRoot className={className} data-testid="legend-caption">
       {icon && <LegendLabelIcon {...icon} />}
       {url ? (
-        <Link href={url} target="_blank" style={{ width: "100%" }}>
+        <Link href={url} target="_blank">
           <Title />
         </Link>
       ) : (
