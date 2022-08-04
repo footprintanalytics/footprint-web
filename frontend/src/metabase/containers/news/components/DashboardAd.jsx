@@ -20,14 +20,14 @@ const DashboardAd = props => {
     },
     {
       type: "list",
-      entityKey: "tableRelatedDashboards",
+      entityKey: "homeRelatedDashboards",
       title: "People also viewed",
     },
-    {
+    /*{
       type: "list",
       entityKey: "tagRelatedDashboards",
       title: "Dashboards you may be interested in",
-    },
+    },*/
   ];
 
   if (!dashboardId) {
