@@ -172,8 +172,8 @@ const TableChartInfo = ({
           style={{ top: 2, height: 18 }}
         >
           <Icon
-            name={"table_info"}
-            size={18}
+            name={"info"}
+            size={16}
             color={showInfo ? "#ff0000" : "#9AA0AF"}
           />
         </a>
