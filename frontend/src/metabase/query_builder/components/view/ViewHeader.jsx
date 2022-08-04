@@ -591,7 +591,7 @@ export class ViewTitleHeader extends React.Component {
               )}
               <div
                 className={cx("ml-auto flex align-center html2canvas-filter", {
-                  "flex-column": this.isSmallScreen(),
+                  "flex-column": this.isSmallScreen() && !isSaved,
                 })}
               >
                 {this.state.expandEdit && (
