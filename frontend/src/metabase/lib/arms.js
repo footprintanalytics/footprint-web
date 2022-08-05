@@ -29,6 +29,12 @@ try {
         ],
       },
     });
+    if (logger) {
+      logger.pipe = [
+        "setPage",
+        logger.getConfig()?.parseHash(location?.pathname),
+      ];
+    }
   }
 } catch (e) {}
 
