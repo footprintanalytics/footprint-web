@@ -1,6 +1,6 @@
 /* eslint-disable curly */
 /* eslint-disable react/prop-types */
-import React from "react";
+import React, { useState } from "react";
 import PropTypes from "prop-types";
 import { t } from "ttag";
 import { Button, Popover, Space } from "antd";
@@ -14,6 +14,7 @@ import {
   FileImageOutlined,
   YoutubeOutlined,
   FilterOutlined,
+  CloseOutlined,
 } from "@ant-design/icons";
 import { trackStructEvent } from "metabase/lib/analytics";
 
@@ -23,6 +24,8 @@ const propTypes = {
 };
 
 export const AddToolPopover = props => {
+  const [visible, setVisible] = useState(true);
+
   if (props.visible === false) return props.children;
   const dashId = props.dashboard.id;
 
@@ -30,10 +33,20 @@ export const AddToolPopover = props => {
     <Popover
       key={props.gridItemWidth + "" + props.dashId}
       getPopupContainer={props.getPopupContainer}
-      visible
+      visible={visible}
       overlayClassName="AddToolPopover"
       placement="rightTop"
       zIndex={2}
+      title={
+        <div className="AddToolPopover-title">
+          <h3>
+            <span>👋</span>Hi, now you can
+          </h3>
+          <a onClick={() => setVisible(false)}>
+            <CloseOutlined />
+          </a>
+        </div>
+      }
       content={
         <div className="AddToolPopover-content">
           <div
@@ -44,9 +57,6 @@ export const AddToolPopover = props => {
             }}
           >
             <Icon name="explore_add" size={60} color={"#3334B2"} />
-            <h3>
-              <span>👋</span>Hi, now you can
-            </h3>
           </div>
           <div className="AddToolPopover-content-r">
             <Space className="AddToolPopover-tools" direction="vertical">

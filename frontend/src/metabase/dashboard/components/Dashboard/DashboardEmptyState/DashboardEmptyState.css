@@ -23,16 +23,8 @@
   margin-right: 10px;
   cursor: pointer;
   padding: 0 30px;
-}
-
-.AddToolPopover-content-l h3 {
-  margin-top: 20px;
-  font-size: 14px;
-  white-space: nowrap;
-}
-
-.AddToolPopover-content-l h3 span {
-  margin-right: 10px;
+  height: 192px;
+  width: 192px;
 }
 
 .AddToolPopover-content-r {
@@ -44,6 +36,20 @@
 .AddToolPopover-tools .ant-btn {
   width: 100%;
   text-align: left;
+}
+
+.AddToolPopover-title {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.AddToolPopover-title h3 {
+  font-size: 14px;
+}
+
+.AddToolPopover-title h3 span {
+  margin-right: 10px;
 }
 
 .HiddenCreatePanel {
