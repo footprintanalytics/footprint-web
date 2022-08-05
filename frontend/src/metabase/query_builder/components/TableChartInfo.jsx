@@ -149,13 +149,14 @@ const TableChartInfo = ({
   const showInfo =
     tableConfigList && getShowInfo({ udTables, betaTables, upgradeTables });
   const [showModal, setShowModal] = useState(null);
+  const showRedIcon = upgradeTables && upgradeTables?.length > 0;
 
   return (
     <>
       {card ? (
         <a
           className={`html2canvas-filter ${
-            showInfo ? "table-chart-info-icon" : "dash-card__button"
+            showRedIcon ? "table-chart-info-icon" : "dash-card__button"
           } ${className}`}
           onClick={async () => {
             const result =
@@ -174,7 +175,7 @@ const TableChartInfo = ({
           <Icon
             name={"info"}
             size={16}
-            color={showInfo ? "#ff0000" : "#9AA0AF"}
+            color={showRedIcon ? "#ff0000" : "#9AA0AF"}
           />
         </a>
       ) : showInfo ? (
