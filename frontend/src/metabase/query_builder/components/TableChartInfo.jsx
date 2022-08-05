@@ -174,7 +174,7 @@ const TableChartInfo = ({
           <Icon
             name={"info"}
             size={16}
-            color={showInfo ? "#ff0000" : "#9AA0AF"}
+            color={"#9AA0AF"}
           />
         </a>
       ) : showInfo ? (
