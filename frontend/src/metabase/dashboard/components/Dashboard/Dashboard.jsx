@@ -402,6 +402,20 @@ export default class Dashboard extends Component {
     });
   };
 
+  onRefreshCache = async () => {
+    message.info("Refresh cache now...", 2);
+    await this.props.fetchDashboard(
+      this.props.dashboard?.id,
+      this.props.location.query,
+      true,
+    );
+    this.props.fetchDashboardCardData({
+      reload: true,
+      clear: true,
+      ignoreCache: true,
+    });
+  };
+
   handleRevertAction = () => {
     const { dashboard, onChangeLocation } = this.props;
     if (dashboard.id === "new") {
@@ -535,6 +549,7 @@ export default class Dashboard extends Component {
                   showNewDashboardModal={this.onShowNewDashboardModal}
                   saveAction={this.saveAction}
                   onRevert={this.onRevert}
+                  onRefreshCache={this.onRefreshCache}
                 />
               </HeaderContainer>
               <div className="flex">

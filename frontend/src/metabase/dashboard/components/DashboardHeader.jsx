@@ -103,6 +103,8 @@ const mapDispatchToProps = {
   setLoginModalShow: loginModalShowAction,
 };
 
+let lastRefreshTime = null;
+
 @connect(mapStateToProps, mapDispatchToProps)
 export default class DashboardHeader extends Component {
   constructor(props: Props) {
@@ -146,6 +148,7 @@ export default class DashboardHeader extends Component {
 
     onEditingChange: PropTypes.func.isRequired,
     onRefreshPeriodChange: PropTypes.func.isRequired,
+    onRefreshCache: PropTypes.func.isRequired,
     onNightModeChange: PropTypes.func.isRequired,
     onFullscreenChange: PropTypes.func.isRequired,
 
@@ -345,6 +348,8 @@ export default class DashboardHeader extends Component {
       onHideAddQuestionSidebar,
       showAddQuestionSidebar,
       user,
+      isEmpty,
+      onRefreshCache,
       // onCopyClick,
     } = this.props;
     const { showMediaModal } = this.state;
@@ -612,6 +617,47 @@ export default class DashboardHeader extends Component {
           </Link>,
         );
       }
+    }
+
+    if (!isEditing && !isEmpty && canEdit) {
+      buttons.push(
+        <Tooltip
+          key="refreshCache"
+          tooltip={
+            <div className="align-center" style={{ margin: "0 auto" }}>
+              Refresh cache <br />
+              (Once in a minute)
+            </div>
+          }
+        >
+          <Button
+            onlyIcon
+            className="ml1 Question-header-btn"
+            iconColor="#7A819B"
+            icon={"refresh"}
+            iconSize={16}
+            onClick={debounce(
+              () => {
+                trackStructEvent("dashboard-click-refresh-cache");
+                if (
+                  !lastRefreshTime ||
+                  new Date().getTime() - lastRefreshTime > 60000
+                ) {
+                  onRefreshCache();
+                  lastRefreshTime = new Date().getTime();
+                } else {
+                  message.info("Refresh cache once one minute...", 2);
+                }
+              },
+              1000,
+              {
+                leading: true,
+                trailing: false,
+              },
+            )}
+          />
+        </Tooltip>,
+      );
     }
 
     if (!isEditing && !isDefi360()) {
