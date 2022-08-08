@@ -11,10 +11,6 @@ import { t } from "ttag";
 import RefreshWidget from "metabase/dashboard/components/RefreshWidget";
 import Tooltip from "metabase/components/Tooltip";
 import Button from "metabase/components/Button";
-import { debounce, throttle } from "lodash";
-import _ from "underscore";
-import { trackStructEvent } from "metabase/lib/analytics";
-import { message } from "antd";
 // import { DashboardHeaderButton } from "./DashboardHeader.styled";
 
 export const getDashboardActions = (
