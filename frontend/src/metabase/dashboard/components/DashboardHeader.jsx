@@ -146,6 +146,7 @@ export default class DashboardHeader extends Component {
 
     onEditingChange: PropTypes.func.isRequired,
     onRefreshPeriodChange: PropTypes.func.isRequired,
+    onRefreshCache: PropTypes.func.isRequired,
     onNightModeChange: PropTypes.func.isRequired,
     onFullscreenChange: PropTypes.func.isRequired,
 

@@ -11,7 +11,12 @@ import { t } from "ttag";
 import RefreshWidget from "metabase/dashboard/components/RefreshWidget";
 import Tooltip from "metabase/components/Tooltip";
 import Button from "metabase/components/Button";
+import { debounce, throttle } from "lodash";
+import _ from "underscore";
+import { trackStructEvent } from "metabase/lib/analytics";
+import { message } from "antd";
 // import { DashboardHeaderButton } from "./DashboardHeader.styled";
+let lastRefreshTime = null;
 
 export const getDashboardActions = (
   self,
@@ -30,6 +35,7 @@ export const getDashboardActions = (
     setRefreshElapsedHook,
     onRefreshPeriodChange,
     onSharingClick,
+    onRefreshCache,
   },
   canEdit,
 ) => {
@@ -55,6 +61,47 @@ export const getDashboardActions = (
 
   // const isOwner =
   //   user && (user.id === dashboard.creator_id || user.is_superuser);
+
+  if (!isEditing && !isEmpty && canEdit) {
+    buttons.push(
+      <Tooltip
+        key="refreshCache"
+        tooltip={
+          <div className="align-center" style={{ margin: "0 auto" }}>
+            Refresh cache <br />
+            (Once in a minute)
+          </div>
+        }
+      >
+        <Button
+          onlyIcon
+          className="ml1 Question-header-btn"
+          iconColor="#7A819B"
+          icon={"cache"}
+          iconSize={18}
+          onClick={debounce(
+            () => {
+              trackStructEvent("dashboard-click-refresh-cache");
+              if (
+                !lastRefreshTime ||
+                new Date().getTime() - lastRefreshTime > 60000
+              ) {
+                onRefreshCache();
+                lastRefreshTime = new Date().getTime();
+              } else {
+                message.info("Refresh cache once one minute...", 2);
+              }
+            },
+            1000,
+            {
+              leading: true,
+              trailing: false,
+            },
+          )}
+        />
+      </Tooltip>,
+    );
+  }
 
   if (!isEditing && !isEmpty && !isPublic) {
     // const extraButtonClassNames =
