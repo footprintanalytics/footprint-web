@@ -87,7 +87,6 @@
 }
 
 .Nav__menu-item span {
-  margin-left: 10px;
   white-space: nowrap;
 }
 
@@ -194,7 +193,7 @@
 }
 
 .dashboards__news {
-  max-width: 300px;
+  max-width: 330px;
 }
 
 @media screen and (--footprint-breakpoint-max-pad) {

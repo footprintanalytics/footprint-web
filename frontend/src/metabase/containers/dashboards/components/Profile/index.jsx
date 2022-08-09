@@ -99,9 +99,9 @@ const Profile = props => {
           })}
         </div>
         <div className="dashboards__profile-also">
-          {hintLines.map(item => {
-            return <div key={item}>{item}</div>;
-          })}
+          {hintLines.map(item => (
+            <div key={item}>{item}</div>
+          ))}
         </div>
         <div
           className="bg-brand dashboards__profile-create footprint-primary-text"

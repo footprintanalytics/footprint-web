@@ -9,7 +9,7 @@
   padding: var(--footprint-spacing-xs) var(--footprint-spacing-s);
   border-radius: 4px;
   cursor: pointer;
-  margin: 0 var(--footprint-spacing-s);
+  margin: var(--footprint-spacing-m) var(--footprint-spacing-s) 0;
   justify-content: center;
 }
 
@@ -23,7 +23,7 @@
   font-size: 12px;
   background: #f2f2f2;
   margin: 12px;
-  padding: 10px;
+  padding: 16px;
 }
 
 .dashboards__profile-action-item {
@@ -44,11 +44,13 @@
   display: flex;
   justify-content: center;
   align-items: center;
+  margin-bottom: 8px;
 }
 
 .dashboards__profile-action-title {
   white-space: pre-line;
   text-align: center;
-  line-height: 14px;
+  line-height: 12px;
+  color: #303440;
   margin: 4px 0 0 0;
 }

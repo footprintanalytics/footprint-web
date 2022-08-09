@@ -9,6 +9,7 @@
 .dashboards__banner-container {
   max-width: 1200px;
   display: flex;
+  flex-direction: row;
   grid-gap: 22px;
 }
 
@@ -18,5 +19,22 @@
   grid-gap: 22px;
 }
 
-.dashboards__banner-right img {
+@media screen and (--footprint-breakpoint-max-pad) {
+  .dashboards__banner-container {
+    flex-direction: column;
+  }
+  .dashboards__banner-right {
+    display: flex;
+    flex-direction: row;
+    grid-gap: 22px;
+    justify-content: center;
+  }
+}
+
+@media screen and (--footprint-breakpoint-max-mobile) {
+  .dashboards__banner-container {
+    max-width: 750px;
+    flex-direction: column;
+    padding: 20px;
+  }
 }

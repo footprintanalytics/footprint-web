@@ -1,7 +1,6 @@
 /* eslint-disable react/prop-types */
 import React from "react";
 import "./index.css";
-import Recommendations from "./components/Recommendations";
 import Dashboards from "./components/Dashboards";
 import News from "./components/News";
 import HomeFooter from "metabase/containers/home/components/HomeFooter";

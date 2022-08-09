@@ -11,7 +11,8 @@
 }
 
 .dashboards__cell h2 {
-  font-size: 16px;
+  font-size: 20px;
+  font-weight: normal;
   color: #303440;
 }
 
@@ -33,7 +34,7 @@
 
 .dashboards__layout-side {
   width: 100%;
-  margin-left: 20px;
+  margin-left: 24px;
   margin-bottom: 50px;
   max-width: 330px;
 }
@@ -59,7 +60,7 @@
     padding: 0 20px;
   }
   .dashboards__cell {
-    padding: 48px 0 20px 0;
+    padding: 10px;
   }
   .dashboards__layout-side {
     width: 100%;
@@ -75,7 +76,7 @@
     padding: 20px 0;
   }
   .dashboards__cell {
-    padding: 48px 20px 20px 20px;
+    padding: 10px;
   }
   .dashboards__layout-side {
     margin-left: 0;
