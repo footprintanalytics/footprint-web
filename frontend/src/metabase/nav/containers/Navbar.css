@@ -1,15 +1,21 @@
 .Nav {
-  z-index: 4;
-  flex-shrink: 0;
-  height: 60px;
-  padding: 0 20px;
-  border-bottom: 1px solid #dcdde5;
-  position: sticky;
-  top: 0;
+  background-color: #fff;
+}
+
+.Nav__container {
+  width: 100%;
+  margin: 0 auto;
   line-height: 60px;
   align-items: center;
   justify-content: space-between;
-  background-color: #fff;
+  flex-shrink: 0;
+  z-index: 4;
+  height: 60px;
+  border-bottom: 1px solid #dcdde5;
+  position: sticky;
+  top: 0;
+  display: flex;
+  padding: 0 20px;
 }
 
 .Nav .ant-drawer-content-wrapper {
@@ -194,7 +200,7 @@
 }
 
 .dashboards__news {
-  max-width: 300px;
+  max-width: 330px;
 }
 
 @media screen and (--footprint-breakpoint-max-pad) {

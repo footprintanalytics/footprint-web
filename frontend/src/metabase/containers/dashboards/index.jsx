@@ -11,6 +11,8 @@ import MetaViewportControls from "metabase/dashboard/hoc/MetaViewportControls";
 import { compose } from "underscore";
 import title, { updateTitle } from "metabase/hoc/Title";
 import Creator from "./components/Creator";
+import Profile from "metabase/containers/dashboards/components/Profile";
+import Banner from "metabase/containers/dashboards/components/Banner";
 
 const Index = ({ router, user }) => {
   const { category } = router?.location?.query;
@@ -43,10 +45,12 @@ const Index = ({ router, user }) => {
     <>
       <Meta description={defaultDesc} keywords={keywords} title={title} />
       <div className="dashboards__wrap" data-nosnippet>
-        <Recommendations />
+        {/*<Recommendations />*/}
+        <Banner />
         <div className="dashboards__layout">
           <Dashboards user={user} router={router} />
           <div className="dashboards__layout-side">
+            <Profile />
             <Creator />
             <News />
           </div>

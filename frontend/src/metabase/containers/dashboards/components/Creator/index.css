@@ -1,9 +1,7 @@
 .dashboards__creator-list {
-  border: 1px solid #dcdee4;
-  border-radius: 4px;
-  background-color: #fff;
   height: 550px;
   overflow-y: scroll;
+  padding: 10px 0;
 }
 
 .dashboards__creator-list::-webkit-scrollbar {
@@ -14,7 +12,6 @@
   display: flex;
   align-items: center;
   justify-content: space-between;
-  border-bottom: 1px solid #dcdee4;
   padding: 12px;
 }
 
@@ -32,10 +29,15 @@
   overflow: hidden;
   white-space: nowrap;
   max-width: 170px;
+  color: #303440;
+  font-weight: normal;
+  line-height: 16px;
+  font-size: 14px;
 }
 
 .dashboards__creator-list-l time {
-  font-size: 14px;
+  font-size: 12px;
+  color: #acacb2;
 }
 
 .dashboards__creator-list-l img {
@@ -54,4 +56,13 @@
   color: #303440;
   font-size: 12px;
   line-height: 25px;
+}
+
+.dashboards__creator-list-r {
+  background: #f2f2f2;
+  color: #303440;
+  font-size: 12px;
+  width: 32px;
+  padding: 6px 0;
+  text-align: center;
 }

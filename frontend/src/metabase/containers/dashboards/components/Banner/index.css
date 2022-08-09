@@ -1,0 +1,22 @@
+.dashboards__banner {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background: #fafafc;
+  padding: 30px 0;
+}
+
+.dashboards__banner-container {
+  max-width: 1200px;
+  display: flex;
+  grid-gap: 22px;
+}
+
+.dashboards__banner-right {
+  display: flex;
+  flex-direction: column;
+  grid-gap: 22px;
+}
+
+.dashboards__banner-right img {
+}

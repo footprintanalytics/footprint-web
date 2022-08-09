@@ -11,14 +11,12 @@ const Dashboards = ({ router, user }) => {
   const tags = getDashboardQueryTags(router.location.query.tags);
 
   return (
-    <div>
-      <div className="dashboards__cell">
+    <div className="dashboards__container">
+      <div className="dashboards__cell" style={{ padding: 0 }}>
         <h2>Dashboard</h2>
-      </div>
-      <div className="dashboards__filter">
         <Category router={router} />
-        {/* <Sort router={router} /> */}
       </div>
+      <div className="dashboards__filter">{/* <Sort router={router} /> */}</div>
       <div className="dashboards__tags-filter">
         <Tags router={router} list={tags} closable />
       </div>

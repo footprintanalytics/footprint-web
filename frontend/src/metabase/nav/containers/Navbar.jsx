@@ -44,6 +44,7 @@ import ActivityZkspaceSubmitModal from "metabase/components/ActivityZkspaceSubmi
 import { isDefi360 } from "metabase/lib/project_info";
 import { color } from "metabase/lib/colors";
 import EntityMenu from "metabase/components/EntityMenu";
+import { isDashboards } from "metabase/containers/dashboards/shared/utils";
 
 const mapStateToProps = (state, props) => ({
   path: getPath(state, props),
@@ -198,63 +199,65 @@ export default class Navbar extends Component {
       // NOTE: DO NOT REMOVE `Nav` CLASS FOR NOW, USED BY MODALS, FULLSCREEN DASHBOARD, ETC
       // TODO: hide nav using state in redux instead?
       <nav className={"Nav AdminNav sm-py1"}>
-        <div className="sm-pl4 flex align-center pr1">
-          <div className="NavTitle flex align-center">
-            <Icon name={"gear"} className="AdminGear" size={22} />
-            <span className="NavItem-text ml1 hide sm-show text-bold">{t`Metabase Admin`}</span>
-          </div>
+        <div className="Nav__container">
+          <div className="sm-pl4 flex align-center pr1">
+            <div className="NavTitle flex align-center">
+              <Icon name={"gear"} className="AdminGear" size={22} />
+              <span className="NavItem-text ml1 hide sm-show text-bold">{t`Metabase Admin`}</span>
+            </div>
 
-          <ul className="sm-ml4 flex flex-full">
-            <AdminNavItem
-              name={t`Settings`}
-              path="/admin/settings"
-              currentPath={this.props.path}
-              key="admin-nav-settings"
-            />
-            <AdminNavItem
-              name={t`People`}
-              path="/admin/people"
-              currentPath={this.props.path}
-              key="admin-nav-people"
-            />
-            <AdminNavItem
-              name={t`Data Model`}
-              path="/admin/datamodel"
-              currentPath={this.props.path}
-              key="admin-nav-datamodel"
-            />
-            <AdminNavItem
-              name={t`Databases`}
-              path="/admin/databases"
-              currentPath={this.props.path}
-              key="admin-nav-databases"
-            />
-            <AdminNavItem
-              name={t`Permissions`}
-              path="/admin/permissions"
-              currentPath={this.props.path}
-              key="admin-nav-permissions"
-            />
-            {PLUGIN_ADMIN_NAV_ITEMS.map(({ name, path }) => (
+            <ul className="sm-ml4 flex flex-full">
               <AdminNavItem
-                name={name}
-                path={path}
+                name={t`Settings`}
+                path="/admin/settings"
                 currentPath={this.props.path}
-                key={`admin-nav-${name}`}
+                key="admin-nav-settings"
               />
-            ))}
-            <AdminNavItem
-              name={t`Troubleshooting`}
-              path="/admin/troubleshooting"
-              currentPath={this.props.path}
-              key="admin-nav-troubleshooting"
-            />
-          </ul>
+              <AdminNavItem
+                name={t`People`}
+                path="/admin/people"
+                currentPath={this.props.path}
+                key="admin-nav-people"
+              />
+              <AdminNavItem
+                name={t`Data Model`}
+                path="/admin/datamodel"
+                currentPath={this.props.path}
+                key="admin-nav-datamodel"
+              />
+              <AdminNavItem
+                name={t`Databases`}
+                path="/admin/databases"
+                currentPath={this.props.path}
+                key="admin-nav-databases"
+              />
+              <AdminNavItem
+                name={t`Permissions`}
+                path="/admin/permissions"
+                currentPath={this.props.path}
+                key="admin-nav-permissions"
+              />
+              {PLUGIN_ADMIN_NAV_ITEMS.map(({ name, path }) => (
+                <AdminNavItem
+                  name={name}
+                  path={path}
+                  currentPath={this.props.path}
+                  key={`admin-nav-${name}`}
+                />
+              ))}
+              <AdminNavItem
+                name={t`Troubleshooting`}
+                path="/admin/troubleshooting"
+                currentPath={this.props.path}
+                key="admin-nav-troubleshooting"
+              />
+            </ul>
 
-          {!MetabaseSettings.isPaidPlan() && <StoreLink />}
-          <ProfileLink {...this.props} />
+            {!MetabaseSettings.isPaidPlan() && <StoreLink />}
+            <ProfileLink {...this.props} />
+          </div>
+          {this.renderLoginModal()}
         </div>
-        {this.renderLoginModal()}
       </nav>
     );
   }
@@ -264,22 +267,24 @@ export default class Navbar extends Component {
       // NOTE: DO NOT REMOVE `Nav` CLASS FOR NOW, USED BY MODALS, FULLSCREEN DASHBOARD, ETC
       // TODO: hide nav using state in redux instead?
       <nav className="Nav sm-py1 relative">
-        <ul className="wrapper flex align-center">
-          <li>
-            <Link
-              to="/"
-              data-metabase-event={"Navbar;Logo"}
-              className="NavItem cursor-pointer flex align-center"
-              onClick={e => {
-                e.preventDefault();
-                this.goLink(e, "/");
-              }}
-            >
-              <LogoIcon className="text-brand my2" />
-            </Link>
-          </li>
-        </ul>
-        {this.renderLoginModal()}
+        <div className="Nav__container">
+          <ul className="wrapper flex align-center">
+            <li>
+              <Link
+                to="/"
+                data-metabase-event={"Navbar;Logo"}
+                className="NavItem cursor-pointer flex align-center"
+                onClick={e => {
+                  e.preventDefault();
+                  this.goLink(e, "/");
+                }}
+              >
+                <LogoIcon className="text-brand my2" />
+              </Link>
+            </li>
+          </ul>
+          {this.renderLoginModal()}
+        </div>
       </nav>
     );
   }
@@ -418,7 +423,7 @@ export default class Navbar extends Component {
       //   open: true,
       // },
       { url: "https://docs.footprint.network/", name: "Docs", open: true },
-      { url: `/@${user?.name}`, name: "My Profile", auth: true },
+      // { url: `/@${user?.name}`, name: "My Profile", auth: true },
       // { url: "/widget", name: "Widget" },
     ];
 
@@ -599,9 +604,9 @@ export default class Navbar extends Component {
           <Link to="/search">
             <Icon name="search" color={color("footprint-color-title")} />
           </Link>
-          <Link onClick={onCreateAction}>
+          {/*<Link onClick={onCreateAction}>
             <Icon name="add" size={12} />
-          </Link>
+          </Link>*/}
         </div>
       );
     };
@@ -612,9 +617,9 @@ export default class Navbar extends Component {
           <Link to="/search">
             <Icon name="search" color={color("footprint-color-title")} />
           </Link>
-          <Link onClick={onCreateAction}>
-            <Icon name="add" size={12} />
-          </Link>
+          {/*<Link onClick={onCreateAction}>*/}
+          {/*  <Icon name="add" size={12} />*/}
+          {/*</Link>*/}
         </div>
       );
     };
@@ -645,7 +650,7 @@ export default class Navbar extends Component {
       return (
         <div className="Nav__right">
           {this.renderLink({})}
-          <CreateMenu />
+          {/*<CreateMenu />*/}
           <React.Fragment>
             <RightMenuMobile />
             <RightMenuPad />
@@ -669,34 +674,12 @@ export default class Navbar extends Component {
 
     return (
       <div className="Nav" style={{ display: rootDisplay }}>
-        <div className="Nav__left">
-          <MobileMenuIcon />
-          <Link
-            className="Nav__logo"
-            to="/about"
-            onClick={e => {
-              e.preventDefault();
-              trackStructEvent(`navbar-click-logo`);
-              this.goLink(e, "/about");
-            }}
-          >
-            <img
-              src={getOssUrl("img_nav_logo_v5.svg")}
-              width={188}
-              height={28}
-              alt="Footprint - One Step Closer to Blockchain Insights"
-            />
-          </Link>
-          <LeftMenu />
-        </div>
-        <React.Fragment>
-          <div className="Nav__search-bar">
-            <SearchBar
-              location={location}
-              onChangeLocation={onChangeLocation}
-            />
-          </div>
-          <div className="Nav__mobile-logo">
+        <div
+          className="Nav__container"
+          style={isDashboards() ? { width: "1200px", padding: 0 } : {}}
+        >
+          <div className="Nav__left">
+            <MobileMenuIcon />
             <Link
               className="Nav__logo"
               to="/about"
@@ -707,20 +690,47 @@ export default class Navbar extends Component {
               }}
             >
               <img
-                src={getOssUrl("img_nav_logo_mobile.svg")}
-                width={40}
-                height={36}
+                src={getOssUrl("img_nav_logo_v5.svg")}
+                width={188}
+                height={28}
                 alt="Footprint - One Step Closer to Blockchain Insights"
               />
             </Link>
+            <LeftMenu />
           </div>
-        </React.Fragment>
-        <RightMenu />
-        {this.renderModal()}
-        {zkspaceDate() && this.renderSubmitAddrZkspaceModal()}
-        {this.renderSideNav()}
-        {this.renderLoginModal()}
-        {this.renderCancelFeedbackModal()}
+          <React.Fragment>
+            <div className="Nav__search-bar">
+              <SearchBar
+                location={location}
+                onChangeLocation={onChangeLocation}
+              />
+            </div>
+            <div className="Nav__mobile-logo">
+              <Link
+                className="Nav__logo"
+                to="/about"
+                onClick={e => {
+                  e.preventDefault();
+                  trackStructEvent(`navbar-click-logo`);
+                  this.goLink(e, "/about");
+                }}
+              >
+                <img
+                  src={getOssUrl("img_nav_logo_mobile.svg")}
+                  width={40}
+                  height={36}
+                  alt="Footprint - One Step Closer to Blockchain Insights"
+                />
+              </Link>
+            </div>
+          </React.Fragment>
+          <RightMenu />
+          {this.renderModal()}
+          {zkspaceDate() && this.renderSubmitAddrZkspaceModal()}
+          {this.renderSideNav()}
+          {this.renderLoginModal()}
+          {this.renderCancelFeedbackModal()}
+        </div>
       </div>
     );
   }
