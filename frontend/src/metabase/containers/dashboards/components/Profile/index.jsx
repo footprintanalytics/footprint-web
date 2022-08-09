@@ -13,7 +13,7 @@ import { isDefi360 } from "metabase/lib/project_info";
 import * as Urls from "metabase/lib/urls";
 
 const Profile = props => {
-  const { user, setLoginModalShow, push } = props;
+  const { user, setLoginModalShow, onChangeLocation } = props;
   const actions = [
     {
       title: "Create\nChart",
@@ -63,13 +63,13 @@ const Profile = props => {
           onClick={e => {
             e.preventDefault();
             if (isLogin()) {
-              push(myProfileUrl);
+              onChangeLocation(myProfileUrl);
             }
             trackStructEvent("Dashboards My profile");
           }}
         >
           <div className="dashboards__cell">
-            <h2>My profile</h2>
+            <h2>My Profile</h2>
             {">"}
           </div>
         </Link>

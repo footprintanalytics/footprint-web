@@ -1,21 +1,15 @@
 .Nav {
-  background-color: #fff;
-}
-
-.Nav__container {
-  width: 100%;
-  margin: 0 auto;
-  line-height: 60px;
-  align-items: center;
-  justify-content: space-between;
-  flex-shrink: 0;
   z-index: 4;
+  flex-shrink: 0;
   height: 60px;
+  padding: 0 20px;
   border-bottom: 1px solid #dcdde5;
   position: sticky;
   top: 0;
-  display: flex;
-  padding: 0 20px;
+  line-height: 60px;
+  align-items: center;
+  justify-content: space-between;
+  background-color: #fff;
 }
 
 .Nav .ant-drawer-content-wrapper {
@@ -108,7 +102,7 @@
 
 .Nav__search-bar {
   min-width: 100px;
-  max-width: 400px;
+  max-width: 360px;
   margin: 0 12px;
   flex: 1;
 }
@@ -200,7 +194,7 @@
 }
 
 .dashboards__news {
-  max-width: 330px;
+  max-width: 300px;
 }
 
 @media screen and (--footprint-breakpoint-max-pad) {
