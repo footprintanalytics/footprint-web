@@ -264,6 +264,8 @@ export default class DashCard extends Component {
 
     const cardDomKey = `Card--${String(dashcard.id).replace(".", "")}`;
 
+    const result = getIn(dashcardData, [dashcard.id, dashcard.card_id]) || {};
+
     return (
       <div
         id={id}
@@ -295,6 +297,11 @@ export default class DashCard extends Component {
             zIndex: 2,
           }}
         >
+          <QueryDownloadWidget
+            className="html2canvas-filter dash-card__button"
+            card={dashcard.card}
+            result={result}
+          />
           {showEdit && editAction && (
             <Tooltip key="ChartEdit" tooltip={t`Edit`}>
               <a

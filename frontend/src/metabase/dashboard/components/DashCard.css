@@ -8,6 +8,19 @@
   margin: 0 10px;
 }
 
+.dash-card__button .Question-header-btn {
+  border: 0;
+  height: initial;
+  width: initial;
+  padding: 0;
+}
+
+.dash-card__button .Question-header-btn .Icon {
+  width: 14px;
+  height: 14px;
+  color: #9aa0af;
+}
+
 .Card:hover .dash-card__buttons {
   display: flex;
 }

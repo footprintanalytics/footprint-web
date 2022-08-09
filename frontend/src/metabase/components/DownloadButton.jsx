@@ -11,6 +11,8 @@ import Label from "metabase/components/type/Label";
 import NeedPermissionModal from "metabase/components/NeedPermissionModal";
 import { cardDownload } from "metabase/new-service";
 import { message } from "antd";
+import { getUser } from "metabase/selectors/user";
+import { loginModalShowAction } from "metabase/redux/control";
 
 function colorForType(type) {
   switch (type) {
@@ -73,6 +75,10 @@ const DownloadButton = ({
           {renderModal()}
           <Box
             onClick={async () => {
+              if (!props.user?.id) {
+                props.setLoginModalShow({ show: true });
+                return;
+              }
               const hide = message.loading("Downloading...", 0);
               const config = {
                 headers: { "Content-Type": "multipart/form-data" },
@@ -145,6 +151,12 @@ const mapStateToProps = state => {
   return {
     // canDownload: getUserDownloadPermission(state),
     canDownload: true,
+    user: getUser(state),
   };
 };
-export default connect(mapStateToProps)(DownloadButton);
+
+const mapDispatchToProps = {
+  setLoginModalShow: loginModalShowAction,
+};
+
+export default connect(mapStateToProps, mapDispatchToProps)(DownloadButton);
