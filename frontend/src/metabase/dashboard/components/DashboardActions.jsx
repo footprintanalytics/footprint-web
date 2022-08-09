@@ -211,7 +211,7 @@ export const getDashboardActions = (
     }
   }
 
-  if (!isEditing && !isEmpty && canEdit) {
+  /*if (!isEditing && !isEmpty && canEdit) {
     buttons.push(
       <RefreshWidget
         key="refresh"
@@ -222,7 +222,7 @@ export const getDashboardActions = (
         onChangePeriod={onRefreshPeriodChange}
       />,
     );
-  }
+  }*/
 
   // if (!isEditing && isFullscreen) {
   //   buttons.push(
