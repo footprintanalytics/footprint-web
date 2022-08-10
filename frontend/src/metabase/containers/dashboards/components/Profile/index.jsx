@@ -36,8 +36,8 @@ const Profile = props => {
   ];
   const hintLines = [
     "You can also:",
-    "1. Duplicate chart/dashboards ",
-    "2. Change filters of charts/dashboard",
+    "1. Duplicate charts/dashboards",
+    "2. Change filters of charts/dashboards",
   ];
   const isLogin = () => {
     if (user) {
