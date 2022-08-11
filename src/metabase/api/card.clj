@@ -703,6 +703,7 @@
              context     :question
              qp-runner   qp/process-query-and-save-execution!}}]
   {:pre [(u/maybe? sequential? parameters)]}
+  (log/info "run-query-for-card-async dashboard-id" dashboard-id)
   (let [run   (or run
                   ;; param `run` can be used to control how the query is ran, e.g. if you need to
                   ;; customize the `context` passed to the QP
@@ -729,6 +730,7 @@
   [card-id :as {{:keys [parameters ignore_cache dashboard_id], :or {ignore_cache false dashboard_id nil}} :body}]
   {ignore_cache (s/maybe s/Bool)
    dashboard_id (s/maybe su/IntGreaterThanZero)}
+  (log/info "defendpoint/:card-id/query" dashboard_id ignore_cache parameters)
   (run-query-for-card-async
    card-id :api
    :parameters parameters,
