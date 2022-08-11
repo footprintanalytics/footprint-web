@@ -9,7 +9,7 @@ import Icon from "metabase/components/Icon";
 import Label from "metabase/components/type/Label";
 // import { getUserDownloadPermission } from "metabase/selectors/user";
 import NeedPermissionModal from "metabase/components/NeedPermissionModal";
-import { cardDownload } from "metabase/new-service";
+import { cardDownload, datasetDownload } from "metabase/new-service";
 import { message } from "antd";
 import { getUser } from "metabase/selectors/user";
 import { loginModalShowAction } from "metabase/redux/control";
@@ -34,6 +34,7 @@ const DownloadButton = ({
   params,
   extensions,
   canDownload,
+  mode,
   ...props
 }) => {
   const [needPermissionModal, setNeedPermissionModal] = React.useState(false);
@@ -69,7 +70,7 @@ const DownloadButton = ({
     </Flex>
   );
   if (canDownload) {
-    if (url.includes("api/v1")) {
+    if (mode) {
       return (
         <>
           {renderModal()}
@@ -82,13 +83,21 @@ const DownloadButton = ({
               const hide = message.loading("Downloading...", 0);
               const config = {
                 headers: { "Content-Type": "multipart/form-data" },
-                silent: true,
               };
               if (params.type === "xlsx") {
                 config.responseType = "blob";
               }
               try {
-                await cardDownload(params, config);
+                switch (mode) {
+                  case "saved":
+                    await cardDownload(params, config);
+                    break;
+                  case "unsaved":
+                    await datasetDownload(params, config);
+                    break;
+                  default:
+                    break;
+                }
               } catch (error) {
                 if (
                   typeof error === "string" &&
