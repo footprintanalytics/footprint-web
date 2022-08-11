@@ -6,6 +6,7 @@
             [clojure.string :as str]
             [metabase.driver :as driver]
             [metabase.util.schema :as su]
+            [metabase.api.common :as api]
             [schema.core :as s]))
 
 ;; TODO - I think most of the functions in this namespace that we don't remove could be moved to `metabase.mbql.util`
@@ -26,15 +27,20 @@
 (defn default-query->remark
   "Generates the default query remark. Exists as a separate function so that overrides of the query->remark multimethod
    can access the default value."
-  [{{:keys [executed-by query-hash], :as info} :info, query-type :type}]
-  (str "Metabase" (when executed-by
+  [{{:keys [executed-by query-hash card-id dashboard-id context], :as info} :info, query-type :type}]
+  (str "Metabase" (when card-id
                     (assert (instance? (Class/forName "[B") query-hash))
-                    (format ":: userID: %s queryType: %s queryHash: %s"
+                    (format ":: userID: %s email: %s queryType: %s card-id: %s dashboard-id: %s context: %s queryHash: %s"
                             executed-by
+                            (when executed-by (:email @api/*current-user*))
                             (case (keyword query-type)
                               :query  "MBQL"
                               :native "native")
-                            (codecs/bytes->hex query-hash)))))
+                            card-id
+                            dashboard-id
+                            context
+                            (codecs/bytes->hex query-hash)
+                            ))))
 
 (defmulti query->remark
   "Generate an appropriate remark `^String` to be prepended to a query to give DBAs additional information about the query
