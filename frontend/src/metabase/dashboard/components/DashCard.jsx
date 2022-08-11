@@ -136,6 +136,7 @@ export default class DashCard extends Component {
       : "18px 24px";
   };
 
+  // eslint-disable-next-line complexity
   render() {
     const {
       dashcard,
@@ -297,11 +298,16 @@ export default class DashCard extends Component {
             zIndex: 2,
           }}
         >
-          <QueryDownloadWidget
-            className="html2canvas-filter dash-card__button"
-            card={dashcard.card}
-            result={result}
-          />
+          {QueryDownloadWidget.shouldRender({
+            result,
+            isResultDirty: false,
+          }) && (
+            <QueryDownloadWidget
+              className="html2canvas-filter dash-card__button"
+              card={dashcard.card}
+              result={result}
+            />
+          )}
           {showEdit && editAction && (
             <Tooltip key="ChartEdit" tooltip={t`Edit`}>
               <a
