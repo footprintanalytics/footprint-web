@@ -3,6 +3,7 @@
   (:require [buddy.core.codecs :as codecs]
             [buddy.core.hash :as hash]
             [cheshire.core :as json]
+            [clojure.tools.logging :as log]
             [clojure.string :as str]
             [metabase.driver :as driver]
             [metabase.util.schema :as su]
@@ -27,20 +28,22 @@
 (defn default-query->remark
   "Generates the default query remark. Exists as a separate function so that overrides of the query->remark multimethod
    can access the default value."
-  [{{:keys [executed-by query-hash card-id dashboard-id context], :as info} :info, query-type :type}]
-  (str "Metabase" (when card-id
-                    (assert (instance? (Class/forName "[B") query-hash))
-                    (format ":: userID: %s email: %s queryType: %s card-id: %s dashboard-id: %s context: %s queryHash: %s"
-                            executed-by
-                            (when executed-by (:email @api/*current-user*))
-                            (case (keyword query-type)
-                              :query  "MBQL"
-                              :native "native")
-                            card-id
-                            dashboard-id
-                            context
-                            (codecs/bytes->hex query-hash)
-                            ))))
+  [{{:keys [executed-by query-hash card-id dashboard-id context], :as info} :info, query-type :type, aysnc-cache :aysnc-refresh-cache?}]
+  (log/info "default-query->remark" dashboard-id info)
+  (str "Metabase"
+       (format ":: userID: %s email: %s queryType: %s card-id: %s dashboard-id: %s context: %s aysnc-cache: %s"
+               executed-by
+               (when executed-by (:email @api/*current-user*))
+               (case (keyword query-type)
+                 :query  "MBQL"
+                 :native "native")
+               card-id
+               dashboard-id
+               context
+               aysnc-cache)
+       (when query-hash
+         (assert (instance? (Class/forName "[B") query-hash))
+         (format " queryHash: %s" (codecs/bytes->hex query-hash)))))
 
 (defmulti query->remark
   "Generate an appropriate remark `^String` to be prepended to a query to give DBAs additional information about the query
