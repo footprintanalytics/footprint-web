@@ -3,7 +3,6 @@
   (:require [buddy.core.codecs :as codecs]
             [buddy.core.hash :as hash]
             [cheshire.core :as json]
-            [clojure.tools.logging :as log]
             [clojure.string :as str]
             [metabase.driver :as driver]
             [metabase.util.schema :as su]
@@ -29,7 +28,6 @@
   "Generates the default query remark. Exists as a separate function so that overrides of the query->remark multimethod
    can access the default value."
   [{{:keys [executed-by query-hash card-id dashboard-id context], :as info} :info, query-type :type, aysnc-cache :aysnc-refresh-cache?}]
-  (log/info "default-query->remark" dashboard-id info)
   (str "Metabase"
        (format ":: userID: %s email: %s queryType: %s card-id: %s dashboard-id: %s context: %s aysnc-cache: %s"
                executed-by
