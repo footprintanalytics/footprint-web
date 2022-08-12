@@ -265,7 +265,7 @@ export default class DashCard extends Component {
 
     const cardDomKey = `Card--${String(dashcard.id).replace(".", "")}`;
 
-    const result = getIn(dashcardData, [dashcard.id, dashcard.card_id]) || {};
+    const result = getIn(dashcardData, [dashcard.id, dashcard.card_id]);
 
     return (
       <div
