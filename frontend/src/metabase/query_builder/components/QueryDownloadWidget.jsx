@@ -109,10 +109,11 @@ const UnsavedQueryButton = ({
   visualizationSettings,
 }) => (
   <DownloadButton
-    url={`api/dataset/${type}`}
+    mode="unsaved"
     params={{
       query: JSON.stringify(_.omit(json_query, "constraints")),
       visualization_settings: JSON.stringify(visualizationSettings),
+      type,
     }}
     extensions={[type]}
   >
@@ -122,7 +123,7 @@ const UnsavedQueryButton = ({
 
 const SavedQueryButton = ({ type, result: { json_query = {} }, card }) => (
   <DownloadButton
-    url={`api/v1/card/${card.id}/download`}
+    mode="saved"
     params={{
       parameters: JSON.stringify(json_query.parameters),
       type,

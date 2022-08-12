@@ -15,7 +15,7 @@ import ViewSection from "./ViewSection";
 import ViewButton from "./ViewButton";
 
 // import QuestionAlertWidget from "./QuestionAlertWidget";
-// import QueryDownloadWidget from "metabase/query_builder/components/QueryDownloadWidget";
+import QueryDownloadWidget from "metabase/query_builder/components/QueryDownloadWidget";
 // import QuestionEmbedWidget, {
 //   QuestionEmbedWidgetTrigger,
 // } from "metabase/query_builder/containers/QuestionEmbedWidget";
@@ -62,6 +62,7 @@ const ViewFooter = ({
   isShowingSummarySidebar,
   onEditSummary,
   onCloseSummary,
+  isDirty,
 }) => {
   if (!result || isObjectDetail) {
     return null;
@@ -153,15 +154,16 @@ const ViewFooter = ({
           //     result={result}
           //   />
           // ),
-          // QueryDownloadWidget.shouldRender({ result, isResultDirty }) && (
-          //   <QueryDownloadWidget
-          //     key="download"
-          //     className="mx1 hide sm-show"
-          //     card={question.card()}
-          //     result={result}
-          //     visualizationSettings={visualizationSettings}
-          //   />
-          // ),
+          QueryDownloadWidget.shouldRender({ result, isResultDirty }) &&
+            isDirty && (
+              <QueryDownloadWidget
+                key="download"
+                className="mx1 hide sm-show"
+                card={question.card()}
+                result={result}
+                visualizationSettings={visualizationSettings}
+              />
+            ),
           // QuestionAlertWidget.shouldRender({
           //   question,
           //   visualizationSettings,

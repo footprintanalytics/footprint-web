@@ -136,6 +136,7 @@ export default class DashCard extends Component {
       : "18px 24px";
   };
 
+  // eslint-disable-next-line complexity
   render() {
     const {
       dashcard,
@@ -264,6 +265,8 @@ export default class DashCard extends Component {
 
     const cardDomKey = `Card--${String(dashcard.id).replace(".", "")}`;
 
+    const result = getIn(dashcardData, [dashcard.id, dashcard.card_id]) || {};
+
     return (
       <div
         id={id}
@@ -295,6 +298,17 @@ export default class DashCard extends Component {
             zIndex: 2,
           }}
         >
+          {!isEditing &&
+            QueryDownloadWidget.shouldRender({
+              result,
+              isResultDirty: false,
+            }) && (
+              <QueryDownloadWidget
+                className="html2canvas-filter dash-card__button"
+                card={dashcard.card}
+                result={result}
+              />
+            )}
           {showEdit && editAction && (
             <Tooltip key="ChartEdit" tooltip={t`Edit`}>
               <a

@@ -395,6 +395,15 @@ export const cardDownload = (params, config) => {
   return POST(`api/v1/card/${cardId}/download`, formData, config);
 };
 
+export const datasetDownload = (params, config) => {
+  const { query, visualization_settings, type } = params;
+  const formData = new FormData();
+  formData.append("query", query);
+  formData.append("visualization_settings", visualization_settings);
+  formData.append("type", type);
+  return POST(`api/v1/card/dataset/download`, formData, config);
+};
+
 export const cancelSubscription = () => {
   return POST(`api/v1/payment/subscription/cancel`);
 };

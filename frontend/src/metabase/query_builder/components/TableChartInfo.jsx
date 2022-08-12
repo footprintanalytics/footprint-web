@@ -170,11 +170,11 @@ const TableChartInfo = ({
               trackStructEvent("chart click chart info");
             }
           }}
-          style={{ top: 2, height: 18 }}
+          style={{ top: 1 }}
         >
           <Icon
             name={"info"}
-            size={16}
+            size={15}
             color={showRedIcon ? "#ff0000" : "#9AA0AF"}
           />
         </a>
@@ -187,7 +187,7 @@ const TableChartInfo = ({
           <a
             className={`html2canvas-filter table-chart-info-icon ${className}`}
           >
-            <Icon name={"dialogue"} size={16} color={"#9AA0AF"} />
+            <Icon name={"dialogue"} size={15} color={"#9AA0AF"} />
           </a>
         </Popover>
       ) : (
