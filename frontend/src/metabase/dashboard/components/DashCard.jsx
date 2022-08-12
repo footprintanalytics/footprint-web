@@ -298,16 +298,17 @@ export default class DashCard extends Component {
             zIndex: 2,
           }}
         >
-          {QueryDownloadWidget.shouldRender({
-            result,
-            isResultDirty: false,
-          }) && (
-            <QueryDownloadWidget
-              className="html2canvas-filter dash-card__button"
-              card={dashcard.card}
-              result={result}
-            />
-          )}
+          {!isEditing &&
+            QueryDownloadWidget.shouldRender({
+              result,
+              isResultDirty: false,
+            }) && (
+              <QueryDownloadWidget
+                className="html2canvas-filter dash-card__button"
+                card={dashcard.card}
+                result={result}
+              />
+            )}
           {showEdit && editAction && (
             <Tooltip key="ChartEdit" tooltip={t`Edit`}>
               <a
