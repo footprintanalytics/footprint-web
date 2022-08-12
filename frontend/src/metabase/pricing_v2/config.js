@@ -83,14 +83,14 @@ export const getComparePlans = user => ({
       benefits: {
         title: "All the benefits of Free, plus:",
         list: [
-          "Keep uploaded data private",
+          "Keep uploaded data private(coming soon)",
           "Keep dashboard private",
           "Remove watermarks",
         ],
       },
     },
     {
-      label: "Enterprise",
+      label: "Team",
       value: "enterprise",
       desc: "Empower every team with reliable data",
       price: "Let's Talk",
@@ -100,7 +100,7 @@ export const getComparePlans = user => ({
         // "Access to full history data",
         "30G data limit per query",
         "Customized data",
-        "Data API (download data)",
+        // "Data API (download data)",
         "Unlimited customized alerts",
         "Unlimited customized dashboards",
       ],
@@ -108,7 +108,7 @@ export const getComparePlans = user => ({
         title: "All the benefits of Business, plus:",
         list: [
           "Customized dashboards",
-          "Customized alerts",
+          "Customized alerts(coming soon)",
           "Team cooperation(coming soon)",
         ],
       },
@@ -282,12 +282,12 @@ export const getComparePlans = user => ({
           business: "Unlimited",
           enterprise: "Unlimited",
         },
-        {
-          name: "Data API",
-          free: false,
-          business: false,
-          enterprise: true,
-        },
+        // {
+        //   name: "Data API",
+        //   free: false,
+        //   business: false,
+        //   enterprise: true,
+        // },
         {
           name: "Customized data",
           free: false,
