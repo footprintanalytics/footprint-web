@@ -229,7 +229,7 @@
             start-time-ms (System/currentTimeMillis)]
         (when (and result ::ok (canRunCache duration-ms card-id))
           (((apply comp query-data-middleware) qp)
-            query
+            (merge {:aysnc-refresh-cache? true} query)
             (fn [metadata]
               (save-results-xform
                start-time-ms metadata query-hash
