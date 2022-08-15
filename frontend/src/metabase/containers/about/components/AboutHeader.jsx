@@ -13,13 +13,14 @@ const AboutHeader = ({ router, location, user }) => {
     signTabState: "signIn",
   });
   const [search, setSearch] = useState();
-  const list = [
-    { title: "Dashboard", url: "/dashboards" },
-    { title: "Data", url: "/dashboards" },
-    { title: "Academy", url: "/academy" },
+  const leftList = [
+    { title: "GameFi", url: "/dashboards" },
+    { title: "NFT", url: "/dashboards" },
+    { title: "Analytics", url: "/dashboards" },
+  ];
+  const rightList = [
+    { title: "Research", url: "/news/featured" },
     { title: "Docs", url: "https://docs.footprint.network/" },
-    { title: "Pricing", url: "/pricing" },
-    // { title: "My Profile", url: `/@${user.name}` },
   ];
 
   return (
@@ -28,12 +29,12 @@ const AboutHeader = ({ router, location, user }) => {
         <WrapLink url="/about">
           <img
             className="About__header-logo"
-            src={getOssUrl("20220602160732.png")}
+            src={getOssUrl("img_nav_logo_v5.svg")}
             alt="Footprint Analytics"
           />
         </WrapLink>
         <ul className="About__header-nav">
-          {list.map(item => (
+          {leftList.map(item => (
             <li key={item.title}>
               <WrapLink
                 url={item.url}
@@ -62,6 +63,20 @@ const AboutHeader = ({ router, location, user }) => {
             }}
           />
         </div>
+        <ul className="About__header-nav">
+          {rightList.map(item => (
+            <li key={item.title}>
+              <WrapLink
+                url={item.url}
+                onClick={() => {
+                  trackStructEvent("About", `Nav ${item.title}`);
+                }}
+              >
+                {item.title}
+              </WrapLink>
+            </li>
+          ))}
+        </ul>
         {user ? (
           <div className="About__btn About__btn--blue">
             <WrapLink

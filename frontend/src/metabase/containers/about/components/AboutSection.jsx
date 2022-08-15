@@ -2,6 +2,7 @@
 import { Image, Skeleton } from "antd";
 import { trackStructEvent } from "metabase/lib/analytics";
 import React, { useState } from "react";
+import WrapLink from "metabase/containers/about/components/WrapLink";
 
 const AboutSection = ({
   reverse,
@@ -11,6 +12,7 @@ const AboutSection = ({
   desc,
   list,
   height,
+  exploreButton,
 }) => {
   const [sectionList, setSectionList] = useState(
     list.map((item, i) => ({ ...item, active: i === 0 })),
@@ -31,8 +33,6 @@ const AboutSection = ({
         style={height ? { height } : {}}
       >
         <div className="About__section-side">
-          <h4>{subTitle}</h4>
-          <p>{desc}</p>
           <ul>
             {sectionList.map(item => (
               <li
@@ -49,19 +49,33 @@ const AboutSection = ({
               </li>
             ))}
           </ul>
+          {exploreButton && (
+            <WrapLink url={exploreButton?.url}>
+              <div
+                className={`About__btn About__btn--lg ${exploreButton?.className}`}
+                onClick={() => trackStructEvent("About", exploreButton?.title)}
+              >
+                {exploreButton?.title}
+              </div>
+            </WrapLink>
+          )}
         </div>
-        <Image
-          key={active.title}
-          placeholder={
-            <div className="About__section-img-placeholder">
-              <Skeleton active />
-            </div>
-          }
-          preview={false}
-          className="About__section-img"
-          src={active.img}
-          alt={active.title}
-        />
+        <div className="About__section-preview">
+          <h4>{subTitle}</h4>
+          <p>{desc}</p>
+          <Image
+            key={active.title}
+            placeholder={
+              <div className="About__section-img-placeholder">
+                <Skeleton active />
+              </div>
+            }
+            preview={false}
+            className="About__section-img"
+            src={active.img}
+            alt={active.title}
+          />
+        </div>
       </div>
     </div>
   );

@@ -28,7 +28,7 @@ const AboutBuild = ({
             url={more}
             onClick={() => trackStructEvent("About", `More ${title}`)}
           >
-            More
+            {"More >"}
           </WrapLink>
         </div>
         {nav && (

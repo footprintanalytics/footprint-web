@@ -9,45 +9,8 @@ const data = {
 
   sectionList: [
     {
-      title: "We Support",
-      subTitle: "Comprehensive Analysis",
-      desc: "Footprint helps people and organizations be more data-driven",
-      list: [
-        {
-          title: "Multi-chain Analysis",
-          img: getOssUrl("20220606152520.gif"),
-        },
-        {
-          title: "Drill-down Analysis",
-          img: getOssUrl("20220606152616.gif"),
-        },
-      ],
-      height: "540px",
-    },
-    {
-      reverse: true,
-      subTitle: "Massive template inventory",
-      desc:
-        "Footprint is home to a global user group that shares insights and drives the platform’s development",
-      list: [
-        {
-          title: "Save as favorite",
-          img: getOssUrl("20220606154724.gif"),
-        },
-        {
-          title: "One-click to fork",
-          img: getOssUrl("20220606154750.gif"),
-        },
-        {
-          title: "Change filters",
-          img: getOssUrl("20220606154806.gif"),
-        },
-      ],
-      height: "455px",
-    },
-    {
-      subTitle: "Drag-and-drop charting interface",
-      desc: "Footprint makes blockchain analytics possible for anyone",
+      subTitle: "Footprint helps people and organizations be more data-driven",
+      desc: "",
       list: [
         {
           title: "No-code visualization",
@@ -63,65 +26,51 @@ const data = {
         },
       ],
       height: "455px",
+      exploreButton: {
+        title: "+ Create Dashboard",
+        url: "/dashboard/new",
+        className: "About__btn--blue mx2",
+      },
     },
+  ],
+  sectionList2: [
     {
-      reverse: true,
-      subTitle: "Upload and download data",
-      desc: "Footprint bridges on-chain and off-chain world together",
+      subTitle: "Suited for: NFT Marketplace, NFT Data Aggregator, NFT Tracker",
+      desc:
+        "Create custom displays for NFT collections from multiple networks.",
       list: [
         {
-          title: "Upload off-chain data",
-          img: getOssUrl("20220606155703.gif"),
+          title: "NFT Gallery",
+          img: getOssUrl("20220606154848.gif"),
         },
         {
-          title: "Download data",
-          img: getOssUrl("20220606155721.gif"),
+          title: "Find Potential NFTs",
+          img: getOssUrl("20220606154902.gif"),
         },
         {
-          title: "Save charts and dashboards",
-          img: getOssUrl("20220606155739.gif"),
+          title: "Research & Invest",
+          img: getOssUrl("20220606154919.gif"),
+        },
+        {
+          title: "Whale Tracking",
+          img: getOssUrl("20220606154919.gif"),
+        },
+        {
+          title: "GameFi Portal",
+          img: getOssUrl("20220606154919.gif"),
+        },
+        {
+          title: "Custom",
+          img: getOssUrl("20220606154919.gif"),
         },
       ],
       height: "455px",
+      exploreButton: {
+        title: "Get a Free Trial",
+        url: "/dashboard/new",
+        className: "About__btn--blue mx2",
+      },
     },
-    {
-      subTitle: "Custom metrics and tables",
-      desc: "Footprint empowers everyone to customize their analysis",
-      list: [
-        {
-          title: "Custom columns",
-          img: getOssUrl("20220606155803.gif"),
-        },
-        {
-          title: "Excel-like experience",
-          img: getOssUrl("20220606155903.gif"),
-        },
-        {
-          title: "Supports Python",
-          img: getOssUrl("20220608142457.gif"),
-        },
-      ],
-      height: "574px",
-      borderless: true,
-    },
-    // {
-    //   reverse: true,
-    //   borderless: true,
-    //   subTitle: "Build a knowledge library",
-    //   desc:
-    //     "Footprint lets you stop repeating coding, and start creating knowledge",
-    //   list: [
-    //     {
-    //       title: "Categorize and share",
-    //       img: "",
-    //     },
-    //     {
-    //       title: "Allow anyone to discover and use your analyses",
-    //       img: "",
-    //     },
-    //   ],
-    //   height: "455px",
-    // },
   ],
 
   backedList: [
@@ -288,6 +237,65 @@ const data = {
     {
       url: "https://twitter.com/doubletop_io",
       logo: "img-double-top.png",
+    },
+  ],
+  socialData: [
+    {
+      icon: "twitter_oppo",
+      label: "Twitter",
+      background: "#00A1F4",
+      url: "https://twitter.com/Footprint_Data",
+    },
+    {
+      icon: "discord_oppo",
+      label: "Discord",
+      background: "#4A70F4",
+      url: "https://discord.gg/3HYaR6USM7",
+    },
+    {
+      icon: "telegram_oppo",
+      label: "Telegram",
+      background: "#00A1F4",
+      url: "https://t.me/joinchat/4-ocuURAr2thODFh",
+    },
+  ],
+  startButtonData: [
+    {
+      title: "Create Dashboard",
+      className: "About__btn--dark-blue",
+      url: "/dashboards",
+    },
+    {
+      title: "Discover Games",
+      className: "About__btn--white",
+      url: "/dashboards",
+    },
+    {
+      title: "Discover NFT Collections",
+      className: "About__btn--white",
+      url: "/dashboards",
+    },
+  ],
+  basicData: [
+    {
+      title: "Chains",
+      count: 17,
+      image: "img_about_basic_2022081301.png?1",
+    },
+    {
+      title: "NFT Collections",
+      count: 20000,
+      image: "img_about_basic_2022081302.png?1",
+    },
+    {
+      title: "Games",
+      count: 3000,
+      image: "img_about_basic_2022081303.png?1",
+    },
+    {
+      title: "Marketplaces",
+      count: 15,
+      image: "img_about_basic_2022081304.png?1",
     },
   ],
 };

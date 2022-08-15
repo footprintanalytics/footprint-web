@@ -10,105 +10,78 @@ import Button from "metabase/components/Button";
 const AboutService = () => {
   const list = [
     {
-      title: "Footprint Analytics Widget",
+      title: "All in One API",
       desc: (
         <>
-          Show blockchain data on your site
+          One unified API access to
           <br />
-          Supports multiple templates
-          <br />
-          Supports custom configurations
+          widest Chains and Domains
         </>
       ),
-      url: "/widget",
-      icon: getOssUrl("20220602192449.png"),
-      width: "48px",
-      height: "36px",
+      icon: getOssUrl("img_about_service_2022081301.png?1"),
+      width: "117px",
+      height: "99px",
     },
     {
-      title: "Research Service and Tool",
+      title: "Richest Data Tiers",
       desc: (
         <>
-          Weekly & monthly reports
+          Not only provide raw data
           <br />
-          Indicator alerts
-          <br />
-          Custom and on-demand research
+          but also semantic data
         </>
       ),
-      url: "/news/featured",
-      icon: getOssUrl("20220602192529.png"),
-      width: "37px",
-      height: "48px",
+      icon: getOssUrl("img_about_service_2022081302.png?1"),
+      width: "114px",
+      height: "100px",
     },
     {
-      title: "Social Media Sharing Tool",
+      title: "Flexible Infrastructure",
       desc: (
         <>
-          Build and share your profile
+          Secure and scalable infrastructure
           <br />
-          Whitelabel your charts and dashboards
+          supports Rest API
+          <br />
+          and GraphQL
         </>
       ),
-      url: "/search?model=creator",
-      icon: getOssUrl("20220602192551.png"),
-      width: "41px",
-      height: "46px",
+      icon: getOssUrl("img_about_service_2022081303.png?1"),
+      width: "114px",
+      height: "101px",
     },
     {
-      title: "Marketing Tool",
+      title: "Customizable",
       desc: (
         <>
-          Competitive analysis and tracking
+          Our APIs are made to fit all your
           <br />
-          Find and incentivize target users and track...
-          <br />
-          Discover user portrait
+          data needs
         </>
       ),
-      url: "https://www.footprint.network/defi360",
-      icon: getOssUrl("20220602192747.png"),
-      width: "48px",
-      height: "48px",
+      icon: getOssUrl("img_about_service_2022081304.png?1"),
+      width: "105px",
+      height: "116px",
     },
     {
-      title: "Data API",
+      title: "Timely Support",
       desc: (
         <>
-          A unified API allows you to pull detailed, historical and granular
-          blockchain data
-        </>
-      ),
-      url: "https://docs.footprint.network/api/download-data",
-      icon: getOssUrl("20220602192809.png"),
-      width: "48px",
-      height: "43px",
-    },
-    {
-      title: (
-        <>
-          Contact us
+          One on one support to satisfy your needs and timely
           <br />
-          <br />
-          <span className="text-normal">sales@footprint.network</span>
+          response
         </>
       ),
-      url: "mailto:sales@footprint.network",
-      button: (
-        <>
-          <Button className="About__service-button">Get Started</Button>
-        </>
-      ),
+      icon: getOssUrl("img_about_service_2022081305.png?1"),
+      width: "99px",
+      height: "109px",
     },
   ];
 
   return (
-    <div
-      className="About__service"
-      style={{ backgroundImage: `url(${getOssUrl("20220607202702.png")})` }}
-    >
+    <div className="About__service">
       <div className="About__container">
-        <h3 className="About__title">Our services and expertise</h3>
+        <h3 className="About__title">Use Data API to Built Your Application</h3>
         <ul>
           {list.map(item => (
             <li key={item.title}>
@@ -123,7 +96,7 @@ const AboutService = () => {
               )}
               <h4>{item.title}</h4>
               <p>{item.desc}</p>
-              <WrapLink
+              {/*<WrapLink
                 url={item.url}
                 onClick={() => {
                   trackStructEvent("About", `More ${item.title}`);
@@ -156,7 +129,7 @@ const AboutService = () => {
                     More <RightOutlined />
                   </>
                 )}
-              </WrapLink>
+              </WrapLink>*/}
             </li>
           ))}
         </ul>

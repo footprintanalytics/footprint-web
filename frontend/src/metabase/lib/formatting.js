@@ -698,14 +698,19 @@ export function formatUrl(value, options = {}) {
   }
 
   if (jsx && rich && url) {
+    let otherProps = {};
     const text = getLinkText(value, options);
     // link the dashboard to go back to the previous level
     if (url.includes("footprint.network")) {
       const backUrl = encodeURIComponent(location.href);
       url += `${url.includes("?") ? "&" : "?"}back_url=${backUrl}`;
+      const pathname = window.location.pathname;
+      if (pathname === "/" || pathname === "/aboout") {
+        otherProps = { target: "_blank" };
+      }
     }
     return (
-      <ExternalLink className="link link--wrappable" href={url}>
+      <ExternalLink className="link link--wrappable" href={url} {...otherProps}>
         {text}
       </ExternalLink>
     );
