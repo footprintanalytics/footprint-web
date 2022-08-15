@@ -294,26 +294,26 @@ const data = {
       url: "/dashboards",
     },
   ],
-  basicData: [
+  basicData: indicator => [
     {
       title: "Chains",
-      count: 17,
-      image: "img_about_basic_2022081301.png?1",
+      total: indicator?.chains,
+      img: getOssUrl("img_about_basic_2022081301.png?1"),
     },
     {
       title: "NFT Collections",
-      count: 126551,
-      image: "img_about_basic_2022081302.png?1",
+      total: indicator?.nftCollections,
+      img: getOssUrl("img_about_basic_2022081302.png?1"),
     },
     {
       title: "Games",
-      count: 1364,
-      image: "img_about_basic_2022081303.png?1",
+      total: indicator?.gamefiParsedProtocols,
+      img: getOssUrl("img_about_basic_2022081303.png?1"),
     },
     {
       title: "Marketplaces",
-      count: 11,
-      image: "img_about_basic_2022081304.png?1",
+      total: indicator?.nftParsedMarketplaces,
+      img: getOssUrl("img_about_basic_2022081304.png?1"),
     },
   ],
 };

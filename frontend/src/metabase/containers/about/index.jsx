@@ -10,38 +10,44 @@ import HomeFooter from "../home/components/HomeFooter";
 import data from "./data";
 import { useQueryDashboard, useQueryIndicator, useQueryNews } from "./hook";
 import { connect } from "react-redux";
-import AboutExploreChains from "metabase/containers/about/components/AboutExploreChains";
+import AboutExploreDomain from "metabase/containers/about/components/AboutExploreDomain";
 import AboutCreateDashboard from "metabase/containers/about/components/AboutCreateDashboard";
 
 const About = props => {
-  const defaultDashboardQuery = data.dashboardNav[0].query;
-  const [dashboardQuery, setDashboardQuery] = useState(defaultDashboardQuery);
-  const { dashboard, isLoading } = useQueryDashboard({ query: dashboardQuery });
+  // const defaultDashboardQuery = data.dashboardNav[0].query;
+  // const [dashboardQuery, setDashboardQuery] = useState(defaultDashboardQuery);
+  // const { dashboard, isLoading } = useQueryDashboard({ query: dashboardQuery });
   const { news } = useQueryNews();
   const { indicator } = useQueryIndicator();
-
+  console.log("indicator", indicator);
+  console.log("news", news);
   return (
     <div className="About">
-      <AboutStart />
-      <AboutExploreChains
-        title="Explore Chains in Footprint"
+      <AboutStart indicator={indicator} />
+      <AboutExploreDomain
+        title={
+          <div>
+            Explore <span className="About__title-bland">Chains</span> in
+            Footprint
+          </div>
+        }
         data={[
-          { title: "Chains Covered", value: 134 },
-          { title: "Chains Parsed", value: 17 },
+          { title: "Chains Covered", total: indicator?.chains },
+          { title: "Chains Parsed", total: indicator?.chainsParsed },
         ]}
-        className="About__explore-chains-bg"
+        className="About__explore-domain-bg"
         exploreButton={{
           title: "Explore More Chain Analytics >",
           url: "/",
           className: "About__btn--blue About__btn-radius",
         }}
       />
-      <AboutExploreChains
-        title="Explore Games in Footprint"
+      <AboutExploreDomain
+        title={<div>Explore Games in Footprint</div>}
         data={[
-          { title: "Chains Covered", value: 42 },
-          { title: "Chains Parsed", value: 15 },
-          { title: "Games", value: 1364 },
+          { title: "Chains Covered", total: indicator?.gamefiChains },
+          { title: "Chains Parsed", total: indicator?.gamefiParsedChains },
+          { title: "Games", total: indicator?.gamefiParsedProtocols },
         ]}
         className="About__explore-games-bg"
         dark={true}
@@ -51,13 +57,18 @@ const About = props => {
           className: "About__btn--white About__btn-radius",
         }}
       />
-      <AboutExploreChains
-        title="Explore NFT Collections in Footprint"
+      <AboutExploreDomain
+        title={
+          <div>
+            Explore <span className="About__title-bland">NFT Collections</span>{" "}
+            in Footprint
+          </div>
+        }
         data={[
-          { title: "Chains Covered", value: 11 },
-          { title: "Chains Parsed", value: 3 },
-          { title: "Marketplace", value: 11 },
-          { title: "NFT Collections", value: 126551 },
+          { title: "Chains Covered", total: indicator?.nftChains },
+          { title: "Chains Parsed", total: indicator?.nftParsedChains },
+          { title: "Marketplace", total: indicator?.nftParsedMarketplaces },
+          { title: "NFT Collections", total: indicator?.nftCollections },
         ]}
         className="About__explore-nft-bg"
         exploreButton={{
@@ -66,23 +77,31 @@ const About = props => {
           className: "About__btn--blue About__btn-radius",
         }}
       />
-      {/*<AboutCover indicator={indicator} />*/}
-
       <AboutCreateDashboard
+        title={
+          <div>
+            Create <span className="About__title-bland">Dashboards</span> Using
+            Footprint
+          </div>
+        }
         list={data.sectionList}
         data={[
-          { title: "Community Dashboards", value: 5212 },
-          { title: "Community Charts", value: 25806 },
+          { title: "Community Dashboards", total: indicator?.dashboards },
+          { title: "Community Charts", total: indicator?.charts },
         ]}
         className={"About__create-dashboard"}
-        title={"Create Dashboards Using Footprint"}
       />
       <AboutService />
 
       <AboutCreateDashboard
+        title={
+          <div>
+            Use <span className="About__title-bland">Data API</span> to Built
+            Your Application
+          </div>
+        }
         list={data.sectionList2}
         className={"About__create-nft"}
-        title={"Use Data API to Built Your Application"}
       />
       <AboutBuild
         type="card"

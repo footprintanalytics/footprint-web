@@ -5,8 +5,9 @@ import { trackStructEvent } from "metabase/lib/analytics";
 import WrapLink from "metabase/containers/about/components/WrapLink";
 import PublicDashboard from "metabase/guest/Dashboard";
 import PublicQuestion from "metabase/guest/Question";
+import { Spin } from "antd";
 
-const AboutExploreChains = ({
+const AboutExploreDomain = ({
   title,
   data,
   exploreButton,
@@ -30,15 +31,15 @@ const AboutExploreChains = ({
     },
   ];
   const panelClassName = dark
-    ? "About__explore-chains-panel-dark"
-    : "About__explore-chains-panel";
+    ? "About__explore-domain-panel-dark"
+    : "About__explore-domain-panel";
   const [navList, setNavList] = useState(navListData);
   const [iframeSrc, setIframeSrc] = useState(navList.find(p => p.active).query);
   const onNavChange = query => {
     setIframeSrc(query);
   };
   return (
-    <div className={`About__explore-chains ${className}`}>
+    <div className={`About__explore-domain ${className}`}>
       <div className={`About__title ${dark ? "About__title-white" : ""}`}>
         {title}
       </div>
@@ -47,9 +48,9 @@ const AboutExploreChains = ({
           return (
             <React.Fragment key={item.title}>
               {index > 0 && <div className="divider" />}
-              <div className={"About__explore-chains-panel-item"}>
-                <h3>{item.value}</h3>
-                <span>{item.title}</span>
+              <div className={"About__explore-domain-panel-item"}>
+                <b>{item.total ? item.total.toLocaleString() : <Spin />}</b>
+                <h3>{item.title}</h3>
               </div>
             </React.Fragment>
           );
@@ -86,4 +87,4 @@ const AboutExploreChains = ({
   );
 };
 
-export default AboutExploreChains;
+export default AboutExploreDomain;

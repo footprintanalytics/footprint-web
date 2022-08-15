@@ -10,7 +10,12 @@ import { push } from "react-router-redux";
 import { loginModalShowAction } from "metabase/redux/control";
 import _ from "underscore";
 import { connect } from "react-redux";
-const AboutStart = ({ user, setLoginModalShow, onChangeLocation }) => {
+const AboutStart = ({
+  user,
+  setLoginModalShow,
+  onChangeLocation,
+  indicator,
+}) => {
   const isLogin = () => {
     if (user) {
       return true;
@@ -52,7 +57,7 @@ const AboutStart = ({ user, setLoginModalShow, onChangeLocation }) => {
           );
         })}
       </div>
-      <AboutBasic />
+      <AboutBasic indicator={indicator} />
     </div>
   );
 };

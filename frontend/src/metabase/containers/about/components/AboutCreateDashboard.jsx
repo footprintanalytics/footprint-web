@@ -1,6 +1,7 @@
 /* eslint-disable react/prop-types */
 import React from "react";
 import AboutSection from "metabase/containers/about/components/AboutSection";
+import { Spin } from "antd";
 
 const AboutCreateDashboard = props => {
   const { data, list, title, className } = props;
@@ -8,14 +9,14 @@ const AboutCreateDashboard = props => {
     <div className={className}>
       <div className="About__title">{title}</div>
       {data && (
-        <div className={"About__explore-chains-panel"}>
+        <div className={"About__explore-domain-panel"}>
           {data?.map((item, index) => {
             return (
               <React.Fragment key={item.title}>
                 {index > 0 && <div className="divider" />}
-                <div className={"About__explore-chains-panel-item"}>
-                  <h3>{item.value}</h3>
-                  <span>{item.title}</span>
+                <div className={"About__explore-domain-panel-item"}>
+                  <b>{item.total ? item.total.toLocaleString() : <Spin />}</b>
+                  <h3>{item.title}</h3>
                 </div>
               </React.Fragment>
             );

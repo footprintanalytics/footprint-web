@@ -41,6 +41,10 @@
   color: #fff;
 }
 
+.About__title-bland {
+  color: var(--color-brand);
+}
+
 .About__btn {
   border-radius: 2px;
   height: 32px;
@@ -727,12 +731,13 @@
   border-radius: 50%;
 }
 
-.About__basic-item h3 {
+.About__basic-item b {
   color: #3434b2;
   font-size: 36px;
+  font-family: Montserrat;
 }
 
-.About__basic-item span {
+.About__basic-item h3 {
   color: #303440;
   font-size: 16px;
 }
@@ -741,7 +746,7 @@
   margin-top: 10px;
 }
 
-.About__explore-chains {
+.About__explore-domain {
   display: flex;
   flex-direction: column;
   justify-content: center;
@@ -750,15 +755,15 @@
   background-color: #fafbfe;
 }
 
-.About__explore-chains-panel-dark,
-.About__explore-chains-panel {
+.About__explore-domain-panel-dark,
+.About__explore-domain-panel {
   display: flex;
   align-items: center;
   justify-content: center;
   margin: 40px 0;
 }
 
-.About__explore-chains-panel-item {
+.About__explore-domain-panel-item {
   width: 300px;
   display: flex;
   flex-direction: column;
@@ -766,39 +771,41 @@
   align-items: center;
 }
 
-.About__explore-chains-panel h3 {
-  font-size: 60px;
-  font-weight: bold;
-  color: #3434b2;
-  line-height: 60px;
-}
-
-.About__explore-chains-panel .divider {
+.About__explore-domain-panel .divider {
   border-left: #d8d8d8 1px solid;
   height: 40px;
   width: 1px;
 }
 
-.About__explore-chains-panel span {
+.About__explore-domain-panel b {
+  font-size: 60px;
+  font-weight: bold;
+  color: #3434b2;
+  line-height: 60px;
+  font-family: Montserrat;
+}
+
+.About__explore-domain-panel h3 {
   font-size: 18px;
   font-weight: bold;
   color: #000000;
 }
 
-.About__explore-chains-panel-dark h3 {
+.About__explore-domain-panel-dark b {
   font-size: 60px;
   font-weight: bold;
   color: #fff;
   line-height: 60px;
+  font-family: Montserrat;
 }
 
-.About__explore-chains-panel-dark .divider {
+.About__explore-domain-panel-dark .divider {
   border-left: #fff 1px solid;
   height: 40px;
   width: 1px;
 }
 
-.About__explore-chains-panel-dark span {
+.About__explore-domain-panel-dark h3 {
   font-size: 18px;
   font-weight: bold;
   color: #fff;
@@ -846,11 +853,11 @@
   border-radius: 8px;
   color: #303440;
 }
-.About__explore-chains .EmbedFrame-footer {
+.About__explore-domain .EmbedFrame-footer {
   display: none;
 }
 
-.About__explore-chains-bg {
+.About__explore-domain-bg {
   background-image: url("https://static.footprint.network/img_about_icon_bg_2022081510.png"),
     url("https://static.footprint.network/img_about_icon_bg_2022081511.png"),
     url("https://static.footprint.network/img_about_icon_bg_2022081512.png"),
@@ -879,7 +886,7 @@
     url("https://static.footprint.network/img_about_icon_bg_2022081525.png"),
     url(https://static.footprint.network/img_about_explore_bg_2022081501.png?1);
   background-size: 80px 80px, 68px 68px, 68px 68px, 80px 43px, 54px 54px,
-    80px 80px, 100%;
+    80px 80px, cover;
   background-repeat: no-repeat, no-repeat, no-repeat, no-repeat, no-repeat,
     no-repeat, no-repeat;
   background-position: top 20% left 6%, top 45% left 10%, bottom 20% left 6%,
@@ -901,7 +908,7 @@
     top 50% right 8%, bottom 5% right 20%, bottom 10% left 12%;
 }
 
-.About__explore-chains iframe {
+.About__explore-domain iframe {
   margin: 40px 0;
   box-shadow: 0 6px 60px #30344020;
 }

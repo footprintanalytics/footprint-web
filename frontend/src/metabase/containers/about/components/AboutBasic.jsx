@@ -1,19 +1,21 @@
+/* eslint-disable react/prop-types */
 import React from "react";
 import data from "../data";
 import { getOssUrl } from "metabase/lib/image";
+import { Spin } from "antd";
 
-const AboutBasic = () => {
+const AboutBasic = ({ indicator }) => {
   return (
     <div className="About__basic">
       <div className="About__basic-process">
-        {data.basicData.map((item, index) => {
+        {data.basicData(indicator).map((item, index) => {
           return (
             <div className="About__basic-item" key={item.title}>
               <div style={{ marginTop: index % 2 === 1 ? 0 : 90 }} />
               <div className="About__basic-item-box">
-                <h3>{item.count}</h3>
-                <span>{item.title}</span>
-                <img src={getOssUrl(item.image)} alt={item.title} />
+                <b>{item.total ? item.total.toLocaleString() : <Spin />}</b>
+                <h3>{item.title}</h3>
+                <img src={item.img} alt={item.title} />
               </div>
               <div className="About__basic-item-circle">
                 <div className="About__basic-item-circle-inner" />
