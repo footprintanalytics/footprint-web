@@ -108,6 +108,7 @@ const List = ({
   }
 
   const columns = (isCommon ? getListColumnsCommonPage : getListColumns)({
+    className: "dashboards__list-column",
     router,
     user,
     onDuplicate: params => {
@@ -163,6 +164,11 @@ const List = ({
         className="dashboards__table"
         dataSource={data?.data}
         columns={columns}
+        rowClassName={(record, index) => {
+          return index % 2 === 1
+            ? "dashboards__table-columns-odd"
+            : "dashboards__table-columns-even";
+        }}
         pagination={pagination}
         showHeader={showHeader}
         onChange={(pagination, filters, sorter, extra) => {

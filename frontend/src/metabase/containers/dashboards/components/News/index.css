@@ -5,9 +5,6 @@
 .dashboards__news-list {
   height: 1000px;
   overflow-y: scroll;
-  border: 1px solid #dcdee4;
-  border-radius: 4px;
-  background-color: #fff;
 }
 
 .dashboards__news-list::-webkit-scrollbar {
@@ -16,8 +13,7 @@
 
 .dashboards__news-item {
   display: block;
-  border-bottom: 1px solid #dcdee4;
-  padding: 20px;
+  padding: 16px;
 }
 
 .dashboards__news-list li:last-child .dashboards__news-item {
@@ -27,9 +23,10 @@
 .dashboards__news-item h3 {
   font-size: 14px;
   color: #303440;
-  line-height: 20px;
+  line-height: 18px;
   margin-bottom: 2px;
   display: -webkit-box;
+  font-weight: normal;
   -webkit-line-clamp: 2;
   overflow: hidden;
   text-overflow: ellipsis;

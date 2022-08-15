@@ -118,3 +118,7 @@ export const isProtocol = () => {
 export const isCreator = () => {
   return window.location.pathname.startsWith("/@");
 };
+
+export const isDashboards = () => {
+  return window.location.pathname.startsWith("/dashboards");
+};

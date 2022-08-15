@@ -1,14 +1,19 @@
+.dashboards__area {
+  background: #fafafc;
+  padding: 16px 8px;
+  margin: 20px 0;
+}
 .dashboards__cell {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  padding: 48px 0 20px 0;
+  padding: 0 var(--footprint-spacing-s);
 }
 
 .dashboards__cell h2 {
-  font-size: 24px;
+  font-size: 20px;
+  font-weight: normal;
   color: #303440;
-  font-weight: 700;
 }
 
 .dashboards__cell a {
@@ -21,7 +26,7 @@
 }
 
 .dashboards__layout {
-  width: 1440px;
+  width: 1200px;
   margin: 0 auto;
   display: flex;
   padding: 0;
@@ -29,9 +34,13 @@
 
 .dashboards__layout-side {
   width: 100%;
-  margin-left: 28px;
+  margin-left: 24px;
   margin-bottom: 50px;
-  max-width: 300px;
+  max-width: 330px;
+}
+
+.dashboards__list-column {
+  background: red;
 }
 
 .dashboards__grid {
@@ -51,7 +60,7 @@
     padding: 0 20px;
   }
   .dashboards__cell {
-    padding: 48px 0 20px 0;
+    padding: 10px;
   }
   .dashboards__layout-side {
     width: 100%;
@@ -67,7 +76,7 @@
     padding: 20px 0;
   }
   .dashboards__cell {
-    padding: 48px 20px 20px 20px;
+    padding: 10px;
   }
   .dashboards__layout-side {
     margin-left: 0;

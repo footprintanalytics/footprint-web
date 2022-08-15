@@ -330,7 +330,7 @@ export default class Navbar extends Component {
                   }
                 }}
               >
-                <Icon name={item.icon} size={16} />
+                {/*<Icon name={item.icon} size={16} />*/}
                 <span>{item.title}</span>
                 {this.isActive(item.path, item.subPath) && (
                   <div className="Nav__menu-item--select" />
@@ -471,7 +471,7 @@ export default class Navbar extends Component {
       return (
         <div className="flex flex-column w-full">
           <div className={className}>
-            {item.icon && <Icon name={item.icon} size={16} />}
+            {/*{item.icon && <Icon name={item.icon} size={16} />}*/}
             <span>{item.name}</span>
           </div>
           <div>
@@ -510,7 +510,7 @@ export default class Navbar extends Component {
             className={className}
             onClick={() => trackStructEvent(`navbar-click-${item.name}`)}
           >
-            {item.icon && <Icon name={item.icon} size={16} />}
+            {/*{item.icon && <Icon name={item.icon} size={16} />}*/}
             <span>{item.name}</span>
           </div>
         }
@@ -578,7 +578,7 @@ export default class Navbar extends Component {
                   trackStructEvent(`navbar-click-${item.title}`);
                 }}
               >
-                <Icon name={item.icon} size={16} />
+                {/*<Icon name={item.icon} size={16} />*/}
                 <span>{item.title}</span>
                 {this.isActive(item.path, item.subPath) && (
                   <div className="Nav__menu-item--select" />
