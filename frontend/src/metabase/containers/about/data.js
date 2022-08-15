@@ -1,4 +1,5 @@
 import { getOssUrl } from "metabase/lib/image";
+import * as Urls from "metabase/lib/urls";
 
 const data = {
   dashboardNav: [
@@ -13,16 +14,32 @@ const data = {
       desc: "",
       list: [
         {
-          title: "No-code visualization",
+          title: "No-Code Visualization",
           img: getOssUrl("20220606154848.gif"),
         },
         {
-          title: "26+ types of charts",
+          title: "26+ Types of Charts",
           img: getOssUrl("20220606154902.gif"),
         },
         {
-          title: "Add text, image & link",
+          title: "Add Text, Image & Link",
           img: getOssUrl("20220606154919.gif"),
+        },
+        {
+          title: "Upload Off-chain Data",
+          img: getOssUrl("20220606155703.gif"),
+        },
+        {
+          title: "Download Data",
+          img: getOssUrl("20220606155721.gif"),
+        },
+        {
+          title: "Custom Columns",
+          img: getOssUrl("20220606155803.gif"),
+        },
+        {
+          title: "Excel-like Experience",
+          img: getOssUrl("20220606155903.gif"),
         },
       ],
       height: "455px",
@@ -263,7 +280,8 @@ const data = {
     {
       title: "Create Dashboard",
       className: "About__btn--dark-blue",
-      url: "/dashboards",
+      url: Urls.newQuestion(),
+      auth: true,
     },
     {
       title: "Discover Games",
@@ -284,17 +302,17 @@ const data = {
     },
     {
       title: "NFT Collections",
-      count: 20000,
+      count: 126551,
       image: "img_about_basic_2022081302.png?1",
     },
     {
       title: "Games",
-      count: 3000,
+      count: 1364,
       image: "img_about_basic_2022081303.png?1",
     },
     {
       title: "Marketplaces",
-      count: 15,
+      count: 11,
       image: "img_about_basic_2022081304.png?1",
     },
   ],

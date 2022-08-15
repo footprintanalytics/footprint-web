@@ -1,10 +1,24 @@
+/* eslint-disable react/prop-types */
 import React from "react";
 import WrapLink from "./WrapLink";
 import { trackStructEvent } from "metabase/lib/analytics";
 import AboutSocial from "metabase/containers/about/components/AboutSocial";
 import AboutBasic from "metabase/containers/about/components/AboutBasic";
 import data from "../data";
-const AboutStart = () => {
+import { getUser } from "metabase/selectors/user";
+import { push } from "react-router-redux";
+import { loginModalShowAction } from "metabase/redux/control";
+import _ from "underscore";
+import { connect } from "react-redux";
+const AboutStart = ({ user, setLoginModalShow, onChangeLocation }) => {
+  const isLogin = () => {
+    if (user) {
+      return true;
+    } else {
+      setLoginModalShow({ show: true, from: "Dashboards Profile" });
+      return false;
+    }
+  };
   return (
     <div className="About__start">
       <div className="About__start-title">
@@ -13,13 +27,21 @@ const AboutStart = () => {
           <br />
           Analytics Platform.
         </h3>
-        <span>No-coding required.</span>
+        <span>No-coding Required.</span>
       </div>
       <AboutSocial />
       <div className="About__start-buttons">
         {data.startButtonData.map(item => {
           return (
-            <WrapLink key={item.title} url={item.url}>
+            <WrapLink
+              key={item.title}
+              url={item.url}
+              onClick={() => {
+                if (item.auth && isLogin()) {
+                  onChangeLocation(item.url);
+                }
+              }}
+            >
               <div
                 className={`About__btn About__btn--width-250 ${item.className}`}
                 onClick={() => trackStructEvent("About", item.title)}
@@ -35,4 +57,15 @@ const AboutStart = () => {
   );
 };
 
-export default AboutStart;
+const mapStateToProps = (state, props) => ({
+  user: getUser(state, props),
+});
+
+const mapDispatchToProps = {
+  onChangeLocation: push,
+  setLoginModalShow: loginModalShowAction,
+};
+
+export default _.compose(connect(mapStateToProps, mapDispatchToProps))(
+  AboutStart,
+);

@@ -168,7 +168,7 @@ export const getRoutes = store => (
       }}
     >
       <Route path="/" component={LazyLoad.Features}>
-        <IndexRedirect to="/dashboards" />
+        <IndexRedirect to="/about" />
         <Route path="topic/:menu/:subMenu" />
         <ModalRoute
           title={t`Login`}

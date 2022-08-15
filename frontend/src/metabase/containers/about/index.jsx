@@ -1,7 +1,6 @@
 /* eslint-disable react/prop-types */
 import React, { useState } from "react";
 import "./index.css";
-import AboutHeader from "./components/AboutHeader";
 import AboutStart from "./components/AboutStart";
 import AboutService from "./components/AboutService";
 import AboutBuild from "./components/AboutBuild";
@@ -23,16 +22,11 @@ const About = props => {
 
   return (
     <div className="About">
-      <AboutHeader
-        router={props.router}
-        location={props.location}
-        user={props.user}
-      />
       <AboutStart />
       <AboutExploreChains
         title="Explore Chains in Footprint"
         data={[
-          { title: "Chains covered", value: 123 },
+          { title: "Chains Covered", value: 134 },
           { title: "Chains Parsed", value: 17 },
         ]}
         exploreButton={{
@@ -44,8 +38,9 @@ const About = props => {
       <AboutExploreChains
         title="Explore Games in Footprint"
         data={[
-          { title: "chains", value: 17 },
-          { title: "Games", value: 3000 },
+          { title: "Chains Covered", value: 134 },
+          { title: "Chains Parsed", value: 15 },
+          { title: "Games", value: 1364 },
         ]}
         className="About__explore-games-bg"
         dark={true}
@@ -58,9 +53,10 @@ const About = props => {
       <AboutExploreChains
         title="Explore NFT Collections in Footprint"
         data={[
-          { title: "chains", value: 17 },
-          { title: "Marketplace", value: 3000 },
-          { title: "NFT Collections", value: 3000 },
+          { title: "Chains Covered", value: 134 },
+          { title: "Chains Parsed", value: 3 },
+          { title: "Marketplace", value: 11 },
+          { title: "NFT Collections", value: 126551 },
         ]}
         exploreButton={{
           title: "Explore More Collections >",
@@ -73,8 +69,8 @@ const About = props => {
       <AboutCreateDashboard
         list={data.sectionList}
         data={[
-          { title: "Community Dashboards", value: 5000 },
-          { title: "Community Charts", value: 24900 },
+          { title: "Community Dashboards", value: 5212 },
+          { title: "Community Charts", value: 25806 },
         ]}
         className={"About__create-dashboard"}
         title={"Create Dashboards Using Footprint"}

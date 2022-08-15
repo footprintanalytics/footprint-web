@@ -68,7 +68,19 @@ const mapDispatchToProps = {
 
 const menus = [
   {
-    title: "Home",
+    title: "Analytics",
+    icon: "menu_home",
+    path: "/dashboards",
+    auth: false,
+  },
+  {
+    title: "GameFi",
+    icon: "menu_home",
+    path: "/dashboards",
+    auth: false,
+  },
+  {
+    title: "NFT",
     icon: "menu_home",
     path: "/dashboards",
     auth: false,
@@ -418,7 +430,7 @@ export default class Navbar extends Component {
       //   open: true,
       // },
       { url: "https://docs.footprint.network/", name: "Docs", open: true },
-      { url: `/@${user?.name}`, name: "My Profile", auth: true },
+      // { url: `/@${user?.name}`, name: "My Profile", auth: true },
       // { url: "/widget", name: "Widget" },
     ];
 
@@ -726,10 +738,7 @@ export default class Navbar extends Component {
   }
 
   render() {
-    const { context, path } = this.props;
-    if (["/about"].includes(path)) {
-      return null;
-    }
+    const { context } = this.props;
     switch (context) {
       case "admin":
         return this.renderAdminNav();

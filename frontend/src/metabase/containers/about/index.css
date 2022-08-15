@@ -1,7 +1,7 @@
 .About {
   min-height: 100vh;
   color: #fff;
-  background: #eef2ff;
+  background: #fafafc;
   font-size: 14px;
 }
 
@@ -174,7 +174,7 @@
   align-items: center;
   padding: 46px 0;
   background-image: url(https://static.footprint.network/img_about_start_bg_2022081502.png);
-  background-position: center top;
+  background-position: center bottom;
   background-size: 100%;
   background-repeat: no-repeat;
 }
@@ -349,8 +349,8 @@
   height: auto;
   min-width: 788px;
   min-height: 400px;
-  border: 4px solid #525252;
   border-radius: 4px;
+  box-shadow: 0 6px 14px #3434b210;
 }
 
 .About__section-img-placeholder {
@@ -359,7 +359,6 @@
 
 .About__service {
   padding: 100px 0;
-  background-color: #fafafc;
 }
 
 .About__service ul {
@@ -579,6 +578,7 @@
   line-height: 1.2;
   margin-bottom: 12px;
   max-width: 100%;
+  color: #303440;
 }
 
 .About__explore-list-news-card span {
@@ -596,9 +596,12 @@
   object-position: center top;
 }
 
-.About__backed,
-.About__partner {
+.About__backed {
   padding: 100px 0;
+}
+
+.About__partner {
+  padding: 20px 0 100px;
 }
 
 .About__backed ul,
@@ -744,7 +747,24 @@
   justify-content: center;
   align-items: center;
   padding: 100px 0;
-  background: #fafbfe;
+  background-color: #fafbfe;
+  background-image: url("https://static.footprint.network/img_about_icon_bg_2022081510.png"),
+    url("https://static.footprint.network/img_about_icon_bg_2022081511.png"),
+    url("https://static.footprint.network/img_about_icon_bg_2022081512.png"),
+    url("https://static.footprint.network/img_about_icon_bg_2022081513.png"),
+    url("https://static.footprint.network/img_about_icon_bg_2022081514.png"),
+    url("https://static.footprint.network/img_about_icon_bg_2022081515.png"),
+    url("https://static.footprint.network/img_about_icon_bg_2022081516.png"),
+    url("https://static.footprint.network/img_about_icon_bg_2022081517.png"),
+    url("https://static.footprint.network/img_about_icon_bg_2022081518.png"),
+    url("https://static.footprint.network/img_about_icon_bg_2022081519.png");
+  background-size: 68px 68px, 32px 32px, 56px 56px, 48px 48px, 240px 240px,
+    48px 48px, 56px 56px, 80px 80px, 56px 56px, 80px 80px;
+  background-repeat: no-repeat, no-repeat, no-repeat, no-repeat, no-repeat,
+    no-repeat, no-repeat, no-repeat, no-repeat, no-repeat;
+  background-position: top 20% left -1%, top 10% left 12%, top 15% left 18%,
+    top 5% left 22%, top 2% left 35%, top 18% right 25%, top 8% right 22%,
+    top 10% right 4%, top 30% right 1%, top 22% left 10%;
 }
 
 .About__explore-chains-panel-dark,
@@ -866,5 +886,4 @@
 
 .About__create-nft {
   padding: 20px 0 80px;
-  background: #fafafc;
 }
