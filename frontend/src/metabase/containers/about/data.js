@@ -42,7 +42,7 @@ const data = {
           img: getOssUrl("20220606155903.gif"),
         },
       ],
-      height: "455px",
+      height: "550px",
       exploreButton: {
         title: "+ Create Dashboard",
         url: "/dashboard/new",
@@ -81,7 +81,7 @@ const data = {
           img: getOssUrl("20220606154919.gif"),
         },
       ],
-      height: "455px",
+      height: "470px",
       exploreButton: {
         title: "Get a Free Trial",
         url: "/dashboard/new",

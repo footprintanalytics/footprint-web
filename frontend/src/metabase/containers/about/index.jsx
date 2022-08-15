@@ -29,6 +29,7 @@ const About = props => {
           { title: "Chains Covered", value: 134 },
           { title: "Chains Parsed", value: 17 },
         ]}
+        className="About__explore-chains-bg"
         exploreButton={{
           title: "Explore More Chain Analytics >",
           url: "/",
@@ -38,7 +39,7 @@ const About = props => {
       <AboutExploreChains
         title="Explore Games in Footprint"
         data={[
-          { title: "Chains Covered", value: 134 },
+          { title: "Chains Covered", value: 42 },
           { title: "Chains Parsed", value: 15 },
           { title: "Games", value: 1364 },
         ]}
@@ -53,11 +54,12 @@ const About = props => {
       <AboutExploreChains
         title="Explore NFT Collections in Footprint"
         data={[
-          { title: "Chains Covered", value: 134 },
+          { title: "Chains Covered", value: 11 },
           { title: "Chains Parsed", value: 3 },
           { title: "Marketplace", value: 11 },
           { title: "NFT Collections", value: 126551 },
         ]}
+        className="About__explore-nft-bg"
         exploreButton={{
           title: "Explore More Collections >",
           url: "/",

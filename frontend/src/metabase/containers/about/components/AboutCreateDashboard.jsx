@@ -7,19 +7,21 @@ const AboutCreateDashboard = props => {
   return (
     <div className={className}>
       <div className="About__title">{title}</div>
-      <div className={"About__explore-chains-panel"}>
-        {data?.map((item, index) => {
-          return (
-            <React.Fragment key={item.title}>
-              {index > 0 && <div className="divider" />}
-              <div className={"About__explore-chains-panel-item"}>
-                <h3>{item.value}</h3>
-                <span>{item.title}</span>
-              </div>
-            </React.Fragment>
-          );
-        })}
-      </div>
+      {data && (
+        <div className={"About__explore-chains-panel"}>
+          {data?.map((item, index) => {
+            return (
+              <React.Fragment key={item.title}>
+                {index > 0 && <div className="divider" />}
+                <div className={"About__explore-chains-panel-item"}>
+                  <h3>{item.value}</h3>
+                  <span>{item.title}</span>
+                </div>
+              </React.Fragment>
+            );
+          })}
+        </div>
+      )}
       {list?.map(item => (
         <AboutSection
           key={item.subTitle}
