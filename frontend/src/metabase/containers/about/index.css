@@ -103,7 +103,7 @@
   height: 48px;
   font-size: 16px;
   font-weight: 700;
-  padding: 0 54px;
+  padding: 0 40px;
   margin-top: 32px;
 }
 
@@ -650,7 +650,6 @@
 }
 
 .About .home-footer-container {
-  height: 300px;
   background-color: #18183e;
 }
 
@@ -937,4 +936,42 @@
 
 .About__create-nft {
   padding: 20px 0 80px;
+}
+
+@media screen and (--footprint-breakpoint-max-pad) {
+  .About__section-side {
+    width: 280px;
+  }
+
+  .About__section-wrap {
+    grid-column-gap: 20px;
+  }
+
+  .About__container {
+    width: auto;
+  }
+
+  .About__explore-list-left {
+    margin-right: 16px;
+  }
+
+  .About__explore-list-right {
+    margin-left: 16px;
+  }
+
+  .About__service ul {
+    grid-template-columns: repeat(3, 1fr);
+  }
+
+  .About__basic-bottom-bg,
+  .About__basic-process {
+    transform: scale(0.7);
+    grid-column-gap: 40px;
+    margin-bottom: -3%;
+  }
+
+  .About__basic-item-box {
+    padding: 36px 8px;
+    width: 220px;
+  }
 }
