@@ -57,7 +57,7 @@ const data = {
       list: [
         {
           title: "NFT Gallery",
-          img: getOssUrl("img_about_data_api_2022081611.png?1"),
+          img: getOssUrl("img_about_data_api_2022081611.png?3"),
           subTitle:
             "Suited for: NFT marketplace, NFT data aggregator, NFT tracker",
           desc:
@@ -65,7 +65,7 @@ const data = {
         },
         {
           title: "Find Potential NFTs",
-          img: getOssUrl("img_about_data_api_2022081612.png?1"),
+          img: getOssUrl("img_about_data_api_2022081612.png?3"),
           subTitle:
             "Suited for: Capital institutions, Investment/trading institution, Research consultant,",
           desc:
@@ -73,14 +73,14 @@ const data = {
         },
         {
           title: "Research & Invest",
-          img: getOssUrl("img_about_data_api_2022081613.png?1"),
+          img: getOssUrl("img_about_data_api_2022081613.png?3"),
           subTitle:
             "Suited for: Investment/trading institution, Research consultant, Web2 financial entities",
           desc: "Empower your research or investment with advanced indicators",
         },
         {
           title: "Whale Tracking",
-          img: getOssUrl("img_about_data_api_2022081614.png?1"),
+          img: getOssUrl("img_about_data_api_2022081614.png?3"),
           subTitle:
             "Suited for: Investment/trading institution, Crypto portfolio management, Exchange, Crypto wallet",
           desc:
@@ -88,7 +88,7 @@ const data = {
         },
         {
           title: "GameFi Portal",
-          img: getOssUrl("img_about_data_api_2022081615.png?1"),
+          img: getOssUrl("img_about_data_api_2022081615.png?3"),
           subTitle: "Suited for: GameFi studios, GameFi tracker, GameFi guilds",
           desc: "A one-stop GameFi information aggregation platform",
         },
