@@ -8,20 +8,23 @@ const Banner = () => {
     <div className="dashboards__banner">
       <div className="dashboards__banner-container">
         <BannerImage
-          src={getOssUrl("/img_banner_left_1.png")}
+          src={getOssUrl("img_analysis_banner_2022081601.png")}
           width={842}
           height={350}
+          url="https://footprint.cool/mv2v"
         />
         <div className="dashboards__banner-right">
           <BannerImage
-            src={getOssUrl("/img_banner_right_1.png")}
+            src={getOssUrl("article/31157b75-7900-41a5-9ac4-41ff5eaf260e.jpg")}
             width={332}
             height={164}
+            url="https://footprint.cool/4vcC"
           />
           <BannerImage
-            src={getOssUrl("/img_banner_right_2.png")}
+            src={getOssUrl("article/f3904f34-ae03-4ce8-bc3c-205b2d9638ff.png")}
             width={332}
             height={164}
+            url="https://footprint.cool/yv9I"
           />
         </div>
       </div>
