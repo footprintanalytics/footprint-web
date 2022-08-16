@@ -3,7 +3,7 @@
   color: #fff;
   background: #fafafc;
   font-size: 14px;
-  font-family: 'Inter', sans-serif;
+  font-family: "Inter", sans-serif;
 }
 
 .About:before {
@@ -273,7 +273,7 @@
 }
 
 .About__cover-list b {
-  font-family: 'D-DIN', sans-serif;
+  font-family: "D-DIN", sans-serif;
   font-size: 48px;
   font-weight: bold;
   color: #fff;
@@ -741,7 +741,7 @@
   font-size: 42px;
   line-height: 60px;
   font-weight: bold;
-  font-family: 'D-DIN', sans-serif;
+  font-family: "D-DIN", sans-serif;
 }
 
 .About__basic-item h3 {
@@ -789,7 +789,7 @@
   font-weight: bold;
   color: #3434b2;
   line-height: 60px;
-  font-family: 'D-DIN', sans-serif;
+  font-family: "D-DIN", sans-serif;
 }
 
 .About__explore-domain-panel h3 {
@@ -803,7 +803,7 @@
   font-weight: bold;
   color: #fff;
   line-height: 60px;
-  font-family: 'D-DIN', sans-serif;
+  font-family: "D-DIN", sans-serif;
 }
 
 .About__explore-domain-panel-dark .divider {
