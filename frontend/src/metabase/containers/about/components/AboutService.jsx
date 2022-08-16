@@ -82,11 +82,7 @@ const AboutService = () => {
             <li key={item.title}>
               {item.icon && (
                 <div className="About__service-icon">
-                  <img
-                    src={item.icon}
-                    alt={item.title}
-                    style={{ width: item.width, height: item.height }}
-                  />
+                  <img src={item.icon} alt={item.title} />
                 </div>
               )}
               <h4>{item.title}</h4>

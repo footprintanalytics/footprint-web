@@ -178,6 +178,7 @@
   flex-direction: column;
   align-items: center;
   padding: 46px 0;
+  background-color: #eff2ff;
   background-image: url(https://static.footprint.network/img_about_start_bg_2022081502.png);
   background-position: center bottom;
   background-size: 100%;
@@ -271,7 +272,7 @@
 }
 
 .About__cover-list b {
-  /*font-family: Montserrat;*/
+  font-family: Inter;
   font-size: 48px;
   font-weight: bold;
   color: #fff;
@@ -355,7 +356,8 @@
   width: 660px;
   height: auto;
   border-radius: 4px;
-  box-shadow: 0 6px 14px #3434b209;
+  margin-top: 12px;
+  box-shadow: 0 6px 48px #3434b213;
 }
 
 .About__section-img-placeholder {
@@ -380,13 +382,14 @@
   border: 1px solid #e1e1e1;
   display: flex;
   flex-direction: column;
-  justify-content: center;
-  align-items: center;
   padding: 10px 0;
   text-align: center;
 }
 
-.About__service-icon {
+.About__service-icon img {
+  width: auto;
+  height: 100px;
+  margin-bottom: 8px;
 }
 
 .About__service-button {
@@ -501,8 +504,6 @@
 }
 
 .About__explore-list-left {
-  background-color: #18183e;
-  border: 1px solid #2e2e72;
   border-radius: 4px;
   width: 520px;
   min-width: 520px;
@@ -525,7 +526,7 @@
 
 .About__explore-list-left h3 {
   font-size: 20px;
-  color: #fff;
+  color: #000000;
   line-height: 1;
   margin-bottom: 8px;
   overflow: hidden;
@@ -582,6 +583,8 @@
   white-space: unset;
   line-height: 1.2;
   margin-bottom: 12px;
+  font-weight: normal;
+  font-size: 20px;
   max-width: 100%;
   color: #303440;
 }
@@ -737,7 +740,7 @@
   font-size: 42px;
   line-height: 60px;
   font-weight: bold;
-  /*font-family: Montserrat;*/
+  font-family: Inter;
 }
 
 .About__basic-item h3 {
@@ -785,7 +788,7 @@
   font-weight: bold;
   color: #3434b2;
   line-height: 60px;
-  /*font-family: Montserrat;*/
+  font-family: Inter;
 }
 
 .About__explore-domain-panel h3 {
@@ -799,7 +802,7 @@
   font-weight: bold;
   color: #fff;
   line-height: 60px;
-  /*font-family: Montserrat;*/
+  font-family: Inter;
 }
 
 .About__explore-domain-panel-dark .divider {
