@@ -15,13 +15,13 @@ const Banner = () => {
         />
         <div className="dashboards__banner-right">
           <BannerImage
-            src={getOssUrl("img_analysis_banner_2022081602.png")}
+            src={getOssUrl("img_analysis_banner_2022081602.jpg")}
             width={332}
             height={164}
             url="https://footprint.cool/4vcC"
           />
           <BannerImage
-            src={getOssUrl("img_analysis_banner_2022081603.png")}
+            src={getOssUrl("img_analysis_banner_2022081603.jpg")}
             width={332}
             height={164}
             url="https://footprint.cool/yv9I"

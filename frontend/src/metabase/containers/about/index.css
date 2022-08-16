@@ -273,7 +273,7 @@
 }
 
 .About__cover-list b {
-  font-family: "D-DIN", sans-serif;
+  /*font-family: "D-DIN", sans-serif;*/
   font-size: 48px;
   font-weight: bold;
   color: #fff;
@@ -744,7 +744,7 @@
   font-size: 42px;
   line-height: 60px;
   font-weight: bold;
-  font-family: "D-DIN", sans-serif;
+  /*font-family: "D-DIN", sans-serif;*/
 }
 
 .About__basic-item h3 {
@@ -792,7 +792,7 @@
   font-weight: bold;
   color: #3434b2;
   line-height: 60px;
-  font-family: "D-DIN", sans-serif;
+  /*font-family: "D-DIN", sans-serif;*/
 }
 
 .About__explore-domain-panel h3 {
@@ -806,7 +806,7 @@
   font-weight: bold;
   color: #fff;
   line-height: 60px;
-  font-family: "D-DIN", sans-serif;
+  /*font-family: "D-DIN", sans-serif;*/
 }
 
 .About__explore-domain-panel-dark .divider {
@@ -911,8 +911,8 @@
     url("https://static.footprint.network/img_about_icon_bg_2022081534.png"),
     url("https://static.footprint.network/img_about_icon_bg_2022081535.png"),
     url("https://static.footprint.network/img_about_icon_bg_2022081601.png"),
-    url("https://static.footprint.network/img_about_icon_bg_2022081602.jpg"),
-    url("https://static.footprint.network/img_about_icon_bg_2022081604.jpg");
+    url("https://static.footprint.network/img_about_icon_bg_2022081602.png"),
+    url("https://static.footprint.network/img_about_icon_bg_2022081604.png");
   background-size: 54px 54px, 48px 48px, 240px 132px, 32px 32px, 48px 48px,
     240px 240px, 900px 680px, 720px 520px, 92px 80px;
   background-repeat: no-repeat, no-repeat, no-repeat, no-repeat, no-repeat,
