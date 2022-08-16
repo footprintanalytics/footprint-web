@@ -304,12 +304,12 @@ const data = {
     {
       title: "Discover Games",
       className: "About__btn--white",
-      url: "/dashboards",
+      url: "https://www.footprint.network/@Footprint/GameFi-Dashboard",
     },
     {
       title: "Discover NFT Collections",
       className: "About__btn--white",
-      url: "/dashboards",
+      url: "https://www.footprint.network/@0xLam/NFT-Collections",
     },
   ],
   basicData: indicator => [
@@ -332,6 +332,72 @@ const data = {
       title: "Marketplaces",
       total: indicator?.nftParsedMarketplaces,
       img: getOssUrl("img_about_basic_2022081304.png?3"),
+    },
+  ],
+  navListDataChain: [
+    {
+      title: "Chain List",
+      active: true,
+      query:
+        "https://www.footprint.network/public/chart/Chain-fp-90bb9cd4-33b8-402b-bf0e-cbcc45ed3049",
+      url: "https://www.footprint.network/@Footprint/Chain",
+    },
+    {
+      title: "Daily Transaction & Avg Gas Fee",
+      query:
+        "https://www.footprint.network/public/chart/Daily-Transaction-%26-Avg-Gas-Fee-fp-593ea116-2797-4ff8-8d4b-520626743f38",
+      url:
+        "https://www.footprint.network/@enmai/Avalaunche-Transaction-Dashbord",
+    },
+    {
+      title: "Stargate",
+      query:
+        "https://www.footprint.network/public/chart/Stargate-fp-08a9e226-6c84-4408-bf2c-3b5fc4318ce8",
+      url: "https://www.footprint.network/@NCL/Stargate-Finance",
+    },
+  ],
+  navListDataGameFi: [
+    {
+      title: "Game Ranking",
+      active: true,
+      query:
+        "https://www.footprint.network/public/chart/Game-Ranking-fp-5bcb75e9-65b6-4c91-8482-0d2bf998eb4b",
+      url: "https://www.footprint.network/@Footprint/GameFi-Dashboard",
+    },
+    {
+      title: "Daily Gamers Trend",
+      query:
+        "https://www.footprint.network/public/chart/Daily-Gamers-Trend-fp-4f6ac9d0-c0f7-43d5-a7ea-9a55593f8b5b",
+      url: "https://www.footprint.network/@Footprint/GameFi-Project-Summary",
+    },
+    {
+      title: "Number of GameFi Protocols by Chain",
+      query:
+        "https://www.footprint.network/public/chart/Number-of-GameFi-Protocols-by-Chain-fp-e4bfcede-a346-4355-b7da-10d988887e99",
+      url:
+        "https://www.footprint.network/@DamonSalvatore/GameFi-in-Bull-Bear-Market",
+    },
+  ],
+  navListDataNft: [
+    {
+      title: "Top Marketplaces",
+      active: true,
+      query:
+        "https://www.footprint.network/public/chart/Top-Marketplaces-fp-639ed028-73ce-49b0-a3c0-f0ac56839381",
+      url: "https://www.footprint.network/@Footprint/NFT",
+    },
+    {
+      title: "Top Collections ",
+      query:
+        "https://www.footprint.network/public/chart/Top-Collections-(30D)-fp-f87c0c3d-fe87-4faf-9dc7-8b62620b9f40",
+      url: "https://www.footprint.network/@Footprint/NFT-Marketplace",
+    },
+    {
+      title: "NFT Volume by Marketplaces",
+      query:
+        "https://www.footprint.network/public/chart/30D-NFT-Volume-by-Marketplaces-fp-17f1d52d-9ab7-4970-a40e-4c083c260768",
+      url:
+        "https://www.footprint.network/@0xLam/NFT-Marketplaces-X2Y2-OpenSea-LooksRare",
     },
   ],
 };

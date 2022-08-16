@@ -3,33 +3,16 @@ import React, { useState } from "react";
 import AboutExploreTab from "metabase/containers/about/components/AboutTab";
 import { trackStructEvent } from "metabase/lib/analytics";
 import WrapLink from "metabase/containers/about/components/WrapLink";
-import PublicDashboard from "metabase/guest/Dashboard";
-import PublicQuestion from "metabase/guest/Question";
 import { Spin } from "antd";
 
 const AboutExploreDomain = ({
   title,
+  navListData,
   data,
   exploreButton,
   className = "",
   dark = false,
 }) => {
-  const navListData = [
-    {
-      title: "dashboard 1",
-      active: true,
-      query:
-        "https://www.footprint.network/public/chart/TVL-All-Chains-fp-5f34f04d-7521-475f-bf40-23f0b12c8e51",
-    },
-    {
-      title: "dashboard 2",
-      query:
-        "https://www.footprint.network/public/chart/GameFi-Go-fp-8f8f2c55-b993-482c-b3f0-591465f36a43",
-    },
-    {
-      title: "dashboard 3",
-    },
-  ];
   const panelClassName = dark
     ? "About__explore-domain-panel-dark"
     : "About__explore-domain-panel";
@@ -75,7 +58,10 @@ const AboutExploreDomain = ({
       {/*  showEditButton={false}*/}
       {/*  featuresMode={true}*/}
       {/*/>*/}
-      <WrapLink key={exploreButton?.title} url={exploreButton?.url}>
+      <WrapLink
+        key={exploreButton?.title}
+        url={navList?.find(item => item.active)?.url}
+      >
         <div
           className={`About__btn About__btn--lg ${exploreButton?.className}`}
           onClick={() => trackStructEvent("About", exploreButton?.title)}

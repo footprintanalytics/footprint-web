@@ -19,8 +19,7 @@ const About = props => {
   // const { dashboard, isLoading } = useQueryDashboard({ query: dashboardQuery });
   const { news } = useQueryNews();
   const { indicator } = useQueryIndicator();
-  console.log("indicator", indicator);
-  console.log("news", news);
+
   return (
     <div className="About">
       <AboutStart indicator={indicator} />
@@ -41,6 +40,7 @@ const About = props => {
           url: "/",
           className: "About__btn--blue About__btn-radius",
         }}
+        navListData={data.navListDataChain}
       />
       <AboutExploreDomain
         title={<div>Explore Games in Footprint</div>}
@@ -56,6 +56,7 @@ const About = props => {
           url: "/",
           className: "About__btn--white About__btn-radius",
         }}
+        navListData={data.navListDataGameFi}
       />
       <AboutExploreDomain
         title={
@@ -76,6 +77,7 @@ const About = props => {
           url: "/",
           className: "About__btn--blue About__btn-radius",
         }}
+        navListData={data.navListDataNft}
       />
       <AboutCreateDashboard
         title={

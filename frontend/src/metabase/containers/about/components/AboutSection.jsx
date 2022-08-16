@@ -1,5 +1,5 @@
 /* eslint-disable react/prop-types */
-import { Image, message, Skeleton } from "antd";
+import { Image, Skeleton } from "antd";
 import { trackStructEvent } from "metabase/lib/analytics";
 import React, { useState } from "react";
 import WrapLink from "metabase/containers/about/components/WrapLink";
@@ -8,7 +8,6 @@ import { push } from "react-router-redux";
 import { loginModalShowAction } from "metabase/redux/control";
 import _ from "underscore";
 import { connect } from "react-redux";
-import { debounce } from "lodash";
 
 const AboutSection = ({
   reverse,
