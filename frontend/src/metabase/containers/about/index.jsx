@@ -69,7 +69,7 @@ const About = props => {
         data={[
           { title: "Chains Covered", total: indicator?.nftChains },
           { title: "Chains Parsed", total: indicator?.nftParsedChains },
-          { title: "Marketplace", total: indicator?.nftParsedMarketplaces },
+          { title: "Marketplaces", total: indicator?.nftParsedMarketplaces },
           { title: "NFT Collections", total: indicator?.nftCollections },
         ]}
         className="About__explore-nft-bg"

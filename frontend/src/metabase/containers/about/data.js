@@ -311,7 +311,7 @@ const data = {
     {
       title: "Discover NFT Collections",
       className: "About__btn--white",
-      url: "https://www.footprint.network/@0xLam/NFT-Collections",
+      url: "https://www.footprint.network/@Footprint/NFT",
     },
   ],
   basicData: indicator => [
@@ -338,21 +338,21 @@ const data = {
   ],
   navListDataChain: [
     {
-      title: "Chain List",
+      title: "Chains",
       active: true,
       query:
         "https://www.footprint.network/public/chart/Chain-fp-90bb9cd4-33b8-402b-bf0e-cbcc45ed3049",
       url: "https://www.footprint.network/@Footprint/Chain",
     },
     {
-      title: "Daily Transaction & Avg Gas Fee",
+      title: "Transactions & Gas Fee",
       query:
         "https://www.footprint.network/public/chart/Daily-Transaction-%26-Avg-Gas-Fee-fp-593ea116-2797-4ff8-8d4b-520626743f38",
       url:
         "https://www.footprint.network/@enmai/Avalaunche-Transaction-Dashbord",
     },
     {
-      title: "Stargate",
+      title: "Protocols in Different Chains",
       query:
         "https://www.footprint.network/public/chart/Stargate-fp-08a9e226-6c84-4408-bf2c-3b5fc4318ce8",
       url: "https://www.footprint.network/@NCL/Stargate-Finance",
@@ -395,7 +395,7 @@ const data = {
       url: "https://www.footprint.network/@Footprint/NFT-Marketplace",
     },
     {
-      title: "NFT Volume by Marketplaces",
+      title: "NFT Volume by Marketplace",
       query:
         "https://www.footprint.network/public/chart/30D-NFT-Volume-by-Marketplaces-fp-17f1d52d-9ab7-4970-a40e-4c083c260768",
       url:

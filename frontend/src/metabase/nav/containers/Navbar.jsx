@@ -79,8 +79,7 @@ const menus = [
     menu: [
       {
         title: "Top Games",
-        link:
-          "https://www.footprint.network/@Footprint/GameFi-Dashboard?chain=BSC",
+        link: "https://www.footprint.network/@Footprint/GameFi-Dashboard",
         externalLink: true,
       },
     ],
@@ -91,14 +90,7 @@ const menus = [
     menu: [
       {
         title: "Marketplaces",
-        link:
-          "https://www.footprint.network/@KikiSmith/NFT-Marketplaces-Analysis?relative_date=past7days",
-        externalLink: true,
-      },
-      {
-        title: "Top Collections",
-        link:
-          "https://www.footprint.network/@0xLam/NFT-Collections?chain=Ethereum&collection=meebits&series_date=past90days&marketplace=opensea",
+        link: "https://www.footprint.network/@Footprint/NFT",
         externalLink: true,
       },
     ],
