@@ -14,6 +14,7 @@ import AboutExploreDomain from "metabase/containers/about/components/AboutExplor
 import AboutCreateDashboard from "metabase/containers/about/components/AboutCreateDashboard";
 
 const About = props => {
+  const { children } = props;
   // const defaultDashboardQuery = data.dashboardNav[0].query;
   // const [dashboardQuery, setDashboardQuery] = useState(defaultDashboardQuery);
   // const { dashboard, isLoading } = useQueryDashboard({ query: dashboardQuery });
@@ -108,6 +109,7 @@ const About = props => {
       <AboutBacked list={data.backedList} />
       <AboutPartner list={data.partnerList} />
       <HomeFooter />
+      {children}
     </div>
   );
 };
