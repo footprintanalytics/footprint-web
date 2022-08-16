@@ -10,7 +10,8 @@ const data = {
 
   sectionList: [
     {
-      subTitle: "Footprint helps people and organizations be more data-driven",
+      subTitle:
+        "Footprint makes accessible blockchain analytics a reality for anyone",
       desc: "",
       list: [
         {

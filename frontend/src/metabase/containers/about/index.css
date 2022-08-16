@@ -856,14 +856,12 @@
   background-color: #313bb3;
   border-radius: 4px;
   color: #fff;
-  font-weight: bold;
 }
 .About__explore-tab-dark li:hover,
 .About__explore-tab-dark li.About__explore-tab-dark--active {
   background-color: #fff;
   border-radius: 4px;
   color: #303440;
-  font-weight: bold;
 }
 .About__explore-domain .EmbedFrame-footer {
   display: none;

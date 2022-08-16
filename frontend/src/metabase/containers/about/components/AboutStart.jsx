@@ -42,9 +42,11 @@ const AboutStart = ({
               key={item.title}
               url={item.url}
               onClick={e => {
-                e.preventDefault();
-                if (item.auth && isLogin()) {
-                  onChangeLocation(item.url);
+                if (item.auth) {
+                  e.preventDefault();
+                  if (isLogin()) {
+                    onChangeLocation(item.url);
+                  }
                 }
               }}
             >
