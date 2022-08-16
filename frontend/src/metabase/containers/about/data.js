@@ -47,44 +47,62 @@ const data = {
         title: "+ Create Dashboard",
         url: "/dashboard/new",
         className: "About__btn--blue mx2",
+        auth: true,
       },
     },
   ],
   sectionList2: [
     {
-      subTitle: "Suited for: NFT Marketplace, NFT Data Aggregator, NFT Tracker",
-      desc:
-        "Create custom displays for NFT collections from multiple networks.",
       list: [
         {
           title: "NFT Gallery",
-          img: getOssUrl("20220606154848.gif"),
+          img: getOssUrl("img_about_data_api_2022081611.png?1"),
+          subTitle:
+            "Suited for: NFT marketplace, NFT data aggregator, NFT tracker",
+          desc:
+            "Create custom displays for NFT collections from multiple networks.",
         },
         {
           title: "Find Potential NFTs",
-          img: getOssUrl("20220606154902.gif"),
+          img: getOssUrl("img_about_data_api_2022081612.png?1"),
+          subTitle:
+            "Suited for: Capital institutions, Investment/trading institution, Research consultant,",
+          desc:
+            "Discover the latest hot collections and access in-depth analytics for 70K+ projects.",
         },
         {
           title: "Research & Invest",
-          img: getOssUrl("20220606154919.gif"),
+          img: getOssUrl("img_about_data_api_2022081613.png?1"),
+          subTitle:
+            "Suited for: Investment/trading institution, Research consultant, Web2 financial entities",
+          desc: "Empower your research or investment with advanced indicators",
         },
         {
           title: "Whale Tracking",
-          img: getOssUrl("20220606154919.gif"),
+          img: getOssUrl("img_about_data_api_2022081614.png?1"),
+          subTitle:
+            "Suited for: Investment/trading institution, Crypto portfolio management, Exchange, Crypto wallet",
+          desc:
+            "Follow and track whales' addresses to identify investment opportunities and potential risks.",
         },
         {
           title: "GameFi Portal",
-          img: getOssUrl("20220606154919.gif"),
+          img: getOssUrl("img_about_data_api_2022081615.png?1"),
+          subTitle: "Suited for: GameFi studios, GameFi tracker, GameFi guilds",
+          desc: "A one-stop GameFi information aggregation platform",
         },
         {
           title: "Custom",
-          img: getOssUrl("20220606154919.gif"),
+          img: getOssUrl("img_about_data_api_2022081616.png?!"),
+          subTitle: "",
+          desc: "",
         },
       ],
       height: "470px",
       exploreButton: {
         title: "Get a Free Trial",
-        url: "/dashboard/new",
+        url: "mailto:sales@footprint.network",
+        target: "_blank",
         className: "About__btn--blue mx2",
       },
     },
@@ -297,23 +315,23 @@ const data = {
   basicData: indicator => [
     {
       title: "Chains",
-      total: indicator?.chains,
-      img: getOssUrl("img_about_basic_2022081301.png?1"),
+      total: indicator?.chainsParsed,
+      img: getOssUrl("img_about_basic_2022081301.png?3"),
     },
     {
       title: "NFT Collections",
       total: indicator?.nftCollections,
-      img: getOssUrl("img_about_basic_2022081302.png?1"),
+      img: getOssUrl("img_about_basic_2022081302.png?3"),
     },
     {
       title: "Games",
       total: indicator?.gamefiParsedProtocols,
-      img: getOssUrl("img_about_basic_2022081303.png?1"),
+      img: getOssUrl("img_about_basic_2022081303.png?3"),
     },
     {
       title: "Marketplaces",
       total: indicator?.nftParsedMarketplaces,
-      img: getOssUrl("img_about_basic_2022081304.png?1"),
+      img: getOssUrl("img_about_basic_2022081304.png?3"),
     },
   ],
 };

@@ -34,7 +34,7 @@
   color: #262626;
   line-height: 1.2;
   text-align: center;
-  font-weight: normal;
+  font-weight: bold;
 }
 
 .About__title-white {
@@ -56,7 +56,7 @@
 }
 
 .About__btn-radius {
-  border-radius: 8px;
+  border-radius: 4px;
 }
 
 .About__btn img {
@@ -94,7 +94,8 @@
   height: 48px;
   font-size: 16px;
   font-weight: 700;
-  margin-top: 36px;
+  margin-top: 32px;
+  border-radius: 4px;
 }
 
 .About__btn--lg {
@@ -102,7 +103,7 @@
   font-size: 16px;
   font-weight: 700;
   padding: 0 54px;
-  margin-top: 36px;
+  margin-top: 32px;
 }
 
 .About__btn--md {
@@ -110,7 +111,7 @@
   font-size: 16px;
   font-weight: 700;
   padding: 0 24px;
-  margin-top: 36px;
+  margin-top: 32px;
 }
 
 .About__header {
@@ -197,6 +198,7 @@
   font-size: 48px;
   font-weight: bold;
   line-height: 64px;
+  color: #303440;
 }
 
 .About__start-title span {
@@ -269,8 +271,9 @@
 }
 
 .About__cover-list b {
-  font-family: Montserrat;
-  font-size: 36px;
+  /*font-family: Montserrat;*/
+  font-size: 48px;
+  font-weight: bold;
   color: #fff;
   line-height: 1.2;
 }
@@ -296,7 +299,7 @@
 
 .About__section-wrap {
   display: flex;
-  justify-content: space-between;
+  grid-column-gap: 80px;
 }
 
 .About__section-wrap--reverse {
@@ -338,7 +341,7 @@
   font-size: 16px;
   color: #303440;
   line-height: 1.2;
-  font-weight: normal;
+  font-weight: bold;
 }
 
 .About__section-preview p {
@@ -349,12 +352,10 @@
 }
 
 .About__section-img {
-  width: 788px;
+  width: 660px;
   height: auto;
-  min-width: 788px;
-  min-height: 400px;
   border-radius: 4px;
-  box-shadow: 0 6px 14px #3434b210;
+  box-shadow: 0 6px 14px #3434b209;
 }
 
 .About__section-img-placeholder {
@@ -690,7 +691,7 @@
 }
 
 .About__basic-item-box {
-  height: 200px;
+  height: 210px;
   width: 240px;
   background: linear-gradient(225deg, #eef2ff, #ffffff);
   border: 3px solid white;
@@ -699,7 +700,7 @@
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  padding: 40px 20px;
+  padding: 36px 20px;
   position: relative;
 }
 
@@ -733,8 +734,10 @@
 
 .About__basic-item b {
   color: #3434b2;
-  font-size: 36px;
-  font-family: Montserrat;
+  font-size: 42px;
+  line-height: 60px;
+  font-weight: bold;
+  /*font-family: Montserrat;*/
 }
 
 .About__basic-item h3 {
@@ -743,7 +746,7 @@
 }
 
 .About__basic-item img {
-  margin-top: 10px;
+  margin-top: 16px;
 }
 
 .About__explore-domain {
@@ -751,7 +754,7 @@
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  padding: 100px 0;
+  padding: 80px 0;
   background-color: #fafbfe;
 }
 
@@ -760,11 +763,11 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  margin: 40px 0;
+  margin: 32px 0;
 }
 
 .About__explore-domain-panel-item {
-  width: 300px;
+  width: 240px;
   display: flex;
   flex-direction: column;
   justify-content: center;
@@ -778,11 +781,11 @@
 }
 
 .About__explore-domain-panel b {
-  font-size: 60px;
+  font-size: 48px;
   font-weight: bold;
   color: #3434b2;
   line-height: 60px;
-  font-family: Montserrat;
+  /*font-family: Montserrat;*/
 }
 
 .About__explore-domain-panel h3 {
@@ -796,7 +799,7 @@
   font-weight: bold;
   color: #fff;
   line-height: 60px;
-  font-family: Montserrat;
+  /*font-family: Montserrat;*/
 }
 
 .About__explore-domain-panel-dark .divider {
@@ -814,7 +817,7 @@
 .About__explore-tab-dark,
 .About__explore-tab {
   display: flex;
-  margin: 20px 0;
+  margin: 8px 0;
 }
 
 .About__explore-tab li {
@@ -844,13 +847,13 @@
 .About__explore-tab li:hover,
 .About__explore-tab li.About__explore-tab--active {
   background-color: #2a2aeb;
-  border-radius: 8px;
+  border-radius: 4px;
   color: #fff;
 }
 .About__explore-tab-dark li:hover,
 .About__explore-tab-dark li.About__explore-tab-dark--active {
   background-color: #fff;
-  border-radius: 8px;
+  border-radius: 4px;
   color: #303440;
 }
 .About__explore-domain .EmbedFrame-footer {
@@ -907,7 +910,7 @@
     240px 240px, 900px 680px, 720px 520px, 92px 80px;
   background-repeat: no-repeat, no-repeat, no-repeat, no-repeat, no-repeat,
     no-repeat, no-repeat, no-repeat, no-repeat;
-  background-position: top 30% left 5%, top 10% left 10%, top 25% right 15%,
+  background-position: top 30% left 5%, top 10% left 10%, top 30% right 15%,
     top 50% right 8%, bottom 5% right 20%, bottom 10% left 12%, top left,
     bottom right, bottom left;
 }
@@ -920,8 +923,8 @@
 }
 
 .About__explore-domain iframe {
-  margin: 40px 0;
-  box-shadow: 0 6px 60px #30344020;
+  margin: 32px 0;
+  box-shadow: 0 6px 60px #30344013;
 }
 
 .About__create-dashboard {
