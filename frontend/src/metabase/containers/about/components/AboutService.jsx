@@ -33,13 +33,7 @@ const AboutService = () => {
     {
       title: "Flexible Infrastructure",
       desc: (
-        <>
-          Secure and scalable infrastructure
-          <br />
-          supports Rest API
-          <br />
-          and GraphQL
-        </>
+        <>Secure and scalable infrastructure supports Rest API and GraphQL</>
       ),
       icon: getOssUrl("img_about_service_2022081303.png?1"),
       width: "114px",
@@ -49,9 +43,9 @@ const AboutService = () => {
       title: "Customizable",
       desc: (
         <>
-          Our APIs are made to fit all your
+          Our APIs are made to fit
           <br />
-          data needs
+          all your data needs
         </>
       ),
       icon: getOssUrl("img_about_service_2022081304.png?1"),
@@ -76,7 +70,10 @@ const AboutService = () => {
   return (
     <div className="About__service">
       <div className="About__container">
-        <h3 className="About__title">Use Data API to Built Your Application</h3>
+        <h3 className="About__title">
+          Use <span className="About__title-bland">Data API</span> to Built Your
+          Application
+        </h3>
         <ul>
           {list.map(item => (
             <li key={item.title}>

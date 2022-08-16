@@ -94,7 +94,9 @@ const AboutSection = ({
               </div>
             }
             preview={false}
-            className="About__section-img"
+            className={`About__section-img ${
+              active.hideBoxShadow ? "" : "About__section-img-shadow"
+            }`}
             src={active.img}
             alt={active.title}
           />

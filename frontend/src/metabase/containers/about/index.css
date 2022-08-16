@@ -337,6 +337,7 @@
 .About__section-side li.About__section-side--active {
   border-left: 3px solid #2a2aeb;
   background: #fff;
+  font-weight: bold;
 }
 
 .About__section-preview h4 {
@@ -358,6 +359,9 @@
   height: auto;
   border-radius: 4px;
   margin-top: 12px;
+}
+
+.About__section-img-shadow {
   box-shadow: 0 6px 48px #3434b213;
 }
 
@@ -380,11 +384,11 @@
   width: 230px;
   height: 230px;
   background-color: #ffffff;
-  border: 1px solid #e1e1e1;
   display: flex;
   flex-direction: column;
-  padding: 10px 0;
+  padding: 10px 12px;
   text-align: center;
+  box-shadow: 0 6px 24px #30344013;
 }
 
 .About__service-icon img {
@@ -526,7 +530,7 @@
 }
 
 .About__explore-list-left h3 {
-  font-size: 20px;
+  font-size: 18px;
   color: #000000;
   line-height: 1;
   margin-bottom: 8px;
@@ -584,8 +588,7 @@
   white-space: unset;
   line-height: 1.2;
   margin-bottom: 12px;
-  font-weight: normal;
-  font-size: 20px;
+  font-size: 18px;
   max-width: 100%;
   color: #303440;
 }
@@ -758,7 +761,7 @@
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  padding: 80px 0;
+  padding: 96px 0;
   background-color: #fafbfe;
 }
 
@@ -785,7 +788,7 @@
 }
 
 .About__explore-domain-panel b {
-  font-size: 48px;
+  font-size: 42px;
   font-weight: bold;
   color: #3434b2;
   line-height: 60px;
@@ -793,13 +796,13 @@
 }
 
 .About__explore-domain-panel h3 {
-  font-size: 18px;
+  font-size: 16px;
   font-weight: bold;
   color: #000000;
 }
 
 .About__explore-domain-panel-dark b {
-  font-size: 60px;
+  font-size: 42px;
   font-weight: bold;
   color: #fff;
   line-height: 60px;
@@ -813,7 +816,7 @@
 }
 
 .About__explore-domain-panel-dark h3 {
-  font-size: 18px;
+  font-size: 16px;
   font-weight: bold;
   color: #fff;
 }
@@ -853,12 +856,14 @@
   background-color: #313bb3;
   border-radius: 4px;
   color: #fff;
+  font-weight: bold;
 }
 .About__explore-tab-dark li:hover,
 .About__explore-tab-dark li.About__explore-tab-dark--active {
   background-color: #fff;
   border-radius: 4px;
   color: #303440;
+  font-weight: bold;
 }
 .About__explore-domain .EmbedFrame-footer {
   display: none;
@@ -879,9 +884,9 @@
     48px 48px, 56px 56px, 80px 80px, 56px 56px, 80px 80px;
   background-repeat: no-repeat, no-repeat, no-repeat, no-repeat, no-repeat,
     no-repeat, no-repeat, no-repeat, no-repeat, no-repeat;
-  background-position: top 20% left 0, top 10% left 12%, top 15% left 18%,
-    top 5% left 22%, top 2% left 35%, top 18% right 25%, top 8% right 22%,
-    top 10% right 4%, top 30% right 1%, top 22% left 10%;
+  background-position: top 23% left 0, top 13% left 12%, top 18% left 18%,
+    top 8% left 22%, top 5% left 35%, top 23% right 25%, top 11% right 22%,
+    top 13% right 4%, top 33% right 1%, top 25% left 10%;
 }
 
 .About__explore-games-bg {
@@ -908,8 +913,8 @@
     url("https://static.footprint.network/img_about_icon_bg_2022081534.png"),
     url("https://static.footprint.network/img_about_icon_bg_2022081535.png"),
     url("https://static.footprint.network/img_about_icon_bg_2022081601.png"),
-    url("https://static.footprint.network/img_about_icon_bg_2022081602.png"),
-    url("https://static.footprint.network/img_about_icon_bg_2022081604.png");
+    url("https://static.footprint.network/img_about_icon_bg_2022081602.jpg"),
+    url("https://static.footprint.network/img_about_icon_bg_2022081604.jpg");
   background-size: 54px 54px, 48px 48px, 240px 132px, 32px 32px, 48px 48px,
     240px 240px, 900px 680px, 720px 520px, 92px 80px;
   background-repeat: no-repeat, no-repeat, no-repeat, no-repeat, no-repeat,

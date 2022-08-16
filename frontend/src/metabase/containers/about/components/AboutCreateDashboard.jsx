@@ -31,6 +31,7 @@ const AboutCreateDashboard = props => {
           title={item.title}
           subTitle={item.subTitle}
           desc={item.desc}
+          hideBoxShadow={item.hideBoxShadow}
           list={item.list}
           height={item.height}
           exploreButton={item.exploreButton}

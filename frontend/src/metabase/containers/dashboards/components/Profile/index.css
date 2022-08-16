@@ -25,6 +25,9 @@
   margin: 12px;
   padding: 16px;
 }
+.dashboards__profile-also div {
+  margin: 4px 0;
+}
 
 .dashboards__profile-action-item {
   display: flex;
@@ -53,4 +56,5 @@
   line-height: 16px;
   color: #303440;
   margin: 4px 0 0 0;
+  font-weight: bold;
 }

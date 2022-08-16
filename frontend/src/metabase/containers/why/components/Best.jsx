@@ -95,12 +95,12 @@ const data = [
     logo: "img-angel-jary-ngan.png",
     name: "angel-jary-ngan",
   },
-  {
+  /*{
     type: "logo",
     url: "https://twitter.com/thejewforu",
     logo: "img-angel-avi-zurlo.png",
     name: "angel-avi-zurlo",
-  },
+  },*/
 ];
 
 const Best = ({ user }) => {

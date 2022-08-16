@@ -96,6 +96,7 @@ const data = {
           img: getOssUrl("img_about_data_api_2022081616.png?!"),
           subTitle: "",
           desc: "",
+          hideBoxShadow: true,
         },
       ],
       height: "470px",
@@ -166,10 +167,10 @@ const data = {
       url: "https://twitter.com/JarylNgan",
       logo: "img-angel-jary-ngan.png",
     },
-    {
+    /*{
       url: "https://twitter.com/thejewforu",
       logo: "img-angel-avi-zurlo.png",
-    },
+    },*/
   ],
 
   partnerList: [
@@ -367,8 +368,8 @@ const data = {
     {
       title: "Daily Gamers Trend",
       query:
-        "https://www.footprint.network/public/chart/Daily-Gamers-Trend-fp-4f6ac9d0-c0f7-43d5-a7ea-9a55593f8b5b",
-      url: "https://www.footprint.network/@Footprint/GameFi-Project-Summary",
+        "https://www.footprint.network/public/chart/Daily-Gamers-Trend-fp-464ea351-eef7-44b4-921a-b8d3f22248fd",
+      url: "https://www.footprint.network/@rogerD/GameFi-Users-Overview",
     },
     {
       title: "Number of GameFi Protocols by Chain",

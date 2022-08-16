@@ -52,7 +52,7 @@ const About = props => {
         className="About__explore-games-bg"
         dark={true}
         exploreButton={{
-          title: "Explore More games >",
+          title: "Explore More Games >",
           url: "/",
           className: "About__btn--white About__btn-radius",
         }}
@@ -96,12 +96,6 @@ const About = props => {
       <AboutService />
 
       <AboutCreateDashboard
-        title={
-          <div>
-            Use <span className="About__title-bland">Data API</span> to Built
-            Your Application
-          </div>
-        }
         list={data.sectionList2}
         className={"About__create-nft"}
       />

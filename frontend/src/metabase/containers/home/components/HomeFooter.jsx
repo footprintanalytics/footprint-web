@@ -122,11 +122,11 @@ const HomeFooter = props => {
             alt="Footprint analytics"
           />
           <span data-nosnippet>
-            Footprint is a powerful yet easy-to-use analytics tool to uncover
-            and visualize blockchain data. The product puts user experience
-            first whether you’re an analyst, data scientist, developer, student,
-            teacher, or executive. It provides an intuitive, drag-and-drop
-            interface for interactive data queries.
+            Footprint Analytics is a tool to uncover and visualize data across
+            the blockchain, including NFT and GameFi data. It currently
+            collects, parses and cleans data from 17 chains and lets users build
+            charts and dashboards without code using a drag-and-drop interface
+            as well as with SQL or Python.
           </span>
           <span data-nosnippet>
             Disclaimer: All data and articles on Footprint Analytics are for
