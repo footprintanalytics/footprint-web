@@ -1,11 +1,6 @@
 /* eslint-disable curly */
-import { RightOutlined } from "@ant-design/icons";
-import { message } from "antd";
-import { trackStructEvent } from "metabase/lib/analytics";
 import { getOssUrl } from "metabase/lib/image";
 import React from "react";
-import WrapLink from "./WrapLink";
-import Button from "metabase/components/Button";
 
 const AboutService = () => {
   const list = [

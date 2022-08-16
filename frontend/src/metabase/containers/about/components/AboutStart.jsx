@@ -41,7 +41,8 @@ const AboutStart = ({
             <WrapLink
               key={item.title}
               url={item.url}
-              onClick={() => {
+              onClick={e => {
+                e.preventDefault();
                 if (item.auth && isLogin()) {
                   onChangeLocation(item.url);
                 }

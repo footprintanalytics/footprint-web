@@ -73,7 +73,7 @@ const menus = [
     path: "/dashboards",
     auth: false,
   },
-  {
+  /*{
     title: "GameFi",
     icon: "menu_home",
     path: "/dashboards",
@@ -84,7 +84,7 @@ const menus = [
     icon: "menu_home",
     path: "/dashboards",
     auth: false,
-  },
+  },*/
   {
     name: "Data",
     icon: "protocols",

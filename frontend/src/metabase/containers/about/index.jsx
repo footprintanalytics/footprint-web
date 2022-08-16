@@ -1,5 +1,5 @@
 /* eslint-disable react/prop-types */
-import React, { useState } from "react";
+import React from "react";
 import "./index.css";
 import AboutStart from "./components/AboutStart";
 import AboutService from "./components/AboutService";
@@ -8,7 +8,7 @@ import AboutBacked from "./components/AboutBacked";
 import AboutPartner from "./components/AboutPartner";
 import HomeFooter from "../home/components/HomeFooter";
 import data from "./data";
-import { useQueryDashboard, useQueryIndicator, useQueryNews } from "./hook";
+import { useQueryIndicator, useQueryNews } from "./hook";
 import { connect } from "react-redux";
 import AboutExploreDomain from "metabase/containers/about/components/AboutExploreDomain";
 import AboutCreateDashboard from "metabase/containers/about/components/AboutCreateDashboard";
@@ -89,7 +89,7 @@ const About = props => {
           { title: "Community Dashboards", total: indicator?.dashboards },
           { title: "Community Charts", total: indicator?.charts },
         ]}
-        className={"About__create-dashboard"}
+        className={"About__create-dashboard About__create-dashboards-bg"}
       />
       <AboutService />
 

@@ -858,7 +858,7 @@
 }
 
 .About__explore-domain-bg {
-  background-image: url("https://static.footprint.network/img_about_icon_bg_2022081510.png"),
+  background-image: url("https://static.footprint.network/img_about_icon_bg_2022081510.png?1"),
     url("https://static.footprint.network/img_about_icon_bg_2022081511.png"),
     url("https://static.footprint.network/img_about_icon_bg_2022081512.png"),
     url("https://static.footprint.network/img_about_icon_bg_2022081513.png"),
@@ -868,11 +868,11 @@
     url("https://static.footprint.network/img_about_icon_bg_2022081517.png"),
     url("https://static.footprint.network/img_about_icon_bg_2022081518.png"),
     url("https://static.footprint.network/img_about_icon_bg_2022081519.png");
-  background-size: 68px 68px, 32px 32px, 56px 56px, 48px 48px, 240px 240px,
+  background-size: 48px 68px, 32px 32px, 56px 56px, 48px 48px, 240px 240px,
     48px 48px, 56px 56px, 80px 80px, 56px 56px, 80px 80px;
   background-repeat: no-repeat, no-repeat, no-repeat, no-repeat, no-repeat,
     no-repeat, no-repeat, no-repeat, no-repeat, no-repeat;
-  background-position: top 20% left -1%, top 10% left 12%, top 15% left 18%,
+  background-position: top 20% left 0, top 10% left 12%, top 15% left 18%,
     top 5% left 22%, top 2% left 35%, top 18% right 25%, top 8% right 22%,
     top 10% right 4%, top 30% right 1%, top 22% left 10%;
 }
@@ -899,13 +899,24 @@
     url("https://static.footprint.network/img_about_icon_bg_2022081532.png"),
     url("https://static.footprint.network/img_about_icon_bg_2022081533.png"),
     url("https://static.footprint.network/img_about_icon_bg_2022081534.png"),
-    url("https://static.footprint.network/img_about_icon_bg_2022081535.png");
+    url("https://static.footprint.network/img_about_icon_bg_2022081535.png"),
+    url("https://static.footprint.network/img_about_icon_bg_2022081601.png"),
+    url("https://static.footprint.network/img_about_icon_bg_2022081602.png"),
+    url("https://static.footprint.network/img_about_icon_bg_2022081604.png");
   background-size: 54px 54px, 48px 48px, 240px 132px, 32px 32px, 48px 48px,
-    240px 240px;
+    240px 240px, 900px 680px, 720px 520px, 92px 80px;
   background-repeat: no-repeat, no-repeat, no-repeat, no-repeat, no-repeat,
-    no-repeat;
+    no-repeat, no-repeat, no-repeat, no-repeat;
   background-position: top 30% left 5%, top 10% left 10%, top 25% right 15%,
-    top 50% right 8%, bottom 5% right 20%, bottom 10% left 12%;
+    top 50% right 8%, bottom 5% right 20%, bottom 10% left 12%, top left,
+    bottom right, bottom left;
+}
+
+.About__create-dashboards-bg {
+  background-image: url("https://static.footprint.network/img_about_icon_bg_2022081603.png");
+  background-size: 92px 160px;
+  background-repeat: no-repeat;
+  background-position: top left;
 }
 
 .About__explore-domain iframe {
@@ -915,7 +926,7 @@
 
 .About__create-dashboard {
   padding: 80px 0;
-  background: #fff;
+  background-color: #fff;
 }
 
 .About__create-nft {
