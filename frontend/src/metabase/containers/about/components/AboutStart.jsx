@@ -29,11 +29,11 @@ const AboutStart = ({
   return (
     <div className="About__start">
       <div className="About__start-title">
-        <h3>Blockchain analytics made simple</h3>
-        <span>
+        <h1>Blockchain analytics made simple</h1>
+        <h2>
           Explore community-built analysis and create charts <br />
           with no code required.
-        </span>
+        </h2>
       </div>
       <AboutSocial />
       <div className="About__start-buttons">

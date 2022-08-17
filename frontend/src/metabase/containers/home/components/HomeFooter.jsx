@@ -15,16 +15,16 @@ const footers = [
     items: [
       {
         label: "Insights",
-        url: "https://insights.footprint.network/",
+        url: "/news/featured",
       },
       {
         label: "Docs",
         url: "https://docs.footprint.network/",
       },
-      {
+      /*{
         label: "Tutorials",
         url: "/tutorials/visualizations",
-      },
+      },*/
       {
         label: "Data Dictionary",
         url:
@@ -39,10 +39,10 @@ const footers = [
   {
     title: "Analytics",
     items: [
-      {
+      /*{
         label: "GameFi Protocols",
         url: "/protocols",
-      },
+      },*/
       {
         label: "Projects Analytics",
         url: "/projects",
@@ -60,10 +60,10 @@ const footers = [
   {
     title: "Company",
     items: [
-      {
+      /*{
         label: "Why Footprint",
         url: "/about",
-      },
+      },*/
       {
         label: "News",
         url: "/news/featured",

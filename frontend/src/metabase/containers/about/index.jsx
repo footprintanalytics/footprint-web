@@ -31,10 +31,10 @@ const About = props => {
         <AboutStart indicator={indicator} />
         <AboutExploreDomain
           title={
-            <div>
+            <h3>
               Explore <span className="About__title-bland">Chains</span> in
               Footprint
-            </div>
+            </h3>
           }
           data={[
             { title: "Chains Covered", total: indicator?.chains },
@@ -42,14 +42,19 @@ const About = props => {
           ]}
           className="About__explore-domain-bg"
           exploreButton={{
-            title: "Explore More Chains >",
+            title: "Explore More Chains ",
             url: "/",
             className: "About__btn--blue About__btn-radius",
           }}
           navListData={data.navListDataChain}
         />
         <AboutExploreDomain
-          title={<div>Explore Games in Footprint</div>}
+          title={
+            <h3>
+              Explore <span className="About__title-light-blue">Games</span> in
+              Footprint
+            </h3>
+          }
           data={[
             { title: "Chains Covered", total: indicator?.gamefiChains },
             { title: "Chains Parsed", total: indicator?.gamefiParsedChains },
@@ -58,7 +63,7 @@ const About = props => {
           className="About__explore-games-bg"
           dark={true}
           exploreButton={{
-            title: "Explore Blockchain Games in Footprint >",
+            title: "Explore Blockchain Games in Footprint ",
             url: "/",
             className: "About__btn--white About__btn-radius",
           }}
@@ -66,11 +71,11 @@ const About = props => {
         />
         <AboutExploreDomain
           title={
-            <div>
+            <h3>
               Explore{" "}
               <span className="About__title-bland">NFT Collections</span> in
               Footprint
-            </div>
+            </h3>
           }
           data={[
             { title: "Chains Covered", total: indicator?.nftChains },
@@ -80,7 +85,7 @@ const About = props => {
           ]}
           className="About__explore-nft-bg"
           exploreButton={{
-            title: "Explore More Collections >",
+            title: "Explore More Collections ",
             url: "/",
             className: "About__btn--blue About__btn-radius",
           }}
@@ -88,10 +93,10 @@ const About = props => {
         />
         <AboutCreateDashboard
           title={
-            <div>
+            <h3>
               Create <span className="About__title-bland">Dashboards</span>{" "}
               Using Footprint
-            </div>
+            </h3>
           }
           list={data.sectionList}
           data={[

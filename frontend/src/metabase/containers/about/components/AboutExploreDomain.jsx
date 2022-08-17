@@ -3,6 +3,7 @@ import React, { useState } from "react";
 import AboutExploreTab from "metabase/containers/about/components/AboutTab";
 import { trackStructEvent } from "metabase/lib/analytics";
 import WrapLink from "metabase/containers/about/components/WrapLink";
+import { RightOutlined } from "@ant-design/icons";
 
 const AboutExploreDomain = ({
   title,
@@ -50,12 +51,6 @@ const AboutExploreDomain = ({
         height="600"
         allowTransparency
       />
-      {/*<PublicQuestion*/}
-      {/*  location={location}*/}
-      {/*  uuid={"8f8f2c55-b993-482c-b3f0-591465f36a43"}*/}
-      {/*  showEditButton={false}*/}
-      {/*  featuresMode={true}*/}
-      {/*/>*/}
       <WrapLink
         key={exploreButton?.title}
         url={navList?.find(item => item.active)?.url}
@@ -64,7 +59,7 @@ const AboutExploreDomain = ({
           className={`About__btn About__btn--lg ${exploreButton?.className}`}
           onClick={() => trackStructEvent("About", exploreButton?.title)}
         >
-          {exploreButton?.title}
+          {exploreButton?.title} <RightOutlined className="ml1" />
         </div>
       </WrapLink>
     </div>

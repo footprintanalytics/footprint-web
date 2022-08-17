@@ -34,11 +34,11 @@ const data = {
           img: getOssUrl("20220606155721.gif"),
         },
         {
-          title: "Custom Columns",
+          title: "Custom columns",
           img: getOssUrl("20220606155803.gif"),
         },
         {
-          title: "Excel-like Experience",
+          title: "Excel-like experience",
           img: getOssUrl("20220606155903.gif"),
         },
       ],
@@ -54,6 +54,13 @@ const data = {
   sectionList2: [
     {
       list: [
+        {
+          title: "Custom",
+          img: getOssUrl("img_about_data_api_2022081616.png?!"),
+          subTitle: "For any web2 or web3 companies",
+          desc: "Explore our API ecosystem to build your own use case.",
+          hideBoxShadow: true,
+        },
         {
           title: "NFT gallery",
           img: getOssUrl("img_about_data_api_2022081613.png?3"),
@@ -86,15 +93,8 @@ const data = {
         {
           title: "GameFi portal",
           img: getOssUrl("img_about_data_api_2022081611.png?3"),
-          subTitle: "Suited for: GameFi studios, GameFi tracker, GameFi guilds",
-          desc: "A one-stop GameFi information aggregation platform",
-        },
-        {
-          title: "Custom",
-          img: getOssUrl("img_about_data_api_2022081616.png?!"),
           subTitle: "For Web3 game studios, guilds and GameFi trackers",
           desc: "Explore a one-stop GameFi information aggregation platform.",
-          hideBoxShadow: true,
         },
       ],
       height: "470px",

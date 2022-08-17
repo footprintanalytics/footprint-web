@@ -74,26 +74,14 @@ const menus = [
     auth: false,
   },
   {
-    name: "GameFi",
+    title: "GameFi",
     icon: "protocols",
-    menu: [
-      {
-        title: "Top Games",
-        link: "https://www.footprint.network/@Footprint/GameFi-Dashboard",
-        externalLink: true,
-      },
-    ],
+    path: "/@Footprint/GameFi-Dashboard",
   },
   {
-    name: "NFT",
+    title: "NFT",
     icon: "protocols",
-    menu: [
-      {
-        title: "Marketplaces",
-        link: "https://www.footprint.network/@Footprint/NFT",
-        externalLink: true,
-      },
-    ],
+    path: "/@Footprint/NFT",
   },
   /*{
     title: "GameFi",
@@ -190,12 +178,7 @@ export default class Navbar extends Component {
     showZkspaceModal: true,
   };
 
-  isActive(path, subPath) {
-    const propsPaths = this.props.path.split("/");
-    if (propsPaths.length > 1) {
-      const target = `/${propsPaths[1]}`;
-      return target === path || target === subPath;
-    }
+  isActive(path) {
     return this.props.path === path;
   }
 
@@ -366,7 +349,7 @@ export default class Navbar extends Component {
               >
                 {/*<Icon name={item.icon} size={16} />*/}
                 <span>{item.title}</span>
-                {this.isActive(item.path, item.subPath) && (
+                {this.isActive(item.path) && (
                   <div className="Nav__menu-item--select" />
                 )}
               </div>
@@ -707,11 +690,11 @@ export default class Navbar extends Component {
           <MobileMenuIcon />
           <Link
             className="Nav__logo"
-            to="/about"
+            to="/"
             onClick={e => {
               e.preventDefault();
               trackStructEvent(`navbar-click-logo`);
-              this.goLink(e, "/about");
+              this.goLink(e, "/");
             }}
           >
             <img
@@ -733,11 +716,11 @@ export default class Navbar extends Component {
           <div className="Nav__mobile-logo">
             <Link
               className="Nav__logo"
-              to="/about"
+              to="/"
               onClick={e => {
                 e.preventDefault();
                 trackStructEvent(`navbar-click-logo`);
-                this.goLink(e, "/about");
+                this.goLink(e, "/");
               }}
             >
               <img

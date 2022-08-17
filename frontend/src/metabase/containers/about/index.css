@@ -42,8 +42,16 @@
   color: #fff;
 }
 
+.About__title-white h3 {
+  color: #fff;
+}
+
 .About__title-bland {
   color: var(--color-brand);
+}
+
+.About__title-light-blue {
+  color: #00fcfe;
 }
 
 .About__btn {
@@ -202,7 +210,7 @@
   margin-bottom: 16px;
 }
 
-.About__start-title h3 {
+.About__start-title h1 {
   font-size: 48px;
   font-weight: 900;
   line-height: 64px;
@@ -210,7 +218,7 @@
   margin-bottom: 10px;
 }
 
-.About__start-title span {
+.About__start-title h2 {
   font-size: 18px;
   line-height: 24px;
   font-weight: bold;

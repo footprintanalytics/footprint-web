@@ -67,23 +67,14 @@ export const useQueryIndicator = () => {
     QUERY_OPTIONS,
   );
   const indicatorTestData = {
-    chains: 134,
     chainsParsed: 17,
-    protocols: 6070,
-    gamefiChains: 42,
-    gamefiProtocols: 1696,
-    gamefiParsedChains: 13,
     gamefiParsedProtocols: 1364,
-    nftChains: 17,
     nftCollections: 84647,
-    nftParsedChains: 3,
     nftParsedMarketplaces: 11,
-    defiProtocols: 1599,
-    tokens: 108341,
-    tags: 27922187,
-    dashboards: 5212,
-    charts: 25806,
+    dashboards: 3730,
+    charts: 28374,
   };
-  const indicator = isProduction ? queryIndicator?.data : indicatorTestData;
+  const indicator = indicatorTestData;
+  // const indicator = isProduction ? queryIndicator?.data : indicatorTestData;
   return { indicator, isLoading: queryIndicator.isLoading };
 };
