@@ -1,5 +1,5 @@
 /* eslint-disable react/prop-types */
-import React from "react";
+import React, { useState } from "react";
 import WrapLink from "./WrapLink";
 import { trackStructEvent } from "metabase/lib/analytics";
 import AboutSocial from "metabase/containers/about/components/AboutSocial";
@@ -10,12 +10,14 @@ import { push } from "react-router-redux";
 import { loginModalShowAction } from "metabase/redux/control";
 import _ from "underscore";
 import { connect } from "react-redux";
+
 const AboutStart = ({
   user,
   setLoginModalShow,
   onChangeLocation,
   indicator,
 }) => {
+  const [indicatorMemo] = useState(indicator);
   const isLogin = () => {
     if (user) {
       return true;
@@ -60,7 +62,7 @@ const AboutStart = ({
           );
         })}
       </div>
-      <AboutBasic indicator={indicator} />
+      <AboutBasic indicator={indicatorMemo} />
     </div>
   );
 };

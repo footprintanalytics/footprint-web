@@ -3,8 +3,10 @@ import React from "react";
 import data from "../data";
 import { getOssUrl } from "metabase/lib/image";
 import { Spin } from "antd";
+import CountUp from "react-countup";
 
 const AboutBasic = ({ indicator }) => {
+  console.log("AboutBasic", indicator);
   return (
     <div className="About__basic">
       <div className="About__basic-process">
@@ -13,7 +15,16 @@ const AboutBasic = ({ indicator }) => {
             <div className="About__basic-item" key={item.title}>
               <div style={{ marginTop: index % 2 === 1 ? 0 : 90 }} />
               <div className="About__basic-item-box">
-                <b>{item.total ? item.total.toLocaleString() : <Spin />}</b>
+                <b>
+                  {item.total ? (
+                    <CountUp
+                      formattingFn={(value: number) => value.toLocaleString()}
+                      end={item.total}
+                    />
+                  ) : (
+                    <Spin />
+                  )}
+                </b>
                 <h3>{item.title}</h3>
                 <img src={item.img} alt={item.title} />
               </div>
@@ -33,4 +44,4 @@ const AboutBasic = ({ indicator }) => {
   );
 };
 
-export default AboutBasic;
+export default React.memo(AboutBasic);

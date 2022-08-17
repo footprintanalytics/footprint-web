@@ -12,105 +12,112 @@ import { useQueryIndicator, useQueryNews } from "./hook";
 import { connect } from "react-redux";
 import AboutExploreDomain from "metabase/containers/about/components/AboutExploreDomain";
 import AboutCreateDashboard from "metabase/containers/about/components/AboutCreateDashboard";
+import Meta from "metabase/components/Meta";
 
 const About = props => {
   const { children } = props;
-  // const defaultDashboardQuery = data.dashboardNav[0].query;
-  // const [dashboardQuery, setDashboardQuery] = useState(defaultDashboardQuery);
-  // const { dashboard, isLoading } = useQueryDashboard({ query: dashboardQuery });
   const { news } = useQueryNews();
   const { indicator } = useQueryIndicator();
 
-  return (
-    <div className="About">
-      <AboutStart indicator={indicator} />
-      <AboutExploreDomain
-        title={
-          <div>
-            Explore <span className="About__title-bland">Chains</span> in
-            Footprint
-          </div>
-        }
-        data={[
-          { title: "Chains Covered", total: indicator?.chains },
-          { title: "Chains Parsed", total: indicator?.chainsParsed },
-        ]}
-        className="About__explore-domain-bg"
-        exploreButton={{
-          title: "Explore More Chain Analytics >",
-          url: "/",
-          className: "About__btn--blue About__btn-radius",
-        }}
-        navListData={data.navListDataChain}
-      />
-      <AboutExploreDomain
-        title={<div>Explore Games in Footprint</div>}
-        data={[
-          { title: "Chains Covered", total: indicator?.gamefiChains },
-          { title: "Chains Parsed", total: indicator?.gamefiParsedChains },
-          { title: "Games", total: indicator?.gamefiParsedProtocols },
-        ]}
-        className="About__explore-games-bg"
-        dark={true}
-        exploreButton={{
-          title: "Explore More Games >",
-          url: "/",
-          className: "About__btn--white About__btn-radius",
-        }}
-        navListData={data.navListDataGameFi}
-      />
-      <AboutExploreDomain
-        title={
-          <div>
-            Explore <span className="About__title-bland">NFT Collections</span>{" "}
-            in Footprint
-          </div>
-        }
-        data={[
-          { title: "Chains Covered", total: indicator?.nftChains },
-          { title: "Chains Parsed", total: indicator?.nftParsedChains },
-          { title: "Marketplaces", total: indicator?.nftParsedMarketplaces },
-          { title: "NFT Collections", total: indicator?.nftCollections },
-        ]}
-        className="About__explore-nft-bg"
-        exploreButton={{
-          title: "Explore More Collections >",
-          url: "/",
-          className: "About__btn--blue About__btn-radius",
-        }}
-        navListData={data.navListDataNft}
-      />
-      <AboutCreateDashboard
-        title={
-          <div>
-            Create <span className="About__title-bland">Dashboards</span> Using
-            Footprint
-          </div>
-        }
-        list={data.sectionList}
-        data={[
-          { title: "Community Dashboards", total: indicator?.dashboards },
-          { title: "Community Charts", total: indicator?.charts },
-        ]}
-        className={"About__create-dashboard About__create-dashboards-bg"}
-      />
-      <AboutService />
+  const defaultDesc =
+    "Footprint is a powerful yet easy-to-use analytics tool to uncover and visualize blockchain data. The product puts user experience first whether you’re an analyst, data scientist, developer, student, teacher, or executive. It provides an intuitive, drag-and-drop interface for interactive data queries.";
+  const keywords = "Footprint";
+  const title = "Footprint Analytics: Crypto Analysis Dashboards";
 
-      <AboutCreateDashboard
-        list={data.sectionList2}
-        className={"About__create-nft"}
-      />
-      <AboutBuild
-        type="card"
-        title="Explore Footprint"
-        list={news}
-        more="/news/featured"
-      />
-      <AboutBacked list={data.backedList} />
-      <AboutPartner list={data.partnerList} />
-      <HomeFooter />
-      {children}
-    </div>
+  return (
+    <>
+      <Meta description={defaultDesc} keywords={keywords} title={title} />
+      <div className="About">
+        <AboutStart indicator={indicator} />
+        <AboutExploreDomain
+          title={
+            <div>
+              Explore <span className="About__title-bland">Chains</span> in
+              Footprint
+            </div>
+          }
+          data={[
+            { title: "Chains Covered", total: indicator?.chains },
+            { title: "Chains Parsed", total: indicator?.chainsParsed },
+          ]}
+          className="About__explore-domain-bg"
+          exploreButton={{
+            title: "Explore More Chain Analytics >",
+            url: "/",
+            className: "About__btn--blue About__btn-radius",
+          }}
+          navListData={data.navListDataChain}
+        />
+        <AboutExploreDomain
+          title={<div>Explore Games in Footprint</div>}
+          data={[
+            { title: "Chains Covered", total: indicator?.gamefiChains },
+            { title: "Chains Parsed", total: indicator?.gamefiParsedChains },
+            { title: "Games", total: indicator?.gamefiParsedProtocols },
+          ]}
+          className="About__explore-games-bg"
+          dark={true}
+          exploreButton={{
+            title: "Explore More Games >",
+            url: "/",
+            className: "About__btn--white About__btn-radius",
+          }}
+          navListData={data.navListDataGameFi}
+        />
+        <AboutExploreDomain
+          title={
+            <div>
+              Explore{" "}
+              <span className="About__title-bland">NFT Collections</span> in
+              Footprint
+            </div>
+          }
+          data={[
+            { title: "Chains Covered", total: indicator?.nftChains },
+            { title: "Chains Parsed", total: indicator?.nftParsedChains },
+            { title: "Marketplaces", total: indicator?.nftParsedMarketplaces },
+            { title: "NFT Collections", total: indicator?.nftCollections },
+          ]}
+          className="About__explore-nft-bg"
+          exploreButton={{
+            title: "Explore More Collections >",
+            url: "/",
+            className: "About__btn--blue About__btn-radius",
+          }}
+          navListData={data.navListDataNft}
+        />
+        <AboutCreateDashboard
+          title={
+            <div>
+              Create <span className="About__title-bland">Dashboards</span>{" "}
+              Using Footprint
+            </div>
+          }
+          list={data.sectionList}
+          data={[
+            { title: "Community Dashboards", total: indicator?.dashboards },
+            { title: "Community Charts", total: indicator?.charts },
+          ]}
+          className={"About__create-dashboard About__create-dashboards-bg"}
+        />
+        <AboutService />
+
+        <AboutCreateDashboard
+          list={data.sectionList2}
+          className={"About__create-nft"}
+        />
+        <AboutBuild
+          type="card"
+          title="Explore Footprint"
+          list={news}
+          more="/news/featured"
+        />
+        <AboutBacked list={data.backedList} />
+        <AboutPartner list={data.partnerList} />
+        <HomeFooter />
+        {children}
+      </div>
+    </>
   );
 };
 

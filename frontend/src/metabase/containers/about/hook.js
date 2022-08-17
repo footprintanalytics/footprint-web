@@ -85,6 +85,5 @@ export const useQueryIndicator = () => {
     charts: 25806,
   };
   const indicator = isProduction ? queryIndicator?.data : indicatorTestData;
-
   return { indicator, isLoading: queryIndicator.isLoading };
 };

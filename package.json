@@ -85,6 +85,7 @@
     "react-collapse": "^4.0.3",
     "react-color": "^2.14.1",
     "react-copy-to-clipboard": "^5.0.1",
+    "react-countup": "^6.3.0",
     "react-coverflow": "^0.2.20",
     "react-dnd": "3",
     "react-dnd-html5-backend": "3",
