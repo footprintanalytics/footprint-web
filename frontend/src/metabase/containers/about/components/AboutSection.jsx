@@ -57,7 +57,7 @@ const AboutSection = ({
                   setSectionList(prev =>
                     prev.map(p => ({ ...p, active: p.title === item.title })),
                   );
-                  trackStructEvent("About", `Hover ${item.title}`);
+                  trackStructEvent("About", `Section ${item.title}`);
                 }}
               >
                 {item.title}

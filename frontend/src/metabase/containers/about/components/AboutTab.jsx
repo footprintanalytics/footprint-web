@@ -19,7 +19,7 @@ const AboutExploreTab = props => {
               prev.map(p => ({ ...p, active: p.title === item.title })),
             );
             onNavChange && onNavChange(item.query);
-            trackStructEvent("About", `Nav ${item.title}`);
+            trackStructEvent("About", `Tab ${item.title}`);
           }}
         >
           {item.title}

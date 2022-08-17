@@ -706,7 +706,10 @@ export function formatUrl(value, options = {}) {
       url += `${url.includes("?") ? "&" : "?"}back_url=${backUrl}`;
       const topOrigin = window?.top?.location?.origin;
       const topPathName = window?.top?.location?.pathname;
-      if (topOrigin === "https://www.footprint.network" && (topPathName === "/" || topPathName === "/about")) {
+      if (
+        topOrigin === "https://www.footprint.network" &&
+        (topPathName === "/" || topPathName === "/about")
+      ) {
         target = "_blank";
       }
     }
