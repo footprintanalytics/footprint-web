@@ -5,35 +5,23 @@ import React from "react";
 const AboutService = () => {
   const list = [
     {
-      title: "All in One API",
-      desc: (
-        <>
-          One unified API access to
-          <br />
-          widest Chains and Domains
-        </>
-      ),
+      title: "All-in-one API",
+      desc: <>One unified API for the widest chain and domain access.</>,
       icon: getOssUrl("img_about_service_2022081301.png?1"),
       width: "117px",
       height: "99px",
     },
     {
-      title: "Richest Data Tiers",
-      desc: (
-        <>
-          Not only provide raw data
-          <br />
-          but also semantic data
-        </>
-      ),
+      title: "Richest data tiers",
+      desc: <>Database with raw and also semantic data.</>,
       icon: getOssUrl("img_about_service_2022081302.png?1"),
       width: "114px",
       height: "100px",
     },
     {
-      title: "Flexible Infrastructure",
+      title: "Flexible infrastructure",
       desc: (
-        <>Secure and scalable infrastructure supports Rest API and GraphQL</>
+        <>Secure and scalable infrastructure supports Rest API and GraphQL.</>
       ),
       icon: getOssUrl("img_about_service_2022081303.png?1"),
       width: "114px",
@@ -41,26 +29,14 @@ const AboutService = () => {
     },
     {
       title: "Customizable",
-      desc: (
-        <>
-          Our APIs are made to fit
-          <br />
-          all your data needs
-        </>
-      ),
+      desc: <>An API engineered to fit all your data needs.</>,
       icon: getOssUrl("img_about_service_2022081304.png?1"),
       width: "105px",
       height: "116px",
     },
     {
-      title: "Timely Support",
-      desc: (
-        <>
-          One on one support to satisfy your needs and timely
-          <br />
-          response
-        </>
-      ),
+      title: "Timely support",
+      desc: <>One-on-one support and assistance whenever you need it.</>,
       icon: getOssUrl("img_about_service_2022081305.png?1"),
       width: "99px",
       height: "109px",

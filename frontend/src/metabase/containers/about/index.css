@@ -3,7 +3,7 @@
   color: #fff;
   background: #fafafc;
   font-size: 14px;
-  font-family: Inter;
+  font-family: roboto;
 }
 
 .About:before {
@@ -97,6 +97,11 @@
   font-weight: 700;
   margin-top: 32px;
   border-radius: 4px;
+}
+
+.About__btn--width-250:hover {
+  background-color: #313bb3;
+  color: white;
 }
 
 .About__btn--lg {
@@ -194,6 +199,7 @@
 .About__start-title {
   color: #303440;
   text-align: center;
+  margin-bottom: 16px;
 }
 
 .About__start-title h3 {
@@ -201,11 +207,12 @@
   font-weight: 900;
   line-height: 64px;
   color: #303440;
+  margin-bottom: 10px;
 }
 
 .About__start-title span {
   font-size: 18px;
-  line-height: 60px;
+  line-height: 24px;
   font-weight: bold;
 }
 
@@ -741,7 +748,8 @@
   color: #3434b2;
   font-size: 42px;
   line-height: 60px;
-  font-weight: bold;
+  font-weight: 600;
+  font-family: Barlow;
 }
 
 .About__basic-item h3 {
@@ -786,9 +794,10 @@
 
 .About__explore-domain-panel b {
   font-size: 42px;
-  font-weight: bold;
+  font-weight: 600;
   color: #3434b2;
   line-height: 60px;
+  font-family: Barlow;
 }
 
 .About__explore-domain-panel h3 {
@@ -819,7 +828,7 @@
 .About__explore-tab-dark,
 .About__explore-tab {
   display: flex;
-  margin: 8px 0;
+  margin: 40px 0 8px;
 }
 
 .About__explore-tab li {
@@ -878,7 +887,7 @@
   background-repeat: no-repeat, no-repeat, no-repeat, no-repeat, no-repeat,
     no-repeat, no-repeat, no-repeat, no-repeat, no-repeat;
   background-position: top 23% left 0, top 13% left 12%, top 18% left 18%,
-    top 8% left 22%, top 5% left 35%, top 23% right 25%, top 11% right 22%,
+    top 8% left 22%, top 5% left 35%, top 23% right 14%, top 11% right 12%,
     top 13% right 4%, top 33% right 1%, top 25% left 10%;
 }
 
@@ -895,7 +904,7 @@
   background-repeat: no-repeat, no-repeat, no-repeat, no-repeat, no-repeat,
     no-repeat, no-repeat;
   background-position: top 20% left 6%, top 45% left 10%, bottom 20% left 6%,
-    top 30% right 5%, top 45% right 11%, bottom 30% right 4%, center;
+    top 25% right 5%, top 45% right 11%, bottom 30% right 4%, center;
 }
 
 .About__explore-nft-bg {
@@ -912,7 +921,7 @@
     240px 240px, 900px 680px, 720px 520px, 92px 80px;
   background-repeat: no-repeat, no-repeat, no-repeat, no-repeat, no-repeat,
     no-repeat, no-repeat, no-repeat, no-repeat;
-  background-position: top 30% left 5%, top 10% left 10%, top 30% right 15%,
+  background-position: top 30% left 5%, top 10% left 10%, top 20% right 15%,
     top 50% right 8%, bottom 5% right 20%, bottom 10% left 12%, top left,
     bottom right, bottom left;
 }

@@ -10,28 +10,27 @@ const data = {
 
   sectionList: [
     {
-      subTitle:
-        "Footprint makes accessible blockchain analytics a reality for anyone",
+      subTitle: "",
       desc: "",
       list: [
         {
-          title: "No-Code Visualization",
+          title: "No-code visualization",
           img: getOssUrl("20220606154848.gif"),
         },
         {
-          title: "26+ Types of Charts",
+          title: "26+ types of charts",
           img: getOssUrl("20220606154902.gif"),
         },
         {
-          title: "Add Text, Image & Link",
+          title: "Add text, images and links",
           img: getOssUrl("20220606154919.gif"),
         },
         {
-          title: "Upload Off-chain Data",
+          title: "Upload off-chain data",
           img: getOssUrl("20220606155703.gif"),
         },
         {
-          title: "Download Data",
+          title: "Download data",
           img: getOssUrl("20220606155721.gif"),
         },
         {
@@ -45,7 +44,7 @@ const data = {
       ],
       height: "550px",
       exploreButton: {
-        title: "+ Create Dashboard",
+        title: "Create Dashboard",
         url: "/dashboard/new",
         className: "About__btn--blue mx2",
         auth: true,
@@ -56,47 +55,45 @@ const data = {
     {
       list: [
         {
-          title: "NFT Gallery",
-          img: getOssUrl("img_about_data_api_2022081611.png?3"),
-          subTitle:
-            "Suited for: NFT marketplace, NFT data aggregator, NFT tracker",
+          title: "NFT gallery",
+          img: getOssUrl("img_about_data_api_2022081613.png?3"),
+          subTitle: "For NFT marketplaces, data aggregators and NFT trackers",
           desc:
             "Create custom displays for NFT collections from multiple networks.",
         },
         {
-          title: "Find Potential NFTs",
+          title: "Find potential NFTs",
+          img: getOssUrl("img_about_data_api_2022081614.png?3"),
+          subTitle: "For VCs, investors, traders and researchers",
+          desc:
+            "Discover trending collections and access in-depth analytics for 80K+ projects.",
+        },
+        {
+          title: "Research and invest",
           img: getOssUrl("img_about_data_api_2022081612.png?3"),
           subTitle:
-            "Suited for: Capital institutions, Investment/trading institution, Research consultant,",
-          desc:
-            "Discover the latest hot collections and access in-depth analytics for 70K+ projects.",
+            "For financial institutions, researchers and consulting firms",
+          desc: "Empower your research or investment with advanced indicators.",
         },
         {
-          title: "Research & Invest",
-          img: getOssUrl("img_about_data_api_2022081613.png?3"),
-          subTitle:
-            "Suited for: Investment/trading institution, Research consultant, Web2 financial entities",
-          desc: "Empower your research or investment with advanced indicators",
-        },
-        {
-          title: "Whale Tracking",
-          img: getOssUrl("img_about_data_api_2022081614.png?3"),
-          subTitle:
-            "Suited for: Investment/trading institution, Crypto portfolio management, Exchange, Crypto wallet",
-          desc:
-            "Follow and track whales' addresses to identify investment opportunities and potential risks.",
-        },
-        {
-          title: "GameFi Portal",
+          title: "Whale tracking",
           img: getOssUrl("img_about_data_api_2022081615.png?3"),
+          subTitle:
+            "For financial institutions, investors, crypto portfolio managers, exchanges and crypto wallet developers",
+          desc:
+            "Follow and track whale addresses to identify investment opportunities and potential risks.",
+        },
+        {
+          title: "GameFi portal",
+          img: getOssUrl("img_about_data_api_2022081611.png?3"),
           subTitle: "Suited for: GameFi studios, GameFi tracker, GameFi guilds",
           desc: "A one-stop GameFi information aggregation platform",
         },
         {
           title: "Custom",
           img: getOssUrl("img_about_data_api_2022081616.png?!"),
-          subTitle: "",
-          desc: "",
+          subTitle: "For Web3 game studios, guilds and GameFi trackers",
+          desc: "Explore a one-stop GameFi information aggregation platform.",
           hideBoxShadow: true,
         },
       ],
@@ -298,20 +295,20 @@ const data = {
   ],
   startButtonData: [
     {
-      title: "Create Dashboard",
-      className: "About__btn--dark-blue",
-      url: Urls.newQuestion(),
-      auth: true,
-    },
-    {
-      title: "Discover Games",
+      title: "Discover GameFi",
       className: "About__btn--white",
       url: "https://www.footprint.network/@Footprint/GameFi-Dashboard",
     },
     {
-      title: "Discover NFT Collections",
+      title: "Discover NFTs",
       className: "About__btn--white",
       url: "https://www.footprint.network/@Footprint/NFT",
+    },
+    {
+      title: "Create a Dashboard",
+      className: "About__btn--white",
+      url: Urls.newQuestion(),
+      auth: true,
     },
   ],
   basicData: indicator => [
@@ -338,21 +335,21 @@ const data = {
   ],
   navListDataChain: [
     {
-      title: "Chains",
+      title: "Top Chains",
       active: true,
       query:
         "https://www.footprint.network/public/chart/Chain-fp-90bb9cd4-33b8-402b-bf0e-cbcc45ed3049",
       url: "https://www.footprint.network/@Footprint/Chain",
     },
     {
-      title: "Transactions & Gas Fee",
+      title: "Transactions & Gas Fees",
       query:
         "https://www.footprint.network/public/chart/Daily-Transaction-%26-Avg-Gas-Fee-fp-593ea116-2797-4ff8-8d4b-520626743f38",
       url:
         "https://www.footprint.network/@enmai/Avalaunche-Transaction-Dashbord",
     },
     {
-      title: "Protocols in Different Chains",
+      title: "Protocol in Multi-chain",
       query:
         "https://www.footprint.network/public/chart/Stargate-fp-08a9e226-6c84-4408-bf2c-3b5fc4318ce8",
       url: "https://www.footprint.network/@NCL/Stargate-Finance",

@@ -3,19 +3,17 @@ import React, { useState } from "react";
 import AboutExploreTab from "metabase/containers/about/components/AboutTab";
 import { trackStructEvent } from "metabase/lib/analytics";
 import WrapLink from "metabase/containers/about/components/WrapLink";
-import { Spin } from "antd";
 
 const AboutExploreDomain = ({
   title,
   navListData,
-  data,
   exploreButton,
   className = "",
   dark = false,
 }) => {
-  const panelClassName = dark
+  /*  const panelClassName = dark
     ? "About__explore-domain-panel-dark"
-    : "About__explore-domain-panel";
+    : "About__explore-domain-panel";*/
   const [navList, setNavList] = useState(navListData);
   const [iframeSrc, setIframeSrc] = useState(navList.find(p => p.active).query);
   const onNavChange = query => {
@@ -26,7 +24,7 @@ const AboutExploreDomain = ({
       <div className={`About__title ${dark ? "About__title-white" : ""}`}>
         {title}
       </div>
-      <div className={panelClassName}>
+      {/*<div className={panelClassName}>
         {data?.map((item, index) => {
           return (
             <React.Fragment key={item.title}>
@@ -38,7 +36,7 @@ const AboutExploreDomain = ({
             </React.Fragment>
           );
         })}
-      </div>
+      </div>*/}
       <AboutExploreTab
         navList={navList}
         setNavList={setNavList}

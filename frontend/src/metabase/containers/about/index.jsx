@@ -42,7 +42,7 @@ const About = props => {
           ]}
           className="About__explore-domain-bg"
           exploreButton={{
-            title: "Explore More Chain Analytics >",
+            title: "Explore More Chains >",
             url: "/",
             className: "About__btn--blue About__btn-radius",
           }}
@@ -58,7 +58,7 @@ const About = props => {
           className="About__explore-games-bg"
           dark={true}
           exploreButton={{
-            title: "Explore More Games >",
+            title: "Explore Blockchain Games in Footprint >",
             url: "/",
             className: "About__btn--white About__btn-radius",
           }}

@@ -29,12 +29,11 @@ const AboutStart = ({
   return (
     <div className="About__start">
       <div className="About__start-title">
-        <h3>
-          The One-Stop Blockchain
-          <br />
-          Analytics Platform.
-        </h3>
-        <span>No-coding Required.</span>
+        <h3>Blockchain analytics made simple</h3>
+        <span>
+          Explore community-built analysis and create charts <br />
+          with no code required.
+        </span>
       </div>
       <AboutSocial />
       <div className="About__start-buttons">

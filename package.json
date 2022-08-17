@@ -12,9 +12,9 @@
   },
   "dependencies": {
     "@apollo/client": "^3.5.8",
+    "@fontsource/barlow": "^4.5.8",
     "@fontsource/ibm-plex-mono": "^4.5.10",
-    "@fontsource/inter": "^4.5.12",
-    "@fontsource/montserrat": "^4.5.11",
+    "@fontsource/roboto": "^4.5.8",
     "@jupyterlab/services": "^6.3.3",
     "@loadable/component": "^5.15.0",
     "@react-hook/resize-observer": "^1.2.2",
