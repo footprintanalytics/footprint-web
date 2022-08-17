@@ -7,7 +7,7 @@ import WrapLink from "./WrapLink";
 const AboutBacked = ({ list }) => {
   return (
     <div className="About__container About__backed">
-      <h3 className="About__title">Backed by the best</h3>
+      <h3 className="About__title">Backed by the Best</h3>
       <ul>
         {list.map(item => (
           <li key={item.url}>

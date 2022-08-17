@@ -1,8 +1,21 @@
+.dashboards__container .dashboards__cell {
+  display: flex;
+  justify-content: normal;
+  align-items: center;
+  grid-column-gap: 20px;
+  margin: 30px 0 10px 0;
+}
+
+.dashboards__container .dashboards__cell .dashboard-title {
+  font-weight: bold;
+  padding: 0;
+}
+
 .dashboards__filter {
   display: flex;
   align-items: flex-start;
   justify-content: space-between;
-  width: 1120px;
+  width: 844px;
 }
 
 .dashboards__tags-filter {
@@ -13,6 +26,7 @@
 .dashboards__category {
   display: flex;
   flex-wrap: wrap;
+  grid-column-gap: 8px;
   /* width: 80%; */
 }
 
@@ -24,9 +38,7 @@
   border-radius: 4px;
   font-size: 14px;
   height: 32px;
-  margin-right: 8px;
   padding: 0 12px;
-  margin-bottom: 8px;
 }
 
 .dashboards__category-item--active {
@@ -63,12 +75,21 @@
   margin-bottom: 50px;
 }
 
+.dashboards__table-columns-odd {
+  background: #fafafc;
+}
+
+.dashboards__table-columns-even {
+  background: #ffffff;
+}
+
 .dashboards__table .ant-table {
-  border-left: 1px solid #dcdee4;
-  border-right: 1px solid #dcdee4;
-  border-top: 1px solid #dcdee4;
   border-radius: 4px;
   overflow: hidden;
+}
+
+.dashboards__table .ant-table-column-sorter {
+  color: #2f3440;
 }
 
 .dashboards__table .ant-pagination {
@@ -76,12 +97,10 @@
 }
 
 .dashboards__table .ant-table-thead > tr > th {
-  background-color: #fff;
-  border-bottom: 1px solid #dcdee4;
+  background-color: #fafafc;
 }
 
 .dashboards__table .ant-table-tbody > tr > td {
-  border-bottom: 1px solid #dcdee4;
 }
 
 .dashboards__table .ant-table-thead > tr > th:before {
@@ -116,10 +135,10 @@
 }
 
 .dashboards__table-name .ant-avatar {
-  min-width: 25px;
-  width: 25px;
-  height: 25px;
-  line-height: 25px;
+  min-width: 32px;
+  width: 32px;
+  height: 32px;
+  line-height: 32px;
   user-select: none;
 }
 
@@ -190,15 +209,12 @@
   display: inline-flex;
   align-items: center;
   justify-content: center;
+  background-color: #f1f1f1;
 }
 
 .dashboards__table-action img {
   width: 3px;
   height: 15px;
-}
-
-.dashboards__table-action:hover {
-  background-color: #f6f6fe;
 }
 
 @media screen and (max-width: 1440px) {
@@ -291,5 +307,8 @@
   }
   .dashboards__recommend {
     padding: 20px;
+  }
+  .dashboards__container .dashboards__cell .dashboard-title {
+    padding: 0 0 0 10px;
   }
 }

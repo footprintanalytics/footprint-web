@@ -5,6 +5,7 @@ import { trackStructEvent } from "metabase/lib/analytics";
 import { getOssUrl } from "metabase/lib/image";
 import React, { useState } from "react";
 import WrapLink from "./WrapLink";
+import { RightOutlined } from "@ant-design/icons";
 
 const AboutBuild = ({
   type,
@@ -28,7 +29,7 @@ const AboutBuild = ({
             url={more}
             onClick={() => trackStructEvent("About", `More ${title}`)}
           >
-            More
+            More <RightOutlined className="ml1" />
           </WrapLink>
         </div>
         {nav && (

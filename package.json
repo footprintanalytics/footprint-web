@@ -12,8 +12,9 @@
   },
   "dependencies": {
     "@apollo/client": "^3.5.8",
+    "@fontsource/barlow": "^4.5.8",
     "@fontsource/ibm-plex-mono": "^4.5.10",
-    "@fontsource/montserrat": "^4.5.11",
+    "@fontsource/roboto": "^4.5.8",
     "@jupyterlab/services": "^6.3.3",
     "@loadable/component": "^5.15.0",
     "@react-hook/resize-observer": "^1.2.2",
@@ -84,6 +85,7 @@
     "react-collapse": "^4.0.3",
     "react-color": "^2.14.1",
     "react-copy-to-clipboard": "^5.0.1",
+    "react-countup": "^6.3.0",
     "react-coverflow": "^0.2.20",
     "react-dnd": "3",
     "react-dnd-html5-backend": "3",

@@ -44,10 +44,10 @@ export default ({
   const name = {
     title: "Name",
     key: "name",
-    width: 600,
     render: (_, record, index) => {
       const backgroundColor = colors[index % colors.length];
       const creatorName = get(record, "creator.name");
+      const tags = get(record, "tags");
       const isChart = record?.model === "card" || record?.type === "card";
       return (
         <div className="dashboards__table-name">
@@ -107,6 +107,18 @@ export default ({
                 )}
               </h3>
             </Link>
+            <div>
+              {tags?.length ? (
+                <Tags
+                  router={router}
+                  list={tags.slice(0, 10)}
+                  searchWords={searchWords}
+                  link
+                />
+              ) : (
+                "-"
+              )}
+            </div>
             <span className="dashboards__table-name-info-creator">
               <CreatorName creatorName={creatorName} />
             </span>
@@ -208,7 +220,7 @@ export default ({
       return (
         <Dropdown overlay={menu} placement="bottomRight">
           <div className="dashboards__table-action">
-            <img src={getOssUrl("20220309154118.png")} />
+            <img src={getOssUrl("20220309154118.png")} alt="" />
           </div>
         </Dropdown>
       );
@@ -221,7 +233,7 @@ export default ({
     return [tag, views];
   }
   if (query?.model === "favorite") {
-    return [name, tag, views, favoriteTime, action];
+    return [name, views, favoriteTime, action];
   }
-  return [name, tag, views, date, action];
+  return [name, views, date, action];
 };

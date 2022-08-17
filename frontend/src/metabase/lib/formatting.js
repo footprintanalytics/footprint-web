@@ -698,14 +698,23 @@ export function formatUrl(value, options = {}) {
   }
 
   if (jsx && rich && url) {
+    let target = null;
     const text = getLinkText(value, options);
     // link the dashboard to go back to the previous level
     if (url.includes("footprint.network")) {
       const backUrl = encodeURIComponent(location.href);
       url += `${url.includes("?") ? "&" : "?"}back_url=${backUrl}`;
+      const topOrigin = window?.top?.location?.origin;
+      const topPathName = window?.top?.location?.pathname;
+      if (
+        topOrigin === "https://www.footprint.network" &&
+        (topPathName === "/" || topPathName === "/about")
+      ) {
+        target = "_blank";
+      }
     }
     return (
-      <ExternalLink className="link link--wrappable" href={url}>
+      <ExternalLink className="link link--wrappable" href={url} target={target}>
         {text}
       </ExternalLink>
     );

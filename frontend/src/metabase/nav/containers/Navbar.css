@@ -87,7 +87,6 @@
 }
 
 .Nav__menu-item span {
-  margin-left: 10px;
   white-space: nowrap;
 }
 
@@ -102,7 +101,7 @@
 
 .Nav__search-bar {
   min-width: 100px;
-  max-width: 400px;
+  max-width: 360px;
   margin: 0 12px;
   flex: 1;
 }
@@ -194,7 +193,7 @@
 }
 
 .dashboards__news {
-  max-width: 300px;
+  max-width: 330px;
 }
 
 @media screen and (--footprint-breakpoint-max-pad) {

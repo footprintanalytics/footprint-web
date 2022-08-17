@@ -2,7 +2,7 @@ import React from "react";
 
 // import { PLUGIN_LANDING_PAGE } from "metabase/plugins";
 import { Route } from "metabase/hoc/Title";
-import { IndexRedirect, IndexRoute } from "react-router";
+import { IndexRoute } from "react-router";
 import { routerActions } from "react-router-redux";
 import { UserAuthWrapper } from "redux-auth-wrapper";
 import { t } from "ttag";
@@ -167,15 +167,18 @@ export const getRoutes = store => (
         done();
       }}
     >
-      <Route path="/" component={LazyLoad.Features}>
-        <IndexRedirect to="/dashboards" />
-        <Route path="topic/:menu/:subMenu" />
+      <Route path="/" component={LazyLoad.About}>
+        {/*<IndexRedirect to="/about" />*/}
         <ModalRoute
           title={t`Login`}
           path="loginModal"
           modal={LazyLoad.LoginModal}
           modalProps={{ className: "loginModalRoot" }}
         />
+      </Route>
+
+      <Route path="/topic" component={LazyLoad.Features}>
+        <Route path=":menu/:subMenu" />
       </Route>
 
       <Route path="/dashboards" component={LazyLoad.Dashboards} />

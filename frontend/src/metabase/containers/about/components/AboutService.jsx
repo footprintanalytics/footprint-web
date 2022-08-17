@@ -1,129 +1,66 @@
 /* eslint-disable curly */
-import { RightOutlined } from "@ant-design/icons";
-import { message } from "antd";
-import { trackStructEvent } from "metabase/lib/analytics";
 import { getOssUrl } from "metabase/lib/image";
 import React from "react";
-import WrapLink from "./WrapLink";
-import Button from "metabase/components/Button";
 
 const AboutService = () => {
   const list = [
     {
-      title: "Footprint Analytics Widget",
-      desc: (
-        <>
-          Show blockchain data on your site
-          <br />
-          Supports multiple templates
-          <br />
-          Supports custom configurations
-        </>
-      ),
-      url: "/widget",
-      icon: getOssUrl("20220602192449.png"),
-      width: "48px",
-      height: "36px",
+      title: "All-in-one API",
+      desc: <>One unified API for the widest chain and domain access.</>,
+      icon: getOssUrl("img_about_service_2022081301.png?1"),
+      width: "117px",
+      height: "99px",
     },
     {
-      title: "Research Service and Tool",
-      desc: (
-        <>
-          Weekly & monthly reports
-          <br />
-          Indicator alerts
-          <br />
-          Custom and on-demand research
-        </>
-      ),
-      url: "/news/featured",
-      icon: getOssUrl("20220602192529.png"),
-      width: "37px",
-      height: "48px",
+      title: "Richest data tiers",
+      desc: <>Database with raw and also semantic data.</>,
+      icon: getOssUrl("img_about_service_2022081302.png?1"),
+      width: "114px",
+      height: "100px",
     },
     {
-      title: "Social Media Sharing Tool",
+      title: "Flexible infrastructure",
       desc: (
-        <>
-          Build and share your profile
-          <br />
-          Whitelabel your charts and dashboards
-        </>
+        <>Secure and scalable infrastructure supports Rest API and GraphQL.</>
       ),
-      url: "/search?model=creator",
-      icon: getOssUrl("20220602192551.png"),
-      width: "41px",
-      height: "46px",
+      icon: getOssUrl("img_about_service_2022081303.png?1"),
+      width: "114px",
+      height: "101px",
     },
     {
-      title: "Marketing Tool",
-      desc: (
-        <>
-          Competitive analysis and tracking
-          <br />
-          Find and incentivize target users and track...
-          <br />
-          Discover user portrait
-        </>
-      ),
-      url: "https://www.footprint.network/defi360",
-      icon: getOssUrl("20220602192747.png"),
-      width: "48px",
-      height: "48px",
+      title: "Customizable",
+      desc: <>An API engineered to fit all your data needs.</>,
+      icon: getOssUrl("img_about_service_2022081304.png?1"),
+      width: "105px",
+      height: "116px",
     },
     {
-      title: "Data API",
-      desc: (
-        <>
-          A unified API allows you to pull detailed, historical and granular
-          blockchain data
-        </>
-      ),
-      url: "https://docs.footprint.network/api/download-data",
-      icon: getOssUrl("20220602192809.png"),
-      width: "48px",
-      height: "43px",
-    },
-    {
-      title: (
-        <>
-          Contact us
-          <br />
-          <br />
-          <span className="text-normal">sales@footprint.network</span>
-        </>
-      ),
-      url: "mailto:sales@footprint.network",
-      button: (
-        <>
-          <Button className="About__service-button">Get Started</Button>
-        </>
-      ),
+      title: "Timely support",
+      desc: <>One-on-one support and assistance whenever you need it.</>,
+      icon: getOssUrl("img_about_service_2022081305.png?1"),
+      width: "99px",
+      height: "109px",
     },
   ];
 
   return (
-    <div
-      className="About__service"
-      style={{ backgroundImage: `url(${getOssUrl("20220607202702.png")})` }}
-    >
+    <div className="About__service">
       <div className="About__container">
-        <h3 className="About__title">Our services and expertise</h3>
+        <h3 className="About__title">
+          Use <span className="About__title-bland">Data API</span> to Built Your
+          Application
+        </h3>
         <ul>
           {list.map(item => (
             <li key={item.title}>
               {item.icon && (
                 <div className="About__service-icon">
-                  <img
-                    src={item.icon}
-                    alt={item.title}
-                    style={{ width: item.width, height: item.height }}
-                  />
+                  <img src={item.icon} alt={item.title} />
                 </div>
               )}
               <h4>{item.title}</h4>
               <p>{item.desc}</p>
-              <WrapLink
+              {/*<WrapLink
                 url={item.url}
                 onClick={() => {
                   trackStructEvent("About", `More ${item.title}`);
@@ -156,7 +93,7 @@ const AboutService = () => {
                     More <RightOutlined />
                   </>
                 )}
-              </WrapLink>
+              </WrapLink>*/}
             </li>
           ))}
         </ul>

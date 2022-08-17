@@ -68,11 +68,33 @@ const mapDispatchToProps = {
 
 const menus = [
   {
-    title: "Home",
+    title: "Analytics",
     icon: "menu_home",
     path: "/dashboards",
     auth: false,
   },
+  {
+    title: "GameFi",
+    icon: "protocols",
+    path: "/@Footprint/GameFi-Dashboard",
+  },
+  {
+    title: "NFT",
+    icon: "protocols",
+    path: "/@Footprint/NFT",
+  },
+  /*{
+    title: "GameFi",
+    icon: "menu_home",
+    path: "/dashboards",
+    auth: false,
+  },
+  {
+    title: "NFT",
+    icon: "menu_home",
+    path: "/dashboards",
+    auth: false,
+  },*/
   {
     name: "Data",
     icon: "protocols",
@@ -156,12 +178,7 @@ export default class Navbar extends Component {
     showZkspaceModal: true,
   };
 
-  isActive(path, subPath) {
-    const propsPaths = this.props.path.split("/");
-    if (propsPaths.length > 1) {
-      const target = `/${propsPaths[1]}`;
-      return target === path || target === subPath;
-    }
+  isActive(path) {
     return this.props.path === path;
   }
 
@@ -330,9 +347,9 @@ export default class Navbar extends Component {
                   }
                 }}
               >
-                <Icon name={item.icon} size={16} />
+                {/*<Icon name={item.icon} size={16} />*/}
                 <span>{item.title}</span>
-                {this.isActive(item.path, item.subPath) && (
+                {this.isActive(item.path) && (
                   <div className="Nav__menu-item--select" />
                 )}
               </div>
@@ -418,7 +435,7 @@ export default class Navbar extends Component {
       //   open: true,
       // },
       { url: "https://docs.footprint.network/", name: "Docs", open: true },
-      { url: `/@${user?.name}`, name: "My Profile", auth: true },
+      // { url: `/@${user?.name}`, name: "My Profile", auth: true },
       // { url: "/widget", name: "Widget" },
     ];
 
@@ -471,7 +488,7 @@ export default class Navbar extends Component {
       return (
         <div className="flex flex-column w-full">
           <div className={className}>
-            {item.icon && <Icon name={item.icon} size={16} />}
+            {/*{item.icon && <Icon name={item.icon} size={16} />}*/}
             <span>{item.name}</span>
           </div>
           <div>
@@ -510,7 +527,7 @@ export default class Navbar extends Component {
             className={className}
             onClick={() => trackStructEvent(`navbar-click-${item.name}`)}
           >
-            {item.icon && <Icon name={item.icon} size={16} />}
+            {/*{item.icon && <Icon name={item.icon} size={16} />}*/}
             <span>{item.name}</span>
           </div>
         }
@@ -578,7 +595,7 @@ export default class Navbar extends Component {
                   trackStructEvent(`navbar-click-${item.title}`);
                 }}
               >
-                <Icon name={item.icon} size={16} />
+                {/*<Icon name={item.icon} size={16} />*/}
                 <span>{item.title}</span>
                 {this.isActive(item.path, item.subPath) && (
                   <div className="Nav__menu-item--select" />
@@ -673,11 +690,11 @@ export default class Navbar extends Component {
           <MobileMenuIcon />
           <Link
             className="Nav__logo"
-            to="/about"
+            to="/"
             onClick={e => {
               e.preventDefault();
               trackStructEvent(`navbar-click-logo`);
-              this.goLink(e, "/about");
+              this.goLink(e, "/");
             }}
           >
             <img
@@ -699,11 +716,11 @@ export default class Navbar extends Component {
           <div className="Nav__mobile-logo">
             <Link
               className="Nav__logo"
-              to="/about"
+              to="/"
               onClick={e => {
                 e.preventDefault();
                 trackStructEvent(`navbar-click-logo`);
-                this.goLink(e, "/about");
+                this.goLink(e, "/");
               }}
             >
               <img
@@ -726,10 +743,7 @@ export default class Navbar extends Component {
   }
 
   render() {
-    const { context, path } = this.props;
-    if (["/about"].includes(path)) {
-      return null;
-    }
+    const { context } = this.props;
     switch (context) {
       case "admin":
         return this.renderAdminNav();

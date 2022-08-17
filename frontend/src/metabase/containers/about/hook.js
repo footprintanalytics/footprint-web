@@ -66,8 +66,15 @@ export const useQueryIndicator = () => {
     brandPageIndicator,
     QUERY_OPTIONS,
   );
-
-  const indicator = queryIndicator?.data;
-
+  const indicatorTestData = {
+    chainsParsed: 17,
+    gamefiParsedProtocols: 1364,
+    nftCollections: 84647,
+    nftParsedMarketplaces: 11,
+    dashboards: 3730,
+    charts: 28374,
+  };
+  const indicator = indicatorTestData;
+  // const indicator = isProduction ? queryIndicator?.data : indicatorTestData;
   return { indicator, isLoading: queryIndicator.isLoading };
 };

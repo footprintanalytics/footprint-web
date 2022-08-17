@@ -1,42 +1,80 @@
-import { getOssUrl } from "metabase/lib/image";
-import React from "react";
+/* eslint-disable react/prop-types */
+import React, { useState } from "react";
 import WrapLink from "./WrapLink";
 import { trackStructEvent } from "metabase/lib/analytics";
+import AboutSocial from "metabase/containers/about/components/AboutSocial";
+import AboutBasic from "metabase/containers/about/components/AboutBasic";
+import data from "../data";
+import { getUser } from "metabase/selectors/user";
+import { push } from "react-router-redux";
+import { loginModalShowAction } from "metabase/redux/control";
+import _ from "underscore";
+import { connect } from "react-redux";
 
-const AboutStart = () => {
+const AboutStart = ({
+  user,
+  setLoginModalShow,
+  onChangeLocation,
+  indicator,
+}) => {
+  const [indicatorMemo] = useState(indicator);
+  const isLogin = () => {
+    if (user) {
+      return true;
+    } else {
+      setLoginModalShow({ show: true, from: "Dashboards Profile" });
+      return false;
+    }
+  };
   return (
     <div className="About__start">
-      <img
-        className="About__start-logo"
-        src={getOssUrl("20220602164236.png")}
-        alt="Footprint Analytics"
-      />
-      <h3 className="About__start-title">
-        Turn on-chain data into charts without coding
-        <br />
-        Explore data with Python or SQL
-        <br />
-        Build custom analytics apps for your project or organization
-        <br />
-        Access the most comprehensive GameFi database
-      </h3>
-      <WrapLink url="/dashboards">
-        <div
-          className="About__btn About__btn--blue About__btn--lg"
-          onClick={() => trackStructEvent("About", "Start a free trial")}
-        >
-          Start a free trial
-        </div>
-      </WrapLink>
-      {/* <div className="About__see">
-        <img className="About__see-pic" src="" alt="" />
-        <div className="About__btn About__btn--md About__btn--black">
-          <img src={getOssUrl("20220602165930.png")} alt="See it in action" />
-          See it in action
-        </div>
-      </div> */}
+      <div className="About__start-title">
+        <h1>Blockchain analytics made simple</h1>
+        <h2>
+          Explore community-built analysis and create charts <br />
+          with no code required.
+        </h2>
+      </div>
+      <AboutSocial />
+      <div className="About__start-buttons">
+        {data.startButtonData.map(item => {
+          return (
+            <WrapLink
+              key={item.title}
+              url={item.url}
+              onClick={e => {
+                if (item.auth) {
+                  e.preventDefault();
+                  if (isLogin()) {
+                    onChangeLocation(item.url);
+                  }
+                }
+              }}
+            >
+              <div
+                className={`About__btn About__btn--width-250 ${item.className}`}
+                onClick={() => trackStructEvent("About", item.title)}
+              >
+                {item.title}
+              </div>
+            </WrapLink>
+          );
+        })}
+      </div>
+      <AboutBasic indicator={indicatorMemo} />
     </div>
   );
 };
 
-export default AboutStart;
+const mapStateToProps = (state, props) => ({
+  user: getUser(state, props),
+});
+
+const mapDispatchToProps = {
+  onChangeLocation: push,
+  setLoginModalShow: loginModalShowAction,
+};
+
+export default _.compose(connect(mapStateToProps, mapDispatchToProps))(
+  AboutStart,
+);
