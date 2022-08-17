@@ -108,7 +108,7 @@ const About = props => {
         <AboutService />
 
         <AboutCreateDashboard
-          list={data.sectionList2}
+          list={data.sectionListDataApi}
           className={"About__create-nft"}
         />
         <AboutBuild
