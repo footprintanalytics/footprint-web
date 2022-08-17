@@ -51,7 +51,7 @@ const data = {
       },
     },
   ],
-  sectionList2: [
+  sectionListDataApi: [
     {
       list: [
         {
