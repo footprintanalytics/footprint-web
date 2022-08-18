@@ -114,7 +114,7 @@ const menus = [
       {
         title: "New Collections",
         link:
-          "https://www.footprint.network/@DamonSalvatore/GameFi-in-Bull-Bear-Market?date=2022-01-01~2022-07-31",
+          "https://www.footprint.network/@0xLam/New-Collections",
       },
       {
         title: "Top Sales",
