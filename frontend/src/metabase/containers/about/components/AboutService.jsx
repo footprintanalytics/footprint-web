@@ -47,8 +47,8 @@ const AboutService = () => {
     <div className="About__service">
       <div className="About__container">
         <h3 className="About__title">
-          Use <span className="About__title-bland">Data API</span> to Built Your
-          Application
+          Build your application with the
+          <span className="About__title-bland"> Data API</span>
         </h3>
         <ul>
           {list.map(item => (
