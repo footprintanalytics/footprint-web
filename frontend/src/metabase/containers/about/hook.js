@@ -61,11 +61,11 @@ export const useQueryNews = () => {
 };
 
 export const useQueryIndicator = () => {
-  const queryIndicator = useQuery(
+  /*const queryIndicator = useQuery(
     "indicator",
     brandPageIndicator,
     QUERY_OPTIONS,
-  );
+  );*/
   const indicatorTestData = {
     chainsParsed: 17,
     gamefiParsedProtocols: 1364,
@@ -76,5 +76,6 @@ export const useQueryIndicator = () => {
   };
   const indicator = indicatorTestData;
   // const indicator = isProduction ? queryIndicator?.data : indicatorTestData;
-  return { indicator, isLoading: queryIndicator.isLoading };
+  // return { indicator, isLoading: queryIndicator.isLoading };
+  return { indicator, isLoading: false };
 };
