@@ -6,7 +6,6 @@ import { Spin } from "antd";
 import CountUp from "react-countup";
 
 const AboutBasic = ({ indicator }) => {
-  console.log("AboutBasic")
   return (
     <div className="About__basic">
       <div className="About__basic-process">

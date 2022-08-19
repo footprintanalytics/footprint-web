@@ -1,16 +1,12 @@
 import "./index.css";
 import { getOssUrl } from "metabase/lib/image";
 import { useQuery } from "react-query";
-import {
-  fetchHomeNewNews,
-  elasticSearch,
-  brandPageIndicator,
-} from "metabase/new-service";
+import { brandPageIndicator, elasticSearch, fetchHomeNewNews } from "metabase/new-service";
 import { QUERY_OPTIONS } from "./config";
 import dayjs from "dayjs";
+import * as Urls from "metabase/lib/urls";
 import { articleDetailUrl } from "metabase/lib/urls";
 import { formatTitle } from "metabase/lib/formatting";
-import * as Urls from "metabase/lib/urls";
 import { ossPath } from "metabase/lib/ossPath";
 import { isProduction } from "metabase/env";
 import { uniqBy } from "lodash";
