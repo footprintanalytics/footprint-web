@@ -1,5 +1,5 @@
 /* eslint-disable react/prop-types */
-import React, { useState } from "react";
+import React from "react";
 import WrapLink from "./WrapLink";
 import { trackStructEvent } from "metabase/lib/analytics";
 import AboutSocial from "metabase/containers/about/components/AboutSocial";
@@ -17,7 +17,6 @@ const AboutStart = ({
   onChangeLocation,
   indicator,
 }) => {
-  const [indicatorMemo] = useState(indicator);
   const isLogin = () => {
     if (user) {
       return true;
@@ -61,7 +60,7 @@ const AboutStart = ({
           );
         })}
       </div>
-      <AboutBasic indicator={indicatorMemo} />
+      <AboutBasic indicator={indicator} />
     </div>
   );
 };

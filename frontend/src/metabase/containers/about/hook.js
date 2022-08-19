@@ -1,16 +1,12 @@
 import "./index.css";
 import { getOssUrl } from "metabase/lib/image";
 import { useQuery } from "react-query";
-import {
-  fetchHomeNewNews,
-  elasticSearch,
-  brandPageIndicator,
-} from "metabase/new-service";
+import { brandPageIndicator, elasticSearch, fetchHomeNewNews } from "metabase/new-service";
 import { QUERY_OPTIONS } from "./config";
 import dayjs from "dayjs";
+import * as Urls from "metabase/lib/urls";
 import { articleDetailUrl } from "metabase/lib/urls";
 import { formatTitle } from "metabase/lib/formatting";
-import * as Urls from "metabase/lib/urls";
 import { ossPath } from "metabase/lib/ossPath";
 import { isProduction } from "metabase/env";
 import { uniqBy } from "lodash";
@@ -61,21 +57,11 @@ export const useQueryNews = () => {
 };
 
 export const useQueryIndicator = () => {
-  /*const queryIndicator = useQuery(
+  const queryIndicator = useQuery(
     "indicator",
     brandPageIndicator,
     QUERY_OPTIONS,
-  );*/
-  const indicatorTestData = {
-    chainsParsed: 17,
-    gamefiParsedProtocols: 1364,
-    nftCollections: 84647,
-    nftParsedMarketplaces: 11,
-    dashboards: 3730,
-    charts: 28374,
-  };
-  const indicator = indicatorTestData;
-  // const indicator = isProduction ? queryIndicator?.data : indicatorTestData;
-  // return { indicator, isLoading: queryIndicator.isLoading };
-  return { indicator, isLoading: false };
+  );
+  const indicator = queryIndicator?.data;
+  return { indicator, isLoading: queryIndicator.isLoading };
 };

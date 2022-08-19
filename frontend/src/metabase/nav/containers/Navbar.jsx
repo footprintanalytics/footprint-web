@@ -84,17 +84,15 @@ const menus = [
       {
         title: "GameFi Report",
         link:
-          "https://www.footprint.network/@DamonSalvatore/GameFi-in-Bull-Bear-Market?date=2022-01-01~2022-07-31",
+          "https://www.footprint.network/@DamonSalvatore/GameFi-in-Bull-Bear-Market",
       },
       {
         title: "Top Games",
-        link:
-          "https://www.footprint.network/@Footprint/GameFi-Dashboard?chain=BSC",
+        link: "https://www.footprint.network/@Footprint/GameFi-Dashboard",
       },
       {
         title: "GameFi Tracker",
-        link:
-          "https://www.footprint.network/@Tom946702/GameFi-Tracker?relative_date=past30days",
+        link: "https://www.footprint.network/@Tom946702/GameFi-Tracker",
       },
       {
         title: "Explore GameFi",
@@ -108,13 +106,11 @@ const menus = [
     menu: [
       {
         title: "NFT Overview",
-        link:
-          "https://www.footprint.network/@Footprint/NFT?relative_date=past7days",
+        link: "https://www.footprint.network/@Footprint/NFT",
       },
       {
         title: "New Collections",
-        link:
-          "https://www.footprint.network/@0xLam/New-Collections",
+        link: "https://www.footprint.network/@0xLam/New-Collections",
       },
       {
         title: "Top Sales",
@@ -123,7 +119,7 @@ const menus = [
       {
         title: "NFT in Multi-chain",
         link:
-          "https://www.footprint.network/@KikiSmith/Comparison-of-3-Chains-NFT-Development?date_filter=2021-08-01~&top_collections_-_filter_chain=Ethereum",
+          "https://www.footprint.network/@KikiSmith/Comparison-of-3-Chains-NFT-Development",
       },
       {
         title: "NFT Project",

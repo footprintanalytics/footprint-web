@@ -43,4 +43,8 @@ const AboutBasic = ({ indicator }) => {
   );
 };
 
-export default React.memo(AboutBasic);
+function areEqual(prevProps, nextProps) {
+  return prevProps?.indicator === nextProps?.indicator;
+}
+
+export default React.memo(AboutBasic, areEqual);
