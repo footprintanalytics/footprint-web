@@ -88,13 +88,11 @@ const menus = [
       },
       {
         title: "Top Games",
-        link:
-          "https://www.footprint.network/@Footprint/GameFi-Dashboard",
+        link: "https://www.footprint.network/@Footprint/GameFi-Dashboard",
       },
       {
         title: "GameFi Tracker",
-        link:
-          "https://www.footprint.network/@Tom946702/GameFi-Tracker",
+        link: "https://www.footprint.network/@Tom946702/GameFi-Tracker",
       },
       {
         title: "Explore GameFi",
@@ -108,13 +106,11 @@ const menus = [
     menu: [
       {
         title: "NFT Overview",
-        link:
-          "https://www.footprint.network/@Footprint/NFT",
+        link: "https://www.footprint.network/@Footprint/NFT",
       },
       {
         title: "New Collections",
-        link:
-          "https://www.footprint.network/@0xLam/New-Collections",
+        link: "https://www.footprint.network/@0xLam/New-Collections",
       },
       {
         title: "Top Sales",

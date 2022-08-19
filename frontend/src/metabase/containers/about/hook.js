@@ -61,21 +61,11 @@ export const useQueryNews = () => {
 };
 
 export const useQueryIndicator = () => {
-  /*const queryIndicator = useQuery(
+  const queryIndicator = useQuery(
     "indicator",
     brandPageIndicator,
     QUERY_OPTIONS,
-  );*/
-  const indicatorTestData = {
-    chainsParsed: 17,
-    gamefiParsedProtocols: 1364,
-    nftCollections: 84647,
-    nftParsedMarketplaces: 11,
-    dashboards: 3730,
-    charts: 28374,
-  };
-  const indicator = indicatorTestData;
-  // const indicator = isProduction ? queryIndicator?.data : indicatorTestData;
-  // return { indicator, isLoading: queryIndicator.isLoading };
-  return { indicator, isLoading: false };
+  );
+  const indicator = queryIndicator?.data;
+  return { indicator, isLoading: queryIndicator.isLoading };
 };

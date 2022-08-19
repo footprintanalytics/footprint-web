@@ -6,6 +6,7 @@ import { Spin } from "antd";
 import CountUp from "react-countup";
 
 const AboutBasic = ({ indicator }) => {
+  console.log("AboutBasic")
   return (
     <div className="About__basic">
       <div className="About__basic-process">
@@ -43,4 +44,8 @@ const AboutBasic = ({ indicator }) => {
   );
 };
 
-export default React.memo(AboutBasic);
+function areEqual(prevProps, nextProps) {
+  return prevProps?.indicator === nextProps?.indicator;
+}
+
+export default React.memo(AboutBasic, areEqual);
