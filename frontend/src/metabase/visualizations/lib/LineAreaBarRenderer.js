@@ -448,24 +448,38 @@ function applyChartLineBarSettings(
 }
 
 // TODO - give this a good name when I figure out what it does
-function doScatterChartStuff(chart, datas, index, { yExtent, yExtents }) {
+function doScatterChartStuff(
+  chart,
+  datas,
+  index,
+  { yExtent, yExtents },
+  settings,
+) {
   chart.keyAccessor(d => d.key[0]).valueAccessor(d => d.key[1]);
 
   if (chart.radiusValueAccessor) {
     const isBubble = datas[index][0].length > 2;
+    let radiusFact = settings["graph.radius_fact"]; //(1 ~ 100)
+    if (radiusFact > 100) {
+      radiusFact = 100;
+    } else if (radiusFact < 1) {
+      radiusFact = 1;
+    }
+    const fixRadiusFact = 0.6 + (radiusFact - 1) * 0.094;
     if (isBubble) {
-      const BUBBLE_SCALE_FACTOR_MAX = 64;
+      const BUBBLE_SCALE_FACTOR_MAX = 128;
       chart
-        .radiusValueAccessor(d => d.value)
+        .radiusValueAccessor(d => d.value * fixRadiusFact)
         .r(
           d3.scale
             .sqrt()
             .domain([0, yExtent[1] * BUBBLE_SCALE_FACTOR_MAX])
             .range([0, 1]),
         );
+      chart.MIN_RADIUS = 5;
     } else {
-      chart.radiusValueAccessor(d => 1);
-      chart.MIN_RADIUS = 3;
+      chart.radiusValueAccessor(d => fixRadiusFact);
+      chart.MIN_RADIUS = 1;
     }
     chart.minRadiusWithLabel(Infinity);
   }
@@ -579,7 +593,7 @@ function getCharts(
       .useRightYAxis(yAxisSplit.length > 1 && yAxisSplit[1].includes(index));
 
     if (chartType === "scatter") {
-      doScatterChartStuff(chart, datas, index, yAxisProps);
+      doScatterChartStuff(chart, datas, index, yAxisProps, settings);
     }
 
     if (chart.defined) {
