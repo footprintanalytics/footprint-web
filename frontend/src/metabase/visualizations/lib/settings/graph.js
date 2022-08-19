@@ -317,6 +317,15 @@ export const GRAPH_GOAL_SETTINGS = {
     },
     useRawSeries: true,
   },
+  "graph.radius_fact": {
+    section: t`Display`,
+    title: t`Radius fact (1-100)`,
+    widget: "number",
+    default: 10,
+    getHidden: (series, vizSettings) => {
+      return series?.length > 0 ? series[0]?.card?.display !== "scatter" : true;
+    },
+  },
 };
 
 export const GRAPH_DISPLAY_VALUES_SETTINGS = {
