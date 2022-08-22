@@ -24,3 +24,7 @@
   padding: 2px;
   white-space: nowrap;
 }
+
+.Table-simple .cellData {
+  font-size: 12px;
+}

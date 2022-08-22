@@ -165,7 +165,7 @@ export default class TableSimple extends Component {
 
     return (
       <div className={cx(this.props.className, "relative flex flex-column")}>
-        <div className="flex-full relative">
+        <div className="flex-full relative Table-simple">
           <div
             className="absolute top bottom left right scroll-x scroll-show scroll-show--hover"
             style={{ overflowY: "hidden" }}
