@@ -511,13 +511,14 @@ export default class NativeQueryEditor extends Component {
     const parameters = query.question().parameters();
 
     // hide the snippet sidebar if there aren't any visible snippets/collections and the root collection isn't writable
-    const showSnippetSidebarButton = !(
+    /*const showSnippetSidebarButton = !(
       snippets &&
       snippets.length === 0 &&
       snippetCollections &&
       snippetCollections.length === 1 &&
       snippetCollections[0].can_write === false
-    );
+    );    */
+    const showSnippetSidebarButton = false;
 
     let dataSelectors = [];
     if (isNativeEditorOpen && databases.length > 0) {
