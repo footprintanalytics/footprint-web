@@ -98,4 +98,7 @@ export const GET = async (url, params) => axios.get(url, { params });
 export const POST = async (url, params, config) =>
   axios.post(url, params, config);
 
+export const PUT = async (url, params, config) =>
+  axios.put(url, params, config);
+
 export const DELETE = async (url, params) => axios.delete(url, params);

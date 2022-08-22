@@ -1,4 +1,4 @@
-import { GET, POST, DELETE } from "metabase/lib/new-api";
+import { GET, POST, PUT, DELETE } from "metabase/lib/new-api";
 import axios from "axios";
 import { getProject, isDefi360 } from "./lib/project_info";
 
@@ -253,6 +253,10 @@ export const zkspaceCreateUserAddress = async params => {
   return POST(`/api/v1/zkspaceUserAddress/createUserAddress`, params);
 };
 
+export const addressActivityInfo = async params => {
+  return GET(`/api/v1/zkspaceUserAddress/AddressActivityInfo`, params);
+};
+
 export const databaseTemplate = async params => {
   return POST(`/api/v1/database/recommend/template`, params);
 };
@@ -406,4 +410,8 @@ export const datasetDownload = (params, config) => {
 
 export const cancelSubscription = () => {
   return POST(`api/v1/payment/subscription/cancel`);
+};
+
+export const userinfoProfile = params => {
+  return PUT(`api/v1/userinfo/profile`, params);
 };

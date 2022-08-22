@@ -1,3 +1,4 @@
+/* eslint-disable react/prop-types */
 import React from "react";
 import WrapLink from "./WrapLink";
 import { trackStructEvent } from "metabase/lib/analytics";
@@ -5,7 +6,7 @@ import Icon from "metabase/components/Icon";
 import { color } from "metabase/lib/colors";
 import data from "../data";
 
-const AboutSocial = () => {
+const AboutSocial = ({ size = 16 }) => {
   return (
     <div className="About__social">
       {data.socialData.map(item => {
@@ -22,7 +23,7 @@ const AboutSocial = () => {
               className="About__social-item-icon-bg"
               style={{ background: item.background }}
             >
-              <Icon name={item.icon} size={16} color={color("white")} />
+              <Icon name={item.icon} size={size} color={color("white")} />
             </div>
           </WrapLink>
         );
