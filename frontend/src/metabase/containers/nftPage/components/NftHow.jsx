@@ -110,7 +110,7 @@ const NftHow = props => {
             return (
               <tr key={content.category} className="nft-activity__how-inner">
                 <td>{content.category}</td>
-                <td>
+                <td className="nft-activity__how-inner-items">
                   {content.items.map(item => {
                     return <li key={item}>{item}</li>;
                   })}

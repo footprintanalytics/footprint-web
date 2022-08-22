@@ -39,7 +39,7 @@
   height: 264px;
   width: 176px;
   left: 0;
-  top: 5%;
+  top: 4%;
   background-image: url("https://static.footprint.network/img_nft_icon_2022081903.png?1");
   background-size: 176px 264px;
   background-repeat: no-repeat;
@@ -123,10 +123,10 @@
 }
 
 .nft-activity__manifesto-bg {
-  background-image: url("https://static.footprint.network/img_nft_bg_2022082102.png"), linear-gradient(rgba(0, 0, 0, 0.7), rgba(0, 0, 0, 0.7)),
+  background-image: url("https://static.footprint.network/img_nft_bg_2022082102.png"),
+    linear-gradient(rgba(0, 0, 0, 0.7), rgba(0, 0, 0, 0.7)),
     url("https://static.footprint.network/img_nft_bg_2022082207.png"),
-    url("https://static.footprint.network/img_nft_bg_2022082208.png")
-  ;
+    url("https://static.footprint.network/img_nft_bg_2022082208.png");
   background-size: auto, 699px 303px, 268px 396px, 699px 303px;
   background-repeat: no-repeat, no-repeat, no-repeat, no-repeat;
   background-position: center, bottom left, top 0 right 0, bottom left;
@@ -235,7 +235,8 @@
 }
 
 .nft-activity__holder-bg {
-  background-image: linear-gradient(rgba(0, 0, 0, 0.1), rgba(0, 0, 0, 0.1)), url("https://static.footprint.network/img_nft_bg_2022082202.png");
+  background-image: linear-gradient(rgba(0, 0, 0, 0.1), rgba(0, 0, 0, 0.1)),
+    url("https://static.footprint.network/img_nft_bg_2022082202.png");
   background-size: 248px 248px, 248px 248px;
   background-repeat: no-repeat, no-repeat;
   background-position: top 18% right 0, top 18% right 0;
@@ -277,6 +278,19 @@
 .nft-activity__how-container td {
   line-height: 30px;
   font-size: 14px;
+}
+.nft-activity__how-container li {
+  list-style-type: none;
+}
+.nft-activity__how-container .nft-activity__how-inner-items li:before {
+   content: "";
+   display: block;
+   background: url(https://static.footprint.network/img_nft_bg_2022082131.png) no-repeat;
+  background-size: 100%;
+   width: 10px;
+   height: 10px;
+   float: left;
+   margin: 10px 6px 0 0;
 }
 
 .nft-activity__how-inner {
@@ -332,7 +346,8 @@
     url("https://static.footprint.network/img_nft_bg_2022082205.png");
   background-size: 240px 262px, 212px 131px, 240px 262px, 212px 131px;
   background-repeat: no-repeat, no-repeat, no-repeat, no-repeat;
-  background-position: bottom 10% right 5%, top 0 left 0, bottom 10% right 5%, top 0 left 0;
+  background-position: bottom 10% right 5%, top 0 left 0, bottom 10% right 5%,
+    top 0 left 0;
   mix-blend-mode: lighten;
 }
 
