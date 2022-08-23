@@ -33,7 +33,11 @@ const NftPage = props => {
     refetch();
     setShowModal(false);
   };
-  console.log("isLoading", isLoading);
+
+  const onClose = () => {
+    setShowModal(false);
+  };
+
   return (
     <>
       <div className="nft-activity">
@@ -49,7 +53,9 @@ const NftPage = props => {
         <NftHolder />
         <NftHow />
         <NftQa />
-        {showModal && <SubmitModal successAction={successAction} />}
+        {showModal && (
+          <SubmitModal successAction={successAction} onClose={onClose} />
+        )}
       </div>
     </>
   );

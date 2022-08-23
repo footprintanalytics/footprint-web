@@ -4,7 +4,7 @@ import React from "react";
 const NftManifesto = props => {
   return (
     <>
-      <div className="nft-activity__manifesto nft-activity__manifesto-bg">
+      <div className="nft-activity__manifesto">
         <div className="nft-activity__manifesto-container">
           <h1>Manifesto</h1>
           <span>

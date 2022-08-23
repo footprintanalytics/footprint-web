@@ -21,7 +21,7 @@ const NftQa = props => {
   ];
   return (
     <>
-      <div className="nft-activity__qa nft-activity__qa-bg">
+      <div className="nft-activity__qa">
         <ul>
           {data.map(item => {
             return (

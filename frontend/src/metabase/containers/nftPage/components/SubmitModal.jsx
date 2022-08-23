@@ -59,12 +59,12 @@ const SubmitModal = props => {
     }
   };
   return (
-    <Modal
-      className="nft-activity-submit__modal"
-      dismissOnClickOutside={false}
-      onClose={onCancel}
-    >
-      <ModalContent className="Modal-content Modal-content--small">
+    <Modal className="nft-activity-submit__modal" dismissOnClickOutside={false}>
+      <ModalContent
+        className="Modal-content Modal-content--small"
+        onClose={onCancel}
+        closeClassName="nft-activity-submit__modal-close"
+      >
         <div className="nft-activity-submit__modal-container">
           <h1>Moon Men</h1>
           <h2>Submit your information to win NFT</h2>

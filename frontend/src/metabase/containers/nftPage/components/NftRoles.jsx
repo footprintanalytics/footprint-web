@@ -24,7 +24,7 @@ const NftRoles = props => {
   ];
   return (
     <>
-      <div className="nft-activity__roles nft-activity__roles-bg">
+      <div className="nft-activity__roles">
         <div className="nft-activity__roles-container">
           <h1>Roles</h1>
           <span>

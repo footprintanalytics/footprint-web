@@ -9,6 +9,7 @@ export default class ModalContent extends Component {
     id: PropTypes.string,
     title: PropTypes.string,
     titleDesc: PropTypes.string,
+    closeClassName: PropTypes.string,
     onClose: PropTypes.func,
     // takes over the entire screen
     fullPageModal: PropTypes.bool,
@@ -18,6 +19,7 @@ export default class ModalContent extends Component {
 
   static defaultProps = {
     formModal: true,
+    closeClassName: "",
   };
 
   static childContextTypes = {
@@ -34,6 +36,7 @@ export default class ModalContent extends Component {
       titleDesc,
       footer,
       onClose,
+      closeClassName,
       children,
       className,
       fullPageModal,
@@ -53,7 +56,7 @@ export default class ModalContent extends Component {
       >
         {onClose && (
           <Icon
-            className="text-light text-medium-hover cursor-pointer absolute z2 m2 top right"
+            className={`text-light text-medium-hover cursor-pointer absolute z2 m2 top right ${closeClassName}`}
             name="close"
             size={fullPageModal ? 28 : 20}
             onClick={onClose}

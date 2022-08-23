@@ -41,11 +41,12 @@ const NftStart = ({
         </div>
       );
     }
-    if (user && !userIdIsExist) {
+    if (!userIdIsExist) {
       return (
         <div
           className="nft-activity__btn"
           onClick={() => {
+            console.log("ddd");
             setShowModal(true);
           }}
         >
@@ -53,7 +54,7 @@ const NftStart = ({
         </div>
       );
     }
-    if (user && userIdIsExist) {
+    if (userIdIsExist) {
       return (
         <div
           className="nft-activity__btn"
@@ -65,7 +66,7 @@ const NftStart = ({
         </div>
       );
     }
-    if (user && isAllowed) {
+    if (isAllowed) {
       return (
         <div
           className="nft-activity__btn"
@@ -82,7 +83,7 @@ const NftStart = ({
 
   return (
     <>
-      <div className="nft-activity__start nft-activity__start-bg">
+      <div className="nft-activity__start">
         <div className="nft-activity__wrap">
           <h1>Moon Men</h1>
           <h2>{"Footprint Analytics' NFT is coming! "}</h2>
@@ -97,7 +98,6 @@ const NftStart = ({
           preview={false}
           src={"https://static.footprint.network/img_nft_icon_2022081902.png?2"}
         />
-        <div className="nft-activity__start-ball" />
       </div>
     </>
   );

@@ -28,7 +28,7 @@ const NftHolder = props => {
 
   return (
     <>
-      <div className="nft-activity__holder nft-activity__holder-bg">
+      <div className="nft-activity__holder">
         <div className="nft-activity__holder-container">
           <h1>As a Moon Men NFT holder, you get:</h1>
         </div>

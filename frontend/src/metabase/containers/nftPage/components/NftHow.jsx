@@ -9,9 +9,25 @@ const NftHow = props => {
   const contents = [
     {
       category: "Join Community",
-      items: ["Follow Twitter", "Join Discord channel"],
+      items: ["Follow Twitter"],
       points: [],
-      actions: [],
+      actions: [
+        {
+          text: "Follow",
+          url: "https://twitter.com/Footprint_Data",
+        },
+      ],
+    },
+    {
+      category: "",
+      items: ["Join Discord channel"],
+      points: [],
+      actions: [
+        {
+          text: "Join",
+          url: "https://discord.gg/3HYaR6USM7",
+        },
+      ],
     },
     {
       category: "Footprint subscriber",
@@ -40,16 +56,20 @@ const NftHow = props => {
     {
       category:
         "Provide guidance and help for more analysts who are interested in data analysis and want to learn more.",
-      items: [
-        "Creating an on-chain data analysis course for Footprint",
-        "Participate in Footprint's community sharing as a speaker",
-      ],
-      points: ["50 points per course content", "50 points per sharing"],
+      items: ["Creating an on-chain data analysis course for Footprint"],
+      points: ["50 points per course content"],
       actions: [
         {
           text: "Create course",
           url: "https://discord.gg/3HYaR6USM7",
         },
+      ],
+    },
+    {
+      category: "",
+      items: ["Participate in Footprint's community sharing as a speaker"],
+      points: ["50 points per sharing"],
+      actions: [
         {
           text: "Talk to us",
           url: "https://discord.gg/3HYaR6USM7",
@@ -72,16 +92,22 @@ const NftHow = props => {
     },
     {
       category: "Participate in data co-construction",
+      items: ["Produce silver or gold layer datasets or Metrics"],
+      points: ["Coming soon. We will use Github to count"],
+      actions: [],
+    },
+    {
+      category: "",
+      items: ["Participate in data validation"],
+      points: ["Coming soon. We will use Github to count"],
+      actions: [],
+    },
+    {
+      category: "",
       items: [
-        "Produce silver or gold layer datasets or Metrics",
-        "Participate in data validation",
         "Participate in data parsing: chain parsing, contract parsing, providing contract addresses, ABI, etc.",
       ],
-      points: [
-        "Coming soon. We will use Github to count",
-        "Coming soon. We will use Github to count",
-        "Coming soon. We will use Github to count",
-      ],
+      points: ["Coming soon. We will use Github to count"],
       actions: [],
     },
     {
@@ -95,21 +121,24 @@ const NftHow = props => {
   ];
   return (
     <>
-      <div
-        className="nft-activity__how nft-activity__how-bg"
-        id="nft-activity__how"
-      >
+      <div className="nft-activity__how" id="nft-activity__how">
         <h1>How should I get on the allow list?</h1>
+        <h2>
+          Our point system scores contributions on sliding scale and Footprint
+          contributors with 100 points or more can join the allow list
+        </h2>
         <div className="nft-activity__how-container">
           <tr>
             {heads.map(item => (
               <th key={item}>{item}</th>
             ))}
           </tr>
-          {contents.map(content => {
+          {contents.map((content, inx) => {
             return (
-              <tr key={content.category} className="nft-activity__how-inner">
-                <td>{content.category}</td>
+              <tr key={inx} className="nft-activity__how-inner">
+                <td>
+                  <b>{content.category}</b>
+                </td>
                 <td className="nft-activity__how-inner-items">
                   {content.items.map(item => {
                     return <li key={item}>{item}</li>;
