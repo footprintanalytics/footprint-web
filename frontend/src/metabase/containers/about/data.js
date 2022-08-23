@@ -177,8 +177,8 @@ const data = {
       logo: "img-partner-near.png",
     },
     {
-      url: "https://www.polygon.com",
-      logo: "img-partner-polygon.png",
+      url: "https://polygon.technology",
+      logo: "img-partner-polygon-v2.png",
     },
     {
       url: "https://www.avax.network",
