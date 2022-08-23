@@ -3,6 +3,7 @@ import React from "react";
 import Button from "metabase/components/Button";
 import * as Urls from "metabase/lib/urls";
 import WrapLink from "metabase/containers/about/components/WrapLink";
+import { trackStructEvent } from "metabase/lib/analytics";
 
 const NftHow = props => {
   const heads = ["Category", "Items", "Points", ""];
@@ -152,7 +153,13 @@ const NftHow = props => {
                 <td>
                   {content.actions.map(action => {
                     return (
-                      <WrapLink key={action.text} url={action.url}>
+                      <WrapLink
+                        key={action.text}
+                        url={action.url}
+                        onClick={() =>
+                          trackStructEvent(`moon-men click ${action.text}`)
+                        }
+                      >
                         <Button className="nft-activity__how-button">
                           {action.text}
                         </Button>

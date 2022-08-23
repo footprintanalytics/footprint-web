@@ -11,16 +11,16 @@ import {
   userinfoProfile,
   zkspaceCreateUserAddress,
 } from "metabase/new-service";
+import { refreshCurrentUser } from "metabase/redux/user";
 
 const SubmitModal = props => {
-  const { onClose, successAction } = props;
+  const { onClose, successAction, refreshCurrentUser, user } = props;
 
   const onCancel = () => {
     onClose && onClose();
   };
 
   const onSubmit = async data => {
-    console.log("onSubmit", data);
     trackStructEvent(`nft-activity-submit-modal click submit`);
     if (!data.userAddress || data.userAddress.trim().length !== 42) {
       message.info("Please input 42-bit length Ethereum address.");
@@ -51,6 +51,7 @@ const SubmitModal = props => {
             telegram: data.telegram,
             discord: data.discord,
           });
+          refreshCurrentUser();
         }
         successAction && successAction();
       }
@@ -76,40 +77,48 @@ const SubmitModal = props => {
             >
               <Input placeholder="Address" rows={1} maxLength={42} />
             </Form.Item>
-            <Form.Item
-              className="nft-activity-submit__modal-container-item"
-              name="twitter"
-              label="Twitter*"
-            >
-              <Input
-                placeholder="@Footprint_Data or https://twitter.com/Footprint_Data"
-                rows={1}
-                maxLength={100}
-              />
-            </Form.Item>
-            <Form.Item
-              className="nft-activity-submit__modal-container-item"
-              name="discord"
-              label="Discord*"
-            >
-              <Input
-                placeholder="@FootprintOfficial#5374 or https://discord.gg/3HYaR6USM7"
-                rows={1}
-                maxLength={100}
-              />
-            </Form.Item>
-            <Form.Item
-              className="nft-activity-submit__modal-container-item"
-              name="telegram"
-              label="Telegram*"
-            >
-              <Input
-                placeholder="@FootprintAnalytics or https://t.me/joinchat/4-ocuURAr2thODFh"
-                rows={1}
-                maxLength={100}
-              />
-            </Form.Item>
-            <h4>The information will be synchronised in your profile</h4>
+            {!user.twitter && (
+              <Form.Item
+                className="nft-activity-submit__modal-container-item"
+                name="twitter"
+                label="Twitter*"
+              >
+                <Input
+                  placeholder="@Footprint_Data or https://twitter.com/Footprint_Data"
+                  rows={1}
+                  maxLength={100}
+                />
+              </Form.Item>
+            )}
+            {!user.discord && (
+              <Form.Item
+                className="nft-activity-submit__modal-container-item"
+                name="discord"
+                label="Discord*"
+              >
+                <Input
+                  placeholder="@FootprintOfficial#5374 or https://discord.gg/3HYaR6USM7"
+                  rows={1}
+                  maxLength={100}
+                />
+              </Form.Item>
+            )}
+            {!user.telegram && (
+              <Form.Item
+                className="nft-activity-submit__modal-container-item"
+                name="telegram"
+                label="Telegram*"
+              >
+                <Input
+                  placeholder="@FootprintAnalytics or https://t.me/joinchat/4-ocuURAr2thODFh"
+                  rows={1}
+                  maxLength={100}
+                />
+              </Form.Item>
+            )}
+            {(!user.discord || !user.telegram || !user.twitter) && (
+              <h4>The information will be synchronised in your profile</h4>
+            )}
             <Form.Item>
               <Button
                 className="nft-activity-submit__modal-container-button"
@@ -133,4 +142,8 @@ const mapStateToProps = (state, props) => {
   };
 };
 
-export default connect(mapStateToProps, null)(SubmitModal);
+const mapDispatchToProps = {
+  refreshCurrentUser,
+};
+
+export default connect(mapStateToProps, mapDispatchToProps)(SubmitModal);
