@@ -18,7 +18,7 @@ const NftPage = props => {
   const { user, setLoginModalShow } = props;
   const [showModal, setShowModal] = useState();
   const params = {
-    type: "nftOnePage",
+    type: "moonMen",
   };
   const { isLoading, data, refetch } = useQuery(
     ["addressActivityInfo", params],

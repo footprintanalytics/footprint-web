@@ -31,7 +31,7 @@ const SubmitModal = props => {
       const {
         userIdIsExist,
         userAddressIsExist,
-      } = await zkspaceCreateUserAddress({ ...data, type: "nftOnePage" });
+      } = await zkspaceCreateUserAddress({ ...data, type: "moonMen" });
       if (userIdIsExist) {
         message.info("You have already submitted an address");
         // setShowZkspaceSubmitAddr(email);
