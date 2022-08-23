@@ -6,6 +6,7 @@ import WrapLink from "metabase/containers/about/components/WrapLink";
 import { trackStructEvent } from "metabase/lib/analytics";
 
 const NftHow = props => {
+  const { user, setLoginModalShow, onChangeLocation } = props;
   const heads = ["Category", "Items", "Points", ""];
   const contents = [
     {
@@ -51,6 +52,7 @@ const NftHow = props => {
         {
           text: "Create dashboard",
           url: Urls.newQuestion(),
+          auth: true,
         },
       ],
     },
@@ -120,6 +122,14 @@ const NftHow = props => {
       actions: [],
     },
   ];
+  const isLogin = () => {
+    if (user) {
+      return true;
+    } else {
+      setLoginModalShow({ show: true, from: "Dashboards Profile" });
+      return false;
+    }
+  };
   return (
     <>
       <div className="nft-activity__how" id="nft-activity__how">
@@ -156,9 +166,15 @@ const NftHow = props => {
                       <WrapLink
                         key={action.text}
                         url={action.url}
-                        onClick={() =>
-                          trackStructEvent(`moon-men click ${action.text}`)
-                        }
+                        onClick={e => {
+                          trackStructEvent(`moon-men click ${action.text}`);
+                          if (action.auth) {
+                            e.preventDefault();
+                            if (isLogin()) {
+                              onChangeLocation(action.url);
+                            }
+                          }
+                        }}
                       >
                         <Button className="nft-activity__how-button">
                           {action.text}

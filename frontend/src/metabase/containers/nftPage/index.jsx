@@ -13,9 +13,10 @@ import SubmitModal from "metabase/containers/nftPage/components/SubmitModal";
 import { useQuery } from "react-query";
 import { addressActivityInfo } from "metabase/new-service";
 import { QUERY_OPTIONS } from "metabase/containers/search/shared/config";
+import { push } from "react-router-redux";
 
 const NftPage = props => {
-  const { user, setLoginModalShow } = props;
+  const { user, setLoginModalShow, onChangeLocation } = props;
   const [showModal, setShowModal] = useState();
   const params = {
     type: "moonMen",
@@ -50,7 +51,11 @@ const NftPage = props => {
         <NftManifesto />
         <NftRoles />
         <NftHolder />
-        <NftHow />
+        <NftHow
+          user={user}
+          setLoginModalShow={setLoginModalShow}
+          onChangeLocation={onChangeLocation}
+        />
         <NftQa />
         {showModal && (
           <SubmitModal successAction={successAction} onClose={onClose} />
@@ -66,6 +71,7 @@ const mapStateToProps = state => ({
 
 const mapDispatchToProps = {
   setLoginModalShow: loginModalShowAction,
+  onChangeLocation: push,
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(NftPage);
