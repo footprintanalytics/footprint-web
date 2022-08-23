@@ -29,7 +29,6 @@ const NftPage = props => {
   );
 
   const successAction = () => {
-    console.log("successAction");
     refetch();
     setShowModal(false);
   };
