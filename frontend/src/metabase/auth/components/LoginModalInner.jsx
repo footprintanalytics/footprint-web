@@ -113,9 +113,17 @@ const LoginModalInner = props => {
     onCloseAction();
   };
 
+  const getChannel = () => {
+    //moon-men page register is channel moon-men
+    if (location?.pathname === "/moon-men") {
+      return { channel: "moon-men" };
+    }
+    return channel.length > 0 ? { channel } : {};
+  };
+
   const onSignUpSubmit = async credentials => {
     const credentialsConfirm = {
-      ...(channel.length > 0 ? { channel } : {}),
+      ...getChannel(),
       ...credentials,
     };
     let hide;

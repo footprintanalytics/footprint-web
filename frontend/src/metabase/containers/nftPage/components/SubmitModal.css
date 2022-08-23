@@ -1,0 +1,50 @@
+.nft-activity-submit__modal {
+  width: 700px;
+  background: #003180dd;
+  padding: 20px 20px 10px 20px;
+  border: 1px #49fffe solid;
+}
+
+.nft-activity-submit__modal-close {
+  color: white;
+}
+
+.nft-activity-submit__modal-container {
+}
+
+.nft-activity-submit__modal h1 {
+  color: white;
+  font-size: 48px;
+}
+
+.nft-activity-submit__modal h2 {
+  color: #00e0ff;
+  font-size: 24px;
+  font-weight: normal;
+  margin-bottom: 10px;
+}
+
+.nft-activity-submit__modal h4 {
+  color: white;
+  font-size: 14px;
+  font-weight: normal;
+}
+
+.nft-activity-submit__modal label {
+  color: white;
+}
+
+.nft-activity-submit__modal .ant-form-item-control-input-content {
+  text-align: right;
+}
+
+.nft-activity-submit__modal-container-item {
+  height: 70px;
+}
+
+.nft-activity-submit__modal-container-button {
+  background: #49fffe;
+  width: 100px;
+  border-radius: 4px;
+  color: #000000;
+}

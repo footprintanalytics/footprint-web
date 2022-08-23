@@ -86,6 +86,7 @@ export default {
   Creator: loadable(() => import("metabase/containers/creator"), options),
   Widget: loadable(() => import("metabase/containers/widget")),
   About: loadable(() => import("metabase/containers/about")),
+  NftPage: loadable(() => import("metabase/containers/nftPage")),
 
   // account
   AccountSettingsApp: loadable(() => import("./account/settings/containers/AccountSettingsApp")),
