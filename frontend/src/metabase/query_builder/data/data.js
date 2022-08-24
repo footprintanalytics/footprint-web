@@ -2,6 +2,7 @@ const dateFieldMapping = [
   //nft_transactions
   //{chain}_transactions
   //{chain}_token_transfers
+  //{chain}_logs
   {
     tableName: "nft_transactions",
     dateField: "block_timestamp",
@@ -136,6 +137,30 @@ const dateFieldMapping = [
   },
   {
     tableName: "thundercore_token_transfers",
+    dateField: "block_timestamp",
+  },
+  {
+    tableName: "arbitrum_logs",
+    dateField: "block_timestamp",
+  },
+  {
+    tableName: "avalanche_logs",
+    dateField: "block_timestamp",
+  },
+  {
+    tableName: "bsc_logs",
+    dateField: "block_timestamp",
+  },
+  {
+    tableName: "ethereum_logs",
+    dateField: "block_timestamp",
+  },
+  {
+    tableName: "fantom_logs",
+    dateField: "block_timestamp",
+  },
+  {
+    tableName: "polygon_logs",
     dateField: "block_timestamp",
   },
 ];
