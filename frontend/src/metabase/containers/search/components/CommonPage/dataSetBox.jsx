@@ -5,7 +5,7 @@ import "../DataSet/Index.css";
 import { Popover } from "antd";
 
 const dataSetBox = ({ router, searchWords, item, isPlain = false }) => {
-  const data = item?.field_names?.replace(/"/g, "")?.split(",");
+  const data = item?.columns?.map(column => column.name);
   if (!data) {
     return null;
   }
