@@ -55,6 +55,7 @@ import NewGuideStartModal from "metabase/containers/newguide/NewGuideStartModal"
 import TableCategory from "metabase/query_builder/components/question/TableCategory";
 import { useQuery } from "react-query";
 import { QUERY_OPTIONS } from "metabase/containers/dashboards/shared/config";
+import dateFieldMapping from "metabase/query_builder/data/data";
 
 function QuestionSide({
   question,
@@ -150,11 +151,31 @@ function QuestionSide({
     }
   }, [newGuideShowTable, dataSets, getNewGuideInfo, setNewGuideInfo]);
 
-  const replaceUrl = ({ tableId, type = "query" }) => {
-    replace(Urls.newQuestion({ databaseId, tableId, type }));
+  const getFilter = ({ tableName, columns }) => {
+    let filter = null;
+    const mapping = dateFieldMapping.find(
+      mapping => mapping.tableName === tableName,
+    );
+    if (mapping && columns) {
+      const { dateField } = mapping;
+      const dateColumn = columns.find(column => column.name === dateField);
+      if (dateColumn) {
+        filter = ["time-interval", ["field", dateColumn.id, null], -7, "day"];
+      }
+    }
+    return filter;
   };
 
-  const handleSelectTable = async ({ tableId, tableName, columnName }) => {
+  const replaceUrl = ({ tableId, type = "query", filter }) => {
+    replace(Urls.newQuestion({ databaseId, tableId, type, filter }));
+  };
+
+  const handleSelectTable = async ({
+    tableId,
+    tableName,
+    columnName,
+    columns,
+  }) => {
     closeNewGuide({ key: "table" });
     if (selectTableAction) {
       selectTableAction({ tableId, tableName, columnName });
@@ -181,8 +202,8 @@ function QuestionSide({
       setConfirmModal(true);
       return;
     }
-
-    replaceUrl({ tableId });
+    const filter = getFilter({ tableName, columns });
+    replaceUrl({ tableId, filter });
     afterAction();
   };
 

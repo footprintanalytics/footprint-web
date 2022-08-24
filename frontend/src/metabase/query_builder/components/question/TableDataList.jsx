@@ -216,6 +216,7 @@ const TableDataList = props => {
               handleSelectTable({
                 tableId: id,
                 tableName: n.name,
+                columns: n.columns,
               });
             }}
           >
@@ -268,6 +269,7 @@ const TableDataList = props => {
                   tableId: id,
                   tableName: n.name,
                   columnName: field.name,
+                  columns: n.columns,
                 });
               }}
             >
