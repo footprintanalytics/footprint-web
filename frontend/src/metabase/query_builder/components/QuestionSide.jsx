@@ -83,7 +83,7 @@ function QuestionSide({
   const [moreParams, setMoreParams] = useState();
   const [searchKey, setSearchKey] = useState("");
   // const [dataSets, setDatasets] = useState([]);
-  const [nextTableId, setNextTableId] = useState();
+  const [nextTableObject, setNextTableObject] = useState({});
   const [confirmModal, setConfirmModal] = useState(false);
   const [showNewGuideStart, setShowNewGuideStart] = useState(false);
   const isNative = query instanceof NativeQuery;
@@ -184,7 +184,7 @@ function QuestionSide({
     if (isEditing) {
       return;
     }
-    setNextTableId(tableId);
+    setNextTableObject({ tableId, tableName, columns });
     if (isNative) {
       updateNativeEditorSelect({
         databaseId,
@@ -308,7 +308,9 @@ function QuestionSide({
           }}
           onAction={() => {
             setConfirmModal(false);
-            replaceUrl({ tableId: nextTableId });
+            const { tableId, tableName, columns } = nextTableObject;
+            const filter = getFilter({ tableName, columns });
+            replaceUrl({ tableId, filter });
             afterAction();
           }}
         />
