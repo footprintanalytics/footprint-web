@@ -155,6 +155,7 @@ export default class Question {
       ? NATIVE_QUERY_TEMPLATE
       : STRUCTURED_QUERY_TEMPLATE,
     create_method,
+    filter,
   }: {
     databaseId?: DatabaseId,
     tableId?: TableId,
@@ -166,6 +167,7 @@ export default class Question {
     visualization_settings?: VisualizationSettings,
     dataset_query?: DatasetQuery,
     create_method?: string,
+    filter?: any,
   } = {}) {
     let card: CardObject = {
       name,
@@ -179,6 +181,9 @@ export default class Question {
     }
     if (databaseId != null) {
       card = assocIn(card, ["dataset_query", "database"], databaseId);
+    }
+    if (filter != null) {
+      card = assocIn(card, ["dataset_query", "query", "filter"], filter);
     }
 
     return new Question(card, metadata, parameterValues);
