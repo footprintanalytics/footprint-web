@@ -82,7 +82,7 @@ export const ParametersWidgetContainer = styled(FullWidthContainer)`
   /* padding-top: ${space(2)}; */
   /* padding-bottom: ${space(1)}; */
   z-index: 4;
-  padding: 1rem 0;
+  padding: 4px 0;
 
   ${({ isEditing }) =>
     isEditing &&

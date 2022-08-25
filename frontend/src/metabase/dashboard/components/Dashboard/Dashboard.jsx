@@ -551,6 +551,13 @@ export default class Dashboard extends Component {
                   onRevert={this.onRevert}
                   onRefreshCache={this.onRefreshCache}
                 />
+                {shouldRenderParametersWidgetInEditMode && (
+                  <div className="px2">
+                    <ParametersWidgetContainer isEditing={isEditing}>
+                      {parametersWidget}
+                    </ParametersWidgetContainer>
+                  </div>
+                )}
               </HeaderContainer>
               <div className="flex">
                 <DashboardLazyLoadContainer className="flex-full flex flex-column flex-basis-none">
@@ -581,11 +588,6 @@ export default class Dashboard extends Component {
                         className="CardsContainer"
                         addMarginTop={cardsContainerShouldHaveMarginTop}
                       >
-                        {shouldRenderParametersWidgetInEditMode && (
-                          <ParametersWidgetContainer isEditing={isEditing}>
-                            {parametersWidget}
-                          </ParametersWidgetContainer>
-                        )}
                         {dashboardHasCards(dashboard) ? (
                           <DashboardGrid
                             {...this.props}
