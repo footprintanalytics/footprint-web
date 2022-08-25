@@ -156,6 +156,7 @@ export default class Question {
       : STRUCTURED_QUERY_TEMPLATE,
     create_method,
     filter,
+    limit = null,
   }: {
     databaseId?: DatabaseId,
     tableId?: TableId,
@@ -184,6 +185,9 @@ export default class Question {
     }
     if (filter != null) {
       card = assocIn(card, ["dataset_query", "query", "filter"], filter);
+    }
+    if (limit != null) {
+      card = assocIn(card, ["dataset_query", "query", "limit"], limit);
     }
 
     return new Question(card, metadata, parameterValues);
