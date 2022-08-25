@@ -15,7 +15,7 @@ const NftQa = props => {
       question: "How can I mint it? What are the mint costs?",
       answer: [
         "Only users on the allow list can mint an NFT.",
-        "Minting is free. Of course, you still need to pay a gas fee.",
+        "Minting is free. Of course, you still need to pay gas fees.",
       ],
     },
   ];
