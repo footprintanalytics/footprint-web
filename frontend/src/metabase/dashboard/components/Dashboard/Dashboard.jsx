@@ -506,7 +506,7 @@ export default class Dashboard extends Component {
     const { chart_style } = {
       ...parseHashOptions(location.hash),
     };
-    console.log("isParametersWidgetSticky", isParametersWidgetSticky)
+
     return (
       <>
         {dashboard && (
