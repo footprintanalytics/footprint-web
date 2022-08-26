@@ -351,7 +351,7 @@ export default class Dashboard extends Component {
     const { dashboardBeforeEditing, user, replace } = this.props;
     const { id, public_uuid } = dashboard;
     if (public_uuid) {
-      await createThumb({
+      createThumb({
         elementId: "#html2canvas-Dashboard",
         fileName: `dashboard/${id}.png`,
         type: "dashboard",

@@ -113,7 +113,7 @@ export default class SaveQuestionModal extends Component {
     if (!id || !public_uuid) {
       return;
     }
-    await createThumb({
+    createThumb({
       elementId: "#html2canvas-Card",
       fileName: `card/${id}.png`,
       type: "chart",
