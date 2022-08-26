@@ -12,7 +12,6 @@ import {
 } from "antd";
 import { uploadFile } from "metabase/lib/oss";
 import { getSuffix } from "metabase/containers/news/util/handle";
-import { staticBucketUrlDefault } from "metabase/env";
 import { v4 as uuidv4 } from "uuid";
 import { ossPath } from "metabase/lib/ossPath";
 import "./FormAvatarWidget.css";
@@ -33,7 +32,7 @@ const FormAvatarWidget = ({ values, onChangeField }) => {
       setLoading(true);
       const fileName = `avatar/${uuidv4()}${getSuffix(file.name)}`;
       await uploadFile({ fileName, file });
-      const fileUrl = `${staticBucketUrlDefault}/${ossPath(fileName)}`;
+      const fileUrl = `https://static.footprint.network/${ossPath(fileName)}`;
       onChangeField("avatar", fileUrl);
       setLoading(false);
     },
