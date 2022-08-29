@@ -79,7 +79,7 @@ const menus = [
     menu: [
       {
         title: "GameFi Overview",
-        link: "https://www.footprint.network/@Bond/GameFi-Overview",
+        link: "https://www.footprint.network/@Footprint/GameFi",
       },
       {
         title: "GameFi Report",
