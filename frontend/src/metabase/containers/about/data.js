@@ -361,7 +361,7 @@ const data = {
       active: true,
       query:
         "https://www.footprint.network/public/chart/Game-Ranking-fp-5bcb75e9-65b6-4c91-8482-0d2bf998eb4b",
-      url: "https://www.footprint.network/@Footprint/GameFi-Dashboard",
+      url: "https://www.footprint.network/@Footprint/GameFi",
     },
     {
       title: "Daily Gamers Trend",
