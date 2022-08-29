@@ -70,9 +70,7 @@ export default class ColumnsList extends Component {
     if (fields.every(field => field.position === 0)) {
       // Tables sometimes come down with all field positions set to zero.
       // In that case, we assume the current field order.
-      fields.forEach(({ id }, index) => {
-        positionById[id] = index;
-      });
+      positionById = this.initPosition(fields);
     } else {
       for (const { id, position } of fields) {
         positionById[id] = position;
