@@ -160,7 +160,9 @@ const List = ({
   const renderTable = () => {
     return (
       <Table
-        rowKey="publicUuid"
+        rowKey={item =>
+          `${item?.type || item?.model}-${item?.id}-${item?.publicUuid}`
+        }
         className="dashboards__table"
         dataSource={data?.data}
         columns={columns}
