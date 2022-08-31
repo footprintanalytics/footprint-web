@@ -11,15 +11,15 @@ const NftRoles = props => {
     },
     {
       top: 120,
-      img: getOssUrl("img_nft_bg_2022082112.png"),
+      img: getOssUrl("img_nft_bg_2022083101.png"),
     },
     {
       top: 60,
-      img: getOssUrl("img_nft_bg_2022082113.png"),
+      img: getOssUrl("img_nft_bg_2022083102.png"),
     },
     {
       top: 0,
-      img: getOssUrl("img_nft_bg_2022082114.png"),
+      img: getOssUrl("img_nft_bg_2022083103.png"),
     },
   ];
   return (
