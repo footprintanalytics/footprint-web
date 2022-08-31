@@ -70,6 +70,10 @@
   cursor: pointer;
 }
 
+.nft-activity__btn--disabled {
+  filter: grayscale(100);
+}
+
 .nft-activity__skeleton {
   width: 438px;
   height: 120px;
@@ -87,10 +91,20 @@
   font-weight: normal;
 }
 
-.nft-activity__start span {
+.nft-activity__start-desc {
   color: white;
   font-size: 30px;
   line-height: 36px;
+}
+
+.nft-activity__btn {
+  display: flex;
+  align-items: center;
+}
+
+.nft-activity__btn .ant-spin {
+  margin-right: 10px;
+  margin-top: 5px;
 }
 
 .nft-activity__start .About__social {
