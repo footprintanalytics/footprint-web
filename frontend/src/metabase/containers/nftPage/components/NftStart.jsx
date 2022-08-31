@@ -45,7 +45,7 @@ const NftStart = ({
     }
 
     const { account, contract } = wallet;
-    if (account !== data?.userAddress) {
+    if (account.toLowerCase() !== data?.userAddress.toLowerCase()) {
       message.error("Please use the wallet address you submitted to mint");
       setLoading(false);
       return;
