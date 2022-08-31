@@ -1,7 +1,7 @@
 /* eslint-disable curly */
 /* eslint-disable react/prop-types */
 import React, { useState } from "react";
-import { Image, Skeleton, Spin } from "antd";
+import { Image, message, Skeleton, Spin } from "antd";
 import AboutSocial from "metabase/containers/about/components/AboutSocial";
 import { trackStructEvent } from "metabase/lib/analytics";
 import ABI from "./ABI.json";
@@ -45,6 +45,12 @@ const NftStart = ({
     }
 
     const { account, contract } = wallet;
+    if (account !== data?.userAddress) {
+      message.error("Please use the wallet address you submitted to mint");
+      setLoading(false);
+      return;
+    }
+
     const tokens = await getTokens(account, contract);
     if (tokens.length) {
       setToken(tokens[0]);
