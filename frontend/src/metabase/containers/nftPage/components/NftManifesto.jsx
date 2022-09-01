@@ -15,7 +15,7 @@ const NftManifesto = props => {
             encourage more people to get involved in Web3.
             <br />
             <br />
-            As of launch, contributors who receive a Moon Man can use it as a
+            As of launch, contributors who receive a Moon Men can use it as a
             PFP of astronomical awesomeness and receive a discount on a
             Footprint Business Plan. There are tons of other benefits.
           </span>

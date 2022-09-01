@@ -59,7 +59,7 @@ const NftHow = props => {
     {
       category:
         "Provide guidance and help for more analysts who are interested in data analysis and want to learn more.",
-      items: ["Creating an on-chain data analysis course for Footprint"],
+      items: ["Creating an original, valuable on-chain data analysis course for Footprint."],
       points: ["50 points per course content"],
       actions: [
         {
@@ -70,7 +70,7 @@ const NftHow = props => {
     },
     {
       category: "",
-      items: ["Participate in Footprint's community sharing as a speaker"],
+      items: ["Participate in Footprint's community sharing session as a speaker"],
       points: ["50 points per sharing"],
       actions: [
         {
