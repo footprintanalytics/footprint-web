@@ -7,7 +7,7 @@ const NftQa = props => {
       question:
         "How many NFTs will be available? What are the maximum mints per address?",
       answer: [
-        "The first Moon Men collection will consist of 807 NFTs. (Footprint went live on August 7, 2021, making 807 an important number for us.",
+        "The first Moon Men collection will consist of 807 NFTs and live on the Ethereum blockchain. (Footprint went live on August 7, 2021, making 807 an important number for us.",
         "Maximum mint per address: 1.",
       ],
     },
