@@ -14,10 +14,10 @@ const Index = ({ router }) => {
     label: "Reports",
     value: "Reports",
     subMenus: [
-      { label: "Daily News", value: "Daily News" },
       { label: "Weekly Reports", value: "Weekly Reports" },
       { label: "Monthly Reports", value: "Monthly Reports" },
       { label: "Yearly Reports", value: "Yearly Reports" },
+      { label: "Daily News", value: "Daily News" },
     ],
   };
   return (

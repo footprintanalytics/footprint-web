@@ -264,11 +264,6 @@ export const getRoutes = store => (
       <Route title={t`News`} path="/news" component={LazyLoad.News}>
         <IndexRoute component={LazyLoad.Featured} />
         <Route
-          title={t`Featured`}
-          path="featured"
-          component={LazyLoad.Featured}
-        />
-        <Route
           title={t`Articles`}
           path="articles"
           component={props => <LazyLoad.Articles {...props} type="article" />}
@@ -290,6 +285,11 @@ export const getRoutes = store => (
           component={props => (
             <LazyLoad.FeatureCharts {...props} type="feature_charts" />
           )}
+        />
+        <Route
+          title={t`Featured`}
+          path="featured"
+          component={LazyLoad.Featured}
         />
         <Route
           title={t`Write for Us`}
