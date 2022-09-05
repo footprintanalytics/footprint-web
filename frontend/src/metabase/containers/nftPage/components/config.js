@@ -1,3 +1,3 @@
-export const contractAddress = "0xa7024C8827d0ee7AE648d2dD9882a9ea4F7881d4";
-// export const network = "mainnet";
-export const network = "rinkeby";
+export const contractAddress = "0xe13be55d3c6b8714a4fa9ac969dc63401cefdbfb";
+export const network = "mainnet";
+// export const network = "rinkeby";
