@@ -1,0 +1,52 @@
+.MintModal .ant-modal-content {
+  background-color: rgba(0, 49, 128, 0.7);
+  border: 1px solid #49fffe;
+  backdrop-filter: blur(26px);
+  border-radius: 4px;
+}
+
+.MintModal .ant-modal-body {
+  display: flex;
+  align-items: center;
+  flex-direction: column;
+  justify-content: center;
+  padding: 60px;
+  line-height: 1;
+}
+
+.MintModal .ant-modal-close-x {
+  color: #49fffe;
+}
+
+.MintModal .ant-modal-body h3 {
+  font-weight: 700;
+  font-size: 24px;
+  color: #fff;
+  margin: 20px 0;
+}
+
+.MintModal .ant-modal-body p {
+  font-size: 16px;
+  line-height: 24px;
+  text-align: center;
+  color: #fff;
+  margin-bottom: 40px;
+}
+
+.MintModal__btns {
+  display: flex;
+  align-items: center;
+}
+
+.MintModal__btns a {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 168px;
+  height: 38px;
+  background-color: #49fffe;
+  font-weight: 700;
+  font-size: 14px;
+  color: #031731;
+  margin: 0 10px;
+}
