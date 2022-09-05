@@ -22,11 +22,27 @@ const TableChartInfo = ({
   tableId,
   tableConfigList,
   deprecatedTableConfigList,
+  executionErrorList,
   card,
   dashcard,
   dashboard,
   getDashboardParameters,
 }) => {
+  console.log("TableChartInfo", { card, dashcard, executionErrorList });
+  const tableTipObject = {
+    defi_protocol_daily_stats:
+      "https://docs.footprint.network/changelog/tables/defi_protocol_daily_stats",
+    protocol_transactions:
+      "https://docs.footprint.network/changelog/tables/protocol_transactions",
+    protocol_active_address:
+      "https://docs.footprint.network/changelog/tables/protocol_active_address",
+    protocol_daily_stats:
+      "https://docs.footprint.network/changelog/tables/protocol_daily_stats",
+    token_daily_stats:
+      "https://docs.footprint.network/changelog/tables/token_daily_stats",
+    gamefi_protocol_daily_stats:
+      "https://docs.footprint.network/changelog/tables/gamefi_protocol_daily_stats",
+  };
   const nativeQuery =
     card?.dataset_query?.type === "native" &&
     get(card, "dataset_query.native.query");
@@ -71,7 +87,12 @@ const TableChartInfo = ({
     return [];
   };
 
-  const getShowInfo = ({ udTables, betaTables, upgradeTables }) => {
+  const getShowInfo = ({
+    udTables,
+    betaTables,
+    upgradeTables,
+    unknownColumn,
+  }) => {
     let udTableNode = null;
     if (udTables?.length > 0) {
       udTableNode = udTables?.map(table => (
@@ -126,7 +147,26 @@ const TableChartInfo = ({
       ));
     }
 
-    return udTableNode || betaTableNode || upgradeNode ? (
+    let unknownColumnNode = null;
+    if (unknownColumn) {
+      const link = tableTipObject[unknownColumn.table];
+      console.log("linklink", link, unknownColumn, unknownColumn.table);
+      if (link) {
+        unknownColumnNode = (
+          <li key={`${unknownColumn.table}${unknownColumn.column}`}>
+            <span>
+              This chart seems to have some problems, you can first check if the
+              fields used have been updated:
+              <Link className="text-underline ml1" to={link} target="_blank">
+                Link
+              </Link>
+            </span>
+          </li>
+        );
+      }
+    }
+    console.log("unknownColumnunknownColumn", unknownColumnNode);
+    return udTableNode || betaTableNode || upgradeNode || unknownColumnNode ? (
       <div className="table-chart-info-show">
         <div className="table-chart-info-show-l">
           <ExclamationCircleFilled style={{ color: "#faad14" }} />
@@ -137,6 +177,7 @@ const TableChartInfo = ({
             {udTableNode}
             {betaTableNode}
             {upgradeNode}
+            {unknownColumnNode}
           </ul>
         </div>
       </div>
@@ -146,11 +187,22 @@ const TableChartInfo = ({
   const udTables = getUdTables();
   const betaTables = getTables("beta");
   const upgradeTables = getTables("upgrade");
-  const showInfo =
-    tableConfigList && getShowInfo({ udTables, betaTables, upgradeTables });
+  console.log("get(executionErrorList, 0)", get(executionErrorList, 0));
+  const unknownColumn =
+    dashcard?.executionError?.unknownColumn ||
+    card?.executionError?.unknownColumn ||
+    get(executionErrorList, 0)?.unknownColumn;
+  console.log("unknownColumn333", unknownColumn);
+  const showInfo = getShowInfo({
+    udTables,
+    betaTables,
+    upgradeTables,
+    unknownColumn,
+  });
   const [showModal, setShowModal] = useState(null);
-  const showRedIcon = upgradeTables && upgradeTables?.length > 0;
-
+  const showRedIcon =
+    (upgradeTables && upgradeTables?.length > 0) || unknownColumn;
+  console.log("showInfo", showInfo);
   return (
     <>
       {card ? (

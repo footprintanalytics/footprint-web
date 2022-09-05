@@ -51,7 +51,11 @@ const PreviewDashboardCard = props => {
     disableLinkClick,
     showArchiveButton,
   } = props;
-
+  console.log(
+    "dddddd",
+    !!item.hasDeprecated?.length,
+    !!item.executionError?.length,
+  );
   // const pathname = window.location.pathname;
   // const copyPathPrefix = pathname === "/" ? "preview" : pathname.split("/")[1];
   const type = item.type || item.model;
@@ -294,10 +298,12 @@ const PreviewDashboardCard = props => {
                     />
                   )}
 
-                  {!!item.hasDeprecated?.length && (
+                  {(!!item.hasDeprecated?.length ||
+                    !!item.executionError?.length) && (
                     <TableChartInfo
                       className="table-chart-info-icon--simple"
                       deprecatedTableConfigList={item.hasDeprecated}
+                      executionErrorList={item.executionError}
                     />
                   )}
                 </div>

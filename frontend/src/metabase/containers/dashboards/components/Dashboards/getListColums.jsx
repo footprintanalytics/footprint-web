@@ -100,9 +100,11 @@ export default ({
                 {!record.publicUuid && (
                   <span className="dashboards__table-private">Private</span>
                 )}
-                {!!record.hasDeprecated?.length && (
+                {(!!record.hasDeprecated?.length ||
+                  !!record.executionError?.length) && (
                   <TableChartInfo
                     deprecatedTableConfigList={record.hasDeprecated}
+                    executionErrorList={record.executionError}
                   />
                 )}
               </h3>
