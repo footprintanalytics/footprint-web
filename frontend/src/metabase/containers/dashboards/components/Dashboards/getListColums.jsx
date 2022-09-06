@@ -101,10 +101,10 @@ export default ({
                   <span className="dashboards__table-private">Private</span>
                 )}
                 {(!!record.hasDeprecated?.length ||
-                  !!record.executionError?.length) && (
+                  !!record.executionError) && (
                   <TableChartInfo
                     deprecatedTableConfigList={record.hasDeprecated}
-                    executionErrorList={record.executionError}
+                    executionError={record.executionError}
                   />
                 )}
               </h3>

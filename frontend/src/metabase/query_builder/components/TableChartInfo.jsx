@@ -22,13 +22,12 @@ const TableChartInfo = ({
   tableId,
   tableConfigList,
   deprecatedTableConfigList,
-  executionErrorList,
+  executionError,
   card,
   dashcard,
   dashboard,
   getDashboardParameters,
 }) => {
-  console.log("TableChartInfo", { card, dashcard, executionErrorList });
   const tableTipObject = {
     defi_protocol_daily_stats:
       "https://docs.footprint.network/changelog/tables/defi_protocol_daily_stats",
@@ -91,7 +90,7 @@ const TableChartInfo = ({
     udTables,
     betaTables,
     upgradeTables,
-    unknownColumn,
+    unknownColumns,
   }) => {
     let udTableNode = null;
     if (udTables?.length > 0) {
@@ -148,24 +147,31 @@ const TableChartInfo = ({
     }
 
     let unknownColumnNode = null;
-    if (unknownColumn) {
+    if (unknownColumns?.length > 0) {
+      const unknownColumn = unknownColumns[0];
       const link = tableTipObject[unknownColumn.table];
-      console.log("linklink", link, unknownColumn, unknownColumn.table);
       if (link) {
         unknownColumnNode = (
           <li key={`${unknownColumn.table}${unknownColumn.column}`}>
             <span>
-              This chart seems to have some problems, you can first check if the
-              fields used have been updated:
-              <Link className="text-underline ml1" to={link} target="_blank">
-                Link
-              </Link>
+              Some of the column names used in this chart have changed. Please check and update them.
+              {unknownColumns.length === 1 && (
+                <Link
+                  className="text-underline ml1"
+                  to={link}
+                  target="_blank" onClick={e => {
+                    e.stopPropagation();
+                    e.nativeEvent.stopImmediatePropagation();
+                  }}
+                >
+                  Link
+                </Link>
+              )}
             </span>
           </li>
         );
       }
     }
-    console.log("unknownColumnunknownColumn", unknownColumnNode);
     return udTableNode || betaTableNode || upgradeNode || unknownColumnNode ? (
       <div className="table-chart-info-show">
         <div className="table-chart-info-show-l">
@@ -187,22 +193,18 @@ const TableChartInfo = ({
   const udTables = getUdTables();
   const betaTables = getTables("beta");
   const upgradeTables = getTables("upgrade");
-  console.log("get(executionErrorList, 0)", get(executionErrorList, 0));
-  const unknownColumn =
-    dashcard?.executionError?.unknownColumn ||
-    card?.executionError?.unknownColumn ||
-    get(executionErrorList, 0)?.unknownColumn;
-  console.log("unknownColumn333", unknownColumn);
+
+  const unknownColumns = dashcard?.executionError?.unknownColumn ||
+    card?.executionError?.unknownColumn || executionError?.unknownColumn
   const showInfo = getShowInfo({
     udTables,
     betaTables,
     upgradeTables,
-    unknownColumn,
+    unknownColumns,
   });
   const [showModal, setShowModal] = useState(null);
   const showRedIcon =
-    (upgradeTables && upgradeTables?.length > 0) || unknownColumn;
-  console.log("showInfo", showInfo);
+    (upgradeTables && upgradeTables?.length > 0) || unknownColumns?.length > 0;
   return (
     <>
       {card ? (
@@ -239,7 +241,7 @@ const TableChartInfo = ({
           <a
             className={`html2canvas-filter table-chart-info-icon ${className}`}
           >
-            <Icon name={"dialogue"} size={15} color={"#9AA0AF"} />
+            <Icon name={"dialogue"} size={15} color={showRedIcon ? "#ff0000" : "#9AA0AF"} />
           </a>
         </Popover>
       ) : (
