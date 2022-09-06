@@ -293,8 +293,7 @@ const PreviewDashboardCard = props => {
                     />
                   )}
 
-                  {(!!item.hasDeprecated?.length ||
-                    !!item.executionError) && (
+                  {(!!item.hasDeprecated?.length || !!item.executionError) && (
                     <TableChartInfo
                       className="table-chart-info-icon--simple"
                       deprecatedTableConfigList={item.hasDeprecated}

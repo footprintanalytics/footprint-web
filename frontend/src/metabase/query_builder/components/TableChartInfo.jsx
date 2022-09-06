@@ -154,12 +154,14 @@ const TableChartInfo = ({
         unknownColumnNode = (
           <li key={`${unknownColumn.table}${unknownColumn.column}`}>
             <span>
-              Some of the column names used in this chart have changed. Please check and update them.
+              Some of the column names used in this chart have changed. Please
+              check and update them.
               {unknownColumns.length === 1 && (
                 <Link
                   className="text-underline ml1"
                   to={link}
-                  target="_blank" onClick={e => {
+                  target="_blank"
+                  onClick={e => {
                     e.stopPropagation();
                     e.nativeEvent.stopImmediatePropagation();
                   }}
@@ -194,8 +196,10 @@ const TableChartInfo = ({
   const betaTables = getTables("beta");
   const upgradeTables = getTables("upgrade");
 
-  const unknownColumns = dashcard?.executionError?.unknownColumn ||
-    card?.executionError?.unknownColumn || executionError?.unknownColumn
+  const unknownColumns =
+    dashcard?.executionError?.unknownColumn ||
+    card?.executionError?.unknownColumn ||
+    executionError?.unknownColumn;
   const showInfo = getShowInfo({
     udTables,
     betaTables,
@@ -241,7 +245,11 @@ const TableChartInfo = ({
           <a
             className={`html2canvas-filter table-chart-info-icon ${className}`}
           >
-            <Icon name={"dialogue"} size={15} color={showRedIcon ? "#ff0000" : "#9AA0AF"} />
+            <Icon
+              name={"dialogue"}
+              size={15}
+              color={showRedIcon ? "#ff0000" : "#9AA0AF"}
+            />
           </a>
         </Popover>
       ) : (
