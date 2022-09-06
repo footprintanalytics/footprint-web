@@ -70,6 +70,10 @@
   cursor: pointer;
 }
 
+.nft-activity__btn:hover {
+  color: #001000;
+}
+
 .nft-activity__btn--disabled {
   filter: grayscale(100);
 }

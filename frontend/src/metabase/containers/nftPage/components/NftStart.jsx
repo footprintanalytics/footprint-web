@@ -1,6 +1,6 @@
 /* eslint-disable curly */
 /* eslint-disable react/prop-types */
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Image, message, Skeleton, Spin } from "antd";
 import AboutSocial from "metabase/containers/about/components/AboutSocial";
 import { trackStructEvent } from "metabase/lib/analytics";
@@ -21,6 +21,22 @@ const NftStart = ({
 
   const isAllowed = data?.isAllowed;
   const userIdIsExist = data?.userIdIsExist;
+
+  useEffect(() => {
+    (async () => {
+      if (!user) return;
+      if (userIdIsExist && isAllowed) {
+        const wallet = await connectWallet();
+        if (!wallet) return;
+        const { account, contract } = wallet;
+        if (account.toLowerCase() !== data?.userAddress.toLowerCase()) return;
+        const tokens = await getTokens(account, contract);
+        if (!tokens.length) return;
+        setToken(tokens[0]);
+        setVisible(true);
+      }
+    })();
+  }, [data?.userAddress, isAllowed, user, userIdIsExist]);
 
   const scrollToAnchor = anchorName => {
     if (anchorName) {
@@ -109,6 +125,25 @@ const NftStart = ({
         </div>
       );
     }
+    if (token) {
+      return (
+        <a
+          href={
+            network === "mainnet"
+              ? `https://opensea.io/assets/ethereum/${contractAddress}/${token}`
+              : `https://testnets.opensea.io/assets/rinkeby/${contractAddress}/${token}`
+          }
+          target="_blank"
+          rel="noreferrer"
+          className="nft-activity__btn"
+          onClick={() => {
+            trackStructEvent("moon-men click View on OpenSea");
+          }}
+        >
+          View on OpenSea
+        </a>
+      );
+    }
     if (isAllowed && data?.hash && data?.signature) {
       return (
         <div
@@ -149,13 +184,20 @@ const NftStart = ({
           <h2>{"Footprint Analytics NFT is coming! "}</h2>
           <AboutSocial size={20} />
           <span className="nft-activity__start-desc">
-            Create your account and <br />
-            get a chance to mint NFT!
+            {token
+              ? "Your NFT has been minted successfully!"
+              : "Create your account and"}
+            <br />
+            {token
+              ? "Learn more about holders' rights."
+              : "get a chance to mint NFT!"}
             <span
               className="text-underline cursor-pointer ml2"
               onClick={() => {
                 trackStructEvent("moon-men click arrow-arrow");
-                scrollToAnchor("nft-activity__how");
+                scrollToAnchor(
+                  token ? "nft-activity__holder" : "nft-activity__how",
+                );
               }}
             >
               {">>"}
