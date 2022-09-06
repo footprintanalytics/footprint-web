@@ -15,6 +15,7 @@ import TableChartInfoModel from "metabase/query_builder/components/TableChartInf
 import { getDashboardParameters } from "metabase/dashboard/actions";
 import { Popover } from "antd";
 import { trackStructEvent } from "metabase/lib/analytics";
+import tableTipObject from "metabase/query_builder/data/tableTip";
 
 const TableChartInfo = ({
   className = "",
@@ -27,21 +28,9 @@ const TableChartInfo = ({
   dashcard,
   dashboard,
   getDashboardParameters,
+  isExecutionErrorFromDashboard = false,
 }) => {
-  const tableTipObject = {
-    defi_protocol_daily_stats:
-      "https://docs.footprint.network/changelog/tables/defi_protocol_daily_stats",
-    protocol_transactions:
-      "https://docs.footprint.network/changelog/tables/protocol_transactions",
-    protocol_active_address:
-      "https://docs.footprint.network/changelog/tables/protocol_active_address",
-    protocol_daily_stats:
-      "https://docs.footprint.network/changelog/tables/protocol_daily_stats",
-    token_daily_stats:
-      "https://docs.footprint.network/changelog/tables/token_daily_stats",
-    gamefi_protocol_daily_stats:
-      "https://docs.footprint.network/changelog/tables/gamefi_protocol_daily_stats",
-  };
+
   const nativeQuery =
     card?.dataset_query?.type === "native" &&
     get(card, "dataset_query.native.query");
@@ -153,23 +142,28 @@ const TableChartInfo = ({
       if (link) {
         unknownColumnNode = (
           <li key={`${unknownColumn.table}${unknownColumn.column}`}>
-            <span>
-              Some of the column names used in this chart have changed. Please
-              check and update them.
-              {unknownColumns.length === 1 && (
-                <Link
-                  className="text-underline ml1"
-                  to={link}
-                  target="_blank"
-                  onClick={e => {
-                    e.stopPropagation();
-                    e.nativeEvent.stopImmediatePropagation();
-                  }}
-                >
-                  Link
-                </Link>
-              )}
-            </span>
+            {isExecutionErrorFromDashboard ?
+              (
+                <span>
+                  Some of the column names of the dataset used in this dashboard have been changed. Please check and update them.
+                </span>
+              ) :
+              (
+                <span>
+                  Some of the column names used in this chart have changed. Pleasecheck and update them.
+                  <Link
+                    className="text-underline ml1"
+                    to={link}
+                    target="_blank"
+                    onClick={e => {
+                      e.stopPropagation();
+                      e.nativeEvent.stopImmediatePropagation();
+                    }}
+                  >
+                    Link
+                  </Link>
+                </span>
+            )}
           </li>
         );
       }
