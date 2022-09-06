@@ -30,7 +30,6 @@ const TableChartInfo = ({
   getDashboardParameters,
   isExecutionErrorFromDashboard = false,
 }) => {
-
   const nativeQuery =
     card?.dataset_query?.type === "native" &&
     get(card, "dataset_query.native.query");
@@ -142,27 +141,27 @@ const TableChartInfo = ({
       if (link) {
         unknownColumnNode = (
           <li key={`${unknownColumn.table}${unknownColumn.column}`}>
-            {isExecutionErrorFromDashboard ?
-              (
-                <span>
-                  Some of the column names of the dataset used in this dashboard have been changed. Please check and update them.
-                </span>
-              ) :
-              (
-                <span>
-                  Some of the column names used in this chart have changed. Pleasecheck and update them.
-                  <Link
-                    className="text-underline ml1"
-                    to={link}
-                    target="_blank"
-                    onClick={e => {
-                      e.stopPropagation();
-                      e.nativeEvent.stopImmediatePropagation();
-                    }}
-                  >
-                    Link
-                  </Link>
-                </span>
+            {isExecutionErrorFromDashboard ? (
+              <span>
+                Some of the column names of the dataset used in this dashboard
+                have been changed. Please check and update them.
+              </span>
+            ) : (
+              <span>
+                Some of the column names used in this chart have changed.
+                Please check and update them.
+                <Link
+                  className="text-underline ml1"
+                  to={link}
+                  target="_blank"
+                  onClick={e => {
+                    e.stopPropagation();
+                    e.nativeEvent.stopImmediatePropagation();
+                  }}
+                >
+                  Link
+                </Link>
+              </span>
             )}
           </li>
         );

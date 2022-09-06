@@ -105,7 +105,9 @@ export default ({
                   <TableChartInfo
                     deprecatedTableConfigList={record.hasDeprecated}
                     executionError={record.executionError}
-                    isExecutionErrorFromDashboard={record.model || record.type === "dashboard"}
+                    isExecutionErrorFromDashboard={
+                      (record.model || record.type) === "dashboard"
+                    }
                   />
                 )}
               </h3>
