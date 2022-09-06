@@ -148,8 +148,8 @@ const TableChartInfo = ({
               </span>
             ) : (
               <span>
-                Some of the column names used in this chart have changed.
-                Please check and update them.
+                Some of the column names used in this chart have changed. Please
+                check and update them.
                 <Link
                   className="text-underline ml1"
                   to={link}
