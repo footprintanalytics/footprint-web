@@ -246,7 +246,7 @@ const TableChartInfo = ({
             className={`html2canvas-filter table-chart-info-icon ${className}`}
           >
             <Icon
-              name={"dialogue"}
+              name={"info"}
               size={15}
               color={showRedIcon ? "#ff0000" : "#9AA0AF"}
             />
