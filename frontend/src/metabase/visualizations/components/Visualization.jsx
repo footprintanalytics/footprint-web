@@ -422,7 +422,6 @@ export default class Visualization extends React.PureComponent {
       replacementContent,
       onOpenChartSettings,
       dashcard,
-      mode,
     } = this.props;
     const { visualization } = this.state;
     const small = width < 330;
