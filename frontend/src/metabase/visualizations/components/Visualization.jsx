@@ -560,15 +560,8 @@ export default class Visualization extends React.PureComponent {
       dashcard?.visualization_settings?.virtual_card?.display === "image";
     const isVideo =
       dashcard?.visualization_settings?.virtual_card?.display === "video";
-    const isPublic = location.pathname.startsWith("/public");
-    console.log(
-      "ffff",
-      mode,
-      !isPublic,
-      showDataUpdateTime,
-      !isEditing,
-      !Utils.isCoin360(),
-    );
+    const isPublic = location.pathname.startsWith("/public"); // iframe 里面也是 work 的，true
+
     return (
       <div
         id="html2canvas-Card"

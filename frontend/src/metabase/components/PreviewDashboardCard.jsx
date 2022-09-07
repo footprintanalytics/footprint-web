@@ -51,6 +51,7 @@ const PreviewDashboardCard = props => {
     disableLinkClick,
     showArchiveButton,
   } = props;
+
   // const pathname = window.location.pathname;
   // const copyPathPrefix = pathname === "/" ? "preview" : pathname.split("/")[1];
   const type = item.type || item.model;

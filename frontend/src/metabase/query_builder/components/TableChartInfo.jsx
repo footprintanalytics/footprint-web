@@ -137,10 +137,10 @@ const TableChartInfo = ({
     let unknownColumnNode = null;
     if (unknownColumns?.length > 0) {
       const unknownColumn = unknownColumns[0];
-      const link = tableTipObject[unknownColumn.table];
+      const link = tableTipObject[unknownColumn?.table];
       if (link) {
         unknownColumnNode = (
-          <li key={`${unknownColumn.table}${unknownColumn.column}`}>
+          <li key={`${unknownColumn?.table}${unknownColumn?.column}`}>
             {isExecutionErrorFromDashboard ? (
               <span>
                 Some of the column names of the dataset used in this dashboard
