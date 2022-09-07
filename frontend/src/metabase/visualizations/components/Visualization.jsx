@@ -62,7 +62,6 @@ import { getOssUrl } from "metabase/lib/image";
 import { Avatar } from "antd";
 import ErrorGuide from "metabase/query_builder/components/ErrorGuide";
 import TableChartInfo from "metabase/query_builder/components/TableChartInfo";
-import PublicMode from "metabase/modes/components/modes/PublicMode";
 
 type Props = {
   rawSeries: RawSeries,
@@ -561,7 +560,7 @@ export default class Visualization extends React.PureComponent {
       dashcard?.visualization_settings?.virtual_card?.display === "image";
     const isVideo =
       dashcard?.visualization_settings?.virtual_card?.display === "video";
-    const isPublic = mode && mode.name === PublicMode.name;
+    const isPublic = location.pathname.startsWith("/public"); // iframe 里面也是 work 的，true
 
     return (
       <div

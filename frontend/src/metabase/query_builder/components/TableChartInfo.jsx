@@ -15,6 +15,7 @@ import TableChartInfoModel from "metabase/query_builder/components/TableChartInf
 import { getDashboardParameters } from "metabase/dashboard/actions";
 import { Popover } from "antd";
 import { trackStructEvent } from "metabase/lib/analytics";
+import tableTipObject from "metabase/query_builder/data/tableTip";
 
 const TableChartInfo = ({
   className = "",
@@ -22,10 +23,12 @@ const TableChartInfo = ({
   tableId,
   tableConfigList,
   deprecatedTableConfigList,
+  executionError,
   card,
   dashcard,
   dashboard,
   getDashboardParameters,
+  isExecutionErrorFromDashboard = false,
 }) => {
   const nativeQuery =
     card?.dataset_query?.type === "native" &&
@@ -71,7 +74,12 @@ const TableChartInfo = ({
     return [];
   };
 
-  const getShowInfo = ({ udTables, betaTables, upgradeTables }) => {
+  const getShowInfo = ({
+    udTables,
+    betaTables,
+    upgradeTables,
+    unknownColumns,
+  }) => {
     let udTableNode = null;
     if (udTables?.length > 0) {
       udTableNode = udTables?.map(table => (
@@ -126,7 +134,40 @@ const TableChartInfo = ({
       ));
     }
 
-    return udTableNode || betaTableNode || upgradeNode ? (
+    let unknownColumnNode = null;
+    if (unknownColumns?.length > 0) {
+      const unknownColumn = unknownColumns[0];
+      const link = tableTipObject[unknownColumn?.table];
+      if (link) {
+        unknownColumnNode = (
+          <li key={`${unknownColumn?.table}${unknownColumn?.column}`}>
+            {isExecutionErrorFromDashboard ? (
+              <span>
+                Some of the column names of the dataset used in this dashboard
+                have been changed. Please check and update them.
+              </span>
+            ) : (
+              <span>
+                Some of the column names used in this chart have changed. Please
+                check and update them.
+                <Link
+                  className="text-underline ml1"
+                  to={link}
+                  target="_blank"
+                  onClick={e => {
+                    e.stopPropagation();
+                    e.nativeEvent.stopImmediatePropagation();
+                  }}
+                >
+                  Link
+                </Link>
+              </span>
+            )}
+          </li>
+        );
+      }
+    }
+    return udTableNode || betaTableNode || upgradeNode || unknownColumnNode ? (
       <div className="table-chart-info-show">
         <div className="table-chart-info-show-l">
           <ExclamationCircleFilled style={{ color: "#faad14" }} />
@@ -137,6 +178,7 @@ const TableChartInfo = ({
             {udTableNode}
             {betaTableNode}
             {upgradeNode}
+            {unknownColumnNode}
           </ul>
         </div>
       </div>
@@ -146,11 +188,20 @@ const TableChartInfo = ({
   const udTables = getUdTables();
   const betaTables = getTables("beta");
   const upgradeTables = getTables("upgrade");
-  const showInfo =
-    tableConfigList && getShowInfo({ udTables, betaTables, upgradeTables });
-  const [showModal, setShowModal] = useState(null);
-  const showRedIcon = upgradeTables && upgradeTables?.length > 0;
 
+  const unknownColumns =
+    dashcard?.executionError?.unknownColumn ||
+    card?.executionError?.unknownColumn ||
+    executionError?.unknownColumn;
+  const showInfo = getShowInfo({
+    udTables,
+    betaTables,
+    upgradeTables,
+    unknownColumns,
+  });
+  const [showModal, setShowModal] = useState(null);
+  const showRedIcon =
+    (upgradeTables && upgradeTables?.length > 0) || unknownColumns?.length > 0;
   return (
     <>
       {card ? (
@@ -187,7 +238,11 @@ const TableChartInfo = ({
           <a
             className={`html2canvas-filter table-chart-info-icon ${className}`}
           >
-            <Icon name={"dialogue"} size={15} color={"#9AA0AF"} />
+            <Icon
+              name={"info"}
+              size={15}
+              color={showRedIcon ? "#ff0000" : "#9AA0AF"}
+            />
           </a>
         </Popover>
       ) : (
