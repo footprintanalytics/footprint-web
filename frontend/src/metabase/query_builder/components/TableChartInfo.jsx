@@ -30,6 +30,10 @@ const TableChartInfo = ({
   getDashboardParameters,
   isExecutionErrorFromDashboard = false,
 }) => {
+
+  if (card && !get(card, "id")) {
+    return null;
+  }
   const nativeQuery =
     card?.dataset_query?.type === "native" &&
     get(card, "dataset_query.native.query");
