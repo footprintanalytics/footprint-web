@@ -41,6 +41,9 @@
   {:success true})
 
 (api/defendpoint POST "/db/:id/table"
+  "Caller can optionally specify a `:table_name` and a `:scan schema` in the body to limit updates to a single `Table`.
+  This endpoint is secured by an API key that needs to be passed as a `X-METABASE-APIKEY` header which needs to be defined in
+  the `MB_API_KEY` [environment variable](https://www.metabase.com/docs/latest/operations-guide/environment-variables.html#mb_api_key)"
   [id :as {{:keys [table_id table_name scan]} :body}]
   {table_id   (s/maybe su/IntGreaterThanZero)
    table_name (s/maybe su/NonBlankString)
