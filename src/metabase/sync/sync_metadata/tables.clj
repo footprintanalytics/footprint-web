@@ -213,17 +213,17 @@
         our-metadata            (our-metadata database)
         strip-desc              (fn [metadata]
                                   (set (map #(dissoc % :description) metadata)))
-        [new-tables2 old-tables2] (data/diff
+        [new-tables-all old-tables-all] (data/diff
                                    (strip-desc db-tables)
                                    (strip-desc our-metadata))
-        [changed-tables2]        (data/diff db-tables our-metadata)
-        new-tables              (set (filter (fn [x] (when (= (:name x) table_name) x)) new-tables2))
-        old-tables            (set (filter (fn [x] (when (= (:name x) table_name) x)) old-tables2))
-        changed-tables              (set (filter (fn [x] (when (= (:name x) table_name) x)) changed-tables2))
+        [changed-tables-all]        (data/diff db-tables our-metadata)
+        new-tables              (set (filter (fn [x] (when (= (:name x) table_name) x)) new-tables-all))
+        old-tables            (set (filter (fn [x] (when (= (:name x) table_name) x)) old-tables-all))
+        changed-tables              (set (filter (fn [x] (when (= (:name x) table_name) x)) changed-tables-all))
         ]
-    (log/info "*******************2" "new-tables" new-tables)
-    (log/info "*******************3" "old-tables" old-tables)
-    (log/info "*******************4" "changed-tables" changed-tables)
+    (log/info "=======> sync-target-table, new-tables: " new-tables)
+    (log/info "=======> sync-target-table, old-tables: " old-tables)
+    (log/info "=======> sync-target-table, changed-tables: " changed-tables)
     ;; update database metadata from database
     (when (some? (:version db-metadata))
           (sync-util/with-error-handling (format "Error creating/reactivating tables for %s"
