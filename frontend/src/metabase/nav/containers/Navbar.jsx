@@ -105,6 +105,11 @@ const menus = [
     icon: "protocols",
     menu: [
       {
+        title: "Top collections",
+        link: "https://nft.footprint.network",
+        externalLink: true,
+      },
+      {
         title: "NFT Overview",
         link: "https://www.footprint.network/@Footprint/NFT",
       },
