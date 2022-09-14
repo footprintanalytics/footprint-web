@@ -1076,6 +1076,7 @@ export function formatTitle(title) {
     "by",
     "on",
     "vs",
+    "is",
   ];
   const titleBlock = title.split(" ");
   if (titleBlock && titleBlock.length > 0) {

@@ -122,10 +122,6 @@ const menus = [
           "https://www.footprint.network/@KikiSmith/Comparison-of-3-Chains-NFT-Development",
       },
       {
-        title: "NFT Project",
-        link: "https://www.footprint.network/@Grim/Project-Test-Dashboard",
-      },
-      {
         title: "Explore More NFTs",
         link: "/dashboards",
       },
