@@ -344,9 +344,8 @@ const data = {
     {
       title: "Transactions & Gas Fees",
       query:
-        "https://www.footprint.network/public/chart/Daily-Transaction-%26-Avg-Gas-Fee-fp-593ea116-2797-4ff8-8d4b-520626743f38",
-      url:
-        "https://www.footprint.network/@enmai/Avalaunche-Transaction-Dashbord",
+        "https://www.footprint.network/public/chart/Ethereum-Daily-Transaction-%26-Avg-Gas-Fee-fp-926953a0-1abe-473a-8cd5-77adab73752e",
+      url: "https://www.footprint.network/@Kkai/Ethereum",
     },
     {
       title: "Protocol in Multi-chain",
