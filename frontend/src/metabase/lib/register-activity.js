@@ -21,7 +21,7 @@ export function isRegisterActivityChannel(string) {
 }
 
 export function zkspaceDate() {
-  return true;
+  return false;
   /*if (isDefi360()) {
     return false;
   }
