@@ -74,6 +74,13 @@ const menus = [
     auth: false,
   },
   {
+    title: "NFT",
+    icon: "menu_home",
+    path: "https://nft.footprint.network",
+    auth: false,
+    open: true,
+  },
+  {
     name: "GameFi",
     icon: "protocols",
     menu: [
@@ -96,33 +103,6 @@ const menus = [
       },
       {
         title: "Explore GameFi",
-        link: "/dashboards",
-      },
-    ],
-  },
-  {
-    name: "NFT",
-    icon: "protocols",
-    menu: [
-      {
-        title: "NFT Overview",
-        link: "https://www.footprint.network/@Footprint/NFT",
-      },
-      {
-        title: "New Collections",
-        link: "https://www.footprint.network/@0xLam/New-Collections",
-      },
-      {
-        title: "Top Sales",
-        link: "https://www.footprint.network/@0xLam/Top-Sales",
-      },
-      {
-        title: "NFT in Multi-chain",
-        link:
-          "https://www.footprint.network/@KikiSmith/Comparison-of-3-Chains-NFT-Development",
-      },
-      {
-        title: "Explore More NFTs",
         link: "/dashboards",
       },
     ],
@@ -387,7 +367,7 @@ export default class Navbar extends Component {
                     setLoginModalShow({ show: true, from: item.title });
                     this.setState({ sideNavModal: false });
                   } else {
-                    this.goLink(e, item.path);
+                    this.goLink(e, item.path, item.open);
                   }
                 }}
               >
@@ -635,7 +615,7 @@ export default class Navbar extends Component {
                     setLoginModalShow({ show: true, from: item.title });
                     this.setState({ sideNavModal: false });
                   } else {
-                    this.goLink(e, item.path);
+                    this.goLink(e, item.path, item.open);
                   }
                   trackStructEvent(`navbar-click-${item.title}`);
                 }}
