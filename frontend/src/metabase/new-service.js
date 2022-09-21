@@ -342,7 +342,7 @@ export const postHomeNewPriority = async params => {
 };
 
 export const personalInfo = async params => {
-  return POST(`/api/v1/personalInfo`, params);
+  return POST(`/api/v1/personalInfo`, params, { silent: true });
 };
 
 export const dashboardIdInfo = async params => {

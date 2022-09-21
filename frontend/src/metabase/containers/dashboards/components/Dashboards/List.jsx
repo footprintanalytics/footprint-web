@@ -93,18 +93,22 @@ const List = ({
       }
       return fetchHomeNewCategoryDashboard(params);
     },
-    QUERY_OPTIONS,
+    { ...QUERY_OPTIONS, retry: 0 },
   );
 
   const device = useDeviceInfo();
   const showHeader = device.isPC;
 
-  if (error || isLoading) {
+  if (isLoading) {
     return (
       <div className="dashboards__table">
         <Skeleton active />
       </div>
     );
+  }
+
+  if (error) {
+    return <div className="dashboards__table" />;
   }
 
   const columns = (isCommon ? getListColumnsCommonPage : getListColumns)({
