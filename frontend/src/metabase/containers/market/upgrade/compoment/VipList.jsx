@@ -1,4 +1,5 @@
 /* eslint-disable react/prop-types */
+/* eslint-disable react/display-name */
 import React, { useCallback, useEffect, useState } from "react";
 import { Button, message, Table } from "antd";
 import EditUserUpgradeModal from "metabase/containers/market/upgrade/compoment/edit";
