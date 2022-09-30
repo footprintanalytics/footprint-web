@@ -616,7 +616,6 @@ export const fetchCardData = createThunkAction(FETCH_CARD_DATA, function(
       dashcardData,
     } = getState().dashboard;
     const dashboard = dashboards[dashboardId];
-    console.log("dashboardId", dashboardId, dashboard)
 
     // if we have a parameter, apply it to the card query before we execute
     const datasetQuery = applyParameters(
@@ -669,7 +668,8 @@ export const fetchCardData = createThunkAction(FETCH_CARD_DATA, function(
     const queryOptions = {
       cancelled: deferred.promise,
     };
-    const dashboard_id = dashcard.dashboard_id === "new" ? null : dashcard.dashboard_id;
+    const dashboard_id =
+      dashcard.dashboard_id === "new" ? null : dashcard.dashboard_id;
     // make the actual request
     if (datasetQuery.type === "endpoint") {
       result = await fetchDataOrError(
