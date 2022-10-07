@@ -415,3 +415,7 @@ export const cancelSubscription = () => {
 export const userinfoProfile = params => {
   return PUT(`api/v1/userinfo/profile`, params);
 };
+
+export const querySql = params => {
+  return POST(`api/v1/database/dataset`, params, { silent: true });
+};

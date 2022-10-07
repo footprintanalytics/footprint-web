@@ -80,6 +80,7 @@ export default {
   LoginModal: loadable(() => import("metabase/auth/containers/LoginModal")),
   ActivateAccount: loadable(() => import("metabase/containers/activate")),
   Dashboards: loadable(() => import("metabase/containers/dashboards"), options),
+  CodeSide: loadable(() => import("metabase/containers/codeSide"), options),
   CustomUpload: loadable(() => import("metabase/containers/customUpload")),
   Search: loadable(() => import("metabase/containers/search")),
   Protocols: loadable(() => import("metabase/containers/protocols")),

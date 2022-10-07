@@ -1,0 +1,33 @@
+.codeMirror {
+  line-height: 1.5;
+  font-size: 12px;
+}
+
+.LanguageBox {
+  display: flex;
+  flex-direction: column;
+}
+
+.LanguageBox h3 {
+  font-size: 20px;
+}
+
+.LanguagePicker {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr 1fr 1fr;
+}
+
+.LanguagePicker__item {
+  background: grey;
+  color: black;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 60px;
+  border: 1px solid white;
+}
+
+.LanguagePicker__item-select {
+  background: red;
+  color: white;
+}
