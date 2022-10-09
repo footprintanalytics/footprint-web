@@ -9,9 +9,9 @@ const DataApiIntroduce = () => {
     <div className="data-api__introduce data-api__introduce-bg">
       <h1>
         <span className="data-api__text-bland">Build fast, Build smart </span>
-        and scale with your users
+        and scale your users
       </h1>
-      <h2>A full suite of APIs for most popular chains and domains</h2>
+      <h2>Power your Web3 projects and applications with unmatched data</h2>
       <div className="data-api__box">
         <Image
           placeholder={<Skeleton active />}

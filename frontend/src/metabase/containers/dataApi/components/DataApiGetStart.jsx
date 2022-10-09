@@ -14,7 +14,7 @@ const DataApiGetStart = () => {
         Get started with Footprint{" "}
         <span className="data-api__text-bland">Data API</span>
       </h1>
-      <h2>Read our documentation to find out how:</h2>
+      <h2>A full suite of APIs for most popular chains and protocols</h2>
       <div className="data-api__box">
         <div className="data-api__get-start-box-container">
           <div className="data-api__get-start-box-main">
@@ -23,8 +23,10 @@ const DataApiGetStart = () => {
               <span className="data-api__text-bland">Chain API</span>
             </h3>
             <span className="data-api__get-start-desc">
+              17 chains support.
+              <br />
               Covering most chains and support from <br />
-              raw data to analytics metrics
+              raw data to analytics metrics.
             </span>
             <Link
               to="https://fp-api.readme.io/reference/get_nft-chain-collection-collection-contract-address-info"

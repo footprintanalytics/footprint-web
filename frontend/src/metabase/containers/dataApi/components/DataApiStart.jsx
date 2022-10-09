@@ -11,10 +11,7 @@ const DataApiStart = () => {
         <br />
         Webs development
       </h1>
-      <h2>
-        Ger access to NFT, GameFi, token and transaction data across all major
-        blockchains with ease and win Web3
-      </h2>
+      <h2>Get comprehensive data from all major blockchains and protocols</h2>
       <DataApiButtons />
     </div>
   );

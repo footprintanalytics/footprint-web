@@ -47,12 +47,12 @@ const DataApiAlphaTest = () => {
       profession: "(Dev Lead)",
     },
     {
-      name: "Anonymous",
+      name: "Ryo Sasaki",
       content:
         "Footprint Analytics は SQL クエリを使用せずに簡単にデータの抽出ができるものの。\nFootprint はクエリを使用すぜにクイックな分析が可能なため、初手として直感的にデータを理解するには最適です。",
       img: "https://static.footprint.network/img_da_bg_2022100885.png",
       project: "Fungible Analyst",
-      profession: " ",
+      profession: "Co-founder",
     },
   ];
   return (

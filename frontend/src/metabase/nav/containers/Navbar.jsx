@@ -161,6 +161,11 @@ const menus = location =>
             },
           ],
         },
+        {
+          title: "Data API",
+          path: "/data-api",
+          auth: false,
+        },
       ];
 
 const AdminNavItem = ({ name, path, currentPath }) => (

@@ -34,6 +34,10 @@ const footers = [
         label: "Pricing",
         url: "/pricing",
       },
+      {
+        label: "Data API",
+        url: "/data-api",
+      },
     ],
   },
   {

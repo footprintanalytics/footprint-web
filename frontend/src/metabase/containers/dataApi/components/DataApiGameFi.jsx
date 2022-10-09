@@ -14,13 +14,16 @@ const DataApiGameFi = () => {
         <div className="data-api__get-start-box-container">
           <div className="data-api__get-start-box-main">
             <h3>
-              One call to retrieve <br />
-              <span className="data-api__text-bland">GameFi data</span>
+              Aggregated on-chain
+              <br />
+              <span className="data-api__text-bland"> GameFi data</span>
             </h3>
             <span className="data-api__get-start-desc">
+              1500 GameFi protocols.
+              <br />
               All-in-one API allows access to all <br />
               blockchain data from GameFi industry <br />
-              to single game
+              to single game.
             </span>
             <Link
               to="https://fp-api.readme.io/reference/get_protocol-protocol-slug-contract"

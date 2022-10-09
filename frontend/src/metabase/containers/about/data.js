@@ -1,5 +1,6 @@
 import { getOssUrl } from "metabase/lib/image";
 import * as Urls from "metabase/lib/urls";
+import { RightOutlined } from "@ant-design/icons";
 
 const data = {
   dashboardNav: [
@@ -103,6 +104,10 @@ const data = {
         url: "mailto:sales@footprint.network",
         target: "_blank",
         className: "About__btn--blue mx2",
+      },
+      exploreTip: {
+        text: "View more details",
+        url: "/data-api",
       },
     },
   ],

@@ -9,9 +9,10 @@ const DataApiPower = () => {
       <div className="data-api__power-container">
         <h1>Power your Web3 projects and applications with our data</h1>
         <h2>
-          Fetch NFT ownership, transfer, price, orderbook, and metadata and
-          more, <br />
-          making it easy to build NFT applications instantly.
+          Boost your apps in seconds and get access to 17+ different chains.{" "}
+          <br />
+          Get access to the comprehensive data about chains, NFTs, GameFi and
+          more.
         </h2>
         <DataApiButtons />
       </div>
