@@ -139,7 +139,7 @@ const menus = [
       },
       {
         title: "Upload API",
-        link: "https://docs.footprint.network/api",
+        link: "https://docs.footprint.network/guides/api/api",
         externalLink: true,
       },
     ],
