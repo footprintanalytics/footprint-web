@@ -135,9 +135,9 @@
 }
 
 .data-api__get-start-desc {
-  font-size: 24px;
+  font-size: 20px;
   margin: 20px 0 60px;
-  line-height: 1.3;
+  line-height: 1.4;
 }
 
 .data-api__get-start-box-container {
@@ -354,6 +354,7 @@
 }
 
 .data-api__feedbacks li h4 {
+  font-weight: normal;
   font-size: 18px;
   white-space: pre-line;
 }
