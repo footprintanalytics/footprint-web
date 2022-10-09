@@ -350,24 +350,27 @@
 }
 
 .data-api__feedbacks li h3 {
-  font-size: 16px;
+  font-size: 22px;
 }
 
 .data-api__feedbacks li h4 {
   font-weight: normal;
-  font-size: 18px;
+  font-size: 12px;
   white-space: pre-line;
+  margin-left: 8px;
 }
 
 .data-api__feedbacks-li-project {
   font-weight: bold;
-  font-size: 14px;
+  font-size: 10px;
   color: #95a9f0;
-  margin-left: 12px;
+  margin-top: 4px;
 }
 
-.data-api__feedbacks span {
-  font-size: 12px;
+.data-api__feedbacks-li-content {
+  font-weight: normal;
+  font-size: 18px;
+  white-space: pre-line;
 }
 
 .data-api__power {

@@ -36,7 +36,7 @@ const DataApiAlphaTest = () => {
         "I also noticed CMC's report and DeGame's reports are super similar. Turns out they both use Footprints. One of Binance Macro Reports used Footprints too! \nFor GameFi data = I think its great actually. Intuitive UI/UX, love the login between email vs. mm connect.",
       img: "https://static.footprint.network/img_da_bg_2022100885.png",
       project: "The Block Research Team",
-      profession: "Senior Analyst",
+      profession: "(Senior Analyst)",
     },
     {
       name: "Miguel",
@@ -44,15 +44,15 @@ const DataApiAlphaTest = () => {
         "I made a few calls on BSC and it's returning the expected transactions for a wider date range, so I think we can make it work.\nWe rather use you guys for everything.",
       img: "https://static.footprint.network/img_da_bg_2022100885.png",
       project: "APY.Vision",
-      profession: "Dev Lead",
+      profession: "(Dev Lead)",
     },
     {
-      name: "",
+      name: "Anonymous",
       content:
-        "Footprint AnalyticsはSQLクエリを使用せずに簡単にデータの抽出ができるものの。\nFootprintはクエリを使用すぜにクイックな分析が可能なため、初手として直感的にデータを理解するには最適です。",
+        "Footprint Analytics は SQL クエリを使用せずに簡単にデータの抽出ができるものの。\nFootprint はクエリを使用すぜにクイックな分析が可能なため、初手として直感的にデータを理解するには最適です。",
       img: "https://static.footprint.network/img_da_bg_2022100885.png",
       project: "Fungible Analyst",
-      profession: "",
+      profession: " ",
     },
   ];
   return (
@@ -78,18 +78,20 @@ const DataApiAlphaTest = () => {
                 className="data-api__feedbacks-li data-api__feedbacks-li-bg"
               >
                 <div className="flex flex-row mb2">
-                  <img src={item.img} alt="footprint" />
+                  {/*<img src={item.img} alt="footprint" />*/}
                   <div className="flex flex-column">
                     <div className="flex flex-row align-baseline">
                       <h3>{item.name}</h3>
-                      <span className="data-api__feedbacks-li-project">
-                        {item.project}
-                      </span>
+                      <h4>{item.profession}</h4>
                     </div>
-                    <h3>{item.profession}</h3>
+                    <span className="data-api__feedbacks-li-project">
+                      {item.project}
+                    </span>
                   </div>
                 </div>
-                <h4>{item.content}</h4>
+                <span className="data-api__feedbacks-li-content">
+                  {item.content}
+                </span>
               </li>
             );
           })}
