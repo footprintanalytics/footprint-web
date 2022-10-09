@@ -14,7 +14,7 @@ const DataApiPower = () => {
           Get access to the comprehensive data about chains, NFTs, GameFi and
           more.
         </h2>
-        <DataApiButtons />
+        <DataApiButtons blandButtonText="Start Building for Free"/>
       </div>
     </div>
   );

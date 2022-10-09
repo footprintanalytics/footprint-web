@@ -1,6 +1,5 @@
 import { getOssUrl } from "metabase/lib/image";
 import * as Urls from "metabase/lib/urls";
-import { RightOutlined } from "@ant-design/icons";
 
 const data = {
   dashboardNav: [

@@ -30,7 +30,7 @@ const DataApiGetStart = () => {
               raw data to analytics metrics.
             </span>
             <Link
-              to="https://fp-api.readme.io/reference/get_nft-chain-collection-collection-contract-address-info"
+              to="https://fp-api.readme.io/reference/get_chain-list"
               target="_blank"
             >
               <Button className="data-api__button-bland">
