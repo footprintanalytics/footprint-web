@@ -22,9 +22,10 @@ const DataApiGetStart = () => {
               Fully access to <br />
               <span className="data-api__text-bland">Chain API</span>
             </h3>
+            <span className="data-api__get-start-subtitle">
+              17 chains support
+            </span>
             <span className="data-api__get-start-desc">
-              17 chains support.
-              <br />
               Covering most chains and support from <br />
               raw data to analytics metrics.
             </span>

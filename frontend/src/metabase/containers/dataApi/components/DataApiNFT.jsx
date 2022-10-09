@@ -22,10 +22,11 @@ const DataApiNFT = () => {
               Cross-chain <br />
               <span className="data-api__text-bland">NFT API</span>
             </h3>
-            <span className="data-api__get-start-desc">
+            <span className="data-api__get-start-subtitle">
               11 marketplaces and more than 100K collections <br />
-              covering 95% of the volume.
-              <br />
+              covering 95% of the volume
+            </span>
+            <span className="data-api__get-start-desc">
               Fetch NFT ownership, transfer, price, orderbook, <br />
               and metadata and more, smaking it easy <br />
               to build NFT applications instantly.

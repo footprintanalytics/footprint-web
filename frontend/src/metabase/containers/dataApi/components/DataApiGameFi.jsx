@@ -18,9 +18,10 @@ const DataApiGameFi = () => {
               <br />
               <span className="data-api__text-bland"> GameFi data</span>
             </h3>
+            <span className="data-api__get-start-subtitle">
+              1500 GameFi protocols
+            </span>
             <span className="data-api__get-start-desc">
-              1500 GameFi protocols.
-              <br />
               All-in-one API allows access to all <br />
               blockchain data from GameFi industry <br />
               to single game.
