@@ -14,7 +14,7 @@ const DataApiAlphaTest = () => {
       img: "https://statichk.footprint.network/img_da_bg_2022100813.png",
     },
     {
-      img: "https://statichk.footprint.network/img_da_bg_2022100813.png",
+      img: "https://statichk.footprint.network/img_da_bg_2022100814.png",
     },
     {
       img: "https://statichk.footprint.network/img_da_bg_2022100815.png",
@@ -79,17 +79,17 @@ const DataApiAlphaTest = () => {
               >
                 <div className="flex flex-row mb2">
                   <img src={item.img} alt="footprint" />
-                  <div>
-                    <div>
-                      <span>{item.name}</span>
-                      <span className="ml3 footprint-secondary-text2">
+                  <div className="flex flex-column">
+                    <div className="flex flex-row align-baseline">
+                      <h3>{item.name}</h3>
+                      <span className="data-api__feedbacks-li-project">
                         {item.project}
                       </span>
                     </div>
-                    <span>{item.profession}</span>
+                    <h3>{item.profession}</h3>
                   </div>
                 </div>
-                <span>{item.content}</span>
+                <h4>{item.content}</h4>
               </li>
             );
           })}

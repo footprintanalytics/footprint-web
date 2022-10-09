@@ -4,13 +4,18 @@ import "../index.css";
 import Button from "metabase/components/Button";
 import { getOssUrl } from "metabase/lib/image";
 import Link from "metabase/components/Link";
+import { Image, Skeleton } from "antd";
 
 const DataApiNFT = () => {
   return (
     <div className="data-api__get-start data-api__get-start-nft-bg">
       <div className="data-api__box">
         <div className="data-api__get-start-box-container">
-          <img src={getOssUrl("img_da_bg_2022100862.png")} alt="nft" />
+          <Image
+            placeholder={<Skeleton active />}
+            preview={false}
+            src={getOssUrl("img_da_bg_2022100862.png")}
+          />
           <div className="data-api__get-start-box-main">
             <h3>
               All cross-chain <br />

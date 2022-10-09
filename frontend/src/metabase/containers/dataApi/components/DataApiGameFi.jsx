@@ -4,6 +4,7 @@ import "../index.css";
 import Button from "metabase/components/Button";
 import { getOssUrl } from "metabase/lib/image";
 import Link from "metabase/components/Link";
+import { Image, Skeleton } from "antd";
 
 const DataApiGameFi = () => {
   return (
@@ -29,7 +30,11 @@ const DataApiGameFi = () => {
               </Button>
             </Link>
           </div>
-          <img src={getOssUrl("img_da_bg_2022100863.png")} alt="gamefi" />
+          <Image
+            placeholder={<Skeleton active />}
+            preview={false}
+            src={getOssUrl("img_da_bg_2022100863.png")}
+          />
         </div>
       </div>
     </div>

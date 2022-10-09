@@ -2,6 +2,7 @@
 import React from "react";
 import "../index.css";
 import { getOssUrl } from "metabase/lib/image";
+import { Image, Skeleton } from "antd";
 
 const DataApiIntroduce = () => {
   return (
@@ -12,7 +13,11 @@ const DataApiIntroduce = () => {
       </h1>
       <h2>A full suite of APIs for most popular chains and domains</h2>
       <div className="data-api__box">
-        <img src={getOssUrl("img_da_bg_2022100851.png")} alt="footprint" />
+        <Image
+          placeholder={<Skeleton active />}
+          preview={false}
+          src={getOssUrl("img_da_bg_2022100851.webp")}
+        />
       </div>
     </div>
   );
