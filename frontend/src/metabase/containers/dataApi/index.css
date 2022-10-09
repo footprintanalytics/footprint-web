@@ -326,7 +326,7 @@
   display: flex;
   flex-direction: column;
   background: white;
-  height: 260px;
+  height: 300px;
   padding: 40px 30px;
   width: 500px;
   border: 1px solid #bbbee3;
@@ -355,6 +355,7 @@
 
 .data-api__feedbacks li h4 {
   font-size: 18px;
+  white-space: pre-line;
 }
 
 .data-api__feedbacks-li-project {

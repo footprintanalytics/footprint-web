@@ -31,28 +31,28 @@ const DataApiAlphaTest = () => {
   ];
   const feedbacks = [
     {
-      name: "Gordon Lewis",
+      name: "Erina",
       content:
-        "With Footprint, I can create complex visualizations by simply dragging and dropping fields to deliver our insights in a much easier way.",
+        "I also noticed CMC's report and DeGame's reports are super similar. Turns out they both use Footprints. One of Binance Macro Reports used Footprints too! \nFor GameFi data = I think its great actually. Intuitive UI/UX, love the login between email vs. mm connect.",
       img: "https://static.footprint.network/img_da_bg_2022100885.png",
-      project: "NFT",
-      profession: "Engineering Manager",
+      project: "The Block Research Team",
+      profession: "Senior Analyst",
     },
     {
-      name: "Gordon Lewis",
+      name: "Miguel",
       content:
-        "With Footprint, I can create complex visualizations by simply dragging and dropping fields to deliver our insights in a much easier way.",
+        "I made a few calls on BSC and it's returning the expected transactions for a wider date range, so I think we can make it work.\nWe rather use you guys for everything.",
       img: "https://static.footprint.network/img_da_bg_2022100885.png",
-      project: "NFT",
-      profession: "Engineering Manager",
+      project: "APY.Vision",
+      profession: "Dev Lead",
     },
     {
-      name: "Gordon Lewis",
+      name: "",
       content:
-        "With Footprint, I can create complex visualizations by simply dragging and dropping fields to deliver our insights in a much easier way.",
+        "Footprint AnalyticsはSQLクエリを使用せずに簡単にデータの抽出ができるものの。\nFootprintはクエリを使用すぜにクイックな分析が可能なため、初手として直感的にデータを理解するには最適です。",
       img: "https://static.footprint.network/img_da_bg_2022100885.png",
-      project: "NFT",
-      profession: "Engineering Manager",
+      project: "Fungible Analyst",
+      profession: "",
     },
   ];
   return (

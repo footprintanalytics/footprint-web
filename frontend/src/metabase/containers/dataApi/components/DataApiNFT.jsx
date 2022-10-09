@@ -5,6 +5,7 @@ import Button from "metabase/components/Button";
 import { getOssUrl } from "metabase/lib/image";
 import Link from "metabase/components/Link";
 import { Image, Skeleton } from "antd";
+import { RightOutlined } from "@ant-design/icons";
 
 const DataApiNFT = () => {
   return (
@@ -14,7 +15,7 @@ const DataApiNFT = () => {
           <Image
             placeholder={<Skeleton active />}
             preview={false}
-            src={getOssUrl("img_da_bg_2022100862.png")}
+            src={getOssUrl("img_da_bg_2022100862.png?2=2")}
           />
           <div className="data-api__get-start-box-main">
             <h3>
@@ -32,7 +33,7 @@ const DataApiNFT = () => {
               target="_blank"
             >
               <Button className="data-api__button-bland">
-                {"Learn more >>>"}
+                Learn more <RightOutlined className="ml1" />
               </Button>
             </Link>
           </div>
