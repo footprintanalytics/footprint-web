@@ -19,14 +19,18 @@ const DeveloperAppForm = ({ user, refreshCurrentUser }) => {
     <Form onSubmit={onSubmit} key={user.auth_key}>
       {({ Form, FormField, FormSubmit }) => (
         <Form>
+          <div className="flex flex-row justify-between mb1">
+            <span className="footprint-title2">API Key</span>
+            <span className="footprint-secondary-text2 align-baseline">
+              Please put the API key in the request Header.
+            </span>
+          </div>
           <div className="flex">
             <FormField
               className="flex-full"
               readOnly={true}
               name="auth_key"
-              title="Auth Key"
               placeholder="Generate Auth Key..."
-              info="Please put the API key in the request Header."
               initial={user.auth_key || ""}
             />
             {user.auth_key && (
@@ -34,8 +38,8 @@ const DeveloperAppForm = ({ user, refreshCurrentUser }) => {
                 style={{
                   display: "flex",
                   alignItems: "center",
-                  marginTop: 14,
                   marginLeft: 8,
+                  marginBottom: 15,
                 }}
               >
                 <Copy text={user.auth_key} successText="Copy successfully.">
