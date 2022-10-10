@@ -156,7 +156,7 @@ const menus = location =>
             },
             {
               title: "Upload API",
-              link: "https://docs.footprint.network/api",
+              link: "https://docs.footprint.network/guides/api/api",
               externalLink: true,
             },
           ],
@@ -594,7 +594,6 @@ export default class Navbar extends Component {
     };
 
     const LeftMenu = () => {
-      const { location } = this.props;
       return (
         <nav
           className="Nav__menu footprint-primary-text"
