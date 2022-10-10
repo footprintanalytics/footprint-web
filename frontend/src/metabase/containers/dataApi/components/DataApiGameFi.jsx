@@ -23,7 +23,7 @@ const DataApiGameFi = () => {
             </span>
             <span className="data-api__get-start-desc">
               All-in-one API allows access to all <br />
-              blockchain data from GameFi industry <br />
+              blockchain data from the GameFi industry <br />
               to single game.
             </span>
             <Link

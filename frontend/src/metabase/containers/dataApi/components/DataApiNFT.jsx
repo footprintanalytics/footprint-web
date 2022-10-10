@@ -28,7 +28,7 @@ const DataApiNFT = () => {
             </span>
             <span className="data-api__get-start-desc">
               Fetch NFT ownership, transfer, price, orderbook, <br />
-              and metadata and more, smaking it easy <br />
+              metadata, and more, making it easy <br />
               to build NFT applications instantly.
             </span>
             <Link

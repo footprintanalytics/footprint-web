@@ -10,7 +10,7 @@ const DataApiStart = () => {
         <span className="data-api__text-bland">One unified API</span> <br/>for Web3 developers
       </h1>
       <h2>Get comprehensive data from all major blockchains and protocols</h2>
-      <DataApiButtons />
+      <DataApiButtons showGetApiKeyHelp={true}/>
     </div>
   );
 };

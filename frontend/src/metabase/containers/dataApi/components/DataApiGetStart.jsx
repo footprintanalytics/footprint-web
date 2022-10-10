@@ -27,7 +27,7 @@ const DataApiGetStart = () => {
             </span>
             <span className="data-api__get-start-desc">
               Covering most chains and support from <br />
-              raw data to analytics metrics.
+              raw data to analytic metrics.
             </span>
             <Link
               to="https://fp-api.readme.io/reference/get_chain-list"
