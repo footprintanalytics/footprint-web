@@ -7,13 +7,12 @@ import { push } from "react-router-redux";
 import DataApiStart from "./components/DataApiStart";
 import DataApiGetStart from "./components/DataApiGetStart";
 import DataApiLowering from "./components/DataApiLowering";
-import DataApiAlphaTest from "./components/DataApiAlphaTest";
 import DataApiPower from "./components/DataApiPower";
 import DataApiGameFi from "metabase/containers/dataApi/components/DataApiGameFi";
 import DataApiNFT from "metabase/containers/dataApi/components/DataApiNFT";
 import DataApiIntroduce from "metabase/containers/dataApi/components/DataApiIntroduce";
 
-const DataApi = props => {
+const DataApi = () => {
   return (
     <>
       <div className="data-api__about">
@@ -23,7 +22,7 @@ const DataApi = props => {
         <DataApiNFT />
         <DataApiGameFi />
         <DataApiLowering />
-        <DataApiAlphaTest />
+        {/*<DataApiAlphaTest />*/}
         <DataApiPower />
       </div>
     </>
