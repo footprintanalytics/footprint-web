@@ -113,7 +113,7 @@ export default class NativeQueryButton extends React.Component {
               <div className="flex flex-row">
                 {sql && (
                   <CopySql text={sql}>
-                    <Button className="mr1">Copy original SQL</Button>
+                    <Button className="mr1">Copy to clipboard</Button>
                   </CopySql>
                 )}
 
