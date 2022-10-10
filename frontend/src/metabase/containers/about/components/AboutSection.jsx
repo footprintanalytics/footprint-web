@@ -79,7 +79,7 @@ const AboutSection = ({
                   }
                 }}
               >
-                {exploreButton?.title}{" "}
+                {exploreButton?.title}
                 {exploreButton?.rightArrow && <RightOutlined className="ml1" />}
               </div>
             </WrapLink>

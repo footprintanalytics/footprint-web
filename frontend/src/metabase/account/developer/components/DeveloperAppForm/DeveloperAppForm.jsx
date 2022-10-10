@@ -8,9 +8,6 @@ import Button from "metabase/components/Button";
 
 const DeveloperAppForm = ({ user, refreshCurrentUser }) => {
   const onSubmit = async () => {
-    if (user.auth_key) {
-      return;
-    }
     await generateAuthKey();
     refreshCurrentUser();
   };
@@ -51,7 +48,6 @@ const DeveloperAppForm = ({ user, refreshCurrentUser }) => {
             )}
           </div>
           <div className="flex flex-column mb2">
-            {/*<span>Please put the API key in the request Header.</span>*/}
             <Link
               to="https://fp-api.readme.io/reference/welcome"
               target="_blank"

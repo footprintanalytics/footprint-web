@@ -5,7 +5,6 @@ import { Spin } from "antd";
 
 const AboutCreateDashboard = props => {
   const { data, list, title, className } = props;
-  console.log("AboutCreateDashboard list", list);
   return (
     <div className={className}>
       <div className="About__title">{title}</div>
