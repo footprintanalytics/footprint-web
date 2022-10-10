@@ -16,7 +16,7 @@ const DataApiIntroduce = () => {
         <Image
           placeholder={<Skeleton active />}
           preview={false}
-          src={getOssUrl("img_da_bg_2022100851.webp")}
+          src={getOssUrl("img_da_bg_2022100851.webp?1=1")}
         />
       </div>
     </div>
