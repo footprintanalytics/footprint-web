@@ -8,7 +8,7 @@ const DataApiIntroduce = () => {
   return (
     <div className="data-api__introduce data-api__introduce-bg">
       <h1>
-        <span className="data-api__text-bland">Build fast, Build smart </span>
+        <span className="data-api__text-bland">Build fast, build smart </span>
         and scale your users
       </h1>
       <h2>Power your Web3 projects and applications with unmatched data</h2>

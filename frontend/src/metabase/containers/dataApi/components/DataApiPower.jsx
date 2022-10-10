@@ -9,7 +9,7 @@ const DataApiPower = () => {
       <div className="data-api__power-container">
         <h1>Power your Web3 projects and applications with our data</h1>
         <h2>
-          Boost your apps in seconds and get access to 17+ different chains.{" "}
+          Boost your apps in seconds and get access to 18 different chains.{" "}
           <br />
           Get access to the comprehensive data about chains, NFTs, GameFi and
           more.
