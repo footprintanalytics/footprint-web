@@ -8,6 +8,7 @@ import { push } from "react-router-redux";
 import { loginModalShowAction } from "metabase/redux/control";
 import _ from "underscore";
 import { connect } from "react-redux";
+import { RightOutlined } from "@ant-design/icons";
 
 const AboutSection = ({
   reverse,
@@ -79,6 +80,7 @@ const AboutSection = ({
                 }}
               >
                 {exploreButton?.title}
+                {exploreButton?.rightArrow && <RightOutlined className="ml1" />}
               </div>
             </WrapLink>
           )}

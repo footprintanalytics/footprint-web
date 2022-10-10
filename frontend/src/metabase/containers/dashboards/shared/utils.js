@@ -122,3 +122,7 @@ export const isCreator = () => {
 export const isDashboards = () => {
   return window.location.pathname.startsWith("/dashboards");
 };
+
+export const isDataApi = (location = window.location) => {
+  return location?.pathname.startsWith("/data-api");
+};
