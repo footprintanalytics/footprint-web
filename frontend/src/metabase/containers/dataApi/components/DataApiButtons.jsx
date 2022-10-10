@@ -3,7 +3,7 @@ import React from "react";
 import Link from "metabase/components/Link";
 import Button from "metabase/components/Button";
 
-const DataApiButtons = ({ blandButtonText= "Try for free" }) => {
+const DataApiButtons = ({ blandButtonText = "Try for free" }) => {
   return (
     <div className="data-api__buttons">
       <Link to="mailto:sales@footprint.network" target="_blank">

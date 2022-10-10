@@ -70,18 +70,18 @@ const mapDispatchToProps = {
 const menus = location =>
   isDataApi(location)
     ? [
-        {
-          title: "Product",
-          path: "/data-api/product",
-          auth: false,
-          comingSoon: true,
-        },
-        {
-          title: "Pricing",
-          path: "/data-api/pricing",
-          auth: false,
-          comingSoon: true,
-        },
+        // {
+        //   title: "Product",
+        //   path: "/data-api/product",
+        //   auth: false,
+        //   comingSoon: true,
+        // },
+        // {
+        //   title: "Pricing",
+        //   path: "/data-api/pricing",
+        //   auth: false,
+        //   comingSoon: true,
+        // },
         {
           title: "Document",
           path: "https://fp-api.readme.io/reference/welcome",
