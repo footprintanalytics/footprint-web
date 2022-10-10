@@ -33,6 +33,7 @@ const DataApiButtons = ({
             to="https://docs.footprint.network/guides/api/api"
             target="_blank"
             className="text-underline text-underline-hover mt1"
+            style={{ width: "fit-content" }}
           >
             How to get API key?
           </Link>
