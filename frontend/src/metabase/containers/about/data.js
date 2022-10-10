@@ -99,14 +99,11 @@ const data = {
       ],
       height: "470px",
       exploreButton: {
-        title: "Get a Free Trial",
-        url: "mailto:sales@footprint.network",
+        title: "View more details",
+        url: "/data-api",
         target: "_blank",
         className: "About__btn--blue mx2",
-      },
-      exploreTip: {
-        text: "View more details",
-        url: "/data-api",
+        rightArrow: true,
       },
     },
   ],

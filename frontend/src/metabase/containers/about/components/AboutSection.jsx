@@ -19,12 +19,10 @@ const AboutSection = ({
   list,
   height,
   exploreButton,
-  exploreTip,
   onChangeLocation,
   setLoginModalShow,
   user,
 }) => {
-  console.log("exploreTip", exploreTip, exploreButton);
   const [sectionList, setSectionList] = useState(
     list.map((item, i) => ({ ...item, active: i === 0 })),
   );
@@ -81,14 +79,8 @@ const AboutSection = ({
                   }
                 }}
               >
-                {exploreButton?.title}
-              </div>
-            </WrapLink>
-          )}
-          {exploreTip && (
-            <WrapLink key={exploreTip?.text} url={exploreTip?.url}>
-              <div className="footprint-primary-text p1 pl2">
-                {exploreTip?.text} <RightOutlined className="ml1" />
+                {exploreButton?.title}{" "}
+                {exploreButton?.rightArrow && <RightOutlined className="ml1" />}
               </div>
             </WrapLink>
           )}

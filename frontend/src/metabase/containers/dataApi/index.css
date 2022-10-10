@@ -344,12 +344,11 @@
   display: flex;
   flex-direction: column;
   background: white;
-  height: 300px;
   padding: 40px 30px;
   width: 500px;
   border: 1px solid #bbbee3;
   border-radius: 4px;
-  line-height: 1.4;
+  line-height: 1.3;
 }
 
 .data-api__feedbacks-li-bg {
@@ -381,6 +380,7 @@
 .data-api__feedbacks-li-project {
   font-weight: bold;
   font-size: 10px;
+  min-height: 12px;
   color: #95a9f0;
   margin-top: 4px;
 }

@@ -39,12 +39,12 @@ const DataApiAlphaTest = () => {
       profession: "(Senior Analyst)",
     },
     {
-      name: "Miguel",
+      name: "Ramen",
       content:
-        "I made a few calls on BSC and it's returning the expected transactions for a wider date range, so I think we can make it work.\nWe rather use you guys for everything.",
+        "Hey there, We are a team looking to build on top of Footprint's API. Footprint has always been our go-to tool to access on-chain data, and we would love to build around it! We are thinking of leveraging the data accessibility provided by your API and build a more UIUX friendly tool for daily users that are not too familiar with the current setups. Would love to have access to the API and build around it. ",
       img: "https://static.footprint.network/img_da_bg_2022100885.png",
-      project: "APY.Vision",
-      profession: "(Dev Lead)",
+      project: " ",
+      profession: " ",
     },
     {
       name: "Ryo Sasaki",
