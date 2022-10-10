@@ -42,7 +42,7 @@ const Zkspace = props => {
       const {
         userIdIsExist,
         userAddressIsExist,
-      } = await zkspaceCreateUserAddress(data);
+      } = await zkspaceCreateUserAddress({ ...data, type: "kcc" });
       if (userIdIsExist) {
         message.info("You have already submitted an address");
         setShowZkspaceSubmitAddr(email);

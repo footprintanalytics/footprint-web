@@ -70,7 +70,7 @@ const ActivityZkspaceSubmitModal = ({ onClose, onChangeLocation, onClick }) => {
             borderless
             onClick={() => {
               trackStructEvent(`zkspace-submit-modal click Submit`);
-              onChangeLocation("/zkspace");
+              onChangeLocation("/kcc");
               onClose();
             }}
           >

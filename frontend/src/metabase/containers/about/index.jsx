@@ -1,5 +1,5 @@
 /* eslint-disable react/prop-types */
-import React from "react";
+import React, { useEffect, useState } from "react";
 import "./index.css";
 import AboutStart from "./components/AboutStart";
 import AboutService from "./components/AboutService";
@@ -13,16 +13,51 @@ import { connect } from "react-redux";
 import AboutExploreDomain from "metabase/containers/about/components/AboutExploreDomain";
 import AboutCreateDashboard from "metabase/containers/about/components/AboutCreateDashboard";
 import Meta from "metabase/components/Meta";
+import {
+  getActivityZkspaceRegisterSuccess,
+  isRegisterActivityChannel,
+  zkspaceDate,
+} from "metabase/lib/register-activity";
+import ActivityZkspaceFirstModal from "metabase/components/ActivityZkspaceFirstModal";
+import ActivityZkspaceSignupSuccessModal from "metabase/components/ActivityZkspaceSignupSuccessModal";
+import * as Urls from "metabase/lib/urls";
+import { getChannel } from "metabase/selectors/app";
+import { push } from "react-router-redux";
+import {
+  createModalShowAction,
+  loginModalShowAction,
+} from "metabase/redux/control";
 
 const About = props => {
-  const { children } = props;
+  const {
+    user,
+    channel,
+    setLoginModalShow,
+    onChangeLocation,
+    children,
+  } = props;
   const { news } = useQueryNews();
   const { indicator } = useQueryIndicator();
+
+  const [showZkspaceModal, setShowZkspaceModal] = useState(false);
+  const [showZkspaceSuccessModal, setShowZkspaceSuccessModal] = useState(false);
+  const userId = user && user.id;
+  const email = user && user.email;
 
   const defaultDesc =
     "Footprint is a powerful yet easy-to-use analytics tool to uncover and visualize blockchain data. The product puts user experience first whether you’re an analyst, data scientist, developer, student, teacher, or executive. It provides an intuitive, drag-and-drop interface for interactive data queries.";
   const keywords = "Footprint";
   const title = "Footprint Analytics: Crypto Analysis Dashboards";
+
+  useEffect(() => {
+    if (zkspaceDate() && !user && isRegisterActivityChannel(channel)) {
+      setShowZkspaceModal(true);
+    }
+
+    if (zkspaceDate() && userId && getActivityZkspaceRegisterSuccess(email)) {
+      setShowZkspaceSuccessModal(true);
+    }
+  }, [channel, email, user, userId]);
 
   return (
     <>
@@ -120,6 +155,31 @@ const About = props => {
         <AboutBacked list={data.backedList} />
         <AboutPartner list={data.partnerList} />
         <HomeFooter />
+        {showZkspaceModal && (
+          <ActivityZkspaceFirstModal
+            onClose={() => {
+              setShowZkspaceModal(false);
+            }}
+            onClick={() => {
+              setLoginModalShow({
+                show: true,
+                from: "zkspace-first-modal click login",
+              });
+              setShowZkspaceModal(false);
+            }}
+          />
+        )}
+        {showZkspaceSuccessModal && (
+          <ActivityZkspaceSignupSuccessModal
+            onClose={() => {
+              setShowZkspaceSuccessModal(false);
+            }}
+            onClick={() => {
+              onChangeLocation(Urls.newQuestion());
+              setShowZkspaceSuccessModal(false);
+            }}
+          />
+        )}
         {children}
       </div>
     </>
@@ -128,6 +188,13 @@ const About = props => {
 
 const mapStateToProps = state => ({
   user: state.currentUser,
+  channel: getChannel(state),
 });
 
-export default connect(mapStateToProps)(About);
+const mapDispatchToProps = {
+  onChangeLocation: push,
+  setLoginModalShow: loginModalShowAction,
+  setCreateModalShow: createModalShowAction,
+};
+
+export default connect(mapStateToProps, mapDispatchToProps)(About);
