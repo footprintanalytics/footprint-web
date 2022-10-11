@@ -18,6 +18,7 @@
             [metabase.api.metric :as metric]
             [metabase.api.native-query-snippet :as native-query-snippet]
             [metabase.api.notify :as notify]
+            [metabase.api.notify3 :as notify3]
             [metabase.api.permissions :as permissions]
             [metabase.api.premium-features :as premium-features]
             [metabase.api.preview-embed :as preview-embed]
@@ -76,6 +77,7 @@
   (context "/metric"               [] (+auth metric/routes))
   (context "/native-query-snippet" [] (+auth native-query-snippet/routes))
   (context "/notify"               [] (+apikey notify/routes))
+  (context "/notify3"               [] (+apikey notify3/routes))
   (context "/permissions"          [] (+auth permissions/routes))
   (context "/preview_embed"        [] (+auth preview-embed/routes))
   (context "/public"               [] (+generic-exceptions public/routes))
