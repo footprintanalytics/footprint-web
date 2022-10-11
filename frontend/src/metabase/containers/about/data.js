@@ -339,7 +339,7 @@ const data = {
       title: "Top Chains",
       active: true,
       query:
-        "https://www.footprint.network/public/chart/Chain-fp-90bb9cd4-33b8-402b-bf0e-cbcc45ed3049",
+        "https://alpha.footprint.network/public/chart/Protocol-Address-Retention-Weeklies%2C-Sum-of-Week-1%2C-Grouped-by-Cohort-(day)%2C-2000-rows-fp-1ddcba6e-ec0d-4d55-ad6a-b3c4c07a3c31",
       url: "https://www.footprint.network/@Footprint/Chain",
     },
     {

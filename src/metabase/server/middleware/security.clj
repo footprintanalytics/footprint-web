@@ -86,6 +86,11 @@
                                  "www.googletagmanager.com"]
                   :frame-src    ["'self'"
                                  "www.footprint.network"
+                                 "alpha.footprint.network"
+                                 "beta.footprint.network"
+                                 "localhost:8081"
+                                 "localhost:8080"
+                                 "localhost:3000"
                                  "*"
                                  "accounts.google.com"
                                  "www.youtube.com"]
