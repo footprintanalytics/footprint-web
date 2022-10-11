@@ -4,8 +4,8 @@ const ACTIVITY_ZKSPACE_SUBMIT_ADDR = "ACTIVITY_KCC_SUBMIT_ADDR";
 const ACTIVITY_ZKSPACE_REGISTER_SUCCESS = "ACTIVITY_KCC_REGISTER_SUCCESS";
 const activityChannel = ["kcc"];
 
-export const activityStartTime = 1644768000000; // 2022/02/14 00:00:00+8
-export const activityEndTime = 1645833600000; // 2022/02/26 00:00:00+0
+export const activityStartTime = 1667145600000; // 2022/10/31 00:00:00+0
+export const activityEndTime = 1667664000000; // 2022/11/6 00:00:00+0
 
 /**
  *
