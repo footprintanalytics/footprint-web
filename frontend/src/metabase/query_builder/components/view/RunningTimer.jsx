@@ -1,13 +1,21 @@
 /* eslint-disable react/prop-types */
 import React, { useState } from "react";
 import { useInterval } from "ahooks";
-import dayjs from "dayjs";
+import moment from "moment";
 
 const RunningTimer = ({ delay = 1000 }) => {
   const [count, setCount] = useState(0);
   useInterval(() => setCount(count + 1000), delay);
-
-  return <span>{dayjs(count).format("mm:ss")}</span>;
+  const duration = moment.duration(count);
+  const minutes = duration
+    .minutes()
+    .toString()
+    .padStart(2, "0");
+  const seconds = duration
+    .seconds()
+    .toString()
+    .padStart(2, "0");
+  return <span>{`${minutes}:${seconds}`}</span>;
 };
 
 export default React.memo(RunningTimer);
