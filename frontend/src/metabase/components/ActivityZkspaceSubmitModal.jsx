@@ -14,12 +14,12 @@ import { push } from "react-router-redux";
 
 const ActivityZkspaceSubmitModal = ({ onClose, onChangeLocation, onClick }) => {
   const onModalClose = value => {
-    trackStructEvent(`zkspace-submit-modal click close`);
+    trackStructEvent(`kcc-submit-modal click close`);
     onClose();
   };
 
   /*  const onSubmit = async data => {
-    trackStructEvent(`zkspace-submit-modal click submit`);
+    trackStructEvent(`kcc-submit-modal click submit`);
     const hide = message.loading("Loading...", 0);
     try {
       const { isExist } = await zkspaceCreateUserAddress(data);
@@ -40,21 +40,16 @@ const ActivityZkspaceSubmitModal = ({ onClose, onChangeLocation, onClick }) => {
       >
         <div className="zkspace-submit-model__logo">
           <img
-            src="https://static.footprint.network/activity-zkspace/img-logo-white.png"
+            src="https://static.footprint.network/activity/kcc/img_logo_kcc_fp.png"
             alt={"img-logo"}
-          />
-          <span className="zkspace-submit-model__line" />
-          <img
-            src="https://static.footprint.network/activity-zkspace/img-logo-zkspace.png"
-            alt={"img-logo-zkspace"}
           />
         </div>
         <Flex align="center" flexDirection="column">
           <img
-            src={getOssUrl("/activity-zkspace/img-task-submit.png")}
+            src={getOssUrl("/activity/kcc/img_gold_success.png")}
             style={{
-              width: "154px",
-              height: "127px",
+              width: "212px",
+              height: "178px",
               objectFit: "fill",
               margin: "10px 0",
             }}
@@ -69,7 +64,7 @@ const ActivityZkspaceSubmitModal = ({ onClose, onChangeLocation, onClick }) => {
             className="zkspace-submit-model__button"
             borderless
             onClick={() => {
-              trackStructEvent(`zkspace-submit-modal click Submit`);
+              trackStructEvent(`kcc-submit-modal click Submit`);
               onChangeLocation("/kcc");
               onClose();
             }}
