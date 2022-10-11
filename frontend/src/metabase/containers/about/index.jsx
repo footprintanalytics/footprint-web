@@ -26,7 +26,7 @@ import {
   createModalShowAction,
   loginModalShowAction,
 } from "metabase/redux/control";
-import ActivityZkspaceSubmitModal from "metabase/components/ActivityZkspaceSubmitModal";
+import ActivityZkspaceSignupSuccessModal from "metabase/components/ActivityZkspaceSignupSuccessModal";
 
 const About = props => {
   const {
@@ -51,8 +51,7 @@ const About = props => {
 
   useEffect(() => {
     if (zkspaceDate() && !user && isRegisterActivityChannel(channel)) {
-      // setShowZkspaceModal(true);
-      setShowZkspaceSuccessModal(true);
+      setShowZkspaceModal(true);
     }
 
     if (zkspaceDate() && userId && getActivityZkspaceRegisterSuccess(email)) {
@@ -171,7 +170,7 @@ const About = props => {
           />
         )}
         {showZkspaceSuccessModal && (
-          <ActivityZkspaceSubmitModal
+          <ActivityZkspaceSignupSuccessModal
             onClose={() => {
               setShowZkspaceSuccessModal(false);
             }}
