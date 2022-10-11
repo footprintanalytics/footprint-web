@@ -35,7 +35,7 @@ import {
   setIsCancelFeedbackBlockAction,
   setSubmitAddrZkspaceModal,
 } from "metabase/redux/control";
-import { Drawer } from "antd";
+import { Drawer, message } from "antd";
 import LoginModal from "metabase/auth/containers/LoginModal";
 import { getOssUrl } from "metabase/lib/image";
 import UserCancelFeedbackModal from "metabase/components/UserCancelFeedbackModal";
@@ -44,6 +44,7 @@ import ActivityZkspaceSubmitModal from "metabase/components/ActivityZkspaceSubmi
 import { isDefi360 } from "metabase/lib/project_info";
 import { color } from "metabase/lib/colors";
 import EntityMenu from "metabase/components/EntityMenu";
+import { isDataApi } from "metabase/containers/dashboards/shared/utils";
 
 const mapStateToProps = (state, props) => ({
   path: getPath(state, props),
@@ -66,109 +67,106 @@ const mapDispatchToProps = {
   setSubmitAddrZkspaceModal,
 };
 
-const menus = [
-  {
-    title: "Analytics",
-    icon: "menu_home",
-    path: "/dashboards",
-    auth: false,
-  },
-  {
-    title: "NFT",
-    icon: "menu_home",
-    path: "https://nft.footprint.network",
-    auth: false,
-    open: true,
-  },
-  {
-    name: "GameFi",
-    icon: "protocols",
-    menu: [
-      {
-        title: "GameFi Overview",
-        link: "https://www.footprint.network/@Footprint/GameFi",
-      },
-      {
-        title: "GameFi Report",
-        link:
-          "https://www.footprint.network/@DamonSalvatore/GameFi-in-Bull-Bear-Market",
-      },
-      {
-        title: "Top Games",
-        link: "https://www.footprint.network/@Footprint/GameFi-Dashboard",
-      },
-      {
-        title: "GameFi Tracker",
-        link: "https://www.footprint.network/@Tom946702/GameFi-Tracker",
-      },
-      {
-        title: "Explore GameFi",
-        link: "/dashboards",
-      },
-    ],
-  },
-  /*{
-    title: "GameFi",
-    icon: "menu_home",
-    path: "/dashboards",
-    auth: false,
-  },
-  {
-    title: "NFT",
-    icon: "menu_home",
-    path: "/dashboards",
-    auth: false,
-  },*/
-  {
-    name: "Data",
-    icon: "protocols",
-    menu: [
-      {
-        title: "Data Overview",
-        link:
-          "https://www.footprint.network/@Footprint/Footprint-Data-Overview",
-      },
-      {
-        title: "Data Dictionary",
-        link:
-          "https://www.footprint.network/@Footprint/Footprint-Datasets-Data-Dictionary",
-      },
-      {
-        title: "Upload CSV",
-        link: "https://www.footprint.network/chart/custom-upload",
-      },
-      {
-        title: "Upload API",
-        link: "https://docs.footprint.network/guides/api/api",
-        externalLink: true,
-      },
-    ],
-  },
-  // {
-  //   title: "Explore",
-  //   path: "/explore",
-  //   icon: "menu_explore",
-  //   auth: false,
-  // },
-  /*{
-    title: "Browse Data",
-    path: "/browse",
-    icon: "menu_data",
-    auth: true,
-  },*/
-  /*{
-    title: "My Analytics",
-    path: "/mine",
-    icon: "menu_my",
-    auth: true,
-  },*/
-  // {
-  //   title: "DeFi360",
-  //   path: "/defi360",
-  //   icon: "menu_home",
-  //   auth: false,
-  // },
-];
+const menus = location =>
+  isDataApi(location)
+    ? [
+        // {
+        //   title: "Product",
+        //   path: "/data-api/product",
+        //   auth: false,
+        //   comingSoon: true,
+        // },
+        // {
+        //   title: "Pricing",
+        //   path: "/data-api/pricing",
+        //   auth: false,
+        //   comingSoon: true,
+        // },
+        {
+          title: "Document",
+          path: "https://fp-api.readme.io/reference/welcome",
+          auth: false,
+          open: true,
+        },
+        {
+          title: "Contact",
+          path: "mailto:sales@footprint.network",
+          auth: false,
+          open: true,
+        },
+      ]
+    : [
+        {
+          title: "Analytics",
+          icon: "menu_home",
+          path: "/dashboards",
+          auth: false,
+        },
+        {
+          title: "NFT",
+          icon: "menu_home",
+          path: "https://nft.footprint.network",
+          auth: false,
+          open: true,
+        },
+        {
+          name: "GameFi",
+          icon: "protocols",
+          menu: [
+            {
+              title: "GameFi Overview",
+              link: "https://www.footprint.network/@Footprint/GameFi",
+            },
+            {
+              title: "GameFi Report",
+              link:
+                "https://www.footprint.network/@DamonSalvatore/GameFi-in-Bull-Bear-Market",
+            },
+            {
+              title: "Top Games",
+              link: "https://www.footprint.network/@Footprint/GameFi-Dashboard",
+            },
+            {
+              title: "GameFi Tracker",
+              link: "https://www.footprint.network/@Tom946702/GameFi-Tracker",
+            },
+            {
+              title: "Explore GameFi",
+              link: "/dashboards",
+            },
+          ],
+        },
+        {
+          name: "Data",
+          icon: "protocols",
+          menu: [
+            {
+              title: "Data Overview",
+              link:
+                "https://www.footprint.network/@Footprint/Footprint-Data-Overview",
+            },
+            {
+              title: "Data Dictionary",
+              link:
+                "https://www.footprint.network/@Footprint/Footprint-Datasets-Data-Dictionary",
+            },
+            {
+              title: "Upload CSV",
+              link: "https://www.footprint.network/chart/custom-upload",
+            },
+            {
+              title: "Upload API",
+              link: "https://docs.footprint.network/guides/api/api",
+              externalLink: true,
+            },
+          ],
+        },
+        {
+          title: "Data API",
+          path: "/data-api",
+          auth: false,
+        },
+      ];
 
 const AdminNavItem = ({ name, path, currentPath }) => (
   <li>
@@ -341,7 +339,7 @@ export default class Navbar extends Component {
     return false;
   };
   renderSideNav() {
-    const { user, setLoginModalShow } = this.props;
+    const { user, setLoginModalShow, location } = this.props;
     return (
       <Drawer
         placement="left"
@@ -349,7 +347,7 @@ export default class Navbar extends Component {
         visible={this.state.sideNavModal}
       >
         <div className="Nav__side-menu">
-          {menus.map(item => {
+          {menus(location).map(item => {
             if (item.menu) {
               return this.renderNavEntityMenu({
                 item,
@@ -363,6 +361,10 @@ export default class Navbar extends Component {
                 key={item.title}
                 onClick={e => {
                   trackStructEvent(`navbar-click-${item.title}`);
+                  if (item.comingSoon) {
+                    message.info("Coming soon...");
+                    return;
+                  }
                   if (item.auth && !user) {
                     setLoginModalShow({ show: true, from: item.title });
                     this.setState({ sideNavModal: false });
@@ -449,20 +451,27 @@ export default class Navbar extends Component {
 
   renderLink({ className = "", fromDrawer = false }) {
     const { user, setLoginModalShow, location } = this.props;
-    const links = [
-      { url: "/moon-men", name: "Moon Men" },
-      { url: "/news/articles", name: "Research" },
-      // { url: "/about", name: "Why Footprint" },
-      // { url: "/tutorials/visualizations", name: "Tutorials" },
-      // {
-      //   url: "https://insights.footprint.network/",
-      //   name: "Insights",
-      //   open: true,
-      // },
-      { url: "https://docs.footprint.network/", name: "Docs", open: true },
-      // { url: `/@${user?.name}`, name: "My Profile", auth: true },
-      // { url: "/widget", name: "Widget" },
-    ];
+    const links = location =>
+      isDataApi(location)
+        ? [{ url: "/", name: "About Us" }]
+        : [
+            { url: "/moon-men", name: "Moon Men" },
+            { url: "/news/articles", name: "Research" },
+            // { url: "/about", name: "Why Footprint" },
+            // { url: "/tutorials/visualizations", name: "Tutorials" },
+            // {
+            //   url: "https://insights.footprint.network/",
+            //   name: "Insights",
+            //   open: true,
+            // },
+            {
+              url: "https://docs.footprint.network/",
+              name: "Docs",
+              open: true,
+            },
+            // { url: `/@${user?.name}`, name: "My Profile", auth: true },
+            // { url: "/widget", name: "Widget" },
+          ];
 
     return (
       <nav
@@ -471,7 +480,7 @@ export default class Navbar extends Component {
         itemType="http://www.schema.org/SiteNavigationElement"
         className={`${className} Nav__right-menus`}
       >
-        {links.map(item => {
+        {links(location).map(item => {
           if (item.menu) {
             return this.renderNavEntityMenu({
               item,
@@ -592,7 +601,7 @@ export default class Navbar extends Component {
           itemScope
           itemType="http://www.schema.org/SiteNavigationElement"
         >
-          {menus.map(item => {
+          {menus(location).map(item => {
             if (item.menu) {
               return this.renderNavEntityMenu({
                 item,
@@ -611,6 +620,10 @@ export default class Navbar extends Component {
                 key={item.title}
                 onClick={e => {
                   e.preventDefault();
+                  if (item.comingSoon) {
+                    message.info("Coming soon...");
+                    return;
+                  }
                   if (item.auth && !user) {
                     setLoginModalShow({ show: true, from: item.title });
                     this.setState({ sideNavModal: false });
@@ -687,7 +700,7 @@ export default class Navbar extends Component {
       return (
         <div className="Nav__right">
           {this.renderLink({})}
-          <CreateMenu />
+          {!isDataApi() && <CreateMenu />}
           <React.Fragment>
             <RightMenuMobile />
             <RightMenuPad />
@@ -732,12 +745,14 @@ export default class Navbar extends Component {
           <LeftMenu />
         </div>
         <React.Fragment>
-          <div className="Nav__search-bar">
-            <SearchBar
-              location={location}
-              onChangeLocation={onChangeLocation}
-            />
-          </div>
+          {!isDataApi() && (
+            <div className="Nav__search-bar">
+              <SearchBar
+                location={location}
+                onChangeLocation={onChangeLocation}
+              />
+            </div>
+          )}
           <div className="Nav__mobile-logo">
             <Link
               className="Nav__logo"
