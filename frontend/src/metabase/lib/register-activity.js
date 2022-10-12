@@ -21,12 +21,11 @@ export function isRegisterActivityChannel(string) {
 }
 
 export function zkspaceDate() {
-  return true;
-  /*if (isDefi360()) {
+  if (isDefi360()) {
     return false;
   }
   const currentDate = new Date().getTime();
-  return currentDate > activityStartTime && currentDate < activityEndTime;*/
+  return currentDate > activityStartTime && currentDate < activityEndTime;
 }
 
 export function setRegistSuccess(email) {
