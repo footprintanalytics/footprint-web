@@ -1,10 +1,11 @@
 .zkspace-submit-model .Modal {
-  background-image: url("https://static.footprint.network/activity-zkspace/img-signup-success-bg.png");
-  background-size: 480px 520px;
-  background-repeat: no-repeat;
-  background-position: bottom right;
   width: 480px;
-  height: 520px;
+  height: 540px;
+  background-color: #1d0e00;
+  background-image: url("https://static.footprint.network/activity/kcc/img_singup_success_bg.png");
+  background-repeat: no-repeat;
+  background-size: 480px 540px;
+  font-family: nanum-myeongjo;
 }
 
 .zkspace-submit-model__root {
@@ -23,11 +24,13 @@
 }
 
 .zkspace-submit-model__button {
-  width: 300px;
+  width: 200px;
   font-size: 18px;
-  color: white;
-  background: #ff861e;
+  color: black;
+  background: #d1a562;
+  border-radius: 0;
   margin: 20px auto 20px;
+  font-family: nanum-myeongjo;
 }
 
 .zkspace-submit-model__title {
@@ -42,18 +45,18 @@
 }
 
 .zkspace-submit-model__desc {
-  font-size: 16px;
+  font-size: 18px;
   width: 390px;
-  color: #8f8f8f;
+  color: #e0cc97;
   line-height: 20px;
   text-align: center;
   white-space: pre-line;
+  margin-top: 20px;
 }
 
 .zkspace-submit-model__tip {
-  font-size: 16px;
-  width: 390px;
-  color: white;
+  font-size: 18px;
+  color: #e0cc97;
   margin: 10px 0;
   line-height: 20px;
   text-align: center;

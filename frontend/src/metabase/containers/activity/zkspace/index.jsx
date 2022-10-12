@@ -32,7 +32,7 @@ const Zkspace = props => {
   const hadDoneTask = getShowZkspaceFinishTask(email);
 
   const onSubmit = async data => {
-    trackStructEvent(`zkspace-landing click submit`);
+    trackStructEvent(`kcc-landing click submit`);
     if (data.userAddress.trim().length !== 42) {
       message.info("Please input 42-bit length Ethereum address.");
       return;
@@ -42,7 +42,7 @@ const Zkspace = props => {
       const {
         userIdIsExist,
         userAddressIsExist,
-      } = await zkspaceCreateUserAddress(data);
+      } = await zkspaceCreateUserAddress({ ...data, type: "kcc" });
       if (userIdIsExist) {
         message.info("You have already submitted an address");
         setShowZkspaceSubmitAddr(email);
@@ -52,7 +52,7 @@ const Zkspace = props => {
           "This address has already been submitted, please fill in another address",
         );
       } else {
-        trackStructEvent(`zkspace-landing click submit success`);
+        trackStructEvent(`kcc-landing click submit success`);
         setShowZkspaceSubmitAddr(email);
         setHadSubmitAddress(true);
       }
@@ -65,9 +65,19 @@ const Zkspace = props => {
     return (
       <div className="zkspace" style={{ padding: "100px 0 0", color: 20 }}>
         <div>This activity has not started or has ended</div>
-        <div>Date: February 14th to 25th, 2022 (UTC+8)</div>
+        <div>Date: October 31th to November 6th, 2022 (UTC+0)</div>
       </div>
     );
+  }
+
+  function getHeight() {
+    if (!user || !hadDoneTask) {
+      return 480;
+    }
+    if (user && hadSubmitAddress) {
+      return 520;
+    }
+    return 560;
   }
 
   return (
@@ -75,20 +85,18 @@ const Zkspace = props => {
       <div className="zkspace__head">
         <div className="zkspace__logo">
           <img
-            src="https://static.footprint.network/activity-zkspace/img-logo-white.png"
+            style={{ width: 255, height: 24 }}
+            src="https://static.footprint.network/activity/kcc/img_logo_kcc_fp.png"
             alt={"img-logo"}
           />
-          <span className="zkspace__line" />
           <img
-            src="https://static.footprint.network/activity-zkspace/img-logo-zkspace.png"
-            alt={"img-logo-zkspace"}
+            style={{ width: 462, height: 113, marginTop: 30 }}
+            src="https://static.footprint.network/activity/kcc/img_kcc_home_head.png"
+            alt={"img-home-head"}
           />
         </div>
-        <div className="zkspace__slogan">
-          Complete the Mission and Win ZKSpace NFT!
-        </div>
       </div>
-      <div className="zkspace__box">
+      <div className="zkspace__box" style={{ height: getHeight() }}>
         <div className="zkspace__task-title">Footprint Analytics Task List</div>
         <ul className="zkspace__task-list">
           <li className="zkspace__item">
@@ -118,11 +126,11 @@ const Zkspace = props => {
             <div className="zkspace__item-todo">
               2. You can also retweet this tweet from @Footprint_Data:
               <ExternalLink
-                href="https://twitter.com/Footprint_Data/status/1486882251954528257?s=20&t=JPNHJwoSkBamxZxtd1Eosw"
+                href="https://twitter.com/Footprint_DeFi/status/1486882251954528257?s=20&t=JPNHJwoSkBamxZxtd1Eosw"
                 target="_blank"
                 style={{ marginLeft: 4 }}
               >
-                Footprint Raises $1.5M in Seed Round!
+                {"Footprint Analytics' data API is now online!"}
               </ExternalLink>
             </div>
           </li>
@@ -159,7 +167,7 @@ const Zkspace = props => {
             className="zkspace__button"
             borderless
             onClick={() => {
-              trackStructEvent(`zkspace-landing click create a chart`);
+              trackStructEvent(`kcc-landing click create a chart`);
               if (user) {
                 onChangeLocation(Urls.newQuestion());
               } else {
@@ -207,7 +215,7 @@ const Zkspace = props => {
               className="zkspace__button"
               borderless
               onClick={() => {
-                trackStructEvent(`zkspace-landing click explore more`);
+                trackStructEvent(`kcc-landing click explore more`);
                 onChangeLocation("/");
               }}
             >

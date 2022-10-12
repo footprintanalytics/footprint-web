@@ -56,6 +56,7 @@ const Home = ({
     if (zkspaceDate() && userId && getActivityZkspaceRegisterSuccess(email)) {
       setShowZkspaceSuccessModal(true);
     }
+
     const fetchData = async () => {
       const data = await getHome();
       setRecommends(data.recommends);

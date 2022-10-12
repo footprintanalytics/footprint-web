@@ -14,6 +14,7 @@
     "@apollo/client": "^3.5.8",
     "@fontsource/barlow": "^4.5.8",
     "@fontsource/ibm-plex-mono": "^4.5.10",
+    "@fontsource/nanum-myeongjo": "^4.5.9",
     "@fontsource/roboto": "^4.5.8",
     "@jupyterlab/services": "^6.3.3",
     "@loadable/component": "^5.15.0",

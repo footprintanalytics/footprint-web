@@ -1,11 +1,13 @@
-const ACTIVITY_ZKSPACE_SUBMIT_MODAL = "ACTIVITY_ZKSPACE_SUBMIT_MODAL";
-const ACTIVITY_ZKSPACE_FINISH_TASK = "ACTIVITY_ZKSPACE_FINISH_TASK";
-const ACTIVITY_ZKSPACE_SUBMIT_ADDR = "ACTIVITY_ZKSPACE_SUBMIT_ADDR";
-const ACTIVITY_ZKSPACE_REGISTER_SUCCESS = "ACTIVITY_ZKSPACE_REGISTER_SUCCESS";
-const activityChannel = ["zkspace"];
+import { isDefi360 } from "metabase/lib/project_info";
 
-export const activityStartTime = 1644768000000; // 2022/02/14 00:00:00+8
-export const activityEndTime = 1645833600000; // 2022/02/26 00:00:00+0
+const ACTIVITY_ZKSPACE_SUBMIT_MODAL = "ACTIVITY_KCC_SUBMIT_MODAL";
+const ACTIVITY_ZKSPACE_FINISH_TASK = "ACTIVITY_KCC_FINISH_TASK";
+const ACTIVITY_ZKSPACE_SUBMIT_ADDR = "ACTIVITY_KCC_SUBMIT_ADDR";
+const ACTIVITY_ZKSPACE_REGISTER_SUCCESS = "ACTIVITY_KCC_REGISTER_SUCCESS";
+const activityChannel = ["kcc"];
+
+export const activityStartTime = 1667145600000; // 2022/10/31 00:00:00+0
+export const activityEndTime = 1667664000000; // 2022/11/6 00:00:00+0
 
 /**
  *
@@ -21,12 +23,11 @@ export function isRegisterActivityChannel(string) {
 }
 
 export function zkspaceDate() {
-  return false;
-  /*if (isDefi360()) {
+  if (isDefi360()) {
     return false;
   }
   const currentDate = new Date().getTime();
-  return currentDate > activityStartTime && currentDate < activityEndTime;*/
+  return currentDate > activityStartTime && currentDate < activityEndTime;
 }
 
 export function setRegistSuccess(email) {

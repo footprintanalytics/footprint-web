@@ -262,7 +262,7 @@ export const getRoutes = store => (
       <Route title={t`Pricing`} path="/pricing" component={LazyLoad.Pricing} />
       <Route path="/about" component={LazyLoad.About} />
       <Route path="/moon-men" component={LazyLoad.NftPage} />
-      <Route title={t`ZKSpace`} path="/zkspace" component={LazyLoad.Zkspace} />
+      <Route title={t`Kcc`} path="/kcc" component={LazyLoad.Zkspace} />
       <Route title={t`News`} path="/news" component={LazyLoad.News}>
         <IndexRoute component={LazyLoad.Featured} />
         <Route
