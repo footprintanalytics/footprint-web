@@ -15,7 +15,7 @@ const DataApiStart = () => {
           Get comprehensive data from all major <br />
           blockchains and protocols
         </h2>
-        <DataApiButtons showGetApiKeyHelp={true} />
+        <DataApiButtons />
       </div>
     </div>
   );

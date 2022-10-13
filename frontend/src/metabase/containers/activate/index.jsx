@@ -10,6 +10,7 @@ const ActivateAccount = props => {
   const { location, router, registerAndLogin } = props;
   const [error, setError] = useState();
   const token = location.query.token;
+  const redirect = location.query.redirect;
 
   useEffect(() => {
     const goHome = () => {
@@ -17,7 +18,7 @@ const ActivateAccount = props => {
     };
     const run = async () => {
       try {
-        await registerAndLogin({ token, redirectUrl: "/" });
+        await registerAndLogin({ token, redirectUrl: redirect });
       } catch (e) {
         setError({ message: e });
         setTimeout(() => {
@@ -30,7 +31,7 @@ const ActivateAccount = props => {
     } else {
       goHome();
     }
-  }, [registerAndLogin, router, setError, token]);
+  }, [redirect, registerAndLogin, router, setError, token]);
 
   return (
     <div className="activate">

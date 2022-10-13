@@ -17,6 +17,7 @@
 
 .AccountLayout {
   background-color: white;
+  min-height: calc(100vh - 60px);
 }
 
 .AccountLayout__header {

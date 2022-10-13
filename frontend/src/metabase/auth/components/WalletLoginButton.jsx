@@ -144,6 +144,7 @@ export default class WalletLoginButton extends Component {
   };
 
   userLoginOrBind = async (email, password) => {
+    const { redirect } = this.props;
     const { addressStr, signResultStr, nonceDataStr } = this.state;
     if (!addressStr || !signResultStr) {
       this.setState({
@@ -168,7 +169,7 @@ export default class WalletLoginButton extends Component {
     try {
       const { payload } = await this.props.loginWallet(
         loginParam,
-        location.query ? location.query.redirect : location,
+        redirect || location?.query?.redirect,
       );
       if (payload.error) {
         this.setState({ errorMessage: payload.error });

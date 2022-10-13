@@ -28,7 +28,7 @@ export default class GoogleButton extends Component {
     this.state = { errorMessage: null };
   }
   componentDidMount() {
-    const { loginGoogle, location, channel, project } = this.props;
+    const { loginGoogle, location, channel, project, redirect } = this.props;
     const element = ReactDOM.findDOMNode(this);
     const attachGoogleAuth = () => {
       if (location.host.includes("localhost")) {
@@ -52,7 +52,7 @@ export default class GoogleButton extends Component {
               this.setState({ errorMessage: null });
               const result = await loginGoogle(
                 googleUser,
-                location.query && location.query.redirect,
+                redirect || (location.query && location.query.redirect),
                 channel,
                 project,
               );

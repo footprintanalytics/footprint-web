@@ -16,18 +16,21 @@ const DataApiButtons = ({
   return (
     <div className="data-api__buttons">
       <div className="flex flex-column">
-        <Button
-          className="data-api__button-bland"
-          onClick={() => {
-            if (user) {
-              onChangeLocation("/account/developer");
-            } else {
-              setLoginModalShow({ show: true, from: "Data api website" });
+        <Link
+          to="/account/developer"
+          onClick={e => {
+            if (!user) {
+              e.preventDefault();
+              setLoginModalShow({
+                show: true,
+                redirect: "/account/developer",
+                from: "Data api website",
+              });
             }
           }}
         >
-          {blandButtonText}
-        </Button>
+          <Button className="data-api__button-bland">{blandButtonText}</Button>
+        </Link>
         {showGetApiKeyHelp && (
           <Link
             to="https://docs.footprint.network/guides/api/api"
@@ -40,7 +43,7 @@ const DataApiButtons = ({
         )}
       </div>
       <Link to="https://fp-api.readme.io/reference/welcome" target="_blank">
-        <Button className="data-api__button-white">View Documentation</Button>
+        <Button className="data-api__button-white">View Docs</Button>
       </Link>
     </div>
   );

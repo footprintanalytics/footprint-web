@@ -1,15 +1,54 @@
 /* eslint-disable react/prop-types */
-import React from "react";
+import React, { useEffect, useState } from "react";
 import Form from "metabase/containers/Form";
 import { generateAuthKey } from "metabase/new-service";
 import Link from "metabase/components/Link";
-import Copy from "metabase/components/CopyPanel";
 import Button from "metabase/components/Button";
+import CopyToClipboard from "react-copy-to-clipboard";
+import { t } from "ttag";
+import Tooltip from "metabase/components/Tooltip";
+import { useQuery } from "react-query";
+import LoadingSpinner from "metabase/components/LoadingSpinner";
 
 const DeveloperAppForm = ({ user, refreshCurrentUser }) => {
+  const [copied, setCopied] = useState(false);
+  const doc = "https://fp-api.readme.io/v2.0/reference/authentication";
+
+  const { isLoading, isSuccess, data } = useQuery(
+    ["generateAuthKey"],
+    async () => {
+      return generateAuthKey();
+    },
+    {
+      refetchOnWindowFocus: false,
+      retry: 0,
+      enabled: !user.auth_key,
+    },
+  );
+  const authKey = user.auth_key || data?.authKey;
+
+  useEffect(() => {
+    if (isSuccess) {
+      refreshCurrentUser();
+    }
+  }, [isSuccess, refreshCurrentUser]);
+
+  if (isLoading) {
+    return (
+      <div style={{ height: 140 }}>
+        <LoadingSpinner message="General API key，loading..." />
+      </div>
+    );
+  }
+
   const onSubmit = async () => {
     await generateAuthKey();
     refreshCurrentUser();
+  };
+
+  const onCopy = () => {
+    setCopied(true);
+    setTimeout(() => setCopied(false), 2000);
   };
 
   return (
@@ -17,49 +56,40 @@ const DeveloperAppForm = ({ user, refreshCurrentUser }) => {
       {({ Form, FormField, FormSubmit }) => (
         <Form>
           <div className="flex flex-row justify-between mb1">
-            <span className="footprint-title2">API Key</span>
+            <span className="footprint-title2">API key</span>
             <span className="footprint-secondary-text2 align-baseline">
-              Please put the API key in the request Header.
+              Copy and paste the API key into the request header.
             </span>
           </div>
-          <div className="flex">
-            <FormField
-              className="flex-full"
-              readOnly={true}
-              name="auth_key"
-              placeholder="Generate Auth Key..."
-              initial={user.auth_key || ""}
-            />
-            {user.auth_key && (
-              <div
-                style={{
-                  display: "flex",
-                  alignItems: "center",
-                  marginLeft: 8,
-                  marginBottom: 15,
+          <FormField
+            className="flex-full"
+            readOnly={true}
+            name="auth_key"
+            placeholder="Generate API Key..."
+            initial={authKey || ""}
+          />
+          {authKey && (
+            <div style={{ textAlign: "right" }}>
+              <Link
+                to={doc}
+                target="_blank"
+                className="text-underline text-underline-hover mt1"
+                style={{ width: "fit-content" }}
+                onClick={e => {
+                  e.preventDefault();
+                  setTimeout(() => {
+                    window.open(doc);
+                  }, 1500);
                 }}
               >
-                <Copy text={user.auth_key} successText="Copy successfully.">
-                  <Button primary onClick={e => e.preventDefault()}>
-                    Copy
-                  </Button>
-                </Copy>
-              </div>
-            )}
-          </div>
-          <div className="flex flex-column mb2">
-            <Link
-              to="https://fp-api.readme.io/reference/welcome"
-              target="_blank"
-              className="text-underline text-underline-hover mt1"
-              style={{ width: "fit-content" }}
-            >
-              <span>How to use the Data API?</span>
-            </Link>
-          </div>
-          {!user.auth_key && (
-            <div style={{ textAlign: "right" }}>
-              <FormSubmit>Generate Auth Key</FormSubmit>
+                <Tooltip tooltip={t`Copied!`} isOpen={copied}>
+                  <CopyToClipboard text={authKey} onCopy={onCopy}>
+                    <Button primary onClick={e => e.preventDefault()}>
+                      Copy the API key and start using data
+                    </Button>
+                  </CopyToClipboard>
+                </Tooltip>
+              </Link>
             </div>
           )}
         </Form>
