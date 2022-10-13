@@ -27,7 +27,7 @@ const DataApiLowering = () => {
   ];
   return (
     <div className="data-api__lowering data-api__lowering-bg">
-      <h1>Lowering the Barrier to Web3 for Developers</h1>
+      <h1>Lowering the barrier to Web3 for developers</h1>
       <ul>
         {array.map(item => {
           return (
