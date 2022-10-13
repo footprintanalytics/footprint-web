@@ -36,6 +36,7 @@ const SignInPanel = ({
   changeToResetPassword,
   changeToSignUp,
   project,
+  redirect,
 }) => {
   return !show ? (
     <Flex />
@@ -112,6 +113,7 @@ const SignInPanel = ({
         className="loginModalGoogleButton"
         location={location}
         project={project}
+        redirect={redirect}
         buttonText="Sign in with Google"
       />
       {!isDefi360(project) && (
@@ -119,6 +121,7 @@ const SignInPanel = ({
           className="loginModalGoogleButton mt1"
           location={location}
           project={project}
+          redirect={redirect}
           buttonText="Sign in with Ethereum"
         />
       )}

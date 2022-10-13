@@ -17,6 +17,7 @@ const SignUpPanel = ({
   credentials,
   changeToSignIn,
   project,
+  redirect,
 }) =>
   !show ? (
     <Flex />
@@ -87,6 +88,7 @@ const SignUpPanel = ({
         className="loginModalGoogleButton"
         location={location}
         project={project}
+        redirect={redirect}
         buttonText="Sign up with Google"
       />
       {!isDefi360(project) && (
@@ -94,6 +96,7 @@ const SignUpPanel = ({
           className="loginModalGoogleButton mt1"
           location={location}
           project={project}
+          redirect={redirect}
           buttonText="Sign up with Ethereum"
         />
       )}

@@ -26,9 +26,9 @@ export const SET_DARK_MODE = "metabase/control/setDarkMode";
 
 export const loginModalShowAction = createAction(
   LOGIN_MODAL_SHOW,
-  ({ show, from, channel }) => {
+  ({ show, from, redirect, channel }) => {
     localStorage.setItem("login-modal-from", from);
-    return { show };
+    return { show, redirect };
   },
 );
 export const featuresSideHideAction = createAction(
@@ -39,8 +39,8 @@ export const featuresSideHideAction = createAction(
 );
 export const createModalShowAction = createAction(
   CREATE_MODAL_SHOW,
-  ({ show }) => {
-    return { show };
+  ({ show, redirect }) => {
+    return { show, redirect };
   },
 );
 export const cancelFeedbackAction = createAction(
@@ -131,6 +131,7 @@ export const control = handleActions(
         return {
           ...state,
           loginModalShow: payload.show,
+          loginModalRedirect: payload.redirect,
         };
       },
     },

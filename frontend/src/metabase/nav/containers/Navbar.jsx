@@ -25,6 +25,7 @@ import {
   getCancelFeedback,
   getCreateModalShow,
   getIsUserFeedbackBlock,
+  getLoginModalRedirect,
   getLoginModalShow,
   getSubmitAddrZkspaceModal,
 } from "metabase/selectors/control";
@@ -51,6 +52,7 @@ const mapStateToProps = (state, props) => ({
   context: getContext(state, props),
   user: getUser(state),
   loginModalShow: getLoginModalShow(state, props),
+  loginModalRedirect: getLoginModalRedirect(state, props),
   createModalShow: getCreateModalShow(state, props),
   cancelFeedback: getCancelFeedback(state, props),
   getIsUserFeedbackBlock: getIsUserFeedbackBlock(state, props),
@@ -391,7 +393,12 @@ export default class Navbar extends Component {
   }
 
   renderLoginModal() {
-    const { location, loginModalShow, setLoginModalShow } = this.props;
+    const {
+      location,
+      loginModalShow,
+      loginModalRedirect,
+      setLoginModalShow,
+    } = this.props;
     return (
       <LoginModal
         isOpen={loginModalShow}
@@ -400,6 +407,7 @@ export default class Navbar extends Component {
         channel={location.query.channel || location.query.cnl}
         location={this.props.location}
         fromNav={true}
+        redirect={loginModalRedirect}
       />
     );
   }

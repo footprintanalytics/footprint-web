@@ -19,44 +19,38 @@ const DeveloperAppForm = ({ user, refreshCurrentUser }) => {
           <div className="flex flex-row justify-between mb1">
             <span className="footprint-title2">API Key</span>
             <span className="footprint-secondary-text2 align-baseline">
-              Please put the API key in the request Header.
+              Copy and paste the API key into the request header.
             </span>
           </div>
-          <div className="flex">
-            <FormField
-              className="flex-full"
-              readOnly={true}
-              name="auth_key"
-              placeholder="Generate Auth Key..."
-              initial={user.auth_key || ""}
-            />
-            {user.auth_key && (
-              <div
-                style={{
-                  display: "flex",
-                  alignItems: "center",
-                  marginLeft: 8,
-                  marginBottom: 15,
+          <FormField
+            className="flex-full"
+            readOnly={true}
+            name="auth_key"
+            placeholder="Generate Auth Key..."
+            initial={user.auth_key || ""}
+          />
+          {user.auth_key && (
+            <div style={{ textAlign: "right" }}>
+              <Link
+                to="https://fp-api.readme.io/reference/welcome"
+                target="_blank"
+                className="text-underline text-underline-hover mt1"
+                style={{ width: "fit-content" }}
+                onClick={e => {
+                  e.preventDefault();
+                  setTimeout(() => {
+                    window.open("https://fp-api.readme.io/reference/welcome");
+                  }, 1000);
                 }}
               >
                 <Copy text={user.auth_key} successText="Copy successfully.">
                   <Button primary onClick={e => e.preventDefault()}>
-                    Copy
+                    Copy the API key and start using data
                   </Button>
                 </Copy>
-              </div>
-            )}
-          </div>
-          <div className="flex flex-column mb2">
-            <Link
-              to="https://fp-api.readme.io/reference/welcome"
-              target="_blank"
-              className="text-underline text-underline-hover mt1"
-              style={{ width: "fit-content" }}
-            >
-              <span>How to use the Data API?</span>
-            </Link>
-          </div>
+              </Link>
+            </div>
+          )}
           {!user.auth_key && (
             <div style={{ textAlign: "right" }}>
               <FormSubmit>Generate Auth Key</FormSubmit>
