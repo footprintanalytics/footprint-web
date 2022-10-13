@@ -19,7 +19,7 @@ const DataApiGameFi = () => {
               <span className="data-api__text-bland"> GameFi data</span>
             </h3>
             <span className="data-api__get-start-subtitle">
-              1500 GameFi protocols
+              1,987 GameFi protocols
             </span>
             <span className="data-api__get-start-desc">
               All-in-one API allows access to all <br />
