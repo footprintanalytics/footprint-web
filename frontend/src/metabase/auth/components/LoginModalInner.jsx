@@ -133,8 +133,6 @@ const LoginModalInner = props => {
       ...getRedirect(),
       ...credentials,
     };
-    console.log("getRedirect", getRedirect());
-    console.log("credentialsConfirm", credentialsConfirm);
     let hide;
     if (isVerifyEmail()) {
       hide = message.loading("loading...", 0);
