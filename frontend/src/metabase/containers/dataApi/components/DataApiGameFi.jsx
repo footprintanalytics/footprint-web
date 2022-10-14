@@ -27,7 +27,7 @@ const DataApiGameFi = () => {
               to single game.
             </span>
             <Link
-              to="https://fp-api.readme.io/reference/get_protocol-protocol-slug-contract"
+              to="https://fp-api.readme.io/reference/get_protocol-protocol-slug-transactions"
               target="_blank"
             >
               <Button className="data-api__button-bland">
