@@ -86,7 +86,7 @@ const menus = location =>
         // },
         {
           title: "Docs",
-          path: "https://fp-api.readme.io/reference/welcome",
+          path: "https://fp-api.readme.io/reference/introduction",
           auth: false,
           open: true,
         },
