@@ -32,7 +32,7 @@ const DataApiNFT = () => {
               to build NFT applications instantly.
             </span>
             <Link
-              to="https://fp-api.readme.io/reference/get_nft-chain-collection-collection-contract-address-transactions"
+              to="https://docs.footprint.network/reference/get_nft-chain-collection-collection-contract-address-transactions"
               target="_blank"
             >
               <Button className="data-api__button-bland">
