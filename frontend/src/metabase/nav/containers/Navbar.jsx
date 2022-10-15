@@ -86,7 +86,7 @@ const menus = location =>
         // },
         {
           title: "Docs",
-          path: "https://fp-api.readme.io/reference/introduction",
+          path: "https://docs.footprint.network/docs",
           auth: false,
           open: true,
         },
@@ -158,7 +158,7 @@ const menus = location =>
             },
             {
               title: "Upload API",
-              link: "https://docs.footprint.network/guides/api/api",
+              link: "https://docs.footprint.network/reference/post_custom-data-upload",
               externalLink: true,
             },
           ],

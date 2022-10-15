@@ -43,7 +43,7 @@ const DataApiButtons = ({
         )}
       </div>
       <Link
-        to="https://fp-api.readme.io/reference/introduction"
+        to="https://docs.footprint.network/reference/introduction"
         target="_blank"
       >
         <Button className="data-api__button-white">View Docs</Button>

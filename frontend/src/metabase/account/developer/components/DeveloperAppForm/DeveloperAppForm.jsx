@@ -12,7 +12,7 @@ import LoadingSpinner from "metabase/components/LoadingSpinner";
 
 const DeveloperAppForm = ({ user, refreshCurrentUser }) => {
   const [copied, setCopied] = useState(false);
-  const doc = "https://fp-api.readme.io/v2.0/reference/authentication";
+  const doc = "https://docs.footprint.network/reference/introduction";
 
   const { isLoading, isSuccess, data } = useQuery(
     ["generateAuthKey"],
