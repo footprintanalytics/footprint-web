@@ -39,6 +39,7 @@ const LoginModalInner = props => {
     user,
     channel,
     hideClose,
+    redirect,
   } = props;
 
   const disableCheckLogin =
@@ -109,7 +110,7 @@ const LoginModalInner = props => {
   };
 
   const onSignInSubmit = async credentials => {
-    await login(credentials, location.query.redirect);
+    await login(credentials, redirect || location.query.redirect);
     onCloseAction();
   };
 
@@ -121,9 +122,15 @@ const LoginModalInner = props => {
     return channel.length > 0 ? { channel } : {};
   };
 
+  const getRedirect = () => {
+    const redirectStr = redirect || location.query.redirect;
+    return redirectStr ? { redirect: redirectStr } : {};
+  };
+
   const onSignUpSubmit = async credentials => {
     const credentialsConfirm = {
       ...getChannel(),
+      ...getRedirect(),
       ...credentials,
     };
     let hide;
@@ -207,6 +214,7 @@ const LoginModalInner = props => {
           changeToResetPassword={changeToForgotPassword}
           changeToSignUp={changeToSignUp}
           project={project}
+          redirect={redirect}
         />
         <SignUpPanel
           show={isSignUp()}
@@ -214,6 +222,7 @@ const LoginModalInner = props => {
           changeToSignIn={changeToSignIn}
           credentials={signUpCredentials}
           project={project}
+          redirect={redirect}
         />
         <VerifyEmailPanel
           show={isVerifyEmail()}

@@ -1,10 +1,12 @@
 /* eslint-disable react/prop-types */
+/* eslint-disable react/display-name */
 import React, { useCallback, useEffect, useState } from "react";
 import { Button, message, Table } from "antd";
 import EditUserUpgradeModal from "metabase/containers/market/upgrade/compoment/edit";
 import EditUserTagModal from "metabase/containers/market/upgrade/compoment/tag";
 import { updateVipLevel, userList } from "metabase/new-service";
 import Tags from "metabase/containers/dashboards/components/Tags";
+import Link from "metabase/components/Link";
 
 const VipList = props => {
   const { user, vip, router, searchText, current, setCurrent } = props;
@@ -33,14 +35,22 @@ const VipList = props => {
   const columns = [
     {
       title: "name",
-      dataIndex: "name",
       key: "name",
       width: 200,
+      render: item => (
+        <Link to={`/@${item.name}`} target="_blank">
+          {item.name}
+        </Link>
+      ),
     },
     {
       title: "email",
-      dataIndex: "email",
       key: "email",
+      render: item => (
+        <Link to={`/@${item.name}`} target="_blank">
+          {item.email}
+        </Link>
+      ),
     },
     {
       title: "tags",

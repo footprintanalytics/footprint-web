@@ -13,6 +13,8 @@ import { formatNativeQuery, getEngineNativeType } from "metabase/lib/engine";
 import { MetabaseApi } from "metabase/services";
 import NeedPermissionModal from "metabase/components/NeedPermissionModal";
 import { trackStructEvent } from "metabase/lib/analytics";
+import withToast from "metabase/hoc/Toast";
+import CopyToClipboard from "react-copy-to-clipboard";
 
 const STRINGS = {
   "": {
@@ -80,7 +82,9 @@ export default class NativeQueryButton extends React.Component {
 
   render() {
     const { question, btnString } = this.props;
-    const { loading, error } = this.state;
+    const { loading, error, native } = this.state;
+
+    const sql = native && native.query;
 
     const engineType = getEngineNativeType(question.database().engine);
     const { tooltip, title, button } =
@@ -106,9 +110,17 @@ export default class NativeQueryButton extends React.Component {
           title={title}
           footer={
             loading || error ? null : (
-              <Button primary onClick={this.handleConvert}>
-                {button}
-              </Button>
+              <div className="flex flex-row">
+                {sql && (
+                  <CopySql text={sql}>
+                    <Button className="mr1">Copy to clipboard</Button>
+                  </CopySql>
+                )}
+
+                <Button primary onClick={this.handleConvert}>
+                  {button}
+                </Button>
+              </div>
             )
           }
           onClose={this.handleClose}
@@ -130,6 +142,15 @@ export default class NativeQueryButton extends React.Component {
     );
   }
 }
+
+const CopySql = withToast(({ text, children, triggerToast }) => (
+  <CopyToClipboard
+    text={text}
+    onCopy={() => triggerToast(`Copied to clipboard`)}
+  >
+    <span className="cursor-pointer">{children}</span>
+  </CopyToClipboard>
+));
 
 NativeQueryButton.shouldRender = ({ question, queryBuilderMode }) =>
   // queryBuilderMode === "notebook" &&

@@ -12,12 +12,12 @@ import Button from "metabase/components/Button";
 
 const ActivityZkspaceFirstModal = ({ onClose, onClick }) => {
   const onConfirm = value => {
-    trackStructEvent(`zkspace-first-modal click to Get`);
+    trackStructEvent(`kcc-first-modal click to Get`);
     onClick();
   };
 
   const onModalClose = value => {
-    trackStructEvent(`zkspace-first-modal click to close`);
+    trackStructEvent(`kcc-first-modal click to close`);
     onClose();
   };
 
@@ -29,28 +29,30 @@ const ActivityZkspaceFirstModal = ({ onClose, onClick }) => {
       >
         <div className="zkspace-first-model__logo">
           <img
-            src="https://static.footprint.network/activity-zkspace/img-logo-white.png"
+            src="https://static.footprint.network/activity/kcc/img_logo_kcc_fp.png"
             alt={"img-logo"}
-          />
-          <span className="zkspace-first-model__line" />
-          <img
-            src="https://static.footprint.network/activity-zkspace/img-logo-zkspace.png"
-            alt={"img-logo-zkspace"}
           />
         </div>
         <Flex align="center" flexDirection="column">
           <div className="zkspace-first-model__title">
-            {"Create Your Charts \n and Win ZKSpace NFT!"}
+            {"Create Your Charts \n and Win KCC Beowulf NFT!"}
           </div>
-          <span style={{ color: "#ffffff", fontSize: "16px", marginTop: 10 }}>
-            Date: February 14th to 25th, 2022 (UTC+8)
+          <span
+            style={{
+              color: "#ffffff",
+              fontSize: "18px",
+              marginTop: 10,
+              fontWeight: "bold",
+            }}
+          >
+            Date: October 31th to November 6th, 2022 (UTC+0)
           </span>
           <Button
             className="zkspace-first-model__button"
             borderless
             onClick={onConfirm}
           >
-            Sign in to Get {" >"}
+            Sign in to Get
           </Button>
         </Flex>
       </ModalContent>

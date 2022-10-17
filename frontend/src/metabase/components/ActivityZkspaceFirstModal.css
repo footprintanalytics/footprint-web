@@ -1,10 +1,11 @@
 .zkspace-first-model .Modal {
   width: 480px;
-  height: 520px;
-  background-color: #453be6;
-  background-image: url("https://static.footprint.network/activity-zkspace/img-first-popup-bg.png");
+  height: 540px;
+  background-color: #1d0e00;
+  background-image: url("https://static.footprint.network/activity/kcc/img_first_modal_bg.png");
   background-repeat: no-repeat;
-  background-size: 480px 520px;
+  background-size: 480px 540px;
+  font-family: nanum-myeongjo;
 }
 
 .zkspace-first-model__root {
@@ -12,8 +13,7 @@
 }
 
 .zkspace-first-model__title {
-  font-size: 32px;
-  width: 360px;
+  font-size: 30px;
   color: white;
   line-height: 40px;
   text-align: center;
@@ -22,11 +22,16 @@
 }
 
 .zkspace-first-model__button {
-  width: 300px;
-  font-size: 18px;
-  color: white;
-  background: #ff861e;
+  width: 380px;
+  height: 97px;
+  font-size: 24px;
+  color: black;
+  font-weight: bold;
   margin: 30px auto;
+  background-image: url("https://static.footprint.network/activity/kcc/img_sign_in_button.png");
+  background-repeat: no-repeat;
+  background-size: 380px 97px;
+  font-family: nanum-myeongjo;
 }
 
 .zkspace-first-model__logo {

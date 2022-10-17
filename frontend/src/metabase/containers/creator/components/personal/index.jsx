@@ -2,11 +2,9 @@
 /* eslint-disable react/prop-types */
 
 import React, { useState } from "react";
-import { Avatar, Skeleton, Button, Modal } from "antd";
+import { Avatar, Button, Modal } from "antd";
 import "./index.css";
-import { getProject } from "metabase/lib/project_info";
-import { useQuery } from "react-query";
-import { cancelSubscription, personalInfo } from "metabase/new-service";
+import { cancelSubscription } from "metabase/new-service";
 import { get } from "lodash";
 import VipIcon from "metabase/containers/creator/components/personal/VipIcon";
 import Link from "metabase/components/Link";
@@ -16,7 +14,7 @@ import { getOssUrl } from "metabase/lib/image";
 import { EditFilled, ExclamationCircleOutlined } from "@ant-design/icons";
 import { slack } from "metabase/lib/slack";
 
-const Index = ({ router, user, name }) => {
+const Index = ({ router, user, data }) => {
   const [loading, setLoading] = useState(false);
 
   const totalInfo = [
@@ -37,34 +35,6 @@ const Index = ({ router, user, name }) => {
       count: "favoriteTotal",
     },
   ];
-
-  const personalInfoParams = {
-    name: name,
-    project: getProject(),
-  };
-
-  const { isLoading, data, error } = useQuery(
-    ["personalInfo", personalInfoParams],
-    async () => {
-      return personalInfo(personalInfoParams);
-    },
-    {
-      refetchOnWindowFocus: false,
-      retry: false,
-    },
-  );
-
-  if (isLoading) {
-    return (
-      <div className="creator__personal">
-        <Skeleton active />
-      </div>
-    );
-  }
-
-  if (error || !data) {
-    return null;
-  }
 
   const logo = get(data, "userInfo.avatar");
   const userName = get(data, "userInfo.name");

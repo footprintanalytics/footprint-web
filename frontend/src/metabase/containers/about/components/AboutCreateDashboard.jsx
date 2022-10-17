@@ -35,6 +35,7 @@ const AboutCreateDashboard = props => {
           list={item.list}
           height={item.height}
           exploreButton={item.exploreButton}
+          exploreTip={item.exploreTip}
         />
       ))}
     </div>

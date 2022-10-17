@@ -58,6 +58,7 @@ const Props = {
   public_uuid: PropTypes.string,
   type: PropTypes.string,
   token: PropTypes.string,
+  redirect: PropTypes.string,
 };
 
 export default withRouter(

@@ -9,6 +9,13 @@ export const getLoginModalShow = createSelector(
   },
 );
 
+export const getLoginModalRedirect = createSelector(
+  [getControl],
+  ({ loginModalRedirect }) => {
+    return loginModalRedirect;
+  },
+);
+
 export const getFeaturesSideHide = createSelector(
   [getControl],
   ({ featuresSideHide }) => {

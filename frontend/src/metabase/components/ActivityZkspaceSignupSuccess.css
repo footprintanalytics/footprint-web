@@ -1,10 +1,11 @@
 .zkspace-signup-success-model .Modal {
-  background-image: url("https://static.footprint.network/activity-zkspace/img-signup-success-bg.png");
-  background-size: 480px 480px;
-  background-repeat: no-repeat;
-  background-position: bottom right;
   width: 480px;
-  height: 480px;
+  height: 540px;
+  background-color: #1d0e00;
+  background-image: url("https://static.footprint.network/activity/kcc/img_singup_success_bg.png");
+  background-repeat: no-repeat;
+  background-size: 480px 540px;
+  font-family: nanum-myeongjo;
 }
 
 .zkspace-signup-success-model__root {
@@ -23,11 +24,16 @@
 }
 
 .zkspace-signup-success-model__button {
-  width: 300px;
-  font-size: 18px;
-  color: white;
-  background: #ff861e;
+  width: 380px;
+  height: 97px;
+  font-size: 24px;
+  color: black;
+  font-weight: bold;
+  background-image: url("https://static.footprint.network/activity/kcc/img_sign_in_button.png");
+  background-repeat: no-repeat;
+  background-size: 380px 97px;
   margin: 30px auto;
+  font-family: nanum-myeongjo;
 }
 
 .zkspace-signup-success-model__title {
@@ -38,4 +44,5 @@
   text-align: center;
   white-space: pre-line;
   font-weight: bold;
+  margin-top: 180px;
 }

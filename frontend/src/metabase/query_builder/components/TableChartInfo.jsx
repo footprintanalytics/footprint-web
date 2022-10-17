@@ -112,7 +112,7 @@ const TableChartInfo = ({
         <li key={table.id}>
           {table.name}:
           <Link
-            to="https://docs.footprint.network/data/naming-convention"
+            to="https://docs.footprint.network/docs/naming-convention"
             target="_blank"
             style={{
               size: 11,

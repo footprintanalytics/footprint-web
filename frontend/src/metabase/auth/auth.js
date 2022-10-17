@@ -68,7 +68,7 @@ export const registerAndLogin = createThunkAction(
         setRegistSuccess(email);
       }
       MetabaseAnalytics.trackStructEvent("Auth", "registerAndLogin");
-      await handleLogin(dispatch, redirectUrl);
+      await handleLogin(dispatch, redirectUrl || "/");
     } else {
       throw message;
     }

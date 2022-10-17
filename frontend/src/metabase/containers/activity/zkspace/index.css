@@ -1,23 +1,22 @@
 .zkspace {
-  background: #0b0b0b;
+  background: #050201;
   min-height: calc(100vh - 60px);
   margin: 0 auto;
   color: white;
   text-align: center;
-  background-image: url("https://static.footprint.network/activity-zkspace/img-landing-bg-left-sub.png"),
-    url("https://static.footprint.network/activity-zkspace/img-landing-bg-left.png"),
-    url("https://static.footprint.network/activity-zkspace/img-landing-bg-right-sub.png"),
-    url("https://static.footprint.network/activity-zkspace/img-landing-bg-right.png");
-  background-size: 102px 95px, 795px 403px, 156px 171px, 291px 197px;
-  background-repeat: no-repeat, no-repeat, no-repeat, no-repeat;
-  background-position: bottom 5% left 12%, top left, bottom 15% right 10%,
-    top right;
+  background-image: url("https://static.footprint.network/activity/kcc/img_kcc_bg.png");
+  background-size: 1920px 820px;
+  background-repeat: no-repeat;
+  background-position: top center;
+  font-family: nanum-myeongjo;
+  padding-bottom: 20px;
 }
 
 .zkspace__task-title {
   font-size: 24px;
   font-weight: bold;
   margin: 16px 0 8px 0;
+  color: #d2a562;
 }
 
 .zkspace__item-todo {
@@ -39,6 +38,7 @@
   line-height: 36px;
   font-weight: bold;
   margin-top: 4px;
+  color: #e0cc97;
 }
 
 .zkspace__item:before {
@@ -52,11 +52,15 @@
 }
 
 .zkspace__button {
-  width: 280px;
-  font-size: 18px;
-  color: white;
-  background: #ff861e;
-  margin: 30px auto;
+  width: 380px;
+  height: 97px;
+  font-size: 24px;
+  color: black;
+  font-weight: bold;
+  background-image: url("https://static.footprint.network/activity/kcc/img_sign_in_button.png");
+  background-repeat: no-repeat;
+  background-size: 380px 97px;
+  font-family: nanum-myeongjo;
 }
 
 .zkspace__head {
@@ -64,22 +68,19 @@
   width: 1000px;
   margin: 0 auto;
   padding-top: 60px;
-  background: url("https://static.footprint.network/activity-zkspace/img-landing-computer.png");
-  background-size: 541px 373px;
-  background-repeat: no-repeat;
-  background-position: bottom right;
 }
 
 .zkspace__box {
-  height: 490px;
+  height: 560px;
   width: 1000px;
-  border: 1px #ff861e solid;
-  margin: 0 auto;
+  border: 5px #d2a562 solid;
+  margin: 60px auto 0px;
+  background: #0b0b0bbb;
 }
 
 .zkspace__task-list {
-  width: 760px;
-  margin: 0 auto;
+  width: 720px;
+  margin: 20px auto 10px;
   text-align: left;
 }
 
@@ -100,6 +101,8 @@
 .zkspace__logo {
   text-align: left;
   margin: 60px 0 20px;
+  display: flex;
+  flex-direction: column;
 }
 
 .zkspace__line {
@@ -115,15 +118,20 @@
 }
 
 .zkspace__button-submit {
-  width: 280px;
-  font-size: 18px;
-  color: white;
-  background: #ff861e;
+  width: 380px;
+  height: 97px;
+  font-size: 24px;
+  color: black;
+  font-weight: bold;
+  background-image: url("https://static.footprint.network/activity/kcc/img_sign_in_button.png");
+  background-repeat: no-repeat;
+  background-size: 380px 97px;
+  font-family: nanum-myeongjo;
   margin: 6px auto 0;
 }
 
 .zkspace__address {
-  width: 420px;
+  width: 400px;
 }
 
 .zkspace__star {
