@@ -86,7 +86,7 @@ const menus = location =>
         // },
         {
           title: "Docs",
-          path: "https://docs.footprint.network/docs",
+          path: "https://docs.footprint.network/reference/introduction",
           auth: false,
           open: true,
         },
@@ -473,7 +473,7 @@ export default class Navbar extends Component {
             //   open: true,
             // },
             {
-              url: "https://docs.footprint.network/",
+              url: "https://docs.footprint.network/docs",
               name: "Docs",
               open: true,
             },
@@ -656,7 +656,7 @@ export default class Navbar extends Component {
     const RightMenuPad = () => {
       return (
         <div className="Nav__right-pad-icon">
-          <Link to="https://docs.footprint.network/" target="_blank">
+          <Link to="https://docs.footprint.network/docs" target="_blank">
             <Icon name="docs" color={color("footprint-color-title")} />
           </Link>
           <Link to="/search">
