@@ -184,6 +184,7 @@ export const getRoutes = store => (
       <Route path="/dashboards" component={LazyLoad.Dashboards} />
 
       <Route path="/data-api" component={LazyLoad.dataApi} />
+      <Route path="/data-api/price" component={LazyLoad.dataApiPrice} />
 
       <Route
         title={t`Protocols`}

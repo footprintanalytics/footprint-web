@@ -1,0 +1,193 @@
+.data-api__price {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  min-height: calc(100vh - 60px);
+  background: #f8f9ff;
+}
+
+.data-api__price-bg {
+  background-image: url("https://static.footprint.network/img-data-api-price-2022101801.png"),
+    url("https://static.footprint.network/img-data-api-price-2022101802.png"),
+    url("https://static.footprint.network/img-data-api-price-2022101803.png"),
+    url("https://static.footprint.network/img-data-api-price-2022101804.png"),
+    url("https://static.footprint.network/img-data-api-price-2022101805.png"),
+    url("https://static.footprint.network/img-data-api-price-2022101806.png"),
+    url("https://static.footprint.network/img-data-api-price-2022101807.png"),
+    url("https://static.footprint.network/img-data-api-price-2022101808.png");
+  background-size: 280px 280px, 139px 139px, 281px 263px, 105px 213px,
+    280px 281px, 240px 121px, 241px 225px, 481px 450px;
+  background-repeat: no-repeat, no-repeat, no-repeat, no-repeat, no-repeat,
+    no-repeat, no-repeat, no-repeat;
+  background-position: top 15% left 8%, top 65% left 4%, bottom 15% left 12%,
+    top 50% left 0, top 8% right 8%, top 50% right 3%, bottom 0 right 25%,
+    bottom 2% right 2%;
+}
+
+.data-api__price h1 {
+  font-size: 54px;
+  color: #303440;
+  margin-top: 80px;
+}
+
+.data-api__price h2 {
+  font-size: 18px;
+  color: #303440;
+  font-weight: normal;
+  margin-top: 10px;
+}
+
+.data-api__price-text-highlight {
+  color: #3434b2;
+  font-weight: bold;
+}
+
+.data-api__price-box {
+  display: flex;
+  flex-direction: row;
+  gap: 6px;
+  margin-top: 50px;
+}
+
+.data-api__price h3 {
+  font-size: 36px;
+  color: #303440;
+  height: 70px;
+  text-align: center;
+}
+
+.data-api__price-desc {
+  font-size: 18px;
+  color: #303440;
+  line-height: 1.2;
+  margin-bottom: 20px;
+}
+
+.data-api__price-amount {
+  position: relative;
+  margin: 20px 0;
+  display: flex;
+  justify-content: center;
+}
+
+.data-api__price-amount-text {
+  font-size: 54px;
+  color: #3434b2;
+  text-align: center;
+}
+
+.data-api__price-amount-unit {
+  font-size: 14px;
+  color: #5b5b63;
+  position: absolute;
+  bottom: 20px;
+  right: 10px;
+}
+
+.data-api__price-button {
+  font-size: 16px;
+  color: white;
+}
+
+.data-api__price-item {
+  width: 300px;
+  display: flex;
+  flex-direction: column;
+  background: #f6f8ff;
+  box-shadow: 0 2px 30px #3434b230;
+  border: 1px solid #dcdee4;
+  border-radius: 24px;
+  padding: 20px;
+}
+
+.data-api__price-item-last {
+  width: 300px;
+  display: flex;
+  flex-direction: column;
+  background: #f6f8ff;
+  box-shadow: 6px 2px 30px #0011ff30;
+  border: 1px solid #dcdee4;
+  border-radius: 24px;
+  padding: 20px;
+}
+
+.data-api__price-item-highlight {
+  background: white;
+  border: 3px solid #3434b2;
+}
+
+.data-api__price-detail-title {
+  font-weight: bold;
+  font-size: 16px;
+  color: black;
+  margin: 40px 0 10px 0;
+}
+
+.data-api__price-detail-content {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  margin-bottom: 30px;
+}
+
+.data-api__price-detail-content-item {
+  font-size: 14px;
+  color: #303440;
+  margin-left: 16px;
+  display: flex;
+  align-items: center;
+}
+
+.data-api__price-detail-content-item::before {
+  content: "•";
+  color: black;
+  display: inline-block;
+  width: 1em;
+  margin-left: -1em;
+}
+
+.data-api__price-detail-content-item-url {
+  color: #3434b2;
+  cursor: pointer;
+}
+
+.data-api__price-detail-content-item-url::before {
+  color: #00aaff;
+  content: "•";
+  display: inline-block;
+  width: 1em;
+  margin-left: -1em;
+}
+
+.data-api__price-other {
+  display: flex;
+  flex-direction: column;
+  padding: 120px 0;
+  align-items: center;
+}
+
+.data-api__price-other-text {
+  font-size: 30px;
+  color: #000000;
+  line-height: 1.3;
+  text-align: center;
+}
+
+.data-api__price-other-button {
+  width: 280px;
+  margin: 40px 0;
+  font-size: 20px;
+}
+
+.data-api__price-item-Popular {
+  width: 180px;
+  height: 30px;
+  line-height: 30px;
+  background: #3334b2;
+  position: absolute;
+  margin-top: -52px;
+  border-radius: 10px 10px 0 0;
+  font-size: 16px;
+  text-align: center;
+  color: white;
+}
