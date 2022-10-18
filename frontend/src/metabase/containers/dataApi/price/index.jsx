@@ -34,8 +34,8 @@ const Index = ({ user, setLoginModalShow, onChangeLocation }) => {
           {
             title: (
               <span>
-                <span className="data-api__price-text-highlight">50K</span>
-                calls per month
+                <span className="data-api__price-text-highlight">50K</span> calls
+                per month
               </span>
             ),
           },
