@@ -8,7 +8,7 @@ import { loginModalShowAction } from "metabase/redux/control";
 import { connect } from "react-redux";
 import Link from "metabase/components/Link";
 
-const Index = ({ user, setLoginModalShow }) => {
+const Index = ({ user, setLoginModalShow, onChangeLocation }) => {
   const data = [
     {
       name: "Free",
@@ -31,6 +31,14 @@ const Index = ({ user, setLoginModalShow }) => {
       detail: {
         title: "Free access to:",
         content: [
+          {
+            title: (
+              <span>
+                <span className="data-api__price-text-highlight">50K</span>
+                calls per month
+              </span>
+            ),
+          },
           {
             title: (
               <span>
@@ -58,6 +66,7 @@ const Index = ({ user, setLoginModalShow }) => {
         amount: "$79",
         unit: "/month",
       },
+      boxBg: "data-api__price-item-second",
       buttonText: "Get started",
       buttonAction: e => {
         window.open("https://forms.gle/ze3F44681h2wgCHT9");
@@ -147,7 +156,7 @@ const Index = ({ user, setLoginModalShow }) => {
                 Footprint Analytics Business Plan($299/per month)
               </span>
             ),
-            // url: "https://docs.footprint.network/reference/query",
+            url: "/pricing",
           },
         ],
       },
@@ -216,7 +225,9 @@ const Index = ({ user, setLoginModalShow }) => {
                 </span>
               )}
               <h3>{item.name}</h3>
-              <span className="data-api__price-desc">{item.desc}</span>
+              <div>
+                <span className="data-api__price-desc">{item.desc}</span>
+              </div>
               <div className="data-api__price-amount">
                 <span className="data-api__price-amount-text">
                   {item.price.amount}
@@ -230,7 +241,7 @@ const Index = ({ user, setLoginModalShow }) => {
                 primary
                 onClick={item.buttonAction}
               >
-                {item.buttonText} <RightOutlined className="ml1" />
+                {item.buttonText}
               </Button>
               <span className="data-api__price-detail-title">
                 {item.detail.title}
@@ -243,25 +254,27 @@ const Index = ({ user, setLoginModalShow }) => {
                         obj.url ? "data-api__price-detail-content-item-url" : ""
                       }`}
                       key={index}
+                      onClick={() => onChangeLocation(obj.url)}
                     >
                       <span style={{ flex: 1, display: "flex" }}>
                         <span>{obj.title}</span>
+                        {obj.comingSoon && (
+                          <div className="data-api__price-item-powerful">
+                            Coming Soon
+                          </div>
+                        )}
                         {obj.powerful && (
-                          <div
-                            style={{
-                              border: "1px solid #3434B2",
-                              borderRadius: 6,
-                              width: 70,
-                              margin: "0 0 0 8px",
-                              padding: "0 8px",
-                              color: "#3434B2",
-                            }}
-                          >
-                            powerful
+                          <div className="data-api__price-item-powerful">
+                            Powerful
                           </div>
                         )}
                       </span>
-                      {obj.url && <RightOutlined className="ml1" />}
+                      {obj.url && (
+                        <RightOutlined
+                          className="ml1"
+                          style={{ color: "#00aaff" }}
+                        />
+                      )}
                     </li>
                   );
                 })}
