@@ -765,7 +765,7 @@ export default class Navbar extends Component {
                 trackStructEvent(`navbar-click-data-api`);
               }}
             >
-              | Data Api
+              | Data API
             </Link>
           )}
 
