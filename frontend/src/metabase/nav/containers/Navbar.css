@@ -196,6 +196,10 @@
   max-width: 330px;
 }
 
+.Nav__data-api {
+  color: #3434b2;
+}
+
 @media screen and (--footprint-breakpoint-max-pad) {
   .Nav__menu,
   .Nav__menu-create,

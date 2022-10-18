@@ -88,6 +88,7 @@ export default {
   About: loadable(() => import("metabase/containers/about")),
   NftPage: loadable(() => import("metabase/containers/nftPage")),
   dataApi: loadable(() => import("metabase/containers/dataApi")),
+  dataApiPrice: loadable(() => import("metabase/containers/dataApi/price")),
 
   // account
   AccountSettingsApp: loadable(() => import("./account/settings/containers/AccountSettingsApp")),

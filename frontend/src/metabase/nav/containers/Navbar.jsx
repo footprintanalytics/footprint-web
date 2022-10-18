@@ -85,6 +85,11 @@ const menus = location =>
         //   comingSoon: true,
         // },
         {
+          title: "Pricing",
+          path: "/data-api/pricing",
+          auth: false,
+        },
+        {
           title: "Docs",
           path: "https://docs.footprint.network/reference/introduction",
           auth: false,
@@ -158,7 +163,8 @@ const menus = location =>
             },
             {
               title: "Upload API",
-              link: "https://docs.footprint.network/reference/post_custom-data-upload",
+              link:
+                "https://docs.footprint.network/reference/post_custom-data-upload",
               externalLink: true,
             },
           ],
@@ -747,9 +753,22 @@ export default class Navbar extends Component {
               src={getOssUrl("img_nav_logo_v5.svg")}
               width={188}
               height={28}
+              style={{ marginBottom: 2 }}
               alt="Footprint - One Step Closer to Blockchain Insights"
             />
           </Link>
+          {isDataApi(location) && (
+            <Link
+              className="Nav__data-api ml1"
+              to="/data-api"
+              onClick={e => {
+                trackStructEvent(`navbar-click-data-api`);
+              }}
+            >
+              | Data Api
+            </Link>
+          )}
+
           <LeftMenu />
         </div>
         <React.Fragment>
