@@ -11,6 +11,8 @@ import GoogleButton from "metabase/auth/components/GoogleButton";
 import WalletLoginButton from "./WalletLoginButton";
 import { isDefi360 } from "metabase/lib/project_info";
 import SplitLine from "metabase/components/SplitLine";
+import { message } from "antd";
+import { entries, get, mapValues, omit } from "lodash";
 
 const ForgotPasswordLink = ({ credentials = {}, changeToResetPassword }) => (
   <Link
@@ -38,6 +40,35 @@ const SignInPanel = ({
   project,
   redirect,
 }) => {
+  const ref = React.createRef();
+  const onkeydown = async e => {
+    if (e.keyCode === 13) {
+      console.log("ref?.current", ref?.current);
+      const { password, username } = ref?.current?.context?.fields;
+      if (username.error) {
+        message.error(`email: ${username.error}`);
+        return;
+      }
+      if (password.error) {
+        message.error(`password: ${password.error}`);
+        return;
+      }
+      const hide = message.loading("Loading...", 0);
+      try {
+        await onSubmit(
+          omit(mapValues(ref?.current?.context?.fields, "value"), ["id"]),
+        );
+      } catch (e) {
+        const errors = e?.data?.errors;
+        const error = get(entries(errors), 0);
+        if (error) {
+          message.error(error.join(": "));
+        }
+      } finally {
+        hide();
+      }
+    }
+  };
   return !show ? (
     <Flex />
   ) : (
@@ -46,6 +77,7 @@ const SignInPanel = ({
         {({ values, Form, FormField, FormSubmit, FormMessage }) => (
           <Form>
             <FormField
+              ref={ref}
               name="username"
               type={ldapEnabled ? "input" : "email"}
               initial={email && email.length > 0 ? email : initEmail}
@@ -54,6 +86,7 @@ const SignInPanel = ({
               }
               placeholder={t`youlooknicetoday@email.com`}
               validate={ldapEnabled ? validate.required() : validate.email()}
+              onKeyDown={e => onkeydown(e)}
               autoFocus
             />
             <FormField
@@ -62,6 +95,7 @@ const SignInPanel = ({
               title={t`Password`}
               placeholder={t`password...`}
               validate={validate.required()}
+              onKeyDown={e => onkeydown(e)}
             />
             <Flex justifyContent="space-between">
               <Flex>

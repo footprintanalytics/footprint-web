@@ -9,6 +9,7 @@ const FormInputWidget = ({
   field,
   readOnly,
   autoFocus,
+  onKeyDown,
 }) => (
   <input
     className="Form-input full"
@@ -17,6 +18,7 @@ const FormInputWidget = ({
     aria-labelledby={`${field.name}-label`}
     readOnly={readOnly}
     autoFocus={autoFocus}
+    onKeyDown={onKeyDown}
     {...formDomOnlyProps(field)}
   />
 );
