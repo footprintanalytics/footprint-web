@@ -24,7 +24,6 @@ const SignUpPanel = ({
   const ref = React.createRef();
   const onkeydown = async e => {
     if (e.keyCode === 13) {
-      console.log("onkeydown", ref?.current);
       const { password, email, name } = ref?.current?.context?.fields;
       if (email.error) {
         message.error(`email: ${email.error}`);

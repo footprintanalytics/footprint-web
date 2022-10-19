@@ -43,7 +43,6 @@ const SignInPanel = ({
   const ref = React.createRef();
   const onkeydown = async e => {
     if (e.keyCode === 13) {
-      console.log("ref?.current", ref?.current);
       const { password, username } = ref?.current?.context?.fields;
       if (username.error) {
         message.error(`email: ${username.error}`);
