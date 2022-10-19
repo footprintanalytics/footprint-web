@@ -106,7 +106,6 @@ const Index = ({ user, setLoginModalShow, onChangeLocation }) => {
     },
     {
       name: "Scale",
-      flag: "Most Popular",
       desc: "For professional teams working in blockchain",
       price: {
         amount: "$360",
@@ -119,7 +118,7 @@ const Index = ({ user, setLoginModalShow, onChangeLocation }) => {
       },
       popular: true,
       detail: {
-        title: "Everything in Basic plan, plus:",
+        title: "Everything in Growth plan, plus:",
         content: [
           {
             title: (
@@ -173,7 +172,7 @@ const Index = ({ user, setLoginModalShow, onChangeLocation }) => {
       },
       boxBg: "data-api__price-item-last",
       detail: {
-        title: "Everything in Pro plan, plus:",
+        title: "Everything in Scale plan, plus:",
         content: [
           {
             title: "Custom calls",
