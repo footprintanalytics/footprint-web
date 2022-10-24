@@ -8,23 +8,23 @@
 }
 
 .data-api-product__start {
-  background-color: #fbfcff;
+  width: 100%;
   height: 600px;
   display: flex;
   justify-content: center;
   align-items: center;
+  background-color: #fbfcff;
 }
 
 .data-api-product__start-bg {
-  background-image: url("https://static.footprint.network/img_da_bg_2022101003.png");
-  background-size: 1920px 680px;
+  background-image: url("https://static.footprint.network/img_dap_power_2022102340.png");
+  background-size: 1265px 441px;
   background-repeat: no-repeat;
-  background-position: bottom 0 center;
+  background-position: bottom 0 right 10%;
 }
 
 .data-api-product__start-container {
   max-width: 1200px;
-  margin-bottom: 5%;
   text-align: left;
   display: flex;
   flex-direction: column;
@@ -35,6 +35,7 @@
   font-size: 60px;
   line-height: 1.2;
   text-align: left;
+  margin-bottom: 10px;
 }
 
 .data-api-product__start h2 {
@@ -59,12 +60,13 @@
   font-size: 42px;
   font-weight: normal;
   line-height: 1.2;
+  margin: 0 0 20px;
 }
 
 .data-api__product .data-api__get-start-desc {
-  font-size: 18px;
+  font-size: 16px;
   max-width: 600px;
-  margin: 10px 0;
+  margin: 0 0 10px;
   line-height: 1.4;
 }
 
@@ -105,12 +107,13 @@
 .powerful-data li {
   display: flex;
   flex-direction: row;
-  padding: 20px;
+  padding: 30px;
   background: white;
+  border-radius: 8px;
 }
 
 .powerful-data img {
-  margin: 10px 20px 10px 0;
+  margin: 10px 30px 10px 10px;
 }
 
 .powerful-data__right {
@@ -118,9 +121,13 @@
   flex-direction: column;
 }
 
+.powerful-data__right h4 {
+  font-size: 18px;
+  line-height: 1.3;
+}
+
 .powerful-data__right span {
   font-size: 18px;
-  margin-bottom: 10px;
   line-height: 1.3;
 }
 
