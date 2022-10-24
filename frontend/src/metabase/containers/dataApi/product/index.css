@@ -3,12 +3,12 @@
   flex-direction: column;
   align-items: center;
   min-height: calc(100vh - 60px);
-  background: #FBFCFF;
+  background: #fbfcff;
   font-family: roboto;
 }
 
 .data-api-product__start {
-  background-color: #FBFCFF;
+  background-color: #fbfcff;
   height: 600px;
   display: flex;
   justify-content: center;
@@ -48,7 +48,7 @@
 }
 
 .domain-detail {
-  background: #FBFCFF;
+  background: #fbfcff;
   width: 100%;
   display: flex;
   align-items: center;
@@ -81,7 +81,7 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  background: #E0E8FF;
+  background: #e0e8ff;
   padding: 30px 0 50px;
 }
 
@@ -127,7 +127,7 @@
 .ready-build {
   height: 500px;
   width: 100%;
-  background: #EAEEFF;
+  background: #eaeeff;
   display: flex;
   justify-content: center;
   align-items: center;
@@ -154,8 +154,7 @@
 }
 
 .domain-detail__nft-Metadata-bg {
-  background-image:
-    url("https://static.footprint.network/img_da_bg_2022100867.png"),
+  background-image: url("https://static.footprint.network/img_da_bg_2022100867.png"),
     url("https://static.footprint.network/img_dap_power_2022102321.png"),
     url("https://static.footprint.network/img_dap_power_2022102331.png");
   background-size: 240px 120px, 80px 80px, 237px 140px;
@@ -164,8 +163,7 @@
 }
 
 .domain-detail__nft-ownership-bg {
-  background-image:
-    url("https://static.footprint.network/img_da_bg_2022100867.png"),
+  background-image: url("https://static.footprint.network/img_da_bg_2022100867.png"),
     url("https://static.footprint.network/img_dap_power_2022102322.png"),
     url("https://static.footprint.network/img_dap_power_2022102332.png");
   background-size: 240px 120px, 80px 80px, 238px, 140px;
@@ -174,8 +172,7 @@
 }
 
 .domain-detail__nft-transfer-bg {
-  background-image:
-    url("https://static.footprint.network/img_da_bg_2022100867.png"),
+  background-image: url("https://static.footprint.network/img_da_bg_2022100867.png"),
     url("https://static.footprint.network/img_dap_power_2022102323.png"),
     url("https://static.footprint.network/img_dap_power_2022102333.png");
   background-size: 240px 120px, 80px 80px, 319px 348px;
@@ -184,8 +181,7 @@
 }
 
 .domain-detail__nft-floor-price-bg {
-  background-image:
-    url("https://static.footprint.network/img_da_bg_2022100867.png"),
+  background-image: url("https://static.footprint.network/img_da_bg_2022100867.png"),
     url("https://static.footprint.network/img_dap_power_2022102324.png"),
     url("https://static.footprint.network/img_dap_power_2022102334.png");
   background-size: 240px 120px, 80px 80px, 411px, 256px;
@@ -194,28 +190,26 @@
 }
 
 .domain-detail__nft-asset-bg {
-  background-image:
-    url("https://static.footprint.network/img_dap_power_2022102335.png?1=1");
+  background-image: url("https://static.footprint.network/img_dap_power_2022102335.png?1=1");
   background-size: 491px 540px;
   background-repeat: no-repeat;
   background-position: top 0 left 0;
 }
 
 .powerful-data__bg {
-  background-image:
-    url("https://static.footprint.network/img_dap_power_2022102325.png"),
+  background-image: url("https://static.footprint.network/img_dap_power_2022102325.png"),
     url("https://static.footprint.network/img_dap_power_2022102326.png"),
     url("https://static.footprint.network/img_dap_power_2022102327.png"),
     url("https://static.footprint.network/img_dap_power_2022102336.png"),
     url("https://static.footprint.network/img_dap_power_2022102337.png");
   background-size: 244px 244px, 240px 479px, 70px 70px, 186px 231px, 528px 434px;
   background-repeat: no-repeat, no-repeat, no-repeat, no-repeat, no-repeat;
-  background-position: top 10% left 13%, bottom 40% left 0, bottom 16% left 12%, top 0 right 0, bottom 0 right 0;
+  background-position: top 10% left 13%, bottom 40% left 0, bottom 16% left 12%,
+    top 0 right 0, bottom 0 right 0;
 }
 
 .ready-build__bg {
-  background-image:
-    url("https://static.footprint.network/img_dap_power_2022102328.png"),
+  background-image: url("https://static.footprint.network/img_dap_power_2022102328.png"),
     url("https://static.footprint.network/img_dap_power_2022102329.png"),
     url("https://static.footprint.network/img_dap_power_2022102330.png");
   background-size: 244px 244px, 239px 240px, 110px 109px;

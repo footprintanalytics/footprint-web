@@ -44,10 +44,7 @@ const DataApiButtons = ({
           </Link>
         )}
       </div>
-      <Link
-        to={secondButtonLink}
-        target="_blank"
-      >
+      <Link to={secondButtonLink} target="_blank">
         <Button className="data-api__button-white">{secondButtonText}</Button>
       </Link>
     </div>
