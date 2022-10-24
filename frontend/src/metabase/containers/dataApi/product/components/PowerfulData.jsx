@@ -49,7 +49,7 @@ const DomainDetail = () => {
                 <img width={60} height={60} src={item.img} alt={item.title} />
                 <div className="powerful-data__right">
                   <h4>{item.title}</h4>
-                  <div className="mb2"/>
+                  <div className="mb2" />
                   <span>{item.desc}</span>
                 </div>
               </li>

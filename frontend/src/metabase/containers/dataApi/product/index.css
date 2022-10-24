@@ -68,6 +68,8 @@
   max-width: 600px;
   margin: 0 0 10px;
   line-height: 1.4;
+  word-break: break-word;
+  white-space: pre-line;
 }
 
 .data-api__product .data-api__get-start-box-main {
