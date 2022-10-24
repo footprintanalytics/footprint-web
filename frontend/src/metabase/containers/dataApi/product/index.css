@@ -1,0 +1,224 @@
+.data-api__product {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  min-height: calc(100vh - 60px);
+  background: #FBFCFF;
+  font-family: roboto;
+}
+
+.data-api-product__start {
+  background-color: #FBFCFF;
+  height: 600px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.data-api-product__start-bg {
+  background-image: url("https://static.footprint.network/img_da_bg_2022101003.png");
+  background-size: 1920px 680px;
+  background-repeat: no-repeat;
+  background-position: bottom 0 center;
+}
+
+.data-api-product__start-container {
+  max-width: 1200px;
+  margin-bottom: 5%;
+  text-align: left;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+}
+
+.data-api-product__start h1 {
+  font-size: 60px;
+  line-height: 1.2;
+  text-align: left;
+}
+
+.data-api-product__start h2 {
+  color: #303440;
+  font-size: 20px;
+  max-width: 600px;
+  font-weight: normal;
+  line-height: 1.3;
+  margin: 10px 0;
+  text-align: left;
+}
+
+.domain-detail {
+  background: #FBFCFF;
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.domain-detail h3 {
+  font-size: 42px;
+  font-weight: normal;
+  line-height: 1.2;
+}
+
+.data-api__product .data-api__get-start-desc {
+  font-size: 18px;
+  max-width: 600px;
+  margin: 10px 0;
+  line-height: 1.4;
+}
+
+.data-api__product .data-api__get-start-box-main {
+  max-width: 500px;
+}
+
+.data-api__product .data-api__get-start-box-container {
+  justify-content: space-around;
+}
+
+.powerful-data {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: #E0E8FF;
+  padding: 30px 0 50px;
+}
+
+.powerful-data__container {
+  max-width: 1200px;
+}
+
+.powerful-data h3 {
+  font-size: 42px;
+  text-align: center;
+  margin: 30px 0;
+}
+
+.powerful-data ul {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  grid-column-gap: 32px;
+  grid-row-gap: 32px;
+}
+
+.powerful-data li {
+  display: flex;
+  flex-direction: row;
+  padding: 20px;
+  background: white;
+}
+
+.powerful-data img {
+  margin: 10px 20px 10px 0;
+}
+
+.powerful-data__right {
+  display: flex;
+  flex-direction: column;
+}
+
+.powerful-data__right span {
+  font-size: 18px;
+  margin-bottom: 10px;
+  line-height: 1.3;
+}
+
+.ready-build {
+  height: 500px;
+  width: 100%;
+  background: #EAEEFF;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.ready-build__container {
+  max-width: 1200px;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+}
+
+.ready-build h3 {
+  font-size: 42px;
+}
+
+.ready-build__desc {
+  margin: 40px 0;
+}
+
+.ready-build span {
+  font-size: 24px;
+  line-height: 1.3;
+}
+
+.domain-detail__nft-Metadata-bg {
+  background-image:
+    url("https://static.footprint.network/img_da_bg_2022100867.png"),
+    url("https://static.footprint.network/img_dap_power_2022102321.png"),
+    url("https://static.footprint.network/img_dap_power_2022102331.png");
+  background-size: 240px 120px, 80px 80px, 237px 140px;
+  background-repeat: no-repeat, no-repeat, no-repeat;
+  background-position: bottom 46% center, top 10% left 12%, bottom 0 right 0;
+}
+
+.domain-detail__nft-ownership-bg {
+  background-image:
+    url("https://static.footprint.network/img_da_bg_2022100867.png"),
+    url("https://static.footprint.network/img_dap_power_2022102322.png"),
+    url("https://static.footprint.network/img_dap_power_2022102332.png");
+  background-size: 240px 120px, 80px 80px, 238px, 140px;
+  background-repeat: no-repeat, no-repeat, no-repeat;
+  background-position: bottom 40% left 14%, top 13% right 48%, top 0 right 0;
+}
+
+.domain-detail__nft-transfer-bg {
+  background-image:
+    url("https://static.footprint.network/img_da_bg_2022100867.png"),
+    url("https://static.footprint.network/img_dap_power_2022102323.png"),
+    url("https://static.footprint.network/img_dap_power_2022102333.png");
+  background-size: 240px 120px, 80px 80px, 319px 348px;
+  background-repeat: no-repeat, no-repeat, no-repeat;
+  background-position: bottom 36% center, top 28% left 12%, bottom 0 right 0;
+}
+
+.domain-detail__nft-floor-price-bg {
+  background-image:
+    url("https://static.footprint.network/img_da_bg_2022100867.png"),
+    url("https://static.footprint.network/img_dap_power_2022102324.png"),
+    url("https://static.footprint.network/img_dap_power_2022102334.png");
+  background-size: 240px 120px, 80px 80px, 411px, 256px;
+  background-repeat: no-repeat;
+  background-position: bottom 16% center, top 3% right 16%, bottom 0 left 0;
+}
+
+.domain-detail__nft-asset-bg {
+  background-image:
+    url("https://static.footprint.network/img_dap_power_2022102335.png?1=1");
+  background-size: 491px 540px;
+  background-repeat: no-repeat;
+  background-position: top 0 left 0;
+}
+
+.powerful-data__bg {
+  background-image:
+    url("https://static.footprint.network/img_dap_power_2022102325.png"),
+    url("https://static.footprint.network/img_dap_power_2022102326.png"),
+    url("https://static.footprint.network/img_dap_power_2022102327.png"),
+    url("https://static.footprint.network/img_dap_power_2022102336.png"),
+    url("https://static.footprint.network/img_dap_power_2022102337.png");
+  background-size: 244px 244px, 240px 479px, 70px 70px, 186px 231px, 528px 434px;
+  background-repeat: no-repeat, no-repeat, no-repeat, no-repeat, no-repeat;
+  background-position: top 10% left 13%, bottom 40% left 0, bottom 16% left 12%, top 0 right 0, bottom 0 right 0;
+}
+
+.ready-build__bg {
+  background-image:
+    url("https://static.footprint.network/img_dap_power_2022102328.png"),
+    url("https://static.footprint.network/img_dap_power_2022102329.png"),
+    url("https://static.footprint.network/img_dap_power_2022102330.png");
+  background-size: 244px 244px, 239px 240px, 110px 109px;
+  background-repeat: no-repeat, no-repeat, no-repeat;
+  background-position: center left 11%, bottom 36% right 22%, top 40% right 7%;
+}

@@ -11,6 +11,8 @@ const DataApiButtons = ({
   setLoginModalShow,
   onChangeLocation,
   blandButtonText = "Try for free",
+  secondButtonText = "View Docs",
+  secondButtonLink = "https://docs.footprint.network/reference/introduction",
   showGetApiKeyHelp = false,
 }) => {
   return (
@@ -43,10 +45,10 @@ const DataApiButtons = ({
         )}
       </div>
       <Link
-        to="https://docs.footprint.network/reference/introduction"
+        to={secondButtonLink}
         target="_blank"
       >
-        <Button className="data-api__button-white">View Docs</Button>
+        <Button className="data-api__button-white">{secondButtonText}</Button>
       </Link>
     </div>
   );

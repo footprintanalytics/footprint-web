@@ -85,6 +85,11 @@ const menus = location =>
         //   comingSoon: true,
         // },
         {
+          title: "Product",
+          path: "/data-api/product",
+          auth: false,
+        },
+        {
           title: "Pricing",
           path: "/data-api/pricing",
           auth: false,
