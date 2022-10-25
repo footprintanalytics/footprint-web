@@ -127,8 +127,8 @@ const mapStateToProps = state => ({
 });
 
 @ExplicitSize()
-@Snippets.loadList({ loadingAndErrorWrapper: false })
-@SnippetCollections.loadList({ loadingAndErrorWrapper: false })
+// @Snippets.loadList({ loadingAndErrorWrapper: false })
+// @SnippetCollections.loadList({ loadingAndErrorWrapper: false })
 @Database.loadList({
   loadingAndErrorWrapper: false,
   query: () => ({ project: getProject() }),
@@ -187,7 +187,7 @@ export default class NativeQueryEditor extends Component {
   componentDidMount() {
     this.loadAceEditor();
     document.addEventListener("keydown", this.handleKeyDown);
-    document.addEventListener("contextmenu", this.handleRightClick);
+    // document.addEventListener("contextmenu", this.handleRightClick);
   }
 
   handleRightClick = event => {
@@ -269,7 +269,7 @@ export default class NativeQueryEditor extends Component {
   componentWillUnmount() {
     this.props.cancelQuery();
     document.removeEventListener("keydown", this.handleKeyDown);
-    document.removeEventListener("contextmenu", this.handleRightClick);
+    // document.removeEventListener("contextmenu", this.handleRightClick);
   }
 
   // this is overwritten when the editor is set up
@@ -611,9 +611,9 @@ export default class NativeQueryEditor extends Component {
           />
           {isNativeEditorOpen && (
             <div className="flex flex-row align-center mr3 flex-align-right ">
-              <div className="mt1">
+              {/*<div className="mt1">
                 <DataReferenceButton {...this.props} />
-              </div>
+              </div>*/}
               <div className="mt1">
                 <NativeVariablesButton {...this.props} />
               </div>
@@ -690,13 +690,13 @@ export default class NativeQueryEditor extends Component {
                 <Icon name={"play"} size={16} className="mr1" />
                 <h4>Run selection</h4>
               </a>
-              <a
+              {/*<a
                 className="p2 bg-medium-hover flex"
                 onClick={this.props.openSnippetModalWithSelectedText}
               >
                 <Icon name={"snippet"} size={16} className="mr1" />
                 <h4>Save as snippet</h4>
-              </a>
+              </a>*/}
             </div>
           </Popover>
           {this.props.modalSnippet && (
