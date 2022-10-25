@@ -16,7 +16,8 @@ const GetStart = () => {
           Solana and Polygon and others.
         </h2>
         <h2>
-          Fetch metadata, ownership data, NFT transfer data, <br />NFT prices, and much more.
+          Fetch metadata, ownership data, NFT transfer data, <br />
+          NFT prices, and much more.
         </h2>
         <span className="mb4" />
         <DataApiButtons blandButtonText="Get your API key" />
