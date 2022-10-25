@@ -7,7 +7,7 @@ let logger = null;
 // const production = process.env.NODE_ENV === "production";
 
 try {
-  if (isProduction) {
+  // if (isProduction) {
     logger = BrowserLogger.singleton({
       pid: armsPid,
       imgUrl: "https://arms-retcode-sg.aliyuncs.com/r.png?",
@@ -35,7 +35,7 @@ try {
         logger.getConfig()?.parseHash(location?.pathname),
       ];
     }
-  }
+  // }
 } catch (e) {}
 
 export const reportAPI = (url, success, time, status, message = "") => {
