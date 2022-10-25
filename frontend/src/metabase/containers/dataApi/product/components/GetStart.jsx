@@ -13,11 +13,10 @@ const GetStart = () => {
         </h1>
         <h2>
           Quickly fetch comprehensive data for any NFT project on Ethereum,
-          Solana and Polygon and more.
+          Solana and Polygon and others.
         </h2>
         <h2>
-          Use industry-leading NFT API to fetch metadata, ownership data, <br />
-          NFT transfer data, NFT prices, and much more.
+          Fetch metadata, ownership data, NFT transfer data, <br />NFT prices, and much more.
         </h2>
         <span className="mb4" />
         <DataApiButtons blandButtonText="Get your API key" />

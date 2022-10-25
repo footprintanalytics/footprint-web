@@ -13,7 +13,7 @@ import ReadyBuild from "metabase/containers/dataApi/product/components/ReadyBuil
 const Index = ({ user, setLoginModalShow, onChangeLocation }) => {
   const domainData = [
     {
-      title: "NFT Metadata",
+      title: "NFT metadata",
       desc: [
         "Retrieving NFT metadata from the blockchain is tedious and \ntime-consuming.",
         "Get all NFT metadata from Footprint Analytics in one single API call.",
