@@ -11,6 +11,16 @@ import { every } from "lodash";
 
 const Creator = () => {
   const hotsData = [
+    "Beosin",
+    "kaixuan",
+    "PrimoData",
+    "0xLam",
+    "1chioku",
+    "Grim",
+    "SIGMAStandard",
+    "Hanson2",
+    "planD",
+    "sankin",
     "Coin360",
     "DeGame",
     "Cao",
