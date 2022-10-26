@@ -31,10 +31,6 @@ const footers = [
           "https://www.footprint.network/@Footprint/Footprint-Datasets-Data-Dictionary",
       },
       {
-        label: "Pricing",
-        url: "/pricing",
-      },
-      {
         label: "Data API",
         url: "/data-api",
       },

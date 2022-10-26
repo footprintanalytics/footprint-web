@@ -37,11 +37,11 @@ const Pricing = ({ user, setLoginModalShow }) => {
   return (
     <div className="Pricing">
       <div className="Pricing__title">
-        <h1>Plans & Pricing</h1>
-        <p>
-          Footprint is a one-stop analysis platform to visualize your discovery
-          in blockchain data.
-        </p>
+        {/*<h1>Plans & Pricing</h1>*/}
+        {/*<p>*/}
+        {/*  Footprint is a one-stop analysis platform to visualize your discovery*/}
+        {/*  in blockchain data.*/}
+        {/*</p>*/}
       </div>
       <PricingModal
         user={user}

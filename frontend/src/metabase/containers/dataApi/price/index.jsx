@@ -12,7 +12,7 @@ const Index = ({ user, setLoginModalShow, onChangeLocation }) => {
   const data = [
     {
       name: "Free",
-      desc: "Best for getting started with Web3",
+      desc: "Best for getting started \nwith Web3",
       price: {
         amount: "$0",
       },
@@ -34,8 +34,8 @@ const Index = ({ user, setLoginModalShow, onChangeLocation }) => {
           {
             title: (
               <span>
-                <span className="data-api__price-text-highlight">50K</span> calls
-                per month
+                <span className="data-api__price-text-highlight">50K</span>{" "}
+                calls per month
               </span>
             ),
           },
@@ -208,8 +208,8 @@ const Index = ({ user, setLoginModalShow, onChangeLocation }) => {
   ];
   return (
     <div className="data-api__price data-api__price-bg">
-      <h1>Developer-first API Pricing Plan</h1>
-      <h2>Simple , flexible pricing for companies and developers</h2>
+      {/*<h1>Developer-first API Pricing Plan</h1>*/}
+      {/*<h2>Simple , flexible pricing for companies and developers</h2>*/}
 
       <ul className="data-api__price-box">
         {data.map(item => {

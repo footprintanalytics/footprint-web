@@ -1,0 +1,38 @@
+.pricing-container {
+  background-color: white;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+.pricing-container h1 {
+  font-size: 54px;
+  margin-top: 60px;
+}
+
+.pricing-container p {
+  font-size: 18px;
+}
+
+.pricing-container__tabs {
+  margin: 10px 0 40px;
+  display: flex;
+}
+
+.pricing-container__button-normal {
+  width: 300px;
+  border: 0;
+  border-radius: 0;
+  font-size: 24px;
+  font-weight: bold;
+  color: #303440;
+  background-color: white;
+  border-bottom: 1px solid #8f8f94;
+}
+
+.pricing-container__button-selected {
+  color: #3434b2;
+  font-size: 28px;
+  border-bottom: 3px solid #3434b2;
+}
