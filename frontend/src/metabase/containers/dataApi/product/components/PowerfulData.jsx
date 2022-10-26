@@ -7,7 +7,7 @@ const DomainDetail = () => {
   const data = [
     {
       title: "Comprehensive and granular data",
-      desc: "Cover raw data, abstraction, and statistics metrics",
+      desc: "Covering raw data, abstraction, and statistics metrics",
       img: getOssUrl("img_dap_power_2022102301.png"),
     },
     {
@@ -32,7 +32,7 @@ const DomainDetail = () => {
     },
     {
       title: "Highest quality data",
-      desc: "The top protocols being manually verified",
+      desc: "Manually verified top protocols",
       img: getOssUrl("img_dap_power_2022102306.png"),
     },
   ];
