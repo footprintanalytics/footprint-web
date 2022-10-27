@@ -27,8 +27,8 @@ const PricingContainer = ({ location }) => {
       <div className="pricing-container__top">
         <h1>{"Plans & Pricing"}</h1>
         <p>
-          Footprint is a one-stop analysis platform to visualize your discovery
-          in blockchain data.
+          Footprint Analytics is an on-chain data platform which provides
+          analytics tool and unified API.
         </p>
         <div className="pricing-container__tabs">
           <Button
