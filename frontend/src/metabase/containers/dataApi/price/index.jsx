@@ -159,7 +159,8 @@ const Index = ({
               <span className="data-api__price-text-highlight">SQL API</span>
             ),
             powerful: true,
-            // url: "https://docs.footprint.network/reference/query",
+            url: "https://docs.footprint.network/reference/post_v1-native",
+            open: true,
           },
           {
             title: (
@@ -167,7 +168,7 @@ const Index = ({
                 Footprint Analytics Business Plan($299/per month)
               </span>
             ),
-            url: "/pricing",
+            url: "/pricing?type=footprint",
           },
         ],
       },
@@ -263,7 +264,13 @@ const Index = ({
                         obj.url ? "data-api__price-detail-content-item-url" : ""
                       }`}
                       key={index}
-                      onClick={() => onChangeLocation(obj.url)}
+                      onClick={() => {
+                        if (obj.open) {
+                          window.open(obj.url);
+                        } else {
+                          onChangeLocation(obj.url);
+                        }
+                      }}
                     >
                       <span style={{ flex: 1, display: "flex" }}>
                         <span>{obj.title}</span>

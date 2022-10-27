@@ -23,37 +23,40 @@ const PricingContainer = ({ location }) => {
 
   return (
     <div className="pricing-container">
-      <h1>{"Plans & Pricing"}</h1>
-      <p>
-        Footprint is a one-stop analysis platform to visualize your discovery in
-        blockchain data.
-      </p>
-      <div className="pricing-container__tabs">
-        <Button
-          className={`pricing-container__button-normal ${
-            status === "footprint" ? "pricing-container__button-selected" : ""
-          }`}
-          onClick={() => {
-            setStatus("footprint");
-            replaceQuery(`/pricing?type=footprint`);
-          }}
-        >
-          Footprint Analytics
-        </Button>
-        <Button
-          className={`pricing-container__button-normal ${
-            status === "data-api" ? "pricing-container__button-selected" : ""
-          }`}
-          onClick={() => {
-            setStatus("data-api");
-            replaceQuery(`/pricing?type=data-api`);
-          }}
-        >
-          Data API
-        </Button>
+      <div className="pricing-container__bg" />
+      <div className="pricing-container__top">
+        <h1>{"Plans & Pricing"}</h1>
+        <p>
+          Footprint is a one-stop analysis platform to visualize your discovery
+          in blockchain data.
+        </p>
+        <div className="pricing-container__tabs">
+          <Button
+            className={`pricing-container__button-normal ${
+              status === "footprint" ? "pricing-container__button-selected" : ""
+            }`}
+            onClick={() => {
+              setStatus("footprint");
+              replaceQuery(`/pricing?type=footprint`);
+            }}
+          >
+            Footprint Analytics
+          </Button>
+          <Button
+            className={`pricing-container__button-normal ${
+              status === "data-api" ? "pricing-container__button-selected" : ""
+            }`}
+            onClick={() => {
+              setStatus("data-api");
+              replaceQuery(`/pricing?type=data-api`);
+            }}
+          >
+            Data API
+          </Button>
+        </div>
+        {status === "footprint" && <Pricing />}
+        {status === "data-api" && <DataApiPricing />}
       </div>
-      {status === "footprint" && <Pricing />}
-      {status === "data-api" && <DataApiPricing />}
     </div>
   );
 };

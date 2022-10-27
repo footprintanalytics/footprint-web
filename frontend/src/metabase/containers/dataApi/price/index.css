@@ -3,7 +3,6 @@
   flex-direction: column;
   align-items: center;
   min-height: calc(100vh - 60px);
-  background: white;
 }
 
 .data-api__price-bg2 {
@@ -99,6 +98,7 @@
   border: 1px solid #dcdee4;
   border-radius: 24px;
   padding: 20px;
+  background-color: #f8f9ff;
 }
 
 .data-api__price-item-second {
@@ -120,7 +120,6 @@
 }
 
 .data-api__price-item-highlight {
-  background: white;
   border: 3px solid #3434b2;
 }
 

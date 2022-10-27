@@ -1,9 +1,17 @@
 .pricing-container {
-  background-color: white;
+  background: #f8f9ff;
   display: flex;
   flex-direction: column;
   justify-content: center;
   align-items: center;
+}
+
+.pricing-container__top {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  z-index: 1;
 }
 
 .pricing-container h1 {
@@ -27,7 +35,6 @@
   font-size: 24px;
   font-weight: bold;
   color: #303440;
-  background-color: white;
   border-bottom: 1px solid #8f8f94;
 }
 
@@ -35,4 +42,30 @@
   color: #3434b2;
   font-size: 28px;
   border-bottom: 3px solid #3434b2;
+}
+
+.pricing-container__bg {
+  position: absolute;
+  top: 0;
+  left: 0;
+  content: "";
+  width: 100%;
+  min-height: 1500px;
+  z-index: 0;
+  display: block;
+  background-image: url("https://static.footprint.network/img-data-api-price-2022101801.png"),
+    url("https://static.footprint.network/img-data-api-price-2022101802.png"),
+    url("https://static.footprint.network/img-data-api-price-2022101803.png"),
+    url("https://static.footprint.network/img-data-api-price-2022101804.png"),
+    url("https://static.footprint.network/img-data-api-price-2022101805.png"),
+    url("https://static.footprint.network/img-data-api-price-2022101806.png"),
+    url("https://static.footprint.network/img-data-api-price-2022101807.png"),
+    url("https://static.footprint.network/img-data-api-price-2022101808.png");
+  background-size: 280px 280px, 139px 139px, 281px 263px, 105px 213px,
+    280px 281px, 240px 121px, 241px 225px, 481px 450px;
+  background-repeat: no-repeat, no-repeat, no-repeat, no-repeat, no-repeat,
+    no-repeat, no-repeat, no-repeat;
+  background-position: top 15% left 8%, top 65% left 4%, bottom 15% left 12%,
+    top 50% left 0, top 8% right 8%, top 50% right 3%, bottom 0 right 25%,
+    bottom 2% right 2%;
 }

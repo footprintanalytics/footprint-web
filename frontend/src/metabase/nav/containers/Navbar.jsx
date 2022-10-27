@@ -446,6 +446,10 @@ export default class Navbar extends Component {
         name: "Docs",
         open: true,
       },
+      {
+        url: "/pricing",
+        name: "Pricing",
+      },
       // { url: `/@${user?.name}`, name: "My Profile", auth: true },
       // { url: "/widget", name: "Widget" },
     ];
