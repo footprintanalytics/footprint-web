@@ -21,7 +21,6 @@
 .Pricing__compare {
   width: 1200px;
   margin: 0 auto;
-  background-color: #f8f9ff;
 }
 
 .Pricing__compare-head {
@@ -29,7 +28,7 @@
   align-items: center;
   position: sticky;
   top: 60px;
-  background-color: #f8f9ff;
+  background-color: #fff;
   padding: 30px 0;
   border-bottom: 1px solid #f6f6fe;
 }
@@ -104,7 +103,7 @@
   border-radius: 24px;
   height: 1100px;
   padding-top: 50px;
-  background-color: #f8f9ff;
+  background-color: white;
 }
 
 .Pricing__select-item:first-child {

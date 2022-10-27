@@ -1,5 +1,5 @@
 .pricing-container {
-  background: #f8f9ff;
+  background: #fff;
   display: flex;
   flex-direction: column;
   justify-content: center;
@@ -50,8 +50,9 @@
   left: 0;
   content: "";
   width: 100%;
-  min-height: 1500px;
+  min-height: 1600px;
   z-index: 0;
+  background-color: #f8f9ff;
   display: block;
   background-image: url("https://static.footprint.network/img-data-api-price-2022101801.png"),
     url("https://static.footprint.network/img-data-api-price-2022101802.png"),
