@@ -149,6 +149,7 @@
 .Pricing__select-price-main b {
   font-size: 48px;
   line-height: 1;
+  color: #3434b2;
 }
 
 .Pricing__select-item:last-child .Pricing__select-price-main b {
