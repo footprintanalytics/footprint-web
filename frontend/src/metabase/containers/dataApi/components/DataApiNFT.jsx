@@ -23,21 +23,34 @@ const DataApiNFT = () => {
               <span className="data-api__text-bland">NFT API</span>
             </h3>
             <span className="data-api__get-start-subtitle">
-              11 marketplaces <br /> and 101,639 collections <br />
-              covering 95% of the volume
+              13 marketplaces <br /> and 101,639 collections
             </span>
             <span className="data-api__get-start-desc">
               Fetch NFT ownership, transfer, price, orderbook, <br />
               metadata, and more, making it easy <br />
               to build NFT applications instantly.
             </span>
+            <div className="data-api__buttons">
+              <Link
+                to="https://docs.footprint.network/reference/get_nft-chain-collection-collection-contract-address-transactions"
+                target="_blank"
+              >
+                <Button className="data-api__button-bland">
+                  Learn more <RightOutlined className="ml1" />
+                </Button>
+              </Link>
+              <Link to="/data-api/product">
+                <Button className="data-api__button-white">
+                  Uses case <RightOutlined className="ml1" />
+                </Button>
+              </Link>
+            </div>
             <Link
-              to="https://docs.footprint.network/reference/get_nft-chain-collection-collection-contract-address-transactions"
+              className="mt2 text-underline text-underline-hover"
+              to="https://nft.footprint.network"
               target="_blank"
             >
-              <Button className="data-api__button-bland">
-                Learn more <RightOutlined className="ml1" />
-              </Button>
+              See what you can build with NFT
             </Link>
           </div>
         </div>

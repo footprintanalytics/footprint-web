@@ -52,14 +52,15 @@
 .data-api__price h3 {
   font-size: 36px;
   color: #303440;
-  margin: 30px 0 10px;
+  margin: 30px 0 5px;
   text-align: center;
 }
 
 .data-api__price-desc {
   font-size: 16px;
   color: #303440;
-  line-height: 1.2;
+  min-height: 40px;
+  text-align: center;
   margin: 0 auto 20px;
 }
 

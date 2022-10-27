@@ -1,5 +1,5 @@
 /* eslint-disable react/prop-types */
-import React from "react";
+import React, { useEffect } from "react";
 import "./index.css";
 import Button from "metabase/components/Button";
 import { RightOutlined } from "@ant-design/icons";
@@ -8,7 +8,19 @@ import { loginModalShowAction } from "metabase/redux/control";
 import { connect } from "react-redux";
 import Link from "metabase/components/Link";
 
-const Index = ({ user, setLoginModalShow, onChangeLocation }) => {
+const Index = ({
+  user,
+  setLoginModalShow,
+  onChangeLocation,
+  location,
+  router,
+}) => {
+  useEffect(() => {
+    if (location?.pathname === "/data-api/pricing") {
+      router?.replace("/pricing?type=data-api");
+    }
+  }, [location, router]);
+
   const data = [
     {
       name: "Free",
@@ -224,9 +236,7 @@ const Index = ({ user, setLoginModalShow, onChangeLocation }) => {
                 </span>
               )}
               <h3>{item.name}</h3>
-              <div>
-                <span className="data-api__price-desc">{item.desc}</span>
-              </div>
+              <span className="data-api__price-desc">{item.desc}</span>
               <div className="data-api__price-amount">
                 <span className="data-api__price-amount-text">
                   {item.price.amount}

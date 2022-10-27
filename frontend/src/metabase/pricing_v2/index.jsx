@@ -235,6 +235,23 @@ const PricingSelect = ({ user, onSign, onSubscribe, onCancelSubscription }) => {
               ))}
             </ul>
           </div>
+          {item.dataApi && (
+            <div className="Pricing__select-data-api">
+              <h3>{item.dataApi.title}</h3>
+              <ul>
+                {item.dataApi.list.map(item => (
+                  <li key={item}>
+                    <img
+                      src={getOssUrl("20220722115105.png")}
+                      width={16}
+                      height={12}
+                    />
+                    {item}
+                  </li>
+                ))}
+              </ul>
+            </div>
+          )}
         </div>
       ))}
     </div>

@@ -136,22 +136,9 @@ const menus = [
     ],
   },
   {
-    name: "Data API",
-    icon: "protocols",
-    menu: [
-      {
-        title: "Overview",
-        link: "https://www.footprint.network/data-api",
-      },
-      {
-        title: "Product",
-        link: "https://www.footprint.network/data-api/product",
-      },
-      {
-        title: "Pricing",
-        link: "https://www.footprint.network/pricing?type=data-api",
-      },
-    ],
+    title: "Data API",
+    path: "/data-api",
+    auth: false,
   },
 ];
 
