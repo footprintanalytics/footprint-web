@@ -77,10 +77,6 @@ const footers = [
         url: "/news/write-for-us",
       },
       {
-        label: "Pricing",
-        url: "/pricing",
-      },
-      {
         label: "Contact Us",
         url: "mailto:analytics@footprint.network",
       },

@@ -1,5 +1,5 @@
 /* eslint-disable react/prop-types */
-import React from "react";
+import React, { useEffect } from "react";
 import "./index.css";
 import Button from "metabase/components/Button";
 import { RightOutlined } from "@ant-design/icons";
@@ -8,11 +8,23 @@ import { loginModalShowAction } from "metabase/redux/control";
 import { connect } from "react-redux";
 import Link from "metabase/components/Link";
 
-const Index = ({ user, setLoginModalShow, onChangeLocation }) => {
+const Index = ({
+  user,
+  setLoginModalShow,
+  onChangeLocation,
+  location,
+  router,
+}) => {
+  useEffect(() => {
+    if (location?.pathname === "/data-api/pricing") {
+      router?.replace("/pricing?type=data-api");
+    }
+  }, [location, router]);
+
   const data = [
     {
       name: "Free",
-      desc: "Best for getting started with Web3",
+      desc: "Best for getting started \nwith Web3",
       price: {
         amount: "$0",
       },
@@ -34,8 +46,8 @@ const Index = ({ user, setLoginModalShow, onChangeLocation }) => {
           {
             title: (
               <span>
-                <span className="data-api__price-text-highlight">50K</span> calls
-                per month
+                <span className="data-api__price-text-highlight">50K</span>{" "}
+                calls per month
               </span>
             ),
           },
@@ -147,7 +159,8 @@ const Index = ({ user, setLoginModalShow, onChangeLocation }) => {
               <span className="data-api__price-text-highlight">SQL API</span>
             ),
             powerful: true,
-            // url: "https://docs.footprint.network/reference/query",
+            url: "https://docs.footprint.network/reference/post_v1-native",
+            open: true,
           },
           {
             title: (
@@ -155,7 +168,7 @@ const Index = ({ user, setLoginModalShow, onChangeLocation }) => {
                 Footprint Analytics Business Plan($299/per month)
               </span>
             ),
-            url: "/pricing",
+            url: "/pricing?type=footprint",
           },
         ],
       },
@@ -208,8 +221,8 @@ const Index = ({ user, setLoginModalShow, onChangeLocation }) => {
   ];
   return (
     <div className="data-api__price data-api__price-bg">
-      <h1>Developer-first API Pricing Plan</h1>
-      <h2>Simple , flexible pricing for companies and developers</h2>
+      {/*<h1>Developer-first API Pricing Plan</h1>*/}
+      {/*<h2>Simple , flexible pricing for companies and developers</h2>*/}
 
       <ul className="data-api__price-box">
         {data.map(item => {
@@ -224,9 +237,7 @@ const Index = ({ user, setLoginModalShow, onChangeLocation }) => {
                 </span>
               )}
               <h3>{item.name}</h3>
-              <div>
-                <span className="data-api__price-desc">{item.desc}</span>
-              </div>
+              <span className="data-api__price-desc">{item.desc}</span>
               <div className="data-api__price-amount">
                 <span className="data-api__price-amount-text">
                   {item.price.amount}
@@ -253,7 +264,13 @@ const Index = ({ user, setLoginModalShow, onChangeLocation }) => {
                         obj.url ? "data-api__price-detail-content-item-url" : ""
                       }`}
                       key={index}
-                      onClick={() => onChangeLocation(obj.url)}
+                      onClick={() => {
+                        if (obj.open) {
+                          window.open(obj.url);
+                        } else {
+                          onChangeLocation(obj.url);
+                        }
+                      }}
                     >
                       <span style={{ flex: 1, display: "flex" }}>
                         <span>{obj.title}</span>

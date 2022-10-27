@@ -3,11 +3,9 @@
   flex-direction: column;
   align-items: center;
   min-height: calc(100vh - 60px);
-  background: #f8f9ff;
-  font-family: roboto;
 }
 
-.data-api__price-bg {
+.data-api__price-bg2 {
   background-image: url("https://static.footprint.network/img-data-api-price-2022101801.png"),
     url("https://static.footprint.network/img-data-api-price-2022101802.png"),
     url("https://static.footprint.network/img-data-api-price-2022101803.png"),
@@ -53,14 +51,15 @@
 .data-api__price h3 {
   font-size: 36px;
   color: #303440;
-  margin: 30px 0 10px;
+  margin: 30px 0 5px;
   text-align: center;
 }
 
 .data-api__price-desc {
-  font-size: 18px;
+  font-size: 16px;
   color: #303440;
-  line-height: 1.2;
+  min-height: 40px;
+  text-align: center;
   margin: 0 auto 20px;
 }
 
@@ -96,19 +95,16 @@
   width: 300px;
   display: flex;
   flex-direction: column;
-  background: #f6f8ff;
-  box-shadow: 0 2px 30px #0011ff30;
   border: 1px solid #dcdee4;
   border-radius: 24px;
   padding: 20px;
+  background-color: white;
 }
 
 .data-api__price-item-second {
   width: 300px;
   display: flex;
   flex-direction: column;
-  background: #fbfbff;
-  box-shadow: 6px 2px 30px #0011ff30;
   border: 1px solid #dcdee4;
   border-radius: 24px;
   padding: 20px;
@@ -118,15 +114,12 @@
   width: 300px;
   display: flex;
   flex-direction: column;
-  background: #f6f8ff;
-  box-shadow: 6px 2px 30px #0011ff30;
   border: 1px solid #dcdee4;
   border-radius: 24px;
   padding: 20px;
 }
 
 .data-api__price-item-highlight {
-  background: white;
   border: 3px solid #3434b2;
 }
 
@@ -145,11 +138,12 @@
 }
 
 .data-api__price-detail-content-item {
-  font-size: 14px;
+  font-size: 16px;
   color: #303440;
   margin-left: 16px;
   display: flex;
   align-items: center;
+  font-family: HelveticaNeue;
 }
 
 .data-api__price-detail-content-item::before {
