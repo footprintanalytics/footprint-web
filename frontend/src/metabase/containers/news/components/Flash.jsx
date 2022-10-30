@@ -50,14 +50,14 @@ const Flash = props => {
 
   return (
     <div className="flash">
-      <div className="article-recommend__section-head">
+      {/*<div className="article-recommend__section-head">
         <div className="article-recommend__section-head-title">
           <Icon name="flash" size={18} mr={10} color="#A6AABE" />
           <span className="article-recommend__title footprint-title1">
             Flash
           </span>
         </div>
-      </div>
+      </div>*/}
       <InfiniteScroll
         dataLength={mediaData.length}
         next={loadMore}

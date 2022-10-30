@@ -244,6 +244,8 @@ const Publish = props => {
               <Select.Option value="article">Article</Select.Option>
               <Select.Option value="dailyNews">Daily News</Select.Option>
               <Select.Option value="realTimeInfo">Flash</Select.Option>
+              <Select.Option value="company">Company</Select.Option>
+              <Select.Option value="product">Product</Select.Option>
             </Select>
           </Form.Item>
           {isArticle && (

@@ -30,7 +30,7 @@ const Articles = props => {
   const [hasMore, setHasMore] = useState(
     mediaData && mediaTotal && mediaData.length < mediaTotal,
   );
-
+  console.log("mediaData", mediaData);
   const loadMore = () => {
     setCurrentPage(currentPage + 1);
   };
@@ -45,7 +45,7 @@ const Articles = props => {
     }
 
     if (mediaTotal === 0) {
-      return <NoData title="No Article" />;
+      return <NoData title="No Data" />;
     }
     return (
       <InfiniteScroll

@@ -2,8 +2,8 @@
 /* eslint-disable react/prop-types */
 import React from "react";
 import { useQuery } from "react-query";
-import { tutorialsMenuDetail } from "metabase/new-service";
-import { QUERY_OPTIONS } from "metabase/containers/dashboards/shared/config";
+import { mediaList } from "metabase/new-service";
+import { QUERY_OPTIONS_ARTICLE } from "metabase/containers/dashboards/shared/config";
 import Item from "metabase/containers/dashboards/components/Recommendations/Item";
 import { Pagination, Skeleton } from "antd";
 import NoData from "metabase/containers/news/components/NoData";
@@ -14,18 +14,18 @@ import getListPagination from "./getListPagination";
 
 const Content = ({ router, subMenu, category }) => {
   const params = {
-    menu: category,
-    subMenu: subMenu,
-    pageSize: subMenu === "tutorial" ? 1000 : 10,
+    type: category,
+    tag: subMenu,
+    pageSize: 10,
     current: router?.location?.query?.current || 1,
   };
 
   const { isLoading, data } = useQuery(
-    ["tutorialsMenuDetail", params],
+    ["mediaList", params],
     async () => {
-      return await tutorialsMenuDetail(params);
+      return await mediaList(params);
     },
-    { ...QUERY_OPTIONS, enabled: !!subMenu && !!category },
+    { ...QUERY_OPTIONS_ARTICLE, enabled: !!subMenu && !!category },
   );
   if (isLoading) {
     return <Skeleton className="edu__right-container" active />;
@@ -50,27 +50,27 @@ const Content = ({ router, subMenu, category }) => {
   };
 
   const formatItem = item => {
-    if (item.model === "news") {
-      return {
-        ...item,
-        name: item.title,
-        mode: "activity",
-        websiteUrl:
-          item.url || articleDetailUrl({ ...item, mediaInfoId: item.id }),
-        target: "_blank",
-        mediaUrl: item.thumbnail,
-      };
-    }
-    if (item.model === "gitbook") {
-      return {
-        ...item,
-        name: getPageTitle(item),
-        mode: "activity",
-        websiteUrl: item.url,
-        target: "_blank",
-      };
-    }
-    return item;
+    // if (item.model === "news") {
+    return {
+      ...item,
+      name: item.title,
+      mode: "activity",
+      websiteUrl:
+        item.url || articleDetailUrl({ ...item, mediaInfoId: item.id }),
+      target: "_blank",
+      mediaUrl: item.thumbnail,
+    };
+    // }
+    // if (item.model === "gitbook") {
+    //   return {
+    //     ...item,
+    //     name: getPageTitle(item),
+    //     mode: "activity",
+    //     websiteUrl: item.url,
+    //     target: "_blank",
+    //   };
+    // }
+    // return item;
   };
   const sections = groupBy(data?.data, "section");
   const showSection = every(Object.keys(sections), p => p !== "undefined");
@@ -117,6 +117,7 @@ const Content = ({ router, subMenu, category }) => {
       </ul>
     );
   }
+  console.log("data", data);
   return (
     <div className="edu__right">
       <ul className="edu__right-container">
