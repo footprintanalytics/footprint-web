@@ -49,7 +49,7 @@ const Index = ({ router, type }) => {
   return (
     <div className="news-articles__container news-report__container">
       <Box router={router} selectCategory={selectCategory} />
-      <ArticleHot />
+      {/*<ArticleHot />*/}
     </div>
   );
 };

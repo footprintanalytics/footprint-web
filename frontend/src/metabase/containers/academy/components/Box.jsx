@@ -7,6 +7,7 @@ import "../../tutorials/index.css";
 import { trackStructEvent } from "metabase/lib/analytics";
 import { updateTitle } from "metabase/hoc/Title";
 import Link from "metabase/components/Link";
+import Articles from "metabase/containers/news/articles";
 
 const Box = ({ router, selectCategory }) => {
   const { subMenu } = router?.location?.query;
@@ -46,10 +47,11 @@ const Box = ({ router, selectCategory }) => {
           );
         })}
       </div>
-      <Content
-        category={selectCategory?.value}
-        subMenu={selectSubMenu?.value}
+      <Articles
+        type={selectCategory?.value}
+        tag={selectSubMenu?.value}
         router={router}
+        canShowHot={false}
       />
     </div>
   );

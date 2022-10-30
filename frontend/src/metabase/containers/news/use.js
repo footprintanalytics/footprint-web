@@ -7,7 +7,7 @@ import {
   QUERY_OPTIONS_NORMAL,
 } from "metabase/containers/dashboards/shared/config";
 
-export const useMediaList = ({ type, currentPage, user }) => {
+export const useMediaList = ({ type, tag, currentPage }) => {
   const [mediaData, setMediaData] = useState([]);
   const [mediaTotal, setMediaTotal] = useState(undefined);
 
@@ -22,7 +22,8 @@ export const useMediaList = ({ type, currentPage, user }) => {
       : {
           pageSize: 10,
           current: currentPage,
-          type: type,
+          type: tag ? null : type,
+          tag,
         };
 
   const { isLoading, data } = useQuery(

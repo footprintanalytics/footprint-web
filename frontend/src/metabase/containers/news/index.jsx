@@ -18,7 +18,7 @@ const News = props => {
     location,
     router,
     user,
-    setLoginModalShow,
+    // setLoginModalShow,
     subscribeInfo,
     children,
   } = props;
@@ -26,7 +26,7 @@ const News = props => {
   const [modal, setModal] = useState(false);
 
   const hasPublishPermission = user && user.hasPublishPermission;
-  const isOpen = subscribeInfo.subscribeStatus === "enable";
+  // const isOpen = subscribeInfo.subscribeStatus === "enable";
 
   const categoryList = routes
     .find(item => item.path === indexPath)
@@ -40,6 +40,10 @@ const News = props => {
 
   const publishAction = () => {
     router.push("/news/publish");
+  };
+
+  const allArticlesAction = () => {
+    router.push("/news/all-article");
   };
 
   const rightPanel = (
@@ -63,6 +67,18 @@ const News = props => {
         iconSize={16}
         color={"#7A819B"}
         borderless
+        onClick={allArticlesAction}
+        style={{ visibility: hasPublishPermission ? "" : "hidden" }}
+      >
+        All
+      </Button>
+      {/*<Button
+        className="news__publish"
+        iconColor="#7A819B"
+        icon="subscribe"
+        iconSize={16}
+        color={"#7A819B"}
+        borderless
         onClick={() => {
           trackStructEvent(`news click Subscription`);
           if (!user) {
@@ -73,7 +89,7 @@ const News = props => {
         }}
       >
         {isOpen ? "Subscribed" : "Subscription"}
-      </Button>
+      </Button>*/}
     </div>
   );
 
