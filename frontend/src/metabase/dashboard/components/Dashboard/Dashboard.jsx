@@ -226,6 +226,11 @@ export default class Dashboard extends Component {
         if (user && (metabaseId === user.id || user.is_superuser)) {
           dashboardId = id;
         } else {
+          if (!uuid) {
+            throw new Error(
+              "The dashboard has been set to private, please contact the owner.",
+            );
+          }
           dashboardId = uuid;
         }
       }
