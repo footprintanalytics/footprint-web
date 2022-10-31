@@ -15,10 +15,10 @@ const Banner = () => {
         />
         <div className="dashboards__banner-right">
           <BannerImage
-            src={getOssUrl("img_analysis_banner_2022082401.png")}
+            src={getOssUrl("img_analysis_banner_kcc.png")}
             width={332}
             height={164}
-            url="/moon-men"
+            url="/kcc"
           />
           <BannerImage
             src={getOssUrl("img_analysis_banner_2022081601.png")}

@@ -65,7 +65,9 @@ const Zkspace = props => {
     return (
       <div className="zkspace" style={{ padding: "100px 0 0", color: 20 }}>
         <div>This activity has not started or has ended</div>
-        <div>Time: 10:00:00 (UTC+0) on Oct. 31 to 10:00:00 (UTC+0) on Nov. 6, 2022</div>
+        <div>
+          Time: 10:00:00 (UTC+0) on Oct. 31 to 10:00:00 (UTC+0) on Nov. 6, 2022
+        </div>
       </div>
     );
   }
@@ -126,7 +128,7 @@ const Zkspace = props => {
             <div className="zkspace__item-todo">
               2. You can also retweet this tweet from @Footprint_Data:
               <ExternalLink
-                href="https://twitter.com/Footprint_DeFi/status/1486882251954528257?s=20&t=JPNHJwoSkBamxZxtd1Eosw"
+                href="https://twitter.com/Footprint_Data/status/1586985557896220672?s=20&t=xltRGdJ9F8MhdmNtxlG-cA"
                 target="_blank"
                 style={{ marginLeft: 4 }}
               >
