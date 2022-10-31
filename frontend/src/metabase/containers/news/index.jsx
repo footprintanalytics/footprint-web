@@ -8,7 +8,6 @@ import connect from "react-redux/lib/connect/connect";
 import { getUser, getUserSubscribeInfo } from "metabase/selectors/user";
 import SubscribeModal from "metabase/components/SubscribeModal";
 import { loginModalShowAction } from "metabase/redux/control";
-import { trackStructEvent } from "metabase/lib/analytics";
 import { compose } from "underscore";
 import MetaViewportControls from "metabase/dashboard/hoc/MetaViewportControls";
 
@@ -19,7 +18,7 @@ const News = props => {
     router,
     user,
     // setLoginModalShow,
-    subscribeInfo,
+    // subscribeInfo,
     children,
   } = props;
   const indexPath = "/news";

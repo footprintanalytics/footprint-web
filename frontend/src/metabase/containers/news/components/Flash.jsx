@@ -1,6 +1,5 @@
 /* eslint-disable react/prop-types */
 import React, { useEffect, useState } from "react";
-import Icon from "metabase/components/Icon";
 import { useMediaList } from "metabase/containers/news/use";
 import { push } from "react-router-redux";
 import connect from "react-redux/lib/connect/connect";

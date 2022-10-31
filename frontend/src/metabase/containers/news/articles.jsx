@@ -30,7 +30,7 @@ const Articles = props => {
   } = props;
   const [currentPage, setCurrentPage] = useState(1);
 
-  const { mediaData, setMediaData, mediaTotal } = useMediaList({
+  const { mediaData, setMediaData, mediaTotal, isLoading } = useMediaList({
     type: type,
     tag: tag,
     currentPage,
@@ -48,6 +48,16 @@ const Articles = props => {
   const removeSuccess = mediaInfoId => {
     setMediaData(mediaData.filter(item => item.mediaInfoId !== mediaInfoId));
   };
+
+  if (isLoading) {
+    return (
+      <div className="news-articles__container">
+        <div style={{ width: "100%", padding: "0 40px" }}>
+          <Skeleton active />
+        </div>
+      </div>
+    );
+  }
 
   const renderList = () => {
     if (mediaTotal === undefined) {

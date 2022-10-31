@@ -7,7 +7,6 @@ import "../index.css";
 import "../../academy/index.css";
 import "../../dashboards/components/Recommendations/index.css";
 import Box from "metabase/containers/academy/components/Box";
-import ArticleHot from "metabase/containers/news/components/ArticleHot";
 
 const Index = ({ router, type }) => {
   const array = {
@@ -19,6 +18,8 @@ const Index = ({ router, type }) => {
         { label: "NFT", value: "NFT" },
         { label: "DeFi", value: "DeFi" },
         { label: "How-to", value: "How-to" },
+        { label: "Blockchain", value: "Blockchain" },
+        { label: "Industry", value: "Industry" },
       ],
     },
     research: {

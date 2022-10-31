@@ -2,7 +2,6 @@
 /* eslint-disable react/prop-types */
 import React from "react";
 import cx from "classnames";
-import Content from "./Content";
 import "../../tutorials/index.css";
 import { trackStructEvent } from "metabase/lib/analytics";
 import { updateTitle } from "metabase/hoc/Title";

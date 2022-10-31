@@ -8,7 +8,7 @@ import Item from "metabase/containers/dashboards/components/Recommendations/Item
 import { Pagination, Skeleton } from "antd";
 import NoData from "metabase/containers/news/components/NoData";
 import { articleDetailUrl } from "metabase/lib/urls";
-import { groupBy, every } from "lodash";
+import { every, groupBy } from "lodash";
 import { formatSectionTitle } from "metabase/lib/formatting";
 import getListPagination from "./getListPagination";
 
@@ -41,13 +41,13 @@ const Content = ({ router, subMenu, category }) => {
     );
   }
 
-  const getPageTitle = item => {
+  /*  const getPageTitle = item => {
     const str = " - Footprint";
     const title = item?.title || "";
     return title.endsWith(str)
       ? title.substring(title.length - str.length, -str.length)
       : title;
-  };
+  };*/
 
   const formatItem = item => {
     // if (item.model === "news") {

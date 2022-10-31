@@ -1,11 +1,7 @@
 import { useEffect, useState } from "react";
 import { mediaList, tutorialsMenuDetail } from "metabase/new-service";
-import { message } from "antd";
 import { useQuery } from "react-query";
-import {
-  QUERY_OPTIONS_ARTICLE,
-  QUERY_OPTIONS_NORMAL,
-} from "metabase/containers/dashboards/shared/config";
+import { QUERY_OPTIONS_ARTICLE } from "metabase/containers/dashboards/shared/config";
 
 export const useMediaList = ({ type, tag, currentPage }) => {
   const [mediaData, setMediaData] = useState([]);
@@ -38,6 +34,11 @@ export const useMediaList = ({ type, tag, currentPage }) => {
   );
 
   console.log("data", data);
+
+  useEffect(() => {
+    setMediaData([]);
+    setMediaTotal(0);
+  }, [tag]);
 
   useEffect(() => {
     if (data) {
