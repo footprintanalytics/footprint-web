@@ -45,7 +45,7 @@ const ActivityZkspaceFirstModal = ({ onClose, onClick }) => {
               fontWeight: "bold",
             }}
           >
-            Date: October 31th to November 6th, 2022 (UTC+0)
+            Time: 10:00:00 (UTC+0) on Oct. 31 to 10:00:00 (UTC+0) on Nov. 6, 2022
           </span>
           <Button
             className="zkspace-first-model__button"

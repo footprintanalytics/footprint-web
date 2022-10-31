@@ -65,7 +65,7 @@ const Zkspace = props => {
     return (
       <div className="zkspace" style={{ padding: "100px 0 0", color: 20 }}>
         <div>This activity has not started or has ended</div>
-        <div>Date: October 31th to November 6th, 2022 (UTC+0)</div>
+        <div>Time: 10:00:00 (UTC+0) on Oct. 31 to 10:00:00 (UTC+0) on Nov. 6, 2022</div>
       </div>
     );
   }
