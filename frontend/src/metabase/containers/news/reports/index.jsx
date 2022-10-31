@@ -42,7 +42,7 @@ const Index = ({ router, type }) => {
         },
         { label: "Activities", value: "Activities" },
         { label: "AMA", value: "AMA" },
-        { label: "Twitter", value: "Twitter" },
+        { label: "Space", value: "Space" },
       ],
     },
   };
