@@ -8,10 +8,10 @@ const Banner = () => {
     <div className="dashboards__banner">
       <div className="dashboards__banner-container">
         <BannerImage
-          src={getOssUrl("img_analysis_banner_2022081601.png")}
+          src={getOssUrl("img-crpyoslate-footprint.png")}
           width={842}
           height={350}
-          url="https://footprint.cool/mv2v"
+          url="https://www.footprint.network/article/blockchain-security-alliance-q3-2022-blockchain-security-report-hwop2nhO"
         />
         <div className="dashboards__banner-right">
           <BannerImage
@@ -21,10 +21,10 @@ const Banner = () => {
             url="/moon-men"
           />
           <BannerImage
-            src={getOssUrl("img_analysis_banner_2022081603.jpg")}
+            src={getOssUrl("img_analysis_banner_2022081601.png")}
             width={332}
             height={164}
-            url="https://footprint.cool/yv9I"
+            url="https://footprint.cool/mv2v"
           />
         </div>
       </div>
