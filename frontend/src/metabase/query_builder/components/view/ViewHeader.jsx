@@ -42,8 +42,8 @@ import { getUserNativeQueryPermission } from "metabase/selectors/user";
 import { HeaderTitle } from "metabase/components/Header";
 import TitleAndDescription from "metabase/components/TitleAndDescription";
 import { isMac } from "metabase/lib/browser";
-import Snippets from "metabase/entities/snippets";
-import SnippetCollections from "metabase/entities/snippet-collections";
+// import Snippets from "metabase/entities/snippets";
+// import SnippetCollections from "metabase/entities/snippet-collections";
 import { questionSideHideAction } from "metabase/redux/config";
 // import SnippetSidebarButton from "./SnippetSidebarButton";
 // import NativeVariablesButton from "./NativeVariablesButton";
@@ -128,8 +128,8 @@ const mapDispatchToProps = {
 };
 
 @connect(mapStateToProps, mapDispatchToProps)
-@Snippets.loadList({ loadingAndErrorWrapper: false })
-@SnippetCollections.loadList({ loadingAndErrorWrapper: false })
+// @Snippets.loadList({ loadingAndErrorWrapper: false })
+// @SnippetCollections.loadList({ loadingAndErrorWrapper: false })
 export class ViewTitleHeader extends React.Component {
   constructor(props) {
     super(props);

@@ -190,6 +190,10 @@ const data = {
       logo: "img-harmony.png",
     },
     {
+      url: "https://getblock.io",
+      logo: "img-partner-getblock.png?2=2",
+    },
+    {
       url: "https://www.footprint.network/dashboard/294",
       logo: "img-partner-curve.png",
     },
@@ -272,6 +276,10 @@ const data = {
     {
       url: "https://twitter.com/doubletop_io",
       logo: "img-double-top.png",
+    },
+    {
+      url: "http://www.abga.asia",
+      logo: "img-partner-abga.png",
     },
   ],
   socialData: [

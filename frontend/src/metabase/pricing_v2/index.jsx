@@ -37,11 +37,11 @@ const Pricing = ({ user, setLoginModalShow }) => {
   return (
     <div className="Pricing">
       <div className="Pricing__title">
-        <h1>Plans & Pricing</h1>
-        <p>
-          Footprint is a one-stop analysis platform to visualize your discovery
-          in blockchain data.
-        </p>
+        {/*<h1>Plans & Pricing</h1>*/}
+        {/*<p>*/}
+        {/*  Footprint is a one-stop analysis platform to visualize your discovery*/}
+        {/*  in blockchain data.*/}
+        {/*</p>*/}
       </div>
       <PricingModal
         user={user}
@@ -235,6 +235,23 @@ const PricingSelect = ({ user, onSign, onSubscribe, onCancelSubscription }) => {
               ))}
             </ul>
           </div>
+          {item.dataApi && (
+            <div className="Pricing__select-data-api">
+              <h3>{item.dataApi.title}</h3>
+              <ul>
+                {item.dataApi.list.map(item => (
+                  <li key={item}>
+                    <img
+                      src={getOssUrl("20220722115105.png")}
+                      width={16}
+                      height={12}
+                    />
+                    {item}
+                  </li>
+                ))}
+              </ul>
+            </div>
+          )}
         </div>
       ))}
     </div>

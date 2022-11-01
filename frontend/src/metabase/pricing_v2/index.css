@@ -1,11 +1,11 @@
 .Pricing {
   padding-bottom: 74px;
-  background-color: #fff;
+  background-color: transparent;
 }
 
 .Pricing__title {
   text-align: center;
-  padding: 74px 0;
+  padding: 10px 0;
 }
 
 .Pricing__title h1 {
@@ -101,8 +101,9 @@
   padding: 0 30px;
   border: 1px solid #dcdee4;
   border-radius: 24px;
-  height: 860px;
+  height: 1100px;
   padding-top: 50px;
+  background-color: white;
 }
 
 .Pricing__select-item:first-child {
@@ -113,8 +114,8 @@
 
 .Pricing__select-item:nth-child(2) {
   border: 2px solid #3434b2;
-  height: 920px;
-  padding-top: calc((920px - 860px) / 2px + 50px);
+  height: 1160px;
+  padding-top: calc((1160px - 1100px) / 2px + 50px);
 }
 
 .Pricing__select-item:last-child {
@@ -135,7 +136,7 @@
 }
 
 .Pricing__select-price {
-  height: 120px;
+  min-height: 120px;
   display: flex;
   flex-direction: column;
   justify-content: center;
@@ -148,6 +149,7 @@
 .Pricing__select-price-main b {
   font-size: 48px;
   line-height: 1;
+  color: #3434b2;
 }
 
 .Pricing__select-item:last-child .Pricing__select-price-main b {
@@ -179,7 +181,7 @@
   flex-direction: column;
   align-items: center;
   width: 100%;
-  height: 130px;
+  min-height: 130px;
 }
 
 .Pricing__select-btn .ant-btn {
@@ -230,6 +232,28 @@
 }
 
 .Pricing__select-benefits ul img {
+  margin-right: 16px;
+}
+
+.Pricing__select-data-api {
+  width: 100%;
+  border-top: 1px solid #dcdee4;
+  padding-top: 30px;
+  margin-top: 30px;
+  margin-bottom: 30px;
+}
+
+.Pricing__select-data-api h3 {
+  font-size: 16px;
+  margin-bottom: 10px;
+}
+
+.Pricing__select-data-api ul {
+  font-size: 16px;
+  line-height: 32px;
+}
+
+.Pricing__select-data-api ul img {
   margin-right: 16px;
 }
 

@@ -61,7 +61,7 @@ export default {
   CollectionLanding: loadable(() => import("metabase/components/CollectionLanding/CollectionLanding")),
   ArchiveApp: loadable(() => import("metabase/home/containers/ArchiveApp")),
   SearchApp: loadable(() => import("metabase/home/containers/SearchApp")),
-  Pricing: loadable(() => import("metabase/pricing_v2/index")),
+  Pricing: loadable(() => import("metabase/pricing_v3/index")),
   Explore: loadable(() => import("metabase/containers/explore/index")),
   Features: loadable(() => import("metabase/containers/features/index")),
   GuestDashboard: loadable(() => import("metabase/guest/Dashboard")),
@@ -88,6 +88,8 @@ export default {
   About: loadable(() => import("metabase/containers/about")),
   NftPage: loadable(() => import("metabase/containers/nftPage")),
   dataApi: loadable(() => import("metabase/containers/dataApi")),
+  dataApiPrice: loadable(() => import("metabase/containers/dataApi/price")),
+  dataApiProduct: loadable(() => import("metabase/containers/dataApi/product")),
 
   // account
   AccountSettingsApp: loadable(() => import("./account/settings/containers/AccountSettingsApp")),
