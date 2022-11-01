@@ -27,6 +27,14 @@
   (:require [clojure.set :as set]
             [metabase.driver :as driver]))
 
+(defn regPrefix
+  [origin]
+  (def tablePrefixPat (re-pattern "\"iceberg\".\"footprint_test\".|\"iceberg\".\"footprint\"."))
+  (def fieldPrefixPat (re-pattern "\"footprint_test\".|\"footprint\"."))
+  (def tablePrefixFixStr (clojure.string/replace origin tablePrefixPat ""))
+  (def fieldPrefixFixStr (clojure.string/replace tablePrefixFixStr fieldPrefixPat ""))
+  fieldPrefixFixStr)
+
 (defn expand-inner
   "Expand parameters inside an *inner* native `query`. Not recursive -- recursive transformations are handled in
   the `middleware.parameters` functions that invoke this function."
@@ -37,6 +45,9 @@
     ;; source queries use `:native`. So we need to handle either case.
     (let [source-query?           (:native inner-query)
           substituted-inner-query (driver/substitute-native-parameters driver/*driver*
-                                                                       (set/rename-keys inner-query {:native :query}))]
-      (cond-> (dissoc substituted-inner-query :parameters :template-tags)
+                                                                       (set/rename-keys inner-query {:native :query}))
+          originQueryStr (:query substituted-inner-query)
+          fixQueryStr (regPrefix originQueryStr)
+          substituted-inner-query-changed (assoc substituted-inner-query :query fixQueryStr)]
+      (cond-> (dissoc substituted-inner-query-changed :parameters :template-tags)
         source-query? (set/rename-keys {:query :native})))))

@@ -8,14 +8,17 @@ export const updateNativeEditorSelect = ({
   nativeEditorCursorOffset,
   nativeEditorSelectedText,
 }) => {
+  const queryRef = databaseId !== 0 ? '"' : "`";
   const selectionStart =
     nativeEditorCursorOffset - (nativeEditorSelectedText || "").length;
-  const queryColumnText = columnName ? `.\`${columnName}\`` : "";
+  const queryColumnText = columnName
+    ? `.${queryRef}${columnName}${queryRef}`
+    : "";
   const queryText =
     query.queryText().trim() === ""
-      ? `select * from \`${tableName}\`${queryColumnText} limit 10;`
+      ? `select * from ${queryRef}${tableName}${queryRef} ${queryColumnText} limit 10`
       : query.queryText().slice(0, selectionStart) +
-        `\`${tableName}\`${queryColumnText}` +
+        `${queryRef}${tableName}${queryRef}${queryColumnText}` +
         query.queryText().slice(nativeEditorCursorOffset);
 
   const nativeQuery = {

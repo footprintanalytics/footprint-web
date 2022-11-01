@@ -69,6 +69,9 @@ FROM registry-intl.us-east-1.aliyuncs.com/mexl/foot-print-frontend:metabase-v0-4
 COPY --from=frontend /home/circleci/target/uberjar/metabase.jar /app/
 COPY --from=registry-intl.us-east-1.aliyuncs.com/mexl/foot-print-frontend:metabase-v0-41-drivers-builder /home/circleci/bin/docker/run_metabase.sh /app/
 
+#trino driver
+COPY --from=registry-intl.us-east-1.aliyuncs.com/mexl/foot-print-frontend:metabase-v0-41-drivers-builder /home/circleci/bin/starburst.metabase-driver-1.0.6.jar ./plugins/
+
 EXPOSE 3000
 
 ENTRYPOINT ["/app/run_metabase.sh"]
