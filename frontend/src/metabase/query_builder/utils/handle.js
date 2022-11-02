@@ -8,7 +8,8 @@ export const updateNativeEditorSelect = ({
   nativeEditorCursorOffset,
   nativeEditorSelectedText,
 }) => {
-  const queryRef = databaseId !== 0 ? '"' : "`";
+  // const queryRef = databaseId !== 0 ? '"' : "`";
+  const queryRef = "`";
   const selectionStart =
     nativeEditorCursorOffset - (nativeEditorSelectedText || "").length;
   const queryColumnText = columnName
