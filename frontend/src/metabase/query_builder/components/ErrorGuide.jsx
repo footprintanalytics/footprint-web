@@ -5,7 +5,7 @@ const ErrorGuide = () => {
   return (
     <div className="text-brand text-underline html2canvas-filter">
       <Link
-        to="https://docs.footprint.network/guides/charts/sql/upgrade-from-26.05.2022"
+        to="https://docs.footprint.network/docs/sql-compatible"
         target="_blank"
       >
         (Get help here.)
