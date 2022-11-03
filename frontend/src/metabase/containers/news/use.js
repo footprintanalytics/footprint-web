@@ -33,8 +33,6 @@ export const useMediaList = ({ type, tag, currentPage }) => {
     QUERY_OPTIONS_ARTICLE,
   );
 
-  console.log("data", data);
-
   useEffect(() => {
     setMediaData([]);
     setMediaTotal(0);
