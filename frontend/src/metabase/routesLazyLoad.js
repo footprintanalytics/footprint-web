@@ -19,6 +19,8 @@ export default {
   News: loadable(() => import("metabase/containers/news")),
   Featured: loadable(() => import("metabase/containers/news/featured")),
   Articles: loadable(() => import("metabase/containers/news/articles")),
+  // Product: loadable(() => import("metabase/containers/news/product")),
+  // Company: loadable(() => import("metabase/containers/news/company")),
   Reports: loadable(() => import("metabase/containers/news/reports")),
   FeatureCharts: loadable(() => import("metabase/containers/news/feature_charts")),
   WriteForUs: loadable(() => import("metabase/containers/news/writeForUs")),

@@ -433,7 +433,7 @@ export default class Navbar extends Component {
     const { user, setLoginModalShow, location } = this.props;
     const links = [
       { url: "/moon-men", name: "Moon Men" },
-      { url: "/news/articles", name: "Research" },
+      { url: "/news/articles", name: "Blog" },
       // { url: "/about", name: "Why Footprint" },
       // { url: "/tutorials/visualizations", name: "Tutorials" },
       // {

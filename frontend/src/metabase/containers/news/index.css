@@ -255,6 +255,7 @@
   justify-content: center;
   max-width: 1350px;
   margin: 0 auto;
+  width: 100%;
 }
 
 .news-articles__featured {
@@ -277,6 +278,7 @@
 
 .news .edu__left-item {
   border: #dcdee4 1px solid;
+  line-height: 1.2;
 }
 
 .news .edu__left-item-select {

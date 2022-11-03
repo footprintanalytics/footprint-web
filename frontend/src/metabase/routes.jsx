@@ -272,7 +272,43 @@ export const getRoutes = store => (
         <Route
           title={t`Articles`}
           path="articles"
-          component={props => <LazyLoad.Articles {...props} type="article" />}
+          component={props => <LazyLoad.Reports {...props} type="articles" />}
+        />
+        <Route
+          title={t`Reports`}
+          path="reports"
+          component={props => <LazyLoad.Reports {...props} type="research" />}
+        />
+        {/*<Route title={t`Flash`} path="featured" component={LazyLoad.Featured} />*/}
+        <Route
+          title={t`Company`}
+          path="company"
+          component={props => <LazyLoad.Articles {...props} type="company" />}
+        />
+        <Route
+          title={t`Product`}
+          path="product"
+          component={props => <LazyLoad.Articles {...props} type="product" />}
+        />
+        <Route
+          title={t`Events`}
+          path="events"
+          component={props => <LazyLoad.Reports {...props} type="events" />}
+        />
+        <Route
+          title={t`Weekly news letter`}
+          path="weekly-letter"
+          component={props => (
+            <LazyLoad.Articles {...props} type="week-letter" />
+          )}
+        />
+        <Route
+          title={t`Feature Charts`}
+          path="feature_charts"
+          hidden
+          component={props => (
+            <LazyLoad.FeatureCharts {...props} type="feature_charts" />
+          )}
         />
         <Route
           title={t`Daily News`}
@@ -281,25 +317,15 @@ export const getRoutes = store => (
           component={props => <LazyLoad.Articles {...props} type="dailyNews" />}
         />
         <Route
-          title={t`Reports`}
-          path="reports"
-          component={props => <LazyLoad.Reports {...props} type="reports" />}
-        />
-        <Route
-          title={t`Feature Charts`}
-          path="feature_charts"
-          component={props => (
-            <LazyLoad.FeatureCharts {...props} type="feature_charts" />
-          )}
-        />
-        <Route
-          title={t`Featured`}
-          path="featured"
-          component={LazyLoad.Featured}
+          title={t`All Articles`}
+          path="all-article"
+          hidden
+          component={props => <LazyLoad.Articles {...props} />}
         />
         <Route
           title={t`Write for Us`}
           path="write-for-us"
+          hidden
           component={props => (
             <LazyLoad.WriteForUs {...props} type="writeForUs" />
           )}

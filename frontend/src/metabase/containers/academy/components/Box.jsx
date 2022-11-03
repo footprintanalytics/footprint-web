@@ -2,12 +2,11 @@
 /* eslint-disable react/prop-types */
 import React from "react";
 import cx from "classnames";
-import Content from "./Content";
-import Visualizations from "metabase/containers/tutorials/visualizations";
 import "../../tutorials/index.css";
 import { trackStructEvent } from "metabase/lib/analytics";
 import { updateTitle } from "metabase/hoc/Title";
 import Link from "metabase/components/Link";
+import Articles from "metabase/containers/news/articles";
 
 const Box = ({ router, selectCategory }) => {
   const { subMenu } = router?.location?.query;
@@ -15,15 +14,6 @@ const Box = ({ router, selectCategory }) => {
   const selectSubMenu =
     selectCategory?.subMenus?.find(item => item.value === subMenu) ||
     (selectCategory?.subMenus && selectCategory?.subMenus[0]);
-
-  // show the special case ui
-  if (selectCategory?.value === "Feature Charts") {
-    return (
-      <div className="edu__root">
-        <Visualizations />
-      </div>
-    );
-  }
 
   if (selectCategory && selectSubMenu) {
     updateTitle(`${selectCategory.label} - ${selectSubMenu.label}`);
@@ -56,10 +46,11 @@ const Box = ({ router, selectCategory }) => {
           );
         })}
       </div>
-      <Content
-        category={selectCategory?.value}
-        subMenu={selectSubMenu?.value}
+      <Articles
+        type={selectCategory?.value}
+        tag={selectSubMenu?.value}
         router={router}
+        canShowHot={false}
       />
     </div>
   );

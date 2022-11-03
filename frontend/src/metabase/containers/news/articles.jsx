@@ -19,17 +19,27 @@ import { getChannel } from "metabase/selectors/app";
 import { articleTitle } from "metabase/lib/formatting";
 
 const Articles = props => {
-  const { location, user, onChangeLocation, channel, type } = props;
+  const {
+    location,
+    user,
+    onChangeLocation,
+    channel,
+    type,
+    tag,
+    canShowHot = true,
+  } = props;
   const [currentPage, setCurrentPage] = useState(1);
 
-  const { mediaData, setMediaData, mediaTotal } = useMediaList({
+  const { mediaData, setMediaData, mediaTotal, isLoading } = useMediaList({
     type: type,
+    tag: tag,
     currentPage,
     user,
   });
   const [hasMore, setHasMore] = useState(
     mediaData && mediaTotal && mediaData.length < mediaTotal,
   );
+  const showHot = !!mediaTotal && mediaTotal > 0 && canShowHot;
 
   const loadMore = () => {
     setCurrentPage(currentPage + 1);
@@ -39,13 +49,23 @@ const Articles = props => {
     setMediaData(mediaData.filter(item => item.mediaInfoId !== mediaInfoId));
   };
 
+  if (isLoading) {
+    return (
+      <div className="news-articles__container">
+        <div style={{ width: "100%", padding: "0 40px" }}>
+          <Skeleton active />
+        </div>
+      </div>
+    );
+  }
+
   const renderList = () => {
     if (mediaTotal === undefined) {
       return <Skeleton active />;
     }
 
     if (mediaTotal === 0) {
-      return <NoData title="No Article" />;
+      return <NoData title="No Data" />;
     }
     return (
       <InfiniteScroll
@@ -135,7 +155,7 @@ const Articles = props => {
   return (
     <div className="news-articles__container">
       <div style={{ flex: 1, maxWidth: 1000 }}>{renderList()}</div>
-      {!!mediaTotal && mediaTotal > 0 && <ArticleHot />}
+      {showHot && <ArticleHot />}
     </div>
   );
 };

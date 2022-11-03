@@ -375,7 +375,7 @@ const articleType = type => {
     daily: "daily-news",
     realTimeInfo: "flash",
   };
-  return array[type];
+  return array[type] || "article";
 };
 
 const divisionKey = "fp";
