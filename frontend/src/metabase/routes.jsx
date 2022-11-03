@@ -279,7 +279,7 @@ export const getRoutes = store => (
           path="reports"
           component={props => <LazyLoad.Reports {...props} type="research" />}
         />
-        <Route title={t`Flash`} path="featured" component={LazyLoad.Featured} />
+        {/*<Route title={t`Flash`} path="featured" component={LazyLoad.Featured} />*/}
         <Route
           title={t`Company`}
           path="company"
