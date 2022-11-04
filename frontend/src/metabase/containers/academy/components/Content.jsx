@@ -117,7 +117,6 @@ const Content = ({ router, subMenu, category }) => {
       </ul>
     );
   }
-  console.log("data", data);
   return (
     <div className="edu__right">
       <ul className="edu__right-container">
