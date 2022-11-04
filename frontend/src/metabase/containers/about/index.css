@@ -204,10 +204,19 @@
   margin-bottom: 18px;
 }
 
+.About__start-text-highlight {
+  color: white;
+  font-size: 18px;
+  padding: 2px 40px;
+  background-color: #3434b2;
+  border-radius: 20px;
+  margin-bottom: 12px;
+}
+
 .About__start-title {
   color: #303440;
   text-align: center;
-  margin-bottom: 24px;
+  margin-bottom: 18px;
 }
 
 .About__start-title h1 {
