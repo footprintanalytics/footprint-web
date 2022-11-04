@@ -35,7 +35,14 @@ const AboutStart = ({
           with no code required.
         </h2>
       </div>
-      <div className="About__start-text-highlight"><img className="mr1" src={getOssUrl("img-home-celebrate.png")} alt="celebrate"/>Full history, real time!</div>
+      <div className="About__start-text-highlight">
+        <img
+          className="mr1"
+          src={getOssUrl("img-home-celebrate.png")}
+          alt="celebrate"
+        />
+        Full history, real time!
+      </div>
       <AboutSocial />
       <div className="About__start-buttons">
         {data.startButtonData.map(item => {
