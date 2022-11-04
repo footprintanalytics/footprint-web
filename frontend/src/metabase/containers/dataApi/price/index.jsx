@@ -164,8 +164,9 @@ const Index = ({
           },
           {
             title: (
-              <span className="data-api__price-text-highlight">
-                Footprint Analytics Business Plan($299/per month)
+              <span className="data-api__price-text-Bonus">
+                Bonus - Footprint Analytics Subscription (Business Plan) - $299
+                Value for Free!
               </span>
             ),
             url: "/pricing?type=footprint",

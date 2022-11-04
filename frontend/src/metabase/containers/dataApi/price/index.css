@@ -41,6 +41,12 @@
   font-weight: bold;
 }
 
+.data-api__price-text-Bonus {
+  font-size: 14px;
+  color: #3434b2;
+  font-weight: bold;
+}
+
 .data-api__price-box {
   display: flex;
   flex-direction: row;

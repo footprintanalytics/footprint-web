@@ -10,6 +10,7 @@ import { push } from "react-router-redux";
 import { loginModalShowAction } from "metabase/redux/control";
 import _ from "underscore";
 import { connect } from "react-redux";
+import { getOssUrl } from "metabase/lib/image";
 
 const AboutStart = ({
   user,
@@ -33,6 +34,14 @@ const AboutStart = ({
           Explore community-built analysis and create charts <br />
           with no code required.
         </h2>
+      </div>
+      <div className="About__start-text-highlight">
+        <img
+          className="mr1"
+          src={getOssUrl("img-home-celebrate.png")}
+          alt="celebrate"
+        />
+        Full history, real time!
       </div>
       <AboutSocial />
       <div className="About__start-buttons">
