@@ -28,6 +28,7 @@ const Articles = props => {
     tag,
     canShowHot = true,
   } = props;
+  console.log("location", location);
   const [currentPage, setCurrentPage] = useState(1);
 
   const { mediaData, setMediaData, mediaTotal, isLoading } = useMediaList({
@@ -49,7 +50,7 @@ const Articles = props => {
     setMediaData(mediaData.filter(item => item.mediaInfoId !== mediaInfoId));
   };
 
-  if (isLoading) {
+  if (isLoading && currentPage === 1) {
     return (
       <div className="news-articles__container">
         <div style={{ width: "100%", padding: "0 40px" }}>
@@ -74,7 +75,7 @@ const Articles = props => {
         hasMore={hasMore}
         className="news-articles__list"
         onScroll={() => {
-          const isActive = location.pathname === window.location.pathname;
+          const isActive = location?.pathname === window?.location?.pathname;
           const canLoadMore = isActive && mediaData.length < mediaTotal;
           if (canLoadMore !== hasMore) {
             setHasMore(canLoadMore);

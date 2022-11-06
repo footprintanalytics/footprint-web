@@ -49,7 +49,7 @@ const Box = ({ router, selectCategory }) => {
       <Articles
         type={selectCategory?.value}
         tag={selectSubMenu?.value}
-        router={router}
+        location={router?.location}
         canShowHot={false}
       />
     </div>
