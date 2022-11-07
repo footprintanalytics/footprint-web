@@ -46,12 +46,20 @@ const Box = ({ router, selectCategory }) => {
           );
         })}
       </div>
-      <Articles
-        type={selectCategory?.value}
-        tag={selectSubMenu?.value}
-        location={router?.location}
-        canShowHot={false}
-      />
+      {subMenus?.map(item => {
+        if (selectSubMenu?.value === item?.value) {
+          return (
+            <Articles
+              type={selectCategory?.value}
+              tag={selectSubMenu?.value}
+              location={router?.location}
+              canShowHot={false}
+              key={item.value}
+            />
+          );
+        }
+        return null;
+      })}
     </div>
   );
 };
