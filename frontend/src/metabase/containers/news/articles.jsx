@@ -28,7 +28,6 @@ const Articles = props => {
     tag,
     canShowHot = true,
   } = props;
-  console.log("location", location);
   const [currentPage, setCurrentPage] = useState(1);
 
   const { mediaData, setMediaData, mediaTotal, isLoading } = useMediaList({
