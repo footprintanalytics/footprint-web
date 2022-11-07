@@ -159,7 +159,7 @@ export default class Question extends Component {
       <div className="Question">
         {showSide ? (
           <div className="Question-side" style={questionSideStyle}>
-            <QuestionSide closeTemplateData={() => this.closeQueryTemplate()} />
+            <QuestionSide closeTemplateData={this.closeQueryTemplate} />
           </div>
         ) : null}
         <div className="Question-main">
@@ -167,9 +167,7 @@ export default class Question extends Component {
             <QueryTemplate
               databaseId={showTemplateChart.databaseId}
               replaceNewQuestion={this.replaceNewQuestion}
-              closeAction={() => {
-                this.closeQueryTemplate();
-              }}
+              closeAction={this.closeQueryTemplate}
             />
           ) : null}
           <QuestionMain

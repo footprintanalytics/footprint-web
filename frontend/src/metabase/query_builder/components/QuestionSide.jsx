@@ -1,6 +1,6 @@
 /* eslint-disable react-hooks/rules-of-hooks */
 /* eslint-disable react/prop-types */
-import React, { useEffect, useState } from "react";
+import React, { useCallback, useEffect, useMemo, useState } from "react";
 import { connect } from "react-redux";
 import Database from "metabase/entities/databases";
 import { withRouter } from "react-router";
@@ -79,6 +79,7 @@ function QuestionSide({
   nextChartPopoverAction,
 }) {
   const [databaseId, setDatabaseId] = useState(dbId || 3);
+  const [handleSelectTable, setHandleSelectTable] = useState();
   const [category, setCategory] = useState();
   const [moreParams, setMoreParams] = useState();
   const [searchKey, setSearchKey] = useState("");
@@ -140,9 +141,13 @@ function QuestionSide({
     });
   };
 
-  const dataSets = updateMoreListData(
-    data?.list && handleTableListDataFunction(data?.list),
-    moreParams,
+  const dataSets = useMemo(
+    () =>
+      updateMoreListData(
+        data?.list && handleTableListDataFunction(data?.list),
+        moreParams,
+      ),
+    [data?.list, handleTableListDataFunction, moreParams],
   );
 
   useEffect(() => {
@@ -172,42 +177,40 @@ function QuestionSide({
     );
   };
 
-  const handleSelectTable = async ({
-    tableId,
-    tableName,
-    columnName,
-    columns,
-  }) => {
-    closeNewGuide({ key: "table" });
-    if (selectTableAction) {
-      selectTableAction({ tableId, tableName, columnName });
-      return;
+  useEffect(() => {
+    if (handleSelectTable) {
+      const { tableId, tableName, columnName, columns } = handleSelectTable;
+      closeNewGuide({ key: "table" });
+      if (selectTableAction) {
+        selectTableAction({ tableId, tableName, columnName });
+        return;
+      }
+      if (isEditing) {
+        return;
+      }
+      setNextTableObject({ tableId, tableName, columns });
+      if (isNative) {
+        updateNativeEditorSelect({
+          databaseId,
+          tableName,
+          columnName,
+          query,
+          question,
+          nativeEditorCursorOffset,
+          nativeEditorSelectedText,
+        });
+        return;
+      }
+      if (!isInitHash({ sourceTableId, databaseId })) {
+        setConfirmModal(true);
+        return;
+      }
+      const filter = getFilter({ tableName, columns });
+      replaceUrl({ tableId, filter });
+      afterAction();
     }
-    if (isEditing) {
-      return;
-    }
-    setNextTableObject({ tableId, tableName, columns });
-    if (isNative) {
-      updateNativeEditorSelect({
-        databaseId,
-        tableName,
-        columnName,
-        query,
-        question,
-        nativeEditorCursorOffset,
-        nativeEditorSelectedText,
-        databaseName: databases.find(f => f.id === databaseId)?.name || "",
-      });
-      return;
-    }
-    if (!isInitHash({ sourceTableId, databaseId })) {
-      setConfirmModal(true);
-      return;
-    }
-    const filter = getFilter({ tableName, columns });
-    replaceUrl({ tableId, filter });
-    afterAction();
-  };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [handleSelectTable]);
 
   const afterAction = () => {
     setTimeout(() => {
@@ -282,15 +285,18 @@ function QuestionSide({
             canShowNewGuide ? handleNewGuideTableData(dataSets) : dataSets
           }
           isEditing={isEditing}
-          handleSelectTable={handleSelectTable}
-          setShowPreviewChart={setShowPreviewChart}
+          handleSelectTable={useCallback(setHandleSelectTable, [
+            setHandleSelectTable,
+          ])}
+          setShowPreviewChart={useCallback(setShowPreviewChart, [
+            setShowPreviewChart,
+          ])}
           closeTemplateData={closeTemplateData}
           databaseId={databaseId}
-          databases={databases}
           formDataSelector={formDataSelector}
           sourceTableId={sourceTableId}
           pageSize={pageSize}
-          updateMoreListData={params => setMoreParams(params)}
+          updateMoreListData={useCallback(setMoreParams, [setMoreParams])}
           isTooMore={data?.isTooMore}
           user={user}
           searchKeyValue={searchKeyValue}
