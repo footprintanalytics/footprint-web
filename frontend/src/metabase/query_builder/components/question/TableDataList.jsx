@@ -42,7 +42,6 @@ const TableDataList = props => {
     isNewQuestion,
     setShowNewGuideStart,
   } = props;
-  console.log("prop", props);
   const canShowNewGuide = canShowNewGuideStart(user);
 
   const [firstShowNewGuideStart, setFirstShowNewGuideStart] = useState(true);
