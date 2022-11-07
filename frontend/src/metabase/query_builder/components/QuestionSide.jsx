@@ -96,6 +96,10 @@ function QuestionSide({
   const isNewQuestion = !get(question, "_card.original_card_id");
   const searchKeyValue = searchKey.trim().toLowerCase();
 
+  const databaseName = useMemo(() => {
+    return databases?.find(f => f.id === databaseId)?.name || "";
+  }, [databaseId, databases]);
+
   const qString = words(searchKeyValue, /[^ ]+/g)
     .map(s => s.trim())
     .filter(s => s !== "");
@@ -293,6 +297,7 @@ function QuestionSide({
           ])}
           closeTemplateData={closeTemplateData}
           databaseId={databaseId}
+          databaseName={databaseName}
           formDataSelector={formDataSelector}
           sourceTableId={sourceTableId}
           pageSize={pageSize}

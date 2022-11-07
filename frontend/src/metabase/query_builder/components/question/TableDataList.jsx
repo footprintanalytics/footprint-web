@@ -29,7 +29,7 @@ const TableDataList = props => {
     setShowPreviewChart,
     closeTemplateData,
     databaseId,
-    databases,
+    databaseName,
     formDataSelector,
     sourceTableId,
     pageSize,
@@ -42,7 +42,7 @@ const TableDataList = props => {
     isNewQuestion,
     setShowNewGuideStart,
   } = props;
-
+  console.log("prop", props);
   const canShowNewGuide = canShowNewGuideStart(user);
 
   const [firstShowNewGuideStart, setFirstShowNewGuideStart] = useState(true);
@@ -189,7 +189,7 @@ const TableDataList = props => {
         data: {
           ...data,
           databaseId,
-          databaseName: databases.find(f => f.id === databaseId)?.name || "",
+          databaseName,
         },
       });
     };
