@@ -18,7 +18,6 @@ const Index = ({ router, type }) => {
         { label: "NFT", value: "NFT" },
         { label: "DeFi", value: "DeFi" },
         { label: "How-to", value: "How-to" },
-        { label: "Blockchain", value: "Blockchain" },
         { label: "Industry", value: "Industry" },
       ],
     },
