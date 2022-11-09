@@ -92,7 +92,8 @@ class VisualizationError extends Component {
 
   render() {
     const { via, card, duration, error, className } = this.props;
-    console.log("error", error);
+
+    const cardId = card?.id;
 
     if (error && typeof error.status === "number") {
       // Assume if the request took more than 15 seconds it was due to a timeout
@@ -151,7 +152,7 @@ class VisualizationError extends Component {
           </QueryErrorIcon>
           <QueryErrorMessage>
             {processedError}
-            <ErrorGuide />
+            <ErrorGuide cardId={cardId}/>
           </QueryErrorMessage>
         </QueryError>
       );

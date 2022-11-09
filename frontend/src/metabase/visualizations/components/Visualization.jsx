@@ -38,7 +38,7 @@ import cx from "classnames";
 
 export const ERROR_MESSAGE_GENERIC = t`There was a problem displaying this chart.`;
 export const ERROR_MESSAGE_PERMISSION = t`Sorry, you don't have permission to see this card.`;
-
+import { get } from "lodash";
 import Question from "metabase-lib/lib/Question";
 import Query from "metabase-lib/lib/queries/Query";
 import Mode from "metabase-lib/lib/Mode";
@@ -561,6 +561,8 @@ export default class Visualization extends React.PureComponent {
       dashcard?.visualization_settings?.virtual_card?.display === "video";
     const isPublic = location.pathname.startsWith("/public"); // iframe 里面也是 work 的，true
 
+    const cardId = get(this.props.rawSeries, 0)?.card?.id;
+
     return (
       <div
         id="html2canvas-Card"
@@ -674,7 +676,7 @@ export default class Visualization extends React.PureComponent {
                 style={{ display: small ? "none" : "" }}
               >
                 <div>{error}</div>
-                <ErrorGuide />
+                <ErrorGuide cardId={cardId}/>
               </div>
             }
           </div>
