@@ -15,10 +15,10 @@ const Banner = () => {
         />
         <div className="dashboards__banner-right">
           <BannerImage
-            src={getOssUrl("img_analysis_banner_kcc.png")}
+            src={getOssUrl("img-footprint-table-banner.jpg")}
             width={332}
             height={164}
-            url="/kcc"
+            url="https://www.footprint.network/@Footprint/Level"
           />
           <BannerImage
             src={getOssUrl("img_analysis_banner_2022081601.png")}
