@@ -150,15 +150,17 @@ export default class Sunburst extends Component {
             normal: {
               position: "inside",
               formatter(params) {
+                let percentageIValue = 0;
+                let percentage = 0;
+                if (params.treePathInfo.length >= 2) {
+                  percentageIValue =
+                    params.treePathInfo[params.treePathInfo.length - 2].value;
+                  if (percentageIValue) {
+                    percentage = params.value / percentageIValue;
+                  }
+                }
                 return `${params.name} ${
-                  showPercentageI
-                    ? (
-                        (params.value /
-                          params.treePathInfo[params.treePathInfo.length - 2]
-                            .value) *
-                        100
-                      ).toFixed(2) + "%"
-                    : ""
+                  showPercentageI ? (percentage * 100).toFixed(2) + "%" : ""
                 }${
                   showNumericalI
                     ? "\n" +
