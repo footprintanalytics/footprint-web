@@ -58,6 +58,7 @@ import type { Moment } from "metabase-types/types";
 import type { ClickObject } from "metabase-types/types/Visualization";
 import upperFirst from "lodash/upperFirst";
 import { getProject, isDefi360 } from "./project_info";
+import { IFRAMED } from "metabase/lib/dom";
 
 // a one or two character string specifying the decimal and grouping separator characters
 export type NumberSeparators = ".," | ", " | ",." | "." | ".’";
@@ -704,14 +705,9 @@ export function formatUrl(value, options = {}) {
     if (url.includes("footprint.network")) {
       const backUrl = encodeURIComponent(location.href);
       url += `${url.includes("?") ? "&" : "?"}back_url=${backUrl}`;
-      const topOrigin = window?.top?.location?.origin;
-      const topPathName = window?.top?.location?.pathname;
-      if (
-        topOrigin === "https://www.footprint.network" &&
-        (topPathName === "/" || topPathName === "/about")
-      ) {
-        target = "_blank";
-      }
+    }
+    if (IFRAMED) {
+      target = "_blank";
     }
     return (
       <ExternalLink className="link link--wrappable" href={url} target={target}>
