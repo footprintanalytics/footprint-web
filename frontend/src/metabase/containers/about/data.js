@@ -281,6 +281,10 @@ const data = {
       url: "http://www.abga.asia",
       logo: "img-partner-abga.png",
     },
+    {
+      url: "https://gopluslabs.io",
+      logo: "img-partner-gopluslabs.png",
+    },
   ],
   socialData: [
     {
