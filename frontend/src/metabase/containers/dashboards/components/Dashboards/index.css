@@ -30,6 +30,10 @@
   /* width: 80%; */
 }
 
+.dashboards__category li {
+  margin: 4px 0;
+}
+
 .dashboards__category-item {
   display: flex;
   align-items: center;
