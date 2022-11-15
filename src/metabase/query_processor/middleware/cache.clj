@@ -183,7 +183,7 @@
                         (i/short-hex-hash query-hash)))
       ::miss)))
 
-(def dateFormat (java.text.SimpleDateFormat. "yyyy-MM-dd'T'HH:mm:ss.SSS'Z'"))
+(def dateFormat (java.text.SimpleDateFormat. "yyyy-MM-dd HH:mm:ss.SSS 'UTC'"))
 
 (defn- tableUpdatedTime
   [card-id]
