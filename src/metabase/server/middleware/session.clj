@@ -79,8 +79,8 @@
                          :http-only true
                          ;; TODO - we should set `site-path` as well. Don't want to enable this yet so we don't end
                          ;; up breaking things
-                         :path      "/" #_ (site-path)
-                         :domain    ".footprint.network"}
+                         :path      "/b" #_ (site-path)
+                         :domain    "footprint.network"}
                         ;; If permanent cookies should be used, set the `Max-Age` directive; cookies with no
                         ;; `Max-Age` and no `Expires` directives are session cookies, and are deleted when the
                         ;; browser is closed.
@@ -106,8 +106,8 @@
   (let [response       (wrap-body-if-needed response)
         cookie-options (merge
                         {:http-only true
-                         :path      "/"
-                         :domain    ".footprint.network"}
+                         :path      "/c"
+                         :domain    "footprint.network"}
                         (when (request.u/https? request)
                           {:secure true}))]
     (-> response
