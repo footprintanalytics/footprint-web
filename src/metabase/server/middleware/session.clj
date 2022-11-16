@@ -79,8 +79,8 @@
                          :http-only true
                          ;; TODO - we should set `site-path` as well. Don't want to enable this yet so we don't end
                          ;; up breaking things
-                         :path      "/" #_ (site-path)}
-                         :domain    ".footprint.network"
+                         :path      "/" #_ (site-path)
+                         :domain    ".footprint.network"}
                         ;; If permanent cookies should be used, set the `Max-Age` directive; cookies with no
                         ;; `Max-Age` and no `Expires` directives are session cookies, and are deleted when the
                         ;; browser is closed.
