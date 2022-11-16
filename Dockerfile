@@ -64,7 +64,7 @@ RUN NODE_ENV=production MB_EDITION=$MB_EDITION && \
     bin/build uberjar
 
 # Run
-FROM docker-registry.footprint.network/mexl/foot-print-frontend:metabase-v0-41-runtime
+FROM docker-registry.footprint.network/mexl/metabase-v0-41-runtime:master
 
 COPY --from=frontend /home/circleci/target/uberjar/metabase.jar /app/
 COPY --from=docker-registry.footprint.network/mexl/foot-print-frontend:metabase-v0-41-drivers-builder /home/circleci/bin/docker/run_metabase.sh /app/
