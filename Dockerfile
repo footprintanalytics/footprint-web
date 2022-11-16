@@ -49,12 +49,12 @@ RUN yarn --frozen-lockfile
 COPY --chown=circleci . .
 
 # BE
-COPY --from=docker-registry.footprint.network/mexl/foot-print-frontend:metabase-v0-41-drivers-builder /home/circleci/modules/ ./modules/
-COPY --from=docker-registry.footprint.network/mexl/foot-print-frontend:metabase-v0-41-drivers-builder /home/circleci/.m2/ ./.m2/
-COPY --from=docker-registry.footprint.network/mexl/foot-print-frontend:metabase-v0-41-drivers-builder /home/circleci/resources/modules/ ./resources/modules/
-COPY --from=docker-registry.footprint.network/mexl/foot-print-frontend:metabase-v0-41-drivers-builder /home/circleci/shared/ ./shared/
-COPY --from=docker-registry.footprint.network/mexl/foot-print-frontend:metabase-v0-41-drivers-builder /home/circleci/src/ ./src/
-COPY --from=docker-registry.footprint.network/mexl/foot-print-frontend:metabase-v0-41-drivers-builder /home/circleci/java/ ./java/
+COPY --from=docker-registry.footprint.network/mexl/metabase-v0-41-drivers-builder:master /home/circleci/modules/ ./modules/
+COPY --from=docker-registry.footprint.network/mexl/metabase-v0-41-drivers-builder:master /home/circleci/.m2/ ./.m2/
+COPY --from=docker-registry.footprint.network/mexl/metabase-v0-41-drivers-builder:master /home/circleci/resources/modules/ ./resources/modules/
+COPY --from=docker-registry.footprint.network/mexl/metabase-v0-41-drivers-builder:master /home/circleci/shared/ ./shared/
+COPY --from=docker-registry.footprint.network/mexl/metabase-v0-41-drivers-builder:master /home/circleci/src/ ./src/
+COPY --from=docker-registry.footprint.network/mexl/metabase-v0-41-drivers-builder:master /home/circleci/java/ ./java/
 
 # FE
 RUN NODE_ENV=production MB_EDITION=$MB_EDITION && \
@@ -67,10 +67,10 @@ RUN NODE_ENV=production MB_EDITION=$MB_EDITION && \
 FROM docker-registry.footprint.network/mexl/metabase-v0-41-runtime:master
 
 COPY --from=frontend /home/circleci/target/uberjar/metabase.jar /app/
-COPY --from=docker-registry.footprint.network/mexl/foot-print-frontend:metabase-v0-41-drivers-builder /home/circleci/bin/docker/run_metabase.sh /app/
+COPY --from=docker-registry.footprint.network/mexl/metabase-v0-41-drivers-builder:master /home/circleci/bin/docker/run_metabase.sh /app/
 
 #trino driver
-COPY --from=docker-registry.footprint.network/mexl/foot-print-frontend:metabase-v0-41-drivers-builder /home/circleci/bin/starburst.metabase-driver-1.0.6.jar ./plugins/
+COPY --from=docker-registry.footprint.network/mexl/metabase-v0-41-drivers-builder:master /home/circleci/bin/starburst.metabase-driver-1.0.6.jar ./plugins/
 
 EXPOSE 3000
 
