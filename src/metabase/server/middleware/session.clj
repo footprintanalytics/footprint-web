@@ -106,7 +106,8 @@
   (let [response       (wrap-body-if-needed response)
         cookie-options (merge
                         {:http-only true
-                         :path      "/"}
+                         :path      "/"
+                         :domain    ".footprint.network"}
                         (when (request.u/https? request)
                           {:secure true}))]
     (-> response
