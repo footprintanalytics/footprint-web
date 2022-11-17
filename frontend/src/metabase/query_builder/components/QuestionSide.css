@@ -19,6 +19,7 @@
 .table-node {
   word-break: break-all;
   min-height: 30px;
+  width: 100%;
 }
 
 .ant-tree-switcher {
@@ -172,4 +173,96 @@
 
 .Question-side .ant-select-clear {
   margin-right: 20px;
+}
+
+.question-side__table-info {
+  width: 300px;
+  display: flex;
+  flex-direction: column;
+  padding: 0;
+}
+
+.question-side__table-info-second {
+  display: flex;
+}
+
+.question-side__table-info-second .button {
+  padding: 4px;
+  width: 100px;
+}
+
+.table-time-period-text {
+  border: 1px solid #e7e7e7;
+  border-radius: 8px;
+  padding: 2px 4px;
+  margin: 4px 0;
+}
+
+.question-side__table-info h3 {
+  font-size: 16px;
+  font-weight: bold;
+  color: #303440;
+  margin-bottom: 4px;
+}
+
+.question-side__table-info span {
+  font-size: 14px;
+  color: #84848a;
+  line-height: 1.2;
+  word-break: break-word;
+}
+
+.question-side__table-info-desc {
+  font-size: 14px;
+  color: #84848a;
+  line-height: 1.2;
+  word-break: break-word;
+  margin-top: 6px;
+}
+
+.question-side__table-info-line {
+  width: 100%;
+  border-bottom: 1px #e7e7e7 solid;
+  margin: 12px 0 0;
+}
+
+.question-side__table-info-buttons {
+  display: flex;
+}
+
+.question-side__table-info-buttons button {
+  height: 30px;
+  padding: 0 10px;
+  margin: 8px 8px 8px 0;
+}
+
+.question-side__table-info-buttons button:hover {
+  color: #3434b2;
+}
+
+.question-side__table-info > button {
+  width: 100px;
+  height: 40px;
+  margin: 4px auto 0;
+  color: #303440;
+}
+
+.idui-popover {
+  padding: 16px 16px 4px 16px !important;
+  box-shadow: 0 0 30px #06041a0d !important;
+}
+
+.question-side__table-info-popover {
+  width: 100%;
+}
+
+.ant-tabs-ink-bar {
+  position: absolute;
+  bottom: 0;
+  left: 20px;
+}
+
+.ant-tabs-ink-bar {
+  left: 15%;
+  width: 32px;
 }

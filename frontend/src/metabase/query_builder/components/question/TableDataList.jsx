@@ -1,7 +1,7 @@
 /* eslint-disable react-hooks/rules-of-hooks */
 /* eslint-disable react/prop-types */
 import React, { useEffect, useState } from "react";
-import { Button, Skeleton, Tree } from "antd";
+import { Skeleton, Tree } from "antd";
 import { DownOutlined } from "metabase/lib/ant-icon";
 import Icon from "metabase/components/Icon";
 import * as MetabaseAnalytics from "metabase/lib/analytics";
@@ -18,6 +18,10 @@ import {
   NEW_GUIDE_CATEGORY,
 } from "metabase/query_builder/components/question/handle";
 import TableBeta from "metabase/query_builder/components/TableBeta";
+import Popover from "@idui/react-popover";
+import Button from "metabase/components/Button";
+import TableDictionary from "metabase/query_builder/components/TableDictionary";
+import TableTimePeriod from "metabase/query_builder/components/TableTimePeriod";
 
 const TableDataList = props => {
   const {
@@ -178,6 +182,24 @@ const TableDataList = props => {
   };
 
   const treeChildren = (q, qInx) => {
+    const renderTableInfo = n => {
+      return (
+        <div className="question-side__table-info">
+          <h3>{n.name}</h3>
+          <div className="question-side__table-info-second">
+            <TableTimePeriod content={n.time_period} />
+          </div>
+          <span className="question-side__table-info-desc">
+            {n.description}
+          </span>
+          <div className="question-side__table-info-line" />
+          <div className="question-side__table-info-buttons">
+            <Button onClick={e => previewAction(e, n)}>Preview</Button>
+            <TableDictionary tableName={n.name} tableId={n.id} mode={"text"} />
+          </div>
+        </div>
+      );
+    };
     const previewAction = (e, data) => {
       MetabaseAnalytics.trackStructEvent("question-side click preview");
       e.stopPropagation();
@@ -195,56 +217,83 @@ const TableDataList = props => {
     const sets = isByCategory ? q && q : [...q.tables, ...q.charts];
     return sets.map((n, nInx) => {
       const id = n.originId;
+      const isUdTable = !!n?.name?.toLowerCase()?.startsWith("ud");
+      const hidePopover =
+        n.type === "more" ||
+        canShowNewGuide ||
+        formDataSelector ||
+        isUdTable ||
+        n.model !== "table";
       return {
         title: (
-          <div
-            id={`table-${qInx}-${nInx}`}
-            className={cx("flex justify-between align-center table-node", {
-              "table-node-selected":
-                !isEditing && sourceTableId === id && !formDataSelector,
-            })}
-            onClick={() => {
-              if (n.type === "more") {
-                MetabaseAnalytics.trackStructEvent("question-side click more");
-                loadMore({ key: q.category.value, current: n.current + 1 });
-                return;
-              }
-              MetabaseAnalytics.trackStructEvent(
-                `question-side click category ${n.name}`,
-              );
-              handleSelectTable({
-                tableId: id,
-                tableName: n.name,
-                columns: n.columns,
-              });
+          <Popover
+            className="question-side__table-info-popover"
+            trigger={hidePopover ? "" : "hover"}
+            fitMaxHeightToBounds
+            fitMaxWidthToBounds
+            closeOnEnter
+            lazy
+            animation={{
+              animate: {
+                opacity: 1,
+              },
+              exit: {
+                opacity: 0,
+                transition: {
+                  duration: 0.1,
+                },
+              },
+              initial: {
+                opacity: 0.5,
+              },
             }}
+            openingAnimationTranslateDistance={0}
+            closeOnScroll
+            content={renderTableInfo(n)}
+            placement="right"
           >
-            <div>
-              {n.type === "more" ? (
-                <Button className="table-node-more" loading={n.loading}>
-                  More
-                </Button>
-              ) : (
-                <Highlighter
-                  className="table-node-title"
-                  highlightClassName="highlight"
-                  searchWords={searchWords}
-                  autoEscape={true}
-                  textToHighlight={n.name}
-                />
-              )}
-              <TableBeta tableId={id} tableName={n.name} />
+            <div
+              id={`table-${qInx}-${nInx}`}
+              className={cx("flex justify-between align-center table-node", {
+                "table-node-selected":
+                  !isEditing && sourceTableId === id && !formDataSelector,
+              })}
+              onClick={() => {
+                if (n.type === "more") {
+                  MetabaseAnalytics.trackStructEvent(
+                    "question-side click more",
+                  );
+                  loadMore({ key: q.category.value, current: n.current + 1 });
+                  return;
+                }
+                MetabaseAnalytics.trackStructEvent(
+                  `question-side click category ${n.name}`,
+                );
+                handleSelectTable({
+                  tableId: id,
+                  tableName: n.name,
+                  columns: n.columns,
+                });
+              }}
+            >
+              <div className="w-full">
+                {n.type === "more" ? (
+                  <Button className="table-node-more" loading={n.loading}>
+                    More
+                  </Button>
+                ) : (
+                  <Highlighter
+                    className="table-node-title"
+                    highlightClassName="highlight"
+                    searchWords={searchWords}
+                    autoEscape={true}
+                    textToHighlight={n.name}
+                  />
+                )}
+                <TableBeta tableId={id} tableName={n.name} />
+              </div>
             </div>
-
-            {n.type !== "more" && !canShowNewGuide && (
-              <Button
-                className="question-side__preview"
-                onClick={e => previewAction(e, n)}
-              >
-                Preview
-              </Button>
-            )}
-          </div>
+          </Popover>
         ),
         key: isByCategory ? `${id}` : `${q.category.value}-${id}`,
         selectable: false,
