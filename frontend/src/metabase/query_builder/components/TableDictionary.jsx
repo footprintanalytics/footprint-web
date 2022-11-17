@@ -27,9 +27,7 @@ const TableDictionary = ({ tableName, tableId, tableConfigList, mode }) => {
           to={`https://www.footprint.network/@Footprint/Table-Info-Dashboard?table_name=${tableName}`}
           target={"_blank"}
         >
-          <Button borderless className="ml1 borderless">
-            Dictionary
-          </Button>
+          <Button className="ml1">Dictionary</Button>
         </Link>
       );
     }

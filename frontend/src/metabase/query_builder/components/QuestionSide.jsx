@@ -258,7 +258,7 @@ function QuestionSide({
   };
 
   const tabInfos = [
-    { tab: "All", key: "all" },
+    { tab: " All ", key: "all" },
     { tab: "Gold", key: "gold" },
     { tab: "Silver", key: "silver" },
     { tab: "Bronze", key: "bronze" },
@@ -313,6 +313,10 @@ function QuestionSide({
           destroyInactiveTabPane
           className="flex-full"
           activeKey={level}
+          moreIcon={<div />}
+          centered
+          tabBarUnderlineStyle={{ transform: "scaleX(0.9)" }}
+          tabBarExtraContent={<div />}
           onChange={activeKey => {
             setLevel(activeKey);
           }}

@@ -194,9 +194,7 @@ const TableDataList = props => {
           </span>
           <div className="question-side__table-info-line" />
           <div className="question-side__table-info-buttons">
-            <Button borderless onClick={e => previewAction(e, n)}>
-              Preview
-            </Button>
+            <Button onClick={e => previewAction(e, n)}>Preview</Button>
             <TableDictionary tableName={n.name} tableId={n.id} mode={"text"} />
           </div>
         </div>
@@ -223,6 +221,7 @@ const TableDataList = props => {
       return {
         title: (
           <Popover
+            className="question-side__table-info-popover"
             trigger={
               n.type === "more" ||
               canShowNewGuide ||
@@ -232,7 +231,26 @@ const TableDataList = props => {
                 ? ""
                 : "hover"
             }
-            className="question-side__table-info-popover"
+            fitMaxHeightToBounds
+            fitMaxWidthToBounds
+            closeOnEnter
+            lazy
+            animation={{
+              animate: {
+                opacity: 1,
+              },
+              exit: {
+                opacity: 0,
+                transition: {
+                  duration: 0.1,
+                },
+              },
+              initial: {
+                opacity: 0,
+              },
+            }}
+            openingAnimationTranslateDistance={0}
+            closeOnScroll
             content={renderTableInfo(n)}
             placement="right"
           >
