@@ -256,13 +256,10 @@
   width: 100%;
 }
 
-.ant-tabs-ink-bar {
-  position: absolute;
-  bottom: 0;
-  left: 20px;
+.ant-tabs>.ant-tabs-nav .ant-tabs-nav-operations {
+  display: none;
 }
 
-.ant-tabs-ink-bar {
-  left: 15%;
-  width: 32px;
+.ant-tabs>div>.ant-tabs-nav .ant-tabs-nav-operations {
+  display: none;
 }
