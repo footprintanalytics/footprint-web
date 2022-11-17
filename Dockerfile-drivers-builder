@@ -1,4 +1,4 @@
-FROM registry-intl.us-east-1.aliyuncs.com/mexl/metabase-v0-41-ci:circleci-java-11-clj-1.10.3.929-07-27-2021-node-browsers
+FROM docker-registry.footprint.network/mexl/metabase-v0-41-ci:circleci-java-11-clj-1.10.3.929-07-27-2021-node-browsers
 
 ARG MB_EDITION=oss
 

@@ -95,7 +95,7 @@ export const getComparePlans = user => ({
         list: [
           "Keep uploaded data private(coming soon)",
           "Keep dashboard private",
-          "Remove watermarks",
+          "Remove dashboard watermarks",
         ],
       },
       dataApi: {
@@ -280,7 +280,7 @@ export const getComparePlans = user => ({
           enterprise: true,
         },
         {
-          name: "Remove watermarks",
+          name: "Remove dashboard watermarks",
           free: false,
           business: true,
           enterprise: true,
