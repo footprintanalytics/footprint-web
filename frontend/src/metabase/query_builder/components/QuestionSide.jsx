@@ -54,8 +54,12 @@ import TableSearch from "metabase/query_builder/components/question/TableSearch"
 import NewGuideStartModal from "metabase/containers/newguide/NewGuideStartModal";
 import TableCategory from "metabase/query_builder/components/question/TableCategory";
 import { useQuery } from "react-query";
-import { QUERY_OPTIONS } from "metabase/containers/dashboards/shared/config";
+import {
+  QUERY_OPTIONS,
+  QUERY_OPTIONS_NORMAL,
+} from "metabase/containers/dashboards/shared/config";
 import dateFieldMapping from "metabase/query_builder/data/data";
+import { Tabs } from "antd";
 
 function QuestionSide({
   question,
@@ -81,6 +85,8 @@ function QuestionSide({
   const [databaseId, setDatabaseId] = useState(dbId || 3);
   const [handleSelectTable, setHandleSelectTable] = useState();
   const [category, setCategory] = useState();
+  const [level, setLevel] = useState("all");
+  const [showD, setShowD] = useState();
   const [moreParams, setMoreParams] = useState();
   const [searchKey, setSearchKey] = useState("");
   // const [dataSets, setDatasets] = useState([]);
@@ -105,21 +111,24 @@ function QuestionSide({
     .filter(s => s !== "");
 
   const qs = qString.length > 0 ? qString : null;
+  const levelObject = level === "community" ? {} : { level: level };
 
   const params = {
     databaseId,
     qs,
     project: getProject(),
     queryType: queryType,
+    ...levelObject,
+    isCommunity: level === "community",
     filterCategories: category ? [category] : null,
   };
 
   const { isLoading, data } = useQuery(
-    ["tableSearchV2", databaseId, category, qs],
+    ["tableSearchV2", params],
     async () => {
       return await tableSearchV2(params);
     },
-    QUERY_OPTIONS,
+    QUERY_OPTIONS_NORMAL,
   );
 
   const isByCategory = data?.isByCategory; //
@@ -248,6 +257,22 @@ function QuestionSide({
     setCategory(value);
   };
 
+  const tabInfos = [
+    { tab: "All", key: "all" },
+    { tab: "Gold", key: "gold" },
+    { tab: "Silver", key: "silver" },
+    { tab: "Bronze", key: "bronze" },
+    { tab: "Community", key: "community" },
+  ];
+
+  // const tabInfos = [
+  //   { tab: "All", key: "all" },
+  //   { tab: "Gold", key: "Recent" },
+  //   { tab: "Silver", key: "FootprintLab" },
+  //   { tab: "Bronze", key: "Chain" },
+  //   { tab: "Community", key: "GameFi" },
+  // ];
+
   return (
     <Flex
       p={15}
@@ -282,34 +307,56 @@ function QuestionSide({
         />
       )}
       <>
-        <TableDataList
-          isLoading={isLoading}
-          isFeature={data?.isFeature}
-          dataSets={
-            canShowNewGuide ? handleNewGuideTableData(dataSets) : dataSets
-          }
-          isEditing={isEditing}
-          handleSelectTable={useCallback(setHandleSelectTable, [
-            setHandleSelectTable,
-          ])}
-          setShowPreviewChart={useCallback(setShowPreviewChart, [
-            setShowPreviewChart,
-          ])}
-          closeTemplateData={closeTemplateData}
-          databaseId={databaseId}
-          databaseName={databaseName}
-          formDataSelector={formDataSelector}
-          sourceTableId={sourceTableId}
-          pageSize={pageSize}
-          updateMoreListData={useCallback(setMoreParams, [setMoreParams])}
-          isTooMore={data?.isTooMore}
-          user={user}
-          searchKeyValue={searchKeyValue}
-          qs={qs}
-          isByCategory={isByCategory}
-          isNewQuestion={isNewQuestion}
-          setShowNewGuideStart={setShowNewGuideStart}
-        />
+        <Tabs
+          tabBarGutter={20}
+          defaultActiveKey={tabInfos[0].key}
+          destroyInactiveTabPane
+          className="flex-full"
+          activeKey={level}
+          onChange={activeKey => {
+            setLevel(activeKey);
+          }}
+        >
+          {tabInfos.map(tabInfo => {
+            return (
+              <Tabs.TabPane tab={tabInfo.tab} key={tabInfo.key}>
+                <TableDataList
+                  isLoading={isLoading}
+                  isFeature={data?.isFeature}
+                  dataSets={
+                    canShowNewGuide
+                      ? handleNewGuideTableData(dataSets)
+                      : dataSets
+                  }
+                  isEditing={isEditing}
+                  handleSelectTable={useCallback(setHandleSelectTable, [
+                    setHandleSelectTable,
+                  ])}
+                  setShowPreviewChart={useCallback(setShowPreviewChart, [
+                    setShowPreviewChart,
+                  ])}
+                  closeTemplateData={closeTemplateData}
+                  databaseId={databaseId}
+                  databaseName={databaseName}
+                  formDataSelector={formDataSelector}
+                  sourceTableId={sourceTableId}
+                  pageSize={pageSize}
+                  updateMoreListData={useCallback(setMoreParams, [
+                    setMoreParams,
+                  ])}
+                  isTooMore={data?.isTooMore}
+                  user={user}
+                  searchKeyValue={searchKeyValue}
+                  qs={qs}
+                  isByCategory={isByCategory}
+                  isNewQuestion={isNewQuestion}
+                  setShowNewGuideStart={setShowNewGuideStart}
+                />
+              </Tabs.TabPane>
+            );
+          })}
+        </Tabs>
+        {showD && <div>dddd</div>}
         <UploadData />
       </>
       <Modal isOpen={confirmModal}>
