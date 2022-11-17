@@ -265,14 +265,6 @@ function QuestionSide({
     { tab: "Community", key: "community" },
   ];
 
-  // const tabInfos = [
-  //   { tab: "All", key: "all" },
-  //   { tab: "Gold", key: "Recent" },
-  //   { tab: "Silver", key: "FootprintLab" },
-  //   { tab: "Bronze", key: "Chain" },
-  //   { tab: "Community", key: "GameFi" },
-  // ];
-
   return (
     <Flex
       p={15}

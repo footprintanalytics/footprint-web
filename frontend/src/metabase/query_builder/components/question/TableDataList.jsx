@@ -246,7 +246,7 @@ const TableDataList = props => {
                 },
               },
               initial: {
-                opacity: 0,
+                opacity: 0.5,
               },
             }}
             openingAnimationTranslateDistance={0}
