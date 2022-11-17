@@ -54,10 +54,7 @@ import TableSearch from "metabase/query_builder/components/question/TableSearch"
 import NewGuideStartModal from "metabase/containers/newguide/NewGuideStartModal";
 import TableCategory from "metabase/query_builder/components/question/TableCategory";
 import { useQuery } from "react-query";
-import {
-  QUERY_OPTIONS,
-  QUERY_OPTIONS_NORMAL,
-} from "metabase/containers/dashboards/shared/config";
+import { QUERY_OPTIONS_NORMAL } from "metabase/containers/dashboards/shared/config";
 import dateFieldMapping from "metabase/query_builder/data/data";
 import { Tabs } from "antd";
 
@@ -86,7 +83,6 @@ function QuestionSide({
   const [handleSelectTable, setHandleSelectTable] = useState();
   const [category, setCategory] = useState();
   const [level, setLevel] = useState("all");
-  const [showD, setShowD] = useState();
   const [moreParams, setMoreParams] = useState();
   const [searchKey, setSearchKey] = useState("");
   // const [dataSets, setDatasets] = useState([]);
@@ -352,7 +348,6 @@ function QuestionSide({
             );
           })}
         </Tabs>
-        {showD && <div>dddd</div>}
         <UploadData />
       </>
       <Modal isOpen={confirmModal}>

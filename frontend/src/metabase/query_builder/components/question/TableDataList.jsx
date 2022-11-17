@@ -218,19 +218,17 @@ const TableDataList = props => {
     return sets.map((n, nInx) => {
       const id = n.originId;
       const isUdTable = !!n?.name?.toLowerCase()?.startsWith("ud");
+      const hidePopover =
+        n.type === "more" ||
+        canShowNewGuide ||
+        formDataSelector ||
+        isUdTable ||
+        n.model !== "table";
       return {
         title: (
           <Popover
             className="question-side__table-info-popover"
-            trigger={
-              n.type === "more" ||
-              canShowNewGuide ||
-              formDataSelector ||
-              isUdTable ||
-              n.model !== "table"
-                ? ""
-                : "hover"
-            }
+            trigger={hidePopover ? "" : "hover"}
             fitMaxHeightToBounds
             fitMaxWidthToBounds
             closeOnEnter
