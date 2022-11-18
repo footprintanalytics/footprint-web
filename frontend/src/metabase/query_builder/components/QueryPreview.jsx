@@ -138,11 +138,11 @@ function QueryPreview(props) {
           <Icon name="close" color={"black"} size={16} />
         </div>
       </div>
-      {description && (
+      {/*{description && (
         <div className="query-preview__desc">
           <span style={{ WebkitBoxOrient: "vertical" }}>{description}</span>
         </div>
-      )}
+      )}*/}
       <div className="query-preview__divider" />
       {previewQuestion && (
         <NotebookStepPreview
