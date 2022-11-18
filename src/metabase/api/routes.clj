@@ -76,7 +76,6 @@
   (context "/metric"               [] (+auth metric/routes))
   (context "/native-query-snippet" [] (+auth native-query-snippet/routes))
   (context "/notify"               [] (+apikey notify/routes))
-  (context "/notify-2"             [] (+apikey notify/routes))
   (context "/permissions"          [] (+auth permissions/routes))
   (context "/preview_embed"        [] (+auth preview-embed/routes))
   (context "/public"               [] (+generic-exceptions public/routes))
