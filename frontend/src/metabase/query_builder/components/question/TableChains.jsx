@@ -97,7 +97,6 @@ const TableChains = props => {
   return (
     <Select
       className="question-side__chains"
-      allowClear
       disabled={disabled}
       value={chain}
       placeholder="Select chain"
