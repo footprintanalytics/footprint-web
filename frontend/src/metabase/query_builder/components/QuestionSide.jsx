@@ -52,11 +52,11 @@ import {
 import { getNewGuideInfo } from "metabase/selectors/control";
 import TableSearch from "metabase/query_builder/components/question/TableSearch";
 import NewGuideStartModal from "metabase/containers/newguide/NewGuideStartModal";
-import TableCategory from "metabase/query_builder/components/question/TableCategory";
 import { useQuery } from "react-query";
 import { QUERY_OPTIONS_NORMAL } from "metabase/containers/dashboards/shared/config";
 import dateFieldMapping from "metabase/query_builder/data/data";
 import { Tabs } from "antd";
+import TableChains from "metabase/query_builder/components/question/TableChains";
 
 function QuestionSide({
   question,
@@ -81,7 +81,7 @@ function QuestionSide({
 }) {
   const [databaseId, setDatabaseId] = useState(dbId || 3);
   const [handleSelectTable, setHandleSelectTable] = useState();
-  const [category, setCategory] = useState();
+  const [chain, setChain] = useState("all");
   const [level, setLevel] = useState("all");
   const [moreParams, setMoreParams] = useState();
   const [searchKey, setSearchKey] = useState("");
@@ -105,9 +105,10 @@ function QuestionSide({
   const qString = words(searchKeyValue, /[^ ]+/g)
     .map(s => s.trim())
     .filter(s => s !== "");
+  const isTabCommunity = level === "community";
 
   const qs = qString.length > 0 ? qString : null;
-  const levelObject = level === "community" ? {} : { level: level };
+  const levelObject = isTabCommunity ? {} : { level: level };
 
   const params = {
     databaseId,
@@ -115,8 +116,8 @@ function QuestionSide({
     project: getProject(),
     queryType: queryType,
     ...levelObject,
-    isCommunity: level === "community",
-    filterCategories: category ? [category] : null,
+    isCommunity: isTabCommunity,
+    filterChain: chain === "all" || isTabCommunity || !chain ? null : [chain],
   };
 
   const { isLoading, data } = useQuery(
@@ -249,8 +250,8 @@ function QuestionSide({
     );
   };
 
-  const categoryChange = value => {
-    setCategory(value);
+  const chainChange = value => {
+    setChain(value);
   };
 
   const tabInfos = [
@@ -288,10 +289,10 @@ function QuestionSide({
         handleSelectTable={handleSelectTable}
       />
       {!formDataSelector && (
-        <TableCategory
-          databaseId={databaseId}
-          categoryChange={categoryChange}
-          category={category}
+        <TableChains
+          disabled={isTabCommunity}
+          chainChange={chainChange}
+          chain={chain}
         />
       )}
       <>
