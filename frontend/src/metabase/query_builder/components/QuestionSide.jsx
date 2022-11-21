@@ -52,7 +52,6 @@ import {
 import { getNewGuideInfo } from "metabase/selectors/control";
 import TableSearch from "metabase/query_builder/components/question/TableSearch";
 import NewGuideStartModal from "metabase/containers/newguide/NewGuideStartModal";
-import TableCategory from "metabase/query_builder/components/question/TableCategory";
 import { useQuery } from "react-query";
 import { QUERY_OPTIONS_NORMAL } from "metabase/containers/dashboards/shared/config";
 import dateFieldMapping from "metabase/query_builder/data/data";
@@ -118,7 +117,7 @@ function QuestionSide({
     queryType: queryType,
     ...levelObject,
     isCommunity: isTabCommunity,
-    filterChain: chain === "all" || isTabCommunity || !chain ? null : chain,
+    filterChain: chain === "all" || isTabCommunity || !chain ? null : [chain],
   };
 
   const { isLoading, data } = useQuery(

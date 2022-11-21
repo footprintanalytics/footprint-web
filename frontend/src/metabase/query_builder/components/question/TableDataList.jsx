@@ -72,6 +72,15 @@ const TableDataList = props => {
         setExpandedKeys([...flatten(dataSets.map(item => `${item.id}`))]);
       }
     } else {
+      if (dataSets && dataSets.length > 0 && dataSets[0].category) {
+        setExpandedKeys([
+          ...flatten(
+            dataSets
+              .filter(item => item.category.value !== "My Dataset")
+              .map(item => item.category.value),
+          ),
+        ]);
+      }
       // setExpandedKeys([]);
     }
     if (
@@ -92,11 +101,11 @@ const TableDataList = props => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [dataSets]);
 
-  useEffect(() => {
+  /*  useEffect(() => {
     if (!qs) {
       setExpandedKeys([]);
     }
-  }, [qs]);
+  }, [qs]);*/
 
   if (isLoading) {
     return (

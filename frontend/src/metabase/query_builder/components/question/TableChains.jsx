@@ -3,18 +3,46 @@
 import React from "react";
 import { Image, Select } from "antd";
 import { getOssUrl } from "metabase/lib/image";
-import { sortBy } from "lodash";
+import { sortBy, concat } from "lodash";
 
 const TableChains = props => {
   const { chainChange, chain, disabled } = props;
 
-  const data = sortBy(
+  const overheadData = [
+    {
+      value: "all",
+      label: "All chains",
+      icon: getOssUrl("chain_all.png"),
+    },
+    {
+      value: "ethereum",
+      label: "Ethereum",
+      icon: getOssUrl("fp-chains/ethereum.webp"),
+    },
+    {
+      value: "bsc",
+      label: "BNB",
+      icon: getOssUrl("fp-chains/bsc.webp"),
+    },
+    {
+      value: "polygon",
+      label: "Polygon",
+      icon: getOssUrl("fp-chains/polygon.webp"),
+    },
+    {
+      value: "solana",
+      label: "Solana",
+      icon: getOssUrl("fp-chains/solana.webp"),
+    },
+    {
+      value: "optimism",
+      label: "Optimism",
+      icon: getOssUrl("fp-chains/optimism.webp"),
+    },
+  ];
+
+  const sortData = sortBy(
     [
-      {
-        value: "all",
-        label: "All chains",
-        icon: getOssUrl("chain_all.png"),
-      },
       {
         value: "arbitrum",
         label: "Arbitrum",
@@ -31,11 +59,6 @@ const TableChains = props => {
         icon: getOssUrl("fp-chains/boba.webp"),
       },
       {
-        value: "bsc",
-        label: "BSC",
-        icon: getOssUrl("fp-chains/bsc.webp"),
-      },
-      {
         value: "celo",
         label: "Celo",
         icon: getOssUrl("fp-chains/celo.webp"),
@@ -49,11 +72,6 @@ const TableChains = props => {
         value: "eos",
         label: "EOS",
         icon: getOssUrl("fp-chains/eos.webp"),
-      },
-      {
-        value: "ethereum",
-        label: "Ethereum",
-        icon: getOssUrl("fp-chains/ethereum.webp"),
       },
       {
         value: "fantom",
@@ -91,21 +109,6 @@ const TableChains = props => {
         icon: getOssUrl("fp-chains/oasys.webp"),
       },
       {
-        value: "optimism",
-        label: "Optimism",
-        icon: getOssUrl("fp-chains/optimism.webp"),
-      },
-      {
-        value: "polygon",
-        label: "Polygon",
-        icon: getOssUrl("fp-chains/polygon.webp"),
-      },
-      {
-        value: "solana",
-        label: "Solana",
-        icon: getOssUrl("fp-chains/solana.webp"),
-      },
-      {
         value: "thundercore",
         label: "Thundercore",
         icon: getOssUrl("fp-chains/thundercore.webp"),
@@ -118,6 +121,8 @@ const TableChains = props => {
     ],
     ["value"],
   );
+
+  const data = concat(overheadData, sortData);
 
   const onChange = value => {
     chainChange && chainChange(value);
