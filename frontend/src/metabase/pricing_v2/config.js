@@ -47,7 +47,7 @@ export const getComparePlans = user => ({
         // "Access to 90-days data",
         "1G data limit per query",
         "CSV upload 5 times",
-        "CSV download 3 times",
+        // "CSV download 3 times",
       ],
       benefits: {
         title: "Key benefits of Free:",
@@ -299,7 +299,7 @@ export const getComparePlans = user => ({
         },
         {
           name: "Download data to CSV",
-          free: "5 times",
+          free: false,
           business: "Unlimited",
           enterprise: "Unlimited",
         },
