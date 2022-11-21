@@ -3,92 +3,121 @@
 import React from "react";
 import { Image, Select } from "antd";
 import { getOssUrl } from "metabase/lib/image";
+import { sortBy } from "lodash";
 
 const TableChains = props => {
   const { chainChange, chain, disabled } = props;
 
-  const data = [
-    {
-      value: "all",
-      label: "All chains",
-      icon: getOssUrl("chain_all.png"),
-    },
-    {
-      value: "bsc",
-      label: "BSC",
-      icon: getOssUrl("fp-chains/bsc.webp"),
-    },
-    {
-      value: "polygon",
-      label: "Polygon",
-      icon: getOssUrl("fp-chains/polygon.webp"),
-    },
-    {
-      value: "ethereum",
-      label: "Ethereum",
-      icon: getOssUrl("fp-chains/ethereum.webp"),
-    },
-    {
-      value: "fantom",
-      label: "Fantom",
-      icon: getOssUrl("fp-chains/fantom.webp"),
-    },
-    {
-      value: "arbitrum",
-      label: "Arbitrum",
-      icon: getOssUrl("fp-chains/arbitrum.webp"),
-    },
-    {
-      value: "avalanche",
-      label: "Avalanche",
-      icon: getOssUrl("fp-chains/avalanche.webp"),
-    },
-    {
-      value: "optimism",
-      label: "Optimism",
-      icon: getOssUrl("fp-chains/optimism.webp"),
-    },
-    {
-      value: "boba",
-      label: "Boba",
-      icon: getOssUrl("fp-chains/boba.webp"),
-    },
-    {
-      value: "celo",
-      label: "Celo",
-      icon: getOssUrl("fp-chains/celo.webp"),
-    },
-    {
-      value: "harmony",
-      label: "Harmony",
-      icon: getOssUrl("fp-chains/harmony.webp"),
-    },
-    {
-      value: "harmony",
-      label: "Iotex",
-      icon: getOssUrl("fp-chains/iotex.webp"),
-    },
-    {
-      value: "moonbeam",
-      label: "Moonbeam",
-      icon: getOssUrl("fp-chains/moonbeam.webp"),
-    },
-    {
-      value: "moonriver",
-      label: "Moonriver",
-      icon: getOssUrl("fp-chains/moonriver.webp"),
-    },
-    {
-      value: "thundercore",
-      label: "Thundercore",
-      icon: getOssUrl("fp-chains/thundercore.webp"),
-    },
-    {
-      value: "solana",
-      label: "Solana",
-      icon: getOssUrl("fp-chains/solana.webp"),
-    },
-  ];
+  const data = sortBy(
+    [
+      {
+        value: "all",
+        label: "All chains",
+        icon: getOssUrl("chain_all.png"),
+      },
+      {
+        value: "arbitrum",
+        label: "Arbitrum",
+        icon: getOssUrl("fp-chains/arbitrum.webp"),
+      },
+      {
+        value: "avalanche",
+        label: "Avalanche",
+        icon: getOssUrl("fp-chains/avalanche.webp"),
+      },
+      {
+        value: "boba",
+        label: "Boba",
+        icon: getOssUrl("fp-chains/boba.webp"),
+      },
+      {
+        value: "bsc",
+        label: "BSC",
+        icon: getOssUrl("fp-chains/bsc.webp"),
+      },
+      {
+        value: "celo",
+        label: "Celo",
+        icon: getOssUrl("fp-chains/celo.webp"),
+      },
+      {
+        value: "dfk",
+        label: "DFK",
+        icon: getOssUrl("fp-chains/dfk.webp"),
+      },
+      {
+        value: "eos",
+        label: "EOS",
+        icon: getOssUrl("fp-chains/eos.webp"),
+      },
+      {
+        value: "ethereum",
+        label: "Ethereum",
+        icon: getOssUrl("fp-chains/ethereum.webp"),
+      },
+      {
+        value: "fantom",
+        label: "Fantom",
+        icon: getOssUrl("fp-chains/fantom.webp"),
+      },
+      {
+        value: "harmony",
+        label: "Harmony",
+        icon: getOssUrl("fp-chains/harmony.webp"),
+      },
+      {
+        value: "hive",
+        label: "Hive",
+        icon: getOssUrl("fp-chains/hive.webp"),
+      },
+      {
+        value: "iotex",
+        label: "Iotex",
+        icon: getOssUrl("fp-chains/iotex.webp"),
+      },
+      {
+        value: "moonbeam",
+        label: "Moonbeam",
+        icon: getOssUrl("fp-chains/moonbeam.webp"),
+      },
+      {
+        value: "moonriver",
+        label: "Moonriver",
+        icon: getOssUrl("fp-chains/moonriver.webp"),
+      },
+      {
+        value: "oasys",
+        label: "Oasys",
+        icon: getOssUrl("fp-chains/oasys.webp"),
+      },
+      {
+        value: "optimism",
+        label: "Optimism",
+        icon: getOssUrl("fp-chains/optimism.webp"),
+      },
+      {
+        value: "polygon",
+        label: "Polygon",
+        icon: getOssUrl("fp-chains/polygon.webp"),
+      },
+      {
+        value: "solana",
+        label: "Solana",
+        icon: getOssUrl("fp-chains/solana.webp"),
+      },
+      {
+        value: "thundercore",
+        label: "Thundercore",
+        icon: getOssUrl("fp-chains/thundercore.webp"),
+      },
+      {
+        value: "wax",
+        label: "Wax",
+        icon: getOssUrl("fp-chains/wax.webp"),
+      },
+    ],
+    ["value"],
+  );
 
   const onChange = value => {
     chainChange && chainChange(value);
