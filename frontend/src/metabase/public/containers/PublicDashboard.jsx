@@ -97,10 +97,6 @@ type Props = {
 export default class PublicDashboard extends Component {
   props: Props;
 
-  state = {
-    error: null,
-  };
-
   async UNSAFE_componentWillMount() {
     const whiteLabelUsers = [14330];
     const {
