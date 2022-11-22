@@ -20,6 +20,7 @@ import PublicBackButton from "metabase/public/components/widgets/PublicBackButto
 import { isPublicScenePath } from "metabase/lib/urls";
 import { isDefi360 } from "metabase/lib/project_info";
 import MetabaseUtils from "metabase/lib/utils";
+import { isWhiteLabel } from "metabase/lib/white_label";
 
 const DEFAULT_OPTIONS = {
   bordered: IFRAMED,
@@ -69,7 +70,8 @@ export default class EmbedFrame extends Component {
     } = this.props;
     const { innerScroll } = this.state;
 
-    const showFooter = !MetabaseSettings.hideEmbedBranding() || actionButtons;
+    const showFooter =
+      !isWhiteLabel && (!MetabaseSettings.hideEmbedBranding() || actionButtons);
 
     const { bordered, titled, theme, hide_parameters, no_params } = {
       ...DEFAULT_OPTIONS,

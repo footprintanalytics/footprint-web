@@ -3,6 +3,8 @@ import React, { useEffect, useRef } from "react";
 import lottie from "lottie-web/build/player/lottie_svg";
 import LoadingSpinnerData from "./LoadingSpinnerData";
 import "./LoadingSpinner.css";
+import LoadingSpinnerDataNormal from "metabase/components/LoadingSpinnerDataNormal";
+import { isWhiteLabel } from "metabase/lib/white_label";
 
 export default function LoadingSpinner({ message }) {
   const ref = useRef();
@@ -13,7 +15,9 @@ export default function LoadingSpinner({ message }) {
       renderer: "svg",
       loop: true,
       autoplay: true,
-      animationData: LoadingSpinnerData,
+      animationData: isWhiteLabel
+        ? LoadingSpinnerDataNormal
+        : LoadingSpinnerData,
     });
   }, []);
 

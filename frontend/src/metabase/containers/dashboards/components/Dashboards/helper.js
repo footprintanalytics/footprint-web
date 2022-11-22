@@ -31,7 +31,7 @@ export default function getActionMenus({
             onShare({
               open: true,
               public_uuid: record.publicUuid,
-              type: record.model,
+              type: record.model || record.type,
               name: record.name,
               id: record.id,
               creatorId: record.creator.id,
