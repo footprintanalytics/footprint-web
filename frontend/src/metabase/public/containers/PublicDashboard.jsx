@@ -41,6 +41,8 @@ import _ from "underscore";
 import { parseTitleId } from "metabase/lib/urls";
 import { parseHashOptions } from "metabase/lib/browser";
 import MetabaseUtils from "metabase/lib/utils";
+import { get } from "lodash";
+import { isWhiteLabel } from "metabase/lib/white_label";
 
 const mapStateToProps = (state, props) => {
   return {
@@ -95,7 +97,12 @@ type Props = {
 export default class PublicDashboard extends Component {
   props: Props;
 
+  state = {
+    error: null,
+  };
+
   async UNSAFE_componentWillMount() {
+    const whiteLabelUsers = [14330];
     const {
       initialize,
       fetchDashboard,
@@ -104,7 +111,6 @@ export default class PublicDashboard extends Component {
       location,
       params,
     } = this.props;
-
     const uuid = parseTitleId(params.uuid).id;
     const token = params.token;
 
@@ -116,7 +122,21 @@ export default class PublicDashboard extends Component {
 
     initialize();
     try {
-      await fetchDashboard(uuid || token, location.query);
+      const dashboardResult = await fetchDashboard(
+        uuid || token,
+        location.query,
+      );
+      if (isWhiteLabel) {
+        const userId = get(
+          dashboardResult?.payload?.entities?.dashboard,
+          uuid || token,
+        )?.creator?.id;
+        if (!whiteLabelUsers.includes(userId)) {
+          throw new Error(
+            "You do not have permission to access, please contact the official.",
+          );
+        }
+      }
       await fetchDashboardCardData({ reload: false, clear: true });
     } catch (error) {
       console.error(error);

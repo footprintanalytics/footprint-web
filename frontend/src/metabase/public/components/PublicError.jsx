@@ -1,12 +1,12 @@
 import React from "react";
 import { t } from "ttag";
 import { connect } from "react-redux";
-import { getErrorMessage } from "metabase/selectors/app";
+import { getPublicErrorMessage } from "metabase/selectors/app";
 
 import EmbedFrame from "./EmbedFrame";
 
 const mapStateToProps = (state, props) => ({
-  message: getErrorMessage(state, props),
+  message: getPublicErrorMessage(state, props),
 });
 
 type Props = {
