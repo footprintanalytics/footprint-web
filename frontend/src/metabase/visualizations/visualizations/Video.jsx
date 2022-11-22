@@ -91,7 +91,7 @@ export default class Video extends Component {
                   styles["text-card-textarea"],
                 )}
                 name="text"
-                placeholder={t`Type or paste video url here, only YouTube videos are supported now, e.g. https://www.youtube.com/watch?v=yL1o7axk1pg`}
+                placeholder={t`Type or paste video url here, only YouTube videos are supported now, e.g. https://www.youtube.com/embed/yL1o7axk1pg`}
                 value={settings.text}
                 onChange={e => this.handleTextChange(e.target.value)}
                 // Prevents text cards from dragging when you actually want to select text

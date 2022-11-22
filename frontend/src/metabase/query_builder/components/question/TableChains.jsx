@@ -21,7 +21,7 @@ const TableChains = props => {
     },
     {
       value: "bsc",
-      label: "BNB",
+      label: "BNB Chain",
       icon: getOssUrl("fp-chains/bsc.webp"),
     },
     {
