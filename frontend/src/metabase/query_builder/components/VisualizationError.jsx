@@ -98,6 +98,17 @@ class VisualizationError extends Component {
     if (error && typeof error.status === "number") {
       // Assume if the request took more than 15 seconds it was due to a timeout
       // Some platforms like Heroku return a 503 for numerous types of errors so we can't use the status code to distinguish between timeouts and other failures.
+      if (error.status === 429) {
+        return (
+          <ErrorMessage
+            className={className}
+            type="queryError"
+            title="Busy service"
+            message={error?.data?.message}
+            action={<EmailAdmin />}
+          />
+        );
+      }
       if (duration > 15 * 1000) {
         return (
           <ErrorMessage
