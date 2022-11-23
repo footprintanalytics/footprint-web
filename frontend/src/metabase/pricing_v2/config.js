@@ -52,7 +52,7 @@ export const getComparePlans = user => ({
       benefits: {
         title: "Key benefits of Free:",
         list: [
-          "Access to 20 chains data",
+          "Access to 22 chains data",
           "Access to GameFi/NFT/DeFi data",
           "Access to Community data",
           "26 chart types to choose",
@@ -140,7 +140,7 @@ export const getComparePlans = user => ({
       type: "Data",
       list: [
         {
-          name: "20 chains",
+          name: "22 chains",
           free: true,
           business: true,
           enterprise: true,
