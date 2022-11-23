@@ -285,6 +285,10 @@ const data = {
       url: "https://gopluslabs.io",
       logo: "img-partner-gopluslabs.png",
     },
+    {
+      url: "https://www.grenade.tw",
+      logo: "img_partner_grenade.png",
+    },
   ],
   socialData: [
     {
