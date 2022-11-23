@@ -46,7 +46,7 @@ const Index = ({
           {
             title: (
               <span>
-                <span className="data-api__price-text-highlight">50K</span>{" "}
+                <span className="data-api__price-text-highlight">3K</span>{" "}
                 calls per month
               </span>
             ),
@@ -54,7 +54,7 @@ const Index = ({
           {
             title: (
               <span>
-                <span className="data-api__price-text-highlight">3</span> calls
+                <span className="data-api__price-text-highlight">1</span> calls
                 per second
               </span>
             ),
