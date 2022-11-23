@@ -23,7 +23,7 @@ const DataApiGetStart = () => {
               <span className="data-api__text-bland">Chain API</span>
             </h3>
             <span className="data-api__get-start-subtitle">
-              20 chains support
+              22 chains support
             </span>
             <span className="data-api__get-start-desc">
               Covering most chains and support from <br />
