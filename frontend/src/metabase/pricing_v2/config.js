@@ -64,8 +64,8 @@ export const getComparePlans = user => ({
       dataApi: {
         title: "Data API (Free)",
         list: [
-          "50K calls per month",
-          "3 calls per second",
+          "3K calls per month",
+          "1 calls per second",
           "Normal performance",
           "Community support",
           "REST API: Easy to access",
@@ -340,13 +340,13 @@ export const getComparePlans = user => ({
       list: [
         {
           name: "Calls per month",
-          free: "50K",
+          free: "3K",
           business: "300K",
           enterprise: "/",
         },
         {
           name: "Calls per second",
-          free: "3",
+          free: "1",
           business: "10",
           enterprise: "/",
         },
