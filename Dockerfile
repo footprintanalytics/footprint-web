@@ -37,6 +37,7 @@ RUN apk add -U bash ttf-dejavu fontconfig curl java-cacerts && \
 # add Metabase script and uberjar
 COPY --from=builder /home/circleci/target/uberjar/metabase.jar /app/
 COPY bin/docker/run_metabase.sh /app/
+COPY bin/starburst-1.0.6.metabase-driver.jar /plugins/
 
 # expose our default runtime port
 EXPOSE 3000
