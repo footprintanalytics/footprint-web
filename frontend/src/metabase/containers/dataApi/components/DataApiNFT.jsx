@@ -23,7 +23,7 @@ const DataApiNFT = () => {
               <span className="data-api__text-bland">NFT API</span>
             </h3>
             <span className="data-api__get-start-subtitle">
-              13 marketplaces <br /> and 101,639 collections
+              14 marketplaces <br /> and 101,639 collections
             </span>
             <span className="data-api__get-start-desc">
               Fetch NFT ownership, transfer, price, orderbook, <br />
