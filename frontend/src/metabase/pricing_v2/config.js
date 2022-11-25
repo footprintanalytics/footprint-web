@@ -66,6 +66,7 @@ export const getComparePlans = user => ({
         list: [
           "3K calls per month",
           "1 calls per second",
+          // "30 days historical data",
           "Normal performance",
           "Community support",
           "REST API: Easy to access",
@@ -103,6 +104,7 @@ export const getComparePlans = user => ({
         list: [
           "300K calls per month",
           "10 calls per second",
+          // "6 months historical data",
           "Quick performance",
           "Community support",
           "REST API: Easy to access",
@@ -350,6 +352,12 @@ export const getComparePlans = user => ({
           business: "10",
           enterprise: "/",
         },
+        // {
+        //   name: "Historical data",
+        //   free: "30 days",
+        //   business: "6 months",
+        //   enterprise: "/",
+        // },
         {
           name: "Performance",
           free: "Normal",
