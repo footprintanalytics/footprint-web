@@ -30,8 +30,7 @@
   utilized.)"
   [query]
   (when-let [average-duration (query/average-execution-time-ms (qp.util/query-hash query))]
-    (let [ttl-seconds (Math/round (float (/ (* average-duration (public-settings/query-caching-ttl-ratio))
-                                            1000.0)))]
+    (let [ttl-seconds (Math/round (float (public-settings/query-caching-ttl-ratio)))]
       (when-not (zero? ttl-seconds)
         (log/info (trs "Question''s average execution duration is {0}; using ''magic'' TTL of {1}"
                        (u/format-milliseconds average-duration) (u/format-seconds ttl-seconds))

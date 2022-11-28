@@ -13,6 +13,9 @@
   (:require [clojure.tools.logging :as log]
             [java-time :as t]
             [medley.core :as m]
+            [metabase.query-processor.middleware.annotate :as annotate]
+            [metabase.query-processor.middleware.add-timezone-info :as add-timezone-info]
+            [metabase.query-processor.context.default :as context.default]
             [metabase.config :as config]
             [metabase.public-settings :as public-settings]
             [metabase.query-processor.context :as qp.context]
@@ -22,9 +25,17 @@
             [metabase.query-processor.util :as qp.util]
             [metabase.util :as u]
             [metabase.util.i18n :refer [trs]])
-  (:import org.eclipse.jetty.io.EofException))
+  (:import org.eclipse.jetty.io.EofException
+           java.util.Base64))
 
 (comment backend.db/keep-me)
+
+(def last-ran-cache (atom nil))
+
+(def query-data-middleware
+  "The middleware applied to queries ran via `process-query` with cache ."
+  [#'annotate/add-column-info
+   #'add-timezone-info/add-timezone-info])
 
 (def ^:private cache-version
   "Current serialization format version. Basically
@@ -91,7 +102,7 @@
         (log/debug e (trs "Not caching results: results are larger than {0} KB" (public-settings/query-caching-max-kb)))
         (log/error e (trs "Error saving query results to cache: {0}" (ex-message e)))))))
 
-(defn- save-results-xform [start-time metadata query-hash rf dashboard-id card-id]
+(defn- save-results-xform [start-time metadata query-hash rf dashboard-id card-id mustRfReponse]
   (let [has-rows? (volatile! false)]
     (add-object-to-cache! (assoc metadata
                                  :cache-version cache-version
@@ -106,10 +117,10 @@
        (let [duration-ms (- (System/currentTimeMillis) start-time)]
          (log/info (trs "Query took {0} to run; minimum for cache eligibility is {1}"
                         (u/format-milliseconds duration-ms) (u/format-milliseconds (min-duration-ms))))
-         (when (and @has-rows?
-                    (> duration-ms (min-duration-ms)))
+         (when @has-rows?
            (cache-results! query-hash dashboard-id card-id)))
-       (rf result))
+         (when mustRfReponse (rf result))
+       )
 
       ([acc row]
        (add-object-to-cache! row)
@@ -127,6 +138,7 @@
     (let [metadata       (dissoc metadata :last-ran :cache-version)
           rf             (rff metadata)
           final-metadata (volatile! nil)]
+      (reset! last-ran-cache (.toEpochMilli (.toInstant last-ran)))
       (fn
         ([]
          (rf))
@@ -176,12 +188,15 @@
 ;;; --------------------------------------------------- Middleware ---------------------------------------------------
 
 (defn- run-query-with-cache
-  [qp {:keys [cache-ttl middleware], :as query} rff {:keys [reducef], :as context}]
+  [qp {:keys [cache-ttl middleware info], :as query} rff {:keys [reducef], :as context}]
   ;; TODO - Query will already have `info.hash` if it's a userland query. I'm not 100% sure it will be the same hash,
   ;; because this is calculated after normalization, instead of before
-  (let [query-hash (qp.util/query-hash query)
+  (log/info "run-query-with-cache info:" info)
+  (let [card-id (info :card-id)
+        dashboard-id (info :dashboard-id)
+        query-hash (qp.util/query-hash query)
         result     (maybe-reduce-cached-results (:ignore-cached-results? middleware) query-hash cache-ttl rff context)]
-    (when (= result ::miss)
+    (if (= result ::miss)
       (let [start-time-ms (System/currentTimeMillis)]
         (log/trace "Running query and saving cached results (if eligible)...")
         (let [reducef' (fn [rff context metadata rows]
@@ -192,8 +207,19 @@
                               (reducef rff context metadata rows)))))]
           (qp query
               (fn [metadata]
-                (save-results-xform start-time-ms metadata query-hash (rff metadata)))
-              (assoc context :reducef reducef')))))))
+                (save-results-xform start-time-ms metadata query-hash (rff metadata) dashboard-id card-id true))
+              (assoc context :reducef reducef'))))
+      (let [duration-ms (- (System/currentTimeMillis) @last-ran-cache)
+            start-time-ms (System/currentTimeMillis)]
+        (when (and result ::ok (> duration-ms (min-duration-ms)))
+              (((apply comp query-data-middleware) qp)
+                query
+                (fn [metadata]
+                  (save-results-xform
+                   start-time-ms metadata query-hash
+                   (((context.default/default-context) :rff) metadata)
+                   dashboard-id card-id, false))
+                context))))))
 
 (defn- is-cacheable? {:arglists '([query])} [{:keys [cache-ttl]}]
   (and (public-settings/enable-query-caching)
@@ -212,9 +238,11 @@
         running the query, satisfying this requirement.)
      *  The result *rows* of the query must be less than `query-caching-max-kb` when serialized (before compression)."
   [qp]
-  (fn maybe-return-cached-results* [query rff context]
-    (let [cacheable? (is-cacheable? query)]
-      (log/tracef "Query is cacheable? %s" (boolean cacheable?))
-      (if cacheable?
-        (run-query-with-cache qp query rff context)
-        (qp query rff context)))))
+  (fn maybe-return-cached-results* [{:keys [cache-ttl middleware info], :as query} rff context]
+    (if (:get-the-cache-info? middleware)
+      (qp.context/reducef rff context {:query_hash_base64 (.encodeToString (Base64/getEncoder) (qp.util/query-hash query))} [])
+      (let [cacheable? (is-cacheable? query)]
+        (log/tracef "Query is cacheable? %s" (boolean cacheable?))
+        (if cacheable?
+          (run-query-with-cache qp query rff context)
+          (qp query rff context))))))

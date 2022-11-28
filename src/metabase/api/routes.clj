@@ -46,6 +46,7 @@
             [metabase.api.transform :as api.transform]
             [metabase.api.user :as api.user]
             [metabase.api.util :as api.util]
+            [metabase.api.info :as info]
             [metabase.config :as config]
             [metabase.plugins.classloader :as classloader]
             [metabase.util :as u]
@@ -92,6 +93,7 @@
   (context "/persist"              [] (+auth api.persist/routes))
   (context "/preview_embed"        [] (+auth api.preview-embed/routes))
   (context "/public"               [] (+generic-exceptions api.public/routes))
+  (context "/info"                 [] (+generic-exceptions info/routes))
   (context "/pulse"                [] (+auth api.pulse/routes))
   (context "/revision"             [] (+auth api.revision/routes))
   (context "/search"               [] (+auth api.search/routes))
