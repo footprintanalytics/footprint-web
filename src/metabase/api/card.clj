@@ -789,9 +789,21 @@ saved later when it is ready."
 
   `parameters` should be passed as query parameter encoded as a serialized JSON string (this is because this endpoint
   is normally used to power 'Download Results' buttons that use HTML `form` actions)."
-  [card-id export-format :as {{:keys [parameters]} :params}]
+  [card-id export-format :as {{:keys [parameters max-results]} :params}]
   {parameters    (s/maybe su/JSONString)
    export-format api.dataset/ExportFormat}
+  (if max-results
+    (qp.card/run-query-for-card-async
+     card-id export-format
+     :parameters  (json/parse-string parameters keyword)
+     :constraints {:max-results-bare-rows (Integer/parseInt max-results)
+                   :max-results (Integer/parseInt max-results)}
+     :context     (api.dataset/export-format->context export-format)
+     :middleware  {:process-viz-settings?  true
+                   :skip-results-metadata? true
+                   :ignore-cached-results? true
+                   :format-rows?           false
+                   :js-int-to-string?      false})
   (qp.card/run-query-for-card-async
    card-id export-format
    :parameters  (json/parse-string parameters keyword)
@@ -801,7 +813,7 @@ saved later when it is ready."
                  :skip-results-metadata? true
                  :ignore-cached-results? true
                  :format-rows?           false
-                 :js-int-to-string?      false}))
+                 :js-int-to-string?      false})))
 
 ;;; ----------------------------------------------- Sharing is Caring ------------------------------------------------
 
