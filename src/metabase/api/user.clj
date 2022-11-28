@@ -331,7 +331,7 @@
         (db/update! User id (u/select-keys-when body
                               :present (cond-> #{:first_name :last_name :locale}
                                          api/*is-superuser?* (conj :login_attributes))
-                              :non-nil (cond->
+                              :non-nil (cond-> #{}
                                          api/*is-superuser?* (conj :is_superuser)))))
        (maybe-update-user-personal-collection-name! user-before-update body))
      (maybe-set-user-group-memberships! id user_group_memberships is_superuser)))
