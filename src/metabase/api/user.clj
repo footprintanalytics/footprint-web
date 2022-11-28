@@ -331,7 +331,7 @@
         (db/update! User id (u/select-keys-when body
                               :present (cond-> #{:first_name :last_name :locale}
                                          api/*is-superuser?* (conj :login_attributes))
-                              :non-nil (cond-> #{:email}
+                              :non-nil (cond-> #{}
                                          api/*is-superuser?* (conj :is_superuser)))))
        (maybe-update-user-personal-collection-name! user-before-update body))
      (maybe-set-user-group-memberships! id user_group_memberships is_superuser)))
@@ -425,7 +425,9 @@
     (let [reset-token (user/set-password-reset-token! id)
           ;; NOTE: the new user join url is just a password reset with an indicator that this is a first time user
           join-url    (str (user/form-password-reset-url reset-token) "#new")]
-      (messages/send-new-user-email! user @api/*current-user* join-url false)))
+;      (messages/send-new-user-email! user @api/*current-user* join-url false)
+      )
+    )
   {:success true})
 
 (api/define-routes)

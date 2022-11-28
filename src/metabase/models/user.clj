@@ -255,16 +255,16 @@
 
 (declare form-password-reset-url set-password-reset-token!)
 
-(defn- send-welcome-email! [new-user invitor sent-from-setup?]
-  (let [reset-token               (set-password-reset-token! (u/the-id new-user))
-        should-link-to-login-page (and (public-settings/sso-enabled?)
-                                       (not (public-settings/enable-password-login)))
-        join-url                  (if should-link-to-login-page
-                                    (str (public-settings/site-url) "/auth/login")
-                                    ;; NOTE: the new user join url is just a password reset with an indicator that this is a first time user
-                                    (str (form-password-reset-url reset-token) "#new"))]
-    (classloader/require 'metabase.email.messages)
-    ((resolve 'metabase.email.messages/send-new-user-email!) new-user invitor join-url sent-from-setup?)))
+;(defn- send-welcome-email! [new-user invitor sent-from-setup?]
+;  (let [reset-token               (set-password-reset-token! (u/the-id new-user))
+;        should-link-to-login-page (and (public-settings/sso-enabled?)
+;                                       (not (public-settings/enable-password-login)))
+;        join-url                  (if should-link-to-login-page
+;                                    (str (public-settings/site-url) "/auth/login")
+;                                    ;; NOTE: the new user join url is just a password reset with an indicator that this is a first time user
+;                                    (str (form-password-reset-url reset-token) "#new"))]
+;    (classloader/require 'metabase.email.messages)
+;    ((resolve 'metabase.email.messages/send-new-user-email!) new-user invitor join-url sent-from-setup?)))
 
 (def LoginAttributes
   "Login attributes, currently not collected for LDAP or Google Auth. Will ultimately be stored as JSON."
@@ -303,8 +303,9 @@
   "Convenience function for inviting a new `User` and sending out the welcome email."
   [new-user :- NewUser, invitor :- Invitor, setup? :- schema/Bool]
   ;; create the new user
-  (u/prog1 (insert-new-user! new-user)
-    (send-welcome-email! <> invitor setup?)))
+  (u/prog1 (insert-new-user! new-user))
+;    (send-welcome-email! <> invitor setup?))
+  )
 
 (schema/defn create-new-google-auth-user!
   "Convenience for creating a new user via Google Auth. This account is considered active immediately; thus all active
@@ -313,7 +314,8 @@
   (u/prog1 (insert-new-user! (assoc new-user :google_auth true))
     ;; send an email to everyone including the site admin if that's set
     (classloader/require 'metabase.email.messages)
-    ((resolve 'metabase.email.messages/send-user-joined-admin-notification-email!) <>, :google-auth? true)))
+;    ((resolve 'metabase.email.messages/send-user-joined-admin-notification-email!) <>, :google-auth? true))
+   ))
 
 (schema/defn create-new-ldap-auth-user!
   "Convenience for creating a new user via LDAP. This account is considered active immediately; thus all active admins
@@ -354,7 +356,7 @@
   "Generate a properly formed password reset url given a password reset token."
   [reset-token]
   {:pre [(string? reset-token)]}
-  (str (public-settings/site-url) "/auth/reset_password/" reset-token))
+  (str (public-settings/site-url) "/loginModal?loginState=resetPassword&token=" reset-token))
 
 (defn set-permissions-groups!
   "Set the user's group memberships to equal the supplied group IDs. Returns `true` if updates were made, `nil`

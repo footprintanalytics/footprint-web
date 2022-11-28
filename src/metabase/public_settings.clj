@@ -295,7 +295,7 @@
   :visibility :public
   :type       :string
   :enabled?   premium-features/enable-whitelabeling?
-  :default    "Metabase")
+  :default    "Footprint")
 
 (defsetting loading-message
   (deferred-tru "Message to show while a query is running.")
@@ -346,6 +346,12 @@
   :visibility :public
   :type       :string
   :enabled?   premium-features/enable-whitelabeling?
+  :default    "app/assets/img/logo.svg")
+
+(defsetting application-logo-slogan-url
+  (deferred-tru "For best results, use an SVG file with a transparent background.")
+  :visibility :public
+  :type       :string
   :default    "app/assets/img/logo.svg")
 
 (defsetting application-favicon-url

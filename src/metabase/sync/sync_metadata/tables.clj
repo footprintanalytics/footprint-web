@@ -14,6 +14,7 @@
             [metabase.sync.sync-metadata.metabase-metadata :as metabase-metadata]
             [metabase.sync.util :as sync-util]
             [metabase.util :as u]
+            [metabase.util.schema :as su]
             [metabase.util.i18n :refer [trs]]
             [schema.core :as s]
             [toucan.db :as db]))
@@ -210,3 +211,51 @@
 
     {:updated-tables (+ (count new-tables) (count old-tables))
      :total-tables   (count our-metadata)}))
+
+(s/defn sync-target-table!
+  "Sync the Tables recorded in the Metabase application database with the ones obtained by calling `database`'s driver's
+  implementation of `describe-database`.
+  Also syncs the database metadata taken from describe-database if there is any"
+  [database :- i/DatabaseInstance
+   table_name :- su/NonBlankString]
+  ;; determine what's changed between what info we have and what's in the DB
+  (let [db-metadata             (fetch-metadata/db-metadata database)
+        db-tables               (table-set db-metadata)
+        our-metadata            (our-metadata database)
+        strip-desc              (fn [metadata]
+                                  (set (map #(dissoc % :description) metadata)))
+        [new-tables-all old-tables-all] (data/diff
+                                         (strip-desc db-tables)
+                                         (strip-desc our-metadata))
+        [changed-tables-all]        (data/diff db-tables our-metadata)
+        new-tables              (set (filter (fn [x] (when (= (:name x) table_name) x)) new-tables-all))
+        old-tables            (set (filter (fn [x] (when (= (:name x) table_name) x)) old-tables-all))
+        changed-tables              (set (filter (fn [x] (when (= (:name x) table_name) x)) changed-tables-all))
+        ]
+    (log/info "=======> sync-target-table, new-tables: " new-tables)
+    (log/info "=======> sync-target-table, old-tables: " old-tables)
+    (log/info "=======> sync-target-table, changed-tables: " changed-tables)
+    ;; update database metadata from database
+    (when (some? (:version db-metadata))
+          (sync-util/with-error-handling (format "Error creating/reactivating tables for %s"
+                                                 (sync-util/name-for-logging database))
+                                         (update-database-metadata! database db-metadata)))
+    ;; create new tables as needed or mark them as active again
+    (when (seq new-tables)
+          (sync-util/with-error-handling (format "Error creating/reactivating tables for %s"
+                                                 (sync-util/name-for-logging database))
+                                         (create-or-reactivate-tables! database new-tables)))
+    ;    ;; mark old tables as inactive
+    (when (seq old-tables)
+          (sync-util/with-error-handling (format "Error retiring tables for %s" (sync-util/name-for-logging database))
+                                         (retire-tables! database old-tables)))
+    ;
+    ;    ;; update description for changed tables
+    (when (seq changed-tables)
+          (sync-util/with-error-handling (format "Error updating table description for %s" (sync-util/name-for-logging database))
+                                         (update-table-description! database changed-tables)))
+    ;
+    {:updated-tables (+ (count new-tables) (count old-tables))
+     :total-tables   (count our-metadata)}
+    )
+  )

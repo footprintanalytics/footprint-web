@@ -108,7 +108,7 @@
 
 (api/defendpoint ^:streaming POST ["/:export-format", :export-format export-format-regex]
   "Execute a query and download the result data as a file in the specified format."
-  [export-format :as {{:keys [query visualization_settings] :or {visualization_settings "{}"}} :params}]
+  [export-format :as {{:keys [query visualization_settings max-results] :or {visualization_settings "{}"}} :params}]
   {query                  su/JSONString
    visualization_settings su/JSONString
    export-format          ExportFormat}
@@ -116,15 +116,28 @@
         viz-settings (-> (json/parse-string visualization_settings viz-setting-key-fn)
                          (update-in [:table.columns] mbql.normalize/normalize)
                          mb.viz/db->norm)
-        query        (-> (assoc query
-                                :async? true
-                                :viz-settings viz-settings)
-                         (dissoc :constraints)
-                         (update :middleware #(-> %
-                                                  (dissoc :add-default-userland-constraints? :js-int-to-string?)
-                                                  (assoc :process-viz-settings? true
-                                                         :skip-results-metadata? true
-                                                         :format-rows? false))))]
+        query        (if max-results (->
+
+                                      (assoc query
+                                             :async? true
+                                             :constraints {:max-results-bare-rows (Integer/parseInt max-results)
+                                                           :max-results (Integer/parseInt max-results)}
+                                             :viz-settings viz-settings)
+                                      (update :middleware #(-> %
+                                                            (dissoc :add-default-userland-constraints? :js-int-to-string?)
+                                                            (assoc :process-viz-settings? true
+                                                                   :skip-results-metadata? true
+                                                                   :format-rows? false)))
+                                      ) (-> (assoc query
+                                                   :async? true
+                                                   :viz-settings viz-settings)
+                                            (dissoc :constraints)
+                                            (update :middleware #(-> %
+                                                                  (dissoc :add-default-userland-constraints? :js-int-to-string?)
+                                                                  (assoc :process-viz-settings? true
+                                                                         :skip-results-metadata? true
+                                                                         :format-rows? false))))
+                       )]
     (run-query-async
      query
      :export-format export-format

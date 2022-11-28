@@ -74,7 +74,8 @@
       ;; off thread for both IP lookup and email sending. Either one could block and slow down user login (#16169)
       (try
         (let [[info] (human-friendly-infos [login-history])]
-          (messages/send-login-from-new-device-email! info))
+;          (messages/send-login-from-new-device-email! info)
+          )
         (catch Throwable e
           (log/error e (trs "Error sending ''login from new device'' notification email")))))))
 

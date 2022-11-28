@@ -27,6 +27,10 @@
     "Add a cache entry with the `results` of running query with byte array `query-hash`. This should replace any prior
   entries for `query-hash` and update the cache timestamp to the current system time.")
 
+  (save-results-v2! [this ^bytes query-hash ^bytes results dashboard-id card-id]
+    "Add a cache entry with the `results` of running query with byte array `query-hash`. This should replace any prior
+  entries for `query-hash` and update the cache timestamp to the current system time.")
+
   (purge-old-entries! [this max-age-seconds]
     "Purge all cache entries older than `max-age-seconds`. Will be called periodically when this backend is in use.
   `max-age-seconds` may be floating-point."))

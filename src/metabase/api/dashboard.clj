@@ -212,7 +212,7 @@
       ;; have a hydration key and an id. moderation_reviews currently aren't batch hydrated but i'm worried they
       ;; cannot be in this situation
       (hydrate [:ordered_cards [:card [:moderation_reviews :moderator_details]] :series :dashcard/action] :collection_authority_level :can_write :param_fields)
-      api/read-check
+      api/read-check-not-403
       api/check-not-archived
       hide-unreadable-cards
       add-query-average-durations))
@@ -318,7 +318,7 @@
    collection_position    (s/maybe su/IntGreaterThanZero)
    is_deep_copy           (s/maybe s/Bool)}
   ;; if we're trying to save the new dashboard in a Collection make sure we have permissions to do that
-  (collection/check-write-perms-for-collection collection_id)
+;  (collection/check-write-perms-for-collection collection_id)
   (let [existing-dashboard (get-dashboard from-dashboard-id)
         dashboard-data {:name                (or name (:name existing-dashboard))
                         :description         (or description (:description existing-dashboard))

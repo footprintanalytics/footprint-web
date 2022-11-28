@@ -156,20 +156,21 @@
                   [[minute-str "minute"]
                    [hour-str "hour"]
                    [(deferred-tru "Minute of Hour") "minute-of-hour"]])
-             (conj
+             (cons
+              {:name dont-bin-str
+               :mbql nil
+               :type "type/Number"}
               (mapv (fn [[name [strategy param]]]
                       {:name name
                        :mbql [:field nil {:binning (merge {:strategy strategy}
                                                           (when param
-                                                            {strategy param}))}]
+                                                                {strategy param}))}]
                        :type "type/Number"})
-                    [default-entry
-                     [(deferred-tru "10 bins") ["num-bins" 10]]
+                    [[(deferred-tru "10 bins") ["num-bins" 10]]
                      [(deferred-tru "50 bins") ["num-bins" 50]]
-                     [(deferred-tru "100 bins") ["num-bins" 100]]])
-              {:name dont-bin-str
-               :mbql nil
-               :type "type/Number"})
+                     [(deferred-tru "100 bins") ["num-bins" 100]]
+                     default-entry])
+              )
              (conj
               (mapv (fn [[name [strategy param]]]
                       {:name name

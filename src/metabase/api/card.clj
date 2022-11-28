@@ -163,7 +163,7 @@
                  (cond-> ;; card
                    (:dataset raw-card) (hydrate :persisted)
                    (:is_write raw-card) (hydrate :card/action-id))
-                 api/read-check
+                 api/read-check-not-403
                  (last-edit/with-last-edit-info :card))]
     (u/prog1 card
       (when-not (Boolean/parseBoolean ignore_view)
@@ -403,7 +403,7 @@ saved later when it is ready."
    cache_ttl              (s/maybe su/IntGreaterThanZero)
    is_write               (s/maybe s/Bool)}
   ;; check that we have permissions to run the query that we're trying to save
-  (check-data-permissions-for-query dataset_query)
+;  (check-data-permissions-for-query dataset_query)
   ;; check that we have permissions for the collection we're trying to save this card to, if applicable
   (collection/check-write-perms-for-collection collection_id)
   ;; if `is_write` was passed, check that it's allowed to be set.
@@ -789,9 +789,21 @@ saved later when it is ready."
 
   `parameters` should be passed as query parameter encoded as a serialized JSON string (this is because this endpoint
   is normally used to power 'Download Results' buttons that use HTML `form` actions)."
-  [card-id export-format :as {{:keys [parameters]} :params}]
+  [card-id export-format :as {{:keys [parameters max-results]} :params}]
   {parameters    (s/maybe su/JSONString)
    export-format api.dataset/ExportFormat}
+  (if max-results
+    (qp.card/run-query-for-card-async
+     card-id export-format
+     :parameters  (json/parse-string parameters keyword)
+     :constraints {:max-results-bare-rows (Integer/parseInt max-results)
+                   :max-results (Integer/parseInt max-results)}
+     :context     (api.dataset/export-format->context export-format)
+     :middleware  {:process-viz-settings?  true
+                   :skip-results-metadata? true
+                   :ignore-cached-results? true
+                   :format-rows?           false
+                   :js-int-to-string?      false})
   (qp.card/run-query-for-card-async
    card-id export-format
    :parameters  (json/parse-string parameters keyword)
@@ -801,7 +813,7 @@ saved later when it is ready."
                  :skip-results-metadata? true
                  :ignore-cached-results? true
                  :format-rows?           false
-                 :js-int-to-string?      false}))
+                 :js-int-to-string?      false})))
 
 ;;; ----------------------------------------------- Sharing is Caring ------------------------------------------------
 

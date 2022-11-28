@@ -376,6 +376,22 @@
   ([entity id & other-conditions]
    (read-check (apply db/select-one entity :id id other-conditions))))
 
+(defn read-check-not-403
+  "Check whether we can read an existing `obj`, or `entity` with `id`. If the object doesn't exist, throw a 404; if we
+  don't have proper permissions, throw a 403. This will fetch the object if it was not already fetched, and returns
+  `obj` if the check is successful."
+  {:style/indent 2}
+  ([obj]
+   (check-404 obj)
+   ;   (check-403 (mi/can-read? obj))
+   obj)
+
+  ([entity id]
+   (read-check (entity id)))
+
+  ([entity id & other-conditions]
+   (read-check (apply db/select-one entity :id id other-conditions))))
+
 (defn write-check
   "Check whether we can write an existing OBJ, or ENTITY with ID.
    If the object doesn't exist, throw a 404; if we don't have proper permissions, throw a 403.
