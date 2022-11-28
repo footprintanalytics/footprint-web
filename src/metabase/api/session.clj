@@ -79,8 +79,8 @@
    ;; IP Address doesn't have an actual UI field so just show error by username
    :ip-address (throttle/make-throttler :username, :attempts-threshold 50)})
 
-(def ^:private password-fail-message (deferred-tru "Password did not match stored password."))
-(def ^:private password-fail-snippet (deferred-tru "did not match stored password"))
+(def ^:private password-fail-message (deferred-tru "The password is invalid"))
+(def ^:private password-fail-snippet (deferred-tru "The password is invalid"))
 
 (def ^:private disabled-account-message (deferred-tru "Your account is disabled. Please contact your administrator."))
 (def ^:private disabled-account-snippet (deferred-tru "Your account is disabled."))
@@ -257,7 +257,8 @@
         ;; if this is the first time the user has logged in it means that they're just accepted their Metabase invite.
         ;; Send all the active admins an email :D
         (when-not (:last_login user)
-          (messages/send-user-joined-admin-notification-email! (db/select-one User :id user-id)))
+;          (messages/send-user-joined-admin-notification-email! (db/select-one User :id user-id))
+          )
         ;; after a successful password update go ahead and offer the client a new session that they can use
         (let [{session-uuid :id, :as session} (create-session! :password user (request.u/device-info request))
               response                        {:success    true
