@@ -212,7 +212,7 @@
         ;; If user uses any SSO method to log in, no need to generate a reset token
         (messages/send-password-reset-email! email google-auth? (boolean (or ldap-auth? sso-source)) nil is-active?)
         (let [reset-token        (user/set-password-reset-token! user-id)
-              password-reset-url (str (public-settings/site-url) "/auth/reset_password/" reset-token)]
+              password-reset-url (str (public-settings/site-url) "/loginModal?loginState=resetPassword&token=" reset-token)]
           (log/info password-reset-url)
           (messages/send-password-reset-email! email false false password-reset-url is-active?))))))
 

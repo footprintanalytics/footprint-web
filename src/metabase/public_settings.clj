@@ -348,6 +348,12 @@
   :enabled?   premium-features/enable-whitelabeling?
   :default    "app/assets/img/logo.svg")
 
+(defsetting application-logo-slogan-url
+  (deferred-tru "For best results, use an SVG file with a transparent background.")
+  :visibility :public
+  :type       :string
+  :default    "app/assets/img/logo.svg")
+
 (defsetting application-favicon-url
   (deferred-tru "The url or image that you want to use as the favicon.")
   :visibility :public

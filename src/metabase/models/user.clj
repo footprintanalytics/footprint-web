@@ -356,7 +356,7 @@
   "Generate a properly formed password reset url given a password reset token."
   [reset-token]
   {:pre [(string? reset-token)]}
-  (str (public-settings/site-url) "/auth/reset_password/" reset-token))
+  (str (public-settings/site-url) "/loginModal?loginState=resetPassword&token=" reset-token))
 
 (defn set-permissions-groups!
   "Set the user's group memberships to equal the supplied group IDs. Returns `true` if updates were made, `nil`

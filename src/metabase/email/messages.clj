@@ -54,13 +54,24 @@
 (defn- logo-url []
   (let [url (public-settings/application-logo-url)]
     (cond
-      (= url "app/assets/img/logo.svg") "http://static.metabase.com/email_logo.png"
+      (= url "app/assets/img/logo.svg") "https://footprint-images.oss-us-east-1.aliyuncs.com/email_logo.png"
 
       :else nil)))
       ;; NOTE: disabling whitelabeled URLs for now since some email clients don't render them correctly
       ;; We need to extract them and embed as attachments like we do in metabase.pulse.render.image-bundle
       ;; (data-uri-svg? url)               (themed-image-url url color)
       ;; :else                             url
+
+(defn- logo-slogan-url []
+  (let [url (public-settings/application-logo-url)]
+    (cond
+     (= url "app/assets/img/logo.svg") "https://footprint-images.oss-us-east-1.aliyuncs.com/img_website_logo_and_slogan.png"
+
+     :else nil)))
+     ;; NOTE: disabling whitelabeled URLs for now since some email clients don't render them correctly
+     ;; We need to extract them and embed as attachments like we do in metabase.pulse.render.image-bundle
+     ;; (data-uri-svg? url)               (themed-image-url url color)
+     ;; :else                             url
 
 (defn- icon-bundle
   [icon-name]
@@ -90,6 +101,7 @@
   {:applicationName           (public-settings/application-name)
    :applicationColor          (style/primary-color)
    :applicationLogoUrl        (logo-url)
+   :applicationLogoAndSloganUrl (logo-slogan-url)
    :buttonStyle               (button-style (style/primary-color))
    :colorTextLight            style/color-text-light
    :colorTextMedium           style/color-text-medium
@@ -184,6 +196,7 @@
                               :nonGoogleSSO     non-google-sso?
                               :passwordResetUrl password-reset-url
                               :logoHeader       true
+                              :followUs         true
                               :isActive         is-active?
                               :adminEmail       (public-settings/admin-email)
                               :adminEmailSet    (boolean (public-settings/admin-email))}))]

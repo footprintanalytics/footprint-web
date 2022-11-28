@@ -163,7 +163,7 @@
                  (cond-> ;; card
                    (:dataset raw-card) (hydrate :persisted)
                    (:is_write raw-card) (hydrate :card/action-id))
-                 api/read-check
+                 api/read-check-not-403
                  (last-edit/with-last-edit-info :card))]
     (u/prog1 card
       (when-not (Boolean/parseBoolean ignore_view)
@@ -403,7 +403,7 @@ saved later when it is ready."
    cache_ttl              (s/maybe su/IntGreaterThanZero)
    is_write               (s/maybe s/Bool)}
   ;; check that we have permissions to run the query that we're trying to save
-  (check-data-permissions-for-query dataset_query)
+;  (check-data-permissions-for-query dataset_query)
   ;; check that we have permissions for the collection we're trying to save this card to, if applicable
   (collection/check-write-perms-for-collection collection_id)
   ;; if `is_write` was passed, check that it's allowed to be set.
