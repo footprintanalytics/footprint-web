@@ -76,6 +76,31 @@
       (log/error e (trs "Error purging old cache entries"))))
   nil)
 
+(defn- save-results-v2!
+  "Save the `results` of query with `query-hash`, updating an existing QueryCache entry if one already exists, otherwise
+  creating a new entry."
+  [^bytes query-hash ^bytes results dashboard-id card-id]
+  (log/info "save-results-v2 版本 这里是对缓存数据进行存储")
+  (log/info dashboard-id)
+  (log/info card-id)
+  (try
+    (or (db/update-where! QueryCache {:query_hash query-hash}
+                          :updated_at (t/offset-date-time)
+                          :results    results
+                          :dashboard_id dashboard-id
+                          :card_id card-id
+                          )
+        (db/insert! QueryCache
+                    :updated_at (t/offset-date-time)
+                    :query_hash query-hash
+                    :results    results
+                    :dashboard_id dashboard-id
+                    :card_id card-id
+                    ))
+    (catch Throwable e
+      (log/error e (trs "Error saving query results to cache."))))
+  nil)
+
 (defn- save-results!
   "Save the `results` of query with `query-hash`, updating an existing QueryCache entry if one already exists, otherwise
   creating a new entry."
@@ -101,6 +126,10 @@
 
     (save-results! [_ query-hash is]
       (save-results! query-hash is)
+      nil)
+
+    (save-results-v2! [_ query-hash is dashboard-id card-id]
+      (save-results-v2! query-hash is dashboard-id card-id)
       nil)
 
     (purge-old-entries! [_ max-age-seconds]

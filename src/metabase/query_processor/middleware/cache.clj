@@ -73,7 +73,7 @@
 
 (defn- cache-results!
   "Save the final results of a query."
-  [query-hash]
+  [query-hash dashboard-id card-id]
   (log/info (trs "Caching results for next time for query with hash {0}."
                  (pr-str (i/short-hex-hash query-hash))) (u/emoji "💾"))
   (try
@@ -82,7 +82,7 @@
         (log/error (trs "Cannot cache results: expected byte array, got {0}" (class bytez)))
         (do
           (log/trace "Got serialized bytes; saving to cache backend")
-          (i/save-results! *backend* query-hash bytez)
+          (i/save-results-v2! *backend* query-hash bytez dashboard-id card-id)
           (log/debug "Successfully cached results for query.")
           (purge! *backend*))))
     :done
@@ -91,7 +91,7 @@
         (log/debug e (trs "Not caching results: results are larger than {0} KB" (public-settings/query-caching-max-kb)))
         (log/error e (trs "Error saving query results to cache: {0}" (ex-message e)))))))
 
-(defn- save-results-xform [start-time metadata query-hash rf]
+(defn- save-results-xform [start-time metadata query-hash rf dashboard-id card-id]
   (let [has-rows? (volatile! false)]
     (add-object-to-cache! (assoc metadata
                                  :cache-version cache-version
@@ -108,7 +108,7 @@
                         (u/format-milliseconds duration-ms) (u/format-milliseconds (min-duration-ms))))
          (when (and @has-rows?
                     (> duration-ms (min-duration-ms)))
-           (cache-results! query-hash)))
+           (cache-results! query-hash dashboard-id card-id)))
        (rf result))
 
       ([acc row]
