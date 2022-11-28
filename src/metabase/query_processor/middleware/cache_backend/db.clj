@@ -80,7 +80,7 @@
   "Save the `results` of query with `query-hash`, updating an existing QueryCache entry if one already exists, otherwise
   creating a new entry."
   [^bytes query-hash ^bytes results dashboard-id card-id]
-  (log/info "save-results-v2 版本 这里是对缓存数据进行存储")
+  (log/info "save-results-v2 store cache data to fix doris bug")
   (log/info dashboard-id)
   (log/info card-id)
   (try

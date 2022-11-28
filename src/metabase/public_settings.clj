@@ -295,7 +295,7 @@
   :visibility :public
   :type       :string
   :enabled?   premium-features/enable-whitelabeling?
-  :default    "Metabase")
+  :default    "Footprint")
 
 (defsetting loading-message
   (deferred-tru "Message to show while a query is running.")

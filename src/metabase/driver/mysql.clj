@@ -138,7 +138,7 @@
 ;; now() returns current timestamp in seconds resolution; now(6) returns it in nanosecond resolution
 (defmethod sql.qp/current-datetime-honeysql-form :mysql
   [_]
-  (hsql/call :now 6))
+  (hsql/call :now))
 
 (defmethod driver/humanize-connection-error-message :mysql
   [_ message]

@@ -65,7 +65,7 @@
 (defn- logo-slogan-url []
   (let [url (public-settings/application-logo-url)]
     (cond
-     (= url "app/assets/img/logo.svg") "https://static.footprint.network/img_website_logo_and_slogan.png"
+     (= url "app/assets/img/logo.svg") "https://static.footprint.network/img_mail_logo_v3.png"
 
      :else nil)))
      ;; NOTE: disabling whitelabeled URLs for now since some email clients don't render them correctly
