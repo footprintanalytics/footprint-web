@@ -46,6 +46,10 @@
   ;; ^/$ -> index.html
   (GET "/" [] index/index)
   (GET "/favicon.ico" [] (response/resource-response (public-settings/application-favicon-url)))
+  (GET "/robots.txt" [] (response/resource-response "robots.txt" {:root "frontend_client"}))
+  (GET "/sitemap.xml" [] (response/resource-response "sitemap.xml" {:root "frontend_client"}))
+  (GET "/rss-featured.xml" [] (response/resource-response "rss-featured.xml" {:root "frontend_client"}))
+  (GET "/rss-articles.xml" [] (response/resource-response "rss-articles.xml" {:root "frontend_client"}))
   ;; ^/api/health -> Health Check Endpoint
   (GET "/api/health" []
        (if (init-status/complete?)
