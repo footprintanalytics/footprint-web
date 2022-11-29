@@ -59,13 +59,14 @@ const Index = ({
               </span>
             ),
           },
-          /*          {
+          {
             title: (
               <span>
-                <span className="data-api__price-text-highlight">30 days</span> historical data
+                <span className="data-api__price-text-highlight">30 days</span>{" "}
+                historical data
               </span>
             ),
-          },*/
+          },
           {
             title: "Normal performance",
           },
@@ -109,13 +110,14 @@ const Index = ({
               </span>
             ),
           },
-          /*          {
+          {
             title: (
               <span>
-                <span className="data-api__price-text-highlight">6 months</span> historical data
+                <span className="data-api__price-text-highlight">6 months</span>{" "}
+                historical data
               </span>
             ),
-          },*/
+          },
           {
             title: "Quick performance",
           },
@@ -162,13 +164,14 @@ const Index = ({
               </span>
             ),
           },
-          /*          {
+          {
             title: (
               <span>
-                <span className="data-api__price-text-highlight">Full</span> historical data
+                <span className="data-api__price-text-highlight">Full</span>{" "}
+                historical data
               </span>
             ),
-          },*/
+          },
           {
             title: "Quicker performance",
           },
@@ -215,13 +218,14 @@ const Index = ({
           {
             title: "Custom throughput",
           },
-          /*          {
+          {
             title: (
               <span>
-                <span className="data-api__price-text-highlight">Full</span> historical data
+                <span className="data-api__price-text-highlight">Full</span>{" "}
+                historical data
               </span>
             ),
-          },*/
+          },
           {
             title: "Quickest performance",
           },

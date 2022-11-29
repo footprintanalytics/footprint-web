@@ -66,7 +66,7 @@ export const getComparePlans = user => ({
         list: [
           "3K calls per month",
           "1 calls per second",
-          // "30 days historical data",
+          "30 days historical data",
           "Normal performance",
           "Community support",
           "REST API: Easy to access",
@@ -85,7 +85,7 @@ export const getComparePlans = user => ({
       btnAction: "subscribe",
       btnDisabled: user && user.vipInfo?.type !== "free",
       features: [
-        // "Access to full history data",
+        "Access to full history data",
         "10G data limit per query",
         "Unlimited CSV uploads",
         "Unlimited API uploads",
@@ -104,7 +104,7 @@ export const getComparePlans = user => ({
         list: [
           "300K calls per month",
           "10 calls per second",
-          // "6 months historical data",
+          "6 months historical data",
           "Quick performance",
           "Community support",
           "REST API: Easy to access",
@@ -352,12 +352,12 @@ export const getComparePlans = user => ({
           business: "10",
           enterprise: "/",
         },
-        // {
-        //   name: "Historical data",
-        //   free: "30 days",
-        //   business: "6 months",
-        //   enterprise: "/",
-        // },
+        {
+          name: "Historical data",
+          free: "30 days",
+          business: "6 months",
+          enterprise: "/",
+        },
         {
           name: "Performance",
           free: "Normal",
