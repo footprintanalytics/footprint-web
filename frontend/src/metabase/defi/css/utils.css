@@ -1,0 +1,75 @@
+.defi-empty {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 100%;
+}
+
+.defi-flex {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.defi-my-120 {
+  margin: 120px 0;
+}
+
+.defi-full-content {
+  height: calc(100vh - 60px - 20px - 20px);
+}
+
+.defi-btn {
+  border-radius: 4px;
+  font-size: 16px;
+  width: 210px;
+  height: 40px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+}
+
+.defi-btn--white {
+  background-color: #fff;
+  color: #3434b2;
+}
+
+.defi-btn--white:hover {
+  color: #3434b2;
+}
+
+.defi-btn--plain {
+  border: 1px solid #fff;
+  color: #fff;
+}
+
+.defi-btn--plain:hover {
+  color: #fff;
+}
+
+.defi-quote {
+  position: relative;
+}
+
+.defi-quote::before {
+  content: "";
+  position: absolute;
+  left: -60px;
+  top: -20px;
+  background-image: url("https://static.footprint.network/20220225173135.png");
+  background-size: cover;
+  width: 25.92px;
+  height: 22.56px;
+}
+
+.defi-quote::after {
+  content: "";
+  position: absolute;
+  right: -60px;
+  bottom: -20px;
+  background-image: url("https://static.footprint.network/20220225173217.png");
+  background-size: cover;
+  width: 25.92px;
+  height: 22.56px;
+}

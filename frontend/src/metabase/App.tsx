@@ -1,7 +1,8 @@
 import React, { ErrorInfo, ReactNode, useState } from "react";
 import { connect } from "react-redux";
 import { Location } from "history";
-
+import Meta from "metabase/components/Meta";
+import { getOssUrl } from "metabase/lib/image";
 import ScrollToTop from "metabase/hoc/ScrollToTop";
 import {
   Archived,
@@ -107,24 +108,35 @@ function App({
   });
 
   return (
-    <ErrorBoundary onError={onError}>
-      <ScrollToTop>
-        <AppContainer className="spread">
-          <AppBanner />
-          {isAppBarVisible && <AppBar isNavBarVisible={isNavBarVisible} />}
-          <AppContentContainer isAdminApp={isAdminApp}>
-            {isNavBarVisible && <Navbar />}
-            <AppContent ref={setViewportElement}>
-              <ContentViewportContext.Provider value={viewportElement ?? null}>
-                {errorPage ? getErrorComponent(errorPage) : children}
-              </ContentViewportContext.Provider>
-            </AppContent>
-            <UndoListing />
-            <StatusListing />
-          </AppContentContainer>
-        </AppContainer>
-      </ScrollToTop>
-    </ErrorBoundary>
+    <React.Fragment>
+      <Meta
+        title="Footprint Analytics"
+        // description="Explore Cross-Chain Web3.0 Data about NFTs, GameFi, Metaverse and DeFi(Decentralized Finance) DApps here. A platform for discovering and visualizing blockchain data without coding."
+        image={getOssUrl("Footprint.jpeg")}
+        imageWidth={1200}
+        imageHeight={630}
+        siteName="Footprint"
+        viewport={0.3}
+      />
+      <ErrorBoundary onError={onError}>
+        <ScrollToTop>
+          <AppContainer className="spread">
+            {/*<AppBanner />*/}
+            {/*{isAppBarVisible && <AppBar isNavBarVisible={isNavBarVisible} />}*/}
+            <AppContentContainer isAdminApp={isAdminApp}>
+              {isNavBarVisible && <Navbar location={location} />}
+              <AppContent ref={setViewportElement}>
+                <ContentViewportContext.Provider value={viewportElement ?? null}>
+                  {errorPage ? getErrorComponent(errorPage) : children}
+                </ContentViewportContext.Provider>
+              </AppContent>
+              <UndoListing />
+              <StatusListing />
+            </AppContentContainer>
+          </AppContainer>
+        </ScrollToTop>
+      </ErrorBoundary>
+    </React.Fragment>
   );
 }
 

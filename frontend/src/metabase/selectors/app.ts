@@ -164,3 +164,9 @@ export const getTokenStatusStatus = createSelector(
   [getSettings],
   settings => settings["token-status"]?.status,
 );
+
+export const getApp = (state: any) => state.app;
+
+export const getChannel = createSelector([getApp], ({ channel }) => {
+  return channel || "";
+});

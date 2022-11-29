@@ -14,6 +14,7 @@ import { AdminPath, State } from "metabase-types/store";
 
 import { AdminNavbar } from "../components/AdminNavbar";
 import MainNavbar from "./MainNavbar";
+import FpNavbar from "./FpNavbar/FpNavbar";
 
 type NavbarProps = {
   isOpen: boolean;
@@ -38,11 +39,11 @@ function Navbar({ isOpen, user, location, params, adminPaths }: NavbarProps) {
   if (!user) {
     return null;
   }
-
+  console.log("NavbarNavbarNavbar", isAdminApp)
   return isAdminApp ? (
     <AdminNavbar user={user} path={location.pathname} adminPaths={adminPaths} />
   ) : (
-    <MainNavbar isOpen={isOpen} location={location} params={params} />
+    <FpNavbar isOpen={isOpen} location={location} params={params} />
   );
 }
 
