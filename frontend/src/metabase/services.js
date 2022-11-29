@@ -89,13 +89,13 @@ export const CardApi = {
     ),
   ),
   create: POST("/api/card"),
-  get: GET("/api/card/:cardId"),
+  // get: GET("/api/card/:cardId"),
   update: PUT("/api/card/:id"),
   delete: DELETE("/api/card/:id"),
   persist: POST("/api/card/:id/persist"),
   unpersist: POST("/api/card/:id/unpersist"),
   refreshModelCache: POST("/api/card/:id/refresh"),
-  query: POST("/api/card/:cardId/query"),
+  // query: POST("/api/card/:cardId/query"),
   query_pivot: POST("/api/card/pivot/:cardId/query"),
   bookmark: {
     create: POST("/api/card/:id/bookmark"),
@@ -103,11 +103,16 @@ export const CardApi = {
   },
   listPublic: GET("/api/card/public"),
   listEmbeddable: GET("/api/card/embeddable"),
-  createPublicLink: POST("/api/card/:id/public_link"),
-  deletePublicLink: DELETE("/api/card/:id/public_link"),
+  // createPublicLink: POST("/api/card/:id/public_link"),
+  // deletePublicLink: DELETE("/api/card/:id/public_link"),
   // related
   related: GET("/api/card/:cardId/related"),
   adHocRelated: POST("/api/card/related"),
+  get: GET("/api/v1/card/:cardId"),
+  query: POST("/api/v1/card/:cardId/query"),
+  createPublicLink: POST("/api/v1/card/:id/public_link"),
+  deletePublicLink: DELETE("/api/v1/card/:id/public_link"),
+  secret: GET("/api/v1/card/:id/secret"),
 };
 
 export const DashboardApi = {
@@ -116,22 +121,22 @@ export const DashboardApi = {
   create: POST("/api/dashboard"),
   // saves a complete transient dashboard
   save: POST("/api/dashboard/save"),
-  get: GET("/api/dashboard/:dashId"),
-  update: PUT("/api/dashboard/:id"),
+  // get: GET("/api/dashboard/:dashId"),
+  // update: PUT("/api/dashboard/:id"),
   delete: DELETE("/api/dashboard/:dashId"),
   addcard: POST("/api/dashboard/:dashId/cards"),
   removecard: DELETE("/api/dashboard/:dashId/cards"),
   reposition_cards: PUT("/api/dashboard/:dashId/cards"),
   favorite: POST("/api/dashboard/:dashId/favorite"),
   unfavorite: DELETE("/api/dashboard/:dashId/favorite"),
-  parameterValues: GET("/api/dashboard/:dashId/params/:paramId/values"),
+  // parameterValues: GET("/api/dashboard/:dashId/params/:paramId/values"),
   parameterSearch: GET("/api/dashboard/:dashId/params/:paramId/search/:query"),
   validFilterFields: GET("/api/dashboard/params/valid-filter-fields"),
 
   listPublic: GET("/api/dashboard/public"),
   listEmbeddable: GET("/api/dashboard/embeddable"),
-  createPublicLink: POST("/api/dashboard/:id/public_link"),
-  deletePublicLink: DELETE("/api/dashboard/:id/public_link"),
+  // createPublicLink: POST("/api/dashboard/:id/public_link"),
+  // deletePublicLink: DELETE("/api/dashboard/:id/public_link"),
 
   cardQuery: POST(
     "/api/dashboard/:dashboardId/dashcard/:dashcardId/card/:cardId/query",
@@ -142,6 +147,12 @@ export const DashboardApi = {
   exportCardQuery: POST(
     "/api/dashboard/:dashboardId/dashcard/:dashcardId/card/:cardId/query/:exportFormat",
   ),
+  get: GET("/api/v1/dashboard/:dashId"),
+  update: PUT("/api/dashboard/:id"),
+  parameterValues: GET("/api/v1/dashboard/:dashId/params/:paramId/values"),
+  createPublicLink: POST("/api/v1/dashboard/:id/public_link"),
+  deletePublicLink: DELETE("/api/v1/dashboard/:id/public_link"),
+  secret: GET("/api/v1/dashboard/:id/secret"),
 };
 
 export const CollectionsApi = {
@@ -167,15 +178,20 @@ export const DataAppsApi = {
 const PIVOT_PUBLIC_PREFIX = "/api/public/pivot/";
 
 export const PublicApi = {
-  card: GET("/api/public/card/:uuid"),
+  // card: GET("/api/public/card/:uuid"),
   cardQuery: GET("/api/public/card/:uuid/query"),
   cardQueryPivot: GET(PIVOT_PUBLIC_PREFIX + "card/:uuid/query"),
-  dashboard: GET("/api/public/dashboard/:uuid"),
+  // dashboard: GET("/api/public/dashboard/:uuid"),
   dashboardCardQuery: GET(
     "/api/public/dashboard/:uuid/dashcard/:dashcardId/card/:cardId",
   ),
   dashboardCardQueryPivot: GET(
     PIVOT_PUBLIC_PREFIX + "dashboard/:uuid/dashcard/:dashcardId/card/:cardId",
+  ),
+  card: GET("/api/v1/public/card/:uuid"),
+  dashboard: GET("/api/v1/public/dashboard/:uuid"),
+  dashboardCardSecret: GET(
+    "/api/v1/public/dashboard/:uuid/card/:cardUuid/secret",
   ),
 };
 
@@ -248,9 +264,9 @@ export const MetabaseApi = {
   //db_tables:   GET("/api/database/:dbId/tables"),
   db_fields: GET("/api/database/:dbId/fields"),
   db_idfields: GET("/api/database/:dbId/idfields"),
-  db_autocomplete_suggestions: GET(
-    "/api/database/:dbId/autocomplete_suggestions?:matchStyle=:query",
-  ),
+  // db_autocomplete_suggestions: GET(
+  //   "/api/database/:dbId/autocomplete_suggestions?:matchStyle=:query",
+  // ),
   db_card_autocomplete_suggestions: GET(
     "/api/database/:dbId/card_autocomplete_suggestions",
   ),
@@ -283,9 +299,9 @@ export const MetabaseApi = {
   field_dimension_delete: DELETE("/api/field/:fieldId/dimension"),
   field_rescan_values: POST("/api/field/:fieldId/rescan_values"),
   field_discard_values: POST("/api/field/:fieldId/discard_values"),
-  field_search: GET("/api/field/:fieldId/search/:searchFieldId"),
+  // field_search: GET("/api/field/:fieldId/search/:searchFieldId"),
   field_remapping: GET("/api/field/:fieldId/remapping/:remappedFieldId"),
-  dataset: POST("/api/dataset"),
+  // dataset: POST("/api/dataset"),
   dataset_pivot: POST("/api/dataset/pivot"),
   dataset_duration: POST("/api/dataset/duration"),
   native: POST("/api/dataset/native"),
@@ -295,6 +311,11 @@ export const MetabaseApi = {
     // this prevents the `endpoint` parameter from being URL encoded
     raw: { endpoint: true },
   }),
+  db_autocomplete_suggestions: GET(
+    "/api/v1/database/:dbId/autocomplete_suggestions?prefix=:prefix",
+  ),
+  field_search: GET("/api/v1/field/:fieldId/search/:searchFieldId"),
+  dataset: POST("/api/v1/database/dataset"),
 };
 
 export const ModerationReviewApi = {
@@ -349,12 +370,14 @@ export const RevisionsApi = {
 
 export const SessionApi = {
   create: POST("/api/session"),
-  createWithGoogleAuth: POST("/api/session/google_auth"),
+  // createWithGoogleAuth: POST("/api/session/google_auth"),
   delete: DELETE("/api/session"),
   properties: GET("/api/session/properties"),
   forgot_password: POST("/api/session/forgot_password"),
   reset_password: POST("/api/session/reset_password"),
   password_reset_token_valid: GET("/api/session/password_reset_token_valid"),
+  createWithGoogleAuth: POST("/api/v1/google/login"),
+  registerAndLogin: POST("/api/v1/quick/auth"),
 };
 
 export const SettingsApi = {
@@ -397,14 +420,16 @@ export const SetupApi = {
 export const UserApi = {
   create: POST("/api/user"),
   list: GET("/api/user"),
-  current: GET("/api/user/current"),
+  //current: GET("/api/user/current"),
   // get:                         GET("/api/user/:userId"),
-  update: PUT("/api/user/:id"),
+  // update: PUT("/api/user/:id"),
   update_password: PUT("/api/user/:id/password"),
   update_qbnewb: PUT("/api/user/:id/modal/qbnewb"),
   delete: DELETE("/api/user/:userId"),
   reactivate: PUT("/api/user/:userId/reactivate"),
   send_invite: POST("/api/user/:id/send_invite"),
+  current: GET("/api/v1/user/current"),
+  update: PUT("/api/v1/userinfo/profile"),
 };
 
 export const UtilApi = {
@@ -434,7 +459,8 @@ export function setPublicQuestionEndpoints(uuid) {
   setFieldEndpoints("/api/public/card/:uuid", { uuid });
 }
 export function setPublicDashboardEndpoints() {
-  setParamsEndpoints("/api/public");
+  setParamsEndpoints("/api/v1/public");
+  // setParamsEndpoints("/api/public");
 }
 export function setEmbedQuestionEndpoints(token) {
   if (!IS_EMBED_PREVIEW) {
