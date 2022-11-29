@@ -145,4 +145,9 @@ export default {
   DeFiAbout: loadable(() => import("./defi/containers/About")),
   DeFiDashboard: loadable(() => import("./defi/containers/Dashboard")),
   DeFiDemo: loadable(() => import("./defi/containers/Demo")),
+
+  // submit
+  SubmitContract: loadable(() => import("metabase/submit/contract/index")),
+  SubmitContractAdd: loadable(() => import("metabase/submit/contract/add")),
+  SubmitContractSuccess: loadable(() => import("metabase/submit/contract/success")),
 }

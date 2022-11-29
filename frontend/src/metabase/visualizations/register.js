@@ -34,6 +34,7 @@ import Rose from "./visualizations/Rose";
 import NestedPies from "./visualizations/NestedPies";
 import BarStack from "./visualizations/BarStack";
 import DoubleScalar from "metabase/visualizations/visualizations/DoubleScalar";
+import Graph from "./visualizations/Graph";
 
 export default function() {
   registerVisualization(Scalar);
@@ -67,6 +68,7 @@ export default function() {
   registerVisualization(Bubble);
   registerVisualization(BarStack);
   registerVisualization(DoubleScalar);
+  registerVisualization(Graph);
 
   setDefaultVisualization(Table);
 }

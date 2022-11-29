@@ -42,6 +42,7 @@ const FIXED_LAYOUT = [
     "bubble",
     "barstack",
     "doublescalar",
+    "graph",
   ],
 ];
 const FIXED_TYPES = new Set(_.flatten(FIXED_LAYOUT));
@@ -70,6 +71,14 @@ const ChartTypeSidebar = ({
 
   const layout = [...FIXED_LAYOUT, ...otherGrouped];
   const [showVip, setShowVip] = useState(false);
+
+  if (
+    !props?.user?.groups?.find(f =>
+      ["staff", "inner", "admin"].includes(String(f).toLocaleLowerCase()),
+    )
+  ) {
+    layout[2] = layout[2].filter(f => f !== "graph");
+  }
 
   useEffect(() => {
     if (question && !showMore && !TOP_TYPES.has(question.display())) {
