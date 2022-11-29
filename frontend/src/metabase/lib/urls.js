@@ -8,6 +8,7 @@ import { serializeCardForUrl } from "metabase/lib/card";
 import MetabaseSettings from "metabase/lib/settings";
 import { optionsToHashParams } from "metabase/public/lib/embed";
 import { getProject, isDefi360 } from "metabase/lib/project_info";
+import Question from "metabase-lib/Question";
 
 function appendSlug(path, slug) {
   return slug ? `${path}-${slug}` : path;

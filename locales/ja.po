@@ -36,7 +36,7 @@ msgstr "データベースタイプを選択する"
 #: frontend/src/metabase/admin/permissions/components/CollectionPermissionsModal/CollectionPermissionsModal.jsx:145
 #: frontend/src/metabase/admin/settings/components/widgets/GroupMappingsWidget.jsx:176
 #: frontend/src/metabase/components/ActionButton.jsx:30
-#: frontend/src/metabase/components/ButtonWithStatus.jsx:8
+#: frontend/src/metabase/core/components/ButtonWithStatus.jsx:8
 #: frontend/src/metabase/containers/SaveQuestionModal.jsx:166
 #: frontend/src/metabase/dashboard/containers/DashboardHeader.jsx:168
 #: frontend/src/metabase/query_builder/components/template_tags/SnippetModal.jsx:46
@@ -103,7 +103,7 @@ msgstr "必要に応じて手動で実行する"
 #: frontend/src/metabase/admin/settings/components/SettingsBatchForm.jsx:34
 #: frontend/src/metabase/admin/settings/components/SettingsSlackForm.jsx:214
 #: frontend/src/metabase/components/ActionButton.jsx:31
-#: frontend/src/metabase/components/ButtonWithStatus.jsx:9
+#: frontend/src/metabase/core/components/ButtonWithStatus.jsx:9
 msgid "Saving..."
 msgstr "保存中..."
 
@@ -2251,17 +2251,17 @@ msgstr "このテーブルを自動探査(X-ray)する"
 msgid "Learn about this table"
 msgstr "このテーブルについて詳細を見る"
 
-#: frontend/src/metabase/components/Button.info.js:12
-#: frontend/src/metabase/components/Button.info.js:13
-#: frontend/src/metabase/components/Button.info.js:14
+#: frontend/src/metabase/core/components/Button.info.js:12
+#: frontend/src/metabase/core/components/Button.info.js:13
+#: frontend/src/metabase/core/components/Button.info.js:14
 msgid "Clickity click"
 msgstr "カチカチ"
 
-#: frontend/src/metabase/components/ButtonWithStatus.jsx:10
+#: frontend/src/metabase/core/components/ButtonWithStatus.jsx:10
 msgid "Saved!"
 msgstr "保存されました！"
 
-#: frontend/src/metabase/components/ButtonWithStatus.jsx:11
+#: frontend/src/metabase/core/components/ButtonWithStatus.jsx:11
 msgid "Saving failed."
 msgstr "保存に失敗しました"
 
@@ -13465,7 +13465,7 @@ msgstr "データベース{0}に対する定期タスクのスケジューリン
 msgid "All elements must be distinct."
 msgstr "全ての項目が一意でなければなりません"
 
-#: 
+#:
 msgctxt "Modal for selecting columns in source data or when doing a join."
 msgid "Pick the columns you want to include"
 msgstr "含めたい列を選ぶ"
@@ -17891,12 +17891,12 @@ msgstr "{0} {1}"
 msgid "{1}"
 msgstr "{1}"
 
-#: 
+#:
 msgctxt "This is a new information message on the new pulse creation page."
 msgid "Pulses are being phased out"
 msgstr "パルスは廃止予定です"
 
-#: 
+#:
 msgctxt "An info message letting you know you can create dashboard subscriptions instead of pulses."
 msgid "You can now set up {0} instead. We'll remove Pulses in a future release, and help you migrate any that you still have."
 msgstr "代わりに{0}を設定できるようになりました。Pulses は将来のリリースで削除し、まだ持っているものは移行するようにします。"
@@ -17905,7 +17905,7 @@ msgstr "代わりに{0}を設定できるようになりました。Pulses は�
 msgid "dashboard subscriptions"
 msgstr "ダッシュボード購読"
 
-#: 
+#:
 msgid "{0} charts in your subscription won't look the same as in your dashboard. {1}"
 msgstr "サブスクリプションの{0}チャートは、ダッシュボードと同じように表示されません。{1}"
 
@@ -18054,7 +18054,7 @@ msgid "Set up {0} source database and run migrations..."
 msgstr "{0}ソースデータベースを設定して移行を実行する..."
 
 #. make sure the dest DB is up-to-date
-#. 
+#.
 #. don't need or want to run data migrations in the target DB, since the data is already migrated appropriately
 #: metabase/cmd/copy.clj:343
 msgid "Set up {0} target database and run migrations..."

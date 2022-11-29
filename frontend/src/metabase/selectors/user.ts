@@ -1,6 +1,6 @@
 import { createSelector } from "reselect";
 import { PLUGIN_APPLICATION_PERMISSIONS } from "metabase/plugins";
-
+import { get } from "lodash";
 import type { State } from "metabase-types/store";
 
 export const getUser = (state: State) => state.currentUser;
@@ -30,3 +30,8 @@ export const getUserPersonalCollectionId = createSelector(
   [getUser],
   user => user?.personal_collection_id,
 );
+
+export const getUserSubscribeInfo = createSelector([getUser], user =>
+  get(user, "subscribeInfo", {}),
+);
+

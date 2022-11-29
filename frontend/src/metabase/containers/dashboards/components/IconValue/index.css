@@ -1,0 +1,13 @@
+.dashboards__icon-value {
+  display: flex;
+  align-items: center;
+  margin-right: 12px;
+  padding: 0;
+}
+
+.dashboards__icon-value .ml1,
+.dashboards__icon-value span {
+  margin-left: 6px;
+  font-size: 14px;
+  color: #303440;
+}

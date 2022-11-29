@@ -88,6 +88,8 @@ import SearchApp from "metabase/home/containers/SearchApp";
 import { trackPageView } from "metabase/lib/analytics";
 import { getAdminPaths } from "metabase/admin/app/selectors";
 
+import LazyLoad from "./routesLazyLoad";
+
 const MetabaseIsSetup = UserAuthWrapper({
   predicate: authData => authData.hasUserSetup,
   failureRedirectPath: "/setup",
@@ -205,6 +207,87 @@ export const getRoutes = store => (
             }
           }}
         />
+
+        {/* footprint */}
+        <Route path="/moon-men" component={LazyLoad.NftPage} />
+
+        <Route title={t`News`} path="/news" component={LazyLoad.News}>
+          <IndexRoute component={LazyLoad.Featured} />
+          <Route
+            title={t`Articles`}
+            path="articles"
+            component={props => <LazyLoad.Reports {...props} type="articles" />}
+          />
+          <Route
+            title={t`Reports`}
+            path="reports"
+            component={props => <LazyLoad.Reports {...props} type="research" />}
+          />
+          <Route
+            title={t`Flash`}
+            hidden
+            path="featured"
+            component={LazyLoad.Featured}
+          />
+          <Route
+            title={t`Company`}
+            path="company"
+            component={props => <LazyLoad.Articles {...props} type="company" />}
+          />
+          <Route
+            title={t`Product`}
+            path="product"
+            component={props => <LazyLoad.Articles {...props} type="product" />}
+          />
+          <Route
+            title={t`Events`}
+            path="events"
+            component={props => <LazyLoad.Reports {...props} type="events" />}
+          />
+          <Route
+            title={t`Newsletter`}
+            path="weekly-letter"
+            component={props => (
+              <LazyLoad.Articles {...props} type="week-letter" />
+            )}
+          />
+          <Route
+            title={t`Feature Charts`}
+            path="feature_charts"
+            hidden
+            component={props => (
+              <LazyLoad.FeatureCharts {...props} type="feature_charts" />
+            )}
+          />
+          <Route
+            title={t`Daily News`}
+            path="daily-news"
+            hidden
+            component={props => <LazyLoad.Articles {...props} type="dailyNews" />}
+          />
+          <Route
+            title={t`All Articles`}
+            path="all-article"
+            hidden
+            component={props => <LazyLoad.Articles {...props} />}
+          />
+          <Route
+            title={t`Write for Us`}
+            path="write-for-us"
+            hidden
+            component={props => (
+              <LazyLoad.WriteForUs {...props} type="writeForUs" />
+            )}
+          />
+        </Route>
+
+        <Route path="/data-api">
+          <IndexRoute component={LazyLoad.dataApi} />
+          <Route path="/data-api/pricing" component={LazyLoad.dataApiPrice} />
+          <Route path="/data-api/product" component={LazyLoad.dataApiProduct} />
+        </Route>
+
+        <Route title={t`Pricing`} path="/pricing" component={LazyLoad.Pricing} />
 
         <Route path="search" title={t`Search`} component={SearchApp} />
         <Route path="archive" title={t`Archive`} component={ArchiveApp} />

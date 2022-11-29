@@ -1,0 +1,21 @@
+.relative-dashboard__wrap {
+  display: flex;
+  flex-direction: column;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  overflow: hidden;
+  width: 100%;
+  margin: 10px auto;
+  max-width: 1120px;
+}
+
+.relative-dashboard__title {
+  font-size: 24px;
+  color: #303440;
+  font-weight: 700;
+  margin: 10px 0;
+}
+
+.relative-dashboard__wrap .dashboards__table {
+  margin-bottom: 0;
+}

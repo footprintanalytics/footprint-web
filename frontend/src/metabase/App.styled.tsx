@@ -13,7 +13,7 @@ export const AppContentContainer = styled.div<{
   display: flex;
   flex-direction: column;
   position: relative;
-  overflow: hidden;
+  //overflow: hidden;
   background-color: ${props =>
     color(props.isAdminApp ? "bg-white" : "content")};
 
@@ -26,7 +26,7 @@ export const AppContentContainer = styled.div<{
 export const AppContent = styled.main`
   width: 100%;
   height: 100%;
-  overflow: auto;
+  //overflow: auto;
 
   @media print {
     overflow: visible !important;

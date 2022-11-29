@@ -1,0 +1,10 @@
+.dashboards__creator-content {
+  text-overflow: ellipsis;
+  overflow: hidden;
+  display: -webkit-box;
+  -webkit-line-clamp: 3;
+}
+
+.dashboards__creator-url {
+  margin: 6px 0;
+}

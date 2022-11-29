@@ -116,8 +116,7 @@ function App({
         imageWidth={1200}
         imageHeight={630}
         siteName="Footprint"
-        viewport={0.3}
-      />
+        viewport={0.3} description={undefined} keywords={undefined}      />
       <ErrorBoundary onError={onError}>
         <ScrollToTop>
           <AppContainer className="spread">

@@ -119,22 +119,22 @@ const config = (module.exports = {
         exclude: /node_modules|cljs/,
         use: [{ loader: "babel-loader", options: BABEL_CONFIG }],
       },
-      ...(shouldUseEslint
-        ? [
-            {
-              test: /\.(tsx?|jsx?)$/,
-              exclude: /node_modules|cljs|\.spec\.js/,
-              use: [
-                {
-                  loader: "eslint-loader",
-                  options: {
-                    rulePaths: [__dirname + "/frontend/lint/eslint-rules"],
-                  },
-                },
-              ],
-            },
-          ]
-        : []),
+      // ...(shouldUseEslint
+      //   ? [
+      //       {
+      //         test: /\.(tsx?|jsx?)$/,
+      //         exclude: /node_modules|cljs|\.spec\.js/,
+      //         use: [
+      //           {
+      //             loader: "eslint-loader",
+      //             options: {
+      //               rulePaths: [__dirname + "/frontend/lint/eslint-rules"],
+      //             },
+      //           },
+      //         ],
+      //       },
+      //     ]
+      //   : []),
       {
         test: /\.(eot|woff2?|ttf|svg|png)$/,
         type: "asset/resource",

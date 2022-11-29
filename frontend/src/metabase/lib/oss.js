@@ -1,7 +1,7 @@
 import { message } from "antd";
 import OSS from "tiny-oss";
-import { ossPath } from "./ossPath";
 import { staticBucketKeyId, staticBucketKeySecret } from "metabase/env";
+import { ossPath } from "./ossPath";
 
 const client = new OSS({
   region: "oss-accelerate",

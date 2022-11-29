@@ -2267,9 +2267,9 @@ msgstr "Aplique raio-X nesta tabela"
 msgid "Learn about this table"
 msgstr "Aprenda mais sobre essa tabela"
 
-#: frontend/src/metabase/components/Button.info.js:12
-#: frontend/src/metabase/components/Button.info.js:13
-#: frontend/src/metabase/components/Button.info.js:14
+#: frontend/src/metabase/core/components/Button.info.js:12
+#: frontend/src/metabase/core/components/Button.info.js:13
+#: frontend/src/metabase/core/components/Button.info.js:14
 msgid "Clickity click"
 msgstr "Clique"
 

@@ -1,0 +1,17 @@
+.dashboards__web-content {
+  text-overflow: ellipsis;
+  overflow: hidden;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  color: var(--footprint-color-primary-text);
+}
+
+.dashboards__web-url {
+  margin: 6px 0;
+  color: var(--footprint-color-secondary-text1);
+}
+
+.search .dashboards__list-item:hover .dashboards__web-title {
+  text-decoration: underline;
+  text-decoration-color: #3434b2;
+}

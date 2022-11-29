@@ -2257,9 +2257,9 @@ msgstr "X-ışını bu tablo"
 msgid "Learn about this table"
 msgstr "Bu tablo hakkında bilgi edinin"
 
-#: frontend/src/metabase/components/Button.info.js:12
-#: frontend/src/metabase/components/Button.info.js:13
-#: frontend/src/metabase/components/Button.info.js:14
+#: frontend/src/metabase/core/components/Button.info.js:12
+#: frontend/src/metabase/core/components/Button.info.js:13
+#: frontend/src/metabase/core/components/Button.info.js:14
 msgid "Clickity click"
 msgstr "Clickity tıklama"
 
