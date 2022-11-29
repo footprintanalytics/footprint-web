@@ -1014,7 +1014,7 @@ ICON_PATHS["combo"] = ICON_PATHS["lineandbar"];
 ICON_PATHS["map"] = ICON_PATHS["pinmap"];
 ICON_PATHS["object"] = ICON_PATHS["document"];
 ICON_PATHS["pivot"] = ICON_PATHS["pivot_table"];
-
+ICON_PATHS["graph"] = ICON_PATHS["bubble"];
 ICON_PATHS["nestedpies"] = ICON_PATHS["nested_pies"];
 ICON_PATHS["doublescalar"] = ICON_PATHS["doubleNumber"];
 
