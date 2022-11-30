@@ -36,7 +36,7 @@ export default {
   // Register: loadable(() => import("metabase/auth/containers/Register")),
   // LogoutApp: loadable(() => import("metabase/auth/containers/LogoutApp")),
   // PasswordResetApp: loadable(() => import("metabase/auth/containers/PasswordResetApp")),
-  // DashboardApp: loadable(() => import("metabase/dashboard/containers/DashboardApp"), options),
+  DashboardApp: loadable(() => import("metabase/dashboard/containers/DashboardApp"), options),
   //
   // BrowseApp: loadable(() => import("metabase/browse/components/BrowseApp")),
   // DatabaseBrowser: loadable(() => import("metabase/browse/containers/DatabaseBrowser")),

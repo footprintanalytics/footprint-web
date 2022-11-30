@@ -66,5 +66,5 @@ const mapDispatchToProps = {
   cancelFeedbackAction,
 };
 
-export default type => (ComposedOperatorComponent: React.Class) =>
+export default type => (ComposedOperatorComponent) =>
   createComponent(ComposedOperatorComponent, type);

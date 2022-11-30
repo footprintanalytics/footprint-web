@@ -39,17 +39,17 @@ const mapStateToProps = (state, props) => {
   const isShowingDashboardInfoSidebar =
     !isDataApp && getIsShowDashboardInfoSidebar(state);
   return {
-    isBookmarked: getIsBookmarked(state, props),
+    // isBookmarked: getIsBookmarked(state, props),
     isNavBarOpen: getIsNavbarOpen(state),
     isShowingDashboardInfoSidebar,
   };
 };
 
 const mapDispatchToProps = {
-  createBookmark: ({ id }) =>
-    Bookmark.actions.create({ id, type: "dashboard" }),
-  deleteBookmark: ({ id }) =>
-    Bookmark.actions.delete({ id, type: "dashboard" }),
+  // createBookmark: ({ id }) =>
+  //   Bookmark.actions.create({ id, type: "dashboard" }),
+  // deleteBookmark: ({ id }) =>
+  //   Bookmark.actions.delete({ id, type: "dashboard" }),
   onChangeLocation: push,
   toggleSidebar,
 };
@@ -59,7 +59,7 @@ class DashboardHeader extends Component {
     super(props);
 
     this.addQuestionModal = React.createRef();
-    this.handleToggleBookmark = this.handleToggleBookmark.bind(this);
+    // this.handleToggleBookmark = this.handleToggleBookmark.bind(this);
   }
 
   state = {
@@ -104,13 +104,13 @@ class DashboardHeader extends Component {
     this.props.onEditingChange(dashboard);
   }
 
-  handleToggleBookmark() {
-    const { createBookmark, deleteBookmark, isBookmarked } = this.props;
-
-    const toggleBookmark = isBookmarked ? deleteBookmark : createBookmark;
-
-    toggleBookmark(this.props.dashboardId);
-  }
+  // handleToggleBookmark() {
+  //   const { createBookmark, deleteBookmark, isBookmarked } = this.props;
+  //
+  //   const toggleBookmark = isBookmarked ? deleteBookmark : createBookmark;
+  //
+  //   toggleBookmark(this.props.dashboardId);
+  // }
 
   onAddTextBox() {
     this.props.addTextDashCardToDashboard({ dashId: this.props.dashboard.id });
@@ -341,13 +341,13 @@ class DashboardHeader extends Component {
       buttons.push(
         ...[
           <DashboardHeaderActionDivider key="dashboard-button-divider" />,
-          <DashboardBookmark
-            key="dashboard-bookmark-button"
-            dashboard={dashboard}
-            onCreateBookmark={createBookmark}
-            onDeleteBookmark={deleteBookmark}
-            isBookmarked={isBookmarked}
-          />,
+          // <DashboardBookmark
+          //   key="dashboard-bookmark-button"
+          //   dashboard={dashboard}
+          //   onCreateBookmark={createBookmark}
+          //   onDeleteBookmark={deleteBookmark}
+          //   isBookmarked={isBookmarked}
+          // />,
           !isDataAppPage && (
             <Tooltip key="dashboard-info-button" tooltip={t`More info`}>
               <DashboardHeaderButton
@@ -413,6 +413,6 @@ class DashboardHeader extends Component {
 }
 
 export default _.compose(
-  Bookmark.loadList(),
+  // Bookmark.loadList(),
   connect(mapStateToProps, mapDispatchToProps),
 )(DashboardHeader);

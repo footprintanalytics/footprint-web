@@ -34,7 +34,7 @@ export function expandInlineDashboard(dashboard) {
     name: "",
     parameters: [],
     ...dashboard,
-    ordered_cards: dashboard.ordered_cards.map(dashcard => ({
+    ordered_cards: dashboard?.ordered_cards?.map(dashcard => ({
       visualization_settings: {},
       parameter_mappings: [],
       ...dashcard,

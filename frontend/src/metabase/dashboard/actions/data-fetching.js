@@ -3,6 +3,7 @@ import { getIn } from "icepick";
 import { t } from "ttag";
 
 import { normalize, schema } from "normalizr";
+import querystring from "querystring";
 import { createAction, createThunkAction } from "metabase/lib/redux";
 import { defer } from "metabase/lib/promise";
 
@@ -127,16 +128,47 @@ const loadingComplete = createThunkAction(
   },
 );
 
+const createDefaultDashboard = () => {
+  const defaultDashboard =
+    '{"entities":{"dashboard":{"new":{"ordered_cards":[],"can_write":true,"name":"New Dashboard","made_public_by_id":1,"id":"new","parameters":[]}}},"result":"new","dashboardId":"new","parameterValues":{}}';
+  return JSON.parse(defaultDashboard);
+};
+
+function getOptionsHash() {
+  let options = {};
+  if (location.hash) {
+    const hash = location.hash.replace(/^#/, "");
+    if (hash.charAt(0) === "?") {
+      options = querystring.parse(hash.substring(1));
+    } else {
+      options = querystring.parse(hash);
+    }
+  }
+  return options;
+}
+
 export const fetchDashboard = createThunkAction(
   FETCH_DASHBOARD,
   function (dashId, queryParams, preserveParameters) {
     let result;
     return async function (dispatch, getState) {
       const dashboardType = getDashboardType(dashId);
+
+      if (dashboardType === "new") {
+        return createDefaultDashboard();
+      }
+      const optionsHash = getOptionsHash();
+
       if (dashboardType === "public") {
-        result = await PublicApi.dashboard({ uuid: dashId });
+        const secret = optionsHash && optionsHash.secret;
+        const { data } = await PublicApi.dashboard({
+          uuid: dashId,
+          secret: secret,
+        });
+        result = data;
         result = {
           ...result,
+          entityId: result.id,
           id: dashId,
           ordered_cards: result.ordered_cards.map(dc => ({
             ...dc,
@@ -179,7 +211,7 @@ export const fetchDashboard = createThunkAction(
       }
 
       // copy over any virtual cards from the dashcard to the underlying card/question
-      result.ordered_cards.forEach(card => {
+      result?.ordered_cards?.forEach(card => {
         if (card.visualization_settings.virtual_card) {
           card.card = Object.assign(
             card.card || {},
@@ -213,6 +245,7 @@ export const fetchDashboard = createThunkAction(
         ...normalize(result, dashboard), // includes `result` and `entities`
         dashboardId: dashId,
         parameterValues: parameterValuesById,
+        templateId: result.templateId,
       };
     };
   },

@@ -22,5 +22,5 @@ const createComponent = ComposedComponent => {
   return EnhancedComponent;
 };
 
-export default (ComposedComponent: React.Class) =>
+export default (ComposedComponent) =>
   createComponent(ComposedComponent);

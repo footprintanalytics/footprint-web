@@ -21,10 +21,17 @@ import { fetchDatabaseMetadata } from "metabase/redux/metadata";
 import { getIsNavbarOpen, setErrorPage } from "metabase/redux/app";
 
 import { getDatabases, getMetadata } from "metabase/selectors/metadata";
+import QueryCopyModal from "metabase/components/QueryCopyModal";
 import {
   getUserIsAdmin,
   canManageSubscriptions,
+  getUser,
 } from "metabase/selectors/user";
+
+import {
+  loginModalShowAction,
+  setIsCancelFeedbackBlockAction,
+} from "metabase/redux/control";
 
 import { getEmbedOptions } from "metabase/selectors/embed";
 
@@ -98,6 +105,9 @@ const mapStateToProps = (state, props) => {
     isHeaderVisible: getIsHeaderVisible(state),
     isAdditionalInfoVisible: getIsAdditionalInfoVisible(state),
     embedOptions: getEmbedOptions(state),
+    urlDashboardName: props.params.dashboardName,
+    urlUserName: props.params.name,
+    user: getUser(state),
   };
 };
 
@@ -107,6 +117,8 @@ const mapDispatchToProps = {
   fetchDatabaseMetadata,
   setErrorPage,
   onChangeLocation: push,
+  setLoginModalShow: loginModalShowAction,
+  setIsCancelFeedbackBlockAction,
 };
 
 // NOTE: should use DashboardControls and DashboardData HoCs here?
@@ -119,6 +131,8 @@ const DashboardApp = props => {
   const [addCardOnLoad] = useState(options.add && parseInt(options.add));
 
   const [isShowingToaster, setIsShowingToaster] = useState(false);
+
+  const [cardInfo, setCardInfo] = useState(null);
 
   const onTimeout = useCallback(() => {
     if ("Notification" in window && Notification.permission === "default") {
@@ -160,13 +174,34 @@ const DashboardApp = props => {
     setIsShowingToaster(false);
   }, []);
 
+  const duplicateAction = async item => {
+    if (this.props.user) {
+      setCardInfo({
+        cardId: item.id,
+        cardName: item.name,
+      });
+    } else {
+      this.props.setLoginModalShow({
+        show: true,
+        from: "publicDashboard_query_duplicate",
+      });
+    }
+  };
+
   return (
     <DataAppContext>
       <div className="shrink-below-content-size full-height">
         <Dashboard
           editingOnLoad={editingOnLoad}
           addCardOnLoad={addCardOnLoad}
+          duplicateAction={duplicateAction}
           {...props}
+        />
+        <QueryCopyModal
+          open={cardInfo?.cardId}
+          cardId={cardInfo?.cardId}
+          name={cardInfo?.cardName}
+          onClose={() => setCardInfo(null)}
         />
         {/* For rendering modal urls */}
         {props.children}

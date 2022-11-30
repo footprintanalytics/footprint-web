@@ -261,37 +261,37 @@ export const getRoutes = store => (
       {/*  component={LazyLoad.Widget}*/}
       {/*/>*/}
 
-      {/*<Route*/}
-      {/*  title={t`Dashboard`}*/}
-      {/*  path="/@:name/:dashboardName"*/}
-      {/*  component={LazyLoad.DashboardApp}*/}
-      {/*>*/}
-      {/*  <ModalRoute*/}
-      {/*    title={t`History`}*/}
-      {/*    path="history"*/}
-      {/*    modal={LazyLoad.DashboardHistoryModal}*/}
-      {/*  />*/}
-      {/*  <ModalRoute*/}
-      {/*    title={t`Move`}*/}
-      {/*    path="move"*/}
-      {/*    modal={LazyLoad.DashboardMoveModal}*/}
-      {/*  />*/}
-      {/*  <ModalRoute*/}
-      {/*    title={t`Copy`}*/}
-      {/*    path="copy"*/}
-      {/*    modal={LazyLoad.DashboardCopyModal}*/}
-      {/*  />*/}
-      {/*  <ModalRoute*/}
-      {/*    title={t`Details`}*/}
-      {/*    path="details"*/}
-      {/*    modal={LazyLoad.DashboardDetailsModal}*/}
-      {/*  />*/}
-      {/*  <ModalRoute*/}
-      {/*    title={t`Archive`}*/}
-      {/*    path="archive"*/}
-      {/*    modal={LazyLoad.ArchiveDashboardModal}*/}
-      {/*  />*/}
-      {/*</Route>*/}
+      <Route
+        title={t`Dashboard`}
+        path="/@:name/:dashboardName"
+        component={LazyLoad.DashboardApp}
+      >
+        {/*<ModalRoute*/}
+        {/*  title={t`History`}*/}
+        {/*  path="history"*/}
+        {/*  modal={LazyLoad.DashboardHistoryModal}*/}
+        {/*/>*/}
+        {/*<ModalRoute*/}
+        {/*  title={t`Move`}*/}
+        {/*  path="move"*/}
+        {/*  modal={LazyLoad.DashboardMoveModal}*/}
+        {/*/>*/}
+        {/*<ModalRoute*/}
+        {/*  title={t`Copy`}*/}
+        {/*  path="copy"*/}
+        {/*  modal={LazyLoad.DashboardCopyModal}*/}
+        {/*/>*/}
+        {/*<ModalRoute*/}
+        {/*  title={t`Details`}*/}
+        {/*  path="details"*/}
+        {/*  modal={LazyLoad.DashboardDetailsModal}*/}
+        {/*/>*/}
+        {/*<ModalRoute*/}
+        {/*  title={t`Archive`}*/}
+        {/*  path="archive"*/}
+        {/*  modal={LazyLoad.ArchiveDashboardModal}*/}
+        {/*/>*/}
+      </Route>
 
       <Route
         title={t`Protocols - Footprint Analytics`}

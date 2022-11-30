@@ -95,7 +95,7 @@ export function isDashboardParameterWithoutMapping(
 }
 
 function getMappings(ordered_cards: DashboardOrderedCard[]): ExtendedMapping[] {
-  return ordered_cards.flatMap(dashcard => {
+  return ordered_cards?.flatMap(dashcard => {
     const { parameter_mappings, card, series } = dashcard;
     const cards = [card, ...(series || [])];
     return (parameter_mappings || [])
