@@ -246,3 +246,7 @@ export const isActivatePath = () => {
   }
   return window.location.pathname.startsWith("/activate");
 };
+
+export function myProfileUrl(userName) {
+  return `/@${userName}`;
+}

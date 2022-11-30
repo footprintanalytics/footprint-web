@@ -37,33 +37,43 @@ function ProfileLink({ user, adminItems, onLogout, trigger }) {
   };
 
   const generateOptionsForUser = () => {
-    const { tag } = MetabaseSettings.get("version");
-    const isAdmin = user?.is_superuser;
+    // const { tag } = MetabaseSettings.get("version");
+    const admin = user && user.is_superuser;
+    const publicAnalyticPermission = user && user.publicAnalytic === "write";
+    const isAdmin = user && user.is_superuser;
+    const isMarket = user && user.isMarket;
+    const userName = user && user.name;
     const showAdminSettingsItem = adminItems?.length > 0;
-    const compactBugReportDetailsForUrl = encodeURIComponent(
+    /*const compactBugReportDetailsForUrl = encodeURIComponent(
       JSON.stringify(bugReportDetails),
-    );
+    );*/
 
     return [
+      {
+        title: t`My Profile`,
+        icon: null,
+        link: Urls.myProfileUrl(userName),
+        event: `Navbar;Profile Dropdown;My Profile`,
+      },
       {
         title: t`Account settings`,
         icon: null,
         link: Urls.accountSettings(),
         event: `Navbar;Profile Dropdown;Edit Profile`,
       },
-      showAdminSettingsItem && {
+      showAdminSettingsItem && admin && {
         title: t`Admin settings`,
         icon: null,
         link: "/admin",
         event: `Navbar;Profile Dropdown;Enter Admin`,
       },
-      {
+      /*{
         title: t`Activity`,
         icon: null,
         link: "/activity",
         event: `Navbar;Profile Dropdown;Activity ${tag}`,
-      },
-      {
+      },*/
+      /*{
         title: t`Help`,
         icon: null,
         link:
@@ -73,12 +83,24 @@ function ProfileLink({ user, adminItems, onLogout, trigger }) {
 
         externalLink: true,
         event: `Navbar;Profile Dropdown;About ${tag}`,
-      },
-      {
+      },*/
+      /*{
         title: t`About Metabase`,
         icon: null,
         action: () => openModal("about"),
         event: `Navbar;Profile Dropdown;About ${tag}`,
+      },*/
+      publicAnalyticPermission && {
+        title: t`Public Analyst`,
+        icon: null,
+        link: "/collection/root",
+        event: `Navbar;Profile Dropdown;Root`,
+      },
+      (isAdmin || isMarket) && {
+        title: t`Upgrade Vip`,
+        icon: null,
+        link: "/market/upgrade",
+        event: `Navbar;Profile Dropdown;upgrade`,
       },
       {
         title: t`Sign out`,
@@ -89,12 +111,12 @@ function ProfileLink({ user, adminItems, onLogout, trigger }) {
     ].filter(Boolean);
   };
 
-  useEffect(() => {
+/*  useEffect(() => {
     const isAdmin = user?.is_superuser;
     if (isAdmin && MetabaseSettings.isPaidPlan()) {
       UtilApi.bug_report_details().then(setBugReportDetails);
     }
-  }, [user?.is_superuser]);
+  }, [user?.is_superuser]);*/
 
   const { tag, date, ...versionExtra } = MetabaseSettings.get("version");
   // don't show trademark if application name is whitelabeled
