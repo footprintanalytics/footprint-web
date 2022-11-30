@@ -12,7 +12,7 @@
 
   This is actually one less than the number of rows allowed by Excel, since we have a header row. See #13585 for more
   details."
-  1048575)
+  104857)
 
 ;; TODO - maybe we should do this more generally with the help of a macro like `do-with-suppressed-output` from the
 ;; test utils, perhaps implemented as separate middleware (and using a `:middleware` option). Or perhaps even make QP

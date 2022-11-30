@@ -54,13 +54,24 @@
 (defn- logo-url []
   (let [url (public-settings/application-logo-url)]
     (cond
-      (= url "app/assets/img/logo.svg") "http://static.metabase.com/email_logo.png"
+      (= url "app/assets/img/logo.svg") "https://static.footprint.network/email_logo.png"
 
       :else nil)))
       ;; NOTE: disabling whitelabeled URLs for now since some email clients don't render them correctly
       ;; We need to extract them and embed as attachments like we do in metabase.pulse.render.image-bundle
       ;; (data-uri-svg? url)               (themed-image-url url color)
       ;; :else                             url
+
+(defn- logo-slogan-url []
+  (let [url (public-settings/application-logo-url)]
+    (cond
+     (= url "app/assets/img/logo.svg") "https://static.footprint.network/img_mail_logo_v3.png"
+
+     :else nil)))
+     ;; NOTE: disabling whitelabeled URLs for now since some email clients don't render them correctly
+     ;; We need to extract them and embed as attachments like we do in metabase.pulse.render.image-bundle
+     ;; (data-uri-svg? url)               (themed-image-url url color)
+     ;; :else                             url
 
 (defn- icon-bundle
   [icon-name]
@@ -90,6 +101,7 @@
   {:applicationName           (public-settings/application-name)
    :applicationColor          (style/primary-color)
    :applicationLogoUrl        (logo-url)
+   :applicationLogoAndSloganUrl (logo-slogan-url)
    :buttonStyle               (button-style (style/primary-color))
    :colorTextLight            style/color-text-light
    :colorTextMedium           style/color-text-medium
@@ -117,26 +129,26 @@
 ;;; ### Public Interface
 
 
-(defn send-new-user-email!
-  "Send an email to `invitied` letting them know `invitor` has invited them to join Metabase."
-  [invited invitor join-url sent-from-setup?]
-  (let [company      (or (public-settings/site-name) "Unknown")
-        message-body (stencil/render-file "metabase/email/new_user_invite"
-                                          (merge (common-context)
-                                                 {:emailType     "new_user_invite"
-                                                  :invitedName   (or (:first_name invited) (:email invited))
-                                                  :invitorName   (or (:first_name invitor) (:email invitor))
-                                                  :invitorEmail  (:email invitor)
-                                                  :company       company
-                                                  :joinUrl       join-url
-                                                  :today         (t/format "MMM'&nbsp;'dd,'&nbsp;'yyyy" (t/zoned-date-time))
-                                                  :logoHeader    true
-                                                  :sentFromSetup sent-from-setup?}))]
-    (email/send-message!
-     :subject      (str (trs "You''re invited to join {0}''s {1}" company (app-name-trs)))
-     :recipients   [(:email invited)]
-     :message-type :html
-     :message      message-body)))
+;(defn send-new-user-email!
+;  "Send an email to `invitied` letting them know `invitor` has invited them to join Metabase."
+;  [invited invitor join-url sent-from-setup?]
+;  (let [company      (or (public-settings/site-name) "Unknown")
+;        message-body (stencil/render-file "metabase/email/new_user_invite"
+;                                          (merge (common-context)
+;                                                 {:emailType     "new_user_invite"
+;                                                  :invitedName   (or (:first_name invited) (:email invited))
+;                                                  :invitorName   (or (:first_name invitor) (:email invitor))
+;                                                  :invitorEmail  (:email invitor)
+;                                                  :company       company
+;                                                  :joinUrl       join-url
+;                                                  :today         (t/format "MMM'&nbsp;'dd,'&nbsp;'yyyy" (t/zoned-date-time))
+;                                                  :logoHeader    true
+;                                                  :sentFromSetup sent-from-setup?}))]
+;    (email/send-message!
+;     :subject      (str (trs "You''re invited to join {0}''s {1}" company (app-name-trs)))
+;     :recipients   [(:email invited)]
+;     :message-type :html
+;     :message      message-body)))
 
 (defn- all-admin-recipients
   "Return a sequence of email addresses for all Admin users.
@@ -184,6 +196,7 @@
                               :nonGoogleSSO     non-google-sso?
                               :passwordResetUrl password-reset-url
                               :logoHeader       true
+                              :followUs         true
                               :isActive         is-active?
                               :adminEmail       (public-settings/admin-email)
                               :adminEmailSet    (boolean (public-settings/admin-email))}))]
