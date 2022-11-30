@@ -415,3 +415,19 @@ export const cancelSubscription = () => {
 export const userinfoProfile = params => {
   return PUT(`api/v1/userinfo/profile`, params);
 };
+
+export const getContractSubmittedList = params => {
+  return GET(`/api/v1/contract/submitted/list`, params);
+};
+
+export const getContractSubmittedByAddress = params => {
+  return GET(`/api/v1/contract/submitted/byAddress`, params);
+};
+
+export const getContractProtocolByAddress = params => {
+  return GET(`/api/v1/contract/protocol/byAddress`, params);
+};
+
+export const submitContract = params => {
+  return POST(`/api/v1/contract/submit`, params);
+};

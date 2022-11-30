@@ -1,3 +1,5 @@
+/* eslint-disable react/prop-types */
+/* eslint-disable curly */
 import "./index.css";
 import React, { useState } from "react";
 import {
@@ -11,28 +13,94 @@ import {
   Checkbox,
   Tooltip,
 } from "antd";
+import { useMutation, useQuery } from "react-query";
+import {
+  getContractSubmittedByAddress,
+  getContractProtocolByAddress,
+  submitContract,
+} from "metabase/new-service";
 import { CheckCircleOutlined } from "@ant-design/icons";
+import { lowerCase } from "lodash";
 
-const SubmitContractAdd = () => {
-  const [current, setCurrent] = useState(0);
+const CHAIN_LIST = [
+  { value: "Ethereum", label: "Ethereum" },
+  { value: "xDAI", label: "xDAI" },
+  { value: "Polygon", label: "Polygon" },
+  { value: "Optimism", label: "Optimism" },
+  { value: "BNB Chain", label: "BNB Chain" },
+  { value: "Arbitrum", label: "Arbitrum" },
+  { value: "Avalanche", label: "Avalanche" },
+];
+
+const PROTOCOL_CATEGORY_LIST = [
+  { value: "NFT", label: "NFT" },
+  { value: "DeFi", label: "DeFi" },
+  { value: "GameFi", label: "GameFi" },
+  { value: "Others", label: "Others" },
+];
+
+const SubmitContractAdd = props => {
+  const [current, setCurrent] = useState(1);
+  const [formData, setFormData] = useState({});
 
   const ContractAddress = () => {
+    const [disabled, setDisabled] = useState(true);
+
+    const { isLoading, mutateAsync } = useMutation(
+      getContractSubmittedByAddress,
+    );
+
     return (
-      <Form layout="vertical">
-        <Form.Item label="Blockchain">
-          <Select
-            defaultValue="Ethereum"
-            options={[{ value: "Ethereum", label: "Ethereum" }]}
-          />
+      <Form
+        layout="vertical"
+        initialValues={{
+          chain: CHAIN_LIST[0].value,
+          contractAddress: "",
+        }}
+        onFinish={values => {
+          setFormData({
+            ...formData,
+            ...values,
+            contractAddress: lowerCase(values.contractAddress),
+          });
+          setCurrent(1);
+        }}
+        onValuesChange={async (_, values) => {
+          if (!/^0x[0-9a-fA-F]{40}$/.test(values.contractAddress)) return;
+          await mutateAsync({
+            ...values,
+            contractAddress: lowerCase(values.contractAddress),
+          });
+          setDisabled(false);
+        }}
+      >
+        <Form.Item
+          label="Blockchain"
+          rules={[{ required: true, message: "" }]}
+          name="chain"
+        >
+          <Select options={CHAIN_LIST} />
         </Form.Item>
-        <Form.Item label="Contract Address">
+        <Form.Item
+          label="Contract Address"
+          rules={[
+            {
+              required: true,
+              len: 42,
+              pattern: /^0x[0-9a-fA-F]{40}$/,
+              message: "",
+            },
+          ]}
+          name="contractAddress"
+        >
           <Input
             placeholder="Enter contract address"
-            defaultValue="0x948c78e96be10aaf90741cb28ae4793df9f93066"
-            suffix={<CheckCircleOutlined style={{ color: "#52c41a" }} />}
+            suffix={
+              !disabled && <CheckCircleOutlined style={{ color: "#52c41a" }} />
+            }
           />
         </Form.Item>
-        <Form.Item>
+        {/* <Form.Item>
           <Alert
             message="Seems like this contract already exists"
             description={
@@ -72,69 +140,131 @@ const SubmitContractAdd = () => {
             type="warning"
             showIcon
           />
-        </Form.Item>
+        </Form.Item> */}
         <Form.Item>
-          <Button type="primary">Still to submit</Button>
+          <Button
+            loading={isLoading}
+            disabled={disabled}
+            type="primary"
+            htmlType="submit"
+          >
+            Still to submit
+          </Button>
         </Form.Item>
       </Form>
     );
   };
 
   const ContractDetails = () => {
+    const [disabled, setDisabled] = useState(true);
+
+    const { data } = useQuery(
+      ["getContractProtocolByAddress"],
+      async () => getContractProtocolByAddress(formData),
+      { refetchOnWindowFocus: false, retry: 0, enabled: formData.chain },
+    );
+
+    const { isLoading, mutateAsync } = useMutation(submitContract);
+
     return (
-      <Form layout="vertical">
-        <Form.Item label="Project name">
+      <Form
+        layout="vertical"
+        initialValues={{
+          ...formData,
+          protocolSlug: "",
+          protocolName: "",
+          projectCategory: PROTOCOL_CATEGORY_LIST[0].value,
+          abi: "",
+          resubmitReason: "",
+          isNewProtocol: false,
+          isFactory: false,
+          isDynamic: false,
+        }}
+        onFinish={async values => {
+          await mutateAsync({ ...formData, ...values });
+          props.router.push("/submit/contract/success");
+        }}
+        onValuesChange={async (_, values) => {
+          // if (!/^0x[0-9a-fA-F]{40}$/.test(values.contractAddress)) return;
+          // await mutateAsync({
+          //   ...values,
+          //   contractAddress: lowerCase(values.contractAddress),
+          // });
+          // setDisabled(false);
+        }}
+      >
+        <Form.Item
+          label="Project name"
+          rules={[{ required: true, message: "" }]}
+          name="protocolName"
+        >
+          <Input placeholder="Enter project name" />
+        </Form.Item>
+        <Form.Item
+          label="Project category"
+          rules={[{ required: true, message: "" }]}
+          name="projectCategory"
+        >
+          <Select options={PROTOCOL_CATEGORY_LIST} />
+        </Form.Item>
+        <Form.Item
+          label="Contract Address"
+          rules={[{ required: true, message: "" }]}
+          name="contractAddress"
+        >
           <Input
-            placeholder="Enter project name"
-            defaultValue="Veg Out Hare Club"
+          // disabled
           />
         </Form.Item>
-        <Form.Item label="Project category">
-          <Select
-            defaultValue="NFT"
-            options={[{ value: "NFT", label: "NFT" }]}
-          />
+        <Form.Item
+          label="ABI"
+          rules={[{ required: true, message: "" }]}
+          name="abi"
+        >
+          <Input.TextArea placeholder="Enter ABI" rows={4} spellCheck={false} />
         </Form.Item>
-        <Form.Item label="Contract Address">
-          <Input
-            disabled
-            placeholder="Enter contract address"
-            defaultValue="0x948c78e96be10aaf90741cb28ae4793df9f93066"
-          />
+        <Form.Item
+          label="Reason"
+          rules={[{ required: true, message: "" }]}
+          name="resubmitReason"
+        >
+          <Input.TextArea placeholder="This contract already exists on Footprint. Contract resubmissions should be handled carefully and may get rejected." />
         </Form.Item>
-        <Form.Item label="ABI">
-          <Input.TextArea
-            placeholder="Enter ABI"
-            rows={4}
-            spellCheck={false}
-            defaultValue={`[{"inputs":[{"internalType":"string","name":"name","type":"string"},{"internalType":"string","name":"symbol","type":"string"},{"internalType":"uint256","name":"_maxMint","type":"uint256"},{"internalType":"uint256","name":"_porfit","type":"uint256"},{"internalType":"uint256","name":"_maxTotal","type":"uint256"},{"internalType":"uint256","name":"_price","type":"uint256"},{"internalType":"uint256","name":"_mintTime","type":"uint256"},{"internalType":"string","name":"_baseTokenURI","type":"string"}],"stateMutability":"nonpayable","type":"constructor"},{"anonymous":false,"inputs":[{"indexed":true,"internalType":"address","name":"owner","type":"address"},{"indexed":true,"internalType":"address","name":"approved","type":"address"},{"indexed":true,"internalType":"uint256","name":"tokenId","type":"uint256"}],"name":"Approval","type":"event"},{"anonymous":false,"inputs":[{"indexed":true,"internalType":"address","name":"owner","type":"address"},{"indexed":true,"internalType":"address","name":"operator","type":"address"},{"indexed":false,"internalType":"bool","name":"approved","type":"bool"}],"name":"ApprovalForAll","type":"event"},{"anonymous":false,"inputs":[{"indexed":true,"internalType":"address","name":"from","type":"address"},{"indexed":true,"internalType":"address","name":"to","type":"address"},{"indexed":true,"internalType":"uint256","name":"tokenId","type":"uint256"}],"name":"Transfer","type":"event"},{"inputs":[{"internalType":"address","name":"to","type":"address"},{"internalType":"uint256","name":"tokenId","type":"uint256"}],"name":"approve","outputs":[],"stateMutability":"nonpayable","type":"function"},{"inputs":[{"internalType":"address","name":"owner","type":"address"}],"name":"balanceOf","outputs":[{"internalType":"uint256","name":"","type":"uint256"}],"stateMutability":"view","type":"function"},{"inputs":[],"name":"baseTokenURI","outputs":[{"internalType":"string","name":"","type":"string"}],"stateMutability":"view","type":"function"},{"inputs":[],"name":"blindBoxOpen","outputs":[{"internalType":"bool","name":"","type":"bool"}],"stateMutability":"view","type":"function"},{"inputs":[],"name":"blindTokenURI","outputs":[{"internalType":"string","name":"","type":"string"}],"stateMutability":"view","type":"function"},{"inputs":[{"internalType":"address","name":"newRedCat","type":"address"}],"name":"fireRedCat","outputs":[],"stateMutability":"nonpayable","type":"function"},{"inputs":[{"internalType":"uint16","name":"_num","type":"uint16"},{"internalType":"address","name":"recipient","type":"address"}],"name":"getAirDrop","outputs":[],"stateMutability":"nonpayable","type":"function"},{"inputs":[{"internalType":"uint256","name":"tokenId","type":"uint256"}],"name":"getApproved","outputs":[{"internalType":"address","name":"","type":"address"}],"stateMutability":"view","type":"function"},{"inputs":[{"internalType":"address","name":"owner","type":"address"},{"internalType":"address","name":"operator","type":"address"}],"name":"isApprovedForAll","outputs":[{"internalType":"bool","name":"","type":"bool"}],"stateMutability":"view","type":"function"},{"inputs":[],"name":"maxMint","outputs":[{"internalType":"uint256","name":"","type":"uint256"}],"stateMutability":"view","type":"function"},{"inputs":[],"name":"maxTotal","outputs":[{"internalType":"uint256","name":"","type":"uint256"}],"stateMutability":"view","type":"function"},{"inputs":[],"name":"merkleRoot","outputs":[{"internalType":"bytes32","name":"","type":"bytes32"}],"stateMutability":"view","type":"function"},{"inputs":[],"name":"mintTime","outputs":[{"internalType":"uint256","name":"","type":"uint256"}],"stateMutability":"view","type":"function"},{"inputs":[],"name":"name","outputs":[{"internalType":"string","name":"","type":"string"}],"stateMutability":"view","type":"function"},{"inputs":[],"name":"owner","outputs":[{"internalType":"address","name":"","type":"address"}],"stateMutability":"view","type":"function"},{"inputs":[{"internalType":"uint256","name":"tokenId","type":"uint256"}],"name":"ownerOf","outputs":[{"internalType":"address","name":"","type":"address"}],"stateMutability":"view","type":"function"},{"inputs":[],"name":"porfit","outputs":[{"internalType":"uint256","name":"","type":"uint256"}],"stateMutability":"view","type":"function"},{"inputs":[{"internalType":"uint256","name":"num","type":"uint256"},{"internalType":"bytes32[]","name":"proof_","type":"bytes32[]"}],"name":"preMint","outputs":[],"stateMutability":"payable","type":"function"},{"inputs":[],"name":"preMintOpen","outputs":[{"internalType":"bool","name":"","type":"bool"}],"stateMutability":"view","type":"function"},{"inputs":[],"name":"price","outputs":[{"internalType":"uint256","name":"","type":"uint256"}],"stateMutability":"view","type":"function"},{"inputs":[{"internalType":"uint256","name":"num","type":"uint256"}],"name":"publicMint","outputs":[],"stateMutability":"payable","type":"function"},{"inputs":[],"name":"publicMintOpen","outputs":[{"internalType":"bool","name":"","type":"bool"}],"stateMutability":"view","type":"function"},{"inputs":[],"name":"redCat","outputs":[{"internalType":"address","name":"","type":"address"}],"stateMutability":"view","type":"function"},{"inputs":[{"internalType":"address","name":"from","type":"address"},{"internalType":"address","name":"to","type":"address"},{"internalType":"uint256","name":"tokenId","type":"uint256"}],"name":"safeTransferFrom","outputs":[],"stateMutability":"nonpayable","type":"function"},{"inputs":[{"internalType":"address","name":"from","type":"address"},{"internalType":"address","name":"to","type":"address"},{"internalType":"uint256","name":"tokenId","type":"uint256"},{"internalType":"bytes","name":"_data","type":"bytes"}],"name":"safeTransferFrom","outputs":[],"stateMutability":"nonpayable","type":"function"},{"inputs":[{"internalType":"address","name":"operator","type":"address"},{"internalType":"bool","name":"approved","type":"bool"}],"name":"setApprovalForAll","outputs":[],"stateMutability":"nonpayable","type":"function"},{"inputs":[{"internalType":"string","name":"_baseTokenURI","type":"string"}],"name":"setBaseURI","outputs":[],"stateMutability":"nonpayable","type":"function"},{"inputs":[],"name":"setBlindBoxOpened","outputs":[],"stateMutability":"nonpayable","type":"function"},{"inputs":[{"internalType":"string","name":"_blindTokenURI","type":"string"}],"name":"setBlindTokenURI","outputs":[],"stateMutability":"nonpayable","type":"function"},{"inputs":[{"internalType":"bytes32","name":"_merkleRoot","type":"bytes32"}],"name":"setMerkleRoot","outputs":[],"stateMutability":"nonpayable","type":"function"},{"inputs":[{"internalType":"uint256","name":"_price","type":"uint256"}],"name":"setMintPrice","outputs":[],"stateMutability":"nonpayable","type":"function"},{"inputs":[{"internalType":"uint256","name":"_mintTime","type":"uint256"}],"name":"setMintTime","outputs":[],"stateMutability":"nonpayable","type":"function"},{"inputs":[{"internalType":"uint256","name":"_porfit","type":"uint256"}],"name":"setPorfit","outputs":[],"stateMutability":"nonpayable","type":"function"},{"inputs":[],"name":"setPreMintOpen","outputs":[],"stateMutability":"nonpayable","type":"function"},{"inputs":[],"name":"setPublicMintOpen","outputs":[],"stateMutability":"nonpayable","type":"function"},{"inputs":[],"name":"setUseBlind","outputs":[],"stateMutability":"nonpayable","type":"function"},{"inputs":[{"internalType":"address","name":"_withdrawAddress","type":"address"}],"name":"setWithdrawAddress","outputs":[],"stateMutability":"nonpayable","type":"function"},{"inputs":[],"name":"steven","outputs":[{"internalType":"address","name":"","type":"address"}],"stateMutability":"view","type":"function"},{"inputs":[{"internalType":"bytes4","name":"interfaceId","type":"bytes4"}],"name":"supportsInterface","outputs":[{"internalType":"bool","name":"","type":"bool"}],"stateMutability":"view","type":"function"},{"inputs":[],"name":"symbol","outputs":[{"internalType":"string","name":"","type":"string"}],"stateMutability":"view","type":"function"},{"inputs":[{"internalType":"uint256","name":"index","type":"uint256"}],"name":"tokenByIndex","outputs":[{"internalType":"uint256","name":"","type":"uint256"}],"stateMutability":"view","type":"function"},{"inputs":[{"internalType":"address","name":"owner","type":"address"},{"internalType":"uint256","name":"index","type":"uint256"}],"name":"tokenOfOwnerByIndex","outputs":[{"internalType":"uint256","name":"","type":"uint256"}],"stateMutability":"view","type":"function"},{"inputs":[{"internalType":"uint256","name":"tokenId","type":"uint256"}],"name":"tokenURI","outputs":[{"internalType":"string","name":"","type":"string"}],"stateMutability":"view","type":"function"},{"inputs":[],"name":"totalSupply","outputs":[{"internalType":"uint256","name":"","type":"uint256"}],"stateMutability":"view","type":"function"},{"inputs":[{"internalType":"address","name":"from","type":"address"},{"internalType":"address","name":"to","type":"address"},{"internalType":"uint256","name":"tokenId","type":"uint256"}],"name":"transferFrom","outputs":[],"stateMutability":"nonpayable","type":"function"},{"inputs":[],"name":"useBlind","outputs":[{"internalType":"bool","name":"","type":"bool"}],"stateMutability":"view","type":"function"},{"inputs":[{"internalType":"bytes32[]","name":"_merkleProof","type":"bytes32[]"}],"name":"verify","outputs":[{"internalType":"bool","name":"","type":"bool"}],"stateMutability":"view","type":"function"},{"inputs":[{"internalType":"address","name":"owner","type":"address"}],"name":"walletOfOwner","outputs":[{"internalType":"uint256[]","name":"","type":"uint256[]"}],"stateMutability":"view","type":"function"},{"inputs":[],"name":"withdrawAddress","outputs":[{"internalType":"address","name":"","type":"address"}],"stateMutability":"view","type":"function"},{"inputs":[],"name":"withdrawAll","outputs":[],"stateMutability":"nonpayable","type":"function"}]`}
-          />
+        <Form.Item
+          name="isFactory"
+          valuePropName="checked"
+          style={{ marginBottom: 0 }}
+        >
+          <Checkbox>
+            <Tooltip title="Turn it on to automatically detect other contract instances with the same ABI.">
+              Are there several instances of this contract?
+            </Tooltip>
+          </Checkbox>
         </Form.Item>
-        <Form.Item label="Reason">
-          <Input.TextArea placeholder="This contract already exists on Dune. Contract resubmissions should be handled carefully and may get rejected." />
+        <Form.Item
+          // shouldUpdate={(prevValues, currentValues) => {
+          //   console.log(prevValues.isFactory, currentValues.isFactory);
+          //   return prevValues.isFactory !== currentValues.isFactory;
+          // }}
+          // dependencies={["isFactory"]}
+          name="isDynamic"
+          valuePropName="checked"
+        >
+          {/* {({ getFieldValue }) => {
+            console.log(getFieldValue("isFactory"));
+            return getFieldValue("isFactory") ? ( */}
+          <Checkbox>
+            <Tooltip title="Turn it on to automatically decode all contracts created by the same address. Turn it off to decode all contracts with the same bytecode.">
+              Is it created by a factory contract?
+            </Tooltip>
+          </Checkbox>
+          {/* ) : null; */}
+          {/* }} */}
         </Form.Item>
         <Form.Item>
-          <div>
-            <Tooltip
-              placement="left"
-              title="Turn it on to automatically detect other contract instances with the same ABI."
-            >
-              <Checkbox defaultChecked>
-                Are there several instances of this contract?
-              </Checkbox>
-            </Tooltip>
-          </div>
-          <div>
-            <Tooltip
-              placement="left"
-              title="Turn it on to automatically decode all contracts created by the same address. Turn it off to decode all contracts with the same bytecode."
-            >
-              <Checkbox>Is it created by a factory contract?</Checkbox>
-            </Tooltip>
-          </div>
-        </Form.Item>
-        <Form.Item>
-          <Button type="primary">Submit</Button>
+          <Button loading={isLoading} type="primary" htmlType="submit">
+            Submit
+          </Button>
         </Form.Item>
       </Form>
     );
@@ -145,11 +275,7 @@ const SubmitContractAdd = () => {
       <div className="SubmitContract__add">
         <h1>Submit smart contracts for decoding</h1>
         <p>2 steps to add new contracts to Footprint</p>
-        <Steps
-          current={current}
-          className="SubmitContract__steps"
-          onChange={setCurrent}
-        >
+        <Steps current={current} className="SubmitContract__steps">
           <Steps.Step title="Contract Address" />
           <Steps.Step title="Contract Details" />
         </Steps>
