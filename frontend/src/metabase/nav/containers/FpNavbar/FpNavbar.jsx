@@ -304,7 +304,7 @@ class FpNavbar extends Component {
       loginModalRedirect,
       setLoginModalShow,
     } = this.props;
-    console.log("loginModalShow", loginModalShow)
+
     return (
       <LoginModal
         isOpen={loginModalShow}

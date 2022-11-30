@@ -50,10 +50,10 @@ const AboutSection = ({
       >
         <div className="About__section-side">
           <ul>
-            {sectionList.map(item => (
+            {sectionList.map((item, index) => (
               <li
                 className={item.active ? "About__section-side--active" : ""}
-                key={item.title}
+                key={index}
                 onMouseOver={() => {
                   setSectionList(prev =>
                     prev.map(p => ({ ...p, active: p.title === item.title })),
