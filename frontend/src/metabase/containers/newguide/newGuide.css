@@ -1,0 +1,57 @@
+.new-guide__scoped-class {
+  background: #3434b2;
+  color: white;
+  padding: 20px !important;
+}
+
+.new-guide__popover-class {
+  font-size: 18px !important;
+  /*opacity: 0.5;*/
+}
+
+#driver-page-overlay {
+  opacity: 0.5 !important;
+}
+
+.driver-popover-description {
+  display: flex;
+  flex-direction: row;
+  margin-top: 40px;
+}
+
+.driver-popover-description .step {
+  height: 8px;
+  width: 8px;
+  border-radius: 4px;
+  background: #3434b266;
+  margin-right: 4px;
+}
+
+.driver-popover-description .current-step {
+  height: 8px;
+  width: 8px;
+  border-radius: 4px;
+  background: #3434b2;
+  margin-right: 4px;
+}
+
+.driver-popover-title {
+  display: flex !important;
+}
+
+.driver-popover-title .index {
+  background: #45bf8e;
+  height: 24px;
+  padding: 8px;
+  line-height: 9px;
+  text-align: center;
+  width: 24px;
+  border-radius: 13px;
+  color: white;
+  font-size: 14px;
+  margin-right: 12px;
+}
+
+.driver-popover-title .title {
+  display: block;
+}
