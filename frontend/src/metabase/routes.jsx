@@ -239,7 +239,7 @@ export const getRoutes = store => (
       {/*  <Route path=":menu/:subMenu" />*/}
       {/*</Route>*/}
 
-      {/*<Route path="/dashboards" component={LazyLoad.Dashboards} />*/}
+      <Route path="/dashboards" component={LazyLoad.Dashboards} />
 
       <Route path="/data-api">
         <IndexRoute component={LazyLoad.dataApi} />

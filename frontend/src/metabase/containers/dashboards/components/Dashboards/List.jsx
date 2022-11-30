@@ -214,7 +214,7 @@ const List = ({
         </div>
       )}
       {isList ? renderTable() : renderGrid()}
-
+      <div />
       <DashboardCopyModal
         isOpen={!!dashboardCopyModal.id}
         onClose={() => setDashboardCopyModal({})}

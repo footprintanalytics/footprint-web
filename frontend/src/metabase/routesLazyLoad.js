@@ -81,7 +81,7 @@ export default {
   // ProtocolDetail: loadable(() => import("metabase/containers/protocols/detail")),
   LoginModal: loadable(() => import("metabase/auth/containers/LoginModal")),
   ActivateAccount: loadable(() => import("metabase/containers/activate")),
-  // Dashboards: loadable(() => import("metabase/containers/dashboards"), options),
+  Dashboards: loadable(() => import("metabase/containers/dashboards"), options),
   // CustomUpload: loadable(() => import("metabase/containers/customUpload")),
   // Search: loadable(() => import("metabase/containers/search")),
   // Protocols: loadable(() => import("metabase/containers/protocols")),

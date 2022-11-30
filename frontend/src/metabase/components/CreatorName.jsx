@@ -2,7 +2,7 @@
 import React from "react";
 import Link from "metabase/core/components/Link";
 import { isDefi360 } from "metabase/lib/project_info";
-import colors from "metabase/lib/colors";
+import { color } from "metabase/lib/colors";
 
 function CreatorName({ creatorName }) {
   if (isDefi360()) {
@@ -15,8 +15,8 @@ function CreatorName({ creatorName }) {
       // target="_blank"
       onClick={e => e.stopPropagation()}
       style={{
-        color: colors["brand"],
-        textDecorationColor: colors["brand"],
+        color: color("brand"),
+        textDecorationColor: color("brand"),
       }}
     >
       {`${creatorName}`}
