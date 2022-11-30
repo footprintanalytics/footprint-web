@@ -1,7 +1,7 @@
 import { getIn } from "icepick";
 
 import { t } from "ttag";
-
+import { dynamicParamsApi } from "metabase/new-service";
 import { normalize, schema } from "normalizr";
 import querystring from "querystring";
 import { createAction, createThunkAction } from "metabase/lib/redux";
@@ -110,7 +110,7 @@ const loadingComplete = createThunkAction(
       }, 3000);
     } else {
       const dashboard = getDashboardComplete(getState());
-      const message = dashboard.is_app_age
+      const message = dashboard?.is_app_age
         ? t`Your page is ready`
         : t`Your dashboard is ready`;
       dispatch(setDocumentTitle(message));
@@ -325,6 +325,9 @@ export const fetchCardData = createThunkAction(
         cancelled: deferred.promise,
       };
 
+      const dashboard_id =
+        dashcard.dashboard_id === "new" ? null : dashcard.dashboard_id;
+
       // make the actual request
       if (datasetQuery.type === "endpoint") {
         result = await fetchDataOrError(
@@ -340,7 +343,7 @@ export const fetchCardData = createThunkAction(
         result = await fetchDataOrError(
           maybeUsePivotEndpoint(PublicApi.dashboardCardQuery, card)(
             {
-              uuid: dashcard.dashboard_id,
+              uuid: dashboard_id,
               dashcardId: dashcard.id,
               cardId: card.id,
               parameters: datasetQuery.parameters
@@ -355,7 +358,7 @@ export const fetchCardData = createThunkAction(
         result = await fetchDataOrError(
           maybeUsePivotEndpoint(EmbedApi.dashboardCardQuery, card)(
             {
-              token: dashcard.dashboard_id,
+              token: dashboard_id,
               dashcardId: dashcard.id,
               cardId: card.id,
               ...getParameterValuesBySlug(
@@ -384,12 +387,12 @@ export const fetchCardData = createThunkAction(
         result = await fetchDataOrError(
           maybeUsePivotEndpoint(endpoint, card)(
             {
-              dashboardId: dashcard.dashboard_id,
+              dashboardId: dashboard_id,
               dashcardId: dashcard.id,
               cardId: card.id,
               parameters: datasetQuery.parameters,
               ignore_cache: ignoreCache,
-              dashboard_id: dashcard.dashboard_id,
+              dashboard_id: dashboard_id,
             },
             queryOptions,
           ),
@@ -430,6 +433,41 @@ export const fetchDashboardCardData = createThunkAction(
     });
   },
 );
+export const GET_DASHBOARD_PARAMETERS =
+  "metabase/dashboard/GET_DASHBOARD_PARAMETERS";
+export const getDashboardParameters = createThunkAction(
+  GET_DASHBOARD_PARAMETERS,
+  function(card, dashcard) {
+    return async function(dispatch, getState) {
+      // If the dataset_query was filtered then we don't have permisison to view this card, so
+      // shortcircuit and return a fake 403
+      if (!card.dataset_query) {
+        return {
+          dashcard_id: dashcard.id,
+          card_id: card.id,
+          result: { error: { status: 403 } },
+        };
+      }
+
+      const { dashboardId, dashboards, parameterValues } = getState().dashboard;
+      const dashboard = dashboards[dashboardId];
+
+      // if we have a parameter, apply it to the card query before we execute
+      const datasetQuery = applyParameters(
+        card,
+        dashboard.parameters,
+        parameterValues,
+        dashcard && dashcard.parameter_mappings,
+      );
+
+      return {
+        dashcard_id: dashcard.id,
+        card_id: card.id,
+        parameters: datasetQuery.parameters,
+      };
+    };
+  },
+);
 
 export const reloadDashboardCards = () => async (dispatch, getState) => {
   const dashboard = getDashboardComplete(getState());
@@ -460,6 +498,29 @@ const cardDataCancelDeferreds = {};
 function setFetchCardDataCancel(card_id, dashcard_id, deferred) {
   cardDataCancelDeferreds[`${dashcard_id},${card_id}`] = deferred;
 }
+export const FETCH_DYNAMIC_PARAMS = "metabase/dashboard/FETCH_DYNAMIC_PARAMS";
+export const fetchDynamicParams = createThunkAction(
+  FETCH_DYNAMIC_PARAMS,
+  function(dashboard) {
+    return async function(dispatch, getState) {
+      const { parameterValues } = getState().dashboard;
+      if (!dashboard) {
+        return {};
+      }
+      const { templateId, parameters } = dashboard;
+      if (!templateId) {
+        return {};
+      }
+      for (const parameter of parameters || []) {
+        parameter.value = parameterValues[parameter.id];
+      }
+      const dynamicParams = await dynamicParamsApi(templateId, { parameters });
+      return {
+        ...dynamicParams,
+      };
+    };
+  },
+);
 
 // machinery to support query cancellation
 export const cancelFetchCardData = createAction(
@@ -483,3 +544,13 @@ export const markCardAsSlow = createAction(MARK_CARD_AS_SLOW, card => ({
   id: card.id,
   result: true,
 }));
+
+export const CREATE_DASHBOARD_SECRET =
+  "metabase/dashboard/CREATE_DASHBOARD_SECRET";
+export const createDashboardSecret = createAction(
+  CREATE_DASHBOARD_SECRET,
+  async ({ id }) => {
+    const { data } = await DashboardApi.secret({ id });
+    return data;
+  },
+);

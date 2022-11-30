@@ -24,7 +24,7 @@ const mapStateToProps = state => ({
 
 export default connect(mapStateToProps)(ProfileLink);
 
-function ProfileLink({ user, adminItems, onLogout }) {
+function ProfileLink({ user, adminItems, onLogout, trigger }) {
   const [modalOpen, setModalOpen] = useState(null);
   const [bugReportDetails, setBugReportDetails] = useState(null);
 
@@ -105,6 +105,7 @@ function ProfileLink({ user, adminItems, onLogout }) {
         tooltip={t`Settings`}
         items={generateOptionsForUser()}
         triggerIcon="gear"
+        trigger={trigger}
         triggerProps={{
           color: color("text-medium"),
           hover: {
@@ -163,4 +164,5 @@ ProfileLink.propTypes = {
   user: PropTypes.object.isRequired,
   adminItems: PropTypes.array,
   onLogout: PropTypes.func.isRequired,
+  trigger: PropTypes.object,
 };

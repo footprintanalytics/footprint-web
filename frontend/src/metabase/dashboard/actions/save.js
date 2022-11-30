@@ -12,22 +12,38 @@ import { getDashboardBeforeEditing } from "../selectors";
 
 import { updateDashcardId } from "./core";
 import { fetchDashboard } from "./data-fetching";
+import userCancelFeedbackUtil from "metabase/dashboard/components/utils/userCancelFeedbackUtil";
+import { dynamicParamsApi } from "metabase/new-service";
 
 export const SAVE_DASHBOARD_AND_CARDS =
   "metabase/dashboard/SAVE_DASHBOARD_AND_CARDS";
 
 export const saveDashboardAndCards = createThunkAction(
   SAVE_DASHBOARD_AND_CARDS,
-  function () {
+  function ({ newDashboard }) {
     return async function (dispatch, getState) {
       const state = getState();
       const { dashboards, dashcards, dashboardId } = state.dashboard;
-      const dashboard = {
+      let dashboard = {
         ...dashboards[dashboardId],
         ordered_cards: dashboards[dashboardId].ordered_cards.map(
           dashcardId => dashcards[dashcardId],
         ),
       };
+
+      if (dashboardId === "new" && newDashboard) {
+        const ordered_cards = dashboard.ordered_cards;
+        dashboard = {
+          ...newDashboard,
+          parameters: dashboard.parameters,
+          ordered_cards: ordered_cards.map(card => {
+            return {
+              ...card,
+              dashboard_id: newDashboard.id,
+            };
+          }),
+        };
+      }
 
       // clean invalid dashcards
       // We currently only do this for dashcard click behavior.
@@ -160,6 +176,25 @@ export const saveDashboardAndCards = createThunkAction(
 
       // make sure that we've fully cleared out any dirty state from editing (this is overkill, but simple)
       dispatch(fetchDashboard(dashboard.id, null)); // disable using query parameters when saving
+
+
+      const scene = "dashboard-save-empty-query";
+      if (
+        userCancelFeedbackUtil.canBlock(scene, true) &&
+        dashboard.ordered_cards &&
+        dashboard.ordered_cards.length === 0
+      ) {
+        dispatch(
+          cancelFeedbackAction({
+            show: true,
+            type: "edit",
+            scene,
+            isLimit: true,
+          }),
+        );
+      }
+
+      return { dashboard };
     };
   },
 );

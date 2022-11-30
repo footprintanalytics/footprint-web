@@ -96,7 +96,9 @@ export function getAllDashboardCards(dashboard) {
 }
 
 export function getDashboardType(id) {
-  if (id == null || typeof id === "object") {
+  if (id === "new") {
+    return "new";
+  } else if (id == null || typeof id === "object") {
     // HACK: support inline dashboards
     return "inline";
   } else if (Utils.isUUID(id)) {

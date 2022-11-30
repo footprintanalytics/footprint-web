@@ -55,6 +55,13 @@ function createForm() {
   return [
     createNameField(),
     createDescriptionField(),
+  ];
+}
+
+function createFormAdmin() {
+  return [
+    createNameField(),
+    createDescriptionField(),
     createCollectionIdField(),
   ];
 }
@@ -62,6 +69,9 @@ function createForm() {
 export default {
   create: {
     fields: createForm,
+  },
+  create_admin: {
+    fields: createFormAdmin,
   },
   duplicate: {
     fields: duplicateForm,

@@ -40,6 +40,8 @@ import UserCancelFeedbackModal from "metabase/components/UserCancelFeedbackModal
 import LogoIcon from "metabase/components/LogoIcon";
 import ActivityZkspaceSubmitModal from "metabase/components/ActivityZkspaceSubmitModal";
 import EntityMenu from "metabase/components/EntityMenu";
+import UserAvatar from "metabase/components/UserAvatar";
+import VipIcon from "metabase/components/VipIcon";
 import { getContext, getPath, getUser } from "../selectors";
 
 const mapStateToProps = (state, props) => ({
@@ -626,7 +628,16 @@ class FpNavbar extends Component {
             <RightMenuPad />
           </React.Fragment>
           {user ? (
-            <ProfileLink {...this.props} onLogout={() => this.props.logout()}/>
+            <ProfileLink {...this.props} onLogout={() => this.props.logout()}
+              trigger={(
+                <div className="relative" style={{ padding: 10 }}>
+                  <UserAvatar user={user} size={["2.5em", "2.5em"]} />
+                  <div className="absolute right bottom mb1" style={{ marginRight: 2 }}>
+                    <VipIcon user={user} />
+                  </div>
+                </div>
+              )}
+            />
           ) : (
             <Link
               className="Nav__sign-up"

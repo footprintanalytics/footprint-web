@@ -213,11 +213,11 @@ export const getRoutes = store => (
     {/* APP */}
     <Route
       onEnter={async (nextState, replace, done) => {
-        // store.dispatch(loadConfig());
+        store.dispatch(loadConfig());
         await store.dispatch(loadCurrentUser());
-        // if (store.getState().currentUser) {
-        //   store.dispatch(loadCurrentUserVip());
-        // }
+        if (store.getState().currentUser) {
+          store.dispatch(loadCurrentUserVip());
+        }
         trackPageView(nextState.location.pathname);
         done();
       }}

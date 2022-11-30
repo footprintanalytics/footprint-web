@@ -10,7 +10,7 @@ import DashboardHeader from "metabase/dashboard/containers/DashboardHeader";
 import SyncedParametersList from "metabase/parameters/components/SyncedParametersList/SyncedParametersList";
 import { getVisibleParameters } from "metabase/parameters/utils/ui";
 import { ossPath } from "metabase/lib/ossPath";
-
+import * as Urls from "metabase/lib/urls";
 import ShareModal from "metabase/containers/home/components/ShareModal";
 import DashboardCopyModal from "metabase/dashboard/components/DashboardCopyModal";
 import RootOverviewControls from "metabase/dashboard/hoc/RootOverviewControls";
@@ -28,6 +28,8 @@ import DashboardGrid from "../DashboardGrid";
 import { DashboardSidebars } from "../DashboardSidebars";
 import DashboardControls from "../../hoc/DashboardControls";
 import DashboardEmptyState from "./DashboardEmptyState/DashboardEmptyState";
+import { createThumb } from "metabase/dashboard/components/utils/thumb";
+import { zkspaceDate } from "metabase/lib/register-activity";
 import {
   CardsContainer,
   DashboardBody,
@@ -114,6 +116,9 @@ class Dashboard extends Component {
     urlUserName: PropTypes.string,
     user: PropTypes.object,
     createDashboard: PropTypes.any,
+    setSubmitAddrZkspaceModal: PropTypes.func,
+    dashboardBeforeEditing: PropTypes.any,
+    replace: PropTypes.func,
   };
 
   static defaultProps = {
@@ -266,6 +271,63 @@ class Dashboard extends Component {
       }
     }
   }
+
+  saveAction = async props => {
+    const { newDashboard } = props || {};
+    const hide = message.loading("Saving...", 0);
+    console.log("saveAction1")
+    const {
+      payload: { dashboard },
+    } = await this.props.saveDashboardAndCards({ newDashboard });
+    console.log("saveAction2")
+
+    const { dashboardBeforeEditing, user, replace } = this.props;
+    console.log("saveAction3")
+    const { id, public_uuid } = dashboard;
+    if (public_uuid) {
+      createThumb({
+        elementId: "#html2canvas-Dashboard",
+        fileName: `dashboard/${id}.png`,
+        type: "dashboard",
+        publicUuid: public_uuid,
+        captureElementHeight: "630px",
+        cssAdjustments: [
+          {
+            selector: ".Dashboard",
+            css: "width: 1200px",
+          },
+        ],
+      });
+    }
+    console.log("saveAction4")
+    this.onDoneEditing();
+    console.log("saveAction5")
+    hide();
+
+    if (
+      zkspaceDate() &&
+      (!dashboardBeforeEditing ||
+        (dashboardBeforeEditing &&
+          dashboardBeforeEditing.ordered_cards.length === 0)) &&
+      dashboard.ordered_cards.length > 0
+    ) {
+      this.props.setSubmitAddrZkspaceModal({
+        submitAddrZkspaceModal: true,
+        email: user && user.email,
+      });
+    }
+
+    if (location.pathname.endsWith("/new")) {
+      replace({
+        pathname: Urls.dashboard({ ...dashboard, type: "dashboard" }),
+        state: { new: true },
+      });
+    }
+  };
+
+  onDoneEditing = () => {
+    this.setEditing(false);
+  };
 
   setEditing = isEditing => {
     this.props.onRefreshPeriodChange(null);

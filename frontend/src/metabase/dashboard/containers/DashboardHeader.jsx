@@ -17,7 +17,9 @@ import EntityMenu from "metabase/components/EntityMenu";
 import Bookmark from "metabase/entities/bookmarks";
 
 import { getDashboardActions } from "metabase/dashboard/components/DashboardActions";
-
+import { trackStructEvent } from "metabase/lib/analytics";
+import { message } from "antd";
+import { snapshot } from "metabase/dashboard/components/utils/snapshot";
 import ParametersPopover from "metabase/dashboard/components/ParametersPopover";
 import DashboardBookmark from "metabase/dashboard/components/DashboardBookmark";
 import TippyPopover from "metabase/components/Popover/TippyPopover";
@@ -135,8 +137,22 @@ class DashboardHeader extends Component {
   }
 
   async onSave() {
-    await this.props.saveDashboardAndCards(this.props.dashboard.id);
-    this.onDoneEditing();
+    // await this.props.saveDashboardAndCards(this.props.dashboard.id);
+    // this.onDoneEditing();
+    trackStructEvent(`click Save edit dashboard`);
+    const { dashboard, showNewDashboardModal, saveAction } = this.props;
+    const { ordered_cards } = dashboard;
+    if (dashboard.id === "new") {
+      if (!ordered_cards || ordered_cards.length === 0) {
+        message.info(
+          "Dashboard cannot be empty , please add a chart to save it !",
+        );
+        return;
+      }
+      showNewDashboardModal();
+      return;
+    }
+    await saveAction();
   }
 
   async onCancel() {
