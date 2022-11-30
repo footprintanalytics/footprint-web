@@ -253,7 +253,7 @@ export const getRoutes = store => (
       {/*  component={LazyLoad.Protocols}*/}
       {/*/>*/}
 
-      {/*<Route title={t`Creator`} path="/@:name" component={LazyLoad.Creator} />*/}
+      <Route title={t`Creator`} path="/@:name" component={LazyLoad.Creator} />
 
       {/*<Route*/}
       {/*  title={t`Footprint Widget`}*/}

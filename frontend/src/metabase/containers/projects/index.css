@@ -1,0 +1,111 @@
+.project-analytics__container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.project-analytics__head {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  padding: 40px 0;
+}
+
+.project-analytics__head-title {
+  font-size: 36px;
+  color: #313541;
+  font-weight: 700;
+}
+
+.project-analytics__head-sub-title {
+  font-size: 16px;
+  color: #a7aabc;
+  margin-top: 10px;
+}
+
+.project-analytics__list {
+  display: flex;
+  flex-direction: column;
+  width: 80%;
+  max-width: 1200px;
+}
+
+.project-analytics__item {
+  display: flex;
+  align-items: center;
+  background-color: white;
+  border-radius: 8px;
+  padding: 30px;
+  margin-bottom: 20px;
+  cursor: pointer;
+}
+
+.project-analytics__item-icon {
+  width: 38px;
+  height: 38px;
+  margin-right: 20px;
+}
+
+.project-analytics__item-info {
+  min-width: 420px;
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  overflow: auto;
+}
+
+.project-analytics__item-info-name {
+  font-size: 30px;
+  color: #313541;
+  font-weight: 700;
+}
+
+.project-analytics__item-info-desc {
+  font-size: 14px;
+  color: #63698a;
+  margin-top: 20px;
+  display: -webkit-box;
+  height: 72px;
+  -webkit-line-clamp: 3;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.project-analytics__item-tag-list {
+  display: flex;
+  margin-top: 20px;
+}
+
+.project-analytics__item-tag-item {
+  background: #f1f1f1;
+  font-size: 12px;
+  color: #666666;
+  padding: 2px 12px;
+  border: 1px solid #d8d8d8;
+  border-radius: 12px;
+  margin-right: 4px;
+  white-space: nowrap;
+}
+
+.project-analytics__item-dashboard-list {
+  width: 302px;
+  display: flex;
+  margin-left: 30px;
+  justify-content: flex-end;
+  flex-direction: column;
+  overflow: hidden;
+}
+
+.project-analytics__item-dashboard-item {
+  height: 170px;
+  border: 1px #dcdde5 solid;
+  margin: 10px 0;
+  border-radius: 6px;
+  overflow: hidden;
+}
+
+.project-analytics__item-dashboard-item .preview-dashboard-card {
+  box-shadow: none;
+  height: 100%;
+}

@@ -85,7 +85,7 @@ export default {
   // CustomUpload: loadable(() => import("metabase/containers/customUpload")),
   // Search: loadable(() => import("metabase/containers/search")),
   // Protocols: loadable(() => import("metabase/containers/protocols")),
-  // Creator: loadable(() => import("metabase/containers/creator"), options),
+  Creator: loadable(() => import("metabase/containers/creator"), options),
   // Widget: loadable(() => import("metabase/containers/widget")),
   About: loadable(() => import("metabase/containers/about")),
   NftPage: loadable(() => import("metabase/containers/nftPage")),
