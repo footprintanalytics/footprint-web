@@ -223,7 +223,7 @@ export default ({
         isMarket: isMarket,
       });
       return (
-        <Dropdown overlay={menu} placement="bottomRight">
+        <Dropdown menu={menu} placement="bottomRight">
           <div className="dashboards__table-action">
             <img src={getOssUrl("20220309154118.png")} alt="" />
           </div>
