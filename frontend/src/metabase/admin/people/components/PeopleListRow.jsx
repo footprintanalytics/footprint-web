@@ -43,7 +43,7 @@ const PeopleListRow = ({
       <td className="flex align-center">
         <span className="text-white inline-block">
           <UserAvatar
-            bg={user.is_superuser ? color("accent2") : color("brand")}
+            bg={user?.is_superuser ? color("accent2") : color("brand")}
             user={user}
           />
         </span>{" "}
@@ -87,7 +87,7 @@ const PeopleListRow = ({
                 groups={groups}
                 memberships={membershipsByGroupId}
                 isCurrentUser={isCurrentUser}
-                isUserAdmin={user.is_superuser}
+                isUserAdmin={user?.is_superuser}
                 onAdd={onAdd}
                 onRemove={onRemove}
                 onChange={onChange}

@@ -1,5 +1,4 @@
 import React from "react";
-import { Flex } from "grid-styled";
 import connect from "react-redux/lib/connect/connect";
 import { withRouter } from "react-router";
 import PropTypes from "prop-types";
@@ -25,17 +24,17 @@ const mapStatusToProps = (state, props) => {
 
 const mapDispatchToProps = { login, regist, getRegistEmail, loginGoogle };
 
-const LoginModal = (props: Props) => {
+const LoginModal = (props) => {
   const { isOpen = false, fromNav = false, from = "" } = props;
 
   const InnerPanel = () => {
     trackStructEvent("ShowLoginModal", from);
     return (
       <ModalContent>
-        <Flex className="loginModalContent rounded overflow-hidden">
+        <div className="flex loginModalContent rounded overflow-hidden">
           <LoginModalSlider {...props} />
           <LoginModalInner {...props} />
-        </Flex>
+        </div>
       </ModalContent>
     );
   };
@@ -53,12 +52,15 @@ const LoginModal = (props: Props) => {
   );
 };
 
-const Props = {
+LoginModal.propTypes = {
   open: PropTypes.bool,
   public_uuid: PropTypes.string,
   type: PropTypes.string,
   token: PropTypes.string,
   redirect: PropTypes.string,
+  from: PropTypes.string,
+  isOpen: PropTypes.bool,
+  fromNav: PropTypes.bool,
 };
 
 export default withRouter(

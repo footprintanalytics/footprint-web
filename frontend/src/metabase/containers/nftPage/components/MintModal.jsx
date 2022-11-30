@@ -8,7 +8,7 @@ const MintModal = ({ visible, onCancel, token }) => {
   return (
     <Modal
       wrapClassName="MintModal"
-      visible={visible}
+      open={visible}
       onCancel={onCancel}
       footer={null}
       maskClosable={false}

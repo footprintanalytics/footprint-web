@@ -28,7 +28,7 @@ export default class ChannelSetupModal extends Component {
         onClose={onClose}
         fullPageModal={fullPageModal}
         title={
-          user.is_superuser
+          user?.is_superuser
             ? t`To send ${entityNamePlural}, you'll need to set up ${channels.join(
                 t` or `,
               )} integration.`

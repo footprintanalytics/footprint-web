@@ -31,7 +31,38 @@ export const getUserPersonalCollectionId = createSelector(
   user => user?.personal_collection_id,
 );
 
+export const getUserCreateQueryPermission = createSelector([getUser], user => {
+  const current = get(user, "vipInfo.currentQuestion", 0);
+  const limit = get(user, "vipInfo.questionLimit", 0);
+  return current < limit;
+});
+
+export const getUserCreateDashboardPermission = createSelector(
+  [getUser],
+  user => {
+    const current = get(user, "vipInfo.currentDashBoard", 0);
+    const limit = get(user, "vipInfo.dashBoardLimit", 0);
+    return current < limit;
+  },
+);
+
+export const getUserNativeQueryPermission = createSelector([getUser], user =>
+  get(user, "vipInfo.nativeQuery", false),
+);
+
+export const getUserAdvancedChartingPermission = createSelector(
+  [getUser],
+  user => get(user, "vipInfo.advancedCharting", false),
+);
+
+export const getUserClearWatermarkPermission = createSelector([getUser], user =>
+  get(user, "vipInfo.clearWatermark", false),
+);
+
+export const getUserDownloadPermission = createSelector([getUser], user =>
+  get(user, "vipInfo.exportToCsv", false),
+);
+
 export const getUserSubscribeInfo = createSelector([getUser], user =>
   get(user, "subscribeInfo", {}),
 );
-

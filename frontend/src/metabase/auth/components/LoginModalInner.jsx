@@ -1,22 +1,21 @@
 /* eslint-disable react/prop-types */
 import React, { useEffect, useState } from "react";
 import "./LoginModalSlider.css";
+import { message } from "antd";
 import Icon from "metabase/components/Icon";
-import { Box, Flex } from "grid-styled";
 import SignInPanel from "metabase/auth/components/SignInPanel";
 import SignUpPanel from "metabase/auth/components/SignUpPanel";
 import VerifyEmailPanel from "metabase/auth/components/VerifyEmailPanel";
 import ForgotPasswordPanel from "metabase/auth/components/ForgotPasswordPanel";
 import ResetPasswordPanel from "metabase/auth/components/ResetPasswordPanel";
 import { SessionApi } from "metabase/services";
-import { message } from "antd";
 import { quickRegister, quickRegisterDefi360 } from "metabase/new-service";
 import { trackStructEvent } from "metabase/lib/analytics";
 import Settings from "metabase/lib/settings";
 import { isDefi360 } from "metabase/lib/project_info";
 
 const LoginModalInner = props => {
-  const ldapEnabled = Settings.ldapEnabled();
+  const ldapEnabled = Settings.isLdapEnabled();
   const [signTabState, setSignTabState] = useState(
     props.signTabState || "signIn",
   );
@@ -202,9 +201,9 @@ const LoginModalInner = props => {
           <Icon name="close" />
         </div>
       )}
-      <Flex flexDirection="column" className="loginModalInner">
+      <div className="flex flex-column loginModalInner">
         <div className="NavTitleActive">{title()}</div>
-        <Box mt={20} />
+        <div className="mt3"/>
         <SignInPanel
           show={isSignIn()}
           email={email}
@@ -245,7 +244,7 @@ const LoginModalInner = props => {
           resetSuccess={resetSuccess}
           backToForgotPassword={changeToForgotPassword}
         />
-      </Flex>
+      </div>
     </div>
   );
 };

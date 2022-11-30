@@ -63,7 +63,7 @@ export const getRemoveMembershipConfirmation = (
       membership => membership.membership_id === deletedMembershipId,
     ) != null;
 
-  return isRemovingSelf && !currentUser.is_superuser
+  return isRemovingSelf && !currentUser?.is_superuser
     ? REVOKE_MANAGING_CONFIRMATION
     : null;
 };
@@ -76,7 +76,7 @@ export const getChangeMembershipConfirmation = (
     updatedMembership.user_id === currentUser.id &&
     !updatedMembership.is_group_manager;
 
-  return isRevokingFromSelf && !currentUser.is_superuser
+  return isRevokingFromSelf && !currentUser?.is_superuser
     ? REVOKE_MANAGING_CONFIRMATION
     : null;
 };

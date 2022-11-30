@@ -1,17 +1,16 @@
 /* eslint-disable react/prop-types */
 import React from "react";
 
-import Flex from "grid-styled/dist/Flex";
-import Link from "metabase/components/Link";
-import { Box } from "grid-styled";
+import Link from "metabase/core/components/Link";
 import { trackStructEvent } from "metabase/lib/analytics";
 
 const VerifyEmailPanel = ({ show, backToLoginIn, resendAction }) =>
   !show ? (
-    <Flex />
+    <div />
   ) : (
-    <Flex flexDirection="column">
-      <Box mt={60} />
+    <div className="flex flex-column">
+      <div className="mt4"/>
+      <div className="mt4"/>
       <div className="verify-email__title">
         Your account is not active yet. Please verify your email.
       </div>
@@ -37,6 +36,6 @@ const VerifyEmailPanel = ({ show, backToLoginIn, resendAction }) =>
         {"Haven't received verification link?"}{" "}
         <span className="link">Resend</span>
       </Link>
-    </Flex>
+    </div>
   );
 export default VerifyEmailPanel;

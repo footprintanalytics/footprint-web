@@ -2,17 +2,16 @@
 import React from "react";
 import { t } from "ttag";
 
+import { message } from "antd";
+import { entries, get, mapValues, omit } from "lodash";
+import { Link } from "react-router";
 import validate from "metabase/lib/validate";
 import Form from "metabase/containers/Form";
 
-import { Box, Flex } from "grid-styled";
-import { Link } from "react-router";
 import GoogleButton from "metabase/auth/components/GoogleButton";
-import WalletLoginButton from "./WalletLoginButton";
 import { isDefi360 } from "metabase/lib/project_info";
 import SplitLine from "metabase/components/SplitLine";
-import { message } from "antd";
-import { entries, get, mapValues, omit } from "lodash";
+import WalletLoginButton from "./WalletLoginButton";
 
 const ForgotPasswordLink = ({ credentials = {}, changeToResetPassword }) => (
   <Link
@@ -69,9 +68,9 @@ const SignInPanel = ({
     }
   };
   return !show ? (
-    <Flex />
+    <div />
   ) : (
-    <Flex flexDirection="column">
+    <div className="flex flex-column">
       <Form onSubmit={onSubmit}>
         {({ values, Form, FormField, FormSubmit, FormMessage }) => (
           <Form>
@@ -96,8 +95,8 @@ const SignInPanel = ({
               validate={validate.required()}
               onKeyDown={e => onkeydown(e)}
             />
-            <Flex justifyContent="space-between">
-              <Flex>
+            <div className="flex justify-between">
+              <div className="flex">
                 <FormField
                   className={"flex flex-reverse text-centered align-baseline"}
                   name="remember"
@@ -116,14 +115,14 @@ const SignInPanel = ({
                     {t`Remember me`}
                   </span>
                 )}
-              </Flex>
+              </div>
               <ForgotPasswordLink
                 credentials={values}
                 changeToResetPassword={changeToResetPassword}
               />
-            </Flex>
+            </div>
             <FormMessage />
-            <Box mt={30} />
+            <div className="mt4"/>
             <div className="Form-actions text-centered">
               <FormSubmit className="block full sign-in-button">{t`Sign in`}</FormSubmit>
             </div>
@@ -158,7 +157,7 @@ const SignInPanel = ({
           buttonText="Sign in with Ethereum"
         />
       )}
-    </Flex>
+    </div>
   );
 };
 export default SignInPanel;

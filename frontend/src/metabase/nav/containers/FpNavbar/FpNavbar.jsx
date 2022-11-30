@@ -8,9 +8,7 @@ import "./FpNavbar.css";
 import PropTypes from "prop-types";
 import { Drawer, message } from "antd";
 import { getChannel } from "metabase/selectors/app";
-import {
-  xxxx,
-} from "metabase/env";
+import { logout } from "metabase/auth/actions";
 import {
   getCancelFeedback,
   getCreateModalShow,
@@ -29,7 +27,7 @@ import {
 import SearchBar from "metabase/nav/components/SearchBar";
 import ProfileLink from "metabase/nav/components/ProfileLink";
 import Link from "metabase/core/components/Link";
-// import LoginModal from "metabase/auth/containers/LoginModal";
+import LoginModal from "metabase/auth/containers/LoginModal";
 import { zkspaceDate } from "metabase/lib/register-activity";
 import { getOssUrl } from "metabase/lib/image";
 import { trackStructEvent } from "metabase/lib/analytics";
@@ -64,6 +62,7 @@ const mapDispatchToProps = {
   cancelFeedbackAction,
   setIsCancelFeedbackBlockAction,
   setSubmitAddrZkspaceModal,
+  logout,
 };
 
 const menus = [
@@ -181,6 +180,7 @@ class FpNavbar extends Component {
       setCreateModalShow,
       // onChangeLocation,
     } = this.props;
+
     return (
       createModalShow && (
         <Modal
@@ -304,18 +304,18 @@ class FpNavbar extends Component {
       loginModalRedirect,
       setLoginModalShow,
     } = this.props;
-    return null;
-    // return (
-    //   <LoginModal
-    //     isOpen={loginModalShow}
-    //     onClose={() => setLoginModalShow({ show: false })}
-    //     from={location.query.from}
-    //     channel={location.query.channel || location.query.cnl}
-    //     location={this.props.location}
-    //     fromNav={true}
-    //     redirect={loginModalRedirect}
-    //   />
-    // );
+    console.log("loginModalShow", loginModalShow)
+    return (
+      <LoginModal
+        isOpen={loginModalShow}
+        onClose={() => setLoginModalShow({ show: false })}
+        from={location.query.from}
+        channel={location.query.channel || location.query.cnl}
+        location={this.props.location}
+        fromNav={true}
+        redirect={loginModalRedirect}
+      />
+    );
   }
 
   renderSubmitAddrZkspaceModal() {
@@ -612,6 +612,7 @@ class FpNavbar extends Component {
       if (block) {
         return;
       }
+      console.log("onCreateAction")
       afterSuccess();
     };
 
@@ -625,7 +626,7 @@ class FpNavbar extends Component {
             <RightMenuPad />
           </React.Fragment>
           {user ? (
-            <ProfileLink {...this.props} />
+            <ProfileLink {...this.props} onLogout={() => this.props.logout()}/>
           ) : (
             <Link
               className="Nav__sign-up"
@@ -702,7 +703,7 @@ class FpNavbar extends Component {
 
   render() {
     const { context } = this.props;
-    console.log("process.env", xxxx)
+
     switch (context) {
       case "auth":
         return null;

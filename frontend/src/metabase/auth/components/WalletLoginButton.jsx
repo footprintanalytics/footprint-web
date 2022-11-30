@@ -1,16 +1,16 @@
 /* eslint-disable react/prop-types */
 import React, { Component } from "react";
 import { connect } from "react-redux";
-import AuthProviderButton from "metabase/auth/components/AuthProviderButton";
-import { loginWallet } from "metabase/auth/auth";
-import { getChannel } from "metabase/selectors/app";
 import { message } from "antd";
+import AuthProviderButton from "metabase/auth/components/AuthProviderButton";
+import { loginWallet } from "metabase/auth/actions";
+import { getChannel } from "metabase/selectors/app";
 import {
   WalletAddressNonce,
   WalletAddressNonceCheck,
 } from "metabase/new-service";
-import BindUserWithWalletAddressModal from "./BindUserWithWalletAddressModal";
 import { getErrorMessage } from "metabase/components/form/FormMessage";
+import BindUserWithWalletAddressModal from "./BindUserWithWalletAddressModal";
 
 const mapStateToProps = (state, props) => {
   return {
@@ -18,8 +18,7 @@ const mapStateToProps = (state, props) => {
   };
 };
 
-@connect(mapStateToProps, { loginWallet })
-export default class WalletLoginButton extends Component {
+class WalletLoginButton extends Component {
   constructor(props) {
     super(props);
     this.state = {
@@ -44,13 +43,13 @@ export default class WalletLoginButton extends Component {
 
   subscribeProvider(provider) {
     // Subscribe to accounts change
-    provider.on("accountsChanged", (accounts: string[]) => {});
+    provider.on("accountsChanged", (accounts) => {});
     // Subscribe to chainId change
-    provider.on("chainChanged", (chainId: number) => {});
+    provider.on("chainChanged", (chainId) => {});
     // Subscribe to provider connection
-    provider.on("connect", (info: { chainId: number }) => {});
+    provider.on("connect", (info) => {});
     // Subscribe to provider disconnection
-    provider.on("disconnect", (error: { code: number, message: string }) => {});
+    provider.on("disconnect", (error) => {});
   }
 
   connectWallet = async () => {
@@ -220,3 +219,5 @@ export default class WalletLoginButton extends Component {
     );
   }
 }
+
+export default connect(mapStateToProps, { loginWallet })(WalletLoginButton);

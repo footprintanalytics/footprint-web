@@ -91,9 +91,9 @@ export const getIsNavBarVisible = createSelector(
     getEmbedOptions,
   ],
   (currentUser, path, isEditingDashboard, isEmbedded, embedOptions) => {
-    if (!currentUser || isEditingDashboard) {
+    /*if (!currentUser || isEditingDashboard) {
       return false;
-    }
+    }*/
     if (isEmbedded && !embedOptions.side_nav) {
       return false;
     }

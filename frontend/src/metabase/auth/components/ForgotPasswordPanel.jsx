@@ -5,7 +5,6 @@ import { t } from "ttag";
 import validate from "metabase/lib/validate";
 import Form from "metabase/containers/Form";
 
-import { Box, Flex } from "grid-styled";
 import BackToLogin from "metabase/auth/components/BackToLogin";
 import Icon from "metabase/components/Icon";
 import MetabaseSettings from "metabase/lib/settings";
@@ -22,10 +21,10 @@ const ForgotPasswordPanel = ({
   const canResetPassword = emailConfigured && !ldapEnabled;
 
   return !show ? (
-    <Flex />
+    <div />
   ) : (
-    <Flex justifyContent="center" flexDirection="column">
-      <Box mt={30} />
+    <div className="flex flex-column justify-center">
+      <div className="flex mt4"/>
       {!canResetPassword ? (
         <div>
           <h3 className="my4">{t`Please contact an administrator to have them reset your password`}</h3>
@@ -72,7 +71,7 @@ const ForgotPasswordPanel = ({
       >
         <a>Back to login in</a>
       </div>
-    </Flex>
+    </div>
   );
 };
 

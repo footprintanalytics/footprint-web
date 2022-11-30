@@ -176,6 +176,24 @@ export const loginGoogle = createThunkAction(
     },
 );
 
+// login Wallet
+export const LOGIN_WALLET = "metabase/auth/LOGIN_WALLET";
+export const loginWallet = createThunkAction(LOGIN_WALLET, function(
+  loginParam: any,
+  redirectUrl = '/',
+) {
+  return async function(dispatch: any, getState: any) {
+    try {
+      const result = await WalletAddressLogin(loginParam);
+      MetabaseAnalytics.trackStructEvent("Auth", "Wallet Auth Login");
+      handleLogin(dispatch, redirectUrl);
+      return result;
+    } catch (error: any) {
+      return { error: error.message ? error.message : error };
+    }
+  };
+});
+
 export const LOGOUT = "metabase/auth/LOGOUT";
 export const logout = createThunkAction(LOGOUT, (redirectUrl: string) => {
   return async (dispatch: any) => {
@@ -184,7 +202,9 @@ export const logout = createThunkAction(LOGOUT, (redirectUrl: string) => {
     await dispatch(refreshLocale());
     trackLogout();
 
-    dispatch(push(Urls.login(redirectUrl)));
+    if (redirectUrl) {
+      dispatch(push(Urls.login(redirectUrl)));
+    }
     window.location.reload(); // clears redux state and browser caches
   };
 });

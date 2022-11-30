@@ -3,10 +3,9 @@ import React from "react";
 import { jt, t } from "ttag";
 import Form from "metabase/containers/Form";
 
-import { Flex } from "grid-styled";
 import Icon from "metabase/components/Icon";
 import MetabaseSettings from "metabase/lib/settings";
-import Link from "metabase/components/Link";
+import Link from "metabase/core/components/Link";
 import Users from "metabase/entities/users";
 
 const ResetPasswordPanel = ({
@@ -24,9 +23,9 @@ const ResetPasswordPanel = ({
     </Link>
   );
   return !show ? (
-    <Flex />
+    <div />
   ) : (
-    <Flex justifyContent="center" flexDirection="column">
+    <div className="flex flex-column justify-center">
       {tokenValid === undefined ? (
         <div />
       ) : !tokenValid ? (
@@ -70,7 +69,7 @@ const ResetPasswordPanel = ({
       >
         Go back
       </Link>
-    </Flex>
+    </div>
   );
 };
 

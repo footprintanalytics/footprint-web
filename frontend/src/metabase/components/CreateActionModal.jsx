@@ -70,12 +70,12 @@ class CreateActionModal extends Component {
       }
     };
 
-    const quetions = [
+    const questions = [
       {
         title: t`New Chart`,
         desc: t`Pick some data, view it, and easily filter, summarize, and visualize it.`,
         icon: getOssUrl("20210713145417.png"),
-        to: Urls.newQuestion(),
+        to: Urls.newQuestion({ type: "query" }),
       },
       // {
       //   title: t`Custom Query`,
@@ -88,7 +88,10 @@ class CreateActionModal extends Component {
         title: t`SQL Query`,
         desc: t`For more complicated queries, you can write your own SQL or native query.`,
         icon: getOssUrl("20210713145436.png"),
-        to: Urls.newQuestion({ type: "native" }),
+        to: Urls.newQuestion({
+          type: "native",
+          creationType: "native_question",
+        }),
         permission: !canNativeQuery,
       },
     ];
@@ -112,7 +115,7 @@ class CreateActionModal extends Component {
       <ModalContent title="Create" onClose={onClose}>
         <div className="create-modal__wrap">
           <div className="create-modal__question-box">
-            {quetions.map(n => (
+            {questions.map(n => (
               <Card
                 className="create-modal__question-box-card"
                 key={n.title}

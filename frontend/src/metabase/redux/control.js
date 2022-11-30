@@ -1,5 +1,6 @@
 import {
-  createAction,
+  combineReducers,
+  createThunkAction,
   handleActions,
 } from "metabase/lib/redux";
 import {
@@ -26,26 +27,27 @@ export const CLOSE_ALL_CHART_POPOVER_Action =
 export const SET_NEW_GUIDE_INFO = "metabase/control/setNewGuideInfo";
 export const SET_DARK_MODE = "metabase/control/setDarkMode";
 
-export const loginModalShowAction = createAction(
+export const loginModalShowAction = createThunkAction(
   LOGIN_MODAL_SHOW,
   ({ show, from, redirect, channel }) => {
     localStorage.setItem("login-modal-from", from);
     return { show, redirect };
   },
 );
-export const featuresSideHideAction = createAction(
+export const featuresSideHideAction = createThunkAction(
   FEATURES_SIDE_HIDE,
   ({ hide }) => {
     return { hide };
   },
 );
-export const createModalShowAction = createAction(
+export const createModalShowAction = createThunkAction(
   CREATE_MODAL_SHOW,
   ({ show, redirect }) => {
+    console.log("createModalShowAction", show, redirect)
     return { show, redirect };
   },
 );
-export const cancelFeedbackAction = createAction(
+export const cancelFeedbackAction = createThunkAction(
   CANCEL_FEEDBACK_SHOW,
   ({ show, afterSuccess = undefined, type, scene, isLimit = false }) => {
     if (show && isLimit) {
@@ -69,13 +71,13 @@ export const cancelFeedbackAction = createAction(
     return { show, afterSuccess, scene, type };
   },
 );
-export const setIsCancelFeedbackBlockAction = createAction(
+export const setIsCancelFeedbackBlockAction = createThunkAction(
   SET_IS_USER_FEEDBACK_BLOCK,
   ({ isUserFeedbackBlock }) => {
     return { isUserFeedbackBlock };
   },
 );
-export const setSubmitAddrZkspaceModal = createAction(
+export const setSubmitAddrZkspaceModal = createThunkAction(
   SET_SUBMIT_ADDR_ZKSPACE_MODAL,
   ({ submitAddrZkspaceModal, email }) => {
     if (!email) {
@@ -91,37 +93,37 @@ export const setSubmitAddrZkspaceModal = createAction(
     return { submitAddrZkspaceModal };
   },
 );
-export const setShowTemplateChart = createAction(
+export const setShowTemplateChart = createThunkAction(
   SHOW_TEMPLATE_CHART,
   ({ show, databaseId }) => {
     return { show, databaseId };
   },
 );
-export const setShowPreviewChart = createAction(
+export const setShowPreviewChart = createThunkAction(
   SHOW_PREVIEW_CHART,
   ({ show, data }) => {
     return { show, data };
   },
 );
-export const nextChartPopoverAction = createAction(
+export const nextChartPopoverAction = createThunkAction(
   NEXT_CHART_POPOVER_Action,
   ({ time, next }) => {
     return { time, next };
   },
 );
-export const closeAllChartPopoverAction = createAction(
+export const closeAllChartPopoverAction = createThunkAction(
   CLOSE_ALL_CHART_POPOVER_Action,
   ({ time }) => {
     return { time };
   },
 );
-export const setNewGuideInfo = createAction(
+export const setNewGuideInfo = createThunkAction(
   SET_NEW_GUIDE_INFO,
   newGuideInfo => {
     return newGuideInfo;
   },
 );
-export const setDarkMode = createAction(SET_DARK_MODE, darkMode => {
+export const setDarkMode = createThunkAction(SET_DARK_MODE, darkMode => {
   localStorage.setItem("sql-editor-dark-mode", darkMode);
   return darkMode;
 });
@@ -147,6 +149,7 @@ export const control = handleActions(
     },
     [CREATE_MODAL_SHOW]: {
       next: (state, { payload }) => {
+        console.log("CREATE_MODAL_SHOW", payload)
         return {
           ...state,
           createModalShow: payload.show,
@@ -231,3 +234,7 @@ export const control = handleActions(
     darkMode: localStorage.getItem("sql-editor-dark-mode") !== "false",
   },
 );
+
+export default combineReducers({
+  control,
+});

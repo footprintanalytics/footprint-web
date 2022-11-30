@@ -36,11 +36,7 @@ function Navbar({ isOpen, user, location, params, adminPaths }: NavbarProps) {
     [location.pathname],
   );
 
-  if (!user) {
-    return null;
-  }
-  console.log("NavbarNavbarNavbar", isAdminApp)
-  return isAdminApp ? (
+  return isAdminApp && user ? (
     <AdminNavbar user={user} path={location.pathname} adminPaths={adminPaths} />
   ) : (
     <FpNavbar isOpen={isOpen} location={location} params={params} />
@@ -48,9 +44,9 @@ function Navbar({ isOpen, user, location, params, adminPaths }: NavbarProps) {
 }
 
 export default _.compose(
-  Database.loadList({
-    loadingAndErrorWrapper: false,
-  }),
+  // Database.loadList({
+  //   loadingAndErrorWrapper: false,
+  // }),
   withRouter,
   connect(mapStateToProps),
 )(Navbar);

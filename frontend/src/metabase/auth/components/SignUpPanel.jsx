@@ -2,16 +2,15 @@
 import React from "react";
 import { t } from "ttag";
 
+import { entries, get, mapValues, omit } from "lodash";
+import { message } from "antd";
 import validate from "metabase/lib/validate";
 import Form from "metabase/containers/Form";
 
-import { Box, Flex } from "grid-styled";
 import GoogleButton from "metabase/auth/components/GoogleButton";
 import { isDefi360 } from "metabase/lib/project_info";
-import WalletLoginButton from "./WalletLoginButton";
 import SplitLine from "metabase/components/SplitLine";
-import { message } from "antd";
-import { entries, get, mapValues, omit } from "lodash";
+import WalletLoginButton from "./WalletLoginButton";
 
 const SignUpPanel = ({
   onSubmit,
@@ -54,9 +53,9 @@ const SignUpPanel = ({
     }
   };
   return !show ? (
-    <Flex />
+    <div />
   ) : (
-    <Flex flexDirection="column">
+    <div className="flex flex-column">
       <Form onSubmit={onSubmit}>
         {({ Form, FormField, FormSubmit, FormMessage }) => (
           <Form>
@@ -100,7 +99,7 @@ const SignUpPanel = ({
               normalize={value => value.trim()}
               onKeyDown={e => onkeydown(e)}
             />
-            <Box mt={10} />
+            <div className="mt2"/>
             <FormMessage />
             <div className="Form-actions text-centered">
               <FormSubmit className="block full sign-in-button">
@@ -138,7 +137,7 @@ const SignUpPanel = ({
           buttonText="Sign up with Ethereum"
         />
       )}
-    </Flex>
+    </div>
   );
 };
 export default SignUpPanel;

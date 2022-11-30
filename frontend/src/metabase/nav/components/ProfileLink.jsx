@@ -38,7 +38,7 @@ function ProfileLink({ user, adminItems, onLogout }) {
 
   const generateOptionsForUser = () => {
     const { tag } = MetabaseSettings.get("version");
-    const isAdmin = user.is_superuser;
+    const isAdmin = user?.is_superuser;
     const showAdminSettingsItem = adminItems?.length > 0;
     const compactBugReportDetailsForUrl = encodeURIComponent(
       JSON.stringify(bugReportDetails),
@@ -90,11 +90,11 @@ function ProfileLink({ user, adminItems, onLogout }) {
   };
 
   useEffect(() => {
-    const isAdmin = user.is_superuser;
+    const isAdmin = user?.is_superuser;
     if (isAdmin && MetabaseSettings.isPaidPlan()) {
       UtilApi.bug_report_details().then(setBugReportDetails);
     }
-  }, [user.is_superuser]);
+  }, [user?.is_superuser]);
 
   const { tag, date, ...versionExtra } = MetabaseSettings.get("version");
   // don't show trademark if application name is whitelabeled
