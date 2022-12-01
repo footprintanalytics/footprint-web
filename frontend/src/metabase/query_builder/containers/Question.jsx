@@ -27,6 +27,7 @@ import { getUser } from "metabase/home/selectors";
 import QueryPreview from "metabase/query_builder/components/QueryPreview";
 import QuestionSide from "../components/QuestionSide";
 import QueryBuilder from "./QueryBuilder";
+import "./Question.css";
 
 const mapStateToProps = state => {
   return {
@@ -155,7 +156,7 @@ class Question extends Component {
       (location.hash || location.query.dbId || showCustomBuilder) && user;
 
     return (
-      <div className="Question">
+      <div className="flex Question">
         {showSide ? (
           <div className="Question-side" style={questionSideStyle}>
             <QuestionSide closeTemplateData={this.closeQueryTemplate} />

@@ -47,6 +47,17 @@ import {
   StyledDebouncedFrame,
   StyledSyncedParametersList,
 } from "./View.styled";
+import { deserializeCardFromUrl } from "metabase/lib/card";
+import { get } from "lodash";
+import ChartTypeSidebarRoot from "metabase/query_builder/components/view/sidebars/ChartTypeSidebarRoot";
+import { getUserNativeQueryPermission } from "metabase/selectors/user";
+import { setNewGuideInfo } from "metabase/redux/control";
+import { getNewGuideInfo } from "metabase/selectors/control";
+import { canShowNewGuideStart } from "metabase/containers/newguide/newGuide";
+import { snapshot } from "metabase/dashboard/components/utils/snapshot";
+import { connect } from "react-redux";
+import { questionSideHideAction } from "metabase/redux/config";
+import QuestionEmpty from "metabase/query_builder/containers/QuestionEmpty";
 
 const DEFAULT_POPOVER_STATE = {
   aggregationIndex: null,
@@ -426,17 +437,19 @@ class View extends React.Component {
       query,
       card,
       databases,
-      isShowingNewbModal,
+      // isShowingNewbModal,
       isShowingTimelineSidebar,
       queryBuilderMode,
-      closeQbNewbModal,
+      // closeQbNewbModal,
       onDismissToast,
       onConfirmToast,
       isShowingToaster,
       isHeaderVisible,
       updateQuestion,
+      config,
+      user,
     } = this.props;
-
+    console.log("123445678")
     // if we don't have a card at all or no databases then we are initializing, so keep it simple
     if (!card || !databases) {
       return <LoadingAndErrorWrapper className="full-height" loading />;
@@ -447,7 +460,44 @@ class View extends React.Component {
     const isNewQuestion =
       isStructured && !query.sourceTableId() && !query.sourceQuery();
 
-    if (isNewQuestion && queryBuilderMode === "view") {
+    const hideSide = config && config.questionSideHide;
+    const isCreate = !question.card().id && !question.card().original_card_id;
+    const isAdmin = user.is_superuser;
+    const isOwner =
+      isAdmin || isCreate || user.id === question.card().creator_id;
+
+    const id = `html2canvas-${question._card.name}-${question._card.id}`;
+    // const fileName = `Footprint-${question._card.name}-${moment().format(
+    //   "MM/DD/YYYY",
+    // )}`;
+
+    const isEditing = window.location.hash;
+
+    if (location.hash) {
+      const json = deserializeCardFromUrl(location.hash);
+      const initShowHideSide =
+        !get(json, "dataset_query.database") &&
+        get(json, "dataset_query.type") !== "native" &&
+        hideSide;
+      if (initShowHideSide) {
+        this.props.questionSideHideAction({ hide: false });
+      }
+    }
+
+    if (isNewQuestion || !query.databaseId()) {
+      if (query instanceof NativeQuery) {
+        const nativeQuery = {
+          type: "native",
+          native: { query: "select * from " },
+          database: 3,
+        };
+        question.setDatasetQuery(nativeQuery).update();
+        window._editor && window._editor.focus();
+      }
+      const showUpload = true;
+      return <QuestionEmpty showUpload={showUpload} />;
+    }
+    /*if (isNewQuestion && queryBuilderMode === "view") {
       return (
         <NewQuestionView
           query={query}
@@ -455,7 +505,7 @@ class View extends React.Component {
           className="full-height"
         />
       );
-    }
+    }*/
 
     if (card.dataset && queryBuilderMode === "dataset") {
       return (
@@ -474,7 +524,7 @@ class View extends React.Component {
     const rightSidebarWidth = isShowingTimelineSidebar
       ? SIDEBAR_SIZES.TIMELINE
       : SIDEBAR_SIZES.NORMAL;
-
+    console.log("vvvv")
     return (
       <div className="full-height">
         <QueryBuilderViewRoot className="QueryBuilder">
@@ -500,12 +550,12 @@ class View extends React.Component {
           </QueryBuilderContentContainer>
         </QueryBuilderViewRoot>
 
-        {isShowingNewbModal && (
-          <SavedQuestionIntroModal
-            question={question}
-            onClose={() => closeQbNewbModal()}
-          />
-        )}
+        {/*{isShowingNewbModal && (*/}
+        {/*  <SavedQuestionIntroModal*/}
+        {/*    question={question}*/}
+        {/*    onClose={() => closeQbNewbModal()}*/}
+        {/*  />*/}
+        {/*)}*/}
 
         <QueryModals {...this.props} />
 
@@ -523,4 +573,16 @@ class View extends React.Component {
   }
 }
 
-export default ExplicitSize({ refreshMode: "debounceLeading" })(View);
+const mapStateToProps = state => {
+  return {
+    user: state.currentUser,
+    config: state.config,
+    canNativeQuery: getUserNativeQueryPermission(state),
+    getNewGuideInfo: getNewGuideInfo(state),
+  };
+};
+
+export default _.compose(
+  ExplicitSize({ refreshMode: "debounceLeading" }),
+  connect(mapStateToProps, { questionSideHideAction, setNewGuideInfo }),
+)(View);

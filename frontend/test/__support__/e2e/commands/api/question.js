@@ -103,7 +103,7 @@ function question(
             .intercept("POST", `/api/card/**/${body.id}/query`)
             .as(interceptAlias);
 
-      const url = dataset ? `/model/${body.id}` : `/question/${body.id}`;
+      const url = dataset ? `/model/${body.id}` : `/chart/${body.id}`;
       cy.visit(url);
 
       // Wait for `result_metadata` to load

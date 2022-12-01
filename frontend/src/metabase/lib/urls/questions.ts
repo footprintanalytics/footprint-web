@@ -54,7 +54,7 @@ export function question(
   }
 
   const isModel = card?.dataset || card?.model === "dataset";
-  let path = isModel ? "model" : "question";
+  let path = isModel ? "model" : "chart";
   if (!card || !card.id) {
     return `/${path}${query}${hash}`;
   }
@@ -108,10 +108,10 @@ export function newQuestion({
     query: objectId ? { objectId } : undefined,
   });
 
-  const entity = question.isDataset() ? "model" : "question";
+  const entity = question.isDataset() ? "model" : "chart";
 
   if (mode) {
-    return url.replace(/^\/(question|model)/, `/${entity}\/${mode}`);
+    return url.replace(/^\/(chart|model)/, `/${entity}\/${mode}`);
   } else {
     return url;
   }
@@ -129,7 +129,7 @@ export function publicQuestion(
   const siteUrl = MetabaseSettings.get("site-url");
   const searchQuery = query ? `?${query}` : "";
   return (
-    `${siteUrl}/public/question/${uuid}` +
+    `${siteUrl}/public/chart/${uuid}` +
     (type ? `.${type}` : "") +
     searchQuery
   );
@@ -137,7 +137,7 @@ export function publicQuestion(
 
 export function embedCard(token: string, type: string | null = null) {
   const siteUrl = MetabaseSettings.get("site-url");
-  return `${siteUrl}/embed/question/${token}` + (type ? `.${type}` : ``);
+  return `${siteUrl}/embed/chart/${token}` + (type ? `.${type}` : ``);
 }
 
 export function tableRowsQuery(

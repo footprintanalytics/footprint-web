@@ -4,7 +4,7 @@ import {
   handleActions,
 } from "metabase/lib/redux";
 import { UserApi } from "metabase/services";
-import { CLOSE_QB_NEWB_MODAL } from "metabase/query_builder/actions";
+// import { CLOSE_QB_NEWB_MODAL } from "metabase/query_builder/actions";
 import Users from "metabase/entities/users";
 import { getUserVipInfo } from "metabase/new-service";
 import arms from "metabase/lib/arms";
@@ -86,9 +86,9 @@ export const currentUser = handleActions(
   {
     [CLEAR_CURRENT_USER]: { next: (state, payload) => null },
     // [REFRESH_CURRENT_USER]: { next: (state, { payload }) => payload },
-    [CLOSE_QB_NEWB_MODAL]: {
-      next: (state, { payload }) => ({ ...state, is_qbnewb: false }),
-    },
+    // [CLOSE_QB_NEWB_MODAL]: {
+    //   next: (state, { payload }) => ({ ...state, is_qbnewb: false }),
+    // },
     [Users.actionTypes.UPDATE]: {
       next: (state, { payload }) => {
         const isCurrentUserUpdated = state.id === payload.user.id;

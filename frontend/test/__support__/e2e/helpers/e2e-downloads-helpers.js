@@ -80,7 +80,7 @@ export function assertSheetRowsCount(expectedCount) {
 
 function getEndpoint(fileType, questionId, publicUid) {
   if (publicUid) {
-    return `/public/question/${publicUid}.${fileType}**`;
+    return `/public/chart/${publicUid}.${fileType}**`;
   }
 
   const questionEndpoint = `/api/card/${questionId}/query/${fileType}`;

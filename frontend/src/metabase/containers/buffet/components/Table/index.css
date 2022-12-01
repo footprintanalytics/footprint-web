@@ -1,0 +1,82 @@
+.buffet__table-wrap {
+  position: relative;
+  width: max-content;
+  min-width: 450px;
+}
+
+.buffet__table {
+  display: block;
+  border: 1px solid #b3b3b3;
+  overflow-x: scroll;
+  max-width: calc(100vw - 360px - 80px - 160px);
+  width: max-content;
+}
+
+.buffet__table-add-field {
+  position: absolute;
+  right: 0;
+  top: calc(-32px - 16px);
+}
+
+.buffet__table-add-field span {
+  margin-right: 7px;
+}
+
+.buffet__table td {
+  height: 40px;
+  padding: 0 10px;
+  line-height: 1;
+  white-space: nowrap;
+  text-align: right;
+}
+
+.buffet__table thead,
+.buffet__table tbody tr {
+  border-bottom: 1px solid #dcdee4;
+}
+
+.buffet__table tbody tr:last-child {
+  border-bottom: 0;
+}
+
+.buffet__table thead td,
+.buffet__table tbody td {
+  border-left: 1px solid #dcdee4;
+}
+
+.buffet__table thead td:first-child,
+.buffet__table tbody td:first-child {
+  border-left: 0;
+}
+
+.buffet__table thead {
+  background-color: #f6f6fe;
+}
+
+.buffet__table thead td {
+  font-weight: bold;
+  text-align: center;
+}
+
+.buffet__table--edit-td {
+  padding: 3px !important;
+  text-align: left !important;
+}
+
+.buffet__table--edit-td .tether-target {
+  margin: 0;
+  font-size: 14px;
+}
+
+.buffet__table--edit-td .input {
+  font-size: 14px !important;
+  line-height: 1.5715;
+  white-space: nowrap !important;
+  border-radius: 2px;
+  padding: 4px 11px;
+}
+
+.buffet__table--edit-td .text-error {
+  margin-top: 4px;
+  margin-bottom: 0;
+}

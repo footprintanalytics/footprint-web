@@ -4,6 +4,7 @@ import { Button } from "antd";
 import { UploadOutlined } from "@ant-design/icons";
 import { getOssUrl } from "metabase/lib/image";
 import Link from "metabase/core/components/Link";
+import "./QuestionEmpty.css";
 
 export default function QuestionEmpty({ showUpload }) {
   return (
