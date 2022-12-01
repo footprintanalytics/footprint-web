@@ -4,7 +4,7 @@
 
 FROM metabase/ci:java-11-clj-1.11.0.1100.04-2022-build as builder
 
-
+ARG MB_EDITION=oss
 
 RUN echo hello-duke & echo $STATIC_BUCKET_URL
 
@@ -23,7 +23,6 @@ RUN INTERACTIVE=false CI=true MB_EDITION=$MB_EDITION bin/build
 
 FROM --platform=linux/amd64 eclipse-temurin:11-jre-alpine as runner
 
-ARG MB_EDITION=oss
 ARG CDN
 ARG PROD_URL
 ARG PRE_URL
