@@ -241,7 +241,7 @@
               (assoc context :reducef reducef'))))
       (let [duration-ms (- (System/currentTimeMillis) @last-ran-cache)
             start-time-ms (System/currentTimeMillis)]
-        (when (and result ::ok (canRunCache (min-duration-ms)))
+        (when (and result ::ok (canRunCache duration-ms card-id))
               (((apply comp query-data-middleware) qp)
                 (merge {:aysnc-refresh-cache? true} query)
                 (fn [metadata]
