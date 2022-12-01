@@ -25,6 +25,7 @@ import { canAutoShowTemplateChart } from "metabase/query_builder/components/Quer
 import { canShowNewGuideStart } from "metabase/containers/newguide/newGuide";
 import { getUser } from "metabase/home/selectors";
 import QueryPreview from "metabase/query_builder/components/QueryPreview";
+import { updateQuestion } from "metabase/query_builder/actions";
 import QuestionSide from "../components/QuestionSide";
 import QueryBuilder from "./QueryBuilder";
 import "./Question.css";
@@ -47,6 +48,7 @@ const mapDispatchToProps = {
   setIsCancelFeedbackBlockAction,
   setShowTemplateChart,
   replace,
+  updateQuestion,
 };
 
 class Question extends Component {
@@ -129,6 +131,7 @@ class Question extends Component {
       question,
       user,
       showPreviewChart,
+      updateQuestion,
     } = this.props;
 
     const hideSide = config && config.questionSideHide;
@@ -159,7 +162,7 @@ class Question extends Component {
       <div className="flex Question">
         {showSide ? (
           <div className="Question-side" style={questionSideStyle}>
-            <QuestionSide closeTemplateData={this.closeQueryTemplate} />
+            <QuestionSide closeTemplateData={this.closeQueryTemplate} updateQuestion={updateQuestion}/>
           </div>
         ) : null}
         <div className="Question-main">

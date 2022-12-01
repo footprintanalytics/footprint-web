@@ -78,6 +78,7 @@ function QuestionSide({
   getNewGuideInfo,
   setNewGuideInfo,
   nextChartPopoverAction,
+  updateQuestion,
 }) {
   const [databaseId, setDatabaseId] = useState(dbId || 3);
   const [handleSelectTable, setHandleSelectTable] = useState();
@@ -208,6 +209,7 @@ function QuestionSide({
           question,
           nativeEditorCursorOffset,
           nativeEditorSelectedText,
+          updateQuestion,
         });
         return;
       }

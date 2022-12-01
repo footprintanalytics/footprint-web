@@ -7,6 +7,7 @@ export const updateNativeEditorSelect = ({
   question,
   nativeEditorCursorOffset,
   nativeEditorSelectedText,
+  updateQuestion,
 }) => {
   const queryRef = databaseId !== 0 ? '"' : "`";
   const selectionStart =
@@ -27,6 +28,6 @@ export const updateNativeEditorSelect = ({
     database: databaseId,
   };
 
-  question.setDatasetQuery(nativeQuery).update();
+  updateQuestion(question.setDatasetQuery(nativeQuery));
   window._editor && window._editor.focus();
 };

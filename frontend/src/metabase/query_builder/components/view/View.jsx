@@ -58,6 +58,7 @@ import { snapshot } from "metabase/dashboard/components/utils/snapshot";
 import { connect } from "react-redux";
 import { questionSideHideAction } from "metabase/redux/config";
 import QuestionEmpty from "metabase/query_builder/containers/QuestionEmpty";
+import { updateQuestion } from "metabase/query_builder/actions";
 
 const DEFAULT_POPOVER_STATE = {
   aggregationIndex: null,
@@ -449,7 +450,7 @@ class View extends React.Component {
       config,
       user,
     } = this.props;
-    console.log("123445678")
+
     // if we don't have a card at all or no databases then we are initializing, so keep it simple
     if (!card || !databases) {
       return <LoadingAndErrorWrapper className="full-height" loading />;
@@ -491,7 +492,7 @@ class View extends React.Component {
           native: { query: "select * from " },
           database: 3,
         };
-        question.setDatasetQuery(nativeQuery).update();
+        updateQuestion(question.setDatasetQuery(nativeQuery));
         window._editor && window._editor.focus();
       }
       const showUpload = true;

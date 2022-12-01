@@ -87,7 +87,7 @@ const Table = ({
                   <Tooltip
                     placement="bottom"
                     title="Select the column type"
-                    visible={ti === 0 && showTooltip}
+                    open={ti === 0 && showTooltip}
                   >
                     <Select
                       value={ts.type}

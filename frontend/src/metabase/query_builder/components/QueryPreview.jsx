@@ -36,6 +36,7 @@ function QueryPreview(props) {
     handleQuestionSideHide,
     closeAllChartPopoverAction,
     setShowPreviewChart,
+    updateQuestion,
   } = props;
 
   const [confirmModal, setConfirmModal] = useState(false);
@@ -97,6 +98,7 @@ function QueryPreview(props) {
         nativeEditorCursorOffset,
         nativeEditorSelectedText,
         databaseName,
+        updateQuestion,
       });
       setShowPreviewChart({ show: false });
       return;
