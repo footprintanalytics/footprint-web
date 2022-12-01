@@ -13,7 +13,8 @@ export const isDev = location.origin.includes(":8081");
 
 // Bucket
 export const xxxx = process.env;
-export const staticBucketUrl = process.env.STATIC_BUCKET_URL;
+export const staticBucketUrl = "https://static.footprint.network";
+// export const staticBucketUrl = process.env.STATIC_BUCKET_URL;
 export const staticBucketUrlDefault = process.env.STATIC_BUCKET_URL;
 export const staticBucketUrlHk = process.env.STATIC_BUCKET_HK_URL;
 export const staticBucketKeyId = process.env.STATIC_BUCKET_KEY_ID;
