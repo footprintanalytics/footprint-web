@@ -48,11 +48,11 @@ const Index = ({ router, user }) => {
         <Banner />
         <div className="dashboards__layout">
           <Dashboards user={user} router={router} />
-          {/*<div className="dashboards__layout-side">*/}
-          {/*  <Profile />*/}
-          {/*  <Creator />*/}
-          {/*  <News />*/}
-          {/*</div>*/}
+          <div className="dashboards__layout-side">
+            <Profile />
+            <Creator />
+            <News />
+          </div>
         </div>
       </div>
       <HomeFooter />
