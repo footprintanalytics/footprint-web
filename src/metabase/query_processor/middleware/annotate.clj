@@ -696,3 +696,17 @@
                        :always
                        (update :cols (fn [cols] (map #(dissoc % :field_ref) cols))))]
         (add-column-info-xform query metadata (rff metadata))))))
+
+(defn add-column-info-for-cache
+  "Middleware for adding type information about the columns in the query results (the `:cols` key)."
+  [qp]
+  (fn [{query-type :type, :as query} rff context]
+    (qp
+     query
+     (fn [metadata]
+       (if (= query-type :query)
+         (rff (assoc metadata :cols (merged-column-info query metadata)))
+         ;; rows sampling is only needed for native queries! TODO ­ not sure we really even need to do for native
+         ;; queries...
+         (add-column-info-xform query metadata (rff metadata))))
+     context)))
