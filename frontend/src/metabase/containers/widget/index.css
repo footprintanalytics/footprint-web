@@ -1,0 +1,269 @@
+.widget-empty {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 100%;
+}
+
+.widget-flex {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.widget-my-120 {
+  margin: 120px 0;
+}
+
+.widget-full-content {
+  height: calc(100vh - 60px - 20px - 20px);
+}
+
+.widget-btn {
+  border-radius: 4px;
+  font-size: 16px;
+  width: 210px;
+  height: 40px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+}
+
+.widget-btn--white {
+  background-color: #fff;
+  color: #3434b2;
+}
+
+.widget-btn--white:hover {
+  color: #3434b2;
+}
+
+.widget-btn--plain {
+  border: 1px solid #fff;
+  color: #fff;
+}
+
+.widget-btn--plain:hover {
+  color: #fff;
+}
+
+.widget-quote {
+  position: relative;
+}
+
+.widget-quote::before {
+  content: "";
+  position: absolute;
+  left: -60px;
+  top: -20px;
+  background-image: url("https://static.footprint.network/20220225173135.png");
+  background-size: cover;
+  width: 25.92px;
+  height: 22.56px;
+}
+
+.widget-quote::after {
+  content: "";
+  position: absolute;
+  right: -60px;
+  bottom: -20px;
+  background-image: url("https://static.footprint.network/20220225173217.png");
+  background-size: cover;
+  width: 25.92px;
+  height: 22.56px;
+}
+
+.widget {
+  min-width: 1200px;
+}
+
+.widget__wrap {
+  width: 1200px;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.widget img {
+  user-select: none;
+}
+
+.widget .partners {
+  padding-bottom: 240px;
+}
+
+.widget .title-desc__title,
+.widget h3 {
+  font-size: 48px;
+  color: #262626;
+  text-align: center;
+}
+
+.widget h4 {
+  font-size: 16px;
+  color: #262626;
+}
+
+.widget p {
+  font-size: 16px;
+  color: #262626;
+  line-height: 22px;
+}
+
+.widget__banner {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.widget__banner-bg {
+  width: 100%;
+  height: 640px;
+  background-size: cover;
+  background-position: center bottom;
+  background-repeat: no-repeat;
+  position: absolute;
+  left: 0;
+  top: 0;
+  z-index: -1;
+}
+
+.widget__banner h2 {
+  font-size: 60px;
+  line-height: 72px;
+  color: #fff;
+  text-align: center;
+  padding-top: 60px;
+}
+
+.widget__banner-btns {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 40px 0;
+}
+
+.widget__banner-btns .widget-btn:last-child {
+  margin-left: 40px;
+}
+
+.widget__banner-demo {
+  border-radius: 8px;
+  box-shadow: 0 19px 37px rgba(7, 5, 37, 0.1);
+  margin-bottom: 40px;
+}
+
+.widget__shadow {
+  box-shadow: 0 19px 37px rgba(7, 5, 37, 0.1);
+  margin: 40px;
+}
+
+.widget__banner p {
+  text-align: center;
+  font-size: 18px;
+  color: #262626;
+  line-height: 28px;
+}
+
+.widget__empower {
+  display: flex;
+  justify-content: center;
+}
+
+.widget__empower-demo {
+  box-shadow: 0 20px 40px rgba(7, 5, 37, 0.1);
+  border-radius: 4px;
+}
+
+.widget__empower-logo {
+  position: relative;
+}
+
+.widget__empower-logo h4 {
+  position: absolute;
+  bottom: 90px;
+  left: 118px;
+}
+
+.widget__empower-list {
+  padding-top: 16px;
+}
+
+.widget__empower-list li {
+  margin-bottom: 46px;
+}
+
+.widget__empower-list h4 {
+  margin-bottom: 5px;
+}
+
+.widget-why {
+  background-size: cover;
+  height: 640px;
+  padding: 120px 0;
+}
+
+.widget-why h3 {
+  margin-bottom: 80px;
+}
+
+.widget-why ul {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.widget-why li {
+  width: 360px;
+  height: 256px;
+  border-radius: 4px;
+  background-color: #ffffff;
+  box-shadow: 0 20px 40px 0 rgba(6, 3, 79, 0.1);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+.widget-why li p {
+  font-size: 16px;
+  color: #3d3d3d;
+  text-align: center;
+  margin-top: 60px;
+  margin-bottom: 0;
+}
+
+.widget__section-info-title h3 {
+  text-align: left;
+  line-height: 57px;
+}
+
+.widget__section-info-desc p {
+  margin: 24px 0 42px 0;
+}
+
+.widget__section-info-link {
+  display: inline-flex;
+  align-items: center;
+  color: #3434b2;
+  font-size: 14px;
+}
+
+.widget__section-info-link img {
+  margin-left: 6px;
+}
+
+.widget__section-info--nolink .widget__section-info-title h3 {
+  margin-bottom: 60px;
+}
+
+.widget__section-info--nolink .widget__section-info-desc p {
+  margin: 30px 0;
+}
+
+@media (max-width: 1200px) {
+  .widget__wrap {
+    padding: 0 20px;
+  }
+}

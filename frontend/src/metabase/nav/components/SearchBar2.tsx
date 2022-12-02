@@ -68,7 +68,7 @@ function getSearchTextFromLocation(location: SearchAwareLocation) {
   return "";
 }
 
-function SearchBar({
+function SearchBar2({
   location,
   onSearchActive,
   onSearchInactive,
@@ -200,4 +200,4 @@ function SearchBar({
 export default _.compose(
   withRouter,
   connect(null, mapDispatchToProps),
-)(SearchBar);
+)(SearchBar2);

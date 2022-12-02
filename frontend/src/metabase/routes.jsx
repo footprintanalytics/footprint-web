@@ -247,19 +247,21 @@ export const getRoutes = store => (
         <Route path="/data-api/product" component={LazyLoad.dataApiProduct} />
       </Route>
 
-      {/*<Route*/}
-      {/*  title={t`Protocols`}*/}
-      {/*  path="/protocols"*/}
-      {/*  component={LazyLoad.Protocols}*/}
-      {/*/>*/}
+      <Route
+        title={t`Protocols`}
+        path="/protocols"
+        component={LazyLoad.Protocols}
+      />
 
       <Route title={t`Creator`} path="/@:name" component={LazyLoad.Creator} />
 
-      {/*<Route*/}
-      {/*  title={t`Footprint Widget`}*/}
-      {/*  path="/widget"*/}
-      {/*  component={LazyLoad.Widget}*/}
-      {/*/>*/}
+      <Route title={t`Search`} path="/search" component={LazyLoad.Search} />
+
+      <Route
+        title={t`Footprint Widget`}
+        path="/widget"
+        component={LazyLoad.Widget}
+      />
 
       <Route
         title={t`Dashboard`}
