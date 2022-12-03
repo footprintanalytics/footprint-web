@@ -149,6 +149,7 @@
   border-radius: 4px;
   cursor: pointer;
   margin: 0 var(--footprint-spacing-s);
+  height: 40px;
 }
 
 .Nav__menu-create span {

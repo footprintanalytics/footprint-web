@@ -127,7 +127,7 @@ class SearchBar extends React.Component {
             ref={ref => (this.searchInput = ref)}
             value={searchText}
             maxLength={200}
-            // placeholder={"Search chain/protocol/token/NFT/creator/dashboard…"}
+            placeholder={"Search chain/protocol/token/NFT/creator/dashboard…"}
             onClick={() => this.setState({ active: true })}
             onChange={e => this.setState({ searchText: e.target.value })}
             onKeyDown={e => this.onkeydown(e)}

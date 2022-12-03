@@ -10,6 +10,7 @@
   padding: 0 20px;
   justify-content: center;
   border-bottom: var(--footprint-border);
+  top: 0;
 }
 
 .news .explore__wrap {

@@ -105,6 +105,7 @@
   border-radius: 24px;
   padding: 20px;
   background-color: white;
+  position: relative;
 }
 
 .data-api__price-item-second {
