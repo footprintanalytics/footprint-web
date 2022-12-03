@@ -24,7 +24,7 @@ const SearchResultsModal = ({
   setLoginModalShow,
 }) => {
   const tabsConfig = [
-    { key: "dashboard", tab: "All", iconName: "search_dashboard" },
+    { key: "all", tab: "All", iconName: "search_dashboard" },
     { key: "dashboard", tab: "Dashboards", iconName: "search_dashboard" },
     { key: "card", tab: "Charts", iconName: "search_chart" },
     { key: "creator", tab: "Creators", iconName: "person" },
