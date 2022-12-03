@@ -7,6 +7,8 @@ import { CollectionId, Dashboard } from "metabase-types/api";
 
 import { appendSlug } from "./utils";
 
+import { get } from "lodash";
+
 export const newDashboard = (collectionId: CollectionId) =>
   `collection/${collectionId}/new_dashboard`;
 
@@ -23,10 +25,23 @@ export function dashboard(
     ...(addCardWithId ? { add: addCardWithId } : {}),
     ...(editMode ? { edit: editMode } : {}),
   };
+  const userName = get(dashboard, "creator.name");
+  const dashboardName =
+    get(dashboard, "uniqueName") || get(dashboard, "unique_name");
+  let path: string = "";
+  if (userName && dashboardName) {
+    return dashboardUrl(dashboard);
+  } else {
+    path = appendSlug(dashboard.id, slugg(dashboard.name));
+    const hash = stringifyHashOptions(options);
+    return hash ? `/dashboard/${path}#${hash}` : `/dashboard/${path}`;
+  }
+}
 
-  const path = appendSlug(dashboard.id, slugg(dashboard.name));
-  const hash = stringifyHashOptions(options);
-  return hash ? `/dashboard/${path}#${hash}` : `/dashboard/${path}`;
+export function dashboardUrl({ creator, uniqueName, unique_name } : Dashboard) {
+  const userName = get(creator, "name");
+  const dashboardName = uniqueName || unique_name;
+  return `@${userName}/${dashboardName}`;
 }
 
 export function publicDashboard(uuid: string) {

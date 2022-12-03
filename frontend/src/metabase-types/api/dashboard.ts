@@ -27,6 +27,10 @@ export interface Dashboard {
   // Pages have features like custom action buttons to write back to the database
   // And lack features like dashboard subscriptions, auto-refresh, night-mode
   is_app_page?: boolean;
+
+  creator?: any;
+  uniqueName?: string;
+  unique_name?: string;
 }
 
 export type DashCardId = EntityId;
