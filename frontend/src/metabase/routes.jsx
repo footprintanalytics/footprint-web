@@ -268,31 +268,31 @@ export const getRoutes = store => (
         path="/@:name/:dashboardName"
         component={LazyLoad.DashboardApp}
       >
-        {/*<ModalRoute*/}
-        {/*  title={t`History`}*/}
-        {/*  path="history"*/}
-        {/*  modal={LazyLoad.DashboardHistoryModal}*/}
-        {/*/>*/}
-        {/*<ModalRoute*/}
-        {/*  title={t`Move`}*/}
-        {/*  path="move"*/}
-        {/*  modal={LazyLoad.DashboardMoveModal}*/}
-        {/*/>*/}
-        {/*<ModalRoute*/}
-        {/*  title={t`Copy`}*/}
-        {/*  path="copy"*/}
-        {/*  modal={LazyLoad.DashboardCopyModal}*/}
-        {/*/>*/}
-        {/*<ModalRoute*/}
-        {/*  title={t`Details`}*/}
-        {/*  path="details"*/}
-        {/*  modal={LazyLoad.DashboardDetailsModal}*/}
-        {/*/>*/}
-        {/*<ModalRoute*/}
-        {/*  title={t`Archive`}*/}
-        {/*  path="archive"*/}
-        {/*  modal={LazyLoad.ArchiveDashboardModal}*/}
-        {/*/>*/}
+        {/*<ModalRoute
+          title={t`History`}
+          path="history"
+          modal={LazyLoad.DashboardHistoryModal}
+        />*/}
+        <ModalRoute
+          title={t`Move`}
+          path="move"
+          modal={LazyLoad.DashboardMoveModal}
+        />
+        <ModalRoute
+          title={t`Copy`}
+          path="copy"
+          modal={DashboardCopyModal}
+        />
+        {/*<ModalRoute
+          title={t`Details`}
+          path="details"
+          modal={LazyLoad.DashboardDetailsModal}
+        />*/}
+        <ModalRoute
+          title={t`Archive`}
+          path="archive"
+          modal={LazyLoad.ArchiveDashboardModal}
+        />
       </Route>
 
       <Route

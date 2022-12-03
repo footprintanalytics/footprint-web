@@ -18,6 +18,7 @@ import { loadCurrentUserVip } from "metabase/redux/user";
 import { getUserCreateDashboardPermission } from "metabase/selectors/user";
 import NeedPermissionModal from "metabase/components/NeedPermissionModal";
 import { getUser } from "metabase/reference/selectors";
+import Modal from "metabase/components/Modal";
 import { getDashboardComplete } from "../selectors";
 
 const mapStateToProps = (state, props) => {
@@ -83,12 +84,8 @@ const DashboardCopyModalInner = ({
     setIsShallowCopy(is_shallow_copy);
   };
 
-  if (!isOpen) {
-    return null;
-  }
-
-  return (
-    <div>
+  const InnerPanel = () => {
+    return (<div>
       <EntityCopyModal
         entityType="dashboards"
         entityObject={{
@@ -123,6 +120,18 @@ const DashboardCopyModalInner = ({
       />
       {renderModal(this)}
     </div>
+  )};
+
+  return !fromRoute ? (
+    isOpen ? (
+      <Modal className={"dashboardCopyModalRoot"}>
+        <InnerPanel {...props} />
+      </Modal>
+    ) : (
+      <React.Fragment />
+    )
+  ) : (
+    <InnerPanel {...props} />
   );
 };
 
