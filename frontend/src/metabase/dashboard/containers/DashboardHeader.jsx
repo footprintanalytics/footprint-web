@@ -12,34 +12,25 @@ import { getIsNavbarOpen } from "metabase/redux/app";
 
 import ActionButton from "metabase/components/ActionButton";
 import Button from "metabase/core/components/Button";
-import Icon from "metabase/components/Icon";
 import Tooltip from "metabase/components/Tooltip";
 import EntityMenu from "metabase/components/EntityMenu";
-
-import Bookmark from "metabase/entities/bookmarks";
 
 import { getDashboardActions } from "metabase/dashboard/components/DashboardActions";
 import { trackStructEvent } from "metabase/lib/analytics";
 import { snapshot } from "metabase/dashboard/components/utils/snapshot";
 import ParametersPopover from "metabase/dashboard/components/ParametersPopover";
-import DashboardBookmark from "metabase/dashboard/components/DashboardBookmark";
 import TippyPopover from "metabase/components/Popover/TippyPopover";
-import {
-  getIsBookmarked,
-  getIsShowDashboardInfoSidebar,
-} from "metabase/dashboard/selectors";
+import { getIsShowDashboardInfoSidebar } from "metabase/dashboard/selectors";
 import Favorite from "metabase/containers/explore/components/Favorite";
 import { getUser } from "metabase/selectors/user";
+import DashboardCardDisplayInfo from "metabase/components/DashboardCardDisplayInfo";
+import Popover from "metabase/components/Popover";
 import { deviceInfo } from "metabase-lib/lib/Device";
 import { toggleSidebar } from "../actions";
 
 import Header from "../components/DashboardHeader";
 import { SIDEBAR_NAME } from "../constants";
-import {
-  DashboardHeaderButton,
-  DashboardHeaderActionDivider,
-} from "./DashboardHeader.styled";
-import DashboardCardDisplayInfo from "metabase/components/DashboardCardDisplayInfo";
+import "./DashboardHeader.css";
 
 const mapStateToProps = (state, props) => {
   const isDataApp = false;
@@ -74,6 +65,7 @@ class DashboardHeader extends Component {
 
   state = {
     modal: null,
+    showMediaModal: false,
   };
 
   static propTypes = {
@@ -91,6 +83,9 @@ class DashboardHeader extends Component {
 
     addCardToDashboard: PropTypes.func.isRequired,
     addTextDashCardToDashboard: PropTypes.func.isRequired,
+    addImageDashCardToDashboard: PropTypes.func.isRequired,
+    addVideoDashCardToDashboard: PropTypes.func.isRequired,
+    addActionDashCardToDashboard: PropTypes.func.isRequired,
     fetchDashboard: PropTypes.func.isRequired,
     saveDashboardAndCards: PropTypes.func.isRequired,
     setDashboardAttribute: PropTypes.func.isRequired,
@@ -126,6 +121,14 @@ class DashboardHeader extends Component {
 
   onAddTextBox() {
     this.props.addTextDashCardToDashboard({ dashId: this.props.dashboard.id });
+  }
+
+  onAddImageBox() {
+    this.props.addImageDashCardToDashboard({ dashId: this.props.dashboard.id });
+  }
+
+  onAddVideoBox() {
+    this.props.addVideoDashCardToDashboard({ dashId: this.props.dashboard.id });
   }
 
   onAddAction() {
@@ -232,6 +235,8 @@ class DashboardHeader extends Component {
       onSharingClick,
     } = this.props;
 
+    const { showMediaModal } = this.state;
+
     const isDataAppPage = false;
     const isLoaded = !!dashboard;
     const canEdit = dashboard.can_write && isEditable && !!dashboard &&
@@ -264,19 +269,34 @@ class DashboardHeader extends Component {
           : t`Add questions`;
 
       buttons.push(
-        <Tooltip tooltip={addQuestionButtonHint}>
-          <DashboardHeaderButton
+        // <Tooltip tooltip={addQuestionButtonHint}>
+          /*<DashboardHeaderButton
             icon="add"
             isActive={activeSidebarName === SIDEBAR_NAME.addQuestion}
             onClick={() => toggleSidebar(SIDEBAR_NAME.addQuestion)}
             data-metabase-event="Dashboard;Add Card Sidebar"
-          />
-        </Tooltip>,
+          />*/
+          <Button
+            onlyIcon
+            className={`ml1 Question-header-btn-new ${
+              activeSidebarName === SIDEBAR_NAME.addQuestion ? "Question-header-btn--primary-new" : ""
+            }`}
+            iconColor="#7A819B"
+            icon="add"
+            iconSize={16}
+            onClick={e => {
+              toggleSidebar(SIDEBAR_NAME.addQuestion);
+              trackStructEvent("click Toggle Add Question Sidebar");
+            }}
+          >
+            Add chart
+          </Button>
+        // </Tooltip>,
       );
 
       // Add text card button
       buttons.push(
-        <Tooltip key="add-a-text-box" tooltip={t`Add a text box`}>
+        /*<Tooltip key="add-a-text-box" tooltip={t`Add a text box`}>
           <a
             data-metabase-event="Dashboard;Add Text Box"
             key="add-text"
@@ -287,7 +307,23 @@ class DashboardHeader extends Component {
               <Icon name="string" size={18} />
             </DashboardHeaderButton>
           </a>
-        </Tooltip>,
+        </Tooltip>,*/
+        <span>
+          <Button
+            onlyIcon
+            className="ml1 Question-header-btn-new"
+            iconColor="#7A819B"
+            icon="string"
+            iconSize={16}
+            onClick={() => {
+              this.setState({ showMediaModal: true });
+              trackStructEvent("click Add Media Box");
+            }}
+          >
+            Add a media box
+          </Button>
+          {showMediaModal && this.renderMediaPopover()}
+        </span>,
       );
 
       const {
@@ -312,14 +348,28 @@ class DashboardHeader extends Component {
             }
           >
             <div>
-              <Tooltip tooltip={t`Add a filter`}>
-                <DashboardHeaderButton
+              {/*<Tooltip tooltip={t`Add a filter`}>*/}
+                {/*<DashboardHeaderButton
                   key="parameters"
                   onClick={showAddParameterPopover}
                 >
                   <Icon name="filter" />
-                </DashboardHeaderButton>
-              </Tooltip>
+                </DashboardHeaderButton>*/}
+                <Button
+                  key="parameters"
+                  onlyIcon
+                  className="ml1 Question-header-btn-new"
+                  iconColor="#7A819B"
+                  icon="dashboard_filter"
+                  iconSize={16}
+                  onClick={e => {
+                    showAddParameterPopover();
+                    trackStructEvent("click Add Fillter");
+                  }}
+                >
+                  Add a filter
+                </Button>
+              {/*</Tooltip>*/}
             </div>
           </TippyPopover>
         </span>,
@@ -592,6 +642,56 @@ class DashboardHeader extends Component {
 
     return buttons;
   }
+
+  renderMediaPopoverItem = (type, onclick) => {
+    return (
+      <div
+        className="dashboard-header__media-popover-item cursor-pointer brand-hover"
+        onClick={onclick}
+      >
+        {type}
+      </div>
+    );
+  };
+
+  renderMediaPopover = () => {
+    const mediaData = [
+      {
+        type: "Text",
+        onclick: () => {
+          this.onAddTextBox();
+        },
+      },
+      {
+        type: "Image",
+        onclick: () => {
+          this.onAddImageBox();
+        },
+      },
+      {
+        type: "Video",
+        onclick: () => {
+          this.onAddVideoBox();
+        },
+      },
+    ];
+    return (
+      <Popover
+        onClose={() => this.setState({ showMediaModal: false })}
+        verticalAttachments={["top", "bottom"]}
+      >
+        <li className="dashboard-header__media-popover">
+          {mediaData.map(data => {
+            return this.renderMediaPopoverItem(data.type, () => {
+              data.onclick();
+              this.setState({ showMediaModal: false });
+              trackStructEvent(`click Add ${data.type} Box`);
+            });
+          })}
+        </li>
+      </Popover>
+    );
+  };
 
   render() {
     const {

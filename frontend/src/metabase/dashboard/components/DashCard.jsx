@@ -35,6 +35,7 @@ import { getClickBehaviorDescription } from "metabase/lib/click-behavior";
 import { getParameterValuesBySlug } from "metabase-lib/parameters/utils/parameter-values";
 import DashCardParameterMapper from "./DashCardParameterMapper";
 import { DashCardRoot } from "./DashCard.styled";
+import PublicMode from "metabase/modes/components/modes/PublicMode";
 
 const DATASET_USUALLY_FAST_THRESHOLD = 15 * 1000;
 
@@ -119,6 +120,10 @@ export default class DashCard extends Component {
       mode,
       headerIcon,
       isNightMode,
+      user,
+      clearWatermark,
+      duplicateAction,
+      chartStyle,
     } = this.props;
 
     const mainCard = {
@@ -130,6 +135,7 @@ export default class DashCard extends Component {
     };
     const cards = [mainCard].concat(dashcard.series || []);
     const dashboardId = dashcard.dashboard_id;
+    const display = (dashcard.card || {}).display;
     const isEmbed = Utils.isJWT(dashboardId);
     const series = cards.map(card => ({
       ...getIn(dashcardData, [dashcard.id, card.id]),
@@ -142,7 +148,10 @@ export default class DashCard extends Component {
 
     const loading =
       !(series.length > 0 && _.every(series, s => s.data)) &&
-      !isVirtualDashCard(dashcard);
+      !isVirtualDashCard(dashcard) &&
+      display !== "text" &&
+      display !== "image" &&
+      display !== "video";
 
     const expectedDuration = Math.max(
       ...series.map(s => s.card.query_average_duration || 0),
@@ -179,6 +188,10 @@ export default class DashCard extends Component {
       parameterValues,
     );
 
+    const isTextDisplay = mainCard.display === "text";
+    const isImageDisplay = mainCard.display === "image";
+    const isVideoDisplay = mainCard.display === "video";
+
     const isAction = isActionCard(mainCard);
 
     const hideBackground =
@@ -191,6 +204,40 @@ export default class DashCard extends Component {
       isEditing && clickBehaviorSidebarDashcard == null && !isEditingParameter;
 
     const gridSize = { width: dashcard.size_x, height: dashcard.size_y };
+
+    const id = `html2canvas-${dashcard.card.name}-${dashcard.card.id}`;
+    // const fileName = `Footprint-${dashcard.card.name}-${moment().format(
+    //   "MM/DD/YYYY",
+    // )}`;
+    const isOwner =
+      user && (user.is_superuser || user.id === dashcard?.card?.creator_id);
+    // const hideDownload =
+    //   (mode && mode.name === PublicMode.name) ||
+    //   mainCard.display === "text" ||
+    //   mainCard.display === "image" ||
+    //   mainCard.display === "video";
+    const showEdit = isOwner && !!dashcard.card.id;
+
+    const isPublic = mode && mode.name === PublicMode.name;
+
+    const hideDuplicate = isTextDisplay || isImageDisplay || isVideoDisplay;
+
+    const hideWatermark =
+      clearWatermark || isTextDisplay || isImageDisplay || isVideoDisplay;
+
+    const showPreview =
+      !isPublic &&
+      !showEdit &&
+      !isTextDisplay &&
+      !isImageDisplay &&
+      !isVideoDisplay;
+
+    const showChartInfo =
+      !isPublic && !isTextDisplay && !isImageDisplay && !isVideoDisplay;
+
+    const editAction = card => {
+      window.open(`/chart/${card.id}?defaultEdit=true`);
+    };
 
     return (
       <DashCardRoot

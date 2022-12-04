@@ -40,6 +40,7 @@ import {
   ParametersWidgetContainer,
 } from "./Dashboard.styled";
 import MetabaseUtils from "metabase/lib/utils";
+import DashboardAd from "metabase/containers/news/components/DashboardAd";
 
 // const SCROLL_THROTTLE_INTERVAL = 1000 / 24;
 const THROTTLE_PERIOD = 300;
@@ -626,13 +627,19 @@ class Dashboard extends Component {
                   )}
                 </CardsContainer>
               </ParametersAndCardsContainer>
-
               <DashboardSidebars
                 {...this.props}
                 onCancel={this.onCancel}
                 setDashboardAttribute={this.setDashboardAttribute}
               />
             </DashboardBody>
+              {!isEditing && (
+                <div style={{ padding: "0 18px" }}>
+                  <DashboardAd
+                    dashboardId={this.state.id || this.props.dashboardId}
+                  />
+                </div>
+              )}
           </DashboardStyled>
         )}
         <ShareModal
