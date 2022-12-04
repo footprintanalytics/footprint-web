@@ -1,9 +1,11 @@
+/* eslint-disable react/display-name */
 /* eslint-disable react/prop-types */
 import "./index.css";
 import React from "react";
-import { Table, Form, Row, Col, Button } from "antd";
+import { Table, Form, Row, Col, Button, Typography, Tag } from "antd";
 import { useQuery } from "react-query";
 import { getContractSubmittedList } from "metabase/new-service";
+import dayjs from "dayjs";
 
 const SubmitContract = props => {
   const { isLoading, data } = useQuery(
@@ -14,30 +16,49 @@ const SubmitContract = props => {
 
   const columns = [
     {
-      title: "Contract address",
-      dataIndex: "contract_address",
-      key: "contract_address",
+      title: "Contract",
+      render: (_, record) => {
+        return (
+          <>
+            <Typography.Text>{record.contract_name}</Typography.Text>
+            <br />
+            <Typography.Text type="secondary">
+              {record.contract_address}
+            </Typography.Text>
+          </>
+        );
+      },
     },
     {
-      title: "Project name",
-      dataIndex: "project_name",
-      key: "project_name",
+      title: "Project",
+      dataIndex: "protocol_name",
     },
     {
       title: "Status",
       dataIndex: "status",
-      key: "status",
-      filters: [
-        { text: "pending", value: "pending" },
-        { text: "reject", value: "reject" },
-        { text: "approved", value: "approved" },
-      ],
-      onFilter: () => {},
+      // filters: [
+      //   { text: "pending", value: "pending" },
+      //   { text: "reject", value: "reject" },
+      //   { text: "approved", value: "approved" },
+      // ],
+      // onFilter: (value, record) => record.status.indexOf(value) === 0,
+      render: text => {
+        switch (text) {
+          case "reject":
+            return <Tag color="error">{text}</Tag>;
+          case "approved":
+            return <Tag color="success">{text}</Tag>;
+          default:
+            return <Tag color="processing">{text}</Tag>;
+        }
+      },
     },
     {
       title: "Submitted at",
       dataIndex: "submitted_at",
-      key: "submitted_at",
+      render: text => {
+        return dayjs(text).format("YYYY-MM-DD HH:mm");
+      },
     },
   ];
 
@@ -65,6 +86,8 @@ const SubmitContract = props => {
         </Row>
       </Form>
       <Table
+        size="small"
+        rowKey="_id"
         loading={isLoading}
         columns={columns}
         dataSource={data}
