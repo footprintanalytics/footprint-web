@@ -59,7 +59,7 @@ export default {
   // DashboardHistoryModal: loadable(() => import("metabase/dashboard/components/DashboardHistoryModal")),
   DashboardMoveModal: loadable(() => import("metabase/dashboard/components/DashboardMoveModal")),
   DashboardCopyModal: loadable(() => import("metabase/dashboard/components/DashboardCopyModal")),
-  // DashboardDetailsModal: loadable(() => import("metabase/dashboard/components/DashboardDetailsModal")),
+  DashboardDetailsModal: loadable(() => import("metabase/dashboard/components/DashboardDetailsModal")),
   // CollectionLanding: loadable(() => import("metabase/components/CollectionLanding/CollectionLanding")),
   // ArchiveApp: loadable(() => import("metabase/home/containers/ArchiveApp")),
   // SearchApp: loadable(() => import("metabase/home/containers/SearchApp")),

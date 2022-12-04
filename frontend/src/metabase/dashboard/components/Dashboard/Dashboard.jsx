@@ -39,6 +39,7 @@ import {
   ParametersAndCardsContainer,
   ParametersWidgetContainer,
 } from "./Dashboard.styled";
+import MetabaseUtils from "metabase/lib/utils";
 
 // const SCROLL_THROTTLE_INTERVAL = 1000 / 24;
 const THROTTLE_PERIOD = 300;
@@ -342,11 +343,30 @@ class Dashboard extends Component {
   };
 
   onCancel = () => {
-    this.props.setSharing(false);
+    // this.props.setSharing(false);
+    this.setState({
+      shareModalResource: {},
+    });
   };
 
-  onSharingClick = () => {
-    this.props.setSharing(true);
+  onSharingClick = (params) => {
+    // this.props.setSharing(true);
+    const { dashboard } = this.props;
+    this.setState({
+      shareModalResource: {
+        open: true,
+        public_uuid: MetabaseUtils.isUUID(dashboard.id)
+          ? dashboard.id
+          : dashboard.public_uuid,
+        type: "dashboard",
+        name: dashboard.name,
+        id: dashboard.id,
+        creatorId: dashboard.creator_id,
+        creator: dashboard.creator,
+        uniqueName: dashboard.uniqueName,
+        onlyEmbed: params?.onlyEmbed,
+      },
+    });
   };
 
   renderNewDashboardModal = () => {

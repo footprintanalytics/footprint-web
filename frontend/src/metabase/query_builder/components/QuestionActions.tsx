@@ -216,14 +216,14 @@ const QuestionActions = ({
   return (
     <>
       <QuestionActionsDivider />
-      <Tooltip tooltip={bookmarkTooltip}>
+      {/*<Tooltip tooltip={bookmarkTooltip}>
         <BookmarkToggle
           onCreateBookmark={handleBookmark}
           onDeleteBookmark={handleBookmark}
           isBookmarked={isBookmarked}
         />
-      </Tooltip>
-      <Tooltip tooltip={t`More info`}>
+      </Tooltip>*/}
+      {/*<Tooltip tooltip={t`More info`}>
         <ViewHeaderIconButtonContainer>
           <Button
             onlyIcon
@@ -234,7 +234,7 @@ const QuestionActions = ({
             data-testId="qb-header-info-button"
           />
         </ViewHeaderIconButtonContainer>
-      </Tooltip>
+      </Tooltip>*/}
       <EntityMenu
         items={extraButtons}
         triggerIcon="ellipsis"

@@ -43,7 +43,7 @@ export const HeaderCaptionContainer = styled.div`
   position: relative;
   transition: top 400ms ease;
   display: flex;
-  padding-right: 2rem;
+  //padding-right: 2rem;
   right: 0.25rem;
 `;
 

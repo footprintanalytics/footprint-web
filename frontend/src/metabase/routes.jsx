@@ -283,11 +283,11 @@ export const getRoutes = store => (
           path="copy"
           modal={DashboardCopyModal}
         />
-        {/*<ModalRoute
+        <ModalRoute
           title={t`Details`}
           path="details"
           modal={LazyLoad.DashboardDetailsModal}
-        />*/}
+        />
         <ModalRoute
           title={t`Archive`}
           path="archive"
@@ -580,6 +580,10 @@ export const getRoutes = store => (
           <ModalRoute path="move" modal={DashboardMoveModal} />
           <ModalRoute path="copy" modal={DashboardCopyModal} />
           <ModalRoute path="archive" modal={ArchiveDashboardModal} />
+          <ModalRoute
+            path="details"
+            modal={LazyLoad.DashboardDetailsModal}
+          />
         </Route>
 
         <Route path="/question">

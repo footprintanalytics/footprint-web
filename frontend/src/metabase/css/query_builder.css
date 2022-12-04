@@ -567,3 +567,11 @@
 .ParameterValuePickerNoPopover input::-webkit-input-placeholder {
   color: var(--color-text-medium);
 }
+
+.Question-header-btn-with-text {
+  height: 32px;
+  font-size: 14px;
+  color: #7a819b;
+  border-radius: 4px;
+  padding: 0 10px;
+}

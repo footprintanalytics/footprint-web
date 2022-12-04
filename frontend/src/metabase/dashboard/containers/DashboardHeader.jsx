@@ -6,6 +6,8 @@ import PropTypes from "prop-types";
 import { t } from "ttag";
 import _ from "underscore";
 
+import { message } from "antd";
+import { debounce } from "lodash";
 import { getIsNavbarOpen } from "metabase/redux/app";
 
 import ActionButton from "metabase/components/ActionButton";
@@ -18,7 +20,6 @@ import Bookmark from "metabase/entities/bookmarks";
 
 import { getDashboardActions } from "metabase/dashboard/components/DashboardActions";
 import { trackStructEvent } from "metabase/lib/analytics";
-import { message } from "antd";
 import { snapshot } from "metabase/dashboard/components/utils/snapshot";
 import ParametersPopover from "metabase/dashboard/components/ParametersPopover";
 import DashboardBookmark from "metabase/dashboard/components/DashboardBookmark";
@@ -27,6 +28,9 @@ import {
   getIsBookmarked,
   getIsShowDashboardInfoSidebar,
 } from "metabase/dashboard/selectors";
+import Favorite from "metabase/containers/explore/components/Favorite";
+import { getUser } from "metabase/selectors/user";
+import { deviceInfo } from "metabase-lib/lib/Device";
 import { toggleSidebar } from "../actions";
 
 import Header from "../components/DashboardHeader";
@@ -35,6 +39,7 @@ import {
   DashboardHeaderButton,
   DashboardHeaderActionDivider,
 } from "./DashboardHeader.styled";
+import DashboardCardDisplayInfo from "metabase/components/DashboardCardDisplayInfo";
 
 const mapStateToProps = (state, props) => {
   const isDataApp = false;
@@ -44,6 +49,7 @@ const mapStateToProps = (state, props) => {
     // isBookmarked: getIsBookmarked(state, props),
     isNavBarOpen: getIsNavbarOpen(state),
     isShowingDashboardInfoSidebar,
+    user: getUser(state),
   };
 };
 
@@ -55,6 +61,8 @@ const mapDispatchToProps = {
   onChangeLocation: push,
   toggleSidebar,
 };
+
+let lastRefreshTime = null;
 
 class DashboardHeader extends Component {
   constructor(props) {
@@ -100,6 +108,8 @@ class DashboardHeader extends Component {
     sidebar: PropTypes.string.isRequired,
     setSidebar: PropTypes.func.isRequired,
     closeSidebar: PropTypes.func.isRequired,
+
+    user: PropTypes.func,
   };
 
   handleEdit(dashboard) {
@@ -203,24 +213,42 @@ class DashboardHeader extends Component {
     const {
       dashboard,
       parametersWidget,
-      isBookmarked,
+      // isBookmarked,
       isEditing,
       isFullscreen,
       isEditable,
       location,
-      onFullscreenChange,
-      createBookmark,
-      deleteBookmark,
+      // onFullscreenChange,
+      // createBookmark,
+      // deleteBookmark,
       sidebar,
-      setSidebar,
+      // setSidebar,
       toggleSidebar,
-      isShowingDashboardInfoSidebar,
-      closeSidebar,
+      // isShowingDashboardInfoSidebar,
+      // closeSidebar,
+      isEmpty,
+      onRefreshCache,
+      user,
+      onSharingClick,
     } = this.props;
 
     const isDataAppPage = false;
-    const canEdit = dashboard.can_write && isEditable && !!dashboard;
+    const isLoaded = !!dashboard;
+    const canEdit = dashboard.can_write && isEditable && !!dashboard &&
+      user && (user.is_superuser || user.id === dashboard?.creator_id);
+    const isAdmin = user && user.is_superuser;
 
+    const hasCards = isLoaded && dashboard.ordered_cards.length > 0;
+    const hasDataCards =
+      hasCards &&
+      dashboard.ordered_cards.some(
+        dashCard =>
+          dashCard.card.display !== "text" &&
+          dashCard.card.display !== "image" &&
+          dashCard.card.display !== "video",
+      );
+
+    const showCopyButton = !isEditing;
     const buttons = [];
     const extraButtons = [];
 
@@ -297,53 +325,67 @@ class DashboardHeader extends Component {
         </span>,
       );
 
-      extraButtons.push({
+      /*extraButtons.push({
         title: t`Revision history`,
         icon: "history",
         link: `${location.pathname}/history`,
         event: "Dashboard;Revisions",
-      });
+      });*/
     }
 
     if (!isFullscreen && !isEditing && canEdit) {
       buttons.push(
         <Tooltip key="edit-dashboard" tooltip={t`Edit dashboard`}>
-          <DashboardHeaderButton
+          <Button
             key="edit"
-            data-metabase-event="Dashboard;Edit"
+            onlyIcon
+            className={`Question-header-btn Question-header-btn--primary`}
+            iconColor="#7A819B"
             icon="pencil"
-            className="text-brand-hover cursor-pointer"
-            onClick={() => this.handleEdit(dashboard)}
+            iconSize={16}
+            onClick={() => {
+              this.handleEdit(dashboard);
+              trackStructEvent("click Edit dashboard");
+            }}
           />
         </Tooltip>,
       );
     }
 
     if (!isFullscreen && !isEditing) {
-      extraButtons.push({
+      /*extraButtons.push({
         title: t`Enter fullscreen`,
         icon: "expand",
         action: e => onFullscreenChange(!isFullscreen, !e.altKey),
         event: `Dashboard;Fullscreen Mode;${!isFullscreen}`,
-      });
+      });*/
 
-      extraButtons.push({
+      /*extraButtons.push({
         title: t`Duplicate`,
         icon: "clone",
         link: `${location.pathname}/copy`,
         event: "Dashboard;Copy",
-      });
+      });*/
 
       if (canEdit) {
         extraButtons.push({
-          title: t`Move`,
-          icon: "move",
-          link: `${location.pathname}/move`,
-          event: "Dashboard;Move",
+          title: t`Edit dashboard details`,
+          icon: "detail",
+          link: `${location.pathname}/details`,
+          event: "Dashboard;EditDetails",
         });
 
+        if (isAdmin) {
+          extraButtons.push({
+            title: t`Move`,
+            icon: "move",
+            link: `${location.pathname}/move`,
+            event: "Dashboard;Move",
+          });
+        }
+
         extraButtons.push({
-          title: t`Archive`,
+          title: t`Delete`,
           icon: "view_archive",
           link: `${location.pathname}/archive`,
           event: "Dashboard;Archive",
@@ -351,37 +393,198 @@ class DashboardHeader extends Component {
       }
     }
 
+    if (!isEditing && !isEmpty && canEdit) {
+      buttons.push(
+        <Tooltip
+          key="refreshCache"
+          tooltip={
+            <div className="align-center" style={{ margin: "0 auto" }}>
+              Refresh cache <br />
+              (Once in a minute)
+            </div>
+          }
+        >
+          <Button
+            onlyIcon
+            className="Question-header-btn"
+            iconColor="#7A819B"
+            icon={"refresh"}
+            iconSize={16}
+            onClick={debounce(
+              () => {
+                trackStructEvent("dashboard-click-refresh-cache");
+                if (
+                  !lastRefreshTime ||
+                  new Date().getTime() - lastRefreshTime > 60000
+                ) {
+                  onRefreshCache();
+                  lastRefreshTime = new Date().getTime();
+                } else {
+                  message.info("Refresh cache once one minute...", 2);
+                }
+              },
+              1000,
+              {
+                leading: true,
+                trailing: false,
+              },
+            )}
+          />
+        </Tooltip>,
+      );
+    }
+
+    if (!isEditing) {
+      buttons.push(
+        <Tooltip tooltip={t`Add to favorite list`}>
+          <Favorite
+            onlyIcon
+            className="Question-header-btn-with-text"
+            like={
+              // -1
+              dashboard && dashboard.statistics && dashboard.statistics.favorite
+            }
+            isLike={dashboard && dashboard.isFavorite}
+            type={"dashboard"}
+            id={dashboard && dashboard.id}
+            uuid={dashboard && dashboard.public_uuid}
+          />
+        </Tooltip>,
+      );
+      /*buttons.push(
+        <Tooltip key="duplicate-dashboard" tooltip={t`Duplicate dashboard`}>
+          <Button
+            key="duplicate"
+            onlyIcon
+            className="Question-header-btn-with-text"
+            iconColor="#7A819B"
+            icon="duplicate"
+            iconSize={16}
+            onClick={onCopyClick}
+          >
+            {dashboard &&
+              dashboard.statistics &&
+              `${dashboard.statistics.copy}`}
+          </Button>
+        </Tooltip>,
+      );*/
+    }
+    if (showCopyButton && !deviceInfo().isMobile) {
+      buttons.push(
+        <Tooltip key="duplicate-dashboard" tooltip={t`Duplicate dashboard`}>
+          <Button
+            key="duplicate"
+            onlyIcon
+            className="Question-header-btn-with-text"
+            iconColor="#7A819B"
+            icon="duplicate"
+            iconSize={16}
+            onClick={() => {
+              if (!user) {
+                this.props.setLoginModalShow({
+                  show: true,
+                  from: `duplicate-dashboard`,
+                });
+                return;
+              }
+              this.props.router.push(location.pathname + `/copy`);
+              trackStructEvent("click Duplicate dashboard");
+            }}
+          >
+            {dashboard &&
+            dashboard.statistics &&
+            `${dashboard.statistics.copy}`}
+          </Button>
+        </Tooltip>,
+      );
+    }
+
+    if (hasDataCards) {
+      if (!isEditing) {
+        buttons.push(
+          <Tooltip key="download-dashboard" tooltip={t`Snapshot`}>
+            <Button
+              key="download"
+              onlyIcon
+              className={`Question-header-btn Question-header-btn--primary`}
+              iconColor="#7A819B"
+              icon="camera"
+              iconSize={16}
+              onClick={() => {
+                trackStructEvent("click Download dashboard");
+                console.log("this.props.dashboard", this.props.dashboard);
+                if (user) {
+                  const { public_uuid } = this.props.dashboard;
+                  if (!public_uuid) {
+                    message.warning("Please open share first to use snapshot.");
+                    return;
+                  }
+                  snapshot({
+                    public_uuid: public_uuid,
+                    isDashboard: true,
+                    user,
+                  });
+                } else {
+                  this.props.setLoginModalShow({
+                    show: true,
+                    from: `dashboard-snapshot`,
+                  });
+                }
+              }}
+            />
+          </Tooltip>,
+        );
+      }
+    }
+
+    if (!isEditing && !isEmpty) {
+      // const extraButtonClassNames =
+      //   "bg-brand-hover text-white-hover py2 px3 text-bold block cursor-pointer";
+
+      buttons.push(
+        <Tooltip tooltip="Embed Widget">
+          <Button
+            onlyIcon
+            className="Question-header-btn"
+            iconColor="#7A819B"
+            icon="embed"
+            iconSize={16}
+            onClick={() => onSharingClick({ onlyEmbed: true })}
+          />
+        </Tooltip>,
+      );
+    }
     buttons.push(...getDashboardActions(this, this.props));
 
     if (extraButtons.length > 0 && !isEditing) {
       buttons.push(
         ...[
-          <DashboardHeaderActionDivider key="dashboard-button-divider" />,
-          // <DashboardBookmark
-          //   key="dashboard-bookmark-button"
-          //   dashboard={dashboard}
-          //   onCreateBookmark={createBookmark}
-          //   onDeleteBookmark={deleteBookmark}
-          //   isBookmarked={isBookmarked}
-          // />,
-          !isDataAppPage && (
-            <Tooltip key="dashboard-info-button" tooltip={t`More info`}>
-              <DashboardHeaderButton
-                icon="info"
-                isActive={isShowingDashboardInfoSidebar}
-                onClick={() =>
-                  isShowingDashboardInfoSidebar
-                    ? closeSidebar()
-                    : setSidebar({ name: SIDEBAR_NAME.info })
-                }
-              />
-            </Tooltip>
-          ),
+        /* <DashboardHeaderActionDivider key="dashboard-button-divider" />,
+         <DashboardBookmark
+           key="dashboard-bookmark-button"
+           dashboard={dashboard}
+           onCreateBookmark={createBookmark}
+           onDeleteBookmark={deleteBookmark}
+           isBookmarked={isBookmarked}
+         />,
+         !isDataAppPage && (
+           <Tooltip key="dashboard-info-button" tooltip={t`More info`}>
+             <DashboardHeaderButton
+               icon="info"
+               isActive={isShowingDashboardInfoSidebar}
+               onClick={() =>
+                 isShowingDashboardInfoSidebar
+                   ? closeSidebar()
+                   : setSidebar({ name: SIDEBAR_NAME.info })
+               }
+             />
+           </Tooltip>
+         ),*/
           <EntityMenu
             key="dashboard-action-menu-button"
             items={extraButtons}
             triggerIcon="ellipsis"
-            tooltip={t`Move, archive, and more...`}
+            tooltip={t`More...`}
           />,
         ].filter(Boolean),
       );
@@ -412,7 +615,8 @@ class DashboardHeader extends Component {
         isEditing={isEditing}
         isBadgeVisible={!isEditing && !isFullscreen && isAdditionalInfoVisible}
         isLastEditInfoVisible={
-          !isDataAppPage && hasLastEditInfo && isAdditionalInfoVisible
+          // !isDataAppPage && hasLastEditInfo && isAdditionalInfoVisible
+          false
         }
         isEditingInfo={isEditing}
         isNavBarOpen={this.props.isNavBarOpen}
@@ -423,6 +627,21 @@ class DashboardHeader extends Component {
         setDashboardAttribute={setDashboardAttribute}
         onLastEditInfoClick={() => setSidebar({ name: SIDEBAR_NAME.info })}
         onSave={() => this.onSave()}
+        titleRightPanel={
+          !this.props.isEditing ? (
+            <DashboardCardDisplayInfo
+              authorName={
+                dashboard && dashboard.creator && dashboard.creator.name
+              }
+              date={
+                dashboard && (dashboard.created_at || dashboard.createdAt)
+              }
+              read={
+                dashboard && dashboard.statistics && dashboard.statistics.view
+              }
+            />
+          ) : null
+        }
       />
     );
   }

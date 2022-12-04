@@ -1,14 +1,14 @@
 /* eslint-disable react/prop-types */
 import React from "react";
+import cx from "classnames";
 import { connect } from "react-redux";
+import moment from "moment";
 import { getUser } from "metabase/selectors/user";
 import { loginModalShowAction } from "metabase/redux/control";
 import Button from "metabase/core/components/Button";
-import moment from "moment";
-import colors from "metabase/lib/colors";
+import { color } from "metabase/lib/colors";
 import "./DashboardCardDisplayInfo.css";
 import CreatorName from "metabase/components/CreatorName";
-import cx from "classnames";
 
 function DashboardCardDisplayInfo({ authorName, date, read, favorite }) {
   return (
@@ -27,8 +27,8 @@ function DashboardCardDisplayInfo({ authorName, date, read, favorite }) {
           className="p0 ml2 cursor-default"
           icon="read"
           iconSize={16}
-          color={colors["footprint-color-secondary-text2"]}
-          iconColor={colors["footprint-color-secondary-text2"]}
+          color={color("footprint-color-secondary-text2")}
+          iconColor={color("footprint-color-secondary-text2")}
           onClick={async e => {
             e.stopPropagation();
           }}

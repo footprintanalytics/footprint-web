@@ -47,6 +47,7 @@ interface DashboardHeaderProps {
   onLastEditInfoClick: () => null;
   onSave: () => null;
   setDashboardAttribute: (prop: string, value: string) => null;
+  titleRightPanel: any,
 }
 
 const DashboardHeader = ({
@@ -67,9 +68,10 @@ const DashboardHeader = ({
   onLastEditInfoClick,
   onSave,
   setDashboardAttribute,
+  titleRightPanel,
 }: DashboardHeaderProps) => {
   const [headerHeight, setHeaderHeight] = useState(0);
-  const [showSubHeader, setShowSubHeader] = useState(true);
+  // const [showSubHeader, setShowSubHeader] = useState(true);
   const header = useRef<HTMLDivElement>(null);
 
   const isModalOpened = headerModalMessage != null;
@@ -106,12 +108,12 @@ const DashboardHeader = ({
     [setDashboardAttribute, onSave, isEditing],
   );
 
-  useOnMount(() => {
+/*  useOnMount(() => {
     const timerId = setTimeout(() => {
       setShowSubHeader(false);
     }, 4000);
     return () => clearTimeout(timerId);
-  });
+  });*/
 
   const isDataApp = false;
 
@@ -137,17 +139,20 @@ const DashboardHeader = ({
         className={cx("QueryBuilder-section", headerClassName)}
         ref={header}
       >
-        <HeaderContent hasSubHeader={!isDataApp} showSubHeader={showSubHeader}>
-          <HeaderCaptionContainer>
-            <HeaderCaption
-              key={dashboard.name}
-              initialValue={dashboard.name}
-              placeholder={t`Add title`}
-              isDisabled={!dashboard.can_write}
-              data-testid="dashboard-name-heading"
-              onChange={handleUpdateCaption}
-            />
-          </HeaderCaptionContainer>
+        <HeaderContent hasSubHeader={!isDataApp} showSubHeader={true}>
+          <div className="flex">
+            <HeaderCaptionContainer>
+              <HeaderCaption
+                key={dashboard.name}
+                initialValue={dashboard.name}
+                placeholder={t`Add title`}
+                isDisabled={!dashboard.can_write}
+                data-testid="dashboard-name-heading"
+                onChange={handleUpdateCaption}
+              />
+            </HeaderCaptionContainer>
+            {titleRightPanel}
+          </div>
           <HeaderBadges>
             {isLastEditInfoVisible && (
               <HeaderLastEditInfoLabel
