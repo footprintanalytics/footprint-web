@@ -103,6 +103,7 @@
   min-width: 100px;
   max-width: 360px;
   margin: 0 12px;
+  font-size: 12px;
   flex: 1;
 }
 
