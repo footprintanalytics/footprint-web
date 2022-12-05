@@ -47,7 +47,7 @@ const DataApiNFT = () => {
             </div>
             <Link
               className="mt2 text-underline text-underline-hover"
-              to="https://nft.footprint.network"
+              to="https://nft.footprint.network/nft/collection"
               target="_blank"
             >
               See what you can build with NFT
