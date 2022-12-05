@@ -235,6 +235,4 @@ export const control = handleActions(
   },
 );
 
-export default combineReducers({
-  control,
-});
+export default control;

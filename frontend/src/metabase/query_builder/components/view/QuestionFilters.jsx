@@ -154,10 +154,10 @@ export function FilterHeader({ question, expanded, onQueryChange }) {
 export function QuestionFilterWidget({ onOpenModal, className }) {
   return (
     <HeaderButton
-      large
       labelBreakpoint="sm"
       className={className}
       color={color("filter")}
+      icon="filter"
       onClick={() => onOpenModal(MODAL_TYPES.FILTERS)}
       aria-label={t`Show more filters`}
       data-metabase-event="View Mode; Open Filter Modal"

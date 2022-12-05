@@ -4,12 +4,15 @@ import {
   handleActions,
 } from "metabase/lib/redux";
 import { loadAppConfig } from "metabase/new-service";
+import { SET_OPTIONS } from "./embed";
+import { REFRESH_SITE_SETTINGS } from "./settings";
 
 export const QUESTION_SIDE_HIDE = "metabase/control/QuestionSideHide";
 
 export const questionSideHideAction = createThunkAction(
   QUESTION_SIDE_HIDE,
   ({ hide }) => {
+    console.log("questionSideHideAction", hide)
     return { hide };
   },
 );
@@ -45,6 +48,4 @@ const config = handleActions(
   { questionSideHide: false, tableConfigList: [] },
 );
 
-export default combineReducers({
-  config,
-});
+export default config;

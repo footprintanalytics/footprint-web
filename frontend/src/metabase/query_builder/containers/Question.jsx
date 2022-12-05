@@ -33,6 +33,7 @@ import "./Question.css";
 const mapStateToProps = state => {
   return {
     config: state.config,
+    settings: state.settings,
     uiControls: getUiControls(state),
     showTemplateChart: getShowTemplateChart(state) || {},
     question: getQuestion(state),
@@ -127,13 +128,13 @@ class Question extends Component {
       location,
       params,
       config,
+      settings,
       showTemplateChart,
       question,
       user,
       showPreviewChart,
       updateQuestion,
     } = this.props;
-
     const hideSide = config && config.questionSideHide;
     const isNewQuestion = !get(question, "_card.original_card_id");
     const isNative = question && question.isNative();
@@ -146,6 +147,7 @@ class Question extends Component {
       !userNewGuide;
     const hasQuery = location.hash || params.slug;
 
+    console.log("configconfig", settings,config, hideSide, hasQuery)
     const questionSideStyle = {
       minWidth: hideSide && hasQuery ? 0 : 360,
       width: hideSide && hasQuery ? 0 : 360,

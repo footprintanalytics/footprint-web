@@ -8,7 +8,7 @@ export const ViewSectionRoot = styled.div`
   padding-right: 0.5rem;
 
   ${breakpointMinSmall} {
-    padding-left: 2rem;
+    padding-left: 1rem;
     padding-right: 1rem;
   }
 `;

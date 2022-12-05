@@ -618,6 +618,7 @@
 
 .Question-header-btn-new {
   height: 32px;
+  line-height: 32px;
   font-size: 14px;
   color: #7a819b;
   border-radius: 4px;

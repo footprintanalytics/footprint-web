@@ -4,6 +4,8 @@ import { Motion, spring } from "react-motion";
 import _ from "underscore";
 import { t } from "ttag";
 
+import { get } from "lodash";
+import { connect } from "react-redux";
 import ExplicitSize from "metabase/components/ExplicitSize";
 import Popover from "metabase/components/Popover";
 import QueryValidationError from "metabase/query_builder/components/QueryValidationError";
@@ -11,6 +13,14 @@ import { SIDEBAR_SIZES } from "metabase/query_builder/constants";
 import LoadingAndErrorWrapper from "metabase/components/LoadingAndErrorWrapper";
 import Toaster from "metabase/components/Toaster";
 
+import QuestionEmpty from "metabase/query_builder/containers/QuestionEmpty";
+import { deserializeCardFromUrl } from "metabase/lib/card";
+import ChartTypeSidebarRoot from "metabase/query_builder/components/view/sidebars/ChartTypeSidebarRoot";
+import { getUserNativeQueryPermission } from "metabase/selectors/user";
+import { setNewGuideInfo } from "metabase/redux/control";
+import { getNewGuideInfo } from "metabase/selectors/control";
+import { questionSideHideAction } from "metabase/redux/config";
+import { updateQuestion } from "metabase/query_builder/actions";
 import NativeQuery from "metabase-lib/queries/NativeQuery";
 import StructuredQuery from "metabase-lib/queries/StructuredQuery";
 
@@ -47,18 +57,6 @@ import {
   StyledDebouncedFrame,
   StyledSyncedParametersList,
 } from "./View.styled";
-import { deserializeCardFromUrl } from "metabase/lib/card";
-import { get } from "lodash";
-import ChartTypeSidebarRoot from "metabase/query_builder/components/view/sidebars/ChartTypeSidebarRoot";
-import { getUserNativeQueryPermission } from "metabase/selectors/user";
-import { setNewGuideInfo } from "metabase/redux/control";
-import { getNewGuideInfo } from "metabase/selectors/control";
-import { canShowNewGuideStart } from "metabase/containers/newguide/newGuide";
-import { snapshot } from "metabase/dashboard/components/utils/snapshot";
-import { connect } from "react-redux";
-import { questionSideHideAction } from "metabase/redux/config";
-import QuestionEmpty from "metabase/query_builder/containers/QuestionEmpty";
-import { updateQuestion } from "metabase/query_builder/actions";
 
 const DEFAULT_POPOVER_STATE = {
   aggregationIndex: null,
@@ -585,5 +583,5 @@ const mapStateToProps = state => {
 
 export default _.compose(
   ExplicitSize({ refreshMode: "debounceLeading" }),
-  connect(mapStateToProps, { questionSideHideAction, setNewGuideInfo }),
+  connect(mapStateToProps, { questionSideHideAction, setNewGuideInfo, }),
 )(View);

@@ -5,85 +5,85 @@ export const getControl = state => state.control;
 
 export const getLoginModalShow = createSelector(
   [getControl],
-  ({ control }) => {
-    return control?.loginModalShow || false;
+  ({ loginModalShow }) => {
+    return loginModalShow || false;
   },
 );
 
 export const getLoginModalRedirect = createSelector(
   [getControl],
-  ({ control }) => {
-    return control?.loginModalRedirect;
+  ({ loginModalRedirect }) => {
+    return loginModalRedirect;
   },
 );
 
 export const getFeaturesSideHide = createSelector(
   [getControl],
-  ({ control }) => {
-    return control?.featuresSideHide || false;
+  ({ featuresSideHide }) => {
+    return featuresSideHide || false;
   },
 );
 
 export const getCreateModalShow = createSelector(
   [getControl],
-  ({ control }) => {
-    return control?.createModalShow || false;
+  ({ createModalShow }) => {
+    return createModalShow || false;
   },
 );
 
 export const getCancelFeedback = createSelector(
   [getControl],
-  ({ control }) => {
-    return control?.cancelFeedback || false;
+  ({ cancelFeedback }) => {
+    return cancelFeedback || false;
   },
 );
 
 export const getSubmitAddrZkspaceModal = createSelector(
   [getControl],
-  ({ control }) => {
-    return control?.submitAddrZkspaceModal || false;
+  ({ submitAddrZkspaceModal }) => {
+    return submitAddrZkspaceModal || false;
   },
 );
 
 export const getIsUserFeedbackBlock = createSelector(
   [getControl],
-  ({ control }) => {
-    return control?.isUserFeedbackBlock;
+  ({ isUserFeedbackBlock }) => {
+    return isUserFeedbackBlock;
   },
 );
 
 export const getShowTemplateChart = createSelector(
   [getControl],
-  ({ control }) => {
-    return control?.showTemplateChart;
+  ({ showTemplateChart }) => {
+    return showTemplateChart;
   },
 );
 
 export const getShowPreviewChart = createSelector(
   [getControl],
-  ({ control }) => {
-    return control?.showPreviewChart;
+  ({ showPreviewChart }) => {
+    return showPreviewChart;
   },
 );
 
 export const getNextChartPopover = createSelector(
   [getControl],
-  ({ control }) => {
-    return control?.nextChartPopover;
+  ({ nextChartPopover }) => {
+    return nextChartPopover;
   },
 );
 
 export const getCloseAllChartPopover = createSelector(
   [getControl],
-  ({ control }) => {
-    return control?.closeAllChartPopover;
+  ({ closeAllChartPopover }) => {
+    return closeAllChartPopover;
   },
 );
 
 export const getNewGuideInfo = createSelector(
   [getControl],
-  ({ control }) => {
-    return control?.newGuideInfo;
+  ({ newGuideInfo }) => {
+    return newGuideInfo;
   },
 );
 

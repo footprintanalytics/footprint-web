@@ -3,6 +3,7 @@ import PropTypes from "prop-types";
 import { t } from "ttag";
 import cx from "classnames";
 
+import { InsertRowAboveOutlined, ScissorOutlined } from "@ant-design/icons";
 import * as Urls from "metabase/lib/urls";
 import { SERVER_ERROR_TYPES } from "metabase/lib/errors";
 import MetabaseSettings from "metabase/lib/settings";
@@ -17,9 +18,21 @@ import { useOnMount } from "metabase/hooks/use-on-mount";
 import { MODAL_TYPES } from "metabase/query_builder/constants";
 import SavedQuestionHeaderButton from "metabase/query_builder/components/SavedQuestionHeaderButton/SavedQuestionHeaderButton";
 
+import Button from "metabase/core/components/Button";
 import RunButtonWithTooltip from "../RunButtonWithTooltip";
-
 import QuestionActions from "../QuestionActions";
+import TableBeta from "../TableBeta";
+import TableDictionary from "../TableDictionary";
+import ToggleCreateType from "../ToggleCreateType";
+import ActionButton from "../../../components/ActionButton";
+import TaggingModal from "../../../components/TaggingModal";
+import { trackStructEvent } from "../../../lib/analytics";
+import { questionSideHideAction } from "../../../redux/config";
+import MyPopover from "../MyPopover";
+import EditBar from "../../../components/EditBar";
+import TableUpgrade from "../TableUpgrade";
+import Modal from "../../../components/Modal";
+import ConfirmContent from "../../../components/ConfirmContent";
 import { HeadBreadcrumbs } from "./HeaderBreadcrumbs";
 import QuestionDataSource from "./QuestionDataSource";
 import QuestionDescription from "./QuestionDescription";
@@ -46,6 +59,9 @@ import {
   ViewHeaderActionPanel,
   ViewHeaderIconButtonContainer,
 } from "./ViewHeader.styled";
+import QuestionRunningTime from "./QuestionRunningTime";
+import { closeNewGuide } from "../../../containers/newguide/newGuide";
+import { getVisualizationRaw } from "../../../visualizations";
 
 const viewTitleHeaderPropTypes = {
   question: PropTypes.object.isRequired,
@@ -78,10 +94,14 @@ const viewTitleHeaderPropTypes = {
 
   className: PropTypes.string,
   style: PropTypes.object,
+  router: PropTypes.any,
+  questionSideHideAction: PropTypes.func,
+  closeNewGuide: PropTypes.func,
+  card: PropTypes.object,
 };
 
 export function ViewTitleHeader(props) {
-  const { question, className, style, isNavBarOpen, updateQuestion } = props;
+  const { question, className, style, isNavBarOpen, updateQuestion, isRunnable, router, originalQuestion, card } = props;
 
   const [
     areFiltersExpanded,
@@ -89,6 +109,9 @@ export function ViewTitleHeader(props) {
   ] = useToggle(!question?.isSaved());
 
   const previousQuestion = usePrevious(question);
+
+  const [confirmModal, setConfirmModal] = useState(false);
+  const [showSeoTaggingModal, setShowSeoTaggingModal] = useState(false);
 
   useEffect(() => {
     if (!question.isStructured() || !previousQuestion?.isStructured()) {
@@ -118,8 +141,52 @@ export function ViewTitleHeader(props) {
     [updateQuestion],
   );
 
+  const getEditingButtons = () => {
+    const { onOpenModal } = props;
+
+    return [
+      <Button
+        key="cancel"
+        className="Button Button--edit-cancel Button--small mr1"
+        onClick={() => setConfirmModal(true)}
+      >
+        {t`Cancel`}
+      </Button>,
+      <ActionButton
+        id="edit-bar-save"
+        key="save"
+        actionFn={() => {
+          trackStructEvent(`click Save edit chart`);
+          onOpenModal("save");
+          closeNewGuide({ key: "saveChart" });
+        }}
+        className=" Button Button--edit-save Button--primary Button--small"
+        normalText={t`Save`}
+        activeText={t`Saving…`}
+        failedText={t`Save`}
+        successText={t`Saved`}
+      />,
+    ];
+  }
+
   return (
     <>
+      {!isSaved && (
+        <EditBar
+          title={t`You're editing this chart.`}
+          buttons={getEditingButtons()}
+        />
+      )}
+      {!isSaved && (
+        <TableUpgrade
+          tableName={question
+            ?.query()
+            ?.table()
+            ?.displayName()}
+          tableId={question?.query()?.table()?.id}
+          card={question?.card()}
+        />
+      )}
       <ViewHeaderContainer
         className={className}
         style={style}
@@ -133,6 +200,14 @@ export function ViewTitleHeader(props) {
             {...props}
             isNative={isNative}
             isSummarized={isSummarized}
+            isRunnable={isRunnable}
+            router={router}
+            isSaved={isSaved}
+            isDataset={isDataset}
+            areFiltersExpanded={areFiltersExpanded}
+            onExpandFilters={expandFilters}
+            onCollapseFilters={collapseFilters}
+            onQueryChange={onQueryChange}
           />
         )}
         <ViewTitleHeaderRightSide
@@ -153,6 +228,34 @@ export function ViewTitleHeader(props) {
           expanded={areFiltersExpanded}
           question={question}
           onQueryChange={onQueryChange}
+        />
+      )}
+      <Modal isOpen={confirmModal}>
+        <ConfirmContent
+          title={t`You have unsaved changes`}
+          message={t`Do you want to leave this page and discard your changes?`}
+          onClose={() => setConfirmModal(false)}
+          onAction={() => {
+            setConfirmModal(false);
+            let url = "";
+            if (originalQuestion) {
+              url = originalQuestion.getUrl();
+            } else {
+              url = Urls.newQuestion({
+                type: isNative ? "native" : "query",
+              });
+            }
+            router.replace(url);
+          }}
+        />
+      </Modal>
+      {showSeoTaggingModal && (
+        <TaggingModal
+          onClose={() => setShowSeoTaggingModal(false)}
+          id={card.id}
+          creatorId={card.creator_id}
+          tagType="seo"
+          type="card"
         />
       )}
     </>
@@ -254,6 +357,19 @@ AhHocQuestionLeftSide.propTypes = {
   isObjectDetail: PropTypes.bool,
   isSummarized: PropTypes.bool,
   onOpenModal: PropTypes.func,
+  isRunnable: PropTypes.bool,
+  router: PropTypes.any,
+  updateQuestion: PropTypes.func,
+  result: PropTypes.any,
+  isResultDirty: PropTypes.bool,
+  runQuestionQuery: PropTypes.func,
+  cancelQuery: PropTypes.func,
+  isRunning: PropTypes.bool,
+  queryBuilderMode: PropTypes.oneOf(["view", "notebook"]),
+  isNativeEditorOpen: PropTypes.bool,
+  isSaved: PropTypes.bool,
+  config: PropTypes.any,
+  questionSideHideAction: PropTypes.func,
 };
 
 function AhHocQuestionLeftSide(props) {
@@ -264,7 +380,27 @@ function AhHocQuestionLeftSide(props) {
     isObjectDetail,
     isSummarized,
     onOpenModal,
+    isRunnable,
+    router,
+    updateQuestion,
+    result,
+    isResultDirty,
+    runQuestionQuery,
+    cancelQuery,
+    isRunning,
+    queryBuilderMode,
+    isNativeEditorOpen,
+    isSaved,
+    config,
+    questionSideHideAction,
   } = props;
+
+  const isShowingNotebook = queryBuilderMode === "notebook";
+  const isMissingPermissions =
+    result?.error_type === SERVER_ERROR_TYPES.missingPermissions;
+  const hasRunButton =
+    isRunnable && !isNativeEditorOpen && !isMissingPermissions;
+  const hideSide = config && config.questionSideHide;
 
   const handleTitleClick = () => {
     const query = question.query();
@@ -272,34 +408,82 @@ function AhHocQuestionLeftSide(props) {
       onOpenModal(MODAL_TYPES.SAVE);
     }
   };
-
+  console.log("xxx", questionSideHideAction)
   return (
     <AdHocLeftSideRoot>
       <ViewHeaderMainLeftContentContainer>
+        {!isSaved && (
+          <Button
+            onlyIcon
+            className="Question-header-btn footprint-mr-s"
+            iconColor="#5A617B"
+            icon={hideSide ? "menu_right" : "menu_left"}
+            iconSize={16}
+            onClick={() => {
+              questionSideHideAction({ hide: !hideSide });
+            }}
+          />
+        )}
         <AdHocViewHeading color="medium">
           {isNative ? (
             t`New question`
           ) : (
-            <QuestionDescription
-              question={question}
-              originalQuestion={originalQuestion}
-              isObjectDetail={isObjectDetail}
-              onClick={handleTitleClick}
-            />
+            <div className="flex">
+
+              <QuestionDescription
+                question={question}
+                originalQuestion={originalQuestion}
+                isObjectDetail={isObjectDetail}
+                onClick={handleTitleClick}
+              />
+              <TableBeta
+                tableName={question
+                  ?.query()
+                  ?.table()
+                  ?.displayName()}
+                tableId={question?.query()?.table()?.id}
+              />
+              <TableDictionary
+                tableName={question
+                  ?.query()
+                  ?.table()
+                  ?.displayName()}
+                tableId={question?.query()?.table()?.id}
+              />
+              <ToggleCreateType question={question} router={router} />
+              {hasRunButton && !isShowingNotebook && (
+                <ViewHeaderIconButtonContainer>
+                  <RunButtonWithTooltip
+                    className={cx("text-brand-hover text-dark ml1", {
+                      "text-white-hover": isResultDirty,
+                    })}
+                    iconSize={16}
+                    onlyIcon
+                    medium
+                    compact
+                    result={result}
+                    isRunning={isRunning}
+                    isDirty={isResultDirty}
+                    onRun={() => runQuestionQuery({ ignoreCache: true })}
+                    onCancel={cancelQuery}
+                  />
+                </ViewHeaderIconButtonContainer>
+              )}
+              {NativeQueryButton.shouldRender(props) && (
+                <NativeQueryButton
+                  size={16}
+                  question={question}
+                  updateQuestion={updateQuestion}
+                  data-metabase-event="Notebook Mode; Convert to SQL Click"
+                />
+              )}
+              {isRunnable && isNative && (
+                <QuestionRunningTime {...this.props} />
+              )}
+            </div>
           )}
         </AdHocViewHeading>
       </ViewHeaderMainLeftContentContainer>
-      <ViewHeaderLeftSubHeading>
-        {isSummarized && (
-          <QuestionDataSource
-            className="mb1"
-            question={question}
-            isObjectDetail={isObjectDetail}
-            subHead
-            data-metabase-event="Question Data Source Click"
-          />
-        )}
-      </ViewHeaderLeftSubHeading>
     </AdHocLeftSideRoot>
   );
 }
@@ -351,6 +535,16 @@ ViewTitleHeaderRightSide.propTypes = {
   isShowingQuestionInfoSidebar: PropTypes.bool,
   onModelPersistenceChange: PropTypes.bool,
   onQueryChange: PropTypes.func,
+  user: PropTypes.any,
+  isShowingChartSettingsSidebar: PropTypes.bool,
+  onCloseChartSettings: PropTypes.func,
+  onOpenChartSettings: PropTypes.func,
+  isShowingFilterSidebar: PropTypes.bool,
+  visualization: PropTypes.object,
+  isShowingChartTypeSidebar: PropTypes.bool,
+  onCloseChartType: PropTypes.func,
+  onOpenChartType: PropTypes.func,
+  isObjectDetail: PropTypes.bool,
 };
 
 function ViewTitleHeaderRightSide(props) {
@@ -388,6 +582,16 @@ function ViewTitleHeaderRightSide(props) {
     onOpenQuestionInfo,
     onModelPersistenceChange,
     onQueryChange,
+    user,
+    isShowingChartSettingsSidebar,
+    onCloseChartSettings,
+    onOpenChartSettings,
+    isShowingFilterSidebar,
+    visualization,
+    isShowingChartTypeSidebar,
+    onCloseChartType,
+    onOpenChartType,
+    isObjectDetail,
   } = props;
   const isShowingNotebook = queryBuilderMode === "notebook";
   const query = question.query();
@@ -403,15 +607,25 @@ function ViewTitleHeaderRightSide(props) {
     MetabaseSettings.get("enable-nested-queries");
 
   const isNewQuery = !query.hasData();
+  const isCreate = !question.card().id && !question.card().original_card_id;
+  const isAdmin = user.is_superuser;
   const hasSaveButton =
     !isDataset &&
     !!isDirty &&
     (isNewQuery || canEditQuery) &&
     isActionListVisible;
-  const isMissingPermissions =
+ /* const isMissingPermissions =
     result?.error_type === SERVER_ERROR_TYPES.missingPermissions;
   const hasRunButton =
-    isRunnable && !isNativeEditorOpen && !isMissingPermissions;
+    isRunnable && !isNativeEditorOpen && !isMissingPermissions;*/
+
+  const icon = visualization && visualization.iconName;
+
+  const isOwner =
+    isAdmin ||
+    isCreate ||
+    user.id === question.card().creator_id ||
+    question.card().creator_id === undefined;
 
   const handleInfoClick = useCallback(() => {
     if (isShowingQuestionInfoSidebar) {
@@ -423,6 +637,31 @@ function ViewTitleHeaderRightSide(props) {
 
   return (
     <ViewHeaderActionPanel data-testid="qb-header-action-panel">
+      {isOwner &&
+        QuestionFilterWidget.shouldRender(props) && (
+        <Button
+          disabled={queryBuilderMode !== "view"}
+          onlyIcon
+          className={`ml1 Question-header-btn-new ${
+            isShowingChartSettingsSidebar
+              ? "Question-header-btn--primary-new"
+              : ""
+          }`}
+          onClick={
+            isShowingChartSettingsSidebar
+              ? onCloseChartSettings
+              : onOpenChartSettings
+          }
+        >
+          <div className="flex align-center">
+            <ScissorOutlined
+              style={{ fontSize: "16px" }}
+              className="mr1"
+            />
+            Column
+          </div>
+        </Button>
+      )}
       {QuestionFilters.shouldRender(props) && (
         <FilterHeaderToggle
           className="ml2 mr1"
@@ -435,13 +674,13 @@ function ViewTitleHeaderRightSide(props) {
       )}
       {QuestionFilterWidget.shouldRender(props) && (
         <QuestionFilterWidget
-          className="hide sm-show"
+          className="Question-header-btn-new hide sm-show"
           onOpenModal={onOpenModal}
         />
       )}
       {QuestionSummarizeWidget.shouldRender(props) && (
         <QuestionSummarizeWidget
-          className="hide sm-show"
+          className="Question-header-btn-new hide sm-show"
           isShowingSummarySidebar={isShowingSummarySidebar}
           onEditSummary={onEditSummary}
           onCloseSummary={onCloseSummary}
@@ -449,9 +688,9 @@ function ViewTitleHeaderRightSide(props) {
         />
       )}
       {QuestionNotebookButton.shouldRender(props) && (
-        <ViewHeaderIconButtonContainer>
+        // <ViewHeaderIconButtonContainer>
           <QuestionNotebookButton
-            iconSize={16}
+            className="Question-header-btn-new hide sm-show"
             question={question}
             isShowingNotebook={isShowingNotebook}
             setQueryBuilderMode={setQueryBuilderMode}
@@ -461,20 +700,78 @@ function ViewTitleHeaderRightSide(props) {
                 : `View Mode; Go to Notebook Mode`
             }
           />
-        </ViewHeaderIconButtonContainer>
+        // </ViewHeaderIconButtonContainer>
       )}
-      {NativeQueryButton.shouldRender(props) && (
-        <ViewHeaderIconButtonContainer>
-          <NativeQueryButton
-            size={16}
-            question={question}
-            updateQuestion={updateQuestion}
-            data-metabase-event="Notebook Mode; Convert to SQL Click"
-          />
-        </ViewHeaderIconButtonContainer>
+      {result && !isObjectDetail && (<Button
+          disabled={queryBuilderMode !== "view"}
+          onlyIcon
+          className={`Question-header-btn-new ${
+            isShowingChartTypeSidebar
+              ? "Question-header-btn--primary-new"
+              : ""
+          }`}
+          iconColor="#7A819B"
+          icon={icon}
+          iconSize={16}
+          onClick={() => {
+            trackStructEvent(
+              `click Visualization edit chart`,
+            );
+            isShowingChartTypeSidebar
+              ? onCloseChartType()
+              : onOpenChartType();
+          }}
+        >
+          Visualization
+        </Button>
       )}
+      {/*{(isAdmin || user.groups.includes("Inner")) && (
+        <Button
+          onlyIcon
+          className="ml1 Question-header-btn-new"
+          iconColor="#7A819B"
+          iconSize={16}
+          onClick={() => {
+            router.push(`/chart/buffet${location.hash}`);
+            this.props.handleQuestionSideHide({ hide: false });
+          }}
+        >
+          <div className="flex align-center">
+            <InsertRowAboveOutlined
+              style={{ fontSize: "16px" }}
+              className="mr1"
+            />
+            Indicator
+          </div>
+        </Button>
+      )}
+      {menuMoreOptions.length > 0 && (
+        <Dropdown
+          overlay={<Menu>{menuMoreOptions}</Menu>}
+          placement="bottomRight"
+          trigger={["click"]}
+        >
+          <Button
+            onlyIcon
+            className="Question-header-btn-new"
+            iconColor="#7A819B"
+            icon="edit_more"
+            iconSize={16}
+            ml={1}
+          ></Button>
+        </Dropdown>
+      )}
+      {this.state.showVip && (
+        <NeedPermissionModal
+          title="Upgrade your account to access SQL query"
+          onClose={() => this.setState({ showVip: false })}
+          afterChangeLocation={() => {
+            this.setState({ showVip: false });
+          }}
+        />
+      )}*/}
       {hasExploreResultsLink && <ExploreResultsLink question={question} />}
-      {hasRunButton && !isShowingNotebook && (
+      {/*{hasRunButton && !isShowingNotebook && (
         <ViewHeaderIconButtonContainer>
           <RunButtonWithTooltip
             className={cx("text-brand-hover text-dark", {
@@ -491,7 +788,7 @@ function ViewTitleHeaderRightSide(props) {
             onCancel={cancelQuery}
           />
         </ViewHeaderIconButtonContainer>
-      )}
+      )}*/}
       {isSaved && (
         <QuestionActions
           isShowingQuestionInfoSidebar={isShowingQuestionInfoSidebar}
@@ -507,7 +804,7 @@ function ViewTitleHeaderRightSide(props) {
           onModelPersistenceChange={onModelPersistenceChange}
         />
       )}
-      {hasSaveButton && (
+      {/*{hasSaveButton && (
         <SaveButton
           disabled={!question.canRun() || !canEditQuery}
           tooltip={{
@@ -524,7 +821,7 @@ function ViewTitleHeaderRightSide(props) {
         >
           {t`Save`}
         </SaveButton>
-      )}
+      )}*/}
     </ViewHeaderActionPanel>
   );
 }

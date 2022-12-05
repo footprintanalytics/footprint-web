@@ -37,9 +37,9 @@ export function QuestionSummarizeWidget({
 }) {
   return (
     <HeaderButton
-      large
       color={color("summarize")}
       labelBreakpoint="sm"
+      icon="insight"
       onClick={async () => {
         if (isShowingSummarySidebar) {
           onCloseSummary();

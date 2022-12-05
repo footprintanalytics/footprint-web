@@ -281,6 +281,9 @@ const Tables = createEntity({
 });
 
 function getTableForeignKeyTableIds(table) {
+  if (!table) {
+    return [];
+  }
   return _.chain(table.fields)
     .filter(field => field.target)
     .map(field => field.target.table_id)
