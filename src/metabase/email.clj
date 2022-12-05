@@ -95,7 +95,7 @@
     (throw (Exception. (tru "SMTP host is not set."))))
   ;; Now send the email
   (send-email! (smtp-settings)
-    {:from    (email-from-address)
+    {:from    (str "Footprint Analytics <"(email-from-address) ">")
      :to      recipients
      :subject subject
      :body    (case message-type
