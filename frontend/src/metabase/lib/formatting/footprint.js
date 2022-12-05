@@ -131,3 +131,16 @@ export function getDescription({ description, orderedCards }) {
 
   return "";
 }
+
+export function getTableNameListFromSQL(nativeQuery) {
+  return (
+    nativeQuery?.match(/(?:from|join)(\s|`)+(\w|`)+/gi)?.map(item =>
+      item
+        .toLowerCase()
+        .replace(/from/g, "")
+        .replace(/join/g, "")
+        .replace(/`/g, "")
+        .trim(),
+    ) || []
+  );
+}

@@ -4,6 +4,15 @@
   min-width: 1024px;
 }
 
+.Question-side {
+  width: 310px;
+  transition: 0.3s width;
+  background: white;
+  height: 100%;
+  border-right: 1px solid var(--color-border);
+  overflow-x: hidden;
+}
+
 .Question-main {
   display: flex;
   flex: 1;

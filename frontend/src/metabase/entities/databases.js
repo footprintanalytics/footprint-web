@@ -27,7 +27,7 @@ export const FETCH_DATABASE_IDFIELDS =
 
 const Databases = createEntity({
   name: "databases",
-  path: "/api/database",
+  path: "/api/v1/database",
   schema: DatabaseSchema,
 
   nameOne: "database",

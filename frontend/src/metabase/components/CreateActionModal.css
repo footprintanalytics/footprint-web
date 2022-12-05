@@ -31,6 +31,8 @@
 
 .create-modal__dashboard {
   justify-content: left;
+  align-items: center;
+  padding: 10px 20px;
 }
 
 .create-modal__question-title {
