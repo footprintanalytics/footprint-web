@@ -114,7 +114,9 @@
   ;; Now send the email
   (send-email! (smtp-settings)
                (merge
-                {:from    (str "Footprint Analytics <" (email-from-address) ">")
+                {:from    (if-let [from-name (email-from-name)]
+                            (str from-name " <" (email-from-address) ">")
+                            (email-from-address))
                  :to      recipients
                  :subject subject
                  :body    (case message-type
