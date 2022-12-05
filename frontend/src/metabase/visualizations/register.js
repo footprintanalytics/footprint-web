@@ -24,6 +24,8 @@ import Gauge from "./visualizations/Gauge";
 import ObjectDetail from "./components/ObjectDetail";
 import PivotTable from "./visualizations/PivotTable";
 import ListViz from "./visualizations/List";
+import Image from "./visualizations/Image";
+import Video from "./visualizations/Video";
 
 export default function () {
   registerVisualization(Scalar);
@@ -46,5 +48,11 @@ export default function () {
   registerVisualization(PivotTable);
   registerVisualization(ListViz);
   registerVisualization(ActionViz);
+
+  //footprint
+  registerVisualization(Image);
+  registerVisualization(Video);
+
+
   setDefaultVisualization(Table);
 }
