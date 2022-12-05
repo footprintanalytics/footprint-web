@@ -41,6 +41,7 @@ import {
 } from "./Dashboard.styled";
 import MetabaseUtils from "metabase/lib/utils";
 import DashboardAd from "metabase/containers/news/components/DashboardAd";
+import { parseHashOptions } from "metabase/lib/browser";
 
 // const SCROLL_THROTTLE_INTERVAL = 1000 / 24;
 const THROTTLE_PERIOD = 300;
@@ -537,6 +538,10 @@ class Dashboard extends Component {
       !shouldRenderParametersWidgetInViewMode &&
       (!isEditing || isEditingParameter);
 
+    const { chart_style } = {
+      ...parseHashOptions(location.hash),
+    };
+
     return (
       <>
         {dashboard && (
@@ -618,6 +623,22 @@ class Dashboard extends Component {
                       {...this.props}
                       isNightMode={shouldRenderAsNightMode}
                       onEditingChange={this.setEditing}
+                      hideWatermark={dashboard && dashboard.hideWatermark}
+                      navigateToNewCardFromDashboard={dashboard => {
+                        const user = this.props.user;
+                        const dashcard = dashboard && dashboard.dashcard;
+                        const isAdmin = user && user.is_superuser;
+                        const isOwner =
+                          user && user.id === get(dashcard, "creator.id");
+                        if (isAdmin || isOwner) {
+                          this.props.navigateToNewCardFromDashboard(
+                            dashboard,
+                          );
+                        } else {
+                          navigateToGuestQuery(dashboard, this.props);
+                        }
+                      }}
+                      chartStyle={chart_style}
                     />
                   ) : (
                     <DashboardEmptyState

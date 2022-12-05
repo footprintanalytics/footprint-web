@@ -175,13 +175,13 @@ const DashboardApp = props => {
   }, []);
 
   const duplicateAction = async item => {
-    if (this.props.user) {
+    if (props.user) {
       setCardInfo({
         cardId: item.id,
         cardName: item.name,
       });
     } else {
-      this.props.setLoginModalShow({
+      props.setLoginModalShow({
         show: true,
         from: "publicDashboard_query_duplicate",
       });

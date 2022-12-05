@@ -32,10 +32,14 @@ import { isActionCard } from "metabase/writeback/utils";
 
 import Utils from "metabase/lib/utils";
 import { getClickBehaviorDescription } from "metabase/lib/click-behavior";
-import { getParameterValuesBySlug } from "metabase-lib/parameters/utils/parameter-values";
-import DashCardParameterMapper from "./DashCardParameterMapper";
-import { DashCardRoot } from "./DashCard.styled";
 import PublicMode from "metabase/modes/components/modes/PublicMode";
+import { trackStructEvent } from "metabase/lib/analytics";
+import TableChartInfo from "metabase/query_builder/components/TableChartInfo";
+import { replaceTemplateCardUrl } from "metabase/lib/urls";
+import { getParameterValuesBySlug } from "metabase-lib/parameters/utils/parameter-values";
+import { DashCardRoot } from "./DashCard.styled";
+import DashCardParameterMapper from "./DashCardParameterMapper";
+import "./DashCard.css";
 
 const DATASET_USUALLY_FAST_THRESHOLD = 15 * 1000;
 
@@ -101,6 +105,7 @@ export default class DashCard extends Component {
     e.stopPropagation();
   };
 
+  // eslint-disable-next-line complexity
   render() {
     const {
       dashcard,
@@ -217,7 +222,6 @@ export default class DashCard extends Component {
     //   mainCard.display === "image" ||
     //   mainCard.display === "video";
     const showEdit = isOwner && !!dashcard.card.id;
-
     const isPublic = mode && mode.name === PublicMode.name;
 
     const hideDuplicate = isTextDisplay || isImageDisplay || isVideoDisplay;
@@ -236,12 +240,17 @@ export default class DashCard extends Component {
       !isPublic && !isTextDisplay && !isImageDisplay && !isVideoDisplay;
 
     const editAction = card => {
-      window.open(`/chart/${card.id}?defaultEdit=true`);
+      window.open(`/chart/${card.id}?editingOnLoad=true`);
     };
+
+    const cardDomKey = `Card--${String(dashcard.id).replace(".", "")}`;
+
+    const result = getIn(dashcardData, [dashcard.id, dashcard.card_id]);
 
     return (
       <DashCardRoot
-        className="Card rounded flex flex-column hover-parent hover--visibility"
+        id={id}
+        className={cx("Card rounded flex flex-column hover-parent hover--visibility", cardDomKey,)}
         style={
           hideBackground
             ? { border: 0, background: "transparent", boxShadow: "none" }
@@ -250,6 +259,98 @@ export default class DashCard extends Component {
         isNightMode={isNightMode}
         isUsuallySlow={isSlow === "usually-slow"}
       >
+        <div
+          style={{
+            textAlign: "right",
+            position: "absolute",
+            right: 8,
+            top: 8,
+            zIndex: 2,
+          }}
+        >
+          {!isEditing &&
+          QueryDownloadWidget.shouldRender({
+            result,
+            isResultDirty: false,
+          }) && (
+            <QueryDownloadWidget
+              className="html2canvas-filter dash-card__button"
+              card={dashcard.card}
+              result={result}
+            />
+          )}
+          {showEdit && editAction && (
+            <Tooltip key="ChartEdit" tooltip={t`Edit`}>
+              <a
+                className="html2canvas-filter dash-card__button"
+                onClick={() => {
+                  editAction && editAction(dashcard.card);
+                  trackStructEvent(`dashcard click to edit`);
+                }}
+              >
+                <Icon name={"pencil"} size={14} color={"#9AA0AF"} />
+              </a>
+            </Tooltip>
+          )}
+          {showPreview && (
+            <Tooltip key="ChartPreview" tooltip={t`Preview`}>
+              <a
+                className="html2canvas-filter dash-card__button"
+                onClick={() => {
+                  replaceTemplateCardUrl(this.props, dashcard.card.id);
+                  trackStructEvent(`dashcard click to preview`);
+                }}
+              >
+                <Icon name={"chart_preview"} size={14} color={"#9AA0AF"} />
+              </a>
+            </Tooltip>
+          )}
+          {!hideDuplicate && duplicateAction && (
+            <Tooltip key="ChartDuplicate" tooltip={t`Duplicate`}>
+              <a
+                className="html2canvas-filter dash-card__button"
+                onClick={() => {
+                  duplicateAction && duplicateAction(dashcard.card);
+                  trackStructEvent(`dashcard click to copy`);
+                }}
+              >
+                <Icon name={"duplicate"} size={14} color={"#9AA0AF"} />
+              </a>
+            </Tooltip>
+          )}
+          {showChartInfo && (
+            <Tooltip key="ChartInfo" tooltip={t`Chart Info`}>
+              <TableChartInfo
+                dashboard={dashboard}
+                card={dashcard?.card}
+                dashcard={dashcard}
+                tableName={dashcard?.card?.table_name}
+                tableId={dashcard?.card?.table_id}
+              />
+            </Tooltip>
+          )}
+          {/* {!hideDownload && (
+            <a
+              className="html2canvas-filter"
+              style={{
+                display: "inline",
+                position: "relative",
+                cursor: "pointer",
+                margin: "0px 10px",
+              }}
+              onClick={() => {
+                snapshot({
+                  public_uuid: dashcard.public_uuid,
+                  isDashboard: false,
+                  user
+                })
+                trackStructEvent(`dashcard click to download`);
+              }}
+            >
+              <Icon name={"camera"} size={14} color={"#9AA0AF"} />
+            </a>
+          )} */}
+        </div>
         {isEditingDashboardLayout ? (
           <DashboardCardActionsPanel onMouseDown={this.preventDragging}>
             <DashCardActionButtons
@@ -359,6 +460,8 @@ export default class DashCard extends Component {
               : null
           }
           onChangeLocation={this.props.onChangeLocation}
+          dynamicParams={dashboard && dashboard.dynamicParams}
+          chartStyle={chartStyle}
         />
       </DashCardRoot>
     );

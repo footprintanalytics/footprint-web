@@ -380,11 +380,11 @@ function QueryBuilder(props) {
   }
 
   const handleDefaultEditAction = () => {
-    if (location.query.defaultEdit) {
+    if (location.query.editingOnLoad) {
       history.replaceState(
         null,
         document.title,
-        urlAddParam(window.location.href, "defaultEdit"),
+        urlAddParam(window.location.href, "editingOnLoad"),
       );
       set(question, "_card.original_card_id", card.id);
       question.update(null, { shouldUpdateUrl: true });
