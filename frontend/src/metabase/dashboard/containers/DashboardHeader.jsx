@@ -389,7 +389,7 @@ class DashboardHeader extends Component {
           <Button
             key="edit"
             onlyIcon
-            className={`Question-header-btn Question-header-btn--primary`}
+            className={`Question-header-btn`}
             iconColor="#7A819B"
             icon="pencil"
             iconSize={16}
@@ -556,7 +556,7 @@ class DashboardHeader extends Component {
             <Button
               key="download"
               onlyIcon
-              className={`Question-header-btn Question-header-btn--primary`}
+              className={`Question-header-btn`}
               iconColor="#7A819B"
               icon="camera"
               iconSize={16}
