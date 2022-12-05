@@ -47,7 +47,7 @@
   not met before returning the `StreamingResponse`."
   [card-id export-format
    & {:keys [parameters constraints context dashboard-id middleware qp-runner run ignore_cache]
-      :or   {constraints constraints/default-query-constraints
+      :or   {constraints (constraints/default-query-constraints)
              context     :question
              qp-runner   qp/process-query-and-save-execution!}}]
   {:pre [(u/maybe? sequential? parameters)]}
