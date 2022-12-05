@@ -22,6 +22,7 @@ const SubmitContractAdd = props => {
         {current === 0 ? (
           <ContractAddress
             onFinish={values => {
+              console.log(values);
               setFormData(values);
               setCurrent(1);
             }}

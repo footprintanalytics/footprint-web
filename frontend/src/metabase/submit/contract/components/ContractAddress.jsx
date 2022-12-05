@@ -1,7 +1,7 @@
 /* eslint-disable react/prop-types */
 /* eslint-disable curly */
 import React, { useState } from "react";
-import { Form, Button, Input, Select } from "antd";
+import { Form, Button, Input, Select, Alert, List } from "antd";
 import { useMutation } from "react-query";
 import { getContractSubmittedByAddress } from "metabase/new-service";
 import { CheckCircleOutlined } from "@ant-design/icons";
@@ -21,7 +21,9 @@ const ContractAddress = ({ onFinish }) => {
   const [disabled, setDisabled] = useState(true);
   const addressReg = /^0x[0-9a-fA-F]{40}$/;
 
-  const { isLoading, mutateAsync } = useMutation(getContractSubmittedByAddress);
+  const { isLoading, mutateAsync, data } = useMutation(
+    getContractSubmittedByAddress,
+  );
 
   return (
     <Form
@@ -34,6 +36,7 @@ const ContractAddress = ({ onFinish }) => {
         onFinish({
           ...values,
           contractAddress: toLower(values.contractAddress),
+          contractExists: data || {},
         });
       }}
       onValuesChange={async (_, values) => {
@@ -64,47 +67,55 @@ const ContractAddress = ({ onFinish }) => {
           }
         />
       </Form.Item>
-      {/* <Form.Item>
+      {data?.protocolName || data?.contractName ? (
+        <Form.Item>
           <Alert
             message="Seems like this contract already exists"
             description={
               <List itemLayout="horizontal">
-                <List.Item>
-                  <List.Item.Meta
-                    title={
-                      <span
-                        style={{ color: "rgba(0,0,0,.45)", fontWeight: 400 }}
-                      >
-                        Project Name
-                      </span>
-                    }
-                    description={
-                      <span style={{ color: "#303440" }}>
-                        Veg Out Hare Club
-                      </span>
-                    }
-                  />
-                </List.Item>
-                <List.Item>
-                  <List.Item.Meta
-                    title={
-                      <span
-                        style={{ color: "rgba(0,0,0,.45)", fontWeight: 400 }}
-                      >
-                        Contract Name
-                      </span>
-                    }
-                    description={
-                      <span style={{ color: "#303440" }}>VegOutHareClub</span>
-                    }
-                  />
-                </List.Item>
+                {data.protocolName ? (
+                  <List.Item>
+                    <List.Item.Meta
+                      title={
+                        <span
+                          style={{ color: "rgba(0,0,0,.45)", fontWeight: 400 }}
+                        >
+                          Project Name
+                        </span>
+                      }
+                      description={
+                        <span style={{ color: "#303440" }}>
+                          {data.protocolName}
+                        </span>
+                      }
+                    />
+                  </List.Item>
+                ) : null}
+                {data.contractName ? (
+                  <List.Item>
+                    <List.Item.Meta
+                      title={
+                        <span
+                          style={{ color: "rgba(0,0,0,.45)", fontWeight: 400 }}
+                        >
+                          Contract Name
+                        </span>
+                      }
+                      description={
+                        <span style={{ color: "#303440" }}>
+                          {data.contractName}
+                        </span>
+                      }
+                    />
+                  </List.Item>
+                ) : null}
               </List>
             }
             type="warning"
             showIcon
           />
-        </Form.Item> */}
+        </Form.Item>
+      ) : null}
       <Form.Item>
         <Button
           loading={isLoading}

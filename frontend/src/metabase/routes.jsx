@@ -263,22 +263,6 @@ export const getRoutes = store => (
       />
       <Route path="/protocols/:slug" component={LazyLoad.ProtocolDetail} />
 
-      <Route
-        title={t`Submit Contract`}
-        path="/submit/contract"
-        component={LazyLoad.SubmitContract}
-      />
-      <Route
-        title={t`Submit Contract`}
-        path="/submit/contract/add"
-        component={LazyLoad.SubmitContractAdd}
-      />
-      <Route
-        title={t`Submit Contract`}
-        path="/submit/contract/success"
-        component={LazyLoad.SubmitContractSuccess}
-      />
-
       <Route title={t`Pricing`} path="/pricing" component={LazyLoad.Pricing} />
       <Route path="/about" component={LazyLoad.About} />
       <Route path="/moon-men" component={LazyLoad.NftPage} />
@@ -628,6 +612,22 @@ export const getRoutes = store => (
           path="/auto/dashboard/*"
           component={AutomaticDashboardApp}
         /> */}
+
+        <Route
+          title={t`Submit Contract`}
+          path="/submit/contract"
+          component={LazyLoad.SubmitContract}
+        />
+        <Route
+          title={t`Submit Contract`}
+          path="/submit/contract/add"
+          component={LazyLoad.SubmitContractAdd}
+        />
+        <Route
+          title={t`Submit Contract`}
+          path="/submit/contract/success"
+          component={LazyLoad.SubmitContractSuccess}
+        />
       </Route>
 
       {/* REFERENCE */}

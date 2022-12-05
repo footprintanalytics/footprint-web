@@ -421,11 +421,11 @@ export const getContractSubmittedList = params => {
 };
 
 export const getContractSubmittedByAddress = params => {
-  return GET(`/api/v1/contract/submitted/byAddress`, params);
+  return GET(`/api/v1/contract/find/one`, params);
 };
 
 export const getContractProtocolByAddress = params => {
-  return GET(`/api/v1/contract/protocol/byAddress`, params);
+  return GET(`/api/v1/protocol/find/list`, params);
 };
 
 export const submitContract = params => {

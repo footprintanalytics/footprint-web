@@ -27,6 +27,7 @@ const PROTOCOL_CATEGORY_LIST = [
 
 const ContractDetails = ({ formData, onFinish }) => {
   const [form] = Form.useForm();
+  const isNewProtocol = !formData.contractExists.contractAddress;
 
   const contractProtocolByAddress = useQuery(
     ["getContractProtocolByAddress", formData],
@@ -35,6 +36,12 @@ const ContractDetails = ({ formData, onFinish }) => {
       refetchOnWindowFocus: false,
       retry: 0,
       enabled: !!formData.chain && !!formData.contractAddress,
+      onSuccess: () => {
+        if (isNewProtocol) return;
+        form.setFieldsValue({
+          protocolName: formData.contractExists.protocolName,
+        });
+      },
     },
   );
 
@@ -47,7 +54,7 @@ const ContractDetails = ({ formData, onFinish }) => {
     {
       refetchOnWindowFocus: false,
       retry: 0,
-      enabled: !!formData.contractAddress,
+      enabled: !!formData.contractAddress && formData.chain === "Ethereum",
       onSuccess: data => {
         if (!data.result?.length) return;
         form.setFieldsValue({
@@ -74,16 +81,20 @@ const ContractDetails = ({ formData, onFinish }) => {
         isFactory: false,
       }}
       onFinish={async values => {
-        await mutateAsync({
-          ...formData,
-          ...values,
-          protocolSlug: slug(values.protocolName),
-          isNewProtocol: false,
-          abi: JSON.parse(values.abi),
-          isDynamic: values.isDynamic || false,
-          isFactory: values.isFactory || false,
-        });
-        onFinish();
+        try {
+          await mutateAsync({
+            ...formData,
+            ...values,
+            protocolSlug:
+              formData.contractExists.protocolSlug || slug(values.protocolName),
+            abi: JSON.parse(values.abi),
+            isDynamic: values.isDynamic || false,
+            isFactory: values.isFactory || false,
+            isNewProtocol,
+            resubmitReason: values.resubmitReason || "",
+          });
+          onFinish();
+        } catch (error) {}
       }}
     >
       <Form.Item
@@ -128,13 +139,15 @@ const ContractDetails = ({ formData, onFinish }) => {
           loading={contractSource.isLoading}
         />
       </Form.Item>
-      <Form.Item
-        label="Reason"
-        rules={[{ required: true, message: "" }]}
-        name="resubmitReason"
-      >
-        <Input.TextArea placeholder="This contract already exists on Footprint. Contract resubmissions should be handled carefully and may get rejected." />
-      </Form.Item>
+      {!isNewProtocol ? (
+        <Form.Item
+          label="Reason"
+          rules={[{ required: true, message: "" }]}
+          name="resubmitReason"
+        >
+          <Input.TextArea placeholder="This contract already exists on Footprint. Contract resubmissions should be handled carefully and may get rejected." />
+        </Form.Item>
+      ) : null}
       <Form.Item
         name="isDynamic"
         valuePropName="checked"
