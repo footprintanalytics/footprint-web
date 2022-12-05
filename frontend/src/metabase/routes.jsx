@@ -492,11 +492,11 @@ export const getRoutes = store => (
         {/* <IndexRoute component={Question} /> */}
         {/* NEW QUESTION FLOW */}
         {/* <Route path="new" title={t`New query`} component={NewQueryOptions} /> */}
-        {/*<Route*/}
-        {/*  title={t`Custom Upload`}*/}
-        {/*  path="custom-upload"*/}
-        {/*  component={LazyLoad.CustomUpload}*/}
-        {/*/>*/}
+        <Route
+          title={t`Custom Upload`}
+          path="custom-upload"
+          component={LazyLoad.CustomUpload}
+        />
         <Route
           title={t`Buffet`}
           path=":slug/buffet"
