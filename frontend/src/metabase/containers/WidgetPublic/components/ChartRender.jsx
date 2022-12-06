@@ -6,10 +6,14 @@ import { QUERY_OPTIONS_NORMAL } from "metabase/containers/dashboards/shared/conf
 import ScalarRender from "metabase/containers/WidgetPublic/components/ScalarRender";
 import LineRender from "metabase/containers/WidgetPublic/components/LineRender";
 import LoadingSpinner from "metabase/components/LoadingSpinner";
+import { get } from "lodash";
 
 const ChartRender = ({ card, public_uuid }) => {
   const params = {};
   const cardId = card?.card_id || "";
+
+  const name = get(get(card, "visualization_settings"), "card.title") || card?.card?.name
+  
   const { isLoading, data } = useQuery(
     ["publicDashboard", public_uuid, cardId, params],
     async () => {
@@ -35,7 +39,7 @@ const ChartRender = ({ card, public_uuid }) => {
 
   return (
     <div className="min-widget__item">
-      <span>{card?.card?.name}</span>
+      <span>{name}</span>
       <div className="min-widget__item-inner">{renderItem()}</div>
     </div>
   );
