@@ -72,6 +72,12 @@ export default class ProfileLink extends Component {
         link: Urls.accountSettings(),
         event: `Navbar;Profile Dropdown;Edit Profile`,
       },
+      {
+        title: t`Submit Contract`,
+        icon: null,
+        link: "/submit/contract",
+        event: `Navbar;Profile Dropdown;Submit Contract`,
+      },
       MetabaseSettings.isHosted() &&
         admin && {
           title: t`Manage Metabase Cloud`,
