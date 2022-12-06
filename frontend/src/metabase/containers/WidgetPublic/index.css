@@ -1,6 +1,7 @@
 .min-widget {
   display: flex;
   align-items: center;
+  overflow: hidden;
 }
 
 .min-widget img {
@@ -14,7 +15,7 @@
 }
 
 .min-widget__item {
-  margin: 2px;
+  margin: 0 2px;
   width: 250px;
   height: 150px;
   display: flex;
