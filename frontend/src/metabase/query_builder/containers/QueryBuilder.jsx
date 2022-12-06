@@ -501,7 +501,7 @@ function QueryBuilder(props) {
   if (uuid) {
     return <PublicQuestion {...props} uuid={uuid} />;
   }
-  console.log("pppp")
+
   return (
     <div className="relative flex flex-full flex-column">
     <View

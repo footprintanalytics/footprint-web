@@ -1,6 +1,7 @@
 import React, { ReactNode } from "react";
 import { t } from "ttag";
 import SidebarHeader from "../SidebarHeader";
+import SidebarCategory from "metabase/query_builder/components/SidebarCategory";
 import {
   SidebarContentRoot,
   SidebarContentMain,
@@ -18,6 +19,8 @@ type Props = {
   doneButtonText?: string;
   footer?: ReactNode;
   children?: ReactNode;
+  categoryList?: any;
+  categoryListSelect?: any;
 };
 
 function SidebarContent({
@@ -34,10 +37,19 @@ function SidebarContent({
       {doneButtonText}
     </FooterButton>
   ) : null,
+  categoryList,
+  categoryListSelect,
   children,
 }: Props) {
+  console.log("SidebarContent categoryList", categoryList)
   return (
     <SidebarContentRoot className={className}>
+      {categoryList && (
+        <SidebarCategory
+          categoryList={categoryList}
+          categoryListSelect={categoryListSelect}
+        />
+      )}
       <SidebarContentMain data-testid="sidebar-content">
         {(title || icon || onBack) && (
           <SidebarHeader

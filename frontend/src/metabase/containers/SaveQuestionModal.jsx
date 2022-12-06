@@ -191,12 +191,12 @@ const SaveTypeInput = ({ field, originalCard }) => (
     {...field}
     options={[
       {
-        name: t`Replace original question, "${
+        name: t`Replace original Chart, "${
           originalCard && originalCard.name
         }"`,
         value: "overwrite",
       },
-      { name: t`Save as new question`, value: "create" },
+      { name: t`Save as new Chart`, value: "create" },
     ]}
     vertical
   />

@@ -46,7 +46,7 @@ const ChartTypeSidebarRoot = ({
     );
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [isShowingChartTypeSidebar, isShowingChartSettingsSidebar]);
-
+  console.log("ChartTypeSidebarRoot", categoryList)
   return (
     <SidebarContent
       className="full-height"

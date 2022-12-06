@@ -75,34 +75,34 @@ const ViewFooter = ({
     >
       <ButtonBar
         className="flex-full"
-        left={[
-          !hideChartSettings && (
-            <VizTypeButton
-              key="viz-type"
-              question={question}
-              result={result}
-              active={isShowingChartTypeSidebar}
-              onClick={
-                isShowingChartTypeSidebar
-                  ? () => onCloseChartType()
-                  : () => onOpenChartType()
-              }
-            />
-          ),
-          !hideChartSettings && (
-            <VizSettingsButton
-              key="viz-settings"
-              ml={1}
-              mr={[3, 0]}
-              active={isShowingChartSettingsSidebar}
-              onClick={
-                isShowingChartSettingsSidebar
-                  ? () => onCloseChartSettings()
-                  : () => onOpenChartSettings()
-              }
-            />
-          ),
-        ]}
+        // left={[
+        //   !hideChartSettings && (
+        //     <VizTypeButton
+        //       key="viz-type"
+        //       question={question}
+        //       result={result}
+        //       active={isShowingChartTypeSidebar}
+        //       onClick={
+        //         isShowingChartTypeSidebar
+        //           ? () => onCloseChartType()
+        //           : () => onOpenChartType()
+        //       }
+        //     />
+        //   ),
+        //   !hideChartSettings && (
+        //     <VizSettingsButton
+        //       key="viz-settings"
+        //       ml={1}
+        //       mr={[3, 0]}
+        //       active={isShowingChartSettingsSidebar}
+        //       onClick={
+        //         isShowingChartSettingsSidebar
+        //           ? () => onCloseChartSettings()
+        //           : () => onOpenChartSettings()
+        //       }
+        //     />
+        //   ),
+        // ]}
         center={
           isVisualized && (
             <VizTableToggle

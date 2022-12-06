@@ -372,6 +372,7 @@ AhHocQuestionLeftSide.propTypes = {
   isSaved: PropTypes.bool,
   config: PropTypes.any,
   questionSideHideAction: PropTypes.func,
+  snippets: PropTypes.array,
 };
 
 function AhHocQuestionLeftSide(props) {
@@ -395,13 +396,14 @@ function AhHocQuestionLeftSide(props) {
     isSaved,
     config,
     questionSideHideAction,
+    snippets,
   } = props;
 
   const isShowingNotebook = queryBuilderMode === "notebook";
   const isMissingPermissions =
     result?.error_type === SERVER_ERROR_TYPES.missingPermissions;
   const hasRunButton =
-    isRunnable && !isNativeEditorOpen && !isMissingPermissions;
+    isRunnable && !isMissingPermissions;
   const hideSide = config && config.questionSideHide;
 
   const handleTitleClick = () => {
@@ -410,7 +412,6 @@ function AhHocQuestionLeftSide(props) {
       onOpenModal(MODAL_TYPES.SAVE);
     }
   };
-  console.log("xxx", questionSideHideAction)
   return (
     <AdHocLeftSideRoot>
       <ViewHeaderMainLeftContentContainer>
@@ -428,7 +429,28 @@ function AhHocQuestionLeftSide(props) {
         )}
         <AdHocViewHeading color="medium">
           {isNative ? (
-            t`New question`
+            <div className="flex">
+              {t`New Chart`}
+              <ToggleCreateType question={question} router={router} />
+              {hasRunButton && !isShowingNotebook && (
+                <ViewHeaderIconButtonContainer>
+                  <RunButtonWithTooltip
+                    className={cx("text-brand-hover text-dark ml1", {
+                      "text-white-hover": isResultDirty,
+                    })}
+                    iconSize={16}
+                    onlyIcon
+                    medium
+                    compact
+                    result={result}
+                    isRunning={isRunning}
+                    isDirty={isResultDirty}
+                    onRun={() => runQuestionQuery({ ignoreCache: true })}
+                    onCancel={cancelQuery}
+                  />
+                </ViewHeaderIconButtonContainer>
+              )}
+            </div>
           ) : (
             <div className="flex">
 
@@ -724,7 +746,7 @@ function ViewTitleHeaderRightSide(props) {
           </div>
         </Button>
       )}
-      {QuestionFilters.shouldRender(props) && (
+      {/*{QuestionFilters.shouldRender(props) && (
         <FilterHeaderToggle
           className="ml2 mr1"
           question={question}
@@ -733,7 +755,7 @@ function ViewTitleHeaderRightSide(props) {
           onCollapse={onCollapseFilters}
           onQueryChange={onQueryChange}
         />
-      )}
+      )}*/}
       {QuestionFilterWidget.shouldRender(props) && (
         <QuestionFilterWidget
           className="Question-header-btn-new hide sm-show"
@@ -768,7 +790,7 @@ function ViewTitleHeaderRightSide(props) {
           disabled={queryBuilderMode !== "view"}
           onlyIcon
           className={`Question-header-btn-new ${
-            isShowingChartTypeSidebar
+            isShowingChartTypeSidebar || isShowingChartSettingsSidebar
               ? "Question-header-btn--primary-new"
               : ""
           }`}
@@ -779,7 +801,7 @@ function ViewTitleHeaderRightSide(props) {
             trackStructEvent(
               `click Visualization edit chart`,
             );
-            isShowingChartTypeSidebar
+            isShowingChartTypeSidebar || isShowingChartSettingsSidebar
               ? onCloseChartType()
               : onOpenChartType();
           }}

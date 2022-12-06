@@ -8,7 +8,7 @@ import { replace } from "react-router-redux";
 import { unset } from "lodash";
 import { connect } from "react-redux";
 import { databaseTemplate } from "metabase/new-service";
-import { loadCard } from "metabase/lib/card";
+import { loadCard, loadCardForPreview } from "metabase/lib/card";
 import PreviewDashboardCard from "metabase/components/PreviewDashboardCard";
 import Icon from "metabase/components/Icon";
 import TipActionBar from "metabase/components/TipActionBar";
@@ -48,7 +48,7 @@ function QueryTemplate(props) {
 
   const replaceTemplateCardUrl = async cardId => {
     setLoadingObject({ cardId, loading: true });
-    const card = await loadCard(cardId);
+    const card = await loadCardForPreview(cardId);
     setLoadingObject({ cardId, loading: false });
     unset(card, ["visualization_settings", "card.title"]);
     replaceNewQuestion(card);

@@ -5,7 +5,7 @@ import { message } from "antd";
 import { unset } from "lodash";
 import { isDefi360 } from "metabase/lib/project_info";
 
-import { loadCard } from "metabase/lib/card";
+import { loadCardForPreview } from "metabase/lib/card";
 import * as Urls from "metabase/lib/urls";
 import { utf8_to_b64url } from "../encoding";
 
@@ -301,7 +301,7 @@ export async function replaceTemplateCardUrl(props, cardId) {
     return;
   }
   const hide = message.loading("Loading...", 0);
-  const card = await loadCard(cardId);
+  const card = await loadCardForPreview(cardId);
   hide();
   unset(card, ["visualization_settings", "card.title"]);
   window.open(Urls.newQuestion({ ...card, create_method: "preview" }));

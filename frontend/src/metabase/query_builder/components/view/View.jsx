@@ -18,7 +18,7 @@ import { deserializeCardFromUrl } from "metabase/lib/card";
 import ChartTypeSidebarRoot from "metabase/query_builder/components/view/sidebars/ChartTypeSidebarRoot";
 import { getUserNativeQueryPermission } from "metabase/selectors/user";
 import { setNewGuideInfo } from "metabase/redux/control";
-import { getNewGuideInfo } from "metabase/selectors/control";
+import { getDarkMode, getNewGuideInfo } from "metabase/selectors/control";
 import { questionSideHideAction } from "metabase/redux/config";
 import { updateQuestion } from "metabase/query_builder/actions";
 import NativeQuery from "metabase-lib/queries/NativeQuery";
@@ -136,18 +136,18 @@ class View extends React.Component {
     const {
       isShowingChartSettingsSidebar,
       isShowingChartTypeSidebar,
-      onCloseChartSettings,
+      // onCloseChartSettings,
       onCloseChartType,
     } = this.props;
 
-    if (isShowingChartSettingsSidebar) {
+/*    if (isShowingChartSettingsSidebar) {
       return (
         <ChartSettingsSidebar {...this.props} onClose={onCloseChartSettings} />
       );
-    }
+    }*/
 
-    if (isShowingChartTypeSidebar) {
-      return <ChartTypeSidebar {...this.props} onClose={onCloseChartType} />;
+    if (isShowingChartTypeSidebar || isShowingChartSettingsSidebar) {
+      return <ChartTypeSidebarRoot {...this.props} onClose={onCloseChartType} onCloseChartSettings={this.props.onCloseChartSettings} onCloseChartType={this.props.onCloseChartType}/>;
     }
 
     return null;
@@ -518,12 +518,12 @@ class View extends React.Component {
     const isNotebookContainerOpen =
       isNewQuestion || queryBuilderMode === "notebook";
 
-    const leftSidebar = this.getLeftSidebar();
-    const rightSidebar = this.getRightSidebar();
+    // const leftSidebar = this.getLeftSidebar();
+    const leftSidebar = null;
+    const rightSidebar = this.getLeftSidebar() || this.getRightSidebar();
     const rightSidebarWidth = isShowingTimelineSidebar
       ? SIDEBAR_SIZES.TIMELINE
       : SIDEBAR_SIZES.NORMAL;
-    console.log("vvvv")
     return (
       <div className="full-height">
         <QueryBuilderViewRoot className="QueryBuilder">
@@ -578,6 +578,7 @@ const mapStateToProps = state => {
     config: state.config,
     canNativeQuery: getUserNativeQueryPermission(state),
     getNewGuideInfo: getNewGuideInfo(state),
+    darkMode: getDarkMode(state),
   };
 };
 

@@ -23,13 +23,17 @@ import Meta from "metabase/components/Meta";
 import CreateDashboardModal from "metabase/components/CreateDashboardModal";
 import { getDescription } from "metabase/lib/formatting";
 import { getOssUrl } from "metabase/lib/image";
+import { zkspaceDate } from "metabase/lib/register-activity";
+import MetabaseUtils from "metabase/lib/utils";
+import { createThumb } from "metabase/dashboard/components/utils/thumb";
+import DashboardAd from "metabase/containers/news/components/DashboardAd";
+import { parseHashOptions } from "metabase/lib/browser";
+import { navigateToGuestQuery } from "metabase/lib/urls";
 import { getValuePopulatedParameters } from "metabase-lib/parameters/utils/parameter-values";
 import DashboardGrid from "../DashboardGrid";
 import { DashboardSidebars } from "../DashboardSidebars";
 import DashboardControls from "../../hoc/DashboardControls";
 import DashboardEmptyState from "./DashboardEmptyState/DashboardEmptyState";
-import { createThumb } from "metabase/dashboard/components/utils/thumb";
-import { zkspaceDate } from "metabase/lib/register-activity";
 import {
   CardsContainer,
   DashboardBody,
@@ -39,9 +43,6 @@ import {
   ParametersAndCardsContainer,
   ParametersWidgetContainer,
 } from "./Dashboard.styled";
-import MetabaseUtils from "metabase/lib/utils";
-import DashboardAd from "metabase/containers/news/components/DashboardAd";
-import { parseHashOptions } from "metabase/lib/browser";
 
 // const SCROLL_THROTTLE_INTERVAL = 1000 / 24;
 const THROTTLE_PERIOD = 300;
@@ -122,6 +123,7 @@ class Dashboard extends Component {
     setSubmitAddrZkspaceModal: PropTypes.func,
     dashboardBeforeEditing: PropTypes.any,
     replace: PropTypes.func,
+    navigateToNewCardFromDashboard: PropTypes.func,
   };
 
   static defaultProps = {
