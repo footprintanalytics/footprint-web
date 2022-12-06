@@ -1,52 +1,64 @@
+/* eslint-disable react/display-name */
+/* eslint-disable react/prop-types */
 import "./index.css";
 import React from "react";
-import { Table, Form, Input, Select, Row, Col, Button } from "antd";
+import { Table, Form, Row, Col, Button, Typography, Tag } from "antd";
+import { useQuery } from "react-query";
+import { getContractSubmittedList } from "metabase/new-service";
+import dayjs from "dayjs";
 
-const SubmitContract = () => {
+const SubmitContract = props => {
+  const { isLoading, data } = useQuery(
+    ["getContractSubmittedList"],
+    async () => getContractSubmittedList(),
+    { refetchOnWindowFocus: false, retry: 0 },
+  );
+
   const columns = [
     {
       title: "Contract",
-      dataIndex: "contract",
-      key: "contract",
-    },
-    {
-      title: "Address",
-      dataIndex: "address",
-      key: "address",
+      render: (_, record) => {
+        return (
+          <>
+            <Typography.Text>{record.contract_name}</Typography.Text>
+            <br />
+            <Typography.Text type="secondary">
+              {record.contract_address}
+            </Typography.Text>
+          </>
+        );
+      },
     },
     {
       title: "Project",
-      dataIndex: "project",
-      key: "project",
+      dataIndex: "protocol_name",
     },
     {
       title: "Status",
       dataIndex: "status",
-      key: "status",
+      // filters: [
+      //   { text: "pending", value: "pending" },
+      //   { text: "reject", value: "reject" },
+      //   { text: "approved", value: "approved" },
+      // ],
+      // onFilter: (value, record) => record.status.indexOf(value) === 0,
+      render: text => {
+        switch (text) {
+          case "reject":
+            return <Tag color="error">{text}</Tag>;
+          case "approved":
+            return <Tag color="success">{text}</Tag>;
+          default:
+            return <Tag color="processing">{text}</Tag>;
+        }
+      },
     },
     {
       title: "Submitted at",
-      dataIndex: "submittedAt",
-      key: "submittedAt",
-    },
-  ];
-
-  const data = [
-    {
-      key: "1",
-      contract: "VegOutHareClub",
-      address: "0x948c78e96be10aaf90741cb28ae4793df9f93066",
-      project: "Veg Out Hare Club",
-      status: "success",
-      submittedAt: "2022-11-12 13:22:33",
-    },
-    {
-      key: "2",
-      contract: "VegOutHareClub",
-      address: "0x948c78e96be10aaf90741cb28ae4793df9f93066",
-      project: "Veg Out Hare Club",
-      status: "success",
-      submittedAt: "2022-11-12 13:22:33",
+      dataIndex: "submitted_at",
+      render: text => {
+        return dayjs(text).format("YYYY-MM-DD HH:mm");
+      },
     },
   ];
 
@@ -61,25 +73,26 @@ const SubmitContract = () => {
         <Row gutter={16}>
           <Col span={16}>
             <Form.Item>
-              <Button type="primary">Add contract</Button>
-            </Form.Item>
-          </Col>
-          <Col span={5}>
-            <Form.Item label="Search your contracts">
-              <Input placeholder="Enter project, contract, address" />
-            </Form.Item>
-          </Col>
-          <Col span={3}>
-            <Form.Item label="Status">
-              <Select
-                placeholder="Select status"
-                options={[{ value: "success", label: "success" }]}
-              />
+              <Button
+                type="primary"
+                onClick={() => {
+                  props.router.push("/submit/contract/add");
+                }}
+              >
+                Add contract
+              </Button>
             </Form.Item>
           </Col>
         </Row>
       </Form>
-      <Table columns={columns} dataSource={data} pagination={false} />
+      <Table
+        size="small"
+        rowKey="_id"
+        loading={isLoading}
+        columns={columns}
+        dataSource={data}
+        pagination={false}
+      />
     </div>
   );
 };

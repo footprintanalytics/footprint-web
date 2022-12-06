@@ -59,6 +59,10 @@ const footers = [
         label: "Footprint Enterprise",
         url: "/defi360",
       },
+      {
+        label: "Submit Contract",
+        url: "/submit/contract",
+      },
     ],
   },
   {
