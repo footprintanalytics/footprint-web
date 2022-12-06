@@ -9,7 +9,6 @@ import { toLower } from "lodash";
 
 const CHAIN_LIST = [
   { value: "Ethereum", label: "Ethereum" },
-  { value: "xDAI", label: "xDAI" },
   { value: "Polygon", label: "Polygon" },
   { value: "Optimism", label: "Optimism" },
   { value: "BNB Chain", label: "BNB Chain" },
