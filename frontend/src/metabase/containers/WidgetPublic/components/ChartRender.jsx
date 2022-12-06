@@ -12,8 +12,9 @@ const ChartRender = ({ card, public_uuid }) => {
   const params = {};
   const cardId = card?.card_id || "";
 
-  const name = get(get(card, "visualization_settings"), "card.title") || card?.card?.name
-  
+  const name =
+    get(get(card, "visualization_settings"), "card.title") || card?.card?.name;
+
   const { isLoading, data } = useQuery(
     ["publicDashboard", public_uuid, cardId, params],
     async () => {
