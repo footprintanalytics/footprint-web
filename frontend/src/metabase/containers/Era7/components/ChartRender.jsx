@@ -7,8 +7,7 @@ import ScalarRender from "metabase/containers/Era7/components/ScalarRender";
 import LineRender from "metabase/containers/Era7/components/LineRender";
 import LoadingSpinner from "metabase/components/LoadingSpinner";
 
-const ChartRender = ({ card }) => {
-  const public_uuid = "687fc0f7-9808-46a7-9e2e-1528471bba8a";
+const ChartRender = ({ card, public_uuid }) => {
   const params = {};
   const cardId = card?.card_id || "";
   const { isLoading, data } = useQuery(

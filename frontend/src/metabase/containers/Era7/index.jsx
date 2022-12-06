@@ -37,7 +37,7 @@ const Era7 = ({ uuid }) => {
       {data?.ordered_cards
         ?.sort((a, b) => a.col - b.col)
         ?.map(card => {
-          return <ChartRender key={card?.id} card={card} />;
+          return <ChartRender key={card?.id} card={card} public_uuid={public_uuid}/>;
         })}
       <img
         src="https://statichk.footprint.network/img_nav_logo_v5.svg"
