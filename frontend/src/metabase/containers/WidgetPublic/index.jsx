@@ -4,11 +4,11 @@ import "./index.css";
 import { useQuery } from "react-query";
 import { publicDashboard } from "metabase/new-service";
 import { QUERY_OPTIONS_NORMAL } from "metabase/containers/dashboards/shared/config";
-import ChartRender from "metabase/containers/Era7/components/ChartRender";
+import ChartRender from "metabase/containers/WidgetPublic/components/ChartRender";
 import LoadingSpinner from "metabase/components/LoadingSpinner";
 import { connect } from "react-redux";
 
-const Era7 = ({ uuid }) => {
+const WidgetPublic = ({ uuid }) => {
   const public_uuid = uuid;
 
   const params = {};
@@ -37,7 +37,9 @@ const Era7 = ({ uuid }) => {
       {data?.ordered_cards
         ?.sort((a, b) => a.col - b.col)
         ?.map(card => {
-          return <ChartRender key={card?.id} card={card} public_uuid={public_uuid}/>;
+          return (
+            <ChartRender key={card?.id} card={card} public_uuid={public_uuid} />
+          );
         })}
       <img
         src="https://statichk.footprint.network/img_nav_logo_v5.svg"
@@ -54,4 +56,4 @@ const mapStateToProps = (state, props) => {
   };
 };
 
-export default connect(mapStateToProps, null)(Era7);
+export default connect(mapStateToProps, null)(WidgetPublic);

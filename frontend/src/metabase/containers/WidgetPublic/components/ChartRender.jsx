@@ -3,8 +3,8 @@ import React from "react";
 import { useQuery } from "react-query";
 import { publicDashboardChartData } from "metabase/new-service";
 import { QUERY_OPTIONS_NORMAL } from "metabase/containers/dashboards/shared/config";
-import ScalarRender from "metabase/containers/Era7/components/ScalarRender";
-import LineRender from "metabase/containers/Era7/components/LineRender";
+import ScalarRender from "metabase/containers/WidgetPublic/components/ScalarRender";
+import LineRender from "metabase/containers/WidgetPublic/components/LineRender";
 import LoadingSpinner from "metabase/components/LoadingSpinner";
 
 const ChartRender = ({ card, public_uuid }) => {
