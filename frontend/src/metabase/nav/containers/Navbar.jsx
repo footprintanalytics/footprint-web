@@ -78,7 +78,7 @@ const menus = [
   {
     title: "NFT",
     icon: "menu_home",
-    path: "https://nft.footprint.network/nft/collection",
+    path: "https://nft.footprint.network",
     auth: false,
     open: true,
   },
