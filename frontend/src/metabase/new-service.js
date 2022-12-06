@@ -431,3 +431,11 @@ export const getContractProtocolByAddress = params => {
 export const submitContract = params => {
   return POST(`/api/v1/contract/submit`, params);
 };
+
+export const publicDashboard = (uuid, params) => {
+  return GET(`api/v1/public/dashboard/${uuid}`, { silentFp: true });
+};
+
+export const publicDashboardChartData = (uuid, cardId, params) => {
+  return GET(`api/public/dashboard/${uuid}/card/${cardId}`, { silentFp: true });
+};

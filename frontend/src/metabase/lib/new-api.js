@@ -64,6 +64,7 @@ axios.interceptors.response.use(
 
 function errorHandle(err) {
   if (err.response) {
+    const { config } = err.response;
     const time = getTime() - err.response.config.requestime;
     switch (err.response.status) {
       case 401:
@@ -84,7 +85,9 @@ function errorHandle(err) {
           err.response.status || 601,
           err.message,
         );
-        message.error("Service exception, please contact the administrator");
+        if (!config?.params?.silentFp) {
+          message.error("Service exception, please contact the administrator");
+        }
     }
   } else {
     const time = getTime() - err.config.requestime;
