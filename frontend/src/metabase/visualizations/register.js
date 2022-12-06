@@ -26,6 +26,17 @@ import PivotTable from "./visualizations/PivotTable";
 import ListViz from "./visualizations/List";
 import Image from "./visualizations/Image";
 import Video from "./visualizations/Video";
+import RowRace from "./visualizations/RowRace";
+import LineRace from "./visualizations/LineRace";
+import Circle from "./visualizations/Circle";
+import TreeMap from "./visualizations/TreeMap";
+import DynamicPie from "./visualizations/DynamicPie";
+import Sunburst from "./visualizations/Sunburst";
+import Rose from "./visualizations/Rose";
+import NestedPies from "./visualizations/NestedPies";
+import BarStack from "./visualizations/BarStack";
+import DoubleScalar from "metabase/visualizations/visualizations/DoubleScalar";
+import Graph from "./visualizations/Graph";
 
 export default function () {
   registerVisualization(Scalar);
@@ -52,6 +63,17 @@ export default function () {
   //footprint
   registerVisualization(Image);
   registerVisualization(Video);
+  registerVisualization(RowRace);
+  registerVisualization(LineRace);
+  registerVisualization(Circle);
+  registerVisualization(TreeMap);
+  registerVisualization(DynamicPie);
+  registerVisualization(Sunburst);
+  registerVisualization(Rose);
+  registerVisualization(NestedPies);
+  registerVisualization(BarStack);
+  registerVisualization(DoubleScalar);
+  registerVisualization(Graph);
 
 
   setDefaultVisualization(Table);

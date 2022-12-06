@@ -471,14 +471,14 @@ function AhHocQuestionLeftSide(props) {
                   />
                 </ViewHeaderIconButtonContainer>
               )}
-              {NativeQueryButton.shouldRender(props) && (
+              {/*{NativeQueryButton.shouldRender(props) && (
                 <NativeQueryButton
                   size={16}
                   question={question}
                   updateQuestion={updateQuestion}
                   data-metabase-event="Notebook Mode; Convert to SQL Click"
                 />
-              )}
+              )}*/}
               {isRunnable && isNative && (
                 <QuestionRunningTime {...this.props} />
               )}
@@ -674,6 +674,7 @@ function ViewTitleHeaderRightSide(props) {
       </Menu.Item>,
     );
   }
+
   if (NativeQueryButton.shouldRender(props)) {
     menuMoreOptions.push(
       <Menu.Item key="view_sql">
@@ -786,10 +787,10 @@ function ViewTitleHeaderRightSide(props) {
           Visualization
         </Button>
       )}
-      {(isAdmin || user.groups.includes("Inner")) && (
+      {/*{(isAdmin || user.groups.includes("Inner")) && (
         <Button
           onlyIcon
-          className="ml1 Question-header-btn-new"
+          className="Question-header-btn-new"
           iconColor="#7A819B"
           iconSize={16}
           onClick={() => {
@@ -805,7 +806,7 @@ function ViewTitleHeaderRightSide(props) {
             Indicator
           </div>
         </Button>
-      )}
+      )}*/}
       {menuMoreOptions.length > 0 && (
         <Dropdown
           overlay={<Menu>{menuMoreOptions}</Menu>}

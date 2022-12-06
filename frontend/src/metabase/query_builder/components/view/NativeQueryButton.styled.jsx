@@ -23,7 +23,7 @@ export const SqlIconButton = styled(Button)`
 `;
 
 SqlIconButton.defaultProps = {
-  icon: "sql",
+  // icon: "sql",
 };
 
 export const NativeCodeWrapper = styled.pre`

@@ -413,3 +413,7 @@ export const isMultiCardSeries = series =>
 export function replaceNullValuesForOrdinal(value) {
   return value === null ? NULL_NUMERIC_VALUE : value;
 }
+
+export function formatNull(value) {
+  return value === null ? NULL_DISPLAY_VALUE : value;
+}

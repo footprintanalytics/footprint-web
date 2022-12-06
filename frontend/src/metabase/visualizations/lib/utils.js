@@ -396,3 +396,21 @@ export const moveElement = (array, oldIndex, newIndex) => {
   arrayCopy.splice(newIndex, 0, arrayCopy.splice(oldIndex, 1)[0]);
   return arrayCopy;
 };
+
+export function isSameSize(width, nextWidth, height, nextHeight) {
+  return (
+    isSameSingleSize(width, nextWidth) && isSameSingleSize(height, nextHeight)
+  );
+}
+
+export function isSameParam(props, nextProps, params) {
+  const result = params.map(p => props[p] === nextProps[p]);
+  return !result.includes(false);
+}
+
+function isSameSingleSize(p1, p2) {
+  if (!p1 && p1 === p2) {
+    return true;
+  }
+  return p1 && p2 && Math.abs(p1.toFixed(2) - p2.toFixed(2)) < 0.5;
+}
