@@ -92,6 +92,7 @@ export default {
   dataApi: loadable(() => import("metabase/containers/dataApi")),
   dataApiPrice: loadable(() => import("metabase/containers/dataApi/price")),
   dataApiProduct: loadable(() => import("metabase/containers/dataApi/product")),
+  Era7: loadable(() => import("metabase/containers/Era7")),
 
   // account
   AccountSettingsApp: loadable(() => import("./account/settings/containers/AccountSettingsApp")),
