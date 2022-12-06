@@ -62,6 +62,8 @@ import {
 import QuestionRunningTime from "./QuestionRunningTime";
 import { closeNewGuide } from "../../../containers/newguide/newGuide";
 import { getVisualizationRaw } from "../../../visualizations";
+import { Dropdown, Menu } from "antd";
+import NeedPermissionModal from "../../../components/NeedPermissionModal";
 
 const viewTitleHeaderPropTypes = {
   question: PropTypes.object.isRequired,
@@ -545,6 +547,12 @@ ViewTitleHeaderRightSide.propTypes = {
   onCloseChartType: PropTypes.func,
   onOpenChartType: PropTypes.func,
   isObjectDetail: PropTypes.bool,
+  setShowTemplateChart: PropTypes.func,
+  setShowPreviewChart: PropTypes.func,
+  handleQuestionSideHide: PropTypes.func,
+  card: PropTypes.object,
+  canNativeQuery: PropTypes.bool,
+  router: PropTypes.any,
 };
 
 function ViewTitleHeaderRightSide(props) {
@@ -592,7 +600,14 @@ function ViewTitleHeaderRightSide(props) {
     onCloseChartType,
     onOpenChartType,
     isObjectDetail,
+    setShowTemplateChart,
+    setShowPreviewChart,
+    handleQuestionSideHide,
+    card,
+    canNativeQuery,
+    router,
   } = props;
+  const [showVip, setShowVip] = useState(false);
   const isShowingNotebook = queryBuilderMode === "notebook";
   const query = question.query();
   const isReadOnlyQuery = query.readOnly();
@@ -634,6 +649,52 @@ function ViewTitleHeaderRightSide(props) {
       onOpenQuestionInfo();
     }
   }, [isShowingQuestionInfoSidebar, onOpenQuestionInfo, onCloseQuestionInfo]);
+
+  const menuMoreOptions = [];
+  const showChartTemplate = !isNative;
+
+  if (showChartTemplate) {
+    menuMoreOptions.push(
+      <Menu.Item key="template">
+        <Button
+          iconColor="#000000"
+          icon="chart_template"
+          iconSize={16}
+          borderless
+          onClick={() => {
+            trackStructEvent(`chart click show query-template`);
+            setShowTemplateChart({
+              show: true,
+              databaseId: card.dataset_query.database,
+            });
+          }}
+        >
+          Template
+        </Button>
+      </Menu.Item>,
+    );
+  }
+  if (NativeQueryButton.shouldRender(props)) {
+    menuMoreOptions.push(
+      <Menu.Item key="view_sql">
+        <div
+          style={{
+            display: "flex",
+            flexDirection: "row",
+            alignItems: "center",
+          }}
+        >
+          <NativeQueryButton
+            borderless
+            question={question}
+            canNativeQuery={canNativeQuery}
+            btnString={"View the SQL"}
+            data-metabase-event={`Notebook Mode; Convert to SQL Click`}
+          />
+        </div>
+      </Menu.Item>,
+    );
+  }
 
   return (
     <ViewHeaderActionPanel data-testid="qb-header-action-panel">
@@ -725,7 +786,7 @@ function ViewTitleHeaderRightSide(props) {
           Visualization
         </Button>
       )}
-      {/*{(isAdmin || user.groups.includes("Inner")) && (
+      {(isAdmin || user.groups.includes("Inner")) && (
         <Button
           onlyIcon
           className="ml1 Question-header-btn-new"
@@ -733,7 +794,7 @@ function ViewTitleHeaderRightSide(props) {
           iconSize={16}
           onClick={() => {
             router.push(`/chart/buffet${location.hash}`);
-            this.props.handleQuestionSideHide({ hide: false });
+            handleQuestionSideHide({ hide: false });
           }}
         >
           <div className="flex align-center">
@@ -761,15 +822,15 @@ function ViewTitleHeaderRightSide(props) {
           ></Button>
         </Dropdown>
       )}
-      {this.state.showVip && (
+      {showVip && (
         <NeedPermissionModal
           title="Upgrade your account to access SQL query"
-          onClose={() => this.setState({ showVip: false })}
+          onClose={() => setShowVip(false)}
           afterChangeLocation={() => {
-            this.setState({ showVip: false });
+            setShowVip(false);
           }}
         />
-      )}*/}
+      )}
       {hasExploreResultsLink && <ExploreResultsLink question={question} />}
       {/*{hasRunButton && !isShowingNotebook && (
         <ViewHeaderIconButtonContainer>
