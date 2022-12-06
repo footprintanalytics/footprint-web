@@ -64,6 +64,7 @@ import { closeNewGuide } from "../../../containers/newguide/newGuide";
 import { getVisualizationRaw } from "../../../visualizations";
 import { Dropdown, Menu } from "antd";
 import NeedPermissionModal from "../../../components/NeedPermissionModal";
+import { updateQuestion } from "../../actions";
 
 const viewTitleHeaderPropTypes = {
   question: PropTypes.object.isRequired,
@@ -431,7 +432,7 @@ function AhHocQuestionLeftSide(props) {
           {isNative ? (
             <div className="flex">
               {t`New Chart`}
-              <ToggleCreateType question={question} router={router} />
+              <ToggleCreateType question={question} router={router} updateQuestion={updateQuestion}/>
               {hasRunButton && !isShowingNotebook && (
                 <ViewHeaderIconButtonContainer>
                   <RunButtonWithTooltip
@@ -474,7 +475,7 @@ function AhHocQuestionLeftSide(props) {
                   ?.displayName()}
                 tableId={question?.query()?.table()?.id}
               />
-              <ToggleCreateType question={question} router={router} />
+              <ToggleCreateType question={question} router={router} updateQuestion={updateQuestion}/>
               {hasRunButton && !isShowingNotebook && (
                 <ViewHeaderIconButtonContainer>
                   <RunButtonWithTooltip

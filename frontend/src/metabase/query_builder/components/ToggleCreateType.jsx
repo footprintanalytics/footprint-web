@@ -11,7 +11,7 @@ import { getTableNameListFromSQL } from "metabase/lib/formatting";
 import { tableSearchV2 } from "metabase/new-service";
 import { getProject } from "metabase/lib/project_info";
 
-const ToggleCreateType = ({ question, router }) => {
+const ToggleCreateType = ({ question, updateQuestion, router }) => {
   const isNative = question.isNative();
 
   const title = isNative ? "to chart mode" : "to SQL mode";
@@ -42,7 +42,7 @@ const ToggleCreateType = ({ question, router }) => {
     const { query } = datasetQuery.native;
     const { database: databaseId } = datasetQuery;
     const tableNameList = getTableNameListFromSQL(query);
-
+    console.log("tableNameList", tableNameList)
     if (!tableNameList.length) {
       router.replace(Urls.newQuestion());
       return;
@@ -58,6 +58,7 @@ const ToggleCreateType = ({ question, router }) => {
 
     const table = search?.list[0]?.tables?.find(f => f.name === tableName);
     const tableId = table?.table_id;
+    console.log("tableId", tableId)
     router.replace(Urls.newQuestion({ databaseId, tableId, type: "query" }));
   };
 
@@ -69,9 +70,11 @@ const ToggleCreateType = ({ question, router }) => {
     const native = await MetabaseApi.native(datasetQuery);
     const query = formatNativeQuery(native?.query, engine);
 
-    question
-      .setDatasetQuery({ type: "native", native: { query }, database })
-      .update(null, { shouldUpdateUrl: true });
+    updateQuestion(
+      question
+        .setDatasetQuery({ type: "native", native: { query }, database }),
+      { shouldUpdateUrl: true },
+    )
   };
 
   return (

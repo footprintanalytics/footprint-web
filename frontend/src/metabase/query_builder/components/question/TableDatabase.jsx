@@ -23,7 +23,6 @@ const TableDatabase = props => {
       replace(`/chart?dbId=${value}`);
     }
   };
-  console.log("databases", databases)
 
   if (!databases || databases.length < 2) {
     return null;

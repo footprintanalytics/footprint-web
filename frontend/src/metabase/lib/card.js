@@ -48,7 +48,6 @@ export async function loadCardForPreview(cardId) {
 }
 
 function getCleanCard(card) {
-  console.log("carddddd", card)
   const dataset_query = Utils.copy(card.dataset_query || {});
   if (dataset_query.query) {
     dataset_query.query = Q_DEPRECATED.cleanQuery(dataset_query.query);

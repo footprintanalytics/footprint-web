@@ -147,7 +147,6 @@ class Question extends Component {
       !userNewGuide;
     const hasQuery = location.hash || params.slug;
 
-    console.log("configconfig", settings,config, hideSide, hasQuery)
     const questionSideStyle = {
       minWidth: hideSide && hasQuery ? 0 : 360,
       width: hideSide && hasQuery ? 0 : 360,

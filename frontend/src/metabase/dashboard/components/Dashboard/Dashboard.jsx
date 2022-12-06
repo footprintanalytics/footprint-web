@@ -235,11 +235,8 @@ class Dashboard extends Component {
       user,
     } = this.props;
 
-    console.log("loadDashboard1", urlDashboardName, urlUserName)
     initialize();
-    console.log("loadDashboard2")
     loadDashboardParams();
-    console.log("loadDashboard3")
 
     try {
       if (urlDashboardName && urlUserName) {

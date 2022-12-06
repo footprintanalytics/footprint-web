@@ -584,5 +584,5 @@ const mapStateToProps = state => {
 
 export default _.compose(
   ExplicitSize({ refreshMode: "debounceLeading" }),
-  connect(mapStateToProps, { questionSideHideAction, setNewGuideInfo, }),
+  connect(mapStateToProps, { questionSideHideAction, setNewGuideInfo, updateQuestion, }),
 )(View);
