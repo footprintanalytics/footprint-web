@@ -1,0 +1,47 @@
+.min-widget {
+  display: flex;
+  align-items: center;
+}
+
+.min-widget img {
+  position: absolute;
+  bottom: 1px;
+  left: 1px;
+  opacity: 0.2;
+}
+
+.min-widget__inner {
+}
+
+.min-widget__item {
+  margin: 2px;
+  width: 250px;
+  height: 150px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 8px;
+  background: white;
+}
+
+.min-widget__item-inner {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100%;
+}
+
+.min-widget__item-scalar {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+.min-widget__item-scalar h3 {
+  font-size: 20px;
+}
+
+.min-widget__item-scalar span {
+  font-size: 14px;
+}
