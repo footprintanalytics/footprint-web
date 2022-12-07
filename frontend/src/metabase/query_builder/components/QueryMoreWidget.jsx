@@ -86,7 +86,7 @@ const QueryMoreWidget = ({
             onClick={() => onOpenModal(MODAL_TYPES.CLONE)}
           >{t`Duplicate this query`}</Button>
         </Box> */}
-          <Box w={"100%"}>
+          <div style={{ width: "100%" }}>
             <Button
               className="Question-header-btn Question-header-btn--full"
               iconColor="#7A819B"
@@ -94,7 +94,7 @@ const QueryMoreWidget = ({
               iconSize={16}
               onClick={() => onOpenModal(MODAL_TYPES.ARCHIVE)}
             >{t`Delete`}</Button>
-          </Box>
+          </div>
         </div>
       </div>
     </PopoverWithTrigger>

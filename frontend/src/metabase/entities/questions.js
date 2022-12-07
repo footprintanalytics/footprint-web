@@ -14,12 +14,17 @@ import Collections, {
 } from "metabase/entities/collections";
 import { canonicalCollectionId } from "metabase/collections/utils";
 
+import { GET } from "metabase/lib/api";
 import forms from "./questions/forms";
 
 const Questions = createEntity({
   name: "questions",
   nameOne: "question",
   path: "/api/card",
+
+  api: {
+    get: GET("/api/v1/card/:id")
+  },
 
   objectActions: {
     setArchived: ({ id, model }, archived, opts) =>

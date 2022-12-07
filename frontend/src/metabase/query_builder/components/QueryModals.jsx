@@ -30,6 +30,8 @@ import NewEventModal from "metabase/timelines/questions/containers/NewEventModal
 import EditEventModal from "metabase/timelines/questions/containers/EditEventModal";
 import MoveEventModal from "metabase/timelines/questions/containers/MoveEventModal";
 import QuestionMoveToast from "./QuestionMoveToast";
+import ShareModal from "metabase/containers/home/components/ShareModal";
+import EditQuestionInfoModal from "metabase/query_builder/components/view/EditQuestionInfoModal";
 
 const mapDispatchToProps = {
   setQuestionCollection: Questions.actions.setCollection,
@@ -68,8 +70,9 @@ class QueryModals extends React.Component {
       onCloseModal,
       onOpenModal,
       setQueryBuilderMode,
+      user,
     } = this.props;
-
+    const publicAnalyticPermission = user && user.publicAnalytic === "write";
     return modal === MODAL_TYPES.SAVE ? (
       <Modal form onClose={onCloseModal}>
         <SaveQuestionModal
@@ -224,10 +227,32 @@ class QueryModals extends React.Component {
       <Modal onClose={onCloseModal}>
         <ArchiveQuestionModal question={question} onClose={onCloseModal} />
       </Modal>
-    ) : modal === MODAL_TYPES.EMBED ? (
-      <Modal full onClose={onCloseModal}>
-        <QuestionEmbedWidget card={this.props.card} onClose={onCloseModal} />
+    ) : modal === MODAL_TYPES.EDIT ? (
+      <Modal onClose={onCloseModal}>
+        <EditQuestionInfoModal
+          question={question}
+          publicAnalyticPermission={publicAnalyticPermission}
+          onClose={onCloseModal}
+          onSave={card => this.props.onSave(card, false)}
+        />
       </Modal>
+    ) : modal === MODAL_TYPES.EMBED ? (
+      /*<Modal full onClose={onCloseModal}>
+        <QuestionEmbedWidget card={this.props.card} onClose={onCloseModal} />
+      </Modal>*/
+      <ShareModal
+        resource={{
+          open: true,
+          public_uuid: this.props.card.public_uuid,
+          type: "card",
+          name: this.props.card.name,
+          id: this.props.card.id,
+          creatorId: this.props.card.creator_id,
+          onlyEmbed: this.props.onlyEmbed,
+        }}
+        onAfterChangePublicUuid={this.onAfterChangePublicUuid}
+        onClose={onCloseModal}
+      />
     ) : modal === MODAL_TYPES.CLONE ? (
       <Modal onClose={onCloseModal}>
         <EntityCopyModal

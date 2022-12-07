@@ -14,7 +14,7 @@ import ViewButton from "metabase/query_builder/components/view/ViewButton";
 import { usePrevious } from "metabase/hooks/use-previous";
 import { useToggle } from "metabase/hooks/use-toggle";
 import { useOnMount } from "metabase/hooks/use-on-mount";
-
+import { set } from "lodash";
 import { MODAL_TYPES } from "metabase/query_builder/constants";
 import SavedQuestionHeaderButton from "metabase/query_builder/components/SavedQuestionHeaderButton/SavedQuestionHeaderButton";
 
@@ -65,6 +65,12 @@ import { getVisualizationRaw } from "../../../visualizations";
 import { Dropdown, Menu } from "antd";
 import NeedPermissionModal from "../../../components/NeedPermissionModal";
 import { updateQuestion } from "../../actions";
+import DashboardCardDisplayInfo from "../../../components/DashboardCardDisplayInfo";
+import Tooltip from "../../../components/Tooltip";
+import Favorite from "../../../containers/explore/components/Favorite";
+import QueryDownloadWidget from "../QueryDownloadWidget";
+import QuestionEmbedWidget from "../../containers/QuestionEmbedWidget";
+import QueryMoreWidget from "../QueryMoreWidget";
 
 const viewTitleHeaderPropTypes = {
   question: PropTypes.object.isRequired,
@@ -272,6 +278,7 @@ SavedQuestionLeftSide.propTypes = {
   isShowingQuestionDetailsSidebar: PropTypes.bool,
   onOpenQuestionInfo: PropTypes.func.isRequired,
   onSave: PropTypes.func,
+  card: PropTypes.object,
 };
 
 function SavedQuestionLeftSide(props) {
@@ -281,16 +288,17 @@ function SavedQuestionLeftSide(props) {
     isAdditionalInfoVisible,
     onOpenQuestionInfo,
     onSave,
+    card,
   } = props;
 
-  const [showSubHeader, setShowSubHeader] = useState(true);
+  const [showSubHeader, setShowSubHeader] = useState(false);
 
-  useOnMount(() => {
+ /* useOnMount(() => {
     const timerId = setTimeout(() => {
       setShowSubHeader(false);
     }, 4000);
     return () => clearTimeout(timerId);
-  });
+  });*/
 
   const hasLastEditInfo = question.lastEditInfo() != null;
   const isDataset = question.isDataset();
@@ -303,7 +311,7 @@ function SavedQuestionLeftSide(props) {
     },
     [question, onSave],
   );
-
+  console.log("cardcardcard", card)
   return (
     <SavedQuestionLeftSideRoot
       data-testid="qb-header-left-side"
@@ -331,8 +339,15 @@ function SavedQuestionLeftSide(props) {
             ]}
           />
         </SavedQuestionHeaderButtonContainer>
+
+        <DashboardCardDisplayInfo
+          authorName={card.creator && card.creator.name}
+          date={card.created_at}
+          read={card.statistics && card.statistics.view}
+        />
+
       </ViewHeaderMainLeftContentContainer>
-      {isAdditionalInfoVisible && (
+      {/*{isAdditionalInfoVisible && (
         <ViewHeaderLeftSubHeading>
           {QuestionDataSource.shouldRender(props) && !isDataset && (
             <StyledQuestionDataSource
@@ -348,7 +363,7 @@ function SavedQuestionLeftSide(props) {
             />
           )}
         </ViewHeaderLeftSubHeading>
-      )}
+      )}*/}
     </SavedQuestionLeftSideRoot>
   );
 }
@@ -503,7 +518,7 @@ function AhHocQuestionLeftSide(props) {
                 />
               )}*/}
               {isRunnable && isNative && (
-                <QuestionRunningTime {...this.props} />
+                <QuestionRunningTime {...props} />
               )}
             </div>
           )}
@@ -576,8 +591,10 @@ ViewTitleHeaderRightSide.propTypes = {
   card: PropTypes.object,
   canNativeQuery: PropTypes.bool,
   router: PropTypes.any,
+  downloadImageAction: PropTypes.func,
 };
 
+// eslint-disable-next-line complexity
 function ViewTitleHeaderRightSide(props) {
   const {
     question,
@@ -588,16 +605,10 @@ function ViewTitleHeaderRightSide(props) {
     isSaved,
     isDataset,
     isNative,
-    isRunnable,
-    isRunning,
-    isNativeEditorOpen,
     isShowingSummarySidebar,
     isDirty,
     isResultDirty,
     isActionListVisible,
-    runQuestionQuery,
-    updateQuestion,
-    cancelQuery,
     onOpenModal,
     onEditSummary,
     onCloseSummary,
@@ -605,14 +616,10 @@ function ViewTitleHeaderRightSide(props) {
     turnDatasetIntoQuestion,
     turnQuestionIntoAction,
     turnActionIntoQuestion,
-    areFiltersExpanded,
-    onExpandFilters,
-    onCollapseFilters,
     isShowingQuestionInfoSidebar,
     onCloseQuestionInfo,
     onOpenQuestionInfo,
     onModelPersistenceChange,
-    onQueryChange,
     user,
     isShowingChartSettingsSidebar,
     onCloseChartSettings,
@@ -629,6 +636,7 @@ function ViewTitleHeaderRightSide(props) {
     card,
     canNativeQuery,
     router,
+    downloadImageAction,
   } = props;
   const [showVip, setShowVip] = useState(false);
   const isShowingNotebook = queryBuilderMode === "notebook";
@@ -720,6 +728,107 @@ function ViewTitleHeaderRightSide(props) {
     );
   }
 
+  if (isSaved) {
+    return (
+      <ViewHeaderActionPanel data-testid="qb-header-action-panel">
+        <Tooltip tooltip={t`Add to favorite list`}>
+          <Favorite
+            onlyIcon
+            className="Question-header-btn-with-text"
+            like={
+              // -1
+              card && card.statistics && card.statistics.favorite
+            }
+            isLike={card.isFavorite}
+            type="card"
+            id={card.id}
+            uuid={card.public_uuid}
+          />
+        </Tooltip>
+        {isOwner && (
+          <Tooltip tooltip={t`Edit`}>
+            <Button
+              onlyIcon
+              className={`Question-header-btn `}
+              iconColor="#7A819B"
+              icon="pencil"
+              iconSize={16}
+              onClick={() => {
+                set(question, "_card.original_card_id", card.id);
+                question.update(null, {
+                  reload: false,
+                  shouldUpdateUrl: true,
+                });
+              }}
+            />
+          </Tooltip>
+        )}
+        {(!!card.public_uuid || isOwner || isAdmin) && (
+          <Tooltip tooltip={t`Duplicate this chart`}>
+            <Button
+              onlyIcon
+              className="Question-header-btn-with-text"
+              iconColor="#7A819B"
+              icon="duplicate"
+              iconSize={16}
+              color={"#7A819B"}
+              onClick={() => onOpenModal(MODAL_TYPES.CLONE)}
+            >
+              {card && card.statistics && `${card.statistics.copy}`}
+            </Button>
+          </Tooltip>
+        )}
+        {(!!card.public_uuid || isOwner || isAdmin) && (
+          <Tooltip tooltip={t`Snapshot`}>
+            <Button
+              onlyIcon
+              className="Question-header-btn"
+              iconColor="#7A819B"
+              icon="camera"
+              iconSize={16}
+              onClick={props.downloadImageAction}
+            />
+          </Tooltip>
+        )}
+        {(!!card.public_uuid || isOwner || isAdmin) &&
+        QueryDownloadWidget.shouldRender({
+          result,
+          isResultDirty,
+        }) && (
+          <QueryDownloadWidget
+            className=""
+            key="download"
+            card={question.card()}
+            result={result}
+          />
+        )}
+        {(!!card.public_uuid || isOwner) && QuestionEmbedWidget.shouldRender({
+          question,
+          isAdmin,
+          user,
+        }) && (
+          <QuestionEmbedWidgetButton
+            key="question-embed-widget-trigger"
+            onClick={params => onOpenModal("embed", params)}
+          />
+        )}
+        {(!!card.public_uuid || isOwner || isAdmin) && (
+          <QueryMoreWidget
+            className=""
+            key="more"
+            isAdmin={isAdmin}
+            isOwner={isOwner}
+            onOpenModal={onOpenModal}
+            user={user}
+            setShowSeoTagging={() =>
+              this.setState({ showSeoTaggingModal: true })
+            }
+          />
+        )}
+      </ViewHeaderActionPanel>
+    )
+  }
+
   return (
     <ViewHeaderActionPanel data-testid="qb-header-action-panel">
       {isOwner &&
@@ -787,7 +896,7 @@ function ViewTitleHeaderRightSide(props) {
           />
         // </ViewHeaderIconButtonContainer>
       )}
-      {result && !isObjectDetail && (<Button
+      {!isSaved && result && !isObjectDetail && (<Button
           disabled={queryBuilderMode !== "view"}
           onlyIcon
           className={`Question-header-btn-new ${
@@ -843,7 +952,7 @@ function ViewTitleHeaderRightSide(props) {
             icon="edit_more"
             iconSize={16}
             ml={1}
-          ></Button>
+          />
         </Dropdown>
       )}
       {showVip && (
@@ -932,3 +1041,48 @@ function ExploreResultsLink({ question }) {
 }
 
 ViewTitleHeader.propTypes = viewTitleHeaderPropTypes;
+
+export function QuestionEmbedWidgetButton({ onClick }) {
+  return (
+    <>
+      <Tooltip tooltip={t`Embed Widget`}>
+        <Button
+          onlyIcon
+          className="Question-header-btn"
+          icon="embed"
+          iconSize={16}
+          onClick={() => {
+            trackStructEvent(
+              "Sharing / Embedding",
+              "question",
+              "Sharing Link Clicked",
+            );
+            onClick({ onlyEmbed: true });
+          }}
+        />
+      </Tooltip>
+      <Tooltip tooltip={t`Sharing`}>
+        <Button
+          onlyIcon
+          className="Question-header-btn"
+          icon="share"
+          iconSize={16}
+          onClick={() => {
+            trackStructEvent(
+              "Sharing / Embedding",
+              "question",
+              "Sharing Link Clicked",
+            );
+            onClick({ onlyEmbed: false });
+          }}
+        />
+      </Tooltip>
+    </>
+  );
+}
+
+const QuestionEmbedWidgetTriggerPropTypes = {
+  onClick: PropTypes.func,
+};
+
+QuestionEmbedWidgetButton.propTypes = QuestionEmbedWidgetTriggerPropTypes;

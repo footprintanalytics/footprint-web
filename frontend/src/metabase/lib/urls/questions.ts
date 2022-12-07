@@ -6,7 +6,7 @@ import MetabaseSettings from "metabase/lib/settings";
 import { Card as BaseCard } from "metabase-types/types/Card";
 import Question, { QuestionCreatorOpts } from "metabase-lib/Question";
 
-import { appendSlug, extractQueryParams, guestUrl, publicUrl } from "./utils";
+import { appendSlug, dashboardQuestionUrl, extractQueryParams, guestUrl, publicUrl } from "./utils";
 import { optionsToHashParams } from "metabase/public/lib/embed";
 
 type Card = Partial<BaseCard> & {
@@ -193,4 +193,17 @@ export function guestQuestion({ uuid, name, search = "", options = null }: guest
     name,
     type: "question",
   })}${search}${optionsToHashParams(options)}`;
+}
+
+interface generalQuestionType {
+  id: string,
+  name: string,
+  search: string,
+  options: any,
+}
+
+export function generalQuestion({ id, name, search = "", options = null }: generalQuestionType) {
+  const questionUrl = dashboardQuestionUrl({ id, name, type: "question" });
+  const siteUrl = `${MetabaseSettings.get("site-url")}`;
+  return `${siteUrl}/${questionUrl}${search}${optionsToHashParams(options)}`;
 }
