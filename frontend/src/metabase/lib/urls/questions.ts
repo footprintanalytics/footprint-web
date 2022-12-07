@@ -35,6 +35,7 @@ export function question(
     isModelDetail = false,
   }: QuestionUrlBuilderParams = {},
 ) {
+  console.log("questionquestion")
   if (hash && typeof hash === "object") {
     hash = serializeCardForUrl(hash);
   }
@@ -55,9 +56,9 @@ export function question(
   }
 
   const isModel = card?.dataset || card?.model === "dataset";
-  let path = isModel ? "model" : "chart";
+  let type = isModel ? "model" : "chart";
   if (!card || !card.id) {
-    return `/${path}${query}${hash}`;
+    return `/${type}${query}${hash}`;
   }
 
   const { card_id, id, name } = card;
@@ -68,7 +69,13 @@ export function question(
    * There can be multiple instances of the same question in a dashboard, hence this distinction.
    */
   const questionId = card_id || id;
-  path = `/${path}/${questionId}`;
+
+  let path = dashboardQuestionUrl({
+    type: type,
+    name: card.name,
+    id: card.id,
+  });
+  // path = `/${path}/${questionId}`;
 
   /**
    * Although it's not possible to intentionally save a question without a name,
@@ -76,14 +83,14 @@ export function question(
    *
    * Please see: https://github.com/metabase/metabase/pull/15989#pullrequestreview-656646149
    */
-  if (name) {
+/*  if (name) {
     path = appendSlug(path, slugg(name));
-  }
+  }*/
 
   if (objectId) {
     path = `${path}/${objectId}`;
   }
-
+  console.log("`${path}${query}${hash}`", `${path}${query}${hash}`)
   return `${path}${query}${hash}`;
 }
 

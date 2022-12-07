@@ -131,22 +131,22 @@ const ViewFooter = ({
               onQueryChange={onQueryChange}
             />
           ),
-          QuestionLastUpdated.shouldRender({ result }) && (
+          /*QuestionLastUpdated.shouldRender({ result }) && (
             <QuestionLastUpdated
               key="last-updated"
               className="mx1 hide sm-show"
               result={result}
             />
-          ),
-          QueryDownloadWidget.shouldRender({ result, isResultDirty }) && (
-            <QueryDownloadWidget
+          ),*/
+          /*QueryDownloadWidget.shouldRender({ result, isResultDirty }) && (
+            <QueryDownloadWidgetFP
               key="download"
               className="mx1 hide sm-show"
               card={question.card()}
               result={result}
               visualizationSettings={visualizationSettings}
             />
-          ),
+          ),*/
           QuestionAlertWidget.shouldRender({
             question,
             visualizationSettings,
@@ -164,7 +164,7 @@ const ViewFooter = ({
               }
             />
           ),
-          QuestionEmbedWidget.shouldRender({ question, isAdmin }) && (
+          /*QuestionEmbedWidget.shouldRender({ question, isAdmin }) && (
             <QuestionEmbedWidgetTrigger
               key="embeds"
               onClick={() =>
@@ -173,7 +173,7 @@ const ViewFooter = ({
                   : onOpenModal("save-question-before-embed")
               }
             />
-          ),
+          ),*/
           QuestionTimelineWidget.shouldRender({ isTimeseries }) && (
             <QuestionTimelineWidget
               key="timelines"
@@ -254,13 +254,13 @@ const VizTableToggle = ({
   return (
     <Well className={className} onClick={() => onShowTable(!isShowingRawTable)}>
       <ToggleIcon active={isShowingRawTable} aria-label={t`Switch to data`}>
-        <Icon name="table2" />
+        <Icon name="table2" size={16}/>
       </ToggleIcon>
       <ToggleIcon
         active={!isShowingRawTable}
         aria-label={t`Switch to visualization`}
       >
-        <Icon name={vizIcon} />
+        <Icon name={vizIcon} size={16}/>
       </ToggleIcon>
     </Well>
   );

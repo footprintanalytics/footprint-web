@@ -40,6 +40,7 @@ import { getParameterValuesBySlug } from "metabase-lib/parameters/utils/paramete
 import { DashCardRoot } from "./DashCard.styled";
 import DashCardParameterMapper from "./DashCardParameterMapper";
 import "./DashCard.css";
+import QueryDownloadWidgetFP from "metabase/query_builder/components/QueryDownloadWidgetFP";
 
 const DATASET_USUALLY_FAST_THRESHOLD = 15 * 1000;
 
@@ -273,7 +274,7 @@ export default class DashCard extends Component {
             result,
             isResultDirty: false,
           }) && (
-            <QueryDownloadWidget
+            <QueryDownloadWidgetFP
               className="html2canvas-filter dash-card__button"
               card={dashcard.card}
               result={result}
@@ -402,7 +403,7 @@ export default class DashCard extends Component {
           totalNumGridCols={this.props.totalNumGridCols}
           actionButtons={
             isEmbed ? (
-              <QueryDownloadWidget
+              <QueryDownloadWidgetFP
                 className="m1 text-brand-hover text-light"
                 classNameClose="hover-child"
                 card={dashcard.card}

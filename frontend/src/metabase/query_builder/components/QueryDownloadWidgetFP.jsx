@@ -1,20 +1,20 @@
 /* eslint-disable react/prop-types */
 import React from "react";
 import PropTypes from "prop-types";
-import Button from "metabase/core/components/Button";
-
+import _ from "underscore";
 import { t } from "ttag";
 import { parse as urlParse } from "url";
 import querystring from "querystring";
+import cx from "classnames";
+import Button from "metabase/core/components/Button";
+
 
 import PopoverWithTrigger from "metabase/components/PopoverWithTrigger";
-import DownloadButton from "metabase/components/DownloadButton";
+import DownloadButtonFP from "metabase/components/DownloadButtonFP";
 import Tooltip from "metabase/components/Tooltip";
 
 import * as Urls from "metabase/lib/urls";
 
-import _ from "underscore";
-import cx from "classnames";
 
 const EXPORT_FORMATS = Urls.exportFormats;
 
@@ -48,9 +48,11 @@ const QueryDownloadWidget = ({
   >
     <div
       className="p2"
-      style={{ width: result.data && result.data.rows_truncated != null ? 300 : 260 }}
+      style={{
+        width: result.data && result.data.rows_truncated != null ? 300 : 260
+      }}
     >
-      <div className="p1" >
+      <div className="p1">
         <h4>{t`Download full results`}</h4>
       </div>
       {result.data != null && result.data.rows_truncated != null && (
@@ -107,7 +109,7 @@ const UnsavedQueryButton = ({
   result: { json_query = {} },
   visualizationSettings,
 }) => (
-  <DownloadButton
+  <DownloadButtonFP
     mode="unsaved"
     params={{
       query: JSON.stringify(_.omit(json_query, "constraints")),
@@ -117,11 +119,11 @@ const UnsavedQueryButton = ({
     extensions={[type]}
   >
     {type}
-  </DownloadButton>
+  </DownloadButtonFP>
 );
 
 const SavedQueryButton = ({ type, result: { json_query = {} }, card }) => (
-  <DownloadButton
+  <DownloadButtonFP
     mode="saved"
     params={{
       parameters: JSON.stringify(json_query.parameters),
@@ -131,37 +133,37 @@ const SavedQueryButton = ({ type, result: { json_query = {} }, card }) => (
     extensions={[type]}
   >
     {type}
-  </DownloadButton>
+  </DownloadButtonFP>
 );
 
 const PublicQueryButton = ({ type, uuid, result: { json_query = {} } }) => (
-  <DownloadButton
+  <DownloadButtonFP
     method="GET"
     url={Urls.publicQuestion({ uuid, options: type })}
     params={{ parameters: JSON.stringify(json_query.parameters) }}
     extensions={[type]}
   >
     {type}
-  </DownloadButton>
+  </DownloadButtonFP>
 );
 
 const EmbedQueryButton = ({ type, token }) => {
   // Parse the query string part of the URL (e.g. the `?key=value` part) into an object. We need to pass them this
-  // way to the `DownloadButton` because it's a form which means we need to insert a hidden `<input>` for each param
+  // way to the `DownloadButtonFP` because it's a form which means we need to insert a hidden `<input>` for each param
   // we want to pass along. For whatever wacky reason the /api/embed endpoint expect params like ?key=value instead
   // of like ?params=<json-encoded-params-array> like the other endpoints do.
   const query = urlParse(window.location.href).query; // get the part of the URL that looks like key=value
   const params = query && querystring.parse(query); // expand them out into a map
 
   return (
-    <DownloadButton
+    <DownloadButtonFP
       method="GET"
       url={Urls.embedCard(token, type)}
       params={params}
       extensions={[type]}
     >
       {type}
-    </DownloadButton>
+    </DownloadButtonFP>
   );
 };
 
@@ -172,14 +174,14 @@ const DashboardEmbedQueryButton = ({
   card,
   params,
 }) => (
-  <DownloadButton
+  <DownloadButtonFP
     method="GET"
     url={`api/embed/dashboard/${token}/dashcard/${dashcardId}/card/${card.id}/${type}`}
     extensions={[type]}
     params={params}
   >
     {type}
-  </DownloadButton>
+  </DownloadButtonFP>
 );
 
 QueryDownloadWidget.propTypes = {

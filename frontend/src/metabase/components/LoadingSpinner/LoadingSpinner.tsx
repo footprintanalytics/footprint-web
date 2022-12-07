@@ -29,6 +29,14 @@ const LoadingSpinner = ({ className, size = 32, borderWidth = 4, message }: Prop
       animationData: isWhiteLabel
         ? LoadingSpinnerDataNormal
         : LoadingSpinnerData,
+      rendererSettings: {
+        svg: {
+          filterSize: {
+            width: `${size/32}%`,
+            height: `${size/32}%`,
+          }
+        }
+      }
     });
   }, []);
 

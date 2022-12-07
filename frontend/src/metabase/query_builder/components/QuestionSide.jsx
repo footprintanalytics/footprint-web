@@ -57,6 +57,7 @@ import {
   getQuery,
   getQuestion,
 } from "../selectors";
+import { isChartPage } from "metabase/lib/urls";
 
 function QuestionSide({
   question,
@@ -80,6 +81,7 @@ function QuestionSide({
   nextChartPopoverAction,
   updateQuestion,
 }) {
+  console.log("dbId", dbId)
   const [databaseId, setDatabaseId] = useState(dbId || 3);
   const [handleSelectTable, setHandleSelectTable] = useState();
   const [chain, setChain] = useState("all");
@@ -393,7 +395,8 @@ function getDatabaseId(props) {
     parseInt(props.dbId) ||
     parseInt(params.dbId) ||
     parseInt(location.query.dbId) ||
-    Urls.extractEntityId(params.slug);
+    (!isChartPage() && Urls.extractEntityId(params.slug));
+
   if (dbId) {
     return Number.isSafeInteger(dbId) ? dbId : undefined;
   }

@@ -30,6 +30,7 @@ import { getParameterValuesBySlug } from "metabase-lib/parameters/utils/paramete
 import { getParametersFromCard } from "metabase-lib/parameters/utils/template-tags";
 import { applyParameters } from "metabase-lib/queries/utils/card";
 import EmbedFrame from "../components/EmbedFrame";
+import QueryDownloadWidgetFP from "metabase/query_builder/components/QueryDownloadWidgetFP";
 
 const mapStateToProps = state => ({
   metadata: getMetadata(state),
@@ -174,7 +175,7 @@ class PublicQuestion extends Component {
     const { card, result, initialized, parameterValues } = this.state;
 
     const actionButtons = result && (
-      <QueryDownloadWidget
+      <QueryDownloadWidgetFP
         className="m1 text-medium-hover"
         uuid={uuid}
         token={token}

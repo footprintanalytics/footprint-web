@@ -21,6 +21,7 @@ import TaggingModal from "metabase/components/TaggingModal";
 import HomePriorityModal from "metabase/components/HomePriorityModal";
 import { replaceTemplateCardUrl } from "metabase/guest/utils";
 import QueryDownloadWidget from "metabase/query_builder/components/QueryDownloadWidget";
+import QueryDownloadWidgetFP from "metabase/query_builder/components/QueryDownloadWidgetFP";
 
 const ActionButtons = ({
   user,
@@ -198,7 +199,7 @@ const ActionButtons = ({
       </Tooltip>
 
       {card && result && (
-        <QueryDownloadWidget
+        <QueryDownloadWidgetFP
           className="ml1"
           key="download"
           iconColor="#acacb2"

@@ -15,6 +15,7 @@ const QuestionDescription = ({
   isObjectDetail,
   onClick,
 }) => {
+  console.log("questionquestionquestionquestion", question)
   const query = question.query();
   const createMethod = get(question, "_card.create_method");
 

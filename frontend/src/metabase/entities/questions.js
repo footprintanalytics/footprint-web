@@ -20,7 +20,7 @@ import forms from "./questions/forms";
 const Questions = createEntity({
   name: "questions",
   nameOne: "question",
-  path: "/api/card",
+  path: "/api/v1/card",
 
   api: {
     get: GET("/api/v1/card/:id")

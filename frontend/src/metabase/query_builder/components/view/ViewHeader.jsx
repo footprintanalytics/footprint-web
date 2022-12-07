@@ -10,7 +10,7 @@ import MetabaseSettings from "metabase/lib/settings";
 
 import Link from "metabase/core/components/Link";
 import ViewButton from "metabase/query_builder/components/view/ViewButton";
-
+import { get } from "lodash";
 import { usePrevious } from "metabase/hooks/use-previous";
 import { useToggle } from "metabase/hooks/use-toggle";
 import { useOnMount } from "metabase/hooks/use-on-mount";
@@ -64,13 +64,14 @@ import { closeNewGuide } from "../../../containers/newguide/newGuide";
 import { getVisualizationRaw } from "../../../visualizations";
 import { Dropdown, Menu } from "antd";
 import NeedPermissionModal from "../../../components/NeedPermissionModal";
-import { updateQuestion } from "../../actions";
 import DashboardCardDisplayInfo from "../../../components/DashboardCardDisplayInfo";
 import Tooltip from "../../../components/Tooltip";
 import Favorite from "../../../containers/explore/components/Favorite";
 import QueryDownloadWidget from "../QueryDownloadWidget";
 import QuestionEmbedWidget from "../../containers/QuestionEmbedWidget";
 import QueryMoreWidget from "../QueryMoreWidget";
+import { updateQuestion } from "../../actions";
+import QueryDownloadWidgetFP from "../QueryDownloadWidgetFP";
 
 const viewTitleHeaderPropTypes = {
   question: PropTypes.object.isRequired,
@@ -177,7 +178,7 @@ export function ViewTitleHeader(props) {
       />,
     ];
   }
-
+  console.log("isSaved", isSaved)
   return (
     <>
       {!isSaved && (
@@ -446,7 +447,7 @@ function AhHocQuestionLeftSide(props) {
         <AdHocViewHeading color="medium">
           {isNative ? (
             <div className="flex">
-              {t`New Chart`}
+              {get(question, "_card.name") || t`New Chart`}
               <ToggleCreateType question={question} router={router} updateQuestion={updateQuestion}/>
               {hasRunButton && !isShowingNotebook && (
                 <ViewHeaderIconButtonContainer>
@@ -637,6 +638,7 @@ function ViewTitleHeaderRightSide(props) {
     canNativeQuery,
     router,
     downloadImageAction,
+    updateQuestion,
   } = props;
   const [showVip, setShowVip] = useState(false);
   const isShowingNotebook = queryBuilderMode === "notebook";
@@ -755,7 +757,9 @@ function ViewTitleHeaderRightSide(props) {
               iconSize={16}
               onClick={() => {
                 set(question, "_card.original_card_id", card.id);
-                question.update(null, {
+                set(question, "_card.id", 0);
+                console.log("question", question)
+                updateQuestion(question, {
                   reload: false,
                   shouldUpdateUrl: true,
                 });
@@ -795,7 +799,7 @@ function ViewTitleHeaderRightSide(props) {
           result,
           isResultDirty,
         }) && (
-          <QueryDownloadWidget
+          <QueryDownloadWidgetFP
             className=""
             key="download"
             card={question.card()}

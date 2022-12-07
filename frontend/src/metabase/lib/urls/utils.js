@@ -51,7 +51,15 @@ export function extractCollectionId(slug) {
   return extractEntityId(slug);
 }
 
-const renderType = type => (type === "dashboard" ? "dashboard" : "chart");
+const renderType = type => {
+  if (type === "dashboard") {
+    return "dashboard";
+  }
+  if (type === "model") {
+    return "model";
+  }
+  return "chart";
+}
 
 const articleType = type => {
   const array = {
@@ -96,11 +104,10 @@ export function publicSceneUrl(detail) {
   })}`;
 }
 
-export function dashboardQuestionUrl({ type, name, id, checkDefi360 = true }) {
+export function dashboardQuestionUrl({ type, name, id, isModel }) {
   const rType = renderType(type);
   const title = fpKebabCase(name);
-  const projectPath = isDefi360() && checkDefi360 ? `defi360/` : "";
-  return `${projectPath}${rType}/${[title, divisionKey, id].join("-")}`;
+  return `${rType}/${[title, divisionKey, id].join("-")}`;
 }
 
 export function articleDetailUrl({
@@ -289,4 +296,8 @@ export function myProfileUrl(userName) {
 
 export function formatName(name) {
   return fpKebabCase(name);
+}
+
+export function isChartPage() {
+  return window.location.pathname.startsWith("/chart");
 }
