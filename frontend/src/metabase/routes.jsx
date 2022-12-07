@@ -464,29 +464,29 @@ export const getRoutes = store => (
           />
         </Route>
       </Route>
-      {/*<Route title={t`Guest`} path="guest">*/}
-      {/*  <Route*/}
-      {/*    title={t`Dashboard`}*/}
-      {/*    path="dashboard/:uuid(/:name)"*/}
-      {/*    component={LazyLoad.GuestDashboard}*/}
-      {/*  >*/}
-      {/*    <ModalRoute*/}
-      {/*      title={t`Copy`}*/}
-      {/*      path="copy"*/}
-      {/*      modal={LazyLoad.DashboardCopyModal}*/}
-      {/*    />*/}
-      {/*  </Route>*/}
-      {/*  <Route*/}
-      {/*    title={t`Chart`}*/}
-      {/*    path="question/:uuid(/:name)"*/}
-      {/*    component={LazyLoad.GuestQuestion}*/}
-      {/*  />*/}
-      {/*  <Route*/}
-      {/*    title={t`Chart`}*/}
-      {/*    path="chart/:titleAndId"*/}
-      {/*    component={LazyLoad.GuestQuestion}*/}
-      {/*  />*/}
-      {/*</Route>*/}
+      <Route title={t`Guest`} path="guest">
+        <Route
+          title={t`Dashboard`}
+          path="dashboard/:uuid(/:name)"
+          component={LazyLoad.GuestDashboard}
+        >
+          <ModalRoute
+            title={t`Copy`}
+            path="copy"
+            modal={LazyLoad.DashboardCopyModal}
+          />
+        </Route>
+        <Route
+          title={t`Chart`}
+          path="question/:uuid(/:name)"
+          component={LazyLoad.GuestQuestion}
+        />
+        <Route
+          title={t`Chart`}
+          path="chart/:titleAndId"
+          component={LazyLoad.GuestQuestion}
+        />
+      </Route>
 
       <Route title={t`Question`} path="/chart" component={LazyLoad.Question}>
         {/* <IndexRoute component={Question} /> */}

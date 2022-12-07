@@ -28,7 +28,7 @@ import MetabaseUtils from "metabase/lib/utils";
 import { createThumb } from "metabase/dashboard/components/utils/thumb";
 import DashboardAd from "metabase/containers/news/components/DashboardAd";
 import { parseHashOptions } from "metabase/lib/browser";
-import { navigateToGuestQuery } from "metabase/lib/urls";
+import { navigateToGuestQuery } from "metabase/guest/utils";
 import { getValuePopulatedParameters } from "metabase-lib/parameters/utils/parameter-values";
 import DashboardGrid from "../DashboardGrid";
 import { DashboardSidebars } from "../DashboardSidebars";

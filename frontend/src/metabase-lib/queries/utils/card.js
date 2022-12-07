@@ -120,6 +120,7 @@ export function applyParameters(
     if (mapping) {
       // mapped target, e.x. on a dashboard
       datasetQuery.parameters.push({
+        ...parameter,
         type,
         value: normalizeParameterValue(type, value),
         target: mapping.target,
@@ -129,6 +130,7 @@ export function applyParameters(
     } else if (parameter.target) {
       // inline target, e.x. on a card
       datasetQuery.parameters.push({
+        ...parameter,
         type,
         value: normalizeParameterValue(type, value),
         target: parameter.target,

@@ -1,7 +1,6 @@
 /* eslint-disable react/prop-types */
 import React, { Component } from "react";
 import PropTypes from "prop-types";
-import { Box } from "grid-styled";
 import { t } from "ttag";
 import { getScrollY } from "metabase/lib/dom";
 import EditBar from "metabase/components/EditBar";
@@ -185,7 +184,7 @@ export const HeaderTitle = ({
   handleSideHide,
 }) => {
   return (
-    <Box className="dashboard-header-title flex left">
+    <div className="dashboard-header-title flex left">
       <div className="flex align-center">
         {!featuresMode && <IconBack router={router} />}
         {featuresMode && handleSideHide && (
@@ -205,7 +204,7 @@ export const HeaderTitle = ({
       </div>
       {titleRightPanel}
       {/*{!!item && !!item["last-edit-info"] && <LastEditInfoLabel item={item} />}*/}
-    </Box>
+    </div>
   );
 };
 
