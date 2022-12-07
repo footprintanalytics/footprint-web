@@ -13,6 +13,7 @@ import NeedPermissionModal from "metabase/components/NeedPermissionModal";
 import { trackStructEvent } from "metabase/lib/analytics";
 import Tooltip from "metabase/components/Tooltip";
 import ShareButton from "./ShareButton";
+import * as Urls from "metabase/lib/urls";
 
 import * as MetabaseAnalytics from "metabase/lib/analytics";
 import {
@@ -45,7 +46,7 @@ interface SharingPaneProps {
   isPublicSharingEnabled: boolean;
   isApplicationEmbeddingEnabled: boolean;
   user: any;
-  getGuestUrl: string;
+  getGuestUrl: any;
   sharePage: () => void;
   onlyEmbed: boolean;
 }
@@ -69,12 +70,11 @@ export default function SharingPane({
   const [extensionState, setExtension] = useState<Extension>(null);
   const [showVip, setShowVip] = useState(false);
 
-  const publicLink = getPublicUrl(resource, extensionState);
+  const guestUrl = getGuestUrl(resource, extensionState);
   const iframeSource = getPublicEmbedHTML(getPublicUrl(resource));
 
   const shouldDisableEmbedding = !isAdmin || !isApplicationEmbeddingEnabled;
-
-  const shareUrl = publicLink;
+  const shareUrl = guestUrl;
   const shareTitle = `Footprint - ${resource.name || ""}`;
 
   const shareSource = "Footprint";
@@ -182,7 +182,7 @@ export default function SharingPane({
             <div className="pb2 mb4 border-bottom flex align-center">
               <h4>{t`Create short link`}</h4>
               <div className="ml-auto">
-                <CopyShortLink url={publicLink}>
+                <CopyShortLink url={guestUrl}>
                   <Button
                     className="ml1 Question-header-btn-with-text"
                     iconColor="#ffffff"
@@ -223,7 +223,7 @@ export default function SharingPane({
             <div className="ml2">
               <h3 className="text-brand mb1">{t`Public link`}</h3>
               <div className="mb1">{t`Share this ${resourceType} with people who don't have a Footprint account using the URL below:`}</div>
-              <CopyWidget value={publicLink} readOnly={true} />
+              <CopyWidget value={guestUrl} readOnly={true} />
               {/* {extensions && extensions.length > 0 && (
               <div className="mt1">
                 {extensions.map(extension => (

@@ -97,7 +97,7 @@ class DashboardSharingEmbeddingModal extends Component {
             this._modal && this._modal.close();
             additionalClickActions();
           }}
-          getPublicUrl={({ public_uuid }) => Urls.publicDashboard(public_uuid)}
+          getPublicUrl={({ public_uuid }) => Urls.publicDashboard({uuid: public_uuid})}
         />
       </ModalWithTrigger>
     );

@@ -6,7 +6,8 @@ import MetabaseSettings from "metabase/lib/settings";
 import { Card as BaseCard } from "metabase-types/types/Card";
 import Question, { QuestionCreatorOpts } from "metabase-lib/Question";
 
-import { appendSlug, extractQueryParams } from "./utils";
+import { appendSlug, extractQueryParams, guestUrl, publicUrl } from "./utils";
+import { optionsToHashParams } from "metabase/public/lib/embed";
 
 type Card = Partial<BaseCard> & {
   id?: number | string;
@@ -121,7 +122,7 @@ export function dataset(...args: Parameters<typeof question>) {
   return question(...args);
 }
 
-export function publicQuestion(
+export function publicQuestionOrigin(
   uuid: string,
   type: string | null = null,
   query?: string,
@@ -160,4 +161,36 @@ export function tableRowsQuery(
   // The QB will parse the querystring and use DB and table IDs to create an ad-hoc question
   // We should refactor the initializeQB to avoid passing query string to hash as it's pretty confusing
   return question(null, { hash: query });
+}
+
+interface publicQuestionType {
+  uuid: string,
+  name: string,
+  search: string,
+  options: any,
+}
+
+export function publicQuestion({ uuid, name, search = "", options = null }: publicQuestionType) {
+  const siteUrl = MetabaseSettings.get("site-url");
+  return `${siteUrl}/${publicUrl({
+    publicUuid: uuid,
+    name,
+    type: "question",
+  })}${search}${optionsToHashParams(options)}`;
+}
+
+interface guestQuestionType {
+  uuid: string,
+  name: string,
+  search: string,
+  options: any,
+}
+
+export function guestQuestion({ uuid, name, search = "", options = null }: guestQuestionType) {
+  const siteUrl = `${MetabaseSettings.get("site-url")}`;
+  return `${siteUrl}/${guestUrl({
+    publicUuid: uuid,
+    name,
+    type: "question",
+  })}${search}${optionsToHashParams(options)}`;
 }
