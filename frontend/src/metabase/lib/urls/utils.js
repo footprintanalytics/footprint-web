@@ -286,3 +286,7 @@ export function extractQueryParams(query) {
 export function myProfileUrl(userName) {
   return `/@${userName}`;
 }
+
+export function formatName(name) {
+  return fpKebabCase(name);
+}

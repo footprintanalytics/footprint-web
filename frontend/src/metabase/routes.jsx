@@ -303,24 +303,24 @@ export const getRoutes = store => (
 
       <Route title={t`Search`} path="/search" component={LazyLoad.Search} />
 
-      {/*<Route*/}
-      {/*  title={t`Project Analytics`}*/}
-      {/*  path="/projects"*/}
-      {/*  component={LazyLoad.ProjectAnalytics}*/}
-      {/*/>*/}
-      {/*<Route*/}
-      {/*  title={t`Chain Analytics`}*/}
-      {/*  path="/chains"*/}
-      {/*  component={LazyLoad.ProjectAnalytics}*/}
-      {/*/>*/}
-      {/*<Route*/}
-      {/*  path="/project/Detail/:slug(/:name)"*/}
-      {/*  component={LazyLoad.ProjectDetail}*/}
-      {/*/>*/}
-      {/*<Route*/}
-      {/*  path="/chain/Detail/:slug(/:name)"*/}
-      {/*  component={LazyLoad.ProjectDetail}*/}
-      {/*/>*/}
+      <Route
+        title={t`Project Analytics`}
+        path="/projects"
+        component={LazyLoad.ProjectAnalytics}
+      />
+      <Route
+        title={t`Chain Analytics`}
+        path="/chains"
+        component={LazyLoad.ProjectAnalytics}
+      />
+      <Route
+        path="/project/Detail/:slug(/:name)"
+        component={LazyLoad.ProjectDetail}
+      />
+      <Route
+        path="/chain/Detail/:slug(/:name)"
+        component={LazyLoad.ProjectDetail}
+      />
       <Route path="/protocols/:slug" component={LazyLoad.ProtocolDetail} />
 
       <Route title={t`Pricing`} path="/pricing" component={LazyLoad.Pricing} />
