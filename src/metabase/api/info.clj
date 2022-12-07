@@ -21,6 +21,7 @@
               [metabase.util.i18n :refer [trs tru]]
               [metabase.util.schema :as su]
               [schema.core :as s]
+              [metabase.task.send-pulses :as send-pulses]
               [toucan.db :as db])
     (:import java.util.UUID)
     (:import java.util.Base64))
@@ -84,6 +85,10 @@
    :dashboard-id dashboard_id
    :middleware {:process-viz-settings? false}))
 
-
+(api/defendpoint ^:streaming POST "/alertNow"
+  []
+  ((log/info "=====> alert now")
+    (#'send-pulses/send-pulses! 0 "fri" :first :first))
+  )
 
 (api/define-routes)
