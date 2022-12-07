@@ -96,6 +96,7 @@ export default {
   // // account
   AccountApp: loadable(() => import("./account/app/containers/AccountApp")),
   WidgetPublic: loadable(() => import("metabase/containers/WidgetPublic")),
+  WidgetBrand: loadable(() => import("metabase/containers/WidgetBrand")),
 
   // account
   UserProfileApp: loadable(() => import("./account/profile/containers/UserProfileApp")),
