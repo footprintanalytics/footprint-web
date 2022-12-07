@@ -19,7 +19,7 @@ import { getOssUrl } from "metabase/lib/image";
 import Link from "metabase/core/components/Link";
 import Thumb from "metabase/components/Thumb";
 import { formatTitle } from "metabase/lib/formatting";
-import colors from "metabase/lib/colors";
+import { color } from "metabase/lib/colors";
 import LoadingAndErrorWrapper from "metabase/components/LoadingAndErrorWrapper";
 import fitViewport from "metabase/hoc/FitViewPort";
 import { isDefi360 } from "metabase/lib/project_info";
@@ -191,8 +191,8 @@ const PreviewDashboardCard = props => {
                     className="p0 mr2 cursor-default footprint-secondary-text1"
                     icon="read"
                     iconSize={16}
-                    color={colors["footprint-color-secondary-text2"]}
-                    iconColor={colors["footprint-color-secondary-text2"]}
+                    color={color("footprint-color-secondary-text2")}
+                    iconColor={color("footprint-color-secondary-text2")}
                     onClick={async e => {
                       e.stopPropagation();
                     }}
@@ -206,8 +206,8 @@ const PreviewDashboardCard = props => {
                       className="p0 mr2 footprint-secondary-text1"
                       icon="duplicate"
                       iconSize={16}
-                      color={colors["footprint-color-secondary-text2"]}
-                      iconColor={colors["footprint-color-secondary-text2"]}
+                      color={color("footprint-color-secondary-text2")}
+                      iconColor={color("footprint-color-secondary-text2")}
                       onClick={async e => {
                         e.stopPropagation();
                         if (onlyViewByButton) {
@@ -257,7 +257,7 @@ const PreviewDashboardCard = props => {
                       size={16}
                       className="p0 mr2"
                       style={{ cursor: "pointer" }}
-                      color={colors["footprint-color-secondary-text2"]}
+                      color={color("footprint-color-secondary-text2")}
                       onClick={async e => {
                         e.stopPropagation();
                         if (onlyViewByButton) {
@@ -275,7 +275,7 @@ const PreviewDashboardCard = props => {
                       size={16}
                       className="p0 mr2"
                       style={{ cursor: "pointer" }}
-                      color={colors["footprint-color-secondary-text2"]}
+                      color={color("footprint-color-secondary-text2")}
                       onClick={async e => {
                         e.stopPropagation();
                         if (onlyViewByButton) {
