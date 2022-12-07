@@ -1,3 +1,4 @@
+/* eslint-disable curly */
 /* eslint-disable react/prop-types */
 import React, { Component } from "react";
 import { t } from "ttag";
@@ -45,12 +46,6 @@ class Graph1 extends Component {
       dashboard: false,
       showColumnSetting: true,
     }),
-    "graph.repulsion": {
-      section: t`Display`,
-      title: t`Repulsion`,
-      widget: "number",
-      default: 2000,
-    },
   };
 
   static checkPermisson = () => true;
@@ -70,26 +65,32 @@ class Graph1 extends Component {
   }
 
   getChart = _.debounce(() => {
-    const { settings } = this.props;
     this.option = {
       tooltip: {},
+      legend: [
+        {
+          data: this.data.categories.map(c => c.name),
+        },
+      ],
       series: [
         {
           name: "Graph",
           type: "graph",
-          layout: "force",
-          data: this.data,
-          links: this.data,
+          layout: "circular",
+          data: this.data.nodes,
+          links: this.data.links,
+          categories: this.data.categories,
           roam: true,
           label: {
             show: true,
             position: "right",
             formatter: "{b}",
           },
-          force: {
-            repulsion: settings["graph.repulsion"],
+          edgeSymbol: ["circle", "arrow"],
+          lineStyle: {
+            color: "source",
+            curveness: 0.3,
           },
-          // edgeSymbol: ["arrow"],
         },
       ],
     };
@@ -97,7 +98,7 @@ class Graph1 extends Component {
   }, 500);
 
   getData() {
-    const data = [];
+    const data = { nodes: [], links: [], categories: [] };
     const { settings } = this.props;
     const { cols, rows } = this.props.data;
     const sourceIndex = cols.findIndex(
@@ -115,19 +116,31 @@ class Graph1 extends Component {
     if (sourceIndex < 0 || sizeIndex < 0 || valueIndex < 0 || targetIndex < 0) {
       return data;
     }
-    rows.forEach((r, i) => {
-      data.push({
-        id: i,
-        name: r[sourceIndex],
-        symbolSize: r[sizeIndex],
-        value: r[valueIndex],
-        source: i,
-        sourceRaw: r[sourceIndex],
-        targetRaw: r[targetIndex],
-      });
+    console.log(rows);
+    rows.forEach(r => {
+      if (!data.nodes.find(n => n.name === r[sourceIndex])) {
+        data.nodes.push({
+          name: r[sourceIndex],
+          value: r[sizeIndex],
+          symbolSize: r[sizeIndex],
+        });
+      }
+      if (!data.nodes.find(n => n.name === r[targetIndex])) {
+        data.nodes.push({
+          name: r[targetIndex],
+          value: r[sizeIndex],
+          symbolSize: r[sizeIndex],
+        });
+      }
     });
-    data.forEach(d => {
-      d.target = data.find(dd => dd.name === d.targetRaw)?.id;
+    data.nodes = data.nodes.map((n, i) => ({ ...n, category: i }));
+    data.categories = data.nodes.map(n => ({ name: n.name }));
+    rows.forEach(r => {
+      data.links.push({
+        source: r[sourceIndex],
+        target: r[targetIndex],
+        value: r[valueIndex],
+      });
     });
     console.log(data);
     return data;
