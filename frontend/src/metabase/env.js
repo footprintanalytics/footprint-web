@@ -13,9 +13,9 @@ export const isDev = location.origin.includes(":8081");
 
 // Bucket
 export const xxxx = process.env;
-export const staticBucketUrl = process.env.STATIC_BUCKET_URL || "https://static.footprint.network";
-export const staticBucketUrlDefault = process.env.STATIC_BUCKET_URL;
-export const staticBucketUrlHk = process.env.STATIC_BUCKET_HK_URL;
+export const staticBucketUrl = process.env.STATIC_BUCKET_URL || "https://statichk.footprint.network";
+export const staticBucketUrlDefault = process.env.STATIC_BUCKET_URL || "https://statichk.footprint.network";
+export const staticBucketUrlHk = process.env.STATIC_BUCKET_HK_URL || "https://statichk.footprint.network";
 export const staticBucketKeyId = process.env.STATIC_BUCKET_KEY_ID || "xx";
 export const staticBucketKeySecret = process.env.STATIC_BUCKET_KEY_SECRET || "yy";
 
