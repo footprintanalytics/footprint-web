@@ -361,7 +361,7 @@
     "cljs-server-restart": "yarn && shadow-cljs restart",
     "cljs-nrepl": "yarn && shadow-cljs node-repl -d cider/cider-nrepl:0.25.8 -d cider/piggieback:0.5.1 -d refactor-nrepl:2.5.1",
     "test-cljs": "yarn && shadow-cljs compile test && node target/node-tests.js",
-    "build": "yarn build:cljs && yarn build:js",
+    "build": "export $(cat fp_env) && yarn build:cljs && yarn build:js",
     "build-watch": "yarn concurrently -n 'cljs,js' 'yarn build-watch:cljs' 'yarn build-watch:js'",
     "build-hot": "yarn concurrently -n 'cljs,js' 'yarn build-hot:cljs' 'export $(cat .env) && yarn build-hot:js'",
     "build-stats": "yarn && webpack --json > stats.json",
