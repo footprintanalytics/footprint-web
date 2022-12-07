@@ -205,7 +205,7 @@ export const logout = createThunkAction(LOGOUT, (redirectUrl: string) => {
     if (redirectUrl) {
       dispatch(push(Urls.login(redirectUrl)));
     }
-    window.location.reload(); // clears redux state and browser caches
+    // window.location.reload(); // clears redux state and browser caches
   };
 });
 
