@@ -93,6 +93,7 @@ export default {
   dataApiPrice: loadable(() => import("metabase/containers/dataApi/price")),
   dataApiProduct: loadable(() => import("metabase/containers/dataApi/product")),
   WidgetPublic: loadable(() => import("metabase/containers/WidgetPublic")),
+  WidgetBrand: loadable(() => import("metabase/containers/WidgetBrand")),
 
   // account
   AccountSettingsApp: loadable(() => import("./account/settings/containers/AccountSettingsApp")),

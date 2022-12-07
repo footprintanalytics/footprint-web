@@ -1,0 +1,8 @@
+.widget-brand {
+  background: transparent;
+  color: #dcdcdc;
+  padding: 2px 8px;
+  font-size: 16px;
+  overflow: hidden;
+  user-select: none;
+}

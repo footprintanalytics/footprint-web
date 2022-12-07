@@ -37,6 +37,7 @@ export const getRoutes = store => (
         component={LazyLoad.PublicDashboard}
       />
       <Route path="widget/chart/:uuid" component={LazyLoad.WidgetPublic} />
+      <Route path="widget/brand" component={LazyLoad.WidgetBrand} />
       <Route title={t`Explore`} path="explore" component={LazyLoad.Explore} />
       <Route path="*" component={LazyLoad.PublicNotFound} />
     </Route>
