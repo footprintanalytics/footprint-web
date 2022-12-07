@@ -1108,6 +1108,7 @@ ICON_PATHS["join_right_outer"] = {
     },
   },
 };
+ICON_PATHS["graph"] = ICON_PATHS["bubble"];
 ICON_PATHS["scalar"] = ICON_PATHS["number"];
 export function parseViewBox(viewBox: string): Array<number> {
   // a viewBox is a string that takes the form 'min-x, min-y, width, height'
