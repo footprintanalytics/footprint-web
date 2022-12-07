@@ -34,11 +34,11 @@ export const parseTitleId = (titleAndId, type = "") => {
   if (!titleAndId) {
     return {};
   }
-  if (!titleAndId.includes(divisionKey)) {
-    return defaultTitleIdResult(titleAndId);
-  }
   if (type === "news") {
     return parseTitleIdFromArticle(titleAndId);
+  }
+  if (!titleAndId.includes(divisionKey)) {
+    return defaultTitleIdResult(titleAndId);
   }
   return parseTitleIdFromDashboard(titleAndId);
 };
@@ -281,4 +281,8 @@ function flattenParam([key, value]) {
 //query: Array<string, any>
 export function extractQueryParams(query) {
   return Object.entries(query).map(flattenParam).flat();
+}
+
+export function myProfileUrl(userName) {
+  return `/@${userName}`;
 }

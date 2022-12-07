@@ -33,7 +33,6 @@ const Detail = props => {
     onReplaceLocation,
     router,
   } = props;
-
   const editorRef = React.createRef();
   const [data, setData] = useState();
   const [errorData, setErrorData] = useState();
