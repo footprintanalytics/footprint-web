@@ -349,7 +349,7 @@
     "test-unit-watch": "yarn test-unit --watch",
     "test-timezones-unit": "yarn build-quick:cljs && jest --silent --maxWorkers=2 --config jest.tz.unit.conf.json",
     "test-timezones": "yarn && ./frontend/test/__runner__/run_timezone_tests",
-    "build:js": "yarn && webpack --bail",
+    "build:js": "export $(cat fp_env) && yarn && webpack --bail",
     "build-watch:js": "yarn && webpack --watch",
     "build-hot:js": "yarn && NODE_OPTIONS=--max-old-space-size=8096 WEBPACK_BUNDLE=hot webpack serve",
     "build:cljs": "yarn && rm -rf frontend/src/cljs/* && shadow-cljs release app",
