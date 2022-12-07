@@ -26,7 +26,7 @@ export default connect(mapStateToProps)(ProfileLink);
 
 function ProfileLink({ user, adminItems, onLogout, trigger }) {
   const [modalOpen, setModalOpen] = useState(null);
-  const [bugReportDetails, setBugReportDetails] = useState(null);
+  // const [bugReportDetails, setBugReportDetails] = useState(null);
 
   const openModal = modalName => {
     setModalOpen(modalName);
@@ -43,7 +43,7 @@ function ProfileLink({ user, adminItems, onLogout, trigger }) {
     const isAdmin = user && user.is_superuser;
     const isMarket = user && user.isMarket;
     const userName = user && user.name;
-    const showAdminSettingsItem = adminItems?.length > 0;
+    // const showAdminSettingsItem = adminItems?.length > 0;
     /*const compactBugReportDetailsForUrl = encodeURIComponent(
       JSON.stringify(bugReportDetails),
     );*/
@@ -61,7 +61,7 @@ function ProfileLink({ user, adminItems, onLogout, trigger }) {
         link: Urls.accountSettings(),
         event: `Navbar;Profile Dropdown;Edit Profile`,
       },
-      showAdminSettingsItem && admin && {
+      admin && {
         title: t`Admin settings`,
         icon: null,
         link: "/admin",

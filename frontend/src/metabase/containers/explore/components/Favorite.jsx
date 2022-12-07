@@ -22,10 +22,10 @@ import {
 import { debounce } from "lodash";
 import { deviceInfo } from "metabase-lib/lib/Device";
 import { trackStructEvent } from "../../../lib/analytics";
+import MetabaseUtil from "metabase/lib/utils";
 
 function Favorite({
   className,
-  uuid,
   id,
   type,
   isLike,
@@ -51,31 +51,32 @@ function Favorite({
   }, [like]);
 
   async function likeApi(isFavorite) {
+    const isUuid = MetabaseUtil.isUUID(id);
     const hide = message.loading("Loading...", 0);
     if (isFavorite) {
       if (type === "dashboard") {
-        if (uuid) {
-          await deleteDashboardPublicFavorite({ uuid });
+        if (isUuid) {
+          await deleteDashboardPublicFavorite({ uuid: id });
         } else {
           await deleteDashboardFavorite({ id });
         }
       } else {
-        if (uuid) {
-          await deleteCardPublicFavorite({ uuid });
+        if (isUuid) {
+          await deleteCardPublicFavorite({ uuid: id });
         } else {
           await deleteCardFavorite({ id });
         }
       }
     } else {
       if (type === "dashboard") {
-        if (uuid) {
-          await postDashboardPublicFavorite({ uuid });
+        if (isUuid) {
+          await postDashboardPublicFavorite({ uuid: id });
         } else {
           await postDashboardFavorite({ id });
         }
       } else {
-        if (uuid) {
-          await postCardPublicFavorite({ uuid });
+        if (isUuid) {
+          await postCardPublicFavorite({ uuid: id });
         } else {
           if (id) await postCardFavorite({ id });
         }
