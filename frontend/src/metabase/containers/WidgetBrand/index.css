@@ -2,7 +2,8 @@
   background: transparent;
   color: #dcdcdc;
   padding: 2px 8px;
-  font-size: 16px;
+  font-size: 0.83333333vw;
   overflow: hidden;
   user-select: none;
+  font-family: OXANIUM-REGULAR,Arial,sans-serif;
 }
