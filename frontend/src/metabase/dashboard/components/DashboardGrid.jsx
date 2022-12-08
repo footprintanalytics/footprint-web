@@ -324,6 +324,7 @@ class DashboardGrid extends Component {
         showClickBehaviorSidebar={this.props.showClickBehaviorSidebar}
         clickBehaviorSidebarDashcard={this.props.clickBehaviorSidebarDashcard}
         duplicateAction={this.props.duplicateAction}
+        previewAction={this.props.previewAction}
         clearWatermark={this.props.clearWatermark}
         chartStyle={this.props.chartStyle}
         user={this.props.user}

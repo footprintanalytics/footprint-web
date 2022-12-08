@@ -18,7 +18,7 @@ import * as Urls from "metabase/lib/urls";
 
 const EXPORT_FORMATS = Urls.exportFormats;
 
-const QueryDownloadWidget = ({
+const QueryDownloadWidgetFP = ({
   className,
   classNameClose,
   card,
@@ -184,7 +184,7 @@ const DashboardEmbedQueryButton = ({
   </DownloadButtonFP>
 );
 
-QueryDownloadWidget.propTypes = {
+QueryDownloadWidgetFP.propTypes = {
   card: PropTypes.object,
   result: PropTypes.object,
   uuid: PropTypes.string,
@@ -192,13 +192,13 @@ QueryDownloadWidget.propTypes = {
   params: PropTypes.object,
 };
 
-QueryDownloadWidget.defaultProps = {
+QueryDownloadWidgetFP.defaultProps = {
   result: {},
   icon: "download",
   params: {},
 };
 
-QueryDownloadWidget.shouldRender = ({ result, isResultDirty }) =>
+QueryDownloadWidgetFP.shouldRender = ({ result, isResultDirty }) =>
   !isResultDirty && result && !result.error;
 
-export default QueryDownloadWidget;
+export default QueryDownloadWidgetFP;

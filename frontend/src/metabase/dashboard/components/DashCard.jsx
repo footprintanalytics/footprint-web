@@ -129,6 +129,7 @@ export default class DashCard extends Component {
       user,
       clearWatermark,
       duplicateAction,
+      previewAction,
       chartStyle,
     } = this.props;
 
@@ -151,6 +152,14 @@ export default class DashCard extends Component {
         card.query_average_duration &&
         card.query_average_duration < DATASET_USUALLY_FAST_THRESHOLD,
     }));
+
+    const isLogin = ({ from }) => {
+      if (!user) {
+        setLoginModalShow({ show: true, from: from });
+        return false;
+      }
+      return true;
+    };
 
     const loading =
       !(series.length > 0 && _.every(series, s => s.data)) &&
@@ -298,7 +307,7 @@ export default class DashCard extends Component {
               <a
                 className="html2canvas-filter dash-card__button"
                 onClick={() => {
-                  replaceTemplateCardUrl(this.props, dashcard.card.id);
+                  previewAction && previewAction(dashcard.card.id)
                   trackStructEvent(`dashcard click to preview`);
                 }}
               >

@@ -65,6 +65,7 @@ import {
   getIsHeaderVisible,
   getIsAdditionalInfoVisible,
 } from "../selectors";
+import { replaceTemplateCardUrl } from "metabase/lib/urls";
 
 function getDashboardId({ dashboardId, location, params }) {
   if (dashboardId) {
@@ -188,6 +189,17 @@ const DashboardApp = props => {
     }
   };
 
+  const previewAction = (cardId) => {
+    if (props.user) {
+      replaceTemplateCardUrl(props, cardId);
+    } else {
+      props.setLoginModalShow({
+        show: true,
+        from: "publicDashboard_query_preview",
+      });
+    }
+  };
+
   return (
     <DataAppContext>
       <div className="shrink-below-content-size full-height">
@@ -195,6 +207,7 @@ const DashboardApp = props => {
           editingOnLoad={editingOnLoad}
           addCardOnLoad={addCardOnLoad}
           duplicateAction={duplicateAction}
+          previewAction={previewAction}
           {...props}
         />
         <QueryCopyModal
