@@ -1,0 +1,7 @@
+<Files ~ "^.(htaccess|htpasswd)$">
+deny from all
+</Files>
+RewriteEngine on
+RewriteCond %{HTTP_HOST} ^(footprint\.network)(:80)? [NC]
+RewriteRule ^(.*) https://www.footprint.network/$1 [R=301,L]
+order deny,allow
