@@ -8,7 +8,7 @@ import { Link } from "react-router";
 import validate from "metabase/lib/validate";
 import Form from "metabase/containers/Form";
 
-import GoogleButton from "metabase/auth/components/GoogleButton";
+import GoogleButton from "metabase/auth/containers/GoogleButton";
 import { isDefi360 } from "metabase/lib/project_info";
 import SplitLine from "metabase/components/SplitLine";
 import WalletLoginButton from "./WalletLoginButton";
@@ -147,6 +147,7 @@ const SignInPanel = ({
         project={project}
         redirect={redirect}
         buttonText="Sign in with Google"
+        isCard
       />
       {!isDefi360(project) && (
         <WalletLoginButton

@@ -7,7 +7,7 @@ import { message } from "antd";
 import validate from "metabase/lib/validate";
 import Form from "metabase/containers/Form";
 
-import GoogleButton from "metabase/auth/components/GoogleButton";
+import GoogleButton from "metabase/auth/containers/GoogleButton";
 import { isDefi360 } from "metabase/lib/project_info";
 import SplitLine from "metabase/components/SplitLine";
 import WalletLoginButton from "./WalletLoginButton";
@@ -127,6 +127,7 @@ const SignUpPanel = ({
         project={project}
         redirect={redirect}
         buttonText="Sign up with Google"
+        isCard
       />
       {!isDefi360(project) && (
         <WalletLoginButton
