@@ -74,6 +74,7 @@ class Visualization extends React.PureComponent {
     isEditing: false,
     isSettings: false,
     isQueryBuilder: false,
+    hideWatermark: false,
     onUpdateVisualizationSettings: () => {},
     // prefer passing in a function that doesn't cause the application to reload
     onChangeLocation: location => {
@@ -349,7 +350,7 @@ class Visualization extends React.PureComponent {
     } = this.props;
     const { visualization } = this.state;
     const small = width < 330;
-
+    console.log("visaul, hideWatermark", hideWatermark, dashcard?.card?.name)
     // these may be overridden below
     let { series, hovered, clicked } = this.state;
     let { style } = this.props;

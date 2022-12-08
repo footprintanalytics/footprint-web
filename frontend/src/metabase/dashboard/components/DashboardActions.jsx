@@ -152,7 +152,7 @@ export const getDashboardActions = (
     );
   }*/
 
-  if (!isEditing && !isEmpty && (isPublic || isFullscreen)) {
+  if (!isEditing && !isEmpty && !isPublic && isFullscreen) {
     // option click to enter fullscreen without making the browser go fullscreen
     buttons.push(
       <Tooltip

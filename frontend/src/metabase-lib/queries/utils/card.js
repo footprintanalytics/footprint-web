@@ -85,7 +85,7 @@ export function applyParameters(
   parameterValues = {},
   parameterMappings = [],
 ) {
-  const datasetQuery = Utils.copy(card.dataset_query);
+  const datasetQuery = Utils.copy(card.dataset_query || {});
   // clean the query
   if (datasetQuery.type === "query") {
     datasetQuery.query = Q_DEPRECATED.cleanQuery(datasetQuery.query);

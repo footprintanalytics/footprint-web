@@ -10,6 +10,8 @@ import { CreateAlertModalContent } from "metabase/query_builder/components/Alert
 import Modal from "metabase/components/Modal";
 import { datasetContainsNoResults } from "metabase-lib/queries/utils/dataset";
 import { ALERT_TYPE_ROWS } from "metabase-lib/Alert";
+import { connect } from "react-redux";
+import { getUserClearWatermarkPermission } from "metabase/selectors/user";
 
 const ALLOWED_VISUALIZATION_PROPS = [
   // Table
@@ -22,7 +24,7 @@ const ALLOWED_VISUALIZATION_PROPS = [
   "mode",
 ];
 
-export default class VisualizationResult extends Component {
+class VisualizationResult extends Component {
   state = {
     showCreateAlertModal: false,
   };
@@ -55,6 +57,7 @@ export default class VisualizationResult extends Component {
       timelineEvents,
       selectedTimelineEventIds,
       className,
+      clearWatermark,
     } = this.props;
     const { showCreateAlertModal } = this.state;
 
@@ -131,6 +134,7 @@ export default class VisualizationResult extends Component {
               this.props.onUpdateVisualizationSettings
             }
             query={this.props.query}
+            hideWatermark={clearWatermark}
             {...vizSpecificProps}
           />
           {this.props.isObjectDetail && (
@@ -144,3 +148,14 @@ export default class VisualizationResult extends Component {
     }
   }
 }
+
+const mapStateToProps = state => {
+  return {
+    user: state.currentUser,
+    clearWatermark: getUserClearWatermarkPermission(state),
+  };
+};
+
+export default _.compose(
+  connect(mapStateToProps, null)
+)(VisualizationResult)

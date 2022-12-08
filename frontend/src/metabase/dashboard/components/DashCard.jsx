@@ -270,7 +270,7 @@ export default class DashCard extends Component {
       isEditing,
       mainCard,
     });
-
+  console.log("hideWatermark",hideWatermark)
     return (
       <DashCardRoot
         id={id}
@@ -292,7 +292,7 @@ export default class DashCard extends Component {
             zIndex: 2,
           }}
         >
-          {!isEditing &&
+          {!isEditing && !isPublic &&
           QueryDownloadWidget.shouldRender({
             result,
             isResultDirty: false,
@@ -491,6 +491,7 @@ export default class DashCard extends Component {
           onChangeLocation={this.props.onChangeLocation}
           dynamicParams={dashboard && dashboard.dynamicParams}
           chartStyle={chartStyle}
+          hideWatermark={hideWatermark}
         />
       </DashCardRoot>
     );

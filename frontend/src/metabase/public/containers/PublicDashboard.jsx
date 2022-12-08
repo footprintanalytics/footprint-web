@@ -34,12 +34,15 @@ import {
   setEmbedDashboardEndpoints,
 } from "metabase/services";
 import EmbedFrame from "../components/EmbedFrame";
+import { parseHashOptions } from "metabase/lib/browser";
+import { parseTitleId } from "metabase/lib/urls";
 
 const mapStateToProps = (state, props) => {
   return {
     metadata: getMetadata(state, props),
-    dashboardId:
+    dashboardId: parseTitleId(
       props.params.dashboardId || props.params.uuid || props.params.token,
+    ).id,
     dashboard: getDashboardComplete(state, props),
     dashcardData: getCardData(state, props),
     slowCards: getSlowCards(state, props),
@@ -66,8 +69,8 @@ class PublicDashboard extends Component {
       location,
       params: { uuid, token },
     } = this.props;
-
-    if (uuid) {
+    const publicUuid = parseTitleId(uuid).id;
+    if (publicUuid) {
       setPublicDashboardEndpoints();
     } else if (token) {
       setEmbedDashboardEndpoints();
@@ -75,7 +78,7 @@ class PublicDashboard extends Component {
 
     initialize();
     try {
-      await fetchDashboard(uuid || token, location.query);
+      await fetchDashboard(publicUuid || token, location.query);
       await fetchDashboardCardData({ reload: false, clear: true });
     } catch (error) {
       console.error(error);
@@ -113,6 +116,10 @@ class PublicDashboard extends Component {
       ? getDashboardActions(this, { ...this.props, isPublic: true })
       : [];
 
+    const { chart_style } = {
+      ...parseHashOptions(location.hash),
+    };
+
     return (
       <EmbedFrame
         name={dashboard && dashboard.name}
@@ -139,6 +146,8 @@ class PublicDashboard extends Component {
               mode={PublicMode}
               metadata={this.props.metadata}
               navigateToNewCardFromDashboard={() => {}}
+              hideWatermark={dashboard && dashboard.hideWatermark}
+              chartStyle={chart_style}
             />
           )}
         </LoadingAndErrorWrapper>
