@@ -4,6 +4,7 @@ import dayjs from "dayjs";
 import RunningTimer from "metabase/query_builder/components/view/RunningTimer";
 
 const QuestionRunningTime = props => {
+  console.log("QuestionRunningTime")
   const { isRunning } = props;
   const [start, setStart] = useState(0);
   const [runningTime, setRunningTime] = useState(0);

@@ -415,7 +415,7 @@ function AhHocQuestionLeftSide(props) {
     questionSideHideAction,
     snippets,
   } = props;
-
+  console.log("isRunnableisRunnableisRunnable", isRunnable, isNative)
   const isShowingNotebook = queryBuilderMode === "notebook";
   const isMissingPermissions =
     result?.error_type === SERVER_ERROR_TYPES.missingPermissions;
@@ -466,6 +466,9 @@ function AhHocQuestionLeftSide(props) {
                     onCancel={cancelQuery}
                   />
                 </ViewHeaderIconButtonContainer>
+              )}
+              {isRunnable && isNative && (
+                <QuestionRunningTime {...props} />
               )}
             </div>
           ) : (
@@ -518,9 +521,6 @@ function AhHocQuestionLeftSide(props) {
                   data-metabase-event="Notebook Mode; Convert to SQL Click"
                 />
               )}*/}
-              {isRunnable && isNative && (
-                <QuestionRunningTime {...props} />
-              )}
             </div>
           )}
         </AdHocViewHeading>
