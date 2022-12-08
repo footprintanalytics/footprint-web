@@ -9,6 +9,7 @@
     "@babel/preset-react",
     "@babel/preset-typescript"
   ],
+  "compact": false,
   "env": {
     "development": {
       "presets": []
