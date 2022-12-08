@@ -37,11 +37,14 @@ function FormFieldView({
   align,
   horizontal,
   standAloneLabel,
+  checkboxCss,
   children,
 }: FormFieldViewProps) {
+
   const rootClassNames = cx("Form-field", className, {
     "Form--fieldError": !!error,
     flex: horizontal,
+    checkbox: checkboxCss,
   });
 
   return (

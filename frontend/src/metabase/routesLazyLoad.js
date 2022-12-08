@@ -94,10 +94,10 @@ export default {
   dataApiProduct: loadable(() => import("metabase/containers/dataApi/product")),
   //
   // // account
-  // AccountSettingsApp: loadable(() => import("./account/settings/containers/AccountSettingsApp")),
-  // UserProfileApp: loadable(() => import("./account/profile/containers/UserProfileApp")),
-  // UserPasswordApp: loadable(() => import("./account/password/containers/UserPasswordApp")),
-  // DeveloperApp: loadable(() => import("./account/developer/containers/DeveloperApp")),
+  AccountApp: loadable(() => import("./account/app/containers/AccountApp")),
+  UserProfileApp: loadable(() => import("./account/profile/containers/UserProfileApp")),
+  UserPasswordApp: loadable(() => import("./account/password/containers/UserPasswordApp")),
+  DeveloperApp: loadable(() => import("./account/developer/containers/DeveloperApp")),
   // LoginHistoryApp: loadable(() => import("./account/login-history/containers/LoginHistoryApp")),
   // NotificationsApp: loadable(() => import("./account/notifications/containers/NotificationsApp")),
   // HelpModal: loadable(() => import("./account/notifications/components/HelpModal")),

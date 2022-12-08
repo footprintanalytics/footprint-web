@@ -24,4 +24,6 @@ export interface User extends BaseUser {
   has_invited_second_user: boolean;
   has_question_and_dashboard: boolean;
   personal_collection_id: number;
+  vipInfo: any;
+  name: string;
 }
