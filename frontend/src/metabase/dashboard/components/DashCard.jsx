@@ -29,13 +29,12 @@ import { isVirtualDashCard } from "metabase/dashboard/utils";
 import { IS_EMBED_PREVIEW } from "metabase/lib/embed";
 
 import { isActionCard } from "metabase/writeback/utils";
-
+import { deviceInfo } from "metabase-lib/lib/Device";
 import Utils from "metabase/lib/utils";
 import { getClickBehaviorDescription } from "metabase/lib/click-behavior";
 import PublicMode from "metabase/modes/components/modes/PublicMode";
 import { trackStructEvent } from "metabase/lib/analytics";
 import TableChartInfo from "metabase/query_builder/components/TableChartInfo";
-import { replaceTemplateCardUrl } from "metabase/lib/urls";
 import { getParameterValuesBySlug } from "metabase-lib/parameters/utils/parameter-values";
 import { DashCardRoot } from "./DashCard.styled";
 import DashCardParameterMapper from "./DashCardParameterMapper";
@@ -106,6 +105,23 @@ export default class DashCard extends Component {
     e.stopPropagation();
   };
 
+  getWrappedVisualizationPadding = ({
+    hideBackground,
+    isEditing,
+    mainCard,
+  }) => {
+    if (deviceInfo().isMobile) {
+      return "6px";
+    }
+    return hideBackground ||
+    (isEditing &&
+      (mainCard.display === "text" ||
+        mainCard.display === "image" ||
+        mainCard.display === "video"))
+      ? ""
+      : "18px 24px";
+  };
+
   // eslint-disable-next-line complexity
   render() {
     const {
@@ -152,14 +168,6 @@ export default class DashCard extends Component {
         card.query_average_duration &&
         card.query_average_duration < DATASET_USUALLY_FAST_THRESHOLD,
     }));
-
-    const isLogin = ({ from }) => {
-      if (!user) {
-        setLoginModalShow({ show: true, from: from });
-        return false;
-      }
-      return true;
-    };
 
     const loading =
       !(series.length > 0 && _.every(series, s => s.data)) &&
@@ -256,6 +264,12 @@ export default class DashCard extends Component {
     const cardDomKey = `Card--${String(dashcard.id).replace(".", "")}`;
 
     const result = getIn(dashcardData, [dashcard.id, dashcard.card_id]);
+
+    const wrappedVisualizationPadding = this.getWrappedVisualizationPadding({
+      hideBackground,
+      isEditing,
+      mainCard,
+    });
 
     return (
       <DashCardRoot
@@ -387,6 +401,11 @@ export default class DashCard extends Component {
           className={cx("flex-full overflow-hidden", {
             "pointer-events-none": isEditingDashboardLayout,
           })}
+          style={{
+            position: "relative",
+            zIndex: 1,
+            padding: wrappedVisualizationPadding,
+          }}
           classNameWidgets={isEmbed && "text-light text-medium-hover"}
           error={errorMessage}
           headerIcon={headerIcon}

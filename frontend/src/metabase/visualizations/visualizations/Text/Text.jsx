@@ -15,7 +15,7 @@ import { CaretDownOutlined } from "@ant-design/icons";
 import { Popover } from "antd";
 import { withInstanceLanguage, siteLocale } from "metabase/lib/i18n";
 import { substitute_tags } from "cljs/metabase.shared.parameters.parameters";
-import "./Text.css";
+import styles from "./Text.css";
 
 const getSettingsStyle = settings => ({
   "align-center": settings["text.align_horizontal"] === "center",
@@ -289,7 +289,7 @@ export default class Text extends Component {
     if (isEditing) {
       return (
         <div
-          className={cx(className, "Text", {
+          className={cx(className, styles.Text, {
             "padded": !isPreviewing,
           })}
         >
@@ -298,7 +298,7 @@ export default class Text extends Component {
               remarkPlugins={REMARK_PLUGINS}
               className={cx(
                 "full flex-full flex flex-column text-card-markdown",
-                "text-card-markdown",
+                styles["text-card-markdown"],
                 getSettingsStyle(settings),
               )}
             >
@@ -310,7 +310,7 @@ export default class Text extends Component {
               <textarea
                 className={cx(
                   "full flex-full flex flex-column bg-light bordered drag-disabled",
-                  "text-card-textarea",
+                  styles["text-card-textarea"],
                 )}
                 name="text"
                 placeholder={t`You can use Markdown here, and include variables {{like_this}}`}
@@ -321,7 +321,7 @@ export default class Text extends Component {
                 onMouseDown={this.preventDragging}
               />
               </div>
-              <div className="Text-wrap-tip">
+              <div className={styles["Text-wrap-tip"]}>
                 <Popover
                   placement="bottomLeft"
                   content={
@@ -347,7 +347,7 @@ export default class Text extends Component {
       return (
         <div
           ref={r => (this.chartRef = r)}
-          className={cx(className, "Text", {
+          className={cx(className, styles.Text, {
             /* if the card is not showing a background we should adjust the left
              * padding to help align the titles with the wrapper */
             pl0: !settings["dashcard.background"],
@@ -362,7 +362,7 @@ export default class Text extends Component {
             linkTarget="_blank"
             className={cx(
               "flex-full flex flex-column",
-              "text-card-markdown",
+              styles["text-card-markdown"],
               getSettingsStyle(settings),
             )}
           >
