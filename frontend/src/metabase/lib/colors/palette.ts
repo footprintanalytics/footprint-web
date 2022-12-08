@@ -7,7 +7,8 @@ export const ACCENT_COUNT = 8;
 // NOTE: KEEP SYNCRONIZED WITH COLORS.CSS
 /* eslint-disable no-color-literals */
 export const colors: ColorPalette = {
-  brand: "#509EE3",
+  brand: "#3434b2",
+  "brand-light": "#F2EFFE",
   summarize: "#88BF4D",
   filter: "#7172AD",
   accent0: "#509EE3",
@@ -17,16 +18,17 @@ export const colors: ColorPalette = {
   accent4: "#F9D45C",
   accent5: "#F2A86F",
   accent6: "#98D9D9",
-  accent7: "#7172AD",
-  "admin-navbar": "#7172AD",
+  accent7: "#3434B2",
+  "admin-navbar": "#3434B2",
   white: "#FFFFFF",
   black: "#2E353B",
   success: "#84BB4C",
   danger: "#ED6E6E",
   error: "#ED6E6E",
   warning: "#F9CF48",
-  "text-dark": "#4C5773",
-  "text-medium": "#949AAB",
+  "text-second": "#667697",
+  "text-dark": "#505050",
+  "text-medium": "#B5BAD2",
   "text-light": "#B8BBC3",
   "text-white": "#FFFFFF",
   "bg-black": "#2E353B",
@@ -35,6 +37,7 @@ export const colors: ColorPalette = {
   "bg-light": "#F9FBFC",
   "bg-white": "#FFFFFF",
   "bg-yellow": "#FFFCF2",
+  "svg-color": "#677796",
   "bg-night": "#42484E",
   "bg-error": "#ED6E6E55",
   shadow: "rgba(0,0,0,0.08)",
@@ -46,6 +49,12 @@ export const colors: ColorPalette = {
   "saturated-purple": "#885AB1",
   "saturated-red": "#ED6E6E",
   "saturated-yellow": "#F9CF48",
+
+  /* footprint colors */
+  "footprint-color-title": "#303440",
+  "footprint-color-primary-text": "#303440",
+  "footprint-color-secondary-text1": "#666c80",
+  "footprint-color-secondary-text2": "#acacb2",
 };
 /* eslint-enable no-color-literals */
 
@@ -53,7 +62,7 @@ export const originalColors = { ...colors };
 
 const aliases: Record<string, (palette: ColorPalette) => string> = {
   dashboard: palette => color("brand", palette),
-  nav: palette => color("bg-white", palette),
+  nav: palette => color("brand", palette),
   content: palette => color("bg-light", palette),
   database: palette => color("accent2", palette),
   pulse: palette => color("accent4", palette),

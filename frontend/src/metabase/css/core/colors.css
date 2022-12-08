@@ -2,27 +2,37 @@
  * NOTE: KEEP SYNCRONIZED WITH COLORS.JS
  */
 :root {
-  --color-brand: #509ee3;
-  --color-brand-light: #ddecfa;
+  --color-brand: #3434b2;
+  --color-brand-light: #f2effe;
+  --color-accent1: #88bf4d;
+  --color-accent2: #a989c5;
+  --color-accent3: #ef8c8c;
+  --color-accent4: #f9d45c;
+  --color-accent5: #f2a86f;
+  --color-accent6: #98d9d9;
+  --color-accent7: #7172ad;
   --color-admin-navbar: #7172ad;
   --color-white: #ffffff;
   --color-black: #2e353b;
   --color-success: #84bb4c;
   --color-error: #ed6e6e;
   --color-warning: #f9cf48;
-  --color-text-dark: #4c5773;
+  --color-text-second: #667697;
+  --color-text-dark: #303440;
   --color-text-medium: #949aab;
-  --color-text-light: #b8bbc3;
+  --color-text-light: #84848a;
   --color-text-white: #ffffff;
+  --color-text-axis: #00000070;
   --color-bg-black: #2e353b;
   --color-bg-dark: #93a1ab;
   --color-bg-medium: #edf2f5;
   --color-bg-light: #f9fbfc;
   --color-bg-white: #ffffff;
   --color-bg-yellow: #fffcf2;
-  --color-focus: #cbe2f7;
   --color-shadow: rgba(0, 0, 0, 0.13);
-  --color-border: #eeecec;
+  --color-border: #dcdee4;
+
+  --color-focus: #cbe2f7;
 
   --footprint-color-main: #3434b2;
   --footprint-color-bg: #f7f7f9;
