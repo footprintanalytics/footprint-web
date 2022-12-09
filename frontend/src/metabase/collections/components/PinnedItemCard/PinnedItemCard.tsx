@@ -30,7 +30,7 @@ const TOOLTIP_MAX_WIDTH = 450;
 
 function getDefaultDescription(model: string) {
   return {
-    card: t`A question`,
+    card: t`A chart`,
     dashboard: t`A dashboard`,
     dataset: t`A model`,
   }[model];

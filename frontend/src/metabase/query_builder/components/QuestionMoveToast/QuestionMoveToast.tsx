@@ -27,7 +27,7 @@ export default function QuestionMoveToast({
               color={color("brand")}
             />
           )}`
-        : jt`Question moved to ${(
+        : jt`Chart moved to ${(
             <Collections.Link
               key="collection-link"
               id={collectionId}

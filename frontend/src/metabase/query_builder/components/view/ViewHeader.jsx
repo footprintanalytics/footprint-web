@@ -444,9 +444,9 @@ function AhHocQuestionLeftSide(props) {
             }}
           />
         )}
-        <AdHocViewHeading color="medium">
+        <AdHocViewHeading color="dark">
           {isNative ? (
-            <div className="flex">
+            <div className="flex align-center">
               {get(question, "_card.name") || t`New Chart`}
               <ToggleCreateType question={question} router={router} updateQuestion={updateQuestion}/>
               {hasRunButton && !isShowingNotebook && (
