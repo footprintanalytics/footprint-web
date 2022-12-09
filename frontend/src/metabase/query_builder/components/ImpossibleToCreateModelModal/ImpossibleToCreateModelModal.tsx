@@ -31,11 +31,12 @@ export function ImpossibleToCreateModelModal({ onClose }: Props) {
       title={t`Variables in models aren't supported yet`}
       onClose={onClose}
     >
-      <p className="text-paragraph">{jt`To solve this, just remove the variables in this question and try again. (It's okay to use ${(
+      {/*<p className="text-paragraph">{jt`To solve this, just remove the variables in this question and try again. (It's okay to use ${(
         <SQLSnippetsDocLink key="link-1" />
       )} or ${(
         <ReferencingQuestionsDocLink key="link-2" />
-      )} in your query.)`}</p>
+      )} in your query.)`}</p>*/}
+      <p className="text-paragraph">{jt`To solve this, just remove the variables in this question and try again. `}</p>
       <div className="flex justify-center py1">
         <Button primary onClick={onClose}>{t`Okay`}</Button>
       </div>

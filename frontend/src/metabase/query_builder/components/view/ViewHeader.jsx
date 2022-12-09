@@ -829,6 +829,19 @@ function ViewTitleHeaderRightSide(props) {
             }
           />
         )}
+        {/*<QuestionActions
+          isShowingQuestionInfoSidebar={isShowingQuestionInfoSidebar}
+          isBookmarked={isBookmarked}
+          handleBookmark={toggleBookmark}
+          onOpenModal={onOpenModal}
+          question={question}
+          setQueryBuilderMode={setQueryBuilderMode}
+          turnDatasetIntoQuestion={turnDatasetIntoQuestion}
+          turnQuestionIntoAction={turnQuestionIntoAction}
+          turnActionIntoQuestion={turnActionIntoQuestion}
+          onInfoClick={handleInfoClick}
+          onModelPersistenceChange={onModelPersistenceChange}
+        />*/}
       </ViewHeaderActionPanel>
     )
   }
@@ -987,21 +1000,6 @@ function ViewTitleHeaderRightSide(props) {
           />
         </ViewHeaderIconButtonContainer>
       )}*/}
-      {isSaved && (
-        <QuestionActions
-          isShowingQuestionInfoSidebar={isShowingQuestionInfoSidebar}
-          isBookmarked={isBookmarked}
-          handleBookmark={toggleBookmark}
-          onOpenModal={onOpenModal}
-          question={question}
-          setQueryBuilderMode={setQueryBuilderMode}
-          turnDatasetIntoQuestion={turnDatasetIntoQuestion}
-          turnQuestionIntoAction={turnQuestionIntoAction}
-          turnActionIntoQuestion={turnActionIntoQuestion}
-          onInfoClick={handleInfoClick}
-          onModelPersistenceChange={onModelPersistenceChange}
-        />
-      )}
       {/*{hasSaveButton && (
         <SaveButton
           disabled={!question.canRun() || !canEditQuery}
