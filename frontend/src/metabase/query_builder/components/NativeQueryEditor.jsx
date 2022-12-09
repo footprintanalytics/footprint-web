@@ -557,18 +557,14 @@ class NativeQueryEditor extends Component {
                 {/*<div className="mt1">
                 <DataReferenceButton {...this.props} />
               </div>*/}
-                <div className="ml2">
-                  <NativeVariablesButton {...this.props} size={18}/>
-                </div>
+                <NativeVariablesButton {...this.props} size={18}/>
                 {/*{showSnippetSidebarButton && (
                   <div className="ml2">
                     <SnippetSidebarButton {...this.props} size={18}/>
                   </div>
                 )}*/}
                 {showDarkModeButton && (
-                  <div className="ml2">
-                    <DarkModeButton {...this.props} size={18}/>
-                  </div>
+                  <DarkModeButton {...this.props} size={18}/>
                 )}
               </div>
             )}

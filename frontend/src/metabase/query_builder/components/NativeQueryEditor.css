@@ -29,43 +29,43 @@
 
 
 .DarkMode .ace_editor .ace_gutter {
-  background-color: #2d2d2d;
-  color: #ebdab4;
+  background-color: #2d2d2d !important;
+  color: #ebdab4 !important;;
 }
 .DarkMode .ace-tm .ace_cursor {
-  color: white;
+  color: white !important;;
 }
 .DarkMode .ace_editor {
-  background-color: #2d2d2d;
-  color: #c0c0c0;
+  background-color: #2d2d2d !important;;
+  color: #c0c0c0 !important;;
 }
 .DarkMode .ace-tm .ace_marker-layer .ace_selection {
-  background: #b0604080;
-  border-radius: 0;
-  border: 0;
+  background: #b0604080 !important;;
+  border-radius: 0 !important;;
+  border: 0 !important;;
 }
 .DarkMode .ace-tm .ace_marker-layer .ace_selected-word {
-  background: transparent;
-  border: 0;
+  background: transparent !important;;
+  border: 0 !important;;
 }
 .DarkMode .ace_editor .ace_keyword {
-  color: #e89393;
+  color: #e89393 !important;;
 }
 
 .DarkMode .ace_editor .ace_function,
 .DarkMode .ace_editor .ace_variable {
-  color: #cdfecd;
+  color: #cdfecd !important;;
 }
 .DarkMode .ace_editor .ace_constant,
 .DarkMode .ace_editor .ace_type {
-  color: #fffc01cc;
+  color: #fffc01cc !important;;
 }
 .DarkMode .ace_editor .ace_string {
-  color: #99b4d1;
+  color: #99b4d1 !important;;
 }
 .DarkMode .ace_editor .ace_templateTag {
-  color: #99cc00;
+  color: #99cc00 !important;;
 }
 .DarkMode .ace-tm .ace_indent-guide {
-  opacity: 0.2;
+  opacity: 0.2 !important;;
 }
