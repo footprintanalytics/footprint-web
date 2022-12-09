@@ -374,11 +374,11 @@
                                   :recipients   email-recipients
                                   :message-type :attachments
                                   :message      "alert telegram"}
-      (= channel_type :twitter) {:channel_type "twitter"
+      (= channel_type :discord) {:channel_type "discord"
                                   :subject      email-subject
                                   :recipients   email-recipients
                                   :message-type :attachments
-                                  :message      "alert twitter"}
+                                  :message      "alert discord"}
       )
     ))
 
