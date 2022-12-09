@@ -357,3 +357,10 @@
   pointer-events: all;
   user-select: auto;
 }
+
+@media screen and (--footprint-breakpoint-max-mobile) {
+  .CardsContainer,
+  .TagWidgetContainer {
+    padding: 0 10px !important;
+  }
+}

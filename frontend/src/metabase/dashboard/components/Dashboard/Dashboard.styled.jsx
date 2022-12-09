@@ -70,7 +70,6 @@ export const HeaderContainer = styled.header`
     !isDataApp &&
     css`
       background-color: ${color("bg-white")};
-      border-bottom: 1px solid ${color("border")};
     `}
 
   ${({ isFullscreen }) =>

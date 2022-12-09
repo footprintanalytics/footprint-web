@@ -3,15 +3,11 @@
 }
 
 :local .Text {
-  border: none;
-  border-radius: 8px;
   display: flex;
   flex-direction: column;
-  height: 100%;
   justify-content: center;
-  overflow: hidden;
-  width: 100%;
   padding: 0.5em 0.75em;
+  height: 100%;
 }
 
 :local .Text .text-card-textarea {
@@ -33,12 +29,7 @@
 }
 
 :local .Text .text-card-markdown {
-  height: 100%;
-  overflow-x: hidden;
-  overflow-y: auto;
-  padding: 0.5em 16px;
   pointer-events: all;
-  width: 100%;
   word-break: break-word;
 }
 

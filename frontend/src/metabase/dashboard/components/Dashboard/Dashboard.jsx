@@ -602,17 +602,22 @@ class Dashboard extends Component {
                 data-testid="dashboard-parameters-and-cards"
                 ref={element => (this.parametersAndCardsContainerRef = element)}
               >
-                {shouldRenderParametersWidgetInViewMode && (
-                  <ParametersWidgetContainer
-                    data-testid="dashboard-parameters-widget-container"
-                    ref={element => (this.parametersWidgetRef = element)}
-                    isNavbarOpen={isNavbarOpen}
-                    isSticky={isParametersWidgetSticky}
-                    topNav={embedOptions?.top_nav}
-                  >
-                    {parametersWidget}
-                  </ParametersWidgetContainer>
-                )}
+                <div className="TagWidgetContainer bg-white pl2 pr2 hove">
+                  <div style={{ display: isEditing ? "none" : "flex" }}>
+                    {this.tagPanel()}
+                  </div>
+                  {shouldRenderParametersWidgetInViewMode && (
+                    <ParametersWidgetContainer
+                      data-testid="dashboard-parameters-widget-container"
+                      ref={element => (this.parametersWidgetRef = element)}
+                      isNavbarOpen={isNavbarOpen}
+                      isSticky={isParametersWidgetSticky}
+                      topNav={embedOptions?.top_nav}
+                    >
+                      {parametersWidget}
+                    </ParametersWidgetContainer>
+                  )}
+                </div>
 
                 <CardsContainer
                   addMarginTop={cardsContainerShouldHaveMarginTop}
