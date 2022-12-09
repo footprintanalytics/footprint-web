@@ -235,7 +235,6 @@ class PublicDashboard extends Component {
             className={cx("Dashboard flex-full", {
               "Dashboard--fullscreen": isFullscreen,
               "Dashboard--night": isNightMode,
-              "Dashboard--coin360": MetabaseUtils.isCoin360(),
             })}
             key={dashboard && dashboard.id}
             loading={!dashboard}

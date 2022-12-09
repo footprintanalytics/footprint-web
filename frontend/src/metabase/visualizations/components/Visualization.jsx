@@ -485,7 +485,7 @@ class Visualization extends React.PureComponent {
         className={cx(className, "flex flex-column full-height")}
         style={{ ...style, position: "relative"}}
       >
-        {!isPublic && showDataUpdateTime && !isEditing && !Utils.isCoin360() && (
+        {!isPublic && showDataUpdateTime && !isEditing && (
           <div className="Visualization__table-chart-info">
             <Tooltip key="ChartInfo" tooltip={t`Chart Info`}>
               <TableChartInfo
