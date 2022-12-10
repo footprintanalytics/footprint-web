@@ -19,7 +19,7 @@ import Collections from "metabase/entities/collections";
 import Timelines from "metabase/entities/timelines";
 import { urlAddParam } from "metabase/lib/urls";
 import Buffet from "metabase/containers/buffet";
-import PublicQuestion from "metabase/public/containers/PublicQuestion";
+import PublicQuestion from "metabase/guest/Question";
 
 import { closeNavbar, getIsNavbarOpen } from "metabase/redux/app";
 import { getMetadata } from "metabase/selectors/metadata";
@@ -235,7 +235,7 @@ function QueryBuilder(props) {
     canCreate,
   } = props;
 
-  const [uuid, setUuid] = useState();
+  const [uuid, setUuid] = useState(null);
   const [error, setError] = useState();
   const [showVip, setShowVip] = useState();
   const forceUpdate = useForceUpdate();
@@ -327,9 +327,9 @@ function QueryBuilder(props) {
     ],
   );
 
-  useOnMount(() => {
+/*  useOnMount(() => {
     initializeQB(location, params);
-  }, []);
+  }, []);*/
 
   useOnMount(() => {
     handleChartProcess(user);
@@ -356,11 +356,7 @@ function QueryBuilder(props) {
         const canEditInfo =
           user && (metabaseId === user.id || user.is_superuser);
         if (canEditInfo) {
-          setUuid(null,
-            () => {
-              init();
-            },
-          );
+          init();
         } else {
           setUuid(uuid);
         }
@@ -498,6 +494,7 @@ function QueryBuilder(props) {
       )
     );
   };
+  console.log("uuiduuid", uuid)
   if (uuid) {
     return <PublicQuestion {...props} uuid={uuid} />;
   }
@@ -527,7 +524,7 @@ function QueryBuilder(props) {
 
 export default _.compose(
   // Bookmark.loadList(),
-  Timelines.loadList(timelineProps),
+  // Timelines.loadList(timelineProps),
   connect(mapStateToProps, mapDispatchToProps),
   favicon(({ pageFavicon }) => pageFavicon),
   title(({ card, documentTitle }) => ({

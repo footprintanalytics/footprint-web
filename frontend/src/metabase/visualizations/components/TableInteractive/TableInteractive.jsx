@@ -1008,7 +1008,7 @@ class TableInteractive extends Component {
                       zIndex: 4,
                     }}
                   />
-                  <div
+                  {/*<div
                     id="gutter-column"
                     className="TableInteractive-gutter"
                     style={{
@@ -1023,7 +1023,7 @@ class TableInteractive extends Component {
                     onMouseLeave={this.handleLeaveRow}
                   >
                     <DetailShortcut ref={this.detailShortcutRef} />
-                  </div>
+                  </div>*/}
                 </>
               )}
               <Grid
