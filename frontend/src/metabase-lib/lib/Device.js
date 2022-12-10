@@ -1,4 +1,5 @@
 import { useSize } from "ahooks";
+// eslint-disable-next-line no-restricted-imports
 import {
   footprintWidthMobile,
   footprintWidthPad,

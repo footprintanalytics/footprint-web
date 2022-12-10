@@ -35,7 +35,7 @@ export function question(
     isModelDetail = false,
   }: QuestionUrlBuilderParams = {},
 ) {
-  console.log("questionquestion")
+
   if (hash && typeof hash === "object") {
     hash = serializeCardForUrl(hash);
   }

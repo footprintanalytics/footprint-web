@@ -1,9 +1,9 @@
-import { loadCard } from "metabase/lib/card";
-import { utf8_to_b64url } from "metabase/lib/encoding";
-import { guestUrl } from "metabase/lib/urls";
+import { unset } from "lodash";
 import querystring from "querystring";
 import { message } from "antd";
-import { unset } from "lodash";
+import { loadCardForPreview } from "metabase/lib/card";
+import { utf8_to_b64url } from "metabase/lib/encoding";
+import { guestUrl } from "metabase/lib/urls";
 import * as Urls from "metabase/lib/urls";
 
 export function navigateToGuestQuery(
@@ -50,7 +50,9 @@ export async function replaceTemplateCardUrl(props, cardId) {
     return;
   }
   const hide = message.loading("Loading...", 0);
-  const card = await loadCard(cardId);
+  console.log("xxx1")
+  const card = await loadCardForPreview(cardId);
+  console.log("xxx2")
   hide();
   unset(card, ["visualization_settings", "card.title"]);
   window.open(Urls.newQuestion({ ...card, create_method: "preview" }));

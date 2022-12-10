@@ -41,6 +41,7 @@ import * as Urls from "metabase/lib/urls";
 import Dashboards from "metabase/entities/dashboards";
 
 import DataAppContext from "metabase/writeback/containers/DataAppContext";
+import { replaceTemplateCardUrl } from "metabase/guest/utils";
 import * as dashboardActions from "../actions";
 import {
   getIsEditing,
@@ -65,7 +66,6 @@ import {
   getIsHeaderVisible,
   getIsAdditionalInfoVisible,
 } from "../selectors";
-import { replaceTemplateCardUrl } from "metabase/lib/urls";
 
 function getDashboardId({ dashboardId, location, params }) {
   if (dashboardId) {
