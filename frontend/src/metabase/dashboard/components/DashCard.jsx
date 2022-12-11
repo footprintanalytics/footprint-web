@@ -40,6 +40,9 @@ import { DashCardRoot } from "./DashCard.styled";
 import DashCardParameterMapper from "./DashCardParameterMapper";
 import "./DashCard.css";
 import QueryDownloadWidgetFP from "metabase/query_builder/components/QueryDownloadWidgetFP";
+import { AddToolPopover } from "metabase/dashboard/components/Dashboard/DashboardEmptyState/DashboardEmptyState";
+import { addTextDashCardToDashboard, toggleSidebar } from "metabase/dashboard/actions";
+import { SIDEBAR_NAME } from "metabase/dashboard/constants";
 
 const DATASET_USUALLY_FAST_THRESHOLD = 15 * 1000;
 
@@ -55,7 +58,7 @@ const WrappedVisualization = WithVizSettingsData(
   connect(null, dispatch => ({ dispatch }))(Visualization),
 );
 
-export default class DashCard extends Component {
+class DashCard extends Component {
   static propTypes = {
     dashcard: PropTypes.object.isRequired,
     gridItemWidth: PropTypes.number.isRequired,
@@ -160,6 +163,7 @@ export default class DashCard extends Component {
     const dashboardId = dashcard.dashboard_id;
     const display = (dashcard.card || {}).display;
     const isEmbed = Utils.isJWT(dashboardId);
+    console.log("cards", cards)
     const series = cards.map(card => ({
       ...getIn(dashcardData, [dashcard.id, card.id]),
       card: card,
@@ -190,7 +194,6 @@ export default class DashCard extends Component {
         s.error_type === SERVER_ERROR_TYPES.missingPermissions ||
         s.error?.status === 403,
     );
-
     const errors = series.map(s => s.error).filter(e => e);
 
     let errorMessage, errorIcon;
@@ -270,7 +273,6 @@ export default class DashCard extends Component {
       isEditing,
       mainCard,
     });
-  console.log("hideWatermark",hideWatermark)
     return (
       <DashCardRoot
         id={id}
@@ -735,3 +737,10 @@ const ClickBehaviorSidebarOverlay = ({
     </div>
   );
 };
+
+const mapDispatchToProps = {
+  toggleSidebar,
+  addTextDashCardToDashboard,
+};
+
+export default connect(null, mapDispatchToProps)(DashCard);

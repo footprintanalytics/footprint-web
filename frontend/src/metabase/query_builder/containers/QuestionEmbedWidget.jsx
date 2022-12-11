@@ -83,6 +83,7 @@ class QuestionEmbedWidget extends Component {
 
   static shouldRender({
     question,
+    user,
     isAdmin,
     // preferably this would come from props
     isPublicLinksEnabled = MetabaseSettings.get("enable-public-sharing"),
@@ -91,9 +92,10 @@ class QuestionEmbedWidget extends Component {
     if (question.isDataset()) {
       return false;
     }
-
+    const isOwner =
+      user && (user.id === question._card.creator_id || user.is_superuser);
     return (
-      (isPublicLinksEnabled && (isAdmin || question.publicUUID())) ||
+      (isPublicLinksEnabled && (isAdmin || isOwner)) ||
       (isEmbeddingEnabled && isAdmin)
     );
   }

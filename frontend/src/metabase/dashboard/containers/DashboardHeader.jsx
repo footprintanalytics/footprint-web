@@ -142,11 +142,7 @@ class DashboardHeader extends Component {
   }
 
   onRevert() {
-    this.props.fetchDashboard(
-      this.props.dashboard.id,
-      this.props.location.query,
-      true,
-    );
+    this.props.onRevert();
   }
 
   async onSave() {
@@ -169,7 +165,7 @@ class DashboardHeader extends Component {
   }
 
   async onCancel() {
-    this.onRevert();
+    // this.onRevert();
     this.onDoneEditing();
   }
 
@@ -562,7 +558,6 @@ class DashboardHeader extends Component {
               iconSize={16}
               onClick={() => {
                 trackStructEvent("click Download dashboard");
-                console.log("this.props.dashboard", this.props.dashboard);
                 if (user) {
                   const { public_uuid } = this.props.dashboard;
                   if (!public_uuid) {

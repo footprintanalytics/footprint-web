@@ -11,6 +11,7 @@ import { t } from "ttag";
 
 import CustomForm from "metabase/components/form/CustomForm";
 import StandardForm from "metabase/components/form/StandardForm";
+import { message } from "antd";
 
 export {
   CustomFormField as FormField,
@@ -43,7 +44,13 @@ const ReduxFormComponent = reduxForm()(
       <FormComponent
         {...props}
         handleSubmit={async (...args) => {
+          console.log("FormComponent handleSubmit")
+          if (props.submitting) {
+            return;
+          }
+          const hide = message.loading("Loading...", 0);
           await handleSubmit(...args);
+          hide();
           // normally handleSubmit swallows the result/error, but we want to make it available to things like ActionButton
           if (submitState.failed) {
             throw submitState.result;
@@ -271,6 +278,7 @@ class Form extends React.Component {
     const formObject = this._getFormObject();
     const initialValues = this._getInitialValues();
     const fieldNames = this._getFieldNames();
+  console.log("yyy")
     return (
       <ReduxFormComponent
         {...this.props}

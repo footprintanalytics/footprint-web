@@ -37,8 +37,8 @@ const Dashboards = createEntity({
   api: {
     favorite: POST("/api/dashboard/:id/favorite"),
     unfavorite: DELETE("/api/dashboard/:id/favorite"),
-    save: POST("/api/dashboard/save"),
-    copy: POST("/api/dashboard/:id/copy"),
+    save: POST("/api/v1/dashboard/save"),
+    copy: POST("/api/v1/dashboard/:id/copy"),
   },
 
   objectActions: {

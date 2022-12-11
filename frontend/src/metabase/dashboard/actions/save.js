@@ -14,6 +14,7 @@ import { updateDashcardId } from "./core";
 import { fetchDashboard } from "./data-fetching";
 import userCancelFeedbackUtil from "metabase/dashboard/components/utils/userCancelFeedbackUtil";
 import { dynamicParamsApi } from "metabase/new-service";
+import { cancelFeedbackAction } from "../../redux/control";
 
 export const SAVE_DASHBOARD_AND_CARDS =
   "metabase/dashboard/SAVE_DASHBOARD_AND_CARDS";

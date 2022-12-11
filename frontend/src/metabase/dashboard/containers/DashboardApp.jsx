@@ -43,6 +43,7 @@ import Dashboards from "metabase/entities/dashboards";
 import DataAppContext from "metabase/writeback/containers/DataAppContext";
 import { replaceTemplateCardUrl } from "metabase/guest/utils";
 import * as dashboardActions from "../actions";
+import { toggleSidebar } from "../actions";
 import {
   getIsEditing,
   getIsSharing,
@@ -120,12 +121,12 @@ const mapDispatchToProps = {
   onChangeLocation: push,
   setLoginModalShow: loginModalShowAction,
   setIsCancelFeedbackBlockAction,
+  toggleSidebar,
 };
 
-// NOTE: should use DashboardControls and DashboardData HoCs here?
+// NOTE: should use DashboardControls and DashboardData HoCs here0?
 const DashboardApp = props => {
   const options = parseHashOptions(window.location.hash);
-
   const { isRunning, isLoadingComplete, dashboard } = props;
 
   const [editingOnLoad] = useState(options.edit);

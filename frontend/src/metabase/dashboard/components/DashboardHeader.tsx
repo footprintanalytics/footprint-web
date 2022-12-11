@@ -116,7 +116,6 @@ const DashboardHeader = ({
   });*/
 
   const isDataApp = false;
-
   return (
     <div>
       {isEditing && (

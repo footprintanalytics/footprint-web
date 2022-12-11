@@ -178,7 +178,6 @@ export function ViewTitleHeader(props) {
       />,
     ];
   }
-  console.log("isSaved", isSaved)
   return (
     <>
       {!isSaved && (
@@ -312,7 +311,6 @@ function SavedQuestionLeftSide(props) {
     },
     [question, onSave],
   );
-  console.log("cardcardcard", card)
   return (
     <SavedQuestionLeftSideRoot
       data-testid="qb-header-left-side"
@@ -813,7 +811,7 @@ function ViewTitleHeaderRightSide(props) {
         }) && (
           <QuestionEmbedWidgetButton
             key="question-embed-widget-trigger"
-            onClick={params => onOpenModal("embed", params)}
+            onClick={params => onOpenModal("embed", null, params)}
           />
         )}
         {(!!card.public_uuid || isOwner || isAdmin) && (

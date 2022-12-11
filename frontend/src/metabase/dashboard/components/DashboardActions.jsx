@@ -49,7 +49,6 @@ export const getDashboardActions = (
   const hasDataCards =
     hasCards &&
     dashboard.ordered_cards.some(dashCard => dashCard.card.display !== "text");
-
   const canShareDashboard = hasCards;
   const canCreateSubscription = hasDataCards && canManageSubscriptions;
 

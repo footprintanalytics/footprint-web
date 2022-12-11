@@ -43,7 +43,6 @@ export const featuresSideHideAction = createThunkAction(
 export const createModalShowAction = createThunkAction(
   CREATE_MODAL_SHOW,
   ({ show, redirect }) => {
-    console.log("createModalShowAction", show, redirect)
     return { show, redirect };
   },
 );

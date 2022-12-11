@@ -43,6 +43,7 @@ import {
   ParametersAndCardsContainer,
   ParametersWidgetContainer,
 } from "./Dashboard.styled";
+import { SIDEBAR_NAME } from "metabase/dashboard/constants";
 
 // const SCROLL_THROTTLE_INTERVAL = 1000 / 24;
 const THROTTLE_PERIOD = 300;
@@ -124,6 +125,7 @@ class Dashboard extends Component {
     dashboardBeforeEditing: PropTypes.any,
     replace: PropTypes.func,
     navigateToNewCardFromDashboard: PropTypes.func,
+    toggleSidebar: PropTypes.func,
   };
 
   static defaultProps = {
@@ -487,6 +489,11 @@ class Dashboard extends Component {
     );
   };
 
+  onAfterChangePublicUuid = ({ newUuid }) => {
+    this.props.dashboard.public_uuid = newUuid;
+    console.log("this.props.dashboard", this.props.dashboard)
+  };
+
   render() {
     const {
       addParameter,
@@ -577,8 +584,6 @@ class Dashboard extends Component {
                   addParameter={addParameter}
                   parametersWidget={parametersWidget}
                   onSharingClick={this.onSharingClick}
-                  onShowAddQuestionSidebar={this.onShowAddQuestionSidebar}
-                  onHideAddQuestionSidebar={this.onHideAddQuestionSidebar}
                   onCopyClick={this.onCopyClick}
                   showNewDashboardModal={this.onShowNewDashboardModal}
                   saveAction={this.saveAction}
@@ -648,6 +653,11 @@ class Dashboard extends Component {
                     <DashboardEmptyState
                       isDataApp={false}
                       isNightMode={shouldRenderAsNightMode}
+                      isEditing={isEditing}
+                      onToggleAddQuestionSidebar={() =>
+                        this.props.toggleSidebar(SIDEBAR_NAME.addQuestion)
+                      }
+                      {...this.props}
                     />
                   )}
                 </CardsContainer>

@@ -9,7 +9,10 @@ export const getCrumbs = (
     return [
       ...collection.path
         .filter(id => collectionsById[id])
-        .map(id => [collectionsById[id].name, () => callback(id)]),
+        .map(id => [
+          collectionsById[id] ? collectionsById[id].name : "",
+          () => callback(id),
+        ]),
       [collection.name],
     ];
   } else {

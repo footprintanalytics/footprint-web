@@ -41,7 +41,6 @@ function SidebarContent({
   categoryListSelect,
   children,
 }: Props) {
-  console.log("SidebarContent categoryList", categoryList)
   return (
     <SidebarContentRoot className={className}>
       {categoryList && (

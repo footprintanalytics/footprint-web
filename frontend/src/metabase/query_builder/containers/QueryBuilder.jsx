@@ -253,7 +253,7 @@ function QueryBuilder(props) {
   const collectionId = question?.collectionId();
 
   const openModal = useCallback(
-    (modal, modalContext) => setUIControls({ modal, modalContext }),
+    (modal, modalContext, params = {}) => setUIControls({ modal, modalContext, ...params }),
     [setUIControls],
   );
 

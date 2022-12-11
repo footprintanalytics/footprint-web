@@ -27,7 +27,6 @@ const QueryCopyInnerModal = ({
 }) => {
   const publicAnalyticPermission = user && user.publicAnalytic === "write";
   const [showVip, setShowVip] = useState(false);
-
   return (
     <>
       <Modal onClose={onClose}>

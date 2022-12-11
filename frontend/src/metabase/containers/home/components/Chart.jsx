@@ -72,7 +72,6 @@ export default class Chart extends Component {
       params: { uuid },
       // location: { query },
     } = this.props;
-    console.log("uuid", uuid);
     try {
       let card;
       if (uuid) {

@@ -7,10 +7,11 @@ import { createEntity, undo } from "metabase/lib/entities";
 import * as Urls from "metabase/lib/urls";
 
 import { CollectionSchema } from "metabase/schema";
-import { getUser, getUserPersonalCollectionId } from "metabase/selectors/user";
+import { getUserPersonalCollectionId } from "metabase/selectors/user";
 
 import { canonicalCollectionId } from "metabase/collections/utils";
 
+import { getPersonalCollectionId } from "metabase/lib/collection";
 import {
   ROOT_COLLECTION,
   PERSONAL_COLLECTION,
@@ -19,8 +20,8 @@ import {
 import { getFormSelector } from "./forms";
 import { getCollectionIcon, getCollectionType } from "./utils";
 
-const listCollectionsTree = GET("/api/collection/tree");
-const listCollections = GET("/api/collection");
+const listCollectionsTree = GET("/api/v1/collection/tree/customize");
+const listCollections = GET("/api/v1/collection");
 
 const Collections = createEntity({
   name: "collections",
@@ -71,18 +72,23 @@ const Collections = createEntity({
   selectors: {
     getForm: getFormSelector,
     getExpandedCollectionsById: createSelector(
+      //用于添加card的sidebar，使用当前的collectionId去找该id下的所有collection，所以在root下就会看到personalCollectionId
       [
         state => state.entities.collections,
-        state => {
-          const { list } = state.entities.collections_list[null] || {};
+        (state, props) => {
+          //通过collectionsIdsKey传进来以query为key获取ids
+          const { list } =
+          state.entities.collections_list[
+            props ? props.collectionsIdsKey : null
+            ] || {};
           return list || [];
         },
-        getUser,
+        // getUser,
       ],
-      (collections, collectionsIds, user) =>
+      (collections, collectionsIds) =>
         getExpandedCollectionsById(
           collectionsIds.map(id => collections[id]),
-          user && user.personal_collection_id,
+          // user && user.personal_collection_id, //隐藏My personal collection的显示
         ),
     ),
     getInitialCollectionId: createSelector(
@@ -95,6 +101,7 @@ const Collections = createEntity({
         byCollectionIdNavParam,
         byCollectionUrlId,
         byCollectionQueryParameter,
+        byCollectionProject, //新增通过project默认自己的文件夹
       ],
       (collections, personalId, ...collectionIds) => {
         const allCollectionIds = [
@@ -278,4 +285,8 @@ function byCollectionUrlId(state, { params, location }) {
  */
 function byCollectionQueryParameter(state, { location }) {
   return location && location.query && location.query.collectionId;
+}
+
+function byCollectionProject({ currentUser }, { location }) {
+  return getPersonalCollectionId(currentUser, location);
 }

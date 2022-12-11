@@ -12,7 +12,6 @@ export const QUESTION_SIDE_HIDE = "metabase/control/QuestionSideHide";
 export const questionSideHideAction = createThunkAction(
   QUESTION_SIDE_HIDE,
   ({ hide }) => {
-    console.log("questionSideHideAction", hide)
     return { hide };
   },
 );

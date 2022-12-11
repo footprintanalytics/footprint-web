@@ -158,7 +158,6 @@ export const fetchDashboard = createThunkAction(
         return createDefaultDashboard();
       }
       const optionsHash = getOptionsHash();
-      console.log("fetchDashboard", dashId, dashboardType)
       if (dashboardType === "public") {
         const secret = optionsHash && optionsHash.secret;
         const { data } = await PublicApi.dashboard({

@@ -4,6 +4,7 @@ import Collection from "metabase/entities/collections";
 import ItemSelect from "./ItemSelect";
 import CollectionPicker from "./CollectionPicker";
 import CollectionName from "./CollectionName";
+import { getProject } from "metabase/lib/project_info";
 
 const CollectionSelect = ItemSelect(
   CollectionPicker,
@@ -22,4 +23,5 @@ const CollectionSelect = ItemSelect(
  */
 export default Collection.loadList({
   loadingAndErrorWrapper: false,
+  entityQuery: () => ({ project: getProject() }),
 })(CollectionSelect);

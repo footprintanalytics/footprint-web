@@ -18,6 +18,7 @@ import { OptionalFormViewProps } from "metabase/components/form/FormikCustomForm
 import { makeFormObject, cleanObject, isNestedFieldName } from "../formUtils";
 import FormikFormViewAdapter from "./FormikFormViewAdapter";
 import useInlineFields from "./useInlineFields";
+import { message } from "antd";
 
 interface FormContainerProps<Values extends BaseFieldValues>
   extends OptionalFormViewProps {
@@ -227,9 +228,12 @@ function Form<Values extends BaseFieldValues>({
 
   const handleSubmit = useCallback(
     async (values: Values, formikHelpers: FormikHelpers<Values>) => {
+      let hide = null;
       try {
         const normalized = formObject.normalize(values);
+        hide = message.loading("Loading...", 0);
         const result = await onSubmit(normalized, formikHelpers);
+        hide();
         onSubmitSuccess?.(result);
         setError(null); // clear any previous errors
         return result;
@@ -237,6 +241,8 @@ function Form<Values extends BaseFieldValues>({
         const error = handleError(e as ServerErrorResponse, formikHelpers);
         // Need to throw, so e.g. submit button can react to an error
         throw error;
+      } finally {
+        hide && hide()
       }
     },
     [formObject, onSubmit, onSubmitSuccess, handleError],

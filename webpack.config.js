@@ -40,7 +40,6 @@ const useFilesystemCache = process.env.FS_CACHE === "true";
 const shouldUseEslint =
   process.env.WEBPACK_BUNDLE !== "production" &&
   process.env.USE_ESLINT === "true";
-console.log("staticBucketUrlstaticBucketUrl", staticBucketUrl)
 // Babel:
 const BABEL_CONFIG = {
   cacheDirectory: process.env.BABEL_DISABLE_CACHE ? false : ".babel_cache",
@@ -56,10 +55,8 @@ const CSS_CONFIG = {
 const isUpgradeTest = staticBucketUrl.includes("static-upgrade-test");
 
 const getEnv = envs => {
-  console.log("xxxxxxxxxxxxxxxxxxxxxxxx", process.env)
   const res = {};
   envs.map(item => (res[item] = JSON.stringify(process.env[item])));
-  console.log("getEnv", res);
   return res;
 };
 

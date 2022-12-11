@@ -12,7 +12,15 @@ import * as Urls from "metabase/lib/urls";
 
 import Dashboards from "metabase/entities/dashboards";
 import Collection, { ROOT_COLLECTION } from "metabase/entities/collections";
+import { getPersonalCollectionId } from "metabase/lib/collection";
+import { getUser } from "metabase/reference/selectors";
 import { ToastRoot } from "./DashboardMoveModal.styled";
+
+const mapStateToProps = (state, props) => {
+  return {
+    user: getUser(state, props),
+  };
+};
 
 const mapDispatchToProps = {
   setDashboardCollection: Dashboards.actions.setCollection,
@@ -20,13 +28,19 @@ const mapDispatchToProps = {
 
 class DashboardMoveModalInner extends React.Component {
   render() {
-    const { dashboard, onClose, setDashboardCollection } = this.props;
+    const { dashboard, onClose, setDashboardCollection, user } = this.props;
+    const publicAnalyticPermission = user && user.publicAnalytic === "write";
     const title = t`Move dashboard to…`;
     return (
       <CollectionMoveModal
         title={title}
         onClose={onClose}
+        initialCollectionId={getPersonalCollectionId(user)}
         onMove={async destination => {
+          //普通用户保存在自己的文件夹
+          if (user && !publicAnalyticPermission) {
+            destination.collection_id = getPersonalCollectionId(user);
+          }
           await setDashboardCollection({ id: dashboard.id }, destination, {
             notify: {
               message: (
@@ -44,7 +58,7 @@ class DashboardMoveModalInner extends React.Component {
 }
 
 const DashboardMoveModal = _.compose(
-  connect(null, mapDispatchToProps),
+  connect(mapStateToProps, mapDispatchToProps),
   Dashboards.load({
     id: (state, props) => Urls.extractCollectionId(props.params.slug),
   }),

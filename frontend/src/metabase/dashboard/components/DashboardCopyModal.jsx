@@ -19,6 +19,7 @@ import { getUserCreateDashboardPermission } from "metabase/selectors/user";
 import NeedPermissionModal from "metabase/components/NeedPermissionModal";
 import { getUser } from "metabase/reference/selectors";
 import Modal from "metabase/components/Modal";
+import { getPersonalCollectionId } from "metabase/lib/collection";
 import { getDashboardComplete } from "../selectors";
 
 const mapStateToProps = (state, props) => {
@@ -61,11 +62,18 @@ const DashboardCopyModalInner = ({
   params,
   user,
   dashboardId,
+  loadVip,
+                                   canCreate,
   ...props
 }) => {
   const [isShallowCopy, setIsShallowCopy] = useState(true);
   const [showVip, setShowVip] = useState(false);
-  const initialDashboardId = Urls.extractEntityId(params.slug);
+  const publicAnalyticPermission = user && user.publicAnalytic === "write";
+  const initialDashboardId =
+    dashboardId ||
+    Urls.extractEntityId(params.slug || params.uuid) ||
+    dashboard?.entityId ||
+    dashboard?.id;
 
   const title = getTitle(dashboard, isShallowCopy);
 
@@ -85,6 +93,7 @@ const DashboardCopyModalInner = ({
   };
 
   const InnerPanel = () => {
+
     return (<div>
       <EntityCopyModal
         entityType="dashboards"
@@ -92,23 +101,32 @@ const DashboardCopyModalInner = ({
           ...dashboard,
           collection_id: initialCollectionId,
         }}
-        form={Dashboards.forms.duplicate}
+        form={
+          publicAnalyticPermission
+          ? Dashboards.forms.duplicate
+          : Dashboards.forms.userDuplicate
+        }
+
         title={title}
         overwriteOnInitialValuesChange
         copy={async object => {
-          const { loadVip } = this.props;
           await loadVip();
-          const { canCreate } = this.props;
           if (!canCreate) {
             setShowVip(true);
             throw { data: "" };
           }
-          copyDashboard({ id: initialDashboardId }, dissoc(object, "id"))
+          if (user && !publicAnalyticPermission) {
+            object.collection_id = getPersonalCollectionId(user);
+          }
+          try {
+            return copyDashboard({ id: initialDashboardId }, dissoc(object, "id"));
+          } catch (e) {
+            console.log(e);
+          }
+          return null;
         }}
         onClose={onClose}
         onSaved={dashboard => {
-          console.log("copy dashboard", dashboard);
-          const { loadVip } = this.props;
           loadVip();
           onClose && onClose();
           setTimeout(() => {

@@ -130,7 +130,6 @@ const ShareModal = ({
     setUuid(uuid);
     onAfterChangePublicUuid &&
       onAfterChangePublicUuid({ newUuid: uuid, id, type });
-
     /*    if (id && type) {
       secretApi(id, type);
     }*/
@@ -153,7 +152,6 @@ const ShareModal = ({
     setUuid(undefined);
     onAfterChangePublicUuid &&
       onAfterChangePublicUuid({ newUuid: undefined, id, type });
-
     /*    if (id && type) {
       secretApi(id, type);
     }*/

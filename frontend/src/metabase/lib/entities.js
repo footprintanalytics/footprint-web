@@ -312,13 +312,25 @@ export function createEntity(def) {
         entityQuery => [...getListStatePath(entityQuery), "fetch"],
       ),
     )((entityQuery = null) => async (dispatch, getState) => {
-      const fetched = await entity.api.list(entityQuery || {});
+      let fetched = await entity.api.list(entityQuery || {});
       // for now at least paginated endpoints have a 'data' property that
       // contains the actual entries, if that is on the response we should
       // use that as the 'results'
 
       let results;
       let metadata = {};
+
+      if (
+        entity &&
+        entity.path &&
+        entity.path.includes("api/v1") &&
+        fetched.data &&
+        // eslint-disable-next-line no-prototype-builtins
+        fetched.data.hasOwnProperty("code")
+      ) {
+        //新服务接口
+        fetched = fetched.data;
+      }
 
       if (fetched.data) {
         const { data, ...rest } = fetched;

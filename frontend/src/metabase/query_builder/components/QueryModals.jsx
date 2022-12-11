@@ -32,12 +32,20 @@ import MoveEventModal from "metabase/timelines/questions/containers/MoveEventMod
 import QuestionMoveToast from "./QuestionMoveToast";
 import ShareModal from "metabase/containers/home/components/ShareModal";
 import EditQuestionInfoModal from "metabase/query_builder/components/view/EditQuestionInfoModal";
+import { getPersonalCollectionId } from "metabase/lib/collection";
+import * as Urls from "metabase/lib/urls";
+import { getProject } from "metabase/lib/project_info";
+import { copyCard } from "metabase/new-service";
 
 const mapDispatchToProps = {
   setQuestionCollection: Questions.actions.setCollection,
 };
 
 class QueryModals extends React.Component {
+  state = {
+    showVip: false,
+  };
+
   showAlertsAfterQuestionSaved = () => {
     const { questionAlerts, user, onCloseModal, onOpenModal } = this.props;
 
@@ -61,6 +69,10 @@ class QueryModals extends React.Component {
     this.props.updateQuestion(question, { run: true });
   };
 
+  onAfterChangePublicUuid = ({ newUuid }) => {
+    this.props.card.public_uuid = newUuid;
+  };
+
   render() {
     const {
       modal,
@@ -71,12 +83,15 @@ class QueryModals extends React.Component {
       onOpenModal,
       setQueryBuilderMode,
       user,
+      onlyEmbed
     } = this.props;
     const publicAnalyticPermission = user && user.publicAnalytic === "write";
-    return modal === MODAL_TYPES.SAVE ? (
+    return (<>
+    {modal === MODAL_TYPES.SAVE ? (
       <Modal form onClose={onCloseModal}>
         <SaveQuestionModal
           card={this.props.card}
+          user={user}
           originalCard={this.props.originalCard}
           tableMetadata={this.props.tableMetadata}
           initialCollectionId={this.props.initialCollectionId}
@@ -86,13 +101,14 @@ class QueryModals extends React.Component {
             onCloseModal();
           }}
           onCreate={async card => {
-            await this.props.onCreate(card);
+            const res = await this.props.onCreate(card);
             if (question.isDataset()) {
               onCloseModal();
               setQueryBuilderMode("view");
             } else {
               onOpenModal(MODAL_TYPES.SAVED);
             }
+            return res;
           }}
           onClose={onCloseModal}
         />
@@ -104,12 +120,16 @@ class QueryModals extends React.Component {
           addToDashboardFn={() => {
             onOpenModal(MODAL_TYPES.ADD_TO_DASHBOARD);
           }}
+          showShareModal={() => {
+            onOpenModal("embed");
+          }}
         />
       </Modal>
     ) : modal === MODAL_TYPES.ADD_TO_DASHBOARD_SAVE ? (
       <Modal onClose={onCloseModal}>
         <SaveQuestionModal
           card={this.props.card}
+          user={user}
           originalCard={this.props.originalCard}
           tableMetadata={this.props.tableMetadata}
           initialCollectionId={this.props.initialCollectionId}
@@ -118,8 +138,9 @@ class QueryModals extends React.Component {
             onOpenModal(MODAL_TYPES.ADD_TO_DASHBOARD);
           }}
           onCreate={async card => {
-            await this.props.onCreate(card);
+            const result = await this.props.onCreate(card);
             onOpenModal(MODAL_TYPES.ADD_TO_DASHBOARD);
+            return result;
           }}
           onClose={onCloseModal}
           multiStep
@@ -144,6 +165,7 @@ class QueryModals extends React.Component {
       <Modal onClose={onCloseModal}>
         <SaveQuestionModal
           card={this.props.card}
+          user={user}
           originalCard={this.props.originalCard}
           tableMetadata={this.props.tableMetadata}
           onSave={async card => {
@@ -151,8 +173,9 @@ class QueryModals extends React.Component {
             this.showAlertsAfterQuestionSaved();
           }}
           onCreate={async card => {
-            await this.props.onCreate(card, false);
+            const result = await this.props.onCreate(card, false);
             this.showAlertsAfterQuestionSaved();
+            return result;
           }}
           onClose={onCloseModal}
           multiStep
@@ -163,6 +186,7 @@ class QueryModals extends React.Component {
       <Modal onClose={onCloseModal}>
         <SaveQuestionModal
           card={this.props.card}
+          user={user}
           originalCard={this.props.originalCard}
           tableMetadata={this.props.tableMetadata}
           onSave={async card => {
@@ -170,8 +194,9 @@ class QueryModals extends React.Component {
             onOpenModal(MODAL_TYPES.EMBED);
           }}
           onCreate={async card => {
-            await this.props.onCreate(card, false);
+            const result = await this.props.onCreate(card, false);
             onOpenModal(MODAL_TYPES.EMBED);
+            return result;
           }}
           onClose={onCloseModal}
           multiStep
@@ -201,7 +226,7 @@ class QueryModals extends React.Component {
       <Modal onClose={onCloseModal}>
         <CollectionMoveModal
           title={t`Which collection should this be in?`}
-          initialCollectionId={question.collectionId()}
+          initialCollectionId={getPersonalCollectionId(user)}
           onClose={onCloseModal}
           onMove={collection => {
             this.props.setQuestionCollection(
@@ -248,7 +273,7 @@ class QueryModals extends React.Component {
           name: this.props.card.name,
           id: this.props.card.id,
           creatorId: this.props.card.creator_id,
-          onlyEmbed: this.props.onlyEmbed,
+          onlyEmbed,
         }}
         onAfterChangePublicUuid={this.onAfterChangePublicUuid}
         onClose={onCloseModal}
@@ -258,21 +283,45 @@ class QueryModals extends React.Component {
         <EntityCopyModal
           entityType="questions"
           entityObject={{
-            ...question.card(),
-            collection_id: question.canWrite()
-              ? question.collectionId()
-              : initialCollectionId,
+            ...this.props.card,
+            collection_id: getPersonalCollectionId(user),
           }}
+          form={
+            publicAnalyticPermission
+              ? Questions.forms.details
+              : Questions.forms.details_without_collection
+          }
           copy={async formValues => {
-            const object = await this.props.onCreate({
-              ...question.card(),
+            const { canCreate } = this.props;
+            if (!canCreate) {
+              this.setState({ showVip: true });
+              return;
+            }
+            const cardId = this.props.card.id;
+            const params = {
+              collection_position: null,
               ...formValues,
               description: formValues.description || null,
+            };
+            if (user && !publicAnalyticPermission) {
+              params.collection_id = getPersonalCollectionId(user);
+            }
+            const data = await copyCard({
+              cardId: cardId,
+              params: { ...params, project: getProject() },
             });
-            return { payload: { object } };
+            this.props.reloadUserVip();
+            return { payload: { object: data } };
           }}
           onClose={onCloseModal}
-          onSaved={() => onOpenModal(MODAL_TYPES.SAVED)}
+          onSaved={async card => {
+            if (card.id) {
+              this.props.onChangeLocation(Urls.question(card));
+            } else {
+              throw card;
+            }
+            onCloseModal && onCloseModal();
+          }}
         />
       </Modal>
     ) : modal === MODAL_TYPES.TURN_INTO_DATASET ? (
@@ -303,7 +352,15 @@ class QueryModals extends React.Component {
           onClose={onCloseModal}
         />
       </Modal>
-    ) : null;
+    ) : null}
+        {this.state.showVip && (
+          <NeedPermissionModal
+            title="Your account has reached the limit of number of query, please upgrade the account to unlock more"
+            onClose={() => this.setState({ showVip: false })}
+          />
+        )}
+    </>
+    )
   }
 }
 

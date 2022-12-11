@@ -51,6 +51,14 @@ function duplicateForm() {
   ];
 }
 
+function userDuplicateForm() {
+  return [
+    createNameField(),
+    createDescriptionField(),
+    createShallowCopyField(),
+  ];
+}
+
 function createForm() {
   return [
     createNameField(),
@@ -75,6 +83,9 @@ export default {
   },
   duplicate: {
     fields: duplicateForm,
+  },
+  userDuplicate: {
+    fields: userDuplicateForm,
   },
   edit: {
     fields: () => {

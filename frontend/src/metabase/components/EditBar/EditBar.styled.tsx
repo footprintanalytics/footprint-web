@@ -14,8 +14,7 @@ export const Root = styled(FullWidthContainer)<{ admin: boolean }>`
   padding-top: 0.5rem;
   padding-bottom: 0.5rem;
 
-  background-color: ${props =>
-    alpha(color(props.admin ? "accent7" : "brand"), 0.15)};
+  background-color: #f6f6fe;
 
   .Button {
     color: ${color("text-second")};
