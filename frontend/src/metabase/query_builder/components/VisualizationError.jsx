@@ -16,15 +16,17 @@ import {
   QueryErrorMessage,
   QueryLink,
 } from "./VisualizationError.styled";
+import ErrorGuide from "metabase/query_builder/components/ErrorGuide";
 
 const EmailAdmin = () => {
-  const adminEmail = MetabaseSettings.adminEmail();
+  const discord = "https://discord.gg/Ts6ppKJade";
+  const content = `If the problem is not solved，contact us via Discord（${discord}）`;
   return (
-    adminEmail && (
+    content && (
       <span className="QueryError-adminEmail">
-        <a className="no-decoration" href={`mailto:${adminEmail}`}>
-          {adminEmail}
-        </a>
+        <Link className="no-decoration" href={discord} target="_blank">
+          {content}
+        </Link>
       </span>
     )
   );
@@ -93,7 +95,8 @@ class VisualizationError extends Component {
 
   render() {
     const { via, card, duration, error, className } = this.props;
-    console.log("error", error);
+
+    const cardId = card?.id;
 
     if (error && typeof error.status === "number") {
       // Assume if the request took more than 15 seconds it was due to a timeout
@@ -103,7 +106,7 @@ class VisualizationError extends Component {
           <ErrorMessage
             className={className}
             type="timeout"
-            title={t`Your question took too long`}
+            title={t`Your chart took too long`}
             message={t`We didn't get an answer back from your database in time, so we had to stop. You can try again in a minute, or if the problem persists, you can email an admin to let them know.`}
             action={<EmailAdmin />}
           />
@@ -148,12 +151,15 @@ class VisualizationError extends Component {
           <QueryErrorIcon>
             <Icon name="warning" size="40" />
           </QueryErrorIcon>
-          <QueryErrorMessage>{processedError}</QueryErrorMessage>
-          <QueryLink
+          <QueryErrorMessage>
+            {processedError}
+            <ErrorGuide cardId={cardId}/>
+          </QueryErrorMessage>
+         {/* <QueryLink
             href={MetabaseSettings.learnUrl("debugging-sql/sql-syntax")}
           >
             {t`Learn how to debug SQL errors`}
-          </QueryLink>
+          </QueryLink>*/}
         </QueryError>
       );
     } else {
@@ -161,8 +167,8 @@ class VisualizationError extends Component {
         <div className={cx(className, "QueryError2 flex justify-center")}>
           <div className="QueryError-image QueryError-image--queryError mr4" />
           <div className="QueryError2-details">
-            <h1 className="text-bold">{t`There was a problem with your question`}</h1>
-            <p className="QueryError-messageText">{t`Most of the time this is caused by an invalid selection or bad input value. Double check your inputs and retry your query.`}</p>
+            <h1 className="text-bold">{t`There was a problem with your chart`}</h1>
+            <p className="QueryError-messageText">{t`Most of the time this is caused by an invalid selection or bad input value. Double check your inputs and retry your chart.`}</p>
             <ErrorDetails className="pt2" details={error} />
           </div>
         </div>
