@@ -57,6 +57,7 @@ import {
   StyledDebouncedFrame,
   StyledSyncedParametersList,
 } from "./View.styled";
+import TagsPanel from "metabase/query_builder/components/view/TagsPanel";
 
 const DEFAULT_POPOVER_STATE = {
   aggregationIndex: null,
@@ -524,10 +525,22 @@ class View extends React.Component {
     const rightSidebarWidth = isShowingTimelineSidebar
       ? SIDEBAR_SIZES.TIMELINE
       : SIDEBAR_SIZES.NORMAL;
+
+    const isSave = question.isSaved();
+
     return (
       <div className="full-height">
         <QueryBuilderViewRoot className="QueryBuilder">
           {isHeaderVisible && this.renderHeader()}
+          {isSave && (
+            <div className="px4 pt1 z3 bg-white">
+              <TagsPanel
+                tagEntityId={question._card.id}
+                isEditPermission={isOwner && isSave}
+                type="card"
+              />
+            </div>
+          )}
           <QueryBuilderContentContainer>
             {isStructured && (
               <QueryViewNotebook
