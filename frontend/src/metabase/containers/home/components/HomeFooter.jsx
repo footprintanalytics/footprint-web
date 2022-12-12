@@ -55,10 +55,10 @@ const footers = [
         label: "Chains Analytics",
         url: "/chains",
       },
-      {
+      /*{
         label: "Footprint Enterprise",
         url: "/defi360",
-      },
+      },*/
     ],
   },
   {
