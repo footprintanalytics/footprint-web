@@ -31,7 +31,7 @@ class ArchiveDashboardModal extends Component {
     // parent collection
     this.props.onClose();
     if (this.props.dashboard.archived) {
-      this.props.push(Urls.collection(this.props.collection));
+      this.props.push("/");
     }
   };
 
@@ -45,7 +45,7 @@ class ArchiveDashboardModal extends Component {
     return (
       <ArchiveModal
         title={
-          dashboard.is_app_age
+          dashboard?.is_app_age
             ? t`Archive this page?`
             : t`Archive this dashboard?`
         }
@@ -60,7 +60,7 @@ class ArchiveDashboardModal extends Component {
 export default _.compose(
   connect(null, mapDispatchToProps),
   Dashboard.load({
-    id: (state, props) => Urls.extractCollectionId(props.params.slug),
+    id: (state, props) => props.id || Urls.extractCollectionId(props.params.slug) || props.location.query.id,
   }),
   Collection.load({
     id: (state, props) => props.dashboard && props.dashboard.collection_id,

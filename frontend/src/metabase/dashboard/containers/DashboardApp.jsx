@@ -219,7 +219,7 @@ const DashboardApp = props => {
         />
         {/* For rendering modal urls */}
         {props.children}
-        <Toaster
+        {/*<Toaster
           message={
             dashboard?.is_app_page
               ? t`Would you like to be notified when this page is done loading?`
@@ -229,7 +229,7 @@ const DashboardApp = props => {
           onDismiss={onDismissToast}
           onConfirm={onConfirmToast}
           fixed
-        />
+        />*/}
       </div>
     </DataAppContext>
   );

@@ -573,13 +573,13 @@ class View extends React.Component {
 
         {isStructured && this.renderAggregationPopover()}
         {isStructured && this.renderBreakoutPopover()}
-        <Toaster
+        {/*<Toaster
           message={t`Would you like to be notified when this question is done loading?`}
           isShown={isShowingToaster}
           onDismiss={onDismissToast}
           onConfirm={onConfirmToast}
           fixed
-        />
+        />*/}
       </div>
     );
   }

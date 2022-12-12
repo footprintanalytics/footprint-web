@@ -416,7 +416,7 @@ class DashboardHeader extends Component {
       if (canEdit) {
         extraButtons.push({
           title: t`Edit dashboard details`,
-          icon: "detail",
+          icon: "edit",
           link: `${location.pathname}/details`,
           event: "Dashboard;EditDetails",
         });
