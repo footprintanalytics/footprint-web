@@ -23,7 +23,7 @@ const DataApiNFT = () => {
               <span className="data-api__text-bland">NFT API</span>
             </h3>
             <span className="data-api__get-start-subtitle">
-              14 marketplaces <br /> and 101,639 collections
+              17 marketplaces <br /> and 101,639 collections
             </span>
             <span className="data-api__get-start-desc">
               Fetch NFT ownership, transfer, price, orderbook, <br />
@@ -32,7 +32,7 @@ const DataApiNFT = () => {
             </span>
             <div className="data-api__buttons">
               <Link
-                to="https://docs.footprint.network/reference/get_nft-chain-collection-collection-contract-address-transactions"
+                to="https://docs.footprint.network/reference/get_nft-collection-transactions"
                 target="_blank"
               >
                 <Button className="data-api__button-bland">
