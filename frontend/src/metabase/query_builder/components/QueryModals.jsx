@@ -114,7 +114,7 @@ class QueryModals extends React.Component {
         />
       </Modal>
     ) : modal === MODAL_TYPES.SAVED ? (
-      <Modal small onClose={onCloseModal}>
+      <Modal medium onClose={onCloseModal}>
         <QuestionSavedModal
           onClose={onCloseModal}
           addToDashboardFn={() => {

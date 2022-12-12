@@ -131,7 +131,6 @@ export default class SaveQuestionModal extends Component {
   render() {
     const { card, originalCard, initialCollectionId, tableMetadata, user, } =
       this.props;
-    console.log("initialCollectionId", initialCollectionId)
     const create_method = get(card, "create_method");
     const isStructured = Q_DEPRECATED.isStructured(card.dataset_query);
     const isReadonly = originalCard != null && !originalCard.can_write;
@@ -233,11 +232,13 @@ export default class SaveQuestionModal extends Component {
                       title={t`Description`}
                       placeholder={t`It's optional but oh, so helpful`}
                     />
-                    <FormField
-                      name="collection_id"
-                      title={t`Which collection should this go in?`}
-                      type="collection"
-                    />
+                    {publicAnalyticPermission ? (
+                      <FormField
+                        name="collection_id"
+                        title={t`Which collection should this go in?`}
+                        type="collection"
+                      />
+                    ) : null}
                   </div>
                 )}
               </CSSTransitionGroup>
