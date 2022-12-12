@@ -91,13 +91,6 @@
        :port (email-smtp-port)}
       (add-ssl-settings (email-smtp-security))))
 
-(defn- smtp-settings-designated-email []
-  (-> {:host (email-smtp-host)
-       :user "fp-alert-noreply@footprint.network"
-       :pass (email-smtp-password)
-       :port (email-smtp-port)}
-      (add-ssl-settings (email-smtp-security))))
-
 (def ^:private EmailMessage
   (s/constrained
    {:subject      s/Str
@@ -131,29 +124,6 @@
                             :text        message
                             :html        [{:type    "text/html; charset=utf-8"
                                            :content message}])}
-                (when-let [reply-to (email-reply-to)]
-                  {:reply-to reply-to}))))
-
-(s/defn send-message-or-throw-designated-email!
-  "Send an email to one or more `recipients`. Upon success, this returns the `message` that was just sent. This function
-  does not catch and swallow thrown exceptions, it will bubble up."
-  {:style/indent 0}
-  [{:keys [subject recipients message-type message]} :- EmailMessage]
-  (when-not (email-smtp-host)
-            (throw (ex-info (tru "SMTP host is not set.") {:cause :smtp-host-not-set})))
-  ;; Now send the email
-  (send-email! (smtp-settings-designated-email)
-               (merge
-                {:from    (if-let [from-name (email-from-name)]
-                            (str from-name " <" (email-from-address) ">")
-                            (email-from-address))
-                 :to      recipients
-                 :subject subject
-                 :body    (case message-type
-                                :attachments message
-                                :text        message
-                                :html        [{:type    "text/html; charset=utf-8"
-                                               :content message}])}
                 (when-let [reply-to (email-reply-to)]
                   {:reply-to reply-to}))))
 

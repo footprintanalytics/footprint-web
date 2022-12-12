@@ -399,10 +399,10 @@
 (defmethod send-notification! :email
   [{:keys [subject recipients message-type message]}]
   (try
-    (email/send-message-or-throw-designated-email! {:subject      subject
-                                                    :recipients   recipients
-                                                    :message-type message-type
-                                                    :message      message})
+    (email/send-message-or-throw! {:subject      subject
+                                   :recipients   recipients
+                                   :message-type message-type
+                                   :message      message})
     (catch ExceptionInfo e
       (when (not= :smtp-host-not-set (:cause (ex-data e)))
         (throw e)))))
