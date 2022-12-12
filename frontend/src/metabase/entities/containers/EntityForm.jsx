@@ -37,7 +37,6 @@ const EForm = ({
      object.collection_id = getPersonalCollectionId(user);
    }
    object.create_method = "self";
-   console.log("EForm onSubmit")
    return object.id ? update(object) : create(object);
   },
   onClose,
@@ -47,7 +46,6 @@ const EForm = ({
   useLegacyForm,
   ...props
 }) => {
-  console.log("EForm", useLegacyForm)
   if (useLegacyForm) {
     return (
       <LegacyForm

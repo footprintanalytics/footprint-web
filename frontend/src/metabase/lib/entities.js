@@ -236,7 +236,6 @@ export function createEntity(def) {
           getWritableProperties({ ...entityObject, project: getProject() }),
         ),
       );
-      console.log("create result", result)
       if (result && result.object && result.object.code === -1) {
         result.object.message && message.error(result.object.message);
       }

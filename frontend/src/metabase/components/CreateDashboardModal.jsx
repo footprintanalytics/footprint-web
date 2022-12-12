@@ -67,7 +67,6 @@ class CreateDashboardModal extends Component {
 
   render() {
     const { initialCollectionId, onSaved, onClose, user } = this.props;
-
     const publicAnalyticPermission = user && user.publicAnalytic === "write";
     const renderModal = context => {
       return (
@@ -87,6 +86,7 @@ class CreateDashboardModal extends Component {
         overwriteOnInitialValuesChange
         dashboard={{ collection_id: initialCollectionId }}
         onBeforeSubmit={this.onBeforeSubmit}
+        user={user}
         onClose={onClose}
         onSaved={typeof onSaved === "function" ? onSaved : this.onSaved}
       />
