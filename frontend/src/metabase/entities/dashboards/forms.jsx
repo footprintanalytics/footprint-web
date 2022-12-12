@@ -52,7 +52,7 @@ function duplicateForm() {
     createNameField(),
     createDescriptionField(),
     createCollectionIdField(),
-    createShallowCopyField(),
+    // createShallowCopyField(),
   ];
 }
 

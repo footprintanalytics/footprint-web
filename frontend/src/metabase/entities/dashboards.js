@@ -100,7 +100,8 @@ const Dashboards = createEntity({
               id: entityObject.id,
               project: getProject(),
               ...overrides,
-              is_deep_copy: !overrides.is_shallow_copy,
+              is_deep_copy: false,
+              // is_deep_copy: !overrides.is_shallow_copy,
             }),
           );
           console.log("copy")

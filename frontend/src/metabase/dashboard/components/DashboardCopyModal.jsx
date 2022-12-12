@@ -1,5 +1,5 @@
 /* eslint-disable react/prop-types */
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { withRouter } from "react-router";
 import { connect } from "react-redux";
 import { dissoc } from "icepick";
@@ -67,6 +67,7 @@ const DashboardCopyModalInner = ({
   ...props
 }) => {
   const [isShallowCopy, setIsShallowCopy] = useState(true);
+  const fpIsShallowCopy = true;
   const [showVip, setShowVip] = useState(false);
   const publicAnalyticPermission = user && user.publicAnalytic === "write";
   const initialDashboardId =
@@ -75,7 +76,7 @@ const DashboardCopyModalInner = ({
     dashboard?.entityId ||
     dashboard?.id;
 
-  const title = getTitle(dashboard, isShallowCopy);
+  const title = getTitle(dashboard, fpIsShallowCopy);
 
   const renderModal = context => {
     return (
@@ -100,7 +101,7 @@ const DashboardCopyModalInner = ({
         entityObject={{
           ...dashboard,
           collection_id: initialCollectionId,
-          is_shallow_copy: isShallowCopy,
+          is_shallow_copy: fpIsShallowCopy,
         }}
         form={
           publicAnalyticPermission
