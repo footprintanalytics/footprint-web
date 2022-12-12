@@ -9,9 +9,9 @@ import { assocIn } from "icepick";
 import _ from "underscore";
 import { t } from "ttag";
 
+import { message } from "antd";
 import CustomForm from "metabase/components/form/CustomForm";
 import StandardForm from "metabase/components/form/StandardForm";
-import { message } from "antd";
 
 export {
   CustomFormField as FormField,
@@ -223,7 +223,12 @@ class Form extends React.Component {
     this._state.submitting = true;
     try {
       const normalized = formObject.normalize(values);
-      return (this._state.result = await this.props.onSubmit(normalized));
+      this._state.result = await this.props.onSubmit(normalized);
+      if (this._state.result?.payload?.object?.code === -1) {
+        message.error(this._state.result?.payload?.object?.message);
+        throw null;
+      }
+      return this._state.result;
     } catch (error) {
       console.error("Form submission error:", error);
       this._state.failed = true;
@@ -239,19 +244,12 @@ class Form extends React.Component {
         const errorNames = Object.keys(error.data.errors);
         const hasUnknownFields = errorNames.some(name => !fieldNames.has(name));
         throw {
-          _error:
-            error.data?.message ||
-            error.message ||
-            (hasUnknownFields ? t`An error occurred` : null),
+          _error: hasUnknownFields ? t`An error occurred` : null,
           ...error.data.errors,
         };
       } else if (error) {
         throw {
-          _error:
-            error.data?.message ||
-            error.message ||
-            error.data ||
-            t`An error occurred`,
+          _error: error?.data?.message || error?.data || error,
         };
       }
     } finally {
@@ -260,7 +258,7 @@ class Form extends React.Component {
   };
 
   _handleSubmitSuccess = async action => {
-    if (this.props.onSubmitSuccess) {
+    if (action && this.props.onSubmitSuccess) {
       await this.props.onSubmitSuccess(action);
     }
     this.props.dispatch(

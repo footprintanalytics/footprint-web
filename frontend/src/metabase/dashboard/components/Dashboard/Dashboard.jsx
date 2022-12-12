@@ -277,56 +277,57 @@ class Dashboard extends Component {
   }
 
   saveAction = async props => {
+    console.log("saveAction")
     const { newDashboard } = props || {};
-    const hide = message.loading("Saving...", 0);
-    console.log("saveAction1")
-    const {
-      payload: { dashboard },
-    } = await this.props.saveDashboardAndCards({ newDashboard });
-    console.log("saveAction2")
-
-    const { dashboardBeforeEditing, user, replace } = this.props;
-    console.log("saveAction3")
-    const { id, public_uuid } = dashboard;
-    if (public_uuid) {
-      createThumb({
-        elementId: "#html2canvas-Dashboard",
-        fileName: `dashboard/${id}.png`,
-        type: "dashboard",
-        publicUuid: public_uuid,
-        captureElementHeight: "630px",
-        cssAdjustments: [
-          {
-            selector: ".Dashboard",
-            css: "width: 1200px",
-          },
-        ],
-      });
-    }
-    console.log("saveAction4")
-    this.onDoneEditing();
-    console.log("saveAction5")
-    hide();
-
-    if (
-      zkspaceDate() &&
-      (!dashboardBeforeEditing ||
-        (dashboardBeforeEditing &&
-          dashboardBeforeEditing.ordered_cards.length === 0)) &&
-      dashboard.ordered_cards.length > 0
-    ) {
-      this.props.setSubmitAddrZkspaceModal({
-        submitAddrZkspaceModal: true,
-        email: user && user.email,
-      });
-    }
-
-    if (location.pathname.endsWith("/new")) {
-      replace({
-        pathname: Urls.dashboard({ ...dashboard, type: "dashboard" }),
-        state: { new: true },
-      });
-    }
+    // const hide = message.loading("Saving...", 0);
+    // console.log("saveAction1")
+    // const {
+    //   payload: { dashboard },
+    // } = await this.props.saveDashboardAndCards({ newDashboard });
+    // console.log("saveAction2")
+    //
+    // const { dashboardBeforeEditing, user, replace } = this.props;
+    // console.log("saveAction3")
+    // const { id, public_uuid } = dashboard;
+    // if (public_uuid) {
+    //   createThumb({
+    //     elementId: "#html2canvas-Dashboard",
+    //     fileName: `dashboard/${id}.png`,
+    //     type: "dashboard",
+    //     publicUuid: public_uuid,
+    //     captureElementHeight: "630px",
+    //     cssAdjustments: [
+    //       {
+    //         selector: ".Dashboard",
+    //         css: "width: 1200px",
+    //       },
+    //     ],
+    //   });
+    // }
+    // console.log("saveAction4")
+    // this.onDoneEditing();
+    // console.log("saveAction5")
+    // hide();
+    //
+    // if (
+    //   zkspaceDate() &&
+    //   (!dashboardBeforeEditing ||
+    //     (dashboardBeforeEditing &&
+    //       dashboardBeforeEditing.ordered_cards.length === 0)) &&
+    //   dashboard.ordered_cards.length > 0
+    // ) {
+    //   this.props.setSubmitAddrZkspaceModal({
+    //     submitAddrZkspaceModal: true,
+    //     email: user && user.email,
+    //   });
+    // }
+    //
+    // if (location.pathname.endsWith("/new")) {
+    //   replace({
+    //     pathname: Urls.dashboard({ ...dashboard, type: "dashboard" }),
+    //     state: { new: true },
+    //   });
+    // }
   };
 
   onDoneEditing = () => {

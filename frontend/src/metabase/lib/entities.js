@@ -89,6 +89,8 @@ import {
   withRequestState,
   withCachedDataAndRequestState,
 } from "metabase/lib/redux";
+import { getProject } from "metabase/lib/project_info";
+import { message } from "antd";
 
 export function createEntity(def) {
   const entity = { ...def };
@@ -218,9 +220,9 @@ export function createEntity(def) {
       ),
       withEntityActionDecorators("fetch"),
     )(
-      (entityQuery, options = {}) =>
+      (entityObject, options = {}) =>
         async (dispatch, getState) =>
-          entity.normalize(await entity.api.get(entityQuery, options)),
+          entity.normalize(await entity.api.get({ id: entityObject.id }, options)),
     ),
 
     create: compose(
@@ -229,9 +231,16 @@ export function createEntity(def) {
       withEntityRequestState(() => ["create"]),
       withEntityActionDecorators("create"),
     )(entityObject => async (dispatch, getState) => {
-      return entity.normalize(
-        await entity.api.create(getWritableProperties(entityObject)),
+      const result = entity.normalize(
+        await entity.api.create(
+          getWritableProperties({ ...entityObject, project: getProject() }),
+        ),
       );
+      console.log("create result", result)
+      if (result && result.object && result.object.code === -1) {
+        result.object.message && message.error(result.object.message);
+      }
+      return result;
     }),
 
     update: compose(
@@ -257,6 +266,10 @@ export function createEntity(def) {
           const result = entity.normalize(
             await entity.api.update(getWritableProperties(entityObject)),
           );
+
+          if (result && result.object && result.object.code === -1) {
+            result.object.message && message.error(result.object.message);
+          }
 
           if (notify) {
             if (notify.undo) {
@@ -292,7 +305,7 @@ export function createEntity(def) {
       withEntityRequestState(object => [object.id, "delete"]),
       withEntityActionDecorators("delete"),
     )(entityObject => async (dispatch, getState) => {
-      await entity.api.delete(entityObject);
+      await entity.api.delete({ id: entityObject.id });
       return {
         entities: { [entity.name]: { [entityObject.id]: null } },
         result: entityObject.id,

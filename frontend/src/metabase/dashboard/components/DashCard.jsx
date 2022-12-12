@@ -163,7 +163,6 @@ class DashCard extends Component {
     const dashboardId = dashcard.dashboard_id;
     const display = (dashcard.card || {}).display;
     const isEmbed = Utils.isJWT(dashboardId);
-    console.log("cards", cards)
     const series = cards.map(card => ({
       ...getIn(dashcardData, [dashcard.id, card.id]),
       card: card,
