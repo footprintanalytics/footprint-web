@@ -30,7 +30,7 @@ const DataApiGetStart = () => {
               raw data to analytic metrics.
             </span>
             <Link
-              to="https://docs.footprint.network/reference/get_chain-chain-transactions"
+              to="https://docs.footprint.network/reference/get_chain-transactions"
               target="_blank"
             >
               <Button className="data-api__button-bland">
