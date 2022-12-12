@@ -30,14 +30,12 @@ class ArchiveQuestionModal extends Component {
       otherSuccessAction,
       user,
     } = this.props;
-    console.log("ArchiveQuestionModal", cardId)
     if (cardId) {
       archive(cardId);
     } else {
       const card = question.card();
       archive(card.id);
     }
-    console.log("ArchiveQuestionModal2", user)
     otherSuccessAction && otherSuccessAction();
     router.replace(`/@${user.name}?model=card`);
   };
