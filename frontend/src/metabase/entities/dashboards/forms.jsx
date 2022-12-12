@@ -55,7 +55,6 @@ function userDuplicateForm() {
   return [
     createNameField(),
     createDescriptionField(),
-    createShallowCopyField(),
   ];
 }
 

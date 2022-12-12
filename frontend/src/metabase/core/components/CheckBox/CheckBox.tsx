@@ -74,7 +74,7 @@ const CheckBox = forwardRef<HTMLLabelElement, CheckBoxProps>(function Checkbox(
   const labelRef = useRef<HTMLSpanElement>(null);
   const hasLabelEllipsis =
     labelRef.current && isEllipsisActive(labelRef.current);
-  console.log("checkbox")
+  console.log("checkbox", isControlledCheckBoxInput, checked)
   return (
     <CheckBoxRoot ref={ref} {...props}>
       <CheckboxTooltip

@@ -100,6 +100,7 @@ const DashboardCopyModalInner = ({
         entityObject={{
           ...dashboard,
           collection_id: initialCollectionId,
+          is_shallow_copy: isShallowCopy,
         }}
         form={
           publicAnalyticPermission
