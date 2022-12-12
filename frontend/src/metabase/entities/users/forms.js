@@ -89,6 +89,25 @@ const DETAILS_FORM_FIELDS_USER = [
   ...USER_INFO_FIELD,
 ];
 
+const PASSWORD_FORM_FIELDS = [
+  {
+    name: "password",
+    title: t`Create a password`,
+    type: "password",
+    placeholder: t`Shhh...`,
+    validate: validate.required().passwordComplexity(),
+  },
+  {
+    name: "password_confirm",
+    title: t`Confirm your password`,
+    type: "password",
+    placeholder: t`Shhh... but one more time so we get it right`,
+    validate: (password_confirm, { values: { password } = {} }) =>
+      (!password_confirm && t`required`) ||
+      (password_confirm !== password && t`passwords do not match`),
+  },
+];
+
 export default {
   vipUser: {
     fields: [...DETAILS_FORM_FIELDS_USER_VIP],
@@ -108,5 +127,8 @@ export default {
       },
       ...PLUGIN_ADMIN_USER_FORM_FIELDS,
     ],
+  },
+  password_reset: {
+    fields: [...PASSWORD_FORM_FIELDS],
   },
 };
