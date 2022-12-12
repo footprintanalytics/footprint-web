@@ -48,6 +48,7 @@ import {
 import { DATA_BUCKET } from "./constants";
 
 import "./DataSelector.css";
+import { getProject } from "metabase/lib/project_info";
 
 const MIN_SEARCH_LENGTH = 2;
 
@@ -110,8 +111,8 @@ export const DatabaseDataSelector = props => (
 
 export const DatabaseSchemaAndTableDataSelector = props => (
   <DataSelector
-    steps={[DATABASE_STEP, SCHEMA_STEP, TABLE_STEP]}
-    combineDatabaseSchemaSteps
+    steps={[DATABASE_STEP, TABLE_STEP]}
+    // combineDatabaseSchemaSteps
     getTriggerElementContent={TableTriggerContent}
     {...props}
   />
@@ -197,23 +198,23 @@ const DataSelector = _.compose(
       databases:
         ownProps.databases ||
         Databases.selectors.getList(state, {
-          entityQuery: ownProps.databaseQuery,
+          entityQuery: { ...ownProps.databaseQuery, project: getProject() },
         }) ||
         [],
       hasLoadedDatabasesWithTablesSaved: Databases.selectors.getLoaded(state, {
-        entityQuery: { include: "tables", saved: true },
+        entityQuery: { include: "tables", saved: true, project: getProject() },
       }),
       hasLoadedDatabasesWithSaved: Databases.selectors.getLoaded(state, {
-        entityQuery: { saved: true },
+        entityQuery: { saved: true, project: getProject() },
       }),
       hasLoadedDatabasesWithTables: Databases.selectors.getLoaded(state, {
-        entityQuery: { include: "tables" },
+        entityQuery: { include: "tables", project: getProject() },
       }),
       hasDataAccess: getHasDataAccess(state),
     }),
     {
       fetchDatabases: databaseQuery =>
-        Databases.actions.fetchList(databaseQuery),
+        Databases.actions.fetchList({ ...databaseQuery, project: getProject() }),
       fetchSchemas: databaseId =>
         Schemas.actions.fetchList({ dbId: databaseId }),
       fetchSchemaTables: schemaId => Schemas.actions.fetch({ id: schemaId }),
@@ -541,6 +542,8 @@ export class UnconnectedDataSelector extends Component {
       await this.switchToStep(TABLE_STEP);
     } else if (this.state.selectedDatabaseId && steps.includes(SCHEMA_STEP)) {
       await this.switchToStep(SCHEMA_STEP);
+    } else if (this.state.selectedDatabaseId && steps.includes(TABLE_STEP)) {
+      await this.switchToStep(TABLE_STEP);
     } else if (steps[0] === DATA_BUCKET_STEP && !this.hasUsableDatasets()) {
       await this.switchToStep(steps[1]);
     } else {
@@ -791,9 +794,9 @@ export class UnconnectedDataSelector extends Component {
     await this.nextStep({ selectedSchemaId: schema && schema.id });
   };
 
-  onChangeTable = async table => {
+  onChangeTable = async (table, dbId) => {
     if (this.props.setSourceTableFn) {
-      this.props.setSourceTableFn(table?.id);
+      this.props.setSourceTableFn(table && table.id, dbId);
     }
     await this.nextStep({ selectedTableId: table?.id });
   };

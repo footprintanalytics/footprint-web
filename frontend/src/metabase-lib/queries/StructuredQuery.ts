@@ -257,15 +257,16 @@ class StructuredQueryInner extends AtomicQuery {
   /**
    * @returns a new query with the provided Table ID set.
    */
-  setSourceTableId(tableId: TableId): StructuredQuery {
+  setSourceTableId(tableId: TableId, databaseId: DatabaseId): StructuredQuery {
     if (tableId !== this.sourceTableId()) {
       return new StructuredQuery(
         this._originalQuestion,
         chain(this.datasetQuery())
-          .assoc("database", this.metadata().table(tableId).database.id)
-          .assoc("query", {
-            "source-table": tableId,
-          })
+          .assoc(
+            "database",
+            databaseId || this.metadata().table(tableId).database.id,
+          )
+          .assoc("query", { "source-table": tableId })
           .value(),
       );
     } else {
@@ -283,8 +284,8 @@ class StructuredQueryInner extends AtomicQuery {
   /**
    * @deprecated: use setSourceTableId
    */
-  setTableId(tableId: TableId): StructuredQuery {
-    return this.setSourceTableId(tableId);
+  setTableId(tableId: TableId, databaseId: DatabaseId): StructuredQuery {
+    return this.setSourceTableId(tableId, databaseId);
   }
 
   /**

@@ -122,6 +122,7 @@ const DataSelectorDatabaseSchemaPicker = ({
       className="text-brand"
       hasInitialFocus={hasInitialFocus}
       sections={sections}
+      searchable={false}
       onChange={({ schema }: any) => onChangeSchema(schema)}
       onChangeSection={handleChangeSection}
       itemIsSelected={(schema: Schema) => schema === selectedSchema}

@@ -54,8 +54,8 @@ const DataSelectorTablePicker = ({
   hasNextStep,
   onBack,
   isLoading,
-  hasFiltering,
-  minTablesToShowSearch = 10,
+  // hasFiltering,
+  // minTablesToShowSearch = 10,
   hasInitialFocus,
 }: DataSelectorTablePickerProps) => {
   // In case DataSelector props get reset
@@ -77,64 +77,55 @@ const DataSelectorTablePicker = ({
     />
   );
 
-  if (tables.length > 0 || isLoading) {
-    const sections = [
-      {
-        name: header,
-        items: tables.filter(isNotNull).map(table => ({
-          name: table.displayName(),
-          table: table,
-          database: selectedDatabase,
-        })),
-        loading: tables.length === 0 && isLoading,
-      },
-    ];
+  const sections = [
+    {
+      name: header,
+      // items: tables.filter(isNotNull).map(table => ({
+      //   name: table.displayName(),
+      //   table: table,
+      //   database: selectedDatabase,
+      // })),
+      type: "tree",
+      loading: isLoading,
+    },
+  ];
 
-    const checkIfItemIsClickable = ({ table }: { table: Table }) =>
-      table && isSyncCompleted(table);
+  const checkIfItemIsClickable = ({ table }: { table: Table }) =>
+    table && isSyncCompleted(table);
 
-    const checkIfItemIsSelected = ({ table }: { table: Table }) =>
-      table && selectedTable ? table.id === selectedTable.id : false;
+  const checkIfItemIsSelected = ({ table }: { table: Table }) =>
+    table && selectedTable ? table.id === selectedTable.id : false;
 
-    const renderItemIcon = ({ table }: { table: Table }) =>
-      table ? <Icon name="table2" size={18} /> : null;
+  const renderItemIcon = ({ table }: { table: Table }) =>
+    table ? <Icon name="table2" size={18} /> : null;
 
-    const handleChange = ({ table }: { table: Table }) => onChangeTable(table);
+  const handleChange = ({ table }: { table: Table }) => onChangeTable(table);
 
-    const isSearchable = hasFiltering && tables.length >= minTablesToShowSearch;
+  return (
+    <Container>
+      <AccordionList
+        id="TablePicker"
+        key="tablePicker"
+        className="text-brand"
+        hasInitialFocus={hasInitialFocus}
+        sections={sections}
+        selectedDatabaseId={selectedDatabase.id}
+        maxHeight={Infinity}
+        width="100%"
+        searchable={false}
+        onChange={handleChange}
+        itemIsSelected={checkIfItemIsSelected}
+        itemIsClickable={checkIfItemIsClickable}
+        renderItemIcon={renderItemIcon}
+        showItemArrows={hasNextStep}
+      />
 
-    return (
-      <Container>
-        <AccordionList
-          id="TablePicker"
-          key="tablePicker"
-          className="text-brand"
-          hasInitialFocus={hasInitialFocus}
-          sections={sections}
-          maxHeight={Infinity}
-          width="100%"
-          searchable={isSearchable}
-          onChange={handleChange}
-          itemIsSelected={checkIfItemIsSelected}
-          itemIsClickable={checkIfItemIsClickable}
-          renderItemIcon={renderItemIcon}
-          showItemArrows={hasNextStep}
-        />
-
-        {isSavedQuestionList && (
-          <LinkToDocsOnReferencingSavedQuestionsInQueries />
-        )}
-      </Container>
-    );
-  } else {
-    return (
-      <Section>
-        <DataSelectorSectionHeader header={header} />
-        <NoTablesFound>{t`No tables found in this database.`}</NoTablesFound>
-      </Section>
-    );
-  }
-};
+      {isSavedQuestionList && (
+        <LinkToDocsOnReferencingSavedQuestionsInQueries />
+      )}
+    </Container>
+  );
+}
 
 const LinkToDocsOnReferencingSavedQuestionsInQueries = () => (
   <LinkToDocsContainer>

@@ -6,12 +6,14 @@ import { List, CellMeasurer, CellMeasurerCache } from "react-virtualized";
 import _ from "underscore";
 import { getIn } from "icepick";
 
+import { connect } from "react-redux";
 import Icon from "metabase/components/Icon";
+import { getUser } from "metabase/selectors/user";
 import { AccordionListCell } from "./AccordionListCell";
 import { AccordionListRoot } from "./AccordionList.styled";
 import { getNextCursor, getPrevCursor } from "./utils";
 
-export default class AccordionList extends Component {
+class AccordionList extends Component {
   constructor(props, context) {
     super(props, context);
 
@@ -150,7 +152,7 @@ export default class AccordionList extends Component {
         index != null &&
         !(index >= this._startIndex && index <= this._stopIndex)
       ) {
-        this._list.scrollToRow(index);
+        this._list.scrollToRow(this._initialSelectedRowIndex);
       }
     }, 0);
   }
@@ -246,7 +248,7 @@ export default class AccordionList extends Component {
   };
 
   handleChangeSearchText = searchText => {
-    this.setState({ searchText, cursor: null });
+    this.setState({ searchText });
   };
 
   searchPredicate = (item, searchPropMember) => {
@@ -386,6 +388,7 @@ export default class AccordionList extends Component {
     itemIsSelected,
     hideEmptySectionsInSearch,
     openSection,
+    user,
   ) => {
     const sectionIsExpanded = sectionIndex =>
       alwaysExpanded || openSection === sectionIndex;
@@ -395,11 +398,12 @@ export default class AccordionList extends Component {
 
     // if any section is searchable just enable a global search
     let globalSearch = false;
-
+    const allowShowHeader = user.is_superuser;
     const rows = [];
     for (const [sectionIndex, section] of sections.entries()) {
       const isLastSection = sectionIndex === sections.length - 1;
       if (
+        allowShowHeader &&
         section.name &&
         (!hideSingleSectionTitle || sections.length > 1 || alwaysTogglable)
       ) {
@@ -440,6 +444,12 @@ export default class AccordionList extends Component {
             isLastSection,
           });
         }
+      }
+      if (section.type === "tree") {
+        rows.push({
+          type: "tree",
+          section,
+        });
       }
       if (
         sectionIsExpanded(sectionIndex) &&
@@ -496,6 +506,7 @@ export default class AccordionList extends Component {
       hideSingleSectionTitle,
       itemIsSelected,
       hideEmptySectionsInSearch,
+      user,
     } = this.props;
 
     const openSection = this.getOpenSection();
@@ -510,6 +521,7 @@ export default class AccordionList extends Component {
       itemIsSelected,
       hideEmptySectionsInSearch,
       openSection,
+      user,
     );
   }
 
@@ -667,3 +679,10 @@ export default class AccordionList extends Component {
     );
   }
 }
+const mapStateToProps = (state) => ({
+  user: getUser(state),
+});
+
+export default _.compose(
+  connect(mapStateToProps, null),
+)(AccordionList)
