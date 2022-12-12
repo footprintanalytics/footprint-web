@@ -646,27 +646,31 @@
 (defn send-new-alert-email!
   "Send out the initial 'new alert' email to the `creator` of the alert"
   [{:keys [creator] :as alert}]
-  (send-email! creator "You set up an alert" new-alert-template
-               (common-alert-context alert alert-condition-text)))
+;  (send-email! creator "You set up an alert" new-alert-template
+;               (common-alert-context alert alert-condition-text))
+  )
 
 (defn send-you-unsubscribed-alert-email!
   "Send an email to `who-unsubscribed` letting them know they've unsubscribed themselves from `alert`"
   [alert who-unsubscribed]
-  (send-email! who-unsubscribed "You unsubscribed from an alert" you-unsubscribed-template
-               (common-alert-context alert)))
+;  (send-email! who-unsubscribed "You unsubscribed from an alert" you-unsubscribed-template
+;               (common-alert-context alert))
+  )
 
 (defn send-admin-unsubscribed-alert-email!
   "Send an email to `user-added` letting them know `admin` has unsubscribed them from `alert`"
   [alert user-added {:keys [first_name last_name] :as _admin}]
   (let [admin-name (format "%s %s" first_name last_name)]
-    (send-email! user-added "You’ve been unsubscribed from an alert" admin-unsubscribed-template
-                 (assoc (common-alert-context alert) :adminName admin-name))))
+;    (send-email! user-added "You’ve been unsubscribed from an alert" admin-unsubscribed-template
+;                 (assoc (common-alert-context alert) :adminName admin-name))
+    ))
 
 (defn send-you-were-added-alert-email!
   "Send an email to `user-added` letting them know `admin-adder` has added them to `alert`"
   [alert user-added {:keys [first_name last_name] :as _admin-adder}]
   (let [subject (format "%s %s added you to an alert" first_name last_name)]
-    (send-email! user-added subject added-template (common-alert-context alert alert-condition-text))))
+;    (send-email! user-added subject added-template (common-alert-context alert alert-condition-text))
+    ))
 
 (def ^:private not-working-subject "One of your alerts has stopped working")
 
@@ -674,13 +678,15 @@
   "Email to notify users when a card associated to their alert has been archived"
   [alert user {:keys [first_name last_name] :as _archiver}]
   (let [deletion-text (format "the question was archived by %s %s" first_name last_name)]
-    (send-email! user not-working-subject stopped-template (assoc (common-alert-context alert) :deletionCause deletion-text))))
+;    (send-email! user not-working-subject stopped-template (assoc (common-alert-context alert) :deletionCause deletion-text))
+    ))
 
 (defn send-alert-stopped-because-changed-email!
   "Email to notify users when a card associated to their alert changed in a way that invalidates their alert"
   [alert user {:keys [first_name last_name] :as _archiver}]
   (let [edited-text (format "the question was edited by %s %s" first_name last_name)]
-    (send-email! user not-working-subject stopped-template (assoc (common-alert-context alert) :deletionCause edited-text))))
+;    (send-email! user not-working-subject stopped-template (assoc (common-alert-context alert) :deletionCause edited-text))
+    ))
 
 (defn send-slack-token-error-emails!
   "Email all admins when a Slack API call fails due to a revoked token or other auth error"

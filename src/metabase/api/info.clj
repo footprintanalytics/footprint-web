@@ -87,8 +87,7 @@
 
 (api/defendpoint ^:streaming POST "/alertNow"
   []
-  ((log/info "=====> alert now")
-    (#'send-pulses/send-pulses! 0 "fri" :first :first))
-  )
+  (log/info "=====> alert now")
+  (#'send-pulses/send-pulses! 0 "fri" :first :first))
 
 (api/define-routes)
