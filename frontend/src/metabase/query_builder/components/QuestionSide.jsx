@@ -81,7 +81,6 @@ function QuestionSide({
   nextChartPopoverAction,
   updateQuestion,
 }) {
-  console.log("dbId", dbId)
   const [databaseId, setDatabaseId] = useState(dbId || 3);
   const [handleSelectTable, setHandleSelectTable] = useState();
   const [chain, setChain] = useState("all");
@@ -171,9 +170,9 @@ function QuestionSide({
 
   const getFilter = ({ tableName, columns }) => {
     let filter = null;
-    const mapping = dateFieldMapping.find(
+    const mapping = dateFieldMapping.mapping.find(
       mapping => mapping.tableName === tableName,
-    );
+    ) || dateFieldMapping.dateFieldSuffix.find(suffixObject => tableName.endsWith(suffixObject.tableName));
     if (mapping && columns) {
       const { dateField } = mapping;
       const dateColumn = columns.find(column => column.name === dateField);
@@ -220,6 +219,7 @@ function QuestionSide({
         return;
       }
       const filter = getFilter({ tableName, columns });
+      console.log("questionside filter", filter)
       replaceUrl({ tableId, filter });
       afterAction();
     }

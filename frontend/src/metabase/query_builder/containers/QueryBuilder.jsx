@@ -494,7 +494,6 @@ function QueryBuilder(props) {
       )
     );
   };
-  console.log("uuiduuid", uuid)
   if (uuid) {
     return <PublicQuestion {...props} uuid={uuid} />;
   }

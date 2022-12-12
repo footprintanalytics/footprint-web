@@ -1317,6 +1317,8 @@ export default class Question extends memoizeClass<QuestionInner>("query")(
     dataset_query = type === "native"
       ? NATIVE_QUERY_TEMPLATE
       : STRUCTURED_QUERY_TEMPLATE,
+    filter,
+    limit = null,
   }: QuestionCreatorOpts = {}) {
     let card: CardObject = {
       name,
@@ -1337,6 +1339,13 @@ export default class Question extends memoizeClass<QuestionInner>("query")(
 
     if (databaseId != null) {
       card = assocIn(card, ["dataset_query", "database"], databaseId);
+    }
+
+    if (filter != null) {
+      card = assocIn(card, ["dataset_query", "query", "filter"], filter);
+    }
+    if (limit != null) {
+      card = assocIn(card, ["dataset_query", "query", "limit"], limit);
     }
 
     return new Question(card, metadata, parameterValues);
