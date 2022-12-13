@@ -98,12 +98,12 @@ const DataSelectorDatabaseSchemaPicker = ({
   const renderSectionIcon = ({ icon }: { icon?: string }) =>
     icon && <Icon className="Icon text-default" name={icon} size={18} />;
 
-  if (hasBackButton) {
+  /*if (hasBackButton) {
     sections.unshift({
       name: <RawDataBackButton />,
       active: true,
     });
-  }
+  }*/
 
   let openSection = selectedSchema
     ? databases.findIndex(db => db.id === selectedSchema.database.id)

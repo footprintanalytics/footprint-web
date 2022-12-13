@@ -120,9 +120,9 @@ const DataSelectorTablePicker = ({
         showItemArrows={hasNextStep}
       />
 
-      {isSavedQuestionList && (
+      {/*{isSavedQuestionList && (
         <LinkToDocsOnReferencingSavedQuestionsInQueries />
-      )}
+      )}*/}
     </Container>
   );
 }
