@@ -313,7 +313,7 @@ export default class Text extends Component {
                   styles["text-card-textarea"],
                 )}
                 name="text"
-                placeholder={t`You can use Markdown here, and include variables {{like_this}}`}
+                placeholder={t`Write here, and use Markdown if you'd like, and include variables {{like_this}}`}
                 value={settings.text}
                 onChange={e => this.handleTextChange(e.target.value)}
                 // Prevents text cards from dragging when you actually want to select text
@@ -367,7 +367,7 @@ export default class Text extends Component {
             )}
           >
             {interpolate(
-              interpolate(settings.text, locationQueryDynamicParams),
+              interpolate(content, locationQueryDynamicParams),
               dynamicParams,
             )}
           </ReactMarkdown>
