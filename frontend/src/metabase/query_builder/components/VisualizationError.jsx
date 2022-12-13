@@ -17,6 +17,7 @@ import {
   QueryLink,
 } from "./VisualizationError.styled";
 import ErrorGuide from "metabase/query_builder/components/ErrorGuide";
+import Link from "metabase/core/components/Link";
 
 const EmailAdmin = () => {
   const discord = "https://discord.gg/Ts6ppKJade";
