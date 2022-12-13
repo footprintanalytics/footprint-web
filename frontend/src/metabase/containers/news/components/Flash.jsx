@@ -58,6 +58,7 @@ const Flash = props => {
         </div>
       </div>*/}
       <InfiniteScroll
+        className="news-articles__list"
         dataLength={mediaData.length}
         next={loadMore}
         hasMore={hasMore}

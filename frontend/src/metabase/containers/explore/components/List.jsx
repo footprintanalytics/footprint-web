@@ -80,7 +80,7 @@ function ExplorerList({
         dataLength={exploreList.length}
         next={loadMore}
         hasMore={hasMore}
-        className="explore__list"
+        className="news-articles__list"
         pullDownToRefreshThreshold={300}
         onScroll={() => {
           if (isDefi360()) {

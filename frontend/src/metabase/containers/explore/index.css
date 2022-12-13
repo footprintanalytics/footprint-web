@@ -99,7 +99,7 @@
 }
 
 .infinite-scroll-component {
-  overflow: initial !important;
+  /*overflow: initial !important;*/
 }
 
 .explore__list-create-border {

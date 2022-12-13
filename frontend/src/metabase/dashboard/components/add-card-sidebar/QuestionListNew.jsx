@@ -110,6 +110,7 @@ export function QuestionListNew({ searchText, sortOption, onSelect }) {
         >
           {searchResult && (
             <InfiniteScroll
+              className="news-articles__list"
               dataLength={searchResult.length}
               next={loadMore}
               hasMore={searchResult.length < total}

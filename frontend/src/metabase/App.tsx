@@ -124,7 +124,7 @@ function App({
             {/*{isAppBarVisible && <AppBar isNavBarVisible={isNavBarVisible} />}*/}
             <AppContentContainer isAdminApp={isAdminApp}>
               {isNavBarVisible && <Navbar location={location} />}
-              <AppContent ref={setViewportElement}>
+              <AppContent id="app-content" ref={setViewportElement}>
                 <ContentViewportContext.Provider value={viewportElement ?? null}>
                   {errorPage ? getErrorComponent(errorPage) : children}
                 </ContentViewportContext.Provider>
