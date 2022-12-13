@@ -26,6 +26,7 @@ import {
   HeaderCaption,
   HeaderCaptionContainer,
 } from "./DashboardHeader.styled";
+import { IconBack } from "metabase/components/IconBack";
 
 interface DashboardHeaderProps {
   editingTitle: string;
@@ -48,6 +49,7 @@ interface DashboardHeaderProps {
   onSave: () => null;
   setDashboardAttribute: (prop: string, value: string) => null;
   titleRightPanel: any,
+  router: any,
 }
 
 const DashboardHeader = ({
@@ -69,6 +71,7 @@ const DashboardHeader = ({
   onSave,
   setDashboardAttribute,
   titleRightPanel,
+  router,
 }: DashboardHeaderProps) => {
   const [headerHeight, setHeaderHeight] = useState(0);
   // const [showSubHeader, setShowSubHeader] = useState(true);
@@ -140,6 +143,7 @@ const DashboardHeader = ({
       >
         <HeaderContent hasSubHeader={!isDataApp} showSubHeader={true}>
           <div className="flex">
+            <IconBack router={router} />
             <HeaderCaptionContainer>
               <HeaderCaption
                 key={dashboard.name}

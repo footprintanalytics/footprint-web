@@ -740,6 +740,7 @@ class DashboardHeader extends Component {
             />
           ) : null
         }
+        router={this.props.router}
       />
     );
   }
