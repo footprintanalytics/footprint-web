@@ -6,7 +6,7 @@ import {
 
 export const FullWidthContainer = styled.div`
   margin: 0 auto;
-  padding: 0 1em;
+  padding: 0 6px;
   width: 100%;
 
   ${breakpointMinSmall} {

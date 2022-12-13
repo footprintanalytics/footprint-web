@@ -78,7 +78,7 @@ interface HeaderContentProps {
 }
 
 export const HeaderContent = styled.div<HeaderContentProps>`
-  padding: 1rem 0;
+  padding: 12px 0;
 
   ${HeaderCaptionContainer} {
     top: ${props => (props.showSubHeader ? "0px" : "10px")};

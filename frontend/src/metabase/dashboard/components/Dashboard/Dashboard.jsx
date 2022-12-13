@@ -603,8 +603,8 @@ class Dashboard extends Component {
                 data-testid="dashboard-parameters-and-cards"
                 ref={element => (this.parametersAndCardsContainerRef = element)}
               >
-                <div className="TagWidgetContainer bg-white pl2 pr2 hove">
-                  <div style={{ display: isEditing ? "none" : "flex" }}>
+                <div className="TagWidgetContainer bg-white hove">
+                  <div className="pl2 pr2" style={{ display: isEditing ? "none" : "flex" }}>
                     {this.tagPanel()}
                   </div>
                   {shouldRenderParametersWidgetInViewMode && (
