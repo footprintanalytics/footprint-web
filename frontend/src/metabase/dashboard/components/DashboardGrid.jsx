@@ -30,6 +30,8 @@ import { generateMobileLayout } from "./grid/utils";
 import AddSeriesModal from "./AddSeriesModal/AddSeriesModal";
 import RemoveFromDashboardModal from "./RemoveFromDashboardModal";
 import DashCard from "./DashCard";
+import { Skeleton } from "antd";
+import LazyLoad from "react-lazyload";
 
 class DashboardGrid extends Component {
   static contextType = ContentViewportContext;
@@ -291,6 +293,17 @@ class DashboardGrid extends Component {
 
   renderDashCard(dc, { isMobile, gridItemWidth, totalNumGridCols }) {
     return (
+      <LazyLoad
+        className="full-height"
+        // unmountIfInvisible
+        placeholder={
+          <div style={{ padding: 20 }}>
+            <Skeleton active />
+          </div>
+        }
+        // offset={500}
+        scrollContainer="#html2canvas-Dashboard"
+      >
       <DashCard
         dashcard={dc}
         headerIcon={this.getDashboardCardIcon(dc)}
@@ -331,6 +344,7 @@ class DashboardGrid extends Component {
         chartStyle={this.props.chartStyle}
         user={this.props.user}
       />
+      </LazyLoad>
     );
   }
 

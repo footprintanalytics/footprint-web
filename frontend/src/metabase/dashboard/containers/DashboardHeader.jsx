@@ -31,6 +31,7 @@ import { toggleSidebar } from "../actions";
 import Header from "../components/DashboardHeader";
 import { SIDEBAR_NAME } from "../constants";
 import "./DashboardHeader.css";
+import MetabaseUtils from "metabase/lib/utils";
 
 const mapStateToProps = (state, props) => {
   const isDataApp = false;
@@ -557,15 +558,17 @@ class DashboardHeader extends Component {
               icon="camera"
               iconSize={16}
               onClick={() => {
+                console.log("this.props.dashboard", this.props.dashboard)
                 trackStructEvent("click Download dashboard");
                 if (user) {
-                  const { public_uuid } = this.props.dashboard;
-                  if (!public_uuid) {
+                  const { id, public_uuid } = this.props.dashboard;
+                  const uuid = MetabaseUtils.isUUID(id) ? id : public_uuid;
+                  if (!uuid ) {
                     message.warning("Please open share first to use snapshot.");
                     return;
                   }
                   snapshot({
-                    public_uuid: public_uuid,
+                    public_uuid: uuid,
                     isDashboard: true,
                     user,
                   });

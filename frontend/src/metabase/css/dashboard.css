@@ -364,3 +364,8 @@
     padding: 0 10px !important;
   }
 }
+
+#html2canvas-Dashboard {
+  overflow-y: scroll;
+  overflow-x: hidden;
+}

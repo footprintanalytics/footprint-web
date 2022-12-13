@@ -44,6 +44,7 @@ import {
   ParametersWidgetContainer,
 } from "./Dashboard.styled";
 import { SIDEBAR_NAME } from "metabase/dashboard/constants";
+import { DashboardLazyLoadContainer } from "metabase/dashboard/components/Dashboard/DashboardLazyLoadContainer";
 
 // const SCROLL_THROTTLE_INTERVAL = 1000 / 24;
 const THROTTLE_PERIOD = 300;
@@ -597,7 +598,7 @@ class Dashboard extends Component {
                 )}
               </HeaderContainer>
             )}
-
+            <DashboardLazyLoadContainer className="flex-full flex flex-column flex-basis-none">
             <DashboardBody isEditingOrSharing={isEditing || isSharing}>
               <ParametersAndCardsContainer
                 data-testid="dashboard-parameters-and-cards"
@@ -671,6 +672,7 @@ class Dashboard extends Component {
                   />
                 </div>
               )}
+            </DashboardLazyLoadContainer>
           </DashboardStyled>
         )}
         <ShareModal
