@@ -278,7 +278,6 @@ class Dashboard extends Component {
   }
 
   saveAction = async props => {
-    console.log("saveAction")
     const { newDashboard } = props || {};
     const hide = message.loading("Saving...", 0);
     const {

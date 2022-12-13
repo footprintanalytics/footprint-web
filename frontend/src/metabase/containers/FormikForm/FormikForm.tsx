@@ -19,6 +19,7 @@ import { makeFormObject, cleanObject, isNestedFieldName } from "../formUtils";
 import FormikFormViewAdapter from "./FormikFormViewAdapter";
 import useInlineFields from "./useInlineFields";
 import { message } from "antd";
+import { get } from "lodash";
 
 interface FormContainerProps<Values extends BaseFieldValues>
   extends OptionalFormViewProps {
@@ -233,6 +234,9 @@ function Form<Values extends BaseFieldValues>({
         const normalized = formObject.normalize(values);
         hide = message.loading("Loading...", 0);
         const result = await onSubmit(normalized, formikHelpers);
+        if (get(result, "payload.object.code") === -1) {
+          throw new Error(get(result, "payload.object.message"));
+        }
         hide();
         onSubmitSuccess?.(result);
         setError(null); // clear any previous errors
