@@ -241,7 +241,7 @@ function ItemPicker({
       return;
     }
     if (id && collections) {
-      const { location } = collectionsById[id];
+      const location = collectionsById[id]?.location;
       if (location && location !== "/") {
         const words = location.split("/");
         if (words && words.length > 1) {
