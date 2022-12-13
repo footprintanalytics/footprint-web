@@ -434,7 +434,7 @@ class DashboardHeader extends Component {
         extraButtons.push({
           title: t`Delete`,
           icon: "view_archive",
-          link: `${location.pathname}/archive`,
+          link: `${location.pathname}/archive?id=${dashboard.id}&uniqueName=${dashboard.uniqueName}`,
           event: "Dashboard;Archive",
         });
       }
