@@ -14,6 +14,7 @@ const Index = ({
   onChangeLocation,
   location,
   router,
+  onSubscribe,
 }) => {
   useEffect(() => {
     if (location?.pathname === "/data-api/pricing") {
@@ -89,7 +90,8 @@ const Index = ({
       boxBg: "data-api__price-item-second",
       buttonText: "Get started",
       buttonAction: e => {
-        window.open("https://forms.gle/ze3F44681h2wgCHT9");
+        onSubscribe("growth");
+        // window.open("https://forms.gle/ze3F44681h2wgCHT9");
       },
       detail: {
         title: "Everything in Free plan, plus:",
@@ -142,7 +144,8 @@ const Index = ({
       boxBg: "data-api__price-item-highlight",
       buttonText: "Get started",
       buttonAction: e => {
-        window.open("https://forms.gle/ze3F44681h2wgCHT9");
+        onSubscribe("scale");
+        // window.open("https://forms.gle/ze3F44681h2wgCHT9");
       },
       popular: true,
       detail: {
