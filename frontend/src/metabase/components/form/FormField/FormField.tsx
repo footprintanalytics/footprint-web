@@ -85,7 +85,6 @@ function FormField({
   const hidden = getHiddenPropValue(props.hidden, formField);
   const horizontal = getHorizontalPropValue(props.horizontal, formField);
   const checkboxCss = props.checkboxCss ?? formField?.checkboxCss;
-  console.log("checkboxCss", checkboxCss, props.checkboxCss, formField?.checkboxCss)
   const isToggle = type === "boolean";
   const standAloneLabel = isToggle && align === "right" && !description;
 

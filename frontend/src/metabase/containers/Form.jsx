@@ -276,7 +276,6 @@ class Form extends React.Component {
     const formObject = this._getFormObject();
     const initialValues = this._getInitialValues();
     const fieldNames = this._getFieldNames();
-  console.log("yyy")
     return (
       <ReduxFormComponent
         {...this.props}

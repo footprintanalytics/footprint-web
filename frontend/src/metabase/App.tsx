@@ -18,12 +18,10 @@ import {
   getIsAppBarVisible,
   getIsNavBarVisible,
 } from "metabase/selectors/app";
-import { setErrorPage } from "metabase/redux/app";
+import { setErrorPage, setChannel } from "metabase/redux/app";
 import { useOnMount } from "metabase/hooks/use-on-mount";
 import { initializeIframeResizer } from "metabase/lib/dom";
 
-import AppBanner from "metabase/components/AppBanner";
-import AppBar from "metabase/nav/containers/AppBar";
 import Navbar from "metabase/nav/containers/Navbar";
 import StatusListing from "metabase/status/containers/StatusListing";
 import { ContentViewportContext } from "metabase/core/context/ContentViewportContext";
@@ -58,6 +56,7 @@ interface AppStateProps {
 
 interface AppDispatchProps {
   onError: (error: unknown) => void;
+  setChannel: any;
 }
 
 interface AppRouterOwnProps {
@@ -79,6 +78,7 @@ const mapStateToProps = (
 
 const mapDispatchToProps: AppDispatchProps = {
   onError: setErrorPage,
+  setChannel,
 };
 
 class ErrorBoundary extends React.Component<{
@@ -100,11 +100,20 @@ function App({
   isNavBarVisible,
   children,
   onError,
+  location,
+  setChannel,
 }: AppProps) {
   const [viewportElement, setViewportElement] = useState<HTMLElement | null>();
 
+  const handleChannel = () => {
+    const channel = location.query.channel || location.query.cnl || "homepage";
+    setChannel(channel);
+    window && window.gtag("set", "user_properties", { channel: channel });
+  };
+
   useOnMount(() => {
     initializeIframeResizer();
+    handleChannel();
   });
 
   return (
