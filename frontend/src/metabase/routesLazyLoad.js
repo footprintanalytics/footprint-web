@@ -143,4 +143,9 @@ export default {
   // PeopleListingApp: loadable(() => import("metabase/admin/people/containers/PeopleListingApp")),
   // GroupsListingApp: loadable(() => import("metabase/admin/people/containers/GroupsListingApp")),
   // GroupDetailApp: loadable(() => import("metabase/admin/people/containers/GroupDetailApp")),
+
+  // submit
+  SubmitContract: loadable(() => import("metabase/submit/contract/index")),
+  SubmitContractAdd: loadable(() => import("metabase/submit/contract/add")),
+  SubmitContractSuccess: loadable(() => import("metabase/submit/contract/success")),
 }

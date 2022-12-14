@@ -7,9 +7,18 @@ import PublicNotFound from "metabase/public/components/PublicNotFound";
 
 import PublicApp from "metabase/public/containers/PublicApp";
 import LazyLoad from "./routesLazyLoad";
+import { trackPageView } from "metabase/lib/analytics";
 
 export const getRoutes = store => (
-  <Route title={t`Metabase`}>
+  <Route
+    title={t`Footprint Analytics`}
+    onEnter={nextState => {
+      trackPageView(nextState.location.pathname, "Enter");
+    }}
+    onChange={(prevState, nextState) => {
+      trackPageView(nextState.location.pathname, "Change");
+    }}
+  >
     <Route path="public" component={PublicApp}>
       <Route
         path="question/:uuid(/:name)"

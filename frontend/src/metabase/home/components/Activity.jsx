@@ -83,7 +83,7 @@ export default class Activity extends Component {
     } else if (user) {
       return user.common_name;
     } else {
-      return t`Metabase`;
+      return t`Footprint`;
     }
   }
 
