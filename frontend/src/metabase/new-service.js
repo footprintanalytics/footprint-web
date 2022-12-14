@@ -416,6 +416,22 @@ export const userinfoProfile = params => {
   return PUT(`api/v1/userinfo/profile`, params);
 };
 
+export const getContractSubmittedList = params => {
+  return GET(`/api/v1/contract/submitted/list`, params);
+};
+
+export const getContractSubmittedByAddress = params => {
+  return GET(`/api/v1/contract/find/one`, params);
+};
+
+export const getContractProtocolByAddress = params => {
+  return GET(`/api/v1/protocol/find/list`, params);
+};
+
+export const submitContract = params => {
+  return POST(`/api/v1/contract/submit`, params);
+};
+
 export const publicDashboard = (uuid, params) => {
   return GET(`api/v1/public/dashboard/${uuid}`, { silentFp: true });
 };

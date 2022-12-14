@@ -61,6 +61,12 @@ function ProfileLink({ user, adminItems, onLogout, trigger }) {
         link: Urls.accountSettings(),
         event: `Navbar;Profile Dropdown;Edit Profile`,
       },
+      {
+        title: t`Submit Contract`,
+        icon: null,
+        link: "/submit/contract",
+        event: `Navbar;Profile Dropdown;Submit Contract`,
+      },
       admin && {
         title: t`Admin settings`,
         icon: null,

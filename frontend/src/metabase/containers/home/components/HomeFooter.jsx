@@ -55,6 +55,10 @@ const footers = [
         label: "Chains Analytics",
         url: "/chains",
       },
+      {
+        label: "Submit Contract",
+        url: "/submit/contract",
+      },
       /*{
         label: "Footprint Enterprise",
         url: "/defi360",

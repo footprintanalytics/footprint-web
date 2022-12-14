@@ -615,7 +615,23 @@ export const getRoutes = store => (
 
         {/* INDIVIDUAL DASHBOARDS */}
 
-        <Route path="/auto/dashboard/*" component={AutomaticDashboardApp} />
+        {/*<Route path="/auto/dashboard/*" component={AutomaticDashboardApp} />*/}
+
+        <Route
+          title={t`Submit Contract`}
+          path="/submit/contract"
+          component={LazyLoad.SubmitContract}
+        />
+        <Route
+          title={t`Submit Contract`}
+          path="/submit/contract/add"
+          component={LazyLoad.SubmitContractAdd}
+        />
+        <Route
+          title={t`Submit Contract`}
+          path="/submit/contract/success"
+          component={LazyLoad.SubmitContractSuccess}
+        />
 
         <Route path="/collections">
           <Route path="create" component={CollectionCreate} />

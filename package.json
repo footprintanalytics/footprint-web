@@ -147,6 +147,7 @@
     "screenfull": "^4.2.1",
     "server-text-width": "^1.0.2",
     "simple-statistics": "^3.0.0",
+    "slug": "^8.2.2",
     "slugg": "^1.2.1",
     "styled-system": "2.2.5",
     "tether": "^1.2.0",

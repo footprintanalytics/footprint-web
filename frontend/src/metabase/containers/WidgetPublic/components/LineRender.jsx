@@ -9,7 +9,7 @@ const LineRender = ({ data, type = "line" }) => {
   const xDataIndex = cols?.findIndex(col => col.base_type === "type/Date") || 0;
   const yDataIndex =
     cols?.findIndex(col => col.base_type === "type/BigInteger") || 1;
-  
+
   rows?.sort();
 
   const xData = rows?.map(item =>
