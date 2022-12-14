@@ -151,16 +151,18 @@ export const LOGIN_GOOGLE = "metabase/auth/LOGIN_GOOGLE";
 export const loginGoogle = createThunkAction(
   LOGIN_GOOGLE,
   (
-    token: string,
+    googleUser: any,
     redirectUrl = "/",
     channel: string,
+    projectRole: string,
   ) =>
     async (dispatch: any) => {
 
       try {
         const { data } = await SessionApi.createWithGoogleAuth({
-          token,
+          idToken: googleUser.getAuthResponse().id_token,
           channel,
+          ...(projectRole ? { projectRole } : {}),
         });
         const { isNew, email } = data;
         if (isNew) {
