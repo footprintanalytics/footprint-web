@@ -65,7 +65,7 @@ export default {
   // SearchApp: loadable(() => import("metabase/home/containers/SearchApp")),
   Pricing: loadable(() => import("metabase/pricing_v3/index")),
   Explore: loadable(() => import("metabase/containers/explore/index")),
-  // Features: loadable(() => import("metabase/containers/features/index")),
+  Features: loadable(() => import("metabase/containers/features/index")),
   GuestDashboard: loadable(() => import("metabase/guest/Dashboard")),
   GuestQuestion: loadable(() => import("metabase/guest/Question")),
   // My: loadable(() => import("metabase/containers/my/index")),

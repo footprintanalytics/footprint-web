@@ -235,9 +235,9 @@ export const getRoutes = store => (
         />
       </Route>
 
-      {/*<Route path="/topic" component={LazyLoad.Features}>*/}
-      {/*  <Route path=":menu/:subMenu" />*/}
-      {/*</Route>*/}
+      <Route path="/topic" component={LazyLoad.Features}>
+        <Route path=":menu/:subMenu" />
+      </Route>
 
       <Route path="/dashboards" component={LazyLoad.Dashboards} />
 
