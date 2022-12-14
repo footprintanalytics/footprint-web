@@ -112,9 +112,10 @@ function DashCardCardParameterMapper({
       return false;
     }
 
-    const question = new Question(card, metadata);
-    return question.query().isEditable();
-  }, [card, metadata, isVirtual]);
+    // const question = new Question(card, metadata);
+    // return question.query().isEditable();
+    return true;
+  }, [card, isVirtual]);
 
   const { buttonVariant, buttonTooltip, buttonText, buttonIcon } =
     useMemo(() => {
