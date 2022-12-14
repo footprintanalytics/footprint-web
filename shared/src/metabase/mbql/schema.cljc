@@ -1448,15 +1448,15 @@
   lock the results down to a single row or set of rows."
   {;; the basic raw-value types. These can be used with [[TemplateTag:RawValue]] template tags as well as
    ;; [[TemplateTag:FieldFilter]] template tags.
-   :number  {:type :numeric, :allowed-for #{:number :number/= :id :category :location/zip_code}}
-   :text    {:type :string,  :allowed-for #{:text :string/= :id :category
+   :number  {:type :numeric, :allowed-for #{:number :number/= :id :category :series_category :location/zip_code}}
+   :text    {:type :string,  :allowed-for #{:text :string/= :id :category :series_category
                                             :location/city :location/state :location/zip_code :location/country}}
-   :date    {:type :date,    :allowed-for #{:date :date/single :date/all-options :id :category}}
+   :date    {:type :date,    :allowed-for #{:date :date/single :date/all-options :id :category :series_category}}
    ;; I don't think `:boolean` is actually used on the FE at all.
-   :boolean {:type :boolean, :allowed-for #{:boolean :id :category}}
+   :boolean {:type :boolean, :allowed-for #{:boolean :id :category :series_category}}
 
    ;; as far as I can tell this is basically just an alias for `:date`... I'm not sure what the difference is TBH
-   :date/single {:type :date, :allowed-for #{:date :date/single :date/all-options :id :category}}
+   :date/single {:type :date, :allowed-for #{:date :date/single :date/all-options :id :category :series_category}}
 
    ;; everything else can't be used with raw value template tags -- they can only be used with Dashboard parameters
    ;; for MBQL queries or Field filters in native queries
@@ -1475,6 +1475,7 @@
    ;; [[metabase.api.public-test/execute-public-card-with-parameters-test]]
    :id       {:allowed-for #{:id}}
    :category {:allowed-for #{:category #_FIXME :number :text :date :boolean}}
+   :series_category {:allowed-for #{:series_category #_FIXME :number :text :date :boolean}}
 
    ;; Like `:id` and `:category`, the `:location/*` types are primarily widget types. They don't really have a meaning
    ;; as a parameter type, so in an ideal world they wouldn't be allowed; however it seems like the FE still passed
@@ -1503,12 +1504,12 @@
    ;; "operator" parameter types.
    :number/!=               {:type :numeric, :operator :variadic, :allowed-for #{:number/!=}}
    :number/<=               {:type :numeric, :operator :unary, :allowed-for #{:number/<=}}
-   :number/=                {:type :numeric, :operator :variadic, :allowed-for #{:number/= :number :id :category
+   :number/=                {:type :numeric, :operator :variadic, :allowed-for #{:number/= :number :id :category :series_category
                                                                                  :location/zip_code}}
    :number/>=               {:type :numeric, :operator :unary, :allowed-for #{:number/>=}}
    :number/between          {:type :numeric, :operator :binary, :allowed-for #{:number/between}}
    :string/!=               {:type :string, :operator :variadic, :allowed-for #{:string/!=}}
-   :string/=                {:type :string, :operator :variadic, :allowed-for #{:string/= :text :id :category
+   :string/=                {:type :string, :operator :variadic, :allowed-for #{:string/= :text :id :category :series_category
                                                                                 :location/city :location/state
                                                                                 :location/zip_code :location/country}}
    :string/contains         {:type :string, :operator :unary, :allowed-for #{:string/contains}}
