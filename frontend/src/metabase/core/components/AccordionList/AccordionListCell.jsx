@@ -42,7 +42,6 @@ export const AccordionListCell = ({
   selectedDatabaseId,
 }) => {
   const { type, section, sectionIndex, item, itemIndex, isLastItem } = row;
-  console.log("type", type)
   let content;
   if (type === "header") {
     if (alwaysExpanded) {

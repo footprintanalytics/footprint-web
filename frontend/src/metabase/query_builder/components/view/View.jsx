@@ -462,9 +462,9 @@ class View extends React.Component {
 
     const hideSide = config && config.questionSideHide;
     const isCreate = !question.card().id && !question.card().original_card_id;
-    const isAdmin = user.is_superuser;
+    const isAdmin = user && user.is_superuser;
     const isOwner =
-      isAdmin || isCreate || user.id === question.card().creator_id;
+      isAdmin || isCreate || (user && user.id === question.card().creator_id);
 
     const id = `html2canvas-${question._card.name}-${question._card.id}`;
     // const fileName = `Footprint-${question._card.name}-${moment().format(

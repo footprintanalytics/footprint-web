@@ -97,6 +97,8 @@ class AccordionList extends Component {
     hasInitialFocus: PropTypes.bool,
 
     itemTestId: PropTypes.string,
+
+    user: PropTypes.any,
   };
 
   static defaultProps = {
@@ -398,12 +400,11 @@ class AccordionList extends Component {
 
     // if any section is searchable just enable a global search
     let globalSearch = false;
-    const allowShowHeader = user.is_superuser;
+
     const rows = [];
     for (const [sectionIndex, section] of sections.entries()) {
       const isLastSection = sectionIndex === sections.length - 1;
       if (
-        allowShowHeader &&
         section.name &&
         (!hideSingleSectionTitle || sections.length > 1 || alwaysTogglable)
       ) {
@@ -506,6 +507,7 @@ class AccordionList extends Component {
       hideSingleSectionTitle,
       itemIsSelected,
       hideEmptySectionsInSearch,
+      // eslint-disable-next-line react/prop-types
       user,
     } = this.props;
 

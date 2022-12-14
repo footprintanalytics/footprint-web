@@ -195,6 +195,7 @@ const DataSelector = _.compose(
   }),
   connect(
     (state, ownProps) => ({
+      user: state.currentUser,
       metadata: getMetadata(state),
       databases:
         ownProps.databases ||
@@ -891,7 +892,6 @@ export class UnconnectedDataSelector extends Component {
 
       databases,
     };
-
     switch (this.state.activeStep) {
       case COLLECTION_DATASET_STEP:
         return (

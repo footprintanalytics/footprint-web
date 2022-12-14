@@ -37,6 +37,7 @@ type DataSelectorTablePickerProps = {
   tables: Table[];
   onBack?: () => void;
   onChangeTable: (table: Table) => void;
+  user: any;
 };
 
 type HeaderProps = Pick<
@@ -57,6 +58,7 @@ const DataSelectorTablePicker = ({
   // hasFiltering,
   // minTablesToShowSearch = 10,
   hasInitialFocus,
+  user,
 }: DataSelectorTablePickerProps) => {
   // In case DataSelector props get reset
   if (!selectedDatabase) {
@@ -67,14 +69,14 @@ const DataSelectorTablePicker = ({
   }
 
   const isSavedQuestionList = selectedDatabase.is_saved_questions;
-
+  const allowShowHeader = user && user.is_superuser;
   const header = (
-    <Header
+    allowShowHeader ? (<Header
       onBack={onBack}
       schemas={schemas}
       selectedDatabase={selectedDatabase}
       selectedSchema={selectedSchema}
-    />
+    />) : <div />
   );
 
   const sections = [
