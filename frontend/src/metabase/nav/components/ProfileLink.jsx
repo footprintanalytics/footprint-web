@@ -128,7 +128,7 @@ function ProfileLink({ user, adminItems, onLogout, trigger }) {
   // don't show trademark if application name is whitelabeled
   const showTrademark = t`Metabase` === "Metabase";
   return (
-    <div>
+    <div className="cursor-pointer">
       <EntityMenu
         tooltip={t`Settings`}
         items={generateOptionsForUser()}

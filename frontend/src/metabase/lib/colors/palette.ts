@@ -19,7 +19,7 @@ export const colors: ColorPalette = {
   accent5: "#F2A86F",
   accent6: "#98D9D9",
   accent7: "#3434B2",
-  "admin-navbar": "#3434B2",
+  "admin-navbar": "#7172ad",
   white: "#FFFFFF",
   black: "#2E353B",
   success: "#84BB4C",
