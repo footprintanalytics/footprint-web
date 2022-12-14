@@ -108,7 +108,9 @@ function App({
   const handleChannel = () => {
     const channel = location.query.channel || location.query.cnl || "homepage";
     setChannel(channel);
-    window && window.gtag("set", "user_properties", { channel: channel });
+    if (window && window.gtag) {
+      window.gtag("set", "user_properties", { channel: channel });
+    }
   };
 
   useOnMount(() => {
