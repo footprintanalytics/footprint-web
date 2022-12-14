@@ -415,3 +415,11 @@ export const cancelSubscription = () => {
 export const userinfoProfile = params => {
   return PUT(`api/v1/userinfo/profile`, params);
 };
+
+export const publicDashboard = (uuid, params) => {
+  return GET(`api/v1/public/dashboard/${uuid}`, { silentFp: true });
+};
+
+export const publicDashboardChartData = (uuid, cardId, params) => {
+  return GET(`api/public/dashboard/${uuid}/card/${cardId}`, { silentFp: true });
+};
