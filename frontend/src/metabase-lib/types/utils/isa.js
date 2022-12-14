@@ -14,7 +14,7 @@ import {
   BOOLEAN,
   SUMMABLE,
   SCOPE,
-  CATEGORY,
+  CATEGORY, SERIES_CATEGORY,
 } from "metabase-lib/types/constants";
 
 /**
@@ -107,6 +107,7 @@ export const isString = isFieldType.bind(null, STRING);
 export const isSummable = isFieldType.bind(null, SUMMABLE);
 export const isScope = isFieldType.bind(null, SCOPE);
 export const isCategory = isFieldType.bind(null, CATEGORY);
+export const isSeriesCategory = isFieldType.bind(null, SERIES_CATEGORY);
 export const isLocation = isFieldType.bind(null, LOCATION);
 
 export const isDimension = col =>

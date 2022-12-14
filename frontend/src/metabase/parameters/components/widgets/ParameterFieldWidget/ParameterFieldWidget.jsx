@@ -39,6 +39,8 @@ export default function ParameterFieldWidget({
   parameters,
   placeholder = t`Enter a value...`,
   dashboard,
+  outerList,
+  children,
 }) {
   const [unsavedValue, setUnsavedValue] = useState(() => normalizeValue(value));
   const operator = deriveFieldOperatorFromParameter(parameter);
@@ -52,6 +54,7 @@ export default function ParameterFieldWidget({
     (multi || unsavedValue.length === numFields);
 
   return (
+    <React.Fragment>
     <WidgetRoot>
       <div className="p1">
         {verboseName && !isEqualsOp && (
@@ -76,6 +79,7 @@ export default function ParameterFieldWidget({
               parameters={parameters}
               dashboard={dashboard}
               onChange={onValueChange}
+              outerList={outerList}
               placeholder={isEditing ? t`Enter a default value…` : undefined}
               fields={fields}
               autoFocus={index === 0}
@@ -102,6 +106,8 @@ export default function ParameterFieldWidget({
         </UpdateButton>
       </Footer>
     </WidgetRoot>
+      {children}
+    </React.Fragment>
   );
 }
 

@@ -23,7 +23,7 @@ import { stripId } from "metabase/lib/formatting";
 import { fetchDashboardParameterValues } from "metabase/dashboard/actions";
 
 import Fields from "metabase/entities/fields";
-
+import { get } from "lodash";
 const MAX_SEARCH_RESULTS = 100;
 
 const fieldValuesWidgetPropTypes = {
@@ -134,6 +134,12 @@ class FieldValuesWidgetInner extends Component {
       }
     } finally {
       this.updateRemappings(options);
+
+      const { outerList } = this.props;
+      if (outerList && outerList.length > 0) {
+        options = options?.filter(item => !outerList?.includes(item[0]));
+      }
+
       this.setState({
         loadingState: "LOADED",
         options,
@@ -307,6 +313,13 @@ class FieldValuesWidgetInner extends Component {
     const isLoading = loadingState === "LOADING";
     const hasListValues = hasList({ fields, disableSearch, options });
 
+    //用户自己上传的表
+    const customUpload = (get(fields[0], "table.name") || "")
+      .toLowerCase()
+      .startsWith("ud");
+
+    const isEncryptAddress = text => text.startsWith("0x") || text.startsWith("0X");
+
     return (
       <div
         style={{
@@ -369,6 +382,10 @@ class FieldValuesWidgetInner extends Component {
             }}
             onInputChange={this.onInputChange}
             parseFreeformValue={value => {
+              //对0x开头的字符串，认为是地址，强制格式化为小写字母，前提是都有录入db的0x地址都是小写字母
+              if (!customUpload && isEncryptAddress(value)) {
+                return value.toLowerCase();
+              }
               return fields[0].isNumeric()
                 ? parseNumberValue(value)
                 : parseStringValue(value);

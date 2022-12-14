@@ -32,7 +32,11 @@ import {
 } from "metabase-lib/parameters/utils/parameter-type";
 
 import ParameterFieldWidget from "./widgets/ParameterFieldWidget/ParameterFieldWidget";
+import SeriesCategory from "metabase/parameters/components/SeriesCategory";
 import S from "./ParameterWidget.css";
+import { Radio } from "antd";
+import { get } from "lodash";
+import "./ParameterValueWidget.css";
 
 const DATE_WIDGETS = {
   "date/single": DateSingleWidget,
@@ -41,6 +45,7 @@ const DATE_WIDGETS = {
   "date/month-year": DateMonthYearWidget,
   "date/quarter-year": DateQuarterYearWidget,
   "date/all-options": DateAllOptionsWidget,
+  "date/series-date": DateAllOptionsWidget,
 };
 
 class ParameterValueWidget extends Component {
@@ -87,6 +92,10 @@ class ParameterValueWidget extends Component {
     return this.trigger.current;
   };
 
+  renderSeriesCategory() {
+    return <SeriesCategory {...this.props} getFields={getFields} />;
+  }
+
   render() {
     const {
       parameter,
@@ -97,12 +106,97 @@ class ParameterValueWidget extends Component {
       isFullscreen,
       noReset,
       className,
+      dashboard,
     } = this.props;
     const { isFocused } = this.state;
     const hasValue = value != null;
     const { noPopover } = getWidgetDefinition(parameter);
     const parameterTypeIcon = getParameterIconName(parameter);
     const showTypeIcon = !isEditing && !hasValue && !isFocused;
+
+    const renderSeriesDate = () => {
+      const seriesData = [
+        {
+          value: "past7days",
+          label: "7D",
+        },
+        {
+          value: "past14days",
+          label: "14D",
+        },
+        {
+          value: "past30days",
+          label: "30D",
+        },
+        {
+          value: "past90days",
+          label: "90D",
+        },
+        {
+          value: "2010-01-01~",
+          label: "Max",
+        },
+      ];
+      const { setValue, value } = this.props;
+      return (
+        <Radio.Group
+          className="parameter-value-widget__series-date-group"
+          value={value}
+          buttonStyle="solid"
+          onChange={({ target }) => {
+            setValue(target.value);
+          }}
+        >
+          {seriesData.map(item => {
+            return (
+              <Radio.Button
+                key={item.value}
+                className="parameter-value-widget__series-date-group-item"
+                value={item.value}
+              >
+                {item.label}
+              </Radio.Button>
+            );
+          })}
+        </Radio.Group>
+      );
+    }
+
+    if (parameter.type === "date/series-date") {
+      return (
+        <div className="flex align-center">
+          {renderSeriesDate()}
+          {hasValue && (
+            <WidgetStatusIcon
+              isFullscreen={isFullscreen}
+              hasValue={hasValue}
+              noReset={noReset}
+              noPopover={noPopover}
+              isFocused={isFocused}
+              setValue={setValue}
+            />
+          )}
+        </div>
+      );
+    }
+
+    /*if (parameter.type === "series_category" && !!dashboard) {
+      return (
+        <div className="flex align-center">
+          {this.renderSeriesCategory()}
+          {hasValue && (
+            <WidgetStatusIcon
+              isFullscreen={isFullscreen}
+              hasValue={hasValue}
+              noReset={noReset}
+              noPopover={noPopover}
+              isFocused={isFocused}
+              setValue={setValue}
+            />
+          )}
+        </div>
+      );
+    }*/
 
     if (noPopover) {
       return (
@@ -195,6 +289,23 @@ class ParameterValueWidget extends Component {
 }
 
 export default ParameterValueWidget;
+
+function getFields(metadata, parameter) {
+  if (!metadata) {
+    return [];
+  }
+  return (
+    parameter.fields ??
+    getFieldIds(parameter)
+      .map(id => metadata.field(id))
+      .filter(f => f != null)
+  );
+}
+
+function getFieldIds(parameter) {
+  const { field_ids = [], field_id } = parameter;
+  return field_id ? [field_id] : field_ids;
+}
 
 function Widget({
   parameter,

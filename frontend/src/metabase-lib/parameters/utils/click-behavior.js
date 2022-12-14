@@ -289,6 +289,8 @@ function formatDateForParameterType(value, parameterType, unit) {
     return m.format("YYYY-MM-DD");
   } else if (parameterType === "date/all-options") {
     return formatDateTimeForParameter(value, unit);
+  } else if (parameterType === "date/series-date") {
+    return formatDateTimeForParameter(value, unit);
   }
   return value;
 }

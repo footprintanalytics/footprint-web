@@ -98,6 +98,13 @@ export const PARAMETER_OPERATOR_TYPES = {
       description: t`Like "the last 7 days" or "this month"`,
     },
     {
+      type: "date/series-date",
+      operator: "series-date",
+      name: t`Series Date`,
+      menuName: t`Series Date`,
+      description: t`Quickly select a date`,
+    },
+    {
       type: "date/all-options",
       operator: "all-options",
       name: t`Date Filter`,
@@ -128,6 +135,10 @@ export const ID_OPTION = {
 };
 
 export const CATEGORY_OPTION = { type: "category", name: t`Category` };
+
+export const SERIES_CATEGORY_OPTIONS = [
+  { type: "series_category", name: t`Series Text` },
+];
 
 export const LOCATION_OPTIONS = [
   {

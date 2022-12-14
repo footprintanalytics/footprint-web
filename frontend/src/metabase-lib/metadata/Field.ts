@@ -16,6 +16,7 @@ import {
   isSummable,
   isScope,
   isCategory,
+  isSeriesCategory,
   isAddress,
   isCity,
   isState,
@@ -200,6 +201,10 @@ class FieldInner extends Base {
   }
 
   isCategory() {
+    return isCategory(this);
+  }
+
+  isSeriesCategory() {
     return isCategory(this);
   }
 

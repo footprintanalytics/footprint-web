@@ -51,6 +51,7 @@ function getParameterOperatorType(parameterType?: string) {
       return NUMBER;
     case "string":
     case "category":
+    case "series_category":
     case "location":
       return STRING;
     case "id":
