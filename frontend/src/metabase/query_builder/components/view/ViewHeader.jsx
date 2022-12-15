@@ -708,6 +708,7 @@ function ViewTitleHeaderRightSide(props) {
             canNativeQuery={canNativeQuery}
             btnString={"View the SQL"}
             data-metabase-event={`Notebook Mode; Convert to SQL Click`}
+            updateQuestion={updateQuestion}
           />
         </div>
       </Menu.Item>,

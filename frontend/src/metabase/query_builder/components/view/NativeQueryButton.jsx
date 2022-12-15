@@ -64,7 +64,7 @@ export default class NativeQueryButton extends React.Component {
       database: this.state.datasetQuery.database,
     });
 
-    updateQuestion(newQuestion, {
+    updateQuestion && updateQuestion(newQuestion, {
       shouldUpdateUrl: true,
     });
   };
