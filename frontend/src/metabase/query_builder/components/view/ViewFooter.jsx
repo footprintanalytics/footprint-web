@@ -11,21 +11,13 @@ import Icon from "metabase/components/Icon";
 import ButtonBar from "metabase/components/ButtonBar";
 
 import QueryDownloadWidget from "metabase/query_builder/components/QueryDownloadWidget";
-import QuestionEmbedWidget, {
-  QuestionEmbedWidgetTrigger,
-} from "metabase/query_builder/containers/QuestionEmbedWidget";
-import {
-  getVisualizationRaw,
-  getIconForVisualizationType,
-} from "metabase/visualizations";
+import { getIconForVisualizationType, getVisualizationRaw } from "metabase/visualizations";
 import ViewButton from "./ViewButton";
-
-import QuestionAlertWidget from "./QuestionAlertWidget";
 import QuestionTimelineWidget from "./QuestionTimelineWidget";
 
 import QuestionRowCount from "./QuestionRowCount";
-import QuestionLastUpdated from "./QuestionLastUpdated";
 import { ViewFooterRoot } from "./ViewFooter.styled";
+import QueryDownloadWidgetFP from "metabase/query_builder/components/QueryDownloadWidgetFP";
 
 const ViewFooter = ({
   question,
@@ -52,6 +44,7 @@ const ViewFooter = ({
   onOpenTimelines,
   onCloseTimelines,
   updateQuestion,
+  isDirty,
 }) => {
   const onQueryChange = useCallback(
     query => {
@@ -138,7 +131,8 @@ const ViewFooter = ({
               result={result}
             />
           ),*/
-          /*QueryDownloadWidget.shouldRender({ result, isResultDirty }) && (
+          QueryDownloadWidget.shouldRender({ result, isResultDirty }) &&
+            isDirty && (
             <QueryDownloadWidgetFP
               key="download"
               className="mx1 hide sm-show"
@@ -146,7 +140,7 @@ const ViewFooter = ({
               result={result}
               visualizationSettings={visualizationSettings}
             />
-          ),*/
+          ),
           /*QuestionAlertWidget.shouldRender({
             question,
             visualizationSettings,
