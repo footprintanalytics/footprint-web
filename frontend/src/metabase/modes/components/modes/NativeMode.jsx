@@ -4,7 +4,8 @@ import DefaultMode from "./DefaultMode";
 const NativeMode = {
   name: "native",
   drills: DefaultMode.drills,
-  fallback: NativeDrillFallback,
+  fallback: [],
+  // fallback: NativeDrillFallback,
 };
 
 export default NativeMode;
