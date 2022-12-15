@@ -1,12 +1,13 @@
 /* eslint-disable react/prop-types */
 import React, { useEffect } from "react";
 import "./index.css";
-import Button from "metabase/components/Button";
+import { Button } from "antd";
 import { RightOutlined } from "@ant-design/icons";
 import { push } from "react-router-redux";
 import { loginModalShowAction } from "metabase/redux/control";
 import { connect } from "react-redux";
 import Link from "metabase/components/Link";
+import { loadCurrentUserVipDataApi } from "metabase/redux/user";
 
 const Index = ({
   user,
@@ -16,6 +17,7 @@ const Index = ({
   router,
   onSubscribe,
 }) => {
+  console.log("IndexIndex", user?.vipInfoDataApi, user?.vipInfo);
   useEffect(() => {
     if (location?.pathname === "/data-api/pricing") {
       router?.replace("/pricing?type=data-api");
@@ -31,6 +33,9 @@ const Index = ({
       },
       boxBg: "",
       buttonText: "Get started for free",
+      buttonCanClick:
+        user?.vipInfo?.type !== "business" &&
+        !["growth", "scale"].includes(user?.vipInfoDataApi?.type),
       buttonAction: e => {
         if (!user) {
           e.preventDefault();
@@ -93,6 +98,9 @@ const Index = ({
         onSubscribe("growth");
         // window.open("https://forms.gle/ze3F44681h2wgCHT9");
       },
+      buttonCanClick:
+        user?.vipInfo?.type !== "business" &&
+        !["growth", "scale"].includes(user?.vipInfoDataApi?.type),
       detail: {
         title: "Everything in Free plan, plus:",
         content: [
@@ -147,6 +155,7 @@ const Index = ({
         onSubscribe("scale");
         // window.open("https://forms.gle/ze3F44681h2wgCHT9");
       },
+      buttonCanClick: !["scale"].includes(user?.vipInfoDataApi?.type),
       popular: true,
       detail: {
         title: "Everything in Growth plan, plus:",
@@ -211,6 +220,7 @@ const Index = ({
       buttonAction: e => {
         window.open("https://forms.gle/ze3F44681h2wgCHT9");
       },
+      buttonCanClick: true,
       boxBg: "data-api__price-item-last",
       detail: {
         title: "Everything in Scale plan, plus:",
@@ -284,8 +294,12 @@ const Index = ({
               </div>
               <Button
                 className="data-api__price-button"
-                primary
+                disabled={!item.buttonCanClick}
                 onClick={item.buttonAction}
+                type="primary"
+                block
+                size="large"
+                target="_blank"
               >
                 {item.buttonText}
               </Button>
@@ -361,6 +375,7 @@ const mapStateToProps = state => {
 const mapDispatchToProps = {
   onChangeLocation: push,
   setLoginModalShow: loginModalShowAction,
+  loadCurrentUserVipDataApi,
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(Index);

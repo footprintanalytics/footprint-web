@@ -8,3 +8,9 @@ export const VipLevel = {
   BUSINESS: "business",
   ENTERPRISE: "enterprise",
 };
+
+export const VipLevelDataApi = {
+  FREE: "free",
+  GROWTH: "growth",
+  SCALE: "scale",
+};

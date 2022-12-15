@@ -6,7 +6,11 @@ import { IndexRoute } from "react-router";
 import { routerActions } from "react-router-redux";
 import { UserAuthWrapper } from "redux-auth-wrapper";
 import { t } from "ttag";
-import { loadCurrentUser, loadCurrentUserVip } from "metabase/redux/user";
+import {
+  loadCurrentUser,
+  loadCurrentUserVip,
+  loadCurrentUserVipDataApi,
+} from "metabase/redux/user";
 import MetabaseSettings from "metabase/lib/settings";
 import getAccountRoutes from "metabase/account/routes";
 import getAdminRoutes from "metabase/admin/routes";
@@ -163,6 +167,7 @@ export const getRoutes = store => (
         await store.dispatch(loadCurrentUser());
         if (store.getState().currentUser) {
           store.dispatch(loadCurrentUserVip());
+          store.dispatch(loadCurrentUserVipDataApi());
         }
         done();
       }}

@@ -13,7 +13,7 @@ import { Skeleton } from "antd";
 import { getProject } from "metabase/lib/project_info";
 import Link from "metabase/components/Link";
 
-const Index = ({ router, user, params }) => {
+const Index = ({ router, user, params, userInfoDataApi }) => {
   const name = params?.name?.replace("@", "") || "";
 
   if (name) {
@@ -80,6 +80,7 @@ const Index = ({ router, user, params }) => {
 const mapStateToProps = state => {
   return {
     user: state.currentUser,
+    userInfoDataApi: state.vipInfoDataApi,
   };
 };
 

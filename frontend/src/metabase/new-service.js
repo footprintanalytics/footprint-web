@@ -45,6 +45,10 @@ export const getUserVipInfo = async () => {
   return GET(`/api/v1/user/vip`, { project: getProject() });
 };
 
+export const getDataApiVipInfo = async () => {
+  return GET(`/api/v1/user/vip/dataApi`, { project: getProject() });
+};
+
 export const getUserInterests = async () => {
   return GET(`/api/v1/user/interests`);
 };

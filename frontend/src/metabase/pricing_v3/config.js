@@ -2,18 +2,18 @@ export const getDataApiSubscribeOptions = (user, mode) => {
   const object = {
     growth: [
       {
-        title: "$299 for Monthly Subscription",
+        title: "$79 for Monthly Subscription",
         selected: true,
         disabledAuto: true,
-        productId: "1",
+        productId: "6399860233fc530014d2f348",
       },
     ],
     scale: [
       {
-        title: "$299 for Monthly Subscription",
+        title: "$360 for Monthly Subscription",
         selected: true,
         disabledAuto: true,
-        productId: "2",
+        productId: "63998f8e33fc530014d2f37d",
       },
     ],
   };
