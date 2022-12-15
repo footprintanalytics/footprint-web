@@ -27,9 +27,10 @@
 (defn- cache-prevention-headers
   "Headers that tell browsers not to cache a response."
   []
-  {"Cache-Control" "max-age=0, no-cache, must-revalidate, proxy-revalidate"
-   "Expires"        "Tue, 03 Jul 2001 06:00:00 GMT"
-   "Last-Modified"  (t/format :rfc-1123-date-time (t/zoned-date-time))})
+  {})
+  ;;{"Cache-Control" "max-age=0, no-cache, must-revalidate, proxy-revalidate"
+  ;; "Expires"        "Tue, 03 Jul 2001 06:00:00 GMT"
+  ;; "Last-Modified"  (t/format :rfc-1123-date-time (t/zoned-date-time))})
 
 (defn- cache-far-future-headers
   "Headers that tell browsers to cache a static resource for a long time."
@@ -48,31 +49,50 @@
    (str/join
     (for [[k vs] {:default-src  ["'none'"]
                   :script-src   (concat
-                                  ["'self'"
+                                  ["*"
+                                    "'self'"
+                                    "'unsafe-inline'"
+                                    "https://apis.google.com"
+                                    "https://*.googleapis.com"
+                                    "https://www.googletagmanager.com"
+                                    "*.gstatic.com"
                                    "'unsafe-eval'" ; TODO - we keep working towards removing this entirely
                                    "https://maps.google.com"
-                                   "https://accounts.google.com"
-                                   (when (public-settings/anon-tracking-enabled)
-                                     "https://www.google-analytics.com")
+                                   "https://accounts.google.com"]
+                                   ;;(when (public-settings/anon-tracking-enabled)
+                                   ;;  "https://www.google-analytics.com")
                                    ;; for webpack hot reloading
-                                   (when config/is-dev?
-                                     "*:8080")
+                                   ;;(when config/is-dev?
+                                   ;;  "*:8080")
                                    ;; for react dev tools to work in Firefox until resolution of
                                    ;; https://github.com/facebook/react/issues/17997
-                                   (when config/is-dev?
-                                     "'unsafe-inline'")]
-                                  (when-not config/is-dev?
-                                    (map (partial format "'sha256-%s'") inline-js-hashes)))
-                  :child-src    ["'self'"
+                                   ;;(when config/is-dev?
+                                   ;;  "'unsafe-inline'")]
+                                   (when-not config/is-dev?
+                                     (map (partial format "'sha256-%s'") inline-js-hashes)))
+                  :child-src    ["*"
+                                 "blob:"
+                                 "'self'"
                                  ;; TODO - double check that we actually need this for Google Auth
                                  "https://accounts.google.com"]
-                  :style-src    ["'self'"
+                  :worker-src   ["*"
+                                 "blob:"]
+                  :style-src    ["*"
+                                 "'self'"
                                  "'unsafe-inline'"
                                  "https://accounts.google.com"]
-                  :font-src     ["*"]
-                  :img-src      ["*"
+                  :font-src     ["*"
                                  "'self' data:"]
-                  :connect-src  ["'self'"
+                  :img-src      ["*"
+                                 "blob:"
+                                 "'self' data:"
+                                 "www.googletagmanager.com"]
+                  :frame-src    ["'self'"
+                                 "www.footprint.network"
+                                 "accounts.google.com"
+                                 "www.youtube.com"]
+                  :connect-src  ["*"
+                                 "'self' data:"
                                  ;; Google Identity Services
                                  "https://accounts.google.com"
                                  ;; MailChimp. So people can sign up for the Metabase mailing list in the sign up process
@@ -86,7 +106,7 @@
                                  ;; Webpack dev server
                                  (when config/is-dev?
                                    "*:8080 ws://*:8080")]
-                  :manifest-src ["'self'"]}]
+                  :manifest-src ["*" "'self'"]}]
       (format "%s %s; " (name k) (str/join " " vs))))})
 
 (defn- embedding-app-origin

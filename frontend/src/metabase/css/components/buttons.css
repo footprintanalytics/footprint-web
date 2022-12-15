@@ -106,7 +106,7 @@
 }
 
 .Button--onlyIcon {
-  border: none;
+  border: 1px solid #dcdde5;
   background: transparent;
   color: var(--color-text-dark);
   padding: 0;

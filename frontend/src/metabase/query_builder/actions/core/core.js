@@ -41,6 +41,7 @@ import { onCloseSidebars } from "../ui";
 import { updateQuestion } from "./updateQuestion";
 import { loadMetadataForCard } from "./metadata";
 import { getQuestionWithDefaultVisualizationSettings } from "./utils";
+import { loadCurrentUserVip } from "metabase/redux/user";
 
 export const RESET_QB = "metabase/qb/RESET_QB";
 export const resetQB = createAction(RESET_QB);
@@ -286,6 +287,12 @@ export const revertToRevision = createThunkAction(
     };
   },
 );
+
+export const reloadUserVip = () => {
+  return (dispatch, state) => {
+    dispatch(loadCurrentUserVip());
+  };
+};
 
 async function reduxCreateQuestion(question, dispatch) {
   const action = await dispatch(Questions.actions.create(question.card()));

@@ -8,6 +8,7 @@ import Icon from "metabase/components/Icon";
 import Tooltip from "metabase/components/Tooltip";
 
 import NativeQuery from "metabase-lib/queries/NativeQuery";
+import Button from "metabase/core/components/Button";
 
 const NativeVariablesButton = ({
   toggleTemplateTagsEditor,
@@ -16,13 +17,15 @@ const NativeVariablesButton = ({
   size,
 }) => (
   <Tooltip tooltip={t`Variables`}>
-    <a
-      className={cx(className, "transition-color text-brand-hover", {
+    <Button
+      className={cx(className, "Question-header-btn transition-color text-brand-hover", {
         "text-brand": isShowingTemplateTagsEditor,
       })}
-    >
-      <Icon name="variable" size={size} onClick={toggleTemplateTagsEditor} />
-    </a>
+      iconColor="#7A819B"
+      icon="variable"
+      iconSize={size}
+      onClick={toggleTemplateTagsEditor}
+    />
   </Tooltip>
 );
 

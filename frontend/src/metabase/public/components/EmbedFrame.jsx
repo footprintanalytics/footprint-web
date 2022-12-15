@@ -54,6 +54,7 @@ class EmbedFrame extends Component {
 
     return (
       <div
+        id="html2canvas-Dashboard"
         className={cx("EmbedFrame flex flex-column", className, {
           spread: innerScroll,
           "bordered rounded shadowed": bordered,

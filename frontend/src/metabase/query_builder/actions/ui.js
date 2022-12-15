@@ -58,15 +58,15 @@ export const onCloseTimelines = createAction("metabase/qb/CLOSE_TIMELINES");
 export const onCloseChartType = createAction("metabase/qb/CLOSE_CHART_TYPE");
 export const onCloseSidebars = createAction("metabase/qb/CLOSE_SIDEBARS");
 
-export const CLOSE_QB_NEWB_MODAL = "metabase/qb/CLOSE_QB_NEWB_MODAL";
-export const closeQbNewbModal = createThunkAction(CLOSE_QB_NEWB_MODAL, () => {
-  return async (dispatch, getState) => {
-    // persist the fact that this user has seen the NewbModal
-    const { currentUser } = getState();
-    await UserApi.update_qbnewb({ id: currentUser.id });
-    MetabaseAnalytics.trackStructEvent("QueryBuilder", "Close Newb Modal");
-  };
-});
+// export const CLOSE_QB_NEWB_MODAL = "metabase/qb/CLOSE_QB_NEWB_MODAL";
+// export const closeQbNewbModal = createThunkAction(CLOSE_QB_NEWB_MODAL, () => {
+//   return async (dispatch, getState) => {
+//     // persist the fact that this user has seen the NewbModal
+//     const { currentUser } = getState();
+//     await UserApi.update_qbnewb({ id: currentUser.id });
+//     MetabaseAnalytics.trackStructEvent("QueryBuilder", "Close Newb Modal");
+//   };
+// });
 
 export const SHOW_CHART_SETTINGS = "metabase/query_builder/SHOW_CHART_SETTINGS";
 export const showChartSettings = createAction(SHOW_CHART_SETTINGS);

@@ -36,7 +36,8 @@ export const addCardToDashboard =
       .map(id => dashcards[id])
       .filter(dc => !dc.isRemoved);
     const { visualization } = getVisualizationRaw([{ card }]);
-    const createdCardSize = visualization.minSize || DEFAULT_CARD_SIZE;
+    // const createdCardSize = visualization.minSize || DEFAULT_CARD_SIZE;
+    const createdCardSize = DEFAULT_CARD_SIZE;
     const dashcard = {
       id: generateTemporaryDashcardId(),
       dashboard_id: dashId,
@@ -82,6 +83,40 @@ export const addDashCardToDashboard = function ({ dashId, dashcardOverrides }) {
 export const addTextDashCardToDashboard = function ({ dashId }) {
   const virtualTextCard = createCard();
   virtualTextCard.display = "text";
+  virtualTextCard.archived = false;
+
+  const dashcardOverrides = {
+    card: virtualTextCard,
+    visualization_settings: {
+      virtual_card: virtualTextCard,
+    },
+  };
+  return addDashCardToDashboard({
+    dashId: dashId,
+    dashcardOverrides: dashcardOverrides,
+  });
+};
+
+export const addImageDashCardToDashboard = function ({ dashId }) {
+  const virtualTextCard = createCard();
+  virtualTextCard.display = "image";
+  virtualTextCard.archived = false;
+
+  const dashcardOverrides = {
+    card: virtualTextCard,
+    visualization_settings: {
+      virtual_card: virtualTextCard,
+    },
+  };
+  return addDashCardToDashboard({
+    dashId: dashId,
+    dashcardOverrides: dashcardOverrides,
+  });
+};
+
+export const addVideoDashCardToDashboard = function ({ dashId }) {
+  const virtualTextCard = createCard();
+  virtualTextCard.display = "video";
   virtualTextCard.archived = false;
 
   const dashcardOverrides = {

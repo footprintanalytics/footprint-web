@@ -1,0 +1,86 @@
+.Features {
+  min-width: 1024px;
+  height: calc(100vh - 60px);
+}
+
+.Features-side {
+  width: 310px;
+  transition: 0.3s width;
+  background: white;
+  height: 100%;
+  border-right: 1px solid var(--color-border);
+  overflow-x: hidden;
+  position: relative;
+}
+
+.Features-main {
+  display: flex;
+  flex: 1;
+  overflow: auto;
+  background-color: var(--color-bg-light);
+}
+
+.Features-side__root {
+  padding: 12px 20px;
+}
+
+.nodata-title {
+  fontsize: 18;
+}
+
+.nodata-desc {
+  fontsize: 14;
+  color: #7e849e;
+}
+.ant-tree.ant-tree-directory .ant-tree-treenode-selected:hover::before,
+.ant-tree.ant-tree-directory .ant-tree-treenode-selected::before {
+  background: #f6f6fe;
+  border-radius: 4px;
+}
+.ant-tree.ant-tree-directory .ant-tree-treenode:hover::before,
+.ant-tree.ant-tree-directory .ant-tree-treenode::before {
+  border-radius: 4px;
+}
+
+.features-switcher {
+  height: 40px;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+}
+
+.features-side__sub-menus {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+.features-side__sub-menus-title {
+  /* font-size: 14px; */
+  /* color: #5a617b; */
+  line-height: 20px;
+  display: -webkit-box;
+  -webkit-line-clamp: 1;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  -webkit-box-orient: vertical;
+}
+
+.features-side__sub-menus-desc {
+  /* font-size: 12px; */
+  /* color: #a2a7b9; */
+  line-height: 14px;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  -webkit-box-orient: vertical;
+}
+
+.ant-tree-treenode-selected .features-side__sub-menus-title {
+  color: #666c80;
+}
+
+.ant-tree-treenode-selected .features-side__sub-menus-desc {
+  color: #8989d2;
+}

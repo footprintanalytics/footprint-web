@@ -26,13 +26,15 @@ class NotebookStepPreview extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      question: this.getPreviewQuestion(props.step),
+      question: props.question || this.getPreviewQuestion(props.step),
     };
   }
 
-  refresh = () => {
+  refresh = props => {
+    const question = props?.question || this.props?.question;
+    const step = props?.step || this.props?.step;
     this.setState({
-      question: this.getPreviewQuestion(this.props.step),
+      question: question || this.getPreviewQuestion(step),
     });
   };
 
@@ -44,13 +46,25 @@ class NotebookStepPreview extends React.Component {
       .setSettings({ "table.pivot": false });
   }
 
-  getIsDirty() {
-    const newQuestion = this.getPreviewQuestion(this.props.step);
+  getIsDirty(props) {
+    const question = props?.question || this.props?.question;
+    const step = props?.step || this.props?.step;
+    const newQuestion = question || this.getPreviewQuestion(step);
     return !_.isEqual(newQuestion.card(), this.state.question.card());
   }
 
+  UNSAFE_componentWillReceiveProps(nextProps) {
+    if (this.props.fromQueryPreview && this.getIsDirty(nextProps)) {
+      this.refresh(nextProps);
+    }
+  }
+
+  getHeight = result => {
+    return this.props.height || getPreviewHeightForResult(result);
+  };
+
   render() {
-    const { onClose } = this.props;
+    const { onClose, fromQueryPreview, className } = this.props;
     const { question } = this.state;
 
     const isDirty = this.getIsDirty();
@@ -62,7 +76,7 @@ class NotebookStepPreview extends React.Component {
 
     return (
       <PreviewRoot>
-        <PreviewHeader>
+        {!fromQueryPreview && (<PreviewHeader>
           <span className="text-bold">{t`Preview`}</span>
           <PreviewIconContainer>
             <Icon
@@ -72,7 +86,8 @@ class NotebookStepPreview extends React.Component {
             />
           </PreviewIconContainer>
         </PreviewHeader>
-        {isDirty ? (
+        )}
+        {!fromQueryPreview && isDirty ? (
           <PreviewButtonContainer className="bordered shadowed rounded bg-white p4">
             <Button onClick={this.refresh}>{t`Refresh`}</Button>
           </PreviewButtonContainer>
@@ -82,11 +97,11 @@ class NotebookStepPreview extends React.Component {
               <Motion
                 defaultStyle={{ height: 36 }}
                 style={{
-                  height: spring(getPreviewHeightForResult(result), springOpts),
+                  height: spring(this.getHeight(result), springOpts),
                 }}
               >
                 {({ height }) => {
-                  const targetHeight = getPreviewHeightForResult(result);
+                  const targetHeight = this.getHeight(result);
                   const snapHeight =
                     height > targetHeight / 2 ? targetHeight : 0;
                   const minHeight = preferReducedMotion ? snapHeight : height;
@@ -96,8 +111,10 @@ class NotebookStepPreview extends React.Component {
                       error={result && result.error}
                       className={cx("bordered shadowed rounded bg-white", {
                         p2: result && result.error,
+                        bordered: !fromQueryPreview,
+                        shadowed: !fromQueryPreview,
                       })}
-                      style={{ minHeight }}
+                      style={{ minHeight: height }}
                     />
                   );
                 }}

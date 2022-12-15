@@ -11,7 +11,7 @@ export const AppContentContainer = styled.div<{
 }>`
   flex-grow: 1;
   display: flex;
-  flex-direction: ${props => (props.isAdminApp ? "column" : "row")};
+  flex-direction: column;
   position: relative;
   overflow: hidden;
   background-color: ${props =>

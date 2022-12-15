@@ -5,6 +5,8 @@ import app from "metabase/redux/app";
 import embed from "metabase/redux/embed";
 import requests from "metabase/redux/requests";
 import settings from "metabase/redux/settings";
+import control from "metabase/redux/control";
+import config from "metabase/redux/config";
 import undo from "metabase/redux/undo";
 // eslint-disable-next-line import/no-named-as-default
 import entities, { enhanceRequestsReducer } from "metabase/redux/entities";
@@ -20,6 +22,8 @@ export default {
   // "entities" framework needs control over "requests" state
   requests: enhanceRequestsReducer(requests),
   settings,
+  control,
+  config,
   undo,
   entities,
 };

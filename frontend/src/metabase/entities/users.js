@@ -30,7 +30,8 @@ const Users = createEntity({
   path: "/api/user",
 
   objectSelectors: {
-    getName: user => user.common_name,
+    getName: user =>
+      user.name || user.common_name || `${user.first_name} ${user.last_name}`,
   },
 
   actionTypes: {
@@ -39,6 +40,10 @@ const Users = createEntity({
     PASSWORD_RESET_EMAIL,
     PASSWORD_RESET_MANUAL,
     RESEND_INVITE,
+  },
+
+  api: {
+    update: async (...args) => UserApi.update(...args),
   },
 
   actionDecorators: {

@@ -30,6 +30,8 @@ import { getParameterValuesBySlug } from "metabase-lib/parameters/utils/paramete
 import { getParametersFromCard } from "metabase-lib/parameters/utils/template-tags";
 import { applyParameters } from "metabase-lib/queries/utils/card";
 import EmbedFrame from "../components/EmbedFrame";
+import QueryDownloadWidgetFP from "metabase/query_builder/components/QueryDownloadWidgetFP";
+import { parseTitleId } from "metabase/lib/urls";
 
 const mapStateToProps = state => ({
   metadata: getMetadata(state),
@@ -55,12 +57,12 @@ class PublicQuestion extends Component {
   async UNSAFE_componentWillMount() {
     const {
       setErrorPage,
-      params: { uuid, token },
+      params: { uuid, token, titleAndId },
       location: { query },
     } = this.props;
-
-    if (uuid) {
-      setPublicQuestionEndpoints(uuid);
+    const publicUuid = uuid || parseTitleId(titleAndId).id;
+    if (publicUuid) {
+      setPublicQuestionEndpoints(publicUuid);
     } else if (token) {
       setEmbedQuestionEndpoints(token);
     }
@@ -69,8 +71,8 @@ class PublicQuestion extends Component {
       let card;
       if (token) {
         card = await EmbedApi.card({ token });
-      } else if (uuid) {
-        card = await PublicApi.card({ uuid });
+      } else if (publicUuid) {
+        card = await PublicApi.card({ uuid: publicUuid });
       } else {
         throw { status: 404 };
       }
@@ -122,10 +124,10 @@ class PublicQuestion extends Component {
   run = async () => {
     const {
       setErrorPage,
-      params: { uuid, token },
+      params: { uuid, token, titleAndId },
     } = this.props;
     const { card, parameterValues } = this.state;
-
+    const publicUuid = uuid || parseTitleId(titleAndId).id;
     if (!card) {
       return;
     }
@@ -145,14 +147,14 @@ class PublicQuestion extends Component {
           token,
           ...getParameterValuesBySlug(parameters, parameterValues),
         });
-      } else if (uuid) {
+      } else if (publicUuid) {
         // public links currently apply parameters client-side
         const datasetQuery = applyParameters(card, parameters, parameterValues);
         newResult = await maybeUsePivotEndpoint(
           PublicApi.cardQuery,
           card,
         )({
-          uuid,
+          uuid: publicUuid,
           parameters: JSON.stringify(datasetQuery.parameters),
         });
       } else {
@@ -168,19 +170,20 @@ class PublicQuestion extends Component {
 
   render() {
     const {
-      params: { uuid, token },
+      // params: { uuid, token, titleAndId },
       metadata,
     } = this.props;
     const { card, result, initialized, parameterValues } = this.state;
+    // const publicUuid = uuid || parseTitleId(titleAndId).id;
 
-    const actionButtons = result && (
-      <QueryDownloadWidget
+/*    const actionButtons = result && (
+      <QueryDownloadWidgetFP
         className="m1 text-medium-hover"
-        uuid={uuid}
+        uuid={publicUuid}
         token={token}
         result={result}
       />
-    );
+    );*/
 
     const parameters =
       card &&
@@ -190,7 +193,7 @@ class PublicQuestion extends Component {
       <EmbedFrame
         name={card && card.name}
         description={card && card.description}
-        actionButtons={actionButtons}
+        // actionButtons={actionButtons}
         parameters={initialized ? parameters : []}
         parameterValues={parameterValues}
         setParameterValue={this.setParameterValue}

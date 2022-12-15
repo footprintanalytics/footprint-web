@@ -3,23 +3,36 @@ import PropTypes from "prop-types";
 import { t } from "ttag";
 import cx from "classnames";
 
+import { InsertRowAboveOutlined, ScissorOutlined } from "@ant-design/icons";
 import * as Urls from "metabase/lib/urls";
 import { SERVER_ERROR_TYPES } from "metabase/lib/errors";
 import MetabaseSettings from "metabase/lib/settings";
 
 import Link from "metabase/core/components/Link";
 import ViewButton from "metabase/query_builder/components/view/ViewButton";
-
+import { get } from "lodash";
 import { usePrevious } from "metabase/hooks/use-previous";
 import { useToggle } from "metabase/hooks/use-toggle";
 import { useOnMount } from "metabase/hooks/use-on-mount";
-
+import { set } from "lodash";
 import { MODAL_TYPES } from "metabase/query_builder/constants";
 import SavedQuestionHeaderButton from "metabase/query_builder/components/SavedQuestionHeaderButton/SavedQuestionHeaderButton";
 
+import Button from "metabase/core/components/Button";
 import RunButtonWithTooltip from "../RunButtonWithTooltip";
-
 import QuestionActions from "../QuestionActions";
+import TableBeta from "../TableBeta";
+import TableDictionary from "../TableDictionary";
+import ToggleCreateType from "../ToggleCreateType";
+import ActionButton from "../../../components/ActionButton";
+import TaggingModal from "../../../components/TaggingModal";
+import { trackStructEvent } from "../../../lib/analytics";
+import { questionSideHideAction } from "../../../redux/config";
+import MyPopover from "../MyPopover";
+import EditBar from "../../../components/EditBar";
+import TableUpgrade from "../TableUpgrade";
+import Modal from "../../../components/Modal";
+import ConfirmContent from "../../../components/ConfirmContent";
 import { HeadBreadcrumbs } from "./HeaderBreadcrumbs";
 import QuestionDataSource from "./QuestionDataSource";
 import QuestionDescription from "./QuestionDescription";
@@ -46,6 +59,19 @@ import {
   ViewHeaderActionPanel,
   ViewHeaderIconButtonContainer,
 } from "./ViewHeader.styled";
+import QuestionRunningTime from "./QuestionRunningTime";
+import { closeNewGuide } from "../../../containers/newguide/newGuide";
+import { getVisualizationRaw } from "../../../visualizations";
+import { Dropdown, Menu } from "antd";
+import NeedPermissionModal from "../../../components/NeedPermissionModal";
+import DashboardCardDisplayInfo from "../../../components/DashboardCardDisplayInfo";
+import Tooltip from "../../../components/Tooltip";
+import Favorite from "../../../containers/explore/components/Favorite";
+import QueryDownloadWidget from "../QueryDownloadWidget";
+import QuestionEmbedWidget from "../../containers/QuestionEmbedWidget";
+import QueryMoreWidget from "../QueryMoreWidget";
+import { updateQuestion } from "../../actions";
+import QueryDownloadWidgetFP from "../QueryDownloadWidgetFP";
 
 const viewTitleHeaderPropTypes = {
   question: PropTypes.object.isRequired,
@@ -78,10 +104,14 @@ const viewTitleHeaderPropTypes = {
 
   className: PropTypes.string,
   style: PropTypes.object,
+  router: PropTypes.any,
+  questionSideHideAction: PropTypes.func,
+  closeNewGuide: PropTypes.func,
+  card: PropTypes.object,
 };
 
 export function ViewTitleHeader(props) {
-  const { question, className, style, isNavBarOpen, updateQuestion } = props;
+  const { question, className, style, isNavBarOpen, updateQuestion, isRunnable, router, originalQuestion, card } = props;
 
   const [
     areFiltersExpanded,
@@ -89,6 +119,9 @@ export function ViewTitleHeader(props) {
   ] = useToggle(!question?.isSaved());
 
   const previousQuestion = usePrevious(question);
+
+  const [confirmModal, setConfirmModal] = useState(false);
+  const [showSeoTaggingModal, setShowSeoTaggingModal] = useState(false);
 
   useEffect(() => {
     if (!question.isStructured() || !previousQuestion?.isStructured()) {
@@ -118,8 +151,51 @@ export function ViewTitleHeader(props) {
     [updateQuestion],
   );
 
+  const getEditingButtons = () => {
+    const { onOpenModal } = props;
+
+    return [
+      <Button
+        key="cancel"
+        className="Button Button--edit-cancel Button--small mr1"
+        onClick={() => setConfirmModal(true)}
+      >
+        {t`Cancel`}
+      </Button>,
+      <ActionButton
+        id="edit-bar-save"
+        key="save"
+        actionFn={() => {
+          trackStructEvent(`click Save edit chart`);
+          onOpenModal("save");
+          closeNewGuide({ key: "saveChart" });
+        }}
+        className=" Button Button--edit-save Button--primary Button--small"
+        normalText={t`Save`}
+        activeText={t`Saving…`}
+        failedText={t`Save`}
+        successText={t`Saved`}
+      />,
+    ];
+  }
   return (
     <>
+      {!isSaved && (
+        <EditBar
+          title={t`You're editing this chart.`}
+          buttons={getEditingButtons()}
+        />
+      )}
+      {!isSaved && (
+        <TableUpgrade
+          tableName={question
+            ?.query()
+            ?.table()
+            ?.displayName()}
+          tableId={question?.query()?.table()?.id}
+          card={question?.card()}
+        />
+      )}
       <ViewHeaderContainer
         className={className}
         style={style}
@@ -133,6 +209,14 @@ export function ViewTitleHeader(props) {
             {...props}
             isNative={isNative}
             isSummarized={isSummarized}
+            isRunnable={isRunnable}
+            router={router}
+            isSaved={isSaved}
+            isDataset={isDataset}
+            areFiltersExpanded={areFiltersExpanded}
+            onExpandFilters={expandFilters}
+            onCollapseFilters={collapseFilters}
+            onQueryChange={onQueryChange}
           />
         )}
         <ViewTitleHeaderRightSide
@@ -155,6 +239,34 @@ export function ViewTitleHeader(props) {
           onQueryChange={onQueryChange}
         />
       )}
+      <Modal isOpen={confirmModal}>
+        <ConfirmContent
+          title={t`You have unsaved changes`}
+          message={t`Do you want to leave this page and discard your changes?`}
+          onClose={() => setConfirmModal(false)}
+          onAction={() => {
+            setConfirmModal(false);
+            let url = "";
+            if (originalQuestion) {
+              url = originalQuestion.getUrl();
+            } else {
+              url = Urls.newQuestion({
+                type: isNative ? "native" : "query",
+              });
+            }
+            router.replace(url);
+          }}
+        />
+      </Modal>
+      {showSeoTaggingModal && (
+        <TaggingModal
+          onClose={() => setShowSeoTaggingModal(false)}
+          id={card.id}
+          creatorId={card.creator_id}
+          tagType="seo"
+          type="card"
+        />
+      )}
     </>
   );
 }
@@ -166,6 +278,7 @@ SavedQuestionLeftSide.propTypes = {
   isShowingQuestionDetailsSidebar: PropTypes.bool,
   onOpenQuestionInfo: PropTypes.func.isRequired,
   onSave: PropTypes.func,
+  card: PropTypes.object,
 };
 
 function SavedQuestionLeftSide(props) {
@@ -175,16 +288,17 @@ function SavedQuestionLeftSide(props) {
     isAdditionalInfoVisible,
     onOpenQuestionInfo,
     onSave,
+    card,
   } = props;
 
-  const [showSubHeader, setShowSubHeader] = useState(true);
+  const [showSubHeader, setShowSubHeader] = useState(false);
 
-  useOnMount(() => {
+ /* useOnMount(() => {
     const timerId = setTimeout(() => {
       setShowSubHeader(false);
     }, 4000);
     return () => clearTimeout(timerId);
-  });
+  });*/
 
   const hasLastEditInfo = question.lastEditInfo() != null;
   const isDataset = question.isDataset();
@@ -197,7 +311,6 @@ function SavedQuestionLeftSide(props) {
     },
     [question, onSave],
   );
-
   return (
     <SavedQuestionLeftSideRoot
       data-testid="qb-header-left-side"
@@ -225,8 +338,15 @@ function SavedQuestionLeftSide(props) {
             ]}
           />
         </SavedQuestionHeaderButtonContainer>
+
+        <DashboardCardDisplayInfo
+          authorName={card.creator && card.creator.name}
+          date={card.created_at}
+          read={card.statistics && card.statistics.view}
+        />
+
       </ViewHeaderMainLeftContentContainer>
-      {isAdditionalInfoVisible && (
+      {/*{isAdditionalInfoVisible && (
         <ViewHeaderLeftSubHeading>
           {QuestionDataSource.shouldRender(props) && !isDataset && (
             <StyledQuestionDataSource
@@ -242,7 +362,7 @@ function SavedQuestionLeftSide(props) {
             />
           )}
         </ViewHeaderLeftSubHeading>
-      )}
+      )}*/}
     </SavedQuestionLeftSideRoot>
   );
 }
@@ -254,6 +374,20 @@ AhHocQuestionLeftSide.propTypes = {
   isObjectDetail: PropTypes.bool,
   isSummarized: PropTypes.bool,
   onOpenModal: PropTypes.func,
+  isRunnable: PropTypes.bool,
+  router: PropTypes.any,
+  updateQuestion: PropTypes.func,
+  result: PropTypes.any,
+  isResultDirty: PropTypes.bool,
+  runQuestionQuery: PropTypes.func,
+  cancelQuery: PropTypes.func,
+  isRunning: PropTypes.bool,
+  queryBuilderMode: PropTypes.oneOf(["view", "notebook"]),
+  isNativeEditorOpen: PropTypes.bool,
+  isSaved: PropTypes.bool,
+  config: PropTypes.any,
+  questionSideHideAction: PropTypes.func,
+  snippets: PropTypes.array,
 };
 
 function AhHocQuestionLeftSide(props) {
@@ -264,7 +398,27 @@ function AhHocQuestionLeftSide(props) {
     isObjectDetail,
     isSummarized,
     onOpenModal,
+    isRunnable,
+    router,
+    updateQuestion,
+    result,
+    isResultDirty,
+    runQuestionQuery,
+    cancelQuery,
+    isRunning,
+    queryBuilderMode,
+    isNativeEditorOpen,
+    isSaved,
+    config,
+    questionSideHideAction,
+    snippets,
   } = props;
+  const isShowingNotebook = queryBuilderMode === "notebook";
+  const isMissingPermissions =
+    result?.error_type === SERVER_ERROR_TYPES.missingPermissions;
+  const hasRunButton =
+    isRunnable && !isMissingPermissions;
+  const hideSide = config && config.questionSideHide;
 
   const handleTitleClick = () => {
     const query = question.query();
@@ -272,34 +426,102 @@ function AhHocQuestionLeftSide(props) {
       onOpenModal(MODAL_TYPES.SAVE);
     }
   };
-
   return (
     <AdHocLeftSideRoot>
       <ViewHeaderMainLeftContentContainer>
-        <AdHocViewHeading color="medium">
+        {!isSaved && (
+          <Button
+            onlyIcon
+            className="Question-header-btn footprint-mr-s"
+            iconColor="#5A617B"
+            icon={hideSide ? "menu_right" : "menu_left"}
+            iconSize={16}
+            onClick={() => {
+              questionSideHideAction({ hide: !hideSide });
+            }}
+          />
+        )}
+        <AdHocViewHeading color="dark">
           {isNative ? (
-            t`New question`
+            <div className="flex align-center">
+              {get(question, "_card.name") || t`New Chart`}
+              <ToggleCreateType question={question} router={router} updateQuestion={updateQuestion}/>
+              {hasRunButton && !isShowingNotebook && (
+                <ViewHeaderIconButtonContainer>
+                  <RunButtonWithTooltip
+                    className={cx("text-brand-hover text-dark ml1", {
+                      "text-white-hover": isResultDirty,
+                    })}
+                    iconSize={16}
+                    onlyIcon
+                    medium
+                    compact
+                    result={result}
+                    isRunning={isRunning}
+                    isDirty={isResultDirty}
+                    onRun={() => runQuestionQuery({ ignoreCache: true })}
+                    onCancel={cancelQuery}
+                  />
+                </ViewHeaderIconButtonContainer>
+              )}
+              {isRunnable && isNative && (
+                <QuestionRunningTime {...props} />
+              )}
+            </div>
           ) : (
-            <QuestionDescription
-              question={question}
-              originalQuestion={originalQuestion}
-              isObjectDetail={isObjectDetail}
-              onClick={handleTitleClick}
-            />
+            <div className="flex">
+
+              <QuestionDescription
+                question={question}
+                originalQuestion={originalQuestion}
+                isObjectDetail={isObjectDetail}
+                onClick={handleTitleClick}
+              />
+              <TableBeta
+                tableName={question
+                  ?.query()
+                  ?.table()
+                  ?.displayName()}
+                tableId={question?.query()?.table()?.id}
+              />
+              <TableDictionary
+                tableName={question
+                  ?.query()
+                  ?.table()
+                  ?.displayName()}
+                tableId={question?.query()?.table()?.id}
+              />
+              <ToggleCreateType question={question} router={router} updateQuestion={updateQuestion}/>
+              {hasRunButton && !isShowingNotebook && (
+                <ViewHeaderIconButtonContainer>
+                  <RunButtonWithTooltip
+                    className={cx("text-brand-hover text-dark ml1", {
+                      "text-white-hover": isResultDirty,
+                    })}
+                    iconSize={16}
+                    onlyIcon
+                    medium
+                    compact
+                    result={result}
+                    isRunning={isRunning}
+                    isDirty={isResultDirty}
+                    onRun={() => runQuestionQuery({ ignoreCache: true })}
+                    onCancel={cancelQuery}
+                  />
+                </ViewHeaderIconButtonContainer>
+              )}
+              {/*{NativeQueryButton.shouldRender(props) && (
+                <NativeQueryButton
+                  size={16}
+                  question={question}
+                  updateQuestion={updateQuestion}
+                  data-metabase-event="Notebook Mode; Convert to SQL Click"
+                />
+              )}*/}
+            </div>
           )}
         </AdHocViewHeading>
       </ViewHeaderMainLeftContentContainer>
-      <ViewHeaderLeftSubHeading>
-        {isSummarized && (
-          <QuestionDataSource
-            className="mb1"
-            question={question}
-            isObjectDetail={isObjectDetail}
-            subHead
-            data-metabase-event="Question Data Source Click"
-          />
-        )}
-      </ViewHeaderLeftSubHeading>
     </AdHocLeftSideRoot>
   );
 }
@@ -351,8 +573,26 @@ ViewTitleHeaderRightSide.propTypes = {
   isShowingQuestionInfoSidebar: PropTypes.bool,
   onModelPersistenceChange: PropTypes.bool,
   onQueryChange: PropTypes.func,
+  user: PropTypes.any,
+  isShowingChartSettingsSidebar: PropTypes.bool,
+  onCloseChartSettings: PropTypes.func,
+  onOpenChartSettings: PropTypes.func,
+  isShowingFilterSidebar: PropTypes.bool,
+  visualization: PropTypes.object,
+  isShowingChartTypeSidebar: PropTypes.bool,
+  onCloseChartType: PropTypes.func,
+  onOpenChartType: PropTypes.func,
+  isObjectDetail: PropTypes.bool,
+  setShowTemplateChart: PropTypes.func,
+  setShowPreviewChart: PropTypes.func,
+  handleQuestionSideHide: PropTypes.func,
+  card: PropTypes.object,
+  canNativeQuery: PropTypes.bool,
+  router: PropTypes.any,
+  downloadImageAction: PropTypes.func,
 };
 
+// eslint-disable-next-line complexity
 function ViewTitleHeaderRightSide(props) {
   const {
     question,
@@ -363,16 +603,10 @@ function ViewTitleHeaderRightSide(props) {
     isSaved,
     isDataset,
     isNative,
-    isRunnable,
-    isRunning,
-    isNativeEditorOpen,
     isShowingSummarySidebar,
     isDirty,
     isResultDirty,
     isActionListVisible,
-    runQuestionQuery,
-    updateQuestion,
-    cancelQuery,
     onOpenModal,
     onEditSummary,
     onCloseSummary,
@@ -380,15 +614,30 @@ function ViewTitleHeaderRightSide(props) {
     turnDatasetIntoQuestion,
     turnQuestionIntoAction,
     turnActionIntoQuestion,
-    areFiltersExpanded,
-    onExpandFilters,
-    onCollapseFilters,
     isShowingQuestionInfoSidebar,
     onCloseQuestionInfo,
     onOpenQuestionInfo,
     onModelPersistenceChange,
-    onQueryChange,
+    user,
+    isShowingChartSettingsSidebar,
+    onCloseChartSettings,
+    onOpenChartSettings,
+    isShowingFilterSidebar,
+    visualization,
+    isShowingChartTypeSidebar,
+    onCloseChartType,
+    onOpenChartType,
+    isObjectDetail,
+    setShowTemplateChart,
+    setShowPreviewChart,
+    handleQuestionSideHide,
+    card,
+    canNativeQuery,
+    router,
+    downloadImageAction,
+    updateQuestion,
   } = props;
+  const [showVip, setShowVip] = useState(false);
   const isShowingNotebook = queryBuilderMode === "notebook";
   const query = question.query();
   const isReadOnlyQuery = query.readOnly();
@@ -403,15 +652,25 @@ function ViewTitleHeaderRightSide(props) {
     MetabaseSettings.get("enable-nested-queries");
 
   const isNewQuery = !query.hasData();
+  const isCreate = !question.card().id && !question.card().original_card_id;
+  const isAdmin = user.is_superuser;
   const hasSaveButton =
     !isDataset &&
     !!isDirty &&
     (isNewQuery || canEditQuery) &&
     isActionListVisible;
-  const isMissingPermissions =
+ /* const isMissingPermissions =
     result?.error_type === SERVER_ERROR_TYPES.missingPermissions;
   const hasRunButton =
-    isRunnable && !isNativeEditorOpen && !isMissingPermissions;
+    isRunnable && !isNativeEditorOpen && !isMissingPermissions;*/
+
+  const icon = visualization && visualization.iconName;
+
+  const isOwner =
+    isAdmin ||
+    isCreate ||
+    user.id === question.card().creator_id ||
+    question.card().creator_id === undefined;
 
   const handleInfoClick = useCallback(() => {
     if (isShowingQuestionInfoSidebar) {
@@ -421,9 +680,197 @@ function ViewTitleHeaderRightSide(props) {
     }
   }, [isShowingQuestionInfoSidebar, onOpenQuestionInfo, onCloseQuestionInfo]);
 
+  const menuMoreOptions = [];
+  const showChartTemplate = !isNative;
+
+  if (showChartTemplate) {
+    menuMoreOptions.push(
+      <Menu.Item key="template">
+        <Button
+          iconColor="#000000"
+          icon="chart_template"
+          iconSize={16}
+          borderless
+          onClick={() => {
+            trackStructEvent(`chart click show query-template`);
+            setShowTemplateChart({
+              show: true,
+              databaseId: card.dataset_query.database,
+            });
+          }}
+        >
+          Template
+        </Button>
+      </Menu.Item>,
+    );
+  }
+
+  if (NativeQueryButton.shouldRender(props)) {
+    menuMoreOptions.push(
+      <Menu.Item key="view_sql">
+        <div
+          style={{
+            display: "flex",
+            flexDirection: "row",
+            alignItems: "center",
+          }}
+        >
+          <NativeQueryButton
+            borderless
+            question={question}
+            canNativeQuery={canNativeQuery}
+            btnString={"View the SQL"}
+            data-metabase-event={`Notebook Mode; Convert to SQL Click`}
+          />
+        </div>
+      </Menu.Item>,
+    );
+  }
+
+  if (isSaved) {
+    return (
+      <ViewHeaderActionPanel data-testid="qb-header-action-panel">
+        <Tooltip tooltip={t`Add to favorite list`}>
+          <Favorite
+            onlyIcon
+            className="Question-header-btn-with-text"
+            like={
+              // -1
+              card && card.statistics && card.statistics.favorite
+            }
+            isLike={card.isFavorite}
+            type="card"
+            id={card.id}
+            uuid={card.public_uuid}
+          />
+        </Tooltip>
+        {isOwner && (
+          <Tooltip tooltip={t`Edit`}>
+            <Button
+              onlyIcon
+              className={`Question-header-btn `}
+              iconColor="#7A819B"
+              icon="pencil"
+              iconSize={16}
+              onClick={() => {
+                set(question, "_card.original_card_id", card.id);
+                set(question, "_card.id", 0);
+                console.log("question", question)
+                updateQuestion(question, {
+                  reload: false,
+                  shouldUpdateUrl: true,
+                });
+              }}
+            />
+          </Tooltip>
+        )}
+        {(!!card.public_uuid || isOwner || isAdmin) && (
+          <Tooltip tooltip={t`Duplicate this chart`}>
+            <Button
+              onlyIcon
+              className="Question-header-btn-with-text"
+              iconColor="#7A819B"
+              icon="duplicate"
+              iconSize={16}
+              color={"#7A819B"}
+              onClick={() => onOpenModal(MODAL_TYPES.CLONE)}
+            >
+              {card && card.statistics && `${card.statistics.copy}`}
+            </Button>
+          </Tooltip>
+        )}
+        {(!!card.public_uuid || isOwner || isAdmin) && (
+          <Tooltip tooltip={t`Snapshot`}>
+            <Button
+              onlyIcon
+              className="Question-header-btn"
+              iconColor="#7A819B"
+              icon="camera"
+              iconSize={16}
+              onClick={props.downloadImageAction}
+            />
+          </Tooltip>
+        )}
+        {(!!card.public_uuid || isOwner || isAdmin) &&
+        QueryDownloadWidget.shouldRender({
+          result,
+          isResultDirty,
+        }) && (
+          <QueryDownloadWidgetFP
+            className=""
+            key="download"
+            card={question.card()}
+            result={result}
+          />
+        )}
+        {(!!card.public_uuid || isOwner) && QuestionEmbedWidget.shouldRender({
+          question,
+          isAdmin,
+          user,
+        }) && (
+          <QuestionEmbedWidgetButton
+            key="question-embed-widget-trigger"
+            onClick={params => onOpenModal("embed", null, params)}
+          />
+        )}
+        {(!!card.public_uuid || isOwner || isAdmin) && (
+          <QueryMoreWidget
+            className=""
+            key="more"
+            isAdmin={isAdmin}
+            isOwner={isOwner}
+            onOpenModal={onOpenModal}
+            user={user}
+            setShowSeoTagging={() =>
+              this.setState({ showSeoTaggingModal: true })
+            }
+          />
+        )}
+        {/*<QuestionActions
+          isShowingQuestionInfoSidebar={isShowingQuestionInfoSidebar}
+          isBookmarked={isBookmarked}
+          handleBookmark={toggleBookmark}
+          onOpenModal={onOpenModal}
+          question={question}
+          setQueryBuilderMode={setQueryBuilderMode}
+          turnDatasetIntoQuestion={turnDatasetIntoQuestion}
+          turnQuestionIntoAction={turnQuestionIntoAction}
+          turnActionIntoQuestion={turnActionIntoQuestion}
+          onInfoClick={handleInfoClick}
+          onModelPersistenceChange={onModelPersistenceChange}
+        />*/}
+      </ViewHeaderActionPanel>
+    )
+  }
+
   return (
     <ViewHeaderActionPanel data-testid="qb-header-action-panel">
-      {QuestionFilters.shouldRender(props) && (
+      {isOwner &&
+        QuestionFilterWidget.shouldRender(props) && (
+        <Button
+          disabled={queryBuilderMode !== "view"}
+          onlyIcon
+          className={`ml1 Question-header-btn-new ${
+            isShowingChartSettingsSidebar
+              ? "Question-header-btn--primary-new"
+              : ""
+          }`}
+          onClick={
+            isShowingChartSettingsSidebar
+              ? onCloseChartSettings
+              : onOpenChartSettings
+          }
+        >
+          <div className="flex align-center">
+            <ScissorOutlined
+              style={{ fontSize: "16px" }}
+              className="mr1"
+            />
+            Column
+          </div>
+        </Button>
+      )}
+      {/*{QuestionFilters.shouldRender(props) && (
         <FilterHeaderToggle
           className="ml2 mr1"
           question={question}
@@ -432,16 +879,16 @@ function ViewTitleHeaderRightSide(props) {
           onCollapse={onCollapseFilters}
           onQueryChange={onQueryChange}
         />
-      )}
+      )}*/}
       {QuestionFilterWidget.shouldRender(props) && (
         <QuestionFilterWidget
-          className="hide sm-show"
+          className="Question-header-btn-new hide sm-show"
           onOpenModal={onOpenModal}
         />
       )}
       {QuestionSummarizeWidget.shouldRender(props) && (
         <QuestionSummarizeWidget
-          className="hide sm-show"
+          className="Question-header-btn-new hide sm-show"
           isShowingSummarySidebar={isShowingSummarySidebar}
           onEditSummary={onEditSummary}
           onCloseSummary={onCloseSummary}
@@ -449,9 +896,9 @@ function ViewTitleHeaderRightSide(props) {
         />
       )}
       {QuestionNotebookButton.shouldRender(props) && (
-        <ViewHeaderIconButtonContainer>
+        // <ViewHeaderIconButtonContainer>
           <QuestionNotebookButton
-            iconSize={16}
+            className="Question-header-btn-new hide sm-show"
             question={question}
             isShowingNotebook={isShowingNotebook}
             setQueryBuilderMode={setQueryBuilderMode}
@@ -461,20 +908,78 @@ function ViewTitleHeaderRightSide(props) {
                 : `View Mode; Go to Notebook Mode`
             }
           />
-        </ViewHeaderIconButtonContainer>
+        // </ViewHeaderIconButtonContainer>
       )}
-      {NativeQueryButton.shouldRender(props) && (
-        <ViewHeaderIconButtonContainer>
-          <NativeQueryButton
-            size={16}
-            question={question}
-            updateQuestion={updateQuestion}
-            data-metabase-event="Notebook Mode; Convert to SQL Click"
+      {!isSaved && result && !isObjectDetail && (<Button
+          disabled={queryBuilderMode !== "view"}
+          onlyIcon
+          className={`Question-header-btn-new ${
+            isShowingChartTypeSidebar || isShowingChartSettingsSidebar
+              ? "Question-header-btn--primary-new"
+              : ""
+          }`}
+          iconColor="#7A819B"
+          icon={icon}
+          iconSize={16}
+          onClick={() => {
+            trackStructEvent(
+              `click Visualization edit chart`,
+            );
+            isShowingChartTypeSidebar || isShowingChartSettingsSidebar
+              ? onCloseChartType()
+              : onOpenChartType();
+          }}
+        >
+          Visualization
+        </Button>
+      )}
+      {/*{(isAdmin || user.groups.includes("Inner")) && (
+        <Button
+          onlyIcon
+          className="Question-header-btn-new"
+          iconColor="#7A819B"
+          iconSize={16}
+          onClick={() => {
+            router.push(`/chart/buffet${location.hash}`);
+            handleQuestionSideHide({ hide: false });
+          }}
+        >
+          <div className="flex align-center">
+            <InsertRowAboveOutlined
+              style={{ fontSize: "16px" }}
+              className="mr1"
+            />
+            Indicator
+          </div>
+        </Button>
+      )}*/}
+      {menuMoreOptions.length > 0 && (
+        <Dropdown
+          overlay={<Menu>{menuMoreOptions}</Menu>}
+          placement="bottomRight"
+          trigger={["click"]}
+        >
+          <Button
+            onlyIcon
+            className="Question-header-btn-new"
+            iconColor="#7A819B"
+            icon="edit_more"
+            iconSize={16}
+            ml={1}
           />
-        </ViewHeaderIconButtonContainer>
+        </Dropdown>
+      )}
+      {showVip && (
+        <NeedPermissionModal
+          title="Upgrade your account to access SQL query"
+          onClose={() => setShowVip(false)}
+          afterChangeLocation={() => {
+            setShowVip(false);
+          }}
+        />
       )}
       {hasExploreResultsLink && <ExploreResultsLink question={question} />}
-      {hasRunButton && !isShowingNotebook && (
+      {/*{hasRunButton && !isShowingNotebook && (
         <ViewHeaderIconButtonContainer>
           <RunButtonWithTooltip
             className={cx("text-brand-hover text-dark", {
@@ -491,23 +996,8 @@ function ViewTitleHeaderRightSide(props) {
             onCancel={cancelQuery}
           />
         </ViewHeaderIconButtonContainer>
-      )}
-      {isSaved && (
-        <QuestionActions
-          isShowingQuestionInfoSidebar={isShowingQuestionInfoSidebar}
-          isBookmarked={isBookmarked}
-          handleBookmark={toggleBookmark}
-          onOpenModal={onOpenModal}
-          question={question}
-          setQueryBuilderMode={setQueryBuilderMode}
-          turnDatasetIntoQuestion={turnDatasetIntoQuestion}
-          turnQuestionIntoAction={turnQuestionIntoAction}
-          turnActionIntoQuestion={turnActionIntoQuestion}
-          onInfoClick={handleInfoClick}
-          onModelPersistenceChange={onModelPersistenceChange}
-        />
-      )}
-      {hasSaveButton && (
+      )}*/}
+      {/*{hasSaveButton && (
         <SaveButton
           disabled={!question.canRun() || !canEditQuery}
           tooltip={{
@@ -524,7 +1014,7 @@ function ViewTitleHeaderRightSide(props) {
         >
           {t`Save`}
         </SaveButton>
-      )}
+      )}*/}
     </ViewHeaderActionPanel>
   );
 }
@@ -550,3 +1040,48 @@ function ExploreResultsLink({ question }) {
 }
 
 ViewTitleHeader.propTypes = viewTitleHeaderPropTypes;
+
+export function QuestionEmbedWidgetButton({ onClick }) {
+  return (
+    <>
+      <Tooltip tooltip={t`Embed Widget`}>
+        <Button
+          onlyIcon
+          className="Question-header-btn"
+          icon="embed"
+          iconSize={16}
+          onClick={() => {
+            trackStructEvent(
+              "Sharing / Embedding",
+              "question",
+              "Sharing Link Clicked",
+            );
+            onClick({ onlyEmbed: true });
+          }}
+        />
+      </Tooltip>
+      <Tooltip tooltip={t`Sharing`}>
+        <Button
+          onlyIcon
+          className="Question-header-btn"
+          icon="share"
+          iconSize={16}
+          onClick={() => {
+            trackStructEvent(
+              "Sharing / Embedding",
+              "question",
+              "Sharing Link Clicked",
+            );
+            onClick({ onlyEmbed: false });
+          }}
+        />
+      </Tooltip>
+    </>
+  );
+}
+
+const QuestionEmbedWidgetTriggerPropTypes = {
+  onClick: PropTypes.func,
+};
+
+QuestionEmbedWidgetButton.propTypes = QuestionEmbedWidgetTriggerPropTypes;

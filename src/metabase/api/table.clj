@@ -221,7 +221,7 @@
   (dimension-index-for-type "type/Time" #(= (str hour-str) (str (:name %)))))
 
 (def ^:private numeric-default-index
-  (dimension-index-for-type "type/Number" #(.contains ^String (str (:name %)) (str auto-bin-str))))
+  (dimension-index-for-type "type/Number" #(.contains ^String (str (:name %)) (str dont-bin-str))))
 
 (def ^:private coordinate-default-index
   (dimension-index-for-type "type/Coordinate" #(.contains ^String (str (:name %)) (str auto-bin-str))))

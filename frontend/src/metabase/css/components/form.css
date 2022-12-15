@@ -63,3 +63,13 @@
   border-color: var(--color-brand);
   transition: border 300ms ease-in-out;
 }
+
+.Form-field.checkbox {
+  flex-direction: row-reverse;
+  display: flex;
+  justify-content: left;
+}
+
+.Form-field.checkbox .Form-label {
+  margin-left: 12px;
+}

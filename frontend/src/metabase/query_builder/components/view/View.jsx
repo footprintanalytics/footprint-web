@@ -4,6 +4,8 @@ import { Motion, spring } from "react-motion";
 import _ from "underscore";
 import { t } from "ttag";
 
+import { get } from "lodash";
+import { connect } from "react-redux";
 import ExplicitSize from "metabase/components/ExplicitSize";
 import Popover from "metabase/components/Popover";
 import QueryValidationError from "metabase/query_builder/components/QueryValidationError";
@@ -11,6 +13,14 @@ import { SIDEBAR_SIZES } from "metabase/query_builder/constants";
 import LoadingAndErrorWrapper from "metabase/components/LoadingAndErrorWrapper";
 import Toaster from "metabase/components/Toaster";
 
+import QuestionEmpty from "metabase/query_builder/containers/QuestionEmpty";
+import { deserializeCardFromUrl } from "metabase/lib/card";
+import ChartTypeSidebarRoot from "metabase/query_builder/components/view/sidebars/ChartTypeSidebarRoot";
+import { getUserNativeQueryPermission } from "metabase/selectors/user";
+import { setNewGuideInfo } from "metabase/redux/control";
+import { getDarkMode, getNewGuideInfo } from "metabase/selectors/control";
+import { questionSideHideAction } from "metabase/redux/config";
+import { updateQuestion } from "metabase/query_builder/actions";
 import NativeQuery from "metabase-lib/queries/NativeQuery";
 import StructuredQuery from "metabase-lib/queries/StructuredQuery";
 
@@ -47,6 +57,7 @@ import {
   StyledDebouncedFrame,
   StyledSyncedParametersList,
 } from "./View.styled";
+import TagsPanel from "metabase/query_builder/components/view/TagsPanel";
 
 const DEFAULT_POPOVER_STATE = {
   aggregationIndex: null,
@@ -126,18 +137,18 @@ class View extends React.Component {
     const {
       isShowingChartSettingsSidebar,
       isShowingChartTypeSidebar,
-      onCloseChartSettings,
+      // onCloseChartSettings,
       onCloseChartType,
     } = this.props;
 
-    if (isShowingChartSettingsSidebar) {
+/*    if (isShowingChartSettingsSidebar) {
       return (
         <ChartSettingsSidebar {...this.props} onClose={onCloseChartSettings} />
       );
-    }
+    }*/
 
-    if (isShowingChartTypeSidebar) {
-      return <ChartTypeSidebar {...this.props} onClose={onCloseChartType} />;
+    if (isShowingChartTypeSidebar || isShowingChartSettingsSidebar) {
+      return <ChartTypeSidebarRoot {...this.props} onClose={onCloseChartType} onCloseChartSettings={this.props.onCloseChartSettings} onCloseChartType={this.props.onCloseChartType}/>;
     }
 
     return null;
@@ -426,15 +437,17 @@ class View extends React.Component {
       query,
       card,
       databases,
-      isShowingNewbModal,
+      // isShowingNewbModal,
       isShowingTimelineSidebar,
       queryBuilderMode,
-      closeQbNewbModal,
+      // closeQbNewbModal,
       onDismissToast,
       onConfirmToast,
       isShowingToaster,
       isHeaderVisible,
       updateQuestion,
+      config,
+      user,
     } = this.props;
 
     // if we don't have a card at all or no databases then we are initializing, so keep it simple
@@ -447,7 +460,44 @@ class View extends React.Component {
     const isNewQuestion =
       isStructured && !query.sourceTableId() && !query.sourceQuery();
 
-    if (isNewQuestion && queryBuilderMode === "view") {
+    const hideSide = config && config.questionSideHide;
+    const isCreate = !question.card().id && !question.card().original_card_id;
+    const isAdmin = user && user.is_superuser;
+    const isOwner =
+      isAdmin || isCreate || (user && user.id === question.card().creator_id);
+
+    const id = `html2canvas-${question._card.name}-${question._card.id}`;
+    // const fileName = `Footprint-${question._card.name}-${moment().format(
+    //   "MM/DD/YYYY",
+    // )}`;
+
+    const isEditing = window.location.hash;
+
+    if (location.hash) {
+      const json = deserializeCardFromUrl(location.hash);
+      const initShowHideSide =
+        !get(json, "dataset_query.database") &&
+        get(json, "dataset_query.type") !== "native" &&
+        hideSide;
+      if (initShowHideSide) {
+        this.props.questionSideHideAction({ hide: false });
+      }
+    }
+
+    if (isNewQuestion || !query.databaseId()) {
+      if (query instanceof NativeQuery) {
+        const nativeQuery = {
+          type: "native",
+          native: { query: "select * from " },
+          database: 3,
+        };
+        updateQuestion(question.setDatasetQuery(nativeQuery));
+        window._editor && window._editor.focus();
+      }
+      const showUpload = true;
+      return <QuestionEmpty showUpload={showUpload} />;
+    }
+    /*if (isNewQuestion && queryBuilderMode === "view") {
       return (
         <NewQuestionView
           query={query}
@@ -455,7 +505,7 @@ class View extends React.Component {
           className="full-height"
         />
       );
-    }
+    }*/
 
     if (card.dataset && queryBuilderMode === "dataset") {
       return (
@@ -469,16 +519,28 @@ class View extends React.Component {
     const isNotebookContainerOpen =
       isNewQuestion || queryBuilderMode === "notebook";
 
-    const leftSidebar = this.getLeftSidebar();
-    const rightSidebar = this.getRightSidebar();
+    // const leftSidebar = this.getLeftSidebar();
+    const leftSidebar = null;
+    const rightSidebar = this.getLeftSidebar() || this.getRightSidebar();
     const rightSidebarWidth = isShowingTimelineSidebar
       ? SIDEBAR_SIZES.TIMELINE
       : SIDEBAR_SIZES.NORMAL;
+
+    const isSave = question.isSaved();
 
     return (
       <div className="full-height">
         <QueryBuilderViewRoot className="QueryBuilder">
           {isHeaderVisible && this.renderHeader()}
+          {isSave && (
+            <div className="px4 pt1 z3 bg-white">
+              <TagsPanel
+                tagEntityId={question._card.id}
+                isEditPermission={isOwner && isSave}
+                type="card"
+              />
+            </div>
+          )}
           <QueryBuilderContentContainer>
             {isStructured && (
               <QueryViewNotebook
@@ -500,27 +562,40 @@ class View extends React.Component {
           </QueryBuilderContentContainer>
         </QueryBuilderViewRoot>
 
-        {isShowingNewbModal && (
-          <SavedQuestionIntroModal
-            question={question}
-            onClose={() => closeQbNewbModal()}
-          />
-        )}
+        {/*{isShowingNewbModal && (*/}
+        {/*  <SavedQuestionIntroModal*/}
+        {/*    question={question}*/}
+        {/*    onClose={() => closeQbNewbModal()}*/}
+        {/*  />*/}
+        {/*)}*/}
 
         <QueryModals {...this.props} />
 
         {isStructured && this.renderAggregationPopover()}
         {isStructured && this.renderBreakoutPopover()}
-        <Toaster
+        {/*<Toaster
           message={t`Would you like to be notified when this question is done loading?`}
           isShown={isShowingToaster}
           onDismiss={onDismissToast}
           onConfirm={onConfirmToast}
           fixed
-        />
+        />*/}
       </div>
     );
   }
 }
 
-export default ExplicitSize({ refreshMode: "debounceLeading" })(View);
+const mapStateToProps = state => {
+  return {
+    user: state.currentUser,
+    config: state.config,
+    canNativeQuery: getUserNativeQueryPermission(state),
+    getNewGuideInfo: getNewGuideInfo(state),
+    darkMode: getDarkMode(state),
+  };
+};
+
+export default _.compose(
+  ExplicitSize({ refreshMode: "debounceLeading" }),
+  connect(mapStateToProps, { questionSideHideAction, setNewGuideInfo, updateQuestion, }),
+)(View);

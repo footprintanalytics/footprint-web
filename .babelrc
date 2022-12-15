@@ -1,10 +1,15 @@
 {
-  "plugins": ["@emotion"],
+  "plugins": [
+    "@emotion",
+    ["import", { "libraryName": "antd", "libraryDirectory": "lib" }, "ant"],
+    ["react-activation/babel"]
+  ],
   "presets": [
     "@babel/preset-env",
     "@babel/preset-react",
     "@babel/preset-typescript"
   ],
+  "compact": true,
   "env": {
     "development": {
       "presets": []

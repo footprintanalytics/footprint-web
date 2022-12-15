@@ -74,10 +74,3 @@ export function collection(collection?: Collection) {
 export function isCollectionPath(path: string) {
   return /collection\/.*/.test(path);
 }
-
-export function extractCollectionId(slug = "") {
-  if (slug === "root" || slug === "users") {
-    return slug;
-  }
-  return extractEntityId(slug);
-}

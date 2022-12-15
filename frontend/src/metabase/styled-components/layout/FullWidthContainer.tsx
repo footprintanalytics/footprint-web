@@ -6,16 +6,16 @@ import {
 
 export const FullWidthContainer = styled.div`
   margin: 0 auto;
-  padding: 0 1em;
+  padding: 0 6px;
   width: 100%;
 
   ${breakpointMinSmall} {
-    padding-left: 1.5rem;
-    padding-right: 1.5rem;
+    padding-left: 15px;
+    padding-right: 15px;
   }
 
   ${breakpointMinMedium} {
-    padding-left: 2rem;
-    padding-right: 2rem;
+    padding-left: 20px;
+    padding-right: 20px;
   }
 `;

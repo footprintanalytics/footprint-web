@@ -84,7 +84,7 @@ export const PLUGIN_IS_PASSWORD_USER: ((user: User) => boolean)[] = [];
 export const PLUGIN_SELECTORS = {
   getHasCustomColors: (state: State) => false,
   canWhitelabel: (state: State) => false,
-  getLoadingMessage: (state: State) => t`Doing science...`,
+  getLoadingMessage: (state: State) => t`GETTING INSIGHTS...`,
 };
 
 export const PLUGIN_FORM_WIDGETS = {};

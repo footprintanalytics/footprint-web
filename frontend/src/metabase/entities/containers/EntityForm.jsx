@@ -7,6 +7,7 @@ import Form from "metabase/containers/FormikForm";
 import ModalContent from "metabase/components/ModalContent";
 
 import entityType from "./EntityType";
+import { getPersonalCollectionId } from "metabase/lib/collection";
 
 export function getForm(entityDef) {
   // 1. default `form`
@@ -20,7 +21,27 @@ const EForm = ({
   form = getForm(entityDef),
   update,
   create,
-  onSubmit = object => (object.id ? update(object) : create(object)),
+  onBeforeSubmit,
+  user,
+  // defaults to `create` or `update` (if an id is present)
+  onSubmit = async object => {
+   if (onBeforeSubmit) {
+     const next = await onBeforeSubmit();
+     if (!next) {
+       throw { data: "" };
+     }
+   }
+   const publicAnalyticPermission =
+     user && user.publicAnalytic === "write";
+   if (user && !publicAnalyticPermission) {
+     object.collection_id = getPersonalCollectionId(user);
+   }
+   object.create_method = "self";
+   return object.id ? update(object) : create(object);
+  },
+  onClose,
+  modal,
+  title,
   onSaved,
   useLegacyForm,
   ...props

@@ -54,7 +54,7 @@ class AlertListPopoverContent extends Component {
     const { questionAlerts, setMenuFreeze, user, closeMenu } = this.props;
     const { adding, hasJustUnsubscribedFromOwnAlert } = this.state;
 
-    const isNonAdmin = !user.is_superuser;
+    const isNonAdmin = !user?.is_superuser;
     const [ownAlerts, othersAlerts] = _.partition(
       questionAlerts,
       this.isCreatedByCurrentUser,
@@ -148,7 +148,7 @@ class AlertListItemInner extends Component {
     const { user, alert, highlight } = this.props;
     const { editing, hasJustUnsubscribed, unsubscribingProgress } = this.state;
 
-    const isAdmin = user.is_superuser;
+    const isAdmin = user?.is_superuser;
     const isCurrentUser = alert.creator.id === user.id;
 
     const emailChannel = alert.channels.find(c => c.channel_type === "email");
@@ -317,7 +317,7 @@ export class AlertCreatorTitle extends Component {
   render() {
     const { alert, user } = this.props;
 
-    const isAdmin = user.is_superuser;
+    const isAdmin = user?.is_superuser;
     const isCurrentUser = alert.creator.id === user.id;
     const creator =
       alert.creator.id === user.id ? t`You` : alert.creator.common_name;

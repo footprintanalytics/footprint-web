@@ -1,0 +1,188 @@
+.defi-about {
+  min-width: 1200px;
+}
+
+.defi-about__wrap {
+  width: 1200px;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.defi-about img {
+  user-select: none;
+}
+
+.defi-about .partners {
+  padding-bottom: 240px;
+}
+
+.defi-about .title-desc__title,
+.defi-about h3 {
+  font-size: 48px;
+  color: #262626;
+  text-align: center;
+}
+
+.defi-about h4 {
+  font-size: 16px;
+  color: #262626;
+}
+
+.defi-about p {
+  font-size: 16px;
+  color: #262626;
+  line-height: 22px;
+}
+
+.defi-about__banner {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.defi-about__banner-bg {
+  width: 100%;
+  height: 640px;
+  background-size: cover;
+  background-position: center bottom;
+  background-repeat: no-repeat;
+  position: absolute;
+  left: 0;
+  top: 0;
+  z-index: -1;
+}
+
+.defi-about__banner h2 {
+  font-size: 60px;
+  line-height: 72px;
+  color: #fff;
+  text-align: center;
+  padding-top: 60px;
+}
+
+.defi-about__banner-btns {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 40px 0;
+}
+
+.defi-about__banner-btns .defi-btn:last-child {
+  margin-left: 40px;
+}
+
+.defi-about__banner-demo {
+  border-radius: 8px;
+  box-shadow: 0 19px 37px rgba(7, 5, 37, 0.1);
+  margin-bottom: 40px;
+}
+
+.defi-about__banner p {
+  text-align: center;
+  font-size: 18px;
+  color: #262626;
+  line-height: 28px;
+}
+
+.defi-about__empower {
+  display: flex;
+  justify-content: center;
+}
+
+.defi-about__empower-demo {
+  box-shadow: 0 20px 40px rgba(7, 5, 37, 0.1);
+  border-radius: 4px;
+}
+
+.defi-about__empower-logo {
+  position: relative;
+}
+
+.defi-about__empower-logo h4 {
+  position: absolute;
+  bottom: 90px;
+  left: 72px;
+}
+
+.defi-about__empower-list {
+  padding-top: 16px;
+}
+
+.defi-about__empower-list li {
+  margin-bottom: 46px;
+}
+
+.defi-about__empower-list h4 {
+  margin-bottom: 5px;
+}
+
+.defi-about-why {
+  background-size: cover;
+  height: 640px;
+  padding: 120px 0;
+}
+
+.defi-about-why h3 {
+  margin-bottom: 80px;
+}
+
+.defi-about-why ul {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.defi-about-why li {
+  width: 360px;
+  height: 256px;
+  border-radius: 4px;
+  background-color: #ffffff;
+  box-shadow: 0 20px 40px 0 rgba(6, 3, 79, 0.1);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+.defi-about-why li p {
+  font-size: 16px;
+  color: #3d3d3d;
+  text-align: center;
+  margin-top: 60px;
+  margin-bottom: 0;
+}
+
+.defi-about__section-info-title h3 {
+  text-align: left;
+  line-height: 57px;
+}
+
+.defi-about__section-info-desc p {
+  margin: 24px 0 42px 0;
+}
+
+.defi-about__section-info-link {
+  display: inline-flex;
+  align-items: center;
+  color: #3434b2;
+  font-size: 14px;
+}
+
+.defi-about__section-info-link img {
+  margin-left: 6px;
+}
+
+.defi-about__section-info--nolink .defi-about__section-info-title h3 {
+  margin-bottom: 60px;
+}
+
+.defi-about__section-info--nolink .defi-about__section-info-desc p {
+  margin: 30px 0;
+}
+
+@media (max-width: 1200px) {
+  .defi-about__wrap {
+    padding: 0 20px;
+  }
+}

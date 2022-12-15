@@ -26,7 +26,7 @@ const NOT_AUTHORIZED_TRIGGERS = [
 init(reducers, getRoutes, store => {
   // received a 401 response
   api.on("401", url => {
-    if (url.indexOf("/api/user/current") >= 0) {
+    if (url.indexOf("/api/user/current") >= 0 || url.indexOf("/api/v1/user/current") >= 0) {
       return;
     }
 

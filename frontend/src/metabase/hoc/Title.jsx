@@ -70,6 +70,13 @@ const title = documentTitleOrGetter => ComposedComponent =>
     }
   };
 
+export const updateTitle = title => {
+  const r = componentStack.pop();
+  r._documentTitle = title;
+  componentStack.push(r);
+  updateDocumentTitle();
+};
+
 export default title;
 
 import { Route as _Route } from "react-router";

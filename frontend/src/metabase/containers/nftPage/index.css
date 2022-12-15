@@ -1,0 +1,469 @@
+.nft-activity {
+  min-height: calc(100vh - 60px);
+  font-family: roboto;
+}
+
+.nft-activity::before {
+  position: fixed;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  background-image: url(https://static.footprint.network/img_nft_bg_2022081901.png);
+  background-position: center top;
+  background-size: cover;
+  background-repeat: no-repeat;
+  background-color: #0c0c34;
+  content: "";
+}
+
+.nft-activity__start {
+  height: calc(100vh - 60px);
+  min-height: 960px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 50px 0;
+  position: relative;
+}
+
+.nft-activity__start::before {
+  content: "";
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  height: 100%;
+  width: 100%;
+  pointer-events: none;
+  background-image: linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)),
+    url("https://static.footprint.network/img_nft_icon_2022081903.png?1"),
+    url("https://static.footprint.network/img_nft_bg_2022082206.png");
+  background-size: 176px 264px, 176px 264px, 268px 264px;
+  background-repeat: no-repeat, no-repeat, no-repeat;
+  background-position: top 23% left 0, top 23% left 0, bottom 0 right 0;
+  mix-blend-mode: lighten;
+}
+
+.nft-activity__wrap {
+  width: 600px;
+  display: flex;
+  flex-direction: column;
+}
+
+.nft-activity__btn {
+  width: 380px;
+  background-image: url("https://static.footprint.network/img_nft_bg_2022082101.png");
+  background-size: contain;
+  background-repeat: no-repeat;
+  height: 110px;
+  margin: 60px 0 0;
+  text-align: center;
+  color: #001000;
+  font-size: 24px;
+  font-weight: bold;
+  display: flex;
+  line-height: 30px;
+  padding: 0 30px;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+}
+
+.nft-activity__btn:hover {
+  color: #001000;
+}
+
+.nft-activity__btn--disabled {
+  filter: grayscale(100);
+}
+
+.nft-activity__skeleton {
+  width: 438px;
+  height: 120px;
+}
+
+.nft-activity__start h1 {
+  color: white;
+  font-size: 72px;
+  line-height: 84px;
+}
+
+.nft-activity__start h2 {
+  color: #49fffe;
+  font-size: 24px;
+  font-weight: normal;
+}
+
+.nft-activity__start-desc {
+  color: white;
+  font-size: 30px;
+  line-height: 36px;
+}
+
+.nft-activity__btn {
+  display: flex;
+  align-items: center;
+}
+
+.nft-activity__btn .ant-spin {
+  margin-right: 10px;
+  margin-top: 5px;
+}
+
+.nft-activity__start .About__social {
+  display: flex;
+  grid-column-gap: 18px;
+  margin: 24px 0;
+}
+
+.nft-activity__start .About__social-item-icon-bg {
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.nft-activity__manifesto {
+  height: calc(100vh - 60px);
+  min-height: 960px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-image: url("https://static.footprint.network/img_nft_bg_2022082102.png");
+  background-repeat: no-repeat;
+  background-position: center;
+  position: relative;
+}
+
+.nft-activity__manifesto::before {
+  content: "";
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  height: 100%;
+  width: 100%;
+  pointer-events: none;
+  background-image: url("https://static.footprint.network/img_nft_bg_2022082102.png"),
+    linear-gradient(rgba(0, 0, 0, 0.7), rgba(0, 0, 0, 0.7)),
+    url("https://static.footprint.network/img_nft_bg_2022082207.png"),
+    url("https://static.footprint.network/img_nft_bg_2022082208.png");
+  background-size: auto, 699px 303px, 268px 396px, 699px 303px;
+  background-repeat: no-repeat, no-repeat, no-repeat, no-repeat;
+  background-position: center, bottom left, top 0 right 0, bottom left;
+  mix-blend-mode: lighten;
+}
+
+.nft-activity__manifesto h1 {
+  font-size: 48px;
+  color: white;
+  text-align: center;
+  line-height: 120px;
+}
+
+.nft-activity__manifesto span {
+  font-size: 20px;
+  color: white;
+  font-weight: normal;
+}
+
+.nft-activity__manifesto-container {
+  width: 1000px;
+  margin-bottom: 30px;
+}
+
+.nft-activity__roles {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  position: relative;
+}
+
+.nft-activity__roles::before {
+  content: "";
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  height: 100%;
+  width: 100%;
+  pointer-events: none;
+  background-image: linear-gradient(rgba(0, 0, 0, 0.7), rgba(0, 0, 0, 0.7)),
+    linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)),
+    url("https://static.footprint.network/img_nft_bg_2022082203.png"),
+    url("https://static.footprint.network/img_nft_bg_2022082209.png");
+  background-size: 699px 849px, 180px 169px, 180px 169px, 699px 849px;
+  background-repeat: no-repeat, no-repeat, no-repeat, no-repeat;
+  background-position: top left, top 10% right 5%, top 10% right 5%, top left;
+  mix-blend-mode: lighten;
+}
+
+.nft-activity__roles-container {
+  width: 600px;
+  margin-right: 680px;
+}
+
+.nft-activity__roles h1 {
+  font-size: 48px;
+  color: white;
+  line-height: 100px;
+}
+
+.nft-activity__roles span {
+  font-size: 20px;
+  color: white;
+  line-height: 24px;
+}
+
+.nft-activity__roles ul {
+  display: flex;
+  grid-column-gap: 60px;
+  margin-top: -80px;
+}
+
+.nft-activity__holder {
+  height: calc(100vh - 60px);
+  min-height: 960px;
+  display: flex;
+  position: relative;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+}
+
+.nft-activity__holder-container {
+  width: 1000px;
+}
+
+.nft-activity__holder h1 {
+  font-size: 48px;
+  color: white;
+  margin: 40px 0 40px -160px;
+}
+
+.nft-activity__holder span {
+  font-size: 24px;
+  color: white;
+  font-weight: normal;
+  line-height: normal;
+}
+
+.nft-activity__holder ul {
+  width: 1280px;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  grid-column-gap: 40px;
+}
+
+.nft-activity__holder li {
+  background-repeat: no-repeat !important;
+  background-position: center;
+  width: 380px;
+  line-height: 36px;
+  height: 308px;
+  padding-left: 140px;
+  padding-top: 80px;
+}
+
+.nft-activity__holder::before {
+  content: "";
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  height: 100%;
+  width: 100%;
+  pointer-events: none;
+  background-image: linear-gradient(rgba(0, 0, 0, 0.1), rgba(0, 0, 0, 0.1)),
+    url("https://static.footprint.network/img_nft_bg_2022082202.png");
+  background-size: 248px 248px, 248px 248px;
+  background-repeat: no-repeat, no-repeat;
+  background-position: top 18% right 0, top 18% right 0;
+  mix-blend-mode: lighten;
+}
+
+.nft-activity__how {
+  height: calc(100vh - 60px);
+  min-height: 960px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin: 0 auto;
+  flex-direction: column;
+  color: white;
+  position: relative;
+}
+
+.nft-activity__how h1 {
+  font-size: 48px;
+  color: white;
+  margin: 10px 0 0 -560px;
+}
+
+.nft-activity__how h2 {
+  font-size: 18px;
+  color: white;
+  font-weight: normal;
+  margin: 0 0 20px -280px;
+}
+
+.nft-activity__how-container {
+  width: 1320px;
+  height: 740px;
+  background-image: url("https://static.footprint.network/img_nft_bg_2022082141.png?1");
+  background-repeat: no-repeat;
+  padding: 20px 40px 0 40px;
+}
+
+.nft-activity__how-container th {
+  font-weight: bold;
+  font-size: 20px;
+  background: transparent;
+}
+
+.nft-activity__how-container td {
+  line-height: normal;
+  font-size: 14px;
+  padding: 0 10px;
+  display: flex;
+  align-items: center;
+}
+
+.nft-activity__how-container tr {
+  margin: 2px 0;
+  display: grid;
+  grid-template-columns: 300px auto 300px 180px;
+  padding: 10px 2px;
+}
+
+.nft-activity__how-container b {
+  font-size: 14px;
+  font-weight: bold;
+}
+
+.nft-activity__how-container li {
+  list-style-type: none;
+}
+
+.nft-activity__how-container .nft-activity__how-inner-items li:before {
+  content: "";
+  display: block;
+  background: url(https://static.footprint.network/img_nft_bg_2022082131.png)
+    no-repeat;
+  background-size: 100%;
+  width: 10px;
+  height: 10px;
+  float: left;
+  margin: 2px 6px 0 0;
+}
+
+.nft-activity__how-inner {
+  background: #031731;
+}
+
+.nft-activity__how-button {
+  border: 0;
+  width: 160px;
+  background: #49fffe;
+  color: #031731;
+  height: 28px;
+  border-radius: 0;
+  line-height: 24px;
+  margin: 4px 0;
+  padding: 0 20px;
+  font-weight: bold;
+}
+
+.nft-activity__how::before {
+  content: "";
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  height: 100%;
+  width: 100%;
+  pointer-events: none;
+  background-image: linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)),
+    url("https://static.footprint.network/img_nft_bg_2022082204.png");
+  background-size: 212px 218px, 212px 218px;
+  background-repeat: no-repeat, no-repeat;
+  background-position: bottom 0 left 0, bottom 0 left 0;
+  mix-blend-mode: lighten;
+}
+
+.nft-activity__qa::before {
+  content: "";
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  height: 100%;
+  width: 100%;
+  pointer-events: none;
+  background-image: linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)),
+    linear-gradient(rgba(0, 0, 0, 0.3), rgba(0, 0, 0, 0.3)),
+    url("https://static.footprint.network/img_nft_bg_2022082201.png"),
+    url("https://static.footprint.network/img_nft_bg_2022082205.png");
+  background-size: 240px 262px, 212px 131px, 240px 262px, 212px 131px;
+  background-repeat: no-repeat, no-repeat, no-repeat, no-repeat;
+  background-position: bottom 10% right 5%, top 0 left 0, bottom 10% right 5%,
+    top 0 left 0;
+  mix-blend-mode: lighten;
+}
+
+.nft-activity__qa {
+  display: flex;
+  position: relative;
+  justify-content: center;
+  align-items: center;
+  height: calc(100vh - 60px);
+  min-height: 960px;
+}
+
+.nft-activity__qa ul {
+  width: 1000px;
+  margin: 0 auto;
+}
+
+.nft-activity__qa-answer {
+  display: flex;
+  flex-direction: column;
+}
+
+.nft-activity__qa h1 {
+  font-size: 32px;
+  color: white;
+  margin: 10px 0 10px -160px;
+}
+
+.nft-activity__qa span {
+  font-size: 20px;
+  line-height: normal;
+  color: white;
+  margin: 10px 0 10px -160px;
+  padding-left: 60px;
+}
+
+.nft-activity__qa ul {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+.nft-activity__qa-answer-item {
+  display: flex;
+}
+
+.nft-activity__qa-answer-item span:before {
+  content: "";
+  display: block;
+  background: url("https://static.footprint.network/img_nft_bg_2022082131.png")
+    no-repeat;
+  width: 20px;
+  height: 20px;
+  float: left;
+  margin: 2px 6px 0 0;
+}
+
+.nft-activity__qa-box {
+  margin: 30px 0;
+}

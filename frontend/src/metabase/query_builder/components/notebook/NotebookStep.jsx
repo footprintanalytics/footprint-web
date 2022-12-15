@@ -38,6 +38,7 @@ const STEP_UI = {
   data: {
     title: t`Data`,
     component: DataStep,
+    name: "dataStep",
     getColor: () => c("brand"),
   },
   join: {
@@ -45,13 +46,14 @@ const STEP_UI = {
     icon: "join_left_outer",
     component: JoinStep,
     priority: 1,
+    name: "joinDataStep",
     getColor: () => c("brand"),
   },
   expression: {
     title: t`Custom column`,
     icon: "add_data",
     component: ExpressionStep,
-    transparent: true,
+    name: "customColumnStep",
     getColor: () => c("bg-dark"),
   },
   filter: {
@@ -59,24 +61,28 @@ const STEP_UI = {
     icon: "filter",
     component: FilterStep,
     priority: 10,
-    getColor: () => c("filter"),
+    name: "filterStep",
+    getColor: () => c("accent7"),
   },
   summarize: {
     title: t`Summarize`,
+    name: "summarizeStep",
     icon: "sum",
     component: SummarizeStep,
     priority: 5,
-    getColor: () => c("summarize"),
+    getColor: () => c("accent1"),
   },
   aggregate: {
     title: t`Aggregate`,
+    name: "aggregateStep",
     icon: "sum",
     component: AggregateStep,
     priority: 5,
-    getColor: () => c("summarize"),
+    getColor: () => c("accent1"),
   },
   breakout: {
     title: t`Breakout`,
+    name: "breakoutStep",
     icon: "segment",
     component: BreakoutStep,
     priority: 1,
@@ -84,18 +90,18 @@ const STEP_UI = {
   },
   sort: {
     title: t`Sort`,
+    name: "sortStep",
     icon: "smartscalar",
     component: SortStep,
     compact: true,
-    transparent: true,
     getColor: () => c("bg-dark"),
   },
   limit: {
     title: t`Row limit`,
+    name: "rowLimitStep",
     icon: "list",
     component: LimitStep,
     compact: true,
-    transparent: true,
     getColor: () => c("bg-dark"),
   },
 };
@@ -125,9 +131,9 @@ export default class NotebookStep extends React.Component {
     const canPreview = step.previewQuery && step.previewQuery.isValid();
     const showPreviewButton = !showPreview && canPreview;
 
-    const largeActionButtons =
+    /*const largeActionButtons =
       isLastStep &&
-      _.any(step.actions, action => !STEP_UI[action.type].compact);
+      _.any(step.actions, action => !STEP_UI[action.type].compact);*/
 
     const actions = [];
     actions.push(
@@ -141,7 +147,7 @@ export default class NotebookStep extends React.Component {
               mr={isLastStep ? 2 : 1}
               mt={isLastStep ? 2 : null}
               color={stepUi.getColor()}
-              large={largeActionButtons}
+              large={true}
               {...stepUi}
               key={`actionButton_${stepUi.title}`}
               onClick={() => action.action({ query: step.query, openStep })}
@@ -189,6 +195,7 @@ export default class NotebookStep extends React.Component {
                     !showPreviewButton ? "hidden disabled" : "text-brand-hover"
                   }
                   icon="play"
+                  large={false}
                   title={t`Preview`}
                   color={c("text-light")}
                   transparent
@@ -219,8 +226,6 @@ export default class NotebookStep extends React.Component {
 const ColorButton = styled(Button)`
   border: none;
   color: ${({ color }) => color};
-  background-color: ${({ color, transparent }) =>
-    transparent ? null : alpha(color, 0.2)};
   &:hover {
     color: ${({ color }) => darken(color, 0.115)};
     background-color: ${({ color, transparent }) =>
@@ -245,7 +250,7 @@ const ActionButton = ({
       color={color}
       transparent={transparent}
       iconVertical={large}
-      iconSize={large ? 18 : 14}
+      iconSize={18}
       onClick={onClick}
       {...props}
     >

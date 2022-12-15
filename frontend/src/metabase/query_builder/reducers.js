@@ -15,7 +15,7 @@ import {
   SET_NATIVE_EDITOR_SELECTED_RANGE,
   SET_MODAL_SNIPPET,
   SET_SNIPPET_COLLECTION_ID,
-  CLOSE_QB_NEWB_MODAL,
+  // CLOSE_QB_NEWB_MODAL,
   SOFT_RELOAD_CARD,
   RELOAD_CARD,
   API_CREATE_QUESTION,
@@ -211,9 +211,9 @@ export const uiControls = handleActions(
       ...state,
       snippetCollectionId: payload,
     }),
-    [CLOSE_QB_NEWB_MODAL]: {
-      next: (state, { payload }) => ({ ...state, isShowingNewbModal: false }),
-    },
+    // [CLOSE_QB_NEWB_MODAL]: {
+    //   next: (state, { payload }) => ({ ...state, isShowingNewbModal: false }),
+    // },
 
     [RUN_QUERY]: state => ({
       ...state,

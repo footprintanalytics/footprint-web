@@ -21,7 +21,7 @@ const QuestionCacheSection = ({
     <div>
       {cacheTimestamp && (
         <QueryStartLabel>
-          {t`Question last cached ${cacheRelativeTime}`}
+          {t`Chart last cached ${cacheRelativeTime}`}
         </QueryStartLabel>
       )}
       <CacheSection initialCacheTTL={question.cacheTTL()} onSave={onSave} />

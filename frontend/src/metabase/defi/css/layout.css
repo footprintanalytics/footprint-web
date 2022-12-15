@@ -1,0 +1,72 @@
+.defi-layout__header {
+  background-color: #fff;
+  border-bottom: 1px solid #dcdee4;
+  height: 60px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 20px;
+  position: fixed;
+  z-index: 4;
+  left: 0;
+  top: 0;
+  width: 100%;
+}
+
+.defi-layout__header-left,
+.defi-layout__header-right {
+  display: flex;
+  align-items: center;
+  flex: 1;
+  height: 100%;
+}
+
+.defi-layout__header-right {
+  justify-content: flex-end;
+}
+
+.defi-layout__content {
+  padding-top: 60px;
+}
+
+.defi-layout__logo {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 100%;
+}
+
+.defi-layout__logo-icon {
+  width: 127px;
+  height: 30px;
+}
+
+.defi-layout__logo-divider {
+  width: 1px;
+  height: 20px;
+  background-color: #dcdee4;
+  margin: 0 8px;
+}
+
+.defi-layout__logo-text {
+  font-size: 14px;
+  font-weight: 700;
+}
+
+.defi-layout--hide-sub-menu .defi-dashboard__sider {
+  width: 100px;
+}
+
+.defi-layout--hide-sub-menu .defi-dashboard__content {
+  margin-left: 100px;
+}
+
+.defi-layout--hide-sub-menu .defi-dashboard__sider-sub-menu {
+  display: none;
+}
+
+.defi-layout__sign {
+  border-radius: 4px !important;
+  border: 1px solid #3434b2;
+  color: #3434b2;
+}

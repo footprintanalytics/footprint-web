@@ -14,11 +14,10 @@ export const Root = styled(FullWidthContainer)<{ admin: boolean }>`
   padding-top: 0.5rem;
   padding-bottom: 0.5rem;
 
-  background-color: ${props =>
-    alpha(color(props.admin ? "accent7" : "brand"), 0.85)};
+  background-color: #f6f6fe;
 
   .Button {
-    color: ${color("text-white")};
+    color: ${color("text-second")};
     background-color: ${alpha(color("bg-white"), 0.1)};
 
     border: none;
@@ -27,8 +26,8 @@ export const Root = styled(FullWidthContainer)<{ admin: boolean }>`
   }
 
   .Button--primary {
-    color: ${props => color(props.admin ? "text-dark" : "brand")};
-    background-color: ${color("bg-white")};
+    color: ${props => color("white")};
+    background-color: ${color("brand")};
   }
 
   .Button:hover {
@@ -38,12 +37,12 @@ export const Root = styled(FullWidthContainer)<{ admin: boolean }>`
 `;
 
 export const EditIcon = styled(Icon)`
-  color: ${color("text-white")};
+  color: ${color("text-second")};
   margin-right: 0.5rem;
 `;
 
 export const Title = styled.span`
-  color: ${color("text-white")};
+  color: ${color("text-dark")};
   font-weight: 700;
 `;
 

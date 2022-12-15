@@ -1,0 +1,17 @@
+.user-upgrade-model__root {
+  padding-top: 40px;
+}
+
+.upgrade {
+  height: calc(100vh - 60px);
+  padding-top: 40px;
+}
+
+.upgrade__title {
+  padding: 20px;
+}
+
+.upgrade__column-type {
+  font-weight: bold;
+  font-size: 16px;
+}

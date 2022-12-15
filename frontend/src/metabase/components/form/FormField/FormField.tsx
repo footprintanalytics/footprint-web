@@ -9,6 +9,7 @@ import {
 } from "metabase-types/forms/legacy";
 
 import FormFieldView from "./FormFieldView";
+import cx from "classnames";
 
 type ReduxFormProps = Pick<FormFieldType, "name"> &
   Partial<Pick<FormFieldType, "error" | "visited" | "active">>;
@@ -83,7 +84,7 @@ function FormField({
   const align = props.align ?? formField?.align ?? "right";
   const hidden = getHiddenPropValue(props.hidden, formField);
   const horizontal = getHorizontalPropValue(props.horizontal, formField);
-
+  const checkboxCss = props.checkboxCss ?? formField?.checkboxCss;
   const isToggle = type === "boolean";
   const standAloneLabel = isToggle && align === "right" && !description;
 
@@ -119,6 +120,7 @@ function FormField({
       align={align}
       standAloneLabel={standAloneLabel}
       horizontal={horizontal}
+      checkboxCss={checkboxCss}
     >
       {children}
     </FormFieldView>

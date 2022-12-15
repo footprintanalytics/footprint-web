@@ -6,6 +6,7 @@
 .EmbedFrame-footer {
   color: var(--color-text-dark);
   background-color: white;
+  padding: 10px;
 }
 
 .Theme--night.EmbedFrame {

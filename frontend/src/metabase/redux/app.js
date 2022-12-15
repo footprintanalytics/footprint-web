@@ -63,6 +63,19 @@ export function getIsNavbarOpen(state) {
   return state.app.isNavbarOpen;
 }
 
+export const SET_CHANNEL = "metabase/app/SET_CHANNEL";
+
+export const setChannel = createAction(SET_CHANNEL, channel => {
+  return { channel };
+});
+
+const channel = handleActions(
+  {
+    [SET_CHANNEL]: (state, { payload }) => payload.channel,
+  },
+  "",
+);
+
 const isNavbarOpen = handleActions(
   {
     [OPEN_NAVBAR]: () => true,
@@ -75,4 +88,5 @@ const isNavbarOpen = handleActions(
 export default combineReducers({
   errorPage,
   isNavbarOpen,
+  channel,
 });

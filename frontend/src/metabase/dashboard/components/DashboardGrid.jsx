@@ -30,6 +30,8 @@ import { generateMobileLayout } from "./grid/utils";
 import AddSeriesModal from "./AddSeriesModal/AddSeriesModal";
 import RemoveFromDashboardModal from "./RemoveFromDashboardModal";
 import DashCard from "./DashCard";
+import { Skeleton } from "antd";
+import LazyLoad from "react-lazyload";
 
 class DashboardGrid extends Component {
   static contextType = ContentViewportContext;
@@ -65,6 +67,9 @@ class DashboardGrid extends Component {
     onReplaceAllDashCardVisualizationSettings: PropTypes.func.isRequired,
 
     onChangeLocation: PropTypes.func.isRequired,
+    user: PropTypes.any,
+
+    hideWatermark: PropTypes.bool,
   };
 
   static defaultProps = {
@@ -288,6 +293,17 @@ class DashboardGrid extends Component {
 
   renderDashCard(dc, { isMobile, gridItemWidth, totalNumGridCols }) {
     return (
+      <LazyLoad
+        className="full-height"
+        // unmountIfInvisible
+        placeholder={
+          <div style={{ padding: 20 }}>
+            <Skeleton active />
+          </div>
+        }
+        // offset={500}
+        scrollContainer="#html2canvas-Dashboard"
+      >
       <DashCard
         dashcard={dc}
         headerIcon={this.getDashboardCardIcon(dc)}
@@ -322,7 +338,13 @@ class DashboardGrid extends Component {
         dashboard={this.props.dashboard}
         showClickBehaviorSidebar={this.props.showClickBehaviorSidebar}
         clickBehaviorSidebarDashcard={this.props.clickBehaviorSidebarDashcard}
+        duplicateAction={this.props.duplicateAction}
+        previewAction={this.props.previewAction}
+        clearWatermark={this.props.hideWatermark}
+        chartStyle={this.props.chartStyle}
+        user={this.props.user}
       />
+      </LazyLoad>
     );
   }
 

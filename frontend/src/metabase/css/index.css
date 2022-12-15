@@ -20,3 +20,6 @@
 @import "./home.css";
 @import "./pulse.css";
 @import "./query_builder.css";
+
+@import "./login_fp.css";
+@import "./share_button.css";

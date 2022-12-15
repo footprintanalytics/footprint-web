@@ -1,0 +1,427 @@
+.data-api__about {
+  min-height: calc(100vh - 60px);
+  font-family: roboto;
+}
+
+.data-api__start {
+  background-color: #eff2ff;
+  height: 600px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.data-api__start-bg {
+  background-image: url("https://static.footprint.network/img_da_bg_2022101003.png");
+  background-size: 1920px 680px;
+  background-repeat: no-repeat;
+  background-position: bottom 0 center;
+}
+
+.data-api__start-container {
+  margin-right: 30%;
+  margin-bottom: 5%;
+  text-align: left;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+}
+
+.data-api__text-bland {
+  color: #3434b2;
+  font-weight: bold;
+}
+
+.data-api__buttons {
+  display: flex;
+  flex-direction: row;
+  column-gap: 20px;
+}
+
+.data-api__button {
+  width: 220px;
+  height: 48px;
+  font-weight: bold;
+}
+
+.data-api__button-white {
+  width: 220px;
+  height: 48px;
+  background: white;
+  font-weight: bold;
+}
+
+.data-api__button-bland {
+  width: 220px;
+  height: 48px;
+  background: #3139b5;
+  color: white;
+  font-weight: bold;
+}
+
+.data-api__start h1 {
+  font-size: 60px;
+  line-height: 1.2;
+  text-align: left;
+}
+
+.data-api__start h2 {
+  color: #303440;
+  font-size: 24px;
+  max-width: 800px;
+  font-weight: normal;
+  line-height: 1.3;
+  margin: 20px 0 30px;
+  text-align: left;
+}
+
+.data-api__box {
+  height: 550px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  padding: 20px;
+}
+
+.data-api__get-start {
+  height: 800px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  background: #fbfcfe;
+}
+
+.data-api__introduce {
+  height: 1000px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  background: #fbfcfe;
+  padding-bottom: 60px;
+}
+
+.data-api__introduce-bg {
+  background-image: url("https://static.footprint.network/img_da_bg_2022100854.png"),
+    url("https://static.footprint.network/img_da_bg_2022100853.png"),
+    url("https://static.footprint.network/img_da_bg_2022101002.png"),
+    url("https://static.footprint.network/img_da_bg_2022100855.png"),
+    url("https://static.footprint.network/img_da_bg_2022100856.png"),
+    url("https://static.footprint.network/img_da_bg_2022100857.png"),
+    url("https://static.footprint.network/img_da_bg_2022100858.png");
+  background-size: 56px 56px, 48px 48px, 68px 68px, 106px 106px, 92px 92px,
+    98px 98px, 56px 56px;
+  background-repeat: no-repeat, no-repeat, no-repeat, no-repeat, no-repeat,
+    no-repeat, no-repeat;
+  background-position: bottom 10% left 0, top 50% left 6%, bottom 35% left 11%,
+    top 30% left 13%, top 60% right 11%, top 30% right 8%, bottom 25% right 2%;
+}
+
+.data-api__introduce h1 {
+  font-size: 42px;
+}
+
+.data-api__introduce h2 {
+  font-size: 24px;
+  font-weight: normal;
+  margin-top: 10px;
+}
+
+.data-api__get-start h1 {
+  font-size: 42px;
+}
+
+.data-api__get-start h2 {
+  font-size: 24px;
+  font-weight: normal;
+  margin-top: 10px;
+}
+
+.data-api__get-start h3 {
+  font-size: 42px;
+  font-weight: normal;
+  line-height: 1.2;
+}
+
+.data-api__get-start-subtitle {
+  font-size: 26px;
+  font-weight: bold;
+  color: #8282ff;
+  line-height: 1.1;
+}
+
+.data-api__get-start-desc {
+  font-size: 20px;
+  margin: 30px 0 60px;
+  line-height: 1.4;
+}
+
+.data-api__get-start-box-container {
+  width: 1200px;
+  display: flex;
+  flex-direction: row;
+  gap: 40px;
+}
+
+.data-api__get-start-box-main {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+.data-api__get-start-chain-bg {
+  background-image: url("https://static.footprint.network/img_da_bg_2022100864.png"),
+    url("https://static.footprint.net ork/img_da_bg_2022100865.png"),
+    url("https://static.footprint.network/img_da_bg_2022100866.png"),
+    url("https://static.footprint.network/img_da_bg_2022100867.png"),
+    url("https://static.footprint.network/img_da_bg_2022100868.png");
+  background-size: 80px 80px, 80px 80px, 280px 280px, 240px 120px, 56px 56px;
+  background-repeat: no-repeat, no-repeat, no-repeat, no-repeat, no-repeat;
+  background-position: top 20% left 2%, bottom 0 left 3%, top 8% left 10%,
+    bottom 10% right 21%, bottom 0 right 5%;
+}
+
+.data-api__get-start-nft-bg {
+  background-image: url("https://static.footprint.network/img_da_bg_2022100869.png"),
+    url("https://static.footprint.network/img_da_bg_2022100870.png"),
+    url("https://static.footprint.network/img_da_bg_2022100871.png"),
+    url("https://static.footprint.network/img_da_bg_2022100872.png"),
+    url("https://static.footprint.network/img_da_bg_2022100873.png"),
+    url("https://static.footprint.network/img_da_bg_2022100882.png");
+  background-size: 80px 80px, 48px 48px, 54px 54px, 48px 48px, 60px 60px,
+    553px 634px;
+  background-repeat: no-repeat, no-repeat, no-repeat, no-repeat, no-repeat;
+  background-position: top 20% left 4%, top 15% left 24%, bottom 5% left 40%,
+    top 2% right 13%, bottom 30% right 3%, bottom 0 right 0;
+}
+
+.data-api__get-start-gamefi-bg {
+  background-image: url("https://static.footprint.network/img_da_bg_2022100874.png"),
+    url("https://static.footprint.network/img_da_bg_2022100875.png"),
+    url("https://static.footprint.network/img_da_bg_2022100876.png"),
+    url("https://static.footprint.network/img_da_bg_2022100877.png"),
+    url("https://static.footprint.network/img_da_bg_2022100878.png"),
+    url("https://static.footprint.network/img_da_bg_2022100879.png?1=1"),
+    url("https://static.footprint.network/img_da_bg_2022100880.png"),
+    url("https://static.footprint.network/img_da_bg_2022100883.png");
+  background-size: 98px 98px, 37px 37px, 240px 112px, 68px 68px, 48px 48px,
+    40px 68px, 62px 87px, 537px 446px;
+  background-repeat: no-repeat, no-repeat, no-repeat, no-repeat, no-repeat,
+    no-repeat, no-repeat, no-repeat;
+  background-position: bottom 24% left 3%, bottom 22% left 35%,
+    top 17% right 48%, bottom 10% right 18%, bottom 30% right 6%,
+    top 12% right 0, top 6% left 0, top 0 right 0;
+}
+
+.data-api__lowering {
+  background: #2e3454;
+  display: flex;
+  flex-direction: column;
+  height: 800px;
+  justify-content: center;
+  align-items: center;
+}
+
+.data-api__lowering-bg {
+  background-image: url("https://static.footprint.network/img_da_bg_2022100835.png"),
+    url("https://static.footprint.network/img_da_bg_2022100836.png"),
+    url("https://static.footprint.network/img_da_bg_2022100837.png"),
+    url("https://static.footprint.network/img_da_bg_2022100838.png"),
+    url("https://static.footprint.network/img_da_bg_2022100839.png"),
+    url("https://static.footprint.network/img_da_bg_2022100840.png"),
+    url("https://static.footprint.network/img_da_bg_2022100841.png"),
+    url("https://static.footprint.network/img_da_bg_2022100842.png"),
+    url("https://static.footprint.network/img_da_bg_2022100843.png");
+  background-size: 91px 178px, 180px 180px, 280px 280px, 362px 280px,
+    128px 128px, 140px 140px, 64px 178px, 180px 220px, 500px 100px;
+  background-repeat: no-repeat, no-repeat, no-repeat, no-repeat, no-repeat,
+    no-repeat, no-repeat, no-repeat, no-repeat;
+  background-position: top 10% left 0, top 20% left 55%, bottom 15% left 12%,
+    bottom 0 left 34%, top 15% right 8%, top 0 right 0, top 30% right 0,
+    bottom 0 right 0, top 0 left 20%;
+}
+
+.data-api__lowering h1 {
+  font-size: 42px;
+  margin-bottom: 30px;
+  color: white;
+}
+
+.data-api__lowering ul {
+  display: grid;
+  flex-wrap: wrap;
+  grid-gap: 20px;
+  grid-template-columns: repeat(4, 1fr);
+  margin-top: 30px;
+  height: 300px;
+}
+
+.data-api__lowering li {
+  display: flex;
+  height: 300px;
+  width: 280px;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  background: white;
+  padding: 30px;
+  border-radius: 10px;
+  box-shadow: 0 0 20px #ffffff40;
+}
+
+.data-api__lowering li img {
+  object-fit: scale-down;
+  width: 80px;
+  height: 80px;
+}
+
+.data-api__lowering h3 {
+  font-size: 24px;
+  margin: 30px 0 10px;
+}
+
+.data-api__lowering span {
+  font-weight: normal;
+  font-size: 14px;
+  text-align: center;
+}
+
+.data-api__alpha-test {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  background: #fbfcfe;
+  height: 1080px;
+}
+
+.data-api__alpha-test-bg {
+  background-image: url("https://static.footprint.network/img_da_bg_2022100821.png"),
+    url("https://static.footprint.network/img_da_bg_2022100822.png"),
+    url("https://static.footprint.network/img_da_bg_2022100823.png");
+  background-size: 182px 167px, 80px 80px, 80px 80px;
+  background-repeat: no-repeat, no-repeat, no-repeat;
+  background-position: top 10% left 0, top 15% right 10%, bottom 5% left 10%;
+}
+
+.data-api__alpha-test h1 {
+  font-size: 42px;
+  color: #323130;
+  margin: 20px 0;
+}
+
+.data-api__partners ul {
+  display: grid;
+  flex-wrap: wrap;
+  grid-gap: 20px;
+  grid-template-columns: repeat(4, 1fr);
+  margin-top: 20px;
+}
+
+.data-api__partners li {
+  display: flex;
+  background: white;
+  height: 120px;
+  width: 280px;
+  box-shadow: 0 6px 24px #30344013;
+}
+.data-api__partners li img {
+  width: 100%;
+  object-fit: scale-down;
+}
+
+.data-api__feedbacks ul {
+  display: grid;
+  flex-wrap: wrap;
+  grid-gap: 20px;
+  grid-template-columns: repeat(3, 1fr);
+  margin-top: 80px;
+}
+
+.data-api__feedbacks-li {
+  display: flex;
+  flex-direction: column;
+  background: white;
+  padding: 40px 30px;
+  width: 500px;
+  border: 1px solid #bbbee3;
+  border-radius: 4px;
+  line-height: 1.3;
+}
+
+.data-api__feedbacks-li-bg {
+  background-image: url("https://static.footprint.network/img_da_bg_2022100884.png");
+  background-size: 90px 60px;
+  background-repeat: no-repeat;
+  background-position: top 10% right 5%;
+}
+
+.data-api__feedbacks li img {
+  object-fit: scale-down;
+  height: 48px;
+  width: 48px;
+  margin-right: 16px;
+  margin-bottom: 16px;
+}
+
+.data-api__feedbacks li h3 {
+  font-size: 22px;
+}
+
+.data-api__feedbacks li h4 {
+  font-weight: normal;
+  font-size: 12px;
+  white-space: pre-line;
+  margin-left: 8px;
+}
+
+.data-api__feedbacks-li-project {
+  font-weight: bold;
+  font-size: 10px;
+  min-height: 12px;
+  color: #95a9f0;
+  margin-top: 4px;
+}
+
+.data-api__feedbacks-li-content {
+  font-weight: normal;
+  font-size: 18px;
+  white-space: pre-line;
+}
+
+.data-api__power {
+  height: 620px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  background: #f8faff;
+}
+
+.data-api__power-bg {
+  background-image: url("https://static.footprint.network/img_da_bg_2022100801.png"),
+    url("https://static.footprint.network/img_da_bg_2022100802.png"),
+    url("https://static.footprint.network/img_da_bg_2022100803.png");
+  background-size: 280px 280px, 480px 480px, 240px 240px;
+  background-repeat: no-repeat, no-repeat, no-repeat;
+  background-position: top 50% left 15%, bottom 45% right 1%,
+    bottom 10% right 25%;
+}
+
+.data-api__power-container {
+  max-width: 1200px;
+}
+
+.data-api__power h1 {
+  font-size: 42px;
+  line-height: 1;
+}
+
+.data-api__power h2 {
+  font-size: 24px;
+  font-weight: normal;
+  margin: 72px 0;
+  line-height: 1.2;
+}

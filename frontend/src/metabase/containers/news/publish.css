@@ -1,0 +1,103 @@
+.bf-dropdown .dropdown-content .menu {
+  display: block;
+}
+
+.ant-form-item-label > label {
+  font-size: 16px;
+  font-weight: bold;
+}
+
+.publish__boarder {
+  border: #2d86d4 dashed 1px;
+}
+
+.publish {
+  background: white;
+  height: 100%;
+  min-height: 100vh;
+}
+
+.publish__inner {
+  background: white;
+  max-width: 870px;
+  display: flex;
+  flex-direction: column;
+  margin: 0 auto;
+  padding: 40px 10px 30px 10px;
+}
+
+.publish__skeleton {
+  background: white;
+  max-width: 850px;
+  height: calc(100vh - 60px);
+  margin: 0 auto;
+}
+
+.thumb-upload > .ant-upload {
+  width: 300px;
+  height: 157px;
+}
+
+.publish__item-border {
+  border: #d9d9d9 1px solid;
+  border-radius: 3px;
+}
+
+.publish__thumb-default {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  font-size: 14px;
+  color: #a7aabc;
+  cursor: pointer;
+  overflow: auto;
+}
+
+.publish__submit {
+  width: 100%;
+  position: fixed;
+  z-index: 1;
+  background: white;
+  padding-top: 10px;
+  bottom: 0;
+  left: 0;
+}
+
+.publish__submit-inner {
+  padding: 15px;
+  text-align: center;
+  border-top: 1px #d9d9d9 solid;
+}
+
+.publish__submit-inner button {
+  margin: 0 30px;
+  width: 100px;
+  border-radius: 6px;
+}
+
+.publish__item-editor .bf-content {
+  height: calc(100vh - 300px);
+}
+
+.toastui-editor-ww-container > .toastui-editor {
+  z-index: 1;
+}
+
+.markdown img {
+  border: 0;
+  display: block;
+  height: auto;
+  margin: 1rem auto;
+  max-width: 100%;
+}
+
+.markdown img + em {
+  color: #737373;
+  display: inline-block;
+  font-size: 0.7rem;
+  text-align: center;
+  width: 100%;
+}

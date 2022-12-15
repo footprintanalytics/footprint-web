@@ -75,7 +75,7 @@ function SavedQuestionPicker({
     preparedCollections.push(...userPersonalCollections);
     preparedCollections.push(...nonPersonalOrArchivedCollections);
 
-    if (currentUser.is_superuser) {
+    if (currentUser?.is_superuser) {
       const otherPersonalCollections = collections.filter(
         collection =>
           isPersonalCollection(collection) &&
@@ -118,7 +118,7 @@ function SavedQuestionPicker({
       <CollectionsContainer>
         <BackButton onClick={onBack}>
           <Icon name="chevronleft" className="mr1" />
-          {isDatasets ? t`Models` : t`Saved Questions`}
+          {isDatasets ? t`Models` : t`Saved Charts`}
         </BackButton>
         <TreeContainer>
           <Tree

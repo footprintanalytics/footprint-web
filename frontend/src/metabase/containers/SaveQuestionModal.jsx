@@ -4,15 +4,23 @@ import PropTypes from "prop-types";
 import { CSSTransitionGroup } from "react-transition-group";
 import { t } from "ttag";
 
+import { get } from "lodash";
+import { assocIn } from "icepick";
 import Form, { FormField, FormFooter } from "metabase/containers/FormikForm";
 import ModalContent from "metabase/components/ModalContent";
 import Radio from "metabase/core/components/Radio";
 import validate from "metabase/lib/validate";
-import { canonicalCollectionId } from "metabase/collections/utils";
+import {
+  canShowNewGuideStart,
+  setShowNewGuideDone,
+} from "metabase/containers/newguide/newGuide";
+import { createThumb } from "metabase/dashboard/components/utils/thumb";
+import { getPersonalCollectionId } from "metabase/lib/collection";
 import * as Q_DEPRECATED from "metabase-lib/queries/utils";
 import { generateQueryDescription } from "metabase-lib/queries/utils/description";
 
 import "./SaveQuestionModal.css";
+
 
 export default class SaveQuestionModal extends Component {
   static propTypes = {
@@ -42,13 +50,15 @@ export default class SaveQuestionModal extends Component {
     //     .setDisplayName(details.name.trim())
     //     .setDescription(details.description ? details.description.trim() : null)
     //     .setCollectionId(details.collection_id)
-    let { card, originalCard, onCreate, onSave } = this.props;
+    let { card, originalCard, onCreate, onSave, user } = this.props;
 
-    const collection_id = canonicalCollectionId(
-      details.saveType === "overwrite"
+    //普通用户保存在自己的文件夹
+    const publicAnalyticPermission = user && user.publicAnalytic === "write";
+    const collection_id = !publicAnalyticPermission
+      ? getPersonalCollectionId(user)
+      : details.saveType === "overwrite"
         ? originalCard.collection_id
-        : details.collection_id,
-    );
+        : details.collection_id;
 
     card = {
       ...card,
@@ -66,26 +76,76 @@ export default class SaveQuestionModal extends Component {
       collection_id,
     };
 
+    // graph.y_axis.auto_split always default to false;
+    if (
+      details.saveType === "create" &&
+      !("graph.y_axis.auto_split" in card?.visualization_settings) &&
+      card?.create_method !== "preview"
+    ) {
+      card = assocIn(
+        card,
+        ["visualization_settings", "graph.y_axis.auto_split"],
+        false,
+      );
+    }
+
     if (details.saveType === "create") {
-      await onCreate(card);
+      const res = await onCreate({
+        ...card,
+        create_method: canShowNewGuideStart(user)
+          ? "new_guide"
+          : card?.create_method,
+      });
+      setShowNewGuideDone(true);
+      await this.thumb({ id: res.id, public_uuid: res.public_uuid });
     } else if (details.saveType === "overwrite") {
       card.id = this.props.originalCard.id;
+      await this.thumb({ id: card.id, public_uuid: card.public_uuid });
       await onSave(card);
     }
   };
 
-  render() {
-    const { card, originalCard, initialCollectionId, tableMetadata } =
-      this.props;
+  async thumb({ id, public_uuid }) {
+    if (!id || !public_uuid) {
+      return;
+    }
+    createThumb({
+      elementId: "#html2canvas-Card",
+      fileName: `card/${id}.png`,
+      type: "chart",
+      publicUuid: public_uuid,
+      captureElementHeight: "630px",
+      cssAdjustments: [
+        {
+          selector: "#html2canvas-Dashboard",
+          css: "height: 630px",
+        },
+        {
+          selector: "#html2canvas-Card",
+          css: "width: 1200px",
+        },
+      ],
+    });
+  }
 
+  render() {
+    const { card, originalCard, initialCollectionId, tableMetadata, user, } =
+      this.props;
+    const create_method = get(card, "create_method");
     const isStructured = Q_DEPRECATED.isStructured(card.dataset_query);
     const isReadonly = originalCard != null && !originalCard.can_write;
+      const initialName =
+        card.name || isStructured
+          ? generateQueryDescription(tableMetadata, card.dataset_query.query)
+          : "";
 
     const initialValues = {
       name:
-        card.name || isStructured
-          ? generateQueryDescription(tableMetadata, card.dataset_query.query)
-          : "",
+        create_method === "template"
+          ? `${card.name} - Template`
+          : create_method === "preview"
+            ? `${card.name} - Preview`
+            : initialName,
       description: card.description || "",
       collection_id:
         card.collection_id === undefined || isReadonly
@@ -101,11 +161,11 @@ export default class SaveQuestionModal extends Component {
 
     const multiStepTitle =
       questionType === "question"
-        ? t`First, save your question`
+        ? t`First, save your chart`
         : t`First, save your model`;
 
     const singleStepTitle =
-      questionType === "question" ? t`Save question` : t`Save model`;
+      questionType === "question" ? t`Save chart` : t`Save model`;
 
     const title = this.props.multiStep ? multiStepTitle : singleStepTitle;
 
@@ -117,8 +177,11 @@ export default class SaveQuestionModal extends Component {
 
     const nameInputPlaceholder =
       questionType === "question"
-        ? t`What is the name of your question?`
+        ? t`What is the name of your chart?`
         : t`What is the name of your model?`;
+
+    const publicAnalyticPermission = user && user.publicAnalytic === "write";
+
 
     return (
       <ModalContent
@@ -169,11 +232,13 @@ export default class SaveQuestionModal extends Component {
                       title={t`Description`}
                       placeholder={t`It's optional but oh, so helpful`}
                     />
-                    <FormField
-                      name="collection_id"
-                      title={t`Which collection should this go in?`}
-                      type="collection"
-                    />
+                    {publicAnalyticPermission ? (
+                      <FormField
+                        name="collection_id"
+                        title={t`Which collection should this go in?`}
+                        type="collection"
+                      />
+                    ) : null}
                   </div>
                 )}
               </CSSTransitionGroup>
@@ -191,12 +256,12 @@ const SaveTypeInput = ({ field, originalCard }) => (
     {...field}
     options={[
       {
-        name: t`Replace original question, "${
+        name: t`Replace original chart, "${
           originalCard && originalCard.name
         }"`,
         value: "overwrite",
       },
-      { name: t`Save as new question`, value: "create" },
+      { name: t`Save as new chart`, value: "create" },
     ]}
     vertical
   />

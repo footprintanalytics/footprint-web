@@ -31,7 +31,7 @@ export const createAdminRedirect = (adminPath, nonAdminPath) => {
     mapDispatchToProps,
   )(({ user, replace, location }) => {
     const path = `${location.pathname}/${
-      user.is_superuser ? adminPath : nonAdminPath
+      user?.is_superuser ? adminPath : nonAdminPath
     }`;
     replace(path);
     return null;

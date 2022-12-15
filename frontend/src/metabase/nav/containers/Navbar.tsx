@@ -14,6 +14,7 @@ import { AdminPath, State } from "metabase-types/store";
 
 import { AdminNavbar } from "../components/AdminNavbar";
 import MainNavbar from "./MainNavbar";
+import FpNavbar from "./FpNavbar/FpNavbar";
 
 type NavbarProps = {
   isOpen: boolean;
@@ -35,21 +36,17 @@ function Navbar({ isOpen, user, location, params, adminPaths }: NavbarProps) {
     [location.pathname],
   );
 
-  if (!user) {
-    return null;
-  }
-
-  return isAdminApp ? (
+  return isAdminApp && user ? (
     <AdminNavbar user={user} path={location.pathname} adminPaths={adminPaths} />
   ) : (
-    <MainNavbar isOpen={isOpen} location={location} params={params} />
+    <FpNavbar isOpen={isOpen} location={location} params={params} />
   );
 }
 
 export default _.compose(
-  Database.loadList({
-    loadingAndErrorWrapper: false,
-  }),
+  // Database.loadList({
+  //   loadingAndErrorWrapper: false,
+  // }),
   withRouter,
   connect(mapStateToProps),
 )(Navbar);

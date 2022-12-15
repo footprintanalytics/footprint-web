@@ -44,14 +44,14 @@ const CollectionMenu = ({
     );
   }
 
-  if (isAdmin && !isPersonal && !isPersonalCollectionChild && !isDataApp) {
+/*  if (isAdmin && !isPersonal && !isPersonalCollectionChild && !isDataApp) {
     items.push({
       title: t`Edit permissions`,
       icon: "lock",
       link: `${url}/permissions`,
       event: `${ANALYTICS_CONTEXT};Edit Menu;Edit Permissions`,
     });
-  }
+  }*/
 
   if (!isRoot && !isPersonal && canWrite) {
     if (!isDataApp) {

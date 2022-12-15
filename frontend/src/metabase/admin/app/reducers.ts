@@ -74,8 +74,8 @@ const paths = handleActions(
     },
     [REFRESH_CURRENT_USER]: {
       next: (state: AdminPath[], { payload: user }: { payload: any }) => {
-        if (user.is_superuser) {
-          return state;
+        if (user?.is_superuser) {
+          return getAdminPaths();
         }
 
         const allowedPaths = PLUGIN_ADMIN_ALLOWED_PATH_GETTERS.map(getter => {

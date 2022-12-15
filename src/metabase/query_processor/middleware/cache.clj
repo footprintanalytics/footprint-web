@@ -36,8 +36,8 @@
 
 (def query-data-middleware
   "The middleware applied to queries ran via `process-query` with cache ."
-  [#'annotate/add-column-info
-   #'add-timezone-info/add-timezone-info])
+  [#'annotate/add-column-info-for-cache
+   #'add-timezone-info/add-timezone-info-for-cache])
 
 (def ^:private cache-version
   "Current serialization format version. Basically
@@ -225,23 +225,23 @@
   (let [card-id (info :card-id)
         dashboard-id (info :dashboard-id)
         query-hash (qp.util/query-hash query)
-        result     (maybe-reduce-cached-results (:ignore-cached-results? middleware) query-hash cache-ttl rff context)]
+        result     (maybe-reduce-cached-results (:ignore-cached-results? middleware) query-hash cache-ttl rff context)
+        reducef' (fn [rff context metadata rows]
+                   (impl/do-with-serialization
+                    (fn [in-fn result-fn]
+                      (binding [*in-fn*     in-fn
+                                *result-fn* result-fn]
+                               (reducef rff context metadata rows)))))]
     (if (= result ::miss)
       (let [start-time-ms (System/currentTimeMillis)]
         (log/trace "Running query and saving cached results (if eligible)...")
-        (let [reducef' (fn [rff context metadata rows]
-                         (impl/do-with-serialization
-                          (fn [in-fn result-fn]
-                            (binding [*in-fn*     in-fn
-                                      *result-fn* result-fn]
-                              (reducef rff context metadata rows)))))]
-          (qp query
-              (fn [metadata]
-                (save-results-xform start-time-ms metadata query-hash (rff metadata) dashboard-id card-id true))
-              (assoc context :reducef reducef'))))
+        (qp query
+            (fn [metadata]
+              (save-results-xform start-time-ms metadata query-hash (rff metadata) dashboard-id card-id true))
+            (assoc context :reducef reducef')))
       (let [duration-ms (- (System/currentTimeMillis) @last-ran-cache)
             start-time-ms (System/currentTimeMillis)]
-        (when (and result ::ok (canRunCache (min-duration-ms)))
+        (when (and result ::ok (canRunCache duration-ms card-id))
               (((apply comp query-data-middleware) qp)
                 (merge {:aysnc-refresh-cache? true} query)
                 (fn [metadata]
@@ -249,7 +249,7 @@
                    start-time-ms metadata query-hash
                    (((context.default/default-context) :rff) metadata)
                    dashboard-id card-id, false))
-                context))))))
+                (assoc context :reducef reducef')))))))
 
 (defn- is-cacheable? {:arglists '([query])} [{:keys [cache-ttl]}]
   (and (public-settings/enable-query-caching)

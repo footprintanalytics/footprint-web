@@ -31,6 +31,7 @@ import {
 import {
   SearchResults,
   convertSearchResultToTableLikeItem,
+  isSavedQuestion,
 } from "./data-search";
 import SavedQuestionPicker from "./saved-question-picker/SavedQuestionPicker";
 import DataBucketPicker from "./DataSelectorDataBucketPicker";
@@ -48,6 +49,7 @@ import {
 import { DATA_BUCKET } from "./constants";
 
 import "./DataSelector.css";
+import { getProject } from "metabase/lib/project_info";
 
 const MIN_SEARCH_LENGTH = 2;
 
@@ -110,8 +112,8 @@ export const DatabaseDataSelector = props => (
 
 export const DatabaseSchemaAndTableDataSelector = props => (
   <DataSelector
-    steps={[DATABASE_STEP, SCHEMA_STEP, TABLE_STEP]}
-    combineDatabaseSchemaSteps
+    steps={[DATABASE_STEP, TABLE_STEP]}
+    // combineDatabaseSchemaSteps
     getTriggerElementContent={TableTriggerContent}
     {...props}
   />
@@ -193,27 +195,28 @@ const DataSelector = _.compose(
   }),
   connect(
     (state, ownProps) => ({
+      user: state.currentUser,
       metadata: getMetadata(state),
       databases:
         ownProps.databases ||
         Databases.selectors.getList(state, {
-          entityQuery: ownProps.databaseQuery,
+          entityQuery: { ...ownProps.databaseQuery, project: getProject() },
         }) ||
         [],
       hasLoadedDatabasesWithTablesSaved: Databases.selectors.getLoaded(state, {
-        entityQuery: { include: "tables", saved: true },
+        entityQuery: { include: "tables", saved: true, project: getProject() },
       }),
       hasLoadedDatabasesWithSaved: Databases.selectors.getLoaded(state, {
-        entityQuery: { saved: true },
+        entityQuery: { saved: true, project: getProject() },
       }),
       hasLoadedDatabasesWithTables: Databases.selectors.getLoaded(state, {
-        entityQuery: { include: "tables" },
+        entityQuery: { include: "tables", project: getProject() },
       }),
       hasDataAccess: getHasDataAccess(state),
     }),
     {
       fetchDatabases: databaseQuery =>
-        Databases.actions.fetchList(databaseQuery),
+        Databases.actions.fetchList({ ...databaseQuery, project: getProject() }),
       fetchSchemas: databaseId =>
         Schemas.actions.fetchList({ dbId: databaseId }),
       fetchSchemaTables: schemaId => Schemas.actions.fetch({ id: schemaId }),
@@ -429,12 +432,16 @@ export class UnconnectedDataSelector extends Component {
     }
   }
 
+  UNSAFE_componentWillMount() {
+    this.hydrateActiveStep();
+  }
+
   async componentDidMount() {
-    const { activeStep } = this.state;
+    /*const { activeStep } = this.state;
     if (!this.isLoadingDatasets() && !activeStep) {
       await this.hydrateActiveStep();
     }
-
+*/
     if (this.props.selectedTableId) {
       await this.props.fetchFields(this.props.selectedTableId);
       if (this.isSavedQuestionSelected()) {
@@ -471,17 +478,17 @@ export class UnconnectedDataSelector extends Component {
       selectedSchema.database.id !== selectedDatabase.id &&
       selectedSchema.database.id !== SAVED_QUESTIONS_VIRTUAL_DB_ID;
 
-    const onStepMissingSchemaAndTable =
+    /*const onStepMissingSchemaAndTable =
       !selectedSchema &&
       !selectedTable &&
       (activeStep === TABLE_STEP || activeStep === FIELD_STEP);
 
-    const onStepMissingTable = !selectedTable && activeStep === FIELD_STEP;
+    const onStepMissingTable = !selectedTable && activeStep === FIELD_STEP;*/
 
     const invalidTable =
       selectedSchema &&
       selectedTable &&
-      !isVirtualCardId(selectedTable.id) &&
+      !isSavedQuestion(selectedTable.id) &&
       selectedTable.schema.id !== selectedSchema.id;
 
     const invalidField =
@@ -489,13 +496,13 @@ export class UnconnectedDataSelector extends Component {
       selectedField &&
       selectedField.table.id !== selectedTable.id;
 
-    if (invalidSchema || onStepMissingSchemaAndTable) {
+    if (invalidSchema) {
       await this.switchToStep(SCHEMA_STEP, {
         selectedSchemaId: null,
         selectedTableId: null,
         selectedFieldId: null,
       });
-    } else if (invalidTable || onStepMissingTable) {
+    } else if (invalidTable) {
       await this.switchToStep(TABLE_STEP, {
         selectedTableId: null,
         selectedFieldId: null,
@@ -532,15 +539,18 @@ export class UnconnectedDataSelector extends Component {
   };
 
   async hydrateActiveStep() {
+    console.log("hydrateActiveStep", this.props)
     const { steps } = this.props;
     if (this.isSavedQuestionSelected()) {
-      await this.switchToStep(DATABASE_STEP);
+      await this.switchToStep(TABLE_STEP);
     } else if (this.state.selectedTableId && steps.includes(FIELD_STEP)) {
       await this.switchToStep(FIELD_STEP);
     } else if (this.state.selectedSchemaId && steps.includes(TABLE_STEP)) {
       await this.switchToStep(TABLE_STEP);
     } else if (this.state.selectedDatabaseId && steps.includes(SCHEMA_STEP)) {
       await this.switchToStep(SCHEMA_STEP);
+    } else if (this.state.selectedDatabaseId && steps.includes(TABLE_STEP)) {
+      await this.switchToStep(TABLE_STEP);
     } else if (steps[0] === DATA_BUCKET_STEP && !this.hasUsableDatasets()) {
       await this.switchToStep(steps[1]);
     } else {
@@ -557,7 +567,7 @@ export class UnconnectedDataSelector extends Component {
       this.props.useOnlyAvailableDatabase &&
       this.props.selectedDatabaseId == null
     ) {
-      const databases = this.getDatabases();
+      const databases = this.state;
       if (databases && databases.length === 1) {
         this.onChangeDatabase(databases[0]);
       }
@@ -605,10 +615,10 @@ export class UnconnectedDataSelector extends Component {
       index -= 1;
     }
 
-    // data bucket step doesn't make a lot of sense when there're no datasets
+/*    // data bucket step doesn't make a lot of sense when there're no datasets
     if (steps[index] === DATA_BUCKET_STEP && !this.hasUsableDatasets()) {
       return null;
-    }
+    }*/
 
     // can't go back to a previous step
     if (index < 0) {
@@ -636,7 +646,7 @@ export class UnconnectedDataSelector extends Component {
   };
 
   getClearedStateForStep(step) {
-    if (step === DATA_BUCKET_STEP) {
+   /* if (step === DATA_BUCKET_STEP) {
       return {
         selectedDataBucketId: null,
         selectedDatabaseId: null,
@@ -644,7 +654,8 @@ export class UnconnectedDataSelector extends Component {
         selectedTableId: null,
         selectedFieldId: null,
       };
-    } else if (step === DATABASE_STEP) {
+    } else */
+    if (step === DATABASE_STEP) {
       return {
         selectedDatabaseId: null,
         selectedSchemaId: null,
@@ -677,10 +688,11 @@ export class UnconnectedDataSelector extends Component {
         return this.props.fetchDatabases(this.props.databaseQuery);
       },
       [SCHEMA_STEP]: () => {
-        return Promise.all([
+        return this.props.fetchSchemas(this.state.selectedDatabaseId);
+        /*return Promise.all([
           this.props.fetchDatabases(this.props.databaseQuery),
           this.props.fetchSchemas(this.state.selectedDatabaseId),
-        ]);
+        ]);*/
       },
       [TABLE_STEP]: () => {
         if (this.state.selectedSchemaId != null) {
@@ -749,7 +761,7 @@ export class UnconnectedDataSelector extends Component {
   showSavedQuestionPicker = () =>
     this.setState({ isSavedQuestionPickerShown: true });
 
-  onChangeDataBucket = selectedDataBucketId => {
+  /*onChangeDataBucket = selectedDataBucketId => {
     const { databases } = this.props;
     if (selectedDataBucketId === DATA_BUCKET.RAW_DATA) {
       this.switchToStep(DATABASE_STEP, { selectedDataBucketId });
@@ -766,7 +778,7 @@ export class UnconnectedDataSelector extends Component {
     if (database) {
       this.onChangeDatabase(database);
     }
-  };
+  };*/
 
   onChangeDatabase = async database => {
     if (database.is_saved_questions) {
@@ -791,9 +803,9 @@ export class UnconnectedDataSelector extends Component {
     await this.nextStep({ selectedSchemaId: schema && schema.id });
   };
 
-  onChangeTable = async table => {
+  onChangeTable = async (table, dbId) => {
     if (this.props.setSourceTableFn) {
-      this.props.setSourceTableFn(table?.id);
+      this.props.setSourceTableFn(table && table.id, dbId);
     }
     await this.nextStep({ selectedTableId: table?.id });
   };
@@ -812,7 +824,7 @@ export class UnconnectedDataSelector extends Component {
       triggerIconSize,
       triggerElement,
       getTriggerElementContent,
-      hasTriggerExpandControl,
+      // hasTriggerExpandControl,
     } = this.props;
 
     if (triggerElement) {
@@ -830,9 +842,9 @@ export class UnconnectedDataSelector extends Component {
           selectedDatabase,
           selectedTable,
           selectedField,
-          ...triggerProps,
+          // ...triggerProps,
         })}
-        {!this.props.readOnly && hasTriggerExpandControl && (
+        {!this.props.readOnly && (
           <Icon
             className="ml1"
             name="chevrondown"
@@ -852,25 +864,19 @@ export class UnconnectedDataSelector extends Component {
       : "flex align-center";
   }
 
-  handleSavedQuestionPickerClose = () => {
-    const { selectedDataBucketId } = this.state;
-    if (
-      selectedDataBucketId === DATA_BUCKET.DATASETS ||
-      this.hasUsableDatasets()
-    ) {
-      this.previousStep();
-    }
-    this.setState({ isSavedQuestionPickerShown: false });
-  };
+  handleSavedQuestionPickerClose = () =>
+    this.setState({
+      isSavedQuestionPickerShown: false,
+    });
 
   renderActiveStep() {
-    const { combineDatabaseSchemaSteps } = this.props;
+    const { combineDatabaseSchemaSteps, databases } = this.props;
 
     const props = {
       ...this.state,
-      databases: this.getDatabases(),
+      // databases: this.getDatabases(),
 
-      onChangeDataBucket: this.onChangeDataBucket,
+      // onChangeDataBucket: this.onChangeDataBucket,
       onChangeDatabase: this.onChangeDatabase,
       onChangeSchema: this.onChangeSchema,
       onChangeTable: this.onChangeTable,
@@ -882,9 +888,10 @@ export class UnconnectedDataSelector extends Component {
       hasNextStep: !!this.getNextStep(),
       onBack: this.getPreviousStep() ? this.previousStep : null,
       hasFiltering: true,
-      hasInitialFocus: !this.showTableSearch(),
-    };
+      // hasInitialFocus: !this.showTableSearch(),
 
+      databases,
+    };
     switch (this.state.activeStep) {
       case COLLECTION_DATASET_STEP:
         return (
@@ -1042,10 +1049,10 @@ export class UnconnectedDataSelector extends Component {
       isSavedQuestionPickerShown ||
       selectedDataBucketId === DATA_BUCKET.DATASETS;
 
-    if (this.isLoadingDatasets()) {
+    /*if (this.isLoadingDatasets()) {
       return <LoadingAndErrorWrapper loading />;
-    }
-
+    }*/
+    console.log("xxxxxx", this.hasDataAccess(), isSearchActive, isPickerOpen)
     if (this.hasDataAccess()) {
       return (
         <>

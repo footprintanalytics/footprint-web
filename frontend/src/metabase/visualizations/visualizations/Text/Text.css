@@ -3,15 +3,11 @@
 }
 
 :local .Text {
-  border: none;
-  border-radius: 8px;
   display: flex;
   flex-direction: column;
-  height: 100%;
   justify-content: center;
-  overflow: hidden;
-  padding: 0;
-  width: 100%;
+  padding: 0.5em 0.75em;
+  height: 100%;
 }
 
 :local .Text .text-card-textarea {
@@ -33,12 +29,8 @@
 }
 
 :local .Text .text-card-markdown {
-  height: 100%;
-  overflow-x: hidden;
-  overflow-y: auto;
-  padding: 0.5em 16px;
   pointer-events: all;
-  width: 100%;
+  word-break: break-word;
 }
 
 :local .Text .text-card-markdown h1,
@@ -100,13 +92,13 @@
 }
 
 :local .text-card-markdown ul {
-  font-size: 16px;
+  font-size: 1.2em;
   margin: 0;
   padding: 0.5em 1.5em;
   list-style-type: disc;
 }
 :local .text-card-markdown ol {
-  font-size: 16px;
+  font-size: 1.2em;
   margin: 0;
   padding: 0.5em 1.5em;
   list-style-type: decimal;
@@ -200,4 +192,83 @@
 
 :local .padded {
   padding: 0.5em 0.75em;
+}
+
+.Text-wrap {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  pointer-events: all;
+}
+
+.Text-wrap-tip {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  margin-top: 8px;
+  cursor: pointer;
+}
+
+.Text-wrap-tip .anticon {
+  margin-left: 4px;
+}
+
+.Text-wrap-tip-list {
+  width: 580px;
+  font-family: IBM Plex Mono;
+}
+
+.Text-wrap-tip-item {
+  display: flex;
+  align-items: center;
+  border-bottom: 1px dashed #d9d9d9;
+  padding: 6px 0;
+  font-size: 13px;
+  line-height: 1.2;
+  white-space: nowrap;
+}
+
+.Text-wrap-tip-item b {
+  width: 150px;
+}
+
+li.Text-wrap-tip-item:last-child {
+  border-bottom: 0;
+}
+
+
+@media screen and (--footprint-breakpoint-max-pad) {
+  :local .Text {
+    overflow-y: scroll;
+  }
+  :local .Text .text-card-markdown {
+    height: 100%;
+  }
+  :local .Text .text-card-markdown pre {
+    overflow: initial;
+  }
+  :local .Text .text-card-markdown h1 {
+    font-size: 18px;
+  }
+  :local .Text .text-card-markdown h2 {
+    font-size: 17px;
+  }
+  :local .Text .text-card-markdown h3 {
+    font-size: 16px;
+  }
+  :local .Text .text-card-markdown h4 {
+    font-size: 14px;
+  }
+  :local .Text .text-card-markdown h5 {
+    font-size: 12px;
+  }
+  :local .Text .text-card-markdown p {
+    font-size: 12px;
+  }
+  :local .text-card-markdown ul {
+    font-size: 12px;
+  }
+  :local .text-card-markdown ol {
+    font-size: 12px;
+  }
 }

@@ -14,6 +14,8 @@ export function getParameterIconName(parameter: UiParameter) {
       return "location";
     case "category":
       return "string";
+    case "series_category":
+      return "string";
     case "number":
       return "number";
     case "id":

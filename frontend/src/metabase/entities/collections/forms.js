@@ -84,7 +84,7 @@ export const getFormSelector = createSelector(
     const parentId = parentCollectionId || collection?.parent_id;
     const parentCollection = allCollections[parentId];
     const canManageAuthorityLevel =
-      user.is_superuser &&
+      user?.is_superuser &&
       !isPersonalCollection(collection) &&
       !isPersonalOrPersonalChild(parentCollection, collectionList);
 

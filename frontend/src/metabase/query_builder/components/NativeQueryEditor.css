@@ -26,3 +26,46 @@
 .ace_editor.ace_autocomplete .ace_completion-meta {
   font-weight: 400;
 }
+
+
+.DarkMode .ace_editor .ace_gutter {
+  background-color: #2d2d2d !important;
+  color: #ebdab4 !important;;
+}
+.DarkMode .ace-tm .ace_cursor {
+  color: white !important;;
+}
+.DarkMode .ace_editor {
+  background-color: #2d2d2d !important;;
+  color: #c0c0c0 !important;;
+}
+.DarkMode .ace-tm .ace_marker-layer .ace_selection {
+  background: #b0604080 !important;;
+  border-radius: 0 !important;;
+  border: 0 !important;;
+}
+.DarkMode .ace-tm .ace_marker-layer .ace_selected-word {
+  background: transparent !important;;
+  border: 0 !important;;
+}
+.DarkMode .ace_editor .ace_keyword {
+  color: #e89393 !important;;
+}
+
+.DarkMode .ace_editor .ace_function,
+.DarkMode .ace_editor .ace_variable {
+  color: #cdfecd !important;;
+}
+.DarkMode .ace_editor .ace_constant,
+.DarkMode .ace_editor .ace_type {
+  color: #fffc01cc !important;;
+}
+.DarkMode .ace_editor .ace_string {
+  color: #99b4d1 !important;;
+}
+.DarkMode .ace_editor .ace_templateTag {
+  color: #99cc00 !important;;
+}
+.DarkMode .ace-tm .ace_indent-guide {
+  opacity: 0.2 !important;;
+}

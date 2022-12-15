@@ -1,7 +1,8 @@
 import React, { ErrorInfo, ReactNode, useState } from "react";
 import { connect } from "react-redux";
 import { Location } from "history";
-
+import Meta from "metabase/components/Meta";
+import { getOssUrl } from "metabase/lib/image";
 import ScrollToTop from "metabase/hoc/ScrollToTop";
 import {
   Archived,
@@ -17,12 +18,10 @@ import {
   getIsAppBarVisible,
   getIsNavBarVisible,
 } from "metabase/selectors/app";
-import { setErrorPage } from "metabase/redux/app";
+import { setErrorPage, setChannel } from "metabase/redux/app";
 import { useOnMount } from "metabase/hooks/use-on-mount";
 import { initializeIframeResizer } from "metabase/lib/dom";
 
-import AppBanner from "metabase/components/AppBanner";
-import AppBar from "metabase/nav/containers/AppBar";
 import Navbar from "metabase/nav/containers/Navbar";
 import StatusListing from "metabase/status/containers/StatusListing";
 import { ContentViewportContext } from "metabase/core/context/ContentViewportContext";
@@ -57,6 +56,7 @@ interface AppStateProps {
 
 interface AppDispatchProps {
   onError: (error: unknown) => void;
+  setChannel: any;
 }
 
 interface AppRouterOwnProps {
@@ -78,6 +78,7 @@ const mapStateToProps = (
 
 const mapDispatchToProps: AppDispatchProps = {
   onError: setErrorPage,
+  setChannel,
 };
 
 class ErrorBoundary extends React.Component<{
@@ -99,32 +100,53 @@ function App({
   isNavBarVisible,
   children,
   onError,
+  location,
+  setChannel,
 }: AppProps) {
   const [viewportElement, setViewportElement] = useState<HTMLElement | null>();
 
+  const handleChannel = () => {
+    const channel = location.query.channel || location.query.cnl || "homepage";
+    setChannel(channel);
+    if (window && window.gtag) {
+      window.gtag("set", "user_properties", { channel: channel });
+    }
+  };
+
   useOnMount(() => {
     initializeIframeResizer();
+    handleChannel();
   });
 
   return (
-    <ErrorBoundary onError={onError}>
-      <ScrollToTop>
-        <AppContainer className="spread">
-          <AppBanner />
-          {isAppBarVisible && <AppBar isNavBarVisible={isNavBarVisible} />}
-          <AppContentContainer isAdminApp={isAdminApp}>
-            {isNavBarVisible && <Navbar />}
-            <AppContent ref={setViewportElement}>
-              <ContentViewportContext.Provider value={viewportElement ?? null}>
-                {errorPage ? getErrorComponent(errorPage) : children}
-              </ContentViewportContext.Provider>
-            </AppContent>
-            <UndoListing />
-            <StatusListing />
-          </AppContentContainer>
-        </AppContainer>
-      </ScrollToTop>
-    </ErrorBoundary>
+    <React.Fragment>
+      <Meta
+        title="Footprint Analytics"
+        // description="Explore Cross-Chain Web3.0 Data about NFTs, GameFi, Metaverse and DeFi(Decentralized Finance) DApps here. A platform for discovering and visualizing blockchain data without coding."
+        image={getOssUrl("Footprint.jpeg")}
+        imageWidth={1200}
+        imageHeight={630}
+        siteName="Footprint"
+        viewport={0.3} description={undefined} keywords={undefined}      />
+      <ErrorBoundary onError={onError}>
+        <ScrollToTop>
+          <AppContainer className="spread">
+            {/*<AppBanner />*/}
+            {/*{isAppBarVisible && <AppBar isNavBarVisible={isNavBarVisible} />}*/}
+            <AppContentContainer isAdminApp={isAdminApp}>
+              {isNavBarVisible && <Navbar location={location} />}
+              <AppContent id="app-content" ref={setViewportElement}>
+                <ContentViewportContext.Provider value={viewportElement ?? null}>
+                  {errorPage ? getErrorComponent(errorPage) : children}
+                </ContentViewportContext.Provider>
+              </AppContent>
+              <UndoListing />
+              <StatusListing />
+            </AppContentContainer>
+          </AppContainer>
+        </ScrollToTop>
+      </ErrorBoundary>
+    </React.Fragment>
   );
 }
 

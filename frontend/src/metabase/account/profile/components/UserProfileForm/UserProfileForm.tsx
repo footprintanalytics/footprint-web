@@ -11,6 +11,9 @@ import FormErrorMessage from "metabase/core/components/FormErrorMessage";
 import * as Errors from "metabase/core/utils/errors";
 import { LocaleData, User } from "metabase-types/api";
 import { UserProfileData } from "../../types";
+import { connect } from "react-redux";
+import { refreshCurrentUser } from "metabase/redux/user";
+import Users from "metabase/entities/users";
 
 const SSO_PROFILE_SCHEMA = Yup.object({
   locale: Yup.string().nullable().default(null),
@@ -27,6 +30,8 @@ export interface UserProfileFormProps {
   locales: LocaleData[] | null;
   isSsoUser: boolean;
   onSubmit: (user: User, data: UserProfileData) => void;
+  loadUserInfo: any,
+  router: any,
 }
 
 const UserProfileForm = ({
@@ -34,6 +39,8 @@ const UserProfileForm = ({
   locales,
   isSsoUser,
   onSubmit,
+  loadUserInfo,
+  router,
 }: UserProfileFormProps): JSX.Element => {
   const schema = isSsoUser ? SSO_PROFILE_SCHEMA : LOCAL_PROFILE_SCHEMA;
 
@@ -50,47 +57,65 @@ const UserProfileForm = ({
     [user, onSubmit],
   );
 
+  const handleSaved = async () => {
+    await loadUserInfo();
+    router.replace(`/@${user.name}`);
+  };
+
+  const isPaidUser = user && user.vipInfo && user.vipInfo.type !== "free";
+  const isAdmin = user && user.is_superuser;
+  const getForm = () => {
+    if (isAdmin) {
+      return Users.forms.admin
+    }
+    return isPaidUser ? Users.forms.vipUser : Users.forms.user;
+  }
   return (
-    <FormProvider
-      initialValues={initialValues}
-      validationSchema={schema}
-      enableReinitialize
-      onSubmit={handleSubmit}
-    >
-      {({ dirty }) => (
-        <Form disabled={!dirty}>
-          {!isSsoUser && (
-            <>
-              <FormInput
-                name="first_name"
-                title={t`First name`}
-                placeholder={t`Johnny`}
-                nullable
-              />
-              <FormInput
-                name="last_name"
-                title={t`Last name`}
-                placeholder={t`Appleseed`}
-                nullable
-              />
-              <FormInput
-                name="email"
-                type="email"
-                title={t`Email`}
-                placeholder="nicetoseeyou@email.com"
-              />
-            </>
-          )}
-          <FormSelect
-            name="locale"
-            title={t`Language`}
-            options={localeOptions}
-          />
-          <FormSubmitButton title={t`Update`} disabled={!dirty} primary />
-          <FormErrorMessage />
-        </Form>
-      )}
-    </FormProvider>
+    <Users.Form
+      user={user}
+      form={getForm()}
+      onSaved={handleSaved}
+    />
+    // <FormProvider
+    //   initialValues={initialValues}
+    //   validationSchema={schema}
+    //   enableReinitialize
+    //   onSubmit={handleSubmit}
+    // >
+    //   {({ dirty }) => (
+    //     <Form disabled={!dirty}>
+    //       {!isSsoUser && (
+    //         <>
+    //           <FormInput
+    //             name="first_name"
+    //             title={t`First name`}
+    //             placeholder={t`Johnny`}
+    //             nullable
+    //           />
+    //           <FormInput
+    //             name="last_name"
+    //             title={t`Last name`}
+    //             placeholder={t`Appleseed`}
+    //             nullable
+    //           />
+    //           <FormInput
+    //             name="email"
+    //             type="email"
+    //             title={t`Email`}
+    //             placeholder="nicetoseeyou@email.com"
+    //           />
+    //         </>
+    //       )}
+    //       <FormSelect
+    //         name="locale"
+    //         title={t`Language`}
+    //         options={localeOptions}
+    //       />
+    //       <FormSubmitButton title={t`Update`} disabled={!dirty} primary />
+    //       <FormErrorMessage />
+    //     </Form>
+    //   )}
+    // </FormProvider>
   );
 };
 
@@ -103,4 +128,8 @@ const getLocaleOptions = (locales: LocaleData[] | null) => {
   return [{ name: t`Use site default`, value: null }, ...options];
 };
 
-export default UserProfileForm;
+const mapDispatchToProps = dispatch => ({
+  loadUserInfo: () => dispatch(refreshCurrentUser()),
+});
+
+export default connect(null, mapDispatchToProps)(UserProfileForm);

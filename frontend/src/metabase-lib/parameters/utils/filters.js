@@ -14,6 +14,8 @@ export function fieldFilterForParameter(parameter) {
       return field => field.isID();
     case "category":
       return field => field.isCategory();
+    case "series_category":
+      return field => field.isSeriesCategory();
     case "location":
       return field => field.isLocation();
     case "number":

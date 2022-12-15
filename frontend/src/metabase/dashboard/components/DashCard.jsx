@@ -29,12 +29,20 @@ import { isVirtualDashCard } from "metabase/dashboard/utils";
 import { IS_EMBED_PREVIEW } from "metabase/lib/embed";
 
 import { isActionCard } from "metabase/writeback/utils";
-
+import { deviceInfo } from "metabase-lib/lib/Device";
 import Utils from "metabase/lib/utils";
 import { getClickBehaviorDescription } from "metabase/lib/click-behavior";
+import PublicMode from "metabase/modes/components/modes/PublicMode";
+import { trackStructEvent } from "metabase/lib/analytics";
+import TableChartInfo from "metabase/query_builder/components/TableChartInfo";
 import { getParameterValuesBySlug } from "metabase-lib/parameters/utils/parameter-values";
-import DashCardParameterMapper from "./DashCardParameterMapper";
 import { DashCardRoot } from "./DashCard.styled";
+import DashCardParameterMapper from "./DashCardParameterMapper";
+import "./DashCard.css";
+import QueryDownloadWidgetFP from "metabase/query_builder/components/QueryDownloadWidgetFP";
+import { AddToolPopover } from "metabase/dashboard/components/Dashboard/DashboardEmptyState/DashboardEmptyState";
+import { addTextDashCardToDashboard, toggleSidebar } from "metabase/dashboard/actions";
+import { SIDEBAR_NAME } from "metabase/dashboard/constants";
 
 const DATASET_USUALLY_FAST_THRESHOLD = 15 * 1000;
 
@@ -50,7 +58,7 @@ const WrappedVisualization = WithVizSettingsData(
   connect(null, dispatch => ({ dispatch }))(Visualization),
 );
 
-export default class DashCard extends Component {
+class DashCard extends Component {
   static propTypes = {
     dashcard: PropTypes.object.isRequired,
     gridItemWidth: PropTypes.number.isRequired,
@@ -100,6 +108,24 @@ export default class DashCard extends Component {
     e.stopPropagation();
   };
 
+  getWrappedVisualizationPadding = ({
+    hideBackground,
+    isEditing,
+    mainCard,
+  }) => {
+    if (deviceInfo().isMobile) {
+      return "6px";
+    }
+    return hideBackground ||
+    (isEditing &&
+      (mainCard.display === "text" ||
+        mainCard.display === "image" ||
+        mainCard.display === "video"))
+      ? ""
+      : "18px 24px";
+  };
+
+  // eslint-disable-next-line complexity
   render() {
     const {
       dashcard,
@@ -119,6 +145,11 @@ export default class DashCard extends Component {
       mode,
       headerIcon,
       isNightMode,
+      user,
+      clearWatermark,
+      duplicateAction,
+      previewAction,
+      chartStyle,
     } = this.props;
 
     const mainCard = {
@@ -130,6 +161,7 @@ export default class DashCard extends Component {
     };
     const cards = [mainCard].concat(dashcard.series || []);
     const dashboardId = dashcard.dashboard_id;
+    const display = (dashcard.card || {}).display;
     const isEmbed = Utils.isJWT(dashboardId);
     const series = cards.map(card => ({
       ...getIn(dashcardData, [dashcard.id, card.id]),
@@ -142,7 +174,10 @@ export default class DashCard extends Component {
 
     const loading =
       !(series.length > 0 && _.every(series, s => s.data)) &&
-      !isVirtualDashCard(dashcard);
+      !isVirtualDashCard(dashcard) &&
+      display !== "text" &&
+      display !== "image" &&
+      display !== "video";
 
     const expectedDuration = Math.max(
       ...series.map(s => s.card.query_average_duration || 0),
@@ -158,7 +193,6 @@ export default class DashCard extends Component {
         s.error_type === SERVER_ERROR_TYPES.missingPermissions ||
         s.error?.status === 403,
     );
-
     const errors = series.map(s => s.error).filter(e => e);
 
     let errorMessage, errorIcon;
@@ -179,6 +213,10 @@ export default class DashCard extends Component {
       parameterValues,
     );
 
+    const isTextDisplay = mainCard.display === "text";
+    const isImageDisplay = mainCard.display === "image";
+    const isVideoDisplay = mainCard.display === "video";
+
     const isAction = isActionCard(mainCard);
 
     const hideBackground =
@@ -192,9 +230,52 @@ export default class DashCard extends Component {
 
     const gridSize = { width: dashcard.size_x, height: dashcard.size_y };
 
+    const id = `html2canvas-${dashcard.card.name}-${dashcard.card.id}`;
+    // const fileName = `Footprint-${dashcard.card.name}-${moment().format(
+    //   "MM/DD/YYYY",
+    // )}`;
+    const isOwner =
+      user && (user.is_superuser || user.id === dashcard?.card?.creator_id);
+    // const hideDownload =
+    //   (mode && mode.name === PublicMode.name) ||
+    //   mainCard.display === "text" ||
+    //   mainCard.display === "image" ||
+    //   mainCard.display === "video";
+    const showEdit = isOwner && !!dashcard.card.id;
+    const isPublic = mode && mode.name === PublicMode.name;
+
+    const hideDuplicate = isTextDisplay || isImageDisplay || isVideoDisplay;
+
+    const hideWatermark =
+      clearWatermark || isTextDisplay || isImageDisplay || isVideoDisplay;
+
+    const showPreview =
+      !isPublic &&
+      !showEdit &&
+      !isTextDisplay &&
+      !isImageDisplay &&
+      !isVideoDisplay;
+
+    const showChartInfo =
+      !isPublic && !isTextDisplay && !isImageDisplay && !isVideoDisplay;
+
+    const editAction = card => {
+      window.open(`/chart/${card.id}?editingOnLoad=true`);
+    };
+
+    const cardDomKey = `Card--${String(dashcard.id).replace(".", "")}`;
+
+    const result = getIn(dashcardData, [dashcard.id, dashcard.card_id]);
+
+    const wrappedVisualizationPadding = this.getWrappedVisualizationPadding({
+      hideBackground,
+      isEditing,
+      mainCard,
+    });
     return (
       <DashCardRoot
-        className="Card rounded flex flex-column hover-parent hover--visibility"
+        id={id}
+        className={cx("Card rounded flex flex-column hover-parent hover--visibility", cardDomKey,)}
         style={
           hideBackground
             ? { border: 0, background: "transparent", boxShadow: "none" }
@@ -203,6 +284,98 @@ export default class DashCard extends Component {
         isNightMode={isNightMode}
         isUsuallySlow={isSlow === "usually-slow"}
       >
+        <div
+          style={{
+            textAlign: "right",
+            position: "absolute",
+            right: 8,
+            top: 8,
+            zIndex: 2,
+          }}
+        >
+          {!isEditing && !isPublic &&
+          QueryDownloadWidget.shouldRender({
+            result,
+            isResultDirty: false,
+          }) && (
+            <QueryDownloadWidgetFP
+              className="html2canvas-filter dash-card__button"
+              card={dashcard.card}
+              result={result}
+            />
+          )}
+          {showEdit && editAction && (
+            <Tooltip key="ChartEdit" tooltip={t`Edit`}>
+              <a
+                className="html2canvas-filter dash-card__button"
+                onClick={() => {
+                  editAction && editAction(dashcard.card);
+                  trackStructEvent(`dashcard click to edit`);
+                }}
+              >
+                <Icon name={"pencil"} size={14} color={"#9AA0AF"} />
+              </a>
+            </Tooltip>
+          )}
+          {showPreview && (
+            <Tooltip key="ChartPreview" tooltip={t`Preview`}>
+              <a
+                className="html2canvas-filter dash-card__button"
+                onClick={() => {
+                  previewAction && previewAction(dashcard.card.id)
+                  trackStructEvent(`dashcard click to preview`);
+                }}
+              >
+                <Icon name={"chart_preview"} size={14} color={"#9AA0AF"} />
+              </a>
+            </Tooltip>
+          )}
+          {!hideDuplicate && duplicateAction && (
+            <Tooltip key="ChartDuplicate" tooltip={t`Duplicate`}>
+              <a
+                className="html2canvas-filter dash-card__button"
+                onClick={() => {
+                  duplicateAction && duplicateAction(dashcard.card);
+                  trackStructEvent(`dashcard click to copy`);
+                }}
+              >
+                <Icon name={"duplicate"} size={14} color={"#9AA0AF"} />
+              </a>
+            </Tooltip>
+          )}
+          {showChartInfo && (
+            <Tooltip key="ChartInfo" tooltip={t`Chart Info`}>
+              <TableChartInfo
+                dashboard={dashboard}
+                card={dashcard?.card}
+                dashcard={dashcard}
+                tableName={dashcard?.card?.table_name}
+                tableId={dashcard?.card?.table_id}
+              />
+            </Tooltip>
+          )}
+          {/* {!hideDownload && (
+            <a
+              className="html2canvas-filter"
+              style={{
+                display: "inline",
+                position: "relative",
+                cursor: "pointer",
+                margin: "0px 10px",
+              }}
+              onClick={() => {
+                snapshot({
+                  public_uuid: dashcard.public_uuid,
+                  isDashboard: false,
+                  user
+                })
+                trackStructEvent(`dashcard click to download`);
+              }}
+            >
+              <Icon name={"camera"} size={14} color={"#9AA0AF"} />
+            </a>
+          )} */}
+        </div>
         {isEditingDashboardLayout ? (
           <DashboardCardActionsPanel onMouseDown={this.preventDragging}>
             <DashCardActionButtons
@@ -229,6 +402,11 @@ export default class DashCard extends Component {
           className={cx("flex-full overflow-hidden", {
             "pointer-events-none": isEditingDashboardLayout,
           })}
+          style={{
+            position: "relative",
+            zIndex: 1,
+            padding: wrappedVisualizationPadding,
+          }}
           classNameWidgets={isEmbed && "text-light text-medium-hover"}
           error={errorMessage}
           headerIcon={headerIcon}
@@ -254,7 +432,7 @@ export default class DashCard extends Component {
           totalNumGridCols={this.props.totalNumGridCols}
           actionButtons={
             isEmbed ? (
-              <QueryDownloadWidget
+              <QueryDownloadWidgetFP
                 className="m1 text-brand-hover text-light"
                 classNameClose="hover-child"
                 card={dashcard.card}
@@ -312,6 +490,9 @@ export default class DashCard extends Component {
               : null
           }
           onChangeLocation={this.props.onChangeLocation}
+          dynamicParams={dashboard && dashboard.dynamicParams}
+          chartStyle={chartStyle}
+          hideWatermark={hideWatermark}
         />
       </DashCardRoot>
     );
@@ -555,3 +736,10 @@ const ClickBehaviorSidebarOverlay = ({
     </div>
   );
 };
+
+const mapDispatchToProps = {
+  toggleSidebar,
+  addTextDashCardToDashboard,
+};
+
+export default connect(null, mapDispatchToProps)(DashCard);

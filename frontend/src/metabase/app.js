@@ -1,4 +1,7 @@
+import "core-js/stable";
 import "regenerator-runtime/runtime";
+
+import "../metabase/lib/prototype.js";
 
 // Use of classList.add and .remove in Background and FitViewPort Hocs requires
 // this polyfill so that those work in older browsers
@@ -11,7 +14,7 @@ import "number-to-locale-string";
 import "metabase/lib/i18n-debug";
 
 // set the locale before loading anything else
-import "metabase/lib/i18n";
+import { loadLocalization } from "metabase/lib/i18n";
 
 // NOTE: why do we need to load this here?
 import "metabase/lib/colors";
@@ -23,10 +26,24 @@ import "metabase/plugins/builtin";
 // If EE isn't enabled, it loads an empty file.
 import "ee-plugins"; // eslint-disable-line import/no-unresolved
 
+import { PLUGIN_APP_INIT_FUCTIONS } from "metabase/plugins";
+
+import registerVisualizations from "metabase/visualizations/register";
+
 import React from "react";
 import ReactDOM from "react-dom";
 import { Provider } from "react-redux";
-import { ThemeProvider } from "@emotion/react";
+import { ThemeProvider } from "styled-components";
+
+import { createTracker } from "metabase/lib/analytics";
+import MetabaseSettings from "metabase/lib/settings";
+
+import api from "metabase/lib/api";
+import { initializeEmbedding } from "metabase/lib/embed";
+
+import { getStore } from "./store";
+
+import { refreshSiteSettings } from "metabase/redux/settings";
 
 // router
 import { Router, useRouterHistory } from "react-router";
@@ -36,16 +53,23 @@ import { syncHistoryWithStore } from "react-router-redux";
 // drag and drop
 import HTML5Backend from "react-dnd-html5-backend";
 import { DragDropContextProvider } from "react-dnd";
-import { refreshSiteSettings } from "metabase/redux/settings";
-import { initializeEmbedding } from "metabase/lib/embed";
-import api from "metabase/lib/api";
-import MetabaseSettings from "metabase/lib/settings";
-import { createTracker } from "metabase/lib/analytics";
-import registerVisualizations from "metabase/visualizations/register";
-import { PLUGIN_APP_INIT_FUCTIONS } from "metabase/plugins";
+// import { AliveScope } from "react-activation";
 
+// antd
+import { message, ConfigProvider } from "antd";
+message.config({ top: 53 });
+ConfigProvider.config({ theme: { primaryColor: "#3434B2" } });
+
+// import { ApolloClient, InMemoryCache, ApolloProvider } from "@apollo/client";
+// import { hasuraUrl } from "./env";
+import { QueryClient, QueryClientProvider } from "react-query";
 import GlobalStyles from "metabase/styled-components/containers/GlobalStyles";
-import { getStore } from "./store";
+
+// const apolloClient = new ApolloClient({
+//   uri: hasuraUrl,
+//   cache: new InMemoryCache(),
+// });
+const queryClient = new QueryClient();
 
 // remove trailing slash
 const BASENAME = window.MetabaseRoot.replace(/\/+$/, "");
@@ -65,17 +89,21 @@ function _init(reducers, getRoutes, callback) {
   const store = getStore(reducers, browserHistory);
   const routes = getRoutes(store);
   const history = syncHistoryWithStore(browserHistory, store);
-
-  let root;
-
   createTracker(store);
 
+  let root;
   ReactDOM.render(
     <Provider store={store} ref={ref => (root = ref)}>
       <DragDropContextProvider backend={HTML5Backend} context={{ window }}>
         <ThemeProvider theme={theme}>
-          <GlobalStyles />
-          <Router history={history}>{routes}</Router>
+          {/*<GlobalStyles />*/}
+          <QueryClientProvider client={queryClient}>
+            {/*<ApolloProvider client={apolloClient}>*/}
+              {/* <AliveScope> */}
+              <Router history={history}>{routes}</Router>
+              {/* </AliveScope> */}
+            {/*</ApolloProvider>*/}
+          </QueryClientProvider>
         </ThemeProvider>
       </DragDropContextProvider>
     </Provider>,
@@ -88,11 +116,34 @@ function _init(reducers, getRoutes, callback) {
 
   store.dispatch(refreshSiteSettings());
 
+  MetabaseSettings.on("user-locale", async locale => {
+    // reload locale definition and site settings with the new locale
+    await Promise.all([
+      loadLocalization(locale),
+      store.dispatch(refreshSiteSettings({ locale })),
+    ]);
+    // force re-render of React application
+    root.forceUpdate();
+  });
+
   PLUGIN_APP_INIT_FUCTIONS.forEach(init => init({ root }));
 
   window.Metabase = window.Metabase || {};
   window.Metabase.store = store;
   window.Metabase.settings = MetabaseSettings;
+
+  window.addEventListener("beforeunload", event => {
+    // prompt user to save
+    const isEditPaths = [
+      "/chart",
+      "/chart/notebook",
+      "/dashboard/new",
+    ].includes(location.pathname);
+    const isEditing = store.getState().dashboard?.isEditing?.id;
+    if (isEditPaths || isEditing) {
+      event.returnValue = "";
+    }
+  });
 
   if (callback) {
     callback(store);
@@ -100,9 +151,14 @@ function _init(reducers, getRoutes, callback) {
 }
 
 export function init(...args) {
-  if (document.readyState !== "loading") {
+  function run() {
     _init(...args);
+    setTimeout(() => document?.getElementById("skeleton")?.remove(), 1000);
+  }
+
+  if (document.readyState !== "loading") {
+    run();
   } else {
-    document.addEventListener("DOMContentLoaded", () => _init(...args));
+    document.addEventListener("DOMContentLoaded", run);
   }
 }

@@ -158,14 +158,14 @@ function getDataSourceParts({ question, subHead, isObjectDetail }) {
 
   const parts = [];
 
-  const database = query.database();
-  if (database) {
+ const database = query.database();
+  /*if (database) {
     parts.push({
       icon: !subHead ? "database" : undefined,
       name: database.displayName(),
       href: database.id >= 0 && Urls.browseDatabase(database),
     });
-  }
+  }*/
 
   const table = query.table();
   if (table && table.hasSchema()) {

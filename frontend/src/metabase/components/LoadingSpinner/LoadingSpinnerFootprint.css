@@ -1,0 +1,17 @@
+.LoadingSpinner {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+.LoadingSpinner__icon {
+  width: 70%;
+  max-width: 80px;
+  max-height: 80px;
+}
+
+.LoadingSpinner__title {
+  font-size: 14px;
+  color: #3434b2;
+}

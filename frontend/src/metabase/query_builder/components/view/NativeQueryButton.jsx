@@ -89,7 +89,7 @@ export default class NativeQueryButton extends React.Component {
     return (
       <span {...props}>
         <Tooltip tooltip={tooltip} placement="bottom">
-          <SqlIconButton iconSize={size} onClick={this.handleOpen} />
+          <SqlIconButton iconSize={size} onClick={this.handleOpen} >View the SQL</SqlIconButton>
         </Tooltip>
         <Modal
           style={{ padding: "1em" }}
@@ -118,7 +118,6 @@ export default class NativeQueryButton extends React.Component {
 }
 
 NativeQueryButton.shouldRender = ({ question, queryBuilderMode }) =>
-  queryBuilderMode === "notebook" &&
-  question.isStructured() &&
-  question.database() &&
-  question.database().native_permissions === "write";
+  // queryBuilderMode === "notebook" &&
+  question.isStructured() && question.database()
+  // question.database().native_permissions === "write";

@@ -16,6 +16,7 @@ import {
 } from "metabase/dashboard/selectors";
 
 import * as dashboardActions from "metabase/dashboard/actions";
+import { getUser } from "metabase/selectors/user";
 
 const mapStateToProps = (state, props) => {
   return {
@@ -24,6 +25,7 @@ const mapStateToProps = (state, props) => {
     slowCards: getSlowCards(state, props),
     parameters: getParameters(state, props),
     parameterValues: getParameterValues(state, props),
+    user: getUser(state, props),
   };
 };
 

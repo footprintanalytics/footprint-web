@@ -4,7 +4,7 @@ import ViewButton from "../view/ViewButton";
 export const SidebarContentRoot = styled.div`
   display: flex;
   flex-direction: column;
-  justify-content: space-between;
+  justify-content: flex-start;
   height: 100%;
 `;
 

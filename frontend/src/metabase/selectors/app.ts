@@ -91,9 +91,9 @@ export const getIsNavBarVisible = createSelector(
     getEmbedOptions,
   ],
   (currentUser, path, isEditingDashboard, isEmbedded, embedOptions) => {
-    if (!currentUser || isEditingDashboard) {
+    /*if (!currentUser || isEditingDashboard) {
       return false;
-    }
+    }*/
     if (isEmbedded && !embedOptions.side_nav) {
       return false;
     }
@@ -164,3 +164,9 @@ export const getTokenStatusStatus = createSelector(
   [getSettings],
   settings => settings["token-status"]?.status,
 );
+
+export const getApp = (state: any) => state.app;
+
+export const getChannel = createSelector([getApp], ({ channel }) => {
+  return channel || "";
+});

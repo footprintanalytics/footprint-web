@@ -11,7 +11,7 @@ import cx from "classnames";
 import PopoverWithTrigger from "metabase/components/PopoverWithTrigger";
 import Icon from "metabase/components/Icon";
 import LoadingSpinner from "metabase/components/LoadingSpinner";
-import DownloadButton from "metabase/components/DownloadButton";
+import DownloadButtonFP from "metabase/components/DownloadButtonFP";
 import Tooltip from "metabase/components/Tooltip";
 import { PLUGIN_FEATURE_LEVEL_PERMISSIONS } from "metabase/plugins";
 
@@ -152,7 +152,8 @@ const UnsavedQueryButton = ({
   onDownloadResolved,
   onDownloadRejected,
 }) => (
-  <DownloadButton
+  <DownloadButtonFP
+    mode="unsaved"
     url={`api/dataset/${type}`}
     params={{
       query: JSON.stringify(_.omit(json_query, "constraints")),
@@ -164,7 +165,7 @@ const UnsavedQueryButton = ({
     onDownloadRejected={onDownloadRejected}
   >
     {type}
-  </DownloadButton>
+  </DownloadButtonFP>
 );
 
 const SavedQueryButton = ({
@@ -175,7 +176,8 @@ const SavedQueryButton = ({
   onDownloadResolved,
   onDownloadRejected,
 }) => (
-  <DownloadButton
+  <DownloadButtonFP
+    mode="saved"
     url={`api/card/${card.id}/query/${type}`}
     params={{ parameters: JSON.stringify(json_query.parameters) }}
     extensions={[type]}
@@ -184,7 +186,7 @@ const SavedQueryButton = ({
     onDownloadRejected={onDownloadRejected}
   >
     {type}
-  </DownloadButton>
+  </DownloadButtonFP>
 );
 
 const PublicQueryButton = ({
@@ -195,7 +197,7 @@ const PublicQueryButton = ({
   onDownloadResolved,
   onDownloadRejected,
 }) => (
-  <DownloadButton
+  <DownloadButtonFP
     method="GET"
     url={Urls.publicQuestion(uuid, type)}
     params={{ parameters: JSON.stringify(json_query.parameters) }}
@@ -205,7 +207,7 @@ const PublicQueryButton = ({
     onDownloadRejected={onDownloadRejected}
   >
     {type}
-  </DownloadButton>
+  </DownloadButtonFP>
 );
 
 const EmbedQueryButton = ({
@@ -216,14 +218,14 @@ const EmbedQueryButton = ({
   onDownloadRejected,
 }) => {
   // Parse the query string part of the URL (e.g. the `?key=value` part) into an object. We need to pass them this
-  // way to the `DownloadButton` because it's a form which means we need to insert a hidden `<input>` for each param
+  // way to the `DownloadButtonFP` because it's a form which means we need to insert a hidden `<input>` for each param
   // we want to pass along. For whatever wacky reason the /api/embed endpoint expect params like ?key=value instead
   // of like ?params=<json-encoded-params-array> like the other endpoints do.
   const query = urlParse(window.location.href).query; // get the part of the URL that looks like key=value
   const params = query && querystring.parse(query); // expand them out into a map
 
   return (
-    <DownloadButton
+    <DownloadButtonFP
       method="GET"
       url={Urls.embedCard(token, type)}
       params={params}
@@ -233,7 +235,7 @@ const EmbedQueryButton = ({
       onDownloadRejected={onDownloadRejected}
     >
       {type}
-    </DownloadButton>
+    </DownloadButtonFP>
   );
 };
 
@@ -247,7 +249,7 @@ const DashboardEmbedQueryButton = ({
   onDownloadResolved,
   onDownloadRejected,
 }) => (
-  <DownloadButton
+  <DownloadButtonFP
     method="GET"
     url={`api/embed/dashboard/${token}/dashcard/${dashcardId}/card/${card.id}/${type}`}
     extensions={[type]}
@@ -257,7 +259,7 @@ const DashboardEmbedQueryButton = ({
     onDownloadRejected={onDownloadRejected}
   >
     {type}
-  </DownloadButton>
+  </DownloadButtonFP>
 );
 
 const renderIcon = ({ icon, status }) => {

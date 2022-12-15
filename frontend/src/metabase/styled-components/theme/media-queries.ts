@@ -17,3 +17,9 @@ export const breakpointMinHeightMedium = "@media screen and (min-height: 45em)";
 export const breakpointMinHeightLarge = "@media screen and (min-height: 60em)";
 export const breakpointMinHeightExtraLarge =
   "@media screen and (min-height: 80em)";
+
+export const footprintWidthMobile = "750";
+export const footprintWidthPad = "1200";
+
+export const footprintBreakpointMaxMobile = `@media screen and (max-width: ${footprintWidthMobile}px)`;
+export const footprintBreakpointMaxPad = `@media screen and (max-width: ${footprintWidthPad}px)`;

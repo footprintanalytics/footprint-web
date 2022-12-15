@@ -25,6 +25,7 @@ import {
 } from "../selectors";
 
 import { updateUrl } from "./navigation";
+import { CardApi, PublicApi } from "../../services";
 
 export const SET_DOCUMENT_TITLE = "metabase/qb/SET_DOCUMENT_TITLE";
 const setDocumentTitle = createAction(SET_DOCUMENT_TITLE);
@@ -275,3 +276,27 @@ export const cancelQuery = () => (dispatch, getState) => {
     return { type: CANCEL_QUERY };
   }
 };
+
+
+export const CREATE_CARD_SECRET = "metabase/card/CREATE_CARD_SECRET";
+export const createCardSecret = createAction(
+  CREATE_CARD_SECRET,
+  async ({ id }) => {
+    const { data } = await CardApi.secret({ id });
+    return data;
+  },
+);
+
+export const DASHBOARD_CARD_SECRET_DATA =
+  "metabase/card/DASHBOARD_CARD_SECRET_DATA";
+export const dashboardCardSecretData = createAction(
+  DASHBOARD_CARD_SECRET_DATA,
+  async ({ uuid, cardUuid, secret }) => {
+    const { data } = await PublicApi.dashboardCardSecret({
+      uuid,
+      cardUuid,
+      secret,
+    });
+    return data;
+  },
+);

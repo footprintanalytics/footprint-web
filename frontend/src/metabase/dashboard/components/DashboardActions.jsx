@@ -10,6 +10,7 @@ import Tooltip from "metabase/components/Tooltip";
 import FullscreenIcon from "metabase/components/icons/FullscreenIcon";
 
 import { DashboardHeaderButton } from "metabase/dashboard/containers/DashboardHeader.styled";
+import Button from "metabase/core/components/Button";
 import DashboardSharingEmbeddingModal from "../containers/DashboardSharingEmbeddingModal.jsx";
 
 export const getDashboardActions = (
@@ -48,13 +49,12 @@ export const getDashboardActions = (
   const hasDataCards =
     hasCards &&
     dashboard.ordered_cards.some(dashCard => dashCard.card.display !== "text");
-
   const canShareDashboard = hasCards;
   const canCreateSubscription = hasDataCards && canManageSubscriptions;
 
   if (!isEditing && !isEmpty && !isPublic) {
     // Getting notifications with static text-only cards doesn't make a lot of sense
-    if (canCreateSubscription && !isFullscreen) {
+/*    if (canCreateSubscription && !isFullscreen) {
       buttons.push(
         <Tooltip tooltip={t`Subscriptions`} key="dashboard-subscriptions">
           <DashboardHeaderButton
@@ -65,45 +65,59 @@ export const getDashboardActions = (
           />
         </Tooltip>,
       );
-    }
+    }*/
 
     if (canShareDashboard) {
       buttons.push(
-        <DashboardSharingEmbeddingModal
-          key="dashboard-embed"
-          additionalClickActions={() => self.refs.popover.close()}
-          dashboard={dashboard}
-          enabled={
-            !isEditing &&
-            !isFullscreen &&
-            ((isPublicLinksEnabled && (isAdmin || dashboard.public_uuid)) ||
-              (isEmbeddingEnabled && isAdmin))
+        // <DashboardSharingEmbeddingModal
+        //   key="dashboard-embed"
+        //   additionalClickActions={() => self.refs.popover.close()}
+        //   dashboard={dashboard}
+        //   enabled={
+        //     !isEditing &&
+        //     !isFullscreen &&
+        //     ((isPublicLinksEnabled && (isAdmin || dashboard.public_uuid)) ||
+        //       (isEmbeddingEnabled && isAdmin))
+        //   }
+        //   isLinkEnabled={canShareDashboard}
+        //   linkText={
+        //     <Tooltip
+        //       isLinkEnabled={canShareDashboard}
+        //       tooltip={
+        //         canShareDashboard
+        //           ? t`Sharing`
+        //           : t`Add data to share this dashboard`
+        //       }
+        //     >
+        //       <DashboardHeaderButton
+        //         icon="share"
+        //         className={cx({
+        //           "text-brand-hover": canShareDashboard,
+        //           "text-light": !canShareDashboard,
+        //         })}
+        //       />
+        //     </Tooltip>
+        //   }
+        // />,
+        <Tooltip
+          tooltip={
+            canShareDashboard ? t`Sharing` : t`Add data to share this dashboard`
           }
-          isLinkEnabled={canShareDashboard}
-          linkText={
-            <Tooltip
-              isLinkEnabled={canShareDashboard}
-              tooltip={
-                canShareDashboard
-                  ? t`Sharing`
-                  : t`Add data to share this dashboard`
-              }
-            >
-              <DashboardHeaderButton
-                icon="share"
-                className={cx({
-                  "text-brand-hover": canShareDashboard,
-                  "text-light": !canShareDashboard,
-                })}
-              />
-            </Tooltip>
-          }
-        />,
+        >
+          <Button
+            onlyIcon
+            className="Question-header-btn"
+            iconColor="#7A819B"
+            icon="share"
+            iconSize={16}
+            onClick={onSharingClick}
+          />
+        </Tooltip>
       );
     }
   }
 
-  if (!isEditing && !isEmpty) {
+/*  if (!isEditing && !isEmpty) {
     buttons.push(
       <RefreshWidget
         key="refresh"
@@ -114,9 +128,9 @@ export const getDashboardActions = (
         onChangePeriod={onRefreshPeriodChange}
       />,
     );
-  }
+  }*/
 
-  if (!isEditing && isFullscreen && hasNightModeToggle) {
+/*  if (!isEditing && isFullscreen && hasNightModeToggle) {
     buttons.push(
       <Tooltip
         key="night"
@@ -135,9 +149,9 @@ export const getDashboardActions = (
         </span>
       </Tooltip>,
     );
-  }
+  }*/
 
-  if (!isEditing && !isEmpty && (isPublic || isFullscreen)) {
+  if (!isEditing && !isEmpty && !isPublic && isFullscreen) {
     // option click to enter fullscreen without making the browser go fullscreen
     buttons.push(
       <Tooltip

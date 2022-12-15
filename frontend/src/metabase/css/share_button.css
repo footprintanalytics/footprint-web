@@ -1,0 +1,13 @@
+.ShareButton {
+  /* display: grid;
+  grid-template-columns: repeat(auto-fill, 32px);
+  grid-gap: 10px; */
+  justify-content: center;
+  padding: 1rem 0 2rem 0;
+  display: flex;
+  align-items: center;
+}
+
+.ShareButton li {
+  margin: 0 5px;
+}

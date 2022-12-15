@@ -113,6 +113,9 @@ function DashCardCardParameterMapper({
     }
 
     const question = new Question(card, metadata);
+    if (question.isNative()) {
+      return true;
+    }
     return question.query().isEditable();
   }, [card, metadata, isVirtual]);
 

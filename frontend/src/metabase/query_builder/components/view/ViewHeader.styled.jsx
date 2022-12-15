@@ -143,7 +143,7 @@ export const SavedQuestionLeftSideRoot = styled.div`
   ${SavedQuestionHeaderButtonContainer} {
     transition: all 400ms ease;
     position: relative;
-    top: ${props => (props.showSubHeader ? "0" : "0.5rem")};
+    top: 0;
   }
 
   ${ViewHeaderLeftSubHeading} {

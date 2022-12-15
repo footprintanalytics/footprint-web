@@ -1,5 +1,5 @@
 import { t } from "ttag";
-import { ID_OPTION } from "metabase-lib/parameters/constants";
+import { ID_OPTION, SERIES_CATEGORY_OPTIONS } from "metabase-lib/parameters/constants";
 import { buildTypedOperatorOptions } from "metabase-lib/parameters/utils/operators";
 
 export function getDashboardParameterSections() {
@@ -32,6 +32,12 @@ export function getDashboardParameterSections() {
       name: t`Number`,
       description: t`Subtotal, Age, Price, Quantity, etc.`,
       options: buildTypedOperatorOptions("number", "number", t`Number`),
+    },
+    {
+      id: "series_category",
+      name: t`Series Text`,
+      description: t`A series of category option.`,
+      options: SERIES_CATEGORY_OPTIONS,
     },
     {
       id: "string",

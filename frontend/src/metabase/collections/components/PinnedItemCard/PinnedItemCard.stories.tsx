@@ -33,7 +33,7 @@ Question.args = {
     collection_position: 1,
     model: "card",
     name: "Question",
-    description: "This is a description of the question",
+    description: "This is a description of the chart",
     getIcon: () => ({ name: "question" }),
     getUrl: () => "/question/1",
     setArchived: action("setArchived"),

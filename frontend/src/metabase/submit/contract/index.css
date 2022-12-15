@@ -1,0 +1,15 @@
+.SubmitContract {
+  height: calc(100vh - 60px);
+  padding: 60px;
+  background-color: #f0f0ff;
+}
+
+.SubmitContract__steps {
+  margin-top: 10px;
+  margin-bottom: 20px;
+}
+
+.SubmitContract__add {
+  width: 500px;
+  margin: 0 auto;
+}

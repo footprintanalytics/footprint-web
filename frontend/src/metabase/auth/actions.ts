@@ -4,12 +4,19 @@ import { SessionApi, UtilApi } from "metabase/services";
 import MetabaseSettings from "metabase/lib/settings";
 import { createThunkAction } from "metabase/lib/redux";
 import { loadLocalization } from "metabase/lib/i18n";
-import { deleteSession } from "metabase/lib/auth";
+import { deleteSession, clearGoogleAuthCredentials } from "metabase/lib/auth";
 import * as Urls from "metabase/lib/urls";
-import { clearCurrentUser, refreshCurrentUser } from "metabase/redux/user";
+import { clearCurrentUser, refreshCurrentUser, loadCurrentUserVip } from "metabase/redux/user";
 import { refreshSiteSettings } from "metabase/redux/settings";
 import { getUser } from "metabase/selectors/user";
 import { State } from "metabase-types/store";
+import { setRegistSuccess } from "metabase/lib/register-activity";
+import { message } from "antd";
+import {
+  WalletAddressLogin,
+  UserRegister,
+  SendEmailCode,
+} from "metabase/new-service";
 import {
   trackLogin,
   trackLoginGoogle,
@@ -17,6 +24,7 @@ import {
   trackPasswordReset,
 } from "./analytics";
 import { LoginData } from "./types";
+import * as MetabaseAnalytics from "metabase/lib/analytics";
 
 export const REFRESH_LOCALE = "metabase/user/REFRESH_LOCALE";
 export const refreshLocale = createThunkAction(
@@ -40,31 +48,153 @@ export const refreshSession = createThunkAction(
   },
 );
 
+const handleLogin = async (dispatch: any, redirectUrl = '/') => {
+  await Promise.all([
+    dispatch(refreshCurrentUser()),
+    dispatch(refreshSiteSettings()),
+  ]);
+  dispatch(loadCurrentUserVip());
+
+  if (redirectUrl) {
+    setTimeout(() => {
+      dispatch(push(redirectUrl));
+    }, 500);
+  }
+};
+
 export const LOGIN = "metabase/auth/LOGIN";
 export const login = createThunkAction(
   LOGIN,
   (data: LoginData, redirectUrl = "/") =>
     async (dispatch: any) => {
       await SessionApi.create(data);
-      await dispatch(refreshSession());
-      trackLogin();
-
-      dispatch(push(redirectUrl));
+      MetabaseAnalytics.trackStructEvent("Auth", "Login");
+      await handleLogin(dispatch, redirectUrl);
     },
+);
+
+// register and login
+export const REGISTERANDLOGIN = "metabase/auth/REGISTERANDLOGIN";
+export const registerAndLogin = createThunkAction(
+  REGISTERANDLOGIN,
+  ({ token, redirectUrl = "/" } : any) => async (dispatch: any, getState: any) => {
+    // NOTE: this request will return a Set-Cookie header for the session
+    const { code, message, data } = await SessionApi.registerAndLogin({
+      token,
+    });
+    if (code === 0) {
+      const { isNew, email } = data;
+      if (isNew) {
+        setRegistSuccess(email);
+      }
+      MetabaseAnalytics.trackStructEvent("Auth", "registerAndLogin");
+      await handleLogin(dispatch, redirectUrl || "/");
+    } else {
+      throw message;
+    }
+  },
+);
+
+//register
+export const regist = createThunkAction(
+  "metabase/auth/REGIST",
+  (credentials: any, redirectUrl = '/') => async (dispatch: any, getState: any) => {
+    // NOTE: this request will return a Set-Cookie header for the session
+    const {
+      firstName,
+      lastName,
+      purpose,
+      email,
+      password,
+      emailCode,
+      channel,
+    } = credentials;
+    const { isNew } : any = await UserRegister({
+      firstName,
+      lastName,
+      purpose,
+      email,
+      password,
+      emailCode,
+      channel,
+    });
+    if (isNew) {
+      setRegistSuccess(email);
+    }
+
+    // await SessionApi.create({ username: email, password });
+    message.success("Register Success!");
+    MetabaseAnalytics.trackStructEvent("Auth", "Register");
+    // await Promise.all([
+    //   dispatch(refreshCurrentUser()),
+    //   dispatch(refreshSiteSettings()),
+    // ]);
+    if (redirectUrl) {
+      setTimeout(() => {
+        dispatch(push("/loginModal"));
+      }, 500);
+    }
+  },
+);
+
+export const getRegistEmail = createThunkAction(
+  "metabase/auth/REGISTEMAILCODE",
+  (credentials: any) => async (dispatch: any, getState: any) => {
+    // NOTE: this request will return a Set-Cookie header for the session
+    const { email } = credentials;
+    await SendEmailCode({ email });
+    MetabaseAnalytics.trackStructEvent("Auth", "Register Send Code");
+  },
 );
 
 export const LOGIN_GOOGLE = "metabase/auth/LOGIN_GOOGLE";
 export const loginGoogle = createThunkAction(
   LOGIN_GOOGLE,
-  (token: string, redirectUrl = "/") =>
+  (
+    googleUser: any,
+    redirectUrl = "/",
+    channel: string,
+    projectRole: string,
+  ) =>
     async (dispatch: any) => {
-      await SessionApi.createWithGoogleAuth({ token });
-      await dispatch(refreshSession());
-      trackLoginGoogle();
 
-      dispatch(push(redirectUrl));
+      try {
+        const { data } = await SessionApi.createWithGoogleAuth({
+          idToken: googleUser.getAuthResponse().id_token,
+          channel,
+          ...(projectRole ? { projectRole } : {}),
+        });
+        const { isNew, email } = data;
+        if (isNew) {
+          setRegistSuccess(email);
+        }
+        MetabaseAnalytics.trackStructEvent("Auth", "Google Auth Login");
+
+        handleLogin(dispatch, redirectUrl);
+      } catch (error) {
+        await clearGoogleAuthCredentials();
+        return error;
+      }
     },
 );
+
+// login Wallet
+export const LOGIN_WALLET = "metabase/auth/LOGIN_WALLET";
+export const loginWallet = createThunkAction(LOGIN_WALLET, function(
+  loginParam: any,
+  redirectUrl = '/',
+) {
+  return async function(dispatch: any, getState: any) {
+    try {
+      const result = await WalletAddressLogin(loginParam);
+      MetabaseAnalytics.trackStructEvent("Auth", "Wallet Auth Login");
+      handleLogin(dispatch, redirectUrl);
+      return result;
+    } catch (error: any) {
+      return { error: error.message ? error.message : error };
+    }
+  };
+});
 
 export const LOGOUT = "metabase/auth/LOGOUT";
 export const logout = createThunkAction(LOGOUT, (redirectUrl: string) => {
@@ -74,8 +204,10 @@ export const logout = createThunkAction(LOGOUT, (redirectUrl: string) => {
     await dispatch(refreshLocale());
     trackLogout();
 
-    dispatch(push(Urls.login(redirectUrl)));
-    window.location.reload(); // clears redux state and browser caches
+    if (redirectUrl) {
+      dispatch(push(Urls.login(redirectUrl)));
+    }
+    // window.location.reload(); // clears redux state and browser caches
   };
 });
 

@@ -6,7 +6,8 @@ import MetabaseSettings from "metabase/lib/settings";
 import { Card as BaseCard } from "metabase-types/types/Card";
 import Question, { QuestionCreatorOpts } from "metabase-lib/Question";
 
-import { appendSlug, extractQueryParams } from "./utils";
+import { appendSlug, dashboardQuestionUrl, extractQueryParams, guestUrl, publicUrl } from "./utils";
+import { optionsToHashParams } from "metabase/public/lib/embed";
 
 type Card = Partial<BaseCard> & {
   id?: number | string;
@@ -34,6 +35,7 @@ export function question(
     isModelDetail = false,
   }: QuestionUrlBuilderParams = {},
 ) {
+
   if (hash && typeof hash === "object") {
     hash = serializeCardForUrl(hash);
   }
@@ -54,9 +56,9 @@ export function question(
   }
 
   const isModel = card?.dataset || card?.model === "dataset";
-  let path = isModel ? "model" : "question";
+  let type = isModel ? "model" : "chart";
   if (!card || !card.id) {
-    return `/${path}${query}${hash}`;
+    return `/${type}${query}${hash}`;
   }
 
   const { card_id, id, name } = card;
@@ -67,7 +69,13 @@ export function question(
    * There can be multiple instances of the same question in a dashboard, hence this distinction.
    */
   const questionId = card_id || id;
-  path = `/${path}/${questionId}`;
+
+  let path = dashboardQuestionUrl({
+    type: type,
+    name: card.name,
+    id: card.id,
+  });
+  // path = `/${path}/${questionId}`;
 
   /**
    * Although it's not possible to intentionally save a question without a name,
@@ -75,14 +83,14 @@ export function question(
    *
    * Please see: https://github.com/metabase/metabase/pull/15989#pullrequestreview-656646149
    */
-  if (name) {
+/*  if (name) {
     path = appendSlug(path, slugg(name));
-  }
+  }*/
 
   if (objectId) {
     path = `${path}/${objectId}`;
   }
-
+  console.log("`${path}${query}${hash}`", `${path}${query}${hash}`)
   return `${path}${query}${hash}`;
 }
 
@@ -108,10 +116,10 @@ export function newQuestion({
     query: objectId ? { objectId } : undefined,
   });
 
-  const entity = question.isDataset() ? "model" : "question";
+  const entity = question.isDataset() ? "model" : "chart";
 
   if (mode) {
-    return url.replace(/^\/(question|model)/, `/${entity}\/${mode}`);
+    return url.replace(/^\/(chart|model)/, `/${entity}\/${mode}`);
   } else {
     return url;
   }
@@ -121,7 +129,7 @@ export function dataset(...args: Parameters<typeof question>) {
   return question(...args);
 }
 
-export function publicQuestion(
+export function publicQuestionOrigin(
   uuid: string,
   type: string | null = null,
   query?: string,
@@ -129,7 +137,7 @@ export function publicQuestion(
   const siteUrl = MetabaseSettings.get("site-url");
   const searchQuery = query ? `?${query}` : "";
   return (
-    `${siteUrl}/public/question/${uuid}` +
+    `${siteUrl}/public/chart/${uuid}` +
     (type ? `.${type}` : "") +
     searchQuery
   );
@@ -137,7 +145,7 @@ export function publicQuestion(
 
 export function embedCard(token: string, type: string | null = null) {
   const siteUrl = MetabaseSettings.get("site-url");
-  return `${siteUrl}/embed/question/${token}` + (type ? `.${type}` : ``);
+  return `${siteUrl}/embed/chart/${token}` + (type ? `.${type}` : ``);
 }
 
 export function tableRowsQuery(
@@ -160,4 +168,49 @@ export function tableRowsQuery(
   // The QB will parse the querystring and use DB and table IDs to create an ad-hoc question
   // We should refactor the initializeQB to avoid passing query string to hash as it's pretty confusing
   return question(null, { hash: query });
+}
+
+interface publicQuestionType {
+  uuid: string,
+  name: string,
+  search: string,
+  options: any,
+}
+
+export function publicQuestion({ uuid, name, search = "", options = null }: publicQuestionType) {
+  const siteUrl = MetabaseSettings.get("site-url");
+  return `${siteUrl}/${publicUrl({
+    publicUuid: uuid,
+    name,
+    type: "question",
+  })}${search}${optionsToHashParams(options)}`;
+}
+
+interface guestQuestionType {
+  uuid: string,
+  name: string,
+  search: string,
+  options: any,
+}
+
+export function guestQuestion({ uuid, name, search = "", options = null }: guestQuestionType) {
+  const siteUrl = `${MetabaseSettings.get("site-url")}`;
+  return `${siteUrl}/${guestUrl({
+    publicUuid: uuid,
+    name,
+    type: "question",
+  })}${search}${optionsToHashParams(options)}`;
+}
+
+interface generalQuestionType {
+  id: string,
+  name: string,
+  search: string,
+  options: any,
+}
+
+export function generalQuestion({ id, name, search = "", options = null }: generalQuestionType) {
+  const questionUrl = dashboardQuestionUrl({ id, name, type: "question" });
+  const siteUrl = `${MetabaseSettings.get("site-url")}`;
+  return `${siteUrl}/${questionUrl}${search}${optionsToHashParams(options)}`;
 }

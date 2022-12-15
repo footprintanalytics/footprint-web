@@ -1,0 +1,22 @@
+.search-bar__result-title {
+  height: 40px;
+  padding: 0 15px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background: #f5f5f5;
+  color: #323642;
+}
+
+.search-bar__result-title:hover {
+  background: #3434b284;
+}
+
+.search-bar__result-more {
+  align-items: center;
+  display: flex;
+}
+
+.search-bar__result-more span {
+  margin-right: 10px;
+}

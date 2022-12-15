@@ -5,13 +5,18 @@ import { PLUGIN_CACHING } from "metabase/plugins";
 
 import DashboardCopyModalShallowCheckboxLabel from "metabase/dashboard/components/DashboardCopyModal/DashboardCopyModalShallowCheckboxLabel";
 
+
+import validate from "metabase/lib/validate";
+import { formatDashboardChartSaveTitle } from "metabase/lib/formatting/footprint";
+
 function createNameField() {
   return {
     name: "name",
     title: t`Name`,
     placeholder: t`What is the name of your dashboard?`,
     autoFocus: true,
-    validate: name => (!name ? t`Name is required` : null),
+    validate: validate.required().checkDashboardTitle(),
+    normalize: name => formatDashboardChartSaveTitle(name),
   };
 }
 
@@ -47,11 +52,25 @@ function duplicateForm() {
     createNameField(),
     createDescriptionField(),
     createCollectionIdField(),
-    createShallowCopyField(),
+    // createShallowCopyField(),
+  ];
+}
+
+function userDuplicateForm() {
+  return [
+    createNameField(),
+    createDescriptionField(),
   ];
 }
 
 function createForm() {
+  return [
+    createNameField(),
+    createDescriptionField(),
+  ];
+}
+
+function createFormAdmin() {
   return [
     createNameField(),
     createDescriptionField(),
@@ -63,8 +82,14 @@ export default {
   create: {
     fields: createForm,
   },
+  create_admin: {
+    fields: createFormAdmin,
+  },
   duplicate: {
     fields: duplicateForm,
+  },
+  userDuplicate: {
+    fields: userDuplicateForm,
   },
   edit: {
     fields: () => {

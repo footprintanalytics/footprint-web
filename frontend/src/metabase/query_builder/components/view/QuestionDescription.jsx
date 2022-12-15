@@ -7,6 +7,7 @@ import StructuredQuery from "metabase-lib/queries/StructuredQuery";
 import QuestionDataSource from "./QuestionDataSource";
 
 import { AggregationAndBreakoutDescription } from "./QuestionDescription.styled";
+import { get } from "lodash";
 
 const QuestionDescription = ({
   question,
@@ -14,7 +15,14 @@ const QuestionDescription = ({
   isObjectDetail,
   onClick,
 }) => {
+
   const query = question.query();
+  const createMethod = get(question, "_card.create_method");
+
+  if (createMethod === "template" || createMethod === "preview") {
+    return <span>{get(question, "_card.name")}</span>;
+  }
+
   if (query instanceof StructuredQuery) {
     const topQuery = query.topLevelQuery();
     const aggregations = topQuery.aggregations();
@@ -60,7 +68,7 @@ const QuestionDescription = ({
       />
     );
   } else {
-    return <span>{t`New question`}</span>;
+    return <span>{t`New chart`}</span>;
   }
 };
 

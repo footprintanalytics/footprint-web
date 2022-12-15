@@ -17,6 +17,7 @@ interface User {
   last_name: string | null;
   common_name: string;
   email?: string;
+  avatar?: string;
 }
 
 interface Group {
@@ -35,6 +36,15 @@ function initial(name?: string | null) {
 }
 
 function userInitials(user: User | Group) {
+  if (user?.avatar) {
+    return (
+      <img
+        src={user.avatar + "?x-oss-process=image/resize,m_fill,h_120,w_120"}
+        style={{ borderRadius: "50%", width: "100%" }}
+      />
+    )
+  }
+
   if (user) {
     return nameInitials(user) || emailInitials(user as User);
   }

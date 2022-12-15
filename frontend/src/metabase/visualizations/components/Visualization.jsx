@@ -33,7 +33,6 @@ import {
   ChartSettingsError,
 } from "metabase/visualizations/lib/errors";
 
-import NoResults from "assets/img/no_results.svg";
 import { datasetContainsNoResults } from "metabase-lib/queries/utils/dataset";
 
 export const ERROR_MESSAGE_GENERIC = t`There was a problem displaying this chart.`;
@@ -43,6 +42,13 @@ import Question from "metabase-lib/Question";
 import Mode from "metabase-lib/Mode";
 import { memoizeClass } from "metabase-lib/utils";
 import { VisualizationSlowSpinner } from "./Visualization.styled";
+import TableChartInfo from "metabase/query_builder/components/TableChartInfo";
+import Link from "metabase/core/components/Link";
+import { getOssUrl } from "metabase/lib/image";
+import ErrorGuide from "metabase/query_builder/components/ErrorGuide";
+import { get } from "lodash";
+import { Avatar } from "antd";
+import "./Visualization.css";
 
 // NOTE: pass `CardVisualization` so that we don't include header when providing size to child element
 
@@ -68,6 +74,7 @@ class Visualization extends React.PureComponent {
     isEditing: false,
     isSettings: false,
     isQueryBuilder: false,
+    hideWatermark: false,
     onUpdateVisualizationSettings: () => {},
     // prefer passing in a function that doesn't cause the application to reload
     onChangeLocation: location => {
@@ -321,6 +328,7 @@ class Visualization extends React.PureComponent {
     }
   };
 
+  // eslint-disable-next-line complexity
   render() {
     const {
       actionButtons,
@@ -338,10 +346,10 @@ class Visualization extends React.PureComponent {
       replacementContent,
       onOpenChartSettings,
       onUpdateVisualizationSettings,
+      hideWatermark,
     } = this.props;
     const { visualization } = this.state;
     const small = width < 330;
-
     // these may be overridden below
     let { series, hovered, clicked } = this.state;
     let { style } = this.props;
@@ -422,7 +430,7 @@ class Visualization extends React.PureComponent {
       </span>
     );
 
-    let { gridSize, gridUnit } = this.props;
+    let { gridSize, gridUnit, dynamicParams, showDataUpdateTime } = this.props;
     if (
       !gridSize &&
       gridUnit &&
@@ -456,14 +464,51 @@ class Visualization extends React.PureComponent {
     const hasHeader =
       (showTitle &&
         hasHeaderContent &&
-        (loading || error || noResults || isHeaderEnabled)) ||
+        (error || noResults || isHeaderEnabled)) ||
       (replacementContent && (dashcard.size_y !== 1 || isMobile));
+
+    const isEditing = location.hash;
+    const isText =
+      dashcard?.visualization_settings?.virtual_card?.display === "text";
+    const isImage =
+      dashcard?.visualization_settings?.virtual_card?.display === "image";
+    const isVideo =
+      dashcard?.visualization_settings?.virtual_card?.display === "video";
+    const isPublic = location.pathname.startsWith("/public"); // iframe 里面也是 work 的，true
+
+    const cardId = get(this.props.rawSeries, 0)?.card?.id;
 
     return (
       <div
+        id="html2canvas-Card"
         className={cx(className, "flex flex-column full-height")}
-        style={style}
+        style={{ ...style, position: "relative"}}
       >
+        {!isPublic && showDataUpdateTime && !isEditing && (
+          <div className="Visualization__table-chart-info">
+            <Tooltip key="ChartInfo" tooltip={t`Chart Info`}>
+              <TableChartInfo
+                className=""
+                style={{ width: 30 }}
+                card={series && series.length > 0 ? series[0]?.card : null}
+                dashcard={dashcard}
+                tableName={dashcard?.card?.table_name}
+                tableId={
+                  series && series.length > 0 ? series[0]?.card?.table_id : null
+                }
+              />
+            </Tooltip>
+          </div>
+        )}
+        {!hideWatermark &&
+        !isText &&
+        !isImage &&
+        !isVideo &&
+        !noResults && (
+          <div className="waterMarkHome">
+            <span />
+          </div>
+        )}
         {!!hasHeader && (
           <div className="p1 flex-no-shrink">
             <ChartCaption
@@ -489,10 +534,28 @@ class Visualization extends React.PureComponent {
               (isDashboard ? "text-slate-light" : "text-slate")
             }
           >
-            <Tooltip tooltip={t`No results!`} isEnabled={small}>
+            {/*<Tooltip tooltip={t`No results!`} isEnabled={small}>
               <img data-testid="no-results-image" src={NoResults} />
             </Tooltip>
-            {!small && <span className="h4 text-bold">{t`No results!`}</span>}
+            {!small && <span className="h4 text-bold">{t`No results!`}</span>}*/}
+            <div className="noResults">
+              <h4>No results!</h4>
+              <ol>
+                <li>You can try refreshing your browser.</li>
+                <li>You can try changing your filters.</li>
+                <li>
+                  You can try contacting us on{" "}
+                  <Link
+                    href="https://discord.gg/3HYaR6USM7"
+                    rel="nofollow"
+                    target="_blank"
+                  >
+                    Discord
+                  </Link>
+                  .
+                </li>
+              </ol>
+            </div>
           </div>
         ) : error ? (
           <div
@@ -504,7 +567,15 @@ class Visualization extends React.PureComponent {
             <Tooltip tooltip={error} isEnabled={small}>
               <Icon className="mb2" name={errorIcon || "warning"} size={50} />
             </Tooltip>
-            {!small && <span className="h4 text-bold">{error}</span>}
+            {
+              <div
+                className="h4 text-bold flex-column"
+                style={{ display: small ? "none" : "" }}
+              >
+                <div>{error}</div>
+                <ErrorGuide cardId={cardId}/>
+              </div>
+            }
           </div>
         ) : loading ? (
           <div className="flex-full p1 text-centered text-brand flex flex-column layout-centered">
@@ -513,7 +584,8 @@ class Visualization extends React.PureComponent {
                 <div className="h4 text-bold mb1">{t`Still Waiting...`}</div>
                 {isSlow === "usually-slow" ? (
                   <div>
-                    {jt`This usually takes an average of ${(
+                    {expectedDuration > 0 &&
+                    jt`This usually takes an average of ${(
                       <span style={{ whiteSpace: "nowrap" }}>
                         {duration(expectedDuration)}
                       </span>
@@ -556,6 +628,7 @@ class Visualization extends React.PureComponent {
                 ? this.handleOnChangeCardAndRun
                 : null
             }
+            dynamicParams={dynamicParams}
           />
         )}
         <ChartTooltip series={series} hovered={hovered} settings={settings} />
@@ -569,10 +642,82 @@ class Visualization extends React.PureComponent {
             onUpdateVisualizationSettings={onUpdateVisualizationSettings}
           />
         )}
+        {location.pathname.startsWith("/guest/chart") && (
+          <VisualizationShareFoot location={this.props.location} />
+        )}
       </div>
     );
   }
 }
+
+export const VisualizationShareFoot = ({ location }) => {
+  let user = location?.query?.userSocial;
+
+  if (!user) return null;
+  user = JSON.parse(user);
+
+  return (
+    <div className="Visualization__share-foot">
+      <img
+        className="Visualization__share-foot-logo"
+        src={getOssUrl("img_nav_logo_v5.svg")}
+      />
+      {user ? (
+        <div className="Visualization__share-foot-user">
+          <div className="Visualization__share-foot-user-avatar">
+            {user.avatar ? (
+              <img
+                src={
+                  user.avatar + "?x-oss-process=image/resize,m_fill,h_500,w_500"
+                }
+              />
+            ) : (
+              <Avatar style={{ backgroundColor: "#E3E3FF" }}>
+                <span data-nosnippet>{String(user.name[0]).toUpperCase()}</span>
+              </Avatar>
+            )}
+            <span>{user.name}</span>
+          </div>
+          <ul className="Visualization__share-foot-user-social">
+            {user.twitter && (
+              <li>
+                <img src={getOssUrl("20220516201254.png")} />
+                <span>
+                  {user.twitter.startsWith("http")
+                    ? user.twitter.replace("https://twitter.com/", "@")
+                    : user.twitter.startsWith("@")
+                      ? user.twitter
+                      : "@" + user.twitter}
+                </span>
+              </li>
+            )}
+            {user.telegram && (
+              <li>
+                <img src={getOssUrl("20220516201327.png")} />
+                <span>
+                  {user.telegram.startsWith("@")
+                    ? user.telegram
+                    : "@" + user.telegram}
+                </span>
+              </li>
+            )}
+            {user.discord && (
+              <li>
+                <img src={getOssUrl("20220516201343.png")} />
+                <span>
+                  {user.discord.startsWith("@")
+                    ? user.discord
+                    : "@" + user.discord}
+                </span>
+              </li>
+            )}
+          </ul>
+        </div>
+      ) : null}
+    </div>
+  );
+};
+
 
 const mapStateToProps = state => ({
   fontFamily: getFont(state),

@@ -21,6 +21,7 @@
               [metabase.util.i18n :refer [trs tru]]
               [metabase.util.schema :as su]
               [schema.core :as s]
+              [metabase.task.send-pulses :as send-pulses]
               [toucan.db :as db])
     (:import java.util.UUID)
     (:import java.util.Base64))
@@ -47,7 +48,7 @@
   not met before returning the `StreamingResponse`."
   [card-id export-format
    & {:keys [parameters constraints context dashboard-id middleware qp-runner run ignore_cache]
-      :or   {constraints constraints/default-query-constraints
+      :or   {constraints (constraints/default-query-constraints)
              context     :question
              qp-runner   qp/process-query-and-save-execution!}}]
   {:pre [(u/maybe? sequential? parameters)]}
@@ -83,7 +84,6 @@
    :ignore_cache ignore_cache
    :dashboard-id dashboard_id
    :middleware {:process-viz-settings? false}))
-
 
 
 (api/define-routes)

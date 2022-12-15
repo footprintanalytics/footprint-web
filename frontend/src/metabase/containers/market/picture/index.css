@@ -1,0 +1,45 @@
+.market {
+  display: flex;
+  height: calc(100vh - 80px);
+}
+
+.market__nodata {
+  text-align: center;
+  margin-top: 100px;
+  font-size: 20px;
+}
+
+.market__item {
+  padding: 10px;
+}
+
+.market__list {
+  flex: 1;
+}
+
+.market__display {
+  flex: 2;
+  background: #f7f7f7;
+  height: 100%;
+}
+
+.market__display img {
+  width: 100%;
+}
+
+.market__create {
+  height: 30px;
+  cursor: pointer;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.market__download {
+  flex: 0.2;
+  height: 30px;
+  cursor: pointer;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}

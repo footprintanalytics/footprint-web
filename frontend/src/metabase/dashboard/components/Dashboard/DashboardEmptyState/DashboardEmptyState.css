@@ -1,0 +1,59 @@
+.AddToolPopover .ant-popover-inner-content {
+  padding: 0;
+}
+
+.AddToolPopover {
+  opacity: 0.9;
+}
+
+.AddToolPopover-content {
+  display: flex;
+  align-items: stretch;
+  padding: 10px;
+}
+
+.AddToolPopover-content-l {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  border: 1px dashed #d9d9d9;
+  border-radius: 2px;
+  flex: 1;
+  margin-right: 10px;
+  cursor: pointer;
+  padding: 0 30px;
+  height: 192px;
+  width: 192px;
+}
+
+.AddToolPopover-content-r {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+.AddToolPopover-tools .ant-btn {
+  width: 100%;
+  text-align: left;
+}
+
+.AddToolPopover-title {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.AddToolPopover-title h3 {
+  font-size: 14px;
+}
+
+.AddToolPopover-title h3 span {
+  margin-right: 10px;
+}
+
+.HiddenCreatePanel {
+  width: 0;
+  height: 0;
+  margin-top: -40px;
+}

@@ -6,6 +6,7 @@ import cx from "classnames";
 
 import Tooltip from "metabase/components/Tooltip";
 import Button from "metabase/core/components/Button";
+import { HeaderButton } from "./ViewHeader.styled";
 
 export default function QuestionNotebookButton({
   className,
@@ -19,19 +20,19 @@ export default function QuestionNotebookButton({
       tooltip={isShowingNotebook ? t`Hide editor` : t`Show editor`}
       placement="bottom"
     >
-      <Button
-        borderless={!isShowingNotebook}
+      <HeaderButton
         primary={isShowingNotebook}
-        medium
         className={cx(className, isShowingNotebook ? undefined : "text-dark", {
           "text-brand-hover": !isShowingNotebook,
         })}
-        icon="notebook"
+        icon="advanced"
         onClick={() =>
           setQueryBuilderMode(isShowingNotebook ? "view" : "notebook")
         }
         {...props}
-      />
+      >
+        {t`Advanced`}
+      </HeaderButton>
     </Tooltip>
   );
 }

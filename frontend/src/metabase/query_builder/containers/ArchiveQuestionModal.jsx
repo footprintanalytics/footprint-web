@@ -9,6 +9,12 @@ import ArchiveModal from "metabase/components/ArchiveModal";
 
 import * as Urls from "metabase/lib/urls";
 import Questions from "metabase/entities/questions";
+import { getUser } from "metabase/selectors/user";
+
+
+const mapStateToProps = state => ({
+  user: getUser(state),
+});
 
 const mapDispatchToProps = {
   archive: id => Questions.actions.setArchived({ id }, true),
@@ -16,11 +22,22 @@ const mapDispatchToProps = {
 
 class ArchiveQuestionModal extends Component {
   onArchive = () => {
-    const { question, archive, router } = this.props;
-
-    const card = question.card();
-    archive(card.id);
-    router.push(Urls.collection(card.collection));
+    const {
+      cardId,
+      question,
+      archive,
+      router,
+      otherSuccessAction,
+      user,
+    } = this.props;
+    if (cardId) {
+      archive(cardId);
+    } else {
+      const card = question.card();
+      archive(card.id);
+    }
+    otherSuccessAction && otherSuccessAction();
+    router.replace(`/@${user.name}?model=card`);
   };
 
   render() {
@@ -28,11 +45,11 @@ class ArchiveQuestionModal extends Component {
 
     const isModel = question.isDataset();
 
-    const title = isModel ? t`Archive this model?` : t`Archive this question?`;
+    const title = isModel ? t`Archive this model?` : t`Archive this chart?`;
 
     const message = isModel
       ? t`This model will be removed from any dashboards or pulses using it.`
-      : t`This question will be removed from any dashboards or pulses using it.`;
+      : t`This chart will be removed from any dashboards or pulses using it.`;
 
     return (
       <ArchiveModal
@@ -46,6 +63,6 @@ class ArchiveQuestionModal extends Component {
 }
 
 export default connect(
-  null,
+  mapStateToProps,
   mapDispatchToProps,
 )(withRouter(ArchiveQuestionModal));

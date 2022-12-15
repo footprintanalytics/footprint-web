@@ -3,12 +3,14 @@
 import React from "react";
 
 import cx from "classnames";
+import { QueryClient, QueryClientProvider } from "react-query";
 import { color } from "metabase/lib/colors";
 
 import Icon from "metabase/components/Icon";
 import LoadingSpinner from "metabase/components/LoadingSpinner";
 import ListSearchField from "metabase/components/ListSearchField";
 import { ListCellItem } from "./AccordionListCell.styled";
+const QuestionSide = React.lazy(() => import('metabase/query_builder/components/QuestionSide'));
 
 export const AccordionListCell = ({
   style,
@@ -37,6 +39,7 @@ export const AccordionListCell = ({
   getItemStyles,
   searchInputProps,
   hasCursor,
+  selectedDatabaseId,
 }) => {
   const { type, section, sectionIndex, item, itemIndex, isLastItem } = row;
   let content;
@@ -99,7 +102,7 @@ export const AccordionListCell = ({
   } else if (type === "search") {
     content = (
       <ListSearchField
-        autoFocus
+        autoFocus={false}
         hasClearButton
         className="bg-white m1"
         onChange={onChangeSearchText}
@@ -107,6 +110,25 @@ export const AccordionListCell = ({
         placeholder={searchPlaceholder}
         {...searchInputProps}
       />
+    );
+  } else if (type === "tree") {
+    const queryClient = new QueryClient();
+    content = (
+      <QueryClientProvider client={queryClient}>
+        <QuestionSide
+          formDataSelector
+          dbId={selectedDatabaseId}
+          selectTableAction={({ tableId, tableName, columnName }) =>
+            onChange({
+              table: {
+                id: tableId,
+                tableName,
+                columnName,
+              },
+            })
+          }
+        />
+      </QueryClientProvider>
     );
   } else if (type === "item") {
     const isSelected = itemIsSelected(item, itemIndex);
@@ -120,6 +142,7 @@ export const AccordionListCell = ({
         role="option"
         aria-selected={isSelected}
         isClickable={isClickable}
+        id={`accordionList-item-${itemIndex}`}
         className={cx(
           "List-item flex mx1",
           {

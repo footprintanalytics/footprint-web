@@ -1,9 +1,10 @@
 /* eslint-disable react/prop-types */
-import React from "react";
+import React, { useState, useEffect } from "react";
 import _ from "underscore";
 import { t } from "ttag";
 import Icon from "metabase/components/Icon";
 import SidebarContent from "metabase/query_builder/components/SidebarContent";
+import "./ChartSidebar.css";
 
 import visualizations from "metabase/visualizations";
 import {
@@ -12,13 +13,40 @@ import {
   OptionRoot,
   OptionText,
 } from "./ChartTypeOption.styled";
+import NeedPermissionModal from "metabase/components/NeedPermissionModal";
+import Link from "metabase/core/components/Link";
 
 const FIXED_LAYOUT = [
-  ["line", "bar", "combo", "area", "row", "waterfall"],
-  ["scatter", "pie", "funnel", "smartscalar", "progress", "gauge"],
-  ["scalar", "table", "pivot", "map"],
+  [
+    "table",
+    "line",
+    "bar",
+    "area",
+    "smartscalar",
+    "pie",
+    "combo",
+    "scalar",
+    "rose",
+  ],
+  ["scatter", "funnel", "progress", "gauge", "row", "waterfall"],
+  [
+    "pivot",
+    "map",
+    "rowrace",
+    "linerace",
+    "circle",
+    "treemap",
+    "dynamicpie",
+    "sunburst",
+    "nestedpies",
+    "bubble",
+    "barstack",
+    "doublescalar",
+    "graph",
+  ],
 ];
 const FIXED_TYPES = new Set(_.flatten(FIXED_LAYOUT));
+const TOP_TYPES = new Set(FIXED_LAYOUT[0]);
 
 const ChartTypeSidebar = ({
   question,
@@ -30,6 +58,7 @@ const ChartTypeSidebar = ({
   setUIControls,
   ...props
 }) => {
+  const [showMore, setShowMore] = useState(false);
   const other = Array.from(visualizations)
     .filter(
       ([type, visualization]) =>
@@ -39,16 +68,30 @@ const ChartTypeSidebar = ({
   const otherGrouped = Object.values(
     _.groupBy(other, (_, index) => Math.floor(index / 4)),
   );
-
   const layout = [...FIXED_LAYOUT, ...otherGrouped];
+  const [showVip, setShowVip] = useState(false);
+
+  if (
+    !props?.user?.groups?.find(f =>
+      ["staff", "inner", "admin"].includes(String(f).toLocaleLowerCase()),
+    )
+  ) {
+    layout[2] = layout[2].filter(f => f !== "graph");
+  }
+
+  useEffect(() => {
+    if (question && !showMore && !TOP_TYPES.has(question.display())) {
+      setShowMore(true);
+    }
+  }, [question, showMore]);
 
   return (
     <SidebarContent
-      className="full-height px1"
-      title={t`Choose a visualization`}
-      onDone={onCloseChartType}
+      className="full-height chart-side-bar__char-type"
+      // title={t`Choose a visualization`}
+      // onDone={onCloseChartType}
     >
-      {layout.map((row, index) => (
+      {layout.slice(0, showMore ? layout.length : 1).map((row, index) => (
         <OptionList key={index}>
           {row.map(type => {
             const visualization = visualizations.get(type);
@@ -82,6 +125,20 @@ const ChartTypeSidebar = ({
           })}
         </OptionList>
       ))}
+      {!showMore && (
+        <div className="text-centered w-full" onClick={() => setShowMore(true)}>
+          <Link className="flex justify-center align-center cursor-pointer p1">
+            <Icon name="search_arrow_up" size={12} />
+            <div className="ml1">More</div>
+          </Link>
+        </div>
+      )}
+      {showVip && (
+        <NeedPermissionModal
+          title="Upgrade your account to access more Advanced Charting"
+          onClose={() => setShowVip(false)}
+        />
+      )}
     </SidebarContent>
   );
 };

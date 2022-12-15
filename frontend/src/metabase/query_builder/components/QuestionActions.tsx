@@ -163,13 +163,13 @@ const QuestionActions = ({
   }
 
   if (canWrite) {
-    extraButtons.push({
+    /*extraButtons.push({
       title: t`Move`,
       icon: "move",
       action: () => onOpenModal(MODAL_TYPES.MOVE),
       testId: MOVE_TESTID,
-    });
-    if (!isDataset && !isAction) {
+    });*/
+/*    if (!isDataset && !isAction) {
       extraButtons.push({
         title: t`Turn into a model`,
         icon: "model",
@@ -183,8 +183,8 @@ const QuestionActions = ({
         icon: "model_framed",
         action: turnDatasetIntoQuestion,
       });
-    }
-    if (isSaved && isNative && !isDataset) {
+    }*/
+    /*if (isSaved && isNative && !isDataset) {
       extraButtons.push({
         title: isAction
           ? t`Turn back to saved question`
@@ -192,21 +192,21 @@ const QuestionActions = ({
         icon: "bolt",
         action: isAction ? turnActionIntoQuestion : turnQuestionIntoAction,
       });
-    }
+    }*/
   }
 
-  if (!question.query().readOnly()) {
+  /*if (!question.query().readOnly()) {
     extraButtons.push({
       title: t`Duplicate`,
       icon: "segment",
       action: () => onOpenModal(MODAL_TYPES.CLONE),
       testId: CLONE_TESTID,
     });
-  }
+  }*/
 
   if (canWrite) {
     extraButtons.push({
-      title: t`Archive`,
+      title: t`Delete`,
       icon: "view_archive",
       action: () => onOpenModal(MODAL_TYPES.ARCHIVE),
       testId: ARCHIVE_TESTID,
@@ -216,14 +216,14 @@ const QuestionActions = ({
   return (
     <>
       <QuestionActionsDivider />
-      <Tooltip tooltip={bookmarkTooltip}>
+      {/*<Tooltip tooltip={bookmarkTooltip}>
         <BookmarkToggle
           onCreateBookmark={handleBookmark}
           onDeleteBookmark={handleBookmark}
           isBookmarked={isBookmarked}
         />
-      </Tooltip>
-      <Tooltip tooltip={t`More info`}>
+      </Tooltip>*/}
+      {/*<Tooltip tooltip={t`More info`}>
         <ViewHeaderIconButtonContainer>
           <Button
             onlyIcon
@@ -234,7 +234,7 @@ const QuestionActions = ({
             data-testId="qb-header-info-button"
           />
         </ViewHeaderIconButtonContainer>
-      </Tooltip>
+      </Tooltip>*/}
       <EntityMenu
         items={extraButtons}
         triggerIcon="ellipsis"

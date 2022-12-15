@@ -34,7 +34,7 @@ export function expandInlineDashboard(dashboard) {
     name: "",
     parameters: [],
     ...dashboard,
-    ordered_cards: dashboard.ordered_cards.map(dashcard => ({
+    ordered_cards: dashboard?.ordered_cards?.map(dashcard => ({
       visualization_settings: {},
       parameter_mappings: [],
       ...dashcard,
@@ -74,13 +74,13 @@ export function showVirtualDashCardInfoText(dashcard, isMobile) {
 
 export function getNativeDashCardEmptyMappingText(parameter) {
   if (isDateParameter(parameter)) {
-    return t`Add a date variable to this question to connect it to a dashboard filter.`;
+    return t`Add a date variable to this chart to connect it to a dashboard filter.`;
   } else if (isNumberParameter(parameter)) {
-    return t`Add a number variable to this question to connect it to a dashboard filter.`;
+    return t`Add a number variable to this chart to connect it to a dashboard filter.`;
   } else if (isStringParameter(parameter)) {
-    return t`Add a string variable to this question to connect it to a dashboard filter.`;
+    return t`Add a string variable to this chart to connect it to a dashboard filter.`;
   } else {
-    return t`Add a variable to this question to connect it to a dashboard filter.`;
+    return t`Add a variable to this chart to connect it to a dashboard filter.`;
   }
 }
 
@@ -96,7 +96,9 @@ export function getAllDashboardCards(dashboard) {
 }
 
 export function getDashboardType(id) {
-  if (id == null || typeof id === "object") {
+  if (id === "new") {
+    return "new";
+  } else if (id == null || typeof id === "object") {
     // HACK: support inline dashboards
     return "inline";
   } else if (Utils.isUUID(id)) {

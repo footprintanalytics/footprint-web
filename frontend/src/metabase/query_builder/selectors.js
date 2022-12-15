@@ -939,6 +939,7 @@ export const getAutocompleteResultsFn = state => {
 
     const apiCall = MetabaseApi.db_autocomplete_suggestions({
       dbId,
+      prefix: query,
       query,
       matchStyle,
     });

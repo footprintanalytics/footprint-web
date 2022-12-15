@@ -19,7 +19,7 @@ export default class ChannelSetupMessage extends Component {
   render() {
     const { user, channels } = this.props;
     let content;
-    if (user.is_superuser) {
+    if (user?.is_superuser) {
       content = (
         <div>
           {channels.map(c => (

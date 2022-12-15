@@ -18,6 +18,7 @@ export const ENTITY = "ENTITY";
 export const SUMMABLE = "SUMMABLE";
 export const SCOPE = "SCOPE";
 export const CATEGORY = "CATEGORY";
+export const SERIES_CATEGORY = "SERIES_CATEGORY";
 export const DIMENSION = "DIMENSION";
 
 export const UNKNOWN = "UNKNOWN";
@@ -71,6 +72,12 @@ export const TYPE_HIERARCHIES = {
     exclude: [LOCATION],
   },
   [CATEGORY]: {
+    base: [TYPE.Boolean],
+    effective: [TYPE.Boolean],
+    semantic: [TYPE.Category],
+    include: [LOCATION],
+  },
+  [SERIES_CATEGORY]: {
     base: [TYPE.Boolean],
     effective: [TYPE.Boolean],
     semantic: [TYPE.Category],

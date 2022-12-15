@@ -1,5 +1,8 @@
 import { assocIn } from "icepick";
 import { t } from "ttag";
+import { getProject } from "metabase/lib/project_info";
+import validate from "metabase/lib/validate";
+import { message } from "antd";
 import {
   compose,
   withAction,
@@ -13,7 +16,7 @@ import { color } from "metabase/lib/colors";
 
 import { addUndo } from "metabase/redux/undo";
 
-import { POST, DELETE } from "metabase/lib/api";
+import { POST, DELETE, PUT } from "metabase/lib/api";
 import {
   getCollectionType,
   normalizedCollection,
@@ -37,16 +40,18 @@ const Dashboards = createEntity({
   api: {
     favorite: POST("/api/dashboard/:id/favorite"),
     unfavorite: DELETE("/api/dashboard/:id/favorite"),
-    save: POST("/api/dashboard/save"),
-    copy: POST("/api/dashboard/:id/copy"),
+    save: POST("/api/v1/dashboard/save"),
+    copy: POST("/api/v1/dashboard/:id/copy"),
+    create: POST("/api/v1/dashboard"),
+    update: PUT("/api/v1/dashboard/:id"),
   },
 
   objectActions: {
-    setArchived: ({ id }, archived, opts) =>
+    setArchived: ({ id, name }, archived, opts) =>
       Dashboards.actions.update(
         { id },
-        { archived },
-        undo(opts, "dashboard", archived ? "archived" : "unarchived"),
+        { archived, name },
+        // undo(opts, "dashboard", archived ? "archived" : "unarchived"),
       ),
 
     setCollection: ({ id }, collection, opts) =>
@@ -93,10 +98,17 @@ const Dashboards = createEntity({
           const result = Dashboards.normalize(
             await Dashboards.api.copy({
               id: entityObject.id,
+              project: getProject(),
               ...overrides,
-              is_deep_copy: !overrides.is_shallow_copy,
+              is_deep_copy: false,
+              // is_deep_copy: !overrides.is_shallow_copy,
             }),
           );
+          console.log("copy")
+          if (result && result.object && result.object.code === -1) {
+            result.object.message && message.error(result.object.message);
+            throw { data: result.object.message };
+          }
           if (notify) {
             dispatch(addUndo(notify));
           }
@@ -108,6 +120,7 @@ const Dashboards = createEntity({
 
   actions: {
     save: dashboard => async dispatch => {
+      console.log("dashboard actions save")
       const savedDashboard = await Dashboards.api.save(dashboard);
       dispatch({ type: Dashboards.actionTypes.INVALIDATE_LISTS_ACTION });
       return {

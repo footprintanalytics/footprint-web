@@ -1,4 +1,4 @@
-import React, { useCallback, useMemo, useState } from "react";
+import React, { useCallback, useMemo, useState, useEffect } from "react";
 import _ from "underscore";
 import { connect } from "react-redux";
 
@@ -11,6 +11,10 @@ import Collections from "metabase/entities/collections";
 import { entityListLoader } from "metabase/entities/containers/EntityListLoader";
 import { entityObjectLoader } from "metabase/entities/containers/EntityObjectLoader";
 import { isRootCollection } from "metabase/collections/utils";
+
+import { getPersonalCollectionId } from "metabase/lib/collection";
+import { getUser } from "metabase/home/selectors";
+import { getProject } from "metabase/lib/project_info";
 
 import type { Collection } from "metabase-types/api";
 import type { State } from "metabase-types/store";
@@ -25,6 +29,7 @@ import type {
 
 import ItemPickerView from "./ItemPickerView";
 import { ScrollAwareLoadingAndErrorWrapper } from "./ItemPicker.styled";
+import { useOnMount } from "../../hooks/use-on-mount";
 
 interface OwnProps {
   value?: PickerValue;
@@ -35,6 +40,7 @@ interface OwnProps {
   className?: string;
   style?: React.CSSProperties;
   onChange: (value: PickerValue) => void;
+  user: any;
 }
 
 interface StateProps {
@@ -51,11 +57,23 @@ function canWriteToCollectionOrChildren(collection: Collection) {
   );
 }
 
+const createEntityQuery = (state: any, props: any) => {
+  return {
+    project: getProject(),
+    ...(props.models && props.models.includes("dashboard")
+      ? { queryType: "dashboard" }
+      : {}),
+  };
+};
+
 function mapStateToProps(state: State, props: OwnProps) {
   const entity = props.entity || Collections;
   return {
-    collectionsById: entity.selectors.getExpandedCollectionsById(state),
+    collectionsById: entity.selectors.getExpandedCollectionsById(state, {
+      collectionsIdsKey: JSON.stringify(createEntityQuery(state, props)),
+    }),
     getCollectionIcon: entity.objectSelectors.getIcon,
+    user: getUser(state),
   };
 }
 
@@ -83,6 +101,7 @@ function ItemPicker({
   style,
   onChange,
   getCollectionIcon,
+  user,
 }: Props) {
   const [openCollectionId, setOpenCollectionId] =
     useState<Collection["id"]>("root");
@@ -96,13 +115,13 @@ function ItemPicker({
     let list = openCollection?.children || [];
 
     // show root in itself if we can pick it
-    if (
+    /*if (
       openCollection &&
       isRootCollection(openCollection) &&
       models.includes("collection")
     ) {
       list = [openCollection, ...list];
-    }
+    }*/
 
     const collectionItems = list
       .filter(canWriteToCollectionOrChildren)
@@ -180,7 +199,7 @@ function ItemPicker({
       const collection = item.collection_id
         ? collectionsById[item.collection_id]
         : collectionsById["root"];
-      return collection.can_write;
+      return collection && collection.can_write;
     },
     [models, collectionsById],
   );
@@ -202,6 +221,46 @@ function ItemPicker({
   const handleCollectionOpen = useCallback(collectionId => {
     setOpenCollectionId(collectionId);
   }, []);
+
+  const initDashboardAndCardParentId = () => {
+    if (
+      (models.includes("dashboard") || models.includes("card")) &&
+      collectionsById
+    ) {
+      setOpenCollectionId(getPersonalCollectionId(user));
+    }
+  }
+
+  const initCollectionParentId = () => {
+    let parentId: any = openCollectionId;
+    if (!value) {
+      return;
+    }
+    const { model, id } = value;
+    if (model !== "collection") {
+      return;
+    }
+    if (id && collections) {
+      const location = collectionsById[id]?.location;
+      if (location && location !== "/") {
+        const words = location.split("/");
+        if (words && words.length > 1) {
+          parentId = words[words.length - 2];
+          setOpenCollectionId(parentId);
+        }
+      }
+    }
+  }
+
+  useOnMount(() => {
+    initCollectionParentId();
+    initDashboardAndCardParentId();
+  })
+
+  /*useEffect(() => {
+    initCollectionParentId();
+    initDashboardAndCardParentId();
+  }, [collections]);*/
 
   return (
     <ScrollAwareLoadingAndErrorWrapper
@@ -234,10 +293,12 @@ export default _.compose(
   entityObjectLoader({
     id: "root",
     entityType: getEntityLoaderType,
+    entityQuery: (state: any, props: any) => createEntityQuery(state, props),
     loadingAndErrorWrapper: false,
   }),
   entityListLoader({
     entityType: getEntityLoaderType,
+    entityQuery: (state: any, props: any) => createEntityQuery(state, props),
     loadingAndErrorWrapper: false,
   }),
   connect(mapStateToProps),

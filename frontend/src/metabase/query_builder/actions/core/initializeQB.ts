@@ -341,7 +341,11 @@ async function handleQBInit(
     },
   });
 
-  if (uiControls.queryBuilderMode !== "notebook") {
+  if (
+    question &&
+    uiControls.queryBuilderMode !== "notebook" &&
+    !location.pathname.includes("/chart/buffet")
+  ) {
     if (question.canRun() && (question.isSaved() || question.isStructured())) {
       // Timeout to allow Parameters widget to set parameterValues
       setTimeout(

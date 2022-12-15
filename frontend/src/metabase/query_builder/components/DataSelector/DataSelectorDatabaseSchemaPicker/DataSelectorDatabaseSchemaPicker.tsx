@@ -56,7 +56,7 @@ const DataSelectorDatabaseSchemaPicker = ({
   }
 
   const sections: Sections = databases.map(database => ({
-    name: database.is_saved_questions ? t`Saved Questions` : database.name,
+    name: database.is_saved_questions ? t`Saved Charts` : database.name,
     items:
       !database.is_saved_questions && database.schemas.length > 1
         ? database.schemas.map(schema => ({
@@ -98,12 +98,12 @@ const DataSelectorDatabaseSchemaPicker = ({
   const renderSectionIcon = ({ icon }: { icon?: string }) =>
     icon && <Icon className="Icon text-default" name={icon} size={18} />;
 
-  if (hasBackButton) {
+  /*if (hasBackButton) {
     sections.unshift({
       name: <RawDataBackButton />,
       active: true,
     });
-  }
+  }*/
 
   let openSection = selectedSchema
     ? databases.findIndex(db => db.id === selectedSchema.database.id)
@@ -122,6 +122,7 @@ const DataSelectorDatabaseSchemaPicker = ({
       className="text-brand"
       hasInitialFocus={hasInitialFocus}
       sections={sections}
+      searchable={false}
       onChange={({ schema }: any) => onChangeSchema(schema)}
       onChangeSection={handleChangeSection}
       itemIsSelected={(schema: Schema) => schema === selectedSchema}

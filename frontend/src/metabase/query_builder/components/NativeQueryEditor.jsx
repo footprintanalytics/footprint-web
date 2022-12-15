@@ -46,6 +46,9 @@ import {
 
 import "./NativeQueryEditor.css";
 import { NativeQueryEditorRoot } from "./NativeQueryEditor.styled";
+import NativeVariablesButton from "metabase/query_builder/components/view/NativeVariablesButton";
+import SnippetSidebarButton from "metabase/query_builder/components/view/SnippetSidebarButton";
+import DarkModeButton from "metabase/query_builder/components/view/DarkModeButton";
 
 const AUTOCOMPLETE_DEBOUNCE_DURATION = 700;
 const AUTOCOMPLETE_CACHE_DURATION = AUTOCOMPLETE_DEBOUNCE_DURATION * 1.2; // tolerate 20%
@@ -511,8 +514,9 @@ class NativeQueryEditor extends Component {
       resizable,
       requireWriteback = false,
       setDatasetQuery,
+      darkMode,
+      snippets,
     } = this.props;
-
     const parameters = query.question().parameters();
 
     const dragHandle = resizable ? (
@@ -525,8 +529,17 @@ class NativeQueryEditor extends Component {
       collection => collection.can_write,
     );
 
+    // const showSnippetSidebarButton = !(
+    //   snippets?.length === 0 &&
+    //   snippetCollections?.length === 1 &&
+    //   !snippetCollections[0].can_write
+    // );
+    console.log("darkMode", darkMode)
+
+    const showDarkModeButton = true;
+
     return (
-      <NativeQueryEditorRoot className="NativeQueryEditor bg-light full">
+      <NativeQueryEditorRoot className={cx("NativeQueryEditor bg-light full", { DarkMode: darkMode })}>
         {hasTopBar && (
           <div className="flex align-center" data-testid="native-query-top-bar">
             <div className={!isNativeEditorOpen ? "hide sm-show" : ""}>
@@ -539,6 +552,24 @@ class NativeQueryEditor extends Component {
                 requireWriteback={requireWriteback}
               />
             </div>
+            {isNativeEditorOpen && (
+              <div className="flex flex-row align-center mr3 flex-align-right ">
+                {/*<div className="mt1">
+                <DataReferenceButton {...this.props} />
+              </div>*/}
+                <NativeVariablesButton {...this.props} size={18}/>
+                {/*{showSnippetSidebarButton && (
+                  <div className="ml2">
+                    <SnippetSidebarButton {...this.props} size={18}/>
+                  </div>
+                )}*/}
+                {showDarkModeButton && (
+                  <DarkModeButton {...this.props} size={18}/>
+                )}
+              </div>
+            )}
+
+
             {hasParametersList && (
               <ResponsiveParametersList
                 parameters={parameters}
@@ -595,12 +626,12 @@ class NativeQueryEditor extends Component {
               closeModal={this.props.closeSnippetModal}
             />
           )}
-          {hasEditingSidebar && !readOnly && (
+          {/*{hasEditingSidebar && !readOnly && (
             <NativeQueryEditorSidebar
               runQuery={this.runQuery}
               {...this.props}
             />
-          )}
+          )}*/}
         </ResizableBox>
       </NativeQueryEditorRoot>
     );

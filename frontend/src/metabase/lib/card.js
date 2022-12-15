@@ -3,6 +3,7 @@ import Utils from "metabase/lib/utils";
 import { b64hash_to_utf8, utf8_to_b64url } from "metabase/lib/encoding";
 import Questions from "metabase/entities/questions";
 import * as Q_DEPRECATED from "metabase-lib/queries/utils";
+import { CardApi } from "metabase/services";
 
 export function createCard(name = null) {
   return {
@@ -37,8 +38,17 @@ export async function loadCard(cardId, { dispatch, getState }) {
   }
 }
 
+export async function loadCardForPreview(cardId) {
+  try {
+    return await CardApi.get({ cardId: cardId });
+  } catch (error) {
+    console.log("error loading card", error);
+    throw error;
+  }
+}
+
 function getCleanCard(card) {
-  const dataset_query = Utils.copy(card.dataset_query);
+  const dataset_query = Utils.copy(card.dataset_query || {});
   if (dataset_query.query) {
     dataset_query.query = Q_DEPRECATED.cleanQuery(dataset_query.query);
   }

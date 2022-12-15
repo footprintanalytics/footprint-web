@@ -115,6 +115,7 @@ export default _.compose(
     id: () => "root",
     entityType: "collections",
     loadingAndErrorWrapper: false,
+    entityQuery: () => ({ project: getProject() }),
   }),
   entityListLoader({
     entityType: "collections",
@@ -123,7 +124,9 @@ export default _.compose(
   connect((state, props) => ({
     collectionsById: (
       props.entity || Collections
-    ).selectors.getExpandedCollectionsById(state),
+    ).selectors.getExpandedCollectionsById(state, {
+      collectionsIdsKey: JSON.stringify({ project: getProject() }),
+    }),
     getCollectionIcon: (props.entity || Collections).objectSelectors.getIcon,
   })),
 )(QuestionPicker);

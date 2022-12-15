@@ -21,10 +21,17 @@ import { fetchDatabaseMetadata } from "metabase/redux/metadata";
 import { getIsNavbarOpen, setErrorPage } from "metabase/redux/app";
 
 import { getDatabases, getMetadata } from "metabase/selectors/metadata";
+import QueryCopyModal from "metabase/components/QueryCopyModal";
 import {
   getUserIsAdmin,
   canManageSubscriptions,
+  getUser,
 } from "metabase/selectors/user";
+
+import {
+  loginModalShowAction,
+  setIsCancelFeedbackBlockAction,
+} from "metabase/redux/control";
 
 import { getEmbedOptions } from "metabase/selectors/embed";
 
@@ -34,7 +41,9 @@ import * as Urls from "metabase/lib/urls";
 import Dashboards from "metabase/entities/dashboards";
 
 import DataAppContext from "metabase/writeback/containers/DataAppContext";
+import { replaceTemplateCardUrl } from "metabase/guest/utils";
 import * as dashboardActions from "../actions";
+import { toggleSidebar } from "../actions";
 import {
   getIsEditing,
   getIsSharing,
@@ -98,6 +107,9 @@ const mapStateToProps = (state, props) => {
     isHeaderVisible: getIsHeaderVisible(state),
     isAdditionalInfoVisible: getIsAdditionalInfoVisible(state),
     embedOptions: getEmbedOptions(state),
+    urlDashboardName: props.params.dashboardName,
+    urlUserName: props.params.name,
+    user: getUser(state),
   };
 };
 
@@ -107,18 +119,22 @@ const mapDispatchToProps = {
   fetchDatabaseMetadata,
   setErrorPage,
   onChangeLocation: push,
+  setLoginModalShow: loginModalShowAction,
+  setIsCancelFeedbackBlockAction,
+  toggleSidebar,
 };
 
-// NOTE: should use DashboardControls and DashboardData HoCs here?
+// NOTE: should use DashboardControls and DashboardData HoCs here0?
 const DashboardApp = props => {
   const options = parseHashOptions(window.location.hash);
-
   const { isRunning, isLoadingComplete, dashboard } = props;
 
   const [editingOnLoad] = useState(options.edit);
   const [addCardOnLoad] = useState(options.add && parseInt(options.add));
 
   const [isShowingToaster, setIsShowingToaster] = useState(false);
+
+  const [cardInfo, setCardInfo] = useState(null);
 
   const onTimeout = useCallback(() => {
     if ("Notification" in window && Notification.permission === "default") {
@@ -160,17 +176,50 @@ const DashboardApp = props => {
     setIsShowingToaster(false);
   }, []);
 
+  const duplicateAction = async item => {
+    if (props.user) {
+      setCardInfo({
+        cardId: item.id,
+        cardName: item.name,
+      });
+    } else {
+      props.setLoginModalShow({
+        show: true,
+        from: "publicDashboard_query_duplicate",
+      });
+    }
+  };
+
+  const previewAction = (cardId) => {
+    if (props.user) {
+      replaceTemplateCardUrl(props, cardId);
+    } else {
+      props.setLoginModalShow({
+        show: true,
+        from: "publicDashboard_query_preview",
+      });
+    }
+  };
+
   return (
     <DataAppContext>
       <div className="shrink-below-content-size full-height">
         <Dashboard
           editingOnLoad={editingOnLoad}
           addCardOnLoad={addCardOnLoad}
+          duplicateAction={duplicateAction}
+          previewAction={previewAction}
           {...props}
+        />
+        <QueryCopyModal
+          open={cardInfo?.cardId}
+          cardId={cardInfo?.cardId}
+          name={cardInfo?.cardName}
+          onClose={() => setCardInfo(null)}
         />
         {/* For rendering modal urls */}
         {props.children}
-        <Toaster
+        {/*<Toaster
           message={
             dashboard?.is_app_page
               ? t`Would you like to be notified when this page is done loading?`
@@ -180,7 +229,7 @@ const DashboardApp = props => {
           onDismiss={onDismissToast}
           onConfirm={onConfirmToast}
           fixed
-        />
+        />*/}
       </div>
     </DataAppContext>
   );

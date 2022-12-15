@@ -70,7 +70,6 @@ export const HeaderContainer = styled.header`
     !isDataApp &&
     css`
       background-color: ${color("bg-white")};
-      border-bottom: 1px solid ${color("border")};
     `}
 
   ${({ isFullscreen }) =>
@@ -95,13 +94,12 @@ export const ParametersAndCardsContainer = styled.div`
 
 export const ParametersWidgetContainer = styled(FullWidthContainer)`
   align-items: flex-start;
-  background-color: ${color("bg-light")};
+  background-color: white;
   border-bottom: 1px solid ${color("bg-light")};
   display: flex;
   flex-direction: column;
-  padding-top: ${space(2)};
-  padding-bottom: ${space(1)};
   z-index: 3;
+  padding: 12px 0 6px;
 
   ${({ isEditing }) =>
     isEditing &&
@@ -138,6 +136,7 @@ export const ParametersWidgetContainer = styled(FullWidthContainer)`
 `;
 
 export const CardsContainer = styled(FullWidthContainer)`
+  padding-top: 12px;
   ${({ addMarginTop }) =>
     addMarginTop &&
     css`

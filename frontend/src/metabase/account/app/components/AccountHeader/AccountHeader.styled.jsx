@@ -12,9 +12,9 @@ export const AccountHeaderRoot = styled.div`
   display: flex;
   flex-direction: column;
   justify-content: center;
-  align-items: center;
+  align-items: flex-start;
   padding-top: ${space(1)};
-  border-bottom: 1px solid ${color("border")};
+  //border-bottom: 1px solid ${color("border")};
   background-color: ${color("white")};
 
   ${breakpointMinSmall} {

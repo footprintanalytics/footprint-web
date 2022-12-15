@@ -12,5 +12,6 @@ export * from "./formatting/strings";
 export * from "./formatting/time";
 export * from "./formatting/url";
 export * from "./formatting/value";
+export * from "./formatting/footprint";
 
 export const FK_SYMBOL = "→";
