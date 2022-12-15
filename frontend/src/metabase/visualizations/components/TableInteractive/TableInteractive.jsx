@@ -480,6 +480,9 @@ class TableInteractive extends Component {
 
   onKeyDown = event => {
     const detailEl = this.detailShortcutRef.current;
+    if (!detailEl) {
+      return ;
+    }
     const visibleDetailButton =
       !!detailEl && Array.from(detailEl.classList).includes("show") && detailEl;
     const canViewRowDetail = !this.props.isPivoted && !!visibleDetailButton;
@@ -937,7 +940,7 @@ class TableInteractive extends Component {
   };
 
   handleLeaveRow = () => {
-    this.detailShortcutRef.current.classList.remove("show");
+    this.detailShortcutRef.current?.classList.remove("show");
   };
 
   handleOnMouseEnter = () => {
