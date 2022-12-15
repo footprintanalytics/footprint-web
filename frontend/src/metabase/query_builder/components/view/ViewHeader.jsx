@@ -70,7 +70,7 @@ import Favorite from "../../../containers/explore/components/Favorite";
 import QueryDownloadWidget from "../QueryDownloadWidget";
 import QuestionEmbedWidget from "../../containers/QuestionEmbedWidget";
 import QueryMoreWidget from "../QueryMoreWidget";
-import { updateQuestion } from "../../actions";
+import { onCloseSidebars, updateQuestion } from "../../actions";
 import QueryDownloadWidgetFP from "../QueryDownloadWidgetFP";
 
 const viewTitleHeaderPropTypes = {
@@ -108,10 +108,11 @@ const viewTitleHeaderPropTypes = {
   questionSideHideAction: PropTypes.func,
   closeNewGuide: PropTypes.func,
   card: PropTypes.object,
+  onCloseSidebars: PropTypes.func,
 };
 
 export function ViewTitleHeader(props) {
-  const { question, className, style, isNavBarOpen, updateQuestion, isRunnable, router, originalQuestion, card } = props;
+  const { question, className, style, isNavBarOpen, updateQuestion, isRunnable, router, originalQuestion, card, onCloseSidebars } = props;
 
   const [
     areFiltersExpanded,
@@ -169,6 +170,7 @@ export function ViewTitleHeader(props) {
           trackStructEvent(`click Save edit chart`);
           onOpenModal("save");
           closeNewGuide({ key: "saveChart" });
+          onCloseSidebars();
         }}
         className=" Button Button--edit-save Button--primary Button--small"
         normalText={t`Save`}
