@@ -122,11 +122,7 @@ export const GRAPH_DATA_SETTINGS = {
             vizSettings["graph._metric_filter"],
           ),
       ),
-    getDefault: (series, vizSettings) =>
-      preserveExistingColumnsOrder(
-        vizSettings["graph.dimensions"] ?? [],
-        getDefaultColumns(series).dimensions,
-      ),
+    getDefault: (series, vizSettings) => getDefaultColumns(series).dimensions,
     persistDefault: true,
     getProps: ([{ card, data }], vizSettings) => {
       const addedDimensions = vizSettings["graph.dimensions"];
@@ -139,7 +135,7 @@ export const GRAPH_DATA_SETTINGS = {
         addAnother:
           options.length > addedDimensions.length &&
           addedDimensions.length < maxDimensionsSupported &&
-          vizSettings["graph.metrics"].length < 2
+          vizSettings["graph.metrics"].length < 3
             ? t`Add series breakout`
             : null,
         columns: data.cols,
@@ -212,12 +208,13 @@ export const GRAPH_DATA_SETTINGS = {
     getDefault: series => getDefaultColumns(series).metrics,
     persistDefault: true,
     getProps: ([{ card, data }], vizSettings, _onChange, extra) => {
+      const value = vizSettings["graph.dimensions"];
       const options = data.cols
         .filter(vizSettings["graph._metric_filter"])
         .map(getOptionFromColumn);
 
       const addedMetrics = vizSettings["graph.metrics"];
-      const hasBreakout = vizSettings["graph.dimensions"].length > 1;
+      const hasBreakout = vizSettings["graph.dimensions"].length > 2;
       const addedMetricsCount = addedMetrics.length;
       const maxMetricsSupportedCount = getMaxMetricsSupported(card.display);
 
@@ -540,9 +537,10 @@ export const GRAPH_AXIS_SETTINGS = {
       options: [
         { name: t`Hide`, value: false },
         { name: t`Show`, value: true },
+        { name: t`Compact`, value: "compact" },
       ],
     },
-    default: true,
+    default: "compact",
   },
   "graph.y_axis.auto_range": {
     section: t`Axes`,
@@ -580,7 +578,14 @@ export const GRAPH_AXIS_SETTINGS = {
     title: t`Split y-axis when necessary`,
     widget: "toggle",
     inline: true,
-    default: true,
+    getDefault: p => {
+      // Compatible with chart default dual-axis, new default single-axis
+      return (
+        !!p?._raw[0]?.card?.id ||
+        !!p?._raw[0]?.card?.original_card_id ||
+        p?._raw[0]?.card?.create_method === "preview"
+      );
+    },
     getHidden: series => series.length < 2,
   },
   "graph.x_axis.labels_enabled": {

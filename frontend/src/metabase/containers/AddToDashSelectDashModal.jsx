@@ -55,11 +55,11 @@ class AddToDashSelectDashModal extends Component {
           title={
             this.props.card.dataset
               ? t`Add this model to a dashboard`
-              : t`Add this question to a dashboard`
+              : t`Add this chart to a dashboard`
           }
           onClose={this.props.onClose}
         >
-          <DashboardPicker onChange={this.onDashboardSelected} />
+          <DashboardPicker onChange={this.onDashboardSelected} showSearch={false}/>
           <Link
             mt={1}
             onClick={() => this.setState({ shouldCreateDashboard: true })}
