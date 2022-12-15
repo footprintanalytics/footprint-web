@@ -1,9 +1,8 @@
 /* eslint-disable react/prop-types */
 
 import React, { useEffect, useState } from "react";
-import { Box, Flex } from "grid-styled";
 import { connect } from "react-redux";
-import Button from "metabase/components/Button";
+import Button from "metabase/core/components/Button";
 import Icon from "metabase/components/Icon";
 import Switch from "react-switch";
 import { Divider, message } from "antd";
@@ -16,7 +15,7 @@ import { getOssUrl } from "metabase/lib/image";
 import PaymentModal from "metabase/pricing/compoment/PaymentModal";
 import PaymentCallbackModal from "metabase/pricing/compoment/PaymentCallbackModal";
 import { trackStructEvent } from "metabase/lib/analytics";
-import Link from "metabase/components/Link";
+import Link from "metabase/core/components/Link";
 
 const Pricing = props => {
   const s_Tabs = {
@@ -105,7 +104,7 @@ const Pricing = props => {
           </span>
         ))}
         <Divider />
-        <Box mt={30} />
+        <div className="mt4"/>
         {basicFunction.map(item => (
           <span key={item.title} className="function-view__item">
             {item.title}
@@ -169,18 +168,15 @@ const Pricing = props => {
 
   return (
     <div style={{ background: "#ffffff", padding: "20px 0" }}>
-      <Flex
-        flexDirection="column"
-        alignItems="center"
-        justifyContent="center"
-        className="page"
+      <div
+        className="flex flex-column align-center justify-center page"
       >
         <h1 className="page__title footprint-title1">Pricing</h1>
         <span className="page__sub-title footprint-primary-text">
           Footprint is a one-stop analysis platform to visualize your discovery
           in blockchain data.
         </span>
-        <Flex alignItems="center" className="page__tab footprint-title1">
+        <div className="flex align-center page__tab footprint-title1">
           <span
             className={cx("page__tab-item", {
               "page__tab-item_light": priceTab === s_Tabs.MONTHLY,
@@ -210,9 +206,9 @@ const Pricing = props => {
               {data.yearlySaving}
             </span>
           )}
-        </Flex>
+        </div>
         {data && (
-          <Flex>
+          <div className="flex">
             <FunctionView />
             {priceList.map(item => (
               <div
@@ -223,17 +219,17 @@ const Pricing = props => {
               >
                 {item.isCurrent
                   ? item.vipValidEndDate && (
-                      <div className="list-item__expired">
-                        <span>{item.vipValidEndDate}</span>
-                      </div>
-                    )
+                  <div className="list-item__expired">
+                    <span>{item.vipValidEndDate}</span>
+                  </div>
+                )
                   : item.isRecommend && (
-                      <img
-                        src={getOssUrl("20210727193715.png")}
-                        className="list-item__recommend"
-                      />
-                    )}
-                <Flex flexDirection="column" justifyContent="center">
+                  <img
+                    src={getOssUrl("20210727193715.png")}
+                    className="list-item__recommend"
+                  />
+                )}
+                <div className="flex flex-column justify-center">
                   <p className="list-item__title footprint-title1">
                     {item.name}
                   </p>
@@ -262,13 +258,12 @@ const Pricing = props => {
                   >
                     {item.buttonText}
                   </Button>
-                  <Box mt={60} />
+                  <div className="mt4"/>
+                  <div className="mt4"/>
                   {firstFunc(item, user).map(n => (
-                    <Flex
+                    <div
                       key={n.title}
-                      justifyContent="center"
-                      alignItems="center"
-                      className="access-list-item footprint-primary-text"
+                      className="flex align-center justify-center access-list-item footprint-primary-text"
                     >
                       {isBoolean(n.value) ? (
                         showContactUs(n) && !n.value ? (
@@ -279,16 +274,14 @@ const Pricing = props => {
                       ) : (
                         <span>{n.value}</span>
                       )}
-                    </Flex>
+                    </div>
                   ))}
                   <Divider />
-                  <Box mt={30} />
+                  <div className="mt4"/>
                   {secondFunc(item, user).map(n => (
-                    <Flex
+                    <div
                       key={n.title}
-                      justifyContent="center"
-                      alignItems="center"
-                      className="access-list-item footprint-primary-text"
+                      className="flex align-center justify-center access-list-item footprint-primary-text"
                     >
                       {isBoolean(n.value) ? (
                         <Icon
@@ -299,7 +292,7 @@ const Pricing = props => {
                       ) : (
                         <span>{n.value}</span>
                       )}
-                    </Flex>
+                    </div>
                   ))}
                   {item.canPay && (
                     <Button
@@ -312,12 +305,12 @@ const Pricing = props => {
                       {item.buttonText}
                     </Button>
                   )}
-                </Flex>
+                </div>
               </div>
             ))}
-          </Flex>
+          </div>
         )}
-      </Flex>
+      </div>
       {showPaymentModal && renderPaymentModel()}
       {showPaymentCallbackModal && (
         <PaymentCallbackModal
