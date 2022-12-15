@@ -27,7 +27,7 @@
   display: flex;
   align-items: center;
   position: sticky;
-  top: 0;
+  top: 60px;
   background-color: #fff;
   padding: 30px 0;
   border-bottom: 1px solid #f6f6fe;

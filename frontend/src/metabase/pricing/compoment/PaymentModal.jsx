@@ -4,7 +4,7 @@ import Modal from "metabase/components/Modal";
 import ModalContent from "metabase/components/ModalContent";
 import "./PaymentModal.css";
 import cx from "classnames";
-import Button from "metabase/core/components/Button";
+import Button from "metabase/components/Button";
 import flatten from "underscore/modules/_flatten";
 import { Select } from "antd";
 import { trackStructEvent } from "metabase/lib/analytics";

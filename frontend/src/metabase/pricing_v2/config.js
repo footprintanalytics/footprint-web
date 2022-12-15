@@ -20,7 +20,7 @@ export const getSubscribeOptions = user => {
     },
   ];
 
-  if (user?.group?.includes("Inner")) {
+  if (user?.groups.includes("Inner")) {
     options.push({
       title: "$1 for Monthly Subscription (Test)",
       selected: false,
