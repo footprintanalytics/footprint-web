@@ -54,7 +54,7 @@ const HomePriorityModal = ({ onClose, onSuccess, id, name }) => {
   return (
     <Modal
       className="tagging-modal"
-      visible={true}
+      open={true}
       footer={null}
       maskClosable={false}
       title={"Home priority"}
