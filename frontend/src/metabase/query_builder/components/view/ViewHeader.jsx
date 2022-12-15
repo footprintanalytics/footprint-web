@@ -446,7 +446,7 @@ function AhHocQuestionLeftSide(props) {
                     result={result}
                     isRunning={isRunning}
                     isDirty={isResultDirty}
-                    onRun={() => runQuestionQuery({ ignoreCache: true })}
+                    onRun={() => runQuestionQuery({ shouldUpdateUrl: false, ignoreCache: true })}
                     onCancel={cancelQuery}
                   />
                 </ViewHeaderIconButtonContainer>
@@ -492,7 +492,7 @@ function AhHocQuestionLeftSide(props) {
                     result={result}
                     isRunning={isRunning}
                     isDirty={isResultDirty}
-                    onRun={() => runQuestionQuery({ ignoreCache: true })}
+                    onRun={() => runQuestionQuery({ shouldUpdateUrl: false, ignoreCache: true })}
                     onCancel={cancelQuery}
                   />
                 </ViewHeaderIconButtonContainer>
