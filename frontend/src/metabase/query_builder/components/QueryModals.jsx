@@ -288,8 +288,8 @@ class QueryModals extends React.Component {
           }}
           form={
             publicAnalyticPermission
-              ? Questions.forms.details
-              : Questions.forms.details_without_collection
+              ? Questions.forms.createAdmin
+              : Questions.forms.create
           }
           copy={async formValues => {
             const { canCreate } = this.props;

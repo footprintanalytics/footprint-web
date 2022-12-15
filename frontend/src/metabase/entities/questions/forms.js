@@ -25,6 +25,11 @@ export default {
   create: {
     fields: [
       ...FORM_FIELDS,
+    ],
+  },
+  createAdmin: {
+    fields: [
+      ...FORM_FIELDS,
       {
         name: "collection_id",
         title: t`Collection`,

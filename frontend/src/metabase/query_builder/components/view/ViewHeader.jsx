@@ -655,7 +655,7 @@ function ViewTitleHeaderRightSide(props) {
 
   const isNewQuery = !query.hasData();
   const isCreate = !question.card().id && !question.card().original_card_id;
-  const isAdmin = user.is_superuser;
+  const isAdmin = user && user.is_superuser;
   const hasSaveButton =
     !isDataset &&
     !!isDirty &&
@@ -671,7 +671,7 @@ function ViewTitleHeaderRightSide(props) {
   const isOwner =
     isAdmin ||
     isCreate ||
-    user.id === question.card().creator_id ||
+    user?.id === question.card().creator_id ||
     question.card().creator_id === undefined;
 
   const handleInfoClick = useCallback(() => {
