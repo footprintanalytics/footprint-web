@@ -80,7 +80,7 @@ const TaggingModal = ({
   return (
     <Modal
       className="tagging-modal"
-      visible={true}
+      open={true}
       footer={null}
       maskClosable={false}
       title={"Seo tagging"}
