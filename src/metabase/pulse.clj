@@ -2,6 +2,7 @@
   "Public API for sending Pulses."
   (:require [clojure.string :as str]
             [clojure.tools.logging :as log]
+            [clj-http.client :as client]
             [metabase.api.common :as api]
             [metabase.config :as config]
             [metabase.email :as email]
@@ -29,6 +30,7 @@
             [metabase.util.ui-logic :as ui-logic]
             [metabase.util.urls :as urls]
             [schema.core :as s]
+            [cheshire.core :as json]
             [toucan.db :as db])
   (:import clojure.lang.ExceptionInfo
            metabase.models.card.CardInstance))
@@ -350,15 +352,34 @@
   [_ _ {:keys [channel_type]}]
   (throw (UnsupportedOperationException. (tru "Unrecognized channel type {0}" (pr-str channel_type)))))
 
+(defn notification-by-footrace
+  [{:keys [id] :as pulse} results channel]
+  (log/info "======> notification-by-footrace")
+  (let [channel_type     (channel :channel_type)
+        condition-kwd    (messages/pulse->alert-condition-kwd pulse)
+        email-subject    (trs "Alert: {0} has {1}"
+                              (first-question-name pulse)
+                              (alert-condition-type->description condition-kwd))
+        first-result     (first results)
+        timezone         (-> first-result :card defaulted-timezone)]
+    (cond
+     (= channel_type :email) {:pulseId id
+                              :subject email-subject
+                              :results first-result
+                              (messages/render-alert-email timezone pulse channel results (ui-logic/find-goal-value first-result))}
+;     (= channel_type :slack) (notification pulse results channel)
+     )
+    ))
+
 (defn- results->notifications [{:keys [channels channel-ids], pulse-id :id, :as pulse} results]
   (let [channel-ids (or channel-ids (mapv :id channels))]
     (when (should-send-notification? pulse results)
-      (when (:alert_first_only pulse)
-        (db/delete! Pulse :id pulse-id))
+;      (when (:alert_first_only pulse)
+;        (db/delete! Pulse :id pulse-id))
       ;; `channel-ids` is the set of channels to send to now, so only send to those. Note the whole set of channels
       (for [channel channels
             :when   (contains? (set channel-ids) (:id channel))]
-        (notification pulse results channel)))))
+        (notification-by-footrace pulse results channel)))))
 
 (defn- pulse->notifications
   "Execute the underlying queries for a sequence of Pulses and return the results as 'notification' maps."
@@ -407,6 +428,21 @@
       (when (not= :smtp-host-not-set (:cause (ex-data e)))
         (throw e)))))
 
+(defn ^:private send-notification-by-footrace!
+  [{:keys [pulseId], :as retry}]
+  (log/info "========>  send-notification-by-footrace" pulseId (class pulseId) (db/select-one [Pulse :alert_first_only] :id pulseId))
+
+  (let [result (client/post (str (site-url) "/api/v1/alert/notification") {:accept  :json
+                                                                           :form-params retry})]
+    (when (and
+           ((db/select-one [Pulse :alert_first_only] :id pulseId) :alert_first_only)
+           (let [resultMap (json/parse-string (result :body) true)]
+             (resultMap :data)))
+          (log/info "====> alert first only success")
+          (db/delete! Pulse :id pulseId))
+    )
+  )
+
 (declare ^:private reconfigure-retrying)
 
 (defsetting notification-retry-max-attempts
@@ -454,7 +490,7 @@
   (let [retry (retry/random-exponential-backoff-retry "send-notification-retry"
                                                       (retry-configuration))]
     {:retry retry
-     :sender (retry/decorate send-notification! retry)}))
+     :sender (retry/decorate send-notification-by-footrace! retry)}))
 
 (defonce
   ^{:private true
