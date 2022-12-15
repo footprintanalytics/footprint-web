@@ -13,6 +13,7 @@ import { trackStructEvent } from "metabase/lib/analytics";
 import { IconBack } from "metabase/components/IconBack";
 import { getOssUrl } from "metabase/lib/image";
 import { slack } from "metabase/lib/slack";
+import VipIconDataApi from "metabase/containers/creator/components/personal/VipIconDataApi";
 
 const Index = ({ router, user, data }) => {
   const [loading, setLoading] = useState(false);
@@ -83,48 +84,74 @@ const Index = ({ router, user, data }) => {
                 vipInfo={data.vipInfo}
                 isOwner={user?.id === get(data, "userInfo.metabaseId")}
               />
+              <VipIconDataApi
+                dataApiVipInfo={data.dataApiVipInfo}
+                isOwner={user?.id === get(data, "userInfo.metabaseId")}
+              />
             </div>
           )}
-          {desc && (
-            <div
-              className="creator__personal-cell-desc"
-              dangerouslySetInnerHTML={{ __html: desc }}
-            />
-          )}
-          <SocialList
-            list={[
-              { href: twitter, icon: "20220516201254.png", isBlank: true },
-              { href: telegram, icon: "20220516201327.png", isBlank: true },
-              { href: discord, icon: "20220516201343.png", isBlank: true },
-              // { href: `mailto:${email}`, icon: "20220516201357.png" },
-            ]}
-          />
-          {user?.id === get(data, "userInfo.metabaseId") && (
-            <div className="creator__personal-cell-buttons">
-              <Link
-                to="/account/profile"
-                onClick={() => trackStructEvent("creator click edit")}
-              >
-                <Button type="primary" ghost icon={<EditFilled />}>
-                  Edit Profile
-                </Button>
-              </Link>
-              {get(data, "vipInfo.type") !== "business" && (
-                <Link
-                  to="/pricing"
-                  target="_blank"
-                  onClick={() => trackStructEvent("creator click upgrade")}
-                >
-                  <Button>Upgrade</Button>
-                </Link>
+          <div className="flex justify-between">
+            <div className="flex flex-column">
+              {desc && (
+                <div
+                  className="creator__personal-cell-desc"
+                  dangerouslySetInnerHTML={{ __html: desc }}
+                />
               )}
-              {user?.stripeSubscribeStatus === "enable" && (
-                <Button onClick={onCancelSubscription}>
-                  Cancel Automatic Renewal
-                </Button>
+              <SocialList
+                list={[
+                  { href: twitter, icon: "20220516201254.png", isBlank: true },
+                  { href: telegram, icon: "20220516201327.png", isBlank: true },
+                  { href: discord, icon: "20220516201343.png", isBlank: true },
+                  // { href: `mailto:${email}`, icon: "20220516201357.png" },
+                ]}
+              />
+              {user?.id === get(data, "userInfo.metabaseId") && (
+                <div className="creator__personal-cell-buttons">
+                  <Link
+                    to="/account/profile"
+                    onClick={() => trackStructEvent("creator click edit")}
+                  >
+                    <Button type="primary" ghost icon={<EditFilled />}>
+                      Edit Profile
+                    </Button>
+                  </Link>
+                  {get(data, "vipInfo.type") !== "business" && (
+                    <Link
+                      to="/pricing"
+                      target="_blank"
+                      onClick={() => trackStructEvent("creator click upgrade")}
+                    >
+                      <Button>Upgrade</Button>
+                    </Link>
+                  )}
+                  {user?.stripeSubscribeStatus === "enable" && (
+                    <Button onClick={onCancelSubscription}>
+                      Cancel Automatic Renewal
+                    </Button>
+                  )}
+                </div>
               )}
             </div>
-          )}
+            <div className="creator__personal-right">
+              {totalInfo.map((item, index) => {
+                return (
+                  <div
+                    key={item.title}
+                    className="creator__personal-right-item"
+                  >
+                    {index > 0 && (
+                      <div className="creator__personal-right-item-split" />
+                    )}
+                    <div className="creator__personal-right-item-left">
+                      <h3>{get(data, item.count)}</h3>
+                      <div>{item.title}</div>
+                    </div>
+                  </div>
+                );
+              })}
+            </div>
+          </div>
 
           {/*<div>
             {socialData.map(item => {
@@ -147,21 +174,6 @@ const Index = ({ router, user, data }) => {
             })}
           </div>*/}
         </div>
-      </div>
-      <div className="creator__personal-right">
-        {totalInfo.map((item, index) => {
-          return (
-            <div key={item.title} className="creator__personal-right-item">
-              {index > 0 && (
-                <div className="creator__personal-right-item-split" />
-              )}
-              <div className="creator__personal-right-item-left">
-                <h3>{get(data, item.count)}</h3>
-                <div>{item.title}</div>
-              </div>
-            </div>
-          );
-        })}
       </div>
     </div>
   );

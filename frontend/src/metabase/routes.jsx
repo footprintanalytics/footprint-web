@@ -7,7 +7,7 @@ import { t } from "ttag";
 import { Route } from "metabase/hoc/Title";
 import { PLUGIN_LANDING_PAGE } from "metabase/plugins";
 
-import { loadCurrentUser, loadCurrentUserVip } from "metabase/redux/user";
+import { loadCurrentUser, loadCurrentUserVip, loadCurrentUserVipDataApi, } from "metabase/redux/user";
 import MetabaseSettings from "metabase/lib/settings";
 
 import App from "metabase/App.tsx";
@@ -217,6 +217,7 @@ export const getRoutes = store => (
         await store.dispatch(loadCurrentUser());
         if (store.getState().currentUser) {
           store.dispatch(loadCurrentUserVip());
+          store.dispatch(loadCurrentUserVipDataApi());
         }
         trackPageView(nextState.location.pathname);
         done();
