@@ -8,6 +8,9 @@ import { getColorsForValues } from "metabase/lib/colors/charts";
 import { nestedSettings } from "./nested";
 
 export function keyForSingleSeries(single) {
+  if (!single) {
+    return "";
+  }
   // _seriesKey is sometimes set by transformSeries
   return single.card._seriesKey || String(single.card.name);
 }
@@ -103,7 +106,7 @@ export function seriesSetting({
       getDefault: (single, settings, { settings: vizSettings }) =>
         // use legacy global line.marker_enabled setting if present
         vizSettings["line.marker_enabled"] == null
-          ? null
+          ? false
           : vizSettings["line.marker_enabled"],
       readDependencies: ["display"],
     },

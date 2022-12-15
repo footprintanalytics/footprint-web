@@ -9,7 +9,7 @@ import { isDimension, isMetric } from "metabase-lib/types/utils/isa";
 export function getOptionFromColumn(col) {
   return {
     name: getFriendlyName(col),
-    value: col.name,
+    value: col ? col.name : "",
   };
 }
 
