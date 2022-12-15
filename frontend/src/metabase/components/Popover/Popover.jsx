@@ -398,6 +398,9 @@ export default class Popover extends Component {
   constrainPopoverToBetweenViewportAndTarget(tetherOptions, direction) {
     const body = tetherOptions.element.querySelector(".PopoverBody");
     const target = this._getTargetElement();
+    if (!body || !target) {
+      return ;
+    }
     const bodyHeight = body.getBoundingClientRect().height;
     const space =
       direction === "top"

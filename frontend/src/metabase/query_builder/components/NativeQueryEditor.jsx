@@ -534,7 +534,6 @@ class NativeQueryEditor extends Component {
     //   snippetCollections?.length === 1 &&
     //   !snippetCollections[0].can_write
     // );
-    console.log("darkMode", darkMode)
 
     const showDarkModeButton = true;
 
