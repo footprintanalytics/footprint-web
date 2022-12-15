@@ -1,67 +1,53 @@
-import React, { useEffect, useCallback, useState } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 import PropTypes from "prop-types";
 import { t } from "ttag";
 import cx from "classnames";
 
-import { InsertRowAboveOutlined, ScissorOutlined } from "@ant-design/icons";
+import { ScissorOutlined } from "@ant-design/icons";
 import * as Urls from "metabase/lib/urls";
 import { SERVER_ERROR_TYPES } from "metabase/lib/errors";
 import MetabaseSettings from "metabase/lib/settings";
 
 import Link from "metabase/core/components/Link";
 import ViewButton from "metabase/query_builder/components/view/ViewButton";
-import { get } from "lodash";
+import { get, set } from "lodash";
 import { usePrevious } from "metabase/hooks/use-previous";
 import { useToggle } from "metabase/hooks/use-toggle";
-import { useOnMount } from "metabase/hooks/use-on-mount";
-import { set } from "lodash";
 import { MODAL_TYPES } from "metabase/query_builder/constants";
-import SavedQuestionHeaderButton from "metabase/query_builder/components/SavedQuestionHeaderButton/SavedQuestionHeaderButton";
+import SavedQuestionHeaderButton
+  from "metabase/query_builder/components/SavedQuestionHeaderButton/SavedQuestionHeaderButton";
 
 import Button from "metabase/core/components/Button";
 import RunButtonWithTooltip from "../RunButtonWithTooltip";
-import QuestionActions from "../QuestionActions";
 import TableBeta from "../TableBeta";
 import TableDictionary from "../TableDictionary";
 import ToggleCreateType from "../ToggleCreateType";
 import ActionButton from "../../../components/ActionButton";
 import TaggingModal from "../../../components/TaggingModal";
 import { trackStructEvent } from "../../../lib/analytics";
-import { questionSideHideAction } from "../../../redux/config";
-import MyPopover from "../MyPopover";
 import EditBar from "../../../components/EditBar";
 import TableUpgrade from "../TableUpgrade";
 import Modal from "../../../components/Modal";
 import ConfirmContent from "../../../components/ConfirmContent";
 import { HeadBreadcrumbs } from "./HeaderBreadcrumbs";
-import QuestionDataSource from "./QuestionDataSource";
 import QuestionDescription from "./QuestionDescription";
 import QuestionNotebookButton from "./QuestionNotebookButton";
-import QuestionFilters, {
-  FilterHeaderToggle,
-  FilterHeader,
-  QuestionFilterWidget,
-} from "./QuestionFilters";
+import QuestionFilters, { FilterHeader, QuestionFilterWidget } from "./QuestionFilters";
 import { QuestionSummarizeWidget } from "./QuestionSummaries";
 import NativeQueryButton from "./NativeQueryButton";
 import {
-  AdHocViewHeading,
-  SaveButton,
-  SavedQuestionHeaderButtonContainer,
-  ViewHeaderMainLeftContentContainer,
-  ViewHeaderLeftSubHeading,
-  ViewHeaderContainer,
-  StyledLastEditInfoLabel,
-  StyledQuestionDataSource,
-  SavedQuestionLeftSideRoot,
   AdHocLeftSideRoot,
+  AdHocViewHeading,
   HeaderDivider,
+  SavedQuestionHeaderButtonContainer,
+  SavedQuestionLeftSideRoot,
   ViewHeaderActionPanel,
+  ViewHeaderContainer,
   ViewHeaderIconButtonContainer,
+  ViewHeaderMainLeftContentContainer,
 } from "./ViewHeader.styled";
 import QuestionRunningTime from "./QuestionRunningTime";
 import { closeNewGuide } from "../../../containers/newguide/newGuide";
-import { getVisualizationRaw } from "../../../visualizations";
 import { Dropdown, Menu } from "antd";
 import NeedPermissionModal from "../../../components/NeedPermissionModal";
 import DashboardCardDisplayInfo from "../../../components/DashboardCardDisplayInfo";
@@ -70,7 +56,6 @@ import Favorite from "../../../containers/explore/components/Favorite";
 import QueryDownloadWidget from "../QueryDownloadWidget";
 import QuestionEmbedWidget from "../../containers/QuestionEmbedWidget";
 import QueryMoreWidget from "../QueryMoreWidget";
-import { onCloseSidebars, updateQuestion } from "../../actions";
 import QueryDownloadWidgetFP from "../QueryDownloadWidgetFP";
 
 const viewTitleHeaderPropTypes = {

@@ -42,7 +42,6 @@ const ToggleCreateType = ({ question, updateQuestion, router }) => {
     const { query } = datasetQuery.native;
     const { database: databaseId } = datasetQuery;
     const tableNameList = getTableNameListFromSQL(query);
-    console.log("tableNameList", tableNameList)
     if (!tableNameList.length) {
       router.replace(Urls.newQuestion());
       return;
@@ -58,8 +57,11 @@ const ToggleCreateType = ({ question, updateQuestion, router }) => {
 
     const table = search?.list[0]?.tables?.find(f => f.name === tableName);
     const tableId = table?.table_id;
-    console.log("tableId", tableId)
-    router.replace(Urls.newQuestion({ databaseId, tableId, type: "query" }));
+    if (tableId) {
+      router.replace(Urls.newQuestion({ databaseId, tableId, type: "query" }));
+    } else {
+      message.info("This sql cannot be converted to other mode")
+    }
   };
 
   const toggleToSQL = async () => {
