@@ -6,8 +6,17 @@ import Pricing from "metabase/pricing_v2";
 import DataApiPricing from "metabase/containers/dataApi/price/index";
 import Button from "metabase/core/components/Button";
 import { browserHistory } from "react-router";
+import PricingModal from "metabase/pricing_v2/components/PricingModal";
+import { loginModalShowAction } from "metabase/redux/control";
+import { connect } from "react-redux";
+import { getDataApiSubscribeOptions } from "metabase/pricing_v3/config";
 
-const PricingContainer = ({ location }) => {
+const PricingContainer = ({ location, user, setLoginModalShow }) => {
+  const [subscribeOptions, setSubscribeOptions] = useState(null);
+
+  const sign = () =>
+    setLoginModalShow({ show: true, from: "handle_pay_data_api" });
+
   const [status, setStatus] = useState(location?.query?.type || "footprint");
   useEffect(() => {
     if (location?.query?.type) {
@@ -17,12 +26,21 @@ const PricingContainer = ({ location }) => {
 
   const replaceQuery = pathname => {
     browserHistory &&
-      browserHistory.getCurrentLocation() &&
-      history.replaceState(null, document.title, pathname);
+    browserHistory.getCurrentLocation() &&
+    history.replaceState(null, document.title, pathname);
   };
 
   return (
     <div className="pricing-container">
+      {subscribeOptions && (
+        <PricingModal
+          user={user}
+          sign={sign}
+          subscribeOptions={subscribeOptions}
+          visible={!!subscribeOptions}
+          onClose={() => setSubscribeOptions(null)}
+        />
+      )}
       <div className="pricing-container__bg" />
       <div className="pricing-container__top">
         <h1>{"Plans & Pricing"}</h1>
@@ -55,10 +73,26 @@ const PricingContainer = ({ location }) => {
           </Button>
         </div>
         {status === "footprint" && <Pricing />}
-        {status === "data-api" && <DataApiPricing />}
+        {status === "data-api" && (
+          <DataApiPricing
+            onSubscribe={mode => {
+              setSubscribeOptions(getDataApiSubscribeOptions(user, mode));
+            }}
+          />
+        )}
       </div>
     </div>
   );
 };
 
-export default PricingContainer;
+const mapStateToProps = state => {
+  return {
+    user: state.currentUser,
+  };
+};
+
+const mapDispatchToProps = {
+  setLoginModalShow: loginModalShowAction,
+};
+
+export default connect(mapStateToProps, mapDispatchToProps)(PricingContainer);
