@@ -6,7 +6,7 @@ import {
 import { UserApi } from "metabase/services";
 // import { CLOSE_QB_NEWB_MODAL } from "metabase/query_builder/actions";
 import Users from "metabase/entities/users";
-import { getUserVipInfo } from "metabase/new-service";
+import { getUserVipInfo, getDataApiVipInfo } from "metabase/new-service";
 import arms from "metabase/lib/arms";
 
 export const REFRESH_CURRENT_USER = "metabase/user/REFRESH_CURRENT_USER";
@@ -72,6 +72,17 @@ export const loadCurrentUserVip = createThunkAction(
   },
 );
 
+export const LOAD_CURRENT_USER_VIP_DATA_API =
+  "metabase/user/LOAD_CURRENT_USER_VIP_DATA_API";
+export const loadCurrentUserVipDataApi = createThunkAction(
+  LOAD_CURRENT_USER_VIP_DATA_API,
+  () => (dispatch, getState) => {
+    if (getState().currentUser) {
+      return getDataApiVipInfo();
+    }
+  },
+);
+
 export const UPDATE_SUBSCRIBE_INFO = "metabase/user/UPDATE_SUBSCRIBE_INFO";
 export const updateSubscribeInfo = createThunkAction(
   UPDATE_SUBSCRIBE_INFO,
@@ -113,6 +124,14 @@ export const currentUser = handleActions(
       next: (state, { payload }) => {
         if (payload) {
           return { ...state, vipInfo: { ...payload } };
+        }
+        return state;
+      },
+    },
+    [LOAD_CURRENT_USER_VIP_DATA_API]: {
+      next: (state, { payload }) => {
+        if (payload) {
+          return { ...state, vipInfoDataApi: { ...payload } };
         }
         return state;
       },

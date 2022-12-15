@@ -6,7 +6,7 @@ import { createThunkAction } from "metabase/lib/redux";
 import { loadLocalization } from "metabase/lib/i18n";
 import { deleteSession, clearGoogleAuthCredentials } from "metabase/lib/auth";
 import * as Urls from "metabase/lib/urls";
-import { clearCurrentUser, refreshCurrentUser, loadCurrentUserVip } from "metabase/redux/user";
+import { clearCurrentUser, refreshCurrentUser, loadCurrentUserVip, loadCurrentUserVipDataApi } from "metabase/redux/user";
 import { refreshSiteSettings } from "metabase/redux/settings";
 import { getUser } from "metabase/selectors/user";
 import { State } from "metabase-types/store";
@@ -54,6 +54,7 @@ const handleLogin = async (dispatch: any, redirectUrl = '/') => {
     dispatch(refreshSiteSettings()),
   ]);
   dispatch(loadCurrentUserVip());
+  dispatch(loadCurrentUserVipDataApi());
 
   if (redirectUrl) {
     setTimeout(() => {

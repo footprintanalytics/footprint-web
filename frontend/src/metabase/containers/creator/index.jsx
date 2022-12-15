@@ -13,7 +13,7 @@ import { personalInfo } from "metabase/new-service";
 import { getProject } from "metabase/lib/project_info";
 import Link from "metabase/core/components/Link";
 
-const Index = ({ router, user, params }) => {
+const Index = ({ router, user, params, userInfoDataApi }) => {
   const name = params?.name?.replace("@", "") || "";
 
   if (name) {
@@ -80,6 +80,7 @@ const Index = ({ router, user, params }) => {
 const mapStateToProps = state => {
   return {
     user: state.currentUser,
+    userInfoDataApi: state.vipInfoDataApi,
   };
 };
 
