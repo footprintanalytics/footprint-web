@@ -27,7 +27,7 @@ export const setQueryBuilderMode =
       }),
     );
     if (shouldUpdateUrl) {
-      await dispatch(updateUrl(null, { queryBuilderMode, datasetEditorTab }));
+      await dispatch(updateUrl(null, { queryBuilderMode, datasetEditorTab, dirty: queryBuilderMode === "notebook" || queryBuilderMode === "view" }));
     }
     if (queryBuilderMode === "notebook") {
       dispatch(cancelQuery());
