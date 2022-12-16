@@ -364,9 +364,8 @@
         timezone         (-> first-result :card defaulted-timezone)]
     (cond
      (= channel_type :email) {:pulseId id
-                              :subject email-subject
                               :results first-result
-                              :message (messages/render-alert-email timezone pulse channel results (ui-logic/find-goal-value first-result))}
+                              :goal (ui-logic/find-goal-value first-result)}
 ;     (= channel_type :slack) (notification pulse results channel)
      )
     ))
