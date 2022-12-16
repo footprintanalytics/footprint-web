@@ -428,6 +428,11 @@
       (when (not= :smtp-host-not-set (:cause (ex-data e)))
         (throw e)))))
 
+(defn- site-url
+  "site-url"
+  []
+  (public-settings/site-url))
+
 (defn ^:private send-notification-by-footrace!
   [{:keys [pulseId], :as retry}]
   (log/info "========>  send-notification-by-footrace" pulseId (class pulseId) (db/select-one [Pulse :alert_first_only] :id pulseId))
