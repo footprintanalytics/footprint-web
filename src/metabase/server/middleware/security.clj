@@ -89,6 +89,7 @@
                                  "www.googletagmanager.com"]
                   :frame-src    ["'self'"
                                  "www.footprint.network"
+                                 "preivew.footprint.network"
                                  "accounts.google.com"
                                  "www.youtube.com"]
                   :connect-src  ["*"
