@@ -72,7 +72,8 @@ class PublicQuestion extends Component {
       if (token) {
         card = await EmbedApi.card({ token });
       } else if (publicUuid) {
-        card = await PublicApi.card({ uuid: publicUuid });
+        const { data } = await PublicApi.card({ uuid: publicUuid });
+        card = data;
       } else {
         throw { status: 404 };
       }
