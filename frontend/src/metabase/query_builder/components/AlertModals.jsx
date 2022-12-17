@@ -466,9 +466,9 @@ class AlertEditFormInner extends Component {
           schedule={schedule}
           onScheduleChange={this.onScheduleChange}
         />
-        {isAdmin && (
+        {/*{isAdmin && (*/}
           <AlertEditChannels alert={alert} onAlertChange={onAlertChange} />
-        )}
+        {/*)}*/}
       </div>
     );
   }

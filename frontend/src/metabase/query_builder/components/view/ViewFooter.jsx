@@ -147,7 +147,7 @@ const ViewFooter = ({
               visualizationSettings={visualizationSettings}
             />
           ),*/
-          /*QuestionAlertWidget.shouldRender({
+          QuestionAlertWidget.shouldRender({
             question,
             visualizationSettings,
           }) && (
@@ -163,7 +163,7 @@ const ViewFooter = ({
                   : onOpenModal("save-question-before-alert")
               }
             />
-          ),*/
+          ),
           /*QuestionEmbedWidget.shouldRender({ question, isAdmin }) && (
             <QuestionEmbedWidgetTrigger
               key="embeds"

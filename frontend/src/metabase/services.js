@@ -339,8 +339,9 @@ export const AlertApi = {
   list: GET("/api/alert"),
   list_for_question: GET("/api/alert/question/:questionId"),
   get: GET("/api/alert/:id"),
-  create: POST("/api/alert"),
-  update: PUT("/api/alert/:id"),
+  create: POST("/api/v1/alert"),
+  // create: POST("/api/alert"),
+  update: PUT("/api/v1/alert/:id"),
   unsubscribe: DELETE("/api/alert/:id/subscription"),
 };
 

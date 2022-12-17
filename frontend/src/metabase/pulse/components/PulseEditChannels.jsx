@@ -243,6 +243,18 @@ export default class PulseEditChannels extends Component {
 
   renderChannelSection(channelSpec) {
     const { pulse, user } = this.props;
+    console.log("pulse.channels", pulse.channels)
+
+    const originChannels = [{
+      "channel_type": "email",
+      "enabled": true,
+      "recipients": [{ email: 'admin@footprint.network' }],
+      "schedule_day": "mon",
+      "schedule_frame": null,
+      "schedule_hour": 0,
+      "schedule_type": "daily",
+    }
+    ]
     const channels = pulse.channels
       .map((c, i) => [c, i])
       .filter(([c, i]) => c.enabled && c.channel_type === channelSpec.type)
@@ -266,14 +278,14 @@ export default class PulseEditChannels extends Component {
             onChange={this.toggleChannel.bind(this, channelSpec.type)}
           />
         </div>
-        {channels.length > 0 && channelSpec.configured ? (
-          <ul className="bg-light px3">{channels}</ul>
-        ) : channels.length > 0 && !channelSpec.configured ? (
-          <div className="p4 text-centered">
-            <h3 className="mb2">{t`${channelSpec.name} needs to be set up by an administrator.`}</h3>
-            <ChannelSetupMessage user={user} channels={[channelSpec.name]} />
-          </div>
-        ) : null}
+        {/*{channels.length > 0 && channelSpec.configured ? (*/}
+        {/*  <ul className="bg-light px3">{channels}</ul>*/}
+        {/*) : channels.length > 0 && !channelSpec.configured ? (*/}
+        {/*  <div className="p4 text-centered">*/}
+        {/*    <h3 className="mb2">{t`${channelSpec.name} needs to be set up by an administrator.`}</h3>*/}
+        {/*    <ChannelSetupMessage user={user} channels={[channelSpec.name]} />*/}
+        {/*  </div>*/}
+        {/*) : null}*/}
       </li>
     );
   }
@@ -281,9 +293,10 @@ export default class PulseEditChannels extends Component {
   render() {
     const { formInput } = this.props;
     // Default to show the default channels until full formInput is loaded
-    const channels = formInput.channels || {
+    // const channels = formInput.channels || {
+    const channels = {
       email: { name: t`Email`, type: "email" },
-      slack: { name: t`Slack`, type: "slack" },
+      // slack: { name: t`Slack`, type: "slack" },
     };
     return (
       <ul className="bordered rounded bg-white">
