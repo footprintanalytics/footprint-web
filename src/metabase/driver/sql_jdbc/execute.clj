@@ -370,6 +370,7 @@
 
 (defn- execute-statement-or-prepared-statement! ^ResultSet [driver ^Statement stmt max-rows params sql]
   (let [st (doto stmt (.setMaxRows max-rows))]
+    (log/info  "execute-statement-or-prepared-statement!" params (use-statement? driver params))
     (if (use-statement? driver params)
       (execute-statement! driver st sql)
       (execute-prepared-statement! driver st))))
@@ -489,8 +490,13 @@
    {:pre [(string? sql) (seq sql)]}
    (let [remark   (qp.util/query->remark driver outer-query)
          sql      (str "-- " remark "\n" sql)
+         sqlWithoutParams     (:query (driver/splice-parameters-into-native-query driver {:query  sql :params params}))
+         paramsWithoutParams   nil
+         aysnc-cache  (:aysnc-refresh-cache? outer-query)
+         sqlFinal     (if aysnc-cache sqlWithoutParams sql)
+         sqlFinal     (if aysnc-cache paramsWithoutParams params)
          max-rows (limit/determine-query-max-rows outer-query)]
-     (execute-reducible-query driver sql params max-rows context respond)))
+     (execute-reducible-query driver sqlFinal sqlFinal max-rows context respond)))
 
   ([driver sql params max-rows context respond]
    (with-open [conn          (connection-with-timezone driver (qp.store/database) (qp.timezone/report-timezone-id-if-supported))
