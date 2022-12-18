@@ -85,5 +85,9 @@
    :dashboard-id dashboard_id
    :middleware {:process-viz-settings? false}))
 
+(api/defendpoint ^:streaming POST "/alertNow"
+  []
+  (log/info "=====> alert now")
+  (#'send-pulses/send-pulses! 0 "fri" :first :first))
 
 (api/define-routes)
