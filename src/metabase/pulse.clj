@@ -436,7 +436,7 @@
   [{:keys [pulseId], :as retry}]
   (log/info "========>  send-notification-by-footrace" pulseId (str (site-url) "/api/v1/alert/notification") (db/select-one [Pulse :alert_first_only] :id pulseId))
 
-  (let [result (client/post (str "https://preview.footprint.network/api/v1/alert/notification") {:accept  :json
+  (let [result (client/post (str (site-url) "/api/v1/alert/notification") {:accept  :json
                                                                            :form-params retry})]
     (when (and
            ((db/select-one [Pulse :alert_first_only] :id pulseId) :alert_first_only)
