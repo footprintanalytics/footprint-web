@@ -95,9 +95,9 @@ function DashCardCardParameterMapper({
 
   const handleChangeTarget = useCallback(
     target => {
-      setParameterMapping(editingParameter.id, dashcard.id, card.id, target);
+      setParameterMapping(editingParameter?.id, dashcard?.id, card?.id, target);
     },
-    [card.id, dashcard.id, editingParameter.id, setParameterMapping],
+    [card?.id, dashcard?.id, editingParameter?.id, setParameterMapping],
   );
 
   const isVirtual = isVirtualDashCard(dashcard);
