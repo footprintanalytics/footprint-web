@@ -49,7 +49,7 @@ export const DashboardStyled = styled.div`
 `;
 
 export const DashboardBody = styled.div`
-  position: relative;
+  //position: relative;
   display: flex;
   flex: 1 0 auto;
   min-width: 0;
@@ -58,7 +58,7 @@ export const DashboardBody = styled.div`
   ${({ isEditingOrSharing }) =>
     isEditingOrSharing &&
     css`
-      flex-basis: 0;
+      //flex-basis: 0;
     `}
 `;
 
