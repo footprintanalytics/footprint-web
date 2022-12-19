@@ -9,7 +9,6 @@ import SchedulePicker from "metabase/components/SchedulePicker";
 import ActionButton from "metabase/components/ActionButton";
 import Toggle from "metabase/core/components/Toggle";
 import Icon from "metabase/components/Icon";
-import ChannelSetupMessage from "metabase/components/ChannelSetupMessage";
 import SlackChannelField from "metabase/sharing/components/SlackChannelField";
 
 import * as MetabaseAnalytics from "metabase/lib/analytics";
@@ -242,19 +241,8 @@ export default class PulseEditChannels extends Component {
   }
 
   renderChannelSection(channelSpec) {
-    const { pulse, user } = this.props;
-    console.log("pulse.channels", pulse.channels)
+    const { pulse } = this.props;
 
-    const originChannels = [{
-      "channel_type": "email",
-      "enabled": true,
-      "recipients": [{ email: 'admin@footprint.network' }],
-      "schedule_day": "mon",
-      "schedule_frame": null,
-      "schedule_hour": 0,
-      "schedule_type": "daily",
-    }
-    ]
     const channels = pulse.channels
       .map((c, i) => [c, i])
       .filter(([c, i]) => c.enabled && c.channel_type === channelSpec.type)
