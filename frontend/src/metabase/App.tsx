@@ -28,6 +28,8 @@ import { ContentViewportContext } from "metabase/core/context/ContentViewportCon
 
 import { AppErrorDescriptor, State } from "metabase-types/store";
 
+import GlobalContactPanel from "metabase/components/GlobalContactPanel/";
+
 import { AppContainer, AppContent, AppContentContainer } from "./App.styled";
 
 const getErrorComponent = ({ status, data, context }: AppErrorDescriptor) => {
@@ -127,7 +129,10 @@ function App({
         imageWidth={1200}
         imageHeight={630}
         siteName="Footprint"
-        viewport={0.3} description={undefined} keywords={undefined}      />
+        viewport={0.3}
+        description={undefined}
+        keywords={undefined}
+      />
       <ErrorBoundary onError={onError}>
         <ScrollToTop>
           <AppContainer className="spread">
@@ -141,6 +146,7 @@ function App({
                 </ContentViewportContext.Provider>
               </AppContent>
               <UndoListing />
+              <GlobalContactPanel />
               <StatusListing />
             </AppContentContainer>
           </AppContainer>
