@@ -466,9 +466,9 @@ class AlertEditFormInner extends Component {
           schedule={schedule}
           onScheduleChange={this.onScheduleChange}
         />
-        {isAdmin && (
+        {/*{isAdmin && (*/}
           <AlertEditChannels alert={alert} onAlertChange={onAlertChange} />
-        )}
+        {/*)}*/}
       </div>
     );
   }
@@ -675,7 +675,7 @@ export const MultiSeriesAlertTip = () => (
 export const NormalAlertTip = () => (
   <div>{jt`${(
     <strong>{t`Tip`}:</strong>
-  )} This kind of alert is most useful when your saved question doesn’t ${(
+  )} This kind of alert is most useful when your saved chart doesn’t ${(
     <em>{t`usually`}</em>
   )} return any results, but you want to know when it does.`}</div>
 );

@@ -1,6 +1,6 @@
 .global-contact-panel__container {
   position: fixed;
-  bottom: 20px;
+  bottom: 70px;
   z-index: 1000;
   right: 0;
   display: flex;

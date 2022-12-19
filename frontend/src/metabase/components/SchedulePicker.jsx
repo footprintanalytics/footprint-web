@@ -203,7 +203,7 @@ export default class SchedulePicker extends Component {
           <span
             className="text-bold"
             style={{ minWidth: "48px" }}
-          >{t`at`}</span>
+          >{"at (UTC)"}</span>
           <Select
             className="mr1"
             value={minuteOfHour}
@@ -233,7 +233,7 @@ export default class SchedulePicker extends Component {
           <span
             className="text-bold"
             style={{ minWidth: "48px" }}
-          >{t`at`}</span>
+          >{"at (UTC)"}</span>
           <Select
             className="mr1"
             value={hour}

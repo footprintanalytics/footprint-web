@@ -90,7 +90,6 @@ export function question(
   if (objectId) {
     path = `${path}/${objectId}`;
   }
-  console.log("`${path}${query}${hash}`", `${path}${query}${hash}`)
   return `${path}${query}${hash}`;
 }
 

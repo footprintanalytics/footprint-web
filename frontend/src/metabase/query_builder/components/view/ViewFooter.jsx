@@ -12,12 +12,13 @@ import ButtonBar from "metabase/components/ButtonBar";
 
 import QueryDownloadWidget from "metabase/query_builder/components/QueryDownloadWidget";
 import { getIconForVisualizationType, getVisualizationRaw } from "metabase/visualizations";
+import QuestionAlertWidget from "metabase/query_builder/components/view/QuestionAlertWidget";
+import QueryDownloadWidgetFP from "metabase/query_builder/components/QueryDownloadWidgetFP";
 import ViewButton from "./ViewButton";
 import QuestionTimelineWidget from "./QuestionTimelineWidget";
 
 import QuestionRowCount from "./QuestionRowCount";
 import { ViewFooterRoot } from "./ViewFooter.styled";
-import QueryDownloadWidgetFP from "metabase/query_builder/components/QueryDownloadWidgetFP";
 
 const ViewFooter = ({
   question,
@@ -141,7 +142,7 @@ const ViewFooter = ({
               visualizationSettings={visualizationSettings}
             />
           ),
-          /*QuestionAlertWidget.shouldRender({
+          QuestionAlertWidget.shouldRender({
             question,
             visualizationSettings,
           }) && (
@@ -157,7 +158,7 @@ const ViewFooter = ({
                   : onOpenModal("save-question-before-alert")
               }
             />
-          ),*/
+          ),
           /*QuestionEmbedWidget.shouldRender({ question, isAdmin }) && (
             <QuestionEmbedWidgetTrigger
               key="embeds"
