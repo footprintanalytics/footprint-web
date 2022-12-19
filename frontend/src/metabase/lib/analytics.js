@@ -1,62 +1,47 @@
-import * as Snowplow from "@snowplow/browser-tracker";
 import Settings from "metabase/lib/settings";
-import { getUserId } from "metabase/selectors/user";
+import { isProduction } from "metabase/env";
 
-export const createTracker = store => {
-  if (Settings.googleAnalyticsEnabled()) {
+export const createTracker = () => {
+  if (isTrackingEnabled()) {
     createGoogleAnalyticsTracker();
-  }
-
-  if (Settings.snowplowEnabled()) {
-    createSnowplowTracker(store);
-  }
-
-  if (Settings.googleAnalyticsEnabled() || Settings.snowplowEnabled()) {
     document.body.addEventListener("click", handleStructEventClick, true);
   }
 };
 
-export const trackPageView = url => {
-  if (!url || !Settings.trackingEnabled()) {
-    return;
-  }
-
-  if (Settings.googleAnalyticsEnabled()) {
-    trackGoogleAnalyticsPageView(getSanitizedUrl(url));
-  }
-
-  if (Settings.snowplowEnabled()) {
-    trackSnowplowPageView(getSanitizedUrl(url));
+export const trackPageView = (url, type) => {
+  console.log("[PAGE_VIEW]", [url, type]);
+  if (isTrackingEnabled() && url) {
+    trackGoogleAnalyticsPageView(url);
   }
 };
 
 export const trackStructEvent = (category, action, label, value) => {
-  if (!category || !label || !Settings.trackingEnabled()) {
-    return;
-  }
-
-  if (Settings.googleAnalyticsEnabled()) {
+  if (category && action) {
     trackGoogleAnalyticsStructEvent(category, action, label, value);
+  } else if (category && !action) {
+    trackGoogleAnalyticsStructEvent("Category", category, label, value);
   }
 };
 
-export const trackSchemaEvent = (schema, version, data) => {
-  if (!schema || !Settings.trackingEnabled()) {
-    return;
-  }
+export const trackSchemaEvent = () => {
+  // intentionally blank
+};
 
-  if (Settings.snowplowEnabled()) {
-    trackSnowplowSchemaEvent(schema, version, data);
-  }
+const isTrackingEnabled = () => {
+  // return isProduction && Settings.trackingEnabled();
+  return isProduction;
 };
 
 const createGoogleAnalyticsTracker = () => {
-  const code = Settings.get("ga-code");
-  window.ga?.("create", code, "auto");
+  // const code = Settings.get("ga-code");
+  // window.ga?.("create", code, "auto");
 
-  Settings.on("anon-tracking-enabled", enabled => {
-    window[`ga-disable-${code}`] = enabled ? null : true;
-  });
+  // Settings.on("anon-tracking-enabled", enabled => {
+  //   window[`ga-disable-${code}`] = enabled ? null : true;
+  // });
+
+  window.ga?.("create", "UA-17374783-45", "auto");
+  window.gtag?.("config", "G-7X0SCJDJYL", { send_page_view: false });
 };
 
 const trackGoogleAnalyticsPageView = url => {
@@ -64,73 +49,31 @@ const trackGoogleAnalyticsPageView = url => {
   window.ga?.("set", "dimension1", version.tag);
   window.ga?.("set", "page", url);
   window.ga?.("send", "pageview", url);
+  window.gtag?.("event", "page_view");
 };
 
-const trackGoogleAnalyticsStructEvent = (category, action, label, value) => {
+const trackGoogleAnalyticsStructEvent = (
+  category,
+  action = "Action",
+  label = "Label",
+  value = 1,
+) => {
   const version = Settings.get("version", {});
-  window.ga?.("set", "dimension1", version.tag);
-  window.ga?.("send", "event", category, action, label, value);
-};
-
-const createSnowplowTracker = store => {
-  Snowplow.newTracker("sp", Settings.snowplowUrl(), {
-    appId: "metabase",
-    platform: "web",
-    eventMethod: "post",
-    discoverRootDomain: true,
-    contexts: { webPage: true },
-    anonymousTracking: { withServerAnonymisation: true },
-    stateStorageStrategy: "none",
-    plugins: [createSnowplowPlugin(store)],
-  });
-};
-
-const createSnowplowPlugin = store => {
-  return {
-    beforeTrack: () => {
-      const userId = getUserId(store.getState());
-      userId && Snowplow.setUserId(String(userId));
-    },
-    contexts: () => {
-      const id = Settings.get("analytics-uuid");
-      const version = Settings.get("version", {});
-      const createdAt = Settings.get("instance-creation");
-      const tokenFeatures = Settings.get("token-features");
-
-      return [
-        {
-          schema: "iglu:com.metabase/instance/jsonschema/1-1-0",
-          data: {
-            id,
-            version: {
-              tag: version.tag,
-            },
-            created_at: createdAt,
-            token_features: tokenFeatures,
-          },
-        },
-      ];
-    },
-  };
-};
-
-const trackSnowplowPageView = url => {
-  Snowplow.setReferrerUrl("#");
-  Snowplow.setCustomUrl(url);
-  Snowplow.trackPageView();
-};
-
-const trackSnowplowSchemaEvent = (schema, version, data) => {
-  Snowplow.trackSelfDescribingEvent({
-    event: {
-      schema: `iglu:com.metabase/${schema}/jsonschema/${version}`,
-      data,
-    },
-  });
+  if (isTrackingEnabled()) {
+    window.ga?.("set", "dimension1", version.tag);
+    window.ga?.("send", "event", category, action, label, value);
+    window.gtag?.("event", action, {
+      event_category: category,
+      event_label: label,
+      value,
+    });
+    localStorage.setItem("lastGTag", action);
+  }
+  console.log("[GTAG_EVENT]", [category, action, label, value, version]);
 };
 
 const handleStructEventClick = event => {
-  if (!Settings.trackingEnabled()) {
+  if (!isTrackingEnabled()) {
     return;
   }
 
@@ -140,11 +83,4 @@ const handleStructEventClick = event => {
       trackStructEvent(...parts);
     }
   }
-};
-
-const getSanitizedUrl = url => {
-  const urlWithoutSlug = url.replace(/(\/\d+)-[^\/]+$/, (match, path) => path);
-  const urlWithoutHost = new URL(urlWithoutSlug, Settings.snowplowUrl());
-
-  return urlWithoutHost.href;
 };
