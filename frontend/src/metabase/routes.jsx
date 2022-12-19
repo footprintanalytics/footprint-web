@@ -364,6 +364,13 @@ export const getRoutes = store => (
           )}
         />
         <Route
+          title={t`Community insights`}
+          path="community-insights"
+          component={props => (
+            <LazyLoad.Articles {...props} type="community-insights" />
+          )}
+        />
+        <Route
           title={t`Feature Charts`}
           path="feature_charts"
           hidden
