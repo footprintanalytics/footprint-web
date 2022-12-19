@@ -33,9 +33,9 @@ import SnippetModal from "metabase/query_builder/components/template_tags/Snippe
 import Questions from "metabase/entities/questions";
 import { CARD_TAG_REGEX } from "metabase-lib/queries/NativeQuery";
 import { ResponsiveParametersList } from "./ResponsiveParametersList";
-import NativeQueryEditorSidebar from "./NativeQueryEditor/NativeQueryEditorSidebar";
+// import NativeQueryEditorSidebar from "./NativeQueryEditor/NativeQueryEditorSidebar";
 import VisibilityToggler from "./NativeQueryEditor/VisibilityToggler";
-import RightClickPopover from "./NativeQueryEditor/RightClickPopover";
+// import RightClickPopover from "./NativeQueryEditor/RightClickPopover";
 import DataSourceSelectors from "./NativeQueryEditor/DataSourceSelectors";
 import { SCROLL_MARGIN, MIN_HEIGHT_LINES } from "./NativeQueryEditor/constants";
 import {
@@ -47,7 +47,7 @@ import {
 import "./NativeQueryEditor.css";
 import { NativeQueryEditorRoot } from "./NativeQueryEditor.styled";
 import NativeVariablesButton from "metabase/query_builder/components/view/NativeVariablesButton";
-import SnippetSidebarButton from "metabase/query_builder/components/view/SnippetSidebarButton";
+// import SnippetSidebarButton from "metabase/query_builder/components/view/SnippetSidebarButton";
 import DarkModeButton from "metabase/query_builder/components/view/DarkModeButton";
 
 const AUTOCOMPLETE_DEBOUNCE_DURATION = 700;
@@ -605,13 +605,13 @@ class NativeQueryEditor extends Component {
         >
           <div className="flex-full" id="id_sql" ref={this.editor} />
 
-          <RightClickPopover
+          {/*<RightClickPopover
             isOpen={this.state.isSelectedTextPopoverOpen}
             openSnippetModalWithSelectedText={openSnippetModalWithSelectedText}
             runQuery={this.runQuery}
             target={() => this.editor.current.querySelector(".ace_selection")}
             canSaveSnippets={canSaveSnippets}
-          />
+          />*/}
 
           {this.props.modalSnippet && (
             <SnippetModal
