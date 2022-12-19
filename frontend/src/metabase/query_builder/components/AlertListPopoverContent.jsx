@@ -1,24 +1,17 @@
 /* eslint-disable react/prop-types */
 import React, { Component } from "react";
 import { connect } from "react-redux";
-import { t, jt } from "ttag";
+import { jt, t } from "ttag";
 import _ from "underscore";
 import cx from "classnames";
 
 import { getQuestionAlerts } from "metabase/query_builder/selectors";
 import { getUser } from "metabase/selectors/user";
 import { deleteAlert, unsubscribeFromAlert } from "metabase/alert/alert";
-import {
-  AM_PM_OPTIONS,
-  DAY_OF_WEEK_OPTIONS,
-  HOUR_OPTIONS,
-} from "metabase/components/SchedulePicker";
+import { AM_PM_OPTIONS, DAY_OF_WEEK_OPTIONS, HOUR_OPTIONS } from "metabase/components/SchedulePicker";
 import Icon from "metabase/components/Icon";
 import Modal from "metabase/components/Modal";
-import {
-  CreateAlertModalContent,
-  UpdateAlertModalContent,
-} from "metabase/query_builder/components/AlertModals";
+import { CreateAlertModalContent, UpdateAlertModalContent } from "metabase/query_builder/components/AlertModals";
 
 class AlertListPopoverContent extends Component {
   state = {
@@ -113,21 +106,20 @@ export default connect(
 
 class AlertListItemInner extends Component {
   state = {
-    unsubscribingProgress: null,
-    hasJustUnsubscribed: false,
+    unDeleteProgress: null,
+    hasDeleted: false,
     editing: false,
   };
 
-  onUnsubscribe = async () => {
+  onDelete = async () => {
     const { alert } = this.props;
 
     try {
-      this.setState({ unsubscribingProgress: t`Unsubscribing...` });
-      await this.props.unsubscribeFromAlert({ ...alert, archived: true });
-      this.setState({ hasJustUnsubscribed: true });
-      this.props.onUnsubscribe(alert);
+      this.setState({ unDeleteProgress: t`Delete...` });
+      await this.props.deleteAlert(alert.id);
+      this.setState({ hasDeleted: true });
     } catch (e) {
-      this.setState({ unsubscribingProgress: t`Failed to unsubscribe` });
+      this.setState({ unDeleteProgress: t`Failed to delete` });
     }
   };
 
@@ -146,7 +138,7 @@ class AlertListItemInner extends Component {
 
   render() {
     const { user, alert, highlight } = this.props;
-    const { editing, hasJustUnsubscribed, unsubscribingProgress } = this.state;
+    const { editing, hasDeleted, unDeleteProgress } = this.state;
 
     const isAdmin = user?.is_superuser;
     const isCurrentUser = alert.creator.id === user.id;
@@ -156,8 +148,8 @@ class AlertListItemInner extends Component {
     const slackChannel = alert.channels.find(c => c.channel_type === "slack");
     const slackEnabled = slackChannel && slackChannel.enabled;
 
-    if (hasJustUnsubscribed) {
-      return <UnsubscribedListItem />;
+    if (hasDeleted) {
+      return <DeletedListItem />;
     }
 
     return (
@@ -181,21 +173,18 @@ class AlertListItemInner extends Component {
               {(isAdmin || isCurrentUser) && (
                 <a className="link" onClick={this.onEdit}>{jt`Edit`}</a>
               )}
-              {!isAdmin && !unsubscribingProgress && (
+              {!isAdmin && !unDeleteProgress && (
                 <a
                   className="link ml2"
-                  onClick={this.onUnsubscribe}
-                >{jt`Unsubscribe`}</a>
+                  onClick={this.onDelete}
+                >{jt`Delete`}</a>
               )}
-              {!isAdmin && unsubscribingProgress && (
-                <span> {unsubscribingProgress}</span>
+              {!isAdmin && unDeleteProgress && (
+                <span> {unDeleteProgress}</span>
               )}
             </div>
           </div>
 
-          {
-            // To-do: @kdoh wants to look into overall alignment
-          }
           <ul className="flex mt2 text-small">
             <li className="flex align-center">
               <Icon name="clock" size="12" className="mr1" />{" "}
@@ -240,7 +229,7 @@ export const AlertListItem = connect(state => ({ user: getUser(state) }), {
   deleteAlert,
 })(AlertListItemInner);
 
-export const UnsubscribedListItem = () => (
+export const DeletedListItem = () => (
   <li className="border-bottom flex align-center py4 text-bold">
     <div className="circle flex align-center justify-center p1 bg-light ml2">
       <Icon name="check" className="text-success" />
@@ -248,9 +237,9 @@ export const UnsubscribedListItem = () => (
     <h3
       className="text-dark"
       style={{ marginLeft: 10 }}
-    >{jt`Okay, you're unsubscribed`}</h3>
+    >{jt`Okay, you're deleted`}</h3>
   </li>
-);
+)
 
 export class AlertScheduleText extends Component {
   getScheduleText = () => {
