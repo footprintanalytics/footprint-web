@@ -156,6 +156,9 @@ export const getRoutes = store => (
   <Route
     title={t`Footprint Analytics`}
     component={App}
+    onEnter={nextState => {
+      trackPageView(nextState.location.pathname, "Enter");
+    }}
     onChange={(prevState, nextState, replace) => {
       // console.log([prevState.location.pathname, nextState.location.pathname]);
 
@@ -189,10 +192,6 @@ export const getRoutes = store => (
         if (MetabaseSettings.hasUserSetup()) {
           replace("/");
         }
-        trackPageView(location.pathname);
-      }}
-      onChange={(prevState, nextState) => {
-        trackPageView(nextState.location.pathname);
       }}
     />
 
@@ -219,11 +218,7 @@ export const getRoutes = store => (
           store.dispatch(loadCurrentUserVip());
           store.dispatch(loadCurrentUserVipDataApi());
         }
-        trackPageView(nextState.location.pathname);
         done();
-      }}
-      onChange={(prevState, nextState) => {
-        trackPageView(nextState.location.pathname);
       }}
     >
       <Route path="/" component={LazyLoad.About}>
@@ -366,6 +361,13 @@ export const getRoutes = store => (
           path="weekly-letter"
           component={props => (
             <LazyLoad.Articles {...props} type="week-letter" />
+          )}
+        />
+        <Route
+          title={t`Community insights`}
+          path="community-insights"
+          component={props => (
+            <LazyLoad.Articles {...props} type="community-insights" />
           )}
         />
         <Route

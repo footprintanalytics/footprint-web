@@ -231,7 +231,7 @@ const Publish = props => {
             />
           </Form.Item>
           <Form.Item
-            wrapperCol={{ span: 4 }}
+            wrapperCol={{ span: 6 }}
             name="type"
             rules={[
               {
@@ -246,6 +246,7 @@ const Publish = props => {
               <Select.Option value="realTimeInfo">Flash</Select.Option>
               <Select.Option value="company">Company</Select.Option>
               <Select.Option value="product">Product</Select.Option>
+              <Select.Option value="community-insights">Community insights</Select.Option>
             </Select>
           </Form.Item>
           {isArticle && (

@@ -68,8 +68,9 @@
                                    ;; https://github.com/facebook/react/issues/17997
                                    ;;(when config/is-dev?
                                    ;;  "'unsafe-inline'")]
-                                   (when-not config/is-dev?
-                                     (map (partial format "'sha256-%s'") inline-js-hashes)))
+;                                   (when-not config/is-dev?
+;                                     (map (partial format "'sha256-%s'") inline-js-hashes))
+                                 )
                   :child-src    ["*"
                                  "blob:"
                                  "'self'"
@@ -89,6 +90,7 @@
                                  "www.googletagmanager.com"]
                   :frame-src    ["'self'"
                                  "www.footprint.network"
+                                 "preview.footprint.network"
                                  "accounts.google.com"
                                  "www.youtube.com"]
                   :connect-src  ["*"

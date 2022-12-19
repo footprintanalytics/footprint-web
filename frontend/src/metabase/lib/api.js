@@ -4,6 +4,8 @@ import EventEmitter from "events";
 
 import { delay } from "metabase/lib/promise";
 import { IFRAMED } from "metabase/lib/dom";
+import { reportAPI } from "metabase/lib/arms";
+import isUrl from "metabase/lib/isUrl";
 
 const ONE_SECOND = 1000;
 const MAX_RETRIES = 10;
@@ -155,14 +157,48 @@ export class Api extends EventEmitter {
   // TODO Atte Keinänen 6/26/17: Replacing this with isomorphic-fetch could simplify the implementation
   _makeRequest(method, url, headers, body, data, options) {
     return new Promise((resolve, reject) => {
+      const begin = Date.now();
       let isCancelled = false;
       const xhr = new XMLHttpRequest();
+      let requestUrl = url;
+      if (!isUrl(url)) {
+        requestUrl = this.basename + url;
+      }
       xhr.open(method, this.basename + url);
       for (const headerName in headers) {
         xhr.setRequestHeader(headerName, headers[headerName]);
       }
+
+      let armsObject = null;
+
+      xhr.onloadend = () => {
+        if (armsObject) {
+          reportAPI(
+            armsObject.requestUrl,
+            armsObject.success,
+            armsObject.time,
+            armsObject.status,
+            armsObject.statusText,
+          );
+        }
+      };
       xhr.onreadystatechange = () => {
         if (xhr.readyState === XMLHttpRequest.DONE) {
+          if (!isCancelled) {
+            const time = Date.now() - begin;
+            const status = xhr.status;
+            const success =
+              (status >= 200 && status < 300) ||
+              status === 304 ||
+              status === 401;
+            armsObject = {
+              requestUrl,
+              success: success,
+              status: status,
+              time: time,
+              statusText: xhr.statusText,
+            };
+          }
           // getResponseHeader() is case-insensitive
           const antiCsrfToken = xhr.getResponseHeader(ANTI_CSRF_HEADER);
           if (antiCsrfToken) {
@@ -182,6 +218,14 @@ export class Api extends EventEmitter {
           if (status >= 200 && status <= 299) {
             if (options.transformResponse) {
               body = options.transformResponse(body, { data });
+              if (body.code > 1) {
+                reject({
+                  status: body.code,
+                  data: body,
+                  isCancelled: isCancelled,
+                });
+                return;
+              }
             }
             resolve(body);
           } else {
@@ -195,6 +239,16 @@ export class Api extends EventEmitter {
             this.emit(status, url);
           }
         }
+      };
+      xhr.onerror = e => {
+        const time = Date.now() - begin;
+        armsObject = {
+          requestUrl,
+          success: false,
+          status: xhr.status || 603,
+          time,
+          statusText: e.message,
+        };
       };
       xhr.send(body);
 

@@ -43,7 +43,9 @@ const Index = ({
             redirect: "/account/developer",
             from: "Data api price free",
           });
+          return ;
         }
+        onChangeLocation("/account/developer");
       },
       detail: {
         title: "Free access to:",

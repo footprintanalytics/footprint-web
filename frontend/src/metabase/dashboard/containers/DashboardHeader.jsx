@@ -32,6 +32,8 @@ import Header from "../components/DashboardHeader";
 import { SIDEBAR_NAME } from "../constants";
 import "./DashboardHeader.css";
 import MetabaseUtils from "metabase/lib/utils";
+import TaggingModal from "metabase/components/TaggingModal";
+import HomePriorityModal from "metabase/components/HomePriorityModal";
 
 const mapStateToProps = (state, props) => {
   const isDataApp = false;
@@ -67,6 +69,8 @@ class DashboardHeader extends Component {
   state = {
     modal: null,
     showMediaModal: false,
+    showSeoTaggingModal: false,
+    showHomePriorityModal: false,
   };
 
   static propTypes = {
@@ -239,6 +243,7 @@ class DashboardHeader extends Component {
     const canEdit = dashboard.can_write && isEditable && !!dashboard &&
       user && (user.is_superuser || user.id === dashboard?.creator_id);
     const isAdmin = user && user.is_superuser;
+    const isMarket = user && user.isMarket;
 
     const hasCards = isLoaded && dashboard.ordered_cards.length > 0;
     const hasDataCards =
@@ -421,6 +426,28 @@ class DashboardHeader extends Component {
           link: `${location.pathname}/details`,
           event: "Dashboard;EditDetails",
         });
+        if (isAdmin || isMarket) {
+          extraButtons.push({
+            title: "Seo tagging",
+            icon: "",
+            event: "Dashboard;Seo-tagging",
+            action: (e) => {
+              this.setState({
+                showSeoTaggingModal: true,
+              });
+            }
+          });
+          extraButtons.push({
+            title: "Home priority",
+            icon: "",
+            event: "Dashboard;Home-priority",
+            action: (e) => {
+              this.setState({
+                showHomePriorityModal: true,
+              });
+            }
+          });
+        }
 
         if (isAdmin) {
           extraButtons.push({
@@ -701,10 +728,16 @@ class DashboardHeader extends Component {
       setSidebar,
     } = this.props;
 
+    const {
+      showSeoTaggingModal,
+      showHomePriorityModal,
+    } = this.state;
+
     const isDataAppPage = false;
     const hasLastEditInfo = dashboard["last-edit-info"] != null;
 
     return (
+      <>
       <Header
         headerClassName="wrapper"
         objectType="dashboard"
@@ -742,6 +775,22 @@ class DashboardHeader extends Component {
         }
         router={this.props.router}
       />
+        {showSeoTaggingModal && (
+          <TaggingModal
+            onClose={() => this.setState({ showSeoTaggingModal: false })}
+            id={dashboard.id}
+            creatorId={dashboard.creator_id}
+            type="dashboard"
+          />
+        )}
+        {showHomePriorityModal && (
+          <HomePriorityModal
+            onClose={() => this.setState({ showHomePriorityModal: false })}
+            id={dashboard.id}
+            type="dashboard"
+          />
+        )}
+      </>
     );
   }
 }

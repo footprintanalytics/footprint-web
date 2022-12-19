@@ -219,16 +219,16 @@ const Pricing = props => {
               >
                 {item.isCurrent
                   ? item.vipValidEndDate && (
-                      <div className="list-item__expired">
-                        <span>{item.vipValidEndDate}</span>
-                      </div>
-                    )
+                  <div className="list-item__expired">
+                    <span>{item.vipValidEndDate}</span>
+                  </div>
+                )
                   : item.isRecommend && (
-                      <img
-                        src={getOssUrl("20210727193715.png")}
-                        className="list-item__recommend"
-                      />
-                    )}
+                  <img
+                    src={getOssUrl("20210727193715.png")}
+                    className="list-item__recommend"
+                  />
+                )}
                 <div className="flex flex-column justify-center">
                   <p className="list-item__title footprint-title1">
                     {item.name}
