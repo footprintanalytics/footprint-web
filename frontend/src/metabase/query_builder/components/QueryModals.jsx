@@ -36,6 +36,7 @@ import { getPersonalCollectionId } from "metabase/lib/collection";
 import * as Urls from "metabase/lib/urls";
 import { getProject } from "metabase/lib/project_info";
 import { copyCard } from "metabase/new-service";
+import NeedPermissionModal from "metabase/components/NeedPermissionModal";
 
 const mapDispatchToProps = {
   setQuestionCollection: Questions.actions.setCollection,

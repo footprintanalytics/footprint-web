@@ -50,9 +50,7 @@ export async function replaceTemplateCardUrl(props, cardId) {
     return;
   }
   const hide = message.loading("Loading...", 0);
-  console.log("xxx1")
   const card = await loadCardForPreview(cardId);
-  console.log("xxx2")
   hide();
   unset(card, ["visualization_settings", "card.title"]);
   window.open(Urls.newQuestion({ ...card, create_method: "preview" }));

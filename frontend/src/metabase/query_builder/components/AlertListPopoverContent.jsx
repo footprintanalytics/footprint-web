@@ -123,7 +123,7 @@ class AlertListItemInner extends Component {
 
     try {
       this.setState({ unsubscribingProgress: t`Unsubscribing...` });
-      await this.props.unsubscribeFromAlert(alert);
+      await this.props.unsubscribeFromAlert({ ...alert, archived: true });
       this.setState({ hasJustUnsubscribed: true });
       this.props.onUnsubscribe(alert);
     } catch (e) {
