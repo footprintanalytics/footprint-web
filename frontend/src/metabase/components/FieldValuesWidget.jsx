@@ -5,6 +5,7 @@ import { connect } from "react-redux";
 import { t, jt } from "ttag";
 import _ from "underscore";
 
+import { get, isString } from "lodash";
 import TokenField, {
   parseNumberValue,
   parseStringValue,
@@ -23,7 +24,6 @@ import { stripId } from "metabase/lib/formatting";
 import { fetchDashboardParameterValues } from "metabase/dashboard/actions";
 
 import Fields from "metabase/entities/fields";
-import { get } from "lodash";
 const MAX_SEARCH_RESULTS = 100;
 
 const fieldValuesWidgetPropTypes = {
@@ -383,7 +383,7 @@ class FieldValuesWidgetInner extends Component {
             onInputChange={this.onInputChange}
             parseFreeformValue={value => {
               //对0x开头的字符串，认为是地址，强制格式化为小写字母，前提是都有录入db的0x地址都是小写字母
-              if (!customUpload && value && isEncryptAddress(value)) {
+              if (!customUpload && value && isString(value) && isEncryptAddress(value)) {
                 return value.toLowerCase();
               }
               return fields[0].isNumeric()
