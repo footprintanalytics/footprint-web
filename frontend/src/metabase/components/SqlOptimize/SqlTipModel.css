@@ -1,0 +1,23 @@
+.sql-tip__inner {
+  padding: 20px 10px 20px;
+}
+
+.sql-tip__inner h3 {
+  font-size: 20px;
+  line-height: 60px;
+}
+
+.sql-tip__inner-bottom {
+  font-size: 14px;
+  color: #303440;
+  margin-top: 30px;
+}
+
+.sql-tip__content {
+  max-height: 200px;
+  max-width: 700px;
+  overflow: auto;
+  display: flex;
+  font-size: 16px;
+  white-space: pre-line;
+}
