@@ -28,7 +28,7 @@ const SqlOptimizeButton = ({ question, isShowingSqlOptimizeSidebar, showSqlOptim
       setIsShow(true);
     }
   }, [isShow, isSaved, showSqlOptimize, hasTips]);
-  console.log("isSaved", question, isSaved, sql)
+  
   return (
     <Tooltip tooltip={t`How to query faster`}>
       <Button
