@@ -6,6 +6,7 @@ import Tooltip from "metabase/components/Tooltip";
 import Button from "metabase/core/components/Button";
 import { setDarkMode } from "metabase/redux/control";
 import { getDarkMode } from "metabase/selectors/control";
+import { trackStructEvent } from "metabase/lib/analytics";
 
 const DarkModeButton = ({ darkMode, setDarkMode, size=16 }) => (
   <Tooltip tooltip={darkMode ? "Light mode" : "Dark mode"}>
@@ -17,6 +18,7 @@ const DarkModeButton = ({ darkMode, setDarkMode, size=16 }) => (
       icon="dark_mode"
       iconSize={size}
       onClick={() => {
+        trackStructEvent("DarkModeButton")
         setDarkMode(!darkMode);
       }}
     />

@@ -9053,7 +9053,7 @@ better-opn@^2.1.1:
   dependencies:
     open "^7.0.3"
 
-big-integer@^1.6.16:
+big-integer@^1.6.16, big-integer@^1.6.48:
   version "1.6.51"
   resolved "https://registry.npmmirror.com/big-integer/-/big-integer-1.6.51.tgz#0df92a5d9880560d3ff2d5fd20245c889d130686"
   integrity sha512-GPEid2Y9QU1Exl1rpO9B2IPJGHPSupF5GnVIP0blYvNOMer2bTvSWs1jGOUg04hTmu67nmLsQ9TBo1puaotBHg==
@@ -20065,6 +20065,13 @@ node-releases@^2.0.6:
   version "2.0.6"
   resolved "https://registry.yarnpkg.com/node-releases/-/node-releases-2.0.6.tgz#8a7088c63a55e493845683ebf3c828d8c51c5503"
   integrity sha512-PiVXnNuFm5+iYkLBNeq5211hvO38y63T0i2KKh2KnUs3RpzJ+JtODFjkD8yjLwnDkTYF1eKXheUwdssR+NRZdg==
+
+node-sql-parser@^4.6.2:
+  version "4.6.2"
+  resolved "https://registry.npmmirror.com/node-sql-parser/-/node-sql-parser-4.6.2.tgz#a7e58b94997561fadf0d0693d950687d53efd2fb"
+  integrity sha512-r8x1J/86mHi8azSbwC/hDB34cKamr604a17vvdsQgDPSHa/qZSqodd8Cw4b5T8F8eF6c2AC615IrP+n60G0bYg==
+  dependencies:
+    big-integer "^1.6.48"
 
 normalize-package-data@^2.3.2, normalize-package-data@^2.5.0:
   version "2.5.0"

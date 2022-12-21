@@ -10,6 +10,7 @@ import {
   OPEN_DATA_REFERENCE_AT_QUESTION,
   TOGGLE_DATA_REFERENCE,
   TOGGLE_TEMPLATE_TAGS_EDITOR,
+  TOGGLE_SQL_OPTIMIZE,
   TOGGLE_SNIPPET_SIDEBAR,
   SET_IS_SHOWING_TEMPLATE_TAGS_EDITOR,
   SET_NATIVE_EDITOR_SELECTED_RANGE,
@@ -55,13 +56,15 @@ import {
   onCloseQuestionInfo,
   onOpenTimelines,
   onCloseTimelines,
+  onOpenSqlOptimize,
+  onCloseSqlOptimize,
   SHOW_TIMELINES,
   HIDE_TIMELINES,
   SELECT_TIMELINE_EVENTS,
   DESELECT_TIMELINE_EVENTS,
   SET_DOCUMENT_TITLE,
   SET_SHOW_LOADING_COMPLETE_FAVICON,
-  SET_DOCUMENT_TITLE_TIMEOUT_ID,
+  SET_DOCUMENT_TITLE_TIMEOUT_ID, SHOW_SQL_OPTIMIZE,
 } from "./actions";
 
 const DEFAULT_UI_CONTROLS = {
@@ -76,6 +79,7 @@ const DEFAULT_UI_CONTROLS = {
   isShowingChartSettingsSidebar: false,
   isShowingQuestionInfoSidebar: false,
   isShowingTimelineSidebar: false,
+  isShowingSqlOptimizeSidebar: false,
   initialChartSetting: null,
   isShowingRawTable: false, // table/viz toggle
   queryBuilderMode: false, // "view" | "notebook" | "dataset"
@@ -97,6 +101,7 @@ const UI_CONTROLS_SIDEBAR_DEFAULTS = {
   isShowingChartSettingsSidebar: false,
   isShowingChartTypeSidebar: false,
   isShowingTimelineSidebar: false,
+  isShowingSqlOptimizeSidebar: false,
   isShowingQuestionInfoSidebar: false,
 };
 
@@ -106,6 +111,7 @@ const CLOSED_NATIVE_EDITOR_SIDEBARS = {
   isShowingSnippetSidebar: false,
   isShowingDataReference: false,
   isShowingTimelineSidebar: false,
+  isShowingSqlOptimizeSidebar: false,
 };
 
 function setUIControls(state, changes) {
@@ -182,6 +188,20 @@ export const uiControls = handleActions(
         ...state,
         ...CLOSED_NATIVE_EDITOR_SIDEBARS,
         isShowingTemplateTagsEditor: !state.isShowingTemplateTagsEditor,
+      }),
+    },
+    [TOGGLE_SQL_OPTIMIZE]: {
+      next: (state, { payload }) => ({
+        ...state,
+        ...CLOSED_NATIVE_EDITOR_SIDEBARS,
+        isShowingSqlOptimizeSidebar: !state.isShowingSqlOptimizeSidebar,
+      }),
+    },
+    [SHOW_SQL_OPTIMIZE]: {
+      next: (state, { payload }) => ({
+        ...state,
+        ...CLOSED_NATIVE_EDITOR_SIDEBARS,
+        isShowingSqlOptimizeSidebar: true,
       }),
     },
     [TOGGLE_SNIPPET_SIDEBAR]: {
@@ -286,6 +306,16 @@ export const uiControls = handleActions(
       isShowingTimelineSidebar: true,
     }),
     [onCloseTimelines]: state => ({
+      ...state,
+      ...UI_CONTROLS_SIDEBAR_DEFAULTS,
+    }),
+    [onOpenSqlOptimize]: state => ({
+      ...state,
+      ...UI_CONTROLS_SIDEBAR_DEFAULTS,
+      ...CLOSED_NATIVE_EDITOR_SIDEBARS,
+      isShowingSqlOptimizeSidebar: true,
+    }),
+    [onCloseSqlOptimize]: state => ({
       ...state,
       ...UI_CONTROLS_SIDEBAR_DEFAULTS,
     }),

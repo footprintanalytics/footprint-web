@@ -2,7 +2,6 @@
 import React from "react";
 import { Motion, spring } from "react-motion";
 import _ from "underscore";
-import { t } from "ttag";
 
 import { get } from "lodash";
 import { connect } from "react-redux";
@@ -11,7 +10,6 @@ import Popover from "metabase/components/Popover";
 import QueryValidationError from "metabase/query_builder/components/QueryValidationError";
 import { SIDEBAR_SIZES } from "metabase/query_builder/constants";
 import LoadingAndErrorWrapper from "metabase/components/LoadingAndErrorWrapper";
-import Toaster from "metabase/components/Toaster";
 
 import QuestionEmpty from "metabase/query_builder/containers/QuestionEmpty";
 import { deserializeCardFromUrl } from "metabase/lib/card";
@@ -32,11 +30,7 @@ import QueryVisualization from "../QueryVisualization";
 import DataReference from "../dataref/DataReference";
 import TagEditorSidebar from "../template_tags/TagEditorSidebar";
 import SnippetSidebar from "../template_tags/SnippetSidebar";
-import SavedQuestionIntroModal from "../SavedQuestionIntroModal";
 import QueryModals from "../QueryModals";
-
-import ChartSettingsSidebar from "./sidebars/ChartSettingsSidebar";
-import ChartTypeSidebar from "./sidebars/ChartTypeSidebar";
 import SummarizeSidebar from "./sidebars/SummarizeSidebar/SummarizeSidebar";
 import { QuestionInfoSidebar } from "./sidebars/QuestionInfoSidebar";
 import TimelineSidebar from "./sidebars/TimelineSidebar";
@@ -44,7 +38,6 @@ import TimelineSidebar from "./sidebars/TimelineSidebar";
 import NewQuestionHeader from "./NewQuestionHeader";
 import ViewFooter from "./ViewFooter";
 import ViewSidebar from "./ViewSidebar";
-import NewQuestionView from "./View/NewQuestionView";
 import QueryViewNotebook from "./View/QueryViewNotebook";
 
 import {
@@ -58,6 +51,7 @@ import {
   StyledSyncedParametersList,
 } from "./View.styled";
 import TagsPanel from "metabase/query_builder/components/view/TagsPanel";
+import SqlOptimizeSidebar from "metabase/query_builder/components/view/sidebars/SqlOptimizeSidebar";
 
 const DEFAULT_POPOVER_STATE = {
   aggregationIndex: null,
@@ -222,7 +216,9 @@ class View extends React.Component {
       isShowingDataReference,
       isShowingSnippetSidebar,
       isShowingTimelineSidebar,
+      isShowingSqlOptimizeSidebar,
       isShowingQuestionInfoSidebar,
+      toggleSqlOptimize,
       toggleTemplateTagsEditor,
       toggleDataReference,
       toggleSnippetSidebar,
@@ -258,6 +254,15 @@ class View extends React.Component {
           onSelectTimelineEvents={selectTimelineEvents}
           onDeselectTimelineEvents={deselectTimelineEvents}
           onClose={onCloseTimelines}
+        />
+      );
+    }
+
+    if (isShowingSqlOptimizeSidebar) {
+      return (
+        <SqlOptimizeSidebar
+          {...this.props}
+          onClose={toggleSqlOptimize}
         />
       );
     }
@@ -592,6 +597,7 @@ const mapStateToProps = state => {
     canNativeQuery: getUserNativeQueryPermission(state),
     getNewGuideInfo: getNewGuideInfo(state),
     darkMode: getDarkMode(state),
+
   };
 };
 
