@@ -222,8 +222,6 @@ class View extends React.Component {
       toggleTemplateTagsEditor,
       toggleDataReference,
       toggleSnippetSidebar,
-      showSqlOptimize,
-      hideSqlOptimize,
       showTimelines,
       hideTimelines,
       selectTimelineEvents,
@@ -599,6 +597,7 @@ const mapStateToProps = state => {
     canNativeQuery: getUserNativeQueryPermission(state),
     getNewGuideInfo: getNewGuideInfo(state),
     darkMode: getDarkMode(state),
+
   };
 };
 

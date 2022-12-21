@@ -94,6 +94,17 @@ export const toggleSqlOptimize = createAction(
     );
   },
 );
+export const SHOW_SQL_OPTIMIZE =
+  "metabase/qb/SHOW_SQL_OPTIMIZE";
+export const showSqlOptimize = createAction(
+  SHOW_SQL_OPTIMIZE,
+  () => {
+    MetabaseAnalytics.trackStructEvent(
+      "QueryBuilder",
+      "Toggle sql optimize",
+    );
+  },
+);
 
 export const SET_IS_SHOWING_TEMPLATE_TAGS_EDITOR =
   "metabase/qb/SET_IS_SHOWING_TEMPLATE_TAGS_EDITOR";

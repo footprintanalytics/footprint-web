@@ -2,6 +2,7 @@
 import React, { useMemo } from "react";
 import { t } from "ttag";
 import SidebarContent from "metabase/query_builder/components/SidebarContent";
+import { useDebouncedValue } from "metabase/hooks/use-debounced-value";
 import SqlOptimizeContent from "./compoment/SqlOptimizeContent";
 
 const SqlOptimizeSidebar = ({
@@ -9,9 +10,10 @@ const SqlOptimizeSidebar = ({
   question,
 }) => {
   const query = question?.card().dataset_query?.native?.query || "";
+  const debouncedQuery = useDebouncedValue(query, 1000);
   const sql = useMemo(() => {
-    return query;
-  }, [query]);
+    return debouncedQuery;
+  }, [debouncedQuery]);
 
   return (
     <SidebarContent

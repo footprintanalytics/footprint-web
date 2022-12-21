@@ -64,7 +64,7 @@ import {
   DESELECT_TIMELINE_EVENTS,
   SET_DOCUMENT_TITLE,
   SET_SHOW_LOADING_COMPLETE_FAVICON,
-  SET_DOCUMENT_TITLE_TIMEOUT_ID,
+  SET_DOCUMENT_TITLE_TIMEOUT_ID, SHOW_SQL_OPTIMIZE,
 } from "./actions";
 
 const DEFAULT_UI_CONTROLS = {
@@ -195,6 +195,13 @@ export const uiControls = handleActions(
         ...state,
         ...CLOSED_NATIVE_EDITOR_SIDEBARS,
         isShowingSqlOptimizeSidebar: !state.isShowingSqlOptimizeSidebar,
+      }),
+    },
+    [SHOW_SQL_OPTIMIZE]: {
+      next: (state, { payload }) => ({
+        ...state,
+        ...CLOSED_NATIVE_EDITOR_SIDEBARS,
+        isShowingSqlOptimizeSidebar: true,
       }),
     },
     [TOGGLE_SNIPPET_SIDEBAR]: {
