@@ -21,7 +21,7 @@ const isWhereValueOrColumn = (where, value) => {
 }
 
 const handleSqlObject = (object, roleArray) => {
-  const tableName = get(object.from, 0)?.table;
+  const tableName = get(object.from, 0)?.table || "";
   if (object.columns === "*") {
     roleArray?.push({ type: "query_all_column", tableName, result: `Table ${tableName} query with "*", you can specify some columns. \ne.g. select chain from table` });
   }

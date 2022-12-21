@@ -1,6 +1,5 @@
 /* eslint-disable react/prop-types */
 import React, { useEffect, useMemo, useState } from "react";
-import { connect } from "react-redux";
 import { t } from "ttag";
 import cx from "classnames";
 import Tooltip from "metabase/components/Tooltip";
@@ -50,12 +49,4 @@ const SqlOptimizeButton = ({ question, isShowingSqlOptimizeSidebar, showSqlOptim
   );
 };
 
-const mapStateToProps = state => ({
-  // showSqlOptimize: isShowingSqlOptimizeSidebar(state),
-});
-
-const mapDispatchToProps = {
-  // setShowSqlOptimize,
-};
-
-export default connect(mapStateToProps, mapDispatchToProps)(SqlOptimizeButton);
+export default SqlOptimizeButton;

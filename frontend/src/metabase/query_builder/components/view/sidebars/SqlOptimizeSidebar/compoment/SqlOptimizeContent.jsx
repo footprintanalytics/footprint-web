@@ -36,7 +36,7 @@ const SqlOptimizeContent = ({
         </>
       )}
       <div className="sql-tip__inner-bottom">
-        You can find more SQL Best Practices in this <Link className="underline text-underline text-underline-hover" to="https://docs.footprint.network/docs/sql">docs</Link>.
+        You can find more SQL Best Practices in this <Link className="underline text-underline text-underline-hover" target="_blank" to="https://docs.footprint.network/docs/sql">docs</Link> .
       </div>
     </div>
   );
