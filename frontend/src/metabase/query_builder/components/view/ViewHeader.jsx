@@ -57,7 +57,6 @@ import QueryDownloadWidget from "../QueryDownloadWidget";
 import QuestionEmbedWidget from "../../containers/QuestionEmbedWidget";
 import QueryMoreWidget from "../QueryMoreWidget";
 import QueryDownloadWidgetFP from "../QueryDownloadWidgetFP";
-import SqlOptimize from "../../../components/SqlOptimize";
 
 const viewTitleHeaderPropTypes = {
   question: PropTypes.object.isRequired,
@@ -898,9 +897,6 @@ function ViewTitleHeaderRightSide(props) {
             }
           />
         // </ViewHeaderIconButtonContainer>
-      )}
-      {!isSaved && !isObjectDetail && (
-        <SqlOptimize sql={question?.card().dataset_query?.native?.query || ""}/>
       )}
       {!isSaved && result && !isObjectDetail && (<Button
           disabled={queryBuilderMode !== "view"}

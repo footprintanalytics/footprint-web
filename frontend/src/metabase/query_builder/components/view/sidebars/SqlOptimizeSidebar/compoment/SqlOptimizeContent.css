@@ -1,10 +1,14 @@
 .sql-tip__inner {
-  padding: 20px 10px 20px;
+  padding: 20px;
 }
 
 .sql-tip__inner h3 {
   font-size: 20px;
   line-height: 60px;
+}
+
+.sql-tip__inner h4 {
+  font-weight: bold;
 }
 
 .sql-tip__inner-bottom {
@@ -14,15 +18,24 @@
 }
 
 .sql-tip__content {
-  max-height: 200px;
-  max-width: 700px;
   overflow: auto;
   display: flex;
-  font-size: 16px;
+  font-size: 14px;
   white-space: pre-line;
 }
 
 .sql-tip__content ul li {
   line-height: 20px;
   margin-bottom: 10px;
+}
+
+.sql-tip__division {
+  margin: 20px 0;
+  height: 1px;
+  background: #dcdee4;
+}
+
+.sql-tip__inner-total {
+  font-size: 14px;
+  margin-top: 20px;
 }

@@ -9,6 +9,7 @@ import Tooltip from "metabase/components/Tooltip";
 
 import NativeQuery from "metabase-lib/queries/NativeQuery";
 import Button from "metabase/core/components/Button";
+import { trackStructEvent } from "metabase/lib/analytics";
 
 const NativeVariablesButton = ({
   toggleTemplateTagsEditor,
@@ -19,12 +20,15 @@ const NativeVariablesButton = ({
   <Tooltip tooltip={t`Variables`}>
     <Button
       className={cx(className, "Question-header-btn transition-color text-brand-hover", {
-        "text-brand": isShowingTemplateTagsEditor,
+        "Question-header-btn--primary": isShowingTemplateTagsEditor,
       })}
       iconColor="#7A819B"
       icon="variable"
       iconSize={size}
-      onClick={toggleTemplateTagsEditor}
+      onClick={() => {
+        trackStructEvent("NativeVariablesButton")
+        toggleTemplateTagsEditor()
+      }}
     />
   </Tooltip>
 );

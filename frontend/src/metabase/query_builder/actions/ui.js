@@ -51,6 +51,12 @@ export const onOpenQuestionInfo = createAction(
 export const onCloseQuestionInfo = createAction(
   "metabase/qb/CLOSE_QUESTION_INFO",
 );
+export const onOpenSqlOptimize = createAction(
+  "metabase/qb/OPEN_SQL_OPTIMIZE",
+);
+export const onCloseSqlOptimize = createAction(
+  "metabase/qb/CLOSE_SQL_OPTIMIZE",
+);
 
 export const onOpenTimelines = createAction("metabase/qb/OPEN_TIMELINES");
 export const onCloseTimelines = createAction("metabase/qb/CLOSE_TIMELINES");

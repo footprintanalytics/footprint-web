@@ -1,20 +1,14 @@
 /* eslint-disable react/prop-types */
-import React, { useState } from "react";
-import { connect } from "react-redux";
-import { Parser } from "node-sql-parser";
+import React from "react";
 import { get } from "lodash";
-import { getUser } from "metabase/selectors/user";
-import SqlTipModal from "metabase/components/SqlOptimize/SqlTipModal";
-import { t } from "ttag";
-import Tooltip from "metabase/components/Tooltip";
-import Button from "metabase/core/components/Button";
-const Index = ({
-  user,
-  sql,
+import { Parser } from "node-sql-parser";
+import Link from "metabase/core/components/Link";
+import "./SqlOptimizeContent.css";
+
+const SqlOptimizeContent = ({
+  sql
 }) => {
-
-  const [showSqlTipModal, setShowSqlTipModal] = useState(false);
-
+  console.log("sql", sql)
   const isWhereValueOrColumn = (where, value) => {
 
     let result = false;
@@ -37,7 +31,7 @@ const Index = ({
   const handleSqlObject = (object, roleArray) => {
     const tableName = get(object.from, 0)?.table;
     if (object.columns === "*") {
-      roleArray?.push({ type: "query_all_column", tableName, result: `Table ${tableName} query with "*", we can specify some columns.` });
+      roleArray?.push({ type: "query_all_column", tableName, result: `Table ${tableName} query with "*", you can specify some columns. \ne.g. select chain from table` });
     }
     const isUdTable = !!tableName?.toLowerCase()?.startsWith("ud");
     const isBronzeTable = !isUdTable
@@ -48,7 +42,7 @@ const Index = ({
         || tableName?.endsWith("_traces"))
     ;
     if (isBronzeTable && !isWhereValueOrColumn(object.where, "block_timestamp")) {
-      roleArray?.push({ type: "bronze_no_block_timestamp", tableName, result: `Table ${tableName} query the full data, we can specify the query time. \ne.g. where block_timestamp > date_add('day',-7,current_date)`});
+      roleArray?.push({ type: "bronze_no_block_timestamp", tableName, result: `Table ${tableName} query the full data, you can specify the query time. \ne.g. select * from ${tableName} where block_timestamp > date_add('day',-7,current_date)`});
     }
 
     if (object?.with) {
@@ -70,41 +64,42 @@ const Index = ({
 
       optimize = roleArray;
     } catch (e) {
-      console.error(e)
     }
     return optimize;
   }
 
-  if (!sql) {
-    return null;
-  }
+  const tips = getSqlOptimize(sql);
+  const hasTips = tips && tips?.length > 0;
 
   return (
-    <>
-      <Tooltip tooltip={t`Sql optimize`}>
-        <Button
-          onlyIcon
-          className="Question-header-btn-new"
-          iconColor="#7A819B"
-          iconSize={16}
-          onClick={() => {
-            setShowSqlTipModal(true)
-          }}
-        >
-          Sql optimize
-        </Button>
-      </Tooltip>
-      {showSqlTipModal && (
-        <SqlTipModal tips={getSqlOptimize(sql)} title="Sql Optimize" onClose={() => setShowSqlTipModal(false)}/>
+    <div className="sql-tip__inner">
+      <div className="sql-tip__inner-top">
+        You can find more SQL Best Practices in this <Link className="underline text-underline text-underline-hover" to="https://docs.footprint.network/docs/sql">docs</Link>.
+
+        <div className="sql-tip__inner-total">
+          {hasTips ? `Total ${tips?.length || 0} tips.` : "No tips."}
+        </div>
+      </div>
+      {hasTips && (
+        <>
+          <div className="sql-tip__division"/>
+          <div className="sql-tip__content">
+            <ul>
+              {tips.map((item, index) => {
+                return (
+                  <li key={index}>
+                    <h4>{`Tip ${index + 1}: `}</h4>
+                    {item.result}
+                  </li>
+                )
+              })}
+            </ul>
+          </div>
+        </>
       )}
-    </>
+    </div>
   );
 };
 
-const mapStateToProps = (state, props) => {
-  return {
-    user: getUser(state, props),
-  };
-};
 
-export default connect(mapStateToProps, null)(Index);
+export default React.memo(SqlOptimizeContent);

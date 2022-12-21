@@ -83,6 +83,17 @@ export const toggleTemplateTagsEditor = createAction(
     );
   },
 );
+export const TOGGLE_SQL_OPTIMIZE =
+  "metabase/qb/TOGGLE_SQL_OPTIMIZE";
+export const toggleSqlOptimize = createAction(
+  TOGGLE_SQL_OPTIMIZE,
+  () => {
+    MetabaseAnalytics.trackStructEvent(
+      "QueryBuilder",
+      "Toggle sql optimize",
+    );
+  },
+);
 
 export const SET_IS_SHOWING_TEMPLATE_TAGS_EDITOR =
   "metabase/qb/SET_IS_SHOWING_TEMPLATE_TAGS_EDITOR";
