@@ -66,7 +66,7 @@ const ContractAddress = ({ onFinish }) => {
           }
         />
       </Form.Item>
-      {data?.protocolName || data?.contractName ? (
+      {data?.abi?.length && (data?.protocolName || data?.contractName) ? (
         <Form.Item>
           <Alert
             message="Seems like this contract already exists"
@@ -122,7 +122,7 @@ const ContractAddress = ({ onFinish }) => {
           type="primary"
           htmlType="submit"
         >
-          Still to submit
+          Next
         </Button>
       </Form.Item>
     </Form>

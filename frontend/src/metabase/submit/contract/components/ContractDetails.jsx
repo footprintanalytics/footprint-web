@@ -27,7 +27,9 @@ const PROTOCOL_CATEGORY_LIST = [
 
 const ContractDetails = ({ formData, onFinish }) => {
   const [form] = Form.useForm();
-  const isNewProtocol = !formData.contractExists.contractAddress;
+  const isNewProtocol =
+    !formData.contractExists.contractAddress ||
+    !formData.contractExists.abi?.length;
 
   const contractProtocolByAddress = useQuery(
     ["getContractProtocolByAddress", formData],
