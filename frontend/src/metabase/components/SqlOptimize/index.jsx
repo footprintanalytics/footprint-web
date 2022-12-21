@@ -37,7 +37,7 @@ const Index = ({
   const handleSqlObject = (object, roleArray) => {
     const tableName = get(object.from, 0)?.table;
     if (object.columns === "*") {
-      roleArray?.push({ type: "query_all_column", tableName, result: `${tableName} query with "*", we can specify some columns.` });
+      roleArray?.push({ type: "query_all_column", tableName, result: `Table ${tableName} query with "*", we can specify some columns.` });
     }
     const isUdTable = !!tableName?.toLowerCase()?.startsWith("ud");
     const isBronzeTable = !isUdTable
@@ -48,7 +48,7 @@ const Index = ({
         || tableName?.endsWith("_traces"))
     ;
     if (isBronzeTable && !isWhereValueOrColumn(object.where, "block_timestamp")) {
-      roleArray?.push({ type: "bronze_no_block_timestamp", tableName, result: `${tableName} query the full data, we can specify the query time. \neg. where block_timestamp > date_add('day',-1,current_date)`});
+      roleArray?.push({ type: "bronze_no_block_timestamp", tableName, result: `Table ${tableName} query the full data, we can specify the query time. \ne.g. where block_timestamp > date_add('day',-7,current_date)`});
     }
 
     if (object?.with) {

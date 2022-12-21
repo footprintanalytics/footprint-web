@@ -21,3 +21,8 @@
   font-size: 16px;
   white-space: pre-line;
 }
+
+.sql-tip__content ul li {
+  line-height: 20px;
+  margin-bottom: 10px;
+}
