@@ -35,7 +35,7 @@ import Link from "metabase/core/components/Link";
 import { UploadOutlined } from "@ant-design/icons";
 import { getUser } from "metabase/selectors/user";
 import {
-  canShowNewGuideStart,
+  // canShowNewGuideStart,
   closeNewGuide,
   newGuideHandle,
   newGuideHighlight,
@@ -50,6 +50,7 @@ import { getMetadata } from "metabase/selectors/metadata";
 import * as Urls from "metabase/lib/urls";
 import dateFieldMapping from "metabase/query_builder/data/data";
 import TableChains from "metabase/query_builder/components/question/TableChains";
+import { isChartPage } from "metabase/lib/urls";
 import NativeQuery from "metabase-lib/queries/NativeQuery";
 import {
   getNativeEditorCursorOffset,
@@ -57,7 +58,6 @@ import {
   getQuery,
   getQuestion,
 } from "../selectors";
-import { isChartPage } from "metabase/lib/urls";
 
 function QuestionSide({
   question,
@@ -94,7 +94,8 @@ function QuestionSide({
   const isNative = query instanceof NativeQuery;
   const sourceTableId = get(card, "dataset_query.query.source-table");
   const pageSize = 10;
-  const canShowNewGuide = canShowNewGuideStart(user);
+  const canShowNewGuide = false;
+  // const canShowNewGuide = canShowNewGuideStart(user);
   const newGuideShowTable = getNewGuideInfo && getNewGuideInfo["table"];
   const queryType = get(card, "dataset_query.type");
   const isNewQuestion = !get(question, "_card.original_card_id");
