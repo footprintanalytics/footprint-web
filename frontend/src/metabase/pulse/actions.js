@@ -86,7 +86,71 @@ export const fetchPulseFormInput = createThunkAction(
   FETCH_PULSE_FORM_INPUT,
   function () {
     return async function (dispatch, getState) {
-      return await PulseApi.form_input();
+
+      // const result = await PulseApi.form_input();
+
+      const result = {
+        "channels": {
+          "email": {
+            "type": "email",
+            "name": "Email",
+            "allows_recipients": false,
+            // "recipients": ["user", "email"],
+            "schedules": ["hourly", "daily", "weekly", "monthly"],
+            "configured": true,
+            "no_detail": true,
+          },
+          /*"slack": {
+            "type": "slack",
+            "name": "Slack",
+            "allows_recipients": false,
+            "schedules": ["hourly", "daily", "weekly", "monthly"],
+            "fields": [{
+              "name": "channel",
+              "type": "select",
+              "displayName": "Post to",
+              "options": [],
+              "required": true,
+            }],
+            "configured": true,
+          },*/
+          "telegram": {
+            "type": "telegram",
+            "name": "Telegram",
+            "allows_recipients": false,
+            "schedules": ["hourly", "daily", "weekly", "monthly"],
+            "fields": [{
+              "name": "telegram_bot_token",
+              "type": "input",
+              "displayName": "Bot token",
+              "options": [],
+              "required": false,
+            }, {
+              "name": "telegram_room_id",
+              "type": "input",
+              "displayName": "Room id",
+              "options": [],
+              "required": false,
+            }],
+            "configured": true,
+          },
+          "discord": {
+            "type": "discord",
+            "name": "Discord",
+            "allows_recipients": false,
+            "schedules": ["hourly", "daily", "weekly", "monthly"],
+            "fields": [{
+              "name": "discord_webhook_url",
+              "type": "select",
+              "displayName": "Webhook url",
+              "options": [],
+              "required": false,
+            }],
+            "configured": true,
+          },
+        },
+      };
+      return result;
     };
   },
 );

@@ -105,6 +105,14 @@ export function recipientIsValid(recipient: NotificationRecipient) {
   return _.isEmpty(allowedDomains) || allowedDomains.includes(recipientDomain);
 }
 
+export function telegramRecipientIsValid(recipient: NotificationRecipient) {
+  return !_.isEmpty(recipient.telegram_bot_token) && !_.isEmpty(recipient.telegram_room_id);
+}
+
+export function discordRecipientIsValid(recipient: NotificationRecipient) {
+  return !_.isEmpty(recipient.discord_webhook_url);
+}
+
 export function pulseIsValid(pulse: Pulse, channelSpecs: ChannelSpecs) {
   return (
     (pulse.name &&
@@ -181,7 +189,7 @@ export function getDefaultChannel(channelSpecs: ChannelSpecs) {
 export function createChannel(channelSpec: ChannelSpec) {
   const details = {};
 
-  return {
+  const common = {
     channel_type: channelSpec.type,
     enabled: true,
     recipients: [],
@@ -191,6 +199,19 @@ export function createChannel(channelSpec: ChannelSpec) {
     schedule_hour: 8,
     schedule_frame: "first",
   };
+  if (channelSpec.type === "discord") {
+    return {
+      ...common,
+      recipients: [{}],
+    }
+  }
+  if (channelSpec.type === "telegram") {
+    return {
+      ...common,
+      recipients: [{}],
+    }
+  }
+  return common;
 }
 
 export function getPulseParameters(pulse: Pulse) {
