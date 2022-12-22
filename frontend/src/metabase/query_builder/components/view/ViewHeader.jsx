@@ -446,7 +446,26 @@ function AhHocQuestionLeftSide(props) {
                     result={result}
                     isRunning={isRunning}
                     isDirty={isResultDirty}
-                    onRun={() => runQuestionQuery({ shouldUpdateUrl: false, ignoreCache: true })}
+                    onRun={() => {
+                      const selectedText =
+                        window._editor && window._editor.getSelectedText();
+                      if (selectedText) {
+                        const temporaryCard = question
+                          .query()
+                          .setQueryText(selectedText)
+                          .question()
+                          .card();
+                        runQuestionQuery({
+                          overrideWithCard: temporaryCard,
+                          shouldUpdateUrl: false,
+                        });
+                      } else {
+                        runQuestionQuery({
+                          shouldUpdateUrl: false,
+                          ignoreCache: true,
+                        });
+                      }
+                    }}
                     onCancel={cancelQuery}
                   />
                 </ViewHeaderIconButtonContainer>
