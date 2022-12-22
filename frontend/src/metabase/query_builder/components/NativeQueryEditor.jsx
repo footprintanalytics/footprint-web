@@ -247,6 +247,7 @@ class NativeQueryEditor extends Component {
     }
 
     this._editor = ace.edit(editorElement);
+    window._editor = this._editor;
 
     // listen to onChange events
     this._editor.getSession().on("change", this.onChange);
