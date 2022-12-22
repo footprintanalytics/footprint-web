@@ -233,10 +233,12 @@
 
       ;; Only admins or users has subscription or monitoring perms
       ;; can update recipients or explicitly archive an alert
-      (when (and (or api/*is-superuser?*
-                     has-subscription-perms?
-                     has-monitoring-permissions?)
-                 (email/email-configured?))
+      (when
+        true
+;        (and (or api/*is-superuser?*
+;                     has-subscription-perms?
+;                     has-monitoring-permissions?)
+;                 (email/email-configured?))
         (if archived
           (notify-on-archive-if-needed! updated-alert)
           (notify-recipient-changes! alert-before-update updated-alert)))
