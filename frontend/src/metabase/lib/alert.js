@@ -1,9 +1,13 @@
 import {
-  recipientIsValid,
-  telegramRecipientIsValid,
   discordRecipientIsValid,
+  recipientIsValid,
   scheduleIsValid,
+  telegramRecipientIsValid,
 } from "metabase/lib/pulse";
+
+export function channelIsEnabled(channel) {
+  return channel.enabled;
+}
 
 export function channelIsValid(channel) {
   switch (channel.channel_type) {
@@ -38,5 +42,5 @@ export function channelIsValid(channel) {
 }
 
 export function alertIsValid(alert) {
-  return alert.channels.length > 0 && alert.channels.every(channelIsValid);
+  return alert.channels.length > 0 && alert.channels.every(channelIsValid) && alert.channels.some(channelIsEnabled);
 }
