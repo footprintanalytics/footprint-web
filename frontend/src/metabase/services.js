@@ -337,7 +337,7 @@ export const PulseApi = {
 
 export const AlertApi = {
   list: GET("/api/alert"),
-  list_for_question: GET("/api/alert/question/:questionId"),
+  list_for_question: GET("/api/v1/alert/question/:questionId"),
   get: GET("/api/alert/:id"),
   create: POST("/api/v1/alert"),
   // create: POST("/api/alert"),

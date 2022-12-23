@@ -3,6 +3,9 @@ import type { Card } from "./card";
 export type NotificationRecipient = {
   id: string;
   email: string;
+  telegram_bot_token: string;
+  telegram_room_id: string;
+  discord_webhook_url: string;
 };
 
 export type Channel = {

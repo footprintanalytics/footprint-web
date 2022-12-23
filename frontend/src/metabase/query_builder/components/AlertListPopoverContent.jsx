@@ -145,9 +145,12 @@ class AlertListItemInner extends Component {
 
     const emailChannel = alert.channels.find(c => c.channel_type === "email");
     const emailEnabled = emailChannel && emailChannel.enabled;
-    const slackChannel = alert.channels.find(c => c.channel_type === "slack");
-    const slackEnabled = slackChannel && slackChannel.enabled;
-
+    /*const slackChannel = alert.channels.find(c => c.channel_type === "slack");
+    const slackEnabled = slackChannel && slackChannel.enabled;*/
+    const telegramChannel = alert.channels.find(c => c.channel_type === "telegram");
+    const telegramEnabled = telegramChannel && telegramChannel.enabled;
+    const discordChannel = alert.channels.find(c => c.channel_type === "discord");
+    const discordEnabled = discordChannel && discordChannel.enabled;
     if (hasDeleted) {
       return <DeletedListItem />;
     }
@@ -173,7 +176,7 @@ class AlertListItemInner extends Component {
               {(isAdmin || isCurrentUser) && (
                 <a className="link" onClick={this.onEdit}>{jt`Edit`}</a>
               )}
-              {!isAdmin && !unDeleteProgress && (
+              {isCurrentUser && !unDeleteProgress && (
                 <a
                   className="link ml2"
                   onClick={this.onDelete}
@@ -186,27 +189,37 @@ class AlertListItemInner extends Component {
           </div>
 
           <ul className="flex mt2 text-small">
-            <li className="flex align-center">
+            <li className="flex align-center mr1">
               <Icon name="clock" size="12" className="mr1" />{" "}
               <AlertScheduleText
                 schedule={alert.channels[0]}
                 verbose={!isAdmin}
               />
             </li>
-            {isAdmin && emailEnabled && (
-              <li className="ml3 flex align-center">
+            {emailEnabled && (
+              <li className="ml1 flex align-center">
                 <Icon name="mail" className="mr1" />
-                {emailChannel.recipients.length}
+                {/*{emailChannel.recipients.length}*/}
               </li>
             )}
-            {isAdmin && slackEnabled && (
+            {telegramEnabled && (
+              <li className="ml1 flex align-center">
+                <Icon name="telegram" className="mr1" size={18}/>
+              </li>
+            )}
+            {discordEnabled && (
+              <li className="ml1 flex align-center">
+                <Icon name="discord" className="mr1" size={20}/>
+              </li>
+            )}
+            {/*{isAdmin && slackEnabled && (
               <li className="ml3 flex align-center">
                 <Icon name="slack" size={16} className="mr1" />
                 {(slackChannel.details &&
                   slackChannel.details.channel.replace("#", "")) ||
                   t`No channel`}
               </li>
-            )}
+            )}*/}
           </ul>
         </div>
 

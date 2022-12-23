@@ -1,4 +1,13 @@
-import { recipientIsValid, scheduleIsValid } from "metabase/lib/pulse";
+import {
+  discordRecipientIsValid,
+  recipientIsValid,
+  scheduleIsValid,
+  telegramRecipientIsValid,
+} from "metabase/lib/pulse";
+
+export function channelIsEnabled(channel) {
+  return channel.enabled;
+}
 
 export function channelIsValid(channel) {
   switch (channel.channel_type) {
@@ -11,11 +20,27 @@ export function channelIsValid(channel) {
       );
     case "slack":
       return channel.details && scheduleIsValid(channel);
+    case "telegram":
+      return !channel.enabled || (
+        channel.enabled &&
+        channel.recipients &&
+        channel.recipients.length > 0 &&
+        channel.recipients.every(telegramRecipientIsValid) &&
+        scheduleIsValid(channel)
+      );
+    case "discord":
+      return !channel.enabled || (
+        channel.enabled &&
+        channel.recipients &&
+        channel.recipients.length > 0 &&
+        channel.recipients.every(discordRecipientIsValid) &&
+        scheduleIsValid(channel)
+      );
     default:
       return false;
   }
 }
 
 export function alertIsValid(alert) {
-  return alert.channels.length > 0 && alert.channels.every(channelIsValid);
+  return alert.channels.length > 0 && alert.channels.every(channelIsValid) && alert.channels.some(channelIsEnabled);
 }

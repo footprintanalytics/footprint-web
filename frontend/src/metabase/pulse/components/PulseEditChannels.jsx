@@ -15,19 +15,26 @@ import * as MetabaseAnalytics from "metabase/lib/analytics";
 
 import { channelIsValid, createChannel } from "metabase/lib/pulse";
 import RecipientPicker from "./RecipientPicker";
+import ChannelSetupMessage from "metabase/components/ChannelSetupMessage";
+import FootprintChannelField from "metabase/sharing/components/FootprintChannelField";
+
 
 export const CHANNEL_ICONS = {
   email: "mail",
   slack: "slack",
+  telegram: "telegram",
+  discord: "discord",
 };
 
 const CHANNEL_NOUN_PLURAL = {
   email: t`Emails`,
   slack: t`Slack messages`,
+  telegram: t`Telegram messages`,
+  discord: t`Discord messages`,
 };
 
 export default class PulseEditChannels extends Component {
-  state = {};
+  state = { type: "email" };
 
   static propTypes = {
     pulse: PropTypes.object.isRequired,
@@ -56,7 +63,6 @@ export default class PulseEditChannels extends Component {
     const channel = createChannel(channelSpec);
 
     this.props.setPulse({ ...pulse, channels: pulse.channels.concat(channel) });
-
     MetabaseAnalytics.trackStructEvent(
       this.props.pulseId ? "PulseEdit" : "PulseCreate",
       "AddChannel",
@@ -72,7 +78,6 @@ export default class PulseEditChannels extends Component {
   onChannelPropertyChange = (index, name, value) => {
     const { pulse } = this.props;
     const channels = [...pulse.channels];
-
     channels[index] = { ...channels[index], [name]: value };
 
     this.props.setPulse({ ...pulse, channels });
@@ -192,6 +197,40 @@ export default class PulseEditChannels extends Component {
             }
           />
         ) : null}
+        {channelSpec.type === "telegram" ? (
+          <>
+            <FootprintChannelField
+              channel={channel}
+              channelSpec={channelSpec}
+              fieldName={"telegram_bot_token"}
+              placeholder={"0000000000:xxxxxxxxxx..."}
+              onChannelPropertyChange={(name, value) =>
+                this.onChannelPropertyChange(index, name, value)
+              }
+            />
+            <div className="mt2"/>
+            <FootprintChannelField
+              channel={channel}
+              channelSpec={channelSpec}
+              fieldName={"telegram_room_id"}
+              placeholder={"-1000000000000"}
+              onChannelPropertyChange={(name, value) =>
+                this.onChannelPropertyChange(index, name, value)
+              }
+            />
+          </>
+        ): null}
+        {channelSpec.type === "discord" ? (
+          <FootprintChannelField
+            channel={channel}
+            channelSpec={channelSpec}
+            fieldName={"discord_webhook_url"}
+            placeholder={"https://discord.com/api/webhooks/******"}
+            onChannelPropertyChange={(name, value) =>
+              this.onChannelPropertyChange(index, name, value)
+            }
+          />
+        ) : null}
         {!this.props.hideSchedulePicker && channelSpec.schedules && (
           <SchedulePicker
             schedule={_.pick(
@@ -241,8 +280,7 @@ export default class PulseEditChannels extends Component {
   }
 
   renderChannelSection(channelSpec) {
-    const { pulse } = this.props;
-
+    const { user, pulse } = this.props;
     const channels = pulse.channels
       .map((c, i) => [c, i])
       .filter(([c, i]) => c.enabled && c.channel_type === channelSpec.type)
@@ -251,39 +289,45 @@ export default class PulseEditChannels extends Component {
       );
     return (
       <li key={channelSpec.type} className="border-row-divider">
-        <div className="flex align-center p3 border-row-divider">
+        <div className="flex align-center p2 border-row-divider">
           {CHANNEL_ICONS[channelSpec.type] && (
             <Icon
               className="mr1 text-light"
               name={CHANNEL_ICONS[channelSpec.type]}
-              size={28}
+              size={24}
             />
           )}
-          <h2>{channelSpec.name}</h2>
+          <h3>{channelSpec.name}</h3>
           <Toggle
             className="flex-align-right"
             value={channels.length > 0}
             onChange={this.toggleChannel.bind(this, channelSpec.type)}
           />
         </div>
-        {/*{channels.length > 0 && channelSpec.configured ? (*/}
-        {/*  <ul className="bg-light px3">{channels}</ul>*/}
-        {/*) : channels.length > 0 && !channelSpec.configured ? (*/}
-        {/*  <div className="p4 text-centered">*/}
-        {/*    <h3 className="mb2">{t`${channelSpec.name} needs to be set up by an administrator.`}</h3>*/}
-        {/*    <ChannelSetupMessage user={user} channels={[channelSpec.name]} />*/}
-        {/*  </div>*/}
-        {/*) : null}*/}
+        {channels.length > 0 && channelSpec.configured ? (
+          !channelSpec.no_detail ? <ul className="bg-light px3">{channels}</ul> : null
+        ) : channels.length > 0 && !channelSpec.configured ? (
+          <div className="p4 text-centered">
+            <h3 className="mb2">{t`${channelSpec.name} needs to be set up by an administrator.`}</h3>
+            <ChannelSetupMessage user={user} channels={[channelSpec.name]} />
+          </div>
+        ) : null}
       </li>
     );
   }
 
+  onChange = (e) => {
+    this.setState({ state: e.target.value })
+  };
+
   render() {
     const { formInput } = this.props;
     // Default to show the default channels until full formInput is loaded
-    // const channels = formInput.channels || {
-    const channels = {
+    const channels = formInput.channels || {
+    // const channels = {
       email: { name: t`Email`, type: "email" },
+      // telegram: { name: t`Telegram`, type: "telegram" },
+      // discord: { name: t`Discord`, type: "discord" },
       // slack: { name: t`Slack`, type: "slack" },
     };
     return (

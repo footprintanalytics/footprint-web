@@ -160,7 +160,7 @@ class CreateAlertModalContentInner extends Component {
       <ModalContent onClose={onCancel}>
         <div
           className="PulseEdit ml-auto mr-auto mb4"
-          style={{ maxWidth: "550px" }}
+          style={{ maxWidth: "550px", minWidth: "400px", }}
         >
           <AlertModalTitle text={t`Let's set up your alert`} />
           <AlertEditForm
@@ -326,7 +326,7 @@ class UpdateAlertModalContentInner extends Component {
       <ModalContent onClose={onCancel}>
         <div
           className="PulseEdit ml-auto mr-auto mb4"
-          style={{ maxWidth: "550px" }}
+          style={{ maxWidth: "550px", minWidth: "400px", }}
         >
           <AlertModalTitle text={title} />
           <AlertEditForm
@@ -619,7 +619,7 @@ class AlertEditChannelsInner extends Component {
 }
 
 export const AlertEditChannels = _.compose(
-  User.loadList(),
+  // User.loadList(),
   connect(
     (state, props) => ({
       user: getUser(state),
