@@ -199,13 +199,7 @@ export function createChannel(channelSpec: ChannelSpec) {
     schedule_hour: 8,
     schedule_frame: "first",
   };
-  if (channelSpec.type === "discord") {
-    return {
-      ...common,
-      recipients: [{}],
-    }
-  }
-  if (channelSpec.type === "telegram") {
+  if (channelSpec.type === "discord" || channelSpec.type === "telegram") {
     return {
       ...common,
       recipients: [{}],
