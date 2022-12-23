@@ -1052,7 +1052,7 @@ export class UnconnectedDataSelector extends Component {
     /*if (this.isLoadingDatasets()) {
       return <LoadingAndErrorWrapper loading />;
     }*/
-    console.log("xxxxxx", this.hasDataAccess(), isSearchActive, isPickerOpen)
+
     if (this.hasDataAccess()) {
       return (
         <>
