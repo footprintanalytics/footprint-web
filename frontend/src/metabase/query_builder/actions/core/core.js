@@ -295,7 +295,8 @@ export const reloadUserVip = () => {
 };
 
 async function reduxCreateQuestion(question, dispatch) {
-  const action = await dispatch(Questions.actions.create(question.card()));
+  const createMethod = question.card()?.create_method || "self"; //new_guide, template, preview
+  const action = await dispatch(Questions.actions.create({ ...question.card(), create_method: createMethod, }));
   return question.setCard(Questions.HACK_getObjectFromAction(action));
 }
 

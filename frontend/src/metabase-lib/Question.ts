@@ -88,6 +88,7 @@ export type QuestionCreatorOpts = {
   display?: string;
   visualization_settings?: VisualizationSettings;
   dataset_query?: DatasetQuery;
+  create_method?: string,
 };
 
 /**
@@ -1204,6 +1205,7 @@ class QuestionInner {
       display: this._card.display,
       parameters: this._card.parameters,
       dataset: this._card.dataset,
+      create_method: this._card.create_method,
       ...(_.isEmpty(this._parameterValues)
         ? undefined
         : {
@@ -1317,6 +1319,7 @@ export default class Question extends memoizeClass<QuestionInner>("query")(
     dataset_query = type === "native"
       ? NATIVE_QUERY_TEMPLATE
       : STRUCTURED_QUERY_TEMPLATE,
+    create_method,
     filter,
     limit = null,
   }: QuestionCreatorOpts = {}) {
@@ -1327,6 +1330,7 @@ export default class Question extends memoizeClass<QuestionInner>("query")(
       visualization_settings,
       dataset,
       dataset_query,
+      create_method,
     };
 
     if (type === "native") {
@@ -1347,7 +1351,6 @@ export default class Question extends memoizeClass<QuestionInner>("query")(
     if (limit != null) {
       card = assocIn(card, ["dataset_query", "query", "limit"], limit);
     }
-
     return new Question(card, metadata, parameterValues);
   }
 }

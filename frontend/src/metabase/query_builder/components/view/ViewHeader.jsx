@@ -762,7 +762,6 @@ function ViewTitleHeaderRightSide(props) {
               onClick={() => {
                 set(question, "_card.original_card_id", card.id);
                 set(question, "_card.id", 0);
-                console.log("question", question)
                 updateQuestion(question, {
                   reload: false,
                   shouldUpdateUrl: true,
@@ -772,7 +771,7 @@ function ViewTitleHeaderRightSide(props) {
           </Tooltip>
         )}
         {(!!card.public_uuid || isOwner || isAdmin) && (
-          <Tooltip tooltip={t`Duplicate this chart`}>
+          <Tooltip tooltip={t`Duplicate chart`}>
             <Button
               onlyIcon
               className="Question-header-btn-with-text"
