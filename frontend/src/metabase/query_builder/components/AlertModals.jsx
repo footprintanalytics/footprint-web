@@ -319,7 +319,7 @@ class UpdateAlertModalContentInner extends Component {
 
     const isCurrentUser = alert.creator.id === user.id;
     const title = isCurrentUser ? t`Edit your alert` : t`Edit alert`;
-    const isValid = alertIsValid(alert);
+    const isValid = alertIsValid(modifiedAlert);
 
     // TODO: Remove PulseEdit css hack
     return (
@@ -336,7 +336,7 @@ class UpdateAlertModalContentInner extends Component {
           />
           {isAdmin && (
             <DeleteAlertSection
-              alert={alert}
+              alert={modifiedAlert}
               onDeleteAlert={this.onDeleteAlert}
             />
           )}
