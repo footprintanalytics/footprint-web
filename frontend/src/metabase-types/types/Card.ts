@@ -47,6 +47,7 @@ export type StructuredDatasetQuery = {
   database?: DatabaseId;
   query: StructuredQuery;
   parameters?: Array<ParameterQueryObject>;
+  create_method?: string;
 };
 
 export type NativeDatasetQuery = {
@@ -54,6 +55,7 @@ export type NativeDatasetQuery = {
   database?: DatabaseId;
   native: NativeQuery;
   parameters?: Array<ParameterQueryObject>;
+  create_method?: string;
 };
 
 /**

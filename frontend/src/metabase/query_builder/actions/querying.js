@@ -183,7 +183,6 @@ export const queryCompleted = (question, queryResults) => {
     const isDirty =
       question.query().isEditable() &&
       question.isDirtyComparedTo(originalQuestion);
-
     if (isDirty) {
       if (question.isNative()) {
         question = question.syncColumnsAndSettings(
@@ -193,14 +192,18 @@ export const queryCompleted = (question, queryResults) => {
       }
       // Only update the display if the question is new or has been changed.
       // Otherwise, trust that the question was saved with the correct display.
-      question = question
-        // if we are going to trigger autoselection logic, check if the locked display no longer is "sensible".
-        .maybeUnlockDisplay(
-          getSensibleDisplays(data),
-          prevData && getSensibleDisplays(prevData),
-        )
-        .setDefaultDisplay()
-        .switchTableScalar(data);
+      const createMethod = question.card().create_method;
+      // const newGuide = canShowNewGuideStart(getState().currentUser);
+      if (createMethod !== "template" && createMethod !== "preview") {
+        question = question
+          // if we are going to trigger autoselection logic, check if the locked display no longer is "sensible".
+          .maybeUnlockDisplay(
+            getSensibleDisplays(data),
+            prevData && getSensibleDisplays(prevData),
+          )
+          .setDefaultDisplay()
+          .switchTableScalar(data);
+      }
     }
 
     const card = question.card();

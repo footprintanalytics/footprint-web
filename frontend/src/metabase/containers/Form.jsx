@@ -44,7 +44,6 @@ const ReduxFormComponent = reduxForm()(
       <FormComponent
         {...props}
         handleSubmit={async (...args) => {
-          console.log("FormComponent handleSubmit")
           if (props.submitting) {
             return;
           }
