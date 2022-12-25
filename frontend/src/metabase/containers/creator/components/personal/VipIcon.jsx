@@ -1,11 +1,11 @@
 /* eslint-disable react/prop-types */
 import React from "react";
-import { getOssUrl } from "metabase/lib/image";
-import { VipLevel } from "metabase/nav/constants";
 import "./VipIcon.css";
 import cx from "classnames";
 import { capitalize } from "lodash";
 import dayjs from "dayjs";
+import { getOssUrl } from "metabase/lib/image";
+import { VipLevel } from "metabase/nav/constants";
 
 const VipIcon = ({ vipInfo, isOwner }) => {
   const renderData = ({ pic, text, className }) => {
