@@ -7,6 +7,7 @@ import { getOssUrl } from "metabase/lib/image";
 import "./HomeFooter.css";
 import Link from "metabase/core/components/Link";
 import ExternalLink from "metabase/core/components/ExternalLink";
+import { CHAIN_COUNT } from "metabase/lib/constants";
 // import { isDefi360 } from "metabase/lib/project_info";
 
 const footers = [
@@ -128,7 +129,7 @@ const HomeFooter = props => {
           <span data-nosnippet>
             Footprint Analytics is a tool to uncover and visualize data across
             the blockchain, including NFT and GameFi data. It currently
-            collects, parses and cleans data from 22 chains and lets users build
+            collects, parses and cleans data from {`${CHAIN_COUNT}`} chains and lets users build
             charts and dashboards without code using a drag-and-drop interface
             as well as with SQL or Python.
           </span>

@@ -1,3 +1,5 @@
+import { CHAIN_COUNT } from "metabase/lib/constants";
+
 export const getSubscribeOptions = user => {
   const options = [
     {
@@ -52,7 +54,7 @@ export const getComparePlans = user => ({
       benefits: {
         title: "Key benefits of Free:",
         list: [
-          "Access to 22 chains data",
+          `Access to ${CHAIN_COUNT} chains data`,
           "Access to GameFi/NFT/DeFi data",
           "Access to Community data",
           "26 chart types to choose",
@@ -142,7 +144,7 @@ export const getComparePlans = user => ({
       type: "Data",
       list: [
         {
-          name: "22 chains",
+          name: "23 chains",
           free: true,
           business: true,
           enterprise: true,
