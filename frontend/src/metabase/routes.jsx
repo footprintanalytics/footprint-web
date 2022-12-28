@@ -352,6 +352,12 @@ export const getRoutes = store => (
           component={props => <LazyLoad.Articles {...props} type="product" />}
         />
         <Route
+          title={t`Academy`}
+          path="academy"
+          isHot
+          component={props => <LazyLoad.Reports {...props} type="academy" />}
+        />
+        <Route
           title={t`Events`}
           path="events"
           component={props => <LazyLoad.Reports {...props} type="events" />}

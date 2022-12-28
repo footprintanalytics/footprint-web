@@ -26,6 +26,9 @@ const Articles = props => {
     channel,
     type,
     tag,
+    sortBy = "publishTime",
+    sortDirection = "desc",
+    showPublishTime = true,
     canShowHot = true,
   } = props;
   const [currentPage, setCurrentPage] = useState(1);
@@ -35,6 +38,8 @@ const Articles = props => {
     tag: tag,
     currentPage,
     user,
+    sortBy,
+    sortDirection,
   });
   const [hasMore, setHasMore] = useState(
     mediaData && mediaTotal && mediaData.length < mediaTotal,
@@ -105,11 +110,13 @@ const Articles = props => {
               >
                 <div className="news-articles__item-left">
                   <div className="news-articles__item-head">
-                    <DashboardCardDisplayInfo
-                      // authorName={item.creator && item.creator.name}
-                      date={item.publishTime}
-                      pointerEvents="auto"
-                    />
+                    {showPublishTime && (
+                      <DashboardCardDisplayInfo
+                        // authorName={item.creator && item.creator.name}
+                        date={item.publishTime}
+                        pointerEvents="auto"
+                      />
+                    )}
                     <ActionButtons
                       onChangeLocation={onChangeLocation}
                       item={item}
