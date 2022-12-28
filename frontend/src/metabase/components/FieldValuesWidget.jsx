@@ -24,6 +24,7 @@ import { stripId } from "metabase/lib/formatting";
 import { fetchDashboardParameterValues } from "metabase/dashboard/actions";
 
 import Fields from "metabase/entities/fields";
+import Utils from "metabase/lib/utils";
 const MAX_SEARCH_RESULTS = 100;
 
 const fieldValuesWidgetPropTypes = {
@@ -180,7 +181,7 @@ class FieldValuesWidgetInner extends Component {
   fetchDashboardParamValues = async query => {
     const { dashboard, parameter, parameters } = this.props;
     const args = {
-      dashboardId: dashboard?.id,
+      dashboardId: Utils.isUUID(dashboard?.id) ? dashboard?.entityId : dashboard?.id,
       parameter,
       parameters,
       query,
