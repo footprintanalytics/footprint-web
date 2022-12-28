@@ -384,7 +384,7 @@ class FieldValuesWidgetInner extends Component {
             parseFreeformValue={value => {
               //对0x开头的字符串，认为是地址，强制格式化为小写字母，前提是都有录入db的0x地址都是小写字母
               if (!customUpload && value && isString(value) && isEncryptAddress(value)) {
-                return value.toLowerCase();
+                return value.trim().toLowerCase();
               }
               return fields[0].isNumeric()
                 ? parseNumberValue(value)
