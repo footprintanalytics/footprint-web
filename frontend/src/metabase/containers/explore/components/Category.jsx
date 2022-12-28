@@ -1,5 +1,6 @@
 /* eslint-disable react/prop-types */
 import React from "react";
+import { getOssUrl } from "metabase/lib/image";
 
 export default function Category({
   categoryList,
@@ -25,6 +26,13 @@ export default function Category({
                 }
               >
                 {item.label}
+                {item.isHot && (
+                  <img
+                    className="explore__category-list-hot"
+                    src={getOssUrl("icon_hot.svg")}
+                    alt={`Hot - ${item.label}`}
+                  />
+                )}
               </li>
             </a>
           ))}

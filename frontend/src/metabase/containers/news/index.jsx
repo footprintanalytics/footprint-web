@@ -35,6 +35,7 @@ const News = props => {
     .map(item => ({
       label: item.title,
       path: item.path,
+      isHot: item.isHot,
       selected: location.pathname.includes(item.path),
       seoLink: `${indexPath}/${item.path}`,
     }));

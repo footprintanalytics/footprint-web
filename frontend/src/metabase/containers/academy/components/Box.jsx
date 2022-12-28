@@ -55,6 +55,9 @@ const Box = ({ router, selectCategory }) => {
               location={router?.location}
               canShowHot={false}
               key={item.value}
+              sortBy={selectCategory?.sortBy}
+              sortDirection={selectCategory?.sortDirection}
+              showPublishTime={selectCategory?.showPublishTime}
             />
           );
         }

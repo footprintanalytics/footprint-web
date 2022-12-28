@@ -44,6 +44,26 @@ const Index = ({ router, type }) => {
         { label: "Space", value: "Space" },
       ],
     },
+    academy: {
+      label: "Academy",
+      value: "academy",
+      sortBy: "title",
+      sortDirection: "asc",
+      showPublishTime: false,
+      subMenus: [
+        {
+          label: "Web3 Data",
+          value: "Web3 Data",
+        },
+        { label: "EVM Analysis", value: "EVM Analysis" },
+        { label: "DeFi Analysis", value: "DeFi Analysis" },
+        { label: "NFT Analysis", value: "NFT Analysis" },
+        { label: "GameFi Analysis", value: "GameFi Analysis" },
+        { label: "Wallet Analysis", value: "Wallet Analysis" },
+        { label: "Footprint for Developer", value: "Footprint for Developer" },
+        { label: "How Footprint Works", value: "How Footprint Works" },
+      ],
+    },
   };
   const selectCategory = array[type] || {};
   return (

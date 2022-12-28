@@ -30,10 +30,17 @@
 .explore__category-list li {
   display: flex;
   align-items: center;
-  margin-right: 60px;
+  margin-right: 40px;
   cursor: pointer;
   white-space: nowrap;
   height: 60px;
+  position: relative;
+}
+
+.explore__category-list-hot {
+  position: absolute;
+  right: -16px;
+  top: 12px;
 }
 
 .explore__category-list li a {
