@@ -89,7 +89,7 @@ export function formatNumber(
         nf = numberFormatterForOptions({
           ...options,
           maximumSignificantDigits: Math.max(
-            2,
+            4,
             options.minimumSignificantDigits || 0,
           ),
           maximumFractionDigits: undefined,
