@@ -1,7 +1,7 @@
 /* eslint-disable react/prop-types */
 import React from "react";
 import { Button } from "antd";
-import { UploadOutlined } from "@ant-design/icons";
+import { UploadOutlined, PlusCircleOutlined } from "@ant-design/icons";
 import { getOssUrl } from "metabase/lib/image";
 import Link from "metabase/core/components/Link";
 import "./QuestionEmpty.css";
@@ -18,15 +18,26 @@ export default function QuestionEmpty({ showUpload }) {
             <br />
             or
           </p>
-          <Link to="/chart/custom-upload">
-            <Button
-              className="Question-main--empty-button"
-              size="large"
-              icon={<UploadOutlined />}
-            >
-              Upload your data
-            </Button>
-          </Link>
+          <div className="flex" style={{ gap: 20 }}>
+            <Link to="/submit/contract">
+              <Button
+                className="Question-main--empty-button"
+                size="large"
+                icon={<PlusCircleOutlined />}
+              >
+                Submit contract
+              </Button>
+            </Link>
+            <Link to="/chart/custom-upload">
+              <Button
+                className="Question-main--empty-button"
+                size="large"
+                icon={<UploadOutlined />}
+              >
+                Upload your data
+              </Button>
+            </Link>
+          </div>
         </>
       ) : (
         <p>Pick the data on the left to create your chart</p>
