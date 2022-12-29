@@ -14,6 +14,7 @@ const CHAIN_LIST = [
   { value: "BNB Chain", label: "BNB Chain" },
   { value: "Arbitrum", label: "Arbitrum" },
   { value: "Avalanche", label: "Avalanche" },
+  { value: "Cronos", label: "Cronos" },
 ];
 
 const ContractAddress = ({ onFinish }) => {
