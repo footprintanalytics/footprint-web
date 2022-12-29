@@ -16,7 +16,7 @@ const DataApiPower = () => {
           more.
         </h2>
         <DataApiButtons
-          blandButtonText="Start Building for Free"
+          blandButtonText="Start building for free"
           secondButtonText="Contact us"
           secondButtonLink="mailto:sales@footprint.network"
         />

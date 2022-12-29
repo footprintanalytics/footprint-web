@@ -20,7 +20,7 @@ const DataApiGetStart = () => {
         <div className="data-api__get-start-box-container">
           <div className="data-api__get-start-box-main">
             <h3>
-              Fully access to <br />
+              Full access to <br />
               <span className="data-api__text-bland">Chain API</span>
             </h3>
             <span className="data-api__get-start-subtitle">
