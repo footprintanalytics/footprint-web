@@ -11,7 +11,7 @@ const DataApiButtons = ({
   setLoginModalShow,
   onChangeLocation,
   blandButtonText = "Try for free",
-  secondButtonText = "View Docs",
+  secondButtonText = "View docs",
   secondButtonLink = "https://docs.footprint.network/reference/introduction",
   showGetApiKeyHelp = false,
 }) => {

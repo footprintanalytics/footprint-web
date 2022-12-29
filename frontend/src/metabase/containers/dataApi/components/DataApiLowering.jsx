@@ -15,7 +15,7 @@ const DataApiLowering = () => {
       img: "https://statichk.footprint.network/img_da_bg_2022100832.png",
     },
     {
-      title: "Full data",
+      title: "Complete Dataset",
       desc: "One call to retrieve all data across any supported blockchain",
       img: "https://statichk.footprint.network/img_da_bg_2022100833.png",
     },
