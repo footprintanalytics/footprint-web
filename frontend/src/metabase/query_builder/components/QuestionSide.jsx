@@ -32,7 +32,7 @@ import TableDataList from "metabase/query_builder/components/question/TableDataL
 import TableDatabase from "metabase/query_builder/components/question/TableDatabase";
 import Link from "metabase/core/components/Link";
 // eslint-disable-next-line import/order
-import { UploadOutlined } from "@ant-design/icons";
+import { UploadOutlined, PlusCircleOutlined } from "@ant-design/icons";
 import { getUser } from "metabase/selectors/user";
 import {
   // canShowNewGuideStart,
@@ -255,6 +255,19 @@ function QuestionSide({
     );
   };
 
+  const SubmitContract = () => {
+    if (formDataSelector) {
+      return null;
+    }
+
+    return (
+      <Link to="/submit/contract" className="question-side__custom-upload">
+        <PlusCircleOutlined />
+        Submit contract
+      </Link>
+    );
+  };
+
   const chainChange = value => {
     setChain(value);
   };
@@ -352,6 +365,7 @@ function QuestionSide({
             );
           })}
         </Tabs>
+        <SubmitContract />
         <UploadData />
       </>
       <Modal isOpen={confirmModal}>
