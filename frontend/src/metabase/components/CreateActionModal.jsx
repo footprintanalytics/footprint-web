@@ -160,9 +160,33 @@ class CreateActionModal extends Component {
           </div>
           <Divider
             className="create-modal__question-divider"
-            style={{ margin: "40px 0" }}
+            style={{ margin: "20px 0" }}
           />
           <div className="flex justify-end">
+            <Card style={{ width: "100%", cursor: "pointer" }}>
+              <div
+                className="flex create-modal__dashboard"
+                onClick={() => {
+                  trackStructEvent(`create-modal click Submit contract`);
+                  if (isLogin()) {
+                    window.open("/submit/contract");
+                  }
+                }}
+              >
+                <img
+                  className="create-modal__question-img"
+                  src={getOssUrl("img_create_submit_contract.png")}
+                  style={{ width: 80, marginRight: 18 }}
+                />
+                <span
+                  style={{ fontSize: 16, color: "#505050", fontWeight: 700 }}
+                >
+                  Submit contract
+                </span>
+              </div>
+            </Card>
+          </div>
+          <div className="flex justify-end mt3">
             <Card style={{ width: "100%", cursor: "pointer" }}>
               <div
                 className="flex create-modal__dashboard"
