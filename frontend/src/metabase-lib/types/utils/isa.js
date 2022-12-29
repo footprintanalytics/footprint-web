@@ -111,7 +111,8 @@ export const isSeriesCategory = isFieldType.bind(null, SERIES_CATEGORY);
 export const isLocation = isFieldType.bind(null, LOCATION);
 
 export const isDimension = col =>
-  col && col.source !== "aggregation" && !isDescription(col);
+  col && !isDescription(col);
+  // col && col.source !== "aggregation" && !isDescription(col);
 export const isMetric = col =>
   col && col.source !== "breakout" && isSummable(col);
 
