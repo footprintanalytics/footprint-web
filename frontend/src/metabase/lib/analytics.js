@@ -29,7 +29,7 @@ export const trackSchemaEvent = () => {
 
 const isTrackingEnabled = () => {
   // return isProduction && Settings.trackingEnabled();
-  return isProduction;
+  return true;
 };
 
 const createGoogleAnalyticsTracker = () => {
@@ -40,8 +40,8 @@ const createGoogleAnalyticsTracker = () => {
   //   window[`ga-disable-${code}`] = enabled ? null : true;
   // });
 
-  window.ga?.("create", "UA-17374783-45", "auto");
-  window.gtag?.("config", "G-7X0SCJDJYL", { send_page_view: false });
+  window.ga?.("create", "UA-161749421-3", "auto");
+  window.gtag?.("config", "G-T2YC4X5T58", { send_page_view: false });
 };
 
 const trackGoogleAnalyticsPageView = url => {
