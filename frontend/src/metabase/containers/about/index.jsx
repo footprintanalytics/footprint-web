@@ -88,6 +88,11 @@ const About = props => {
         <LazyLoad
           className="full-height"
           scrollContainer="#app-content"
+          placeholder={
+            <div style={{ padding: 20 }}>
+              <Skeleton active />
+            </div>
+          }
         >
           <>
             <AboutExploreDomain
