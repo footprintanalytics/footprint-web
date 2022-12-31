@@ -27,6 +27,8 @@ import AboutBacked from "./components/AboutBacked";
 import AboutPartner from "./components/AboutPartner";
 import data from "./data";
 import { useQueryIndicator, useQueryNews } from "./hook";
+import { Skeleton } from "antd";
+import LazyLoad from "react-lazyload";
 
 const About = props => {
   const {
@@ -83,78 +85,86 @@ const About = props => {
           }}
           navListData={data.navListDataChain}
         />
-        <AboutExploreDomain
-          title={
-            <h3>
-              Explore <span className="About__title-light-blue">Games</span> in
-              Footprint
-            </h3>
-          }
-          data={[
-            { title: "Chains Covered", total: indicator?.gamefiChains },
-            { title: "Chains Parsed", total: indicator?.gamefiParsedChains },
-            { title: "Games", total: indicator?.gamefiParsedProtocols },
-          ]}
-          className="About__explore-games-bg"
-          dark={true}
-          exploreButton={{
-            title: "Explore Blockchain Games in Footprint ",
-            url: "/",
-            className: "About__btn--white About__btn-radius",
-          }}
-          navListData={data.navListDataGameFi}
-        />
-        <AboutExploreDomain
-          title={
-            <h3>
-              Explore{" "}
-              <span className="About__title-bland">NFT Collections</span> in
-              Footprint
-            </h3>
-          }
-          data={[
-            { title: "Chains Covered", total: indicator?.nftChains },
-            { title: "Chains Parsed", total: indicator?.nftParsedChains },
-            { title: "Marketplaces", total: indicator?.nftParsedMarketplaces },
-            { title: "NFT Collections", total: indicator?.nftCollections },
-          ]}
-          className="About__explore-nft-bg"
-          exploreButton={{
-            title: "Explore More Collections ",
-            url: "/",
-            className: "About__btn--blue About__btn-radius",
-          }}
-          navListData={data.navListDataNft}
-        />
-        <AboutCreateDashboard
-          title={
-            <h3>
-              Create <span className="About__title-bland">Dashboards</span>{" "}
-              Using Footprint
-            </h3>
-          }
-          list={data.sectionList}
-          data={[
-            { title: "Community Dashboards", total: indicator?.dashboards },
-            { title: "Community Charts", total: indicator?.charts },
-          ]}
-          className={"About__create-dashboard About__create-dashboards-bg"}
-        />
-        <AboutService />
+        <LazyLoad
+          className="full-height"
+          scrollContainer="#app-content"
+        >
+          <>
+            <AboutExploreDomain
+              title={
+                <h3>
+                  Explore <span className="About__title-light-blue">Games</span> in
+                  Footprint
+                </h3>
+              }
+              data={[
+                { title: "Chains Covered", total: indicator?.gamefiChains },
+                { title: "Chains Parsed", total: indicator?.gamefiParsedChains },
+                { title: "Games", total: indicator?.gamefiParsedProtocols },
+              ]}
+              className="About__explore-games-bg"
+              dark={true}
+              exploreButton={{
+                title: "Explore Blockchain Games in Footprint ",
+                url: "/",
+                className: "About__btn--white About__btn-radius",
+              }}
+              navListData={data.navListDataGameFi}
+            />
+            <AboutExploreDomain
+              title={
+                <h3>
+                  Explore{" "}
+                  <span className="About__title-bland">NFT Collections</span> in
+                  Footprint
+                </h3>
+              }
+              data={[
+                { title: "Chains Covered", total: indicator?.nftChains },
+                { title: "Chains Parsed", total: indicator?.nftParsedChains },
+                { title: "Marketplaces", total: indicator?.nftParsedMarketplaces },
+                { title: "NFT Collections", total: indicator?.nftCollections },
+              ]}
+              className="About__explore-nft-bg"
+              exploreButton={{
+                title: "Explore More Collections ",
+                url: "/",
+                className: "About__btn--blue About__btn-radius",
+              }}
+              navListData={data.navListDataNft}
+            />
+            <AboutCreateDashboard
+              title={
+                <h3>
+                  Create <span className="About__title-bland">Dashboards</span>{" "}
+                  Using Footprint
+                </h3>
+              }
+              list={data.sectionList}
+              data={[
+                { title: "Community Dashboards", total: indicator?.dashboards },
+                { title: "Community Charts", total: indicator?.charts },
+              ]}
+              className={"About__create-dashboard About__create-dashboards-bg"}
+            />
+            <AboutService />
 
-        <AboutCreateDashboard
-          list={data.sectionListDataApi}
-          className={"About__create-nft"}
-        />
-        <AboutBuild
-          type="card"
-          title="Explore Footprint"
-          list={news}
-          more="/news/featured"
-        />
-        <AboutBacked list={data.backedList} />
-        <AboutPartner list={data.partnerList} />
-        <HomeFooter />
+            <AboutCreateDashboard
+              list={data.sectionListDataApi}
+              className={"About__create-nft"}
+            />
+            <AboutBuild
+              type="card"
+              title="Explore Footprint"
+              list={news}
+              more="/news/featured"
+            />
+            <AboutBacked list={data.backedList} />
+            <AboutPartner list={data.partnerList} />
+            <HomeFooter />
+          </>
+        </LazyLoad>
+
         {showZkspaceModal && (
           <ActivityZkspaceFirstModal
             onClose={() => {
