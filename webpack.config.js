@@ -232,7 +232,7 @@ const config = (module.exports = {
       filename: "../../public.html",
       chunksSortMode: "manual",
       chunks: ["vendor", "styles", "app-public"],
-      template: __dirname + "/resources/frontend_client/index_template.html",
+      template: __dirname + "/resources/frontend_client/index_template_public.html",
       inject: "body",
       scriptLoading: "blocking",
       alwaysWriteToDisk: true,
