@@ -183,7 +183,7 @@ class DataSelectorInner extends Component {
 }
 
 const DataSelector = _.compose(
-  Search.loadList({
+  /*Search.loadList({
     // If there is at least one dataset,
     // we want to display a slightly different data picker view
     // (see DATA_BUCKET step)
@@ -192,7 +192,7 @@ const DataSelector = _.compose(
       limit: 1,
     },
     loadingAndErrorWrapper: false,
-  }),
+  }),*/
   connect(
     (state, ownProps) => ({
       user: state.currentUser,
