@@ -37,4 +37,4 @@ export const jupyterToken = process.env.JUPYTER_TOKEN;
 export const slackUrl = process.env.SLACK_URL;
 
 // ARMS
-export const armsPid = "1erasm1qtfy@05d779f3f8375cf";
+export const armsPid = process.env.ARMS_PID;
