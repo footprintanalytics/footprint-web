@@ -1,18 +1,6 @@
 import React, { Fragment } from "react";
 import { ModalRoute } from "metabase/hoc/ModalRoute";
-import DeleteEventModal from "./containers/DeleteEventModal";
-import DeleteTimelineModal from "./containers/DeleteTimelineModal";
-import EditEventModal from "./containers/EditEventModal";
-import EditTimelineModal from "./containers/EditTimelineModal";
-import MoveEventModal from "./containers/MoveEventModal";
-import MoveTimelineModal from "./containers/MoveTimelineModal";
-import NewEventModal from "./containers/NewEventModal";
-import NewEventWithTimelineModal from "./containers/NewEventWithTimelineModal";
-import NewTimelineModal from "./containers/NewTimelineModal";
-import TimelineArchiveModal from "./containers/TimelineArchiveModal";
-import TimelineDetailsModal from "./containers/TimelineDetailsModal";
-import TimelineIndexModal from "./containers/TimelineIndexModal";
-import TimelineListArchiveModal from "./containers/TimelineListArchiveModal";
+import LazyLoad from "metabase/routesLazyLoad";
 
 const getRoutes = () => {
   return (
@@ -20,91 +8,91 @@ const getRoutes = () => {
       <ModalRoute
         {...{
           path: "timelines",
-          modal: TimelineIndexModal,
+          modal: LazyLoad.TimelineIndexModal,
           modalProps: { enableTransition: false },
         }}
       />
       <ModalRoute
         {...{
           path: "timelines/new",
-          modal: NewTimelineModal,
+          modal: LazyLoad.NewTimelineModal,
           modalProps: { enableTransition: false },
         }}
       />
       <ModalRoute
         {...{
           path: "timelines/archive",
-          modal: TimelineListArchiveModal,
+          modal: LazyLoad.TimelineListArchiveModal,
           modalProps: { enableTransition: false },
         }}
       />
       <ModalRoute
         {...{
           path: "timelines/:timelineId",
-          modal: TimelineDetailsModal,
+          modal: LazyLoad.TimelineDetailsModal,
           modalProps: { enableTransition: false },
         }}
       />
       <ModalRoute
         {...{
           path: "timelines/:timelineId/edit",
-          modal: EditTimelineModal,
+          modal: LazyLoad.EditTimelineModal,
           modalProps: { enableTransition: false },
         }}
       />
       <ModalRoute
         {...{
           path: "timelines/:timelineId/move",
-          modal: MoveTimelineModal,
+          modal: LazyLoad.MoveTimelineModal,
           modalProps: { enableTransition: false },
         }}
       />
       <ModalRoute
         {...{
           path: "timelines/:timelineId/archive",
-          modal: TimelineArchiveModal,
+          modal: LazyLoad.TimelineArchiveModal,
           modalProps: { enableTransition: false },
         }}
       />
       <ModalRoute
         {...{
           path: "timelines/:timelineId/delete",
-          modal: DeleteTimelineModal,
+          modal: LazyLoad.DeleteTimelineModal,
           modalProps: { enableTransition: false },
         }}
       />
       <ModalRoute
         {...{
           path: "timelines/new/events/new",
-          modal: NewEventWithTimelineModal,
+          modal: LazyLoad.NewEventWithTimelineModal,
           modalProps: { enableTransition: false },
         }}
       />
       <ModalRoute
         {...{
           path: "timelines/:timelineId/events/new",
-          modal: NewEventModal,
+          modal: LazyLoad.NewEventModal,
           modalProps: { enableTransition: false },
         }}
       />
       <ModalRoute
         {...{
           path: "timelines/:timelineId/events/:timelineEventId/edit",
-          modal: EditEventModal,
+          modal: LazyLoad.EditEventModal,
           modalProps: { enableTransition: false },
         }}
       />
       <ModalRoute
         {...{
           path: "timelines/:timelineId/events/:timelineEventId/move",
-          modal: MoveEventModal,
+          modal: LazyLoad.MoveEventModal,
           modalProps: { enableTransition: false },
         }}
       />
       <ModalRoute
         {...{
           path: "timelines/:timelineId/events/:timelineEventId/delete",
-          modal: DeleteEventModal,
+          modal: LazyLoad.DeleteEventModal,
           modalProps: { enableTransition: false },
         }}
       />

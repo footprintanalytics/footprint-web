@@ -3,11 +3,8 @@ import React from "react";
 import { t } from "ttag";
 import { Route } from "metabase/hoc/Title";
 
-import PublicNotFound from "metabase/public/components/PublicNotFound";
-
-import PublicApp from "metabase/public/containers/PublicApp";
-import LazyLoad from "./routesLazyLoad";
 import { trackPageView } from "metabase/lib/analytics";
+import LazyLoad from "./routesLazyLoad";
 
 export const getRoutes = store => (
   <Route
@@ -19,7 +16,7 @@ export const getRoutes = store => (
       trackPageView(nextState.location.pathname, "Change");
     }}
   >
-    <Route path="public" component={PublicApp}>
+    <Route path="public" component={LazyLoad.PublicApp}>
       <Route
         path="question/:uuid(/:name)"
         component={LazyLoad.PublicQuestion}
@@ -44,8 +41,8 @@ export const getRoutes = store => (
       <Route path="widget/chart/:uuid" component={LazyLoad.WidgetPublic} />
       <Route path="widget/brand" component={LazyLoad.WidgetBrand} />
       <Route title={t`Explore`} path="explore" component={LazyLoad.Explore} />
-      <Route path="*" component={PublicNotFound} />
+      <Route path="*" component={LazyLoad.PublicNotFound} />
     </Route>
-    <Route path="*" component={PublicNotFound} />
+    <Route path="*" component={LazyLoad.PublicNotFound} />
   </Route>
 );

@@ -6,27 +6,7 @@ import _ from "underscore";
 import { Route } from "metabase/hoc/Title";
 import { ModalRoute } from "metabase/hoc/ModalRoute";
 import { createAdminRouteGuard } from "metabase/admin/utils";
-
-import AuditApp from "./containers/AuditApp";
-import UnsubscribeUserModal from "./containers/UnsubscribeUserModal/UnsubscribeUserModal";
-
-import AuditOverview from "./pages/AuditOverview";
-
-import AuditDatabases from "./pages/AuditDatabases";
-import AuditDatabaseDetail from "./pages/AuditDatabaseDetail";
-import AuditSchemas from "./pages/AuditSchemas";
-import AuditSchemaDetail from "./pages/AuditSchemaDetail";
-import AuditTables from "./pages/AuditTables";
-import AuditTableDetail from "./pages/AuditTableDetail";
-import AuditQuestions from "./pages/AuditQuestions";
-import AuditQuestionDetail from "./pages/AuditQuestionDetail";
-import AuditDashboards from "./pages/AuditDashboards";
-import AuditDashboardDetail from "./pages/AuditDashboardDetail";
-import AuditQueryDetail from "./pages/AuditQueryDetail";
-import AuditUsers from "./pages/AuditUsers";
-import AuditUserDetail from "./pages/AuditUserDetail";
-import AuditDownloads from "./pages/AuditDownloads";
-import AuditSubscriptions from "./pages/AuditSubscriptions";
+import LazyLoad from "metabase/routesLazyLoad";
 
 function getPageRoutes(path, page) {
   const subRoutes = [];
@@ -78,33 +58,33 @@ const getRoutes = store => (
     key="audit"
     path="audit"
     title={t`Audit`}
-    component={createAdminRouteGuard("audit", AuditApp)}
+    component={createAdminRouteGuard("audit", LazyLoad.AuditApp)}
   >
     {/* <IndexRedirect to="overview" /> */}
     <IndexRedirect to="members" />
 
-    <Route path="overview" component={AuditOverview} />
+    <Route path="overview" component={LazyLoad.AuditOverview} />
 
-    {getPageRoutes("databases", AuditDatabases)}
-    {getPageRoutes("database/:databaseId", AuditDatabaseDetail)}
-    {getPageRoutes("schemas", AuditSchemas)}
-    {getPageRoutes("schema/:schemaId", AuditSchemaDetail)}
-    {getPageRoutes("tables", AuditTables)}
-    {getPageRoutes("table/:tableId", AuditTableDetail)}
-    {getPageRoutes("dashboards", AuditDashboards)}
-    {getPageRoutes("dashboard/:dashboardId", AuditDashboardDetail)}
-    {getPageRoutes("questions", AuditQuestions)}
-    {getPageRoutes("question/:questionId", AuditQuestionDetail)}
-    {getPageRoutes("query/:queryHash", AuditQueryDetail)}
-    {getPageRoutes("downloads", AuditDownloads)}
-    {getPageRoutes("members", AuditUsers)}
-    {getPageRoutes("member/:userId", AuditUserDetail)}
-    {getPageRoutes("subscriptions", AuditSubscriptions)}
+    {getPageRoutes("databases", LazyLoad.AuditDatabases)}
+    {getPageRoutes("database/:databaseId", LazyLoad.AuditDatabaseDetail)}
+    {getPageRoutes("schemas", LazyLoad.AuditSchemas)}
+    {getPageRoutes("schema/:schemaId", LazyLoad.AuditSchemaDetail)}
+    {getPageRoutes("tables", LazyLoad.AuditTables)}
+    {getPageRoutes("table/:tableId", LazyLoad.AuditTableDetail)}
+    {getPageRoutes("dashboards", LazyLoad.AuditDashboards)}
+    {getPageRoutes("dashboard/:dashboardId", LazyLoad.AuditDashboardDetail)}
+    {getPageRoutes("questions", LazyLoad.AuditQuestions)}
+    {getPageRoutes("question/:questionId", LazyLoad.AuditQuestionDetail)}
+    {getPageRoutes("query/:queryHash", LazyLoad.AuditQueryDetail)}
+    {getPageRoutes("downloads", LazyLoad.AuditDownloads)}
+    {getPageRoutes("members", LazyLoad.AuditUsers)}
+    {getPageRoutes("member/:userId", LazyLoad.AuditUserDetail)}
+    {getPageRoutes("subscriptions", LazyLoad.AuditSubscriptions)}
   </Route>
 );
 
 export const getUserMenuRotes = () => (
-  <ModalRoute path="unsubscribe" modal={UnsubscribeUserModal} />
+  <ModalRoute path="unsubscribe" modal={LazyLoad.UnsubscribeUserModal} />
 );
 
 export default getRoutes;
