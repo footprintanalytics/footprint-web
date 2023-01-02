@@ -1,93 +1,20 @@
 import React from "react";
 
-import { Redirect, IndexRedirect, IndexRoute } from "react-router";
+import { IndexRedirect, IndexRoute, Redirect } from "react-router";
 import { routerActions } from "react-router-redux";
 import { UserAuthWrapper } from "redux-auth-wrapper";
 import { t } from "ttag";
 import { Route } from "metabase/hoc/Title";
-import { PLUGIN_LANDING_PAGE } from "metabase/plugins";
-
-import { loadCurrentUser, loadCurrentUserVip, loadCurrentUserVipDataApi, } from "metabase/redux/user";
+import { loadCurrentUser, loadCurrentUserVip, loadCurrentUserVipDataApi } from "metabase/redux/user";
 import MetabaseSettings from "metabase/lib/settings";
-
 import App from "metabase/App.tsx";
-
-import ActivityApp from "metabase/home/containers/ActivityApp";
-
-// auth containers
-import ForgotPasswordApp from "metabase/auth/containers/ForgotPasswordApp";
-import LoginApp from "metabase/auth/containers/LoginApp";
-import LogoutApp from "metabase/auth/containers/LogoutApp";
-import ResetPasswordApp from "metabase/auth/containers/ResetPasswordApp";
-
-/* Dashboards */
-import DashboardApp from "metabase/dashboard/containers/DashboardApp";
-import AutomaticDashboardApp from "metabase/dashboard/containers/AutomaticDashboardApp";
-
-/* Browse data */
-import BrowseApp from "metabase/browse/components/BrowseApp";
-import DatabaseBrowser from "metabase/browse/containers/DatabaseBrowser";
-import SchemaBrowser from "metabase/browse/containers/SchemaBrowser";
-import TableBrowser from "metabase/browse/containers/TableBrowser";
-
-import QueryBuilder from "metabase/query_builder/containers/QueryBuilder";
-
-import CollectionCreate from "metabase/collections/containers/CollectionCreate";
-import MoveCollectionModal from "metabase/collections/containers/MoveCollectionModal";
-import ArchiveCollectionModal from "metabase/components/ArchiveCollectionModal";
-import CollectionPermissionsModal from "metabase/admin/permissions/components/CollectionPermissionsModal/CollectionPermissionsModal";
-import UserCollectionList from "metabase/containers/UserCollectionList";
-
-import PulseEditApp from "metabase/pulse/containers/PulseEditApp";
-import SetupApp from "metabase/setup/containers/SetupApp";
-
-import NewModelOptions from "metabase/new_model/containers/NewModelOptions";
-
-import CreateDashboardModal from "metabase/components/CreateDashboardModal";
-
 import { Unauthorized } from "metabase/containers/ErrorPages";
-import NotFoundFallbackPage from "metabase/containers/NotFoundFallbackPage";
-
-// Reference Metrics
-import MetricListContainer from "metabase/reference/metrics/MetricListContainer";
-import MetricDetailContainer from "metabase/reference/metrics/MetricDetailContainer";
-import MetricQuestionsContainer from "metabase/reference/metrics/MetricQuestionsContainer";
-import MetricRevisionsContainer from "metabase/reference/metrics/MetricRevisionsContainer";
-// Reference Segments
-import SegmentListContainer from "metabase/reference/segments/SegmentListContainer";
-import SegmentDetailContainer from "metabase/reference/segments/SegmentDetailContainer";
-import SegmentQuestionsContainer from "metabase/reference/segments/SegmentQuestionsContainer";
-import SegmentRevisionsContainer from "metabase/reference/segments/SegmentRevisionsContainer";
-import SegmentFieldListContainer from "metabase/reference/segments/SegmentFieldListContainer";
-import SegmentFieldDetailContainer from "metabase/reference/segments/SegmentFieldDetailContainer";
-// Reference Databases
-import DatabaseListContainer from "metabase/reference/databases/DatabaseListContainer";
-import DatabaseDetailContainer from "metabase/reference/databases/DatabaseDetailContainer";
-import TableListContainer from "metabase/reference/databases/TableListContainer";
-import TableDetailContainer from "metabase/reference/databases/TableDetailContainer";
-import TableQuestionsContainer from "metabase/reference/databases/TableQuestionsContainer";
-import FieldListContainer from "metabase/reference/databases/FieldListContainer";
-import FieldDetailContainer from "metabase/reference/databases/FieldDetailContainer";
-
 import getAccountRoutes from "metabase/account/routes";
 import getAdminRoutes from "metabase/admin/routes";
 import getCollectionTimelineRoutes from "metabase/timelines/collections/routes";
-
-import PublicQuestion from "metabase/public/containers/PublicQuestion";
-import PublicDashboard from "metabase/public/containers/PublicDashboard";
-import ArchiveDashboardModal from "metabase/dashboard/containers/ArchiveDashboardModal";
-import DashboardMoveModal from "metabase/dashboard/components/DashboardMoveModal";
-import DashboardCopyModal from "metabase/dashboard/components/DashboardCopyModal";
 import { ModalRoute } from "metabase/hoc/ModalRoute";
-
-import HomePage from "metabase/home/homepage/containers/HomePage";
-import CollectionLanding from "metabase/collections/components/CollectionLanding";
-
-import ArchiveApp from "metabase/home/containers/ArchiveApp";
-import SearchApp from "metabase/home/containers/SearchApp";
 import { trackPageView } from "metabase/lib/analytics";
 import { getAdminPaths } from "metabase/admin/app/selectors";
-
 import { loadConfig } from "metabase/redux/config";
 import { isProduction } from "metabase/env";
 import LazyLoad from "./routesLazyLoad";
@@ -277,7 +204,7 @@ export const getRoutes = store => (
         <ModalRoute
           title={t`Copy`}
           path="copy"
-          modal={DashboardCopyModal}
+          modal={LazyLoad.DashboardCopyModal}
         />
         <ModalRoute
           title={t`Details`}
@@ -528,12 +455,12 @@ export const getRoutes = store => (
       <Route path="/auth">
         <IndexRedirect to="/auth/login" />
         <Route component={IsNotAuthenticated}>
-          <Route path="login" title={t`Login`} component={LoginApp} />
-          <Route path="login/:provider" title={t`Login`} component={LoginApp} />
+          <Route path="login" title={t`Login`} component={LazyLoad.LoginApp} />
+          <Route path="login/:provider" title={t`Login`} component={LazyLoad.LoginApp} />
         </Route>
-        <Route path="logout" component={LogoutApp} />
-        <Route path="forgot_password" component={ForgotPasswordApp} />
-        <Route path="reset_password/:token" component={ResetPasswordApp} />
+        <Route path="logout" component={LazyLoad.LogoutApp} />
+        <Route path="forgot_password" component={LazyLoad.ForgotPasswordApp} />
+        <Route path="reset_password/:token" component={LazyLoad.ResetPasswordApp} />
       </Route>
 
       {/* MAIN */}
@@ -563,32 +490,32 @@ export const getRoutes = store => (
           />
         </Route>
 
-        <Route path="search" title={t`Search`} component={SearchApp} />
-        <Route path="archive" title={t`Archive`} component={ArchiveApp} />
+        <Route path="search" title={t`Search`} component={LazyLoad.SearchApp} />
+        <Route path="archive" title={t`Archive`} component={LazyLoad.ArchiveApp} />
 
         <Route path="collection/users" component={IsAdmin}>
-          <IndexRoute component={UserCollectionList} />
+          <IndexRoute component={LazyLoad.UserCollectionList} />
         </Route>
 
-        <Route path="collection/:slug" component={CollectionLanding}>
-          <ModalRoute path="move" modal={MoveCollectionModal} />
-          <ModalRoute path="archive" modal={ArchiveCollectionModal} />
-          <ModalRoute path="new_collection" modal={CollectionCreate} />
-          <ModalRoute path="new_dashboard" modal={CreateDashboardModal} />
-          <ModalRoute path="permissions" modal={CollectionPermissionsModal} />
+        <Route path="collection/:slug" component={LazyLoad.CollectionLanding}>
+          <ModalRoute path="move" modal={LazyLoad.MoveCollectionModal} />
+          <ModalRoute path="archive" modal={LazyLoad.ArchiveCollectionModal} />
+          <ModalRoute path="new_collection" modal={LazyLoad.CollectionCreate} />
+          <ModalRoute path="new_dashboard" modal={LazyLoad.CreateDashboardModal} />
+          <ModalRoute path="permissions" modal={LazyLoad.CollectionPermissionsModal} />
           {getCollectionTimelineRoutes()}
         </Route>
 
-        <Route path="activity" component={ActivityApp} />
+        <Route path="activity" component={LazyLoad.ActivityApp} />
 
         <Route
           path="dashboard/:slug"
           title={t`Dashboard`}
-          component={DashboardApp}
+          component={LazyLoad.DashboardApp}
         >
-          <ModalRoute path="move" modal={DashboardMoveModal} />
-          <ModalRoute path="copy" modal={DashboardCopyModal} />
-          <ModalRoute path="archive" modal={ArchiveDashboardModal} />
+          <ModalRoute path="move" modal={LazyLoad.DashboardMoveModal} />
+          <ModalRoute path="copy" modal={LazyLoad.DashboardCopyModal} />
+          <ModalRoute path="archive" modal={LazyLoad.ArchiveDashboardModal} />
           <ModalRoute
             path="details"
             modal={LazyLoad.DashboardDetailsModal}
@@ -596,30 +523,30 @@ export const getRoutes = store => (
         </Route>
 
         <Route path="/question">
-          <IndexRoute component={QueryBuilder} />
-          <Route path="notebook" component={QueryBuilder} />
-          <Route path=":slug" component={QueryBuilder} />
-          <Route path=":slug/notebook" component={QueryBuilder} />
-          <Route path=":slug/:objectId" component={QueryBuilder} />
+          <IndexRoute component={LazyLoad.QueryBuilder} />
+          <Route path="notebook" component={LazyLoad.QueryBuilder} />
+          <Route path=":slug" component={LazyLoad.QueryBuilder} />
+          <Route path=":slug/notebook" component={LazyLoad.QueryBuilder} />
+          <Route path=":slug/:objectId" component={LazyLoad.QueryBuilder} />
         </Route>
 
         <Route path="/model">
-          <IndexRoute component={QueryBuilder} />
-          <Route path="new" title={t`New Model`} component={NewModelOptions} />
-          <Route path="notebook" component={QueryBuilder} />
-          <Route path=":slug" component={QueryBuilder} />
-          <Route path=":slug/notebook" component={QueryBuilder} />
-          <Route path=":slug/query" component={QueryBuilder} />
-          <Route path=":slug/metadata" component={QueryBuilder} />
-          <Route path=":slug/:objectId" component={QueryBuilder} />
-          <Route path="query" component={QueryBuilder} />
-          <Route path="metadata" component={QueryBuilder} />
+          <IndexRoute component={LazyLoad.QueryBuilder} />
+          <Route path="new" title={t`New Model`} component={LazyLoad.NewModelOptions} />
+          <Route path="notebook" component={LazyLoad.QueryBuilder} />
+          <Route path=":slug" component={LazyLoad.QueryBuilder} />
+          <Route path=":slug/notebook" component={LazyLoad.QueryBuilder} />
+          <Route path=":slug/query" component={LazyLoad.QueryBuilder} />
+          <Route path=":slug/metadata" component={LazyLoad.QueryBuilder} />
+          <Route path=":slug/:objectId" component={LazyLoad.QueryBuilder} />
+          <Route path="query" component={LazyLoad.QueryBuilder} />
+          <Route path="metadata" component={LazyLoad.QueryBuilder} />
         </Route>
 
-        <Route path="browse" component={BrowseApp}>
-          <IndexRoute component={DatabaseBrowser} />
-          <Route path=":slug" component={SchemaBrowser} />
-          <Route path=":dbId/schema/:schemaName" component={TableBrowser} />
+        <Route path="browse" component={LazyLoad.BrowseApp}>
+          <IndexRoute component={LazyLoad.DatabaseBrowser} />
+          <Route path=":slug" component={LazyLoad.SchemaBrowser} />
+          <Route path=":dbId/schema/:schemaName" component={LazyLoad.TableBrowser} />
         </Route>
 
         {/* INDIVIDUAL DASHBOARDS */}
@@ -643,71 +570,71 @@ export const getRoutes = store => (
         />
 
         <Route path="/collections">
-          <Route path="create" component={CollectionCreate} />
+          <Route path="create" component={LazyLoad.CollectionCreate} />
         </Route>
 
         {/* REFERENCE */}
         <Route path="/reference" title={t`Data Reference`}>
           <IndexRedirect to="/reference/databases" />
-          <Route path="metrics" component={MetricListContainer} />
-          <Route path="metrics/:metricId" component={MetricDetailContainer} />
+          <Route path="metrics" component={LazyLoad.MetricListContainer} />
+          <Route path="metrics/:metricId" component={LazyLoad.MetricDetailContainer} />
           <Route
             path="metrics/:metricId/edit"
-            component={MetricDetailContainer}
+            component={LazyLoad.MetricDetailContainer}
           />
           <Route
             path="metrics/:metricId/questions"
-            component={MetricQuestionsContainer}
+            component={LazyLoad.MetricQuestionsContainer}
           />
           <Route
             path="metrics/:metricId/revisions"
-            component={MetricRevisionsContainer}
+            component={LazyLoad.MetricRevisionsContainer}
           />
-          <Route path="segments" component={SegmentListContainer} />
+          <Route path="segments" component={LazyLoad.SegmentListContainer} />
           <Route
             path="segments/:segmentId"
-            component={SegmentDetailContainer}
+            component={LazyLoad.SegmentDetailContainer}
           />
           <Route
             path="segments/:segmentId/fields"
-            component={SegmentFieldListContainer}
+            component={LazyLoad.SegmentFieldListContainer}
           />
           <Route
             path="segments/:segmentId/fields/:fieldId"
-            component={SegmentFieldDetailContainer}
+            component={LazyLoad.SegmentFieldDetailContainer}
           />
           <Route
             path="segments/:segmentId/questions"
-            component={SegmentQuestionsContainer}
+            component={LazyLoad.SegmentQuestionsContainer}
           />
           <Route
             path="segments/:segmentId/revisions"
-            component={SegmentRevisionsContainer}
+            component={LazyLoad.SegmentRevisionsContainer}
           />
-          <Route path="databases" component={DatabaseListContainer} />
+          <Route path="databases" component={LazyLoad.DatabaseListContainer} />
           <Route
             path="databases/:databaseId"
-            component={DatabaseDetailContainer}
+            component={LazyLoad.DatabaseDetailContainer}
           />
           <Route
             path="databases/:databaseId/tables"
-            component={TableListContainer}
+            component={LazyLoad.TableListContainer}
           />
           <Route
             path="databases/:databaseId/tables/:tableId"
-            component={TableDetailContainer}
+            component={LazyLoad.TableDetailContainer}
           />
           <Route
             path="databases/:databaseId/tables/:tableId/fields"
-            component={FieldListContainer}
+            component={LazyLoad.FieldListContainer}
           />
           <Route
             path="databases/:databaseId/tables/:tableId/fields/:fieldId"
-            component={FieldDetailContainer}
+            component={LazyLoad.FieldDetailContainer}
           />
           <Route
             path="databases/:databaseId/tables/:tableId/questions"
-            component={TableQuestionsContainer}
+            component={LazyLoad.TableQuestionsContainer}
           />
         </Route>
 
@@ -715,9 +642,9 @@ export const getRoutes = store => (
         <Route path="/pulse" title={t`Pulses`}>
           {/* NOTE: legacy route, not linked to in app */}
           <IndexRedirect to="/search" query={{ type: "pulse" }} />
-          <Route path="create" component={PulseEditApp} />
+          <Route path="create" component={LazyLoad.PulseEditApp} />
           <Route path=":pulseId">
-            <IndexRoute component={PulseEditApp} />
+            <IndexRoute component={LazyLoad.PulseEditApp} />
           </Route>
         </Route>
 
@@ -764,6 +691,6 @@ export const getRoutes = store => (
 
     {/* MISC */}
     <Route path="/unauthorized" component={Unauthorized} />
-    <Route path="/*" component={NotFoundFallbackPage} />
+    <Route path="/*" component={LazyLoad.NotFoundFallbackPage} />
   </Route>
 );

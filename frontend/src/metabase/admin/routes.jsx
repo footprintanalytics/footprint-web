@@ -19,56 +19,10 @@ import {
   createAdminRedirect,
 } from "metabase/admin/utils";
 
-import AdminApp from "metabase/admin/app/components/AdminApp";
-import NewUserModal from "metabase/admin/people/containers/NewUserModal";
-import UserSuccessModal from "metabase/admin/people/containers/UserSuccessModal";
-import UserPasswordResetModal from "metabase/admin/people/containers/UserPasswordResetModal";
-import EditUserModal from "metabase/admin/people/containers/EditUserModal";
-import UserActivationModal from "metabase/admin/people/containers/UserActivationModal";
-
-// Settings
-import SettingsEditorApp from "metabase/admin/settings/containers/SettingsEditorApp";
-import PremiumEmbeddingLicensePage from "metabase/admin/settings/containers/PremiumEmbeddingLicensePage";
-
-//  DB Add / list
-import DatabaseListApp from "metabase/admin/databases/containers/DatabaseListApp";
-import DatabaseEditApp from "metabase/admin/databases/containers/DatabaseEditApp";
-
-// Metadata / Data model
-import DataModelApp from "metabase/admin/datamodel/containers/DataModelApp";
-import MetadataEditorApp from "metabase/admin/datamodel/containers/MetadataEditorApp";
-import MetricListApp from "metabase/admin/datamodel/containers/MetricListApp";
-import MetricApp from "metabase/admin/datamodel/containers/MetricApp";
-import SegmentListApp from "metabase/admin/datamodel/containers/SegmentListApp";
-import SegmentApp from "metabase/admin/datamodel/containers/SegmentApp";
-import RevisionHistoryApp from "metabase/admin/datamodel/containers/RevisionHistoryApp";
-import AdminPeopleApp from "metabase/admin/people/containers/AdminPeopleApp";
-import FieldApp from "metabase/admin/datamodel/containers/FieldApp";
-import TableSettingsApp from "metabase/admin/datamodel/containers/TableSettingsApp";
-
-import TroubleshootingApp from "metabase/admin/tasks/containers/TroubleshootingApp";
-import {
-  ModelCacheRefreshJobs,
-  ModelCacheRefreshJobModal,
-} from "metabase/admin/tasks/containers/ModelCacheRefreshJobs";
-import TasksApp from "metabase/admin/tasks/containers/TasksApp";
-import TaskModal from "metabase/admin/tasks/containers/TaskModal";
-import JobInfoApp from "metabase/admin/tasks/containers/JobInfoApp";
-import JobTriggersModal from "metabase/admin/tasks/containers/JobTriggersModal";
-import Logs from "metabase/admin/tasks/containers/Logs";
-import Help from "metabase/admin/tasks/containers/Help";
-
-// People
-import PeopleListingApp from "metabase/admin/people/containers/PeopleListingApp";
-import GroupsListingApp from "metabase/admin/people/containers/GroupsListingApp";
-import GroupDetailApp from "metabase/admin/people/containers/GroupDetailApp";
-
 // Permissions
 import getAdminPermissionsRoutes from "metabase/admin/permissions/routes";
 
-// Tools
-import Tools from "metabase/admin/tools/containers/Tools";
-import RedirectToAllowedSettings from "./settings/containers/RedirectToAllowedSettings";
+import LazyLoad from "metabase/routesLazyLoad";
 
 const UserCanAccessTools = UserAuthWrapper({
   predicate: isEnabled => isEnabled,
@@ -94,71 +48,71 @@ const getRoutes = (store, CanAccessSettings, IsAdmin) => (
     path="/admin"
     component={withBackground("bg-white")(CanAccessSettings)}
   >
-    <Route title={t`Admin`} component={AdminApp}>
-      <IndexRoute component={RedirectToAllowedSettings} />
+    <Route title={t`Admin`} component={LazyLoad.AdminApp}>
+      <IndexRoute component={LazyLoad.RedirectToAllowedSettings} />
 
       <Route
         path="databases"
         title={t`Databases`}
         component={createAdminRouteGuard("databases")}
       >
-        <IndexRoute component={DatabaseListApp} />
-        <Route path="create" component={DatabaseEditApp} />
-        <Route path=":databaseId" component={DatabaseEditApp} />
+        <IndexRoute component={LazyLoad.DatabaseListApp} />
+        <Route path="create" component={LazyLoad.DatabaseEditApp} />
+        <Route path=":databaseId" component={LazyLoad.DatabaseEditApp} />
       </Route>
 
       <Route path="datamodel" component={createAdminRouteGuard("data-model")}>
-        <Route title={t`Data Model`} component={DataModelApp}>
+        <Route title={t`Data Model`} component={LazyLoad.DataModelApp}>
           <IndexRedirect to="database" />
-          <Route path="database" component={MetadataEditorApp} />
-          <Route path="database/:databaseId" component={MetadataEditorApp} />
+          <Route path="database" component={LazyLoad.MetadataEditorApp} />
+          <Route path="database/:databaseId" component={LazyLoad.MetadataEditorApp} />
           <Route
             path="database/:databaseId/:mode"
-            component={MetadataEditorApp}
+            component={LazyLoad.MetadataEditorApp}
           />
           <Route
             path="database/:databaseId/:mode/:tableId"
-            component={MetadataEditorApp}
+            component={LazyLoad.MetadataEditorApp}
           />
           <Route
             path="database/:databaseId/:mode/:tableId/settings"
-            component={TableSettingsApp}
+            component={LazyLoad.TableSettingsApp}
           />
           <Route path="database/:databaseId/:mode/:tableId/:fieldId">
             <IndexRedirect to="general" />
-            <Route path=":section" component={FieldApp} />
+            <Route path=":section" component={LazyLoad.FieldApp} />
           </Route>
-          <Route path="metrics" component={MetricListApp} />
-          <Route path="metric/create" component={MetricApp} />
-          <Route path="metric/:id" component={MetricApp} />
-          <Route path="segments" component={SegmentListApp} />
-          <Route path="segment/create" component={SegmentApp} />
-          <Route path="segment/:id" component={SegmentApp} />
-          <Route path=":entity/:id/revisions" component={RevisionHistoryApp} />
+          <Route path="metrics" component={LazyLoad.MetricListApp} />
+          <Route path="metric/create" component={LazyLoad.MetricApp} />
+          <Route path="metric/:id" component={LazyLoad.MetricApp} />
+          <Route path="segments" component={LazyLoad.SegmentListApp} />
+          <Route path="segment/create" component={LazyLoad.SegmentApp} />
+          <Route path="segment/:id" component={LazyLoad.SegmentApp} />
+          <Route path=":entity/:id/revisions" component={LazyLoad.RevisionHistoryApp} />
         </Route>
       </Route>
 
       {/* PEOPLE */}
       <Route path="people" component={createAdminRouteGuard("people")}>
-        <Route title={t`People`} component={AdminPeopleApp}>
-          <IndexRoute component={PeopleListingApp} />
+        <Route title={t`People`} component={LazyLoad.AdminPeopleApp}>
+          <IndexRoute component={LazyLoad.PeopleListingApp} />
 
           {/*NOTE: this must come before the other routes otherwise it will be masked by them*/}
           <Route path="groups" title={t`Groups`}>
-            <IndexRoute component={GroupsListingApp} />
-            <Route path=":groupId" component={GroupDetailApp} />
+            <IndexRoute component={LazyLoad.GroupsListingApp} />
+            <Route path=":groupId" component={LazyLoad.GroupDetailApp} />
           </Route>
 
-          <Route path="" component={PeopleListingApp}>
-            <ModalRoute path="new" modal={NewUserModal} />
+          <Route path="" component={LazyLoad.PeopleListingApp}>
+            <ModalRoute path="new" modal={LazyLoad.NewUserModal} />
           </Route>
 
-          <Route path=":userId" component={PeopleListingApp}>
-            <ModalRoute path="edit" modal={EditUserModal} />
-            <ModalRoute path="success" modal={UserSuccessModal} />
-            <ModalRoute path="reset" modal={UserPasswordResetModal} />
-            <ModalRoute path="deactivate" modal={UserActivationModal} />
-            <ModalRoute path="reactivate" modal={UserActivationModal} />
+          <Route path=":userId" component={LazyLoad.PeopleListingApp}>
+            <ModalRoute path="edit" modal={LazyLoad.EditUserModal} />
+            <ModalRoute path="success" modal={LazyLoad.UserSuccessModal} />
+            <ModalRoute path="reset" modal={LazyLoad.UserPasswordResetModal} />
+            <ModalRoute path="deactivate" modal={LazyLoad.UserActivationModal} />
+            <ModalRoute path="reactivate" modal={LazyLoad.UserActivationModal} />
             {PLUGIN_ADMIN_USER_MENU_ROUTES.map(getRoutes => getRoutes(store))}
           </Route>
         </Route>
@@ -169,20 +123,20 @@ const getRoutes = (store, CanAccessSettings, IsAdmin) => (
         path="troubleshooting"
         component={createAdminRouteGuard("troubleshooting")}
       >
-        <Route title={t`Troubleshooting`} component={TroubleshootingApp}>
+        <Route title={t`Troubleshooting`} component={LazyLoad.TroubleshootingApp}>
           <IndexRedirect to="help" />
-          <Route path="help" component={Help} />
-          <Route path="tasks" component={TasksApp}>
-            <ModalRoute path=":taskId" modal={TaskModal} />
+          <Route path="help" component={LazyLoad.Help} />
+          <Route path="tasks" component={LazyLoad.TasksApp}>
+            <ModalRoute path=":taskId" modal={LazyLoad.TaskModal} />
           </Route>
-          <Route path="jobs" component={JobInfoApp}>
+          <Route path="jobs" component={LazyLoad.JobInfoApp}>
             <ModalRoute
               path=":jobKey"
-              modal={JobTriggersModal}
+              modal={LazyLoad.JobTriggersModal}
               modalProps={{ wide: true }}
             />
           </Route>
-          <Route path="logs" component={Logs} />
+          <Route path="logs" component={LazyLoad.Logs} />
         </Route>
       </Route>
 
@@ -192,9 +146,9 @@ const getRoutes = (store, CanAccessSettings, IsAdmin) => (
         <Route title={t`Settings`}>
           <Route
             path="premium-embedding-license"
-            component={PremiumEmbeddingLicensePage}
+            component={LazyLoad.PremiumEmbeddingLicensePage}
           />
-          <Route path="*" component={SettingsEditorApp} />
+          <Route path="*" component={LazyLoad.SettingsEditorApp} />
         </Route>
       </Route>
 
@@ -207,14 +161,14 @@ const getRoutes = (store, CanAccessSettings, IsAdmin) => (
         path="tools"
         component={UserCanAccessTools(createAdminRouteGuard("tools"))}
       >
-        <Route title={t`Tools`} component={Tools}>
+        <Route title={t`Tools`} component={LazyLoad.Tools}>
           <IndexRedirect to={PLUGIN_ADMIN_TOOLS.INDEX_ROUTE} />
           <Route
             path="model-caching"
             title={t`Model Caching Log`}
-            component={ModelCacheRefreshJobs}
+            component={LazyLoad.ModelCacheRefreshJobs}
           >
-            <ModalRoute path=":jobId" modal={ModelCacheRefreshJobModal} />
+            <ModalRoute path=":jobId" modal={LazyLoad.ModelCacheRefreshJobModal} />
           </Route>
           {PLUGIN_ADMIN_TOOLS.EXTRA_ROUTES}
         </Route>
