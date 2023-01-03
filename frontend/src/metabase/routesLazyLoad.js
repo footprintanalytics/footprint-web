@@ -28,7 +28,7 @@ export default {
   Publish: loadable(() => import("metabase/containers/news/publish")),
   Upgrade: loadable(() => import("metabase/containers/market/upgrade")),
   Market: loadable(() => import("metabase/containers/market/picture")),
-  App: loadable(() => import("metabase/App")),
+  App: loadable(() => import("metabase/App.tsx")),
   // HomepageApp: loadable(() => import("metabase/home/containers/HomepageApp")),
   // AuthApp: loadable(() => import("metabase/auth/AuthApp")),
   // Register: loadable(() => import("metabase/auth/containers/Register")),

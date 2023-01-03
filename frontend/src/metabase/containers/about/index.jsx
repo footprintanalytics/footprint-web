@@ -3,6 +3,8 @@ import React, { useEffect, useState } from "react";
 import "./index.css";
 import { connect } from "react-redux";
 import { push } from "react-router-redux";
+import { Skeleton } from "antd";
+import LazyLoad from "react-lazyload";
 import AboutExploreDomain from "metabase/containers/about/components/AboutExploreDomain";
 import AboutCreateDashboard from "metabase/containers/about/components/AboutCreateDashboard";
 import Meta from "metabase/components/Meta";
@@ -27,8 +29,6 @@ import AboutBacked from "./components/AboutBacked";
 import AboutPartner from "./components/AboutPartner";
 import data from "./data";
 import { useQueryIndicator, useQueryNews } from "./hook";
-import { Skeleton } from "antd";
-import LazyLoad from "react-lazyload";
 
 const About = props => {
   const {

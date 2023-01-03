@@ -99,6 +99,6 @@
 
 .Visualization__table-chart-info {
   display: flex;
-  justify-content: end;
+  justify-content: flex-end;
   margin: 0 20px;
 }

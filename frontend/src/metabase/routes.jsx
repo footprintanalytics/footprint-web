@@ -7,7 +7,6 @@ import { t } from "ttag";
 import { Route } from "metabase/hoc/Title";
 import { loadCurrentUser, loadCurrentUserVip, loadCurrentUserVipDataApi } from "metabase/redux/user";
 import MetabaseSettings from "metabase/lib/settings";
-import App from "metabase/App.tsx";
 import { Unauthorized } from "metabase/containers/ErrorPages";
 import getAccountRoutes from "metabase/account/routes";
 import getAdminRoutes from "metabase/admin/routes";
@@ -82,35 +81,11 @@ const CanAccessSettings = MetabaseIsSetup(
 export const getRoutes = store => (
   <Route
     title={t`Footprint Analytics`}
-    component={App}
+    component={LazyLoad.App}
     onEnter={nextState => {
       trackPageView(nextState.location.pathname, "Enter");
     }}
-    onChange={(prevState, nextState, replace) => {
-      // console.log([prevState.location.pathname, nextState.location.pathname]);
-
-      let { pathname: prevPathname } = prevState.location;
-      if (!prevPathname.startsWith("/")) {
-        prevPathname = "/" + prevPathname;
-      }
-
-      let { pathname: nextPathname, hash, search } = nextState.location;
-      if (!nextPathname.startsWith("/")) {
-        nextPathname = "/" + nextPathname;
-      }
-
-      if (
-        prevPathname.startsWith("/defi360") &&
-        !nextPathname.startsWith("/defi360")
-      ) {
-        replace(`/defi360${nextPathname}${search}${hash}`);
-      }
-
-      if (prevPathname !== nextPathname) {
-        trackPageView(nextPathname, "Change");
-      }
-    }}
-    >
+  >
     {/* SETUP */}
     <Route
       path="/setup"

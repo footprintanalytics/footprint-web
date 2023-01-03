@@ -7,6 +7,7 @@ let logger = null;
 // const production = process.env.NODE_ENV === "production";
 
 try {
+  const disabled = window?.location?.pathname === "/public/widget/brand";
   if (isProduction) {
     logger = BrowserLogger.singleton({
       pid: armsPid,
@@ -18,6 +19,7 @@ try {
       disableHook: true,
       enableSPA: true,
       useFmp: true,
+      disabled: disabled,
       ignore: {
         ignoreErrors: [
           /Script error/,
