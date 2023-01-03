@@ -1,7 +1,7 @@
 import React from "react";
 import { t } from "ttag";
 import Button from "metabase/core/components/Button";
-import { Collection, Timeline, TimelineEvent } from "metabase-types/api";
+import { Collection, Timeline, TimelineEvent, User, } from "metabase-types/api";
 import TimelineList from "../TimelineList";
 import TimelineEmptyState from "../TimelineEmptyState";
 import { PanelRoot, PanelToolbar } from "./TimelinePanel.styled";
@@ -17,6 +17,7 @@ export interface TimelinePanelProps {
   onArchiveEvent?: (event: TimelineEvent) => void;
   onToggleEvent?: (event: TimelineEvent, isSelected: boolean) => void;
   onToggleTimeline?: (timeline: Timeline, isVisible: boolean) => void;
+  user?: User,
 }
 
 const TimelinePanel = ({
@@ -30,6 +31,7 @@ const TimelinePanel = ({
   onArchiveEvent,
   onToggleEvent,
   onToggleTimeline,
+  user,
 }: TimelinePanelProps): JSX.Element => {
   const isEmpty = timelines.length === 0;
   const canWrite = collection.can_write;
@@ -51,6 +53,7 @@ const TimelinePanel = ({
           onMoveEvent={onMoveEvent}
           onToggleEvent={onToggleEvent}
           onArchiveEvent={onArchiveEvent}
+          user={user}
         />
       ) : (
         <TimelineEmptyState

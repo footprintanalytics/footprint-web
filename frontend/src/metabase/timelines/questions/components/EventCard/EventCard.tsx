@@ -5,7 +5,7 @@ import { parseTimestamp } from "metabase/lib/time";
 import { formatDateTimeWithUnit } from "metabase/lib/formatting";
 import EntityMenu from "metabase/components/EntityMenu";
 import { useScrollOnMount } from "metabase/hooks/use-scroll-on-mount";
-import { Timeline, TimelineEvent } from "metabase-types/api";
+import { Timeline, TimelineEvent, User } from "metabase-types/api";
 import {
   CardAside,
   CardBody,
@@ -26,6 +26,7 @@ export interface EventCardProps {
   onMove?: (event: TimelineEvent) => void;
   onArchive?: (event: TimelineEvent) => void;
   onToggle?: (event: TimelineEvent, isSelected: boolean) => void;
+  user?: User;
 }
 
 const EventCard = ({
@@ -36,12 +37,16 @@ const EventCard = ({
   onMove,
   onArchive,
   onToggle,
+  user,
 }: EventCardProps): JSX.Element => {
   const selectedRef = useScrollOnMount();
   const menuItems = getMenuItems(event, timeline, onEdit, onMove, onArchive);
   const dateMessage = getDateMessage(event);
   const creatorMessage = getCreatorMessage(event);
-
+  const isAdmin = user && user.is_superuser;
+  const isOwner =
+    isAdmin || (user && user.id === event.creator.id);
+  console.log("EventCard", isAdmin, isOwner)
   const handleEventClick = useCallback(() => {
     onToggle?.(event, !isSelected);
   }, [event, isSelected, onToggle]);
@@ -92,12 +97,12 @@ const getMenuItems = (
       title: t`Edit event`,
       action: () => onEdit?.(event),
     },
-    {
+    /*{
       title: t`Move event`,
       action: () => onMove?.(event),
-    },
+    },*/
     {
-      title: t`Archive event`,
+      title: t`Delete event`,
       action: () => onArchive?.(event),
     },
   ];
@@ -119,7 +124,7 @@ const getCreatorMessage = (event: TimelineEvent) => {
   const createdAt = formatDateTimeWithUnit(event.created_at, "day", options);
 
   if (event.creator) {
-    return t`${event.creator.common_name} added this on ${createdAt}`;
+    return t`${event.creator.first_name} added this on ${createdAt}`;
   } else {
     return t`Added on ${createdAt}`;
   }

@@ -199,6 +199,7 @@ class View extends React.Component {
           onDeselectTimelineEvents={deselectTimelineEvents}
           onOpenModal={onOpenModal}
           onClose={onCloseTimelines}
+          user={this.props.user}
         />
       );
     }

@@ -231,9 +231,11 @@ export function createEntity(def) {
       withEntityRequestState(() => ["create"]),
       withEntityActionDecorators("create"),
     )(entityObject => async (dispatch, getState) => {
+      const isTimelineEvent = entity.name === "timelineEvents";
+      const projectObject = !isTimelineEvent ? { project: getProject() } : {};
       const result = entity.normalize(
         await entity.api.create(
-          getWritableProperties({ ...entityObject, project: getProject() }),
+          getWritableProperties({ ...entityObject, ...projectObject }),
         ),
       );
       if (result && result.object && result.object.code === -1) {

@@ -523,7 +523,7 @@ function QueryBuilder(props) {
 
 export default _.compose(
   // Bookmark.loadList(),
-  // Timelines.loadList(timelineProps),
+  Timelines.loadList(timelineProps),
   connect(mapStateToProps, mapDispatchToProps),
   favicon(({ pageFavicon }) => pageFavicon),
   title(({ card, documentTitle }) => ({

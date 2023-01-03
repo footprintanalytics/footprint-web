@@ -7,9 +7,8 @@ import React, {
   useEffect,
 } from "react";
 import _ from "underscore";
-import { getTimelineName } from "metabase/lib/timelines";
 import Ellipsified from "metabase/core/components/Ellipsified";
-import { Timeline, TimelineEvent } from "metabase-types/api";
+import { Timeline, TimelineEvent, User } from "metabase-types/api";
 import EventCard from "../EventCard";
 import {
   CardHeader,
@@ -30,6 +29,7 @@ export interface TimelineCardProps {
   onArchiveEvent?: (event: TimelineEvent) => void;
   onToggleEvent?: (event: TimelineEvent, isSelected: boolean) => void;
   onToggleTimeline?: (timeline: Timeline, isVisible: boolean) => void;
+  user?: User,
 }
 
 const TimelineCard = ({
@@ -42,6 +42,7 @@ const TimelineCard = ({
   onArchiveEvent,
   onToggleEvent,
   onToggleTimeline,
+  user,
 }: TimelineCardProps): JSX.Element => {
   const events = getEvents(timeline.events);
   const isEventSelected = events.some(e => selectedEventIds.includes(e.id));
@@ -89,7 +90,8 @@ const TimelineCard = ({
         />
         <CardLabel>
           <Ellipsified tooltipMaxWidth="100%">
-            {getTimelineName(timeline)}
+            Show events
+            {/*{getTimelineName(timeline)}*/}
           </Ellipsified>
         </CardLabel>
         <CardIcon name={isExpanded ? "chevronup" : "chevrondown"} />
@@ -106,6 +108,7 @@ const TimelineCard = ({
               onMove={onMoveEvent}
               onArchive={onArchiveEvent}
               onToggle={handleToggleEvent}
+              user={user}
             />
           ))}
         </CardContent>

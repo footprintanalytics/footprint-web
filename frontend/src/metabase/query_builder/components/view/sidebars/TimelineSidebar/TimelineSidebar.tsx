@@ -4,7 +4,7 @@ import { Moment } from "moment-timezone";
 import { MODAL_TYPES } from "metabase/query_builder/constants";
 import SidebarContent from "metabase/query_builder/components/SidebarContent";
 import TimelinePanel from "metabase/timelines/questions/containers/TimelinePanel";
-import { Timeline, TimelineEvent } from "metabase-types/api";
+import { Timeline, TimelineEvent, User } from "metabase-types/api";
 import Question from "metabase-lib/Question";
 
 export interface TimelineSidebarProps {
@@ -19,6 +19,7 @@ export interface TimelineSidebarProps {
   onDeselectTimelineEvents?: () => void;
   onOpenModal?: (modal: string, modalContext?: unknown) => void;
   onClose?: () => void;
+  user?: User;
 }
 
 const TimelineSidebar = ({
@@ -33,6 +34,7 @@ const TimelineSidebar = ({
   onSelectTimelineEvents,
   onDeselectTimelineEvents,
   onClose,
+  user,
 }: TimelineSidebarProps) => {
   const handleNewEvent = useCallback(() => {
     onOpenModal?.(MODAL_TYPES.NEW_EVENT);
@@ -86,6 +88,7 @@ const TimelineSidebar = ({
         onMoveEvent={handleMoveEvent}
         onToggleEvent={handleToggleEvent}
         onToggleTimeline={handleToggleTimeline}
+        user={user}
       />
     </SidebarContent>
   );
