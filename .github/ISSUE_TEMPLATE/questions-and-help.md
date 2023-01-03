@@ -3,7 +3,7 @@ name: Questions and help
 about: If you think you need help with something related to Metabase
 title: ''
 labels: ".Needs Triage, Type:Question"
-assignees: ''
+assignees: 'Hige_xie'
 
 ---
 
