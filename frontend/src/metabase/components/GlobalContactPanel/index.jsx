@@ -17,7 +17,7 @@ const Index = () => {
   const [active, setActive] = useState(false);
   const helpRef = React.createRef();
 
-  const isChart = window.location.pathname === "/chart";
+  const isChart = window?.location?.pathname?.startsWith("/chart");
   const showSocialPanel = !isChart && !deviceInfo.isMobile;
   const showHelpButtonPanel = !showSocialPanel;
 
