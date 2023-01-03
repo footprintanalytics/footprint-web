@@ -1,6 +1,8 @@
 /* eslint-disable react/prop-types */
 import React, { useState } from "react";
 import { RightOutlined } from "@ant-design/icons";
+import { Skeleton } from "antd";
+import LazyLoad from "react-lazyload";
 import AboutExploreTab from "metabase/containers/about/components/AboutTab";
 import { trackStructEvent } from "metabase/lib/analytics";
 import WrapLink from "metabase/containers/about/components/WrapLink";
@@ -44,13 +46,23 @@ const AboutExploreDomain = ({
         onNavChange={onNavChange}
         dark={dark}
       />
-      <iframe
-        src={iframeSrc}
-        frameBorder="0"
-        width="1200"
-        height="600"
-        allowTransparency
-      />
+      <LazyLoad
+        className="full-height"
+        scrollContainer="#app-content"
+        placeholder={
+          <div style={{ padding: 20 }}>
+            <Skeleton active />
+          </div>
+        }
+      >
+        <iframe
+          src={iframeSrc}
+          frameBorder="0"
+          width="1200"
+          height="600"
+          allowTransparency
+        />
+      </LazyLoad>
       <WrapLink
         key={exploreButton?.title}
         url={navList?.find(item => item.active)?.url}
