@@ -2,7 +2,7 @@
 name: Bug report
 about: Create a report to help us improve
 title: ''
-labels: 'Bug'
+labels: ["bug"]
 assignees: sefigi
 
 ---
@@ -20,9 +20,4 @@ Steps to reproduce the behavior:
 **Screenshots**
 If applicable, add screenshots to help explain your problem.
 
-### Severity
-- [ ] Highest
-- [ ] High
-- [x] Middle
-- [ ] Low
 
