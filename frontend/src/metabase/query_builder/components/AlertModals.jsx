@@ -160,7 +160,7 @@ class CreateAlertModalContentInner extends Component {
       <ModalContent onClose={onCancel}>
         <div
           className="PulseEdit ml-auto mr-auto mb4"
-          style={{ maxWidth: "550px", minWidth: "400px", }}
+          style={{ maxWidth: "550px", minWidth: "400px" }}
         >
           <AlertModalTitle text={t`Let's set up your alert`} />
           <AlertEditForm
@@ -326,7 +326,7 @@ class UpdateAlertModalContentInner extends Component {
       <ModalContent onClose={onCancel}>
         <div
           className="PulseEdit ml-auto mr-auto mb4"
-          style={{ maxWidth: "550px", minWidth: "400px", }}
+          style={{ maxWidth: "550px", minWidth: "400px" }}
         >
           <AlertModalTitle text={title} />
           <AlertEditForm
@@ -467,7 +467,7 @@ class AlertEditFormInner extends Component {
           onScheduleChange={this.onScheduleChange}
         />
         {/*{isAdmin && (*/}
-          <AlertEditChannels alert={alert} onAlertChange={onAlertChange} />
+        <AlertEditChannels alert={alert} onAlertChange={onAlertChange} />
         {/*)}*/}
       </div>
     );
@@ -596,7 +596,7 @@ class AlertEditChannelsInner extends Component {
     const { alert, user, users, formInput } = this.props;
     return (
       <div className="mt4 pt2">
-        <h3 className="text-dark mb3">{jt`Where do you want to send these alerts?`}</h3>
+        <h3 className="text-dark mb3">{jt`Where do you want to send?`}</h3>
         <div className="mb2">
           <PulseEditChannels
             pulse={alert}

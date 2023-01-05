@@ -118,7 +118,7 @@ const CreateNotification = ({ state }) => {
         }}
         onClick={() => setIsNotificationModalOpen(true)}
       >
-        Send a notification
+        Send Email/Telegram/Discord
       </Button>
       <Modal
         open={isNotificationModalOpen}
