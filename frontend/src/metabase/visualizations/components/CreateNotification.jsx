@@ -126,7 +126,7 @@ const CreateNotification = ({ state }) => {
         onOk={onSend}
         okText="Send"
         closable={false}
-        title="Where do you want to send these alerts?"
+        title="Where do you want to send?"
       >
         <h3>You have selected {emailList.length} users.</h3>
         <div className="mt2" />
