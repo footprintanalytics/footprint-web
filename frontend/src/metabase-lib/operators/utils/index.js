@@ -88,7 +88,7 @@ export function getSupportedAggregationOperators(table) {
       return true;
     }
     return (
-      table.db && table.db.features.includes(operator.requiredDriverFeature)
+      table.db && table.db.features?.includes(operator.requiredDriverFeature)
     );
   });
 }
