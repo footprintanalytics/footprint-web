@@ -7,7 +7,8 @@ let logger = null;
 // const production = process.env.NODE_ENV === "production";
 
 try {
-  const disabled = window?.location?.pathname === "/public/widget/brand";
+  // const disabled = window?.location?.pathname === "/public/widget/brand";
+  const disabled = window?.location?.pathname?.startsWith("/public");
   if (isProduction) {
     logger = BrowserLogger.singleton({
       pid: armsPid,
