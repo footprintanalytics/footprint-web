@@ -1,16 +1,16 @@
-import { updateIn } from "icepick";
+// import { updateIn } from "icepick";
+//
+// import {
+//   PLUGIN_AUTH_PROVIDERS,
+//   PLUGIN_ADMIN_SETTINGS_UPDATES,
+//   PLUGIN_IS_PASSWORD_USER,
+// } from "metabase/plugins";
 
-import {
-  PLUGIN_AUTH_PROVIDERS,
-  PLUGIN_ADMIN_SETTINGS_UPDATES,
-  PLUGIN_IS_PASSWORD_USER,
-} from "metabase/plugins";
-
-import MetabaseSettings from "metabase/lib/settings";
+// import MetabaseSettings from "metabase/lib/settings";
 
 import FormikForm from "metabase/containers/FormikForm";
-import GoogleAuthCard from "metabase/admin/settings/auth/containers/GoogleAuthCard";
-import GoogleSettingsForm from "metabase/admin/settings/auth/containers/GoogleAuthForm";
+// import GoogleAuthCard from "metabase/admin/settings/auth/containers/GoogleAuthCard";
+// import GoogleSettingsForm from "metabase/admin/settings/auth/containers/GoogleAuthForm";
 //
 // PLUGIN_AUTH_PROVIDERS.push(providers => {
 //   const googleProvider = {
