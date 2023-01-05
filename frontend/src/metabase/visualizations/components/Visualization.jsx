@@ -42,6 +42,7 @@ import Question from "metabase-lib/Question";
 import Mode from "metabase-lib/Mode";
 import { memoizeClass } from "metabase-lib/utils";
 import { VisualizationSlowSpinner } from "./Visualization.styled";
+import CreateNotification from "./CreateNotification";
 import TableChartInfo from "metabase/query_builder/components/TableChartInfo";
 import Link from "metabase/core/components/Link";
 import { getOssUrl } from "metabase/lib/image";
@@ -482,7 +483,7 @@ class Visualization extends React.PureComponent {
       <div
         id="html2canvas-Card"
         className={cx(className, "flex flex-column full-height")}
-        style={{ ...style, position: "relative"}}
+        style={{ ...style, position: "relative" }}
       >
         {!isPublic && showDataUpdateTime && !isEditing && (
           <div className="Visualization__table-chart-info">
@@ -500,11 +501,7 @@ class Visualization extends React.PureComponent {
             </Tooltip>
           </div>
         )}
-        {!hideWatermark &&
-        !isText &&
-        !isImage &&
-        !isVideo &&
-        !noResults && (
+        {!hideWatermark && !isText && !isImage && !isVideo && !noResults && (
           <div className="waterMarkHome">
             <span />
           </div>
@@ -573,7 +570,7 @@ class Visualization extends React.PureComponent {
                 style={{ display: small ? "none" : "" }}
               >
                 <div>{error}</div>
-                <ErrorGuide cardId={cardId}/>
+                <ErrorGuide cardId={cardId} />
               </div>
             }
           </div>
@@ -585,11 +582,11 @@ class Visualization extends React.PureComponent {
                 {isSlow === "usually-slow" ? (
                   <div>
                     {expectedDuration > 0 &&
-                    jt`This usually takes an average of ${(
-                      <span style={{ whiteSpace: "nowrap" }}>
-                        {duration(expectedDuration)}
-                      </span>
-                    )}.`}
+                      jt`This usually takes an average of ${(
+                        <span style={{ whiteSpace: "nowrap" }}>
+                          {duration(expectedDuration)}
+                        </span>
+                      )}.`}
                     <br />
                     {t`(This is a bit long for a dashboard)`}
                   </div>
@@ -604,32 +601,36 @@ class Visualization extends React.PureComponent {
             )}
           </div>
         ) : (
-          <CardVisualization
-            {...this.props}
-            // NOTE: CardVisualization class used to target ExplicitSize HOC
-            className="CardVisualization flex-full flex-basis-none"
-            isPlaceholder={isPlaceholder}
-            series={series}
-            settings={settings}
-            card={series[0].card} // convenience for single-series visualizations
-            data={series[0].data} // convenience for single-series visualizations
-            hovered={hovered}
-            clicked={clicked}
-            headerIcon={hasHeader ? null : headerIcon}
-            onHoverChange={this.handleHoverChange}
-            onVisualizationClick={this.handleVisualizationClick}
-            visualizationIsClickable={this.visualizationIsClickable}
-            onRenderError={this.onRenderError}
-            onRender={this.onRender}
-            onActionDismissal={this.hideActions}
-            gridSize={gridSize}
-            onChangeCardAndRun={
-              this.props.onChangeCardAndRun
-                ? this.handleOnChangeCardAndRun
-                : null
-            }
-            dynamicParams={dynamicParams}
-          />
+          <>
+            {this.state.computedSettings["card.title"] ===
+              "Wallet User Stats" && <CreateNotification state={this.state} />}
+            <CardVisualization
+              {...this.props}
+              // NOTE: CardVisualization class used to target ExplicitSize HOC
+              className="CardVisualization flex-full flex-basis-none"
+              isPlaceholder={isPlaceholder}
+              series={series}
+              settings={settings}
+              card={series[0].card} // convenience for single-series visualizations
+              data={series[0].data} // convenience for single-series visualizations
+              hovered={hovered}
+              clicked={clicked}
+              headerIcon={hasHeader ? null : headerIcon}
+              onHoverChange={this.handleHoverChange}
+              onVisualizationClick={this.handleVisualizationClick}
+              visualizationIsClickable={this.visualizationIsClickable}
+              onRenderError={this.onRenderError}
+              onRender={this.onRender}
+              onActionDismissal={this.hideActions}
+              gridSize={gridSize}
+              onChangeCardAndRun={
+                this.props.onChangeCardAndRun
+                  ? this.handleOnChangeCardAndRun
+                  : null
+              }
+              dynamicParams={dynamicParams}
+            />
+          </>
         )}
         <ChartTooltip series={series} hovered={hovered} settings={settings} />
         {this.props.onChangeCardAndRun && (
@@ -686,8 +687,8 @@ export const VisualizationShareFoot = ({ location }) => {
                   {user.twitter.startsWith("http")
                     ? user.twitter.replace("https://twitter.com/", "@")
                     : user.twitter.startsWith("@")
-                      ? user.twitter
-                      : "@" + user.twitter}
+                    ? user.twitter
+                    : "@" + user.twitter}
                 </span>
               </li>
             )}
@@ -717,7 +718,6 @@ export const VisualizationShareFoot = ({ location }) => {
     </div>
   );
 };
-
 
 const mapStateToProps = state => ({
   fontFamily: getFont(state),
