@@ -66,22 +66,22 @@
     <script type="text/javascript">{{{bootstrapJS}}}</script>
 
     <!-- CDN -->
-    <script src="%STATIC_BUCKET_URL%/app/lib/echarts.min.js"></script>
-    <script src="%STATIC_BUCKET_URL%/screenshot.js"></script>
+    <script async src="%STATIC_BUCKET_URL%/app/lib/echarts.min.js"></script>
+    <script async src="%STATIC_BUCKET_URL%/screenshot.js"></script>
 
     <!-- google login -->
     <script async src="https://apis.google.com/js/api.js"></script>
 
     <!-- GA -->
     <script async src="https://www.googletagmanager.com/gtag/js?id=G-7X0SCJDJYL"></script>
-    <script>
+    <script async>
       window.dataLayer = window.dataLayer || [];
       function gtag(){dataLayer.push(arguments);}
       gtag('js', new Date());
       // gtag('config', 'G-7X0SCJDJYL', { send_page_view: false });
     </script>
 
-    <script>
+    <script async>
       (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
         (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
         m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
@@ -91,8 +91,8 @@
 
     <!-- Google Analytics -->
     <!-- If you modify this script, make sure you update the whitelisted Content-Security-Policy hash in metabase.server.middleware.security -->
-    {{#enableAnonTracking}}
-      <script type="text/javascript">{{{googleAnalyticsJS}}}</script>
-    {{/enableAnonTracking}}
+<!--    {{#enableAnonTracking}}-->
+<!--      <script async type="text/javascript">{{{googleAnalyticsJS}}}</script>-->
+<!--    {{/enableAnonTracking}}-->
   </body>
 </html>
