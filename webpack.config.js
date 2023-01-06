@@ -16,6 +16,7 @@ const InterpolateHtmlPlugin = require("interpolate-html-plugin");
 
 const fs = require("fs");
 const os = require("os");
+const CssMinimizerPlugin = require("css-minimizer-webpack-plugin");
 
 const ASSETS_PATH = __dirname + "/resources/frontend_client/app/assets";
 const FONTS_PATH = __dirname + "/resources/frontend_client/app/fonts";
@@ -197,16 +198,10 @@ const config = (module.exports = {
         },
       }
     : undefined,
+
   optimization: {
-    runtimeChunk: "single",
     splitChunks: {
-      cacheGroups: {
-        vendors: {
-          test: /[\\/]node_modules[\\/]/,
-          chunks: "all",
-          name: "vendor",
-        },
-      },
+      chunks: "all",
     },
   },
 
@@ -225,7 +220,7 @@ const config = (module.exports = {
       template: __dirname + "/resources/frontend_client/index_template.html",
       inject: "body",
       // Using default of "defer" creates race-condition when applying whitelabel colors (metabase#18173)
-      scriptLoading: "blocking",
+      // scriptLoading: "blocking",
       alwaysWriteToDisk: true,
     }),
     new HtmlWebpackPlugin({
@@ -234,7 +229,7 @@ const config = (module.exports = {
       chunks: ["vendor", "styles", "app-public"],
       template: __dirname + "/resources/frontend_client/index_template_public.html",
       inject: "body",
-      scriptLoading: "blocking",
+      // scriptLoading: "blocking",
       alwaysWriteToDisk: true,
     }),
     // new HtmlWebpackPlugin({
@@ -250,10 +245,10 @@ const config = (module.exports = {
     new HtmlWebpackHarddiskPlugin({
       outputPath: __dirname + "/resources/frontend_client/app/dist",
     }),
-    new webpack.BannerPlugin({
-      banner:
-        "/*\n* This file is subject to the terms and conditions defined in\n * file 'LICENSE.txt', which is part of this source code package.\n */\n",
-    }),
+    // new webpack.BannerPlugin({
+    //   banner:
+    //     "/*\n* This file is subject to the terms and conditions defined in\n * file 'LICENSE.txt', which is part of this source code package.\n */\n",
+    // }),
     new NodePolyfillPlugin(), // for crypto, among others
     new webpack.EnvironmentPlugin({
       WEBPACK_BUNDLE: "development",
@@ -365,9 +360,17 @@ if (WEBPACK_BUNDLE !== "production") {
     }),
   );
 } else {
-  config.plugins.push(
-    new TerserPlugin({ parallel: true, test: /\.(tsx?|jsx?)($|\?)/i }),
-  );
+  config.optimization.minimizer = [
+    new TerserPlugin({
+      terserOptions: { format: { comments: false } },
+      extractComments: false,
+    }),
+    new CssMinimizerPlugin({
+      minimizerOptions: {
+        preset: ["default", { discardComments: { removeAll: true } }],
+      },
+    }),
+  ];
 
   config.devtool = "source-map";
 }
