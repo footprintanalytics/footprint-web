@@ -239,7 +239,7 @@ class AddSeriesModal extends Component {
 }
 
 export default _.compose(
-  Questions.loadList({ query: { f: "all" } }),
+  Questions.loadList({ query: { f: "mine" } }),
   connect(
     (state, ownProps) => ({
       questions: getQuestions(state, ownProps),
