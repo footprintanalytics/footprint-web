@@ -14,16 +14,20 @@ import Collections, {
 } from "metabase/entities/collections";
 import { canonicalCollectionId } from "metabase/collections/utils";
 
-import { GET } from "metabase/lib/api";
+import { DELETE, GET, POST, PUT } from "metabase/lib/api";
 import forms from "./questions/forms";
 
 const Questions = createEntity({
   name: "questions",
   nameOne: "question",
-  path: "/api/v1/card",
+  path: "/api/card",
 
   api: {
-    get: GET("/api/v1/card/:id")
+    get: GET("/api/v1/card/:id"),
+    favorite: POST("/api/card/:id/favorite"),
+    unfavorite: DELETE("/api/card/:id/favorite"),
+    create: POST("/api/v1/card"),
+    update: PUT("/api/v1/card/:id"),
   },
 
   objectActions: {

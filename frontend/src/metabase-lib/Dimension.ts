@@ -1066,12 +1066,12 @@ export class FieldDimension extends Dimension {
     if (this.fk()) {
       const fkDisplayName =
         this.fk() && stripId(this.fk().field().displayName());
-      if (!displayName.startsWith(`${fkDisplayName} ${FK_SYMBOL}`)) {
+      if (!displayName?.startsWith(`${fkDisplayName} ${FK_SYMBOL}`)) {
         displayName = `${fkDisplayName} ${FK_SYMBOL} ${displayName}`;
       }
     } else if (this.joinAlias()) {
       const joinAlias = this.joinAlias();
-      if (!displayName.startsWith(`${joinAlias} ${FK_SYMBOL}`)) {
+      if (!displayName?.startsWith(`${joinAlias} ${FK_SYMBOL}`)) {
         displayName = `${joinAlias} ${FK_SYMBOL} ${displayName}`;
       }
     }
@@ -1254,7 +1254,7 @@ export class ExpressionDimension extends Dimension {
     }
 
     let base_type = type;
-    if (!type.startsWith("type/")) {
+    if (!type?.startsWith("type/")) {
       switch (type) {
         case MONOTYPE.String:
           base_type = "type/Text";
