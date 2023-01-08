@@ -80,9 +80,9 @@
   "Save the `results` of query with `query-hash`, updating an existing QueryCache entry if one already exists, otherwise
   creating a new entry."
   [^bytes query-hash ^bytes results dashboard-id card-id]
-  (log/info "save-results-v2 store cache data to fix doris bug")
-  (log/info dashboard-id)
-  (log/info card-id)
+;  (log/info "save-results-v2 store cache data to fix doris bug")
+;  (log/info dashboard-id)
+;  (log/info card-id)
   (try
     (or (db/update-where! QueryCache {:query_hash query-hash}
                           :updated_at (t/offset-date-time)
