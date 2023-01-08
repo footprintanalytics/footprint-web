@@ -92,8 +92,8 @@
 (defn- cache-results!
   "Save the final results of a query."
   [query-hash dashboard-id card-id]
-  (log/info (trs "Caching results for next time for query with hash {0}."
-                 (pr-str (i/short-hex-hash query-hash))) (u/emoji "💾"))
+;  (log/info (trs "Caching results for next time for query with hash {0}."
+;                 (pr-str (i/short-hex-hash query-hash))) (u/emoji "💾"))
   (try
     (let [bytez (serialized-bytes)]
       (if-not (instance? (Class/forName "[B") bytez)
@@ -122,8 +122,8 @@
                                (m/dissoc-in result [:data :rows])
                                {}))
        (let [duration-ms (- (System/currentTimeMillis) start-time)]
-         (log/info (trs "Query took {0} to run; minimum for cache eligibility is {1}"
-                        (u/format-milliseconds duration-ms) (u/format-milliseconds (min-duration-ms))))
+;         (log/info (trs "Query took {0} to run; minimum for cache eligibility is {1}"
+;                        (u/format-milliseconds duration-ms) (u/format-milliseconds (min-duration-ms))))
          (when @has-rows?
            (cache-results! query-hash dashboard-id card-id)))
          (when mustRfReponse (rf result))
@@ -140,7 +140,7 @@
 (defn- cached-results-rff
   "Reducing function for cached results. Merges the final object in the cached results, the `final-metdata` map, with
   the reduced value assuming it is a normal metadata map."
-  [rff]
+  [rff card-id]
   (fn [{:keys [last-ran], :as metadata}]
     (let [metadata       (dissoc metadata :last-ran :cache-version)
           rf             (rff metadata)
@@ -148,9 +148,11 @@
       (reset! last-ran-cache (.toEpochMilli (.toInstant last-ran)))
       (fn
         ([]
+         (log/info "cached-results-rff0" card-id)
          (rf))
 
         ([result]
+         (log/info "cached-results-rff2" card-id)
          (let [normal-format? (and (map? (unreduced result))
                                    (seq (get-in (unreduced result) [:data :cols])))
                result*        (-> (if normal-format?
@@ -167,7 +169,7 @@
 
 (defn- maybe-reduce-cached-results
   "Reduces cached results if there is a hit. Otherwise, returns `::miss` directly."
-  [ignore-cache? query-hash max-age-seconds rff context]
+  [ignore-cache? query-hash max-age-seconds rff context card-id]
   (try
     (or (when-not ignore-cache?
           (log/tracef "Looking for cached results for query with hash %s younger than %s\n"
@@ -179,7 +181,7 @@
                 (when (and (= (:cache-version metadata) cache-version)
                            reducible-rows)
                   (log/tracef "Reducing cached rows...")
-                  (qp.context/reducef (cached-results-rff rff) context metadata reducible-rows)
+                  (qp.context/reducef (cached-results-rff rff card-id) context metadata reducible-rows)
                   (log/tracef "All cached rows reduced")
                   ::ok)))))
         ::miss)
@@ -225,7 +227,7 @@
   (let [card-id (info :card-id)
         dashboard-id (info :dashboard-id)
         query-hash (qp.util/query-hash query)
-        result     (maybe-reduce-cached-results (:ignore-cached-results? middleware) query-hash cache-ttl rff context)
+        result     (maybe-reduce-cached-results (:ignore-cached-results? middleware) query-hash cache-ttl rff context card-id)
         reducef' (fn [rff context metadata rows]
                    (impl/do-with-serialization
                     (fn [in-fn result-fn]
