@@ -140,7 +140,7 @@ export const DashboardApi = {
   // deletePublicLink: DELETE("/api/dashboard/:id/public_link"),
 
   cardQuery: POST(
-    "/api/v1/dashboard/:dashboardId/dashcard/:dashcardId/card/:cardId/query",
+    "/api/dashboard/:dashboardId/dashcard/:dashcardId/card/:cardId/query",
   ),
   cardQueryPivot: POST(
     "/api/dashboard/pivot/:dashboardId/dashcard/:dashcardId/card/:cardId/query",
@@ -184,7 +184,7 @@ export const PublicApi = {
   cardQueryPivot: GET(PIVOT_PUBLIC_PREFIX + "card/:uuid/query"),
   // dashboard: GET("/api/public/dashboard/:uuid"),
   dashboardCardQuery: GET(
-    "/api/v1/public/dashboard/:uuid/dashcard/:dashcardId/card/:cardId",
+    "/api/public/dashboard/:uuid/dashcard/:dashcardId/card/:cardId",
   ),
   dashboardCardQueryPivot: GET(
     PIVOT_PUBLIC_PREFIX + "dashboard/:uuid/dashcard/:dashcardId/card/:cardId",
