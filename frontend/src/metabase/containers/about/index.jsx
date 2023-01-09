@@ -50,7 +50,7 @@ const About = props => {
     "Footprint is a powerful yet easy-to-use analytics tool to uncover and visualize blockchain data. The product puts user experience first whether you’re an analyst, data scientist, developer, student, teacher, or executive. It provides an intuitive, drag-and-drop interface for interactive data queries.";
   const keywords = "Footprint";
   const title = "Footprint Analytics: Crypto Analysis Dashboards";
-
+  console.log(window.location)
   useEffect(() => {
     if (zkspaceDate() && !user && isRegisterActivityChannel(channel)) {
       setShowZkspaceModal(true);
