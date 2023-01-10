@@ -421,20 +421,20 @@ export const fetchDashboardCardData = createThunkAction(
         }
       })
       .filter(p => !!p);
+    // Optimized requests, concurrent 10
+    if (tasks.length) {
+      dispatch(setDocumentTitle(t`0/${tasks.length} loaded`));
 
-    const limit = promiseLimit(10)
-
-    dispatch(setDocumentTitle(t`0/${tasks.length} loaded`));
-
-    Promise.all(
-      tasks.map(({ card, dashcard }, inx) => {
-        return limit(() => job(card, dashcard, inx))
+      const limit = promiseLimit(10)
+      Promise.all(
+        tasks.map(({ card, dashcard }, inx) => {
+          return limit(() => doPromise(card, dashcard, inx))
+        })
+      ).then(() => {
+        dispatch(loadingComplete());
       })
-    ).then(results => {
-      dispatch(loadingComplete());
-    })
-
-    function job (card, dashcard, inx) {
+    }
+    function doPromise (card, dashcard, inx) {
       return new Promise(function (resolve) {
         dispatch(fetchCardData(card, dashcard, options)).then(() => {
           resolve(inx)

@@ -47,7 +47,7 @@ import { SIDEBAR_NAME } from "metabase/dashboard/constants";
 import { DashboardLazyLoadContainer } from "metabase/dashboard/components/Dashboard/DashboardLazyLoadContainer";
 
 // const SCROLL_THROTTLE_INTERVAL = 1000 / 24;
-const THROTTLE_PERIOD = 500;
+const THROTTLE_PERIOD = 300;
 
 // NOTE: move DashboardControls HoC to container
 
@@ -182,15 +182,14 @@ class Dashboard extends Component {
   );*/
 
   // NOTE: all of these lifecycle methods should be replaced with DashboardData HoC in container
-  async componentDidMount() {
-    console.log("datashboard")
+  componentDidMount() {
     const { dashboardId, urlDashboardName, urlUserName } = this.props;
-    await this.loadDashboard({
+    this.loadDashboard({
       dashboardId,
       urlDashboardName,
       urlUserName,
     });
-    this.fetchDashboardCardDataThrottle();
+
     /*const main = getMainElement();
     main.addEventListener("scroll", this.throttleParameterWidgetStickiness, {
       passive: true,
@@ -215,8 +214,7 @@ class Dashboard extends Component {
       !_.isEqual(prevProps.parameterValues, this.props.parameterValues) ||
       !prevProps.dashboard
     ) {
-      console.log("xxx", prevProps.parameterValues, this.props.parameterValues, prevProps.dashboard)
-      // this.fetchDashboardCardDataThrottle();
+      this.fetchDashboardCardDataThrottle();
     }
   }
 
@@ -516,7 +514,6 @@ class Dashboard extends Component {
 
     const shouldRenderAsNightMode = isNightMode && isFullscreen;
     const dashboardHasCards = dashboard => dashboard.ordered_cards.length > 0;
-    console.log("dashboard.ordered_cards", dashboard?.ordered_cards)
     const visibleParameters = getVisibleParameters(parameters);
 
     const parametersWidget = (
