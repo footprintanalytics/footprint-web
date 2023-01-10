@@ -2,23 +2,19 @@
 /* eslint-disable react/prop-types */
 import React, { useEffect, useState } from "react";
 import { Skeleton, Tree } from "antd";
+import cx from "classnames";
+import Highlighter from "react-highlight-words";
+import { flatten, isNaN, toNumber, union } from "lodash";
+import Popover from "@idui/react-popover";
 import { DownOutlined } from "metabase/lib/ant-icon";
 import Icon from "metabase/components/Icon";
 import * as MetabaseAnalytics from "metabase/lib/analytics";
-import cx from "classnames";
 import Tooltip from "metabase/components/Tooltip";
-import { personalSaveIndicator } from "metabase/new-service";
+import { tableColumns } from "metabase/new-service";
 import { canShowNewGuideStart } from "metabase/containers/newguide/newGuide";
-import { getProject } from "metabase/lib/project_info";
-import Highlighter from "react-highlight-words";
 import { getSearchTexts } from "metabase/nav/components/utils";
-import { flatten, flattenDeep } from "lodash";
-import {
-  getTreeLoadedKeys,
-  NEW_GUIDE_CATEGORY,
-} from "metabase/query_builder/components/question/handle";
+import { getTreeLoadedKeys, NEW_GUIDE_CATEGORY } from "metabase/query_builder/components/question/handle";
 import TableBeta from "metabase/query_builder/components/TableBeta";
-import Popover from "@idui/react-popover";
 import Button from "metabase/core/components/Button";
 import TableDictionary from "metabase/query_builder/components/TableDictionary";
 import TableTimePeriod from "metabase/query_builder/components/TableTimePeriod";
@@ -36,8 +32,6 @@ const TableDataList = props => {
     databaseName,
     formDataSelector,
     sourceTableId,
-    pageSize,
-    updateMoreListData,
     isTooMore,
     user,
     searchKeyValue,
@@ -45,6 +39,7 @@ const TableDataList = props => {
     isByCategory,
     isNewQuestion,
     setShowNewGuideStart,
+    updateColumnsData,
   } = props;
   const canShowNewGuide = canShowNewGuideStart(user);
 
@@ -60,13 +55,13 @@ const TableDataList = props => {
       if (!isByCategory) {
         setExpandedKeys([
           ...flatten(dataSets.map(item => item.category.value)),
-          ...flattenDeep(
-            dataSets.map(
-              item =>
-                item.tables &&
-                item.tables.map(table => `${item.category.value}-${table.id}`),
-            ),
-          ),
+          // ...flattenDeep(
+          //   dataSets.map(
+          //     item =>
+          //       item.tables &&
+          //       item.tables.map(table => `${item.category.value}-${table.id}`),
+          //   ),
+          // ),
         ]);
       } else {
         setExpandedKeys([...flatten(dataSets.map(item => `${item.id}`))]);
@@ -119,66 +114,41 @@ const TableDataList = props => {
     setExpandedKeys(expanded);
   };
 
-  const keyCanLoadMore = key => {
-    return !!(dataSets?.find(a => key === a.category.value) || {}).loadMore;
-  };
-
   const setTreeLoadedKeysAppend = key => {
-    setTreeLoadedKeys([...treeLoadedKeys, key]);
+    setTreeLoadedKeys(union([...treeLoadedKeys, key]));
   };
 
   const onLoadData = async props => {
     const { key, children } = props || {};
-    try {
-      if (children && children.length === 0) {
-        if (keyCanLoadMore(key)) {
-          await loadMore({ key, current: 1 });
-        } else {
-          setTreeLoadedKeysAppend(key);
-        }
-      } else {
+    const keyArray = key.split("-");
+    const lastKeyElement = keyArray[keyArray.length - 1];
+    const tableId = toNumber(lastKeyElement);
+    const isTable = !isNaN(tableId);
+    console.log("onLoadData", key, isTable, keyArray, lastKeyElement, isTable)
+    return new Promise((resolve) => {
+      if (children || !isTable) {
+        resolve();
         setTreeLoadedKeysAppend(key);
+        return;
       }
-    } catch (e) {
-      console.log(e);
-    }
+      try {
+        updateColumns({ tableId: tableId }).then(() => {
+          resolve();
+          setExpandedKeys([...expandedKeys, key]);
+          setTreeLoadedKeysAppend(key);
+        });
+      } catch (e) {
+        console.log(e);
+      }
+    });
   };
 
-  const loadMore = async ({ key, current }) => {
-    const { list, total } = await personalSaveIndicator({
-      databaseId,
-      current,
-      pageSize,
-      project: getProject(),
+  const updateColumns = async ({ tableId }) => {
+    const data = await tableColumns({
+      "tableId": tableId,
+      "databaseId": databaseId,
     });
-    const hasMore = current * pageSize < total;
-    let moreData;
-    dataSets?.map(dataSet => {
-      if (dataSet.category.value === key) {
-        moreData = {
-          charts: [
-            ...dataSet.charts.filter(chart => chart.type !== "more"),
-            ...(list &&
-              list.map(t => {
-                return {
-                  ...t,
-                  type: "chart",
-                  originId: `card__${t.id}`,
-                };
-              })),
-            hasMore
-              ? {
-                  originId: `more`,
-                  type: "more",
-                  name: "More",
-                  current: current,
-                }
-              : null,
-          ].filter(item => item !== null),
-        };
-      }
-    });
-    updateMoreListData({ key, moreData });
+    updateColumnsData({ [data.table_id]: data.columns })
   };
 
   const renderNoData = () => {
@@ -228,7 +198,6 @@ const TableDataList = props => {
       const id = n.originId;
       const isUdTable = !!n?.name?.toLowerCase()?.startsWith("ud");
       const hidePopover =
-        n.type === "more" ||
         canShowNewGuide ||
         formDataSelector ||
         isUdTable ||
@@ -268,13 +237,6 @@ const TableDataList = props => {
                   !isEditing && sourceTableId === id && !formDataSelector,
               })}
               onClick={() => {
-                if (n.type === "more") {
-                  MetabaseAnalytics.trackStructEvent(
-                    "question-side click more",
-                  );
-                  loadMore({ key: q.category.value, current: n.current + 1 });
-                  return;
-                }
                 MetabaseAnalytics.trackStructEvent(
                   `question-side click category ${n.name}`,
                 );
@@ -286,26 +248,20 @@ const TableDataList = props => {
               }}
             >
               <div className="w-full">
-                {n.type === "more" ? (
-                  <Button className="table-node-more" loading={n.loading}>
-                    More
-                  </Button>
-                ) : (
-                  <Highlighter
-                    className="table-node-title"
-                    highlightClassName="highlight"
-                    searchWords={searchWords}
-                    autoEscape={true}
-                    textToHighlight={n.name}
-                  />
-                )}
+                <Highlighter
+                  className="table-node-title"
+                  highlightClassName="highlight"
+                  searchWords={searchWords}
+                  autoEscape={true}
+                  textToHighlight={n.name}
+                />
                 <TableBeta tableId={id} tableName={n.name} />
               </div>
             </div>
           </Popover>
         ),
         key: isByCategory ? `${id}` : `${q.category.value}-${id}`,
-        selectable: false,
+        // selectable: false,
         children: treeColumnsChildren({ q, n, id }),
       };
     });
@@ -347,13 +303,15 @@ const TableDataList = props => {
                 </span>
               )}
             </span>
-          </Tooltip>
-        ),
-        key: isByCategory
-          ? `${id}-${field.name}`
-          : `${q.category.value}-${id}-${field.name}`,
-        selectable: false,
-      }))
+            </Tooltip>
+          ),
+          key: isByCategory
+            ? `${id}-${field.name}`
+            : `${q.category.value}-${id}-${field.name}`,
+          selectable: false,
+          isLeaf: true,
+        })
+      )
     );
   };
 
@@ -382,7 +340,7 @@ const TableDataList = props => {
             </span>
           ),
           key: q.category.value,
-          selectable: false,
+          // selectable: false,
           children: treeChildren(q, qInx),
         };
       });
@@ -395,7 +353,7 @@ const TableDataList = props => {
       </div>
     );
   };
-
+  console.log("expandedKeys", expandedKeys)
   return (
     <div className="flex-full">
       {isFeature && renderNoData()}
@@ -413,6 +371,7 @@ const TableDataList = props => {
           expandedKeys={expandedKeys}
           switcherIcon={<DownOutlined />}
           treeData={treeData}
+          loadData={onLoadData}
           defaultExpandAll={!!isEditing}
           loadedKeys={treeLoadedKeys}
         />

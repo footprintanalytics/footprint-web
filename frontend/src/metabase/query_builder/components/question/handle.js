@@ -79,16 +79,17 @@ export function getTreeLoadedKeys(list) {
   if (!list) {
     return [];
   }
-  const second = flatten(
-    list.map(a =>
-      [...a.tables, ...a.charts].map(b => {
-        return {
-          originId: b.originId,
-          category: a.category.value,
-        };
-      }),
-    ),
-  ).map(item => `${item.category}-${item.originId}`);
+  const second = [];
+  // const second = flatten(
+  //   list.map(a =>
+  //     [...a.tables, ...a.charts].map(b => {
+  //       return {
+  //         originId: b.originId,
+  //         category: a.category.value,
+  //       };
+  //     }),
+  //   ),
+  // ).map(item => `${item.category}-${item.originId}`);
   const third = flattenDeep(
     list.map(a =>
       [...a.tables, ...a.charts].map(b => {
@@ -107,7 +108,7 @@ export function getTreeLoadedKeys(list) {
   ).map(item => item && `${item.category}-${item.originId}-${item.name}`);
   const first =
     second.length > 0 ? [] : list.map(a => a?.category?.value || "");
-  return [...first, ...second, ...third];
+  return [...first, ...second, ...third].filter(p => p);
 }
 
 export function getAddTableTreeLoadedKeys(key, list) {

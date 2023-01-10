@@ -274,7 +274,7 @@ export const recentTableList = async params => {
 };
 
 export const tableSearchV2 = async params => {
-  return POST(`/api/v1/database/table/searchV2`, params);
+  return POST(`/api/v1/database/table/search`, params);
 };
 
 export const fetchTableCategory = async params => {
@@ -442,4 +442,8 @@ export const publicDashboard = (uuid, params) => {
 
 export const publicDashboardChartData = (uuid, cardId, params) => {
   return GET(`api/public/dashboard/${uuid}/card/${cardId}`, { silentFp: true });
+};
+
+export const tableColumns = (params) => {
+  return POST(`api/v1/database/table/column`, params);
 };
