@@ -163,7 +163,6 @@ class Dashboard extends Component {
   }
 
   fetchDashboardCardData = () => {
-    console.log("fetchDashboardCardData")
     this.props.fetchDashboardCardData({
       reload: false,
       clear: true,

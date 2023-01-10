@@ -140,7 +140,7 @@
 (defn- cached-results-rff
   "Reducing function for cached results. Merges the final object in the cached results, the `final-metdata` map, with
   the reduced value assuming it is a normal metadata map."
-  [rff card-id]
+  [rff]
   (fn [{:keys [last-ran], :as metadata}]
     (let [metadata       (dissoc metadata :last-ran :cache-version)
           rf             (rff metadata)
@@ -148,11 +148,9 @@
       (reset! last-ran-cache (.toEpochMilli (.toInstant last-ran)))
       (fn
         ([]
-         (log/info "cached-results-rff0" card-id)
          (rf))
 
         ([result]
-         (log/info "cached-results-rff2" card-id)
          (let [normal-format? (and (map? (unreduced result))
                                    (seq (get-in (unreduced result) [:data :cols])))
                result*        (-> (if normal-format?
@@ -169,7 +167,7 @@
 
 (defn- maybe-reduce-cached-results
   "Reduces cached results if there is a hit. Otherwise, returns `::miss` directly."
-  [ignore-cache? query-hash max-age-seconds rff context card-id]
+  [ignore-cache? query-hash max-age-seconds rff context]
   (try
     (or (when-not ignore-cache?
           (log/tracef "Looking for cached results for query with hash %s younger than %s\n"
@@ -181,7 +179,7 @@
                 (when (and (= (:cache-version metadata) cache-version)
                            reducible-rows)
                   (log/tracef "Reducing cached rows...")
-                  (qp.context/reducef (cached-results-rff rff card-id) context metadata reducible-rows)
+                  (qp.context/reducef (cached-results-rff rff) context metadata reducible-rows)
                   (log/tracef "All cached rows reduced")
                   ::ok)))))
         ::miss)
@@ -227,7 +225,7 @@
   (let [card-id (info :card-id)
         dashboard-id (info :dashboard-id)
         query-hash (qp.util/query-hash query)
-        result     (maybe-reduce-cached-results (:ignore-cached-results? middleware) query-hash cache-ttl rff context card-id)
+        result     (maybe-reduce-cached-results (:ignore-cached-results? middleware) query-hash cache-ttl rff context)
         reducef' (fn [rff context metadata rows]
                    (impl/do-with-serialization
                     (fn [in-fn result-fn]
