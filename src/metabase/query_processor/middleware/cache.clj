@@ -92,8 +92,8 @@
 (defn- cache-results!
   "Save the final results of a query."
   [query-hash dashboard-id card-id]
-  (log/info (trs "Caching results for next time for query with hash {0}."
-                 (pr-str (i/short-hex-hash query-hash))) (u/emoji "💾"))
+;  (log/info (trs "Caching results for next time for query with hash {0}."
+;                 (pr-str (i/short-hex-hash query-hash))) (u/emoji "💾"))
   (try
     (let [bytez (serialized-bytes)]
       (if-not (instance? (Class/forName "[B") bytez)
@@ -122,8 +122,8 @@
                                (m/dissoc-in result [:data :rows])
                                {}))
        (let [duration-ms (- (System/currentTimeMillis) start-time)]
-         (log/info (trs "Query took {0} to run; minimum for cache eligibility is {1}"
-                        (u/format-milliseconds duration-ms) (u/format-milliseconds (min-duration-ms))))
+;         (log/info (trs "Query took {0} to run; minimum for cache eligibility is {1}"
+;                        (u/format-milliseconds duration-ms) (u/format-milliseconds (min-duration-ms))))
          (when @has-rows?
            (cache-results! query-hash dashboard-id card-id)))
          (when mustRfReponse (rf result))
@@ -198,7 +198,7 @@
   (try (let [result (client/post (str (site-url) "/api/v1/dataDictionary/tableLastUpdate")
                                  {:accept  :json
                                   :form-params {:id card-id, :model "card"}})]
-         (log/info "------------" "tableUpdatedTime" card-id result)
+;         (log/info "------------" "tableUpdatedTime" card-id result)
          (let [resultMap (json/parse-string (result :body) true)]
            (if (resultMap :data) (.toEpochMilli (.toInstant (.parse dateFormat ((resultMap :data) :tableUpdated)))) 0)))
     (catch Exception e
@@ -210,7 +210,7 @@
 
 (defn- canRunCache [duration-ms card-id]
   (let [chartUpdated (tableUpdatedTime card-id)]
-    (log/info "------------" "canRunCache" card-id (> chartUpdated @last-ran-cache) (> duration-ms (min-duration-ms)))
+;    (log/info "------------" "canRunCache" card-id (> chartUpdated @last-ran-cache) (> duration-ms (min-duration-ms)))
     (or (> chartUpdated @last-ran-cache) (> duration-ms (min-duration-ms)))
     )
   )
@@ -221,7 +221,7 @@
   [qp {:keys [cache-ttl middleware info], :as query} rff {:keys [reducef], :as context}]
   ;; TODO - Query will already have `info.hash` if it's a userland query. I'm not 100% sure it will be the same hash,
   ;; because this is calculated after normalization, instead of before
-  (log/info "run-query-with-cache info:" info)
+;  (log/info "run-query-with-cache info:" info)
   (let [card-id (info :card-id)
         dashboard-id (info :dashboard-id)
         query-hash (qp.util/query-hash query)

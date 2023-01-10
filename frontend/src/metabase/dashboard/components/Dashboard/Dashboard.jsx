@@ -182,7 +182,6 @@ class Dashboard extends Component {
 
   // NOTE: all of these lifecycle methods should be replaced with DashboardData HoC in container
   componentDidMount() {
-    console.log("datashboard")
     const { dashboardId, urlDashboardName, urlUserName } = this.props;
     this.loadDashboard({
       dashboardId,
