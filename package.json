@@ -87,6 +87,7 @@
     "normalizr": "^3.0.2",
     "number-to-locale-string": "^1.0.1",
     "password-generator": "^2.0.1",
+    "promise-limit": "^2.7.0",
     "prop-types": "^15.5.7",
     "randomcolor": "^0.6.2",
     "re-reselect": "^3.4.0",

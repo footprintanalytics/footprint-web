@@ -1,6 +1,7 @@
 import { getIn } from "icepick";
 
 import { t } from "ttag";
+import promiseLimit from "promise-limit";
 import { dynamicParamsApi } from "metabase/new-service";
 import { normalize, schema } from "normalizr";
 import querystring from "querystring";
@@ -42,7 +43,6 @@ import {
   getDatasetQueryParams,
 } from "../utils";
 import { loadMetadataForDashboard } from "./metadata";
-
 const DATASET_SLOW_TIMEOUT = 15 * 1000;
 
 // normalizr schemas
@@ -414,22 +414,35 @@ export const fetchDashboardCardData = createThunkAction(
   FETCH_DASHBOARD_CARD_DATA,
   options => (dispatch, getState) => {
     const dashboard = getDashboardComplete(getState());
-
-    const promises = getAllDashboardCards(dashboard)
+    const tasks = getAllDashboardCards(dashboard)
       .map(({ card, dashcard }) => {
         if (!isVirtualDashCard(dashcard)) {
-          return dispatch(fetchCardData(card, dashcard, options)).then(() => {
-            return dispatch(updateLoadingTitle());
-          });
+          return { card, dashcard }
         }
       })
       .filter(p => !!p);
 
-    dispatch(setDocumentTitle(t`0/${promises.length} loaded`));
+    const limit = promiseLimit(10)
 
-    Promise.all(promises).then(() => {
+    dispatch(setDocumentTitle(t`0/${tasks.length} loaded`));
+
+    Promise.all(
+      tasks.map(({ card, dashcard }, inx) => {
+        return limit(() => job(card, dashcard, inx))
+      })
+    ).then(results => {
       dispatch(loadingComplete());
-    });
+    })
+
+    function job (card, dashcard, inx) {
+      return new Promise(function (resolve) {
+        dispatch(fetchCardData(card, dashcard, options)).then(() => {
+          resolve(inx)
+          dispatch(updateLoadingTitle());
+        });
+      })
+    }
+
   },
 );
 export const GET_DASHBOARD_PARAMETERS =
