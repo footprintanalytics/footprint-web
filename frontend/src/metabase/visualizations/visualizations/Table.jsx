@@ -264,7 +264,7 @@ export default class Table extends Component {
       options.push({ name: t`Email link`, value: "email_link" });
     }
     if (!column.semantic_type || isImageURL(column) || isAvatarURL(column)) {
-      defaultValue = isAvatarURL(column) ? "image" : "link";
+      defaultValue = "image";
       options.push({ name: t`Image`, value: "image" });
     }
     if (!column.semantic_type) {
