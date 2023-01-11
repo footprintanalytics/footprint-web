@@ -447,3 +447,12 @@ export const publicDashboardChartData = (uuid, cardId, params) => {
 export const tableColumns = (params) => {
   return POST(`api/v1/database/table/column`, params);
 };
+
+export const udTableDetail = (params) => {
+  return POST(`api/v1/udTable/detail`, params);
+  // return POST(`mock/udtable/detail`, params);
+};
+
+export const udTableSaveChartConfig = (params) => {
+  return POST(`api/v1/udTable/saveChartConfig`, params);
+};

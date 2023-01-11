@@ -57,6 +57,7 @@ import QueryDownloadWidget from "../QueryDownloadWidget";
 import QuestionEmbedWidget from "../../containers/QuestionEmbedWidget";
 import QueryMoreWidget from "../QueryMoreWidget";
 import QueryDownloadWidgetFP from "../QueryDownloadWidgetFP";
+import SaveChartToUdModal from "../../../components/SaveChartToUdModal";
 
 const viewTitleHeaderPropTypes = {
   question: PropTypes.object.isRequired,
@@ -644,6 +645,7 @@ function ViewTitleHeaderRightSide(props) {
     updateQuestion,
   } = props;
   const [showVip, setShowVip] = useState(false);
+  const [showSaveChartToUd, setSaveChartToUd] = useState(false);
   const isShowingNotebook = queryBuilderMode === "notebook";
   const query = question.query();
   const isReadOnlyQuery = query.readOnly();
@@ -770,6 +772,21 @@ function ViewTitleHeaderRightSide(props) {
             />
           </Tooltip>
         )}
+        {isOwner && (
+          <Tooltip tooltip={t`Save chart to ud table`}>
+            <Button
+              onlyIcon
+              className={`Question-header-btn `}
+              iconColor="#7A819B"
+              icon="save"
+              iconSize={16}
+              onClick={async () => {
+                setSaveChartToUd(true);
+              }}
+            />
+          </Tooltip>
+        )}
+        {showSaveChartToUd && (<SaveChartToUdModal cardId={card.id} onClose={() => setSaveChartToUd(false)}/>)}
         {(!!card.public_uuid || isOwner || isAdmin) && (
           <Tooltip tooltip={t`Duplicate chart`}>
             <Button

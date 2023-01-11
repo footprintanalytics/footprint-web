@@ -110,6 +110,7 @@ export function newQuestion({
   ...options
 }: NewQuestionUrlBuilderParams = {}) {
   const question = Question.create(options);
+  console.log("question", question)
   const url = question.getUrl({
     creationType,
     query: objectId ? { objectId } : undefined,
