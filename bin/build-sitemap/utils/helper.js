@@ -1,5 +1,6 @@
 const chunk = require("lodash/chunk");
 const kebabCase = require("lodash/kebabCase");
+const getSlug = require("speakingurl");
 
 const renderType = type => (type === "dashboard" ? "dashboard" : "chart");
 
@@ -9,7 +10,7 @@ const articleType = type => {
     dailyNews: "daily-news",
     realTimeInfo: "flash",
   };
-  return array[type];
+  return array[type] || "article";
 };
 
 const divisionKey = "fp";
@@ -28,11 +29,22 @@ const dashboardQuestionUrl = ({ type, name, id }) => {
   return `${rType}/${[title, divisionKey, id].join("-")}`;
 }
 
-exports.articleDetailUrl = ({ type, title, mediaInfoId }) => {
+function speakingUrl(text) {
+  if (!text) return text;
+  return getSlug(text);
+}
+
+exports.articleDetailUrl = ({ type, title, mediaInfoId, shortMediaInfoId }) => {
+  const mediaId = shortMediaInfoId || mediaInfoId;
+  if (!mediaId) {
+    return "";
+  }
   const rType = articleType(type);
-  const id = chunk(mediaInfoId.split(""), 8)
+  const id = chunk(mediaId.split(""), 8)
     .map(array => array.join(""))
     .join("-");
-  const rTitle = kebabCase(title);
-  return `${rType}/${[rTitle, divisionKey, id].join("-")}`;
+  const rTitle = speakingUrl(title);
+  return `${rType}/${[rTitle, shortMediaInfoId ? null : divisionKey, id]
+    .filter(i => i)
+    .join("-")}`;
 }
