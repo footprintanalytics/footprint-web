@@ -120,11 +120,10 @@ const TableDataList = props => {
 
   const onLoadData = async props => {
     const { key, children } = props || {};
-    const keyArray = key.split("-");
-    const lastKeyElement = keyArray[keyArray.length - 1];
+    const keyArray = key?.split("-");
+    const lastKeyElement = keyArray && keyArray[keyArray.length - 1];
     const tableId = toNumber(lastKeyElement);
     const isTable = !isNaN(tableId);
-    console.log("onLoadData", key, isTable, keyArray, lastKeyElement, isTable)
     return new Promise((resolve) => {
       if (children || !isTable) {
         resolve();
@@ -353,7 +352,6 @@ const TableDataList = props => {
       </div>
     );
   };
-  console.log("expandedKeys", expandedKeys)
   return (
     <div className="flex-full">
       {isFeature && renderNoData()}

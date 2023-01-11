@@ -142,7 +142,6 @@ function QuestionSide({
       return dataSets;
     }
     return dataSets?.map(dataSet => {
-      console.log("dataset", dataSet)
       if (isByCategory) {
         return {
           ...dataSet,
@@ -169,7 +168,6 @@ function QuestionSide({
       ),
     [data?.list, handleTableListDataFunction, columnDataMap],
   );
-  console.log("dataSets", dataSets)
   useEffect(() => {
     if (newGuideShowTable && dataSets?.length > 0) {
       newGuideHighlight({ key: "table", getNewGuideInfo, setNewGuideInfo });
