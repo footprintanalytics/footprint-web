@@ -309,6 +309,10 @@ export const checkTableName = async params => {
   return POST(`/api/v1/custom/data/check/tableName`, params);
 };
 
+export const checkTableNameChart = async params => {
+  return POST(`/api/v1/udTable/checkTableName`, params);
+};
+
 export const elasticSearch = async params => {
   return POST(`/api/v1/elasticsearch/search`, params);
 };

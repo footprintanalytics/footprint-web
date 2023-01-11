@@ -4,7 +4,7 @@ import { Alert, Button, Form, Input, Modal, Skeleton } from "antd";
 import "./TaggingModal.css";
 import { connect } from "react-redux";
 import { getUser } from "metabase/selectors/user";
-import { checkTableName, udTableDetail, udTableSaveChartConfig } from "../new-service";
+import { checkTableName, checkTableNameChart, udTableDetail, udTableSaveChartConfig } from "../new-service";
 import { useMutation, useQuery } from "react-query";
 import { QUERY_OPTIONS } from "../containers/dashboards/shared/config";
 import moment from "moment-timezone";
@@ -32,11 +32,11 @@ const SaveChartToUdModal = ({
   );
   const [tableName, setTableName] = useState(data?.chartConfig?.targetTableName);
   const debouncedTableName = useDebounce(tableName, { wait: 500 });
-  const checkMutate = useMutation(checkTableName);
+  const checkMutate = useMutation(checkTableNameChart);
   const message = checkMutate?.data?.message;
   useEffect(() => {
     if (!debouncedTableName) return;
-    checkMutate.mutate({ tableName: debouncedTableName, tableType: "chart" });
+    checkMutate.mutate({ tableName: debouncedTableName, tableType: "chart", cardId: cardId });
   }, [debouncedTableName]);
   console.log("checkMutate", checkMutate)
   const callbackTime = useCallback(
