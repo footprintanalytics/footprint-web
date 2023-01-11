@@ -225,7 +225,6 @@ function QuestionSide({
         return;
       }
       const filter = getFilter({ tableName, columns });
-      console.log("questionside filter", filter)
       replaceUrl({ tableId, filter });
       afterAction();
     }
