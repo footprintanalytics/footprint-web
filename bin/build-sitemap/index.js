@@ -61,9 +61,11 @@ const getExploreList = async () => {
 
 const getMediaList = async type => {
   const res = await axios.post(`${hostname}/api/v1/media/list`, {
-    pageSize: 5000,
+    pageSize: 8000,
     current: 1,
     type: type,
+    sortBy: "publishTime",
+    sortDirection: "desc",
   });
   return {
     list: res.data.data.data,
@@ -184,7 +186,7 @@ const run = async () => {
   // });
 
   // article
-  const articles = await getMediaList("article");
+  const articles = await getMediaList();
   newsItemToSitemap(articles.list, sitemap);
   total += articles.list.length;
 
@@ -194,9 +196,9 @@ const run = async () => {
   // total += realTimeInfos.list.length;
 
   // dailyNews
-  const dailyNews = await getMediaList("dailyNews");
-  newsItemToSitemap(dailyNews.list, sitemap);
-  total += dailyNews.list.length;
+  // const dailyNews = await getMediaList("dailyNews");
+  // newsItemToSitemap(dailyNews.list, sitemap);
+  // total += dailyNews.list.length;
 
   sitemap.end();
   console.log(`sitemap.xml ${total}`);

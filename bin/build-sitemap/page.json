@@ -12,8 +12,16 @@
     "https://www.footprint.network/chains",
     "https://www.footprint.network/news/featured",
     "https://www.footprint.network/news/articles",
+    "https://www.footprint.network/news/reports",
+    "https://www.footprint.network/news/company",
+    "https://www.footprint.network/news/product",
+    "https://www.footprint.network/news/academy",
+    "https://www.footprint.network/news/events",
+    "https://www.footprint.network/news/weekly-letter",
+    "https://www.footprint.network/news/community-insights",
     "https://www.footprint.network/news/daily-news",
     "https://www.footprint.network/protocols",
-    "https://www.footprint.network/widget"
+    "https://www.footprint.network/widget",
+    "https://www.footprint.network/moon-men"
   ]
 }
