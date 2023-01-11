@@ -82,10 +82,10 @@ function QuestionSide({
   updateQuestion,
 }) {
   const [databaseId, setDatabaseId] = useState(dbId || 3);
+  const [columnDataMap, setColumnDataMap] = useState({});
   const [handleSelectTable, setHandleSelectTable] = useState();
   const [chain, setChain] = useState("all");
   const [level, setLevel] = useState("all");
-  const [moreParams, setMoreParams] = useState();
   const [searchKey, setSearchKey] = useState("");
   // const [dataSets, setDatasets] = useState([]);
   const [nextTableObject, setNextTableObject] = useState({});
@@ -137,32 +137,37 @@ function QuestionSide({
     ? handleTableListDataByCategory
     : handleTableListData;
 
-  const updateMoreListData = (dataSets, params) => {
-    if (!params) {
+  const updateColumnsData = (dataSets, columnDataMap) => {
+    if (Object.keys(columnDataMap).length === 0) {
       return dataSets;
     }
-    const { key, moreData } = params;
     return dataSets?.map(dataSet => {
-      let dataSetAddData;
-      if (dataSet?.category?.value === key) {
-        dataSetAddData = moreData;
+      if (isByCategory) {
+        return {
+          ...dataSet,
+          columns: columnDataMap[dataSet.id],
+        }
       }
       return {
         ...dataSet,
-        ...dataSetAddData,
+        tables: dataSet.tables.map(table => {
+          return {
+            ...table,
+            columns: columnDataMap[table.id],
+          }
+        })
       };
     });
   };
 
   const dataSets = useMemo(
     () =>
-      updateMoreListData(
+      updateColumnsData(
         data?.list && handleTableListDataFunction(data?.list),
-        moreParams,
+        columnDataMap,
       ),
-    [data?.list, handleTableListDataFunction, moreParams],
+    [data?.list, handleTableListDataFunction, columnDataMap],
   );
-
   useEffect(() => {
     if (newGuideShowTable && dataSets?.length > 0) {
       newGuideHighlight({ key: "table", getNewGuideInfo, setNewGuideInfo });
@@ -220,7 +225,6 @@ function QuestionSide({
         return;
       }
       const filter = getFilter({ tableName, columns });
-      console.log("questionside filter", filter)
       replaceUrl({ tableId, filter });
       afterAction();
     }
@@ -350,9 +354,9 @@ function QuestionSide({
                   formDataSelector={formDataSelector}
                   sourceTableId={sourceTableId}
                   pageSize={pageSize}
-                  updateMoreListData={useCallback(setMoreParams, [
-                    setMoreParams,
-                  ])}
+                  updateColumnsData={data => {
+                    setColumnDataMap(origin => { return { ...origin, ...data } });
+                  }}
                   isTooMore={data?.isTooMore}
                   user={user}
                   searchKeyValue={searchKeyValue}
