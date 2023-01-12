@@ -4,7 +4,7 @@ import EventEmitter from "events";
 
 import { delay } from "metabase/lib/promise";
 import { IFRAMED } from "metabase/lib/dom";
-import { reportAPI } from "metabase/lib/arms";
+import { formatArmsStatusTextByCache, reportAPI } from "metabase/lib/arms";
 import isUrl from "metabase/lib/isUrl";
 
 const ONE_SECOND = 1000;
@@ -165,6 +165,7 @@ export class Api extends EventEmitter {
         requestUrl = this.basename + url;
       }
       xhr.open(method, this.basename + url);
+      xhr.setRequestHeader("client_request_time", begin);
       for (const headerName in headers) {
         xhr.setRequestHeader(headerName, headers[headerName]);
       }
@@ -211,6 +212,11 @@ export class Api extends EventEmitter {
               body = JSON.parse(body);
             } catch (e) {}
           }
+          const isCache = body?.cached || body?.data?.cached;
+          if (armsObject) {
+            armsObject.statusText = formatArmsStatusTextByCache(armsObject.statusText || "", isCache);
+          }
+
           let status = xhr.status;
           if (status === 202 && body && body._status > 0) {
             status = body._status;

@@ -80,6 +80,7 @@
    results
    [[:data :cols :rows :rows_truncated :insights :requested_timezone :results_timezone]
     [:json_query :parameters]
+    :cached
     :status]))
 
 (defmethod transform-results :failed
