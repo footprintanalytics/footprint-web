@@ -3,7 +3,7 @@ import axios from "axios";
 import { message } from "antd";
 import { saveAs } from "file-saver";
 import api from "metabase/lib/api";
-import { reportAPI } from "metabase/lib/arms";
+import logger, { reportAPI } from "metabase/lib/arms";
 
 axios.defaults.baseURL = api.basename;
 axios.defaults.headers.put["Content-Type"] = "application/json; charset=utf-8";
@@ -32,17 +32,23 @@ const saveStream = (headers, data) => {
 axios.interceptors.request.use(config => {
   const headers = config?.headers || {};
   const requestime = getTime();
+  const traceId = logger.getTraceId()['EagleEye-TraceID'];
+  const sid = logger.getPageviewId()['EagleEye-SessionID'];
   return {
     ...config,
     ...{ requestime: requestime },
-    headers: { ...headers, common: { ...headers?.common, client_request_time: requestime }}
+    ...{ traceId: traceId },
+    ...{ sid: sid },
+    headers: { ...headers, common: { ...headers?.common, client_request_time: requestime, "EagleEye-TraceID": traceId, "EagleEye-SessionID": sid }}
   };
 });
 
 axios.interceptors.response.use(
   async response => {
     const time = getTime() - response.config.requestime;
-    reportAPI(response.config.url, true, time, response.status, "OK");
+    const traceId = response.config.traceId;
+    const sid = response.config.sid;
+    reportAPI(response.config.url, true, time, response.status, "OK", response.config.requestime, traceId, sid);
     const { data, config, headers } = response;
     if (data instanceof Blob) {
       const text = await data.text();

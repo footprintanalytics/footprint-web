@@ -4,7 +4,7 @@ import EventEmitter from "events";
 
 import { delay } from "metabase/lib/promise";
 import { IFRAMED } from "metabase/lib/dom";
-import { formatArmsStatusTextByCache, reportAPI } from "metabase/lib/arms";
+import logger, { formatArmsStatusTextByCache, reportAPI } from "metabase/lib/arms";
 import isUrl from "metabase/lib/isUrl";
 
 const ONE_SECOND = 1000;
@@ -164,8 +164,12 @@ export class Api extends EventEmitter {
       if (!isUrl(url)) {
         requestUrl = this.basename + url;
       }
+      const traceId = logger.getTraceId()['EagleEye-TraceID'];
+      const sid = logger.getPageviewId()['EagleEye-SessionID'];
       xhr.open(method, this.basename + url);
       xhr.setRequestHeader("client_request_time", begin);
+      xhr.setRequestHeader("EagleEye-TraceID", traceId);
+      xhr.setRequestHeader("EagleEye-SessionID", sid);
       for (const headerName in headers) {
         xhr.setRequestHeader(headerName, headers[headerName]);
       }
@@ -180,6 +184,9 @@ export class Api extends EventEmitter {
             armsObject.time,
             armsObject.status,
             armsObject.statusText,
+            begin,
+            traceId,
+            sid,
           );
         }
       };

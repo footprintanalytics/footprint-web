@@ -41,9 +41,7 @@ try {
   // }
 } catch (e) {}
 
-export const reportAPI = (url, success, time, status, message = "", begin) => {
-  const traceId = logger.getTraceId('EagleEye-TraceID');
-  const sid = logger.getPageviewId('EagleEye-SessionID');
+export const reportAPI = (url, success, time, status, message = "", begin, traceId, sid) => {
   logger && logger.api(url, success, time, status, message, begin, traceId, sid);
   if (!isProduction) {
     console.log("[REPORT_API]", [url, success, time, status, message, begin, traceId, sid]);
