@@ -9,13 +9,14 @@ let logger = null;
 try {
   // const disabled = window?.location?.pathname === "/public/widget/brand";
   const disabled = window?.location?.pathname?.startsWith("/public");
-  if (isProduction) {
+  // if (isProduction) {
     logger = BrowserLogger.singleton({
       pid: armsPid,
       imgUrl: "https://arms-retcode-sg.aliyuncs.com/r.png?",
       appType: "web",
       sendResource: true,
       enableLinkTrace: true,
+      enableApiCors: true,
       behavior: true,
       disableHook: true,
       enableSPA: true,
@@ -38,7 +39,7 @@ try {
         logger.getConfig()?.parseHash(location?.pathname),
       ];
     }
-  }
+  // }
 } catch (e) {}
 
 export const reportAPI = (url, success, time, status, message = "") => {
