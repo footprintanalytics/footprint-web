@@ -48,4 +48,11 @@ export const reportAPI = (url, success, time, status, message = "") => {
   }
 };
 
+export const formatArmsStatusTextByCache = (statusText, isCache) => {
+  if (!isCache) {
+    return statusText;
+  }
+  return `${statusText}/isCache`;
+}
+
 export default logger;
