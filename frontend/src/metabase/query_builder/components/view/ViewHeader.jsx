@@ -57,6 +57,7 @@ import QueryDownloadWidget from "../QueryDownloadWidget";
 import QuestionEmbedWidget from "../../containers/QuestionEmbedWidget";
 import QueryMoreWidget from "../QueryMoreWidget";
 import QueryDownloadWidgetFP from "../QueryDownloadWidgetFP";
+import { snapshot } from "metabase/dashboard/components/utils/snapshot";
 
 const viewTitleHeaderPropTypes = {
   question: PropTypes.object.isRequired,
@@ -97,7 +98,7 @@ const viewTitleHeaderPropTypes = {
 };
 
 export function ViewTitleHeader(props) {
-  const { question, className, style, isNavBarOpen, updateQuestion, isRunnable, router, originalQuestion, card, onCloseSidebars } = props;
+  const { question, className, style, isNavBarOpen, updateQuestion, isRunnable, router, originalQuestion, card, onCloseSidebars, user } = props;
 
   const [
     areFiltersExpanded,
@@ -216,6 +217,13 @@ export function ViewTitleHeader(props) {
           onExpandFilters={expandFilters}
           onCollapseFilters={collapseFilters}
           onQueryChange={onQueryChange}
+          downloadImageAction={() => {
+            snapshot({
+              public_uuid: card.public_uuid,
+              isDashboard: false,
+              user,
+            });
+          }}
         />
       </ViewHeaderContainer>
       {QuestionFilters.shouldRender(props) && (
