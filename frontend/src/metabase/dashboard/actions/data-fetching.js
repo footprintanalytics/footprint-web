@@ -421,11 +421,11 @@ export const fetchDashboardCardData = createThunkAction(
         }
       })
       .filter(p => !!p);
-    // Optimized requests, concurrent 10
+    // Optimized requests, concurrent 8
     if (tasks.length) {
       dispatch(setDocumentTitle(t`0/${tasks.length} loaded`));
 
-      const limit = promiseLimit(10)
+      const limit = promiseLimit(8)
       Promise.all(
         tasks.map(({ card, dashcard }, inx) => {
           return limit(() => doPromise(card, dashcard, inx))
