@@ -16,11 +16,8 @@ try {
       appType: "web",
       sendResource: true,
       enableLinkTrace: true,
-      enableApiCors: true,
       behavior: true,
-      debug: false,
-      enableConsole: false,
-      disableHook: false,
+      disableHook: true,
       enableSPA: true,
       useFmp: true,
       disabled: disabled,
@@ -44,10 +41,12 @@ try {
   // }
 } catch (e) {}
 
-export const reportAPI = (url, success, time, status, message = "") => {
-  logger && logger.api(url, success, time, status, message);
+export const reportAPI = (url, success, time, status, message = "", begin) => {
+  const traceId = logger.getTraceId('EagleEye-TraceID');
+  const sid = logger.getPageviewId('EagleEye-SessionID');
+  logger && logger.api(url, success, time, status, message, begin, traceId, sid);
   if (!isProduction) {
-    console.log("[REPORT_API]", [url, success, time, status, message]);
+    console.log("[REPORT_API]", [url, success, time, status, message, begin, traceId, sid]);
   }
 };
 
