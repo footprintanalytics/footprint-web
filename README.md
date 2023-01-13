@@ -1,67 +1,55 @@
-# Metabase
+<div align="center">
+  <div align=center><img src="https://files.readme.io/be7e289-_2.png" width=" 476 "></div>
+  <h2 align="center">
+    Blockchain analytics made simple
+  </h2>
+  <p>Explore community-built analysis and create charts with no code required.</p>
+  <br />
+ <a href="https://www.footprint.network/">Website</a>｜
+ <a href="https://docs.footprint.network/docs">Docs</a>｜
+ <a href="https://www.footprint.network/data-api">Data API</a>｜
+ <a href="https://www.footprint.network/news/academy">Web3 Data Academy </a>
+  <p>
+    <br />
+    <a href="https://twitter.com/Footprint_Data"><img alt="Twitter Follow" src="https://img.shields.io/twitter/follow/Footprint_Data?label=Follow"></a>
+    <a href="https://discord.gg/3HYaR6USM7"><img src="https://img.shields.io/discord/864829036294307881?color=5865F2&logo=discord&logoColor=white&label=discord" alt="Discord server" /></a>
+    <a href="https://t.me/joinchat/4-ocuURAr2thODFh"><img src="https://img.shields.io/badge/telegram-blue?color=blue&logo=telegram&logoColor=white" alt="Telegram group" /></a>
+    <a href="https://www.youtube.com/c/FootprintAnalytics"><img alt="YouTube Channel Subscribers" src="https://img.shields.io/youtube/channel/subscribers/UCKwZbKyuhWveetGhZcNtSTg?style=social"></a>
+  </p>
+</div>
 
-[Metabase](https://www.metabase.com) is the easy, open-source way for everyone in your company to ask questions and learn from data.
+## Introduce
+Footprint Analytics is building blockchain's most comprehensive data infrastructure with tools to help developers, analysts, and investors get unrivaled real-time GameFi, DeFi, and NFT insights.
+The engine indexes, cleans and abstracts data from 24+ chains and counting — letting users build charts and dashboards without code using a drag-and-drop interface as well as with SQL or Python. [Explore Web3 data](https://www.footprint.network/dashboards)
+Footprint Analytics also provides a unified data API for NFTs, GameFi, and DeFi across all major chain ecosystems to build your applications fast.
 
-![Metabase Product Screenshot](docs/images/metabase-product-screenshot.svg)
+![footprint snapshot](https://static.footprint.network/github/footprint_web_readme.png)
 
-[![Latest Release](https://img.shields.io/github/release/metabase/metabase.svg?label=latest%20release)](https://github.com/metabase/metabase/releases)
-[![Circle CI](https://circleci.com/gh/metabase/metabase.svg?style=svg&circle-token=3ccf0aa841028af027f2ac9e8df17ce603e90ef9)](https://circleci.com/gh/metabase/metabase)
-[![codecov](https://codecov.io/gh/metabase/metabase/branch/master/graph/badge.svg)](https://codecov.io/gh/metabase/metabase)
-![Docker Pulls](https://img.shields.io/docker/pulls/metabase/metabase)
+## Footprint Web Application
+Footprint web application is built on Metabase open-source technology. We use Metabase because it is open — the technology allows users to contribute to the code base, developing and improving it over time.
+Analysts can create charts on the Footprint Analytics platform with a convenient drag-and-drop query builder. This capability significantly lowers the barrier to entry, allowing any user without technical knowledge to use the product and extract business value.
 
-## Features
+> ### Features
+> - [No code SQL](https://docs.footprint.network/docs/no-code)
+> - [Rich visualization charts](https://docs.footprint.network/docs/line-chart)
+> - [Alerts](https://docs.footprint.network/docs/alerts)
 
-- [Set up in five minutes](https://www.metabase.com/docs/latest/setting-up-metabase.html) (we're not kidding).
-- Let anyone on your team [ask questions](https://www.metabase.com/docs/latest/users-guide/04-asking-questions.html) without knowing SQL.
-- Use the [SQL editor](https://www.metabase.com/docs/latest/users-guide/writing-sql.html) for more complex queries.
-- Build handsome, interactive [dashboards](https://www.metabase.com/docs/latest/users-guide/07-dashboards.html) with filters, auto-refresh, fullscreen, and custom click behavior.
-- Create [models](https://www.metabase.com/learn/getting-started/models) that clean up, annotate, and/or combine raw tables.
-- Define canonical [segments and metrics](https://www.metabase.com/docs/latest/administration-guide/07-segments-and-metrics.html) for your team to use.
-- Send data to Slack or email on a schedule with [dashboard subscriptions](https://www.metabase.com/docs/latest/users-guide/dashboard-subscriptions).
-- Set up [alerts](https://www.metabase.com/docs/latest/users-guide/15-alerts.html) to have Metabase notify you when your data changes.
-- [Embed charts and dashboards](https://www.metabase.com/docs/latest/administration-guide/13-embedding.html) in your app, or even [your entire Metabase](https://www.metabase.com/docs/latest/enterprise-guide/full-app-embedding.html).
+![footprint snapshot](https://static.footprint.network/github/footprint_web_readme.png)
 
-Take a [tour of Metabase](https://www.metabase.com/learn/getting-started/tour-of-metabase).
+## Footprint Data API
+The UI is not the only interface that could be used to access the data. Footprint provides a unified Data API for developers to build applications. Both REST API and SQL API are supported at Footprint Analytics.
 
-## Supported databases
+![footprint API snapshot](https://static.footprint.network/github/footprint_api_readme.png)
 
-- [Officially supported databases](./docs/databases/connecting.md#connecting-to-supported-databases)
-- [Partner and Community drivers](./docs/developers-guide/partner-and-community-drivers.md)
 
-## Installation
+## Footprint Data
+As of Jan 2023, we parse more data from 22 different chains than any other platforms. The Footprint Analytics database automatically picks up blocks, logs, traces, and transactions on the blockchain. It supplements this with community-contributed data and data from 3rd party APIs (e.g. token price data from Coingecko.) All this data is originally raw and unstructured. We structure it to fit into categories, e.g. borrowing, lending, yield farming, etc. This way, any data from the blockchain is easily accessible by anyone.
 
-Metabase can be run just about anywhere. Check out our [Installation Guides](https://www.metabase.com/docs/latest/operations-guide/installing-metabase.html).
+Our core competitive advantage is our Footprint Analytics Platform, powered by the Footprint Machine Learning Platform. It turns the Bronze Data into Silver, then Gold using some technical means of data ETL, such as Python and SQL. In the future, we plan to make the ETL code, including the code from Bronze to Silver parsing, open source.
 
-## Contributing
+We also enable any organization to tap into this trove of structured data with our blockchain data API.
 
-To get started with a development installation of the Metabase, check out our [Developers Guide](https://www.metabase.com/docs/latest/developers-guide/start).
-
-## Internationalization
-
-We want Metabase to be available in as many languages as possible. See which translations are available and help contribute to internationalization using our project over at [POEditor](https://poeditor.com/join/project/ynjQmwSsGh). You can also check out our [policies on translations](https://www.metabase.com/docs/latest/administration-guide/localization.html).
-
-## Extending Metabase
-
-Hit our Query API from Javascript to integrate analytics. Metabase enables your application to:
-
-- Build moderation interfaces.
-- Export subsets of your users to third party marketing automation software.
-- Provide a custom customer lookup application for the people in your company.
-
-Check out our guide, [Working with the Metabase API](https://www.metabase.com/learn/administration/metabase-api).
-
-## Security Disclosure
-
-See [SECURITY.md](./SECURITY.md) for details.
+![Footprint Data snapshot](https://files.readme.io/2ab5caf-Screenshot_2022-10-27_at_08.35.37.png)
 
 ## License
-
-This repository contains the source code for both the Open Source edition of Metabase, released under the AGPL, as well as the [commercial editions of Metabase](https://www.metabase.com/pricing), which are released under the Metabase Commercial Software License.
-
-See [LICENSE.txt](./LICENSE.txt) for details.
-
-Unless otherwise noted, all files © 2022 Metabase, Inc.
-
-## [Metabase Experts](https://www.metabase.com/partners/)
-
-If you’d like more technical resources to set up your data stack with Metabase, connect with a [Metabase Expert](https://www.metabase.com/partners/?utm_source=readme&utm_medium=metabase-expetrs&utm_campaign=readme).
+[AGPL](https://opensource.org/licenses/AGPL-3.0)
