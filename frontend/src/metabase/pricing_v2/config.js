@@ -14,13 +14,13 @@ export const getSubscribeOptions = user => {
       selected: false,
       productId: "6100d209444d4f0017c1008e",
     },
-    {
+    user?.vipInfo?.type === "free" ? {
       title: "$29 for 7-day Trial",
       selected: false,
       productId: "61013c30e0276a0010950ff9",
       disabledAuto: true,
-    },
-  ];
+    }: null,
+  ].filter(o => o);
 
   if (user?.groups?.includes("Inner")) {
     options.push({
@@ -83,9 +83,9 @@ export const getComparePlans = user => ({
       unit: "month",
       yearlyPrice: "$239",
       yearlySaving: "20%",
-      btnText: "$29 for 7-day Trial",
+      btnText: user?.vipInfo?.type !== "free" && user?.stripeSubscribeStatus === "enable" ? "Renewal" : "$29 for 7-day Trial",
       btnAction: "subscribe",
-      btnDisabled: user && user.vipInfo?.type !== "free",
+      btnDisabled: user?.stripeSubscribeStatus === "enable",
       features: [
         "Access to full history data",
         "10G data limit per query",

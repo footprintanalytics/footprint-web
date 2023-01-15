@@ -94,7 +94,7 @@ const Index = ({
         unit: "/month",
       },
       boxBg: "data-api__price-item-second",
-      buttonText: "Get started",
+      buttonText: user?.vipInfoDataApi?.type === "growth" ? "Renewal" : "Get started",
       buttonAction: e => {
         if (!user) {
           e.preventDefault();
@@ -109,8 +109,7 @@ const Index = ({
         // window.open("https://forms.gle/ze3F44681h2wgCHT9");
       },
       buttonCanClick:
-        user?.vipInfo?.type !== "business" &&
-        !["growth", "scale"].includes(user?.vipInfoDataApi?.type),
+        !["scale"].includes(user?.vipInfoDataApi?.type),
       detail: {
         title: "Everything in Free plan, plus:",
         content: [
@@ -160,7 +159,7 @@ const Index = ({
         unit: "/month",
       },
       boxBg: "data-api__price-item-highlight",
-      buttonText: "Get started",
+      buttonText: user?.vipInfoDataApi?.type === "scale" ? "Renewal" : "Get started",
       buttonAction: e => {
         if (!user) {
           e.preventDefault();
@@ -174,7 +173,7 @@ const Index = ({
         onSubscribe("scale");
         // window.open("https://forms.gle/ze3F44681h2wgCHT9");
       },
-      buttonCanClick: !["scale"].includes(user?.vipInfoDataApi?.type),
+      buttonCanClick: true,
       popular: true,
       detail: {
         title: "Everything in Growth plan, plus:",
