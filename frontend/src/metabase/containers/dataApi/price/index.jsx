@@ -1,13 +1,15 @@
 /* eslint-disable react/prop-types */
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import "./index.css";
-import { Button } from "antd";
+import { Button, Skeleton } from "antd";
 import { RightOutlined } from "@ant-design/icons";
 import { push } from "react-router-redux";
-import { loginModalShowAction } from "metabase/redux/control";
 import { connect } from "react-redux";
+import { loginModalShowAction } from "metabase/redux/control";
 import Link from "metabase/core/components/Link";
 import { loadCurrentUserVipDataApi } from "metabase/redux/user";
+import { useGetProductInfo } from "metabase/pricing_v2/use";
+import PricingModal from "metabase/pricing_v2/components/PricingModal";
 
 const Index = ({
   user,
@@ -15,15 +17,29 @@ const Index = ({
   onChangeLocation,
   location,
   router,
-  onSubscribe,
+  sign,
 }) => {
+
+  const [visible, setVisible] = useState();
+  const { isLoading, data } = useGetProductInfo("dataApi");
+  const products = data?.groups?.find(item => item.type === visible)?.products;
+
   useEffect(() => {
     if (location?.pathname === "/data-api/pricing") {
       router?.replace("/pricing?type=data-api");
     }
   }, [location, router]);
 
-  const data = [
+
+  if (isLoading) {
+    return (
+      <div className="Pricing">
+        <Skeleton active />
+      </div>
+    );
+  }
+
+  const frontData = [
     {
       name: "Free",
       desc: "Best for getting started \nwith Web3",
@@ -105,7 +121,7 @@ const Index = ({
           });
           return ;
         }
-        onSubscribe("growth");
+        setVisible("growth");
         // window.open("https://forms.gle/ze3F44681h2wgCHT9");
       },
       buttonCanClick:
@@ -170,7 +186,7 @@ const Index = ({
           });
           return ;
         }
-        onSubscribe("scale");
+        setVisible("scale");
         // window.open("https://forms.gle/ze3F44681h2wgCHT9");
       },
       buttonCanClick: true,
@@ -284,103 +300,113 @@ const Index = ({
     },
   ];
   return (
-    <div className="data-api__price data-api__price-bg">
-      {/*<h1>Developer-first API Pricing Plan</h1>*/}
-      {/*<h2>Simple , flexible pricing for companies and developers</h2>*/}
-
-      <ul className="data-api__price-box">
-        {data.map(item => {
-          return (
-            <li
-              className={`data-api__price-item ${item.boxBg || ""}`}
-              key={item.name}
-            >
-              {item.popular && (
-                <span className="data-api__price-item-Popular">
-                  Most Popular
-                </span>
-              )}
-              <h3>{item.name}</h3>
-              <span className="data-api__price-desc">{item.desc}</span>
-              <div className="data-api__price-amount">
-                <span className="data-api__price-amount-text">
-                  {item.price.amount}
-                </span>
-                <span className="data-api__price-amount-unit">
-                  {item.price.unit}
-                </span>
-              </div>
-              <Button
-                className="data-api__price-button"
-                disabled={!item.buttonCanClick}
-                onClick={item.buttonAction}
-                type="primary"
-                block
-                size="large"
-                target="_blank"
+    <>
+      <div className="data-api__price data-api__price-bg">
+        {/*<h1>Developer-first API Pricing Plan</h1>*/}
+        {/*<h2>Simple , flexible pricing for companies and developers</h2>*/}
+        <ul className="data-api__price-box">
+          {frontData.map(item => {
+            return (
+              <li
+                className={`data-api__price-item ${item.boxBg || ""}`}
+                key={item.name}
               >
-                {item.buttonText}
-              </Button>
-              <span className="data-api__price-detail-title">
-                {item.detail.title}
-              </span>
-              <ul className="data-api__price-detail-content">
-                {item.detail.content.map((obj, index) => {
-                  return (
-                    <li
-                      className={`data-api__price-detail-content-item ${
-                        obj.url ? "data-api__price-detail-content-item-url" : ""
-                      }`}
-                      key={index}
-                      onClick={() => {
-                        if (obj.open) {
-                          window.open(obj.url);
-                        } else {
-                          onChangeLocation(obj.url);
-                        }
-                      }}
-                    >
-                      <span style={{ flex: 1, display: "flex" }}>
-                        <span>{obj.title}</span>
-                        {obj.comingSoon && (
-                          <div className="data-api__price-item-powerful">
-                            Coming Soon
-                          </div>
+                {item.popular && (
+                  <span className="data-api__price-item-Popular">
+                    Most Popular
+                  </span>
+                )}
+                <h3>{item.name}</h3>
+                <span className="data-api__price-desc">{item.desc}</span>
+                <div className="data-api__price-amount">
+                  <span className="data-api__price-amount-text">
+                    {item.price.amount}
+                  </span>
+                  <span className="data-api__price-amount-unit">
+                    {item.price.unit}
+                  </span>
+                </div>
+                <Button
+                  className="data-api__price-button"
+                  disabled={!item.buttonCanClick}
+                  onClick={item.buttonAction}
+                  type="primary"
+                  block
+                  size="large"
+                  target="_blank"
+                >
+                  {item.buttonText}
+                </Button>
+                <span className="data-api__price-detail-title">
+                  {item.detail.title}
+                </span>
+                <ul className="data-api__price-detail-content">
+                  {item.detail.content.map((obj, index) => {
+                    return (
+                      <li
+                        className={`data-api__price-detail-content-item ${
+                          obj.url ? "data-api__price-detail-content-item-url" : ""
+                        }`}
+                        key={index}
+                        onClick={() => {
+                          if (obj.open) {
+                            window.open(obj.url);
+                          } else {
+                            onChangeLocation(obj.url);
+                          }
+                        }}
+                      >
+                        <span style={{ flex: 1, display: "flex" }}>
+                          <span>{obj.title}</span>
+                          {obj.comingSoon && (
+                            <div className="data-api__price-item-powerful">
+                              Coming Soon
+                            </div>
+                          )}
+                          {obj.powerful && (
+                            <div className="data-api__price-item-powerful">
+                              Powerful
+                            </div>
+                          )}
+                        </span>
+                        {obj.url && (
+                          <RightOutlined
+                            className="ml1"
+                            style={{ color: "#00aaff" }}
+                          />
                         )}
-                        {obj.powerful && (
-                          <div className="data-api__price-item-powerful">
-                            Powerful
-                          </div>
-                        )}
-                      </span>
-                      {obj.url && (
-                        <RightOutlined
-                          className="ml1"
-                          style={{ color: "#00aaff" }}
-                        />
-                      )}
-                    </li>
-                  );
-                })}
-              </ul>
-            </li>
-          );
-        })}
-      </ul>
+                      </li>
+                    );
+                  })}
+                </ul>
+              </li>
+            );
+          })}
+        </ul>
 
-      <div className="data-api__price-other">
-        <span className="data-api__price-other-text">
-          Not sure which plan is right for you?
-          <br />
-          Our team is here to help!
-        </span>
-        <Link to="https://forms.gle/ze3F44681h2wgCHT9" target="_blank">
-          <Button className="data-api__price-other-button" primary>
-            Talk to an Expert
-          </Button>
-        </Link>
+        <div className="data-api__price-other">
+          <span className="data-api__price-other-text">
+            Not sure which plan is right for you?
+            <br />
+            Our team is here to help!
+          </span>
+          <Link to="https://forms.gle/ze3F44681h2wgCHT9" target="_blank">
+            <Button className="data-api__price-other-button" primary>
+              Talk to an Expert
+            </Button>
+          </Link>
+        </div>
       </div>
-    </div>
+      {products && products.length > 0 && (
+        <PricingModal
+          user={user}
+          sign={sign}
+          subscribeOptions={products}
+          visible={!!products}
+          onClose={() => setVisible(null)}
+        />
+      )}
+    </>
   );
 };
 

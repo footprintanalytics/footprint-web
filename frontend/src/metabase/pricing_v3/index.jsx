@@ -10,6 +10,7 @@ import PricingModal from "metabase/pricing_v2/components/PricingModal";
 import { loginModalShowAction } from "metabase/redux/control";
 import { connect } from "react-redux";
 import { getDataApiSubscribeOptions } from "metabase/pricing_v3/config";
+import { Skeleton } from "antd";
 
 const PricingContainer = ({ location, user, setLoginModalShow }) => {
   const [subscribeOptions, setSubscribeOptions] = useState(null);
@@ -32,15 +33,7 @@ const PricingContainer = ({ location, user, setLoginModalShow }) => {
 
   return (
     <div className="pricing-container">
-      {subscribeOptions && (
-        <PricingModal
-          user={user}
-          sign={sign}
-          subscribeOptions={subscribeOptions}
-          visible={!!subscribeOptions}
-          onClose={() => setSubscribeOptions(null)}
-        />
-      )}
+
       <div className="pricing-container__bg" />
       <div className="pricing-container__top">
         <h1>{"Plans & Pricing"}</h1>
@@ -75,6 +68,7 @@ const PricingContainer = ({ location, user, setLoginModalShow }) => {
         {status === "footprint" && <Pricing />}
         {status === "data-api" && (
           <DataApiPricing
+            sign={sign}
             onSubscribe={mode => {
               setSubscribeOptions(getDataApiSubscribeOptions(user, mode));
             }}

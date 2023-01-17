@@ -33,7 +33,7 @@ export const getSubscribeOptions = user => {
   return options;
 };
 
-export const getComparePlans = user => ({
+export const getComparePlans = (user, canBusinessSevenTrial) => ({
   title: "Compare plans",
   columns: [
     {
@@ -83,7 +83,7 @@ export const getComparePlans = user => ({
       unit: "month",
       yearlyPrice: "$239",
       yearlySaving: "20%",
-      btnText: user?.vipInfo?.type !== "free" && user?.stripeSubscribeStatus === "enable" ? "Renewal" : "$29 for 7-day Trial",
+      btnText: user?.stripeSubscribeStatus !== "enable" && canBusinessSevenTrial ? "$29 for 7-day Trial" : "Renewal",
       btnAction: "subscribe",
       btnDisabled: user?.stripeSubscribeStatus === "enable",
       features: [
