@@ -26,6 +26,7 @@
             [metabase.util :as u]
             [clj-http.client :as client]
             [cheshire.core :as json]
+            [metabase.models.query-cache :refer [QueryCache]]
             [metabase.util.i18n :refer [trs]])
   (:import org.eclipse.jetty.io.EofException
            java.util.Base64))
@@ -92,8 +93,8 @@
 (defn- cache-results!
   "Save the final results of a query."
   [query-hash dashboard-id card-id]
-  (log/info (trs "Caching results for next time for query with hash {0}."
-                 (pr-str (i/short-hex-hash query-hash))) (u/emoji "💾"))
+;  (log/info (trs "Caching results for next time for query with hash {0}."
+;                 (pr-str (i/short-hex-hash query-hash))) (u/emoji "💾"))
   (try
     (let [bytez (serialized-bytes)]
       (if-not (instance? (Class/forName "[B") bytez)
@@ -102,7 +103,9 @@
           (log/trace "Got serialized bytes; saving to cache backend")
           (i/save-results-v2! *backend* query-hash bytez dashboard-id card-id)
           (log/debug "Successfully cached results for query.")
-          (purge! *backend*))))
+          (purge! *backend*)))
+          (i/update-cache-status! *backend* query-hash "success")
+      )
     :done
     (catch Throwable e
       (if (= (:type (ex-data e)) ::impl/max-bytes)
@@ -122,8 +125,8 @@
                                (m/dissoc-in result [:data :rows])
                                {}))
        (let [duration-ms (- (System/currentTimeMillis) start-time)]
-         (log/info (trs "Query took {0} to run; minimum for cache eligibility is {1}"
-                        (u/format-milliseconds duration-ms) (u/format-milliseconds (min-duration-ms))))
+;         (log/info (trs "Query took {0} to run; minimum for cache eligibility is {1}"
+;                        (u/format-milliseconds duration-ms) (u/format-milliseconds (min-duration-ms))))
          (when @has-rows?
            (cache-results! query-hash dashboard-id card-id)))
          (when mustRfReponse (rf result))
@@ -198,7 +201,7 @@
   (try (let [result (client/post (str (site-url) "/api/v1/dataDictionary/tableLastUpdate")
                                  {:accept  :json
                                   :form-params {:id card-id, :model "card"}})]
-         (log/info "------------" "tableUpdatedTime" card-id result)
+;         (log/info "------------" "tableUpdatedTime" card-id result)
          (let [resultMap (json/parse-string (result :body) true)]
            (if (resultMap :data) (.toEpochMilli (.toInstant (.parse dateFormat ((resultMap :data) :tableUpdated)))) 0)))
     (catch Exception e
@@ -208,10 +211,15 @@
     )
   )
 
-(defn- canRunCache [duration-ms card-id]
-  (let [chartUpdated (tableUpdatedTime card-id)]
-    (log/info "------------" "canRunCache" card-id (> chartUpdated @last-ran-cache) (> duration-ms (min-duration-ms)))
-    (or (> chartUpdated @last-ran-cache) (> duration-ms (min-duration-ms)))
+(defn- canRunCache [duration-ms start-time-ms card-id query-hash]
+  (let [chartUpdated (tableUpdatedTime card-id)
+        isNotPending (not= (backend.db/getQueryCacheStatus query-hash) "pending")
+        cacheStatusUpdateAt (backend.db/getQueryCacheStatusUpdatedAt query-hash)
+        ;; cache pending timeout is exceed 20 minutes
+        cachePendingTimeout (or (= cacheStatusUpdateAt nil)(> (- start-time-ms (.toEpochMilli (.toInstant cacheStatusUpdateAt))) 1200000))]
+
+    (and (or isNotPending cachePendingTimeout)
+         (or (> chartUpdated @last-ran-cache) (> duration-ms (min-duration-ms))))
     )
   )
 
@@ -221,17 +229,18 @@
   [qp {:keys [cache-ttl middleware info], :as query} rff {:keys [reducef], :as context}]
   ;; TODO - Query will already have `info.hash` if it's a userland query. I'm not 100% sure it will be the same hash,
   ;; because this is calculated after normalization, instead of before
-  (log/info "run-query-with-cache info:" info)
+;  (log/info "run-query-with-cache info:" info)
   (let [card-id (info :card-id)
         dashboard-id (info :dashboard-id)
         query-hash (qp.util/query-hash query)
         result     (maybe-reduce-cached-results (:ignore-cached-results? middleware) query-hash cache-ttl rff context)
+        erorCallback (fn [] (i/update-cache-status! *backend* query-hash "error"))
         reducef' (fn [rff context metadata rows]
                    (impl/do-with-serialization
                     (fn [in-fn result-fn]
                       (binding [*in-fn*     in-fn
                                 *result-fn* result-fn]
-                               (reducef rff context metadata rows)))))]
+                        (reducef rff context (merge {:aysnc-refresh-cache? true, :erorCallback erorCallback} metadata) rows)))))]
     (if (= result ::miss)
       (let [start-time-ms (System/currentTimeMillis)]
         (log/trace "Running query and saving cached results (if eligible)...")
@@ -241,15 +250,16 @@
             (assoc context :reducef reducef')))
       (let [duration-ms (- (System/currentTimeMillis) @last-ran-cache)
             start-time-ms (System/currentTimeMillis)]
-        (when (and result ::ok (canRunCache duration-ms card-id))
-              (((apply comp query-data-middleware) qp)
-                (merge {:aysnc-refresh-cache? true} query)
-                (fn [metadata]
-                  (save-results-xform
-                   start-time-ms metadata query-hash
-                   (((context.default/default-context) :rff) metadata)
-                   dashboard-id card-id, false))
-                (assoc context :reducef reducef')))))))
+        (when (and result ::ok (canRunCache duration-ms start-time-ms card-id query-hash))
+          (i/update-cache-status! *backend* query-hash "pending")
+          (((apply comp query-data-middleware) qp)
+            (merge {:aysnc-refresh-cache? true, :erorCallback erorCallback} query)
+            (fn [metadata]
+              (save-results-xform
+               start-time-ms metadata query-hash
+               (((context.default/default-context) :rff) metadata)
+               dashboard-id card-id, false))
+            (assoc context :reducef reducef')))))))
 
 (defn- is-cacheable? {:arglists '([query])} [{:keys [cache-ttl]}]
   (and (public-settings/enable-query-caching)
