@@ -72,7 +72,6 @@ const Pricing = ({ user, setLoginModalShow }) => {
             groups={data?.groups}
             onSign={sign}
             onSubscribe={(item) => {
-              console.log("item", item)
               setVisible(item.value)
             }}
             onCancelSubscription={onCancelSubscription}
