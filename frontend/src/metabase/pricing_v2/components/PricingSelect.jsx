@@ -1,11 +1,13 @@
 /* eslint-disable react/prop-types */
 import React from "react";
+import { Button } from "antd";
 import { getComparePlans } from "metabase/pricing_v2/config";
 import { getOssUrl } from "metabase/lib/image";
-import { Button } from "antd";
 
 const PricingSelect = ({ user, onSign, onSubscribe, onCancelSubscription, groups }) => {
-  const canBusinessSevenTrial = !!groups?.find(group => group.type === "business")?.products
+  const canBusinessSevenTrial = !!groups
+    ?.find(group => group.type === "business")
+    ?.products
     ?.find(product => product.category === "7-trial");
   const comparePlans = getComparePlans(user, canBusinessSevenTrial);
 

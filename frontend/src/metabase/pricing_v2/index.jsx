@@ -19,8 +19,6 @@ const Pricing = ({ user, setLoginModalShow }) => {
 
   const { isLoading, data } = useGetProductInfo();
 
-  console.log ("data", data?.groups)
-
   const products = data?.groups?.find(item => item.type === visible)?.products;
 
   const sign = () => setLoginModalShow({ show: true, from: "handle_pay" });
