@@ -26,6 +26,7 @@
             [metabase.util :as u]
             [clj-http.client :as client]
             [cheshire.core :as json]
+            [metabase.models.query-cache :refer [QueryCache]]
             [metabase.util.i18n :refer [trs]])
   (:import org.eclipse.jetty.io.EofException
            java.util.Base64))
@@ -102,7 +103,9 @@
           (log/trace "Got serialized bytes; saving to cache backend")
           (i/save-results-v2! *backend* query-hash bytez dashboard-id card-id)
           (log/debug "Successfully cached results for query.")
-          (purge! *backend*))))
+          (purge! *backend*)))
+          (i/update-cache-status! *backend* query-hash "success")
+      )
     :done
     (catch Throwable e
       (if (= (:type (ex-data e)) ::impl/max-bytes)
@@ -208,10 +211,15 @@
     )
   )
 
-(defn- canRunCache [duration-ms card-id]
-  (let [chartUpdated (tableUpdatedTime card-id)]
-;    (log/info "------------" "canRunCache" card-id (> chartUpdated @last-ran-cache) (> duration-ms (min-duration-ms)))
-    (or (> chartUpdated @last-ran-cache) (> duration-ms (min-duration-ms)))
+(defn- canRunCache [duration-ms start-time-ms card-id query-hash]
+  (let [chartUpdated (tableUpdatedTime card-id)
+        isNotPending (not= (backend.db/getQueryCacheStatus query-hash) "pending")
+        cacheStatusUpdateAt (.toEpochMilli (.toInstant (backend.db/getQueryCacheStatusUpdatedAt query-hash)))
+        ;; cache pending timeout is exceed 20 minutes
+        cachePendingTimeout (or (= cacheStatusUpdateAt nil)(> (- start-time-ms cacheStatusUpdateAt) 1200000))]
+
+    (and (or isNotPending cachePendingTimeout)
+         (or (> chartUpdated @last-ran-cache) (> duration-ms (min-duration-ms))))
     )
   )
 
@@ -226,12 +234,13 @@
         dashboard-id (info :dashboard-id)
         query-hash (qp.util/query-hash query)
         result     (maybe-reduce-cached-results (:ignore-cached-results? middleware) query-hash cache-ttl rff context)
+        erorCallback (fn [] (i/update-cache-status! *backend* query-hash "error"))
         reducef' (fn [rff context metadata rows]
                    (impl/do-with-serialization
                     (fn [in-fn result-fn]
                       (binding [*in-fn*     in-fn
                                 *result-fn* result-fn]
-                               (reducef rff context metadata rows)))))]
+                        (reducef rff context (merge {:aysnc-refresh-cache? true, :erorCallback erorCallback} metadata) rows)))))]
     (if (= result ::miss)
       (let [start-time-ms (System/currentTimeMillis)]
         (log/trace "Running query and saving cached results (if eligible)...")
@@ -241,15 +250,16 @@
             (assoc context :reducef reducef')))
       (let [duration-ms (- (System/currentTimeMillis) @last-ran-cache)
             start-time-ms (System/currentTimeMillis)]
-        (when (and result ::ok (canRunCache duration-ms card-id))
-              (((apply comp query-data-middleware) qp)
-                (merge {:aysnc-refresh-cache? true} query)
-                (fn [metadata]
-                  (save-results-xform
-                   start-time-ms metadata query-hash
-                   (((context.default/default-context) :rff) metadata)
-                   dashboard-id card-id, false))
-                (assoc context :reducef reducef')))))))
+        (when (and result ::ok (canRunCache duration-ms start-time-ms card-id query-hash))
+          (i/update-cache-status! *backend* query-hash "pending")
+          (((apply comp query-data-middleware) qp)
+            (merge {:aysnc-refresh-cache? true, :erorCallback erorCallback} query)
+            (fn [metadata]
+              (save-results-xform
+               start-time-ms metadata query-hash
+               (((context.default/default-context) :rff) metadata)
+               dashboard-id card-id, false))
+            (assoc context :reducef reducef')))))))
 
 (defn- is-cacheable? {:arglists '([query])} [{:keys [cache-ttl]}]
   (and (public-settings/enable-query-caching)

@@ -118,6 +118,24 @@
       (log/error e (trs "Error saving query results to cache."))))
   nil)
 
+(defn- update-cache-status!
+  [^bytes query-hash status]
+  (try
+    (db/update-where! QueryCache {:query_hash query-hash}
+                      :status status
+                      :status_updated_at (t/offset-date-time))
+    (catch Throwable e
+      (log/error e (trs "Error updating status to cache."))))
+  nil)
+
+(defn getQueryCacheStatus [query-hash]
+  (db/select-one-field :status QueryCache :query_hash query-hash)
+  )
+
+(defn getQueryCacheStatusUpdatedAt [query-hash]
+  (db/select-one-field :status_updated_at QueryCache :query_hash query-hash)
+  )
+
 (defmethod i/cache-backend :db
   [_]
   (reify i/CacheBackend
@@ -130,6 +148,10 @@
 
     (save-results-v2! [_ query-hash is dashboard-id card-id]
       (save-results-v2! query-hash is dashboard-id card-id)
+      nil)
+
+    (update-cache-status! [_ query-hash status]
+      (update-cache-status! query-hash status)
       nil)
 
     (purge-old-entries! [_ max-age-seconds]
