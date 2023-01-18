@@ -1,7 +1,7 @@
 .Question {
   display: flex;
   height: calc(100vh - 60px);
-  min-width: 1024px;
+  min-width: 375px;
 }
 
 .Question-side {

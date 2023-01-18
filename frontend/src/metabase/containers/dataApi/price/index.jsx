@@ -229,7 +229,7 @@ const Index = ({
               <span className="data-api__price-text-highlight">SQL API</span>
             ),
             powerful: true,
-            url: "https://docs.footprint.network/reference/post_v1-native",
+            url: "https://docs.footprint.network/reference/post_native",
             open: true,
           },
           {
