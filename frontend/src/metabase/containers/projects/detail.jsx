@@ -8,6 +8,8 @@ import PreviewDashboardCard from "metabase/components/PreviewDashboardCard";
 import "./detail.css";
 import DefaultDashboardCard from "metabase/components/DefaultDashboardCard";
 import title, { updateTitle } from "metabase/hoc/Title";
+import { compose } from "underscore";
+import MetaViewportControls from "metabase/dashboard/hoc/MetaViewportControls";
 
 const ProjectDetail = ({ params, router }) => {
   const landingId = params.slug;
@@ -79,4 +81,7 @@ const ProjectDetail = ({ params, router }) => {
   );
 };
 
-export default title()(ProjectDetail);
+export default compose(
+  title(),
+  MetaViewportControls,
+)(ProjectDetail);

@@ -10,8 +10,8 @@ const BannerImage = ({ src, width, height, url }) => {
     <Link to={url} target="_blank">
       <Image
         src={src}
-        width={isMobile ? width / 2 : width}
-        height={isMobile ? height / 2 : height}
+        width={isMobile ? width / 3 : width}
+        height={isMobile ? height / 3 : height}
         preview={false}
         placeholder={
           <div
