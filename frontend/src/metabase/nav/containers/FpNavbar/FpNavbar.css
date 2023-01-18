@@ -58,7 +58,7 @@
 .Nav__menu {
   display: flex;
   align-items: center;
-  margin-left: 28px;
+  margin-left: 20px;
 }
 
 .Nav__menu-item {
@@ -67,7 +67,7 @@
   position: relative;
   height: 60px;
   cursor: pointer;
-  margin-right: 28px;
+  margin: 0 16px;
 }
 
 .Nav__menu-item svg {
@@ -127,7 +127,7 @@
 }
 
 .Nav__right-menu {
-  margin-right: var(--footprint-spacing-l);
+  margin: 0 16px;
   cursor: pointer;
   white-space: nowrap;
   height: 60px;

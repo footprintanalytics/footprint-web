@@ -4415,7 +4415,17 @@ var colors = {
   "saturated-green": "#70A63A",
   "saturated-purple": "#885AB1",
   "saturated-red": "#ED6E6E",
-  "saturated-yellow": "#F9CF48"
+  "saturated-yellow": "#F9CF48",
+
+  "footprint-color-main": "#3434b2",
+  "footprint-color-bg": "#f7f7f9",
+  "footprint-color-title": "#303440",
+  "footprint-color-primary-text": "#303440",
+  "footprint-color-secondary-text1": "#666c80",
+  "footprint-color-secondary-text2": "#acacb2",
+  "footprint-color-border": "#dcdee4",
+  "footprint-color-background": "#fafafc",
+  "footprint-color-edit-bar": "#f6f6fe"
 };
 /* eslint-enable no-color-literals */
 exports.default = colors;
