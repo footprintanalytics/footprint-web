@@ -67,7 +67,7 @@ const mapDispatchToProps = {
   logout,
 };
 
-const menus = [
+const leftMenuData = [
   {
     title: "Analytics",
     icon: "menu_home",
@@ -75,69 +75,85 @@ const menus = [
     auth: false,
   },
   {
-    title: "NFT",
-    icon: "menu_home",
-    path: "https://nft.footprint.network",
-    auth: false,
-    open: true,
-  },
-  {
-    name: "GameFi",
+    name: "Data API",
     icon: "protocols",
     menu: [
       {
-        title: "GameFi Overview",
-        link: "https://www.footprint.network/@Footprint/GameFi",
-      },
-      {
-        title: "GameFi Report",
+        title: "Data API",
+        desc: "Unified API for Web3 developers",
         link:
-          "https://www.footprint.network/@DamonSalvatore/GameFi-in-Bull-Bear-Market",
+          "/data-api",
       },
       {
-        title: "Top Games",
-        link: "https://www.footprint.network/@Footprint/GameFi-Dashboard",
+        title: "BingoNFT",
+        desc: "A window into NFTs powered by Footprint Data API",
+        link:
+          "https://nft.footprint.network/",
+        externalLink: true,
       },
       {
-        title: "GameFi Tracker",
-        link: "https://www.footprint.network/@Tom946702/GameFi-Tracker",
-      },
-      {
-        title: "Explore GameFi",
-        link: "/dashboards",
+        title: "Footrace",
+        desc: "A realtime alert platform powered by Footprint Data API",
+        link:
+          "https://footrace.io/",
+        externalLink: true,
       },
     ],
   },
+];
+
+const rightMenuData = [
+  // { url: "/moon-men", name: "Moon Men" },
   {
-    name: "Data",
+    name: "Learn",
     icon: "protocols",
     menu: [
       {
-        title: "Data Overview",
+        title: "Blog",
+        desc: "Analyze the trends of each domain in the Web3 industry",
         link:
-          "https://www.footprint.network/@Footprint/Footprint-Data-Overview",
+          "/news/articles",
+      },
+      {
+        title: "Academy",
+        desc: "The premier Web3 education platform with industry leading courses",
+        link:
+          "/news/academy",
+      },
+      {
+        title: "Data Overview",
+        desc: "Check the data coverage of most comprehensive data provider",
+        link: "/@Footprint/Footprint-Data-Overview",
       },
       {
         title: "Data Dictionary",
-        link:
-          "https://www.footprint.network/@Footprint/Footprint-Datasets-Data-Dictionary",
+        desc: "Quick access to each data table definitions and metadata",
+        link: "/@Footprint/Footprint-Datasets-Data-Dictionary",
       },
       {
-        title: "Upload CSV",
-        link: "https://www.footprint.network/chart/custom-upload",
+        title: "YouTube",
+        desc: "Unravel Web3 and learn how to do analysis and build dapps via Videos",
+        link:
+          "https://www.youtube.com/@FootprintAnalytics",
+        externalLink: true,
       },
       {
-        title: "Upload API",
+        title: "GitHub",
+        desc: "Open source community welcomes you to join and become a contributor",
         link:
-          "https://docs.footprint.network/reference/post_custom-data-upload",
+          "https://github.com/footprintanalytics",
         externalLink: true,
       },
     ],
   },
   {
-    title: "Data API",
-    path: "/data-api",
-    auth: false,
+    url: "https://docs.footprint.network/docs",
+    name: "Docs",
+    open: true,
+  },
+  {
+    url: "/pricing",
+    name: "Pricing",
   },
 ];
 
@@ -254,7 +270,7 @@ class FpNavbar extends Component {
         open={this.state.sideNavModal}
       >
         <div className="Nav__side-menu">
-          {menus.map((item, index) => {
+          {leftMenuData.map((item, index) => {
             if (item.menu) {
               return (<div key={index}>
                 {this.renderNavEntityMenu({
@@ -367,28 +383,6 @@ class FpNavbar extends Component {
 
   renderLink({ className = "", fromDrawer = false }) {
     const { user, setLoginModalShow, location } = this.props;
-    const links = [
-      { url: "/moon-men", name: "Moon Men" },
-      { url: "/news/articles", name: "Blog" },
-      // { url: "/about", name: "Why Footprint" },
-      // { url: "/tutorials/visualizations", name: "Tutorials" },
-      // {
-      //   url: "https://insights.footprint.network/",
-      //   name: "Insights",
-      //   open: true,
-      // },
-      {
-        url: "https://docs.footprint.network/docs",
-        name: "Docs",
-        open: true,
-      },
-      {
-        url: "/pricing",
-        name: "Pricing",
-      },
-      // { url: `/@${user?.name}`, name: "My Profile", auth: true },
-      // { url: "/widget", name: "Widget" },
-    ];
 
     return (
       <nav
@@ -397,7 +391,7 @@ class FpNavbar extends Component {
         itemType="http://www.schema.org/SiteNavigationElement"
         className={`${className} Nav__right-menus`}
       >
-        {links.map((item, index) => {
+        {rightMenuData.map((item, index) => {
           if (item.menu) {
             return (<div key={index}>
               {this.renderNavEntityMenu({
@@ -443,6 +437,7 @@ class FpNavbar extends Component {
           <div className={className}>
             {/*{item.icon && <Icon name={item.icon} size={16} />}*/}
             <span>{item.name}</span>
+            <Icon className="ml1" name="search_arrow_up" size={12}/>
           </div>
           <div>
             {item.menu.map((item, index) => {
@@ -474,7 +469,9 @@ class FpNavbar extends Component {
             marginTop: 20,
           },
         }}
-        offsetY={-10}
+        hasArrow={true}
+        hasBackground={true}
+        menuShiftY={0}
         renderChildren={
           <div
             className={className}
@@ -482,6 +479,7 @@ class FpNavbar extends Component {
           >
             {/*{item.icon && <Icon name={item.icon} size={16} />}*/}
             <span>{item.name}</span>
+            <Icon className="ml1" name="search_arrow_up" size={12}/>
           </div>
         }
       />
@@ -520,7 +518,7 @@ class FpNavbar extends Component {
           itemScope
           itemType="http://www.schema.org/SiteNavigationElement"
         >
-          {menus.map((item, index) => {
+          {leftMenuData.map((item, index) => {
             if (item.menu) {
               return (<div key={index}>
                 {this.renderNavEntityMenu({

@@ -62,6 +62,12 @@ function ProfileLink({ user, adminItems, onLogout, trigger }) {
         event: `Navbar;Profile Dropdown;Edit Profile`,
       },
       {
+        title: t`Moon men`,
+        icon: null,
+        link: "/moon-men",
+        event: `Navbar;Profile Dropdown;Moon men`,
+      },
+      {
         title: t`Submit Contract`,
         icon: null,
         link: "/submit/contract",

@@ -110,6 +110,10 @@ const footers = [
         label: "Youtube",
         url: "https://www.youtube.com/channel/UCKwZbKyuhWveetGhZcNtSTg",
       },
+      {
+        label: "Github",
+        url: "https://github.com/footprintanalytics",
+      },
     ],
   },
 ];
