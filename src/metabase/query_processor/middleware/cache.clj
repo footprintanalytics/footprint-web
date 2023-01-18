@@ -214,9 +214,9 @@
 (defn- canRunCache [duration-ms start-time-ms card-id query-hash]
   (let [chartUpdated (tableUpdatedTime card-id)
         isNotPending (not= (backend.db/getQueryCacheStatus query-hash) "pending")
-        cacheStatusUpdateAt (.toEpochMilli (.toInstant (backend.db/getQueryCacheStatusUpdatedAt query-hash)))
+        cacheStatusUpdateAt (backend.db/getQueryCacheStatusUpdatedAt query-hash)
         ;; cache pending timeout is exceed 20 minutes
-        cachePendingTimeout (or (= cacheStatusUpdateAt nil)(> (- start-time-ms cacheStatusUpdateAt) 1200000))]
+        cachePendingTimeout (or (= cacheStatusUpdateAt nil)(> (- start-time-ms (.toEpochMilli (.toInstant cacheStatusUpdateAt))) 1200000))]
 
     (and (or isNotPending cachePendingTimeout)
          (or (> chartUpdated @last-ran-cache) (> duration-ms (min-duration-ms))))
