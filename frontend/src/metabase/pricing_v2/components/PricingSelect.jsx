@@ -1,11 +1,15 @@
 /* eslint-disable react/prop-types */
 import React from "react";
+import { Button } from "antd";
 import { getComparePlans } from "metabase/pricing_v2/config";
 import { getOssUrl } from "metabase/lib/image";
-import { Button } from "antd";
 
-const PricingSelect = ({ user, onSign, onSubscribe, onCancelSubscription }) => {
-  const comparePlans = getComparePlans(user);
+const PricingSelect = ({ user, onSign, onSubscribe, onCancelSubscription, groups }) => {
+  const canBusinessSevenTrial = !!groups
+    ?.find(group => group.type === "business")
+    ?.products
+    ?.find(product => product.category === "7-trial");
+  const comparePlans = getComparePlans(user, canBusinessSevenTrial);
 
   return (
     <div className="Pricing__select">
@@ -39,7 +43,7 @@ const PricingSelect = ({ user, onSign, onSubscribe, onCancelSubscription }) => {
                     onSign();
                     break;
                   case "subscribe":
-                    onSubscribe();
+                    onSubscribe(item);
                     break;
                   default:
                     break;
@@ -49,7 +53,7 @@ const PricingSelect = ({ user, onSign, onSubscribe, onCancelSubscription }) => {
               {item.btnText}
             </Button>
             {!!item.yearlyPrice && !item.btnDisabled && (
-              <span className="Pricing__select-btn-tip" onClick={onSubscribe}>
+              <span className="Pricing__select-btn-tip" onClick={() => onSubscribe(item)}>
                 or skip and <i>pay yearly now</i>
               </span>
             )}

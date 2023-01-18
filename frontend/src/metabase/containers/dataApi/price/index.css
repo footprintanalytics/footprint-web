@@ -95,6 +95,7 @@
   font-size: 16px;
   color: white;
   font-weight: bold;
+  height: 48px
 }
 
 .data-api__price-item {
@@ -194,6 +195,7 @@
   width: 280px;
   margin: 40px 0;
   font-size: 20px;
+  height: 48px;
 }
 
 .data-api__price-item-Popular {

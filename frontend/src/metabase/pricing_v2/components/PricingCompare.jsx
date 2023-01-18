@@ -3,8 +3,12 @@ import React from "react";
 import { getComparePlans } from "metabase/pricing_v2/config";
 import { getOssUrl } from "metabase/lib/image";
 
-const PricingCompare = () => {
-  const comparePlans = getComparePlans();
+const PricingCompare = ({ user, groups }) => {
+  const canBusinessSevenTrial = !!groups
+    ?.find(group => group.type === "business")
+    ?.products
+    ?.find(product => product.category === "7-trial");
+  const comparePlans = getComparePlans(user, canBusinessSevenTrial);
 
   return (
     <div className="Pricing__compare">

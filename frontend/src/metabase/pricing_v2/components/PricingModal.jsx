@@ -11,7 +11,7 @@ const PricingModal = ({ user, sign, subscribeOptions, visible, onClose }) => {
   const [loading, setLoading] = useState(false);
   const [callback, setCallback] = useState(false);
   const [auto, setAuto] = useState(true);
-  const { disabledAuto } = options?.find(item => item.selected) || {};
+  const { subscription } = options?.find(item => item.selected) || {};
 
   const onPay = async () => {
     if (!user?.id) {
@@ -23,7 +23,7 @@ const PricingModal = ({ user, sign, subscribeOptions, visible, onClose }) => {
     try {
       const { productId, title } = options?.find(item => item.selected) || {};
       const paymentChannel = "stripe";
-      const mode = auto && !disabledAuto ? "subscription" : "payment";
+      const mode = auto && subscription ? "subscription" : "payment";
       const { paymentLink } = await payProduct({
         productId,
         paymentChannel,
@@ -88,7 +88,7 @@ const PricingModal = ({ user, sign, subscribeOptions, visible, onClose }) => {
           <Button type="primary" size="large" onClick={onPay} loading={loading}>
             Subscribe Now
           </Button>
-          {!disabledAuto && (
+          {subscription && (
             <Checkbox checked={auto} onChange={e => setAuto(e.target.checked)}>
               Automatic Renewal
             </Checkbox>

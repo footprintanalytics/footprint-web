@@ -57,8 +57,8 @@ export const postUserInterests = async params => {
   return POST(`/api/v1/user/interests`, params);
 };
 
-export const getProductInfo = async () => {
-  return POST(`/api/v1/payment/product/list`);
+export const getProductInfo = async (params) => {
+  return POST(`/api/v1/payment/product/list`, params);
 };
 
 export const payProduct = async params => {
