@@ -62,6 +62,7 @@
 
 .article-detail__content {
   margin-top: 30px !important;
+  padding: 0;
 }
 
 .article-detail__no-data {
@@ -93,4 +94,17 @@
 
 .article-detail article header {
   display: flex;
+}
+
+@media screen and (--footprint-breakpoint-max-mobile) {
+  .article-detail__content {
+    padding: 12px !important;
+  }
+  .article-detail__title {
+    font-size: 24px;
+    line-height: 28px;
+  }
+  .article-detail .dashboard-card-display-info {
+    margin: 0 8px;
+  }
 }

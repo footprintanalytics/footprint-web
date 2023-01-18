@@ -225,6 +225,10 @@
   margin: 0 !important;
 }
 
+.toastui-editor-contents img {
+  object-fit: contain !important;
+}
+
 .article-list__no-data {
   display: flex;
   flex-direction: column;
@@ -428,5 +432,10 @@
 
   .news .explore__category {
     justify-content: initial;
+  }
+
+  .article-detail__container {
+    display: flex;
+    flex-direction: column;
   }
 }

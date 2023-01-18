@@ -99,7 +99,7 @@ class EmbedFrame extends Component {
           })}
         >
           <div className="DashboardHeader">
-            <div className="EmbedFrame-header flex align-baseline">
+            <div className="EmbedFrame-header EmbedFrame-header-guest flex align-baseline">
               {name && (
                 // <TitleAndDescription title={name} description={description} />
                 <HeaderTitle
