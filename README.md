@@ -58,6 +58,12 @@ yarn build-hot
 
 #### Backend
 
+Start the backend build process with
+
+```
+clj -X:deps prep
+```
+
 Run your backend development server with
 
 ```
