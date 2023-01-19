@@ -8,6 +8,7 @@ import Icon from "metabase/components/Icon";
 import Popover from "metabase/components/Popover";
 
 import AlertListPopoverContent from "../AlertListPopoverContent";
+import { message } from "antd";
 
 export default class QuestionAlertWidget extends React.Component {
   state = {
@@ -35,7 +36,8 @@ export default class QuestionAlertWidget extends React.Component {
     } = this.props;
     const { isOpen, isFrozen } = this.state;
 
-    if (!canManageSubscriptions) {
+    const canUseAlert = ["line", "bar", "area", "combo"].includes(question?._card?.display)
+    if (!canManageSubscriptions || !canUseAlert) {
       return null;
     }
 
