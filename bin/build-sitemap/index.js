@@ -187,8 +187,9 @@ const run = async () => {
 
   // article
   const articles = await getMediaList();
-  newsItemToSitemap(articles.list, sitemap);
-  total += articles.list.length;
+  const articlesList = articles.list.filter(article => article.type !== "realTimeInfo");
+  newsItemToSitemap(articlesList, sitemap);
+  total += articlesList.length;
 
   // realTimeInfo
   // const realTimeInfos = await getMediaList("realTimeInfo");
