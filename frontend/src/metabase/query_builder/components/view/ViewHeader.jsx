@@ -736,6 +736,8 @@ function ViewTitleHeaderRightSide(props) {
     );
   }
 
+  console.log("card", card)
+
   if (isSaved) {
     return (
       <ViewHeaderActionPanel data-testid="qb-header-action-panel">
@@ -786,7 +788,13 @@ function ViewTitleHeaderRightSide(props) {
             />
           </Tooltip>
         )}
-        {showSaveChartToUd && (<SaveChartToUdModal cardId={card.id} onClose={() => setSaveChartToUd(false)}/>)}
+        {showSaveChartToUd && (
+          <SaveChartToUdModal
+            result_metadata={card.result_metadata}
+            cardId={card.id}
+            onClose={() => setSaveChartToUd(false)}
+          />
+        )}
         {(!!card.public_uuid || isOwner || isAdmin) && (
           <Tooltip tooltip={t`Duplicate chart`}>
             <Button

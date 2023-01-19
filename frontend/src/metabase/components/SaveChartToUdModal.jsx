@@ -4,7 +4,7 @@ import { Alert, Button, Form, Input, Modal, Skeleton } from "antd";
 import "./TaggingModal.css";
 import { connect } from "react-redux";
 import { getUser } from "metabase/selectors/user";
-import { checkTableName, checkTableNameChart, udTableDetail, udTableSaveChartConfig } from "../new-service";
+import { checkTableNameChart, udTableDetail, udTableSaveChartConfig } from "../new-service";
 import { useMutation, useQuery } from "react-query";
 import { QUERY_OPTIONS } from "../containers/dashboards/shared/config";
 import moment from "moment-timezone";
@@ -12,57 +12,73 @@ import SaveChartToUdTime from "./SaveChartToUdTime";
 import * as Urls from "../lib/urls";
 import Link from "metabase/core/components/Link";
 import { useDebounce } from "ahooks";
+import ChartSchema from "./ChartSchema";
+import "./SaveChartToUdModal.css";
 
 const SaveChartToUdModal = ({
   onClose,
   cardId,
+  result_metadata,
 }) => {
-
+  console.log("result_metadata", result_metadata)
   const [loading, setLoading] = useState(false);
+  const [chartConfig, setChartConfig] = useState({});
 
 
+  const isLoading = false;
+  const data = null;
+  const refetch = null;
 
-
-  const { isLoading, data, refetch } = useQuery(
-    ["udTableDetail", cardId],
-    async () => {
-      return await udTableDetail({ cardId });
-    },
-    QUERY_OPTIONS,
-  );
+  // const { isLoading, data, refetch } = useQuery(
+  //   ["udTableDetail", cardId],
+  //   async () => {
+  //     return await udTableDetail({ cardId });
+  //   },
+  //   QUERY_OPTIONS,
+  // );
   const [tableName, setTableName] = useState(data?.chartConfig?.targetTableName);
   const debouncedTableName = useDebounce(tableName, { wait: 500 });
   const checkMutate = useMutation(checkTableNameChart);
   const message = checkMutate?.data?.message;
-  useEffect(() => {
-    if (!debouncedTableName) return;
-    checkMutate.mutate({ tableName: debouncedTableName, tableType: "chart", cardId: cardId });
-  }, [debouncedTableName]);
+
+  // useEffect(() => {
+  //   if (!debouncedTableName) return;
+  //   checkMutate.mutate({ tableName: debouncedTableName, tableType: "chart", cardId: cardId });
+  // }, [debouncedTableName]);
+
   console.log("checkMutate", checkMutate)
   const callbackTime = useCallback(
     (status) => {
       refetch();
     }, [refetch]);
 
-  const targetTableName = data?.chartConfig?.targetTableName;
-  const hasSavedToUd = !!data?.chartConfig?.targetTableName;
+  const targetTableName = chartConfig?.targetTableName;
+  const hasSavedToUd = !!chartConfig?.targetTableName;
   console.log("SaveChartToUdModal data", data);
   const onSave = async (data) => {
     const tableName = targetTableName || data.name;
     setLoading(true);
     let result = null;
-    try {
-      result = await udTableSaveChartConfig({
-        "cardId": cardId,
-        "targetTableName": tableName,
-      });
-    } catch (e) {
-    }
+    // try {
+    //   result = await udTableSaveChartConfig({
+    //     "cardId": cardId,
+    //     "targetTableName": tableName,
+    //   });
+    // } catch (e) {
+    // }
+    setTimeout(() => {
+      setChartConfig({
+        targetTableName: tableName,
+        tableId: 10,
+        lastUpdatedAt: new Date().getTime()
+      })
+      setLoading(false);
+    }, 5000)
     console.log("result", result);
-    if (result?.result === "success") {
-      await refetch();
-    }
-    setLoading(false);
+    // if (result?.result === "success") {
+    //   await refetch();
+    // }
+    // setLoading(false);
   };
 
   const showSaveCharToUdTime = data?.newestLog?.status === "executing";
@@ -74,16 +90,19 @@ const SaveChartToUdModal = ({
   const onCancel = () => {
     onClose && onClose();
   };
-  const udTableLink = Urls.newQuestion({ databaseId: 3, tableId: data?.chartConfig?.tableId, limit: 2000 });
+  const udTableLink = Urls.newQuestion({ databaseId: 3, tableId: chartConfig?.tableId, limit: 2000 });
 
 
   const onChange = value => {
     setTableName(value);
   }
   console.log("checkMutate?.data?.result === 1", checkMutate?.data?.result === 1)
+
+  //data?.chartConfig
+
   return (
     <Modal
-      className="tagging-modal"
+      className="save-chart-to-ud-modal"
       open={true}
       footer={null}
       maskClosable={false}
@@ -99,30 +118,35 @@ const SaveChartToUdModal = ({
           onFinish={onSave}
         >
           <div className="text-centered flex flex-column">
-            {data?.chartConfig?.targetTableName && (<Form.Item name="table" label="Current UD table">
+            <ChartSchema result_metadata={result_metadata}/>
+            <div className="mb3"/>
+
+            {chartConfig?.targetTableName && (
+              <Form.Item name="table" label="Associated UD table name">
+                <div className="text-left bg-gray p1">
+                  <Link
+                    target="_blank"
+                    to={udTableLink}
+                    onClick={v => {
+                      v.preventDefault();
+                      if (chartConfig?.tableId) {
+                        window.open(udTableLink);
+                      }
+                    }}>{`ud_${chartConfig?.targetTableName}`}</Link>
+                </div>
+              </Form.Item>
+            )}
+            {chartConfig?.lastUpdatedAt && (<Form.Item name="time" label="UD table last updated time">
               <div className="text-left bg-gray p1">
-                <Link
-                  target="_blank"
-                  to={udTableLink}
-                  onClick={v => {
-                    v.preventDefault();
-                    if (data?.chartConfig?.tableId) {
-                      window.open(udTableLink);
-                    }
-                  }}>{`ud_${data?.chartConfig?.targetTableName}`}</Link>
-              </div>
-            </Form.Item>)}
-            {data?.chartConfig?.lastUpdatedAt && (<Form.Item name="time" label="Last updated time">
-              <div className="text-left bg-gray p1">
-                {moment(data?.chartConfig?.lastUpdatedAt).format("YYYY-MM-DD HH:mm:ss")}
+                {moment(chartConfig?.lastUpdatedAt).format("YYYY-MM-DD HH:mm:ss")}
               </div>
             </Form.Item>)}
             {/*{data?.newestLog?.status || ""}*/}
 
             {!hasSavedToUd && (
-              <Form.Item name="name">
+              <Form.Item name="name" label="Which table name do you save?">
                 <Input
-                  prefix="ud"
+                  prefix="ud_"
                   size="large"
                   value={tableName}
                   onChange={e => onChange(e.target.value)}
@@ -143,19 +167,20 @@ const SaveChartToUdModal = ({
                   size="large"
                   htmlType="submit"
                   className="right"
-                  disabled={!data || checkMutate?.data?.result === 1}
+                  disabled={!debouncedTableName || debouncedTableName?.length === 0}
+                  // disabled={!data || checkMutate?.data?.result === 1}
                   loading={loading}
                 >
                   {hasSavedToUd ? "Update" : "Submit"}
                 </Button>
-                {data?.chartConfig?.tableId && (
+                {chartConfig?.tableId && (
                   <Link
                     className="mt2"
                     target="_blank"
                     to={udTableLink}
                     onClick={v => {
                       v.preventDefault();
-                      if (data?.chartConfig?.tableId) {
+                      if (chartConfig?.tableId) {
                         window.open(udTableLink);
                       }
                     }}>
