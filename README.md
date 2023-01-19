@@ -37,14 +37,8 @@ Different charts can be added to the dashboad, arranging their position and size
 
 
 ## Architecture
-
-#### Frontend
-
-    react
-
-#### Backend
-
-    clojure
+- Frontend - react
+- Backend - clojure
 
 ## Building and Running the application
 
