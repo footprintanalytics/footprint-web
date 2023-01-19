@@ -42,21 +42,35 @@ Different charts can be added to the dashboad, arranging their position and size
 
 ## Building and Running the application
 
-#### Frontend
+### Backend
 
-Compile javascript dependencies
+To complete any build of the footprint web code, you’ll need to install the following.
+
+[Clojure](https://clojure.org) - install the latest release by following the guide depending on your OS
+
+[Java Development Kit JDK](https://adoptopenjdk.net/releases.html) - you need to install JDK 11 (more info on Java versions)
+
+[Node.js](http://nodejs.org/) - latest LTS release
+
+[Yarn package manager for Node.js](https://yarnpkg.com/) - latest release of version 1.x - you can install it in any OS by running:
 
 ```
-$ yarn
-```
+npm install --global yarn
+``` 
+    
+On a most recent stable Ubuntu/Debian, all the tools above, with the exception of Clojure, can be installed by using:
 
-Start the frontend build process with
+```
+sudo apt install openjdk-11-jdk nodejs && sudo npm install --global yarn
+``` 
+    
+If you have multiple JDK versions installed in your machine, be sure to switch your JDK before building with:
 
 ```
-yarn build-hot
-```
-
-#### Backend
+sudo update-alternatives --config java
+```    
+    
+Then select Java 11 in the menu.
 
 Start the backend build process with
 
@@ -68,6 +82,20 @@ Run your backend development server with
 
 ```
 clojure -M:run
+```
+
+### Frontend
+
+Compile javascript dependencies
+
+```
+$ yarn
+```
+
+Start the frontend build process with
+
+```
+yarn build-hot
 ```
 
 ## Contributing
