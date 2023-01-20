@@ -460,7 +460,6 @@ function QueryBuilder(props) {
   const [requestPermission, showNotification] = useWebNotification();
 
   useEffect(() => {
-    console.log("isLoadingComplete", isLoadingComplete)
     if (isLoadingComplete) {
       setIsShowingToaster(false);
 
