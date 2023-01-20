@@ -358,6 +358,11 @@ function QueryBuilder(props) {
         if (canEditInfo) {
           init();
         } else {
+          if (!uuid) {
+            throw new Error(
+              "The chart has been set to private, please contact the owner.",
+            );
+          }
           setUuid(uuid);
         }
       } catch (error) {
@@ -455,6 +460,7 @@ function QueryBuilder(props) {
   const [requestPermission, showNotification] = useWebNotification();
 
   useEffect(() => {
+    console.log("isLoadingComplete", isLoadingComplete)
     if (isLoadingComplete) {
       setIsShowingToaster(false);
 
