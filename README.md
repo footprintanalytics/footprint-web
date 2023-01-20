@@ -93,7 +93,7 @@ Then select Java 11 in the menu.
 Start the backend build process with
 
 ```
-$ $ clj -X:deps prep
+$ clj -X:deps prep
 ```
 
 Run your backend development server with
