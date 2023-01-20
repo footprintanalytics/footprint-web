@@ -25,8 +25,7 @@ const IconBackLink = ({ url, onClick }) => {
 
 export const IconBack = ({ router, url = "/dashboards" }) => {
   const backUrl = router.location.query.back_url;
-  const hasPrev = history.length > 2;
-
+  const hasPrev = history.length > 2 || history.state?.key;
   if (backUrl) {
     return <IconBackLink onClick={() => router.replace(backUrl)} />;
   }
