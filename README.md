@@ -1,5 +1,4 @@
-# Footprint Web
-Footprint Web is a website where you can create charts and dashboards for analyzing data without code.
+# Footprint Web APP
 
 ![footprint web](https://static.footprint.network/github/footprint-web-index.png)
 
@@ -13,23 +12,42 @@ Footprint Web is a website where you can create charts and dashboards for analyz
   </p>
 </div>
 
+## Get started
+
+Guide for the Footprint web application accessible from www.footprint.network
+
+* Footprint lets users convert raw data tables into charts without any code with an easy-to-use drag-and-drop interface.
+* Anyone to get started with blockchain analytics quickly; Footprint provides thousands of datasets that encourage curiosity, creativity and data-driven decision making.
+* Users can find the dashboard they need based on topic, chain, or category of data. Footprint supports forking any open analytics table on the platform with one click, helping users create and manage personalised dashboards easily.
+* Quickly replicate and find new inspiration with hundreds of community-created dashboards.
+
+### No coding required
+
+Footprint makes exploring blockchain data simple with its drag-and-drop user experience. No need for SQL queries or coding to explore blockchain data—anyone can discover and present actionable DeFi insights.
+
+### Storytelling with data
+
+Our solution lets you analyse the market and present your findings, no matter what your audience's experience with blockchain. There are more than types of charts to choose from. Fork charts with one click. Footprint provides rich data analytics templates that support forks with any open analytics table on the platform with one click, helping you easily create and manage your personalised dashboards. You can also share your data tables and dashboards with your partners or social channels.
+
+
+
 ## Features
 * Tables
 
 footprint table involves gamefi defi nft and other multi-domain table, you can search for the corresponding table to do table analysis data.
 
 ![footprint web table](https://static.footprint.network/github/footprint-web-table.png)
-* Charts
+* [Charts](https://docs.footprint.network/docs/charts)
 
 We can use drag and drop mode or sql mode to quickly create a chart. For non-technical people it is possible to create charts to analyze data without writing code. So cool.
 
 ![footprint web chart](https://static.footprint.network/github/footprint-web-chart.png)
-* Visualisations
+* [Visualisations](https://docs.footprint.network/docs/visualisations)
 
 A variety of chart types to choose from, such as line, bar, pie, area, etc. Displaying data is more intuitive and more beautiful.
 
 ![footprint web visualisation](https://static.footprint.network/github/footprint-web-visualisation.png)
-* Dashboards
+* [Dashboards](https://docs.footprint.network/docs/create)
 
 Different charts can be added to the dashboad, arranging their position and size in order to better display the data. Filtering conditions are also supported. Dashboard can be embedded into other websites.
 
