@@ -129,9 +129,6 @@ export default function SharingPane({
     message.success("Copy channel link success！");
   }
 
-  // @ts-ignore
-  // @ts-ignore
-  // @ts-ignore
   return (
     <div className="pt2 ml-auto mr-auto" style={{ maxWidth: 600 }}>
       {renderModal()}
