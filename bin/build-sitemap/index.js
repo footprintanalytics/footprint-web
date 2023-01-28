@@ -130,26 +130,26 @@ const run = async () => {
   });
   total += topicLen;
 
-  const project = await getProjectList();
-  project.list.forEach(item => {
-    const dashboard = item.dashboardList[0];
-    const url = `/project/Detail/${item.landingId}/${formatName(item.name)}`;
-    if (dashboard) {
-      sitemap.write({
-        url,
-        lastmod,
-        img: [
-          {
-            url: getImg(dashboard.id, dashboard.type),
-            caption: dashboard.name.trim(),
-            title: dashboard.name.trim(),
-          },
-        ],
-      });
-    }
-    log(url);
-  });
-  total += project.list.length;
+  // const project = await getProjectList();
+  // project.list.forEach(item => {
+  //   const dashboard = item.dashboardList[0];
+  //   const url = `/project/Detail/${item.landingId}/${formatName(item.name)}`;
+  //   if (dashboard) {
+  //     sitemap.write({
+  //       url,
+  //       lastmod,
+  //       img: [
+  //         {
+  //           url: getImg(dashboard.id, dashboard.type),
+  //           caption: dashboard.name.trim(),
+  //           title: dashboard.name.trim(),
+  //         },
+  //       ],
+  //     });
+  //   }
+  //   log(url);
+  // });
+  // total += project.list.length;
 
   const chain = await getChainList();
   chain.list.forEach(item => {
@@ -187,7 +187,7 @@ const run = async () => {
 
   // article
   const articles = await getMediaList();
-  const articlesList = articles.list.filter(article => article.type !== "realTimeInfo");
+  const articlesList = articles.list;
   newsItemToSitemap(articlesList, sitemap);
   total += articlesList.length;
 
