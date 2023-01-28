@@ -8,6 +8,7 @@ import { menuDetailList } from "metabase/new-service";
 import { getFeaturesSideHide } from "metabase/selectors/control";
 import DashboardArea from "metabase/containers/features/components/DashboardArea";
 import { loginModalShowAction } from "metabase/redux/control";
+import { useDeviceInfo } from "metabase-lib/lib/Device";
 
 const Index = props => {
   const {
@@ -22,6 +23,7 @@ const Index = props => {
   const [mode, setMode] = useState(""); //home,dashboard
   const [item, setItem] = useState();
   const [hasShowLoginAuto, setHasShowLoginAuto] = useState(false);
+  const { isMobile } = useDeviceInfo()
 
   const handleScroll = event => {
     if (!event.srcElement.scrollTop) {
@@ -83,7 +85,7 @@ const Index = props => {
 
   return (
     <div className="Features bg-gray flex">
-      <div className="Features-side" style={{ width: hideSide ? 0 : 280 }}>
+      <div className="Features-side" style={{ width: hideSide || isMobile ? 0 : 280 }}>
         <FeaturesSide
           defaultMenu={menu}
           defaultSubMenu={subMenu}
