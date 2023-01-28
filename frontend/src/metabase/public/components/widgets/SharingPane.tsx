@@ -24,6 +24,8 @@ import {
   PublicEmbedHeader,
   PublicLinkHeader,
 } from "./SharingPane.styled";
+import copy from "copy-to-clipboard";
+import { message } from "antd";
 
 type Resource = {
   dashboard?: number;
@@ -69,6 +71,7 @@ export default function SharingPane({
 }: SharingPaneProps) {
   const [extensionState, setExtension] = useState<Extension>(null);
   const [showVip, setShowVip] = useState(false);
+  const inputRef: any = React.createRef();
 
   const guestUrl = getGuestUrl(resource, extensionState);
   const iframeSource = getPublicEmbedHTML(getPublicUrl(resource));
@@ -110,6 +113,21 @@ export default function SharingPane({
       }
     }
   };
+
+  const copyChannelUrl = () => {
+    const channel = inputRef.current.value.trim();
+    let separator = "";
+    const url = shareUrl;
+    if (!url.includes("?")) {
+      separator = "?";
+    } else if (!url.endsWith("?") && !url.endsWith("&")){
+      separator = "&";
+    }
+    const channelStr = channel.length > 0 ? `channel=${channel}` : "";
+    const channelGuestUrl = `${url}${separator}${channelStr}`;
+    copy(channelGuestUrl || "");
+    message.success("Copy channel link success！");
+  }
 
   return (
     <div className="pt2 ml-auto mr-auto" style={{ maxWidth: 600 }}>
@@ -179,6 +197,14 @@ export default function SharingPane({
             </div>
           )}
           {(isMarket || isAdmin) && (
+            <div className="flex justify-between border-bottom pb2">
+              <input className="Button mr1" ref={inputRef} placeholder="Dashboard channel" />
+              <Button onClick={copyChannelUrl}>
+                create channel link
+              </Button>
+            </div>
+          )}
+          {/*{(isMarket || isAdmin) && (
             <div className="pb2 mb4 border-bottom flex align-center">
               <h4>{t`Create short link`}</h4>
               <div className="ml-auto">
@@ -194,7 +220,7 @@ export default function SharingPane({
                 </CopyShortLink>
               </div>
             </div>
-          )}
+          )}*/}
           {/*{isShowCancelWatermarkSwitch && (
           <div className="pb2 mb4 border-bottom flex align-center">
             <h4>{t`Remove watermark`}</h4>
@@ -210,7 +236,7 @@ export default function SharingPane({
           </div>
         )}*/}
           <div
-            className={cx("mb4 flex align-center", {
+            className={cx("mt2 mb4 flex align-center", {
               disabled: !resource.public_uuid,
             })}
           >
