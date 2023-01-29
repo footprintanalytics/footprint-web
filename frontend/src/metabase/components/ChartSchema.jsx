@@ -6,28 +6,27 @@ import { Table } from "antd";
 const ChartSchema = ({
   result_metadata,
 }) => {
-  const metadata = result_metadata?.map(metadata => { return { name: metadata.name, base_type: metadata.base_type }});
+  const metadata = result_metadata?.map(metadata => { return { name: metadata.name, base_type: metadata.base_type.replace(/type\//g, "") }});
   const columns = [
     {
       title: `Field Name (${metadata.length})`,
       dataIndex: 'name',
-      width: 200,
     },
     {
       title: 'Field Type',
       dataIndex: 'base_type',
-      width: 100,
+      width: 200,
     },
   ];
   return (
     <div>
-      <div className="text-left mb1">Chart schema</div>
+      {/*<div className="text-left mb1">Chart schema</div>*/}
       <Table
         columns={columns}
         dataSource={metadata}
         pagination={false}
         scroll={{
-          y: 200,
+          y: 160,
         }}
       />
     </div>

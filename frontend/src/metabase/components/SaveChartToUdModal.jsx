@@ -1,10 +1,10 @@
 /* eslint-disable react/prop-types */
 import React, { useCallback, useEffect, useState } from "react";
-import { Alert, Button, Form, Input, Modal, Skeleton } from "antd";
+import { Alert, Button, Form, Input, message, Modal, Skeleton, Card } from "antd";
 import "./TaggingModal.css";
 import { connect } from "react-redux";
 import { getUser } from "metabase/selectors/user";
-import { checkTableNameChart, udTableDetail, udTableSaveChartConfig } from "../new-service";
+import { checkTableNameChart, udTableDetail, udTableSaveModelConfig } from "../new-service";
 import { useMutation, useQuery } from "react-query";
 import { QUERY_OPTIONS } from "../containers/dashboards/shared/config";
 import moment from "moment-timezone";
@@ -22,63 +22,58 @@ const SaveChartToUdModal = ({
 }) => {
   console.log("result_metadata", result_metadata)
   const [loading, setLoading] = useState(false);
-  const [chartConfig, setChartConfig] = useState({});
 
+  const { isLoading, data, refetch } = useQuery(
+    ["udTableDetail", cardId],
+    async () => {
+      return await udTableDetail({ cardId });
+    },
+    QUERY_OPTIONS,
+  );
 
-  const isLoading = false;
-  const data = null;
-  const refetch = null;
-
-  // const { isLoading, data, refetch } = useQuery(
-  //   ["udTableDetail", cardId],
-  //   async () => {
-  //     return await udTableDetail({ cardId });
-  //   },
-  //   QUERY_OPTIONS,
-  // );
+  const chartConfig = data?.chartConfig;
   const [tableName, setTableName] = useState(data?.chartConfig?.targetTableName);
   const debouncedTableName = useDebounce(tableName, { wait: 500 });
   const checkMutate = useMutation(checkTableNameChart);
-  const message = checkMutate?.data?.message;
+  const checkNameMessage = checkMutate?.data?.message;
 
-  // useEffect(() => {
-  //   if (!debouncedTableName) return;
-  //   checkMutate.mutate({ tableName: debouncedTableName, tableType: "chart", cardId: cardId });
-  // }, [debouncedTableName]);
 
   console.log("checkMutate", checkMutate)
   const callbackTime = useCallback(
     (status) => {
+      console.log("callbackTime status", status)
+      if (status === "done") {
+        message.success("Save successfully.");
+      } else if (status === "fail") {
+        message.fail("Save fail.");
+      }
       refetch();
     }, [refetch]);
 
   const targetTableName = chartConfig?.targetTableName;
   const hasSavedToUd = !!chartConfig?.targetTableName;
+  useEffect(() => {
+    if (!debouncedTableName || hasSavedToUd) return;
+    checkMutate.mutate({ tableName: debouncedTableName, tableType: "chart", cardId: cardId });
+  }, [debouncedTableName, hasSavedToUd]);
   console.log("SaveChartToUdModal data", data);
   const onSave = async (data) => {
     const tableName = targetTableName || data.name;
+    console.log("onSave", data)
     setLoading(true);
     let result = null;
-    // try {
-    //   result = await udTableSaveChartConfig({
-    //     "cardId": cardId,
-    //     "targetTableName": tableName,
-    //   });
-    // } catch (e) {
-    // }
-    setTimeout(() => {
-      setChartConfig({
-        targetTableName: tableName,
-        tableId: 10,
-        lastUpdatedAt: new Date().getTime()
-      })
-      setLoading(false);
-    }, 5000)
-    console.log("result", result);
-    // if (result?.result === "success") {
-    //   await refetch();
-    // }
-    // setLoading(false);
+    try {
+      result = await udTableSaveModelConfig({
+        "source": "chartTrino",
+        "sourceId": cardId,
+        "targetTableName": tableName,
+      });
+    } catch (e) {
+    }
+    if (result?.result === "success") {
+      await refetch();
+    }
+    setLoading(false);
   };
 
   const showSaveCharToUdTime = data?.newestLog?.status === "executing";
@@ -94,10 +89,9 @@ const SaveChartToUdModal = ({
 
 
   const onChange = value => {
+    console.log("onChange", value)
     setTableName(value);
   }
-  console.log("checkMutate?.data?.result === 1", checkMutate?.data?.result === 1)
-
   //data?.chartConfig
 
   return (
@@ -118,29 +112,34 @@ const SaveChartToUdModal = ({
           onFinish={onSave}
         >
           <div className="text-centered flex flex-column">
-            <ChartSchema result_metadata={result_metadata}/>
-            <div className="mb3"/>
-
-            {chartConfig?.targetTableName && (
-              <Form.Item name="table" label="Associated UD table name">
-                <div className="text-left bg-gray p1">
-                  <Link
-                    target="_blank"
-                    to={udTableLink}
-                    onClick={v => {
-                      v.preventDefault();
-                      if (chartConfig?.tableId) {
-                        window.open(udTableLink);
-                      }
-                    }}>{`ud_${chartConfig?.targetTableName}`}</Link>
+            <Card title="UD table info">
+            <div className="flex">
+              {chartConfig?.targetTableName && (
+                <div className="ud-chart__form-item">
+                  <span>Associated UD table name</span>
+                  <div className="text-left bg-gray">
+                    <Link
+                      target="_blank"
+                      to={udTableLink}
+                      onClick={v => {
+                        v.preventDefault();
+                        if (chartConfig?.tableId) {
+                          window.open(udTableLink);
+                        }
+                      }}>
+                      <h3>{`ud_${chartConfig?.targetTableName}`}</h3></Link>
+                  </div>
                 </div>
-              </Form.Item>
-            )}
-            {chartConfig?.lastUpdatedAt && (<Form.Item name="time" label="UD table last updated time">
-              <div className="text-left bg-gray p1">
-                {moment(chartConfig?.lastUpdatedAt).format("YYYY-MM-DD HH:mm:ss")}
-              </div>
-            </Form.Item>)}
+              )}
+              {chartConfig?.lastUpdatedAt && (
+                <div className="ud-chart__form-item ml2">
+                  <div>UD table last updated time</div>
+                  <h3 className="text-left bg-gray">
+                    {moment(chartConfig?.lastUpdatedAt).format("YYYY-MM-DD HH:mm:ss")}
+                  </h3>
+                </div>
+              )}
+            </div>
             {/*{data?.newestLog?.status || ""}*/}
 
             {!hasSavedToUd && (
@@ -155,11 +154,19 @@ const SaveChartToUdModal = ({
                 />
               </Form.Item>
             )}
-            {message && <Alert message={message} type="warning" showIcon closable />}
+            {checkNameMessage && <Alert message={checkNameMessage} type="warning" showIcon closable />}
+            </Card>
+            <div className="mb3"/>
+            <Card title="Schema">
+              <ChartSchema result_metadata={result_metadata}/>
+            </Card>
+            <div className="mb3"/>
+
             {showSaveCharToUdTime && (<SaveChartToUdTime
                 cardId={cardId}
                 callback={callbackTime} />
             )}
+
             {showMainButton && (
               <>
                 <Button
@@ -167,13 +174,12 @@ const SaveChartToUdModal = ({
                   size="large"
                   htmlType="submit"
                   className="right"
-                  disabled={!debouncedTableName || debouncedTableName?.length === 0}
-                  // disabled={!data || checkMutate?.data?.result === 1}
+                  disabled={!data || !debouncedTableName || checkMutate?.data?.result === 1}
                   loading={loading}
                 >
-                  {hasSavedToUd ? "Update" : "Submit"}
+                  {hasSavedToUd ? "Update" : "Save"}
                 </Button>
-                {chartConfig?.tableId && (
+               {/* {chartConfig?.tableId && (
                   <Link
                     className="mt2"
                     target="_blank"
@@ -186,7 +192,7 @@ const SaveChartToUdModal = ({
                     }}>
                     To create chart
                   </Link>
-                )}
+                )}*/}
               </>
             )}
           </div>

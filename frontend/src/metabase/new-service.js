@@ -457,6 +457,6 @@ export const udTableDetail = (params) => {
   // return POST(`mock/udtable/detail`, params);
 };
 
-export const udTableSaveChartConfig = (params) => {
-  return POST(`api/v1/udTable/saveChartConfig`, params);
+export const udTableSaveModelConfig = (params) => {
+  return POST(`api/v1/udTable/saveModelConfig`, params);
 };

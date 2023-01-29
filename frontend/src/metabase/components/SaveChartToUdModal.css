@@ -1,3 +1,17 @@
 .ant-table-tbody>tr>td, .ant-table-thead>tr>th, .ant-table tfoot>tr>td, .ant-table tfoot>tr>th {
   padding: 6px 16px;
 }
+
+.save-chart-to-ud-modal {
+  width: 720px !important;
+}
+
+.ud-chart__form-item {
+  display: flex;
+  flex-direction: column;
+}
+
+.ud-chart__form-item h3 {
+  font-size: 18px;
+  font-weight: bold;
+}

@@ -691,6 +691,8 @@ function ViewTitleHeaderRightSide(props) {
   const menuMoreOptions = [];
   const showChartTemplate = !isNative;
 
+  const hasQueryData = !result?.error;
+
   if (showChartTemplate) {
     menuMoreOptions.push(
       <Menu.Item key="template">
@@ -741,20 +743,6 @@ function ViewTitleHeaderRightSide(props) {
   if (isSaved) {
     return (
       <ViewHeaderActionPanel data-testid="qb-header-action-panel">
-        <Tooltip tooltip={t`Add to favorite list`}>
-          <Favorite
-            onlyIcon
-            className="Question-header-btn-with-text"
-            like={
-              // -1
-              card && card.statistics && card.statistics.favorite
-            }
-            isLike={card.isFavorite}
-            type="card"
-            id={card.id}
-            uuid={card.public_uuid}
-          />
-        </Tooltip>
         {isOwner && (
           <Tooltip tooltip={t`Edit`}>
             <Button
@@ -774,7 +762,7 @@ function ViewTitleHeaderRightSide(props) {
             />
           </Tooltip>
         )}
-        {isOwner && (
+        {isOwner && hasQueryData && (
           <Tooltip tooltip={t`Save chart to ud table`}>
             <Button
               onlyIcon
@@ -810,18 +798,6 @@ function ViewTitleHeaderRightSide(props) {
             </Button>
           </Tooltip>
         )}
-        {(!!card.public_uuid || isOwner || isAdmin) && (
-          <Tooltip tooltip={t`Snapshot`}>
-            <Button
-              onlyIcon
-              className="Question-header-btn"
-              iconColor="#7A819B"
-              icon="camera"
-              iconSize={16}
-              onClick={props.downloadImageAction}
-            />
-          </Tooltip>
-        )}
         {(!!card.public_uuid || isOwner || isAdmin) &&
         QueryDownloadWidget.shouldRender({
           result,
@@ -842,8 +818,23 @@ function ViewTitleHeaderRightSide(props) {
           <QuestionEmbedWidgetButton
             key="question-embed-widget-trigger"
             onClick={params => onOpenModal("embed", null, params)}
+            showEmbed={false}
           />
         )}
+        <Tooltip tooltip={t`Add to favorite list`}>
+          <Favorite
+            onlyIcon
+            className="Question-header-btn-with-text"
+            like={
+              // -1
+              card && card.statistics && card.statistics.favorite
+            }
+            isLike={card.isFavorite}
+            type="card"
+            id={card.id}
+            uuid={card.public_uuid}
+          />
+        </Tooltip>
         {(!!card.public_uuid || isOwner || isAdmin) && (
           <QueryMoreWidget
             className=""
@@ -855,6 +846,9 @@ function ViewTitleHeaderRightSide(props) {
             setShowSeoTagging={() =>
               this.setState({ showSeoTaggingModal: true })
             }
+            card={card}
+            question={question}
+            downloadImageAction={downloadImageAction}
           />
         )}
         {/*<QuestionActions
@@ -1072,47 +1066,53 @@ function ExploreResultsLink({ question }) {
 
 ViewTitleHeader.propTypes = viewTitleHeaderPropTypes;
 
-export function QuestionEmbedWidgetButton({ onClick }) {
+export function QuestionEmbedWidgetButton({ onClick, showEmbed = true, showSharing = true }) {
   return (
     <>
-      <Tooltip tooltip={t`Embed Widget`}>
-        <Button
-          onlyIcon
-          className="Question-header-btn"
-          icon="embed"
-          iconSize={16}
-          onClick={() => {
-            trackStructEvent(
-              "Sharing / Embedding",
-              "question",
-              "Sharing Link Clicked",
-            );
-            onClick({ onlyEmbed: true });
-          }}
-        />
-      </Tooltip>
-      <Tooltip tooltip={t`Sharing`}>
-        <Button
-          onlyIcon
-          className="Question-header-btn"
-          icon="share"
-          iconSize={16}
-          onClick={() => {
-            trackStructEvent(
-              "Sharing / Embedding",
-              "question",
-              "Sharing Link Clicked",
-            );
-            onClick({ onlyEmbed: false });
-          }}
-        />
-      </Tooltip>
+      {showEmbed && (
+        <Tooltip tooltip={t`Embed Widget`}>
+          <Button
+            onlyIcon
+            className="Question-header-btn"
+            icon="embed"
+            iconSize={16}
+            onClick={() => {
+              trackStructEvent(
+                "Sharing / Embedding",
+                "question",
+                "Sharing Link Clicked",
+              );
+              onClick({ onlyEmbed: true });
+            }}
+          />
+        </Tooltip>
+      )}
+      {showSharing && (
+        <Tooltip tooltip={t`Sharing`}>
+          <Button
+            onlyIcon
+            className="Question-header-btn"
+            icon="share"
+            iconSize={16}
+            onClick={() => {
+              trackStructEvent(
+                "Sharing / Embedding",
+                "question",
+                "Sharing Link Clicked",
+              );
+              onClick({ onlyEmbed: false });
+            }}
+          />
+        </Tooltip>
+      )}
     </>
   );
 }
 
 const QuestionEmbedWidgetTriggerPropTypes = {
   onClick: PropTypes.func,
+  showEmbed: PropTypes.bool,
+  showSharing: PropTypes.bool,
 };
 
 QuestionEmbedWidgetButton.propTypes = QuestionEmbedWidgetTriggerPropTypes;
