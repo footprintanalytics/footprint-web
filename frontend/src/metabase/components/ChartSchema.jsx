@@ -15,19 +15,16 @@ const ChartSchema = ({
     {
       title: 'Field Type',
       dataIndex: 'base_type',
-      width: 200,
+      width: 250,
     },
   ];
   return (
-    <div>
-      {/*<div className="text-left mb1">Chart schema</div>*/}
+    <div style={{ maxHeight: 180, overflow: "auto"}}>
       <Table
         columns={columns}
         dataSource={metadata}
         pagination={false}
-        scroll={{
-          y: 160,
-        }}
+        sticky={true}
       />
     </div>
   );

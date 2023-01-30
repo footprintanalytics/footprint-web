@@ -781,6 +781,8 @@ function ViewTitleHeaderRightSide(props) {
             result_metadata={card.result_metadata}
             cardId={card.id}
             onClose={() => setSaveChartToUd(false)}
+            creatorId={question.card().creator_id}
+            user={user}
           />
         )}
         {(!!card.public_uuid || isOwner || isAdmin) && (

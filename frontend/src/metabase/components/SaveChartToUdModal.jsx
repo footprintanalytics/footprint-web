@@ -1,6 +1,6 @@
 /* eslint-disable react/prop-types */
 import React, { useCallback, useEffect, useState } from "react";
-import { Alert, Button, Form, Input, message, Modal, Skeleton, Card } from "antd";
+import { Alert, Button, Form, Input, message, Modal, Skeleton, Card, Popover } from "antd";
 import "./TaggingModal.css";
 import { connect } from "react-redux";
 import { getUser } from "metabase/selectors/user";
@@ -19,6 +19,8 @@ const SaveChartToUdModal = ({
   onClose,
   cardId,
   result_metadata,
+  creatorId,
+  user,
 }) => {
   console.log("result_metadata", result_metadata)
   const [loading, setLoading] = useState(false);
@@ -36,9 +38,11 @@ const SaveChartToUdModal = ({
   const debouncedTableName = useDebounce(tableName, { wait: 500 });
   const checkMutate = useMutation(checkTableNameChart);
   const checkNameMessage = checkMutate?.data?.message;
+  const isOwner = user && (user.id === creatorId);
 
 
-  console.log("checkMutate", checkMutate)
+  console.log("tableName", tableName)
+  console.log("debouncedTableName", debouncedTableName)
   const callbackTime = useCallback(
     (status) => {
       console.log("callbackTime status", status)
@@ -78,10 +82,9 @@ const SaveChartToUdModal = ({
 
   const showSaveCharToUdTime = data?.newestLog?.status === "executing";
 
-  const showMainButton = data?.newestLog?.status !== "executing";
+  const showMainButton = data?.newestLog?.status !== "executing" && isOwner;
 
   const firstLoading = isLoading && !data;
-  console.log("firstLoading", firstLoading);
   const onCancel = () => {
     onClose && onClose();
   };
@@ -89,11 +92,10 @@ const SaveChartToUdModal = ({
 
 
   const onChange = value => {
-    console.log("onChange", value)
     setTableName(value);
   }
   //data?.chartConfig
-
+  console.log("hahaha ", !data , !debouncedTableName , checkMutate?.data?.result === 1)
   return (
     <Modal
       className="save-chart-to-ud-modal"
@@ -120,14 +122,15 @@ const SaveChartToUdModal = ({
                   <div className="text-left bg-gray">
                     <Link
                       target="_blank"
-                      to={udTableLink}
+                      to={chartConfig?.lastUpdatedAt ? udTableLink : ""}
                       onClick={v => {
                         v.preventDefault();
-                        if (chartConfig?.tableId) {
+                        if (chartConfig?.tableId && chartConfig?.lastUpdatedAt) {
                           window.open(udTableLink);
                         }
                       }}>
-                      <h3>{`ud_${chartConfig?.targetTableName}`}</h3></Link>
+                      <h3>{`ud_${chartConfig?.targetTableName}`}</h3>
+                    </Link>
                   </div>
                 </div>
               )}
@@ -139,10 +142,15 @@ const SaveChartToUdModal = ({
                   </h3>
                 </div>
               )}
+              {data?.newestLog?.sql && (
+                <Popover className="ml2 cursor-pointer" content={data?.newestLog?.sql} title="SQL" overlayStyle={{ width: 600, maxHeight: 300 }}>
+                  <div>SQL</div>
+                </Popover>
+              )}
             </div>
             {/*{data?.newestLog?.status || ""}*/}
 
-            {!hasSavedToUd && (
+            {!hasSavedToUd && isOwner && (
               <Form.Item name="name" label="Which table name do you save?">
                 <Input
                   prefix="ud_"
@@ -174,7 +182,7 @@ const SaveChartToUdModal = ({
                   size="large"
                   htmlType="submit"
                   className="right"
-                  disabled={!data || !debouncedTableName || checkMutate?.data?.result === 1}
+                  disabled={!data || (!hasSavedToUd && !debouncedTableName) || checkMutate?.data?.result === 1}
                   loading={loading}
                 >
                   {hasSavedToUd ? "Update" : "Save"}
