@@ -354,7 +354,7 @@ function QueryBuilder(props) {
           id: cardId,
         });
         const canEditInfo =
-          user && (metabaseId === user.id || user.is_superuser);
+          user && (metabaseId === user.id || user.is_superuser || user.groups.includes("Inner"));
         if (canEditInfo) {
           init();
         } else {

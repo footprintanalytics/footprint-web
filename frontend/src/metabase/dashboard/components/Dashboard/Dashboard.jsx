@@ -247,7 +247,7 @@ class Dashboard extends Component {
           userName: urlUserName,
         });
         this.setState({ id });
-        if (user && (metabaseId === user.id || user.is_superuser)) {
+        if (user && (metabaseId === user.id || user.is_superuser || user.groups.includes("Inner"))) {
           dashboardId = id;
         } else {
           if (!uuid) {

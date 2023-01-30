@@ -244,6 +244,9 @@ class DashboardHeader extends Component {
       user && (user.is_superuser || user.id === dashboard?.creator_id);
     const isAdmin = user && user.is_superuser;
     const isMarket = user && user.isMarket;
+    const isOwner =
+      user && (user.is_superuser || user.id === dashboard?.creator_id);
+    const isInner = user?.groups?.includes("Inner");
 
     const hasCards = isLoaded && dashboard.ordered_cards.length > 0;
     const hasDataCards =
@@ -508,7 +511,7 @@ class DashboardHeader extends Component {
       );
     }
 
-    if (!isEditing) {
+    if (!isEditing && (!!dashboard.public_uuid || isOwner || isAdmin)) {
       buttons.push(
         <Tooltip tooltip={t`Add to favorite list`}>
           <Favorite
@@ -543,7 +546,7 @@ class DashboardHeader extends Component {
         </Tooltip>,
       );*/
     }
-    if (showCopyButton && !deviceInfo().isMobile) {
+    if (showCopyButton && !deviceInfo().isMobile && (!!dashboard.public_uuid || isOwner || isAdmin)) {
       buttons.push(
         <Tooltip key="duplicate-dashboard" tooltip={t`Duplicate dashboard`}>
           <Button
@@ -573,7 +576,7 @@ class DashboardHeader extends Component {
       );
     }
 
-    if (hasDataCards) {
+    if (hasDataCards && (!!dashboard.public_uuid || isOwner || isAdmin || isInner)) {
       if (!isEditing) {
         buttons.push(
           <Tooltip key="download-dashboard" tooltip={t`Snapshot`}>
@@ -612,7 +615,7 @@ class DashboardHeader extends Component {
       }
     }
 
-    if (!isEditing && !isEmpty) {
+    if (!isEditing && !isEmpty && (!!dashboard.public_uuid || isOwner || isAdmin)) {
       // const extraButtonClassNames =
       //   "bg-brand-hover text-white-hover py2 px3 text-bold block cursor-pointer";
 

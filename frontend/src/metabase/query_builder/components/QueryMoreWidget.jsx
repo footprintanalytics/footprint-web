@@ -12,10 +12,11 @@ const QueryMoreWidget = ({
   classNameClose,
   isAdmin,
   isOwner,
+  isInner,
   onOpenModal,
   setShowSeoTagging,
 }) => {
-  if (!isOwner && !isAdmin) {
+  if (!isOwner && !isAdmin && !isInner) {
     return null;
   }
 
@@ -35,15 +36,17 @@ const QueryMoreWidget = ({
     >
       <div className="p2" style={{ width: 260 }}>
         <div>
-          <div style={{ width: "100%"}}>
-            <Button
-              className="Question-header-btn Question-header-btn--full"
-              iconColor="#7A819B"
-              icon="pencil"
-              iconSize={16}
-              onClick={() => onOpenModal(MODAL_TYPES.EDIT)}
-            >{t`Edit details`}</Button>
-          </div>
+          {isOwner && isAdmin && (
+            <div style={{ width: "100%"}}>
+              <Button
+                className="Question-header-btn Question-header-btn--full"
+                iconColor="#7A819B"
+                icon="pencil"
+                iconSize={16}
+                onClick={() => onOpenModal(MODAL_TYPES.EDIT)}
+              >{t`Edit details`}</Button>
+            </div>
+          )}
           <div style={{ width: "100%"}}>
             <Button
               className="Question-header-btn Question-header-btn--full"
@@ -86,15 +89,17 @@ const QueryMoreWidget = ({
             onClick={() => onOpenModal(MODAL_TYPES.CLONE)}
           >{t`Duplicate this query`}</Button>
         </Box> */}
-          <div style={{ width: "100%" }}>
-            <Button
-              className="Question-header-btn Question-header-btn--full"
-              iconColor="#7A819B"
-              icon="archive"
-              iconSize={16}
-              onClick={() => onOpenModal(MODAL_TYPES.ARCHIVE)}
-            >{t`Delete`}</Button>
-          </div>
+          {isOwner && isAdmin && (
+            <div style={{ width: "100%" }}>
+              <Button
+                className="Question-header-btn Question-header-btn--full"
+                iconColor="#7A819B"
+                icon="archive"
+                iconSize={16}
+                onClick={() => onOpenModal(MODAL_TYPES.ARCHIVE)}
+              >{t`Delete`}</Button>
+            </div>
+          )}
         </div>
       </div>
     </PopoverWithTrigger>
