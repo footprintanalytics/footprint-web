@@ -14,6 +14,7 @@ import Link from "metabase/core/components/Link";
 import { useDebounce } from "ahooks";
 import ChartSchema from "./ChartSchema";
 import "./SaveChartToUdModal.css";
+import Code from "../containers/buffet/components/Code";
 
 const SaveChartToUdModal = ({
   onClose,
@@ -40,16 +41,14 @@ const SaveChartToUdModal = ({
   const checkNameMessage = checkMutate?.data?.message;
   const isOwner = user && (user.id === creatorId);
 
-
-  console.log("tableName", tableName)
-  console.log("debouncedTableName", debouncedTableName)
   const callbackTime = useCallback(
-    (status) => {
-      console.log("callbackTime status", status)
+    ({ status, tableName, successCount }) => {
       if (status === "done") {
-        message.success("Save successfully.");
+        const action = successCount === 1 ? "save": "update";
+        message.success(`${tableName} ${action} successfully.`);
       } else if (status === "fail") {
-        message.fail("Save fail.");
+        const action = successCount === 0 ? "save": "update";
+        message.fail(`${tableName} ${action} fail.`);
       }
       refetch();
     }, [refetch]);
@@ -102,7 +101,7 @@ const SaveChartToUdModal = ({
       open={true}
       footer={null}
       maskClosable={false}
-      title={"Save chart to ud table"}
+      title={"Save chart to UD table"}
       onCancel={onCancel}
     >
       {firstLoading ? (
@@ -114,6 +113,7 @@ const SaveChartToUdModal = ({
           onFinish={onSave}
         >
           <div className="text-centered flex flex-column">
+            <div className="save-chart-to-ud-modal__desc">You can save the data of this chart to the ud table. ud table will run the latest data once a day at 12:00 utc, and use the intermediate table to solve the case of large computation.</div>
             <Card title="UD table info">
             <div className="flex">
               {chartConfig?.targetTableName && (
@@ -129,7 +129,7 @@ const SaveChartToUdModal = ({
                           window.open(udTableLink);
                         }
                       }}>
-                      <h3>{`ud_${chartConfig?.targetTableName}`}</h3>
+                      <h3 className="cursor-pointer text-underline-hover">{`ud_${chartConfig?.targetTableName}`}</h3>
                     </Link>
                   </div>
                 </div>
@@ -143,7 +143,7 @@ const SaveChartToUdModal = ({
                 </div>
               )}
               {data?.newestLog?.sql && (
-                <Popover className="ml2 cursor-pointer" content={data?.newestLog?.sql} title="SQL" overlayStyle={{ width: 600, maxHeight: 300 }}>
+                <Popover className="ml4 cursor-pointer" content={<Code value={data?.newestLog?.sql} marginTop={0}/>} title="SQL" overlayStyle={{ width: 600, maxHeight: 300, padding: "12px 0" }}>
                   <div>SQL</div>
                 </Popover>
               )}
@@ -182,10 +182,10 @@ const SaveChartToUdModal = ({
                   size="large"
                   htmlType="submit"
                   className="right"
-                  disabled={!data || (!hasSavedToUd && !debouncedTableName) || checkMutate?.data?.result === 1}
+                  disabled={!data || (!hasSavedToUd && !debouncedTableName) || checkMutate.isLoading || checkMutate?.data?.result === 1}
                   loading={loading}
                 >
-                  {hasSavedToUd ? "Update" : "Save"}
+                  {checkMutate.isLoading ? "Checking..." : (hasSavedToUd ? "Update" : "Save")}
                 </Button>
                {/* {chartConfig?.tableId && (
                   <Link

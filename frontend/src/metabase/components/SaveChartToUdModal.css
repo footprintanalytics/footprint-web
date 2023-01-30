@@ -9,9 +9,17 @@
 .ud-chart__form-item {
   display: flex;
   flex-direction: column;
+  text-align: left;
 }
 
 .ud-chart__form-item h3 {
-  font-size: 18px;
-  font-weight: bold;
+  font-size: 16px;
+  font-weight: normal;
+}
+
+.save-chart-to-ud-modal__desc {
+  line-height: 18px;
+  margin-bottom: 12px;
+  text-align: left;
+  color: var(--footprint-color-secondary-text1);
 }

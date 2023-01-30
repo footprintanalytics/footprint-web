@@ -26,7 +26,7 @@ const SaveChartToUdTime = ({
           }, 5000)
         }
       } else {
-        callback(data.newestLog.status)
+        callback({ status: data.newestLog.status, tableName: data.chartConfig.targetTableName, successCount: data.chartConfig.successCount })
       }
     }
     const run = () => {
@@ -46,7 +46,7 @@ const SaveChartToUdTime = ({
   return (
     <div>
       <div>
-        <LoadingSpinner /> Please wait a moment in the generated table.
+        <LoadingSpinner /> Updating the UD table.
       </div>
       {showTooLong && (
         <div className="flex flex-column">
