@@ -16,6 +16,7 @@ const SaveChartToUdTime = ({
     const startTime = new Date();
     const detailApi = async () => {
       const data = await udTableDetail({ cardId })
+      console.log("datadatadatadata", data)
       if (data.newestLog.status === "executing") {
         const endTime = new Date();
         if (endTime - startTime > 60000) {

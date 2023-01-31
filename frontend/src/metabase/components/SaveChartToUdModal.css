@@ -23,3 +23,8 @@
   text-align: left;
   color: var(--footprint-color-secondary-text1);
 }
+
+.ud-chart__fail-tip {
+  color: red;
+  margin-bottom: 12px;
+}

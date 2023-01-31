@@ -9,6 +9,7 @@ import { useMutation, useQuery } from "react-query";
 import { QUERY_OPTIONS } from "../containers/dashboards/shared/config";
 import moment from "moment-timezone";
 import SaveChartToUdTime from "./SaveChartToUdTime";
+import SaveChartToUdFail from "./SaveChartToUdFail";
 import * as Urls from "../lib/urls";
 import Link from "metabase/core/components/Link";
 import { useDebounce } from "ahooks";
@@ -43,12 +44,13 @@ const SaveChartToUdModal = ({
 
   const callbackTime = useCallback(
     ({ status, tableName, successCount }) => {
+      console.log("status", status)
       if (status === "done") {
         const action = successCount === 1 ? "save": "update";
         message.success(`${tableName} ${action} successfully.`);
       } else if (status === "fail") {
         const action = successCount === 0 ? "save": "update";
-        message.fail(`${tableName} ${action} fail.`);
+        message.error(`${tableName} ${action} fail.`);
       }
       refetch();
     }, [refetch]);
@@ -80,6 +82,7 @@ const SaveChartToUdModal = ({
   };
 
   const showSaveCharToUdTime = data?.newestLog?.status === "executing";
+  const showFailStatus = data?.newestLog?.status === "fail";
 
   const showMainButton = data?.newestLog?.status !== "executing" && isOwner;
 
@@ -171,6 +174,11 @@ const SaveChartToUdModal = ({
             <div className="mb3"/>
 
             {showSaveCharToUdTime && (<SaveChartToUdTime
+                cardId={cardId}
+                callback={callbackTime} />
+            )}
+
+            {showFailStatus && (<SaveChartToUdFail
                 cardId={cardId}
                 callback={callbackTime} />
             )}
