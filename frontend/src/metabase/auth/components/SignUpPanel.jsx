@@ -10,6 +10,7 @@ import Form from "metabase/containers/Form";
 import GoogleButton from "metabase/auth/containers/GoogleButton";
 import { isDefi360 } from "metabase/lib/project_info";
 import SplitLine from "metabase/components/SplitLine";
+import MetabaseSettings from "metabase/lib/settings";
 import WalletLoginButton from "./WalletLoginButton";
 
 const SignUpPanel = ({
@@ -20,6 +21,7 @@ const SignUpPanel = ({
   project,
   redirect,
 }) => {
+  const passwordComplexity = MetabaseSettings.passwordComplexityDescription();
   const ref = React.createRef();
   const onkeydown = async e => {
     if (e.keyCode === 13) {
@@ -59,6 +61,7 @@ const SignUpPanel = ({
       <Form onSubmit={onSubmit}>
         {({ Form, FormField, FormSubmit, FormMessage }) => (
           <Form>
+            <p className="text-medium mb1">{t`To keep your data secure, passwords ${passwordComplexity}`}</p>
             <FormField
               ref={ref}
               name="email"
@@ -76,7 +79,7 @@ const SignUpPanel = ({
               initial={credentials.password || ""}
               title={t`Password`}
               placeholder={t`please enter password`}
-              validate={validate.required()}
+              validate={validate.required().passwordComplexity()}
               onKeyDown={e => onkeydown(e)}
             />
             {isDefi360(project) && (
@@ -99,7 +102,7 @@ const SignUpPanel = ({
               normalize={value => value.trim()}
               onKeyDown={e => onkeydown(e)}
             />
-            <div className="mt2"/>
+            <div className="mt1"/>
             <FormMessage />
             <div className="Form-actions text-centered">
               <FormSubmit className="block full sign-in-button">
