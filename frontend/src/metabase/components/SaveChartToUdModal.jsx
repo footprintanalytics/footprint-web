@@ -16,6 +16,7 @@ import { useDebounce } from "ahooks";
 import ChartSchema from "./ChartSchema";
 import "./SaveChartToUdModal.css";
 import Code from "../containers/buffet/components/Code";
+import { trackStructEvent } from "../lib/analytics";
 
 const SaveChartToUdModal = ({
   onClose,
@@ -61,6 +62,7 @@ const SaveChartToUdModal = ({
     checkMutate.mutate({ tableName: debouncedTableName, tableType: "chart", cardId: cardId });
   }, [debouncedTableName, hasSavedToUd]);
   const onSave = async (data) => {
+    trackStructEvent("SaveChartToUdModal onSave")
     if (!enableSave) {
       message.info("Do not support sql with parameters, please remove the parameters")
       return ;
@@ -129,6 +131,7 @@ const SaveChartToUdModal = ({
                       onClick={v => {
                         v.preventDefault();
                         if (chartConfig?.tableId && chartConfig?.lastUpdatedAt) {
+                          trackStructEvent("SaveChartToUdModal open table")
                           window.open(udTableLink);
                         }
                       }}>

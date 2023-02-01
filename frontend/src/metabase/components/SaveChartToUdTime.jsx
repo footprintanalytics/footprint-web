@@ -1,9 +1,10 @@
 /* eslint-disable react/prop-types */
 import React, { useEffect, useState } from "react";
-import { Button } from "antd";
+import { Button, message } from "antd";
 import "./TaggingModal.css";
 import { udTableDetail } from "../new-service";
 import LoadingSpinner from "./LoadingSpinner/LoadingSpinner";
+import { trackStructEvent } from "../lib/analytics";
 
 const SaveChartToUdTime = ({
   cardId,
@@ -16,7 +17,6 @@ const SaveChartToUdTime = ({
     const startTime = new Date();
     const detailApi = async () => {
       const data = await udTableDetail({ cardId })
-      console.log("datadatadatadata", data)
       if (data.newestLog.status === "executing") {
         const endTime = new Date();
         if (endTime - startTime > 60000) {
@@ -39,16 +39,23 @@ const SaveChartToUdTime = ({
   }, [callback, cardId])
 
   const refreshStatus = async () => {
+    trackStructEvent("SaveChartToUdModal refresh status")
     const data = await udTableDetail({ cardId });
+    const hide = message.loading("Loading...", 0);
     if (data.newestLog.status !== "executing") {
-      callback(data.newestLog.status)
+      callback({ status: data.newestLog.status, tableName: data.chartConfig.targetTableName, successCount: data.chartConfig.successCount })
+    } else {
+      message.info("Updating the UD table...");
     }
+    hide();
   }
   return (
     <div>
-      <div>
-        <LoadingSpinner /> Updating the UD table.
-      </div>
+      {!showTooLong && (
+        <div>
+          <LoadingSpinner /> Updating the UD table.
+        </div>
+      )}
       {showTooLong && (
         <div className="flex flex-column">
           It looks like the process is a bit long, you can manually click the button to refresh the status.
