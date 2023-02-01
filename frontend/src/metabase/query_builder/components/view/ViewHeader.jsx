@@ -831,7 +831,7 @@ function ViewTitleHeaderRightSide(props) {
             onClick={params => onOpenModal("embed", null, params)}
           />
         )}
-        {(!!card.public_uuid || isOwner || isAdmin || isInner) && (
+        {(!!card.public_uuid || isOwner || isAdmin) && (
           <QueryMoreWidget
             className=""
             key="more"
