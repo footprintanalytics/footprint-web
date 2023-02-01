@@ -688,6 +688,11 @@ function ViewTitleHeaderRightSide(props) {
     user?.id === question.card().creator_id ||
     question.card().creator_id === undefined;
 
+  const canShowSaveUdButton =
+    isCreate ||
+    user?.id === question.card().creator_id ||
+    question.card().creator_id === undefined;
+
   const handleInfoClick = useCallback(() => {
     if (isShowingQuestionInfoSidebar) {
       onCloseQuestionInfo();
@@ -771,7 +776,7 @@ function ViewTitleHeaderRightSide(props) {
             />
           </Tooltip>
         )}
-        {isOwner && hasQueryData && (
+        {canShowSaveUdButton && hasQueryData && (
           <Tooltip tooltip={t`Save chart to ud table`}>
             <Button
               onlyIcon
