@@ -161,6 +161,21 @@ const ActionButtons = ({
         />
       </Tooltip>
 
+      <Tooltip tooltip={t`Add to favorite list`}>
+        <Favorite
+          onlyIcon
+          className="ml1 Question-header-btn-with-text"
+          like={
+            // -1
+            statistics && statistics.favorite
+          }
+          isLike={isFavorite}
+          type={type}
+          id={entityId}
+          uuid={uuid}
+        />
+      </Tooltip>
+
       <Tooltip key="download-dashboard" tooltip={t`Snapshot`}>
         <Button
           className="ml1 Question-header-btn Question-header-btn--auto"
@@ -191,21 +206,6 @@ const ActionButtons = ({
           result={result}
         />
       )}
-
-      <Tooltip tooltip={t`Add to favorite list`}>
-        <Favorite
-          onlyIcon
-          className="ml1 Question-header-btn-with-text"
-          like={
-            // -1
-            statistics && statistics.favorite
-          }
-          isLike={isFavorite}
-          type={type}
-          id={entityId}
-          uuid={uuid}
-        />
-      </Tooltip>
 
       {(isMarket || isAdmin) && (
         <PopoverWithTrigger

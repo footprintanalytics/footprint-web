@@ -508,41 +508,6 @@ class DashboardHeader extends Component {
       );
     }
 
-    if (!isEditing) {
-      buttons.push(
-        <Tooltip tooltip={t`Add to favorite list`}>
-          <Favorite
-            onlyIcon
-            className="Question-header-btn-with-text"
-            like={
-              // -1
-              dashboard && dashboard.statistics && dashboard.statistics.favorite
-            }
-            isLike={dashboard && dashboard.isFavorite}
-            type={"dashboard"}
-            id={dashboard && dashboard.id}
-            uuid={dashboard && dashboard.public_uuid}
-          />
-        </Tooltip>,
-      );
-      /*buttons.push(
-        <Tooltip key="duplicate-dashboard" tooltip={t`Duplicate dashboard`}>
-          <Button
-            key="duplicate"
-            onlyIcon
-            className="Question-header-btn-with-text"
-            iconColor="#7A819B"
-            icon="duplicate"
-            iconSize={16}
-            onClick={onCopyClick}
-          >
-            {dashboard &&
-              dashboard.statistics &&
-              `${dashboard.statistics.copy}`}
-          </Button>
-        </Tooltip>,
-      );*/
-    }
     if (showCopyButton && !deviceInfo().isMobile) {
       buttons.push(
         <Tooltip key="duplicate-dashboard" tooltip={t`Duplicate dashboard`}>
@@ -630,7 +595,24 @@ class DashboardHeader extends Component {
       );
     }
     buttons.push(...getDashboardActions(this, this.props));
-
+    if (!isEditing) {
+      buttons.push(
+        <Tooltip tooltip={t`Add to favorite list`}>
+          <Favorite
+            onlyIcon
+            className="Question-header-btn-with-text"
+            like={
+              // -1
+              dashboard && dashboard.statistics && dashboard.statistics.favorite
+            }
+            isLike={dashboard && dashboard.isFavorite}
+            type={"dashboard"}
+            id={dashboard && dashboard.id}
+            uuid={dashboard && dashboard.public_uuid}
+          />
+        </Tooltip>,
+      );
+    }
     if (extraButtons.length > 0 && !isEditing) {
       buttons.push(
         ...[
