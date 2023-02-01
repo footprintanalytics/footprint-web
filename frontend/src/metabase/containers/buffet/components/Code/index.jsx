@@ -5,11 +5,12 @@ import "ace-builds/src-noconflict/mode-python";
 import "ace-builds/src-noconflict/theme-terminal";
 import "ace-builds/src-noconflict/ext-language_tools";
 
-const Code = ({ value }) => {
+const Code = ({ value, marginTop=48 }) => {
   return (
     <AceEditor
       readOnly
-      style={{ marginTop: 48 }}
+      sizeToFit
+      style={{ marginTop: marginTop }}
       width="100%"
       maxLines={Infinity}
       mode="python"
