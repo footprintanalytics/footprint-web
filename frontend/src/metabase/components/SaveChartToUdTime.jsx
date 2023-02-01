@@ -59,7 +59,7 @@ const SaveChartToUdTime = ({
       {showTooLong && (
         <div className="flex flex-column">
           It looks like the process is a bit long, you can manually click the button to refresh the status.
-          <Button onClick={refreshStatus}>refresh status</Button>
+          <Button className="mt2" onClick={refreshStatus}>refresh status</Button>
         </div>
       )}
     </div>
