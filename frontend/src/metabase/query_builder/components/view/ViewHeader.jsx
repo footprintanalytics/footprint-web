@@ -693,9 +693,10 @@ function ViewTitleHeaderRightSide(props) {
 
   const hasQueryData = !result?.error;
   // const enableSaveUd = !Object.keys(get("card.dataset_query.native.template-tags"));
-  const enableSaveUd = !Object.keys(get(card, "dataset_query.native.template-tags"));
-  console.log("enableSave2", !Object.keys(get(card, "dataset_query.native.template-tags")))
-  console.log("enableSave", enableSaveUd)
+
+  // sql chart with params
+  const enableSaveUd = !get(card, "dataset_query.native.template-tags") || !Object.keys(get(card, "dataset_query.native.template-tags"))?.length;
+
   if (showChartTemplate) {
     menuMoreOptions.push(
       <Menu.Item key="template">
@@ -740,8 +741,6 @@ function ViewTitleHeaderRightSide(props) {
       </Menu.Item>,
     );
   }
-
-  console.log("card", card)
 
   if (isSaved) {
     return (

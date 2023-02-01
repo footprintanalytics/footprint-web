@@ -25,7 +25,6 @@ const SaveChartToUdModal = ({
   user,
   enableSave = true,
 }) => {
-  console.log("result_metadata", result_metadata)
   const [loading, setLoading] = useState(false);
 
   const { isLoading, data, refetch } = useQuery(
@@ -45,7 +44,6 @@ const SaveChartToUdModal = ({
 
   const callbackTime = useCallback(
     ({ status, tableName, successCount }) => {
-      console.log("status", status)
       if (status === "done") {
         const action = successCount === 1 ? "save": "update";
         message.success(`${tableName} ${action} successfully.`);
@@ -62,13 +60,12 @@ const SaveChartToUdModal = ({
     if (!debouncedTableName || hasSavedToUd) return;
     checkMutate.mutate({ tableName: debouncedTableName, tableType: "chart", cardId: cardId });
   }, [debouncedTableName, hasSavedToUd]);
-  console.log("SaveChartToUdModal data", data);
   const onSave = async (data) => {
     if (!enableSave) {
       message.info("Do not support sql with parameters, please remove the parameters")
+      return ;
     }
     const tableName = targetTableName || data.name;
-    console.log("onSave", data)
     setLoading(true);
     let result = null;
     try {
@@ -100,8 +97,7 @@ const SaveChartToUdModal = ({
   const onChange = value => {
     setTableName(value);
   }
-  //data?.chartConfig
-  console.log("hahaha ", !data , !debouncedTableName , checkMutate?.data?.result === 1)
+
   return (
     <Modal
       className="save-chart-to-ud-modal"

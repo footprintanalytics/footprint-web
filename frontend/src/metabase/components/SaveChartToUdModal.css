@@ -25,6 +25,7 @@
 }
 
 .ud-chart__fail-tip {
-  color: red;
+  color: #dd0000;
   margin-bottom: 12px;
+  text-align: left;
 }
