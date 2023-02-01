@@ -23,6 +23,7 @@ const SaveChartToUdModal = ({
   result_metadata,
   creatorId,
   user,
+  enableSave = true,
 }) => {
   console.log("result_metadata", result_metadata)
   const [loading, setLoading] = useState(false);
@@ -63,6 +64,9 @@ const SaveChartToUdModal = ({
   }, [debouncedTableName, hasSavedToUd]);
   console.log("SaveChartToUdModal data", data);
   const onSave = async (data) => {
+    if (!enableSave) {
+      message.info("Do not support sql with parameters, please remove the parameters")
+    }
     const tableName = targetTableName || data.name;
     console.log("onSave", data)
     setLoading(true);
@@ -178,9 +182,8 @@ const SaveChartToUdModal = ({
                 callback={callbackTime} />
             )}
 
-            {showFailStatus && (<SaveChartToUdFail
-                cardId={cardId}
-                callback={callbackTime} />
+            {showFailStatus && (
+              <SaveChartToUdFail />
             )}
 
             {showMainButton && (

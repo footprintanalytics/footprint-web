@@ -1,14 +1,8 @@
 /* eslint-disable react/prop-types */
-import React, { useEffect, useState } from "react";
-import { Button } from "antd";
+import React from "react";
 import "./TaggingModal.css";
-import { udTableDetail } from "../new-service";
-import LoadingSpinner from "./LoadingSpinner/LoadingSpinner";
 
-const SaveChartToUdFail = ({
-  cardId,
-  callback
-}) => {
+const SaveChartToUdFail = () => {
   return (
     <div className="ud-chart__fail-tip">
       <div>The last run failed to update into ud table.</div>

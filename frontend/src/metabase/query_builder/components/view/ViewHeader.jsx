@@ -692,7 +692,10 @@ function ViewTitleHeaderRightSide(props) {
   const showChartTemplate = !isNative;
 
   const hasQueryData = !result?.error;
-
+  // const enableSaveUd = !Object.keys(get("card.dataset_query.native.template-tags"));
+  const enableSaveUd = !Object.keys(get(card, "dataset_query.native.template-tags"));
+  console.log("enableSave2", !Object.keys(get(card, "dataset_query.native.template-tags")))
+  console.log("enableSave", enableSaveUd)
   if (showChartTemplate) {
     menuMoreOptions.push(
       <Menu.Item key="template">
@@ -783,6 +786,7 @@ function ViewTitleHeaderRightSide(props) {
             onClose={() => setSaveChartToUd(false)}
             creatorId={question.card().creator_id}
             user={user}
+            enableSave={enableSaveUd}
           />
         )}
         {(!!card.public_uuid || isOwner || isAdmin) && (
