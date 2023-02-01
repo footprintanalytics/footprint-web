@@ -21,10 +21,10 @@ const Banner = () => {
             url="https://www.footprint.network/@Footprint/Level"
           />
           <BannerImage
-            src={getOssUrl("img_analysis_banner_2022081601.png")}
+            src={getOssUrl("img_home_banner_33.png")}
             width={332}
             height={164}
-            url="https://footprint.cool/mv2v"
+            url="https://www.footprint.network/article/26-stats-about-the-gamefi-industry-in-2022-EDXh40Vm"
           />
         </div>
       </div>

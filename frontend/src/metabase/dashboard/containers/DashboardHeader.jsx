@@ -633,7 +633,24 @@ class DashboardHeader extends Component {
       );
     }
     buttons.push(...getDashboardActions(this, this.props));
-
+    if (!isEditing) {
+      buttons.push(
+        <Tooltip tooltip={t`Add to favorite list`}>
+          <Favorite
+            onlyIcon
+            className="Question-header-btn-with-text"
+            like={
+              // -1
+              dashboard && dashboard.statistics && dashboard.statistics.favorite
+            }
+            isLike={dashboard && dashboard.isFavorite}
+            type={"dashboard"}
+            id={dashboard && dashboard.id}
+            uuid={dashboard && dashboard.public_uuid}
+          />
+        </Tooltip>,
+      );
+    }
     if (extraButtons.length > 0 && !isEditing) {
       buttons.push(
         ...[

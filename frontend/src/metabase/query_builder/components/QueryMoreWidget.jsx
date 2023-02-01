@@ -6,6 +6,10 @@ import cx from "classnames";
 import Button from "metabase/core/components/Button";
 import PopoverWithTrigger from "metabase/components/PopoverWithTrigger";
 import { MODAL_TYPES } from "metabase/query_builder/constants";
+import QuestionEmbedWidget from "../containers/QuestionEmbedWidget";
+import { QuestionEmbedWidgetButton } from "./view/ViewHeader";
+import Tooltip from "../../components/Tooltip";
+import { trackStructEvent } from "../../lib/analytics";
 
 const QueryMoreWidget = ({
   className,
@@ -15,6 +19,10 @@ const QueryMoreWidget = ({
   isInner,
   onOpenModal,
   setShowSeoTagging,
+  card,
+  user,
+  question,
+  downloadImageAction,
 }) => {
   if (!isOwner && !isAdmin && !isInner) {
     return null;
@@ -44,7 +52,39 @@ const QueryMoreWidget = ({
                 icon="pencil"
                 iconSize={16}
                 onClick={() => onOpenModal(MODAL_TYPES.EDIT)}
-              >{t`Edit details`}</Button>
+              >{t`Edit description`}</Button>
+            </div>
+          )}
+          {(!!card.public_uuid || isOwner) && QuestionEmbedWidget.shouldRender({
+            question,
+            isAdmin,
+            user,
+          }) && (
+            <div style={{ width: "100%"}}>
+              <Button
+                className="Question-header-btn Question-header-btn--full"
+                icon="embed"
+                iconSize={16}
+                onClick={() => {
+                  trackStructEvent(
+                  "Sharing / Embedding",
+                  "question",
+                  "Sharing Link Clicked",
+                  );
+                  onOpenModal("embed", null, { onlyEmbed: true });
+                }}
+              >Embed widget</Button>
+            </div>
+          )}
+          {(!!card.public_uuid || isOwner || isAdmin) && (
+            <div style={{ width: "100%"}}>
+              <Button
+                className="Question-header-btn Question-header-btn--full"
+                iconColor="#7A819B"
+                icon="camera"
+                iconSize={16}
+                onClick={downloadImageAction}
+              >Snapshot</Button>
             </div>
           )}
           <div style={{ width: "100%"}}>

@@ -309,6 +309,10 @@ export const checkTableName = async params => {
   return POST(`/api/v1/custom/data/check/tableName`, params);
 };
 
+export const checkTableNameChart = async params => {
+  return POST(`/api/v1/udTable/checkTableName`, params);
+};
+
 export const elasticSearch = async params => {
   return POST(`/api/v1/elasticsearch/search`, params);
 };
@@ -446,4 +450,12 @@ export const publicDashboardChartData = (uuid, cardId, params) => {
 
 export const tableColumns = (params) => {
   return POST(`api/v1/database/table/column`, params);
+};
+
+export const udTableDetail = (params) => {
+  return POST(`api/v1/udTable/detail`, params);
+};
+
+export const udTableSaveModelConfig = (params) => {
+  return POST(`api/v1/udTable/saveModelConfig`, params);
 };

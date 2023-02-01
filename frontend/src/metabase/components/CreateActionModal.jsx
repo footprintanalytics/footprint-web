@@ -233,7 +233,7 @@ class CreateActionModal extends Component {
             </Card> */}
           </div>
         </div>
-        {renderModal(this)}
+        {/*{renderModal(this)}*/}
       </ModalContent>
     );
   }
