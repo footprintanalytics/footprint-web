@@ -57,6 +57,7 @@ import QueryDownloadWidget from "../QueryDownloadWidget";
 import QuestionEmbedWidget from "../../containers/QuestionEmbedWidget";
 import QueryMoreWidget from "../QueryMoreWidget";
 import QueryDownloadWidgetFP from "../QueryDownloadWidgetFP";
+import { snapshot } from "metabase/dashboard/components/utils/snapshot";
 import SaveChartToUdModal from "../../../components/SaveChartToUdModal";
 
 const viewTitleHeaderPropTypes = {
@@ -98,7 +99,7 @@ const viewTitleHeaderPropTypes = {
 };
 
 export function ViewTitleHeader(props) {
-  const { question, className, style, isNavBarOpen, updateQuestion, isRunnable, router, originalQuestion, card, onCloseSidebars } = props;
+  const { question, className, style, isNavBarOpen, updateQuestion, isRunnable, router, originalQuestion, card, onCloseSidebars, user } = props;
 
   const [
     areFiltersExpanded,
@@ -217,6 +218,13 @@ export function ViewTitleHeader(props) {
           onExpandFilters={expandFilters}
           onCollapseFilters={collapseFilters}
           onQueryChange={onQueryChange}
+          downloadImageAction={() => {
+            snapshot({
+              public_uuid: card.public_uuid,
+              isDashboard: false,
+              user,
+            });
+          }}
         />
       </ViewHeaderContainer>
       {QuestionFilters.shouldRender(props) && (
@@ -692,7 +700,6 @@ function ViewTitleHeaderRightSide(props) {
   const showChartTemplate = !isNative;
 
   const hasQueryData = !result?.error;
-  // const enableSaveUd = !Object.keys(get("card.dataset_query.native.template-tags"));
 
   // sql chart with params
   const enableSaveUd = !get(card, "dataset_query.native.template-tags") || !Object.keys(get(card, "dataset_query.native.template-tags"))?.length;

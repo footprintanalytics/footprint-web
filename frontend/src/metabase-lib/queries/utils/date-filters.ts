@@ -303,7 +303,7 @@ export function getLast7DaysDateFilter(filter: Filter) {
     getDateTimeDimensionFromMbql(filter[1]),
     -7,
     "day",
-    { include_current: false },
+    { include_current: false, "include-current": true },
   ];
 }
 
@@ -313,7 +313,7 @@ export function getLast30DaysDateFilter(filter: Filter) {
     getDateTimeDimensionFromMbql(filter[1]),
     -30,
     "day",
-    { include_current: false },
+    { include_current: false, "include-current": true },
   ];
 }
 
@@ -365,7 +365,7 @@ export function getInitialSpecificDatesShortcut(filter: Filter) {
 }
 
 export function getInitialRelativeDatesShortcut(filter: Filter) {
-  return ["time-interval", getDateTimeDimensionFromMbql(filter[1]), -30, "day"];
+  return ["time-interval", getDateTimeDimensionFromMbql(filter[1]), -30, "day", { include_current: false, "include-current": true },];
 }
 
 export function getInitialExcludeShortcut(filter: Filter) {

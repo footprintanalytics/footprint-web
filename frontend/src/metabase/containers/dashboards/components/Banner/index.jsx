@@ -8,10 +8,10 @@ const Banner = () => {
     <div className="dashboards__banner">
       <div className="dashboards__banner-container">
         <BannerImage
-          src={getOssUrl("img-ootprint-major-upgrade-banner.jpg")}
+          src={getOssUrl("article/footprint-analytics-our-2022-in-review.jpg")}
           width={842}
           height={350}
-          url="https://www.footprint.network/article/footprint-major-upgrade-and-change-in-october-xr0u4IPf"
+          url="https://www.footprint.network/article/footprint-analytics-our-2022-in-review-GfK0XPDo"
         />
         <div className="dashboards__banner-right">
           <BannerImage
@@ -21,10 +21,10 @@ const Banner = () => {
             url="https://www.footprint.network/@Footprint/Level"
           />
           <BannerImage
-            src={getOssUrl("img_analysis_banner_2022081601.png")}
+            src={getOssUrl("img_home_banner_33.png")}
             width={332}
             height={164}
-            url="https://footprint.cool/mv2v"
+            url="https://www.footprint.network/article/26-stats-about-the-gamefi-industry-in-2022-EDXh40Vm"
           />
         </div>
       </div>

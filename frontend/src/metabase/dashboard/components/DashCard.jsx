@@ -272,6 +272,9 @@ class DashCard extends Component {
       isEditing,
       mainCard,
     });
+
+    const notShowReplacementContent = isImageDisplay || isVideoDisplay;
+
     return (
       <DashCardRoot
         id={id}
@@ -447,6 +450,7 @@ class DashCard extends Component {
             this.props.onUpdateVisualizationSettings
           }
           replacementContent={
+            notShowReplacementContent ? null :
             clickBehaviorSidebarDashcard != null &&
             isVirtualDashCard(dashcard) ? (
               <div className="flex full-height align-center justify-center">

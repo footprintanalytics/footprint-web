@@ -2,14 +2,15 @@ import React, { MouseEvent, ReactNode } from "react";
 import Tooltip from "metabase/components/Tooltip";
 import {
   MenuExternalLink,
-  MenuItemContent,
-  MenuItemIcon,
+  MenuItemContent, MenuItemDesc,
+  MenuItemIcon, MenuItemRightContainer,
   MenuItemTitle,
   MenuLink,
 } from "./EntityMenuItem.styled";
 
 export interface EntityMenuItemProps {
   title?: string;
+  desc?: string;
   icon?: string;
   action?: (event: MouseEvent<HTMLDivElement>) => void;
   link?: string;
@@ -22,6 +23,7 @@ export interface EntityMenuItemProps {
 
 const EntityMenuItem = ({
   title,
+  desc,
   icon,
   action,
   link,
@@ -38,7 +40,12 @@ const EntityMenuItem = ({
   const content = (
     <MenuItemContent disabled={disabled}>
       {icon && <MenuItemIcon name={icon} />}
-      <MenuItemTitle>{title}</MenuItemTitle>
+      <MenuItemRightContainer>
+        <MenuItemTitle>{title}</MenuItemTitle>
+        {desc && (
+          <MenuItemDesc>{desc}</MenuItemDesc>
+        )}
+      </MenuItemRightContainer>
     </MenuItemContent>
   );
 

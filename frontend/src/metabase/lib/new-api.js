@@ -30,7 +30,13 @@ const saveStream = (headers, data) => {
 };
 
 axios.interceptors.request.use(config => {
-  return { ...config, ...{ requestime: getTime() } };
+  const headers = config?.headers || {};
+  const requestime = getTime();
+  return {
+    ...config,
+    ...{ requestime: requestime },
+    headers: { ...headers, common: { ...headers?.common, client_request_time: requestime }}
+  };
 });
 
 axios.interceptors.response.use(

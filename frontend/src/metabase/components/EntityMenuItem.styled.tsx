@@ -14,7 +14,7 @@ export const MenuItemContent = styled.div<MenuItemProps>`
   border-radius: 0.5em;
   cursor: ${props => (props.disabled ? "not-allowed" : "pointer")};
   color: ${props => color(props.disabled ? "text-light" : "text-dark")};
-  padding: 0.85em 1.45em;
+  padding: 10px 20px;
   text-decoration: none;
   :hover {
     color: ${props => !props.disabled && color("brand")};
@@ -51,8 +51,25 @@ export const MenuItemIcon = styled(Icon)`
   margin-right: 0.5rem;
 `;
 
+export const MenuItemRightContainer = styled.span`
+  display: flex;
+  flex-direction: column;
+  line-height: 20px;
+`;
+
 export const MenuItemTitle = styled.span`
   font-weight: bold;
+  color: ${color("footprint-color-title")};
+  line-height: 20px;
+`;
+
+export const MenuItemDesc = styled.span`
+  font-weight: normal;
+  font-size: 12px;
+  color: ${color("footprint-color-secondary-text2")};
+  max-width: 260px;
+  line-height: 16px;
+  margin-top: 4px;
 `;
 
 export const MenuLink = styled(Link)`

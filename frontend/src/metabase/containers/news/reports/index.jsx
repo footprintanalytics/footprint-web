@@ -62,6 +62,7 @@ const Index = ({ router, type }) => {
         { label: "Wallet Analysis", value: "Wallet Analysis" },
         { label: "Footprint for SQL", value: "Footprint for SQL" },
         { label: "Footprint for Developer", value: "Footprint for Developer" },
+        { label: "Footprint for Crypto Investor", value: "Footprint for Crypto Investor" },
       ],
     },
   };

@@ -1,6 +1,7 @@
 .Pricing {
   padding-bottom: 74px;
   background-color: transparent;
+  width: 100%;
 }
 
 .Pricing__title {
@@ -187,11 +188,15 @@
 .Pricing__select-btn .ant-btn {
   height: 48px;
   font-size: 18px;
+  padding: 0;
   border-radius: 4px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
 
 .Pricing__select-btn a.ant-btn {
-  padding-top: 4px !important;
+  /*padding-top: 4px !important;*/
 }
 
 .Pricing__select-btn-tip {

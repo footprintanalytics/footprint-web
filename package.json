@@ -394,6 +394,7 @@
     "chromatic": "yarn build:cljs && chromatic",
     "docs-lint-links": "find docs -type f -name '*.md' -print0 | xargs -0 markdown-link-check --quiet --config .mlc_config.json",
     "sitemap": "node ./bin/build-sitemap",
+    "sitemap-article": "node ./bin/build-sitemap-article",
     "rss": "node ./bin/build-rss"
   },
   "lint-staged": {

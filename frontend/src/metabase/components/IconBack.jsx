@@ -25,15 +25,22 @@ const IconBackLink = ({ url, onClick }) => {
 
 export const IconBack = ({ router, url = "/dashboards" }) => {
   const backUrl = router.location.query.back_url;
-  const hasPrev = history.length > 2;
-
   if (backUrl) {
     return <IconBackLink onClick={() => router.replace(backUrl)} />;
   }
 
-  if (hasPrev) {
-    return <IconBackLink onClick={() => router.goBack()} />;
+  const getLocationUrl = (router) => {
+    return `${router.location.pathname}${router.location.search}`;
   }
 
-  return <IconBackLink url={url} />;
+  return <IconBackLink onClick={() => {
+    router.goBack();
+    const oldLocationUrl = getLocationUrl(router);
+    setTimeout(() => {
+      const newLocationUrl = getLocationUrl(router);
+      if (oldLocationUrl === newLocationUrl) {
+        router.replace(url)
+      }
+    }, 500)
+  }} />;
 };

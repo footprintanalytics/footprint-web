@@ -4,18 +4,22 @@ import "./index.css";
 import React, { useState } from "react";
 import { connect } from "react-redux";
 import { loginModalShowAction } from "metabase/redux/control";
-import { getSubscribeOptions } from "./config";
-import { Modal } from "antd";
+import { Modal, Skeleton } from "antd";
 import { cancelSubscription } from "metabase/new-service";
 import { ExclamationCircleOutlined } from "@ant-design/icons";
 import { slack } from "metabase/lib/slack";
 import PricingModal from "metabase/pricing_v2/components/PricingModal";
 import PricingCompare from "metabase/pricing_v2/components/PricingCompare";
 import PricingSelect from "metabase/pricing_v2/components/PricingSelect";
+import { useGetProductInfo } from "metabase/pricing_v2/use";
 
 const Pricing = ({ user, setLoginModalShow }) => {
-  const [visible, setVisible] = useState(false);
+  const [visible, setVisible] = useState();
   const [loading, setLoading] = useState(false);
+
+  const { isLoading, data } = useGetProductInfo();
+
+  const products = data?.groups?.find(item => item.type === visible)?.products;
 
   const sign = () => setLoginModalShow({ show: true, from: "handle_pay" });
 
@@ -35,6 +39,14 @@ const Pricing = ({ user, setLoginModalShow }) => {
     });
   };
 
+  if (isLoading) {
+    return (
+      <div className="Pricing">
+        <Skeleton active />
+      </div>
+    );
+  }
+
   return (
     <div className="Pricing">
       <div className="Pricing__title">
@@ -44,20 +56,32 @@ const Pricing = ({ user, setLoginModalShow }) => {
         {/*  in blockchain data.*/}
         {/*</p>*/}
       </div>
-      <PricingModal
-        user={user}
-        sign={sign}
-        subscribeOptions={getSubscribeOptions(user)}
-        visible={visible}
-        onClose={() => setVisible(false)}
-      />
-      <PricingSelect
-        user={user}
-        onSign={sign}
-        onSubscribe={() => setVisible(true)}
-        onCancelSubscription={onCancelSubscription}
-      />
-      <PricingCompare />
+      {products && products.length > 0 && (
+        <PricingModal
+          user={user}
+          sign={sign}
+          subscribeOptions={data?.groups?.find(item => item.type === visible)?.products}
+          visible={!!visible}
+          onClose={() => setVisible(null)}
+        />
+      )}
+      {data?.groups && (
+        <>
+          <PricingSelect
+            user={user}
+            groups={data?.groups}
+            onSign={sign}
+            onSubscribe={(item) => {
+              setVisible(item.value)
+            }}
+            onCancelSubscription={onCancelSubscription}
+          />
+          <PricingCompare
+            user={user}
+            groups={data?.groups}
+          />
+        </>
+      )}
     </div>
   );
 };

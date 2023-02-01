@@ -453,11 +453,12 @@ class View extends React.Component {
       updateQuestion,
       config,
       user,
+      error,
     } = this.props;
 
     // if we don't have a card at all or no databases then we are initializing, so keep it simple
     if (!card || !databases) {
-      return <LoadingAndErrorWrapper className="full-height" loading />;
+      return <LoadingAndErrorWrapper className="full-height" loading error={error}/>;
     }
 
     const isStructured = query instanceof StructuredQuery;

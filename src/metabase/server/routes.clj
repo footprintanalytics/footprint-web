@@ -48,6 +48,7 @@
   (GET "/favicon.ico" [] (response/resource-response (public-settings/application-favicon-url)))
   (GET "/robots.txt" [] (response/resource-response "robots.txt" {:root "frontend_client"}))
   (GET "/sitemap.xml" [] (response/resource-response "sitemap.xml" {:root "frontend_client"}))
+  (GET "/sitemap-article.xml" [] (response/resource-response "sitemap-article.xml" {:root "frontend_client"}))
   (GET "/sitemap.html" [] (response/resource-response "sitemap.html" {:root "frontend_client"}))
   (GET "/rss-featured.xml" [] (response/resource-response "rss-featured.xml" {:root "frontend_client"}))
   (GET "/rss-articles.xml" [] (response/resource-response "rss-articles.xml" {:root "frontend_client"}))

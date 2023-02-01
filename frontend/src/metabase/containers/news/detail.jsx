@@ -24,6 +24,8 @@ import { articleTitle } from "metabase/lib/formatting";
 import title, { updateTitle } from "metabase/hoc/Title";
 import { IconBack } from "metabase/components/IconBack";
 import TagsPanel from "metabase/query_builder/components/view/TagsPanel";
+import { compose } from "underscore";
+import MetaViewportControls from "metabase/dashboard/hoc/MetaViewportControls";
 
 const Detail = props => {
   const {
@@ -223,4 +225,8 @@ const mapDispatchToProps = {
   onReplaceLocation: replace,
 };
 
-export default title()(connect(mapStateToProps, mapDispatchToProps)(Detail));
+export default compose(
+  title(),
+  connect(mapStateToProps, mapDispatchToProps),
+  MetaViewportControls,
+)(Detail);

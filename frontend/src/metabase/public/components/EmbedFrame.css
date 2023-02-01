@@ -9,6 +9,10 @@
   padding: 10px;
 }
 
+.EmbedFrame-header-guest {
+  flex-direction: row;
+}
+
 .Theme--night.EmbedFrame {
   background-color: var(--color-bg-black);
   border: 1px solid var(--color-bg-dark);
@@ -52,4 +56,10 @@
 
 .Theme--transparent.EmbedFrame .DashCard .Card {
   background-color: transparent;
+}
+
+@media screen and (--footprint-breakpoint-max-mobile) {
+  .EmbedFrame-header-guest {
+    flex-direction: column;
+  }
 }

@@ -11,7 +11,6 @@ import Popover from "metabase/components/Popover";
 
 import { Container } from "./EntityMenu.styled";
 
-const MENU_SHIFT_Y = 10;
 
 class EntityMenu extends Component {
   state = {
@@ -49,8 +48,12 @@ class EntityMenu extends Component {
       trigger,
       renderChildren,
       targetOffsetY,
+      menuShiftY,
+      hasArrow,
+      hasBackground,
     } = this.props;
     const { open, menuItemContent } = this.state;
+    const MENU_SHIFT_Y = menuShiftY !== null ? menuShiftY : 10;
     return (
       <Container className={className} open={open}>
         {renderChildren ? (
@@ -68,9 +71,9 @@ class EntityMenu extends Component {
         <Popover
           isOpen={open}
           onClose={this.toggleMenu}
-          hasArrow={false}
-          hasBackground={false}
-          horizontalAttachments={["left", "right"]}
+          hasArrow={hasArrow || false}
+          hasBackground={hasBackground || false}
+          horizontalAttachments={["center", "left", "right"]}
           targetOffsetY={targetOffsetY || 0}
           ignoreTrigger
         >
@@ -119,6 +122,7 @@ class EntityMenu extends Component {
                                 <EntityMenuItem
                                   icon={item.icon}
                                   title={item.title}
+                                  desc={item.desc}
                                   action={() =>
                                     this.replaceMenuWithItemContent(
                                       item.content(
@@ -137,6 +141,7 @@ class EntityMenu extends Component {
                                 <EntityMenuItem
                                   icon={item.icon}
                                   title={item.title}
+                                  desc={item.desc}
                                   externalLink={item.externalLink}
                                   action={
                                     item.action &&
