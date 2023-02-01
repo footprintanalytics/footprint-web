@@ -454,7 +454,6 @@ export const tableColumns = (params) => {
 
 export const udTableDetail = (params) => {
   return POST(`api/v1/udTable/detail`, params);
-  // return POST(`mock/udtable/detail`, params);
 };
 
 export const udTableSaveModelConfig = (params) => {
