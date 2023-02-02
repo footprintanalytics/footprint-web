@@ -417,7 +417,6 @@ export const datasetDownload = (params, config) => {
 };
 
 export const paymentSubscriptionDetail = (params) => {
-  // return GET(`mock/payment/subscription/detail`, params);
   return POST(`api/v1/payment/subscription/detail`, params);
 };
 

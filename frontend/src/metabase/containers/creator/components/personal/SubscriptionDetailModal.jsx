@@ -32,7 +32,6 @@ const SubscriptionDetailModal = ({ onClose, subscriptionDetailList, onCancelSubs
       width: 200,
       align: "center",
       render: (_, record) => {
-        console.log("record", record)
         return (
           <div>
             <Button onClick={() => onCancelSubscription(record.productId)}>cancel automatic renewal</Button>
