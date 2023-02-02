@@ -1,20 +1,20 @@
 /* eslint-disable curly */
 /* eslint-disable react/prop-types */
-import "./index.css";
 import React, { useEffect, useState } from "react";
+import { Modal } from "antd";
+import { connect } from "react-redux";
+import { browserHistory } from "react-router";
+import { ExclamationCircleOutlined } from "@ant-design/icons";
 import Pricing from "metabase/pricing_v2";
 import DataApiPricing from "metabase/containers/dataApi/price/index";
 import Button from "metabase/core/components/Button";
-import { browserHistory } from "react-router";
-import PricingModal from "metabase/pricing_v2/components/PricingModal";
 import { loginModalShowAction } from "metabase/redux/control";
-import { connect } from "react-redux";
-import { getDataApiSubscribeOptions } from "metabase/pricing_v3/config";
-import { Skeleton } from "antd";
+import { cancelSubscription } from "metabase/new-service";
+import { slack } from "metabase/lib/slack";
+import "./index.css";
 
 const PricingContainer = ({ location, user, setLoginModalShow }) => {
-  const [subscribeOptions, setSubscribeOptions] = useState(null);
-
+  const [loading, setLoading] = useState(false);
   const sign = () =>
     setLoginModalShow({ show: true, from: "handle_pay_data_api" });
 
@@ -29,6 +29,22 @@ const PricingContainer = ({ location, user, setLoginModalShow }) => {
     browserHistory &&
     browserHistory.getCurrentLocation() &&
     history.replaceState(null, document.title, pathname);
+  };
+
+  const onCancelSubscription = async (productId) => {
+    Modal.confirm({
+      title: "Do you want to cancel automatic renewal?",
+      icon: <ExclamationCircleOutlined />,
+      confirmLoading: loading,
+      onOk: async () => {
+        setLoading(true);
+        await cancelSubscription({ productId });
+        setLoading(false);
+        slack([{ label: "Cancel Subscription", value: user?.email }]);
+        window.location.reload();
+      },
+      onCancel: () => {},
+    });
   };
 
   return (
@@ -65,13 +81,11 @@ const PricingContainer = ({ location, user, setLoginModalShow }) => {
             Data API
           </Button>
         </div>
-        {status === "footprint" && <Pricing />}
+        {status === "footprint" && <Pricing onCancelSubscription={onCancelSubscription}/>}
         {status === "data-api" && (
           <DataApiPricing
             sign={sign}
-            onSubscribe={mode => {
-              setSubscribeOptions(getDataApiSubscribeOptions(user, mode));
-            }}
+            onCancelSubscription={onCancelSubscription}
           />
         )}
       </div>

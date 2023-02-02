@@ -4,13 +4,12 @@ import { Button } from "antd";
 import { getComparePlans } from "metabase/pricing_v2/config";
 import { getOssUrl } from "metabase/lib/image";
 
-const PricingSelect = ({ user, onSign, onSubscribe, onCancelSubscription, groups }) => {
+const PricingSelect = ({ user, onSign, onSubscribe, onCancelSubscription, groups, subscriptionDetailList }) => {
   const canBusinessSevenTrial = !!groups
     ?.find(group => group.type === "business")
     ?.products
     ?.find(product => product.category === "7-trial");
-  const comparePlans = getComparePlans(user, canBusinessSevenTrial);
-
+  const comparePlans = getComparePlans({user, canBusinessSevenTrial, subscriptionDetailList});
   return (
     <div className="Pricing__select">
       {comparePlans.columns.map(item => (
@@ -52,21 +51,19 @@ const PricingSelect = ({ user, onSign, onSubscribe, onCancelSubscription, groups
             >
               {item.btnText}
             </Button>
-            {!!item.yearlyPrice && !item.btnDisabled && (
+            {!!item.yearlyPrice && !item.btnDisabled && !item.isSubscribe && (
               <span className="Pricing__select-btn-tip" onClick={() => onSubscribe(item)}>
                 or skip and <i>pay yearly now</i>
               </span>
             )}
-            {item.yearlyPrice &&
-              item.btnDisabled &&
-              user?.stripeSubscribeStatus === "enable" && (
-                <span
-                  className="Pricing__select-btn-tip"
-                  onClick={onCancelSubscription}
-                >
-                  <i>Cancel Automatic Renewal</i>
-                </span>
-              )}
+            {item.isSubscribe && (
+              <span
+                className="Pricing__select-btn-tip"
+                onClick={() => onCancelSubscription(item.currentSubscriptionProductId)}
+              >
+                <i>{`Cancel ${item.label} Automatic Renewal`}</i>
+              </span>
+            )}
           </div>
           <ul className="Pricing__select-features">
             {item.features.map(item => (
