@@ -97,7 +97,7 @@ const DownloadButton = ({
               } catch (error) {
                 if (
                   typeof error === "string" &&
-                  error.includes("download times")
+                  error.includes("Free users")
                 ) {
                   setNeedPermissionModal(true);
                 }
