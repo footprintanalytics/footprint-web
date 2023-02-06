@@ -7,7 +7,6 @@ import { loginModalShowAction } from "metabase/redux/control";
 import { Modal, Skeleton } from "antd";
 import { cancelSubscription } from "metabase/new-service";
 import { ExclamationCircleOutlined } from "@ant-design/icons";
-import { slack } from "metabase/lib/slack";
 import PricingModal from "metabase/pricing_v2/components/PricingModal";
 import PricingCompare from "metabase/pricing_v2/components/PricingCompare";
 import PricingSelect from "metabase/pricing_v2/components/PricingSelect";
@@ -32,7 +31,7 @@ const Pricing = ({ user, setLoginModalShow }) => {
         setLoading(true);
         await cancelSubscription();
         setLoading(false);
-        slack([{ label: "Cancel Subscription", value: user?.email }]);
+        // slack([{ label: "Cancel Subscription", value: user?.email }]);
         location.reload();
       },
       onCancel: () => {},
