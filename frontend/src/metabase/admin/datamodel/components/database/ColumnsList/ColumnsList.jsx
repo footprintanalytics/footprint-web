@@ -4,6 +4,7 @@ import PropTypes from "prop-types";
 import { t } from "ttag";
 import _ from "underscore";
 
+import { values, union } from "lodash";
 import {
   SortableContainer,
   SortableElement,
@@ -41,21 +42,43 @@ export default class ColumnsList extends Component {
     }
   }
 
+  // Verify that the sort is normal
+  isNormalPosition = positionById => {
+    //1. repeat value 2. maximum value is larger than the array size
+    if (!positionById) {
+      return true;
+    }
+    const positionValues = values(positionById);
+    const isRepeatSort = union(positionValues).length === positionValues.length;
+    const isNormalSort = Math.max(...positionValues) < positionValues.length;
+    return isRepeatSort && isNormalSort;
+  };
+
+  initPosition = fields => {
+    const positionById = {};
+    fields?.forEach(({ id }, index) => {
+      positionById[id] = index;
+    });
+    return positionById;
+  };
+
   getFieldOrder(table) {
     const { fields } = table || {};
     if (!fields) {
       return;
     }
-    const positionById = {};
+    let positionById = {};
     if (fields.every(field => field.position === 0)) {
       // Tables sometimes come down with all field positions set to zero.
       // In that case, we assume the current field order.
-      fields.forEach(({ id }, index) => {
-        positionById[id] = index;
-      });
+      positionById = this.initPosition(fields);
     } else {
       for (const { id, position } of fields) {
         positionById[id] = position;
+      }
+      //Fix sort value is empty or duplicate
+      if (!this.isNormalPosition(positionById)) {
+        positionById = this.initPosition(fields);
       }
     }
     return positionById;
