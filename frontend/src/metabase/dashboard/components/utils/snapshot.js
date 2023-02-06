@@ -1,7 +1,6 @@
 /* eslint-disable no-undef */
 import { message } from "antd";
 import { isDev } from "metabase/env";
-// import { slack } from "metabase/lib/slack";
 
 export const snapshot = ({ public_uuid, isDashboard = true, user }) => {
   const hide = message.loading(
