@@ -10,7 +10,6 @@ import DataApiPricing from "metabase/containers/dataApi/price/index";
 import Button from "metabase/core/components/Button";
 import { loginModalShowAction } from "metabase/redux/control";
 import { cancelSubscription } from "metabase/new-service";
-import { slack } from "metabase/lib/slack";
 import "./index.css";
 
 const PricingContainer = ({ location, user, setLoginModalShow }) => {
@@ -40,7 +39,7 @@ const PricingContainer = ({ location, user, setLoginModalShow }) => {
         setLoading(true);
         await cancelSubscription({ productId });
         setLoading(false);
-        slack([{ label: "Cancel Subscription", value: user?.email }]);
+        // slack([{ label: "Cancel Subscription", value: user?.email }]);
         window.location.reload();
       },
       onCancel: () => {},
