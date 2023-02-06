@@ -3,7 +3,6 @@ import React, { useState } from "react";
 import { Button, Checkbox, Modal } from "antd";
 import { payProduct } from "metabase/new-service";
 import { getOssUrl } from "metabase/lib/image";
-import { slack } from "metabase/lib/slack";
 
 const PricingModal = ({ user, sign, subscribeOptions, visible, onClose, setCallback }) => {
   const [options, setOptions] = useState(subscribeOptions);
@@ -28,11 +27,11 @@ const PricingModal = ({ user, sign, subscribeOptions, visible, onClose, setCallb
         mode,
       });
       window.open(paymentLink);
-      slack([
+      /*slack([
         { label: "Pay", value: user?.email },
         { label: "Mode", value: mode },
         { label: "Title", value: title },
-      ]);
+      ]);*/
     } catch (e) {
     } finally {
       setLoading(false);

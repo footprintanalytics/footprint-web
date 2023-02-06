@@ -12,7 +12,6 @@ import Link from "metabase/core/components/Link";
 import { trackStructEvent } from "metabase/lib/analytics";
 import { IconBack } from "metabase/components/IconBack";
 import { getOssUrl } from "metabase/lib/image";
-import { slack } from "metabase/lib/slack";
 import VipIconDataApi from "metabase/containers/creator/components/personal/VipIconDataApi";
 import { useGetPaymentSubscriptionDetail } from "metabase/pricing_v2/use";
 import SubscriptionDetailModal from "metabase/containers/creator/components/personal/SubscriptionDetailModal";
@@ -61,7 +60,7 @@ const Index = ({ router, user, data }) => {
         setLoading(true);
         await cancelSubscription({ productId });
         setLoading(false);
-        slack([{ label: "Cancel Subscription", value: user?.email }]);
+        // slack([{ label: "Cancel Subscription", value: user?.email }]);
         location.reload();
       },
       onCancel: () => {},
