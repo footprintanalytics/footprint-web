@@ -1,4 +1,5 @@
 import { CHAIN_COUNT } from "metabase/lib/constants";
+import { getCurrentSubscriptionProductId, isStripeSubscribe } from "metabase/pricing_v2/helper";
 
 export const getSubscribeOptions = user => {
   const options = [
@@ -33,7 +34,7 @@ export const getSubscribeOptions = user => {
   return options;
 };
 
-export const getComparePlans = (user, canBusinessSevenTrial) => ({
+export const getComparePlans = ({user, canBusinessSevenTrial, subscriptionDetailList}) => ({
   title: "Compare plans",
   columns: [
     {
@@ -83,9 +84,11 @@ export const getComparePlans = (user, canBusinessSevenTrial) => ({
       unit: "month",
       yearlyPrice: "$239",
       yearlySaving: "20%",
-      btnText: user?.stripeSubscribeStatus !== "enable" && canBusinessSevenTrial ? "$29 for 7-day Trial" : "Renewal",
+      currentSubscriptionProductId: getCurrentSubscriptionProductId({ subscriptionDetailList, service: "footprint", groupType: "business" }),
+      isSubscribe: isStripeSubscribe({ subscriptionDetailList, service: "footprint", groupType: "business" }),
+      btnText: !isStripeSubscribe({ subscriptionDetailList, service: "footprint", groupType: "business" }) && canBusinessSevenTrial ? "$29 for 7-day Trial" : "Renewal",
       btnAction: "subscribe",
-      btnDisabled: user?.stripeSubscribeStatus === "enable",
+      btnDisabled: isStripeSubscribe({ subscriptionDetailList, service: "footprint", groupType: "business" }),
       features: [
         "Access to full history data",
         "10G data limit per query",

@@ -8,8 +8,10 @@ import { connect } from "react-redux";
 import { loginModalShowAction } from "metabase/redux/control";
 import Link from "metabase/core/components/Link";
 import { loadCurrentUserVipDataApi } from "metabase/redux/user";
-import { useGetProductInfo } from "metabase/pricing_v2/use";
+import { useGetPaymentSubscriptionDetail, useGetProductInfo } from "metabase/pricing_v2/use";
 import PricingModal from "metabase/pricing_v2/components/PricingModal";
+import { getCurrentSubscriptionProductId, isStripeSubscribe } from "metabase/pricing_v2/helper";
+import PaymentCallbackModal from "metabase/pricing/compoment/PaymentCallbackModal";
 
 const Index = ({
   user,
@@ -18,12 +20,15 @@ const Index = ({
   location,
   router,
   sign,
+  onCancelSubscription,
 }) => {
 
   const [visible, setVisible] = useState();
+  const [callback, setCallback] = useState(false);
   const { isLoading, data } = useGetProductInfo("dataApi");
+  const { subscriptionDetailData } = useGetPaymentSubscriptionDetail(user, "dataApi");
   const products = data?.groups?.find(item => item.type === visible)?.products;
-
+  const subscriptionDetailList = subscriptionDetailData?.list;
   useEffect(() => {
     if (location?.pathname === "/data-api/pricing") {
       router?.replace("/pricing?type=data-api");
@@ -124,8 +129,11 @@ const Index = ({
         setVisible("growth");
         // window.open("https://forms.gle/ze3F44681h2wgCHT9");
       },
+      currentSubscriptionProductId: getCurrentSubscriptionProductId({ subscriptionDetailList, service: "dataApi", groupType: "growth" }),
+      isSubscribe: isStripeSubscribe({ subscriptionDetailList, service: "dataApi", groupType: "growth" }),
       buttonCanClick:
-        !["scale"].includes(user?.vipInfoDataApi?.type),
+        !isStripeSubscribe({ subscriptionDetailList, service: "dataApi", groupType: "growth" })
+        && !["scale"].includes(user?.vipInfoDataApi?.type),
       detail: {
         title: "Everything in Free plan, plus:",
         content: [
@@ -189,7 +197,9 @@ const Index = ({
         setVisible("scale");
         // window.open("https://forms.gle/ze3F44681h2wgCHT9");
       },
-      buttonCanClick: true,
+      currentSubscriptionProductId: getCurrentSubscriptionProductId({ subscriptionDetailList, service: "dataApi", groupType: "scale" }),
+      isSubscribe: isStripeSubscribe({ subscriptionDetailList, service: "dataApi", groupType: "scale" }),
+      buttonCanClick: !isStripeSubscribe({ subscriptionDetailList, service: "dataApi", groupType: "scale" }),
       popular: true,
       detail: {
         title: "Everything in Growth plan, plus:",
@@ -337,6 +347,14 @@ const Index = ({
                 >
                   {item.buttonText}
                 </Button>
+                {item.isSubscribe && (
+                  <span
+                    className="Pricing__select-btn-tip"
+                    onClick={() => onCancelSubscription(item.currentSubscriptionProductId)}
+                  >
+                    <i>{`Cancel ${item.name} Automatic Renewal`}</i>
+                  </span>
+                )}
                 <span className="data-api__price-detail-title">
                   {item.detail.title}
                 </span>
@@ -403,9 +421,11 @@ const Index = ({
           sign={sign}
           subscribeOptions={products}
           visible={!!products}
+          setCallback={setCallback}
           onClose={() => setVisible(null)}
         />
       )}
+      {callback && <PaymentCallbackModal onClose={() => setCallback(false)} />}
     </>
   );
 };

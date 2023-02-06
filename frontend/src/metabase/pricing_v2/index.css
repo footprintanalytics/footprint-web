@@ -203,6 +203,7 @@
   font-size: 14px;
   margin-top: 14px;
   cursor: pointer;
+  text-align: center;
 }
 
 .Pricing__select-btn-tip i {

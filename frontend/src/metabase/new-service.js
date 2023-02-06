@@ -416,8 +416,12 @@ export const datasetDownload = (params, config) => {
   return POST(`api/v1/card/dataset/download`, formData, config);
 };
 
-export const cancelSubscription = () => {
-  return POST(`api/v1/payment/subscription/cancel`);
+export const paymentSubscriptionDetail = (params) => {
+  return POST(`api/v1/payment/subscription/detail`, params);
+};
+
+export const cancelSubscription = (params) => {
+  return POST(`api/v1/payment/subscription/cancel`, params);
 };
 
 export const userinfoProfile = params => {

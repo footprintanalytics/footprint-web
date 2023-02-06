@@ -1,0 +1,8 @@
+.subscription-detail-modal .Modal {
+  width: 480px;
+  padding-bottom: 20px;
+}
+
+.subscription-detail-modal__root {
+  padding-top: 50px;
+}

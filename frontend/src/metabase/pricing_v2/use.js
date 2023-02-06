@@ -1,4 +1,4 @@
-import { getProductInfo } from "metabase/new-service";
+import { getProductInfo, paymentSubscriptionDetail } from "metabase/new-service";
 import { useQuery } from "react-query";
 
 export const useGetProductInfo = (service) => {
@@ -20,5 +20,27 @@ export const useGetProductInfo = (service) => {
   return {
     isLoading,
     data,
+  };
+};
+
+export const useGetPaymentSubscriptionDetail = (user, service) => {
+  const params = {
+    "service": service || "footprint",
+  }
+
+  const { isLoading, data } = useQuery(
+    ["paymentSubscriptionDetail"],
+    async () => {
+      return paymentSubscriptionDetail(params);
+    },
+    {
+      refetchOnWindowFocus: false,
+      retry: 0,
+      enabled: !!user,
+    },
+  );
+  return {
+    isSubscriptionDetailLoading: isLoading,
+    subscriptionDetailData: data,
   };
 };
