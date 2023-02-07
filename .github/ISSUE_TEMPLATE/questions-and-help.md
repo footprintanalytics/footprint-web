@@ -1,13 +1,13 @@
 ---
 name: Questions and help
-about: If you think you need help with something related to FootPrint
+about: If you think you need help with something related to Footprint
 title: ''
 labels: ".Needs Triage, Type:Question"
 assignees: 'Hige_xie'
 
 ---
 
-For help with installation and setup, information on how specific features work, or general questions about FootPrint, please use our discussion forum:
+For help with installation and setup, information on how specific features work, or general questions about Footprint, please use our discussion forum:
 
 https://discord.com/invite/3HYaR6USM7
 
