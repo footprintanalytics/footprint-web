@@ -11,6 +11,7 @@ import Button from "metabase/core/components/Button";
 import { loginModalShowAction } from "metabase/redux/control";
 import { cancelSubscription } from "metabase/new-service";
 import "./index.css";
+import Meta from "metabase/components/Meta";
 
 const PricingContainer = ({ location, user, setLoginModalShow }) => {
   const [loading, setLoading] = useState(false);
@@ -47,6 +48,10 @@ const PricingContainer = ({ location, user, setLoginModalShow }) => {
   };
 
   return (
+    <>
+    <Meta
+      title={`Pricing - Footprint Analytics`}
+    />
     <div className="pricing-container">
 
       <div className="pricing-container__bg" />
@@ -89,6 +94,7 @@ const PricingContainer = ({ location, user, setLoginModalShow }) => {
         )}
       </div>
     </div>
+    </>
   );
 };
 

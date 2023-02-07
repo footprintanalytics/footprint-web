@@ -29,6 +29,9 @@ import { updateQuestion } from "metabase/query_builder/actions";
 import QuestionSide from "../components/QuestionSide";
 import QueryBuilder from "./QueryBuilder";
 import "./Question.css";
+import Meta from "metabase/components/Meta";
+import { getOssUrl } from "metabase/lib/image";
+import { ossPath } from "metabase/lib/ossPath";
 
 const mapStateToProps = state => {
   return {
@@ -160,6 +163,17 @@ class Question extends Component {
       (location.hash || location.query.dbId || showCustomBuilder) && user;
 
     return (
+      <>
+      {question && (
+        <Meta
+          title={question?.card()?.name}
+          description={question?.card()?.description || question?.card()?.name}
+          image={getOssUrl(
+            ossPath(`card/${question?.card()?.id}.png`),
+            { resize: true },
+          )}
+        />
+      )}
       <div className="flex Question">
         {showSide ? (
           <div className="Question-side" style={questionSideStyle}>
@@ -182,6 +196,7 @@ class Question extends Component {
           {showPreviewChart.show && <QueryPreview {...this.props} />}
         </div>
       </div>
+      </>
     );
   }
 }

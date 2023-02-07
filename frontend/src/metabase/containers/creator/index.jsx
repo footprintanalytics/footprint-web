@@ -12,6 +12,10 @@ import title, { updateTitle } from "metabase/hoc/Title";
 import { personalInfo } from "metabase/new-service";
 import { getProject } from "metabase/lib/project_info";
 import Link from "metabase/core/components/Link";
+import Meta from "metabase/components/Meta";
+import { getOssUrl } from "metabase/lib/image";
+import { ossPath } from "metabase/lib/ossPath";
+import { get } from "lodash";
 
 const Index = ({ router, user, params, userInfoDataApi }) => {
   const name = params?.name?.replace("@", "") || "";
@@ -64,6 +68,12 @@ const Index = ({ router, user, params, userInfoDataApi }) => {
 
   return (
     <>
+      {data && (
+        <Meta
+          title={`${get(data, "userInfo.name")} - Footprint Analytics`}
+          description={get(data, "userInfo.bio")}
+        />
+      )}
       <div className="creator__wrap">
         <Personal router={router} user={user} data={data} />
         <List
