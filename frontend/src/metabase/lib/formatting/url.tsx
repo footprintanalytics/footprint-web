@@ -5,6 +5,7 @@ import { getDataFromClicked } from "metabase-lib/parameters/utils/click-behavior
 import { isURL } from "metabase-lib/types/utils/isa";
 import { renderLinkTextForClick, renderLinkURLForClick } from "./link";
 import { formatValue, getRemappedValue } from "./value";
+import { IFRAMED } from "metabase/lib/dom";
 
 import type { OptionsType } from "./types";
 
@@ -36,8 +37,9 @@ export function formatUrl(value: string, options: OptionsType = {}) {
 
   if (jsx && rich && url) {
     const text = getLinkText(value, options);
+    const targetObject = IFRAMED ? { target: "_blank" } : {};
     return (
-      <ExternalLink className="link link--wrappable" href={url}>
+      <ExternalLink className="link link--wrappable" href={url} {...targetObject}>
         {text}
       </ExternalLink>
     );
