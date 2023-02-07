@@ -93,6 +93,7 @@ function Explore({ location, user, q, children, hideSearch }) {
   return (
     <>
       <Meta
+        title="Footprint Analytics Explore"
         keywords={tagList.map(item => item.tag).join(", ")}
         description={currentTag.tag}
       />

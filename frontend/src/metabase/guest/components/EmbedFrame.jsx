@@ -87,6 +87,7 @@ class EmbedFrame extends Component {
         style={{ height: `calc(100vh - 60px)` }}
       >
         <Meta
+          title={dashboard?.name}
           description={getDescription({
             description,
             orderedCards: dashboard?.ordered_cards,

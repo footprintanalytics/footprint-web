@@ -7,6 +7,7 @@ import "../index.css";
 import "../../academy/index.css";
 import "../../dashboards/components/Recommendations/index.css";
 import Box from "metabase/containers/academy/components/Box";
+import Meta from "metabase/components/Meta";
 
 const Index = ({ router, type }) => {
   const array = {
@@ -68,10 +69,15 @@ const Index = ({ router, type }) => {
   };
   const selectCategory = array[type] || {};
   return (
+    <>
+    <Meta
+      title={`${selectCategory?.label} - Footprint Analytics`}
+    />
     <div className="news-articles__container news-report__container">
       <Box router={router} selectCategory={selectCategory} />
       {/*<ArticleHot />*/}
     </div>
+    </>
   );
 };
 

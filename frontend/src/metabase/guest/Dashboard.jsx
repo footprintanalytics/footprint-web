@@ -46,6 +46,10 @@ import MetaViewportControls from "metabase/dashboard/hoc/MetaViewportControls";
 import { navigateToGuestQuery } from "metabase/guest/utils";
 import MetabaseUtils from "metabase/lib/utils";
 import { VisualizationShareFoot } from "metabase/visualizations/components/Visualization";
+import Meta from "metabase/components/Meta";
+import { getDescription } from "metabase/lib/formatting/footprint";
+import { getOssUrl } from "metabase/lib/image";
+import { ossPath } from "metabase/lib/ossPath";
 
 const THROTTLE_PERIOD = 300;
 
@@ -200,6 +204,20 @@ class PublicDashboard extends Component {
       ...parseHashOptions(location.hash),
     };
     return (
+      <>
+      {dashboard && (
+        <Meta
+          title={dashboard.name}
+          description={getDescription({
+            description: dashboard.description,
+            orderedCards: dashboard.ordered_cards,
+          })}
+          image={getOssUrl(
+            ossPath(`dashboard/${dashboard.entityId || dashboard.id}.png`),
+            { resize: true },
+          )}
+        />
+      )}
       <LoadingAndErrorWrapper
         style={{
           width:
@@ -272,6 +290,7 @@ class PublicDashboard extends Component {
           {children}
         </EmbedFrame>
       </LoadingAndErrorWrapper>
+      </>
     );
   }
 }

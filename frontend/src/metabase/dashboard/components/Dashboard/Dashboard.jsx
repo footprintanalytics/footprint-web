@@ -547,6 +547,7 @@ class Dashboard extends Component {
       <>
         {dashboard && (
           <Meta
+            title={dashboard.name}
             description={getDescription({
               description: dashboard.description,
               orderedCards: dashboard.ordered_cards,

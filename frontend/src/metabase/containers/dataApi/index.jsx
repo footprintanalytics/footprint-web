@@ -11,10 +11,14 @@ import DataApiPower from "./components/DataApiPower";
 import DataApiGameFi from "metabase/containers/dataApi/components/DataApiGameFi";
 import DataApiNFT from "metabase/containers/dataApi/components/DataApiNFT";
 import DataApiIntroduce from "metabase/containers/dataApi/components/DataApiIntroduce";
+import Meta from "metabase/components/Meta";
 
 const DataApi = () => {
   return (
     <>
+      <Meta
+        title={`Data API - Footprint Analytics`}
+      />
       <div className="data-api__about">
         <DataApiStart />
         <DataApiIntroduce />
