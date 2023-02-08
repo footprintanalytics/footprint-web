@@ -1,7 +1,7 @@
 /* eslint-disable react/prop-types */
 import React, { useEffect, useState } from "react";
 import "./index.css";
-import { Button, Skeleton } from "antd";
+import { Button, Skeleton, Tooltip } from "antd";
 import { RightOutlined } from "@ant-design/icons";
 import { push } from "react-router-redux";
 import { connect } from "react-redux";
@@ -12,6 +12,8 @@ import { useGetPaymentSubscriptionDetail, useGetProductInfo } from "metabase/pri
 import PricingModal from "metabase/pricing_v2/components/PricingModal";
 import { getCurrentSubscriptionProductId, isStripeSubscribe } from "metabase/pricing_v2/helper";
 import PaymentCallbackModal from "metabase/pricing/compoment/PaymentCallbackModal";
+import Icon from "metabase/components/Icon";
+import DataStaticTooltip from "metabase/containers/dataApi/components/DataStaticTooltip";
 
 const Index = ({
   user,
@@ -82,6 +84,14 @@ const Index = ({
           {
             title: (
               <span>
+                <span className="data-api__price-text-highlight">100</span> calls
+                per day
+              </span>
+            ),
+          },
+          {
+            title: (
+              <span>
                 <span className="data-api__price-text-highlight">1</span> calls
                 per second
               </span>
@@ -92,6 +102,20 @@ const Index = ({
               <span>
                 <span className="data-api__price-text-highlight">30 days</span>{" "}
                 historical data
+              </span>
+            ),
+          },
+          {
+            title: (
+              <span>
+                <span className="data-api__price-text-highlight">1</span> rows data return (static endpoint)<DataStaticTooltip />
+              </span>
+            ),
+          },
+          {
+            title: (
+              <span>
+                <span className="data-api__price-text-highlight">100</span> rows data return (non-static endpoint)
               </span>
             ),
           },
@@ -148,6 +172,14 @@ const Index = ({
           {
             title: (
               <span>
+                <span className="data-api__price-text-highlight">10000</span>{" "}
+                calls per day
+              </span>
+            ),
+          },
+          {
+            title: (
+              <span>
                 <span className="data-api__price-text-highlight">10</span> calls
                 per second
               </span>
@@ -158,6 +190,20 @@ const Index = ({
               <span>
                 <span className="data-api__price-text-highlight">6 months</span>{" "}
                 historical data
+              </span>
+            ),
+          },
+          {
+            title: (
+              <span>
+                <span className="data-api__price-text-highlight">10</span> rows data return (static endpoint)<DataStaticTooltip />
+              </span>
+            ),
+          },
+          {
+            title: (
+              <span>
+                <span className="data-api__price-text-highlight">100</span> rows data return (non-static endpoint)
               </span>
             ),
           },
@@ -215,6 +261,14 @@ const Index = ({
           {
             title: (
               <span>
+                <span className="data-api__price-text-highlight">10M</span> calls
+                per day
+              </span>
+            ),
+          },
+          {
+            title: (
+              <span>
                 <span className="data-api__price-text-highlight">50</span> calls
                 per second
               </span>
@@ -225,6 +279,20 @@ const Index = ({
               <span>
                 <span className="data-api__price-text-highlight">Full</span>{" "}
                 historical data
+              </span>
+            ),
+          },
+          {
+            title: (
+              <span>
+                <span className="data-api__price-text-highlight">10</span> rows data return (static endpoint)
+              </span>
+            ),
+          },
+          {
+            title: (
+              <span>
+                <span className="data-api__price-text-highlight">100</span> rows data return (non-static endpoint)
               </span>
             ),
           },

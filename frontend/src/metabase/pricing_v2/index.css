@@ -102,7 +102,7 @@
   padding: 0 30px;
   border: 1px solid #dcdee4;
   border-radius: 24px;
-  height: 1100px;
+  height: 1260px;
   padding-top: 50px;
   background-color: white;
 }
@@ -115,8 +115,8 @@
 
 .Pricing__select-item:nth-child(2) {
   border: 2px solid #3434b2;
-  height: 1160px;
-  padding-top: calc((1160px - 1100px) / 2px + 50px);
+  height: 1320px;
+  padding-top: calc((1320px - 1260px) / 2px + 50px);
 }
 
 .Pricing__select-item:last-child {
