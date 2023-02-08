@@ -410,38 +410,19 @@ class Dashboard extends Component {
     });
   };
 
-  handleRevertAction = () => {
+  handleRevertAction = async () => {
     const { dashboard, onChangeLocation } = this.props;
     if (dashboard.id === "new") {
       onChangeLocation("/");
       return;
     }
-    this.props.fetchDashboard(
+    const hide = message.loading("Reverting...");
+    await this.props.fetchDashboard(
       this.props.dashboard.id,
       this.props.location.query,
       true,
     );
-  };
-  renderCancelModal = () => {
-    const isOpen = this.state.cancelModal;
-    return (
-      <Modal isOpen={isOpen}>
-        {isOpen && (
-          <ConfirmContent
-            title={t`You have unsaved changes`}
-            message={t`Do you want to leave this page and discard your changes?`}
-            onClose={() => {
-              this.setState({ cancelModal: false });
-            }}
-            onAction={() => {
-              this.setState({ cancelModal: false });
-              this.handleRevertAction();
-              this.setEditing(false);
-            }}
-          />
-        )}
-      </Modal>
-    );
+    hide();
   };
 
   renderCancelModal = () => {
@@ -464,6 +445,12 @@ class Dashboard extends Component {
         )}
       </Modal>
     );
+  };
+
+  onRevert = () => {
+    this.setState({
+      cancelModal: true,
+    });
   };
 
   tagPanel = () => {
@@ -580,7 +567,6 @@ class Dashboard extends Component {
                   addParameter={addParameter}
                   parametersWidget={parametersWidget}
                   onSharingClick={this.onSharingClick}
-                  onCopyClick={this.onCopyClick}
                   showNewDashboardModal={this.onShowNewDashboardModal}
                   saveAction={this.saveAction}
                   onRevert={this.onRevert}
