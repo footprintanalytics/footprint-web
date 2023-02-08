@@ -1,5 +1,6 @@
 import { CHAIN_COUNT } from "metabase/lib/constants";
 import { getCurrentSubscriptionProductId, isStripeSubscribe } from "metabase/pricing_v2/helper";
+import DataStaticTooltip from "metabase/containers/dataApi/components/DataStaticTooltip";
 
 export const getSubscribeOptions = user => {
   const options = [
@@ -68,8 +69,11 @@ export const getComparePlans = ({user, canBusinessSevenTrial, subscriptionDetail
         title: "Data API (Free)",
         list: [
           "3K calls per month",
+          "100 calls per day",
           "1 calls per second",
           "30 days historical data",
+          "1 rows data return (static endpoint)",
+          "100 rows data return (non-static endpoint)",
           "Normal performance",
           "Community support",
           "REST API: Easy to access",
@@ -108,8 +112,11 @@ export const getComparePlans = ({user, canBusinessSevenTrial, subscriptionDetail
         title: "Data API (Growth)",
         list: [
           "300K calls per month",
+          "10000 calls per day",
           "10 calls per second",
           "6 months historical data",
+          "10 rows data return (static endpoint)",
+          "100 rows data return (non-static endpoint)",
           "Quick performance",
           "Community support",
           "REST API: Easy to access",
@@ -352,6 +359,12 @@ export const getComparePlans = ({user, canBusinessSevenTrial, subscriptionDetail
           enterprise: "/",
         },
         {
+          name: "Calls per day",
+          free: "100",
+          business: "100000",
+          enterprise: "/",
+        },
+        {
           name: "Calls per second",
           free: "1",
           business: "10",
@@ -361,6 +374,19 @@ export const getComparePlans = ({user, canBusinessSevenTrial, subscriptionDetail
           name: "Historical data",
           free: "30 days",
           business: "6 months",
+          enterprise: "/",
+        },
+        {
+          name: "Data return rows (static endpoint)",
+          free: "1",
+          business: "10",
+          enterprise: "/",
+          dataStaticTooltip: true
+        },
+        {
+          name: "Data return rows (non-static endpoint)",
+          free: "100",
+          business: "100",
           enterprise: "/",
         },
         {

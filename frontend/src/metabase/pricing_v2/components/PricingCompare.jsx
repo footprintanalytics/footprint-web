@@ -2,6 +2,7 @@
 import React from "react";
 import { getComparePlans } from "metabase/pricing_v2/config";
 import { getOssUrl } from "metabase/lib/image";
+import DataStaticTooltip from "metabase/containers/dataApi/components/DataStaticTooltip";
 
 const PricingCompare = ({ user, groups, subscriptionDetailList }) => {
   const canBusinessSevenTrial = !!groups
@@ -25,7 +26,7 @@ const PricingCompare = ({ user, groups, subscriptionDetailList }) => {
             <ul className="Pricing__compare-body-item">
               {item.list.map(l => (
                 <li key={l.name}>
-                  <h6>{l.name}</h6>
+                  <h6>{l.name}{l.dataStaticTooltip && (<DataStaticTooltip />)}</h6>
                   {comparePlans.columns.map(c => (
                     <section key={l.name + c.label}>
                       {l[c.value] === true && (
