@@ -570,7 +570,7 @@ class Visualization extends React.PureComponent {
                 style={{ display: small ? "none" : "" }}
               >
                 <div>{error}</div>
-                <ErrorGuide cardId={cardId} />
+                {errorIcon !== "key" &&<ErrorGuide cardId={cardId} />}
               </div>
             }
           </div>
