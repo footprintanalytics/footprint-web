@@ -70,7 +70,6 @@ const News = props => {
         color={"#7A819B"}
         borderless
         onClick={allArticlesAction}
-        style={{ visibility: hasPublishPermission ? "" : "hidden" }}
       >
         All
       </Button>
