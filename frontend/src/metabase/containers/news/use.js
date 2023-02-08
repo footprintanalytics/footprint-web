@@ -16,7 +16,7 @@ export const useMediaList = ({ type, tag, currentPage, sortBy, sortDirection }) 
           current: currentPage,
         }
       : {
-          pageSize: type ? 50 : 10,
+          pageSize: type ? 10 : 30,
           current: currentPage,
           type: tag ? null : type,
           tag,
