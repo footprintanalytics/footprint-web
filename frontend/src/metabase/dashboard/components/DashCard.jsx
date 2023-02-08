@@ -196,7 +196,12 @@ class DashCard extends Component {
     const errors = series.map(s => s.error).filter(e => e);
 
     let errorMessage, errorIcon;
-    if (isAccessRestricted) {
+
+    const fpCustomError = errors?.length > 0 && errors[0] && errors[0].code === -1 && errors[0].message;
+    if (fpCustomError) {
+      errorMessage = fpCustomError;
+      errorIcon = "key";
+    } else if (isAccessRestricted) {
       errorMessage = ERROR_MESSAGE_PERMISSION;
       errorIcon = "key";
     } else if (errors.length > 0) {

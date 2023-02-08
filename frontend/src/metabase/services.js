@@ -140,7 +140,7 @@ export const DashboardApi = {
   // deletePublicLink: DELETE("/api/dashboard/:id/public_link"),
 
   cardQuery: POST(
-    "/api/dashboard/:dashboardId/dashcard/:dashcardId/card/:cardId/query",
+    "/api/v1/dashboard/:dashboardId/dashcard/:dashcardId/card/:cardId/query",
   ),
   cardQueryPivot: POST(
     "/api/dashboard/pivot/:dashboardId/dashcard/:dashcardId/card/:cardId/query",

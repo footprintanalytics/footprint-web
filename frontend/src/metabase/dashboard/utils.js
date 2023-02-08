@@ -114,7 +114,11 @@ export function getDashboardType(id) {
 
 export async function fetchDataOrError(dataPromise) {
   try {
-    return await dataPromise;
+    const result = await dataPromise;
+    if (result.code === -1) {
+      throw result;
+    }
+    return result;
   } catch (error) {
     return { error };
   }
