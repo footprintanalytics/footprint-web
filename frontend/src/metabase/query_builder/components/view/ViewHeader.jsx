@@ -422,8 +422,7 @@ function AhHocQuestionLeftSide(props) {
       onOpenModal(MODAL_TYPES.SAVE);
     }
   };
-  console.log("question", question)
-  console.log("get(question, \"_card.name\")", get(question, "_card.name"))
+
   return (
     <AdHocLeftSideRoot>
       <ViewHeaderMainLeftContentContainer>
