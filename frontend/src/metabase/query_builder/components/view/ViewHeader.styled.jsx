@@ -28,7 +28,7 @@ export const ViewHeaderContainer = styled(ViewSection)`
 export const ViewHeaderMainLeftContentContainer = styled.div`
   display: flex;
   align-items: center;
-  flex-wrap: wrap;
+  //flex-wrap: wrap;
 `;
 
 export const ViewHeaderLeftSubHeading = styled(ViewSubHeading)`
@@ -201,6 +201,8 @@ export const ViewHeaderActionPanel = styled.div`
 `;
 
 export const ViewHeaderIconButtonContainer = styled.div`
+  display: flex;
+  align-items: center;
   ${Button.Root} {
     padding: 0.25rem 0.5rem;
     height: 2rem;

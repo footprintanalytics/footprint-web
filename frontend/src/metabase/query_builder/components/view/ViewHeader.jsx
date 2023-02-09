@@ -422,6 +422,7 @@ function AhHocQuestionLeftSide(props) {
       onOpenModal(MODAL_TYPES.SAVE);
     }
   };
+
   return (
     <AdHocLeftSideRoot>
       <ViewHeaderMainLeftContentContainer>
