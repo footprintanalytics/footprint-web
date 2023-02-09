@@ -441,7 +441,7 @@ function AhHocQuestionLeftSide(props) {
         <AdHocViewHeading color="dark">
           {isNative ? (
             <div className="flex align-center">
-              {get(question, "_card.name") || t`New Chart`} cxxxxxx
+              {get(question, "_card.name") || t`New Chart`}
               <ToggleCreateType question={question} router={router} updateQuestion={updateQuestion}/>
               {hasRunButton && !isShowingNotebook && (
                 <ViewHeaderIconButtonContainer>
