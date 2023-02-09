@@ -504,7 +504,7 @@ function QueryBuilder(props) {
   }
 
   return (
-    <div className="relative flex flex-full flex-column">
+    <div className="relative flex flex-full flex-column" style={{ width: "100%" }}>
     <View
       {...props}
       modal={uiControls.modal}

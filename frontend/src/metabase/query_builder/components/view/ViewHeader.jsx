@@ -422,6 +422,8 @@ function AhHocQuestionLeftSide(props) {
       onOpenModal(MODAL_TYPES.SAVE);
     }
   };
+  console.log("question", question)
+  console.log("get(question, \"_card.name\")", get(question, "_card.name"))
   return (
     <AdHocLeftSideRoot>
       <ViewHeaderMainLeftContentContainer>
@@ -440,7 +442,7 @@ function AhHocQuestionLeftSide(props) {
         <AdHocViewHeading color="dark">
           {isNative ? (
             <div className="flex align-center">
-              {get(question, "_card.name") || t`New Chart`}
+              {get(question, "_card.name") || t`New Chart`} cxxxxxx
               <ToggleCreateType question={question} router={router} updateQuestion={updateQuestion}/>
               {hasRunButton && !isShowingNotebook && (
                 <ViewHeaderIconButtonContainer>
