@@ -35,13 +35,13 @@ const ScalarValue = ({
     () =>
       findSize({
         text: value,
-        targetWidth: width - HORIZONTAL_PADDING,
+        targetWidth: width - HORIZONTAL_PADDING * 2,
         fontFamily: fontFamily ?? "Lato",
         fontWeight: 900,
         unit: "rem",
-        step: 0.2,
-        min: 2.2,
-        max: gridSize ? getMaxFontSize(gridSize.width, totalNumGridCols) : 4,
+        step: 0.4,
+        min: 1,
+        max: gridSize ? getMaxFontSize(gridSize.width, totalNumGridCols) / 1.5 : 4,
       }),
     [fontFamily, gridSize, totalNumGridCols, value, width],
   );
