@@ -5,6 +5,7 @@ import d3 from "d3";
 import _ from "underscore";
 import { t } from "ttag";
 
+import ResizeObserver from "resize-observer-polyfill";
 import {
   ChartSettingsError,
   MinRowsError,
@@ -32,7 +33,7 @@ import { PieArc } from "./PieArc";
 const SIDE_PADDING = 24;
 const MAX_LABEL_FONT_SIZE = 20;
 const MIN_LABEL_FONT_SIZE = 14;
-const MAX_PIE_SIZE = 550;
+const MAX_PIE_SIZE = 400;
 
 const INNER_RADIUS_RATIO = 3 / 5;
 
@@ -46,7 +47,11 @@ export default class PieChart extends Component {
   constructor(props) {
     super(props);
 
-    this.state = { width: 0, height: 0 };
+    this.state = {
+      width: 0,
+      height: 0,
+      scale: 1,
+    };
 
     this.chartContainer = React.createRef();
     this.chartDetail = React.createRef();
@@ -140,6 +145,12 @@ export default class PieChart extends Component {
       title: t`Minimum slice percentage`,
       widget: "number",
       default: SLICE_THRESHOLD * 100,
+    },
+    "pie.show_center_value": {
+      section: t`Display`,
+      title: t`Show Center Value`,
+      widget: "toggle",
+      default: true,
     },
     "pie.colors": {
       section: t`Display`,
@@ -252,16 +263,33 @@ export default class PieChart extends Component {
 
   componentDidMount() {
     this.updateChartViewportSize();
+
+    this._ro = new ResizeObserver((entries, observer) => {
+      const { width, height } = entries[0].contentRect;
+      const scale = (Math.min(width, height) / 350.0).toFixed(1);
+      this.setState({
+        scale: Math.min(scale, 1),
+      });
+    });
+    this._ro.observe(this.chartContainer.current);
+  }
+
+  componentWillUnmount() {
+    if (this._ro) {
+      this._ro.unobserve(this.chartContainer.current);
+      this._ro.disconnect();
+      this._ro = null;
+    }
   }
 
   componentDidUpdate(prevProps) {
     requestAnimationFrame(() => {
       const groupElement = this.chartGroup.current;
       const detailElement = this.chartDetail.current;
-      if (groupElement.getBoundingClientRect().width < 120) {
-        detailElement.classList.add("hide");
+      if (groupElement && groupElement.getBoundingClientRect().width < 120) {
+        detailElement && detailElement.classList.add("hide");
       } else {
-        detailElement.classList.remove("hide");
+        detailElement && detailElement.classList.remove("hide");
       }
     });
 
@@ -309,6 +337,8 @@ export default class PieChart extends Component {
       });
 
     const total = rows.reduce((sum, row) => sum + row[metricIndex], 0);
+
+    const showCenterValue = settings["pie.show_center_value"];
 
     const showPercentInTooltip =
       !PERCENT_REGEX.test(cols[metricIndex].name) &&
@@ -507,17 +537,28 @@ export default class PieChart extends Component {
         isDashboard={this.props.isDashboard}
       >
         <div className={styles.ChartAndDetail}>
-          <div ref={this.chartDetail} className={styles.Detail}>
-            <div
-              data-testid="detail-value"
-              className={cx(
-                styles.Value,
-                "fullscreen-normal-text fullscreen-night-text",
-              )}
-            >
-              {value}
-            </div>
-            <div className={styles.Title}>{title}</div>
+          <div
+            ref={this.chartDetail}
+            className={styles.Detail}
+            style={{ transform: `scale( ${this.state.scale} )` }}
+          >
+            {showCenterValue && (
+              <div>
+                <div
+                  data-testid="detail-value"
+                  className={cx(
+                    styles.Value,
+                    "fullscreen-normal-text fullscreen-night-text",
+                  )}
+                  style={{ padding: "0px 10px" }}
+                >
+                  {value}
+                </div>
+                <div className={styles.Title} style={{ marginTop: "2px", textAlign: "center" }}>
+                  {title}
+                </div>
+              </div>
+            )}
           </div>
           <div
             ref={this.chartContainer}
