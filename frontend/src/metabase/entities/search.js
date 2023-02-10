@@ -10,7 +10,7 @@ import { canonicalCollectionId } from "metabase/collections/utils";
 const ENTITIES_TYPES = Object.keys(ENTITIES_SCHEMA_MAP);
 
 const searchList = GET("/api/search");
-const collectionList = GET("/api/collection/:collection/items");
+const collectionList = GET("/api/v1/collection/:collection/items");
 
 export default createEntity({
   name: "search",
@@ -38,7 +38,7 @@ export default createEntity({
           );
         }
 
-        const { data, ...rest } = await collectionList({
+        const result = await collectionList({
           collection,
           archived,
           models,
@@ -49,6 +49,8 @@ export default createEntity({
           sort_column,
           sort_direction,
         });
+
+        const { data, ...rest } = result?.data;
 
         return {
           ...rest,

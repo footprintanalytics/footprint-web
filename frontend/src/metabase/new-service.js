@@ -27,7 +27,7 @@ export const SendEmailCode = async params => {
 };
 
 export const getCollectionItems = async ({ params = {}, collectionId }) => {
-  return GET(`/api/collection/${collectionId}/items`, params);
+  return GET(`/api/v1/collection/${collectionId}/items`, params);
 };
 
 export const getMyAnalytics = async ({ params = {}, valueX, valueY }) => {

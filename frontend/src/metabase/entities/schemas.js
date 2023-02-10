@@ -16,8 +16,8 @@ import {
 
 // This is a weird entity because we don't have actual schema objects
 
-const listDatabaseSchemas = GET("/api/database/:dbId/schemas");
-const getSchemaTables = GET("/api/database/:dbId/schema/:schemaName");
+const listDatabaseSchemas = GET("/api/v1/database/:dbId/schemas");
+const getSchemaTables = GET("/api/v1/database/:dbId/schema/:schemaName");
 const getVirtualDatasetTables = GET("/api/database/:dbId/datasets/:schemaName");
 
 export default createEntity({

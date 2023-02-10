@@ -29,13 +29,13 @@ import {
   getQuestionVirtualTableId,
 } from "metabase-lib/metadata/utils/saved-questions";
 
-const listTables = GET("/api/table");
+const listTables = GET("/api/v1/table");
 const listTablesForDatabase = async (...args) =>
   // HACK: no /api/database/:dbId/tables endpoint
-  (await GET("/api/database/:dbId/metadata")(...args)).tables;
-const listTablesForSchema = GET("/api/database/:dbId/schema/:schemaName");
-const updateFieldOrder = PUT("/api/table/:id/fields/order");
-const updateTables = PUT("/api/table");
+  (await GET("/api/v1/database/:dbId/metadata")(...args)).tables;
+const listTablesForSchema = GET("/api/v1/database/:dbId/schema/:schemaName");
+const updateFieldOrder = PUT("/api/v1/table/:id/fields/order");
+const updateTables = PUT("/api/v1/table");
 
 // OBJECT ACTIONS
 export const TABLES_BULK_UPDATE = "metabase/entities/TABLES_BULK_UPDATE";
@@ -48,7 +48,7 @@ const UPDATE_TABLE_FIELD_ORDER = "metabase/entities/UPDATE_TABLE_FIELD_ORDER";
 const Tables = createEntity({
   name: "tables",
   nameOne: "table",
-  path: "/api/table",
+  path: "/api/v1/table",
   schema: TableSchema,
 
   api: {
