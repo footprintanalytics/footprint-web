@@ -314,7 +314,7 @@ const data = {
     {
       title: "Discover GameFi",
       className: "About__btn--white",
-      url: "https://www.footprint.network/@Footprint/GameFi-Dashboard",
+      url: "https://www.footprint.network/@Footprint/GameFi",
     },
     {
       title: "Discover NFTs",

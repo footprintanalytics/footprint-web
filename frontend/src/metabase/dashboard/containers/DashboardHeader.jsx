@@ -170,8 +170,8 @@ class DashboardHeader extends Component {
   }
 
   async onCancel() {
-    // this.onRevert();
-    this.onDoneEditing();
+    this.onRevert();
+    // this.onDoneEditing();
   }
 
   getEditWarning(dashboard) {

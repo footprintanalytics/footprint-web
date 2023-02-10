@@ -549,7 +549,7 @@ export const getRoutes = store => (
         </Route>
 
         {/* REFERENCE */}
-        <Route path="/reference" title={t`Data Reference`}>
+        {/*<Route path="/reference" title={t`Data Reference`}>
           <IndexRedirect to="/reference/databases" />
           <Route path="metrics" component={LazyLoad.MetricListContainer} />
           <Route path="metrics/:metricId" component={LazyLoad.MetricDetailContainer} />
@@ -611,7 +611,7 @@ export const getRoutes = store => (
             path="databases/:databaseId/tables/:tableId/questions"
             component={LazyLoad.TableQuestionsContainer}
           />
-        </Route>
+        </Route>*/}
 
         {/* PULSE */}
         <Route path="/pulse" title={t`Pulses`}>

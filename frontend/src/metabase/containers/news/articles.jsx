@@ -4,6 +4,7 @@ import { push } from "react-router-redux";
 import connect from "react-redux/lib/connect/connect";
 import InfiniteScroll from "react-infinite-scroll-component";
 import { Skeleton } from "antd";
+import { capitalize } from "lodash";
 import DashboardCardDisplayInfo from "metabase/components/DashboardCardDisplayInfo";
 import { useMediaList } from "metabase/containers/news/use";
 import Thumb from "metabase/components/Thumb";
@@ -17,6 +18,7 @@ import { formatOssUrl } from "metabase/lib/image";
 import ArticleHot from "metabase/containers/news/components/ArticleHot";
 import { getChannel } from "metabase/selectors/app";
 import { articleTitle } from "metabase/lib/formatting";
+import Meta from "metabase/components/Meta";
 
 const Articles = props => {
   const {
@@ -162,10 +164,15 @@ const Articles = props => {
   };
 
   return (
+    <>
+    {type && (<Meta
+      title={`${capitalize(type)} - Footprint Analytics`}
+    />)}
     <div className="news-articles__container">
       <div style={{ flex: 1, maxWidth: 1000 }}>{renderList()}</div>
       {showHot && <ArticleHot />}
     </div>
+    </>
   );
 };
 

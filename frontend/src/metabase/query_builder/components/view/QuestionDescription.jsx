@@ -18,9 +18,9 @@ const QuestionDescription = ({
 
   const query = question.query();
   const createMethod = get(question, "_card.create_method");
-
-  if (createMethod === "template" || createMethod === "preview") {
-    return <span>{get(question, "_card.name")}</span>;
+  const cardName = get(question, "_card.name")
+  if (cardName && createMethod !== "preview") {
+    return <span>{cardName}</span>;
   }
 
   if (query instanceof StructuredQuery) {

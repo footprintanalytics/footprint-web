@@ -27,7 +27,7 @@ export const SendEmailCode = async params => {
 };
 
 export const getCollectionItems = async ({ params = {}, collectionId }) => {
-  return GET(`/api/collection/${collectionId}/items`, params);
+  return GET(`/api/v1/collection/${collectionId}/items`, params);
 };
 
 export const getMyAnalytics = async ({ params = {}, valueX, valueY }) => {
@@ -416,8 +416,12 @@ export const datasetDownload = (params, config) => {
   return POST(`api/v1/card/dataset/download`, formData, config);
 };
 
-export const cancelSubscription = () => {
-  return POST(`api/v1/payment/subscription/cancel`);
+export const paymentSubscriptionDetail = (params) => {
+  return POST(`api/v1/payment/subscription/detail`, params);
+};
+
+export const cancelSubscription = (params) => {
+  return POST(`api/v1/payment/subscription/cancel`, params);
 };
 
 export const userinfoProfile = params => {

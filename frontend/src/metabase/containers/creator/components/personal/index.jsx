@@ -12,11 +12,13 @@ import Link from "metabase/core/components/Link";
 import { trackStructEvent } from "metabase/lib/analytics";
 import { IconBack } from "metabase/components/IconBack";
 import { getOssUrl } from "metabase/lib/image";
-import { slack } from "metabase/lib/slack";
 import VipIconDataApi from "metabase/containers/creator/components/personal/VipIconDataApi";
+import { useGetPaymentSubscriptionDetail } from "metabase/pricing_v2/use";
+import SubscriptionDetailModal from "metabase/containers/creator/components/personal/SubscriptionDetailModal";
 
 const Index = ({ router, user, data }) => {
   const [loading, setLoading] = useState(false);
+  const [showSubscriptionDetailModal, setShowSubscriptionDetailModal] = useState(false);
 
   const totalInfo = [
     {
@@ -37,6 +39,10 @@ const Index = ({ router, user, data }) => {
     },
   ];
 
+  const { subscriptionDetailData } = useGetPaymentSubscriptionDetail(user, "footprint");
+  const subscriptionDetailList = subscriptionDetailData?.list;
+  const showSubscriptionCancelButton = subscriptionDetailList?.length > 0;
+
   const logo = get(data, "userInfo.avatar");
   const userName = get(data, "userInfo.name");
   const desc = get(data, "userInfo.bio");
@@ -45,16 +51,16 @@ const Index = ({ router, user, data }) => {
   const discord = get(data, "userInfo.discord");
   // const email = get(data, "userInfo.email");
 
-  const onCancelSubscription = async () => {
+  const onCancelSubscription = async (productId) => {
     Modal.confirm({
       title: "Do you want to cancel automatic renewal?",
       icon: <ExclamationCircleOutlined />,
       confirmLoading: loading,
       onOk: async () => {
         setLoading(true);
-        await cancelSubscription();
+        await cancelSubscription({ productId });
         setLoading(false);
-        slack([{ label: "Cancel Subscription", value: user?.email }]);
+        // slack([{ label: "Cancel Subscription", value: user?.email }]);
         location.reload();
       },
       onCancel: () => {},
@@ -125,8 +131,8 @@ const Index = ({ router, user, data }) => {
                       <Button>Upgrade</Button>
                     </Link>
                   )}
-                  {user?.stripeSubscribeStatus === "enable" && (
-                    <Button onClick={onCancelSubscription}>
+                  {showSubscriptionCancelButton && (
+                    <Button onClick={() => setShowSubscriptionDetailModal(true)}>
                       Cancel Automatic Renewal
                     </Button>
                   )}
@@ -152,7 +158,6 @@ const Index = ({ router, user, data }) => {
               })}
             </div>
           </div>
-
           {/*<div>
             {socialData.map(item => {
               return (
@@ -175,6 +180,15 @@ const Index = ({ router, user, data }) => {
           </div>*/}
         </div>
       </div>
+      {showSubscriptionDetailModal && (
+        <SubscriptionDetailModal
+          subscriptionDetailList={subscriptionDetailList}
+          onCancelSubscription={onCancelSubscription}
+          onClose={() => {
+            setShowSubscriptionDetailModal(false)
+          }}
+        />
+      )}
     </div>
   );
 };

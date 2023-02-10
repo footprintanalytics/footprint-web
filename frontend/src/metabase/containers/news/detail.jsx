@@ -194,6 +194,7 @@ const Detail = props => {
   return (
     <div className="article-detail">
       <Meta
+        title={articleTitle(data)}
         description={data?.description || articleTitle(data)}
         image={getOssUrl(getOgImage(data), { resize: true })}
       />

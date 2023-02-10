@@ -9,7 +9,6 @@ import { message } from "antd";
 import { snakeCase } from "lodash";
 import { useDebounce } from "ahooks";
 import { isProduction } from "metabase/env";
-import { slack } from "metabase/lib/slack";
 
 export const useDataset = ({ card }) => {
   const [dataset, setDataset] = useState();
@@ -86,13 +85,13 @@ export const usePreview = ({ dataset, user }) => {
   });
 
   const notify = msg => {
-    slack([
+    /*slack([
       { label: "Message", value: msg },
       { label: "Formula", value: JSON.stringify(debouncedFormulas) },
       { label: "SQL", value: dataset.native_form.query },
       { label: "Email", value: user?.email },
       { label: "User", value: user?.common_name },
-    ]);
+    ]);*/
   };
 
   const run = params => {

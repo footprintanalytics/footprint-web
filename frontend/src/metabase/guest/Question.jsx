@@ -30,6 +30,10 @@ import MetaViewportControls from "metabase/dashboard/hoc/MetaViewportControls";
 import { getParametersFromCard } from "metabase-lib/parameters/utils/template-tags";
 import _ from "underscore";
 import { getCardUiParameters } from "metabase-lib/parameters/utils/cards";
+import Meta from "metabase/components/Meta";
+import { getDescription } from "metabase/lib/formatting/footprint";
+import { getOssUrl } from "metabase/lib/image";
+import { ossPath } from "metabase/lib/ossPath";
 
 const mapStateToProps = state => ({
   metadata: getMetadata(state),
@@ -240,6 +244,17 @@ class PublicQuestion extends Component {
     const showEditButton = user && (user.id === creatorId || user.is_superuser);
 
     return (
+      <>
+      {card && (
+        <Meta
+          title={card.name}
+          description={card.description || card.name}
+          image={getOssUrl(
+            ossPath(`card/${card.id}.png`),
+            { resize: true },
+          )}
+        />
+      )}
       <EmbedFrame
         className="w-full"
         type="card"
@@ -293,6 +308,7 @@ class PublicQuestion extends Component {
           )}
         </LoadingAndErrorWrapper>
       </EmbedFrame>
+      </>
     );
   }
 }

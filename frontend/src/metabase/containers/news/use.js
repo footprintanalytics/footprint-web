@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
-import { mediaList, tutorialsMenuDetail } from "metabase/new-service";
 import { useQuery } from "react-query";
+import { mediaList, tutorialsMenuDetail } from "metabase/new-service";
 import { QUERY_OPTIONS_ARTICLE } from "metabase/containers/dashboards/shared/config";
 
 export const useMediaList = ({ type, tag, currentPage, sortBy, sortDirection }) => {
@@ -16,7 +16,7 @@ export const useMediaList = ({ type, tag, currentPage, sortBy, sortDirection }) 
           current: currentPage,
         }
       : {
-          pageSize: 10,
+          pageSize: type ? 10 : 30,
           current: currentPage,
           type: tag ? null : type,
           tag,

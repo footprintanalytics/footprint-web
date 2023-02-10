@@ -4,40 +4,23 @@ import "./index.css";
 import React, { useState } from "react";
 import { connect } from "react-redux";
 import { loginModalShowAction } from "metabase/redux/control";
-import { Modal, Skeleton } from "antd";
-import { cancelSubscription } from "metabase/new-service";
-import { ExclamationCircleOutlined } from "@ant-design/icons";
-import { slack } from "metabase/lib/slack";
+import { Skeleton } from "antd";
 import PricingModal from "metabase/pricing_v2/components/PricingModal";
 import PricingCompare from "metabase/pricing_v2/components/PricingCompare";
 import PricingSelect from "metabase/pricing_v2/components/PricingSelect";
-import { useGetProductInfo } from "metabase/pricing_v2/use";
+import { useGetPaymentSubscriptionDetail, useGetProductInfo } from "metabase/pricing_v2/use";
+import PaymentCallbackModal from "metabase/pricing/compoment/PaymentCallbackModal";
 
-const Pricing = ({ user, setLoginModalShow }) => {
+const Pricing = ({ user, setLoginModalShow, onCancelSubscription }) => {
   const [visible, setVisible] = useState();
-  const [loading, setLoading] = useState(false);
+  const [callback, setCallback] = useState(false);
 
   const { isLoading, data } = useGetProductInfo();
+  const { subscriptionDetailData } = useGetPaymentSubscriptionDetail(user, "footprint");
 
   const products = data?.groups?.find(item => item.type === visible)?.products;
 
   const sign = () => setLoginModalShow({ show: true, from: "handle_pay" });
-
-  const onCancelSubscription = async () => {
-    Modal.confirm({
-      title: "Do you want to cancel automatic renewal?",
-      icon: <ExclamationCircleOutlined />,
-      confirmLoading: loading,
-      onOk: async () => {
-        setLoading(true);
-        await cancelSubscription();
-        setLoading(false);
-        slack([{ label: "Cancel Subscription", value: user?.email }]);
-        location.reload();
-      },
-      onCancel: () => {},
-    });
-  };
 
   if (isLoading) {
     return (
@@ -62,13 +45,16 @@ const Pricing = ({ user, setLoginModalShow }) => {
           sign={sign}
           subscribeOptions={data?.groups?.find(item => item.type === visible)?.products}
           visible={!!visible}
+          setCallback={setCallback}
           onClose={() => setVisible(null)}
         />
       )}
+      {callback && <PaymentCallbackModal onClose={() => setCallback(false)} />}
       {data?.groups && (
         <>
           <PricingSelect
             user={user}
+            subscriptionDetailList={subscriptionDetailData?.list}
             groups={data?.groups}
             onSign={sign}
             onSubscribe={(item) => {
@@ -78,6 +64,7 @@ const Pricing = ({ user, setLoginModalShow }) => {
           />
           <PricingCompare
             user={user}
+            subscriptionDetailList={subscriptionDetailData?.list}
             groups={data?.groups}
           />
         </>

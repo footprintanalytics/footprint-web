@@ -44,6 +44,8 @@ export const ScalarTitleContainer = styled.div`
 export const ScalarTitleContent = styled.h3`
   text-align: center;
   overflow: hidden;
+  font-size: 1.05em;
+  line-height: 1.2;
   cursor: ${props => props.onClick && "pointer"};
 
   &:hover {

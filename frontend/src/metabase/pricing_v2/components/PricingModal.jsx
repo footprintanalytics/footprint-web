@@ -1,15 +1,12 @@
 /* eslint-disable react/prop-types */
 import React, { useState } from "react";
-import PaymentCallbackModal from "metabase/pricing/compoment/PaymentCallbackModal";
 import { Button, Checkbox, Modal } from "antd";
 import { payProduct } from "metabase/new-service";
 import { getOssUrl } from "metabase/lib/image";
-import { slack } from "metabase/lib/slack";
 
-const PricingModal = ({ user, sign, subscribeOptions, visible, onClose }) => {
+const PricingModal = ({ user, sign, subscribeOptions, visible, onClose, setCallback }) => {
   const [options, setOptions] = useState(subscribeOptions);
   const [loading, setLoading] = useState(false);
-  const [callback, setCallback] = useState(false);
   const [auto, setAuto] = useState(true);
   const { subscription } = options?.find(item => item.selected) || {};
 
@@ -30,11 +27,11 @@ const PricingModal = ({ user, sign, subscribeOptions, visible, onClose }) => {
         mode,
       });
       window.open(paymentLink);
-      slack([
+      /*slack([
         { label: "Pay", value: user?.email },
         { label: "Mode", value: mode },
         { label: "Title", value: title },
-      ]);
+      ]);*/
     } catch (e) {
     } finally {
       setLoading(false);
@@ -95,7 +92,6 @@ const PricingModal = ({ user, sign, subscribeOptions, visible, onClose }) => {
           )}
         </div>
       </Modal>
-      {callback && <PaymentCallbackModal onClose={() => setCallback(false)} />}
     </>
   );
 };

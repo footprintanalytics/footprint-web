@@ -25,7 +25,7 @@ const listCollections = GET("/api/v1/collection");
 
 const Collections = createEntity({
   name: "collections",
-  path: "/api/collection",
+  path: "/api/v1/collection",
   schema: CollectionSchema,
 
   displayNameOne: t`collection`,
