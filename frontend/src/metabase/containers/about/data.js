@@ -34,12 +34,16 @@ const data = {
           img: getOssUrl("20220606155721.gif"),
         },
         {
-          title: "Custom columns",
-          img: getOssUrl("20220606155803.gif"),
+          title: "Save chart as ud table",
+          img: getOssUrl("2023021001.gif"),
         },
         {
-          title: "Excel-like experience",
-          img: getOssUrl("20220606155903.gif"),
+          title: "Set alert & Mark event",
+          img: getOssUrl("2023021002.gif"),
+        },
+        {
+          title: "Iframe widget to your app",
+          img: getOssUrl("2023021003.gif"),
         },
       ],
       height: "550px",
