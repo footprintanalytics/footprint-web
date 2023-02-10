@@ -28,7 +28,11 @@ const mapDispatchToProps = {
 
 class DashboardMoveModalInner extends React.Component {
   render() {
-    const { dashboard, onClose, setDashboardCollection, user } = this.props;
+    const { location, onClose, setDashboardCollection, user } = this.props;
+    const dashboardId =
+      this.props.id ||
+      Urls.extractEntityId(this.props.params.slug) ||
+      location?.query?.id;
     const publicAnalyticPermission = user && user.publicAnalytic === "write";
     const title = t`Move dashboard to…`;
     return (
@@ -41,7 +45,7 @@ class DashboardMoveModalInner extends React.Component {
           if (user && !publicAnalyticPermission) {
             destination.collection_id = getPersonalCollectionId(user);
           }
-          await setDashboardCollection({ id: dashboard.id }, destination, {
+          await setDashboardCollection({ id: dashboardId }, destination, {
             notify: {
               message: (
                 <DashboardMoveToast
@@ -59,9 +63,9 @@ class DashboardMoveModalInner extends React.Component {
 
 const DashboardMoveModal = _.compose(
   connect(mapStateToProps, mapDispatchToProps),
-  Dashboards.load({
-    id: (state, props) => Urls.extractCollectionId(props.params.slug),
-  }),
+  // Dashboards.load({
+  //   id: (state, props) => Urls.extractCollectionId(props.params.slug),
+  // }),
 )(DashboardMoveModalInner);
 
 export default DashboardMoveModal;

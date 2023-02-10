@@ -456,7 +456,7 @@ class DashboardHeader extends Component {
           extraButtons.push({
             title: t`Move`,
             icon: "move",
-            link: `${location.pathname}/move`,
+            link: `${location.pathname}/move?id=${dashboard.id}`,
             event: "Dashboard;Move",
           });
         }

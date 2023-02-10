@@ -247,14 +247,9 @@ class Dashboard extends Component {
           userName: urlUserName,
         });
         this.setState({ id });
-        if (user && (metabaseId === user.id || user.is_superuser || user.groups.includes("Inner"))) {
+        if ((user && (metabaseId === user.id || user.is_superuser)) || !uuid) {
           dashboardId = id;
         } else {
-          if (!uuid) {
-            throw new Error(
-              "The dashboard has been set to private, please contact the owner.",
-            );
-          }
           dashboardId = uuid;
         }
       }
