@@ -134,6 +134,7 @@ export const StyledQuestionDataSource = styled(QuestionDataSource)`
 `;
 
 export const AdHocLeftSideRoot = styled.div`
+  flex: 1;
   ${breakpointMaxSmall} {
     padding: 0 1.25rem;
   }
