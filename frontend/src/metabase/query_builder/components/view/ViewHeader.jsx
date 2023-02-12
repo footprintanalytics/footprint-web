@@ -59,6 +59,7 @@ import QueryMoreWidget from "../QueryMoreWidget";
 import QueryDownloadWidgetFP from "../QueryDownloadWidgetFP";
 import { snapshot } from "metabase/dashboard/components/utils/snapshot";
 import SaveChartToUdModal from "../../../components/SaveChartToUdModal";
+import "./ViewHeader.css";
 
 const viewTitleHeaderPropTypes = {
   question: PropTypes.object.isRequired,
@@ -887,13 +888,13 @@ function ViewTitleHeaderRightSide(props) {
   }
 
   return (
-    <ViewHeaderActionPanel data-testid="qb-header-action-panel">
+    <ViewHeaderActionPanel data-testid="qb-header-action-panel" className="ViewHeaderActionPanel">
       {isOwner &&
         QuestionFilterWidget.shouldRender(props) && (
         <Button
           disabled={queryBuilderMode !== "view"}
           onlyIcon
-          className={`ml1 Question-header-btn-new ${
+          className={`Question-header-btn-new ${
             isShowingChartSettingsSidebar
               ? "Question-header-btn--primary-new"
               : ""

@@ -8,6 +8,7 @@ import QuestionDataSource from "./QuestionDataSource";
 
 import { AggregationAndBreakoutDescription } from "./QuestionDescription.styled";
 import { get } from "lodash";
+import Ellipsified from "../../../core/components/Ellipsified";
 
 const QuestionDescription = ({
   question,
@@ -20,7 +21,11 @@ const QuestionDescription = ({
   const createMethod = get(question, "_card.create_method");
   const cardName = get(question, "_card.name")
   if (cardName && createMethod !== "preview") {
-    return <span>{cardName}</span>;
+    return (
+      <Ellipsified lines={3} style={{ maxWidth: 600, lineHeight: 1.3 }}>
+        {cardName}
+      </Ellipsified>
+    );
   }
 
   if (query instanceof StructuredQuery) {

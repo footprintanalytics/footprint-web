@@ -1,0 +1,9 @@
+.ViewHeaderActionPanel {
+}
+
+@media screen and (--breakpoint-max-l) {
+  .ViewHeaderActionPanel {
+    flex-flow: wrap;
+    width: 350px;
+  }
+}
