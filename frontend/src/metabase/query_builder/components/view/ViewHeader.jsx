@@ -695,6 +695,8 @@ function ViewTitleHeaderRightSide(props) {
     user?.id === question.card().creator_id ||
     question.card().creator_id === undefined;
 
+  const isInner = user?.groups?.includes("Inner");
+
   const handleInfoClick = useCallback(() => {
     if (isShowingQuestionInfoSidebar) {
       onCloseQuestionInfo();
@@ -759,6 +761,22 @@ function ViewTitleHeaderRightSide(props) {
   if (isSaved) {
     return (
       <ViewHeaderActionPanel data-testid="qb-header-action-panel">
+        {!!card.public_uuid && (
+          <Tooltip tooltip={t`Add to favorite list`}>
+            <Favorite
+              onlyIcon
+              className="Question-header-btn-with-text"
+              like={
+                // -1
+                card && card.statistics && card.statistics.favorite
+              }
+              isLike={card.isFavorite}
+              type="card"
+              id={card.id}
+              uuid={card.public_uuid}
+            />
+          </Tooltip>
+        )}
         {isOwner && (
           <Tooltip tooltip={t`Edit`}>
             <Button
@@ -817,7 +835,19 @@ function ViewTitleHeaderRightSide(props) {
             </Button>
           </Tooltip>
         )}
-        {(!!card.public_uuid || isOwner || isAdmin) &&
+        {(!!card.public_uuid || isOwner || isAdmin || isInner) && (
+          <Tooltip tooltip={t`Snapshot`}>
+            <Button
+              onlyIcon
+              className="Question-header-btn"
+              iconColor="#7A819B"
+              icon="camera"
+              iconSize={16}
+              onClick={props.downloadImageAction}
+            />
+          </Tooltip>
+        )}
+        {(!!card.public_uuid || isOwner || isAdmin || isInner) &&
         QueryDownloadWidget.shouldRender({
           result,
           isResultDirty,
@@ -860,6 +890,7 @@ function ViewTitleHeaderRightSide(props) {
             key="more"
             isAdmin={isAdmin}
             isOwner={isOwner}
+            isInner={isInner}
             onOpenModal={onOpenModal}
             user={user}
             setShowSeoTagging={() =>

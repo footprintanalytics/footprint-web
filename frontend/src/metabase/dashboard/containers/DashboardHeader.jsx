@@ -244,6 +244,9 @@ class DashboardHeader extends Component {
       user && (user.is_superuser || user.id === dashboard?.creator_id);
     const isAdmin = user && user.is_superuser;
     const isMarket = user && user.isMarket;
+    const isOwner =
+      user && (user.is_superuser || user.id === dashboard?.creator_id);
+    const isInner = user?.groups?.includes("Inner");
 
     const hasCards = isLoaded && dashboard.ordered_cards.length > 0;
     const hasDataCards =
@@ -453,7 +456,7 @@ class DashboardHeader extends Component {
           extraButtons.push({
             title: t`Move`,
             icon: "move",
-            link: `${location.pathname}/move`,
+            link: `${location.pathname}/move?id=${dashboard.id}`,
             event: "Dashboard;Move",
           });
         }
@@ -508,7 +511,42 @@ class DashboardHeader extends Component {
       );
     }
 
-    if (showCopyButton && !deviceInfo().isMobile) {
+    if (!isEditing && (!!dashboard.public_uuid || isOwner || isAdmin)) {
+      buttons.push(
+        <Tooltip tooltip={t`Add to favorite list`}>
+          <Favorite
+            onlyIcon
+            className="Question-header-btn-with-text"
+            like={
+              // -1
+              dashboard && dashboard.statistics && dashboard.statistics.favorite
+            }
+            isLike={dashboard && dashboard.isFavorite}
+            type={"dashboard"}
+            id={dashboard && dashboard.id}
+            uuid={dashboard && dashboard.public_uuid}
+          />
+        </Tooltip>,
+      );
+      /*buttons.push(
+        <Tooltip key="duplicate-dashboard" tooltip={t`Duplicate dashboard`}>
+          <Button
+            key="duplicate"
+            onlyIcon
+            className="Question-header-btn-with-text"
+            iconColor="#7A819B"
+            icon="duplicate"
+            iconSize={16}
+            onClick={onCopyClick}
+          >
+            {dashboard &&
+              dashboard.statistics &&
+              `${dashboard.statistics.copy}`}
+          </Button>
+        </Tooltip>,
+      );*/
+    }
+    if (showCopyButton && !deviceInfo().isMobile && (!!dashboard.public_uuid || isOwner || isAdmin)) {
       buttons.push(
         <Tooltip key="duplicate-dashboard" tooltip={t`Duplicate dashboard`}>
           <Button
@@ -538,7 +576,7 @@ class DashboardHeader extends Component {
       );
     }
 
-    if (hasDataCards) {
+    if (hasDataCards && (!!dashboard.public_uuid || isOwner || isAdmin || isInner)) {
       if (!isEditing) {
         buttons.push(
           <Tooltip key="download-dashboard" tooltip={t`Snapshot`}>
@@ -577,7 +615,7 @@ class DashboardHeader extends Component {
       }
     }
 
-    if (!isEditing && !isEmpty) {
+    if (!isEditing && !isEmpty && (!!dashboard.public_uuid || isOwner || isAdmin)) {
       // const extraButtonClassNames =
       //   "bg-brand-hover text-white-hover py2 px3 text-bold block cursor-pointer";
 
