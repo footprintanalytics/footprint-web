@@ -1,4 +1,4 @@
-import { push } from "react-router-redux";
+import { push, replace } from "react-router-redux";
 import { getIn } from "icepick";
 import { SessionApi, UtilApi } from "metabase/services";
 import MetabaseSettings from "metabase/lib/settings";
@@ -205,9 +205,11 @@ export const logout = createThunkAction(LOGOUT, (redirectUrl: string) => {
     await dispatch(refreshLocale());
     trackLogout();
 
-    if (redirectUrl) {
+/*    if (redirectUrl) {
       dispatch(push(Urls.login(redirectUrl)));
-    }
+    }*/
+
+    dispatch(replace("/"));
     // window.location.reload(); // clears redux state and browser caches
   };
 });
