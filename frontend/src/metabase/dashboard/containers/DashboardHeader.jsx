@@ -511,42 +511,7 @@ class DashboardHeader extends Component {
       );
     }
 
-    if (!isEditing && (!!dashboard.public_uuid || isOwner || isAdmin)) {
-      buttons.push(
-        <Tooltip tooltip={t`Add to favorite list`}>
-          <Favorite
-            onlyIcon
-            className="Question-header-btn-with-text"
-            like={
-              // -1
-              dashboard && dashboard.statistics && dashboard.statistics.favorite
-            }
-            isLike={dashboard && dashboard.isFavorite}
-            type={"dashboard"}
-            id={dashboard && dashboard.id}
-            uuid={dashboard && dashboard.public_uuid}
-          />
-        </Tooltip>,
-      );
-      /*buttons.push(
-        <Tooltip key="duplicate-dashboard" tooltip={t`Duplicate dashboard`}>
-          <Button
-            key="duplicate"
-            onlyIcon
-            className="Question-header-btn-with-text"
-            iconColor="#7A819B"
-            icon="duplicate"
-            iconSize={16}
-            onClick={onCopyClick}
-          >
-            {dashboard &&
-              dashboard.statistics &&
-              `${dashboard.statistics.copy}`}
-          </Button>
-        </Tooltip>,
-      );*/
-    }
-    if (showCopyButton && !deviceInfo().isMobile && (!!dashboard.public_uuid || isOwner || isAdmin)) {
+    if (showCopyButton && !deviceInfo().isMobile) {
       buttons.push(
         <Tooltip key="duplicate-dashboard" tooltip={t`Duplicate dashboard`}>
           <Button
@@ -576,7 +541,7 @@ class DashboardHeader extends Component {
       );
     }
 
-    if (hasDataCards && (!!dashboard.public_uuid || isOwner || isAdmin || isInner)) {
+    if (hasDataCards) {
       if (!isEditing) {
         buttons.push(
           <Tooltip key="download-dashboard" tooltip={t`Snapshot`}>
@@ -615,7 +580,7 @@ class DashboardHeader extends Component {
       }
     }
 
-    if (!isEditing && !isEmpty && (!!dashboard.public_uuid || isOwner || isAdmin)) {
+    if (!isEditing && !isEmpty) {
       // const extraButtonClassNames =
       //   "bg-brand-hover text-white-hover py2 px3 text-bold block cursor-pointer";
 
