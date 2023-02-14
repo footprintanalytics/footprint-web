@@ -14,6 +14,8 @@ const TableDictionary = ({ tableName, tableId, tableConfigList, mode }) => {
 
   const betaTable = getBetaTable({ tableName, tableId, tableConfigList });
 
+  const dictionaryLink = `https://www.footprint.network/@Footprint/Table-Info-Dashboard?table_name=${tableName}`;
+
   // beta table can't be seen the dictionary entrance.
   if (betaTable) {
     return null;
@@ -24,8 +26,13 @@ const TableDictionary = ({ tableName, tableId, tableConfigList, mode }) => {
       return (
         <Link
           className="flex align-center"
-          to={`https://www.footprint.network/@Footprint/Table-Info-Dashboard?table_name=${tableName}`}
+          to={dictionaryLink}
           target={"_blank"}
+          onClick={e => {
+            e.stopPropagation();
+            e.preventDefault();
+            window.open(dictionaryLink)
+          }}
         >
           <Button className="ml1">Dictionary</Button>
         </Link>
