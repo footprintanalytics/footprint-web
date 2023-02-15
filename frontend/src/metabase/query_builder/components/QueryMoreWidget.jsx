@@ -129,7 +129,7 @@ const QueryMoreWidget = ({
             onClick={() => onOpenModal(MODAL_TYPES.CLONE)}
           >{t`Duplicate this query`}</Button>
         </Box> */}
-          {isOwner && isAdmin && (
+          {(isOwner || isAdmin) && (
             <div style={{ width: "100%" }}>
               <Button
                 className="Question-header-btn Question-header-btn--full"

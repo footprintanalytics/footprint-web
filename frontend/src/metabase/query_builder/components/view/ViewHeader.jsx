@@ -761,22 +761,6 @@ function ViewTitleHeaderRightSide(props) {
   if (isSaved) {
     return (
       <ViewHeaderActionPanel data-testid="qb-header-action-panel">
-        {!!card.public_uuid && (
-          <Tooltip tooltip={t`Add to favorite list`}>
-            <Favorite
-              onlyIcon
-              className="Question-header-btn-with-text"
-              like={
-                // -1
-                card && card.statistics && card.statistics.favorite
-              }
-              isLike={card.isFavorite}
-              type="card"
-              id={card.id}
-              uuid={card.public_uuid}
-            />
-          </Tooltip>
-        )}
         {isOwner && (
           <Tooltip tooltip={t`Edit`}>
             <Button
@@ -833,18 +817,6 @@ function ViewTitleHeaderRightSide(props) {
             >
               {card && card.statistics && `${card.statistics.copy}`}
             </Button>
-          </Tooltip>
-        )}
-        {(!!card.public_uuid || isOwner || isAdmin || isInner) && (
-          <Tooltip tooltip={t`Snapshot`}>
-            <Button
-              onlyIcon
-              className="Question-header-btn"
-              iconColor="#7A819B"
-              icon="camera"
-              iconSize={16}
-              onClick={props.downloadImageAction}
-            />
           </Tooltip>
         )}
         {(!!card.public_uuid || isOwner || isAdmin || isInner) &&
