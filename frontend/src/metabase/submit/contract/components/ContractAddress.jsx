@@ -15,6 +15,7 @@ const CHAIN_LIST = [
   { value: "Arbitrum", label: "Arbitrum" },
   { value: "Avalanche", label: "Avalanche" },
   { value: "Cronos", label: "Cronos" },
+  { value: "Harmony", label: "Harmony" },
 ];
 
 const ContractAddress = ({ onFinish }) => {
