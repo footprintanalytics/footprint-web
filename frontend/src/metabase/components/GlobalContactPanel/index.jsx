@@ -19,7 +19,7 @@ const Index = () => {
 
   const isChart = window?.location?.pathname?.startsWith("/chart");
   const showSocialPanel = !isChart && !deviceInfo.isMobile;
-  const showHelpButtonPanel = !showSocialPanel;
+  const showHelpButtonPanel = false;
 
   const closeAction = () => {
     setActive(false);

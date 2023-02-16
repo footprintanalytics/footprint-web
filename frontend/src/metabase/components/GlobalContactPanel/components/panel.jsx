@@ -20,12 +20,14 @@ const Panel = props => {
       <div className="footprint-title2 global-contact-panel__section">
         Need More Help?
       </div>
-      <Icon
-        className="global-contact-panel__close"
-        name="close"
-        size={20}
-        onClick={closeAction}
-      />
+      {closeAction && (
+        <Icon
+          className="global-contact-panel__close"
+          name="close"
+          size={20}
+          onClick={closeAction}
+        />
+      )}
       <div
         style={{
           display: "grid",

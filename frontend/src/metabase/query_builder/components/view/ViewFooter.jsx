@@ -14,6 +14,7 @@ import QueryDownloadWidget from "metabase/query_builder/components/QueryDownload
 import { getIconForVisualizationType, getVisualizationRaw } from "metabase/visualizations";
 import QuestionAlertWidget from "metabase/query_builder/components/view/QuestionAlertWidget";
 import QueryDownloadWidgetFP from "metabase/query_builder/components/QueryDownloadWidgetFP";
+import HelpPanel from "metabase/components/GlobalContactPanel/components/HelpPanel";
 import ViewButton from "./ViewButton";
 import QuestionTimelineWidget from "./QuestionTimelineWidget";
 
@@ -178,6 +179,8 @@ const ViewFooter = ({
               onCloseTimelines={onCloseTimelines}
             />
           ),
+          // eslint-disable-next-line react/jsx-key
+          <HelpPanel />,
         ]}
       />
     </ViewFooterRoot>
