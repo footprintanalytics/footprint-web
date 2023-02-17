@@ -1,5 +1,5 @@
-import React from "react";
-import { Layout, Menu } from "antd";
+import React, { useState, useEffect } from "react";
+import { Button, Layout, Menu, message } from "antd";
 
 const { Sider } = Layout;
 import {
@@ -12,9 +12,10 @@ interface IGaSidebarProp {
   className?: string;
   currentProject?: string;
   router: any;
+  location: any;
 }
 export default function GaSidebar(prop: IGaSidebarProp) {
-  const { currentProject, router } = prop;
+  const { currentProject, router, location } = prop;
   const items = [
     {
       key: "project",
@@ -34,27 +35,33 @@ export default function GaSidebar(prop: IGaSidebarProp) {
       disabled: currentProject === "create_new" ? true : false,
     },
   ];
-
+  const [tab, setTab] = useState<string>();
+  useEffect(() => {
+    if (location.query.tab) {
+      setTab(location.query.tab);
+    } else {
+      setTab("project");
+    }
+  }, [location.query.tab]);
   return (
     <Sider
       collapsible
-      className=""
+      className="flex flex-col h-full"
       trigger={null}
       style={{
         overflow: "auto",
         height: "100vh",
         position: "fixed",
-        marginTop: 60,
         background: "white",
-        left: 0,
-        top: 0,
-        bottom: 0,
+        borderRight: "1px solid #dcdee4",
+        zIndex: 10,
       }}
     >
       <Menu
-        style={{ height: "100%" }}
+        style={{ borderRight: "0px", width: "100%" }}
         theme="light"
         mode="inline"
+        selectedKeys={[tab!]}
         onSelect={item => {
           console.log("select", item);
           router.push({
@@ -62,9 +69,19 @@ export default function GaSidebar(prop: IGaSidebarProp) {
             query: { ...router.query, tab: item.key },
           });
         }}
-        defaultSelectedKeys={[items[0].key]}
+        // defaultSelectedKeys={[items[0].key]}
         items={items}
       />
+      <div className="mt-10 flex flex-column items-center">
+        <Button
+          type="dashed"
+          onClick={() => {
+            message.info("Coming soon!");
+          }}
+        >
+          Edit Menu
+        </Button>
+      </div>
     </Sider>
   );
 }

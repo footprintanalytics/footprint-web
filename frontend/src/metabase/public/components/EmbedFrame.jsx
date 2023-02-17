@@ -48,8 +48,8 @@ class EmbedFrame extends Component {
       ...parseHashOptions(location.hash),
     };
     const showFooter =
-      !hideFooter && (
-        !MetabaseSettings.hideEmbedBranding() ||
+      !hideFooter &&
+      (!MetabaseSettings.hideEmbedBranding() ||
         (!hide_download_button && actionButtons));
 
     const name = titled ? this.props.name : null;

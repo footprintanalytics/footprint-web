@@ -4,7 +4,7 @@ import { connect } from "react-redux";
 import { push } from "react-router-redux";
 import cx from "classnames";
 
-import _  from "underscore";
+import _ from "underscore";
 import { IFRAMED } from "metabase/lib/dom";
 
 import LoadingAndErrorWrapper from "metabase/components/LoadingAndErrorWrapper";
@@ -40,9 +40,9 @@ import EmbedFrame from "../components/EmbedFrame";
 const mapStateToProps = (state, props) => {
   return {
     metadata: getMetadata(state, props),
-    dashboardId: props.params.dashboardId || parseTitleId(
-      props.params.uuid || props.params.token,
-    ).id,
+    dashboardId:
+      props.params.dashboardId ||
+      parseTitleId(props.params.uuid || props.params.token).id,
     dashboard: getDashboardComplete(state, props),
     dashcardData: getCardData(state, props),
     slowCards: getSlowCards(state, props),
@@ -114,6 +114,7 @@ class PublicDashboard extends Component {
       isFullscreen,
       isNightMode,
       hideFooter,
+      className,
     } = this.props;
     const buttons = !IFRAMED
       ? getDashboardActions(this, { ...this.props, isPublic: true })
@@ -135,6 +136,7 @@ class PublicDashboard extends Component {
           buttons.length > 0 && <div className="flex">{buttons}</div>
         }
         hideFooter={hideFooter}
+        className={className}
       >
         <LoadingAndErrorWrapper
           className={cx("Dashboard p1 flex-full", {
