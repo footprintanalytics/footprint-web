@@ -7,7 +7,7 @@ import ConfigConnectors from "../components/config_panel/ConfigConnectors";
 import ConfigFinish from "../components/config_panel/ConfigFinish";
 import ConfigMapping from "../components/config_panel/ConfigMapping";
 import ConfigProject from "../components/config_panel/ConfigProject";
-import "../../containers/why/index.css";
+import "../css/utils.css";
 const steps = [
   {
     title: "Step 1",

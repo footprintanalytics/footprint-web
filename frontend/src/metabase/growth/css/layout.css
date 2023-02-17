@@ -71,37 +71,5 @@
   border: 1px solid #3434b2;
   color: #3434b2;
 }
-.flex{
-  display: flex;
-}
-.flex-row{
-  flex-direction: row;
-}
-.flex-col{
-  flex-direction: column;
-}
-.w-full{
- width: '100%';
-}
-.h-full{
-  height: '100%';
- }
- .flex-row-reverse{
-  flex-direction: row-reverse;
- }
- .mt-10{
-  margin-top: 10px;
- }
-.ml-5{
-  margin-left: 5px;
-}
-.ml-10{
-  margin-left: 10px;
-}
-.ml-200{
-  margin-left: 200px;
-}
-.items-center {
-  align-items: center;
-}
+
 
