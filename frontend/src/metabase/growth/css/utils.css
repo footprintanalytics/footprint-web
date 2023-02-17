@@ -1,0 +1,75 @@
+.ga-empty {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 100%;
+}
+
+.ga-flex {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.ga-my-120 {
+  margin: 120px 0;
+}
+
+.ga-full-content {
+  height: calc(100vh - 60px - 20px - 20px);
+}
+
+.ga-btn {
+  border-radius: 4px;
+  font-size: 16px;
+  width: 210px;
+  height: 40px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+}
+
+.ga-btn--white {
+  background-color: #fff;
+  color: #3434b2;
+}
+
+.ga-btn--white:hover {
+  color: #3434b2;
+}
+
+.ga-btn--plain {
+  border: 1px solid #fff;
+  color: #fff;
+}
+
+.ga-btn--plain:hover {
+  color: #fff;
+}
+
+.ga-quote {
+  position: relative;
+}
+
+.ga-quote::before {
+  content: "";
+  position: absolute;
+  left: -60px;
+  top: -20px;
+  background-image: url("https://static.footprint.network/20220225173135.png");
+  background-size: cover;
+  width: 25.92px;
+  height: 22.56px;
+}
+
+.ga-quote::after {
+  content: "";
+  position: absolute;
+  right: -60px;
+  bottom: -20px;
+  background-image: url("https://static.footprint.network/20220225173217.png");
+  background-size: cover;
+  width: 25.92px;
+  height: 22.56px;
+}

@@ -39,6 +39,7 @@ class EmbedFrame extends Component {
       parameters,
       parameterValues,
       setParameterValue,
+      hideFooter,
     } = this.props;
     const { innerScroll } = this.state;
 
@@ -47,8 +48,9 @@ class EmbedFrame extends Component {
       ...parseHashOptions(location.hash),
     };
     const showFooter =
-      !MetabaseSettings.hideEmbedBranding() ||
-      (!hide_download_button && actionButtons);
+      !hideFooter &&
+      (!MetabaseSettings.hideEmbedBranding() ||
+        (!hide_download_button && actionButtons));
 
     const name = titled ? this.props.name : null;
 

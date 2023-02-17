@@ -210,6 +210,11 @@ export default {
   GroupsListingApp: loadable(() => import("metabase/admin/people/containers/GroupsListingApp")),
   GroupDetailApp: loadable(() => import("metabase/admin/people/containers/GroupDetailApp")),
 
+  // GrowthAnalytics
+  GaAboutContainer:loadable(() => import("metabase/growth/containers/About")),
+  GaConfigContainer:loadable(() => import("metabase/growth/containers/CreateProject")),
+  GaHomeContainer:loadable(() => import("metabase/growth/containers/Home")),
+
   // Metadata / Data model
   DataModelApp: loadable(() => import("metabase/admin/datamodel/containers/DataModelApp")),
   MetadataEditorApp: loadable(() => import("metabase/admin/datamodel/containers/MetadataEditorApp")),

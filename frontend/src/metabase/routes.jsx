@@ -5,7 +5,11 @@ import { routerActions } from "react-router-redux";
 import { UserAuthWrapper } from "redux-auth-wrapper";
 import { t } from "ttag";
 import { Route } from "metabase/hoc/Title";
-import { loadCurrentUser, loadCurrentUserVip, loadCurrentUserVipDataApi } from "metabase/redux/user";
+import {
+  loadCurrentUser,
+  loadCurrentUserVip,
+  loadCurrentUserVipDataApi,
+} from "metabase/redux/user";
 import MetabaseSettings from "metabase/lib/settings";
 import { Unauthorized } from "metabase/containers/ErrorPages";
 import getAccountRoutes from "metabase/account/routes";
@@ -431,11 +435,18 @@ export const getRoutes = store => (
         <IndexRedirect to="/auth/login" />
         <Route component={IsNotAuthenticated}>
           <Route path="login" title={t`Login`} component={LazyLoad.LoginApp} />
-          <Route path="login/:provider" title={t`Login`} component={LazyLoad.LoginApp} />
+          <Route
+            path="login/:provider"
+            title={t`Login`}
+            component={LazyLoad.LoginApp}
+          />
         </Route>
         <Route path="logout" component={LazyLoad.LogoutApp} />
         <Route path="forgot_password" component={LazyLoad.ForgotPasswordApp} />
-        <Route path="reset_password/:token" component={LazyLoad.ResetPasswordApp} />
+        <Route
+          path="reset_password/:token"
+          component={LazyLoad.ResetPasswordApp}
+        />
       </Route>
 
       {/* MAIN */}
@@ -466,7 +477,11 @@ export const getRoutes = store => (
         </Route>
 
         <Route path="search" title={t`Search`} component={LazyLoad.SearchApp} />
-        <Route path="archive" title={t`Archive`} component={LazyLoad.ArchiveApp} />
+        <Route
+          path="archive"
+          title={t`Archive`}
+          component={LazyLoad.ArchiveApp}
+        />
 
         <Route path="collection/users" component={IsAdmin}>
           <IndexRoute component={LazyLoad.UserCollectionList} />
@@ -476,8 +491,14 @@ export const getRoutes = store => (
           <ModalRoute path="move" modal={LazyLoad.MoveCollectionModal} />
           <ModalRoute path="archive" modal={LazyLoad.ArchiveCollectionModal} />
           <ModalRoute path="new_collection" modal={LazyLoad.CollectionCreate} />
-          <ModalRoute path="new_dashboard" modal={LazyLoad.CreateDashboardModal} />
-          <ModalRoute path="permissions" modal={LazyLoad.CollectionPermissionsModal} />
+          <ModalRoute
+            path="new_dashboard"
+            modal={LazyLoad.CreateDashboardModal}
+          />
+          <ModalRoute
+            path="permissions"
+            modal={LazyLoad.CollectionPermissionsModal}
+          />
           {getCollectionTimelineRoutes()}
         </Route>
 
@@ -491,10 +512,7 @@ export const getRoutes = store => (
           <ModalRoute path="move" modal={LazyLoad.DashboardMoveModal} />
           <ModalRoute path="copy" modal={LazyLoad.DashboardCopyModal} />
           <ModalRoute path="archive" modal={LazyLoad.ArchiveDashboardModal} />
-          <ModalRoute
-            path="details"
-            modal={LazyLoad.DashboardDetailsModal}
-          />
+          <ModalRoute path="details" modal={LazyLoad.DashboardDetailsModal} />
         </Route>
 
         <Route path="/question">
@@ -507,7 +525,11 @@ export const getRoutes = store => (
 
         <Route path="/model">
           <IndexRoute component={LazyLoad.QueryBuilder} />
-          <Route path="new" title={t`New Model`} component={LazyLoad.NewModelOptions} />
+          <Route
+            path="new"
+            title={t`New Model`}
+            component={LazyLoad.NewModelOptions}
+          />
           <Route path="notebook" component={LazyLoad.QueryBuilder} />
           <Route path=":slug" component={LazyLoad.QueryBuilder} />
           <Route path=":slug/notebook" component={LazyLoad.QueryBuilder} />
@@ -521,7 +543,10 @@ export const getRoutes = store => (
         <Route path="browse" component={LazyLoad.BrowseApp}>
           <IndexRoute component={LazyLoad.DatabaseBrowser} />
           <Route path=":slug" component={LazyLoad.SchemaBrowser} />
-          <Route path=":dbId/schema/:schemaName" component={LazyLoad.TableBrowser} />
+          <Route
+            path=":dbId/schema/:schemaName"
+            component={LazyLoad.TableBrowser}
+          />
         </Route>
 
         {/* INDIVIDUAL DASHBOARDS */}
@@ -663,7 +688,17 @@ export const getRoutes = store => (
       from="/collections/permissions"
       to="/admin/permissions/collections"
     />
-
+    {/* GrowthAnalytics */}
+    <Route path="/growth" component={LazyLoad.GaHomeContainer}>
+      <ModalRoute
+        title={t`Login`}
+        path="loginModal"
+        modal={LazyLoad.LoginModal}
+        modalProps={{ className: "loginModalRoot" }}
+      />
+    </Route>
+    <Route path="/growth/about" component={LazyLoad.GaAboutContainer} />
+    <Route path="/growth/config" component={LazyLoad.GaConfigContainer} />
     {/* MISC */}
     <Route path="/unauthorized" component={Unauthorized} />
     <Route path="/*" component={LazyLoad.NotFoundFallbackPage} />

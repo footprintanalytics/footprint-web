@@ -33,16 +33,16 @@ import {
   setPublicDashboardEndpoints,
   setEmbedDashboardEndpoints,
 } from "metabase/services";
-import EmbedFrame from "../components/EmbedFrame";
 import { parseHashOptions } from "metabase/lib/browser";
 import { parseTitleId } from "metabase/lib/urls";
+import EmbedFrame from "../components/EmbedFrame";
 
 const mapStateToProps = (state, props) => {
   return {
     metadata: getMetadata(state, props),
-    dashboardId: parseTitleId(
-      props.params.dashboardId || props.params.uuid || props.params.token,
-    ).id,
+    dashboardId:
+      props.params.dashboardId ||
+      parseTitleId(props.params.uuid || props.params.token).id,
     dashboard: getDashboardComplete(state, props),
     dashcardData: getCardData(state, props),
     slowCards: getSlowCards(state, props),
@@ -67,18 +67,20 @@ class PublicDashboard extends Component {
       fetchDashboardCardData,
       setErrorPage,
       location,
-      params: { uuid, token },
+      params: { dashboardId, uuid, token },
     } = this.props;
-    const publicUuid = parseTitleId(uuid).id;
-    if (publicUuid) {
-      setPublicDashboardEndpoints();
-    } else if (token) {
-      setEmbedDashboardEndpoints();
+    let publicUuid;
+    if (!dashboardId) {
+      publicUuid = parseTitleId(uuid).id;
+      if (publicUuid) {
+        setPublicDashboardEndpoints();
+      } else if (token) {
+        setEmbedDashboardEndpoints();
+      }
     }
-
     initialize();
     try {
-      await fetchDashboard(publicUuid || token, location.query);
+      await fetchDashboard(dashboardId || publicUuid || token, location.query);
       await fetchDashboardCardData({ reload: false, clear: true });
     } catch (error) {
       console.error(error);
@@ -111,6 +113,8 @@ class PublicDashboard extends Component {
       parameterValues,
       isFullscreen,
       isNightMode,
+      hideFooter,
+      className,
     } = this.props;
     const buttons = !IFRAMED
       ? getDashboardActions(this, { ...this.props, isPublic: true })
@@ -131,6 +135,8 @@ class PublicDashboard extends Component {
         actionButtons={
           buttons.length > 0 && <div className="flex">{buttons}</div>
         }
+        hideFooter={hideFooter}
+        className={className}
       >
         <LoadingAndErrorWrapper
           className={cx("Dashboard p1 flex-full", {
