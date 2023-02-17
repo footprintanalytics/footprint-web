@@ -93,7 +93,7 @@ class Rose extends Component {
   static checkPermisson = () => true;
 
   componentDidMount() {
-    this.chart = window.echarts.init(this.id.current);
+    this.chart = window.echarts?.init(this.id.current);
     this.getChart();
   }
 
