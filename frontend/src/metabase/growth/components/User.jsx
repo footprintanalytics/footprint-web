@@ -8,13 +8,13 @@ import { demoTip, isDemo } from "../utils/dashboard";
 
 const User = props => {
   const { user, router, location } = props;
-  const isLogin = user && user.groups && user.groups.includes("Defi360");
+  const isLogin = user && user.groups && user.groups.includes("ga");
 
   useEffect(() => {
     if (
       user?.groups &&
-      !user?.groups?.includes("Defi360") &&
-      location.pathname === "/defi360"
+      !user?.groups?.includes("ga") &&
+      location.pathname === "/ga"
     ) {
       demoTip();
     }
@@ -22,7 +22,7 @@ const User = props => {
 
   const login = () => {
     router.push(
-      "/defi360/loginModal?loginState=signIn&from=defi360_about&redirect=/defi360/protocol-dashboard&project=defi360&disableCheckLogin=true",
+      "/ga/loginModal?loginState=signIn&from=ga_about&redirect=/ga&project=ga&disableCheckLogin=true",
     );
   };
 
@@ -32,9 +32,9 @@ const User = props => {
         <ProfileLink {...props} />
       ) : (
         <Button
-          className="defi-layout__sign"
+          className="ga-layout__sign"
           onClick={() => {
-            trackStructEvent("Footprint Enterprise", "Sign In");
+            trackStructEvent("Footprint Growth Analytics", "Sign In");
             if (isDemo()) {
               demoTip();
             } else {
