@@ -23,20 +23,11 @@ const About = props => {
   }, [location.query.tab]);
 
   const getDashboardId = current_tab => {
-    if (!isProduction) {
-      switch (current_tab) {
-        case "activation":
-          return 6942;
-        case "analytics":
-          return 6939;
-      }
-    } else {
-      switch (current_tab) {
-        case "activation":
-          return 6711;
-        case "analytics":
-          return 6720;
-      }
+    switch (current_tab) {
+      case "activation":
+        return 6942;
+      case "analytics":
+        return 6939;
     }
   };
   return (
