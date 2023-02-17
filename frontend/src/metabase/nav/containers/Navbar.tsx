@@ -35,7 +35,6 @@ function Navbar({ isOpen, user, location, params, adminPaths }: NavbarProps) {
     () => location.pathname.startsWith("/admin/"),
     [location.pathname],
   );
-
   return isAdminApp && user ? (
     <AdminNavbar user={user} path={location.pathname} adminPaths={adminPaths} />
   ) : (
