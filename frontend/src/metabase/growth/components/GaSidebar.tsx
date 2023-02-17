@@ -54,7 +54,6 @@ export default function GaSidebar(prop: IGaSidebarProp) {
         position: "fixed",
         background: "white",
         borderRight: "1px solid #dcdee4",
-        zIndex: 10,
       }}
     >
       <Menu

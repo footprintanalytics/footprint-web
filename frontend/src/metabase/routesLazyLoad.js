@@ -214,6 +214,7 @@ export default {
   GaAboutContainer:loadable(() => import("metabase/growth/containers/About")),
   GaConfigContainer:loadable(() => import("metabase/growth/containers/CreateProject")),
   GaHomeContainer:loadable(() => import("metabase/growth/containers/Home")),
+  GaCreateContainer:loadable(() => import("metabase/growth/containers/CreateProject")),
 
   // Metadata / Data model
   DataModelApp: loadable(() => import("metabase/admin/datamodel/containers/DataModelApp")),

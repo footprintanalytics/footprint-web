@@ -689,14 +689,12 @@ export const getRoutes = store => (
       to="/admin/permissions/collections"
     />
     {/* GrowthAnalytics */}
-    <Route path="/growth" component={LazyLoad.GaHomeContainer}>
-      <ModalRoute
-        title={t`Login`}
-        path="loginModal"
-        modal={LazyLoad.LoginModal}
-        modalProps={{ className: "loginModalRoot" }}
-      />
-    </Route>
+    <Route path="/growth" component={LazyLoad.GaHomeContainer}></Route>
+
+    <Route
+      path="/growth/create-project"
+      component={LazyLoad.GaAboutContainer}
+    />
     <Route path="/growth/about" component={LazyLoad.GaAboutContainer} />
     <Route path="/growth/config" component={LazyLoad.GaConfigContainer} />
     {/* MISC */}

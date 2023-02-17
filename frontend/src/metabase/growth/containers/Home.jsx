@@ -5,10 +5,8 @@ import { Layout } from "antd";
 import { Content } from "antd/lib/layout/layout";
 import { getUser } from "metabase/selectors/user";
 import PublicDashboard from "metabase/public/containers/PublicDashboard";
-import { isProduction } from "metabase/env";
 import GaLayout from "../components/GaLayout";
 import GaSidebar from "../components/GaSidebar";
-import "../../containers/why/index.css";
 import CreateProject from "./CreateProject";
 
 const About = props => {
@@ -31,7 +29,7 @@ const About = props => {
     }
   };
   return (
-    <div className="defi-dashboard">
+    <div className="ga-dashboard">
       <GaLayout router={router} location={location}>
         <Layout hasSider>
           <GaSidebar router={router} location={location}></GaSidebar>

@@ -1,12 +1,9 @@
 /* eslint-disable react/prop-types */
 import React, { useContext } from "react";
 import { connect } from "react-redux";
-import { Space } from "antd";
 import { getUser } from "metabase/selectors/user";
 import { getOssUrl } from "metabase/lib/image";
 import Meta from "metabase/components/Meta";
-import Logo from "./Logo";
-import User from "./User";
 import { StateProvider, StateContext } from "./StateProvider";
 import "../css/index.css";
 
@@ -36,19 +33,6 @@ const LayoutView = props => {
           isOpenSubMenu ? "" : "ga-layout--hide-sub-menu"
         }`}
       >
-        <div className="ga-layout__header">
-          <div className="ga-layout__header-left">
-            <Logo />
-            {props.leftHeader}
-          </div>
-          <div className="ga-layout__header-right">
-            <Space>
-              {props.rightHeader}
-              <User {...props} />
-            </Space>
-          </div>
-        </div>
-
         <div className="ga-layout__content">{props.children}</div>
       </div>
     </>
