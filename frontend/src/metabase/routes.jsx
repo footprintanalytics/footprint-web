@@ -401,6 +401,15 @@ export const getRoutes = store => (
           path="chart/:titleAndId"
           component={LazyLoad.GuestQuestion}
         />
+        {/* GrowthAnalytics */}
+        <Route path="/growth" component={LazyLoad.GaHomeContainer}></Route>
+
+        <Route
+          path="/growth/create-project"
+          component={LazyLoad.GaAboutContainer}
+        />
+        <Route path="/growth/about" component={LazyLoad.GaAboutContainer} />
+        <Route path="/growth/config" component={LazyLoad.GaConfigContainer} />
       </Route>
 
       <Route title={t`Question`} path="/chart" component={LazyLoad.Question}>
@@ -688,15 +697,7 @@ export const getRoutes = store => (
       from="/collections/permissions"
       to="/admin/permissions/collections"
     />
-    {/* GrowthAnalytics */}
-    <Route path="/growth" component={LazyLoad.GaHomeContainer}></Route>
 
-    <Route
-      path="/growth/create-project"
-      component={LazyLoad.GaAboutContainer}
-    />
-    <Route path="/growth/about" component={LazyLoad.GaAboutContainer} />
-    <Route path="/growth/config" component={LazyLoad.GaConfigContainer} />
     {/* MISC */}
     <Route path="/unauthorized" component={Unauthorized} />
     <Route path="/*" component={LazyLoad.NotFoundFallbackPage} />
