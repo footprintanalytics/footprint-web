@@ -224,7 +224,7 @@
   (log/info "run-query-with-cache info:" info)
   (let [card-id (info :card-id)
         dashboard-id (info :dashboard-id)
-        query-hash (qp.util/query-hash query)
+        query-hash (qp.util/query-hash query "cache")
         result     (maybe-reduce-cached-results (:ignore-cached-results? middleware) query-hash cache-ttl rff context)
         reducef' (fn [rff context metadata rows]
                    (impl/do-with-serialization

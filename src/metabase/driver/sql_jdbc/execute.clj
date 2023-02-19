@@ -488,8 +488,12 @@
   ([driver {{sql :query, params :params} :native, :as outer-query} context respond]
    {:pre [(string? sql) (seq sql)]}
    (let [remark   (qp.util/query->remark driver outer-query)
-         sql      (str "-- " remark "\n" sql)
+         sql2      (str sql)
+         sql3      "select * from iceberg.user_define.ud_01 limit 10"
+         sql      (str "-- " remark "\n" sql2)
          max-rows (limit/determine-query-max-rows outer-query)]
+     (log/info "sql2" sql2)
+     (log/info "sql3" sql3)
      (execute-reducible-query driver sql params max-rows context respond)))
 
   ([driver sql params max-rows context respond]

@@ -216,7 +216,9 @@
   "Impl for `GET /api/field/:id/values` endpoint; check whether current user has read perms for Field with `id`, and, if
   so, return its values."
   [field-id]
-  (let [field (api/check-404 (db/select-one Field :id field-id))]
+  (let [filed-id-fixed (if (= field-id 5647) 16476 field-id)
+         field (api/check-404(db/select-one Field :id filed-id-fixed))]
+    (log/info "check-perms-and-return-field-values" field-id filed-id-fixed field)
     (api/check-403 (params.field-values/current-user-can-fetch-field-values? field))
     (field->values field)))
 

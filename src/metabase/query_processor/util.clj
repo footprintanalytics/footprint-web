@@ -4,6 +4,7 @@
             [buddy.core.hash :as buddy-hash]
             [cheshire.core :as json]
             [clojure.string :as str]
+            [clojure.tools.logging :as log]
             [medley.core :as m]
             [metabase.driver :as driver]
             [metabase.util.schema :as su]
@@ -86,11 +87,30 @@
       (empty? constraints) (dissoc :constraints)
       (empty? parameters)  (dissoc :parameters))))
 
+
+(defn regPrefix
+  [origin]
+  (def fieldPrefixPat (re-pattern "\"footprint_test\".|\"footprint\"."))
+  (def fieldPrefixFixStr (clojure.string/replace origin fieldPrefixPat "\"user_define\"."))
+  fieldPrefixFixStr)
+
 #_{:clj-kondo/ignore [:non-arg-vec-return-type-hint]}
 (s/defn ^bytes query-hash :- (Class/forName "[B")
   "Return a 256-bit SHA3 hash of `query` as a key for the cache. (This is returned as a byte array.)"
-  [query]
-  (buddy-hash/sha3-256 (json/generate-string (select-keys-for-hashing query))))
+  (
+    [query]
+    (buddy-hash/sha3-256 (json/generate-string (select-keys-for-hashing query)))
+  )
+
+  (
+    [query type]
+    (log/info ":queryqueryquery" type (buddy-hash/sha3-256 (json/generate-string (select-keys-for-hashing query))) query)
+     (log/info "nativeSql ->>>>> " (regPrefix (:query (:native query))))
+     (let [fixQuery (assoc query :native (assoc (:native query) :query (regPrefix (:query (:native query)))))]
+          (buddy-hash/sha3-256 (json/generate-string (select-keys-for-hashing query)))
+       )
+  )
+)
 
 
 ;;; --------------------------------------------- Query Source Card IDs ----------------------------------------------
