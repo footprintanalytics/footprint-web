@@ -1,6 +1,7 @@
 /* eslint-disable react/prop-types */
 import React, { useContext } from "react";
 import { connect } from "react-redux";
+import { Space } from "antd";
 import { getUser } from "metabase/selectors/user";
 import { getOssUrl } from "metabase/lib/image";
 import Meta from "metabase/components/Meta";
