@@ -402,7 +402,8 @@ export const getRoutes = store => (
           component={LazyLoad.GuestQuestion}
         />
         {/* GrowthAnalytics */}
-        <Route path="/growth" component={LazyLoad.GaHomeContainer}></Route>
+        {/* <Route path="/growth" component={LazyLoad.GaHomeContainer}></Route> */}
+        <Route path="/growth" component={LazyLoad.GaProjectsContainer}></Route>
 
         <Route
           path="/growth/create-project"
@@ -410,6 +411,11 @@ export const getRoutes = store => (
         />
         <Route path="/growth/about" component={LazyLoad.GaAboutContainer} />
         <Route path="/growth/config" component={LazyLoad.GaConfigContainer} />
+        <Route
+          path="/growth/projects"
+          component={LazyLoad.GaProjectsContainer}
+        />
+        <Route path="/growth/project" component={LazyLoad.GaProjectContainer} />
       </Route>
 
       <Route title={t`Question`} path="/chart" component={LazyLoad.Question}>
