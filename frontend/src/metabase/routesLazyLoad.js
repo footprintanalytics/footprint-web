@@ -213,7 +213,10 @@ export default {
   // GrowthAnalytics
   GaAboutContainer:loadable(() => import("metabase/growth/containers/About")),
   GaConfigContainer:loadable(() => import("metabase/growth/containers/CreateProject")),
+  GaProjectsContainer:loadable(() => import("metabase/growth/containers/Projects")),
+  GaProjectContainer:loadable(() => import("metabase/growth/containers/Project")),
   GaHomeContainer:loadable(() => import("metabase/growth/containers/Home")),
+  GaCreateContainer:loadable(() => import("metabase/growth/containers/CreateProject")),
 
   // Metadata / Data model
   DataModelApp: loadable(() => import("metabase/admin/datamodel/containers/DataModelApp")),
