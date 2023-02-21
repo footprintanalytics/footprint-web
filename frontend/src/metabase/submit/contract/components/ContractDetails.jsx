@@ -75,7 +75,7 @@ const ContractDetails = ({ formData, onFinish }) => {
       layout="vertical"
       initialValues={{
         protocolName: "",
-        projectCategory: PROTOCOL_CATEGORY_LIST[0].value,
+        projectCategory: null,
         abi: "",
         resubmitReason: "",
         contractName: "",
@@ -120,7 +120,7 @@ const ContractDetails = ({ formData, onFinish }) => {
         rules={[{ required: true, message: "" }]}
         name="projectCategory"
       >
-        <Select options={PROTOCOL_CATEGORY_LIST} />
+        <Select placeholder="Select project category" options={PROTOCOL_CATEGORY_LIST} />
       </Form.Item>
       <Form.Item
         label="Contract Name"
