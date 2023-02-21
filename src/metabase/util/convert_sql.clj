@@ -3,11 +3,22 @@
   (:require [clojure.string :as str])
   )
 
+(defn get-footprint-schema []
+  (
+    let [footprint-schema (System/getenv "FOOTPRINT_SCHEMA")]
+    (if footprint-schema
+      footprint-schema
+      ""
+      )
+    )
+  )
+
 (defn handle-replace-schema [sql col]
   "Replace schema if table is special"
   (println "handle-replace-schema" col)
   (let [trimTable (str/trim col)
-        fixedTrimTable (str/replace trimTable "footprint_test" "animoca_mocaverse_test")]
+        footprint-schema (get-footprint-schema)
+        fixedTrimTable (str/replace trimTable footprint-schema "animoca_mocaverse_test")]
     (str/replace sql trimTable fixedTrimTable)
     )
   )
