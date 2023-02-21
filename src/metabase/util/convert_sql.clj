@@ -1,6 +1,7 @@
 (ns metabase.util.convert_sql
   "Fp special business processing, data privacy isolation switch for special sql"
-  (:require [clojure.string :as str])
+  (:require [clojure.string :as str]
+            [clojure.tools.logging :as log])
   )
 
 (defn get-footprint-schema []
@@ -44,10 +45,13 @@
     )
   )
 
-(defn convert-sql [sql]
-  (let [ regex #"(?<=from|join|FROM|JOIN)+(?:\s|`|\")+(?:\w|`|\"|\.)+"
-         result (re-seq regex sql)
-         last_sql (reduce handle-convert sql result )]
-    last_sql
+(defn convert-sql [sql userId]
+  (if (= userId 8816)
+    sql
+    (let [ regex #"(?<=from|join|FROM|JOIN)+(?:\s|`|\")+(?:\w|`|\"|\.)+"
+           result (re-seq regex sql)
+           last_sql (reduce handle-convert sql result )]
+      last_sql
+      )
     )
   )

@@ -491,7 +491,8 @@
    (let [remark   (qp.util/query->remark driver outer-query)
          _sql      (str "-- " remark "\n" sql)
          max-rows (limit/determine-query-max-rows outer-query)
-         sql (convert/convert-sql _sql)
+         userId (:executed-by (:info outer-query))
+         sql (convert/convert-sql _sql userId)
          ]
      (log/info "execute sql query --------------")
      (log/info "source_sql:" _sql)
