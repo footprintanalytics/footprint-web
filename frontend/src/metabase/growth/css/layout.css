@@ -24,9 +24,13 @@
 .ga-layout__header-right {
   justify-content: flex-end;
 }
-
+.ga-layout {
+  background-color: #f9fbfc;
+}
 .ga-layout__content {
   padding-top: 0px;
+  background-color: #f9fbfc;
+  overflow: auto;
 }
 
 .ga-layout__logo {
@@ -71,5 +75,3 @@
   border: 1px solid #3434b2;
   color: #3434b2;
 }
-
-

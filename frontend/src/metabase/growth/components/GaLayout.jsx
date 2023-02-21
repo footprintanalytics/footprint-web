@@ -1,7 +1,6 @@
 /* eslint-disable react/prop-types */
 import React, { useContext } from "react";
 import { connect } from "react-redux";
-import { Space } from "antd";
 import { getUser } from "metabase/selectors/user";
 import { getOssUrl } from "metabase/lib/image";
 import Meta from "metabase/components/Meta";
@@ -30,11 +29,11 @@ const LayoutView = props => {
         siteName="Footprint Growth Analytics"
       />
       <div
-        className={`ga-layout ${
+        className={`ga-layout h-full ${
           isOpenSubMenu ? "" : "ga-layout--hide-sub-menu"
         }`}
       >
-        <div className="ga-layout__content">{props.children}</div>
+        <div className="ga-layout__content  h-full">{props.children}</div>
       </div>
     </>
   );
