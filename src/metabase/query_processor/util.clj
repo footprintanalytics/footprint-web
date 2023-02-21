@@ -5,6 +5,8 @@
             [cheshire.core :as json]
             [clojure.string :as str]
             [medley.core :as m]
+            [clojure.tools.logging :as log]
+            [metabase.util.convert_sql :as convert]
             [metabase.driver :as driver]
             [metabase.util.schema :as su]
             [metabase.api.common :as api]
@@ -86,11 +88,21 @@
       (empty? constraints) (dissoc :constraints)
       (empty? parameters)  (dissoc :parameters))))
 
+(defn createFixQuery [query]
+  (let [canFix (or (:native query) (:query (:native query)))]
+    (if canFix
+      (assoc query :native (assoc (:native query) :query (convert/convert-sql (:query (:native query)))))
+      query
+      )
+    )
+  )
+
 #_{:clj-kondo/ignore [:non-arg-vec-return-type-hint]}
 (s/defn ^bytes query-hash :- (Class/forName "[B")
   "Return a 256-bit SHA3 hash of `query` as a key for the cache. (This is returned as a byte array.)"
   [query]
-  (buddy-hash/sha3-256 (json/generate-string (select-keys-for-hashing query))))
+  (let [fixQuery (createFixQuery query)]
+    (buddy-hash/sha3-256 (json/generate-string (select-keys-for-hashing fixQuery)))))
 
 
 ;;; --------------------------------------------- Query Source Card IDs ----------------------------------------------
