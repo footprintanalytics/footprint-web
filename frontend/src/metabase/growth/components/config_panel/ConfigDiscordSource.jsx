@@ -10,12 +10,14 @@ const tailLayout = {
 };
 
 const ConfigDiscordSource = props => {
+  const { onAddConnector } = props;
   const formRef = React.useRef(null);
   const [editable, setEditable] = useState(true);
   const onSave = values => {
     setEditable(false);
     // todo 提交表单到 api，成功之后 onNext
     // onNext();
+    onAddConnector("discord");
   };
   const onEdit = value => {
     setEditable(true);
@@ -35,7 +37,7 @@ const ConfigDiscordSource = props => {
         layout="vertical"
         name="control-ref"
         onFinish={onSave}
-        style={{ maxWidth: 1000, minWidth: 500 }}
+        style={{ maxWidth: 1000, minWidth: 300, width: "100%" }}
       >
         <Form.Item
           name="guild_name"

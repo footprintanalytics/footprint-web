@@ -29,7 +29,7 @@ const Project = props => {
     if (location.query.tab) {
       setTab(location.query.tab);
     } else {
-      setTab("project");
+      setTab("Overview");
     }
   }, [location.query.tab]);
   useEffect(() => {
@@ -42,73 +42,125 @@ const Project = props => {
       );
     }
   }, [location.query.project_name]);
-  function getItem(label, icon, children, type) {
-    return {
-      key: label,
-      icon,
-      children,
-      label,
-      type,
-    };
-  }
-  const tabs = [
-    getItem("Overview", React.createElement(ShopOutlined)),
-    getItem("Users", React.createElement(TeamOutlined), [
-      getItem("New User"),
-      getItem("Top Users"),
-      getItem("User Funnel"),
-      getItem("User Retention"),
-      getItem("User Profile"),
-      getItem("User List"),
-      // getItem("Churning Users"),
-    ]),
-    getItem("NFT", React.createElement(FileImageOutlined), [
-      getItem("NFT Overview"),
-      getItem("Holder"),
-      getItem("Transaction"),
-    ]),
-    getItem("Campaign Managemant", React.createElement(BarChartOutlined), [
-      getItem("Campaign List"),
-      getItem("Locate Potential User"),
-      getItem("Wallet Radar"),
-      getItem("Snapshot"),
-      getItem("Airdrop"),
-    ]),
-    getItem("Social Media", React.createElement(CommentOutlined), [
-      getItem("Social Dashboard"),
-      getItem("Twitter"),
-      getItem("Discord"),
-    ]),
-    getItem("Competitive Research", React.createElement(SearchOutlined), [
-      getItem("Industry Insights"),
-      getItem("Competitive Comparison"),
-      // getItem("Competitive Tracking"),
-      getItem("User Overlap"),
-    ]),
-    getItem("Custom Analysis", React.createElement(CustomerServiceOutlined), [
-      getItem("My Analysis"),
-    ]),
-    getItem("Setting", React.createElement(SettingOutlined), [
-      getItem("Connectors"),
-    ]),
+  const tabs_data = [
+    {
+      name: "Overview",
+      icon: React.createElement(ShopOutlined),
+      id: null,
+      children: null,
+    },
+    {
+      name: "Users",
+      icon: React.createElement(TeamOutlined),
+      id: null,
+      children: [
+        { name: "New User", id: 7128 },
+        { name: "Top Users", id: 7120 },
+        { name: "User Funnel", id: 7118 },
+        { name: "User Retention", id: 7119 },
+        { name: "User Profile", id: 7123 },
+        { name: "User List", id: 7122 },
+      ],
+    },
+    {
+      name: "NFT",
+      icon: React.createElement(FileImageOutlined),
+      id: null,
+      children: [
+        { name: "NFT Overview", id: 7129 },
+        { name: "Holder", id: 7133 },
+        { name: "Transaction", id: 7131 },
+      ],
+    },
+    {
+      name: "Campaign Managemant",
+      icon: React.createElement(BarChartOutlined),
+      id: null,
+      children: [
+        { name: "Campaign List", id: null },
+        { name: "Locate Potential User", id: null },
+        { name: "Wallet Radar", id: null },
+        { name: "Snapshot", id: null },
+        { name: "Airdrop", id: null },
+      ],
+    },
+    {
+      name: "Social Media",
+      icon: React.createElement(CommentOutlined),
+      id: null,
+      children: [
+        { name: "Social Dashboard", id: null },
+        { name: "Twitter", id: null },
+        { name: "Discord", id: null },
+      ],
+    },
+    {
+      name: "Competitive Research",
+      icon: React.createElement(SearchOutlined),
+      id: null,
+      children: [
+        { name: "Industry Insights", id: null },
+        { name: "Competitive Comparison", id: null },
+        { name: "User Overlap", id: null },
+      ],
+    },
+    {
+      name: "Custom Analysis",
+      icon: React.createElement(CustomerServiceOutlined),
+      id: null,
+      children: [{ name: "My Analysis", id: null }],
+    },
+    {
+      name: "Setting",
+      icon: React.createElement(SettingOutlined),
+      id: null,
+      children: [{ name: "Connectors", id: null }],
+    },
   ];
+
+  const dashboardMap = new Map();
+  const getTabs = () => {
+    const tabs = [];
+    tabs_data.map(item => {
+      if (item.children && item.children.length > 0) {
+        const children = [];
+        item.children.map(child => {
+          children.push({
+            key: child.name,
+            icon: child.icon,
+            children: null,
+            label: child.name,
+          });
+          if (child.id) {
+            dashboardMap.set(child.name, child.id);
+          }
+        });
+        tabs.push({
+          key: item.name,
+          icon: item.icon,
+          children: children,
+          label: item.name,
+        });
+      } else {
+        tabs.push({
+          key: item.name,
+          icon: item.icon,
+          children: null,
+          label: item.name,
+        });
+        if (item.id) {
+          dashboardMap.set(item.name, item.id);
+        }
+      }
+    });
+    return tabs;
+  };
 
   const projects = [
     { value: "The Sandbox", label: "The Sandbox" },
-    { value: "Mocaverse", label: "Mocaverse" },
-    { value: "BenjiBanana", label: "BenjiBanana" },
+    { value: "Demo1", label: "Demo1" },
   ];
-  const dashboardMap = new Map();
-  // dashboardMap.set("Overview", 4696);
-  dashboardMap.set("New User", 7128);
-  dashboardMap.set("Top Users", 7120);
-  dashboardMap.set("User Funnel", 7118);
-  dashboardMap.set("User Retention", 7119);
-  dashboardMap.set("User List", 7122);
-  dashboardMap.set("User Profile", 7123);
-  dashboardMap.set("NFT Overview", 7129);
-  dashboardMap.set("Holder", 7133);
-  dashboardMap.set("Profit Leadboard", 7131);
+
   const getContentPannel = current_tab => {
     if (dashboardMap.has(current_tab)) {
       return (
@@ -136,7 +188,7 @@ const Project = props => {
         <GaSidebar
           router={router}
           location={location}
-          items={tabs}
+          items={getTabs()}
           currentProject={project}
           projects={projects}
         ></GaSidebar>

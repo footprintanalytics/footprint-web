@@ -9,16 +9,16 @@ const MyProjects = props => {
   const { router } = props;
   const data = [
     {
-      title: "Mocaverse",
+      title: "Demo1",
       desc: "",
-      icon: "https://twitter.com/MocaverseNFT/photo",
-      key: "Mocaverse",
+      icon: "",
+      key: "demo1",
     },
     {
-      title: "BenjiBananas",
+      title: "Demo2",
       desc: "",
-      icon: "https://twitter.com/BenjiBananas/photo",
-      key: "BenjiBananas",
+      icon: "",
+      key: "Demo2",
     },
   ];
   return (

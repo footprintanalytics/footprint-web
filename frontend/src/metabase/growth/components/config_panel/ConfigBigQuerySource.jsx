@@ -10,6 +10,7 @@ const tailLayout = {
 };
 
 const ConfigBigQuerySource = props => {
+  const { onAddConnector } = props;
   const formRef = React.useRef(null);
   const [editable, setEditable] = useState(true);
   const onSave = values => {
@@ -17,6 +18,7 @@ const ConfigBigQuerySource = props => {
 
     setEditable(false);
     // todo 提交表单到 api，成功之后 onNext
+    onAddConnector("bq");
     // onNext();
   };
   const onEdit = value => {
@@ -37,7 +39,7 @@ const ConfigBigQuerySource = props => {
         layout="vertical"
         name="control-ref"
         onFinish={onSave}
-        style={{ maxWidth: 1000, minWidth: 500 }}
+        style={{ maxWidth: 1000, minWidth: 300, width: "100%" }}
       >
         <Form.Item
           name="ga_json_key"
