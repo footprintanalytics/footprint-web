@@ -10,11 +10,13 @@ const tailLayout = {
 };
 
 const ConfigGoogleAnalyticsSource = props => {
+  const { onAddConnector } = props;
   const formRef = React.useRef(null);
   const [editable, setEditable] = useState(true);
   const onSave = values => {
     console.log(values);
     setEditable(false);
+    onAddConnector("ga");
     // todo 提交表单到 api，成功之后 onNext
     // onNext();
   };
@@ -36,7 +38,7 @@ const ConfigGoogleAnalyticsSource = props => {
         layout="vertical"
         name="control-ref"
         onFinish={onSave}
-        style={{ maxWidth: 1000, minWidth: 500 }}
+        style={{ maxWidth: 1000, minWidth: 300, width: "100%" }}
       >
         <Form.Item
           name="property_id"

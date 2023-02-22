@@ -1,12 +1,13 @@
 import React, { useState, useEffect } from "react";
 import { Button, Layout, Menu, message, Select } from "antd";
-
+import type { MenuProps } from "antd";
 const { Sider } = Layout;
 import {
   BarChartOutlined,
   ShopOutlined,
   TeamOutlined,
 } from "@ant-design/icons";
+import "../css/utils.css";
 
 interface IGaSidebarProp {
   className?: string;
@@ -33,6 +34,10 @@ export default function GaSidebar(prop: IGaSidebarProp) {
       disabled: currentProject === "create_new" ? true : false,
     },
   ];
+  const rootSubmenuKeys: any[] = [];
+  items?.map(i => {
+    rootSubmenuKeys.push(i.label);
+  });
   const [tab, setTab] = useState<string>();
   useEffect(() => {
     if (location.query.tab) {
@@ -47,6 +52,16 @@ export default function GaSidebar(prop: IGaSidebarProp) {
       pathname: location.pathname,
       query: { ...location.query, project_name: value },
     });
+  };
+  const [openKeys, setOpenKeys] = useState([tab]);
+
+  const onOpenChange: MenuProps["onOpenChange"] = keys => {
+    const latestOpenKey = keys.find(key => openKeys.indexOf(key) === -1);
+    if (rootSubmenuKeys.indexOf(latestOpenKey!) === -1) {
+      setOpenKeys(keys);
+    } else {
+      setOpenKeys(latestOpenKey ? [latestOpenKey] : []);
+    }
   };
   return (
     <Sider
@@ -74,7 +89,10 @@ export default function GaSidebar(prop: IGaSidebarProp) {
       <Menu
         style={{ borderRight: "0px", width: "100%" }}
         theme="light"
+        // className="ant-menu-inline ant-menu-item"
         mode="inline"
+        openKeys={openKeys}
+        onOpenChange={onOpenChange}
         selectedKeys={[tab!]}
         onSelect={item => {
           console.log("select", item);
