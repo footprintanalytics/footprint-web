@@ -67,8 +67,10 @@
   (if (= userId 8816)
     sql
     (let [ regex #"(?<=from|join|FROM|JOIN)+(?:\s|`|\")+(?:\w|`|\"|\.)+"
+           groupRegex #"(?<=from|join|FROM|JOIN)+((?:\s|`|\")+(?:\w|`|\"|\.)+)"
+           fix_sql (str/replace sql groupRegex "$1 ")
            result (re-seq regex sql)
-           last_sql (reduce handle-convert sql result )]
+           last_sql (reduce handle-convert fix_sql result )]
       last_sql
       )
     )
