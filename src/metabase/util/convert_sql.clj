@@ -30,14 +30,42 @@
     )
   )
 
+(defn get-footprint-catalog []
+  (
+    let [footprint-catalog (System/getenv "FOOTPRINT_CATALOG")]
+    (if footprint-catalog
+      footprint-catalog
+      ""
+      )
+    )
+  )
+
+(defn get-fga-catalog []
+  (
+    let [fga-catalog (System/getenv "FGA_CATALOG")]
+    (if fga-catalog
+      fga-catalog
+      ""
+      )
+    )
+  )
+
 (defn handle-replace-schema [sql col]
   "Replace schema if table is special"
   (println "handle-replace-schema" col)
-  (let [trimTable (str/trim col)
+  (let [trim-table (str/trim col)
+        footprint-catalog (get-footprint-catalog)
+        fga-catalog (get-fga-catalog)
         footprint-schema (get-footprint-schema)
         account-schema (get-fga-account-mapping "animoca_mocaverse")
-        fixedTrimTable (str/replace trimTable footprint-schema account-schema)]
-    (str/replace sql trimTable fixedTrimTable)
+        fixed-trim-table (str/replace trim-table footprint-schema account-schema)
+        fixed-trim-table
+        (if (str/includes? fixed-trim-table footprint-catalog)
+          (str/replace fixed-trim-table footprint-catalog fga-catalog)
+          (str "\"" fga-catalog "\"." fixed-trim-table)
+          )
+        ]
+    (str/replace sql trim-table fixed-trim-table)
     )
   )
 
@@ -45,10 +73,11 @@
   "Add schema if table is special"
   (println "handle-add-schema", col)
   (let [trimTable (str/trim col)
+        fga-catalog (get-fga-catalog)
         account-schema (get-fga-account-mapping "animoca_mocaverse")
-        replaceSpaceSQLStr (str/replace sql (str trimTable " ") (str "\""  account-schema "\"." trimTable " "))
+        replaceSpaceSQLStr (str/replace sql (str trimTable " ") (str "\"" fga-catalog "\"." "\""  account-schema "\"." trimTable " "))
         ]
-    (str/replace replaceSpaceSQLStr (str trimTable "\n") (str "\""account-schema "\"." trimTable "\n"))
+    (str/replace replaceSpaceSQLStr (str trimTable "\n") (str "\"" fga-catalog "\"." "\"" "\""account-schema "\"." trimTable "\n"))
     )
   )
 
