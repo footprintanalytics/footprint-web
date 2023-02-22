@@ -8,12 +8,14 @@
 
 (defn get-fga-table-white-list []
   (let [table-white-list (fga_table/fga-table-white-list)]
+    (println "get-fga-table-white-list--->>>>>" table-white-list)
     table-white-list
     )
   )
 
 (defn get-fga-account-mapping [groupName]
   (let [account (fga_account_mapping/account-mapping-result groupName)]
+    (println "get-fga-account-mapping--->>>>>" account)
     (first account)
     )
   )
