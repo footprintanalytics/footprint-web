@@ -37,9 +37,7 @@ const Project = props => {
       setProject(location.query.project_name);
       saveLatestGAProject(location.query.project_name);
     } else {
-      setProject(
-        getLatestGAProject() ? getLatestGAProject() : projects[0].value,
-      );
+      setProject(getLatestGAProject() ? getLatestGAProject() : "");
     }
   }, [location.query.project_name]);
   const tabs_data = [
@@ -156,11 +154,6 @@ const Project = props => {
     return tabs;
   };
 
-  const projects = [
-    { value: "The Sandbox", label: "The Sandbox" },
-    { value: "Demo1", label: "Demo1" },
-  ];
-
   const getContentPannel = current_tab => {
     if (dashboardMap.has(current_tab)) {
       return (
@@ -190,7 +183,6 @@ const Project = props => {
           location={location}
           items={getTabs()}
           currentProject={project}
-          projects={projects}
         ></GaSidebar>
         <Content
           className="h-full ga-layout__content"
