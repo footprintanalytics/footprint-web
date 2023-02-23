@@ -334,13 +334,13 @@ class FgaNavbar extends Component {
           onClick={onCreateAction}
         >
           <Icon name="plus" size={12} />
-          <span>Create</span>
+          <span>Create My Project</span>
         </div>
       );
     };
 
     const onCreateAction = () => {
-      trackStructEvent(`click Navbar Create`);
+      trackStructEvent(`click Navbar Create My Project`);
       const afterSuccess = () => setCreateModalShow({ show: true });
       const block = this.needCancelFeedbackBlock({ afterSuccess });
       if (block) {
@@ -426,14 +426,7 @@ class FgaNavbar extends Component {
         </div>
         <React.Fragment>
           <div className="Nav__search-bar">
-            <GaProjectSelector
-              location={location}
-              // router={router}
-            ></GaProjectSelector>
-            {/* <SearchBar
-              location={location}
-              onChangeLocation={onChangeLocation}
-            /> */}
+            <GaProjectSelector location={location}></GaProjectSelector>
           </div>
           <div className="Nav__mobile-logo">
             <Link
