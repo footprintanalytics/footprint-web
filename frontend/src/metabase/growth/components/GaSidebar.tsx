@@ -1,12 +1,8 @@
 import React, { useState, useEffect } from "react";
-import { Button, Layout, Menu, message, Select } from "antd";
+import { Layout, Menu } from "antd";
 import type { MenuProps } from "antd";
 const { Sider } = Layout;
-import {
-  BarChartOutlined,
-  ShopOutlined,
-  TeamOutlined,
-} from "@ant-design/icons";
+import { BarChartOutlined, TeamOutlined } from "@ant-design/icons";
 import "../css/utils.css";
 
 interface IGaSidebarProp {
@@ -47,13 +43,7 @@ export default function GaSidebar(prop: IGaSidebarProp) {
     }
   }, [location.query.tab]);
 
-  const handleProjectChange = (value: string) => {
-    router.push({
-      pathname: location.pathname,
-      query: { ...location.query, project_name: value },
-    });
-  };
-  const [openKeys, setOpenKeys] = useState([tab]);
+  const [openKeys, setOpenKeys] = useState<string[]>([tab!]);
 
   const onOpenChange: MenuProps["onOpenChange"] = keys => {
     const latestOpenKey = keys.find(key => openKeys.indexOf(key) === -1);
@@ -71,23 +61,19 @@ export default function GaSidebar(prop: IGaSidebarProp) {
         display: "flex",
         flexDirection: "column",
         overflow: "auto",
-        height: "100vh",
+        height: "100%",
         position: "fixed",
         background: "white",
         borderRight: "1px solid #dcdee4",
       }}
     >
-      {projects && projects.length > 0 && (
-        <Select
-          value={currentProject}
-          style={{ margin: "20px", width: "210px" }}
-          onChange={handleProjectChange}
-          options={projects}
-        />
-      )}
-
       <Menu
-        style={{ borderRight: "0px", width: "100%" }}
+        style={{
+          borderRight: "0px",
+          width: "100%",
+          paddingBottom: 50,
+          paddingTop: 20,
+        }}
         theme="light"
         // className="ant-menu-inline ant-menu-item"
         mode="inline"
@@ -104,7 +90,7 @@ export default function GaSidebar(prop: IGaSidebarProp) {
         // defaultSelectedKeys={[items[0].key]}
         items={items ? items : items_temp}
       />
-      <div className="mt-10 flex flex-column items-center">
+      {/* <div className="mt-10 flex flex-column items-center">
         <Button
           type="dashed"
           onClick={() => {
@@ -113,7 +99,7 @@ export default function GaSidebar(prop: IGaSidebarProp) {
         >
           Edit Menu
         </Button>
-      </div>
+      </div> */}
     </Sider>
   );
 }

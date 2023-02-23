@@ -1,7 +1,9 @@
 .ant-menu-item,
 .ant-menu-inline {
-  margin-top: 0px;
-  margin-bottom: 0px;
+  margin-top: 0px !important;
+  margin-bottom: 0px !important;
+  /* line-height: 35px !important; */
+  /* height: 35px !important; */
 }
 .ga-empty {
   display: flex;
