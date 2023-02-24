@@ -19,3 +19,16 @@ export function getLatestGACampaigns() {
     ? JSON.parse(localStorage.getItem("LatestGACampaigns")!)
     : [];
 }
+
+export function saveGASearchHistory(item: any) {
+  const temp: any[] = getGASearchHistory();
+  if (temp.findIndex(i => i.value === item.value) === -1) {
+    temp.push(item);
+  }
+  localStorage.setItem("GASearchHistory", JSON.stringify(temp));
+}
+export function getGASearchHistory() {
+  return localStorage.getItem("GASearchHistory")
+    ? JSON.parse(localStorage.getItem("GASearchHistory")!)
+    : [];
+}
