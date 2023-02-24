@@ -10,3 +10,12 @@ export function saveLatestGAMenuTag(LatestGAMenuTag: string) {
 export function getLatestGAMenuTag() {
   return localStorage.getItem("LatestGAMenuTag");
 }
+
+export function saveLatestGACampaigns(LatestGACampaigns: any) {
+  localStorage.setItem("LatestGACampaigns", JSON.stringify(LatestGACampaigns));
+}
+export function getLatestGACampaigns() {
+  return localStorage.getItem("LatestGACampaigns")
+    ? JSON.parse(localStorage.getItem("LatestGACampaigns")!)
+    : [];
+}

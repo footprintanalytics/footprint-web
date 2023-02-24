@@ -174,7 +174,7 @@ const Project = props => {
       return <Connectors></Connectors>;
     }
     if (current_tab === "Campaign List") {
-      return <Campaigns></Campaigns>;
+      return <Campaigns router={router} location={location}></Campaigns>;
     }
     return (
       <div style={{ textAlign: "center", padding: "50px" }}>
