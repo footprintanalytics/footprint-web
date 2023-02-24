@@ -11,8 +11,10 @@ import {
   Result,
   Card,
   Typography,
+  message,
 } from "antd";
 import Title from "antd/lib/typography/Title";
+import Icon from "metabase/components/Icon";
 import { getUser } from "metabase/selectors/user";
 import AF from "assets/img/af.png";
 import BQ from "assets/img/BQ.svg";
@@ -23,58 +25,22 @@ import ConfigAppsFlyerSource from "../components/config_panel/ConfigAppsFlyerSou
 import ConfigTwitterSource from "../components/config_panel/ConfigTwitterSource";
 import ConfigDiscordSource from "../components/config_panel/ConfigDiscordSource";
 import "../css/utils.css";
-const { Text } = Typography;
+import { getLatestGACampaigns } from "../utils/utils";
 
 const Campaigns = props => {
   const { router, location, children, user } = props;
   const [isModalOpen, setIsModalOpen] = useState(false);
-  const [openDrawer, setOpenDrawer] = useState({ show: false, connector: {} });
+  const [openDrawer, setOpenDrawer] = useState({ show: false, campaign: {} });
   const showDrawer = c => {
-    setOpenDrawer({ show: true, connector: c });
+    setOpenDrawer({ show: true, campaign: c });
   };
   const onCloseDrawer = () => {
     setOpenDrawer({ show: false });
   };
-  const onAddConnector = key => {
-    const i = connectors.find(item => item.key === key);
-    const temp = currentConnectors;
-    temp.push({ connector: i });
-    setCurrentConnectors(temp);
-    onCloseDrawer();
-  };
-  const connectors = [
-    {
-      name: "Google Analytics",
-      key: "ga",
-      icon: GA,
-      pannel: <ConfigGoogleAnalyticsSource onAddConnector={onAddConnector} />,
-    },
-    {
-      name: "BigQuery",
-      key: "bq",
-      icon: BQ,
-      pannel: <ConfigBigQuerySource onAddConnector={onAddConnector} />,
-    },
-    {
-      name: "Appsflyers",
-      key: "af",
-      icon: AF,
-      pannel: <ConfigAppsFlyerSource onAddConnector={onAddConnector} />,
-    },
-    {
-      name: "Discord",
-      key: "discord",
-      icon: "https://footprint-imgs-hk.oss-cn-hongkong.aliyuncs.com/20220516201343.png",
-      pannel: <ConfigDiscordSource onAddConnector={onAddConnector} />,
-    },
-    {
-      name: "Twitter",
-      key: "twitter",
-      icon: "https://footprint-imgs-hk.oss-cn-hongkong.aliyuncs.com/20220516201254.png",
-      pannel: <ConfigTwitterSource onAddConnector={onAddConnector} />,
-    },
-  ];
-  const [currentConnectors, setCurrentConnectors] = useState([]);
+
+  const [currentCampaigns, setCurrentCampaigns] = useState(
+    getLatestGACampaigns(),
+  );
   return (
     <div className=" flex flex-column items-center">
       <div
@@ -95,7 +61,11 @@ const Campaigns = props => {
           <Button
             type={"default"}
             onClick={() => {
-              setIsModalOpen(true);
+              // setIsModalOpen(true);
+              router?.push({
+                pathname: location.pathname,
+                query: { ...location.query, tab: "User List" },
+              });
             }}
           >
             Add Campaign
@@ -103,11 +73,11 @@ const Campaigns = props => {
         </div>
 
         <Divider></Divider>
-        {currentConnectors.length > 0 ? (
+        {currentCampaigns.length > 0 ? (
           <List
             className="w-full"
             itemLayout="horizontal"
-            dataSource={currentConnectors}
+            dataSource={currentCampaigns}
             renderItem={item => (
               <List.Item
                 style={{
@@ -121,18 +91,31 @@ const Campaigns = props => {
                   <a
                     key="list-loadmore-edit"
                     onClick={() => {
-                      showDrawer(item.connector);
+                      showDrawer(item);
                     }}
                   >
                     detail
                   </a>,
-                  <a key="list-loadmore-more">delete</a>,
+                  <a
+                    key="list-loadmore-more"
+                    onClick={() => {
+                      message.info("Comming soon");
+                    }}
+                  >
+                    delete
+                  </a>,
                 ]}
               >
                 <List.Item.Meta
-                  avatar={<Avatar src={item?.connector?.icon} />}
-                  title={item.connector?.name}
-                  description="Sync data in 2023-02-01 12:00:00"
+                  avatar={
+                    <Icon
+                      className="mr1 text-light"
+                      name={item.channel}
+                      size={24}
+                    />
+                  }
+                  title={item.channel + " campaign "}
+                  description={item.message}
                 />
               </List.Item>
             )}
@@ -198,14 +181,14 @@ const Campaigns = props => {
         /> */}
       </Modal>
       <Drawer
-        title={`Config ${openDrawer?.connector?.name} Connector`}
+        title={`Campaign ${openDrawer?.campaign?.channel} detail`}
         placement="right"
         maskClosable={false}
         width={500}
         onClose={onCloseDrawer}
         open={openDrawer.show}
       >
-        {openDrawer.connector && openDrawer.connector.pannel}
+        {openDrawer.campaign && JSON.stringify(openDrawer.campaign)}
       </Drawer>
     </div>
   );

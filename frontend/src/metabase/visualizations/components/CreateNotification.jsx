@@ -4,6 +4,10 @@ import { Modal, Input, message, Button } from "antd";
 import axios from "axios";
 import Toggle from "metabase/core/components/Toggle";
 import Icon from "metabase/components/Icon";
+import {
+  saveLatestGACampaigns,
+  getLatestGACampaigns,
+} from "metabase/growth/utils/utils";
 
 const CreateNotification = ({ state }) => {
   const [isNotificationModalOpen, setIsNotificationModalOpen] = useState(false);
@@ -95,6 +99,9 @@ const CreateNotification = ({ state }) => {
     const hide = message.loading("Sending... ", 0);
     setIsNotificationModalOpen(false);
     console.log(body);
+    const pre_datas = getLatestGACampaigns();
+    pre_datas.push(body);
+    saveLatestGACampaigns(pre_datas);
     // await axios.post(
     //   "https://app.internal.footprint.network/api/v0/task/notify",
     //   body,

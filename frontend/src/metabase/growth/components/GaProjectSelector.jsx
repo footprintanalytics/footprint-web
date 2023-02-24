@@ -28,7 +28,7 @@ const GaProjectSelector = props => {
   const handleProjectChange = value => {
     router?.push({
       pathname: location.pathname,
-      query: { ...location.query, project_name: value, gamefi: value },
+      query: { ...location.query, project_name: value },
     });
   };
   return (
