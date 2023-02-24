@@ -10,8 +10,8 @@ import "../css/index.css";
 const GaProjectSelector = props => {
   const { router, location } = props;
   const projects = [
-    { value: "The Sandbox", label: "The Sandbox" },
-    { value: "Demo1", label: "Demo1" },
+    { value: "the-sandbox", label: "The Sandbox" },
+    { value: "sunflower-farmers", label: "Sunflower Farmers" },
   ];
 
   const [currentProject, setCurrentProject] = useState();
@@ -28,7 +28,7 @@ const GaProjectSelector = props => {
   const handleProjectChange = value => {
     router?.push({
       pathname: location.pathname,
-      query: { ...location.query, project_name: value },
+      query: { ...location.query, project_name: value, gamefi: value },
     });
   };
   return (

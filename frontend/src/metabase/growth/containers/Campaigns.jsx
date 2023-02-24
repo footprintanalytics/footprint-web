@@ -25,7 +25,7 @@ import ConfigDiscordSource from "../components/config_panel/ConfigDiscordSource"
 import "../css/utils.css";
 const { Text } = Typography;
 
-const Connectors = props => {
+const Campaigns = props => {
   const { router, location, children, user } = props;
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [openDrawer, setOpenDrawer] = useState({ show: false, connector: {} });
@@ -74,24 +74,7 @@ const Connectors = props => {
       pannel: <ConfigTwitterSource onAddConnector={onAddConnector} />,
     },
   ];
-  const [currentConnectors, setCurrentConnectors] = useState([
-    // {
-    //   connector: {
-    //     name: "Google Analytics",
-    //     key: "ga",
-    //     icon: GA,
-    //     pannel: <ConfigGoogleAnalyticsSource />,
-    //   },
-    // },
-    // {
-    //   connector: {
-    //     name: "Appsflyers",
-    //     key: "af",
-    //     icon: AF,
-    //     pannel: <ConfigAppsFlyerSource />,
-    //   },
-    // },
-  ]);
+  const [currentConnectors, setCurrentConnectors] = useState([]);
   return (
     <div className=" flex flex-column items-center">
       <div
@@ -107,7 +90,7 @@ const Connectors = props => {
       >
         <div className=" flex flex-row justify-between w-full">
           <Title width={"100%"} level={4} style={{ marginBottom: 0 }}>
-            Connectors
+            Campaigns
           </Title>
           <Button
             type={"default"}
@@ -115,7 +98,7 @@ const Connectors = props => {
               setIsModalOpen(true);
             }}
           >
-            Add Connector
+            Add Campaign
           </Button>
         </div>
 
@@ -141,7 +124,7 @@ const Connectors = props => {
                       showDrawer(item.connector);
                     }}
                   >
-                    edit
+                    detail
                   </a>,
                   <a key="list-loadmore-more">delete</a>,
                 ]}
@@ -159,7 +142,7 @@ const Connectors = props => {
             {/* <div>This project still no config any connector!</div> */}
             <Result
               status="warning"
-              title="This project still no config any connector!"
+              title="This project still have not campaigns!"
               extra={
                 <Button
                   type="primary"
@@ -168,7 +151,7 @@ const Connectors = props => {
                     setIsModalOpen(true);
                   }}
                 >
-                  Add Connector Now
+                  Add Campaigns Now
                 </Button>
               }
             />
@@ -185,7 +168,8 @@ const Connectors = props => {
           setIsModalOpen(false);
         }}
       >
-        <List
+        Coming soon~
+        {/* <List
           grid={{
             gutter: 10,
             xs: 1,
@@ -211,7 +195,7 @@ const Connectors = props => {
               </Card>
             </List.Item>
           )}
-        />
+        /> */}
       </Modal>
       <Drawer
         title={`Config ${openDrawer?.connector?.name} Connector`}
@@ -233,4 +217,4 @@ const mapStateToProps = state => {
   };
 };
 
-export default connect(mapStateToProps)(Connectors);
+export default connect(mapStateToProps)(Campaigns);

@@ -570,7 +570,7 @@ class Visualization extends React.PureComponent {
                 style={{ display: small ? "none" : "" }}
               >
                 <div>{error}</div>
-                {errorIcon !== "key" &&<ErrorGuide cardId={cardId} />}
+                {errorIcon !== "key" && <ErrorGuide cardId={cardId} />}
               </div>
             }
           </div>
@@ -602,8 +602,12 @@ class Visualization extends React.PureComponent {
           </div>
         ) : (
           <>
-            {this.state.computedSettings["card.title"] ===
-              "Wallet User Stats" && <CreateNotification state={this.state} />}
+            {(this.state.computedSettings["card.title"] ===
+              "Wallet User Stats" ||
+              this.state.computedSettings["card.title"] ===
+                "User Segmentation") && (
+              <CreateNotification state={this.state} />
+            )}
             <CardVisualization
               {...this.props}
               // NOTE: CardVisualization class used to target ExplicitSize HOC
