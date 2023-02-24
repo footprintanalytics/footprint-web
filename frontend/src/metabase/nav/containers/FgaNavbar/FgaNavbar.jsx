@@ -24,6 +24,7 @@ import {
 } from "metabase/redux/control";
 import SearchBar from "metabase/nav/components/SearchBar";
 import GaProjectSelector from "metabase/growth/components/GaProjectSelector";
+import GaProjectSearch from "metabase/growth/components/GaProjectSearch";
 import ProfileLink from "metabase/nav/components/ProfileLink";
 import Link from "metabase/core/components/Link";
 import LoginModal from "metabase/auth/containers/LoginModal";
@@ -426,7 +427,8 @@ class FgaNavbar extends Component {
         </div>
         <React.Fragment>
           <div className="Nav__search-bar">
-            <GaProjectSelector location={location}></GaProjectSelector>
+            <GaProjectSearch location={location}></GaProjectSearch>
+            {/* <GaProjectSelector location={location}></GaProjectSelector> */}
           </div>
           <div className="Nav__mobile-logo">
             <Link
