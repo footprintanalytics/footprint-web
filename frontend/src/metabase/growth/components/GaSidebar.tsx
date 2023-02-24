@@ -4,6 +4,7 @@ import type { MenuProps } from "antd";
 const { Sider } = Layout;
 import { BarChartOutlined, TeamOutlined } from "@ant-design/icons";
 import "../css/utils.css";
+import { getLatestGAMenuTag, saveLatestGAMenuTag } from "../utils/utils";
 
 interface IGaSidebarProp {
   className?: string;
@@ -39,7 +40,7 @@ export default function GaSidebar(prop: IGaSidebarProp) {
     if (location.query.tab) {
       setTab(location.query.tab);
     } else {
-      setTab("");
+      setTab(getLatestGAMenuTag() ? getLatestGAMenuTag()! : "");
     }
   }, [location.query.tab]);
 
@@ -81,7 +82,7 @@ export default function GaSidebar(prop: IGaSidebarProp) {
         onOpenChange={onOpenChange}
         selectedKeys={[tab!]}
         onSelect={item => {
-          console.log("select", item);
+          saveLatestGAMenuTag(item.key);
           router.push({
             pathname: location.pathname,
             query: { ...location.query, tab: item.key },

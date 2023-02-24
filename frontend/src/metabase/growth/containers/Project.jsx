@@ -8,17 +8,20 @@ import {
   ShopOutlined,
   TeamOutlined,
   SettingOutlined,
-  CustomerServiceOutlined,
   SearchOutlined,
   CommentOutlined,
-  FileImageOutlined,
 } from "@ant-design/icons";
 import PublicDashboard from "metabase/public/containers/PublicDashboard";
 import { getUser } from "metabase/selectors/user";
 import GaLayout from "../components/GaLayout";
 import GaSidebar from "../components/GaSidebar";
-import { getLatestGAProject, saveLatestGAProject } from "../utils/utils";
+import {
+  getLatestGAProject,
+  saveLatestGAProject,
+  getLatestGAMenuTag,
+} from "../utils/utils";
 import Connectors from "./Connectors";
+import Campaigns from "./Campaigns";
 import "../css/index.css";
 
 const Project = props => {
@@ -29,7 +32,7 @@ const Project = props => {
     if (location.query.tab) {
       setTab(location.query.tab);
     } else {
-      setTab("Overview");
+      setTab(getLatestGAMenuTag() ? getLatestGAMenuTag() : "");
     }
   }, [location.query.tab]);
   useEffect(() => {
@@ -74,9 +77,9 @@ const Project = props => {
           // icon: React.createElement(SearchOutlined),
           id: null,
           children: [
-            { name: "Industry Insights", id: null },
-            { name: "Competitive Comparison", id: null },
-            { name: "User Overlap", id: null },
+            { name: "Industry Insights", id: 7164 },
+            { name: "Competitive Comparison", id: 7160 },
+            { name: "User Overlap", id: 7128 },
           ],
         },
         {
@@ -113,9 +116,9 @@ const Project = props => {
       id: null,
       children: [
         { name: "Campaign List", id: null },
-        // { name: "Locate Potential User", id: null },
+        // { name: "User List", id: 7136 },
+        // { name: "User Group", id: null },
         // { name: "Wallet Radar", id: null },
-        // { name: "Snapshot", id: null },
         { name: "Snapshot & Airdrop", id: null },
       ],
     },
@@ -130,7 +133,10 @@ const Project = props => {
       name: "Setting",
       icon: React.createElement(SettingOutlined),
       id: null,
-      children: [{ name: "Connectors", id: null }],
+      children: [
+        { name: "Connectors", id: null },
+        { name: "Project Info", id: null },
+      ],
     },
   ];
 
@@ -148,37 +154,6 @@ const Project = props => {
       if (item.id) {
         dashboardMap.set(item.name, item.id);
       }
-
-      // if (item.children && item.children.length > 0) {
-      //   const children = [];
-      //   item.children.map(child => {
-      //     children.push({
-      //       key: child.name,
-      //       icon: child.icon,
-      //       children: null,
-      //       label: child.name,
-      //     });
-      //     if (child.id) {
-      //       dashboardMap.set(child.name, child.id);
-      //     }
-      //   });
-      //   tabs.push({
-      //     key: item.name,
-      //     icon: item.icon,
-      //     children: children,
-      //     label: item.name,
-      //   });
-      // } else {
-      //   tabs.push({
-      //     key: item.name,
-      //     icon: item.icon,
-      //     children: null,
-      //     label: item.name,
-      //   });
-      //   if (item.id) {
-      //     dashboardMap.set(item.name, item.id);
-      //   }
-      // }
     });
     return tabs;
   };
@@ -197,6 +172,9 @@ const Project = props => {
     }
     if (current_tab === "Connectors") {
       return <Connectors></Connectors>;
+    }
+    if (current_tab === "Campaign List") {
+      return <Campaigns></Campaigns>;
     }
     return (
       <div style={{ textAlign: "center", padding: "50px" }}>
