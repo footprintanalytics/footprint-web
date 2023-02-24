@@ -293,7 +293,7 @@ export const MetabaseApi = {
   table_discard_values: POST("/api/v1/table/:tableId/discard_values"),
   field_get: GET("/api/field/:fieldId"),
   // field_summary:               GET("/api/field/:fieldId/summary"),
-  field_values: GET("/api/field/:fieldId/values"),
+  field_values: GET("/api/v1/field/:fieldId/values"),
   field_values_update: POST("/api/field/:fieldId/values"),
   field_update: PUT("/api/field/:id"),
   field_dimension_update: POST("/api/field/:fieldId/dimension"),
