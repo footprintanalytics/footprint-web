@@ -342,7 +342,7 @@ function QueryBuilder(props) {
 
   const handleChartProcess = async (user) => {
     if (location.hash && !user) {
-      router.push(`/loginModal`);
+      router.push(`/loginModal?redirect=${encodeURIComponent(window.location.href)}`);
       return;
     }
     const cardId = Urls.extractEntityId(params.slug);
