@@ -59,7 +59,7 @@ const ForgotPasswordSuccess = (): JSX.Element => {
       <InfoMessage>
         {t`Check your email for instructions on how to reset your password.`}
       </InfoMessage>
-      <Button primary as="a" href="/auth/login">{t`Back to sign in`}</Button>
+      <Button primary as="a" href="/loginModal">{t`Back to sign in`}</Button>
     </InfoBody>
   );
 };
@@ -70,7 +70,7 @@ const ForgotPasswordDisabled = (): JSX.Element => {
       <InfoMessage>
         {t`Please contact an administrator to have them reset your password.`}
       </InfoMessage>
-      <InfoLink to="/auth/login">{t`Back to sign in`}</InfoLink>
+      <InfoLink to="/loginModal">{t`Back to sign in`}</InfoLink>
     </InfoBody>
   );
 };

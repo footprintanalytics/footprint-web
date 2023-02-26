@@ -39,7 +39,7 @@ init(reducers, getRoutes, store => {
     }
 
     store.dispatch(clearCurrentUser());
-    store.dispatch(push("/auth/login"));
+    store.dispatch(push("/loginModal"));
   });
 
   // received a 403 response

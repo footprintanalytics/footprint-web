@@ -48,7 +48,7 @@ export const refreshSession = createThunkAction(
   },
 );
 
-const handleLogin = async (dispatch: any, redirectUrl = '/') => {
+const handleLogin = async (dispatch: any, redirectUrl: string) => {
   await Promise.all([
     dispatch(refreshCurrentUser()),
     dispatch(refreshSiteSettings()),
@@ -66,7 +66,7 @@ const handleLogin = async (dispatch: any, redirectUrl = '/') => {
 export const LOGIN = "metabase/auth/LOGIN";
 export const login = createThunkAction(
   LOGIN,
-  (data: LoginData, redirectUrl = "/") =>
+  (data: LoginData, redirectUrl: string) =>
     async (dispatch: any) => {
       await SessionApi.create(data);
       MetabaseAnalytics.trackStructEvent("Auth", "Login");
@@ -78,7 +78,7 @@ export const login = createThunkAction(
 export const REGISTERANDLOGIN = "metabase/auth/REGISTERANDLOGIN";
 export const registerAndLogin = createThunkAction(
   REGISTERANDLOGIN,
-  ({ token, redirectUrl = "/" } : any) => async (dispatch: any, getState: any) => {
+  ({ token, redirectUrl } : any) => async (dispatch: any, getState: any) => {
     // NOTE: this request will return a Set-Cookie header for the session
     const { code, message, data } = await SessionApi.registerAndLogin({
       token,
@@ -89,7 +89,7 @@ export const registerAndLogin = createThunkAction(
         setRegistSuccess(email);
       }
       MetabaseAnalytics.trackStructEvent("Auth", "registerAndLogin");
-      await handleLogin(dispatch, redirectUrl || "/");
+      await handleLogin(dispatch, redirectUrl);
     } else {
       throw message;
     }
@@ -99,7 +99,7 @@ export const registerAndLogin = createThunkAction(
 //register
 export const regist = createThunkAction(
   "metabase/auth/REGIST",
-  (credentials: any, redirectUrl = '/') => async (dispatch: any, getState: any) => {
+  (credentials: any, redirectUrl: string) => async (dispatch: any, getState: any) => {
     // NOTE: this request will return a Set-Cookie header for the session
     const {
       firstName,
@@ -132,7 +132,7 @@ export const regist = createThunkAction(
     // ]);
     if (redirectUrl) {
       setTimeout(() => {
-        dispatch(push("/loginModal"));
+        dispatch(push(redirectUrl));
       }, 500);
     }
   },
@@ -153,7 +153,7 @@ export const loginGoogle = createThunkAction(
   LOGIN_GOOGLE,
   (
     googleUser: any,
-    redirectUrl = "/",
+    redirectUrl: string,
     channel: string,
     projectRole: string,
   ) =>
@@ -183,7 +183,7 @@ export const loginGoogle = createThunkAction(
 export const LOGIN_WALLET = "metabase/auth/LOGIN_WALLET";
 export const loginWallet = createThunkAction(LOGIN_WALLET, function(
   loginParam: any,
-  redirectUrl = '/',
+  redirectUrl: string,
 ) {
   return async function(dispatch: any, getState: any) {
     try {

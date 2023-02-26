@@ -33,7 +33,8 @@ const MetabaseIsSetup = UserAuthWrapper({
 
 const UserIsAuthenticated = UserAuthWrapper({
   failureRedirectPath: () => {
-    return `/loginModal?from=${localStorage.getItem("lastGTag")}`;
+    const from = localStorage.getItem("lastGTag");
+    return `/loginModal?${from ? "from=" + from : ""}`;
   },
   authSelector: state => state.currentUser,
   wrapperDisplayName: "UserIsAuthenticated",

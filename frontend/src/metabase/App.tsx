@@ -2,6 +2,7 @@ import React, { ErrorInfo, ReactNode, useState } from "react";
 import { connect } from "react-redux";
 import { Location } from "history";
 import Meta from "metabase/components/Meta";
+import { getUser } from "metabase/selectors/user";
 import { getOssUrl } from "metabase/lib/image";
 import ScrollToTop from "metabase/hoc/ScrollToTop";
 import {
@@ -49,6 +50,7 @@ const getErrorComponent = ({ status, data, context }: AppErrorDescriptor) => {
 };
 
 interface AppStateProps {
+  user: any;
   errorPage: AppErrorDescriptor | null;
   isAdminApp: boolean;
   bannerMessageDescriptor?: string;
@@ -72,6 +74,7 @@ const mapStateToProps = (
   state: State,
   props: AppRouterOwnProps,
 ): AppStateProps => ({
+  user: getUser(state),
   errorPage: getErrorPage(state),
   isAdminApp: getIsAdminApp(state, props),
   isAppBarVisible: getIsAppBarVisible(state, props),
@@ -104,6 +107,7 @@ function App({
   onError,
   location,
   setChannel,
+  user,
 }: AppProps) {
   const [viewportElement, setViewportElement] = useState<HTMLElement | null>();
 
@@ -140,7 +144,7 @@ function App({
             {/*{isAppBarVisible && <AppBar isNavBarVisible={isNavBarVisible} />}*/}
             <AppContentContainer isAdminApp={isAdminApp}>
               {isNavBarVisible && <Navbar location={location} />}
-              <AppContent id="app-content" ref={setViewportElement}>
+              <AppContent id="app-content" ref={setViewportElement} key={user?.id}>
                 <ContentViewportContext.Provider value={viewportElement ?? null}>
                   {errorPage ? getErrorComponent(errorPage) : children}
                 </ContentViewportContext.Provider>
