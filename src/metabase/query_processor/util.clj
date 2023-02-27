@@ -91,9 +91,9 @@
 (defn createFixQuery [query]
   (let [canFix (or (:native query) (:query (:native query)))
         sql (:query (:native query))
-        schema-id (:schema-id query)]
+        fga-schema (:fga-schema (:middleware query))]
     (if canFix
-      (assoc query :native (assoc (:native query) :query (convert/convert-sql sql schema-id)))
+      (assoc query :native (assoc (:native query) :query (convert/convert-sql sql fga-schema)))
       query
       )
     )

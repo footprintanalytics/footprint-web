@@ -492,7 +492,7 @@
          _sql      (str "-- " remark "\n" sql)
          max-rows (limit/determine-query-max-rows outer-query)
          userId (:executed-by (:info outer-query))
-         schema-id (:fga-schema outer-query)
+         schema-id (:fga-schema (:middleware outer-query))
          sql (convert/convert-sql _sql schema-id)
          ]
      (log/info "execute sql query --------------")
