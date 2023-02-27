@@ -1,12 +1,10 @@
 /* eslint-disable react/prop-types */
 /* eslint-disable react/forbid-component-props */
-import React, { Component } from "react";
+import React, { Component, useState } from "react";
 import { connect } from "react-redux";
 import { push } from "react-router-redux";
-import cx from "classnames";
-import "./FpNavbar.css";
+import "./FgaNavbar.css";
 import PropTypes from "prop-types";
-import { Drawer, message } from "antd";
 import { getChannel } from "metabase/selectors/app";
 import { logout } from "metabase/auth/actions";
 import {
@@ -25,6 +23,8 @@ import {
   setSubmitAddrZkspaceModal,
 } from "metabase/redux/control";
 import SearchBar from "metabase/nav/components/SearchBar";
+import GaProjectSelector from "metabase/growth/components/GaProjectSelector";
+import GaProjectSearch from "metabase/growth/components/GaProjectSearch";
 import ProfileLink from "metabase/nav/components/ProfileLink";
 import Link from "metabase/core/components/Link";
 import LoginModal from "metabase/auth/containers/LoginModal";
@@ -42,6 +42,7 @@ import ActivityZkspaceSubmitModal from "metabase/components/ActivityZkspaceSubmi
 import EntityMenu from "metabase/components/EntityMenu";
 import UserAvatar from "metabase/components/UserAvatar";
 import VipIcon from "metabase/components/VipIcon";
+import CreateProjectModal from "metabase/growth/components/CreateProjectModal";
 import { getContext, getPath, getUser } from "../selectors";
 
 const mapStateToProps = (state, props) => ({
@@ -67,108 +68,11 @@ const mapDispatchToProps = {
   logout,
 };
 
-const leftMenuData = [
-  {
-    title: "Analytics",
-    icon: "menu_home",
-    path: "/dashboards",
-    auth: false,
-  },
-  {
-    name: "Data API",
-    icon: "protocols",
-    menu: [
-      {
-        title: "Data API",
-        desc: "Unified API for Web3 developers",
-        link: "/data-api",
-      },
-      {
-        title: "BingoNFT",
-        desc: "A window into NFTs powered by Footprint Data API",
-        link: "https://nft.footprint.network/",
-        externalLink: true,
-      },
-      {
-        title: "Footrace",
-        desc: "A realtime alert platform powered by Footprint Data API",
-        link: "https://footrace.io/",
-        externalLink: true,
-      },
-    ],
-  },
-];
-
-const rightMenuData = [
-  // { url: "/moon-men", name: "Moon Men" },
-  {
-    name: "Learn",
-    icon: "protocols",
-    menu: [
-      {
-        title: "Blog",
-        desc: "Analyze the trends of each domain in the Web3 industry",
-        link: "/news/articles",
-      },
-      {
-        title: "Academy",
-        desc: "The premier Web3 education platform with industry leading courses",
-        link: "/news/academy",
-      },
-      {
-        title: "Data Overview",
-        desc: "Check the data coverage of most comprehensive data provider",
-        link: "/@Footprint/Footprint-Data-Overview",
-      },
-      {
-        title: "Data Dictionary",
-        desc: "Quick access to each data table definitions and metadata",
-        link: "/@Footprint/Footprint-Datasets-Data-Dictionary",
-      },
-      {
-        title: "YouTube",
-        desc: "Unravel Web3 and learn how to do analysis and build dapps via Videos",
-        link: "https://www.youtube.com/@FootprintAnalytics",
-        externalLink: true,
-      },
-      {
-        title: "GitHub",
-        desc: "Open source community welcomes you to join and become a contributor",
-        link: "https://github.com/footprintanalytics",
-        externalLink: true,
-      },
-    ],
-  },
-  {
-    url: "https://docs.footprint.network/docs",
-    name: "Docs",
-    open: true,
-  },
-  {
-    url: "/pricing",
-    name: "Pricing",
-  },
-];
-
-const AdminNavItem = ({ name, path, currentPath }) => (
-  <li>
-    <Link
-      to={path}
-      data-metabase-event={`NavBar;${name}`}
-      className={cx("NavItem py1 px2 no-decoration", {
-        "is--selected": currentPath.startsWith(path),
-      })}
-    >
-      {name}
-    </Link>
-  </li>
-);
-
 // @Database.loadList({
 //   // set this to false to prevent a potential spinner on the main nav
 //   loadingAndErrorWrapper: false,
 // })
-class FpNavbar extends Component {
+class FgaNavbar extends Component {
   static propTypes = {
     context: PropTypes.string.isRequired,
     path: PropTypes.string.isRequired,
@@ -179,12 +83,11 @@ class FpNavbar extends Component {
   state = {
     sideNavModal: false,
     showZkspaceModal: true,
+    isProjectModalOpen: false,
   };
-
   isActive(path) {
     return this.props.path === path;
   }
-
   renderModal() {
     const {
       createModalShow,
@@ -254,62 +157,6 @@ class FpNavbar extends Component {
     }
     return false;
   };
-  renderSideNav() {
-    const { user, setLoginModalShow } = this.props;
-    return (
-      <Drawer
-        placement="left"
-        onClose={() => this.setState({ sideNavModal: false })}
-        open={this.state.sideNavModal}
-      >
-        <div className="Nav__side-menu">
-          {leftMenuData.map((item, index) => {
-            if (item.menu) {
-              return (
-                <div key={index}>
-                  {this.renderNavEntityMenu({
-                    item,
-                    className: `Nav__menu-item text-brand-hover`,
-                    fromDrawer: true,
-                  })}
-                </div>
-              );
-            }
-            return (
-              <div
-                className="Nav__menu-item text-brand-hover"
-                key={index}
-                onClick={e => {
-                  trackStructEvent(`navbar-click-${item.title}`);
-                  if (item.comingSoon) {
-                    message.info("Coming soon...");
-                    return;
-                  }
-                  if (item.auth && !user) {
-                    setLoginModalShow({ show: true, from: item.title });
-                    this.setState({ sideNavModal: false });
-                  } else {
-                    this.goLink(e, item.path, item.open);
-                  }
-                }}
-              >
-                {/*<Icon name={item.icon} size={16} />*/}
-                <span>{item.title}</span>
-                {this.isActive(item.path) && (
-                  <div className="Nav__menu-item--select" />
-                )}
-              </div>
-            );
-          })}
-        </div>
-        {this.renderLink({
-          className: "Nav__side-menu links",
-          fromDrawer: true,
-        })}
-      </Drawer>
-    );
-  }
-
   renderLoginModal() {
     const { location, loginModalShow, loginModalRedirect, setLoginModalShow } =
       this.props;
@@ -319,7 +166,7 @@ class FpNavbar extends Component {
         isOpen={loginModalShow}
         onClose={() => setLoginModalShow({ show: false })}
         from={location.query.from}
-        channel={location.query.channel || location.query.cnl}
+        channel={"FGA"}
         location={this.props.location}
         fromNav={true}
         redirect={loginModalRedirect}
@@ -371,57 +218,6 @@ class FpNavbar extends Component {
     }
     afterSuccess();
   };
-
-  renderLink({ className = "", fromDrawer = false }) {
-    const { user, setLoginModalShow, location } = this.props;
-
-    return (
-      <nav
-        role="navigation"
-        itemScope
-        itemType="http://www.schema.org/SiteNavigationElement"
-        className={`${className} Nav__right-menus`}
-      >
-        {rightMenuData.map((item, index) => {
-          if (item.menu) {
-            return (
-              <div key={index}>
-                {this.renderNavEntityMenu({
-                  item,
-                  className: `Nav__right-menu footprint-primary-text`,
-                  fromDrawer,
-                })}
-              </div>
-            );
-          }
-          return (
-            <Link
-              key={index}
-              itemProp="url"
-              to={item.url}
-              onClick={e => {
-                e.preventDefault();
-                if (item.auth && !user) {
-                  setLoginModalShow({ show: true, from: item.title });
-                  this.setState({ sideNavModal: false });
-                } else {
-                  this.goLink(e, item.url, item.open);
-                }
-
-                trackStructEvent(`navbar-click-${item.name}`);
-              }}
-              className={`Nav__right-menu footprint-primary-text ${
-                location.pathname === item.url ? "Nav__right-menu-select" : ""
-              }`}
-              target={item.open ? "_blank" : ""}
-            >
-              {item.name}
-            </Link>
-          );
-        })}
-      </nav>
-    );
-  }
 
   renderNavEntityMenu({ item, className, fromDrawer }) {
     if (fromDrawer) {
@@ -503,62 +299,6 @@ class FpNavbar extends Component {
       );
     };
 
-    const LeftMenu = () => {
-      return (
-        <nav
-          className="Nav__menu footprint-primary-text"
-          role="navigation"
-          itemScope
-          itemType="http://www.schema.org/SiteNavigationElement"
-        >
-          {leftMenuData.map((item, index) => {
-            if (item.menu) {
-              return (
-                <div key={index}>
-                  {this.renderNavEntityMenu({
-                    item,
-                    className: `text-brand-hover Nav__menu-item Nav__menu-item-color`,
-                  })}
-                </div>
-              );
-            }
-            return (
-              <Link
-                itemProp="url"
-                to={item.path}
-                className={`text-brand-hover Nav__menu-item ${
-                  this.isActive(item.path, item.subPath)
-                    ? "Nav__menu-item-color--select"
-                    : "Nav__menu-item-color"
-                }`}
-                key={index}
-                onClick={e => {
-                  e.preventDefault();
-                  if (item.comingSoon) {
-                    message.info("Coming soon...");
-                    return;
-                  }
-                  if (item.auth && !user) {
-                    setLoginModalShow({ show: true, from: item.title });
-                    this.setState({ sideNavModal: false });
-                  } else {
-                    this.goLink(e, item.path, item.open);
-                  }
-                  trackStructEvent(`navbar-click-${item.title}`);
-                }}
-              >
-                {/*<Icon name={item.icon} size={16} />*/}
-                <span>{item.title}</span>
-                {this.isActive(item.path, item.subPath) && (
-                  <div className="Nav__menu-item--select" />
-                )}
-              </Link>
-            );
-          })}
-        </nav>
-      );
-    };
-
     const RightMenuPad = () => {
       return (
         <div className="Nav__right-pad-icon">
@@ -595,26 +335,26 @@ class FpNavbar extends Component {
           onClick={onCreateAction}
         >
           <Icon name="plus" size={12} />
-          <span>Create</span>
+          <span>Create My Project</span>
         </div>
       );
     };
 
     const onCreateAction = () => {
-      trackStructEvent(`click Navbar Create`);
-      const afterSuccess = () => setCreateModalShow({ show: true });
-      const block = this.needCancelFeedbackBlock({ afterSuccess });
-      if (block) {
-        return;
-      }
+      trackStructEvent(`click Navbar Create My Project`);
+      // const afterSuccess = () => setCreateModalShow({ show: true });
+      // const block = this.needCancelFeedbackBlock({ afterSuccess });
+      // if (block) {
+      //   return;
+      // }
+      // afterSuccess();
+      this.setState({ ...this.state, isProjectModalOpen: true });
       console.log("onCreateAction");
-      afterSuccess();
     };
 
     const RightMenu = () => {
       return (
         <div className="Nav__right">
-          {this.renderLink({})}
           <CreateMenu />
           <React.Fragment>
             <RightMenuMobile />
@@ -664,22 +404,32 @@ class FpNavbar extends Component {
               this.goLink(e, "/");
             }}
           >
-            <img
-              src={getOssUrl("img_nav_logo_v5.svg")}
-              width={188}
-              height={28}
-              style={{ marginBottom: 2 }}
-              alt="Footprint - One Step Closer to Blockchain Insights"
-            />
+            <div className="flex flex-row items-center">
+              <img
+                src={getOssUrl("img_nav_logo_mobile.svg")}
+                width={30}
+                height={28}
+                style={{ marginBottom: 2 }}
+                alt="Footprint - One Step Closer to Blockchain Insights"
+              />
+              <span
+                style={{
+                  fontSize: 20,
+                  fontWeight: 500,
+                  marginLeft: 20,
+                  color: "#2e2ca6",
+                }}
+              >
+                Footprint Growth Analytics
+              </span>
+            </div>
           </Link>
-          <LeftMenu />
+          {/* <LeftMenu /> */}
         </div>
         <React.Fragment>
           <div className="Nav__search-bar">
-            <SearchBar
-              location={location}
-              onChangeLocation={onChangeLocation}
-            />
+            <GaProjectSearch location={location}></GaProjectSearch>
+            {/* <GaProjectSelector location={location}></GaProjectSelector> */}
           </div>
           <div className="Nav__mobile-logo">
             <Link
@@ -703,9 +453,14 @@ class FpNavbar extends Component {
         <RightMenu />
         {this.renderModal()}
         {zkspaceDate() && this.renderSubmitAddrZkspaceModal()}
-        {this.renderSideNav()}
         {this.renderLoginModal()}
         {this.renderCancelFeedbackModal()}
+        <CreateProjectModal
+          open={this.state.isProjectModalOpen}
+          onCancel={() => {
+            this.setState({ ...this.state, isProjectModalOpen: false });
+          }}
+        ></CreateProjectModal>
       </div>
     );
   }
@@ -726,4 +481,4 @@ class FpNavbar extends Component {
   }
 }
 
-export default connect(mapStateToProps, mapDispatchToProps)(FpNavbar);
+export default connect(mapStateToProps, mapDispatchToProps)(FgaNavbar);

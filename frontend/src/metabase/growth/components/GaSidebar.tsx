@@ -1,27 +1,23 @@
 import React, { useState, useEffect } from "react";
-import { Button, Layout, Menu, message } from "antd";
-
+import { Layout, Menu } from "antd";
+import type { MenuProps } from "antd";
 const { Sider } = Layout;
-import {
-  BarChartOutlined,
-  ShopOutlined,
-  TeamOutlined,
-} from "@ant-design/icons";
+import { BarChartOutlined, TeamOutlined } from "@ant-design/icons";
+import "../css/utils.css";
+import { getLatestGAMenuTag, saveLatestGAMenuTag } from "../utils/utils";
 
 interface IGaSidebarProp {
   className?: string;
   currentProject?: string;
   router: any;
   location: any;
+  items?: [any];
+  projects?: [any];
 }
 export default function GaSidebar(prop: IGaSidebarProp) {
-  const { currentProject, router, location } = prop;
-  const items = [
-    {
-      key: "project",
-      icon: React.createElement(ShopOutlined),
-      label: `Project`,
-    },
+  const { currentProject, router, location, items, projects } = prop;
+
+  const items_temp = [
     {
       key: "analytics",
       icon: React.createElement(BarChartOutlined),
@@ -35,44 +31,67 @@ export default function GaSidebar(prop: IGaSidebarProp) {
       disabled: currentProject === "create_new" ? true : false,
     },
   ];
+  const rootSubmenuKeys: any[] = [];
+  items?.map(i => {
+    rootSubmenuKeys.push(i.label);
+  });
   const [tab, setTab] = useState<string>();
   useEffect(() => {
     if (location.query.tab) {
       setTab(location.query.tab);
     } else {
-      setTab("project");
+      setTab(getLatestGAMenuTag() ? getLatestGAMenuTag()! : "");
     }
   }, [location.query.tab]);
+
+  const [openKeys, setOpenKeys] = useState<string[]>([tab!]);
+
+  const onOpenChange: MenuProps["onOpenChange"] = keys => {
+    const latestOpenKey = keys.find(key => openKeys.indexOf(key) === -1);
+    if (rootSubmenuKeys.indexOf(latestOpenKey!) === -1) {
+      setOpenKeys(keys);
+    } else {
+      setOpenKeys(latestOpenKey ? [latestOpenKey] : []);
+    }
+  };
   return (
     <Sider
-      collapsible
-      className="flex flex-col h-full"
       trigger={null}
+      width="250px"
       style={{
+        display: "flex",
+        flexDirection: "column",
         overflow: "auto",
-        height: "100vh",
+        height: "100%",
         position: "fixed",
         background: "white",
         borderRight: "1px solid #dcdee4",
-        zIndex: 10,
       }}
     >
       <Menu
-        style={{ borderRight: "0px", width: "100%" }}
+        style={{
+          borderRight: "0px",
+          width: "100%",
+          paddingBottom: 50,
+          paddingTop: 20,
+        }}
         theme="light"
+        // className="ant-menu-inline ant-menu-item"
         mode="inline"
+        openKeys={openKeys}
+        onOpenChange={onOpenChange}
         selectedKeys={[tab!]}
         onSelect={item => {
-          console.log("select", item);
+          saveLatestGAMenuTag(item.key);
           router.push({
-            pathname: "/growth",
-            query: { ...router.query, tab: item.key },
+            pathname: location.pathname,
+            query: { ...location.query, tab: item.key },
           });
         }}
         // defaultSelectedKeys={[items[0].key]}
-        items={items}
+        items={items ? items : items_temp}
       />
-      <div className="mt-10 flex flex-column items-center">
+      {/* <div className="mt-10 flex flex-column items-center">
         <Button
           type="dashed"
           onClick={() => {
@@ -81,7 +100,7 @@ export default function GaSidebar(prop: IGaSidebarProp) {
         >
           Edit Menu
         </Button>
-      </div>
+      </div> */}
     </Sider>
   );
 }

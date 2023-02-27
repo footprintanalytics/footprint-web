@@ -15,6 +15,7 @@ import { AdminPath, State } from "metabase-types/store";
 import { AdminNavbar } from "../components/AdminNavbar";
 import MainNavbar from "./MainNavbar";
 import FpNavbar from "./FpNavbar/FpNavbar";
+import FgaNavbar from "./FgaNavbar/FgaNavbar";
 
 type NavbarProps = {
   isOpen: boolean;
@@ -35,9 +36,14 @@ function Navbar({ isOpen, user, location, params, adminPaths }: NavbarProps) {
     () => location.pathname.startsWith("/admin/"),
     [location.pathname],
   );
-
+  const isFgaApp = useMemo(
+    () => location.pathname.startsWith("/growth"),
+    [location.pathname],
+  );
   return isAdminApp && user ? (
     <AdminNavbar user={user} path={location.pathname} adminPaths={adminPaths} />
+  ) : isFgaApp ? (
+    <FgaNavbar isOpen={isOpen} location={location} params={params} />
   ) : (
     <FpNavbar isOpen={isOpen} location={location} params={params} />
   );

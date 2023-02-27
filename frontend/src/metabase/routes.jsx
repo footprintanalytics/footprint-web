@@ -402,6 +402,25 @@ export const getRoutes = store => (
           path="chart/:titleAndId"
           component={LazyLoad.GuestQuestion}
         />
+        {/* GrowthAnalytics */}
+        {/* <Route path="/growth" component={LazyLoad.GaHomeContainer}></Route> */}
+        <Route path="/growth" component={LazyLoad.GaProjectContainer}></Route>
+        <Route
+          path="/growth/connectors"
+          component={LazyLoad.GaConnectorsContainer}
+        ></Route>
+
+        <Route
+          path="/growth/create-project"
+          component={LazyLoad.GaConfigContainer}
+        />
+        <Route path="/growth/about" component={LazyLoad.GaAboutContainer} />
+        <Route path="/growth/config" component={LazyLoad.GaConfigContainer} />
+        <Route
+          path="/growth/projects"
+          component={LazyLoad.GaProjectsContainer}
+        />
+        <Route path="/growth/project" component={LazyLoad.GaProjectContainer} />
       </Route>
 
       <Route title={t`Question`} path="/chart" component={LazyLoad.Question}>
@@ -689,17 +708,7 @@ export const getRoutes = store => (
       from="/collections/permissions"
       to="/admin/permissions/collections"
     />
-    {/* GrowthAnalytics */}
-    <Route path="/growth" component={LazyLoad.GaHomeContainer}>
-      <ModalRoute
-        title={t`Login`}
-        path="loginModal"
-        modal={LazyLoad.LoginModal}
-        modalProps={{ className: "loginModalRoot" }}
-      />
-    </Route>
-    <Route path="/growth/about" component={LazyLoad.GaAboutContainer} />
-    <Route path="/growth/config" component={LazyLoad.GaConfigContainer} />
+
     {/* MISC */}
     <Route path="/unauthorized" component={Unauthorized} />
     <Route path="/*" component={LazyLoad.NotFoundFallbackPage} />

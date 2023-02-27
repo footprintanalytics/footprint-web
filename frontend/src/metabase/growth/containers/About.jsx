@@ -2,7 +2,6 @@
 import React from "react";
 import { connect } from "react-redux";
 import { getUser } from "metabase/selectors/user";
-import "../../containers/why/index.css";
 
 const About = props => {
   const { router, location, children, user } = props;

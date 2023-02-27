@@ -3,15 +3,14 @@ import React, { useEffect, useState } from "react";
 import { connect } from "react-redux";
 import { Layout } from "antd";
 import { Content } from "antd/lib/layout/layout";
+import { compose } from "underscore";
 import { getUser } from "metabase/selectors/user";
 import PublicDashboard from "metabase/public/containers/PublicDashboard";
-import { isProduction } from "metabase/env";
 import GaLayout from "../components/GaLayout";
 import GaSidebar from "../components/GaSidebar";
-import "../../containers/why/index.css";
 import CreateProject from "./CreateProject";
 
-const About = props => {
+const Home = props => {
   const { router, location, children, user } = props;
   const [tab, setTab] = useState();
   useEffect(() => {
@@ -31,7 +30,7 @@ const About = props => {
     }
   };
   return (
-    <div className="defi-dashboard">
+    <div className="ga-dashboard">
       <GaLayout router={router} location={location}>
         <Layout hasSider>
           <GaSidebar router={router} location={location}></GaSidebar>
@@ -57,8 +56,8 @@ const About = props => {
 
 const mapStateToProps = state => {
   return {
-    user: getUser(state),
+    user: state.currentUser,
   };
 };
 
-export default connect(mapStateToProps)(About);
+export default compose(connect(mapStateToProps))(Home);
