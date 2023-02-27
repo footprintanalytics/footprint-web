@@ -1,18 +1,14 @@
 /* eslint-disable react/prop-types */
 import React, { createContext } from "react";
 import { Modal, Select, Button } from "antd";
+import Link from "antd/lib/typography/Link";
 import { withRouter } from "react-router";
 import { connect } from "react-redux";
 import { getUser } from "metabase/selectors/user";
-import GaProjectSearch from "./GaProjectSearch";
-import Link from "antd/lib/typography/Link";
 
 const CreateProjectModal = props => {
   const { open, onCancel } = props;
-  // const [value, setValue] = useState({
-  //   isOpenSubMenu: true,
-  // });
-  // const [isProjectModalOpen, setIsProjectModalOpen] = useState(false);
+  // monitor datas
   const normalOptions = [
     {
       value: "BAYC",
@@ -75,14 +71,12 @@ const CreateProjectModal = props => {
           filterOption={(input, option) =>
             (option?.label ?? "").toLowerCase().includes(input.toLowerCase())
           }
-          // filterSort={(optionA, optionB) =>
-          //   (optionA?.label ?? "")
-          //     .toLowerCase()
-          //     .localeCompare((optionB?.label ?? "").toLowerCase())
-          // }
           options={normalOptions}
         />
-        <Link style={{ width: "100%", marginTop: 10 }}>
+        <Link
+          style={{ width: "100%", marginTop: 10 }}
+          href="submit/contract/add"
+        >
           Can not find the protocol? Submit now!
         </Link>
         <Button
