@@ -157,7 +157,6 @@ const Project = props => {
     });
     return tabs;
   };
-  console.log("getTabs(tabs_data)", getTabs(tabs_data));
   const getContentPannel = current_tab => {
     if (dashboardMap.has(current_tab)) {
       return (

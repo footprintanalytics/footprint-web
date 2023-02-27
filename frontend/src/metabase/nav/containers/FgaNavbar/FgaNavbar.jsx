@@ -1,6 +1,6 @@
 /* eslint-disable react/prop-types */
 /* eslint-disable react/forbid-component-props */
-import React, { Component } from "react";
+import React, { Component, useState } from "react";
 import { connect } from "react-redux";
 import { push } from "react-router-redux";
 import "./FgaNavbar.css";
@@ -42,6 +42,7 @@ import ActivityZkspaceSubmitModal from "metabase/components/ActivityZkspaceSubmi
 import EntityMenu from "metabase/components/EntityMenu";
 import UserAvatar from "metabase/components/UserAvatar";
 import VipIcon from "metabase/components/VipIcon";
+import CreateProjectModal from "metabase/growth/components/CreateProjectModal";
 import { getContext, getPath, getUser } from "../selectors";
 
 const mapStateToProps = (state, props) => ({
@@ -82,12 +83,11 @@ class FgaNavbar extends Component {
   state = {
     sideNavModal: false,
     showZkspaceModal: true,
+    isProjectModalOpen: false,
   };
-
   isActive(path) {
     return this.props.path === path;
   }
-
   renderModal() {
     const {
       createModalShow,
@@ -342,13 +342,14 @@ class FgaNavbar extends Component {
 
     const onCreateAction = () => {
       trackStructEvent(`click Navbar Create My Project`);
-      const afterSuccess = () => setCreateModalShow({ show: true });
-      const block = this.needCancelFeedbackBlock({ afterSuccess });
-      if (block) {
-        return;
-      }
+      // const afterSuccess = () => setCreateModalShow({ show: true });
+      // const block = this.needCancelFeedbackBlock({ afterSuccess });
+      // if (block) {
+      //   return;
+      // }
+      // afterSuccess();
+      this.setState({ ...this.state, isProjectModalOpen: true });
       console.log("onCreateAction");
-      afterSuccess();
     };
 
     const RightMenu = () => {
@@ -454,6 +455,12 @@ class FgaNavbar extends Component {
         {zkspaceDate() && this.renderSubmitAddrZkspaceModal()}
         {this.renderLoginModal()}
         {this.renderCancelFeedbackModal()}
+        <CreateProjectModal
+          open={this.state.isProjectModalOpen}
+          onCancel={() => {
+            this.setState({ ...this.state, isProjectModalOpen: false });
+          }}
+        ></CreateProjectModal>
       </div>
     );
   }

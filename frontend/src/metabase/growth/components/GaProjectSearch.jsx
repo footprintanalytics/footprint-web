@@ -13,7 +13,8 @@ import {
 } from "../utils/utils";
 
 const GaProjectSearch = props => {
-  const { router, location } = props;
+  const { router, location, onlyAll } = props;
+  // monitor data
   const normalOptions = [
     {
       value: "BAYC",
@@ -75,7 +76,7 @@ const GaProjectSearch = props => {
     finalOptions.push({ label: "History Search", options: historyOptions });
   }
   finalOptions.push({ label: "All Projects", options: normalOptions });
-  console.log("finalOptions", finalOptions);
+
   const [currentProject, setCurrentProject] = useState();
   useEffect(() => {
     if (location?.query?.project_name) {
@@ -89,7 +90,6 @@ const GaProjectSearch = props => {
   }, [location?.query?.project_name]);
   const handleProjectChange = (value, option) => {
     const item = option;
-    // item.value = item.key + "-histroy";
     item.key = item.value + "-histroy";
     saveGASearchHistory(item);
     router?.push({
