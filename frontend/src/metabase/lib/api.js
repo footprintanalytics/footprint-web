@@ -6,6 +6,7 @@ import { delay } from "metabase/lib/promise";
 import { IFRAMED } from "metabase/lib/dom";
 import { formatArmsStatusTextByCache, reportAPI } from "metabase/lib/arms";
 import isUrl from "metabase/lib/isUrl";
+import { getLatestGAProjectId } from "metabase/lib/project_info";
 
 const ONE_SECOND = 1000;
 const MAX_RETRIES = 10;
@@ -166,6 +167,12 @@ export class Api extends EventEmitter {
       }
       xhr.open(method, this.basename + url);
       xhr.setRequestHeader("client_request_time", begin);
+
+      const latestGAProjectId = getLatestGAProjectId();
+      if (latestGAProjectId) {
+        xhr.setRequestHeader("fgaProjectId", latestGAProjectId);
+      }
+
       for (const headerName in headers) {
         xhr.setRequestHeader(headerName, headers[headerName]);
       }

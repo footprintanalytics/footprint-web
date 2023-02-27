@@ -4,6 +4,8 @@ import { message } from "antd";
 import { saveAs } from "file-saver";
 import api from "metabase/lib/api";
 import { reportAPI } from "metabase/lib/arms";
+import { refreshCardData } from "metabase/dashboard/actions/cards";
+import { getLatestGAProjectId } from "metabase/lib/project_info";
 
 axios.defaults.baseURL = api.basename;
 axios.defaults.headers.put["Content-Type"] = "application/json; charset=utf-8";
@@ -32,10 +34,12 @@ const saveStream = (headers, data) => {
 axios.interceptors.request.use(config => {
   const headers = config?.headers || {};
   const requestime = getTime();
+  const latestGAProjectId = getLatestGAProjectId();
+  const projectIdObject = latestGAProjectId ? { fgaProjectId: latestGAProjectId } : {};
   return {
     ...config,
     ...{ requestime: requestime },
-    headers: { ...headers, common: { ...headers?.common, client_request_time: requestime }}
+    headers: { ...headers, common: { ...headers?.common, client_request_time: requestime, ...projectIdObject }}
   };
 });
 

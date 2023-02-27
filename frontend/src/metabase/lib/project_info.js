@@ -9,3 +9,12 @@ export const isDefi360 = project => {
   // return (project ? project : getProject()) === "defi360";
 };
 
+export const getLatestGAProjectId = () => {
+  const projectIdStr = window.localStorage.getItem("LatestGAProjectId");
+  let projectId;
+  try {
+    projectId = projectIdStr && parseInt(projectIdStr)
+  } catch (e) {
+  }
+  return projectId;
+}
