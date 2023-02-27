@@ -22,14 +22,12 @@ import ConfigBigQuerySource from "../components/config_panel/ConfigBigQuerySourc
 import ConfigAppsFlyerSource from "../components/config_panel/ConfigAppsFlyerSource";
 import ConfigTwitterSource from "../components/config_panel/ConfigTwitterSource";
 import ConfigDiscordSource from "../components/config_panel/ConfigDiscordSource";
-import CreateProjectModal from "../components/CreateProjectModal";
 import "../css/utils.css";
 const { Text } = Typography;
 
 const Connectors = props => {
   const { router, location, children, user } = props;
   const [isModalOpen, setIsModalOpen] = useState(false);
-  const [isProjectModalOpen, setIsProjectModalOpen] = useState(false);
   const [openDrawer, setOpenDrawer] = useState({ show: false, connector: {} });
   const showDrawer = c => {
     setOpenDrawer({ show: true, connector: c });
@@ -76,24 +74,7 @@ const Connectors = props => {
       pannel: <ConfigTwitterSource onAddConnector={onAddConnector} />,
     },
   ];
-  const [currentConnectors, setCurrentConnectors] = useState([
-    // {
-    //   connector: {
-    //     name: "Google Analytics",
-    //     key: "ga",
-    //     icon: GA,
-    //     pannel: <ConfigGoogleAnalyticsSource />,
-    //   },
-    // },
-    // {
-    //   connector: {
-    //     name: "Appsflyers",
-    //     key: "af",
-    //     icon: AF,
-    //     pannel: <ConfigAppsFlyerSource />,
-    //   },
-    // },
-  ]);
+  const [currentConnectors, setCurrentConnectors] = useState([]);
   return (
     <div className=" flex flex-column items-center">
       <div
@@ -114,8 +95,7 @@ const Connectors = props => {
           <Button
             type={"default"}
             onClick={() => {
-              // setIsModalOpen(true);
-              setIsProjectModalOpen(true);
+              setIsModalOpen(true);
             }}
           >
             Add Connector
@@ -178,12 +158,6 @@ const Connectors = props => {
           </Card>
         )}
       </div>
-      <CreateProjectModal
-        open={isProjectModalOpen}
-        onCancel={() => {
-          setIsProjectModalOpen(false);
-        }}
-      ></CreateProjectModal>
 
       <Modal
         title="Select connector type"

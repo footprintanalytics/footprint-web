@@ -123,7 +123,6 @@ class PublicDashboard extends Component {
     const { chart_style } = {
       ...parseHashOptions(location.hash),
     };
-    console.log("dashboard", parameters, parameterValues);
 
     return (
       <EmbedFrame
