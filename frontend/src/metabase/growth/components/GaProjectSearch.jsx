@@ -17,58 +17,65 @@ const GaProjectSearch = props => {
   const normalOptions = [
     {
       value: "BAYC",
+      key: "BAYC",
       label: "BAYC",
     },
     {
       value: "Moonbird",
+      key: "Moonbird",
       label: "Moonbird",
     },
     {
       value: "AlienWar",
+      key: "AlienWar",
       label: "AlienWar",
     },
     {
       value: "Decentraland",
+      key: "Decentraland",
       label: "Decentraland",
     },
     {
       value: "FootprintNFT",
+      key: "FootprintNFT",
       label: "FootprintNFT",
     },
     {
       value: "Era7",
+      key: "Era7",
       label: "Era7",
     },
     {
       value: "the-sandbox",
+      key: "the-sandbox",
       label: "The Sandbox",
     },
-    { value: "sunflower-farmers", label: "Sunflower Farmers" },
+    {
+      value: "sunflower-farmers",
+      key: "sunflower-farmers",
+      label: "Sunflower Farmers",
+    },
   ];
-  // const recommendOptions = [
-  //   {
-  //     value: "the-sandbox",
-  //     label: "The Sandbox",
-  //   },
-  //   { value: "sunflower-farmers", label: "Sunflower Farmers" },
-  // ];
-  // const historyOptions = getGASearchHistory();
-  // const allOptions = [];
-  // normalOptions.map(j => {
-  //   if (
-  //     (recommendOptions.find(i => i.value === j.value) === -1) &
-  //     (historyOptions.find(i => i.value === j.value) === -1)
-  //   ) {
-  //     allOptions.push(j);
-  //   }
-  // });
-  // const finalOptions = [];
-  // finalOptions.push({ label: "All Projects", options: allOptions });
-  // if (historyOptions.length > 0) {
-  //   finalOptions.push({ label: "History Search", options: historyOptions });
-  // }
-  // finalOptions.push({ label: "Recommend Projects", options: recommendOptions });
-
+  const recommendOptions = [
+    {
+      value: "the-sandbox",
+      key: "the-sandbox-recommend",
+      label: "The Sandbox",
+    },
+    {
+      value: "sunflower-farmers",
+      key: "sunflower-farmers-recommend",
+      label: "Sunflower Farmers",
+    },
+  ];
+  const historyOptions = getGASearchHistory();
+  const finalOptions = [];
+  finalOptions.push({ label: "Recommend Projects", options: recommendOptions });
+  if (historyOptions.length > 0) {
+    finalOptions.push({ label: "History Search", options: historyOptions });
+  }
+  finalOptions.push({ label: "All Projects", options: normalOptions });
+  console.log("finalOptions", finalOptions);
   const [currentProject, setCurrentProject] = useState();
   useEffect(() => {
     if (location?.query?.project_name) {
@@ -76,15 +83,18 @@ const GaProjectSearch = props => {
       saveLatestGAProject(location.query.project_name);
     } else {
       setCurrentProject(
-        getLatestGAProject() ? getLatestGAProject() : normalOptions[0].value,
+        getLatestGAProject() ? getLatestGAProject() : recommendOptions[0].value,
       );
     }
   }, [location?.query?.project_name]);
   const handleProjectChange = (value, option) => {
-    saveGASearchHistory(option);
+    const item = option;
+    // item.value = item.key + "-histroy";
+    item.key = item.value + "-histroy";
+    saveGASearchHistory(item);
     router?.push({
       pathname: location.pathname,
-      query: { ...location.query, project_name: value },
+      query: { ...location.query, project_name: option.value },
     });
   };
   return (
@@ -99,12 +109,12 @@ const GaProjectSearch = props => {
         filterOption={(input, option) =>
           (option?.label ?? "").toLowerCase().includes(input.toLowerCase())
         }
-        filterSort={(optionA, optionB) =>
-          (optionA?.label ?? "")
-            .toLowerCase()
-            .localeCompare((optionB?.label ?? "").toLowerCase())
-        }
-        options={normalOptions}
+        // filterSort={(optionA, optionB) =>
+        //   (optionA?.label ?? "")
+        //     .toLowerCase()
+        //     .localeCompare((optionB?.label ?? "").toLowerCase())
+        // }
+        options={finalOptions}
       />
     </div>
   );
