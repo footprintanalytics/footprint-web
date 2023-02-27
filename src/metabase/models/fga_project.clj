@@ -1,4 +1,4 @@
-(ns metabase.models.fga_table
+(ns metabase.models.fga_project
   (:require [honeysql.core :as hsql]
             [metabase.db.connection :as mdb.connection]
             [metabase.db.util :as mdb.u]
@@ -9,8 +9,9 @@
             [toucan.db :as db]
             [toucan.models :as models]))
 
-(models/defmodel FgaTable :fga_table)
+(models/defmodel FgaProject :fga_project)
 
-(defn fga-table-white-list []
-  (db/select-field :name FgaTable :active true)
+(defn schema [schema-id]
+  (when schema-id
+    (db/select-field :schema FgaProject :id schema-id  :active true))
   )

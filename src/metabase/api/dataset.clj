@@ -70,10 +70,12 @@
 
 (api/defendpoint ^:streaming POST "/"
   "Execute a query and retrieve the results in the usual format. The query will not use the cache."
-  [:as {{:keys [database] :as query} :body}]
+  [:as {{:keys [database fga-schema] :as query} :body}]
   {database (s/maybe s/Int)}
-  (run-query-async (update-in query [:middleware :js-int-to-string?] (fnil identity true))))
-
+  (let [result (update-in query [:middleware :js-int-to-string?] (fnil identity true))]
+  (run-query-async (update-in result [:middleware :fga-schema] (fnil identity fga-schema)))
+    )
+  )
 
 ;;; ----------------------------------- Downloading Query Results in Other Formats -----------------------------------
 
@@ -108,7 +110,7 @@
 
 (api/defendpoint ^:streaming POST ["/:export-format", :export-format export-format-regex]
   "Execute a query and download the result data as a file in the specified format."
-  [export-format :as {{:keys [query visualization_settings max-results] :or {visualization_settings "{}"}} :params}]
+  [export-format :as {{:keys [query visualization_settings max-results fga-schema] :or {visualization_settings "{}"}} :params}]
   {query                  su/JSONString
    visualization_settings su/JSONString
    export-format          ExportFormat}
@@ -127,7 +129,8 @@
                                                             (dissoc :add-default-userland-constraints? :js-int-to-string?)
                                                             (assoc :process-viz-settings? true
                                                                    :skip-results-metadata? true
-                                                                   :format-rows? false)))
+                                                                   :format-rows? false
+                                                                   :fga-schema fga-schema)))
                                       ) (-> (assoc query
                                                    :async? true
                                                    :viz-settings viz-settings)
@@ -136,7 +139,8 @@
                                                                   (dissoc :add-default-userland-constraints? :js-int-to-string?)
                                                                   (assoc :process-viz-settings? true
                                                                          :skip-results-metadata? true
-                                                                         :format-rows? false))))
+                                                                         :format-rows? false
+                                                                         :fga-schema fga-schema))))
                        )]
     (run-query-async
      query

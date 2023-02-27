@@ -492,13 +492,15 @@
          _sql      (str "-- " remark "\n" sql)
          max-rows (limit/determine-query-max-rows outer-query)
          userId (:executed-by (:info outer-query))
-         sql (convert/convert-sql _sql userId)
+         schema-id (:fga-schema (:middleware outer-query))
+         sql (convert/convert-sql _sql schema-id)
          ]
      (log/info "execute sql query --------------")
      (log/info "source_sql:" _sql)
      (log/info "after_convert_sql:" sql)
      (log/info "outer-query" outer-query)
      (log/info  "params" params)
+     (log/info "schema-id" schema-id)
      (execute-reducible-query driver sql params max-rows context respond)))
 
   ([driver sql params max-rows context respond]

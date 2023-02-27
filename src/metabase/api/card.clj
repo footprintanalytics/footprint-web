@@ -767,7 +767,7 @@ saved later when it is ready."
 
 (api/defendpoint ^:streaming POST "/:card-id/query"
   "Run the query associated with a Card."
-  [card-id :as {{:keys [parameters ignore_cache dashboard_id collection_preview], :or {ignore_cache false dashboard_id nil}} :body}]
+  [card-id :as {{:keys [parameters ignore_cache dashboard_id collection_preview fga-schema], :or {ignore_cache false dashboard_id nil}} :body}]
   {ignore_cache (s/maybe s/Bool)
    collection_preview (s/maybe s/Bool)
    dashboard_id (s/maybe su/IntGreaterThanZero)}
@@ -782,14 +782,14 @@ saved later when it is ready."
    :ignore_cache ignore_cache
    :dashboard-id dashboard_id
    :context      (if collection_preview :collection :question)
-   :middleware   {:process-viz-settings? false}))
+   :middleware   {:process-viz-settings? false :fga-schema fga-schema}))
 
 (api/defendpoint ^:streaming POST "/:card-id/query/:export-format"
   "Run the query associated with a Card, and return its results as a file in the specified format.
 
   `parameters` should be passed as query parameter encoded as a serialized JSON string (this is because this endpoint
   is normally used to power 'Download Results' buttons that use HTML `form` actions)."
-  [card-id export-format :as {{:keys [parameters max-results]} :params}]
+  [card-id export-format :as {{:keys [parameters max-results fga-schema]} :params}]
   {parameters    (s/maybe su/JSONString)
    export-format api.dataset/ExportFormat}
   (if max-results
@@ -813,7 +813,8 @@ saved later when it is ready."
                  :skip-results-metadata? true
                  :ignore-cached-results? true
                  :format-rows?           false
-                 :js-int-to-string?      false})))
+                 :js-int-to-string?      false
+                 :fga-schema fga-schema})))
 
 ;;; ----------------------------------------------- Sharing is Caring ------------------------------------------------
 
