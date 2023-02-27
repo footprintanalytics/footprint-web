@@ -23,7 +23,6 @@
             [metabase.query-processor.timezone :as qp.timezone]
             [metabase.query-processor.util :as qp.util]
             [metabase.util :as u]
-            [metabase.util.convert_sql :as convert]
             [metabase.util.i18n :refer [trs tru]]
             [potemkin :as p])
   (:import [java.sql Connection JDBCType PreparedStatement ResultSet ResultSetMetaData Statement Types]
@@ -483,6 +482,33 @@
   (let [row-thunk (row-thunk driver rs rsmeta)]
     (qp.reducible/reducible-rows row-thunk canceled-chan)))
 
+(defn handle-replace [sql col]
+  (println col)
+  (let [fga-tables ["protocol_ivvvnfo"]
+         is_include (some #(str/includes? col %) fga-tables)]
+    (if (= is_include true)
+      (let [
+             trimTable (str/trim col)
+             fixedTrimTable (str/replace trimTable "footprint_test" "animoca_mocaverse_test")
+             ]
+        (println trimTable)
+        (println fixedTrimTable)
+        (println "执行")
+        (str/replace sql trimTable fixedTrimTable)
+        )
+      sql
+      )
+    )
+  )
+
+(defn convert-sql [sql]
+  (let [ regex #"(?<=from|join|FROM|JOIN)+(?:\s|`|\")+(?:\w|`|\"|\.)+"
+         result (re-seq regex sql)
+         last_sql (reduce handle-replace sql result )]
+    last_sql
+    )
+  )
+
 (defn execute-reducible-query
   "Default impl of `execute-reducible-query` for sql-jdbc drivers."
   {:added "0.35.0", :arglists '([driver query context respond] [driver sql params max-rows context respond])}
@@ -491,11 +517,12 @@
    (let [remark   (qp.util/query->remark driver outer-query)
          _sql      (str "-- " remark "\n" sql)
          max-rows (limit/determine-query-max-rows outer-query)
-         sql (convert/convert-sql _sql)
+         sql (convert-sql _sql)
          ]
-     (log/info "execute sql query --------------")
-     (log/info "source_sql:" _sql)
-     (log/info "after_convert_sql:" sql)
+     (log/info "下班了")
+     (log/info remark)
+     (log/info _sql)
+     (log/info sql)
      (log/info "outer-query" outer-query)
      (log/info  "params" params)
      (execute-reducible-query driver sql params max-rows context respond)))
