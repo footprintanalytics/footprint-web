@@ -166,7 +166,7 @@ class FgaNavbar extends Component {
         isOpen={loginModalShow}
         onClose={() => setLoginModalShow({ show: false })}
         from={location.query.from}
-        channel={location.query.channel || location.query.cnl}
+        channel={"FGA"}
         location={this.props.location}
         fromNav={true}
         redirect={loginModalRedirect}
