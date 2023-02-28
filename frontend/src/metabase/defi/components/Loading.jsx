@@ -4,7 +4,7 @@ import LoadingSpinner from "metabase/components/LoadingSpinner";
 const Loading = () => {
   return (
     <div style={{ display: "flex", justifyContent: "center", height: "100vh" }}>
-      <LoadingSpinner message="GETTING INSIGHTS..." />
+      <LoadingSpinner message="Getting Insights..." />
     </div>
   );
 };
