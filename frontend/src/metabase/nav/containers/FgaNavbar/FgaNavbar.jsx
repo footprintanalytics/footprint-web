@@ -335,13 +335,13 @@ class FgaNavbar extends Component {
           onClick={onCreateAction}
         >
           <Icon name="plus" size={12} />
-          <span>Create My Project</span>
+          <span>Add My Project</span>
         </div>
       );
     };
 
     const onCreateAction = () => {
-      trackStructEvent(`click Navbar Create My Project`);
+      trackStructEvent(`click Navbar Add My Project`);
       if (user) {
         this.setState({ ...this.state, isProjectModalOpen: true });
       } else {

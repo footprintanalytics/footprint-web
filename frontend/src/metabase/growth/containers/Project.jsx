@@ -5,10 +5,14 @@ import { Layout } from "antd";
 import { Content } from "antd/lib/layout/layout";
 import {
   BarChartOutlined,
+  FileImageOutlined,
   ShopOutlined,
   TeamOutlined,
   SettingOutlined,
   SearchOutlined,
+  ConsoleSqlOutlined,
+  ProjectOutlined,
+  CodeOutlined,
   CommentOutlined,
 } from "@ant-design/icons";
 import PublicDashboard from "metabase/public/containers/PublicDashboard";
@@ -77,51 +81,7 @@ const Project = props => {
         },
         // { name: "Top Users", id: 7120 ,uuid:''},
         // { name: "User List", id: 7122 ,uuid:''},
-        {
-          name: "NFT",
-          // icon: React.createElement(FileImageOutlined),
-          id: null,
-          children: [
-            {
-              name: "NFT Overview",
-              id: 7129,
-              uuid: "dbf29773-5afa-4396-84c0-49b3909496ff",
-            },
-            {
-              name: "Holder",
-              id: 7133,
-              uuid: "f519b7db-ef8e-4c94-9e39-001b5deb51e0",
-            },
-            // { name: "Transaction", id: null },
-            {
-              name: "Profit Leadboard",
-              id: 7131,
-              uuid: "eeff10d7-a0d3-48dc-9aa4-e564e861be4a",
-            },
-          ],
-        },
-        {
-          name: "Competitors",
-          // icon: React.createElement(SearchOutlined),
-          id: null,
-          children: [
-            {
-              name: "Industry Insights",
-              id: 7164,
-              uuid: "c9c94943-7ec3-45bf-a2c1-29ffed28c8dc",
-            },
-            {
-              name: "Competitive Comparison",
-              id: 7160,
-              uuid: "05cdbe1b-6d12-43c5-abdb-0136fe703dac",
-            },
-            {
-              name: "User Overlap",
-              id: 7171,
-              uuid: "cc8953e2-86c0-492f-85bf-1043eb9589c0",
-            },
-          ],
-        },
+
         {
           name: "Social Media",
           // icon: React.createElement(CommentOutlined),
@@ -136,24 +96,70 @@ const Project = props => {
       ],
     },
     {
-      name: "Users",
-      icon: React.createElement(TeamOutlined),
+      name: "NFT",
+      icon: React.createElement(FileImageOutlined),
       id: null,
       children: [
         {
-          name: "User List",
-          id: 7136,
-          uuid: "9de520df-ccd9-467f-b2dd-82c6a2a44f5f",
+          name: "NFT Overview",
+          id: 7129,
+          uuid: "dbf29773-5afa-4396-84c0-49b3909496ff",
         },
-        { name: "Potential Users", id: null, uuid: null },
-        // { name: "Top Users", id: 7120 },
+        {
+          name: "Holder",
+          id: 7133,
+          uuid: "f519b7db-ef8e-4c94-9e39-001b5deb51e0",
+        },
+        // { name: "Transaction", id: null },
+        {
+          name: "Profit Leadboard",
+          id: 7131,
+          uuid: "eeff10d7-a0d3-48dc-9aa4-e564e861be4a",
+        },
+      ],
+    },
+    {
+      name: "Competitors",
+      icon: React.createElement(ProjectOutlined),
+      id: null,
+      children: [
+        {
+          name: "Industry Insights",
+          id: 7164,
+          uuid: "c9c94943-7ec3-45bf-a2c1-29ffed28c8dc",
+        },
+        {
+          name: "Competitive Comparison",
+          id: 7160,
+          uuid: "05cdbe1b-6d12-43c5-abdb-0136fe703dac",
+        },
+        {
+          name: "User Overlap",
+          id: 7171,
+          uuid: "cc8953e2-86c0-492f-85bf-1043eb9589c0",
+        },
       ],
     },
     {
       name: "Cohorts",
       icon: React.createElement(TeamOutlined),
       id: null,
-      children: [{ name: "Cohort List", id: null, uuid: null }],
+      children: [
+        {
+          name: "Cohort List",
+          id: null,
+          uuid: null,
+          children: [
+            {
+              name: "User List",
+              id: 7136,
+              uuid: "9de520df-ccd9-467f-b2dd-82c6a2a44f5f",
+            },
+          ],
+        },
+        { name: "Potential Users", id: null, uuid: null },
+        // { name: "Top Users", id: 7120 },
+      ],
     },
     {
       name: "Campaigns",
@@ -170,9 +176,9 @@ const Project = props => {
 
     {
       name: "Custom Analysis",
-      icon: React.createElement(SearchOutlined),
+      icon: React.createElement(CodeOutlined),
       id: null,
-      children: [{ name: "My Analysis", id: null, uuid: null }],
+      // children: [{ name: "My Analysis", id: null, uuid: null }],
     },
     {
       name: "Setting",
@@ -190,10 +196,17 @@ const Project = props => {
     const tabs = [];
     tabs_data?.map(item => {
       const children = getTabs(item.children);
+      const disabled =
+        children.length <= 0 &&
+        !item.uuid &&
+        ["Connectors", "Campaign List"].findIndex(i => item.name) === -1
+          ? true
+          : false;
       tabs.push({
         key: item.name,
         icon: item.icon,
         children: children.length > 0 ? children : null,
+        disabled: disabled,
         label: item.name,
       });
       if (item.uuid) {
