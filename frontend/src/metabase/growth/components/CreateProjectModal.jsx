@@ -1,9 +1,12 @@
 /* eslint-disable react/prop-types */
-import React, { createContext } from "react";
-import { Modal, Select, Button, Input, Form } from "antd";
+import React, { createContext, useEffect } from "react";
+import { Modal, Select, Button, Input, Form, message } from "antd";
 import Link from "antd/lib/typography/Link";
 import { withRouter } from "react-router";
 import { connect } from "react-redux";
+import { useQuery } from "react-query";
+import { QUERY_OPTIONS } from "metabase/containers/dashboards/shared/config";
+import { CreateFgaProject, GetFgaProject } from "metabase/new-service";
 import { getUser } from "metabase/selectors/user";
 
 const layout = {
@@ -61,8 +64,38 @@ const CreateProjectModal = props => {
     },
   ];
 
+  // const { isLoading, data } = useQuery(
+  //   ["GetFgaProject"],
+  //   async () => {
+  //     return await GetFgaProject();
+  //   },
+  //   QUERY_OPTIONS,
+  // );
+  // useEffect(() => {
+  //   if (!isLoading) {
+  //     console.log("project", data);
+  //   }
+  // }, [isLoading]);
+
+  async function createProject(projectName, protocol) {
+    console.log(projectName, protocol);
+    const hide = message.loading("Loading...", 0);
+    const result = await CreateFgaProject({
+      name: projectName,
+      protocolSlug: protocol,
+      nftContractAddress: [],
+    });
+    console.log("result", result);
+    hide();
+    return true;
+  }
   const onFinish = values => {
+    // values = {
+    //    "projectName": "sasa",
+    //    "protocol": "the-sandbox2"
+    //  }
     console.log(values);
+    createProject(values.projectName, values.protocol);
   };
 
   return (

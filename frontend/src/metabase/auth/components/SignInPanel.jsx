@@ -37,6 +37,7 @@ const SignInPanel = ({
   changeToResetPassword,
   changeToSignUp,
   project,
+  channel,
   redirect,
 }) => {
   const ref = React.createRef();
@@ -122,7 +123,7 @@ const SignInPanel = ({
               />
             </div>
             <FormMessage />
-            <div className="mt4"/>
+            <div className="mt4" />
             <div className="Form-actions text-centered">
               <FormSubmit className="block full sign-in-button">{t`Sign in`}</FormSubmit>
             </div>
@@ -144,6 +145,7 @@ const SignInPanel = ({
       <GoogleButton
         className="loginModalGoogleButton"
         location={location}
+        channel={channel}
         project={project}
         redirect={redirect}
         buttonText="Sign in with Google"
@@ -153,6 +155,7 @@ const SignInPanel = ({
         <WalletLoginButton
           className="loginModalGoogleButton mt1"
           location={location}
+          channel={channel}
           project={project}
           redirect={redirect}
           buttonText="Sign in with Ethereum"

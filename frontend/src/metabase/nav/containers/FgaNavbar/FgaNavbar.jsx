@@ -401,25 +401,13 @@ class FgaNavbar extends Component {
               this.goLink(e, "/");
             }}
           >
-            <div className="flex flex-row items-center">
-              <img
-                src={getOssUrl("img_nav_logo_mobile.svg")}
-                width={30}
-                height={28}
-                style={{ marginBottom: 2 }}
-                alt="Footprint - One Step Closer to Blockchain Insights"
-              />
-              <span
-                style={{
-                  fontSize: 20,
-                  fontWeight: 500,
-                  marginLeft: 20,
-                  color: "#2e2ca6",
-                }}
-              >
-                Footprint Growth Analytics
-              </span>
-            </div>
+            <img
+              src={getOssUrl("20230228153645.svg")}
+              width={160}
+              height={42}
+              style={{ marginBottom: 2 }}
+              alt="Footprint Growth Analytics - One Step Closer to Blockchain Marketing Insights"
+            />
           </Link>
           {/* <LeftMenu /> */}
         </div>
