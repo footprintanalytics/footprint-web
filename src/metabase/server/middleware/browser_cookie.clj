@@ -15,6 +15,7 @@
 (def ^:private cookie-options
   {:http-only true
    :path      "/"
+   :domain    "footprint.network"
    :same-site :lax
    ;; Set the cookie to expire 20 years from now. That should be sufficient
    :expires   (t/format :rfc-1123-date-time (t/plus (t/zoned-date-time) (t/years 20)))})
