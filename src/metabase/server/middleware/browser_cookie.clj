@@ -21,6 +21,7 @@
   [request]
   (merge {:http-only true
           :path      "/"
+          :domain    "footprint.network"
           ;; Set the cookie to expire 20 years from now. That should be sufficient
           :expires   (t/format :rfc-1123-date-time (t/plus (t/zoned-date-time) (t/years 20)))}
          (if (request.u/https? request)

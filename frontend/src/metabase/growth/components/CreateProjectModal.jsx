@@ -64,18 +64,18 @@ const CreateProjectModal = props => {
     },
   ];
 
-  // const { isLoading, data } = useQuery(
-  //   ["GetFgaProject"],
-  //   async () => {
-  //     return await GetFgaProject();
-  //   },
-  //   QUERY_OPTIONS,
-  // );
-  // useEffect(() => {
-  //   if (!isLoading) {
-  //     console.log("project", data);
-  //   }
-  // }, [isLoading]);
+  const { isLoading, data } = useQuery(
+    ["GetFgaProject"],
+    async () => {
+      return await GetFgaProject();
+    },
+    QUERY_OPTIONS,
+  );
+  useEffect(() => {
+    if (!isLoading) {
+      console.log("project", data);
+    }
+  }, [isLoading]);
 
   async function createProject(projectName, protocol) {
     console.log(projectName, protocol);
@@ -90,11 +90,6 @@ const CreateProjectModal = props => {
     return true;
   }
   const onFinish = values => {
-    // values = {
-    //    "projectName": "sasa",
-    //    "protocol": "the-sandbox2"
-    //  }
-    console.log(values);
     createProject(values.projectName, values.protocol);
   };
 

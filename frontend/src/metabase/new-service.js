@@ -12,7 +12,7 @@ export const CreateFgaProject = async params => {
 };
 
 export const GetFgaProject = async params => {
-  return GET("http://connector-server-preview.footprint.network/api/v1/project", params);
+  return GET("/api/v1/project", params);
 };
 
 export const CreateFgaConnector = async params => {
