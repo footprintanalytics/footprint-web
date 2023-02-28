@@ -180,11 +180,11 @@ const PIVOT_PUBLIC_PREFIX = "/api/public/pivot/";
 
 export const PublicApi = {
   // card: GET("/api/public/card/:uuid"),
-  cardQuery: GET("/api/public/card/:uuid/query"),
+  cardQuery: GET("/api/v1/public/card/:uuid/query"),
   cardQueryPivot: GET(PIVOT_PUBLIC_PREFIX + "card/:uuid/query"),
   // dashboard: GET("/api/public/dashboard/:uuid"),
   dashboardCardQuery: GET(
-    "/api/public/dashboard/:uuid/dashcard/:dashcardId/card/:cardId",
+    "/api/v1/public/dashboard/:uuid/dashcard/:dashcardId/card/:cardId",
   ),
   dashboardCardQueryPivot: GET(
     PIVOT_PUBLIC_PREFIX + "dashboard/:uuid/dashcard/:dashcardId/card/:cardId",
