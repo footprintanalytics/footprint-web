@@ -232,6 +232,7 @@
   [uuid card-id dashcard-id parameters fga-schema]
   {parameters (s/maybe su/JSONString)}
   (validation/check-public-sharing-enabled)
+  (println "public dashboard" fga-schema)
   (let [dashboard-id (api/check-404 (db/select-one-id Dashboard :public_uuid uuid, :archived false))]
     (public-dashcard-results-async
      :dashboard-id  dashboard-id
