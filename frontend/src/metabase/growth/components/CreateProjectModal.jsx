@@ -1,18 +1,23 @@
 /* eslint-disable react/prop-types */
 import React, { createContext } from "react";
-import { Modal, Select, Button } from "antd";
+import { Modal, Select, Button, Input, Form } from "antd";
+import Link from "antd/lib/typography/Link";
 import { withRouter } from "react-router";
 import { connect } from "react-redux";
 import { getUser } from "metabase/selectors/user";
-import GaProjectSearch from "./GaProjectSearch";
-import Link from "antd/lib/typography/Link";
+
+const layout = {
+  labelCol: { span: 6 },
+  wrapperCol: { span: 18 },
+};
+const tailLayout = {
+  wrapperCol: { offset: 0, span: 24 },
+};
 
 const CreateProjectModal = props => {
   const { open, onCancel } = props;
-  // const [value, setValue] = useState({
-  //   isOpenSubMenu: true,
-  // });
-  // const [isProjectModalOpen, setIsProjectModalOpen] = useState(false);
+  const [form] = Form.useForm();
+  // monitor datas
   const normalOptions = [
     {
       value: "BAYC",
@@ -55,6 +60,11 @@ const CreateProjectModal = props => {
       label: "Sunflower Farmers",
     },
   ];
+
+  const onFinish = values => {
+    console.log(values);
+  };
+
   return (
     <Modal
       title="Create your own project"
@@ -63,38 +73,58 @@ const CreateProjectModal = props => {
       // onOk={handleOk}
       onCancel={onCancel}
     >
-      <div className="flex flex-column">
-        Select the protocol of your project
-        <Select
-          showSearch
-          style={{ width: "100%", marginTop: 20 }}
-          // value={currentProject}
-          // onChange={handleProjectChange}
-          placeholder="Search to Select"
-          optionFilterProp="children"
-          filterOption={(input, option) =>
-            (option?.label ?? "").toLowerCase().includes(input.toLowerCase())
-          }
-          // filterSort={(optionA, optionB) =>
-          //   (optionA?.label ?? "")
-          //     .toLowerCase()
-          //     .localeCompare((optionB?.label ?? "").toLowerCase())
-          // }
-          options={normalOptions}
-        />
-        <Link style={{ width: "100%", marginTop: 10 }}>
+      <Form {...layout} form={form} name="control-hooks" onFinish={onFinish}>
+        <Form.Item
+          name="projectName"
+          label="Project Name"
+          rules={[{ required: true }]}
+        >
+          <Input />
+        </Form.Item>
+        <Form.Item
+          name="protocol"
+          label="Protocol"
+          rules={[{ required: true }]}
+        >
+          <Select
+            showSearch
+            // value={currentProject}
+            // onChange={handleProjectChange}
+            placeholder="Select the protocol of your project"
+            optionFilterProp="children"
+            filterOption={(input, option) =>
+              (option?.label ?? "").toLowerCase().includes(input.toLowerCase())
+            }
+            options={normalOptions}
+          />
+        </Form.Item>
+        <Form.Item {...tailLayout}>
+          <div
+            className="flex flex-column"
+            style={{
+              width: "100%",
+              alignItems: "center",
+              justifyItems: "center",
+            }}
+          >
+            <Button type="primary" htmlType="submit">
+              Create Now
+            </Button>
+          </div>
+        </Form.Item>
+      </Form>
+      <div
+        className="flex flex-column"
+        style={{
+          width: "100%",
+          alignItems: "center",
+          justifyItems: "center",
+          marginTop: 10,
+        }}
+      >
+        <Link href="submit/contract/add">
           Can not find the protocol? Submit now!
         </Link>
-        <Button
-          type="primary"
-          key="Create"
-          style={{ width: "100%", marginTop: 50 }}
-          onClick={() => {
-            // setIsModalOpen(true);
-          }}
-        >
-          Create Now
-        </Button>
       </div>
     </Modal>
   );

@@ -16,14 +16,6 @@ import {
 import Title from "antd/lib/typography/Title";
 import Icon from "metabase/components/Icon";
 import { getUser } from "metabase/selectors/user";
-import AF from "assets/img/af.png";
-import BQ from "assets/img/BQ.svg";
-import GA from "assets/img/GA.svg";
-import ConfigGoogleAnalyticsSource from "../components/config_panel/ConfigGoogleAnalyticsSource";
-import ConfigBigQuerySource from "../components/config_panel/ConfigBigQuerySource";
-import ConfigAppsFlyerSource from "../components/config_panel/ConfigAppsFlyerSource";
-import ConfigTwitterSource from "../components/config_panel/ConfigTwitterSource";
-import ConfigDiscordSource from "../components/config_panel/ConfigDiscordSource";
 import "../css/utils.css";
 import { getLatestGACampaigns } from "../utils/utils";
 

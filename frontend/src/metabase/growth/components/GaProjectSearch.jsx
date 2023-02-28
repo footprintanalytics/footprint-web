@@ -13,7 +13,7 @@ import {
 } from "../utils/utils";
 
 const GaProjectSearch = props => {
-  const { router, location, onlyAll } = props;
+  const { router, location } = props;
   // monitor data
   const normalOptions = [
     {

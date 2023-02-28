@@ -25,6 +25,10 @@ export function saveGASearchHistory(item: any) {
   if (temp.findIndex(i => i.value === item.value) === -1) {
     temp.push(item);
   }
+
+  if (temp.length > 3) {
+    temp.splice(0, 1);
+  }
   localStorage.setItem("GASearchHistory", JSON.stringify(temp));
 }
 export function getGASearchHistory() {
