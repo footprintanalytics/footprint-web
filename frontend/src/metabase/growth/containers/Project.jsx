@@ -55,21 +55,49 @@ const Project = props => {
       icon: React.createElement(BarChartOutlined),
       id: null,
       children: [
-        { name: "New User", id: 7128 },
-        { name: "User Funnel", id: 7118 },
-        { name: "User Retention", id: 7119 },
-        { name: "User Profile", id: 7123 },
-        // { name: "Top Users", id: 7120 },
-        // { name: "User List", id: 7122 },
+        {
+          name: "New User",
+          id: 7128,
+          uuid: "181c3a01-6271-473d-a9dc-fe574c7e4691",
+        },
+        {
+          name: "User Funnel",
+          id: 7118,
+          uuid: "b1682d12-bddd-4b10-99a3-a403a3a6a78c",
+        },
+        {
+          name: "User Retention",
+          id: 7119,
+          uuid: "92c8f6c4-0c56-45ee-b3c1-399a23cfba33",
+        },
+        {
+          name: "User Profile",
+          id: null,
+          uuid: null,
+        },
+        // { name: "Top Users", id: 7120 ,uuid:''},
+        // { name: "User List", id: 7122 ,uuid:''},
         {
           name: "NFT",
           // icon: React.createElement(FileImageOutlined),
           id: null,
           children: [
-            { name: "NFT Overview", id: 7129 },
-            { name: "Holder", id: 7133 },
-            // { name: "Transaction", id: 7131 },
-            { name: "Profit Leadboard", id: null },
+            {
+              name: "NFT Overview",
+              id: 7129,
+              uuid: "dbf29773-5afa-4396-84c0-49b3909496ff",
+            },
+            {
+              name: "Holder",
+              id: 7133,
+              uuid: "f519b7db-ef8e-4c94-9e39-001b5deb51e0",
+            },
+            // { name: "Transaction", id: null },
+            {
+              name: "Profit Leadboard",
+              id: 7131,
+              uuid: "eeff10d7-a0d3-48dc-9aa4-e564e861be4a",
+            },
           ],
         },
         {
@@ -77,15 +105,28 @@ const Project = props => {
           // icon: React.createElement(SearchOutlined),
           id: null,
           children: [
-            { name: "Industry Insights", id: 7164 },
-            { name: "Competitive Comparison", id: 7160 },
-            { name: "User Overlap", id: 7128 },
+            {
+              name: "Industry Insights",
+              id: 7164,
+              uuid: "c9c94943-7ec3-45bf-a2c1-29ffed28c8dc",
+            },
+            {
+              name: "Competitive Comparison",
+              id: 7160,
+              uuid: "05cdbe1b-6d12-43c5-abdb-0136fe703dac",
+            },
+            {
+              name: "User Overlap",
+              id: 7171,
+              uuid: "cc8953e2-86c0-492f-85bf-1043eb9589c0",
+            },
           ],
         },
         {
           name: "Social Media",
           // icon: React.createElement(CommentOutlined),
           id: 7154,
+          uuid: "49bc72c9-8a7e-4b78-8275-9d473e633392",
           // children: [
           //   { name: "Social Dashboard", id: null },
           //   { name: "Twitter", id: null },
@@ -99,8 +140,12 @@ const Project = props => {
       icon: React.createElement(TeamOutlined),
       id: null,
       children: [
-        { name: "User List", id: 7136 },
-        { name: "Potential Users", id: null },
+        {
+          name: "User List",
+          id: 7136,
+          uuid: "9de520df-ccd9-467f-b2dd-82c6a2a44f5f",
+        },
+        { name: "Potential Users", id: null, uuid: null },
         // { name: "Top Users", id: 7120 },
       ],
     },
@@ -108,18 +153,18 @@ const Project = props => {
       name: "Cohorts",
       icon: React.createElement(TeamOutlined),
       id: null,
-      children: [{ name: "Cohort List", id: null }],
+      children: [{ name: "Cohort List", id: null, uuid: null }],
     },
     {
       name: "Campaigns",
       icon: React.createElement(CommentOutlined),
       id: null,
       children: [
-        { name: "Campaign List", id: null },
+        { name: "Campaign List", id: null, uuid: null },
         // { name: "User List", id: 7136 },
         // { name: "User Group", id: null },
         // { name: "Wallet Radar", id: null },
-        { name: "Snapshot & Airdrop", id: null },
+        { name: "Snapshot & Airdrop", id: null, uuid: null },
       ],
     },
 
@@ -127,15 +172,15 @@ const Project = props => {
       name: "Custom Analysis",
       icon: React.createElement(SearchOutlined),
       id: null,
-      children: [{ name: "My Analysis", id: null }],
+      children: [{ name: "My Analysis", id: null, uuid: null }],
     },
     {
       name: "Setting",
       icon: React.createElement(SettingOutlined),
       id: null,
       children: [
-        { name: "Connectors", id: null },
-        { name: "Project Info", id: null },
+        { name: "Connectors", id: null, uuid: null },
+        { name: "Project Info", id: null, uuid: null },
       ],
     },
   ];
@@ -151,8 +196,8 @@ const Project = props => {
         children: children.length > 0 ? children : null,
         label: item.name,
       });
-      if (item.id) {
-        dashboardMap.set(item.name, item.id);
+      if (item.uuid) {
+        dashboardMap.set(item.name, item.uuid);
       }
     });
     return tabs;
@@ -161,7 +206,7 @@ const Project = props => {
     if (dashboardMap.has(current_tab)) {
       return (
         <PublicDashboard
-          params={{ dashboardId: dashboardMap.get(current_tab) }}
+          params={{ uuid: dashboardMap.get(current_tab) }}
           location={location}
           isFullscreen={false}
           className="ml-250"

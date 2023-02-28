@@ -342,14 +342,11 @@ class FgaNavbar extends Component {
 
     const onCreateAction = () => {
       trackStructEvent(`click Navbar Create My Project`);
-      // const afterSuccess = () => setCreateModalShow({ show: true });
-      // const block = this.needCancelFeedbackBlock({ afterSuccess });
-      // if (block) {
-      //   return;
-      // }
-      // afterSuccess();
-      this.setState({ ...this.state, isProjectModalOpen: true });
-      console.log("onCreateAction");
+      if (user) {
+        this.setState({ ...this.state, isProjectModalOpen: true });
+      } else {
+        setLoginModalShow({ show: true, from: "navbar_fga_signin" });
+      }
     };
 
     const RightMenu = () => {
@@ -381,7 +378,7 @@ class FgaNavbar extends Component {
               className="Nav__sign-up"
               onClick={() => {
                 trackStructEvent(`click Sign in`);
-                setLoginModalShow({ show: true, from: "navbar_signin" });
+                setLoginModalShow({ show: true, from: "navbar_fga_signin" });
               }}
             >
               Sign in
