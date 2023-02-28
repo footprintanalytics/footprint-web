@@ -6,6 +6,28 @@ export const apiGet = async api => {
   return await axios.get(api);
 };
 
+// FGA Api
+export const CreateFgaProject = async params => {
+  return POST("http://connector-server-preview.footprint.network/api/v1/project", params);
+};
+
+export const GetFgaProject = async params => {
+  return GET("http://connector-server-preview.footprint.network/api/v1/project", params);
+};
+
+export const CreateFgaConnector = async params => {
+  return POST("/api/v1/connector-config", params);
+};
+
+export const GetFgaConnectors = async params => {
+  return GET("/api/v1/connector-config", params);
+};
+
+export const UpdateFgaConnector = async params => {
+  return PUT(`/api/v1/connector-config/${params.id}`, params);
+};
+
+// FP Api
 export const UserRegister = async params => {
   return POST("/api/v1/user/signup", params);
 };

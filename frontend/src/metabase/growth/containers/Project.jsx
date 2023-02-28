@@ -51,7 +51,8 @@ const Project = props => {
     {
       name: "Project Overview",
       icon: React.createElement(ShopOutlined),
-      id: null,
+      id: "7179",
+      uuid: "fb62e629-9dea-4da7-9cdf-b013d9c17e3c",
       children: null,
     },
     {
@@ -157,7 +158,11 @@ const Project = props => {
             },
           ],
         },
-        { name: "Potential Users", id: null, uuid: null },
+        {
+          name: "Potential Users",
+          id: 7180,
+          uuid: "b46fc872-c97d-4300-a83e-45fa61760ad2",
+        },
         // { name: "Top Users", id: 7120 },
       ],
     },
@@ -199,7 +204,7 @@ const Project = props => {
       const disabled =
         children.length <= 0 &&
         !item.uuid &&
-        ["Connectors", "Campaign List"].findIndex(i => item.name) === -1
+        ["Connectors", "Campaign List"].findIndex(i => i === item.name) === -1
           ? true
           : false;
       tabs.push({
