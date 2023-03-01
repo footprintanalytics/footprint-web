@@ -343,6 +343,7 @@ class DashboardGrid extends Component {
         clearWatermark={this.props.hideWatermark}
         chartStyle={this.props.chartStyle}
         user={this.props.user}
+        refreshCardData={this.props.refreshCardData}
       />
       </LazyLoad>
     );

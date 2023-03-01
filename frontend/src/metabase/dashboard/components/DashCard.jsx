@@ -40,9 +40,10 @@ import { DashCardRoot } from "./DashCard.styled";
 import DashCardParameterMapper from "./DashCardParameterMapper";
 import "./DashCard.css";
 import QueryDownloadWidgetFP from "metabase/query_builder/components/QueryDownloadWidgetFP";
-import { AddToolPopover } from "metabase/dashboard/components/Dashboard/DashboardEmptyState/DashboardEmptyState";
 import { addTextDashCardToDashboard, toggleSidebar } from "metabase/dashboard/actions";
-import { SIDEBAR_NAME } from "metabase/dashboard/constants";
+import QueryRealtimeButton from "metabase/query_builder/components/QueryRealtimeButton";
+import { isRealtimeChart } from "metabase/dashboard/components/utils/realtime";
+import { getRealtimeList } from "metabase/selectors/config";
 
 const DATASET_USUALLY_FAST_THRESHOLD = 15 * 1000;
 
@@ -150,6 +151,7 @@ class DashCard extends Component {
       duplicateAction,
       previewAction,
       chartStyle,
+      realtimeList,
     } = this.props;
 
     const mainCard = {
@@ -279,6 +281,11 @@ class DashCard extends Component {
     });
 
     const notShowReplacementContent = isImageDisplay || isVideoDisplay;
+    const includeRealtimeTable = isRealtimeChart(dashcard, realtimeList);
+    const isRealtimeUser = user?.id === 20103;
+    const showReadTimeMode = !isPublic && !isTextDisplay && !isImageDisplay && !isVideoDisplay && result && !result.error
+      && includeRealtimeTable
+      && isRealtimeUser;
 
     return (
       <DashCardRoot
@@ -297,21 +304,23 @@ class DashCard extends Component {
             textAlign: "right",
             position: "absolute",
             right: 8,
+            bottom: 8,
+            zIndex: 2,
+          }}
+        >
+          {showReadTimeMode && (
+            <QueryRealtimeButton dashcard={this.props.dashcard} refreshCardData={this.props.refreshCardData}/>
+          )}
+        </div>
+        <div
+          style={{
+            textAlign: "right",
+            position: "absolute",
+            right: 8,
             top: 8,
             zIndex: 2,
           }}
         >
-          {!isEditing && !isPublic &&
-          QueryDownloadWidget.shouldRender({
-            result,
-            isResultDirty: false,
-          }) && (
-            <QueryDownloadWidgetFP
-              className="html2canvas-filter dash-card__button"
-              card={dashcard.card}
-              result={result}
-            />
-          )}
           {showEdit && editAction && (
             <Tooltip key="ChartEdit" tooltip={t`Edit`}>
               <a
@@ -362,6 +371,18 @@ class DashCard extends Component {
               />
             </Tooltip>
           )}
+          {!isEditing && !isPublic &&
+            QueryDownloadWidget.shouldRender({
+              result,
+              isResultDirty: false,
+            }) && (
+              <QueryDownloadWidgetFP
+              className="html2canvas-filter dash-card__button"
+              card={dashcard.card}
+              result={result}
+              />
+            )
+          }
           {/* {!hideDownload && (
             <a
               className="html2canvas-filter"
@@ -746,9 +767,13 @@ const ClickBehaviorSidebarOverlay = ({
   );
 };
 
+const mapStateToProps = state => ({
+  realtimeList: getRealtimeList(state),
+});
+
 const mapDispatchToProps = {
   toggleSidebar,
   addTextDashCardToDashboard,
 };
 
-export default connect(null, mapDispatchToProps)(DashCard);
+export default connect(mapStateToProps, mapDispatchToProps)(DashCard);

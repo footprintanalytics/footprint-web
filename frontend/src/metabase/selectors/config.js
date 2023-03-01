@@ -8,3 +8,10 @@ export const getTableConfigList = createSelector(
     return tableConfigList || [];
   },
 );
+
+export const getRealtimeList = createSelector(
+  [getConfig],
+  ({ realtimeList }) => {
+    return realtimeList || [];
+  },
+);
