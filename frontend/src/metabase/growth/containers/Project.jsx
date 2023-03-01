@@ -222,18 +222,27 @@ const Project = props => {
   };
   const getContentPannel = current_tab => {
     if (dashboardMap.has(current_tab)) {
+      // TODO: fix this project object
       return (
         <PublicDashboard
           params={{ uuid: dashboardMap.get(current_tab) }}
           location={location}
+          project={{ projectName: project }}
           isFullscreen={false}
           className="ml-250"
+          key={project}
           hideFooter
         />
       );
     }
     if (current_tab === "Connectors") {
-      return <Connectors></Connectors>;
+      return (
+        <Connectors
+          location={location}
+          router={router}
+          projectId={"22"}
+        ></Connectors>
+      );
     }
     if (current_tab === "Campaign List") {
       return <Campaigns router={router} location={location}></Campaigns>;

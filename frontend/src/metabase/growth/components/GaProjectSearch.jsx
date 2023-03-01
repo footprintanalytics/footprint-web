@@ -4,6 +4,9 @@ import { connect } from "react-redux";
 import { Select } from "antd";
 import { withRouter } from "react-router";
 import { getUser } from "metabase/selectors/user";
+import { useQuery } from "react-query";
+import { QUERY_OPTIONS } from "metabase/containers/dashboards/shared/config";
+import { GetFgaProject } from "metabase/new-service";
 import "../css/index.css";
 import {
   getGASearchHistory,
@@ -14,6 +17,32 @@ import {
 
 const GaProjectSearch = props => {
   const { router, location } = props;
+  const [userProject, setUserProject] = useState([]);
+  const { isLoading, data } = useQuery(
+    ["GetFgaProject"],
+    async () => {
+      return await GetFgaProject();
+    },
+    QUERY_OPTIONS,
+  );
+  useEffect(() => {
+    if (!isLoading) {
+      console.log("GetFgaProject", data);
+      if (data.data?.length > 0) {
+        const projects = [];
+        data.data.map(p => {
+          projects.push({
+            ...p,
+            value: p.protocolSlug,
+            label: p.name,
+            key: p.protocolSlug + p.id,
+          });
+        });
+        setUserProject(projects);
+      }
+    }
+  }, [isLoading]);
+
   // monitor data
   const normalOptions = [
     {
@@ -84,10 +113,12 @@ const GaProjectSearch = props => {
       saveLatestGAProject(location.query.project_name);
     } else {
       setCurrentProject(
-        getLatestGAProject() ? getLatestGAProject() : recommendOptions[0].value,
+        getLatestGAProject()
+          ? getLatestGAProject()
+          : (userProject.length > 0 ? userProject : recommendOptions)[0].value,
       );
     }
-  }, [location?.query?.project_name]);
+  }, [location?.query?.project_name, isLoading]);
   const handleProjectChange = (value, option) => {
     const item = option;
     item.key = item.value + "-histroy";
@@ -103,6 +134,7 @@ const GaProjectSearch = props => {
         showSearch
         style={{ width: 300 }}
         value={currentProject}
+        loading={isLoading}
         onChange={handleProjectChange}
         placeholder="Search to Select"
         optionFilterProp="children"
@@ -114,7 +146,7 @@ const GaProjectSearch = props => {
         //     .toLowerCase()
         //     .localeCompare((optionB?.label ?? "").toLowerCase())
         // }
-        options={finalOptions}
+        options={userProject.length > 0 ? userProject : finalOptions}
       />
     </div>
   );

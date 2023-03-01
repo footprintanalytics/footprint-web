@@ -6,7 +6,7 @@ import { withRouter } from "react-router";
 import { connect } from "react-redux";
 import { useQuery } from "react-query";
 import { QUERY_OPTIONS } from "metabase/containers/dashboards/shared/config";
-import { CreateFgaProject, GetFgaProject } from "metabase/new-service";
+import { CreateFgaProject } from "metabase/new-service";
 import { getUser } from "metabase/selectors/user";
 
 const layout = {
@@ -63,19 +63,6 @@ const CreateProjectModal = props => {
       label: "Sunflower Farmers",
     },
   ];
-
-  const { isLoading, data } = useQuery(
-    ["GetFgaProject"],
-    async () => {
-      return await GetFgaProject();
-    },
-    QUERY_OPTIONS,
-  );
-  useEffect(() => {
-    if (!isLoading) {
-      console.log("project", data);
-    }
-  }, [isLoading]);
 
   async function createProject(projectName, protocol) {
     console.log(projectName, protocol);

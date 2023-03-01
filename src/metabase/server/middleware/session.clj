@@ -80,8 +80,7 @@
    {:same-site config/mb-session-cookie-samesite
     ;; TODO - we should set `site-path` as well. Don't want to enable this yet so we don't end
     ;; up breaking things
-    :path      "/" #_(site-path)
-    :domain    "footprint.network"}
+    :path      "/" #_(site-path)}
    ;; If the authentication request request was made over HTTPS (hopefully always except for
    ;; local dev instances) add `Secure` attribute so the cookie is only sent over HTTPS.
    (when (request.u/https? request)
@@ -90,8 +89,7 @@
 (defmethod default-session-cookie-attributes :full-app-embed
   [_ request]
   (merge
-   {:path "/"
-    :domain    "footprint.network"}
+   {:path "/"}
    (when (request.u/https? request)
      ;; SameSite=None is required for cross-domain full-app embedding. This is safe because
      ;; security is provided via anti-CSRF token. Note that most browsers will only accept

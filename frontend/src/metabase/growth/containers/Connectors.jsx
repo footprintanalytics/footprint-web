@@ -1,5 +1,5 @@
 /* eslint-disable react/prop-types */
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { connect } from "react-redux";
 import {
   Drawer,
@@ -11,14 +11,17 @@ import {
   Result,
   Card,
   Typography,
+  message,
 } from "antd";
 import Title from "antd/lib/typography/Title";
+import { useQuery } from "react-query";
+import { QUERY_OPTIONS } from "metabase/containers/dashboards/shared/config";
+import { GetFgaConnectors } from "metabase/new-service";
 import { getUser } from "metabase/selectors/user";
 import AF from "assets/img/af.png";
 import BQ from "assets/img/BQ.svg";
 import GA from "assets/img/GA.svg";
-import ConfigGoogleAnalyticsSource from "../components/config_panel/ConfigGoogleAnalyticsSource";
-import ConfigBigQuerySource from "../components/config_panel/ConfigBigQuerySource";
+import { loginModalShowAction } from "metabase/redux/control";
 import ConfigAppsFlyerSource from "../components/config_panel/ConfigAppsFlyerSource";
 import ConfigTwitterSource from "../components/config_panel/ConfigTwitterSource";
 import ConfigDiscordSource from "../components/config_panel/ConfigDiscordSource";
@@ -26,9 +29,24 @@ import "../css/utils.css";
 const { Text } = Typography;
 
 const Connectors = props => {
-  const { router, location, children, user } = props;
+  const { router, location, children, user, projectId } = props;
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [openDrawer, setOpenDrawer] = useState({ show: false, connector: {} });
+
+  const { isLoading, data } = useQuery(
+    ["GetFgaConnectors", projectId],
+    async () => {
+      return await GetFgaConnectors({ projectId: projectId });
+    },
+    QUERY_OPTIONS,
+  );
+
+  useEffect(() => {
+    if (projectId) {
+      console.log("GetFgaConnectors", data);
+    }
+  }, [projectId, isLoading, data]);
+
   const showDrawer = c => {
     setOpenDrawer({ show: true, connector: c });
   };
@@ -47,14 +65,14 @@ const Connectors = props => {
       name: "Google Analytics",
       key: "ga",
       icon: GA,
-      pannel: <ConfigGoogleAnalyticsSource onAddConnector={onAddConnector} />,
+      // pannel: <ConfigGoogleAnalyticsSource onAddConnector={onAddConnector} />,
     },
-    {
-      name: "BigQuery",
-      key: "bq",
-      icon: BQ,
-      pannel: <ConfigBigQuerySource onAddConnector={onAddConnector} />,
-    },
+    // {
+    //   name: "BigQuery",
+    //   key: "bq",
+    //   icon: BQ,
+    //   pannel: <ConfigBigQuerySource onAddConnector={onAddConnector} />,
+    // },
     {
       name: "Appsflyers",
       key: "af",
@@ -75,6 +93,31 @@ const Connectors = props => {
     },
   ];
   const [currentConnectors, setCurrentConnectors] = useState([]);
+  const addConnector = item => {
+    console.log("item", item);
+    if (user) {
+      if (item.pannel) {
+        showDrawer(item);
+      } else if (item.key === "ga") {
+        const redirect_uri =
+          "https://preview.footprint.network/api/v1/fga/connector-config/ga/auth/callback";
+        const client_id =
+          "741447545-hsk59fk55lc03aksgs57jvu0ahqs4t1o.apps.googleusercontent.com";
+        const state = JSON.stringify({
+          userId: user.id,
+          projectid: projectId,
+          page: `${window.location.origin}${location.pathname}?tab=Connectors`,
+        });
+        const scope = "https://www.googleapis.com/auth/analytics.readonly";
+        const url = `https://accounts.google.com/o/oauth2/v2/auth?scope=${scope}&access_type=offline&include_granted_scopes=true&response_type=code&redirect_uri=${redirect_uri}&client_id=${client_id}&prompt=consent&state=${state}`;
+        console.log("url", url);
+        window.open(url, "_blank");
+      }
+    } else {
+      message.info("Please login first!");
+      loginModalShowAction({ show: true, from: "add connector" });
+    }
+  };
   return (
     <div className=" flex flex-column items-center">
       <div
@@ -183,7 +226,7 @@ const Connectors = props => {
             <List.Item
               onClick={() => {
                 setIsModalOpen(false);
-                showDrawer(item);
+                addConnector(item);
               }}
             >
               <Card hoverable style={{ width: "100%" }}>

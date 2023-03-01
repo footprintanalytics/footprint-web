@@ -25,13 +25,22 @@ export function saveGASearchHistory(item: any) {
   if (temp.findIndex(i => i.value === item.value) === -1) {
     temp.push(item);
   }
-
   if (temp.length > 3) {
     temp.splice(0, 1);
   }
   localStorage.setItem("GASearchHistory", JSON.stringify(temp));
 }
 export function getGASearchHistory() {
+  return localStorage.getItem("GASearchHistory")
+    ? JSON.parse(localStorage.getItem("GASearchHistory")!)
+    : [];
+}
+
+export function saveGAObject(key: string, item: any) {
+  localStorage.setItem(key, JSON.stringify(item));
+}
+
+export function getGACurrent() {
   return localStorage.getItem("GASearchHistory")
     ? JSON.parse(localStorage.getItem("GASearchHistory")!)
     : [];
