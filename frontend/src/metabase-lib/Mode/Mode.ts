@@ -4,6 +4,7 @@ import {
   QueryMode,
 } from "metabase-types/types/Visualization";
 import Question from "metabase-lib/Question";
+import { isFunction } from "lodash";
 
 export default class Mode {
   _question: Question;
@@ -32,7 +33,7 @@ export default class Mode {
     const props = { question, settings, clicked, extraData };
     const actions = mode.drills.flatMap(drill => drill(props));
 
-    if (!actions.length && mode.fallback) {
+    if (!actions.length && mode.fallback && isFunction(mode.fallback)) {
       return mode.fallback(props);
     } else {
       return actions;
