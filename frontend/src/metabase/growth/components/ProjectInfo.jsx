@@ -54,7 +54,7 @@ const ProjectInfo = props => {
                 </div>
                 <div className=" mt1">
                   <Tag>{currentProject.chain}</Tag>
-                  <Tag>{currentProject.protocol_type}</Tag>
+                  <Tag>NFT</Tag>
                 </div>
               </div>
             </div>

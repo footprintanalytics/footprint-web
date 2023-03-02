@@ -70,7 +70,13 @@ const Connectors = props => {
       icon: GA,
       statu: "unconnected",
       desc: "Google Analytics can help you to analytic the user event of your project and known your user most!",
-      pannel: <ConfigGoogleAnalyticsSource onAddConnector={onAddConnector} user={user} projectId={projectId} />,
+      pannel: (
+        <ConfigGoogleAnalyticsSource
+          onAddConnector={onAddConnector}
+          user={user}
+          projectId={projectId}
+        />
+      ),
     },
     // {
     //   name: "BigQuery",
@@ -89,7 +95,7 @@ const Connectors = props => {
     {
       name: "Discord",
       key: "discord",
-      statu: "connected",
+      statu: "unconnected",
       icon: "https://footprint-imgs-hk.oss-cn-hongkong.aliyuncs.com/20220516201343.png",
       desc: "This connector can help to analytic the user change of your Discord guild .",
       pannel: <ConfigDiscordSource onAddConnector={onAddConnector} />,
@@ -97,7 +103,7 @@ const Connectors = props => {
     {
       name: "Twitter",
       key: "twitter",
-      statu: "connected",
+      statu: "unconnected",
       icon: "https://footprint-imgs-hk.oss-cn-hongkong.aliyuncs.com/20220516201254.png",
       desc: "This connector can help to analytic the follower change of your Twitter.",
       pannel: <ConfigTwitterSource onAddConnector={onAddConnector} />,
