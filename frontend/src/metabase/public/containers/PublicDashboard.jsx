@@ -58,7 +58,6 @@ const mapStateToProps = (state, props) => {
       ]);
     }
   }
-  console.log("after change", parameters, parameterValues);
   return {
     metadata: getMetadata(state, props),
     project: props.project,
@@ -122,8 +121,6 @@ class PublicDashboard extends Component {
     if (this.props.dashboardId !== prevProps.dashboardId) {
       return this._initialize();
     }
-    console.log("this.props.parameterValues", this.props.parameterValues);
-    console.log("prevProps.parameterValues", prevProps.parameterValues);
     if (!_.isEqual(this.props.parameterValues, prevProps.parameterValues)) {
       this.props.fetchDashboardCardData({ reload: false, clear: true });
     }
@@ -147,7 +144,6 @@ class PublicDashboard extends Component {
     const { chart_style } = {
       ...parseHashOptions(location.hash),
     };
-    console.log("render", parameterValues);
     return (
       <EmbedFrame
         name={dashboard && dashboard.name}

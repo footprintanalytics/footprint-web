@@ -4,9 +4,11 @@ import { connect } from "react-redux";
 import { Select } from "antd";
 import { withRouter } from "react-router";
 import { useQuery } from "react-query";
+import { set } from "lodash";
 import { getUser } from "metabase/selectors/user";
 import { QUERY_OPTIONS } from "metabase/containers/dashboards/shared/config";
 import { GetFgaProject } from "metabase/new-service";
+import { PublicApi, maybeUsePivotEndpoint } from "metabase/services";
 import { top_protocols } from "../utils/data";
 import "../css/index.css";
 import {
@@ -18,16 +20,53 @@ import {
 } from "../utils/utils";
 
 const GaProjectSearch = props => {
-  const { router, location } = props;
+  const { router, location, user } = props;
   const [userProject, setUserProject] = useState([]);
   const [currentProject, setCurrentProject] = useState();
   const { isLoading, data } = useQuery(
-    ["GetFgaProject"],
+    ["GetFgaProject", user],
     async () => {
-      return await GetFgaProject();
+      if (user) {
+        return await GetFgaProject();
+      } else {
+        return;
+      }
     },
     QUERY_OPTIONS,
   );
+  const getAllProtocol = async () => {
+    const uuid = "5276dcf1-0e5f-49d1-a49a-c405d2caa3d4";
+    // const uuid = "93629e56-00c0-48cd-83b0-79fb0b0054f2";
+    const { data } = await PublicApi.card({
+      uuid,
+    });
+    const card = data;
+    const newResult = await maybeUsePivotEndpoint(
+      PublicApi.cardQuery,
+      card,
+    )({
+      uuid,
+      parameters: JSON.stringify([]),
+    });
+    const protocols = [];
+    newResult?.data?.rows?.map((i, index) => {
+      const p = {};
+      newResult?.data?.cols?.map((j, index) => {
+        if (j.name === "collections_list") {
+          const l = i[index]
+            .replace("[", "")
+            .replace("]", "")
+            .replaceAll(" ", "")
+            .split(",");
+          set(p, j.name, l);
+        } else {
+          set(p, j.name, i[index]);
+        }
+      });
+      protocols.push(p);
+    });
+    console.log("getAllProtocol", uuid, newResult, protocols);
+  };
 
   useEffect(() => {
     if (!isLoading) {
@@ -47,6 +86,7 @@ const GaProjectSearch = props => {
         setUserProject(projects);
       }
     }
+    // getAllProtocol();
   }, [currentProject, data?.data, isLoading]);
 
   // monitor data

@@ -69,16 +69,16 @@ const ProjectInfo = props => {
                   key: "nft",
                   children: `Content of Tab Pane 1`,
                 },
-                {
-                  label: `Token Address`,
-                  key: "token",
-                  children: `Content of Tab Pane 2`,
-                },
-                {
-                  label: `Contract Address`,
-                  key: "contract",
-                  children: `Content of Tab Pane 3`,
-                },
+                // {
+                //   label: `Token Address`,
+                //   key: "token",
+                //   children: `Content of Tab Pane 2`,
+                // },
+                // {
+                //   label: `Contract Address`,
+                //   key: "contract",
+                //   children: `Content of Tab Pane 3`,
+                // },
               ]}
             />
           </div>

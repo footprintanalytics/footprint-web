@@ -24,6 +24,7 @@ import {
   getLatestGAProject,
   saveLatestGAProject,
   getLatestGAMenuTag,
+  getLatestGAProjectId,
 } from "../utils/utils";
 import { top_protocols } from "../utils/data";
 import Connectors from "./Connectors";
@@ -34,6 +35,7 @@ const Project = props => {
   const { router, location, children, user } = props;
   const [tab, setTab] = useState();
   const [project, setProject] = useState();
+  // const [projectId, setProjectId] = useState();
   useEffect(() => {
     if (location.query.tab) {
       setTab(location.query.tab);
@@ -231,7 +233,7 @@ const Project = props => {
         projectName: project,
         collection_contract_address: top_protocols.find(
           i => i.protocol_slug === project,
-        )?.nft_contract_address,
+        )?.collections_list?.[0],
       };
       return (
         <PublicDashboard
@@ -250,7 +252,7 @@ const Project = props => {
         <Connectors
           location={location}
           router={router}
-          projectId={"22"}
+          projectId={getLatestGAProjectId()}
         ></Connectors>
       );
     }
