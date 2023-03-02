@@ -28,9 +28,10 @@ const GaProjectSearch = props => {
     },
     QUERY_OPTIONS,
   );
+
   useEffect(() => {
     if (!isLoading) {
-      if (data.data?.length > 0) {
+      if (data?.data?.length > 0) {
         const projects = [];
         data.data.map(p => {
           projects.push({
@@ -46,7 +47,7 @@ const GaProjectSearch = props => {
         setUserProject(projects);
       }
     }
-  }, [isLoading]);
+  }, [currentProject, data?.data, isLoading]);
 
   // monitor data
   const normalOptions = [];
