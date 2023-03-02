@@ -442,6 +442,10 @@ class FgaNavbar extends Component {
         {this.renderCancelFeedbackModal()}
         <CreateProjectModal
           open={this.state.isProjectModalOpen}
+          location={location}
+          onSuccess={() => {
+            this.setState({ ...this.state, isProjectModalOpen: false });
+          }}
           onCancel={() => {
             this.setState({ ...this.state, isProjectModalOpen: false });
           }}

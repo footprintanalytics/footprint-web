@@ -22,9 +22,11 @@ import AF from "assets/img/af.png";
 import BQ from "assets/img/BQ.svg";
 import GA from "assets/img/GA.svg";
 import { loginModalShowAction } from "metabase/redux/control";
+import LoadingSpinner from "metabase/components/LoadingSpinner";
 import ConfigAppsFlyerSource from "../components/config_panel/ConfigAppsFlyerSource";
 import ConfigTwitterSource from "../components/config_panel/ConfigTwitterSource";
 import ConfigDiscordSource from "../components/config_panel/ConfigDiscordSource";
+import ConfigGoogleAnalyticsSource from "../components/config_panel/ConfigGoogleAnalyticsSource";
 import "../css/utils.css";
 const { Text } = Typography;
 
@@ -42,8 +44,9 @@ const Connectors = props => {
   );
 
   useEffect(() => {
-    if (projectId) {
+    if (projectId && !isLoading) {
       console.log("GetFgaConnectors", data);
+      // setCurrentConnectors()
     }
   }, [projectId, isLoading, data]);
 
@@ -65,7 +68,9 @@ const Connectors = props => {
       name: "Google Analytics",
       key: "ga",
       icon: GA,
-      // pannel: <ConfigGoogleAnalyticsSource onAddConnector={onAddConnector} />,
+      statu: "unconnected",
+      desc: "Google Analytics can help you to analytic the user event of your project and known your user most!",
+      pannel: <ConfigGoogleAnalyticsSource onAddConnector={onAddConnector} user={user} projectId={projectId} />,
     },
     // {
     //   name: "BigQuery",
@@ -77,41 +82,32 @@ const Connectors = props => {
       name: "Appsflyers",
       key: "af",
       icon: AF,
+      statu: "unconnected",
+      desc: "This connector can help your to using appsflyers ",
       pannel: <ConfigAppsFlyerSource onAddConnector={onAddConnector} />,
     },
     {
       name: "Discord",
       key: "discord",
+      statu: "connected",
       icon: "https://footprint-imgs-hk.oss-cn-hongkong.aliyuncs.com/20220516201343.png",
+      desc: "This connector can help to analytic the user change of your Discord guild .",
       pannel: <ConfigDiscordSource onAddConnector={onAddConnector} />,
     },
     {
       name: "Twitter",
       key: "twitter",
+      statu: "connected",
       icon: "https://footprint-imgs-hk.oss-cn-hongkong.aliyuncs.com/20220516201254.png",
+      desc: "This connector can help to analytic the follower change of your Twitter.",
       pannel: <ConfigTwitterSource onAddConnector={onAddConnector} />,
     },
   ];
   const [currentConnectors, setCurrentConnectors] = useState([]);
   const addConnector = item => {
-    console.log("item", item);
     if (user) {
       if (item.pannel) {
         showDrawer(item);
-      } else if (item.key === "ga") {
-        const redirect_uri =
-          "https://preview.footprint.network/api/v1/fga/connector-config/ga/auth/callback";
-        const client_id =
-          "741447545-hsk59fk55lc03aksgs57jvu0ahqs4t1o.apps.googleusercontent.com";
-        const state = JSON.stringify({
-          userId: user.id,
-          projectid: projectId,
-          page: `${window.location.origin}${location.pathname}?tab=Connectors`,
-        });
-        const scope = "https://www.googleapis.com/auth/analytics.readonly";
-        const url = `https://accounts.google.com/o/oauth2/v2/auth?scope=${scope}&access_type=offline&include_granted_scopes=true&response_type=code&redirect_uri=${redirect_uri}&client_id=${client_id}&prompt=consent&state=${state}`;
-        console.log("url", url);
-        window.open(url, "_blank");
       }
     } else {
       message.info("Please login first!");
@@ -135,70 +131,91 @@ const Connectors = props => {
           <Title width={"100%"} level={4} style={{ marginBottom: 0 }}>
             Connectors
           </Title>
-          <Button
+          {/* <Button
             type={"default"}
             onClick={() => {
               setIsModalOpen(true);
             }}
           >
             Add Connector
-          </Button>
+          </Button> */}
         </div>
 
         <Divider></Divider>
-        {currentConnectors.length > 0 ? (
-          <List
-            className="w-full"
-            itemLayout="horizontal"
-            dataSource={currentConnectors}
-            renderItem={item => (
-              <List.Item
-                style={{
-                  borderRadius: 10,
-                  backgroundColor: "white",
-                  paddingLeft: 10,
-                  paddingRight: 10,
-                  margin: 5,
-                }}
-                actions={[
-                  <a
-                    key="list-loadmore-edit"
-                    onClick={() => {
-                      showDrawer(item.connector);
-                    }}
-                  >
-                    edit
-                  </a>,
-                  <a key="list-loadmore-more">delete</a>,
-                ]}
-              >
-                <List.Item.Meta
-                  avatar={<Avatar src={item?.connector?.icon} />}
-                  title={item.connector?.name}
-                  description="Sync data in 2023-02-01 12:00:00"
-                />
-              </List.Item>
-            )}
-          />
+        {isLoading ? (
+          <LoadingSpinner message="Loading..." />
         ) : (
-          <Card style={{ width: "100%", borderRadius: 10 }}>
-            {/* <div>This project still no config any connector!</div> */}
-            <Result
-              status="warning"
-              title="This project still no config any connector!"
-              extra={
-                <Button
-                  type="primary"
-                  key="console"
-                  onClick={() => {
-                    setIsModalOpen(true);
-                  }}
-                >
-                  Add Connector Now
-                </Button>
-              }
-            />
-          </Card>
+          <>
+            {connectors.length > 0 ? (
+              <List
+                className="w-full"
+                itemLayout="horizontal"
+                dataSource={connectors}
+                renderItem={item => (
+                  <List.Item
+                    style={{
+                      borderRadius: 10,
+                      backgroundColor: "white",
+                      paddingLeft: 10,
+                      paddingRight: 10,
+                      cursor: "pointer",
+                      margin: 5,
+                    }}
+                    actions={
+                      item.statu === "connected"
+                        ? [
+                            <a
+                              key="list-loadmore-edit"
+                              onClick={() => {
+                                showDrawer(item);
+                              }}
+                            >
+                              edit
+                            </a>,
+                            <a key="list-loadmore-more">delete</a>,
+                          ]
+                        : [
+                            <Button
+                              type={"primary"}
+                              key="Connect"
+                              onClick={() => {
+                                showDrawer(item);
+                              }}
+                            >
+                              Connect
+                            </Button>,
+                          ]
+                    }
+                  >
+                    <List.Item.Meta
+                      avatar={<Avatar src={item?.icon} />}
+                      title={item?.name}
+                      description={item?.desc}
+                    />
+                  </List.Item>
+                )}
+              />
+            ) : (
+              <Card style={{ width: "100%", borderRadius: 10 }}>
+                {/* <div>This project still no config any connector!</div> */}
+                <Result
+                  status="warning"
+                  title="This project still no config any connector!"
+                  extra={
+                    <Button
+                      type="primary"
+                      key="console"
+                      onClick={() => {
+                        setIsModalOpen(true);
+                      }}
+                    >
+                      Add Connector Now
+                    </Button>
+                  }
+                />
+              </Card>
+            )}
+          </>
         )}
       </div>
 

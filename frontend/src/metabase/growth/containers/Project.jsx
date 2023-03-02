@@ -19,11 +19,13 @@ import PublicDashboard from "metabase/public/containers/PublicDashboard";
 import { getUser } from "metabase/selectors/user";
 import GaLayout from "../components/GaLayout";
 import GaSidebar from "../components/GaSidebar";
+import ProjectInfo from "../components/ProjectInfo";
 import {
   getLatestGAProject,
   saveLatestGAProject,
   getLatestGAMenuTag,
 } from "../utils/utils";
+import { top_protocols } from "../utils/data";
 import Connectors from "./Connectors";
 import Campaigns from "./Campaigns";
 import "../css/index.css";
@@ -56,7 +58,7 @@ const Project = props => {
       children: null,
     },
     {
-      name: "Analytics",
+      name: "Users",
       icon: React.createElement(BarChartOutlined),
       id: null,
       children: [
@@ -204,7 +206,9 @@ const Project = props => {
       const disabled =
         children.length <= 0 &&
         !item.uuid &&
-        ["Connectors", "Campaign List"].findIndex(i => i === item.name) === -1
+        ["Connectors", "Campaign List", "Project Info"].findIndex(
+          i => i === item.name,
+        ) === -1
           ? true
           : false;
       tabs.push({
@@ -223,11 +227,17 @@ const Project = props => {
   const getContentPannel = current_tab => {
     if (dashboardMap.has(current_tab)) {
       // TODO: fix this project object
+      const projectObject = {
+        projectName: project,
+        collection_contract_address: top_protocols.find(
+          i => i.protocol_slug === project,
+        )?.nft_contract_address,
+      };
       return (
         <PublicDashboard
           params={{ uuid: dashboardMap.get(current_tab) }}
           location={location}
-          project={{ projectName: project }}
+          project={projectObject}
           isFullscreen={false}
           className="ml-250"
           key={project}
@@ -242,6 +252,15 @@ const Project = props => {
           router={router}
           projectId={"22"}
         ></Connectors>
+      );
+    }
+    if (current_tab === "Project Info") {
+      return (
+        <ProjectInfo
+          location={location}
+          router={router}
+          project={project}
+        ></ProjectInfo>
       );
     }
     if (current_tab === "Campaign List") {

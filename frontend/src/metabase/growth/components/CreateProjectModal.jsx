@@ -8,6 +8,8 @@ import { useQuery } from "react-query";
 import { QUERY_OPTIONS } from "metabase/containers/dashboards/shared/config";
 import { CreateFgaProject } from "metabase/new-service";
 import { getUser } from "metabase/selectors/user";
+import { top_protocols } from "../utils/data";
+import { saveLatestGAProject, saveLatestGAProjectId } from "../utils/utils";
 
 const layout = {
   labelCol: { span: 6 },
@@ -18,51 +20,18 @@ const tailLayout = {
 };
 
 const CreateProjectModal = props => {
-  const { open, onCancel } = props;
+  const { open, onCancel, onSuccess, router, location } = props;
   const [form] = Form.useForm();
   // monitor datas
-  const normalOptions = [
-    {
-      value: "BAYC",
-      key: "BAYC",
-      label: "BAYC",
-    },
-    {
-      value: "Moonbird",
-      key: "Moonbird",
-      label: "Moonbird",
-    },
-    {
-      value: "AlienWar",
-      key: "AlienWar",
-      label: "AlienWar",
-    },
-    {
-      value: "Decentraland",
-      key: "Decentraland",
-      label: "Decentraland",
-    },
-    {
-      value: "FootprintNFT",
-      key: "FootprintNFT",
-      label: "FootprintNFT",
-    },
-    {
-      value: "Era7",
-      key: "Era7",
-      label: "Era7",
-    },
-    {
-      value: "the-sandbox",
-      key: "the-sandbox",
-      label: "The Sandbox",
-    },
-    {
-      value: "sunflower-farmers",
-      key: "sunflower-farmers",
-      label: "Sunflower Farmers",
-    },
-  ];
+  const normalOptions = [];
+  top_protocols.map(i =>
+    normalOptions.push({
+      ...i,
+      value: i.protocol_slug,
+      key: i.protocol_slug,
+      label: i.protocol_name,
+    }),
+  );
 
   async function createProject(projectName, protocol) {
     console.log(projectName, protocol);
@@ -73,6 +42,15 @@ const CreateProjectModal = props => {
       nftContractAddress: [],
     });
     console.log("result", result);
+    if (result) {
+      saveLatestGAProject(result.protocolSlug);
+      saveLatestGAProjectId(result.id);
+      onSuccess?.();
+      router?.push({
+        pathname: location.pathname,
+        query: { ...location.query, project_name: result.protocolSlug },
+      });
+    }
     hide();
     return true;
   }
@@ -80,6 +58,9 @@ const CreateProjectModal = props => {
     createProject(values.projectName, values.protocol);
   };
 
+  const handleProjectChange = (value, option) => {
+    form.setFieldsValue({ projectName: option.label });
+  };
   return (
     <Modal
       title="Create your own project"
@@ -90,13 +71,6 @@ const CreateProjectModal = props => {
     >
       <Form {...layout} form={form} name="control-hooks" onFinish={onFinish}>
         <Form.Item
-          name="projectName"
-          label="Project Name"
-          rules={[{ required: true }]}
-        >
-          <Input />
-        </Form.Item>
-        <Form.Item
           name="protocol"
           label="Protocol"
           rules={[{ required: true }]}
@@ -104,7 +78,7 @@ const CreateProjectModal = props => {
           <Select
             showSearch
             // value={currentProject}
-            // onChange={handleProjectChange}
+            onChange={handleProjectChange}
             placeholder="Select the protocol of your project"
             optionFilterProp="children"
             filterOption={(input, option) =>
@@ -113,6 +87,14 @@ const CreateProjectModal = props => {
             options={normalOptions}
           />
         </Form.Item>
+        <Form.Item
+          name="projectName"
+          label="Project Name"
+          rules={[{ required: true }]}
+        >
+          <Input />
+        </Form.Item>
+
         <Form.Item {...tailLayout}>
           <div
             className="flex flex-column"

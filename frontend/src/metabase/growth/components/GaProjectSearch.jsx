@@ -3,21 +3,24 @@ import React, { useState, useEffect } from "react";
 import { connect } from "react-redux";
 import { Select } from "antd";
 import { withRouter } from "react-router";
-import { getUser } from "metabase/selectors/user";
 import { useQuery } from "react-query";
+import { getUser } from "metabase/selectors/user";
 import { QUERY_OPTIONS } from "metabase/containers/dashboards/shared/config";
 import { GetFgaProject } from "metabase/new-service";
+import { top_protocols } from "../utils/data";
 import "../css/index.css";
 import {
   getGASearchHistory,
   saveGASearchHistory,
   getLatestGAProject,
   saveLatestGAProject,
+  saveLatestGAProjectId,
 } from "../utils/utils";
 
 const GaProjectSearch = props => {
   const { router, location } = props;
   const [userProject, setUserProject] = useState([]);
+  const [currentProject, setCurrentProject] = useState();
   const { isLoading, data } = useQuery(
     ["GetFgaProject"],
     async () => {
@@ -27,7 +30,6 @@ const GaProjectSearch = props => {
   );
   useEffect(() => {
     if (!isLoading) {
-      console.log("GetFgaProject", data);
       if (data.data?.length > 0) {
         const projects = [];
         data.data.map(p => {
@@ -38,66 +40,35 @@ const GaProjectSearch = props => {
             key: p.protocolSlug + p.id,
           });
         });
+        if (projects.findIndex(i => i.value === currentProject) !== -1) {
+          setCurrentProject(projects[0].value);
+        }
         setUserProject(projects);
       }
     }
   }, [isLoading]);
 
   // monitor data
-  const normalOptions = [
-    {
-      value: "BAYC",
-      key: "BAYC",
-      label: "BAYC",
-    },
-    {
-      value: "Moonbird",
-      key: "Moonbird",
-      label: "Moonbird",
-    },
-    {
-      value: "AlienWar",
-      key: "AlienWar",
-      label: "AlienWar",
-    },
-    {
-      value: "Decentraland",
-      key: "Decentraland",
-      label: "Decentraland",
-    },
-    {
-      value: "FootprintNFT",
-      key: "FootprintNFT",
-      label: "FootprintNFT",
-    },
-    {
-      value: "Era7",
-      key: "Era7",
-      label: "Era7",
-    },
-    {
-      value: "the-sandbox",
-      key: "the-sandbox",
-      label: "The Sandbox",
-    },
-    {
-      value: "sunflower-farmers",
-      key: "sunflower-farmers",
-      label: "Sunflower Farmers",
-    },
-  ];
-  const recommendOptions = [
-    {
-      value: "the-sandbox",
-      key: "the-sandbox-recommend",
-      label: "The Sandbox",
-    },
-    {
-      value: "sunflower-farmers",
-      key: "sunflower-farmers-recommend",
-      label: "Sunflower Farmers",
-    },
-  ];
+  const normalOptions = [];
+  const recommendOptions = [];
+  top_protocols.map((i, index) => {
+    if (index < 3) {
+      recommendOptions.push({
+        ...i,
+        value: i.protocol_slug,
+        key: i.protocol_slug + "-recommend",
+        label: i.protocol_name,
+      });
+    } else {
+      normalOptions.push({
+        ...i,
+        value: i.protocol_slug,
+        key: i.protocol_slug,
+        label: i.protocol_name,
+      });
+    }
+  });
+
   const historyOptions = getGASearchHistory();
   const finalOptions = [];
   finalOptions.push({ label: "Recommend Projects", options: recommendOptions });
@@ -106,7 +77,6 @@ const GaProjectSearch = props => {
   }
   finalOptions.push({ label: "All Projects", options: normalOptions });
 
-  const [currentProject, setCurrentProject] = useState();
   useEffect(() => {
     if (location?.query?.project_name) {
       setCurrentProject(location.query.project_name);
@@ -123,6 +93,8 @@ const GaProjectSearch = props => {
     const item = option;
     item.key = item.value + "-histroy";
     saveGASearchHistory(item);
+    saveLatestGAProject(option.value);
+    saveLatestGAProjectId(option.id);
     router?.push({
       pathname: location.pathname,
       query: { ...location.query, project_name: option.value },
@@ -141,11 +113,6 @@ const GaProjectSearch = props => {
         filterOption={(input, option) =>
           (option?.label ?? "").toLowerCase().includes(input.toLowerCase())
         }
-        // filterSort={(optionA, optionB) =>
-        //   (optionA?.label ?? "")
-        //     .toLowerCase()
-        //     .localeCompare((optionB?.label ?? "").toLowerCase())
-        // }
         options={userProject.length > 0 ? userProject : finalOptions}
       />
     </div>

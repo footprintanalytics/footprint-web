@@ -4,6 +4,14 @@ export function saveLatestGAProject(LatestGAProject: string) {
 export function getLatestGAProject() {
   return localStorage.getItem("LatestGAProject");
 }
+
+export function saveLatestGAProjectId(LatestGAProjectId: string) {
+  localStorage.setItem("LatestGAProjectId", LatestGAProjectId);
+}
+export function getLatestGAProjectId() {
+  return localStorage.getItem("LatestGAProjectId");
+}
+
 export function saveLatestGAMenuTag(LatestGAMenuTag: string) {
   localStorage.setItem("LatestGAMenuTag", LatestGAMenuTag);
 }
@@ -12,11 +20,11 @@ export function getLatestGAMenuTag() {
 }
 
 export function saveLatestGACampaigns(LatestGACampaigns: any) {
-  localStorage.setItem("LatestGACampaigns", JSON.stringify(LatestGACampaigns));
+  saveGAObject("LatestGACampaigns", LatestGACampaigns);
 }
 export function getLatestGACampaigns() {
-  return localStorage.getItem("LatestGACampaigns")
-    ? JSON.parse(localStorage.getItem("LatestGACampaigns")!)
+  return getGAObject("LatestGACampaigns")
+    ? getGAObject("LatestGACampaigns")
     : [];
 }
 
@@ -40,8 +48,6 @@ export function saveGAObject(key: string, item: any) {
   localStorage.setItem(key, JSON.stringify(item));
 }
 
-export function getGACurrent() {
-  return localStorage.getItem("GASearchHistory")
-    ? JSON.parse(localStorage.getItem("GASearchHistory")!)
-    : [];
+export function getGAObject(key: string) {
+  return JSON.parse(localStorage.getItem("key")!);
 }
