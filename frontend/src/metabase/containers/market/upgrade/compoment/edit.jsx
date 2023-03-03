@@ -18,7 +18,13 @@ const EditUserUpgradeModal = props => {
           value="business"
           // disabled={type === "enterprise"}
         >
-          business
+          Business
+        </Select.Option>
+        <Select.Option
+          value="scale"
+          // disabled={type === "enterprise"}
+        >
+          Scale
         </Select.Option>
         {/* <Select.Option value="enterprise">enterprise</Select.Option> */}
       </React.Fragment>
