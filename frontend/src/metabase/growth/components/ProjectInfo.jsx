@@ -13,6 +13,7 @@ import {
   Tabs,
   message,
 } from "antd";
+import Link from "antd/lib/typography/Link";
 import { connect } from "react-redux";
 import CopyToClipboard from "react-copy-to-clipboard";
 import { getUser } from "metabase/selectors/user";
@@ -41,8 +42,28 @@ const ProjectInfo = props => {
       case "NFT":
         datas = currentProject?.collections_list;
         break;
+      case "Contract":
+        datas = [];
+        break;
+      case "Token":
+        datas = [];
+        break;
       default:
-        datas = currentProject?.collections_list;
+        datas = [];
+    }
+    if (datas.length <= 0) {
+      return (
+        <Empty
+          image="https://gw.alipayobjects.com/zos/antfincdn/ZHrcdLPrvN/empty.svg"
+          imageStyle={{
+            height: 100,
+          }}
+          description={<span>Data is empty!</span>}
+        >
+          <Link href="submit/contract/add">Submit Now</Link>
+          {/* <Button type="primary">Submit Now</Button> */}
+        </Empty>
+      );
     }
     return (
       <List
@@ -123,6 +144,16 @@ const ProjectInfo = props => {
                   label: `NFT Collection Address`,
                   key: "nft",
                   children: getTabPanel("NFT"),
+                },
+                {
+                  label: `Token Address`,
+                  key: "Token",
+                  children: getTabPanel("Token"),
+                },
+                {
+                  label: `Contract Address`,
+                  key: "Contract",
+                  children: getTabPanel("Contract"),
                 },
               ]}
             />

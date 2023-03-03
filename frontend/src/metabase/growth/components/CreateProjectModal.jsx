@@ -35,9 +35,9 @@ const CreateProjectModal = props => {
 
   async function createProject(projectName, protocol) {
     console.log(projectName, protocol);
-    const hide = message.loading("Loading...", 0);
+    const hide = message.loading("Loading...", 10);
     const result = await CreateFgaProject({
-      name: projectName,
+      name: projectName.replaceAll(" ", ""),
       protocolSlug: protocol,
       nftContractAddress: [],
     });

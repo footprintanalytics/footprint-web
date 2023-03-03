@@ -109,12 +109,12 @@ const GaProjectSearch = props => {
       });
     }
   });
-  const historyOptions = getGASearchHistory();
+  // const historyOptions = getGASearchHistory();
   const finalOptions = [];
   finalOptions.push({ label: "Recommend Projects", options: recommendOptions });
-  if (historyOptions.length > 0) {
-    finalOptions.push({ label: "History Search", options: historyOptions });
-  }
+  // if (historyOptions.length > 0) {
+  //   finalOptions.push({ label: "History Search", options: historyOptions });
+  // }
   finalOptions.push({ label: "All Projects", options: normalOptions });
 
   useEffect(() => {
