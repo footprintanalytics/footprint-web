@@ -44,11 +44,68 @@ const Connectors = props => {
   );
 
   useEffect(() => {
-    if (projectId && !isLoading) {
+    const temp = [
+      {
+        name: "Google Analytics",
+        key: "Google Analytics daily",
+        icon: GA,
+        statu: "unconnected",
+        desc: "Google Analytics can help you to analytic the user event of your project and known your user most!",
+        pannel: (
+          <ConfigGoogleAnalyticsSource
+            onAddConnector={onAddConnector}
+            user={user}
+            projectId={projectId}
+          />
+        ),
+      },
+      // {
+      //   name: "BigQuery",
+      //   key: "bq",
+      //   icon: BQ,
+      //   pannel: <ConfigBigQuerySource onAddConnector={onAddConnector} />,
+      // },
+      {
+        name: "Appsflyers",
+        key: "af",
+        icon: AF,
+        statu: "unconnected",
+        desc: "This connector can help your to using appsflyers ",
+        pannel: <ConfigAppsFlyerSource onAddConnector={onAddConnector} />,
+      },
+      {
+        name: "Discord",
+        key: "discord",
+        statu: "unconnected",
+        icon: "https://footprint-imgs-hk.oss-cn-hongkong.aliyuncs.com/20220516201343.png",
+        desc: "This connector can help to analytic the user change of your Discord guild .",
+        pannel: <ConfigDiscordSource onAddConnector={onAddConnector} />,
+      },
+      {
+        name: "Twitter",
+        key: "twitter",
+        statu: "unconnected",
+        icon: "https://footprint-imgs-hk.oss-cn-hongkong.aliyuncs.com/20220516201254.png",
+        desc: "This connector can help to analytic the follower change of your Twitter.",
+        pannel: <ConfigTwitterSource onAddConnector={onAddConnector} />,
+      },
+    ];
+    if (projectId && !isLoading && data) {
       console.log("GetFgaConnectors", data);
+      if (data.length > 0) {
+        data.map((i, index) => {
+          temp.map((j, index) => {
+            if (j.key === i.name) {
+              j.statu = "connected";
+            }
+          });
+        });
+        console.log("temp", temp);
+      }
       // setCurrentConnectors()
     }
-  }, [projectId, isLoading, data]);
+    setConnectors(temp);
+  }, [projectId, isLoading, data, connectors, user]);
 
   const showDrawer = c => {
     setOpenDrawer({ show: true, connector: c });
@@ -63,52 +120,7 @@ const Connectors = props => {
     setCurrentConnectors(temp);
     onCloseDrawer();
   };
-  const connectors = [
-    {
-      name: "Google Analytics",
-      key: "ga",
-      icon: GA,
-      statu: "unconnected",
-      desc: "Google Analytics can help you to analytic the user event of your project and known your user most!",
-      pannel: (
-        <ConfigGoogleAnalyticsSource
-          onAddConnector={onAddConnector}
-          user={user}
-          projectId={projectId}
-        />
-      ),
-    },
-    // {
-    //   name: "BigQuery",
-    //   key: "bq",
-    //   icon: BQ,
-    //   pannel: <ConfigBigQuerySource onAddConnector={onAddConnector} />,
-    // },
-    {
-      name: "Appsflyers",
-      key: "af",
-      icon: AF,
-      statu: "unconnected",
-      desc: "This connector can help your to using appsflyers ",
-      pannel: <ConfigAppsFlyerSource onAddConnector={onAddConnector} />,
-    },
-    {
-      name: "Discord",
-      key: "discord",
-      statu: "unconnected",
-      icon: "https://footprint-imgs-hk.oss-cn-hongkong.aliyuncs.com/20220516201343.png",
-      desc: "This connector can help to analytic the user change of your Discord guild .",
-      pannel: <ConfigDiscordSource onAddConnector={onAddConnector} />,
-    },
-    {
-      name: "Twitter",
-      key: "twitter",
-      statu: "unconnected",
-      icon: "https://footprint-imgs-hk.oss-cn-hongkong.aliyuncs.com/20220516201254.png",
-      desc: "This connector can help to analytic the follower change of your Twitter.",
-      pannel: <ConfigTwitterSource onAddConnector={onAddConnector} />,
-    },
-  ];
+  const [connectors, setConnectors] = useState([]);
   const [currentConnectors, setCurrentConnectors] = useState([]);
   const addConnector = item => {
     if (user) {
@@ -152,7 +164,7 @@ const Connectors = props => {
           <LoadingSpinner message="Loading..." />
         ) : (
           <>
-            {connectors.length > 0 ? (
+            {connectors && (
               <List
                 className="w-full"
                 itemLayout="horizontal"
@@ -204,25 +216,6 @@ const Connectors = props => {
                   </List.Item>
                 )}
               />
-            ) : (
-              <Card style={{ width: "100%", borderRadius: 10 }}>
-                {/* <div>This project still no config any connector!</div> */}
-                <Result
-                  status="warning"
-                  title="This project still no config any connector!"
-                  extra={
-                    <Button
-                      type="primary"
-                      key="console"
-                      onClick={() => {
-                        setIsModalOpen(true);
-                      }}
-                    >
-                      Add Connector Now
-                    </Button>
-                  }
-                />
-              </Card>
             )}
           </>
         )}

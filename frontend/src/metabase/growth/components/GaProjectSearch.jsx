@@ -24,7 +24,7 @@ const GaProjectSearch = props => {
   const [userProject, setUserProject] = useState([]);
   const [currentProject, setCurrentProject] = useState();
   const { isLoading, data } = useQuery(
-    ["GetFgaProject", user],
+    ["GetFgaProject", user, currentProject],
     async () => {
       if (user) {
         return await GetFgaProject();
@@ -80,9 +80,11 @@ const GaProjectSearch = props => {
             key: p.protocolSlug + p.id,
           });
         });
-        if (projects.findIndex(i => i.value === currentProject) !== -1) {
-          setCurrentProject(projects[0].value);
-        }
+        let index = projects.findIndex(i => i.value === currentProject);
+        index = index === -1 ? 0 : index;
+        setCurrentProject(projects[index].value);
+        saveLatestGAProject(projects[index].value);
+        saveLatestGAProjectId(projects[index].id);
         setUserProject(projects);
       }
     }
