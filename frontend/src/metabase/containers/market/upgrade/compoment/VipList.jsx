@@ -2,6 +2,7 @@
 /* eslint-disable react/display-name */
 import React, { useCallback, useEffect, useState } from "react";
 import { Button, message, Table, Tag } from "antd";
+import { capitalize } from "lodash";
 import EditUserUpgradeModal from "metabase/containers/market/upgrade/compoment/edit";
 import EditUserTagModal from "metabase/containers/market/upgrade/compoment/tag";
 import { updateVipLevel, userList } from "metabase/new-service";
@@ -62,16 +63,20 @@ const VipList = props => {
         tags?.length ? <Tags router={router} list={tags.slice(0, 10)} /> : "-",
     },
     {
-      tile: "vip",
+      title: "vip",
       dataIndex: "vipInfos",
+      key: "vip",
+      width: 400,
       render: vipInfos => (
         <>
           {
-            vipInfos.forEach(vip => {
-              const color = vip.isExpire ? 'volcano' : 'green'
+            vipInfos.map(vip => {
+              if (vip.isExpire) {
+                return null
+              }
               return (
-                <Tag color={color} key={vip.type}>
-                  `{vip.type} {vip.validEndDate.slice(0, 10)}`
+                <Tag color="green" key={vip.type}>
+                  {capitalize(vip.type)} {vip.validEndDate.slice(0, 10)}
                 </Tag>
               )
             })
