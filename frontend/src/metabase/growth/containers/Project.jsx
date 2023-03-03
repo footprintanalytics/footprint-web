@@ -148,15 +148,15 @@ const Project = props => {
       children: [
         {
           name: "Cohort List",
-          id: null,
-          uuid: null,
-          children: [
-            {
-              name: "User List",
-              id: 7136,
-              uuid: "9de520df-ccd9-467f-b2dd-82c6a2a44f5f",
-            },
-          ],
+          id: 7210,
+          uuid: "4454f1ce-202b-45eb-8f83-3d78beff6756",
+          // children: [
+          //   {
+          //     name: "User List",
+          //     id: 7136,
+          //     uuid: "9de520df-ccd9-467f-b2dd-82c6a2a44f5f",
+          //   },
+          // ],
         },
         {
           name: "Potential Users",
