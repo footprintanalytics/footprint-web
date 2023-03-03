@@ -187,7 +187,10 @@ const Project = props => {
       name: "Custom Analysis",
       icon: React.createElement(CodeOutlined),
       id: null,
-      // children: [{ name: "My Analysis", id: null, uuid: null }],
+      children: [
+        { name: "My Analysis", id: null, uuid: null },
+        { name: "Template Gallery", id: null, uuid: null },
+      ],
     },
     {
       name: "Setting",
@@ -226,20 +229,22 @@ const Project = props => {
     });
     return tabs;
   };
+  const getProjectObject = project => {
+    return {
+      projectName: project,
+      collection_contract_address: top_protocols.find(
+        i => i.protocol_slug === project,
+      )?.collections_list?.[0],
+    };
+  };
   const getContentPannel = current_tab => {
     if (dashboardMap.has(current_tab)) {
       // TODO: fix this project object
-      const projectObject = {
-        projectName: project,
-        collection_contract_address: top_protocols.find(
-          i => i.protocol_slug === project,
-        )?.collections_list?.[0],
-      };
       return (
         <PublicDashboard
           params={{ uuid: dashboardMap.get(current_tab) }}
           location={location}
-          project={projectObject}
+          project={getProjectObject(project)}
           isFullscreen={false}
           className="ml-250"
           key={project}

@@ -4,14 +4,17 @@ import {
   Avatar,
   List,
   Image,
+  Tooltip,
   Empty,
   Button,
   Card,
   Tag,
   Divider,
   Tabs,
+  message,
 } from "antd";
 import { connect } from "react-redux";
+import CopyToClipboard from "react-copy-to-clipboard";
 import { getUser } from "metabase/selectors/user";
 import { top_protocols } from "../utils/data";
 import "../css/index.css";
@@ -22,22 +25,74 @@ const ProjectInfo = props => {
   useEffect(() => {
     const p = top_protocols.find(i => i.protocol_slug === project);
     setCurrentProject(p ?? null);
-  }, []);
+  }, [project]);
   const onTabChange = key => {
     console.log(key);
+  };
+  const getScanLink = address => {
+    switch (currentProject?.chain) {
+      case "Ethereum":
+        return `https://etherscan.io/token/${address}`;
+    }
+  };
+  const getTabPanel = type => {
+    let datas = [];
+    switch (type) {
+      case "NFT":
+        datas = currentProject?.collections_list;
+        break;
+      default:
+        datas = currentProject?.collections_list;
+    }
+    return (
+      <List
+        className="demo-loadmore-list"
+        itemLayout="horizontal"
+        dataSource={datas}
+        renderItem={item => (
+          <List.Item
+            actions={[
+              <CopyToClipboard
+                key="list-copy"
+                text={item}
+                onCopy={() => {
+                  message.success("Copied!");
+                }}
+              >
+                <Tooltip title={`Copy this contract address!`}>
+                  <a>copy</a>
+                </Tooltip>
+              </CopyToClipboard>,
+              <Tooltip key="list-more" title={`View in scan!`}>
+                <a
+                  onClick={() => {
+                    window.open(getScanLink(item), "_blank");
+                  }}
+                >
+                  more
+                </a>
+              </Tooltip>,
+            ]}
+          >
+            <div>
+              <Avatar style={{ marginRight: 5 }}>{type}</Avatar>
+              {item}
+            </div>
+          </List.Item>
+        )}
+      />
+    );
   };
   return (
     <div className="flex flex-col w-full items-center">
       <Card
-        style={{ width: 600, minHeight: 600, marginTop: 50, borderRadius: 10 }}
+        style={{ width: 600, minHeight: 600, margin: 20, borderRadius: 10 }}
       >
         {currentProject ? (
           <div className="flex flex-col">
             <div className="flex flex-row">
               <img
-                src={
-                  "https://gw.alipayobjects.com/zos/antfincdn/ZHrcdLPrvN/empty.svg"
-                }
+                src={currentProject.logo}
                 width={80}
                 height={80}
                 style={{
@@ -67,18 +122,8 @@ const ProjectInfo = props => {
                 {
                   label: `NFT Collection Address`,
                   key: "nft",
-                  children: `Content of Tab Pane 1`,
+                  children: getTabPanel("NFT"),
                 },
-                // {
-                //   label: `Token Address`,
-                //   key: "token",
-                //   children: `Content of Tab Pane 2`,
-                // },
-                // {
-                //   label: `Contract Address`,
-                //   key: "contract",
-                //   children: `Content of Tab Pane 3`,
-                // },
               ]}
             />
           </div>

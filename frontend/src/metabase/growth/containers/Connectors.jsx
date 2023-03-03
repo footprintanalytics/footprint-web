@@ -184,6 +184,9 @@ const Connectors = props => {
                             <Button
                               type={"primary"}
                               key="Connect"
+                              disabled={
+                                projectId !== "undefined" ? false : true
+                              }
                               onClick={() => {
                                 showDrawer(item);
                               }}

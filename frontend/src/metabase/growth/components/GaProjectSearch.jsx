@@ -109,7 +109,6 @@ const GaProjectSearch = props => {
       });
     }
   });
-
   const historyOptions = getGASearchHistory();
   const finalOptions = [];
   finalOptions.push({ label: "Recommend Projects", options: recommendOptions });
@@ -129,7 +128,7 @@ const GaProjectSearch = props => {
           : (userProject.length > 0 ? userProject : recommendOptions)[0].value,
       );
     }
-  }, [location?.query?.project_name, isLoading]);
+  }, [location.query.project_name, isLoading, userProject, recommendOptions]);
   const handleProjectChange = (value, option) => {
     const item = option;
     item.key = item.value + "-histroy";
