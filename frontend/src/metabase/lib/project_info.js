@@ -8,4 +8,3 @@ export const isDefi360 = project => {
   return false;
   // return (project ? project : getProject()) === "defi360";
 };
-
