@@ -23,7 +23,7 @@ const LayoutView = props => {
       <Meta
         title="Footprint Growth Analytics"
         description="Unlock your growth potential in a Web3 world"
-        image={getOssUrl("202205121523524.jpg")}
+        image={getOssUrl("20230303142500.jpg")}
         imageWidth={1200}
         imageHeight={630}
         siteName="Footprint Growth Analytics"
