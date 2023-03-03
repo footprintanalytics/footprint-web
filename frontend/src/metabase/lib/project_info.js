@@ -10,14 +10,13 @@ export const isDefi360 = project => {
 };
 
 export const getLatestGAProjectId = () => {
-  if (!window.location.pathname.startsWith("/growth")) {
-    return null;
-  }
+  // if (!window.location.pathname.startsWith("/growth")) {
+  //   return null;
+  // }
   const projectIdStr = window.localStorage.getItem("LatestGAProjectId");
   let projectId;
   try {
-    projectId = projectIdStr && parseInt(projectIdStr)
-  } catch (e) {
-  }
+    projectId = projectIdStr && parseInt(projectIdStr);
+  } catch (e) {}
   return projectId;
 }
