@@ -1,17 +1,17 @@
 /* eslint-disable import/no-unresolved */
 /* eslint-disable react/prop-types */
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 // import Recommend from "metabase/containers/news/components/Recommend";
 import Flash from "metabase/containers/news/components/Flash";
 // import KeepAliveControls from "metabase/hoc/KeepAliveControls";
 import ArticleHot from "metabase/containers/news/components/ArticleHot";
 
 const Featured = props => {
-  const { router } = props;
-
+  // const { router } = props;
+/*
   useEffect(() => {
     router.replace("/news/articles");
-  }, [router]);
+  }, [router]);*/
 
   const [loadedMediaData, setLoadedMediaData] = useState(false);
   return (
