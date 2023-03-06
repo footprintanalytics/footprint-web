@@ -25,7 +25,7 @@ const ConfigGoogleAnalyticsSource = props => {
     const redirect_uri =
       "https://preview.footprint.network/api/v1/fga/connector-config/ga/auth/callback";
     const client_id =
-      "741447545-hsk59fk55lc03aksgs57jvu0ahqs4t1o.apps.googleusercontent.com";
+      "741447545-srgvritfv0qfbnjjm3rsb25gfv2h0q23.apps.googleusercontent.com";
     const state = JSON.stringify({
       userId: user.id,
       projectId: projectId,
