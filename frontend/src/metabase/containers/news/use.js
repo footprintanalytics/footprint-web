@@ -36,9 +36,11 @@ export const useMediaList = ({ type, tag, currentPage, sortBy, sortDirection }) 
   );
 
   useEffect(() => {
-    setMediaData([]);
-    setMediaTotal(0);
-  }, [tag]);
+    if (type !== "realTimeInfo") {
+      setMediaData([]);
+      setMediaTotal(0);
+    }
+  }, [tag, type]);
 
   useEffect(() => {
     if (data) {

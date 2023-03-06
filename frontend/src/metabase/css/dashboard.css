@@ -151,6 +151,10 @@
   box-shadow: 0px 1px 3px var(--color-shadow);
 }
 
+.DashCard .card-real-time {
+  border: 1px solid red;
+}
+
 @media (prefers-reduced-motion) {
   /* short duration (instead of none) to still trigger transition events */
   .DashCard {

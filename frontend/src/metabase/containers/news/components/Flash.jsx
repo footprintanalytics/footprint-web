@@ -59,10 +59,11 @@ const Flash = props => {
       </div>*/}
       <InfiniteScroll
         className="news-articles__list"
+        scrollableTarget="app-content"
         dataLength={mediaData.length}
         next={loadMore}
         hasMore={hasMore}
-        className="news-articles__list"
+        loader={<h4 className="my2">Loading...</h4>}
         onScroll={() => {
           const isActive = location.pathname === window.location.pathname;
           const canLoadMore = isActive && mediaData.length < mediaTotal;

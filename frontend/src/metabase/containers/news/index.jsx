@@ -12,6 +12,7 @@ import { loginModalShowAction } from "metabase/redux/control";
 // eslint-disable-next-line import/order
 import { compose } from "underscore";
 import MetaViewportControls from "metabase/dashboard/hoc/MetaViewportControls";
+import Link from "metabase/core/components/Link";
 
 const News = props => {
   const {
@@ -44,10 +45,6 @@ const News = props => {
     router.push("/news/publish");
   };
 
-  const allArticlesAction = () => {
-    router.push("/news/all-article");
-  };
-
   const rightPanel = (
     <div className="news__category-right">
       <Button
@@ -62,17 +59,18 @@ const News = props => {
       >
         Publish
       </Button>
-      <Button
-        className="news__publish"
-        iconColor="#7A819B"
-        icon="subscribe"
-        iconSize={16}
-        color={"#7A819B"}
-        borderless
-        onClick={allArticlesAction}
+      <Link
+        className="news__publish ml2"
+        to="/news/featured"
+      >
+        Flash
+      </Link>
+      <Link
+        className="news__publish ml2"
+        to="/news/all-article"
       >
         All
-      </Button>
+      </Link>
       {/*<Button
         className="news__publish"
         iconColor="#7A819B"

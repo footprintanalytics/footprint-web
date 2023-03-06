@@ -85,6 +85,10 @@ const footers = [
         label: "Contact Us",
         url: "mailto:analytics@footprint.network",
       },
+      {
+        label: "Privacy Policy",
+        url: "https://static.footprint.network/site/privacy-policy.html",
+      },
     ],
   },
   {

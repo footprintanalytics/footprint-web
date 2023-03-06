@@ -1,5 +1,8 @@
 .parameter-value-widget__series-date-group {
-  padding: 5px 0px 5px 0px;
+  margin: 1px 4px 0 0;
+  padding: 2px;
+  border-radius: 6px;
+  background: #FAFAFC;
 }
 
 .parameter-value-widget__series-category-group {
@@ -16,8 +19,8 @@
 }
 
 .parameter-value-widget__series-date-group-item {
-  height: 20px;
-  line-height: 20px;
+  height: 24px;
+  line-height: 24px;
   font-size: 14px;
 }
 
@@ -25,4 +28,17 @@
 .ant-checkbox-wrapper
 + .ant-checkbox-wrapper {
   margin-left: 0;
+}
+
+.parameter-value-widget__series-date-group .ant-radio-button-wrapper-checked {
+  background: #3434B2 !important;
+  border-radius: 6px !important;
+}
+
+.parameter-value-widget__series-date-group .ant-radio-button-wrapper {
+  border: 0 !important;
+  background: transparent;
+  position: inherit !important;
+  box-shadow: 0 0 0 0 !important;
+  border-radius: 6px !important;
 }
