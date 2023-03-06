@@ -23,7 +23,7 @@ const ConfigGoogleAnalyticsSource = props => {
   };
   const toAuthorization = propertyId => {
     const host = window.location.origin.startsWith(
-      "https://www.footprint.network/",
+      "https://www.footprint.network",
     )
       ? "https://www.footprint.network"
       : "https://preview.footprint.network";
