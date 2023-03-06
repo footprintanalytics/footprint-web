@@ -1,3 +1,4 @@
+import { saveLatestGAProjectId } from "metabase/growth/utils/utils";
 import { push, replace } from "react-router-redux";
 import { getIn } from "icepick";
 import { SessionApi, UtilApi } from "metabase/services";
@@ -6,7 +7,12 @@ import { createThunkAction } from "metabase/lib/redux";
 import { loadLocalization } from "metabase/lib/i18n";
 import { deleteSession, clearGoogleAuthCredentials } from "metabase/lib/auth";
 import * as Urls from "metabase/lib/urls";
-import { clearCurrentUser, refreshCurrentUser, loadCurrentUserVip, loadCurrentUserVipDataApi } from "metabase/redux/user";
+import {
+  clearCurrentUser,
+  refreshCurrentUser,
+  loadCurrentUserVip,
+  loadCurrentUserVipDataApi,
+} from "metabase/redux/user";
 import { refreshSiteSettings } from "metabase/redux/settings";
 import { getUser } from "metabase/selectors/user";
 import { State } from "metabase-types/store";
@@ -48,7 +54,7 @@ export const refreshSession = createThunkAction(
   },
 );
 
-const handleLogin = async (dispatch: any, redirectUrl = '/') => {
+const handleLogin = async (dispatch: any, redirectUrl: string) => {
   await Promise.all([
     dispatch(refreshCurrentUser()),
     dispatch(refreshSiteSettings()),
@@ -66,28 +72,28 @@ const handleLogin = async (dispatch: any, redirectUrl = '/') => {
 export const LOGIN = "metabase/auth/LOGIN";
 export const login = createThunkAction(
   LOGIN,
-  (data: LoginData, redirectUrl = "/") =>
-    async (dispatch: any) => {
-      await SessionApi.create(data);
-      MetabaseAnalytics.trackStructEvent("Auth", "Login");
-      await handleLogin(dispatch, redirectUrl);
-    },
+  (data: LoginData, redirectUrl: string) => async (dispatch: any) => {
+    await SessionApi.create(data);
+    MetabaseAnalytics.trackStructEvent("Auth", "Login");
+    await handleLogin(dispatch, redirectUrl);
+  },
 );
 
 // register and login
 export const REGISTERANDLOGIN = "metabase/auth/REGISTERANDLOGIN";
 export const registerAndLogin = createThunkAction(
   REGISTERANDLOGIN,
-  ({ token, redirectUrl = "/" } : any) => async (dispatch: any, getState: any) => {
-    // NOTE: this request will return a Set-Cookie header for the session
-    const { code, message, data } = await SessionApi.registerAndLogin({
-      token,
-    });
-    if (code === 0) {
-      const { isNew, email } = data;
-      if (isNew) {
-        setRegistSuccess(email);
-      }
+  ({ token, redirectUrl }: any) =>
+    async (dispatch: any, getState: any) => {
+      // NOTE: this request will return a Set-Cookie header for the session
+      const { code, message, data } = await SessionApi.registerAndLogin({
+        token,
+      });
+      if (code === 0) {
+        const { isNew, email } = data;
+        if (isNew) {
+          setRegistSuccess(email);
+        }
       MetabaseAnalytics.trackStructEvent("Auth", "registerAndLogin");
       await handleLogin(dispatch, redirectUrl || "/");
     } else {
@@ -99,43 +105,44 @@ export const registerAndLogin = createThunkAction(
 //register
 export const regist = createThunkAction(
   "metabase/auth/REGIST",
-  (credentials: any, redirectUrl = '/') => async (dispatch: any, getState: any) => {
-    // NOTE: this request will return a Set-Cookie header for the session
-    const {
-      firstName,
-      lastName,
-      purpose,
-      email,
-      password,
-      emailCode,
-      channel,
-    } = credentials;
-    const { isNew } : any = await UserRegister({
-      firstName,
-      lastName,
-      purpose,
-      email,
-      password,
-      emailCode,
-      channel,
-    });
-    if (isNew) {
-      setRegistSuccess(email);
-    }
+  (credentials: any, redirectUrl: string) =>
+    async (dispatch: any, getState: any) => {
+      // NOTE: this request will return a Set-Cookie header for the session
+      const {
+        firstName,
+        lastName,
+        purpose,
+        email,
+        password,
+        emailCode,
+        channel,
+      } = credentials;
+      const { isNew }: any = await UserRegister({
+        firstName,
+        lastName,
+        purpose,
+        email,
+        password,
+        emailCode,
+        channel,
+      });
+      if (isNew) {
+        setRegistSuccess(email);
+      }
 
-    // await SessionApi.create({ username: email, password });
-    message.success("Register Success!");
-    MetabaseAnalytics.trackStructEvent("Auth", "Register");
-    // await Promise.all([
-    //   dispatch(refreshCurrentUser()),
-    //   dispatch(refreshSiteSettings()),
-    // ]);
-    if (redirectUrl) {
-      setTimeout(() => {
-        dispatch(push("/loginModal"));
-      }, 500);
-    }
-  },
+      // await SessionApi.create({ username: email, password });
+      message.success("Register Success!");
+      MetabaseAnalytics.trackStructEvent("Auth", "Register");
+      // await Promise.all([
+      //   dispatch(refreshCurrentUser()),
+      //   dispatch(refreshSiteSettings()),
+      // ]);
+      if (redirectUrl) {
+        setTimeout(() => {
+          dispatch(push(redirectUrl));
+        }, 500);
+      }
+    },
 );
 
 export const getRegistEmail = createThunkAction(
@@ -152,13 +159,12 @@ export const LOGIN_GOOGLE = "metabase/auth/LOGIN_GOOGLE";
 export const loginGoogle = createThunkAction(
   LOGIN_GOOGLE,
   (
-    googleUser: any,
-    redirectUrl = "/",
-    channel: string,
-    projectRole: string,
-  ) =>
+      googleUser: any,
+      redirectUrl: string,
+      channel: string,
+      projectRole: string,
+    ) =>
     async (dispatch: any) => {
-
       try {
         const { data } = await SessionApi.createWithGoogleAuth({
           idToken: googleUser.getAuthResponse().id_token,
@@ -181,21 +187,21 @@ export const loginGoogle = createThunkAction(
 
 // login Wallet
 export const LOGIN_WALLET = "metabase/auth/LOGIN_WALLET";
-export const loginWallet = createThunkAction(LOGIN_WALLET, function(
-  loginParam: any,
-  redirectUrl = '/',
-) {
-  return async function(dispatch: any, getState: any) {
-    try {
-      const result = await WalletAddressLogin(loginParam);
-      MetabaseAnalytics.trackStructEvent("Auth", "Wallet Auth Login");
-      handleLogin(dispatch, redirectUrl);
-      return result;
-    } catch (error: any) {
-      return { error: error.message ? error.message : error };
-    }
-  };
-});
+export const loginWallet = createThunkAction(
+  LOGIN_WALLET,
+  function (loginParam: any, redirectUrl: string) {
+    return async function (dispatch: any, getState: any) {
+      try {
+        const result = await WalletAddressLogin(loginParam);
+        MetabaseAnalytics.trackStructEvent("Auth", "Wallet Auth Login");
+        handleLogin(dispatch, redirectUrl);
+        return result;
+      } catch (error: any) {
+        return { error: error.message ? error.message : error };
+      }
+    };
+  },
+);
 
 export const LOGOUT = "metabase/auth/LOGOUT";
 export const logout = createThunkAction(LOGOUT, (redirectUrl: string) => {
@@ -204,8 +210,8 @@ export const logout = createThunkAction(LOGOUT, (redirectUrl: string) => {
     await dispatch(clearCurrentUser());
     await dispatch(refreshLocale());
     trackLogout();
-
-/*    if (redirectUrl) {
+    saveLatestGAProjectId("");
+    /*    if (redirectUrl) {
       dispatch(push(Urls.login(redirectUrl)));
     }*/
 

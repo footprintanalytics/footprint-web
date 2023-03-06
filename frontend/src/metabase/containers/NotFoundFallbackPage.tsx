@@ -29,7 +29,7 @@ const NotFoundFallbackPage = ({
       const result = await refreshCurrentUser();
       const isSignedIn = !result.error;
       if (!isSignedIn) {
-        onChangeLocation("/auth/login");
+        onChangeLocation("/loginModal");
       }
     }
     refresh();

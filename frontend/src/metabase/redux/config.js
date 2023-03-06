@@ -40,6 +40,7 @@ const config = handleActions(
         return {
           ...state,
           tableConfigList: payload?.tableConfigList,
+          realtimeList: payload?.realtimeList,
         };
       },
     },

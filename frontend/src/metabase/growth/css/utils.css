@@ -1,3 +1,10 @@
+.ant-menu-item,
+.ant-menu-inline {
+  margin-top: 0px !important;
+  margin-bottom: 0px !important;
+  /* line-height: 35px !important; */
+  /* height: 35px !important; */
+}
 .ga-empty {
   display: flex;
   align-items: center;
@@ -72,4 +79,54 @@
   background-size: cover;
   width: 25.92px;
   height: 22.56px;
+}
+.ga-icon {
+  /* w-5 h-5 inline mr-1 */
+  width: 25px;
+  height: 25px;
+  display: inline;
+  margin-right: 10px;
+}
+.ga-big-icon {
+  /* w-5 h-5 inline mr-1 */
+  width: 50px;
+  height: 50px;
+  display: inline;
+  margin-bottom: 10px;
+}
+.flex {
+  display: flex;
+}
+.flex-row {
+  flex-direction: row;
+}
+.flex-col {
+  flex-direction: column;
+}
+.w-full {
+  width: 100%;
+}
+.h-full {
+  height: 100%;
+}
+.flex-row-reverse {
+  flex-direction: row-reverse;
+}
+.mt-10 {
+  margin-top: 10px;
+}
+.ml-5 {
+  margin-left: 5px;
+}
+.ml-10 {
+  margin-left: 10px;
+}
+.ml-200 {
+  margin-left: 200px;
+}
+.ml-250 {
+  margin-left: 250px;
+}
+.items-center {
+  align-items: center;
 }

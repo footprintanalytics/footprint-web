@@ -203,7 +203,7 @@ const LoginModalInner = props => {
       )}
       <div className="flex flex-column loginModalInner">
         <div className="NavTitleActive">{title()}</div>
-        <div className="mt2"/>
+        <div className="mt2" />
         <SignInPanel
           show={isSignIn()}
           email={email}
@@ -213,6 +213,7 @@ const LoginModalInner = props => {
           changeToResetPassword={changeToForgotPassword}
           changeToSignUp={changeToSignUp}
           project={project}
+          channel={getChannel()}
           redirect={redirect}
         />
         <SignUpPanel

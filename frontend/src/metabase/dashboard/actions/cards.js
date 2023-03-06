@@ -58,6 +58,12 @@ export const addCardToDashboard =
     dispatch(loadMetadataForDashboard([dashcard]));
   };
 
+export const refreshCardData =
+  ({ dashcard, card }) =>
+  async (dispatch, getState) => {
+    return await dispatch(fetchCardData(card, dashcard, { reload: true, clear: false, ignoreCache: true }));
+  };
+
 export const addDashCardToDashboard = function ({ dashId, dashcardOverrides }) {
   return function (dispatch, getState) {
     const { dashboards, dashcards } = getState().dashboard;

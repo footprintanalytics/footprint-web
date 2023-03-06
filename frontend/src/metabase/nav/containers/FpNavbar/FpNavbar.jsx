@@ -81,21 +81,18 @@ const leftMenuData = [
       {
         title: "Data API",
         desc: "Unified API for Web3 developers",
-        link:
-          "/data-api",
+        link: "/data-api",
       },
       {
         title: "BingoNFT",
         desc: "A window into NFTs powered by Footprint Data API",
-        link:
-          "https://nft.footprint.network/",
+        link: "https://nft.footprint.network/",
         externalLink: true,
       },
       {
         title: "Footrace",
         desc: "A realtime alert platform powered by Footprint Data API",
-        link:
-          "https://footrace.io/",
+        link: "https://footrace.io/",
         externalLink: true,
       },
     ],
@@ -111,14 +108,12 @@ const rightMenuData = [
       {
         title: "Blog",
         desc: "Analyze the trends of each domain in the Web3 industry",
-        link:
-          "/news/articles",
+        link: "/news/articles",
       },
       {
         title: "Academy",
         desc: "The premier Web3 education platform with industry leading courses",
-        link:
-          "/news/academy",
+        link: "/news/academy",
       },
       {
         title: "Data Overview",
@@ -133,15 +128,13 @@ const rightMenuData = [
       {
         title: "YouTube",
         desc: "Unravel Web3 and learn how to do analysis and build dapps via Videos",
-        link:
-          "https://www.youtube.com/@FootprintAnalytics",
+        link: "https://www.youtube.com/@FootprintAnalytics",
         externalLink: true,
       },
       {
         title: "GitHub",
         desc: "Open source community welcomes you to join and become a contributor",
-        link:
-          "https://github.com/footprintanalytics",
+        link: "https://github.com/footprintanalytics",
         externalLink: true,
       },
     ],
@@ -272,13 +265,15 @@ class FpNavbar extends Component {
         <div className="Nav__side-menu">
           {leftMenuData.map((item, index) => {
             if (item.menu) {
-              return (<div key={index}>
-                {this.renderNavEntityMenu({
-                  item,
-                  className: `Nav__menu-item text-brand-hover`,
-                  fromDrawer: true,
-                })}
-              </div>)
+              return (
+                <div key={index}>
+                  {this.renderNavEntityMenu({
+                    item,
+                    className: `Nav__menu-item text-brand-hover`,
+                    fromDrawer: true,
+                  })}
+                </div>
+              );
             }
             return (
               <div
@@ -316,12 +311,8 @@ class FpNavbar extends Component {
   }
 
   renderLoginModal() {
-    const {
-      location,
-      loginModalShow,
-      loginModalRedirect,
-      setLoginModalShow,
-    } = this.props;
+    const { location, loginModalShow, loginModalRedirect, setLoginModalShow } =
+      this.props;
 
     return (
       <LoginModal
@@ -393,13 +384,15 @@ class FpNavbar extends Component {
       >
         {rightMenuData.map((item, index) => {
           if (item.menu) {
-            return (<div key={index}>
-              {this.renderNavEntityMenu({
-                item,
-                className: `Nav__right-menu footprint-primary-text`,
-                fromDrawer,
-              })}
-            </div>)
+            return (
+              <div key={index}>
+                {this.renderNavEntityMenu({
+                  item,
+                  className: `Nav__right-menu footprint-primary-text`,
+                  fromDrawer,
+                })}
+              </div>
+            );
           }
           return (
             <Link
@@ -437,7 +430,7 @@ class FpNavbar extends Component {
           <div className={className}>
             {/*{item.icon && <Icon name={item.icon} size={16} />}*/}
             <span>{item.name}</span>
-            <Icon className="ml1" name="search_arrow_up" size={12}/>
+            <Icon className="ml1" name="search_arrow_up" size={12} />
           </div>
           <div>
             {item.menu.map((item, index) => {
@@ -479,7 +472,7 @@ class FpNavbar extends Component {
           >
             {/*{item.icon && <Icon name={item.icon} size={16} />}*/}
             <span>{item.name}</span>
-            <Icon className="ml1" name="search_arrow_up" size={12}/>
+            <Icon className="ml1" name="search_arrow_up" size={12} />
           </div>
         }
       />
@@ -520,12 +513,14 @@ class FpNavbar extends Component {
         >
           {leftMenuData.map((item, index) => {
             if (item.menu) {
-              return (<div key={index}>
-                {this.renderNavEntityMenu({
-                  item,
-                  className: `text-brand-hover Nav__menu-item Nav__menu-item-color`,
-                })}
-              </div>)
+              return (
+                <div key={index}>
+                  {this.renderNavEntityMenu({
+                    item,
+                    className: `text-brand-hover Nav__menu-item Nav__menu-item-color`,
+                  })}
+                </div>
+              );
             }
             return (
               <Link
@@ -612,7 +607,7 @@ class FpNavbar extends Component {
       if (block) {
         return;
       }
-      console.log("onCreateAction")
+      console.log("onCreateAction");
       afterSuccess();
     };
 
@@ -626,15 +621,20 @@ class FpNavbar extends Component {
             <RightMenuPad />
           </React.Fragment>
           {user ? (
-            <ProfileLink {...this.props} onLogout={() => this.props.logout()}
-              trigger={(
+            <ProfileLink
+              {...this.props}
+              onLogout={() => this.props.logout()}
+              trigger={
                 <div className="relative" style={{ padding: 10 }}>
                   <UserAvatar user={user} size={["2.5em", "2.5em"]} />
-                  <div className="absolute right bottom mb1" style={{ marginRight: 2 }}>
+                  <div
+                    className="absolute right bottom mb1"
+                    style={{ marginRight: 2 }}
+                  >
                     <VipIcon user={user} />
                   </div>
                 </div>
-              )}
+              }
             />
           ) : (
             <Link

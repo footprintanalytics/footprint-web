@@ -148,7 +148,7 @@ export const control = handleActions(
     },
     [CREATE_MODAL_SHOW]: {
       next: (state, { payload }) => {
-        console.log("CREATE_MODAL_SHOW", payload)
+        console.log("CREATE_MODAL_SHOW", payload);
         return {
           ...state,
           createModalShow: payload.show,

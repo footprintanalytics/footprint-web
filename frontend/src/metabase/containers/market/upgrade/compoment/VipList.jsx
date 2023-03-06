@@ -1,7 +1,8 @@
 /* eslint-disable react/prop-types */
 /* eslint-disable react/display-name */
 import React, { useCallback, useEffect, useState } from "react";
-import { Button, message, Table } from "antd";
+import { Button, message, Table, Tag } from "antd";
+import { capitalize } from "lodash";
 import EditUserUpgradeModal from "metabase/containers/market/upgrade/compoment/edit";
 import EditUserTagModal from "metabase/containers/market/upgrade/compoment/tag";
 import { updateVipLevel, userList } from "metabase/new-service";
@@ -62,18 +63,40 @@ const VipList = props => {
         tags?.length ? <Tags router={router} list={tags.slice(0, 10)} /> : "-",
     },
     {
-      title: "type",
-      dataIndex: "type",
-      key: "type",
-      width: 100,
-      className: "upgrade__column-type",
+      title: "vip",
+      dataIndex: "vipInfos",
+      key: "vip",
+      width: 400,
+      render: vipInfos => (
+        <>
+          {
+            vipInfos.map(vip => {
+              if (vip.isExpire) {
+                return null
+              }
+              return (
+                <Tag color="green" key={vip.type}>
+                  {capitalize(vip.type)} {vip.validEndDate.slice(0, 10)}
+                </Tag>
+              )
+            })
+          }
+        </>
+      )
     },
-    {
-      title: "validEndDate",
-      dataIndex: "validEndDate",
-      key: "validEndDate",
-      width: 200,
-    },
+    // {
+    //   title: "type",
+    //   dataIndex: "type",
+    //   key: "type",
+    //   width: 100,
+    //   className: "upgrade__column-type",
+    // },
+    // {
+    //   title: "validEndDate",
+    //   dataIndex: "validEndDate",
+    //   key: "validEndDate",
+    //   width: 200,
+    // },
     {
       title: "Action",
       key: "operation",

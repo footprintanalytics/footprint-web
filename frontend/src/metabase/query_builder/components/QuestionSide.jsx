@@ -191,7 +191,7 @@ function QuestionSide({
 
   const replaceUrl = ({ tableId, type = "query", filter }) => {
     replace(
-      Urls.newQuestion({ databaseId, tableId, type, filter, limit: 2000 }),
+      Urls.newQuestion({ databaseId, tableId, type, filter, limit: 1000 }),
     );
   };
 

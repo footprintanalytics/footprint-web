@@ -138,7 +138,7 @@ export default class LoadingAndErrorWrapper extends Component {
         {error ? (
           this.renderError(contentClassName)
         ) : loading ? (
-          <div className={contentClassName}>
+          <div className={contentClassName} style={{ marginTop: 20 }}>
             {loadingScenes && loadingScenes[sceneIndex]}
             {!loadingScenes && showSpinner && <LoadingSpinner />}
             <h2 className="text-normal text-light mt1">
