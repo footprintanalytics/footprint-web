@@ -38,7 +38,12 @@ const Connectors = props => {
   const { isLoading, data } = useQuery(
     ["GetFgaConnectors", projectId],
     async () => {
-      return await GetFgaConnectors({ projectId: projectId });
+      if (projectId) {
+        return await GetFgaConnectors({ projectId: projectId });
+      } else {
+        console.log("no project id");
+        return;
+      }
     },
     QUERY_OPTIONS,
   );
@@ -200,7 +205,13 @@ const Connectors = props => {
                                 projectId !== "undefined" ? false : true
                               }
                               onClick={() => {
-                                showDrawer(item);
+                                if (projectId) {
+                                  showDrawer(item);
+                                } else {
+                                  message.error(
+                                    "You need create your own project first!",
+                                  );
+                                }
                               }}
                             >
                               Connect
