@@ -45,7 +45,7 @@
   (mi/instance
    Card
    (u/select-nested-keys card [:id :name :description :display :visualization_settings
-                               [:dataset_query :type [:native :template-tags]]])))
+                               [:dataset_query :type :native :query [:native :query :template-tags]]])))
 
 (defn public-card
   "Return a public Card matching key-value `conditions`, removing all columns that should not be visible to the general
