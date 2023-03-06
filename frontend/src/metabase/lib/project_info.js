@@ -19,4 +19,4 @@ export const getLatestGAProjectId = () => {
     projectId = projectIdStr && parseInt(projectIdStr);
   } catch (e) {}
   return projectId;
-}
+};

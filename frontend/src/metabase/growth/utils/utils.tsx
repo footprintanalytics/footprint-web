@@ -9,7 +9,8 @@ export function saveLatestGAProjectId(LatestGAProjectId: string) {
   localStorage.setItem("LatestGAProjectId", LatestGAProjectId);
 }
 export function getLatestGAProjectId() {
-  return localStorage.getItem("LatestGAProjectId");
+  const id = localStorage.getItem("LatestGAProjectId");
+  return id === "undefined" ? null : id;
 }
 
 export function saveLatestGAMenuTag(LatestGAMenuTag: string) {
@@ -54,4 +55,21 @@ export function saveGAObject(key: string, item: any) {
 
 export function getGAObject(key: string) {
   return JSON.parse(localStorage.getItem("key")!);
+}
+
+export function saveGAFavoritedTemplate(item: any, like: boolean) {
+  const temp: any[] = getGAFavoritedTemplate();
+  const index = temp.findIndex(i => i.No === item.No);
+  if (like && index === -1) {
+    temp.push(item);
+  }
+  if (!like && index !== -1) {
+    temp.splice(index, 1);
+  }
+  localStorage.setItem("GAFavoritedTemplate", JSON.stringify(temp));
+}
+export function getGAFavoritedTemplate() {
+  return localStorage.getItem("GAFavoritedTemplate")
+    ? JSON.parse(localStorage.getItem("GAFavoritedTemplate")!)
+    : [];
 }
