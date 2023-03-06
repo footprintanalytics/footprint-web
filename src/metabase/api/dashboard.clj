@@ -840,7 +840,7 @@
             (merge
              body
              {:dashboard-id dashboard-id
-              :card-id card-id
+              :card-id      card-id
               :dashcard-id  dashcard-id
               :middleware {:fga-schema fga-schema}})))
 
