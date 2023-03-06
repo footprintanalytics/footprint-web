@@ -96,6 +96,6 @@ const ConfigGoogleAnalyticsSource = props => {
       </Form>
     </div>
   );
-};;;;
+};
 
 export default ConfigGoogleAnalyticsSource;

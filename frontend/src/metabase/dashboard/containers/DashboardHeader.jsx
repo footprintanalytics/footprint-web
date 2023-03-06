@@ -425,45 +425,45 @@ class DashboardHeader extends Component {
       if (canEdit) {
         extraButtons.push({
           title: t`Edit dashboard details`,
-          icon: "edit",
+          icon: "",
           link: `${location.pathname}/details`,
           event: "Dashboard;EditDetails",
         });
-        if (isAdmin || isMarket) {
-          extraButtons.push({
-            title: "Seo tagging",
-            icon: "",
-            event: "Dashboard;Seo-tagging",
-            action: (e) => {
-              this.setState({
-                showSeoTaggingModal: true,
-              });
-            }
-          });
-          extraButtons.push({
-            title: "Home priority",
-            icon: "",
-            event: "Dashboard;Home-priority",
-            action: (e) => {
-              this.setState({
-                showHomePriorityModal: true,
-              });
-            }
-          });
-        }
-
-        if (isAdmin) {
-          extraButtons.push({
-            title: t`Move`,
-            icon: "move",
-            link: `${location.pathname}/move?id=${dashboard.id}`,
-            event: "Dashboard;Move",
-          });
-        }
-
+      }
+      if (isAdmin || isMarket) {
+        extraButtons.push({
+          title: "Seo tagging",
+          icon: "",
+          event: "Dashboard;Seo-tagging",
+          action: (e) => {
+            this.setState({
+              showSeoTaggingModal: true,
+            });
+          }
+        });
+        extraButtons.push({
+          title: "Home priority",
+          icon: "",
+          event: "Dashboard;Home-priority",
+          action: (e) => {
+            this.setState({
+              showHomePriorityModal: true,
+            });
+          }
+        });
+      }
+      if (canEdit && isAdmin) {
+        extraButtons.push({
+          title: t`Move`,
+          icon: "",
+          link: `${location.pathname}/move?id=${dashboard.id}`,
+          event: "Dashboard;Move",
+        });
+      }
+      if (canEdit) {
         extraButtons.push({
           title: t`Delete`,
-          icon: "view_archive",
+          icon: "",
           link: `${location.pathname}/archive?id=${dashboard.id}&uniqueName=${dashboard.uniqueName}`,
           event: "Dashboard;Archive",
         });
