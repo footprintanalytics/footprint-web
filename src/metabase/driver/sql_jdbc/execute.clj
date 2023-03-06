@@ -498,9 +498,9 @@
      (log/info "execute sql query --------------")
      (log/info "source_sql:" _sql)
      (log/info "after_convert_sql:" sql)
-     (log/info "outer-query" outer-query)
-     (log/info  "params" params)
-     (log/info "schema-id" schema-id)
+;     (log/info "outer-query" outer-query)
+;     (log/info  "params" params)
+;     (log/info "schema-id" schema-id)
      (execute-reducible-query driver sql params max-rows context respond)))
 
   ([driver sql params max-rows context respond]
