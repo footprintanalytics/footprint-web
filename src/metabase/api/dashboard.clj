@@ -834,14 +834,14 @@
 
 (api/defendpoint POST "/:dashboard-id/dashcard/:dashcard-id/card/:card-id/query"
   "Run the query associated with a Saved Question (`Card`) in the context of a `Dashboard` that includes it."
-  [dashboard-id dashcard-id card-id :as {{:keys [parameters], :as body} :body}]
+  [dashboard-id dashcard-id card-id :as {{:keys [parameters fga-schema], :as body} :body}]
   {parameters (s/maybe [ParameterWithID])}
   (m/mapply qp.dashboard/run-query-for-dashcard-async
             (merge
              body
              {:dashboard-id dashboard-id
-              :card-id      card-id
-              :dashcard-id  dashcard-id})))
+              :dashcard-id  dashcard-id
+              :middleware {:fga-schema fga-schema}})))
 
 (api/defendpoint POST "/:dashboard-id/dashcard/:dashcard-id/card/:card-id/query/:export-format"
   "Run the query associated with a Saved Question (`Card`) in the context of a `Dashboard` that includes it, and return
