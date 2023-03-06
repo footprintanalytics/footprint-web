@@ -8,23 +8,23 @@ export const apiGet = async api => {
 
 // FGA Api
 export const CreateFgaProject = async params => {
-  return POST("http://connector-server-preview.footprint.network/api/v1/project", params);
+  return POST("/api/v1/fga/project", params);
 };
 
 export const GetFgaProject = async params => {
-  return GET("http://connector-server-preview.footprint.network/api/v1/project", params);
+  return GET("/api/v1/fga/project", params);
 };
 
 export const CreateFgaConnector = async params => {
-  return POST("/api/v1/connector-config", params);
+  return POST("/api/v1/fga/connector-config", params);
 };
 
 export const GetFgaConnectors = async params => {
-  return GET("/api/v1/connector-config", params);
+  return GET("/api/v1/fga/connector-config", params);
 };
 
 export const UpdateFgaConnector = async params => {
-  return PUT(`/api/v1/connector-config/${params.id}`, params);
+  return PUT(`/api/v1/fga/connector-config/${params.id}`, params);
 };
 
 // FP Api

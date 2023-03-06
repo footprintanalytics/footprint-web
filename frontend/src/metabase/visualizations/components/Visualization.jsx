@@ -605,7 +605,8 @@ class Visualization extends React.PureComponent {
             {(this.state.computedSettings["card.title"] ===
               "Wallet User Stats" ||
               this.state.computedSettings["card.title"] ===
-                "User Segmentation") && (
+                "User Segmentation" ||
+              this.state.computedSettings["card.title"] === "All Cohorts") && (
               <CreateNotification state={this.state} />
             )}
             <CardVisualization

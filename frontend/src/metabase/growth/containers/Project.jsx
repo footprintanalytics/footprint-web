@@ -19,11 +19,14 @@ import PublicDashboard from "metabase/public/containers/PublicDashboard";
 import { getUser } from "metabase/selectors/user";
 import GaLayout from "../components/GaLayout";
 import GaSidebar from "../components/GaSidebar";
+import ProjectInfo from "../components/ProjectInfo";
 import {
   getLatestGAProject,
   saveLatestGAProject,
   getLatestGAMenuTag,
+  getLatestGAProjectId,
 } from "../utils/utils";
+import { top_protocols } from "../utils/data";
 import Connectors from "./Connectors";
 import Campaigns from "./Campaigns";
 import "../css/index.css";
@@ -32,6 +35,7 @@ const Project = props => {
   const { router, location, children, user } = props;
   const [tab, setTab] = useState();
   const [project, setProject] = useState();
+  // const [projectId, setProjectId] = useState();
   useEffect(() => {
     if (location.query.tab) {
       setTab(location.query.tab);
@@ -56,7 +60,7 @@ const Project = props => {
       children: null,
     },
     {
-      name: "Analytics",
+      name: "Users",
       icon: React.createElement(BarChartOutlined),
       id: null,
       children: [
@@ -183,7 +187,10 @@ const Project = props => {
       name: "Custom Analysis",
       icon: React.createElement(CodeOutlined),
       id: null,
-      // children: [{ name: "My Analysis", id: null, uuid: null }],
+      children: [
+        { name: "My Analysis", id: null, uuid: null },
+        { name: "Template Gallery", id: null, uuid: null },
+      ],
     },
     {
       name: "Setting",
@@ -204,7 +211,9 @@ const Project = props => {
       const disabled =
         children.length <= 0 &&
         !item.uuid &&
-        ["Connectors", "Campaign List"].findIndex(i => i === item.name) === -1
+        ["Connectors", "Campaign List", "Project Info"].findIndex(
+          i => i === item.name,
+        ) === -1
           ? true
           : false;
       tabs.push({
@@ -220,20 +229,46 @@ const Project = props => {
     });
     return tabs;
   };
+  const getProjectObject = project => {
+    return {
+      projectName: project,
+      collection_contract_address: top_protocols.find(
+        i => i.protocol_slug === project,
+      )?.collections_list?.[0],
+    };
+  };
   const getContentPannel = current_tab => {
     if (dashboardMap.has(current_tab)) {
+      // TODO: fix this project object
       return (
         <PublicDashboard
           params={{ uuid: dashboardMap.get(current_tab) }}
           location={location}
+          project={getProjectObject(project)}
           isFullscreen={false}
           className="ml-250"
+          key={project}
           hideFooter
         />
       );
     }
     if (current_tab === "Connectors") {
-      return <Connectors></Connectors>;
+      return (
+        <Connectors
+          location={location}
+          router={router}
+          projectId={getLatestGAProjectId()}
+        ></Connectors>
+      );
+    }
+    if (current_tab === "Project Info") {
+      return (
+        <ProjectInfo
+          location={location}
+          router={router}
+          project={project}
+        ></ProjectInfo>
+      );
     }
     if (current_tab === "Campaign List") {
       return <Campaigns router={router} location={location}></Campaigns>;

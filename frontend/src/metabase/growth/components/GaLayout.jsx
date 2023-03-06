@@ -22,8 +22,8 @@ const LayoutView = props => {
     <>
       <Meta
         title="Footprint Growth Analytics"
-        description="Providing actionable data insight about TVL growth, user activity and retention monitoring on multiple chains. Covering Ethereum, Binance, Polygon, Fantom, Avalanche and Arbitrium."
-        image={getOssUrl("202205121523524.jpg")}
+        description="Unlock your growth potential in a Web3 world"
+        image={getOssUrl("20230303142500.jpg")}
         imageWidth={1200}
         imageHeight={630}
         siteName="Footprint Growth Analytics"

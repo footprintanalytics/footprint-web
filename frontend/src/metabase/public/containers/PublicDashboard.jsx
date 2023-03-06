@@ -5,6 +5,7 @@ import { push } from "react-router-redux";
 import cx from "classnames";
 
 import _ from "underscore";
+import { set } from "lodash";
 import { IFRAMED } from "metabase/lib/dom";
 
 import LoadingAndErrorWrapper from "metabase/components/LoadingAndErrorWrapper";
@@ -38,16 +39,36 @@ import { parseTitleId } from "metabase/lib/urls";
 import EmbedFrame from "../components/EmbedFrame";
 
 const mapStateToProps = (state, props) => {
+  const parameters = getParameters(state, props);
+  const parameterValues = getParameterValues(state, props);
+  const project = props.project;
+
+  if (project) {
+    // switch protocol
+    const name_index = parameters.findIndex(i => i.slug === "gamefi");
+    if (name_index !== -1) {
+      set(parameterValues, parameters[name_index].id, [project.projectName]);
+    }
+    const collection_contract_address_index = parameters.findIndex(
+      i => i.slug === "collection_contract_address",
+    );
+    if (collection_contract_address_index !== -1) {
+      set(parameterValues, parameters[collection_contract_address_index].id, [
+        project.collection_contract_address,
+      ]);
+    }
+  }
   return {
     metadata: getMetadata(state, props),
+    project: props.project,
     dashboardId:
       props.params.dashboardId ||
       parseTitleId(props.params.uuid || props.params.token).id,
     dashboard: getDashboardComplete(state, props),
     dashcardData: getCardData(state, props),
     slowCards: getSlowCards(state, props),
-    parameters: getParameters(state, props),
-    parameterValues: getParameterValues(state, props),
+    parameters: parameters,
+    parameterValues: parameterValues,
   };
 };
 
@@ -100,19 +121,19 @@ class PublicDashboard extends Component {
     if (this.props.dashboardId !== prevProps.dashboardId) {
       return this._initialize();
     }
-
     if (!_.isEqual(this.props.parameterValues, prevProps.parameterValues)) {
       this.props.fetchDashboardCardData({ reload: false, clear: true });
     }
   }
 
   render() {
-    const {
+    let {
       dashboard,
       parameters,
       parameterValues,
       isFullscreen,
       isNightMode,
+      project,
       hideFooter,
       className,
     } = this.props;
@@ -123,7 +144,6 @@ class PublicDashboard extends Component {
     const { chart_style } = {
       ...parseHashOptions(location.hash),
     };
-
     return (
       <EmbedFrame
         name={dashboard && dashboard.name}
