@@ -91,7 +91,7 @@ const QueryRealtimeButton = ({
           className={cx("ml1", isRealTimeLoading ? "loading-cache" : "")}
           name="refresh"
           size={14}
-          color={isRealTimeMode ? "#666c80" : "#9AA0AF"}
+          color={isRealTimeMode ? "#84bb4c" : "#9AA0AF"}
         />
       </div>
     </Tooltip>
