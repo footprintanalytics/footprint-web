@@ -129,12 +129,12 @@ class FgaNavbar extends Component {
         <ul className="wrapper flex align-center">
           <li>
             <Link
-              to="/"
+              to="/growth"
               data-metabase-event={"Navbar;Logo"}
               className="NavItem cursor-pointer flex align-center"
               onClick={e => {
                 e.preventDefault();
-                this.goLink(e, "/");
+                this.goLink(e, "/growth");
               }}
             >
               <LogoIcon className="text-brand my2" />
@@ -402,11 +402,11 @@ class FgaNavbar extends Component {
           <MobileMenuIcon />
           <Link
             className="Nav__logo"
-            to="/"
+            to="/growth"
             onClick={e => {
               e.preventDefault();
               trackStructEvent(`navbar-click-logo`);
-              this.goLink(e, "/");
+              this.goLink(e, "/growth");
             }}
           >
             <img
@@ -427,11 +427,11 @@ class FgaNavbar extends Component {
           <div className="Nav__mobile-logo">
             <Link
               className="Nav__logo"
-              to="/"
+              to="/growth"
               onClick={e => {
                 e.preventDefault();
                 trackStructEvent(`navbar-click-logo`);
-                this.goLink(e, "/");
+                this.goLink(e, "/growth");
               }}
             >
               <img

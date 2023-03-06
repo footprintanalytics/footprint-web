@@ -1452,3 +1452,114 @@ export const top_protocols = [
     chain: "Ethereum",
   },
 ];
+ export const template_gallery = [
+   {
+     No: 1,
+     tag: "",
+     dashboard_name: "Holder Profile List",
+     dashboard_link:
+       "/growth/@rogerD/Holder-Profile-List?collection_contract_address=0xa342f5d851e866e18ff98f351f2c6637f4478db5",
+   },
+   {
+     No: 2,
+     tag: "",
+     dashboard_name: "Profit Leaderboard for Collection",
+     dashboard_link:
+       "/growth/@rogerD/Profit-Leaderboard-for-Collection-FGA?collection_contract_address=0xa342f5d851e866e18ff98f351f2c6637f4478db5",
+   },
+   {
+     No: 3,
+     tag: "",
+     dashboard_name: "Multi-NFT Collections Royalties",
+     dashboard_link:
+       "/growth/@rogerD/Multi-NFT-Collections-Royalties?nft_collections=0x6a570bb15bc67968868c19b0ec7dcccdfd8ed089&nft_collections=0xed55e4477b795eaa9bb4bca24df42214e1a05c18&nft_collections=0x16a1dcd0f76947dc3d3ba5158952107ef0321ad9&nft_collections=0xb55a820d92809bcff91d568fc1ef0e451c69f5e8&nft_collections=0x5891eb497d1ddb4e3933981b55b37d5f98bbfbcf&nft_collections=0x15f3e5a30e45a58b15bba610f27689fbc7de8c3c&series_date=past30days",
+   },
+   {
+     No: 4,
+     tag: "",
+     dashboard_name: "Owner Analysis",
+     dashboard_link:
+       "/growth/@rogerD/Owner-Analysis-Random-Games?target_collection=0xed55e4477b795eaa9bb4bca24df42214e1a05c18&selected_collections=0x16a1dcd0f76947dc3d3ba5158952107ef0321ad9&selected_collections=0xb55a820d92809bcff91d568fc1ef0e451c69f5e8&selected_collections=0x6a570bb15bc67968868c19b0ec7dcccdfd8ed089&selected_collections=0x5891eb497d1ddb4e3933981b55b37d5f98bbfbcf&selected_collections=0x15f3e5a30e45a58b15bba610f27689fbc7de8c3c&selected_collections=0x34d85c9cdeb23fa97cb08333b511ac86e1c4e258&selected_collections=0xbc4ca0eda7647a8ab7c2061c2e118a18a936f13d&selected_collection_balance_%253E%253D=0&wallet_address=0x950fca90ae7eb55cd35326eb8e6350747d4cf32e",
+   },
+   {
+     No: 5,
+     tag: "",
+     dashboard_name: "Multi-NFT Overview",
+     dashboard_link:
+       "/growth/@rogerD/NFT-Overview-Random-Games-Heros?nft_collection_contract_address=0xed55e4477b795eaa9bb4bca24df42214e1a05c18&series_date=past30days",
+   },
+   {
+     No: 6,
+     tag: "",
+     dashboard_name: "Competitor User List",
+     dashboard_link: "/growth/@rogerD/Competitor-User-List",
+   },
+   {
+     No: 7,
+     tag: "",
+     dashboard_name: "Top X NFT by Trading Vol",
+     dashboard_link:
+       "/growth/@rogerD/Top-X-NFT-by-Trading-Vol?trading_vol._%253E%253D=1000000",
+   },
+   {
+     No: 8,
+     tag: "",
+     dashboard_name: "GameFi & in-game NFT Protocols",
+     dashboard_link:
+       "/growth/@rogerD/GameFi-NFT-Protocols?protocol_slug=the-sandbox&nft_type=in-Game%20NFT",
+   },
+   {
+     No: 9,
+     tag: "",
+     dashboard_name: "Mutual Holders",
+     dashboard_link:
+       "/growth/@rogerD/Mutual-Holders?collection_a_=0xbc4ca0eda7647a8ab7c2061c2e118a18a936f13d&collection_b=0xb47e3cd837ddf8e4c57f05d70ab865de6e193bbb&holder_tag=mutual_holders",
+   },
+   {
+     No: 10,
+     tag: "",
+     dashboard_name: "GameFi Industry Insights",
+     dashboard_link:
+       "/growth/@rogerD/GameFi-Industry-Insights?series_date=past90days",
+   },
+   {
+     No: 11,
+     tag: "",
+     dashboard_name: "NFT Overview",
+     dashboard_link:
+       "/growth/@rogerD/NFT-Overview-Random-Games?nft_collection_contract_address=0xed55e4477b795eaa9bb4bca24df42214e1a05c18&nft_collection_contract_address=0x16a1dcd0f76947dc3d3ba5158952107ef0321ad9&nft_collection_contract_address=0x5891eb497d1ddb4e3933981b55b37d5f98bbfbcf&nft_collection_contract_address=0xb55a820d92809bcff91d568fc1ef0e451c69f5e8&nft_collection_contract_address=0x15f3e5a30e45a58b15bba610f27689fbc7de8c3c&data=past3months",
+   },
+   {
+     No: 12,
+     tag: "",
+     dashboard_name: "Top 10 Users by Balance",
+     dashboard_link: "/growth/@rogerD/Top-10-Users-by-Balance",
+   },
+   {
+     No: 13,
+     tag: "",
+     dashboard_name: "GameFi Compare",
+     dashboard_link:
+       "/growth/@rogerD/GameFi-Compare?game_a=walken&game_b=stepn&chain=Solana",
+   },
+   {
+     No: 14,
+     tag: "",
+     dashboard_name: "Gamer Profile",
+     dashboard_link:
+       "/growth/@rogerD/Gamer-Profile?wallet_address=0x81e4fb0c64bf49f89b57f6648562fc9a791b2e92",
+   },
+   {
+     No: 15,
+     tag: "",
+     dashboard_name: "Wallet Tracing",
+     dashboard_link:
+       "/growth/@rogerD/Wallet-Tracing?collection=benji-bananas-membership-pass&date_range=past30days",
+   },
+   {
+     No: 16,
+     tag: "",
+     dashboard_name: "NFT Stats & Holder Wallet Tracing",
+     dashboard_link: "/growth/@rogerD/Wallet-Tracing-Demo?date=past6months~",
+   },
+ ];

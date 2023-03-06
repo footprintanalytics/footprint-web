@@ -402,25 +402,46 @@ export const getRoutes = store => (
           path="chart/:titleAndId"
           component={LazyLoad.GuestQuestion}
         />
-        {/* GrowthAnalytics */}
+        {/* Growth Analytics */}
         {/* <Route path="/growth" component={LazyLoad.GaHomeContainer}></Route> */}
         <Route path="/growth" component={LazyLoad.GaProjectContainer}></Route>
         <Route
           path="/growth/connectors"
           component={LazyLoad.GaConnectorsContainer}
         ></Route>
-
-        <Route
-          path="/growth/create-project"
-          component={LazyLoad.GaConfigContainer}
-        />
         <Route path="/growth/about" component={LazyLoad.GaAboutContainer} />
-        <Route path="/growth/config" component={LazyLoad.GaConfigContainer} />
-        <Route
-          path="/growth/projects"
-          component={LazyLoad.GaProjectsContainer}
-        />
         <Route path="/growth/project" component={LazyLoad.GaProjectContainer} />
+        <Route
+          title={t`Dashboard`}
+          path="/growth/@:name/:dashboardName"
+          component={LazyLoad.DashboardApp}
+        >
+          {/*<ModalRoute
+          title={t`History`}
+          path="history"
+          modal={LazyLoad.DashboardHistoryModal}
+        />*/}
+          <ModalRoute
+            title={t`Move`}
+            path="move"
+            modal={LazyLoad.DashboardMoveModal}
+          />
+          <ModalRoute
+            title={t`Copy`}
+            path="copy"
+            modal={LazyLoad.DashboardCopyModal}
+          />
+          <ModalRoute
+            title={t`Details`}
+            path="details"
+            modal={LazyLoad.DashboardDetailsModal}
+          />
+          <ModalRoute
+            title={t`Archive`}
+            path="archive"
+            modal={LazyLoad.ArchiveDashboardModal}
+          />
+        </Route>
       </Route>
 
       <Route title={t`Question`} path="/chart" component={LazyLoad.Question}>

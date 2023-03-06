@@ -22,8 +22,12 @@ const ConfigGoogleAnalyticsSource = props => {
     // onNext();
   };
   const toAuthorization = propertyId => {
-    const redirect_uri =
-      "https://preview.footprint.network/api/v1/fga/connector-config/ga/auth/callback";
+    const host = window.location.origin.startsWith(
+      "https://www.footprint.network/",
+    )
+      ? "https://www.footprint.network"
+      : "https://preview.footprint.network";
+    const redirect_uri = `${host}/api/v1/fga/connector-config/ga/auth/callback`;
     const client_id =
       "741447545-srgvritfv0qfbnjjm3rsb25gfv2h0q23.apps.googleusercontent.com";
     const state = JSON.stringify({
@@ -34,7 +38,6 @@ const ConfigGoogleAnalyticsSource = props => {
     });
     const scope = "https://www.googleapis.com/auth/analytics.readonly";
     const url = `https://accounts.google.com/o/oauth2/v2/auth?scope=${scope}&access_type=offline&include_granted_scopes=true&response_type=code&redirect_uri=${redirect_uri}&client_id=${client_id}&prompt=consent&state=${state}`;
-    console.log("url", url);
     // window.open(url, "_blank");
     window.open(url, "_self");
   };
@@ -93,6 +96,6 @@ const ConfigGoogleAnalyticsSource = props => {
       </Form>
     </div>
   );
-};
+};;;;
 
 export default ConfigGoogleAnalyticsSource;

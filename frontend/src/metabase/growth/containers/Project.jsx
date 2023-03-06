@@ -28,6 +28,8 @@ import {
 } from "../utils/utils";
 import { top_protocols } from "../utils/data";
 import Connectors from "./Connectors";
+import TemplateGallery from "./TemplateGallery";
+import MyFavoriteTemplate from "./MyFavoriteTemplate";
 import Campaigns from "./Campaigns";
 import "../css/index.css";
 
@@ -123,28 +125,7 @@ const Project = props => {
         },
       ],
     },
-    {
-      name: "Competitors",
-      icon: React.createElement(ProjectOutlined),
-      id: null,
-      children: [
-        {
-          name: "Industry Insights",
-          id: 7164,
-          uuid: "c9c94943-7ec3-45bf-a2c1-29ffed28c8dc",
-        },
-        {
-          name: "Competitive Comparison",
-          id: 7160,
-          uuid: "05cdbe1b-6d12-43c5-abdb-0136fe703dac",
-        },
-        {
-          name: "User Overlap",
-          id: 7171,
-          uuid: "cc8953e2-86c0-492f-85bf-1043eb9589c0",
-        },
-      ],
-    },
+
     {
       name: "Cohorts",
       icon: React.createElement(TeamOutlined),
@@ -182,7 +163,45 @@ const Project = props => {
         { name: "Snapshot & Airdrop", id: null, uuid: null },
       ],
     },
-
+    {
+      name: "Competitors",
+      icon: React.createElement(ProjectOutlined),
+      id: null,
+      children: [
+        {
+          name: "Industry Ranking",
+          id: 7271,
+          uuid: "859c1295-89f4-4d2b-a8dd-b48914a6bbd3",
+        },
+        {
+          name: "Competitors Comparison",
+          id: 7248,
+          uuid: "63114b7c-094c-402c-8fe8-a9bf1db1369d",
+        },
+        {
+          name: "User Overlap",
+          id: 7171,
+          uuid: "cc8953e2-86c0-492f-85bf-1043eb9589c0",
+        },
+      ],
+    },
+    {
+      name: "Industry",
+      icon: React.createElement(CodeOutlined),
+      id: null,
+      children: [
+        {
+          name: "Overview",
+          id: 7284,
+          uuid: "7edf6b30-83e5-4fca-a1d5-7c3002560ea5",
+        },
+        {
+          name: "Chain Analysis",
+          id: 7285,
+          uuid: "4eea9a6d-932b-49cf-acfa-6724c3887cc6",
+        },
+      ],
+    },
     {
       name: "Custom Analysis",
       icon: React.createElement(CodeOutlined),
@@ -211,9 +230,13 @@ const Project = props => {
       const disabled =
         children.length <= 0 &&
         !item.uuid &&
-        ["Connectors", "Campaign List", "Project Info"].findIndex(
-          i => i === item.name,
-        ) === -1
+        [
+          "Connectors",
+          "Campaign List",
+          "Project Info",
+          "Template Gallery",
+          "My Analysis",
+        ].findIndex(i => i === item.name) === -1
           ? true
           : false;
       tabs.push({
@@ -268,6 +291,19 @@ const Project = props => {
           router={router}
           project={project}
         ></ProjectInfo>
+      );
+    }
+    if (current_tab === "Template Gallery") {
+      return (
+        <TemplateGallery location={location} router={router}></TemplateGallery>
+      );
+    }
+    if (current_tab === "My Analysis") {
+      return (
+        <MyFavoriteTemplate
+          location={location}
+          router={router}
+        ></MyFavoriteTemplate>
       );
     }
     if (current_tab === "Campaign List") {

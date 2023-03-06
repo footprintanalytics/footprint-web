@@ -205,6 +205,7 @@ const Connectors = props => {
                                 projectId !== "undefined" ? false : true
                               }
                               onClick={() => {
+                                // showDrawer(item);
                                 if (projectId) {
                                   showDrawer(item);
                                 } else {
