@@ -8,3 +8,15 @@ export const isDefi360 = project => {
   return false;
   // return (project ? project : getProject()) === "defi360";
 };
+
+export const getLatestGAProjectId = () => {
+  // if (!window.location.pathname.startsWith("/growth")) {
+  //   return null;
+  // }
+  const projectIdStr = window.localStorage.getItem("LatestGAProjectId");
+  let projectId;
+  try {
+    projectId = projectIdStr && parseInt(projectIdStr);
+  } catch (e) {}
+  return projectId;
+};
