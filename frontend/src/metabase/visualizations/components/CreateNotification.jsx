@@ -9,7 +9,7 @@ import {
   getLatestGACampaigns,
 } from "metabase/growth/utils/utils";
 
-const CreateNotification = ({ state }) => {
+const CreateNotification = ({ state, style }) => {
   const [isNotificationModalOpen, setIsNotificationModalOpen] = useState(false);
   const [channels, setChannels] = useState([
     {
@@ -116,13 +116,7 @@ const CreateNotification = ({ state }) => {
     <>
       <Button
         type="primary"
-        style={{
-          position: "absolute",
-          left: 180,
-          top: 20,
-          // width: 160,
-          // marginRight: -80,
-        }}
+        style={style}
         onClick={() => setIsNotificationModalOpen(true)}
       >
         Send Email/Telegram/Discord

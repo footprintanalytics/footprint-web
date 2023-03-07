@@ -42,7 +42,7 @@ import Question from "metabase-lib/Question";
 import Mode from "metabase-lib/Mode";
 import { memoizeClass } from "metabase-lib/utils";
 import { VisualizationSlowSpinner } from "./Visualization.styled";
-import CreateNotification from "./CreateNotification";
+import CreateCohort from "./CreateCohort";
 import TableChartInfo from "metabase/query_builder/components/TableChartInfo";
 import Link from "metabase/core/components/Link";
 import { getOssUrl } from "metabase/lib/image";
@@ -50,6 +50,7 @@ import ErrorGuide from "metabase/query_builder/components/ErrorGuide";
 import { get } from "lodash";
 import { Avatar } from "antd";
 import "./Visualization.css";
+import CreateNotification from "metabase/visualizations/components/CreateNotification";
 
 // NOTE: pass `CardVisualization` so that we don't include header when providing size to child element
 
@@ -349,6 +350,7 @@ class Visualization extends React.PureComponent {
       onUpdateVisualizationSettings,
       hideWatermark,
     } = this.props;
+    console.log("this.state", this.state)
     const { visualization } = this.state;
     const small = width < 330;
     // these may be overridden below
@@ -602,12 +604,30 @@ class Visualization extends React.PureComponent {
           </div>
         ) : (
           <>
+            {(this.state.visualization?.identifier === "fgatable"
+              && !this.props.isEditing && isDashboard)
+            && (
+              <div className="flex" style={{
+                position: "absolute",
+                right: 160,
+                top: 20,
+              }}>
+                {get(this.state.computedSettings, "table.create_cohort") && (<CreateCohort state={this.state} style={{ marginLeft: 20 }} />)}
+                {get(this.state.computedSettings, "table.send_email") && (<CreateNotification state={this.state} style={{ marginLeft: 20 }}/>)}
+              </div>
+            )}
             {(this.state.computedSettings["card.title"] ===
               "Wallet User Stats" ||
               this.state.computedSettings["card.title"] ===
-                "User Segmentation" ||
-              this.state.computedSettings["card.title"] === "All Cohorts") && (
-              <CreateNotification state={this.state} />
+              "User Segmentation" ||
+              this.state.computedSettings["card.title"] === "All Cohorts")
+            && this.state.visualization?.identifier === "table"
+            && (
+              <CreateNotification state={this.state} style={{
+                position: "absolute",
+                left: 180,
+                top: 20,
+              }}/>
             )}
             <CardVisualization
               {...this.props}

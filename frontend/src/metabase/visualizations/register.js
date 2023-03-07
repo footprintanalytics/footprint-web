@@ -35,8 +35,10 @@ import Sunburst from "./visualizations/Sunburst";
 import Rose from "./visualizations/Rose";
 import NestedPies from "./visualizations/NestedPies";
 import BarStack from "./visualizations/BarStack";
+import Bubble from "./visualizations/Bubble";
 import DoubleScalar from "metabase/visualizations/visualizations/DoubleScalar";
 import Graph from "./visualizations/Graph";
+import FGATable from "./visualizations/FGATable";
 
 export default function () {
   registerVisualization(Scalar);
@@ -72,8 +74,10 @@ export default function () {
   registerVisualization(Rose);
   registerVisualization(NestedPies);
   registerVisualization(BarStack);
+  registerVisualization(Bubble);
   registerVisualization(DoubleScalar);
   registerVisualization(Graph);
+  registerVisualization(FGATable);
 
 
   setDefaultVisualization(Table);
