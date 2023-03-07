@@ -1,3 +1,36 @@
+export function getTabs(tabs_data: any[]) {
+  let dashboardMap = new Map();
+  const tabs: any[] = [];
+  tabs_data?.map(item => {
+    const temp = getTabs(item.children);
+    const children: any[] = temp.tabs;
+    dashboardMap = temp.dashboardMap;
+    const disabled =
+      children.length <= 0 &&
+      !item.uuid &&
+      [
+        "Connectors",
+        "Campaign List",
+        "Project Info",
+        "Template Gallery",
+        "My Analysis",
+      ].findIndex(i => i === item.name) === -1
+        ? true
+        : false;
+    tabs.push({
+      key: item.name,
+      icon: item.icon,
+      children: children.length > 0 ? children : null,
+      disabled: disabled,
+      label: item.name,
+    });
+    if (item.uuid) {
+      dashboardMap.set(item.name, item.uuid);
+    }
+  });
+  return { tabs, dashboardMap };
+}
+
 export function saveLatestGAProject(LatestGAProject: string) {
   localStorage.setItem("LatestGAProject", LatestGAProject);
 }

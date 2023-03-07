@@ -58,6 +58,7 @@
                                     "*.gstatic.com"
                                    "'unsafe-eval'" ; TODO - we keep working towards removing this entirely
                                    "https://maps.google.com"
+                                   "https://docs.google.com"
                                    "https://accounts.google.com"]
                                    ;;(when (public-settings/anon-tracking-enabled)
                                    ;;  "https://www.google-analytics.com")
@@ -75,28 +76,33 @@
                                  "blob:"
                                  "'self'"
                                  ;; TODO - double check that we actually need this for Google Auth
+                                 "https://docs.google.com"
                                  "https://accounts.google.com"]
                   :worker-src   ["*"
                                  "blob:"]
                   :style-src    ["*"
                                  "'self'"
                                  "'unsafe-inline'"
+                                 "https://docs.google.com"
                                  "https://accounts.google.com"]
                   :font-src     ["*"
                                  "'self' data:"]
                   :img-src      ["*"
                                  "blob:"
                                  "'self' data:"
+                                 "docs.google.com"
                                  "www.googletagmanager.com"]
                   :frame-src    ["'self'"
                                  "www.footprint.network"
                                  "preview.footprint.network"
                                  "accounts.google.com"
+                                 "docs.google.com"
                                  "www.youtube.com"]
                   :connect-src  ["*"
                                  "'self' data:"
                                  ;; Google Identity Services
                                  "https://accounts.google.com"
+                                 "https://docs.google.com"
                                  ;; MailChimp. So people can sign up for the Metabase mailing list in the sign up process
                                  "metabase.us10.list-manage.com"
                                  ;; Google analytics
