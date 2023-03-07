@@ -43,6 +43,7 @@ const FIXED_LAYOUT = [
     "barstack",
     "doublescalar",
     "graph",
+    "fgatable",
   ],
 ];
 const FIXED_TYPES = new Set(_.flatten(FIXED_LAYOUT));
@@ -76,7 +77,7 @@ const ChartTypeSidebar = ({
       ["staff", "inner", "admin"].includes(String(f).toLocaleLowerCase()),
     )
   ) {
-    layout[2] = layout[2].filter(f => f !== "graph");
+    layout[2] = layout[2].filter(f => f !== "graph" && f !== "fgatable");
   }
 
   useEffect(() => {
