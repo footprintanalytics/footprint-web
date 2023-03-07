@@ -350,7 +350,6 @@ class Visualization extends React.PureComponent {
       onUpdateVisualizationSettings,
       hideWatermark,
     } = this.props;
-    console.log("this.state", this.state)
     const { visualization } = this.state;
     const small = width < 330;
     // these may be overridden below
