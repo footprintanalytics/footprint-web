@@ -2,7 +2,7 @@
 import React, { useState, useEffect } from "react";
 import { connect } from "react-redux";
 import { LikeOutlined, StarFilled, StarOutlined } from "@ant-design/icons";
-import { Avatar, List, Space } from "antd";
+import { Avatar, List, message, Space } from "antd";
 import { Link } from "react-router";
 import { getUser } from "metabase/selectors/user";
 import { template_gallery } from "../utils/data";
@@ -15,10 +15,12 @@ const MyFavoriteTemplate = props => {
   const { router, location, children, user } = props;
   const [templateData, setTemplateData] = useState([]);
   // monitor datas
-
-  useEffect(() => {
+  const updateData = () => {
     const data = getGAFavoritedTemplate();
     setTemplateData(data);
+  };
+  useEffect(() => {
+    updateData();
   }, []);
 
   const IconText = ({ icon, text, click }) => (
@@ -49,6 +51,8 @@ const MyFavoriteTemplate = props => {
                 text={"Favorited"}
                 click={() => {
                   saveGAFavoritedTemplate(item, false);
+                  updateData();
+                  message.success("Cancel favorited!");
                 }}
                 key="list-vertical-star-o"
               />,

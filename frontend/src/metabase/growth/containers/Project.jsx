@@ -9,6 +9,7 @@ import {
   ShopOutlined,
   TeamOutlined,
   SettingOutlined,
+  FundProjectionScreenOutlined,
   SearchOutlined,
   ConsoleSqlOutlined,
   ProjectOutlined,
@@ -187,7 +188,7 @@ const Project = props => {
     },
     {
       name: "Industry",
-      icon: React.createElement(CodeOutlined),
+      icon: React.createElement(FundProjectionScreenOutlined),
       id: null,
       children: [
         {
