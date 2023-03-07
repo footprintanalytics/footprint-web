@@ -153,7 +153,10 @@ const GaProjectSearch = props => {
         placeholder="Search to Select"
         optionFilterProp="children"
         filterOption={(input, option) =>
-          (option?.label ?? "").toLowerCase().includes(input.toLowerCase())
+          (option?.label ?? "").toLowerCase().includes(input.toLowerCase()) ||
+          (option?.collections_list ?? [])
+            .join(",")
+            .includes(input.toLowerCase())
         }
         options={userProject.length > 0 ? userProject : finalOptions}
       />

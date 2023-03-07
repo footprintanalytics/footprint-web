@@ -415,6 +415,7 @@ export const getRoutes = store => (
           title={t`Dashboard`}
           path="/growth/@:name/:dashboardName"
           component={LazyLoad.DashboardApp}
+          // component={LazyLoad.GaDashboard}
         >
           {/*<ModalRoute
           title={t`History`}

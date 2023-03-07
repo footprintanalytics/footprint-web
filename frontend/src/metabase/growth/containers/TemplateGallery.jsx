@@ -2,7 +2,7 @@
 import React, { useEffect, useState } from "react";
 import { connect } from "react-redux";
 import { LikeOutlined, StarFilled, StarOutlined } from "@ant-design/icons";
-import { Avatar, List, Space } from "antd";
+import { Avatar, List, message, Space } from "antd";
 import { Link } from "react-router";
 import { getUser } from "metabase/selectors/user";
 import { template_gallery } from "../utils/data";
@@ -15,8 +15,7 @@ const TemplateGallery = props => {
   const { router, location, children, user } = props;
   const [templateData, setTemplateData] = useState([]);
   // monitor datas
-
-  useEffect(() => {
+  const updateData = () => {
     const favorite_template = getGAFavoritedTemplate();
     const data = [];
     template_gallery.map(t => {
@@ -29,8 +28,10 @@ const TemplateGallery = props => {
           "https://static.footprint.network/avatar/19e41ed0-82e2-4489-8a0d-11292806cf91.gif?x-oss-process=image/resize,m_fill,h_120,w_120",
       });
     });
-    console.log(data);
     setTemplateData(data);
+  };
+  useEffect(() => {
+    updateData();
   }, []);
   const IconText = ({ icon, text, click }) => (
     <Space onClick={click} style={{ cursor: "pointer" }}>
@@ -59,7 +60,11 @@ const TemplateGallery = props => {
                 icon={item.favorited ? StarFilled : StarOutlined}
                 text={item.favorited ? "Favorited" : "Favorite"}
                 click={() => {
+                  message.success(
+                    item.favorited ? "Cancel favorited!" : "Favorited!",
+                  );
                   saveGAFavoritedTemplate(item, !item.favorited);
+                  updateData();
                 }}
                 key="list-vertical-star-o"
               />,

@@ -34,14 +34,12 @@ const CreateProjectModal = props => {
   );
 
   async function createProject(projectName, protocol) {
-    console.log(projectName, protocol);
     const hide = message.loading("Loading...", 10);
     const result = await CreateFgaProject({
       name: projectName.replaceAll(" ", ""),
       protocolSlug: protocol,
       nftContractAddress: [],
     });
-    console.log("result", result);
     if (result) {
       saveLatestGAProject(result.protocolSlug);
       saveLatestGAProjectId(result.id);
@@ -82,12 +80,18 @@ const CreateProjectModal = props => {
             placeholder="Select the protocol of your project"
             optionFilterProp="children"
             filterOption={(input, option) =>
-              (option?.label ?? "").toLowerCase().includes(input.toLowerCase())
+              (option?.label ?? "")
+                .toLowerCase()
+                .includes(input.toLowerCase()) ||
+              (option?.collections_list ?? [])
+                .join(",")
+                .includes(input.toLowerCase())
             }
             options={normalOptions}
           />
         </Form.Item>
         <Form.Item
+          hidden
           name="projectName"
           label="Project Name"
           rules={[{ required: true }]}

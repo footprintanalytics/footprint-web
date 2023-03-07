@@ -26,8 +26,6 @@ import {
   setIsCancelFeedbackBlockAction,
   setSubmitAddrZkspaceModal,
 } from "metabase/redux/control";
-import SearchBar from "metabase/nav/components/SearchBar";
-import GaProjectSelector from "metabase/growth/components/GaProjectSelector";
 import GaProjectSearch from "metabase/growth/components/GaProjectSearch";
 import ProfileLink from "metabase/nav/components/ProfileLink";
 import Link from "metabase/core/components/Link";
@@ -422,7 +420,6 @@ class FgaNavbar extends Component {
         <React.Fragment>
           <div className="Nav__search-bar">
             <GaProjectSearch location={location}></GaProjectSearch>
-            {/* <GaProjectSelector location={location}></GaProjectSelector> */}
           </div>
           <div className="Nav__mobile-logo">
             <Link
