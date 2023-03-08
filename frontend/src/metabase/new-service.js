@@ -7,6 +7,10 @@ export const apiGet = async api => {
 };
 
 // FGA Api
+export const CreateFgaCohort = async params => {
+  return POST("/api/v1/fga/cohort", params);
+};
+
 export const CreateFgaProject = async params => {
   return POST("/api/v1/fga/project", params);
 };
