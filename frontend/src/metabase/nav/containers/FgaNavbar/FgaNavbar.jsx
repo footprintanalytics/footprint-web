@@ -6,10 +6,6 @@ import { push } from "react-router-redux";
 import "./FgaNavbar.css";
 import PropTypes from "prop-types";
 import { getChannel } from "metabase/selectors/app";
-import {
-  saveLatestGAProjectId,
-  saveGASearchHistory,
-} from "metabase/growth/utils/utils";
 import { logout } from "metabase/auth/actions";
 import {
   getCancelFeedback,
@@ -364,8 +360,6 @@ class FgaNavbar extends Component {
               {...this.props}
               onLogout={() => {
                 this.props.logout();
-                saveLatestGAProjectId(undefined);
-                saveGASearchHistory();
               }}
               trigger={
                 <div className="relative" style={{ padding: 10 }}>

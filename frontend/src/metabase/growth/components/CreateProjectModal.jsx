@@ -77,7 +77,7 @@ const CreateProjectModal = props => {
             showSearch
             // value={currentProject}
             onChange={handleProjectChange}
-            placeholder="Select the protocol of your project"
+            placeholder="Search by protocol or nft collection address"
             optionFilterProp="children"
             filterOption={(input, option) =>
               (option?.label ?? "")

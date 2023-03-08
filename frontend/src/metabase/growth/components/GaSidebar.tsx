@@ -2,7 +2,6 @@ import React, { useState, useEffect } from "react";
 import { Layout, Menu } from "antd";
 import type { MenuProps } from "antd";
 const { Sider } = Layout;
-import { BarChartOutlined, TeamOutlined } from "@ant-design/icons";
 import "../css/utils.css";
 import { getLatestGAMenuTag, saveLatestGAMenuTag } from "../utils/utils";
 
@@ -10,27 +9,14 @@ interface IGaSidebarProp {
   className?: string;
   currentProject?: string;
   router: any;
+  currentTab?: string;
   location: any;
-  items?: [any];
-  projects?: [any];
+  items?: any[];
+  projects?: any[];
 }
 export default function GaSidebar(prop: IGaSidebarProp) {
-  const { currentProject, router, location, items, projects } = prop;
-
-  const items_temp = [
-    {
-      key: "analytics",
-      icon: React.createElement(BarChartOutlined),
-      label: `Analytics`,
-      disabled: currentProject === "create_new" ? true : false,
-    },
-    {
-      key: "activation",
-      icon: React.createElement(TeamOutlined),
-      label: `Activation`,
-      disabled: currentProject === "create_new" ? true : false,
-    },
-  ];
+  const { currentProject, router, location, items, projects, currentTab } =
+    prop;
   const rootSubmenuKeys: any[] = [];
   items?.map(i => {
     rootSubmenuKeys.push(i.label);
@@ -40,9 +26,9 @@ export default function GaSidebar(prop: IGaSidebarProp) {
     if (location.query.tab) {
       setTab(location.query.tab);
     } else {
-      setTab(getLatestGAMenuTag() ? getLatestGAMenuTag()! : "");
+      setTab(getLatestGAMenuTag() ?? currentTab);
     }
-  }, [location.query.tab]);
+  }, [currentTab, location.query.tab]);
 
   const [openKeys, setOpenKeys] = useState<string[]>([tab!]);
 
@@ -88,19 +74,8 @@ export default function GaSidebar(prop: IGaSidebarProp) {
             query: { ...location.query, tab: item.key },
           });
         }}
-        // defaultSelectedKeys={[items[0].key]}
-        items={items ? items : items_temp}
+        items={items}
       />
-      {/* <div className="mt-10 flex flex-column items-center">
-        <Button
-          type="dashed"
-          onClick={() => {
-            message.info("Coming soon!");
-          }}
-        >
-          Edit Menu
-        </Button>
-      </div> */}
     </Sider>
   );
 }
