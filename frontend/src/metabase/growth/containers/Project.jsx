@@ -3,19 +3,6 @@ import React, { useState, useEffect } from "react";
 import { connect } from "react-redux";
 import { Layout } from "antd";
 import { Content } from "antd/lib/layout/layout";
-import {
-  BarChartOutlined,
-  FileImageOutlined,
-  ShopOutlined,
-  TeamOutlined,
-  SettingOutlined,
-  FundProjectionScreenOutlined,
-  SearchOutlined,
-  ConsoleSqlOutlined,
-  ProjectOutlined,
-  CodeOutlined,
-  CommentOutlined,
-} from "@ant-design/icons";
 import PublicDashboard from "metabase/public/containers/PublicDashboard";
 import { getUser } from "metabase/selectors/user";
 import GaLayout from "../components/GaLayout";
@@ -26,6 +13,7 @@ import {
   saveLatestGAProject,
   getLatestGAMenuTag,
   getLatestGAProjectId,
+  getGaMenuTabs,
 } from "../utils/utils";
 import { fga_menu_data, top_protocols } from "../utils/data";
 import Connectors from "./Connectors";
@@ -43,9 +31,9 @@ const Project = props => {
     if (location.query.tab) {
       setTab(location.query.tab);
     } else {
-      setTab(getLatestGAMenuTag() ? getLatestGAMenuTag() : "");
+      setTab(getLatestGAMenuTag() ? getLatestGAMenuTag() : tabs_data[0].name);
     }
-  }, [location.query.tab]);
+  }, [location.query.tab, tabs_data]);
   useEffect(() => {
     if (location.query.project_name) {
       setProject(location.query.project_name);
@@ -55,37 +43,8 @@ const Project = props => {
     }
   }, [location.query.project_name]);
   const tabs_data = fga_menu_data;
-
-  const dashboardMap = new Map();
-  const getTabs = tabs_data => {
-    const tabs = [];
-    tabs_data?.map(item => {
-      const children = getTabs(item.children);
-      const disabled =
-        children.length <= 0 &&
-        !item.uuid &&
-        [
-          "Connectors",
-          "Campaign List",
-          "Project Info",
-          "Template Gallery",
-          "My Analysis",
-        ].findIndex(i => i === item.name) === -1
-          ? true
-          : false;
-      tabs.push({
-        key: item.name,
-        icon: item.icon,
-        children: children.length > 0 ? children : null,
-        disabled: disabled,
-        label: item.name,
-      });
-      if (item.uuid) {
-        dashboardMap.set(item.name, item.uuid);
-      }
-    });
-    return tabs;
-  };
+  console.log("getGaMenuTabs(tabs_data)");
+  const { menuTabs, dashboardMap } = getGaMenuTabs(tabs_data);
   const getProjectObject = project => {
     return {
       projectName: project,
@@ -155,7 +114,8 @@ const Project = props => {
         <GaSidebar
           router={router}
           location={location}
-          items={getTabs(tabs_data)}
+          currentTab={tab}
+          items={menuTabs}
           currentProject={project}
         ></GaSidebar>
         <Content

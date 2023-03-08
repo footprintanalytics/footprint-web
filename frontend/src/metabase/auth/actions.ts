@@ -1,4 +1,4 @@
-import { saveLatestGAProjectId } from "metabase/growth/utils/utils";
+import { clearGACache } from "metabase/growth/utils/utils";
 import { push, replace } from "react-router-redux";
 import { getIn } from "icepick";
 import { SessionApi, UtilApi } from "metabase/services";
@@ -94,12 +94,12 @@ export const registerAndLogin = createThunkAction(
         if (isNew) {
           setRegistSuccess(email);
         }
-      MetabaseAnalytics.trackStructEvent("Auth", "registerAndLogin");
-      await handleLogin(dispatch, redirectUrl || "/");
-    } else {
-      throw message;
-    }
-  },
+        MetabaseAnalytics.trackStructEvent("Auth", "registerAndLogin");
+        await handleLogin(dispatch, redirectUrl || "/");
+      } else {
+        throw message;
+      }
+    },
 );
 
 //register
@@ -210,12 +210,12 @@ export const logout = createThunkAction(LOGOUT, (redirectUrl: string) => {
     await dispatch(clearCurrentUser());
     await dispatch(refreshLocale());
     trackLogout();
-    saveLatestGAProjectId("");
     /*    if (redirectUrl) {
       dispatch(push(Urls.login(redirectUrl)));
     }*/
 
     dispatch(replace("/"));
+    clearGACache();
     // window.location.reload(); // clears redux state and browser caches
   };
 });
