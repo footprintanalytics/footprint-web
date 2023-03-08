@@ -1,9 +1,15 @@
 (ns metabase.query-processor.card
   "Code for running a query in the context of a specific Card."
   (:require [clojure.string :as str]
+            [cheshire.core :as json]
+            [toucan.models :as models]
+            [metabase.query-processor.middleware.cache :as cache]
             [clojure.tools.logging :as log]
             [medley.core :as m]
             [metabase.api.common :as api]
+            [metabase.query-processor.middleware.cache-backend.db :as cache-backend.db]
+            [metabase.query-processor.context.default :as context.default]
+            [java-time :as t]
             [metabase.mbql.normalize :as mbql.normalize]
             [metabase.mbql.schema :as mbql.s]
             [metabase.mbql.util :as mbql.u]
@@ -209,3 +215,29 @@
     (log/tracef "Running query for Card %d:\n%s" card-id
                 (u/pprint-to-str query))
     (run query info)))
+
+(defn run-qp-userland-query [queryAsyncList]
+  (let [
+         newQuery (json/parse-string-strict (:query queryAsyncList) true)
+         context (keyword (:context (:info newQuery)))
+         type (keyword (:type  newQuery))
+         info (assoc (:info newQuery) :context context)
+         newQueryFix (assoc newQuery
+                            :middleware (merge {:refresh-cache true} (:middleware newQuery))
+                            :type type
+                            :info info)
+        ]
+    (qp/process-userland-query newQueryFix (context.default/default-context))
+    type
+  )
+)
+
+(defn run-query-cache-async-refresh
+  [max]
+    (let [queryAsyncMax (cache-backend.db/getQueryAsyncUpperLimit max)
+           queryAsyncList (cache-backend.db/getQueryAsyncList queryAsyncMax)]
+      {:max queryAsyncMax
+        :run (count (map run-qp-userland-query queryAsyncList))
+        :now (t/offset-date-time)}
+      )
+    )

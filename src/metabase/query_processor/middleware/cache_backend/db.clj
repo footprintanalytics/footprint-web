@@ -4,7 +4,9 @@
             [honeysql.core :as hsql]
             [java-time :as t]
             [metabase.db :as mdb]
+            [cheshire.core :as json]
             [metabase.models.query-cache :refer [QueryCache]]
+            [metabase.models.query-cache-async :refer [QueryCacheAsync]]
             [metabase.query-processor.middleware.cache-backend.interface :as i]
             [metabase.util.date-2 :as u.date]
             [metabase.util.i18n :refer [trs]]
@@ -118,22 +120,58 @@
       (log/error e (trs "Error saving query results to cache."))))
   nil)
 
+(defn- save-cache-request!
+  "Save the request into the db."
+  [^bytes query-hash query dashboard-id card-id]
+  (try
+    (or (db/update-where! QueryCacheAsync {:query_hash query-hash}
+                          :query (json/generate-string query)
+                          :query_hash query-hash
+                          :dashboard_id dashboard-id
+                          :card_id card-id
+                          :status "ready"
+                          :updated_at (t/offset-date-time))
+        (db/insert! QueryCacheAsync {
+                                      :query (json/generate-string query)
+                                      :query_hash query-hash
+                                      :dashboard_id dashboard-id
+                                      :card_id card-id
+                                      :status "ready"
+                                      :updated_at (t/offset-date-time)}))
+    (catch Throwable e
+      (log/error e (trs "Error saving query results to cache."))))
+  nil)
+
+(defn- getCacheModel []
+  (if (System/getenv "MB_CACHE_REFRESH_INSERT_DB") QueryCacheAsync QueryCache))
+
 (defn- update-cache-status!
   [^bytes query-hash status]
   (try
-    (db/update-where! QueryCache {:query_hash query-hash}
+    (db/update-where! (getCacheModel) {:query_hash query-hash}
                       :status status
-                      :status_updated_at (t/offset-date-time))
+                      :updated_at (t/offset-date-time))
     (catch Throwable e
       (log/error e (trs "Error updating status to cache."))))
   nil)
 
 (defn getQueryCacheStatus [query-hash]
-  (db/select-one-field :status QueryCache :query_hash query-hash)
+  (db/select-one-field :status (getCacheModel) :query_hash query-hash)
   )
 
 (defn getQueryCacheStatusUpdatedAt [query-hash]
-  (db/select-one-field :status_updated_at QueryCache :query_hash query-hash)
+  (db/select-one-field :updated_at (getCacheModel) :query_hash query-hash)
+  )
+
+(defn getQueryAsyncUpperLimit [max] (if max max 5))
+
+(defn getQueryAsyncList [max]
+  (let [pending (db/count QueryCacheAsync {:where [:= :status "pending"]})]
+    (db/select QueryCacheAsync
+               {:where    [:= :status "ready"]
+                :order-by [[:updated_at :desc]]
+                :limit (- max pending)})
+    )
   )
 
 (defmethod i/cache-backend :db
@@ -148,6 +186,10 @@
 
     (save-results-v2! [_ query-hash is dashboard-id card-id]
       (save-results-v2! query-hash is dashboard-id card-id)
+      nil)
+
+    (save-cache-request! [_ query-hash query dashboard-id card-id]
+      (save-cache-request! query-hash query dashboard-id card-id)
       nil)
 
     (update-cache-status! [_ query-hash status]
