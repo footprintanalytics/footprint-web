@@ -57,7 +57,7 @@ export function multiLevelPivot(data, settings) {
 
   // loop over the primary rows to build trees of column/row header data
   const primaryRowsKey = JSON.stringify(
-    _.range(columnColumnIndexes.length + rowColumnIndexes.length),
+    _.range(columnColumnIndexes.length + rowColumnIndexes.length - 1),
   );
   for (const row of pivotData[primaryRowsKey]) {
     // mutate the trees to add the tuple from the current row
