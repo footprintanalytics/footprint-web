@@ -39,7 +39,7 @@ const CreateCohort = ({ state, style }) => {
         style={style}
         onClick={() => setIsTagModalOpen(true)}
       >
-        create cohort
+        Create Cohort
       </Button>
       <Modal
         open={isTagModalOpen}
@@ -49,12 +49,14 @@ const CreateCohort = ({ state, style }) => {
         closable={false}
         title="Create cohort"
       >
-        {emailList && (<h3>You have selected {emailList?.length} wallet address.</h3>)}
+        {emailList && (
+          <h3>You have selected {emailList?.length} wallet address.</h3>
+        )}
         <div className="mt2" />
         <Select
           mode="tags"
           style={{
-            width: '100%',
+            width: "100%",
           }}
           placeholder="Tags"
           onChange={handleChange}

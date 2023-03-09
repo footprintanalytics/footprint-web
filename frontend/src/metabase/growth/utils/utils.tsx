@@ -12,8 +12,8 @@ export function getGaMenuTabs(tabs_data: any[]) {
       children.length <= 0 &&
       !item.uuid &&
       [
-        "Connectors",
-        "Campaign List",
+        "Connector",
+        "Campaign",
         "Project Info",
         "Template Gallery",
         "My Analysis",

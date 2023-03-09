@@ -4,6 +4,7 @@ import {
   FileImageOutlined,
   ShopOutlined,
   TeamOutlined,
+  RocketOutlined,
   SettingOutlined,
   FundProjectionScreenOutlined,
   SearchOutlined,
@@ -1572,170 +1573,185 @@ export const top_protocols = [
  ];
 
  export const fga_menu_data = [
-  {
-    name: "Project Overview",
-    icon:  React.createElement(ShopOutlined),
-    id: "7179",
-    uuid: "fb62e629-9dea-4da7-9cdf-b013d9c17e3c",
-    children: null,
-  },
-  {
-    name: "Users",
-    icon: React.createElement(BarChartOutlined),
-    id: null,
-    children: [
-      {
-        name: "New User",
-        id: 7128,
-        uuid: "181c3a01-6271-473d-a9dc-fe574c7e4691",
-      },
-      {
-        name: "User Funnel",
-        id: 7118,
-        uuid: "b1682d12-bddd-4b10-99a3-a403a3a6a78c",
-      },
-      {
-        name: "User Retention",
-        id: 7119,
-        uuid: "92c8f6c4-0c56-45ee-b3c1-399a23cfba33",
-      },
-      {
-        name: "User Profile",
-        id: null,
-        uuid: null,
-      },
-      // { name: "Top Users", id: 7120 ,uuid:''},
-      // { name: "User List", id: 7122 ,uuid:''},
+   {
+     name: "Project Overview",
+     icon: React.createElement(ShopOutlined),
+     id: "7179",
+     uuid: "fb62e629-9dea-4da7-9cdf-b013d9c17e3c",
+     children: null,
+   },
+   {
+     name: "User Analysis",
+     icon: React.createElement(BarChartOutlined),
+     id: null,
+     children: [
+       // {
+       //   name: "New User",
+       //   id: 7128,
+       //   uuid: "181c3a01-6271-473d-a9dc-fe574c7e4691",
+       // },
+       {
+         name: "User Composition",
+         id: 7128,
+         uuid: "181c3a01-6271-473d-a9dc-fe574c7e4691",
+       },
+       {
+         name: "User Retention",
+         id: 7119,
+         uuid: "92c8f6c4-0c56-45ee-b3c1-399a23cfba33",
+       },
+       {
+         name: "User Profile",
+         id: null,
+         uuid: null,
+       },
+       // { name: "Top Users", id: 7120 ,uuid:''},
+       // { name: "User List", id: 7122 ,uuid:''},
+     ],
+   },
+   {
+     name: "NFT Analysis",
+     icon: React.createElement(FileImageOutlined),
+     id: null,
+     children: [
+       {
+         name: "NFT Overview",
+         id: 7342,
+         uuid: "65cb5f69-f01d-4719-995d-b54880eb6865",
+       },
+       {
+         name: "Holder",
+         id: 7133,
+         uuid: "f519b7db-ef8e-4c94-9e39-001b5deb51e0",
+       },
+       // { name: "Transaction", id: null },
+       {
+         name: "Profit Leadboard",
+         id: 7131,
+         uuid: "eeff10d7-a0d3-48dc-9aa4-e564e861be4a",
+       },
+     ],
+   },
 
-      {
-        name: "Social Media",
-        // icon: React.createElement(CommentOutlined),
-        id: 7154,
-        uuid: "49bc72c9-8a7e-4b78-8275-9d473e633392",
-        // children: [
-        //   { name: "Social Dashboard", id: null },
-        //   { name: "Twitter", id: null },
-        //   { name: "Discord", id: null },
-        // ],
-      },
-    ],
-  },
-  {
-    name: "NFT",
-    icon: React.createElement(FileImageOutlined),
-    id: null,
-    children: [
-      {
-        name: "NFT Overview",
-        id: 7129,
-        uuid: "dbf29773-5afa-4396-84c0-49b3909496ff",
-      },
-      {
-        name: "Holder",
-        id: 7133,
-        uuid: "f519b7db-ef8e-4c94-9e39-001b5deb51e0",
-      },
-      // { name: "Transaction", id: null },
-      {
-        name: "Profit Leadboard",
-        id: 7131,
-        uuid: "eeff10d7-a0d3-48dc-9aa4-e564e861be4a",
-      },
-    ],
-  },
-
-  {
-    name: "Cohorts",
-    icon: React.createElement(TeamOutlined),
-    id: null,
-    children: [
-      {
-        name: "Cohort List",
-        id: 7210,
-        uuid: "4454f1ce-202b-45eb-8f83-3d78beff6756",
-        // children: [
-        //   {
-        //     name: "User List",
-        //     id: 7136,
-        //     uuid: "9de520df-ccd9-467f-b2dd-82c6a2a44f5f",
-        //   },
-        // ],
-      },
-      {
-        name: "Potential Users",
-        id: 7180,
-        uuid: "b46fc872-c97d-4300-a83e-45fa61760ad2",
-      },
-      // { name: "Top Users", id: 7120 },
-    ],
-  },
-  {
-    name: "Campaigns",
-    icon: React.createElement(CommentOutlined),
-    id: null,
-    children: [
-      { name: "Campaign List", id: null, uuid: null },
-      // { name: "User List", id: 7136 },
-      // { name: "User Group", id: null },
-      // { name: "Wallet Radar", id: null },
-      { name: "Snapshot & Airdrop", id: null, uuid: null },
-    ],
-  },
-  {
-    name: "Competitors",
-    icon: React.createElement(ProjectOutlined),
-    id: null,
-    children: [
-      {
-        name: "Industry Ranking",
-        id: 7271,
-        uuid: "859c1295-89f4-4d2b-a8dd-b48914a6bbd3",
-      },
-      {
-        name: "Competitors Comparison",
-        id: 7248,
-        uuid: "63114b7c-094c-402c-8fe8-a9bf1db1369d",
-      },
-      {
-        name: "User Overlap",
-        id: 7171,
-        uuid: "cc8953e2-86c0-492f-85bf-1043eb9589c0",
-      },
-    ],
-  },
-  {
-    name: "Industry",
-    icon: React.createElement(FundProjectionScreenOutlined),
-    id: null,
-    children: [
-      {
-        name: "Overview",
-        id: 7284,
-        uuid: "7edf6b30-83e5-4fca-a1d5-7c3002560ea5",
-      },
-      {
-        name: "Chain Analysis",
-        id: 7285,
-        uuid: "4eea9a6d-932b-49cf-acfa-6724c3887cc6",
-      },
-    ],
-  },
-  {
-    name: "Custom Analysis",
-    icon: React.createElement(CodeOutlined),
-    id: null,
-    children: [
-      { name: "My Analysis", id: null, uuid: null },
-      { name: "Template Gallery", id: null, uuid: null },
-    ],
-  },
-  {
-    name: "Setting",
-    icon: React.createElement(SettingOutlined),
-    id: null,
-    children: [
-      { name: "Connectors", id: null, uuid: null },
-      { name: "Project Info", id: null, uuid: null },
-    ],
-  },
-];
+   {
+     name: "Cohort",
+     icon: React.createElement(TeamOutlined),
+     id: null,
+     children: [
+       {
+         name: "Cohort",
+         id: 7210,
+         uuid: "4454f1ce-202b-45eb-8f83-3d78beff6756",
+         // children: [
+         //   {
+         //     name: "User List",
+         //     id: 7136,
+         //     uuid: "9de520df-ccd9-467f-b2dd-82c6a2a44f5f",
+         //   },
+         // ],
+       },
+       // { name: "Top Users", id: 7120 },
+     ],
+   },
+   {
+     name: "Campaign",
+     icon: React.createElement(CommentOutlined),
+     id: null,
+     children: [
+       { name: "Campaign", id: null, uuid: null },
+       { name: "Airdrop", id: null, uuid: null },
+       // { name: "User List", id: 7136 },
+       // { name: "User Group", id: null },
+       // { name: "Wallet Radar", id: null },
+       { name: "User activation", id: null, uuid: null },
+     ],
+   },
+   {
+     name: "Traffic ",
+     icon: React.createElement(RocketOutlined),
+     id: null,
+     children: [
+       { name: "Channels", id: null, uuid: null },
+       {
+         name: "Potential Users",
+         id: 7180,
+         uuid: "b46fc872-c97d-4300-a83e-45fa61760ad2",
+       },
+       {
+         name: "Social Intelligence",
+         // icon: React.createElement(CommentOutlined),
+         id: 7154,
+         uuid: "49bc72c9-8a7e-4b78-8275-9d473e633392",
+         // children: [
+         //   { name: "Social Dashboard", id: null },
+         //   { name: "Twitter", id: null },
+         //   { name: "Discord", id: null },
+         // ],
+       },
+       { name: "Google Data", id: null, uuid: null },
+       {
+         name: "User Funnel",
+         id: 7118,
+         uuid: "b1682d12-bddd-4b10-99a3-a403a3a6a78c",
+       },
+       { name: "App Installation", id: null, uuid: null },
+     ],
+   },
+   {
+     name: "Competitors Intelligence",
+     icon: React.createElement(ProjectOutlined),
+     id: null,
+     children: [
+       {
+         name: "Industry Ranking",
+         id: 7271,
+         uuid: "859c1295-89f4-4d2b-a8dd-b48914a6bbd3",
+       },
+       {
+         name: "Competitor Comparison",
+         id: 7248,
+         uuid: "63114b7c-094c-402c-8fe8-a9bf1db1369d",
+       },
+       // {
+       //   name: "User Overlap",
+       //   id: 7171,
+       //   uuid: "cc8953e2-86c0-492f-85bf-1043eb9589c0",
+       // },
+     ],
+   },
+   {
+     name: "Industry Overview",
+     icon: React.createElement(FundProjectionScreenOutlined),
+     id: null,
+     children: [
+       {
+         name: "Overall Overview",
+         id: 7284,
+         uuid: "7edf6b30-83e5-4fca-a1d5-7c3002560ea5",
+       },
+       {
+         name: "Chain Analysis",
+         id: 7285,
+         uuid: "4eea9a6d-932b-49cf-acfa-6724c3887cc6",
+       },
+     ],
+   },
+   {
+     name: "Custom Analysis",
+     icon: React.createElement(CodeOutlined),
+     id: null,
+     children: [
+       { name: "My Analysis", id: null, uuid: null },
+       { name: "Template Gallery", id: null, uuid: null },
+     ],
+   },
+   {
+     name: "Settings",
+     icon: React.createElement(SettingOutlined),
+     id: null,
+     children: [
+       { name: "Connector", id: null, uuid: null },
+       { name: "Project Info", id: null, uuid: null },
+     ],
+   },
+ ];
