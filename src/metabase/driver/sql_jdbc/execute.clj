@@ -498,9 +498,8 @@
          execution-mode (:execution-mode (:middleware outer-query))
          schema-id (:fga-schema (:middleware outer-query))
          _convert-sql (convert/convert-sql _sql schema-id)
-         is-include-limit-key (str/includes? _convert-sql "limit")
-         is-include-LIMIT-key (str/includes? _convert-sql "LIMIT")
-         is-include-limit (or is-include-limit-key is-include-LIMIT-key)
+         pattern (re-pattern (str "(?i)" "limit"))
+         is-include-limit (not (nil? (re-find pattern _convert-sql)))
          sql (if (and (= execution-mode  "native") (not is-include-limit)) (str _convert-sql "\nLIMIT 1000") _convert-sql)
          ]
      (log/info "execute sql query --------------")
