@@ -169,7 +169,7 @@
   (let [pending (db/count QueryCacheAsync {:where [:= :status "pending"]})]
     (db/select QueryCacheAsync
                {:where    [:= :status "ready"]
-                :order-by [[:updated_at :desc]]
+                :order-by [[:updated_at :asc]]
                 :limit (- max pending)})
     )
   )
