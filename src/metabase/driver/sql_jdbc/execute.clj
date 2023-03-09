@@ -495,9 +495,12 @@
          params nil
          _sql      (str "-- " remark "\n" sql)
          max-rows (limit/determine-query-max-rows outer-query)
-         userId (:executed-by (:info outer-query))
+         execution-mode (:execution-mode (:middleware outer-query))
          schema-id (:fga-schema (:middleware outer-query))
-         sql (convert/convert-sql _sql schema-id)
+         _convert-sql (convert/convert-sql _sql schema-id)
+         pattern (re-pattern (str "(?i)" "limit"))
+         is-include-limit (not (nil? (re-find pattern _convert-sql)))
+         sql (if (and (= execution-mode  "native") (not is-include-limit)) (str _convert-sql "\nLIMIT 1000") _convert-sql)
          ]
      (log/info "execute sql query --------------")
      (log/info "source_sql:" _sql)
