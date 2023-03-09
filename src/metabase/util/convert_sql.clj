@@ -13,6 +13,16 @@
     )
   )
 
+(defn get-fga-suffix []
+  (
+    let [fga-suffix (System/getenv "FGA_SUFFIX")]
+    (if fga-suffix
+      fga-suffix
+      ""
+      )
+    )
+  )
+
 (defn get-fga-schema [schema-id]
   (let [schemas (fga_project/schema schema-id)]
     (println "get-fga-schemas--->>>>>" schemas)
@@ -96,9 +106,10 @@
   (let [fga-schema (get-fga-schema schema-id)]
     (if fga-schema (let [ regex #"(?<=from|join|FROM|JOIN)+(?:\s|`|\")+(?:\w|`|\"|\.)+"
                           group-regex #"(?<=from|join|FROM|JOIN)+((?:\s|`|\")+(?:\w|`|\"|\.)+)"
+                          fga-suffix (get-fga-suffix)
                           fix-sql (str/replace sql group-regex "$1 ")
                           result (re-seq regex sql)
-                          last-sql (reduce #(handle-convert %1 %2 fga-schema) fix-sql result)
+                          last-sql (reduce #(handle-convert %1 %2 (str fga-schema fga-suffix)) fix-sql result)
                           ]
                      last-sql
                      ) sql)
