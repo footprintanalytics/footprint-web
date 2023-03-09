@@ -489,6 +489,10 @@
   ([driver {{sql :query, params :params} :native, :as outer-query} context respond]
    {:pre [(string? sql) (seq sql)]}
    (let [remark   (qp.util/query->remark driver outer-query)
+         sql (if params (:query (driver/splice-parameters-into-native-query driver
+                          {:query  sql
+                           :params params})) sql)
+         params nil
          _sql      (str "-- " remark "\n" sql)
          max-rows (limit/determine-query-max-rows outer-query)
          execution-mode (:execution-mode (:middleware outer-query))

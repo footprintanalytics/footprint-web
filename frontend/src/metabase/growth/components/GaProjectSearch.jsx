@@ -86,6 +86,10 @@ const GaProjectSearch = props => {
         saveLatestGAProject(projects[index].value);
         saveLatestGAProjectId(projects[index].id);
         setUserProject(projects);
+        router?.push({
+          pathname: location.pathname,
+          query: { ...location.query, project_name: projects[index].value },
+        });
       }
     }
     // getAllProtocol();
@@ -124,19 +128,32 @@ const GaProjectSearch = props => {
       setCurrentProject(location.query.project_name);
       saveLatestGAProject(location.query.project_name);
     } else {
-      setCurrentProject(
-        getLatestGAProject()
-          ? getLatestGAProject()
-          : (userProject.length > 0 ? userProject : recommendOptions)[0].value,
-      );
+      const temp_project = getLatestGAProject()
+        ? getLatestGAProject()
+        : (userProject.length > 0 ? userProject : recommendOptions)[0].value;
+      setCurrentProject(temp_project);
+      router?.push({
+        pathname: location.pathname,
+        query: { ...location.query, project_name: temp_project },
+      });
     }
-  }, [location.query.project_name, isLoading, userProject, recommendOptions]);
+  }, [
+    location.query.project_name,
+    isLoading,
+    userProject,
+    recommendOptions,
+    location.query,
+    location.pathname,
+    router,
+  ]);
   const handleProjectChange = (value, option) => {
     const item = option;
     item.key = item.value + "-histroy";
     saveGASearchHistory(item);
     saveLatestGAProject(option.value);
-    saveLatestGAProjectId(option.id);
+    if (option.id) {
+      saveLatestGAProjectId(option.id);
+    }
     router?.push({
       pathname: location.pathname,
       query: { ...location.query, project_name: option.value },
@@ -150,7 +167,7 @@ const GaProjectSearch = props => {
         value={currentProject}
         loading={isLoading}
         onChange={handleProjectChange}
-        placeholder="Search to Select"
+        placeholder="Search by protocol or nft collection address"
         optionFilterProp="children"
         filterOption={(input, option) =>
           (option?.label ?? "").toLowerCase().includes(input.toLowerCase()) ||

@@ -14,7 +14,7 @@ import {
   saveLatestGAProject,
   getLatestGAMenuTag,
   getLatestGAProjectId,
-  getTabs as getGaMenuTabs,
+  getGaMenuTabs,
 } from "../utils/utils";
 import { fga_menu_data, top_protocols } from "../utils/data";
 import Connectors from "./Connectors";
@@ -44,7 +44,7 @@ const GaDashboard = props => {
     }
   }, [location.query.project_name]);
   const tabs_data = fga_menu_data;
-  const { tabs, dashboardMap } = getGaMenuTabs(tabs_data);
+  const { menuTabs, dashboardMap } = getGaMenuTabs(tabs_data);
 
   return (
     <GaLayout router={router} location={location}>
@@ -52,7 +52,7 @@ const GaDashboard = props => {
         <GaSidebar
           router={router}
           location={location}
-          items={tabs}
+          items={menuTabs}
           currentProject={project}
         ></GaSidebar>
         <Content

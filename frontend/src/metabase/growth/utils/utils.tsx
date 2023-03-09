@@ -1,34 +1,47 @@
-export function getTabs(tabs_data: any[]) {
-  let dashboardMap = new Map();
-  const tabs: any[] = [];
+export function getGaMenuTabs(tabs_data: any[]) {
+  const dashboardMap = new Map();
+  const menuTabs: any[] = [];
   tabs_data?.map(item => {
-    const temp = getTabs(item.children);
-    const children: any[] = temp.tabs;
-    dashboardMap = temp.dashboardMap;
+    const temp = getGaMenuTabs(item.children);
+    const children: any[] = temp.menuTabs;
+    temp.dashboardMap.forEach((value, key, map) => {
+      dashboardMap.set(key, value);
+    });
+    // dashboardMap = temp.dashboardMap;
     const disabled =
       children.length <= 0 &&
       !item.uuid &&
       [
-        "Connectors",
-        "Campaign List",
+        "Connector",
+        "Campaign",
         "Project Info",
         "Template Gallery",
         "My Analysis",
       ].findIndex(i => i === item.name) === -1
         ? true
         : false;
-    tabs.push({
+    menuTabs.push({
       key: item.name,
       icon: item.icon,
       children: children.length > 0 ? children : null,
       disabled: disabled,
       label: item.name,
+      dashboard_uuid: item.uuid ?? null,
     });
     if (item.uuid) {
       dashboardMap.set(item.name, item.uuid);
     }
   });
-  return { tabs, dashboardMap };
+  return { menuTabs, dashboardMap };
+}
+
+export function clearGACache() {
+  localStorage.removeItem("LatestGACampaigns");
+  localStorage.removeItem("LatestGAMenuTag");
+  localStorage.removeItem("GASearchHistory");
+  localStorage.removeItem("GAFavoritedTemplate");
+  localStorage.removeItem("LatestGAProjectId");
+  localStorage.removeItem("LatestGAProject");
 }
 
 export function saveLatestGAProject(LatestGAProject: string) {

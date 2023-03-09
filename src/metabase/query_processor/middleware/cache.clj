@@ -219,9 +219,36 @@
         cachePendingTimeout (or (= cacheStatusUpdateAt nil)(> (- start-time-ms (.toEpochMilli (.toInstant cacheStatusUpdateAt))) 1200000))]
 
     (and (or isNotPending cachePendingTimeout)
-         (or (> chartUpdated @last-ran-cache) (> duration-ms (min-duration-ms))))
-    )
+         (or (> chartUpdated @last-ran-cache) (> duration-ms (min-duration-ms)))))
   )
+(defn add-db-by-refresh-cache-async [query dashboard-id card-id]
+  (let [
+         query-hash (qp.util/query-hash query)
+         fix-query (if (= :query(:type query)) (dissoc query :native) query)
+         ]
+    (i/save-cache-request! *backend* query-hash fix-query dashboard-id card-id))
+  )
+
+(defn refresh-cache-function [query dashboard-id card-id]
+  (let [
+         start-time-ms (System/currentTimeMillis)
+         reducef' (fn [rff context metadata rows]
+                    (impl/do-with-serialization
+                     (fn [in-fn result-fn]
+                       (binding [*in-fn*     in-fn
+                                 *result-fn* result-fn]
+                         (((context.default/default-context) :reducef) rff context metadata rows)))))
+         ]
+    (((apply comp query-data-middleware) ((context.default/default-context) :runf))
+      (merge {:aysnc-refresh-cache? true} query)
+      (fn [metadata]
+        (save-results-xform
+         start-time-ms metadata (qp.util/query-hash query)
+         (((context.default/default-context) :rff) metadata)
+         dashboard-id card-id, false))
+      (assoc (context.default/default-context) :reducef reducef'))
+    true
+    ))
 
 ;;; --------------------------------------------------- Middleware ---------------------------------------------------
 
@@ -251,15 +278,10 @@
       (let [duration-ms (- (System/currentTimeMillis) @last-ran-cache)
             start-time-ms (System/currentTimeMillis)]
         (when (and result ::ok (canRunCache duration-ms start-time-ms card-id query-hash))
-          (i/update-cache-status! *backend* query-hash "pending")
-          (((apply comp query-data-middleware) qp)
-            (merge {:aysnc-refresh-cache? true, :erorCallback erorCallback} query)
-            (fn [metadata]
-              (save-results-xform
-               start-time-ms metadata query-hash
-               (((context.default/default-context) :rff) metadata)
-               dashboard-id card-id, false))
-            (assoc context :reducef reducef')))))))
+            (if (System/getenv "MB_CACHE_REFRESH_INSERT_DB")
+              (add-db-by-refresh-cache-async query dashboard-id card-id )
+              (refresh-cache-function query (info :dashboard-id) (info :card-id))
+              ))))))
 
 (defn- is-cacheable? {:arglists '([query])} [{:keys [cache-ttl]}]
   (and (public-settings/enable-query-caching)
@@ -279,10 +301,12 @@
      *  The result *rows* of the query must be less than `query-caching-max-kb` when serialized (before compression)."
   [qp]
   (fn maybe-return-cached-results* [{:keys [cache-ttl middleware info], :as query} rff context]
-    (if (:get-the-cache-info? middleware)
-      (qp.context/reducef rff context {:query_hash_base64 (.encodeToString (Base64/getEncoder) (qp.util/query-hash query))} [])
-      (let [cacheable? (is-cacheable? query)]
-        (log/tracef "Query is cacheable? %s" (boolean cacheable?))
-        (if cacheable?
-          (run-query-with-cache qp query rff context)
-          (qp query rff context))))))
+    (if (:refresh-cache middleware)
+      (refresh-cache-function query (info :dashboard-id) (info :card-id))
+      (if (:get-the-cache-info? middleware)
+        (qp.context/reducef rff context {:query_hash_base64 (.encodeToString (Base64/getEncoder) (qp.util/query-hash query))} [])
+        (let [cacheable? (is-cacheable? query)]
+          (log/tracef "Query is cacheable? %s" (boolean cacheable?))
+          (if cacheable?
+            (run-query-with-cache qp query rff context)
+            (qp query rff context)))))))

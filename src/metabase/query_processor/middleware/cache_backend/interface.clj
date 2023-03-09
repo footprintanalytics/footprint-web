@@ -31,6 +31,9 @@
     "Add a cache entry with the `results` of running query with byte array `query-hash`. This should replace any prior
   entries for `query-hash` and update the cache timestamp to the current system time.")
 
+  (save-cache-request! [this ^bytes query-hash query dashboard-id card-id]
+    "update the request of cache so it can be use by a api.")
+
   (update-cache-status! [this ^bytes query-hash status]
     "update the status which is the chart cache updating async data.")
 
