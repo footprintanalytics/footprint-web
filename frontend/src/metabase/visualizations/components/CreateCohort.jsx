@@ -1,34 +1,78 @@
 /* eslint-disable react/prop-types */
 import React, { useState } from "react";
-import { Button, message, Modal, Select } from "antd";
+import { Button, message, Modal, Select, AutoComplete } from "antd";
+import { CreateFgaCohort } from "metabase/new-service";
+import { getLatestGAProjectId } from "metabase/growth/utils/utils";
 
-const CreateCohort = ({ state, style }) => {
+const CreateCohort = ({ state, style, propData }) => {
   const [isTagModalOpen, setIsTagModalOpen] = useState(false);
-
+  const [cohortName, setCohortName] = useState();
+  const dashboardData = propData.dashboard;
   const result = state?.series[0];
-  const addressIndex = result?.data?.cols?.findIndex(f => f?.name?.toLowerCase()?.includes("address"));
-  const emailList = addressIndex >= 0 ? result?.data?.rows
-    ?.map(f => f[addressIndex])
-    ?.filter(f => !!f) : null;
-
+  const cardData = result.card;
+  const queryCondition = result?.json_query?.parameters;
+  const queryConditionValue = propData.parameterValues;
+  queryCondition?.map(i => {
+    i = { ...i, value: queryConditionValue[i.id] };
+  });
+  const projectId = getLatestGAProjectId();
+  const addressIndex = result?.data?.cols?.findIndex(f =>
+    f?.display_name?.toLowerCase()?.includes("address"),
+  );
+  const addressList =
+    addressIndex >= 0
+      ? result?.data?.rows?.map(f => f[addressIndex])?.filter(f => !!f)
+      : null;
   const onSend = async () => {
-    message.loading("Loading...");
-    setTimeout(() => {
+    if (!cohortName) {
+      message.error("Please enter cohort name!");
+      return;
+    }
+    const hide = message.loading("Loading...", 10);
+    const parms = {
+      title: cohortName,
+      projectId: parseInt(projectId, 10),
+      dashboardId: dashboardData?.id,
+      dashboardCardId: propData?.dashcard?.id,
+      queryChartId: cardData?.id,
+      queryCondition: queryCondition,
+    };
+    console.log("onSend", parms);
+    const result = await CreateFgaCohort(parms);
+    console.log("onSend result", result);
+    hide();
+    if (result) {
       message.success("Create cohort success");
       setIsTagModalOpen(false);
-    }, 2000);
-  };
-  const options = [{
-    value: "high_profit_winner",
-    label: "High Profit Winner",
-  }, {
-    value: "royal_holder",
-    label: "Royal Holder",
-  }, {
-    value: "high_value_holder",
-    label: "High Value Holder",
-  }];
-  const handleChange = (value) => {
+    }
+    // setTimeout(() => {
+    //   message.success("Create cohort success");
+    //   setIsTagModalOpen(false);
+    // }, 2000);
+  };;
+
+  const options = [
+    { value: "Airdrop list" },
+    { value: "Whale users" },
+    { value: "Top hodler users" },
+  ];
+
+  const optionsTag = [
+    {
+      value: "high_profit_winner",
+      label: "High Profit Winner",
+    },
+    {
+      value: "royal_holder",
+      label: "Royal Holder",
+    },
+    {
+      value: "high_value_holder",
+      label: "High Value Holder",
+    },
+  ];
+
+  const handleChange = value => {
     console.log(`selected ${value}`);
   };
 
@@ -49,19 +93,36 @@ const CreateCohort = ({ state, style }) => {
         closable={false}
         title="Create cohort"
       >
-        {emailList && (
-          <h3>You have selected {emailList?.length} wallet address.</h3>
+        {addressList && (
+          <h3>You have selected {addressList?.length} wallet address.</h3>
         )}
         <div className="mt2" />
-        <Select
-          mode="tags"
+        <AutoComplete
           style={{
             width: "100%",
           }}
-          placeholder="Tags"
-          onChange={handleChange}
+          allowClear
+          onChange={value => {
+            setCohortName(value);
+          }}
           options={options}
+          placeholder="Enter the name of this cohort "
+          filterOption={(inputValue, option) =>
+            option?.value.toUpperCase().indexOf(inputValue.toUpperCase()) !== -1
+          }
         />
+        {/* <Select
+          mode="tags"
+          style={{
+            width: "100%",
+            marginTop: 20,
+          }}
+          disabled={cohortName ? false : true}
+          placeholder="Tag those address by the way~"
+          onChange={handleChange}
+          options={optionsTag}
+        /> */}
+        <div className="mb2" />
       </Modal>
     </>
   );

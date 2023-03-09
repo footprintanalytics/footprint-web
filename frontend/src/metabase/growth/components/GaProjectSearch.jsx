@@ -24,7 +24,7 @@ const GaProjectSearch = props => {
   const [userProject, setUserProject] = useState([]);
   const [currentProject, setCurrentProject] = useState();
   const { isLoading, data } = useQuery(
-    ["GetFgaProject", user, currentProject],
+    ["GetFgaProject", user],
     async () => {
       if (user) {
         return await GetFgaProject();
@@ -72,7 +72,7 @@ const GaProjectSearch = props => {
     if (!isLoading) {
       if (data?.data?.length > 0) {
         const projects = [];
-        data.data.map(p => {
+        data?.data?.map(p => {
           projects.push({
             ...p,
             value: p.protocolSlug,
@@ -86,14 +86,21 @@ const GaProjectSearch = props => {
         saveLatestGAProject(projects[index].value);
         saveLatestGAProjectId(projects[index].id);
         setUserProject(projects);
-        router?.push({
-          pathname: location.pathname,
-          query: { ...location.query, project_name: projects[index].value },
-        });
+        // router?.push({
+        //   pathname: location.pathname,
+        //   query: { ...location.query, project_name: projects[index].value },
+        // });
       }
     }
     // getAllProtocol();
-  }, [currentProject, data?.data, isLoading]);
+  }, [
+    currentProject,
+    data?.data,
+    isLoading,
+    location.pathname,
+    location.query,
+    router,
+  ]);
 
   // monitor data
   const normalOptions = [];
