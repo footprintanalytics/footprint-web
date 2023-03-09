@@ -369,7 +369,7 @@ class Visualization extends React.PureComponent {
 
     // don't try to load settings unless data is loaded
     let settings = this.props.settings || {};
-
+    // console.log("cohort series", series);
     if (!loading && !error) {
       settings = this.props.settings || this.state.computedSettings;
       if (!visualization) {
@@ -603,19 +603,32 @@ class Visualization extends React.PureComponent {
           </div>
         ) : (
           <>
-            {(this.state.visualization?.identifier === "fgatable"
-              && !this.props.isEditing && isDashboard)
-            && (
-              <div className="flex" style={{
-                position: "absolute",
-                right: 160,
-                top: 20,
-              }}>
-                {get(this.state.computedSettings, "table.create_cohort") && (<CreateCohort state={this.state} style={{ marginLeft: 20 }} />)}
-                {get(this.state.computedSettings, "table.send_email") && (<CreateNotification state={this.state} style={{ marginLeft: 20 }}/>)}
-              </div>
-            )}
-            {(this.state.computedSettings["card.title"] ===
+            {this.state.visualization?.identifier === "fgatable" &&
+              !this.props.isEditing &&
+              isDashboard && (
+                <div
+                  className="flex"
+                  style={{
+                    position: "absolute",
+                    right: 160,
+                    top: 20,
+                  }}
+                >
+                  {get(this.state.computedSettings, "table.create_cohort") && (
+                    <CreateCohort
+                      state={this.state}
+                      style={{ marginLeft: 20 }}
+                    />
+                  )}
+                  {get(this.state.computedSettings, "table.send_email") && (
+                    <CreateNotification
+                      state={this.state}
+                      style={{ marginLeft: 20 }}
+                    />
+                  )}
+                </div>
+              )}
+            {/* {(this.state.computedSettings["card.title"] ===
               "Wallet User Stats" ||
               this.state.computedSettings["card.title"] ===
               "User Segmentation" ||
@@ -627,7 +640,7 @@ class Visualization extends React.PureComponent {
                 left: 180,
                 top: 20,
               }}/>
-            )}
+            )} */}
             <CardVisualization
               {...this.props}
               // NOTE: CardVisualization class used to target ExplicitSize HOC

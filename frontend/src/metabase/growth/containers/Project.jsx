@@ -68,7 +68,7 @@ const Project = props => {
         />
       );
     }
-    if (current_tab === "Connectors") {
+    if (current_tab === "Connector") {
       return (
         <Connectors
           location={location}
@@ -99,7 +99,7 @@ const Project = props => {
         ></MyFavoriteTemplate>
       );
     }
-    if (current_tab === "Campaign List") {
+    if (current_tab === "Campaign") {
       return <Campaigns router={router} location={location}></Campaigns>;
     }
     return (
