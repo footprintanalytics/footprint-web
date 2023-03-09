@@ -170,7 +170,7 @@ const ViewFooter = ({
               }
             />
           ),*/
-          QuestionTimelineWidget.shouldRender({ isTimeseries }) && (
+          /*QuestionTimelineWidget.shouldRender({ isTimeseries }) && (
             <QuestionTimelineWidget
               key="timelines"
               className="mx1 hide sm-show"
@@ -178,7 +178,7 @@ const ViewFooter = ({
               onOpenTimelines={onOpenTimelines}
               onCloseTimelines={onCloseTimelines}
             />
-          ),
+          ),*/
           // eslint-disable-next-line react/jsx-key
           <HelpPanel />,
         ]}
