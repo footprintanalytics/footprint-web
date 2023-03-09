@@ -16,6 +16,7 @@
 (defn get-fga-suffix []
   (
     let [fga-suffix (System/getenv "FGA_SUFFIX")]
+    (println "get-fga-suffix--->>>>>" fga-suffix)
     (if fga-suffix
       fga-suffix
       ""
