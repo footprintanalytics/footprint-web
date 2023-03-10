@@ -369,8 +369,6 @@ class Visualization extends React.PureComponent {
 
     // don't try to load settings unless data is loaded
     let settings = this.props.settings || {};
-    console.log("cohort state", { state: this.state });
-    console.log("cohort props", { props: this.props });
     if (!loading && !error) {
       settings = this.props.settings || this.state.computedSettings;
       if (!visualization) {

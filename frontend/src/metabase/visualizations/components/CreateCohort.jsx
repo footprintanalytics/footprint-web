@@ -1,10 +1,12 @@
 /* eslint-disable react/prop-types */
 import React, { useState } from "react";
 import { Button, message, Modal, Select, AutoComplete } from "antd";
+import { connect } from "react-redux";
 import { CreateFgaCohort } from "metabase/new-service";
 import { getLatestGAProjectId } from "metabase/growth/utils/utils";
+import { getUser } from "metabase/selectors/user";
 
-const CreateCohort = ({ state, style, propData }) => {
+const CreateCohort = ({ state, style, propData, user }) => {
   const [isTagModalOpen, setIsTagModalOpen] = useState(false);
   const [cohortName, setCohortName] = useState();
   const dashboardData = propData.dashboard;
@@ -45,11 +47,7 @@ const CreateCohort = ({ state, style, propData }) => {
       message.success("Create cohort success");
       setIsTagModalOpen(false);
     }
-    // setTimeout(() => {
-    //   message.success("Create cohort success");
-    //   setIsTagModalOpen(false);
-    // }, 2000);
-  };;
+  };
 
   const options = [
     { value: "Airdrop list" },
@@ -81,7 +79,17 @@ const CreateCohort = ({ state, style, propData }) => {
       <Button
         type="primary"
         style={style}
-        onClick={() => setIsTagModalOpen(true)}
+        onClick={() => {
+          if (!user) {
+            message.warning("Please sign in first!");
+            return;
+          }
+          if (!projectId) {
+            message.warning("Please create your project first!");
+            return;
+          }
+          setIsTagModalOpen(true);
+        }}
       >
         Create Cohort
       </Button>
@@ -127,5 +135,10 @@ const CreateCohort = ({ state, style, propData }) => {
     </>
   );
 };
+const mapStateToProps = state => {
+  return {
+    user: getUser(state),
+  };
+};
 
-export default CreateCohort;
+export default connect(mapStateToProps)(CreateCohort);
