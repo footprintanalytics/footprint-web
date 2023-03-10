@@ -218,14 +218,9 @@
 
 (defn run-qp-userland-query [queryAsyncList]
   (let [
-         newQuery (json/parse-string-strict (:query queryAsyncList) true)
-         context (keyword (:context (:info newQuery)))
-         type (keyword (:type  newQuery))
-         info (assoc (:info newQuery) :context context)
+         newQuery (read-string (:query queryAsyncList))
          newQueryFix (assoc newQuery
-                            :middleware (merge {:refresh-cache true} (:middleware newQuery))
-                            :type type
-                            :info info)
+                            :middleware (merge {:refresh-cache true} (:middleware newQuery)))
         ]
     (qp/process-userland-query newQueryFix (context.default/default-context))
     type
