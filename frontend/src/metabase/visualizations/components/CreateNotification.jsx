@@ -9,7 +9,8 @@ import {
   getLatestGACampaigns,
 } from "metabase/growth/utils/utils";
 
-const CreateNotification = ({ state, style }) => {
+const CreateNotification = ({ state, style, propData }) => {
+  const dashboardData = propData.dashboard;
   const [isNotificationModalOpen, setIsNotificationModalOpen] = useState(false);
   const [channels, setChannels] = useState([
     {
@@ -48,7 +49,9 @@ const CreateNotification = ({ state, style }) => {
   ]);
 
   const result = state?.series[0];
-  const emailIndex = result?.data?.cols?.findIndex(f => f.name === "email");
+  const emailIndex = result?.data?.cols?.findIndex(
+    f => f.display_name.toLowerCase() === "email",
+  );
   const emailList = result?.data?.rows
     ?.map(f => f[emailIndex])
     ?.filter(f => !!f);

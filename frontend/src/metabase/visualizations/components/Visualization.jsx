@@ -369,7 +369,6 @@ class Visualization extends React.PureComponent {
 
     // don't try to load settings unless data is loaded
     let settings = this.props.settings || {};
-    // console.log("cohort series", series);
     if (!loading && !error) {
       settings = this.props.settings || this.state.computedSettings;
       if (!visualization) {
@@ -617,12 +616,14 @@ class Visualization extends React.PureComponent {
                   {get(this.state.computedSettings, "table.create_cohort") && (
                     <CreateCohort
                       state={this.state}
+                      propData={this.props}
                       style={{ marginLeft: 20 }}
                     />
                   )}
                   {get(this.state.computedSettings, "table.send_email") && (
                     <CreateNotification
                       state={this.state}
+                      propData={this.props}
                       style={{ marginLeft: 20 }}
                     />
                   )}

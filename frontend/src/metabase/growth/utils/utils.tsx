@@ -56,7 +56,7 @@ export function saveLatestGAProjectId(LatestGAProjectId: string) {
 }
 export function getLatestGAProjectId() {
   const id = localStorage.getItem("LatestGAProjectId");
-  return id === "undefined" ? null : id;
+  return id === "undefined" || !id ? null : id;
 }
 
 export function saveLatestGAMenuTag(LatestGAMenuTag: string) {
