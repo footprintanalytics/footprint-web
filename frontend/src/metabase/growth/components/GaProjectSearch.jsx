@@ -80,16 +80,22 @@ const GaProjectSearch = props => {
             key: p.protocolSlug + p.id,
           });
         });
-        let index = projects.findIndex(i => i.value === currentProject);
-        index = index === -1 ? 0 : index;
-        setCurrentProject(projects[index].value);
-        saveLatestGAProject(projects[index].value);
-        saveLatestGAProjectId(projects[index].id);
+        const index = projects.findIndex(i => i.value === currentProject);
+        const projectIndex = index === -1 ? 0 : index;
+        setCurrentProject(projects[projectIndex].value);
+        saveLatestGAProject(projects[projectIndex].value);
+        saveLatestGAProjectId(projects[projectIndex].id);
         setUserProject(projects);
-        // router?.push({
-        //   pathname: location.pathname,
-        //   query: { ...location.query, project_name: projects[index].value },
-        // });
+        if (index === -1) {
+          router?.push({
+            pathname: location.pathname,
+            query: {
+              ...location.query,
+              project_name: projects[projectIndex].value,
+            },
+          });
+        }
+
       }
     }
     // getAllProtocol();

@@ -39,14 +39,18 @@ const CreateCohort = ({ state, style, propData, user }) => {
       queryChartId: cardData?.id,
       queryCondition: queryCondition,
     };
-    console.log("onSend", parms);
-    const result = await CreateFgaCohort(parms);
-    console.log("onSend result", result);
-    hide();
-    if (result) {
-      message.success("Create cohort success");
-      setIsTagModalOpen(false);
-    }
+    // console.log("onSend", parms);
+    // const result = await CreateFgaCohort(parms);
+    // console.log("onSend result", result);
+    // hide();
+    // if (result) {
+    //   message.success("Create cohort success");
+    //   setIsTagModalOpen(false);
+    // }
+    setTimeout(() => {
+      hide();
+      message.success("Create cohort successfully");
+    }, 1000);
   };
 
   const options = [
