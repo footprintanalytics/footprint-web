@@ -24,7 +24,7 @@ const GaProjectSearch = props => {
   const [userProject, setUserProject] = useState([]);
   const [currentProject, setCurrentProject] = useState();
   const { isLoading, data } = useQuery(
-    ["GetFgaProject", user],
+    ["GetFgaProject", user, location.query],
     async () => {
       if (user) {
         return await GetFgaProject();
@@ -34,6 +34,7 @@ const GaProjectSearch = props => {
     },
     QUERY_OPTIONS,
   );
+
   const getAllProtocol = async () => {
     const uuid = "5276dcf1-0e5f-49d1-a49a-c405d2caa3d4";
     // const uuid = "93629e56-00c0-48cd-83b0-79fb0b0054f2";
