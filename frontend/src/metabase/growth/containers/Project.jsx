@@ -43,7 +43,6 @@ const Project = props => {
     }
   }, [location.query.project_name]);
   const tabs_data = fga_menu_data;
-  console.log("getGaMenuTabs(tabs_data)");
   const { menuTabs, dashboardMap } = getGaMenuTabs(tabs_data);
   const getProjectObject = project => {
     return {

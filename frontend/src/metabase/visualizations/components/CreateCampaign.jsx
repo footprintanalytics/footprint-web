@@ -9,7 +9,7 @@ import {
   getLatestGACampaigns,
 } from "metabase/growth/utils/utils";
 
-const CreateNotification = ({ state, style, propData }) => {
+const CreateCampaign = ({ state, style, propData }) => {
   const dashboardData = propData.dashboard;
   const [isNotificationModalOpen, setIsNotificationModalOpen] = useState(false);
   const [channels, setChannels] = useState([
@@ -296,4 +296,4 @@ const CreateNotification = ({ state, style, propData }) => {
   );
 };
 
-export default CreateNotification;
+export default CreateCampaign;

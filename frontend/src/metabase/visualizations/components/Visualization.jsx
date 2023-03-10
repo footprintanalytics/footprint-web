@@ -6,6 +6,8 @@ import { t, jt } from "ttag";
 import { assoc } from "icepick";
 import _ from "underscore";
 import cx from "classnames";
+import { get } from "lodash";
+import { Avatar } from "antd";
 import ExplicitSize from "metabase/components/ExplicitSize";
 import ChartCaption from "metabase/visualizations/components/ChartCaption";
 import ChartTooltip from "metabase/visualizations/components/ChartTooltip";
@@ -23,6 +25,7 @@ import {
 import { getComputedSettingsForSeries } from "metabase/visualizations/lib/settings/visualization";
 import { isSameSeries } from "metabase/visualizations/lib/utils";
 import { performDefaultAction } from "metabase/visualizations/lib/action";
+import CreateCampaign from "metabase/visualizations/components/CreateCampaign";
 import { getFont } from "metabase/styled-components/selectors";
 
 import { getMode } from "metabase/modes/lib/modes";
@@ -33,24 +36,20 @@ import {
   ChartSettingsError,
 } from "metabase/visualizations/lib/errors";
 
-import { datasetContainsNoResults } from "metabase-lib/queries/utils/dataset";
-
 export const ERROR_MESSAGE_GENERIC = t`There was a problem displaying this chart.`;
 export const ERROR_MESSAGE_PERMISSION = t`Sorry, you don't have permission to see this card.`;
 
+import TableChartInfo from "metabase/query_builder/components/TableChartInfo";
+import Link from "metabase/core/components/Link";
+import { getOssUrl } from "metabase/lib/image";
+import ErrorGuide from "metabase/query_builder/components/ErrorGuide";
+import { datasetContainsNoResults } from "metabase-lib/queries/utils/dataset";
 import Question from "metabase-lib/Question";
 import Mode from "metabase-lib/Mode";
 import { memoizeClass } from "metabase-lib/utils";
 import { VisualizationSlowSpinner } from "./Visualization.styled";
 import CreateCohort from "./CreateCohort";
-import TableChartInfo from "metabase/query_builder/components/TableChartInfo";
-import Link from "metabase/core/components/Link";
-import { getOssUrl } from "metabase/lib/image";
-import ErrorGuide from "metabase/query_builder/components/ErrorGuide";
-import { get } from "lodash";
-import { Avatar } from "antd";
 import "./Visualization.css";
-import CreateNotification from "metabase/visualizations/components/CreateNotification";
 
 // NOTE: pass `CardVisualization` so that we don't include header when providing size to child element
 
@@ -621,7 +620,7 @@ class Visualization extends React.PureComponent {
                     />
                   )}
                   {get(this.state.computedSettings, "table.send_email") && (
-                    <CreateNotification
+                    <CreateCampaign
                       state={this.state}
                       propData={this.props}
                       style={{ marginLeft: 20 }}
