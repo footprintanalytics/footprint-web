@@ -20,14 +20,16 @@ export function getGaMenuTabs(tabs_data: any[]) {
       ].findIndex(i => i === item.name) === -1
         ? true
         : false;
-    menuTabs.push({
-      key: item.name,
-      icon: item.icon,
-      children: children.length > 0 ? children : null,
-      disabled: disabled,
-      label: item.name,
-      dashboard_uuid: item.uuid ?? null,
-    });
+    if (!disabled) {
+      menuTabs.push({
+        key: `${item.name}`,
+        icon: item.icon,
+        children: children.length > 0 ? children : null,
+        disabled: disabled,
+        label: item.name,
+        dashboard_uuid: item.uuid ?? null,
+      });
+    }
     if (item.uuid) {
       dashboardMap.set(item.name, item.uuid);
     }

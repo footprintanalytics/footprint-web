@@ -617,8 +617,8 @@ export const top_protocols = [
     nft_trading_vol: 507436.04477788496,
     logo: "",
     collections_list: [
-      "0xc03844f07f86ad1d90a1c4a2a8204dcf00f3a991",
       "0x6fa769eed284a94a73c15299e1d3719b29ae2f52",
+      "0xc03844f07f86ad1d90a1c4a2a8204dcf00f3a991",
     ],
     chain: "Ethereum",
   },
@@ -1602,8 +1602,8 @@ export const top_protocols = [
        },
        {
          name: "User Profile",
-         id: null,
-         uuid: null,
+         id: 7381,
+         uuid: "a832dc29-b44e-4622-827d-279b8401b0e5",
        },
        // { name: "Top Users", id: 7120 ,uuid:''},
        // { name: "User List", id: 7122 ,uuid:''},

@@ -1,6 +1,6 @@
 /* eslint-disable react/prop-types */
 import React, { useState } from "react";
-import { Button, message, Modal, Select, AutoComplete } from "antd";
+import { Button, message, Modal, Tag, AutoComplete, Divider } from "antd";
 import { connect } from "react-redux";
 import { CreateFgaCohort } from "metabase/new-service";
 import { getLatestGAProjectId } from "metabase/growth/utils/utils";
@@ -9,11 +9,11 @@ import { getUser } from "metabase/selectors/user";
 const CreateCohort = ({ state, style, propData, user }) => {
   const [isTagModalOpen, setIsTagModalOpen] = useState(false);
   const [cohortName, setCohortName] = useState();
-  const dashboardData = propData.dashboard;
+  const dashboardData = propData?.dashboard;
   const result = state?.series[0];
-  const cardData = result.card;
+  const cardData = result?.card;
   const queryCondition = result?.json_query?.parameters;
-  const queryConditionValue = propData.parameterValues;
+  const queryConditionValue = propData?.parameterValues;
   queryCondition?.map(i => {
     i = { ...i, value: queryConditionValue[i.id] };
   });
@@ -51,28 +51,6 @@ const CreateCohort = ({ state, style, propData, user }) => {
       setIsTagModalOpen(false);
     }, 2000);
   };
-
-  const options = [
-    { value: "Airdrop list" },
-    { value: "Whale users" },
-    { value: "Top hodler users" },
-  ];
-
-  const optionsTag = [
-    {
-      value: "high_profit_winner",
-      label: "High Profit Winner",
-    },
-    {
-      value: "royal_holder",
-      label: "Royal Holder",
-    },
-    {
-      value: "high_value_holder",
-      label: "High Value Holder",
-    },
-  ];
-
   const handleChange = value => {
     console.log(`selected ${value}`);
   };
@@ -104,10 +82,8 @@ const CreateCohort = ({ state, style, propData, user }) => {
         closable={false}
         title="Create cohort"
       >
-        {addressList && (
-          <h3>You have selected {addressList?.length} wallet address.</h3>
-        )}
-        <div className="mt2" />
+        <h3>Cohort Name</h3>
+        <div className="mt1" />
         <AutoComplete
           style={{
             width: "100%",
@@ -116,12 +92,35 @@ const CreateCohort = ({ state, style, propData, user }) => {
           onChange={value => {
             setCohortName(value);
           }}
-          options={options}
+          // options={options}
           placeholder="Enter the name of this cohort "
           filterOption={(inputValue, option) =>
             option?.value.toUpperCase().indexOf(inputValue.toUpperCase()) !== -1
           }
         />
+        <div className="mt2" />
+        {addressList && (
+          <h4>You have selected {addressList?.length} wallet address.</h4>
+        )}
+        <div className="bg-light p2 mt1">
+          <h5>Condition:</h5>
+          <Divider style={{ marginTop: 10, marginBottom: 10 }}></Divider>
+          {/* <div className="mt1" /> */}
+          {queryCondition && (
+            <>
+              {queryCondition?.map((q, index) => {
+                return (
+                  <div key={index} style={{ marginBottom: 10 }}>
+                    {q.name}:{" "}
+                    {q.value.map(t => {
+                      return <Tag key={t}>{t}</Tag>;
+                    })}
+                  </div>
+                );
+              })}
+            </>
+          )}
+        </div>
         {/* <Select
           mode="tags"
           style={{

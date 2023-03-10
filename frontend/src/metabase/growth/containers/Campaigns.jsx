@@ -10,13 +10,14 @@ import {
   Button,
   Result,
   Card,
-  Typography,
+  Empty,
   message,
 } from "antd";
 import Title from "antd/lib/typography/Title";
 import Icon from "metabase/components/Icon";
 import { getUser } from "metabase/selectors/user";
 import "../css/utils.css";
+import CreateCampaign from "metabase/visualizations/components/CreateCampaign";
 import { getLatestGACampaigns } from "../utils/utils";
 
 const Campaigns = props => {
@@ -50,7 +51,7 @@ const Campaigns = props => {
           <Title width={"100%"} level={4} style={{ marginBottom: 0 }}>
             Campaigns
           </Title>
-          <Button
+          {/* <Button
             type={"default"}
             onClick={() => {
               // setIsModalOpen(true);
@@ -61,7 +62,7 @@ const Campaigns = props => {
             }}
           >
             Add Campaign
-          </Button>
+          </Button> */}
         </div>
 
         <Divider></Divider>
@@ -115,21 +116,17 @@ const Campaigns = props => {
         ) : (
           <Card style={{ width: "100%", borderRadius: 10 }}>
             {/* <div>This project still no config any connector!</div> */}
-            <Result
-              status="warning"
-              title="This project still have not campaigns!"
-              extra={
-                <Button
-                  type="primary"
-                  key="console"
-                  onClick={() => {
-                    setIsModalOpen(true);
-                  }}
-                >
-                  Add Campaigns Now
-                </Button>
+            <Empty
+              image="https://gw.alipayobjects.com/zos/antfincdn/ZHrcdLPrvN/empty.svg"
+              imageStyle={{
+                height: 150,
+              }}
+              description={
+                <span>Create a campaign to engage your users immediately!</span>
               }
-            />
+            >
+              <CreateCampaign></CreateCampaign>
+            </Empty>
           </Card>
         )}
       </div>
