@@ -70,10 +70,11 @@
 
 (api/defendpoint ^:streaming POST "/"
   "Execute a query and retrieve the results in the usual format. The query will not use the cache."
-  [:as {{:keys [database fga-schema] :as query} :body}]
+  [:as {{:keys [database fga-schema type] :as query} :body}]
   {database (s/maybe s/Int)}
-  (let [result (update-in query [:middleware :js-int-to-string?] (fnil identity true))]
-  (run-query-async (update-in result [:middleware :fga-schema] (fnil identity fga-schema)))
+  (let [result (update-in query [:middleware :js-int-to-string?] (fnil identity true))
+        _result (update-in result [:middleware :execution-mode] (fnil identity type))]
+  (run-query-async (update-in _result [:middleware :fga-schema] (fnil identity fga-schema)))
     )
   )
 
