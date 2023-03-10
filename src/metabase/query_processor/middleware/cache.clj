@@ -225,6 +225,7 @@
   (let [
          query-hash (qp.util/query-hash query)
          fix-query (if (= :query(:type query)) (dissoc query :native) query)
+         fix-query (assoc fix-query :info (dissoc (:info fix-query) :query-hash))
          ]
     (i/save-cache-request! *backend* query-hash fix-query dashboard-id card-id))
   )
@@ -306,7 +307,6 @@
       (if (:get-the-cache-info? middleware)
         (qp.context/reducef rff context {:query_hash_base64 (.encodeToString (Base64/getEncoder) (qp.util/query-hash query))} [])
         (let [cacheable? (is-cacheable? query)]
-          (log/tracef "Query is cacheable? %s" (boolean cacheable?))
           (if cacheable?
             (run-query-with-cache qp query rff context)
             (qp query rff context)))))))

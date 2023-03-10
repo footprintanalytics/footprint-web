@@ -125,14 +125,14 @@
   [^bytes query-hash query dashboard-id card-id]
   (try
     (or (db/update-where! QueryCacheAsync {:query_hash query-hash}
-                          :query (json/generate-string query)
+                          :query (pr-str  query)
                           :query_hash query-hash
                           :dashboard_id dashboard-id
                           :card_id card-id
                           :status "ready"
                           :updated_at (t/offset-date-time))
         (db/insert! QueryCacheAsync {
-                                      :query (json/generate-string query)
+                                      :query (pr-str  query)
                                       :query_hash query-hash
                                       :dashboard_id dashboard-id
                                       :card_id card-id
