@@ -66,7 +66,6 @@ const CreateCampaign = ({ style }) => {
     { Label: "Airdrop List", value: "3" },
   ]);
 
-
   const onSave = async () => {
     // const current = channels.find(f => f.enabled);
     // const content = current.field.message;
