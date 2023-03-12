@@ -220,7 +220,7 @@
   (let [
          newQuery (read-string (:query queryAsyncList))
          newQueryFix (assoc newQuery
-                            :middleware (merge {:refresh-cache true} (:middleware newQuery)))
+                            :middleware (merge {:refresh-cache true :query-hash (:query_hash queryAsyncList)} (:middleware newQuery)))
         ]
     (qp/process-userland-query newQueryFix (context.default/default-context))
     type
@@ -229,9 +229,11 @@
 
 (defn run-query-cache-async-refresh
   [max]
-    (let [queryAsyncMax (cache-backend.db/getQueryAsyncUpperLimit max)
-           queryAsyncList (cache-backend.db/getQueryAsyncList queryAsyncMax)]
+    (let [pendingCount (cache-backend.db/getQueryPendingCount)
+           queryAsyncMax (cache-backend.db/getQueryAsyncUpperLimit max)
+           queryAsyncList (cache-backend.db/getQueryAsyncList queryAsyncMax pendingCount)]
       {:max queryAsyncMax
+        :pending pendingCount
         :run (count (map run-qp-userland-query queryAsyncList))
         :now (t/offset-date-time)}
       )

@@ -5,6 +5,7 @@
             [java-time :as t]
             [metabase.db :as mdb]
             [cheshire.core :as json]
+            [metabase.query-processor.middleware.cache.constant :as cacheContant]
             [metabase.models.query-cache :refer [QueryCache]]
             [metabase.models.query-cache-async :refer [QueryCacheAsync]]
             [metabase.query-processor.middleware.cache-backend.interface :as i]
@@ -165,14 +166,23 @@
 
 (defn getQueryAsyncUpperLimit [max] (if max max 5))
 
-(defn getQueryAsyncList [max]
-  (let [pending (db/count QueryCacheAsync {:where [:= :status "pending"]})]
-    (db/select QueryCacheAsync
-               {:where    [:= :status "ready"]
-                :order-by [[:updated_at :desc]]
-                :limit (- max pending)})
-    )
-  )
+(def formatter (java.time.format.DateTimeFormatter/ofPattern "yyyy-MM-dd HH:mm:ss"))
+
+(defn getQueryPendingCount []
+  (let [date-ago (-> (t/minus (t/offset-date-time) (t/minutes cacheContant/CACHE-PENDING-TIMEOUT-MINUTES))
+                     (.format formatter))]
+    (db/count QueryCacheAsync {:where
+     [:and
+      [:= :status "pending"]
+      [:> :updated_at date-ago]
+      ]
+     })))
+
+(defn getQueryAsyncList [max pending]
+  (db/select QueryCacheAsync
+             {:where    [:= :status "ready"]
+              :order-by [[:updated_at :desc]]
+              :limit (- max pending)}))
 
 (defmethod i/cache-backend :db
   [_]

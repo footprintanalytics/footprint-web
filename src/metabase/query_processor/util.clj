@@ -7,7 +7,8 @@
             [medley.core :as m]
             [metabase.driver :as driver]
             [metabase.util.schema :as su]
-            [metabase.api.common :as api]
+            [metabase.models.user :refer [User]]
+            [toucan.db :as db]
             [schema.core :as s]))
 
 ;; TODO - I think most of the functions in this namespace that we don't remove could be moved to [[metabase.mbql.util]]
@@ -26,7 +27,7 @@
   (str "Metabase"
        (format ":: userID: %s email: %s queryType: %s card-id: %s dashboard-id: %s context: %s aysnc-cache: %s"
                executed-by
-               (when executed-by (:email @api/*current-user*))
+               (when executed-by (db/select-one-field :email  User :id executed-by))
                (case (keyword query-type)
                      :query  "MBQL"
                      :native "native")
