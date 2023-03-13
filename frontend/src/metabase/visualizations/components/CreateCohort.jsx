@@ -34,7 +34,7 @@ const CreateCohort = ({ state, style, propData, user }) => {
     const parms = {
       title: cohortName,
       projectId: parseInt(projectId, 10),
-      dashboardId: dashboardData?.id,
+      dashboardId: dashboardData?.entityId,
       dashboardCardId: propData?.dashcard?.id,
       queryChartId: cardData?.id,
       queryCondition: queryCondition,
