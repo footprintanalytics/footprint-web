@@ -219,13 +219,15 @@
 
 (defn run-qp-userland-query [queryAsyncList]
   (let [
+         dashboardId (:dashboad_id queryAsyncList)
+         cardId (:card_id queryAsyncList)
          newQuery (read-string (:query queryAsyncList))
          newQueryFix (assoc newQuery
                             :middleware (merge {:refresh-cache true :query-hash (:query_hash queryAsyncList)} (:middleware newQuery)))
         ]
     (log/info "run-qp-userland-query" (:card_id queryAsyncList) (:dashboard_id queryAsyncList) (i/short-hex-hash (:query_hash queryAsyncList)))
     (qp/process-userland-query newQueryFix (context.default/default-context))
-    type
+    {:dashboardId dashboardId, :cardId cardId}
   )
 )
 
@@ -233,10 +235,12 @@
   [max]
     (let [pendingCount (cache-backend.db/getQueryPendingCount)
            queryAsyncMax (cache-backend.db/getQueryAsyncUpperLimit max)
-           queryAsyncList (cache-backend.db/getQueryAsyncList queryAsyncMax pendingCount)]
+           queryAsyncList (cache-backend.db/getQueryAsyncList queryAsyncMax pendingCount)
+           result (map run-qp-userland-query queryAsyncList)]
       {:max queryAsyncMax
         :pending pendingCount
-        :run (count (map run-qp-userland-query queryAsyncList))
+        :run (count result)
+        :detail result
         :now (t/offset-date-time)}
       )
     )
