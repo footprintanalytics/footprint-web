@@ -96,6 +96,7 @@
   [query-hash dashboard-id card-id]
 ;  (log/info (trs "Caching results for next time for query with hash {0}."
 ;                 (pr-str (i/short-hex-hash query-hash))) (u/emoji "💾"))
+  (log/info "cache-results!" card-id dashboard-id (i/short-hex-hash query-hash))
   (try
     (let [bytez (serialized-bytes)]
       (if-not (instance? (Class/forName "[B") bytez)
@@ -233,11 +234,12 @@
   )
 
 (defn refresh-cache-function [{:keys [middleware], :as query} dashboard-id card-id]
+  (log/info "refresh-cache-function-middleware" card-id dashboard-id middleware)
   (let [
          start-time-ms (System/currentTimeMillis)
          query-hash (:query-hash middleware)
          query-hash (if query-hash query-hash (qp.util/query-hash query))
-         erorCallback (fn [] (i/update-cache-status! *backend* query-hash "error"))
+         erorCallback (fn [] (log/info "error callback" card-id dashboard-id (i/short-hex-hash query-hash)) (i/update-cache-status! *backend* query-hash "error"))
          reducef' (fn [rff context metadata rows]
                     (impl/do-with-serialization
                      (fn [in-fn result-fn]
@@ -245,7 +247,7 @@
                                  *result-fn* result-fn]
                          (((context.default/default-context) :reducef) rff context (merge {:aysnc-refresh-cache? true, :erorCallback erorCallback} metadata) rows)))))
          ]
-    (log/info "refresh-cache-function" dashboard-id card-id)
+    (log/info "refresh-cache-function" card-id dashboard-id (i/short-hex-hash query-hash))
     (i/update-cache-status! *backend* query-hash "pending")
     (((apply comp query-data-middleware) ((context.default/default-context) :runf))
       (merge {:aysnc-refresh-cache? true} query)

@@ -148,6 +148,7 @@
 
 (defn- update-cache-status!
   [^bytes query-hash status]
+  (log/info "update-cache-status!" status (i/short-hex-hash query-hash))
   (try
     (db/update-where! (getCacheModel) {:query_hash query-hash}
                       :status status
@@ -179,10 +180,15 @@
      })))
 
 (defn getQueryAsyncList [max pending]
-  (db/select QueryCacheAsync
-             {:where    [:= :status "ready"]
-              :order-by [[:updated_at :desc]]
-              :limit (- max pending)}))
+  (log/info "getQueryAsyncList" max pending (- max pending))
+  (let [limit (- max pending)]
+    (if (> limit 0)
+      (db/select QueryCacheAsync
+                 {:where    [:= :status "ready"]
+                  :order-by [[:updated_at :desc]]
+                  :limit (- max pending)})
+      nil
+    )))
 
 (defmethod i/cache-backend :db
   [_]
