@@ -79,6 +79,7 @@ const CreateCohort = ({ state, style, propData, user }) => {
       >
         Create Cohort
       </Button>
+
       <Modal
         open={isTagModalOpen}
         onCancel={() => setIsTagModalOpen(false)}
