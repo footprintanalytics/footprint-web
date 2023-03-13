@@ -4,6 +4,7 @@ import PropTypes from "prop-types";
 import { t } from "ttag";
 
 import cx from "classnames";
+import { useThrottleFn } from "ahooks";
 import Button from "metabase/core/components/Button";
 
 const propTypes = {
@@ -44,6 +45,14 @@ const RunButton = forwardRef(function RunButton(
   } else {
     buttonIcon = "refresh";
   }
+
+  const { run } = useThrottleFn(
+    isRunning ? onCancel : onRun,
+    {
+      wait: 1000,
+    },
+  );
+
   return (
     <Button
       {...props}
@@ -55,7 +64,7 @@ const RunButton = forwardRef(function RunButton(
         "RunButton--compact": circular && !props.borderless && compact,
         circular: circular,
       })}
-      onClick={isRunning ? onCancel : onRun}
+      onClick={run}
       ref={ref}
     >
       {buttonText}
