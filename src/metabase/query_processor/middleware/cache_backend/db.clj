@@ -186,7 +186,7 @@
       (db/select QueryCacheAsync
                  {:where    [:= :status "ready"]
                   :order-by [[:updated_at :desc]]
-                  :limit (- max pending)})
+                  :limit limit})
       nil
     )))
 
