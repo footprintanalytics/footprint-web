@@ -18,7 +18,11 @@ const Index = () => {
   const helpRef = React.createRef();
 
   const isChart = window?.location?.pathname?.startsWith("/chart");
-  const showSocialPanel = !isChart && !deviceInfo.isMobile;
+  const isAdminPage = window?.location?.pathname?.startsWith("/admin");
+  const showSocialPanel =
+    !isChart
+    && !isAdminPage
+    && !deviceInfo.isMobile;
   const showHelpButtonPanel = false;
 
   const closeAction = () => {
