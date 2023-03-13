@@ -154,14 +154,6 @@ const Connectors = props => {
           <Title width={"100%"} level={4} style={{ marginBottom: 0 }}>
             Connectors
           </Title>
-          {/* <Button
-            type={"default"}
-            onClick={() => {
-              setIsModalOpen(true);
-            }}
-          >
-            Add Connector
-          </Button> */}
         </div>
 
         <Divider></Divider>
