@@ -2,6 +2,7 @@
   "Code for running a query in the context of a specific Card."
   (:require [clojure.string :as str]
             [cheshire.core :as json]
+            [metabase.query-processor.middleware.cache-backend.interface :as i]
             [toucan.models :as models]
             [metabase.query-processor.middleware.cache :as cache]
             [clojure.tools.logging :as log]
@@ -222,6 +223,7 @@
          newQueryFix (assoc newQuery
                             :middleware (merge {:refresh-cache true :query-hash (:query_hash queryAsyncList)} (:middleware newQuery)))
         ]
+    (log/info "run-qp-userland-query" (:card_id queryAsyncList) (:dashboard_id queryAsyncList) (i/short-hex-hash (:query_hash queryAsyncList)))
     (qp/process-userland-query newQueryFix (context.default/default-context))
     type
   )
