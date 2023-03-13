@@ -25,6 +25,8 @@ const CreateCohort = ({ state, style, propData, user }) => {
     addressIndex >= 0
       ? result?.data?.rows?.map(f => f[addressIndex])?.filter(f => !!f)
       : null;
+
+  console.log("CreateCohort", state, propData);
   const onSend = async () => {
     if (!cohortName) {
       message.error("Please enter cohort name!");
@@ -34,22 +36,25 @@ const CreateCohort = ({ state, style, propData, user }) => {
     const parms = {
       title: cohortName,
       projectId: parseInt(projectId, 10),
-      dashboardId: dashboardData?.id,
+      dashboardId:
+        user?.id === dashboardData.creator_id
+          ? dashboardData?.id
+          : dashboardData?.entity_id,
       dashboardCardId: propData?.dashcard?.id,
       queryChartId: cardData?.id,
       queryCondition: queryCondition,
     };
-    // const result = await CreateFgaCohort(parms);
-    // hide();
-    // if (result) {
-    //   message.success("Create cohort success");
-    //   setIsTagModalOpen(false);
-    // }
-    setTimeout(() => {
-      hide();
-      message.success("Create cohort successfully");
+    const result = await CreateFgaCohort(parms);
+    hide();
+    if (result) {
+      message.success("Create cohort success");
       setIsTagModalOpen(false);
-    }, 2000);
+    }
+    // setTimeout(() => {
+    //   hide();
+    //   message.success("Create cohort successfully");
+    //   setIsTagModalOpen(false);
+    // }, 2000);
   };
   const handleChange = value => {
     console.log(`selected ${value}`);

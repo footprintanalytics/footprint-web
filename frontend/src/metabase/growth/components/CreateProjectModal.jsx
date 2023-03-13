@@ -124,7 +124,7 @@ const CreateProjectModal = props => {
           marginTop: 10,
         }}
       >
-        <Link href="submit/contract/add">
+        <Link href="growth/submit/contract/add">
           Can not find the protocol? Submit now!
         </Link>
       </div>

@@ -12,7 +12,7 @@ import {
 } from "../utils/utils";
 
 const TemplateGallery = props => {
-  const { router, location, children, user } = props;
+  const { router, location, children, user, currentTab } = props;
   const [templateData, setTemplateData] = useState([]);
   // monitor datas
   const updateData = () => {
@@ -32,7 +32,7 @@ const TemplateGallery = props => {
   };
   useEffect(() => {
     updateData();
-  }, []);
+  }, [currentTab]);
   const IconText = ({ icon, text, click }) => (
     <Space onClick={click} style={{ cursor: "pointer" }}>
       {React.createElement(icon)}
@@ -55,28 +55,28 @@ const TemplateGallery = props => {
         dataSource={templateData}
         renderItem={(item, index) => (
           <List.Item
-            actions={[
-              <IconText
-                icon={item.favorited ? StarFilled : StarOutlined}
-                text={item.favorited ? "Favorited" : "Favorite"}
-                click={() => {
-                  message.success(
-                    item.favorited ? "Cancel favorited!" : "Favorited!",
-                  );
-                  saveGAFavoritedTemplate(item, !item.favorited);
-                  updateData();
-                }}
-                key="list-vertical-star-o"
-              />,
-              // <IconText
-              //   icon={LikeOutlined}
-              //   text="156"
-              //   key="list-vertical-like-o"
-              // />,
-            ]}
+          // actions={[
+          //   <IconText
+          //     icon={item.favorited ? StarFilled : StarOutlined}
+          //     text={item.favorited ? "Favorited" : "Favorite"}
+          //     click={() => {
+          //       message.success(
+          //         item.favorited ? "Cancel favorited!" : "Favorited!",
+          //       );
+          //       saveGAFavoritedTemplate(item, !item.favorited);
+          //       updateData();
+          //     }}
+          //     key="list-vertical-star-o"
+          //   />,
+          // <IconText
+          //   icon={LikeOutlined}
+          //   text="156"
+          //   key="list-vertical-like-o"
+          // />,
+          // ]}
           >
             <List.Item.Meta
-              avatar={<Avatar src={item.avatar} />}
+              // avatar={<Avatar src={item.avatar} />}
               title={
                 <Link
                   onClick={() => {
@@ -87,7 +87,7 @@ const TemplateGallery = props => {
                   {item.dashboard_name}
                 </Link>
               }
-              description={`Created by @${item.creator}`}
+              // description={`Created by @${item.creator}`}
             />
             {/* <div>content</div> */}
           </List.Item>

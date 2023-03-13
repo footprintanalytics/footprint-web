@@ -15,6 +15,7 @@ const ConfigEmail = () => {
       <h4>Message Title</h4>
       <div className="mt1" />
       <Form.Item
+        rules={[{ required: true }]}
         name={"emailTitle"}
         wrapperCol={{
           span: 24,
@@ -58,6 +59,7 @@ const ConfigEmail = () => {
       <div className="mt1" />
       <Form.Item
         name={"emailContent"}
+        rules={[{ required: true }]}
         wrapperCol={{
           span: 24,
         }}
