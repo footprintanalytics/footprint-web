@@ -219,7 +219,7 @@
 
 (defn run-qp-userland-query [queryAsyncList]
   (let [
-         dashboardId (:dashboad_id queryAsyncList)
+         dashboardId (:dashboard_id queryAsyncList)
          cardId (:card_id queryAsyncList)
          newQuery (read-string (:query queryAsyncList))
          newQueryFix (assoc newQuery

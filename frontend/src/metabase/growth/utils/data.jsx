@@ -1583,8 +1583,8 @@ export const top_protocols = [
    {
      name: "Project Overview",
      icon: React.createElement(ShopOutlined),
-     id: "7179",
-     uuid: "fb62e629-9dea-4da7-9cdf-b013d9c17e3c",
+     id: "7398",
+     uuid: "4837f6c1-bb18-4630-b634-37b7f29397c3",
      children: null,
    },
    {
