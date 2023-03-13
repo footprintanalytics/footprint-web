@@ -18,6 +18,8 @@ export const top_protocols = [
   {
     protocol_slug: "the-sandbox",
     protocol_name: "The Sandbox",
+    isPremium:true,
+    isDemo:true,
     nft_trading_vol: 1576582502.5102763,
     logo: "https://footprint-imgs.oss-us-east-1.aliyuncs.com/logo_images/the-sandbox.jpg",
     collections_list: [
@@ -32,6 +34,7 @@ export const top_protocols = [
   {
     protocol_slug: "decentraland",
     protocol_name: "Decentraland",
+    isPremium:true,
     nft_trading_vol: 261165102.1676954,
     logo: "https://lh3.googleusercontent.com/5KIxEGmnAiL5psnMCSLPlfSxDxfRSk4sTQRSyhPdgnu70nGb2YsuVxTmO2iKEkOZOfq476Bl1hAu6aJIKjs1myY=s60",
     collections_list: [
@@ -92,6 +95,7 @@ export const top_protocols = [
   {
     protocol_slug: "nft-worlds",
     protocol_name: "NFT Worlds",
+    isPremium:true,
     nft_trading_vol: 166826532.0470039,
     logo: "https://footprint-imgs.oss-us-east-1.aliyuncs.com/logo_images/nft-worlds.png",
     collections_list: ["0xbd4455da5929d5639ee098abfaa3241e9ae111af"],
@@ -143,6 +147,7 @@ export const top_protocols = [
   {
     protocol_slug: "mooncatrescue",
     protocol_name: "MoonCatRescue",
+    isPremium:true,
     nft_trading_vol: 62664564.87930243,
     logo: "https://footprint-imgs.oss-us-east-1.aliyuncs.com/logo_images/mooncatrescue.png",
     collections_list: ["0xc3f733ca98e0dad0386979eb96fb1722a1a05e69"],
@@ -729,6 +734,7 @@ export const top_protocols = [
   {
     protocol_slug: "the-dustland",
     protocol_name: "The Dustland",
+    isPremium:true,
     nft_trading_vol: 319229.48828706896,
     logo: "https://footprint-imgs.oss-us-east-1.aliyuncs.com/logo_images/the-dustland.png",
     collections_list: ["0x3b2f1189b9372c4b6c569a497ad241112d8824c1"],
@@ -809,6 +815,7 @@ export const top_protocols = [
   {
     protocol_slug: "planet-ix",
     protocol_name: "Planet IX",
+    isPremium:true,
     nft_trading_vol: 162758.66614488626,
     logo: "https://footprint-imgs.oss-us-east-1.aliyuncs.com/logo_images/planet-ix.png",
     collections_list: ["0xba6666b118f8303f990f3519df07e160227cce87"],

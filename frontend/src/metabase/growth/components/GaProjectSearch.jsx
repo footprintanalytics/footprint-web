@@ -96,7 +96,6 @@ const GaProjectSearch = props => {
             },
           });
         }
-
       }
     }
     // getAllProtocol();
@@ -113,21 +112,29 @@ const GaProjectSearch = props => {
   const normalOptions = [];
   const recommendOptions = [];
   top_protocols.map((i, index) => {
-    if (index < 3) {
+    if (i.isPremium) {
       recommendOptions.push({
         ...i,
         value: i.protocol_slug,
         key: i.protocol_slug + "-recommend",
         label: i.protocol_name,
       });
-    } else {
-      normalOptions.push({
-        ...i,
-        value: i.protocol_slug,
-        key: i.protocol_slug,
-        label: i.protocol_name,
-      });
     }
+    // if (index < 3) {
+    //   recommendOptions.push({
+    //     ...i,
+    //     value: i.protocol_slug,
+    //     key: i.protocol_slug + "-recommend",
+    //     label: i.protocol_name,
+    //   });
+    // } else {
+    //   normalOptions.push({
+    //     ...i,
+    //     value: i.protocol_slug,
+    //     key: i.protocol_slug,
+    //     label: i.protocol_name,
+    //   });
+    // }
   });
   // const historyOptions = getGASearchHistory();
   const finalOptions = [];
@@ -135,7 +142,7 @@ const GaProjectSearch = props => {
   // if (historyOptions.length > 0) {
   //   finalOptions.push({ label: "History Search", options: historyOptions });
   // }
-  finalOptions.push({ label: "All Projects", options: normalOptions });
+  // finalOptions.push({ label: "All Projects", options: normalOptions });
 
   useEffect(() => {
     if (location?.query?.project_name) {
@@ -193,7 +200,7 @@ const GaProjectSearch = props => {
       />
     </div>
   );
-};
+};;
 
 const mapStateToProps = state => {
   return {

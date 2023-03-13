@@ -25,6 +25,8 @@ const CreateCohort = ({ state, style, propData, user }) => {
     addressIndex >= 0
       ? result?.data?.rows?.map(f => f[addressIndex])?.filter(f => !!f)
       : null;
+
+  console.log("CreateCohort", state, propData);
   const onSend = async () => {
     if (!cohortName) {
       message.error("Please enter cohort name!");
