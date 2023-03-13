@@ -5,6 +5,7 @@
             [java-time :as t]
             [metabase.db :as mdb]
             [cheshire.core :as json]
+            [metabase.query-processor.middleware.cache.constant :as cacheContant]
             [metabase.models.query-cache :refer [QueryCache]]
             [metabase.models.query-cache-async :refer [QueryCacheAsync]]
             [metabase.query-processor.middleware.cache-backend.interface :as i]
@@ -125,14 +126,14 @@
   [^bytes query-hash query dashboard-id card-id]
   (try
     (or (db/update-where! QueryCacheAsync {:query_hash query-hash}
-                          :query (json/generate-string query)
+                          :query (pr-str  query)
                           :query_hash query-hash
                           :dashboard_id dashboard-id
                           :card_id card-id
                           :status "ready"
                           :updated_at (t/offset-date-time))
         (db/insert! QueryCacheAsync {
-                                      :query (json/generate-string query)
+                                      :query (pr-str  query)
                                       :query_hash query-hash
                                       :dashboard_id dashboard-id
                                       :card_id card-id
@@ -147,6 +148,7 @@
 
 (defn- update-cache-status!
   [^bytes query-hash status]
+  (log/info "update-cache-status!" status (i/short-hex-hash query-hash))
   (try
     (db/update-where! (getCacheModel) {:query_hash query-hash}
                       :status status
@@ -163,16 +165,30 @@
   (db/select-one-field :updated_at (getCacheModel) :query_hash query-hash)
   )
 
-(defn getQueryAsyncUpperLimit [max] (if max max 5))
+(defn getQueryAsyncUpperLimit [max] (if max max cacheContant/CACHE-REFRESH-MAX))
 
-(defn getQueryAsyncList [max]
-  (let [pending (db/count QueryCacheAsync {:where [:= :status "pending"]})]
-    (db/select QueryCacheAsync
-               {:where    [:= :status "ready"]
-                :order-by [[:updated_at :asc]]
-                :limit (- max pending)})
-    )
-  )
+(def formatter (java.time.format.DateTimeFormatter/ofPattern "yyyy-MM-dd HH:mm:ss"))
+
+(defn getQueryPendingCount []
+  (let [date-ago (-> (t/minus (t/offset-date-time) (t/minutes cacheContant/CACHE-PENDING-TIMEOUT-MINUTES))
+                     (.format formatter))]
+    (db/count QueryCacheAsync {:where
+     [:and
+      [:= :status "pending"]
+      [:> :updated_at date-ago]
+      ]
+     })))
+
+(defn getQueryAsyncList [max pending]
+  (log/info "getQueryAsyncList max pending limit " max pending (- max pending))
+  (let [limit (- max pending)]
+    (if (> limit 0)
+      (db/select QueryCacheAsync
+                 {:where    [:= :status "ready"]
+                  :order-by [[:updated_at :desc]]
+                  :limit (- max pending)})
+      nil
+    )))
 
 (defmethod i/cache-backend :db
   [_]

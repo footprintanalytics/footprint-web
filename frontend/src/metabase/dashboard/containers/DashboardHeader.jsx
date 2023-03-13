@@ -717,7 +717,7 @@ class DashboardHeader extends Component {
       showSeoTaggingModal,
       showHomePriorityModal,
     } = this.state;
-
+    const dashboardId = MetabaseUtils.isUUID(dashboard.id) ? dashboard.entityId : dashboard.id;
     const isDataAppPage = false;
     const hasLastEditInfo = dashboard["last-edit-info"] != null;
 
@@ -763,7 +763,7 @@ class DashboardHeader extends Component {
         {showSeoTaggingModal && (
           <TaggingModal
             onClose={() => this.setState({ showSeoTaggingModal: false })}
-            id={dashboard.id}
+            id={dashboardId}
             creatorId={dashboard.creator_id}
             type="dashboard"
           />
@@ -771,7 +771,7 @@ class DashboardHeader extends Component {
         {showHomePriorityModal && (
           <HomePriorityModal
             onClose={() => this.setState({ showHomePriorityModal: false })}
-            id={dashboard.id}
+            id={dashboardId}
             type="dashboard"
           />
         )}
