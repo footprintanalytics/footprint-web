@@ -165,7 +165,7 @@
   (db/select-one-field :updated_at (getCacheModel) :query_hash query-hash)
   )
 
-(defn getQueryAsyncUpperLimit [max] (if max max 5))
+(defn getQueryAsyncUpperLimit [max] (if max max cacheContant/CACHE-REFRESH-MAX))
 
 (def formatter (java.time.format.DateTimeFormatter/ofPattern "yyyy-MM-dd HH:mm:ss"))
 
@@ -180,7 +180,7 @@
      })))
 
 (defn getQueryAsyncList [max pending]
-  (log/info "getQueryAsyncList" max pending (- max pending))
+  (log/info "getQueryAsyncList max pending limit " max pending (- max pending))
   (let [limit (- max pending)]
     (if (> limit 0)
       (db/select QueryCacheAsync
