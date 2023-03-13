@@ -237,12 +237,13 @@
          start-time-ms (System/currentTimeMillis)
          query-hash (:query-hash middleware)
          query-hash (if query-hash query-hash (qp.util/query-hash query))
+         erorCallback (fn [] (i/update-cache-status! *backend* query-hash "error"))
          reducef' (fn [rff context metadata rows]
                     (impl/do-with-serialization
                      (fn [in-fn result-fn]
                        (binding [*in-fn*     in-fn
                                  *result-fn* result-fn]
-                         (((context.default/default-context) :reducef) rff context metadata rows)))))
+                         (((context.default/default-context) :reducef) rff context (merge {:aysnc-refresh-cache? true, :erorCallback erorCallback} metadata) rows)))))
          ]
     (log/info "refresh-cache-function" dashboard-id card-id)
     (i/update-cache-status! *backend* query-hash "pending")
