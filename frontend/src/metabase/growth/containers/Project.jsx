@@ -17,6 +17,7 @@ import {
 } from "../utils/utils";
 import { fga_menu_data, top_protocols } from "../utils/data";
 import Connectors from "./Connectors";
+import CustomAnalysis from "./CustomAnalysis";
 import TemplateGallery from "./TemplateGallery";
 import MyFavoriteTemplate from "./MyFavoriteTemplate";
 import Campaigns from "./Campaigns";
@@ -88,6 +89,11 @@ const Project = props => {
     if (current_tab === "Template Gallery") {
       return (
         <TemplateGallery location={location} router={router}></TemplateGallery>
+      );
+    }
+    if (current_tab === "Custom Analysis") {
+      return (
+        <CustomAnalysis location={location} router={router}></CustomAnalysis>
       );
     }
     if (current_tab === "My Analysis") {

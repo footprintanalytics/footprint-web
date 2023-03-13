@@ -412,6 +412,11 @@ export const getRoutes = store => (
         <Route path="/growth/about" component={LazyLoad.GaAboutContainer} />
         <Route path="/growth/project" component={LazyLoad.GaProjectContainer} />
         <Route
+          title={t`Submit Contract`}
+          path="/growth/submit/contract/add"
+          component={LazyLoad.SubmitContractAdd}
+        />
+        <Route
           title={t`Dashboard`}
           path="/growth/@:name/:dashboardName"
           component={LazyLoad.DashboardApp}

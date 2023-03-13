@@ -16,6 +16,7 @@ export function getGaMenuTabs(tabs_data: any[]) {
         "Campaign",
         "Project Info",
         "Template Gallery",
+        "Custom Analysis",
         "My Analysis",
       ].findIndex(i => i === item.name) === -1
         ? true

@@ -12,16 +12,17 @@ import {
 } from "../utils/utils";
 
 const MyFavoriteTemplate = props => {
-  const { router, location, children, user } = props;
+  const { router, location, children, user, currentTab } = props;
   const [templateData, setTemplateData] = useState([]);
   // monitor datas
   const updateData = () => {
     const data = getGAFavoritedTemplate();
     setTemplateData(data);
   };
+
   useEffect(() => {
     updateData();
-  }, []);
+  }, [currentTab]);
 
   const IconText = ({ icon, text, click }) => (
     <Space onClick={click} style={{ cursor: "pointer" }}>

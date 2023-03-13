@@ -58,9 +58,15 @@ const ProjectInfo = props => {
           imageStyle={{
             height: 100,
           }}
-          description={<span>Data is empty!</span>}
+          description={
+            <span>
+              This project does not currently include the relevant contract
+              address information. You can assist us in enhancing it by
+              providing this information!
+            </span>
+          }
         >
-          <Link href="submit/contract/add">Submit Now</Link>
+          <Link href="growth/submit/contract/add">Submit Now</Link>
           {/* <Button type="primary">Submit Now</Button> */}
         </Empty>
       );
@@ -164,7 +170,13 @@ const ProjectInfo = props => {
             imageStyle={{
               height: 100,
             }}
-            description={<span>This project is empty!</span>}
+            description={
+              <span>
+                This project does not currently include the relevant contract
+                address information. You can assist us in enhancing it by
+                providing this information!
+              </span>
+            }
           >
             {/* <Button type="primary">Create Now</Button> */}
           </Empty>

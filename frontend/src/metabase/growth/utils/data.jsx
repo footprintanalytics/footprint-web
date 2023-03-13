@@ -1741,8 +1741,8 @@ export const top_protocols = [
      icon: React.createElement(CodeOutlined),
      id: null,
      children: [
-       { name: "My Analysis", id: null, uuid: null },
-       { name: "Template Gallery", id: null, uuid: null },
+       //  { name: "My Analysis", id: null, uuid: null },
+       //  { name: "Template Gallery", id: null, uuid: null },
      ],
    },
    {
