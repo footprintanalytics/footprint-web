@@ -2,6 +2,7 @@
   "Code for running a query in the context of a specific Card."
   (:require [clojure.string :as str]
             [cheshire.core :as json]
+            [metabase.query-processor.middleware.cache-backend.interface :as i]
             [toucan.models :as models]
             [metabase.query-processor.middleware.cache :as cache]
             [clojure.tools.logging :as log]
@@ -218,26 +219,28 @@
 
 (defn run-qp-userland-query [queryAsyncList]
   (let [
-         newQuery (json/parse-string-strict (:query queryAsyncList) true)
-         context (keyword (:context (:info newQuery)))
-         type (keyword (:type  newQuery))
-         info (assoc (:info newQuery) :context context)
+         dashboardId (:dashboard_id queryAsyncList)
+         cardId (:card_id queryAsyncList)
+         newQuery (read-string (:query queryAsyncList))
          newQueryFix (assoc newQuery
-                            :middleware (merge {:refresh-cache true} (:middleware newQuery))
-                            :type type
-                            :info info)
+                            :middleware (merge {:refresh-cache true :query-hash (:query_hash queryAsyncList)} (:middleware newQuery)))
         ]
+    (log/info "run-qp-userland-query" (:card_id queryAsyncList) (:dashboard_id queryAsyncList) (i/short-hex-hash (:query_hash queryAsyncList)))
     (qp/process-userland-query newQueryFix (context.default/default-context))
-    type
+    {:dashboardId dashboardId, :cardId cardId}
   )
 )
 
 (defn run-query-cache-async-refresh
   [max]
-    (let [queryAsyncMax (cache-backend.db/getQueryAsyncUpperLimit max)
-           queryAsyncList (cache-backend.db/getQueryAsyncList queryAsyncMax)]
+    (let [pendingCount (cache-backend.db/getQueryPendingCount)
+           queryAsyncMax (cache-backend.db/getQueryAsyncUpperLimit max)
+           queryAsyncList (cache-backend.db/getQueryAsyncList queryAsyncMax pendingCount)
+           result (map run-qp-userland-query queryAsyncList)]
       {:max queryAsyncMax
-        :run (count (map run-qp-userland-query queryAsyncList))
+        :pending pendingCount
+        :run (count result)
+        :detail result
         :now (t/offset-date-time)}
       )
     )

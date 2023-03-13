@@ -14,6 +14,7 @@
             [java-time :as t]
             [medley.core :as m]
             [metabase.query-processor.middleware.annotate :as annotate]
+            [metabase.query-processor.middleware.cache.constant :as cacheContant]
             [metabase.query-processor.middleware.add-timezone-info :as add-timezone-info]
             [metabase.query-processor.context.default :as context.default]
             [metabase.config :as config]
@@ -95,6 +96,7 @@
   [query-hash dashboard-id card-id]
 ;  (log/info (trs "Caching results for next time for query with hash {0}."
 ;                 (pr-str (i/short-hex-hash query-hash))) (u/emoji "💾"))
+  (log/info "cache-results!" card-id dashboard-id (i/short-hex-hash query-hash))
   (try
     (let [bytez (serialized-bytes)]
       (if-not (instance? (Class/forName "[B") bytez)
@@ -216,7 +218,7 @@
         isNotPending (not= (backend.db/getQueryCacheStatus query-hash) "pending")
         cacheStatusUpdateAt (backend.db/getQueryCacheStatusUpdatedAt query-hash)
         ;; cache pending timeout is exceed 20 minutes
-        cachePendingTimeout (or (= cacheStatusUpdateAt nil)(> (- start-time-ms (.toEpochMilli (.toInstant cacheStatusUpdateAt))) 1200000))]
+        cachePendingTimeout (or (= cacheStatusUpdateAt nil)(> (- start-time-ms (.toEpochMilli (.toInstant cacheStatusUpdateAt))) cacheContant/CACHE-PENDING-TIMEOUT))]
 
     (and (or isNotPending cachePendingTimeout)
          (or (> chartUpdated @last-ran-cache) (> duration-ms (min-duration-ms)))))
@@ -225,25 +227,33 @@
   (let [
          query-hash (qp.util/query-hash query)
          fix-query (if (= :query(:type query)) (dissoc query :native) query)
+         fix-query (assoc fix-query :info (dissoc (:info fix-query) :query-hash))
+         canUpdateInfoDb (not= (backend.db/getQueryCacheStatus query-hash) "ready")
          ]
-    (i/save-cache-request! *backend* query-hash fix-query dashboard-id card-id))
+    (if canUpdateInfoDb (i/save-cache-request! *backend* query-hash fix-query dashboard-id card-id)))
   )
 
-(defn refresh-cache-function [query dashboard-id card-id]
+(defn refresh-cache-function [{:keys [middleware], :as query} dashboard-id card-id]
+  (log/info "refresh-cache-function-middleware" card-id dashboard-id middleware)
   (let [
          start-time-ms (System/currentTimeMillis)
+         query-hash (:query-hash middleware)
+         query-hash (if query-hash query-hash (qp.util/query-hash query))
+         erorCallback (fn [] (log/info "error callback" card-id dashboard-id (i/short-hex-hash query-hash)) (i/update-cache-status! *backend* query-hash "error"))
          reducef' (fn [rff context metadata rows]
                     (impl/do-with-serialization
                      (fn [in-fn result-fn]
                        (binding [*in-fn*     in-fn
                                  *result-fn* result-fn]
-                         (((context.default/default-context) :reducef) rff context metadata rows)))))
+                         (((context.default/default-context) :reducef) rff context (merge {:aysnc-refresh-cache? true, :erorCallback erorCallback} metadata) rows)))))
          ]
+    (log/info "refresh-cache-function" card-id dashboard-id (i/short-hex-hash query-hash))
+    (i/update-cache-status! *backend* query-hash "pending")
     (((apply comp query-data-middleware) ((context.default/default-context) :runf))
       (merge {:aysnc-refresh-cache? true} query)
       (fn [metadata]
         (save-results-xform
-         start-time-ms metadata (qp.util/query-hash query)
+         start-time-ms metadata query-hash
          (((context.default/default-context) :rff) metadata)
          dashboard-id card-id, false))
       (assoc (context.default/default-context) :reducef reducef'))
@@ -261,13 +271,12 @@
         dashboard-id (info :dashboard-id)
         query-hash (qp.util/query-hash query)
         result     (maybe-reduce-cached-results (:ignore-cached-results? middleware) query-hash cache-ttl rff context)
-        erorCallback (fn [] (i/update-cache-status! *backend* query-hash "error"))
         reducef' (fn [rff context metadata rows]
                    (impl/do-with-serialization
                     (fn [in-fn result-fn]
                       (binding [*in-fn*     in-fn
                                 *result-fn* result-fn]
-                        (reducef rff context (merge {:aysnc-refresh-cache? true, :erorCallback erorCallback} metadata) rows)))))]
+                        (reducef rff context metadata rows)))))]
     (if (= result ::miss)
       (let [start-time-ms (System/currentTimeMillis)]
         (log/trace "Running query and saving cached results (if eligible)...")
@@ -306,7 +315,6 @@
       (if (:get-the-cache-info? middleware)
         (qp.context/reducef rff context {:query_hash_base64 (.encodeToString (Base64/getEncoder) (qp.util/query-hash query))} [])
         (let [cacheable? (is-cacheable? query)]
-          (log/tracef "Query is cacheable? %s" (boolean cacheable?))
           (if cacheable?
             (run-query-with-cache qp query rff context)
             (qp query rff context)))))))
