@@ -404,7 +404,9 @@ export const getRoutes = store => (
         />
         {/* Growth Analytics */}
         {/* <Route path="/growth" component={LazyLoad.GaHomeContainer}></Route> */}
-        <Route path="/growth" component={LazyLoad.GaProjectContainer}></Route>
+        <Route path="/growth" component={LazyLoad.GaProjectContainer}>
+          <Route path=":project(/:menu)" />
+        </Route>
         <Route
           path="/growth/connectors"
           component={LazyLoad.GaConnectorsContainer}

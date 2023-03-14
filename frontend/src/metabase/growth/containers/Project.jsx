@@ -24,7 +24,8 @@ import Campaigns from "./Campaigns";
 import "../css/index.css";
 
 const Project = props => {
-  const { router, location, children, user } = props;
+  const { router, location, children, user, menu, projectPath } = props;
+  console.log("fga project", projectPath, menu);
   const [tab, setTab] = useState();
   const [project, setProject] = useState();
   // const [projectId, setProjectId] = useState();
@@ -135,9 +136,11 @@ const Project = props => {
   );
 };
 
-const mapStateToProps = state => {
+const mapStateToProps = (state, props) => {
   return {
     user: getUser(state),
+    projectPath: props.params.project,
+    menu: props.params.menu,
   };
 };
 

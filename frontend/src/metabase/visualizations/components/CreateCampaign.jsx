@@ -11,6 +11,7 @@ import {
   TimePicker,
   DatePicker,
 } from "antd";
+import { connect } from "react-redux";
 import axios from "axios";
 import Toggle from "metabase/core/components/Toggle";
 import Icon from "metabase/components/Icon";
@@ -21,8 +22,9 @@ import {
 import ConfigEmail from "metabase/growth/components/config_panel/ConfigEmail";
 import ConfigAirdrop from "metabase/growth/components/config_panel/ConfigAirdrop";
 import { CreateFgaCampagin } from "metabase/new-service";
+import { getUser } from "metabase/selectors/user";
 
-const CreateCampaign = ({ style }) => {
+const CreateCampaign = ({ style, user }) => {
   const [isNotificationModalOpen, setIsNotificationModalOpen] = useState(false);
   const [timingType, setTimingType] = useState("now");
   const [notifyType, setNotifyType] = useState("email");
@@ -46,6 +48,10 @@ const CreateCampaign = ({ style }) => {
       });
   };
   const onCreate = async () => {
+    if (!user) {
+      message.warning("Please sign in before proceeding.");
+      return;
+    }
     const hide = message.loading("Loading... ", 0);
     const parms = {
       name: formValues?.campaginName,
@@ -196,5 +202,10 @@ const CreateCampaign = ({ style }) => {
     </>
   );
 };
+const mapStateToProps = state => {
+  return {
+    user: getUser(state),
+  };
+};
 
-export default CreateCampaign;
+export default connect(mapStateToProps)(CreateCampaign);

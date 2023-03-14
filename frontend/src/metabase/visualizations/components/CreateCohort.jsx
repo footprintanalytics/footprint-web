@@ -32,6 +32,14 @@ const CreateCohort = ({ state, style, propData, user }) => {
       message.error("Please enter cohort name!");
       return;
     }
+    if (!user) {
+      message.warning("Please sign in before proceeding.");
+      return;
+    }
+    if (!projectId) {
+      message.warning("Please create your project before proceeding.");
+      return;
+    }
     const hide = message.loading("Loading...", 10);
     const parms = {
       title: cohortName,
@@ -47,7 +55,7 @@ const CreateCohort = ({ state, style, propData, user }) => {
     const result = await CreateFgaCohort(parms);
     hide();
     if (result) {
-      message.success("Create cohort success");
+      message.success("Successfully create a cohort!");
       setIsTagModalOpen(false);
     }
     // setTimeout(() => {
@@ -66,14 +74,6 @@ const CreateCohort = ({ state, style, propData, user }) => {
         type="primary"
         style={style}
         onClick={() => {
-          if (!user) {
-            message.warning("Please sign in first!");
-            return;
-          }
-          if (!projectId) {
-            message.warning("Please create your project first!");
-            return;
-          }
           setIsTagModalOpen(true);
         }}
       >
