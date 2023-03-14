@@ -4,8 +4,10 @@ import PropTypes from "prop-types";
 import { t } from "ttag";
 
 import cx from "classnames";
-import { useThrottleFn } from "ahooks";
 import Button from "metabase/core/components/Button";
+import { debounce } from "lodash";
+import { trackStructEvent } from "../../lib/analytics";
+import { message } from "antd";
 
 const propTypes = {
   className: PropTypes.string,
@@ -45,14 +47,6 @@ const RunButton = forwardRef(function RunButton(
   } else {
     buttonIcon = "refresh";
   }
-
-  const { run } = useThrottleFn(
-    isRunning ? onCancel : onRun,
-    {
-      wait: 1000,
-    },
-  );
-
   return (
     <Button
       {...props}
@@ -64,7 +58,7 @@ const RunButton = forwardRef(function RunButton(
         "RunButton--compact": circular && !props.borderless && compact,
         circular: circular,
       })}
-      onClick={run}
+      onClick={isRunning ? onCancel : onRun}
       ref={ref}
     >
       {buttonText}
