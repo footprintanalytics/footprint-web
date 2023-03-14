@@ -97,6 +97,7 @@
 ;  (log/info (trs "Caching results for next time for query with hash {0}."
 ;                 (pr-str (i/short-hex-hash query-hash))) (u/emoji "💾"))
   (log/info "cache-results!" card-id dashboard-id (i/short-hex-hash query-hash))
+  (i/update-cache-status! *backend* query-hash "success")
   (try
     (let [bytez (serialized-bytes)]
       (if-not (instance? (Class/forName "[B") bytez)
@@ -106,7 +107,6 @@
           (i/save-results-v2! *backend* query-hash bytez dashboard-id card-id)
           (log/debug "Successfully cached results for query.")
           (purge! *backend*)))
-          (i/update-cache-status! *backend* query-hash "success")
       )
     :done
     (catch Throwable e
