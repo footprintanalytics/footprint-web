@@ -51,14 +51,14 @@
   [[metabase.query-processor.reducible-test/write-rows-to-file-test]] for an example of a custom implementation."
   [rff context metadata reducible-rows]
   {:pre [(fn? rff)]}
-  (let [rf (rff (dissoc metadata :erorCallback))]
+  (let [rf (rff (dissoc metadata :erorCallback :aysnc-refresh-cache? :aysnc-refresh-cache2?))]
     (assert (fn? rf))
     (when-let [reduced-rows (try
                               (transduce identity rf reducible-rows)
                               (catch Throwable e
                                 ;;Data processing for cache async query error
-                                (when (metadata :aysnc-refresh-cache?)
-                                  ((metadata :erorCallback)))
+                                (when (:aysnc-refresh-cache2? metadata)
+                                  ((:erorCallback metadata)))
                                 (qp.context/raisef (ex-info (tru "Error reducing result rows")
                                                             {:type qp.error-type/qp}
                                                             e)
@@ -67,12 +67,12 @@
 
 (defn- default-runf [query rff context]
   (try
-    (qp.context/executef driver/*driver* query context (fn respond* [metadata reducible-rows]
+    (qp.context/executef driver/*driver* (dissoc query :erorCallback) context (fn respond* [metadata reducible-rows]
                                                          (qp.context/reducef rff context metadata reducible-rows)))
     (catch Throwable e
       ;;Data processing for cache async query error
-      (when (query :aysnc-refresh-cache?)
-        ((query :erorCallback)))
+      (when (:aysnc-refresh-cache2? query)
+        ((:erorCallback query)))
       (qp.context/raisef e context))))
 
 (defn- default-raisef [e context]
