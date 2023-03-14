@@ -5,9 +5,6 @@ import { t } from "ttag";
 
 import cx from "classnames";
 import Button from "metabase/core/components/Button";
-import { debounce } from "lodash";
-import { trackStructEvent } from "../../lib/analytics";
-import { message } from "antd";
 
 const propTypes = {
   className: PropTypes.string,
