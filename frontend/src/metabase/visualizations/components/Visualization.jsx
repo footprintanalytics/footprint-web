@@ -646,20 +646,6 @@ class Visualization extends React.PureComponent {
                   )}
                 </div>
               )}
-
-            {/* {(this.state.computedSettings["card.title"] ===
-              "Wallet User Stats" ||
-              this.state.computedSettings["card.title"] ===
-              "User Segmentation" ||
-              this.state.computedSettings["card.title"] === "All Cohorts")
-            && this.state.visualization?.identifier === "table"
-            && (
-              <CreateNotification state={this.state} style={{
-                position: "absolute",
-                left: 180,
-                top: 20,
-              }}/>
-            )} */}
             <CardVisualization
               {...this.props}
               // NOTE: CardVisualization class used to target ExplicitSize HOC
