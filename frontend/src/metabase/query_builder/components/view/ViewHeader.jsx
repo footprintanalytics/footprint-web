@@ -393,7 +393,7 @@ function AhHocQuestionLeftSide(props) {
     originalQuestion,
     isNative,
     isObjectDetail,
-    isSummarized,
+    // isSummarized,
     onOpenModal,
     isRunnable,
     router,
@@ -404,17 +404,13 @@ function AhHocQuestionLeftSide(props) {
     cancelQuery,
     isRunning,
     queryBuilderMode,
-    isNativeEditorOpen,
+    // isNativeEditorOpen,
     isSaved,
     config,
     questionSideHideAction,
-    snippets,
   } = props;
   const isShowingNotebook = queryBuilderMode === "notebook";
-  const isMissingPermissions =
-    result?.error_type === SERVER_ERROR_TYPES.missingPermissions;
-  const hasRunButton =
-    isRunnable && !isMissingPermissions;
+  const hasRunButton = isRunnable;
   const hideSide = config && config.questionSideHide;
 
   const handleTitleClick = () => {
