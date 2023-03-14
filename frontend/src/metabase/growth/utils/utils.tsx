@@ -1,3 +1,6 @@
+export function getGrowthProjectPath(project: string, menu?: string) {
+  return `/growth/project/${project}/${menu ?? ""}`;
+}
 export function getGaMenuTabs(tabs_data: any[]) {
   const dashboardMap = new Map();
   const menuTabs: any[] = [];
@@ -45,6 +48,7 @@ export function clearGACache() {
   localStorage.removeItem("GAFavoritedTemplate");
   localStorage.removeItem("LatestGAProjectId");
   localStorage.removeItem("LatestGAProject");
+  localStorage.removeItem("GAUserId");
 }
 
 export function saveLatestGAProject(LatestGAProject: string) {

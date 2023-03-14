@@ -17,14 +17,15 @@ import {
   getLatestGAProject,
   saveLatestGAProject,
   saveLatestGAProjectId,
+  getGrowthProjectPath,
 } from "../utils/utils";
 
 const GaProjectSearch = props => {
-  const { router, location, user } = props;
+  const { router, location, user, menu, projectPath } = props;
   const [userProject, setUserProject] = useState([]);
-  const [currentProject, setCurrentProject] = useState();
+  const [currentProject, setCurrentProject] = useState(projectPath);
   const { isLoading, data } = useQuery(
-    ["GetFgaProject", user, location.query],
+    ["GetFgaProject", user, projectPath],
     async () => {
       if (user) {
         return await GetFgaProject();
@@ -89,11 +90,8 @@ const GaProjectSearch = props => {
         setUserProject(projects);
         if (index === -1) {
           router?.push({
-            pathname: location.pathname,
-            query: {
-              ...location.query,
-              project_name: projects[projectIndex].value,
-            },
+            pathname: getGrowthProjectPath(projects[projectIndex].value,menu),
+
           });
         }
       }
@@ -102,9 +100,8 @@ const GaProjectSearch = props => {
   }, [
     currentProject,
     data?.data,
+    menu,
     isLoading,
-    location.pathname,
-    location.query,
     router,
   ]);
 
@@ -145,26 +142,22 @@ const GaProjectSearch = props => {
   // finalOptions.push({ label: "All Projects", options: normalOptions });
 
   useEffect(() => {
-    if (location?.query?.project_name) {
-      setCurrentProject(location.query.project_name);
-      saveLatestGAProject(location.query.project_name);
+    if (projectPath) {
+      setCurrentProject(projectPath);
+      saveLatestGAProject(projectPath);
     } else {
       const temp_project = getLatestGAProject()
-        ? getLatestGAProject()
-        : (userProject.length > 0 ? userProject : recommendOptions)[0].value;
+        ?? (userProject.length > 0 ? userProject : recommendOptions)[0].value;
       setCurrentProject(temp_project);
       router?.push({
-        pathname: location.pathname,
-        query: { ...location.query, project_name: temp_project },
+        pathname: getGrowthProjectPath(temp_project,menu)
       });
     }
   }, [
-    location.query.project_name,
-    isLoading,
+    projectPath,
+    menu,
     userProject,
     recommendOptions,
-    location.query,
-    location.pathname,
     router,
   ]);
   const handleProjectChange = (value, option) => {
@@ -176,8 +169,7 @@ const GaProjectSearch = props => {
       saveLatestGAProjectId(option.id);
     }
     router?.push({
-      pathname: location.pathname,
-      query: { ...location.query, project_name: option.value },
+      pathname: getGrowthProjectPath( option.value,menu)
     });
   };
   return (
@@ -200,11 +192,13 @@ const GaProjectSearch = props => {
       />
     </div>
   );
-};;
+};
 
-const mapStateToProps = state => {
+const mapStateToProps = (state, props) => {
   return {
     user: getUser(state),
+    projectPath: props.params.project,
+    menu: props.params.menu,
   };
 };
 

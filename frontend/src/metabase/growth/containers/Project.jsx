@@ -25,25 +25,21 @@ import "../css/index.css";
 
 const Project = props => {
   const { router, location, children, user, menu, projectPath } = props;
-  console.log("fga project", projectPath, menu);
-  const [tab, setTab] = useState();
-  const [project, setProject] = useState();
-  // const [projectId, setProjectId] = useState();
+  const [tab, setTab] = useState(menu);
+  const [project, setProject] = useState(projectPath);
+
   useEffect(() => {
-    if (location.query.tab) {
-      setTab(location.query.tab);
-    } else {
-      setTab(getLatestGAMenuTag() ? getLatestGAMenuTag() : tabs_data[0].name);
-    }
-  }, [location.query.tab, tabs_data]);
+    setTab(menu ?? getLatestGAMenuTag() ?? tabs_data[0].name);
+  }, [menu, tabs_data]);
+
   useEffect(() => {
-    if (location.query.project_name) {
-      setProject(location.query.project_name);
-      saveLatestGAProject(location.query.project_name);
+    if (projectPath) {
+      setProject(projectPath);
+      saveLatestGAProject(projectPath);
     } else {
-      setProject(getLatestGAProject() ? getLatestGAProject() : "");
+      setProject(getLatestGAProject() ?? "");
     }
-  }, [location.query.project_name]);
+  }, [projectPath]);
   const tabs_data = fga_menu_data;
   const { menuTabs, dashboardMap } = getGaMenuTabs(tabs_data);
   const getProjectObject = project => {

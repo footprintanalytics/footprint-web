@@ -23,6 +23,9 @@ export const refreshCurrentUser = createAction(
   async () => {
     try {
       const res = await UserApi.current();
+      if (res.id) {
+        window.localStorage.setItem("GAUserId", res.id);
+      }
       if (res.email) {
         if (window.gtag) {
           window.gtag("set", { user_id: res.email });

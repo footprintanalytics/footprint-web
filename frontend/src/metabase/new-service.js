@@ -11,8 +11,8 @@ export const CreateFgaCohort = async params => {
   return POST("/api/v1/fga/cohort", params);
 };
 
-export const CreateFgaCampagin = async params => {
-  return POST("/api/v1/fga/campagin", params);
+export const CreateFgaCampaign = async params => {
+  return POST("/api/v1/fga/campaign", params);
 };
 
 export const CreateFgaProject = async params => {

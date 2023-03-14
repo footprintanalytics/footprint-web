@@ -9,7 +9,11 @@ import { QUERY_OPTIONS } from "metabase/containers/dashboards/shared/config";
 import { CreateFgaProject, GetFgaProject } from "metabase/new-service";
 import { getUser } from "metabase/selectors/user";
 import { top_protocols } from "../utils/data";
-import { saveLatestGAProject, saveLatestGAProjectId } from "../utils/utils";
+import {
+  getGrowthProjectPath,
+  saveLatestGAProject,
+  saveLatestGAProjectId,
+} from "../utils/utils";
 
 const layout = {
   labelCol: { span: 6 },
@@ -46,8 +50,7 @@ const CreateProjectModal = props => {
       saveLatestGAProjectId(result.id);
       onSuccess?.();
       router?.push({
-        pathname: location.pathname,
-        query: { ...location.query, project_name: result.protocolSlug },
+        pathname: getGrowthProjectPath(result.protocolSlug),
       });
     }
     hide();
