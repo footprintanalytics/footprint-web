@@ -46,11 +46,11 @@ const Project = props => {
   const tabs_data = fga_menu_data;
   const { menuTabs, dashboardMap } = getGaMenuTabs(tabs_data);
   const getProjectObject = project => {
+    const p = top_protocols.find(i => i.protocol_slug === project);
     return {
       projectName: project,
-      collection_contract_address: top_protocols.find(
-        i => i.protocol_slug === project,
-      )?.collections_list?.[0],
+      collection_contract_address: p?.collections_list?.[0],
+      project: p,
     };
   };
   const getContentPannel = current_tab => {
@@ -73,6 +73,7 @@ const Project = props => {
         <Connectors
           location={location}
           router={router}
+          project={getProjectObject(project)}
           projectId={getLatestGAProjectId()}
         ></Connectors>
       );

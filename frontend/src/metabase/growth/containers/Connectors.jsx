@@ -31,7 +31,7 @@ import "../css/utils.css";
 const { Text } = Typography;
 
 const Connectors = props => {
-  const { router, location, children, user, projectId } = props;
+  const { router, location, children, user, projectId, project } = props;
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [openDrawer, setOpenDrawer] = useState({ show: false, connector: {} });
 
@@ -41,7 +41,6 @@ const Connectors = props => {
       if (projectId) {
         return await GetFgaConnectors({ projectId: projectId });
       } else {
-        console.log("no project id");
         return;
       }
     },
@@ -96,7 +95,6 @@ const Connectors = props => {
       },
     ];
     if (projectId && !isLoading && data) {
-      console.log("GetFgaConnectors", data);
       if (data.length > 0) {
         data.map((i, index) => {
           temp.map((j, index) => {
@@ -105,9 +103,14 @@ const Connectors = props => {
             }
           });
         });
-        console.log("temp", temp);
       }
       // setCurrentConnectors()
+    } else {
+      if (project?.project?.isDemo) {
+        temp.map((j, index) => {
+          j.statu = "connected";
+        });
+      }
     }
     setConnectors(temp);
   }, [projectId, isLoading, data, connectors, user]);
