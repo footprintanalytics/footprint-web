@@ -25,7 +25,7 @@
 (defn default-query->remark
   "Generates the default query remark. Exists as a separate function so that overrides of the query->remark multimethod
    can access the default value."
-  [{{:keys [executed-by query-hash card-id dashboard-id context], :as _info} :info, query-type :type, aysnc-cache :aysnc-refresh-cache?}]
+  [{{:keys [executed-by query-hash card-id dashboard-id context], :as _info} :info, query-type :type, aysnc-cache :aysnc-refresh-cache2?}]
   (str "Metabase"
        (format ":: userID: %s email: %s queryType: %s card-id: %s dashboard-id: %s context: %s aysnc-cache: %s"
                executed-by
