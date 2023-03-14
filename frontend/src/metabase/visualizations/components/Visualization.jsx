@@ -50,6 +50,10 @@ import { memoizeClass } from "metabase-lib/utils";
 import { VisualizationSlowSpinner } from "./Visualization.styled";
 import CreateCohort from "./CreateCohort";
 import "./Visualization.css";
+import {
+  getGrowthProjectPath,
+  getLatestGAProject,
+} from "metabase/growth/utils/utils";
 
 // NOTE: pass `CardVisualization` so that we don't include header when providing size to child element
 
@@ -632,8 +636,10 @@ class Visualization extends React.PureComponent {
                     <Button
                       type="primary"
                       style={{ marginLeft: 20 }}
-                      href={"/growth?tab=Potential Users"}
-                      // onClick={() => {}}
+                      href={getGrowthProjectPath(
+                        getLatestGAProject(),
+                        "Potential Users",
+                      )}
                     >
                       All Users
                     </Button>
