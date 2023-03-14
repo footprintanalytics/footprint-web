@@ -403,14 +403,9 @@ export const getRoutes = store => (
           component={LazyLoad.GuestQuestion}
         />
         {/* Growth Analytics */}
-        {/* <Route path="/growth" component={LazyLoad.GaHomeContainer}></Route> */}
-        <Route path="/growth" component={LazyLoad.GaProjectContainer}></Route>
-        <Route
-          path="/growth/connectors"
-          component={LazyLoad.GaConnectorsContainer}
-        ></Route>
-        <Route path="/growth/about" component={LazyLoad.GaAboutContainer} />
-        <Route path="/growth/project" component={LazyLoad.GaProjectContainer} />
+        <Route path="/growth" component={LazyLoad.GaProjectContainer}>
+          <Route path="project/:project(/:menu)" />
+        </Route>
         <Route
           title={t`Submit Contract`}
           path="/growth/submit/contract/add"
@@ -420,13 +415,7 @@ export const getRoutes = store => (
           title={t`Dashboard`}
           path="/growth/@:name/:dashboardName"
           component={LazyLoad.DashboardApp}
-          // component={LazyLoad.GaDashboard}
         >
-          {/*<ModalRoute
-          title={t`History`}
-          path="history"
-          modal={LazyLoad.DashboardHistoryModal}
-        />*/}
           <ModalRoute
             title={t`Move`}
             path="move"

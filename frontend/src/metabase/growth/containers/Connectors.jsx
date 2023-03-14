@@ -31,7 +31,7 @@ import "../css/utils.css";
 const { Text } = Typography;
 
 const Connectors = props => {
-  const { router, location, children, user, projectId } = props;
+  const { router, location, children, user, projectId, project } = props;
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [openDrawer, setOpenDrawer] = useState({ show: false, connector: {} });
 
@@ -41,7 +41,6 @@ const Connectors = props => {
       if (projectId) {
         return await GetFgaConnectors({ projectId: projectId });
       } else {
-        console.log("no project id");
         return;
       }
     },
@@ -96,7 +95,6 @@ const Connectors = props => {
       },
     ];
     if (projectId && !isLoading && data) {
-      console.log("GetFgaConnectors", data);
       if (data.length > 0) {
         data.map((i, index) => {
           temp.map((j, index) => {
@@ -105,9 +103,14 @@ const Connectors = props => {
             }
           });
         });
-        console.log("temp", temp);
       }
       // setCurrentConnectors()
+    } else {
+      if (project?.project?.isDemo) {
+        temp.map((j, index) => {
+          j.statu = "connected";
+        });
+      }
     }
     setConnectors(temp);
   }, [projectId, isLoading, data, connectors, user]);
@@ -119,6 +122,15 @@ const Connectors = props => {
     setOpenDrawer({ show: false });
   };
   const onAddConnector = key => {
+    if (!user) {
+      message.info("Kindly log in before proceeding.");
+      loginModalShowAction({ show: true, from: "add connector" });
+      return;
+    }
+    if (!projectId) {
+      message.error("Initially, you must create your personal project!");
+      return;
+    }
     const i = connectors.find(item => item.key === key);
     const temp = currentConnectors;
     temp.push({ connector: i });
@@ -128,13 +140,8 @@ const Connectors = props => {
   const [connectors, setConnectors] = useState([]);
   const [currentConnectors, setCurrentConnectors] = useState([]);
   const addConnector = item => {
-    if (user) {
-      if (item.pannel) {
-        showDrawer(item);
-      }
-    } else {
-      message.info("Please login first!");
-      loginModalShowAction({ show: true, from: "add connector" });
+    if (item.pannel) {
+      showDrawer(item);
     }
   };
   return (
@@ -197,14 +204,7 @@ const Connectors = props => {
                                 projectId !== "undefined" ? false : true
                               }
                               onClick={() => {
-                                // showDrawer(item);
-                                if (projectId) {
-                                  showDrawer(item);
-                                } else {
-                                  message.error(
-                                    "You need create your own project first!",
-                                  );
-                                }
+                                showDrawer(item);
                               }}
                             >
                               Connect

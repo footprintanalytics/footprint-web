@@ -346,11 +346,6 @@ export default {
   GaCreateContainer: loadable(() =>
     import("metabase/growth/containers/CreateProject"),
   ),
-  GaDashboard: loadable(
-    () => import("metabase/growth/containers/GaDashboard"),
-    options,
-  ),
-
   // Metadata / Data model
   DataModelApp: loadable(() =>
     import("metabase/admin/datamodel/containers/DataModelApp"),

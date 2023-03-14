@@ -11,6 +11,7 @@ import {
   TimePicker,
   DatePicker,
 } from "antd";
+import { connect } from "react-redux";
 import axios from "axios";
 import Toggle from "metabase/core/components/Toggle";
 import Icon from "metabase/components/Icon";
@@ -20,9 +21,10 @@ import {
 } from "metabase/growth/utils/utils";
 import ConfigEmail from "metabase/growth/components/config_panel/ConfigEmail";
 import ConfigAirdrop from "metabase/growth/components/config_panel/ConfigAirdrop";
-import { CreateFgaCampagin } from "metabase/new-service";
+import { CreateFgaCampaign } from "metabase/new-service";
+import { getUser } from "metabase/selectors/user";
 
-const CreateCampaign = ({ style }) => {
+const CreateCampaign = ({ style, user }) => {
   const [isNotificationModalOpen, setIsNotificationModalOpen] = useState(false);
   const [timingType, setTimingType] = useState("now");
   const [notifyType, setNotifyType] = useState("email");
@@ -46,9 +48,13 @@ const CreateCampaign = ({ style }) => {
       });
   };
   const onCreate = async () => {
+    if (!user) {
+      message.warning("Please sign in before proceeding.");
+      return;
+    }
     const hide = message.loading("Loading... ", 0);
     const parms = {
-      name: formValues?.campaginName,
+      name: formValues?.campaignName,
       eligibility: [formValues?.targetCohort], // cohortId
       task: [
         {
@@ -61,7 +67,7 @@ const CreateCampaign = ({ style }) => {
         },
       ],
     };
-    const result = await CreateFgaCampagin(parms);
+    const result = await CreateFgaCampaign(parms);
     if (result) {
       hide();
       message.success("Send successfully");
@@ -94,7 +100,7 @@ const CreateCampaign = ({ style }) => {
         style={style}
         onClick={() => setIsNotificationModalOpen(true)}
       >
-        Create Campagin
+        Create Campaign
       </Button>
       <Modal
         style={{ minHeight: 800, minWidth: 600 }}
@@ -103,7 +109,7 @@ const CreateCampaign = ({ style }) => {
         onOk={onSave}
         okText="Save"
         closable={false}
-        title="Create Campagin"
+        title="Create Campaign"
       >
         <div className="bordered rounded bg-white p2">
           <Form
@@ -123,10 +129,10 @@ const CreateCampaign = ({ style }) => {
           >
             <Form.Item
               rules={[{ required: true }]}
-              name={"campaginName"}
+              name={"campaignName"}
               label="Campaign Name"
             >
-              <Input placeholder="Enter the campagin name" />
+              <Input placeholder="Enter the campaign name" />
             </Form.Item>
             <Form.Item
               rules={[{ required: true }]}
@@ -196,5 +202,10 @@ const CreateCampaign = ({ style }) => {
     </>
   );
 };
+const mapStateToProps = state => {
+  return {
+    user: getUser(state),
+  };
+};
 
-export default CreateCampaign;
+export default connect(mapStateToProps)(CreateCampaign);

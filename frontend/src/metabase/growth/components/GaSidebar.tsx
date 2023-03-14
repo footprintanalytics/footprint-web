@@ -15,8 +15,7 @@ interface IGaSidebarProp {
   projects?: any[];
 }
 export default function GaSidebar(prop: IGaSidebarProp) {
-  const { currentProject, router, location, items, projects, currentTab } =
-    prop;
+  const { currentProject, router, location, items, currentTab } = prop;
   const rootSubmenuKeys: any[] = [];
   items?.map(i => {
     rootSubmenuKeys.push(i.label);
@@ -70,8 +69,8 @@ export default function GaSidebar(prop: IGaSidebarProp) {
         onSelect={item => {
           saveLatestGAMenuTag(item.key);
           router.push({
-            pathname: location.pathname,
-            query: { ...location.query, tab: item.key },
+            pathname: `/growth/project/${currentProject}/${item.key}`,
+            // query: { ...location.query, tab: item.key },
           });
         }}
         items={items}

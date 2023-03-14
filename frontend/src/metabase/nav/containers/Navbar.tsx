@@ -36,10 +36,9 @@ function Navbar({ isOpen, user, location, params, adminPaths }: NavbarProps) {
     () => location.pathname.startsWith("/admin/"),
     [location.pathname],
   );
-  const isFgaApp = useMemo(
-    () => location.pathname.startsWith("/growth"),
-    [location.pathname],
-  );
+  const isFgaApp = useMemo(() => {
+    return location.pathname.startsWith("/growth");
+  }, [location.pathname]);
   return isAdminApp && user ? (
     <AdminNavbar user={user} path={location.pathname} adminPaths={adminPaths} />
   ) : isFgaApp ? (

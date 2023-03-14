@@ -24,33 +24,30 @@ import Campaigns from "./Campaigns";
 import "../css/index.css";
 
 const Project = props => {
-  const { router, location, children, user } = props;
-  const [tab, setTab] = useState();
-  const [project, setProject] = useState();
-  // const [projectId, setProjectId] = useState();
+  const { router, location, children, user, menu, projectPath } = props;
+  const [tab, setTab] = useState(menu);
+  const [project, setProject] = useState(projectPath);
+
   useEffect(() => {
-    if (location.query.tab) {
-      setTab(location.query.tab);
-    } else {
-      setTab(getLatestGAMenuTag() ? getLatestGAMenuTag() : tabs_data[0].name);
-    }
-  }, [location.query.tab, tabs_data]);
+    setTab(menu ?? getLatestGAMenuTag() ?? tabs_data[0].name);
+  }, [menu, tabs_data]);
+
   useEffect(() => {
-    if (location.query.project_name) {
-      setProject(location.query.project_name);
-      saveLatestGAProject(location.query.project_name);
+    if (projectPath) {
+      setProject(projectPath);
+      saveLatestGAProject(projectPath);
     } else {
-      setProject(getLatestGAProject() ? getLatestGAProject() : "");
+      setProject(getLatestGAProject() ?? "");
     }
-  }, [location.query.project_name]);
+  }, [projectPath]);
   const tabs_data = fga_menu_data;
   const { menuTabs, dashboardMap } = getGaMenuTabs(tabs_data);
   const getProjectObject = project => {
+    const p = top_protocols.find(i => i.protocol_slug === project);
     return {
       projectName: project,
-      collection_contract_address: top_protocols.find(
-        i => i.protocol_slug === project,
-      )?.collections_list?.[0],
+      collection_contract_address: p?.collections_list?.[0],
+      project: p,
     };
   };
   const getContentPannel = current_tab => {
@@ -73,6 +70,7 @@ const Project = props => {
         <Connectors
           location={location}
           router={router}
+          project={getProjectObject(project)}
           projectId={getLatestGAProjectId()}
         ></Connectors>
       );
@@ -134,9 +132,11 @@ const Project = props => {
   );
 };
 
-const mapStateToProps = state => {
+const mapStateToProps = (state, props) => {
   return {
     user: getUser(state),
+    projectPath: props.params.project,
+    menu: props.params.menu,
   };
 };
 

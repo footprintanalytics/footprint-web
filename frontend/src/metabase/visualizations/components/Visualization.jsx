@@ -7,7 +7,7 @@ import { assoc } from "icepick";
 import _ from "underscore";
 import cx from "classnames";
 import { get } from "lodash";
-import { Avatar } from "antd";
+import { Avatar, Button } from "antd";
 import ExplicitSize from "metabase/components/ExplicitSize";
 import ChartCaption from "metabase/visualizations/components/ChartCaption";
 import ChartTooltip from "metabase/visualizations/components/ChartTooltip";
@@ -626,8 +626,21 @@ class Visualization extends React.PureComponent {
                       style={{ marginLeft: 20 }}
                     />
                   )}
+                  {["Cohort List", "All Cohorts"].includes(
+                    this.state.computedSettings["card.title"],
+                  ) && (
+                    <Button
+                      type="primary"
+                      style={{ marginLeft: 20 }}
+                      href={"/growth?tab=Potential Users"}
+                      // onClick={() => {}}
+                    >
+                      All Users
+                    </Button>
+                  )}
                 </div>
               )}
+
             {/* {(this.state.computedSettings["card.title"] ===
               "Wallet User Stats" ||
               this.state.computedSettings["card.title"] ===

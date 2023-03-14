@@ -5,6 +5,7 @@ import { connect } from "react-redux";
 import { CreateFgaCohort } from "metabase/new-service";
 import { getLatestGAProjectId } from "metabase/growth/utils/utils";
 import { getUser } from "metabase/selectors/user";
+import MetabaseUtils from "metabase/lib/utils";
 
 const CreateCohort = ({ state, style, propData, user }) => {
   const [isTagModalOpen, setIsTagModalOpen] = useState(false);
@@ -25,21 +26,26 @@ const CreateCohort = ({ state, style, propData, user }) => {
     addressIndex >= 0
       ? result?.data?.rows?.map(f => f[addressIndex])?.filter(f => !!f)
       : null;
-
-  console.log("CreateCohort", state, propData);
   const onSend = async () => {
     if (!cohortName) {
       message.error("Please enter cohort name!");
+      return;
+    }
+    if (!user) {
+      message.warning("Please sign in before proceeding.");
+      return;
+    }
+    if (!projectId) {
+      message.warning("Please create your project before proceeding.");
       return;
     }
     const hide = message.loading("Loading...", 10);
     const parms = {
       title: cohortName,
       projectId: parseInt(projectId, 10),
-      dashboardId:
-        user?.id === dashboardData?.creator?.id
-          ? dashboardData?.id
-          : dashboardData?.entityId ?? dashboardData?.entity_id,
+      dashboardId: MetabaseUtils.isUUID(dashboardData?.id)
+        ? dashboardData?.entityId
+        : dashboardData?.id,
       dashboardCardId: propData?.dashcard?.id,
       queryChartId: cardData?.id,
       queryCondition: queryCondition,
@@ -47,7 +53,7 @@ const CreateCohort = ({ state, style, propData, user }) => {
     const result = await CreateFgaCohort(parms);
     hide();
     if (result) {
-      message.success("Create cohort success");
+      message.success("Successfully create a cohort!");
       setIsTagModalOpen(false);
     }
     // setTimeout(() => {
@@ -66,14 +72,6 @@ const CreateCohort = ({ state, style, propData, user }) => {
         type="primary"
         style={style}
         onClick={() => {
-          if (!user) {
-            message.warning("Please sign in first!");
-            return;
-          }
-          if (!projectId) {
-            message.warning("Please create your project first!");
-            return;
-          }
           setIsTagModalOpen(true);
         }}
       >
