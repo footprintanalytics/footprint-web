@@ -64,7 +64,8 @@ const TableDataList = props => {
           // ),
         ]);
       } else {
-        setExpandedKeys([...flatten(dataSets.map(item => `${item.id}`))]);
+        //search community
+        // setExpandedKeys([...flatten(dataSets.map(item => `${item.id}`))]);
       }
     } else {
       if (dataSets && dataSets.length > 0 && dataSets[0].category) {

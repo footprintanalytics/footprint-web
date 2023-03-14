@@ -97,6 +97,7 @@
 ;  (log/info (trs "Caching results for next time for query with hash {0}."
 ;                 (pr-str (i/short-hex-hash query-hash))) (u/emoji "💾"))
   (log/info "cache-results!" card-id dashboard-id (i/short-hex-hash query-hash))
+  (i/update-cache-status! *backend* query-hash "success")
   (try
     (let [bytez (serialized-bytes)]
       (if-not (instance? (Class/forName "[B") bytez)
@@ -106,7 +107,6 @@
           (i/save-results-v2! *backend* query-hash bytez dashboard-id card-id)
           (log/debug "Successfully cached results for query.")
           (purge! *backend*)))
-          (i/update-cache-status! *backend* query-hash "success")
       )
     :done
     (catch Throwable e
@@ -245,12 +245,12 @@
                      (fn [in-fn result-fn]
                        (binding [*in-fn*     in-fn
                                  *result-fn* result-fn]
-                         (((context.default/default-context) :reducef) rff context (merge {:aysnc-refresh-cache? true, :erorCallback erorCallback} metadata) rows)))))
+                         (((context.default/default-context) :reducef) rff context (merge {:aysnc-refresh-cache2? true, :erorCallback erorCallback} metadata) rows)))))
          ]
     (log/info "refresh-cache-function" card-id dashboard-id (i/short-hex-hash query-hash))
     (i/update-cache-status! *backend* query-hash "pending")
     (((apply comp query-data-middleware) ((context.default/default-context) :runf))
-      (merge {:aysnc-refresh-cache? true} query)
+      (merge {:aysnc-refresh-cache2? true, :erorCallback erorCallback} query)
       (fn [metadata]
         (save-results-xform
          start-time-ms metadata query-hash
