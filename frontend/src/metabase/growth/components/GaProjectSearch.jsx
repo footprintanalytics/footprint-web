@@ -90,8 +90,7 @@ const GaProjectSearch = props => {
         setUserProject(projects);
         if (index === -1) {
           router?.push({
-            pathname: getGrowthProjectPath(projects[projectIndex].value,menu),
-
+            pathname: getGrowthProjectPath(projects[projectIndex].value, menu),
           });
         }
       }

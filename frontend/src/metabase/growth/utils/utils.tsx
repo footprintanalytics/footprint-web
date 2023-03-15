@@ -26,7 +26,7 @@ export function getGaMenuTabs(tabs_data: any[]) {
         : false;
     if (!disabled) {
       menuTabs.push({
-        key: `${item.name}`,
+        key: `${item.name}${children.length > 0 ? "-sub" : ""}`,
         icon: item.icon,
         children: children.length > 0 ? children : null,
         disabled: disabled,

@@ -48,7 +48,7 @@ const CreateCohort = ({ state, style, propData, user }) => {
         : dashboardData?.id,
       dashboardCardId: propData?.dashcard?.id,
       queryChartId: cardData?.id,
-      queryCondition: queryCondition,
+      queryCondition: queryCondition ?? [],
     };
     const result = await CreateFgaCohort(parms);
     hide();

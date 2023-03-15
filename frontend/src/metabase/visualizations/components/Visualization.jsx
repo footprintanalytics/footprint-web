@@ -26,6 +26,7 @@ import { getComputedSettingsForSeries } from "metabase/visualizations/lib/settin
 import { isSameSeries } from "metabase/visualizations/lib/utils";
 import { performDefaultAction } from "metabase/visualizations/lib/action";
 import CreateCampaign from "metabase/visualizations/components/CreateCampaign";
+import ToAllUser from "metabase/visualizations/components/ToAllUser";
 import { getFont } from "metabase/styled-components/selectors";
 
 import { getMode } from "metabase/modes/lib/modes";
@@ -632,18 +633,7 @@ class Visualization extends React.PureComponent {
                   )}
                   {["Cohort List", "All Cohorts"].includes(
                     this.state.computedSettings["card.title"],
-                  ) && (
-                    <Button
-                      type="primary"
-                      style={{ marginLeft: 20 }}
-                      href={getGrowthProjectPath(
-                        getLatestGAProject(),
-                        "Potential Users",
-                      )}
-                    >
-                      All Users
-                    </Button>
-                  )}
+                  ) && <ToAllUser style={{ marginLeft: 20 }}></ToAllUser>}
                 </div>
               )}
             <CardVisualization

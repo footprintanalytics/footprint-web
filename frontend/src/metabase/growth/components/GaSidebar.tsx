@@ -3,7 +3,12 @@ import { Layout, Menu } from "antd";
 import type { MenuProps } from "antd";
 const { Sider } = Layout;
 import "../css/utils.css";
-import { getLatestGAMenuTag, saveLatestGAMenuTag } from "../utils/utils";
+import {
+  getGrowthProjectPath,
+  getLatestGAMenuTag,
+  saveLatestGAMenuTag,
+  getLatestGAProject,
+} from "../utils/utils";
 
 interface IGaSidebarProp {
   className?: string;
@@ -11,7 +16,7 @@ interface IGaSidebarProp {
   router: any;
   currentTab?: string;
   location: any;
-  items?: any[];
+  items: any[];
   projects?: any[];
 }
 export default function GaSidebar(prop: IGaSidebarProp) {
@@ -22,12 +27,8 @@ export default function GaSidebar(prop: IGaSidebarProp) {
   });
   const [tab, setTab] = useState<string>();
   useEffect(() => {
-    if (location.query.tab) {
-      setTab(location.query.tab);
-    } else {
-      setTab(getLatestGAMenuTag() ?? currentTab);
-    }
-  }, [currentTab, location.query.tab]);
+    setTab(currentTab ?? getLatestGAMenuTag() ?? items[0]?.key);
+  }, [currentTab, items]);
 
   const [openKeys, setOpenKeys] = useState<string[]>([tab!]);
 
@@ -69,7 +70,10 @@ export default function GaSidebar(prop: IGaSidebarProp) {
         onSelect={item => {
           saveLatestGAMenuTag(item.key);
           router.push({
-            pathname: `/growth/project/${currentProject}/${item.key}`,
+            pathname: getGrowthProjectPath(
+              currentProject ?? getLatestGAProject() ?? "",
+              item.key,
+            ),
             // query: { ...location.query, tab: item.key },
           });
         }}
