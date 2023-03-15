@@ -95,7 +95,7 @@ const TemplateGallery = props => {
       />
     </div>
   );
-};
+};;
 
 const mapStateToProps = state => {
   return {

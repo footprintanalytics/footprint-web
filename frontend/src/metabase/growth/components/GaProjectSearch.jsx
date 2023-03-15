@@ -96,13 +96,7 @@ const GaProjectSearch = props => {
       }
     }
     // getAllProtocol();
-  }, [
-    currentProject,
-    data?.data,
-    menu,
-    isLoading,
-    router,
-  ]);
+  }, [currentProject, data?.data, menu, isLoading, router]);
 
   // monitor data
   const normalOptions = [];
@@ -145,12 +139,15 @@ const GaProjectSearch = props => {
       setCurrentProject(projectPath);
       saveLatestGAProject(projectPath);
     } else {
-      const temp_project = getLatestGAProject()
-        ?? (userProject.length > 0 ? userProject : recommendOptions)[0].value;
+      const temp_project =
+        getLatestGAProject() ??
+        (userProject.length > 0 ? userProject : recommendOptions)[0].value;
       setCurrentProject(temp_project);
-      router?.push({
-        pathname: getGrowthProjectPath(temp_project,menu)
-      });
+      if (location.pathname.startsWith("/growth/project")) {
+        router?.push({
+          pathname: getGrowthProjectPath(temp_project, menu),
+        });
+      }
     }
   }, [
     projectPath,
@@ -158,18 +155,22 @@ const GaProjectSearch = props => {
     userProject,
     recommendOptions,
     router,
+    location.pathname,
   ]);
   const handleProjectChange = (value, option) => {
     const item = option;
     item.key = item.value + "-histroy";
     saveGASearchHistory(item);
     saveLatestGAProject(option.value);
+    setCurrentProject(option.value);
     if (option.id) {
       saveLatestGAProjectId(option.id);
     }
-    router?.push({
-      pathname: getGrowthProjectPath( option.value,menu)
-    });
+    if (location.pathname.startsWith("/growth/project")) {
+      router?.push({
+        pathname: getGrowthProjectPath(option.value, menu),
+      });
+    }
   };
   return (
     <div className="flex flex-column items-center" style={{ minWidth: 300 }}>
