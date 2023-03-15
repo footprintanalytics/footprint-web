@@ -51,6 +51,10 @@ import { memoizeClass } from "metabase-lib/utils";
 import { VisualizationSlowSpinner } from "./Visualization.styled";
 import CreateCohort from "./CreateCohort";
 import "./Visualization.css";
+import {
+  getGrowthProjectPath,
+  getLatestGAProject,
+} from "metabase/growth/utils/utils";
 
 // NOTE: pass `CardVisualization` so that we don't include header when providing size to child element
 
