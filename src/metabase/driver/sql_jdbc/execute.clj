@@ -500,7 +500,9 @@
          _convert-sql (convert/convert-sql _sql schema-id)
          pattern (re-pattern (str "(?i)" "limit"))
          is-include-limit (not (nil? (re-find pattern _convert-sql)))
-         sql (if (and (= execution-mode  "native") (not is-include-limit)) (str _convert-sql "\nLIMIT 1000") _convert-sql)
+         downloadContexts [:csv-download :xlsx-download :json-download]
+         isDownload (some #(= (:context (:info outer-query)) %) downloadContexts)
+         sql (if (and (= execution-mode  "native") (not is-include-limit) (not isDownload)) (str _convert-sql "\nLIMIT 1000") _convert-sql)
          ]
      (log/info "execute sql query --------------")
      (log/info "source_sql:" _sql)
