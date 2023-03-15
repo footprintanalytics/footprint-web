@@ -36,40 +36,6 @@ const GaProjectSearch = props => {
     QUERY_OPTIONS,
   );
 
-  const getAllProtocol = async () => {
-    const uuid = "5276dcf1-0e5f-49d1-a49a-c405d2caa3d4";
-    // const uuid = "93629e56-00c0-48cd-83b0-79fb0b0054f2";
-    const { data } = await PublicApi.card({
-      uuid,
-    });
-    const card = data;
-    const newResult = await maybeUsePivotEndpoint(
-      PublicApi.cardQuery,
-      card,
-    )({
-      uuid,
-      parameters: JSON.stringify([]),
-    });
-    const protocols = [];
-    newResult?.data?.rows?.map((i, index) => {
-      const p = {};
-      newResult?.data?.cols?.map((j, index) => {
-        if (j.name === "collections_list") {
-          const l = i[index]
-            .replace("[", "")
-            .replace("]", "")
-            .replaceAll(" ", "")
-            .split(",");
-          set(p, j.name, l);
-        } else {
-          set(p, j.name, i[index]);
-        }
-      });
-      protocols.push(p);
-    });
-    console.log("getAllProtocol", uuid, newResult, protocols);
-  };
-
   useEffect(() => {
     if (!isLoading) {
       if (data?.data?.length > 0) {

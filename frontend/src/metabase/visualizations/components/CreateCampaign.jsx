@@ -1,5 +1,5 @@
 /* eslint-disable react/prop-types */
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import {
   Modal,
   Input,
@@ -18,6 +18,8 @@ import Icon from "metabase/components/Icon";
 import {
   saveLatestGACampaigns,
   getLatestGACampaigns,
+  getLatestGAProjectId,
+  getDashboardDatas,
 } from "metabase/growth/utils/utils";
 import {
   loginModalShowAction,
@@ -39,12 +41,30 @@ const CreateCampaign = ({
   const [notifyType, setNotifyType] = useState("email");
   const [formValues, setFormValues] = useState();
   const [loading, setLoading] = useState(false);
+  const [loadingCohort, setLoadingCohort] = useState(false);
 
   const [cohorts, setCohorts] = useState([
-    { label: "Whales", value: 1 },
-    { label: "Top100", value: 2 },
-    { label: "Airdrop List", value: 3 },
+    // { label: "Whales", value: 1 },
+    // { label: "Top100", value: 2 },
+    // { label: "Airdrop List", value: 14 },
   ]);
+
+  useEffect(() => {
+    if (isNotificationModalOpen) {
+      setLoadingCohort(true);
+      getDashboardDatas("1f158646-3dd1-440c-969c-45348b9390ee")
+        .then(result => {
+          const cohorts = [];
+          result?.map(i => {
+            cohorts.push({ label: i.title, value: i.cohort_id });
+          });
+          setCohorts(cohorts);
+        })
+        .finally(() => {
+          setLoadingCohort(false);
+        });
+    }
+  }, [isNotificationModalOpen]);
 
   const formRef = React.useRef(null);
   const onSave = () => {
@@ -69,6 +89,13 @@ const CreateCampaign = ({
       });
       return;
     }
+    const projectId = getLatestGAProjectId();
+    if (!projectId) {
+      setIsNotificationModalOpen(false);
+      message.warning("Please create your project before proceeding.");
+      setCreateFgaProjectModalShowAction({ show: true });
+      return;
+    }
     console.log("formValues", formValues);
     setLoading(true);
     const hide = message.loading("Loading... ", 0);
@@ -76,6 +103,7 @@ const CreateCampaign = ({
       name: formValues?.campaignName,
       cohortIds: formValues?.targetCohort, // cohortId
       type: "email",
+      projectId: parseInt(projectId, 10),
       email: {
         title: formValues?.emailTitle,
         content: formValues?.emailContent,
@@ -166,6 +194,7 @@ const CreateCampaign = ({
               <Select
                 placeholder="Select a target cohort"
                 mode="multiple"
+                loading={loadingCohort}
                 options={cohorts}
               />
             </Form.Item>

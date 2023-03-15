@@ -30,7 +30,6 @@ const CreateCohort = ({
   queryCondition?.map(i => {
     i = { ...i, value: queryConditionValue[i.id] };
   });
-  const projectId = getLatestGAProjectId();
   const addressIndex = result?.data?.cols?.findIndex(f =>
     f?.display_name?.toLowerCase()?.includes("address"),
   );
@@ -54,6 +53,7 @@ const CreateCohort = ({
       });
       return;
     }
+    const projectId = getLatestGAProjectId();
     if (!projectId) {
       setIsTagModalOpen(false);
       message.warning("Please create your project before proceeding.");
