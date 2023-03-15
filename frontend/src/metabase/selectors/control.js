@@ -3,6 +3,13 @@ import { getXraysEnabled } from "metabase/selectors/settings";
 
 export const getControl = state => state.control;
 
+export const getCreateFgaProjectModalShow = createSelector(
+  [getControl],
+  ({ createFgaProjectModalShow }) => {
+    return createFgaProjectModalShow || false;
+  },
+);
+
 export const getLoginModalShow = createSelector(
   [getControl],
   ({ loginModalShow }) => {

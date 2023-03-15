@@ -102,7 +102,7 @@ const GaProjectSearch = props => {
   const normalOptions = [];
   const recommendOptions = [];
   top_protocols.map((i, index) => {
-    if (i.isPremium) {
+    if (i.isDemo) {
       recommendOptions.push({
         ...i,
         value: i.protocol_slug,

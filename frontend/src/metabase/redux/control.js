@@ -10,6 +10,8 @@ import {
 } from "metabase/lib/register-activity";
 
 export const LOGIN_MODAL_SHOW = "metabase/control/loginModalShow";
+export const CREATE_FGA_PROJECT_MODAL_SHOW =
+  "metabase/control/createFgaProjectModalShow";
 
 export const FEATURES_SIDE_HIDE = "metabase/control/featuresSideHide";
 export const CREATE_MODAL_SHOW = "metabase/control/createModalShow";
@@ -27,6 +29,12 @@ export const CLOSE_ALL_CHART_POPOVER_Action =
 export const SET_NEW_GUIDE_INFO = "metabase/control/setNewGuideInfo";
 export const SET_DARK_MODE = "metabase/control/setDarkMode";
 
+export const createFgaProjectModalShowAction = createThunkAction(
+  CREATE_FGA_PROJECT_MODAL_SHOW,
+  ({ show }) => {
+    return { show };
+  },
+);
 export const loginModalShowAction = createThunkAction(
   LOGIN_MODAL_SHOW,
   ({ show, from, redirect, channel }) => {
@@ -129,6 +137,14 @@ export const setDarkMode = createThunkAction(SET_DARK_MODE, darkMode => {
 
 export const control = handleActions(
   {
+    [CREATE_FGA_PROJECT_MODAL_SHOW]: {
+      next: (state, { payload }) => {
+        return {
+          ...state,
+          createFgaProjectModalShow: payload.show,
+        };
+      },
+    },
     [LOGIN_MODAL_SHOW]: {
       next: (state, { payload }) => {
         return {

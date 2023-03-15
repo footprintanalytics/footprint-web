@@ -19,21 +19,31 @@ import {
   saveLatestGACampaigns,
   getLatestGACampaigns,
 } from "metabase/growth/utils/utils";
+import {
+  loginModalShowAction,
+  createFgaProjectModalShowAction,
+} from "metabase/redux/control";
 import ConfigEmail from "metabase/growth/components/config_panel/ConfigEmail";
 import ConfigAirdrop from "metabase/growth/components/config_panel/ConfigAirdrop";
 import { CreateFgaCampaign } from "metabase/new-service";
 import { getUser } from "metabase/selectors/user";
 
-const CreateCampaign = ({ style, user }) => {
+const CreateCampaign = ({
+  style,
+  user,
+  setLoginModalShowAction,
+  setCreateFgaProjectModalShowAction,
+}) => {
   const [isNotificationModalOpen, setIsNotificationModalOpen] = useState(false);
   const [timingType, setTimingType] = useState("now");
   const [notifyType, setNotifyType] = useState("email");
   const [formValues, setFormValues] = useState();
+  const [loading, setLoading] = useState(false);
 
   const [cohorts, setCohorts] = useState([
-    { label: "Whales", value: "cohort id 1" },
-    { label: "Top100", value: "cohort id 2" },
-    { label: "Airdrop List", value: "cohort id 3" },
+    { label: "Whales", value: 1 },
+    { label: "Top100", value: 2 },
+    { label: "Airdrop List", value: 3 },
   ]);
 
   const formRef = React.useRef(null);
@@ -49,39 +59,40 @@ const CreateCampaign = ({ style, user }) => {
   };
   const onCreate = async () => {
     if (!user) {
+      setIsNotificationModalOpen(false);
       message.warning("Please sign in before proceeding.");
+      setLoginModalShowAction({
+        show: true,
+        from: "CreateCampaign",
+        redirect: location.pathname,
+        channel: "FGA",
+      });
       return;
     }
+    console.log("formValues", formValues);
+    setLoading(true);
     const hide = message.loading("Loading... ", 0);
     const parms = {
       name: formValues?.campaignName,
-      eligibility: [formValues?.targetCohort], // cohortId
-      task: [
-        {
-          type: "message",
-          timing: "", //if this campaign need to seed now, then don`t fill this fild
-          detail: {
-            title: formValues?.emailTitle,
-            content: formValues?.emailContent,
-          },
-        },
-      ],
+      cohortIds: formValues?.targetCohort, // cohortId
+      type: "email",
+      email: {
+        title: formValues?.emailTitle,
+        content: formValues?.emailContent,
+      },
     };
-    const result = await CreateFgaCampaign(parms);
-    if (result) {
-      hide();
-      message.success("Send successfully");
-      setIsNotificationModalOpen(false);
+    // console.log("formValues parms", parms);
+    try {
+      const result = await CreateFgaCampaign(parms);
+      if (result) {
+        message.success("Create successfully");
+        setIsNotificationModalOpen(false);
+      }
+    } catch (error) {
+      console.log(error);
     }
-    // await axios.post(
-    //   "https://app.internal.footprint.network/api/v0/task/notify",
-    //   body,
-    // );
-    // setTimeout(() => {
-    //   hide();
-    //   message.success("Creating successfully");
-    //   setIsNotificationModalOpen(false);
-    // }, 2000);
+    setLoading(false);
+    hide();
   };
 
   const getInputPanel = type => {
@@ -107,7 +118,20 @@ const CreateCampaign = ({ style, user }) => {
         open={isNotificationModalOpen}
         onCancel={() => setIsNotificationModalOpen(false)}
         onOk={onSave}
-        okText="Save"
+        // okText="Save"
+        footer={[
+          <Button key="back" onClick={() => setIsNotificationModalOpen(false)}>
+            Cancel
+          </Button>,
+          <Button
+            key="submit"
+            type="primary"
+            loading={loading}
+            onClick={onSave}
+          >
+            Create
+          </Button>,
+        ]}
         closable={false}
         title="Create Campaign"
       >
@@ -139,7 +163,11 @@ const CreateCampaign = ({ style, user }) => {
               name={"targetCohort"}
               label="Target Cohort"
             >
-              <Select placeholder="Select a target cohort" options={cohorts} />
+              <Select
+                placeholder="Select a target cohort"
+                mode="multiple"
+                options={cohorts}
+              />
             </Form.Item>
             {/* <Form.Item label="Chekbox" name="disabled" valuePropName="checked">
               <Checkbox>Checkbox</Checkbox>
@@ -150,13 +178,12 @@ const CreateCampaign = ({ style, user }) => {
               label="Timing"
             >
               <Radio.Group
+                defaultValue={"now"}
                 onChange={e => {
                   setTimingType(e.target.value);
                 }}
               >
-                <Radio value="now" defaultChecked>
-                  Right now
-                </Radio>
+                <Radio value="now">Right now</Radio>
                 <Radio value="pickTime" disabled>
                   Pick a date&time{" "}
                 </Radio>
@@ -176,14 +203,13 @@ const CreateCampaign = ({ style, user }) => {
               <Radio.Group
                 optionType="button"
                 size="small"
+                defaultValue={"email"}
                 onChange={e => {
                   setNotifyType(e.target.value);
                 }}
                 buttonStyle="solid"
               >
-                <Radio value="email" defaultChecked>
-                  Email
-                </Radio>
+                <Radio value="email">Email</Radio>
                 <Radio value="airdrop" disabled>
                   Airdrop
                 </Radio>
@@ -202,10 +228,15 @@ const CreateCampaign = ({ style, user }) => {
     </>
   );
 };
+
+const mapDispatchToProps = {
+  setLoginModalShowAction: loginModalShowAction,
+  setCreateFgaProjectModalShowAction: createFgaProjectModalShowAction,
+};
 const mapStateToProps = state => {
   return {
     user: getUser(state),
   };
 };
 
-export default connect(mapStateToProps)(CreateCampaign);
+export default connect(mapStateToProps, mapDispatchToProps)(CreateCampaign);

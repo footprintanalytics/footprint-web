@@ -18,10 +18,14 @@ import { useQuery } from "react-query";
 import { QUERY_OPTIONS } from "metabase/containers/dashboards/shared/config";
 import { GetFgaConnectors } from "metabase/new-service";
 import { getUser } from "metabase/selectors/user";
+
 import AF from "assets/img/af.png";
 import BQ from "assets/img/BQ.svg";
 import GA from "assets/img/GA.svg";
-import { loginModalShowAction } from "metabase/redux/control";
+import {
+  loginModalShowAction,
+  createFgaProjectModalShowAction,
+} from "metabase/redux/control";
 import LoadingSpinner from "metabase/components/LoadingSpinner";
 import ConfigAppsFlyerSource from "../components/config_panel/ConfigAppsFlyerSource";
 import ConfigTwitterSource from "../components/config_panel/ConfigTwitterSource";
@@ -31,7 +35,16 @@ import "../css/utils.css";
 const { Text } = Typography;
 
 const Connectors = props => {
-  const { router, location, children, user, projectId, project } = props;
+  const {
+    router,
+    location,
+    children,
+    user,
+    projectId,
+    project,
+    setLoginModalShowAction,
+    setCreateFgaProjectModalShowAction,
+  } = props;
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [openDrawer, setOpenDrawer] = useState({ show: false, connector: {} });
 
@@ -59,6 +72,11 @@ const Connectors = props => {
           <ConfigGoogleAnalyticsSource
             onAddConnector={onAddConnector}
             user={user}
+            setOpenDrawer={setOpenDrawer}
+            setLoginModalShowAction={setLoginModalShowAction}
+            setCreateFgaProjectModalShowAction={
+              setCreateFgaProjectModalShowAction
+            }
             projectId={projectId}
           />
         ),
@@ -123,12 +141,19 @@ const Connectors = props => {
   };
   const onAddConnector = key => {
     if (!user) {
-      message.info("Kindly log in before proceeding.");
-      loginModalShowAction({ show: true, from: "add connector" });
+      onCloseDrawer();
+      message.warning("Kindly log in before proceeding.");
+      setLoginModalShowAction({
+        show: true,
+        from: "add connector",
+        redirect: location.pathname,
+        channel: "FGA",
+      });
       return;
     }
     if (!projectId) {
-      message.error("Initially, you must create your personal project!");
+      message.warning("Initially, you must create your personal project!");
+      setCreateFgaProjectModalShowAction({ show: true });
       return;
     }
     const i = connectors.find(item => item.key === key);
@@ -224,7 +249,6 @@ const Connectors = props => {
           </>
         )}
       </div>
-
       <Modal
         title="Select connector type"
         open={isModalOpen}
@@ -276,10 +300,15 @@ const Connectors = props => {
   );
 };
 
+const mapDispatchToProps = {
+  setLoginModalShowAction: loginModalShowAction,
+  setCreateFgaProjectModalShowAction: createFgaProjectModalShowAction,
+};
+
 const mapStateToProps = state => {
   return {
     user: getUser(state),
   };
 };
 
-export default connect(mapStateToProps)(Connectors);
+export default connect(mapStateToProps, mapDispatchToProps)(Connectors);
