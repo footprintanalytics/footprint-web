@@ -92,15 +92,28 @@
     )
   )
 
+(defn canConvert [col]
+  (let [fga-tables (into [] (get-fga-table-white-list))
+        is_include (some #(str/includes? col %) fga-tables)]
+    is_include))
+
+(defn canRunFGAConvert [sqlTables]
+  (some canConvert sqlTables))
+
 (defn convert-sql [sql schema-id]
   (let [fga-schema (get-fga-schema schema-id)]
-    (if fga-schema (let [ regex #"(?<=from|join|FROM|JOIN)+(?:\s|`|\")+(?:\w|`|\"|\.)+"
-                          group-regex #"(?<=from|join|FROM|JOIN)+((?:\s|`|\")+(?:\w|`|\"|\.)+)"
-                          fix-sql (str/replace sql group-regex "$1 ")
-                          result (re-seq regex sql)
-                          last-sql (reduce #(handle-convert %1 %2 fga-schema) fix-sql result)
-                          ]
-                     last-sql
-                     ) sql)
+    (if fga-schema
+      (let [regex #"(?<=from|join|FROM|JOIN)+(?:\s|`|\")+(?:\w|`|\"|\.)+"
+            group-regex #"(?<=from|join|FROM|JOIN)+((?:\s|`|\")+(?:\w|`|\"|\.)+)"
+            fix-sql (str/replace sql group-regex "$1 ")
+            result (re-seq regex sql)]
+         (if (canRunFGAConvert  result)
+           (let [last-sql (reduce #(handle-convert %1 %2 fga-schema) fix-sql result)]
+              last-sql
+           )
+           sql
+         )
+      )
+      sql)
     )
   )
