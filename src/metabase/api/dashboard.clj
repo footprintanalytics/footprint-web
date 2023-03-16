@@ -688,6 +688,16 @@
                  field-id          (param-key->field-ids dashboard param-key)]
              [field-id value])))
 
+(defn- getNewFieldIds [field-ids]
+  ;;Need to replace the field mapping, the left is the original field, the right is the replaced field. Such as 1 2, the fieldid is 1 replaced with 2
+  (let [mapping {
+                  8272 9339
+                }]
+    (->> field-ids
+         (replace mapping)
+         (distinct)
+         (into #{}))))
+
 (s/defn chain-filter
   "C H A I N filters!
 
@@ -713,7 +723,9 @@
                        {:resolved-params (keys (:resolved-params dashboard))
                         :status-code     400})))
      (let [constraints (chain-filter-constraints dashboard constraint-param-key->value)
-           field-ids   (param-key->field-ids dashboard param-key)]
+           field-ids   (param-key->field-ids dashboard param-key)
+           field-ids   (getNewFieldIds field-ids)]
+       (log/info "chain-filter field-ids" field-ids)
       (when (empty? field-ids)
         (throw (ex-info (tru "Parameter {0} does not have any Fields associated with it" (pr-str param-key))
                         {:param       (get (:resolved-params dashboard) param-key)
