@@ -66,7 +66,7 @@ const CreateCohort = ({ state, style, propData, user }) => {
   const handleChange = value => {
     console.log(`selected ${value}`);
   };
-  console.log("queryCondition", queryCondition)
+  
   return (
     <>
       <Button
