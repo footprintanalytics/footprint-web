@@ -210,11 +210,11 @@ export const logout = createThunkAction(LOGOUT, (redirectUrl: string) => {
     await dispatch(clearCurrentUser());
     await dispatch(refreshLocale());
     trackLogout();
-    /*    if (redirectUrl) {
+    if (redirectUrl) {
       dispatch(push(Urls.login(redirectUrl)));
-    }*/
-
-    dispatch(replace("/"));
+    } else {
+      dispatch(replace("/"));
+    }
     clearGACache();
     // window.location.reload(); // clears redux state and browser caches
   };

@@ -23,14 +23,14 @@ export default function GaSidebar(prop: IGaSidebarProp) {
   const { currentProject, router, location, items, currentTab } = prop;
   const rootSubmenuKeys: any[] = [];
   items?.map(i => {
-    rootSubmenuKeys.push(i.label);
+    rootSubmenuKeys.push(i.key);
   });
-  const [tab, setTab] = useState<string>();
+  const [tab, setTab] = useState<string>(currentTab!);
   useEffect(() => {
     setTab(currentTab ?? getLatestGAMenuTag() ?? items[0]?.key);
   }, [currentTab, items]);
 
-  const [openKeys, setOpenKeys] = useState<string[]>([tab!]);
+  const [openKeys, setOpenKeys] = useState<string[]>([currentTab!]);
 
   const onOpenChange: MenuProps["onOpenChange"] = keys => {
     const latestOpenKey = keys.find(key => openKeys.indexOf(key) === -1);

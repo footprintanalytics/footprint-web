@@ -12,6 +12,7 @@ import {
   getCreateModalShow,
   getIsUserFeedbackBlock,
   getLoginModalRedirect,
+  getCreateFgaProjectModalShow,
   getLoginModalShow,
   getSubmitAddrZkspaceModal,
 } from "metabase/selectors/control";
@@ -19,6 +20,7 @@ import {
   cancelFeedbackAction,
   createModalShowAction,
   loginModalShowAction,
+  createFgaProjectModalShowAction,
   setIsCancelFeedbackBlockAction,
   setSubmitAddrZkspaceModal,
 } from "metabase/redux/control";
@@ -48,6 +50,7 @@ const mapStateToProps = (state, props) => ({
   context: getContext(state, props),
   user: getUser(state),
   loginModalShow: getLoginModalShow(state, props),
+  createFgaProjectModalShow: getCreateFgaProjectModalShow(state, props),
   loginModalRedirect: getLoginModalRedirect(state, props),
   createModalShow: getCreateModalShow(state, props),
   cancelFeedback: getCancelFeedback(state, props),
@@ -59,6 +62,7 @@ const mapStateToProps = (state, props) => ({
 const mapDispatchToProps = {
   onChangeLocation: push,
   setLoginModalShow: loginModalShowAction,
+  setCreateFgaProjectModalShowAction: createFgaProjectModalShowAction,
   setCreateModalShow: createModalShowAction,
   cancelFeedbackAction,
   setIsCancelFeedbackBlockAction,
@@ -81,7 +85,7 @@ class FgaNavbar extends Component {
   state = {
     sideNavModal: false,
     showZkspaceModal: true,
-    isProjectModalOpen: false,
+    // isProjectModalOpen: false,
   };
   isActive(path) {
     return this.props.path === path;
@@ -158,7 +162,6 @@ class FgaNavbar extends Component {
   renderLoginModal() {
     const { location, loginModalShow, loginModalRedirect, setLoginModalShow } =
       this.props;
-
     return (
       <LoginModal
         isOpen={loginModalShow}
@@ -278,6 +281,8 @@ class FgaNavbar extends Component {
       user,
       setLoginModalShow,
       setCreateModalShow,
+      setCreateFgaProjectModalShowAction,
+      createFgaProjectModalShow,
       location,
       onChangeLocation,
     } = this.props;
@@ -341,7 +346,8 @@ class FgaNavbar extends Component {
     const onCreateAction = () => {
       trackStructEvent(`click Navbar Add My Project`);
       if (user) {
-        this.setState({ ...this.state, isProjectModalOpen: true });
+        setCreateFgaProjectModalShowAction({ show: true });
+        // this.setState({ ...this.state, isProjectModalOpen: true });
       } else {
         setLoginModalShow({ show: true, from: "navbar_fga_signin" });
       }
@@ -359,7 +365,7 @@ class FgaNavbar extends Component {
             <ProfileLink
               {...this.props}
               onLogout={() => {
-                this.props.logout();
+                this.props.logout(location.pathname);
               }}
               trigger={
                 <div className="relative" style={{ padding: 10 }}>
@@ -440,13 +446,16 @@ class FgaNavbar extends Component {
         {this.renderLoginModal()}
         {this.renderCancelFeedbackModal()}
         <CreateProjectModal
-          open={this.state.isProjectModalOpen}
+          // open={this.state.isProjectModalOpen}
+          open={createFgaProjectModalShow}
           location={location}
           onSuccess={() => {
-            this.setState({ ...this.state, isProjectModalOpen: false });
+            setCreateFgaProjectModalShowAction({ show: false });
+            // this.setState({ ...this.state, isProjectModalOpen: false });
           }}
           onCancel={() => {
-            this.setState({ ...this.state, isProjectModalOpen: false });
+            setCreateFgaProjectModalShowAction({ show: false });
+            // this.setState({ ...this.state, isProjectModalOpen: false });
           }}
         ></CreateProjectModal>
       </div>

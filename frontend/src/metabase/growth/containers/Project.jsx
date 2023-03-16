@@ -37,7 +37,20 @@ const Project = props => {
       setProject(projectPath);
       saveLatestGAProject(projectPath);
     } else {
-      setProject(getLatestGAProject() ?? "");
+      const recommendOptions = [];
+      top_protocols.map((i, index) => {
+        if (i.isDemo) {
+          recommendOptions.push({
+            ...i,
+            value: i.protocol_slug,
+            key: i.protocol_slug + "-recommend",
+            label: i.protocol_name,
+          });
+        }
+      });
+      setProject(
+        getLatestGAProject() ?? recommendOptions?.[0]?.value ?? "the-sandbox",
+      );
     }
   }, [projectPath]);
   const tabs_data = fga_menu_data;

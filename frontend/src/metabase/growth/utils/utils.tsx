@@ -1,3 +1,41 @@
+import { set } from "lodash";
+import { PublicApi, maybeUsePivotEndpoint } from "metabase/services";
+
+export async function getDashboardDatas(uuid: string) {
+  // const uuid = "93629e56-00c0-48cd-83b0-79fb0b0054f2";
+  const datas: any[] = [];
+  try {
+    const { data } = await PublicApi.card({ uuid });
+    const card = data;
+    const newResult = await maybeUsePivotEndpoint(
+      PublicApi.cardQuery,
+      card,
+    )({
+      uuid,
+      parameters: JSON.stringify([]),
+    });
+    newResult?.data?.rows?.map((i: any, index: number) => {
+      const p = {};
+      newResult?.data?.cols?.map((j: any, index: number) => {
+        if (j.name === "collections_list") {
+          const l = i[index]
+            .replace("[", "")
+            .replace("]", "")
+            .replaceAll(" ", "")
+            .split(",");
+          set(p, j.name, l);
+        } else {
+          set(p, j.name, i[index]);
+        }
+      });
+      datas.push(p);
+    });
+  } catch (error) {
+    console.log("error", error);
+  }
+  return datas;
+}
+
 export function getGrowthProjectPath(project: string, menu?: string) {
   return `/growth/project/${project}/${menu ?? ""}`;
 }

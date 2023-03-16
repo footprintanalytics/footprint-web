@@ -1,6 +1,6 @@
 /* eslint-disable react/prop-types */
 import React, { useState } from "react";
-import { Button, Input, Form } from "antd";
+import { Button, Input, Form, message } from "antd";
 const layout = {
   labelCol: { span: 24 },
   wrapperCol: { span: 24 },
@@ -10,7 +10,14 @@ const tailLayout = {
 };
 
 const ConfigGoogleAnalyticsSource = props => {
-  const { onAddConnector, user, projectId } = props;
+  const {
+    onAddConnector,
+    user,
+    projectId,
+    setLoginModalShowAction,
+    setCreateFgaProjectModalShowAction,
+    setOpenDrawer,
+  } = props;
   const formRef = React.useRef(null);
   const [editable, setEditable] = useState(true);
   const onSave = values => {
@@ -22,6 +29,23 @@ const ConfigGoogleAnalyticsSource = props => {
     // onNext();
   };
   const toAuthorization = propertyId => {
+    if (!user) {
+      setOpenDrawer({ show: false });
+      message.warning("Kindly log in before proceeding.");
+      setLoginModalShowAction({
+        show: true,
+        from: "add connector",
+        redirect: location.pathname,
+        channel: "FGA",
+      });
+      return;
+    }
+    if (!projectId) {
+      setOpenDrawer({ show: false });
+      message.warning("Initially, you must create your personal project!");
+      setCreateFgaProjectModalShowAction({ show: true });
+      return;
+    }
     const host = window.location.origin.startsWith(
       "https://www.footprint.network",
     )

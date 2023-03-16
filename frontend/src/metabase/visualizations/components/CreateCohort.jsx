@@ -5,11 +5,23 @@ import { connect } from "react-redux";
 import { CreateFgaCohort } from "metabase/new-service";
 import { getLatestGAProjectId } from "metabase/growth/utils/utils";
 import { getUser } from "metabase/selectors/user";
+import {
+  loginModalShowAction,
+  createFgaProjectModalShowAction,
+} from "metabase/redux/control";
 import MetabaseUtils from "metabase/lib/utils";
 import { isArray } from "lodash";
 
-const CreateCohort = ({ state, style, propData, user }) => {
+const CreateCohort = ({
+  state,
+  style,
+  propData,
+  user,
+  setLoginModalShowAction,
+  setCreateFgaProjectModalShowAction,
+}) => {
   const [isTagModalOpen, setIsTagModalOpen] = useState(false);
+  const [loading, setLoading] = useState(false);
   const [cohortName, setCohortName] = useState();
   const dashboardData = propData?.dashboard;
   const result = state?.series[0];
@@ -19,7 +31,6 @@ const CreateCohort = ({ state, style, propData, user }) => {
   queryCondition?.map(i => {
     i = { ...i, value: queryConditionValue[i.id] };
   });
-  const projectId = getLatestGAProjectId();
   const addressIndex = result?.data?.cols?.findIndex(f =>
     f?.display_name?.toLowerCase()?.includes("address"),
   );
@@ -33,13 +44,24 @@ const CreateCohort = ({ state, style, propData, user }) => {
       return;
     }
     if (!user) {
+      setIsTagModalOpen(false);
       message.warning("Please sign in before proceeding.");
+      setLoginModalShowAction({
+        show: true,
+        from: "add cohort",
+        redirect: location.pathname,
+        channel: "FGA",
+      });
       return;
     }
+    const projectId = getLatestGAProjectId();
     if (!projectId) {
+      setIsTagModalOpen(false);
       message.warning("Please create your project before proceeding.");
+      setCreateFgaProjectModalShowAction({ show: true });
       return;
     }
+    setLoading(true);
     const hide = message.loading("Loading...", 10);
     const parms = {
       title: cohortName,
@@ -51,12 +73,17 @@ const CreateCohort = ({ state, style, propData, user }) => {
       queryChartId: cardData?.id,
       queryCondition: queryCondition ?? [],
     };
-    const result = await CreateFgaCohort(parms);
-    hide();
-    if (result) {
-      message.success("Successfully create a cohort!");
-      setIsTagModalOpen(false);
+    try {
+      const result = await CreateFgaCohort(parms);
+      if (result) {
+        message.success("Successfully create a cohort!");
+        setIsTagModalOpen(false);
+      }
+    } catch (error) {
+      console.log(error);
     }
+    hide();
+    setLoading(false);
     // setTimeout(() => {
     //   hide();
     //   message.success("Create cohort successfully");
@@ -66,7 +93,7 @@ const CreateCohort = ({ state, style, propData, user }) => {
   const handleChange = value => {
     console.log(`selected ${value}`);
   };
-  
+
   return (
     <>
       <Button
@@ -83,7 +110,20 @@ const CreateCohort = ({ state, style, propData, user }) => {
         open={isTagModalOpen}
         onCancel={() => setIsTagModalOpen(false)}
         onOk={onSend}
-        okText="create"
+        // okText="Create"
+        footer={[
+          <Button key="back" onClick={() => setIsTagModalOpen(false)}>
+            Cancel
+          </Button>,
+          <Button
+            key="submit"
+            type="primary"
+            loading={loading}
+            onClick={onSend}
+          >
+            Create
+          </Button>,
+        ]}
         closable={false}
         title="Create cohort"
       >
@@ -108,7 +148,7 @@ const CreateCohort = ({ state, style, propData, user }) => {
           <h4>You have selected {addressList?.length} wallet address.</h4>
         )}
         <div className="bg-light p2 mt1">
-          <h5>Condition:</h5>
+          <h5>Criteria:</h5>
           <Divider style={{ marginTop: 10, marginBottom: 10 }}></Divider>
           {/* <div className="mt1" /> */}
           {queryCondition && (
@@ -117,16 +157,20 @@ const CreateCohort = ({ state, style, propData, user }) => {
                 return (
                   <div key={index} style={{ marginBottom: 10 }}>
                     {q.name}:{" "}
-                    {isArray(q.value) ?
-                      q.value.map(t => {
-                        return <Tag key={t}>{t}</Tag>;
-                      }) :
-                      (<span>{q.value}</span>)
-                    }
+                    {q.value.map(t => {
+                      return (
+                        <Tag style={{ borderRadius: 5 }} key={t}>
+                          {t}
+                        </Tag>
+                      );
+                    })}
                   </div>
                 );
               })}
             </>
+          )}
+          {(!queryCondition || queryCondition?.length <= 0) && (
+            <>You have not yet established any filtering criteria.</>
           )}
         </div>
         {/* <Select
@@ -145,10 +189,15 @@ const CreateCohort = ({ state, style, propData, user }) => {
     </>
   );
 };
+
+const mapDispatchToProps = {
+  setLoginModalShowAction: loginModalShowAction,
+  setCreateFgaProjectModalShowAction: createFgaProjectModalShowAction,
+};
 const mapStateToProps = state => {
   return {
     user: getUser(state),
   };
 };
 
-export default connect(mapStateToProps)(CreateCohort);
+export default connect(mapStateToProps, mapDispatchToProps)(CreateCohort);
