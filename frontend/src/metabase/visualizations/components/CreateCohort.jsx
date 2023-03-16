@@ -157,12 +157,19 @@ const CreateCohort = ({
                   <div key={index} style={{ marginBottom: 10 }}>
                     {q.name}:{" "}
                     {q.value.map(t => {
-                      return <Tag key={t}>{t}</Tag>;
+                      return (
+                        <Tag style={{ borderRadius: 5 }} key={t}>
+                          {t}
+                        </Tag>
+                      );
                     })}
                   </div>
                 );
               })}
             </>
+          )}
+          {(!queryCondition || queryCondition?.length <= 0) && (
+            <>You have not yet established any filtering criteria.</>
           )}
         </div>
         {/* <Select
