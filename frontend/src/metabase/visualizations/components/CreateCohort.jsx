@@ -157,13 +157,17 @@ const CreateCohort = ({
                 return (
                   <div key={index} style={{ marginBottom: 10 }}>
                     {q.name}:{" "}
-                    {q.value.map(t => {
-                      return (
-                        <Tag style={{ borderRadius: 5 }} key={t}>
-                          {t}
-                        </Tag>
-                      );
-                    })}
+                    {isArray(q.value) ? (
+                      q.value.map(t => {
+                        return (
+                          <Tag style={{ borderRadius: 5 }} key={t}>
+                            {t}
+                          </Tag>
+                        );
+                      })
+                    ) : (
+                      <Tag style={{ borderRadius: 5 }}>{q.value}</Tag>
+                    )}
                   </div>
                 );
               })}

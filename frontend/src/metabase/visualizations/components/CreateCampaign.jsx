@@ -62,6 +62,13 @@ const CreateCampaign = ({
         })
         .finally(() => {
           setLoadingCohort(false);
+          if (!getLatestGAProjectId()) {
+            setCohorts([
+              { label: "Airdrop White List", value: 1 },
+              { label: "Top 500 of Project", value: 2 },
+              { label: "Potential Users", value: 3 },
+            ]);
+          }
         });
     }
   }, [isNotificationModalOpen]);
