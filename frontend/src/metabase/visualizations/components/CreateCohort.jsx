@@ -10,6 +10,7 @@ import {
   createFgaProjectModalShowAction,
 } from "metabase/redux/control";
 import MetabaseUtils from "metabase/lib/utils";
+import { isArray } from "lodash";
 
 const CreateCohort = ({
   state,
