@@ -6,6 +6,7 @@ import { CreateFgaCohort } from "metabase/new-service";
 import { getLatestGAProjectId } from "metabase/growth/utils/utils";
 import { getUser } from "metabase/selectors/user";
 import MetabaseUtils from "metabase/lib/utils";
+import { isArray } from "lodash";
 
 const CreateCohort = ({ state, style, propData, user }) => {
   const [isTagModalOpen, setIsTagModalOpen] = useState(false);
@@ -65,7 +66,7 @@ const CreateCohort = ({ state, style, propData, user }) => {
   const handleChange = value => {
     console.log(`selected ${value}`);
   };
-
+  console.log("queryCondition", queryCondition)
   return (
     <>
       <Button
@@ -116,9 +117,12 @@ const CreateCohort = ({ state, style, propData, user }) => {
                 return (
                   <div key={index} style={{ marginBottom: 10 }}>
                     {q.name}:{" "}
-                    {q.value.map(t => {
-                      return <Tag key={t}>{t}</Tag>;
-                    })}
+                    {isArray(q.value) ?
+                      q.value.map(t => {
+                        return <Tag key={t}>{t}</Tag>;
+                      }) :
+                      (<span>{q.value}</span>)
+                    }
                   </div>
                 );
               })}
