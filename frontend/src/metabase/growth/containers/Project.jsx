@@ -123,7 +123,7 @@ const Project = props => {
         {tab} is coming soon~
       </div>
     );
-  };
+  }
   return (
     <GaLayout router={router} location={location}>
       <Layout hasSider className="h-full">

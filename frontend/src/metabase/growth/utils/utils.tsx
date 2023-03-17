@@ -1,6 +1,18 @@
 import { set } from "lodash";
 import { PublicApi, maybeUsePivotEndpoint } from "metabase/services";
 
+export function updateDashboardPara(
+  parameters: any[],
+  parameterValues: any,
+  newValueKey: string,
+  newValue: [],
+) {
+  const name_index = parameters.findIndex(i => i.slug === newValueKey);
+  if (name_index !== -1) {
+    set(parameterValues, parameters[name_index].id, newValue);
+  }
+}
+
 export async function getDashboardDatas(uuid: string) {
   // const uuid = "93629e56-00c0-48cd-83b0-79fb0b0054f2";
   const datas: any[] = [];

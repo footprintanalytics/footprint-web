@@ -11,18 +11,29 @@ export default class FGATable extends Table {
 
   static settings = {
     ...super.settings,
-    "table.create_cohort": {
+    "table.create_filter_cohort": {
       section: t`Columns`,
-      title: t`Create cohort`,
+      title: t`Create filter cohort`,
       widget: "toggle",
-      getDefault: () => true,
+      getDefault: () => false,
     },
-    "table.send_email": {
+    "table.create_upload_cohort": {
       section: t`Columns`,
-      title: t`Send email`,
+      title: t`Create upload cohort`,
       widget: "toggle",
-      getDefault: () => true,
-    }
-  }
-
+      getDefault: () => false,
+    },
+    "table.create_campaign": {
+      section: t`Columns`,
+      title: t`Create Campaign`,
+      widget: "toggle",
+      getDefault: () => false,
+    },
+    "table.all_user": {
+      section: t`Columns`,
+      title: t`All Users`,
+      widget: "toggle",
+      getDefault: () => false,
+    },
+  };
 }

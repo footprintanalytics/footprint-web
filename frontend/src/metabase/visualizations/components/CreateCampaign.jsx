@@ -146,7 +146,7 @@ const CreateCampaign = ({
         style={style}
         onClick={() => setIsNotificationModalOpen(true)}
       >
-        Create Campaign
+        Create campaign
       </Button>
       <Modal
         style={{ minHeight: 800, minWidth: 600 }}

@@ -11,6 +11,10 @@ export const CreateFgaCohort = async params => {
   return POST("/api/v1/fga/cohort", params);
 };
 
+export const CreateFgaCohortByAddress = async params => {
+  return POST("/api/v1/fga/cohort/address", params);
+};
+
 export const CreateFgaCampaign = async params => {
   return POST("/api/v1/fga/campaign", params);
 };
