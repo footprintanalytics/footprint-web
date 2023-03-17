@@ -2,6 +2,7 @@
   "/api/dashboard endpoints."
   (:require [cheshire.core :as json]
             [clojure.set :as set]
+            [metabase.api.common.field-util :as field-util]
             [clojure.tools.logging :as log]
             [compojure.core :refer [DELETE GET POST PUT]]
             [medley.core :as m]
@@ -688,6 +689,15 @@
                  field-id          (param-key->field-ids dashboard param-key)]
              [field-id value])))
 
+
+(defn- getNewFieldIds [field-ids]
+  ;;Need to replace the field mapping, the left is the original field, the right is the replaced field. Such as 1 2, the fieldid is 1 replaced with 2
+  (let [mapping field-util/filterFieldIdMapping]
+    (->> field-ids
+         (replace mapping)
+         (distinct)
+         (into #{}))))
+
 (s/defn chain-filter
   "C H A I N filters!
 
@@ -713,7 +723,8 @@
                        {:resolved-params (keys (:resolved-params dashboard))
                         :status-code     400})))
      (let [constraints (chain-filter-constraints dashboard constraint-param-key->value)
-           field-ids   (param-key->field-ids dashboard param-key)]
+           field-ids   (param-key->field-ids dashboard param-key)
+           field-ids   (getNewFieldIds field-ids)]
       (when (empty? field-ids)
         (throw (ex-info (tru "Parameter {0} does not have any Fields associated with it" (pr-str param-key))
                         {:param       (get (:resolved-params dashboard) param-key)

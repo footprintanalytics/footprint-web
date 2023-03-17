@@ -2,6 +2,7 @@
   (:require [clojure.tools.logging :as log]
             [compojure.core :refer [DELETE GET POST PUT]]
             [metabase.api.common :as api]
+            [metabase.api.common.field-util :as field-util]
             [metabase.db.metadata-queries :as metadata-queries]
             [metabase.models.dimension :refer [Dimension]]
             [metabase.models.field :as field :refer [Field]]
@@ -373,13 +374,20 @@
        (log/debug e (trs "Error searching field values"))
        nil))))
 
+(defn- getNewFieldId [field-id]
+  ;;Need to replace the field mapping, the left is the original field, the right is the replaced field. Such as 1 2, the fieldid is 1 replaced with 2
+  (let [mapping field-util/filterFieldIdMapping
+        new-field-id (or (get mapping field-id) field-id)]
+    new-field-id))
 
 (api/defendpoint GET "/:id/search/:search-id"
   "Search for values of a Field with `search-id` that start with `value`. See docstring for
   `metabase.api.field/search-values` for a more detailed explanation."
   [id search-id value]
   {value su/NonBlankString}
-  (let [field        (api/check-404 (db/select-one Field :id id))
+  (let [id           (getNewFieldId id)
+        search-id    (getNewFieldId search-id)
+        field        (api/check-404 (db/select-one Field :id id))
         search-field (api/check-404 (db/select-one Field :id search-id))]
     (throw-if-no-read-or-segmented-perms field)
     (throw-if-no-read-or-segmented-perms search-field)
