@@ -51,10 +51,6 @@ import { memoizeClass } from "metabase-lib/utils";
 import { VisualizationSlowSpinner } from "./Visualization.styled";
 import CreateCohort from "./CreateCohort";
 import "./Visualization.css";
-import {
-  getGrowthProjectPath,
-  getLatestGAProject,
-} from "metabase/growth/utils/utils";
 
 // NOTE: pass `CardVisualization` so that we don't include header when providing size to child element
 
@@ -617,23 +613,43 @@ class Visualization extends React.PureComponent {
                     top: 20,
                   }}
                 >
-                  {get(this.state.computedSettings, "table.create_cohort") && (
+                  {get(
+                    this.state.computedSettings,
+                    "table.create_filter_cohort",
+                  ) && (
                     <CreateCohort
                       state={this.state}
                       propData={this.props}
-                      style={{ marginLeft: 20 }}
+                      cohortType="query"
+                      btnText="Filter to create cohort"
+                      style={{ marginLeft: 10 }}
                     />
                   )}
-                  {get(this.state.computedSettings, "table.send_email") && (
+                  {get(
+                    this.state.computedSettings,
+                    "table.create_upload_cohort",
+                  ) && (
+                    <CreateCohort
+                      state={this.state}
+                      propData={this.props}
+                      cohortType="upload"
+                      btnText="Upload to create cohort"
+                      style={{ marginLeft: 10 }}
+                    />
+                  )}
+                  {get(
+                    this.state.computedSettings,
+                    "table.create_campaign",
+                  ) && (
                     <CreateCampaign
                       state={this.state}
                       propData={this.props}
-                      style={{ marginLeft: 20 }}
+                      style={{ marginLeft: 10 }}
                     />
                   )}
-                  {["Cohort List", "All Cohorts"].includes(
-                    this.state.computedSettings["card.title"],
-                  ) && <ToAllUser style={{ marginLeft: 20 }}></ToAllUser>}
+                  {get(this.state.computedSettings, "table.all_user") && (
+                    <ToAllUser style={{ marginLeft: 10 }}></ToAllUser>
+                  )}
                 </div>
               )}
             <CardVisualization

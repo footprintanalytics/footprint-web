@@ -36,6 +36,7 @@ import {
 } from "metabase/services";
 import { parseHashOptions } from "metabase/lib/browser";
 import { parseTitleId } from "metabase/lib/urls";
+import { updateDashboardPara } from "metabase/growth/utils/utils";
 import EmbedFrame from "../components/EmbedFrame";
 
 const mapStateToProps = (state, props) => {
@@ -45,18 +46,15 @@ const mapStateToProps = (state, props) => {
 
   if (project) {
     // switch protocol
-    const name_index = parameters.findIndex(i => i.slug === "gamefi");
-    if (name_index !== -1) {
-      set(parameterValues, parameters[name_index].id, [project.projectName]);
-    }
-    const collection_contract_address_index = parameters.findIndex(
-      i => i.slug === "collection_contract_address",
+    updateDashboardPara(parameters, parameterValues, "gamefi", [
+      project.projectName,
+    ]);
+    updateDashboardPara(
+      parameters,
+      parameterValues,
+      "collection_contract_address",
+      [project.collection_contract_address],
     );
-    if (collection_contract_address_index !== -1) {
-      set(parameterValues, parameters[collection_contract_address_index].id, [
-        project.collection_contract_address,
-      ]);
-    }
   }
   return {
     metadata: getMetadata(state, props),

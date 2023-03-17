@@ -18,7 +18,7 @@ const ToAllUser = ({ style, user, router, menu, project }) => {
           });
         }}
       >
-        All Users
+        All users
       </Button>
     </>
   );
