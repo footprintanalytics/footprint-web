@@ -97,10 +97,9 @@ const CreateCohort = ({
             queryCondition: queryCondition ?? [],
           };
     try {
-      const result =
-        (await cohortType) === "upload"
-          ? CreateFgaCohortByAddress(parms)
-          : CreateFgaCohort(parms);
+      const result = await (cohortType === "upload"
+        ? CreateFgaCohortByAddress(parms)
+        : CreateFgaCohort(parms));
       if (result) {
         message.success("Successfully create a cohort!");
         setCohortModalOpen(false);
