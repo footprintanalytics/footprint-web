@@ -1072,6 +1072,7 @@ class QuestionInner {
     isDirty = false,
     ignoreCache = false,
     collectionPreview = false,
+    isPreview = false,
   } = {}): Promise<[Dataset]> {
     // TODO Atte Keinänen 7/5/17: Should we clean this query with Query.cleanQuery(query) before executing it?
     const canUseCardApiEndpoint = !isDirty && this.isSaved();
@@ -1114,7 +1115,7 @@ class QuestionInner {
       const getDatasetQueryResult = datasetQuery => {
         const datasetQueryWithParameters = { ...datasetQuery, parameters };
         return maybeUsePivotEndpoint(
-          MetabaseApi.dataset,
+          isPreview ? MetabaseApi.dataset_preview : MetabaseApi.dataset,
           this.card(),
           this.metadata(),
         )(

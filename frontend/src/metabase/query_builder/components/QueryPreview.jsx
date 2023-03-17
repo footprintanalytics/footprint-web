@@ -153,6 +153,7 @@ function QueryPreview(props) {
           fromQueryPreview
           height={description ? 300 : 340}
           onClose={closeAction}
+          isPreview={true}
         />
       )}
       <Modal isOpen={confirmModal}>
