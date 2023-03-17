@@ -1603,8 +1603,8 @@ export const top_protocols = [
    },
    {
      name: "Go-To-Marketing",
+     icon: React.createElement(LineChartOutlined),
      children: [
-       icon: React.createElement(LineChartOutlined),
        {
          name: "Airdrop",
          id: 7426,
