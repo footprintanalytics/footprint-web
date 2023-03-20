@@ -462,7 +462,8 @@ export function setPublicQuestionEndpoints(uuid) {
   setFieldEndpoints("/api/public/card/:uuid", { uuid });
 }
 export function setPublicDashboardEndpoints() {
-  setParamsEndpoints("/api/v1/public");
+  console.log("setPublicDashboardEndpoints")
+  setPublicParamsEndpoints();
   // setParamsEndpoints("/api/public");
 }
 export function setEmbedQuestionEndpoints(token) {
@@ -501,6 +502,15 @@ function setParamsEndpoints(prefix) {
   );
   DashboardApi.parameterSearch = GET(
     prefix + "/dashboard/:dashId/params/:paramId/search/:query",
+  );
+}
+
+function setPublicParamsEndpoints() {
+  DashboardApi.parameterValues = GET(
+    "/api/v1/public" + "/dashboard/:dashId/params/:paramId/values",
+  );
+  DashboardApi.parameterSearch = GET(
+    "/api/public" + "/dashboard/:dashId/params/:paramId/search/:query",
   );
 }
 
