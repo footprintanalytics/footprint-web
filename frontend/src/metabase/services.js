@@ -462,7 +462,6 @@ export function setPublicQuestionEndpoints(uuid) {
   setFieldEndpoints("/api/public/card/:uuid", { uuid });
 }
 export function setPublicDashboardEndpoints() {
-  console.log("setPublicDashboardEndpoints")
   setPublicParamsEndpoints();
   // setParamsEndpoints("/api/public");
 }
