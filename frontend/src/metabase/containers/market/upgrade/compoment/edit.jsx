@@ -12,21 +12,30 @@ const EditUserUpgradeModal = props => {
   const handleChange = () => {};
 
   const renderTypeSelectData = () => {
+    const items = [
+      {
+        value: "business",
+        label: "Business",
+      },
+      {
+        value: "growth",
+        label: "Growth",
+      },
+      {
+        value: "scale",
+        label: "Scale",
+      },
+    ]
     return (
       <React.Fragment>
-        <Select.Option
-          value="business"
-          // disabled={type === "enterprise"}
-        >
-          Business
-        </Select.Option>
-        <Select.Option
-          value="scale"
-          // disabled={type === "enterprise"}
-        >
-          Scale
-        </Select.Option>
-        {/* <Select.Option value="enterprise">enterprise</Select.Option> */}
+        {items.map(item =>
+          <Select.Option
+            key={item.value}
+            value={item.value}
+          >
+            {item.label}
+          </Select.Option>
+        )}
       </React.Fragment>
     );
   };
