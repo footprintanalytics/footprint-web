@@ -317,6 +317,7 @@ export const MetabaseApi = {
   ),
   field_search: GET("/api/v1/field/:fieldId/search/:searchFieldId"),
   dataset: POST("/api/v1/database/dataset"),
+  dataset_preview: POST("/api/v1/database/dataset/preview"),
 };
 
 export const ModerationReviewApi = {

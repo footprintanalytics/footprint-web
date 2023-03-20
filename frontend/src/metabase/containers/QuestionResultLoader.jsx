@@ -43,14 +43,14 @@ export class QuestionResultLoader extends React.Component {
     const { question, onLoad, keepPreviousWhileLoading } = nextProps;
     // if the question is different, we need to do a fresh load
     if (question && !question.isEqual(this.props.question)) {
-      this._loadResult(question, onLoad, keepPreviousWhileLoading);
+      this._loadResult({ question, onLoad, keepPreviousWhileLoading });
     }
   }
 
   /*
    * load the result by calling question.apiGetResults
    */
-  async _loadResult(question, onLoad, keepPreviousWhileLoading) {
+  async _loadResult({ question, onLoad, keepPreviousWhileLoading, isPreview }) {
     const { collectionPreview } = this.props;
 
     // we need to have a question for anything to happen
@@ -70,6 +70,7 @@ export class QuestionResultLoader extends React.Component {
         const results = await question.apiGetResults({
           cancelDeferred: this._cancelDeferred,
           collectionPreview,
+          isPreview,
         });
 
         // setState with our result, remove our cancel since we've finished
@@ -94,8 +95,8 @@ export class QuestionResultLoader extends React.Component {
    * load again
    */
   _reload = () => {
-    const { question, onLoad, keepPreviousWhileLoading } = this.props;
-    this._loadResult(question, onLoad, keepPreviousWhileLoading);
+    const { question, onLoad, keepPreviousWhileLoading, isPreview } = this.props;
+    this._loadResult({ question, onLoad, keepPreviousWhileLoading, isPreview });
   };
 
   /*
