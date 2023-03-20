@@ -64,7 +64,7 @@ class NotebookStepPreview extends React.Component {
   };
 
   render() {
-    const { onClose, fromQueryPreview, className } = this.props;
+    const { onClose, fromQueryPreview, className, isPreview } = this.props;
     const { question } = this.state;
 
     const isDirty = this.getIsDirty();
@@ -92,7 +92,7 @@ class NotebookStepPreview extends React.Component {
             <Button onClick={this.refresh}>{t`Refresh`}</Button>
           </PreviewButtonContainer>
         ) : (
-          <QuestionResultLoader question={question}>
+          <QuestionResultLoader question={question} isPreview={isPreview}>
             {({ rawSeries, result }) => (
               <Motion
                 defaultStyle={{ height: 36 }}
