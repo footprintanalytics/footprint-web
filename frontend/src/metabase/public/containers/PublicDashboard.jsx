@@ -5,7 +5,7 @@ import { push } from "react-router-redux";
 import cx from "classnames";
 
 import _ from "underscore";
-import { set } from "lodash";
+import { isArray } from "lodash";
 import { IFRAMED } from "metabase/lib/dom";
 
 import LoadingAndErrorWrapper from "metabase/components/LoadingAndErrorWrapper";
@@ -36,25 +36,36 @@ import {
 } from "metabase/services";
 import { parseHashOptions } from "metabase/lib/browser";
 import { parseTitleId } from "metabase/lib/urls";
-import { updateDashboardPara } from "metabase/growth/utils/utils";
+import {
+  updateDashboardPara,
+  getDefaultDashboardPara,
+} from "metabase/growth/utils/utils";
 import EmbedFrame from "../components/EmbedFrame";
 
 const mapStateToProps = (state, props) => {
   const parameters = getParameters(state, props);
   const parameterValues = getParameterValues(state, props);
   const project = props.project;
-
   if (project) {
     // switch protocol
     updateDashboardPara(parameters, parameterValues, "gamefi", [
       project.projectName,
     ]);
-    updateDashboardPara(
-      parameters,
-      parameterValues,
-      "collection_contract_address",
-      [project.collection_contract_address],
-    );
+    if (project.collection_contract_address?.length > 0) {
+      const key = "collection_contract_address";
+      let queryCollection = getDefaultDashboardPara(
+        parameters,
+        parameterValues,
+        key,
+      );
+      queryCollection =
+        queryCollection &&
+        !isArray(queryCollection) &&
+        project.collection_contract_address.includes(queryCollection)
+          ? queryCollection
+          : project.collection_contract_address?.[0];
+      updateDashboardPara(parameters, parameterValues, key, queryCollection);
+    }
   }
   return {
     metadata: getMetadata(state, props),

@@ -59,7 +59,7 @@ const Project = props => {
     const p = top_protocols.find(i => i.protocol_slug === project);
     return {
       projectName: project,
-      collection_contract_address: p?.collections_list?.[0],
+      collection_contract_address: p?.collections_list,
       project: p,
     };
   };
