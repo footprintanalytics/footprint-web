@@ -8,9 +8,18 @@ export function updateDashboardPara(
   newValue: [],
 ) {
   const name_index = parameters.findIndex(i => i.slug === newValueKey);
-  if (name_index !== -1) {
+  if (name_index !== -1 && parameterValues[parameters[name_index].id]) {
     set(parameterValues, parameters[name_index].id, newValue);
   }
+}
+
+export function getDefaultDashboardPara(
+  parameters: any[],
+  parameterValues: any,
+  newValueKey: string,
+) {
+  const id = parameters.find(i => i.slug === newValueKey)?.id;
+  return id ? parameterValues[id] : null;
 }
 
 export async function getDashboardDatas(uuid: string) {
