@@ -50,6 +50,7 @@ import Mode from "metabase-lib/Mode";
 import { memoizeClass } from "metabase-lib/utils";
 import { VisualizationSlowSpinner } from "./Visualization.styled";
 import CreateCohort from "./CreateCohort";
+import CreateFliterCohort from "./CreateFliterCohort";
 import "./Visualization.css";
 
 // NOTE: pass `CardVisualization` so that we don't include header when providing size to child element
@@ -613,27 +614,17 @@ class Visualization extends React.PureComponent {
                     top: 20,
                   }}
                 >
+                  {get(this.state.computedSettings, "table.create_cohort") && (
+                    <CreateCohort style={{ marginLeft: 10 }} />
+                  )}
                   {get(
                     this.state.computedSettings,
                     "table.create_filter_cohort",
                   ) && (
-                    <CreateCohort
+                    <CreateFliterCohort
                       state={this.state}
                       propData={this.props}
-                      cohortType="query"
                       btnText="Filter to create cohort"
-                      style={{ marginLeft: 10 }}
-                    />
-                  )}
-                  {get(
-                    this.state.computedSettings,
-                    "table.create_upload_cohort",
-                  ) && (
-                    <CreateCohort
-                      state={this.state}
-                      propData={this.props}
-                      cohortType="upload"
-                      btnText="Upload to create cohort"
                       style={{ marginLeft: 10 }}
                     />
                   )}
@@ -646,9 +637,6 @@ class Visualization extends React.PureComponent {
                       propData={this.props}
                       style={{ marginLeft: 10 }}
                     />
-                  )}
-                  {get(this.state.computedSettings, "table.all_user") && (
-                    <ToAllUser style={{ marginLeft: 10 }}></ToAllUser>
                   )}
                 </div>
               )}
