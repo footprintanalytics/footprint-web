@@ -181,7 +181,7 @@ class FieldValuesWidgetInner extends Component {
   fetchDashboardParamValues = async query => {
     const { dashboard, parameter, parameters } = this.props;
     const args = {
-      dashboardId: Utils.isUUID(dashboard?.id) ? dashboard?.entityId : dashboard?.id,
+      dashboardId: dashboard?.id,
       parameter,
       parameters,
       query,

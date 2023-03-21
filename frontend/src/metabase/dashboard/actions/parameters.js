@@ -27,6 +27,8 @@ import { isVirtualDashCard } from "../utils";
 
 import { setDashboardAttributes, setDashCardAttributes } from "./core";
 import { setSidebar, closeSidebar } from "./ui";
+import { setPublicDashboardEndpoints } from "../../services";
+import MetabaseUtils from "../../lib/utils";
 
 function updateParameter(dispatch, getState, id, parameterUpdater) {
   const dashboard = getDashboard(getState());
@@ -249,6 +251,10 @@ export const fetchDashboardParameterValuesWithCache = createThunkAction(
 
       if (parameterValuesSearchCache[cacheKey]) {
         return;
+      }
+
+      if (MetabaseUtils.isUUID(dashboardId)) {
+        setPublicDashboardEndpoints();
       }
 
       const endpoint = query
