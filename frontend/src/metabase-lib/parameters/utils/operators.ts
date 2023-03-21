@@ -50,6 +50,7 @@ function getParameterOperatorType(parameterType?: string) {
     case "number":
       return NUMBER;
     case "string":
+    case "fga-string":
     case "category":
     case "series_category":
     case "location":

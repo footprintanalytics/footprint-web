@@ -202,7 +202,7 @@ class ParameterValueWidget extends Component {
       return (
         <div
           ref={this.trigger}
-          className={cx(S.parameter, S.noPopover, className, {
+          className={cx(S.parameter, S.noPopover, className, "xxxxxx", {
             [S.selected]: hasValue,
             [S.isEditing]: isEditing,
           })}
@@ -236,7 +236,6 @@ class ParameterValueWidget extends Component {
           ? t`Select a default value…`
           : t`Enter a default value…`
         : placeholder || t`Select…`;
-
       return (
         <PopoverWithTrigger
           ref={this.valuePopover}
@@ -370,6 +369,7 @@ function Widget({
         fields={parameter.fields}
         setValue={value => {
           setValue(value);
+          console.log("value", value)
           onPopoverClose();
         }}
         isEditing={isEditing}

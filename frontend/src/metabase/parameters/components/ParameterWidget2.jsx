@@ -8,8 +8,11 @@ import FieldSet from "../../components/FieldSet";
 import ParameterValueWidget from "./ParameterValueWidget";
 
 import S from "./ParameterWidget.css";
+import "metabase/containers/protocols/components/Protocols/index.css";
+import Category from "metabase/containers/protocols/components/Protocols/Category";
+import FGACategory from "metabase/parameters/components/FGACategory";
 
-export default class ParameterWidget extends Component {
+export default class ParameterWidget2 extends Component {
   state = {
     isEditingName: false,
     editingNameValue: undefined,
@@ -68,6 +71,7 @@ export default class ParameterWidget extends Component {
       setEditingParameter,
       setValue,
       children,
+      dashboard,
       dragHandle,
     } = this.props;
 
@@ -78,24 +82,11 @@ export default class ParameterWidget extends Component {
       const fieldHasValueOrFocus =
         parameter.value != null || this.state.isFocused;
       const legend = fieldHasValueOrFocus ? parameter.name : "";
-
       return (
-        <FieldSet
-          legend={legend}
-          noPadding={true}
-          className={cx(className, S.container, {
-            "border-brand": fieldHasValueOrFocus,
-          })}
-        >
-          {this.renderPopover(
-            parameter.value,
-            value => setValue(value),
-            parameter.name,
-            isFullscreen,
-          )}
-          {/*{children}*/}
-        </FieldSet>
-      );
+        <div >
+          <FGACategory dashboard={dashboard} fields={parameter.fields} {...this.props}/>
+        </div>
+      )
     };
 
     const renderEditing = () => (

@@ -10,6 +10,7 @@ import {
 } from "metabase/components/sortable";
 import { getVisibleParameters } from "metabase/parameters/utils/ui";
 import StaticParameterWidget from "./ParameterWidget";
+import StaticParameterWidget2 from "./ParameterWidget2";
 
 const StaticParameterWidgetList = ({
   children,
@@ -76,42 +77,81 @@ function ParametersList({
     ParameterWidgetList = StaticParameterWidgetList;
   }
 
+  const fgaVisibleValuePopulatedParameters = visibleValuePopulatedParameters?.filter(item => item.slug === 'fga_text');
+  const normalVisibleValuePopulatedParameters = visibleValuePopulatedParameters?.filter(item => item.slug !== 'fga_text');
   return visibleValuePopulatedParameters.length > 0 ? (
-    <ParameterWidgetList
-      className={cx(
-        className,
-        "flex align-end flex-wrap",
-        vertical ? "flex-column" : "flex-row",
-      )}
-      axis="x"
-      distance={9}
-      onSortStart={handleSortStart}
-      onSortEnd={handleSortEnd}
-    >
-      {visibleValuePopulatedParameters.map((valuePopulatedParameter, index) => (
-        <ParameterWidget
-          key={valuePopulatedParameter.id}
-          className={cx({ mb2: vertical })}
-          isEditing={isEditing}
-          isFullscreen={isFullscreen}
-          isNightMode={isNightMode}
-          parameter={valuePopulatedParameter}
-          parameters={parameters}
-          dashboard={dashboard}
-          editingParameter={editingParameter}
-          setEditingParameter={setEditingParameter}
-          index={index}
-          setValue={
-            setParameterValue &&
-            (value => setParameterValue(valuePopulatedParameter.id, value))
-          }
-          commitImmediately={commitImmediately}
-          dragHandle={
-            isEditing && setParameterIndex ? <SortableParameterHandle /> : null
-          }
-        />
-      ))}
-    </ParameterWidgetList>
+    <div className="flex flex-column w-full">
+      <ParameterWidgetList
+        className={cx(
+          className,
+          "flex align-end flex-wrap",
+          vertical ? "flex-column" : "flex-row",
+        )}
+        axis="x"
+        distance={9}
+        onSortStart={handleSortStart}
+        onSortEnd={handleSortEnd}
+      >
+        {fgaVisibleValuePopulatedParameters.map((valuePopulatedParameter, index) => (
+          <StaticParameterWidget2
+            key={valuePopulatedParameter.id}
+            className={cx({ mb2: vertical })}
+            isEditing={isEditing}
+            isFullscreen={isFullscreen}
+            isNightMode={isNightMode}
+            parameter={valuePopulatedParameter}
+            parameters={parameters}
+            dashboard={dashboard}
+            editingParameter={editingParameter}
+            setEditingParameter={setEditingParameter}
+            index={index}
+            setValue={
+              setParameterValue &&
+              (value => setParameterValue(valuePopulatedParameter.id, value))
+            }
+            commitImmediately={commitImmediately}
+            dragHandle={
+              isEditing && setParameterIndex ? <SortableParameterHandle /> : null
+            }
+          />
+        ))}
+      </ParameterWidgetList>
+      <ParameterWidgetList
+        className={cx(
+          className,
+          "flex align-end flex-wrap",
+          vertical ? "flex-column" : "flex-row",
+        )}
+        axis="x"
+        distance={9}
+        onSortStart={handleSortStart}
+        onSortEnd={handleSortEnd}
+      >
+        {normalVisibleValuePopulatedParameters.map((valuePopulatedParameter, index) => (
+          <ParameterWidget
+            key={valuePopulatedParameter.id}
+            className={cx({ mb2: vertical })}
+            isEditing={isEditing}
+            isFullscreen={isFullscreen}
+            isNightMode={isNightMode}
+            parameter={valuePopulatedParameter}
+            parameters={parameters}
+            dashboard={dashboard}
+            editingParameter={editingParameter}
+            setEditingParameter={setEditingParameter}
+            index={index}
+            setValue={
+              setParameterValue &&
+              (value => setParameterValue(valuePopulatedParameter.id, value))
+            }
+            commitImmediately={commitImmediately}
+            dragHandle={
+              isEditing && setParameterIndex ? <SortableParameterHandle /> : null
+            }
+          />
+        ))}
+      </ParameterWidgetList>
+    </div>
   ) : null;
 }
 

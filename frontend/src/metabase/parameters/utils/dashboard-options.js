@@ -40,6 +40,12 @@ export function getDashboardParameterSections() {
       options: SERIES_CATEGORY_OPTIONS,
     },
     {
+      id: "fga_string",
+      name: t`FGA Panel`,
+      description: t`Name, Rating, Description, etc.`,
+      options: buildTypedOperatorOptions("string", "string", t`FGA Text`),
+    },
+    {
       id: "string",
       name: t`Text or Category`,
       description: t`Name, Rating, Description, etc.`,
