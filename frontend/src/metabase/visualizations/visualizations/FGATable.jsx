@@ -5,7 +5,7 @@ import { t } from "ttag";
 import Table from "./Table";
 
 export default class FGATable extends Table {
-  static uiName = t`FGATable`;
+  static uiName = t`Activation Table`;
   static identifier = "fgatable";
   static iconName = "table";
 
