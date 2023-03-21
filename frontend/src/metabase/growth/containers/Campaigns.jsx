@@ -17,7 +17,7 @@ import Title from "antd/lib/typography/Title";
 import Icon from "metabase/components/Icon";
 import { getUser } from "metabase/selectors/user";
 import "../css/utils.css";
-import CreateCampaign from "metabase/visualizations/components/CreateCampaign";
+import CreateCampaign from "metabase/growth/components/buttons/CreateCampaign";
 import { getLatestGACampaigns } from "../utils/utils";
 
 const Campaigns = props => {

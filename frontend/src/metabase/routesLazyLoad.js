@@ -333,9 +333,6 @@ export default {
   GaConfigContainer: loadable(() =>
     import("metabase/growth/containers/CreateProject"),
   ),
-  GaProjectsContainer: loadable(() =>
-    import("metabase/growth/containers/Projects"),
-  ),
   GaConnectorsContainer: loadable(() =>
     import("metabase/growth/containers/Connectors"),
   ),

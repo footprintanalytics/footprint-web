@@ -42,7 +42,7 @@ import ActivityZkspaceSubmitModal from "metabase/components/ActivityZkspaceSubmi
 import EntityMenu from "metabase/components/EntityMenu";
 import UserAvatar from "metabase/components/UserAvatar";
 import VipIcon from "metabase/components/VipIcon";
-import CreateProjectModal from "metabase/growth/components/CreateProjectModal";
+import CreateProjectModal from "metabase/growth/components/Modal/CreateProjectModal";
 import { getContext, getPath, getUser } from "../selectors";
 
 const mapStateToProps = (state, props) => ({

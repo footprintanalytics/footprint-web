@@ -63,7 +63,7 @@ const mapStateToProps = (state, props) => {
         !isArray(queryCollection) &&
         project.collection_contract_address.includes(queryCollection)
           ? queryCollection
-          : project.collection_contract_address?.[0];
+          : project.collection_contract_address;
       updateDashboardPara(parameters, parameterValues, key, queryCollection);
     }
   }
