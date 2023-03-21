@@ -1602,6 +1602,19 @@ export const top_protocols = [
      // ],
    },
    {
+     name: "Campaign",
+     icon: React.createElement(CommentOutlined),
+     id: null,
+     //  children: [
+     //    { name: "Campaign", id: null, uuid: null },
+     //    { name: "Airdrop", id: null, uuid: null },
+     //    // { name: "User List", id: 7136 },
+     //    // { name: "User Group", id: null },
+     //    // { name: "Wallet Radar", id: null },
+     //    { name: "User activation", id: null, uuid: null },
+     //  ],
+   },
+   {
      name: "Go-To-Marketing",
      icon: React.createElement(LineChartOutlined),
      children: [
@@ -1617,19 +1630,7 @@ export const top_protocols = [
        },
      ],
    },
-   {
-     name: "Campaign",
-     icon: React.createElement(CommentOutlined),
-     id: null,
-     //  children: [
-     //    { name: "Campaign", id: null, uuid: null },
-     //    { name: "Airdrop", id: null, uuid: null },
-     //    // { name: "User List", id: 7136 },
-     //    // { name: "User Group", id: null },
-     //    // { name: "Wallet Radar", id: null },
-     //    { name: "User activation", id: null, uuid: null },
-     //  ],
-   },
+
    {
      name: "Traffic",
      icon: React.createElement(RocketOutlined),
