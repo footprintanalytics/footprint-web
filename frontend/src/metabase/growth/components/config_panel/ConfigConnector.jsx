@@ -1,7 +1,8 @@
 /* eslint-disable react/prop-types */
 import React, { useState } from "react";
-import { Button, Input, Form, message } from "antd";
+import { Button, Input, Form, message, Modal } from "antd";
 import { addConnectors } from "metabase/new-service";
+import { Link } from "react-router";
 const layout = {
   labelCol: { span: 24 },
   wrapperCol: { span: 24 },
@@ -58,6 +59,9 @@ const ConfigConnector = props => {
           if (result?.result === "success") {
             message.success("Successfully configured connector.");
             onAddConnector(true);
+            if (connector.name === "Discord") {
+              showDiscordBotLink(values);
+            }
           } else {
             message.error(`Configured connector ${result?.result}`);
           }
@@ -69,6 +73,28 @@ const ConfigConnector = props => {
   };
   const onEdit = value => {
     setEditable(true);
+  };
+
+  const showDiscordBotLink = values => {
+    const link = `https://discord.com/oauth2/authorize?client_id=${values.bot_id}&scope=bot&permissions=0&guild_id=${values.guild_id}`;
+    Modal.info({
+      title: "The final and crucial step!",
+      content: (
+        <div style={{ marginTop: 20 }}>
+          <p>
+            In order for the connector to function, you must incorporate our
+            Discord bot into your guild.
+          </p>
+          <Link target="_blank" href={link}>
+            CLick this link to add bot:
+            <p>https://discord.com/oauth2/authorize/.....</p>
+          </Link>
+        </div>
+      ),
+      onOk() {
+        window.open(link, "_blank");
+      },
+    });
   };
 
   const toAuthorization = propertyId => {
