@@ -47,13 +47,11 @@ const FGACategory = props => {
     let valuesMode = status.valuesMode;
     try {
       if (usesChainFilterEndpoints(dashboard)) {
-        console.log("xxx")
         const { results, has_more_values } =
           await fetchDashboardParamValues(query);
         options = results;
         valuesMode = has_more_values ? "search" : valuesMode;
       } else {
-        console.log("yyy")
         options = await fetchFieldValues(query);
         valuesMode = getValuesMode(
           fields,
