@@ -244,3 +244,27 @@
         :now (t/offset-date-time)}
       )
     )
+
+(defn run-query-for-card-sql
+  "get card sql splice parameter"
+  [card-id export-format
+   & {:keys [parameters constraints context dashboard-id middleware qp-runner run ignore_cache]
+      :or   {constraints (qp.constraints/default-query-constraints)
+             context     :question
+             qp-runner   qp/process-query-and-save-execution!}}]
+  {:pre [(int? card-id) (u/maybe? sequential? parameters)]}
+  (let [card  (api/read-check (db/select-one [Card :id :name :dataset_query :database_id :is_write
+                                                       :cache_ttl :collection_id :dataset :result_metadata]
+                                             :id card-id))
+        query (-> (assoc (query-for-card card parameters constraints middleware {:dashboard-id dashboard-id}) :async? true)
+                  (update :middleware (fn [middleware]
+                                        (merge
+                                         {:js-int-to-string? true :ignore-cached-results? ignore_cache}
+                                         middleware))))]
+    (api/check-not-archived card)
+    (api/check-is-readonly card)
+    (when (seq parameters)
+      (validate-card-parameters card-id (mbql.normalize/normalize-fragment [:parameters] parameters)))
+
+    (dissoc (qp/compile-and-splice-parameters query) :params))
+  )
