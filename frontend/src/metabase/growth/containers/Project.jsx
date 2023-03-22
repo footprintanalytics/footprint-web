@@ -17,6 +17,7 @@ import {
 } from "../utils/utils";
 import { fga_menu_data, top_protocols } from "../utils/data";
 import Connectors from "./Connectors";
+import Activator from "./Activator";
 import CustomAnalysis from "./CustomAnalysis";
 import TemplateGallery from "./TemplateGallery";
 import MyFavoriteTemplate from "./MyFavoriteTemplate";
@@ -88,6 +89,16 @@ const Project = props => {
         ></Connectors>
       );
     }
+    if (current_tab === "Activator") {
+      return (
+        <Activator
+          location={location}
+          router={router}
+          project={getProjectObject(project)}
+          projectId={getLatestGAProjectId()}
+        ></Activator>
+      );
+    }
     if (current_tab === "Project Info") {
       return (
         <ProjectInfo
@@ -123,7 +134,7 @@ const Project = props => {
         {tab} is coming soon~
       </div>
     );
-  }
+  };
   return (
     <GaLayout router={router} location={location}>
       <Layout hasSider className="h-full">

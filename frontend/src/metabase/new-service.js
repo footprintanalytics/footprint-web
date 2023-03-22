@@ -39,6 +39,14 @@ export const UpdateFgaConnector = async params => {
   return PUT(`/api/v1/fga/connector-config/${params.id}`, params);
 };
 
+export const getAvailableConnectors = async params => {
+  return POST(`/api/v1/fga/connector-config/available`, params);
+};
+
+export const addConnectors = async params => {
+  return POST(`/api/v1/fga/connector-config`, params);
+};
+
 // FP Api
 export const UserRegister = async params => {
   return POST("/api/v1/user/signup", params);

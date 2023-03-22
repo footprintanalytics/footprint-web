@@ -16,12 +16,13 @@ import {
 import Title from "antd/lib/typography/Title";
 import { useQuery } from "react-query";
 import { QUERY_OPTIONS } from "metabase/containers/dashboards/shared/config";
-import { GetFgaConnectors, getAvailableConnectors } from "metabase/new-service";
+import { GetFgaConnectors } from "metabase/new-service";
 import { getUser } from "metabase/selectors/user";
 
 import AF from "assets/img/af.png";
 import BQ from "assets/img/BQ.svg";
 import GA from "assets/img/GA.svg";
+import messageIcon from "assets/img/message.svg";
 import {
   loginModalShowAction,
   createFgaProjectModalShowAction,
@@ -34,7 +35,7 @@ import ConfigGoogleAnalyticsSource from "../components/config_panel/ConfigGoogle
 import "../css/utils.css";
 const { Text } = Typography;
 
-const Connectors = props => {
+const Activator = props => {
   const {
     router,
     location,
@@ -48,46 +49,28 @@ const Connectors = props => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [openDrawer, setOpenDrawer] = useState({ show: false, connector: {} });
 
-  const { isLoading, data } = useQuery(
-    ["getAvailableConnectors", projectId],
-    async () => {
-      if (projectId) {
-        return await getAvailableConnectors({ projectId: parseInt(projectId) });
-      } else {
-        return;
-      }
-    },
-    QUERY_OPTIONS,
-  );
-  /**
-{
-  "name": "Twitter",
-  "description": "This connector can help your to using appsflyers",
-  "icon": "",
-  "sourceDefinitionId": "29c24dbc-2ab4-40d7-9b4c-479acef7f369",
-  "connectionSpecification": [
-    {
-      "type": "string",
-      "title": "Screen Name",
-      "key": "screen_name",
-      "required": true,
-      "value": "",
-      "private": false
-    }
-  ],
-  "mode": "normal",
-  "active": true,
-  "configured": false
-}
- */
+  const isLoading = false;
+  const data = [];
+  // const { isLoading, data } = useQuery(
+  //   ["GetFgaConnectors", projectId],
+  //   async () => {
+  //     if (projectId) {
+  //       return await GetFgaConnectors({ projectId: projectId });
+  //     } else {
+  //       return;
+  //     }
+  //   },
+  //   QUERY_OPTIONS,
+  // );
+
   useEffect(() => {
     const temp = [
       {
-        name: "Google Analytics",
-        key: "Google Analytics daily",
-        icon: GA,
+        name: "Email",
+        key: "Email",
+        icon: messageIcon,
         statu: "unconnected",
-        desc: "Google Analytics can help you to analytic the user event of your project and known your user most!",
+        desc: "Activator your users by email.",
         pannel: (
           <ConfigGoogleAnalyticsSource
             onAddConnector={onAddConnector}
@@ -101,34 +84,12 @@ const Connectors = props => {
           />
         ),
       },
-      // {
-      //   name: "BigQuery",
-      //   key: "bq",
-      //   icon: BQ,
-      //   pannel: <ConfigBigQuerySource onAddConnector={onAddConnector} />,
-      // },
-      {
-        name: "Appsflyers",
-        key: "af",
-        icon: AF,
-        statu: "unconnected",
-        desc: "This connector can help your to using appsflyers ",
-        pannel: <ConfigAppsFlyerSource onAddConnector={onAddConnector} />,
-      },
       {
         name: "Discord",
         key: "discord",
         statu: "unconnected",
         icon: "https://footprint-imgs-hk.oss-cn-hongkong.aliyuncs.com/20220516201343.png",
-        desc: "This connector can help to analytic the user change of your Discord guild .",
-        pannel: <ConfigDiscordSource onAddConnector={onAddConnector} />,
-      },
-      {
-        name: "Discord Mapping",
-        key: "discord_mapping",
-        statu: "unconnected",
-        icon: "https://footprint-imgs.oss-us-east-1.aliyuncs.com/discord_red.png",
-        desc: "You can maping your user by Discord Bot",
+        desc: "Activator your users by discord.",
         pannel: <ConfigDiscordSource onAddConnector={onAddConnector} />,
       },
       {
@@ -136,22 +97,30 @@ const Connectors = props => {
         key: "twitter",
         statu: "unconnected",
         icon: "https://footprint-imgs-hk.oss-cn-hongkong.aliyuncs.com/20220516201254.png",
-        desc: "This connector can help to analytic the follower change of your Twitter.",
+        desc: "Activator your users by twitter",
         pannel: <ConfigTwitterSource onAddConnector={onAddConnector} />,
       },
     ];
-    if (projectId && !isLoading && data) {
-      console.log("getAvailableConnectors", data);
-      const availableConnectors = data?.availableConnectorConfig;
-      // setCurrentConnectors()
-      if (project?.project?.isDemo && !projectId) {
-        availableConnectors.map((j, index) => {
-          j.configured = true;
-        });
-      }
-      setConnectors(availableConnectors);
+    // if (projectId && !isLoading && data) {
+    //   if (data.length > 0) {
+    //     data.map((i, index) => {
+    //       temp.map((j, index) => {
+    //         if (j.key === i.name) {
+    //           j.statu = "connected";
+    //         }
+    //       });
+    //     });
+    //   }
+    //   // setCurrentConnectors()
+    // } else {
+    if (project?.project?.isDemo) {
+      temp.map((j, index) => {
+        j.statu = "connected";
+      });
     }
-  }, [projectId, isLoading, data, user]);
+    // }
+    setActivators(temp);
+  }, []);
 
   const showDrawer = c => {
     setOpenDrawer({ show: true, connector: c });
@@ -176,15 +145,15 @@ const Connectors = props => {
       setCreateFgaProjectModalShowAction({ show: true });
       return;
     }
-    const i = connectors.find(item => item.key === key);
-    const temp = currentConnectors;
+    const i = activators.find(item => item.key === key);
+    const temp = currentActivators;
     temp.push({ connector: i });
-    setCurrentConnectors(temp);
+    setCurrentActivators(temp);
     onCloseDrawer();
   };
-  const [connectors, setConnectors] = useState([]);
-  const [currentConnectors, setCurrentConnectors] = useState([]);
-  const addConnector = item => {
+  const [activators, setActivators] = useState([]);
+  const [currentActivators, setCurrentActivators] = useState([]);
+  const addActivator = item => {
     if (item.pannel) {
       showDrawer(item);
     }
@@ -204,7 +173,7 @@ const Connectors = props => {
       >
         <div className=" flex flex-row justify-between w-full">
           <Title width={"100%"} level={4} style={{ marginBottom: 0 }}>
-            Connectors
+            Activators
           </Title>
         </div>
 
@@ -213,11 +182,11 @@ const Connectors = props => {
           <LoadingSpinner message="Loading..." />
         ) : (
           <>
-            {connectors && (
+            {activators && (
               <List
                 className="w-full"
                 itemLayout="horizontal"
-                dataSource={connectors}
+                dataSource={activators}
                 renderItem={item => (
                   <List.Item
                     style={{
@@ -229,7 +198,7 @@ const Connectors = props => {
                       margin: 5,
                     }}
                     actions={
-                      item.configured
+                      item.statu === "connected"
                         ? [
                             <a
                               key="list-loadmore-edit"
@@ -245,17 +214,14 @@ const Connectors = props => {
                             <Button
                               type={"primary"}
                               key="Connect"
-                              style={{ borderRadius: 5 }}
                               disabled={
-                                projectId !== "undefined" && item.active
-                                  ? false
-                                  : true
+                                projectId !== "undefined" ? false : true
                               }
                               onClick={() => {
                                 showDrawer(item);
                               }}
                             >
-                              Connect
+                              Add
                             </Button>,
                           ]
                     }
@@ -263,7 +229,7 @@ const Connectors = props => {
                     <List.Item.Meta
                       avatar={<Avatar src={item?.icon} />}
                       title={item?.name}
-                      description={item?.description}
+                      description={item?.desc}
                     />
                   </List.Item>
                 )}
@@ -291,12 +257,12 @@ const Connectors = props => {
             xl: 3,
             xxl: 3,
           }}
-          dataSource={connectors}
+          dataSource={activators}
           renderItem={item => (
             <List.Item
               onClick={() => {
                 setIsModalOpen(false);
-                addConnector(item);
+                addActivator(item);
               }}
             >
               <Card hoverable style={{ width: "100%" }}>
@@ -317,8 +283,7 @@ const Connectors = props => {
         onClose={onCloseDrawer}
         open={openDrawer.show}
       >
-        {/* {openDrawer.connector && openDrawer.connector.pannel} */}
-        <div>{openDrawer?.connector.name}</div>
+        {openDrawer.connector && openDrawer.connector.pannel}
       </Drawer>
     </div>
   );
@@ -335,4 +300,4 @@ const mapStateToProps = state => {
   };
 };
 
-export default connect(mapStateToProps, mapDispatchToProps)(Connectors);
+export default connect(mapStateToProps, mapDispatchToProps)(Activator);
