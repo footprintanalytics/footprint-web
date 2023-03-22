@@ -7,7 +7,7 @@ import { fetchDashboardParameterValues } from "metabase/dashboard/actions";
 import Fields from "metabase/entities/fields";
 import { compose } from "underscore";
 import connect from "react-redux/lib/connect/connect";
-import Category2 from "metabase/containers/protocols/components/Protocols/Category2";
+import CategoryForFga from "metabase/containers/protocols/components/Protocols/Category2";
 
 const FGACategory = props => {
   const {
@@ -97,7 +97,7 @@ const FGACategory = props => {
 
   return (
     <div>
-      <Category2
+      <CategoryForFga
         categorys={data}
         actives={parameter.value}
         router={null}

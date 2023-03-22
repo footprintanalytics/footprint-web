@@ -77,15 +77,16 @@ function ParametersList({
     ParameterWidgetList = StaticParameterWidgetList;
   }
 
-  const fgaVisibleValuePopulatedParameters = visibleValuePopulatedParameters?.filter(item => item.slug === 'fga_text');
-  const normalVisibleValuePopulatedParameters = visibleValuePopulatedParameters?.filter(item => item.slug !== 'fga_text');
+  const fgaVisibleValuePopulatedParameters = visibleValuePopulatedParameters?.filter(item => item.sectionId === "fga_text");
+  const normalVisibleValuePopulatedParameters = visibleValuePopulatedParameters?.filter(item => item.sectionId !== "fga_text");
+
   return visibleValuePopulatedParameters.length > 0 ? (
     <div className="flex flex-column w-full">
       <ParameterWidgetList
         className={cx(
           className,
-          "flex align-end flex-wrap",
-          vertical ? "flex-column" : "flex-row",
+          "flex flex-wrap",
+          "flex-column",
         )}
         axis="x"
         distance={9}

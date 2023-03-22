@@ -19,7 +19,7 @@ export const SUMMABLE = "SUMMABLE";
 export const SCOPE = "SCOPE";
 export const CATEGORY = "CATEGORY";
 export const SERIES_CATEGORY = "SERIES_CATEGORY";
-export const FGA_STRING = "FGA_STRING";
+export const FGA_TEXT = "FGA_TEXT";
 export const DIMENSION = "DIMENSION";
 
 export const UNKNOWN = "UNKNOWN";
@@ -41,7 +41,7 @@ export const TYPE_HIERARCHIES = {
     effective: [TYPE.Text],
     semantic: [TYPE.Text, TYPE.Category],
   },
-  [FGA_STRING]: {
+  [FGA_TEXT]: {
     base: [TYPE.Text],
     effective: [TYPE.Text],
     semantic: [TYPE.Text, TYPE.Category],

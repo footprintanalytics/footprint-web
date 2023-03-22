@@ -20,7 +20,7 @@ export function fieldFilterForParameter(parameter) {
       return field => field.isLocation();
     case "number":
       return field => field.isNumber() && !field.isCoordinate();
-    case "fga-string":
+    case "fga_text":
       return field => field.isString() && !field.isLocation();
     case "string":
       return field => field.isString() && !field.isLocation();

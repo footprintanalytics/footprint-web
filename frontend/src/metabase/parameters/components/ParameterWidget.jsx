@@ -93,7 +93,7 @@ export default class ParameterWidget extends Component {
             parameter.name,
             isFullscreen,
           )}
-          {/*{children}*/}
+          {children}
         </FieldSet>
       );
     };
