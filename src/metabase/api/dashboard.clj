@@ -855,6 +855,17 @@
               :dashcard-id  dashcard-id
               :middleware {:fga-schema fga-schema}})))
 
+(api/defendpoint POST "/:dashboard-id/dashcard/:dashcard-id/card/:card-id/sql"
+  "get dashboardcard sql."
+  [dashboard-id dashcard-id card-id :as {{:keys [parameters], :as body} :body}]
+  {parameters (s/maybe [ParameterWithID])}
+  (m/mapply qp.dashboard/get-dashcard-sql
+            (merge
+             body
+             {:dashboard-id dashboard-id
+              :card-id      card-id
+              :dashcard-id  dashcard-id})))
+
 (api/defendpoint POST "/:dashboard-id/dashcard/:dashcard-id/card/:card-id/query/:export-format"
   "Run the query associated with a Saved Question (`Card`) in the context of a `Dashboard` that includes it, and return
   its results as a file in the specified format.
