@@ -236,7 +236,6 @@ class ParameterValueWidget extends Component {
           ? t`Select a default value…`
           : t`Enter a default value…`
         : placeholder || t`Select…`;
-
       return (
         <PopoverWithTrigger
           ref={this.valuePopover}

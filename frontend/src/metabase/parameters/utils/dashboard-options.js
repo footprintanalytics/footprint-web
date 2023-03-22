@@ -3,6 +3,8 @@ import { ID_OPTION, SERIES_CATEGORY_OPTIONS } from "metabase-lib/parameters/cons
 import { buildTypedOperatorOptions } from "metabase-lib/parameters/utils/operators";
 
 export function getDashboardParameterSections() {
+  const userId = window.localStorage.getItem("GAUserId");
+  const showFgaText = userId === "6" || userId === "10";
   return [
     {
       id: "date",
@@ -39,6 +41,12 @@ export function getDashboardParameterSections() {
       description: t`A series of category option.`,
       options: SERIES_CATEGORY_OPTIONS,
     },
+    showFgaText ? {
+      id: "fga_text",
+      name: t`FGA Text`,
+      description: t`Name, Rating, Description, etc.`,
+      options: buildTypedOperatorOptions("string", "fga_text", t`FGA Text`),
+    } : null,
     {
       id: "string",
       name: t`Text or Category`,
