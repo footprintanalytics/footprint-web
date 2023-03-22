@@ -186,7 +186,6 @@ class FieldValuesWidgetInner extends Component {
       parameters,
       query,
     };
-    console.log("fetchDashboardParamValues", args)
     return this.props.fetchDashboardParameterValues(args);
   };
 

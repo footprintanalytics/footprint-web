@@ -79,10 +79,8 @@ const FGACategory = props => {
       parameters,
       query,
     };
-    console.log("fetchDashboardParamValues", args)
     return fetchDashboardParameterValues(args);
   };
-  console.log("this.props", props)
   const updateRemappings = (options) => {
     if (showRemapping(fields)) {
       const [field] = fields;
