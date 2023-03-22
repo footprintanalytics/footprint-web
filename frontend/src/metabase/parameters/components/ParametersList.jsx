@@ -10,7 +10,7 @@ import {
 } from "metabase/components/sortable";
 import { getVisibleParameters } from "metabase/parameters/utils/ui";
 import StaticParameterWidget from "./ParameterWidget";
-import StaticParameterWidget2 from "./ParameterWidget2";
+import StaticParameterWidgetFga from "./ParameterWidgetFga";
 
 const StaticParameterWidgetList = ({
   children,
@@ -94,7 +94,7 @@ function ParametersList({
         onSortEnd={handleSortEnd}
       >
         {fgaVisibleValuePopulatedParameters.map((valuePopulatedParameter, index) => (
-          <StaticParameterWidget2
+          <StaticParameterWidgetFga
             key={valuePopulatedParameter.id}
             className={cx({ mb2: vertical })}
             isEditing={isEditing}

@@ -202,7 +202,7 @@ class ParameterValueWidget extends Component {
       return (
         <div
           ref={this.trigger}
-          className={cx(S.parameter, S.noPopover, className, "xxxxxx", {
+          className={cx(S.parameter, S.noPopover, className, {
             [S.selected]: hasValue,
             [S.isEditing]: isEditing,
           })}
@@ -369,7 +369,6 @@ function Widget({
         fields={parameter.fields}
         setValue={value => {
           setValue(value);
-          console.log("value", value)
           onPopoverClose();
         }}
         isEditing={isEditing}

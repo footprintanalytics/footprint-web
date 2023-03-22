@@ -4,15 +4,12 @@ import PropTypes from "prop-types";
 import cx from "classnames";
 import Icon from "metabase/components/Icon";
 import { color } from "metabase/lib/colors";
-import FieldSet from "../../components/FieldSet";
 import ParameterValueWidget from "./ParameterValueWidget";
 
-import S from "./ParameterWidget.css";
 import "metabase/containers/protocols/components/Protocols/index.css";
-import Category from "metabase/containers/protocols/components/Protocols/Category";
 import FGACategory from "metabase/parameters/components/FGACategory";
 
-export default class ParameterWidget2 extends Component {
+export default class ParameterWidgetFga extends Component {
   state = {
     isEditingName: false,
     editingNameValue: undefined,
