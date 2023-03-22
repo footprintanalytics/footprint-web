@@ -7,7 +7,7 @@ import { fetchDashboardParameterValues } from "metabase/dashboard/actions";
 import Fields from "metabase/entities/fields";
 import { compose } from "underscore";
 import connect from "react-redux/lib/connect/connect";
-import CategoryForFga from "metabase/containers/protocols/components/Protocols/Category2";
+import CategoryForFga from "metabase/containers/protocols/components/Protocols/CategoryForFga";
 
 const FGACategory = props => {
   const {
