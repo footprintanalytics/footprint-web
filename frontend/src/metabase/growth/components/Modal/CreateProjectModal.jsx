@@ -1,19 +1,17 @@
 /* eslint-disable react/prop-types */
-import React, { createContext, useEffect, useState } from "react";
+import React, { useState } from "react";
 import { Modal, Select, Button, Input, Form, message } from "antd";
 import Link from "antd/lib/typography/Link";
 import { withRouter } from "react-router";
 import { connect } from "react-redux";
-import { useQuery } from "react-query";
-import { QUERY_OPTIONS } from "metabase/containers/dashboards/shared/config";
-import { CreateFgaProject, GetFgaProject } from "metabase/new-service";
+import { CreateFgaProject } from "metabase/new-service";
 import { getUser } from "metabase/selectors/user";
-import { top_protocols } from "../utils/data";
+import { top_protocols } from "../../utils/data";
 import {
   getGrowthProjectPath,
   saveLatestGAProject,
   saveLatestGAProjectId,
-} from "../utils/utils";
+} from "../../utils/utils";
 
 const layout = {
   labelCol: { span: 6 },
@@ -43,6 +41,7 @@ const CreateProjectModal = props => {
     const result = await CreateFgaProject({
       name: projectName.trim().replaceAll(" ", "-"),
       protocolSlug: protocol,
+      protocolName: projectName,
       nftContractAddress: [],
     });
     if (result) {

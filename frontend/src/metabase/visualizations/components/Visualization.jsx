@@ -25,8 +25,6 @@ import {
 import { getComputedSettingsForSeries } from "metabase/visualizations/lib/settings/visualization";
 import { isSameSeries } from "metabase/visualizations/lib/utils";
 import { performDefaultAction } from "metabase/visualizations/lib/action";
-import CreateCampaign from "metabase/visualizations/components/CreateCampaign";
-import ToAllUser from "metabase/visualizations/components/ToAllUser";
 import { getFont } from "metabase/styled-components/selectors";
 
 import { getMode } from "metabase/modes/lib/modes";
@@ -44,13 +42,14 @@ import TableChartInfo from "metabase/query_builder/components/TableChartInfo";
 import Link from "metabase/core/components/Link";
 import { getOssUrl } from "metabase/lib/image";
 import ErrorGuide from "metabase/query_builder/components/ErrorGuide";
+import CreateCampaign from "metabase/growth/components/buttons/CreateCampaign";
+import CreateCohort from "metabase/growth/components/buttons/CreateCohort";
+import CreateFliterCohort from "metabase/growth/components/buttons/CreateFliterCohort";
 import { datasetContainsNoResults } from "metabase-lib/queries/utils/dataset";
 import Question from "metabase-lib/Question";
 import Mode from "metabase-lib/Mode";
 import { memoizeClass } from "metabase-lib/utils";
 import { VisualizationSlowSpinner } from "./Visualization.styled";
-import CreateCohort from "./CreateCohort";
-import CreateFliterCohort from "./CreateFliterCohort";
 import "./Visualization.css";
 
 // NOTE: pass `CardVisualization` so that we don't include header when providing size to child element
@@ -611,7 +610,7 @@ class Visualization extends React.PureComponent {
                   style={{
                     position: "absolute",
                     right: 160,
-                    top: 20,
+                    top: 10,
                   }}
                 >
                   {get(this.state.computedSettings, "table.create_cohort") && (
