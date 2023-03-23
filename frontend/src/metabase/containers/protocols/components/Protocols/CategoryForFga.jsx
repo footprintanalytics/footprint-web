@@ -28,10 +28,10 @@ const CategoryForFga = ({ data = [], isLoading, title, actives=[], onChange }) =
 
   const formatTitle = title => {
     return title
-      .replace(/_wallets$/g, "")
-      .replace(/_wallet$/g, "")
-      .replace(/_users$/g, "")
-      .replace(/_user$/g, "");
+      ?.replace(/_wallets$/g, "")
+      ?.replace(/_wallet$/g, "")
+      ?.replace(/_users$/g, "")
+      ?.replace(/_user$/g, "");
   }
 
   return (
