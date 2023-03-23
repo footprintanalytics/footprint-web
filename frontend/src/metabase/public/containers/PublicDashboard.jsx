@@ -75,15 +75,27 @@ const mapStateToProps = (state, props) => {
     }
     if (project.twitter_handler) {
       const key = "twitter_handler";
-      let queryHandler = getDefaultDashboardPara(
+      console.log("hanlder", project.twitter_handler);
+      // let queryHandler = getDefaultDashboardPara(
+      //   parameters,
+      //   parameterValues,
+      //   key,
+      // );
+      // const queryHandlerInUrl = location.query.twitter_handler;
+      // console.log(
+      //   "hanlder",
+      //   project.twitter_handler,
+      //   queryHandler,
+      //   queryHandlerInUrl,
+      // );
+      // queryHandler =
+      //   queryHandler ?? queryHandlerInUrl ?? project.twitter_handler;
+      updateDashboardPara(
         parameters,
         parameterValues,
         key,
+        project.twitter_handler,
       );
-      const queryHandlerInUrl = location.query.twitter_handler;
-      queryHandler =
-        queryHandler ?? queryHandlerInUrl ?? project.twitter_handler;
-      updateDashboardPara(parameters, parameterValues, key, queryHandler);
     }
   }
   return {

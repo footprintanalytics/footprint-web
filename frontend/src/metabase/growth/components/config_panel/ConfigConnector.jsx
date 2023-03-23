@@ -22,7 +22,7 @@ const ConfigConnector = props => {
     setOpenDrawer,
   } = props;
   const formRef = React.useRef(null);
-  const [editable, setEditable] = useState(true);
+  const [editable, setEditable] = useState(!connector?.configured);
   const [loading, setLoading] = useState(false);
   const onSave = values => {
     if (!user) {
@@ -42,7 +42,7 @@ const ConfigConnector = props => {
       setCreateFgaProjectModalShowAction({ show: true });
       return;
     }
-    setEditable(false);
+    // setEditable(false);
     setLoading(true);
     console.log("form value", values);
     if (connector.mode === "gaAuthorization") {
@@ -72,7 +72,7 @@ const ConfigConnector = props => {
     }
   };
   const onEdit = value => {
-    setEditable(true);
+    // setEditable(true);
   };
 
   const showDiscordBotLink = values => {

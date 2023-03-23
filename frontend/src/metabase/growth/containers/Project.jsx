@@ -45,10 +45,10 @@ const Project = props => {
     );
   }, [menu, tabs_data]);
 
-  const { isLoadingProject, projectData } = useQuery(
-    ["GetFgaProjectDetail", user, projectId],
+  const { isLoadingProject, data } = useQuery(
+    ["GetFgaProjectDetail", user, projectPath, getLatestGAProjectId()],
     async () => {
-      if (projectId) {
+      if (getLatestGAProjectId()) {
         return await GetFgaProjectDetail({
           projectId: parseInt(getLatestGAProjectId()),
         });
@@ -90,7 +90,7 @@ const Project = props => {
       projectName: project,
       collection_contract_address: p?.collections_list,
       project: p,
-      twitter_handler: projectData?.twitter?.handler,
+      twitter_handler: data?.twitter?.handler,
     };
   };
   const getContentPannel = current_tab => {

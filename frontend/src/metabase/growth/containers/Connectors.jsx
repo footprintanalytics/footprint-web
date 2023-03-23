@@ -129,9 +129,11 @@ const Connectors = props => {
                                 showDrawer(item);
                               }}
                             >
-                              edit
+                              detail
                             </a>,
-                            <a key="list-loadmore-more">delete</a>,
+                            // <a key="list-loadmore-more" disabled={true}>
+                            //   delete
+                            // </a>,
                           ]
                         : [
                             <Button
