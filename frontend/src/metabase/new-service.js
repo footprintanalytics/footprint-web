@@ -30,7 +30,9 @@ export const CreateFgaProject = async params => {
 export const GetFgaProject = async params => {
   return GET("/api/v1/fga/project", params);
 };
-
+export const GetFgaProjectDetail = async params => {
+  return POST("/api/v1/fga/project/detail", params);
+};
 export const CreateFgaConnector = async params => {
   return POST("/api/v1/fga/connector-config", params);
 };
@@ -41,6 +43,14 @@ export const GetFgaConnectors = async params => {
 
 export const UpdateFgaConnector = async params => {
   return PUT(`/api/v1/fga/connector-config/${params.id}`, params);
+};
+
+export const getAvailableConnectors = async params => {
+  return POST(`/api/v1/fga/connector-config/available`, params);
+};
+
+export const addConnectors = async params => {
+  return POST(`/api/v1/fga/connector-config`, params);
 };
 
 // FP Api

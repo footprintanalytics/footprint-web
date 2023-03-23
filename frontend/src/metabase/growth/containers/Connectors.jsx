@@ -16,21 +16,14 @@ import {
 import Title from "antd/lib/typography/Title";
 import { useQuery } from "react-query";
 import { QUERY_OPTIONS } from "metabase/containers/dashboards/shared/config";
-import { GetFgaConnectors } from "metabase/new-service";
+import { getAvailableConnectors } from "metabase/new-service";
 import { getUser } from "metabase/selectors/user";
-
-import AF from "assets/img/af.png";
-import BQ from "assets/img/BQ.svg";
-import GA from "assets/img/GA.svg";
 import {
   loginModalShowAction,
   createFgaProjectModalShowAction,
 } from "metabase/redux/control";
 import LoadingSpinner from "metabase/components/LoadingSpinner";
-import ConfigAppsFlyerSource from "../components/config_panel/ConfigAppsFlyerSource";
-import ConfigTwitterSource from "../components/config_panel/ConfigTwitterSource";
-import ConfigDiscordSource from "../components/config_panel/ConfigDiscordSource";
-import ConfigGoogleAnalyticsSource from "../components/config_panel/ConfigGoogleAnalyticsSource";
+import ConfigConnector from "../components/config_panel/ConfigConnector";
 import "../css/utils.css";
 const { Text } = Typography;
 
@@ -47,12 +40,12 @@ const Connectors = props => {
   } = props;
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [openDrawer, setOpenDrawer] = useState({ show: false, connector: {} });
-
+  const [count, setCount] = useState(1);
   const { isLoading, data } = useQuery(
-    ["GetFgaConnectors", projectId],
+    ["getAvailableConnectors", projectId, count],
     async () => {
       if (projectId) {
-        return await GetFgaConnectors({ projectId: projectId });
+        return await getAvailableConnectors({ projectId: parseInt(projectId) });
       } else {
         return;
       }
@@ -61,77 +54,18 @@ const Connectors = props => {
   );
 
   useEffect(() => {
-    const temp = [
-      {
-        name: "Google Analytics",
-        key: "Google Analytics daily",
-        icon: GA,
-        statu: "unconnected",
-        desc: "Google Analytics can help you to analytic the user event of your project and known your user most!",
-        pannel: (
-          <ConfigGoogleAnalyticsSource
-            onAddConnector={onAddConnector}
-            user={user}
-            setOpenDrawer={setOpenDrawer}
-            setLoginModalShowAction={setLoginModalShowAction}
-            setCreateFgaProjectModalShowAction={
-              setCreateFgaProjectModalShowAction
-            }
-            projectId={projectId}
-          />
-        ),
-      },
-      // {
-      //   name: "BigQuery",
-      //   key: "bq",
-      //   icon: BQ,
-      //   pannel: <ConfigBigQuerySource onAddConnector={onAddConnector} />,
-      // },
-      {
-        name: "Appsflyers",
-        key: "af",
-        icon: AF,
-        statu: "unconnected",
-        desc: "This connector can help your to using appsflyers ",
-        pannel: <ConfigAppsFlyerSource onAddConnector={onAddConnector} />,
-      },
-      {
-        name: "Discord",
-        key: "discord",
-        statu: "unconnected",
-        icon: "https://footprint-imgs-hk.oss-cn-hongkong.aliyuncs.com/20220516201343.png",
-        desc: "This connector can help to analytic the user change of your Discord guild .",
-        pannel: <ConfigDiscordSource onAddConnector={onAddConnector} />,
-      },
-      {
-        name: "Twitter",
-        key: "twitter",
-        statu: "unconnected",
-        icon: "https://footprint-imgs-hk.oss-cn-hongkong.aliyuncs.com/20220516201254.png",
-        desc: "This connector can help to analytic the follower change of your Twitter.",
-        pannel: <ConfigTwitterSource onAddConnector={onAddConnector} />,
-      },
-    ];
     if (projectId && !isLoading && data) {
-      if (data.length > 0) {
-        data.map((i, index) => {
-          temp.map((j, index) => {
-            if (j.key === i.name) {
-              j.statu = "connected";
-            }
-          });
-        });
-      }
+      console.log("getAvailableConnectors", data);
+      const availableConnectors = data?.availableConnectorConfig;
       // setCurrentConnectors()
-    } else {
-      if (project?.project?.isDemo) {
-        temp.map((j, index) => {
-          j.statu = "connected";
+      if (project?.project?.isDemo && !projectId) {
+        availableConnectors.map((j, index) => {
+          j.configured = true;
         });
       }
+      setConnectors(availableConnectors);
     }
-    setConnectors(temp);
-  }, [projectId, isLoading, data, connectors, user]);
+  }, [projectId, isLoading, data, user]);
 
   const showDrawer = c => {
     setOpenDrawer({ show: true, connector: c });
@@ -139,36 +73,14 @@ const Connectors = props => {
   const onCloseDrawer = () => {
     setOpenDrawer({ show: false });
   };
-  const onAddConnector = key => {
-    if (!user) {
-      onCloseDrawer();
-      message.warning("Kindly log in before proceeding.");
-      setLoginModalShowAction({
-        show: true,
-        from: "add connector",
-        redirect: location.pathname,
-        channel: "FGA",
-      });
-      return;
-    }
-    if (!projectId) {
-      message.warning("Initially, you must create your personal project!");
-      setCreateFgaProjectModalShowAction({ show: true });
-      return;
-    }
-    const i = connectors.find(item => item.key === key);
-    const temp = currentConnectors;
-    temp.push({ connector: i });
-    setCurrentConnectors(temp);
+  const onAddConnector = isSuccess => {
+    //Todo refresh data
     onCloseDrawer();
+    if (isSuccess) {
+      setCount(count + 1);
+    }
   };
   const [connectors, setConnectors] = useState([]);
-  const [currentConnectors, setCurrentConnectors] = useState([]);
-  const addConnector = item => {
-    if (item.pannel) {
-      showDrawer(item);
-    }
-  };
   return (
     <div className=" flex flex-column items-center">
       <div
@@ -209,7 +121,7 @@ const Connectors = props => {
                       margin: 5,
                     }}
                     actions={
-                      item.statu === "connected"
+                      item.configured
                         ? [
                             <a
                               key="list-loadmore-edit"
@@ -217,16 +129,21 @@ const Connectors = props => {
                                 showDrawer(item);
                               }}
                             >
-                              edit
+                              detail
                             </a>,
-                            <a key="list-loadmore-more">delete</a>,
+                            // <a key="list-loadmore-more" disabled={true}>
+                            //   delete
+                            // </a>,
                           ]
                         : [
                             <Button
                               type={"primary"}
                               key="Connect"
+                              style={{ borderRadius: 5 }}
                               disabled={
-                                projectId !== "undefined" ? false : true
+                                projectId !== "undefined" && item.active
+                                  ? false
+                                  : true
                               }
                               onClick={() => {
                                 showDrawer(item);
@@ -240,7 +157,7 @@ const Connectors = props => {
                     <List.Item.Meta
                       avatar={<Avatar src={item?.icon} />}
                       title={item?.name}
-                      description={item?.desc}
+                      description={item?.description}
                     />
                   </List.Item>
                 )}
@@ -273,7 +190,6 @@ const Connectors = props => {
             <List.Item
               onClick={() => {
                 setIsModalOpen(false);
-                addConnector(item);
               }}
             >
               <Card hoverable style={{ width: "100%" }}>
@@ -294,7 +210,19 @@ const Connectors = props => {
         onClose={onCloseDrawer}
         open={openDrawer.show}
       >
-        {openDrawer.connector && openDrawer.connector.pannel}
+        {openDrawer.connector && (
+          <ConfigConnector
+            connector={openDrawer.connector}
+            onAddConnector={onAddConnector}
+            user={user}
+            setOpenDrawer={setOpenDrawer}
+            setLoginModalShowAction={setLoginModalShowAction}
+            setCreateFgaProjectModalShowAction={
+              setCreateFgaProjectModalShowAction
+            }
+            projectId={projectId}
+          ></ConfigConnector>
+        )}
       </Drawer>
     </div>
   );

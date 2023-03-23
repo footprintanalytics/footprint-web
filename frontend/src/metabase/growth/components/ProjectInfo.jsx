@@ -3,10 +3,8 @@ import React, { useEffect, useState } from "react";
 import {
   Avatar,
   List,
-  Image,
   Tooltip,
   Empty,
-  Button,
   Card,
   Tag,
   Divider,
@@ -15,6 +13,7 @@ import {
 } from "antd";
 import Link from "antd/lib/typography/Link";
 import { connect } from "react-redux";
+import Title from "antd/lib/typography/Title";
 import CopyToClipboard from "react-copy-to-clipboard";
 import { getUser } from "metabase/selectors/user";
 import { top_protocols } from "../utils/data";
@@ -24,6 +23,7 @@ const ProjectInfo = props => {
   const { router, project, location } = props;
   const [currentProject, setCurrentProject] = useState();
   useEffect(() => {
+    //TODO 这里要换成从数据源api 读取 project 数据
     const p = top_protocols.find(i => i.protocol_slug === project);
     setCurrentProject(p ?? null);
   }, [project]);
@@ -112,76 +112,99 @@ const ProjectInfo = props => {
   };
   return (
     <div className="flex flex-col w-full items-center">
-      <Card
-        style={{ width: 600, minHeight: 600, margin: 20, borderRadius: 10 }}
+      <div
+        className=" flex flex-column items-center"
+        style={{
+          width: 800,
+          // backgroundColor: "white",
+          borderRadius: 10,
+          padding: 20,
+          marginTop: 20,
+          minHeight: 800,
+        }}
       >
-        {currentProject ? (
-          <div className="flex flex-col">
-            <div className="flex flex-row">
-              <img
-                src={currentProject.logo}
-                width={80}
-                height={80}
-                style={{
-                  borderRadius: 40,
-                  borderWidth: 0.5,
-                  borderStyle: "solid",
-                  borderColor: "#f8fafb",
-                }}
-                alt="Project Icon"
-              />
-              <div className="flex flex-col ml3">
-                <div style={{ fontSize: 22, fontWeight: 500 }}>
-                  {currentProject.protocol_name}
-                </div>
-                <div className=" mt1">
-                  <Tag>{currentProject.chain}</Tag>
-                  <Tag>NFT</Tag>
+        <div className=" flex flex-row justify-between w-full">
+          <Title width={"100%"} level={4} style={{ marginBottom: 0 }}>
+            General
+          </Title>
+        </div>
+        <Divider></Divider>
+        <Card
+          style={{
+            width: "100%",
+            minHeight: 600,
+            margin: 20,
+            borderRadius: 10,
+          }}
+        >
+          {currentProject ? (
+            <div className="flex flex-col">
+              <div className="flex flex-row">
+                <img
+                  src={currentProject.logo}
+                  width={80}
+                  height={80}
+                  style={{
+                    borderRadius: 40,
+                    borderWidth: 0.5,
+                    borderStyle: "solid",
+                    borderColor: "#f8fafb",
+                  }}
+                  alt="Project Icon"
+                />
+                <div className="flex flex-col ml3">
+                  <div style={{ fontSize: 22, fontWeight: 500 }}>
+                    {currentProject.protocol_name}
+                  </div>
+                  <div className=" mt1">
+                    <Tag>{currentProject.chain}</Tag>
+                    <Tag>NFT</Tag>
+                  </div>
                 </div>
               </div>
+              {/* <Divider></Divider> */}
+              <Tabs
+                className=" mt1"
+                defaultActiveKey="1"
+                onChange={onTabChange}
+                items={[
+                  {
+                    label: `NFT Collection Address`,
+                    key: "nft",
+                    children: getTabPanel("NFT"),
+                  },
+                  {
+                    label: `Token Address`,
+                    key: "Token",
+                    children: getTabPanel("Token"),
+                  },
+                  {
+                    label: `Contract Address`,
+                    key: "Contract",
+                    children: getTabPanel("Contract"),
+                  },
+                ]}
+              />
             </div>
-            {/* <Divider></Divider> */}
-            <Tabs
-              className=" mt1"
-              defaultActiveKey="1"
-              onChange={onTabChange}
-              items={[
-                {
-                  label: `NFT Collection Address`,
-                  key: "nft",
-                  children: getTabPanel("NFT"),
-                },
-                {
-                  label: `Token Address`,
-                  key: "Token",
-                  children: getTabPanel("Token"),
-                },
-                {
-                  label: `Contract Address`,
-                  key: "Contract",
-                  children: getTabPanel("Contract"),
-                },
-              ]}
-            />
-          </div>
-        ) : (
-          <Empty
-            image="https://gw.alipayobjects.com/zos/antfincdn/ZHrcdLPrvN/empty.svg"
-            imageStyle={{
-              height: 100,
-            }}
-            description={
-              <span>
-                This project does not currently include the relevant contract
-                address information. You can assist us in enhancing it by
-                providing this information!
-              </span>
-            }
-          >
-            {/* <Button type="primary">Create Now</Button> */}
-          </Empty>
-        )}
-      </Card>
+          ) : (
+            <Empty
+              image="https://gw.alipayobjects.com/zos/antfincdn/ZHrcdLPrvN/empty.svg"
+              imageStyle={{
+                height: 100,
+              }}
+              description={
+                <span>
+                  This project does not currently include the relevant contract
+                  address information. You can assist us in enhancing it by
+                  providing this information!
+                </span>
+              }
+            >
+              {/* <Button type="primary">Create Now</Button> */}
+            </Empty>
+          )}
+        </Card>
+      </div>
     </div>
   );
 };
