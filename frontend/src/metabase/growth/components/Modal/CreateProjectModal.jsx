@@ -1,5 +1,5 @@
 /* eslint-disable react/prop-types */
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Modal, Select, Button, Input, Form, message } from "antd";
 import Link from "antd/lib/typography/Link";
 import { withRouter } from "react-router";
@@ -8,6 +8,7 @@ import { CreateFgaProject } from "metabase/new-service";
 import { getUser } from "metabase/selectors/user";
 import { top_protocols } from "../../utils/data";
 import {
+  getDashboardDatas,
   getGrowthProjectPath,
   saveLatestGAProject,
   saveLatestGAProjectId,
@@ -25,33 +26,63 @@ const CreateProjectModal = props => {
   const { open, onCancel, onSuccess, router, location, user } = props;
   const [form] = Form.useForm();
   // monitor datas
-  const normalOptions = [];
-  top_protocols.map(i =>
-    normalOptions.push({
-      ...i,
-      value: i.protocol_slug,
-      key: i.protocol_slug,
-      label: i.protocol_name,
-    }),
-  );
-  const [options, setOptions] = useState(normalOptions);
+  // const normalOptions = [];
+  // top_protocols.map(i =>
+  //   normalOptions.push({
+  //     ...i,
+  //     value: i.protocol_slug,
+  //     key: i.protocol_slug,
+  //     label: i.protocol_name,
+  //   }),
+  // );
+  const [options, setOptions] = useState([]);
+  const [loadingData, setLoadingData] = useState(false);
+  const [loading, setLoading] = useState(false);
+
+  useEffect(() => {
+    if (open) {
+      setLoadingData(true);
+      getDashboardDatas("5276dcf1-0e5f-49d1-a49a-c405d2caa3d4")
+        .then(result => {
+          const normalOptions = [];
+          result?.map(i => {
+            normalOptions.push({
+              ...i,
+              value: i.protocol_slug,
+              key: i.protocol_slug,
+              label: i.protocol_name,
+            });
+          });
+          setOptions(normalOptions);
+        })
+        .finally(() => {
+          setLoadingData(false);
+        });
+    }
+  }, [open]);
 
   async function createProject(projectName, protocol) {
     const hide = message.loading("Loading...", 10);
-    const result = await CreateFgaProject({
-      name: projectName.trim().replaceAll(" ", "-"),
-      protocolSlug: protocol,
-      protocolName: projectName,
-      nftContractAddress: [],
-    });
-    if (result) {
-      saveLatestGAProject(result.protocolSlug);
-      saveLatestGAProjectId(result.id);
-      onSuccess?.();
-      router?.push({
-        pathname: getGrowthProjectPath(result.protocolSlug),
+    setLoading(true);
+    try {
+      const result = await CreateFgaProject({
+        name: projectName.trim().replaceAll(" ", "-"),
+        protocolSlug: protocol,
+        protocolName: projectName,
+        nftContractAddress: [],
       });
+      if (result) {
+        saveLatestGAProject(result.protocolSlug);
+        saveLatestGAProjectId(result.id);
+        onSuccess?.();
+        router?.push({
+          pathname: getGrowthProjectPath(result.protocolSlug),
+        });
+      }
+    } catch (error) {
+      console.log(error);
     }
+    setLoading(false);
     hide();
     return true;
   }
@@ -78,6 +109,7 @@ const CreateProjectModal = props => {
         >
           <Select
             showSearch
+            loading={loadingData}
             // value={currentProject}
             onChange={handleProjectChange}
             placeholder="Search by protocol or nft collection address"
@@ -111,7 +143,7 @@ const CreateProjectModal = props => {
               justifyItems: "center",
             }}
           >
-            <Button type="primary" htmlType="submit">
+            <Button type="primary" htmlType="submit" loading={loading}>
               Create Now
             </Button>
           </div>

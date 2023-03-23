@@ -46,6 +46,7 @@ const mapStateToProps = (state, props) => {
   const parameters = getParameters(state, props);
   const parameterValues = getParameterValues(state, props);
   const project = props.project;
+  const location = props.location;
   if (project) {
     // switch protocol
     updateDashboardPara(parameters, parameterValues, "gamefi", [
@@ -58,13 +59,31 @@ const mapStateToProps = (state, props) => {
         parameterValues,
         key,
       );
+      let queryCollectionInUrl = location.query.collection_contract_address;
+      queryCollectionInUrl = project.collection_contract_address.includes(
+        queryCollectionInUrl,
+      )
+        ? queryCollectionInUrl
+        : null;
       queryCollection =
         queryCollection &&
         !isArray(queryCollection) &&
         project.collection_contract_address.includes(queryCollection)
           ? queryCollection
-          : project.collection_contract_address?.[0];
+          : queryCollectionInUrl ?? project.collection_contract_address?.[0];
       updateDashboardPara(parameters, parameterValues, key, queryCollection);
+    }
+    if (project.twitter_handler) {
+      const key = "twitter_handler";
+      let queryHandler = getDefaultDashboardPara(
+        parameters,
+        parameterValues,
+        key,
+      );
+      const queryHandlerInUrl = location.query.twitter_handler;
+      queryHandler =
+        queryHandler ?? queryHandlerInUrl ?? project.twitter_handler;
+      updateDashboardPara(parameters, parameterValues, key, queryHandler);
     }
   }
   return {

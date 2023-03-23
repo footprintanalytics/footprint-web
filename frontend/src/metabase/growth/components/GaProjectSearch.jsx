@@ -18,6 +18,7 @@ import {
   saveLatestGAProject,
   saveLatestGAProjectId,
   getGrowthProjectPath,
+  getDashboardDatas,
 } from "../utils/utils";
 
 const GaProjectSearch = props => {
@@ -35,7 +36,6 @@ const GaProjectSearch = props => {
     },
     QUERY_OPTIONS,
   );
-
   useEffect(() => {
     if (!isLoading) {
       if (data?.data?.length > 0) {

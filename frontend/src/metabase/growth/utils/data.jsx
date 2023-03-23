@@ -1582,42 +1582,43 @@ export const top_protocols = [
 
  export const fga_menu_data = [
    {
-     name: "Project Overview",
+     name: "Overview",
      icon: React.createElement(ShopOutlined),
-     id: "7398",
-     uuid: "4837f6c1-bb18-4630-b634-37b7f29397c3",
-     children: null,
+     children: [
+       {
+         name: "GameFi",
+         id: 7398,
+         uuid: "4837f6c1-bb18-4630-b634-37b7f29397c3",
+       },
+       {
+         name: "NFT",
+         id: 7342,
+         uuid: "65cb5f69-f01d-4719-995d-b54880eb6865",
+       },
+     ],
    },
    {
      name: "Cohort",
      icon: React.createElement(TeamOutlined),
-     id: 7210,
-     uuid: "4454f1ce-202b-45eb-8f83-3d78beff6756",
-     // children: [
-     //   {
-     //     name: "Cohort",
-     //     id: 7210,
-     //     uuid: "4454f1ce-202b-45eb-8f83-3d78beff6756",
-     //   },
-     // ],
+     children: [
+       {
+         name: "Cohort",
+         id: 7210,
+         uuid: "4454f1ce-202b-45eb-8f83-3d78beff6756",
+       },
+       {
+         name: "Potential Users",
+         id: 7180,
+         uuid: "b46fc872-c97d-4300-a83e-45fa61760ad2",
+       },
+     ],
    },
    {
      name: "Campaign",
      icon: React.createElement(CommentOutlined),
      id: null,
-     //  children: [
-     //    { name: "Campaign", id: null, uuid: null },
-     //    { name: "Airdrop", id: null, uuid: null },
-     //    // { name: "User List", id: 7136 },
-     //    // { name: "User Group", id: null },
-     //    // { name: "Wallet Radar", id: null },
-     //    { name: "User activation", id: null, uuid: null },
-     //  ],
-   },
-   {
-     name: "Go-To-Marketing",
-     icon: React.createElement(LineChartOutlined),
      children: [
+       { name: "Campaign", id: null, uuid: null },
        {
          name: "Airdrop",
          id: 7426,
@@ -1630,16 +1631,20 @@ export const top_protocols = [
        },
      ],
    },
-
    {
-     name: "Traffic",
-     icon: React.createElement(RocketOutlined),
+     name: "User Analysis",
+     icon: React.createElement(BarChartOutlined),
      id: null,
      children: [
        {
-         name: "Potential Users",
-         id: 7180,
-         uuid: "b46fc872-c97d-4300-a83e-45fa61760ad2",
+         name: "User Profile",
+         id: 7381,
+         uuid: "a832dc29-b44e-4622-827d-279b8401b0e5",
+       },
+       {
+         name: "User Funnel",
+         id: 7118,
+         uuid: "b1682d12-bddd-4b10-99a3-a403a3a6a78c",
        },
        {
          name: "Twitter",
@@ -1647,65 +1652,6 @@ export const top_protocols = [
          uuid: "fd4d94f3-06f7-445d-ada3-0ce82bcefa39",
        },
        { name: "Discord", id: null, uuid: null },
-       { name: "Google Data", id: null, uuid: null },
-       {
-         name: "User Funnel",
-         id: 7118,
-         uuid: "b1682d12-bddd-4b10-99a3-a403a3a6a78c",
-       },
-       { name: "App Installation", id: null, uuid: null },
-     ],
-   },
-   {
-     name: "User Analysis",
-     icon: React.createElement(BarChartOutlined),
-     id: null,
-     children: [
-       // {
-       //   name: "New User",
-       //   id: 7128,
-       //   uuid: "181c3a01-6271-473d-a9dc-fe574c7e4691",
-       // },
-       {
-         name: "User Composition",
-         id: 7128,
-         uuid: "181c3a01-6271-473d-a9dc-fe574c7e4691",
-       },
-       {
-         name: "User Retention",
-         id: 7119,
-         uuid: "92c8f6c4-0c56-45ee-b3c1-399a23cfba33",
-       },
-       {
-         name: "User Profile",
-         id: 7381,
-         uuid: "a832dc29-b44e-4622-827d-279b8401b0e5",
-       },
-       // { name: "Top Users", id: 7120 ,uuid:''},
-       // { name: "User List", id: 7122 ,uuid:''},
-     ],
-   },
-   {
-     name: "NFT Analysis",
-     icon: React.createElement(FileImageOutlined),
-     id: null,
-     children: [
-       {
-         name: "NFT Overview",
-         id: 7342,
-         uuid: "65cb5f69-f01d-4719-995d-b54880eb6865",
-       },
-       {
-         name: "Holder",
-         id: 7133,
-         uuid: "f519b7db-ef8e-4c94-9e39-001b5deb51e0",
-       },
-       // { name: "Transaction", id: null },
-       {
-         name: "Profit Leadboard",
-         id: 7131,
-         uuid: "eeff10d7-a0d3-48dc-9aa4-e564e861be4a",
-       },
      ],
    },
    {
@@ -1719,24 +1665,16 @@ export const top_protocols = [
          uuid: "7edf6b30-83e5-4fca-a1d5-7c3002560ea5",
        },
        {
-         name: "Industry Ranking",
-         id: 7271,
-         uuid: "859c1295-89f4-4d2b-a8dd-b48914a6bbd3",
-       },
-       {
          name: "Competitor Comparison",
          id: 7248,
          uuid: "63114b7c-094c-402c-8fe8-a9bf1db1369d",
        },
-     ],
-   },
-   {
-     name: "Custom Analysis",
-     icon: React.createElement(CodeOutlined),
-     id: null,
-     children: [
-       //  { name: "My Analysis", id: null, uuid: null },
-       //  { name: "Template Gallery", id: null, uuid: null },
+       {
+         name: "Custom Analysis",
+         id: null,
+         uuid: null,
+         children: [],
+       },
      ],
    },
    {
@@ -1744,9 +1682,9 @@ export const top_protocols = [
      icon: React.createElement(SettingOutlined),
      id: null,
      children: [
-       { name: "Project Info", id: null, uuid: null },
+       { name: "General", id: null, uuid: null },
        { name: "Connector", id: null, uuid: null },
-       { name: "Activator", id: null, uuid: null },
+       { name: "Channel", id: null, uuid: null },
      ],
    },
  ];

@@ -38,7 +38,12 @@ export async function getDashboardDatas(uuid: string) {
     newResult?.data?.rows?.map((i: any, index: number) => {
       const p = {};
       newResult?.data?.cols?.map((j: any, index: number) => {
-        if (j.name === "collections_list") {
+        // if (j.name === "collections_list") {
+        if (
+          j.base_type === "type/Text" &&
+          i[index].startsWith("[") &&
+          i[index].endsWith("]")
+        ) {
           const l = i[index]
             .replace("[", "")
             .replace("]", "")
@@ -80,6 +85,8 @@ export function getGaMenuTabs(tabs_data: any[]) {
         "Template Gallery",
         "Custom Analysis",
         "Activator",
+        "Channel",
+        "General",
         "My Analysis",
       ].findIndex(i => i === item.name) === -1
         ? true

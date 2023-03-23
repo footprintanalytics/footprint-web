@@ -14,14 +14,7 @@ import {
   message,
 } from "antd";
 import Title from "antd/lib/typography/Title";
-import { useQuery } from "react-query";
-import { QUERY_OPTIONS } from "metabase/containers/dashboards/shared/config";
-import { GetFgaConnectors } from "metabase/new-service";
 import { getUser } from "metabase/selectors/user";
-
-import AF from "assets/img/af.png";
-import BQ from "assets/img/BQ.svg";
-import GA from "assets/img/GA.svg";
 import messageIcon from "assets/img/message.svg";
 import {
   loginModalShowAction,
@@ -35,7 +28,7 @@ import ConfigGoogleAnalyticsSource from "../components/config_panel/ConfigGoogle
 import "../css/utils.css";
 const { Text } = Typography;
 
-const Activator = props => {
+const Activators = props => {
   const {
     router,
     location,
@@ -66,11 +59,30 @@ const Activator = props => {
   useEffect(() => {
     const temp = [
       {
-        name: "Email",
+        name: "E-mail",
         key: "Email",
-        icon: messageIcon,
+        icon: "https://footprint-imgs.oss-us-east-1.aliyuncs.com/20220516201357.png",
         statu: "unconnected",
         desc: "Activator your users by email.",
+        pannel: (
+          <ConfigGoogleAnalyticsSource
+            onAddConnector={onAddConnector}
+            user={user}
+            setOpenDrawer={setOpenDrawer}
+            setLoginModalShowAction={setLoginModalShowAction}
+            setCreateFgaProjectModalShowAction={
+              setCreateFgaProjectModalShowAction
+            }
+            projectId={projectId}
+          />
+        ),
+      },
+      {
+        name: "SMS",
+        key: "SMS",
+        icon: messageIcon,
+        statu: "unconnected",
+        desc: "Activator your users by SMS.",
         pannel: (
           <ConfigGoogleAnalyticsSource
             onAddConnector={onAddConnector}
@@ -99,6 +111,34 @@ const Activator = props => {
         icon: "https://footprint-imgs-hk.oss-cn-hongkong.aliyuncs.com/20220516201254.png",
         desc: "Activator your users by twitter",
         pannel: <ConfigTwitterSource onAddConnector={onAddConnector} />,
+      },
+      {
+        name: "Galxe",
+        key: "Galxe",
+        statu: "unconnected",
+        icon: "https://footprint-imgs.oss-us-east-1.aliyuncs.com/galxe.png",
+        desc: "Activator your users by Galxe",
+      },
+      {
+        name: "PortN",
+        key: "PortN",
+        statu: "unconnected",
+        icon: "https://footprint-imgs.oss-us-east-1.aliyuncs.com/web3port.svg",
+        desc: "Activator your users by PortN",
+      },
+      {
+        name: "Link3",
+        key: "Link3",
+        statu: "unconnected",
+        icon: "https://footprint-imgs.oss-us-east-1.aliyuncs.com/link3.jpg",
+        desc: "Activator your users by Link3",
+      },
+      {
+        name: "Notifi",
+        key: "Notifi",
+        statu: "unconnected",
+        icon: "https://footprint-imgs.oss-us-east-1.aliyuncs.com/notifi.jpeg",
+        desc: "Activator your users by Notifi",
       },
     ];
     // if (projectId && !isLoading && data) {
@@ -173,7 +213,7 @@ const Activator = props => {
       >
         <div className=" flex flex-row justify-between w-full">
           <Title width={"100%"} level={4} style={{ marginBottom: 0 }}>
-            Activators
+            Channel
           </Title>
         </div>
 
@@ -214,9 +254,11 @@ const Activator = props => {
                             <Button
                               type={"primary"}
                               key="Connect"
-                              disabled={
-                                projectId !== "undefined" ? false : true
-                              }
+                              style={{ borderRadius: 5 }}
+                              // disabled={
+                              //   projectId !== "undefined" ? false : true
+                              // }
+                              disabled={true}
                               onClick={() => {
                                 showDrawer(item);
                               }}
@@ -300,4 +342,4 @@ const mapStateToProps = state => {
   };
 };
 
-export default connect(mapStateToProps, mapDispatchToProps)(Activator);
+export default connect(mapStateToProps, mapDispatchToProps)(Activators);
