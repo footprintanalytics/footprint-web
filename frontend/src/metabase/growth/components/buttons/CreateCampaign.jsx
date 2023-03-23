@@ -37,6 +37,7 @@ const CreateCampaign = ({
   user,
   setLoginModalShowAction,
   setCreateFgaProjectModalShowAction,
+  plain
 }) => {
   const [isNotificationModalOpen, setIsNotificationModalOpen] = useState(false);
   const [timingType, setTimingType] = useState("now");
@@ -195,13 +196,17 @@ const CreateCampaign = ({
   const [campaignType, setCampaignType] = useState(campaignOptions[0].value);
   return (
     <>
-      <Button
-        type="primary"
-        style={style}
-        onClick={() => setIsNotificationModalOpen(true)}
-      >
-        Create campaign
-      </Button>
+      {plain ? (
+        <div onClick={() => setIsNotificationModalOpen(true)}>Create campaign</div>
+      ) : (
+        <Button
+          type="primary"
+          style={style}
+          onClick={() => setIsNotificationModalOpen(true)}
+        >
+          Create campaign
+        </Button>
+      )}
       <Modal
         style={{ minHeight: 800, minWidth: 600 }}
         // open={isNotificationModalOpen}

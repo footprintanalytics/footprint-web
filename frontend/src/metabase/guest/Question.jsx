@@ -247,7 +247,7 @@ class PublicQuestion extends Component {
       <>
       {card && (
         <Meta
-          title={card.name}
+          title={`${card.name} - Footprint Analytics`}
           description={card.description || card.name}
           image={getOssUrl(
             ossPath(`card/${card.id}.png`),

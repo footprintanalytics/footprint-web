@@ -88,6 +88,7 @@ export function getGaMenuTabs(tabs_data: any[]) {
         "Channel",
         "General",
         "My Analysis",
+        "Cohort"
       ].findIndex(i => i === item.name) === -1
         ? true
         : false;

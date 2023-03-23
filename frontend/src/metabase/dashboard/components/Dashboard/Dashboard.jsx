@@ -529,7 +529,7 @@ class Dashboard extends Component {
       <>
         {dashboard && (
           <Meta
-            title={dashboard.name}
+            title={`${dashboard.name} - Footprint Analytics`}
             description={getDescription({
               description: dashboard.description,
               orderedCards: dashboard.ordered_cards,

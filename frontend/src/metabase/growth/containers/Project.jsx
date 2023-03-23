@@ -24,6 +24,7 @@ import CustomAnalysis from "./CustomAnalysis";
 import TemplateGallery from "./TemplateGallery";
 import MyFavoriteTemplate from "./MyFavoriteTemplate";
 import Campaigns from "./Campaigns";
+import Cohort from "./Cohort";
 import "../css/index.css";
 import { GetFgaProjectDetail } from "metabase/new-service";
 
@@ -156,6 +157,9 @@ const Project = props => {
     }
     if (current_tab === "Campaign") {
       return <Campaigns router={router} location={location}></Campaigns>;
+    }
+    if (current_tab === "Cohort") {
+      return <Cohort router={router} location={location}></Cohort>;
     }
     return (
       <div style={{ textAlign: "center", padding: "50px" }}>
