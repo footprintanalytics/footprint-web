@@ -8,7 +8,7 @@ import LoadingSpinner from "metabase/components/LoadingSpinner/LoadingSpinner";
 
 const CategoryForFga = ({ data = [], isLoading, title, actives=[], onChange }) => {
   const categorys = union(actives, data);
-  const otherIgnoreNum = 10 - actives.length;
+  const otherIgnoreNum = 6 - actives.length;
   const getEnumArray = () => {
     if (otherIgnoreNum < 0) {
       return actives;
@@ -25,6 +25,14 @@ const CategoryForFga = ({ data = [], isLoading, title, actives=[], onChange }) =
 
   const others = getOthers();
   const enumArray = getEnumArray();
+
+  const formatTitle = title => {
+    return title
+      .replace(/_wallets$/g, "")
+      .replace(/_wallet$/g, "")
+      .replace(/_users$/g, "")
+      .replace(/_user$/g, "");
+  }
 
   return (
     <div className="protocols__category-container">
@@ -54,7 +62,7 @@ const CategoryForFga = ({ data = [], isLoading, title, actives=[], onChange }) =
                     }
                   }}
                 >
-                  {item}
+                  {formatTitle(item)}
                 </Link>
               </li>
             ))}
@@ -72,7 +80,7 @@ const CategoryForFga = ({ data = [], isLoading, title, actives=[], onChange }) =
               >
                 {others.map(item => (
                   <Select.Option key={item} value={item}>
-                    {item}
+                    {formatTitle(item)}
                   </Select.Option>
                 ))}
               </Select>
