@@ -183,6 +183,20 @@ export const setParameterDefaultValue = createThunkAction(
   },
 );
 
+export const SET_PARAMETER_REMARK =
+  "metabase/dashboard/SET_PARAMETER_REMARK";
+
+export const setParameterRemark = createThunkAction(
+  SET_PARAMETER_REMARK,
+  (parameterId, remark) => (dispatch, getState) => {
+    updateParameter(dispatch, getState, parameterId, parameter => ({
+      ...parameter,
+      remark: remark,
+    }));
+    return { id: parameterId, remark };
+  },
+);
+
 export const SET_PARAMETER_IS_MULTI_SELECT =
   "metabase/dashboard/SET_PARAMETER_DEFAULT_VALUE";
 export const setParameterIsMultiSelect = createThunkAction(

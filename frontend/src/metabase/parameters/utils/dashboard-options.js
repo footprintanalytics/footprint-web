@@ -42,10 +42,10 @@ export function getDashboardParameterSections() {
       options: SERIES_CATEGORY_OPTIONS,
     },
     showFgaText ? {
-      id: "fga_text",
-      name: t`FGA Text`,
+      id: "fp_enum",
+      name: t`Enum`,
       description: t`Name, Rating, Description, etc.`,
-      options: buildTypedOperatorOptions("string", "fga_text", t`FGA Text`),
+      options: buildTypedOperatorOptions("string", "fp_enum", t`Enum`),
     } : null,
     {
       id: "string",

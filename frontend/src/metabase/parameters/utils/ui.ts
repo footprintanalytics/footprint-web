@@ -16,7 +16,7 @@ export function getParameterIconName(parameter: UiParameter) {
       return "string";
     case "series_category":
       return "string";
-    case "fga_text":
+    case "fp_enum":
       return "string";
     case "number":
       return "number";

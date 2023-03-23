@@ -22,17 +22,18 @@ const FGACategory = props => {
     parameters,
     setValue,
   } = props;
-
+  const remark = parameter.remark;
+  const isRemark = !!remark;
   const [status, setStatus] = useState({
     loadingState: "LOADING",
     options: [],
   });
 
-  const data = status.options.map(item => item[0]);
-  const isLoading = status.loadingState === "LOADING";
+  const data = !isRemark ? status.options.map(item => item[0]) : remark.split(',');
+  const isLoading = !isRemark ? status.loadingState === "LOADING" : false;
 
   useEffect(() => {
-    if (status.loadingState !== "LOADED") {
+    if (!isRemark && status.loadingState !== "LOADED") {
       fetchValues();
     }
   }, [fetchValues, status.loadingState])
@@ -92,18 +93,16 @@ const FGACategory = props => {
   }
 
   return (
-    <div>
-      <CategoryForFga
-        categorys={data}
-        actives={parameter.value}
-        router={null}
-        title={parameter.name}
-        isLoading={isLoading}
-        onChange={actives => {
-          setValue(actives);
-        }}
-      />
-    </div>
+    <CategoryForFga
+      data={data}
+      actives={parameter.value}
+      router={null}
+      title={parameter.name}
+      isLoading={isLoading}
+      onChange={actives => {
+        setValue(actives);
+      }}
+    />
   );
 };
 
