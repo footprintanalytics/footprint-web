@@ -2,7 +2,8 @@
 /* eslint-disable react/prop-types */
 import React from "react";
 import { connect } from "react-redux";
-import { Button, Card, Table, Typography, Dropdown } from "antd";
+import { Button, Card, Table, Typography, Dropdown, Tag } from "antd";
+import { SyncOutlined } from "@ant-design/icons";
 import { useQuery } from "react-query";
 import dayjs from "dayjs";
 import { getUser } from "metabase/selectors/user";
@@ -35,7 +36,16 @@ const Cohort = props => {
       title: "Number of Wallets",
       dataIndex: "numberOfWallets",
       key: "numberOfWallets",
-      render: text => Number(text).toLocaleString(),
+      render: text => {
+        if (!Number(text)) {
+          return (
+            <Tag icon={<SyncOutlined spin />} color="processing">
+              Processing
+            </Tag>
+          );
+        }
+        return Number(text).toLocaleString();
+      },
     },
     {
       title: "Create Time",
