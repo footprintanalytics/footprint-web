@@ -166,7 +166,7 @@ class Question extends Component {
       <>
       {question && (
         <Meta
-          title={question?.card()?.name}
+          title={`${question?.card()?.name} - Footprint Analytics`}
           description={question?.card()?.description || question?.card()?.name}
           image={getOssUrl(
             ossPath(`card/${question?.card()?.id}.png`),
