@@ -1591,8 +1591,9 @@ export const top_protocols = [
    {
      name: "Cohort",
      icon: React.createElement(TeamOutlined),
-     id: 7210,
-     uuid: "4454f1ce-202b-45eb-8f83-3d78beff6756",
+     id: null
+     // id: 7210,
+     // uuid: "4454f1ce-202b-45eb-8f83-3d78beff6756",
      // children: [
      //   {
      //     name: "Cohort",

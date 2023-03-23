@@ -80,6 +80,7 @@ export function getGaMenuTabs(tabs_data: any[]) {
         "Template Gallery",
         "Custom Analysis",
         "My Analysis",
+        "Cohort"
       ].findIndex(i => i === item.name) === -1
         ? true
         : false;
