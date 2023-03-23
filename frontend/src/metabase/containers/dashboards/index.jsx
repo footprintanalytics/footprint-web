@@ -36,9 +36,9 @@ const Index = ({ router, user }) => {
   }*/
 
   const defaultDesc =
-    "Footprint is a powerful yet easy-to-use analytics tool to uncover and visualize blockchain data. The product puts user experience first whether you’re an analyst, data scientist, developer, student, teacher, or executive. It provides an intuitive, drag-and-drop interface for interactive data queries.";
-  const keywords = "Footprint";
-  const title = "Footprint Analytics: Crypto Analysis Dashboards";
+    "Zero coding analytics as Tableau for crypto. Use Footprint real-time on-chain data and uploaded data to build charts and dashboards that showcase cutting-edge blockchain market insights without code using a drag-and-drop interface as well as with SQL.";
+  const keywords = "Footprint Analytics, web3 gaming, web3 gaming analytics, web3 gaming data, NFT game, Web3 marketing, web3 growth marketing, wallet profile, Growth Marketing, cross chain data, blockchain data api, Zero coding analytics";
+  const title = "Analytics App | Get in-depth analytics and data about Web3 NFT Game";
 
   return (
     <>

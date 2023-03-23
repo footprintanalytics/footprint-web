@@ -14,11 +14,13 @@ import DataApiIntroduce from "metabase/containers/dataApi/components/DataApiIntr
 import Meta from "metabase/components/Meta";
 
 const DataApi = () => {
+  const defaultDesc =
+    "Build your application with the Data API. A unified data API for NFTs, GameFi, and DeFi across all major chain ecosystems. Support not only raw data but also statistics metrics with one line of code.";
+  const keywords = "Footprint Analytics, web3 gaming, web3 gaming analytics, web3 gaming data, NFT game, Web3 marketing, web3 growth marketing, wallet profile, Growth Marketing, cross chain data, blockchain data api, Zero coding analytics";
+  const title = "Data API | A unified API for Web3 Gaming data, NFT data, and more";
   return (
     <>
-      <Meta
-        title={`Data API - Footprint Analytics`}
-      />
+      <Meta description={defaultDesc} keywords={keywords} title={title} />
       <div className="data-api__about">
         <DataApiStart />
         <DataApiIntroduce />

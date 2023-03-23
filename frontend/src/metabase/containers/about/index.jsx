@@ -47,9 +47,9 @@ const About = props => {
   const email = user && user.email;
 
   const defaultDesc =
-    "Footprint is a powerful yet easy-to-use analytics tool to uncover and visualize blockchain data. The product puts user experience first whether you’re an analyst, data scientist, developer, student, teacher, or executive. It provides an intuitive, drag-and-drop interface for interactive data queries.";
-  const keywords = "Footprint";
-  const title = "Footprint Analytics: Crypto Analysis Dashboards";
+    "Footprint Analytics is a data platform blending web2 and web3 data with abstractions. We help analysts, builders, and investors turn blockchain data into insights with accessible visualization tools and a powerful multi-chain API across 20+ chains for NFTs, GameFi and DeFi. We also provide Footprint Growth Analytics to help with effective growth in GameFi and any web3 projects. Explore and share data from Ethereum, Bitcoin, Polygon, BNB Chain, Solana, Arbitrum, Avalanche, Optimism, Fantom and Harmory Chain and more for free.";
+  const keywords = "Footprint Analytics, web3 gaming, web3 gaming analytics, web3 gaming data, NFT game, Web3 marketing, web3 growth marketing, wallet profile, Growth Marketing, cross chain data, blockchain data api, Zero coding analytics";
+  const title = "Footprint Analytics | Power Web3 growth marketing in GameFi, NFT and DeFi";
 
   useEffect(() => {
     if (zkspaceDate() && !user && isRegisterActivityChannel(channel)) {

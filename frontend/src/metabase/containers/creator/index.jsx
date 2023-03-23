@@ -72,6 +72,7 @@ const Index = ({ router, user, params, userInfoDataApi }) => {
         <Meta
           title={`${get(data, "userInfo.name")} - Footprint Analytics`}
           description={get(data, "userInfo.bio")}
+          keywords={name}
         />
       )}
       <div className="creator__wrap">
