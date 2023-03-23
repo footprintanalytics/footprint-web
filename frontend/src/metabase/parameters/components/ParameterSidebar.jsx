@@ -1,15 +1,12 @@
 /* eslint-disable react/prop-types */
 import React from "react";
-import { t, jt } from "ttag";
+import { jt, t } from "ttag";
 import cx from "classnames";
 
 import { DashboardApi } from "metabase/services";
 import Fields from "metabase/entities/fields";
 import Tables from "metabase/entities/tables";
-import {
-  canUseLinkedFilters,
-  usableAsLinkedFilter,
-} from "metabase/parameters/utils/linked-filters";
+import { canUseLinkedFilters, usableAsLinkedFilter } from "metabase/parameters/utils/linked-filters";
 
 import Radio from "metabase/core/components/Radio";
 import Toggle from "metabase/core/components/Toggle";
@@ -20,6 +17,7 @@ import ParameterValueWidget from "metabase/parameters/components/ParameterValueW
 import { isSingleOrMultiSelectable } from "metabase/parameters/utils/parameter-type";
 import Sidebar from "metabase/dashboard/components/Sidebar";
 import { getIsMultiSelect } from "metabase/parameters/utils/dashboards";
+import { Input } from "antd";
 
 const LINKED_FILTER = "linked-filters";
 const TABS = [
@@ -55,6 +53,7 @@ class ParameterSidebar extends React.Component {
       done,
       setName,
       setDefaultValue,
+      setRemark,
       setIsMultiSelect,
       setFilteringParameters,
     } = this.props;
@@ -96,6 +95,17 @@ class ParameterSidebar extends React.Component {
                   className="input bg-white"
                 />
               </div>
+              {parameter.sectionId === "fp_enum" && <>
+                <span>Data</span>
+                <Input
+                  placeholder="Enter data. Like xxx,yyy"
+                  defaultValue={parameter.remark}
+                  onChange={(e) => {
+                    setRemark(e.target.value);
+                  }}
+                />
+              </>
+              }
               {isSingleOrMultiSelectable(parameter) && (
                 <div className="pb2">
                   <label className="mt2 mb1 block text-bold">{t`Users can pick`}</label>
