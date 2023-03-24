@@ -78,25 +78,6 @@ const Activators = props => {
         ),
       },
       {
-        name: "SMS",
-        key: "SMS",
-        icon: messageIcon,
-        statu: "unconnected",
-        desc: "Activator your users by SMS.",
-        pannel: (
-          <ConfigGoogleAnalyticsSource
-            onAddConnector={onAddConnector}
-            user={user}
-            setOpenDrawer={setOpenDrawer}
-            setLoginModalShowAction={setLoginModalShowAction}
-            setCreateFgaProjectModalShowAction={
-              setCreateFgaProjectModalShowAction
-            }
-            projectId={projectId}
-          />
-        ),
-      },
-      {
         name: "Discord",
         key: "discord",
         statu: "unconnected",
@@ -139,6 +120,25 @@ const Activators = props => {
         statu: "unconnected",
         icon: "https://footprint-imgs.oss-us-east-1.aliyuncs.com/notifi.jpeg",
         desc: "Activator your users by Notifi",
+      },
+      {
+        name: "SMS",
+        key: "SMS",
+        icon: messageIcon,
+        statu: "unconnected",
+        desc: "Activator your users by SMS.",
+        pannel: (
+          <ConfigGoogleAnalyticsSource
+            onAddConnector={onAddConnector}
+            user={user}
+            setOpenDrawer={setOpenDrawer}
+            setLoginModalShowAction={setLoginModalShowAction}
+            setCreateFgaProjectModalShowAction={
+              setCreateFgaProjectModalShowAction
+            }
+            projectId={projectId}
+          />
+        ),
       },
     ];
     // if (projectId && !isLoading && data) {

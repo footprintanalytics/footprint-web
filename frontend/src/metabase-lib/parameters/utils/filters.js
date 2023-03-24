@@ -77,6 +77,8 @@ function tagFilterForParameter(parameter) {
       return tag => tag.type === "number" || tag.type === "text";
     case "number":
       return tag => tag.type === "number";
+    case "fp_enum":
+      return tag => tag.type === "text";
     case "string":
       return tag => tag.type === "text";
   }

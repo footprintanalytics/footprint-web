@@ -1603,8 +1603,9 @@ export const top_protocols = [
      children: [
        {
          name: "Cohort",
-         id: 7210,
-         uuid: "4454f1ce-202b-45eb-8f83-3d78beff6756",
+         id: null
+         //  id: 7210,
+         //  uuid: "4454f1ce-202b-45eb-8f83-3d78beff6756",
        },
        {
          name: "Potential Users",
@@ -1656,6 +1657,7 @@ export const top_protocols = [
          id: 7490,
          uuid: "d137a1ef-34a3-4553-84cb-2203bd9d2baf",
        },
+       { name: "Discord", id: null, uuid: null },
      ],
    },
    {

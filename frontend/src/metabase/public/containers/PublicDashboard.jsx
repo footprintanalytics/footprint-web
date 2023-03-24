@@ -75,6 +75,7 @@ const mapStateToProps = (state, props) => {
     }
     if (project.twitter_handler) {
       const key = "twitter_handler";
+      console.log("hanlder", project.twitter_handler);
       // let queryHandler = getDefaultDashboardPara(
       //   parameters,
       //   parameterValues,
