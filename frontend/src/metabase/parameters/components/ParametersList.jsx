@@ -140,7 +140,7 @@ function ParametersList({
           </div>
         )}
       </div>
-      {(!showAdvanced || isEditing || (showAdvanced && showNormalVisibleParams)) && (
+      {(!showAdvanced || (showAdvanced && showNormalVisibleParams)) && (
         <ParameterWidgetList
           className={cx(
             className,
