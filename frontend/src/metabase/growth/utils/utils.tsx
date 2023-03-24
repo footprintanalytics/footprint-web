@@ -23,7 +23,6 @@ export function getDefaultDashboardPara(
 }
 
 export async function getDashboardDatas(uuid: string) {
-  // const uuid = "93629e56-00c0-48cd-83b0-79fb0b0054f2";
   const datas: any[] = [];
   try {
     const { data } = await PublicApi.card({ uuid });

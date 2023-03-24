@@ -24,6 +24,7 @@ import CustomAnalysis from "./CustomAnalysis";
 import TemplateGallery from "./TemplateGallery";
 import MyFavoriteTemplate from "./MyFavoriteTemplate";
 import Campaigns from "./Campaigns";
+import CreateCampaign from "./CreateCampaign";
 import Cohort from "./Cohort";
 import "../css/index.css";
 import { GetFgaProjectDetail } from "metabase/new-service";
@@ -106,6 +107,16 @@ const Project = props => {
           key={project}
           hideFooter
         />
+      );
+    }
+    if (current_tab === "CreateCampaign") {
+      return (
+        <CreateCampaign
+          location={location}
+          router={router}
+          project={getProjectObject(project)}
+          projectId={getLatestGAProjectId()}
+        ></CreateCampaign>
       );
     }
     if (current_tab === "Connector") {

@@ -19,8 +19,8 @@ export const top_protocols = [
   {
     protocol_slug: "the-sandbox",
     protocol_name: "The Sandbox",
-    isPremium:true,
-    isDemo:true,
+    isPremium: true,
+    isDemo: true,
     nft_trading_vol: 1576582502.5102763,
     logo: "https://footprint-imgs.oss-us-east-1.aliyuncs.com/logo_images/the-sandbox.jpg",
     collections_list: [
@@ -35,7 +35,7 @@ export const top_protocols = [
   {
     protocol_slug: "decentraland",
     protocol_name: "Decentraland",
-    isPremium:true,
+    isPremium: true,
     nft_trading_vol: 261165102.1676954,
     logo: "https://lh3.googleusercontent.com/5KIxEGmnAiL5psnMCSLPlfSxDxfRSk4sTQRSyhPdgnu70nGb2YsuVxTmO2iKEkOZOfq476Bl1hAu6aJIKjs1myY=s60",
     collections_list: [
@@ -96,7 +96,7 @@ export const top_protocols = [
   {
     protocol_slug: "nft-worlds",
     protocol_name: "NFT Worlds",
-    isPremium:true,
+    isPremium: true,
     nft_trading_vol: 166826532.0470039,
     logo: "https://footprint-imgs.oss-us-east-1.aliyuncs.com/logo_images/nft-worlds.png",
     collections_list: ["0xbd4455da5929d5639ee098abfaa3241e9ae111af"],
@@ -148,7 +148,7 @@ export const top_protocols = [
   {
     protocol_slug: "mooncatrescue",
     protocol_name: "MoonCatRescue",
-    isPremium:true,
+    isPremium: true,
     nft_trading_vol: 62664564.87930243,
     logo: "https://footprint-imgs.oss-us-east-1.aliyuncs.com/logo_images/mooncatrescue.png",
     collections_list: ["0xc3f733ca98e0dad0386979eb96fb1722a1a05e69"],
@@ -735,7 +735,7 @@ export const top_protocols = [
   {
     protocol_slug: "the-dustland",
     protocol_name: "The Dustland",
-    isPremium:true,
+    isPremium: true,
     nft_trading_vol: 319229.48828706896,
     logo: "https://footprint-imgs.oss-us-east-1.aliyuncs.com/logo_images/the-dustland.png",
     collections_list: ["0x3b2f1189b9372c4b6c569a497ad241112d8824c1"],
@@ -816,7 +816,7 @@ export const top_protocols = [
   {
     protocol_slug: "planet-ix",
     protocol_name: "Planet IX",
-    isPremium:true,
+    isPremium: true,
     nft_trading_vol: 162758.66614488626,
     logo: "https://footprint-imgs.oss-us-east-1.aliyuncs.com/logo_images/planet-ix.png",
     collections_list: ["0xba6666b118f8303f990f3519df07e160227cce87"],
@@ -1467,118 +1467,183 @@ export const top_protocols = [
     chain: "Ethereum",
   },
 ];
+export const template_gallery = [
+  {
+    category: "Go-To-Marketing",
+    desc: "Analyze campaign data to determine which platforms and campaigns are the most popular, and identify the most precise target audience.",
+    items: [
+      {
+        category: "Go-To-Marketing",
+        dashboardName: "Galxe Campaign Overall Stats",
+        id: 7408,
+        dashboardLink:
+          "https://www.footprint.network/growth/@rogerD/Campaign-Analysis",
+      },
+      {
+        category: "Go-To-Marketing",
+        desc: "",
+        dashboardName: "Galxe Campaign Analysis",
+        dashboardLink:
+          "https://www.footprint.network/growth/@rogerD/Campaign-Overview?campaign_id=5284",
+        id: 7407,
+      },
+      {
+        category: "Go-To-Marketing",
+        desc: "",
+        dashboardName: "Galxe Campaign Comparison",
+        dashboardLink:
+          "https://www.footprint.network/growth/@rogerD/Campaign-Comparison?campaign_a_id=5284&campaign_b_id=8087",
+        id: 7409,
+      },
+    ],
+  },
+  {
+    category: "GameFi",
+    desc: "Gain deep industry insights by thoroughly understanding industry data, and develop a comprehensive understanding of operational status by analyzing games.",
+    items: [
+      {
+        category: "GameFi",
+        desc: "Gain deep industry insights by thoroughly understanding industry data, and develop a comprehensive understanding of operational status by analyzing games.",
+        dashboardName: "GameFi Industry Insights & Ranking",
+        dashboardLink:
+          "https://www.footprint.network/growth/@rogerD/GameFi-Industry-Insights?series_date=past90days",
+        id: 7164,
+      },
+      {
+        category: "GameFi",
+        desc: "",
+        dashboardName: "GameFi Drill Down Analysis",
+        dashboardLink: "https://www.footprint.network/growth/@Footprint/GameFi",
+        id: 5947,
+      },
+      {
+        category: "GameFi",
+        desc: "",
+        dashboardName: "GameFi Users Overview",
+        dashboardLink:
+          "https://www.footprint.network/growth/@rogerD/GameFi-Users-Overview?date__=past180days&chain=BNB%20Chain",
+        id: 3578,
+      },
+      {
+        category: "GameFi",
+        desc: "",
+        dashboardName: "Gamer Profile",
+        id: 6345,
+        dashboardLink:
+          "https://www.footprint.network/growth/@rogerD/Gamer-Profile?wallet_address=0x81e4fb0c64bf49f89b57f6648562fc9a791b2e92",
+      },
+      {
+        category: "GameFi",
+        desc: "",
+        dashboardName: "GameFi Project Summary",
+        id: 5911,
+        dashboardLink:
+          "https://www.footprint.network/growth/@Footprint/GameFi-Project-Summary?gamefi_name=splinterlands&date_range=past90days",
+      },
+      {
+        category: "GameFi",
+        desc: "",
+        dashboardName: "GameFi Compare",
+        id: 6390,
+        dashboardLink:
+          "https://www.footprint.network/growth/@rogerD/GameFi-Compare?game_a=walken&game_b=stepn&chain=Solana",
+      },
+    ],
+  },
+  {
+    category: "NFT",
+    desc: "Gain a deeper understanding  by analyzing the overview and holder profit&loss of NFTs.",
+    items: [
+      {
+        category: "NFT",
+        desc: "Gain a deeper understanding  by analyzing the overview and holder profit&loss of NFTs.",
+        dashboardName: "Top X NFT by Trading Vol",
+        id: 7175,
+        dashboardLink:
+          "https://www.footprint.network/growth/@rogerD/Top-X-NFT-by-Trading-Vol?trading_vol._%253E%253D=1000000",
+      },
+      {
+        category: "NFT",
+        desc: "",
+        dashboardName: "Multi-NFT Overview",
+        id: 7185,
+        dashboardLink:
+          "https://www.footprint.network/growth/@rogerD/NFT-Overview-Random-Games-Heros?nft_collection_contract_address=0xed55e4477b795eaa9bb4bca24df42214e1a05c18&series_date=past30days",
+      },
+      {
+        category: "NFT",
+        desc: "",
+        dashboardName: "NFT Overview",
+        id: 7139,
+        dashboardLink:
+          "https://www.footprint.network/growth/@rogerD/NFT-Overview-Random-Games?nft_collection_contract_address=0xed55e4477b795eaa9bb4bca24df42214e1a05c18&nft_collection_contract_address=0x16a1dcd0f76947dc3d3ba5158952107ef0321ad9&nft_collection_contract_address=0x5891eb497d1ddb4e3933981b55b37d5f98bbfbcf&nft_collection_contract_address=0xb55a820d92809bcff91d568fc1ef0e451c69f5e8&nft_collection_contract_address=0x15f3e5a30e45a58b15bba610f27689fbc7de8c3c&data=past3months",
+      },
+      {
+        category: "NFT",
+        desc: "",
+        id: 7192,
+        dashboardName: "Profit Leaderboard for Collection",
+        dashboardLink:
+          "https://www.footprint.network/growth/@rogerD/Profit-Leaderboard-for-Collection-FGA?collection_contract_address=0xa342f5d851e866e18ff98f351f2c6637f4478db5",
+      },
+      {
+        category: "NFT",
+        desc: "",
+        dashboardName: "Multi-NFT Collections Royalties",
+        id: 7188,
+        dashboardLink:
+          "https://www.footprint.network/growth/@rogerD/Multi-NFT-Collections-Royalties?nft_collections=0x6a570bb15bc67968868c19b0ec7dcccdfd8ed089&nft_collections=0xed55e4477b795eaa9bb4bca24df42214e1a05c18&nft_collections=0x16a1dcd0f76947dc3d3ba5158952107ef0321ad9&nft_collections=0xb55a820d92809bcff91d568fc1ef0e451c69f5e8&nft_collections=0x5891eb497d1ddb4e3933981b55b37d5f98bbfbcf&nft_collections=0x15f3e5a30e45a58b15bba610f27689fbc7de8c3c&series_date=past30days",
+      },
+      {
+        category: "NFT",
+        desc: "",
+        id: 6808,
+        dashboardName: "Wallet Tracing",
+        dashboardLink:
+          "https://www.footprint.network/growth/@rogerD/Wallet-Tracing?collection=benji-bananas-membership-pass&date_range=past30days",
+      },
+      {
+        category: "NFT",
+        desc: "",
+        id: 7187,
+        dashboardName: "Owner Analysis",
+        dashboardLink:
+          "https://www.footprint.network/growth/@rogerD/Owner-Analysis-Random-Games?target_collection=0xed55e4477b795eaa9bb4bca24df42214e1a05c18&selected_collections=0x16a1dcd0f76947dc3d3ba5158952107ef0321ad9&selected_collections=0xb55a820d92809bcff91d568fc1ef0e451c69f5e8&selected_collections=0x6a570bb15bc67968868c19b0ec7dcccdfd8ed089&selected_collections=0x5891eb497d1ddb4e3933981b55b37d5f98bbfbcf&selected_collections=0x15f3e5a30e45a58b15bba610f27689fbc7de8c3c&selected_collections=0x34d85c9cdeb23fa97cb08333b511ac86e1c4e258&selected_collections=0xbc4ca0eda7647a8ab7c2061c2e118a18a936f13d&selected_collection_balance_%253E%253D=0&wallet_address=0x950fca90ae7eb55cd35326eb8e6350747d4cf32e",
+      },
+      {
+        category: "NFT",
+        desc: "",
+        id: 7170,
+        dashboardName: "Mutual Holders",
+        dashboardLink:
+          "https://www.footprint.network/growth/@rogerD/Mutual-Holders?collection_a_=0xbc4ca0eda7647a8ab7c2061c2e118a18a936f13d&collection_b=0xb47e3cd837ddf8e4c57f05d70ab865de6e193bbb&holder_tag=mutual_holders",
+      },
+    ],
+  },
+  {
+    category: "Investment Portfolio",
+    desc: "Stay up-to-date on industry financing trends and keep a close eye on investment institutions' portfolios",
+    items: [
+      {
+        category: "Investment Portfolio",
+        desc: "Stay up-to-date on industry financing trends and keep a close eye on investment institutions' portfolios",
+        dashboardName: "Investment History of Project",
+        id: 3462,
+        dashboardLink:
+          "https://www.footprint.network/growth/chart/Investment-History-of-Project-fp-3462",
+      },
+      {
+        category: "Investment Portfolio",
+        desc: "",
+        id: 824,
+        dashboardName: "Investment History of VC",
+        dashboardLink:
+          "https://www.footprint.network/growth/@Bond/Investment-History-of-VC%3A-IOSG",
+      },
+    ],
+  },
+];
 
- export const template_gallery = [
-   {
-     No: 1,
-     tag: "",
-     dashboard_name: "Holder Profile List",
-     dashboard_link:
-       "/growth/@rogerD/Holder-Profile-List?collection_contract_address=0xa342f5d851e866e18ff98f351f2c6637f4478db5",
-   },
-   {
-     No: 2,
-     tag: "",
-     dashboard_name: "Profit Leaderboard for Collection",
-     dashboard_link:
-       "/growth/@rogerD/Profit-Leaderboard-for-Collection-FGA?collection_contract_address=0xa342f5d851e866e18ff98f351f2c6637f4478db5",
-   },
-   {
-     No: 3,
-     tag: "",
-     dashboard_name: "Multi-NFT Collections Royalties",
-     dashboard_link:
-       "/growth/@rogerD/Multi-NFT-Collections-Royalties?nft_collections=0x6a570bb15bc67968868c19b0ec7dcccdfd8ed089&nft_collections=0xed55e4477b795eaa9bb4bca24df42214e1a05c18&nft_collections=0x16a1dcd0f76947dc3d3ba5158952107ef0321ad9&nft_collections=0xb55a820d92809bcff91d568fc1ef0e451c69f5e8&nft_collections=0x5891eb497d1ddb4e3933981b55b37d5f98bbfbcf&nft_collections=0x15f3e5a30e45a58b15bba610f27689fbc7de8c3c&series_date=past30days",
-   },
-   {
-     No: 4,
-     tag: "",
-     dashboard_name: "Owner Analysis",
-     dashboard_link:
-       "/growth/@rogerD/Owner-Analysis-Random-Games?target_collection=0xed55e4477b795eaa9bb4bca24df42214e1a05c18&selected_collections=0x16a1dcd0f76947dc3d3ba5158952107ef0321ad9&selected_collections=0xb55a820d92809bcff91d568fc1ef0e451c69f5e8&selected_collections=0x6a570bb15bc67968868c19b0ec7dcccdfd8ed089&selected_collections=0x5891eb497d1ddb4e3933981b55b37d5f98bbfbcf&selected_collections=0x15f3e5a30e45a58b15bba610f27689fbc7de8c3c&selected_collections=0x34d85c9cdeb23fa97cb08333b511ac86e1c4e258&selected_collections=0xbc4ca0eda7647a8ab7c2061c2e118a18a936f13d&selected_collection_balance_%253E%253D=0&wallet_address=0x950fca90ae7eb55cd35326eb8e6350747d4cf32e",
-   },
-   {
-     No: 5,
-     tag: "",
-     dashboard_name: "Multi-NFT Overview",
-     dashboard_link:
-       "/growth/@rogerD/NFT-Overview-Random-Games-Heros?nft_collection_contract_address=0xed55e4477b795eaa9bb4bca24df42214e1a05c18&series_date=past30days",
-   },
-   {
-     No: 6,
-     tag: "",
-     dashboard_name: "Competitor User List",
-     dashboard_link: "/growth/@rogerD/Competitor-User-List",
-   },
-   {
-     No: 7,
-     tag: "",
-     dashboard_name: "Top X NFT by Trading Vol",
-     dashboard_link:
-       "/growth/@rogerD/Top-X-NFT-by-Trading-Vol?trading_vol._%253E%253D=1000000",
-   },
-   {
-     No: 8,
-     tag: "",
-     dashboard_name: "GameFi & in-game NFT Protocols",
-     dashboard_link:
-       "/growth/@rogerD/GameFi-NFT-Protocols?protocol_slug=the-sandbox&nft_type=in-Game%20NFT",
-   },
-   {
-     No: 9,
-     tag: "",
-     dashboard_name: "Mutual Holders",
-     dashboard_link:
-       "/growth/@rogerD/Mutual-Holders?collection_a_=0xbc4ca0eda7647a8ab7c2061c2e118a18a936f13d&collection_b=0xb47e3cd837ddf8e4c57f05d70ab865de6e193bbb&holder_tag=mutual_holders",
-   },
-   {
-     No: 10,
-     tag: "",
-     dashboard_name: "GameFi Industry Insights",
-     dashboard_link:
-       "/growth/@rogerD/GameFi-Industry-Insights?series_date=past90days",
-   },
-   {
-     No: 11,
-     tag: "",
-     dashboard_name: "NFT Overview",
-     dashboard_link:
-       "/growth/@rogerD/NFT-Overview-Random-Games?nft_collection_contract_address=0xed55e4477b795eaa9bb4bca24df42214e1a05c18&nft_collection_contract_address=0x16a1dcd0f76947dc3d3ba5158952107ef0321ad9&nft_collection_contract_address=0x5891eb497d1ddb4e3933981b55b37d5f98bbfbcf&nft_collection_contract_address=0xb55a820d92809bcff91d568fc1ef0e451c69f5e8&nft_collection_contract_address=0x15f3e5a30e45a58b15bba610f27689fbc7de8c3c&data=past3months",
-   },
-   {
-     No: 12,
-     tag: "",
-     dashboard_name: "Top 10 Users by Balance",
-     dashboard_link: "/growth/@rogerD/Top-10-Users-by-Balance",
-   },
-   {
-     No: 13,
-     tag: "",
-     dashboard_name: "GameFi Compare",
-     dashboard_link:
-       "/growth/@rogerD/GameFi-Compare?game_a=walken&game_b=stepn&chain=Solana",
-   },
-   {
-     No: 14,
-     tag: "",
-     dashboard_name: "Gamer Profile",
-     dashboard_link:
-       "/growth/@rogerD/Gamer-Profile?wallet_address=0x81e4fb0c64bf49f89b57f6648562fc9a791b2e92",
-   },
-   {
-     No: 15,
-     tag: "",
-     dashboard_name: "Wallet Tracing",
-     dashboard_link:
-       "/growth/@rogerD/Wallet-Tracing?collection=benji-bananas-membership-pass&date_range=past30days",
-   },
-   {
-     No: 16,
-     tag: "",
-     dashboard_name: "NFT Stats & Holder Wallet Tracing",
-     dashboard_link: "/growth/@rogerD/Wallet-Tracing-Demo?date=past6months~",
-   },
- ];
 
  export const fga_menu_data = [
    {
