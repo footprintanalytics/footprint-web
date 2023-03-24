@@ -117,6 +117,7 @@ class Dashboard extends Component {
     }).isRequired,
     closeSidebar: PropTypes.func.isRequired,
     embedOptions: PropTypes.object,
+    hideParameters: PropTypes.object,
 
     urlDashboardName: PropTypes.string,
     urlUserName: PropTypes.string,
@@ -489,6 +490,7 @@ class Dashboard extends Component {
       setEditingParameter,
       isHeaderVisible,
       embedOptions,
+      hideParameters,
     } = this.props;
 
     const { error, isParametersWidgetSticky, shareModalResource } = this.state;
@@ -500,6 +502,7 @@ class Dashboard extends Component {
     const parametersWidget = (
       <SyncedParametersList
         parameters={getValuePopulatedParameters(parameters, parameterValues)}
+        hideParameters={hideParameters}
         editingParameter={editingParameter}
         dashboard={dashboard}
         isFullscreen={isFullscreen}
