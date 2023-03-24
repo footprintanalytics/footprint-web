@@ -153,14 +153,14 @@ const Activators = props => {
     //   }
     //   // setCurrentConnectors()
     // } else {
-    if (project?.project?.isDemo) {
+    if (project?.project?.isDemo && !projectId) {
       temp.map((j, index) => {
         j.statu = "connected";
       });
     }
     // }
     setActivators(temp);
-  }, []);
+  }, [project]);
 
   const showDrawer = c => {
     setOpenDrawer({ show: true, connector: c });

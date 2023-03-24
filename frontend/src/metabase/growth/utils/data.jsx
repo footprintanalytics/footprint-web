@@ -1651,7 +1651,11 @@ export const top_protocols = [
          id: 7476,
          uuid: "fd4d94f3-06f7-445d-ada3-0ce82bcefa39",
        },
-       { name: "Discord", id: null, uuid: null },
+       {
+         name: "Discord",
+         id: 7490,
+         uuid: "d137a1ef-34a3-4553-84cb-2203bd9d2baf",
+       },
      ],
    },
    {
