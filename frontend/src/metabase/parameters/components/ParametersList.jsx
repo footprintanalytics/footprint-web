@@ -129,7 +129,7 @@ function ParametersList({
           <div className="flex align-end">
             <Button
               className="cursor-pointer flex align-center mb1"
-              style={{ padding: "4px 6px", color: "#303440" }}
+              style={{ padding: "4px 6px", color: "#7A819B" }}
               onClick={() => {
                 setShowNormalVisibleParams(!showNormalVisibleParams)
               }}

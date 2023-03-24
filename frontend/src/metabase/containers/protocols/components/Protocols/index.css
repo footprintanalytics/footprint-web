@@ -278,7 +278,8 @@
   margin-bottom: 8px;
   border: 1px solid #dcdee4;
   border-radius: 4px;
-  color: #949aab;
+  color: #7A819B;
+  font-weight: 500;
 }
 
 .fga__category-item--active {
