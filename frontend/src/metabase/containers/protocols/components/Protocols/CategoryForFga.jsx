@@ -49,8 +49,8 @@ const CategoryForFga = ({ data = [], isLoading, title, actives=[], onChange }) =
                 onClick={() => trackStructEvent("Protocols Category", item)}
               >
                 <Link
-                  className={`protocols__category-item ${
-                    actives.includes(item) ? "protocols__category-item--active" : ""
+                  className={`fga__category-item ${
+                    actives.includes(item) ? "fga__category-item--active" : ""
                   }`}
 
                   onClick={e => {

@@ -266,6 +266,27 @@
   padding: 20px 0;
 }
 
+.fga__category-item {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: #fff;
+  font-size: 14px;
+  height: 30px;
+  margin-right: 8px;
+  padding: 0 12px;
+  margin-bottom: 8px;
+  border: 1px solid #dcdee4;
+  border-radius: 4px;
+  color: #7A819B;
+  font-weight: 500;
+}
+
+.fga__category-item--active {
+  border: 1px solid #3434b2;
+  color: #3434b2;
+}
+
 @media screen and (--footprint-breakpoint-max-pad) {
   .protocols__table .ant-table {
     border-left: 0;
