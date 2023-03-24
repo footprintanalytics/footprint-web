@@ -25,16 +25,6 @@ const tailLayout = {
 const CreateProjectModal = props => {
   const { open, onCancel, onSuccess, router, location, user } = props;
   const [form] = Form.useForm();
-  // monitor datas
-  // const normalOptions = [];
-  // top_protocols.map(i =>
-  //   normalOptions.push({
-  //     ...i,
-  //     value: i.protocol_slug,
-  //     key: i.protocol_slug,
-  //     label: i.protocol_name,
-  //   }),
-  // );
   const [options, setOptions] = useState([]);
   const [loadingData, setLoadingData] = useState(false);
   const [loading, setLoading] = useState(false);
@@ -42,6 +32,8 @@ const CreateProjectModal = props => {
   useEffect(() => {
     if (open) {
       setLoadingData(true);
+      // old uuid 5276dcf1-0e5f-49d1-a49a-c405d2caa3d4
+      // new uuid af524d7d-d565-429b-af91-d3028f5ee8ad
       getDashboardDatas("5276dcf1-0e5f-49d1-a49a-c405d2caa3d4")
         .then(result => {
           const normalOptions = [];

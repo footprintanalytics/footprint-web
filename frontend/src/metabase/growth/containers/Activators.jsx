@@ -101,10 +101,10 @@ const Activators = props => {
         desc: "Activator your users by Galxe",
       },
       {
-        name: "PortN",
-        key: "PortN",
+        name: "Port3",
+        key: "Port3",
         statu: "unconnected",
-        icon: "https://footprint-imgs.oss-us-east-1.aliyuncs.com/web3port.svg",
+        icon: "https://footprint-imgs.oss-accelerate.aliyuncs.com/20230324164222.svg",
         desc: "Activator your users by PortN",
       },
       {
@@ -153,14 +153,14 @@ const Activators = props => {
     //   }
     //   // setCurrentConnectors()
     // } else {
-    if (project?.project?.isDemo) {
+    if (project?.project?.isDemo && !projectId) {
       temp.map((j, index) => {
         j.statu = "connected";
       });
     }
     // }
     setActivators(temp);
-  }, []);
+  }, [project]);
 
   const showDrawer = c => {
     setOpenDrawer({ show: true, connector: c });

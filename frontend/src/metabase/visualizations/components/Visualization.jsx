@@ -45,6 +45,7 @@ import ErrorGuide from "metabase/query_builder/components/ErrorGuide";
 import CreateCampaign from "metabase/growth/components/buttons/CreateCampaign";
 import CreateCohort from "metabase/growth/components/buttons/CreateCohort";
 import CreateFliterCohort from "metabase/growth/components/buttons/CreateFliterCohort";
+import FgaErrorGuide from "metabase/growth/components/FgaErrorGuide";
 import { datasetContainsNoResults } from "metabase-lib/queries/utils/dataset";
 import Question from "metabase-lib/Question";
 import Mode from "metabase-lib/Mode";
@@ -476,7 +477,11 @@ class Visualization extends React.PureComponent {
     const isVideo =
       dashcard?.visualization_settings?.virtual_card?.display === "video";
     const isPublic = location.pathname.startsWith("/public"); // iframe 里面也是 work 的，true
-
+    const isFga = location.pathname.startsWith("/growth");
+    const isFgaTwitter = isFga && location.pathname.includes("/Twitter");
+    const isFgaDiscord = isFga && location.pathname.includes("/Discord");
+    const isFgaGoogleAnalysis =
+      isFga && location.pathname.includes("/User%20Funnel");
     const cardId = get(this.props.rawSeries, 0)?.card?.id;
 
     return (
@@ -535,24 +540,30 @@ class Visualization extends React.PureComponent {
               <img data-testid="no-results-image" src={NoResults} />
             </Tooltip>
             {!small && <span className="h4 text-bold">{t`No results!`}</span>}*/}
-            <div className="noResults">
-              <h4>No results!</h4>
-              <ol>
-                <li>You can try refreshing your browser.</li>
-                <li>You can try changing your filters.</li>
-                <li>
-                  You can try contacting us on{" "}
-                  <Link
-                    href="https://discord.gg/3HYaR6USM7"
-                    rel="nofollow"
-                    target="_blank"
-                  >
-                    Discord
-                  </Link>
-                  .
-                </li>
-              </ol>
-            </div>
+            <>
+              {isFgaDiscord || isFgaTwitter || isFgaGoogleAnalysis ? (
+                <FgaErrorGuide></FgaErrorGuide>
+              ) : (
+                <div className="noResults">
+                  <h4>No results!</h4>
+                  <ol>
+                    <li>You can try refreshing your browser.</li>
+                    <li>You can try changing your filters.</li>
+                    <li>
+                      You can try contacting us on{" "}
+                      <Link
+                        href="https://discord.gg/3HYaR6USM7"
+                        rel="nofollow"
+                        target="_blank"
+                      >
+                        Discord
+                      </Link>
+                      .
+                    </li>
+                  </ol>
+                </div>
+              )}
+            </>
           </div>
         ) : error ? (
           <div
@@ -561,18 +572,30 @@ class Visualization extends React.PureComponent {
               (isDashboard ? "text-slate-light" : "text-slate")
             }
           >
-            <Tooltip tooltip={error} isEnabled={small}>
-              <Icon className="mb2" name={errorIcon || "warning"} size={50} />
-            </Tooltip>
-            {
-              <div
-                className="h4 text-bold flex-column"
-                style={{ display: small ? "none" : "" }}
-              >
-                <div>{error}</div>
-                {errorIcon !== "key" && <ErrorGuide cardId={cardId} />}
-              </div>
-            }
+            <>
+              {isFgaDiscord || isFgaTwitter || isFgaGoogleAnalysis ? (
+                <FgaErrorGuide></FgaErrorGuide>
+              ) : (
+                <>
+                  <Tooltip tooltip={error} isEnabled={small}>
+                    <Icon
+                      className="mb2"
+                      name={errorIcon || "warning"}
+                      size={50}
+                    />
+                  </Tooltip>
+                  {
+                    <div
+                      className="h4 text-bold flex-column"
+                      style={{ display: small ? "none" : "" }}
+                    >
+                      <div>{error}</div>
+                      {errorIcon !== "key" && <ErrorGuide cardId={cardId} />}
+                    </div>
+                  }
+                </>
+              )}
+            </>
           </div>
         ) : loading ? (
           <div className="flex-full p1 text-centered text-brand flex flex-column layout-centered">
