@@ -27,7 +27,7 @@
    can access the default value."
   [{{:keys [executed-by query-hash card-id dashboard-id context], :as _info} :info, query-type :type, aysnc-cache :aysnc-refresh-cache2?, {:keys [web-vip]} :middleware}]
   (str "Metabase"
-       (format ":: userID: %s email: %s web-vip: %s queryType: %s card-id: %s dashboard-id: %s context: %s aysnc-cache: %s"
+       (format ":: userID: %s email: %s webVip: %s queryType: %s card-id: %s dashboard-id: %s context: %s aysnc-cache: %s"
                executed-by
                (when executed-by (db/select-one-field :email  User :id executed-by))
                web-vip
