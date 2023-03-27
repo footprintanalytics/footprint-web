@@ -1,6 +1,8 @@
 /* eslint-disable react/prop-types */
 import React from "react";
 import upperFirst from "lodash/upperFirst";
+import upperCase from "lodash/upperCase";
+import lowerCase from "lodash/lowerCase";
 import { DEFAULT_DATE_STYLE, DEFAULT_TIME_STYLE, getTimeFormatFromStyle, hasHour } from "metabase/lib/formatting/date";
 
 
@@ -8,13 +10,15 @@ export function formatTitle(title) {
   if (!title) {
     return title;
   }
-  const ignoreArray = [
+  const lowerArray = [
     "a",
     "all",
     "the",
     "at",
     "with",
     "of",
+    "for",
+    "info",
     "in",
     "or",
     "and",
@@ -25,10 +29,22 @@ export function formatTitle(title) {
     "on",
     "vs",
   ];
+  const upperArray = [
+    "nft",
+  ];
+  const mapFunction = (item) => {
+    if (lowerArray.includes(item?.toLowerCase())) {
+      return lowerCase(item);
+    }
+    if (upperArray.includes(item?.toLowerCase())) {
+      return upperCase(item);
+    }
+    return upperFirst(item);
+  }
   const titleBlock = title.split(" ");
   if (titleBlock && titleBlock.length > 0) {
     return titleBlock
-      .map(item => (ignoreArray.includes(item) ? item : upperFirst(item)))
+      .map(item => mapFunction(item))
       .join(" ")
       .trim();
   }
