@@ -47,7 +47,7 @@ const Project = props => {
     );
   }, [menu, tabs_data]);
 
-  const { isLoadingProject, data } = useQuery(
+  const { isLoadingProject, data, refetch } = useQuery(
     ["GetFgaProjectDetail", user, projectPath, getLatestGAProjectId()],
     async () => {
       if (getLatestGAProjectId()) {
@@ -93,6 +93,7 @@ const Project = props => {
       collection_contract_address: p?.collections_list,
       project: p,
       twitter_handler: data?.twitter?.handler,
+      discord_guild_name: data?.discord?.guildName,
     };
   };
   const getContentPannel = current_tab => {
@@ -123,6 +124,7 @@ const Project = props => {
     if (current_tab === "Connector") {
       return (
         <Connectors
+          refetchProject={refetch}
           location={location}
           router={router}
           project={getProjectObject(project)}

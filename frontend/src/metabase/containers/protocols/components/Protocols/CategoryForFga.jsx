@@ -5,6 +5,7 @@ import { trackStructEvent } from "metabase/lib/analytics";
 import { Select } from "antd";
 import { xor, union } from "lodash";
 import LoadingSpinner from "metabase/components/LoadingSpinner/LoadingSpinner";
+import { formatTableTitle } from "metabase/lib/formatting/footprint";
 
 const CategoryForFga = ({ data = [], isLoading, title, actives=[], onChange }) => {
   const categorys = union(actives, data);
@@ -27,11 +28,13 @@ const CategoryForFga = ({ data = [], isLoading, title, actives=[], onChange }) =
   const enumArray = getEnumArray();
 
   const formatTitle = title => {
-    return title
+    return formatTableTitle(title
       ?.replace(/_wallets$/g, "")
       ?.replace(/_wallet$/g, "")
       ?.replace(/_users$/g, "")
-      ?.replace(/_user$/g, "");
+      ?.replace(/_marketplace_user$/g, "")
+      ?.replace(/_user$/g, "")
+    );
   }
 
   return (

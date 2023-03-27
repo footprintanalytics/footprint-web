@@ -196,14 +196,14 @@ const CreateCampaign = ({
   return (
     <>
       {plain ? (
-        <div onClick={() => setIsNotificationModalOpen(true)}>Create campaign</div>
+        <div onClick={() => setIsNotificationModalOpen(true)}>Create Campaign</div>
       ) : (
         <Button
           type="primary"
           style={style}
           onClick={() => setIsNotificationModalOpen(true)}
         >
-          Create campaign
+          Create Campaign
         </Button>
       )}
       <Modal
