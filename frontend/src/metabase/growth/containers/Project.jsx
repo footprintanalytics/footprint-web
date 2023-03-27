@@ -92,6 +92,7 @@ const Project = props => {
       collection_contract_address: p?.collections_list,
       project: p,
       twitter_handler: data?.twitter?.handler,
+      discord_guild_name: data?.discord?.guildName,
     };
   };
   const getContentPannel = current_tab => {
