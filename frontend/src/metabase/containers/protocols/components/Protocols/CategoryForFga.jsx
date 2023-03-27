@@ -32,7 +32,9 @@ const CategoryForFga = ({ data = [], isLoading, title, actives=[], onChange }) =
       ?.replace(/_wallets$/g, "")
       ?.replace(/_wallet$/g, "")
       ?.replace(/_users$/g, "")
-      ?.replace(/_user$/g, ""));
+      ?.replace(/_marketplace_user$/g, "")
+      ?.replace(/_user$/g, "")
+    );
   }
 
   return (
