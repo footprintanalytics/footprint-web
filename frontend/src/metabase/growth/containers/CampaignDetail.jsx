@@ -38,7 +38,21 @@ const CampaignDetail = props => {
   const items = [
     {
       key: "3",
-      label: <CreateCampaign plain={true} />,
+      label: (
+        <div
+          onClick={() =>
+            router?.push({
+              pathname: getGrowthProjectPath(
+                router?.params?.project,
+                "CreateCampaign",
+              ),
+            })
+          }
+        >
+          Create Campaign
+        </div>
+      ),
+      // label: <CreateCampaign plain={true} />,
     },
     {
       key: "1",
