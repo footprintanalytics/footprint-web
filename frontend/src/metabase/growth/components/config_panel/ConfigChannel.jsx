@@ -25,6 +25,10 @@ const ConfigChannel = props => {
   const onEdit = value => {
     // setEditable(true);
   };
+  const initialValues = {};
+  channel?.details?.map(i => {
+    initialValues[i.key] = i.value;
+  });
 
   return (
     <div
@@ -37,6 +41,7 @@ const ConfigChannel = props => {
         {...layout}
         labelWrap
         ref={formRef}
+        initialValues={initialValues}
         layout="vertical"
         name="control-ref"
         onFinish={onSave}
@@ -48,14 +53,14 @@ const ConfigChannel = props => {
           }
           i.type = i.type === "string" ? "text" : i.type;
           return (
-            <Form.Item
-              key={i.key}
-              name={i.key}
-              label={i.title}
-              rules={[{ required: i.required }]}
-            >
-              <>
-                {i.type === "text" && (
+            <div key={i.key}>
+              {i.type === "text" && (
+                <Form.Item
+                  key={i.key}
+                  name={i.key}
+                  label={i.title}
+                  rules={[{ required: i.required }]}
+                >
                   <Input
                     defaultValue={i.value}
                     value={i.value}
@@ -64,18 +69,21 @@ const ConfigChannel = props => {
                     placeholder={`Input the ${i.title}.`}
                     type={i.private ? "password" : i.type}
                   />
-                )}
-              </>
-              <>
-                {i.type === "boolean" && (
-                  <Switch
-                    value={i.value}
-                    defaultChecked={i.value}
-                    disabled={i.notEdit}
-                  />
-                )}
-              </>
-            </Form.Item>
+                </Form.Item>
+              )}
+
+              {i.type === "boolean" && (
+                <Form.Item
+                  key={i.key}
+                  name={i.key}
+                  valuePropName="checked"
+                  label={i.title}
+                  rules={[{ required: i.required }]}
+                >
+                  <Switch disabled={i.notEdit} />
+                </Form.Item>
+              )}
+            </div>
           );
         })}
         <Divider key={"divider"}></Divider>

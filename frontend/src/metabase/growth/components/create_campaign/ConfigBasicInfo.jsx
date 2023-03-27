@@ -1,13 +1,10 @@
 /* eslint-disable react/prop-types */
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Card, Button, Form, Input, Select, Drawer, Switch } from "antd";
+import { color } from "metabase/lib/colors";
+import { addCampaign } from "metabase/new-service";
 import ConfigChannel from "../config_panel/ConfigChannel";
 const { Option } = Select;
-import { color } from "metabase/lib/colors";
-const layout = {
-  labelCol: { span: 24 },
-  wrapperCol: { span: 24 },
-};
 
 const tailLayout = {
   wrapperCol: { offset: 0, span: 24 },
@@ -18,10 +15,21 @@ const ConfigBasicInfo = props => {
   const formRef = React.useRef(null);
   const [currentCampaign, setCurrentCampaign] = useState();
   const [currentChannel, setCurrentChannel] = useState();
+  const [currentParam, setCurrentParam] = useState();
+  const [isSubmiting, setSubmiting] = useState(false);
   const layout = {
     labelCol: { span: 6 },
     wrapperCol: { span: 18 },
   };
+  useEffect(() => {
+    if (currentChannel) {
+      const initialValues = {};
+      currentChannel?.details?.map(i => {
+        initialValues[i.key] = i.value;
+      });
+      setCurrentParam(initialValues);
+    }
+  }, [currentChannel]);
   const getChanelConfigDetail = currentChannel => {
     if (!currentChannel) {
       return <></>;
@@ -32,7 +40,7 @@ const ConfigBasicInfo = props => {
           borderRadius: 5,
           borderWidth: 1,
           borderColor: color("border"),
-          borderStyle: "solid",
+          borderStyle: "dashed",
           marginBottom: 10,
           padding: 10,
         }}
@@ -55,17 +63,16 @@ const ConfigBasicInfo = props => {
               return <></>;
             }
             return (
-              <Form.Item
-                key={i.key}
-                name={i.key}
-                label={i.title}
-                rules={[{ required: i.required }]}
-              >
-                <>
-                  {i.type === "string" && (
+              <>
+                {i.type === "string" && (
+                  <Form.Item
+                    key={i.key}
+                    name={i.key}
+                    label={i.title}
+                    rules={[{ required: i.required }]}
+                  >
                     <Input
                       defaultValue={i.value}
-                      value={i.value}
                       allowClear
                       disabled={i.notEdit}
                       placeholder={`Input the ${i.title}.`}
@@ -77,18 +84,21 @@ const ConfigBasicInfo = props => {
                           : i.type
                       }
                     />
-                  )}
-                </>
-                <>
-                  {i.type === "boolean" && (
-                    <Switch
-                      value={i.value}
-                      defaultChecked={i.value}
-                      disabled={i.notEdit}
-                    />
-                  )}
-                </>
-              </Form.Item>
+                  </Form.Item>
+                )}
+
+                {i.type === "boolean" && (
+                  <Form.Item
+                    key={i.key}
+                    name={i.key}
+                    valuePropName="checked"
+                    label={i.title}
+                    rules={[{ required: i.required }]}
+                  >
+                    <Switch disabled={i.notEdit} />
+                  </Form.Item>
+                )}
+              </>
             );
           })}
         </div>
@@ -96,9 +106,26 @@ const ConfigBasicInfo = props => {
     );
   };
   const onFinish = values => {
-    console.log(values);
     //todo 提交表单到 api，成功之后 onNext
-    onNext();
+    if (currentCampaign?.campaignType === "mapping") {
+      const param = { ...currentParam, ...values };
+      console.log("onFinish param", param);
+      // toAddCampaign(param);
+      setCurrentParam(param);
+    } else {
+      onNext();
+    }
+  };
+
+  const toAddCampaign = param => {
+    setSubmiting(true);
+    addCampaign(param)
+      .then(result => {
+        console.log("toAddCampaign result", result);
+      })
+      .finally(() => {
+        setSubmiting(false);
+      });
   };
 
   const [openDrawer, setOpenDrawer] = useState({ show: false, channel: {} });
@@ -109,7 +136,15 @@ const ConfigBasicInfo = props => {
     setOpenDrawer({ show: false });
   };
   const onChannelEditFinish = values => {
-    console.log("config base get", values);
+    onCloseDrawer();
+    const param = { ...currentParam, ...values };
+    console.log("config base get", param);
+    setCurrentParam(param);
+    const channel = currentChannel;
+    channel?.details?.map(i => {
+      i.value = values[i.key];
+    });
+    setCurrentChannel(channel);
   };
   return (
     <div
@@ -123,6 +158,7 @@ const ConfigBasicInfo = props => {
           className=" bg-white rounded-md p-5 w-full"
           {...layout}
           labelWrap
+          initialValues={currentParam}
           ref={formRef}
           layout="horizontal"
           name="control-ref"
@@ -192,7 +228,12 @@ const ConfigBasicInfo = props => {
               <Button htmlType="button" onClick={onNext} className="ml-10">
                 Skip & Save
               </Button>
-              <Button type="primary" htmlType="submit" className=" bg-blue-500">
+              <Button
+                type="primary"
+                htmlType="submit"
+                className=" bg-blue-500"
+                loading={isSubmiting}
+              >
                 Next
               </Button>
             </div>
