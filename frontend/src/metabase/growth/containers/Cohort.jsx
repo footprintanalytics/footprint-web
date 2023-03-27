@@ -25,7 +25,7 @@ const Cohort = props => {
       dataIndex: "title",
       render: text => (
         <Typography.Link
-          href={`https://www.footprint.network/@rogerD/Cohort-User-Profile?tag=${text}`}
+          href={`https://www.footprint.network/growth/@rogerD/Cohort-User-Profile?tag=${text}`}
           target="_blank"
         >
           {text}

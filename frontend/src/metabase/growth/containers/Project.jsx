@@ -7,6 +7,7 @@ import { useQuery } from "react-query";
 import { QUERY_OPTIONS } from "metabase/containers/dashboards/shared/config";
 import PublicDashboard from "metabase/public/containers/PublicDashboard";
 import { getUser } from "metabase/selectors/user";
+import { GetFgaProjectDetail } from "metabase/new-service";
 import GaLayout from "../components/GaLayout";
 import GaSidebar from "../components/GaSidebar";
 import ProjectInfo from "../components/ProjectInfo";
@@ -23,11 +24,11 @@ import Activators from "./Activators";
 import CustomAnalysis from "./CustomAnalysis";
 import TemplateGallery from "./TemplateGallery";
 import MyFavoriteTemplate from "./MyFavoriteTemplate";
-import Campaigns from "./Campaigns";
-import CreateCampaign from "./CreateCampaign";
+import CampaignDetail from "./CampaignDetail";
+import CampaignList from "./CampaignList";
+import CreateCampaignPage from "./CreateCampaignPage";
 import Cohort from "./Cohort";
 import "../css/index.css";
-import { GetFgaProjectDetail } from "metabase/new-service";
 
 const Project = props => {
   const { router, location, children, user, menu, projectPath } = props;
@@ -111,12 +112,12 @@ const Project = props => {
     }
     if (current_tab === "CreateCampaign") {
       return (
-        <CreateCampaign
+        <CreateCampaignPage
           location={location}
           router={router}
           project={getProjectObject(project)}
           projectId={getLatestGAProjectId()}
-        ></CreateCampaign>
+        ></CreateCampaignPage>
       );
     }
     if (current_tab === "Connector") {
@@ -167,7 +168,14 @@ const Project = props => {
       );
     }
     if (current_tab === "Campaign") {
-      return <Campaigns router={router} location={location}></Campaigns>;
+      // return <Campaigns router={router} location={location}></Campaigns>;
+      return <CampaignList router={router} location={location}></CampaignList>;
+    }
+    if (current_tab === "CampaignDetail") {
+      // return <Campaigns router={router} location={location}></Campaigns>;
+      return (
+        <CampaignDetail router={router} location={location}></CampaignDetail>
+      );
     }
     if (current_tab === "Cohort") {
       return <Cohort router={router} location={location}></Cohort>;
