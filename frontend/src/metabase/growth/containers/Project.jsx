@@ -46,7 +46,7 @@ const Project = props => {
     );
   }, [menu, tabs_data]);
 
-  const { isLoadingProject, data } = useQuery(
+  const { isLoadingProject, data, refetch } = useQuery(
     ["GetFgaProjectDetail", user, projectPath, getLatestGAProjectId()],
     async () => {
       if (getLatestGAProjectId()) {
@@ -122,6 +122,7 @@ const Project = props => {
     if (current_tab === "Connector") {
       return (
         <Connectors
+          refetchProject={refetch}
           location={location}
           router={router}
           project={getProjectObject(project)}

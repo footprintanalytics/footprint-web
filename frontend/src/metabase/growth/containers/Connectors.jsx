@@ -37,6 +37,7 @@ const Connectors = props => {
     project,
     setLoginModalShowAction,
     setCreateFgaProjectModalShowAction,
+    refetchProject,
   } = props;
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [openDrawer, setOpenDrawer] = useState({ show: false, connector: {} });
@@ -72,6 +73,7 @@ const Connectors = props => {
   };
   const onCloseDrawer = () => {
     setOpenDrawer({ show: false });
+    refetchProject()
   };
   const onAddConnector = isSuccess => {
     //Todo refresh data
