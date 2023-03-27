@@ -1,11 +1,9 @@
 /* eslint-disable react/prop-types */
 import React, { useState } from "react";
-import { Card, Button, Form, Input, Select, Collapse, Checkbox } from "antd";
-import { SettingOutlined } from "@ant-design/icons";
+import { Card, Button, Form, Input, Select, Drawer, Switch } from "antd";
+import ConfigChannel from "../config_panel/ConfigChannel";
 const { Option } = Select;
-// import { FormInstance } from 'antd/es/form'
-const { Panel } = Collapse;
-const { TextArea } = Input;
+import { color } from "metabase/lib/colors";
 const layout = {
   labelCol: { span: 24 },
   wrapperCol: { span: 24 },
@@ -16,99 +14,102 @@ const tailLayout = {
 };
 
 const ConfigBasicInfo = props => {
-  const { onNext } = props;
+  const { onNext, campaignTemplate } = props;
   const formRef = React.useRef(null);
-  const [campaignType, setCampaignType] = useState("Mapping");
-
-  const getCampaignDetail = campaignType => {
-    console.log("getCampaignDetail", campaignType);
-    switch (campaignType) {
-      case "Mapping":
-        return (
-          <>
-            <h4>Campaign Channel</h4>
-            <Collapse
-              className=" my2"
-              defaultActiveKey={[]}
-              onChange={values => {
-                console.log("Collapse values", values);
-              }}
-            >
-              <Panel
-                header={
-                  <Checkbox
-                    onClick={event => {
-                      event.stopPropagation();
-                    }}
-                    // checked={checked}
-                    // onChange={onChange}
-                  >
-                    Twitter collection
-                  </Checkbox>
-                }
-                key="Twitter"
-                showArrow={false}
-                extra={
-                  <SettingOutlined
-                    onClick={event => {
-                      event.stopPropagation();
-                    }}
-                  />
-                }
-              >
-                <div>
-                  <div>
-                    Enter the urls in the blew to collect twitter handler and
-                    wallet address
-                  </div>
-                  <TextArea
-                    // value={pasteValue}
-                    style={{ marginTop: 10 }}
-                    onChange={e => {
-                      // setPasteValue(e.target.value);
-                      // parseWalletAddress(e.target.value);
-                    }}
-                    placeholder="Please paste all the tweet url you wish to add to this new campaign, separated by line breaks ."
-                    autoSize={{ minRows: 5, maxRows: 10 }}
-                  />
-                </div>
-              </Panel>
-              <Panel
-                header={
-                  <Checkbox
-                    onClick={event => {
-                      event.stopPropagation();
-                    }}
-                    // checked={checked}
-                    // onChange={onChange}
-                  >
-                    Discord collection
-                  </Checkbox>
-                }
-                showArrow={false}
-                key="Discord"
-                extra={
-                  <SettingOutlined
-                    onClick={event => {
-                      // If you don't want click extra trigger collapse, you can prevent this:
-                      event.stopPropagation();
-                    }}
-                  />
-                }
-              >
-                <div>
-                  {"Set the link in your Discord,will collect wallet mapping"}
-                </div>
-              </Panel>
-            </Collapse>
-          </>
-        );
+  const [currentCampaign, setCurrentCampaign] = useState();
+  const [currentChannel, setCurrentChannel] = useState();
+  const layout = {
+    labelCol: { span: 6 },
+    wrapperCol: { span: 18 },
+  };
+  const getChanelConfigDetail = currentChannel => {
+    if (!currentChannel) {
+      return <></>;
     }
+    return (
+      <div
+        style={{
+          borderRadius: 5,
+          borderWidth: 1,
+          borderColor: color("border"),
+          borderStyle: "solid",
+          marginBottom: 10,
+          padding: 10,
+        }}
+      >
+        <div className=" flex flex-row items-center justify-between">
+          <div>Channel Config</div>
+          <Button
+            type="default"
+            size="small"
+            onClick={() => {
+              showDrawer(currentChannel);
+            }}
+          >
+            Edit
+          </Button>
+        </div>
+        <div className="bg-light p2 my1">
+          {currentChannel?.details?.map(i => {
+            if (i.extend) {
+              return <></>;
+            }
+            return (
+              <Form.Item
+                key={i.key}
+                name={i.key}
+                label={i.title}
+                rules={[{ required: i.required }]}
+              >
+                <>
+                  {i.type === "string" && (
+                    <Input
+                      defaultValue={i.value}
+                      value={i.value}
+                      allowClear
+                      disabled={i.notEdit}
+                      placeholder={`Input the ${i.title}.`}
+                      type={
+                        i.private
+                          ? "password"
+                          : i.type === "string"
+                          ? "text"
+                          : i.type
+                      }
+                    />
+                  )}
+                </>
+                <>
+                  {i.type === "boolean" && (
+                    <Switch
+                      value={i.value}
+                      defaultChecked={i.value}
+                      disabled={i.notEdit}
+                    />
+                  )}
+                </>
+              </Form.Item>
+            );
+          })}
+        </div>
+      </div>
+    );
   };
   const onFinish = values => {
     console.log(values);
-    // todo 提交表单到 api,成功之后 onNext
+    //todo 提交表单到 api，成功之后 onNext
     onNext();
+  };
+
+  const [openDrawer, setOpenDrawer] = useState({ show: false, channel: {} });
+  const showDrawer = c => {
+    setOpenDrawer({ show: true, channel: c });
+  };
+  const onCloseDrawer = () => {
+    setOpenDrawer({ show: false });
+  };
+  const onChannelEditFinish = values => {
+    console.log("config base get", values);
   };
   return (
     <div
@@ -119,11 +120,11 @@ const ConfigBasicInfo = props => {
     >
       <Card style={{ width: 600 }}>
         <Form
-          className=" bg-white rounded-md p-5"
+          className=" bg-white rounded-md p-5 w-full"
           {...layout}
           labelWrap
           ref={formRef}
-          layout="vertical"
+          layout="horizontal"
           name="control-ref"
           onFinish={onFinish}
           style={{ maxWidth: 1000, minWidth: 500 }}
@@ -133,7 +134,7 @@ const ConfigBasicInfo = props => {
             label="Campaign Name"
             rules={[{ required: true }]}
           >
-            <Input />
+            <Input placeholder="Input the name of this new campaign" />
           </Form.Item>
           <Form.Item
             name="campaignType"
@@ -142,21 +143,50 @@ const ConfigBasicInfo = props => {
           >
             <Select
               placeholder="Select a campaign type"
-              onChange={value => {
-                setCampaignType(value);
+              onChange={(value, option) => {
+                setCurrentCampaign(
+                  campaignTemplate?.find(i => i.campaignType === value),
+                );
               }}
             >
-              <Option value="Mapping">Mapping</Option>
-              <Option value="Quest" disabled={true}>
-                Quest
-              </Option>
-              <Option value="Airdrop" disabled={true}>
-                Airdrop
-              </Option>
+              {campaignTemplate.map(i => {
+                return (
+                  <Option key={i.campaignType} value={i.campaignType}>
+                    {i.campaignType}
+                  </Option>
+                );
+              })}
             </Select>
           </Form.Item>
-
-          <>{getCampaignDetail(campaignType)}</>
+          <Form.Item
+            name="channel"
+            label="Channel"
+            rules={[{ required: true }]}
+          >
+            <Select
+              placeholder="Select a campaign channel"
+              disabled={!currentCampaign}
+              onChange={(value, option) => {
+                setCurrentChannel(
+                  currentCampaign?.channels?.find(i => i.channelName === value),
+                );
+              }}
+            >
+              {currentCampaign &&
+                currentCampaign?.channels?.map(channel => {
+                  // [].find(i=>i.)
+                  return (
+                    <Option
+                      key={channel.channelName}
+                      value={channel.channelName}
+                    >
+                      {channel.channelName}
+                    </Option>
+                  );
+                })}
+            </Select>
+          </Form.Item>
+          <>{getChanelConfigDetail(currentChannel)}</>
           <Form.Item {...tailLayout}>
             <div className="flex w-full flex-row-reverse">
               <Button htmlType="button" onClick={onNext} className="ml-10">
@@ -169,6 +199,22 @@ const ConfigBasicInfo = props => {
           </Form.Item>
         </Form>
       </Card>
+      <Drawer
+        title={`Config ${openDrawer?.channel?.channelName} channel`}
+        placement="right"
+        maskClosable={false}
+        width={500}
+        onClose={onCloseDrawer}
+        open={openDrawer.show}
+      >
+        {openDrawer.channel && (
+          <ConfigChannel
+            channel={openDrawer.channel}
+            onChannelEditFinish={onChannelEditFinish}
+            setOpenDrawer={setOpenDrawer}
+          ></ConfigChannel>
+        )}
+      </Drawer>
     </div>
   );
 };

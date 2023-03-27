@@ -30,19 +30,9 @@ export const CreateFgaProject = async params => {
 export const GetFgaProject = async params => {
   return GET("/api/v1/fga/project", params);
 };
+
 export const GetFgaProjectDetail = async params => {
   return POST("/api/v1/fga/project/detail", params);
-};
-export const CreateFgaConnector = async params => {
-  return POST("/api/v1/fga/connector-config", params);
-};
-
-export const GetFgaConnectors = async params => {
-  return GET("/api/v1/fga/connector-config", params);
-};
-
-export const UpdateFgaConnector = async params => {
-  return PUT(`/api/v1/fga/connector-config/${params.id}`, params);
 };
 
 export const getAvailableConnectors = async params => {
@@ -52,8 +42,23 @@ export const getAvailableConnectors = async params => {
 export const addConnectors = async params => {
   return POST(`/api/v1/fga/connector-config`, params);
 };
+// camppaign process: getCampaignTemplate() --> addCampaign() --> getCampaign() --> getCampaignDetail()
+export const getCampaignTemplate = async params => {
+  return GET(`/api/v1/fga/campaign/template`, params);
+};
+// create a new Campaign
+export const addCampaign = async params => {
+  return POST(`/api/v1/fga/campaign`, params);
+};
+// get Campaign list
+export const getCampaign = async params => {
+  return GET(`/api/v1/fga/campaign`, params);
+};
 
-// FP Api
+export const getCampaignDetail = async params => {
+  return GET(`/api/v1/fga/campaign/${params.id}`);
+};
+// FP Api ---------------
 export const UserRegister = async params => {
   return POST("/api/v1/user/signup", params);
 };

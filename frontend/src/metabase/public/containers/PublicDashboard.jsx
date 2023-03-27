@@ -97,6 +97,15 @@ const mapStateToProps = (state, props) => {
         project.twitter_handler,
       );
     }
+    if (project.discord_guild_name) {
+      const key = "project_name";
+      updateDashboardPara(
+        parameters,
+        parameterValues,
+        key,
+        project.discord_guild_name,
+      );
+    }
   }
   return {
     metadata: getMetadata(state, props),

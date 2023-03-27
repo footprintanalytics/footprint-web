@@ -1668,7 +1668,7 @@ export const template_gallery = [
      children: [
        {
          name: "Cohort",
-         id: null
+         id: null,
          //  id: 7210,
          //  uuid: "4454f1ce-202b-45eb-8f83-3d78beff6756",
        },
@@ -1692,8 +1692,8 @@ export const template_gallery = [
        },
        {
          name: "NFT Minting",
-         id: 7386,
-         uuid: "bcdb346a-2a13-4d3f-a0ac-2d96adc740d5",
+         id: 7569,
+         uuid: "340f11c8-144e-4c24-a298-b5564c4a88a8",
        },
      ],
    },

@@ -59,7 +59,7 @@ const TemplateGallery = props => {
                             />
                           }
                         >
-                          <Meta description={item.dashboardName} />
+                          <Meta title={item.dashboardName} />
                         </Card>
                       </Link>
                     </List.Item>

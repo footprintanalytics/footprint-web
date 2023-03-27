@@ -45,7 +45,6 @@ const CreateCampaign = ({
   const [formValues, setFormValues] = useState();
   const [loading, setLoading] = useState(false);
   const [loadingCohort, setLoadingCohort] = useState(false);
-
   const [cohorts, setCohorts] = useState([]);
 
   useEffect(() => {
@@ -197,14 +196,14 @@ const CreateCampaign = ({
   return (
     <>
       {plain ? (
-        <div onClick={() => setIsNotificationModalOpen(true)}>Create campaign</div>
+        <div onClick={() => setIsNotificationModalOpen(true)}>Create Campaign</div>
       ) : (
         <Button
           type="primary"
           style={style}
           onClick={() => setIsNotificationModalOpen(true)}
         >
-          Create campaign
+          Create Campaign
         </Button>
       )}
       <Modal
