@@ -43,6 +43,8 @@ const Index = ({ router, type }) => {
         { label: "Activities", value: "Activities" },
         { label: "AMA", value: "AMA" },
         { label: "Space", value: "Space" },
+        { label: "Footprint Analytics Tutorials", value: "Footprint Analytics Tutorials" },
+        { label: "Learn From Workshops", value: "Learn From Workshops" },
       ],
     },
     academy: {
