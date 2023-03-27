@@ -199,11 +199,24 @@ const config = (module.exports = {
       }
     : undefined,
 
-  optimization: {
-    splitChunks: {
-      chunks: "all",
-    },
-  },
+  optimization: devMode
+    ? {
+        runtimeChunk: "single",
+        splitChunks: {
+          cacheGroups: {
+            vendors: {
+              test: /[\\/]node_modules[\\/]/,
+              chunks: "all",
+              name: "vendor",
+            },
+          },
+        },
+      }
+    : {
+        splitChunks: {
+          chunks: "all",
+        },
+      },
 
   plugins: [
     // Extracts initial CSS into a standard stylesheet that can be loaded in parallel with JavaScript
