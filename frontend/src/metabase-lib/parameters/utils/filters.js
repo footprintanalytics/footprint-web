@@ -9,21 +9,21 @@ export function fieldFilterForParameter(parameter) {
   const type = getParameterType(parameter);
   switch (type) {
     case "date":
-      return field => field.isDate();
+      return field => field?.isDate();
     case "id":
-      return field => field.isID();
+      return field => field?.isID();
     case "category":
-      return field => field.isCategory();
+      return field => field?.isCategory();
     case "series_category":
-      return field => field.isSeriesCategory();
+      return field => field?.isSeriesCategory();
     case "location":
-      return field => field.isLocation();
+      return field => field?.isLocation();
     case "number":
-      return field => field.isNumber() && !field.isCoordinate();
+      return field => field?.isNumber() && !field?.isCoordinate();
     case "fp_enum":
-      return field => field.isString() && !field.isLocation();
+      return field => field?.isString() && !field?.isLocation();
     case "string":
-      return field => field.isString() && !field.isLocation();
+      return field => field?.isString() && !field?.isLocation();
   }
 
   return () => false;
