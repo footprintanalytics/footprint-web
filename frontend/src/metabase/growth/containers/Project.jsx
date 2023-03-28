@@ -36,7 +36,11 @@ const Project = props => {
   const [tab, setTab] = useState(menu);
   const [project, setProject] = useState(projectPath);
   const [projectId, setProjectId] = useState(getLatestGAProjectId());
-
+  const [projectData, setProjectData] = useState();
+  useEffect(() => {
+    //TODO 这里要换成从数据源api 读取 project 数据
+    setProjectData(top_protocols.find(i => i.protocol_slug === projectPath));
+  }, [projectPath]);
   useEffect(() => {
     setProjectId(getLatestGAProjectId());
     setTab(
@@ -47,7 +51,6 @@ const Project = props => {
           : tabs_data[0].name),
     );
   }, [menu, tabs_data]);
-
   const { isLoadingProject, data, refetch } = useQuery(
     ["GetFgaProjectDetail", user, projectPath, getLatestGAProjectId()],
     async () => {
@@ -85,17 +88,20 @@ const Project = props => {
     }
   }, [projectPath]);
   const tabs_data = fga_menu_data;
-  const { menuTabs, dashboardMap } = getGaMenuTabs(tabs_data);
-  //TODO 这里要换成从数据源api 读取 project 数据
+  // todo protocol_type 先写死 GameFi，到时候需要根据 api 返回的真实 project data 传参数
+  const { menuTabs, dashboardMap } = getGaMenuTabs(
+    tabs_data,
+    "GameFi",
+    projectData?.collections_list?.length > 0,
+  );
   const getProjectObject = project => {
-    const p = top_protocols.find(i => i.protocol_slug === project);
     return {
       projectName: project,
-      collection_contract_address: p?.collections_list,
-      project: p,
+      collection_contract_address: projectData?.collections_list,
+      project: projectData,
       twitter_handler: data?.twitter?.handler,
       discord_guild_name: data?.discord?.guildName,
-      protocolName: data?.protocolName
+      protocolName: data?.protocolName,
     };
   };
   const getContentPannel = current_tab => {

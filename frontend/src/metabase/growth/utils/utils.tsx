@@ -64,17 +64,21 @@ export async function getDashboardDatas(uuid: string) {
 export function getGrowthProjectPath(project: string, menu?: string) {
   return `/growth/project/${project}/${menu ?? ""}`;
 }
-export function getGaMenuTabs(tabs_data: any[]) {
+export function getGaMenuTabs(
+  tabs_data: any[],
+  protocol_type?: string,
+  hasNftContract?: boolean,
+) {
   const dashboardMap = new Map();
   const menuTabs: any[] = [];
   tabs_data?.map(item => {
-    const temp = getGaMenuTabs(item.children);
+    const temp = getGaMenuTabs(item.children, protocol_type, hasNftContract);
     const children: any[] = temp.menuTabs;
     temp.dashboardMap.forEach((value, key, map) => {
       dashboardMap.set(key, value);
     });
     // dashboardMap = temp.dashboardMap;
-    const disabled =
+    let disabled =
       children.length <= 0 &&
       !item.uuid &&
       [
@@ -87,10 +91,16 @@ export function getGaMenuTabs(tabs_data: any[]) {
         "Channel",
         "General",
         "My Analysis",
-        "Cohort"
+        "Cohort",
       ].findIndex(i => i === item.name) === -1
         ? true
         : false;
+    if (!hasNftContract && item.name === "NFT") {
+      disabled = true;
+    }
+    if (protocol_type !== "GameFi" && item.name === "GameFi") {
+      disabled = true;
+    }
     if (!disabled) {
       menuTabs.push({
         key: `${item.name}${children.length > 0 ? "-sub" : ""}`,

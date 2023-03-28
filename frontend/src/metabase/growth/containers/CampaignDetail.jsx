@@ -23,6 +23,7 @@ import { getCampaignDetail } from "metabase/new-service";
 import CreateCampaign from "../components/buttons/CreateCampaign";
 import UploadWallets from "../components/buttons/UploadWallets";
 import { getGrowthProjectPath } from "../utils/utils";
+import { Link } from "react-router";
 
 const CampaignDetail = props => {
   const { location, router } = props;
@@ -114,9 +115,14 @@ const CampaignDetail = props => {
                 <Badge status="success" text={data.status} />
               )}
             </Descriptions.Item>
-            {/* <Descriptions.Item label="Detail info">
-              {data.details}
-            </Descriptions.Item> */}
+            {data?.campaignType === "mapping" &&
+              data?.channel?.channelName === "discord" && (
+                <Descriptions.Item label="Discord bot invite link">
+                  <Link
+                    href={`https://discord.com/oauth2/authorize?client_id=1069198197441957979&scope=bot&permissions=0&guild_id=${111}`}
+                  >{`link`}</Link>
+                </Descriptions.Item>
+              )}
           </Descriptions>
         ) : (
           <Empty description="No data" />
