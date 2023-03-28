@@ -103,7 +103,7 @@ const mapStateToProps = (state, props) => {
         parameters,
         parameterValues,
         key,
-        project.discord_guild_name,
+        project.protocolName,
       );
     }
   }

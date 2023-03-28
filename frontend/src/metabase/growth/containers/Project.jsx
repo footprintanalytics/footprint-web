@@ -7,6 +7,7 @@ import { useQuery } from "react-query";
 import { QUERY_OPTIONS } from "metabase/containers/dashboards/shared/config";
 import PublicDashboard from "metabase/public/containers/PublicDashboard";
 import { getUser } from "metabase/selectors/user";
+import { GetFgaProjectDetail } from "metabase/new-service";
 import GaLayout from "../components/GaLayout";
 import GaSidebar from "../components/GaSidebar";
 import ProjectInfo from "../components/ProjectInfo";
@@ -18,6 +19,7 @@ import {
   getGaMenuTabs,
 } from "../utils/utils";
 import { fga_menu_data, top_protocols } from "../utils/data";
+import LoadingDashboard from "../components/LoadingDashboard";
 import Connectors from "./Connectors";
 import Activators from "./Activators";
 import CustomAnalysis from "./CustomAnalysis";
@@ -27,7 +29,6 @@ import Campaigns from "./Campaigns";
 import CreateCampaign from "./CreateCampaign";
 import Cohort from "./Cohort";
 import "../css/index.css";
-import { GetFgaProjectDetail } from "metabase/new-service";
 
 const Project = props => {
   const { router, location, children, user, menu, projectPath } = props;
@@ -93,11 +94,11 @@ const Project = props => {
       project: p,
       twitter_handler: data?.twitter?.handler,
       discord_guild_name: data?.discord?.guildName,
+      protocolName: data?.protocolName
     };
   };
   const getContentPannel = current_tab => {
-    if (dashboardMap.has(current_tab)) {
-      // TODO: fix this project object
+    const WrapPublicDashboard = () => {
       return (
         <PublicDashboard
           params={{ uuid: dashboardMap.get(current_tab) }}
@@ -109,6 +110,33 @@ const Project = props => {
           hideFooter
         />
       );
+    }
+
+    if (dashboardMap.has(current_tab)) {
+      // TODO: fix this project object
+      if (current_tab === 'Twitter') {
+        return (
+          <LoadingDashboard
+            sourceDefinitionId={data?.twitter?.sourceDefinitionId}
+            projectId={parseInt(getLatestGAProjectId())}
+            current_tab={current_tab}
+          >
+            <WrapPublicDashboard />
+          </LoadingDashboard>
+        )
+      }
+      if (current_tab === 'Discord') {
+        return (
+          <LoadingDashboard
+            sourceDefinitionId={data?.discord?.sourceDefinitionId}
+            projectId={parseInt(getLatestGAProjectId())}
+            current_tab={current_tab}
+          >
+            <WrapPublicDashboard />
+          </LoadingDashboard>
+        )
+      }
+      return <WrapPublicDashboard />
     }
     if (current_tab === "CreateCampaign") {
       return (
