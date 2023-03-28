@@ -141,19 +141,19 @@
 (api/defendpoint ^:streaming GET "/card/:uuid/query"
   "Fetch a publicly-accessible Card an return query results as well as `:card` information. Does not require auth
    credentials. Public sharing must be enabled."
-  [uuid parameters fga-schema web-vip]
+  [uuid parameters fga-schema project-role]
   {parameters (s/maybe su/JSONString)}
   (run-query-for-card-with-public-uuid-async
    uuid
    :api
     (json/parse-string parameters keyword)
    :constraints nil
-   :middleware {:fga-schema fga-schema :web-vip web-vip}))
+   :middleware {:fga-schema fga-schema :project-role project-role}))
 
 (api/defendpoint ^:streaming GET "/card/:uuid/query/:export-format"
   "Fetch a publicly-accessible Card and return query results in the specified format. Does not require auth
    credentials. Public sharing must be enabled."
-  [uuid export-format :as {{:keys [parameters fga-schema web-vip]} :params}]
+  [uuid export-format :as {{:keys [parameters fga-schema project-role]} :params}]
   {parameters    (s/maybe su/JSONString)
    export-format api.dataset/ExportFormat}
   (run-query-for-card-with-public-uuid-async
@@ -165,7 +165,7 @@
                 :js-int-to-string?     false
                 :format-rows?          false
                 :fga-schema            fga-schema
-                :web-vip               web-vip}))
+                :project-role               project-role}))
 
 
 ;;; ----------------------------------------------- Public Dashboards ------------------------------------------------
@@ -230,7 +230,7 @@
 (api/defendpoint ^:streaming GET "/dashboard/:uuid/dashcard/:dashcard-id/card/:card-id"
   "Fetch the results for a Card in a publicly-accessible Dashboard. Does not require auth credentials. Public
    sharing must be enabled."
-  [uuid card-id dashcard-id parameters fga-schema web-vip]
+  [uuid card-id dashcard-id parameters fga-schema project-role]
   {parameters (s/maybe su/JSONString)}
   (validation/check-public-sharing-enabled)
   (println "public dashboard" fga-schema)
@@ -241,7 +241,7 @@
      :dashcard-id   dashcard-id
      :export-format :api
      :parameters    parameters
-     :middleware {:fga-schema fga-schema :web-vip web-vip})))
+     :middleware {:fga-schema fga-schema :project-role project-role})))
 
 (api/defendpoint GET "/oembed"
   "oEmbed endpoint used to retreive embed code and metadata for a (public) Metabase URL."

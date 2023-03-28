@@ -25,12 +25,12 @@
 (defn default-query->remark
   "Generates the default query remark. Exists as a separate function so that overrides of the query->remark multimethod
    can access the default value."
-  [{{:keys [executed-by query-hash card-id dashboard-id context], :as _info} :info, query-type :type, aysnc-cache :aysnc-refresh-cache2?, {:keys [web-vip]} :middleware}]
+  [{{:keys [executed-by query-hash card-id dashboard-id context], :as _info} :info, query-type :type, aysnc-cache :aysnc-refresh-cache2?, {:keys [project-role]} :middleware}]
   (str "Metabase"
-       (format ":: userID: %s email: %s webVip: %s queryType: %s card-id: %s dashboard-id: %s context: %s aysnc-cache: %s"
+       (format ":: userID: %s email: %s project-role: %s queryType: %s card-id: %s dashboard-id: %s context: %s aysnc-cache: %s"
                executed-by
                (when executed-by (db/select-one-field :email  User :id executed-by))
-               web-vip
+               project-role
                (case (keyword query-type)
                      :query  "MBQL"
                      :native "native")
