@@ -141,19 +141,19 @@
 (api/defendpoint ^:streaming GET "/card/:uuid/query"
   "Fetch a publicly-accessible Card an return query results as well as `:card` information. Does not require auth
    credentials. Public sharing must be enabled."
-  [uuid parameters fga-schema project-role]
+  [uuid parameters fga-schema project-role power-level]
   {parameters (s/maybe su/JSONString)}
   (run-query-for-card-with-public-uuid-async
    uuid
    :api
     (json/parse-string parameters keyword)
    :constraints nil
-   :middleware {:fga-schema fga-schema :project-role project-role}))
+   :middleware {:fga-schema fga-schema :project-role project-role :power-level power-level}))
 
 (api/defendpoint ^:streaming GET "/card/:uuid/query/:export-format"
   "Fetch a publicly-accessible Card and return query results in the specified format. Does not require auth
    credentials. Public sharing must be enabled."
-  [uuid export-format :as {{:keys [parameters fga-schema project-role]} :params}]
+  [uuid export-format :as {{:keys [parameters fga-schema project-role power-level]} :params}]
   {parameters    (s/maybe su/JSONString)
    export-format api.dataset/ExportFormat}
   (run-query-for-card-with-public-uuid-async
@@ -165,7 +165,8 @@
                 :js-int-to-string?     false
                 :format-rows?          false
                 :fga-schema            fga-schema
-                :project-role               project-role}))
+                :project-role          project-role
+                :power-level          power-level}))
 
 
 ;;; ----------------------------------------------- Public Dashboards ------------------------------------------------
@@ -230,7 +231,7 @@
 (api/defendpoint ^:streaming GET "/dashboard/:uuid/dashcard/:dashcard-id/card/:card-id"
   "Fetch the results for a Card in a publicly-accessible Dashboard. Does not require auth credentials. Public
    sharing must be enabled."
-  [uuid card-id dashcard-id parameters fga-schema project-role]
+  [uuid card-id dashcard-id parameters fga-schema project-role power-level]
   {parameters (s/maybe su/JSONString)}
   (validation/check-public-sharing-enabled)
   (println "public dashboard" fga-schema)
@@ -241,7 +242,7 @@
      :dashcard-id   dashcard-id
      :export-format :api
      :parameters    parameters
-     :middleware {:fga-schema fga-schema :project-role project-role})))
+     :middleware {:fga-schema fga-schema :project-role project-role :power-level power-level})))
 
 (api/defendpoint GET "/oembed"
   "oEmbed endpoint used to retreive embed code and metadata for a (public) Metabase URL."
