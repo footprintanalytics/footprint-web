@@ -19,6 +19,7 @@ import {
   getGaMenuTabs,
 } from "../utils/utils";
 import { fga_menu_data, top_protocols } from "../utils/data";
+import LoadingDashboard from "../components/LoadingDashboard";
 import Connectors from "./Connectors";
 import Activators from "./Activators";
 import CustomAnalysis from "./CustomAnalysis";
@@ -94,11 +95,11 @@ const Project = props => {
       project: p,
       twitter_handler: data?.twitter?.handler,
       discord_guild_name: data?.discord?.guildName,
+      protocolName: data?.protocolName
     };
   };
   const getContentPannel = current_tab => {
-    if (dashboardMap.has(current_tab)) {
-      // TODO: fix this project object
+    const WrapPublicDashboard = () => {
       return (
         <PublicDashboard
           params={{ uuid: dashboardMap.get(current_tab) }}
@@ -110,6 +111,33 @@ const Project = props => {
           hideFooter
         />
       );
+    }
+
+    if (dashboardMap.has(current_tab)) {
+      // TODO: fix this project object
+      if (current_tab === 'Twitter') {
+        return (
+          <LoadingDashboard
+            sourceDefinitionId={data?.twitter?.sourceDefinitionId}
+            projectId={parseInt(getLatestGAProjectId())}
+            current_tab={current_tab}
+          >
+            <WrapPublicDashboard />
+          </LoadingDashboard>
+        )
+      }
+      if (current_tab === 'Discord') {
+        return (
+          <LoadingDashboard
+            sourceDefinitionId={data?.discord?.sourceDefinitionId}
+            projectId={parseInt(getLatestGAProjectId())}
+            current_tab={current_tab}
+          >
+            <WrapPublicDashboard />
+          </LoadingDashboard>
+        )
+      }
+      return <WrapPublicDashboard />
     }
     if (current_tab === "CreateCampaign") {
       return (
