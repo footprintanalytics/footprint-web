@@ -31,10 +31,19 @@ const CampaignDetail = props => {
   const { isLoading, data } = useQuery(
     ["getCampaignDetail", id],
     async () => {
-      return await getCampaignDetail({ id });
+      if (id) {
+        return await getCampaignDetail({ id });
+      }
     },
     QUERY_OPTIONS,
   );
+
+  let botInviteUrl = null;
+  data?.channel?.details?.map(i => {
+    if (i.key === "discordGuildId") {
+      botInviteUrl = `https://discord.com/oauth2/authorize?client_id=1069198197441957979&scope=bot&permissions=0&guild_id=${i.value}`;
+    }
+  });
 
   const items = [
     {
@@ -115,14 +124,15 @@ const CampaignDetail = props => {
                 <Badge status="success" text={data.status} />
               )}
             </Descriptions.Item>
-            {data?.campaignType === "mapping" &&
-              data?.channel?.channelName === "discord" && (
-                <Descriptions.Item label="Discord bot invite link">
-                  <Link
-                    href={`https://discord.com/oauth2/authorize?client_id=1069198197441957979&scope=bot&permissions=0&guild_id=${111}`}
-                  >{`link`}</Link>
-                </Descriptions.Item>
-              )}
+            {botInviteUrl && (
+              <Descriptions.Item label="Discord bot invite link">
+                {/* todo  guild_id 要真实从接口拿*/}
+                <Link
+                  target="_blank"
+                  href={botInviteUrl}
+                >{`https://discord.com/oauth2/authorize?client_id...`}</Link>
+              </Descriptions.Item>
+            )}
           </Descriptions>
         ) : (
           <Empty description="No data" />
