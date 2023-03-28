@@ -27,6 +27,7 @@ const VipIcon = ({ vipInfo, isOwner }) => {
   switch (type) {
     case VipLevel.BASIC:
     case VipLevel.BUSINESS:
+    case "team":
     case VipLevel.PRO:
       return renderData({
         pic: "icon_vip_basic.png",
