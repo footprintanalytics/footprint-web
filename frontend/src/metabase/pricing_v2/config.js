@@ -35,7 +35,7 @@ export const getSubscribeOptions = user => {
   return options;
 };
 
-export const getComparePlans = ({user, canBusinessSevenTrial, subscriptionDetailList}) => ({
+export const getComparePlans = ({user, canBusinessSevenTrial, subscriptionDetailList, canTeamPay}) => ({
   title: "Compare plans",
   columns: [
     {
@@ -126,11 +126,24 @@ export const getComparePlans = ({user, canBusinessSevenTrial, subscriptionDetail
     },
     {
       label: "Team",
-      value: "enterprise",
+      value: "team",
       desc: "Empower every team with reliable data",
       price: "Let's Talk",
-      btnText: "Talk to us",
-      btnLink: "https://discord.gg/3HYaR6USM7",
+      ...(
+        !canTeamPay ? {btnText: "Talk to us",
+          btnLink: "https://discord.gg/3HYaR6USM7",}
+         : {
+          currentSubscriptionProductId: getCurrentSubscriptionProductId({
+            subscriptionDetailList,
+            service: "footprint",
+            groupType: "team"
+          }),
+          isSubscribe: isStripeSubscribe({ subscriptionDetailList, service: "footprint", groupType: "team" }),
+          btnText: "Pay now",
+          btnAction: "subscribe",
+          btnDisabled: isStripeSubscribe({ subscriptionDetailList, service: "footprint", groupType: "team" }),
+        }
+      ),
       features: [
         // "Access to full history data",
         "30G data limit per query",
