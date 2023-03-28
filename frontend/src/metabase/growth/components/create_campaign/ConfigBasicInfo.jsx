@@ -1,8 +1,21 @@
 /* eslint-disable react/prop-types */
 import React, { useEffect, useState } from "react";
-import { Card, Button, Form, Input, Select, Drawer, Switch } from "antd";
+import {
+  Card,
+  Button,
+  Form,
+  Input,
+  Select,
+  Drawer,
+  Switch,
+  message,
+} from "antd";
 import { color } from "metabase/lib/colors";
 import { addCampaign } from "metabase/new-service";
+import {
+  getGrowthProjectPath,
+  getLatestGAProjectId,
+} from "metabase/growth/utils/utils";
 import ConfigChannel from "../config_panel/ConfigChannel";
 const { Option } = Select;
 
@@ -11,7 +24,16 @@ const tailLayout = {
 };
 
 const ConfigBasicInfo = props => {
-  const { onNext, campaignTemplate } = props;
+  const {
+    onNext,
+    campaignTemplate,
+    user,
+    router,
+    setCreateFgaProjectModalShowAction,
+    setLoginModalShowAction,
+    project,
+    location,
+  } = props;
   const formRef = React.useRef(null);
   const [currentCampaign, setCurrentCampaign] = useState();
   const [currentChannel, setCurrentChannel] = useState();
@@ -30,10 +52,11 @@ const ConfigBasicInfo = props => {
       setCurrentParam(initialValues);
     }
   }, [currentChannel]);
-  const getChanelConfigDetail = currentChannel => {
-    if (!currentChannel) {
+  const getConfigDetail = (datas, type) => {
+    if (!datas || !datas.details || datas?.details?.length <= 0) {
       return <></>;
     }
+    const hasExtent = datas?.details?.findIndex(i => i.extend) !== -1;
     return (
       <div
         style={{
@@ -46,19 +69,21 @@ const ConfigBasicInfo = props => {
         }}
       >
         <div className=" flex flex-row items-center justify-between">
-          <div>Channel Config</div>
-          <Button
-            type="default"
-            size="small"
-            onClick={() => {
-              showDrawer(currentChannel);
-            }}
-          >
-            Edit
-          </Button>
+          <div>{type} Config</div>
+          {hasExtent && (
+            <Button
+              type="default"
+              size="small"
+              onClick={() => {
+                showDrawer(datas);
+              }}
+            >
+              Edit
+            </Button>
+          )}
         </div>
         <div className="bg-light p2 my1">
-          {currentChannel?.details?.map(i => {
+          {datas?.details?.map(i => {
             if (i.extend) {
               return <></>;
             }
@@ -72,7 +97,6 @@ const ConfigBasicInfo = props => {
                     rules={[{ required: i.required }]}
                   >
                     <Input
-                      defaultValue={i.value}
                       allowClear
                       disabled={i.notEdit}
                       placeholder={`Input the ${i.title}.`}
@@ -110,18 +134,53 @@ const ConfigBasicInfo = props => {
     if (currentCampaign?.campaignType === "mapping") {
       const param = { ...currentParam, ...values };
       console.log("onFinish param", param);
-      // toAddCampaign(param);
       setCurrentParam(param);
+      toAddCampaign(param);
     } else {
       onNext();
     }
   };
 
   const toAddCampaign = param => {
+    // 需要判断 登录 以及 project id
+    if (!user) {
+      message.warning("Kindly log in before proceeding.");
+      setLoginModalShowAction({
+        show: true,
+        from: "create campaign",
+        redirect: location.pathname,
+        channel: "FGA",
+      });
+      return;
+    }
+    if (!getLatestGAProjectId()) {
+      message.warning("Initially, you must create your personal project!");
+      setCreateFgaProjectModalShowAction({ show: true });
+      return;
+    }
     setSubmiting(true);
-    addCampaign(param)
+    currentChannel?.details?.map(i => {
+      i.value = param[i.key];
+    });
+    currentChannel["channelId"] = currentChannel["id"];
+    currentCampaign?.details?.map(i => {
+      i.value = param[i.key];
+    });
+    const requestParam = {
+      projectId: parseInt(getLatestGAProjectId()),
+      title: param["campaignName"],
+      cohortIds: param["cohortIds"] ?? [],
+      campaignType: currentCampaign.campaignType,
+      details: currentCampaign?.details ?? [],
+      channel: currentChannel,
+    };
+    console.log("toAddCampaign requestParam\n", requestParam);
+    addCampaign(requestParam)
       .then(result => {
         console.log("toAddCampaign result", result);
+        message.success("The campaign creation was successful.");
+        router.push(getGrowthProjectPath(project, "Campaign"));
+        //todo 还差展示 邀请机器人link 和 活动 link
       })
       .finally(() => {
         setSubmiting(false);
@@ -222,7 +281,8 @@ const ConfigBasicInfo = props => {
                 })}
             </Select>
           </Form.Item>
-          <>{getChanelConfigDetail(currentChannel)}</>
+          <>{getConfigDetail(currentCampaign, "Campaign")}</>
+          <>{getConfigDetail(currentChannel, "channel")}</>
           <Form.Item {...tailLayout}>
             <div className="flex w-full flex-row-reverse">
               <Button htmlType="button" onClick={onNext} className="ml-10">

@@ -5,17 +5,23 @@ import { connect } from "react-redux";
 import { Button, Card, Table, Typography, Dropdown, Tag } from "antd";
 import { SyncOutlined, CheckCircleOutlined } from "@ant-design/icons";
 import { useQuery } from "react-query";
+import { QUERY_OPTIONS } from "metabase/containers/dashboards/shared/config";
 import dayjs from "dayjs";
 import { getUser } from "metabase/selectors/user";
 import LoadingSpinner from "metabase/components/LoadingSpinner";
 import { getCampaign } from "metabase/new-service";
 import CreateCampaign from "../components/buttons/CreateCampaign";
 import UploadWallets from "../components/buttons/UploadWallets";
-import { getGrowthProjectPath } from "../utils/utils";
+import { getGrowthProjectPath, getLatestGAProjectId } from "../utils/utils";
 
 const CampaignList = props => {
-  const { isLoading, data } = useQuery(["getCampaign"], getCampaign);
-
+  const { isLoading, data } = useQuery(
+    ["getCampaign", getLatestGAProjectId()],
+    async () => {
+      return await getCampaign({ projectId: parseInt(getLatestGAProjectId()) });
+    },
+    QUERY_OPTIONS,
+  );
   const dataSource = data?.list?.sort(
     (a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime(),
   );

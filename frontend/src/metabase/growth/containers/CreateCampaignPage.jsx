@@ -7,6 +7,10 @@ import { QUERY_OPTIONS } from "metabase/containers/dashboards/shared/config";
 import { getCampaignTemplate } from "metabase/new-service";
 import { getUser } from "metabase/selectors/user";
 import LoadingSpinner from "metabase/components/LoadingSpinner";
+import {
+  loginModalShowAction,
+  createFgaProjectModalShowAction,
+} from "metabase/redux/control";
 import ConfigConnectors from "../components/config_panel/ConfigConnectors";
 import ConfigFinish from "../components/config_panel/ConfigFinish";
 import ConfigMapping from "../components/config_panel/ConfigMapping";
@@ -35,7 +39,15 @@ const steps = [
   // },
 ];
 const CreateCampaignPage = props => {
-  const { router, location, children, user } = props;
+  const {
+    router,
+    location,
+    children,
+    project,
+    user,
+    setLoginModalShowAction,
+    setCreateFgaProjectModalShowAction,
+  } = props;
   const [current, setCurrent] = useState(1);
 
   const { isLoading, data } = useQuery(
@@ -77,6 +89,14 @@ const CreateCampaignPage = props => {
         return (
           <ConfigBasicInfo
             onNext={onNext}
+            location={location}
+            router={router}
+            project={project}
+            user={user}
+            setCreateFgaProjectModalShowAction={
+              setCreateFgaProjectModalShowAction
+            }
+            setLoginModalShowAction={setLoginModalShowAction}
             campaignTemplate={data?.list}
           ></ConfigBasicInfo>
         );
@@ -119,10 +139,16 @@ const CreateCampaignPage = props => {
   );
 };
 
+const mapDispatchToProps = {
+  setLoginModalShowAction: loginModalShowAction,
+  setCreateFgaProjectModalShowAction: createFgaProjectModalShowAction,
+};
+
 const mapStateToProps = state => {
   return {
     user: getUser(state),
   };
 };
 
-export default connect(mapStateToProps)(CreateCampaignPage);
+export default connect(mapStateToProps, mapDispatchToProps)(CreateCampaignPage);
+
