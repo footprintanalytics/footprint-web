@@ -213,22 +213,6 @@ const CreateCampaignPage2 = props => {
                         { label: "Quest", value: "Quest", disabled: true },
                       ]}
                     />
-                    {/* <Select
-              placeholder="Select a campaign type"
-              onChange={(value, option) => {
-                setCurrentCampaign(
-                  campaignTemplate?.find(i => i.campaignType === value),
-                );
-              }}
-            >
-              {campaignTemplate.map(i => {
-            return (
-              <Option key={i.campaignType} value={i.campaignType}>
-                {i.campaignType}
-              </Option>
-            );
-          })}
-            </Select> */}
                   </Form.Item>
                   <Form.Item
                     name="campaignName"
