@@ -19,6 +19,7 @@ import {
   getGaMenuTabs,
 } from "../utils/utils";
 import { fga_menu_data, top_protocols } from "../utils/data";
+import LoadingDashboard from "../components/LoadingDashboard";
 import Connectors from "./Connectors";
 import Activators from "./Activators";
 import CustomAnalysis from "./CustomAnalysis";
@@ -27,6 +28,7 @@ import MyFavoriteTemplate from "./MyFavoriteTemplate";
 import CampaignDetail from "./CampaignDetail";
 import CampaignList from "./CampaignList";
 import CreateCampaignPage from "./CreateCampaignPage";
+import CreateCampaignPage2 from "./CreateCampaignPage2";
 import Cohort from "./Cohort";
 import "../css/index.css";
 
@@ -35,7 +37,11 @@ const Project = props => {
   const [tab, setTab] = useState(menu);
   const [project, setProject] = useState(projectPath);
   const [projectId, setProjectId] = useState(getLatestGAProjectId());
-
+  const [projectData, setProjectData] = useState();
+  useEffect(() => {
+    //TODO 这里要换成从数据源api 读取 project 数据
+    setProjectData(top_protocols.find(i => i.protocol_slug === projectPath));
+  }, [projectPath]);
   useEffect(() => {
     setProjectId(getLatestGAProjectId());
     setTab(
@@ -46,7 +52,6 @@ const Project = props => {
           : tabs_data[0].name),
     );
   }, [menu, tabs_data]);
-
   const { isLoadingProject, data, refetch } = useQuery(
     ["GetFgaProjectDetail", user, projectPath, getLatestGAProjectId()],
     async () => {
@@ -84,21 +89,24 @@ const Project = props => {
     }
   }, [projectPath]);
   const tabs_data = fga_menu_data;
-  const { menuTabs, dashboardMap } = getGaMenuTabs(tabs_data);
-  //TODO 这里要换成从数据源api 读取 project 数据
+  // todo protocol_type 先写死 GameFi，到时候需要根据 api 返回的真实 project data 传参数
+  const { menuTabs, dashboardMap } = getGaMenuTabs(
+    tabs_data,
+    "GameFi",
+    projectData?.collections_list?.length > 0,
+  );
   const getProjectObject = project => {
-    const p = top_protocols.find(i => i.protocol_slug === project);
     return {
       projectName: project,
-      collection_contract_address: p?.collections_list,
-      project: p,
+      collection_contract_address: projectData?.collections_list,
+      project: projectData,
       twitter_handler: data?.twitter?.handler,
       discord_guild_name: data?.discord?.guildName,
+      protocolName: data?.protocolName,
     };
   };
   const getContentPannel = current_tab => {
-    if (dashboardMap.has(current_tab)) {
-      // TODO: fix this project object
+    const WrapPublicDashboard = () => {
       return (
         <PublicDashboard
           params={{ uuid: dashboardMap.get(current_tab) }}
@@ -110,17 +118,7 @@ const Project = props => {
           hideFooter
         />
       );
-    }
-    if (current_tab === "CreateCampaign") {
-      return (
-        <CreateCampaignPage
-          location={location}
-          router={router}
-          project={getProjectObject(project)}
-          projectId={getLatestGAProjectId()}
-        ></CreateCampaignPage>
-      );
-    }
+    };
     if (current_tab === "Connector") {
       return (
         <Connectors
@@ -169,6 +167,26 @@ const Project = props => {
         ></MyFavoriteTemplate>
       );
     }
+    if (current_tab === "CreateCampaign") {
+      return (
+        <CreateCampaignPage
+          location={location}
+          router={router}
+          project={getProjectObject(project)}
+          projectId={getLatestGAProjectId()}
+        ></CreateCampaignPage>
+      );
+    }
+    if (current_tab === "CreateCampaign2") {
+      return (
+        <CreateCampaignPage2
+          location={location}
+          router={router}
+          project={getProjectObject(project)}
+          projectId={getLatestGAProjectId()}
+        ></CreateCampaignPage2>
+      );
+    }
     if (current_tab === "Campaign") {
       // return <Campaigns router={router} location={location}></Campaigns>;
       return <CampaignList router={router} location={location}></CampaignList>;
@@ -181,6 +199,32 @@ const Project = props => {
     }
     if (current_tab === "Cohort") {
       return <Cohort router={router} location={location}></Cohort>;
+    }
+    if (dashboardMap.has(current_tab)) {
+      // TODO: fix this project object
+      if (current_tab === "Twitter") {
+        return (
+          <LoadingDashboard
+            sourceDefinitionId={data?.twitter?.sourceDefinitionId}
+            projectId={parseInt(getLatestGAProjectId())}
+            current_tab={current_tab}
+          >
+            <WrapPublicDashboard />
+          </LoadingDashboard>
+        );
+      }
+      if (current_tab === "Discord") {
+        return (
+          <LoadingDashboard
+            sourceDefinitionId={data?.discord?.sourceDefinitionId}
+            projectId={parseInt(getLatestGAProjectId())}
+            current_tab={current_tab}
+          >
+            <WrapPublicDashboard />
+          </LoadingDashboard>
+        );
+      }
+      return <WrapPublicDashboard />;
     }
     return (
       <div style={{ textAlign: "center", padding: "50px" }}>

@@ -18,27 +18,32 @@ import ConfigBasicInfo from "../components/create_campaign/ConfigBasicInfo";
 import "../css/utils.css";
 const steps = [
   {
-    title: "Campaign",
+    title: "Start",
+    key: "Start",
+    // description: "Start to Config campaign",
+  },
+  {
+    title: "Content",
     key: "Campaign",
-    description: "Config your campaign basic info",
+    // description: "Config your campaign basic info",
   },
   {
     title: "Cohort",
     key: "Cohort",
-    description: "Config the cohort of this campaign",
+    // description: "Config the cohort of this campaign",
   },
   {
-    title: "Notification",
-    key: "Notification",
-    description: "Setup the notification of this campaign",
+    title: "Channel",
+    key: "Channel",
+    // description: "Setup the notification of this campaign",
   },
-  // {
-  //   title: "Finish",
-  //   key: "Finish",
-  //   description: "Campaign config successfully",
-  // },
+  {
+    title: "Finish",
+    key: "Finish",
+    // description: "Campaign config successfully",
+  },
 ];
-const CreateCampaignPage = props => {
+const CreateCampaignPage2 = props => {
   const {
     router,
     location,
@@ -114,14 +119,15 @@ const CreateCampaignPage = props => {
         <LoadingSpinner message="Loading..." />
       ) : (
         <div
-          className="flex flex-column"
+          className="flex flex-column mt3 bg-white rounded"
           style={{ maxWidth: 1000, minWidth: 500, width: "80%" }}
         >
           {/* <h1>New campaign</h1> */}
           <Steps
             current={current ? current - 1 : 0}
             // className="mt-5 px-10"
-            // size="small"
+            direction="vertical"
+            size="small"
             style={{ padding: 20 }}
             items={steps}
             onChange={value => {
@@ -132,7 +138,7 @@ const CreateCampaignPage = props => {
             }}
           />
           <Divider style={{ marginTop: 0, marginBottom: 20 }} />
-          {current && <>{getCurrentConfigPanel(current)}</>}
+          {/* {current && <>{getCurrentConfigPanel(current)}</>} */}
         </div>
       )}
     </div>
@@ -150,5 +156,7 @@ const mapStateToProps = state => {
   };
 };
 
-export default connect(mapStateToProps, mapDispatchToProps)(CreateCampaignPage);
-
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps,
+)(CreateCampaignPage2);

@@ -1495,6 +1495,14 @@ export const template_gallery = [
           "https://www.footprint.network/growth/@rogerD/Campaign-Comparison?campaign_a_id=5284&campaign_b_id=8087",
         id: 7409,
       },
+      {
+        category: "Go-To-Marketing",
+        desc: "",
+        dashboardName: "Galxe Campaign Reward Analysis",
+        dashboardLink:
+          "https://www.footprint.network/growth/@rogerD/Campaign-Reward-Dashboard?series_date=past90days&campaign_name=galxe",
+        id: 7584,
+      },
     ],
   },
   {
@@ -1644,118 +1652,117 @@ export const template_gallery = [
   },
 ];
 
-
- export const fga_menu_data = [
-   {
-     name: "Overview",
-     icon: React.createElement(ShopOutlined),
-     children: [
-       {
-         name: "GameFi",
-         id: 7398,
-         uuid: "4837f6c1-bb18-4630-b634-37b7f29397c3",
-       },
-       {
-         name: "NFT",
-         id: 7342,
-         uuid: "65cb5f69-f01d-4719-995d-b54880eb6865",
-       },
-     ],
-   },
-   {
-     name: "Cohort",
-     icon: React.createElement(TeamOutlined),
-     children: [
-       {
-         name: "Cohort",
-         id: null,
-         //  id: 7210,
-         //  uuid: "4454f1ce-202b-45eb-8f83-3d78beff6756",
-       },
-       {
-         name: "Potential Users",
-         id: 7180,
-         uuid: "b46fc872-c97d-4300-a83e-45fa61760ad2",
-       },
-     ],
-   },
-   {
-     name: "Campaign",
-     icon: React.createElement(CommentOutlined),
-     id: null,
-     children: [
-       { name: "Campaign", id: null, uuid: null },
-       {
-         name: "Airdrop",
-         id: 7426,
-         uuid: "c676fe55-c785-4015-bc8a-27c18b57826f",
-       },
-       {
-         name: "NFT Minting",
-         id: 7569,
-         uuid: "340f11c8-144e-4c24-a298-b5564c4a88a8",
-       },
-     ],
-   },
-   {
-     name: "User Analysis",
-     icon: React.createElement(BarChartOutlined),
-     id: null,
-     children: [
-       {
-         name: "User Profile",
-         id: 7381,
-         uuid: "a832dc29-b44e-4622-827d-279b8401b0e5",
-       },
-       {
-         name: "User Funnel",
-         id: 7118,
-         uuid: "b1682d12-bddd-4b10-99a3-a403a3a6a78c",
-       },
-       {
-         name: "Twitter",
-         id: 7476,
-         uuid: "fd4d94f3-06f7-445d-ada3-0ce82bcefa39",
-       },
-       {
-         name: "Discord",
-         id: 7490,
-         uuid: "d137a1ef-34a3-4553-84cb-2203bd9d2baf",
-       },
-       { name: "Discord", id: null, uuid: null },
-     ],
-   },
-   {
-     name: "Discover",
-     icon: React.createElement(ProjectOutlined),
-     id: null,
-     children: [
-       {
-         name: "Industry Overview",
-         id: 7284,
-         uuid: "7edf6b30-83e5-4fca-a1d5-7c3002560ea5",
-       },
-       {
-         name: "Competitor Comparison",
-         id: 7248,
-         uuid: "63114b7c-094c-402c-8fe8-a9bf1db1369d",
-       },
-       {
-         name: "Custom Analysis",
-         id: null,
-         uuid: null,
-         children: [],
-       },
-     ],
-   },
-   {
-     name: "Settings",
-     icon: React.createElement(SettingOutlined),
-     id: null,
-     children: [
-       { name: "General", id: null, uuid: null },
-       { name: "Connector", id: null, uuid: null },
-       { name: "Channel", id: null, uuid: null },
-     ],
-   },
- ];
+export const fga_menu_data = [
+  {
+    name: "Overview",
+    icon: React.createElement(ShopOutlined),
+    children: [
+      {
+        name: "GameFi",
+        id: 7582,
+        uuid: "8c277761-b6c6-464e-8219-cdc6948f2012",
+      },
+      {
+        name: "NFT",
+        id: 7342,
+        uuid: "65cb5f69-f01d-4719-995d-b54880eb6865",
+      },
+    ],
+  },
+  {
+    name: "Cohort",
+    icon: React.createElement(TeamOutlined),
+    children: [
+      {
+        name: "Cohort",
+        id: null,
+        //  id: 7210,
+        //  uuid: "4454f1ce-202b-45eb-8f83-3d78beff6756",
+      },
+      {
+        name: "Potential Users",
+        id: 7180,
+        uuid: "b46fc872-c97d-4300-a83e-45fa61760ad2",
+      },
+    ],
+  },
+  {
+    name: "Campaign",
+    icon: React.createElement(CommentOutlined),
+    id: null,
+    children: [
+      { name: "Campaign", id: null, uuid: null },
+      {
+        name: "Token Airdrop ",
+        id: 7426,
+        uuid: "c676fe55-c785-4015-bc8a-27c18b57826f",
+      },
+      {
+        name: "NFT Minting",
+        id: 7569,
+        uuid: "340f11c8-144e-4c24-a298-b5564c4a88a8",
+      },
+    ],
+  },
+  {
+    name: "User Analysis",
+    icon: React.createElement(BarChartOutlined),
+    id: null,
+    children: [
+      {
+        name: "User Profile",
+        id: 7514,
+        uuid: "55b1eb29-b15e-458f-9241-1862a0d19d3b",
+      },
+      {
+        name: "User Funnel",
+        id: 7118,
+        uuid: "b1682d12-bddd-4b10-99a3-a403a3a6a78c",
+      },
+      {
+        name: "Twitter",
+        id: 7476,
+        uuid: "fd4d94f3-06f7-445d-ada3-0ce82bcefa39",
+      },
+      {
+        name: "Discord",
+        id: 7490,
+        uuid: "d137a1ef-34a3-4553-84cb-2203bd9d2baf",
+      },
+      { name: "Discord", id: null, uuid: null },
+    ],
+  },
+  {
+    name: "Discover",
+    icon: React.createElement(ProjectOutlined),
+    id: null,
+    children: [
+      {
+        name: "Industry Overview",
+        id: 7284,
+        uuid: "7edf6b30-83e5-4fca-a1d5-7c3002560ea5",
+      },
+      {
+        name: "Competitor Comparison",
+        id: 7248,
+        uuid: "63114b7c-094c-402c-8fe8-a9bf1db1369d",
+      },
+      {
+        name: "Custom Analysis",
+        id: null,
+        uuid: null,
+        children: [],
+      },
+    ],
+  },
+  {
+    name: "Settings",
+    icon: React.createElement(SettingOutlined),
+    id: null,
+    children: [
+      { name: "General", id: null, uuid: null },
+      { name: "Connector", id: null, uuid: null },
+      { name: "Channel", id: null, uuid: null },
+    ],
+  },
+];

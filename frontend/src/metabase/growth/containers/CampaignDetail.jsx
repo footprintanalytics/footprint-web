@@ -16,6 +16,7 @@ import {
 import { SyncOutlined } from "@ant-design/icons";
 import dayjs from "dayjs";
 import { useQuery } from "react-query";
+import { Link } from "react-router";
 import LoadingSpinner from "metabase/components/LoadingSpinner";
 import { QUERY_OPTIONS } from "metabase/containers/dashboards/shared/config";
 import { getUser } from "metabase/selectors/user";
@@ -30,10 +31,17 @@ const CampaignDetail = props => {
   const { isLoading, data } = useQuery(
     ["getCampaignDetail", id],
     async () => {
-      return await getCampaignDetail({ id });
+      if (id) {
+        return await getCampaignDetail({ id });
+      }
     },
     QUERY_OPTIONS,
   );
+
+  let botInviteUrl = null;
+  if (data?.channel?.details?.discordGuildId) {
+    botInviteUrl = `https://discord.com/oauth2/authorize?client_id=1069198197441957979&scope=bot&permissions=0&guild_id=${data?.channel?.details?.discordGuildId}`;
+  }
 
   const items = [
     {
@@ -114,9 +122,15 @@ const CampaignDetail = props => {
                 <Badge status="success" text={data.status} />
               )}
             </Descriptions.Item>
-            {/* <Descriptions.Item label="Detail info">
-              {data.details}
-            </Descriptions.Item> */}
+            {botInviteUrl && (
+              <Descriptions.Item label="Discord bot invite link">
+                {/* todo  guild_id 要真实从接口拿*/}
+                <Link
+                  target="_blank"
+                  href={botInviteUrl}
+                >{`https://discord.com/oauth2/authorize?client_id...`}</Link>
+              </Descriptions.Item>
+            )}
           </Descriptions>
         ) : (
           <Empty description="No data" />
