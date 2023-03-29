@@ -1,6 +1,6 @@
 /* eslint-disable react/prop-types */
 import React, { useState } from "react";
-import { Button, Input, Form, message, Modal } from "antd";
+import { Button, Input, Form, message, Modal, Switch } from "antd";
 import { Link } from "react-router";
 import { addConnectors } from "metabase/new-service";
 const layout = {
@@ -159,14 +159,22 @@ const ConfigConnector = props => {
               label={i.title}
               rules={[{ required: i.required }]}
             >
-              <Input
-                defaultValue={i.value}
-                value={i.value}
-                allowClear
-                placeholder={`Input the ${i.title}.`}
-                type={i.private ? "password" : i.type}
-                disabled={!editable}
-              />
+              <>
+                {i.type === "text" && (
+                  <Input
+                    defaultValue={i.value}
+                    value={i.value}
+                    allowClear
+                    placeholder={`Input the ${i.title}.`}
+                    type={i.private ? "password" : i.type}
+                  />
+                )}
+              </>
+              <>
+                {i.type === "boolean" && (
+                  <Switch value={i.value} defaultChecked={i.value} />
+                )}
+              </>
             </Form.Item>
           );
         })}

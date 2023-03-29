@@ -45,7 +45,6 @@ const CreateCampaign = ({
   const [formValues, setFormValues] = useState();
   const [loading, setLoading] = useState(false);
   const [loadingCohort, setLoadingCohort] = useState(false);
-
   const [cohorts, setCohorts] = useState([]);
 
   useEffect(() => {

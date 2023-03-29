@@ -59,7 +59,7 @@ const Activators = props => {
   useEffect(() => {
     const temp = [
       {
-        name: "E-mail",
+        name: "Email",
         key: "Email",
         icon: "https://footprint-imgs.oss-us-east-1.aliyuncs.com/20220516201357.png",
         statu: "unconnected",

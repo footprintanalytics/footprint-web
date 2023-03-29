@@ -25,7 +25,7 @@ const Cohort = props => {
       dataIndex: "title",
       render: text => (
         <Typography.Link
-          href={`https://www.footprint.network/@rogerD/Cohort-User-Profile?tag=${text}`}
+          href={`https://www.footprint.network/growth/@rogerD/Cohort-User-Profile?tag=${text}`}
           target="_blank"
         >
           {text}
@@ -78,7 +78,21 @@ const Cohort = props => {
     },
     {
       key: "3",
-      label: <CreateCampaign plain={true} />,
+      label: (
+        <div
+          onClick={() =>
+            props.router?.push({
+              pathname: getGrowthProjectPath(
+                props.router?.params?.project,
+                "CreateCampaign",
+              ),
+            })
+          }
+        >
+          Create Campaign
+        </div>
+      ),
+      // label: <CreateCampaign plain={true} />,
     },
   ];
 

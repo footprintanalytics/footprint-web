@@ -25,8 +25,9 @@ import Activators from "./Activators";
 import CustomAnalysis from "./CustomAnalysis";
 import TemplateGallery from "./TemplateGallery";
 import MyFavoriteTemplate from "./MyFavoriteTemplate";
-import Campaigns from "./Campaigns";
-import CreateCampaign from "./CreateCampaign";
+import CampaignDetail from "./CampaignDetail";
+import CampaignList from "./CampaignList";
+import CreateCampaignPage from "./CreateCampaignPage";
 import Cohort from "./Cohort";
 import "../css/index.css";
 
@@ -35,7 +36,11 @@ const Project = props => {
   const [tab, setTab] = useState(menu);
   const [project, setProject] = useState(projectPath);
   const [projectId, setProjectId] = useState(getLatestGAProjectId());
-
+  const [projectData, setProjectData] = useState();
+  useEffect(() => {
+    //TODO 这里要换成从数据源api 读取 project 数据
+    setProjectData(top_protocols.find(i => i.protocol_slug === projectPath));
+  }, [projectPath]);
   useEffect(() => {
     setProjectId(getLatestGAProjectId());
     setTab(
@@ -46,7 +51,6 @@ const Project = props => {
           : tabs_data[0].name),
     );
   }, [menu, tabs_data]);
-
   const { isLoadingProject, data, refetch } = useQuery(
     ["GetFgaProjectDetail", user, projectPath, getLatestGAProjectId()],
     async () => {
@@ -84,17 +88,20 @@ const Project = props => {
     }
   }, [projectPath]);
   const tabs_data = fga_menu_data;
-  const { menuTabs, dashboardMap } = getGaMenuTabs(tabs_data);
-  //TODO 这里要换成从数据源api 读取 project 数据
+  // todo protocol_type 先写死 GameFi，到时候需要根据 api 返回的真实 project data 传参数
+  const { menuTabs, dashboardMap } = getGaMenuTabs(
+    tabs_data,
+    "GameFi",
+    projectData?.collections_list?.length > 0,
+  );
   const getProjectObject = project => {
-    const p = top_protocols.find(i => i.protocol_slug === project);
     return {
       projectName: project,
-      collection_contract_address: p?.collections_list,
-      project: p,
+      collection_contract_address: projectData?.collections_list,
+      project: projectData,
       twitter_handler: data?.twitter?.handler,
       discord_guild_name: data?.discord?.guildName,
-      protocolName: data?.protocolName
+      protocolName: data?.protocolName,
     };
   };
   const getContentPannel = current_tab => {
@@ -140,12 +147,12 @@ const Project = props => {
     }
     if (current_tab === "CreateCampaign") {
       return (
-        <CreateCampaign
+        <CreateCampaignPage
           location={location}
           router={router}
           project={getProjectObject(project)}
           projectId={getLatestGAProjectId()}
-        ></CreateCampaign>
+        ></CreateCampaignPage>
       );
     }
     if (current_tab === "Connector") {
@@ -197,7 +204,14 @@ const Project = props => {
       );
     }
     if (current_tab === "Campaign") {
-      return <Campaigns router={router} location={location}></Campaigns>;
+      // return <Campaigns router={router} location={location}></Campaigns>;
+      return <CampaignList router={router} location={location}></CampaignList>;
+    }
+    if (current_tab === "CampaignDetail") {
+      // return <Campaigns router={router} location={location}></Campaigns>;
+      return (
+        <CampaignDetail router={router} location={location}></CampaignDetail>
+      );
     }
     if (current_tab === "Cohort") {
       return <Cohort router={router} location={location}></Cohort>;
