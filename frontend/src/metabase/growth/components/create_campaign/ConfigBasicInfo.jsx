@@ -166,13 +166,26 @@ const ConfigBasicInfo = props => {
     currentCampaign?.details?.map(i => {
       i.value = param[i.key];
     });
+    const channelParam = {
+      channelId: currentChannel.channelId,
+      channelName: currentChannel.channelName,
+      campaignType: currentChannel.campaignType,
+      details: {},
+    };
+    currentChannel?.details?.map(i => {
+      channelParam.details[i.key] = i.value;
+    });
+    const details = {};
+    currentCampaign?.details?.map(i => {
+      details[i.key] = i.value;
+    });
     const requestParam = {
       projectId: parseInt(getLatestGAProjectId()),
       title: param["campaignName"],
       cohortIds: param["cohortIds"] ?? [],
       campaignType: currentCampaign.campaignType,
-      details: currentCampaign?.details ?? [],
-      channel: currentChannel,
+      details: details,
+      channel: channelParam,
     };
     console.log("toAddCampaign requestParam\n", requestParam);
     addCampaign(requestParam)

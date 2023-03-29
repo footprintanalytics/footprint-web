@@ -16,6 +16,7 @@ import {
 import { SyncOutlined } from "@ant-design/icons";
 import dayjs from "dayjs";
 import { useQuery } from "react-query";
+import { Link } from "react-router";
 import LoadingSpinner from "metabase/components/LoadingSpinner";
 import { QUERY_OPTIONS } from "metabase/containers/dashboards/shared/config";
 import { getUser } from "metabase/selectors/user";
@@ -23,7 +24,6 @@ import { getCampaignDetail } from "metabase/new-service";
 import CreateCampaign from "../components/buttons/CreateCampaign";
 import UploadWallets from "../components/buttons/UploadWallets";
 import { getGrowthProjectPath } from "../utils/utils";
-import { Link } from "react-router";
 
 const CampaignDetail = props => {
   const { location, router } = props;
@@ -39,11 +39,9 @@ const CampaignDetail = props => {
   );
 
   let botInviteUrl = null;
-  data?.channel?.details?.map(i => {
-    if (i.key === "discordGuildId") {
-      botInviteUrl = `https://discord.com/oauth2/authorize?client_id=1069198197441957979&scope=bot&permissions=0&guild_id=${i.value}`;
-    }
-  });
+  if (data?.channel?.details?.discordGuildId) {
+    botInviteUrl = `https://discord.com/oauth2/authorize?client_id=1069198197441957979&scope=bot&permissions=0&guild_id=${data?.channel?.details?.discordGuildId}`;
+  }
 
   const items = [
     {
