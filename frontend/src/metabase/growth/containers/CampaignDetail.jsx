@@ -39,9 +39,11 @@ const CampaignDetail = props => {
   );
 
   let botInviteUrl = null;
-  if (data?.channel?.details?.discordGuildId) {
-    botInviteUrl = `https://discord.com/oauth2/authorize?client_id=1069198197441957979&scope=bot&permissions=0&guild_id=${data?.channel?.details?.discordGuildId}`;
-  }
+  data?.channels?.map?.(channel => {
+    if (channel?.details?.discordGuildId) {
+      botInviteUrl = `https://discord.com/oauth2/authorize?client_id=1069198197441957979&scope=bot&permissions=0&guild_id=${data?.channel?.details?.discordGuildId}`;
+    }
+  });
 
   const items = [
     {
@@ -123,12 +125,21 @@ const CampaignDetail = props => {
               )}
             </Descriptions.Item>
             {botInviteUrl && (
-              <Descriptions.Item label="Discord bot invite link">
+              <Descriptions.Item label="Discord bot step">
                 {/* todo  guild_id 要真实从接口拿*/}
+                Step 1 : Invite the bot to your server
+                <br />
                 <Link
                   target="_blank"
+                  color="blue"
                   href={botInviteUrl}
                 >{`https://discord.com/oauth2/authorize?client_id...`}</Link>
+                <br />
+                <br />
+                Step 2 : send command to the channel{" "}
+                <Button size="small" type="primary">
+                  copy
+                </Button>
               </Descriptions.Item>
             )}
           </Descriptions>

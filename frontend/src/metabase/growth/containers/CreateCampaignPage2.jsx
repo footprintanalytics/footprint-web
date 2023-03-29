@@ -1,4 +1,5 @@
 /* eslint-disable react/prop-types */
+import { Link } from "react-router";
 import React, { useEffect, useState } from "react";
 import {
   Divider,
@@ -11,6 +12,7 @@ import {
   Input,
   Segmented,
   Switch,
+  message,
 } from "antd";
 import { connect } from "react-redux";
 import { useQuery } from "react-query";
@@ -90,18 +92,12 @@ const CreateCampaignPage2 = props => {
     {
       key: "1",
       label: (
-        <div
-          onClick={() =>
-            props.router?.push({
-              pathname: getGrowthProjectPath(
-                project?.projectName,
-                "Potential Users",
-              ),
-            })
-          }
+        <Link
+          href={getGrowthProjectPath(project?.projectName, "Potential Users")}
+          target="_blank"
         >
           Filter Wallets
-        </div>
+        </Link>
       ),
     },
     {
@@ -136,6 +132,11 @@ const CreateCampaignPage2 = props => {
     // } else {
     //   onNext();
     // }
+    message.success("Create campaign successfully");
+    router.push({
+      pathname: getGrowthProjectPath(project?.projectName, "CampaignDetail"),
+      query: { id: 1 },
+    });
   };
 
   return (
@@ -212,22 +213,6 @@ const CreateCampaignPage2 = props => {
                         { label: "Quest", value: "Quest", disabled: true },
                       ]}
                     />
-                    {/* <Select
-              placeholder="Select a campaign type"
-              onChange={(value, option) => {
-                setCurrentCampaign(
-                  campaignTemplate?.find(i => i.campaignType === value),
-                );
-              }}
-            >
-              {campaignTemplate.map(i => {
-            return (
-              <Option key={i.campaignType} value={i.campaignType}>
-                {i.campaignType}
-              </Option>
-            );
-          })}
-            </Select> */}
                   </Form.Item>
                   <Form.Item
                     name="campaignName"
@@ -269,7 +254,9 @@ const CreateCampaignPage2 = props => {
                   </>
                 )}
                 <div className="flex flex-row items-center justify-between mt2">
-                  <Title level={5}>{"Cohort (optional)"}</Title>
+                  <Title level={5}>{`Cohort ${
+                    campaignType === "User contact" ? "(optional)" : "(require)"
+                  }`}</Title>
                   <Switch
                     defaultChecked={cohortOption}
                     onChange={checked => {
@@ -305,7 +292,9 @@ const CreateCampaignPage2 = props => {
                   </div>
                 )}
                 <div className="flex flex-row items-center justify-between mt2">
-                  <Title level={5}>{"Channel (optional)"}</Title>
+                  <Title level={5}>{`Channel ${
+                    campaignType === "User contact" ? "(optional)" : "(require)"
+                  }`}</Title>
                   <Switch
                     defaultChecked={cohortOption}
                     onChange={checked => {
