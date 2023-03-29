@@ -169,12 +169,18 @@ const Project = props => {
     }
     if (current_tab === "CreateCampaign") {
       return (
-        <CreateCampaignPage
+        // <CreateCampaignPage
+        //   location={location}
+        //   router={router}
+        //   project={getProjectObject(project)}
+        //   projectId={getLatestGAProjectId()}
+        // ></CreateCampaignPage>
+        <CreateCampaignPage2
           location={location}
           router={router}
           project={getProjectObject(project)}
           projectId={getLatestGAProjectId()}
-        ></CreateCampaignPage>
+        ></CreateCampaignPage2>
       );
     }
     if (current_tab === "CreateCampaign2") {
