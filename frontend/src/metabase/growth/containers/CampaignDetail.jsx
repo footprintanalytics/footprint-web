@@ -90,7 +90,7 @@ const CampaignDetail = props => {
   return (
     <div style={{ padding: 20 }}>
       <Card
-        title="Campaign Dateil"
+        title="Campaign Detail"
         extra={
           <Dropdown menu={{ items }}>
             <Button type="primary">Create</Button>

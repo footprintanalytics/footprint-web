@@ -1,8 +1,20 @@
 /* eslint-disable react/prop-types */
 import React, { useState } from "react";
-import { Button, Input, Form, message, Modal, Switch } from "antd";
+import {
+  Button,
+  Input,
+  Form,
+  message,
+  Modal,
+  Switch,
+  Space,
+  Tooltip,
+  Typography,
+} from "antd";
 import { Link } from "react-router";
+import { QuestionCircleOutlined, InfoCircleOutlined } from "@ant-design/icons";
 import { addConnectors } from "metabase/new-service";
+
 const layout = {
   labelCol: { span: 24 },
   wrapperCol: { span: 24 },
@@ -156,7 +168,16 @@ const ConfigConnector = props => {
             <Form.Item
               key={i.key}
               name={i.key}
-              label={i.title}
+              label={
+                <Space>
+                  <span>{i.title}</span>
+                  {i.description ? (
+                    <Tooltip title={i.description}>
+                      <QuestionCircleOutlined />
+                    </Tooltip>
+                  ) : null}
+                </Space>
+              }
               rules={[{ required: i.required }]}
             >
               <>
@@ -165,7 +186,7 @@ const ConfigConnector = props => {
                     defaultValue={i.value}
                     value={i.value}
                     allowClear
-                    placeholder={`Input the ${i.title}.`}
+                    placeholder={i.placeholder}
                     type={i.private ? "password" : i.type}
                   />
                 )}
@@ -178,6 +199,20 @@ const ConfigConnector = props => {
             </Form.Item>
           );
         })}
+        {connector.docLink ? (
+          <Form.Item>
+            <Space>
+              <InfoCircleOutlined />
+              <Typography.Link
+                href={connector.docLink}
+                target="_blank"
+                underline
+              >
+                Where can I find my configuration information?
+              </Typography.Link>
+            </Space>
+          </Form.Item>
+        ) : null}
         <Form.Item {...tailLayout}>
           <div className="flex w-full flex-row-reverse">
             <Button
