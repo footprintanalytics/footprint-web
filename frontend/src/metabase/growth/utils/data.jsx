@@ -1469,18 +1469,18 @@ export const top_protocols = [
 ];
 export const template_gallery = [
   {
-    category: "Go-To-Marketing",
+    category: "Go to market",
     desc: "Analyze campaign data to determine which platforms and campaigns are the most popular, and identify the most precise target audience.",
     items: [
       {
-        category: "Go-To-Marketing",
+        category: "Go to market",
         dashboardName: "Galxe Campaign Overall Stats",
         id: 7408,
         dashboardLink:
           "https://www.footprint.network/growth/@rogerD/Campaign-Analysis",
       },
       {
-        category: "Go-To-Marketing",
+        category: "Go to market",
         desc: "",
         dashboardName: "Galxe Campaign Analysis",
         dashboardLink:
@@ -1488,7 +1488,7 @@ export const template_gallery = [
         id: 7407,
       },
       {
-        category: "Go-To-Marketing",
+        category: "Go to market",
         desc: "",
         dashboardName: "Galxe Campaign Comparison",
         dashboardLink:
@@ -1496,7 +1496,7 @@ export const template_gallery = [
         id: 7409,
       },
       {
-        category: "Go-To-Marketing",
+        category: "Go to market",
         desc: "",
         dashboardName: "Galxe Campaign Reward Analysis",
         dashboardLink:
