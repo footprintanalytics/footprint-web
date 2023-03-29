@@ -1,4 +1,5 @@
 /* eslint-disable react/prop-types */
+import { Link } from "react-router";
 import React, { useEffect, useState } from "react";
 import {
   Divider,
@@ -11,6 +12,7 @@ import {
   Input,
   Segmented,
   Switch,
+  message,
 } from "antd";
 import { connect } from "react-redux";
 import { useQuery } from "react-query";
@@ -90,18 +92,12 @@ const CreateCampaignPage2 = props => {
     {
       key: "1",
       label: (
-        <div
-          onClick={() =>
-            props.router?.push({
-              pathname: getGrowthProjectPath(
-                project?.projectName,
-                "Potential Users",
-              ),
-            })
-          }
+        <Link
+          href={getGrowthProjectPath(project?.projectName, "Potential Users")}
+          target="_blank"
         >
           Filter Wallets
-        </div>
+        </Link>
       ),
     },
     {
@@ -136,6 +132,11 @@ const CreateCampaignPage2 = props => {
     // } else {
     //   onNext();
     // }
+    message.success("Create campaign successfully");
+    router.push({
+      pathname: getGrowthProjectPath(project?.projectName, "CampaignDetail"),
+      query: { id: 1 },
+    });
   };
 
   return (
