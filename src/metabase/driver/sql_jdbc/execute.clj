@@ -504,7 +504,6 @@
          isDownload (some #(= (:context (:info outer-query)) %) downloadContexts)
          sql (if (and (= execution-mode  "native") (not is-include-limit) (not isDownload)) (str _convert-sql "\nLIMIT 1000") _convert-sql)
          ]
-     (log/info "outer-query" outer-query)
      (log/info "execute sql query --------------")
      (log/info "source_sql:" _sql)
      (log/info "after_convert_sql:" sql)

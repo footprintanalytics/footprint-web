@@ -73,11 +73,10 @@
   [:as {{:keys [database fga-schema type web-vip] :as query} :body}]
   {database (s/maybe s/Int)}
   (let [result (-> query
-                    (update-in [:middleware :js-int-to-string?] (fnil identity true))
+                    (update-in query [:middleware :js-int-to-string?] (fnil identity true))
                     (update-in [:middleware :execution-mode] (fnil identity type))
                     (update-in [:middleware :fga-schema] (fnil identity fga-schema))
                     (update-in [:middleware :web-vip] (fnil identity web-vip)))]
-    (log/info "result", result)
   (run-query-async result)))
 
 ;;; ----------------------------------- Downloading Query Results in Other Formats -----------------------------------
