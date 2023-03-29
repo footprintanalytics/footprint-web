@@ -270,7 +270,9 @@ const CreateCampaignPage2 = props => {
                   </>
                 )}
                 <div className="flex flex-row items-center justify-between mt2">
-                  <Title level={5}>{"Cohort (optional)"}</Title>
+                  <Title level={5}>{`Cohort ${
+                    campaignType === "User contact" ? "(optional)" : "(require)"
+                  }`}</Title>
                   <Switch
                     defaultChecked={cohortOption}
                     onChange={checked => {
@@ -306,7 +308,9 @@ const CreateCampaignPage2 = props => {
                   </div>
                 )}
                 <div className="flex flex-row items-center justify-between mt2">
-                  <Title level={5}>{"Channel (optional)"}</Title>
+                  <Title level={5}>{`Channel ${
+                    campaignType === "User contact" ? "(optional)" : "(require)"
+                  }`}</Title>
                   <Switch
                     defaultChecked={cohortOption}
                     onChange={checked => {

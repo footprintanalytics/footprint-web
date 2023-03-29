@@ -185,7 +185,7 @@ const ConfigBasicInfo = props => {
       cohortIds: param["cohortIds"] ?? [],
       campaignType: currentCampaign.campaignType,
       details: details,
-      channel: channelParam,
+      channels: [channelParam],
     };
     console.log("toAddCampaign requestParam\n", requestParam);
     addCampaign(requestParam)
