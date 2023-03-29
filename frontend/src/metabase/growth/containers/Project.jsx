@@ -28,6 +28,7 @@ import MyFavoriteTemplate from "./MyFavoriteTemplate";
 import CampaignDetail from "./CampaignDetail";
 import CampaignList from "./CampaignList";
 import CreateCampaignPage from "./CreateCampaignPage";
+import CreateCampaignPage2 from "./CreateCampaignPage2";
 import Cohort from "./Cohort";
 import "../css/index.css";
 
@@ -117,44 +118,7 @@ const Project = props => {
           hideFooter
         />
       );
-    }
-
-    if (dashboardMap.has(current_tab)) {
-      // TODO: fix this project object
-      if (current_tab === 'Twitter') {
-        return (
-          <LoadingDashboard
-            sourceDefinitionId={data?.twitter?.sourceDefinitionId}
-            projectId={parseInt(getLatestGAProjectId())}
-            current_tab={current_tab}
-          >
-            <WrapPublicDashboard />
-          </LoadingDashboard>
-        )
-      }
-      if (current_tab === 'Discord') {
-        return (
-          <LoadingDashboard
-            sourceDefinitionId={data?.discord?.sourceDefinitionId}
-            projectId={parseInt(getLatestGAProjectId())}
-            current_tab={current_tab}
-          >
-            <WrapPublicDashboard />
-          </LoadingDashboard>
-        )
-      }
-      return <WrapPublicDashboard />
-    }
-    if (current_tab === "CreateCampaign") {
-      return (
-        <CreateCampaignPage
-          location={location}
-          router={router}
-          project={getProjectObject(project)}
-          projectId={getLatestGAProjectId()}
-        ></CreateCampaignPage>
-      );
-    }
+    };
     if (current_tab === "Connector") {
       return (
         <Connectors
@@ -203,6 +167,26 @@ const Project = props => {
         ></MyFavoriteTemplate>
       );
     }
+    if (current_tab === "CreateCampaign") {
+      return (
+        <CreateCampaignPage
+          location={location}
+          router={router}
+          project={getProjectObject(project)}
+          projectId={getLatestGAProjectId()}
+        ></CreateCampaignPage>
+      );
+    }
+    if (current_tab === "CreateCampaign2") {
+      return (
+        <CreateCampaignPage2
+          location={location}
+          router={router}
+          project={getProjectObject(project)}
+          projectId={getLatestGAProjectId()}
+        ></CreateCampaignPage2>
+      );
+    }
     if (current_tab === "Campaign") {
       // return <Campaigns router={router} location={location}></Campaigns>;
       return <CampaignList router={router} location={location}></CampaignList>;
@@ -215,6 +199,32 @@ const Project = props => {
     }
     if (current_tab === "Cohort") {
       return <Cohort router={router} location={location}></Cohort>;
+    }
+    if (dashboardMap.has(current_tab)) {
+      // TODO: fix this project object
+      if (current_tab === "Twitter") {
+        return (
+          <LoadingDashboard
+            sourceDefinitionId={data?.twitter?.sourceDefinitionId}
+            projectId={parseInt(getLatestGAProjectId())}
+            current_tab={current_tab}
+          >
+            <WrapPublicDashboard />
+          </LoadingDashboard>
+        );
+      }
+      if (current_tab === "Discord") {
+        return (
+          <LoadingDashboard
+            sourceDefinitionId={data?.discord?.sourceDefinitionId}
+            projectId={parseInt(getLatestGAProjectId())}
+            current_tab={current_tab}
+          >
+            <WrapPublicDashboard />
+          </LoadingDashboard>
+        );
+      }
+      return <WrapPublicDashboard />;
     }
     return (
       <div style={{ textAlign: "center", padding: "50px" }}>
