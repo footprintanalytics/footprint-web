@@ -25,6 +25,8 @@ import {
 import LoadingSpinner from "metabase/components/LoadingSpinner";
 import ConfigConnector from "../components/config_panel/ConfigConnector";
 import "../css/utils.css";
+import { getGrowthProjectPath } from "../utils/utils";
+
 const { Text } = Typography;
 
 const Connectors = props => {
@@ -73,7 +75,7 @@ const Connectors = props => {
   };
   const onCloseDrawer = () => {
     setOpenDrawer({ show: false });
-    refetchProject()
+    refetchProject();
   };
   const onAddConnector = isSuccess => {
     //Todo refresh data
@@ -125,14 +127,40 @@ const Connectors = props => {
                     actions={
                       item.configured
                         ? [
-                            <a
-                              key="list-loadmore-edit"
+                            <Button
+                              key="Detail"
+                              style={{ borderRadius: 5, width: 90 }}
                               onClick={() => {
-                                showDrawer(item);
+                                switch (item.name) {
+                                  case "Google Analytics":
+                                    router.push(
+                                      getGrowthProjectPath(
+                                        project.projectName,
+                                        "User Funnel",
+                                      ),
+                                    );
+                                    break;
+                                  default:
+                                    router.push(
+                                      getGrowthProjectPath(
+                                        project.projectName,
+                                        item.name,
+                                      ),
+                                    );
+                                    break;
+                                }
                               }}
                             >
-                              detail
-                            </a>,
+                              Analysis
+                            </Button>,
+                            // <a
+                            //   key="list-loadmore-edit"
+                            //   onClick={() => {
+                            //     showDrawer(item);
+                            //   }}
+                            // >
+                            //   detail
+                            // </a>,
                             // <a key="list-loadmore-more" disabled={true}>
                             //   delete
                             // </a>,
@@ -141,7 +169,7 @@ const Connectors = props => {
                             <Button
                               type={"primary"}
                               key="Connect"
-                              style={{ borderRadius: 5 }}
+                              style={{ borderRadius: 5, width: 90 }}
                               disabled={
                                 projectId !== "undefined" && item.active
                                   ? false

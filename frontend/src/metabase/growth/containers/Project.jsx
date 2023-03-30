@@ -101,24 +101,22 @@ const Project = props => {
       collection_contract_address: projectData?.collections_list,
       project: projectData,
       twitter_handler: data?.twitter?.handler,
-      discord_guild_name: data?.discord?.guildName,
+      discord_guild_id: data?.discord?.guildId,
       protocolName: data?.protocolName,
     };
   };
   const getContentPannel = current_tab => {
-    const WrapPublicDashboard = () => {
-      return (
-        <PublicDashboard
-          params={{ uuid: dashboardMap.get(current_tab) }}
-          location={location}
-          project={getProjectObject(project)}
-          isFullscreen={false}
-          className="ml-250"
-          key={project}
-          hideFooter
-        />
-      );
-    };
+    const WrapPublicDashboard = (
+      <PublicDashboard
+        params={{ uuid: dashboardMap.get(current_tab) }}
+        location={location}
+        project={getProjectObject(project)}
+        isFullscreen={false}
+        className="ml-250"
+        key={project}
+        hideFooter
+      />
+    );
     if (current_tab === "Connector") {
       return (
         <Connectors
@@ -169,12 +167,18 @@ const Project = props => {
     }
     if (current_tab === "CreateCampaign") {
       return (
-        <CreateCampaignPage
+        // <CreateCampaignPage
+        //   location={location}
+        //   router={router}
+        //   project={getProjectObject(project)}
+        //   projectId={getLatestGAProjectId()}
+        // ></CreateCampaignPage>
+        <CreateCampaignPage2
           location={location}
           router={router}
           project={getProjectObject(project)}
           projectId={getLatestGAProjectId()}
-        ></CreateCampaignPage>
+        ></CreateCampaignPage2>
       );
     }
     if (current_tab === "CreateCampaign2") {
@@ -205,26 +209,43 @@ const Project = props => {
       if (current_tab === "Twitter") {
         return (
           <LoadingDashboard
+            router={router}
             sourceDefinitionId={data?.twitter?.sourceDefinitionId}
+            project={getProjectObject(project)}
             projectId={parseInt(getLatestGAProjectId())}
             current_tab={current_tab}
           >
-            <WrapPublicDashboard />
+            {WrapPublicDashboard}
           </LoadingDashboard>
         );
       }
       if (current_tab === "Discord") {
         return (
           <LoadingDashboard
+            router={router}
             sourceDefinitionId={data?.discord?.sourceDefinitionId}
+            project={getProjectObject(project)}
             projectId={parseInt(getLatestGAProjectId())}
             current_tab={current_tab}
           >
-            <WrapPublicDashboard />
+            {WrapPublicDashboard}
           </LoadingDashboard>
         );
       }
-      return <WrapPublicDashboard />;
+      if (current_tab === "User Funnel") {
+        return (
+          <LoadingDashboard
+            router={router}
+            sourceDefinitionId={data?.ga?.sourceDefinitionId}
+            project={getProjectObject(project)}
+            projectId={parseInt(getLatestGAProjectId())}
+            current_tab={current_tab}
+          >
+            {WrapPublicDashboard}
+          </LoadingDashboard>
+        );
+      }
+      return WrapPublicDashboard;
     }
     return (
       <div style={{ textAlign: "center", padding: "50px" }}>

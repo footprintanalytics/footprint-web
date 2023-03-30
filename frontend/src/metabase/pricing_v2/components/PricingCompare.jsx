@@ -9,7 +9,10 @@ const PricingCompare = ({ user, groups, subscriptionDetailList }) => {
     ?.find(group => group.type === "business")
     ?.products
     ?.find(product => product.category === "7-trial");
-  const comparePlans = getComparePlans({user, canBusinessSevenTrial, subscriptionDetailList});
+  const canTeamPay = !!groups
+    ?.find(group => group.type === "team")
+    ?.products?.length > 0;
+  const comparePlans = getComparePlans({user, canBusinessSevenTrial, subscriptionDetailList, canTeamPay});
 
   return (
     <div className="Pricing__compare">

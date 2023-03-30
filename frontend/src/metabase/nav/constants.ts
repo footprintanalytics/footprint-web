@@ -8,6 +8,7 @@ export const VipLevel = {
   FREE: "free",
   BASIC: "basic",
   PRO: "pro",
+  TEAM: "team",
   BUSINESS: "business",
   ENTERPRISE: "enterprise",
 };

@@ -97,7 +97,7 @@ const mapStateToProps = (state, props) => {
         project.twitter_handler,
       );
     }
-    if (project.discord_guild_name) {
+    if (project.discord_guild_id) {
       const key = "project_name";
       updateDashboardPara(
         parameters,

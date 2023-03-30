@@ -1,8 +1,21 @@
 /* eslint-disable react/prop-types */
 import React, { useState } from "react";
-import { Button, Input, Form, message, Modal, Switch } from "antd";
+import {
+  Button,
+  Input,
+  Form,
+  message,
+  Modal,
+  Switch,
+  Space,
+  Tooltip,
+  Typography,
+  Alert,
+} from "antd";
 import { Link } from "react-router";
+import { QuestionCircleOutlined, InfoCircleOutlined } from "@ant-design/icons";
 import { addConnectors } from "metabase/new-service";
+
 const layout = {
   labelCol: { span: 24 },
   wrapperCol: { span: 24 },
@@ -59,9 +72,9 @@ const ConfigConnector = props => {
           if (result?.result === "success") {
             message.success("Successfully configured connector.");
             onAddConnector(true);
-            if (connector.name === "Discord") {
-              showDiscordBotLink(values);
-            }
+            // if (connector.name === "Discord") {
+            //   showDiscordBotLink(values);
+            // }
           } else {
             message.error(`Configured connector ${result?.result}`);
           }
@@ -150,34 +163,75 @@ const ConfigConnector = props => {
         onFinish={onSave}
         style={{ maxWidth: 1000, minWidth: 300, width: "100%" }}
       >
+        {connector.name === "Discord" ? (
+          <Form.Item>
+            <Alert
+              message="Make sure you have invited Discord bot"
+              description={
+                <>
+                  Please click on the{" "}
+                  <Typography.Link
+                    href="https://discord.com/api/oauth2/authorize?client_id=1089756391889178745&permissions=268435456&scope=bot"
+                    target="_blank"
+                    underline
+                  >
+                    invitation link
+                  </Typography.Link>{" "}
+                  to add the Discord bot and ensure proper data connection.
+                </>
+              }
+              type="warning"
+              showIcon
+            />
+          </Form.Item>
+        ) : null}
         {connector?.connectionSpecification.map(i => {
           i.type = i.type === "string" ? "text" : i.type;
           return (
             <Form.Item
               key={i.key}
               name={i.key}
-              label={i.title}
+              label={
+                <Space>
+                  <span>{i.title}</span>
+                  {i.description ? (
+                    <Tooltip title={i.description}>
+                      <QuestionCircleOutlined />
+                    </Tooltip>
+                  ) : null}
+                </Space>
+              }
               rules={[{ required: i.required }]}
             >
-              <>
-                {i.type === "text" && (
-                  <Input
-                    defaultValue={i.value}
-                    value={i.value}
-                    allowClear
-                    placeholder={`Input the ${i.title}.`}
-                    type={i.private ? "password" : i.type}
-                  />
-                )}
-              </>
-              <>
-                {i.type === "boolean" && (
-                  <Switch value={i.value} defaultChecked={i.value} />
-                )}
-              </>
+              {i.type === "text" && (
+                <Input
+                  defaultValue={i.value}
+                  value={i.value}
+                  allowClear
+                  placeholder={i.placeholder}
+                  type={i.private ? "password" : i.type}
+                />
+              )}
+              {/* {i.type === "boolean" && (
+                <Switch value={i.value} defaultChecked={i.value} />
+              )} */}
             </Form.Item>
           );
         })}
+        {connector.docLink ? (
+          <Form.Item>
+            <Space>
+              <InfoCircleOutlined />
+              <Typography.Link
+                href={connector.docLink}
+                target="_blank"
+                underline
+              >
+                Where can I find my configuration information?
+              </Typography.Link>
+            </Space>
+          </Form.Item>
+        ) : null}
         <Form.Item {...tailLayout}>
           <div className="flex w-full flex-row-reverse">
             <Button
