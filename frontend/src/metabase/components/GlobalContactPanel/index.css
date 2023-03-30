@@ -155,5 +155,23 @@
 .global-contact-panel__social-item {
   display: flex;
   flex-direction: column;
+  justify-content: center;
+  align-items: center;
   padding: 8px;
+}
+.global-contact-panel__social-item svg {
+  z-index: 1;
+}
+
+.global-contact-panel__social-item-icon-bg {
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  background-color: white;
+  position: absolute;
+}
+
+.dark .global-contact-panel__social {
+  background-color: #182034;
+  border: 1px solid #D9D9D9;
 }

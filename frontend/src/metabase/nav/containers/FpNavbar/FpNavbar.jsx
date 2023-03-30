@@ -69,12 +69,24 @@ const mapDispatchToProps = {
 
 const leftMenuData = [
   {
-    title: "Analytics",
+    title: "Growth Analytics",
+    icon: "menu_home",
+    path: "/growth",
+    auth: false,
+  },
+  {
+    title: "Analytics App",
     icon: "menu_home",
     path: "/dashboards",
     auth: false,
   },
   {
+    title: "Data API",
+    icon: "menu_home",
+    path: "/data-api",
+    auth: false,
+  },
+  /*{
     name: "Data API",
     icon: "protocols",
     menu: [
@@ -96,7 +108,7 @@ const leftMenuData = [
         externalLink: true,
       },
     ],
-  },
+  },*/
 ];
 
 const rightMenuData = [
@@ -491,6 +503,12 @@ class FpNavbar extends Component {
       ? "none"
       : "flex";
 
+    const showCreate =
+      window.location.pathname !== "/" &&
+      window.location.pathname !== "/data-api"
+    const showSignup =
+      !showCreate;
+
     const MobileMenuIcon = () => {
       return (
         <div
@@ -615,7 +633,7 @@ class FpNavbar extends Component {
       return (
         <div className="Nav__right">
           {this.renderLink({})}
-          <CreateMenu />
+          {showCreate && (<CreateMenu />)}
           <React.Fragment>
             <RightMenuMobile />
             <RightMenuPad />
@@ -637,51 +655,37 @@ class FpNavbar extends Component {
               }
             />
           ) : (
-            <Link
-              className="Nav__sign-up"
-              onClick={() => {
-                trackStructEvent(`click Sign in`);
-                setLoginModalShow({ show: true, from: "navbar_signin" });
-              }}
-            >
-              Sign in
-            </Link>
+            <>
+              <Link
+                className="Nav__sign-up"
+                onClick={() => {
+                  trackStructEvent(`click Sign in`);
+                  setLoginModalShow({ show: true, from: "navbar_signin" });
+                }}
+              >
+                Sign in
+              </Link>
+              {showSignup && (<Link
+                className="Nav__sign-up-start"
+                onClick={() => {
+                  trackStructEvent(`click Sign up`);
+                  setLoginModalShow({ show: true, from: "navbar_signup" });
+                }}
+              >
+                Start for Free
+              </Link>)}
+            </>
           )}
         </div>
       );
     };
+    const isDark = window?.location?.pathname === "/";
 
     return (
-      <div className="Nav" style={{ display: rootDisplay }}>
-        <div className="Nav__left">
-          <MobileMenuIcon />
-          <Link
-            className="Nav__logo"
-            to="/"
-            onClick={e => {
-              e.preventDefault();
-              trackStructEvent(`navbar-click-logo`);
-              this.goLink(e, "/");
-            }}
-          >
-            <img
-              src={getOssUrl("img_nav_logo_v5.svg")}
-              width={188}
-              height={28}
-              style={{ marginBottom: 2 }}
-              alt="Footprint - One Step Closer to Blockchain Insights"
-            />
-          </Link>
-          <LeftMenu />
-        </div>
-        <React.Fragment>
-          <div className="Nav__search-bar">
-            <SearchBar
-              location={location}
-              onChangeLocation={onChangeLocation}
-            />
-          </div>
-          <div className="Nav__mobile-logo">
+      <div className={cx({ "dark": isDark })}>
+        <div className="Nav" style={{ display: rootDisplay }}>
+          <div className="Nav__left">
+            <MobileMenuIcon />
             <Link
               className="Nav__logo"
               to="/"
@@ -692,20 +696,48 @@ class FpNavbar extends Component {
               }}
             >
               <img
-                src={getOssUrl("img_nav_logo_mobile.svg")}
-                width={40}
-                height={36}
+                src={getOssUrl(isDark ? "img_nav_logo_v5_white.svg": "img_nav_logo_v5.svg")}
+                width={188}
+                height={28}
+                style={{ marginBottom: 2 }}
                 alt="Footprint - One Step Closer to Blockchain Insights"
               />
             </Link>
+            <LeftMenu />
           </div>
-        </React.Fragment>
-        <RightMenu />
-        {this.renderModal()}
-        {zkspaceDate() && this.renderSubmitAddrZkspaceModal()}
-        {this.renderSideNav()}
-        {this.renderLoginModal()}
-        {this.renderCancelFeedbackModal()}
+          <React.Fragment>
+            <div className="Nav__search-bar">
+              <SearchBar
+                location={location}
+                onChangeLocation={onChangeLocation}
+              />
+            </div>
+            <div className="Nav__mobile-logo">
+              <Link
+                className="Nav__logo"
+                to="/"
+                onClick={e => {
+                  e.preventDefault();
+                  trackStructEvent(`navbar-click-logo`);
+                  this.goLink(e, "/");
+                }}
+              >
+                <img
+                  src={getOssUrl("img_nav_logo_mobile.svg")}
+                  width={40}
+                  height={36}
+                  alt="Footprint - One Step Closer to Blockchain Insights"
+                />
+              </Link>
+            </div>
+          </React.Fragment>
+          <RightMenu />
+          {this.renderModal()}
+          {zkspaceDate() && this.renderSubmitAddrZkspaceModal()}
+          {this.renderSideNav()}
+          {this.renderLoginModal()}
+          {this.renderCancelFeedbackModal()}
+        </div>
       </div>
     );
   }
