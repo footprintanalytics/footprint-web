@@ -101,7 +101,7 @@ const Project = props => {
       collection_contract_address: projectData?.collections_list,
       project: projectData,
       twitter_handler: data?.twitter?.handler,
-      discord_guild_name: data?.discord?.guildName,
+      discord_guild_id: data?.discord?.guildId,
       protocolName: data?.protocolName,
     };
   };
