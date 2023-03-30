@@ -1,5 +1,6 @@
 /* eslint-disable react/prop-types */
 import { Link } from "react-router";
+import { SettingOutlined } from "@ant-design/icons";
 import React, { useEffect, useState } from "react";
 import {
   Divider,
@@ -18,43 +19,19 @@ import { connect } from "react-redux";
 import { useQuery } from "react-query";
 import Title from "antd/lib/typography/Title";
 import { QUERY_OPTIONS } from "metabase/containers/dashboards/shared/config";
-import { getCampaignTemplate } from "metabase/new-service";
+import {
+  getCampaignTemplate,
+  GetFgaCohort,
+  addCampaign,
+} from "metabase/new-service";
 import { getUser } from "metabase/selectors/user";
 import LoadingSpinner from "metabase/components/LoadingSpinner";
 import {
   loginModalShowAction,
   createFgaProjectModalShowAction,
 } from "metabase/redux/control";
-import UploadWallets from "../components/buttons/UploadWallets";
 import "../css/utils.css";
-import { getGrowthProjectPath } from "../utils/utils";
-const steps = [
-  // {
-  //   title: "Start",
-  //   key: "Start",
-  //   // description: "Start to Config campaign",
-  // },
-  {
-    title: "Content",
-    key: "Campaign",
-    // description: "Config your campaign basic info",
-  },
-  {
-    title: "Cohort",
-    key: "Cohort",
-    // description: "Config the cohort of this campaign",
-  },
-  {
-    title: "Channel",
-    key: "Channel",
-    // description: "Setup the notification of this campaign",
-  },
-  // {
-  //   title: "Finish",
-  //   key: "Finish",
-  //   // description: "Campaign config successfully",
-  // },
-];
+import { getGrowthProjectPath, getLatestGAProjectId } from "../utils/utils";
 const { Option } = Select;
 const { TextArea } = Input;
 const layout = {
@@ -74,12 +51,15 @@ const CreateCampaignPage2 = props => {
     setLoginModalShowAction,
     setCreateFgaProjectModalShowAction,
   } = props;
-  const [current, setCurrent] = useState(1);
+  const [currentStep, setCurrentStep] = useState(1);
   const [isSubmiting, setSubmiting] = useState(false);
-  const [cohortOption, setCorhortOption] = useState(false);
-  const [channelOption, setChannelOption] = useState(false);
-  const [channelOptionValue, setChannelOptionValue] = useState();
-  const [campaignType, setCampaignType] = useState("User contact");
+  const [steps, setSteps] = useState([]);
+  const [channelSelectedValue, setChannelSelectedValue] = useState([]);
+  const [cohortDataOptions, setCohortDataOptions] = useState([]);
+  const [cohortSelectedValue, setCohortSelectedValue] = useState([]);
+  const [campaignTemplates, setCampaignTemplates] = useState();
+  const [channelTemplates, setChannelTemplates] = useState();
+  const [campaignSelected, setCampaignSelected] = useState(null);
   const formRef = React.useRef(null);
 
   const { isLoading, data } = useQuery(
@@ -88,55 +68,262 @@ const CreateCampaignPage2 = props => {
     QUERY_OPTIONS,
   );
 
-  const items = [
-    {
-      key: "1",
-      label: (
-        <Link
-          href={getGrowthProjectPath(project?.projectName, "Potential Users")}
-          target="_blank"
-        >
-          Filter Wallets
-        </Link>
-      ),
+  const { isLoading: isLoadingCohort, data: cohortData } = useQuery(
+    ["getCohort", campaignSelected?.campaignType],
+    async () => {
+      if (campaignSelected?.cohortRequired) {
+        return await GetFgaCohort();
+      } else {
+        return;
+      }
     },
-    {
-      key: "2",
-      label: <UploadWallets />,
-    },
-  ];
+  );
+
+  useEffect(() => {
+    if (cohortData) {
+      const options = [];
+      cohortData?.list?.forEach(item => {
+        options.push(
+          <Option key={item.cohortId} label={item.title} value={item.cohortId}>
+            <div className="flex flex-row items-center justify-between">
+              <div>{item.title}</div>
+              <div style={{ color: "GrayText" }}>
+                {item.numberOfWallets} wallets
+              </div>
+            </div>
+          </Option>,
+        );
+      });
+      setCohortDataOptions(options);
+    }
+  }, [cohortData]);
 
   useEffect(() => {
     if (!isLoading) {
-      console.log("getCampaignTemplate data", data);
+      const templates = [];
+      data?.list?.forEach(item => {
+        templates.push({
+          key: item.campaignType,
+          label: item.campaignName ?? item.campaignType,
+          // description: item.description,
+          value: item.campaignType,
+          disabled: item.status !== "enable",
+          ...item,
+        });
+      });
+      setCampaignTemplates(templates);
+      if (!campaignSelected) {
+        setCampaignSelected(templates[0]);
+      }
     }
   }, [isLoading]);
 
   useEffect(() => {
-    if (channelOption) {
-      setCurrent(3);
-    } else if (cohortOption) {
-      setCurrent(2);
-    } else {
-      setCurrent(1);
+    if (campaignSelected) {
+      const templates = [];
+      campaignSelected?.channels?.forEach(item => {
+        templates.push({
+          key: item.channelName,
+          label: item.channelName,
+          value: item.channelName,
+          disabled: item.disabled,
+          ...item,
+        });
+      });
+      setChannelTemplates(templates);
+      setSteps(
+        campaignSelected?.cohortRequired
+          ? [
+              {
+                title: "Content",
+                key: "Campaign",
+              },
+              {
+                title: "Cohort",
+                key: "Cohort",
+              },
+              {
+                title: "Channel",
+                key: "Channel",
+              },
+            ]
+          : [
+              {
+                title: "Content",
+                key: "Campaign",
+              },
+              {
+                title: "Channel",
+                key: "Channel",
+              },
+            ],
+      );
     }
-  }, [current, channelOption, cohortOption]);
+  }, [campaignSelected]);
 
-  const onFinish = values => {
-    //todo 提交表单到 api，成功之后 onNext
-    // if (currentCampaign?.campaignType === "mapping") {
-    //   const param = { ...currentParam, ...values };
-    //   console.log("onFinish param", param);
-    //   setCurrentParam(param);
-    //   toAddCampaign(param);
-    // } else {
-    //   onNext();
-    // }
-    message.success("Create campaign successfully");
-    router.push({
-      pathname: getGrowthProjectPath(project?.projectName, "CampaignDetail"),
-      query: { id: 1 },
+  useEffect(() => {
+    if (channelSelectedValue?.length > 0) {
+      setCurrentStep(steps?.findIndex(item => item.key === "Channel") + 1);
+    } else if (cohortSelectedValue?.length > 0) {
+      setCurrentStep(steps?.findIndex(item => item.key === "Cohort") + 1);
+    } else {
+      setCurrentStep(1);
+    }
+  }, [currentStep, channelSelectedValue, cohortSelectedValue]);
+
+  const getChannelConfigPanel = details => {
+    return (
+      <>
+        {details?.map(detail => {
+          if (detail.type === "checkbox") {
+            const options = [];
+            const defaultValue = [];
+            detail.options?.forEach(item => {
+              if (item.value === true) {
+                defaultValue.push(item.key);
+              }
+              options.push({
+                label: item.title,
+                value: item.key,
+                // key: item.key,
+                disabled: item.notEdit,
+              });
+            });
+            return (
+              <>
+                <div className="mt1">
+                  {detail.title}
+                  {detail.required && <span className="text-red">*</span>}
+                </div>
+                <Form.Item
+                  key={detail.key}
+                  name={detail.key}
+                  {...tailLayout}
+                  initialValue={defaultValue}
+                  valuePropName="value"
+                  // label={detail.title}
+                  rules={[{ required: detail.required }]}
+                >
+                  <Checkbox.Group className="mt1" options={options} />
+                </Form.Item>
+              </>
+            );
+          } else if (detail.type === "string") {
+            return (
+              <>
+                <Form.Item
+                  key={detail.key}
+                  name={detail.key}
+                  layout={tailLayout}
+                  initialValue={detail.value}
+                  valuePropName="value"
+                  label={detail.title}
+                  rules={[{ required: detail.required }]}
+                >
+                  <Input
+                    allowClear
+                    disabled={detail.notEdit}
+                    placeholder={`Input the ${detail.title}.`}
+                    type={
+                      detail.private
+                        ? "password"
+                        : detail.type === "string"
+                        ? "text"
+                        : detail.type
+                    }
+                  />
+                </Form.Item>
+              </>
+            );
+          }
+        })}
+      </>
+    );
+  };
+
+  const onFinish = param => {
+    console.log("onFinish values", param);
+    if (!user) {
+      message.warning("Kindly log in before proceeding.");
+      setLoginModalShowAction({
+        show: true,
+        from: "create campaign",
+        redirect: location.pathname,
+        channel: "FGA",
+      });
+      return;
+    }
+    if (!getLatestGAProjectId()) {
+      message.warning("Initially, you must create your personal project!");
+      setCreateFgaProjectModalShowAction({ show: true });
+      return;
+    }
+    setSubmiting(true);
+    // 组装 campaign 的参数
+    const campaignDetails = {};
+    campaignSelected?.details?.map(detail => {
+      if (detail.type === "checkbox") {
+        // 把 checkbox 的选中项的 key 放到 details 里
+        detail.options?.map(detailOption => {
+          campaignDetails[detailOption.key] = param[detail.key]?.includes(
+            detailOption.key,
+          );
+        });
+      } else {
+        campaignDetails[detail.key] = param[detail.key];
+      }
     });
+    // 组装 channel 的参数
+    const channelsParam = [];
+    channelSelectedValue?.map(channel => {
+      const channelParam = {
+        id: channel.id,
+        channelName: channel.channelName,
+        campaignType: channel.campaignType,
+        details: {},
+      };
+      channel?.details?.map(channelDetailItem => {
+        if (channelDetailItem.type === "checkbox") {
+          // 把 checkbox 的选中项的 key 放到 details 里
+          channelDetailItem.options?.map(detailOption => {
+            channelParam.details[detailOption.key] = param[
+              channelDetailItem.key
+            ]?.includes(detailOption.key);
+          });
+        } else {
+          channelParam.details[channelDetailItem.key] =
+            param[channelDetailItem.key];
+        }
+      });
+      channelsParam.push(channelParam);
+    });
+    // 组装 request 的参数
+    const requestParam = {
+      projectId: parseInt(getLatestGAProjectId()),
+      title: param["campaignName"],
+      cohortIds: param["TargetCohort"] ?? [],
+      campaignType: campaignSelected.campaignType,
+      details: campaignDetails,
+      channels: channelsParam,
+    };
+    console.log("toAddCampaign requestParam\n", requestParam);
+    addCampaign(requestParam)
+      .then(result => {
+        console.log("toAddCampaign result", result);
+        message.success("The campaign creation was successful.");
+        // router.push(getGrowthProjectPath(project?.projectName, "Campaign"));
+        router.push({
+          pathname: getGrowthProjectPath(
+            project?.projectName,
+            "CampaignDetail",
+          ),
+          query: { id: result?.campaignId },
+        });
+        //todo 还差展示 邀请机器人link 和 活动 link
+      })
+      .finally(() => {
+        setSubmiting(false);
+      });
   };
 
   return (
@@ -157,12 +344,12 @@ const CreateCampaignPage2 = props => {
           </Title>
         </div>
         <Divider></Divider>
-        {isLoading ? (
+        {isLoading || !campaignSelected ? (
           <LoadingSpinner message="Loading..." />
         ) : (
           <div className="flex flex-row mt3 bg-white rounded p3 full-width">
             <Steps
-              current={current ? current - 1 : 0}
+              current={currentStep ? currentStep - 1 : 0}
               // className="mt-5 px-10"
               className="full-height"
               direction="vertical"
@@ -170,7 +357,6 @@ const CreateCampaignPage2 = props => {
               style={{ padding: 0, width: "20%", marginTop: 20 }}
               items={steps}
             />
-            {/* <Divider className=" full-height" type="vertical" /> */}
             <div
               style={{ height: "100%", width: "80%" }}
               className="flex flex-column pl2 border-left"
@@ -179,7 +365,9 @@ const CreateCampaignPage2 = props => {
                 className=" bg-white rounded-md w-full"
                 {...layout}
                 labelWrap
-                // initialValues={currentParam}
+                initialValues={{
+                  campaignType: campaignSelected?.campaignType,
+                }}
                 ref={formRef}
                 scrollToFirstError={true}
                 layout="horizontal"
@@ -195,23 +383,19 @@ const CreateCampaignPage2 = props => {
                   <Form.Item
                     name="campaignType"
                     label="Campaign Type"
+                    valuePropName="value"
                     rules={[{ required: true }]}
                   >
                     <Segmented
                       style={{ padding: 5 }}
+                      name="campaignType2"
+                      // value={campaignSelected?.value}
                       onChange={value => {
-                        setCampaignType(value);
+                        setCampaignSelected(
+                          campaignTemplates.find(item => item.value === value),
+                        );
                       }}
-                      options={[
-                        "User contact",
-                        {
-                          label: "Notification",
-                          value: "Notification",
-                          disabled: false,
-                        },
-                        { label: "Airdrop", value: "Airdrop", disabled: true },
-                        { label: "Quest", value: "Quest", disabled: true },
-                      ]}
+                      options={campaignTemplates}
                     />
                   </Form.Item>
                   <Form.Item
@@ -222,12 +406,11 @@ const CreateCampaignPage2 = props => {
                     <Input placeholder="Input the name of this new campaign" />
                   </Form.Item>
                 </div>
-                {campaignType === "Notification" && (
+                {/* 需要改成 后端控制 */}
+                {campaignSelected?.campaignType === "Notification" && (
                   <>
-                    <div className="mt1">
-                      1 step to setup notification content
-                    </div>
-                    <div className="bg-light rounded p1 mt1  pt3">
+                    <div className="bg-light rounded p1 mt1 pt3">
+                      <div className="mb1">Notification content</div>
                       <Form.Item
                         name="messageTitle"
                         label="Title"
@@ -253,157 +436,94 @@ const CreateCampaignPage2 = props => {
                     </div>
                   </>
                 )}
-                <div className="flex flex-row items-center justify-between mt2">
-                  <Title level={5}>{`Cohort ${
-                    campaignType === "User contact" ? "(optional)" : "(require)"
-                  }`}</Title>
-                  <Switch
-                    defaultChecked={cohortOption}
-                    onChange={checked => {
-                      setCorhortOption(checked);
-                    }}
-                  />
-                </div>
-                {cohortOption && (
-                  <div className="bg-light rounded p1 mt1  pt3">
-                    <Form.Item
-                      rules={[{ required: true }]}
-                      name={"TargetCohort"}
-                      label="Target Cohort"
-                    >
-                      <Select
-                        placeholder="Select a target cohort"
-                        mode="multiple"
-                        // loading={loadingCohort}
-                        options={[
-                          { label: "Airdrop White List", value: 1 },
-                          { label: "Top 500 of Project", value: 2 },
-                          { label: "Potential Users", value: 3 },
-                        ]}
-                      />
-                    </Form.Item>
-                    <div className="flex flex-row-reverse">
-                      <Dropdown menu={{ items }}>
-                        <Button size="small" type="dashed">
-                          Create cohort
-                        </Button>
-                      </Dropdown>
-                    </div>
-                  </div>
-                )}
-                <div className="flex flex-row items-center justify-between mt2">
-                  <Title level={5}>{`Channel ${
-                    campaignType === "User contact" ? "(optional)" : "(require)"
-                  }`}</Title>
-                  <Switch
-                    defaultChecked={cohortOption}
-                    onChange={checked => {
-                      setChannelOption(checked);
-                    }}
-                  />
-                </div>
-                {channelOption && (
-                  <div className="bg-light rounded p1 mt1  pt3">
-                    <Form.Item
-                      rules={[{ required: true }]}
-                      name={"TargetChannel"}
-                      label="Target Channel"
-                    >
-                      <Select
-                        placeholder="Select a target channel"
-                        mode="multiple"
-                        onChange={value => {
-                          setChannelOptionValue(value);
-                        }}
-                        // loading={loadingCohort}
-                        options={
-                          campaignType === "User contact"
-                            ? [
-                                { label: "Discord bot", value: "discordBot" },
-                                { label: "Tweet URL", value: "tweetURL" },
-                                {
-                                  label: "Webpage",
-                                  value: "webpage",
-                                  disabled: true,
-                                },
-                              ]
-                            : [
-                                { label: "Discord", value: "discord" },
-                                { label: "Tweet", value: "tweet" },
-                                {
-                                  label: "Email",
-                                  value: "Email",
-                                  disabled: false,
-                                },
-                                {
-                                  label: "SMS",
-                                  value: "SMS",
-                                  disabled: true,
-                                },
-                              ]
-                        }
-                      />
-                    </Form.Item>
-                    <div className="flex flex-row-reverse">
+                {campaignSelected?.cohortRequired && (
+                  <>
+                    <div className="flex flex-row items-center justify-between mt2">
+                      <Title level={5}>{`Cohort`}</Title>
                       <Button
                         target="_blank"
                         href={getGrowthProjectPath(
                           project?.projectName,
-                          "Channel",
+                          "Cohort",
                         )}
-                        size="small"
-                        type="dashed"
+                        // size="small"
+                        icon={<SettingOutlined />}
+                        type="text"
                       >
-                        Config more channel
+                        Create cohort
                       </Button>
                     </div>
-                  </div>
-                )}
-                {channelOptionValue?.includes("discordBot") && (
-                  <>
-                    <div className="mt1">1 step to setup discord bot</div>
-                    <div className="bg-light rounded p1 mt1">
-                      <div className="mt1">
-                        Which user contact you want to collect?
-                      </div>
-                      <Checkbox.Group
-                        className="mt1"
-                        options={[
-                          {
-                            label: "Wallet address",
-                            value: "WalletAddress",
-                            disabled: true,
-                          },
-                          {
-                            label: "Discord hanlder",
-                            value: "DiscordHanlder",
-                            disabled: true,
-                          },
-                          { label: "Twitter handler", value: "TwitterHandler" },
-                          { label: "Email", value: "Email" },
-                        ]}
-                        defaultValue={["WalletAddress", "DiscordHanlder"]}
-                        onChange={value => {
-                          console.log(value);
-                        }}
-                      />
-                    </div>
-                  </>
-                )}
-                {channelOptionValue?.includes("tweetURL") && (
-                  <>
-                    <div className="mt1">1 step to setup tweet URL</div>
                     <div className="bg-light rounded p1 mt1  pt3">
                       <Form.Item
-                        name="TweetURL"
-                        label="Tweet URL"
                         rules={[{ required: true }]}
+                        name={"TargetCohort"}
+                        label="Target Cohort"
                       >
-                        <Input placeholder="Input the URL of tweet which you want to tracking." />
+                        <Select
+                          placeholder="Select a target cohort"
+                          mode="multiple"
+                          loading={isLoadingCohort}
+                          optionLabelProp="label"
+                          onChange={value => {
+                            setCohortSelectedValue(value);
+                          }}
+                        >
+                          {cohortDataOptions}
+                        </Select>
                       </Form.Item>
                     </div>
                   </>
                 )}
+                <div className="flex flex-row items-center justify-between mt2">
+                  <Title level={5}>{`Channel`}</Title>
+                  <Button
+                    target="_blank"
+                    href={getGrowthProjectPath(project?.projectName, "Channel")}
+                    // size="small"
+                    icon={<SettingOutlined />}
+                    type="text"
+                  >
+                    Config channel
+                  </Button>
+                </div>
+                <div className="bg-light rounded p1 mt1 pt3">
+                  <Form.Item
+                    rules={[{ required: true }]}
+                    name={"TargetChannel"}
+                    label="Target Channel"
+                  >
+                    <Select
+                      placeholder="Select a target channel"
+                      // mode="multiple"
+                      onChange={value => {
+                        const channels = [];
+                        const values = Array.isArray(value) ? value : [value];
+                        values?.map(v => {
+                          channels.push(
+                            channelTemplates.find(item => item.value === v),
+                          );
+                        });
+                        setChannelSelectedValue(channels);
+                      }}
+                      // loading={loadingCohort}
+                      options={channelTemplates}
+                    />
+                  </Form.Item>
+                </div>
+                {channelSelectedValue?.map(channel => {
+                  return (
+                    <>
+                      <div className="bg-light rounded p1 mt1 mb1">
+                        <div className="mt1 text-bold">
+                          {channel.channelName}
+                        </div>
+                        <Divider className=" my1"></Divider>
+                        {getChannelConfigPanel(channel.details)}
+                      </div>
+                    </>
+                  );
+                })}
+
                 <Form.Item {...tailLayout} className="mt3 mb0">
                   <div className="flex w-full flex-row-reverse">
                     <Button

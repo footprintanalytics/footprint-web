@@ -2,17 +2,7 @@
 /* eslint-disable react/prop-types */
 import React from "react";
 import { connect } from "react-redux";
-import {
-  Button,
-  Card,
-  Table,
-  Typography,
-  Dropdown,
-  Tag,
-  Badge,
-  Descriptions,
-  Empty,
-} from "antd";
+import { Button, Card, Tag, Badge, Descriptions, Empty } from "antd";
 import { SyncOutlined } from "@ant-design/icons";
 import dayjs from "dayjs";
 import { useQuery } from "react-query";
@@ -21,9 +11,6 @@ import LoadingSpinner from "metabase/components/LoadingSpinner";
 import { QUERY_OPTIONS } from "metabase/containers/dashboards/shared/config";
 import { getUser } from "metabase/selectors/user";
 import { getCampaignDetail } from "metabase/new-service";
-import CreateCampaign from "../components/buttons/CreateCampaign";
-import UploadWallets from "../components/buttons/UploadWallets";
-import { getGrowthProjectPath } from "../utils/utils";
 
 const CampaignDetail = props => {
   const { location, router } = props;
@@ -39,64 +26,21 @@ const CampaignDetail = props => {
   );
 
   let botInviteUrl = null;
+  let tweetTrackingURL = null;
+  let channel_type = [];
   data?.channels?.map?.(channel => {
+    channel_type.push(channel?.channelName);
     if (channel?.details?.discordGuildId) {
       botInviteUrl = `https://discord.com/oauth2/authorize?client_id=1069198197441957979&scope=bot&permissions=0&guild_id=${data?.channel?.details?.discordGuildId}`;
     }
+    if (channel?.details?.twitterUri) {
+      tweetTrackingURL = channel?.details?.twitterUri;
+    }
   });
-
-  const items = [
-    {
-      key: "3",
-      label: (
-        <div
-          onClick={() =>
-            router?.push({
-              pathname: getGrowthProjectPath(
-                router?.params?.project,
-                "CreateCampaign",
-              ),
-            })
-          }
-        >
-          Create Campaign
-        </div>
-      ),
-      // label: <CreateCampaign plain={true} />,
-    },
-    {
-      key: "1",
-      label: (
-        <div
-          onClick={() =>
-            props.router?.push({
-              pathname: getGrowthProjectPath(
-                props.router?.params?.project,
-                "Potential Users",
-              ),
-            })
-          }
-        >
-          Filter Wallets
-        </div>
-      ),
-    },
-    {
-      key: "2",
-      label: <UploadWallets />,
-    },
-  ];
 
   return (
     <div style={{ padding: 20 }}>
-      <Card
-        title="Campaign Dateil"
-        extra={
-          <Dropdown menu={{ items }}>
-            <Button type="primary">Create</Button>
-          </Dropdown>
-        }
-      >
+      <Card title="Campaign Dateil">
         {isLoading ? (
           <LoadingSpinner message="Loading..." />
         ) : data ? (
@@ -106,7 +50,7 @@ const CampaignDetail = props => {
               {data?.campaignType}
             </Descriptions.Item>
             <Descriptions.Item label="Channel Type">
-              {data?.channel?.channelName}
+              {channel_type.join(", ")}
             </Descriptions.Item>
             <Descriptions.Item label="Created At">
               {data.createdAt}
@@ -124,6 +68,13 @@ const CampaignDetail = props => {
                 <Badge status="success" text={data.status} />
               )}
             </Descriptions.Item>
+            {tweetTrackingURL && (
+              <Descriptions.Item label="Tweet tracking URL">
+                <Link target="_blank" color="blue" href={tweetTrackingURL}>
+                  {tweetTrackingURL}
+                </Link>
+              </Descriptions.Item>
+            )}
             {botInviteUrl && (
               <Descriptions.Item label="Discord bot step">
                 {/* todo  guild_id 要真实从接口拿*/}
