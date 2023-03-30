@@ -209,7 +209,9 @@ const Project = props => {
       if (current_tab === "Twitter") {
         return (
           <LoadingDashboard
+            router={router}
             sourceDefinitionId={data?.twitter?.sourceDefinitionId}
+            project={getProjectObject(project)}
             projectId={parseInt(getLatestGAProjectId())}
             current_tab={current_tab}
           >
@@ -220,7 +222,22 @@ const Project = props => {
       if (current_tab === "Discord") {
         return (
           <LoadingDashboard
+            router={router}
             sourceDefinitionId={data?.discord?.sourceDefinitionId}
+            project={getProjectObject(project)}
+            projectId={parseInt(getLatestGAProjectId())}
+            current_tab={current_tab}
+          >
+            {WrapPublicDashboard}
+          </LoadingDashboard>
+        );
+      }
+      if (current_tab === "User Funnel") {
+        return (
+          <LoadingDashboard
+            router={router}
+            sourceDefinitionId={data?.ga?.sourceDefinitionId}
+            project={getProjectObject(project)}
             projectId={parseInt(getLatestGAProjectId())}
             current_tab={current_tab}
           >

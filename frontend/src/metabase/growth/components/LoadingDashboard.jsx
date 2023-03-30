@@ -1,11 +1,14 @@
 /* eslint-disable react/prop-types */
 import React from "react";
-import { Alert, Spin, Card } from "antd";
+import { Alert, Card, Typography } from "antd";
 import { useQuery } from "react-query";
 import { GetFgaConnectorJob } from "metabase/new-service";
+import { getGrowthProjectPath } from "../utils/utils";
 
 const LoadingDashboard = ({
   sourceDefinitionId,
+  router,
+  project,
   projectId,
   current_tab,
   children,
@@ -19,19 +22,46 @@ const LoadingDashboard = ({
     },
   );
 
-  const message = `Loading data, please wait...`;
-  const description = `This may take a few minutes or a few hours, depending on the amount of data. Thank you for your patience.`;
+  const connector =
+    current_tab === "User Funnel" ? "Google Analytics" : current_tab;
 
-  if (sourceDefinitionId && data?.status !== "succeeded") {
+  if (!sourceDefinitionId) {
     return (
       <div style={{ padding: 20 }}>
         <Card title={current_tab}>
           <Alert
-            message={message}
-            description={description}
+            message="Sorry, you haven't connected any data yet"
+            description={
+              <>
+                Please go to{" "}
+                <Typography.Link
+                  underline
+                  onClick={() => {
+                    router.push(
+                      getGrowthProjectPath(project.projectName, "Connector"),
+                    );
+                  }}
+                >
+                  Settings {">"} Connector {">"} {connector}
+                </Typography.Link>{" "}
+                to connect your data and start analyzing.
+              </>
+            }
+            type="warning"
+            showIcon
+          />
+        </Card>
+      </div>
+    );
+  } else if (sourceDefinitionId && data?.status !== "succeeded") {
+    return (
+      <div style={{ padding: 20 }}>
+        <Card title={current_tab}>
+          <Alert
+            message="Loading data, please wait..."
+            description="This may take a few minutes or a few hours, depending on the amount of data. Thank you for your patience."
             type="info"
             showIcon
-            icon={<Spin />}
           />
         </Card>
       </div>
