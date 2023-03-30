@@ -106,19 +106,19 @@ const Project = props => {
     };
   };
   const getContentPannel = current_tab => {
-    const WrapPublicDashboard = () => {
-      return (
-        <PublicDashboard
-          params={{ uuid: dashboardMap.get(current_tab) }}
-          location={location}
-          project={getProjectObject(project)}
-          isFullscreen={false}
-          className="ml-250"
-          key={project}
-          hideFooter
-        />
-      );
-    };
+    // const WrapPublicDashboard = () => {
+    //   return (
+    //     <PublicDashboard
+    //       params={{ uuid: dashboardMap.get(current_tab) }}
+    //       location={location}
+    //       project={getProjectObject(project)}
+    //       isFullscreen={false}
+    //       className="ml-250"
+    //       key={project}
+    //       hideFooter
+    //     />
+    //   );
+    // };
     if (current_tab === "Connector") {
       return (
         <Connectors
@@ -208,29 +208,39 @@ const Project = props => {
     }
     if (dashboardMap.has(current_tab)) {
       // TODO: fix this project object
-      if (current_tab === "Twitter") {
-        return (
-          <LoadingDashboard
-            sourceDefinitionId={data?.twitter?.sourceDefinitionId}
-            projectId={parseInt(getLatestGAProjectId())}
-            current_tab={current_tab}
-          >
-            <WrapPublicDashboard />
-          </LoadingDashboard>
-        );
-      }
-      if (current_tab === "Discord") {
-        return (
-          <LoadingDashboard
-            sourceDefinitionId={data?.discord?.sourceDefinitionId}
-            projectId={parseInt(getLatestGAProjectId())}
-            current_tab={current_tab}
-          >
-            <WrapPublicDashboard />
-          </LoadingDashboard>
-        );
-      }
-      return <WrapPublicDashboard />;
+      // if (current_tab === "Twitter") {
+      //   return (
+      //     <LoadingDashboard
+      //       sourceDefinitionId={data?.twitter?.sourceDefinitionId}
+      //       projectId={parseInt(getLatestGAProjectId())}
+      //       current_tab={current_tab}
+      //     >
+      //       <WrapPublicDashboard />
+      //     </LoadingDashboard>
+      //   );
+      // }
+      // if (current_tab === "Discord") {
+      //   return (
+      //     <LoadingDashboard
+      //       sourceDefinitionId={data?.discord?.sourceDefinitionId}
+      //       projectId={parseInt(getLatestGAProjectId())}
+      //       current_tab={current_tab}
+      //     >
+      //       <WrapPublicDashboard />
+      //     </LoadingDashboard>
+      //   );
+      // }
+      return (
+        <PublicDashboard
+          params={{ uuid: dashboardMap.get(current_tab) }}
+          location={location}
+          project={getProjectObject(project)}
+          isFullscreen={false}
+          className="ml-250"
+          key={project}
+          hideFooter
+        />
+      );
     }
     return (
       <div style={{ textAlign: "center", padding: "50px" }}>
