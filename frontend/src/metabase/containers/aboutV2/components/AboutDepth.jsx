@@ -3,6 +3,7 @@ import React, { useState } from "react";
 import AboutImage from "metabase/containers/aboutV2/components/AboutImage";
 import { getOssUrl } from "metabase/lib/image";
 import AboutButton from "metabase/containers/aboutV2/components/AboutButton";
+import cx from "classnames";
 
 const AboutDepth = ({ indicator }) => {
   const [currentInx, setCurrentInx] = useState(1);
@@ -17,7 +18,7 @@ const AboutDepth = ({ indicator }) => {
           buttonText: "Explore the NFT airdrop marketing loop"
         },
       ],
-      img: "home-v2/img_depth_1.png?1=1",
+      img: "home-v2/img_depth_1.png?2=2",
     },
     {
       icon: "home-v2/img_depth_analytics.png",
@@ -30,7 +31,7 @@ const AboutDepth = ({ indicator }) => {
           link: "https://www.footprint.network/@Higi/PlanetIX",
         },
       ],
-      img: "home-v2/img_depth_2.png?1=1",
+      img: "home-v2/img_depth_2.png?2=2",
     },
     {
       icon: "home-v2/img_depth_research.png",
@@ -47,14 +48,14 @@ const AboutDepth = ({ indicator }) => {
           link: "https://www.footprint.network/@Footprint/GameFi",
         },
       ],
-      img: "home-v2/img_depth_3.png?1=1",
+      img: "home-v2/img_depth_3.png?2=2",
     },
     {
       icon: "home-v2/img_depth_profiles.png",
       label: "Wallet Profiles",
       title: "Analyze and track transactions to match on-chain assets with the right users, and do Sybil prevention",
       desc: "Batch access to all on-chain data to know your users better and bring more valuable users to your project",
-      img: "home-v2/img_depth_4.png?1=1",
+      img: "home-v2/img_depth_4.png?2=2",
     },
     {
       icon: "home-v2/img_depth_dapps.png",
@@ -71,7 +72,7 @@ const AboutDepth = ({ indicator }) => {
           link: "https://footrace.io/trace",
         },
       ],
-      img: "home-v2/img_depth_5.png?1=1",
+      img: "home-v2/img_depth_5.png?2=2",
     },
   ];
   const current = data[currentInx];
@@ -98,7 +99,9 @@ const AboutDepth = ({ indicator }) => {
           <div className="About__depth-panel-left">
             <h3>{current.title}</h3>
             <h4>{current.desc}</h4>
-            {current.buttons?.map(item => <AboutButton key={item.buttonText} className="mt2 mb2" buttonText={item.buttonText} link={item.link}/>)}
+            <div className="About__depth-panel-buttons">
+              {current.buttons?.map((item, inx) => <AboutButton key={item.buttonText} className={cx("mt2 mb2", {"ml3": inx !== 0})} buttonText={item.buttonText} link={item.link}/>)}
+            </div>
           </div>
           <AboutImage className="About__depth-panel-image" key={current.label} src={getOssUrl(current.img)} alt={current.label} />
         </div>

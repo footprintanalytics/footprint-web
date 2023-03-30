@@ -12,6 +12,7 @@ import { getUser } from "metabase/selectors/user";
 import data from "../data";
 import WrapLink from "./WrapLink";
 import AboutImage from "metabase/containers/aboutV2/components/AboutImage";
+import AboutButton from "metabase/containers/aboutV2/components/AboutButton";
 
 const AboutStart = ({
   user,
@@ -49,6 +50,16 @@ const AboutStart = ({
             <span>Off-chain & On-chain Data</span>
           </li>
         </ul>
+        <div className="flex" style={{ marginTop: 50 }}>
+          <AboutButton
+            buttonText={user ? "view docs" : "Try for free"}
+            onClick={(e) => {
+            if (isLogin()) {
+              window.open("https://docs.footprint.network/");
+            }
+          }}/>
+          <AboutButton className="ml2" buttonText="Contact us" link="mailto:sales@footprint.network"/>
+        </div>
       </div>
     </div>
   );

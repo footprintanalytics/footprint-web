@@ -204,7 +204,7 @@
   flex-direction: column;
   padding: 150px 0 46px;
   height: 900px;
-  background-image: url("https://static.footprint.network/home-v2/img_start_bg.png");
+  background-image: url("https://static.footprint.network/home-v2/img_start_bg.png?1=1");
   background-size: cover;
   background-repeat: no-repeat;
   background-position: center;
@@ -217,7 +217,7 @@
 
 .About__start-title h1 {
   font-size: 64px;
-  font-weight: bold;
+  font-weight: 900;
   line-height: 1.3;
   color: white;
 }
@@ -286,9 +286,10 @@
 }
 
 .About__data-feature span {
-  margin-top: 12px;
+  margin-top: 18px;
   font-size: 16px;
   text-align: center;
+  font-weight: bold;
 }
 
 .About__data-model {
@@ -324,11 +325,11 @@
 }
 
 .About__data-trusted-inner {
-  height: 400px;
   width: 1200px;
   background: #4444FF;
   margin: 60px auto;
   border-radius: 20px;
+  padding: 20px 0 40px;
 }
 
 .About__data-trusted-carousel {
@@ -372,12 +373,12 @@
 .About__data-trusted-carousel-left h3 {
   font-size: 24px;
   color: white;
-  margin-top: 10px;
 }
 
 .About__data-trusted-carousel-left h4 {
-  font-size: 16px;
+  font-size: 20px;
   color: white;
+  line-height: 1.1;
 }
 
 .About__data-trusted-carousel-left span {
@@ -389,7 +390,7 @@
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  padding: 120px 0 0 0;
+  padding: 80px 0 0 0;
   background-image: url("https://static.footprint.network/home-v2/img_data_coverage_bg.png");
   background-size: 1920px 960px;
   background-repeat: no-repeat;
@@ -447,7 +448,7 @@
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  padding: 120px 0 160px 0;
+  padding: 120px 0 100px 0;
   background-image: url("https://static.footprint.network/home-v2/img_hexagon_bg_4.png");
   background-size: 520px 439px;
   background-repeat: no-repeat;
@@ -462,6 +463,10 @@
   background: linear-gradient(90deg, #FFFFFF 0%, #4444FF 100%), #FFFFFF;
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
+}
+
+.About__demo .About__demo-growth-analytics h3 {
+  margin-top: -80px;
 }
 
 .About__demo h4 {
@@ -592,6 +597,7 @@
 .About__depth-tabs-li-selected {
   background: linear-gradient(180deg, #2C2E94, transparent);
   margin-top: -10px;
+  border-top: 1px solid #4444ff;
 }
 
 .About__depth-tabs li span {
@@ -608,6 +614,7 @@
   display: flex;
   width: 1440px;
   height: 680px;
+  z-index: 1;
 }
 
 .About__depth-panel-left {
@@ -615,6 +622,10 @@
   flex-direction: column;
   padding-top: 150px;
   flex: 1;
+}
+
+.About__depth-panel-buttons {
+  display: flex;
 }
 
 .About__depth-panel-image {

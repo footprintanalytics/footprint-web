@@ -173,5 +173,6 @@
 
 .dark .global-contact-panel__social {
   background-color: #182034;
-  border: 1px solid #D9D9D9;
+  border: 1px solid #4A5568;
+  border-radius: 4px;
 }

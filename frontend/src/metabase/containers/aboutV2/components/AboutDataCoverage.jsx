@@ -16,15 +16,15 @@ const AboutDataCoverage = ({ indicator }) => {
     },
     {
       label: "NFT collections",
-      value: 101639
+      value: 1094667,
     },
     {
       label: "Games",
-      value: 1987
+      value: 2000
     },
     {
       label: "Marketplaces",
-      value: 14
+      value: 18,
     },
   ];
   return (
