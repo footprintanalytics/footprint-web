@@ -261,6 +261,10 @@
     display: flex;
   }
 
+  .dark .Nav__side-menu-icon {
+    color: white;
+  }
+
   .Nav__mobile-logo {
     display: flex;
     position: absolute;

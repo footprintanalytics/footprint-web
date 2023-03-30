@@ -1,32 +1,16 @@
 /* eslint-disable react/prop-types */
-import React, { useEffect, useState } from "react";
+import React from "react";
 import "./index.css";
 import { connect } from "react-redux";
 import { push } from "react-router-redux";
 import { Skeleton } from "antd";
 import LazyLoad from "react-lazyload";
-import AboutExploreDomain from "metabase/containers/about/components/AboutExploreDomain";
-import AboutCreateDashboard from "metabase/containers/about/components/AboutCreateDashboard";
 import Meta from "metabase/components/Meta";
-import {
-  getActivityZkspaceRegisterSuccess,
-  isRegisterActivityChannel,
-  zkspaceDate,
-} from "metabase/lib/register-activity";
-import ActivityZkspaceFirstModal from "metabase/components/ActivityZkspaceFirstModal";
-import * as Urls from "metabase/lib/urls";
 import { getChannel } from "metabase/selectors/app";
-import {
-  createModalShowAction,
-  loginModalShowAction,
-} from "metabase/redux/control";
-import ActivityZkspaceSignupSuccessModal from "metabase/components/ActivityZkspaceSignupSuccessModal";
+import { createModalShowAction, loginModalShowAction } from "metabase/redux/control";
 import HomeFooter from "../home/components/HomeFooter";
 import AboutStart from "./components/AboutStart";
-import AboutService from "./components/AboutService";
-import AboutBuild from "./components/AboutBuild";
 import AboutBacked from "./components/AboutBacked";
-import AboutPartner from "./components/AboutPartner";
 import data from "./data";
 import { useQueryIndicator, useQueryNews } from "./hook";
 import AboutDataFeature from "metabase/containers/aboutV2/components/AboutDataFeature";
@@ -36,6 +20,7 @@ import AboutDataCoverage from "metabase/containers/aboutV2/components/AboutDataC
 import AboutDemo from "metabase/containers/aboutV2/components/AboutDemo";
 import AboutDepth from "metabase/containers/aboutV2/components/AboutDepth";
 import AboutPartnerV2 from "metabase/containers/aboutV2/components/AboutPartnerV2";
+import MetaViewportControls from "metabase/dashboard/hoc/MetaViewportControls";
 
 const About = props => {
   const {
@@ -56,35 +41,55 @@ const About = props => {
   const keywords = "Footprint Analytics, web3 gaming, web3 gaming analytics, web3 gaming data, NFT game, Web3 marketing, web3 growth marketing, wallet profile, Growth Marketing, cross chain data, blockchain data api, Zero coding analytics";
   const title = "Footprint Analytics | Power Web3 growth marketing in GameFi, NFT and DeFi";
 
+  const LazyLoadAbout = ({ children }) => {
+    return (
+      <LazyLoad
+        className="full-height"
+        scrollContainer="#app-content"
+        placeholder={
+          <div style={{ padding: 20 }}>
+            <Skeleton active />
+          </div>
+        }
+      >
+        {children}
+      </LazyLoad>
+    );
+  };
   return (
     <>
       <Meta description={defaultDesc} keywords={keywords} title={title} />
       <div className="About">
         <AboutStart />
         <div className="About__depth-dividing-line" />
-        <AboutDepth />
-
-        <LazyLoad
-          className="full-height"
-          scrollContainer="#app-content"
-          placeholder={
-            <div style={{ padding: 20 }}>
-              <Skeleton active />
-            </div>
-          }
-        >
-          <>
-            <AboutDemo />
-            <AboutDataCoverage />
-            <AboutDataFeature />
-            <AboutDataModel />
-            <AboutBacked list={data.backedList}/>
-            <AboutDataTrusted />
-            <AboutPartnerV2 list={data.partnerList}/>
-            <div className="About__depth-dividing-line-gray" />
-            <HomeFooter />
-          </>
-        </LazyLoad>
+        <LazyLoadAbout>
+          <AboutDepth />
+        </LazyLoadAbout>
+        <LazyLoadAbout>
+          <AboutDemo />
+        </LazyLoadAbout>
+        <LazyLoadAbout>
+          <AboutDataCoverage />
+        </LazyLoadAbout>
+        <LazyLoadAbout>
+          <AboutDataFeature />
+        </LazyLoadAbout>
+        <LazyLoadAbout>
+          <AboutDataModel />
+        </LazyLoadAbout>
+        <LazyLoadAbout>
+          <AboutBacked list={data.backedList} />
+        </LazyLoadAbout>
+        <LazyLoadAbout>
+          <AboutDataTrusted />
+        </LazyLoadAbout>
+        <LazyLoadAbout>
+          <AboutPartnerV2 list={data.partnerList} />
+        </LazyLoadAbout>
+        <div className="About__depth-dividing-line-gray" />
+        <LazyLoadAbout>
+          <HomeFooter />
+        </LazyLoadAbout>
 
         {children}
       </div>

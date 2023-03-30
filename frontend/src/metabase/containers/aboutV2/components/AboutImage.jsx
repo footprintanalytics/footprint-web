@@ -2,13 +2,11 @@
 import React from "react";
 import { Image, Skeleton } from "antd";
 
-const AboutImage = ({ className, src, alt, preview= false }) => {
+const AboutImage = ({ className, src, alt, preview= false, placeholder=<Skeleton active /> }) => {
   return (
     <div className={className}>
       <Image
-        placeholder={
-          <Skeleton active />
-        }
+        placeholder={placeholder}
         preview={preview}
         src={src}
         alt={alt}

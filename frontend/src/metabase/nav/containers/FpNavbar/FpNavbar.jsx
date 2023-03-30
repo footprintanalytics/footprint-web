@@ -578,26 +578,28 @@ class FpNavbar extends Component {
     };
 
     const RightMenuPad = () => {
+      const color2 = isDark ? "white" : color("footprint-color-title");
       return (
         <div className="Nav__right-pad-icon">
           <Link to="https://docs.footprint.network/docs" target="_blank">
-            <Icon name="docs" color={color("footprint-color-title")} />
+            <Icon name="docs" color={color2} />
           </Link>
           <Link to="/search">
-            <Icon name="search" color={color("footprint-color-title")} />
+            <Icon name="search" color={color2} />
           </Link>
           <Link onClick={onCreateAction}>
-            <Icon name="add" size={12} />
+            <Icon name="add" size={12} color={color2}/>
           </Link>
         </div>
       );
     };
 
     const RightMenuMobile = () => {
+      const color2 = isDark ? "white" : color("footprint-color-title");
       return (
         <div className="Nav__right-mobile-icon">
           <Link to="/search">
-            <Icon name="search" color={color("footprint-color-title")} />
+            <Icon name="search" color={color2} />
           </Link>
           <Link onClick={onCreateAction}>
             <Icon name="add" size={12} />
@@ -710,6 +712,7 @@ class FpNavbar extends Component {
               <SearchBar
                 location={location}
                 onChangeLocation={onChangeLocation}
+                isDark={isDark}
               />
             </div>
             <div className="Nav__mobile-logo">

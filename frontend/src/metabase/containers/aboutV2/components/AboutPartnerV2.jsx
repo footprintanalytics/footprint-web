@@ -1,8 +1,6 @@
 /* eslint-disable react/prop-types */
 import React from "react";
-import { trackStructEvent } from "metabase/lib/analytics";
 import { getOssUrl } from "metabase/lib/image";
-import WrapLink from "./WrapLink";
 import AboutImage from "metabase/containers/aboutV2/components/AboutImage";
 
 const AboutPartnerV2 = ({ list }) => {
@@ -39,7 +37,7 @@ const AboutPartnerV2 = ({ list }) => {
           {topData.map(item =>
             <li key={item}>
               <div className="About__partnerV2-list-item">
-                <AboutImage src={getOssUrl(item)} alt={item}/>
+                <AboutImage src={getOssUrl(item)} alt={item} placeholder={null}/>
               </div>
             </li>
           )}
@@ -50,7 +48,7 @@ const AboutPartnerV2 = ({ list }) => {
           {bottomData.map(item =>
             <li key={item}>
               <div className="About__partnerV2-list-item">
-                <AboutImage src={getOssUrl(item)} alt={item}/>
+                <AboutImage src={getOssUrl(item)} alt={item} placeholder={null}/>
               </div>
             </li>
           )}

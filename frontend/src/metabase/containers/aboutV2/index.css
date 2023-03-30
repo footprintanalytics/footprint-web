@@ -1,3 +1,7 @@
+::-webkit-scrollbar {
+  display: none;
+}
+
 .About {
   min-height: 100vh;
   color: #fff;
@@ -5,7 +9,9 @@
   font-size: 14px;
   font-family: roboto;
 }
-
+.mask {
+  background-image: linear-gradient(to bottom, rgba(0, 0, 0, 0), rgba(0, 0, 0, 1));
+}
 .About:before {
   /*  position: fixed;
   top: 0;
@@ -204,10 +210,16 @@
   flex-direction: column;
   padding: 150px 0 46px;
   height: 900px;
-  background-image: url("https://static.footprint.network/home-v2/img_start_bg.png?1=1");
-  background-size: cover;
-  background-repeat: no-repeat;
-  background-position: center;
+  max-width: 1920px;
+  margin: 0 auto;
+  background-image:
+    url("https://static.footprint.network/home-v2/img_start_bg_1.png"),
+    url("https://static.footprint.network/home-v2/img_start_bg_2.png"),
+    url("https://static.footprint.network/home-v2/img_start_bg_3.png"),
+    url("https://static.footprint.network/home-v2/img_start_bg_4.png");
+  background-size: 50% 50%, 50% 50%, 50% 50%, 50% 50%;
+  background-repeat: no-repeat, no-repeat, no-repeat, no-repeat;
+  background-position: top left, top right, bottom left, bottom right;
 }
 
 .About__start-title {
@@ -259,6 +271,8 @@
   flex-direction: column;
   align-items: center;
   justify-content: center;
+  max-width: 1920px;
+  margin: 0 auto;
   padding: 160px 0 40px 0;
   background-image: url("https://static.footprint.network/home-v2/img_hexagon_bg_6.png"),
   url("https://static.footprint.network/home-v2/img_hexagon_bg_8.png?1=1");
@@ -293,6 +307,8 @@
 }
 
 .About__data-model {
+  max-width: 1920px;
+  margin: 0 auto;
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -444,6 +460,8 @@
 }
 
 .About__demo {
+  max-width: 1920px;
+  margin: 0 auto;
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -486,7 +504,7 @@
   display: flex;
   flex-direction: row;
   justify-content: space-between;
-  width: 1440px;
+  max-width: 1440px;
   padding: 0 80px 0 0;
   background-color: #182034ee;
   background-image: url("https://static.footprint.network/home-v2/img_growth_analytics_bg.png?1=1");
@@ -500,6 +518,7 @@
 }
 
 .About__demo-growth-analytics-left {
+  width: 800px;
   display: flex;
   flex-direction: column;
   justify-content: center;
@@ -508,7 +527,7 @@
 }
 
 .About__demo-bottom {
-  width: 1440px;
+  max-width: 1440px;
   display: flex;
   flex-direction: row;
   justify-content: center;
@@ -559,6 +578,8 @@
 }
 
 .About__depth {
+  max-width: 1920px;
+  margin: 0 auto;
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -612,7 +633,8 @@
 
 .About__depth-panel-inner {
   display: flex;
-  width: 1440px;
+  max-width: 1440px;
+  padding: 0 20px;
   height: 680px;
   z-index: 1;
 }
@@ -651,14 +673,14 @@
 }
 
 .About__depth-dividing-line {
-  width: 1440px;
+  max-width: 1440px;
   margin: 0 auto;
   height: 1px;
   background: radial-gradient(closest-side at 50% 49%, #4444ff 0%, rgba(68, 68, 255, 0) 100%);
 }
 
 .About__depth-dividing-line-gray {
-  width: 1440px;
+  max-width: 1440px;
   margin: 0 auto;
   border-bottom: 1px solid #353C4A;
 }
@@ -674,6 +696,8 @@
 }
 
 .About__partnerV2 {
+  max-width: 1920px;
+  margin: 0 auto;
   padding: 20px 0 160px 0;
   background-image: url("https://static.footprint.network/home-v2/img_trusted_bg_2.png");
   background-size: 1920px 256px;
@@ -704,6 +728,8 @@
 .About__partnerV2-list-top,
 .About__partnerV2-list-bottom {
   width: 100%;
+  max-width: 1920px;
+  margin: 0 auto;
 }
 
 .About__partnerV2-list-top ul,
@@ -1480,6 +1506,53 @@
 }
 
 @media screen and (--footprint-breakpoint-max-pad) {
+  .About__depth-tabs li {
+    width: 160px;
+  }
+
+  .About__depth-panel-left {
+    padding-top: 20px;
+  }
+
+  .About__depth-panel-inner {
+    width: 100%;
+    padding: 0 20px;
+    flex-direction: column;
+  }
+
+  .About__demo-analytics-app,
+  .About__demo-data-api,
+  .About__demo-growth-analytics {
+    width: 100%;
+  }
+
+  .About__demo {
+    padding: 160px 0 100px 0;
+  }
+
+  .About__demo-data-api {
+    margin: 20px 0 0 0;
+  }
+
+  .About__demo-bottom {
+    width: 100%;
+    flex-direction: column;
+  }
+
+  .About__data-coverage li {
+    width: 180px;
+    margin: 10px;
+  }
+
+  .About__data-coverage li h3 {
+    font-size: 24px;
+  }
+
+  .About__data-feature li {
+    width: 180px;
+    height: 180px;
+  }
+
   .About__section-side {
     width: 280px;
   }
