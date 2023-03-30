@@ -5,8 +5,8 @@ import { connect } from "react-redux";
 import { Button, Card, Table, Typography, Dropdown, Tag } from "antd";
 import { SyncOutlined, CheckCircleOutlined } from "@ant-design/icons";
 import { useQuery } from "react-query";
-import { QUERY_OPTIONS } from "metabase/containers/dashboards/shared/config";
 import dayjs from "dayjs";
+import { QUERY_OPTIONS } from "metabase/containers/dashboards/shared/config";
 import { getUser } from "metabase/selectors/user";
 import LoadingSpinner from "metabase/components/LoadingSpinner";
 import { getCampaign } from "metabase/new-service";
@@ -77,10 +77,16 @@ const CampaignList = props => {
     },
     {
       title: "Channel Type",
-      dataIndex: "channel",
+      dataIndex: "channels",
       key: "channelType",
-      render: channel => {
-        return <Tag>{channel?.channelName}</Tag>;
+      render: channels => {
+        return (
+          <div>
+            {channels.map(channel => {
+              return <Tag key={channel.id}>{channel.channelName}</Tag>;
+            })}
+          </div>
+        );
       },
     },
     {
