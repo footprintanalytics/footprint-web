@@ -180,22 +180,18 @@ const ConfigConnector = props => {
               }
               rules={[{ required: i.required }]}
             >
-              <>
-                {i.type === "text" && (
-                  <Input
-                    defaultValue={i.value}
-                    value={i.value}
-                    allowClear
-                    placeholder={i.placeholder}
-                    type={i.private ? "password" : i.type}
-                  />
-                )}
-              </>
-              <>
-                {i.type === "boolean" && (
-                  <Switch value={i.value} defaultChecked={i.value} />
-                )}
-              </>
+              {i.type === "text" && (
+                <Input
+                  defaultValue={i.value}
+                  value={i.value}
+                  allowClear
+                  placeholder={i.placeholder}
+                  type={i.private ? "password" : i.type}
+                />
+              )}
+              {/* {i.type === "boolean" && (
+                <Switch value={i.value} defaultChecked={i.value} />
+              )} */}
             </Form.Item>
           );
         })}
