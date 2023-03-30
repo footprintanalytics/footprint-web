@@ -2,11 +2,22 @@
 /* eslint-disable react/prop-types */
 import React from "react";
 import { connect } from "react-redux";
-import { Button, Card, Tag, Badge, Descriptions, Empty } from "antd";
+import {
+  Button,
+  Card,
+  Tag,
+  Badge,
+  Descriptions,
+  Empty,
+  Tooltip,
+  message,
+} from "antd";
 import { SyncOutlined } from "@ant-design/icons";
 import dayjs from "dayjs";
+import CopyToClipboard from "react-copy-to-clipboard";
 import { useQuery } from "react-query";
 import { Link } from "react-router";
+import PublicDashboard from "metabase/public/containers/PublicDashboard";
 import "../css/utils.css";
 import LoadingSpinner from "metabase/components/LoadingSpinner";
 import { QUERY_OPTIONS } from "metabase/containers/dashboards/shared/config";
@@ -14,8 +25,8 @@ import { getUser } from "metabase/selectors/user";
 import { getCampaignDetail } from "metabase/new-service";
 
 const CampaignDetail = props => {
-  const { location, router } = props;
-  const id = location.query.id;
+  const { location, router, project } = props;
+  const id = location.query.id ?? 5;
   const { isLoading, data } = useQuery(
     ["getCampaignDetail", id],
     async () => {
@@ -27,12 +38,16 @@ const CampaignDetail = props => {
   );
 
   let botInviteUrl = null;
+  let botInitCmd = null;
   let tweetTrackingURL = null;
   let channel_type = [];
   data?.channels?.map?.(channel => {
     channel_type.push(channel?.channelName);
-    if (channel?.details?.discordGuildId) {
-      botInviteUrl = `https://discord.com/oauth2/authorize?client_id=1069198197441957979&scope=bot&permissions=0&guild_id=${data?.channel?.details?.discordGuildId}`;
+    if (channel?.details?.botInviteUrl) {
+      botInviteUrl = channel?.details?.botInviteUrl;
+    }
+    if (channel?.details?.botInitCmd) {
+      botInitCmd = channel?.details?.botInitCmd;
     }
     if (channel?.details?.twitterUri) {
       tweetTrackingURL = channel?.details?.twitterUri;
@@ -40,7 +55,7 @@ const CampaignDetail = props => {
   });
 
   return (
-    <div style={{ padding: 20 }}>
+    <div className="flex flex-col" style={{ padding: 20 }}>
       <Card title="Campaign Dateil">
         {isLoading ? (
           <LoadingSpinner message="Loading..." />
@@ -91,9 +106,18 @@ const CampaignDetail = props => {
                 <br />
                 <span style={{ color: "red" }}>Step 2</span> : send command to
                 the channel{" "}
-                <Button size="small" type="primary">
-                  copy
-                </Button>
+                <CopyToClipboard
+                  text={botInitCmd}
+                  onCopy={() => {
+                    message.success("Copied!");
+                  }}
+                >
+                  <Tooltip title={`Copy this bot command!`}>
+                    <Button className="ml2" size="small" type="primary">
+                      copy
+                    </Button>
+                  </Tooltip>
+                </CopyToClipboard>
               </Descriptions.Item>
             )}
           </Descriptions>
@@ -102,6 +126,20 @@ const CampaignDetail = props => {
         )}
       </Card>
       {/* 可能这里要嵌入一个 dashboard */}
+      {!isLoading && data?.title && (
+        <div>
+          <PublicDashboard
+            params={{ uuid: "6cc6c56f-b265-4ab1-a2a0-300efde7f319" }}
+            // params={{ uuid: "b46fc872-c97d-4300-a83e-45fa61760ad2" }}
+            location={location}
+            project={{ ...project, campaignTitle: data?.title }}
+            isFullscreen={false}
+            className="ml-250 mt-400"
+            key={project?.projectName}
+            hideFooter
+          />
+        </div>
+      )}
     </div>
   );
 };
