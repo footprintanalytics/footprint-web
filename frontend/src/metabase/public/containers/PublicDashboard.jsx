@@ -106,6 +106,15 @@ const mapStateToProps = (state, props) => {
         project.protocolName,
       );
     }
+    if (project.campaignTitle) {
+      const key = "campaign_title";
+      updateDashboardPara(
+        parameters,
+        parameterValues,
+        key,
+        project.campaignTitle,
+      );
+    }
   }
   return {
     metadata: getMetadata(state, props),
