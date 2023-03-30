@@ -127,6 +127,19 @@
 .ml-250 {
   margin-left: 250px;
 }
+.mt-250 {
+  margin-top: 250px;
+}
+
+.mt-400 {
+  margin-top: 400px;
+}
+.mt-450 {
+  margin-top: 450px;
+}
+.mt-650 {
+  margin-top: 650px;
+}
 .items-center {
   align-items: center;
 }

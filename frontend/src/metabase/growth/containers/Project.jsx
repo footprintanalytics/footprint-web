@@ -181,24 +181,16 @@ const Project = props => {
         ></CreateCampaignPage2>
       );
     }
-    if (current_tab === "CreateCampaign2") {
-      return (
-        <CreateCampaignPage2
-          location={location}
-          router={router}
-          project={getProjectObject(project)}
-          projectId={getLatestGAProjectId()}
-        ></CreateCampaignPage2>
-      );
-    }
     if (current_tab === "Campaign") {
-      // return <Campaigns router={router} location={location}></Campaigns>;
       return <CampaignList router={router} location={location}></CampaignList>;
     }
     if (current_tab === "CampaignDetail") {
-      // return <Campaigns router={router} location={location}></Campaigns>;
       return (
-        <CampaignDetail router={router} location={location}></CampaignDetail>
+        <CampaignDetail
+          router={router}
+          location={location}
+          project={getProjectObject(project)}
+        ></CampaignDetail>
       );
     }
     if (current_tab === "Cohort") {
