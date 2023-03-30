@@ -10,6 +10,7 @@ import {
   Space,
   Tooltip,
   Typography,
+  Alert,
 } from "antd";
 import { Link } from "react-router";
 import { QuestionCircleOutlined, InfoCircleOutlined } from "@ant-design/icons";
@@ -71,9 +72,9 @@ const ConfigConnector = props => {
           if (result?.result === "success") {
             message.success("Successfully configured connector.");
             onAddConnector(true);
-            if (connector.name === "Discord") {
-              showDiscordBotLink(values);
-            }
+            // if (connector.name === "Discord") {
+            //   showDiscordBotLink(values);
+            // }
           } else {
             message.error(`Configured connector ${result?.result}`);
           }
@@ -162,6 +163,28 @@ const ConfigConnector = props => {
         onFinish={onSave}
         style={{ maxWidth: 1000, minWidth: 300, width: "100%" }}
       >
+        {connector.name === "Discord" ? (
+          <Form.Item>
+            <Alert
+              message="Make sure you have invited Discord bot"
+              description={
+                <>
+                  Please click on the{" "}
+                  <Typography.Link
+                    href="https://discord.com/api/oauth2/authorize?client_id=1089756391889178745&permissions=268435456&scope=bot"
+                    target="_blank"
+                    underline
+                  >
+                    invitation link
+                  </Typography.Link>{" "}
+                  to add the Discord bot and ensure proper data connection.
+                </>
+              }
+              type="warning"
+              showIcon
+            />
+          </Form.Item>
+        ) : null}
         {connector?.connectionSpecification.map(i => {
           i.type = i.type === "string" ? "text" : i.type;
           return (
