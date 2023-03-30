@@ -7,6 +7,7 @@ import { SyncOutlined } from "@ant-design/icons";
 import dayjs from "dayjs";
 import { useQuery } from "react-query";
 import { Link } from "react-router";
+import "../css/utils.css";
 import LoadingSpinner from "metabase/components/LoadingSpinner";
 import { QUERY_OPTIONS } from "metabase/containers/dashboards/shared/config";
 import { getUser } from "metabase/selectors/user";
@@ -78,7 +79,8 @@ const CampaignDetail = props => {
             {botInviteUrl && (
               <Descriptions.Item label="Discord bot step">
                 {/* todo  guild_id 要真实从接口拿*/}
-                Step 1 : Invite the bot to your server
+                <span style={{ color: "red" }}>Step 1</span> : Invite the bot to
+                your server
                 <br />
                 <Link
                   target="_blank"
@@ -87,7 +89,8 @@ const CampaignDetail = props => {
                 >{`https://discord.com/oauth2/authorize?client_id...`}</Link>
                 <br />
                 <br />
-                Step 2 : send command to the channel{" "}
+                <span style={{ color: "red" }}>Step 2</span> : send command to
+                the channel{" "}
                 <Button size="small" type="primary">
                   copy
                 </Button>
