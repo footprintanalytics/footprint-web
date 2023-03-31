@@ -115,9 +115,10 @@ const Project = props => {
       projectName: data?.protocolSlug ?? project,
       collection_contract_address:
         data?.nftCollectionAddress ?? demoProjectData?.nftCollectionAddress,
-      project: data ?? demoProjectData,
-      twitter_handler: data?.twitter?.handler,
-      discord_guild_id: data?.discord?.guildId,
+      project: {...(data ?? demoProjectData),
+        twitter_handler: data?.twitter?.handler,
+        discord_guild_id: data?.discord?.guildId,
+      },
       protocolName: data?.protocolName,
     };
   };
