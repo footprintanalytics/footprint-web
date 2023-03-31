@@ -77,7 +77,7 @@ const CampaignDetail = props => {
               {data.updatedAt}
             </Descriptions.Item>
             <Descriptions.Item label="Status" span={3}>
-              {["pending", "init"].includes(data.status) ? (
+              {["init"].includes(data.status) ? (
                 <Tag icon={<SyncOutlined spin />} color="processing">
                   {data.status}
                 </Tag>
@@ -135,7 +135,7 @@ const CampaignDetail = props => {
   return (
     <div className="flex flex-col" style={{ padding: 20 }}>
       {/* 可能这里要嵌入一个 dashboard */}
-      {!isLoading && data?.title && (
+      {!isLoading && data?.title ? (
         <div>
           {data.status === "init" ? (
             <>
@@ -167,6 +167,8 @@ const CampaignDetail = props => {
             />
           )}
         </div>
+      ) : (
+        <LoadingSpinner message="Loading..." />
       )}
     </div>
   );

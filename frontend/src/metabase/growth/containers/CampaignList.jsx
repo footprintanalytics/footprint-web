@@ -52,13 +52,13 @@ const CampaignList = props => {
       render: text => {
         return (
           <>
-            {["pending", "init"].includes(text) ? (
+            {["init"].includes(text) ? (
               <Tag icon={<SyncOutlined spin />} color="processing">
                 {text}
               </Tag>
             ) : (
               <Tag icon={<CheckCircleOutlined />} color="success">
-                success
+                {text}
               </Tag>
             )}
           </>
