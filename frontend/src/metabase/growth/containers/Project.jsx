@@ -68,19 +68,21 @@ const Project = props => {
 
   useEffect(() => {
     let menu = null;
-    if (!isLoadingProject && data) {
-      menu = getGaMenuTabs(
-        tabs_data,
-        data?.protocolType,
-        data?.nftCollectionAddress?.length > 0,
-      );
-    } else {
-      // demo project menu
-      menu = getGaMenuTabs(
-        tabs_data,
-        demoProjectData.protocolType,
-        demoProjectData?.nftCollectionAddress?.length > 0,
-      );
+    if (!isLoadingProject) {
+      if (data) {
+        menu = getGaMenuTabs(
+          tabs_data,
+          data?.protocolType,
+          data?.nftCollectionAddress?.length > 0,
+        );
+      } else {
+        // demo project menu
+        menu = getGaMenuTabs(
+          tabs_data,
+          demoProjectData.protocolType,
+          demoProjectData?.nftCollectionAddress?.length > 0,
+        );
+      }
     }
     setGaMenuTabs(menu);
   }, [isLoadingProject, data]);
