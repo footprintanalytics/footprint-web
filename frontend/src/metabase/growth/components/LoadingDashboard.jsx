@@ -1,6 +1,6 @@
 /* eslint-disable react/prop-types */
 import React from "react";
-import { Alert, Card, Typography } from "antd";
+import { Alert, Card, Typography, Button } from "antd";
 import { useQuery } from "react-query";
 import { GetFgaConnectorJob } from "metabase/new-service";
 import { getGrowthProjectPath } from "../utils/utils";
@@ -25,28 +25,108 @@ const LoadingDashboard = ({
   const connector =
     current_tab === "User Funnel" ? "Google Analytics" : current_tab;
 
+  const Setup = (
+    <Button
+      type="primary"
+      onClick={() => {
+        router.push(getGrowthProjectPath(project.projectName, "Connector"));
+      }}
+    >
+      Set up
+    </Button>
+  );
+
+  let message = ``;
+  let description = ``;
+
+  switch (connector) {
+    case "Google Analytics":
+      message = `Connect Google Analytics`;
+      description = (
+        <>
+          {Setup}
+          <div className="mt2">
+            <p>
+              Get access to the entire user journey. Use this data to identify
+              any obstacles to grow your business.
+            </p>
+            When you connect your Google Analytics account, you can:
+            <ul style={{ listStyle: "inside" }}>
+              <li>See Google data in Footprint GA.</li>
+              <li>
+                See user funnel, from page view to connect wallet,optimize.
+              </li>
+              <li>
+                Get a full user profile, track both off-chain behaviors and
+                on-chain transactions.
+              </li>
+            </ul>
+          </div>
+        </>
+      );
+      break;
+    case "Twitter":
+      message = `Connect Twitter data`;
+      description = (
+        <>
+          {Setup}
+          <div className="mt2">
+            <p>
+              Get access to social media engagement. Use this data to identify
+              any obstacles to grow your business.
+            </p>
+            When you connect your Twitter, you can:
+            <ul style={{ listStyle: "inside" }}>
+              <li>See Twitter followers data in Footprint GA.</li>
+              <li>
+                See Twitter engagement analysis, including followers, tweets.
+              </li>
+              <li>
+                Gain insights into the impact of social media engagement on
+                project operations and token / NFT prices.
+              </li>
+            </ul>
+          </div>
+        </>
+      );
+      break;
+    case "Discord":
+      message = `Connect Discord data`;
+      description = (
+        <>
+          {Setup}
+          <div className="mt2">
+            <p>
+              Get access to social media engagement. Use this data to identify
+              any obstacles to grow your business.
+            </p>
+            When you connect your Discord, you can:
+            <ul style={{ listStyle: "inside" }}>
+              <li>See Discord members data in Footprint GA.</li>
+              <li>
+                See Discord engagement analysis, including active members,
+                channels.
+              </li>
+              <li>
+                Gain insights into the impact of social media engagement on
+                project operations and token / NFT prices.
+              </li>
+            </ul>
+          </div>
+        </>
+      );
+      break;
+    default:
+      break;
+  }
+
   if (!sourceDefinitionId) {
     return (
       <div style={{ padding: 20 }}>
         <Card title={current_tab}>
           <Alert
-            message="You haven't connected any data yet"
-            description={
-              <>
-                Please go to{" "}
-                <Typography.Link
-                  underline
-                  onClick={() => {
-                    router.push(
-                      getGrowthProjectPath(project.projectName, "Connector"),
-                    );
-                  }}
-                >
-                  Settings {">"} Connector {">"} {connector}
-                </Typography.Link>{" "}
-                to connect your data and start analyzing.
-              </>
-            }
+            message={message}
+            description={description}
             type="warning"
             showIcon
           />
