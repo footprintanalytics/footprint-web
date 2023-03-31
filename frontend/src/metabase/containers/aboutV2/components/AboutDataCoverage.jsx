@@ -15,7 +15,7 @@ const AboutDataCoverage = () => {
       value: 9265652,
     },
     {
-      label: "NFT collections",
+      label: "NFT Collections",
       value: 1094667,
     },
     {
