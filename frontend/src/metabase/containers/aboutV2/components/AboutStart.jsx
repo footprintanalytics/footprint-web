@@ -39,12 +39,12 @@ const AboutStart = ({
           </li>
           <li>
             <CreateImage />
-            <h2>Off-chain & On-chain Data</h2>
+            <h2>Off-Chain & On-Chain data</h2>
           </li>
         </ul>
         <div className="flex" style={{ marginTop: 50 }}>
           <AboutButton
-            buttonText={user ? "View docs" : "Try for free"}
+            buttonText={user ? "View Docs" : "Try for Free"}
             onClick={(e) => {
               e.preventDefault()
               if (isLogin()) {
@@ -52,7 +52,7 @@ const AboutStart = ({
               }
             }}
           />
-          <AboutButton className="ml2" buttonClassName="about__button-second" buttonText="Contact us" link="mailto:sales@footprint.network"/>
+          <AboutButton className="ml2" buttonClassName="about__button-second" buttonText="Contact Us" link="mailto:sales@footprint.network"/>
         </div>
       </div>
     </div>

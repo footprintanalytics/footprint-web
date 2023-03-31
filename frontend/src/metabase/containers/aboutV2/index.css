@@ -212,13 +212,10 @@
   max-width: 1920px;
   margin: 0 auto;
   background-image:
-    url("https://static.footprint.network/home-v2/img_start_bg_1.png"),
-    url("https://static.footprint.network/home-v2/img_start_bg_2.png"),
-    url("https://static.footprint.network/home-v2/img_start_bg_3.png"),
-    url("https://static.footprint.network/home-v2/img_start_bg_4.png");
-  background-size: 50% 50%, 50% 50%, 50% 50%, 50% 50%;
-  background-repeat: no-repeat, no-repeat, no-repeat, no-repeat;
-  background-position: top left, top right, bottom left, bottom right;
+    url("https://static.footprint.network/home-v2/img_start_bg.webp");
+  background-size: cover;
+  background-repeat: no-repeat;
+  background-position: center;
 }
 
 .About__start-title {

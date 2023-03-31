@@ -29,7 +29,7 @@ const SearchInput = styled.input`
   background-color: transparent;
   width: 100%;
   border: none;
-  color: #000;
+  color: ${props => props.isDark ? "#fff" : "#000"};
   font-size: 1em;
   font-weight: 500;
   &:focus {
@@ -127,6 +127,7 @@ class SearchBar extends React.Component {
             pr={[0, 2]}
             pl={1}
             ref={ref => (this.searchInput = ref)}
+            isDark={isDark}
             value={searchText}
             maxLength={200}
             placeholder={"Search chain/protocol/token/NFT/creator/dashboard…"}
