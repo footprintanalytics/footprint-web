@@ -27,7 +27,9 @@ export default function GaSidebar(prop: IGaSidebarProp) {
   });
   const [tab, setTab] = useState<string>(currentTab!);
   useEffect(() => {
-    setTab(currentTab ?? getLatestGAMenuTag() ?? items[0]?.key);
+    if (!items) return;
+    if (!items[0].children) return;
+    setTab(currentTab ?? getLatestGAMenuTag() ?? items[0].children[0].key);
   }, [currentTab, items]);
 
   const [openKeys, setOpenKeys] = useState<string[]>([currentTab!]);
