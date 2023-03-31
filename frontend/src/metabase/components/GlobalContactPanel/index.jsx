@@ -8,7 +8,6 @@ import Motion from "react-motion/lib/Motion";
 import Icon from "metabase/components/Icon";
 import { trackStructEvent } from "metabase/lib/analytics";
 import Link from "metabase/core/components/Link";
-import { color } from "metabase/lib/colors";
 import { deviceInfo } from "metabase-lib/lib/Device";
 import { socialData } from "metabase/components/GlobalContactPanel/data";
 
@@ -24,6 +23,7 @@ const Index = () => {
     && !isAdminPage
     && !deviceInfo.isMobile;
   const showHelpButtonPanel = false;
+  const isDark = window?.location?.pathname === "/";
 
   const closeAction = () => {
     setActive(false);
@@ -36,7 +36,7 @@ const Index = () => {
 
   return (
     <div
-      className={cx("global-contact-panel__container html2canvas-filter")}
+      className={cx("global-contact-panel__container html2canvas-filter", { "dark": isDark })}
     >
       {active && (
         <Motion
@@ -80,7 +80,9 @@ const Index = () => {
                     window.open(item.url, "_blank");
                   }}
                 >
-                  <Icon name={item.icon} size={24} color={color("brand")} />
+                  {/*<Icon name={item.icon} size={24} color={color("brand")} style={{background: "white"}}/>*/}
+                  {item.svg}
+                  <div className="global-contact-panel__social-item-icon-bg"/>
                 </Link>
               );
             })}
