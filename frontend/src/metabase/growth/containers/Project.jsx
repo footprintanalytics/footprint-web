@@ -47,8 +47,8 @@ const Project = props => {
       menu ??
         getLatestGAMenuTag() ??
         (gaMenuTabs?.menuTabs?.[0].children.length > 0
-          ? gaMenuTabs?.menuTabs?.[0].children[0].name
-          : gaMenuTabs?.menuTabs?.[0].name),
+          ? gaMenuTabs?.menuTabs?.[0].children[0].key
+          : gaMenuTabs?.menuTabs?.[0].key),
     );
   }, [menu, gaMenuTabs]);
 
@@ -115,7 +115,8 @@ const Project = props => {
       projectName: data?.protocolSlug ?? project,
       collection_contract_address:
         data?.nftCollectionAddress ?? demoProjectData?.nftCollectionAddress,
-      project: {...(data ?? demoProjectData),
+      project: {
+        ...(data ?? demoProjectData),
         twitter_handler: data?.twitter?.handler,
         discord_guild_id: data?.discord?.guildId,
       },
