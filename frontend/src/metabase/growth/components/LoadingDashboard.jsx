@@ -30,7 +30,7 @@ const LoadingDashboard = ({
       <div style={{ padding: 20 }}>
         <Card title={current_tab}>
           <Alert
-            message="Sorry, you haven't connected any data yet"
+            message="You haven't connected any data yet"
             description={
               <>
                 Please go to{" "}

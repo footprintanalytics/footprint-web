@@ -75,13 +75,24 @@ const Connectors = props => {
   };
   const onCloseDrawer = () => {
     setOpenDrawer({ show: false });
-    refetchProject();
   };
-  const onAddConnector = isSuccess => {
+  const onAddConnector = async isSuccess => {
     //Todo refresh data
     onCloseDrawer();
     if (isSuccess) {
+      await refetchProject();
+      gotoAnalytics(openDrawer.connector.name);
       setCount(count + 1);
+    }
+  };
+  const gotoAnalytics = name => {
+    switch (name) {
+      case "Google Analytics":
+        router.push(getGrowthProjectPath(project.projectName, "User Funnel"));
+        break;
+      default:
+        router.push(getGrowthProjectPath(project.projectName, name));
+        break;
     }
   };
   const [connectors, setConnectors] = useState([]);
@@ -128,30 +139,11 @@ const Connectors = props => {
                       item.configured
                         ? [
                             <Button
-                              key="Detail"
+                              key="Connect Disabled"
                               style={{ borderRadius: 5, width: 90 }}
-                              onClick={() => {
-                                switch (item.name) {
-                                  case "Google Analytics":
-                                    router.push(
-                                      getGrowthProjectPath(
-                                        project.projectName,
-                                        "User Funnel",
-                                      ),
-                                    );
-                                    break;
-                                  default:
-                                    router.push(
-                                      getGrowthProjectPath(
-                                        project.projectName,
-                                        item.name,
-                                      ),
-                                    );
-                                    break;
-                                }
-                              }}
+                              disabled
                             >
-                              Analysis
+                              Connect
                             </Button>,
                             // <a
                             //   key="list-loadmore-edit"
@@ -175,9 +167,7 @@ const Connectors = props => {
                                   ? false
                                   : true
                               }
-                              onClick={() => {
-                                showDrawer(item);
-                              }}
+                              onClick={() => showDrawer(item)}
                             >
                               Connect
                             </Button>,
