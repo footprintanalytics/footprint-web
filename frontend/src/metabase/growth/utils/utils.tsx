@@ -7,16 +7,28 @@ export function checkIsDemoAccountAndAlert(user: any, action: () => any) {
   if (user && user.email === "fga@footprint.network") {
     notification.info({
       message: `Notification`,
-      description:
-        "This account is solely for demo purposes. If you need to create campaigns or cohorts and access more advanced features, please register your own account and add your own project.",
+      description: (
+        <>
+          <div className=" mt1 text-light">
+            To get the best marketing solution for your project, feel free to
+            contact us for a customized analysis of your project:
+          </div>
+          <div className="mt2">Email: sales@footprint.network</div>
+          <div>Telegram: @dplinnn</div>
+        </>
+      ),
+      // `To get the best marketing solution for your project, feel free to contact us for a customized analysis of your project:
+      //   </br>Email:  sales@footprint.network
+      //   </br>Telegram:  @dplinnn`,
       placement: "top",
       btn: (
         <Button
           type="primary"
           size="small"
-          href="mailto:analytics@footprint.network"
+          target="_blank"
+          href="https://calendly.com/partners-79/footprint-growth-analytics-demo"
         >
-          Contact Us
+          Book a meeting
         </Button>
       ),
     });
