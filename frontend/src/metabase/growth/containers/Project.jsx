@@ -68,19 +68,21 @@ const Project = props => {
 
   useEffect(() => {
     let menu = null;
-    if (!isLoadingProject && data) {
-      menu = getGaMenuTabs(
-        tabs_data,
-        data?.protocolType,
-        data?.nftCollectionAddress?.length > 0,
-      );
-    } else {
-      // demo project menu
-      menu = getGaMenuTabs(
-        tabs_data,
-        demoProjectData.protocolType,
-        demoProjectData?.nftCollectionAddress?.length > 0,
-      );
+    if (!isLoadingProject) {
+      if (data) {
+        menu = getGaMenuTabs(
+          tabs_data,
+          data?.protocolType,
+          data?.nftCollectionAddress?.length > 0,
+        );
+      } else {
+        // demo project menu
+        menu = getGaMenuTabs(
+          tabs_data,
+          demoProjectData.protocolType,
+          demoProjectData?.nftCollectionAddress?.length > 0,
+        );
+      }
     }
     setGaMenuTabs(menu);
   }, [isLoadingProject, data]);
@@ -113,9 +115,10 @@ const Project = props => {
       projectName: data?.protocolSlug ?? project,
       collection_contract_address:
         data?.nftCollectionAddress ?? demoProjectData?.nftCollectionAddress,
-      project: data ?? demoProjectData,
-      twitter_handler: data?.twitter?.handler,
-      discord_guild_id: data?.discord?.guildId,
+      project: {...(data ?? demoProjectData),
+        twitter_handler: data?.twitter?.handler,
+        discord_guild_id: data?.discord?.guildId,
+      },
       protocolName: data?.protocolName,
     };
   };
