@@ -67,6 +67,7 @@ LoginModal.propTypes = {
   from: PropTypes.string,
   isOpen: PropTypes.bool,
   fromNav: PropTypes.bool,
+  defaultRegister: PropTypes.bool,
 };
 
 export default withRouter(

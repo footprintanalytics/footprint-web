@@ -32,6 +32,7 @@ import { AppErrorDescriptor, State } from "metabase-types/store";
 import GlobalContactPanel from "metabase/components/GlobalContactPanel/";
 
 import { AppContainer, AppContent, AppContentContainer } from "./App.styled";
+import cx from "classnames";
 
 const getErrorComponent = ({ status, data, context }: AppErrorDescriptor) => {
   if (status === 403 || data?.error_code === "unauthorized") {
@@ -110,6 +111,7 @@ function App({
   user,
 }: AppProps) {
   const [viewportElement, setViewportElement] = useState<HTMLElement | null>();
+  const hideScrollbar = location.pathname === ("/");
 
   const handleChannel = () => {
     const channel = location.query.channel || location.query.cnl || "homepage";
@@ -144,7 +146,7 @@ function App({
             {/*{isAppBarVisible && <AppBar isNavBarVisible={isNavBarVisible} />}*/}
             <AppContentContainer isAdminApp={isAdminApp}>
               {isNavBarVisible && <Navbar location={location} />}
-              <AppContent id="app-content" ref={setViewportElement} key={`${user?.id}`}>
+              <AppContent className={cx({ "scroll-hide-all": hideScrollbar })} id="app-content" ref={setViewportElement} key={`${user?.id}`}>
                 <ContentViewportContext.Provider value={viewportElement ?? null}>
                   {errorPage ? getErrorComponent(errorPage) : children}
                 </ContentViewportContext.Provider>

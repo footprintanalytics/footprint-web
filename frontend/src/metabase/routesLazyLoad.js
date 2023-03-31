@@ -116,7 +116,7 @@ export default {
   Protocols: loadable(() => import("metabase/containers/protocols")),
   Creator: loadable(() => import("metabase/containers/creator"), options),
   Widget: loadable(() => import("metabase/containers/widget")),
-  About: loadable(() => import("metabase/containers/about")),
+  About: loadable(() => import("metabase/containers/aboutV2")),
   NftPage: loadable(() => import("metabase/containers/nftPage")),
   dataApi: loadable(() => import("metabase/containers/dataApi")),
   dataApiPrice: loadable(() => import("metabase/containers/dataApi/price")),

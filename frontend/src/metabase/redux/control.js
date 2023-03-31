@@ -37,9 +37,8 @@ export const createFgaProjectModalShowAction = createThunkAction(
 );
 export const loginModalShowAction = createThunkAction(
   LOGIN_MODAL_SHOW,
-  ({ show, from, redirect, channel }) => {
-    localStorage.setItem("login-modal-from", from);
-    return { show, redirect };
+  ({ show, from, redirect, defaultRegister= false, channel }) => {
+    return { show, redirect, defaultRegister };
   },
 );
 export const featuresSideHideAction = createThunkAction(
@@ -151,6 +150,7 @@ export const control = handleActions(
           ...state,
           loginModalShow: payload.show,
           loginModalRedirect: payload.redirect,
+          loginModalDefaultRegister: payload.defaultRegister,
         };
       },
     },

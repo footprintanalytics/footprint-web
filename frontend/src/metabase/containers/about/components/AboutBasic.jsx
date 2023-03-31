@@ -17,7 +17,7 @@ const AboutBasic = ({ indicator }) => {
                 <b>
                   {item.total ? (
                     <CountUp
-                      formattingFn={(value) => value.toLocaleString()}
+                      formattingFn={(value) => 1}
                       end={item.total}
                     />
                   ) : (

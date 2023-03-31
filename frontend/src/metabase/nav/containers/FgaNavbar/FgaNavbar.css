@@ -149,8 +149,8 @@
   padding: var(--footprint-spacing-xs) var(--footprint-spacing-s);
   border-radius: 4px;
   cursor: pointer;
-  margin: 0 var(--footprint-spacing-s);
-  height: 40px;
+  margin: 0 0 0 var(--footprint-spacing-s);
+  height: 36px;
 }
 
 .Nav__menu-create span {

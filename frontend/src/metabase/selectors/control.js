@@ -24,6 +24,13 @@ export const getLoginModalRedirect = createSelector(
   },
 );
 
+export const getLoginModalDefaultRegister = createSelector(
+  [getControl],
+  ({ loginModalDefaultRegister }) => {
+    return loginModalDefaultRegister;
+  },
+);
+
 export const getFeaturesSideHide = createSelector(
   [getControl],
   ({ featuresSideHide }) => {
