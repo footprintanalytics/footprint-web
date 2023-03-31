@@ -37,7 +37,8 @@ const CampaignList = props => {
                 props.router?.params?.project,
                 "CampaignDetail",
               ),
-              query: { id: row.campaignId },
+              // query: { id: row.campaignId },
+              hash: "#id=" + row.campaignId,
             });
           }}
         >
@@ -51,9 +52,9 @@ const CampaignList = props => {
       render: text => {
         return (
           <>
-            {text === "pending" ? (
+            {["pending", "init"].includes(text) ? (
               <Tag icon={<SyncOutlined spin />} color="processing">
-                pending
+                {text}
               </Tag>
             ) : (
               <Tag icon={<CheckCircleOutlined />} color="success">

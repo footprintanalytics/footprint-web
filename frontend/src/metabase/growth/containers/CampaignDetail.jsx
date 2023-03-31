@@ -12,7 +12,7 @@ import {
   Tooltip,
   message,
 } from "antd";
-import { SyncOutlined } from "@ant-design/icons";
+import { SyncOutlined, CheckCircleOutlined } from "@ant-design/icons";
 import dayjs from "dayjs";
 import CopyToClipboard from "react-copy-to-clipboard";
 import { useQuery } from "react-query";
@@ -23,10 +23,11 @@ import LoadingSpinner from "metabase/components/LoadingSpinner";
 import { QUERY_OPTIONS } from "metabase/containers/dashboards/shared/config";
 import { getUser } from "metabase/selectors/user";
 import { getCampaignDetail } from "metabase/new-service";
+import { parseHashOptions } from "metabase/lib/browser";
 
 const CampaignDetail = props => {
   const { location, router, project } = props;
-  const id = location.query.id ?? 5;
+  const id = parseHashOptions(location.hash).id;
   const { isLoading, data } = useQuery(
     ["getCampaignDetail", id],
     async () => {
@@ -74,14 +75,16 @@ const CampaignDetail = props => {
             <Descriptions.Item label="Updated At">
               {data.updatedAt}
             </Descriptions.Item>
-            {/* {} */}
             <Descriptions.Item label="Status" span={3}>
-              {data.status === "pending" ? (
+              {["pending", "init"].includes(data.status) ? (
                 <Tag icon={<SyncOutlined spin />} color="processing">
                   pending
                 </Tag>
               ) : (
-                <Badge status="success" text={data.status} />
+                <Tag icon={<CheckCircleOutlined />} color="success">
+                  {data.status}
+                </Tag>
+                // <Badge status="success" text={data.status} />
               )}
             </Descriptions.Item>
             {tweetTrackingURL && (
@@ -94,8 +97,8 @@ const CampaignDetail = props => {
             {botInviteUrl && (
               <Descriptions.Item label="Discord bot step">
                 {/* todo  guild_id 要真实从接口拿*/}
-                <span style={{ color: "red" }}>Step 1</span> : Invite the bot to
-                your server
+                <span style={{ color: "red" }}>Step 1</span> : Add the FGA
+                discord bot to your server.
                 <br />
                 <Link
                   target="_blank"
@@ -104,8 +107,8 @@ const CampaignDetail = props => {
                 >{`https://discord.com/oauth2/authorize?client_id...`}</Link>
                 <br />
                 <br />
-                <span style={{ color: "red" }}>Step 2</span> : send command to
-                the channel{" "}
+                <span style={{ color: "red" }}>Step 2</span> : Dispatch the
+                active command to your Discord channel.{" "}
                 <CopyToClipboard
                   text={botInitCmd}
                   onCopy={() => {
