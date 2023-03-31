@@ -4,13 +4,13 @@ import { getOssUrl } from "metabase/lib/image";
 import AboutButton from "metabase/containers/aboutV2/components/AboutButton";
 import AboutImage from "metabase/containers/aboutV2/components/AboutImage";
 
-const AboutDemo = ({ indicator }) => {
+const AboutDemo = () => {
   return (
     <div className="About__demo">
       <div className="About__demo-growth-analytics">
         <div className="About__demo-growth-analytics-left">
           <h3>Growth Analytics</h3>
-          <h4>One Platform for your team and user growth</h4>
+          <h4>One platform for your team and user growth</h4>
           <span>Dive into data insights and get an edge in your marketing strategy with <br/>Footprint GA by bringing all of your Web2 and Wed3 data sources together.</span>
           <AboutButton
             className="mt4"

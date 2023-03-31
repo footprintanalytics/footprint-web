@@ -39,10 +39,17 @@ const LoginModalInner = props => {
     channel,
     hideClose,
     redirect,
+    defaultRegister,
   } = props;
 
   const disableCheckLogin =
     props.disableCheckLogin || location.query.disableCheckLogin;
+
+  useEffect(() => {
+    if (defaultRegister) {
+      changeToSignUp();
+    }
+  }, [defaultRegister]);
 
   useEffect(() => {
     if (props.project) {

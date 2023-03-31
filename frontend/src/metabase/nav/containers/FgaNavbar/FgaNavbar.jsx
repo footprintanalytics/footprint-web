@@ -44,12 +44,14 @@ import UserAvatar from "metabase/components/UserAvatar";
 import VipIcon from "metabase/components/VipIcon";
 import CreateProjectModal from "metabase/growth/components/Modal/CreateProjectModal";
 import { getContext, getPath, getUser } from "../selectors";
+import { getLoginModalDefaultRegister } from "../../../selectors/control";
 
 const mapStateToProps = (state, props) => ({
   path: getPath(state, props),
   context: getContext(state, props),
   user: getUser(state),
   loginModalShow: getLoginModalShow(state, props),
+  loginModalDefaultRegister: getLoginModalDefaultRegister(state, props),
   createFgaProjectModalShow: getCreateFgaProjectModalShow(state, props),
   loginModalRedirect: getLoginModalRedirect(state, props),
   createModalShow: getCreateModalShow(state, props),
@@ -160,8 +162,9 @@ class FgaNavbar extends Component {
     return false;
   };
   renderLoginModal() {
-    const { location, loginModalShow, loginModalRedirect, setLoginModalShow } =
+    const { location, loginModalShow, loginModalRedirect, loginModalDefaultRegister, setLoginModalShow } =
       this.props;
+    console.log("loginModalDefaultRegister", loginModalDefaultRegister)
     return (
       <LoginModal
         isOpen={loginModalShow}
@@ -170,6 +173,7 @@ class FgaNavbar extends Component {
         channel={"FGA"}
         location={this.props.location}
         fromNav={true}
+        defaultRegister={loginModalDefaultRegister}
         redirect={loginModalRedirect}
       />
     );

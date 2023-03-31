@@ -1,13 +1,10 @@
 /* eslint-disable react/prop-types */
 import React from "react";
-import { Image, Skeleton, Spin } from "antd";
-import CountUp from "react-countup";
 import { getOssUrl } from "metabase/lib/image";
-import data from "../data";
 import AboutButton from "metabase/containers/aboutV2/components/AboutButton";
 import AboutImage from "metabase/containers/aboutV2/components/AboutImage";
 
-const AboutDataFeature = ({ indicator }) => {
+const AboutDataFeature = () => {
   const data = [
     {
       icon: "home-v2/img_feature1.png",

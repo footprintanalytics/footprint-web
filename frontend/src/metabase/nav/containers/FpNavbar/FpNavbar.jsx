@@ -43,6 +43,7 @@ import EntityMenu from "metabase/components/EntityMenu";
 import UserAvatar from "metabase/components/UserAvatar";
 import VipIcon from "metabase/components/VipIcon";
 import { getContext, getPath, getUser } from "../selectors";
+import { getLoginModalDefaultRegister } from "../../../selectors/control";
 
 const mapStateToProps = (state, props) => ({
   path: getPath(state, props),
@@ -50,6 +51,7 @@ const mapStateToProps = (state, props) => ({
   user: getUser(state),
   loginModalShow: getLoginModalShow(state, props),
   loginModalRedirect: getLoginModalRedirect(state, props),
+  loginModalDefaultRegister: getLoginModalDefaultRegister(state, props),
   createModalShow: getCreateModalShow(state, props),
   cancelFeedback: getCancelFeedback(state, props),
   getIsUserFeedbackBlock: getIsUserFeedbackBlock(state, props),
@@ -323,8 +325,9 @@ class FpNavbar extends Component {
   }
 
   renderLoginModal() {
-    const { location, loginModalShow, loginModalRedirect, setLoginModalShow } =
+    const { location, loginModalShow, loginModalRedirect, loginModalDefaultRegister, setLoginModalShow } =
       this.props;
+    console.log("loginModalDefaultRegister", loginModalDefaultRegister)
 
     return (
       <LoginModal
@@ -334,6 +337,7 @@ class FpNavbar extends Component {
         channel={location.query.channel || location.query.cnl}
         location={this.props.location}
         fromNav={true}
+        defaultRegister={loginModalDefaultRegister}
         redirect={loginModalRedirect}
       />
     );
@@ -671,7 +675,7 @@ class FpNavbar extends Component {
                 className="Nav__sign-up-start"
                 onClick={() => {
                   trackStructEvent(`click Sign up`);
-                  setLoginModalShow({ show: true, from: "navbar_signup" });
+                  setLoginModalShow({ show: true, from: "navbar_signup", defaultRegister: true });
                 }}
               >
                 Start for Free

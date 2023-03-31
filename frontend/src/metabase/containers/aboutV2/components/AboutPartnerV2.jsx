@@ -3,7 +3,7 @@ import React from "react";
 import { getOssUrl } from "metabase/lib/image";
 import AboutImage from "metabase/containers/aboutV2/components/AboutImage";
 
-const AboutPartnerV2 = ({ list }) => {
+const AboutPartnerV2 = () => {
   const data = [
     "home-v2/img_partner_1.png",
     "home-v2/img_partner_2.png",

@@ -4,7 +4,7 @@ import { getOssUrl } from "metabase/lib/image";
 import AboutButton from "metabase/containers/aboutV2/components/AboutButton";
 import AboutImage from "metabase/containers/aboutV2/components/AboutImage";
 
-const AboutDataCoverage = ({ indicator }) => {
+const AboutDataCoverage = () => {
   const data = [
     {
       label: "Wallet Addresses",

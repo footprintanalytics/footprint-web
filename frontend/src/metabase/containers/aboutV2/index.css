@@ -78,6 +78,11 @@
   font-weight: normal;
 }
 
+.about__button-second {
+  background: #172033;
+  border: 1px solid #4A5468;
+}
+
 .About__btn-radius {
   border-radius: 4px;
 }

@@ -2,29 +2,21 @@
 import React from "react";
 import { connect } from "react-redux";
 import { push } from "react-router-redux";
-import _ from "underscore";
-import { trackStructEvent } from "metabase/lib/analytics";
-import AboutSocial from "metabase/containers/about/components/AboutSocial";
-import AboutBasic from "metabase/containers/about/components/AboutBasic";
 import { getOssUrl } from "metabase/lib/image";
 import { loginModalShowAction } from "metabase/redux/control";
 import { getUser } from "metabase/selectors/user";
-import data from "../data";
-import WrapLink from "./WrapLink";
 import AboutImage from "metabase/containers/aboutV2/components/AboutImage";
 import AboutButton from "metabase/containers/aboutV2/components/AboutButton";
 
 const AboutStart = ({
   user,
   setLoginModalShow,
-  onChangeLocation,
-  indicator,
 }) => {
   const isLogin = () => {
     if (user) {
       return true;
     } else {
-      setLoginModalShow({ show: true, from: "Dashboards Profile" });
+      setLoginModalShow({ show: true, from: "Dashboards Profile", defaultRegister: true });
       return false;
     }
   };
@@ -54,11 +46,13 @@ const AboutStart = ({
           <AboutButton
             buttonText={user ? "view docs" : "Try for free"}
             onClick={(e) => {
-            if (isLogin()) {
-              window.open("https://docs.footprint.network/");
-            }
-          }}/>
-          <AboutButton className="ml2" buttonText="Contact us" link="mailto:sales@footprint.network"/>
+              e.preventDefault()
+              if (isLogin()) {
+                window.open("https://docs.footprint.network/");
+              }
+            }}
+          />
+          <AboutButton className="ml2" buttonClassName="about__button-second" buttonText="Contact us" link="mailto:sales@footprint.network"/>
         </div>
       </div>
     </div>
@@ -74,6 +68,4 @@ const mapDispatchToProps = {
   setLoginModalShow: loginModalShowAction,
 };
 
-export default _.compose(connect(mapStateToProps, mapDispatchToProps))(
-  AboutStart,
-);
+export default connect(mapStateToProps, mapDispatchToProps)(AboutStart);

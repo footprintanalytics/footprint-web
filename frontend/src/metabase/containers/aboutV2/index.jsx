@@ -8,11 +8,6 @@ import LazyLoad from "react-lazyload";
 import Meta from "metabase/components/Meta";
 import { getChannel } from "metabase/selectors/app";
 import { createModalShowAction, loginModalShowAction } from "metabase/redux/control";
-import HomeFooter from "../home/components/HomeFooter";
-import AboutStart from "./components/AboutStart";
-import AboutBacked from "./components/AboutBacked";
-import data from "./data";
-import { useQueryIndicator, useQueryNews } from "./hook";
 import AboutDataFeature from "metabase/containers/aboutV2/components/AboutDataFeature";
 import AboutDataModel from "metabase/containers/aboutV2/components/AboutDataModel";
 import AboutDataTrusted from "metabase/containers/aboutV2/components/AboutDataTrusted";
@@ -20,21 +15,15 @@ import AboutDataCoverage from "metabase/containers/aboutV2/components/AboutDataC
 import AboutDemo from "metabase/containers/aboutV2/components/AboutDemo";
 import AboutDepth from "metabase/containers/aboutV2/components/AboutDepth";
 import AboutPartnerV2 from "metabase/containers/aboutV2/components/AboutPartnerV2";
-import MetaViewportControls from "metabase/dashboard/hoc/MetaViewportControls";
+import HomeFooter from "../home/components/HomeFooter";
+import data from "./data";
+import AboutBacked from "./components/AboutBacked";
+import AboutStart from "./components/AboutStart";
 
 const About = props => {
   const {
-    user,
-    channel,
-    setLoginModalShow,
-    onChangeLocation,
     children,
   } = props;
-  const { news } = useQueryNews();
-  const { indicator } = useQueryIndicator();
-
-  const userId = user && user.id;
-  const email = user && user.email;
 
   const defaultDesc =
     "Footprint Analytics is a data platform blending web2 and web3 data with abstractions. We help analysts, builders, and investors turn blockchain data into insights with accessible visualization tools and a powerful multi-chain API across 20+ chains for NFTs, GameFi and DeFi. We also provide Footprint Growth Analytics to help with effective growth in GameFi and any web3 projects. Explore and share data from Ethereum, Bitcoin, Polygon, BNB Chain, Solana, Arbitrum, Avalanche, Optimism, Fantom and Harmory Chain and more for free.";

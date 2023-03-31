@@ -4,14 +4,7 @@ import { Carousel } from "antd";
 import AboutImage from "metabase/containers/aboutV2/components/AboutImage";
 import { getOssUrl } from "metabase/lib/image";
 
-const AboutDataTrusted = ({ indicator }) => {
-  const contentStyle = {
-    height: '160px',
-    color: '#fff',
-    lineHeight: '160px',
-    textAlign: 'center',
-    background: '#364d79',
-  };
+const AboutDataTrusted = () => {
   const data = [
     {
       name: "Agave",

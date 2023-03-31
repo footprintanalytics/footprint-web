@@ -5,7 +5,7 @@ import { getOssUrl } from "metabase/lib/image";
 import AboutButton from "metabase/containers/aboutV2/components/AboutButton";
 import cx from "classnames";
 
-const AboutDepth = ({ indicator }) => {
+const AboutDepth = () => {
   const [currentInx, setCurrentInx] = useState(1);
   const data = [
     {
@@ -15,7 +15,8 @@ const AboutDepth = ({ indicator }) => {
       desc: "Select quality users such as whales and long-term holders from massive  address databases for airdrops, and monitor campaign performance",
       buttons: [
         {
-          buttonText: "Explore the NFT airdrop marketing loop"
+          buttonText: "Explore the NFT airdrop marketing loop",
+          link: "https://www.footprint.network/@Shelly/Mocaverse-Real-Time-NFT-Airdrop-Monitoring",
         },
       ],
       img: "home-v2/img_depth_1.png?2=2",
