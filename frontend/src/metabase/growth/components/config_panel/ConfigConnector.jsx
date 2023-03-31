@@ -147,6 +147,11 @@ const ConfigConnector = props => {
     // window.open(url, "_blank");
     window.open(url, "_self");
   };
+  const initialValues = {};
+  connector?.connectionSpecification?.map(item => {
+    initialValues[item.key] = item.value;
+  });
+  console.log(initialValues);
   return (
     <div
       className="flex flex-col w-full p-5"
@@ -161,6 +166,7 @@ const ConfigConnector = props => {
         layout="vertical"
         name="control-ref"
         onFinish={onSave}
+        initialValues={initialValues}
         style={{ maxWidth: 1000, minWidth: 300, width: "100%" }}
       >
         {connector.name === "Discord" ? (
@@ -239,7 +245,7 @@ const ConfigConnector = props => {
               htmlType="submit"
               loading={loading}
               className="bg-blue-500 ml-10"
-              disabled={!editable}
+              // disabled={!editable}
             >
               Save
             </Button>

@@ -2,12 +2,13 @@
 /* eslint-disable react/prop-types */
 import React from "react";
 import { connect } from "react-redux";
-import { Button, Card, Table, Typography, Dropdown, Tag } from "antd";
+import { Button, Card, Table, Typography, Dropdown, Tag, Space } from "antd";
 import { SyncOutlined } from "@ant-design/icons";
 import { useQuery } from "react-query";
 import dayjs from "dayjs";
 import { getUser } from "metabase/selectors/user";
 import { GetFgaCohort } from "metabase/new-service";
+import Link from "metabase/core/components/Link/Link";
 import CreateCampaign from "../components/buttons/CreateCampaign";
 import UploadWallets from "../components/buttons/UploadWallets";
 import { getGrowthProjectPath } from "../utils/utils";
@@ -25,7 +26,7 @@ const Cohort = props => {
       dataIndex: "title",
       render: text => (
         <Typography.Link
-          href={`https://www.footprint.network/growth/@rogerD/Cohort-User-Profile?tag=${text}`}
+          href={`/growth/@rogerD/Cohort-User-Profile?tag=${text}`}
           target="_blank"
         >
           {text}
@@ -52,6 +53,30 @@ const Cohort = props => {
       dataIndex: "createdAt",
       render: text => dayjs(text).format("YYYY-MM-DD HH:mm"),
     },
+    {
+      title: "Action",
+      key: "action",
+      render: (_, record) => (
+        <Space size="middle">
+          <Typography.Link
+            href={`/growth/@rogerD/Cohort-User-Profile?tag=${record.title}`}
+            target="_blank"
+          >
+            User Profile
+          </Typography.Link>
+          {/* <Link>Wallet Detail</Link> */}
+          <Link
+            color="rgb(52, 52, 178)"
+            to={getGrowthProjectPath(
+              props.router?.params?.project,
+              "CreateCampaign",
+            )}
+          >
+            Create Campaign
+          </Link>
+        </Space>
+      ),
+    },
   ];
 
   const items = [
@@ -76,24 +101,6 @@ const Cohort = props => {
       key: "2",
       label: <UploadWallets />,
     },
-    {
-      key: "3",
-      label: (
-        <div
-          onClick={() =>
-            props.router?.push({
-              pathname: getGrowthProjectPath(
-                props.router?.params?.project,
-                "CreateCampaign",
-              ),
-            })
-          }
-        >
-          Create Campaign
-        </div>
-      ),
-      // label: <CreateCampaign plain={true} />,
-    },
   ];
 
   return (
@@ -102,7 +109,7 @@ const Cohort = props => {
         title="Cohort"
         extra={
           <Dropdown menu={{ items }}>
-            <Button type="primary">Create</Button>
+            <Button type="primary">Create Cohort</Button>
           </Dropdown>
         }
       >

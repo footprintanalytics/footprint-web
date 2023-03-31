@@ -145,9 +145,21 @@ const CampaignList = props => {
       <Card
         title="Campaigns"
         extra={
-          <Dropdown menu={{ items }}>
-            <Button type="primary">Create</Button>
-          </Dropdown>
+          // <Dropdown menu={{ items }}>
+          <Button
+            type="primary"
+            onClick={() =>
+              props.router?.push({
+                pathname: getGrowthProjectPath(
+                  props.router?.params?.project,
+                  "CreateCampaign",
+                ),
+              })
+            }
+          >
+            Create Campaign
+          </Button>
+          // </Dropdown>
         }
       >
         {isLoading ? (
