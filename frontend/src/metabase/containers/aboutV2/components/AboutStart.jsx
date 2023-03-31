@@ -27,24 +27,24 @@ const AboutStart = ({
   return (
     <div className="About__start">
       <div className="About__start-title">
-        <h1>Empower Decisions <br/>with Unified Off-Chain <br/>and & Web3 Data</h1>
+        <h1>Empower Decisions <br/>with Unified Off-Chain <br/>and Web3 Data</h1>
         <ul>
           <li>
             <CreateImage />
-            <span>25+ Chains</span>
+            <h2>25+ Chains</h2>
           </li>
           <li>
             <CreateImage />
-            <span>GameFi, NFT, DeFi Sectors</span>
+            <h2>GameFi, NFT, DeFi Sectors</h2>
           </li>
           <li>
             <CreateImage />
-            <span>Off-chain & On-chain Data</span>
+            <h2>Off-chain & On-chain Data</h2>
           </li>
         </ul>
         <div className="flex" style={{ marginTop: 50 }}>
           <AboutButton
-            buttonText={user ? "view docs" : "Try for free"}
+            buttonText={user ? "View docs" : "Try for free"}
             onClick={(e) => {
               e.preventDefault()
               if (isLogin()) {

@@ -71,12 +71,6 @@ const mapDispatchToProps = {
 
 const leftMenuData = [
   {
-    title: "Growth Analytics",
-    icon: "menu_home",
-    path: "/growth",
-    auth: false,
-  },
-  {
     title: "Analytics App",
     icon: "menu_home",
     path: "/dashboards",
@@ -86,6 +80,12 @@ const leftMenuData = [
     title: "Data API",
     icon: "menu_home",
     path: "/data-api",
+    auth: false,
+  },
+  {
+    title: "Growth Analytics",
+    icon: "menu_home",
+    path: "/growth",
     auth: false,
   },
   /*{

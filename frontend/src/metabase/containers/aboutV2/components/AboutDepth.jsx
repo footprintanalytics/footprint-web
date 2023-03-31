@@ -24,8 +24,8 @@ const AboutDepth = () => {
     {
       icon: "home-v2/img_depth_analytics.png",
       label: "Analytics",
-      title: "In-depth project analysis with a full view of \nyour key business metrics",
-      desc: "Dive deep into data insights with all bronze data (such as transactions, logs, and events) \nand abstract data",
+      title: "In-depth project analysis with a full view of your key business metrics",
+      desc: "Dive deep into data insights with all bronze data (such as transactions, logs, and events) and abstract data",
       buttons: [
         {
           buttonText: "Take PlanetIX Dashboard as an Example",
@@ -58,7 +58,7 @@ const AboutDepth = () => {
       desc: "Batch access to all on-chain data to know your users better and bring more valuable users to your project",
       buttons: [
         {
-          buttonText: "Explore wallet profile dashboard",
+          buttonText: "Explore Wallet Profile Dashboard",
           link: "https://www.footprint.network/@rogerD/Wallet-Profile-FGA?wallet_address=0x7a9fe22691c811ea339d9b73150e6911a5343dca",
         },
       ],

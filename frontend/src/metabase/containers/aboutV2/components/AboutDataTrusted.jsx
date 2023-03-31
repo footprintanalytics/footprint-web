@@ -18,7 +18,7 @@ const AboutDataTrusted = () => {
       name: "Trusta",
       desc: "Simon",
       post: "Founder & CTO",
-      img: "home-v2/img_trusted_agave.png",
+      img: "home-v2/img_trusted_trusta.png",
       detail: "Without the on-chain data supported by footprint, we cannot deliver our TrustScan, an AI-powered Sybil resistance product in just two months. We apprieciate Footprint for their data coverage of over 20 chains, high-quality and structured data, and the instant tech support by FT engineers."
     }
   ]
