@@ -82,7 +82,6 @@ const Project = props => {
         demoProjectData?.nftCollectionAddress?.length > 0,
       );
     }
-    console.log("menu", menu);
     setGaMenuTabs(menu);
   }, [isLoadingProject, data]);
 
