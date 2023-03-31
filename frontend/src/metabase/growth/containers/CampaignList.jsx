@@ -2,7 +2,7 @@
 /* eslint-disable react/prop-types */
 import React from "react";
 import { connect } from "react-redux";
-import { Button, Card, Table, Typography, Dropdown, Tag } from "antd";
+import { Button, Card, Table, Typography, Dropdown, Tag, Badge } from "antd";
 import { SyncOutlined, CheckCircleOutlined } from "@ant-design/icons";
 import { useQuery } from "react-query";
 import dayjs from "dayjs";
@@ -52,14 +52,15 @@ const CampaignList = props => {
       render: text => {
         return (
           <>
-            {["pending", "init"].includes(text) ? (
+            {["init"].includes(text) ? (
               <Tag icon={<SyncOutlined spin />} color="processing">
                 {text}
               </Tag>
             ) : (
-              <Tag icon={<CheckCircleOutlined />} color="success">
-                success
-              </Tag>
+              <Badge status="success" text={text} />
+              // <Tag icon={<CheckCircleOutlined />} color="success">
+              //   {text}
+              // </Tag>
             )}
           </>
           //    <Tag icon={<CloseCircleOutlined />} color="error">

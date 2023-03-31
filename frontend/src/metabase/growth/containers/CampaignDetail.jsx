@@ -77,15 +77,15 @@ const CampaignDetail = props => {
               {data.updatedAt}
             </Descriptions.Item>
             <Descriptions.Item label="Status" span={3}>
-              {["pending", "init"].includes(data.status) ? (
+              {["init"].includes(data.status) ? (
                 <Tag icon={<SyncOutlined spin />} color="processing">
                   {data.status}
                 </Tag>
               ) : (
-                <Tag icon={<CheckCircleOutlined />} color="success">
-                  {data.status}
-                </Tag>
-                // <Badge status="success" text={data.status} />
+                // <Tag icon={<CheckCircleOutlined />} color="success">
+                //   {data.status}
+                // </Tag>
+                <Badge status="success" text={data.status} />
               )}
             </Descriptions.Item>
             {tweetTrackingURL && (
@@ -135,7 +135,7 @@ const CampaignDetail = props => {
   return (
     <div className="flex flex-col" style={{ padding: 20 }}>
       {/* 可能这里要嵌入一个 dashboard */}
-      {!isLoading && data?.title && (
+      {!isLoading && data?.title ? (
         <div>
           {data.status === "init" ? (
             <>
@@ -167,6 +167,8 @@ const CampaignDetail = props => {
             />
           )}
         </div>
+      ) : (
+        <LoadingSpinner message="Loading..." />
       )}
     </div>
   );
