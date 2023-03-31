@@ -139,11 +139,11 @@ const Connectors = props => {
                       item.configured
                         ? [
                             <Button
-                              key="Connect Disabled"
+                              key="Detail"
                               style={{ borderRadius: 5, width: 90 }}
-                              disabled
+                              onClick={() => showDrawer(item)}
                             >
-                              Connect
+                              Detail
                             </Button>,
                             // <a
                             //   key="list-loadmore-edit"
