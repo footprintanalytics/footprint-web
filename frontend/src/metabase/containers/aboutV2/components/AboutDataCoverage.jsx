@@ -37,7 +37,7 @@ const AboutDataCoverage = ({ indicator }) => {
       </div>
       <AboutImage
         className="About__data-image"
-        src={getOssUrl("home-v2/img_data_coverage.png")}
+        src={getOssUrl("home-v2/img_data_coverage.png?1=1")}
         alt={"data coverage"}
       />
       <ul>
