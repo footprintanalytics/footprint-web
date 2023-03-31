@@ -14,7 +14,7 @@ const LoadingDashboard = ({
   children,
 }) => {
   const { data } = useQuery(
-    ["GetFgaConnectorJob", projectId],
+    ["GetFgaConnectorJob", projectId, sourceDefinitionId],
     async () => GetFgaConnectorJob({ projectId, sourceDefinitionId }),
     {
       refetchInterval: data => (data?.status === "succeeded" ? false : 10000),
