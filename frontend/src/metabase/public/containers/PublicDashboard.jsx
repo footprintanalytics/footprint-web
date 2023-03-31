@@ -45,14 +45,14 @@ import EmbedFrame from "../components/EmbedFrame";
 const mapStateToProps = (state, props) => {
   const parameters = getParameters(state, props);
   const parameterValues = getParameterValues(state, props);
-  const project = props.project;
+  const project = props.project.project;
   const location = props.location;
   if (project) {
     // switch protocol
     updateDashboardPara(parameters, parameterValues, "gamefi", [
-      project.projectName,
+      project.protocolSlug,
     ]);
-    if (project.collection_contract_address?.length > 0) {
+    if (project.nftCollectionAddress?.length > 0) {
       const key = "collection_contract_address";
       let queryCollection = getDefaultDashboardPara(
         parameters,
@@ -60,17 +60,20 @@ const mapStateToProps = (state, props) => {
         key,
       );
       let queryCollectionInUrl = location.query.collection_contract_address;
-      queryCollectionInUrl = project.collection_contract_address.includes(
-        queryCollectionInUrl,
-      )
-        ? queryCollectionInUrl
-        : null;
+      queryCollectionInUrl =
+        project.nftCollectionAddress.findIndex(
+          item => item.address === queryCollectionInUrl,
+        ) !== -1
+          ? queryCollectionInUrl
+          : null;
       queryCollection =
         queryCollection &&
         !isArray(queryCollection) &&
-        project.collection_contract_address.includes(queryCollection)
+        project.nftCollectionAddress.findIndex(
+          item => item.address === queryCollectionInUrl,
+        ) !== -1
           ? queryCollection
-          : queryCollectionInUrl ?? project.collection_contract_address?.[0];
+          : queryCollectionInUrl ?? project.nftCollectionAddress?.[0].address;
       updateDashboardPara(parameters, parameterValues, key, queryCollection);
     }
     if (project.twitter_handler) {

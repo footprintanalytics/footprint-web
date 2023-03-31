@@ -1,5 +1,6 @@
+import React from "react";
 import { set } from "lodash";
-import { notification } from "antd";
+import { notification, Button } from "antd";
 import { PublicApi, maybeUsePivotEndpoint } from "metabase/services";
 
 export function checkIsDemoAccountAndAlert(user: any, action: () => any) {
@@ -9,6 +10,15 @@ export function checkIsDemoAccountAndAlert(user: any, action: () => any) {
       description:
         "This account is solely for demo purposes. If you need to create campaigns or cohorts and access more advanced features, please register your own account and add your own project.",
       placement: "top",
+      btn: (
+        <Button
+          type="primary"
+          size="small"
+          href="mailto:analytics@footprint.network"
+        >
+          Contact Us
+        </Button>
+      ),
     });
   } else {
     action();

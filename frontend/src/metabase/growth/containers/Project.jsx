@@ -34,24 +34,24 @@ import "../css/index.css";
 
 const Project = props => {
   const { router, location, children, user, menu, projectPath } = props;
+  const tabs_data = fga_menu_data;
   const [tab, setTab] = useState(menu);
   const [project, setProject] = useState(projectPath);
   const [projectId, setProjectId] = useState(getLatestGAProjectId());
-  const [projectData, setProjectData] = useState();
-  useEffect(() => {
-    //TODO 这里要换成从数据源api 读取 project 数据
-    setProjectData(top_protocols.find(i => i.protocol_slug === projectPath));
-  }, [projectPath]);
+  const demoProjectData = top_protocols[0];
+  const [gaMenuTabs, setGaMenuTabs] = useState();
+
   useEffect(() => {
     setProjectId(getLatestGAProjectId());
     setTab(
       menu ??
         getLatestGAMenuTag() ??
-        (tabs_data[0].children.length > 0
-          ? tabs_data[0].children[0].name
-          : tabs_data[0].name),
+        (gaMenuTabs?.menuTabs?.[0].children.length > 0
+          ? gaMenuTabs?.menuTabs?.[0].children[0].name
+          : gaMenuTabs?.menuTabs?.[0].name),
     );
-  }, [menu, tabs_data]);
+  }, [menu, gaMenuTabs]);
+
   const { isLoadingProject, data, refetch } = useQuery(
     ["GetFgaProjectDetail", user, projectPath, getLatestGAProjectId()],
     async () => {
@@ -65,6 +65,26 @@ const Project = props => {
     },
     QUERY_OPTIONS,
   );
+
+  useEffect(() => {
+    let menu = null;
+    if (!isLoadingProject && data) {
+      menu = getGaMenuTabs(
+        tabs_data,
+        data?.protocolType,
+        data?.nftCollectionAddress?.length > 0,
+      );
+    } else {
+      // demo project menu
+      menu = getGaMenuTabs(
+        tabs_data,
+        demoProjectData.protocolType,
+        demoProjectData?.nftCollectionAddress?.length > 0,
+      );
+    }
+    console.log("menu", menu);
+    setGaMenuTabs(menu);
+  }, [isLoadingProject, data]);
 
   useEffect(() => {
     setProjectId(getLatestGAProjectId());
@@ -88,18 +108,13 @@ const Project = props => {
       );
     }
   }, [projectPath]);
-  const tabs_data = fga_menu_data;
-  // todo protocol_type 先写死 GameFi，到时候需要根据 api 返回的真实 project data 传参数
-  const { menuTabs, dashboardMap } = getGaMenuTabs(
-    tabs_data,
-    "GameFi",
-    projectData?.collections_list?.length > 0,
-  );
+
   const getProjectObject = project => {
     return {
-      projectName: project,
-      collection_contract_address: projectData?.collections_list,
-      project: projectData,
+      projectName: data?.protocolSlug ?? project,
+      collection_contract_address:
+        data?.nftCollectionAddress ?? demoProjectData?.nftCollectionAddress,
+      project: data ?? demoProjectData,
       twitter_handler: data?.twitter?.handler,
       discord_guild_id: data?.discord?.guildId,
       protocolName: data?.protocolName,
@@ -108,7 +123,7 @@ const Project = props => {
   const getContentPannel = current_tab => {
     const WrapPublicDashboard = (
       <PublicDashboard
-        params={{ uuid: dashboardMap.get(current_tab) }}
+        params={{ uuid: gaMenuTabs?.dashboardMap?.get(current_tab) }}
         location={location}
         project={getProjectObject(project)}
         isFullscreen={false}
@@ -143,7 +158,7 @@ const Project = props => {
         <ProjectInfo
           location={location}
           router={router}
-          project={project}
+          project={getProjectObject(project)}
         ></ProjectInfo>
       );
     }
@@ -190,7 +205,7 @@ const Project = props => {
     if (current_tab === "Cohort") {
       return <Cohort router={router} location={location}></Cohort>;
     }
-    if (dashboardMap.has(current_tab)) {
+    if (gaMenuTabs?.dashboardMap?.has(current_tab)) {
       // TODO: fix this project object
       if (current_tab === "Twitter") {
         return (
@@ -246,7 +261,7 @@ const Project = props => {
           router={router}
           location={location}
           currentTab={tab}
-          items={menuTabs}
+          items={gaMenuTabs?.menuTabs}
           currentProject={project}
         ></GaSidebar>
         <Content
