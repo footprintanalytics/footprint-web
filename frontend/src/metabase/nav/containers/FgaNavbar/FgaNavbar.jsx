@@ -45,6 +45,7 @@ import VipIcon from "metabase/components/VipIcon";
 import CreateProjectModal from "metabase/growth/components/Modal/CreateProjectModal";
 import { getContext, getPath, getUser } from "../selectors";
 import { getLoginModalDefaultRegister } from "../../../selectors/control";
+import { checkIsDemoAccountAndAlert } from "metabase/growth/utils/utils";
 
 const mapStateToProps = (state, props) => ({
   path: getPath(state, props),
@@ -366,7 +367,9 @@ class FgaNavbar extends Component {
     const onCreateAction = () => {
       trackStructEvent(`click Navbar Add My Project`);
       if (user) {
-        setCreateFgaProjectModalShowAction({ show: true });
+        checkIsDemoAccountAndAlert(user, () => {
+          setCreateFgaProjectModalShowAction({ show: true });
+        });
         // this.setState({ ...this.state, isProjectModalOpen: true });
       } else {
         setLoginModalShow({ show: true, from: "navbar_fga_signin" });

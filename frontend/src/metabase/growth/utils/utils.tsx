@@ -1,5 +1,19 @@
 import { set } from "lodash";
+import { notification } from "antd";
 import { PublicApi, maybeUsePivotEndpoint } from "metabase/services";
+
+export function checkIsDemoAccountAndAlert(user: any, action: () => any) {
+  if (user && user.email === "fga@footprint.network") {
+    notification.info({
+      message: `Notification`,
+      description:
+        "This account is solely for demo purposes. If you need to create campaigns or cohorts and access more advanced features, please register your own account and add your own project.",
+      placement: "top",
+    });
+  } else {
+    action();
+  }
+}
 
 export function updateDashboardPara(
   parameters: any[],
