@@ -164,7 +164,6 @@ class FgaNavbar extends Component {
   renderLoginModal() {
     const { location, loginModalShow, loginModalRedirect, loginModalDefaultRegister, setLoginModalShow } =
       this.props;
-    console.log("loginModalDefaultRegister", loginModalDefaultRegister)
     return (
       <LoginModal
         isOpen={loginModalShow}
