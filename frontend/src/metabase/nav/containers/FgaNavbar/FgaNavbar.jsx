@@ -87,6 +87,22 @@ class FgaNavbar extends Component {
     showZkspaceModal: true,
     // isProjectModalOpen: false,
   };
+
+  forceLogin() {
+    const { user, setLoginModalShow } = this.props;
+    if (!user) {
+      setLoginModalShow({ show: true, from: "navbar_fga_signin" });
+    }
+  }
+
+  componentDidUpdate() {
+    this.forceLogin();
+  }
+
+  componentDidMount() {
+    this.forceLogin();
+  }
+
   isActive(path) {
     return this.props.path === path;
   }
@@ -171,6 +187,7 @@ class FgaNavbar extends Component {
         location={this.props.location}
         fromNav={true}
         redirect={loginModalRedirect}
+        hideClose={true}
       />
     );
   }

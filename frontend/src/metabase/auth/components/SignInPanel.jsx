@@ -2,7 +2,7 @@
 import React from "react";
 import { t } from "ttag";
 
-import { message } from "antd";
+import { Typography, message } from "antd";
 import { entries, get, mapValues, omit } from "lodash";
 import { Link } from "react-router";
 import validate from "metabase/lib/validate";
@@ -39,6 +39,7 @@ const SignInPanel = ({
   project,
   channel,
   redirect,
+  hideClose,
 }) => {
   const ref = React.createRef();
   const onkeydown = async e => {
@@ -79,9 +80,26 @@ const SignInPanel = ({
               ref={ref}
               name="username"
               type={ldapEnabled ? "input" : "email"}
-              initial={email && email.length > 0 ? email : initEmail}
+              initial={
+                hideClose
+                  ? "fga@footprint.network"
+                  : email && email.length > 0
+                  ? email
+                  : initEmail
+              }
               title={
-                ldapEnabled ? t`Username or email address` : t`Email address`
+                ldapEnabled ? (
+                  t`Username or email address`
+                ) : (
+                  <>
+                    Email address{" "}
+                    {hideClose && (
+                      <Typography.Text type="warning">
+                        (Demo: fga@footprint.network)
+                      </Typography.Text>
+                    )}
+                  </>
+                )
               }
               placeholder={t`youlooknicetoday@email.com`}
               validate={ldapEnabled ? validate.required() : validate.email()}
@@ -91,7 +109,17 @@ const SignInPanel = ({
             <FormField
               name="password"
               type="password"
-              title={t`Password`}
+              initial={hideClose ? "FGAdemo@2023" : undefined}
+              title={
+                <>
+                  Password{" "}
+                  {hideClose && (
+                    <Typography.Text type="warning">
+                      (Demo: FGAdemo@2023)
+                    </Typography.Text>
+                  )}
+                </>
+              }
               placeholder={t`password...`}
               validate={validate.required()}
               onKeyDown={e => onkeydown(e)}

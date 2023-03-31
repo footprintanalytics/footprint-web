@@ -215,6 +215,7 @@ const LoginModalInner = props => {
           project={project}
           channel={getChannel()}
           redirect={redirect}
+          hideClose={hideClose}
         />
         <SignUpPanel
           show={isSignUp()}

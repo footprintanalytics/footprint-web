@@ -4,7 +4,12 @@ import { withRouter } from "react-router";
 import PropTypes from "prop-types";
 import ModalContent from "metabase/components/ModalContent";
 import Modal from "metabase/components/Modal";
-import { getRegistEmail, login, loginGoogle, regist } from "metabase/auth/actions";
+import {
+  getRegistEmail,
+  login,
+  loginGoogle,
+  regist,
+} from "metabase/auth/actions";
 import LoginModalSlider from "metabase/auth/components/LoginModalSlider";
 import { getUser } from "metabase/home/selectors";
 import { getChannel } from "metabase/selectors/app";
@@ -19,12 +24,13 @@ const mapStatusToProps = (state, props) => {
     user: getUser(state),
     channel: getChannel(state) || "homepage",
     project: props.project || props.location.query.project || "footprint",
+    hideClose: props.hideClose,
   };
 };
 
 const mapDispatchToProps = { login, regist, getRegistEmail, loginGoogle };
 
-const LoginModal = (props) => {
+const LoginModal = props => {
   const { isOpen = false, fromNav = false, from = "" } = props;
 
   const InnerPanel = () => {
