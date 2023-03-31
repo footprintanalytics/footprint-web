@@ -9,6 +9,7 @@ import {
   Badge,
   Descriptions,
   Empty,
+  Alert,
   Tooltip,
   message,
 } from "antd";
@@ -78,7 +79,7 @@ const CampaignDetail = props => {
             <Descriptions.Item label="Status" span={3}>
               {["pending", "init"].includes(data.status) ? (
                 <Tag icon={<SyncOutlined spin />} color="processing">
-                  pending
+                  {data.status}
                 </Tag>
               ) : (
                 <Tag icon={<CheckCircleOutlined />} color="success">
@@ -136,19 +137,35 @@ const CampaignDetail = props => {
       {/* 可能这里要嵌入一个 dashboard */}
       {!isLoading && data?.title && (
         <div>
-          <PublicDashboard
-            // params={{ uuid: "6cc6c56f-b265-4ab1-a2a0-300efde7f319" }}
-            params={{ uuid: "b46fc872-c97d-4300-a83e-45fa61760ad2" }}
-            header={Header()}
-            hideTitle={true}
-            location={location}
-            hideAllParams={true}
-            project={{ ...project, campaignTitle: data?.title }}
-            isFullscreen={false}
-            className="ml-250 mt-40"
-            key={project?.projectName}
-            hideFooter
-          />
+          {data.status === "init" ? (
+            <>
+              {Header()}
+              <div style={{ marginTop: 10 }}>
+                <Card>
+                  <Alert
+                    message="This campaign still initing, please wait..."
+                    description="This may take a few minutes or a few hours, depending on the amount of data. Thank you for your patience."
+                    type="info"
+                    showIcon
+                  />
+                </Card>
+              </div>
+            </>
+          ) : (
+            <PublicDashboard
+              params={{ uuid: "6cc6c56f-b265-4ab1-a2a0-300efde7f319" }}
+              // params={{ uuid: "b46fc872-c97d-4300-a83e-45fa61760ad2" }}
+              header={Header()}
+              hideTitle={true}
+              location={location}
+              hideAllParams={true}
+              project={{ ...project, campaignTitle: data?.title }}
+              isFullscreen={false}
+              className="ml-250 mt-40"
+              key={project?.projectName}
+              hideFooter
+            />
+          )}
         </div>
       )}
     </div>

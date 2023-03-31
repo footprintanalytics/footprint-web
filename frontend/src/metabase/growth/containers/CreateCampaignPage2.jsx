@@ -317,7 +317,7 @@ const CreateCampaignPage2 = props => {
             project?.projectName,
             "CampaignDetail",
           ),
-          query: { id: result?.campaignId },
+          hash: "#id=" + result?.campaignId,
         });
         //todo 还差展示 邀请机器人link 和 活动 link
       })

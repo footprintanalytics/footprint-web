@@ -167,12 +167,6 @@ const Project = props => {
     }
     if (current_tab === "CreateCampaign") {
       return (
-        // <CreateCampaignPage
-        //   location={location}
-        //   router={router}
-        //   project={getProjectObject(project)}
-        //   projectId={getLatestGAProjectId()}
-        // ></CreateCampaignPage>
         <CreateCampaignPage2
           location={location}
           router={router}
