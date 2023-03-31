@@ -116,7 +116,13 @@ const UploadWallets = ({
 
   return (
     <>
-      <div onClick={() => setCohortModalOpen(true)}>Upload Wallets</div>
+      <div
+        onClick={() => {
+          setCohortModalOpen(true);
+        }}
+      >
+        Upload Wallets
+      </div>
       <Modal
         open={isCohortModalOpen}
         onCancel={() => setCohortModalOpen(false)}

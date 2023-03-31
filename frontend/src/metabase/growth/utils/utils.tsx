@@ -1,5 +1,41 @@
+import React from "react";
 import { set } from "lodash";
+import { notification, Button } from "antd";
 import { PublicApi, maybeUsePivotEndpoint } from "metabase/services";
+
+export function checkIsDemoAccountAndAlert(user: any, action: () => any) {
+  if (user && user.email === "fga@footprint.network") {
+    notification.info({
+      message: `Notification`,
+      description: (
+        <>
+          <div className=" mt1 text-light">
+            To get the best marketing solution for your project, feel free to
+            contact us for a customized analysis of your project:
+          </div>
+          <div className="mt2">Email: sales@footprint.network</div>
+          <div>Telegram: @dplinnn</div>
+        </>
+      ),
+      // `To get the best marketing solution for your project, feel free to contact us for a customized analysis of your project:
+      //   </br>Email:  sales@footprint.network
+      //   </br>Telegram:  @dplinnn`,
+      placement: "top",
+      btn: (
+        <Button
+          type="primary"
+          size="small"
+          target="_blank"
+          href="https://calendly.com/partners-79/footprint-growth-analytics-demo"
+        >
+          Book a meeting
+        </Button>
+      ),
+    });
+  } else {
+    action();
+  }
+}
 
 export function updateDashboardPara(
   parameters: any[],
@@ -95,7 +131,7 @@ export function getGaMenuTabs(
       ].findIndex(i => i === item.name) === -1
         ? true
         : false;
-    if (!hasNftContract && item.name === "NFT") {
+    if (!hasNftContract && ["NFT", "NFT Minting"].includes(item.name)) {
       disabled = true;
     }
     if (protocol_type !== "GameFi" && item.name === "GameFi") {

@@ -21,11 +21,9 @@ import "../css/index.css";
 
 const ProjectInfo = props => {
   const { router, project, location } = props;
-  const [currentProject, setCurrentProject] = useState();
+  const [currentProject, setCurrentProject] = useState(project?.project);
   useEffect(() => {
-    //TODO 这里要换成从数据源api 读取 project 数据
-    const p = top_protocols.find(i => i.protocol_slug === project);
-    setCurrentProject(p ?? null);
+    setCurrentProject(project?.project);
   }, [project]);
   const onTabChange = key => {
     console.log(key);
@@ -40,18 +38,19 @@ const ProjectInfo = props => {
     let datas = [];
     switch (type) {
       case "NFT":
-        datas = currentProject?.collections_list;
+        datas = currentProject?.nftCollectionAddress;
         break;
       case "Contract":
         datas = [];
         break;
       case "Token":
-        datas = [];
+        datas = currentProject?.tokenAddress;
         break;
       default:
         datas = [];
     }
-    if (datas.length <= 0) {
+    console.log("datas", datas);
+    if (!Array.isArray(datas) || datas.length <= 0) {
       return (
         <Empty
           image="https://gw.alipayobjects.com/zos/antfincdn/ZHrcdLPrvN/empty.svg"
@@ -81,7 +80,7 @@ const ProjectInfo = props => {
             actions={[
               <CopyToClipboard
                 key="list-copy"
-                text={item}
+                text={`${item.address}`}
                 onCopy={() => {
                   message.success("Copied!");
                 }}
@@ -90,20 +89,20 @@ const ProjectInfo = props => {
                   <a>copy</a>
                 </Tooltip>
               </CopyToClipboard>,
-              <Tooltip key="list-more" title={`View in scan!`}>
-                <a
-                  onClick={() => {
-                    window.open(getScanLink(item), "_blank");
-                  }}
-                >
-                  more
-                </a>
-              </Tooltip>,
+              // <Tooltip key="list-more" title={`View in scan!`}>
+              //   <a
+              //     onClick={() => {
+              //       window.open(getScanLink(item), "_blank");
+              //     }}
+              //   >
+              //     more
+              //   </a>
+              // </Tooltip>,
             ]}
           >
             <div>
               <Avatar style={{ marginRight: 5 }}>{type}</Avatar>
-              {item}
+              {item.address} <Tag>{item.chain}</Tag>
             </div>
           </List.Item>
         )}
@@ -154,11 +153,19 @@ const ProjectInfo = props => {
                 />
                 <div className="flex flex-col ml3">
                   <div style={{ fontSize: 22, fontWeight: 500 }}>
-                    {currentProject.protocol_name}
+                    {currentProject.protocolName}
                   </div>
                   <div className=" mt1">
-                    <Tag>{currentProject.chain}</Tag>
-                    <Tag>NFT</Tag>
+                    {currentProject?.protocolType &&
+                      currentProject?.protocolType !== "NFT" && (
+                        <Tag>{currentProject?.protocolType}</Tag>
+                      )}
+                    {currentProject?.nftCollectionAddress?.length > 0 && (
+                      <Tag>NFT</Tag>
+                    )}
+                    {currentProject?.tokenAddress?.length > 0 && (
+                      <Tag>Token</Tag>
+                    )}
                   </div>
                 </div>
               </div>
@@ -207,7 +214,7 @@ const ProjectInfo = props => {
       </div>
     </div>
   );
-};
+};;
 
 const mapStateToProps = state => {
   return {

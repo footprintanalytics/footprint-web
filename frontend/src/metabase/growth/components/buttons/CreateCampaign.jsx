@@ -7,6 +7,7 @@ import {
   Avatar,
   Button,
   Form,
+  notification,
   Radio,
   Segmented,
   Tooltip,
@@ -37,7 +38,7 @@ const CreateCampaign = ({
   user,
   setLoginModalShowAction,
   setCreateFgaProjectModalShowAction,
-  plain
+  plain,
 }) => {
   const [isNotificationModalOpen, setIsNotificationModalOpen] = useState(false);
   const [timingType, setTimingType] = useState("now");
@@ -193,16 +194,15 @@ const CreateCampaign = ({
     },
   ];
   const [campaignType, setCampaignType] = useState(campaignOptions[0].value);
+  const onClickCreateCampaign = () => {
+    setIsNotificationModalOpen(true);
+  };
   return (
     <>
       {plain ? (
-        <div onClick={() => setIsNotificationModalOpen(true)}>Create Campaign</div>
+        <div onClick={onClickCreateCampaign}>Create Campaign</div>
       ) : (
-        <Button
-          type="primary"
-          style={style}
-          onClick={() => setIsNotificationModalOpen(true)}
-        >
+        <Button type="primary" style={style} onClick={onClickCreateCampaign}>
           Create Campaign
         </Button>
       )}
