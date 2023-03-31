@@ -212,13 +212,10 @@
   max-width: 1920px;
   margin: 0 auto;
   background-image:
-    url("https://static.footprint.network/home-v2/img_start_bg_1.png"),
-    url("https://static.footprint.network/home-v2/img_start_bg_2.png"),
-    url("https://static.footprint.network/home-v2/img_start_bg_3.png"),
-    url("https://static.footprint.network/home-v2/img_start_bg_4.png");
-  background-size: 50% 50%, 50% 50%, 50% 50%, 50% 50%;
-  background-repeat: no-repeat, no-repeat, no-repeat, no-repeat;
-  background-position: top left, top right, bottom left, bottom right;
+    url("https://static.footprint.network/home-v2/img_start_bg.webp");
+  background-size: cover;
+  background-repeat: no-repeat;
+  background-position: center;
 }
 
 .About__start-title {
@@ -248,16 +245,11 @@
   margin: 16px 0;
 }
 
-.About__start li span {
+.About__start-title h2 {
   margin-left: 10px;
   font-size: 24px;
   font-weight: normal;
-}
-
-.About__start-title h2 {
-  font-size: 18px;
-  line-height: 24px;
-  font-weight: normal;
+  color: white;
 }
 
 .About__start-buttons {

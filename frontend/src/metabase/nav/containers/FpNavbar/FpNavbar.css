@@ -133,13 +133,20 @@
   height: 60px;
   line-height: 60px;
 }
-
 .Nav__right-menu:hover {
   color: #3434b2;
 }
 
 .Nav__right-menu-select {
   border-bottom: 4px solid #3434b2 !important;
+}
+
+.dark .Nav__right-menu:hover {
+  color: #4444FF;
+}
+
+.dark .Nav__right-menu-select {
+  border-bottom: 4px solid #4444FF !important;
 }
 
 .Nav__menu-create {
@@ -232,6 +239,10 @@
   color: white;
 }
 
+.dark .Nav__menu-item-color:hover {
+  color: #4444FF;
+}
+
 .dark .footprint-primary-text {
   color: white;
 }
@@ -242,7 +253,7 @@
 }
 
 .dark .Nav__sign-up:hover {
-  color: #eee;
+  color: #4444FF;
 }
 
 @media screen and (--footprint-breakpoint-max-pad) {

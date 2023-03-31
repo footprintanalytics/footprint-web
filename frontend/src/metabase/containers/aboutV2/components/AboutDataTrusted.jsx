@@ -12,20 +12,20 @@ const AboutDataTrusted = () => {
       post: "CEO & Co-founder",
       img: "home-v2/img_trusted_agave.png",
       detail: "Thanks to Footprint's SQL API, we have been able to efficiently access vast amounts of well-structured blockchain and market data across multiple chains. This has enabled us to power our analysis of Web3 gaming data and discover valuable insights.\n" +
-        "Above is API focused, but I've really appreciated the Footprint teams' support. @JimmyTF, is always quick to help and resolve any issues we have. This is a great part of using FP services"
+        "Above is API focused, but I've really appreciated the Footprint teams' support. @JimmyTF, is always quick to help and resolve any issues we have. This is a great part of using Footprint services"
     },
     {
       name: "Trusta",
       desc: "Simon",
       post: "Founder & CTO",
-      img: "home-v2/img_trusted_agave.png",
-      detail: "Without the on-chain data supported by footprint, we cannot deliver our TrustScan, an AI-powered Sybil resistance product in just two months. We apprieciate Footprint for their data coverage of over 20 chains, high-quality and structured data, and the instant tech support by FT engineers."
+      img: "home-v2/img_trusted_trusta.png",
+      detail: "Without the on-chain data supported by footprint, we cannot deliver our TrustScan, an AI-powered Sybil resistance product in just two months. We apprieciate Footprint for their data coverage of over 20 chains, high-quality and structured data, and the instant tech support by Footprint engineers."
     }
   ]
   return (
     <div className="About__data-trusted">
       <div className="About__title">
-        Trusted by industry leaders
+        Trusted by Industry leaders
       </div>
       <div className="About__data-trusted-inner">
         <Carousel dotPosition="bottom" autoplay>
