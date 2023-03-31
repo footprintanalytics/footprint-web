@@ -156,6 +156,10 @@ const ProjectInfo = props => {
                     {currentProject.protocolName}
                   </div>
                   <div className=" mt1">
+                    {currentProject?.protocolType &&
+                      currentProject?.protocolType !== "NFT" && (
+                        <Tag>{currentProject?.protocolType}</Tag>
+                      )}
                     {currentProject?.nftCollectionAddress?.length > 0 && (
                       <Tag>NFT</Tag>
                     )}

@@ -73,8 +73,13 @@ const mapStateToProps = (state, props) => {
           item => item.address === queryCollectionInUrl,
         ) !== -1
           ? queryCollection
-          : queryCollectionInUrl ?? project.nftCollectionAddress?.[0].address;
+          : queryCollectionInUrl ?? project.nftCollectionAddress?.[0]?.address;
       updateDashboardPara(parameters, parameterValues, key, queryCollection);
+      if (queryCollection === project.nftCollectionAddress?.[0]?.address) {
+        updateDashboardPara(parameters, parameterValues, "chain", [
+          project.nftCollectionAddress?.[0].chain,
+        ]);
+      }
     }
     if (project.twitter_handler) {
       const key = "twitter_handler";
