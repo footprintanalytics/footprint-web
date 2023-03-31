@@ -82,10 +82,10 @@ const CampaignDetail = props => {
                   {data.status}
                 </Tag>
               ) : (
-                <Tag icon={<CheckCircleOutlined />} color="success">
-                  {data.status}
-                </Tag>
-                // <Badge status="success" text={data.status} />
+                // <Tag icon={<CheckCircleOutlined />} color="success">
+                //   {data.status}
+                // </Tag>
+                <Badge status="success" text={data.status} />
               )}
             </Descriptions.Item>
             {tweetTrackingURL && (
