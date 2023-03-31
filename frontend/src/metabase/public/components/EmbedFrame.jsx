@@ -38,7 +38,9 @@ class EmbedFrame extends Component {
       location,
       parameters,
       parameterValues,
+      hideParameters,
       setParameterValue,
+      hideTitle,
       hideFooter,
     } = this.props;
     const { innerScroll } = this.state;
@@ -52,7 +54,7 @@ class EmbedFrame extends Component {
       (!MetabaseSettings.hideEmbedBranding() ||
         (!hide_download_button && actionButtons));
 
-    const name = titled ? this.props.name : null;
+    const name = titled && !hideTitle ? this.props.name : null;
 
     return (
       <div
@@ -87,7 +89,7 @@ class EmbedFrame extends Component {
                       parameterValues,
                     )}
                     setParameterValue={setParameterValue}
-                    hideParameters={hide_parameters}
+                    hideParameters={hideParameters ?? hide_parameters}
                   />
                 </div>
               ) : null}

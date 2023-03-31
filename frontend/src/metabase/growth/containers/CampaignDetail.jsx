@@ -54,8 +54,8 @@ const CampaignDetail = props => {
     }
   });
 
-  return (
-    <div className="flex flex-col" style={{ padding: 20 }}>
+  const Header = () => {
+    return (
       <Card title="Campaign Dateil">
         {isLoading ? (
           <LoadingSpinner message="Loading..." />
@@ -125,16 +125,24 @@ const CampaignDetail = props => {
           <Empty description="No data" />
         )}
       </Card>
+    );
+  };
+
+  return (
+    <div className="flex flex-col" style={{ padding: 20 }}>
       {/* 可能这里要嵌入一个 dashboard */}
       {!isLoading && data?.title && (
         <div>
           <PublicDashboard
-            params={{ uuid: "6cc6c56f-b265-4ab1-a2a0-300efde7f319" }}
-            // params={{ uuid: "b46fc872-c97d-4300-a83e-45fa61760ad2" }}
+            // params={{ uuid: "6cc6c56f-b265-4ab1-a2a0-300efde7f319" }}
+            params={{ uuid: "b46fc872-c97d-4300-a83e-45fa61760ad2" }}
+            header={Header()}
+            hideTitle={true}
             location={location}
+            hideAllParams={true}
             project={{ ...project, campaignTitle: data?.title }}
             isFullscreen={false}
-            className="ml-250 mt-400"
+            className="ml-250 mt-40"
             key={project?.projectName}
             hideFooter
           />
