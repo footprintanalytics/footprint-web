@@ -5,9 +5,7 @@
   font-size: 14px;
   font-family: roboto;
 }
-.mask {
-  background-image: linear-gradient(to bottom, rgba(0, 0, 0, 0), rgba(0, 0, 0, 1));
-}
+
 .About:before {
   /*  position: fixed;
   top: 0;
@@ -425,6 +423,7 @@
 }
 
 .About__data-image {
+  margin: 60px 0;
 }
 
 .About__data-coverage ul {

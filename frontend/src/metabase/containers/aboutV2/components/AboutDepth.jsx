@@ -15,7 +15,7 @@ const AboutDepth = () => {
       desc: "Select quality users such as whales and long-term holders from massive  address databases for airdrops, and monitor campaign performance",
       buttons: [
         {
-          buttonText: "Explore the NFT airdrop marketing loop",
+          buttonText: "Real Time NFT Minting Monitoring",
           link: "https://www.footprint.network/@Shelly/Mocaverse-Real-Time-NFT-Airdrop-Monitoring",
         },
       ],
@@ -56,6 +56,12 @@ const AboutDepth = () => {
       label: "Wallet Profiles",
       title: "Analyze and track transactions to match on-chain assets with the right users, and do Sybil prevention",
       desc: "Batch access to all on-chain data to know your users better and bring more valuable users to your project",
+      buttons: [
+        {
+          buttonText: "Explore wallet profile dashboard",
+          link: "https://www.footprint.network/@rogerD/Wallet-Profile-FGA?wallet_address=0x7a9fe22691c811ea339d9b73150e6911a5343dca",
+        },
+      ],
       img: "home-v2/img_depth_4.png?2=2",
     },
     {
