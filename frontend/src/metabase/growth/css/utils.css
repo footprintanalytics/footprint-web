@@ -127,10 +127,27 @@
 .ml-250 {
   margin-left: 250px;
 }
+.mt-20 {
+  margin-top: 20px;
+}
+
+.mt-30 {
+  margin-top: 30px;
+}
+
+.mt-40 {
+  margin-top: 40px;
+}
+.mt-45 {
+  margin-top: 45px;
+}
+
+.mt-50 {
+  margin-top: 50px;
+}
 .mt-250 {
   margin-top: 250px;
 }
-
 .mt-400 {
   margin-top: 400px;
 }

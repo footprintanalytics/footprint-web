@@ -119,6 +119,9 @@ const mapStateToProps = (state, props) => {
   return {
     metadata: getMetadata(state, props),
     project: props.project,
+    header: props.header,
+    hideAllParams: props.hideAllParams,
+    hideTitle: props.hideTitle,
     dashboardId:
       props.params.dashboardId ||
       parseTitleId(props.params.uuid || props.params.token).id,
@@ -192,7 +195,10 @@ class PublicDashboard extends Component {
       isFullscreen,
       isNightMode,
       project,
+      header,
       hideFooter,
+      hideTitle,
+      hideAllParams,
       className,
     } = this.props;
     const buttons = !IFRAMED
@@ -202,12 +208,20 @@ class PublicDashboard extends Component {
     const { chart_style } = {
       ...parseHashOptions(location.hash),
     };
+    let hideParameters = "";
+    if (hideAllParams) {
+      parameters.map((para, index) => {
+        hideParameters = hideParameters + (index !== 0 ? "," : "") + para.slug;
+      });
+    }
     return (
       <EmbedFrame
         name={dashboard && dashboard.name}
         description={dashboard && dashboard.description}
         dashboard={dashboard}
         parameters={parameters}
+        hideParameters={hideParameters}
+        hideTitle={hideTitle}
         parameterValues={parameterValues}
         setParameterValue={this.props.setParameterValue}
         actionButtons={
@@ -216,25 +230,28 @@ class PublicDashboard extends Component {
         hideFooter={hideFooter}
         className={className}
       >
-        <LoadingAndErrorWrapper
-          className={cx("Dashboard p1 flex-full", {
-            "Dashboard--fullscreen": isFullscreen,
-            "Dashboard--night": isNightMode,
-          })}
-          loading={!dashboard}
-        >
-          {() => (
-            <DashboardGrid
-              {...this.props}
-              className="spread"
-              mode={PublicMode}
-              metadata={this.props.metadata}
-              navigateToNewCardFromDashboard={() => {}}
-              hideWatermark={dashboard && dashboard.hideWatermark}
-              chartStyle={chart_style}
-            />
-          )}
-        </LoadingAndErrorWrapper>
+        <>
+          {header ?? <></>}
+          <LoadingAndErrorWrapper
+            className={cx("Dashboard p1 flex-full", {
+              "Dashboard--fullscreen": isFullscreen,
+              "Dashboard--night": isNightMode,
+            })}
+            loading={!dashboard}
+          >
+            {() => (
+              <DashboardGrid
+                {...this.props}
+                className="spread"
+                mode={PublicMode}
+                metadata={this.props.metadata}
+                navigateToNewCardFromDashboard={() => {}}
+                hideWatermark={dashboard && dashboard.hideWatermark}
+                chartStyle={chart_style}
+              />
+            )}
+          </LoadingAndErrorWrapper>
+        </>
       </EmbedFrame>
     );
   }
