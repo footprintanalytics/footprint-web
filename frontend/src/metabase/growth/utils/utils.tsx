@@ -95,7 +95,7 @@ export function getGaMenuTabs(
       ].findIndex(i => i === item.name) === -1
         ? true
         : false;
-    if (!hasNftContract && item.name === "NFT") {
+    if (!hasNftContract && ["NFT", "NFT Minting"].includes(item.name)) {
       disabled = true;
     }
     if (protocol_type !== "GameFi" && item.name === "GameFi") {
