@@ -45,7 +45,7 @@ import EmbedFrame from "../components/EmbedFrame";
 const mapStateToProps = (state, props) => {
   const parameters = getParameters(state, props);
   const parameterValues = getParameterValues(state, props);
-  const project = props.project.project;
+  const project = props.project?.project;
   const location = props.location;
   if (project) {
     // switch protocol
