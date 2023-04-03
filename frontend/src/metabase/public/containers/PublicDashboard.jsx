@@ -5,7 +5,7 @@ import { push } from "react-router-redux";
 import cx from "classnames";
 
 import _ from "underscore";
-import { isArray } from "lodash";
+import { debounce, isArray } from "lodash";
 import { IFRAMED } from "metabase/lib/dom";
 
 import LoadingAndErrorWrapper from "metabase/components/LoadingAndErrorWrapper";
@@ -150,11 +150,23 @@ const mapDispatchToProps = {
 
 // NOTE: this should use DashboardData HoC
 class PublicDashboard extends Component {
+
+  _fetchDashboardCardData =
+    debounce(
+      () => {
+        this.props.fetchDashboardCardData({ reload: false, clear: true });
+      },
+      100,
+      {
+        leading: false,
+        trailing: true,
+      },
+    )
+
   _initialize = async () => {
     const {
       initialize,
       fetchDashboard,
-      fetchDashboardCardData,
       setErrorPage,
       location,
       params: { dashboardId, uuid, token },
@@ -171,7 +183,7 @@ class PublicDashboard extends Component {
     initialize();
     try {
       await fetchDashboard(dashboardId || publicUuid || token, location.query);
-      await fetchDashboardCardData({ reload: false, clear: true });
+      this._fetchDashboardCardData();
     } catch (error) {
       console.error(error);
       setErrorPage(error);
@@ -191,7 +203,7 @@ class PublicDashboard extends Component {
       return this._initialize();
     }
     if (!_.isEqual(this.props.parameterValues, prevProps.parameterValues)) {
-      this.props.fetchDashboardCardData({ reload: false, clear: true });
+      this._fetchDashboardCardData();
     }
   }
 
