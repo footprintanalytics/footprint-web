@@ -48,7 +48,7 @@ const AboutDataCoverage = () => {
           </li>
         )}
       </ul>
-      <AboutButton buttonText="Explore Footprint Data" link="https://www.footprint.network/@Footprint/Footprint-Data-Overview"/>
+      <AboutButton buttonText="Explore Footprint Data" link="https://www.footprint.network/@Footprint/Footprint-Datasets-Data-Dictionary"/>
     </div>
   );
 };
