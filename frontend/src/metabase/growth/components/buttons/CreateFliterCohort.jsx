@@ -11,6 +11,7 @@ import {
   createFgaProjectModalShowAction,
 } from "metabase/redux/control";
 import MetabaseUtils from "metabase/lib/utils";
+import { FilterOut } from "metabase/growth/components/FilterOut";
 
 const CreateFliterCohort = ({
   state,
@@ -176,6 +177,7 @@ const CreateFliterCohort = ({
         <div className="mt2" />
         {getPannel()}
         <div className="mb2" />
+        <FilterOut />
       </Modal>
     </>
   );
