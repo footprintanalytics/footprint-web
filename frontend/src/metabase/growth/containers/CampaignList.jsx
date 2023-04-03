@@ -2,16 +2,16 @@
 /* eslint-disable react/prop-types */
 import React from "react";
 import { connect } from "react-redux";
-import { Button, Card, Table, Typography, Tag } from "antd";
+import { Button, Card, Table, Typography, Tag, Badge } from "antd";
+import { SyncOutlined } from "@ant-design/icons";
 import { useQuery } from "react-query";
 import dayjs from "dayjs";
 import { QUERY_OPTIONS } from "metabase/containers/dashboards/shared/config";
 import { getUser } from "metabase/selectors/user";
 import LoadingSpinner from "metabase/components/LoadingSpinner";
 import { getCampaign } from "metabase/new-service";
-import UploadWallets from "../components/buttons/UploadWallets";
-import CampaignStatus from "../components/CampaignStatus";
 import { getGrowthProjectPath, getLatestGAProjectId } from "../utils/utils";
+import CampaignStatus from "../components/CampaignStatus";
 
 const CampaignList = props => {
   const { isLoading, data } = useQuery(
@@ -36,7 +36,6 @@ const CampaignList = props => {
                 props.router?.params?.project,
                 "CampaignDetail",
               ),
-              // query: { id: row.campaignId },
               hash: "#id=" + row.campaignId,
             });
           }}
@@ -76,48 +75,6 @@ const CampaignList = props => {
       title: "Create Time",
       dataIndex: "createdAt",
       render: text => dayjs(text).format("YYYY-MM-DD HH:mm"),
-    },
-  ];
-
-  const items = [
-    {
-      key: "3",
-      label: (
-        <div
-          onClick={() =>
-            props.router?.push({
-              pathname: getGrowthProjectPath(
-                props.router?.params?.project,
-                "CreateCampaign",
-              ),
-            })
-          }
-        >
-          Create Campaign
-        </div>
-      ),
-      // label: <CreateCampaign plain={true} />,
-    },
-    {
-      key: "1",
-      label: (
-        <div
-          onClick={() =>
-            props.router?.push({
-              pathname: getGrowthProjectPath(
-                props.router?.params?.project,
-                "Potential Users",
-              ),
-            })
-          }
-        >
-          Filter Wallets
-        </div>
-      ),
-    },
-    {
-      key: "2",
-      label: <UploadWallets />,
     },
   ];
 

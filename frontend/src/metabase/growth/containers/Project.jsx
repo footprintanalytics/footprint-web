@@ -1,7 +1,7 @@
 /* eslint-disable react/prop-types */
 import React, { useState, useEffect } from "react";
 import { connect } from "react-redux";
-import { Layout } from "antd";
+import { Button, Result, Layout, Image } from "antd";
 import { Content } from "antd/lib/layout/layout";
 import { useQuery } from "react-query";
 import { QUERY_OPTIONS } from "metabase/containers/dashboards/shared/config";
@@ -16,20 +16,18 @@ import {
   saveLatestGAProject,
   getLatestGAMenuTag,
   getLatestGAProjectId,
+  getGrowthProjectPath,
   getGaMenuTabs,
 } from "../utils/utils";
 import { fga_menu_data, top_protocols } from "../utils/data";
 import LoadingDashboard from "../components/LoadingDashboard";
-import Connectors from "./Connectors";
-import Activators from "./Activators";
-import CustomAnalysis from "./CustomAnalysis";
-import TemplateGallery from "./TemplateGallery";
-import MyFavoriteTemplate from "./MyFavoriteTemplate";
+import ConnectorList from "./ConnectorList";
+import ChannelList from "./ChannelList";
 import CampaignDetail from "./CampaignDetail";
 import CampaignList from "./CampaignList";
-import CreateCampaignPage from "./CreateCampaignPage";
-import CreateCampaignPage2 from "./CreateCampaignPage2";
-import Cohort from "./Cohort";
+import CustomAnalysis from "./CustomAnalysis";
+import CampaignCreate from "./CampaignCreate";
+import CohortList from "./CohortList";
 import "../css/index.css";
 
 const Project = props => {
@@ -69,20 +67,12 @@ const Project = props => {
   useEffect(() => {
     let menu = null;
     if (!isLoadingProject) {
-      if (data) {
-        menu = getGaMenuTabs(
-          tabs_data,
-          data?.protocolType,
-          data?.nftCollectionAddress?.length > 0,
-        );
-      } else {
-        // demo project menu
-        menu = getGaMenuTabs(
-          tabs_data,
-          demoProjectData.protocolType,
-          demoProjectData?.nftCollectionAddress?.length > 0,
-        );
-      }
+      menu = getGaMenuTabs(
+        tabs_data,
+        (data ?? demoProjectData).protocolType,
+        (data ?? demoProjectData).nftCollectionAddress?.length > 0,
+        user,
+      );
     }
     setGaMenuTabs(menu);
   }, [isLoadingProject, data]);
@@ -112,15 +102,9 @@ const Project = props => {
 
   const getProjectObject = project => {
     return {
-      projectName: data?.protocolSlug ?? project,
-      collection_contract_address:
-        data?.nftCollectionAddress ?? demoProjectData?.nftCollectionAddress,
-      project: {
-        ...(data ?? demoProjectData),
-        twitter_handler: data?.twitter?.handler,
-        discord_guild_id: data?.discord?.guildId,
-      },
-      protocolName: data?.protocolName,
+      ...(data ?? demoProjectData),
+      twitter_handler: data?.twitter?.handler,
+      discord_guild_id: data?.discord?.guildId,
     };
   };
   const getContentPannel = current_tab => {
@@ -137,23 +121,23 @@ const Project = props => {
     );
     if (current_tab === "Connector") {
       return (
-        <Connectors
+        <ConnectorList
           refetchProject={refetch}
           location={location}
           router={router}
           project={getProjectObject(project)}
           projectId={getLatestGAProjectId()}
-        ></Connectors>
+        ></ConnectorList>
       );
     }
     if (current_tab === "Channel") {
       return (
-        <Activators
+        <ChannelList
           location={location}
           router={router}
           project={getProjectObject(project)}
           projectId={getLatestGAProjectId()}
-        ></Activators>
+        ></ChannelList>
       );
     }
     if (current_tab === "General") {
@@ -165,32 +149,19 @@ const Project = props => {
         ></ProjectInfo>
       );
     }
-    if (current_tab === "Template Gallery") {
-      return (
-        <TemplateGallery location={location} router={router}></TemplateGallery>
-      );
-    }
     if (current_tab === "Custom Analysis") {
       return (
         <CustomAnalysis location={location} router={router}></CustomAnalysis>
       );
     }
-    if (current_tab === "My Analysis") {
-      return (
-        <MyFavoriteTemplate
-          location={location}
-          router={router}
-        ></MyFavoriteTemplate>
-      );
-    }
     if (current_tab === "CreateCampaign") {
       return (
-        <CreateCampaignPage2
+        <CampaignCreate
           location={location}
           router={router}
           project={getProjectObject(project)}
           projectId={getLatestGAProjectId()}
-        ></CreateCampaignPage2>
+        ></CampaignCreate>
       );
     }
     if (current_tab === "Campaign") {
@@ -206,10 +177,9 @@ const Project = props => {
       );
     }
     if (current_tab === "Cohort") {
-      return <Cohort router={router} location={location}></Cohort>;
+      return <CohortList router={router} location={location}></CohortList>;
     }
     if (gaMenuTabs?.dashboardMap?.has(current_tab)) {
-      // TODO: fix this project object
       if (current_tab === "Twitter") {
         return (
           <LoadingDashboard
@@ -253,7 +223,52 @@ const Project = props => {
     }
     return (
       <div style={{ textAlign: "center", padding: "50px" }}>
-        {tab} is coming soon~
+        <div
+          style={{
+            display: "flex",
+            padding: 0,
+            justifyContent: "center",
+          }}
+        >
+          <Result
+            style={{ margin: 0, width: "50%", minWidth: 400, maxWidth: 600 }}
+            icon={
+              <Image
+                preview={false}
+                style={{
+                  height: "50%",
+                  width: "50%",
+                  minHeight: 30,
+                  minWidth: 50,
+                  maxHeight: 500,
+                  maxWidth: 550,
+                }}
+                src={
+                  "https://footprint-imgs.oss-us-east-1.aliyuncs.com/no-data01.svg"
+                }
+              />
+            }
+            // title="There is currently no data available for this project."
+            subTitle="I'm sorry, the content for this page is not yet ready. You can visit our homepage for now and stay tuned for more high-quality content coming soon. We appreciate your patience."
+            extra={
+              <Button
+                type="primary"
+                onClick={() => {
+                  router.push(
+                    getGrowthProjectPath(
+                      project,
+                      gaMenuTabs?.menuTabs?.[0].children?.length > 0
+                        ? gaMenuTabs?.menuTabs?.[0].children[0].key
+                        : gaMenuTabs?.menuTabs?.[0].key,
+                    ),
+                  );
+                }}
+              >
+                Goto Homepage
+              </Button>
+            }
+          />
+        </div>
       </div>
     );
   };

@@ -1,35 +1,66 @@
 import React from "react";
 import { set } from "lodash";
 import { notification, Button } from "antd";
+import Link from "antd/lib/typography/Link";
 import { PublicApi, maybeUsePivotEndpoint } from "metabase/services";
 
-export function checkIsDemoAccountAndAlert(user: any, action: () => any) {
+export function checkIsDemoAccountAndAlert(
+  user: any,
+  action: () => any,
+  logout: () => any,
+) {
   if (user && user.email === "fga@footprint.network") {
+    const key = "checkIsDemoAccountAndAlert";
     notification.info({
+      key,
       message: `Notification`,
       description: (
         <>
           <div className=" mt1 text-light">
-            To get the best marketing solution for your project, feel free to
-            contact us for a customized analysis of your project:
+            This account is a public demo account for Footprint GA. If you wish
+            to view data dashboards related to your own project, please create a
+            new account and link it to your corresponding project. For any other
+            inquiries, please feel free to contact our BD team. Thank you.
           </div>
-          <div className="mt2">Email: sales@footprint.network</div>
-          <div>Telegram: @dplinnn</div>
+          <div className="mt2">
+            <Link target="_blank" href="mailto:sales@footprint.network">
+              Email: sales@footprint.network
+            </Link>
+          </div>
+          <div>
+            <Link
+              target="_blank"
+              className="mt2"
+              href="https://t.me/joinchat/4-ocuURAr2thODFh"
+            >
+              Telegram: @dplinnn
+            </Link>
+          </div>
         </>
       ),
-      // `To get the best marketing solution for your project, feel free to contact us for a customized analysis of your project:
-      //   </br>Email:  sales@footprint.network
-      //   </br>Telegram:  @dplinnn`,
       placement: "top",
       btn: (
-        <Button
-          type="primary"
-          size="small"
-          target="_blank"
-          href="https://calendly.com/partners-79/footprint-growth-analytics-demo"
-        >
-          Book a meeting
-        </Button>
+        <>
+          <Button
+            type="default"
+            size="small"
+            target="_blank"
+            href="https://calendly.com/partners-79/footprint-growth-analytics-demo"
+          >
+            Book a meeting
+          </Button>
+          <Button
+            type="primary"
+            size="small"
+            className="ml1"
+            onClick={async () => {
+              await logout?.();
+              notification.close(key);
+            }}
+          >
+            Create account
+          </Button>
+        </>
       ),
     });
   } else {
@@ -104,16 +135,22 @@ export function getGaMenuTabs(
   tabs_data: any[],
   protocol_type?: string,
   hasNftContract?: boolean,
+  user?: any,
 ) {
   const dashboardMap = new Map();
   const menuTabs: any[] = [];
   tabs_data?.map(item => {
-    const temp = getGaMenuTabs(item.children, protocol_type, hasNftContract);
+    const temp = getGaMenuTabs(
+      item.children,
+      protocol_type,
+      hasNftContract,
+      user,
+    );
     const children: any[] = temp.menuTabs;
     temp.dashboardMap.forEach((value, key, map) => {
       dashboardMap.set(key, value);
     });
-    // dashboardMap = temp.dashboardMap;
+    // those menu items are turn into native pages,so that they are not in the dashboard
     let disabled =
       children.length <= 0 &&
       !item.uuid &&
@@ -137,6 +174,11 @@ export function getGaMenuTabs(
     if (protocol_type !== "GameFi" && item.name === "GameFi") {
       disabled = true;
     }
+    if (["Token Airdrop"].includes(item.name)) {
+      //token airdrop is only for demo account
+      disabled = user?.email === "fga@footprint.network" ? false : true;
+    }
+
     if (!disabled) {
       menuTabs.push({
         key: `${item.name}${children.length > 0 ? "-sub" : ""}`,

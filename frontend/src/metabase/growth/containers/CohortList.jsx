@@ -9,12 +9,11 @@ import dayjs from "dayjs";
 import { getUser } from "metabase/selectors/user";
 import { GetFgaCohort } from "metabase/new-service";
 import Link from "metabase/core/components/Link/Link";
-import CreateCampaign from "../components/buttons/CreateCampaign";
 import UploadWallets from "../components/buttons/UploadWallets";
 import { getGrowthProjectPath } from "../utils/utils";
 
-const Cohort = props => {
-  const { isLoading, data } = useQuery(["getCohort"], GetFgaCohort);
+const CohortList = props => {
+  const { isLoading, data, refetch } = useQuery(["getCohort"], GetFgaCohort);
 
   const dataSource = data?.list?.sort(
     (a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime(),
@@ -99,7 +98,7 @@ const Cohort = props => {
     },
     {
       key: "2",
-      label: <UploadWallets />,
+      label: <UploadWallets refetchData={refetch} />,
     },
   ];
 
@@ -131,4 +130,4 @@ const mapStateToProps = state => {
   };
 };
 
-export default connect(mapStateToProps)(Cohort);
+export default connect(mapStateToProps)(CohortList);

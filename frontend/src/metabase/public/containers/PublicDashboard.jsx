@@ -41,11 +41,12 @@ import {
   getDefaultDashboardPara,
 } from "metabase/growth/utils/utils";
 import EmbedFrame from "../components/EmbedFrame";
+import { cons } from "cljs/cljs.core";
 
 const mapStateToProps = (state, props) => {
   const parameters = getParameters(state, props);
   const parameterValues = getParameterValues(state, props);
-  const project = props.project?.project;
+  const project = props.project;
   const location = props.location;
   if (project) {
     // switch protocol
@@ -81,9 +82,16 @@ const mapStateToProps = (state, props) => {
         ]);
       }
     }
+    // mutiple collection
+    if (project.nftCollectionAddress?.length > 0) {
+      const key = "collection_contract_addresses";
+      const mutipleCollection = project.nftCollectionAddress.map(item => {
+        return item.address;
+      });
+      updateDashboardPara(parameters, parameterValues, key, mutipleCollection);
+    }
     if (project.twitter_handler) {
       const key = "twitter_handler";
-      console.log("hanlder", project.twitter_handler);
       // let queryHandler = getDefaultDashboardPara(
       //   parameters,
       //   parameterValues,

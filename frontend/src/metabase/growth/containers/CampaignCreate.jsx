@@ -41,7 +41,7 @@ const layout = {
 const tailLayout = {
   wrapperCol: { offset: 0, span: 24 },
 };
-const CreateCampaignPage2 = props => {
+const CampaignCreate = props => {
   const {
     router,
     location,
@@ -311,10 +311,10 @@ const CreateCampaignPage2 = props => {
       .then(result => {
         console.log("toAddCampaign result", result);
         message.success("The campaign creation was successful.");
-        // router.push(getGrowthProjectPath(project?.projectName, "Campaign"));
+        // router.push(getGrowthProjectPath(project?.protocolSlug, "Campaign"));
         router.push({
           pathname: getGrowthProjectPath(
-            project?.projectName,
+            project?.protocolSlug,
             "CampaignDetail",
           ),
           hash: "#id=" + result?.campaignId,
@@ -443,7 +443,7 @@ const CreateCampaignPage2 = props => {
                       <Button
                         target="_blank"
                         href={getGrowthProjectPath(
-                          project?.projectName,
+                          project?.protocolSlug,
                           "Cohort",
                         )}
                         // size="small"
@@ -478,7 +478,10 @@ const CreateCampaignPage2 = props => {
                   <Title level={5}>{`Channel`}</Title>
                   <Button
                     target="_blank"
-                    href={getGrowthProjectPath(project?.projectName, "Channel")}
+                    href={getGrowthProjectPath(
+                      project?.protocolSlug,
+                      "Channel",
+                    )}
                     // size="small"
                     icon={<SettingOutlined />}
                     type="text"
@@ -563,7 +566,4 @@ const mapStateToProps = state => {
   };
 };
 
-export default connect(
-  mapStateToProps,
-  mapDispatchToProps,
-)(CreateCampaignPage2);
+export default connect(mapStateToProps, mapDispatchToProps)(CampaignCreate);

@@ -16,14 +16,13 @@ import { connect } from "react-redux";
 import Title from "antd/lib/typography/Title";
 import CopyToClipboard from "react-copy-to-clipboard";
 import { getUser } from "metabase/selectors/user";
-import { top_protocols } from "../utils/data";
 import "../css/index.css";
 
 const ProjectInfo = props => {
   const { router, project, location } = props;
-  const [currentProject, setCurrentProject] = useState(project?.project);
+  const [currentProject, setCurrentProject] = useState(project);
   useEffect(() => {
-    setCurrentProject(project?.project);
+    setCurrentProject(project);
   }, [project]);
   const onTabChange = key => {
     console.log(key);
@@ -49,7 +48,6 @@ const ProjectInfo = props => {
       default:
         datas = [];
     }
-    console.log("datas", datas);
     if (!Array.isArray(datas) || datas.length <= 0) {
       return (
         <Empty
@@ -214,7 +212,7 @@ const ProjectInfo = props => {
       </div>
     </div>
   );
-};;
+};
 
 const mapStateToProps = state => {
   return {

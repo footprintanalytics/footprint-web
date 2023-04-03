@@ -367,9 +367,15 @@ class FgaNavbar extends Component {
     const onCreateAction = () => {
       trackStructEvent(`click Navbar Add My Project`);
       if (user) {
-        checkIsDemoAccountAndAlert(user, () => {
-          setCreateFgaProjectModalShowAction({ show: true });
-        });
+        checkIsDemoAccountAndAlert(
+          user,
+          () => {
+            setCreateFgaProjectModalShowAction({ show: true });
+          },
+          () => {
+            this.props.logout(location.pathname);
+          },
+        );
         // this.setState({ ...this.state, isProjectModalOpen: true });
       } else {
         setLoginModalShow({ show: true, from: "navbar_fga_signin" });

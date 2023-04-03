@@ -327,21 +327,10 @@ export default {
   GroupDetailApp: loadable(() =>
     import("metabase/admin/people/containers/GroupDetailApp"),
   ),
-
   // GrowthAnalytics
   GaAboutContainer: loadable(() => import("metabase/growth/containers/About")),
-  GaConfigContainer: loadable(() =>
-    import("metabase/growth/containers/CreateProject"),
-  ),
-  GaConnectorsContainer: loadable(() =>
-    import("metabase/growth/containers/Connectors"),
-  ),
   GaProjectContainer: loadable(() =>
     import("metabase/growth/containers/Project"),
-  ),
-  GaHomeContainer: loadable(() => import("metabase/growth/containers/Home")),
-  GaCreateContainer: loadable(() =>
-    import("metabase/growth/containers/CreateProject"),
   ),
   // Metadata / Data model
   DataModelApp: loadable(() =>

@@ -402,7 +402,8 @@ export const getRoutes = store => (
           path="chart/:titleAndId"
           component={LazyLoad.GuestQuestion}
         />
-        {/* Growth Analytics */}
+
+        {/* ----------- Growth Analytics 👇 --------- */}
         <Route
           title={t`Dashboard`}
           path="/growth/@:name/:dashboardName"
@@ -438,6 +439,7 @@ export const getRoutes = store => (
           component={LazyLoad.SubmitContractAdd}
         />
       </Route>
+      {/* ----------- Growth Analytics 👆 --------- */}
 
       <Route title={t`Question`} path="/chart" component={LazyLoad.Question}>
         {/* <IndexRoute component={Question} /> */}

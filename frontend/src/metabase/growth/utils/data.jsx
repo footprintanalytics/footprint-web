@@ -276,7 +276,7 @@ export const fga_menu_data = [
     children: [
       { name: "Campaign", id: null, uuid: null },
       {
-        name: "Token Airdrop ",
+        name: "Token Airdrop",
         id: 7426,
         uuid: "c676fe55-c785-4015-bc8a-27c18b57826f",
       },
@@ -325,11 +325,11 @@ export const fga_menu_data = [
         id: 7284,
         uuid: "7edf6b30-83e5-4fca-a1d5-7c3002560ea5",
       },
-      {
-        name: "Competitor Comparison",
-        id: 7248,
-        uuid: "63114b7c-094c-402c-8fe8-a9bf1db1369d",
-      },
+      // {
+      //   name: "Competitor Comparison",
+      //   id: 7248,
+      //   uuid: "63114b7c-094c-402c-8fe8-a9bf1db1369d",
+      // },
       {
         name: "Custom Analysis",
         id: null,

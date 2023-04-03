@@ -17,6 +17,7 @@ const UploadWallets = ({
   setLoginModalShowAction,
   setCreateFgaProjectModalShowAction,
   btnText,
+  refetchData,
 }) => {
   const [isCohortModalOpen, setCohortModalOpen] = useState(false);
   const [loading, setLoading] = useState(false);
@@ -60,6 +61,7 @@ const UploadWallets = ({
       const result = await CreateFgaCohortByAddress(parms);
       if (result) {
         message.success("Successfully create a cohort!");
+        refetchData?.();
         setCohortModalOpen(false);
       }
     } catch (error) {
