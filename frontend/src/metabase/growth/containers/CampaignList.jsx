@@ -11,6 +11,7 @@ import { getUser } from "metabase/selectors/user";
 import LoadingSpinner from "metabase/components/LoadingSpinner";
 import { getCampaign } from "metabase/new-service";
 import { getGrowthProjectPath, getLatestGAProjectId } from "../utils/utils";
+import CampaignStatus from "../components/CampaignStatus";
 
 const CampaignList = props => {
   const { isLoading, data } = useQuery(
@@ -46,19 +47,7 @@ const CampaignList = props => {
     {
       title: "Status",
       dataIndex: "status",
-      render: text => {
-        return (
-          <>
-            {["init"].includes(text) ? (
-              <Tag icon={<SyncOutlined spin />} color="processing">
-                {text}
-              </Tag>
-            ) : (
-              <Badge status="success" text={text} />
-            )}
-          </>
-        );
-      },
+      render: text => <CampaignStatus value={text} />,
     },
     {
       title: "Campaign Type",

@@ -5,15 +5,12 @@ import { connect } from "react-redux";
 import {
   Button,
   Card,
-  Tag,
-  Badge,
   Descriptions,
   Empty,
   Alert,
   Tooltip,
   message,
 } from "antd";
-import { SyncOutlined, CheckCircleOutlined } from "@ant-design/icons";
 import dayjs from "dayjs";
 import CopyToClipboard from "react-copy-to-clipboard";
 import { useQuery } from "react-query";
@@ -25,6 +22,7 @@ import { QUERY_OPTIONS } from "metabase/containers/dashboards/shared/config";
 import { getUser } from "metabase/selectors/user";
 import { getCampaignDetail } from "metabase/new-service";
 import { parseHashOptions } from "metabase/lib/browser";
+import CampaignStatus from "../components/CampaignStatus";
 
 const CampaignDetail = props => {
   const { location, router, project } = props;
@@ -71,22 +69,13 @@ const CampaignDetail = props => {
               {channel_type.join(", ")}
             </Descriptions.Item>
             <Descriptions.Item label="Created At">
-              {data.createdAt}
+              {dayjs(data.createdAt).format("YYYY-MM-DD HH:mm")}
             </Descriptions.Item>
             <Descriptions.Item label="Updated At">
-              {data.updatedAt}
+              {dayjs(data.updatedAt).format("YYYY-MM-DD HH:mm")}
             </Descriptions.Item>
             <Descriptions.Item label="Status" span={3}>
-              {["init"].includes(data.status) ? (
-                <Tag icon={<SyncOutlined spin />} color="processing">
-                  {data.status}
-                </Tag>
-              ) : (
-                // <Tag icon={<CheckCircleOutlined />} color="success">
-                //   {data.status}
-                // </Tag>
-                <Badge status="success" text={data.status} />
-              )}
+              <CampaignStatus value={data.status} />
             </Descriptions.Item>
             {tweetTrackingURL && (
               <Descriptions.Item label="Tweet tracking URL">
