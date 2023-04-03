@@ -131,7 +131,7 @@ function App({
       <Meta
         title="Footprint Analytics"
         // description="Explore Cross-Chain Web3.0 Data about NFTs, GameFi, Metaverse and DeFi(Decentralized Finance) DApps here. A platform for discovering and visualizing blockchain data without coding."
-        image={getOssUrl("Footprint.jpeg")}
+        image={getOssUrl("Footprint_v2.jpeg")}
         imageWidth={1200}
         imageHeight={630}
         siteName="Footprint"
