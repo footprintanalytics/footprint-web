@@ -1,7 +1,7 @@
 /* eslint-disable react/prop-types */
 import React, { useState, useEffect } from "react";
 import { connect } from "react-redux";
-import { Layout } from "antd";
+import { Button, Result, Layout, Image } from "antd";
 import { Content } from "antd/lib/layout/layout";
 import { useQuery } from "react-query";
 import { QUERY_OPTIONS } from "metabase/containers/dashboards/shared/config";
@@ -16,6 +16,7 @@ import {
   saveLatestGAProject,
   getLatestGAMenuTag,
   getLatestGAProjectId,
+  getGrowthProjectPath,
   getGaMenuTabs,
 } from "../utils/utils";
 import { fga_menu_data, top_protocols } from "../utils/data";
@@ -179,7 +180,6 @@ const Project = props => {
       return <CohortList router={router} location={location}></CohortList>;
     }
     if (gaMenuTabs?.dashboardMap?.has(current_tab)) {
-      // TODO: fix this project object
       if (current_tab === "Twitter") {
         return (
           <LoadingDashboard
@@ -223,7 +223,52 @@ const Project = props => {
     }
     return (
       <div style={{ textAlign: "center", padding: "50px" }}>
-        {tab} is coming soon~
+        <div
+          style={{
+            display: "flex",
+            padding: 0,
+            justifyContent: "center",
+          }}
+        >
+          <Result
+            style={{ margin: 0, width: "50%", minWidth: 400, maxWidth: 600 }}
+            icon={
+              <Image
+                preview={false}
+                style={{
+                  height: "50%",
+                  width: "50%",
+                  minHeight: 30,
+                  minWidth: 50,
+                  maxHeight: 500,
+                  maxWidth: 550,
+                }}
+                src={
+                  "https://footprint-imgs.oss-us-east-1.aliyuncs.com/no-data01.svg"
+                }
+              />
+            }
+            // title="There is currently no data available for this project."
+            subTitle="I'm sorry, the content for this page is not yet ready. You can visit our homepage for now and stay tuned for more high-quality content coming soon. We appreciate your patience."
+            extra={
+              <Button
+                type="primary"
+                onClick={() => {
+                  router.push(
+                    getGrowthProjectPath(
+                      project,
+                      gaMenuTabs?.menuTabs?.[0].children?.length > 0
+                        ? gaMenuTabs?.menuTabs?.[0].children[0].key
+                        : gaMenuTabs?.menuTabs?.[0].key,
+                    ),
+                  );
+                }}
+              >
+                Goto Homepage
+              </Button>
+            }
+          />
+        </div>
       </div>
     );
   };
