@@ -21,14 +21,10 @@ import {
   createFgaProjectModalShowAction,
 } from "metabase/redux/control";
 import LoadingSpinner from "metabase/components/LoadingSpinner";
-import ConfigAppsFlyerSource from "../components/config_panel/ConfigAppsFlyerSource";
-import ConfigTwitterSource from "../components/config_panel/ConfigTwitterSource";
-import ConfigDiscordSource from "../components/config_panel/ConfigDiscordSource";
-import ConfigGoogleAnalyticsSource from "../components/config_panel/ConfigGoogleAnalyticsSource";
 import "../css/utils.css";
 const { Text } = Typography;
 
-const Activators = props => {
+const ChannelList = props => {
   const {
     router,
     location,
@@ -64,18 +60,6 @@ const Activators = props => {
         icon: "https://footprint-imgs.oss-us-east-1.aliyuncs.com/20220516201357.png",
         statu: "unconnected",
         desc: "Activator your users by email.",
-        pannel: (
-          <ConfigGoogleAnalyticsSource
-            onAddConnector={onAddConnector}
-            user={user}
-            setOpenDrawer={setOpenDrawer}
-            setLoginModalShowAction={setLoginModalShowAction}
-            setCreateFgaProjectModalShowAction={
-              setCreateFgaProjectModalShowAction
-            }
-            projectId={projectId}
-          />
-        ),
       },
       {
         name: "Discord",
@@ -83,7 +67,6 @@ const Activators = props => {
         statu: "unconnected",
         icon: "https://footprint-imgs-hk.oss-cn-hongkong.aliyuncs.com/20220516201343.png",
         desc: "Activator your users by discord.",
-        pannel: <ConfigDiscordSource onAddConnector={onAddConnector} />,
       },
       {
         name: "Twitter",
@@ -91,7 +74,6 @@ const Activators = props => {
         statu: "unconnected",
         icon: "https://footprint-imgs-hk.oss-cn-hongkong.aliyuncs.com/20220516201254.png",
         desc: "Activator your users by twitter",
-        pannel: <ConfigTwitterSource onAddConnector={onAddConnector} />,
       },
       {
         name: "Galxe",
@@ -127,38 +109,14 @@ const Activators = props => {
         icon: messageIcon,
         statu: "unconnected",
         desc: "Activator your users by SMS.",
-        pannel: (
-          <ConfigGoogleAnalyticsSource
-            onAddConnector={onAddConnector}
-            user={user}
-            setOpenDrawer={setOpenDrawer}
-            setLoginModalShowAction={setLoginModalShowAction}
-            setCreateFgaProjectModalShowAction={
-              setCreateFgaProjectModalShowAction
-            }
-            projectId={projectId}
-          />
-        ),
       },
     ];
-    // if (projectId && !isLoading && data) {
-    //   if (data.length > 0) {
-    //     data.map((i, index) => {
-    //       temp.map((j, index) => {
-    //         if (j.key === i.name) {
-    //           j.statu = "connected";
-    //         }
-    //       });
-    //     });
-    //   }
-    //   // setCurrentConnectors()
-    // } else {
-    if (project?.project?.isDemo && !projectId) {
+    if (project?.isDemo && !projectId) {
+      //if is demo project, set all channel to connected
       temp.map((j, index) => {
         j.statu = "connected";
       });
     }
-    // }
     setActivators(temp);
   }, [project]);
 
@@ -342,4 +300,4 @@ const mapStateToProps = state => {
   };
 };
 
-export default connect(mapStateToProps, mapDispatchToProps)(Activators);
+export default connect(mapStateToProps, mapDispatchToProps)(ChannelList);

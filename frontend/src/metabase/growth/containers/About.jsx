@@ -16,7 +16,7 @@ const About = props => {
         marginHeight="0"
         marginWidth="0"
       >
-        Loading...s
+        Loading...
       </iframe>
     </div>
   );

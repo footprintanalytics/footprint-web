@@ -17,9 +17,6 @@ export function checkIsDemoAccountAndAlert(user: any, action: () => any) {
           <div>Telegram: @dplinnn</div>
         </>
       ),
-      // `To get the best marketing solution for your project, feel free to contact us for a customized analysis of your project:
-      //   </br>Email:  sales@footprint.network
-      //   </br>Telegram:  @dplinnn`,
       placement: "top",
       btn: (
         <Button
@@ -104,16 +101,22 @@ export function getGaMenuTabs(
   tabs_data: any[],
   protocol_type?: string,
   hasNftContract?: boolean,
+  user?: any,
 ) {
   const dashboardMap = new Map();
   const menuTabs: any[] = [];
   tabs_data?.map(item => {
-    const temp = getGaMenuTabs(item.children, protocol_type, hasNftContract);
+    const temp = getGaMenuTabs(
+      item.children,
+      protocol_type,
+      hasNftContract,
+      user,
+    );
     const children: any[] = temp.menuTabs;
     temp.dashboardMap.forEach((value, key, map) => {
       dashboardMap.set(key, value);
     });
-    // dashboardMap = temp.dashboardMap;
+    // those menu items are turn into native pages,so that they are not in the dashboard
     let disabled =
       children.length <= 0 &&
       !item.uuid &&
@@ -137,6 +140,11 @@ export function getGaMenuTabs(
     if (protocol_type !== "GameFi" && item.name === "GameFi") {
       disabled = true;
     }
+    if (["Token Airdrop"].includes(item.name)) {
+      //token airdrop is only for demo account
+      disabled = user?.email === "fga@footprint.network" ? false : true;
+    }
+
     if (!disabled) {
       menuTabs.push({
         key: `${item.name}${children.length > 0 ? "-sub" : ""}`,

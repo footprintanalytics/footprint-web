@@ -1,9 +1,8 @@
 /* eslint-disable react/prop-types */
 import React from "react";
-import { Typography, Card, Button, Form, Input, Select } from "antd";
+import { Card, Button, Form, Input, Select } from "antd";
 const { Option } = Select;
 import { MinusCircleOutlined, PlusCircleOutlined } from "@ant-design/icons";
-// import { FormInstance } from 'antd/es/form'
 
 const layout = {
   labelCol: { span: 24 },
@@ -29,8 +28,7 @@ const ConfigProject = props => {
   const formRef = React.useRef(null);
 
   const onFinish = values => {
-    console.log(values);
-    // todo 提交表单到 api,成功之后 onNext
+    // todo
     onNext();
   };
   return (

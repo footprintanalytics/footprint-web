@@ -162,7 +162,7 @@ const CampaignDetail = props => {
               project={{ ...project, campaignTitle: data?.title }}
               isFullscreen={false}
               className="ml-250 mt-40"
-              key={project?.projectName}
+              key={project?.protocolSlug}
               hideFooter
             />
           )}

@@ -29,7 +29,7 @@ import { getGrowthProjectPath } from "../utils/utils";
 
 const { Text } = Typography;
 
-const Connectors = props => {
+const ConnectorList = props => {
   const {
     router,
     location,
@@ -61,7 +61,8 @@ const Connectors = props => {
       console.log("getAvailableConnectors", data);
       const availableConnectors = data?.availableConnectorConfig;
       // setCurrentConnectors()
-      if (project?.project?.isDemo && !projectId) {
+      if (project?.isDemo && !projectId) {
+        // if this project is demo project (the sandbox), set all connectors to configured
         availableConnectors.map((j, index) => {
           j.configured = true;
         });
@@ -88,10 +89,10 @@ const Connectors = props => {
   const gotoAnalytics = name => {
     switch (name) {
       case "Google Analytics":
-        router.push(getGrowthProjectPath(project.projectName, "User Funnel"));
+        router.push(getGrowthProjectPath(project.protocolSlug, "User Funnel"));
         break;
       default:
-        router.push(getGrowthProjectPath(project.projectName, name));
+        router.push(getGrowthProjectPath(project.protocolSlug, name));
         break;
     }
   };
@@ -259,4 +260,4 @@ const mapStateToProps = state => {
   };
 };
 
-export default connect(mapStateToProps, mapDispatchToProps)(Connectors);
+export default connect(mapStateToProps, mapDispatchToProps)(ConnectorList);

@@ -20,16 +20,13 @@ import {
 } from "../utils/utils";
 import { fga_menu_data, top_protocols } from "../utils/data";
 import LoadingDashboard from "../components/LoadingDashboard";
-import Connectors from "./Connectors";
-import Activators from "./Activators";
-import CustomAnalysis from "./CustomAnalysis";
-import TemplateGallery from "./TemplateGallery";
-import MyFavoriteTemplate from "./MyFavoriteTemplate";
+import ConnectorList from "./ConnectorList";
+import ChannelList from "./ChannelList";
 import CampaignDetail from "./CampaignDetail";
 import CampaignList from "./CampaignList";
-import CreateCampaignPage from "./CreateCampaignPage";
-import CreateCampaignPage2 from "./CreateCampaignPage2";
-import Cohort from "./Cohort";
+import CustomAnalysis from "./CustomAnalysis";
+import CampaignCreate from "./CampaignCreate";
+import CohortList from "./CohortList";
 import "../css/index.css";
 
 const Project = props => {
@@ -69,20 +66,12 @@ const Project = props => {
   useEffect(() => {
     let menu = null;
     if (!isLoadingProject) {
-      if (data) {
-        menu = getGaMenuTabs(
-          tabs_data,
-          data?.protocolType,
-          data?.nftCollectionAddress?.length > 0,
-        );
-      } else {
-        // demo project menu
-        menu = getGaMenuTabs(
-          tabs_data,
-          demoProjectData.protocolType,
-          demoProjectData?.nftCollectionAddress?.length > 0,
-        );
-      }
+      menu = getGaMenuTabs(
+        tabs_data,
+        (data ?? demoProjectData).protocolType,
+        (data ?? demoProjectData).nftCollectionAddress?.length > 0,
+        user,
+      );
     }
     setGaMenuTabs(menu);
   }, [isLoadingProject, data]);
@@ -112,14 +101,9 @@ const Project = props => {
 
   const getProjectObject = project => {
     return {
-      projectName: data?.protocolSlug ?? project,
-      collection_contract_address:
-        data?.nftCollectionAddress ?? demoProjectData?.nftCollectionAddress,
-      project: {...(data ?? demoProjectData),
-        twitter_handler: data?.twitter?.handler,
-        discord_guild_id: data?.discord?.guildId,
-      },
-      protocolName: data?.protocolName,
+      ...(data ?? demoProjectData),
+      twitter_handler: data?.twitter?.handler,
+      discord_guild_id: data?.discord?.guildId,
     };
   };
   const getContentPannel = current_tab => {
@@ -136,23 +120,23 @@ const Project = props => {
     );
     if (current_tab === "Connector") {
       return (
-        <Connectors
+        <ConnectorList
           refetchProject={refetch}
           location={location}
           router={router}
           project={getProjectObject(project)}
           projectId={getLatestGAProjectId()}
-        ></Connectors>
+        ></ConnectorList>
       );
     }
     if (current_tab === "Channel") {
       return (
-        <Activators
+        <ChannelList
           location={location}
           router={router}
           project={getProjectObject(project)}
           projectId={getLatestGAProjectId()}
-        ></Activators>
+        ></ChannelList>
       );
     }
     if (current_tab === "General") {
@@ -164,32 +148,19 @@ const Project = props => {
         ></ProjectInfo>
       );
     }
-    if (current_tab === "Template Gallery") {
-      return (
-        <TemplateGallery location={location} router={router}></TemplateGallery>
-      );
-    }
     if (current_tab === "Custom Analysis") {
       return (
         <CustomAnalysis location={location} router={router}></CustomAnalysis>
       );
     }
-    if (current_tab === "My Analysis") {
-      return (
-        <MyFavoriteTemplate
-          location={location}
-          router={router}
-        ></MyFavoriteTemplate>
-      );
-    }
     if (current_tab === "CreateCampaign") {
       return (
-        <CreateCampaignPage2
+        <CampaignCreate
           location={location}
           router={router}
           project={getProjectObject(project)}
           projectId={getLatestGAProjectId()}
-        ></CreateCampaignPage2>
+        ></CampaignCreate>
       );
     }
     if (current_tab === "Campaign") {
@@ -205,7 +176,7 @@ const Project = props => {
       );
     }
     if (current_tab === "Cohort") {
-      return <Cohort router={router} location={location}></Cohort>;
+      return <CohortList router={router} location={location}></CohortList>;
     }
     if (gaMenuTabs?.dashboardMap?.has(current_tab)) {
       // TODO: fix this project object

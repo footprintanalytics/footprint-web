@@ -29,7 +29,7 @@ const LoadingDashboard = ({
     <Button
       type="primary"
       onClick={() => {
-        router.push(getGrowthProjectPath(project.projectName, "Connector"));
+        router.push(getGrowthProjectPath(project.protocolSlug, "Connector"));
       }}
     >
       Set up
