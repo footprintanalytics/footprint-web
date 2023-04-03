@@ -11,7 +11,7 @@ const AboutDepth = () => {
     {
       icon: "home-v2/img_depth_marketing.png",
       label: "Growth Marketing",
-      title: "Explore campaign strategies for different user cohorts to optimize your marketing spend",
+      title: " Explore campaign strategies for different user cohorts to optimize your marketing budget",
       desc: "Select quality users such as whales and long-term holders from massive  address databases for airdrops, and monitor campaign performance",
       buttons: [
         {
@@ -37,7 +37,7 @@ const AboutDepth = () => {
     {
       icon: "home-v2/img_depth_research.png",
       label: "Research",
-      title: "Get Web3 insights at ease with real-time, cross-chain, high-coverage data",
+      title: "Get Web3 insights at ease with real-time, cross-chain, & high-coverage data",
       desc: "Explore community-built analysis and create charts with no code required",
       buttons: [
         {

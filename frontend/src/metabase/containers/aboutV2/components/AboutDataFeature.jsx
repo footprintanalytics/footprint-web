@@ -30,7 +30,7 @@ const AboutDataFeature = () => {
   return (
     <div className="About__data-feature">
       <div className="About__title">
-        Data Feature
+        Data Features
       </div>
       <ul>
         {data.map(item =>
