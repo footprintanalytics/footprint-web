@@ -124,7 +124,6 @@ const CampaignDetail = props => {
 
   return (
     <div className="flex flex-col" style={{ padding: 20 }}>
-      {/* 可能这里要嵌入一个 dashboard */}
       {!isLoading && data?.title ? (
         <div>
           {data.status === "init" ? (
@@ -133,8 +132,8 @@ const CampaignDetail = props => {
               <div style={{ marginTop: 10 }}>
                 <Card>
                   <Alert
-                    message="This campaign still initing, please wait..."
-                    description="This may take a few minutes or a few hours, depending on the amount of data. Thank you for your patience."
+                    message="Your campaign is waiting to be started..."
+                    description="Please make sure you have completed the campaign steps above and the data will be presented after the steps are completed."
                     type="info"
                     showIcon
                   />
