@@ -6,7 +6,6 @@ import { withRouter } from "react-router";
 import { connect } from "react-redux";
 import { CreateFgaProject } from "metabase/new-service";
 import { getUser } from "metabase/selectors/user";
-import { top_protocols } from "../../utils/data";
 import {
   getDashboardDatas,
   getGrowthProjectPath,

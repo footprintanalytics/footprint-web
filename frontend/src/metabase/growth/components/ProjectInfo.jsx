@@ -16,7 +16,6 @@ import { connect } from "react-redux";
 import Title from "antd/lib/typography/Title";
 import CopyToClipboard from "react-copy-to-clipboard";
 import { getUser } from "metabase/selectors/user";
-import { top_protocols } from "../utils/data";
 import "../css/index.css";
 
 const ProjectInfo = props => {
