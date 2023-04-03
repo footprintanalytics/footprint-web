@@ -8,13 +8,13 @@ import {
   Descriptions,
   Empty,
   Alert,
-  Tooltip,
   message,
+  Typography,
+  Space,
 } from "antd";
 import dayjs from "dayjs";
 import CopyToClipboard from "react-copy-to-clipboard";
 import { useQuery } from "react-query";
-import { Link } from "react-router";
 import PublicDashboard from "metabase/public/containers/PublicDashboard";
 import "../css/utils.css";
 import LoadingSpinner from "metabase/components/LoadingSpinner";
@@ -79,38 +79,39 @@ const CampaignDetail = props => {
             </Descriptions.Item>
             {tweetTrackingURL && (
               <Descriptions.Item label="Tweet tracking URL">
-                <Link target="_blank" color="blue" href={tweetTrackingURL}>
+                <Typography.Link
+                  target="_blank"
+                  underline
+                  href={tweetTrackingURL}
+                >
                   {tweetTrackingURL}
-                </Link>
+                </Typography.Link>
               </Descriptions.Item>
             )}
             {botInviteUrl && (
               <Descriptions.Item label="Discord bot step">
-                {/* todo  guild_id 要真实从接口拿*/}
-                <span style={{ color: "red" }}>Step 1</span> : Add the FGA
+                <Typography.Text mark>Step 1</Typography.Text> Add the FGA
                 discord bot to your server.
                 <br />
-                <Link
-                  target="_blank"
-                  color="blue"
-                  href={botInviteUrl}
-                >{`https://discord.com/oauth2/authorize?client_id...`}</Link>
+                <Typography.Link target="_blank" underline href={botInviteUrl}>
+                  {botInviteUrl}
+                </Typography.Link>
                 <br />
                 <br />
-                <span style={{ color: "red" }}>Step 2</span> : Dispatch the
-                active command to your Discord channel.{" "}
-                <CopyToClipboard
-                  text={botInitCmd}
-                  onCopy={() => {
-                    message.success("Copied!");
-                  }}
-                >
-                  <Tooltip title={`Copy this bot command!`}>
-                    <Button className="ml2" size="small" type="primary">
-                      copy
-                    </Button>
-                  </Tooltip>
-                </CopyToClipboard>
+                <Typography.Text mark>Step 2</Typography.Text> Dispatch the
+                active command to your Discord channel.
+                <br />
+                <Typography.Paragraph>
+                  <Space>
+                    <pre>{botInitCmd}</pre>
+                    <CopyToClipboard
+                      text={botInitCmd}
+                      onCopy={() => message.success("Copied!")}
+                    >
+                      <Button type="primary">Copy</Button>
+                    </CopyToClipboard>
+                  </Space>
+                </Typography.Paragraph>
               </Descriptions.Item>
             )}
           </Descriptions>
