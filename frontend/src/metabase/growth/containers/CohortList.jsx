@@ -2,8 +2,7 @@
 /* eslint-disable react/prop-types */
 import React from "react";
 import { connect } from "react-redux";
-import { Button, Card, Table, Typography, Dropdown, Tag, Space } from "antd";
-import { SyncOutlined } from "@ant-design/icons";
+import { Button, Card, Table, Dropdown, Space, Badge } from "antd";
 import { useQuery } from "react-query";
 import dayjs from "dayjs";
 import { getUser } from "metabase/selectors/user";
@@ -13,7 +12,9 @@ import UploadWallets from "../components/buttons/UploadWallets";
 import { getGrowthProjectPath } from "../utils/utils";
 
 const CohortList = props => {
-  const { isLoading, data, refetch } = useQuery(["getCohort"], GetFgaCohort);
+  const { isLoading, data, refetch } = useQuery(["getCohort"], GetFgaCohort, {
+    refetchInterval: 5000,
+  });
 
   const dataSource = data?.list?.sort(
     (a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime(),
@@ -38,11 +39,7 @@ const CohortList = props => {
       key: "numberOfWallets",
       render: text => {
         if (!Number(text)) {
-          return (
-            <Tag icon={<SyncOutlined spin />} color="processing">
-              Processing
-            </Tag>
-          );
+          return <Badge status="processing" text="Loading" />;
         }
         return Number(text).toLocaleString();
       },
