@@ -27,3 +27,32 @@ export interface User extends BaseUser {
   vipInfo: any;
   name: string;
 }
+export interface FgaProject {
+  id: number;
+  protocolName: string;
+  protocolSlug: string;
+  nftCollectionAddress: ContractAddress[] | null;
+  tokenAddress: ContractAddress[] | null;
+  protocolType: string;
+  logo: string;
+  twitter: Twitter | null;
+  discord: Discord | null;
+  ga: Ga | null;
+}
+interface Ga {
+  sourceDefinitionId: string;
+}
+interface Discord {
+  guildId: string;
+  guildName: string;
+  sourceDefinitionId: string;
+}
+interface Twitter {
+  handler: string;
+  sourceDefinitionId: string;
+}
+interface ContractAddress {
+  address: string;
+  chain: string;
+}
+

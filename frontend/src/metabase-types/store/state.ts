@@ -1,4 +1,4 @@
-import { User } from "metabase-types/api";
+import { FgaProject, User } from "metabase-types/api";
 import { AdminState } from "./admin";
 import { AppState } from "./app";
 import { EmbedState } from "./embed";
@@ -12,6 +12,7 @@ export interface State {
   admin: AdminState;
   app: AppState;
   currentUser: User | null;
+  currentFgaProject: FgaProject | null;
   embed: EmbedState;
   entities: EntitiesState;
   form: FormState;
