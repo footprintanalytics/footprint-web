@@ -114,6 +114,34 @@ const CampaignDetail = props => {
                 </Typography.Paragraph>
               </Descriptions.Item>
             )}
+            {data?.details && (
+              <Descriptions.Item label="Details" span={3}>
+                <>
+                  {Object.entries(data?.details).map?.((detail, index) => {
+                    return (
+                      <div key={index}>
+                        <div>
+                          <Typography.Text
+                            style={{ whiteSpace: "pre-wrap" }}
+                            className=" text-bold"
+                          >
+                            {detail?.[0]}
+                          </Typography.Text>
+                        </div>
+                        <div>
+                          <Typography.Paragraph
+                            style={{ whiteSpace: "pre-wrap" }}
+                            className=" text-light"
+                          >
+                            {detail?.[1]}
+                          </Typography.Paragraph>
+                        </div>
+                      </div>
+                    );
+                  })}
+                </>
+              </Descriptions.Item>
+            )}
           </Descriptions>
         ) : (
           <Empty description="No data" />
