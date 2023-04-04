@@ -24,12 +24,12 @@ const CohortList = props => {
       title: "Title",
       dataIndex: "title",
       render: text => (
-        <Typography.Link
-          href={`/growth/@rogerD/Cohort-User-Profile?tag=${text}`}
-          target="_blank"
+        <Link
+          color="rgb(52, 52, 178)"
+          to={`/growth/@rogerD/Cohort-User-Profile?tag=${text}`}
         >
           {text}
-        </Typography.Link>
+        </Link>
       ),
     },
     {
@@ -57,13 +57,18 @@ const CohortList = props => {
       key: "action",
       render: (_, record) => (
         <Space size="middle">
-          <Typography.Link
-            href={`/growth/@rogerD/Cohort-User-Profile?tag=${record.title}`}
-            target="_blank"
+          <Link
+            color="rgb(52, 52, 178)"
+            to={`/growth/@rogerD/Cohort-User-Profile?tag=${record.title}`}
           >
             User Profile
-          </Typography.Link>
-          {/* <Link>Wallet Detail</Link> */}
+          </Link>
+          <Link
+            color="rgb(52, 52, 178)"
+            to={`/growth/@rogerD/Cohort-Wallet-List-FGA?cohort_id=${record.cohortId}&cohort_title=${record.title}`}
+          >
+            Wallet List
+          </Link>
           <Link
             color="rgb(52, 52, 178)"
             to={getGrowthProjectPath(

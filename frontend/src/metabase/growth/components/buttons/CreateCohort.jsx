@@ -13,6 +13,7 @@ import {
   loginModalShowAction,
   createFgaProjectModalShowAction,
 } from "metabase/redux/control";
+import { FilterOut } from "metabase/growth/components/FilterOut";
 const { TextArea } = Input;
 
 const CreateCohort = ({
@@ -191,6 +192,7 @@ const CreateCohort = ({
         <div className="mt2" />
         {getPannel()}
         <div className="mb2" />
+        <FilterOut />
       </Modal>
     </>
   );
