@@ -1,5 +1,5 @@
 /* eslint-disable react/prop-types */
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Button, message, Modal, Tag, AutoComplete, Divider } from "antd";
 import { connect } from "react-redux";
 import { isArray } from "lodash";
@@ -25,6 +25,9 @@ const CreateFliterCohort = ({
   const [isCohortModalOpen, setCohortModalOpen] = useState(false);
   const [loading, setLoading] = useState(false);
   const [cohortName, setCohortName] = useState();
+  const [filterOut, setFilterOut] = useState([]);
+  const filterOutOptions = ["Bot", "Sybil"];
+  const defaultFilterOut = [];
   const dashboardData = propData?.dashboard;
   const result = state?.series[0];
   const cardData = result?.card;
@@ -64,7 +67,7 @@ const CreateFliterCohort = ({
       return;
     }
     setLoading(true);
-    const parms = {
+    const params = {
       title: cohortName,
       projectId: parseInt(projectId, 10),
       dashboardId: MetabaseUtils.isUUID(dashboardData?.id)
@@ -74,8 +77,35 @@ const CreateFliterCohort = ({
       queryChartId: cardData?.id,
       queryCondition: queryCondition ?? [],
     };
+    const excludeIndex = queryCondition?.findIndex(
+      item => item.slug === "exclude",
+    );
+    const value = [];
+    if (filterOut?.includes("Sybil")) value.push("sybil");
+    if (filterOut?.includes("Bot")) value.push("flashbot");
+    if (excludeIndex > -1) {
+      if (value.length) {
+        params.queryCondition[excludeIndex].value = value;
+      } else {
+        params.queryCondition.splice(excludeIndex, 1);
+      }
+    } else {
+      if (value.length) {
+        params.queryCondition.push({
+          type: "string/=",
+          name: "Exclude",
+          slug: "exclude",
+          id: "b2ece640",
+          sectionId: "fp_enum",
+          remark: "flashbot,sybil",
+          value,
+          target: ["dimension", ["template-tag", "excludeTag"]],
+        });
+      }
+    }
     try {
-      const result = await CreateFgaCohort(parms);
+      console.log(params);
+      const result = await CreateFgaCohort(params);
       if (result) {
         message.success("Successfully create a cohort!");
         setCohortModalOpen(false);
@@ -86,16 +116,26 @@ const CreateFliterCohort = ({
     setLoading(false);
   };
 
+  useEffect(() => {
+    const exclude = queryCondition?.find(item => item.slug === "exclude");
+    if (exclude) {
+      const _filterOut = [];
+      if (exclude.value?.includes("sybil")) _filterOut.push("Sybil");
+      if (exclude.value?.includes("flashbot")) _filterOut.push("Bot");
+      setFilterOut(_filterOut);
+    }
+  }, [queryCondition]);
+
   const getPannel = () => {
     return (
       <>
         {addressList && (
           <h4>You have selected {addressList?.length} wallet address.</h4>
         )}
-        <div className="bg-light p2 mt1">
+        {/* <div className="bg-light p2 mt1">
           <h5>Criteria:</h5>
           <Divider style={{ marginTop: 10, marginBottom: 10 }}></Divider>
-          {/* <div className="mt1" /> */}
+          <div className="mt1" />
           {queryCondition && (
             <>
               {queryCondition?.map((q, index) => {
@@ -121,7 +161,7 @@ const CreateFliterCohort = ({
           {(!queryCondition || queryCondition?.length <= 0) && (
             <>You have not yet established any filtering criteria.</>
           )}
-        </div>
+        </div> */}
       </>
     );
   };
@@ -177,7 +217,11 @@ const CreateFliterCohort = ({
         <div className="mt2" />
         {getPannel()}
         <div className="mb2" />
-        <FilterOut />
+        <FilterOut
+          options={filterOutOptions}
+          defaultValue={filterOut}
+          onChange={setFilterOut}
+        />
       </Modal>
     </>
   );

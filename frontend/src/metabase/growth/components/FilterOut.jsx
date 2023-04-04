@@ -2,13 +2,15 @@
 import React from "react";
 import { Checkbox } from "antd";
 
-export const FilterOut = () => {
-
+export const FilterOut = ({ options, defaultValue, onChange }) => {
   return (
     <div className="flex">
       <span className="mr2">Filter out:</span>
-      <Checkbox defaultChecked={true}>Bot</Checkbox>
-      <Checkbox defaultChecked={true}>Sybil</Checkbox>
+      <Checkbox.Group
+        options={options}
+        defaultValue={defaultValue}
+        onChange={onChange}
+      />
     </div>
   );
 };
