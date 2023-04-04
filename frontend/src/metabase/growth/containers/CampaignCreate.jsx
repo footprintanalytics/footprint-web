@@ -208,7 +208,8 @@ const CampaignCreate = props => {
                 </Form.Item>
               </>
             );
-          } else if (detail.type === "string") {
+          }
+          if (detail.type === "string") {
             return (
               <>
                 <Form.Item
@@ -227,13 +228,58 @@ const CampaignCreate = props => {
                     type={
                       detail.private
                         ? "password"
-                        : detail.type === "string"
+                        : ["textArea", "string"].includes(detail.type)
                         ? "text"
                         : detail.type
                     }
                   />
                 </Form.Item>
               </>
+            );
+          }
+          if (detail.type === "textArea") {
+            return (
+              <>
+                <Form.Item
+                  key={detail.key}
+                  name={detail.key}
+                  layout={tailLayout}
+                  initialValue={detail.value}
+                  valuePropName="value"
+                  label={detail.title}
+                  rules={[{ required: detail.required }]}
+                >
+                  <TextArea
+                    allowClear
+                    // value={pasteValue}
+                    disabled={detail.notEdit}
+                    placeholder={`Input the ${detail.title}.`}
+                    type={
+                      detail.private
+                        ? "password"
+                        : ["textArea", "string"].includes(detail.type)
+                        ? "text"
+                        : detail.type
+                    }
+                    autoSize={{ minRows: 5, maxRows: 10 }}
+                  />
+                </Form.Item>
+              </>
+            );
+          }
+          if (detail.type === "boolean") {
+            return (
+              <Form.Item
+                key={detail.key}
+                name={detail.key}
+                layout={tailLayout}
+                initialValue={detail.value}
+                valuePropName="checked"
+                label={detail.title}
+                rules={[{ required: detail.required }]}
+              >
+                <Switch />
+              </Form.Item>
             );
           }
         })}
@@ -364,6 +410,7 @@ const CampaignCreate = props => {
               <Form
                 className=" bg-white rounded-md w-full"
                 {...layout}
+                colon={false}
                 labelWrap
                 initialValues={{
                   campaignType: campaignSelected?.campaignType,
@@ -407,7 +454,18 @@ const CampaignCreate = props => {
                   </Form.Item>
                 </div>
                 {/* 需要改成 后端控制 */}
-                {campaignSelected?.campaignType === "Notification" && (
+                {campaignSelected?.details?.length > 0 && (
+                  <>
+                    <div className="bg-light rounded p1 mt1 mb1">
+                      <div className="mt1 text-bold">
+                        {campaignSelected?.campaignType} Configuration
+                      </div>
+                      <Divider className=" my1"></Divider>
+                      {getChannelConfigPanel(campaignSelected?.details)}
+                    </div>
+                  </>
+                )}
+                {/* {campaignSelected?.campaignType === "Notification" && (
                   <>
                     <div className="bg-light rounded p1 mt1 pt3">
                       <div className="mb1">Notification content</div>
@@ -435,7 +493,7 @@ const CampaignCreate = props => {
                       </Form.Item>
                     </div>
                   </>
-                )}
+                )} */}
                 {campaignSelected?.cohortRequired && (
                   <>
                     <div className="flex flex-row items-center justify-between mt2">
@@ -514,24 +572,27 @@ const CampaignCreate = props => {
                   </Form.Item>
                 </div>
                 {channelSelectedValue?.map(channel => {
-                  return (
-                    <>
-                      <div className="bg-light rounded p1 mt1 mb1">
-                        <div className="mt1 text-bold">
-                          {channel.channelName}
+                  if (channel.details && channel.details.length > 0) {
+                    return (
+                      <>
+                        <div className="bg-light rounded p1 mt1 mb1">
+                          <div className="mt1 text-bold">
+                            {channel.channelName}
+                          </div>
+                          <Divider className=" my1"></Divider>
+                          {getChannelConfigPanel(channel.details)}
                         </div>
-                        <Divider className=" my1"></Divider>
-                        {getChannelConfigPanel(channel.details)}
-                      </div>
-                    </>
-                  );
+                      </>
+                    );
+                  }
                 })}
-
                 <Form.Item {...tailLayout} className="mt3 mb0">
                   <div className="flex w-full flex-row-reverse">
                     <Button
                       htmlType="button"
-                      // onClick={onNext}
+                      onClick={() => {
+                        router?.goBack();
+                      }}
                       className="ml-10"
                     >
                       Cancel
