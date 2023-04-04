@@ -170,6 +170,10 @@ export const getDataset = async params => {
   return POST(`/api/v1/database/dataset/list`, params);
 };
 
+export const queryDataset = async params => {
+  return POST(`/api/v1/database/dataset`, params);
+};
+
 export const getTable = async params => {
   return POST(`/api/v1/database/table/list`, params);
 };

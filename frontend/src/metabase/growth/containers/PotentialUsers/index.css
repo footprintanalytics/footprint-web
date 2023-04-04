@@ -1,0 +1,32 @@
+.potential-users__filter {
+  padding: 40px;
+  margin: 0 40px 0 40px;
+}
+
+.potential-users__profile {
+  display: flex;
+  flex-direction: column;
+  padding: 0 40px 40px 40px;
+  margin: 0 40px 40px 40px;
+}
+
+.Potential-Users__condition {
+  width: 400px;
+  height: 150px;
+  padding: 10px;
+  margin: 4px;
+  background: white;
+}
+
+.Potential-Users__total {
+  width: 200px;
+  height: 150px;
+  padding: 10px;
+  margin: 4px;
+  background: white;
+}
+
+.Potential-Users__profile {
+  height: 400px;
+  width: 50%;
+}
