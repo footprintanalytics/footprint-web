@@ -45,7 +45,6 @@ const Project = props => {
     setProjectId(getLatestGAProjectId());
     setTab(
       menu ??
-        getLatestGAMenuTag() ??
         (gaMenuTabs?.menuTabs?.[0].children.length > 0
           ? gaMenuTabs?.menuTabs?.[0].children[0].key
           : gaMenuTabs?.menuTabs?.[0].key),

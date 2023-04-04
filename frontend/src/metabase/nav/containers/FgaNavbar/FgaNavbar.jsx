@@ -179,8 +179,14 @@ class FgaNavbar extends Component {
     return false;
   };
   renderLoginModal() {
-    const { location, loginModalShow, loginModalRedirect, loginModalDefaultRegister, setLoginModalShow } =
-      this.props;
+    const {
+      location,
+      loginModalShow,
+      loginModalRedirect,
+      loginModalDefaultRegister,
+      setLoginModalShow,
+    } = this.props;
+    const isSignOutDemoAccount = localStorage.getItem("sign-out-demo-account");
     return (
       <LoginModal
         isOpen={loginModalShow}
@@ -192,6 +198,7 @@ class FgaNavbar extends Component {
         defaultRegister={loginModalDefaultRegister}
         redirect={loginModalRedirect}
         hideClose={true}
+        signTabState={isSignOutDemoAccount ? "signUp" : "signIn"}
       />
     );
   }

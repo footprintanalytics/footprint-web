@@ -65,7 +65,6 @@ const GaProjectSearch = props => {
   }, [currentProject, data?.data, menu, isLoading, router]);
 
   // monitor data
-  const normalOptions = [];
   const recommendOptions = [];
   top_protocols.map((i, index) => {
     if (i.isDemo) {
@@ -76,29 +75,9 @@ const GaProjectSearch = props => {
         label: i.protocol_name,
       });
     }
-    // if (index < 3) {
-    //   recommendOptions.push({
-    //     ...i,
-    //     value: i.protocol_slug,
-    //     key: i.protocol_slug + "-recommend",
-    //     label: i.protocol_name,
-    //   });
-    // } else {
-    //   normalOptions.push({
-    //     ...i,
-    //     value: i.protocol_slug,
-    //     key: i.protocol_slug,
-    //     label: i.protocol_name,
-    //   });
-    // }
   });
-  // const historyOptions = getGASearchHistory();
   const finalOptions = [];
   finalOptions.push({ label: "Recommend Projects", options: recommendOptions });
-  // if (historyOptions.length > 0) {
-  //   finalOptions.push({ label: "History Search", options: historyOptions });
-  // }
-  // finalOptions.push({ label: "All Projects", options: normalOptions });
 
   useEffect(() => {
     if (projectPath) {
@@ -140,22 +119,24 @@ const GaProjectSearch = props => {
   };
   return (
     <div className="flex flex-column items-center" style={{ minWidth: 300 }}>
-      <Select
-        showSearch
-        style={{ width: 300 }}
-        value={currentProject}
-        loading={isLoading}
-        onChange={handleProjectChange}
-        placeholder="Search by protocol or nft collection address"
-        optionFilterProp="children"
-        filterOption={(input, option) =>
-          (option?.label ?? "").toLowerCase().includes(input.toLowerCase()) ||
-          (option?.collections_list ?? [])
-            .join(",")
-            .includes(input.toLowerCase())
-        }
-        options={userProject.length > 0 ? userProject : finalOptions}
-      />
+      {user && user.email !== "fga@footprint.network" && (
+        <Select
+          showSearch
+          style={{ width: 300 }}
+          value={currentProject}
+          loading={isLoading}
+          onChange={handleProjectChange}
+          placeholder="Search by protocol or nft collection address"
+          optionFilterProp="children"
+          filterOption={(input, option) =>
+            (option?.label ?? "").toLowerCase().includes(input.toLowerCase()) ||
+            (option?.collections_list ?? [])
+              .join(",")
+              .includes(input.toLowerCase())
+          }
+          options={userProject.length > 0 ? userProject : finalOptions}
+        />
+      )}
     </div>
   );
 };

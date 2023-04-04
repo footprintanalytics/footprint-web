@@ -56,6 +56,7 @@ export function checkIsDemoAccountAndAlert(
             onClick={async () => {
               await logout?.();
               notification.close(key);
+              localStorage.setItem("sign-out-demo-account", "true");
             }}
           >
             Create account
