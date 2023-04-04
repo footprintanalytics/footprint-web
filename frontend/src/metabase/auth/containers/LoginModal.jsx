@@ -25,6 +25,7 @@ const mapStatusToProps = (state, props) => {
     channel: getChannel(state) || "homepage",
     project: props.project || props.location.query.project || "footprint",
     hideClose: props.hideClose,
+    signTabState: props.signTabState,
   };
 };
 

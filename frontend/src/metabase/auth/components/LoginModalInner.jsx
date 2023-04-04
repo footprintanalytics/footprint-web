@@ -87,6 +87,7 @@ const LoginModalInner = props => {
 
   const onCloseAction = () => {
     setSignTabState("signIn");
+    localStorage.removeItem("sign-out-demo-account");
     onClose && onClose();
   };
 

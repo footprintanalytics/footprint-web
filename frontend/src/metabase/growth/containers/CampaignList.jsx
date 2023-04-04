@@ -3,7 +3,6 @@
 import React from "react";
 import { connect } from "react-redux";
 import { Button, Card, Table, Typography, Tag, Badge } from "antd";
-import { SyncOutlined } from "@ant-design/icons";
 import { useQuery } from "react-query";
 import dayjs from "dayjs";
 import { QUERY_OPTIONS } from "metabase/containers/dashboards/shared/config";
@@ -14,12 +13,13 @@ import { getGrowthProjectPath, getLatestGAProjectId } from "../utils/utils";
 import CampaignStatus from "../components/CampaignStatus";
 
 const CampaignList = props => {
+  const latestGAProjectId = getLatestGAProjectId();
   const { isLoading, data } = useQuery(
-    ["getCampaign", getLatestGAProjectId()],
+    ["getCampaign", latestGAProjectId],
     async () => {
-      return await getCampaign({ projectId: parseInt(getLatestGAProjectId()) });
+      return await getCampaign({ projectId: parseInt(latestGAProjectId) });
     },
-    QUERY_OPTIONS,
+    { ...QUERY_OPTIONS, enabled: !!latestGAProjectId },
   );
   const dataSource = data?.list?.sort(
     (a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime(),

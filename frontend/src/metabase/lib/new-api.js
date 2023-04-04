@@ -35,11 +35,20 @@ axios.interceptors.request.use(config => {
   const headers = config?.headers || {};
   const requestime = getTime();
   const latestGAProjectId = getLatestGAProjectId();
-  const projectIdObject = latestGAProjectId ? { fgaProjectId: latestGAProjectId } : {};
+  const projectIdObject = latestGAProjectId
+    ? { fgaProjectId: latestGAProjectId }
+    : {};
   return {
     ...config,
     ...{ requestime: requestime },
-    headers: { ...headers, common: { ...headers?.common, client_request_time: requestime, ...projectIdObject }}
+    headers: {
+      ...headers,
+      common: {
+        ...headers?.common,
+        client_request_time: requestime,
+        ...projectIdObject,
+      },
+    },
   };
 });
 
@@ -85,7 +94,10 @@ function errorHandle(err) {
           err.response.status,
           "OK",
         );
-        message.error("You does not have permission to access");
+        message.error({
+          content: "You does not have permission to access",
+          key: "permission",
+        });
         break;
       default:
         reportAPI(
@@ -108,7 +120,8 @@ function errorHandle(err) {
 
 export const GET = async (url, params) => axios.get(url, { params });
 
-export const POST = async (url, params, config) => axios.post(url, params, config);
+export const POST = async (url, params, config) =>
+  axios.post(url, params, config);
 
 export const PUT = async (url, params, config) =>
   axios.put(url, params, config);
