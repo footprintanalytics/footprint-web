@@ -455,7 +455,9 @@ class FgaNavbar extends Component {
         </div>
         <React.Fragment>
           <div className="Nav__search-bar">
-            <GaProjectSearch location={location}></GaProjectSearch>
+            {user && user.email !== "fga@footprint.network" && (
+              <GaProjectSearch location={location}></GaProjectSearch>
+            )}
           </div>
           <div className="Nav__mobile-logo">
             <Link
