@@ -1,14 +1,15 @@
 import React from "react";
 import { connect } from "react-redux";
-import { Tag, Input, Tooltip, Skeleton } from "antd";
-import { PlusOutlined } from "../../../lib/ant-icon";
-import { addTagging, deleteTag, getEntityTag } from "metabase/new-service";
+import { Tag, Input, Tooltip, Skeleton, ConfigProvider, theme } from "antd";
+const { darkAlgorithm, defaultAlgorithm } = theme;
 import PropTypes from "prop-types";
 import { remove } from "lodash";
+import cx from "classnames";
 import Link from "metabase/core/components/Link";
 import Meta from "metabase/components/Meta";
-import cx from "classnames";
+import { addTagging, deleteTag, getEntityTag } from "metabase/new-service";
 import { deviceInfo } from "metabase-lib/lib/Device";
+import { PlusOutlined } from "../../../lib/ant-icon";
 
 class TagsPanel extends React.Component {
   state = {
@@ -172,6 +173,7 @@ class TagsPanel extends React.Component {
       user,
       type,
       showSkeleton,
+      isNightMode,
     } = this.props;
 
     let keywords;
@@ -192,114 +194,118 @@ class TagsPanel extends React.Component {
     return (
       <>
         <Meta keywords={keywords} />
-        <div
-          className={cx(
-            "flex",
-            isMobile || hover
-              ? "overflow-x-auto overflow-y-hidden"
-              : "overflow-hidden",
-          )}
-          style={{
-            height: tagEntityList && tagEntityList.length > 0 ? 46 : "auto",
-            alignItems: "flex-start",
-          }}
-          onMouseLeave={() => this.setState({ hover: false })}
-          onMouseOver={() => this.setState({ hover: true })}
-        >
-          <div ref={this.tagPanelRef} className="flex">
-            {tagEntityList &&
-              tagEntityList.map(item => {
-                const { tagName, entityNsName } = item;
-                const tagBackground =
-                  entityNsName === "system" ? "#F1F1F1" : "#EEEEFF";
-                const tagColor =
-                  entityNsName === "system" ? "#666666" : "#3434B2";
-                const tagBorder =
-                  entityNsName === "system"
-                    ? "#D8D8D8 solid 1px"
-                    : "#CCCCFF solid 1px";
-                const isLongTag = tagName.length > 20;
-                const tagElem = (
-                  <Tag
-                    style={{
-                      padding: "1px 7px",
-                      margin: "3px 3px",
-                      background: tagBackground,
-                      color: tagColor,
-                      border: tagBorder,
-                      borderRadius: 4,
-                      cursor: "pointer",
-                    }}
-                    key={this.getKey(item)}
-                    closable={
-                      user &&
-                      isEditPermission &&
-                      entityNsName === this.state.currentEntityNsName
-                    }
-                    onClose={() => this.tagRemove(item)}
-                  >
-                    {this.props.canClick ? (
-                      <Link
-                        href={`/search?q=${tagName}&model=${type}`}
-                        target="_blank"
-                      >
-                        {this.renderTags({ isLongTag, item, tagName })}
-                      </Link>
-                    ) : (
-                      <React.Fragment>
-                        {this.renderTags({ isLongTag, item, tagName })}
-                      </React.Fragment>
-                    )}
-                  </Tag>
-                );
-                return isLongTag ? (
-                  <Tooltip title={item.tagName} key={this.getKey(item)}>
-                    {tagElem}
-                  </Tooltip>
-                ) : (
-                  tagElem
-                );
-              })}
+        <ConfigProvider theme={{
+          algorithm: isNightMode ? darkAlgorithm : defaultAlgorithm,
+        }}>
+          <div
+            className={cx(
+              "flex",
+              isMobile || hover
+                ? "overflow-x-auto overflow-y-hidden"
+                : "overflow-hidden",
+            )}
+            style={{
+              height: tagEntityList && tagEntityList.length > 0 ? 46 : "auto",
+              alignItems: "flex-start",
+            }}
+            onMouseLeave={() => this.setState({ hover: false })}
+            onMouseOver={() => this.setState({ hover: true })}
+          >
+            <div ref={this.tagPanelRef} className="flex">
+              {tagEntityList &&
+                tagEntityList.map(item => {
+                  const { tagName, entityNsName } = item;
+                  const tagBackground =
+                    isNightMode ? "transparency" : (entityNsName === "system" ? "#F1F1F1" : "#EEEEFF");
+                  const tagColor =
+                    entityNsName === "system" ? "#666666" : "#3434B2";
+                  const tagBorder =
+                    entityNsName === "system"
+                      ? "#D8D8D8 solid 1px"
+                      : "#CCCCFF solid 1px";
+                  const isLongTag = tagName.length > 20;
+                  const tagElem = (
+                    <Tag
+                      style={{
+                        padding: "1px 7px",
+                        margin: "3px 3px",
+                        background: tagBackground,
+                        color: tagColor,
+                        border: tagBorder,
+                        borderRadius: 4,
+                        cursor: "pointer",
+                      }}
+                      key={this.getKey(item)}
+                      closable={
+                        user &&
+                        isEditPermission &&
+                        entityNsName === this.state.currentEntityNsName
+                      }
+                      onClose={() => this.tagRemove(item)}
+                    >
+                      {this.props.canClick ? (
+                        <Link
+                          href={`/search?q=${tagName}&model=${type}`}
+                          target="_blank"
+                        >
+                          {this.renderTags({ isLongTag, item, tagName })}
+                        </Link>
+                      ) : (
+                        <React.Fragment>
+                          {this.renderTags({ isLongTag, item, tagName })}
+                        </React.Fragment>
+                      )}
+                    </Tag>
+                  );
+                  return isLongTag ? (
+                    <Tooltip title={item.tagName} key={this.getKey(item)}>
+                      {tagElem}
+                    </Tooltip>
+                  ) : (
+                    tagElem
+                  );
+                })}
+            </div>
+            {user && tagEntityId && isEditPermission && inputVisible && (
+              <Input
+                ref={this.saveInputRef}
+                type="text"
+                size="small"
+                style={{
+                  width: 80,
+                  height: 25,
+                  padding: "1px 7px",
+                  margin:
+                    tagEntityList?.length > 0 ? "3px 0 6px 12px" : "3px 0 6px 0",
+                }}
+                value={inputValue}
+                onChange={this.handleInputChange}
+                onBlur={this.handleInputConfirm}
+                onPressEnter={this.handleInputConfirm}
+              />
+            )}
+            {user && tagEntityId && isEditPermission && !inputVisible && (
+              <Tag
+                style={{
+                  width: 80,
+                  borderRadius: 4,
+                  background: isNightMode ? "transparency" : "#fff",
+                  borderStyle: "dashed",
+                  padding: "1px 7px",
+                  margin:
+                    tagEntityList?.length > 0 ? "3px 0 6px 12px" : "3px 0 6px 0",
+                  display: "flex",
+                  alignItems: "center",
+                  height: 25,
+                  cursor: "pointer",
+                }}
+                onClick={this.showInput}
+              >
+                <PlusOutlined className="footprint-mr-xs" /> New Tag
+              </Tag>
+            )}
           </div>
-          {user && tagEntityId && isEditPermission && inputVisible && (
-            <Input
-              ref={this.saveInputRef}
-              type="text"
-              size="small"
-              style={{
-                width: 80,
-                height: 25,
-                padding: "1px 7px",
-                margin:
-                  tagEntityList?.length > 0 ? "3px 0 6px 12px" : "3px 0 6px 0",
-              }}
-              value={inputValue}
-              onChange={this.handleInputChange}
-              onBlur={this.handleInputConfirm}
-              onPressEnter={this.handleInputConfirm}
-            />
-          )}
-          {user && tagEntityId && isEditPermission && !inputVisible && (
-            <Tag
-              style={{
-                width: 80,
-                borderRadius: 4,
-                background: "#fff",
-                borderStyle: "dashed",
-                padding: "1px 7px",
-                margin:
-                  tagEntityList?.length > 0 ? "3px 0 6px 12px" : "3px 0 6px 0",
-                display: "flex",
-                alignItems: "center",
-                height: 25,
-                cursor: "pointer",
-              }}
-              onClick={this.showInput}
-            >
-              <PlusOutlined className="footprint-mr-xs" /> New Tag
-            </Tag>
-          )}
-        </div>
+        </ConfigProvider>
       </>
     );
   }
@@ -314,6 +320,7 @@ TagsPanel.propTypes = {
   canClick: PropTypes.bool,
   showSkeleton: PropTypes.bool,
   showSeoTagEntityList: PropTypes.bool,
+  isNightMode: PropTypes.bool,
 };
 
 TagsPanel.defaultProps = {

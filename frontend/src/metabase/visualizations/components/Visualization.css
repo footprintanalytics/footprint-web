@@ -26,6 +26,10 @@
   user-select: none;
 }
 
+.Theme--night .waterMarkHome span {
+  color: white;
+}
+
 .noResults {
   margin-top: -12px;
 }

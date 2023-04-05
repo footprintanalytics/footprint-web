@@ -16,6 +16,10 @@
   margin: 10px 0;
 }
 
+.Dashboard--night .relative-dashboard__title {
+  color: white;
+}
+
 .relative-dashboard__wrap .dashboards__table {
   margin-bottom: 0;
 }

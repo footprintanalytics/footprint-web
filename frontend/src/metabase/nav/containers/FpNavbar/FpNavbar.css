@@ -256,6 +256,10 @@
   color: #4444FF;
 }
 
+.Nav__logo {
+  display: flex;
+}
+
 @media screen and (--footprint-breakpoint-max-pad) {
   .Nav__menu,
   .Nav__menu-create,

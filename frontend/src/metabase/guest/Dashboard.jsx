@@ -286,7 +286,7 @@ class PublicDashboard extends Component {
               <VisualizationShareFoot location={this.props.location} />
             )}
           </LoadingAndErrorWrapper>
-          {!isDefi360() && <DashboardAd dashboardId={dashboard?.entityId} />}
+          {!isDefi360() && <DashboardAd dashboardId={dashboard?.entityId} isNightMode={isNightMode} />}
           {children}
         </EmbedFrame>
       </LoadingAndErrorWrapper>
