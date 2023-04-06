@@ -1,9 +1,11 @@
 import { createSelector } from "reselect";
-import { PLUGIN_APPLICATION_PERMISSIONS } from "metabase/plugins";
 import { get } from "lodash";
+import { PLUGIN_APPLICATION_PERMISSIONS } from "metabase/plugins";
 import type { State } from "metabase-types/store";
 
 export const getUser = (state: State) => state.currentUser;
+
+export const getFgaProject = (state: State) => state.currentFgaProject;
 
 export const getUserId = createSelector([getUser], user => user?.id);
 

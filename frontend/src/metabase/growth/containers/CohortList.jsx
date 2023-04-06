@@ -12,9 +12,13 @@ import UploadWallets from "../components/buttons/UploadWallets";
 import { getGrowthProjectPath } from "../utils/utils";
 
 const CohortList = props => {
-  const { isLoading, data, refetch } = useQuery(["getCohort"], GetFgaCohort, {
-    refetchInterval: 5000,
-  });
+  const { isLoading, data, refetch } = useQuery(
+    ["getCohort", props.project],
+    GetFgaCohort,
+    {
+      refetchInterval: 5000,
+    },
+  );
 
   const dataSource = data?.list?.sort(
     (a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime(),

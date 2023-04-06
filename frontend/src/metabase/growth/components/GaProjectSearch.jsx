@@ -5,10 +5,11 @@ import { Select } from "antd";
 import { withRouter } from "react-router";
 import { useQuery } from "react-query";
 import { set } from "lodash";
-import { getUser } from "metabase/selectors/user";
+import { getUser, getFgaProject } from "metabase/selectors/user";
 import { QUERY_OPTIONS } from "metabase/containers/dashboards/shared/config";
 import { GetFgaProject } from "metabase/new-service";
 import { PublicApi, maybeUsePivotEndpoint } from "metabase/services";
+import { loadCurrentFgaProject } from "metabase/redux/user";
 import { top_protocols } from "../utils/data";
 import "../css/index.css";
 import {
@@ -36,6 +37,12 @@ const GaProjectSearch = props => {
     },
     QUERY_OPTIONS,
   );
+
+  const loadProjectDetail = project_id => {
+    console.log("loadProjectDetail", project_id);
+    props.dispatch(loadCurrentFgaProject(parseInt(project_id)));
+  };
+
   useEffect(() => {
     if (!isLoading) {
       if (data?.data?.length > 0) {
@@ -50,15 +57,20 @@ const GaProjectSearch = props => {
         });
         const index = projects.findIndex(i => i.value === currentProject);
         const projectIndex = index === -1 ? 0 : index;
+        // console.log("useEffect loadProjectDetail projectIndex", projectIndex);
+        // loadProjectDetail(projects[projectIndex].id);
         setCurrentProject(projects[projectIndex].value);
         saveLatestGAProject(projects[projectIndex].value);
         saveLatestGAProjectId(projects[projectIndex].id);
+        loadProjectDetail(projects[projectIndex].id);
         setUserProject(projects);
+        console.log("ProjectSearch router push", 1);
         if (index === -1) {
           router?.push({
             pathname: getGrowthProjectPath(projects[projectIndex].value, menu),
           });
         }
+
       }
     }
     // getAllProtocol();
@@ -86,9 +98,14 @@ const GaProjectSearch = props => {
     } else {
       const temp_project =
         getLatestGAProject() ??
-        (userProject.length > 0 ? userProject : recommendOptions)[0].value;
+        (userProject?.length > 0
+          ? userProject[0].value
+          : recommendOptions[0].value);
+      console.log("temp_project", temp_project, projectPath);
       setCurrentProject(temp_project);
+      saveLatestGAProject(temp_project);
       if (location.pathname.startsWith("/growth/project")) {
+        console.log("ProjectSearch router push", 2);
         router?.push({
           pathname: getGrowthProjectPath(temp_project, menu),
         });
@@ -111,7 +128,8 @@ const GaProjectSearch = props => {
     if (option.id) {
       saveLatestGAProjectId(option.id);
     }
-    if (location.pathname.startsWith("/growth/project")) {
+    if (location.pathname.startsWith("/growth/project") && option.value) {
+      console.log("ProjectSearch router push", 3);
       router?.push({
         pathname: getGrowthProjectPath(option.value, menu),
       });
@@ -134,7 +152,7 @@ const GaProjectSearch = props => {
               .join(",")
               .includes(input.toLowerCase())
           }
-          options={userProject.length > 0 ? userProject : finalOptions}
+          options={userProject?.length > 0 ? userProject : finalOptions}
         />
       )}
     </div>
@@ -144,6 +162,7 @@ const GaProjectSearch = props => {
 const mapStateToProps = (state, props) => {
   return {
     user: getUser(state),
+    projectObject: getFgaProject(state),
     projectPath: props.params.project,
     menu: props.params.menu,
   };
