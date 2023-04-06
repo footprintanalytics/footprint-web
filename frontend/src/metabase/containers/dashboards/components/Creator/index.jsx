@@ -15,7 +15,6 @@ const Creator = () => {
   const hotsData = [
     "HarmonyONE",
     "Beosin",
-    "Beosin",
     "kaixuan",
     "PrimoData",
     "0xLam",
