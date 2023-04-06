@@ -2,6 +2,7 @@
   --default-font-size: 0.875em;
   --default-font-color: var(--color-text-dark);
   --default-bg-color: var(--color-bg-light);
+  --default-font-family: sans-serif;
 }
 
 html {
