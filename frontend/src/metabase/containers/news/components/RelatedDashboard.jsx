@@ -14,6 +14,7 @@ const RelatedDashboard = ({
   entityKey,
   router,
   type = "list",
+  isNightMode,
 }) => {
   const { data } = useQuery(
     "relatedDashboard",
@@ -58,6 +59,7 @@ const RelatedDashboard = ({
           router={router}
           data={{ data: getData() }}
           gaCategory="related-dashboard"
+          isNightMode={isNightMode}
         />
       )}
     </div>

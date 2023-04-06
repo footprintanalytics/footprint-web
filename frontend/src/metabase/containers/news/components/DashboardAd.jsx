@@ -10,7 +10,7 @@ import fitViewport from "metabase/hoc/FitViewPort";
 import "../../dashboards/components/Dashboards/index.css";
 
 const DashboardAd = props => {
-  const { dashboardId, router } = props;
+  const { dashboardId, router, isNightMode } = props;
 
   const data = [
     {
@@ -44,6 +44,7 @@ const DashboardAd = props => {
           dashboardId={dashboardId}
           entityKey={item.entityKey}
           title={item.title}
+          isNightMode={isNightMode}
         />
       ))}
     </div>

@@ -47,7 +47,7 @@ const ScalarValue = ({
   );
 
   return (
-    <ScalarValueWrapper className="ScalarValue" fontSize={fontSize}>
+    <ScalarValueWrapper className="ScalarValue fullscreen-night-text" fontSize={fontSize}>
       {value}
     </ScalarValueWrapper>
   );

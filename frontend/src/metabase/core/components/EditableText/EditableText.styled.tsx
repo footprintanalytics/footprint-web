@@ -3,11 +3,12 @@ import { color } from "metabase/lib/colors";
 
 export interface EditableTextRootProps {
   isDisabled: boolean;
+  isNightMode: boolean;
 }
 
 export const EditableTextRoot = styled.div<EditableTextRootProps>`
   position: relative;
-  color: ${color("text-dark")};
+  color: ${props => props.isNightMode ? "white" : color("text-dark")};
   padding: 0.25rem;
   border: 1px solid transparent;
   border-radius: 4px;

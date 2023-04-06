@@ -1,5 +1,5 @@
 /* eslint-disable react/prop-types */
-import { Table } from "antd";
+import { Table, ConfigProvider, theme } from "antd";
 import React, { useState } from "react";
 import DashboardCopyModal from "metabase/dashboard/components/DashboardCopyModal";
 import ShareModal from "metabase/containers/home/components/ShareModal";
@@ -9,8 +9,9 @@ import HomePriorityModal from "metabase/components/HomePriorityModal";
 import { useDeviceInfo } from "metabase-lib/lib/Device";
 import getListPagination from "./getListPagination";
 import getListColums from "./getListColums";
+const { darkAlgorithm, defaultAlgorithm } = theme;
 
-const HotList = ({ router, user, data, current, gaCategory }) => {
+const HotList = ({ router, user, data, current, gaCategory, isNightMode }) => {
   const [dashboardCopyModal, setDashboardCopyModal] = useState({});
   const [cardCopyModal, setCardCopyModal] = useState({}); //query copy modal
   const [shareModalResource, setShareModalResource] = useState({});
@@ -50,14 +51,18 @@ const HotList = ({ router, user, data, current, gaCategory }) => {
 
   return (
     <>
-      <Table
-        rowKey="publicUuid"
-        className="dashboards__table"
-        dataSource={data?.data}
-        columns={columns}
-        pagination={pagination}
-        showHeader={showHeader}
-      />
+      <ConfigProvider theme={{
+        algorithm: isNightMode ? darkAlgorithm : defaultAlgorithm,
+      }}>
+        <Table
+          rowKey="publicUuid"
+          className="dashboards__table"
+          dataSource={data?.data}
+          columns={columns}
+          pagination={pagination}
+          showHeader={showHeader}
+        />
+      </ConfigProvider>
       <DashboardCopyModal
         isOpen={!!dashboardCopyModal.id}
         onClose={() => setDashboardCopyModal({})}

@@ -1,7 +1,7 @@
 /* eslint-disable react/prop-types */
-import React, { useState, useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { connect } from "react-redux";
-import { Button, Result, Layout, Image } from "antd";
+import { Button, Image, Layout, Result } from "antd";
 import { Content } from "antd/lib/layout/layout";
 import { useQuery } from "react-query";
 import { QUERY_OPTIONS } from "metabase/containers/dashboards/shared/config";
@@ -14,11 +14,12 @@ import GaLayout from "../components/GaLayout";
 import GaSidebar from "../components/GaSidebar";
 import ProjectInfo from "../components/ProjectInfo";
 import {
-  getLatestGAProject,
-  saveLatestGAProject,
-  getLatestGAProjectId,
-  getGrowthProjectPath,
   getGaMenuTabs,
+  getGrowthProjectPath,
+  getLatestGAMenuTag,
+  getLatestGAProject,
+  getLatestGAProjectId,
+  saveLatestGAProject,
 } from "../utils/utils";
 import { fga_menu_data, top_protocols } from "../utils/data";
 import LoadingDashboard from "../components/LoadingDashboard";
@@ -28,6 +29,7 @@ import CampaignDetail from "./CampaignDetail";
 import CampaignList from "./CampaignList";
 import CustomAnalysis from "./CustomAnalysis";
 import CampaignCreate from "./CampaignCreate";
+import PotentialUsers from "./PotentialUsers";
 import CohortList from "./CohortList";
 import "../css/index.css";
 
@@ -39,6 +41,7 @@ const Project = props => {
   const [project, setProject] = useState(projectPath);
   const demoProjectData = top_protocols[0];
   const [gaMenuTabs, setGaMenuTabs] = useState();
+  const isDemo = location?.hash?.includes("demo");
 
   useEffect(() => {
     if (!project) {
@@ -203,6 +206,11 @@ const Project = props => {
             {WrapPublicDashboard}
           </LoadingDashboard>
         );
+      }
+      if (current_tab === "Potential Users" && isDemo) {
+        return (
+          <PotentialUsers project={getProjectObject(project)}/>
+        )
       }
       return WrapPublicDashboard;
     }

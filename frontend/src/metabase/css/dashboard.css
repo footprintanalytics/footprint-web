@@ -57,6 +57,11 @@
   transition: color 1s linear;
 }
 
+.Dashboard.Dashboard--night .fullscreen-night-text {
+  color: color-mod(var(--color-text-white) alpha(-14%));
+  transition: color 1s linear;
+}
+
 .Dashboard.Dashboard--night .DashCard .Card svg text {
   fill: color-mod(var(--color-text-white) alpha(-14%)) !important;
   stroke: none !important;

@@ -33,6 +33,7 @@ export default class ParameterWidget extends Component {
       editingParameter,
       commitImmediately,
       parameters,
+      isNightMode,
     } = this.props;
 
     const isEditingParameter = editingParameter?.id === parameter.id;
@@ -46,6 +47,7 @@ export default class ParameterWidget extends Component {
         value={value}
         setValue={setValue}
         isEditing={isEditingParameter}
+        isNightMode={isNightMode}
         placeholder={placeholder}
         focusChanged={this.focusChanged}
         isFullscreen={isFullscreen}
@@ -64,6 +66,7 @@ export default class ParameterWidget extends Component {
       parameter,
       isEditing,
       isFullscreen,
+      isNightMode,
       editingParameter,
       setEditingParameter,
       setValue,
@@ -84,7 +87,7 @@ export default class ParameterWidget extends Component {
           legend={legend}
           noPadding={true}
           className={cx(className, S.container, {
-            "border-brand": fieldHasValueOrFocus,
+            "border-brand": fieldHasValueOrFocus && !isNightMode,
           })}
         >
           {this.renderPopover(

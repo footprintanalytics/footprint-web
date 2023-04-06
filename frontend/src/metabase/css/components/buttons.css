@@ -108,7 +108,7 @@
 .Button--onlyIcon {
   border: 1px solid #dcdde5;
   background: transparent;
-  color: var(--color-text-dark);
+  color: #7A819B;
   padding: 0;
 }
 

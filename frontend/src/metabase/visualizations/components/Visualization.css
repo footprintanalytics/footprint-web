@@ -26,6 +26,33 @@
   user-select: none;
 }
 
+.Dashboard--night .waterMarkHome span {
+  pointer-events: none;
+  content: " ";
+  font-size: 18px;
+  color: rgba(203, 203, 255, 0.5);
+  z-index: 9999;
+  display: block;
+  text-align: center;
+  line-height: 100%;
+  background-image: url("https://footprint-imgs.oss-accelerate.aliyuncs.com/img_watermark_2.png");
+  width: calc(100% - 40px);
+  background-size: 40%;
+  background-repeat: no-repeat;
+  background-position: center;
+  height: 90%;
+  position: absolute;
+
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+}
+
+.Theme--night .waterMarkHome span {
+  color: white;
+}
+
 .noResults {
   margin-top: -12px;
 }

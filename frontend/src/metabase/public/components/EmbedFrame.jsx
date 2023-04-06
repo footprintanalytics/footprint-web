@@ -42,6 +42,7 @@ class EmbedFrame extends Component {
       setParameterValue,
       hideTitle,
       hideFooter,
+      isNightMode,
     } = this.props;
     const { innerScroll } = this.state;
 
@@ -49,6 +50,9 @@ class EmbedFrame extends Component {
       ...DEFAULT_OPTIONS,
       ...parseHashOptions(location.hash),
     };
+
+    const curTheme = isNightMode ? "night" : theme;
+
     const showFooter =
       !hideFooter &&
       (!MetabaseSettings.hideEmbedBranding() ||
@@ -62,7 +66,7 @@ class EmbedFrame extends Component {
         className={cx("EmbedFrame flex flex-column", className, {
           spread: innerScroll,
           "bordered rounded shadowed": bordered,
-          [`Theme--${theme}`]: !!theme,
+          [`Theme--${curTheme}`]: !!curTheme,
         })}
       >
         <div
@@ -83,6 +87,7 @@ class EmbedFrame extends Component {
                 <div className="flex">
                   <SyncedParametersList
                     className="mt1"
+                    isNightMode={isNightMode}
                     dashboard={this.props.dashboard}
                     parameters={getValuePopulatedParameters(
                       parameters,
@@ -102,7 +107,7 @@ class EmbedFrame extends Component {
         {showFooter && (
           <div className="EmbedFrame-footer p1 md-p2 lg-p3 border-top flex-no-shrink flex align-center">
             {!MetabaseSettings.hideEmbedBranding() && (
-              <LogoBadge dark={theme} />
+              <LogoBadge dark={curTheme} />
             )}
             {actionButtons && (
               <div className="flex-align-right text-medium">

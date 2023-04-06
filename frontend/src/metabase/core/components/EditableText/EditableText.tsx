@@ -25,6 +25,7 @@ export interface EditableTextProps extends EditableTextAttributes {
   isOptional?: boolean;
   isMultiline?: boolean;
   isDisabled?: boolean;
+  isNightMode?: boolean;
   onChange?: (value: string) => void;
   "data-testid"?: string;
 }
@@ -36,6 +37,7 @@ const EditableText = forwardRef(function EditableText(
     isOptional = false,
     isMultiline = false,
     isDisabled = false,
+    isNightMode = false,
     onChange,
     "data-testid": dataTestId,
     ...props
@@ -93,6 +95,7 @@ const EditableText = forwardRef(function EditableText(
     <EditableTextRoot
       {...props}
       ref={ref}
+      isNightMode={isNightMode}
       isDisabled={isDisabled}
       data-value={`${displayValue}\u00A0`}
     >

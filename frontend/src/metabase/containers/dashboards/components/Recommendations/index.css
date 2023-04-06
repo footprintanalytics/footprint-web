@@ -97,6 +97,10 @@
   white-space: nowrap;
 }
 
+.Dashboard.Dashboard--night .dashboards__recommendations-title{
+  color: white;
+}
+
 .dashboards__recommendations-stat {
   display: flex;
 }

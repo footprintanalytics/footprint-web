@@ -104,6 +104,7 @@ class ParameterValueWidget extends Component {
       isEditing,
       placeholder,
       isFullscreen,
+      isNightMode,
       noReset,
       className,
       dashboard,
@@ -203,7 +204,7 @@ class ParameterValueWidget extends Component {
         <div
           ref={this.trigger}
           className={cx(S.parameter, S.noPopover, className, {
-            [S.selected]: hasValue,
+            [isNightMode ? S.selected_night : S.selected]: hasValue,
             [S.isEditing]: isEditing,
           })}
         >
@@ -244,7 +245,7 @@ class ParameterValueWidget extends Component {
             <div
               ref={this.trigger}
               className={cx(S.parameter, className, {
-                [S.selected]: hasValue,
+                [isNightMode ? S.selected_night : S.selected]: hasValue,
               })}
             >
               {showTypeIcon && (
@@ -254,7 +255,7 @@ class ParameterValueWidget extends Component {
                   size={14}
                 />
               )}
-              <div className="mr1 text-nowrap">
+              <div className="mr1 text-nowrap fullscreen-night-text">
                 <FormattedParameterValue
                   parameter={parameter}
                   value={value}
@@ -263,6 +264,7 @@ class ParameterValueWidget extends Component {
               </div>
               <WidgetStatusIcon
                 isFullscreen={isFullscreen}
+                isNightMode={isNightMode}
                 hasValue={hasValue}
                 noReset={noReset}
                 noPopover={!!noPopover}
