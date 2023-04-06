@@ -64,9 +64,13 @@ const GaProjectSearch = props => {
         saveLatestGAProjectId(projects[projectIndex].id);
         loadProjectDetail(projects[projectIndex].id);
         setUserProject(projects);
-        router?.push({
-          pathname: getGrowthProjectPath(projects[projectIndex].value, menu),
-        });
+        console.log("ProjectSearch router push", 1);
+        if (index === -1) {
+          router?.push({
+            pathname: getGrowthProjectPath(projects[projectIndex].value, menu),
+          });
+        }
+
       }
     }
     // getAllProtocol();
@@ -101,6 +105,7 @@ const GaProjectSearch = props => {
       setCurrentProject(temp_project);
       saveLatestGAProject(temp_project);
       if (location.pathname.startsWith("/growth/project")) {
+        console.log("ProjectSearch router push", 2);
         router?.push({
           pathname: getGrowthProjectPath(temp_project, menu),
         });
@@ -124,6 +129,7 @@ const GaProjectSearch = props => {
       saveLatestGAProjectId(option.id);
     }
     if (location.pathname.startsWith("/growth/project") && option.value) {
+      console.log("ProjectSearch router push", 3);
       router?.push({
         pathname: getGrowthProjectPath(option.value, menu),
       });

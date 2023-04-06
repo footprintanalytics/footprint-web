@@ -28,7 +28,6 @@ interface IGaSidebarProp {
   projectObject?: any;
 }
 const GaSidebar = (props: IGaSidebarProp) => {
-  // const { currentProject, router, location, items, currentTab} = props;
   const { currentProject, router, location, currentTab, projectObject, user } =
     props;
   const rootSubmenuKeys: any[] = [];
@@ -54,8 +53,8 @@ const GaSidebar = (props: IGaSidebarProp) => {
     //       ? items[0].children[0].key
     //       : items[0]?.key),
     // );
-    if(currentTab){
-      setTab(currentTab)
+    if (currentTab) {
+      setTab(currentTab);
     }
   }, [currentTab, items]);
 

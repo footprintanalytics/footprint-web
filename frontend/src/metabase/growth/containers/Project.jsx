@@ -52,6 +52,10 @@ const Project = props => {
           ? gaMenuTabs?.menuTabs[0].children[0].key
           : gaMenuTabs?.menuTabs[0]?.key;
       setTab(tempMenu);
+      console.log(
+        "project useEffect router.push",
+        getGrowthProjectPath(project, tempMenu),
+      );
       router.push(getGrowthProjectPath(project, tempMenu));
     }
   }, [gaMenuTabs, menu, project, router]);
@@ -152,7 +156,13 @@ const Project = props => {
       );
     }
     if (current_tab === "Cohort") {
-      return <CohortList router={router} location={location}></CohortList>;
+      return (
+        <CohortList
+          router={router}
+          location={location}
+          project={getProjectObject(project)}
+        ></CohortList>
+      );
     }
     if (gaMenuTabs?.dashboardMap?.has(current_tab)) {
       if (current_tab === "Twitter") {
