@@ -13,6 +13,7 @@ import { QUERY_OPTIONS } from "../../shared/config";
 
 const Creator = () => {
   const hotsData = [
+    "HarmonyONE",
     "Beosin",
     "kaixuan",
     "PrimoData",
