@@ -30,8 +30,8 @@ interface IGaSidebarProp {
 const GaSidebar = (props: IGaSidebarProp) => {
   const { currentProject, router, location, currentTab, projectObject, user } =
     props;
-  const rootSubmenuKeys: any[] = [];
   const [items, setItems] = useState<any[]>([]);
+  const [rootSubmenuKeys, setRootSubmenuKeys] = useState<any[]>([]);
   const [tab, setTab] = useState<string>(currentTab!);
   useEffect(() => {
     const itemsTemp: any[] = getGaMenuTabs(
@@ -40,9 +40,11 @@ const GaSidebar = (props: IGaSidebarProp) => {
       (projectObject ?? top_protocols[0]).nftCollectionAddress?.length > 0,
       user,
     )?.menuTabs;
+    const rootSubmenuKeysTemp: any[] = [];
     itemsTemp?.map(i => {
-      rootSubmenuKeys.push(i.key);
+      rootSubmenuKeysTemp.push(i.key);
     });
+    setRootSubmenuKeys(rootSubmenuKeysTemp);
     setItems(itemsTemp);
   }, [projectObject]);
 
@@ -62,7 +64,7 @@ const GaSidebar = (props: IGaSidebarProp) => {
 
   const onOpenChange: MenuProps["onOpenChange"] = keys => {
     const latestOpenKey = keys.find(key => openKeys.indexOf(key) === -1);
-    if (rootSubmenuKeys.indexOf(latestOpenKey!) === -1) {
+    if (!rootSubmenuKeys.includes(latestOpenKey)) {
       setOpenKeys(keys);
     } else {
       setOpenKeys(latestOpenKey ? [latestOpenKey] : []);

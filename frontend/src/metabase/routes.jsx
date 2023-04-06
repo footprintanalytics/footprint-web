@@ -430,6 +430,11 @@ export const getRoutes = store => (
             modal={LazyLoad.ArchiveDashboardModal}
           />
         </Route>
+        <Route
+          title={t`Public Dashboard`}
+          path="/growth/public/dashboard/:uuid"
+          component={LazyLoad.PublicDashboard}
+        />
         <Route path="/growth" component={LazyLoad.GaProjectContainer}>
           <Route path="project/:project(/:menu)" />
         </Route>

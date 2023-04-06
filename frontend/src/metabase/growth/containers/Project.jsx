@@ -1,8 +1,7 @@
 /* eslint-disable react/prop-types */
 import React, { useEffect, useState } from "react";
 import { connect } from "react-redux";
-import { Button, Image, Layout, Result } from "antd";
-import { Content } from "antd/lib/layout/layout";
+import { Button, Image, Result } from "antd";
 import { useQuery } from "react-query";
 import { QUERY_OPTIONS } from "metabase/containers/dashboards/shared/config";
 import PublicDashboard from "metabase/public/containers/PublicDashboard";
@@ -10,8 +9,7 @@ import { getUser, getFgaProject } from "metabase/selectors/user";
 import { GetFgaProjectDetail } from "metabase/new-service";
 import LoadingSpinner from "metabase/components/LoadingSpinner";
 import { loadCurrentFgaProject } from "metabase/redux/user";
-import GaLayout from "../components/GaLayout";
-import GaSidebar from "../components/GaSidebar";
+
 import ProjectInfo from "../components/ProjectInfo";
 import {
   getGaMenuTabs,
@@ -208,9 +206,7 @@ const Project = props => {
         );
       }
       if (current_tab === "Potential Users" && isDemo) {
-        return (
-          <PotentialUsers project={getProjectObject(project)}/>
-        )
+        return <PotentialUsers project={getProjectObject(project)} />;
       }
       return WrapPublicDashboard;
     }
@@ -276,21 +272,7 @@ const Project = props => {
       </div>
     );
   };
-  return (
-    <GaLayout router={router} location={location}>
-      <Layout hasSider className="h-full">
-        <GaSidebar
-        // router={router} location={location}
-        ></GaSidebar>
-        <Content
-          className="h-full ga-layout__content"
-          style={{ marginLeft: 250 }}
-        >
-          {getContentPannel(tab)}
-        </Content>
-      </Layout>
-    </GaLayout>
-  );
+  return <>{getContentPannel(tab)}</>;
 };
 
 const mapStateToProps = (state, props) => {

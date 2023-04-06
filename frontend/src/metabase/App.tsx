@@ -1,6 +1,8 @@
 import React, { ErrorInfo, ReactNode, useState } from "react";
 import { connect } from "react-redux";
 import { Location } from "history";
+import { ConfigProvider } from "antd";
+import cx from "classnames";
 import Meta from "metabase/components/Meta";
 import { getUser } from "metabase/selectors/user";
 import { getOssUrl } from "metabase/lib/image";
@@ -32,8 +34,8 @@ import { AppErrorDescriptor, State } from "metabase-types/store";
 import GlobalContactPanel from "metabase/components/GlobalContactPanel/";
 
 import { AppContainer, AppContent, AppContentContainer } from "./App.styled";
-import cx from "classnames";
-import { ConfigProvider } from "antd";
+import GaSidebar from "./growth/components/GaSidebar";
+import GaLayout from "./growth/components/GaLayout";
 
 const getErrorComponent = ({ status, data, context }: AppErrorDescriptor) => {
   if (status === 403 || data?.error_code === "unauthorized") {
@@ -112,8 +114,8 @@ function App({
   user,
 }: AppProps) {
   const [viewportElement, setViewportElement] = useState<HTMLElement | null>();
-  const hideScrollbar = location.pathname === ("/");
-
+  const hideScrollbar = location.pathname === "/";
+  const isFga = location.pathname.startsWith("/growth");
   const handleChannel = () => {
     const channel = location.query.channel || location.query.cnl || "homepage";
     setChannel(channel);
@@ -143,7 +145,7 @@ function App({
       <ConfigProvider
         theme={{
           token: {
-            colorPrimary: '#3434B2',
+            colorPrimary: "#3434B2",
             borderRadius: 0,
           },
         }}
@@ -155,9 +157,23 @@ function App({
               {/*{isAppBarVisible && <AppBar isNavBarVisible={isNavBarVisible} />}*/}
               <AppContentContainer isAdminApp={isAdminApp}>
                 {isNavBarVisible && <Navbar location={location} />}
-                <AppContent className={cx({ "scroll-hide-all": hideScrollbar })} id="app-content" ref={setViewportElement} key={`${user?.id}`}>
-                  <ContentViewportContext.Provider value={viewportElement ?? null}>
-                    {errorPage ? getErrorComponent(errorPage) : children}
+
+                <AppContent
+                  className={cx({ "scroll-hide-all": hideScrollbar })}
+                  id="app-content"
+                  ref={setViewportElement}
+                  key={`${user?.id}`}
+                >
+                  <ContentViewportContext.Provider
+                    value={viewportElement ?? null}
+                  >
+                    {isFga ? (
+                      <GaLayout>
+                        {errorPage ? getErrorComponent(errorPage) : children}
+                      </GaLayout>
+                    ) : (
+                      <>{errorPage ? getErrorComponent(errorPage) : children}</>
+                    )}
                   </ContentViewportContext.Provider>
                 </AppContent>
                 <UndoListing />
