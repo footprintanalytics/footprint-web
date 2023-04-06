@@ -82,7 +82,7 @@ const CreateFliterCohort = ({
     );
     const value = [];
     if (filterOut?.includes("Sybil")) value.push("sybil");
-    if (filterOut?.includes("Bot")) value.push("flashbot");
+    if (filterOut?.includes("Bot")) value.push("bot");
     if (excludeIndex > -1) {
       if (value.length) {
         params.queryCondition[excludeIndex].value = value;
@@ -97,7 +97,7 @@ const CreateFliterCohort = ({
           slug: "exclude",
           id: "b2ece640",
           sectionId: "fp_enum",
-          remark: "flashbot,sybil",
+          remark: "bot,sybil",
           value,
           target: ["dimension", ["template-tag", "excludeTag"]],
         });
@@ -121,7 +121,7 @@ const CreateFliterCohort = ({
     if (exclude) {
       const _filterOut = [];
       if (exclude.value?.includes("sybil")) _filterOut.push("Sybil");
-      if (exclude.value?.includes("flashbot")) _filterOut.push("Bot");
+      if (exclude.value?.includes("bot")) _filterOut.push("Bot");
       setFilterOut(_filterOut);
     }
   }, [queryCondition]);
