@@ -62,6 +62,12 @@
   border-color: var(--color-brand);
 }
 
+:local(.parameter.selected_night) {
+  font-weight: bold;
+  color: white;
+  border-color: white;
+}
+
 :local(.parameter.noPopover) input {
   width: 100%;
   font-size: 1em;

@@ -24,7 +24,7 @@ function DashboardCardDisplayInfo({ authorName, date, read, favorite }) {
         <Button
           small
           borderless
-          className="p0 ml2 cursor-default"
+          className="p0 ml2 pointer-events-none"
           icon="read"
           iconSize={16}
           color={color("footprint-color-secondary-text2")}

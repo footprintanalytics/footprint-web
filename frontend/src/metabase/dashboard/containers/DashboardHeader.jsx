@@ -707,6 +707,7 @@ class DashboardHeader extends Component {
     const {
       dashboard,
       isEditing,
+      isNightMode,
       isFullscreen,
       isAdditionalInfoVisible,
       setDashboardAttribute,
@@ -729,6 +730,7 @@ class DashboardHeader extends Component {
         analyticsContext="Dashboard"
         dashboard={dashboard}
         isEditing={isEditing}
+        isNightMode={isNightMode}
         isBadgeVisible={!isEditing && !isFullscreen && isAdditionalInfoVisible}
         isLastEditInfoVisible={
           // !isDataAppPage && hasLastEditInfo && isAdditionalInfoVisible

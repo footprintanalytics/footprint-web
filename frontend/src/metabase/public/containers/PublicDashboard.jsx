@@ -42,6 +42,7 @@ import {
 } from "metabase/growth/utils/utils";
 import EmbedFrame from "../components/EmbedFrame";
 import { cons } from "cljs/cljs.core";
+import { canShowDarkMode } from "metabase/dashboard/components/utils/dark";
 
 const mapStateToProps = (state, props) => {
   const parameters = getParameters(state, props);
@@ -242,6 +243,8 @@ class PublicDashboard extends Component {
         hideParameters = hideParameters + (index !== 0 ? "," : "") + para.slug;
       });
     }
+    const shouldRenderAsNightMode = isNightMode || canShowDarkMode(dashboard);
+
     return (
       <EmbedFrame
         name={dashboard && dashboard.name}
@@ -255,6 +258,7 @@ class PublicDashboard extends Component {
         actionButtons={
           buttons.length > 0 && <div className="flex">{buttons}</div>
         }
+        isNightMode={shouldRenderAsNightMode}
         hideFooter={hideFooter}
         className={className}
       >
@@ -263,7 +267,7 @@ class PublicDashboard extends Component {
           <LoadingAndErrorWrapper
             className={cx("Dashboard p1 flex-full", {
               "Dashboard--fullscreen": isFullscreen,
-              "Dashboard--night": isNightMode,
+              "Dashboard--night": shouldRenderAsNightMode,
             })}
             loading={!dashboard}
           >
@@ -276,6 +280,7 @@ class PublicDashboard extends Component {
                 navigateToNewCardFromDashboard={() => {}}
                 hideWatermark={dashboard && dashboard.hideWatermark}
                 chartStyle={chart_style}
+                isNightMode={shouldRenderAsNightMode}
               />
             )}
           </LoadingAndErrorWrapper>

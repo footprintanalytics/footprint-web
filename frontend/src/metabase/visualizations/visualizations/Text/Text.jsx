@@ -347,7 +347,7 @@ export default class Text extends Component {
       return (
         <div
           ref={r => (this.chartRef = r)}
-          className={cx(className, styles.Text, {
+          className={cx(className, styles.Text, "Text", {
             /* if the card is not showing a background we should adjust the left
              * padding to help align the titles with the wrapper */
             pl0: !settings["dashcard.background"],
@@ -363,6 +363,7 @@ export default class Text extends Component {
             className={cx(
               "flex-full flex flex-column",
               styles["text-card-markdown"],
+              "fullscreen-night-text",
               getSettingsStyle(settings),
             )}
           >

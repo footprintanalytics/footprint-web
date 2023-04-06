@@ -101,7 +101,7 @@
 }
 
 .dashboards__table .ant-table-thead > tr > th {
-  background-color: #fafafc;
+  /*background-color: #fafafc;*/
 }
 
 .dashboards__table .ant-table-tbody > tr > td {
@@ -166,6 +166,10 @@
   text-overflow: ellipsis;
 }
 
+.Dashboard--night .dashboards__table-name-info h3 {
+  color: white;
+}
+
 .dashboards__table-name-info h3 img {
   width: 14px;
   margin-left: 4px;
@@ -203,6 +207,10 @@
   text-overflow: ellipsis;
   white-space: nowrap;
   max-width: 400px;
+}
+
+.Dashboard--night .dashboards__table-name-info-creator {
+  color: white;
 }
 
 .dashboards__table-action {

@@ -33,6 +33,7 @@ import GlobalContactPanel from "metabase/components/GlobalContactPanel/";
 
 import { AppContainer, AppContent, AppContentContainer } from "./App.styled";
 import cx from "classnames";
+import { ConfigProvider } from "antd";
 
 const getErrorComponent = ({ status, data, context }: AppErrorDescriptor) => {
   if (status === 403 || data?.error_code === "unauthorized") {
@@ -139,25 +140,34 @@ function App({
         description={undefined}
         keywords={undefined}
       />
-      <ErrorBoundary onError={onError}>
-        <ScrollToTop>
-          <AppContainer className="spread">
-            {/*<AppBanner />*/}
-            {/*{isAppBarVisible && <AppBar isNavBarVisible={isNavBarVisible} />}*/}
-            <AppContentContainer isAdminApp={isAdminApp}>
-              {isNavBarVisible && <Navbar location={location} />}
-              <AppContent className={cx({ "scroll-hide-all": hideScrollbar })} id="app-content" ref={setViewportElement} key={`${user?.id}`}>
-                <ContentViewportContext.Provider value={viewportElement ?? null}>
-                  {errorPage ? getErrorComponent(errorPage) : children}
-                </ContentViewportContext.Provider>
-              </AppContent>
-              <UndoListing />
-              <GlobalContactPanel />
-              <StatusListing />
-            </AppContentContainer>
-          </AppContainer>
-        </ScrollToTop>
-      </ErrorBoundary>
+      <ConfigProvider
+        theme={{
+          token: {
+            colorPrimary: '#3434B2',
+            borderRadius: 0,
+          },
+        }}
+      >
+        <ErrorBoundary onError={onError}>
+          <ScrollToTop>
+            <AppContainer className="spread">
+              {/*<AppBanner />*/}
+              {/*{isAppBarVisible && <AppBar isNavBarVisible={isNavBarVisible} />}*/}
+              <AppContentContainer isAdminApp={isAdminApp}>
+                {isNavBarVisible && <Navbar location={location} />}
+                <AppContent className={cx({ "scroll-hide-all": hideScrollbar })} id="app-content" ref={setViewportElement} key={`${user?.id}`}>
+                  <ContentViewportContext.Provider value={viewportElement ?? null}>
+                    {errorPage ? getErrorComponent(errorPage) : children}
+                  </ContentViewportContext.Provider>
+                </AppContent>
+                <UndoListing />
+                <GlobalContactPanel />
+                <StatusListing />
+              </AppContentContainer>
+            </AppContainer>
+          </ScrollToTop>
+        </ErrorBoundary>
+      </ConfigProvider>
     </React.Fragment>
   );
 }

@@ -45,6 +45,8 @@ import {
 } from "./Dashboard.styled";
 import { SIDEBAR_NAME } from "metabase/dashboard/constants";
 import { DashboardLazyLoadContainer } from "metabase/dashboard/components/Dashboard/DashboardLazyLoadContainer";
+import cx from "classnames";
+import { canShowDarkMode } from "metabase/dashboard/components/utils/dark";
 
 // const SCROLL_THROTTLE_INTERVAL = 1000 / 24;
 const THROTTLE_PERIOD = 300;
@@ -449,7 +451,7 @@ class Dashboard extends Component {
     });
   };
 
-  tagPanel = () => {
+  tagPanel = ({ shouldRenderAsNightMode }) => {
     const { dashboard, isEditable, user } = this.props;
     const isLoaded = !!dashboard;
     const canEdit =
@@ -462,6 +464,7 @@ class Dashboard extends Component {
         tagEntityId={this.props.dashboard.entityId || this.props.dashboard.id}
         isEditPermission={!this.props.isEditing && canEdit}
         type="dashboard"
+        isNightMode={shouldRenderAsNightMode}
         showSeoTagEntityList={true}
       />
     );
@@ -492,10 +495,10 @@ class Dashboard extends Component {
       embedOptions,
       hideParameters,
     } = this.props;
-
     const { error, isParametersWidgetSticky, shareModalResource } = this.state;
+    // const shouldRenderAsNightMode = isNightMode && isFullscreen;
+    const shouldRenderAsNightMode = (isNightMode || canShowDarkMode(dashboard)) && !isEditing;
 
-    const shouldRenderAsNightMode = isNightMode && isFullscreen;
     const dashboardHasCards = dashboard => dashboard.ordered_cards.length > 0;
     const visibleParameters = getVisibleParameters(parameters);
 
@@ -560,6 +563,7 @@ class Dashboard extends Component {
               >
                 <DashboardHeader
                   {...this.props}
+                  isNightMode={shouldRenderAsNightMode}
                   onEditingChange={this.setEditing}
                   setDashboardAttribute={this.setDashboardAttribute}
                   addParameter={addParameter}
@@ -575,6 +579,7 @@ class Dashboard extends Component {
                   <ParametersWidgetContainer
                     data-testid="edit-dashboard-parameters-widget-container"
                     isEditing={isEditing}
+                    isNightMode={shouldRenderAsNightMode}
                   >
                     {parametersWidget}
                   </ParametersWidgetContainer>
@@ -587,9 +592,9 @@ class Dashboard extends Component {
                 data-testid="dashboard-parameters-and-cards"
                 ref={element => (this.parametersAndCardsContainerRef = element)}
               >
-                <div className="TagWidgetContainer bg-white hove">
+                <div className={cx("TagWidgetContainer hove", shouldRenderAsNightMode ? "bg-transparent" : "bg-white")}>
                   <div className="pl2 pr2" style={{ display: isEditing ? "none" : "flex" }}>
-                    {this.tagPanel()}
+                    {this.tagPanel({ shouldRenderAsNightMode })}
                   </div>
                   {shouldRenderParametersWidgetInViewMode && (
                     <ParametersWidgetContainer
@@ -598,6 +603,7 @@ class Dashboard extends Component {
                       isNavbarOpen={isNavbarOpen}
                       isSticky={isParametersWidgetSticky}
                       topNav={embedOptions?.top_nav}
+                      isNightMode={shouldRenderAsNightMode}
                     >
                       {parametersWidget}
                     </ParametersWidgetContainer>
@@ -652,6 +658,7 @@ class Dashboard extends Component {
                 <div style={{ padding: "0 18px" }}>
                   <DashboardAd
                     dashboardId={this.state.id || this.props.dashboardId}
+                    isNightMode={shouldRenderAsNightMode}
                   />
                 </div>
               )}

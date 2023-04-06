@@ -10,6 +10,15 @@
   height: 100%;
 }
 
+.Dashboard--night .Text h1,
+.Dashboard--night .Text h2,
+.Dashboard--night .Text h3,
+.Dashboard--night .Text h4,
+.Dashboard--night .Text h5,
+.Dashboard--night .Text h6 {
+  color: #ffffffee;
+}
+
 :local .Text .text-card-textarea {
   border-radius: var(--default-border-radius);
   font-size: 1.143em;
