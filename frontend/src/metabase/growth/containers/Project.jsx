@@ -28,6 +28,7 @@ import CampaignList from "./CampaignList";
 import CustomAnalysis from "./CustomAnalysis";
 import CampaignCreate from "./CampaignCreate";
 import PotentialUsers from "./PotentialUsers";
+import UserTemplate from "./UserTemplate";
 import CohortList from "./CohortList";
 import "../css/index.css";
 
@@ -97,6 +98,15 @@ const Project = props => {
         hideFooter
       />
     );
+    if (current_tab === "UserTemplate") {
+      return (
+        <UserTemplate
+          location={location}
+          router={router}
+          projectId={getLatestGAProjectId()}
+        ></UserTemplate>
+      );
+    }
     if (current_tab === "Connector") {
       return (
         <ConnectorList
