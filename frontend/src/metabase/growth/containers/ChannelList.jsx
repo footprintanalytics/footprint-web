@@ -22,6 +22,7 @@ import {
 } from "metabase/redux/control";
 import LoadingSpinner from "metabase/components/LoadingSpinner";
 import "../css/utils.css";
+import { isDark } from "metabase/dashboard/components/utils/dark";
 const { Text } = Typography;
 
 const ChannelList = props => {
@@ -189,7 +190,7 @@ const ChannelList = props => {
                   <List.Item
                     style={{
                       borderRadius: 10,
-                      backgroundColor: "white",
+                      backgroundColor: isDark ? "#00000040": "white",
                       paddingLeft: 10,
                       paddingRight: 10,
                       cursor: "pointer",

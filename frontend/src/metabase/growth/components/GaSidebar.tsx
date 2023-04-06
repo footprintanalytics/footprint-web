@@ -50,7 +50,7 @@ export default function GaSidebar(prop: IGaSidebarProp) {
         display: "flex",
         flexDirection: "column",
         overflow: "auto",
-        height: "100%",
+        // height: "100%",
         position: "fixed",
         background: "white",
         borderRight: "1px solid #dcdee4",

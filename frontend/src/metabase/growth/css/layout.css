@@ -33,6 +33,10 @@
   overflow: auto;
 }
 
+.ga-dark .ga-layout__content {
+  background-color: #2E353B;
+}
+
 .ga-layout__logo {
   display: flex;
   align-items: center;
@@ -74,4 +78,13 @@
   border-radius: 4px !important;
   border: 1px solid #3434b2;
   color: #3434b2;
+}
+
+.ga-dark h1,
+.ga-dark h2,
+.ga-dark h3,
+.ga-dark h4,
+.ga-dark h5,
+.ga-dark h6 {
+  color: #ffffffe0;
 }

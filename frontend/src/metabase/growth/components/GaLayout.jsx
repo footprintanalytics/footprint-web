@@ -37,7 +37,7 @@ const LayoutView = props => {
           isOpenSubMenu ? "" : "ga-layout--hide-sub-menu"
         }`}
       >
-        <div className="ga-layout__content  h-full">{props.children}</div>
+        <div className="ga-layout__content h-full ga-dark">{props.children}</div>
       </div>
     </>
   );

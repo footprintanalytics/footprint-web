@@ -26,6 +26,7 @@ import LoadingSpinner from "metabase/components/LoadingSpinner";
 import ConfigConnector from "../components/config_panel/ConfigConnector";
 import "../css/utils.css";
 import { getGrowthProjectPath } from "../utils/utils";
+import { isDark } from "metabase/dashboard/components/utils/dark";
 
 const { Text } = Typography;
 
@@ -130,7 +131,7 @@ const ConnectorList = props => {
                   <List.Item
                     style={{
                       borderRadius: 10,
-                      backgroundColor: "white",
+                      backgroundColor: isDark ? "#00000040": "white",
                       paddingLeft: 10,
                       paddingRight: 10,
                       cursor: "pointer",

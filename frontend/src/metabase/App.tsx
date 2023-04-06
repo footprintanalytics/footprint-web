@@ -33,7 +33,9 @@ import GlobalContactPanel from "metabase/components/GlobalContactPanel/";
 
 import { AppContainer, AppContent, AppContentContainer } from "./App.styled";
 import cx from "classnames";
-import { ConfigProvider } from "antd";
+import { ConfigProvider, theme } from "antd";
+
+const { darkAlgorithm, defaultAlgorithm } = theme;
 
 const getErrorComponent = ({ status, data, context }: AppErrorDescriptor) => {
   if (status === 403 || data?.error_code === "unauthorized") {
@@ -126,7 +128,7 @@ function App({
     initializeIframeResizer();
     handleChannel();
   });
-
+  const isNightMode = location.pathname.startsWith("/growth")
   return (
     <React.Fragment>
       <Meta
@@ -146,6 +148,7 @@ function App({
             colorPrimary: '#3434B2',
             borderRadius: 0,
           },
+          algorithm: isNightMode ? darkAlgorithm : defaultAlgorithm,
         }}
       >
         <ErrorBoundary onError={onError}>

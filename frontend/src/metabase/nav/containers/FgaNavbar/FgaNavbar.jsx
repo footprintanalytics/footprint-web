@@ -46,6 +46,8 @@ import CreateProjectModal from "metabase/growth/components/Modal/CreateProjectMo
 import { getContext, getPath, getUser } from "../selectors";
 import { getLoginModalDefaultRegister } from "../../../selectors/control";
 import { checkIsDemoAccountAndAlert } from "metabase/growth/utils/utils";
+import cx from "classnames";
+import { isDark } from "../../../dashboard/components/utils/dark";
 
 const mapStateToProps = (state, props) => ({
   path: getPath(state, props),
@@ -331,26 +333,28 @@ class FgaNavbar extends Component {
     };
 
     const RightMenuPad = () => {
+      const color2 = isDark ? "white" : color("footprint-color-title");
       return (
         <div className="Nav__right-pad-icon">
           <Link to="https://docs.footprint.network/docs" target="_blank">
-            <Icon name="docs" color={color("footprint-color-title")} />
+            <Icon name="docs" color={color2} />
           </Link>
           <Link to="/search">
-            <Icon name="search" color={color("footprint-color-title")} />
+            <Icon name="search" color={color2} />
           </Link>
           <Link onClick={onCreateAction}>
-            <Icon name="add" size={12} />
+            <Icon name="add" size={12} color={color2}/>
           </Link>
         </div>
       );
     };
 
     const RightMenuMobile = () => {
+      const color2 = isDark ? "white" : color("footprint-color-title");
       return (
         <div className="Nav__right-mobile-icon">
           <Link to="/search">
-            <Icon name="search" color={color("footprint-color-title")} />
+            <Icon name="search" color={color2} />
           </Link>
           <Link onClick={onCreateAction}>
             <Icon name="add" size={12} />
@@ -431,33 +435,10 @@ class FgaNavbar extends Component {
     };
 
     return (
-      <div className="Nav" style={{ display: rootDisplay }}>
-        <div className="Nav__left">
-          <MobileMenuIcon />
-          <Link
-            className="Nav__logo"
-            to="/growth"
-            onClick={e => {
-              e.preventDefault();
-              trackStructEvent(`navbar-click-logo`);
-              this.goLink(e, "/growth");
-            }}
-          >
-            <img
-              src={getOssUrl("20230228153645.svg")}
-              width={160}
-              height={42}
-              style={{ marginBottom: 2 }}
-              alt="Footprint Growth Analytics - One Step Closer to Blockchain Marketing Insights"
-            />
-          </Link>
-          {/* <LeftMenu /> */}
-        </div>
-        <React.Fragment>
-          <div className="Nav__search-bar">
-            <GaProjectSearch location={location}></GaProjectSearch>
-          </div>
-          <div className="Nav__mobile-logo">
+      <div className={cx({ "dark": isDark })}>
+        <div className="Nav" style={{ display: rootDisplay }}>
+          <div className="Nav__left">
+            <MobileMenuIcon />
             <Link
               className="Nav__logo"
               to="/growth"
@@ -468,32 +449,57 @@ class FgaNavbar extends Component {
               }}
             >
               <img
-                src={getOssUrl("img_nav_logo_mobile.svg")}
-                width={40}
-                height={36}
-                alt="Footprint - One Step Closer to Blockchain Insights"
+                src={getOssUrl("20230228153645.svg")}
+                width={160}
+                height={42}
+                style={{ marginBottom: 2 }}
+                alt="Footprint Growth Analytics - One Step Closer to Blockchain Marketing Insights"
               />
             </Link>
+            {/* <LeftMenu /> */}
           </div>
-        </React.Fragment>
-        <RightMenu />
-        {this.renderModal()}
-        {zkspaceDate() && this.renderSubmitAddrZkspaceModal()}
-        {this.renderLoginModal()}
-        {this.renderCancelFeedbackModal()}
-        <CreateProjectModal
-          // open={this.state.isProjectModalOpen}
-          open={createFgaProjectModalShow}
-          location={location}
-          onSuccess={() => {
-            setCreateFgaProjectModalShowAction({ show: false });
-            // this.setState({ ...this.state, isProjectModalOpen: false });
-          }}
-          onCancel={() => {
-            setCreateFgaProjectModalShowAction({ show: false });
-            // this.setState({ ...this.state, isProjectModalOpen: false });
-          }}
-        ></CreateProjectModal>
+          <React.Fragment>
+            <div className="Nav__search-bar">
+              <GaProjectSearch location={location}></GaProjectSearch>
+            </div>
+            <div className="Nav__mobile-logo">
+              <Link
+                className="Nav__logo"
+                to="/growth"
+                onClick={e => {
+                  e.preventDefault();
+                  trackStructEvent(`navbar-click-logo`);
+                  this.goLink(e, "/growth");
+                }}
+              >
+                <img
+                  src={getOssUrl("img_nav_logo_mobile.svg")}
+                  width={40}
+                  height={36}
+                  alt="Footprint - One Step Closer to Blockchain Insights"
+                />
+              </Link>
+            </div>
+          </React.Fragment>
+          <RightMenu />
+          {this.renderModal()}
+          {zkspaceDate() && this.renderSubmitAddrZkspaceModal()}
+          {this.renderLoginModal()}
+          {this.renderCancelFeedbackModal()}
+          <CreateProjectModal
+            // open={this.state.isProjectModalOpen}
+            open={createFgaProjectModalShow}
+            location={location}
+            onSuccess={() => {
+              setCreateFgaProjectModalShowAction({ show: false });
+              // this.setState({ ...this.state, isProjectModalOpen: false });
+            }}
+            onCancel={() => {
+              setCreateFgaProjectModalShowAction({ show: false });
+              // this.setState({ ...this.state, isProjectModalOpen: false });
+            }}
+          ></CreateProjectModal>
+        </div>
       </div>
     );
   }
