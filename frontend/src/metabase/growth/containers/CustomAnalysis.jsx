@@ -24,7 +24,7 @@ const CustomAnalysis = props => {
                   dataSource={i.items}
                   renderItem={item => (
                     <List.Item>
-                      <Link href={item.dashboardLink}>
+                      <Link to={item.dashboardLink}>
                         <Card
                           hoverable
                           style={{
