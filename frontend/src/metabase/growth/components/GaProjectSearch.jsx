@@ -104,6 +104,7 @@ const GaProjectSearch = props => {
       setCurrentProject(temp_project);
       saveLatestGAProject(temp_project);
       if (location.pathname.startsWith("/growth/project")) {
+        console.log("ProjectSearch router push", 2);
         router?.push({
           pathname: getGrowthProjectPath(temp_project, menu),
         });
