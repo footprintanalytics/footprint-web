@@ -224,7 +224,9 @@ const CampaignCreate = props => {
                   <Input
                     allowClear
                     disabled={detail.notEdit}
-                    placeholder={`Input the ${detail.title}.`}
+                    placeholder={
+                      detail.placeholder ?? `Input the ${detail.title}.`
+                    }
                     type={
                       detail.private
                         ? "password"
@@ -253,7 +255,9 @@ const CampaignCreate = props => {
                     allowClear
                     // value={pasteValue}
                     disabled={detail.notEdit}
-                    placeholder={`Input the ${detail.title}.`}
+                    placeholder={
+                      detail.placeholder ?? `Input the ${detail.title}.`
+                    }
                     type={
                       detail.private
                         ? "password"
@@ -450,7 +454,9 @@ const CampaignCreate = props => {
                     label="Campaign Name"
                     rules={[{ required: true }]}
                   >
-                    <Input placeholder="Input the name of this new campaign" />
+                    <Input
+                      placeholder={"Input the name of this new campaign"}
+                    />
                   </Form.Item>
                 </div>
                 {/* 需要改成 后端控制 */}
@@ -465,35 +471,6 @@ const CampaignCreate = props => {
                     </div>
                   </>
                 )}
-                {/* {campaignSelected?.campaignType === "Notification" && (
-                  <>
-                    <div className="bg-light rounded p1 mt1 pt3">
-                      <div className="mb1">Notification content</div>
-                      <Form.Item
-                        name="messageTitle"
-                        label="Title"
-                        rules={[{ required: true }]}
-                      >
-                        <Input placeholder="Input the title of message" />
-                      </Form.Item>
-                      <Form.Item
-                        name="messageContent"
-                        label="Content"
-                        rules={[{ required: true }]}
-                      >
-                        <TextArea
-                          // value={pasteValue}
-                          style={{ marginTop: 0 }}
-                          onChange={e => {
-                            // setPasteValue(e.target.value);
-                          }}
-                          placeholder="Input the content of message"
-                          autoSize={{ minRows: 5, maxRows: 10 }}
-                        />
-                      </Form.Item>
-                    </div>
-                  </>
-                )} */}
                 {campaignSelected?.cohortRequired && (
                   <>
                     <div className="flex flex-row items-center justify-between mt2">

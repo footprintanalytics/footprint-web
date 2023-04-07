@@ -1,17 +1,10 @@
 import React from "react";
 import {
   BarChartOutlined,
-  FileImageOutlined,
   ShopOutlined,
   TeamOutlined,
-  RocketOutlined,
   SettingOutlined,
-  FundProjectionScreenOutlined,
-  SearchOutlined,
-  ConsoleSqlOutlined,
   ProjectOutlined,
-  CodeOutlined,
-  LineChartOutlined,
   CommentOutlined,
 } from "@ant-design/icons";
 
@@ -217,7 +210,7 @@ export const template_gallery = [
         desc: "Stay up-to-date on industry financing trends and keep a close eye on investment institutions' portfolios",
         dashboardName: "Investment History of Project",
         id: 3462,
-        dashboardLink: "/growth/public/chart/3462",
+        dashboardLink: "/growth/chart/3462",
       },
       {
         category: "Investment Portfolio",
