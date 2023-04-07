@@ -435,6 +435,50 @@ export const getRoutes = store => (
           path="/growth/public/dashboard/:uuid"
           component={LazyLoad.PublicDashboard}
         />
+        <Route
+          title={t`Chart`}
+          path="/growth/guest/chart/:titleAndId"
+          component={LazyLoad.GuestQuestion}
+        />
+        <Route
+          path="/growth/public/scene/chart/:titleAndId"
+          component={LazyLoad.PublicQuestion}
+        />
+        <Route
+          path="/growth/public/widget/chart/:uuid"
+          component={LazyLoad.WidgetPublic}
+        />
+        <Route
+          path="/growth/public/chart/:titleAndId"
+          component={LazyLoad.PublicQuestion}
+        />
+        <Route
+          title={t`Question`}
+          path="/growth/chart"
+          component={LazyLoad.Question}
+        >
+          <Route
+            title={t`Custom Upload`}
+            path="custom-upload"
+            component={LazyLoad.CustomUpload}
+          />
+          <Route
+            title={t`Buffet`}
+            path=":slug/buffet"
+            component={LazyLoad.Question}
+          />
+          <Route
+            title={t`Notebook`}
+            path="notebook"
+            component={LazyLoad.Question}
+          />
+          <Route title={t`Detail`} path=":slug" component={LazyLoad.Question} />
+          <Route
+            title={t`Detail Notebook`}
+            path=":slug/notebook"
+            component={LazyLoad.Question}
+          />
+        </Route>
         <Route path="/growth" component={LazyLoad.GaProjectContainer}>
           <Route path="project/:project(/:menu)" />
         </Route>
