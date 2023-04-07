@@ -39,7 +39,7 @@ const AboutStart = ({
           </li>
           <li>
             <CreateImage />
-            <h2>Off-Chain & On-Chain data</h2>
+            <h2>Off-Chain & On-Chain Data</h2>
           </li>
         </ul>
         <div className="flex" style={{ marginTop: 50 }}>

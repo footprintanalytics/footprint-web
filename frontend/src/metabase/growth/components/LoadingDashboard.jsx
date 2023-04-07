@@ -133,7 +133,11 @@ const LoadingDashboard = ({
         </Card>
       </div>
     );
-  } else if (sourceDefinitionId && data?.status !== "succeeded") {
+  } else if (
+    sourceDefinitionId &&
+    data?.status !== "succeeded" &&
+    project.twitter_handler !== "Footprint_Data"
+  ) {
     return (
       <div style={{ padding: 20 }}>
         <Card title={current_tab}>
