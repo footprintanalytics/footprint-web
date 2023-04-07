@@ -3,7 +3,6 @@ import React from "react";
 import { Button, Card, Image, List, Typography } from "antd";
 import { connect } from "react-redux";
 import { getUser, getFgaProject } from "metabase/selectors/user";
-import { width } from "styled-system";
 const { Text } = Typography;
 
 const UserTemplate = props => {
