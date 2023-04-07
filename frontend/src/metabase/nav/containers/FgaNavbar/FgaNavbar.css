@@ -215,8 +215,8 @@
 }
 
 .dark .Nav {
-  background-color: #121828;
-  border-bottom: none;
+  background-color: #000000;
+  border-bottom: 1px #303030 solid;
 }
 
 .dark .Nav__menu-item-color {

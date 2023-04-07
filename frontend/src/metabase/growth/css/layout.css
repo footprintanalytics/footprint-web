@@ -34,7 +34,7 @@
 }
 
 .ga-dark .ga-layout__content {
-  background-color: #2E353B;
+  background-color: #000000;
 }
 
 .ga-layout__logo {
@@ -87,4 +87,8 @@
 .ga-dark h5,
 .ga-dark h6 {
   color: #ffffffe0;
+}
+
+.ga-layout .ant-layout {
+  background: #000000;
 }

@@ -131,7 +131,7 @@ const ConnectorList = props => {
                   <List.Item
                     style={{
                       borderRadius: 10,
-                      backgroundColor: isDark ? "#00000040": "white",
+                      backgroundColor: isDark ? "#ffffff11": "white",
                       paddingLeft: 10,
                       paddingRight: 10,
                       cursor: "pointer",

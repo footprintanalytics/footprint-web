@@ -449,7 +449,7 @@ class FgaNavbar extends Component {
               }}
             >
               <img
-                src={getOssUrl("20230228153645.svg")}
+                src={getOssUrl(isDark ? "img_logo_ga_dark.svg" : "20230228153645.svg")}
                 width={160}
                 height={42}
                 style={{ marginBottom: 2 }}

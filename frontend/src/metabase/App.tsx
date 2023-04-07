@@ -144,8 +144,9 @@ function App({
       />
       <ConfigProvider
         theme={{
+          hashed: false,
           token: {
-            colorPrimary: '#3434B2',
+            colorPrimary: '#4444FF',
             borderRadius: 0,
           },
           algorithm: isNightMode ? darkAlgorithm : defaultAlgorithm,

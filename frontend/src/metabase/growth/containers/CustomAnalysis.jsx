@@ -17,7 +17,7 @@ const CustomAnalysis = props => {
           return (
             <div key={i.category}>
               <h2 className=" mt3">{i.category}</h2>
-              <div>{i.desc}</div>
+              <div style={{ color: "#ffffff80" }}>{i.desc}</div>
               <div className=" mt1">
                 <List
                   grid={{ gutter: 10, column: 4 }}

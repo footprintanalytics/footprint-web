@@ -282,7 +282,18 @@
   font-weight: 500;
 }
 
+.ga-dark .fga__category-item {
+  background-color: transparent;
+  color: #ffffffe0;
+  border: 1px solid #424242;
+}
+
 .fga__category-item--active {
+  border: 1px solid #3434b2;
+  color: #3434b2;
+}
+
+.ga-dark .fga__category-item--active {
   border: 1px solid #3434b2;
   color: #3434b2;
 }

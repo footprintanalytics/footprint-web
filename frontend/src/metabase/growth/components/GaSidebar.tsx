@@ -53,15 +53,13 @@ export default function GaSidebar(prop: IGaSidebarProp) {
         // height: "100%",
         position: "fixed",
         background: "white",
-        borderRight: "1px solid #dcdee4",
+        // borderRight: "1px solid #dcdee4",
       }}
     >
       <Menu
         style={{
           borderRight: "0px",
           width: "100%",
-          paddingBottom: 50,
-          paddingTop: 20,
         }}
         theme="light"
         // className="ant-menu-inline ant-menu-item"

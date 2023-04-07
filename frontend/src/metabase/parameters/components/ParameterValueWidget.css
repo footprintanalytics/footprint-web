@@ -5,6 +5,10 @@
   background: #FAFAFC;
 }
 
+.Theme--night .parameter-value-widget__series-date-group {
+  background: transparent;
+}
+
 .parameter-value-widget__series-category-group {
   padding: 4px 0px 4px 0px;
 }

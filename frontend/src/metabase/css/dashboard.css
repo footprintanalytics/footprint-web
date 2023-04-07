@@ -152,7 +152,7 @@
 }
 
 .DashCard .Card {
-  border-radius: 8px;
+  border-radius: 4px;
   box-shadow: 0px 1px 3px var(--color-shadow);
 }
 
