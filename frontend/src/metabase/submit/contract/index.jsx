@@ -5,6 +5,7 @@ import React from "react";
 import { Table, Form, Row, Col, Button, Typography, Tag } from "antd";
 import { useQuery } from "react-query";
 import { getContractSubmittedList } from "metabase/new-service";
+import Link from "metabase/core/components/Link";
 import dayjs from "dayjs";
 
 const SubmitContract = props => {
@@ -68,7 +69,16 @@ const SubmitContract = props => {
         Welcome to submit more contracts to help us better display the data you
         want
       </h1>
-      <p>Contract submissions normally take a few days to get processed</p>
+      <span>Contract submissions normally take a few days to get processed.</span>
+      <p>{"If you have any questions, please "}
+        <Link
+          className="text-underline text-underline-hover text-brand"
+          to="https://docs.footprint.network/docs/smart-contracts-decoding"
+          target="_blank"
+        >
+          check out the tutorial
+        </Link>.
+      </p>
       <Form layout="vertical">
         <Row gutter={16}>
           <Col span={16}>
