@@ -153,7 +153,7 @@ class DashCard extends Component {
       chartStyle,
       realtimeList,
     } = this.props;
-
+    console.log("isNightMode", isNightMode)
     const mainCard = {
       ...dashcard.card,
       visualization_settings: mergeSettings(

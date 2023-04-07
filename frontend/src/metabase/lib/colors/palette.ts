@@ -40,6 +40,7 @@ export const colors: ColorPalette = {
   "svg-color": "#677796",
   "bg-night": "#00000",
   "bg-error": "#ED6E6E55",
+  "border-dark": "#303030",
   shadow: "rgba(0,0,0,0.08)",
   border: "#EEECEC",
 

@@ -12,7 +12,7 @@
 
 .bordered,
 :local(.bordered) {
-  border: var(--border-size) var(--border-style) var(--color-border-ant);
+  border: var(--border-size) var(--border-style) var(--color-border-dark);
 }
 
 .border-bottom,
@@ -57,6 +57,10 @@
 
 .border-left {
   border-left: var(--border-size) var(--border-style) var(--color-border);
+}
+
+.dark .border-left {
+  border-left: var(--border-size) var(--border-style) var(--color-border-dark);
 }
 
 .border-light {

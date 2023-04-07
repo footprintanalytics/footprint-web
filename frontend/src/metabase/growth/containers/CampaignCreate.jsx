@@ -393,7 +393,7 @@ const CampaignCreate = props => {
         {isLoading || !campaignSelected ? (
           <LoadingSpinner message="Loading..." />
         ) : (
-          <div className="flex flex-row mt3 bg-white rounded p3 full-width">
+          <div className="flex flex-row mt3 rounded p3 full-width">
             <Steps
               current={currentStep ? currentStep - 1 : 0}
               // className="mt-5 px-10"
@@ -408,7 +408,7 @@ const CampaignCreate = props => {
               className="flex flex-column pl2 border-left"
             >
               <Form
-                className=" bg-white rounded-md w-full"
+                className=" rounded-md w-full"
                 {...layout}
                 colon={false}
                 labelWrap
@@ -426,7 +426,7 @@ const CampaignCreate = props => {
                 <div className="flex flex-row items-center justify-between">
                   <Title level={5}>{"Content"}</Title>
                 </div>
-                <div className="bg-light rounded p1 mt1 pt3">
+                <div className="rounded p1 mt1 pt3" style={{ background: "#ffffff10" }}>
                   <Form.Item
                     name="campaignType"
                     label="Campaign Type"
@@ -456,7 +456,7 @@ const CampaignCreate = props => {
                 {/* 需要改成 后端控制 */}
                 {campaignSelected?.details?.length > 0 && (
                   <>
-                    <div className="bg-light rounded p1 mt1 mb1">
+                    <div className="rounded p1 mt1 mb1" style={{ background: "#ffffff10" }}>
                       <div className="mt1 text-bold">
                         {campaignSelected?.campaignType} Configuration
                       </div>
@@ -511,7 +511,7 @@ const CampaignCreate = props => {
                         Create cohort
                       </Button>
                     </div>
-                    <div className="bg-light rounded p1 mt1  pt3">
+                    <div className="rounded p1 mt1  pt3" style={{ background: "#ffffff10" }}>
                       <Form.Item
                         rules={[{ required: true }]}
                         name={"TargetCohort"}
@@ -547,7 +547,7 @@ const CampaignCreate = props => {
                     Config channel
                   </Button>
                 </div>
-                <div className="bg-light rounded p1 mt1 pt3">
+                <div className="rounded p1 mt1 pt3" style={{ background: "#ffffff10" }}>
                   <Form.Item
                     rules={[{ required: true }]}
                     name={"TargetChannel"}
@@ -575,7 +575,7 @@ const CampaignCreate = props => {
                   if (channel.details && channel.details.length > 0) {
                     return (
                       <>
-                        <div className="bg-light rounded p1 mt1 mb1">
+                        <div className="rounded p1 mt1 mb1" style={{ background: "#ffffff10" }}>
                           <div className="mt1 text-bold">
                             {channel.channelName}
                           </div>

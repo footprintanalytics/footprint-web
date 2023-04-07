@@ -34,6 +34,7 @@ import GlobalContactPanel from "metabase/components/GlobalContactPanel/";
 import { AppContainer, AppContent, AppContentContainer } from "./App.styled";
 import cx from "classnames";
 import { ConfigProvider, theme } from "antd";
+import { isDark } from "./dashboard/components/utils/dark";
 
 const { darkAlgorithm, defaultAlgorithm } = theme;
 
@@ -128,7 +129,8 @@ function App({
     initializeIframeResizer();
     handleChannel();
   });
-  const isNightMode = location.pathname.startsWith("/growth")
+
+  // @ts-ignore
   return (
     <React.Fragment>
       <Meta
@@ -146,10 +148,10 @@ function App({
         theme={{
           hashed: false,
           token: {
-            colorPrimary: '#4444FF',
+            colorPrimary: '#5A54F9',
             borderRadius: 0,
           },
-          algorithm: isNightMode ? darkAlgorithm : defaultAlgorithm,
+          algorithm: isDark() ? darkAlgorithm : defaultAlgorithm,
         }}
       >
         <ErrorBoundary onError={onError}>
@@ -157,9 +159,9 @@ function App({
             <AppContainer className="spread">
               {/*<AppBanner />*/}
               {/*{isAppBarVisible && <AppBar isNavBarVisible={isNavBarVisible} />}*/}
-              <AppContentContainer isAdminApp={isAdminApp}>
+              <AppContentContainer className={isDark() ? "dark": ""} isAdminApp={isAdminApp}>
                 {isNavBarVisible && <Navbar location={location} />}
-                <AppContent className={cx({ "scroll-hide-all": hideScrollbar })} id="app-content" ref={setViewportElement} key={`${user?.id}`}>
+                <AppContent className={cx({ "scroll-hide-all": hideScrollbar })} id="app-content" ref={setViewportElement} key={`${user?.id}`} style={{ backgroundColor: isDark()? "black" : "white" }}>
                   <ContentViewportContext.Provider value={viewportElement ?? null}>
                     {errorPage ? getErrorComponent(errorPage) : children}
                   </ContentViewportContext.Provider>

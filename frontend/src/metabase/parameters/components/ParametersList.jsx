@@ -11,7 +11,7 @@ import {
 import { getVisibleParameters } from "metabase/parameters/utils/ui";
 import StaticParameterWidget from "./ParameterWidget";
 import StaticParameterWidgetFga from "./ParameterWidgetFga";
-import Button from "metabase/core/components/Button";
+import { Button } from "antd";
 
 const StaticParameterWidgetList = ({
   children,

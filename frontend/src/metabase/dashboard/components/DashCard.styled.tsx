@@ -8,12 +8,12 @@ export interface DashCardRootProps {
 }
 
 export const DashCardRoot = styled.div<DashCardRootProps>`
-  background-color: ${color("white")};
+  border: 1px solid ${color("border")};
 
   ${({ isNightMode }) =>
     isNightMode &&
     css`
-      border-color: ${color("bg-night")};
+      border-color: ${color("border-dark")};
       background-color: ${color("bg-night")};
     `}
 
