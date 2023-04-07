@@ -40,9 +40,9 @@ import {
   updateDashboardPara,
   getDefaultDashboardPara,
 } from "metabase/growth/utils/utils";
-import EmbedFrame from "../components/EmbedFrame";
 import { cons } from "cljs/cljs.core";
 import { canShowDarkMode } from "metabase/dashboard/components/utils/dark";
+import EmbedFrame from "../components/EmbedFrame";
 
 const mapStateToProps = (state, props) => {
   const parameters = getParameters(state, props);
@@ -54,6 +54,25 @@ const mapStateToProps = (state, props) => {
     updateDashboardPara(parameters, parameterValues, "gamefi", [
       project.protocolSlug,
     ]);
+    updateDashboardPara(parameters, parameterValues, "protocol_slug", [
+      project.protocolSlug,
+    ]);
+    if (project.template) {
+      const key = "tag";
+      const queryCollection = getDefaultDashboardPara(
+        parameters,
+        parameterValues,
+        key,
+      );
+      const tags = [project.template].concat(queryCollection ?? []);
+      console.log("tags", tags);
+      updateDashboardPara(
+        parameters,
+        parameterValues,
+        key,
+        tags.filter((item, index) => tags.indexOf(item) === index),
+      );
+    }
     if (project.nftCollectionAddress?.length > 0) {
       const key = "collection_contract_address";
       let queryCollection = getDefaultDashboardPara(

@@ -94,11 +94,11 @@ const Project = props => {
         project={getProjectObject()}
         isFullscreen={false}
         className="ml-250"
-        key={project}
+        key={projectObject?.protocolSlug}
         hideFooter
       />
     );
-    if (current_tab === "UserTemplate") {
+    if (current_tab === "UserTemplate" || current_tab === "Potential Users") {
       return (
         <UserTemplate
           location={location}
