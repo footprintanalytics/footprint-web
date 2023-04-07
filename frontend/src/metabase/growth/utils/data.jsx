@@ -210,7 +210,8 @@ export const template_gallery = [
         desc: "Stay up-to-date on industry financing trends and keep a close eye on investment institutions' portfolios",
         dashboardName: "Investment History of Project",
         id: 3462,
-        dashboardLink: "/growth/chart/3462",
+        dashboardLink:
+          "/growth/public/chart/Investment-History-of-Project-fp-d24f9ed8-82ce-402d-b89c-cf4554c4f683",
       },
       {
         category: "Investment Portfolio",
