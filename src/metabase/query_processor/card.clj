@@ -81,7 +81,7 @@
   binding this to a truthy value you can disable the checks. Currently this is only done
   by [[metabase.query-processor.dashboard]], which does its own parameter validation before handing off to the code
   here."
-  false)
+  true)
 
 (defn- card-template-tag-parameters
   "Template tag parameters that have been specified for the query for Card with `card-id`, if any, returned as a map in
