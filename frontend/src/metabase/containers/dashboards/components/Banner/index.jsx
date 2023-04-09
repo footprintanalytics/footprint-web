@@ -8,7 +8,7 @@ const Banner = () => {
     <div className="dashboards__banner">
       <div className="dashboards__banner-container">
         <BannerImage
-          src={getOssUrl("article/footprint-analytics-our-2022-in-review.jpg")}
+          src={getOssUrl("article/footprint-analytics-our-2022-in-review-v2.jpg")}
           width={842}
           height={350}
           url="https://www.footprint.network/article/footprint-analytics-our-2022-in-review-GfK0XPDo"
