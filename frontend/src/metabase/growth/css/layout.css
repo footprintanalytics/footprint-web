@@ -34,7 +34,7 @@
 }
 
 .ga-dark .ga-layout__content {
-  background-color: #000000;
+  background-color: var(--color-bg-dark);
 }
 
 .ga-layout__logo {
@@ -91,4 +91,8 @@
 
 .ga-layout .ant-layout {
   background: #000000;
+}
+
+.ga-layout .ant-menu-inline .ant-menu-item, .ant-menu-vertical .ant-menu-item, .ant-menu-inline .ant-menu-submenu-title, .ant-menu-vertical .ant-menu-submenu-title {
+  width: 100%;
 }

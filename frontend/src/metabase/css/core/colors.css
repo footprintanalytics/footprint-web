@@ -24,14 +24,16 @@
   --color-text-white: #ffffff;
   --color-text-axis: #00000070;
   --color-bg-black: #000000;
-  --color-bg-dark: #303030;
+  --color-bg-dark: #121828;
+  --color-primary-dark: #6C70FF;
+  --color-border-dark: #4A5568;
+  --color-bg-card-dark: #182034;
   --color-bg-medium: #edf2f5;
   --color-bg-light: #f9fbfc;
   --color-bg-white: #ffffff;
   --color-bg-yellow: #fffcf2;
   --color-shadow: rgba(0, 0, 0, 0.13);
   --color-border: #dcdee4;
-  --color-border-dark: #424242;
 
   --color-focus: #cbe2f7;
 

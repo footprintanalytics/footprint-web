@@ -78,10 +78,10 @@ const GaSidebar = (props: IGaSidebarProp) => {
         display: "flex",
         flexDirection: "column",
         overflow: "auto",
-        // height: "100%",
+        height: "100%",
         position: "fixed",
-        background: "white",
-        // borderRight: "1px solid #dcdee4",
+        background: "#121728",
+        borderRight: "1px solid #4A5568",
       }}
     >
       <>
@@ -90,8 +90,8 @@ const GaSidebar = (props: IGaSidebarProp) => {
             style={{
               borderRight: "0px",
               width: "100%",
-              paddingBottom: 50,
-              paddingTop: 20,
+              // paddingBottom: 50,
+              // paddingTop: 20,
             }}
             theme="light"
             // className="ant-menu-inline ant-menu-item"

@@ -433,7 +433,7 @@ class FgaNavbar extends Component {
         </div>
       );
     };
-
+    console.log("xxxx")
     return (
       <div className="Nav" style={{ display: rootDisplay }}>
         <div className="Nav__left">

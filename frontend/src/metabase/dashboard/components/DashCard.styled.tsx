@@ -13,7 +13,7 @@ export const DashCardRoot = styled.div<DashCardRootProps>`
   ${({ isNightMode }) =>
     isNightMode &&
     css`
-      border-color: ${color("border-dark")};
+      border: 0;
       background-color: ${color("bg-night")};
     `}
 

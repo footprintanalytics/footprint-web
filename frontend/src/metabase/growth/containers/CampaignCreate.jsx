@@ -397,7 +397,7 @@ const CampaignCreate = props => {
         {isLoading || !campaignSelected ? (
           <LoadingSpinner message="Loading..." />
         ) : (
-          <div className="flex flex-row mt3 rounded p3 full-width">
+          <div className="flex flex-row mt3 rounded p3 full-width bordered">
             <Steps
               current={currentStep ? currentStep - 1 : 0}
               // className="mt-5 px-10"

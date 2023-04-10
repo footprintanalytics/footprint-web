@@ -36,7 +36,7 @@
 
 /* Night mode */
 .Dashboard.Dashboard--night {
-  background-color: var(--color-bg-black);
+  background-color: var(--color-bg-dark);
 }
 
 .Dashboard.Dashboard--night .Card {

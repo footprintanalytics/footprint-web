@@ -32,13 +32,11 @@ import { AppErrorDescriptor, State } from "metabase-types/store";
 import GlobalContactPanel from "metabase/components/GlobalContactPanel/";
 
 import { AppContainer, AppContent, AppContentContainer } from "./App.styled";
-import GaSidebar from "./growth/components/GaSidebar";
 import GaLayout from "./growth/components/GaLayout";
 import cx from "classnames";
 import { ConfigProvider, theme } from "antd";
 import { isDark } from "./dashboard/components/utils/dark";
-
-const { darkAlgorithm, defaultAlgorithm } = theme;
+import getThemeConfig from "./theme-helper";
 
 const getErrorComponent = ({ status, data, context }: AppErrorDescriptor) => {
   if (status === 403 || data?.error_code === "unauthorized") {
@@ -146,14 +144,7 @@ function App({
         keywords={undefined}
       />
       <ConfigProvider
-        theme={{
-          hashed: false,
-          token: {
-            colorPrimary: "#3434B2",
-            borderRadius: 0,
-          },
-          algorithm: isDark() ? darkAlgorithm : defaultAlgorithm,
-        }}
+        theme={getThemeConfig()}
       >
         <ErrorBoundary onError={onError}>
           <ScrollToTop>
@@ -168,7 +159,7 @@ function App({
                   id="app-content"
                   ref={setViewportElement}
                   key={`${user?.id}`}
-                  style={{ backgroundColor: isDark()? "black" : "white" }}
+                  style={{ backgroundColor: isDark()? "#121828" : "white" }}
                 >
                   <ContentViewportContext.Provider
                     value={viewportElement ?? null}

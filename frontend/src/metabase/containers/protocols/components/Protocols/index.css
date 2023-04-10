@@ -285,7 +285,7 @@
 .ga-dark .fga__category-item {
   background-color: transparent;
   color: #ffffffe0;
-  border: 1px solid #424242;
+  border: 1px solid var(--color-border-dark);
 }
 
 .fga__category-item--active {
@@ -294,8 +294,8 @@
 }
 
 .ga-dark .fga__category-item--active {
-  border: 1px solid #3434b2;
-  color: #3434b2;
+  border: 1px solid var(--color-primary-dark);
+  color: var(--color-primary-dark);
 }
 
 @media screen and (--footprint-breakpoint-max-pad) {

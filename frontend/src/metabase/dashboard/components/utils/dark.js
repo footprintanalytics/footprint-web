@@ -9,3 +9,8 @@ export const isDark = () => {
   const isGrowth = window.location.pathname.startsWith("/growth");
   return isGrowth;
 };
+
+export const isDashboardDark = () => {
+  const isGrowth = window.location.pathname.startsWith("/growth");
+  return isGrowth;
+};
