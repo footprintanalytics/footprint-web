@@ -504,7 +504,6 @@ class FgaNavbar extends Component {
 
   render() {
     const { context } = this.props;
-
     switch (context) {
       case "auth":
         return null;

@@ -32,6 +32,8 @@ import { AppErrorDescriptor, State } from "metabase-types/store";
 import GlobalContactPanel from "metabase/components/GlobalContactPanel/";
 
 import { AppContainer, AppContent, AppContentContainer } from "./App.styled";
+import GaSidebar from "./growth/components/GaSidebar";
+import GaLayout from "./growth/components/GaLayout";
 import cx from "classnames";
 import { ConfigProvider, theme } from "antd";
 import { isDark } from "./dashboard/components/utils/dark";
@@ -115,8 +117,8 @@ function App({
   user,
 }: AppProps) {
   const [viewportElement, setViewportElement] = useState<HTMLElement | null>();
-  const hideScrollbar = location.pathname === ("/");
-
+  const hideScrollbar = location.pathname === "/";
+  const isFga = location.pathname.startsWith("/growth");
   const handleChannel = () => {
     const channel = location.query.channel || location.query.cnl || "homepage";
     setChannel(channel);
@@ -130,7 +132,6 @@ function App({
     handleChannel();
   });
 
-  // @ts-ignore
   return (
     <React.Fragment>
       <Meta
@@ -148,7 +149,7 @@ function App({
         theme={{
           hashed: false,
           token: {
-            colorPrimary: '#5A54F9',
+            colorPrimary: "#3434B2",
             borderRadius: 0,
           },
           algorithm: isDark() ? darkAlgorithm : defaultAlgorithm,
@@ -161,9 +162,24 @@ function App({
               {/*{isAppBarVisible && <AppBar isNavBarVisible={isNavBarVisible} />}*/}
               <AppContentContainer className={isDark() ? "dark": ""} isAdminApp={isAdminApp}>
                 {isNavBarVisible && <Navbar location={location} />}
-                <AppContent className={cx({ "scroll-hide-all": hideScrollbar })} id="app-content" ref={setViewportElement} key={`${user?.id}`} style={{ backgroundColor: isDark()? "black" : "white" }}>
-                  <ContentViewportContext.Provider value={viewportElement ?? null}>
-                    {errorPage ? getErrorComponent(errorPage) : children}
+
+                <AppContent
+                  className={cx({ "scroll-hide-all": hideScrollbar })}
+                  id="app-content"
+                  ref={setViewportElement}
+                  key={`${user?.id}`}
+                  style={{ backgroundColor: isDark()? "black" : "white" }}
+                >
+                  <ContentViewportContext.Provider
+                    value={viewportElement ?? null}
+                  >
+                    {isFga ? (
+                      <GaLayout>
+                        {errorPage ? getErrorComponent(errorPage) : children}
+                      </GaLayout>
+                    ) : (
+                      <>{errorPage ? getErrorComponent(errorPage) : children}</>
+                    )}
                   </ContentViewportContext.Provider>
                 </AppContent>
                 <UndoListing />

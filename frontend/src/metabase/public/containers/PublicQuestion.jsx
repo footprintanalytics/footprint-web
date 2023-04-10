@@ -190,6 +190,7 @@ class PublicQuestion extends Component {
       card &&
       getCardUiParameters(card, metadata, {}, card.parameters || undefined);
 
+      const isFgaPublicDashboard = location.pathname.startsWith("/growth");
     return (
       <EmbedFrame
         name={card && card.name}
@@ -197,6 +198,8 @@ class PublicQuestion extends Component {
         // actionButtons={actionButtons}
         parameters={initialized ? parameters : []}
         parameterValues={parameterValues}
+        className={`${isFgaPublicDashboard ? "ml-250 mt-60" : ""}`}
+        hideFooter={isFgaPublicDashboard}
         setParameterValue={this.setParameterValue}
       >
         <LoadingAndErrorWrapper

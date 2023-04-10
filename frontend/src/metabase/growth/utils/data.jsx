@@ -1,17 +1,10 @@
 import React from "react";
 import {
   BarChartOutlined,
-  FileImageOutlined,
   ShopOutlined,
   TeamOutlined,
-  RocketOutlined,
   SettingOutlined,
-  FundProjectionScreenOutlined,
-  SearchOutlined,
-  ConsoleSqlOutlined,
   ProjectOutlined,
-  CodeOutlined,
-  LineChartOutlined,
   CommentOutlined,
 } from "@ant-design/icons";
 
@@ -59,15 +52,13 @@ export const template_gallery = [
         category: "Go to market",
         dashboardName: "Galxe Campaign Overall Stats",
         id: 7408,
-        dashboardLink:
-          "https://www.footprint.network/growth/@rogerD/Campaign-Analysis",
+        dashboardLink: "/growth/public/dashboard/7408",
       },
       {
         category: "Go to market",
         desc: "",
         dashboardName: "Galxe Campaign Analysis",
-        dashboardLink:
-          "https://www.footprint.network/growth/@rogerD/Campaign-Overview?campaign_id=5284",
+        dashboardLink: "/growth/public/dashboard/7407?campaign_id=5284",
         id: 7407,
       },
       {
@@ -75,7 +66,7 @@ export const template_gallery = [
         desc: "",
         dashboardName: "Galxe Campaign Comparison",
         dashboardLink:
-          "https://www.footprint.network/growth/@rogerD/Campaign-Comparison?campaign_a_id=5284&campaign_b_id=8087",
+          "/growth/public/dashboard/7409?campaign_a_id=5284&campaign_b_id=8087",
         id: 7409,
       },
       {
@@ -83,7 +74,7 @@ export const template_gallery = [
         desc: "",
         dashboardName: "Galxe Campaign Reward Analysis",
         dashboardLink:
-          "https://www.footprint.network/growth/@rogerD/Campaign-Reward-Dashboard?series_date=past90days&campaign_name=galxe",
+          "/growth/public/dashboard/7584?series_date=past90days&campaign_name=galxe",
         id: 7584,
       },
     ],
@@ -96,15 +87,14 @@ export const template_gallery = [
         category: "GameFi",
         desc: "Gain deep industry insights by thoroughly understanding industry data, and develop a comprehensive understanding of operational status by analyzing games.",
         dashboardName: "GameFi Industry Insights & Ranking",
-        dashboardLink:
-          "https://www.footprint.network/growth/@rogerD/GameFi-Industry-Insights?series_date=past90days",
+        dashboardLink: "/growth/public/dashboard/7164?series_date=past90days",
         id: 7164,
       },
       {
         category: "GameFi",
         desc: "",
         dashboardName: "GameFi Drill Down Analysis",
-        dashboardLink: "https://www.footprint.network/growth/@Footprint/GameFi",
+        dashboardLink: "/growth/public/dashboard/5947",
         id: 5947,
       },
       {
@@ -112,7 +102,7 @@ export const template_gallery = [
         desc: "",
         dashboardName: "GameFi Users Overview",
         dashboardLink:
-          "https://www.footprint.network/growth/@rogerD/GameFi-Users-Overview?date__=past180days&chain=BNB%20Chain",
+          "/growth/public/dashboard/3578?date__=past180days&chain=BNB%20Chain",
         id: 3578,
       },
       {
@@ -121,7 +111,7 @@ export const template_gallery = [
         dashboardName: "Gamer Profile",
         id: 6345,
         dashboardLink:
-          "https://www.footprint.network/growth/@rogerD/Gamer-Profile?wallet_address=0x81e4fb0c64bf49f89b57f6648562fc9a791b2e92",
+          "/growth/public/dashboard/6345?wallet_address=0x81e4fb0c64bf49f89b57f6648562fc9a791b2e92",
       },
       {
         category: "GameFi",
@@ -129,7 +119,7 @@ export const template_gallery = [
         dashboardName: "GameFi Project Summary",
         id: 5911,
         dashboardLink:
-          "https://www.footprint.network/growth/@Footprint/GameFi-Project-Summary?gamefi_name=splinterlands&date_range=past90days",
+          "/growth/public/dashboard/5911?gamefi_name=splinterlands&date_range=past90days",
       },
       {
         category: "GameFi",
@@ -137,7 +127,7 @@ export const template_gallery = [
         dashboardName: "GameFi Compare",
         id: 6390,
         dashboardLink:
-          "https://www.footprint.network/growth/@rogerD/GameFi-Compare?game_a=walken&game_b=stepn&chain=Solana",
+          "/growth/public/dashboard/6390?game_a=walken&game_b=stepn&chain=Solana",
       },
     ],
   },
@@ -151,7 +141,7 @@ export const template_gallery = [
         dashboardName: "Top X NFT by Trading Vol",
         id: 7175,
         dashboardLink:
-          "https://www.footprint.network/growth/@rogerD/Top-X-NFT-by-Trading-Vol?trading_vol._%253E%253D=1000000",
+          "/growth/public/dashboard/7175?trading_vol._%253E%253D=1000000",
       },
       {
         category: "NFT",
@@ -159,7 +149,7 @@ export const template_gallery = [
         dashboardName: "Multi-NFT Overview",
         id: 7185,
         dashboardLink:
-          "https://www.footprint.network/growth/@rogerD/NFT-Overview-Random-Games-Heros?nft_collection_contract_address=0xed55e4477b795eaa9bb4bca24df42214e1a05c18&series_date=past30days",
+          "/growth/public/dashboard/7185?nft_collection_contract_address=0xed55e4477b795eaa9bb4bca24df42214e1a05c18&series_date=past30days",
       },
       {
         category: "NFT",
@@ -167,7 +157,7 @@ export const template_gallery = [
         dashboardName: "NFT Overview",
         id: 7139,
         dashboardLink:
-          "https://www.footprint.network/growth/@rogerD/NFT-Overview-Random-Games?nft_collection_contract_address=0xed55e4477b795eaa9bb4bca24df42214e1a05c18&nft_collection_contract_address=0x16a1dcd0f76947dc3d3ba5158952107ef0321ad9&nft_collection_contract_address=0x5891eb497d1ddb4e3933981b55b37d5f98bbfbcf&nft_collection_contract_address=0xb55a820d92809bcff91d568fc1ef0e451c69f5e8&nft_collection_contract_address=0x15f3e5a30e45a58b15bba610f27689fbc7de8c3c&data=past3months",
+          "/growth/public/dashboard/7139?nft_collection_contract_address=0xed55e4477b795eaa9bb4bca24df42214e1a05c18&nft_collection_contract_address=0x16a1dcd0f76947dc3d3ba5158952107ef0321ad9&nft_collection_contract_address=0x5891eb497d1ddb4e3933981b55b37d5f98bbfbcf&nft_collection_contract_address=0xb55a820d92809bcff91d568fc1ef0e451c69f5e8&nft_collection_contract_address=0x15f3e5a30e45a58b15bba610f27689fbc7de8c3c&data=past3months",
       },
       {
         category: "NFT",
@@ -175,7 +165,7 @@ export const template_gallery = [
         id: 7192,
         dashboardName: "Profit Leaderboard for Collection",
         dashboardLink:
-          "https://www.footprint.network/growth/@rogerD/Profit-Leaderboard-for-Collection-FGA?collection_contract_address=0xa342f5d851e866e18ff98f351f2c6637f4478db5",
+          "/growth/public/dashboard/7192?collection_contract_address=0xa342f5d851e866e18ff98f351f2c6637f4478db5",
       },
       {
         category: "NFT",
@@ -183,7 +173,7 @@ export const template_gallery = [
         dashboardName: "Multi-NFT Collections Royalties",
         id: 7188,
         dashboardLink:
-          "https://www.footprint.network/growth/@rogerD/Multi-NFT-Collections-Royalties?nft_collections=0x6a570bb15bc67968868c19b0ec7dcccdfd8ed089&nft_collections=0xed55e4477b795eaa9bb4bca24df42214e1a05c18&nft_collections=0x16a1dcd0f76947dc3d3ba5158952107ef0321ad9&nft_collections=0xb55a820d92809bcff91d568fc1ef0e451c69f5e8&nft_collections=0x5891eb497d1ddb4e3933981b55b37d5f98bbfbcf&nft_collections=0x15f3e5a30e45a58b15bba610f27689fbc7de8c3c&series_date=past30days",
+          "/growth/public/dashboard/7188?nft_collections=0x6a570bb15bc67968868c19b0ec7dcccdfd8ed089&nft_collections=0xed55e4477b795eaa9bb4bca24df42214e1a05c18&nft_collections=0x16a1dcd0f76947dc3d3ba5158952107ef0321ad9&nft_collections=0xb55a820d92809bcff91d568fc1ef0e451c69f5e8&nft_collections=0x5891eb497d1ddb4e3933981b55b37d5f98bbfbcf&nft_collections=0x15f3e5a30e45a58b15bba610f27689fbc7de8c3c&series_date=past30days",
       },
       {
         category: "NFT",
@@ -191,7 +181,7 @@ export const template_gallery = [
         id: 6808,
         dashboardName: "Wallet Tracing",
         dashboardLink:
-          "https://www.footprint.network/growth/@rogerD/Wallet-Tracing?collection=benji-bananas-membership-pass&date_range=past30days",
+          "/growth/public/dashboard/6808?collection=benji-bananas-membership-pass&date_range=past30days",
       },
       {
         category: "NFT",
@@ -199,7 +189,7 @@ export const template_gallery = [
         id: 7187,
         dashboardName: "Owner Analysis",
         dashboardLink:
-          "https://www.footprint.network/growth/@rogerD/Owner-Analysis-Random-Games?target_collection=0xed55e4477b795eaa9bb4bca24df42214e1a05c18&selected_collections=0x16a1dcd0f76947dc3d3ba5158952107ef0321ad9&selected_collections=0xb55a820d92809bcff91d568fc1ef0e451c69f5e8&selected_collections=0x6a570bb15bc67968868c19b0ec7dcccdfd8ed089&selected_collections=0x5891eb497d1ddb4e3933981b55b37d5f98bbfbcf&selected_collections=0x15f3e5a30e45a58b15bba610f27689fbc7de8c3c&selected_collections=0x34d85c9cdeb23fa97cb08333b511ac86e1c4e258&selected_collections=0xbc4ca0eda7647a8ab7c2061c2e118a18a936f13d&selected_collection_balance_%253E%253D=0&wallet_address=0x950fca90ae7eb55cd35326eb8e6350747d4cf32e",
+          "/growth/public/dashboard/7187?target_collection=0xed55e4477b795eaa9bb4bca24df42214e1a05c18&selected_collections=0x16a1dcd0f76947dc3d3ba5158952107ef0321ad9&selected_collections=0xb55a820d92809bcff91d568fc1ef0e451c69f5e8&selected_collections=0x6a570bb15bc67968868c19b0ec7dcccdfd8ed089&selected_collections=0x5891eb497d1ddb4e3933981b55b37d5f98bbfbcf&selected_collections=0x15f3e5a30e45a58b15bba610f27689fbc7de8c3c&selected_collections=0x34d85c9cdeb23fa97cb08333b511ac86e1c4e258&selected_collections=0xbc4ca0eda7647a8ab7c2061c2e118a18a936f13d&selected_collection_balance_%253E%253D=0&wallet_address=0x950fca90ae7eb55cd35326eb8e6350747d4cf32e",
       },
       {
         category: "NFT",
@@ -207,7 +197,7 @@ export const template_gallery = [
         id: 7170,
         dashboardName: "Mutual Holders",
         dashboardLink:
-          "https://www.footprint.network/growth/@rogerD/Mutual-Holders?collection_a_=0xbc4ca0eda7647a8ab7c2061c2e118a18a936f13d&collection_b=0xb47e3cd837ddf8e4c57f05d70ab865de6e193bbb&holder_tag=mutual_holders",
+          "/growth/public/dashboard/7170?collection_a_=0xbc4ca0eda7647a8ab7c2061c2e118a18a936f13d&collection_b=0xb47e3cd837ddf8e4c57f05d70ab865de6e193bbb&holder_tag=mutual_holders",
       },
     ],
   },
@@ -221,15 +211,14 @@ export const template_gallery = [
         dashboardName: "Investment History of Project",
         id: 3462,
         dashboardLink:
-          "https://www.footprint.network/growth/chart/Investment-History-of-Project-fp-3462",
+          "/growth/public/chart/Investment-History-of-Project-fp-d24f9ed8-82ce-402d-b89c-cf4554c4f683",
       },
       {
         category: "Investment Portfolio",
         desc: "",
         id: 824,
         dashboardName: "Investment History of VC",
-        dashboardLink:
-          "https://www.footprint.network/growth/@Bond/Investment-History-of-VC%3A-IOSG",
+        dashboardLink: "/growth/public/dashboard/824",
       },
     ],
   },
@@ -267,6 +256,11 @@ export const fga_menu_data = [
         id: 7180,
         uuid: "b46fc872-c97d-4300-a83e-45fa61760ad2",
       },
+      {
+        name: "Community",
+        id: 7773,
+        uuid: "451d53ab-9d62-40ff-931e-9ec197595f0b",
+      },
     ],
   },
   {
@@ -297,6 +291,7 @@ export const fga_menu_data = [
         id: 7514,
         uuid: "55b1eb29-b15e-458f-9241-1862a0d19d3b",
       },
+
       {
         name: "User Funnel",
         id: 7118,

@@ -12,9 +12,13 @@ import UploadWallets from "../components/buttons/UploadWallets";
 import { getGrowthProjectPath } from "../utils/utils";
 
 const CohortList = props => {
-  const { isLoading, data, refetch } = useQuery(["getCohort"], GetFgaCohort, {
-    refetchInterval: 5000,
-  });
+  const { isLoading, data, refetch } = useQuery(
+    ["getCohort", props.project],
+    GetFgaCohort,
+    {
+      refetchInterval: 5000,
+    },
+  );
 
   const dataSource = data?.list?.sort(
     (a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime(),
@@ -27,7 +31,7 @@ const CohortList = props => {
       render: text => (
         <Link
           color="rgb(52, 52, 178)"
-          to={`/growth/@rogerD/Cohort-User-Profile?tag=${text}`}
+          to={`/growth/public/dashboard/55b1eb29-b15e-458f-9241-1862a0d19d3b?tag=${text}`}
         >
           {text}
         </Link>
@@ -56,13 +60,13 @@ const CohortList = props => {
         <Space size="middle">
           <Link
             color="rgb(52, 52, 178)"
-            to={`/growth/@rogerD/Cohort-User-Profile?tag=${record.title}`}
+            to={`/growth/public/dashboard/55b1eb29-b15e-458f-9241-1862a0d19d3b?tag=${record.title}`}
           >
             User Profile
           </Link>
           <Link
             color="rgb(52, 52, 178)"
-            to={`/growth/@rogerD/Cohort-Wallet-List-FGA?cohort_id=${record.cohortId}&cohort_title=${record.title}`}
+            to={`/growth/public/dashboard/dce33214-a079-4eb8-b53f-defaabde2eba?cohort_id=${record.cohortId}&cohort_title=${record.title}`}
           >
             Wallet List
           </Link>

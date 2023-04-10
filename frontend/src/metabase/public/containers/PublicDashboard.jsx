@@ -40,9 +40,9 @@ import {
   updateDashboardPara,
   getDefaultDashboardPara,
 } from "metabase/growth/utils/utils";
-import EmbedFrame from "../components/EmbedFrame";
 import { cons } from "cljs/cljs.core";
 import { canShowDarkMode } from "metabase/dashboard/components/utils/dark";
+import EmbedFrame from "../components/EmbedFrame";
 
 const mapStateToProps = (state, props) => {
   const parameters = getParameters(state, props);
@@ -54,6 +54,25 @@ const mapStateToProps = (state, props) => {
     updateDashboardPara(parameters, parameterValues, "gamefi", [
       project.protocolSlug,
     ]);
+    updateDashboardPara(parameters, parameterValues, "protocol_slug", [
+      project.protocolSlug,
+    ]);
+    if (project.template) {
+      const key = "tag";
+      const queryCollection = getDefaultDashboardPara(
+        parameters,
+        parameterValues,
+        key,
+      );
+      const tags = [project.template].concat(queryCollection ?? []);
+      console.log("tags", tags);
+      updateDashboardPara(
+        parameters,
+        parameterValues,
+        key,
+        tags.filter((item, index) => tags.indexOf(item) === index),
+      );
+    }
     if (project.nftCollectionAddress?.length > 0) {
       const key = "collection_contract_address";
       let queryCollection = getDefaultDashboardPara(
@@ -244,7 +263,7 @@ class PublicDashboard extends Component {
       });
     }
     const shouldRenderAsNightMode = isNightMode || canShowDarkMode(dashboard);
-
+    const isFgaPublicDashboard = location.pathname.startsWith("/growth");
     return (
       <EmbedFrame
         name={dashboard && dashboard.name}
@@ -253,17 +272,17 @@ class PublicDashboard extends Component {
         parameters={parameters}
         hideParameters={hideParameters}
         hideTitle={hideTitle}
+        headerLayout={header}
         parameterValues={parameterValues}
         setParameterValue={this.props.setParameterValue}
         actionButtons={
           buttons.length > 0 && <div className="flex">{buttons}</div>
         }
         isNightMode={shouldRenderAsNightMode}
-        hideFooter={hideFooter}
-        className={className}
+        hideFooter={hideFooter || isFgaPublicDashboard}
+        className={cx(className, isFgaPublicDashboard && "ml-250 mt-60")}
       >
         <>
-          {header ?? <></>}
           <LoadingAndErrorWrapper
             className={cx("Dashboard p1 flex-full", {
               "Dashboard--fullscreen": isFullscreen,
