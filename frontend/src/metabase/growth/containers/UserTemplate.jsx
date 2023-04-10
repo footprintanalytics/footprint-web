@@ -68,7 +68,7 @@ const UserTemplate = props => {
                         });
                       }}
                     >
-                      Protential Users
+                      Potential Users
                     </a>
                   ),
                 },
