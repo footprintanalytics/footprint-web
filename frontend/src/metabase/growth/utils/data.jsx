@@ -52,13 +52,14 @@ export const template_gallery = [
         category: "Go to market",
         dashboardName: "Galxe Campaign Overall Stats",
         id: 7408,
-        dashboardLink: "/growth/public/dashboard/7408",
+        dashboardLink: "/growth/public/dashboard/7408#from=Custom Analysis",
       },
       {
         category: "Go to market",
         desc: "",
         dashboardName: "Galxe Campaign Analysis",
-        dashboardLink: "/growth/public/dashboard/7407?campaign_id=5284",
+        dashboardLink:
+          "/growth/public/dashboard/7407?campaign_id=5284#from=Custom Analysis",
         id: 7407,
       },
       {
@@ -66,7 +67,7 @@ export const template_gallery = [
         desc: "",
         dashboardName: "Galxe Campaign Comparison",
         dashboardLink:
-          "/growth/public/dashboard/7409?campaign_a_id=5284&campaign_b_id=8087",
+          "/growth/public/dashboard/7409?campaign_a_id=5284&campaign_b_id=8087#from=Custom Analysis",
         id: 7409,
       },
       {
@@ -74,7 +75,7 @@ export const template_gallery = [
         desc: "",
         dashboardName: "Galxe Campaign Reward Analysis",
         dashboardLink:
-          "/growth/public/dashboard/7584?series_date=past90days&campaign_name=galxe",
+          "/growth/public/dashboard/7584?series_date=past90days&campaign_name=galxe#from=Custom Analysis",
         id: 7584,
       },
     ],
@@ -87,14 +88,15 @@ export const template_gallery = [
         category: "GameFi",
         desc: "Gain deep industry insights by thoroughly understanding industry data, and develop a comprehensive understanding of operational status by analyzing games.",
         dashboardName: "GameFi Industry Insights & Ranking",
-        dashboardLink: "/growth/public/dashboard/7164?series_date=past90days",
+        dashboardLink:
+          "/growth/public/dashboard/7164?series_date=past90days#from=Custom Analysis",
         id: 7164,
       },
       {
         category: "GameFi",
         desc: "",
         dashboardName: "GameFi Drill Down Analysis",
-        dashboardLink: "/growth/public/dashboard/5947",
+        dashboardLink: "/growth/public/dashboard/5947#from=Custom Analysis",
         id: 5947,
       },
       {
@@ -102,7 +104,7 @@ export const template_gallery = [
         desc: "",
         dashboardName: "GameFi Users Overview",
         dashboardLink:
-          "/growth/public/dashboard/3578?date__=past180days&chain=BNB%20Chain",
+          "/growth/public/dashboard/3578?date__=past180days&chain=BNB%20Chain#from=Custom Analysis",
         id: 3578,
       },
       {
@@ -111,7 +113,7 @@ export const template_gallery = [
         dashboardName: "Gamer Profile",
         id: 6345,
         dashboardLink:
-          "/growth/public/dashboard/6345?wallet_address=0x81e4fb0c64bf49f89b57f6648562fc9a791b2e92",
+          "/growth/public/dashboard/6345?wallet_address=0x81e4fb0c64bf49f89b57f6648562fc9a791b2e92#from=Custom Analysis",
       },
       {
         category: "GameFi",
@@ -119,7 +121,7 @@ export const template_gallery = [
         dashboardName: "GameFi Project Summary",
         id: 5911,
         dashboardLink:
-          "/growth/public/dashboard/5911?gamefi_name=splinterlands&date_range=past90days",
+          "/growth/public/dashboard/5911?gamefi_name=splinterlands&date_range=past90days#from=Custom Analysis",
       },
       {
         category: "GameFi",
@@ -127,7 +129,7 @@ export const template_gallery = [
         dashboardName: "GameFi Compare",
         id: 6390,
         dashboardLink:
-          "/growth/public/dashboard/6390?game_a=walken&game_b=stepn&chain=Solana",
+          "/growth/public/dashboard/6390?game_a=walken&game_b=stepn&chain=Solana#from=Custom Analysis",
       },
     ],
   },
@@ -141,7 +143,7 @@ export const template_gallery = [
         dashboardName: "Top X NFT by Trading Vol",
         id: 7175,
         dashboardLink:
-          "/growth/public/dashboard/7175?trading_vol._%253E%253D=1000000",
+          "/growth/public/dashboard/7175?trading_vol._%253E%253D=1000000#from=Custom Analysis",
       },
       {
         category: "NFT",
@@ -149,7 +151,7 @@ export const template_gallery = [
         dashboardName: "Multi-NFT Overview",
         id: 7185,
         dashboardLink:
-          "/growth/public/dashboard/7185?nft_collection_contract_address=0xed55e4477b795eaa9bb4bca24df42214e1a05c18&series_date=past30days",
+          "/growth/public/dashboard/7185?nft_collection_contract_address=0xed55e4477b795eaa9bb4bca24df42214e1a05c18&series_date=past30days#from=Custom Analysis",
       },
       {
         category: "NFT",
@@ -157,7 +159,7 @@ export const template_gallery = [
         dashboardName: "NFT Overview",
         id: 7139,
         dashboardLink:
-          "/growth/public/dashboard/7139?nft_collection_contract_address=0xed55e4477b795eaa9bb4bca24df42214e1a05c18&nft_collection_contract_address=0x16a1dcd0f76947dc3d3ba5158952107ef0321ad9&nft_collection_contract_address=0x5891eb497d1ddb4e3933981b55b37d5f98bbfbcf&nft_collection_contract_address=0xb55a820d92809bcff91d568fc1ef0e451c69f5e8&nft_collection_contract_address=0x15f3e5a30e45a58b15bba610f27689fbc7de8c3c&data=past3months",
+          "/growth/public/dashboard/7139?nft_collection_contract_address=0xed55e4477b795eaa9bb4bca24df42214e1a05c18&nft_collection_contract_address=0x16a1dcd0f76947dc3d3ba5158952107ef0321ad9&nft_collection_contract_address=0x5891eb497d1ddb4e3933981b55b37d5f98bbfbcf&nft_collection_contract_address=0xb55a820d92809bcff91d568fc1ef0e451c69f5e8&nft_collection_contract_address=0x15f3e5a30e45a58b15bba610f27689fbc7de8c3c&data=past3months#from=Custom Analysis",
       },
       {
         category: "NFT",
@@ -165,7 +167,7 @@ export const template_gallery = [
         id: 7192,
         dashboardName: "Profit Leaderboard for Collection",
         dashboardLink:
-          "/growth/public/dashboard/7192?collection_contract_address=0xa342f5d851e866e18ff98f351f2c6637f4478db5",
+          "/growth/public/dashboard/7192?collection_contract_address=0xa342f5d851e866e18ff98f351f2c6637f4478db5#from=Custom Analysis",
       },
       {
         category: "NFT",
@@ -173,7 +175,7 @@ export const template_gallery = [
         dashboardName: "Multi-NFT Collections Royalties",
         id: 7188,
         dashboardLink:
-          "/growth/public/dashboard/7188?nft_collections=0x6a570bb15bc67968868c19b0ec7dcccdfd8ed089&nft_collections=0xed55e4477b795eaa9bb4bca24df42214e1a05c18&nft_collections=0x16a1dcd0f76947dc3d3ba5158952107ef0321ad9&nft_collections=0xb55a820d92809bcff91d568fc1ef0e451c69f5e8&nft_collections=0x5891eb497d1ddb4e3933981b55b37d5f98bbfbcf&nft_collections=0x15f3e5a30e45a58b15bba610f27689fbc7de8c3c&series_date=past30days",
+          "/growth/public/dashboard/7188?nft_collections=0x6a570bb15bc67968868c19b0ec7dcccdfd8ed089&nft_collections=0xed55e4477b795eaa9bb4bca24df42214e1a05c18&nft_collections=0x16a1dcd0f76947dc3d3ba5158952107ef0321ad9&nft_collections=0xb55a820d92809bcff91d568fc1ef0e451c69f5e8&nft_collections=0x5891eb497d1ddb4e3933981b55b37d5f98bbfbcf&nft_collections=0x15f3e5a30e45a58b15bba610f27689fbc7de8c3c&series_date=past30days#from=Custom Analysis",
       },
       {
         category: "NFT",
@@ -181,7 +183,7 @@ export const template_gallery = [
         id: 6808,
         dashboardName: "Wallet Tracing",
         dashboardLink:
-          "/growth/public/dashboard/6808?collection=benji-bananas-membership-pass&date_range=past30days",
+          "/growth/public/dashboard/6808?collection=benji-bananas-membership-pass&date_range=past30days#from=Custom Analysis",
       },
       {
         category: "NFT",
@@ -189,7 +191,7 @@ export const template_gallery = [
         id: 7187,
         dashboardName: "Owner Analysis",
         dashboardLink:
-          "/growth/public/dashboard/7187?target_collection=0xed55e4477b795eaa9bb4bca24df42214e1a05c18&selected_collections=0x16a1dcd0f76947dc3d3ba5158952107ef0321ad9&selected_collections=0xb55a820d92809bcff91d568fc1ef0e451c69f5e8&selected_collections=0x6a570bb15bc67968868c19b0ec7dcccdfd8ed089&selected_collections=0x5891eb497d1ddb4e3933981b55b37d5f98bbfbcf&selected_collections=0x15f3e5a30e45a58b15bba610f27689fbc7de8c3c&selected_collections=0x34d85c9cdeb23fa97cb08333b511ac86e1c4e258&selected_collections=0xbc4ca0eda7647a8ab7c2061c2e118a18a936f13d&selected_collection_balance_%253E%253D=0&wallet_address=0x950fca90ae7eb55cd35326eb8e6350747d4cf32e",
+          "/growth/public/dashboard/7187?target_collection=0xed55e4477b795eaa9bb4bca24df42214e1a05c18&selected_collections=0x16a1dcd0f76947dc3d3ba5158952107ef0321ad9&selected_collections=0xb55a820d92809bcff91d568fc1ef0e451c69f5e8&selected_collections=0x6a570bb15bc67968868c19b0ec7dcccdfd8ed089&selected_collections=0x5891eb497d1ddb4e3933981b55b37d5f98bbfbcf&selected_collections=0x15f3e5a30e45a58b15bba610f27689fbc7de8c3c&selected_collections=0x34d85c9cdeb23fa97cb08333b511ac86e1c4e258&selected_collections=0xbc4ca0eda7647a8ab7c2061c2e118a18a936f13d&selected_collection_balance_%253E%253D=0&wallet_address=0x950fca90ae7eb55cd35326eb8e6350747d4cf32e#from=Custom Analysis",
       },
       {
         category: "NFT",
@@ -197,7 +199,7 @@ export const template_gallery = [
         id: 7170,
         dashboardName: "Mutual Holders",
         dashboardLink:
-          "/growth/public/dashboard/7170?collection_a_=0xbc4ca0eda7647a8ab7c2061c2e118a18a936f13d&collection_b=0xb47e3cd837ddf8e4c57f05d70ab865de6e193bbb&holder_tag=mutual_holders",
+          "/growth/public/dashboard/7170?collection_a_=0xbc4ca0eda7647a8ab7c2061c2e118a18a936f13d&collection_b=0xb47e3cd837ddf8e4c57f05d70ab865de6e193bbb&holder_tag=mutual_holders#from=Custom Analysis",
       },
     ],
   },
@@ -211,14 +213,14 @@ export const template_gallery = [
         dashboardName: "Investment History of Project",
         id: 3462,
         dashboardLink:
-          "/growth/public/chart/Investment-History-of-Project-fp-d24f9ed8-82ce-402d-b89c-cf4554c4f683",
+          "/growth/public/chart/Investment-History-of-Project-fp-d24f9ed8-82ce-402d-b89c-cf4554c4f683#from=Custom Analysis",
       },
       {
         category: "Investment Portfolio",
         desc: "",
         id: 824,
         dashboardName: "Investment History of VC",
-        dashboardLink: "/growth/public/dashboard/824",
+        dashboardLink: "/growth/public/dashboard/824#from=Custom Analysis",
       },
     ],
   },
@@ -338,7 +340,7 @@ export const fga_menu_data = [
     icon: React.createElement(SettingOutlined),
     id: null,
     children: [
-      { name: "General", id: null, uuid: null },
+      // { name: "General", id: null, uuid: null },
       { name: "Connector", id: null, uuid: null },
       { name: "Channel", id: null, uuid: null },
     ],

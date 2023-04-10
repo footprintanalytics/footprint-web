@@ -19,6 +19,7 @@ import title from "metabase/hoc/Title";
 import { fetchDatabaseMetadata } from "metabase/redux/metadata";
 import { setErrorPage } from "metabase/redux/app";
 import { getMetadata } from "metabase/selectors/metadata";
+import { parseHashOptions } from "metabase/lib/browser";
 
 import PublicMode from "metabase/modes/components/modes/PublicMode";
 
@@ -36,7 +37,6 @@ import {
   setPublicDashboardEndpoints,
   setEmbedDashboardEndpoints,
 } from "metabase/services";
-import { parseHashOptions } from "metabase/lib/browser";
 import { parseTitleId } from "metabase/lib/urls";
 import {
   updateDashboardPara,
@@ -246,7 +246,8 @@ class PublicDashboard extends Component {
     let hideParameters = isFgaPublicDashboard
       ? "gamefi,protocol_slug,twitter_handler,project_name"
       : "";
-    if (isFgaPublicDashboard && false) {
+    const hashData = parseHashOptions(location?.hash);
+    if (isFgaPublicDashboard && hashData?.from && dashboard) {
       header = (
         <>
           <Breadcrumb
@@ -259,7 +260,7 @@ class PublicDashboard extends Component {
                       router?.goBack();
                     }}
                   >
-                    Campaign
+                    {hashData?.from}
                   </a>
                 ),
               },

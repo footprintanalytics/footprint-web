@@ -11,6 +11,10 @@ const CampaignStatus = ({ value }) => {
       status = "warning";
       text = "Campaign is waiting to be started";
       break;
+    case "done":
+      status = "success";
+      text = "Campaign was successfully completed";
+      break;
     default:
       status = "processing";
       text = "Campaign is in progress";

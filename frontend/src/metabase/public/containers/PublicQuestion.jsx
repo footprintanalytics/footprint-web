@@ -32,6 +32,8 @@ import { applyParameters } from "metabase-lib/queries/utils/card";
 import EmbedFrame from "../components/EmbedFrame";
 import QueryDownloadWidgetFP from "metabase/query_builder/components/QueryDownloadWidgetFP";
 import { parseTitleId } from "metabase/lib/urls";
+import { parseHashOptions } from "metabase/lib/browser";
+import { Breadcrumb } from "antd";
 
 const mapStateToProps = state => ({
   metadata: getMetadata(state),
@@ -173,11 +175,12 @@ class PublicQuestion extends Component {
     const {
       // params: { uuid, token, titleAndId },
       metadata,
+      router,
     } = this.props;
     const { card, result, initialized, parameterValues } = this.state;
     // const publicUuid = uuid || parseTitleId(titleAndId).id;
 
-/*    const actionButtons = result && (
+    /*    const actionButtons = result && (
       <QueryDownloadWidgetFP
         className="m1 text-medium-hover"
         uuid={publicUuid}
@@ -189,15 +192,46 @@ class PublicQuestion extends Component {
     const parameters =
       card &&
       getCardUiParameters(card, metadata, {}, card.parameters || undefined);
-
-      const isFgaPublicDashboard = location.pathname.startsWith("/growth");
+    const isFgaPublicDashboard = location.pathname.startsWith("/growth");
+    const hashData = parseHashOptions(location?.hash);
+    let header = <></>;
+    let hideTitle = false;
+    if (isFgaPublicDashboard && hashData?.from && card) {
+      header = (
+        <>
+          <Breadcrumb
+            className="pl1 py2"
+            items={[
+              {
+                title: (
+                  <a
+                    onClick={() => {
+                      router?.goBack();
+                    }}
+                  >
+                    {hashData?.from}
+                  </a>
+                ),
+              },
+              {
+                title: card && card.name,
+              },
+            ]}
+          />
+          {header}
+        </>
+      );
+      hideTitle = true;
+    }
     return (
       <EmbedFrame
         name={card && card.name}
         description={card && card.description}
         // actionButtons={actionButtons}
         parameters={initialized ? parameters : []}
+        headerLayout={header}
         parameterValues={parameterValues}
+        hideTitle={hideTitle}
         className={`${isFgaPublicDashboard ? "ml-250 mt-60" : ""}`}
         hideFooter={isFgaPublicDashboard}
         setParameterValue={this.setParameterValue}
