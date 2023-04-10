@@ -246,7 +246,6 @@ class PublicDashboard extends Component {
     let hideParameters = isFgaPublicDashboard
       ? "gamefi,protocol_slug,twitter_handler,project_name"
       : "";
-    console.log("location", location);
     const hashData = parseHashOptions(location?.hash);
     if (isFgaPublicDashboard && hashData?.from && dashboard) {
       header = (
