@@ -5,8 +5,14 @@ export const getControl = state => state.control;
 
 export const getCreateFgaProjectModalShow = createSelector(
   [getControl],
-  ({ createFgaProjectModalShow }) => {
-    return createFgaProjectModalShow || false;
+  ({ show, force, tip }) => {
+    return (
+      { show: show, force: force, tip: tip } || {
+        show: false,
+        force: false,
+        tip: "",
+      }
+    );
   },
 );
 

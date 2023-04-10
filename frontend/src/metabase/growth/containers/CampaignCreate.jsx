@@ -309,11 +309,9 @@ const CampaignCreate = props => {
       return;
     }
     setSubmiting(true);
-    // 组装 campaign 的参数
     const campaignDetails = {};
     campaignSelected?.details?.map(detail => {
       if (detail.type === "checkbox") {
-        // 把 checkbox 的选中项的 key 放到 details 里
         detail.options?.map(detailOption => {
           campaignDetails[detailOption.key] = param[detail.key]?.includes(
             detailOption.key,
@@ -323,7 +321,6 @@ const CampaignCreate = props => {
         campaignDetails[detail.key] = param[detail.key];
       }
     });
-    // 组装 channel 的参数
     const channelsParam = [];
     channelSelectedValue?.map(channel => {
       const channelParam = {
@@ -334,7 +331,6 @@ const CampaignCreate = props => {
       };
       channel?.details?.map(channelDetailItem => {
         if (channelDetailItem.type === "checkbox") {
-          // 把 checkbox 的选中项的 key 放到 details 里
           channelDetailItem.options?.map(detailOption => {
             channelParam.details[detailOption.key] = param[
               channelDetailItem.key
@@ -347,7 +343,6 @@ const CampaignCreate = props => {
       });
       channelsParam.push(channelParam);
     });
-    // 组装 request 的参数
     const requestParam = {
       projectId: parseInt(getLatestGAProjectId()),
       title: param["campaignName"],
@@ -359,7 +354,6 @@ const CampaignCreate = props => {
     console.log("toAddCampaign requestParam\n", requestParam);
     addCampaign(requestParam)
       .then(result => {
-        console.log("toAddCampaign result", result);
         message.success("The campaign creation was successful.");
         // router.push(getGrowthProjectPath(project?.protocolSlug, "Campaign"));
         router.push({
@@ -369,7 +363,6 @@ const CampaignCreate = props => {
           ),
           hash: "#id=" + result?.campaignId,
         });
-        //todo 还差展示 邀请机器人link 和 活动 link
       })
       .finally(() => {
         setSubmiting(false);
