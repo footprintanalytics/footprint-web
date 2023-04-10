@@ -4,29 +4,26 @@ import { connect } from "react-redux";
 import { Select } from "antd";
 import { withRouter } from "react-router";
 import { useQuery } from "react-query";
+import { set } from "lodash";
 import { getUser, getFgaProject } from "metabase/selectors/user";
 import { QUERY_OPTIONS } from "metabase/containers/dashboards/shared/config";
 import { GetFgaProject } from "metabase/new-service";
+import { PublicApi, maybeUsePivotEndpoint } from "metabase/services";
 import { loadCurrentFgaProject } from "metabase/redux/user";
 import { top_protocols } from "../utils/data";
 import "../css/index.css";
 import {
+  getGASearchHistory,
   saveGASearchHistory,
   getLatestGAProject,
   saveLatestGAProject,
   saveLatestGAProjectId,
   getGrowthProjectPath,
+  getDashboardDatas,
 } from "../utils/utils";
 
 const GaProjectSearch = props => {
-  const {
-    router,
-    location,
-    user,
-    menu,
-    projectPath,
-    setCreateFgaProjectModalShowAction,
-  } = props;
+  const { router, location, user, menu, projectPath } = props;
   const [userProject, setUserProject] = useState([]);
   const [currentProject, setCurrentProject] = useState(projectPath);
   const { isLoading, data } = useQuery(
@@ -42,6 +39,7 @@ const GaProjectSearch = props => {
   );
 
   const loadProjectDetail = project_id => {
+    console.log("loadProjectDetail", project_id);
     props.dispatch(loadCurrentFgaProject(parseInt(project_id)));
   };
 
@@ -71,12 +69,7 @@ const GaProjectSearch = props => {
             pathname: getGrowthProjectPath(projects[projectIndex].value, menu),
           });
         }
-      } else {
-        setCreateFgaProjectModalShowAction({
-          show: true,
-          force: true,
-          tip: "Before embarking on your magical FGA journey, please choose a project that you fancy",
-        });
+
       }
     }
     // getAllProtocol();
@@ -107,9 +100,11 @@ const GaProjectSearch = props => {
         (userProject?.length > 0
           ? userProject[0].value
           : recommendOptions[0].value);
+      console.log("temp_project", temp_project, projectPath);
       setCurrentProject(temp_project);
       saveLatestGAProject(temp_project);
       if (location.pathname.startsWith("/growth/project")) {
+        console.log("ProjectSearch router push", 2);
         router?.push({
           pathname: getGrowthProjectPath(temp_project, menu),
         });
@@ -161,7 +156,6 @@ const GaProjectSearch = props => {
     </div>
   );
 };
-
 
 const mapStateToProps = (state, props) => {
   return {

@@ -429,6 +429,7 @@ class FgaNavbar extends Component {
         </div>
       );
     };
+
     return (
       <div className="Nav" style={{ display: rootDisplay }}>
         <div className="Nav__left">
@@ -454,12 +455,7 @@ class FgaNavbar extends Component {
         </div>
         <React.Fragment>
           <div className="Nav__search-bar">
-            <GaProjectSearch
-              location={location}
-              setCreateFgaProjectModalShowAction={
-                setCreateFgaProjectModalShowAction
-              }
-            ></GaProjectSearch>
+            <GaProjectSearch location={location}></GaProjectSearch>
           </div>
           <div className="Nav__mobile-logo">
             <Link
@@ -487,9 +483,7 @@ class FgaNavbar extends Component {
         {this.renderCancelFeedbackModal()}
         <CreateProjectModal
           // open={this.state.isProjectModalOpen}
-          open={createFgaProjectModalShow.show}
-          tip={createFgaProjectModalShow.tip}
-          force={createFgaProjectModalShow.force}
+          open={createFgaProjectModalShow}
           location={location}
           onSuccess={() => {
             setCreateFgaProjectModalShowAction({ show: false });
