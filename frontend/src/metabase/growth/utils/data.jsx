@@ -256,6 +256,11 @@ export const fga_menu_data = [
         id: 7180,
         uuid: "b46fc872-c97d-4300-a83e-45fa61760ad2",
       },
+      {
+        name: "Community",
+        id: 7773,
+        uuid: "451d53ab-9d62-40ff-931e-9ec197595f0b",
+      },
     ],
   },
   {
@@ -286,6 +291,7 @@ export const fga_menu_data = [
         id: 7514,
         uuid: "55b1eb29-b15e-458f-9241-1862a0d19d3b",
       },
+
       {
         name: "User Funnel",
         id: 7118,
