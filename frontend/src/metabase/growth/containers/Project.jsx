@@ -86,6 +86,7 @@ const Project = props => {
         location={location}
         project={getProjectObject()}
         isFullscreen={false}
+        hideTitle={true}
         // className="ml-250 mt-60"
         key={projectObject?.protocolSlug}
         hideFooter

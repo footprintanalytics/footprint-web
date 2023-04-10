@@ -50,10 +50,6 @@ const UserTemplate = props => {
           params={{ uuid: "b46fc872-c97d-4300-a83e-45fa61760ad2" }}
           hideTitle={true}
           location={location}
-          // project={{
-          //   ...projectObject,
-          //   template: template === "CustomerFilter" ? null : template,
-          // }}
           header={
             <Breadcrumb
               className=" pl1 pt2"
@@ -220,8 +216,6 @@ const mapStateToProps = (state, props) => {
   return {
     user: getUser(state),
     projectObject: getFgaProject(state),
-    // projectPath: props.params.project,
-    // menu: props.params.menu,
   };
 };
 
