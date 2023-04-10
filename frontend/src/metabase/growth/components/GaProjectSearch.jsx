@@ -4,22 +4,18 @@ import { connect } from "react-redux";
 import { Select } from "antd";
 import { withRouter } from "react-router";
 import { useQuery } from "react-query";
-import { set } from "lodash";
 import { getUser, getFgaProject } from "metabase/selectors/user";
 import { QUERY_OPTIONS } from "metabase/containers/dashboards/shared/config";
 import { GetFgaProject } from "metabase/new-service";
-import { PublicApi, maybeUsePivotEndpoint } from "metabase/services";
 import { loadCurrentFgaProject } from "metabase/redux/user";
 import { top_protocols } from "../utils/data";
 import "../css/index.css";
 import {
-  getGASearchHistory,
   saveGASearchHistory,
   getLatestGAProject,
   saveLatestGAProject,
   saveLatestGAProjectId,
   getGrowthProjectPath,
-  getDashboardDatas,
 } from "../utils/utils";
 
 const GaProjectSearch = props => {
