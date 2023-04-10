@@ -108,7 +108,7 @@ const UploadWallets = ({
         <div className=" flex flex-row items-center justify-between full-width">
           <div>
             Detect <span style={{ color: "red" }}>{walletList.length}</span>{" "}
-            addressse.Up to <span style={{ color: "red" }}>1000</span> addresses
+            addresses.Up to <span style={{ color: "red" }}>1000</span> addresses
             can be processed at once.
           </div>
         </div>
