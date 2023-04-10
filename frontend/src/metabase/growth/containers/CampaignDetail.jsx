@@ -178,7 +178,7 @@ const CampaignDetail = props => {
               hideAllParams={true}
               project={{ ...project, campaignTitle: data?.title }}
               isFullscreen={false}
-              className="ml-250 mt-40"
+              // className="ml-250 mt-60"
               key={project?.protocolSlug}
               hideFooter
             />

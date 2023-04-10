@@ -36,6 +36,7 @@ class EmbedFrame extends Component {
       description,
       actionButtons,
       location,
+      headerLayout,
       parameters,
       parameterValues,
       hideParameters,
@@ -74,6 +75,7 @@ class EmbedFrame extends Component {
             "scroll-y": innerScroll,
           })}
         >
+          {headerLayout}
           {name || parameters?.length > 0 ? (
             <div className="EmbedFrame-header flex flex-column p1 sm-p2 lg-p3">
               {name && (

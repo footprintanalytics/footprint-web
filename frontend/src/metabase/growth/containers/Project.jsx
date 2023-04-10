@@ -2,22 +2,15 @@
 import React, { useEffect, useState } from "react";
 import { connect } from "react-redux";
 import { Button, Image, Result } from "antd";
-import { useQuery } from "react-query";
-import { QUERY_OPTIONS } from "metabase/containers/dashboards/shared/config";
 import PublicDashboard from "metabase/public/containers/PublicDashboard";
 import { getUser, getFgaProject } from "metabase/selectors/user";
-import { GetFgaProjectDetail } from "metabase/new-service";
 import LoadingSpinner from "metabase/components/LoadingSpinner";
 import { loadCurrentFgaProject } from "metabase/redux/user";
-
 import ProjectInfo from "../components/ProjectInfo";
 import {
   getGaMenuTabs,
   getGrowthProjectPath,
-  getLatestGAMenuTag,
-  getLatestGAProject,
   getLatestGAProjectId,
-  saveLatestGAProject,
 } from "../utils/utils";
 import { fga_menu_data, top_protocols } from "../utils/data";
 import LoadingDashboard from "../components/LoadingDashboard";
@@ -93,7 +86,7 @@ const Project = props => {
         location={location}
         project={getProjectObject()}
         isFullscreen={false}
-        className="ml-250"
+        // className="ml-250 mt-60"
         key={projectObject?.protocolSlug}
         hideFooter
       />

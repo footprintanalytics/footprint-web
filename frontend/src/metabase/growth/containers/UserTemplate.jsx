@@ -1,6 +1,6 @@
 /* eslint-disable react/prop-types */
 import React, { useState, useEffect } from "react";
-import { Button, Card, Image, List, Typography } from "antd";
+import { Button, Card, Breadcrumb, List, Typography } from "antd";
 import { connect } from "react-redux";
 import { getUser, getFgaProject } from "metabase/selectors/user";
 import PublicDashboard from "metabase/public/containers/PublicDashboard";
@@ -37,19 +37,51 @@ const UserTemplate = props => {
       icon: "https://footprint-imgs.oss-us-east-1.aliyuncs.com/whale_tracking.svg",
       key: "token-whale",
     },
+    {
+      name: "Customer Filter",
+      key: "CustomerFilter",
+      hiden: true,
+    },
   ];
   return (
     <>
       {template ? (
         <PublicDashboard
           params={{ uuid: "b46fc872-c97d-4300-a83e-45fa61760ad2" }}
+          hideTitle={true}
           location={location}
           // project={{
           //   ...projectObject,
           //   template: template === "CustomerFilter" ? null : template,
           // }}
+          header={
+            <Breadcrumb
+              className=" pl1 pt2"
+              items={[
+                {
+                  title: (
+                    <a
+                      onClick={() => {
+                        setTemplate(null);
+                        router.replace({
+                          pathname: location.pathname,
+                        });
+                      }}
+                    >
+                      Protential Users
+                    </a>
+                  ),
+                },
+                {
+                  title: `${
+                    templates.find(item => item.key === template)?.name
+                  }`,
+                },
+              ]}
+            />
+          }
           isFullscreen={false}
-          className="ml-250"
+          // className="ml-250 mt-60 "
           key={template}
           hideFooter
         />
@@ -97,15 +129,17 @@ const UserTemplate = props => {
                       });
                     }}
                   >
-                    <Card hoverable style={{ width: "100%" }}>
-                      <div
-                        className=" flex flex-column items-center"
-                        style={{}}
-                      >
-                        <img src={item?.icon} className="ga-big-icon"></img>
-                        <Text ellipsis={true}>{item?.name}</Text>
-                      </div>
-                    </Card>
+                    {!item.hiden && (
+                      <Card hoverable style={{ width: "100%" }}>
+                        <div
+                          className=" flex flex-column items-center"
+                          style={{}}
+                        >
+                          <img src={item?.icon} className="ga-big-icon"></img>
+                          <Text ellipsis={true}>{item?.name}</Text>
+                        </div>
+                      </Card>
+                    )}
                   </List.Item>
                 )}
               />

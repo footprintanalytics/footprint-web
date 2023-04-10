@@ -263,9 +263,7 @@ class PublicDashboard extends Component {
       });
     }
     const shouldRenderAsNightMode = isNightMode || canShowDarkMode(dashboard);
-    const isFgaPublicDashboard = location.pathname.startsWith(
-      "/growth/public/dashboard",
-    );
+    const isFgaPublicDashboard = location.pathname.startsWith("/growth");
     return (
       <EmbedFrame
         name={dashboard && dashboard.name}
@@ -274,6 +272,7 @@ class PublicDashboard extends Component {
         parameters={parameters}
         hideParameters={hideParameters}
         hideTitle={hideTitle}
+        headerLayout={header}
         parameterValues={parameterValues}
         setParameterValue={this.props.setParameterValue}
         actionButtons={
@@ -281,10 +280,9 @@ class PublicDashboard extends Component {
         }
         isNightMode={shouldRenderAsNightMode}
         hideFooter={hideFooter || isFgaPublicDashboard}
-        className={cx(className, isFgaPublicDashboard && "ml-250")}
+        className={cx(className, isFgaPublicDashboard && "ml-250 mt-60")}
       >
         <>
-          {header}
           <LoadingAndErrorWrapper
             className={cx("Dashboard p1 flex-full", {
               "Dashboard--fullscreen": isFullscreen,
