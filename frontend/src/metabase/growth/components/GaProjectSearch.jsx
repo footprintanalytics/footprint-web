@@ -72,11 +72,13 @@ const GaProjectSearch = props => {
           });
         }
       } else {
-        setCreateFgaProjectModalShowAction({
-          show: true,
-          force: true,
-          tip: "Before embarking on your magical FGA journey, please choose a project that you fancy",
-        });
+        if (user) {
+          setCreateFgaProjectModalShowAction({
+            show: true,
+            force: true,
+            tip: "Before embarking on your magical FGA journey, please choose a project that you fancy",
+          });
+        }
       }
     }
     // getAllProtocol();
