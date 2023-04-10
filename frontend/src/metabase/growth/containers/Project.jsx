@@ -92,7 +92,8 @@ const Project = props => {
         hideFooter
       />
     );
-    if (current_tab === "UserTemplate" || current_tab === "Potential Users") {
+    if (current_tab === "UserTemplate") {
+      //|| current_tab === "Potential Users"
       return (
         <UserTemplate
           location={location}
