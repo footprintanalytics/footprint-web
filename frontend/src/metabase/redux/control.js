@@ -31,13 +31,13 @@ export const SET_DARK_MODE = "metabase/control/setDarkMode";
 
 export const createFgaProjectModalShowAction = createThunkAction(
   CREATE_FGA_PROJECT_MODAL_SHOW,
-  ({ show }) => {
-    return { show };
+  ({ show, force = false, tip = "" }) => {
+    return { show: show, force: force, tip: tip };
   },
 );
 export const loginModalShowAction = createThunkAction(
   LOGIN_MODAL_SHOW,
-  ({ show, from, redirect, defaultRegister= false, channel }) => {
+  ({ show, from, redirect, defaultRegister = false, channel }) => {
     return { show, redirect, defaultRegister };
   },
 );
@@ -140,7 +140,7 @@ export const control = handleActions(
       next: (state, { payload }) => {
         return {
           ...state,
-          createFgaProjectModalShow: payload.show,
+          ...payload,
         };
       },
     },
@@ -164,7 +164,6 @@ export const control = handleActions(
     },
     [CREATE_MODAL_SHOW]: {
       next: (state, { payload }) => {
-        console.log("CREATE_MODAL_SHOW", payload);
         return {
           ...state,
           createModalShow: payload.show,

@@ -1,6 +1,15 @@
 /* eslint-disable react/prop-types */
 import React, { useEffect, useState } from "react";
-import { Modal, Select, Button, Input, Form, message } from "antd";
+import {
+  Modal,
+  Select,
+  Button,
+  Input,
+  Form,
+  message,
+  Divider,
+  Typography,
+} from "antd";
 import Link from "antd/lib/typography/Link";
 import { withRouter } from "react-router";
 import { connect } from "react-redux";
@@ -22,7 +31,8 @@ const tailLayout = {
 };
 
 const CreateProjectModal = props => {
-  const { open, onCancel, onSuccess, router, location, user } = props;
+  const { open, onCancel, onSuccess, router, location, user, tip, force } =
+    props;
   const [form] = Form.useForm();
   const [options, setOptions] = useState([]);
   const [loadingData, setLoadingData] = useState(false);
@@ -89,13 +99,29 @@ const CreateProjectModal = props => {
       title="Create your own project"
       open={open}
       footer={null}
+      closable={!force}
+      maskClosable={!force}
       // onOk={handleOk}
       onCancel={onCancel}
     >
-      <Form {...layout} form={form} name="control-hooks" onFinish={onFinish}>
+      <Divider />
+      {tip && (
+        <div style={{ marginBottom: 20 }}>
+          <Typography.Text mark>{tip}</Typography.Text>
+        </div>
+      )}
+      <Form
+        {...layout}
+        labelAlign="left"
+        colon={false}
+        labelWrap
+        form={form}
+        name="control-hooks"
+        onFinish={onFinish}
+      >
         <Form.Item
           name="protocol"
-          label="Protocol"
+          label="Select Project"
           rules={[{ required: true }]}
         >
           <Select
