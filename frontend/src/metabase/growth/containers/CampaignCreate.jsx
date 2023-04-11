@@ -388,7 +388,7 @@ const CampaignCreate = props => {
           minHeight: 800,
         }}
       >
-        <div className=" flex flex-row justify-between w-full mb2">
+        <div className=" flex flex-row justify-between w-full mb1">
           <Title width={"100%"} level={4} style={{ marginBottom: 0 }}>
             Create Campaign
           </Title>
@@ -429,7 +429,7 @@ const CampaignCreate = props => {
                 <div className="flex flex-row items-center justify-between">
                   <Title level={5}>{"Content"}</Title>
                 </div>
-                <div className="rounded p1 mt1 pt3">
+                <div className="rounded p1 pt3">
                   <Form.Item
                     name="campaignType"
                     label="Campaign Type"
@@ -508,6 +508,7 @@ const CampaignCreate = props => {
                     </div>
                   </>
                 )}
+                <Divider />
                 <div className="flex flex-row items-center justify-between mt2">
                   <Title level={5}>{`Channel`}</Title>
                   <Button
@@ -552,7 +553,7 @@ const CampaignCreate = props => {
                     return (
                       <>
                         <div className="rounded p1 mt1 mb1">
-                          <div className="mt1 text-bold mb2">
+                          <div className="mt1 text-bold mb1">
                             {channel.channelName}
                           </div>
                           {getChannelConfigPanel(channel.details)}

@@ -12,6 +12,7 @@ export interface InputProps {
   hasSubtitle?: boolean;
   hasLeftIcon?: boolean;
   hasRightIcon?: boolean;
+  isDark?: boolean;
 }
 
 export const InputRoot = styled.div<InputProps>`
@@ -25,17 +26,24 @@ export const InputField = styled.input<InputProps>`
   font-family: inherit;
   font-weight: 700;
   font-size: 1rem;
-  color: ${color("text-dark")};
+  color: ${props => props.isDark ? color("") : color("text-dark")};
   padding: 0.75rem;
   border: 1px solid ${color("border")};
   border-radius: ${space(1)};
-  background-color: ${props => color(props.readOnly ? "bg-light" : "bg-white")};
+
+  border: 1px solid ${props => props.isDark ? color("--color-border-dark") : color("border")};
+  background-color: ${props => {
+    if (props.isDark) {
+      return color(props.readOnly ? "--color-bg-black" : "--color-bg-dark")
+    }
+    return color(props.readOnly ? "bg-light" : "bg-white")
+  }};
   outline: none;
   text-align: inherit;
 
   &:focus,
   &:hover {
-    border-color: ${() => color("brand")};
+    border-color: ${props => props.isDark ? color("--color-primary-dark") : color("brand")};
     transition: border 300ms ease-in-out;
   }
 

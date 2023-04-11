@@ -15,6 +15,8 @@ import { getUser } from "metabase/home/selectors";
 import { getChannel } from "metabase/selectors/app";
 import LoginModalInner from "metabase/auth/components/LoginModalInner";
 import { trackStructEvent } from "metabase/lib/analytics";
+import cx from "classnames";
+import { isDark } from "metabase/dashboard/components/utils/dark";
 
 const mapStatusToProps = (state, props) => {
   return {
@@ -48,7 +50,7 @@ const LoginModal = props => {
 
   return fromNav ? (
     isOpen ? (
-      <Modal className={"loginModalRoot"} ModalClass="z-index-top">
+      <Modal className={cx("loginModalRoot", { "dark": isDark() })} ModalClass="z-index-top">
         <InnerPanel {...props} />
       </Modal>
     ) : (

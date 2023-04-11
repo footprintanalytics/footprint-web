@@ -17,12 +17,24 @@
   border-radius: var(--default-button-border-radius);
 }
 
+.dark .Button {
+  border: 1px solid color-mod(var(--color-primary-dark) blackness(5%));
+  background: var(--color-bg-card-dark);
+  color: var(--color-primary-dark);
+}
+
 .Button:hover {
   color: var(--color-brand);
   border-color: color-mod(var(--color-border) blackness(12%));
   background: var(--color-bg-light);
   transition: all 200ms linear;
   transition-property: color, border-color, background-color;
+}
+
+.dark .Button:hover {
+  color: var(--color-primary-dark);
+  border: 1px solid color-mod(var(--color-primary-dark) blackness(12%));
+  background: var(--color-bg-dark);
 }
 
 .Button:focus {
@@ -67,10 +79,20 @@
   border: 1px solid var(--color-brand);
 }
 
+.dark .Button--primary {
+  color: var(--color-text-white);
+  background: var(--color-primary-dark);
+}
+
 .Button--primary:hover {
   color: var(--color-text-white);
   border-color: var(--color-brand);
   background-color: color-mod(var(--color-brand) alpha(-12%));
+}
+
+.dark .Button--primary:hover {
+  color: var(--color-text-white);
+  background-color: color-mod(var(--color-primary-dark) alpha(-12%));
 }
 
 .Button--warning {

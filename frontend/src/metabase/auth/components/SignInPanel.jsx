@@ -94,7 +94,7 @@ const SignInPanel = ({
                   <>
                     Email address{" "}
                     {hideClose && (
-                      <Typography.Text type="warning">
+                      <Typography.Text type="default">
                         (Demo: fga@footprint.network)
                       </Typography.Text>
                     )}
@@ -114,7 +114,7 @@ const SignInPanel = ({
                 <>
                   Password{" "}
                   {hideClose && (
-                    <Typography.Text type="warning">
+                    <Typography.Text type="default">
                       (Demo: FGAdemo@2023)
                     </Typography.Text>
                   )}
