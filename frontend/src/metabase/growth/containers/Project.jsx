@@ -145,7 +145,7 @@ const Project = props => {
   };
 
   const getContentPannel = current_tab => {
-    const WrapPublicDashboard = (
+    const WrapPublicDashboard = projectObject?.protocolSlug ? (
       <PublicDashboard
         params={{ uuid: gaMenuTabs?.dashboardMap?.get(current_tab) }}
         location={location}
@@ -155,6 +155,8 @@ const Project = props => {
         key={projectObject?.protocolSlug}
         hideFooter
       />
+    ) : (
+      <LoadingSpinner message="Loading..." />
     );
     if (current_tab === "UserTemplate") {
       //|| current_tab === "Potential Users"

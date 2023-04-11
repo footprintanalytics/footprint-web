@@ -59,7 +59,7 @@ const CreateProjectModal = props => {
       const result = await CreateFgaProject({
         name: projectName.trim().replaceAll(" ", "-"),
         protocolSlug: protocol,
-        protocolName: projectName,
+        protocolName: projectName.trim().replaceAll(" ", "-"),
         nftContractAddress: [],
       });
       if (result) {
