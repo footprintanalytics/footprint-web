@@ -46,7 +46,7 @@ const GaProjectSearch = props => {
   };
 
   useEffect(() => {
-    if (!isLoading) {
+    if (!isLoading && data?.data) {
       if (data?.data?.length > 0) {
         const projects = [];
         data?.data?.map(p => {
@@ -76,7 +76,6 @@ const GaProjectSearch = props => {
           setCreateFgaProjectModalShowAction({
             show: true,
             force: true,
-            tip: "Before embarking on your magical FGA journey, please choose a project that you fancy",
           });
         }
       }

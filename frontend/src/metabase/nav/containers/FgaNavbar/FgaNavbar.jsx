@@ -13,6 +13,7 @@ import {
   getIsUserFeedbackBlock,
   getLoginModalRedirect,
   getCreateFgaProjectModalShow,
+  getCreateFgaProjectModalShowForce,
   getLoginModalShow,
   getSubmitAddrZkspaceModal,
 } from "metabase/selectors/control";
@@ -54,6 +55,10 @@ const mapStateToProps = (state, props) => ({
   loginModalShow: getLoginModalShow(state, props),
   loginModalDefaultRegister: getLoginModalDefaultRegister(state, props),
   createFgaProjectModalShow: getCreateFgaProjectModalShow(state, props),
+  createFgaProjectModalShowForce: getCreateFgaProjectModalShowForce(
+    state,
+    props,
+  ),
   loginModalRedirect: getLoginModalRedirect(state, props),
   createModalShow: getCreateModalShow(state, props),
   cancelFeedback: getCancelFeedback(state, props),
@@ -311,6 +316,7 @@ class FgaNavbar extends Component {
       setCreateModalShow,
       setCreateFgaProjectModalShowAction,
       createFgaProjectModalShow,
+      createFgaProjectModalShowForce,
       location,
       onChangeLocation,
     } = this.props;
@@ -486,18 +492,14 @@ class FgaNavbar extends Component {
         {this.renderLoginModal()}
         {this.renderCancelFeedbackModal()}
         <CreateProjectModal
-          // open={this.state.isProjectModalOpen}
-          open={createFgaProjectModalShow.show}
-          tip={createFgaProjectModalShow.tip}
-          force={createFgaProjectModalShow.force}
+          open={createFgaProjectModalShow?.show}
+          force={createFgaProjectModalShow?.force}
           location={location}
           onSuccess={() => {
             setCreateFgaProjectModalShowAction({ show: false });
-            // this.setState({ ...this.state, isProjectModalOpen: false });
           }}
           onCancel={() => {
             setCreateFgaProjectModalShowAction({ show: false });
-            // this.setState({ ...this.state, isProjectModalOpen: false });
           }}
         ></CreateProjectModal>
       </div>

@@ -179,6 +179,18 @@ export function getGaMenuTabs(
       //token airdrop is only for demo account
       disabled = user?.email === "fga@footprint.network" ? false : true;
     }
+    if (["Campaign"].includes(item.name)) {
+      // TODO: Campaign need to display but disabled temporarily
+      disabled = true;
+      menuTabs.push({
+        key: `${item.name}${children.length > 0 ? "-sub" : ""}`,
+        icon: item.icon,
+        children: children.length > 0 ? children : null,
+        disabled: disabled,
+        label: item.name,
+        dashboard_uuid: item.uuid ?? null,
+      });
+    }
 
     if (!disabled) {
       menuTabs.push({

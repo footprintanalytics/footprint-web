@@ -105,9 +105,13 @@ const CreateProjectModal = props => {
       onCancel={onCancel}
     >
       <Divider />
-      {tip && (
+      {force && (
         <div style={{ marginBottom: 20 }}>
-          <Typography.Text mark>{tip}</Typography.Text>
+          <Typography.Text mark>
+            {
+              "Before embarking on your magical FGA journey, please choose a project that you fancy"
+            }
+          </Typography.Text>
         </div>
       )}
       <Form
