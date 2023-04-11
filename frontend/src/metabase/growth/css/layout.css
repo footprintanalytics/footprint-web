@@ -108,3 +108,11 @@
 .ga-layout .ant-btn-default {
   border-color: #6C70FF;
 }
+
+.ga-layout .ant-segmented .ant-segmented-item-disabled, .ant-segmented .ant-segmented-item-disabled:hover, .ant-segmented .ant-segmented-item-disabled:focus {
+  color: revert;
+}
+
+.ga-layout .ant-segmented .ant-segmented-item-selected {
+  background: var(--color-primary-dark);
+}
