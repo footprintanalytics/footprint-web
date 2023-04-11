@@ -1,6 +1,6 @@
 /* eslint-disable react/display-name */
 /* eslint-disable react/prop-types */
-import React from "react";
+import React, { useEffect, useRef } from "react";
 import { connect } from "react-redux";
 import {
   Button,
@@ -27,7 +27,7 @@ import CampaignStatus from "../components/CampaignStatus";
 import { getGrowthProjectPath } from "../utils/utils";
 
 const CampaignDetail = props => {
-  const { location, router, project } = props;
+  const { location, router, project, projectPath } = props;
   const id = parseHashOptions(location.hash).id;
   const { isLoading, data } = useQuery(
     ["getCampaignDetail", id],
@@ -38,6 +38,19 @@ const CampaignDetail = props => {
     },
     QUERY_OPTIONS,
   );
+  const preProtocolSlug = useRef(null);
+  useEffect(() => {
+    if (
+      projectPath &&
+      preProtocolSlug.current &&
+      preProtocolSlug.current !== projectPath
+    ) {
+      router?.push({
+        pathname: getGrowthProjectPath(projectPath, "Campaign"),
+      });
+    }
+    preProtocolSlug.current = projectPath;
+  }, [projectPath]);
 
   let botInviteUrl = null;
   let botInitCmd = null;

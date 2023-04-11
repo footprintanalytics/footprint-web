@@ -15,6 +15,7 @@ import {
   getCreateFgaProjectModalShow,
   getLoginModalShow,
   getSubmitAddrZkspaceModal,
+  getLoginModalDefaultRegister,
 } from "metabase/selectors/control";
 import {
   cancelFeedbackAction,
@@ -43,9 +44,8 @@ import EntityMenu from "metabase/components/EntityMenu";
 import UserAvatar from "metabase/components/UserAvatar";
 import VipIcon from "metabase/components/VipIcon";
 import CreateProjectModal from "metabase/growth/components/Modal/CreateProjectModal";
-import { getContext, getPath, getUser } from "../selectors";
-import { getLoginModalDefaultRegister } from "../../../selectors/control";
 import { checkIsDemoAccountAndAlert } from "metabase/growth/utils/utils";
+import { getContext, getPath, getUser } from "../selectors";
 
 const mapStateToProps = (state, props) => ({
   path: getPath(state, props),
@@ -482,16 +482,14 @@ class FgaNavbar extends Component {
         {this.renderLoginModal()}
         {this.renderCancelFeedbackModal()}
         <CreateProjectModal
-          // open={this.state.isProjectModalOpen}
-          open={createFgaProjectModalShow}
+          open={createFgaProjectModalShow?.show}
+          force={createFgaProjectModalShow?.force}
           location={location}
           onSuccess={() => {
             setCreateFgaProjectModalShowAction({ show: false });
-            // this.setState({ ...this.state, isProjectModalOpen: false });
           }}
           onCancel={() => {
             setCreateFgaProjectModalShowAction({ show: false });
-            // this.setState({ ...this.state, isProjectModalOpen: false });
           }}
         ></CreateProjectModal>
       </div>

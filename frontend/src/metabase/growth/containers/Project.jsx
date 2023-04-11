@@ -79,18 +79,84 @@ const Project = props => {
       discord_guild_id: projectObject?.discord?.guildId,
     };
   };
+
+  const comingSoon = page => {
+    return (
+      <div style={{ textAlign: "center", padding: "50px" }}>
+        <div
+          style={{
+            display: "flex",
+            padding: 0,
+            justifyContent: "center",
+          }}
+        >
+          <>
+            {gaMenuTabs?.dashboardMap && tab ? (
+              <Result
+                style={{
+                  margin: 0,
+                  width: "50%",
+                  minWidth: 400,
+                  maxWidth: 600,
+                }}
+                icon={
+                  <Image
+                    preview={false}
+                    style={{
+                      height: "50%",
+                      width: "50%",
+                      minHeight: 30,
+                      minWidth: 50,
+                      maxHeight: 500,
+                      maxWidth: 550,
+                    }}
+                    src={
+                      "https://footprint-imgs.oss-us-east-1.aliyuncs.com/no-data01.svg"
+                    }
+                  />
+                }
+                // title="There is currently no data available for this project."
+                subTitle={`I'm sorry, the content for this ${page} page is not yet ready. You can visit our homepage for now and stay tuned for more high-quality content coming soon. We appreciate your patience.`}
+                extra={
+                  <Button
+                    type="primary"
+                    onClick={() => {
+                      router.push(
+                        getGrowthProjectPath(
+                          project,
+                          gaMenuTabs?.menuTabs?.[0].children?.length > 0
+                            ? gaMenuTabs?.menuTabs?.[0].children[0].key
+                            : gaMenuTabs?.menuTabs?.[0].key,
+                        ),
+                      );
+                    }}
+                  >
+                    Goto Homepage
+                  </Button>
+                }
+              />
+            ) : (
+              <LoadingSpinner message="Loading..." />
+            )}
+          </>
+        </div>
+      </div>
+    );
+  };
+
   const getContentPannel = current_tab => {
-    const WrapPublicDashboard = (
+    const WrapPublicDashboard = projectObject?.protocolSlug ? (
       <PublicDashboard
         params={{ uuid: gaMenuTabs?.dashboardMap?.get(current_tab) }}
         location={location}
         project={getProjectObject()}
         isFullscreen={false}
         hideTitle={true}
-        // className="ml-250 mt-60"
         key={projectObject?.protocolSlug}
         hideFooter
       />
+    ) : (
+      <LoadingSpinner message="Loading..." />
     );
     if (current_tab === "UserTemplate") {
       //|| current_tab === "Potential Users"
@@ -106,7 +172,7 @@ const Project = props => {
       return (
         <ConnectorList
           refetchProject={props.dispatch(
-            loadCurrentFgaProject(projectObject?.id),
+            loadCurrentFgaProject(projectObject?.id, "project"),
           )}
           location={location}
           router={router}
@@ -150,6 +216,7 @@ const Project = props => {
       );
     }
     if (current_tab === "Campaign") {
+      // return comingSoon("Campaign");
       return <CampaignList router={router} location={location}></CampaignList>;
     }
     if (current_tab === "CampaignDetail") {
@@ -157,6 +224,7 @@ const Project = props => {
         <CampaignDetail
           router={router}
           location={location}
+          projectPath={projectPath}
           project={getProjectObject(project)}
         ></CampaignDetail>
       );
@@ -215,67 +283,7 @@ const Project = props => {
       }
       return WrapPublicDashboard;
     }
-    return (
-      <div style={{ textAlign: "center", padding: "50px" }}>
-        <div
-          style={{
-            display: "flex",
-            padding: 0,
-            justifyContent: "center",
-          }}
-        >
-          <>
-            {gaMenuTabs?.dashboardMap && tab ? (
-              <Result
-                style={{
-                  margin: 0,
-                  width: "50%",
-                  minWidth: 400,
-                  maxWidth: 600,
-                }}
-                icon={
-                  <Image
-                    preview={false}
-                    style={{
-                      height: "50%",
-                      width: "50%",
-                      minHeight: 30,
-                      minWidth: 50,
-                      maxHeight: 500,
-                      maxWidth: 550,
-                    }}
-                    src={
-                      "https://footprint-imgs.oss-us-east-1.aliyuncs.com/no-data01.svg"
-                    }
-                  />
-                }
-                // title="There is currently no data available for this project."
-                subTitle="I'm sorry, the content for this page is not yet ready. You can visit our homepage for now and stay tuned for more high-quality content coming soon. We appreciate your patience."
-                extra={
-                  <Button
-                    type="primary"
-                    onClick={() => {
-                      router.push(
-                        getGrowthProjectPath(
-                          project,
-                          gaMenuTabs?.menuTabs?.[0].children?.length > 0
-                            ? gaMenuTabs?.menuTabs?.[0].children[0].key
-                            : gaMenuTabs?.menuTabs?.[0].key,
-                        ),
-                      );
-                    }}
-                  >
-                    Goto Homepage
-                  </Button>
-                }
-              />
-            ) : (
-              <LoadingSpinner message="Loading..." />
-            )}
-          </>
-        </div>
-      </div>
-    );
+    return comingSoon("");
   };
   return <>{getContentPannel(tab)}</>;
 };

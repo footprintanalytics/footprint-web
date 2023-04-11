@@ -2,6 +2,7 @@ import React from "react";
 import {
   BarChartOutlined,
   ShopOutlined,
+  TagsOutlined,
   TeamOutlined,
   SettingOutlined,
   ProjectOutlined,
@@ -44,10 +45,38 @@ export const top_protocols = [
   },
 ];
 export const template_gallery = [
+  // {
+  //   category: "Campaign Analysis",
+  //   desc: "Campaign Analysis is the technique of evaluating marketing campaigns to determine their effectiveness in achieving specific business objectives.",
+  //   items: [
+  //     {
+  //       dashboardName: "Token Airdrop Monitoring",
+  //       id: 7426,
+  //       dashboardLink: "/growth/public/dashboard/7426#from=Custom Analysis",
+  //     },
+  //     {
+  //       dashboardName: "Dashboard for NFT Minting",
+  //       dashboardLink:
+  //         "/growth/public/dashboard/7569?campaign_id=5284#from=Custom Analysis",
+  //       id: 7569,
+  //     },
+  //   ],
+  // },
   {
-    category: "Go to market",
+    category: "Campaign Analysis",
     desc: "Analyze campaign data to determine which platforms and campaigns are the most popular, and identify the most precise target audience.",
     items: [
+      {
+        dashboardName: "Token Airdrop Monitoring",
+        id: 7426,
+        dashboardLink: "/growth/public/dashboard/7426#from=Custom Analysis",
+      },
+      {
+        dashboardName: "Dashboard for NFT Minting",
+        dashboardLink:
+          "/growth/public/dashboard/7569?campaign_id=5284#from=Custom Analysis",
+        id: 7569,
+      },
       {
         category: "Go to market",
         dashboardName: "Galxe Campaign Overall Stats",
@@ -244,8 +273,34 @@ export const fga_menu_data = [
     ],
   },
   {
-    name: "Cohort",
+    name: "Community",
     icon: React.createElement(TeamOutlined),
+    children: [
+      {
+        name: "Project Users",
+        id: 7773,
+        uuid: "451d53ab-9d62-40ff-931e-9ec197595f0b",
+      },
+      {
+        name: "Twitter",
+        id: 7476,
+        uuid: "fd4d94f3-06f7-445d-ada3-0ce82bcefa39",
+      },
+      {
+        name: "Discord",
+        id: 7490,
+        uuid: "d137a1ef-34a3-4553-84cb-2203bd9d2baf",
+      },
+      {
+        name: "Lifecycle",
+        id: 7118,
+        uuid: "b1682d12-bddd-4b10-99a3-a403a3a6a78c",
+      },
+    ],
+  },
+  {
+    name: "Cohort",
+    icon: React.createElement(TagsOutlined),
     children: [
       {
         name: "Cohort",
@@ -258,11 +313,6 @@ export const fga_menu_data = [
         id: 7180,
         uuid: "b46fc872-c97d-4300-a83e-45fa61760ad2",
       },
-      {
-        name: "Community",
-        id: 7773,
-        uuid: "451d53ab-9d62-40ff-931e-9ec197595f0b",
-      },
     ],
   },
   {
@@ -270,48 +320,31 @@ export const fga_menu_data = [
     icon: React.createElement(CommentOutlined),
     id: null,
     children: [
-      { name: "Campaign", id: null, uuid: null },
-      {
-        name: "Token Airdrop",
-        id: 7426,
-        uuid: "c676fe55-c785-4015-bc8a-27c18b57826f",
-      },
-      {
-        name: "NFT Minting",
-        id: 7569,
-        uuid: "340f11c8-144e-4c24-a298-b5564c4a88a8",
-      },
+      // { name: "Campaign", id: null, uuid: null },
+      // {
+      //   name: "Token Airdrop",
+      //   id: 7426,
+      //   uuid: "c676fe55-c785-4015-bc8a-27c18b57826f",
+      // },
+      // {
+      //   name: "NFT Minting",
+      //   id: 7569,
+      //   uuid: "340f11c8-144e-4c24-a298-b5564c4a88a8",
+      // },
     ],
   },
-  {
-    name: "User Analysis",
-    icon: React.createElement(BarChartOutlined),
-    id: null,
-    children: [
-      {
-        name: "User Profile",
-        id: 7514,
-        uuid: "55b1eb29-b15e-458f-9241-1862a0d19d3b",
-      },
-
-      {
-        name: "User Funnel",
-        id: 7118,
-        uuid: "b1682d12-bddd-4b10-99a3-a403a3a6a78c",
-      },
-      {
-        name: "Twitter",
-        id: 7476,
-        uuid: "fd4d94f3-06f7-445d-ada3-0ce82bcefa39",
-      },
-      {
-        name: "Discord",
-        id: 7490,
-        uuid: "d137a1ef-34a3-4553-84cb-2203bd9d2baf",
-      },
-      { name: "Discord", id: null, uuid: null },
-    ],
-  },
+  // {
+  //   name: "User Analysis",
+  //   icon: React.createElement(BarChartOutlined),
+  //   id: null,
+  //   children: [
+  //     {
+  //       name: "User Profile",
+  //       id: 7514,
+  //       uuid: "55b1eb29-b15e-458f-9241-1862a0d19d3b",
+  //     },
+  //   ],
+  // },
   {
     name: "Discover",
     icon: React.createElement(ProjectOutlined),

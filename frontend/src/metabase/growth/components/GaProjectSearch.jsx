@@ -23,11 +23,11 @@ import {
 } from "../utils/utils";
 
 const GaProjectSearch = props => {
-  const { router, location, user, menu, projectPath } = props;
+  const { router, location, user, menu, projectPath ,setCreateFgaProjectModalShowAction} = props;
   const [userProject, setUserProject] = useState([]);
   const [currentProject, setCurrentProject] = useState(projectPath);
   const { isLoading, data } = useQuery(
-    ["GetFgaProject", user, projectPath],
+    ["GetFgaProject", user?.id],
     async () => {
       if (user) {
         return await GetFgaProject();
@@ -39,12 +39,12 @@ const GaProjectSearch = props => {
   );
 
   const loadProjectDetail = project_id => {
-    console.log("loadProjectDetail", project_id);
-    props.dispatch(loadCurrentFgaProject(parseInt(project_id)));
+    props.dispatch(loadCurrentFgaProject(parseInt(project_id), "search"));
   };
 
   useEffect(() => {
-    if (!isLoading) {
+    if (!isLoading && data?.data) {
+      console.log("isLoading data?.data finish", data?.data?.length);
       if (data?.data?.length > 0) {
         const projects = [];
         data?.data?.map(p => {
@@ -57,8 +57,6 @@ const GaProjectSearch = props => {
         });
         const index = projects.findIndex(i => i.value === currentProject);
         const projectIndex = index === -1 ? 0 : index;
-        // console.log("useEffect loadProjectDetail projectIndex", projectIndex);
-        // loadProjectDetail(projects[projectIndex].id);
         setCurrentProject(projects[projectIndex].value);
         saveLatestGAProject(projects[projectIndex].value);
         saveLatestGAProjectId(projects[projectIndex].id);
@@ -69,11 +67,17 @@ const GaProjectSearch = props => {
             pathname: getGrowthProjectPath(projects[projectIndex].value, menu),
           });
         }
-
+      } else {
+        if (user) {
+          setCreateFgaProjectModalShowAction({
+            show: true,
+            force: true,
+          });
+        }
       }
     }
     // getAllProtocol();
-  }, [currentProject, data?.data, menu, isLoading, router]);
+  }, [data, isLoading]);
 
   // monitor data
   const recommendOptions = [];
