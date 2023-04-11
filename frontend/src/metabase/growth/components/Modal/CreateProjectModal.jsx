@@ -1,6 +1,6 @@
 /* eslint-disable react/prop-types */
 import React, { useEffect, useState } from "react";
-import { Modal, Select, Button, Input, Form, message } from "antd";
+import { Modal, Select, Button, Input, Form, message,Divider,Typography } from "antd";
 import Link from "antd/lib/typography/Link";
 import { withRouter } from "react-router";
 import { connect } from "react-redux";
@@ -22,7 +22,7 @@ const tailLayout = {
 };
 
 const CreateProjectModal = props => {
-  const { open, onCancel, onSuccess, router, location, user } = props;
+  const { open, onCancel, onSuccess, router, location, user,force } = props;
   const [form] = Form.useForm();
   const [options, setOptions] = useState([]);
   const [loadingData, setLoadingData] = useState(false);
@@ -59,7 +59,7 @@ const CreateProjectModal = props => {
       const result = await CreateFgaProject({
         name: projectName.trim().replaceAll(" ", "-"),
         protocolSlug: protocol,
-        protocolName: projectName,
+        protocolName: projectName.trim().replaceAll(" ", "-"),
         nftContractAddress: [],
       });
       if (result) {
@@ -92,7 +92,25 @@ const CreateProjectModal = props => {
       // onOk={handleOk}
       onCancel={onCancel}
     >
-      <Form {...layout} form={form} name="control-hooks" onFinish={onFinish}>
+      <Divider />
+      {force && (
+        <div style={{ marginBottom: 20 }}>
+          <Typography.Text mark>
+            {
+              "Before embarking on your magical FGA journey, please choose a project that you fancy"
+            }
+          </Typography.Text>
+        </div>
+      )}
+      <Form
+        {...layout}
+        labelAlign="left"
+        colon={false}
+        labelWrap
+        form={form}
+        name="control-hooks"
+        onFinish={onFinish}
+      >
         <Form.Item
           name="protocol"
           label="Protocol"

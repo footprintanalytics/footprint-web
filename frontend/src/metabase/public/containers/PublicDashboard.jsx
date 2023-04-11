@@ -3,9 +3,11 @@ import React, { Component } from "react";
 import { connect } from "react-redux";
 import { push } from "react-router-redux";
 import cx from "classnames";
+import { withRouter } from "react-router";
 
 import _ from "underscore";
 import { debounce, isArray } from "lodash";
+import { Breadcrumb } from "antd";
 import { IFRAMED } from "metabase/lib/dom";
 
 import LoadingAndErrorWrapper from "metabase/components/LoadingAndErrorWrapper";
@@ -17,6 +19,7 @@ import title from "metabase/hoc/Title";
 import { fetchDatabaseMetadata } from "metabase/redux/metadata";
 import { setErrorPage } from "metabase/redux/app";
 import { getMetadata } from "metabase/selectors/metadata";
+import { parseHashOptions } from "metabase/lib/browser";
 
 import PublicMode from "metabase/modes/components/modes/PublicMode";
 
@@ -34,7 +37,6 @@ import {
   setPublicDashboardEndpoints,
   setEmbedDashboardEndpoints,
 } from "metabase/services";
-import { parseHashOptions } from "metabase/lib/browser";
 import { parseTitleId } from "metabase/lib/urls";
 import {
   updateDashboardPara,
@@ -65,7 +67,6 @@ const mapStateToProps = (state, props) => {
         key,
       );
       const tags = [project.template].concat(queryCollection ?? []);
-      console.log("tags", tags);
       updateDashboardPara(
         parameters,
         parameterValues,
@@ -112,20 +113,6 @@ const mapStateToProps = (state, props) => {
     }
     if (project.twitter_handler) {
       const key = "twitter_handler";
-      // let queryHandler = getDefaultDashboardPara(
-      //   parameters,
-      //   parameterValues,
-      //   key,
-      // );
-      // const queryHandlerInUrl = location.query.twitter_handler;
-      // console.log(
-      //   "hanlder",
-      //   project.twitter_handler,
-      //   queryHandler,
-      //   queryHandlerInUrl,
-      // );
-      // queryHandler =
-      //   queryHandler ?? queryHandlerInUrl ?? project.twitter_handler;
       updateDashboardPara(
         parameters,
         parameterValues,
@@ -178,18 +165,16 @@ const mapDispatchToProps = {
 
 // NOTE: this should use DashboardData HoC
 class PublicDashboard extends Component {
-
-  _fetchDashboardCardData =
-    debounce(
-      () => {
-        this.props.fetchDashboardCardData({ reload: false, clear: true });
-      },
-      100,
-      {
-        leading: false,
-        trailing: true,
-      },
-    )
+  _fetchDashboardCardData = debounce(
+    () => {
+      this.props.fetchDashboardCardData({ reload: false, clear: true });
+    },
+    100,
+    {
+      leading: false,
+      trailing: true,
+    },
+  );
 
   _initialize = async () => {
     const {
@@ -248,6 +233,7 @@ class PublicDashboard extends Component {
       hideTitle,
       hideAllParams,
       className,
+      router,
     } = this.props;
     const buttons = !IFRAMED
       ? getDashboardActions(this, { ...this.props, isPublic: true })
@@ -256,14 +242,44 @@ class PublicDashboard extends Component {
     const { chart_style } = {
       ...parseHashOptions(location.hash),
     };
-    let hideParameters = "";
+    const isFgaPublicDashboard = location.pathname.startsWith("/growth");
+    let hideParameters = isFgaPublicDashboard
+      ? "gamefi,protocol_slug,twitter_handler,project_name"
+      : "";
+    const hashData = parseHashOptions(location?.hash);
+    if (isFgaPublicDashboard && hashData?.from && dashboard) {
+      header = (
+        <>
+          <Breadcrumb
+            className="pl1 pt2"
+            items={[
+              {
+                title: (
+                  <a
+                    onClick={() => {
+                      router?.goBack();
+                    }}
+                  >
+                    {hashData?.from}
+                  </a>
+                ),
+              },
+              {
+                title: dashboard && dashboard.name,
+              },
+            ]}
+          />
+          {header}
+        </>
+      );
+      hideTitle = true;
+    }
     if (hideAllParams) {
       parameters.map((para, index) => {
         hideParameters = hideParameters + (index !== 0 ? "," : "") + para.slug;
       });
     }
     const shouldRenderAsNightMode = isNightMode || canShowDarkMode(dashboard);
-    const isFgaPublicDashboard = location.pathname.startsWith("/growth");
     return (
       <EmbedFrame
         name={dashboard && dashboard.name}

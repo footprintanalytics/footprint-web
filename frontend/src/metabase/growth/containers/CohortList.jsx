@@ -30,7 +30,7 @@ const CohortList = props => {
       dataIndex: "title",
       render: text => (
         <Link
-          to={`/growth/public/dashboard/55b1eb29-b15e-458f-9241-1862a0d19d3b?tag=${text}`}
+          to={`/growth/public/dashboard/55b1eb29-b15e-458f-9241-1862a0d19d3b?tag=${text}&cohort_title=${text}#from=Cohort`}
         >
           {text}
         </Link>
@@ -58,12 +58,12 @@ const CohortList = props => {
       render: (_, record) => (
         <Space size="middle">
           <Link
-            to={`/growth/public/dashboard/55b1eb29-b15e-458f-9241-1862a0d19d3b?tag=${record.title}`}
+            to={`/growth/public/dashboard/55b1eb29-b15e-458f-9241-1862a0d19d3b?tag=${record.title}&cohort_title=${record.title}#from=Cohort`}
           >
             User Profile
           </Link>
           <Link
-            to={`/growth/public/dashboard/dce33214-a079-4eb8-b53f-defaabde2eba?cohort_id=${record.cohortId}&cohort_title=${record.title}`}
+            to={`/growth/public/dashboard/dce33214-a079-4eb8-b53f-defaabde2eba?cohort_id=${record.cohortId}&cohort_title=${record.title}#from=Cohort`}
           >
             Wallet List
           </Link>

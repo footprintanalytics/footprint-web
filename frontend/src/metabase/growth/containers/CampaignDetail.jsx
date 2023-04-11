@@ -1,6 +1,6 @@
 /* eslint-disable react/display-name */
 /* eslint-disable react/prop-types */
-import React from "react";
+import React, { useEffect, useRef } from "react";
 import { connect } from "react-redux";
 import {
   Button,
@@ -10,6 +10,7 @@ import {
   Alert,
   message,
   Typography,
+  Breadcrumb,
   Space,
 } from "antd";
 import dayjs from "dayjs";
@@ -23,9 +24,10 @@ import { getUser } from "metabase/selectors/user";
 import { getCampaignDetail } from "metabase/new-service";
 import { parseHashOptions } from "metabase/lib/browser";
 import CampaignStatus from "../components/CampaignStatus";
+import { getGrowthProjectPath } from "../utils/utils";
 
 const CampaignDetail = props => {
-  const { location, router, project } = props;
+  const { location, router, project, projectPath } = props;
   const id = parseHashOptions(location.hash).id;
   const { isLoading, data } = useQuery(
     ["getCampaignDetail", id],
@@ -36,6 +38,19 @@ const CampaignDetail = props => {
     },
     QUERY_OPTIONS,
   );
+  const preProtocolSlug = useRef(null);
+  useEffect(() => {
+    if (
+      projectPath &&
+      preProtocolSlug.current &&
+      preProtocolSlug.current !== projectPath
+    ) {
+      router?.push({
+        pathname: getGrowthProjectPath(projectPath, "Campaign"),
+      });
+    }
+    preProtocolSlug.current = projectPath;
+  }, [projectPath]);
 
   let botInviteUrl = null;
   let botInitCmd = null;
@@ -56,97 +71,127 @@ const CampaignDetail = props => {
 
   const Header = () => {
     return (
-      <Card title="Campaign Dateil">
-        {isLoading ? (
-          <LoadingSpinner message="Loading..." />
-        ) : data ? (
-          <Descriptions bordered>
-            <Descriptions.Item label="Name">{data.title}</Descriptions.Item>
-            <Descriptions.Item label="Campaign Type">
-              {data?.campaignType}
-            </Descriptions.Item>
-            <Descriptions.Item label="Channel Type">
-              {channel_type.join(", ")}
-            </Descriptions.Item>
-            <Descriptions.Item label="Created At">
-              {dayjs(data.createdAt).format("YYYY-MM-DD HH:mm")}
-            </Descriptions.Item>
-            <Descriptions.Item label="Updated At">
-              {dayjs(data.updatedAt).format("YYYY-MM-DD HH:mm")}
-            </Descriptions.Item>
-            <Descriptions.Item label="Status" span={3}>
-              <CampaignStatus value={data.status} />
-            </Descriptions.Item>
-            {tweetTrackingURL && (
-              <Descriptions.Item label="Tweet tracking URL">
-                <Typography.Link
-                  target="_blank"
-                  underline
-                  href={tweetTrackingURL}
+      <>
+        <Breadcrumb
+          className="p2"
+          items={[
+            {
+              title: (
+                <a
+                  onClick={() => {
+                    router.push({
+                      pathname: getGrowthProjectPath(
+                        project?.protocolSlug,
+                        "Campaign",
+                      ),
+                    });
+                  }}
                 >
-                  {tweetTrackingURL}
-                </Typography.Link>
+                  Campaign
+                </a>
+              ),
+            },
+            {
+              title: "Campaign Detail",
+            },
+          ]}
+        />
+        <Card>
+          {isLoading ? (
+            <LoadingSpinner message="Loading..." />
+          ) : data ? (
+            <Descriptions bordered>
+              <Descriptions.Item label="Name">{data.title}</Descriptions.Item>
+              <Descriptions.Item label="Campaign Type">
+                {data?.campaignType}
               </Descriptions.Item>
-            )}
-            {botInviteUrl && (
-              <Descriptions.Item label="Discord bot step">
-                <Typography.Text mark>Step 1</Typography.Text> Add the FGA
-                discord bot to your server.
-                <br />
-                <Typography.Link target="_blank" underline href={botInviteUrl}>
-                  {botInviteUrl}
-                </Typography.Link>
-                <br />
-                <br />
-                <Typography.Text mark>Step 2</Typography.Text> Dispatch the
-                active command to your Discord channel.
-                <br />
-                <Typography.Paragraph>
-                  <Space>
-                    <pre>{botInitCmd}</pre>
-                    <CopyToClipboard
-                      text={botInitCmd}
-                      onCopy={() => message.success("Copied!")}
-                    >
-                      <Button type="primary">Copy</Button>
-                    </CopyToClipboard>
-                  </Space>
-                </Typography.Paragraph>
+              <Descriptions.Item label="Channel Type">
+                {channel_type.join(", ")}
               </Descriptions.Item>
-            )}
-            {data?.details && (
-              <Descriptions.Item label="Details" span={3}>
-                <>
-                  {Object.entries(data?.details).map?.((detail, index) => {
-                    return (
-                      <div key={index}>
-                        <div>
-                          <Typography.Text
-                            style={{ whiteSpace: "pre-wrap" }}
-                            className=" text-bold"
-                          >
-                            {detail?.[0]}
-                          </Typography.Text>
+              <Descriptions.Item label="Created At">
+                {dayjs(data.createdAt).format("YYYY-MM-DD HH:mm")}
+              </Descriptions.Item>
+              <Descriptions.Item label="Updated At">
+                {dayjs(data.updatedAt).format("YYYY-MM-DD HH:mm")}
+              </Descriptions.Item>
+              <Descriptions.Item label="Status" span={3}>
+                <CampaignStatus value={data.status} />
+              </Descriptions.Item>
+              {tweetTrackingURL && (
+                <Descriptions.Item label="Tweet tracking URL">
+                  <Typography.Link
+                    target="_blank"
+                    underline
+                    href={tweetTrackingURL}
+                  >
+                    {tweetTrackingURL}
+                  </Typography.Link>
+                </Descriptions.Item>
+              )}
+              {botInviteUrl && (
+                <Descriptions.Item label="Discord bot step">
+                  <Typography.Text mark>Step 1</Typography.Text> Add the FGA
+                  discord bot to your server.
+                  <br />
+                  <Typography.Link
+                    target="_blank"
+                    underline
+                    href={botInviteUrl}
+                  >
+                    {botInviteUrl}
+                  </Typography.Link>
+                  <br />
+                  <br />
+                  <Typography.Text mark>Step 2</Typography.Text> Dispatch the
+                  active command to your Discord channel.
+                  <br />
+                  <Typography.Paragraph>
+                    <Space>
+                      <pre>{botInitCmd}</pre>
+                      <CopyToClipboard
+                        text={botInitCmd}
+                        onCopy={() => message.success("Copied!")}
+                      >
+                        <Button type="primary">Copy</Button>
+                      </CopyToClipboard>
+                    </Space>
+                  </Typography.Paragraph>
+                </Descriptions.Item>
+              )}
+              {data?.details && (
+                <Descriptions.Item label="Details" span={3}>
+                  <>
+                    {Object.entries(data?.details).map?.((detail, index) => {
+                      return (
+                        <div key={index}>
+                          <div>
+                            <Typography.Text
+                              style={{ whiteSpace: "pre-wrap" }}
+                              className=" text-bold"
+                            >
+                              {detail?.[0]}
+                            </Typography.Text>
+                          </div>
+                          <div>
+                            <Typography.Paragraph
+                              style={{ whiteSpace: "pre-wrap" }}
+                              className=" text-light"
+                            >
+                              {detail?.[1]}
+                            </Typography.Paragraph>
+                          </div>
                         </div>
-                        <div>
-                          <Typography.Paragraph
-                            style={{ whiteSpace: "pre-wrap" }}
-                            className=" text-light"
-                          >
-                            {detail?.[1]}
-                          </Typography.Paragraph>
-                        </div>
-                      </div>
-                    );
-                  })}
-                </>
-              </Descriptions.Item>
-            )}
-          </Descriptions>
-        ) : (
-          <Empty description="No data" />
-        )}
-      </Card>
+                      );
+                    })}
+                  </>
+                </Descriptions.Item>
+              )}
+            </Descriptions>
+          ) : (
+            <Empty description="No data" />
+          )}
+        </Card>
+      </>
     );
   };
 

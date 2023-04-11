@@ -31,8 +31,8 @@ export const SET_DARK_MODE = "metabase/control/setDarkMode";
 
 export const createFgaProjectModalShowAction = createThunkAction(
   CREATE_FGA_PROJECT_MODAL_SHOW,
-  ({ show }) => {
-    return { show };
+  ({ show, force = false }) => {
+    return { show: show, force: force };
   },
 );
 export const loginModalShowAction = createThunkAction(
@@ -141,6 +141,7 @@ export const control = handleActions(
         return {
           ...state,
           createFgaProjectModalShow: payload.show,
+          createFgaProjectModalForce: payload.force,
         };
       },
     },
