@@ -67,14 +67,14 @@ const CohortList = props => {
           >
             Wallet List
           </Link>
-          <Link
+          {/*<Link
             to={getGrowthProjectPath(
               props.router?.params?.project,
               "CreateCampaign",
             )}
           >
             Create Campaign
-          </Link>
+          </Link>*/}
         </Space>
       ),
     },
