@@ -35,7 +35,7 @@
 }
 
 .parameter-value-widget__series-date-group .ant-radio-button-wrapper-checked {
-  background: #3434B2 !important;
+  /*background: #3434B2 !important;*/
   border-radius: 6px !important;
 }
 
@@ -45,4 +45,12 @@
   position: inherit !important;
   box-shadow: 0 0 0 0 !important;
   border-radius: 6px !important;
+}
+
+.parameter-widget-input {
+  color: var(--color-text-axis);
+}
+
+.Dashboard--night .parameter-widget-input {
+  color: var(--color-text-white);
 }

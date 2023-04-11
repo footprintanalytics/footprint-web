@@ -51,7 +51,7 @@ const CategoryForFga = ({ data = [], isLoading, title, actives=[], onChange }) =
                 key={item}
                 onClick={() => trackStructEvent("Protocols Category", item)}
               >
-                <Link
+                <div
                   className={`fga__category-item ${
                     actives.includes(item) ? "fga__category-item--active" : ""
                   }`}
@@ -66,7 +66,7 @@ const CategoryForFga = ({ data = [], isLoading, title, actives=[], onChange }) =
                   }}
                 >
                   {formatTitle(item)}
-                </Link>
+                </div>
               </li>
             ))}
             {others && others.length > 0 && (

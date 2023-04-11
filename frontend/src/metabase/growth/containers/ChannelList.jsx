@@ -170,13 +170,12 @@ const ChannelList = props => {
           minHeight: 800,
         }}
       >
-        <div className=" flex flex-row justify-between w-full">
+        <div className=" flex flex-row justify-between w-full mb2">
           <Title width={"100%"} level={4} style={{ marginBottom: 0 }}>
             Channel
           </Title>
         </div>
 
-        <Divider></Divider>
         {isLoading ? (
           <LoadingSpinner message="Loading..." />
         ) : (
@@ -186,15 +185,16 @@ const ChannelList = props => {
                 className="w-full"
                 itemLayout="horizontal"
                 dataSource={activators}
+                split={false}
                 renderItem={item => (
                   <List.Item
                     style={{
                       borderRadius: 10,
-                      backgroundColor: isDark ? "#ffffff11": "white",
+                      backgroundColor: isDark ? "#182034": "white",
                       paddingLeft: 10,
                       paddingRight: 10,
                       cursor: "pointer",
-                      margin: 5,
+                      margin: 8,
                     }}
                     actions={
                       item.statu === "connected"
@@ -228,7 +228,7 @@ const ChannelList = props => {
                     }
                   >
                     <List.Item.Meta
-                      avatar={<Avatar src={item?.icon} />}
+                      avatar={<Avatar src={item?.icon} style={{ backgroundColor: '#fff' }}/>}
                       title={item?.name}
                       description={item?.desc}
                     />

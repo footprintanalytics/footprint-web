@@ -39,7 +39,7 @@ const LayoutView = props => {
       />
       <Layout
         hasSider
-        className={`ga-layout h-full ga-dark ${
+        className={`ga-layout h-full ${
           isOpenSubMenu ? "" : "ga-layout--hide-sub-menu"
         }`}
         style={{ backgroundColor: "#121828" }}

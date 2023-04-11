@@ -1,10 +1,11 @@
 /* eslint-disable react/prop-types */
 /* eslint-disable react/forbid-component-props */
-import React, { Component, useState } from "react";
+import React, { Component } from "react";
 import { connect } from "react-redux";
 import { push } from "react-router-redux";
 import "./FgaNavbar.css";
 import PropTypes from "prop-types";
+import { notification } from "antd";
 import { getChannel } from "metabase/selectors/app";
 import { logout } from "metabase/auth/actions";
 import {
@@ -15,7 +16,7 @@ import {
   getCreateFgaProjectModalShow,
   getLoginModalShow,
   getSubmitAddrZkspaceModal,
-} from "metabase/selectors/control";
+ getLoginModalDefaultRegister } from "metabase/selectors/control";
 import {
   cancelFeedbackAction,
   createModalShowAction,
@@ -43,10 +44,9 @@ import EntityMenu from "metabase/components/EntityMenu";
 import UserAvatar from "metabase/components/UserAvatar";
 import VipIcon from "metabase/components/VipIcon";
 import CreateProjectModal from "metabase/growth/components/Modal/CreateProjectModal";
-import { getContext, getPath, getUser } from "../selectors";
-import { getLoginModalDefaultRegister } from "../../../selectors/control";
 import { checkIsDemoAccountAndAlert } from "metabase/growth/utils/utils";
-import cx from "classnames";
+import { getContext, getPath, getUser } from "../selectors";
+
 import { isDark } from "../../../dashboard/components/utils/dark";
 
 const mapStateToProps = (state, props) => ({
@@ -364,21 +364,24 @@ class FgaNavbar extends Component {
     };
 
     const CreateMenu = () => {
+      const [notificationApi, notificationContextHolder] = notification.useNotification();
       return (
         <div
           className="bg-brand Nav__menu-create footprint-primary-text"
-          onClick={onCreateAction}
+          onClick={() => onCreateAction(notificationApi)}
         >
           <Icon name="plus" size={12} />
           <span>Add My Project</span>
+          {notificationContextHolder}
         </div>
       );
     };
 
-    const onCreateAction = () => {
+    const onCreateAction = (notificationApi) => {
       trackStructEvent(`click Navbar Add My Project`);
       if (user) {
         checkIsDemoAccountAndAlert(
+          notificationApi,
           user,
           () => {
             setCreateFgaProjectModalShowAction({ show: true });
@@ -409,7 +412,7 @@ class FgaNavbar extends Component {
               }}
               trigger={
                 <div className="relative" style={{ padding: 10 }}>
-                  <UserAvatar user={user} size={["2.5em", "2.5em"]} />
+                  <UserAvatar user={user} size={["2.5em", "2.5em"]} bg="#6C70FF"/>
                   <div
                     className="absolute right bottom mb1"
                     style={{ marginRight: 2 }}

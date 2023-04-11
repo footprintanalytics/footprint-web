@@ -30,7 +30,6 @@ const CohortList = props => {
       dataIndex: "title",
       render: text => (
         <Link
-          color="rgb(52, 52, 178)"
           to={`/growth/public/dashboard/55b1eb29-b15e-458f-9241-1862a0d19d3b?tag=${text}`}
         >
           {text}
@@ -59,19 +58,16 @@ const CohortList = props => {
       render: (_, record) => (
         <Space size="middle">
           <Link
-            color="rgb(52, 52, 178)"
             to={`/growth/public/dashboard/55b1eb29-b15e-458f-9241-1862a0d19d3b?tag=${record.title}`}
           >
             User Profile
           </Link>
           <Link
-            color="rgb(52, 52, 178)"
             to={`/growth/public/dashboard/dce33214-a079-4eb8-b53f-defaabde2eba?cohort_id=${record.cohortId}&cohort_title=${record.title}`}
           >
             Wallet List
           </Link>
           <Link
-            color="rgb(52, 52, 178)"
             to={getGrowthProjectPath(
               props.router?.params?.project,
               "CreateCampaign",

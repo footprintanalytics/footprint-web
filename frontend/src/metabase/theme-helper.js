@@ -7,6 +7,7 @@ const getThemeConfig = () => {
   if (isDark()) {
     const colorPrimary = "#6C70FF";
     const background = "#121828";
+    const cardBg = "#182034";
     return {
       hashed: false,
       token: {
@@ -21,18 +22,18 @@ const getThemeConfig = () => {
       },
       components: {
         Menu: {
-          colorPrimary: "#ff0000",
           colorItemTextHover: colorPrimary,
           colorItemTextHoverHorizontal: colorPrimary,
           colorSubItemBg: background,
           colorItemBgHover: "#4444FF22",
+          colorItemTextSelected: colorPrimary,
         },
         Card: {
-          colorBgContainer: "#182034",
+          colorBgContainer: cardBg,
           lineWidth: 0,
         },
         Table: {
-          colorBgContainer: "#182034",
+          colorBgContainer: cardBg,
           colorFillAlter: "#2B3346",
         },
         Typography: {
@@ -40,7 +41,16 @@ const getThemeConfig = () => {
         },
         Drawer: {
           colorBgElevated: background,
+          colorPrimary: colorPrimary,
         },
+        Button: {
+          colorLink: colorPrimary,
+          colorBgContainer: cardBg,
+          colorPrimary: colorPrimary,
+        },
+        Radio: {
+          colorPrimary: colorPrimary,
+        }
       },
       algorithm: isDark() ? darkAlgorithm : defaultAlgorithm,
     };

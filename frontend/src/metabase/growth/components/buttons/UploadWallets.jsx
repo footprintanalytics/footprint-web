@@ -1,7 +1,7 @@
 /* eslint-disable react/prop-types */
 import React, { useState } from "react";
 import { withRouter } from "react-router";
-import { Button, message, Modal, AutoComplete, Input } from "antd";
+import { Button, message, Modal, AutoComplete, Input, Typography } from "antd";
 import { connect } from "react-redux";
 import { CreateFgaCohortByAddress } from "metabase/new-service";
 import { getLatestGAProjectId } from "metabase/growth/utils/utils";
