@@ -152,7 +152,6 @@ const Project = props => {
         project={getProjectObject()}
         isFullscreen={false}
         hideTitle={true}
-        // className="ml-250 mt-60"
         key={projectObject?.protocolSlug}
         hideFooter
       />
@@ -215,14 +214,15 @@ const Project = props => {
       );
     }
     if (current_tab === "Campaign") {
-      return comingSoon("Campaign");
-      // return <CampaignList router={router} location={location}></CampaignList>;
+      // return comingSoon("Campaign");
+      return <CampaignList router={router} location={location}></CampaignList>;
     }
     if (current_tab === "CampaignDetail") {
       return (
         <CampaignDetail
           router={router}
           location={location}
+          projectPath={projectPath}
           project={getProjectObject(project)}
         ></CampaignDetail>
       );
