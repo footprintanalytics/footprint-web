@@ -9,12 +9,12 @@ export interface DashCardRootProps {
 
 export const DashCardRoot = styled.div<DashCardRootProps>`
   border: 1px solid ${color("border")};
+  background-color: ${props => props.isNightMode ? color("--color-bg-card-dark") : color("white")};
 
   ${({ isNightMode }) =>
     isNightMode &&
     css`
       border: 0;
-      background-color: ${color("bg-night")};
     `}
 
   ${({ isUsuallySlow }) =>

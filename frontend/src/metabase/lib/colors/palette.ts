@@ -44,6 +44,11 @@ export const colors: ColorPalette = {
   shadow: "rgba(0,0,0,0.08)",
   border: "#EEECEC",
 
+  "--color-bg-dark": "#121828",
+  "--color-primary-dark": "#6C70FF",
+  "--color-border-dark": "#4A5568",
+  "--color-bg-card-dark": "#182034",
+
   "edit-bar": "#f6f6fe",
 
   /* Saturated colors for the SQL editor. Shouldn't be used elsewhere since they're not white-labelable. */

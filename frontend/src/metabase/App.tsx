@@ -159,7 +159,7 @@ function App({
                   id="app-content"
                   ref={setViewportElement}
                   key={`${user?.id}`}
-                  style={{ backgroundColor: isDark()? "#121828" : "white" }}
+                  style={{ backgroundColor: isDark()? "#121828" : "transparent" }}
                 >
                   <ContentViewportContext.Provider
                     value={viewportElement ?? null}
