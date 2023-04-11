@@ -31,7 +31,7 @@ const CohortList = props => {
       render: text => (
         <Link
           color="rgb(52, 52, 178)"
-          to={`/growth/public/dashboard/55b1eb29-b15e-458f-9241-1862a0d19d3b?tag=${text}#from=Cohort`}
+          to={`/growth/public/dashboard/55b1eb29-b15e-458f-9241-1862a0d19d3b?tag=${text}&cohort_title=${text}#from=Cohort`}
         >
           {text}
         </Link>
@@ -60,7 +60,7 @@ const CohortList = props => {
         <Space size="middle">
           <Link
             color="rgb(52, 52, 178)"
-            to={`/growth/public/dashboard/55b1eb29-b15e-458f-9241-1862a0d19d3b?tag=${record.title}#from=Cohort`}
+            to={`/growth/public/dashboard/55b1eb29-b15e-458f-9241-1862a0d19d3b?tag=${record.title}&cohort_title=${record.title}#from=Cohort`}
           >
             User Profile
           </Link>
