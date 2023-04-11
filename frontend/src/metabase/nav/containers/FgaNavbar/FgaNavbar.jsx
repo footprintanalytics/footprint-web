@@ -13,9 +13,9 @@ import {
   getIsUserFeedbackBlock,
   getLoginModalRedirect,
   getCreateFgaProjectModalShow,
-  getCreateFgaProjectModalShowForce,
   getLoginModalShow,
   getSubmitAddrZkspaceModal,
+  getLoginModalDefaultRegister,
 } from "metabase/selectors/control";
 import {
   cancelFeedbackAction,
@@ -44,9 +44,8 @@ import EntityMenu from "metabase/components/EntityMenu";
 import UserAvatar from "metabase/components/UserAvatar";
 import VipIcon from "metabase/components/VipIcon";
 import CreateProjectModal from "metabase/growth/components/Modal/CreateProjectModal";
-import { getContext, getPath, getUser } from "../selectors";
-import { getLoginModalDefaultRegister } from "../../../selectors/control";
 import { checkIsDemoAccountAndAlert } from "metabase/growth/utils/utils";
+import { getContext, getPath, getUser } from "../selectors";
 
 const mapStateToProps = (state, props) => ({
   path: getPath(state, props),
@@ -55,10 +54,6 @@ const mapStateToProps = (state, props) => ({
   loginModalShow: getLoginModalShow(state, props),
   loginModalDefaultRegister: getLoginModalDefaultRegister(state, props),
   createFgaProjectModalShow: getCreateFgaProjectModalShow(state, props),
-  createFgaProjectModalShowForce: getCreateFgaProjectModalShowForce(
-    state,
-    props,
-  ),
   loginModalRedirect: getLoginModalRedirect(state, props),
   createModalShow: getCreateModalShow(state, props),
   cancelFeedback: getCancelFeedback(state, props),
@@ -316,7 +311,6 @@ class FgaNavbar extends Component {
       setCreateModalShow,
       setCreateFgaProjectModalShowAction,
       createFgaProjectModalShow,
-      createFgaProjectModalShowForce,
       location,
       onChangeLocation,
     } = this.props;
@@ -435,6 +429,7 @@ class FgaNavbar extends Component {
         </div>
       );
     };
+
     return (
       <div className="Nav" style={{ display: rootDisplay }}>
         <div className="Nav__left">
@@ -460,12 +455,7 @@ class FgaNavbar extends Component {
         </div>
         <React.Fragment>
           <div className="Nav__search-bar">
-            <GaProjectSearch
-              location={location}
-              setCreateFgaProjectModalShowAction={
-                setCreateFgaProjectModalShowAction
-              }
-            ></GaProjectSearch>
+            <GaProjectSearch location={location}></GaProjectSearch>
           </div>
           <div className="Nav__mobile-logo">
             <Link

@@ -15,16 +15,6 @@ export const getCreateFgaProjectModalShow = createSelector(
   },
 );
 
-export const getCreateFgaProjectModalShowForce = createSelector(
-  [getControl],
-  ({
-    createFgaProjectModalShow = false,
-    createFgaProjectModalForce = false,
-  }) => {
-    return createFgaProjectModalForce || false;
-  },
-);
-
 export const getLoginModalShow = createSelector(
   [getControl],
   ({ loginModalShow }) => {

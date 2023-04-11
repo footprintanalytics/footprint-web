@@ -1,15 +1,6 @@
 /* eslint-disable react/prop-types */
 import React, { useEffect, useState } from "react";
-import {
-  Modal,
-  Select,
-  Button,
-  Input,
-  Form,
-  message,
-  Divider,
-  Typography,
-} from "antd";
+import { Modal, Select, Button, Input, Form, message,Divider,Typography } from "antd";
 import Link from "antd/lib/typography/Link";
 import { withRouter } from "react-router";
 import { connect } from "react-redux";
@@ -31,8 +22,7 @@ const tailLayout = {
 };
 
 const CreateProjectModal = props => {
-  const { open, onCancel, onSuccess, router, location, user, tip, force } =
-    props;
+  const { open, onCancel, onSuccess, router, location, user,force } = props;
   const [form] = Form.useForm();
   const [options, setOptions] = useState([]);
   const [loadingData, setLoadingData] = useState(false);
@@ -99,8 +89,6 @@ const CreateProjectModal = props => {
       title="Create your own project"
       open={open}
       footer={null}
-      closable={!force}
-      maskClosable={!force}
       // onOk={handleOk}
       onCancel={onCancel}
     >
@@ -125,7 +113,7 @@ const CreateProjectModal = props => {
       >
         <Form.Item
           name="protocol"
-          label="Select Project"
+          label="Protocol"
           rules={[{ required: true }]}
         >
           <Select

@@ -37,7 +37,7 @@ export const createFgaProjectModalShowAction = createThunkAction(
 );
 export const loginModalShowAction = createThunkAction(
   LOGIN_MODAL_SHOW,
-  ({ show, from, redirect, defaultRegister = false, channel }) => {
+  ({ show, from, redirect, defaultRegister= false, channel }) => {
     return { show, redirect, defaultRegister };
   },
 );
@@ -165,6 +165,7 @@ export const control = handleActions(
     },
     [CREATE_MODAL_SHOW]: {
       next: (state, { payload }) => {
+        console.log("CREATE_MODAL_SHOW", payload);
         return {
           ...state,
           createModalShow: payload.show,
