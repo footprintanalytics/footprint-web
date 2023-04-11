@@ -144,7 +144,7 @@ class FgaNavbar extends Component {
     return (
       // NOTE: DO NOT REMOVE `Nav` CLASS FOR NOW, USED BY MODALS, FULLSCREEN DASHBOARD, ETC
       // TODO: hide nav using state in redux instead?
-      <nav className="Nav sm-py1 relative">
+      <nav className="fga-Nav sm-py1 relative">
         <ul className="wrapper flex align-center">
           <li>
             <Link
@@ -436,9 +436,9 @@ class FgaNavbar extends Component {
         </div>
       );
     };
-    console.log("xxxx")
+
     return (
-      <div className="Nav" style={{ display: rootDisplay }}>
+      <div className="fga-Nav" style={{ display: rootDisplay }}>
         <div className="Nav__left">
           <MobileMenuIcon />
           <Link

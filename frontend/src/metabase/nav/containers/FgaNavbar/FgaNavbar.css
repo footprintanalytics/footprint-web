@@ -1,4 +1,4 @@
-.Nav {
+.fga-Nav {
   z-index: 4;
   flex-shrink: 0;
   height: 60px;
@@ -12,7 +12,7 @@
   background-color: #fff;
 }
 
-.Nav .ant-drawer-content-wrapper {
+.fga-Nav .ant-drawer-content-wrapper {
   width: 280px;
 }
 
@@ -214,7 +214,7 @@
   display: flex;
 }
 
-.dark .Nav {
+.dark .fga-Nav {
   background-color: #121828;
   border-bottom: 1px var(--color-border-dark) solid;
 }
