@@ -4,7 +4,6 @@ import { Location } from "history";
 import { connect } from "react-redux";
 import { withRouter } from "react-router";
 
-import Database from "metabase/entities/databases";
 import { getIsNavbarOpen } from "metabase/redux/app";
 import { getUser } from "metabase/selectors/user";
 import { getAdminPaths } from "metabase/admin/app/selectors";
@@ -13,7 +12,6 @@ import { User } from "metabase-types/api";
 import { AdminPath, State } from "metabase-types/store";
 
 import { AdminNavbar } from "../components/AdminNavbar";
-import MainNavbar from "./MainNavbar";
 import FpNavbar from "./FpNavbar/FpNavbar";
 import FgaNavbar from "./FgaNavbar/FgaNavbar";
 
@@ -39,13 +37,16 @@ function Navbar({ isOpen, user, location, params, adminPaths }: NavbarProps) {
   const isFgaApp = useMemo(() => {
     return location.pathname.startsWith("/growth");
   }, [location.pathname]);
-  return isAdminApp && user ? (
-    <AdminNavbar user={user} path={location.pathname} adminPaths={adminPaths} />
-  ) : isFgaApp ? (
-    <FgaNavbar isOpen={isOpen} location={location} params={params} />
-  ) : (
-    <FpNavbar isOpen={isOpen} location={location} params={params} />
-  );
+
+  if (isAdminApp && user) {
+    return <AdminNavbar user={user} path={location.pathname} adminPaths={adminPaths} />;
+  }
+
+  if (isFgaApp) {
+    return <FgaNavbar isOpen={isOpen} location={location} params={params} />;
+  }
+
+  return <FpNavbar isOpen={isOpen} location={location} params={params} />;
 }
 
 export default _.compose(

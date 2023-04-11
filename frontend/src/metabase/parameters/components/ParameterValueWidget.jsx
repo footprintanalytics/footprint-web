@@ -385,7 +385,7 @@ function Widget({
           setValue(value);
           onPopoverClose();
         }}
-        className={className}
+        className={cx(className, "parameter-widget-input")}
         autoFocus
         placeholder={isEditing ? t`Enter a default value…` : undefined}
         arity={getStringParameterArity(parameter)}

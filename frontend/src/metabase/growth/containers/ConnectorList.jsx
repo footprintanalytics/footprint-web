@@ -12,6 +12,7 @@ import {
   Card,
   Typography,
   message,
+  notification,
 } from "antd";
 import Title from "antd/lib/typography/Title";
 import { useQuery } from "react-query";
@@ -26,9 +27,9 @@ import LoadingSpinner from "metabase/components/LoadingSpinner";
 import ConfigConnector from "../components/config_panel/ConfigConnector";
 import "../css/utils.css";
 import { getGrowthProjectPath } from "../utils/utils";
+import { isDark } from "metabase/dashboard/components/utils/dark";
 
 const { Text } = Typography;
-
 const ConnectorList = props => {
   const {
     router,
@@ -110,13 +111,12 @@ const ConnectorList = props => {
           minHeight: 800,
         }}
       >
-        <div className=" flex flex-row justify-between w-full">
+        <div className=" flex flex-row justify-between w-full mb2">
           <Title width={"100%"} level={4} style={{ marginBottom: 0 }}>
             Connectors
           </Title>
         </div>
 
-        <Divider></Divider>
         {isLoading ? (
           <LoadingSpinner message="Loading..." />
         ) : (
@@ -126,15 +126,16 @@ const ConnectorList = props => {
                 className="w-full"
                 itemLayout="horizontal"
                 dataSource={connectors}
+                split={false}
                 renderItem={item => (
                   <List.Item
                     style={{
                       borderRadius: 10,
-                      backgroundColor: "white",
+                      backgroundColor: isDark ? "#182034": "white",
                       paddingLeft: 10,
                       paddingRight: 10,
                       cursor: "pointer",
-                      margin: 5,
+                      margin: 8,
                     }}
                     actions={
                       item.configured
@@ -176,7 +177,7 @@ const ConnectorList = props => {
                     }
                   >
                     <List.Item.Meta
-                      avatar={<Avatar src={item?.icon} />}
+                      avatar={<Avatar src={item?.icon} style={{ backgroundColor: '#fff' }}/>}
                       title={item?.name}
                       description={item?.description}
                     />

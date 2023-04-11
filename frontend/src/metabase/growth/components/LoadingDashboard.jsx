@@ -127,7 +127,6 @@ const LoadingDashboard = ({
           <Alert
             message={message}
             description={description}
-            type="warning"
             showIcon
           />
         </Card>

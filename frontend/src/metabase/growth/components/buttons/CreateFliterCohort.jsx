@@ -179,6 +179,7 @@ const CreateFliterCohort = ({
       </Button>
 
       <Modal
+        className="dark"
         open={isCohortModalOpen}
         onCancel={() => setCohortModalOpen(false)}
         onOk={onSend}

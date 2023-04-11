@@ -286,7 +286,6 @@ class DashCard extends Component {
     const showReadTimeMode = !isPublic && !isTextDisplay && !isImageDisplay && !isVideoDisplay && result && !result.error
       && includeRealtimeTable
       && isRealtimeUser;
-
     return (
       <DashCardRoot
         id={id}

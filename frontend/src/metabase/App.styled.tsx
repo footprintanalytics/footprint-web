@@ -27,6 +27,8 @@ export const AppContent = styled.main`
   width: 100%;
   height: 100%;
   overflow: auto;
+  background-color: ${props =>
+    color(props.isDark ? "bg-white" : "content")};
 
   @media print {
     overflow: visible !important;

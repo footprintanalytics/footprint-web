@@ -1,7 +1,7 @@
 /* eslint-disable react/prop-types */
 import React, { useState } from "react";
 import { withRouter } from "react-router";
-import { Button, message, Modal, Dropdown, AutoComplete, Input } from "antd";
+import { Button, message, Modal, Dropdown, AutoComplete, Input, Typography } from "antd";
 import { connect } from "react-redux";
 import { CreateFgaCohortByAddress } from "metabase/new-service";
 import {
@@ -173,26 +173,28 @@ const CreateCohort = ({
         closable={false}
         title={`${btnText ?? "Upload to create cohort"}`}
       >
-        <h3>Cohort Name</h3>
-        <div className="mt1" />
-        <AutoComplete
-          style={{
-            width: "100%",
-          }}
-          allowClear
-          onChange={value => {
-            setCohortName(value);
-          }}
-          // options={options}
-          placeholder="Enter the name of this cohort "
-          filterOption={(inputValue, option) =>
-            option?.value.toUpperCase().indexOf(inputValue.toUpperCase()) !== -1
-          }
-        />
-        <div className="mt2" />
-        {getPannel()}
-        <div className="mb2" />
-        <FilterOut />
+        <Typography>
+          <h3>Cohort Name</h3>
+          <div className="mt1" />
+          <AutoComplete
+            style={{
+              width: "100%",
+            }}
+            allowClear
+            onChange={value => {
+              setCohortName(value);
+            }}
+            // options={options}
+            placeholder="Enter the name of this cohort "
+            filterOption={(inputValue, option) =>
+              option?.value.toUpperCase().indexOf(inputValue.toUpperCase()) !== -1
+            }
+          />
+          <div className="mt2" />
+          {getPannel()}
+          <div className="mb2" />
+          <FilterOut />
+        </Typography>
       </Modal>
     </>
   );

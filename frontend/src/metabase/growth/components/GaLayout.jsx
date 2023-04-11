@@ -42,6 +42,7 @@ const LayoutView = props => {
         className={`ga-layout h-full ${
           isOpenSubMenu ? "" : "ga-layout--hide-sub-menu"
         }`}
+        style={{ backgroundColor: "#121828" }}
       >
         <GaSidebar />
         <Content

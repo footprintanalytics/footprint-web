@@ -9,6 +9,7 @@ import { getFriendlyName } from "metabase/visualizations/lib/utils";
 
 import { color } from "metabase/lib/colors";
 import styles from "./FunnelNormal.css";
+import { isDark } from "metabase/dashboard/components/utils/dark";
 
 export default class FunnelNormal extends Component {
   render() {
@@ -137,7 +138,7 @@ export default class FunnelNormal extends Component {
             {formatDimension(rows[0][dimensionIndex])}
           </Ellipsified>
           <div className={styles.Start}>
-            <div className={styles.Title}>
+            <div className={isDark() ? styles.TitleNight : styles.Title}>
               {formatMetric(rows[0][metricIndex])}
             </div>
             <div className={styles.Subtitle}>
@@ -146,7 +147,7 @@ export default class FunnelNormal extends Component {
           </div>
           {/* This part of code in used only to share height between .Start and .Graph columns. */}
           <div className={styles.Infos}>
-            <div className={styles.Title}>&nbsp;</div>
+            <div className={isDark() ? styles.TitleNight : styles.Title}>&nbsp;</div>
             <div className={styles.Subtitle}>&nbsp;</div>
           </div>
         </div>
@@ -175,7 +176,7 @@ export default class FunnelNormal extends Component {
                 onVisualizationClick={isClickable ? onVisualizationClick : null}
               />
               <div className={styles.Infos}>
-                <Ellipsified className={styles.Title}>
+                <Ellipsified className={isDark() ? styles.TitleNight : styles.Title}>
                   {formatPercent(stepPercentage)}
                 </Ellipsified>
                 <Ellipsified className={styles.Subtitle}>

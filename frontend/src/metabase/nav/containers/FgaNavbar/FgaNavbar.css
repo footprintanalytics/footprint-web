@@ -1,4 +1,4 @@
-.Nav {
+.fga-Nav {
   z-index: 4;
   flex-shrink: 0;
   height: 60px;
@@ -12,7 +12,7 @@
   background-color: #fff;
 }
 
-.Nav .ant-drawer-content-wrapper {
+.fga-Nav .ant-drawer-content-wrapper {
   width: 280px;
 }
 
@@ -53,6 +53,14 @@
   border-bottom: 1px solid #dcdde5;
   line-height: initial;
   display: block;
+}
+
+.dark .Nav__right-menu:hover {
+  color: #4444FF;
+}
+
+.dark .Nav__right-menu-select {
+  border-bottom: 4px solid #4444FF !important;
 }
 
 .Nav__menu {
@@ -204,6 +212,36 @@
 
 .Nav__logo {
   display: flex;
+}
+
+.dark .fga-Nav {
+  background-color: #121828;
+  border-bottom: 1px var(--color-border-dark) solid;
+}
+
+.dark .bg-brand {
+  background: var(--color-primary-dark);
+}
+
+.dark .Nav__menu-item-color {
+  color: white;
+}
+
+.dark .Nav__menu-item-color:hover {
+  color: #4444FF;
+}
+
+.dark .footprint-primary-text {
+  color: white;
+}
+
+.dark .Nav__sign-up {
+  border: 1px solid #B4C8FA;
+  color: #B4C8FA;
+}
+
+.dark .Nav__sign-up:hover {
+  color: #4444FF;
 }
 
 @media screen and (--footprint-breakpoint-max-pad) {
