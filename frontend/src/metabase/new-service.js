@@ -78,7 +78,7 @@ export const getCampaignDetail = async params => {
 export const getCommunityInfo = async params => {
   return GET(`/api/v1/fga/community/info`);
 };
-export const getCommunityQuickFilyer = async params => {
+export const getCommunityQuickFilter = async params => {
   return GET(`/api/v1/fga/community/quick-filter`);
 };
 export const getCommunityWalletAddress = async params => {
