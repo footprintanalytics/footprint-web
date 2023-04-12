@@ -46,7 +46,7 @@ export function checkIsDemoAccountAndAlert(
             type="default"
             size="small"
             target="_blank"
-            href="https://calendly.com/partners-79/footprint-growth-analytics-demo"
+            href="https://forms.gle/Xs8WahhYh26xKoDj7"
           >
             Book a meeting
           </Button>
