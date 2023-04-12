@@ -34,9 +34,10 @@ export const QuickFilter = ({ options }) => {
             key={tag.value}
             className=" rounded"
             style={{
-              borderColor: "#4A5568",
-              borderStyle: "solid",
-              borderWidth: "1px",
+              // borderColor: "#4A5568",
+              // borderStyle: "solid",
+              // borderWidth: "1px",
+              // color: "var(--color-primary-dark)",
               padding: "5px 8px",
             }}
             checked={selectedTags === tag.value}

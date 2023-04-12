@@ -1,9 +1,9 @@
 /* eslint-disable react/prop-types */
 import React, { useState } from "react";
 import { Space, Col, Row, Tag, Input, Typography } from "antd";
-const { CheckableTag } = Tag;
+import FloatInput from "../FloatInput";
 
-export const ValueFilter = ({ options }) => {
+export const ValueFilter = ({ options, className }) => {
   // mock datas
   const optionsList = [
     {
@@ -68,7 +68,9 @@ export const ValueFilter = ({ options }) => {
   }
 
   return (
-    <div className="flex flex-row w-full p1 items-center  text-nowrap">
+    <div
+      className={`flex flex-row w-full p1 items-center  text-nowrap ${className}`}
+    >
       <Typography.Text
         ellipsis={false}
         rows={1}
@@ -79,15 +81,17 @@ export const ValueFilter = ({ options }) => {
       <Row gutter={16} className="w-full">
         {optionsList.map(item => (
           <Col span={4} key={item.label}>
-            {ValueInput(item)}
+            {/* {ValueInput(item)} */}
+            <FloatInput
+              height={40}
+              style={{ width: "100%", height: 40 }}
+              label={item.label}
+              // placeholder="Email here please"
+              name={item.value}
+            />
           </Col>
         ))}
       </Row>
-      {/* <Space size={[0, 8]} wrap>
-        {optionsList.map(item => (
-          <>{ValueInput(item)}</>
-        ))}
-      </Space> */}
     </div>
   );
 };

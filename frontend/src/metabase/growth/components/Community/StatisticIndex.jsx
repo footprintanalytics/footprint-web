@@ -10,7 +10,7 @@ export const StatisticIndex = ({ options }) => {
     { title: "Discord Members", value: 623, change: +120 },
   ];
   return (
-    <Row gutter={16} className="w-full p1">
+    <Row gutter={16} className="w-full ">
       {optionsList.map((option, index) => {
         return (
           <Col span={4} key={option.title}>

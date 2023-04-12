@@ -18,16 +18,63 @@ export const WalletList = props => {
       totalTransactions: 1000,
       twitterName: "twitter name",
       discordName: "discord name",
+      tags: ["Whale"],
       email: "email@exmaple",
       eNS: "eNS",
     },
     {
       address: "0x1cf8fd41718deff957562acfac78b85b3914a688",
+      holdingNFT: 29,
+      holdingToken: 344,
+      holdingNFTValue: 1450,
+      holdingTokenValue: 24200,
+      netWorth: 11000,
+      tags: ["Whale", "Airdrop"],
+      totalNFTTransaction: 100,
+      totalTransactions: 1000,
+      twitterName: "twitter name",
+      discordName: "discord name",
+      email: "email@exmaple",
+      eNS: "eNS",
+    },
+    {
+      address: "0x1cf8fd41718deff957562acfac78b85b3914a610",
       holdingNFT: 10,
       holdingToken: 100,
       holdingNFTValue: 1000,
       holdingTokenValue: 10000,
       netWorth: 11000,
+      tags: ["Whale", "Airdrop"],
+      totalNFTTransaction: 100,
+      totalTransactions: 1000,
+      twitterName: "twitter name",
+      discordName: "discord name",
+      email: "email@exmaple",
+      eNS: "eNS",
+    },
+    {
+      address: "0x33f8fd41718deff957562acfac78b85b3914a688",
+      holdingNFT: 1,
+      holdingToken: 200,
+      holdingNFTValue: 4400,
+      holdingTokenValue: 34000,
+      netWorth: 11000,
+      tags: ["Whale", "Blue chip", "Top 100"],
+      totalNFTTransaction: 20,
+      totalTransactions: 1000,
+      twitterName: "twitter name",
+      discordName: "discord name",
+      email: "email@exmaple",
+      eNS: "eNS",
+    },
+    {
+      address: "0x44f8fd41718deff957562acfac78b85b3914a688",
+      holdingNFT: 31,
+      holdingToken: 4100,
+      holdingNFTValue: 6400,
+      holdingTokenValue: 10000,
+      netWorth: 11000,
+      tags: ["Diamond hand", "Airdrop"],
       totalNFTTransaction: 100,
       totalTransactions: 1000,
       twitterName: "twitter name",
@@ -38,20 +85,10 @@ export const WalletList = props => {
   ];
   const columns = [
     {
-      title: "Name",
-      dataIndex: "name",
-      key: "name",
-      render: text => <a>{text}</a>,
-    },
-    {
-      title: "Age",
-      dataIndex: "age",
-      key: "age",
-    },
-    {
-      title: "Address",
+      title: "Wallet",
       dataIndex: "address",
-      key: "address",
+      key: "Wallet",
+      render: text => <a>{text}</a>,
     },
     {
       title: "Tags",
@@ -59,14 +96,25 @@ export const WalletList = props => {
       dataIndex: "tags",
       render: (_, { tags }) => (
         <>
-          {tags.map(tag => {
-            let color = tag.length > 5 ? "geekblue" : "green";
-            if (tag === "loser") {
-              color = "volcano";
-            }
+          {tags.map((tag, index) => {
+            const colors = [
+              "blue",
+              "green",
+              "volcano",
+              "yellow",
+              "orange",
+              "cyan",
+              "geekblue",
+              "purple",
+              "magenta",
+              "lime",
+              "gold",
+              "red",
+            ];
+            const color = colors[index % colors.length];
             return (
               <Tag color={color} key={tag}>
-                {tag.toUpperCase()}
+                {tag}
               </Tag>
             );
           })}
@@ -74,87 +122,45 @@ export const WalletList = props => {
       ),
     },
     {
-      title: "Action",
-      key: "action",
-      render: (_, record) => (
-        <Space size="middle">
-          <a>Invite {record.name}</a>
-          <a>Delete</a>
-        </Space>
-      ),
-    },
-  ];
-  const data = [
-    {
-      key: "1",
-      name: "John Brown",
-      age: 32,
-      address: "New York No. 1 Lake Park",
-      tags: ["nice", "developer"],
+      title: "Net Worth",
+      dataIndex: "netWorth",
+      key: "netWorth",
     },
     {
-      key: "2",
-      name: "Jim Green",
-      age: 42,
-      address: "London No. 1 Lake Park",
-      tags: ["loser"],
+      title: "NFT Holding Values",
+      dataIndex: "holdingNFTValue",
+      key: "holdingNFTValue",
     },
     {
-      key: "3",
-      name: "Joe Black",
-      age: 32,
-      address: "Sydney No. 1 Lake Park",
-      tags: ["cool", "teacher"],
+      title: "Token Holding Values",
+      dataIndex: "holdingTokenValue",
+      key: "holdingTokenValue",
     },
     {
-      key: "4",
-      name: "John Brown",
-      age: 32,
-      address: "New York No. 1 Lake Park",
-      tags: ["nice", "developer"],
+      title: "Twitter",
+      dataIndex: "twitterName",
+      key: "twitterName",
     },
     {
-      key: "5",
-      name: "Jim Green",
-      age: 42,
-      address: "London No. 1 Lake Park",
-      tags: ["loser"],
+      title: "Discord",
+      dataIndex: "discordName",
+      key: "discordName",
     },
     {
-      key: "6",
-      name: "Joe Black",
-      age: 32,
-      address: "Sydney No. 1 Lake Park",
-      tags: ["cool", "teacher"],
+      title: "Email",
+      dataIndex: "email",
+      key: "email",
     },
-    {
-      key: "7",
-      name: "John Brown",
-      age: 32,
-      address: "New York No. 1 Lake Park",
-      tags: ["nice", "developer"],
-    },
-    {
-      key: "8",
-      name: "Jim Green",
-      age: 42,
-      address: "London No. 1 Lake Park",
-      tags: ["loser"],
-    },
-    {
-      key: "9",
-      name: "Joe Black",
-      age: 32,
-      address: "Sydney No. 1 Lake Park",
-      tags: ["cool", "teacher"],
-    },
-    {
-      key: "10",
-      name: "John Brown",
-      age: 32,
-      address: "New York No. 1 Lake Park",
-      tags: ["nice", "developer"],
-    },
+    // {
+    //   title: "Action",
+    //   key: "action",
+    //   render: (_, record) => (
+    //     <Space size="middle">
+    //       <a>Invite {record.name}</a>
+    //       <a>Delete</a>
+    //     </Space>
+    //   ),
+    // },
   ];
   const actionItems = [
     {
@@ -178,6 +184,23 @@ export const WalletList = props => {
       key: "2",
       label: <UploadWallets />,
     },
+    {
+      key: "3",
+      label: (
+        <div
+          onClick={() =>
+            props.router?.push({
+              pathname: getGrowthProjectPath(
+                props.router?.params?.project,
+                "CreateCampaign",
+              ),
+            })
+          }
+        >
+          Mapping Now
+        </div>
+      ),
+    },
   ];
   return (
     <div className="flex flex-col w-full rounded p1">
@@ -190,7 +213,7 @@ export const WalletList = props => {
             <Button type="primary">User Actions</Button>
           </Dropdown>
         </div>
-        <Table columns={columns} dataSource={data} />
+        <Table columns={columns} dataSource={dataList} />
       </Card>
     </div>
   );

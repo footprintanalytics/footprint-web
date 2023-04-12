@@ -13,7 +13,7 @@ const Community = props => {
   return (
     <div className="flex flex-column items-center w-full p2">
       <StatisticIndex />
-      <ValueFilter />
+      <ValueFilter className="mt2" />
       <QuickFilter />
       <WalletList />
     </div>
