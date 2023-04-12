@@ -13,3 +13,11 @@
   width: 500px;
   margin: 0 auto;
 }
+
+.dark .SubmitContract {
+  background-color: var(--color-bg-dark);
+}
+
+.dark .SubmitContract__add p {
+  color: #ffffffb0;
+}

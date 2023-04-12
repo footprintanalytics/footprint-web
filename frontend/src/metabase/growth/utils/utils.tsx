@@ -5,13 +5,14 @@ import Link from "antd/lib/typography/Link";
 import { PublicApi, maybeUsePivotEndpoint } from "metabase/services";
 
 export function checkIsDemoAccountAndAlert(
+  notificationApi = notification,
   user: any,
   action: () => any,
   logout: () => any,
 ) {
   if (user && user.email === "fga@footprint.network") {
     const key = "checkIsDemoAccountAndAlert";
-    notification.info({
+    notificationApi.info({
       key,
       message: `Notification`,
       description: (
@@ -45,7 +46,7 @@ export function checkIsDemoAccountAndAlert(
             type="default"
             size="small"
             target="_blank"
-            href="https://calendly.com/partners-79/footprint-growth-analytics-demo"
+            href="https://forms.gle/Xs8WahhYh26xKoDj7"
           >
             Book a meeting
           </Button>
@@ -55,7 +56,7 @@ export function checkIsDemoAccountAndAlert(
             className="ml1"
             onClick={async () => {
               await logout?.();
-              notification.close(key);
+              notificationApi.destroy(key);
               localStorage.setItem("sign-out-demo-account", "true");
             }}
           >

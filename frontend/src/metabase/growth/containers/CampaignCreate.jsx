@@ -388,16 +388,15 @@ const CampaignCreate = props => {
           minHeight: 800,
         }}
       >
-        <div className=" flex flex-row justify-between w-full">
+        <div className=" flex flex-row justify-between w-full mb1">
           <Title width={"100%"} level={4} style={{ marginBottom: 0 }}>
             Create Campaign
           </Title>
         </div>
-        <Divider></Divider>
         {isLoading || !campaignSelected ? (
           <LoadingSpinner message="Loading..." />
         ) : (
-          <div className="flex flex-row mt3 bg-white rounded p3 full-width">
+          <div className="flex flex-row mt3 rounded p3 full-width" style={{ background: "#182034" }}>
             <Steps
               current={currentStep ? currentStep - 1 : 0}
               // className="mt-5 px-10"
@@ -412,7 +411,7 @@ const CampaignCreate = props => {
               className="flex flex-column pl2 border-left"
             >
               <Form
-                className=" bg-white rounded-md w-full"
+                className=" rounded-md w-full"
                 {...layout}
                 colon={false}
                 labelWrap
@@ -430,7 +429,7 @@ const CampaignCreate = props => {
                 <div className="flex flex-row items-center justify-between">
                   <Title level={5}>{"Content"}</Title>
                 </div>
-                <div className="bg-light rounded p1 mt1 pt3">
+                <div className="rounded p1 pt3">
                   <Form.Item
                     name="campaignType"
                     label="Campaign Type"
@@ -462,7 +461,7 @@ const CampaignCreate = props => {
                 {/* 需要改成 后端控制 */}
                 {campaignSelected?.details?.length > 0 && (
                   <>
-                    <div className="bg-light rounded p1 mt1 mb1">
+                    <div className="rounded p1 mt1 mb1">
                       <div className="mt1 text-bold">
                         {campaignSelected?.campaignType} Configuration
                       </div>
@@ -488,7 +487,7 @@ const CampaignCreate = props => {
                         Create cohort
                       </Button>
                     </div>
-                    <div className="bg-light rounded p1 mt1  pt3">
+                    <div className="rounded p1 mt1  pt3">
                       <Form.Item
                         rules={[{ required: true }]}
                         name={"TargetCohort"}
@@ -509,6 +508,7 @@ const CampaignCreate = props => {
                     </div>
                   </>
                 )}
+                <Divider />
                 <div className="flex flex-row items-center justify-between mt2">
                   <Title level={5}>{`Channel`}</Title>
                   <Button
@@ -524,7 +524,7 @@ const CampaignCreate = props => {
                     Config channel
                   </Button>
                 </div>
-                <div className="bg-light rounded p1 mt1 pt3">
+                <div className="rounded p1 mt1 pt3" >
                   <Form.Item
                     rules={[{ required: true }]}
                     name={"TargetChannel"}
@@ -552,11 +552,10 @@ const CampaignCreate = props => {
                   if (channel.details && channel.details.length > 0) {
                     return (
                       <>
-                        <div className="bg-light rounded p1 mt1 mb1">
-                          <div className="mt1 text-bold">
+                        <div className="rounded p1 mt1 mb1">
+                          <div className="mt1 text-bold mb1">
                             {channel.channelName}
                           </div>
-                          <Divider className=" my1"></Divider>
                           {getChannelConfigPanel(channel.details)}
                         </div>
                       </>

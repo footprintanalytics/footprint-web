@@ -15,6 +15,7 @@ import {
   InputSubtitle,
 } from "./Input.styled";
 import { InputSize } from "./types";
+import { isDark } from "../../../dashboard/components/utils/dark";
 
 export type InputAttributes = Omit<
   InputHTMLAttributes<HTMLInputElement>,
@@ -69,6 +70,7 @@ const Input = forwardRef(function Input(
         fieldSize={size}
         hasError={error}
         fullWidth={fullWidth}
+        isDark={isDark()}
         hasSubtitle={Boolean(subtitle)}
         hasLeftIcon={Boolean(leftIcon)}
         hasRightIcon={Boolean(rightIcon)}

@@ -120,12 +120,12 @@ const ProjectInfo = props => {
           minHeight: 800,
         }}
       >
-        <div className=" flex flex-row justify-between w-full">
+        <div className=" flex flex-row justify-between w-full mb2">
           <Title width={"100%"} level={4} style={{ marginBottom: 0 }}>
             General
           </Title>
         </div>
-        <Divider></Divider>
+
         <Card
           style={{
             width: "100%",

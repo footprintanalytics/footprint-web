@@ -2,6 +2,7 @@ import React, { CSSProperties, HTMLAttributes, ReactNode } from "react";
 import Tooltip from "metabase/components/Tooltip";
 import { TooltipProps } from "metabase/components/Tooltip/Tooltip";
 import { LinkRoot } from "./Link.styled";
+import cx from "classnames";
 
 export interface LinkProps extends HTMLAttributes<HTMLAnchorElement> {
   to: string;
@@ -25,6 +26,7 @@ const Link = ({
     <LinkRoot
       {...props}
       to={to}
+      className={cx(props.className, "Link")}
       disabled={disabled}
       tabIndex={disabled ? -1 : undefined}
       aria-disabled={disabled}

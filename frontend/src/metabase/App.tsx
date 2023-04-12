@@ -1,8 +1,6 @@
 import React, { ErrorInfo, ReactNode, useState } from "react";
 import { connect } from "react-redux";
 import { Location } from "history";
-import { ConfigProvider } from "antd";
-import cx from "classnames";
 import Meta from "metabase/components/Meta";
 import { getUser } from "metabase/selectors/user";
 import { getOssUrl } from "metabase/lib/image";
@@ -34,8 +32,11 @@ import { AppErrorDescriptor, State } from "metabase-types/store";
 import GlobalContactPanel from "metabase/components/GlobalContactPanel/";
 
 import { AppContainer, AppContent, AppContentContainer } from "./App.styled";
-import GaSidebar from "./growth/components/GaSidebar";
 import GaLayout from "./growth/components/GaLayout";
+import cx from "classnames";
+import { ConfigProvider, theme } from "antd";
+import { isDark } from "./dashboard/components/utils/dark";
+import getThemeConfig from "./theme-helper";
 
 const getErrorComponent = ({ status, data, context }: AppErrorDescriptor) => {
   if (status === 403 || data?.error_code === "unauthorized") {
@@ -143,19 +144,14 @@ function App({
         keywords={undefined}
       />
       <ConfigProvider
-        theme={{
-          token: {
-            colorPrimary: "#3434B2",
-            borderRadius: 0,
-          },
-        }}
+        theme={getThemeConfig()}
       >
         <ErrorBoundary onError={onError}>
           <ScrollToTop>
             <AppContainer className="spread">
               {/*<AppBanner />*/}
               {/*{isAppBarVisible && <AppBar isNavBarVisible={isNavBarVisible} />}*/}
-              <AppContentContainer isAdminApp={isAdminApp}>
+              <AppContentContainer className={isDark() ? "dark": ""} isAdminApp={isAdminApp}>
                 {isNavBarVisible && <Navbar location={location} />}
 
                 <AppContent
@@ -163,6 +159,7 @@ function App({
                   id="app-content"
                   ref={setViewportElement}
                   key={`${user?.id}`}
+                  style={{ backgroundColor: isDark()? "#121828" : "transparent" }}
                 >
                   <ContentViewportContext.Provider
                     value={viewportElement ?? null}

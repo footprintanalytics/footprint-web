@@ -1,10 +1,11 @@
 /* eslint-disable react/prop-types */
 /* eslint-disable react/forbid-component-props */
-import React, { Component, useState } from "react";
+import React, { Component } from "react";
 import { connect } from "react-redux";
 import { push } from "react-router-redux";
 import "./FgaNavbar.css";
 import PropTypes from "prop-types";
+import { notification } from "antd";
 import { getChannel } from "metabase/selectors/app";
 import { logout } from "metabase/auth/actions";
 import {
@@ -46,6 +47,8 @@ import VipIcon from "metabase/components/VipIcon";
 import CreateProjectModal from "metabase/growth/components/Modal/CreateProjectModal";
 import { checkIsDemoAccountAndAlert } from "metabase/growth/utils/utils";
 import { getContext, getPath, getUser } from "../selectors";
+
+import { isDark } from "../../../dashboard/components/utils/dark";
 
 const mapStateToProps = (state, props) => ({
   path: getPath(state, props),
@@ -142,7 +145,7 @@ class FgaNavbar extends Component {
     return (
       // NOTE: DO NOT REMOVE `Nav` CLASS FOR NOW, USED BY MODALS, FULLSCREEN DASHBOARD, ETC
       // TODO: hide nav using state in redux instead?
-      <nav className="Nav sm-py1 relative">
+      <nav className="fga-Nav sm-py1 relative">
         <ul className="wrapper flex align-center">
           <li>
             <Link
@@ -331,26 +334,28 @@ class FgaNavbar extends Component {
     };
 
     const RightMenuPad = () => {
+      const color2 = isDark ? "white" : color("footprint-color-title");
       return (
         <div className="Nav__right-pad-icon">
           <Link to="https://docs.footprint.network/docs" target="_blank">
-            <Icon name="docs" color={color("footprint-color-title")} />
+            <Icon name="docs" color={color2} />
           </Link>
           <Link to="/search">
-            <Icon name="search" color={color("footprint-color-title")} />
+            <Icon name="search" color={color2} />
           </Link>
           <Link onClick={onCreateAction}>
-            <Icon name="add" size={12} />
+            <Icon name="add" size={12} color={color2}/>
           </Link>
         </div>
       );
     };
 
     const RightMenuMobile = () => {
+      const color2 = isDark ? "white" : color("footprint-color-title");
       return (
         <div className="Nav__right-mobile-icon">
           <Link to="/search">
-            <Icon name="search" color={color("footprint-color-title")} />
+            <Icon name="search" color={color2} />
           </Link>
           <Link onClick={onCreateAction}>
             <Icon name="add" size={12} />
@@ -360,21 +365,24 @@ class FgaNavbar extends Component {
     };
 
     const CreateMenu = () => {
+      const [notificationApi, notificationContextHolder] = notification.useNotification();
       return (
         <div
           className="bg-brand Nav__menu-create footprint-primary-text"
-          onClick={onCreateAction}
+          onClick={() => onCreateAction(notificationApi)}
         >
           <Icon name="plus" size={12} />
           <span>Add My Project</span>
+          {notificationContextHolder}
         </div>
       );
     };
 
-    const onCreateAction = () => {
+    const onCreateAction = (notificationApi) => {
       trackStructEvent(`click Navbar Add My Project`);
       if (user) {
         checkIsDemoAccountAndAlert(
+          notificationApi,
           user,
           () => {
             setCreateFgaProjectModalShowAction({ show: true });
@@ -405,7 +413,7 @@ class FgaNavbar extends Component {
               }}
               trigger={
                 <div className="relative" style={{ padding: 10 }}>
-                  <UserAvatar user={user} size={["2.5em", "2.5em"]} />
+                  <UserAvatar user={user} size={["2.5em", "2.5em"]} bg="#6C70FF"/>
                   <div
                     className="absolute right bottom mb1"
                     style={{ marginRight: 2 }}
@@ -431,7 +439,7 @@ class FgaNavbar extends Component {
     };
 
     return (
-      <div className="Nav" style={{ display: rootDisplay }}>
+      <div className="fga-Nav" style={{ display: rootDisplay }}>
         <div className="Nav__left">
           <MobileMenuIcon />
           <Link
@@ -444,7 +452,7 @@ class FgaNavbar extends Component {
             }}
           >
             <img
-              src={getOssUrl("20230228153645.svg")}
+              src={getOssUrl(isDark ? "img_logo_ga_dark.svg" : "20230228153645.svg")}
               width={160}
               height={42}
               style={{ marginBottom: 2 }}
