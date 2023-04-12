@@ -74,6 +74,16 @@ export const getCampaign = async params => {
 export const getCampaignDetail = async params => {
   return GET(`/api/v1/fga/campaign/${params.id}`);
 };
+
+export const getCommunityInfo = async params => {
+  return GET(`/api/v1/fga/community/info`);
+};
+export const getCommunityQuickFilyer = async params => {
+  return GET(`/api/v1/fga/community/quick-filter`);
+};
+export const getCommunityWalletAddress = async params => {
+  return GET(`/api/v1/fga/community/wallet-address`);
+};
 // FP Api ---------------
 export const UserRegister = async params => {
   return POST("/api/v1/user/signup", params);

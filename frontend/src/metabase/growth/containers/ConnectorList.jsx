@@ -24,10 +24,10 @@ import {
   createFgaProjectModalShowAction,
 } from "metabase/redux/control";
 import LoadingSpinner from "metabase/components/LoadingSpinner";
+import { isDark } from "metabase/dashboard/components/utils/dark";
 import ConfigConnector from "../components/config_panel/ConfigConnector";
 import "../css/utils.css";
 import { getGrowthProjectPath } from "../utils/utils";
-import { isDark } from "metabase/dashboard/components/utils/dark";
 
 const { Text } = Typography;
 const ConnectorList = props => {
