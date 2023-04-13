@@ -18,7 +18,7 @@ const MuiSelect = props => {
   const labelClass = isOccupied ? "label as-label" : "label as-placeholder";
 
   const requiredMark = required ? <span className="text-danger">*</span> : null;
-  
+
   return (
     <div
       className={"mui-select"}
