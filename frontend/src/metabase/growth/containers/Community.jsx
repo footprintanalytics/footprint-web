@@ -3,12 +3,13 @@
 import React from "react";
 import { connect } from "react-redux";
 import { Card, Tag, Badge } from "antd";
-import { useQueries } from "react-query";
+import { useQueries, useQuery } from "react-query";
 import { Link } from "react-router";
 import { getUser, getFgaProject } from "metabase/selectors/user";
 import { QUERY_OPTIONS } from "metabase/containers/dashboards/shared/config";
 import LoadingSpinner from "metabase/components/LoadingSpinner";
 import {
+  generateAuthKey,
   getCommunityInfo,
   getCommunityQuickFilter,
   getCommunityWalletAddress,
@@ -37,39 +38,38 @@ const Community = props => {
     filters: [],
     quickFilter: [],
   });
-  const [infoResult, filterResult, listResult] = useQueries(
-    [
-      {
-        queryKey: ["getCommunityInfo", project?.id],
-        queryFn: async () => {
-          return (
-            project?.id &&
-            getCommunityInfo({ projectId: parseInt(project?.id) })
-          );
-        },
-      },
-      {
-        queryKey: ["getCommunityQuickFilter", project?.id],
-        queryFn: async () => {
-          return (
-            project?.id &&
-            getCommunityQuickFilter({ projectId: parseInt(project?.id) })
-          );
-        },
-      },
-      {
-        queryKey: ["getCommunityWalletAddress", project?.id, walletListParams],
-        queryFn: async () => {
-          return (
-            project?.id &&
-            getCommunityWalletAddress({
-              ...walletListParams,
-              projectId: parseInt(project?.id),
-            })
-          );
-        },
-      },
-    ],
+
+  const infoResult = useQuery(
+    ["getCommunityInfo", project?.id],
+    async () => {
+      return (
+        project?.id &&
+        getCommunityInfo({ projectId: parseInt(project?.id) })
+      );
+    },
+    QUERY_OPTIONS,
+  );
+  const filterResult = useQuery(
+    ["getCommunityQuickFilter", project?.id],
+    async () => {
+      return (
+        project?.id &&
+        getCommunityQuickFilter({ projectId: parseInt(project?.id) })
+      );
+    },
+    QUERY_OPTIONS,
+  );
+  const listResult = useQuery(
+    ["getCommunityWalletAddress", project?.id, walletListParams],
+    async () => {
+      return (
+        project?.id &&
+        getCommunityWalletAddress({
+          ...walletListParams,
+          projectId: parseInt(project?.id),
+        })
+      );
+    },
     QUERY_OPTIONS,
   );
 
