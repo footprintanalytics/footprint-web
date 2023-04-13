@@ -34,7 +34,6 @@ const Community = props => {
   const [walletListParams, setWalletListParams] = React.useState({
     pageSize: 10,
     current: 1,
-    projectId: parseInt(project?.id),
     filters: [],
     quickFilter: [],
   });
@@ -95,20 +94,26 @@ const Community = props => {
     }
     return dataList;
   }
+
   const valueFilterOptionsList = [
     {
-      label: "Total Holding Value >=",
-      value: "totalHoldingValue",
-      type: "gte",
+      label: "Net Worth >=",
+      indicator: "netWorth",
+      comparisonSymbol: "gte",
     },
-    { label: "NFT Holding Value >=", value: "nftHoldingValue", type: "gte" },
+    {
+      label: "NFT Holding Value >=",
+      indicator: "nftHoldingValue",
+      comparisonSymbol: "gte",
+    },
     {
       label: "Token Holding Value >=",
-      value: "tokenHoldingValue",
-      type: "gte",
+      indicator: "tokenHoldingValue",
+      comparisonSymbol: "gte",
     },
-    { label: "Profit >=", value: "profit", type: "gte" },
+    // { label: "Profit >=", indicator: "profit", comparisonSymbol: "gte" },
   ];
+
   const actions = [
     {
       component: (
@@ -204,7 +209,6 @@ const Community = props => {
       key: "twitterName",
       render: text => (
         <>
-          {" "}
           {text ? (
             <a
               rel="noreferrer"
@@ -242,6 +246,7 @@ const Community = props => {
     //   ),
     // },
   ];
+
   return (
     <>
       {project?.id ? (
@@ -253,10 +258,38 @@ const Community = props => {
           ) : (
             <>
               {!infoResult.isLoading && (
-                <StatisticIndex data={formatInfoResult(infoResult?.data)} />
+                <StatisticIndex
+                  data={formatInfoResult(infoResult?.data)}
+                  router={router}
+                />
               )}
-              <ValueFilter className="mt2" data={valueFilterOptionsList} />
-              <QuickFilter data={filterResult?.data?.data} />
+              <ValueFilter
+                className="mt2"
+                data={valueFilterOptionsList}
+                onFliterChange={valueFilter => {
+                  if (!valueFilter) return;
+                  let temp = [...walletListParams.filters];
+                  temp = temp.filter(
+                    item => item.indicator !== valueFilter.indicator,
+                  );
+                  if (valueFilter.comparisonValue) {
+                    temp.push(valueFilter);
+                  }
+                  setWalletListParams({
+                    ...walletListParams,
+                    filters: temp,
+                  });
+                }}
+              />
+              <QuickFilter
+                data={filterResult?.data?.data}
+                onFliterChange={tag => {
+                  setWalletListParams({
+                    ...walletListParams,
+                    quickFilter: tag ? [tag?.value] : [],
+                  });
+                }}
+              />
             </>
           )}
           {listResult.isLoading ? (
@@ -269,7 +302,7 @@ const Community = props => {
               // isLoading={listResult?.isLoading}
               data={listResult?.data}
               actions={actions}
-              isRefetching={listResult?.isFetching}
+              // isRefetching={listResult?.isFetching}
               columns={tableColumns}
             />
           )}

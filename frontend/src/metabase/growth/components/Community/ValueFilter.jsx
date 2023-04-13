@@ -1,14 +1,17 @@
 /* eslint-disable react/prop-types */
 import React, { useState } from "react";
 import { Space, Col, Row, Tag, Input, Typography } from "antd";
-import FloatInput from "../FloatInput";
 import cx from "classnames";
+import FloatInput from "../FloatInput";
 
 export const ValueFilter = props => {
-  const { data, isLoading, refetchData, className } = props;
+  const { data, isLoading, refetchData, className, onFliterChange } = props;
   return (
     <div
-      className={cx("flex flex-row w-full p1 items-center  text-nowrap", className)}
+      className={cx(
+        "flex flex-row w-full p1 items-center  text-nowrap",
+        className,
+      )}
     >
       <Typography.Text
         ellipsis={false}
@@ -24,9 +27,16 @@ export const ValueFilter = props => {
             <FloatInput
               height={40}
               style={{ width: "100%", height: 40 }}
+              onChange={val => {
+                onFliterChange?.({
+                  comparisonValue: val,
+                  indicator: item.indicator,
+                  comparisonSymbol: item.comparisonSymbol,
+                });
+              }}
               label={item.label}
               // placeholder="Email here please"
-              name={item.value}
+              name={item.indicator}
             />
           </Col>
         ))}

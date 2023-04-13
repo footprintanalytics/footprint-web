@@ -1,6 +1,7 @@
 /* eslint-disable react/prop-types */
 import React, { useState } from "react";
 import { Input } from "antd";
+import { debounce } from "lodash";
 
 import "./index.css";
 
@@ -16,7 +17,12 @@ const FloatInput = props => {
   const labelClass = isOccupied ? "label as-label" : "label as-placeholder";
 
   const requiredMark = required ? <span className="text-danger">*</span> : null;
-
+  const handleInputChange = debounce(val => {
+    if (currentValue !== val) {
+      setCurrentValue(val);
+    }
+    props?.onChange(val);
+  }, 1500);
   return (
     <div
       className="float-label"
@@ -26,12 +32,7 @@ const FloatInput = props => {
       <Input
         style={{ height: 40 }}
         className="rounded"
-        onChange={e => {
-          if (currentValue !== e.target.value) {
-            setCurrentValue(e.target.value);
-          }
-          props?.onChange(e);
-        }}
+        onChange={e => handleInputChange(e.target.value)}
         type={type}
         defaultValue={value ?? ""}
       />

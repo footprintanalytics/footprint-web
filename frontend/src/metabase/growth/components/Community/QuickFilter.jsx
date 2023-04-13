@@ -4,7 +4,7 @@ import { Space, Tag, Row, Typography } from "antd";
 const { CheckableTag } = Tag;
 
 export const QuickFilter = props => {
-  const { data, isLoading, refetchData } = props;
+  const { data, isLoading, refetchData, onFliterChange } = props;
   const optionsList = [];
   data?.map((option, index) => {
     optionsList.push({
@@ -15,9 +15,8 @@ export const QuickFilter = props => {
 
   const [selectedTags, setSelectedTags] = useState(null);
   const handleChange = (tag, checked) => {
-    const nextSelectedTags = checked ? tag.value : null;
-    console.log("You are interested in: ", nextSelectedTags);
-    setSelectedTags(nextSelectedTags);
+    setSelectedTags(checked ? tag.value : null);
+    onFliterChange?.(checked ? tag : null);
   };
   return (
     <div className="flex flex-row w-full p1 items-center">
