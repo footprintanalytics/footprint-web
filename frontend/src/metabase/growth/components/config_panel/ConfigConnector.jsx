@@ -11,6 +11,7 @@ import {
   Tooltip,
   Typography,
   Alert,
+  Checkbox,
 } from "antd";
 import { Link } from "react-router";
 import { QuestionCircleOutlined, InfoCircleOutlined } from "@ant-design/icons";
@@ -62,12 +63,13 @@ const ConfigConnector = props => {
       toAuthorization(values.propertyId);
     } else {
       // 提交表单到 api，成功之后
-      addConnectors({
+      const data = {
         projectId: parseInt(projectId),
         sourceDefinitionId: connector.sourceDefinitionId,
         connectionConfiguration: values,
-        streams: connector.streamConfig?.list?.map(m => m.value) || [],
-      })
+        streams: values.streams || [],
+      };
+      addConnectors(data)
         .then(result => {
           console.log("add connector", result);
           if (result?.result === "success") {
@@ -148,7 +150,12 @@ const ConfigConnector = props => {
     // window.open(url, "_blank");
     window.open(url, "_self");
   };
-  const initialValues = {};
+  const initialValues = {
+    streams:
+      connector?.streamConfig?.list
+        ?.filter(f => f.selected)
+        ?.map(m => m.value) || [],
+  };
   connector?.connectionSpecification?.map(item => {
     initialValues[item.key] = item.value;
   });
@@ -225,6 +232,20 @@ const ConfigConnector = props => {
             </Form.Item>
           );
         })}
+        {connector.streamConfig?.list?.length ? (
+          <Form.Item
+            name="streams"
+            label="Metrics"
+            rules={[{ required: true }]}
+          >
+            <Checkbox.Group
+              options={connector.streamConfig.list.map(m => ({
+                ...m,
+                disabled: m.required,
+              }))}
+            />
+          </Form.Item>
+        ) : null}
         {connector.docLink ? (
           <Form.Item>
             <Space>
