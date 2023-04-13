@@ -73,13 +73,7 @@ const Community = props => {
     ],
     QUERY_OPTIONS,
   );
-  if (
-    !(infoResult.isLoading && !filterResult.isLoading && !listResult.isLoading)
-  ) {
-    console.log("infoResult", infoResult);
-    console.log("filterResult", filterResult);
-    console.log("listResult", listResult);
-  }
+
   function formatInfoResult(data) {
     const dataList = [];
     if (data) {
@@ -159,7 +153,10 @@ const Community = props => {
           </Link>
           {record.ens && (
             <div>
-              <Badge color={"green"} text={<a>{record.ens}</a>} />
+              {/* <Badge color={"green"} text={} /> */}
+              <a href={record.ens} target="_blank" rel="noreferrer">
+                {record.ens}
+              </a>
             </div>
           )}
         </div>
@@ -235,7 +232,7 @@ const Community = props => {
       {project?.id ? (
         <div className="flex flex-column items-center w-full p2">
           {infoResult.isLoading || filterResult.isLoading ? (
-            <Card className="w-full rounded" style={{ height: 250 }}>
+            <Card className="w-full rounded m1" style={{ height: 250 }}>
               <LoadingSpinner message="Loading..." />
             </Card>
           ) : (
@@ -248,7 +245,7 @@ const Community = props => {
             </>
           )}
           {listResult.isLoading ? (
-            <Card className="w-full rounded" style={{ height: 450 }}>
+            <Card className="w-full rounded m1" style={{ height: 450 }}>
               <LoadingSpinner message="Loading..." />
             </Card>
           ) : (

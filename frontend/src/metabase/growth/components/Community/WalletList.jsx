@@ -2,10 +2,8 @@
 /* eslint-disable react/prop-types */
 /* eslint-disable-next-line react/display-name */
 import React from "react";
-import { Tag, Badge, Table, Typography, Button, Card, Dropdown } from "antd";
-import { Link } from "react-router";
-import { getGrowthProjectPath } from "metabase/growth/utils/utils";
-import UploadWallets from "../buttons/UploadWallets";
+import { Table, Typography, Button, Card, Dropdown } from "antd";
+
 
 export const WalletList = props => {
   const {
