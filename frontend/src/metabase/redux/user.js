@@ -178,12 +178,13 @@ export const LOAD_CURRENT_FGA_PROJECT =
   "metabase/user/LOAD_CURRENT_FGA_PROJECT";
 export const loadCurrentFgaProject = createThunkAction(
   LOAD_CURRENT_FGA_PROJECT,
-  (project_id, from = "") =>
+  (project_id, force = false) =>
     async (dispatch, getState) => {
       if (!project_id) {
         return;
       }
       if (
+        force ||
         !getState().currentFgaProject ||
         getState().currentFgaProject?.id !== project_id
       ) {
