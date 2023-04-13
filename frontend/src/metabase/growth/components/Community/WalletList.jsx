@@ -12,6 +12,8 @@ export const WalletList = props => {
     router,
     isLoading,
     isRefetching,
+    pageSize,
+    currentPage,
     refetchData,
     onPageChange,
     actions,
@@ -48,9 +50,10 @@ export const WalletList = props => {
           columns={columns}
           key="wallet"
           pagination={{
-            pageSize: 10,
+            pageSize: pageSize,
             total: data?.total,
-            showSizeChanger: false,
+            showSizeChanger: true,
+            current: currentPage,
             onChange: (page, pageSize) => {
               onPageChange?.(page, pageSize);
             },
