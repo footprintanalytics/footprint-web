@@ -191,7 +191,7 @@ export const WalletList = props => {
       link: "",
     },
   ];
-  const actionItems = [
+  const actionItems = props.defaultActionItems || [
     {
       key: "1",
       label: (
