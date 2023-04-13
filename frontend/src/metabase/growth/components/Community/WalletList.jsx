@@ -1,11 +1,18 @@
+/* eslint-disable react/display-name */
 /* eslint-disable react/prop-types */
+/* eslint-disable-next-line react/display-name */
 import React from "react";
-import { Tag, Space, Table, Typography, Button, Card, Dropdown } from "antd";
+import { Tag, Badge, Table, Typography, Button, Card, Dropdown } from "antd";
+import { Link } from "react-router";
 import { getGrowthProjectPath } from "metabase/growth/utils/utils";
 import UploadWallets from "../buttons/UploadWallets";
 
 export const WalletList = props => {
   // mock datas
+  const data = {
+    total: "",
+    dataList: [],
+  };
   const dataList = [
     {
       address: "0x1cf8fd41718deff957562acfac78b85b3914a677",
@@ -88,7 +95,29 @@ export const WalletList = props => {
       title: "Wallet",
       dataIndex: "address",
       key: "Wallet",
-      render: text => <a>{text}</a>,
+      render: (text, record) => (
+        <div className="flex flex-col">
+          <Link
+            onClick={() => {
+              props.router?.push({
+                pathname:
+                  "/growth/public/dashboard/f7cd2f21-1e14-438d-8820-011418607450",
+                query: {
+                  wallet_address: text,
+                },
+                hash: "#from=Community",
+              });
+            }}
+          >
+            {text}
+          </Link>
+          {record.eNS && (
+            <div>
+              <Badge color={"green"} text={<a>ens.com</a>} />
+            </div>
+          )}
+        </div>
+      ),
     },
     {
       title: "Tags",
@@ -96,27 +125,8 @@ export const WalletList = props => {
       dataIndex: "tags",
       render: (_, { tags }) => (
         <>
-          {tags.map((tag, index) => {
-            const colors = [
-              "blue",
-              "green",
-              "volcano",
-              "yellow",
-              "orange",
-              "cyan",
-              "geekblue",
-              "purple",
-              "magenta",
-              "lime",
-              "gold",
-              "red",
-            ];
-            const color = colors[index % colors.length];
-            return (
-              <Tag color={color} key={tag}>
-                {tag}
-              </Tag>
-            );
+          {tags.map(tag => {
+            return <Tag key={tag}>{tag}</Tag>;
           })}
         </>
       ),
@@ -125,21 +135,33 @@ export const WalletList = props => {
       title: "Net Worth",
       dataIndex: "netWorth",
       key: "netWorth",
+      render: text => text.toLocaleString("en-US"),
     },
     {
       title: "NFT Holding Values",
       dataIndex: "holdingNFTValue",
       key: "holdingNFTValue",
+      render: text => text.toLocaleString("en-US"),
     },
     {
       title: "Token Holding Values",
       dataIndex: "holdingTokenValue",
       key: "holdingTokenValue",
+      render: text => text.toLocaleString("en-US"),
     },
     {
       title: "Twitter",
       dataIndex: "twitterName",
       key: "twitterName",
+      render: text => (
+        <a
+          rel="noreferrer"
+          href={`https://twitter.com/${text}`}
+          target="_blank"
+        >
+          {text}
+        </a>
+      ),
     },
     {
       title: "Discord",
@@ -161,6 +183,13 @@ export const WalletList = props => {
     //     </Space>
     //   ),
     // },
+  ];
+  const action = [
+    {
+      component: <></>,
+      title: "", //required
+      link: "",
+    },
   ];
   const actionItems = [
     {
