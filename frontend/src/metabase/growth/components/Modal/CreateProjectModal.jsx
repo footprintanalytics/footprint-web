@@ -89,6 +89,8 @@ const CreateProjectModal = props => {
       title="Create your own project"
       open={open}
       footer={null}
+      closable={!force}
+      maskClosable={!force}
       // onOk={handleOk}
       onCancel={onCancel}
     >
