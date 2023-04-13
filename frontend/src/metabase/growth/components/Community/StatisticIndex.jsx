@@ -43,12 +43,12 @@ export const StatisticIndex = props => {
                       router?.push({
                         pathname: getGrowthProjectPath(
                           router?.params?.project,
-                          "CreateCampaign",
+                          "Connector",
                         ),
                       });
                     }}
                   >
-                    Mapping Now
+                    Setting Now
                   </Button>
                 )}
               </div>

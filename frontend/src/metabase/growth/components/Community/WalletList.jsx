@@ -13,6 +13,7 @@ export const WalletList = props => {
     isLoading,
     isRefetching,
     refetchData,
+    onPageChange,
     actions,
   } = props;
   const actionItems = [];
@@ -45,6 +46,15 @@ export const WalletList = props => {
         </div>
         <Table
           columns={columns}
+          key="wallet"
+          pagination={{
+            pageSize: 10,
+            total: data?.total,
+            showSizeChanger: false,
+            onChange: (page, pageSize) => {
+              onPageChange?.(page, pageSize);
+            },
+          }}
           dataSource={data?.data}
           loading={isRefetching}
         />

@@ -302,6 +302,12 @@ const Community = props => {
               // isLoading={listResult?.isLoading}
               data={listResult?.data}
               actions={actions}
+              onPageChange={(page, pageSize) => {
+                setWalletListParams({
+                  ...walletListParams,
+                  current: parseInt(page),
+                });
+              }}
               // isRefetching={listResult?.isFetching}
               columns={tableColumns}
             />
