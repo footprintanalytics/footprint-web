@@ -2,8 +2,9 @@
 import React, { useState } from "react";
 import { Row, Col, Select } from "antd";
 import MuiSelect from "metabase/growth/components/MuiSelect";
+import cx from "classnames";
 
-export const ItemFilter = ({ options }) => {
+export const ItemFilter = ({ className }) => {
   // mock datas
   const optionsList = [
     {
@@ -29,7 +30,9 @@ export const ItemFilter = ({ options }) => {
     console.log(`selected ${value}`);
   };
   return (
-    <div className="flex flex-row w-full p1 items-center">
+    <div
+      className={cx("flex flex-row w-full p1 items-center  text-nowrap", className)}
+    >
       <span style={{ marginRight: 8, color: "white", width: "80px", }}>Item Filter:</span>
       <Row gutter={16} className="w-full">
         {optionsList.map(item => (

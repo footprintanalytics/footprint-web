@@ -2,6 +2,7 @@
 import React, { useState } from "react";
 import { Space, Col, Row, Tag, Input, Typography } from "antd";
 import FloatInput from "../FloatInput";
+import cx from "classnames";
 
 export const ValueFilter = ({ options, className }) => {
   // mock datas
@@ -69,7 +70,7 @@ export const ValueFilter = ({ options, className }) => {
 
   return (
     <div
-      className={`flex flex-row w-full p1 items-center  text-nowrap ${className}`}
+      className={cx("flex flex-row w-full p1 items-center  text-nowrap", className)}
     >
       <Typography.Text
         ellipsis={false}

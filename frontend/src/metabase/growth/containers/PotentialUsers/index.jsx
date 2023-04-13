@@ -88,8 +88,8 @@ const PotentialUsers = props => {
 
   return (
     <div className="flex flex-column">
-      <ItemFilter />
-      <ValueFilter className="mt2" />
+      <ItemFilter className="mt2" />
+      <ValueFilter />
       <QuickFilter />
       <WalletList />
       {/*<div className="potential-users__filter">*/}
