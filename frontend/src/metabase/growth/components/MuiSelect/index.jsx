@@ -35,7 +35,7 @@ const MuiSelect = props => {
             setCurrentValue(e);
           }
           if (onValueChange) {
-            onValueChange(e);
+            onValueChange(e || null);
           }
         }}
         filterOption={(input, option) =>

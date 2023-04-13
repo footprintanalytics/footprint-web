@@ -16,6 +16,7 @@ import { ValueFilter } from "metabase/growth/components/Community/ValueFilter";
 import { QuickFilter } from "metabase/growth/components/Community/QuickFilter";
 import { ItemFilter } from "./ItemFilter";
 import { WalletList } from "metabase/growth/components/Community/WalletList";
+import { getGrowthProjectPath } from "metabase/growth/utils/utils";
 
 const PotentialUsers = props => {
   const {project} = props;
@@ -86,12 +87,18 @@ const PotentialUsers = props => {
     }
   }
 
+  const actionItems = [
+    {
+      key: "create_cohort",
+      label: (<CreateCohort2 project={project}> </CreateCohort2>),
+    },
+  ];
+
   return (
     <div className="flex flex-column">
-      <ItemFilter />
-      <ValueFilter className="mt2" />
+      <ItemFilter className="mt2" />
       <QuickFilter />
-      <WalletList />
+      <WalletList defaultActionItems={actionItems}/>
       {/*<div className="potential-users__filter">*/}
       {/*  <h2>Filter</h2>*/}
       {/*  <div className="flex flex-column">*/}
