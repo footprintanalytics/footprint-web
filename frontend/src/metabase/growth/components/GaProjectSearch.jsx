@@ -23,7 +23,14 @@ import {
 } from "../utils/utils";
 
 const GaProjectSearch = props => {
-  const { router, location, user, menu, projectPath ,setCreateFgaProjectModalShowAction} = props;
+  const {
+    router,
+    location,
+    user,
+    menu,
+    projectPath,
+    setCreateFgaProjectModalShowAction,
+  } = props;
   const [userProject, setUserProject] = useState([]);
   const [currentProject, setCurrentProject] = useState(projectPath);
   const { isLoading, data } = useQuery(
@@ -39,7 +46,7 @@ const GaProjectSearch = props => {
   );
 
   const loadProjectDetail = project_id => {
-    props.dispatch(loadCurrentFgaProject(parseInt(project_id), "search"));
+    props.dispatch(loadCurrentFgaProject(parseInt(project_id)));
   };
 
   useEffect(() => {

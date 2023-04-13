@@ -37,7 +37,7 @@ const Community = props => {
       <StatisticIndex />
       <ValueFilter className="mt2" />
       <QuickFilter />
-      <WalletList />
+      <WalletList router={router} />
     </div>
   );
 };
