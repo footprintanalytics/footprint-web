@@ -66,6 +66,7 @@ const ConfigConnector = props => {
         projectId: parseInt(projectId),
         sourceDefinitionId: connector.sourceDefinitionId,
         connectionConfiguration: values,
+        streams: connector.streamConfig?.list?.map(m => m.value) || [],
       })
         .then(result => {
           console.log("add connector", result);

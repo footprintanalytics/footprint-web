@@ -171,9 +171,9 @@ const Project = props => {
     if (current_tab === "Connector") {
       return (
         <ConnectorList
-          refetchProject={props.dispatch(
-            loadCurrentFgaProject(projectObject?.id, "project"),
-          )}
+          refetchProject={() =>
+            props.dispatch(loadCurrentFgaProject(projectObject?.id, "project"))
+          }
           location={location}
           router={router}
           project={getProjectObject(project)}
