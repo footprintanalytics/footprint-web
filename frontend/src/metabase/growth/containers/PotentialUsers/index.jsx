@@ -12,6 +12,10 @@ import CreateCohort2 from "metabase/growth/containers/PotentialUsers/CreateFlite
 import { push } from "react-router-redux";
 import { getUser } from "metabase/selectors/user";
 import { connect } from "react-redux";
+import { ValueFilter } from "metabase/growth/components/Community/ValueFilter";
+import { QuickFilter } from "metabase/growth/components/Community/QuickFilter";
+import { ItemFilter } from "./ItemFilter";
+import { WalletList } from "metabase/growth/components/Community/WalletList";
 
 const PotentialUsers = props => {
   const {project} = props;
@@ -84,71 +88,75 @@ const PotentialUsers = props => {
 
   return (
     <div className="flex flex-column">
-      <div className="potential-users__filter">
-        <h2>Filter</h2>
-        <div className="flex flex-column">
-          <CategoryForFga
-            data={data}
-            router={null}
-            title={"Include tag"}
-            isLoading={false}
-            actives={tags}
-            onChange={array => setTags(array)}
-          />
-          <CategoryForFga
-            data={excludeData}
-            router={null}
-            title={"Exclude tag"}
-            isLoading={false}
-            actives={excludeTags}
-            onChange={array => setExcludeTags(array)}
-          />
-          {filterArray.map(item => <Filter key={item} onChange={object => {
-            handleFilterObject(object)
-          }}/>)}
+      <ItemFilter />
+      <ValueFilter className="mt2" />
+      <QuickFilter />
+      <WalletList />
+      {/*<div className="potential-users__filter">*/}
+      {/*  <h2>Filter</h2>*/}
+      {/*  <div className="flex flex-column">*/}
+      {/*    <CategoryForFga*/}
+      {/*      data={data}*/}
+      {/*      router={null}*/}
+      {/*      title={"Include tag"}*/}
+      {/*      isLoading={false}*/}
+      {/*      actives={tags}*/}
+      {/*      onChange={array => setTags(array)}*/}
+      {/*    />*/}
+      {/*    <CategoryForFga*/}
+      {/*      data={excludeData}*/}
+      {/*      router={null}*/}
+      {/*      title={"Exclude tag"}*/}
+      {/*      isLoading={false}*/}
+      {/*      actives={excludeTags}*/}
+      {/*      onChange={array => setExcludeTags(array)}*/}
+      {/*    />*/}
+      {/*    {filterArray.map(item => <Filter key={item} onChange={object => {*/}
+      {/*      handleFilterObject(object)*/}
+      {/*    }}/>)}*/}
 
-          <div className="flex">
-            <Button onClick={() => {
-              const array = filterArray;
-              array.push(filterArray.length + 1);
-              setFilterArray([...array]);
-            }}>Add filter</Button>
-            <Button onClick={() => {
-              setFilterResult({
-                tags: tags,
-                excludeTags: excludeTags,
-                filter: filterValueArray,
-                totalSql: createTotalSql({ tags, excludeTags }),
-                pieDataSql: createPieSql({ tags, excludeTags }),
-              });
-            }}>Run</Button>
-          </div>
-        </div>
-      </div>
-      <div className="potential-users__profile">
-        <h2>Profile</h2>
-        {filterResult && <div className="flex justify-end">
-          <CreateCohort2 project={project}/>
-        </div> }
-        <div className="flex">
-          {filterResult &&
-          (
-            <div className="Potential-Users__condition">
-              <ul style={{ whiteSpace: "pre-line" }}>
-                <div>{`Include tags: ${filterResult.tags?.join(",")}`}</div>
-                <div>{`Exclude tags: ${filterResult.excludeTags?.join(",")}`}</div>
-                {filterResult.filter?.map(item => <li key={item.key}>{`${item.key}: ${item.operator} ${item.value}`}</li>)}
-              </ul>
-            </div>
-          )}
-          {filterResult && (
-            <div className="Potential-Users__total">
-              <Total sql={filterResult?.totalSql}/>
-            </div>
-          )}
-        </div>
-        {filterResult?.pieDataSql && (<Profile sql={filterResult.pieDataSql}/>)}
-      </div>
+      {/*    <div className="flex">*/}
+      {/*      <Button onClick={() => {*/}
+      {/*        const array = filterArray;*/}
+      {/*        array.push(filterArray.length + 1);*/}
+      {/*        setFilterArray([...array]);*/}
+      {/*      }}>Add filter</Button>*/}
+      {/*      <Button onClick={() => {*/}
+      {/*        setFilterResult({*/}
+      {/*          tags: tags,*/}
+      {/*          excludeTags: excludeTags,*/}
+      {/*          filter: filterValueArray,*/}
+      {/*          totalSql: createTotalSql({ tags, excludeTags }),*/}
+      {/*          pieDataSql: createPieSql({ tags, excludeTags }),*/}
+      {/*        });*/}
+      {/*      }}>Run</Button>*/}
+      {/*    </div>*/}
+      {/*  </div>*/}
+      {/*</div>*/}
+      {/*<div className="potential-users__profile">*/}
+      {/*  <h2>Profile</h2>*/}
+      {/*  {filterResult && <div className="flex justify-end">*/}
+      {/*    <CreateCohort2 project={project}/>*/}
+      {/*  </div> }*/}
+      {/*  <div className="flex">*/}
+      {/*    {filterResult &&*/}
+      {/*    (*/}
+      {/*      <div className="Potential-Users__condition">*/}
+      {/*        <ul style={{ whiteSpace: "pre-line" }}>*/}
+      {/*          <div>{`Include tags: ${filterResult.tags?.join(",")}`}</div>*/}
+      {/*          <div>{`Exclude tags: ${filterResult.excludeTags?.join(",")}`}</div>*/}
+      {/*          {filterResult.filter?.map(item => <li key={item.key}>{`${item.key}: ${item.operator} ${item.value}`}</li>)}*/}
+      {/*        </ul>*/}
+      {/*      </div>*/}
+      {/*    )}*/}
+      {/*    {filterResult && (*/}
+      {/*      <div className="Potential-Users__total">*/}
+      {/*        <Total sql={filterResult?.totalSql}/>*/}
+      {/*      </div>*/}
+      {/*    )}*/}
+      {/*  </div>*/}
+      {/*  {filterResult?.pieDataSql && (<Profile sql={filterResult.pieDataSql}/>)}*/}
+      {/*</div>*/}
 
     </div>
 
