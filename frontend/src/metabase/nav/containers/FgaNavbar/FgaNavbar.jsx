@@ -452,7 +452,9 @@ class FgaNavbar extends Component {
             }}
           >
             <img
-              src={getOssUrl(isDark ? "img_logo_ga_dark.svg" : "20230228153645.svg")}
+              src={getOssUrl(
+                isDark ? "img_logo_ga_dark.svg" : "20230228153645.svg",
+              )}
               width={160}
               height={42}
               style={{ marginBottom: 2 }}
@@ -463,7 +465,12 @@ class FgaNavbar extends Component {
         </div>
         <React.Fragment>
           <div className="Nav__search-bar">
-            <GaProjectSearch location={location}></GaProjectSearch>
+            <GaProjectSearch
+              location={location}
+              setCreateFgaProjectModalShowAction={
+                setCreateFgaProjectModalShowAction
+              }
+            ></GaProjectSearch>
           </div>
           <div className="Nav__mobile-logo">
             <Link

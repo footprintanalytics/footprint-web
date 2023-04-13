@@ -95,9 +95,9 @@ const CreateProjectModal = props => {
       <Divider />
       {force && (
         <div style={{ marginBottom: 20 }}>
-          <Typography.Text mark>
+          <Typography.Text type="warning">
             {
-              "Before embarking on your magical FGA journey, please choose a project that you fancy"
+              "Before embarking on your magical FGA journey, please choose a project that you fancy."
             }
           </Typography.Text>
         </div>
