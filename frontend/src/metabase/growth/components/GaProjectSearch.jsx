@@ -1,5 +1,5 @@
 /* eslint-disable react/prop-types */
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useMemo } from "react";
 import { connect } from "react-redux";
 import { Select } from "antd";
 import { withRouter } from "react-router";
@@ -75,6 +75,7 @@ const GaProjectSearch = props => {
           });
         }
       } else {
+        setUserProject([]);
         if (user) {
           setCreateFgaProjectModalShowAction?.({
             show: true,
@@ -87,19 +88,16 @@ const GaProjectSearch = props => {
   }, [data, isLoading]);
 
   // monitor data
-  const recommendOptions = [];
-  top_protocols.map((i, index) => {
-    if (i.isDemo) {
-      recommendOptions.push({
-        ...i,
-        value: i.protocol_slug,
-        key: i.protocol_slug + "-recommend",
-        label: i.protocol_name,
-      });
-    }
-  });
-  const finalOptions = [];
-  finalOptions.push({ label: "Recommend Projects", options: recommendOptions });
+  const recommendOptions = useMemo(() => {
+    return [
+      {
+        ...top_protocols[0],
+        value: top_protocols[0].protocolSlug,
+        key: top_protocols[0].protocolSlug + "-recommend",
+        label: top_protocols[0].protocolName,
+      },
+    ];
+  }, []);
 
   useEffect(() => {
     if (projectPath) {
@@ -111,11 +109,12 @@ const GaProjectSearch = props => {
         (userProject?.length > 0
           ? userProject[0].value
           : recommendOptions[0].value);
-      console.log("temp_project", temp_project, projectPath);
       setCurrentProject(temp_project);
       saveLatestGAProject(temp_project);
-      if (location.pathname.startsWith("/growth/project")) {
-        console.log("ProjectSearch router push", 2);
+      if (
+        location.pathname.startsWith("/growth/project") ||
+        location.pathname === "/growth"
+      ) {
         router?.push({
           pathname: getGrowthProjectPath(temp_project, menu),
         });
@@ -161,7 +160,11 @@ const GaProjectSearch = props => {
               .join(",")
               .includes(input.toLowerCase())
           }
-          options={userProject?.length > 0 ? userProject : finalOptions}
+          options={
+            userProject?.length > 0
+              ? userProject
+              : [{ label: "Recommend Projects", options: recommendOptions }]
+          }
         />
       )}
     </div>
