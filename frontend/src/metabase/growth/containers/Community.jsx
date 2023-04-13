@@ -251,76 +251,72 @@ const Community = props => {
     <>
       {project?.id ? (
         <div className="flex flex-column items-center w-full p2">
-          {
-            infoResult.isLoading || filterResult.isLoading ? (
-              <Card className="w-full rounded m1" style={{ height: 250 }}>
-                <LoadingSpinner message="Loading..." />
-              </Card>
-            ) : (
-              <>
-                {!infoResult.isLoading && (
-                  <StatisticIndex
-                    data={formatInfoResult(infoResult?.data)}
-                    router={router}
-                  />
-                )}
-                <ValueFilter
-                  className="mt2"
-                  data={valueFilterOptionsList}
-                  onFliterChange={valueFilter => {
-                    if (!valueFilter) return;
-                    let temp = [...walletListParams.filters];
-                    temp = temp.filter(
-                      item => item.indicator !== valueFilter.indicator,
-                    );
-                    if (valueFilter.comparisonValue) {
-                      temp.push(valueFilter);
-                    }
-                    setWalletListParams({
-                      ...walletListParams,
-                      filters: temp,
-                      current: 1,
-                    });
-                  }}
+          {infoResult.isLoading || filterResult.isLoading ? (
+            <Card className="w-full rounded m1" style={{ height: 250 }}>
+              <LoadingSpinner message="Loading..." />
+            </Card>
+          ) : (
+            <>
+              {!infoResult.isLoading && (
+                <StatisticIndex
+                  data={formatInfoResult(infoResult?.data)}
+                  router={router}
                 />
-                <QuickFilter
-                  data={filterResult?.data?.data}
-                  onFliterChange={tag => {
-                    setWalletListParams({
-                      ...walletListParams,
-                      current: 1,
-                      quickFilter: tag ? [tag?.value] : [],
-                    });
-                  }}
-                />
-              </>
-            );
-          }
-          {
-            listResult.isLoading ? (
-              <Card className="w-full rounded m1" style={{ height: 650 }}>
-                <LoadingSpinner message="Loading..." />
-              </Card>
-            ) : (
-              <WalletList
-                router={router}
-                // isLoading={listResult?.isLoading}
-                data={listResult?.data}
-                actions={actions}
-                pageSize={walletListParams.pageSize}
-                currentPage={walletListParams.current}
-                onPageChange={(page, pageSize) => {
+              )}
+              <ValueFilter
+                className="mt2"
+                data={valueFilterOptionsList}
+                onFliterChange={valueFilter => {
+                  if (!valueFilter) return;
+                  let temp = [...walletListParams.filters];
+                  temp = temp.filter(
+                    item => item.indicator !== valueFilter.indicator,
+                  );
+                  if (valueFilter.comparisonValue) {
+                    temp.push(valueFilter);
+                  }
                   setWalletListParams({
                     ...walletListParams,
-                    current: parseInt(page),
-                    pageSize: parseInt(pageSize),
+                    filters: temp,
+                    current: 1,
                   });
                 }}
-                // isRefetching={listResult?.isFetching}
-                columns={tableColumns}
               />
-            );
-          }
+              <QuickFilter
+                data={filterResult?.data?.data}
+                onFliterChange={tag => {
+                  setWalletListParams({
+                    ...walletListParams,
+                    current: 1,
+                    quickFilter: tag ? [tag?.value] : [],
+                  });
+                }}
+              />
+            </>
+          )}
+          {listResult.isLoading ? (
+            <Card className="w-full rounded m1" style={{ height: 650 }}>
+              <LoadingSpinner message="Loading..." />
+            </Card>
+          ) : (
+            <WalletList
+              router={router}
+              // isLoading={listResult?.isLoading}
+              data={listResult?.data}
+              actions={actions}
+              pageSize={walletListParams.pageSize}
+              currentPage={walletListParams.current}
+              onPageChange={(page, pageSize) => {
+                setWalletListParams({
+                  ...walletListParams,
+                  current: parseInt(page),
+                  pageSize: parseInt(pageSize),
+                });
+              }}
+              // isRefetching={listResult?.isFetching}
+              columns={tableColumns}
+            />
+          )}
         </div>
       ) : (
         <LoadingSpinner message="Loading..." />
