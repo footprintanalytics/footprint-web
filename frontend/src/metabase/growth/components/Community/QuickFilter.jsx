@@ -3,22 +3,16 @@ import React, { useState } from "react";
 import { Space, Tag, Row, Typography } from "antd";
 const { CheckableTag } = Tag;
 
-export const QuickFilter = ({ options }) => {
-  // mock datas
-  const optionsList = [
-    { label: "Whale (100)", value: "Whale" },
-    { label: "Active Gamer (100)", value: "Active Gamer" },
-    { label: "Only Discord ID (100)", value: "Only Discord ID" },
-    { label: "Only Twitter ID (100)", value: "Only Twitter ID" },
-    {
-      label: "Wallets with Discord ID (100)",
-      value: "Wallets with Discord ID",
-    },
-    {
-      label: "Wallets with Twitter ID (100)",
-      value: "Wallets with Twitter ID",
-    },
-  ];
+export const QuickFilter = props => {
+  const { data, isLoading, refetchData } = props;
+  const optionsList = [];
+  data?.map((option, index) => {
+    optionsList.push({
+      label: `${option.name} (${option.wallets})`,
+      value: option.name,
+    });
+  });
+
   const [selectedTags, setSelectedTags] = useState(null);
   const handleChange = (tag, checked) => {
     const nextSelectedTags = checked ? tag.value : null;

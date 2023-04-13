@@ -2,16 +2,11 @@
 import React from "react";
 import { Card, Col, Row, Typography } from "antd";
 
-export const StatisticIndex = ({ options }) => {
-  // mock datas
-  const optionsList = [
-    { title: "Wallets", value: 1128, change: -100 },
-    { title: "Twitter Followers", value: 923, change: -200 },
-    { title: "Discord Members", value: 623, change: +120 },
-  ];
+export const StatisticIndex = props => {
+  const { data, isLoading, refetchData } = props;
   return (
     <Row gutter={16} className="w-full ">
-      {optionsList.map((option, index) => {
+      {data?.map((option, index) => {
         return (
           <Col span={4} key={option.title}>
             <Card bordered={false}>
@@ -42,4 +37,4 @@ export const StatisticIndex = ({ options }) => {
       })}
     </Row>
   );
-};
+};;

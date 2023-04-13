@@ -3,70 +3,8 @@ import React, { useState } from "react";
 import { Space, Col, Row, Tag, Input, Typography } from "antd";
 import FloatInput from "../FloatInput";
 
-export const ValueFilter = ({ options, className }) => {
-  // mock datas
-  const optionsList = [
-    {
-      label: "Total Holding Value >=",
-      value: "totalHoldingValue",
-      type: "gte",
-    },
-    { label: "NFT Holding Value >=", value: "nftHoldingValue", type: "gte" },
-    {
-      label: "Token Holding Value >=",
-      value: "tokenHoldingValue",
-      type: "gte",
-    },
-    { label: "Profit >=", value: "profit", type: "gte" },
-  ];
-
-  function ValueInput(item) {
-    const [showLabel, setShowLabel] = useState(false);
-    return (
-      <div
-        className="flex flex-row rounded px1 align-center text-nowrap"
-        style={{
-          height: "40px",
-          borderColor: "var(--color-border-dark)",
-          borderStyle: "solid",
-          borderWidth: "1px",
-        }}
-      >
-        {/* {showLabel && <Typography.Text>{item.label}</Typography.Text>} */}
-        <Typography.Text type="secondary" style={{ fontSize: 10 }}>
-          {item.label}
-        </Typography.Text>
-        <div className="number-input">
-          <Input
-            // placeholder={item.label}
-            bordered={false}
-            className=" w-full"
-            type="number"
-            style={{}}
-            size="small"
-            // size={showLabel ? "small" : "large"}
-            // onFocus={e => {
-            //   console.log("onFocus", e);
-            //   setShowLabel(true);
-            // }}
-            // onBlur={e => {
-            //   console.log("onBlur", e);
-            //   setShowLabel(false);
-            // }}
-            onChange={e => {
-              console.log("onChange", e.target?.value);
-              if (e.target?.value?.length > 0) {
-                setShowLabel(true);
-              } else {
-                setShowLabel(false);
-              }
-            }}
-          />
-        </div>
-      </div>
-    );
-  }
-
+export const ValueFilter = props => {
+  const { data, isLoading, refetchData, className } = props;
   return (
     <div
       className={`flex flex-row w-full p1 items-center  text-nowrap ${className}`}
@@ -79,7 +17,7 @@ export const ValueFilter = ({ options, className }) => {
         Value Filter:
       </Typography.Text>
       <Row gutter={16} className="w-full">
-        {optionsList.map(item => (
+        {data?.map(item => (
           <Col span={4} key={item.label}>
             {/* {ValueInput(item)} */}
             <FloatInput
