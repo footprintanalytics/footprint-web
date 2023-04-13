@@ -168,9 +168,15 @@ const Community = props => {
       dataIndex: "tags",
       render: (_, { tags }) => (
         <>
-          {tags?.map(tag => {
-            return <Tag key={tag}>{tag}</Tag>;
-          })}
+          {tags ? (
+            <>
+              {tags?.map(tag => {
+                return <Tag key={tag}>{tag}</Tag>;
+              })}
+            </>
+          ) : (
+            <>--</>
+          )}
         </>
       ),
     },
@@ -178,43 +184,52 @@ const Community = props => {
       title: "Net Worth",
       dataIndex: "netWorth",
       key: "netWorth",
-      render: text => text.toLocaleString("en-US"),
+      render: text => (text ? text.toLocaleString("en-US") : "--"),
     },
     {
       title: "NFT Holding Values",
       dataIndex: "holdingNFTValue",
       key: "holdingNFTValue",
-      render: text => text.toLocaleString("en-US"),
+      render: text => (text ? text.toLocaleString("en-US") : "--"),
     },
     {
       title: "Token Holding Values",
       dataIndex: "holdingTokenValue",
       key: "holdingTokenValue",
-      render: text => text.toLocaleString("en-US"),
+      render: text => (text ? text.toLocaleString("en-US") : "--"),
     },
     {
       title: "Twitter",
       dataIndex: "twitterName",
       key: "twitterName",
       render: text => (
-        <a
-          rel="noreferrer"
-          href={`https://twitter.com/${text}`}
-          target="_blank"
-        >
-          {text}
-        </a>
+        <>
+          {" "}
+          {text ? (
+            <a
+              rel="noreferrer"
+              href={`https://twitter.com/${text}`}
+              target="_blank"
+            >
+              {text}
+            </a>
+          ) : (
+            "--"
+          )}
+        </>
       ),
     },
     {
       title: "Discord",
       dataIndex: "discordName",
       key: "discordName",
+      render: text => text ?? "--",
     },
     {
       title: "Email",
       dataIndex: "email",
       key: "email",
+      render: text => text ?? "--",
     },
     // {
     //   title: "Action",
