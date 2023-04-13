@@ -76,7 +76,7 @@ const GaProjectSearch = props => {
         }
       } else {
         if (user) {
-          setCreateFgaProjectModalShowAction({
+          setCreateFgaProjectModalShowAction?.({
             show: true,
             force: true,
           });
