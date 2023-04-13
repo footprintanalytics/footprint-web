@@ -172,7 +172,7 @@ const Project = props => {
       return (
         <ConnectorList
           refetchProject={() =>
-            props.dispatch(loadCurrentFgaProject(projectObject?.id, "project"))
+            props.dispatch(loadCurrentFgaProject(projectObject?.id, true))
           }
           location={location}
           router={router}
