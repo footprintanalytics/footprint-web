@@ -29,7 +29,7 @@ export const ValueFilter = props => {
               style={{ width: "100%", height: 40 }}
               onChange={val => {
                 onFliterChange?.({
-                  comparisonValue: val,
+                  comparisonValue: parseFloat(val),
                   indicator: item.indicator,
                   comparisonSymbol: item.comparisonSymbol,
                 });
