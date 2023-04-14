@@ -47,8 +47,56 @@ RUN echo hello-duke & echo $STATIC_BUCKET_URL
 
 WORKDIR /home/circleci
 
-COPY --chown=circleci . .
-RUN INTERACTIVE=false CI=true MB_EDITION=$MB_EDITION bin/build
+# COPY --chown=circleci . .
+COPY --chown=circleci bin/ ./bin/
+COPY --chown=circleci dev/ ./dev/
+COPY --chown=circleci enterprise/ ./enterprise/
+COPY --chown=circleci hooks/ ./hooks/
+COPY --chown=circleci locales/ ./locales/
+COPY --chown=circleci modules/ ./modules/
+COPY --chown=circleci resources/ ./resources/
+COPY --chown=circleci shared/ ./shared/
+COPY --chown=circleci snowplow/ ./snowplow/
+COPY --chown=circleci src/ ./src/
+COPY --chown=circleci test/ ./test/
+COPY --chown=circleci test_config/ ./test_config/
+COPY --chown=circleci test_modules/ ./test_modules/
+COPY --chown=circleci test_resources/ ./test_resources/
+
+COPY --chown=circleci .babelrc .babelrc
+COPY --chown=circleci .dir-locals.el .dir-locals.el
+COPY --chown=circleci .mlc_config.json .mlc_config.json
+COPY --chown=circleci .percy.yml .percy.yml
+
+COPY --chown=circleci build.clj build.clj
+COPY --chown=circleci codecov.yml codecov.yml
+COPY --chown=circleci deps.edn deps.edn
+COPY --chown=circleci jest.tz.unit.conf.json jest.tz.unit.conf.json
+COPY --chown=circleci jest.unit.conf.json jest.unit.conf.json
+COPY --chown=circleci jsconfig.json jsconfig.json
+COPY --chown=circleci package.json package.json
+COPY --chown=circleci postcss.config.js postcss.config.js
+COPY --chown=circleci renovate.json renovate.json
+COPY --chown=circleci shadow-cljs.edn shadow-cljs.edn
+COPY --chown=circleci tsconfig.json tsconfig.json
+COPY --chown=circleci webpack.config.js webpack.config.js
+COPY --chown=circleci webpack.shared.config.js webpack.shared.config.js
+COPY --chown=circleci webpack.static-viz.config.js webpack.static-viz.config.js
+COPY --chown=circleci .env .env
+COPY --chown=circleci yarn.lock yarn.lock
+
+RUN INTERACTIVE=false CI=true MB_EDITION=$MB_EDITION bin/build version
+RUN INTERACTIVE=false CI=true MB_EDITION=$MB_EDITION bin/build translations
+RUN INTERACTIVE=false CI=true MB_EDITION=$MB_EDITION bin/build licenses
+RUN INTERACTIVE=false CI=true MB_EDITION=$MB_EDITION bin/build drivers
+RUN INTERACTIVE=false CI=true MB_EDITION=$MB_EDITION bin/build uberjar
+
+RUN INTERACTIVE=false CI=true MB_EDITION=$MB_EDITION bin/build frontend-download-dependencies
+
+COPY --chown=circleci frontend/ ./frontend/
+RUN INTERACTIVE=false CI=true MB_EDITION=$MB_EDITION bin/build frontend-build-frontend
+RUN INTERACTIVE=false CI=true MB_EDITION=$MB_EDITION bin/build frontend-static-viz
+# RUN INTERACTIVE=false CI=true MB_EDITION=$MB_EDITION bin/build frontend
 
 # ###################
 # # STAGE 2: runner
