@@ -217,12 +217,12 @@ const CreateFliterCohort = ({
         />
         <div className="mt2" />
         {getPannel()}
-        <div className="mb2" />
+        {/* <div className="mb2" />
         <FilterOut
           options={filterOutOptions}
           defaultValue={filterOut}
           onChange={setFilterOut}
-        />
+        /> */}
       </Modal>
     </>
   );

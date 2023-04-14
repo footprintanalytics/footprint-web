@@ -23,7 +23,7 @@ const LoadingDashboard = ({
   );
 
   const connector =
-    current_tab === "User Funnel" ? "Google Analytics" : current_tab;
+    current_tab === "Lifecycle" ? "Google Analytics" : current_tab;
 
   const Setup = (
     <Button
@@ -124,11 +124,7 @@ const LoadingDashboard = ({
     return (
       <div style={{ padding: 20 }}>
         <Card title={current_tab}>
-          <Alert
-            message={message}
-            description={description}
-            showIcon
-          />
+          <Alert message={message} description={description} showIcon />
         </Card>
       </div>
     );

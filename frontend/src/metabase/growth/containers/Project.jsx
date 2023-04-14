@@ -277,7 +277,7 @@ const Project = props => {
           </LoadingDashboard>
         );
       }
-      if (current_tab === "User Funnel") {
+      if (current_tab === "Lifecycle") {
         return (
           <LoadingDashboard
             router={router}
