@@ -19,7 +19,6 @@ import { QuickFilter } from "../components/Community/QuickFilter";
 import { ValueFilter } from "../components/Community/ValueFilter";
 import { WalletList } from "../components/Community/WalletList";
 import { getGrowthProjectPath } from "../utils/utils";
-
 const Community = props => {
   const { router, location, children, user, projectPath, menu, project } =
     props;
@@ -156,7 +155,17 @@ const Community = props => {
       dataIndex: "address",
       key: "address",
       render: (text, record) => (
-        <div className="flex flex-col">
+        <div className="flex flex-row">
+          {/* <Avatar
+            size={25}
+            className="mr1"
+            src={createIcon({
+              seed: text?.toLowerCase(),
+              size: 12,
+              scale: 8,
+            })?.current?.toDataURL()}
+
+          /> */}
           <Link
             onClick={() => {
               props.router?.push({
@@ -219,13 +228,13 @@ const Community = props => {
       title: "Twitter",
       dataIndex: "twitterName",
       key: "twitterName",
-      render: (text, { twitterAvatar }, index) => (
+      render: (text, { twitterAvatar, twitterHandler }, index) => (
         <>
-          {text ? (
+          {text?.length > 0 ? (
             <>
               <a
                 rel="noreferrer"
-                href={`https://twitter.com/${text}`}
+                href={`https://twitter.com/${twitterHandler ?? text}`}
                 target="_blank"
               >
                 <div className=" flex flex-row">
