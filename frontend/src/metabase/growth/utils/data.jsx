@@ -44,6 +44,7 @@ export const top_protocols = [
     chain: "Ethereum",
   },
 ];
+
 export const template_gallery = [
   // {
   //   category: "Campaign Analysis",
@@ -384,3 +385,19 @@ export const fga_menu_data = [
     ],
   },
 ];
+
+export const cohortTips = new Map([
+  ["Token Whale", "holding value of token > $1M"],
+  ["NFT Whale", "holding value of NFT > $1M"],
+  ["Diamond Hand", "NFT holding period > 360"],
+  ["New Gamers", "first interaction with the project in the last 30 days. "],
+  ["Active Gamers", "interaction with the project in the last 30 days"],
+  [
+    "At Risk Gamers",
+    "has not been active for 30 days but was active within the last 90 days.",
+  ],
+  ["Dormant Gamers", "have been inactive for over 90 days"],
+  ["NFT Holders", "NFT holders"],
+  ["Token Holders", "project token holder"],
+  ["{project slug} Users", "all users interacted with project contract"],
+]);
