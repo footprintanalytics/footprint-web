@@ -169,7 +169,7 @@ const Community = props => {
             }}
           >
             <div className="flex flex-col">
-              <Typography.Text>{text}</Typography.Text>
+              <Typography.Text>{String(text).slice(0, 4) + String(text).slice(-4)}</Typography.Text>
               {record.ens && (
                 <Typography.Text type="secondary">{record.ens}</Typography.Text>
               )}
