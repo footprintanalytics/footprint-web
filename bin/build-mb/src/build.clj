@@ -17,32 +17,38 @@
     "ee"  :ee
     nil   :oss))
 
-(defn- build-frontend! [edition]
+(defn- build-frontend! [edition type]
   {:pre [(#{:oss :ee} edition)]}
   (let [mb-edition (case edition
                      :ee "ee"
                      :oss "oss")]
     (u/step (format "Build frontend with MB_EDITION=%s" mb-edition)
-      (u/step "Run 'yarn' to download javascript dependencies"
-        (if (env/env :ci)
-          (do
-            (u/announce "CI run: enforce the lockfile")
-            (u/sh {:dir u/project-root-directory} "yarn" "--frozen-lockfile"))
-          (u/sh {:dir u/project-root-directory} "yarn")))
+      (when (= type "download-dependencies")
+  (u/step "Run 'yarn' to download javascript dependencies"
+            (if (env/env :ci)
+              (do
+                (u/announce "CI run: enforce the lockfile")
+                (u/sh {:dir u/project-root-directory} "yarn" "--frozen-lockfile"))
+              (u/sh {:dir u/project-root-directory} "yarn")))
+      )
+        (when (= type "build-frontend")
       (u/step "Build frontend"
-        (u/sh {:dir u/project-root-directory
-               :env {"PATH"       (env/env :path)
-                     "HOME"       (env/env :user-home)
-                     "WEBPACK_BUNDLE"   "production"
-                     "MB_EDITION" mb-edition}}
-              "yarn" "build"))
+              (u/sh {:dir u/project-root-directory
+                     :env {"PATH"       (env/env :path)
+                           "HOME"       (env/env :user-home)
+                           "WEBPACK_BUNDLE"   "production"
+                           "MB_EDITION" mb-edition}}
+                    "yarn" "build"))
+          )
+        (when (= type "static-viz")
       (u/step "Build static viz"
-        (u/sh {:dir u/project-root-directory
-               :env {"PATH"       (env/env :path)
-                     "HOME"       (env/env :user-home)
-                     "WEBPACK_BUNDLE"   "production"
-                     "MB_EDITION" mb-edition}}
-              "yarn" "build-static-viz"))
+              (u/sh {:dir u/project-root-directory
+                     :env {"PATH"       (env/env :path)
+                           "HOME"       (env/env :user-home)
+                           "WEBPACK_BUNDLE"   "production"
+                           "MB_EDITION" mb-edition}}
+                    "yarn" "build-static-viz"))
+          )
       (u/announce "Frontend built successfully."))))
 
 (defn- build-licenses!
@@ -90,8 +96,12 @@
                    (version-info/generate-version-info-file! edition version))
    :translations (fn [_]
                    (i18n/create-all-artifacts!))
-   :frontend     (fn [{:keys [edition]}]
-                   (build-frontend! edition))
+   :frontend-download-dependencies     (fn [{:keys [edition]}]
+                   (build-frontend! edition "download-dependencies"))
+   :frontend-build-frontend     (fn [{:keys [edition]}]
+                   (build-frontend! edition "build-frontend"))
+   :frontend-static-viz     (fn [{:keys [edition]}]
+                   (build-frontend! edition "static-viz"))
    :licenses     (fn [{:keys [edition]}]
                    (build-licenses! edition))
    :drivers      (fn [{:keys [edition]}]
