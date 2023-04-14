@@ -96,7 +96,7 @@ const PotentialUsers = props => {
               });
             }}
           >
-            {String(text).slice(0, 4) + String(text).slice(-4)}
+            {String(text).slice(0, 4) + '...' + String(text).slice(-4)}
           </Link>
           {record.ens && (
             <div>
