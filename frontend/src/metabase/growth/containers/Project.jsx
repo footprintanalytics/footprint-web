@@ -159,7 +159,8 @@ const Project = props => {
     ) : (
       <LoadingSpinner message="Loading..." />
     );
-    if (current_tab === "UserTemplate" || current_tab === "Potential Users") {
+    if (current_tab === "UserTemplate") {
+      //|| current_tab === "Potential Users"
       return (
         <UserTemplate
           location={location}

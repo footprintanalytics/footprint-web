@@ -9,7 +9,6 @@ const FloatInput = props => {
   let { label, value, placeholder, type, required } = props;
   const [focus, setFocus] = useState(false);
   const [currentValue, setCurrentValue] = useState(value ?? "");
-console.log("FloatInput value", value);
   if (!placeholder) placeholder = label;
 
   const isOccupied = focus || (currentValue && currentValue.length !== 0);
