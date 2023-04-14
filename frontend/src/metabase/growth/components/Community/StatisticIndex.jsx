@@ -17,10 +17,10 @@ export const StatisticIndex = props => {
                 <LoadingConnectorButton
                   router={router}
                   project={project}
-                  className="mt2"
+                  className="mt1"
                   disableCheck={option?.value ? true : false}
                   sourceDefinitionId={option.sourceDefinitionId}
-                  refetch={option.refetch}
+                  refetch={refetchData}
                 >
                   <>
                     <Typography.Title
@@ -43,45 +43,6 @@ export const StatisticIndex = props => {
                     </Typography.Text>
                   </>
                 </LoadingConnectorButton>
-                {/* {option?.value ? (
-                  <>
-                    <Typography.Title
-                      level={3}
-                      style={{ marginTop: 10, marginBottom: 5 }}
-                    >
-                      {option?.value?.toLocaleString("en-US")}
-                    </Typography.Title>
-                    <Typography.Text
-                      type={`${
-                        option?.change < 0
-                          ? "danger"
-                          : option?.change > 0
-                          ? "success"
-                          : "secondary"
-                      }`}
-                    >
-                      {`${option?.change > 0 ? "+" : ""}`}
-                      {option?.change?.toLocaleString("en-US")}
-                    </Typography.Text>
-                  </>
-                ) : (
-
-                  <Button
-                    type="primary"
-                    className="mt2 rounded"
-                    // size="small"
-                    onClick={() => {
-                      router?.push({
-                        pathname: getGrowthProjectPath(
-                          router?.params?.project,
-                          "Connector",
-                        ),
-                      });
-                    }}
-                  >
-                    Setting Now
-                  </Button>
-                )} */}
               </div>
             </Card>
           </Col>

@@ -20,8 +20,11 @@ const LoadingConnectorButton = ({
     async () =>
       GetFgaConnectorJob({ projectId: project?.id, sourceDefinitionId }),
     {
-      refetchInterval: data => (data?.status === "succeeded" ? false : 10000),
-      enabled: !!sourceDefinitionId,
+      refetchInterval: data =>
+        data?.status === "succeeded" || data?.status === "failed"
+          ? false
+          : 10000,
+      enabled: !!sourceDefinitionId && !disableCheck,
     },
   );
   if (disableCheck) {
@@ -44,6 +47,29 @@ const LoadingConnectorButton = ({
       >
         Setting Now
       </Button>
+    );
+  } else if (sourceDefinitionId && data?.status === "failed") {
+    return (
+      <>
+        <Button
+          type="primary"
+          className={cx("rounded", className)}
+          // size="small"
+          onClick={() => {
+            router?.push({
+              pathname: getGrowthProjectPath(
+                router?.params?.project,
+                "Connector",
+              ),
+            });
+          }}
+        >
+          Edit Now
+        </Button>
+        <Typography.Text type="danger" className="mt1">
+          Connector job exce fail.
+        </Typography.Text>
+      </>
     );
   } else if (
     sourceDefinitionId &&
@@ -70,7 +96,7 @@ const LoadingConnectorButton = ({
       </Button>
     );
   } else {
-    refetch?.();
+    data?.status === "succeeded" && refetch?.();
     return children;
   }
 };

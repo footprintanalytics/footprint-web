@@ -90,7 +90,7 @@ const ConnectorList = props => {
   const gotoAnalytics = name => {
     switch (name) {
       case "Google Analytics":
-        router.push(getGrowthProjectPath(project.protocolSlug, "User Funnel"));
+        router.push(getGrowthProjectPath(project.protocolSlug, "Lifecycle"));
         break;
       default:
         router.push(getGrowthProjectPath(project.protocolSlug, name));

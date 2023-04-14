@@ -21,13 +21,14 @@ export const WalletList = props => {
     actionItems.push({
       key: item.title,
       label: item.component ?? (
-        <a
+        <Button
+          type="text"
           onClick={() => {
             router?.push({ pathname: item.link });
           }}
         >
           {item.title}
-        </a>
+        </Button>
       ),
     });
   });

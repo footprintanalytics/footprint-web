@@ -12,6 +12,7 @@ const CreateCohort2 = ({
   btnText = "Create Cohort",
   onChangeLocation,
   project,
+  disable = false,
 }) => {
   const [isCohortModalOpen, setCohortModalOpen] = useState(false);
   const addressList = [];
@@ -35,13 +36,15 @@ const CreateCohort2 = ({
   };
   return (
     <>
-      <div
+      <Button
+        type="text"
+        disabled={disable}
         onClick={() => {
           setCohortModalOpen(true);
         }}
       >
         {btnText}
-      </div>
+      </Button>
 
       <Modal
         open={isCohortModalOpen}
@@ -53,7 +56,9 @@ const CreateCohort2 = ({
           <Button
             key="submit"
             type="primary"
-            onClick={() => onChangeLocation(getGrowthProjectPath(project, "Cohort"))}
+            onClick={() =>
+              onChangeLocation(getGrowthProjectPath(project, "Cohort"))
+            }
           >
             Create
           </Button>,

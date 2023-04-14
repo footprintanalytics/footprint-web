@@ -2,7 +2,7 @@
 /* eslint-disable react/prop-types */
 import React from "react";
 import { connect } from "react-redux";
-import { Card, Tag, Avatar, Typography } from "antd";
+import { Card, Tag, Avatar, Typography, Button } from "antd";
 import { useQuery } from "react-query";
 import { Link } from "react-router";
 import { getUser, getFgaProject } from "metabase/selectors/user";
@@ -13,6 +13,7 @@ import {
   getCommunityQuickFilter,
   getCommunityWalletAddress,
 } from "metabase/new-service";
+import CreateCohort2 from "metabase/growth/containers/PotentialUsers/CreateFliterCohort";
 import { StatisticIndex } from "../components/Community/StatisticIndex";
 import { QuickFilter } from "../components/Community/QuickFilter";
 import { ValueFilter } from "../components/Community/ValueFilter";
@@ -97,8 +98,13 @@ const Community = props => {
 
   const actions = [
     {
+      title: "Create Cohort",
+      component: <CreateCohort2 disable={true} project={project} />,
+    },
+    {
       component: (
-        <div
+        <Button
+          type="text"
           onClick={() =>
             props.router?.push({
               pathname: getGrowthProjectPath(
@@ -109,7 +115,7 @@ const Community = props => {
           }
         >
           Mapping Now
-        </div>
+        </Button>
       ),
       title: "Mapping Now", //required
       link: null,
