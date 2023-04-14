@@ -153,7 +153,7 @@ const ConfigConnector = props => {
   const initialValues = {
     streams:
       connector?.streamConfig?.list
-        ?.filter(f => f.configured)
+        ?.filter(f => f.configured || f.selected)
         ?.map(m => m.value) || [],
   };
   connector?.connectionSpecification?.map(item => {
