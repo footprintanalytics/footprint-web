@@ -203,18 +203,20 @@ const Community = props => {
                 href={`https://twitter.com/${text}`}
                 target="_blank"
               >
-                <Avatar
-                  size={25}
-                  className="mr1"
-                  src={
-                    twitterAvatar?.length > 0
-                      ? twitterAvatar
-                      : `https://xsgames.co/randomusers/assets/avatars/pixel/${
-                          index % 50
-                        }.jpg`
-                  }
-                />
-                {text}
+                <div className=" flex flex-row">
+                  <Avatar
+                    size={25}
+                    className="mr1"
+                    src={
+                      twitterAvatar?.length > 0
+                        ? twitterAvatar
+                        : `https://xsgames.co/randomusers/assets/avatars/pixel/${
+                            index % 50
+                          }.jpg`
+                    }
+                  />
+                  {text}
+                </div>
               </a>
             </>
           ) : (
@@ -230,7 +232,7 @@ const Community = props => {
       render: (text, { discordAvatar }, index) => (
         <>
           {text ? (
-            <>
+            <div className=" flex flex-row">
               <Avatar
                 size={25}
                 className="mr1"
@@ -242,8 +244,10 @@ const Community = props => {
                       }.jpg`
                 }
               />
-              <Typography.Text copyable={true}>{text}</Typography.Text>
-            </>
+              <Typography.Text ellipsis={true} copyable={true}>
+                {text}
+              </Typography.Text>
+            </div>
           ) : (
             "--"
           )}
