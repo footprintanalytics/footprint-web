@@ -169,7 +169,9 @@ const Community = props => {
             }}
           >
             <div className="flex flex-col">
-              <Typography.Text>{String(text).slice(0, 4) + String(text).slice(-4)}</Typography.Text>
+              <Typography.Text>
+                {String(text).slice(0, 4) + String(text).slice(-4)}
+              </Typography.Text>
               {record.ens && (
                 <Typography.Text type="secondary">{record.ens}</Typography.Text>
               )}
@@ -200,18 +202,21 @@ const Community = props => {
       title: "Net Worth",
       dataIndex: "netWorth",
       key: "netWorth",
+      align: "right",
       render: text => (text ? "$" + text.toLocaleString("en-US") : "--"),
     },
     {
       title: "NFT Holding Values",
       dataIndex: "holdingNFTValue",
       key: "holdingNFTValue",
+      align: "right",
       render: text => (text ? "$" + text.toLocaleString("en-US") : "--"),
     },
     {
       title: "Token Holding Values",
       dataIndex: "holdingTokenValue",
       key: "holdingTokenValue",
+      align: "right",
       render: text => (text ? "$" + text.toLocaleString("en-US") : "--"),
     },
     {
