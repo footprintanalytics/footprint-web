@@ -1,7 +1,7 @@
 /* eslint-disable react/prop-types */
 import React from "react";
 import { Button, Card, Col, Row, Typography } from "antd";
-import { ArrowUpOutlined, ArrowDownOutlined } from "@ant-design/icons"
+import { ArrowUpOutlined, ArrowDownOutlined } from "@ant-design/icons";
 import { getGrowthProjectPath } from "metabase/growth/utils/utils";
 import LoadingConnectorButton from "metabase/growth/components/LoadingConnectorButton";
 
@@ -39,9 +39,12 @@ export const StatisticIndex = props => {
                           : "secondary"
                       }`}
                     >
-                      {option?.change > 0 ? <ArrowUpOutlined /> : <ArrowDownOutlined />}{" "}
-                      {`${option?.change > 0 ? "+" : ""}`}
-                      {option?.change?.toLocaleString("en-US")}
+                      {option?.change > 0 ? (
+                        <ArrowUpOutlined />
+                      ) : option?.change < 0 ? (
+                        <ArrowDownOutlined />
+                      ) : null}{" "}
+                      {Math.abs(option?.change)?.toLocaleString("en-US")}
                     </Typography.Text>
                   </>
                 </LoadingConnectorButton>
@@ -52,4 +55,4 @@ export const StatisticIndex = props => {
       })}
     </Row>
   );
-};;
+};
