@@ -200,19 +200,22 @@ const Community = props => {
       title: "Net Worth",
       dataIndex: "netWorth",
       key: "netWorth",
-      render: text => (text ? '$' + text.toLocaleString("en-US") : "--"),
+      align: "right",
+      render: text => (text ? "$" + text.toLocaleString("en-US") : "--"),
     },
     {
       title: "NFT Holding Values",
       dataIndex: "holdingNFTValue",
       key: "holdingNFTValue",
-      render: text => (text ? '$' + text.toLocaleString("en-US") : "--"),
+      align: "right",
+      render: text => (text ? "$" + text.toLocaleString("en-US") : "--"),
     },
     {
       title: "Token Holding Values",
       dataIndex: "holdingTokenValue",
       key: "holdingTokenValue",
-      render: text => (text ? '$' + text.toLocaleString("en-US") : "--"),
+      align: "right",
+      render: text => (text ? "$" + text.toLocaleString("en-US") : "--"),
     },
     {
       title: "Twitter",
@@ -255,7 +258,7 @@ const Community = props => {
       key: "discordName",
       render: (text, { discordAvatar }, index) => (
         <>
-          {text ? (
+          {text?.length > 0 ? (
             <div className=" flex flex-row">
               <Avatar
                 size={25}
@@ -282,7 +285,7 @@ const Community = props => {
       title: "Email",
       dataIndex: "email",
       key: "email",
-      render: text => text ?? "--",
+      render: text => (text?.length > 0 ? text : "--"),
     },
     // {
     //   title: "Action",
