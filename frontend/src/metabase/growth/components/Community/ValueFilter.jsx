@@ -27,6 +27,7 @@ export const ValueFilter = props => {
             <FloatInput
               height={40}
               style={{ width: "100%", height: 40 }}
+              value={item.defaultValue}
               onChange={val => {
                 onFliterChange?.({
                   comparisonValue: parseFloat(val),

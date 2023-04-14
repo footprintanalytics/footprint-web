@@ -1,6 +1,6 @@
 /* eslint-disable react/display-name */
 /* eslint-disable react/prop-types */
-import React from "react";
+import React, { useEffect } from "react";
 import { connect } from "react-redux";
 import { Card, Tag, Avatar, Typography, Button } from "antd";
 import { useQuery } from "react-query";
@@ -25,11 +25,28 @@ const Community = props => {
     props;
 
   const [walletListParams, setWalletListParams] = React.useState({
-    pageSize: 10,
-    current: 1,
-    filters: [],
-    quickFilter: [],
+    pageSize: location.query?.pageSize
+      ? parseInt(location.query?.pageSize)
+      : 10,
+    current: location.query?.page ? parseInt(location.query?.page) : 1,
+    quickFilter: location.query?.quickFilter
+      ? [location.query?.quickFilter.replace("+", " ")]
+      : [],
+    filters: location.query?.filters ? JSON.parse(location.query?.filters) : [],
   });
+
+  useEffect(() => {
+    router.replace({
+      pathname: location.pathname,
+      query: {
+        ...location.query,
+        page: walletListParams.current,
+        pageSize: walletListParams.pageSize,
+        quickFilter: walletListParams.quickFilter,
+        filters: JSON.stringify(walletListParams.filters),
+      },
+    });
+  }, [walletListParams]);
 
   const infoResult = useQuery(
     ["getCommunityInfo", project?.id],
@@ -82,16 +99,27 @@ const Community = props => {
       label: "Net Worth >=",
       indicator: "netWorth",
       comparisonSymbol: "gte",
+      defaultValue:
+        walletListParams?.filters?.find(item => item.indicator === "netWorth")
+          ?.comparisonValue ?? null,
     },
     {
       label: "NFT Holding Value >=",
       indicator: "nftHoldingValue",
       comparisonSymbol: "gte",
+      defaultValue:
+        walletListParams?.filters?.find(
+          item => item.indicator === "nftHoldingValue",
+        )?.comparisonValue ?? null,
     },
     {
       label: "Token Holding Value >=",
       indicator: "tokenHoldingValue",
       comparisonSymbol: "gte",
+      defaultValue:
+        walletListParams?.filters?.find(
+          item => item.indicator === "tokenHoldingValue",
+        )?.comparisonValue ?? null,
     },
     // { label: "Profit >=", indicator: "profit", comparisonSymbol: "gte" },
   ];
@@ -315,6 +343,11 @@ const Community = props => {
           />
           <QuickFilter
             optionsList={getQuickFilterOptionList(filterResult?.data?.data)}
+            defaultValue={
+              walletListParams.quickFilter?.length > 0
+                ? walletListParams.quickFilter[0]
+                : null
+            }
             onFliterChange={tag => {
               setWalletListParams({
                 ...walletListParams,

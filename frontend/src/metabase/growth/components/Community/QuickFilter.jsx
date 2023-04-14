@@ -4,8 +4,15 @@ import { Space, Tag, Row, Typography } from "antd";
 const { CheckableTag } = Tag;
 
 export const QuickFilter = props => {
-  const { optionsList, formatFunction, isLoading, refetchData, onFliterChange } = props
-  const [selectedTags, setSelectedTags] = useState(null);
+  const {
+    optionsList,
+    formatFunction,
+    isLoading,
+    refetchData,
+    onFliterChange,
+    defaultValue,
+  } = props;
+  const [selectedTags, setSelectedTags] = useState(defaultValue);
   const handleChange = (tag, checked) => {
     setSelectedTags(checked ? tag.value : null);
     onFliterChange?.(checked ? tag : null);
