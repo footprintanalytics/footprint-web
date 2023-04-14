@@ -273,7 +273,6 @@ const Community = props => {
   ];
 
   const getQuickFilterOptionList = data => {
-    console.log("getQuickFilterOptionList data", data);
     return data?.map(option => {
       return {
         label: `${option.name} (${option.wallets})`,
