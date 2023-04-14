@@ -32,7 +32,7 @@ const LoadingDashboard = ({
         router.push(getGrowthProjectPath(project.protocolSlug, "Connector"));
       }}
     >
-      Set up
+      Set up now
     </Button>
   );
 

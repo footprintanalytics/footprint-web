@@ -45,7 +45,7 @@ const LoadingConnectorButton = ({
           });
         }}
       >
-        Setting Now
+        Set up now
       </Button>
     );
   } else if (sourceDefinitionId && data?.status === "failed") {
