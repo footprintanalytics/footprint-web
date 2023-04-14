@@ -156,8 +156,8 @@ const PotentialUsers = props => {
   const getQuickFilterOptionList = (data) => {
     return data?.map(option => {
       return {
-        label: option,
-        value: option,
+        label: option.tag,
+        value: option.tag,
       };
     });
   }
@@ -209,7 +209,7 @@ const PotentialUsers = props => {
                 formatFunction={name =>
                   formatTableTitle(name?.replace(/-/g, " "))
                 }
-                onFliterChange={tag => {
+                onFilterChange={tag => {
                   setWalletListParams({
                     ...walletListParams,
                     current: 1,
