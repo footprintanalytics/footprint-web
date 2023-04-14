@@ -277,10 +277,15 @@ export const fga_menu_data = [
     icon: React.createElement(TeamOutlined),
     children: [
       {
-        name: "Project Users",
-        id: 7773,
-        uuid: "451d53ab-9d62-40ff-931e-9ec197595f0b",
+        name: "Community",
+        id: null,
+        uuid: null,
       },
+      // {
+      //   name: "Project Users",
+      //   id: 7773,
+      //   uuid: "451d53ab-9d62-40ff-931e-9ec197595f0b",
+      // },
       {
         name: "Twitter",
         id: 7476,

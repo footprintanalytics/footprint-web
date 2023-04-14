@@ -10,6 +10,7 @@ export const QuickFilter = props => {
     setSelectedTags(checked ? tag.value : null);
     onFliterChange?.(checked ? tag : null);
   };
+  console.log("optionsList optionsList", optionsList);
   return (
     <div className="flex flex-row w-full p1 items-center">
       <span style={{ marginRight: 8, color: "white" }}>Quick Filter:</span>

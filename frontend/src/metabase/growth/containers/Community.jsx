@@ -23,15 +23,6 @@ import { getGrowthProjectPath } from "../utils/utils";
 const Community = props => {
   const { router, location, children, user, projectPath, menu, project } =
     props;
-  //  https://preview.footprint.network/api/v1/fga#/community/CommunityController_list
-  //   "filters": [
-  //   {
-  //     "indicator": "string",
-  //     "comparisonSymbol": "gt",
-  //     "comparisonValue": 0
-  //   }
-  // ],
-
   const [walletListParams, setWalletListParams] = React.useState({
     pageSize: 10,
     current: 1,
@@ -277,14 +268,15 @@ const Community = props => {
     // },
   ];
 
-  const getQuickFilterOptionList = (data) => {
+  const getQuickFilterOptionList = data => {
+    console.log("getQuickFilterOptionList data", data);
     return data?.map(option => {
       return {
         label: `${option.name} (${option.wallets})`,
         value: option.name,
       };
     });
-  }
+  };
 
   return (
     <>
@@ -322,7 +314,7 @@ const Community = props => {
                 }}
               />
               <QuickFilter
-                optionList={getQuickFilterOptionList(filterResult?.data?.data)}
+                optionsList={getQuickFilterOptionList(filterResult?.data?.data)}
                 onFliterChange={tag => {
                   setWalletListParams({
                     ...walletListParams,

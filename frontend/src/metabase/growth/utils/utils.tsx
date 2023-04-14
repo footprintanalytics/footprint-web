@@ -159,6 +159,7 @@ export function getGaMenuTabs(
       [
         "Connector",
         "Campaign",
+        "Community",
         "Project Info",
         "Template Gallery",
         "Custom Analysis",
