@@ -2,7 +2,7 @@
 /* eslint-disable react/prop-types */
 import React from "react";
 import { connect } from "react-redux";
-import { Card, Tag, Badge } from "antd";
+import { Card, Tag, Avatar, Typography } from "antd";
 import { useQueries, useQuery } from "react-query";
 import { Link } from "react-router";
 import { getUser, getFgaProject } from "metabase/selectors/user";
@@ -43,8 +43,7 @@ const Community = props => {
     ["getCommunityInfo", project?.id],
     async () => {
       return (
-        project?.id &&
-        getCommunityInfo({ projectId: parseInt(project?.id) })
+        project?.id && getCommunityInfo({ projectId: parseInt(project?.id) })
       );
     },
     QUERY_OPTIONS,
@@ -154,16 +153,13 @@ const Community = props => {
               });
             }}
           >
-            {text}
-          </Link>
-          {record.ens && (
-            <div>
-              {/* <Badge color={"green"} text={} /> */}
-              <a href={record.ens} target="_blank" rel="noreferrer">
-                {record.ens}
-              </a>
+            <div className="flex flex-col">
+              <a>{text}</a>
+              {record.ens && (
+                <Typography.Text type="secondary">{record.ens}</Typography.Text>
+              )}
             </div>
-          )}
+          </Link>
         </div>
       ),
     },
@@ -207,16 +203,29 @@ const Community = props => {
       title: "Twitter",
       dataIndex: "twitterName",
       key: "twitterName",
-      render: text => (
+      render: (text, { twitterAvatar }, index) => (
         <>
           {text ? (
-            <a
-              rel="noreferrer"
-              href={`https://twitter.com/${text}`}
-              target="_blank"
-            >
-              {text}
-            </a>
+            <>
+              <a
+                rel="noreferrer"
+                href={`https://twitter.com/${text}`}
+                target="_blank"
+              >
+                <Avatar
+                  size={25}
+                  className="mr1"
+                  src={
+                    twitterAvatar?.length > 0
+                      ? twitterAvatar
+                      : `https://xsgames.co/randomusers/assets/avatars/pixel/${
+                          index % 50
+                        }.jpg`
+                  }
+                />
+                {text}
+              </a>
+            </>
           ) : (
             "--"
           )}
@@ -227,7 +236,28 @@ const Community = props => {
       title: "Discord",
       dataIndex: "discordName",
       key: "discordName",
-      render: text => text ?? "--",
+      render: (text, { discordAvatar }, index) => (
+        <>
+          {text ? (
+            <>
+              <Avatar
+                size={25}
+                className="mr1"
+                src={
+                  discordAvatar?.length > 0
+                    ? discordAvatar
+                    : `https://xsgames.co/randomusers/assets/avatars/pixel/${
+                        index % 50
+                      }.jpg`
+                }
+              />
+              <Typography.Text copyable={true}>{text}</Typography.Text>
+            </>
+          ) : (
+            "--"
+          )}
+        </>
+      ),
     },
     {
       title: "Email",
@@ -302,10 +332,9 @@ const Community = props => {
             <WalletList
               router={router}
               // isLoading={listResult?.isLoading}
+              // isRefetching={listResult?.isFetching}
               data={listResult?.data}
               actions={actions}
-              pageSize={walletListParams.pageSize}
-              currentPage={walletListParams.current}
               onPageChange={(page, pageSize) => {
                 setWalletListParams({
                   ...walletListParams,
@@ -313,7 +342,6 @@ const Community = props => {
                   pageSize: parseInt(pageSize),
                 });
               }}
-              // isRefetching={listResult?.isFetching}
               columns={tableColumns}
             />
           )}
