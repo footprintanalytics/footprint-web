@@ -166,9 +166,8 @@ const PotentialUsers = props => {
     <>
       {project?.id ? (
         <div className="flex flex-column items-center w-full p2">
-          {
-            filterProjectResult?.isLoading &&
-            filterCollectionResult?.isLoading &&
+          {filterProjectResult?.isLoading &&
+          filterCollectionResult?.isLoading &&
           listResult?.isLoading &&
           filterTagResult?.isLoading ? (
             <Card className="w-full rounded m1" style={{ height: 250 }}>
@@ -204,8 +203,12 @@ const PotentialUsers = props => {
                 }}
               />
               <QuickFilter
-                optionsList={getQuickFilterOptionList(filterTagResult?.data?.data)}
-                formatFunction={name => formatTableTitle(name?.replace(/-/g, " "))}
+                optionsList={getQuickFilterOptionList(
+                  filterTagResult?.data?.data,
+                )}
+                formatFunction={name =>
+                  formatTableTitle(name?.replace(/-/g, " "))
+                }
                 onFliterChange={tag => {
                   setWalletListParams({
                     ...walletListParams,
@@ -226,8 +229,6 @@ const PotentialUsers = props => {
               // isLoading={listResult?.isLoading}
               data={listResult?.data}
               actions={actions}
-              pageSize={walletListParams.pageSize}
-              currentPage={walletListParams.current}
               onPageChange={(page, pageSize) => {
                 setWalletListParams({
                   ...walletListParams,
