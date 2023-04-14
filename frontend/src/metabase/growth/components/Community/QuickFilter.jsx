@@ -4,15 +4,7 @@ import { Space, Tag, Row, Typography } from "antd";
 const { CheckableTag } = Tag;
 
 export const QuickFilter = props => {
-  const { data, isLoading, refetchData, onFliterChange } = props;
-  const optionsList = [];
-  data?.map((option, index) => {
-    optionsList.push({
-      label: `${option.name} (${option.wallets})`,
-      value: option.name,
-    });
-  });
-
+  const { optionsList, formatFunction, isLoading, refetchData, onFliterChange } = props
   const [selectedTags, setSelectedTags] = useState(null);
   const handleChange = (tag, checked) => {
     setSelectedTags(checked ? tag.value : null);
@@ -22,7 +14,7 @@ export const QuickFilter = props => {
     <div className="flex flex-row w-full p1 items-center">
       <span style={{ marginRight: 8, color: "white" }}>Quick Filter:</span>
       <Space size={[0, 8]} wrap>
-        {optionsList.map(tag => (
+        {optionsList?.map(tag => (
           <CheckableTag
             key={tag.value}
             className=" rounded"
@@ -36,7 +28,7 @@ export const QuickFilter = props => {
             checked={selectedTags === tag.value}
             onChange={checked => handleChange(tag, checked)}
           >
-            {tag.label}
+            {formatFunction?.(tag.label) || tag.label}
           </CheckableTag>
         ))}
       </Space>

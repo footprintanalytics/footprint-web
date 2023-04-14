@@ -277,6 +277,15 @@ const Community = props => {
     // },
   ];
 
+  const getQuickFilterOptionList = (data) => {
+    return data?.map(option => {
+      return {
+        label: `${option.name} (${option.wallets})`,
+        value: option.name,
+      };
+    });
+  }
+
   return (
     <>
       {project?.id ? (
@@ -313,7 +322,7 @@ const Community = props => {
                 }}
               />
               <QuickFilter
-                data={filterResult?.data?.data}
+                optionList={getQuickFilterOptionList(filterResult?.data?.data)}
                 onFliterChange={tag => {
                   setWalletListParams({
                     ...walletListParams,
