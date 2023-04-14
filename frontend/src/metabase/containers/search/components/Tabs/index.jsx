@@ -9,6 +9,7 @@ import DashboardsList from "../../../dashboards/components/Dashboards/List";
 import PageList from "../Page/Index";
 import CreatorList from "../Creator/Index";
 import DataSetList from "../DataSet/Index";
+import MyTables from "../MyTables/Index";
 import cx from "classnames";
 import {
   getCreatorQueryLink,
@@ -43,6 +44,7 @@ const Index = ({
   const isOwnCreator = user && user.name === router?.params?.name;
 
   const isFavoritesTab = model === "favorite";
+  const isMyTablesTab = model === "table";
 
   const isCreatorAndOwner = () => {
     return isCreator() && router?.params?.name === user?.name;
@@ -78,6 +80,14 @@ const Index = ({
       tab: "My Favorites",
       render: params => {
         return <DashboardsList {...params} />;
+      },
+      show: isCreator() && isOwnCreator,
+    },
+    {
+      key: "table",
+      tab: "My Tables",
+      render: params => {
+        return <MyTables {...params} />;
       },
       show: isCreator() && isOwnCreator,
     },
@@ -150,7 +160,7 @@ const Index = ({
     }, 1000);
     return (
       <div className="search__tabs-other flex justify-end">
-        {!isFavoritesTab && (
+        {!isFavoritesTab && !isMyTablesTab && (
           <Search
             allowClear
             placeholder="Search..."
