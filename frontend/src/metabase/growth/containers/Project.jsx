@@ -159,8 +159,7 @@ const Project = props => {
     ) : (
       <LoadingSpinner message="Loading..." />
     );
-    if (current_tab === "UserTemplate") {
-      //|| current_tab === "Potential Users"
+    if (current_tab === "UserTemplate" || current_tab === "Potential Users") {
       return (
         <UserTemplate
           location={location}
@@ -168,6 +167,9 @@ const Project = props => {
           projectId={getLatestGAProjectId()}
         ></UserTemplate>
       );
+    }
+    if (current_tab === "Potential Users2") {
+      return <PotentialUsers project={getProjectObject(project)} />;
     }
     if (current_tab === "Connector") {
       return (
@@ -287,9 +289,6 @@ const Project = props => {
             {WrapPublicDashboard}
           </LoadingDashboard>
         );
-      }
-      if (current_tab === "Potential Users" && isDemo) {
-        return <PotentialUsers project={getProjectObject(project)} />;
       }
       return WrapPublicDashboard;
     }
