@@ -84,6 +84,19 @@ export const getCommunityQuickFilter = async params => {
 export const getCommunityWalletAddress = async params => {
   return POST(`/api/v1/fga/community/wallet-address`, params);
 };
+
+export const getPotentialUseFilterProject = async params => {
+  return GET(`/api/v1/fga/potential-user/filter/project`, params);
+};
+export const getPotentialUserFilterCollection = async params => {
+  return GET(`/api/v1/fga/potential-user/filter/collection`, params);
+};
+export const getPotentialUserFilterTag = async params => {
+  return GET(`/api/v1/fga/potential-user/filter/tag`, params);
+};
+export const getPotentialUser = async params => {
+  return POST(`/api/v1/fga/potential-user`, params);
+};
 // FP Api ---------------
 export const UserRegister = async params => {
   return POST("/api/v1/user/signup", params);

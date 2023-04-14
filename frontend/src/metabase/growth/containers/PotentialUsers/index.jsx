@@ -1,181 +1,262 @@
 /* eslint-disable react/prop-types */
-import React, { useState } from "react";
+import React from "react";
 import "../../css/index.css";
 import "./index.css";
-import CategoryForFga from "metabase/containers/protocols/components/Protocols/CategoryForFga";
-import Button from "metabase/core/components/Button";
-import Profile from "./Profile";
-import Filter from "./Filter";
-import Total from "./Total";
-import { remove } from "lodash";
 import CreateCohort2 from "metabase/growth/containers/PotentialUsers/CreateFliterCohort";
 import { push } from "react-router-redux";
-import { getUser } from "metabase/selectors/user";
+import { getFgaProject, getUser } from "metabase/selectors/user";
 import { connect } from "react-redux";
-import { ValueFilter } from "metabase/growth/components/Community/ValueFilter";
 import { QuickFilter } from "metabase/growth/components/Community/QuickFilter";
 import { ItemFilter } from "./ItemFilter";
 import { WalletList } from "metabase/growth/components/Community/WalletList";
-import { getGrowthProjectPath } from "metabase/growth/utils/utils";
+import { Card } from "antd";
+import LoadingSpinner from "metabase/components/LoadingSpinner/LoadingSpinner";
+import { useQuery } from "react-query";
+import {
+  getPotentialUseFilterProject,
+  getPotentialUser,
+  getPotentialUserFilterCollection,
+  getPotentialUserFilterTag,
+} from "metabase/new-service";
+import { QUERY_OPTIONS } from "metabase/containers/dashboards/shared/config";
+import { Link } from "react-router";
+import { formatTableTitle } from "metabase/lib/formatting/footprint";
 
 const PotentialUsers = props => {
-  const {project} = props;
-  const data = "bluechip_holder,diamond_hand,whale,nft_smart_money,flashbot,sybil,nft_hunter,high_buying_power,active_nft_trader,blur_airdrop_wallets".split(",")
-  const excludeData = "flashbot,sybil".split(",")
-  const [tags, setTags] = useState([]);
-  const [excludeTags, setExcludeTags] = useState([]);
-  const [filterArray, setFilterArray] = useState([]);
+  const { router, project } = props;
 
-  const [filterResult, setFilterResult] = useState();
 
-  const createTotalSql = ({tags, excludeTags}) => {
-    const sql = "with total_tag as(" + "\n" +
-      "    select \n" +
-      "    entity_id as wallet_address\n" +
-      "    ,tag_name\n" +
-      "    from iceberg.footprint.fga_address_tag \n" +
-      ") \n" +
-      "select \n" +
-      "count(distinct wallet_address)\n" +
-      "from\n" +
-      "user_profile\n" +
-      "where 1=1 \n"
-      const t1 = tags ? tags?.map(s => ` and wallet_address in (select wallet_address from total_tag address_tag where tag_name='${s}') \n`)?.join(" ") : ""
-      const t2 = excludeTags ? excludeTags?.map(s => `and wallet_address not in (select wallet_address from total_tag address_tag where tag_name='${s}')\n`)?.join(" ") : ""
-    ;
-    return `${sql}${t1}${t2}`
-  }
+  const [walletListParams, setWalletListParams] = React.useState({
+    pageSize: 10,
+    current: 1,
+    filters: [],
+    tags:[],
+    protocolSlugs: [],
+    collectionSlugs: [],
+  });
 
-  const createPieSql = ({tags, excludeTags}) => {
-    const t1 = tags ? tags?.map(s => ` and wallet_address in (select wallet_address from total_tag address_tag where tag_name='${s}') \n`)?.join(" ") : ""
-    const t2 = excludeTags ? excludeTags?.map(s => `and wallet_address not in (select wallet_address from total_tag address_tag where tag_name='${s}')\n`)?.join(" ") : ""
-    const sql = "with total_tag as(" + "\n" +
-      "    select \n" +
-      "    entity_id as wallet_address\n" +
-      "    ,tag_name\n" +
-      "    from iceberg.footprint.fga_address_tag \n" +
-      "), \n" +
-      "wallets as (\n" +
-      "    select \n" +
-      "    distinct wallet_address as wallet_address\n" +
-      "    from\n" +
-      "    user_profile\n" +
-      "    where 1=1 \n" +
-      "    and wallet_address in (select wallet_address from total_tag address_tag where tag_name='diamond_hand')\n" +
-      "    and wallet_address not in (select wallet_address from total_tag address_tag where tag_name='B')\n" +
-      `${t1}` + "\n" +
-      `${t2}` + "\n" +
-      "    limit 1000\n" +
-      ")" +
-      "\n" +
-      "\n" +
-      "select tag_name as tag, count(*) as wallets " +
-      "from total_tag " +
-      "where wallet_address in (select wallet_address from wallets) group by 1 order by 2 desc \n"
-    return `${sql}`
-  }
-  let filterValueArray = [];
-  const handleFilterObject = object => {
-    if (!object?.key) {
-      return ;
-    }
-    if (filterValueArray.length === 0 || !filterValueArray?.map(item => item.key).includes(object?.key)) {
-      filterValueArray = [...filterValueArray, object]
-    } else {
-      remove(filterValueArray, (item) => item.key === object?.key)
-      filterValueArray = [...filterValueArray, object]
-    }
-  }
+  const filterProjectResult = useQuery(
+    ["getPotentialUseFilterProject", project?.id],
+    async () => {
+      return getPotentialUseFilterProject({ projectId: parseInt(project?.id) });
+    },
+    { ...QUERY_OPTIONS, enabled: !!project?.id },
+  );
 
-  const actionItems = [
+  const filterCollectionResult = useQuery(
+    ["getPotentialUserFilterCollection", project?.id],
+    async () => {
+      return getPotentialUserFilterCollection({ projectId: parseInt(project?.id) });
+    },
+    { ...QUERY_OPTIONS, enabled: !!project?.id },
+  );
+
+  const filterTagResult = useQuery(
+    ["getPotentialUserFilterTag", project?.id],
+    async () => {
+      return getPotentialUserFilterTag({ projectId: parseInt(project?.id) });
+    },
+    { ...QUERY_OPTIONS, enabled: !!project?.id },
+  );
+
+  const listResult = useQuery(
+    ["getPotentialUser", project?.id, walletListParams],
+    async () => {
+      return getPotentialUser({
+        ...walletListParams,
+        projectId: parseInt(project?.id),
+      });
+    },
+    { ...QUERY_OPTIONS, enabled: !!project?.id },
+  );
+
+  const actions = [
     {
-      key: "create_cohort",
+      title: "Create Cohort",
       label: (<CreateCohort2 project={project}> </CreateCohort2>),
     },
   ];
 
+  const tableColumns = [
+    {
+      title: "Wallet",
+      dataIndex: "address",
+      key: "Wallet",
+      render: (text, record) => (
+        <div className="flex flex-col">
+          <Link
+            onClick={() => {
+              props.router?.push({
+                pathname:
+                  "/growth/public/dashboard/f7cd2f21-1e14-438d-8820-011418607450",
+                query: {
+                  wallet_address: text,
+                },
+                hash: "#from=Community",
+              });
+            }}
+          >
+            {text}
+          </Link>
+          {record.ens && (
+            <div>
+              {/* <Badge color={"green"} text={} /> */}
+              <a href={record.ens} target="_blank" rel="noreferrer">
+                {record.ens}
+              </a>
+            </div>
+          )}
+        </div>
+      ),
+    },
+    {
+      title: "Net Worth",
+      dataIndex: "netWorth",
+      key: "netWorth",
+      render: text => (text ? text.toLocaleString("en-US") : "--"),
+    },
+    {
+      title: "NFT Holding",
+      dataIndex: "holdingNFT",
+      key: "holdingNFT",
+      render: text => (text ? text.toLocaleString("en-US") : "--"),
+    },
+    {
+      title: "NFT Holding Values",
+      dataIndex: "holdingNFTValue",
+      key: "holdingNFTValue",
+      render: text => (text ? text.toLocaleString("en-US") : "--"),
+    },
+    {
+      title: "Token Holding",
+      dataIndex: "holdingToken",
+      key: "holdingToken",
+      render: text => (text ? text.toLocaleString("en-US") : "--"),
+    },
+    {
+      title: "Token Holding Values",
+      dataIndex: "holdingTokenValue",
+      key: "holdingTokenValue",
+      render: text => (text ? text.toLocaleString("en-US") : "--"),
+    },
+    {
+      title: "Total NFTTransaction",
+      dataIndex: "totalNFTTransaction",
+      key: "totalNFTTransaction",
+      render: text => (text ? text.toLocaleString("en-US") : "--"),
+    },
+    {
+      title: "Total Transactions",
+      dataIndex: "totalTransactions",
+      key: "Total Transactions",
+      render: text => (text ? text.toLocaleString("en-US") : "--"),
+    },
+  ];
+
+  const getQuickFilterOptionList = (data) => {
+    return data?.map(option => {
+      return {
+        label: option,
+        value: option,
+      };
+    });
+  }
+
   return (
-    <div className="flex flex-column">
-      <ItemFilter className="mt2" />
-      <QuickFilter />
-      <WalletList defaultActionItems={actionItems}/>
-      {/*<div className="potential-users__filter">*/}
-      {/*  <h2>Filter</h2>*/}
-      {/*  <div className="flex flex-column">*/}
-      {/*    <CategoryForFga*/}
-      {/*      data={data}*/}
-      {/*      router={null}*/}
-      {/*      title={"Include tag"}*/}
-      {/*      isLoading={false}*/}
-      {/*      actives={tags}*/}
-      {/*      onChange={array => setTags(array)}*/}
-      {/*    />*/}
-      {/*    <CategoryForFga*/}
-      {/*      data={excludeData}*/}
-      {/*      router={null}*/}
-      {/*      title={"Exclude tag"}*/}
-      {/*      isLoading={false}*/}
-      {/*      actives={excludeTags}*/}
-      {/*      onChange={array => setExcludeTags(array)}*/}
-      {/*    />*/}
-      {/*    {filterArray.map(item => <Filter key={item} onChange={object => {*/}
-      {/*      handleFilterObject(object)*/}
-      {/*    }}/>)}*/}
-
-      {/*    <div className="flex">*/}
-      {/*      <Button onClick={() => {*/}
-      {/*        const array = filterArray;*/}
-      {/*        array.push(filterArray.length + 1);*/}
-      {/*        setFilterArray([...array]);*/}
-      {/*      }}>Add filter</Button>*/}
-      {/*      <Button onClick={() => {*/}
-      {/*        setFilterResult({*/}
-      {/*          tags: tags,*/}
-      {/*          excludeTags: excludeTags,*/}
-      {/*          filter: filterValueArray,*/}
-      {/*          totalSql: createTotalSql({ tags, excludeTags }),*/}
-      {/*          pieDataSql: createPieSql({ tags, excludeTags }),*/}
-      {/*        });*/}
-      {/*      }}>Run</Button>*/}
-      {/*    </div>*/}
-      {/*  </div>*/}
-      {/*</div>*/}
-      {/*<div className="potential-users__profile">*/}
-      {/*  <h2>Profile</h2>*/}
-      {/*  {filterResult && <div className="flex justify-end">*/}
-      {/*    <CreateCohort2 project={project}/>*/}
-      {/*  </div> }*/}
-      {/*  <div className="flex">*/}
-      {/*    {filterResult &&*/}
-      {/*    (*/}
-      {/*      <div className="Potential-Users__condition">*/}
-      {/*        <ul style={{ whiteSpace: "pre-line" }}>*/}
-      {/*          <div>{`Include tags: ${filterResult.tags?.join(",")}`}</div>*/}
-      {/*          <div>{`Exclude tags: ${filterResult.excludeTags?.join(",")}`}</div>*/}
-      {/*          {filterResult.filter?.map(item => <li key={item.key}>{`${item.key}: ${item.operator} ${item.value}`}</li>)}*/}
-      {/*        </ul>*/}
-      {/*      </div>*/}
-      {/*    )}*/}
-      {/*    {filterResult && (*/}
-      {/*      <div className="Potential-Users__total">*/}
-      {/*        <Total sql={filterResult?.totalSql}/>*/}
-      {/*      </div>*/}
-      {/*    )}*/}
-      {/*  </div>*/}
-      {/*  {filterResult?.pieDataSql && (<Profile sql={filterResult.pieDataSql}/>)}*/}
-      {/*</div>*/}
-
-    </div>
-
+    <>
+      {project?.id ? (
+        <div className="flex flex-column items-center w-full p2">
+          {
+            filterProjectResult?.isLoading &&
+            filterCollectionResult?.isLoading &&
+          listResult?.isLoading &&
+          filterTagResult?.isLoading ? (
+            <Card className="w-full rounded m1" style={{ height: 250 }}>
+              <LoadingSpinner message="Loading..." />
+            </Card>
+          ) : (
+            <>
+              <ItemFilter
+                className="mt2"
+                projectData={filterProjectResult?.data?.data}
+                collectionData={filterCollectionResult?.data?.data}
+                onSelectChange={selectObject => {
+                  setWalletListParams({
+                    ...walletListParams,
+                    ...selectObject,
+                    current: 1,
+                  });
+                }}
+                onFilterChange={valueFilter => {
+                  if (!valueFilter) return;
+                  let temp = [...walletListParams.filters];
+                  temp = temp.filter(
+                    item => item.indicator !== valueFilter.indicator,
+                  );
+                  if (valueFilter.comparisonValue) {
+                    temp.push(valueFilter);
+                  }
+                  setWalletListParams({
+                    ...walletListParams,
+                    filters: temp,
+                    current: 1,
+                  });
+                }}
+              />
+              <QuickFilter
+                optionsList={getQuickFilterOptionList(filterTagResult?.data?.data)}
+                formatFunction={name => formatTableTitle(name?.replace(/-/g, " "))}
+                onFliterChange={tag => {
+                  setWalletListParams({
+                    ...walletListParams,
+                    current: 1,
+                    tags: tag ? [tag?.value] : [],
+                  });
+                }}
+              />
+            </>
+          )}
+          {listResult.isLoading ? (
+            <Card className="w-full rounded m1" style={{ height: 650 }}>
+              <LoadingSpinner message="Loading..." />
+            </Card>
+          ) : (
+            <WalletList
+              router={router}
+              // isLoading={listResult?.isLoading}
+              data={listResult?.data}
+              actions={actions}
+              pageSize={walletListParams.pageSize}
+              currentPage={walletListParams.current}
+              onPageChange={(page, pageSize) => {
+                setWalletListParams({
+                  ...walletListParams,
+                  current: parseInt(page),
+                  pageSize: parseInt(pageSize),
+                });
+              }}
+              // isRefetching={listResult?.isFetching}
+              columns={tableColumns}
+            />
+          )}
+        </div>
+      ) : (
+        <LoadingSpinner message="Loading..." />
+      )}
+    </>
   );
 };
 
 const mapDispatchToProps = {
   onChangeLocation: push,
 };
+
 const mapStateToProps = (state, props) => {
   return {
     user: getUser(state),
+    projectPath: props?.params?.project,
+    projectObject: getFgaProject(state),
+    menu: props?.params?.menu,
   };
 };
 

@@ -41,7 +41,7 @@ const MuiSelect = props => {
         filterOption={(input, option) =>
           (option?.label ?? '').toLowerCase().includes(input.toLowerCase())
         }
-        value={value}
+        value={currentValue}
         options={options}
       />
       <label className={labelClass}>
