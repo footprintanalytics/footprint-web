@@ -200,19 +200,19 @@ const Community = props => {
       title: "Net Worth",
       dataIndex: "netWorth",
       key: "netWorth",
-      render: text => (text ? text.toLocaleString("en-US") : "--"),
+      render: text => (text ? '$' + text.toLocaleString("en-US") : "--"),
     },
     {
       title: "NFT Holding Values",
       dataIndex: "holdingNFTValue",
       key: "holdingNFTValue",
-      render: text => (text ? text.toLocaleString("en-US") : "--"),
+      render: text => (text ? '$' + text.toLocaleString("en-US") : "--"),
     },
     {
       title: "Token Holding Values",
       dataIndex: "holdingTokenValue",
       key: "holdingTokenValue",
-      render: text => (text ? text.toLocaleString("en-US") : "--"),
+      render: text => (text ? '$' + text.toLocaleString("en-US") : "--"),
     },
     {
       title: "Twitter",
