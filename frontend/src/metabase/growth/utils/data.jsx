@@ -282,6 +282,11 @@ export const fga_menu_data = [
         id: null,
         uuid: null,
       },
+      {
+        name: "Lifecycle",
+        id: 7118,
+        uuid: "b1682d12-bddd-4b10-99a3-a403a3a6a78c",
+      },
       // {
       //   name: "Project Users",
       //   id: 7773,
@@ -296,11 +301,6 @@ export const fga_menu_data = [
         name: "Discord",
         id: 7490,
         uuid: "d137a1ef-34a3-4553-84cb-2203bd9d2baf",
-      },
-      {
-        name: "Lifecycle",
-        id: 7118,
-        uuid: "b1682d12-bddd-4b10-99a3-a403a3a6a78c",
       },
     ],
   },

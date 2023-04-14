@@ -14,7 +14,7 @@ export function checkIsDemoAccountAndAlert(
     const key = "checkIsDemoAccountAndAlert";
     notificationApi.info({
       key,
-      message: `Notification`,
+      message: `Contact Us`,
       description: (
         <>
           <div className=" mt1 text-light">

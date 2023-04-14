@@ -156,16 +156,6 @@ const Community = props => {
       key: "address",
       render: (text, record) => (
         <div className="flex flex-row">
-          {/* <Avatar
-            size={25}
-            className="mr1"
-            src={createIcon({
-              seed: text?.toLowerCase(),
-              size: 12,
-              scale: 8,
-            })?.current?.toDataURL()}
-
-          /> */}
           <Link
             onClick={() => {
               props.router?.push({
