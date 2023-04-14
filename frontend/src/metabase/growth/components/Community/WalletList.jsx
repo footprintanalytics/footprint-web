@@ -46,7 +46,7 @@ export const WalletList = props => {
         </div>
         <Table
           columns={columns}
-          key="wallet"
+          key="address"
           pagination={{
             pageSize: data?.pageSize,
             total: data?.total,

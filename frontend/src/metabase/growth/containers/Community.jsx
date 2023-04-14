@@ -64,11 +64,13 @@ const Community = props => {
         title: "Twitter Followers",
         value: data.twitterFollowers,
         change: data.twitterFollowersChange,
+        sourceDefinitionId: project?.twitter?.sourceDefinitionId,
       });
       dataList.push({
         title: "Discord Members",
         value: data.discordMembers,
         change: data.discordMembersChange,
+        sourceDefinitionId: project?.discord?.sourceDefinitionId,
       });
     }
     return dataList;
@@ -118,7 +120,7 @@ const Community = props => {
     {
       title: "Wallet",
       dataIndex: "address",
-      key: "Wallet",
+      key: "address",
       render: (text, record) => (
         <div className="flex flex-col">
           <Link
@@ -134,7 +136,7 @@ const Community = props => {
             }}
           >
             <div className="flex flex-col">
-              <a>{text}</a>
+              <Typography.Text>{text}</Typography.Text>
               {record.ens && (
                 <Typography.Text type="secondary">{record.ens}</Typography.Text>
               )}
@@ -281,6 +283,8 @@ const Community = props => {
           {!infoResult.isLoading && (
             <StatisticIndex
               data={formatInfoResult(infoResult?.data)}
+              project={project}
+              refetchData={infoResult.refetch}
               router={router}
             />
           )}
