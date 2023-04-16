@@ -23,15 +23,15 @@
                      :ee "ee"
                      :oss "oss")]
     (u/step (format "Build frontend with MB_EDITION=%s" mb-edition)
-      (when (= type "download-dependencies")
+;      (when (= type "download-dependencies")
   (u/step "Run 'yarn' to download javascript dependencies"
             (if (env/env :ci)
               (do
                 (u/announce "CI run: enforce the lockfile")
                 (u/sh {:dir u/project-root-directory} "yarn" "--frozen-lockfile"))
               (u/sh {:dir u/project-root-directory} "yarn")))
-      )
-        (when (= type "build-frontend")
+;      )
+;        (when (= type "build-frontend")
       (u/step "Build frontend"
               (u/sh {:dir u/project-root-directory
                      :env {"PATH"       (env/env :path)
@@ -39,8 +39,8 @@
                            "WEBPACK_BUNDLE"   "production"
                            "MB_EDITION" mb-edition}}
                     "yarn" "build"))
-          )
-        (when (= type "static-viz")
+;          )
+;        (when (= type "static-viz")
       (u/step "Build static viz"
               (u/sh {:dir u/project-root-directory
                      :env {"PATH"       (env/env :path)
@@ -48,7 +48,7 @@
                            "WEBPACK_BUNDLE"   "production"
                            "MB_EDITION" mb-edition}}
                     "yarn" "build-static-viz"))
-          )
+;          )
       (u/announce "Frontend built successfully."))))
 
 (defn- build-licenses!
@@ -129,7 +129,7 @@
                                       (throw (ex-info (format "Invalid step: %s" step-name)
                                                       {:step        step-name
                                                        :valid-steps (keys all-steps)})))]]
-         (step-fn {:version version, :edition edition}))
+         (print"step-namestep-namestep-namestep-name" step-name))
        (u/announce "All build steps finished.")))))
 
 (defn -main [& steps]

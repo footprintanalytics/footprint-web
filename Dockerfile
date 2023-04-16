@@ -51,15 +51,15 @@ COPY --chown=circleci . .
 
 RUN INTERACTIVE=false CI=true MB_EDITION=$MB_EDITION bin/build version
 RUN INTERACTIVE=false CI=true MB_EDITION=$MB_EDITION bin/build translations
+ RUN INTERACTIVE=false CI=true MB_EDITION=$MB_EDITION bin/build frontend
 RUN INTERACTIVE=false CI=true MB_EDITION=$MB_EDITION bin/build licenses
 RUN INTERACTIVE=false CI=true MB_EDITION=$MB_EDITION bin/build drivers
 RUN INTERACTIVE=false CI=true MB_EDITION=$MB_EDITION bin/build uberjar
 
-RUN INTERACTIVE=false CI=true MB_EDITION=$MB_EDITION bin/build frontend-download-dependencies
+RUN #INTERACTIVE=false CI=true MB_EDITION=$MB_EDITION bin/build frontend-download-dependencies
 
-RUN INTERACTIVE=false CI=true MB_EDITION=$MB_EDITION bin/build frontend-build-frontend
-RUN INTERACTIVE=false CI=true MB_EDITION=$MB_EDITION bin/build frontend-static-viz
-# RUN INTERACTIVE=false CI=true MB_EDITION=$MB_EDITION bin/build frontend
+RUN #INTERACTIVE=false CI=true MB_EDITION=$MB_EDITION bin/build frontend-build-frontend
+RUN #INTERACTIVE=false CI=true MB_EDITION=$MB_EDITION bin/build frontend-static-viz
 
 # ###################
 # # STAGE 2: runner
