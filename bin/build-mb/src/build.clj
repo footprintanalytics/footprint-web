@@ -131,7 +131,7 @@
                                       (throw (ex-info (format "Invalid step: %s" step-name)
                                                       {:step        step-name
                                                        :valid-steps (keys all-steps)})))]]
-         (print"step-namestep-namestep-namestep-name" step-name))
+         (step-fn {:version version, :edition edition}))
        (u/announce "All build steps finished.")))))
 
 (defn -main [& steps]
