@@ -102,6 +102,8 @@
                    (build-frontend! edition "build-frontend"))
    :frontend-static-viz     (fn [{:keys [edition]}]
                    (build-frontend! edition "static-viz"))
+   :frontend     (fn [{:keys [edition]}]
+                   (build-frontend! edition nil))
    :licenses     (fn [{:keys [edition]}]
                    (build-licenses! edition))
    :drivers      (fn [{:keys [edition]}]
