@@ -251,6 +251,9 @@ const Project = props => {
         ></CohortList>
       );
     }
+    if (current_tab === "Potential Users" && isDemo) {
+      return <PotentialUsers project={getProjectObject(project)} />;
+    }
     if (gaMenuTabs?.dashboardMap?.has(current_tab)) {
       if (current_tab === "Twitter") {
         return (
