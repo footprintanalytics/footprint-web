@@ -2,7 +2,7 @@
 /* eslint-disable react/prop-types */
 import React, { useEffect } from "react";
 import { connect } from "react-redux";
-import { Card, Tag, Avatar, Typography, Button } from "antd";
+import { Card, Tag, Avatar, Typography, Button, Tooltip } from "antd";
 import { useQuery } from "react-query";
 import { Link } from "react-router";
 import { getUser, getFgaProject } from "metabase/selectors/user";
@@ -169,7 +169,9 @@ const Community = props => {
             }}
           >
             <div className="flex flex-col">
-              <Typography.Text>{String(text).slice(0, 4) + '...' + String(text).slice(-4)}</Typography.Text>
+              <Typography.Text>
+                {String(text).slice(0, 4) + "..." + String(text).slice(-4)}
+              </Typography.Text>
               {record.ens && (
                 <Typography.Text type="secondary">{record.ens}</Typography.Text>
               )}
@@ -184,7 +186,7 @@ const Community = props => {
       dataIndex: "tags",
       render: (_, { tags }) => (
         <>
-          {tags ? (
+          {tags?.length > 0 ? (
             <>
               {tags?.map(tag => {
                 return <Tag key={tag}>{tag}</Tag>;
@@ -242,7 +244,14 @@ const Community = props => {
                           }.jpg`
                     }
                   />
-                  {text}
+                  <Typography.Text
+                    style={{ maxWidth: 120 }}
+                    ellipsis={{
+                      tooltip: text,
+                    }}
+                  >
+                    {text}
+                  </Typography.Text>
                 </div>
               </a>
             </>
@@ -271,7 +280,13 @@ const Community = props => {
                       }.jpg`
                 }
               />
-              <Typography.Text ellipsis={true} copyable={true}>
+              <Typography.Text
+                style={{ maxWidth: 120 }}
+                ellipsis={{
+                  tooltip: text,
+                }}
+                copyable={true}
+              >
                 {text}
               </Typography.Text>
             </div>
@@ -285,7 +300,22 @@ const Community = props => {
       title: "Email",
       dataIndex: "email",
       key: "email",
-      render: text => (text?.length > 0 ? text : "--"),
+      render: text => {
+        const mail = text;
+        return mail?.length > 0 ? (
+          <Tooltip title={mail}>
+            <Avatar
+              size={25}
+              style={{ backgroundColor: "#fff" }}
+              src={
+                "https://footprint-imgs.oss-us-east-1.aliyuncs.com/20220516201357.png"
+              }
+            ></Avatar>
+          </Tooltip>
+        ) : (
+          " -- "
+        );
+      },
     },
     // {
     //   title: "Action",
