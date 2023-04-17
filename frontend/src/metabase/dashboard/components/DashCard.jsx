@@ -225,7 +225,7 @@ class DashCard extends Component {
     const isTextDisplay = mainCard.display === "text";
     const isImageDisplay = mainCard.display === "image";
     const isVideoDisplay = mainCard.display === "video";
-    const isIframeDisplay = mainCard.display === "embed";
+    const isEmbedDisplay = mainCard.display === "embed";
 
     const isAction = isActionCard(mainCard);
 
@@ -254,21 +254,21 @@ class DashCard extends Component {
     const showEdit = isOwner && !!dashcard.card.id;
     const isPublic = mode && mode.name === PublicMode.name;
 
-    const hideDuplicate = isTextDisplay || isImageDisplay || isVideoDisplay || isIframeDisplay;
+    const hideDuplicate = isTextDisplay || isImageDisplay || isVideoDisplay || isEmbedDisplay;
 
     const hideWatermark =
-      clearWatermark || isTextDisplay || isImageDisplay || isVideoDisplay || isIframeDisplay;
+      clearWatermark || isTextDisplay || isImageDisplay || isVideoDisplay || isEmbedDisplay;
 
     const showPreview =
       !isPublic &&
       !showEdit &&
       !isTextDisplay &&
       !isImageDisplay &&
-      !isIframeDisplay &&
+      !isEmbedDisplay &&
       !isVideoDisplay;
 
     const showChartInfo =
-      !isPublic && !isTextDisplay && !isImageDisplay && !isVideoDisplay && !isIframeDisplay;
+      !isPublic && !isTextDisplay && !isImageDisplay && !isVideoDisplay && !isEmbedDisplay;
 
     const editAction = card => {
       window.open(`/chart/${card.id}?editingOnLoad=true`);
@@ -284,10 +284,10 @@ class DashCard extends Component {
       mainCard,
     });
 
-    const notShowReplacementContent = isImageDisplay || isVideoDisplay || isIframeDisplay;
+    const notShowReplacementContent = isImageDisplay || isVideoDisplay || isEmbedDisplay;
     const includeRealtimeTable = isRealtimeChart(dashcard, realtimeList);
     const isRealtimeUser = user?.id === 20103;
-    const showReadTimeMode = !isPublic && !isTextDisplay && !isImageDisplay && !isVideoDisplay && !isIframeDisplay && result && !result.error
+    const showReadTimeMode = !isPublic && !isTextDisplay && !isImageDisplay && !isVideoDisplay && !isEmbedDisplay && result && !result.error
       && includeRealtimeTable
       && isRealtimeUser;
     return (
