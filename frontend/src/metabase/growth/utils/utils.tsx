@@ -4,6 +4,23 @@ import { notification, Button } from "antd";
 import Link from "antd/lib/typography/Link";
 import { PublicApi, maybeUsePivotEndpoint } from "metabase/services";
 
+export function updateHashValue(
+  hash: string,
+  key: string,
+  value: string,
+): string {
+  // update hash value
+  return (
+    "#" +
+    hash
+      .substr(1)
+      .split("&")
+      .filter(entry => entry !== "" && entry.split("=")[0] !== key)
+      .concat(`${key}=${value}`)
+      .join("&")
+  );
+}
+
 export function checkIsDemoAccountAndAlert(
   notificationApi = notification,
   user: any,
