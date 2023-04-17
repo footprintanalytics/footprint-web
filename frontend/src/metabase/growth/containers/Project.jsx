@@ -24,6 +24,7 @@ import PotentialUsers from "./PotentialUsers";
 import UserTemplate from "./UserTemplate";
 import CohortList from "./CohortList";
 import Community from "./Community";
+import UserProfile from "./UserProfile";
 import "../css/index.css";
 
 const Project = props => {
@@ -171,6 +172,15 @@ const Project = props => {
     }
     if (current_tab === "Potential Users2") {
       return <PotentialUsers project={getProjectObject(project)} />;
+    }
+    if (current_tab === "UserProfile") {
+      return (
+        <UserProfile
+          location={location}
+          router={router}
+          project={getProjectObject(project)}
+        />
+      );
     }
     if (current_tab === "Connector") {
       return (

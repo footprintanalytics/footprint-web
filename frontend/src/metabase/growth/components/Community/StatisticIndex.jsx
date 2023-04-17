@@ -19,7 +19,7 @@ export const StatisticIndex = props => {
                   router={router}
                   project={project}
                   className="mt1"
-                  disableCheck={option?.value ? true : false}
+                  disableCheck={option?.value >= 0 ? true : false}
                   sourceDefinitionId={option.sourceDefinitionId}
                   refetch={refetchData}
                 >
