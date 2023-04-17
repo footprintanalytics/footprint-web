@@ -24,7 +24,7 @@ export default ({ router, setTableBelongType, jumpToChart }) => {
               type: "query",
             })
           }
-        >{value}</Link>
+        ><h4>{value}</h4></Link>
       );
     },
   };
@@ -80,11 +80,11 @@ export default ({ router, setTableBelongType, jumpToChart }) => {
         }}
       >
         <Menu.Item key="setPrivate">
-          <IconValue iconName="duplicate" value={record.belongType === "public" ? "Set to Private" : "Set to Public"} />
+          <IconValue iconName="tool_setting" value={record.belongType === "public" ? "Set to Private" : "Set to Public"} />
         </Menu.Item>
         {record.source === "chart" && (
           <Menu.Item key="jumpToChart">
-            <IconValue iconName="duplicate" value={"Jump to Chart"} />
+            <IconValue iconName="search_chart" value={"Jump to Chart"} />
           </Menu.Item>
         )}
       </Menu>);
