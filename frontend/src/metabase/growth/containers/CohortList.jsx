@@ -31,7 +31,7 @@ const CohortList = props => {
       title: "Title",
       dataIndex: "title",
       render: text => {
-        const tip =
+        let tip =
           cohortTips.get(
             [
               `${props.project?.protocolName} Users`,
@@ -40,6 +40,8 @@ const CohortList = props => {
               ? "{project slug} Users"
               : text,
           ) ?? null;
+        // TODO: Don't show the tooltip temporarily
+        tip = null;
         return (
           <Tooltip placement="top" title={tip} arrow={true}>
             <Link
