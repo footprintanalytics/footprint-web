@@ -203,21 +203,24 @@ const Community = props => {
       dataIndex: "netWorth",
       key: "netWorth",
       align: "right",
-      render: text => (text ? "$" + text.toLocaleString("en-US") : "--"),
+      render: text =>
+        text !== null ? "$" + text.toLocaleString("en-US") : "--",
     },
     {
       title: "NFT Holding Values",
       dataIndex: "holdingNFTValue",
       key: "holdingNFTValue",
       align: "right",
-      render: text => (text ? "$" + text.toLocaleString("en-US") : "--"),
+      render: text =>
+        text !== null ? "$" + text.toLocaleString("en-US") : "--",
     },
     {
       title: "Token Holding Values",
       dataIndex: "holdingTokenValue",
       key: "holdingTokenValue",
       align: "right",
-      render: text => (text ? "$" + text.toLocaleString("en-US") : "--"),
+      render: text =>
+        text !== null ? "$" + text.toLocaleString("en-US") : "--",
     },
     {
       title: "Twitter",

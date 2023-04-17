@@ -17,17 +17,17 @@ const UserProfile = props => {
     {
       label: "User Overview",
       key: "user_overview",
-      uuid: "b46fc872-c97d-4300-a83e-45fa61760ad2",
+      uuid: "7edf6b30-83e5-4fca-a1d5-7c3002560ea5",
     },
     {
       label: "User Actions",
       key: "user_actions",
-      uuid: "b46fc872-c97d-4300-a83e-45fa61760ad2",
+      uuid: "65cb5f69-f01d-4719-995d-b54880eb6865",
     },
     {
       label: "User Profile",
       key: "user_profile",
-      uuid: "b46fc872-c97d-4300-a83e-45fa61760ad2",
+      uuid: "8c277761-b6c6-464e-8219-cdc6948f2012",
     },
   ];
   const from = parseHashOptions(location.hash).from;
@@ -82,23 +82,20 @@ const UserProfile = props => {
             ]}
           />
         )}
-        {/* need a tab select  */}
-        {currentTab && (
-          <Tabs
-            defaultActiveKey={currentTab?.key}
-            style={{ marginBottom: -40 }}
-            className="p1"
-            items={tabs}
-            onChange={onChange}
-          />
-        )}
+        <Tabs
+          defaultActiveKey={currentTab?.key}
+          style={{ marginBottom: -20 }}
+          className="p1"
+          items={tabs}
+          onChange={onChange}
+        />
       </>
     );
   };
 
   return (
     <div className="flex flex-col" style={{ padding: 20 }}>
-      {currentTab ? (
+      {currentTab && project ? (
         <PublicDashboard
           params={{ uuid: currentTab?.uuid }}
           // params={{ uuid: "b46fc872-c97d-4300-a83e-45fa61760ad2" }}
@@ -110,7 +107,7 @@ const UserProfile = props => {
           disableBreadcrumb={true}
           isFullscreen={false}
           // className="ml-250 mt-60"
-          key={currentTab?.key}
+          key={`${project?.protocolSlug}-${currentTab?.key}`}
           hideFooter
         />
       ) : (
