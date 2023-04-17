@@ -129,15 +129,17 @@ const GaProjectSearch = props => {
     location.pathname,
   ]);
   const handleProjectChange = (value, option) => {
-    const item = option;
-    item.key = item.value + "-histroy";
-    saveGASearchHistory(item);
     saveLatestGAProject(option.value);
     setCurrentProject(option.value);
     if (option.id) {
       saveLatestGAProjectId(option.id);
+      loadProjectDetail(option.id);
     }
-    if (location.pathname.startsWith("/growth/project") && option.value) {
+    if (
+      (location.pathname.startsWith("/growth/project") ||
+        location.pathname === "/growth") &&
+      option.value
+    ) {
       router?.push({
         pathname: getGrowthProjectPath(option.value, menu),
       });

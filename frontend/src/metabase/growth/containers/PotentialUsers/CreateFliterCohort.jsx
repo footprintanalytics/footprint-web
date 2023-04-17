@@ -9,9 +9,10 @@ import { FilterOut } from "metabase/growth/components/FilterOut";
 import { push } from "react-router-redux";
 
 const CreateCohort2 = ({
-  btnText,
+  btnText = "Create Cohort",
   onChangeLocation,
   project,
+  disable = false,
 }) => {
   const [isCohortModalOpen, setCohortModalOpen] = useState(false);
   const addressList = [];
@@ -22,26 +23,27 @@ const CreateCohort2 = ({
         {addressList && (
           <h4>You have selected {addressList?.length} wallet address.</h4>
         )}
-        <div className="bg-light p2 mt1">
-          <h5>Criteria:</h5>
-          <Divider style={{ marginTop: 10, marginBottom: 10 }}></Divider>
-          {/* <div className="mt1" /> */}
-          {(!queryCondition || queryCondition?.length <= 0) && (
-            <>You have not yet established any filtering criteria.</>
-          )}
-        </div>
+        {/*<div className="bg-light p2 mt1">*/}
+        {/*  <h5>Criteria:</h5>*/}
+        {/*  <Divider style={{ marginTop: 10, marginBottom: 10 }}></Divider>*/}
+        {/*  /!* <div className="mt1" /> *!/*/}
+        {/*  {(!queryCondition || queryCondition?.length <= 0) && (*/}
+        {/*    <>You have not yet established any filtering criteria.</>*/}
+        {/*  )}*/}
+        {/*</div>*/}
       </>
     );
   };
   return (
     <>
       <Button
-        type="primary"
+        type="text"
+        disabled={disable}
         onClick={() => {
           setCohortModalOpen(true);
         }}
       >
-        {btnText ?? "Create Cohort"}
+        {btnText}
       </Button>
 
       <Modal
@@ -54,7 +56,9 @@ const CreateCohort2 = ({
           <Button
             key="submit"
             type="primary"
-            onClick={() => onChangeLocation(getGrowthProjectPath(project, "Cohort"))}
+            onClick={() =>
+              onChangeLocation(getGrowthProjectPath(project, "Cohort"))
+            }
           >
             Create
           </Button>,

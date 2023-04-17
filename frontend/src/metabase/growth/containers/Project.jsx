@@ -23,6 +23,7 @@ import CampaignCreate from "./CampaignCreate";
 import PotentialUsers from "./PotentialUsers";
 import UserTemplate from "./UserTemplate";
 import CohortList from "./CohortList";
+import Community from "./Community";
 import "../css/index.css";
 
 const Project = props => {
@@ -168,6 +169,9 @@ const Project = props => {
         ></UserTemplate>
       );
     }
+    if (current_tab === "Potential Users2") {
+      return <PotentialUsers project={getProjectObject(project)} />;
+    }
     if (current_tab === "Connector") {
       return (
         <ConnectorList
@@ -198,6 +202,15 @@ const Project = props => {
           router={router}
           project={getProjectObject(project)}
         ></ProjectInfo>
+      );
+    }
+    if (current_tab === "Community") {
+      return (
+        <Community
+          location={location}
+          router={router}
+          project={getProjectObject(project)}
+        ></Community>
       );
     }
     if (current_tab === "Custom Analysis") {
@@ -238,6 +251,9 @@ const Project = props => {
         ></CohortList>
       );
     }
+    if (current_tab === "Potential Users" && isDemo) {
+      return <PotentialUsers project={getProjectObject(project)} />;
+    }
     if (gaMenuTabs?.dashboardMap?.has(current_tab)) {
       if (current_tab === "Twitter") {
         return (
@@ -277,9 +293,6 @@ const Project = props => {
             {WrapPublicDashboard}
           </LoadingDashboard>
         );
-      }
-      if (current_tab === "Potential Users" && isDemo) {
-        return <PotentialUsers project={getProjectObject(project)} />;
       }
       return WrapPublicDashboard;
     }

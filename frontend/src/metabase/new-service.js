@@ -74,6 +74,29 @@ export const getCampaign = async params => {
 export const getCampaignDetail = async params => {
   return GET(`/api/v1/fga/campaign/${params.id}`);
 };
+
+export const getCommunityInfo = async params => {
+  return GET(`/api/v1/fga/community/info`, params);
+};
+export const getCommunityQuickFilter = async params => {
+  return GET(`/api/v1/fga/community/quick-filter`, params);
+};
+export const getCommunityWalletAddress = async params => {
+  return POST(`/api/v1/fga/community/wallet-address`, params);
+};
+
+export const getPotentialUseFilterProject = async params => {
+  return GET(`/api/v1/fga/potential-user/filter/project`, params);
+};
+export const getPotentialUserFilterCollection = async params => {
+  return GET(`/api/v1/fga/potential-user/filter/collection`, params);
+};
+export const getPotentialUserFilterTag = async params => {
+  return GET(`/api/v1/fga/potential-user/filter/tag`, params);
+};
+export const getPotentialUser = async params => {
+  return POST(`/api/v1/fga/potential-user`, params);
+};
 // FP Api ---------------
 export const UserRegister = async params => {
   return POST("/api/v1/user/signup", params);
