@@ -5,6 +5,11 @@
   /* line-height: 35px !important; */
   /* height: 35px !important; */
 }
+.number-input input[type='number']::-webkit-inner-spin-button,
+.number-input input[type='number']::-webkit-outer-spin-button {
+  -webkit-appearance: none;
+}
+
 .ga-empty {
   display: flex;
   align-items: center;

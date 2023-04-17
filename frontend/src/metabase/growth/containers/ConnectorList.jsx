@@ -24,10 +24,10 @@ import {
   createFgaProjectModalShowAction,
 } from "metabase/redux/control";
 import LoadingSpinner from "metabase/components/LoadingSpinner";
+import { isDark } from "metabase/dashboard/components/utils/dark";
 import ConfigConnector from "../components/config_panel/ConfigConnector";
 import "../css/utils.css";
 import { getGrowthProjectPath } from "../utils/utils";
-import { isDark } from "metabase/dashboard/components/utils/dark";
 
 const { Text } = Typography;
 const ConnectorList = props => {
@@ -90,7 +90,7 @@ const ConnectorList = props => {
   const gotoAnalytics = name => {
     switch (name) {
       case "Google Analytics":
-        router.push(getGrowthProjectPath(project.protocolSlug, "User Funnel"));
+        router.push(getGrowthProjectPath(project.protocolSlug, "Lifecycle"));
         break;
       default:
         router.push(getGrowthProjectPath(project.protocolSlug, name));
