@@ -37,6 +37,7 @@ const Index = ({ router, user, params, userInfoDataApi }) => {
     {
       refetchOnWindowFocus: false,
       retry: false,
+      enabled: !!user,
     },
   );
 

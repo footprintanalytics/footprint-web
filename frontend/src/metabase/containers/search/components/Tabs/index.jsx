@@ -76,6 +76,14 @@ const Index = ({
       show: true,
     },
     {
+      key: "flex",
+      tab: "",
+      render: params => {
+        return null;
+      },
+      show: isCreator() && isOwnCreator,
+    },
+    {
       key: "favorite",
       tab: "My Favorites",
       render: params => {
@@ -116,6 +124,8 @@ const Index = ({
       show: isSearch(),
     },
   ];
+
+  const showSwitchGraph = isCreator() && !isMyTablesTab;
 
   const getTab = (key, tab) => {
     const num = data && data[key];
@@ -179,7 +189,7 @@ const Index = ({
         >
           <Tooltip tooltip={isList ? "Grid view" : "List view"}>
             <Icon
-              name={isList ? "switch_grid" : "switch_list"}
+              name={isList ? "switch_list" : "switch_grid"}
               size={20}
               color={"#A6AABE"}
             />
@@ -192,9 +202,10 @@ const Index = ({
   return (
     <div className={cx("search__tabs relative", className)}>
       <Tabs
+        key={data ? Object.keys(data).join(",") : ""}
         activeKey={model}
         size="large"
-        tabBarGutter={isMobile ? 20 : 60}
+        tabBarGutter={isMobile ? 20 : null}
         animated={false}
         destroyInactiveTabPane={true}
         onChange={model => {
@@ -219,7 +230,7 @@ const Index = ({
             );
           })}
       </Tabs>
-      {isCreator() && renderSwitchGraph()}
+      {showSwitchGraph && renderSwitchGraph()}
     </div>
   );
 };
