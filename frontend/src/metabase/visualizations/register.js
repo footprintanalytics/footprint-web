@@ -26,6 +26,7 @@ import PivotTable from "./visualizations/PivotTable";
 import ListViz from "./visualizations/List";
 import Image from "./visualizations/Image";
 import Video from "./visualizations/Video";
+import Embed from "./visualizations/Embed";
 import RowRace from "./visualizations/RowRace";
 import LineRace from "./visualizations/LineRace";
 import Circle from "./visualizations/Circle";
@@ -65,6 +66,7 @@ export default function () {
   //footprint
   registerVisualization(Image);
   registerVisualization(Video);
+  registerVisualization(Embed);
   registerVisualization(RowRace);
   registerVisualization(LineRace);
   registerVisualization(Circle);
