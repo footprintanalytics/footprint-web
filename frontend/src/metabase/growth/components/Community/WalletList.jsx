@@ -39,11 +39,11 @@ export const WalletList = props => {
           <Typography.Text type="secondary">
             Filtered {data?.total.toLocaleString("en-US")} Wallets
           </Typography.Text>
-          <Dropdown menu={{ items: actionItems }} trigger={["click", "hover"]}>
+          {/* <Dropdown menu={{ items: actionItems }} trigger={["click", "hover"]}>
             <Button type="primary" className=" rounded">
               User Actions
             </Button>
-          </Dropdown>
+          </Dropdown> */}
         </div>
         <Table
           columns={columns}

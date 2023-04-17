@@ -49,10 +49,6 @@ const Project = props => {
           ? gaMenuTabs?.menuTabs[0].children[0].key
           : gaMenuTabs?.menuTabs[0]?.key;
       setTab(tempMenu);
-      console.log(
-        "project useEffect router.push",
-        getGrowthProjectPath(project, tempMenu),
-      );
       router.push(getGrowthProjectPath(project, tempMenu));
     }
   }, [gaMenuTabs, menu, project, router]);
@@ -75,12 +71,19 @@ const Project = props => {
   }, [projectPath]);
 
   const getProjectObject = () => {
-    return {
-      ...(projectObject ?? demoProjectData),
-      twitter_handler: projectObject?.twitter?.handler,
-      discord_guild_id: projectObject?.discord?.guildId,
-    };
-  };
+    return projectObject
+      ? {
+          ...projectObject,
+          twitter_handler: projectObject?.twitter?.handler,
+          discord_guild_id: projectObject?.discord?.guildId,
+        }
+      : null;
+    // return {
+    //   ...(projectObject ?? demoProjectData),
+    //   twitter_handler: projectObject?.twitter?.handler,
+    //   discord_guild_id: projectObject?.discord?.guildId,
+    // };
+  };;
 
   const comingSoon = page => {
     return (
@@ -309,7 +312,7 @@ const Project = props => {
     return comingSoon("");
   };
   return <>{getContentPannel(tab)}</>;
-};
+};;
 
 const mapStateToProps = (state, props) => {
   return {

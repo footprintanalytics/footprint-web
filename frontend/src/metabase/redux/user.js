@@ -164,9 +164,7 @@ export const refreshCurrentFgaProject = createThunkAction(
       const res = await GetFgaProjectDetail({
         projectId: project_id,
       });
-      // if (res.id) {
-      //   window.localStorage.setItem("LatestGAProjectId", res.id);
-      // }
+      // window.localStorage.setItem("LatestGAProjectId", project_id);
       return res;
     } catch (e) {
       return null;
@@ -188,6 +186,7 @@ export const loadCurrentFgaProject = createThunkAction(
         !getState().currentFgaProject ||
         getState().currentFgaProject?.id !== project_id
       ) {
+        dispatch(clearCurrentFgaProject());
         await dispatch(refreshCurrentFgaProject(project_id));
       }
     },
