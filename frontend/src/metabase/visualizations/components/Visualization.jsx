@@ -476,6 +476,8 @@ class Visualization extends React.PureComponent {
       dashcard?.visualization_settings?.virtual_card?.display === "image";
     const isVideo =
       dashcard?.visualization_settings?.virtual_card?.display === "video";
+    const isEmbed =
+      dashcard?.visualization_settings?.virtual_card?.display === "embed";
     const isPublic = location.pathname.startsWith("/public"); // iframe 里面也是 work 的，true
     const isFga = location.pathname.startsWith("/growth");
     const isFgaTwitter = isFga && location.pathname.includes("/Twitter");
@@ -506,7 +508,7 @@ class Visualization extends React.PureComponent {
             </Tooltip>
           </div>
         )}
-        {!hideWatermark && !isText && !isImage && !isVideo && !noResults && (
+        {!hideWatermark && !isText && !isImage && !isVideo && !isEmbed && !noResults && (
           <div className="waterMarkHome">
             <span />
           </div>

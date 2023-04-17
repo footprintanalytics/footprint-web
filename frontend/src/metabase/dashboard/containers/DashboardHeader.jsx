@@ -90,6 +90,7 @@ class DashboardHeader extends Component {
     addTextDashCardToDashboard: PropTypes.func.isRequired,
     addImageDashCardToDashboard: PropTypes.func.isRequired,
     addVideoDashCardToDashboard: PropTypes.func.isRequired,
+    addEmbedDashCardToDashboard: PropTypes.func.isRequired,
     addActionDashCardToDashboard: PropTypes.func.isRequired,
     fetchDashboard: PropTypes.func.isRequired,
     saveDashboardAndCards: PropTypes.func.isRequired,
@@ -134,6 +135,10 @@ class DashboardHeader extends Component {
 
   onAddVideoBox() {
     this.props.addVideoDashCardToDashboard({ dashId: this.props.dashboard.id });
+  }
+
+  onAddEmbedBox() {
+    this.props.addEmbedDashCardToDashboard({ dashId: this.props.dashboard.id });
   }
 
   onAddAction() {
@@ -682,6 +687,12 @@ class DashboardHeader extends Component {
         type: "Video",
         onclick: () => {
           this.onAddVideoBox();
+        },
+      },
+      {
+        type: "Embed",
+        onclick: () => {
+          this.onAddEmbedBox();
         },
       },
     ];
