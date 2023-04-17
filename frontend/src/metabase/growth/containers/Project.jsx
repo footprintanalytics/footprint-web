@@ -23,6 +23,8 @@ import CampaignCreate from "./CampaignCreate";
 import PotentialUsers from "./PotentialUsers";
 import UserTemplate from "./UserTemplate";
 import CohortList from "./CohortList";
+import Community from "./Community";
+import UserProfile from "./UserProfile";
 import "../css/index.css";
 
 const Project = props => {
@@ -47,10 +49,6 @@ const Project = props => {
           ? gaMenuTabs?.menuTabs[0].children[0].key
           : gaMenuTabs?.menuTabs[0]?.key;
       setTab(tempMenu);
-      console.log(
-        "project useEffect router.push",
-        getGrowthProjectPath(project, tempMenu),
-      );
       router.push(getGrowthProjectPath(project, tempMenu));
     }
   }, [gaMenuTabs, menu, project, router]);
@@ -73,12 +71,19 @@ const Project = props => {
   }, [projectPath]);
 
   const getProjectObject = () => {
-    return {
-      ...(projectObject ?? demoProjectData),
-      twitter_handler: projectObject?.twitter?.handler,
-      discord_guild_id: projectObject?.discord?.guildId,
-    };
-  };
+    return projectObject
+      ? {
+          ...projectObject,
+          twitter_handler: projectObject?.twitter?.handler,
+          discord_guild_id: projectObject?.discord?.guildId,
+        }
+      : null;
+    // return {
+    //   ...(projectObject ?? demoProjectData),
+    //   twitter_handler: projectObject?.twitter?.handler,
+    //   discord_guild_id: projectObject?.discord?.guildId,
+    // };
+  };;
 
   const comingSoon = page => {
     return (
@@ -168,6 +173,18 @@ const Project = props => {
         ></UserTemplate>
       );
     }
+    if (current_tab === "Potential Users2") {
+      return <PotentialUsers project={getProjectObject(project)} />;
+    }
+    if (current_tab === "UserProfile") {
+      return (
+        <UserProfile
+          location={location}
+          router={router}
+          project={getProjectObject(project)}
+        />
+      );
+    }
     if (current_tab === "Connector") {
       return (
         <ConnectorList
@@ -198,6 +215,15 @@ const Project = props => {
           router={router}
           project={getProjectObject(project)}
         ></ProjectInfo>
+      );
+    }
+    if (current_tab === "Community") {
+      return (
+        <Community
+          location={location}
+          router={router}
+          project={getProjectObject(project)}
+        ></Community>
       );
     }
     if (current_tab === "Custom Analysis") {
@@ -237,6 +263,9 @@ const Project = props => {
           project={getProjectObject(project)}
         ></CohortList>
       );
+    }
+    if (current_tab === "Potential Users" && isDemo) {
+      return <PotentialUsers project={getProjectObject(project)} />;
     }
     if (gaMenuTabs?.dashboardMap?.has(current_tab)) {
       if (current_tab === "Twitter") {
@@ -278,15 +307,12 @@ const Project = props => {
           </LoadingDashboard>
         );
       }
-      if (current_tab === "Potential Users" && isDemo) {
-        return <PotentialUsers project={getProjectObject(project)} />;
-      }
       return WrapPublicDashboard;
     }
     return comingSoon("");
   };
   return <>{getContentPannel(tab)}</>;
-};
+};;
 
 const mapStateToProps = (state, props) => {
   return {

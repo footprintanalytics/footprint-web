@@ -232,6 +232,7 @@ class PublicDashboard extends Component {
       hideFooter,
       hideTitle,
       hideAllParams,
+      disableBreadcrumb,
       className,
       router,
     } = this.props;
@@ -247,7 +248,12 @@ class PublicDashboard extends Component {
       ? "gamefi,protocol_slug,twitter_handler,project_name"
       : "";
     const hashData = parseHashOptions(location?.hash);
-    if (isFgaPublicDashboard && hashData?.from && dashboard) {
+    if (
+      isFgaPublicDashboard &&
+      hashData?.from &&
+      dashboard &&
+      !disableBreadcrumb
+    ) {
       header = (
         <>
           <Breadcrumb

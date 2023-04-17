@@ -44,6 +44,7 @@ export const top_protocols = [
     chain: "Ethereum",
   },
 ];
+
 export const template_gallery = [
   // {
   //   category: "Campaign Analysis",
@@ -277,10 +278,20 @@ export const fga_menu_data = [
     icon: React.createElement(TeamOutlined),
     children: [
       {
-        name: "Project Users",
-        id: 7773,
-        uuid: "451d53ab-9d62-40ff-931e-9ec197595f0b",
+        name: "Community",
+        id: null,
+        uuid: null,
       },
+      {
+        name: "Lifecycle",
+        id: 7118,
+        uuid: "b1682d12-bddd-4b10-99a3-a403a3a6a78c",
+      },
+      // {
+      //   name: "Project Users",
+      //   id: 7773,
+      //   uuid: "451d53ab-9d62-40ff-931e-9ec197595f0b",
+      // },
       {
         name: "Twitter",
         id: 7476,
@@ -290,11 +301,6 @@ export const fga_menu_data = [
         name: "Discord",
         id: 7490,
         uuid: "d137a1ef-34a3-4553-84cb-2203bd9d2baf",
-      },
-      {
-        name: "Lifecycle",
-        id: 7118,
-        uuid: "b1682d12-bddd-4b10-99a3-a403a3a6a78c",
       },
     ],
   },
@@ -379,3 +385,19 @@ export const fga_menu_data = [
     ],
   },
 ];
+
+export const cohortTips = new Map([
+  ["Token Whale", "holding value of token > $1M"],
+  ["NFT Whale", "holding value of NFT > $1M"],
+  ["Diamond Hand", "NFT holding period > 360"],
+  ["New Gamers", "first interaction with the project in the last 30 days. "],
+  ["Active Gamers", "interaction with the project in the last 30 days"],
+  [
+    "At Risk Gamers",
+    "has not been active for 30 days but was active within the last 90 days.",
+  ],
+  ["Dormant Gamers", "have been inactive for over 90 days"],
+  ["NFT Holders", "NFT holders"],
+  ["Token Holders", "project token holder"],
+  ["{project slug} Users", "all users interacted with project contract"],
+]);

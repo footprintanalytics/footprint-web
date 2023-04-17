@@ -2,7 +2,8 @@
 /* eslint-disable react/prop-types */
 import React from "react";
 import { connect } from "react-redux";
-import { Button, Card, Table, Dropdown, Space, Badge } from "antd";
+import { Button, Card, Table, Dropdown, Space, Badge, Tooltip } from "antd";
+import { QuestionCircleOutlined } from "@ant-design/icons";
 import { useQuery } from "react-query";
 import dayjs from "dayjs";
 import { getUser } from "metabase/selectors/user";
@@ -10,6 +11,7 @@ import { GetFgaCohort } from "metabase/new-service";
 import Link from "metabase/core/components/Link/Link";
 import UploadWallets from "../components/buttons/UploadWallets";
 import { getGrowthProjectPath } from "../utils/utils";
+import { cohortTips } from "../utils/data";
 
 const CohortList = props => {
   const { isLoading, data, refetch } = useQuery(
@@ -28,13 +30,28 @@ const CohortList = props => {
     {
       title: "Title",
       dataIndex: "title",
-      render: text => (
-        <Link
-          to={`/growth/public/dashboard/55b1eb29-b15e-458f-9241-1862a0d19d3b?tag=${text}&cohort_title=${text}#from=Cohort`}
-        >
-          {text}
-        </Link>
-      ),
+      render: text => {
+        let tip =
+          cohortTips.get(
+            [
+              `${props.project?.protocolName} Users`,
+              `${props.project?.protocolSlug} users`,
+            ].includes(text)
+              ? "{project slug} Users"
+              : text,
+          ) ?? null;
+        // TODO: Don't show the tooltip temporarily
+        tip = null;
+        return (
+          <Tooltip placement="top" title={tip} arrow={true}>
+            <Link
+              to={`/growth/public/dashboard/55b1eb29-b15e-458f-9241-1862a0d19d3b?tag=${text}&cohort_title=${text}#from=Cohort`}
+            >
+              {text} {tip && <QuestionCircleOutlined />}
+            </Link>
+          </Tooltip>
+        );
+      },
     },
     {
       title: "Number of Wallets",
