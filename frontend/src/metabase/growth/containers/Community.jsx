@@ -132,7 +132,7 @@ const Community = props => {
       component: (
         <Button
           type="text"
-          disabled={false}
+          disabled={true}
           onClick={() =>
             props.router?.push({
               pathname: getGrowthProjectPath(
