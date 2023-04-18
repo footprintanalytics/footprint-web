@@ -37,13 +37,13 @@ export const WalletList = props => {
       <Card bordered={false} className="">
         <div className="flex flex-row w-full justify-between align-end mb2">
           <Typography.Text type="secondary">
-            Filtered {data?.total.toLocaleString("en-US")} Wallets
+            Filtered {data?.total.toLocaleString("en-US")} Addresses
           </Typography.Text>
-          {/* <Dropdown menu={{ items: actionItems }} trigger={["click", "hover"]}>
+          <Dropdown menu={{ items: actionItems }} trigger={["click", "hover"]}>
             <Button type="primary" className=" rounded">
               User Actions
             </Button>
-          </Dropdown> */}
+          </Dropdown>
         </div>
         <Table
           columns={columns}

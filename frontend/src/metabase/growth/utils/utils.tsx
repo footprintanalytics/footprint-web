@@ -4,6 +4,16 @@ import { notification, Button } from "antd";
 import Link from "antd/lib/typography/Link";
 import { PublicApi, maybeUsePivotEndpoint } from "metabase/services";
 
+// format number into 1,000,000.00
+export function valueFormat(value:number):string{
+  const formatter = new Intl.NumberFormat('en-US', {
+    style: 'decimal',
+    minimumFractionDigits: 0,
+    maximumFractionDigits: 2
+  });
+ return formatter.format(value);
+}
+
 export function updateHashValue(
   hash: string,
   key: string,
@@ -177,6 +187,7 @@ export function getGaMenuTabs(
         "Connector",
         "Campaign",
         "Community",
+        "Members",
         "Project Info",
         "Template Gallery",
         "Custom Analysis",

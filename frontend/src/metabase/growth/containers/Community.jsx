@@ -18,7 +18,7 @@ import { StatisticIndex } from "../components/Community/StatisticIndex";
 import { QuickFilter } from "../components/Community/QuickFilter";
 import { ValueFilter } from "../components/Community/ValueFilter";
 import { WalletList } from "../components/Community/WalletList";
-import { getGrowthProjectPath } from "../utils/utils";
+import { getGrowthProjectPath, valueFormat } from "../utils/utils";
 const Community = props => {
   const { router, location, children, user, projectPath, menu, project } =
     props;
@@ -73,7 +73,7 @@ const Community = props => {
     const dataList = [];
     if (data) {
       dataList.push({
-        title: "Wallets",
+        title: "Addresses",
         value: data.wallets,
         change: data.walletsChange,
       });
@@ -132,6 +132,7 @@ const Community = props => {
       component: (
         <Button
           type="text"
+          disabled={true}
           onClick={() =>
             props.router?.push({
               pathname: getGrowthProjectPath(
@@ -151,11 +152,24 @@ const Community = props => {
 
   const tableColumns = [
     {
-      title: "Wallet",
+      title: "Address",
       dataIndex: "address",
       key: "address",
-      render: (text, record) => (
+      render: (text, { ens, discordAvatar, twitterAvatar }, index) => (
         <div className="flex flex-row">
+          {/* <Avatar
+            size={35}
+            className="mr1"
+            src={
+              twitterAvatar?.length > 0
+                ? twitterAvatar
+                : discordAvatar?.length > 0
+                ? discordAvatar
+                : `https://xsgames.co/randomusers/assets/avatars/pixel/${
+                    index % 50
+                  }.jpg`
+            }
+          /> */}
           <Link
             onClick={() => {
               props.router?.push({
@@ -172,154 +186,265 @@ const Community = props => {
               <Typography.Text>
                 {String(text).slice(0, 4) + "..." + String(text).slice(-4)}
               </Typography.Text>
-              {record.ens && (
-                <Typography.Text type="secondary">{record.ens}</Typography.Text>
-              )}
+              {ens && <Typography.Text type="secondary">{ens}</Typography.Text>}
             </div>
           </Link>
         </div>
       ),
     },
     {
-      title: "Tags",
+      title: "Tag",
       key: "tags",
       dataIndex: "tags",
       render: (_, { tags }) => (
-        <>
+        <div style={{ maxWidth: 300 }}>
           {tags?.length > 0 ? (
             <>
               {tags?.map(tag => {
-                return <Tag key={tag}>{tag}</Tag>;
+                return (
+                  <Tag style={{ margin: 2.5 }} key={tag}>
+                    {tag}
+                  </Tag>
+                );
               })}
             </>
           ) : (
-            <>--</>
+            <></>
           )}
-        </>
+        </div>
       ),
     },
     {
-      title: "Net Worth",
+      title: "In-game Net Worth",
       dataIndex: "netWorth",
       key: "netWorth",
       align: "right",
-      render: text =>
-        text !== null ? "$" + text.toLocaleString("en-US") : "--",
+      render: text => (text !== null ? "$" + valueFormat(text) : ""),
     },
     {
-      title: "NFT Holding Values",
+      title: "In-game NFTs",
+      dataIndex: "holdingNFT",
+      key: "holdingNFT",
+      align: "right",
+      render: text => (text !== null ? valueFormat(text) : ""),
+    },
+    {
+      title: "In-game NFT Value",
       dataIndex: "holdingNFTValue",
       key: "holdingNFTValue",
       align: "right",
-      render: text =>
-        text !== null ? "$" + text.toLocaleString("en-US") : "--",
+      render: text => (text !== null ? "$" + valueFormat(text) : ""),
     },
     {
-      title: "Token Holding Values",
+      title: "Total In-game NFT Transactions",
+      dataIndex: "totalNFTTransaction",
+      key: "totalNFTTransaction",
+      align: "right",
+      render: text => (text !== null ? text : ""),
+    },
+    {
+      title: "Total in-game Transactions",
+      dataIndex: "totalTransactions",
+      key: "totalTransactions",
+      align: "right",
+      render: text => (text !== null ? text : ""),
+    },
+    {
+      title: "In-game Tokens",
+      dataIndex: "holdingToken",
+      key: "holdingToken",
+      align: "right",
+      render: text => (text !== null ? valueFormat(text) : ""),
+    },
+    {
+      title: "In-game Token Value",
       dataIndex: "holdingTokenValue",
       key: "holdingTokenValue",
       align: "right",
-      render: text =>
-        text !== null ? "$" + text.toLocaleString("en-US") : "--",
+      render: text => (text !== null ? "$" + valueFormat(text) : ""),
     },
     {
-      title: "Twitter",
+      title: "Social ID",
       dataIndex: "twitterName",
-      key: "twitterName",
-      render: (text, { twitterAvatar, twitterHandler }, index) => (
+      key: "socialId",
+      render: (
+        text2,
+        {
+          twitterAvatar,
+          twitterHandler,
+          twitterName,
+          discordName,
+          discordAvatar,
+          email,
+        },
+        index,
+      ) => (
         <>
-          {text?.length > 0 ? (
+          {(twitterName?.length > 0 || twitterHandler?.length > 0) && (
             <>
               <a
                 rel="noreferrer"
-                href={`https://twitter.com/${twitterHandler ?? text}`}
+                href={`https://twitter.com/${twitterHandler ?? twitterName}`}
                 target="_blank"
               >
-                <div className=" flex flex-row">
+                <div className="mt1 flex flex-row">
                   <Avatar
                     size={25}
                     className="mr1"
-                    src={
-                      twitterAvatar?.length > 0
-                        ? twitterAvatar
-                        : `https://xsgames.co/randomusers/assets/avatars/pixel/${
-                            index % 50
-                          }.jpg`
-                    }
+                    style={{ backgroundColor: "#fff" }}
+                    src="https://footprint-imgs.oss-us-east-1.aliyuncs.com/20220516201254.png"
                   />
                   <Typography.Text
-                    style={{ maxWidth: 120 }}
+                    style={{ maxWidth: 150 }}
                     ellipsis={{
-                      tooltip: text,
+                      tooltip: twitterName ?? twitterHandler,
                     }}
                   >
-                    {text}
+                    {twitterName ?? twitterHandler}
                   </Typography.Text>
                 </div>
               </a>
             </>
-          ) : (
-            "--"
           )}
-        </>
-      ),
-    },
-    {
-      title: "Discord",
-      dataIndex: "discordName",
-      key: "discordName",
-      render: (text, { discordAvatar }, index) => (
-        <>
-          {text?.length > 0 ? (
-            <div className=" flex flex-row">
+          {discordName?.length > 0 && (
+            <div className="mt1 flex flex-row">
               <Avatar
                 size={25}
                 className="mr1"
+                style={{ backgroundColor: "#fff" }}
+                src="https://footprint-imgs.oss-us-east-1.aliyuncs.com/20220516201343.png"
+              />
+              <Typography.Text
+                style={{ maxWidth: 150 }}
+                ellipsis={{
+                  tooltip: discordName,
+                }}
+              >
+                {discordName}
+              </Typography.Text>
+            </div>
+          )}
+          {email?.length > 0 && (
+            <div className="mt1 flex flex-row">
+              <Avatar
+                size={25}
+                className="mr1"
+                style={{ backgroundColor: "#fff" }}
                 src={
-                  discordAvatar?.length > 0
-                    ? discordAvatar
-                    : `https://xsgames.co/randomusers/assets/avatars/pixel/${
-                        index % 50
-                      }.jpg`
+                  "https://footprint-imgs.oss-us-east-1.aliyuncs.com/icon_email.png"
                 }
               />
               <Typography.Text
-                style={{ maxWidth: 120 }}
+                style={{ maxWidth: 150 }}
                 ellipsis={{
-                  tooltip: text,
+                  tooltip: email,
                 }}
-                copyable={true}
               >
-                {text}
+                {email}
               </Typography.Text>
             </div>
-          ) : (
-            "--"
           )}
         </>
       ),
     },
-    {
-      title: "Email",
-      dataIndex: "email",
-      key: "email",
-      render: text => {
-        const mail = text;
-        return mail?.length > 0 ? (
-          <Tooltip title={mail}>
-            <Avatar
-              size={25}
-              style={{ backgroundColor: "#fff" }}
-              src={
-                "https://footprint-imgs.oss-us-east-1.aliyuncs.com/20220516201357.png"
-              }
-            ></Avatar>
-          </Tooltip>
-        ) : (
-          " -- "
-        );
-      },
-    },
+    // {
+    //   title: "Twitter",
+    //   dataIndex: "twitterName",
+    //   key: "twitterName",
+    //   render: (text, { twitterAvatar, twitterHandler }, index) => (
+    //     <>
+    //       {text?.length > 0 ? (
+    //         <>
+    //           <a
+    //             rel="noreferrer"
+    //             href={`https://twitter.com/${twitterHandler ?? text}`}
+    //             target="_blank"
+    //           >
+    //             <div className=" flex flex-row">
+    //               <Avatar
+    //                 size={25}
+    //                 className="mr1"
+    //                 src={
+    //                   twitterAvatar?.length > 0
+    //                     ? twitterAvatar
+    //                     : `https://xsgames.co/randomusers/assets/avatars/pixel/${
+    //                         index % 50
+    //                       }.jpg`
+    //                 }
+    //               />
+    //               <Typography.Text
+    //                 style={{ maxWidth: 150 }}
+    //                 ellipsis={{
+    //                   tooltip: text,
+    //                 }}
+    //               >
+    //                 {text}
+    //               </Typography.Text>
+    //             </div>
+    //           </a>
+    //         </>
+    //       ) : (
+    //         ""
+    //       )}
+    //     </>
+    //   ),
+    // },
+    // {
+    //   title: "Discord",
+    //   dataIndex: "discordName",
+    //   key: "discordName",
+    //   render: (text, { discordAvatar }, index) => (
+    //     <>
+    //       {text?.length > 0 ? (
+    //         <div className=" flex flex-row">
+    //           <Avatar
+    //             size={25}
+    //             className="mr1"
+    //             src={
+    //               discordAvatar?.length > 0
+    //                 ? discordAvatar
+    //                 : `https://xsgames.co/randomusers/assets/avatars/pixel/${
+    //                     index % 50
+    //                   }.jpg`
+    //             }
+    //           />
+    //           <Typography.Text
+    //             style={{ maxWidth: 150 }}
+    //             ellipsis={{
+    //               tooltip: text,
+    //             }}
+    //             copyable={false}
+    //           >
+    //             {text}
+    //           </Typography.Text>
+    //         </div>
+    //       ) : (
+    //         ""
+    //       )}
+    //     </>
+    //   ),
+    // },
+    // {
+    //   title: "Email",
+    //   dataIndex: "email",
+    //   key: "email",
+    //   render: text => {
+    //     const mail = text;
+    //     return mail?.length > 0 ? (
+    //       <Tooltip title={mail}>
+    //         <Avatar
+    //           size={25}
+    //           style={{ backgroundColor: "#fff" }}
+    //           src={
+    //             "https://footprint-imgs.oss-us-east-1.aliyuncs.com/20220516201357.png"
+    //           }
+    //         ></Avatar>
+    //       </Tooltip>
+    //     ) : (
+    //       ""
+    //     );
+    //   },
+    // },
     // {
     //   title: "Action",
     //   key: "action",
