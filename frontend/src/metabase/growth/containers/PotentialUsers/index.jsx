@@ -9,7 +9,7 @@ import { connect } from "react-redux";
 import { QuickFilter } from "metabase/growth/components/Community/QuickFilter";
 import { ItemFilter } from "./ItemFilter";
 import { WalletList } from "metabase/growth/components/Community/WalletList";
-import { Card } from "antd";
+import { Alert, Card } from "antd";
 import LoadingSpinner from "metabase/components/LoadingSpinner/LoadingSpinner";
 import { useQuery } from "react-query";
 import {
@@ -162,10 +162,35 @@ const PotentialUsers = props => {
     });
   }
 
+  const renderHint = () => {
+    const message = (
+      <>
+        <div className="my2 ml1">
+          With this feature, you'll be able to:
+          <ul style={{ listStyle: "inside" }}>
+            <li>Gain access to and analyze over 120 million wallet profiles and tags.</li>
+            <li>
+              Identify valuable users from the top NFTs, protocols, and chains.
+            </li>
+            <li>
+              Dive deep into analyzing target audiences' holding value and activities on the chain.
+            </li>
+          </ul>
+        </div>
+      </>
+    )
+    return (
+      <Card >
+        <Alert message={message} showIcon />
+      </Card>
+    );
+  }
+
   return (
     <>
       {project?.id ? (
-        <div className="flex flex-column items-center w-full p2">
+        <div className="flex flex-column w-full p2">
+          {renderHint()}
           {filterProjectResult?.isLoading &&
           filterCollectionResult?.isLoading &&
           listResult?.isLoading &&
