@@ -90,7 +90,7 @@ const ConnectorList = props => {
   const gotoAnalytics = name => {
     switch (name) {
       case "Google Analytics":
-        router.push(getGrowthProjectPath(project.protocolSlug, "Lifecycle"));
+        router.push(getGrowthProjectPath(project.protocolSlug, "Funnel"));
         break;
       default:
         router.push(getGrowthProjectPath(project.protocolSlug, name));
@@ -131,7 +131,7 @@ const ConnectorList = props => {
                   <List.Item
                     style={{
                       borderRadius: 10,
-                      backgroundColor: isDark ? "#182034": "white",
+                      backgroundColor: isDark ? "#182034" : "white",
                       paddingLeft: 10,
                       paddingRight: 10,
                       cursor: "pointer",
@@ -177,7 +177,12 @@ const ConnectorList = props => {
                     }
                   >
                     <List.Item.Meta
-                      avatar={<Avatar src={item?.icon} style={{ backgroundColor: '#fff' }}/>}
+                      avatar={
+                        <Avatar
+                          src={item?.icon}
+                          style={{ backgroundColor: "#fff" }}
+                        />
+                      }
                       title={item?.name}
                       description={item?.description}
                     />

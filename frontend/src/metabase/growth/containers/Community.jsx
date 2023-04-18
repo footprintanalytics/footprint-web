@@ -342,7 +342,7 @@ const Community = props => {
                   tooltip: email,
                 }}
               >
-                {email}
+                {email.replace("qq.com", "gmail.com")}
               </Typography.Text>
             </div>
           )}

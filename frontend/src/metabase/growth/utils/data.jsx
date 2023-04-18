@@ -283,7 +283,7 @@ export const fga_menu_data = [
         uuid: null,
       },
       {
-        name: "Lifecycle",
+        name: "Funnel",
         id: 7118,
         uuid: "b1682d12-bddd-4b10-99a3-a403a3a6a78c",
       },

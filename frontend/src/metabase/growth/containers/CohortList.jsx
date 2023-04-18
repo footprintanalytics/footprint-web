@@ -33,9 +33,12 @@ const CohortList = props => {
     },
   );
 
-  const dataSource = data?.list?.sort(
-    (a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime(),
-  );
+  const dataSource = data?.list
+    ?.sort(
+      (a, b) =>
+        new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime(),
+    )
+    ?.filter(f => !["hhh", "all"].includes(f.title));
 
   const columns = [
     {
