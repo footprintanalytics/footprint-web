@@ -234,6 +234,18 @@ export default class Table extends Component {
       },
       readDependencies: [DataGrid.COLUMN_FORMATTING_SETTING, "table.pivot"],
     },
+    "table.table_transpose": {
+      section: t`Columns`,
+      title: t`Table transpose`,
+      widget: "radio",
+      props: {
+        options: [
+          { name: t`Auto`, value: "auto" },
+          { name: t`Transpose`, value: "transpose" },
+        ],
+      },
+      default: "auto",
+    },
   };
 
   static columnSettings = column => {
