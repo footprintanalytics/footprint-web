@@ -278,7 +278,7 @@ export const fga_menu_data = [
     icon: React.createElement(TeamOutlined),
     children: [
       {
-        name: "Community",
+        name: "Members",
         id: null,
         uuid: null,
       },
