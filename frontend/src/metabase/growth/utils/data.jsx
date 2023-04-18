@@ -409,7 +409,7 @@ export const cohortTips = new Map([
   ["NFT Holders", "Wallets that holding the project's NFT."],
   ["Token Holders", "Wallets that holding the project's token."],
   [
-    "{project slug} Users",
+    "Gamers",
     "All wallets that have interacted with the project's smart contracts.",
   ],
 ]);

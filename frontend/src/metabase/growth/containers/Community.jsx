@@ -4,8 +4,6 @@ import React, { useEffect } from "react";
 import { connect } from "react-redux";
 import { Card, Tag, Avatar, Typography, Button, Tooltip } from "antd";
 import { useQuery } from "react-query";
-// import { Link } from "react-router";
-
 import Link from "metabase/core/components/Link/Link";
 import { getUser, getFgaProject } from "metabase/selectors/user";
 import { QUERY_OPTIONS } from "metabase/containers/dashboards/shared/config";
@@ -188,21 +186,34 @@ const Community = props => {
       key: "tags",
       dataIndex: "tags",
       render: (_, { tags }) => (
-        <div style={{ maxWidth: 300 }}>
+        <Typography.Paragraph
+          ellipsis={{
+            rows: 2,
+            expandable: true,
+            suffix: "",
+            symbol: "more",
+          }}
+          style={{ minWidth: 150, maxWidth: 500, fontSize: 10 }}
+        >
           {tags?.length > 0 ? (
             <>
-              {tags?.map(tag => {
+              {tags?.join(", ")}
+              {/* {tags?.map(tag => {
                 return (
-                  <Tag className="rounded" style={{ margin: 2.5 }} key={tag}>
+                  <Tag
+                    className="rounded"
+                    style={{ margin: 2.5, fontSize: 8, display: "inline" }}
+                    key={tag}
+                  >
                     {tag}
                   </Tag>
                 );
-              })}
+              })} */}
             </>
           ) : (
             <></>
           )}
-        </div>
+        </Typography.Paragraph>
       ),
     },
     {
@@ -245,14 +256,14 @@ const Community = props => {
       dataIndex: "totalNFTTransaction",
       key: "totalNFTTransaction",
       align: "right",
-      render: text => (text !== null ? text : ""),
+      render: text => (text !== null ? valueFormat(text) : ""),
     },
     {
       title: "Total In-game Transactions(30D)",
       dataIndex: "totalTransactions",
       key: "totalTransactions",
       align: "right",
-      render: text => (text !== null ? text : ""),
+      render: text => (text !== null ? valueFormat(text) : ""),
     },
     {
       title: "Social ID",
@@ -343,7 +354,7 @@ const Community = props => {
   const getQuickFilterOptionList = data => {
     return data?.map(option => {
       return {
-        label: `${option.name} (${option.wallets})`,
+        label: `${option.name} (${valueFormat(option.wallets)})`,
         value: option.name,
       };
     });
