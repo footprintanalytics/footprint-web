@@ -4,6 +4,15 @@ import { notification, Button } from "antd";
 import Link from "antd/lib/typography/Link";
 import { PublicApi, maybeUsePivotEndpoint } from "metabase/services";
 
+export function formatTag(tag: string) {
+  const words = tag.split("-");
+  for (let i = 0; i < words.length; i++) {
+    words[i] = words[i].charAt(0).toUpperCase() + words[i].slice(1);
+  }
+  return words.join(" ");
+}
+
+
 // format number into 1,000,000.00
 export function valueFormat(value:number):string{
   const formatter = new Intl.NumberFormat('en-US', {

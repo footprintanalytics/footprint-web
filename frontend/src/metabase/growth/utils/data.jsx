@@ -387,17 +387,29 @@ export const fga_menu_data = [
 ];
 
 export const cohortTips = new Map([
-  ["Token Whale", "holding value of token > $1M"],
-  ["NFT Whale", "holding value of NFT > $1M"],
-  ["Diamond Hand", "NFT holding period > 360"],
-  ["New Gamers", "first interaction with the project in the last 30 days. "],
-  ["Active Gamers", "interaction with the project in the last 30 days"],
+  ["Token Whale", "Has a project's token balance of at least $1,000,000."],
+  ["NFT Whale", "Has a project's NFT balance of at least $1,000,000."],
+  [
+    "Diamond Hand",
+    "Wallets holding the project's NFT for a minimum of 360 days.",
+  ],
+  [
+    "New Gamers",
+    "Wallets with first interaction with the project's smart contracts within the past 30 days.",
+  ],
+  [
+    "Active Gamers",
+    "Wallets interacted with the project's smart contracts within the past 30 days.",
+  ],
   [
     "At Risk Gamers",
-    "has not been active for 30 days but was active within the last 90 days.",
+    "Wallets that have been inactive for 30 days, but have been active for the last 90 days.",
   ],
-  ["Dormant Gamers", "have been inactive for over 90 days"],
-  ["NFT Holders", "NFT holders"],
-  ["Token Holders", "project token holder"],
-  ["{project slug} Users", "all users interacted with project contract"],
+  ["Dormant Gamers", "Wallets that have been inactive for more than 90 days."],
+  ["NFT Holders", "Wallets that holding the project's NFT."],
+  ["Token Holders", "Wallets that holding the project's token."],
+  [
+    "{project slug} Users",
+    "All wallets that have interacted with the project's smart contracts.",
+  ],
 ]);
