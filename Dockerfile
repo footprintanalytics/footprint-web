@@ -48,7 +48,18 @@ RUN echo hello-duke & echo $STATIC_BUCKET_URL
 WORKDIR /home/circleci
 
 COPY --chown=circleci . .
-RUN INTERACTIVE=false CI=true MB_EDITION=$MB_EDITION bin/build
+
+RUN INTERACTIVE=false CI=true MB_EDITION=$MB_EDITION bin/build version
+RUN INTERACTIVE=false CI=true MB_EDITION=$MB_EDITION bin/build translations
+RUN INTERACTIVE=false CI=true MB_EDITION=$MB_EDITION bin/build frontend-download-dependencies
+
+COPY --chown=circleci frontend/ ./frontend/
+RUN INTERACTIVE=false CI=true MB_EDITION=$MB_EDITION bin/build frontend-build-frontend
+RUN INTERACTIVE=false CI=true MB_EDITION=$MB_EDITION bin/build frontend-static-viz
+RUN INTERACTIVE=false CI=true MB_EDITION=$MB_EDITION bin/build licenses
+RUN INTERACTIVE=false CI=true MB_EDITION=$MB_EDITION bin/build drivers
+RUN INTERACTIVE=false CI=true MB_EDITION=$MB_EDITION bin/build uberjar
+
 
 # ###################
 # # STAGE 2: runner
