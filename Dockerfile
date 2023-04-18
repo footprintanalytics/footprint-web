@@ -47,7 +47,7 @@ RUN echo hello-duke & echo $STATIC_BUCKET_URL
 
 WORKDIR /home/circleci
 
-COPY --chown=circleci . .
+#COPY --chown=circleci . .
 
 RUN INTERACTIVE=false CI=true MB_EDITION=$MB_EDITION bin/build version
 RUN INTERACTIVE=false CI=true MB_EDITION=$MB_EDITION bin/build translations
