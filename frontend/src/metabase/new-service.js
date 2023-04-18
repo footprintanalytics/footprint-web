@@ -559,3 +559,11 @@ export const udTableDetail = (params) => {
 export const udTableSaveModelConfig = (params) => {
   return POST(`api/v1/udTable/saveModelConfig`, params);
 };
+
+export const setTableBelongType = (params) => {
+  return POST(`api/v1/userPage/setTableBelongType`, params);
+};
+
+export const ownerTable = (params) => {
+  return POST(`api/v1/userPage/owner/table`, params);
+};

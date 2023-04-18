@@ -31,7 +31,7 @@ const TableDatabase = props => {
   return (
     <Select
       disabled={!!isEditing}
-      style={{ width: "100%", marginBottom: "15px" }}
+      style={{ margin: "10px 15px 0 15px" }}
       showSearch={databases.length > 1}
       placeholder="Select Database"
       defaultValue={databaseId}

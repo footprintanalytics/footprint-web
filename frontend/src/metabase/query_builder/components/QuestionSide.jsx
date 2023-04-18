@@ -286,7 +286,7 @@ function QuestionSide({
 
   return (
     <div
-      className="flex flex-column p2 full-height overflow-auto relative"
+      className="flex flex-column full-height overflow-auto relative"
     >
       {!formDataSelector && (
         <TableDatabase
@@ -315,7 +315,7 @@ function QuestionSide({
           chain={chain}
         />
       )}
-      <>
+      <div className="overflow-auto" style={{ flex: 1, marginLeft: 10 }}>
         <Tabs
           tabBarGutter={20}
           defaultActiveKey={tabInfos[0].key}
@@ -369,9 +369,11 @@ function QuestionSide({
             );
           })}
         </Tabs>
+      </div>
+      <div style={{ margin: "10px 15px" }}>
         <SubmitContract />
         <UploadData />
-      </>
+      </div>
       <Modal isOpen={confirmModal}>
         <ConfirmContent
           title={t`You have unsaved changes`}
