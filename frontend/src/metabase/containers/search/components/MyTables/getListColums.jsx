@@ -1,8 +1,7 @@
 /* eslint-disable react/display-name */
 import React from "react";
 import dayjs from "dayjs";
-import { Button, Menu } from "antd";
-import IconValue from "metabase/containers/dashboards/components/IconValue";
+import { Button, Switch } from "antd";
 import * as Urls from "metabase/lib/urls";
 import Link from "metabase/core/components/Link";
 import upperFirst from "lodash/upperFirst";
@@ -65,15 +64,16 @@ export default ({ router, setTableBelongType, jumpToChart }) => {
   const action = {
     title: "Actions",
     key: "action",
-    width: 200,
+    width: 250,
     render: (_, record) => {
       return (
-        <div className="flex">
-          <Button
-            onClick={() => setTableBelongType(record)}
-          >
-            {record.belongType === "public" ? "Private" : "Public"}
-          </Button>
+        <div className="flex align-center">
+          <Switch checkedChildren="public" unCheckedChildren="private" checked={record.belongType === "public"} onClick={() => setTableBelongType(record)} />
+          {/*<Button*/}
+          {/*  onClick={() => setTableBelongType(record)}*/}
+          {/*>*/}
+          {/*  {record.belongType === "public" ? "Private" : "Public"}*/}
+          {/*</Button>*/}
           {record.source === "chart" && (
             <Button
               className="ml1"
@@ -87,5 +87,5 @@ export default ({ router, setTableBelongType, jumpToChart }) => {
     },
   };
 
-  return [name, belongType, source, createdAt, action];
+  return [name, source, createdAt, action];
 };
