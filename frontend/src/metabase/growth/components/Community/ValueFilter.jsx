@@ -16,7 +16,7 @@ export const ValueFilter = props => {
       <Typography.Text
         ellipsis={false}
         rows={1}
-        style={{ marginRight: 8, color: "white" }}
+        style={{ marginRight: 8, color: "white", whiteSpace: "nowrap" }}
       >
         Value Filter:
       </Typography.Text>

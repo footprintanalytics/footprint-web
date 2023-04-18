@@ -41,28 +41,15 @@ const CohortList = props => {
     {
       title: "Title",
       dataIndex: "title",
-      render: text => {
-        // TODO: text need to format by frontend
-        const title = formatTag(text);
-        let tip =
-          cohortTips.get(
-            [
-              `${props.project?.protocolName} Users`,
-              `${props.project?.protocolSlug} users`,
-            ].includes(title)
-              ? "{project slug} Users"
-              : title,
-          ) ?? null;
-        // TODO: Don't show the tooltip temporarily
-        tip = null;
+      render: (text, { createdBy }) => {
+        // only format tag for system cohorts
+        const title = createdBy !== "user" ? formatTag(text) : text;
         return (
-          <Tooltip placement="top" title={tip} arrow={true}>
-            <Link
-              to={`/growth/public/dashboard/55b1eb29-b15e-458f-9241-1862a0d19d3b?tag=${title}&cohort_title=${title}#from=Cohort`}
-            >
-              {title} {tip && <QuestionCircleOutlined />}
-            </Link>
-          </Tooltip>
+          <Link
+            to={`/growth/public/dashboard/55b1eb29-b15e-458f-9241-1862a0d19d3b?tag=${text}&cohort_title=${text}#from=Cohort`}
+          >
+            {title}
+          </Link>
         );
       },
     },

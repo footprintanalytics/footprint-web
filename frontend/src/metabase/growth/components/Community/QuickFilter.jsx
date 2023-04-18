@@ -18,8 +18,17 @@ export const QuickFilter = props => {
     onFliterChange?.(checked ? tag : null);
   };
   return (
-    <div className="flex flex-row w-full p1 items-center">
-      <span style={{ marginRight: 8, color: "white" }}>Quick Filter:</span>
+    <div className="flex flex-row w-full p1">
+      <span
+        style={{
+          marginRight: 8,
+          color: "white",
+          whiteSpace: "nowrap",
+          marginTop: 5,
+        }}
+      >
+        Quick Filter:
+      </span>
       <Space size={[0, 8]} wrap>
         {optionsList?.map(tag => (
           <CheckableTag
