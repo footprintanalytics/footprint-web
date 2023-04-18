@@ -76,6 +76,7 @@ const Index = ({ router, user, params, userInfoDataApi }) => {
         />
       )}
       <div className="creator__wrap">
+        <span>Preview</span>
         <Personal router={router} user={user} data={data} />
         <List
           router={router}
