@@ -9,6 +9,7 @@ import DashboardsList from "../../../dashboards/components/Dashboards/List";
 import PageList from "../Page/Index";
 import CreatorList from "../Creator/Index";
 import DataSetList from "../DataSet/Index";
+import MyTables from "../MyTables/Index";
 import cx from "classnames";
 import {
   getCreatorQueryLink,
@@ -43,6 +44,7 @@ const Index = ({
   const isOwnCreator = user && user.name === router?.params?.name;
 
   const isFavoritesTab = model === "favorite";
+  const isMyTablesTab = model === "table";
 
   const isCreatorAndOwner = () => {
     return isCreator() && router?.params?.name === user?.name;
@@ -74,10 +76,26 @@ const Index = ({
       show: true,
     },
     {
+      key: "flex",
+      tab: "",
+      render: params => {
+        return null;
+      },
+      show: isCreator() && isOwnCreator,
+    },
+    {
       key: "favorite",
       tab: "My Favorites",
       render: params => {
         return <DashboardsList {...params} />;
+      },
+      show: isCreator() && isOwnCreator,
+    },
+    {
+      key: "table",
+      tab: "My Datasets",
+      render: params => {
+        return <MyTables {...params} />;
       },
       show: isCreator() && isOwnCreator,
     },
@@ -106,6 +124,8 @@ const Index = ({
       show: isSearch(),
     },
   ];
+
+  const showSwitchGraph = isCreator() && !isMyTablesTab;
 
   const getTab = (key, tab) => {
     const num = data && data[key];
@@ -150,7 +170,7 @@ const Index = ({
     }, 1000);
     return (
       <div className="search__tabs-other flex justify-end">
-        {!isFavoritesTab && (
+        {!isFavoritesTab && !isMyTablesTab && (
           <Search
             allowClear
             placeholder="Search..."
@@ -169,7 +189,7 @@ const Index = ({
         >
           <Tooltip tooltip={isList ? "Grid view" : "List view"}>
             <Icon
-              name={isList ? "switch_grid" : "switch_list"}
+              name={isList ? "switch_list" : "switch_grid"}
               size={20}
               color={"#A6AABE"}
             />
@@ -182,9 +202,10 @@ const Index = ({
   return (
     <div className={cx("search__tabs relative", className)}>
       <Tabs
+        key={data ? Object.keys(data).join(",") : ""}
         activeKey={model}
         size="large"
-        tabBarGutter={isMobile ? 20 : 60}
+        tabBarGutter={isMobile ? 20 : null}
         animated={false}
         destroyInactiveTabPane={true}
         onChange={model => {
@@ -209,7 +230,7 @@ const Index = ({
             );
           })}
       </Tabs>
-      {isCreator() && renderSwitchGraph()}
+      {showSwitchGraph && renderSwitchGraph()}
     </div>
   );
 };

@@ -121,9 +121,7 @@ function QueryPreview(props) {
 
           <Button
             className="query-preview__select"
-            icon="add"
             color="white"
-            iconColor="white"
             small
             onClick={selectAction}
           >
