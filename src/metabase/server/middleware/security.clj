@@ -97,7 +97,8 @@
                                  "preview.footprint.network"
                                  "accounts.google.com"
                                  "docs.google.com"
-                                 "www.youtube.com"]
+                                 "www.youtube.com"
+                                 "*"]
                   :connect-src  ["*"
                                  "'self' data:"
                                  ;; Google Identity Services

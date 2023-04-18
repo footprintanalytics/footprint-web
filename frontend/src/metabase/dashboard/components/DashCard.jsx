@@ -121,6 +121,7 @@ class DashCard extends Component {
     (isEditing &&
       (mainCard.display === "text" ||
         mainCard.display === "image" ||
+        mainCard.display === "embed" ||
         mainCard.display === "video"))
       ? ""
       : "18px 24px";
@@ -179,6 +180,7 @@ class DashCard extends Component {
       !isVirtualDashCard(dashcard) &&
       display !== "text" &&
       display !== "image" &&
+      display !== "embed" &&
       display !== "video";
 
     const expectedDuration = Math.max(
@@ -223,6 +225,7 @@ class DashCard extends Component {
     const isTextDisplay = mainCard.display === "text";
     const isImageDisplay = mainCard.display === "image";
     const isVideoDisplay = mainCard.display === "video";
+    const isEmbedDisplay = mainCard.display === "embed";
 
     const isAction = isActionCard(mainCard);
 
@@ -251,20 +254,21 @@ class DashCard extends Component {
     const showEdit = isOwner && !!dashcard.card.id;
     const isPublic = mode && mode.name === PublicMode.name;
 
-    const hideDuplicate = isTextDisplay || isImageDisplay || isVideoDisplay;
+    const hideDuplicate = isTextDisplay || isImageDisplay || isVideoDisplay || isEmbedDisplay;
 
     const hideWatermark =
-      clearWatermark || isTextDisplay || isImageDisplay || isVideoDisplay;
+      clearWatermark || isTextDisplay || isImageDisplay || isVideoDisplay || isEmbedDisplay;
 
     const showPreview =
       !isPublic &&
       !showEdit &&
       !isTextDisplay &&
       !isImageDisplay &&
+      !isEmbedDisplay &&
       !isVideoDisplay;
 
     const showChartInfo =
-      !isPublic && !isTextDisplay && !isImageDisplay && !isVideoDisplay;
+      !isPublic && !isTextDisplay && !isImageDisplay && !isVideoDisplay && !isEmbedDisplay;
 
     const editAction = card => {
       window.open(`/chart/${card.id}?editingOnLoad=true`);
@@ -280,10 +284,10 @@ class DashCard extends Component {
       mainCard,
     });
 
-    const notShowReplacementContent = isImageDisplay || isVideoDisplay;
+    const notShowReplacementContent = isImageDisplay || isVideoDisplay || isEmbedDisplay;
     const includeRealtimeTable = isRealtimeChart(dashcard, realtimeList);
     const isRealtimeUser = user?.id === 20103;
-    const showReadTimeMode = !isPublic && !isTextDisplay && !isImageDisplay && !isVideoDisplay && result && !result.error
+    const showReadTimeMode = !isPublic && !isTextDisplay && !isImageDisplay && !isVideoDisplay && !isEmbedDisplay && result && !result.error
       && includeRealtimeTable
       && isRealtimeUser;
     return (
