@@ -83,7 +83,7 @@ const Project = props => {
     //   twitter_handler: projectObject?.twitter?.handler,
     //   discord_guild_id: projectObject?.discord?.guildId,
     // };
-  };;
+  }
 
   const comingSoon = page => {
     return (
@@ -217,7 +217,7 @@ const Project = props => {
         ></ProjectInfo>
       );
     }
-    if (current_tab === "Community") {
+    if (["Community", "Members"].includes(current_tab)) {
       return (
         <Community
           location={location}
