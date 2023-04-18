@@ -1,5 +1,5 @@
 /* eslint-disable react/prop-types */
-import { message, Skeleton, Table } from "antd";
+import { Skeleton, Table, Modal } from "antd";
 import { ownerTable, setTableBelongType } from "metabase/new-service";
 import React, { useState } from "react";
 import { useQuery } from "react-query";
@@ -12,7 +12,7 @@ import "../../../protocols/index.css";
 import "../../../protocols/components/Protocols/index.css";
 import getListColums from "./getListColums";
 import { useDeviceInfo } from "metabase-lib/lib/Device";
-import { getCreatorQueryLink, isSearch } from "metabase/containers/dashboards/shared/utils";
+import { getCreatorQueryLink } from "metabase/containers/dashboards/shared/utils";
 import { sortMap } from "metabase/containers/dashboards/shared/config";
 import NeedPermissionModal from "metabase/components/NeedPermissionModal";
 import getListQueryParams from "metabase/containers/search/components/MyTables/getListQueryParams";
@@ -23,6 +23,22 @@ const Index = ({ router, user }) => {
   const device = useDeviceInfo();
   const showHeader = device.isPC;
   const [showVip, setShowVip] = useState(false);
+
+  const [open, setOpen] = useState({});
+  const [confirmLoading, setConfirmLoading] = useState(false);
+  const handleOk = async () => {
+    setConfirmLoading(true);
+    await setTableBelongType({
+      "tableId": open.tableId,
+      "belongType": open.belongType === "private" ? "public" : "private"
+    })
+    await refetch();
+    setOpen({ open: false });
+    setConfirmLoading(false);
+  };
+  const handleCancel = () => {
+    setOpen({ open: false });
+  };
 
   const { isLoading, data, error, refetch } = useQuery(
     ["ownerTable", params],
@@ -50,13 +66,7 @@ const Index = ({ router, user }) => {
       setShowVip(true);
       return ;
     }
-    const hide = message.loading("Loading...", 0);
-    await setTableBelongType({
-      "tableId": tableId,
-      "belongType": belongType === "private" ? "public": "private"
-    })
-    await refetch();
-    hide();
+    setOpen({ open: true, tableId, belongType });
   }
 
   const jumpToChart = ({ chartId }) => {
@@ -110,6 +120,15 @@ const Index = ({ router, user }) => {
           onClose={() => setShowVip(false)}
         />
       )}
+      <Modal
+        title="Prompt"
+        open={open.open}
+        onOk={handleOk}
+        confirmLoading={confirmLoading}
+        onCancel={handleCancel}
+      >
+        <p>{`Do you set dataset to ${open.belongType === "private" ? "public" : "private"} ?`}</p>
+      </Modal>
     </>
   );
 };
