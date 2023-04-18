@@ -200,7 +200,7 @@ const Community = props => {
             <>
               {tags?.map(tag => {
                 return (
-                  <Tag style={{ margin: 2.5 }} key={tag}>
+                  <Tag className="rounded" style={{ margin: 2.5 }} key={tag}>
                     {tag}
                   </Tag>
                 );
@@ -234,20 +234,6 @@ const Community = props => {
       render: text => (text !== null ? "$" + valueFormat(text) : ""),
     },
     {
-      title: "Total In-game NFT Transactions",
-      dataIndex: "totalNFTTransaction",
-      key: "totalNFTTransaction",
-      align: "right",
-      render: text => (text !== null ? text : ""),
-    },
-    {
-      title: "Total in-game Transactions",
-      dataIndex: "totalTransactions",
-      key: "totalTransactions",
-      align: "right",
-      render: text => (text !== null ? text : ""),
-    },
-    {
       title: "In-game Tokens",
       dataIndex: "holdingToken",
       key: "holdingToken",
@@ -260,6 +246,20 @@ const Community = props => {
       key: "holdingTokenValue",
       align: "right",
       render: text => (text !== null ? "$" + valueFormat(text) : ""),
+    },
+    {
+      title: "Total In-game NFT Transactions(30D)",
+      dataIndex: "totalNFTTransaction",
+      key: "totalNFTTransaction",
+      align: "right",
+      render: text => (text !== null ? text : ""),
+    },
+    {
+      title: "Total In-game Transactions(30D)",
+      dataIndex: "totalTransactions",
+      key: "totalTransactions",
+      align: "right",
+      render: text => (text !== null ? text : ""),
     },
     {
       title: "Social ID",
@@ -466,10 +466,12 @@ const Community = props => {
 
   return (
     <div className="flex flex-column items-center w-full p2">
-      {infoResult.isLoading || filterResult.isLoading || !project?.id ? (
-        <Card className="w-full rounded m1" style={{ height: 250 }}>
-          <LoadingSpinner message="Loading..." />
-        </Card>
+      {infoResult.isLoading || !project?.id ? (
+        <div className="w-full p1">
+          <Card className="w-full rounded" style={{ height: 140 }}>
+            <LoadingSpinner />
+          </Card>
+        </div>
       ) : (
         <>
           {!infoResult.isLoading && (
@@ -480,6 +482,16 @@ const Community = props => {
               router={router}
             />
           )}
+        </>
+      )}
+      {filterResult.isLoading || !project?.id ? (
+        <div className="w-full p1">
+          <Card className="w-full rounded" style={{ height: 110 }}>
+            <LoadingSpinner />
+          </Card>
+        </div>
+      ) : (
+        <>
           <ValueFilter
             className="mt2"
             data={valueFilterOptionsList}
@@ -517,9 +529,11 @@ const Community = props => {
         </>
       )}
       {listResult.isLoading | !project?.id ? (
-        <Card className="w-full rounded m1" style={{ height: 650 }}>
-          <LoadingSpinner message="Loading..." />
-        </Card>
+        <div className="w-full p1">
+          <Card className="w-full rounded" style={{ height: 650 }}>
+            <LoadingSpinner />
+          </Card>
+        </div>
       ) : (
         <WalletList
           router={router}

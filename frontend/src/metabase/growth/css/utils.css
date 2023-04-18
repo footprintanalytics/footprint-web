@@ -9,6 +9,10 @@
 .number-input input[type='number']::-webkit-outer-spin-button {
   -webkit-appearance: none;
 }
+.my-tooltip {
+  max-width: 450px;
+  /* 设置其他样式 */
+}
 
 .ga-empty {
   display: flex;
