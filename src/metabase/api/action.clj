@@ -1,5 +1,5 @@
 (ns metabase.api.action
-  "`/api/action/` endpoints."
+  "`/api/action/` endpoints.."
   (:require [compojure.core :as compojure :refer [POST]]
             [metabase.actions :as actions]
             [metabase.actions.http-action :as http-action]
