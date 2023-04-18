@@ -27,7 +27,7 @@ const List = ({ router, user, name }) => {
         name: name,
       });
     },
-    { ...QUERY_OPTIONS, retry: 0, enabled: !!user },
+    { ...QUERY_OPTIONS, retry: 0 },
   );
 
   return (
