@@ -19,7 +19,9 @@ export const StatisticIndex = props => {
                   router={router}
                   project={project}
                   className="mt1"
-                  disableCheck={option?.value >= 0 ? true : false}
+                  disableCheck={
+                    option?.value !== null && option?.value >= 0 ? true : false
+                  }
                   sourceDefinitionId={option.sourceDefinitionId}
                   refetch={refetchData}
                 >
@@ -43,7 +45,7 @@ export const StatisticIndex = props => {
                         <ArrowUpOutlined />
                       ) : option?.change < 0 ? (
                         <ArrowDownOutlined />
-                      ) : null}{" "}
+                      ) : null}
                       {Math.abs(option?.change)?.toLocaleString("en-US")}
                     </Typography.Text>
                   </>

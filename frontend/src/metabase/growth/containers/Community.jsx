@@ -183,9 +183,7 @@ const Community = props => {
             }}
           >
             <div className="flex flex-col">
-              <Typography.Text>
-                {String(text).slice(0, 4) + "..." + String(text).slice(-4)}
-              </Typography.Text>
+              {String(text).slice(0, 4) + "..." + String(text).slice(-4)}
               {ens && <Typography.Text type="secondary">{ens}</Typography.Text>}
             </div>
           </Link>
