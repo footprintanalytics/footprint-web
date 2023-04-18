@@ -30,7 +30,8 @@ class NeedPermissionModal extends Component {
             <SvgEmptyPermission />
             <div
               style={{
-                fontSize: 16,
+                fontSize: 18,
+                fontWeight: "bold",
                 textAlign: "center",
                 margin: "10px 0px 20px",
                 maxWidth: "400px",
