@@ -4,8 +4,6 @@ import React, { useEffect } from "react";
 import { connect } from "react-redux";
 import { Card, Tag, Avatar, Typography, Button, Tooltip } from "antd";
 import { useQuery } from "react-query";
-// import { Link } from "react-router";
-
 import Link from "metabase/core/components/Link/Link";
 import { getUser, getFgaProject } from "metabase/selectors/user";
 import { QUERY_OPTIONS } from "metabase/containers/dashboards/shared/config";
