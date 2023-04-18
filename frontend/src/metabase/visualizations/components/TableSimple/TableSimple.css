@@ -1,0 +1,32 @@
+.table-transpose table {
+  display: flex;
+}
+
+.table-transpose thead {
+  display: flex;
+  flex-direction: column;
+}
+
+.table-transpose tbody {
+  display: flex;
+  flex-direction: row;
+}
+
+.table-transpose thead tr {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  background: #44444405;
+}
+
+.table-transpose td,
+.table-transpose th {
+  height: 100%;
+  box-sizing: border-box;
+  display: flex;
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  align-items: center;
+  justify-content: flex-end;
+}
