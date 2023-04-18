@@ -38,7 +38,11 @@ const standardTableStyleReset = css`
   text-align: left;
 `;
 
-export const Table = styled.table`
+export interface FpTableProps {
+  isTranspose: boolean;
+}
+
+export const Table = styled.table<FpTableProps>`
   ${standardTableStyleReset}
 
   tr {
@@ -54,7 +58,7 @@ export const Table = styled.table`
 
   th:first-of-type,
   td:first-of-type {
-    padding-left: 1.44em;
+    padding-left: ${props => (props.isTranspose ? "0.75rem" : "1.44rem")}
   }
 `;
 
