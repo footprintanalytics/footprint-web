@@ -106,7 +106,7 @@ const Index = ({ router, user }) => {
       />
       {showVip && (
         <NeedPermissionModal
-          title="Upgrade your account to access more function"
+          title="Upgrade to the Business Plan to protect your data privacy"
           onClose={() => setShowVip(false)}
         />
       )}

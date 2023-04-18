@@ -93,7 +93,7 @@ const Index = ({
     },
     {
       key: "table",
-      tab: "My Tables",
+      tab: "My Datasets",
       render: params => {
         return <MyTables {...params} />;
       },

@@ -50,7 +50,7 @@ class NeedPermissionModal extends Component {
                 afterChangeLocation && afterChangeLocation();
               }}
             >
-              {"Upgrade now"}
+              {"Upgrade Now"}
             </Link>
           </div>
         </ModalContent>

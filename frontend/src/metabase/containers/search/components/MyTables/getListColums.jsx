@@ -1,11 +1,11 @@
 /* eslint-disable react/display-name */
 import React from "react";
 import dayjs from "dayjs";
-import { Dropdown, Menu } from "antd";
-import { getOssUrl } from "metabase/lib/image";
+import { Button, Menu } from "antd";
 import IconValue from "metabase/containers/dashboards/components/IconValue";
 import * as Urls from "metabase/lib/urls";
 import Link from "metabase/core/components/Link";
+import upperFirst from "lodash/upperFirst";
 
 export default ({ router, setTableBelongType, jumpToChart }) => {
   const name = {
@@ -32,10 +32,10 @@ export default ({ router, setTableBelongType, jumpToChart }) => {
     title: "Type",
     key: "belongType",
     dataIndex: "belongType",
-    width: 200,
+    width: 130,
     render: value => {
       return (
-        <div>{value}</div>
+        <div>{upperFirst(value)}</div>
       );
     },
   };
@@ -43,10 +43,10 @@ export default ({ router, setTableBelongType, jumpToChart }) => {
     title: "Source",
     key: "source",
     dataIndex: "source",
-    width: 200,
+    width: 130,
     render: value => {
       return (
-        <div>{value}</div>
+        <div>{upperFirst(value)}</div>
       );
     },
   };
@@ -63,37 +63,26 @@ export default ({ router, setTableBelongType, jumpToChart }) => {
   };
 
   const action = {
-    title: "",
+    title: "Actions",
     key: "action",
-    align: "right",
+    width: 200,
     render: (_, record) => {
-      const menu = (<Menu
-        onClick={({ key }) => {
-          switch (key) {
-            case "setPrivate":
-              setTableBelongType(record);
-              break;
-            case "jumpToChart":
-              jumpToChart(record);
-              break;
-          }
-        }}
-      >
-        <Menu.Item key="setPrivate">
-          <IconValue iconName="tool_setting" value={record.belongType === "public" ? "Set to Private" : "Set to Public"} />
-        </Menu.Item>
-        {record.source === "chart" && (
-          <Menu.Item key="jumpToChart">
-            <IconValue iconName="search_chart" value={"Jump to Chart"} />
-          </Menu.Item>
-        )}
-      </Menu>);
       return (
-        <Dropdown overlay={menu} placement="bottomRight">
-          <div className="dashboards__table-action">
-            <img src={getOssUrl("20220309154118.png")} alt="" />
-          </div>
-        </Dropdown>
+        <div className="flex">
+          <Button
+            onClick={() => setTableBelongType(record)}
+          >
+            {record.belongType === "public" ? "Private" : "Public"}
+          </Button>
+          {record.source === "chart" && (
+            <Button
+              className="ml1"
+              onClick={() => jumpToChart(record)}
+            >
+              {"Chart detail >>"}
+            </Button>
+          )}
+        </div>
       );
     },
   };
