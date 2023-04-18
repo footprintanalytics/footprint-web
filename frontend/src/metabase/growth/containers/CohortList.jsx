@@ -2,7 +2,18 @@
 /* eslint-disable react/prop-types */
 import React from "react";
 import { connect } from "react-redux";
-import { Button, Card, Table, Dropdown, Space, Badge, Tooltip } from "antd";
+import {
+  Button,
+  Card,
+  Table,
+  Dropdown,
+  Space,
+  Badge,
+  Tooltip,
+  Tag,
+  Typography,
+  Divider,
+} from "antd";
 import { QuestionCircleOutlined } from "@ant-design/icons";
 import { useQuery } from "react-query";
 import dayjs from "dayjs";
@@ -10,7 +21,7 @@ import { getUser } from "metabase/selectors/user";
 import { GetFgaCohort } from "metabase/new-service";
 import Link from "metabase/core/components/Link/Link";
 import UploadWallets from "../components/buttons/UploadWallets";
-import { getGrowthProjectPath } from "../utils/utils";
+import { formatTag, getGrowthProjectPath } from "../utils/utils";
 import { cohortTips } from "../utils/data";
 
 const CohortList = props => {
@@ -31,23 +42,25 @@ const CohortList = props => {
       title: "Title",
       dataIndex: "title",
       render: text => {
+        // TODO: text need to format by frontend
+        const title = formatTag(text);
         let tip =
           cohortTips.get(
             [
               `${props.project?.protocolName} Users`,
               `${props.project?.protocolSlug} users`,
-            ].includes(text)
+            ].includes(title)
               ? "{project slug} Users"
-              : text,
+              : title,
           ) ?? null;
         // TODO: Don't show the tooltip temporarily
         tip = null;
         return (
           <Tooltip placement="top" title={tip} arrow={true}>
             <Link
-              to={`/growth/public/dashboard/55b1eb29-b15e-458f-9241-1862a0d19d3b?tag=${text}&cohort_title=${text}#from=Cohort`}
+              to={`/growth/public/dashboard/55b1eb29-b15e-458f-9241-1862a0d19d3b?tag=${title}&cohort_title=${title}#from=Cohort`}
             >
-              {text} {tip && <QuestionCircleOutlined />}
+              {title} {tip && <QuestionCircleOutlined />}
             </Link>
           </Tooltip>
         );
@@ -65,7 +78,15 @@ const CohortList = props => {
       },
     },
     {
-      title: "Create Time",
+      title: "Created By",
+      dataIndex: "createdBy",
+      key: "createdBy",
+      render: text => {
+        return <>{text === "user" ? "Admin" : "System"}</>;
+      },
+    },
+    {
+      title: "Created Time",
       dataIndex: "createdAt",
       render: text => dayjs(text).format("YYYY-MM-DD HH:mm"),
     },
@@ -121,10 +142,42 @@ const CohortList = props => {
     },
   ];
 
+  const tooltipTitle = Array.from(cohortTips).map(([key, value]) => (
+    <div key={key} className="mb1">
+      <Typography.Text style={{ display: "inline", whiteSpace: "nowrap" }}>
+        {key === "{project slug} Users"
+          ? `${props.project?.protocolName} Users`
+          : key}{" "}
+      </Typography.Text>
+      <Typography.Text style={{ display: "block" }} type="secondary">
+        {value}
+      </Typography.Text>
+    </div>
+  ));
+
   return (
     <div style={{ padding: 20 }}>
       <Card
-        title="Cohort"
+        title={
+          <Tooltip
+            placement="rightTop"
+            trigger={["click", "hover"]}
+            overlayClassName="my-tooltip"
+            title={
+              <div className="flex flex-col m1">
+                <Typography.Title level={5}>
+                  Cohort Description
+                </Typography.Title>
+                <Divider className="my1" />
+                {tooltipTitle}
+              </div>
+            }
+            arrow={true}
+          >
+            {"Cohort "}
+            <QuestionCircleOutlined />
+          </Tooltip>
+        }
         extra={
           <Dropdown menu={{ items }}>
             <Button type="primary">Create Cohort</Button>
