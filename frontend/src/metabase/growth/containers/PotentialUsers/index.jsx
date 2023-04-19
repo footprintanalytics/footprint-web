@@ -22,16 +22,16 @@ import { QUERY_OPTIONS } from "metabase/containers/dashboards/shared/config";
 import Link from "metabase/core/components/Link/Link";
 import { formatTableTitle } from "metabase/lib/formatting/footprint";
 import { ItemFilter } from "./ItemFilter";
+import { valueFormat } from "metabase/growth/utils/utils";
 
 const PotentialUsers = props => {
   const { router, project } = props;
-
 
   const [walletListParams, setWalletListParams] = React.useState({
     pageSize: 10,
     current: 1,
     filters: [],
-    tags:[],
+    tags: [],
     protocolSlugs: [],
     collectionSlugs: [],
     excludeTags: [],
@@ -48,7 +48,9 @@ const PotentialUsers = props => {
   const filterCollectionResult = useQuery(
     ["getPotentialUserFilterCollection", project?.id],
     async () => {
-      return getPotentialUserFilterCollection({ projectId: parseInt(project?.id) });
+      return getPotentialUserFilterCollection({
+        projectId: parseInt(project?.id),
+      });
     },
     { ...QUERY_OPTIONS, enabled: !!project?.id },
   );
@@ -123,54 +125,61 @@ const PotentialUsers = props => {
       title: "Net Worth",
       dataIndex: "netWorth",
       key: "netWorth",
-      render: text => (text ? '$' + text.toLocaleString("en-US") : "--"),
+      align: "right",
+      render: text => (text !== null ? "$" + valueFormat(text) : ""),
     },
     {
       title: "NFT Holding",
       dataIndex: "holdingNFT",
       key: "holdingNFT",
-      render: text => (text ? '$' + text.toLocaleString("en-US") : "--"),
+      align: "right",
+      render: text => (text !== null ? "$" + valueFormat(text) : ""),
     },
     {
       title: "NFT Holding Values",
       dataIndex: "holdingNFTValue",
       key: "holdingNFTValue",
-      render: text => (text ? '$' + text.toLocaleString("en-US") : "--"),
+      align: "right",
+      render: text => (text !== null ? "$" + valueFormat(text) : ""),
     },
     {
       title: "Token Holding",
       dataIndex: "holdingToken",
       key: "holdingToken",
-      render: text => (text ? '$' + text.toLocaleString("en-US") : "--"),
+      align: "right",
+      render: text => (text !== null ? "$" + valueFormat(text) : ""),
     },
     {
       title: "Token Holding Values",
       dataIndex: "holdingTokenValue",
       key: "holdingTokenValue",
-      render: text => (text ? '$' + text.toLocaleString("en-US") : "--"),
+      align: "right",
+      render: text => (text !== null ? "$" + valueFormat(text) : ""),
     },
     {
       title: "Total NFTTransaction",
       dataIndex: "totalNFTTransaction",
       key: "totalNFTTransaction",
-      render: text => (text ? '$' + text.toLocaleString("en-US") : "--"),
+      align: "right",
+      render: text => (text !== null ? "$" + valueFormat(text) : ""),
     },
     {
       title: "Total Transactions",
       dataIndex: "totalTransactions",
       key: "Total Transactions",
-      render: text => (text ? '$' + text.toLocaleString("en-US") : "--"),
+      align: "right",
+      render: text => (text !== null ? "$" + valueFormat(text) : ""),
     },
   ];
 
-  const getQuickFilterOptionList = (data) => {
+  const getQuickFilterOptionList = data => {
     return data?.map(option => {
       return {
         label: option.tag,
         value: option.tag,
       };
     });
-  }
+  };
 
   const renderHint = () => {
     const message = (
@@ -178,23 +187,28 @@ const PotentialUsers = props => {
         <div className="my2 ml1">
           {"With this feature, you'll be able to:"}
           <ul style={{ listStyle: "inside" }}>
-            <li>Gain access to and analyze over 120 million wallet profiles and tags.</li>
+            <li>
+              Gain access to and analyze over 120 million wallet profiles and
+              tags.
+            </li>
             <li>
               Identify valuable users from the top NFTs, protocols, and chains.
             </li>
             <li>
-              {"Dive deep into analyzing target audiences' holding value and activities on the chain."}
+              {
+                "Dive deep into analyzing target audiences' holding value and activities on the chain."
+              }
             </li>
           </ul>
         </div>
       </>
-    )
+    );
     return (
-      <Card >
+      <Card>
         <Alert message={message} showIcon />
       </Card>
     );
-  }
+  };
 
   return (
     <>
@@ -213,7 +227,9 @@ const PotentialUsers = props => {
               <ItemFilter
                 className="mt2"
                 projectData={orderBy(filterProjectResult?.data?.data, ["name"])}
-                collectionData={orderBy(filterCollectionResult?.data?.data, ["name"])}
+                collectionData={orderBy(filterCollectionResult?.data?.data, [
+                  "name",
+                ])}
                 onSelectChange={selectObject => {
                   setWalletListParams({
                     ...walletListParams,
@@ -222,7 +238,9 @@ const PotentialUsers = props => {
                   });
                 }}
                 onFilterChange={valueFilter => {
-                  if (!valueFilter) {return;}
+                  if (!valueFilter) {
+                    return;
+                  }
                   let temp = [...walletListParams.filters];
                   temp = temp.filter(
                     item => item.indicator !== valueFilter.indicator,
