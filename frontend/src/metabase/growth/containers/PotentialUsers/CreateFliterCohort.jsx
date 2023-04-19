@@ -1,39 +1,109 @@
 /* eslint-disable react/prop-types */
 import React, { useState } from "react";
-import { AutoComplete, Button, Divider, Modal } from "antd";
+import { AutoComplete, Button, message, Modal, Tag } from "antd";
 import { connect } from "react-redux";
+import { push } from "react-router-redux";
+import { omit, isArray, keys } from "lodash";
 import { getGrowthProjectPath } from "metabase/growth/utils/utils";
 import { getUser } from "metabase/selectors/user";
 import { createFgaProjectModalShowAction, loginModalShowAction } from "metabase/redux/control";
 import { FilterOut } from "metabase/growth/components/FilterOut";
-import { push } from "react-router-redux";
+import { createPotentialUserCohort } from "metabase/new-service";
 
 const CreateCohort2 = ({
   btnText = "Create Cohort",
   onChangeLocation,
   project,
   disable = false,
+  addressListCount,
+  params = {},
 }) => {
   const [isCohortModalOpen, setCohortModalOpen] = useState(false);
+  const [createCohortLoading, setCreateCohortLoading] = useState(false);
+  const filterOutOptions = ["Bot", "Sybil"];
+  const [filterOutValues, setFilterOutValues] = useState(filterOutOptions);
+  const [cohortName, setCohortName] = useState();
   const addressList = [];
-  const queryCondition = null;
-  const getPannel = () => {
+
+  const handleConditions = (params) => {
+    const paramKeys = keys(omit(params, ["pageSize", "current", "excludeTags", "projectId"]));
+    const conditions = [];
+    paramKeys.forEach(k => {
+      if (isArray(params[k]) && params[k].length > 0 && params[k] !== 0) {
+        if (k === "filters") {
+          conditions.push({ name: k, value: params[k].map(item => {
+            return `${item.indicator} ${item.comparisonSymbol} ${item.comparisonValue}\n`
+            }) })
+        } else {
+          conditions.push({ name: k, value: params[k] });
+        }
+      }
+    })
+    return conditions;
+  }
+
+  const queryCondition = handleConditions(params);
+
+  const getPanel = () => {
     return (
       <>
         {addressList && (
-          <h4>You have selected {addressList?.length} wallet address.</h4>
+          <h4>You have selected {addressListCount?.toLocaleString("en-US")} wallet address.</h4>
         )}
-        {/*<div className="bg-light p2 mt1">*/}
-        {/*  <h5>Criteria:</h5>*/}
-        {/*  <Divider style={{ marginTop: 10, marginBottom: 10 }}></Divider>*/}
-        {/*  /!* <div className="mt1" /> *!/*/}
-        {/*  {(!queryCondition || queryCondition?.length <= 0) && (*/}
-        {/*    <>You have not yet established any filtering criteria.</>*/}
-        {/*  )}*/}
-        {/*</div>*/}
+        <div className="p2 mt1" style={{ background: "#182034" }}>
+          <h5>Criteria:</h5>
+          <div className="mt1" />
+          {queryCondition && (
+            <>
+              {queryCondition?.map((q, index) => {
+                return (
+                  <div key={index} style={{ marginBottom: 10 }}>
+                    {q.name}:{" "}
+                    {isArray(q.value) ? (
+                      q.value.map(t => {
+                        return (
+                          <Tag style={{ borderRadius: 5 }} key={t}>
+                            {t}
+                          </Tag>
+                        );
+                      })
+                    ) : (
+                      <Tag style={{ borderRadius: 5 }}>{q.value}</Tag>
+                    )}
+                  </div>
+                );
+              })}
+            </>
+          )}
+          {(!queryCondition || queryCondition?.length <= 0) && (
+            <>You have not yet established any filtering criteria.</>
+          )}
+        </div>
       </>
     );
   };
+  console.log("isCohortModalOpen", isCohortModalOpen)
+  console.log("project", project)
+  const createCohortAction = async () => {
+    if (!cohortName) {
+      message.error("Please enter the name of your cohort.");
+      return;
+    }
+    if (addressListCount === 0) {
+      message.error("Please filter more address list");
+      return;
+    }
+    setCreateCohortLoading(true);
+    await createPotentialUserCohort({
+      ...(omit(params, ["pageSize", "current"])),
+      title: cohortName,
+      excludeTags: [...filterOutValues],
+    });
+    console.log("params", params)
+    setCreateCohortLoading(false);
+    onChangeLocation(getGrowthProjectPath(project?.protocolSlug, "Cohort"));
+  }
+  console.log("filterOutValues",filterOutValues)
   return (
     <>
       <Button
@@ -56,9 +126,8 @@ const CreateCohort2 = ({
           <Button
             key="submit"
             type="primary"
-            onClick={() =>
-              onChangeLocation(getGrowthProjectPath(project, "Cohort"))
-            }
+            loading={createCohortLoading}
+            onClick={createCohortAction}
           >
             Create
           </Button>,
@@ -74,15 +143,18 @@ const CreateCohort2 = ({
           }}
           allowClear
           // options={options}
+          onChange={value => {
+            setCohortName(value.trim());
+          }}
           placeholder="Enter the name of this cohort "
           filterOption={(inputValue, option) =>
             option?.value.toUpperCase().indexOf(inputValue.toUpperCase()) !== -1
           }
         />
         <div className="mt2" />
-        {getPannel()}
+        {getPanel()}
         <div className="mb2" />
-        <FilterOut />
+        <FilterOut options={filterOutOptions} defaultValue={filterOutOptions} onChange={values => setFilterOutValues(values)}/>
       </Modal>
     </>
   );

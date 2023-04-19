@@ -11,6 +11,7 @@ export const QuickFilter = props => {
     refetchData,
     onFliterChange,
     defaultValue,
+    title = "Quick Filter",
   } = props;
   const [selectedTags, setSelectedTags] = useState(defaultValue);
   const handleChange = (tag, checked) => {
@@ -27,7 +28,7 @@ export const QuickFilter = props => {
           marginTop: 5,
         }}
       >
-        Quick Filter:
+        {title}:
       </span>
       <Space size={[0, 8]} wrap>
         {optionsList?.map(tag => (
