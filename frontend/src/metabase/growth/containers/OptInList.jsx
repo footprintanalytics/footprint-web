@@ -1,6 +1,6 @@
 /* eslint-disable react/display-name */
 /* eslint-disable react/prop-types */
-import React from "react";
+import React, { useState } from "react";
 import { connect } from "react-redux";
 import {
   Button,
@@ -24,10 +24,11 @@ import {
   getLatestGAProjectId,
   valueFormat,
 } from "../utils/utils";
-import CampaignStatus from "../components/CampaignStatus";
+import CreateCampaignModal from "../components/Modal/CreateCampaignModal";
 
 const OptInList = props => {
   const latestGAProjectId = getLatestGAProjectId();
+  const [isModalOpen, setIsModalOpen] = useState({ open: false, type: "" });
   const { isLoading, data } = useQuery(
     ["getCampaign", latestGAProjectId],
     async () => {
@@ -172,7 +173,14 @@ const OptInList = props => {
             </Typography.Paragraph>
           </Col>
           <Col sm={24} md={12} lg={8} xl={6} xxl={4} key="twitter">
-            <Card hoverable className=" rounded" style={{ width: "100%" }}>
+            <Card
+              hoverable
+              className=" rounded"
+              style={{ width: "100%" }}
+              onClick={() => {
+                setIsModalOpen({ open: true, type: "twitter" });
+              }}
+            >
               <div className=" flex flex-column items-center" style={{}}>
                 <Avatar
                   src={
@@ -188,7 +196,14 @@ const OptInList = props => {
             </Card>
           </Col>
           <Col sm={24} md={12} lg={8} xl={6} xxl={4} key="discord">
-            <Card className="rounded" hoverable style={{ width: "100%" }}>
+            <Card
+              className="rounded"
+              hoverable
+              style={{ width: "100%" }}
+              onClick={() => {
+                setIsModalOpen({ open: true, type: "discord" });
+              }}
+            >
               <div className=" flex flex-column items-center" style={{}}>
                 <Avatar
                   src={
@@ -218,6 +233,17 @@ const OptInList = props => {
           />
         )}
       </Card>
+      <CreateCampaignModal
+        open={isModalOpen?.open}
+        optInType={isModalOpen?.type}
+        location={location}
+        onSuccess={() => {
+          console.log("success");
+        }}
+        onCancel={() => {
+          console.log("cancel");
+        }}
+      ></CreateCampaignModal>
     </div>
   );
 };
