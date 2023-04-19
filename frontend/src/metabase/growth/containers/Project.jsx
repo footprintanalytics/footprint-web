@@ -163,6 +163,7 @@ const Project = props => {
     ) : (
       <LoadingSpinner message="Loading..." />
     );
+    console.log("current_tabcurrent_tabcurrent_tab", current_tab)
     if (current_tab === "UserTemplate") {
       //|| current_tab === "Potential Users"
       return (
@@ -172,9 +173,6 @@ const Project = props => {
           projectId={getLatestGAProjectId()}
         ></UserTemplate>
       );
-    }
-    if (current_tab === "Potential Users2") {
-      return <PotentialUsers project={getProjectObject(project)} />;
     }
     if (current_tab === "UserProfile") {
       return (
@@ -225,6 +223,9 @@ const Project = props => {
           project={getProjectObject(project)}
         ></Community>
       );
+    }
+    if (["Potential Users2", "Potential Users"].includes(current_tab)) {
+      return <PotentialUsers project={getProjectObject(project)} />;
     }
     if (current_tab === "Custom Analysis") {
       return (
