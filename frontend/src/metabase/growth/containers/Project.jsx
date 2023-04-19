@@ -83,7 +83,7 @@ const Project = props => {
     //   twitter_handler: projectObject?.twitter?.handler,
     //   discord_guild_id: projectObject?.discord?.guildId,
     // };
-  }
+  };
 
   const comingSoon = page => {
     return (
@@ -294,7 +294,7 @@ const Project = props => {
           </LoadingDashboard>
         );
       }
-      if (current_tab === "Lifecycle") {
+      if (current_tab === "Funnel") {
         return (
           <LoadingDashboard
             router={router}
@@ -312,7 +312,7 @@ const Project = props => {
     return comingSoon("");
   };
   return <>{getContentPannel(tab)}</>;
-};;
+};
 
 const mapStateToProps = (state, props) => {
   return {

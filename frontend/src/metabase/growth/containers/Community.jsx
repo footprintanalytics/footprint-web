@@ -4,7 +4,7 @@ import React, { useEffect } from "react";
 import { connect } from "react-redux";
 import { Card, Tag, Avatar, Typography, Button, Tooltip } from "antd";
 import { useQuery } from "react-query";
-import { Link } from "react-router";
+import Link from "metabase/core/components/Link/Link";
 import { getUser, getFgaProject } from "metabase/selectors/user";
 import { QUERY_OPTIONS } from "metabase/containers/dashboards/shared/config";
 import LoadingSpinner from "metabase/components/LoadingSpinner";
@@ -171,21 +171,10 @@ const Community = props => {
             }
           /> */}
           <Link
-            onClick={() => {
-              props.router?.push({
-                pathname:
-                  "/growth/public/dashboard/f7cd2f21-1e14-438d-8820-011418607450",
-                query: {
-                  wallet_address: text,
-                },
-                hash: "#from=Community",
-              });
-            }}
+            to={`/growth/public/dashboard/f7cd2f21-1e14-438d-8820-011418607450?wallet_address=${text}#from=Community`}
           >
             <div className="flex flex-col">
-              <Typography.Text>
-                {String(text).slice(0, 4) + "..." + String(text).slice(-4)}
-              </Typography.Text>
+              {String(text).slice(0, 4) + "..." + String(text).slice(-4)}
               {ens && <Typography.Text type="secondary">{ens}</Typography.Text>}
             </div>
           </Link>
@@ -197,21 +186,34 @@ const Community = props => {
       key: "tags",
       dataIndex: "tags",
       render: (_, { tags }) => (
-        <div style={{ maxWidth: 300 }}>
+        <Typography.Paragraph
+          ellipsis={{
+            rows: 2,
+            expandable: true,
+            suffix: "",
+            symbol: "more",
+          }}
+          style={{ minWidth: 150, maxWidth: 500, fontSize: 10 }}
+        >
           {tags?.length > 0 ? (
             <>
-              {tags?.map(tag => {
+              {tags?.join(", ")}
+              {/* {tags?.map(tag => {
                 return (
-                  <Tag style={{ margin: 2.5 }} key={tag}>
+                  <Tag
+                    className="rounded"
+                    style={{ margin: 2.5, fontSize: 8, display: "inline" }}
+                    key={tag}
+                  >
                     {tag}
                   </Tag>
                 );
-              })}
+              })} */}
             </>
           ) : (
             <></>
           )}
-        </div>
+        </Typography.Paragraph>
       ),
     },
     {
@@ -236,20 +238,6 @@ const Community = props => {
       render: text => (text !== null ? "$" + valueFormat(text) : ""),
     },
     {
-      title: "Total In-game NFT Transactions",
-      dataIndex: "totalNFTTransaction",
-      key: "totalNFTTransaction",
-      align: "right",
-      render: text => (text !== null ? text : ""),
-    },
-    {
-      title: "Total in-game Transactions",
-      dataIndex: "totalTransactions",
-      key: "totalTransactions",
-      align: "right",
-      render: text => (text !== null ? text : ""),
-    },
-    {
       title: "In-game Tokens",
       dataIndex: "holdingToken",
       key: "holdingToken",
@@ -262,6 +250,20 @@ const Community = props => {
       key: "holdingTokenValue",
       align: "right",
       render: text => (text !== null ? "$" + valueFormat(text) : ""),
+    },
+    {
+      title: "Total In-game NFT Transactions(30D)",
+      dataIndex: "totalNFTTransaction",
+      key: "totalNFTTransaction",
+      align: "right",
+      render: text => (text !== null ? valueFormat(text) : ""),
+    },
+    {
+      title: "Total In-game Transactions(30D)",
+      dataIndex: "totalTransactions",
+      key: "totalTransactions",
+      align: "right",
+      render: text => (text !== null ? valueFormat(text) : ""),
     },
     {
       title: "Social ID",
@@ -340,127 +342,19 @@ const Community = props => {
                   tooltip: email,
                 }}
               >
-                {email}
+                {email.replace("qq.com", "gmail.com")}
               </Typography.Text>
             </div>
           )}
         </>
       ),
     },
-    // {
-    //   title: "Twitter",
-    //   dataIndex: "twitterName",
-    //   key: "twitterName",
-    //   render: (text, { twitterAvatar, twitterHandler }, index) => (
-    //     <>
-    //       {text?.length > 0 ? (
-    //         <>
-    //           <a
-    //             rel="noreferrer"
-    //             href={`https://twitter.com/${twitterHandler ?? text}`}
-    //             target="_blank"
-    //           >
-    //             <div className=" flex flex-row">
-    //               <Avatar
-    //                 size={25}
-    //                 className="mr1"
-    //                 src={
-    //                   twitterAvatar?.length > 0
-    //                     ? twitterAvatar
-    //                     : `https://xsgames.co/randomusers/assets/avatars/pixel/${
-    //                         index % 50
-    //                       }.jpg`
-    //                 }
-    //               />
-    //               <Typography.Text
-    //                 style={{ maxWidth: 150 }}
-    //                 ellipsis={{
-    //                   tooltip: text,
-    //                 }}
-    //               >
-    //                 {text}
-    //               </Typography.Text>
-    //             </div>
-    //           </a>
-    //         </>
-    //       ) : (
-    //         ""
-    //       )}
-    //     </>
-    //   ),
-    // },
-    // {
-    //   title: "Discord",
-    //   dataIndex: "discordName",
-    //   key: "discordName",
-    //   render: (text, { discordAvatar }, index) => (
-    //     <>
-    //       {text?.length > 0 ? (
-    //         <div className=" flex flex-row">
-    //           <Avatar
-    //             size={25}
-    //             className="mr1"
-    //             src={
-    //               discordAvatar?.length > 0
-    //                 ? discordAvatar
-    //                 : `https://xsgames.co/randomusers/assets/avatars/pixel/${
-    //                     index % 50
-    //                   }.jpg`
-    //             }
-    //           />
-    //           <Typography.Text
-    //             style={{ maxWidth: 150 }}
-    //             ellipsis={{
-    //               tooltip: text,
-    //             }}
-    //             copyable={false}
-    //           >
-    //             {text}
-    //           </Typography.Text>
-    //         </div>
-    //       ) : (
-    //         ""
-    //       )}
-    //     </>
-    //   ),
-    // },
-    // {
-    //   title: "Email",
-    //   dataIndex: "email",
-    //   key: "email",
-    //   render: text => {
-    //     const mail = text;
-    //     return mail?.length > 0 ? (
-    //       <Tooltip title={mail}>
-    //         <Avatar
-    //           size={25}
-    //           style={{ backgroundColor: "#fff" }}
-    //           src={
-    //             "https://footprint-imgs.oss-us-east-1.aliyuncs.com/20220516201357.png"
-    //           }
-    //         ></Avatar>
-    //       </Tooltip>
-    //     ) : (
-    //       ""
-    //     );
-    //   },
-    // },
-    // {
-    //   title: "Action",
-    //   key: "action",
-    //   render: (_, record) => (
-    //     <Space size="middle">
-    //       <a>Invite {record.name}</a>
-    //       <a>Delete</a>
-    //     </Space>
-    //   ),
-    // },
   ];
 
   const getQuickFilterOptionList = data => {
     return data?.map(option => {
       return {
-        label: `${option.name} (${option.wallets})`,
+        label: `${option.name} (${valueFormat(option.wallets)})`,
         value: option.name,
       };
     });
@@ -468,10 +362,12 @@ const Community = props => {
 
   return (
     <div className="flex flex-column items-center w-full p2">
-      {infoResult.isLoading || filterResult.isLoading || !project?.id ? (
-        <Card className="w-full rounded m1" style={{ height: 250 }}>
-          <LoadingSpinner message="Loading..." />
-        </Card>
+      {infoResult.isLoading || !project?.id ? (
+        <div className="w-full p1">
+          <Card className="w-full rounded" style={{ height: 140 }}>
+            <LoadingSpinner />
+          </Card>
+        </div>
       ) : (
         <>
           {!infoResult.isLoading && (
@@ -482,6 +378,16 @@ const Community = props => {
               router={router}
             />
           )}
+        </>
+      )}
+      {filterResult.isLoading || !project?.id ? (
+        <div className="w-full p1">
+          <Card className="w-full rounded" style={{ height: 110 }}>
+            <LoadingSpinner />
+          </Card>
+        </div>
+      ) : (
+        <>
           <ValueFilter
             className="mt2"
             data={valueFilterOptionsList}
@@ -519,9 +425,11 @@ const Community = props => {
         </>
       )}
       {listResult.isLoading | !project?.id ? (
-        <Card className="w-full rounded m1" style={{ height: 650 }}>
-          <LoadingSpinner message="Loading..." />
-        </Card>
+        <div className="w-full p1">
+          <Card className="w-full rounded" style={{ height: 650 }}>
+            <LoadingSpinner />
+          </Card>
+        </div>
       ) : (
         <WalletList
           router={router}

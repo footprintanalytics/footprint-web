@@ -9,20 +9,20 @@ export const ValueFilter = props => {
   return (
     <div
       className={cx(
-        "flex flex-row w-full p1 items-center  text-nowrap",
+        "flex flex-row w-full p1 items-center text-nowrap",
         className,
       )}
     >
       <Typography.Text
         ellipsis={false}
         rows={1}
-        style={{ marginRight: 8, color: "white" }}
+        style={{ marginRight: 8, color: "white", whiteSpace: "nowrap" }}
       >
         Value Filter:
       </Typography.Text>
-      <Row gutter={16} className="w-full">
+      <Row gutter={[10, 10]} className="w-full">
         {data?.map(item => (
-          <Col span={4} key={item.label}>
+          <Col sm={24} md={12} lg={8} xl={6} xxl={4} key={item.label}>
             {/* {ValueInput(item)} */}
             <FloatInput
               height={40}

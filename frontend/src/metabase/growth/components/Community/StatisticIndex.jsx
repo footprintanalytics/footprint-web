@@ -8,10 +8,10 @@ import LoadingConnectorButton from "metabase/growth/components/LoadingConnectorB
 export const StatisticIndex = props => {
   const { data, isLoading, refetchData, router, project } = props;
   return (
-    <Row gutter={16} className="w-full ">
+    <Row gutter={[15, 15]} className="w-full ">
       {data?.map((option, index) => {
         return (
-          <Col span={4} key={option?.title}>
+          <Col sm={24} md={12} lg={8} xl={6} xxl={4} key={option?.title}>
             <Card bordered={false} style={{ minHeight: 140 }}>
               <div className="flex flex-col items-center">
                 <Typography.Text>{option?.title}</Typography.Text>
@@ -19,7 +19,9 @@ export const StatisticIndex = props => {
                   router={router}
                   project={project}
                   className="mt1"
-                  disableCheck={option?.value >= 0 ? true : false}
+                  disableCheck={
+                    option?.value !== null && option?.value >= 0 ? true : false
+                  }
                   sourceDefinitionId={option.sourceDefinitionId}
                   refetch={refetchData}
                 >
@@ -43,7 +45,7 @@ export const StatisticIndex = props => {
                         <ArrowUpOutlined />
                       ) : option?.change < 0 ? (
                         <ArrowDownOutlined />
-                      ) : null}{" "}
+                      ) : null}
                       {Math.abs(option?.change)?.toLocaleString("en-US")}
                     </Typography.Text>
                   </>

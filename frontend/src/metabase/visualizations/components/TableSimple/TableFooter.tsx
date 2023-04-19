@@ -20,6 +20,7 @@ interface TableFooterProps {
   limit?: number;
   onPreviousPage: () => void;
   onNextPage: () => void;
+  isTranspose?: boolean;
 }
 
 const TableFooter = React.forwardRef<HTMLDivElement, TableFooterProps>(
@@ -32,15 +33,17 @@ const TableFooter = React.forwardRef<HTMLDivElement, TableFooterProps>(
       total,
       onPreviousPage,
       onNextPage,
+      isTranspose,
     }: TableFooterProps,
     ref,
   ) {
     const paginateMessage = useMemo(() => {
+      const totalText = isTranspose ? "Columns" : "Rows"
       if (limit === undefined && total >= HARD_ROW_LIMIT) {
-        return t`Rows ${start + 1}-${end + 1} of first ${total}`;
+        return t`${totalText} ${start + 1}-${end + 1} of first ${total}`;
       }
-      return t`Rows ${start + 1}-${end + 1} of ${total}`;
-    }, [total, start, end, limit]);
+      return t`${totalText} ${start + 1}-${end + 1} of ${total}`;
+    }, [total, start, end, limit, isTranspose]);
 
     const handlePreviousPage = useCallback(
       (event: MouseEvent) => {
