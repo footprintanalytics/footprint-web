@@ -25,6 +25,7 @@ import UserTemplate from "./UserTemplate";
 import CohortList from "./CohortList";
 import Community from "./Community";
 import UserProfile from "./UserProfile";
+import OptInList from "./OptInList";
 import "../css/index.css";
 
 const Project = props => {
@@ -83,7 +84,7 @@ const Project = props => {
     //   twitter_handler: projectObject?.twitter?.handler,
     //   discord_guild_id: projectObject?.discord?.guildId,
     // };
-  }
+  };
 
   const comingSoon = page => {
     return (
@@ -215,6 +216,15 @@ const Project = props => {
           router={router}
           project={getProjectObject(project)}
         ></ProjectInfo>
+      );
+    }
+    if (["OptInList", "Opt-In", "OptIn", "Opt-In Tool"].includes(current_tab)) {
+      return (
+        <OptInList
+          location={location}
+          router={router}
+          project={getProjectObject(project)}
+        ></OptInList>
       );
     }
     if (["Community", "Members"].includes(current_tab)) {
