@@ -7,7 +7,8 @@ import { GetFgaConnectorJob } from "metabase/new-service";
 import { getGrowthProjectPath } from "../utils/utils";
 
 const LoadingConnectorButton = ({
-  sourceDefinitionId,
+  fgaConnectorId,
+  metrics,
   router,
   project,
   children,
@@ -16,21 +17,21 @@ const LoadingConnectorButton = ({
   refetch,
 }) => {
   const { data } = useQuery(
-    ["GetFgaConnectorJob", project?.id, sourceDefinitionId],
-    async () =>
-      GetFgaConnectorJob({ projectId: project?.id, sourceDefinitionId }),
+    ["GetFgaConnectorJob", project?.id, fgaConnectorId],
+    async () => GetFgaConnectorJob({ projectId: project?.id, fgaConnectorId }),
     {
       refetchInterval: data =>
-        data?.status === "succeeded" || data?.status === "failed"
+        data?.[metrics]?.status === "succeeded" ||
+        data?.[metrics]?.status === "failed"
           ? false
           : 10000,
-      enabled: !!sourceDefinitionId && !disableCheck,
+      enabled: !!fgaConnectorId && !!metrics && !disableCheck,
     },
   );
   if (disableCheck) {
     return children;
   }
-  if (!sourceDefinitionId) {
+  if (!fgaConnectorId || !metrics) {
     return (
       <Button
         type="primary"
@@ -48,7 +49,7 @@ const LoadingConnectorButton = ({
         Set up now
       </Button>
     );
-  } else if (sourceDefinitionId && data?.status === "failed") {
+  } else if (fgaConnectorId && data?.[metrics]?.status === "failed") {
     return (
       <>
         <Button
@@ -72,8 +73,8 @@ const LoadingConnectorButton = ({
       </>
     );
   } else if (
-    sourceDefinitionId &&
-    data?.status !== "succeeded" &&
+    fgaConnectorId &&
+    data?.[metrics]?.status !== "succeeded" &&
     project.twitter_handler !== "Footprint_Data"
   ) {
     return (
@@ -96,7 +97,7 @@ const LoadingConnectorButton = ({
       </Button>
     );
   } else {
-    data?.status === "succeeded" && refetch?.();
+    data?.[metrics]?.status === "succeeded" && refetch?.();
     return children;
   }
 };

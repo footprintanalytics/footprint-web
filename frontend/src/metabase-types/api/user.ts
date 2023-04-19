@@ -40,16 +40,16 @@ export interface FgaProject {
   ga: Ga | null;
 }
 interface Ga {
-  sourceDefinitionId: string;
+  fgaConnectorId: string;
 }
 interface Discord {
   guildId: string;
   guildName: string;
-  sourceDefinitionId: string;
+  fgaConnectorId: string;
 }
 interface Twitter {
   handler: string;
-  sourceDefinitionId: string;
+  fgaConnectorId: string;
 }
 interface ContractAddress {
   address: string;

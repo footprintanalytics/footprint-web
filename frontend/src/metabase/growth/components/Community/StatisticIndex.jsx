@@ -18,11 +18,12 @@ export const StatisticIndex = props => {
                 <LoadingConnectorButton
                   router={router}
                   project={project}
+                  metrics={option?.metrics}
                   className="mt1"
                   disableCheck={
                     option?.value !== null && option?.value >= 0 ? true : false
                   }
-                  sourceDefinitionId={option.sourceDefinitionId}
+                  fgaConnectorId={option.fgaConnectorId}
                   refetch={refetchData}
                 >
                   <>

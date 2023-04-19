@@ -65,7 +65,7 @@ const ConfigConnector = props => {
       // 提交表单到 api，成功之后
       const data = {
         projectId: parseInt(projectId),
-        sourceDefinitionId: connector.sourceDefinitionId,
+        fgaConnectorId: connector.fgaConnectorId,
         connectionConfiguration: values,
         streams: values.streams || [],
       };

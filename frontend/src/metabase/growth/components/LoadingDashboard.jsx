@@ -6,7 +6,7 @@ import { GetFgaConnectorJob } from "metabase/new-service";
 import { getGrowthProjectPath } from "../utils/utils";
 
 const LoadingDashboard = ({
-  sourceDefinitionId,
+  fgaConnectorId,
   router,
   project,
   projectId,
@@ -14,11 +14,12 @@ const LoadingDashboard = ({
   children,
 }) => {
   const { data } = useQuery(
-    ["GetFgaConnectorJob", projectId, sourceDefinitionId],
-    async () => GetFgaConnectorJob({ projectId, sourceDefinitionId }),
+    ["GetFgaConnectorJob", projectId, fgaConnectorId],
+    async () => GetFgaConnectorJob({ projectId, fgaConnectorId }),
     {
-      refetchInterval: data => (data?.status === "succeeded" ? false : 10000),
-      enabled: !!sourceDefinitionId,
+      refetchInterval: data =>
+        data?.twitter_tweet_metrics?.status === "succeeded" ? false : 10000,
+      enabled: !!fgaConnectorId,
     },
   );
 
@@ -119,7 +120,7 @@ const LoadingDashboard = ({
       break;
   }
 
-  if (!sourceDefinitionId) {
+  if (!fgaConnectorId) {
     return (
       <div style={{ padding: 20 }}>
         <Card title={current_tab}>
@@ -128,8 +129,8 @@ const LoadingDashboard = ({
       </div>
     );
   } else if (
-    sourceDefinitionId &&
-    data?.status !== "succeeded" &&
+    fgaConnectorId &&
+    data?.twitter_tweet_metrics?.status !== "succeeded" &&
     project.twitter_handler !== "Footprint_Data"
   ) {
     return (

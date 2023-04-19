@@ -81,13 +81,15 @@ const Community = props => {
         title: "Twitter Followers",
         value: data.twitterFollowers,
         change: data.twitterFollowersChange,
-        sourceDefinitionId: project?.twitter?.sourceDefinitionId,
+        metrics: "user_detail",
+        fgaConnectorId: project?.twitter?.fgaConnectorId,
       });
       dataList.push({
         title: "Discord Members",
         value: data.discordMembers,
         change: data.discordMembersChange,
-        sourceDefinitionId: project?.discord?.sourceDefinitionId,
+        metrics: "discord_user_detail",
+        fgaConnectorId: project?.discord?.fgaConnectorId,
       });
     }
     return dataList;
