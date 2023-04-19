@@ -283,7 +283,7 @@ export const fga_menu_data = [
         uuid: null,
       },
       {
-        name: "Lifecycle",
+        name: "Funnel",
         id: 7118,
         uuid: "b1682d12-bddd-4b10-99a3-a403a3a6a78c",
       },
@@ -410,6 +410,10 @@ export const cohortTips = new Map([
   ["Token Holders", "Wallets that holding the project's token."],
   [
     "{project slug} Users",
+    "All wallets that have interacted with the project's smart contracts.",
+  ],
+  [
+    "Gamers",
     "All wallets that have interacted with the project's smart contracts.",
   ],
 ]);

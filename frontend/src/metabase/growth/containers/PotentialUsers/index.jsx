@@ -2,25 +2,26 @@
 import React from "react";
 import "../../css/index.css";
 import "./index.css";
-import CreateCohort2 from "metabase/growth/containers/PotentialUsers/CreateFliterCohort";
 import { push } from "react-router-redux";
-import { getFgaProject, getUser } from "metabase/selectors/user";
 import { connect } from "react-redux";
-import { QuickFilter } from "metabase/growth/components/Community/QuickFilter";
-import { ItemFilter } from "./ItemFilter";
-import { WalletList } from "metabase/growth/components/Community/WalletList";
-import { Card } from "antd";
-import LoadingSpinner from "metabase/components/LoadingSpinner/LoadingSpinner";
+import { Alert, Card, Typography } from "antd";
 import { useQuery } from "react-query";
+import { orderBy } from "lodash";
+import { WalletList } from "metabase/growth/components/Community/WalletList";
+import LoadingSpinner from "metabase/components/LoadingSpinner/LoadingSpinner";
+import { QuickFilter } from "metabase/growth/components/Community/QuickFilter";
+import { getFgaProject, getUser } from "metabase/selectors/user";
+import CreateCohort2 from "metabase/growth/containers/PotentialUsers/CreateFliterCohort";
 import {
   getPotentialUseFilterProject,
-  getPotentialUser,
+  queryPotentialUser,
   getPotentialUserFilterCollection,
   getPotentialUserFilterTag,
 } from "metabase/new-service";
 import { QUERY_OPTIONS } from "metabase/containers/dashboards/shared/config";
-import { Link } from "react-router";
+import Link from "metabase/core/components/Link/Link";
 import { formatTableTitle } from "metabase/lib/formatting/footprint";
+import { ItemFilter } from "./ItemFilter";
 
 const PotentialUsers = props => {
   const { router, project } = props;
@@ -33,6 +34,7 @@ const PotentialUsers = props => {
     tags:[],
     protocolSlugs: [],
     collectionSlugs: [],
+    excludeTags: [],
   });
 
   const filterProjectResult = useQuery(
@@ -60,9 +62,9 @@ const PotentialUsers = props => {
   );
 
   const listResult = useQuery(
-    ["getPotentialUser", project?.id, walletListParams],
+    ["queryPotentialUser", project?.id, walletListParams],
     async () => {
-      return getPotentialUser({
+      return queryPotentialUser({
         ...walletListParams,
         projectId: parseInt(project?.id),
       });
@@ -73,7 +75,16 @@ const PotentialUsers = props => {
   const actions = [
     {
       title: "Create Cohort",
-      label: (<CreateCohort2 project={project}> </CreateCohort2>),
+      component: (
+        <CreateCohort2
+          project={project}
+          addressListCount={listResult?.data?.total}
+          params={{
+            ...walletListParams,
+            projectId: parseInt(project?.id),
+          }}
+        />
+      ),
     },
   ];
 
@@ -82,30 +93,29 @@ const PotentialUsers = props => {
       title: "Wallet",
       dataIndex: "address",
       key: "Wallet",
-      render: (text, record) => (
-        <div className="flex flex-col">
+      render: (text, { ens, discordAvatar, twitterAvatar }, index) => (
+        <div className="flex flex-row">
+          {/* <Avatar
+            size={35}
+            className="mr1"
+            src={
+              twitterAvatar?.length > 0
+                ? twitterAvatar
+                : discordAvatar?.length > 0
+                ? discordAvatar
+                : `https://xsgames.co/randomusers/assets/avatars/pixel/${
+                    index % 50
+                  }.jpg`
+            }
+          /> */}
           <Link
-            onClick={() => {
-              props.router?.push({
-                pathname:
-                  "/growth/public/dashboard/f7cd2f21-1e14-438d-8820-011418607450",
-                query: {
-                  wallet_address: text,
-                },
-                hash: "#from=Community",
-              });
-            }}
+            to={`/growth/public/dashboard/f7cd2f21-1e14-438d-8820-011418607450?wallet_address=${text}#from=Community`}
           >
-            {String(text).slice(0, 4) + '...' + String(text).slice(-4)}
-          </Link>
-          {record.ens && (
-            <div>
-              {/* <Badge color={"green"} text={} /> */}
-              <a href={record.ens} target="_blank" rel="noreferrer">
-                {record.ens}
-              </a>
+            <div className="flex flex-col">
+              {String(text).slice(0, 4) + "..." + String(text).slice(-4)}
+              {ens && <Typography.Text type="secondary">{ens}</Typography.Text>}
             </div>
-          )}
+          </Link>
         </div>
       ),
     },
@@ -162,10 +172,35 @@ const PotentialUsers = props => {
     });
   }
 
+  const renderHint = () => {
+    const message = (
+      <>
+        <div className="my2 ml1">
+          {"With this feature, you'll be able to:"}
+          <ul style={{ listStyle: "inside" }}>
+            <li>Gain access to and analyze over 120 million wallet profiles and tags.</li>
+            <li>
+              Identify valuable users from the top NFTs, protocols, and chains.
+            </li>
+            <li>
+              {"Dive deep into analyzing target audiences' holding value and activities on the chain."}
+            </li>
+          </ul>
+        </div>
+      </>
+    )
+    return (
+      <Card >
+        <Alert message={message} showIcon />
+      </Card>
+    );
+  }
+
   return (
     <>
       {project?.id ? (
-        <div className="flex flex-column items-center w-full p2">
+        <div className="flex flex-column w-full p2">
+          {renderHint()}
           {filterProjectResult?.isLoading &&
           filterCollectionResult?.isLoading &&
           listResult?.isLoading &&
@@ -177,8 +212,8 @@ const PotentialUsers = props => {
             <>
               <ItemFilter
                 className="mt2"
-                projectData={filterProjectResult?.data?.data}
-                collectionData={filterCollectionResult?.data?.data}
+                projectData={orderBy(filterProjectResult?.data?.data, ["name"])}
+                collectionData={orderBy(filterCollectionResult?.data?.data, ["name"])}
                 onSelectChange={selectObject => {
                   setWalletListParams({
                     ...walletListParams,
@@ -187,7 +222,7 @@ const PotentialUsers = props => {
                   });
                 }}
                 onFilterChange={valueFilter => {
-                  if (!valueFilter) return;
+                  if (!valueFilter) {return;}
                   let temp = [...walletListParams.filters];
                   temp = temp.filter(
                     item => item.indicator !== valueFilter.indicator,
@@ -203,13 +238,14 @@ const PotentialUsers = props => {
                 }}
               />
               <QuickFilter
+                title={"Tag"}
                 optionsList={getQuickFilterOptionList(
-                  filterTagResult?.data?.data,
+                  orderBy(filterTagResult?.data?.data, ["tag"]),
                 )}
                 formatFunction={name =>
                   formatTableTitle(name?.replace(/-/g, " "))
                 }
-                onFilterChange={tag => {
+                onFliterChange={tag => {
                   setWalletListParams({
                     ...walletListParams,
                     current: 1,

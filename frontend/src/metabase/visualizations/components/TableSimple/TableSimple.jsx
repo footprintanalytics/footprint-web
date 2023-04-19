@@ -27,6 +27,9 @@ import {
   SortIcon,
 } from "./TableSimple.styled";
 
+import "./TableSimple.css";
+import cx from "classnames";
+
 function getBoundingClientRectSafe(ref) {
   return ref.current?.getBoundingClientRect?.() ?? {};
 }
@@ -50,6 +53,7 @@ function TableSimple({
   data,
   series,
   settings,
+  width,
   height,
   isPivoted,
   className,
@@ -67,11 +71,19 @@ function TableSimple({
   const footerRef = useRef(null);
   const firstRowRef = useRef(null);
 
+  const tableTranspose = settings["table.table_transpose"];
+  const isTranspose = tableTranspose === "transpose";
+
   useLayoutEffect(() => {
-    const { height: headerHeight } = getBoundingClientRectSafe(headerRef);
+    const { height: headerHeight, width: headerWidth } = getBoundingClientRectSafe(headerRef);
     const { height: footerHeight = 0 } = getBoundingClientRectSafe(footerRef);
-    const { height: rowHeight = 0 } = getBoundingClientRectSafe(firstRowRef);
-    const currentPageSize = Math.floor(
+    const { height: rowHeight = 0, width: rowWidth = 0 } = getBoundingClientRectSafe(firstRowRef);
+    const currentPageSize = isTranspose ?
+      Math.floor(
+        (width - headerWidth) / (rowWidth + 1),
+      )
+      :
+      Math.floor(
       (height - headerHeight - footerHeight) / (rowHeight + 1),
     );
     const normalizedPageSize = Math.max(1, currentPageSize);
@@ -149,7 +161,7 @@ function TableSimple({
           <TableHeaderCellContent
             isSorted={colIndex === sortColumn}
             onClick={onClick}
-            isRightAligned={isColumnRightAligned(col)}
+            isRightAligned={isTranspose ? null: isColumnRightAligned(col)}
           >
             <SortIcon name={iconName} />
             <Ellipsified>{getColumnTitle(colIndex)}</Ellipsified>
@@ -197,10 +209,10 @@ function TableSimple({
   );
 
   return (
-    <Root className={className}>
+    <Root className={cx(className, {"table-transpose": isTranspose})}>
       <ContentContainer>
         <TableContainer className="scroll-show scroll-show--hover">
-          <Table className="fullscreen-normal-text fullscreen-night-text">
+          <Table className="fullscreen-normal-text fullscreen-night-text" isTranspose={isTranspose}>
             <thead ref={headerRef}>
               <tr>{cols.map(renderColumnHeader)}</tr>
             </thead>
@@ -217,6 +229,7 @@ function TableSimple({
           onPreviousPage={handlePreviousPage}
           onNextPage={handleNextPage}
           ref={footerRef}
+          isTranspose={isTranspose}
         />
       )}
     </Root>
