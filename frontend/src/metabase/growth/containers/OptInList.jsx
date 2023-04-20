@@ -1,7 +1,7 @@
 /* eslint-disable react/display-name */
 /* eslint-disable react/prop-types */
-import React, { useState } from "react";
-import { connect } from "react-redux";
+import React, { useEffect, useState } from "react"
+import { connect } from "react-redux"
 import {
   Button,
   Card,
@@ -12,33 +12,58 @@ import {
   Row,
   Avatar,
   Space,
-} from "antd";
-import { useQuery } from "react-query";
-import dayjs from "dayjs";
-import { QUERY_OPTIONS } from "metabase/containers/dashboards/shared/config";
-import { getUser } from "metabase/selectors/user";
-import LoadingSpinner from "metabase/components/LoadingSpinner";
-import { getCampaign } from "metabase/new-service";
-import {
-  getGrowthProjectPath,
-  getLatestGAProjectId,
-  valueFormat,
-} from "../utils/utils";
-import CreateCampaignModal from "../components/Modal/CreateCampaignModal";
+  Tooltip,
+} from "antd"
+import { useQuery } from "react-query"
+import dayjs from "dayjs"
+import { QUERY_OPTIONS } from "metabase/containers/dashboards/shared/config"
+import { getUser } from "metabase/selectors/user"
+import LoadingSpinner from "metabase/components/LoadingSpinner"
+import { getCampaign } from "metabase/new-service"
+import { getGrowthProjectPath, valueFormat } from "../utils/utils"
+import CreateCampaignModal from "../components/Modal/CreateCampaignModal"
+import ViewOptInModal from "../components/Modal/ViewOptInModal"
+import "../css/utils.css"
 
 const OptInList = props => {
-  const latestGAProjectId = getLatestGAProjectId();
-  const [isModalOpen, setIsModalOpen] = useState({ open: false, type: "" });
-  const { isLoading, data } = useQuery(
-    ["getCampaign", latestGAProjectId],
+  const { router, location, project } = props
+  const [isModalOpen, setIsModalOpen] = useState({
+    open: false,
+    type: "",
+  })
+  const [viewModalOpen, setViewModalOpen] = useState({
+    open: false,
+    type: "",
+    channel: null,
+  })
+  const [dataSource, setDataSource] = useState([])
+
+  const { isLoading, data, refetch, isFetching } = useQuery(
+    ["getCampaign", project?.id],
     async () => {
-      return await getCampaign({ projectId: parseInt(latestGAProjectId) });
+      return await getCampaign({ projectId: parseInt(project?.id) })
     },
-    { ...QUERY_OPTIONS, enabled: !!latestGAProjectId },
-  );
-  const dataSource = data?.list?.sort(
-    (a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime(),
-  );
+    { ...QUERY_OPTIONS, enabled: !!project?.id },
+  )
+  useEffect(() => {
+    if (data) {
+      const dataSourceTemp = data?.list
+        ?.filter(i => {
+          // only show the campaign with channel: Discord bot or Tweet URL
+          return (
+            i.channels.findIndex(j =>
+              ["Discord bot", "Tweet URL"].includes(j.channelName),
+            ) !== -1
+          )
+        })
+        ?.sort(
+          (a, b) =>
+            new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime(),
+        )
+      console.log("dataSourceTemp", dataSourceTemp)
+      setDataSource(dataSourceTemp)
+    }
+  }, [data])
 
   const columns = [
     {
@@ -85,44 +110,72 @@ const OptInList = props => {
         return (
           <div>
             {channels.map(channel => {
-              return <Tag key={channel.id}>{channel.channelName}</Tag>;
+              // return <Tag key={channel.id}>{channel.channelName}</Tag>
+              return (
+                <Tooltip key={channel.id} title={channel.channelName}>
+                  <Avatar
+                    src={`https://footprint-imgs.oss-us-east-1.aliyuncs.com/${
+                      channel.channelName === "Tweet URL"
+                        ? "20220516201254"
+                        : "20220516201343"
+                    }.png`}
+                    size={25}
+                    className="bg-white mr1"
+                  ></Avatar>
+                </Tooltip>
+              )
             })}
           </div>
-        );
+        )
       },
     },
     {
       title: "Number of Wallet Address",
       dataIndex: "status",
       align: "right",
-      render: text => valueFormat(0),
+      render: text => "--",
     },
     {
       title: "Number of Twitter Name",
       dataIndex: "status",
       align: "right",
-      render: text => valueFormat(0),
+      render: text => "--",
     },
     {
       title: "Number of Discord Name",
       dataIndex: "status",
       align: "right",
-      render: text => valueFormat(0),
+      render: text => "--",
     },
     {
       title: "Number of Email",
       dataIndex: "status",
       align: "right",
-      render: text => valueFormat(0),
+      render: text => "--",
     },
     {
       title: "Action",
       key: "action",
       render: (_, record) => (
         <Space size="middle">
-          <Button type="link">View</Button>
           <Button
             type="link"
+            onClick={() => {
+              setViewModalOpen({
+                open: true,
+                type:
+                  record?.channels?.[0]?.channelName === "Tweet URL"
+                    ? "Twitter"
+                    : "Discord",
+                channel: record?.channels?.[0],
+              })
+            }}
+          >
+            View
+          </Button>
+          <Button
+            type="link"
+            disabled={true}
             onClick={() => {
               props.router?.push({
                 pathname: getGrowthProjectPath(
@@ -130,7 +183,7 @@ const OptInList = props => {
                   "CampaignDetail",
                 ),
                 hash: "#id=" + record.campaignId,
-              });
+              })
               // props.router?.push({
               //   pathname: `/growth/public/dashboard/55b1eb29-b15e-458f-9241-1862a0d19d3b?tag=${record.title}&cohort_title=${record.title}#from=Cohort`,
               // });
@@ -139,11 +192,13 @@ const OptInList = props => {
             Detail
           </Button>
 
-          <Button type="link">Save as cohort</Button>
+          <Button type="link" disabled={true}>
+            Save as cohort
+          </Button>
         </Space>
       ),
     },
-  ];
+  ]
 
   return (
     <div className="w-full" style={{ padding: 20 }}>
@@ -153,17 +208,10 @@ const OptInList = props => {
           className="w-full items-center"
           style={{ minHeight: 200 }}
         >
-          <Col
-            sm={24}
-            md={24}
-            lg={24}
-            xl={10}
-            xxl={8}
-            key="desc"
-            className=" text-center"
-          >
+          <Col span={24} key="desc" className=" text-center">
             <Typography.Title level={4}>
-              Use FGA tool to speed up user information collection
+              Use Footprint GA Opt-In Tool to speed up user information
+              collection
             </Typography.Title>
             <Typography.Paragraph>
               Gain valuable insights about your customers and optimize your
@@ -178,7 +226,7 @@ const OptInList = props => {
               className=" rounded"
               style={{ width: "100%" }}
               onClick={() => {
-                setIsModalOpen({ open: true, type: "twitter" });
+                setIsModalOpen({ open: true, type: "Twitter" })
               }}
             >
               <div className=" flex flex-column items-center" style={{}}>
@@ -192,6 +240,9 @@ const OptInList = props => {
                 <Typography.Text ellipsis={true}>
                   {"Twitter Tweet"}
                 </Typography.Text>
+                <Button type="primary" className=" rounded mt1">
+                  Set up now
+                </Button>
               </div>
             </Card>
           </Col>
@@ -201,7 +252,7 @@ const OptInList = props => {
               hoverable
               style={{ width: "100%" }}
               onClick={() => {
-                setIsModalOpen({ open: true, type: "discord" });
+                setIsModalOpen({ open: true, type: "Discord" })
               }}
             >
               <div className=" flex flex-column items-center" style={{}}>
@@ -215,13 +266,17 @@ const OptInList = props => {
                 <Typography.Text ellipsis={true}>
                   {"Discord Bot"}
                 </Typography.Text>
+
+                <Button type="primary" className=" rounded mt1">
+                  Set up now
+                </Button>
               </div>
             </Card>
           </Col>
         </Row>
       </div>
       <Card title="Opt-In List" className="mt2">
-        {isLoading ? (
+        {isLoading || isFetching || !project?.id ? (
           <LoadingSpinner message="Loading..." />
         ) : (
           <Table
@@ -237,16 +292,33 @@ const OptInList = props => {
         open={isModalOpen?.open}
         optInType={isModalOpen?.type}
         location={location}
+        project={project}
+        router={router}
         onSuccess={() => {
-          console.log("success");
+          refetch()
+          setIsModalOpen({ open: false })
         }}
         onCancel={() => {
-          console.log("cancel");
+          setIsModalOpen({ open: false })
         }}
       ></CreateCampaignModal>
+      <ViewOptInModal
+        location={location}
+        project={project}
+        router={router}
+        type={viewModalOpen?.type}
+        channel={viewModalOpen?.channel}
+        open={viewModalOpen?.open}
+        onSuccess={() => {
+          setViewModalOpen({ open: false })
+        }}
+        onCancel={() => {
+          setViewModalOpen({ open: false })
+        }}
+      />
     </div>
-  );
-};
+  )
+}
 
 const mapStateToProps = state => {
   return {

@@ -4,7 +4,6 @@
 import React from "react";
 import { Table, Typography, Button, Card, Dropdown } from "antd";
 
-
 export const WalletList = props => {
   const {
     data,

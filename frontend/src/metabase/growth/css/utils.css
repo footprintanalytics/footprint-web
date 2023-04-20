@@ -5,6 +5,9 @@
   /* line-height: 35px !important; */
   /* height: 35px !important; */
 }
+.ant-form-item {
+  margin-bottom: 0;
+}
 .number-input input[type='number']::-webkit-inner-spin-button,
 .number-input input[type='number']::-webkit-outer-spin-button {
   -webkit-appearance: none;
