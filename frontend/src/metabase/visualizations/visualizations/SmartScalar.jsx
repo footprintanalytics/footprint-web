@@ -136,7 +136,9 @@ export default class Smart extends React.Component {
       <PreviousValueSeparator gridSize={gridSize}>•</PreviousValueSeparator>
     );
     const granularityDisplay = (
-      <span style={{ marginLeft: 5 }}>{jt`last ${granularity}`}</span>
+      <span style={{ marginLeft: 5 }}>
+        {granularity === "day" ? "yesterday" : jt`last ${granularity}`}
+      </span>
     );
 
     const clicked = {
@@ -193,8 +195,10 @@ export default class Smart extends React.Component {
           {lastChange == null || previousValue == null ? (
             <div
               className="text-centered text-bold mt1"
-              style={{ color: color("text-medium") }}
-            >{jt`Nothing to compare for the previous ${granularity}.`}</div>
+              style={{ color: color("text-medium"), opacity: 0 }}
+            >
+              {jt`Nothing to compare for the previous ${granularity}.`}
+            </div>
           ) : lastChange === 0 ? (
             t`No change from last ${granularity}`
           ) : (

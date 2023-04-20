@@ -68,6 +68,11 @@ export const template_gallery = [
     desc: "Analyze campaign data to determine which platforms and campaigns are the most popular, and identify the most precise target audience.",
     items: [
       {
+        dashboardName: "Blur Airdrop",
+        id: 7121,
+        dashboardLink: "/growth/public/dashboard/7121#from=Custom Analysis",
+      },
+      {
         dashboardName: "Token Airdrop Monitoring",
         id: 7426,
         dashboardLink: "/growth/public/dashboard/7426#from=Custom Analysis",
@@ -283,7 +288,7 @@ export const fga_menu_data = [
         uuid: null,
       },
       {
-        name: "Lifecycle",
+        name: "Funnel",
         id: 7118,
         uuid: "b1682d12-bddd-4b10-99a3-a403a3a6a78c",
       },

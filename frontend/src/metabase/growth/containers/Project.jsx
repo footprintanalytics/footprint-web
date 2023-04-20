@@ -304,7 +304,7 @@ const Project = props => {
           </LoadingDashboard>
         );
       }
-      if (current_tab === "Lifecycle") {
+      if (current_tab === "Funnel") {
         return (
           <LoadingDashboard
             router={router}
@@ -322,7 +322,7 @@ const Project = props => {
     return comingSoon("");
   };
   return <>{getContentPannel(tab)}</>;
-};;
+};
 
 const mapStateToProps = (state, props) => {
   return {

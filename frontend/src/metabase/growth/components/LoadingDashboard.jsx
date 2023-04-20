@@ -22,8 +22,7 @@ const LoadingDashboard = ({
     },
   );
 
-  const connector =
-    current_tab === "Lifecycle" ? "Google Analytics" : current_tab;
+  const connector = current_tab === "Funnel" ? "Google Analytics" : current_tab;
 
   const Setup = (
     <Button

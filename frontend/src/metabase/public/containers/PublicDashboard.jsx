@@ -121,12 +121,17 @@ const mapStateToProps = (state, props) => {
       );
     }
     if (project.discord_guild_id) {
-      const key = "project_name";
       updateDashboardPara(
         parameters,
         parameterValues,
-        key,
+        "project_name",
         project.protocolName,
+      );
+      updateDashboardPara(
+        parameters,
+        parameterValues,
+        "guild_id",
+        project.discord_guild_id,
       );
     }
     if (project.campaignTitle) {
@@ -245,7 +250,7 @@ class PublicDashboard extends Component {
     };
     const isFgaPublicDashboard = location.pathname.startsWith("/growth");
     let hideParameters = isFgaPublicDashboard
-      ? "gamefi,protocol_slug,twitter_handler,project_name"
+      ? "gamefi,protocol_slug,twitter_handler,project_name,guild_id"
       : "";
     const hashData = parseHashOptions(location?.hash);
     if (
