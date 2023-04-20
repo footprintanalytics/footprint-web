@@ -165,7 +165,7 @@ const PotentialUsers = props => {
       render: text => (text !== null ? "$" + valueFormat(text) : ""),
     },
     {
-      title: "NFT Holding Values",
+      title: "NFT Holding Value",
       dataIndex: "holdingNFTValue",
       key: "holdingNFTValue",
       align: "right",
@@ -179,7 +179,7 @@ const PotentialUsers = props => {
       render: text => (text !== null ? "$" + valueFormat(text) : ""),
     },
     {
-      title: "Token Holding Values",
+      title: "Token Holding Value",
       dataIndex: "holdingTokenValue",
       key: "holdingTokenValue",
       align: "right",
