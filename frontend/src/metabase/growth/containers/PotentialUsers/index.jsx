@@ -287,7 +287,7 @@ const PotentialUsers = props => {
                 }}
               />
               <QuickFilter
-                title={"Tag"}
+                title={"Tags"}
                 titleWidth={"68px"}
                 defaultValue={location?.query?.tag}
                 optionsList={getQuickFilterOptionList(

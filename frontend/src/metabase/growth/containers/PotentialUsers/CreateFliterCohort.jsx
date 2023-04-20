@@ -48,7 +48,7 @@ const CreateCohort2 = ({
     return (
       <>
         {addressList && (
-          <h4>You have selected {addressListCount?.toLocaleString("en-US")} wallet address.</h4>
+          <h4>You have selected {addressListCount?.toLocaleString("en-US")} addresses.</h4>
         )}
         <div className="p2 mt1" style={{ background: "#182034" }}>
           <h5>Criteria:</h5>
