@@ -199,6 +199,7 @@ export function getGaMenuTabs(
         "Members",
         "Project Info",
         "Template Gallery",
+        "Opt-In Tool",
         "Custom Analysis",
         "Activator",
         "Channel",

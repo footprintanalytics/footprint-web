@@ -307,6 +307,11 @@ export const fga_menu_data = [
         id: 7490,
         uuid: "d137a1ef-34a3-4553-84cb-2203bd9d2baf",
       },
+      {
+        name: "Opt-In Tool",
+        id: null,
+        uuid: null,
+      },
     ],
   },
   {
