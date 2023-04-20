@@ -17,6 +17,7 @@ const CreateCohort2 = ({
   disable = false,
   addressListCount,
   params = {},
+  isButtonStyle = true,
 }) => {
   const [isCohortModalOpen, setCohortModalOpen] = useState(false);
   const [createCohortLoading, setCreateCohortLoading] = useState(false);
@@ -41,8 +42,8 @@ const CreateCohort2 = ({
     })
     return conditions;
   }
-
   const queryCondition = handleConditions(params);
+  console.log("queryCondition", params, queryCondition)
 
   const getPanel = () => {
     return (
@@ -99,22 +100,30 @@ const CreateCohort2 = ({
       title: cohortName,
       excludeTags: [...filterOutValues],
     });
-    console.log("params", params)
     setCreateCohortLoading(false);
     onChangeLocation(getGrowthProjectPath(project?.protocolSlug, "Cohort"));
   }
-  console.log("filterOutValues",filterOutValues)
   return (
     <>
-      <Button
-        type="text"
-        disabled={disable}
-        onClick={() => {
-          setCohortModalOpen(true);
-        }}
-      >
-        {btnText}
-      </Button>
+      {isButtonStyle ? (
+        <Button
+          type="text"
+          disabled={disable}
+          onClick={() => {
+            setCohortModalOpen(true);
+          }}
+        >
+          {btnText}
+        </Button>
+      ) : (
+        <div
+          onClick={() => {
+            setCohortModalOpen(true);
+          }}
+        >
+          {btnText}
+        </div>
+      )}
 
       <Modal
         open={isCohortModalOpen}

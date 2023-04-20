@@ -107,21 +107,21 @@ const UserTemplate = props => {
           ></img>
           <div className="flex flex-column p2" style={{ width: "50%" }}>
             <h3>
-              Associating millions of data - From addresses to social media
+              Gain access to and analyze over 120 million wallet profiles and tags.
             </h3>
-            <Text className="mt1">
+            <Text className="mt1" style={{ whiteSpace: "pre-line" }}>
               {
-                "Footprint GA can connect to the world's largest blockchain projects and synchronize with Web2 data, to achieve data mining and algorithm learning automatically. You can find information about millions of addresses, and contact social media information for automatic classification, filtering, and tagging."
+                "View holding detailed information on any wallet address, including their token assets and NFTs.\nView historical activities and preferences on any wallet address to mine new opportunities."
               }
             </Text>
           </div>
         </div>
         <div className="mt2 flex flex-row w-full items-center justify-between">
           <div className="flex flex-column p2" style={{ width: "50%" }}>
-            <h3>Intelligent data analytics - AI and Machine Learning</h3>
-            <Text className="mt1">
+            <h3>Identify valuable users from the top NFTs, protocols, and chains.</h3>
+            <Text className="mt1" style={{ whiteSpace: "pre-line" }}>
               {
-                "Footprint GA can deliver intelligent data analytics and operation through utilizing AI and Machine Learning technology, which can boost the efficiency of data analysis and save your time and resources, enabling you to have more focus on the things that matter."
+                "Select on-chain users of any contract，NFTs, protocols, and chains.\nFilter by holding assets and historical active protocols to build your ideal audience.\nFilter out bot,Sybil and low-value users to boost your campaign ROI."
               }
             </Text>
           </div>
@@ -136,30 +136,13 @@ const UserTemplate = props => {
             style={{ width: "40%" }}
           ></img>
           <div className="flex flex-column p2" style={{ width: "50%" }}>
-            <h3>Multi-dimensional analysis - From addresses to industries</h3>
-            <Text className="mt1">
+            <h3>{"Dive deep into analyzing target audiences' holding value and activities on the chain."}</h3>
+            <Text className="mt1" style={{ whiteSpace: "pre-line" }}>
               {
-                "Footprint GA provides various dimensions of tags, which can not only help you track the asset flows on the blockchain, but also offer you a comprehensive understanding of their sources, destinations, and involved industries. This can help you gain insights into the market trends and predict the future direction."
+                "View unique user profiling that is cross-chain, cross-protocol, and integrates off-chain data.\nView more preference indicators and performance analysis."
               }
             </Text>
           </div>
-        </div>
-        <div className="mt2 flex flex-row w-full items-center justify-between">
-          <div className="flex flex-column p2" style={{ width: "50%" }}>
-            <h3>
-              Highly personalized - Flourishing with countless possibilities
-            </h3>
-            <Text className="mt1">
-              {
-                "Footprint GA can offer data analytical and query customization based on your specific needs. You can add your own tags to analyze and manage your digital assets more efficiently. This enables you to set up a personalized classification and management system for your assets, monitoring and managing your asset portfolios with ease."
-              }
-            </Text>
-          </div>
-          <img
-            className="mr3 pr4"
-            src="https://footprint-imgs.oss-us-east-1.aliyuncs.com/img-why-about-us.png"
-            style={{ width: "30%" }}
-          ></img>
         </div>
       </div>
     </div>

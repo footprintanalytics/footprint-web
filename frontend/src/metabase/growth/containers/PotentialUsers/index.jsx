@@ -114,6 +114,7 @@ const PotentialUsers = props => {
             ...walletListParams,
             projectId: parseInt(project?.id),
           }}
+          isButtonStyle={false}
         />
       ),
     },
@@ -150,6 +151,41 @@ const PotentialUsers = props => {
         </div>
       ),
     },
+    /*{
+      title: "Tag",
+      key: "tags",
+      dataIndex: "tags",
+      render: (_, { tags }) => (
+        <Typography.Paragraph
+          ellipsis={{
+            rows: 2,
+            expandable: true,
+            suffix: "",
+            symbol: "more",
+          }}
+          style={{ minWidth: 150, maxWidth: 500, fontSize: 10 }}
+        >
+          {tags?.length > 0 ? (
+            <>
+              {tags?.join(", ")}
+              {/!* {tags?.map(tag => {
+                return (
+                  <Tag
+                    className="rounded"
+                    style={{ margin: 2.5, fontSize: 8, display: "inline" }}
+                    key={tag}
+                  >
+                    {tag}
+                  </Tag>
+                );
+              })} *!/}
+            </>
+          ) : (
+            <></>
+          )}
+        </Typography.Paragraph>
+      ),
+    },*/
     {
       title: "Net Worth",
       dataIndex: "netWorth",
@@ -186,8 +222,8 @@ const PotentialUsers = props => {
       render: text => (text !== null ? "$" + valueFormat(text) : ""),
     },
     {
-      title: "Total NFT Transaction(30D)",
-      dataIndex: "totalNFTTransactions",
+      title: "Total NFT Transactions(30D)",
+      dataIndex: "totalNFTTransaction",
       key: "totalNFTTransaction",
       align: "right",
       render: text => (text !== null ? valueFormat(text) : ""),
