@@ -92,7 +92,7 @@ const PotentialUsers = props => {
 
   const tableColumns = [
     {
-      title: "Wallet",
+      title: "Address",
       dataIndex: "address",
       key: "Wallet",
       render: (text, { ens, discordAvatar, twitterAvatar }, index) => (
@@ -122,49 +122,49 @@ const PotentialUsers = props => {
       ),
     },
     {
-      title: "Net Worth",
+      title: "In-Game Net Worth",
       dataIndex: "netWorth",
       key: "netWorth",
       align: "right",
       render: text => (text !== null ? "$" + valueFormat(text) : ""),
     },
     {
-      title: "NFT Holding",
+      title: "In-Game NFT Holding",
       dataIndex: "holdingNFT",
       key: "holdingNFT",
       align: "right",
       render: text => (text !== null ? "$" + valueFormat(text) : ""),
     },
     {
-      title: "NFT Holding Values",
+      title: "In-Game NFT Holding Values",
       dataIndex: "holdingNFTValue",
       key: "holdingNFTValue",
       align: "right",
       render: text => (text !== null ? "$" + valueFormat(text) : ""),
     },
     {
-      title: "Token Holding",
+      title: "In-Game Token Holding",
       dataIndex: "holdingToken",
       key: "holdingToken",
       align: "right",
       render: text => (text !== null ? "$" + valueFormat(text) : ""),
     },
     {
-      title: "Token Holding Values",
+      title: "In-Game Token Holding Values",
       dataIndex: "holdingTokenValue",
       key: "holdingTokenValue",
       align: "right",
       render: text => (text !== null ? "$" + valueFormat(text) : ""),
     },
     {
-      title: "Total NFTTransaction",
+      title: "Total In-Game NFTTransaction(30D)",
       dataIndex: "totalNFTTransaction",
       key: "totalNFTTransaction",
       align: "right",
       render: text => (text !== null ? "$" + valueFormat(text) : ""),
     },
     {
-      title: "Total Transactions",
+      title: "Total In-Game Transactions(30D)",
       dataIndex: "totalTransactions",
       key: "Total Transactions",
       align: "right",
@@ -204,9 +204,11 @@ const PotentialUsers = props => {
       </>
     );
     return (
-      <Card>
-        <Alert message={message} showIcon />
-      </Card>
+      <div style={{ padding: 6 }}>
+        <Card>
+          <Alert message={message} showIcon />
+        </Card>
+      </div>
     );
   };
 
@@ -219,7 +221,7 @@ const PotentialUsers = props => {
           filterCollectionResult?.isLoading &&
           listResult?.isLoading &&
           filterTagResult?.isLoading ? (
-            <Card className="w-full rounded m1" style={{ height: 250 }}>
+            <Card className="w-full rounded m1" style={{ height: 100 }}>
               <LoadingSpinner message="Loading..." />
             </Card>
           ) : (
@@ -257,6 +259,7 @@ const PotentialUsers = props => {
               />
               <QuickFilter
                 title={"Tag"}
+                titleWidth={"68px"}
                 optionsList={getQuickFilterOptionList(
                   orderBy(filterTagResult?.data?.data, ["tag"]),
                 )}

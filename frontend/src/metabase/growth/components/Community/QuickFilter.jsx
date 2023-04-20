@@ -11,6 +11,7 @@ export const QuickFilter = props => {
     refetchData,
     onFliterChange,
     defaultValue,
+    titleWidth,
     title = "Quick Filter",
   } = props;
   const [selectedTags, setSelectedTags] = useState(defaultValue);
@@ -26,6 +27,7 @@ export const QuickFilter = props => {
           color: "white",
           whiteSpace: "nowrap",
           marginTop: 5,
+          width: titleWidth,
         }}
       >
         {title}:

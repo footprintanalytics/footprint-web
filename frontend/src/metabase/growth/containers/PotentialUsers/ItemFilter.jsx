@@ -62,7 +62,7 @@ export const ItemFilter = (props) => {
     <div
       className={cx("flex flex-row w-full p1 items-center  text-nowrap", className)}
     >
-      <span style={{ marginRight: 8, color: "white", width: "80px", }}>Item Filter:</span>
+      <span style={{ marginRight: 8, color: "white", width: "80px", }}>Filter:</span>
       <Row gutter={16} className="w-full">
         {optionsList.map(item => (
           <Col span={4} key={item.label}>
