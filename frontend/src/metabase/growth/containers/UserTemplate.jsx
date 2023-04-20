@@ -52,7 +52,7 @@ const UserTemplate = props => {
             onClick={() => {
               // setTemplate("CustomerFilter");
               router.push({
-                pathname: getGrowthProjectPath(projectPath, "Potential Users2"),
+                pathname: getGrowthProjectPath(projectPath, "Potential Users List"),
               });
             }}
           >
@@ -80,7 +80,7 @@ const UserTemplate = props => {
                   router.push({
                     pathname: getGrowthProjectPath(
                       projectPath,
-                      "Potential Users2",
+                      "Potential Users List",
                     ),
                     query: { tag: item.key },
                   });

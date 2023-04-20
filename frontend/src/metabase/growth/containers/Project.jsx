@@ -35,7 +35,6 @@ const Project = props => {
   const [project, setProject] = useState(projectPath);
   const demoProjectData = top_protocols[0];
   const [gaMenuTabs, setGaMenuTabs] = useState();
-  const isDemo = location?.hash?.includes("demo");
 
   useEffect(() => {
     if (!project) {
@@ -163,14 +162,14 @@ const Project = props => {
     ) : (
       <LoadingSpinner message="Loading..." />
     );
-    console.log("current_tabcurrent_tabcurrent_tab", current_tab)
-    if (current_tab === "UserTemplate") {
+    if (current_tab === "UserTemplate" || current_tab === "Potential Users") {
       //|| current_tab === "Potential Users"
       return (
         <UserTemplate
           location={location}
           router={router}
           projectId={getLatestGAProjectId()}
+          projectPath={projectPath}
         ></UserTemplate>
       );
     }
@@ -224,8 +223,8 @@ const Project = props => {
         ></Community>
       );
     }
-    if (["Potential Users2", "Potential Users"].includes(current_tab)) {
-      return <PotentialUsers project={getProjectObject(project)} />;
+    if (["Potential Users List", "Potential Users"].includes(current_tab)) {
+      return <PotentialUsers location={location} project={getProjectObject(project)} />;
     }
     if (current_tab === "Custom Analysis") {
       return (
@@ -264,9 +263,6 @@ const Project = props => {
           project={getProjectObject(project)}
         ></CohortList>
       );
-    }
-    if (current_tab === "Potential Users" && isDemo) {
-      return <PotentialUsers project={getProjectObject(project)} />;
     }
     if (gaMenuTabs?.dashboardMap?.has(current_tab)) {
       if (current_tab === "Twitter") {
