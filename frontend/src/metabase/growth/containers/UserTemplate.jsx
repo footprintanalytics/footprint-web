@@ -56,7 +56,7 @@ const UserTemplate = props => {
               });
             }}
           >
-            {"Customer Filter >"}
+            {"Custom Filter >"}
           </Button>
         </div>
         <div className="flex flex-row items-center mt4 w-full">
