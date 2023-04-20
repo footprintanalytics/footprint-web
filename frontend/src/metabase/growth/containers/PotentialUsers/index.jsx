@@ -1,5 +1,5 @@
 /* eslint-disable react/prop-types */
-import React from "react";
+import React, { useEffect } from "react";
 import "../../css/index.css";
 import "./index.css";
 import { push } from "react-router-redux";
@@ -25,17 +25,46 @@ import { ItemFilter } from "./ItemFilter";
 import { valueFormat } from "metabase/growth/utils/utils";
 
 const PotentialUsers = props => {
-  const { router, project } = props;
+  const { router, location, project } = props;
 
   const [walletListParams, setWalletListParams] = React.useState({
     pageSize: 10,
     current: 1,
     filters: [],
-    tags: [],
+    tags: location?.query?.tag
+        ? [location?.query?.tag.replace("+", " ")]
+        : [],
     protocolSlugs: [],
     collectionSlugs: [],
     excludeTags: [],
   });
+
+  // const [walletListParams, setWalletListParams] = React.useState({
+  //   pageSize: location.query?.pageSize
+  //     ? parseInt(location.query?.pageSize)
+  //     : 10,
+  //   current: location.query?.page ? parseInt(location.query?.page) : 1,
+  //   filters: location.query?.filters ? JSON.parse(location.query?.filters) : [],
+  //   tag: location.query?.tag
+  //     ? [location.query?.tag.replace("+", " ")]
+  //     : [],
+  //   protocolSlugs: [],
+  //   collectionSlugs: [],
+  //   excludeTags: [],
+  // });
+  //
+  // useEffect(() => {
+  //   router.replace({
+  //     pathname: location.pathname,
+  //     query: {
+  //       ...location.query,
+  //       page: walletListParams.current,
+  //       pageSize: walletListParams.pageSize,
+  //       tag: walletListParams.tag,
+  //       filters: JSON.stringify(walletListParams.filters),
+  //     },
+  //   });
+  // }, [walletListParams]);
 
   const filterProjectResult = useQuery(
     ["getPotentialUseFilterProject", project?.id],
@@ -122,49 +151,49 @@ const PotentialUsers = props => {
       ),
     },
     {
-      title: "In-Game Net Worth",
+      title: "Net Worth",
       dataIndex: "netWorth",
       key: "netWorth",
       align: "right",
       render: text => (text !== null ? "$" + valueFormat(text) : ""),
     },
     {
-      title: "In-Game NFT Holding",
+      title: "NFT Holding",
       dataIndex: "holdingNFT",
       key: "holdingNFT",
       align: "right",
       render: text => (text !== null ? "$" + valueFormat(text) : ""),
     },
     {
-      title: "In-Game NFT Holding Values",
+      title: "NFT Holding Values",
       dataIndex: "holdingNFTValue",
       key: "holdingNFTValue",
       align: "right",
       render: text => (text !== null ? "$" + valueFormat(text) : ""),
     },
     {
-      title: "In-Game Token Holding",
+      title: "Token Holding",
       dataIndex: "holdingToken",
       key: "holdingToken",
       align: "right",
       render: text => (text !== null ? "$" + valueFormat(text) : ""),
     },
     {
-      title: "In-Game Token Holding Values",
+      title: "Token Holding Values",
       dataIndex: "holdingTokenValue",
       key: "holdingTokenValue",
       align: "right",
       render: text => (text !== null ? "$" + valueFormat(text) : ""),
     },
     {
-      title: "Total In-Game NFTTransaction(30D)",
+      title: "Total NFT Transaction(30D)",
       dataIndex: "totalNFTTransaction",
       key: "totalNFTTransaction",
       align: "right",
       render: text => (text !== null ? "$" + valueFormat(text) : ""),
     },
     {
-      title: "Total In-Game Transactions(30D)",
+      title: "Total Transactions(30D)",
       dataIndex: "totalTransactions",
       key: "Total Transactions",
       align: "right",
@@ -221,7 +250,7 @@ const PotentialUsers = props => {
           filterCollectionResult?.isLoading &&
           listResult?.isLoading &&
           filterTagResult?.isLoading ? (
-            <Card className="w-full rounded m1" style={{ height: 100 }}>
+            <Card className="w-full rounded m1" style={{ height: 150 }}>
               <LoadingSpinner message="Loading..." />
             </Card>
           ) : (
@@ -260,6 +289,7 @@ const PotentialUsers = props => {
               <QuickFilter
                 title={"Tag"}
                 titleWidth={"68px"}
+                defaultValue={location?.query?.tag}
                 optionsList={getQuickFilterOptionList(
                   orderBy(filterTagResult?.data?.data, ["tag"]),
                 )}

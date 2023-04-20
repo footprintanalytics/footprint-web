@@ -283,7 +283,7 @@ export const fga_menu_data = [
         uuid: null,
       },
       {
-        name: "Potential Users2",
+        name: "Potential Users List",
         id: null,
         uuid: null,
       },
