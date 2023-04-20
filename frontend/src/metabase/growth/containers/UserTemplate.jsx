@@ -13,7 +13,7 @@ const UserTemplate = props => {
     {
       name: "Token Airdrop",
       icon: "https://footprint-imgs.oss-us-east-1.aliyuncs.com/airdrop2.svg",
-      key: "token-airdrop",
+      key: "campaign-participant",
     },
     {
       name: "NFT Collector",
@@ -23,7 +23,7 @@ const UserTemplate = props => {
     {
       name: "Active Gamer",
       icon: "https://footprint-imgs.oss-us-east-1.aliyuncs.com/activity_gamer.svg",
-      key: "active-gamer",
+      key: "gamer",
     },
     {
       name: "Token Whale",
