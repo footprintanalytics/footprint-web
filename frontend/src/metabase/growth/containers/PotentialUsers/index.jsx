@@ -31,9 +31,7 @@ const PotentialUsers = props => {
     pageSize: 10,
     current: 1,
     filters: [],
-    tags: location?.query?.tag
-        ? [location?.query?.tag.replace("+", " ")]
-        : [],
+    tags: location?.query?.tag ? [location?.query?.tag.replace("+", " ")] : [],
     protocolSlugs: [],
     collectionSlugs: [],
     excludeTags: [],
@@ -248,9 +246,9 @@ const PotentialUsers = props => {
 
   const renderHint = () => {
     const message = (
-      <>
-        <div className="my2 ml1">
-          {"With this feature, you'll be able to:"}
+      <Alert
+        message="With this feature, you'll be able to"
+        description={
           <ul style={{ listStyle: "inside" }}>
             <li>
               Gain access to and analyze over 120 million wallet profiles and
@@ -265,14 +263,14 @@ const PotentialUsers = props => {
               }
             </li>
           </ul>
-        </div>
-      </>
+        }
+        type="info"
+        showIcon
+      />
     );
     return (
       <div style={{ padding: 6 }}>
-        <Card>
-          <Alert message={message} showIcon />
-        </Card>
+        <Card>{message}</Card>
       </div>
     );
   };
