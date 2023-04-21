@@ -100,6 +100,9 @@ export const queryPotentialUser = async params => {
 export const createPotentialUserCohort = async params => {
   return POST(`/api/v1/fga/potential-user/cohort`, params);
 };
+export const createCommunityUserCohort = async params => {
+  return POST(`/api/v1/fga/community/cohort`, params);
+};
 // FP Api ---------------
 export const UserRegister = async params => {
   return POST("/api/v1/user/signup", params);

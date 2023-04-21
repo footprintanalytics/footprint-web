@@ -56,7 +56,9 @@ const CreateCampaignModal = props => {
     channel,
   } = props;
   const [isSubmiting, setSubmiting] = useState(false);
+  const [isShow, setShow] = useState(false);
   const [channelSelectedValue, setChannelSelectedValue] = useState([]);
+  const [previewChannel, setPreviewChannel] = useState(null);
   const [campaignSelected, setCampaignSelected] = useState(null);
   const [showDiscordStep3, setShowDiscordStep3] = useState({
     show: false,
@@ -72,10 +74,44 @@ const CreateCampaignModal = props => {
   );
 
   useEffect(() => {
+    if (!isLoading) {
+      data?.list?.forEach(item => {
+        if (item.campaignType === "User Contact") {
+          const opt_in_campaign = {
+            key: item.campaignType,
+            label: item.campaignName ?? item.campaignType,
+            // description: item.description,
+            value: item.campaignType,
+            disabled: item.status !== "enable",
+            ...item,
+          };
+          setCampaignSelected(opt_in_campaign);
+          optInType && setupSelectedChannel(optInType, opt_in_campaign);
+          return;
+        }
+      });
+    }
+  }, [isLoading]);
+
+  useEffect(() => {
+    if (open) {
+      setupPreviewChannel(channel);
+      setupSelectedChannel(optInType, campaignSelected);
+    }
+    setShow(open);
+  }, [open]);
+
+  // useEffect(() => {
+  //   if (optInType) {
+  //     setupOptInType(campaignSelected);
+  //   }
+  // }, [optInType]);
+
+  const setupPreviewChannel = channel => {
     if (channel) {
+      let tempChannel = null;
       if (optInType === "Discord") {
-        setEditable(false);
-        setChannelSelectedValue([
+        tempChannel = [
           {
             ...channel,
             details: [
@@ -129,10 +165,9 @@ const CreateCampaignModal = props => {
               },
             ],
           },
-        ]);
+        ];
       } else if (optInType === "Twitter") {
-        setEditable(false);
-        setChannelSelectedValue([
+        tempChannel = [
           {
             ...channel,
             details: [
@@ -146,38 +181,17 @@ const CreateCampaignModal = props => {
               },
             ],
           },
-        ]);
+        ];
       }
+      setEditable(false);
+      setPreviewChannel(tempChannel);
+    } else {
+      setEditable(true);
+      setPreviewChannel(null);
     }
-  }, [channel]);
+  };
 
-  useEffect(() => {
-    if (!isLoading) {
-      data?.list?.forEach(item => {
-        if (item.campaignType === "User Contact") {
-          const opt_in_campaign = {
-            key: item.campaignType,
-            label: item.campaignName ?? item.campaignType,
-            // description: item.description,
-            value: item.campaignType,
-            disabled: item.status !== "enable",
-            ...item,
-          };
-          setCampaignSelected(opt_in_campaign);
-          optInType && setupOptInType(opt_in_campaign);
-          return;
-        }
-      });
-    }
-  }, [isLoading]);
-
-  useEffect(() => {
-    if (optInType && campaignSelected) {
-      setupOptInType(campaignSelected);
-    }
-  }, [optInType]);
-
-  const setupOptInType = campaign => {
+  const setupSelectedChannel = (optInType, campaign) => {
     const channelType =
       optInType === "Twitter"
         ? "Tweet URL"
@@ -187,7 +201,7 @@ const CreateCampaignModal = props => {
     const channelTemp = campaign?.channels?.find(
       item => item.channelName === channelType,
     );
-    if (channelTemp && channel === null) {
+    if (channelTemp) {
       setChannelSelectedValue([channelTemp]);
     }
   };
@@ -405,14 +419,6 @@ const CreateCampaignModal = props => {
           return;
         }
         onSuccess?.();
-        // router.push(getGrowthProjectPath(project?.protocolSlug, "Campaign"));
-        // router.push({
-        //   pathname: getGrowthProjectPath(
-        //     project?.protocolSlug,
-        //     "CampaignDetail",
-        //   ),
-        //   hash: "#id=" + result?.campaignId,
-        // });
       })
       .finally(() => {
         setSubmiting(false);
@@ -437,11 +443,13 @@ const CreateCampaignModal = props => {
         </div>
       }
       width={600}
-      open={open}
+      open={isShow}
       footer={null}
       afterClose={() => {
         setShowDiscordStep3({ show: false });
         setEditable(true);
+        setPreviewChannel([]);
+        setChannelSelectedValue([]);
       }}
       // onOk={handleOk}
       onCancel={onCancel}
@@ -518,18 +526,21 @@ const CreateCampaignModal = props => {
                   className="rounded p1 mt1"
                   style={{ background: "#182034" }}
                 >
-                  {channelSelectedValue?.map(channel => {
-                    if (channel.details && channel.details.length > 0) {
+                  {(previewChannel?.length > 0
+                    ? previewChannel
+                    : channelSelectedValue
+                  )?.map(channelItem => {
+                    if (channelItem.details && channelItem.details.length > 0) {
                       return (
                         <>
                           <div>
-                            {getChannelConfigPanel(channel.details)}
+                            {getChannelConfigPanel(channelItem.details)}
                             {optInType === "Discord" && (
                               <div className="mb2">
                                 <div className="flex flex-row mt3 items-center">
                                   <div>
-                                    {channel.details.length + 1}. Invite the bot
-                                    to your server
+                                    {channelItem.details.length + 1}. Invite the
+                                    bot to your server
                                   </div>
                                   <Button
                                     type="primary"
@@ -537,7 +548,8 @@ const CreateCampaignModal = props => {
                                     className="ml2"
                                     onClick={() => {
                                       window.open(
-                                        "https://discord.com/api/oauth2/authorize?client_id=1089756391889178745&permissions=268435456&scope=bot",
+                                        channel?.details?.botInviteUrl ??
+                                          "https://discord.com/api/oauth2/authorize?client_id=1089756391889178745&permissions=268435456&scope=bot",
                                         "_blank",
                                       );
                                     }}
@@ -546,6 +558,32 @@ const CreateCampaignModal = props => {
                                     Invite Now
                                   </Button>
                                 </div>
+                                {channel?.details?.botInitCmd && (
+                                  <div className="flex flex-row mt3 items-center">
+                                    <div>
+                                      {channelItem.details.length + 2}. Send
+                                      Command to your server
+                                    </div>
+                                    <CopyToClipboard
+                                      text={channel?.details?.botInitCmd}
+                                      onCopy={() => {
+                                        message.success("Copied Successfully!");
+                                      }}
+                                    >
+                                      <Button
+                                        type="primary"
+                                        size="small"
+                                        className="ml2"
+                                        style={{
+                                          fontSize: 10,
+                                          borderRadius: 4,
+                                        }}
+                                      >
+                                        Copy Command
+                                      </Button>
+                                    </CopyToClipboard>
+                                  </div>
+                                )}
                               </div>
                             )}
                           </div>

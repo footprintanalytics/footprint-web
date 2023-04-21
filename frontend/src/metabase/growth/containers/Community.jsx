@@ -126,27 +126,42 @@ const Community = props => {
   const actions = [
     {
       title: "Create Cohort",
-      component: <CreateCohort2 disable={true} project={project} />,
+      disabled: true,
+      component: (
+        <CreateCohort2
+          disable={true}
+          project={project}
+          router={router}
+          type="Community"
+          addressListCount={listResult?.data?.total}
+          params={{
+            ...walletListParams,
+            projectId: parseInt(project?.id),
+          }}
+          isButtonStyle={false}
+        />
+      ),
     },
     {
       component: (
-        <Button
+        <a
           type="text"
-          disabled={true}
+          className="p0"
           onClick={() =>
             props.router?.push({
               pathname: getGrowthProjectPath(
                 props.router?.params?.project,
-                "CreateCampaign",
+                "Opt-In Tool",
               ),
             })
           }
         >
-          Mapping Now
-        </Button>
+          Opt-In
+        </a>
       ),
-      title: "Mapping Now", //required
+      title: "Opt-In", //required
       link: null,
+      disabled: true,
     },
   ];
 

@@ -20,6 +20,7 @@ export const WalletList = props => {
   actions?.map(item => {
     actionItems.push({
       key: item.title,
+      disabled: item.disabled,
       label: item.component ?? (
         <Button
           type="text"

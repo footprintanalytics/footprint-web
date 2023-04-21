@@ -8,6 +8,9 @@
 .ant-form-item2 {
   margin-bottom: 0;
 }
+.ant-btn {
+  border-radius: 4px;
+}
 .number-input input[type='number']::-webkit-inner-spin-button,
 .number-input input[type='number']::-webkit-outer-spin-button {
   -webkit-appearance: none;

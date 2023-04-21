@@ -31,20 +31,14 @@ const OptInList = props => {
     open: false,
     type: "",
   })
-  const [viewModalOpen, setViewModalOpen] = useState({
-    open: false,
-    type: "",
-    channel: null,
-  })
-  const [dataSource, setDataSource] = useState([])
-
+  const [dataSource, setDataSource] = useState([]);
   const { isLoading, data, refetch, isFetching } = useQuery(
     ["getCampaign", project?.id],
     async () => {
-      return await getCampaign({ projectId: parseInt(project?.id) })
+      return await getCampaign({ projectId: parseInt(project?.id) });
     },
     { ...QUERY_OPTIONS, enabled: !!project?.id },
-  )
+  );
   useEffect(() => {
     if (data) {
       const dataSourceTemp = data?.list
@@ -60,9 +54,9 @@ const OptInList = props => {
           (a, b) =>
             new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime(),
         );
-      setDataSource(dataSourceTemp)
+      setDataSource(dataSourceTemp);
     }
-  }, [data])
+  }, [data]);
 
   const columns = [
     {
@@ -161,14 +155,6 @@ const OptInList = props => {
             type="link"
             className="p0"
             onClick={() => {
-              // setViewModalOpen({
-              //   open: true,
-              //   type:
-              //     record?.channels?.[0]?.channelName === "Tweet URL"
-              //       ? "Twitter"
-              //       : "Discord",
-              //   channel: record?.channels?.[0],
-              // });
               setIsModalOpen({
                 open: true,
                 type:
@@ -297,35 +283,23 @@ const OptInList = props => {
           />
         )}
       </Card>
-      <CreateCampaignModal
-        open={isModalOpen?.open}
-        optInType={isModalOpen?.type}
-        channel={isModalOpen?.channel}
-        location={location}
-        project={project}
-        router={router}
-        onSuccess={() => {
-          refetch();
-          setIsModalOpen({ open: false });
-        }}
-        onCancel={() => {
-          setIsModalOpen({ open: false });
-        }}
-      />
-      <ViewOptInModal
-        location={location}
-        project={project}
-        router={router}
-        type={viewModalOpen?.type}
-        channel={viewModalOpen?.channel}
-        open={viewModalOpen?.open}
-        onSuccess={() => {
-          setViewModalOpen({ open: false });
-        }}
-        onCancel={() => {
-          setViewModalOpen({ open: false });
-        }}
-      />
+      {isModalOpen?.open && (
+        <CreateCampaignModal
+          open={isModalOpen?.open}
+          optInType={isModalOpen?.type}
+          channel={isModalOpen?.channel}
+          location={location}
+          project={project}
+          router={router}
+          onSuccess={() => {
+            refetch();
+            setIsModalOpen({ open: false });
+          }}
+          onCancel={() => {
+            setIsModalOpen({ open: false });
+          }}
+        />
+      )}
     </div>
   );
 }

@@ -234,7 +234,13 @@ const Project = props => {
       );
     }
     if (["Potential Users List", "Potential Users"].includes(current_tab)) {
-      return <PotentialUsers location={location} project={getProjectObject(project)} />;
+      return (
+        <PotentialUsers
+          location={location}
+          project={getProjectObject(project)}
+          router={router}
+        />
+      );
     }
     if (current_tab === "Custom Analysis") {
       return (
