@@ -205,7 +205,6 @@ const Community = props => {
                     style={{ margin: 2.5, fontSize: 8, display: "inline" }}
                     key={tag}
                   >
-                  <Tag className="rounded" style={{ margin: 2.5 }} key={tag}>
                     {tag}
                   </Tag>
                 );

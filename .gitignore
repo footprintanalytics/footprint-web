@@ -83,3 +83,4 @@ dev/src/dev/nocommit/
 *.code-workspace
 
 .calva/
+.prettierrc

@@ -312,6 +312,11 @@ export const fga_menu_data = [
         id: 7490,
         uuid: "d137a1ef-34a3-4553-84cb-2203bd9d2baf",
       },
+      {
+        name: "Opt-In Tool",
+        id: null,
+        uuid: null,
+      },
     ],
   },
   {
@@ -418,10 +423,6 @@ export const cohortTips = new Map([
   ["Dormant Gamers", "Wallets that have been inactive for more than 90 days."],
   ["NFT Holders", "Wallets that holding the project's NFT."],
   ["Token Holders", "Wallets that holding the project's token."],
-  [
-    "{project slug} Users",
-    "All wallets that have interacted with the project's smart contracts.",
-  ],
   [
     "Gamers",
     "All wallets that have interacted with the project's smart contracts.",
