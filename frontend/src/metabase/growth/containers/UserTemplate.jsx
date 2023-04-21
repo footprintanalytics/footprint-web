@@ -126,7 +126,7 @@ const UserTemplate = props => {
           return (
             <div key={item.title} className={cx("mt4 flex flex-row w-full items-center justify-between", { "flex-row-reverse": item.reverse })}>
               <img
-                src={getOssUrl("img_potential1.png")}
+                src={item.img}
                 style={{ width: "40%" }}
                 alt={item.title}
               />
