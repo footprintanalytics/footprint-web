@@ -151,7 +151,7 @@ const PotentialUsers = props => {
         </div>
       ),
     },
-    /*{
+    {
       title: "Tag",
       key: "tags",
       dataIndex: "tags",
@@ -168,7 +168,7 @@ const PotentialUsers = props => {
           {tags?.length > 0 ? (
             <>
               {tags?.join(", ")}
-              {/!* {tags?.map(tag => {
+              {/* {tags?.map(tag => {
                 return (
                   <Tag
                     className="rounded"
@@ -178,14 +178,14 @@ const PotentialUsers = props => {
                     {tag}
                   </Tag>
                 );
-              })} *!/}
+              })} */}
             </>
           ) : (
             <></>
           )}
         </Typography.Paragraph>
       ),
-    },*/
+    },
     {
       title: "Net Worth",
       dataIndex: "netWorth",
