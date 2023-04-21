@@ -53,15 +53,16 @@ const CreateCampaignModal = props => {
     onCancel,
     onSuccess,
     optInType,
+    channel,
   } = props;
   const [isSubmiting, setSubmiting] = useState(false);
   const [channelSelectedValue, setChannelSelectedValue] = useState([]);
-  console.log("channelSelectedValue", channelSelectedValue);
   const [campaignSelected, setCampaignSelected] = useState(null);
   const [showDiscordStep3, setShowDiscordStep3] = useState({
     show: false,
     command: "",
   });
+  const [isEditable, setEditable] = useState(false);
   const formRef = React.useRef(null);
 
   const { isLoading, data } = useQuery(
@@ -69,6 +70,86 @@ const CreateCampaignModal = props => {
     getCampaignTemplate,
     QUERY_OPTIONS,
   );
+
+  useEffect(() => {
+    if (channel) {
+      if (optInType === "Discord") {
+        setEditable(false);
+        setChannelSelectedValue([
+          {
+            ...channel,
+            details: [
+              {
+                type: "checkbox",
+                title: "Which user contact you want to collect?",
+                key: "collectCheckbox",
+                required: false,
+                options: [
+                  {
+                    type: "boolean",
+                    title: "Wallet Address",
+                    key: "walletAddress",
+                    required: true,
+                    notEdit: true,
+                    extend: true,
+                    value: channel?.details?.walletAddress,
+                    private: false,
+                  },
+                  {
+                    type: "boolean",
+                    title: "Email",
+                    key: "email",
+                    notEdit: true,
+                    extend: true,
+                    required: true,
+                    value: channel?.details?.email,
+                    private: false,
+                  },
+                  {
+                    type: "boolean",
+                    title: "Discord",
+                    key: "discordHandler",
+                    required: true,
+                    extend: true,
+                    value: channel?.details?.discordHandler,
+                    private: false,
+                  },
+                  {
+                    type: "boolean",
+                    title: "Twitter",
+                    key: "twitterHandler",
+                    required: true,
+                    extend: true,
+                    value: channel?.details?.twitterHandler,
+                    private: false,
+                  },
+                ],
+                value: "",
+                private: false,
+              },
+            ],
+          },
+        ]);
+      } else if (optInType === "Twitter") {
+        setEditable(false);
+        setChannelSelectedValue([
+          {
+            ...channel,
+            details: [
+              {
+                type: "string",
+                title: "Tweet URL",
+                key: "twitterUri",
+                required: true,
+                value: channel?.details?.twitterUri,
+                private: false,
+              },
+            ],
+          },
+        ]);
+      }
+    }
+  }, [channel]);
 
   useEffect(() => {
     if (!isLoading) {
@@ -106,7 +187,7 @@ const CreateCampaignModal = props => {
     const channelTemp = campaign?.channels?.find(
       item => item.channelName === channelType,
     );
-    if (channelTemp) {
+    if (channelTemp && channel === null) {
       setChannelSelectedValue([channelTemp]);
     }
   };
@@ -311,10 +392,8 @@ const CreateCampaignModal = props => {
       details: campaignDetails,
       channels: channelsParam,
     };
-    console.log("toAddCampaign requestParam\n", requestParam);
     addCampaign(requestParam)
       .then(result => {
-        console.log("add opt-in result", result);
         message.success("The campaign creation was successful.");
         if (optInType === "Discord") {
           //  /connect campaign_id:2 twitter_handler:enable email:enable
@@ -362,6 +441,7 @@ const CreateCampaignModal = props => {
       footer={null}
       afterClose={() => {
         setShowDiscordStep3({ show: false });
+        setEditable(true);
       }}
       // onOk={handleOk}
       onCancel={onCancel}
@@ -483,6 +563,7 @@ const CreateCampaignModal = props => {
                     <Button
                       type="primary"
                       htmlType="submit"
+                      disabled={!isEditable}
                       className="ml-10  bg-blue-500 rounded"
                       loading={isSubmiting}
                     >
