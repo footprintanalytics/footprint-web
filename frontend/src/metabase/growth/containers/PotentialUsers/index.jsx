@@ -1,3 +1,4 @@
+/* eslint-disable react/display-name */
 /* eslint-disable react/prop-types */
 import React, { useEffect } from "react";
 import "../../css/index.css";
@@ -161,7 +162,12 @@ const PotentialUsers = props => {
             suffix: "",
             symbol: "more",
           }}
-          style={{ minWidth: 150, maxWidth: 500, fontSize: 10 }}
+          style={{
+            minWidth: 150,
+            maxWidth: 500,
+            fontSize: 10,
+            marginBottom: 0,
+          }}
         >
           {tags?.length > 0 ? (
             <>
@@ -322,7 +328,6 @@ const PotentialUsers = props => {
               />
               <QuickFilter
                 title={"Tags"}
-                titleWidth={"68px"}
                 defaultValue={location?.query?.tag}
                 optionsList={getQuickFilterOptionList(
                   orderBy(filterTagResult?.data?.data, ["tag"]),

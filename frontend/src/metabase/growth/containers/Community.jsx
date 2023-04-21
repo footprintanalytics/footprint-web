@@ -193,7 +193,12 @@ const Community = props => {
             suffix: "",
             symbol: "more",
           }}
-          style={{ minWidth: 150, maxWidth: 500, fontSize: 10 }}
+          style={{
+            minWidth: 150,
+            maxWidth: 500,
+            fontSize: 10,
+            marginBottom: 0,
+          }}
         >
           {tags?.length > 0 ? (
             <>
