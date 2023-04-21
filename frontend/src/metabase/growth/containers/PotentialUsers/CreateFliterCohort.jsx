@@ -1,6 +1,6 @@
 /* eslint-disable react/prop-types */
 import React, { useState } from "react";
-import { AutoComplete, Button, message, Modal, Tag } from "antd";
+import { AutoComplete, Button, Divider, message, Modal, Tag } from "antd";
 import { connect } from "react-redux";
 import { push } from "react-router-redux";
 import { omit, isArray, keys } from "lodash";
@@ -126,12 +126,17 @@ const CreateCohort2 = ({
         open={isCohortModalOpen}
         onCancel={() => setCohortModalOpen(false)}
         footer={[
-          <Button key="back" onClick={() => setCohortModalOpen(false)}>
+          <Button
+            key="back"
+            className=" rounded"
+            onClick={() => setCohortModalOpen(false)}
+          >
             Cancel
           </Button>,
           <Button
             key="submit"
             type="primary"
+            className=" rounded"
             loading={createCohortLoading}
             onClick={createCohortAction}
           >
@@ -141,7 +146,8 @@ const CreateCohort2 = ({
         closable={false}
         title={`${btnText}`}
       >
-        <h3>Cohort Name</h3>
+        <Divider className="my2" />
+        <h4>Cohort Name</h4>
         <div className="mt1" />
         <AutoComplete
           style={{
@@ -160,7 +166,11 @@ const CreateCohort2 = ({
         <div className="mt2" />
         {getPanel()}
         <div className="mb2" />
-        <FilterOut options={filterOutOptions} defaultValue={filterOutOptions} onChange={values => setFilterOutValues(values)}/>
+        <FilterOut
+          options={filterOutOptions}
+          defaultValue={filterOutOptions}
+          onChange={values => setFilterOutValues(values)}
+        />
       </Modal>
     </>
   );

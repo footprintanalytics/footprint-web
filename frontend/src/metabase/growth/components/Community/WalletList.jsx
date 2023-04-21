@@ -3,6 +3,7 @@
 /* eslint-disable-next-line react/display-name */
 import React from "react";
 import { Table, Typography, Button, Card, Dropdown } from "antd";
+import { valueFormat } from "metabase/growth/utils/utils";
 
 export const WalletList = props => {
   const {
@@ -31,6 +32,12 @@ export const WalletList = props => {
       ),
     });
   });
+  const itemRender = (current, type, originalElement) => {
+    if (type === "page") {
+      return <a>{valueFormat(current)}</a>;
+    }
+    return originalElement;
+  };
   return (
     <div className="flex flex-col w-full rounded p1">
       <Card bordered={false} className="">
@@ -52,6 +59,7 @@ export const WalletList = props => {
             total: data?.total,
             showSizeChanger: true,
             current: data?.current,
+            itemRender: itemRender,
             onChange: (page, pageSize) => {
               pageSize !== data?.pageSize
                 ? onPageChange?.(1, pageSize)
