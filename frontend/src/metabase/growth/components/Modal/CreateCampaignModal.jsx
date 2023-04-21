@@ -17,29 +17,29 @@ import { connect } from "react-redux"
 import { useQuery } from "react-query"
 import Title from "antd/lib/typography/Title"
 import CopyToClipboard from "react-copy-to-clipboard"
-import { QUERY_OPTIONS } from "metabase/containers/dashboards/shared/config"
+import { Link } from "react-router";
+import { QUERY_OPTIONS } from "metabase/containers/dashboards/shared/config";
 import {
   getCampaignTemplate,
   GetFgaCohort,
   addCampaign,
-} from "metabase/new-service"
-import { getUser } from "metabase/selectors/user"
-import LoadingSpinner from "metabase/components/LoadingSpinner"
+} from "metabase/new-service";
+import { getUser } from "metabase/selectors/user";
+import LoadingSpinner from "metabase/components/LoadingSpinner";
 import {
   loginModalShowAction,
   createFgaProjectModalShowAction,
-} from "metabase/redux/control"
-import "../../css/utils.css"
-import { Link } from "react-router"
-const { Option } = Select
-const { TextArea } = Input
+} from "metabase/redux/control";
+import "../../css/utils.css";
+const { Option } = Select;
+const { TextArea } = Input;
 const layout = {
   labelCol: { span: 24 },
   wrapperCol: { span: 24 },
-}
+};
 const tailLayout = {
   wrapperCol: { offset: 0, span: 24 },
-}
+};
 const CreateCampaignModal = props => {
   const {
     router,
@@ -53,24 +53,22 @@ const CreateCampaignModal = props => {
     onCancel,
     onSuccess,
     optInType,
-  } = props
-  const [isSubmiting, setSubmiting] = useState(false)
-  const [channelSelectedValue, setChannelSelectedValue] = useState(
-     [],
-  )
-  console.log("channelSelectedValue", channelSelectedValue)
-  const [campaignSelected, setCampaignSelected] = useState(null)
+  } = props;
+  const [isSubmiting, setSubmiting] = useState(false);
+  const [channelSelectedValue, setChannelSelectedValue] = useState([]);
+  console.log("channelSelectedValue", channelSelectedValue);
+  const [campaignSelected, setCampaignSelected] = useState(null);
   const [showDiscordStep3, setShowDiscordStep3] = useState({
     show: false,
     command: "",
-  })
-  const formRef = React.useRef(null)
+  });
+  const formRef = React.useRef(null);
 
   const { isLoading, data } = useQuery(
     ["getCampaignTemplate"],
     getCampaignTemplate,
     QUERY_OPTIONS,
-  )
+  );
 
   useEffect(() => {
     if (!isLoading) {
@@ -83,20 +81,20 @@ const CreateCampaignModal = props => {
             value: item.campaignType,
             disabled: item.status !== "enable",
             ...item,
-          }
-          setCampaignSelected(opt_in_campaign)
-          optInType && setupOptInType(opt_in_campaign)
-          return
+          };
+          setCampaignSelected(opt_in_campaign);
+          optInType && setupOptInType(opt_in_campaign);
+          return;
         }
-      })
+      });
     }
-  }, [isLoading])
+  }, [isLoading]);
 
   useEffect(() => {
     if (optInType && campaignSelected) {
-      setupOptInType(campaignSelected)
+      setupOptInType(campaignSelected);
     }
-  }, [optInType])
+  }, [optInType]);
 
   const setupOptInType = campaign => {
     const channelType =
@@ -104,38 +102,38 @@ const CreateCampaignModal = props => {
         ? "Tweet URL"
         : optInType === "Discord"
         ? "Discord bot"
-        : ""
+        : "";
     const channelTemp = campaign?.channels?.find(
       item => item.channelName === channelType,
-    )
+    );
     if (channelTemp) {
-      setChannelSelectedValue([channelTemp])
+      setChannelSelectedValue([channelTemp]);
     }
-  }
+  };
 
   const getChannelConfigPanel = details => {
     return (
       <>
         {details?.map((detail, index) => {
           const isTwtterUri =
-            optInType === "Twitter" && detail.key === "twitterUri"
-          if (isTwtterUri) {
-            detail.type = "textArea"
-          }
+            optInType === "Twitter" && detail.key === "twitterUri";
+          // if (isTwtterUri) {
+          //   detail.type = "textArea";
+          // }
           if (detail.type === "checkbox") {
-            const options = []
-            const defaultValue = []
+            const options = [];
+            const defaultValue = [];
             detail.options?.forEach(item => {
               if (item.value === true) {
-                defaultValue.push(item.key)
+                defaultValue.push(item.key);
               }
               options.push({
                 label: item.title,
                 value: item.key,
                 // key: item.key,
                 disabled: item.notEdit,
-              })
-            })
+              });
+            });
             return (
               <>
                 <div className="mt1">
@@ -155,7 +153,7 @@ const CreateCampaignModal = props => {
                   <Checkbox.Group className="mt1" options={options} />
                 </Form.Item>
               </>
-            )
+            );
           }
           if (detail.type === "string") {
             return (
@@ -174,7 +172,8 @@ const CreateCampaignModal = props => {
                     allowClear
                     disabled={detail.notEdit}
                     placeholder={
-                      detail.placeholder ?? `Input the ${detail.title}.`
+                      detail.placeholder ??
+                      `Input the ${detail.title}, such as: https://twitter.com/Footprint_Data/status/1648495146672222209`
                     }
                     type={
                       detail.private
@@ -186,7 +185,7 @@ const CreateCampaignModal = props => {
                   />
                 </Form.Item>
               </>
-            )
+            );
           }
           if (detail.type === "textArea") {
             return (
@@ -195,6 +194,7 @@ const CreateCampaignModal = props => {
                   key={detail.key}
                   name={detail.key}
                   layout={tailLayout}
+                  className="ant-form-item2"
                   initialValue={detail.value}
                   valuePropName="value"
                   label={isTwtterUri ? "" : `${index + 1}. ${detail.title}`}
@@ -218,7 +218,7 @@ const CreateCampaignModal = props => {
                   />
                 </Form.Item>
               </>
-            )
+            );
           }
           if (detail.type === "boolean") {
             return (
@@ -233,75 +233,75 @@ const CreateCampaignModal = props => {
               >
                 <Switch />
               </Form.Item>
-            )
+            );
           }
         })}
       </>
-    )
-  }
+    );
+  };
 
   const onFinish = param => {
-    // setShowDiscordStep3({
-    //   show: true,
-    //   botInitCmd: "/connect campaign_id:15 twitter_handler:enable email:enable",
-    //   botInviteUrl:
-    //     "https://discord.com/api/oauth2/authorize?client_id=1089756391889178745&permissions=268435456&scope=bot",
-    // })
-    // return;
+    setShowDiscordStep3({
+      show: true,
+      botInitCmd: "/connect campaign_id:15 twitter_handler:enable email:enable",
+      botInviteUrl:
+        "https://discord.com/api/oauth2/authorize?client_id=1089756391889178745&permissions=268435456&scope=bot",
+    });
+    return;
     if (!user) {
-      message.warning("Kindly log in before proceeding.")
+      message.warning("Kindly log in before proceeding.");
       setLoginModalShowAction({
         show: true,
         from: "create campaign",
         redirect: location.pathname,
         channel: "FGA",
-      })
-      return
+      });
+      return;
     }
     if (!project?.id) {
-      message.warning("Initially, you must create your personal project!")
-      setCreateFgaProjectModalShowAction({ show: true })
-      return
+      message.warning("Initially, you must create your personal project!");
+      setCreateFgaProjectModalShowAction({ show: true });
+      return;
     }
-    setSubmiting(true)
+    setSubmiting(true);
     // 组装 campaign 的参数
-    const campaignDetails = {}
+    const campaignDetails = {};
     campaignSelected?.details?.map(detail => {
       if (detail.type === "checkbox") {
         // 把 checkbox 的选中项的 key 放到 details 里
         detail.options?.map(detailOption => {
           campaignDetails[detailOption.key] = param[detail.key]?.includes(
             detailOption.key,
-          )
-        })
+          );
+        });
       } else {
-        campaignDetails[detail.key] = param[detail.key]
+        campaignDetails[detail.key] = param[detail.key];
       }
-    })
+    });
     // 组装 channel 的参数
-    const channelsParam = []
+    const channelsParam = [];
     channelSelectedValue?.map(channel => {
       const channelParam = {
         id: channel.id,
         channelName: channel.channelName,
         campaignType: channel.campaignType,
         details: {},
-      }
+      };
       channel?.details?.map(channelDetailItem => {
         if (channelDetailItem.type === "checkbox") {
           // 把 checkbox 的选中项的 key 放到 details 里
           channelDetailItem.options?.map(detailOption => {
             channelParam.details[detailOption.key] = param[
               channelDetailItem.key
-            ]?.includes(detailOption.key)
-          })
+            ]?.includes(detailOption.key);
+          });
         } else {
           channelParam.details[channelDetailItem.key] =
-            param[channelDetailItem.key]
+            param[channelDetailItem.key];
         }
-      })
-      channelsParam.push(channelParam)
-    })
+      });
+      channelsParam.push(channelParam);
+    });
     // 组装 request 的参数
     const requestParam = {
       projectId: parseInt(project?.id),
@@ -310,22 +310,22 @@ const CreateCampaignModal = props => {
       campaignType: campaignSelected.campaignType,
       details: campaignDetails,
       channels: channelsParam,
-    }
-    console.log("toAddCampaign requestParam\n", requestParam)
+    };
+    console.log("toAddCampaign requestParam\n", requestParam);
     addCampaign(requestParam)
       .then(result => {
-        console.log("add opt-in result", result)
-        message.success("The campaign creation was successful.")
+        console.log("add opt-in result", result);
+        message.success("The campaign creation was successful.");
         if (optInType === "Discord") {
           //  /connect campaign_id:2 twitter_handler:enable email:enable
           setShowDiscordStep3({
             show: true,
             botInitCmd: result?.channels?.[0]?.details?.botInitCmd,
             botInviteUrl: result?.channels?.[0]?.details?.botInviteUrl,
-          })
-          return
+          });
+          return;
         }
-        onSuccess?.()
+        onSuccess?.();
         // router.push(getGrowthProjectPath(project?.protocolSlug, "Campaign"));
         // router.push({
         //   pathname: getGrowthProjectPath(
@@ -336,9 +336,9 @@ const CreateCampaignModal = props => {
         // });
       })
       .finally(() => {
-        setSubmiting(false)
-      })
-  }
+        setSubmiting(false);
+      });
+  };
 
   return (
     <Modal
@@ -361,7 +361,7 @@ const CreateCampaignModal = props => {
       open={open}
       footer={null}
       afterClose={() => {
-        setShowDiscordStep3({ show: false })
+        setShowDiscordStep3({ show: false });
       }}
       // onOk={handleOk}
       onCancel={onCancel}
@@ -373,30 +373,30 @@ const CreateCampaignModal = props => {
               src="https://footprint-imgs.oss-us-east-1.aliyuncs.com/20220317121550.png"
               style={{ width: 100, height: 100 }}
             />
-            <Typography.Title level={4} className="mt1">
-              Creating Discord bot successfully!
+            <Typography.Title level={4} className="mt2">
+              Create Discord Bot successfully!
             </Typography.Title>
-            <Typography.Text>
-              But you still have one final step to complete.
+            <Typography.Text type="secondary">
+              But you still have one final step to complete :
             </Typography.Text>
-            <Typography.Text mark>
+            <Typography.Text type="secondary">
               Send the command to your channel
             </Typography.Text>
             <CopyToClipboard
               text={showDiscordStep3?.botInitCmd}
               onCopy={() => {
-                onSuccess?.()
+                onSuccess?.();
               }}
             >
               <Button
                 type={"primary"}
-                className="mt3 mb1"
+                className="my3"
                 style={{ borderRadius: 4 }}
               >
                 Copy Command
               </Button>
             </CopyToClipboard>
-            <Typography.Text className="mb2 text-center mx3">
+            {/* <Typography.Text className="mb2 text-center mx3">
               {`If you still haven't `}
               <a
                 href={showDiscordStep3?.botInviteUrl}
@@ -406,7 +406,7 @@ const CreateCampaignModal = props => {
                 invited our Discord bot to your server
               </a>
               {`, please do so before proceeding.`}
-            </Typography.Text>
+            </Typography.Text> */}
           </div>
         </div>
       ) : (
@@ -459,7 +459,7 @@ const CreateCampaignModal = props => {
                                       window.open(
                                         "https://discord.com/api/oauth2/authorize?client_id=1089756391889178745&permissions=268435456&scope=bot",
                                         "_blank",
-                                      )
+                                      );
                                     }}
                                     style={{ fontSize: 10, borderRadius: 4 }}
                                   >
@@ -470,7 +470,7 @@ const CreateCampaignModal = props => {
                             )}
                           </div>
                         </>
-                      )
+                      );
                     }
                   })}
                 </div>
@@ -481,21 +481,21 @@ const CreateCampaignModal = props => {
                 >
                   <div className="flex w-full flex-row-reverse">
                     <Button
-                      htmlType="button"
-                      onClick={() => {
-                        onCancel?.()
-                      }}
-                      className="ml-10 rounded"
-                    >
-                      Cancel
-                    </Button>
-                    <Button
                       type="primary"
                       htmlType="submit"
-                      className=" bg-blue-500 rounded"
+                      className="ml-10  bg-blue-500 rounded"
                       loading={isSubmiting}
                     >
                       Create
+                    </Button>
+                    <Button
+                      htmlType="button"
+                      onClick={() => {
+                        onCancel?.();
+                      }}
+                      className="rounded"
+                    >
+                      Cancel
                     </Button>
                   </div>
                 </Form.Item>
@@ -505,8 +505,8 @@ const CreateCampaignModal = props => {
         </>
       )}
     </Modal>
-  )
-}
+  );
+};
 
 const mapDispatchToProps = {
   setLoginModalShowAction: loginModalShowAction,
