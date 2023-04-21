@@ -13,7 +13,7 @@ const UserTemplate = props => {
     props;
   const templates = [
     {
-      name: "Token Airdrop",
+      name: "Campaign Participant",
       icon: "https://footprint-imgs.oss-us-east-1.aliyuncs.com/airdrop2.svg",
       key: "campaign-participant",
     },
@@ -23,7 +23,7 @@ const UserTemplate = props => {
       key: "nft-collector",
     },
     {
-      name: "Active Gamer",
+      name: "Gamer",
       icon: "https://footprint-imgs.oss-us-east-1.aliyuncs.com/activity_gamer.svg",
       key: "gamer",
     },
