@@ -43,7 +43,6 @@ const CreateCohort2 = ({
     return conditions;
   }
   const queryCondition = handleConditions(params);
-  console.log("queryCondition", params, queryCondition)
 
   const getPanel = () => {
     return (
@@ -83,8 +82,6 @@ const CreateCohort2 = ({
       </>
     );
   };
-  console.log("isCohortModalOpen", isCohortModalOpen)
-  console.log("project", project)
   const createCohortAction = async () => {
     if (!cohortName) {
       message.error("Please enter the name of your cohort.");
