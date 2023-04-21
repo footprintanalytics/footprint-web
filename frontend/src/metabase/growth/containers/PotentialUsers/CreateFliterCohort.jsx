@@ -27,7 +27,7 @@ const CreateCohort2 = ({
   router,
   addressListCount,
   params = {},
-  type = "potential User",
+  type = "Potential User",
   isButtonStyle = true,
 }) => {
   const [isCohortModalOpen, setCohortModalOpen] = useState(false);
