@@ -108,6 +108,7 @@ const PotentialUsers = props => {
       component: (
         <CreateCohort2
           project={project}
+          router={router}
           addressListCount={listResult?.data?.total}
           params={{
             ...walletListParams,

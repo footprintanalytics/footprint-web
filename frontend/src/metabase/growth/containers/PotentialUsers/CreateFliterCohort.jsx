@@ -1,22 +1,33 @@
 /* eslint-disable react/prop-types */
 import React, { useState } from "react";
-import { AutoComplete, Button, message, Modal, Tag } from "antd";
+import { AutoComplete, Button, Divider, message, Modal, Tag } from "antd";
 import { connect } from "react-redux";
 import { push } from "react-router-redux";
 import { omit, isArray, keys } from "lodash";
-import { getGrowthProjectPath } from "metabase/growth/utils/utils";
+import {
+  getGrowthProjectPath,
+  showCohortSuccessModal,
+} from "metabase/growth/utils/utils";
 import { getUser } from "metabase/selectors/user";
-import { createFgaProjectModalShowAction, loginModalShowAction } from "metabase/redux/control";
+import {
+  createFgaProjectModalShowAction,
+  loginModalShowAction,
+} from "metabase/redux/control";
 import { FilterOut } from "metabase/growth/components/FilterOut";
-import { createPotentialUserCohort } from "metabase/new-service";
+import {
+  createPotentialUserCohort,
+  createCommunityUserCohort,
+} from "metabase/new-service";
 
 const CreateCohort2 = ({
   btnText = "Create Cohort",
   onChangeLocation,
   project,
   disable = false,
+  router,
   addressListCount,
   params = {},
+  type = "Potential User",
   isButtonStyle = true,
 }) => {
   const [isCohortModalOpen, setCohortModalOpen] = useState(false);
@@ -26,29 +37,38 @@ const CreateCohort2 = ({
   const [cohortName, setCohortName] = useState();
   const addressList = [];
 
-  const handleConditions = (params) => {
-    const paramKeys = keys(omit(params, ["pageSize", "current", "excludeTags", "projectId"]));
+  const [modal, contextHolder] = Modal.useModal();
+  const handleConditions = params => {
+    const paramKeys = keys(
+      omit(params, ["pageSize", "current", "excludeTags", "projectId"]),
+    );
     const conditions = [];
     paramKeys.forEach(k => {
       if (isArray(params[k]) && params[k].length > 0 && params[k] !== 0) {
         if (k === "filters") {
-          conditions.push({ name: k, value: params[k].map(item => {
-            return `${item.indicator} ${item.comparisonSymbol} ${item.comparisonValue}\n`
-            }) })
+          conditions.push({
+            name: k,
+            value: params[k].map(item => {
+              return `${item.indicator} ${item.comparisonSymbol} ${item.comparisonValue}\n`;
+            }),
+          });
         } else {
           conditions.push({ name: k, value: params[k] });
         }
       }
-    })
+    });
     return conditions;
-  }
+  };
   const queryCondition = handleConditions(params);
 
   const getPanel = () => {
     return (
       <>
         {addressList && (
-          <h4>You have selected {addressListCount?.toLocaleString("en-US")} addresses.</h4>
+          <h4>
+            You have selected {addressListCount?.toLocaleString("en-US")}{" "}
+            addresses.
+          </h4>
         )}
         <div className="p2 mt1" style={{ background: "#182034" }}>
           <h5>Criteria:</h5>
@@ -92,14 +112,26 @@ const CreateCohort2 = ({
       return;
     }
     setCreateCohortLoading(true);
-    await createPotentialUserCohort({
-      ...(omit(params, ["pageSize", "current"])),
-      title: cohortName,
-      excludeTags: [...filterOutValues],
-    });
+    console.log("params", type, params);
+    const result =
+      type === "Community"
+        ? await createCommunityUserCohort({
+            ...omit(params, ["pageSize", "current"]),
+            title: cohortName,
+            excludeTags: [...filterOutValues],
+          })
+        : await createPotentialUserCohort({
+            ...omit(params, ["pageSize", "current"]),
+            title: cohortName,
+            excludeTags: [...filterOutValues],
+          });
+    setCohortModalOpen(false);
     setCreateCohortLoading(false);
-    onChangeLocation(getGrowthProjectPath(project?.protocolSlug, "Cohort"));
-  }
+    // onChangeLocation(getGrowthProjectPath(project?.protocolSlug, "Cohort"));
+    showCohortSuccessModal(modal, result, router, type, () => {
+      onChangeLocation(getGrowthProjectPath(project?.protocolSlug, "Cohort"));
+    });
+  };
   return (
     <>
       {isButtonStyle ? (
@@ -126,12 +158,17 @@ const CreateCohort2 = ({
         open={isCohortModalOpen}
         onCancel={() => setCohortModalOpen(false)}
         footer={[
-          <Button key="back" onClick={() => setCohortModalOpen(false)}>
+          <Button
+            key="back"
+            className=" rounded"
+            onClick={() => setCohortModalOpen(false)}
+          >
             Cancel
           </Button>,
           <Button
             key="submit"
             type="primary"
+            className=" rounded"
             loading={createCohortLoading}
             onClick={createCohortAction}
           >
@@ -141,7 +178,8 @@ const CreateCohort2 = ({
         closable={false}
         title={`${btnText}`}
       >
-        <h3>Cohort Name</h3>
+        <Divider className="my2" />
+        <h4>Cohort Name</h4>
         <div className="mt1" />
         <AutoComplete
           style={{
@@ -160,8 +198,13 @@ const CreateCohort2 = ({
         <div className="mt2" />
         {getPanel()}
         <div className="mb2" />
-        <FilterOut options={filterOutOptions} defaultValue={filterOutOptions} onChange={values => setFilterOutValues(values)}/>
+        <FilterOut
+          options={filterOutOptions}
+          defaultValue={filterOutOptions}
+          onChange={values => setFilterOutValues(values)}
+        />
       </Modal>
+      {contextHolder}
     </>
   );
 };

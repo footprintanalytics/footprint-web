@@ -1,10 +1,21 @@
 /* eslint-disable react/prop-types */
 import React, { useState } from "react";
 import { withRouter } from "react-router";
-import { Button, message, Modal, AutoComplete, Input, Typography } from "antd";
+import {
+  Button,
+  message,
+  Modal,
+  AutoComplete,
+  Input,
+  Typography,
+  Divider,
+} from "antd";
 import { connect } from "react-redux";
 import { CreateFgaCohortByAddress } from "metabase/new-service";
-import { getLatestGAProjectId } from "metabase/growth/utils/utils";
+import {
+  getLatestGAProjectId,
+  showCohortSuccessModal,
+} from "metabase/growth/utils/utils";
 import { getUser } from "metabase/selectors/user";
 import {
   loginModalShowAction,
@@ -18,6 +29,7 @@ const UploadWallets = ({
   setCreateFgaProjectModalShowAction,
   btnText,
   refetchData,
+  router,
 }) => {
   const [isCohortModalOpen, setCohortModalOpen] = useState(false);
   const [loading, setLoading] = useState(false);
@@ -60,7 +72,8 @@ const UploadWallets = ({
     try {
       const result = await CreateFgaCohortByAddress(parms);
       if (result) {
-        message.success("Successfully create a cohort!");
+        // message.success("Successfully create a cohort!");
+        showCohortSuccessModal(modal, result, router);
         refetchData?.();
         setCohortModalOpen(false);
       }
@@ -92,9 +105,9 @@ const UploadWallets = ({
   const getPannel = () => {
     return (
       <>
-        <h4>
+        <h5>
           Please enter all the addresses you wish to add to this new cohort.
-        </h4>
+        </h5>
         <TextArea
           // value={pasteValue}
           style={{ marginTop: 20 }}
@@ -105,7 +118,10 @@ const UploadWallets = ({
           placeholder="Please paste all the addresses you wish to add to this new cohort, separated by line breaks ."
           autoSize={{ minRows: 10, maxRows: 15 }}
         />
-        <div className=" flex flex-row items-center justify-between full-width">
+        <div
+          className="mt1 flex flex-row items-center justify-between full-width"
+          style={{ fontSize: 12 }}
+        >
           <div>
             Detect <span style={{ color: "red" }}>{walletList.length}</span>{" "}
             addresses.Up to <span style={{ color: "red" }}>1000</span> addresses
@@ -115,7 +131,7 @@ const UploadWallets = ({
       </>
     );
   };
-
+  const [modal, contextHolder] = Modal.useModal();
   return (
     <>
       <div
@@ -145,7 +161,8 @@ const UploadWallets = ({
         closable={false}
         title={`${btnText ?? "Upload to create cohort"}`}
       >
-        <h3>Cohort Name</h3>
+        <Divider className="my2" />
+        <h5>Cohort Name</h5>
         <div className="mt1" />
         <AutoComplete
           style={{
@@ -165,6 +182,7 @@ const UploadWallets = ({
         {getPannel()}
         <div className="mb2" />
       </Modal>
+      {contextHolder}
     </>
   );
 };

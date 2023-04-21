@@ -7,6 +7,7 @@ import { CreateFgaCohortByAddress } from "metabase/new-service";
 import {
   getLatestGAProjectId,
   getGrowthProjectPath,
+  showCohortSuccessModal,
 } from "metabase/growth/utils/utils";
 import { getUser } from "metabase/selectors/user";
 import {
@@ -65,7 +66,8 @@ const CreateCohort = ({
     try {
       const result = await CreateFgaCohortByAddress(parms);
       if (result) {
-        message.success("Successfully create a cohort!");
+        // message.success("Successfully create a cohort!");
+        showCohortSuccessModal(modal, result, router);
         setCohortModalOpen(false);
       }
     } catch (error) {
@@ -142,8 +144,10 @@ const CreateCohort = ({
     }
   };
 
+  const [modal, contextHolder] = Modal.useModal();
   return (
     <>
+      {contextHolder}
       <Dropdown
         menu={{ items, onClick: onMenuItemClick }}
         placement="bottom"
@@ -187,7 +191,8 @@ const CreateCohort = ({
             // options={options}
             placeholder="Enter the name of this cohort "
             filterOption={(inputValue, option) =>
-              option?.value.toUpperCase().indexOf(inputValue.toUpperCase()) !== -1
+              option?.value.toUpperCase().indexOf(inputValue.toUpperCase()) !==
+              -1
             }
           />
           <div className="mt2" />

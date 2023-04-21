@@ -25,6 +25,7 @@ import UserTemplate from "./UserTemplate";
 import CohortList from "./CohortList";
 import Community from "./Community";
 import UserProfile from "./UserProfile";
+import OptInList from "./OptInList";
 import "../css/index.css";
 
 const Project = props => {
@@ -214,6 +215,15 @@ const Project = props => {
         ></ProjectInfo>
       );
     }
+    if (["OptInList", "Opt-In", "OptIn", "Opt-In Tool"].includes(current_tab)) {
+      return (
+        <OptInList
+          location={location}
+          router={router}
+          project={getProjectObject(project)}
+        ></OptInList>
+      );
+    }
     if (["Community", "Members"].includes(current_tab)) {
       return (
         <Community
@@ -224,7 +234,13 @@ const Project = props => {
       );
     }
     if (["Potential Users List", "Potential Users"].includes(current_tab)) {
-      return <PotentialUsers location={location} project={getProjectObject(project)} />;
+      return (
+        <PotentialUsers
+          location={location}
+          project={getProjectObject(project)}
+          router={router}
+        />
+      );
     }
     if (current_tab === "Custom Analysis") {
       return (
