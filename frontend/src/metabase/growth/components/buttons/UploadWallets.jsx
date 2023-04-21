@@ -35,10 +35,7 @@ const UploadWallets = ({
   const [loading, setLoading] = useState(false);
   const [cohortName, setCohortName] = useState();
   const [walletList, setWalletList] = useState([]);
-  const [openSuccessModal, setOpenSuccessModal] = useState({
-    open: false,
-    cohort: null,
-  });
+
   const onSend = async () => {
     if (!cohortName) {
       message.error("Please enter the name of your cohort.");
