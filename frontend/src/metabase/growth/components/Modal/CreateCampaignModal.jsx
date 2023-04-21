@@ -241,13 +241,13 @@ const CreateCampaignModal = props => {
   };
 
   const onFinish = param => {
-    setShowDiscordStep3({
-      show: true,
-      botInitCmd: "/connect campaign_id:15 twitter_handler:enable email:enable",
-      botInviteUrl:
-        "https://discord.com/api/oauth2/authorize?client_id=1089756391889178745&permissions=268435456&scope=bot",
-    });
-    return;
+    // setShowDiscordStep3({
+    //   show: true,
+    //   botInitCmd: "/connect campaign_id:15 twitter_handler:enable email:enable",
+    //   botInviteUrl:
+    //     "https://discord.com/api/oauth2/authorize?client_id=1089756391889178745&permissions=268435456&scope=bot",
+    // });
+    // return;
     if (!user) {
       message.warning("Kindly log in before proceeding.");
       setLoginModalShowAction({
