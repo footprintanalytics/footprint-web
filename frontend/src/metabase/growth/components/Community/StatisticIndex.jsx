@@ -32,22 +32,24 @@ export const StatisticIndex = props => {
                     >
                       {option?.value?.toLocaleString("en-US")}
                     </Typography.Title>
-                    <Typography.Text
-                      type={`${
-                        option?.change < 0
-                          ? "danger"
-                          : option?.change > 0
-                          ? "success"
-                          : "secondary"
-                      }`}
-                    >
-                      {option?.change > 0 ? (
-                        <ArrowUpOutlined />
-                      ) : option?.change < 0 ? (
-                        <ArrowDownOutlined />
-                      ) : null}
-                      {Math.abs(option?.change)?.toLocaleString("en-US")}
-                    </Typography.Text>
+                    {option?.change !== 0 && (
+                      <Typography.Text
+                        type={`${
+                          option?.change < 0
+                            ? "danger"
+                            : option?.change > 0
+                            ? "success"
+                            : "secondary"
+                        }`}
+                      >
+                        {option?.change > 0 ? (
+                          <ArrowUpOutlined />
+                        ) : option?.change < 0 ? (
+                          <ArrowDownOutlined />
+                        ) : null}
+                        {Math.abs(option?.change)?.toLocaleString("en-US")}
+                      </Typography.Text>
+                    )}
                   </>
                 </LoadingConnectorButton>
               </div>

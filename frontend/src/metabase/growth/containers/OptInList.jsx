@@ -123,10 +123,10 @@ const OptInList = props => {
                     className="bg-white mr1"
                   ></Avatar>
                 </Tooltip>
-              )
+              );
             })}
           </div>
-        )
+        );
       },
     },
     {
@@ -160,6 +160,7 @@ const OptInList = props => {
         <Space size="middle">
           <Button
             type="link"
+            className="p0"
             onClick={() => {
               setViewModalOpen({
                 open: true,
@@ -168,7 +169,7 @@ const OptInList = props => {
                     ? "Twitter"
                     : "Discord",
                 channel: record?.channels?.[0],
-              })
+              });
             }}
           >
             View
@@ -176,6 +177,7 @@ const OptInList = props => {
           <Button
             type="link"
             disabled={true}
+            className="p0"
             onClick={() => {
               props.router?.push({
                 pathname: getGrowthProjectPath(
@@ -183,7 +185,7 @@ const OptInList = props => {
                   "CampaignDetail",
                 ),
                 hash: "#id=" + record.campaignId,
-              })
+              });
               // props.router?.push({
               //   pathname: `/growth/public/dashboard/55b1eb29-b15e-458f-9241-1862a0d19d3b?tag=${record.title}&cohort_title=${record.title}#from=Cohort`,
               // });
@@ -192,13 +194,13 @@ const OptInList = props => {
             Detail
           </Button>
 
-          <Button type="link" disabled={true}>
+          <Button className="p0" type="link" disabled={true}>
             Save as cohort
           </Button>
         </Space>
       ),
     },
-  ]
+  ];
 
   return (
     <div className="w-full" style={{ padding: 20 }}>
