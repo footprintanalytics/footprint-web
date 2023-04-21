@@ -116,6 +116,22 @@ const leftMenuData = [
 const rightMenuData = [
   // { url: "/moon-men", name: "Moon Men" },
   {
+    name: "Data",
+    icon: "protocols",
+    menu: [
+      {
+        title: "Data Overview",
+        desc: "Check the data coverage of most comprehensive data provider",
+        link: "/@Footprint/Footprint-Data-Overview",
+      },
+      {
+        title: "Data Dictionary",
+        desc: "Quick access to each data table definitions and metadata",
+        link: "/@Footprint/Footprint-Datasets-Data-Dictionary",
+      },
+    ],
+  },
+  {
     name: "Learn",
     icon: "protocols",
     menu: [
@@ -128,16 +144,6 @@ const rightMenuData = [
         title: "Academy",
         desc: "The premier Web3 education platform with industry leading courses",
         link: "/news/academy",
-      },
-      {
-        title: "Data Overview",
-        desc: "Check the data coverage of most comprehensive data provider",
-        link: "/@Footprint/Footprint-Data-Overview",
-      },
-      {
-        title: "Data Dictionary",
-        desc: "Quick access to each data table definitions and metadata",
-        link: "/@Footprint/Footprint-Datasets-Data-Dictionary",
       },
       {
         title: "YouTube",
