@@ -54,13 +54,12 @@ const OptInList = props => {
             i.channels.findIndex(j =>
               ["Discord bot", "Tweet URL"].includes(j.channelName),
             ) !== -1
-          )
+          );
         })
         ?.sort(
           (a, b) =>
             new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime(),
-        )
-      console.log("dataSourceTemp", dataSourceTemp)
+        );
       setDataSource(dataSourceTemp)
     }
   }, [data])
@@ -162,7 +161,15 @@ const OptInList = props => {
             type="link"
             className="p0"
             onClick={() => {
-              setViewModalOpen({
+              // setViewModalOpen({
+              //   open: true,
+              //   type:
+              //     record?.channels?.[0]?.channelName === "Tweet URL"
+              //       ? "Twitter"
+              //       : "Discord",
+              //   channel: record?.channels?.[0],
+              // });
+              setIsModalOpen({
                 open: true,
                 type:
                   record?.channels?.[0]?.channelName === "Tweet URL"
@@ -228,7 +235,7 @@ const OptInList = props => {
               className=" rounded"
               style={{ width: "100%" }}
               onClick={() => {
-                setIsModalOpen({ open: true, type: "Twitter" })
+                setIsModalOpen({ open: true, type: "Twitter" });
               }}
             >
               <div className=" flex flex-column items-center" style={{}}>
@@ -254,7 +261,7 @@ const OptInList = props => {
               hoverable
               style={{ width: "100%" }}
               onClick={() => {
-                setIsModalOpen({ open: true, type: "Discord" })
+                setIsModalOpen({ open: true, type: "Discord" });
               }}
             >
               <div className=" flex flex-column items-center" style={{}}>
@@ -293,17 +300,18 @@ const OptInList = props => {
       <CreateCampaignModal
         open={isModalOpen?.open}
         optInType={isModalOpen?.type}
+        channel={isModalOpen?.channel}
         location={location}
         project={project}
         router={router}
         onSuccess={() => {
-          refetch()
-          setIsModalOpen({ open: false })
+          refetch();
+          setIsModalOpen({ open: false });
         }}
         onCancel={() => {
-          setIsModalOpen({ open: false })
+          setIsModalOpen({ open: false });
         }}
-      ></CreateCampaignModal>
+      />
       <ViewOptInModal
         location={location}
         project={project}
@@ -312,14 +320,14 @@ const OptInList = props => {
         channel={viewModalOpen?.channel}
         open={viewModalOpen?.open}
         onSuccess={() => {
-          setViewModalOpen({ open: false })
+          setViewModalOpen({ open: false });
         }}
         onCancel={() => {
-          setViewModalOpen({ open: false })
+          setViewModalOpen({ open: false });
         }}
       />
     </div>
-  )
+  );
 }
 
 const mapStateToProps = state => {
