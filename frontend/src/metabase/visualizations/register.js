@@ -27,6 +27,7 @@ import ListViz from "./visualizations/List";
 import Image from "./visualizations/Image";
 import Video from "./visualizations/Video";
 import Embed from "./visualizations/Embed";
+import Tableau from "./visualizations/Tableau";
 import RowRace from "./visualizations/RowRace";
 import LineRace from "./visualizations/LineRace";
 import Circle from "./visualizations/Circle";
@@ -67,6 +68,7 @@ export default function () {
   registerVisualization(Image);
   registerVisualization(Video);
   registerVisualization(Embed);
+  registerVisualization(Tableau);
   registerVisualization(RowRace);
   registerVisualization(LineRace);
   registerVisualization(Circle);

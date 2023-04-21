@@ -1,3 +1,4 @@
+/* eslint-disable react/display-name */
 /* eslint-disable react/prop-types */
 import React, { useEffect } from "react";
 import "../../css/index.css";
@@ -31,9 +32,7 @@ const PotentialUsers = props => {
     pageSize: 10,
     current: 1,
     filters: [],
-    tags: location?.query?.tag
-        ? [location?.query?.tag.replace("+", " ")]
-        : [],
+    tags: location?.query?.tag ? [location?.query?.tag.replace("+", " ")] : [],
     protocolSlugs: [],
     collectionSlugs: [],
     excludeTags: [],
@@ -164,7 +163,12 @@ const PotentialUsers = props => {
             suffix: "",
             symbol: "more",
           }}
-          style={{ minWidth: 150, maxWidth: 500, fontSize: 10 }}
+          style={{
+            minWidth: 150,
+            maxWidth: 500,
+            fontSize: 10,
+            marginBottom: 0,
+          }}
         >
           {tags?.length > 0 ? (
             <>
@@ -199,7 +203,7 @@ const PotentialUsers = props => {
       dataIndex: "holdingNFT",
       key: "holdingNFT",
       align: "right",
-      render: text => (text !== null ? "$" + valueFormat(text) : ""),
+      render: text => (text !== null ? valueFormat(text) : ""),
     },
     {
       title: "NFT Holding Value",
@@ -213,7 +217,7 @@ const PotentialUsers = props => {
       dataIndex: "holdingToken",
       key: "holdingToken",
       align: "right",
-      render: text => (text !== null ? "$" + valueFormat(text) : ""),
+      render: text => (text !== null ? valueFormat(text) : ""),
     },
     {
       title: "Token Holding Value",
@@ -249,9 +253,9 @@ const PotentialUsers = props => {
 
   const renderHint = () => {
     const message = (
-      <>
-        <div className="my2 ml1">
-          {"With this feature, you'll be able to:"}
+      <Alert
+        message="With this feature, you'll be able to"
+        description={
           <ul style={{ listStyle: "inside" }}>
             <li>
               Gain access to and analyze over 120 million wallet profiles and
@@ -266,14 +270,14 @@ const PotentialUsers = props => {
               }
             </li>
           </ul>
-        </div>
-      </>
+        }
+        type="info"
+        showIcon
+      />
     );
     return (
       <div style={{ padding: 6 }}>
-        <Card>
-          <Alert message={message} showIcon />
-        </Card>
+        <Card>{message}</Card>
       </div>
     );
   };
@@ -325,7 +329,6 @@ const PotentialUsers = props => {
               />
               <QuickFilter
                 title={"Tags"}
-                titleWidth={"68px"}
                 defaultValue={location?.query?.tag}
                 optionsList={getQuickFilterOptionList(
                   orderBy(filterTagResult?.data?.data, ["tag"]),

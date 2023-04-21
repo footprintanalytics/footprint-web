@@ -122,6 +122,7 @@ class DashCard extends Component {
       (mainCard.display === "text" ||
         mainCard.display === "image" ||
         mainCard.display === "embed" ||
+        mainCard.display === "tableau" ||
         mainCard.display === "video"))
       ? ""
       : "18px 24px";
@@ -181,6 +182,7 @@ class DashCard extends Component {
       display !== "text" &&
       display !== "image" &&
       display !== "embed" &&
+      display !== "tableau" &&
       display !== "video";
 
     const expectedDuration = Math.max(
@@ -226,6 +228,7 @@ class DashCard extends Component {
     const isImageDisplay = mainCard.display === "image";
     const isVideoDisplay = mainCard.display === "video";
     const isEmbedDisplay = mainCard.display === "embed";
+    const isTableauDisplay = mainCard.display === "tableau";
 
     const isAction = isActionCard(mainCard);
 
@@ -254,10 +257,10 @@ class DashCard extends Component {
     const showEdit = isOwner && !!dashcard.card.id;
     const isPublic = mode && mode.name === PublicMode.name;
 
-    const hideDuplicate = isTextDisplay || isImageDisplay || isVideoDisplay || isEmbedDisplay;
+    const hideDuplicate = isTextDisplay || isImageDisplay || isVideoDisplay || isEmbedDisplay || isTableauDisplay;
 
     const hideWatermark =
-      clearWatermark || isTextDisplay || isImageDisplay || isVideoDisplay || isEmbedDisplay;
+      clearWatermark || isTextDisplay || isImageDisplay || isVideoDisplay || isEmbedDisplay || isTableauDisplay;
 
     const showPreview =
       !isPublic &&
@@ -265,10 +268,11 @@ class DashCard extends Component {
       !isTextDisplay &&
       !isImageDisplay &&
       !isEmbedDisplay &&
+      !isTableauDisplay &&
       !isVideoDisplay;
 
     const showChartInfo =
-      !isPublic && !isTextDisplay && !isImageDisplay && !isVideoDisplay && !isEmbedDisplay;
+      !isPublic && !isTextDisplay && !isImageDisplay && !isVideoDisplay && !isEmbedDisplay && isTableauDisplay;
 
     const editAction = card => {
       window.open(`/chart/${card.id}?editingOnLoad=true`);
@@ -284,10 +288,10 @@ class DashCard extends Component {
       mainCard,
     });
 
-    const notShowReplacementContent = isImageDisplay || isVideoDisplay || isEmbedDisplay;
+    const notShowReplacementContent = isImageDisplay || isVideoDisplay || isEmbedDisplay || isTableauDisplay;
     const includeRealtimeTable = isRealtimeChart(dashcard, realtimeList);
     const isRealtimeUser = user?.id === 20103;
-    const showReadTimeMode = !isPublic && !isTextDisplay && !isImageDisplay && !isVideoDisplay && !isEmbedDisplay && result && !result.error
+    const showReadTimeMode = !isPublic && !isTextDisplay && !isImageDisplay && !isVideoDisplay && !isEmbedDisplay && !isTableauDisplay && result && !result.error
       && includeRealtimeTable
       && isRealtimeUser;
     return (
