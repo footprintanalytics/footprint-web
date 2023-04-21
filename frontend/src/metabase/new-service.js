@@ -94,8 +94,11 @@ export const getPotentialUserFilterCollection = async params => {
 export const getPotentialUserFilterTag = async params => {
   return GET(`/api/v1/fga/potential-user/filter/tag`, params);
 };
-export const getPotentialUser = async params => {
+export const queryPotentialUser = async params => {
   return POST(`/api/v1/fga/potential-user`, params);
+};
+export const createPotentialUserCohort = async params => {
+  return POST(`/api/v1/fga/potential-user/cohort`, params);
 };
 // FP Api ---------------
 export const UserRegister = async params => {
