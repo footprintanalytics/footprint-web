@@ -227,7 +227,7 @@ const PotentialUsers = props => {
       render: text => (text !== null ? "$" + valueFormat(text) : ""),
     },
     {
-      title: "Trading Value",
+      title: "Trading Value(30D)",
       dataIndex: "tradingValue",
       key: "tradingValue",
       align: "right",

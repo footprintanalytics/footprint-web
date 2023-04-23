@@ -64,7 +64,7 @@ export const ItemFilter = props => {
       ui: "input",
     },
     {
-      label: "Trading Value >=",
+      label: "Trading Value(30D) >=",
       indicator: "tradingValue",
       comparisonSymbol: "gte",
       ui: "input",

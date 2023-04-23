@@ -121,7 +121,7 @@ const Community = props => {
         )?.comparisonValue ?? null,
     },
     {
-      label: "Trading Value >=",
+      label: "Trading Value(30D) >=",
       indicator: "tradingValue",
       comparisonSymbol: "gte",
       defaultValue:
@@ -281,7 +281,7 @@ const Community = props => {
       render: text => (text !== null ? "$" + valueFormat(text) : ""),
     },
     {
-      title: "In-Game Trading Value",
+      title: "In-Game Trading Value(30D)",
       dataIndex: "tradingValue",
       key: "tradingValue",
       align: "right",
