@@ -1,6 +1,7 @@
+/* eslint-disable @typescript-eslint/no-empty-function */
 import React from "react";
 import { set } from "lodash";
-import { notification, Button } from "antd";
+import { notification, Button, Modal } from "antd";
 import Link from "antd/lib/typography/Link";
 import { PublicApi, maybeUsePivotEndpoint } from "metabase/services";
 
@@ -11,16 +12,48 @@ export function formatTag(tag: string) {
   }
   return words.join(" ");
 }
+export function formatType(tag: string) {
+  const words = tag.split(" ");
+  for (let i = 0; i < words.length; i++) {
+    words[i] = words[i].charAt(0).toUpperCase() + words[i].slice(1);
+  }
+  return words.join(" ");
+}
 
+export function showCohortSuccessModal(
+  modalApi = Modal,
+  cohort: any,
+  router: any,
+  from = "Cohort",
+  onCancel = () => {},
+) {
+  return modalApi.success({
+    title: "Cohort created successfully",
+    content: "You can now view the User Profile of this cohort .",
+    onOk() {
+      router?.push({
+        pathname: `/growth/public/dashboard/55b1eb29-b15e-458f-9241-1862a0d19d3b`,
+        query: { tag: cohort?.title, cohort_title: cohort?.title },
+        hash: `#from=${from}`,
+      });
+    },
+    onCancel() {
+      onCancel?.();
+    },
+    closable: true,
+    okText: "View User Profile",
+    cancelText: "Close",
+  });
+}
 
 // format number into 1,000,000.00
-export function valueFormat(value:number):string{
-  const formatter = new Intl.NumberFormat('en-US', {
-    style: 'decimal',
+export function valueFormat(value: number): string {
+  const formatter = new Intl.NumberFormat("en-US", {
+    style: "decimal",
     minimumFractionDigits: 0,
-    maximumFractionDigits: 2
+    maximumFractionDigits: 2,
   });
- return formatter.format(value);
+  return formatter.format(value);
 }
 
 export function updateHashValue(

@@ -20,31 +20,25 @@ import { QUERY_OPTIONS } from "metabase/containers/dashboards/shared/config"
 import { getUser } from "metabase/selectors/user"
 import LoadingSpinner from "metabase/components/LoadingSpinner"
 import { getCampaign } from "metabase/new-service"
-import { getGrowthProjectPath, valueFormat } from "../utils/utils"
-import CreateCampaignModal from "../components/Modal/CreateCampaignModal"
-import ViewOptInModal from "../components/Modal/ViewOptInModal"
-import "../css/utils.css"
+import { formatType, getGrowthProjectPath, valueFormat } from "../utils/utils";
+import CreateCampaignModal from "../components/Modal/CreateCampaignModal";
+import ViewOptInModal from "../components/Modal/ViewOptInModal";
+import "../css/utils.css";
 
 const OptInList = props => {
-  const { router, location, project } = props
+  const { router, location, project } = props;
   const [isModalOpen, setIsModalOpen] = useState({
     open: false,
     type: "",
-  })
-  const [viewModalOpen, setViewModalOpen] = useState({
-    open: false,
-    type: "",
-    channel: null,
-  })
-  const [dataSource, setDataSource] = useState([])
-
+  });
+  const [dataSource, setDataSource] = useState([]);
   const { isLoading, data, refetch, isFetching } = useQuery(
     ["getCampaign", project?.id],
     async () => {
-      return await getCampaign({ projectId: parseInt(project?.id) })
+      return await getCampaign({ projectId: parseInt(project?.id) });
     },
     { ...QUERY_OPTIONS, enabled: !!project?.id },
-  )
+  );
   useEffect(() => {
     if (data) {
       const dataSourceTemp = data?.list
@@ -60,9 +54,9 @@ const OptInList = props => {
           (a, b) =>
             new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime(),
         );
-      setDataSource(dataSourceTemp)
+      setDataSource(dataSourceTemp);
     }
-  }, [data])
+  }, [data]);
 
   const columns = [
     {
@@ -111,7 +105,10 @@ const OptInList = props => {
             {channels.map(channel => {
               // return <Tag key={channel.id}>{channel.channelName}</Tag>
               return (
-                <Tooltip key={channel.id} title={channel.channelName}>
+                <Tooltip
+                  key={channel.id}
+                  title={formatType(channel.channelName)}
+                >
                   <Avatar
                     src={`https://footprint-imgs.oss-us-east-1.aliyuncs.com/${
                       channel.channelName === "Tweet URL"
@@ -161,14 +158,6 @@ const OptInList = props => {
             type="link"
             className="p0"
             onClick={() => {
-              // setViewModalOpen({
-              //   open: true,
-              //   type:
-              //     record?.channels?.[0]?.channelName === "Tweet URL"
-              //       ? "Twitter"
-              //       : "Discord",
-              //   channel: record?.channels?.[0],
-              // });
               setIsModalOpen({
                 open: true,
                 type:
@@ -297,38 +286,26 @@ const OptInList = props => {
           />
         )}
       </Card>
-      <CreateCampaignModal
-        open={isModalOpen?.open}
-        optInType={isModalOpen?.type}
-        channel={isModalOpen?.channel}
-        location={location}
-        project={project}
-        router={router}
-        onSuccess={() => {
-          refetch();
-          setIsModalOpen({ open: false });
-        }}
-        onCancel={() => {
-          setIsModalOpen({ open: false });
-        }}
-      />
-      <ViewOptInModal
-        location={location}
-        project={project}
-        router={router}
-        type={viewModalOpen?.type}
-        channel={viewModalOpen?.channel}
-        open={viewModalOpen?.open}
-        onSuccess={() => {
-          setViewModalOpen({ open: false });
-        }}
-        onCancel={() => {
-          setViewModalOpen({ open: false });
-        }}
-      />
+      {isModalOpen?.open && (
+        <CreateCampaignModal
+          open={isModalOpen?.open}
+          optInType={isModalOpen?.type}
+          channel={isModalOpen?.channel}
+          location={location}
+          project={project}
+          router={router}
+          onSuccess={() => {
+            refetch();
+            setIsModalOpen({ open: false });
+          }}
+          onCancel={() => {
+            setIsModalOpen({ open: false });
+          }}
+        />
+      )}
     </div>
   );
-}
+};
 
 const mapStateToProps = state => {
   return {

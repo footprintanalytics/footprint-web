@@ -5,8 +5,14 @@ import MuiSelect from "metabase/growth/components/MuiSelect";
 import cx from "classnames";
 import FloatInput from "metabase/growth/components/FloatInput";
 
-export const ItemFilter = (props) => {
-  const { projectData, collectionData, className, onSelectChange, onFilterChange } = props;
+export const ItemFilter = props => {
+  const {
+    projectData,
+    collectionData,
+    className,
+    onSelectChange,
+    onFilterChange,
+  } = props;
   // mock datas
   const optionsList = [
     {
@@ -14,14 +20,14 @@ export const ItemFilter = (props) => {
       indicator: "project",
       ui: "select",
       comparisonSymbol: "ge",
-      resultFormatFunction: (value) => {
-        return {protocolSlugs: value ? [value] : []}
+      resultFormatFunction: value => {
+        return { protocolSlugs: value ? [value] : [] };
       },
       options: projectData?.map(item => {
         return {
           value: item.protocolSlug,
           label: item.name,
-        }
+        };
       }),
     },
     {
@@ -29,15 +35,15 @@ export const ItemFilter = (props) => {
       indicator: "nft_collection",
       ui: "select",
       comparisonSymbol: "ge",
-      resultFormatFunction: (value) => {
-        return {collectionSlugs: value ? [value] : []}
+      resultFormatFunction: value => {
+        return { collectionSlugs: value ? [value] : [] };
       },
       options: collectionData?.map(item => {
         return {
           value: item.collectionSlug,
           label: item.name,
-        }
-      })
+        };
+      }),
     },
     {
       label: "Net Worth >=",
@@ -57,12 +63,21 @@ export const ItemFilter = (props) => {
       comparisonSymbol: "gte",
       ui: "input",
     },
+    {
+      label: "Trading Value >=",
+      indicator: "tradingValue",
+      comparisonSymbol: "gte",
+      ui: "input",
+    },
   ];
   return (
     <div
-      className={cx("flex flex-row w-full p1 items-center  text-nowrap", className)}
+      className={cx(
+        "flex flex-row w-full p1 items-center  text-nowrap",
+        className,
+      )}
     >
-      <span style={{ marginRight: 8, color: "white", width: "80px", }}>Filters:</span>
+      <span style={{ marginRight: 8, color: "white" }}>Filters:</span>
       <Row gutter={16} className="w-full">
         {optionsList.map(item => (
           <Col span={4} key={item.label}>
@@ -75,8 +90,8 @@ export const ItemFilter = (props) => {
                   onSelectChange?.(item.resultFormatFunction?.(value));
                 }}
                 options={item.options}
-              />)
-            : (
+              />
+            ) : (
               <FloatInput
                 height={40}
                 style={{ width: "100%", height: 40 }}
@@ -91,10 +106,8 @@ export const ItemFilter = (props) => {
                 // placeholder="Email here please"
                 name={item.value}
               />
-              )}
-
+            )}
           </Col>
-
         ))}
       </Row>
     </div>

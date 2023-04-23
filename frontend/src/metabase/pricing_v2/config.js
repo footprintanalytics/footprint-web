@@ -103,7 +103,7 @@ export const getComparePlans = ({user, canBusinessSevenTrial, subscriptionDetail
       benefits: {
         title: "All the benefits of Free, plus:",
         list: [
-          "Keep uploaded data private(coming soon)",
+          "Keep uploaded data private",
           "Keep dashboard private",
           "Remove dashboard watermarks",
         ],
