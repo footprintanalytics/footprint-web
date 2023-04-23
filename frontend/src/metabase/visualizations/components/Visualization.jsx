@@ -510,11 +510,17 @@ class Visualization extends React.PureComponent {
             </Tooltip>
           </div>
         )}
-        {!hideWatermark && !isText && !isImage && !isVideo && !isEmbed && !isTableau && !noResults && (
-          <div className="waterMarkHome">
-            <span />
-          </div>
-        )}
+        {!hideWatermark &&
+          !isText &&
+          !isImage &&
+          !isVideo &&
+          !isEmbed &&
+          !isTableau &&
+          !noResults && (
+            <div className="waterMarkHome">
+              <span />
+            </div>
+          )}
         {!!hasHeader && (
           <div className="p1 flex-no-shrink">
             <ChartCaption
@@ -629,6 +635,18 @@ class Visualization extends React.PureComponent {
           </div>
         ) : (
           <>
+            {!this.props.isEditing &&
+              isDashboard &&
+              this.props.dashcard?.card?.name === "Twitter Followers Info" && (
+                <Button
+                  type="primary"
+                  onClick={() => {
+                    // router.push(getGrowthProjectPath(project.protocolSlug, "Connector"));
+                  }}
+                >
+                  Set up now
+                </Button>
+              )}
             {this.state.visualization?.identifier === "fgatable" &&
               !this.props.isEditing &&
               isDashboard && (
