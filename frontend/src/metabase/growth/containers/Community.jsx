@@ -126,13 +126,13 @@ const Community = props => {
   const actions = [
     {
       title: "Create Cohort",
-      disabled: true,
+      disabled: false,
       component: (
         <CreateCohort2
           disable={true}
           project={project}
           router={router}
-          type="Community"
+          type="Members"
           addressListCount={listResult?.data?.total}
           params={{
             ...walletListParams,
