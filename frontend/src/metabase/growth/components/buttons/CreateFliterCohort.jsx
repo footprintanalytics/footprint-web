@@ -3,8 +3,12 @@ import React, { useEffect, useState } from "react";
 import { Button, message, Modal, Tag, AutoComplete, Divider } from "antd";
 import { connect } from "react-redux";
 import { isArray } from "lodash";
+import { withRouter } from "react-router";
 import { CreateFgaCohort } from "metabase/new-service";
-import { getLatestGAProjectId } from "metabase/growth/utils/utils";
+import {
+  getLatestGAProjectId,
+  showCohortSuccessModal,
+} from "metabase/growth/utils/utils";
 import { getUser } from "metabase/selectors/user";
 import {
   loginModalShowAction,
@@ -18,6 +22,7 @@ const CreateFliterCohort = ({
   style,
   propData,
   user,
+  router,
   setLoginModalShowAction,
   setCreateFgaProjectModalShowAction,
   btnText,
@@ -107,7 +112,8 @@ const CreateFliterCohort = ({
       console.log(params);
       const result = await CreateFgaCohort(params);
       if (result) {
-        message.success("Successfully create a cohort!");
+        // message.success("Successfully create a cohort!");
+        showCohortSuccessModal(modal, result, router);
         setCohortModalOpen(false);
       }
     } catch (error) {
@@ -116,6 +122,7 @@ const CreateFliterCohort = ({
     setLoading(false);
   };
 
+  const [modal, contextHolder] = Modal.useModal();
   useEffect(() => {
     const exclude = queryCondition?.find(item => item.slug === "exclude");
     if (exclude) {
@@ -168,6 +175,7 @@ const CreateFliterCohort = ({
 
   return (
     <>
+      {contextHolder}
       <Button
         type="primary"
         style={style}
@@ -237,5 +245,6 @@ const mapStateToProps = state => {
     user: getUser(state),
   };
 };
-
-export default connect(mapStateToProps, mapDispatchToProps)(CreateFliterCohort);
+export default withRouter(
+  connect(mapStateToProps, mapDispatchToProps)(CreateFliterCohort),
+);

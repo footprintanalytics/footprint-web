@@ -5,15 +5,17 @@ import { connect } from "react-redux";
 import { getUser, getFgaProject } from "metabase/selectors/user";
 import { getGrowthProjectPath } from "../utils/utils";
 const { Text } = Typography;
+import { getOssUrl } from "metabase/lib/image";
+import cx from "classnames";
 
 const UserTemplate = props => {
   const { router, location, children, user, projectPath, menu, projectObject } =
     props;
   const templates = [
     {
-      name: "Token Airdrop",
+      name: "Campaign Participant",
       icon: "https://footprint-imgs.oss-us-east-1.aliyuncs.com/airdrop2.svg",
-      key: "token-airdrop",
+      key: "campaign-participant",
     },
     {
       name: "NFT Collector",
@@ -21,9 +23,9 @@ const UserTemplate = props => {
       key: "nft-collector",
     },
     {
-      name: "Active Gamer",
+      name: "Gamer",
       icon: "https://footprint-imgs.oss-us-east-1.aliyuncs.com/activity_gamer.svg",
-      key: "active-gamer",
+      key: "gamer",
     },
     {
       name: "Token Whale",
@@ -36,6 +38,26 @@ const UserTemplate = props => {
       hiden: true,
     },
   ];
+
+  const workDemoList = [
+    {
+      title: "Gain access to and analyze over 120 million wallet profiles and tags.",
+      desc: "View holding detailed information on any wallet address, including their token assets and NFTs.\nView historical activities and preferences on any wallet address to mine new opportunities.",
+      img: getOssUrl("img_potential1.png"),
+    },
+    {
+      title: "Identify valuable users from the top NFTs, protocols, and chains.",
+      desc: "Select on-chain users of any contract，NFTs, protocols, and chains.\nFilter by holding assets and historical active protocols to build your ideal audience.\nFilter out bot,Sybil and low-value users to boost your campaign ROI.",
+      img: getOssUrl("img_potential2.png"),
+      reverse: true,
+    },
+    {
+      title: "Dive deep into analyzing target audiences' holding value and activities on the chain.",
+      desc: "View unique user profiling that is cross-chain, cross-protocol, and integrates off-chain data.\nView more preference indicators and performance analysis.",
+      img: getOssUrl("img_potential3.png"),
+    },
+  ];
+
   return (
     <div
       className="flex flex-column items-center"
@@ -52,11 +74,11 @@ const UserTemplate = props => {
             onClick={() => {
               // setTemplate("CustomerFilter");
               router.push({
-                pathname: getGrowthProjectPath(projectPath, "Potential Users2"),
+                pathname: getGrowthProjectPath(projectPath, "Potential Users List"),
               });
             }}
           >
-            {"Customer Filter >"}
+            {"Custom Filter >"}
           </Button>
         </div>
         <div className="flex flex-row items-center mt4 w-full">
@@ -80,7 +102,7 @@ const UserTemplate = props => {
                   router.push({
                     pathname: getGrowthProjectPath(
                       projectPath,
-                      "Potential Users2",
+                      "Potential Users List",
                     ),
                     query: { tag: item.key },
                   });
@@ -100,67 +122,21 @@ const UserTemplate = props => {
         </div>
 
         <h2 className="m mt4 w-full text-centered">How it work?</h2>
-        <div className="mt3 flex flex-row w-full items-center justify-between">
-          <img
-            src="https://footprint-imgs.oss-us-east-1.aliyuncs.com/20220225181036.png"
-            style={{ width: "40%" }}
-          ></img>
-          <div className="flex flex-column p2" style={{ width: "50%" }}>
-            <h3>
-              Associating millions of data - From addresses to social media
-            </h3>
-            <Text className="mt1">
-              {
-                "Footprint GA can connect to the world's largest blockchain projects and synchronize with Web2 data, to achieve data mining and algorithm learning automatically. You can find information about millions of addresses, and contact social media information for automatic classification, filtering, and tagging."
-              }
-            </Text>
-          </div>
-        </div>
-        <div className="mt2 flex flex-row w-full items-center justify-between">
-          <div className="flex flex-column p2" style={{ width: "50%" }}>
-            <h3>Intelligent data analytics - AI and Machine Learning</h3>
-            <Text className="mt1">
-              {
-                "Footprint GA can deliver intelligent data analytics and operation through utilizing AI and Machine Learning technology, which can boost the efficiency of data analysis and save your time and resources, enabling you to have more focus on the things that matter."
-              }
-            </Text>
-          </div>
-          <img
-            src="https://footprint-imgs.oss-us-east-1.aliyuncs.com/20220225185345.png"
-            style={{ width: "40%" }}
-          ></img>
-        </div>
-        <div className="mt2 flex flex-row w-full items-center justify-between">
-          <img
-            src="https://footprint-imgs.oss-us-east-1.aliyuncs.com/20220225210539.png"
-            style={{ width: "40%" }}
-          ></img>
-          <div className="flex flex-column p2" style={{ width: "50%" }}>
-            <h3>Multi-dimensional analysis - From addresses to industries</h3>
-            <Text className="mt1">
-              {
-                "Footprint GA provides various dimensions of tags, which can not only help you track the asset flows on the blockchain, but also offer you a comprehensive understanding of their sources, destinations, and involved industries. This can help you gain insights into the market trends and predict the future direction."
-              }
-            </Text>
-          </div>
-        </div>
-        <div className="mt2 flex flex-row w-full items-center justify-between">
-          <div className="flex flex-column p2" style={{ width: "50%" }}>
-            <h3>
-              Highly personalized - Flourishing with countless possibilities
-            </h3>
-            <Text className="mt1">
-              {
-                "Footprint GA can offer data analytical and query customization based on your specific needs. You can add your own tags to analyze and manage your digital assets more efficiently. This enables you to set up a personalized classification and management system for your assets, monitoring and managing your asset portfolios with ease."
-              }
-            </Text>
-          </div>
-          <img
-            className="mr3 pr4"
-            src="https://footprint-imgs.oss-us-east-1.aliyuncs.com/img-why-about-us.png"
-            style={{ width: "30%" }}
-          ></img>
-        </div>
+        {workDemoList.map(item => {
+          return (
+            <div key={item.title} className={cx("mt4 flex flex-row w-full items-center justify-between", { "flex-row-reverse": item.reverse })}>
+              <img
+                src={item.img}
+                style={{ width: "40%" }}
+                alt={item.title}
+              />
+              <div className="flex flex-column p2" style={{ width: "50%" }}>
+                <h3>{item.title}</h3>
+                <Text className="mt1" style={{ whiteSpace: "pre-line" }}>{item.desc}</Text>
+              </div>
+            </div>
+          )
+        })}
       </div>
     </div>
   );

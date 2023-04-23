@@ -141,6 +141,10 @@ class DashboardHeader extends Component {
     this.props.addEmbedDashCardToDashboard({ dashId: this.props.dashboard.id });
   }
 
+  onAddTableauBox() {
+    this.props.addTableauDashCardToDashboard({ dashId: this.props.dashboard.id });
+  }
+
   onAddAction() {
     this.props.addActionDashCardToDashboard({
       dashId: this.props.dashboard.id,
@@ -693,6 +697,12 @@ class DashboardHeader extends Component {
         type: "Embed",
         onclick: () => {
           this.onAddEmbedBox();
+        },
+      },
+      {
+        type: "Tableau",
+        onclick: () => {
+          this.onAddTableauBox();
         },
       },
     ];

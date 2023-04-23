@@ -25,6 +25,7 @@ import UserTemplate from "./UserTemplate";
 import CohortList from "./CohortList";
 import Community from "./Community";
 import UserProfile from "./UserProfile";
+import OptInList from "./OptInList";
 import "../css/index.css";
 
 const Project = props => {
@@ -35,7 +36,6 @@ const Project = props => {
   const [project, setProject] = useState(projectPath);
   const demoProjectData = top_protocols[0];
   const [gaMenuTabs, setGaMenuTabs] = useState();
-  const isDemo = location?.hash?.includes("demo");
 
   useEffect(() => {
     if (!project) {
@@ -163,18 +163,16 @@ const Project = props => {
     ) : (
       <LoadingSpinner message="Loading..." />
     );
-    if (current_tab === "UserTemplate") {
+    if (current_tab === "UserTemplate" || current_tab === "Potential Users") {
       //|| current_tab === "Potential Users"
       return (
         <UserTemplate
           location={location}
           router={router}
           projectId={getLatestGAProjectId()}
+          projectPath={projectPath}
         ></UserTemplate>
       );
-    }
-    if (current_tab === "Potential Users2") {
-      return <PotentialUsers project={getProjectObject(project)} />;
     }
     if (current_tab === "UserProfile") {
       return (
@@ -217,6 +215,15 @@ const Project = props => {
         ></ProjectInfo>
       );
     }
+    if (["OptInList", "Opt-In", "OptIn", "Opt-In Tool"].includes(current_tab)) {
+      return (
+        <OptInList
+          location={location}
+          router={router}
+          project={getProjectObject(project)}
+        ></OptInList>
+      );
+    }
     if (["Community", "Members"].includes(current_tab)) {
       return (
         <Community
@@ -224,6 +231,15 @@ const Project = props => {
           router={router}
           project={getProjectObject(project)}
         ></Community>
+      );
+    }
+    if (["Potential Users List", "Potential Users"].includes(current_tab)) {
+      return (
+        <PotentialUsers
+          location={location}
+          project={getProjectObject(project)}
+          router={router}
+        />
       );
     }
     if (current_tab === "Custom Analysis") {
@@ -263,9 +279,6 @@ const Project = props => {
           project={getProjectObject(project)}
         ></CohortList>
       );
-    }
-    if (current_tab === "Potential Users" && isDemo) {
-      return <PotentialUsers project={getProjectObject(project)} />;
     }
     if (gaMenuTabs?.dashboardMap?.has(current_tab)) {
       if (current_tab === "Twitter") {

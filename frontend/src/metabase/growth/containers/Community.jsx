@@ -128,27 +128,42 @@ const Community = props => {
   const actions = [
     {
       title: "Create Cohort",
-      component: <CreateCohort2 disable={true} project={project} />,
+      disabled: false,
+      component: (
+        <CreateCohort2
+          disable={true}
+          project={project}
+          router={router}
+          type="Members"
+          addressListCount={listResult?.data?.total}
+          params={{
+            ...walletListParams,
+            projectId: parseInt(project?.id),
+          }}
+          isButtonStyle={false}
+        />
+      ),
     },
     {
       component: (
-        <Button
+        <a
           type="text"
-          disabled={true}
+          className="p0"
           onClick={() =>
             props.router?.push({
               pathname: getGrowthProjectPath(
                 props.router?.params?.project,
-                "CreateCampaign",
+                "Opt-In Tool",
               ),
             })
           }
         >
-          Mapping Now
-        </Button>
+          Opt-In
+        </a>
       ),
-      title: "Mapping Now", //required
+      title: "Opt-In", //required
       link: null,
+      disabled: true,
     },
   ];
 
@@ -195,7 +210,12 @@ const Community = props => {
             suffix: "",
             symbol: "more",
           }}
-          style={{ minWidth: 150, maxWidth: 500, fontSize: 10 }}
+          style={{
+            minWidth: 150,
+            maxWidth: 500,
+            fontSize: 10,
+            marginBottom: 0,
+          }}
         >
           {tags?.length > 0 ? (
             <>
