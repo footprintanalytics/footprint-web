@@ -20,17 +20,17 @@ import { QUERY_OPTIONS } from "metabase/containers/dashboards/shared/config"
 import { getUser } from "metabase/selectors/user"
 import LoadingSpinner from "metabase/components/LoadingSpinner"
 import { getCampaign } from "metabase/new-service"
-import { getGrowthProjectPath, valueFormat } from "../utils/utils"
-import CreateCampaignModal from "../components/Modal/CreateCampaignModal"
-import ViewOptInModal from "../components/Modal/ViewOptInModal"
-import "../css/utils.css"
+import { formatType, getGrowthProjectPath, valueFormat } from "../utils/utils";
+import CreateCampaignModal from "../components/Modal/CreateCampaignModal";
+import ViewOptInModal from "../components/Modal/ViewOptInModal";
+import "../css/utils.css";
 
 const OptInList = props => {
-  const { router, location, project } = props
+  const { router, location, project } = props;
   const [isModalOpen, setIsModalOpen] = useState({
     open: false,
     type: "",
-  })
+  });
   const [dataSource, setDataSource] = useState([]);
   const { isLoading, data, refetch, isFetching } = useQuery(
     ["getCampaign", project?.id],
@@ -105,7 +105,10 @@ const OptInList = props => {
             {channels.map(channel => {
               // return <Tag key={channel.id}>{channel.channelName}</Tag>
               return (
-                <Tooltip key={channel.id} title={channel.channelName}>
+                <Tooltip
+                  key={channel.id}
+                  title={formatType(channel.channelName)}
+                >
                   <Avatar
                     src={`https://footprint-imgs.oss-us-east-1.aliyuncs.com/${
                       channel.channelName === "Tweet URL"
@@ -302,7 +305,7 @@ const OptInList = props => {
       )}
     </div>
   );
-}
+};
 
 const mapStateToProps = state => {
   return {

@@ -226,7 +226,7 @@ const CreateCampaignModal = props => {
                 label: item.title,
                 value: item.key,
                 // key: item.key,
-                disabled: item.notEdit,
+                disabled: item.notEdit || !isEditable,
               });
             });
             return (
@@ -265,7 +265,7 @@ const CreateCampaignModal = props => {
                 >
                   <Input
                     allowClear
-                    disabled={detail.notEdit}
+                    disabled={detail.notEdit || !isEditable}
                     placeholder={
                       detail.placeholder ??
                       `Input the ${detail.title}, such as: https://twitter.com/Footprint_Data/status/1648495146672222209`
@@ -298,7 +298,7 @@ const CreateCampaignModal = props => {
                   <TextArea
                     allowClear
                     // value={pasteValue}
-                    disabled={detail.notEdit}
+                    disabled={detail.notEdit || !isEditable}
                     placeholder={
                       detail.placeholder ?? `Input the ${detail.title}.`
                     }
@@ -562,7 +562,7 @@ const CreateCampaignModal = props => {
                                   <div className="flex flex-row mt3 items-center">
                                     <div>
                                       {channelItem.details.length + 2}. Send
-                                      Command to your server
+                                      command to your server
                                     </div>
                                     <CopyToClipboard
                                       text={channel?.details?.botInitCmd}
