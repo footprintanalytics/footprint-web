@@ -271,10 +271,6 @@
   box-shadow: 0 0 30px #06041a0d !important;
 }
 
-.question-side__table-info-popover {
-  width: 100%;
-}
-
 .ant-tabs > .ant-tabs-nav .ant-tabs-nav-operations {
   display: none;
 }
