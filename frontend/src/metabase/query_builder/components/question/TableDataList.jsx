@@ -1,11 +1,10 @@
 /* eslint-disable react-hooks/rules-of-hooks */
 /* eslint-disable react/prop-types */
 import React, { useEffect, useState } from "react";
-import { Skeleton, Tree } from "antd";
+import { Skeleton, Tree, Popover } from "antd";
 import cx from "classnames";
 import Highlighter from "react-highlight-words";
 import { flatten, isNaN, toNumber, union } from "lodash";
-import Popover from "@idui/react-popover";
 import { DownOutlined } from "metabase/lib/ant-icon";
 import Icon from "metabase/components/Icon";
 import * as MetabaseAnalytics from "metabase/lib/analytics";
@@ -205,29 +204,13 @@ const TableDataList = props => {
       return {
         title: (
           <Popover
-            className="question-side__table-info-popover"
-            trigger={hidePopover ? "" : "hover"}
-            fitMaxHeightToBounds
-            fitMaxWidthToBounds
-            closeOnEnter
-            lazy
-            animation={{
-              animate: {
-                opacity: 1,
-              },
-              exit: {
-                opacity: 0,
-                transition: {
-                  duration: 0.1,
-                },
-              },
-              initial: {
-                opacity: 0.5,
-              },
+            align={{
+              offset: [26, 0],
             }}
-            openingAnimationTranslateDistance={0}
-            closeOnScroll
             content={renderTableInfo(n)}
+            mouseEnterDelay={0.2}
+            mouseLeaveDelay={0.2}
+            trigger={hidePopover ? "" : "hover"}
             placement="right"
           >
             <div
