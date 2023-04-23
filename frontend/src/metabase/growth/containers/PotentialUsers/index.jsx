@@ -227,6 +227,13 @@ const PotentialUsers = props => {
       render: text => (text !== null ? "$" + valueFormat(text) : ""),
     },
     {
+      title: "Trading Value",
+      dataIndex: "tradingValue",
+      key: "tradingValue",
+      align: "right",
+      render: text => (text !== null ? "$" + valueFormat(text) : ""),
+    },
+    {
       title: "Total NFT Transactions(30D)",
       dataIndex: "totalNFTTransaction",
       key: "totalNFTTransaction",

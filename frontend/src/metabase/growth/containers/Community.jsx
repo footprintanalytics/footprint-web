@@ -120,6 +120,15 @@ const Community = props => {
           item => item.indicator === "tokenHoldingValue",
         )?.comparisonValue ?? null,
     },
+    {
+      label: "Trading Value >=",
+      indicator: "tradingValue",
+      comparisonSymbol: "gte",
+      defaultValue:
+        walletListParams?.filters?.find(
+          item => item.indicator === "tradingValue",
+        )?.comparisonValue ?? null,
+    },
     // { label: "Profit >=", indicator: "profit", comparisonSymbol: "gte" },
   ];
 
@@ -268,6 +277,13 @@ const Community = props => {
       title: "In-Game Token Value",
       dataIndex: "holdingTokenValue",
       key: "holdingTokenValue",
+      align: "right",
+      render: text => (text !== null ? "$" + valueFormat(text) : ""),
+    },
+    {
+      title: "In-Game Trading Value",
+      dataIndex: "tradingValue",
+      key: "tradingValue",
       align: "right",
       render: text => (text !== null ? "$" + valueFormat(text) : ""),
     },
