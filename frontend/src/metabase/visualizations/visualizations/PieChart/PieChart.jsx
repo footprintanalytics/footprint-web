@@ -390,7 +390,7 @@ export default class PieChart extends Component {
     const percentages = slices.map(s => s.percentage);
     const legendDecimals = customLegendDecimals >= 0 ? customLegendDecimals : computeMaxDecimalsForValues(percentages, {
       style: "percent",
-      maximumSignificantDigits: 3,
+      maximumSignificantDigits: 2,
     });
     const labelsDecimals = computeMaxDecimalsForValues(percentages, {
       style: "percent",
