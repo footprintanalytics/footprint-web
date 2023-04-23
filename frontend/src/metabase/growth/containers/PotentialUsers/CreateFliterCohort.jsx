@@ -114,7 +114,7 @@ const CreateCohort2 = ({
     setCreateCohortLoading(true);
     console.log("params", type, params);
     const result =
-      type === "Community"
+      type === "Members"
         ? await createCommunityUserCohort({
             ...omit(params, ["pageSize", "current"]),
             title: cohortName,
