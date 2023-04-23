@@ -285,6 +285,7 @@ const Project = props => {
         return (
           <LoadingDashboard
             router={router}
+            type="twitter"
             fgaConnectorId={projectObject?.twitter?.fgaConnectorId}
             project={getProjectObject(project)}
             projectId={parseInt(getLatestGAProjectId())}
@@ -298,6 +299,7 @@ const Project = props => {
         return (
           <LoadingDashboard
             router={router}
+            type="discord"
             fgaConnectorId={projectObject?.discord?.fgaConnectorId}
             project={getProjectObject(project)}
             projectId={parseInt(getLatestGAProjectId())}
@@ -311,6 +313,7 @@ const Project = props => {
         return (
           <LoadingDashboard
             router={router}
+            type="google_analytics"
             fgaConnectorId={projectObject?.ga?.fgaConnectorId}
             project={getProjectObject(project)}
             projectId={parseInt(getLatestGAProjectId())}

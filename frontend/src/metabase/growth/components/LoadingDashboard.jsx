@@ -4,7 +4,7 @@ import { Alert, Card, Typography, Button } from "antd";
 import { useQuery } from "react-query";
 import { GetFgaConnectorJob } from "metabase/new-service";
 import { getGrowthProjectPath } from "../utils/utils";
-
+// connector type : twitter, google_analytics, discord
 const LoadingDashboard = ({
   fgaConnectorId,
   router,
@@ -12,16 +12,33 @@ const LoadingDashboard = ({
   projectId,
   current_tab,
   children,
+  type = "twitter",
 }) => {
+  // status :  "succeeded" | "failed" | "running"
+  // twitter : twitter_tweet_metrics | user_details
+  // google_analytics : google_analytics_metrics
+  // discord : members | messages
   const { data } = useQuery(
     ["GetFgaConnectorJob", projectId, fgaConnectorId],
     async () => GetFgaConnectorJob({ projectId, fgaConnectorId }),
     {
       refetchInterval: data =>
-        data?.twitter_tweet_metrics?.status === "succeeded" ? false : 10000,
+        getDataStatus(data) === "succeeded" ? false : 10000,
       enabled: !!fgaConnectorId,
     },
   );
+
+  const getDataStatus = data => {
+    switch (type) {
+      case "twitter":
+        return data?.twitter?.twitter_tweet_metrics?.status;
+      // TODO: add google_analytics: need complete backend
+      // case "google_analytics":
+      //   return data?.google_analytics?.google_analytics_metrics?.status;
+      case "discord":
+        return data?.discord?.members?.status;
+    }
+  };
 
   const connector = current_tab === "Funnel" ? "Google Analytics" : current_tab;
 
@@ -130,7 +147,7 @@ const LoadingDashboard = ({
     );
   } else if (
     fgaConnectorId &&
-    data?.twitter_tweet_metrics?.status !== "succeeded" &&
+    getDataStatus(data) !== "succeeded" &&
     project.twitter_handler !== "Footprint_Data"
   ) {
     return (
