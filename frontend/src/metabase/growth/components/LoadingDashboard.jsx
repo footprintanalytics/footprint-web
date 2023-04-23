@@ -28,7 +28,7 @@ const LoadingDashboard = ({
     },
   );
 
-  const getDataStatus = data => {
+  function getDataStatus(data) {
     switch (type) {
       case "twitter":
         return data?.twitter?.twitter_tweet_metrics?.status;
@@ -38,7 +38,7 @@ const LoadingDashboard = ({
       case "discord":
         return data?.discord?.members?.status;
     }
-  };
+  }
 
   const connector = current_tab === "Funnel" ? "Google Analytics" : current_tab;
 
