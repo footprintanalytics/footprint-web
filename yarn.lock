@@ -3566,14 +3566,6 @@
   resolved "https://registry.yarnpkg.com/@icons/material/-/material-0.2.4.tgz#e90c9f71768b3736e76d7dd6783fc6c2afa88bc8"
   integrity sha512-QPcGmICAPbGLGb6F/yNf/KzKqvFx8z5qx3D1yFqVAjoFmXK35EgyW+cJ57Te3CNsmzblwtzakLGFqHPqrfb4Tw==
 
-"@idui/react-popover@^3.1.0":
-  version "3.1.0"
-  resolved "https://registry.npmmirror.com/@idui/react-popover/-/react-popover-3.1.0.tgz#21cd3f69d048628300db48d3e1c9a02ac9666948"
-  integrity sha512-PYlUyokXgdRpO57MYwJxdVfcLRQSmMhYMf1Xsp3eYTKfXKe+bP/iaGGpzT9yWTbrBdJsVkgmFg+mHR4B0dO8eA==
-  dependencies:
-    debounce "^1.2.1"
-    framer-motion "4.1.17"
-
 "@istanbuljs/load-nyc-config@^1.0.0":
   version "1.1.0"
   resolved "https://registry.yarnpkg.com/@istanbuljs/load-nyc-config/-/load-nyc-config-1.1.0.tgz#fd3db1d59ecf7cf121e80650bb86712f9b55eced"
