@@ -146,6 +146,11 @@ export default class PieChart extends Component {
       widget: "number",
       default: SLICE_THRESHOLD * 100,
     },
+    "pie.custom_legend_decimals": {
+      section: t`Display`,
+      title: t`Legend Decimals`,
+      widget: "number",
+    },
     "pie.show_center_value": {
       section: t`Display`,
       title: t`Show Center Value`,
@@ -339,7 +344,7 @@ export default class PieChart extends Component {
     const total = rows.reduce((sum, row) => sum + row[metricIndex], 0);
 
     const showCenterValue = settings["pie.show_center_value"];
-
+    const customLegendDecimals = settings["pie.custom_legend_decimals"];
     const showPercentInTooltip =
       !PERCENT_REGEX.test(cols[metricIndex].name) &&
       !PERCENT_REGEX.test(cols[metricIndex].display_name);
@@ -383,9 +388,9 @@ export default class PieChart extends Component {
     }
 
     const percentages = slices.map(s => s.percentage);
-    const legendDecimals = computeMaxDecimalsForValues(percentages, {
+    const legendDecimals = customLegendDecimals >= 0 ? customLegendDecimals : computeMaxDecimalsForValues(percentages, {
       style: "percent",
-      maximumSignificantDigits: 3,
+      maximumSignificantDigits: 2,
     });
     const labelsDecimals = computeMaxDecimalsForValues(percentages, {
       style: "percent",
