@@ -42,14 +42,11 @@ const OptInList = props => {
   useEffect(() => {
     if (data) {
       const dataSourceTemp = data?.list
-        ?.filter(i => {
-          // only show the campaign with channel: Discord bot or Tweet URL
-          return (
-            i.channels.findIndex(j =>
-              ["Discord bot", "Tweet URL"].includes(j.channelName),
-            ) !== -1
-          );
-        })
+        ?.filter(
+          i =>
+            // only show the campaignType : User Contact
+            i.campaignType === "User Contact",
+        )
         ?.sort(
           (a, b) =>
             new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime(),
@@ -280,6 +277,7 @@ const OptInList = props => {
           <Table
             rowKey="campaignId"
             loading={isLoading}
+            minHeight={400}
             dataSource={dataSource}
             columns={columns}
             pagination={false}
