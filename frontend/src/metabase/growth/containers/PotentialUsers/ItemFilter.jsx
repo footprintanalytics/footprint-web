@@ -64,7 +64,7 @@ export const ItemFilter = props => {
       ui: "input",
     },
     {
-      label: "Trading Value >=",
+      label: "Trading Value(30D) >=",
       indicator: "tradingValue",
       comparisonSymbol: "gte",
       ui: "input",
@@ -78,9 +78,9 @@ export const ItemFilter = props => {
       )}
     >
       <span style={{ marginRight: 8, color: "white" }}>Filters:</span>
-      <Row gutter={16} className="w-full">
+      <Row gutter={[10, 10]} className="w-full">
         {optionsList.map(item => (
-          <Col span={4} key={item.label}>
+          <Col sm={24} md={12} lg={8} xl={6} xxl={4} key={item.label}>
             {item.ui === "select" ? (
               <MuiSelect
                 height={40}
