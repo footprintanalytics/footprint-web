@@ -96,9 +96,9 @@ class FgaNavbar extends Component {
 
   forceLogin() {
     const { user, setLoginModalShow } = this.props;
-    if (!user) {
-      setLoginModalShow({ show: true, from: "navbar_fga_signin" });
-    }
+    // if (!user) {
+    //   setLoginModalShow({ show: true, from: "navbar_fga_signin" });
+    // }
   }
 
   componentDidUpdate() {
@@ -200,7 +200,7 @@ class FgaNavbar extends Component {
         fromNav={true}
         defaultRegister={loginModalDefaultRegister}
         redirect={loginModalRedirect}
-        hideClose={true}
+        hideClose={false}
         signTabState={isSignOutDemoAccount ? "signUp" : "signIn"}
       />
     );

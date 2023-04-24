@@ -36,11 +36,7 @@ const GaProjectSearch = props => {
   const { isLoading, data } = useQuery(
     ["GetFgaProject", user?.id],
     async () => {
-      if (user) {
-        return await GetFgaProject();
-      } else {
-        return;
-      }
+      return await GetFgaProject();
     },
     QUERY_OPTIONS,
   );
