@@ -1,12 +1,14 @@
 /* eslint-disable react/prop-types */
 import React, { useState } from "react";
+import { connect } from "react-redux";
 import * as Urls from "metabase/lib/urls";
+import { getUser } from "metabase/selectors/user";
 import Confirm from "./components/Confirm";
 import Prepare from "./components/Prepare";
 import Result from "./components/Result";
 import "./index.css";
 
-const Index = ({ router }) => {
+const Index = ({ router, user }) => {
   const [step, setStep] = useState(
     "PREPARE",
     // "CONFIRM",
@@ -27,6 +29,7 @@ const Index = ({ router }) => {
       )}
       {step === "CONFIRM" && (
         <Confirm
+          user={user}
           prepareData={prepareData}
           onPrev={() => setStep("PREPARE")}
           onNext={() => setStep("RESULT")}
@@ -46,4 +49,8 @@ const Index = ({ router }) => {
   );
 };
 
-export default Index;
+const mapStateToProps = (state) => ({
+  user: getUser(state),
+});
+
+export default connect(mapStateToProps)(Index);
