@@ -15,6 +15,7 @@ import {
   Tooltip,
   Input,
   message,
+  Divider,
 } from "antd";
 import { useQuery } from "react-query";
 import dayjs from "dayjs";
@@ -181,6 +182,7 @@ const SocialConnectList = props => {
               setOpenCreatingCohort({
                 open: true,
                 campaignId: record?.campaignId,
+                count: record?.performanceDetails?.numberOfWalletAddress,
               });
             }}
           >
@@ -223,18 +225,19 @@ const SocialConnectList = props => {
     open: isOpenCreatingCohort?.open,
     content: (
       <div>
-        <Typography.Text type="secondary">
-          Create a new cohort based on the mapping data
-        </Typography.Text>
+        <Divider className="my2" />
+        <h4>Cohort Name</h4>
+
         <Input
-          className="mt1 mb2"
+          className="mt1 mb1"
           placeholder="Input cohort name"
           onChange={event => {
             setCohortName(event.target.value);
             // title = event.target.value;
           }}
         />
-        <div className="flex flex-row-reverse">
+        <h5>You have selected {isOpenCreatingCohort?.count} addresses.</h5>
+        <div className="flex flex-row-reverse mt2">
           <Button
             type="primary"
             loading={isCreatingCohort}
@@ -266,6 +269,12 @@ const SocialConnectList = props => {
             }}
           >
             {isCreatingCohort ? "Creating..." : "Create"}
+          </Button>
+          <Button
+            className="mr1"
+            onClick={() => setOpenCreatingCohort({ open: false })}
+          >
+            Cancel
           </Button>
         </div>
       </div>
