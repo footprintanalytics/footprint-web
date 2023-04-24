@@ -174,6 +174,19 @@ const SocialConnectList = props => {
             View
           </Button>
           <Button
+            className="p0"
+            type="link"
+            disabled={!(record?.performanceDetails?.numberOfWalletAddress > 0)}
+            onClick={() => {
+              setOpenCreatingCohort({
+                open: true,
+                campaignId: record?.campaignId,
+              });
+            }}
+          >
+            Save as cohort
+          </Button>{" "}
+          <Button
             type="link"
             disabled={true}
             className="p0"
@@ -191,20 +204,6 @@ const SocialConnectList = props => {
             }}
           >
             Detail
-          </Button>
-
-          <Button
-            className="p0"
-            type="link"
-            disabled={false}
-            onClick={() => {
-              setOpenCreatingCohort({
-                open: true,
-                campaignId: record?.campaignId,
-              });
-            }}
-          >
-            Save as cohort
           </Button>
         </Space>
       ),
