@@ -128,9 +128,9 @@ const UserTemplate = props => {
                     hoverable
                     style={{
                       width: "100%",
-                      borderWidth: 0,
+                      borderWidth: 0.5,
                       minHeight: 120,
-                      borderRadius: 8,
+                      borderRadius: 10,
                       backgroundImage: "url(" + item?.bg + ")",
                       backgroundSize: "cover",
                     }}
