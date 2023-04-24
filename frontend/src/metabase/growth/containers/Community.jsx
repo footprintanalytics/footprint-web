@@ -95,7 +95,7 @@ const Community = props => {
 
   const valueFilterOptionsList = [
     {
-      label: "Net Worth >=",
+      label: "In-Game Net Worth >=",
       indicator: "netWorth",
       comparisonSymbol: "gte",
       defaultValue:
@@ -103,7 +103,7 @@ const Community = props => {
           ?.comparisonValue ?? null,
     },
     {
-      label: "NFT Holding Value >=",
+      label: "In-Game NFT Holding Value >=",
       indicator: "nftHoldingValue",
       comparisonSymbol: "gte",
       defaultValue:
@@ -112,12 +112,21 @@ const Community = props => {
         )?.comparisonValue ?? null,
     },
     {
-      label: "Token Holding Value >=",
+      label: "In-Game Token Holding Value >=",
       indicator: "tokenHoldingValue",
       comparisonSymbol: "gte",
       defaultValue:
         walletListParams?.filters?.find(
           item => item.indicator === "tokenHoldingValue",
+        )?.comparisonValue ?? null,
+    },
+    {
+      label: "In-Game Trading Value(30D) >=",
+      indicator: "tradingValue",
+      comparisonSymbol: "gte",
+      defaultValue:
+        walletListParams?.filters?.find(
+          item => item.indicator === "tradingValue",
         )?.comparisonValue ?? null,
     },
     // { label: "Profit >=", indicator: "profit", comparisonSymbol: "gte" },
@@ -151,17 +160,17 @@ const Community = props => {
             props.router?.push({
               pathname: getGrowthProjectPath(
                 props.router?.params?.project,
-                "Opt-In Tool",
+                "Social Connect",
               ),
             })
           }
         >
-          Opt-In
+          Social Connect
         </a>
       ),
-      title: "Opt-In", //required
+      title: "Social Connect", //required
       link: null,
-      disabled: true,
+      disabled: false,
     },
   ];
 
@@ -268,6 +277,13 @@ const Community = props => {
       title: "In-Game Token Value",
       dataIndex: "holdingTokenValue",
       key: "holdingTokenValue",
+      align: "right",
+      render: text => (text !== null ? "$" + valueFormat(text) : ""),
+    },
+    {
+      title: "In-Game Trading Value(30D)",
+      dataIndex: "tradingValue",
+      key: "tradingValue",
       align: "right",
       render: text => (text !== null ? "$" + valueFormat(text) : ""),
     },

@@ -5,6 +5,14 @@ import { notification, Button, Modal } from "antd";
 import Link from "antd/lib/typography/Link";
 import { PublicApi, maybeUsePivotEndpoint } from "metabase/services";
 
+//  quickFilter --> Quick Filter
+export function formatKeyLabel(label:string) {
+  return label.replace(/(?:^|\s)\S/g, (char:string) => char.toUpperCase())
+  .replace(/([a-z])([A-Z])/g, '$1 $2');
+
+}
+
+//  quick-filter --> Quick Filter
 export function formatTag(tag: string) {
   const words = tag.split("-");
   for (let i = 0; i < words.length; i++) {
@@ -233,6 +241,7 @@ export function getGaMenuTabs(
         "Project Info",
         "Template Gallery",
         "Opt-In Tool",
+        "Social Connect",
         "Custom Analysis",
         "Activator",
         "Channel",

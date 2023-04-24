@@ -25,7 +25,7 @@ import UserTemplate from "./UserTemplate";
 import CohortList from "./CohortList";
 import Community from "./Community";
 import UserProfile from "./UserProfile";
-import OptInList from "./OptInList";
+import SocialConnectList from "./SocialConnectList";
 import "../css/index.css";
 
 const Project = props => {
@@ -215,13 +215,21 @@ const Project = props => {
         ></ProjectInfo>
       );
     }
-    if (["OptInList", "Opt-In", "OptIn", "Opt-In Tool"].includes(current_tab)) {
+    if (
+      [
+        "OptInList",
+        "Opt-In",
+        "OptIn",
+        "Opt-In Tool",
+        "Social Connect",
+      ].includes(current_tab)
+    ) {
       return (
-        <OptInList
+        <SocialConnectList
           location={location}
           router={router}
           project={getProjectObject(project)}
-        ></OptInList>
+        ></SocialConnectList>
       );
     }
     if (["Community", "Members"].includes(current_tab)) {

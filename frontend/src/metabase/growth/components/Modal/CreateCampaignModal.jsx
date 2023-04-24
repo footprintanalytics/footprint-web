@@ -52,7 +52,7 @@ const CreateCampaignModal = props => {
     open,
     onCancel,
     onSuccess,
-    optInType,
+    socialType,
     channel,
   } = props;
   const [isSubmiting, setSubmiting] = useState(false);
@@ -77,7 +77,7 @@ const CreateCampaignModal = props => {
     if (!isLoading) {
       data?.list?.forEach(item => {
         if (item.campaignType === "User Contact") {
-          const opt_in_campaign = {
+          const social_connect_campaign = {
             key: item.campaignType,
             label: item.campaignName ?? item.campaignType,
             // description: item.description,
@@ -85,8 +85,8 @@ const CreateCampaignModal = props => {
             disabled: item.status !== "enable",
             ...item,
           };
-          setCampaignSelected(opt_in_campaign);
-          optInType && setupSelectedChannel(optInType, opt_in_campaign);
+          setCampaignSelected(social_connect_campaign);
+          socialType && setupSelectedChannel(socialType, social_connect_campaign);
           return;
         }
       });
@@ -96,21 +96,15 @@ const CreateCampaignModal = props => {
   useEffect(() => {
     if (open) {
       setupPreviewChannel(channel);
-      setupSelectedChannel(optInType, campaignSelected);
+      setupSelectedChannel(socialType, campaignSelected);
     }
     setShow(open);
   }, [open]);
 
-  // useEffect(() => {
-  //   if (optInType) {
-  //     setupOptInType(campaignSelected);
-  //   }
-  // }, [optInType]);
-
   const setupPreviewChannel = channel => {
     if (channel) {
       let tempChannel = null;
-      if (optInType === "Discord") {
+      if (socialType === "Discord") {
         tempChannel = [
           {
             ...channel,
@@ -166,7 +160,7 @@ const CreateCampaignModal = props => {
             ],
           },
         ];
-      } else if (optInType === "Twitter") {
+      } else if (socialType === "Twitter") {
         tempChannel = [
           {
             ...channel,
@@ -191,11 +185,11 @@ const CreateCampaignModal = props => {
     }
   };
 
-  const setupSelectedChannel = (optInType, campaign) => {
+  const setupSelectedChannel = (socialType, campaign) => {
     const channelType =
-      optInType === "Twitter"
+      socialType === "Twitter"
         ? "Tweet URL"
-        : optInType === "Discord"
+        : socialType === "Discord"
         ? "Discord bot"
         : "";
     const channelTemp = campaign?.channels?.find(
@@ -211,7 +205,7 @@ const CreateCampaignModal = props => {
       <>
         {details?.map((detail, index) => {
           const isTwtterUri =
-            optInType === "Twitter" && detail.key === "twitterUri";
+            socialType === "Twitter" && detail.key === "twitterUri";
           // if (isTwtterUri) {
           //   detail.type = "textArea";
           // }
@@ -400,7 +394,7 @@ const CreateCampaignModal = props => {
     // 组装 request 的参数
     const requestParam = {
       projectId: parseInt(project?.id),
-      title: `${optInType} Opt-In tool`,
+      title: `${socialType} Social Connect tool`,
       cohortIds: [],
       campaignType: campaignSelected.campaignType,
       details: campaignDetails,
@@ -409,7 +403,7 @@ const CreateCampaignModal = props => {
     addCampaign(requestParam)
       .then(result => {
         message.success("The campaign creation was successful.");
-        if (optInType === "Discord") {
+        if (socialType === "Discord") {
           //  /connect campaign_id:2 twitter_handler:enable email:enable
           setShowDiscordStep3({
             show: true,
@@ -427,17 +421,17 @@ const CreateCampaignModal = props => {
 
   return (
     <Modal
-      // title={`Create ${optInType} Opt-In`}
+      // title={`Create ${socialType} Opt-In`}
       title={
         <div className="text-bold text-center">
           <Avatar
             src={`https://footprint-imgs.oss-us-east-1.aliyuncs.com/${
-              optInType === "Twitter" ? "20220516201254" : "20220516201343"
+              socialType === "Twitter" ? "20220516201254" : "20220516201343"
             }.png`}
             size={25}
             className="bg-white mr1"
           ></Avatar>
-          {optInType === "Twitter"
+          {socialType === "Twitter"
             ? "Enter the Tweet URL in the below"
             : "Invite the Discord Bot"}
         </div>
@@ -535,7 +529,7 @@ const CreateCampaignModal = props => {
                         <>
                           <div>
                             {getChannelConfigPanel(channelItem.details)}
-                            {optInType === "Discord" && (
+                            {socialType === "Discord" && (
                               <div className="mb2">
                                 <div className="flex flex-row mt3 items-center">
                                   <div>
