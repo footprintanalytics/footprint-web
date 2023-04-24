@@ -5,6 +5,7 @@ import { connect } from "react-redux";
 import { push } from "react-router-redux";
 import { omit, isArray, keys } from "lodash";
 import {
+  formatKeyLabel,
   getGrowthProjectPath,
   showCohortSuccessModal,
 } from "metabase/growth/utils/utils";
@@ -47,13 +48,13 @@ const CreateCohort2 = ({
       if (isArray(params[k]) && params[k].length > 0 && params[k] !== 0) {
         if (k === "filters") {
           conditions.push({
-            name: k,
+            name: formatKeyLabel(k),
             value: params[k].map(item => {
               return `${item.indicator} ${item.comparisonSymbol} ${item.comparisonValue}\n`;
             }),
           });
         } else {
-          conditions.push({ name: k, value: params[k] });
+          conditions.push({ name: formatKeyLabel(k), value: params[k] });
         }
       }
     });
