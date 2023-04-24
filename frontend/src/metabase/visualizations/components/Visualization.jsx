@@ -44,6 +44,7 @@ import { getOssUrl } from "metabase/lib/image";
 import ErrorGuide from "metabase/query_builder/components/ErrorGuide";
 import CreateCampaign from "metabase/growth/components/buttons/CreateCampaign";
 import CreateCohort from "metabase/growth/components/buttons/CreateCohort";
+import SocialConnect from "metabase/growth/components/buttons/SocialConnect";
 import CreateFliterCohort from "metabase/growth/components/buttons/CreateFliterCohort";
 import FgaErrorGuide from "metabase/growth/components/FgaErrorGuide";
 import { datasetContainsNoResults } from "metabase-lib/queries/utils/dataset";
@@ -637,15 +638,19 @@ class Visualization extends React.PureComponent {
           <>
             {!this.props.isEditing &&
               isDashboard &&
-              this.props.dashcard?.card?.name === "Twitter Followers Info" && (
-                <Button
-                  type="primary"
-                  onClick={() => {
-                    // router.push(getGrowthProjectPath(project.protocolSlug, "Connector"));
+              ["Discord Members Info", "Twitter Followers Info"].includes(
+                this.props.dashcard?.card?.name,
+              ) && (
+                <div
+                  className="flex"
+                  style={{
+                    position: "absolute",
+                    right: 25,
+                    top: 10,
                   }}
                 >
-                  Set up now
-                </Button>
+                  <SocialConnect />
+                </div>
               )}
             {this.state.visualization?.identifier === "fgatable" &&
               !this.props.isEditing &&
