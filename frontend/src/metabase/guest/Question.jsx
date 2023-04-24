@@ -9,14 +9,10 @@ import EmbedFrame from "./components/EmbedFrame";
 import title, { updateTitle } from "metabase/hoc/Title";
 import { applyParameters } from "metabase-lib/queries/utils/card";
 
-import {
-  PublicApi,
-  setPublicQuestionEndpoints,
-  maybeUsePivotEndpoint,
-} from "metabase/services";
+import { maybeUsePivotEndpoint, PublicApi, setPublicQuestionEndpoints } from "metabase/services";
 
 import { setErrorPage } from "metabase/redux/app";
-import { addParamValues, addFields } from "metabase/redux/metadata";
+import { addFields, addParamValues } from "metabase/redux/metadata";
 import { getMetadata } from "metabase/selectors/metadata";
 import PublicMode from "metabase/modes/components/modes/PublicMode";
 import { updateIn } from "icepick";
@@ -31,9 +27,9 @@ import { getParametersFromCard } from "metabase-lib/parameters/utils/template-ta
 import _ from "underscore";
 import { getCardUiParameters } from "metabase-lib/parameters/utils/cards";
 import Meta from "metabase/components/Meta";
-import { getDescription } from "metabase/lib/formatting/footprint";
 import { getOssUrl } from "metabase/lib/image";
 import { ossPath } from "metabase/lib/ossPath";
+import { getParameterValuesByIdFromQueryParams } from "metabase/parameters/utils/parameter-values";
 
 const mapStateToProps = state => ({
   metadata: getMetadata(state),
@@ -68,7 +64,7 @@ class PublicQuestion extends Component {
   }
 
   async UNSAFE_componentWillMount() {
-    const { setErrorPage, location } = this.props;
+    const { setErrorPage, location: { query }, } = this.props;
 
     const uuid = this.uuid;
 
@@ -110,11 +106,26 @@ class PublicQuestion extends Component {
       if (card.param_fields) {
         this.props.addFields(card.param_fields);
       }
-      this.setState({ card }, async () => {
-        await this.run();
-        this.setState({ initialized: true });
-        updateTitle(card.name);
-      });
+      const parameters = getCardUiParameters(
+        card,
+        this.props.metadata,
+        {},
+        card.parameters || undefined,
+      );
+      const parameterValuesById = getParameterValuesByIdFromQueryParams(
+        parameters,
+        query,
+        this.props.metadata,
+      );
+
+      this.setState(
+        { card, parameterValues: parameterValuesById },
+        async () => {
+          await this.run();
+          this.setState({ initialized: true });
+          updateTitle(card.name);
+        },
+      );
     } catch (error) {
       console.error("error", error);
       setErrorPage(error);
@@ -188,7 +199,7 @@ class PublicQuestion extends Component {
     const uuid = this.uuid;
 
     const { card, parameterValues, parameter_mappings } = this.state;
-    let parameters = this.state.parameters;
+    const parameters = this.state.parameters || card.parameters || getParametersFromCard(card);
 
     if (!card) {
       return;
