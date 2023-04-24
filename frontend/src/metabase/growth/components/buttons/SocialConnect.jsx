@@ -46,7 +46,7 @@ const SocialConnect = ({
           });
         }}
       >
-        {btnText ?? "Social Connect"}
+        {btnText ?? "Map wallet address"}
       </Button>
     </>
   );
