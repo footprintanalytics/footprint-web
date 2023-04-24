@@ -12,20 +12,24 @@ import TableName from "./TableName";
 import TablePreview from "./TablePreview";
 import { useDebounce } from "ahooks";
 import NeedPermissionModal from "metabase/components/NeedPermissionModal";
+import TableBelong from "metabase/containers/customUpload/components/Confirm/TableBelong";
 
 const Confirm = ({
+  user,
   prepareData = mockPrepareData,
   onPrev,
   onNext,
   onPrepareDataChange,
 }) => {
+  const isPaidUser = user && user.vipInfo && user.vipInfo.type !== "free";
   const project = getProject();
 
   const [tableName, setTableName] = useState(prepareData.tableName);
+  const [belongType, setBelongType] = useState("public");
   const checkMutate = useMutation(checkTableName);
   const confirmMutate = useMutation(uploadCSVConfirm);
   const debouncedTableName = useDebounce(tableName, { wait: 500 });
-  const [needPermissionModal, setNeedPermissionModal] = useState(false);
+  const [needPermissionModal, setNeedPermissionModal] = useState();
 
   useEffect(() => {
     if (!debouncedTableName) return;
@@ -39,14 +43,18 @@ const Confirm = ({
         desc="Please make sure that Footprint interprets your data correctly."
         onPrev={onPrev}
         onNext={async () => {
+          if (!isPaidUser && belongType === "private") {
+            setNeedPermissionModal("Upgrade to the Business Plan to protect your data privacy");
+            return ;
+          }
           try {
             const { tableName, storageName, tableSchema } = prepareData;
-            const params = { tableName, storageName, tableSchema, project };
+            const params = { tableName, storageName, tableSchema, project, belongType };
             await confirmMutate.mutateAsync(params);
             onNext();
           } catch (error) {
             if (error.inclueds("upload times")) {
-              setNeedPermissionModal(true);
+              setNeedPermissionModal("Upgrade your account to unlock upload");
             }
           }
         }}
@@ -67,12 +75,17 @@ const Confirm = ({
             prepareData={prepareData}
             onPrepareDataChange={onPrepareDataChange}
           />
+          <TableBelong
+            className="mt4"
+            belongType={belongType}
+            setBelongType={setBelongType}
+          />
         </div>
       </Step>
-      {needPermissionModal && (
+      {!!needPermissionModal && (
         <NeedPermissionModal
-          title="Upgrade your account to unlock upload"
-          onClose={() => setNeedPermissionModal(false)}
+          title={needPermissionModal}
+          onClose={() => setNeedPermissionModal(null)}
         />
       )}
     </>

@@ -127,7 +127,7 @@ const Index = ({ router, user }) => {
         confirmLoading={confirmLoading}
         onCancel={handleCancel}
       >
-        <p>{`Do you set dataset to ${open.belongType === "private" ? "public" : "private"} ?`}</p>
+        <p>{`Do you set this data to ${open.belongType === "private" ? "public" : "private"} ?`}</p>
       </Modal>
     </>
   );
