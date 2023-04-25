@@ -48,16 +48,19 @@ export function showCohortSuccessModal(
     content: "You can now view the User Profile of this cohort .",
     onOk() {
       router?.push({
-        pathname: `/growth/public/dashboard/55b1eb29-b15e-458f-9241-1862a0d19d3b`,
-        query: { tag: cohort?.title, cohort_title: cohort?.title },
-        hash: `#from=${from}`,
+        pathname: getGrowthProjectPath(router?.params?.project, "Cohort"),
       });
+      // router?.push({
+      //   pathname: `/growth/public/dashboard/55b1eb29-b15e-458f-9241-1862a0d19d3b`,
+      //   query: { tag: cohort?.title, cohort_title: cohort?.title ,cohortId: cohort?.id},
+      //   hash: `#from=${from}`,
+      // });
     },
     onCancel() {
       onCancel?.();
     },
     closable: true,
-    okText: "View User Profile",
+    okText: "View Cohort",
     cancelText: "Close",
   });
 }
@@ -78,19 +81,18 @@ export function updateHashValue(
   );
 }
 
-export function checkIsDemoAccountAndAlert(
-  notificationApi = notification,
+export function contactUs(
+  modal = Modal,
   user: any,
   action: () => any,
   logout: () => any,
+  closable = true,
 ) {
   // if (user && user.email === "fga@footprint.network") {
-  const key = "checkIsDemoAccountAndAlert";
-  notificationApi.info({
-    key,
-    message: `Contact Us`,
-    duration: null,
-    description: (
+  modal.info({
+    title: "Contact Us",
+    closable: closable,
+    content: (
       <>
         <div className=" mt1 text-light">
           If you wish to view data dashboards related to your own project,
@@ -112,32 +114,10 @@ export function checkIsDemoAccountAndAlert(
         </div>
       </>
     ),
-    placement: "top",
-    btn: (
-      <>
-        <Button
-          type="primary"
-          // size="small"
-          className="rounded"
-          target="_blank"
-          href="https://forms.gle/Xs8WahhYh26xKoDj7"
-        >
-          Book a meeting
-        </Button>
-        {/* <Button
-          type="primary"
-          size="small"
-          className="ml1"
-          onClick={async () => {
-            await logout?.();
-            notificationApi.destroy(key);
-            localStorage.setItem("sign-out-demo-account", "true");
-          }}
-        >
-          Create account
-        </Button> */}
-      </>
-    ),
+    okText: "Book a meeting",
+    onOk() {
+      window.open("https://forms.gle/Xs8WahhYh26xKoDj7", "_blank");
+    },
   });
   // } else {
   //   action();
