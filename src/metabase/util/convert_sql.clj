@@ -81,7 +81,7 @@
 
 (defn handle-convert [sql col fga-schema]
   (let [fga-tables (into [] (get-fga-table-white-list))
-        is_include (some #(str/includes? col %) fga-tables)]
+        is_include (some #(= col %) fga-tables)]
     (if is_include
       (let [trimTable (str/trim col)
             hasDot (str/includes? trimTable ".")]
@@ -94,7 +94,7 @@
 
 (defn canConvert [col]
   (let [fga-tables (into [] (get-fga-table-white-list))
-        is_include (some #(str/includes? col %) fga-tables)]
+        is_include (some #(= col %) fga-tables)]
     is_include))
 
 (defn canRunFGAConvert [sqlTables]
@@ -107,6 +107,7 @@
             group-regex #"(?<=from|join|FROM|JOIN)+((?:\s|`|\")+(?:\w|`|\"|\.)+)"
             fix-sql (str/replace sql group-regex "$1 ")
             result (re-seq regex sql)]
+        (println result)
          (if (canRunFGAConvert  result)
            (let [last-sql (reduce #(handle-convert %1 %2 fga-schema) fix-sql result)]
               last-sql
