@@ -150,10 +150,10 @@ const GaProjectSearch = props => {
       option.value
     ) {
       console.log("router", 3, getGrowthProjectPath(option.value));
-      // window.location.href = getGrowthProjectPath(option.value);
-      router?.push({
-        pathname: getGrowthProjectPath(option.value),
-      });
+      window.location.href = getGrowthProjectPath(option.value);
+      // router?.push({
+      //   pathname: getGrowthProjectPath(option.value),
+      // });
     }
   };
   return (
