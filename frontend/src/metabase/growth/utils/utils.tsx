@@ -302,6 +302,7 @@ export function clearGACache() {
 }
 
 export function saveLatestGAProject(LatestGAProject: string) {
+  console.log("saveLatestGAProject", LatestGAProject);
   localStorage.setItem("LatestGAProject", LatestGAProject);
 }
 export function getLatestGAProject() {

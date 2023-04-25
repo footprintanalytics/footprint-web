@@ -49,20 +49,23 @@ const Project = props => {
           ? gaMenuTabs?.menuTabs[0].children[0].key
           : gaMenuTabs?.menuTabs[0]?.key;
       setTab(tempMenu);
+      console.log("tempMenu", project, tempMenu);
       router.push(getGrowthProjectPath(project, tempMenu));
     }
-  }, [gaMenuTabs, menu, project, router]);
+  }, [gaMenuTabs, menu, project]);
 
   useEffect(() => {
-    setGaMenuTabs(
-      getGaMenuTabs(
-        tabs_data,
-        (projectObject ?? demoProjectData).protocolType,
-        (projectObject ?? demoProjectData).nftCollectionAddress?.length > 0,
-        user,
-      ),
-    );
-  }, [demoProjectData, projectObject, tabs_data, user]);
+    if (projectObject) {
+      setGaMenuTabs(
+        getGaMenuTabs(
+          tabs_data,
+          projectObject.protocolType,
+          projectObject?.nftCollectionAddress?.length > 0,
+          user,
+        ),
+      );
+    }
+  }, [projectObject, user]);
 
   useEffect(() => {
     if (projectPath) {
@@ -121,7 +124,8 @@ const Project = props => {
                   />
                 }
                 // title="There is currently no data available for this project."
-                subTitle={`I'm sorry, the content for this ${page} page is not yet ready. You can visit our homepage for now and stay tuned for more high-quality content coming soon. We appreciate your patience.`}
+                // subTitle={`I'm sorry, the content for this ${page} page is not yet ready. You can visit our homepage for now and stay tuned for more high-quality content coming soon. We appreciate your patience.`}
+                subTitle="Coming Soon~"
                 extra={
                   <Button
                     type="primary"
@@ -172,6 +176,25 @@ const Project = props => {
           projectId={getLatestGAProjectId()}
           projectPath={projectPath}
         ></UserTemplate>
+      );
+    }
+    if (
+      current_tab === "GameFi" &&
+      !projectObject?.nftCollectionAddress?.length > 0
+    ) {
+      // GameFi Project without NFT
+      return projectObject?.protocolSlug ? (
+        <PublicDashboard
+          params={{ uuid: "82cf8827-1962-47d3-a31e-dd72d9262520" }}
+          location={location}
+          project={getProjectObject()}
+          isFullscreen={false}
+          hideTitle={true}
+          key={projectObject?.protocolSlug}
+          hideFooter
+        />
+      ) : (
+        <LoadingSpinner message="Loading..." />
       );
     }
     if (current_tab === "UserProfile") {
@@ -266,7 +289,6 @@ const Project = props => {
       );
     }
     if (current_tab === "Campaign") {
-      // return comingSoon("Campaign");
       return <CampaignList router={router} location={location}></CampaignList>;
     }
     if (current_tab === "CampaignDetail") {
@@ -332,8 +354,9 @@ const Project = props => {
     }
     return comingSoon("");
   };
-  return <>{getContentPannel(tab)}</>;
-};
+  return comingSoon("");
+  // return <>{getContentPannel(tab)}</>;
+};;
 
 const mapStateToProps = (state, props) => {
   return {

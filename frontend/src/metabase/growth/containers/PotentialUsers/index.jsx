@@ -141,7 +141,7 @@ const PotentialUsers = props => {
             }
           /> */}
           <Link
-            to={`/growth/public/dashboard/f7cd2f21-1e14-438d-8820-011418607450?wallet_address=${text}#from=Community`}
+            to={`/growth/public/dashboard/f7cd2f21-1e14-438d-8820-011418607450?wallet_address=${text}#from=Potential User`}
           >
             <div className="flex flex-col">
               {String(text).slice(0, 4) + "..." + String(text).slice(-4)}
