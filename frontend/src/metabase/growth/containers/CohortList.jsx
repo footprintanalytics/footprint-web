@@ -61,10 +61,21 @@ const CohortList = props => {
       title: "Number of Wallets",
       dataIndex: "numberOfWallets",
       key: "numberOfWallets",
-      render: text => {
-        // if (!Number(text)) {
-        //   return <Badge status="processing" text="Loading" />;
-        // }
+      render: (text, { status }) => {
+        if (!Number(text)) {
+          switch (status) {
+            case "Ready":
+              return Number(text).toLocaleString();
+            case "Init":
+            case "Generating":
+            case "Failed":
+            default:
+              return <Badge status="processing" text="Loading" />;
+            // return <Badge status="processing" text="Initing" />;
+            // case "Failed":
+            //   return <Badge status="error" text="Failed" />;
+          }
+        }
         return Number(text).toLocaleString();
       },
     },
