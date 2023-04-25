@@ -6,10 +6,10 @@ import Link from "antd/lib/typography/Link";
 import { PublicApi, maybeUsePivotEndpoint } from "metabase/services";
 
 //  quickFilter --> Quick Filter
-export function formatKeyLabel(label:string) {
-  return label.replace(/(?:^|\s)\S/g, (char:string) => char.toUpperCase())
-  .replace(/([a-z])([A-Z])/g, '$1 $2');
-
+export function formatKeyLabel(label: string) {
+  return label
+    .replace(/(?:^|\s)\S/g, (char: string) => char.toUpperCase())
+    .replace(/([a-z])([A-Z])/g, "$1 $2");
 }
 
 //  quick-filter --> Quick Filter
@@ -27,7 +27,15 @@ export function formatType(tag: string) {
   }
   return words.join(" ");
 }
-
+// format number into 1,000,000.00
+export function valueFormat(value: number): string {
+  const formatter = new Intl.NumberFormat("en-US", {
+    style: "decimal",
+    minimumFractionDigits: 0,
+    maximumFractionDigits: 2,
+  });
+  return formatter.format(value);
+}
 export function showCohortSuccessModal(
   modalApi = Modal,
   cohort: any,
@@ -53,17 +61,6 @@ export function showCohortSuccessModal(
     cancelText: "Close",
   });
 }
-
-// format number into 1,000,000.00
-export function valueFormat(value: number): string {
-  const formatter = new Intl.NumberFormat("en-US", {
-    style: "decimal",
-    minimumFractionDigits: 0,
-    maximumFractionDigits: 2,
-  });
-  return formatter.format(value);
-}
-
 export function updateHashValue(
   hash: string,
   key: string,
@@ -87,64 +84,64 @@ export function checkIsDemoAccountAndAlert(
   action: () => any,
   logout: () => any,
 ) {
-  if (user && user.email === "fga@footprint.network") {
-    const key = "checkIsDemoAccountAndAlert";
-    notificationApi.info({
-      key,
-      message: `Contact Us`,
-      description: (
-        <>
-          <div className=" mt1 text-light">
-            This account is a public demo account for Footprint GA. If you wish
-            to view data dashboards related to your own project, please create a
-            new account and link it to your corresponding project. For any other
-            inquiries, please feel free to contact our BD team. Thank you.
-          </div>
-          <div className="mt2">
-            <Link target="_blank" href="mailto:sales@footprint.network">
-              Email: sales@footprint.network
-            </Link>
-          </div>
-          <div>
-            <Link
-              target="_blank"
-              className="mt2"
-              href="https://t.me/joinchat/4-ocuURAr2thODFh"
-            >
-              Telegram: @dplinnn
-            </Link>
-          </div>
-        </>
-      ),
-      placement: "top",
-      btn: (
-        <>
-          <Button
-            type="default"
-            size="small"
+  // if (user && user.email === "fga@footprint.network") {
+  const key = "checkIsDemoAccountAndAlert";
+  notificationApi.info({
+    key,
+    message: `Contact Us`,
+    duration: null,
+    description: (
+      <>
+        <div className=" mt1 text-light">
+          If you wish to view data dashboards related to your own project,
+          please feel free to contact our BD team. Thank you.
+        </div>
+        <div className="mt2">
+          <Link target="_blank" href="mailto:sales@footprint.network">
+            Email: sales@footprint.network
+          </Link>
+        </div>
+        <div>
+          <Link
             target="_blank"
-            href="https://forms.gle/Xs8WahhYh26xKoDj7"
+            className="mt2"
+            href="https://t.me/joinchat/4-ocuURAr2thODFh"
           >
-            Book a meeting
-          </Button>
-          <Button
-            type="primary"
-            size="small"
-            className="ml1"
-            onClick={async () => {
-              await logout?.();
-              notificationApi.destroy(key);
-              localStorage.setItem("sign-out-demo-account", "true");
-            }}
-          >
-            Create account
-          </Button>
-        </>
-      ),
-    });
-  } else {
-    action();
-  }
+            Telegram: @dplinnn
+          </Link>
+        </div>
+      </>
+    ),
+    placement: "top",
+    btn: (
+      <>
+        <Button
+          type="primary"
+          // size="small"
+          className="rounded"
+          target="_blank"
+          href="https://forms.gle/Xs8WahhYh26xKoDj7"
+        >
+          Book a meeting
+        </Button>
+        {/* <Button
+          type="primary"
+          size="small"
+          className="ml1"
+          onClick={async () => {
+            await logout?.();
+            notificationApi.destroy(key);
+            localStorage.setItem("sign-out-demo-account", "true");
+          }}
+        >
+          Create account
+        </Button> */}
+      </>
+    ),
+  });
+  // } else {
+  //   action();
+  // }
 }
 
 export function updateDashboardPara(
