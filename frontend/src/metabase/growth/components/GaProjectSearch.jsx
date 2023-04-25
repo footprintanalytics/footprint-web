@@ -11,7 +11,6 @@ import { QUERY_OPTIONS } from "metabase/containers/dashboards/shared/config";
 import { GetFgaProject } from "metabase/new-service";
 import { PublicApi, maybeUsePivotEndpoint } from "metabase/services";
 import { loadCurrentFgaProject } from "metabase/redux/user";
-import { top_protocols } from "../utils/data";
 import "../css/index.css";
 import {
   getGASearchHistory,
@@ -105,17 +104,6 @@ const GaProjectSearch = props => {
   }, [data, isLoading]);
 
   const [modal, contextHolder] = Modal.useModal();
-  // monitor data
-  const recommendOptions = useMemo(() => {
-    return [
-      {
-        ...top_protocols[0],
-        value: top_protocols[0].protocolSlug,
-        key: top_protocols[0].protocolSlug + "-recommend",
-        label: top_protocols[0].protocolName,
-      },
-    ];
-  }, []);
 
   useEffect(() => {
     if (projectPath) {
@@ -124,18 +112,18 @@ const GaProjectSearch = props => {
     } else {
       const temp_project =
         getLatestGAProject() ??
-        (userProject?.length > 0
-          ? userProject[0].value
-          : recommendOptions[0].value);
-      setCurrentProject(temp_project);
-      saveLatestGAProject(temp_project);
-      if (
-        location.pathname.startsWith("/growth/project") ||
-        location.pathname === "/growth"
-      ) {
-        router?.push({
-          pathname: getGrowthProjectPath(temp_project),
-        });
+        (userProject?.length > 0 ? userProject[0].value : null);
+      if (temp_project) {
+        saveLatestGAProject(temp_project);
+        setCurrentProject(temp_project);
+        if (
+          location.pathname.startsWith("/growth/project") ||
+          location.pathname === "/growth"
+        ) {
+          router?.push({
+            pathname: getGrowthProjectPath(temp_project),
+          });
+        }
       }
     }
   }, [projectPath]);
@@ -151,10 +139,10 @@ const GaProjectSearch = props => {
         location.pathname === "/growth") &&
       option.value
     ) {
-      window.location.href = getGrowthProjectPath(option.value);
-      // router?.push({
-      //   pathname: getGrowthProjectPath(option.value),
-      // });
+      // window.location.href = getGrowthProjectPath(option.value);
+      router?.push({
+        pathname: getGrowthProjectPath(option.value),
+      });
     }
   };
   return (
@@ -174,11 +162,7 @@ const GaProjectSearch = props => {
               .join(",")
               .includes(input.toLowerCase())
           }
-          options={
-            userProject?.length > 0
-              ? userProject
-              : [{ label: "Recommend Projects", options: recommendOptions }]
-          }
+          options={userProject?.length > 0 ? userProject : []}
         />
       )}
       {contextHolder}
