@@ -2,7 +2,7 @@
 /* eslint-disable react/prop-types */
 import React, { useState, useEffect, useMemo } from "react";
 import { connect } from "react-redux";
-import { Select } from "antd";
+import { Select, Modal } from "antd";
 import { withRouter } from "react-router";
 import { useQuery } from "react-query";
 import { set } from "lodash";
@@ -21,6 +21,7 @@ import {
   saveLatestGAProjectId,
   getGrowthProjectPath,
   getDashboardDatas,
+  contactUs,
 } from "../utils/utils";
 
 const GaProjectSearch = props => {
@@ -31,6 +32,7 @@ const GaProjectSearch = props => {
     menu,
     projectPath,
     setCreateFgaProjectModalShowAction,
+    logout,
   } = props;
   const [userProject, setUserProject] = useState([]);
   const [currentProject, setCurrentProject] = useState(projectPath);
@@ -81,16 +83,28 @@ const GaProjectSearch = props => {
       } else {
         setUserProject([]);
         if (user) {
-          setCreateFgaProjectModalShowAction?.({
-            show: true,
-            force: true,
-          });
+          contactUs(
+            modal,
+            user,
+            () => {
+              setCreateFgaProjectModalShowAction({ show: true });
+            },
+            () => {
+              logout?.(location.pathname);
+            },
+            false,
+          );
+          // setCreateFgaProjectModalShowAction?.({
+          //   show: true,
+          //   force: true,
+          // });
         }
       }
     }
     // getAllProtocol();
   }, [data, isLoading]);
 
+  const [modal, contextHolder] = Modal.useModal();
   // monitor data
   const recommendOptions = useMemo(() => {
     return [
@@ -167,6 +181,7 @@ const GaProjectSearch = props => {
           }
         />
       )}
+      {contextHolder}
     </div>
   );
 };
