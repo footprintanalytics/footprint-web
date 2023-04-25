@@ -18,7 +18,7 @@ import { StatisticIndex } from "../components/Community/StatisticIndex";
 import { QuickFilter } from "../components/Community/QuickFilter";
 import { ValueFilter } from "../components/Community/ValueFilter";
 import { WalletList } from "../components/Community/WalletList";
-import { getGrowthProjectPath, valueFormat } from "../utils/utils";
+import { formatTag, getGrowthProjectPath, valueFormat } from "../utils/utils";
 const Community = props => {
   const { router, location, children, user, projectPath, menu, project } =
     props;
@@ -209,25 +209,27 @@ const Community = props => {
       title: "Tag",
       key: "tags",
       dataIndex: "tags",
-      render: (_, { tags }) => (
-        <Typography.Paragraph
-          ellipsis={{
-            rows: 2,
-            expandable: true,
-            suffix: "",
-            symbol: "more",
-          }}
-          style={{
-            minWidth: 150,
-            maxWidth: 500,
-            fontSize: 10,
-            marginBottom: 0,
-          }}
-        >
-          {tags?.length > 0 ? (
-            <>
-              {tags?.join(", ")}
-              {/* {tags?.map(tag => {
+      render: (_, { tags }) => {
+        tags = tags.map(i => formatTag(i));
+        return (
+          <Typography.Paragraph
+            ellipsis={{
+              rows: 2,
+              expandable: true,
+              suffix: "",
+              symbol: "more",
+            }}
+            style={{
+              minWidth: 150,
+              maxWidth: 500,
+              fontSize: 10,
+              marginBottom: 0,
+            }}
+          >
+            {tags?.length > 0 ? (
+              <>
+                {tags?.join(", ")}
+                {/* {tags?.map(tag => {
                 return (
                   <Tag
                     className="rounded"
@@ -238,12 +240,13 @@ const Community = props => {
                   </Tag>
                 );
               })} */}
-            </>
-          ) : (
-            <></>
-          )}
-        </Typography.Paragraph>
-      ),
+              </>
+            ) : (
+              <></>
+            )}
+          </Typography.Paragraph>
+        );
+      },
     },
     {
       title: "In-Game Net Worth",

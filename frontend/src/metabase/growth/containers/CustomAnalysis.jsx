@@ -20,7 +20,15 @@ const CustomAnalysis = props => {
               <div style={{ color: "#ffffff80" }}>{i.desc}</div>
               <div className=" mt1">
                 <List
-                  grid={{ gutter: 10, column: 4 }}
+                  grid={{
+                    gutter: 10,
+                    xs: 1,
+                    sm: 1,
+                    md: 2,
+                    lg: 2,
+                    xl: 3,
+                    xxl: 4,
+                  }}
                   dataSource={i.items}
                   renderItem={item => (
                     <List.Item>

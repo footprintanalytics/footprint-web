@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 /* eslint-disable react/prop-types */
 import React, { useState, useEffect, useMemo } from "react";
 import { connect } from "react-redux";
@@ -51,14 +52,13 @@ const GaProjectSearch = props => {
 
   useEffect(() => {
     if (!isLoading && data?.data) {
-      console.log("isLoading data?.data finish", data?.data?.length);
       if (data?.data?.length > 0) {
         const projects = [];
         data?.data?.map(p => {
           projects.push({
             ...p,
             value: p.protocolSlug,
-            label: p.name,
+            label: p.protocolName ?? p.name,
             key: p.protocolSlug + p.id,
           });
         });
@@ -69,7 +69,11 @@ const GaProjectSearch = props => {
         saveLatestGAProjectId(projects[projectIndex].id);
         loadProjectDetail(projects[projectIndex].id);
         setUserProject(projects);
-        if (index === -1 || location.pathname === "/growth") {
+        if (
+          index === -1 ||
+          location.pathname === "/growth" ||
+          location.pathname.startsWith("/growth/project")
+        ) {
           router?.push({
             pathname: getGrowthProjectPath(projects[projectIndex].value, menu),
           });
@@ -116,18 +120,11 @@ const GaProjectSearch = props => {
         location.pathname === "/growth"
       ) {
         router?.push({
-          pathname: getGrowthProjectPath(temp_project, menu),
+          pathname: getGrowthProjectPath(temp_project),
         });
       }
     }
-  }, [
-    projectPath,
-    menu,
-    userProject,
-    recommendOptions,
-    router,
-    location.pathname,
-  ]);
+  }, [projectPath]);
   const handleProjectChange = (value, option) => {
     saveLatestGAProject(option.value);
     setCurrentProject(option.value);
@@ -140,9 +137,10 @@ const GaProjectSearch = props => {
         location.pathname === "/growth") &&
       option.value
     ) {
-      router?.push({
-        pathname: getGrowthProjectPath(option.value, menu),
-      });
+      window.location.href = getGrowthProjectPath(option.value);
+      // router?.push({
+      //   pathname: getGrowthProjectPath(option.value),
+      // });
     }
   };
   return (

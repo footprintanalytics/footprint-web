@@ -52,31 +52,35 @@ const CreateProjectModal = props => {
     }
   }, [open]);
 
-  async function createProject(projectName, protocol) {
-    const hide = message.loading("Loading...", 10);
-    setLoading(true);
-    try {
-      const result = await CreateFgaProject({
-        name: projectName.trim().replaceAll(" ", "-"),
-        protocolSlug: protocol,
-        protocolName: projectName.trim().replaceAll(" ", "-"),
-        nftContractAddress: [],
-      });
-      if (result) {
-        saveLatestGAProject(result.protocolSlug);
-        saveLatestGAProjectId(result.id);
-        onSuccess?.();
-        router?.push({
-          pathname: getGrowthProjectPath(result.protocolSlug),
-        });
-      }
-    } catch (error) {
-      console.log(error);
-    }
-    setLoading(false);
-    hide();
-    return true;
-  }
+   function createProject(projectName, protocol) {
+     const hide = message.loading("Loading...", 10);
+     setLoading(true);
+     CreateFgaProject({
+       name: projectName.trim().replaceAll(" ", "-"),
+       protocolSlug: protocol,
+       protocolName: projectName,
+       nftContractAddress: [],
+     })
+       .then(result => {
+         console.log(result);
+         saveLatestGAProject(result.protocolSlug);
+         saveLatestGAProjectId(result.id);
+         onSuccess?.();
+         window.location.href = getGrowthProjectPath(result.protocolSlug);
+         //  router?.push({
+         //    pathname: getGrowthProjectPath(result.protocolSlug),
+         //  });
+         return true;
+       })
+       .catch(error => {
+         console.log(error);
+         return false;
+       })
+       .finally(() => {
+         setLoading(false);
+         hide();
+       });
+   }
   const onFinish = values => {
     createProject(values.projectName, values.protocol);
   };

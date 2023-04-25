@@ -68,37 +68,6 @@ const SocialConnectList = props => {
       dataIndex: "createdAt",
       render: text => dayjs(text).format("YYYY-MM-DD HH:mm"),
     },
-    // {
-    //   title: "Title",
-    //   render: (_, row) => (
-    //     <Typography.Link
-    //       onClick={() => {
-    //         props.router?.push({
-    //           pathname: getGrowthProjectPath(
-    //             props.router?.params?.project,
-    //             "CampaignDetail",
-    //           ),
-    //           hash: "#id=" + row.campaignId,
-    //         });
-    //       }}
-    //     >
-    //       {row.title}
-    //     </Typography.Link>
-    //   ),
-    // },
-    // {
-    //   title: "Status",
-    //   dataIndex: "status",
-    //   render: text => <CampaignStatus value={text} />,
-    // },
-    // {
-    //   title: "Campaign Type",
-    //   dataIndex: "campaignType",
-    //   key: "campaignType",
-    //   render: text => {
-    //     return <Tag>{text}</Tag>;
-    //   },
-    // },
     {
       title: "Type",
       dataIndex: "channels",
@@ -187,7 +156,7 @@ const SocialConnectList = props => {
             }}
           >
             Save as cohort
-          </Button>{" "}
+          </Button>
           <Button
             type="link"
             disabled={true}
@@ -227,7 +196,6 @@ const SocialConnectList = props => {
       <div>
         <Divider className="my2" />
         <h4>Cohort Name</h4>
-
         <Input
           className="mt1 mb1"
           placeholder="Input cohort name"

@@ -7,7 +7,7 @@ import { connect } from "react-redux";
 import { withRouter } from "react-router";
 import { getUser, getFgaProject } from "metabase/selectors/user";
 import LoadingSpinner from "metabase/components/LoadingSpinner";
-import { fga_menu_data, top_protocols } from "../utils/data";
+import { fga_menu_data } from "../utils/data";
 import {
   getGrowthProjectPath,
   getLatestGAMenuTag,
@@ -21,23 +21,24 @@ interface IGaSidebarProp {
   currentProject?: string;
   router: any;
   user: any;
-  currentTab?: string;
+  currentMenu?: string;
   location: any;
   items: any[];
   projects?: any[];
   projectObject?: any;
 }
 const GaSidebar = (props: IGaSidebarProp) => {
-  const { currentProject, router, location, currentTab, projectObject, user } =
+  const { currentProject, router, location, currentMenu, projectObject, user } =
     props;
   const [items, setItems] = useState<any[]>([]);
   const [rootSubmenuKeys, setRootSubmenuKeys] = useState<any[]>([]);
-  const [tab, setTab] = useState<string>(currentTab!);
+  const [selectMenu, setSelectMenu] = useState<string>(currentMenu!);
   useEffect(() => {
+    if (!projectObject) return;
     const itemsTemp: any[] = getGaMenuTabs(
       fga_menu_data,
-      (projectObject ?? top_protocols[0]).protocolType,
-      (projectObject ?? top_protocols[0]).nftCollectionAddress?.length > 0,
+      projectObject.protocolType,
+      projectObject.nftCollectionAddress?.length > 0,
       user,
     )?.menuTabs;
     const rootSubmenuKeysTemp: any[] = [];
@@ -55,12 +56,12 @@ const GaSidebar = (props: IGaSidebarProp) => {
     //       ? items[0].children[0].key
     //       : items[0]?.key),
     // );
-    if (currentTab) {
-      setTab(currentTab);
+    if (currentMenu) {
+      setSelectMenu(currentMenu);
     }
-  }, [currentTab, items]);
+  }, [currentMenu, items]);
 
-  const [openKeys, setOpenKeys] = useState<string[]>([currentTab!]);
+  const [openKeys, setOpenKeys] = useState<string[]>([currentMenu!]);
 
   const onOpenChange: MenuProps["onOpenChange"] = keys => {
     const latestOpenKey = keys.find(key => openKeys.indexOf(key) === -1);
@@ -85,7 +86,7 @@ const GaSidebar = (props: IGaSidebarProp) => {
       }}
     >
       <>
-        {items?.length > 0 ? (
+        {projectObject && items?.length > 0 ? (
           <Menu
             style={{
               borderRight: "0px",
@@ -98,10 +99,10 @@ const GaSidebar = (props: IGaSidebarProp) => {
             mode="inline"
             openKeys={openKeys}
             onOpenChange={onOpenChange}
-            selectedKeys={[tab!]}
+            selectedKeys={[currentMenu!]}
             onSelect={item => {
               saveLatestGAMenuTag(item.key);
-              setTab(item.key);
+              setSelectMenu(item.key);
               router.push({
                 pathname: getGrowthProjectPath(
                   currentProject ?? getLatestGAProject() ?? "",
@@ -125,7 +126,7 @@ const mapStateToProps = (state: any, props: any) => {
     user: getUser(state),
     projectObject: getFgaProject(state),
     currentProject: props.params.project,
-    currentTab: props.params.menu,
+    currentMenu: props.params.menu,
   };
 };
 
