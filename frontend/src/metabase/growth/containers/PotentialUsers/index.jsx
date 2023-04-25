@@ -23,7 +23,7 @@ import { QUERY_OPTIONS } from "metabase/containers/dashboards/shared/config";
 import Link from "metabase/core/components/Link/Link";
 import { formatTableTitle } from "metabase/lib/formatting/footprint";
 import { ItemFilter } from "./ItemFilter";
-import { valueFormat } from "metabase/growth/utils/utils";
+import { formatTag, valueFormat } from "metabase/growth/utils/utils";
 
 const PotentialUsers = props => {
   const { router, location, project } = props;
@@ -155,41 +155,44 @@ const PotentialUsers = props => {
       title: "Tag",
       key: "tags",
       dataIndex: "tags",
-      render: (_, { tags }) => (
-        <Typography.Paragraph
-          ellipsis={{
-            rows: 2,
-            expandable: true,
-            suffix: "",
-            symbol: "more",
-          }}
-          style={{
-            minWidth: 150,
-            maxWidth: 500,
-            fontSize: 10,
-            marginBottom: 0,
-          }}
-        >
-          {tags?.length > 0 ? (
-            <>
-              {tags?.join(", ")}
-              {/* {tags?.map(tag => {
-                return (
-                  <Tag
-                    className="rounded"
-                    style={{ margin: 2.5, fontSize: 8, display: "inline" }}
-                    key={tag}
-                  >
-                    {tag}
-                  </Tag>
-                );
-              })} */}
-            </>
-          ) : (
-            <></>
-          )}
-        </Typography.Paragraph>
-      ),
+      render: (_, { tags }) => {
+        tags = tags.map(i => formatTag(i));
+        return (
+          <Typography.Paragraph
+            ellipsis={{
+              rows: 2,
+              expandable: true,
+              suffix: "",
+              symbol: "more",
+            }}
+            style={{
+              minWidth: 150,
+              maxWidth: 500,
+              fontSize: 10,
+              marginBottom: 0,
+            }}
+          >
+            {tags?.length > 0 ? (
+              <>
+                {tags?.join(", ")}
+                {/* {tags?.map(tag => {
+              return (
+                <Tag
+                  className="rounded"
+                  style={{ margin: 2.5, fontSize: 8, display: "inline" }}
+                  key={tag}
+                >
+                  {tag}
+                </Tag>
+              );
+            })} */}
+              </>
+            ) : (
+              <></>
+            )}
+          </Typography.Paragraph>
+        );
+      },
     },
     {
       title: "Net Worth",

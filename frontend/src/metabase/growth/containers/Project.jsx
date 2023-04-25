@@ -354,9 +354,9 @@ const Project = props => {
     }
     return comingSoon("");
   };
-  return comingSoon("");
-  // return <>{getContentPannel(tab)}</>;
-};;
+  // return comingSoon("");
+  return <>{getContentPannel(tab)}</>;
+}
 
 const mapStateToProps = (state, props) => {
   return {
