@@ -52,7 +52,6 @@ const GaProjectSearch = props => {
 
   useEffect(() => {
     if (!isLoading && data?.data) {
-      console.log("isLoading data?.data finish", data?.data?.length);
       if (data?.data?.length > 0) {
         const projects = [];
         data?.data?.map(p => {
@@ -66,7 +65,6 @@ const GaProjectSearch = props => {
         const index = projects.findIndex(i => i.value === currentProject);
         const projectIndex = index === -1 ? 0 : index;
         setCurrentProject(projects[projectIndex].value);
-        console.log(4);
         saveLatestGAProject(projects[projectIndex].value);
         saveLatestGAProjectId(projects[projectIndex].id);
         loadProjectDetail(projects[projectIndex].id);
@@ -76,11 +74,6 @@ const GaProjectSearch = props => {
           location.pathname === "/growth" ||
           location.pathname.startsWith("/growth/project")
         ) {
-          console.log(
-            "router",
-            1,
-            getGrowthProjectPath(projects[projectIndex].value, menu),
-          );
           router?.push({
             pathname: getGrowthProjectPath(projects[projectIndex].value, menu),
           });
@@ -113,7 +106,6 @@ const GaProjectSearch = props => {
   useEffect(() => {
     if (projectPath) {
       setCurrentProject(projectPath);
-      console.log(1);
       saveLatestGAProject(projectPath);
     } else {
       const temp_project =
@@ -122,13 +114,11 @@ const GaProjectSearch = props => {
           ? userProject[0].value
           : recommendOptions[0].value);
       setCurrentProject(temp_project);
-      console.log(2);
       saveLatestGAProject(temp_project);
       if (
         location.pathname.startsWith("/growth/project") ||
         location.pathname === "/growth"
       ) {
-        console.log("router", 2, getGrowthProjectPath(temp_project));
         router?.push({
           pathname: getGrowthProjectPath(temp_project),
         });
@@ -136,10 +126,8 @@ const GaProjectSearch = props => {
     }
   }, [projectPath]);
   const handleProjectChange = (value, option) => {
-    console.log(3);
     saveLatestGAProject(option.value);
     setCurrentProject(option.value);
-    console.log("option", option);
     if (option.id) {
       saveLatestGAProjectId(option.id);
       loadProjectDetail(option.id);
@@ -149,7 +137,6 @@ const GaProjectSearch = props => {
         location.pathname === "/growth") &&
       option.value
     ) {
-      console.log("router", 3, getGrowthProjectPath(option.value));
       window.location.href = getGrowthProjectPath(option.value);
       // router?.push({
       //   pathname: getGrowthProjectPath(option.value),
@@ -185,7 +172,6 @@ const GaProjectSearch = props => {
 };
 
 const mapStateToProps = (state, props) => {
-  console.log("state projectPath", props.params.project);
   return {
     user: getUser(state),
     projectObject: getFgaProject(state),
