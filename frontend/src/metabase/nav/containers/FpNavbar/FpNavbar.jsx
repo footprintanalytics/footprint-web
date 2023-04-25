@@ -635,7 +635,6 @@ class FpNavbar extends Component {
       if (block) {
         return;
       }
-      console.log("onCreateAction");
       afterSuccess();
     };
 
