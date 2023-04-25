@@ -107,7 +107,6 @@
             group-regex #"(?<=from|join|FROM|JOIN)+((?:\s|`|\")+(?:\w|`|\"|\.)+)"
             fix-sql (str/replace sql group-regex "$1 ")
             result (re-seq regex sql)]
-        (println result)
          (if (canRunFGAConvert  result)
            (let [last-sql (reduce #(handle-convert %1 %2 fga-schema) fix-sql result)]
               last-sql
