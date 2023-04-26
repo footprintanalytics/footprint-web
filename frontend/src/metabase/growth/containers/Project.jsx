@@ -35,7 +35,7 @@ const Project = props => {
   const [gaMenuTabs, setGaMenuTabs] = useState();
 
   useEffect(() => {
-    if (menu && menu !== currentMenu) {
+    if (menu && menu !== currentMenu && projectObject) {
       setCurrentMenu(menu);
     }
   }, [menu]);
@@ -57,6 +57,10 @@ const Project = props => {
         // setCurrentMenu(firstMenu);
         router.push(
           getGrowthProjectPath(projectObject?.protocolSlug, firstMenu),
+        );
+      } else {
+        router.replace(
+          getGrowthProjectPath(projectObject?.protocolSlug, currentMenu),
         );
       }
     }
@@ -355,7 +359,6 @@ const Project = props => {
     }
     return comingSoon("");
   };
-  // return comingSoon("");
   return (
     <>
       {projectObject ? (
