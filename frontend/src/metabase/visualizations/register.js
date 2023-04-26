@@ -40,6 +40,7 @@ import BarStack from "./visualizations/BarStack";
 import Bubble from "./visualizations/Bubble";
 import DoubleScalar from "metabase/visualizations/visualizations/DoubleScalar";
 import Graph from "./visualizations/Graph";
+import Sankey from "./visualizations/Sankey";
 import FGATable from "./visualizations/FGATable";
 
 export default function () {
@@ -81,6 +82,7 @@ export default function () {
   registerVisualization(Bubble);
   registerVisualization(DoubleScalar);
   registerVisualization(Graph);
+  registerVisualization(Sankey);
   registerVisualization(FGATable);
 
 
