@@ -2,7 +2,7 @@
 /* eslint-disable react/prop-types */
 import React, { useState, useEffect, useMemo } from "react";
 import { connect } from "react-redux";
-import { Select, Modal } from "antd";
+import { Select, Modal, Skeleton } from "antd";
 import { withRouter } from "react-router";
 import { useQuery } from "react-query";
 import { set } from "lodash";
@@ -141,22 +141,31 @@ const GaProjectSearch = props => {
   };
   return (
     <div className="flex flex-column items-center" style={{ minWidth: 300 }}>
-      <Select
-        showSearch
-        style={{ width: 300 }}
-        value={currentProject}
-        loading={isLoading}
-        onChange={handleProjectChange}
-        placeholder="Search by protocol or nft collection address"
-        optionFilterProp="children"
-        filterOption={(input, option) =>
-          (option?.label ?? "").toLowerCase().includes(input.toLowerCase()) ||
-          (option?.collections_list ?? [])
-            .join(",")
-            .includes(input.toLowerCase())
-        }
-        options={userProject?.length > 0 ? userProject : []}
-      />
+      {userProject?.length > 0 ? (
+        <Select
+          showSearch
+          style={{ width: 300 }}
+          value={currentProject}
+          loading={isLoading}
+          onChange={handleProjectChange}
+          placeholder="Search by protocol or nft collection address"
+          optionFilterProp="children"
+          filterOption={(input, option) =>
+            (option?.label ?? "").toLowerCase().includes(input.toLowerCase()) ||
+            (option?.collections_list ?? [])
+              .join(",")
+              .includes(input.toLowerCase())
+          }
+          options={userProject?.length > 0 ? userProject : []}
+        />
+      ) : (
+        <Skeleton.Button
+          active={true}
+          className="flex flex-column items-center"
+          style={{ width: 300, height: 30, marginTop: 15, padding: 0 }}
+          paragraph={false}
+        />
+      )}
 
       {contextHolder}
     </div>

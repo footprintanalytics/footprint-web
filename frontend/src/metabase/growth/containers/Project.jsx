@@ -32,15 +32,23 @@ const Project = props => {
   const { router, location, children, user, menu, projectPath, projectObject } =
     props;
   const [currentMenu, setCurrentMenu] = useState(menu);
-  const [gaMenuTabs, setGaMenuTabs] = useState();
+  const [gaMenuTabs, setGaMenuTabs] = useState(null);
 
   useEffect(() => {
+    console.log(
+      "Project.jsx useEffect menu => ",
+      "current: " + currentMenu,
+      ", new: " + menu,
+      projectObject,
+    );
     if (menu && menu !== currentMenu && projectObject) {
+      console.log("Project.jsx useEffect reset menu to => ", menu);
       setCurrentMenu(menu);
     }
   }, [menu]);
 
   useEffect(() => {
+    console.log("Project.jsx useEffect projectObject => ", projectObject);
     if (projectObject) {
       const newMenu = getGaMenuTabs(
         fga_menu_data,
@@ -49,12 +57,18 @@ const Project = props => {
         user,
       );
       setGaMenuTabs(newMenu);
+      console.log(
+        "Project.jsx useEffect findMenu => ",
+        currentMenu,
+        findMenu(currentMenu, newMenu?.menuTabs),
+      );
       if (!currentMenu || !findMenu(currentMenu, newMenu?.menuTabs)) {
         const firstMenu =
           newMenu?.menuTabs[0]?.children?.length > 0
             ? newMenu?.menuTabs[0].children[0].key
             : newMenu?.menuTabs[0]?.key;
-        // setCurrentMenu(firstMenu);
+        console.log("Project.jsx useEffect reset to firstMenu => ", firstMenu);
+        setCurrentMenu(firstMenu);
         router.push(
           getGrowthProjectPath(projectObject?.protocolSlug, firstMenu),
         );
@@ -63,6 +77,8 @@ const Project = props => {
           getGrowthProjectPath(projectObject?.protocolSlug, currentMenu),
         );
       }
+    } else {
+      setGaMenuTabs(null);
     }
   }, [projectObject, user]);
 
@@ -158,6 +174,10 @@ const Project = props => {
   };
 
   const getContentPannel = current_tab => {
+    if (!projectObject || !currentMenu || !gaMenuTabs) {
+      return <LoadingSpinner message="Loading..." />;
+    }
+    console.log("Project.jsx getContentPannel current_tab => ", current_tab);
     const WrapPublicDashboard = current_tab =>
       projectObject?.protocolSlug ? (
         <PublicDashboard
@@ -366,7 +386,12 @@ const Project = props => {
   return (
     <>
       {projectObject ? (
-        <>{currentMenu && getContentPannel(currentMenu)}</>
+        <>
+          {currentMenu &&
+            projectObject &&
+            gaMenuTabs &&
+            getContentPannel(currentMenu)}
+        </>
       ) : (
         <>
           <LoadingSpinner message="Loading..." />
@@ -377,7 +402,12 @@ const Project = props => {
 };
 
 const mapStateToProps = (state, props) => {
-  // console.log("project state", getFgaProject(state));
+  // console.log(
+  //   "project mapStateToProps => ",
+  //   props.params.project,
+  //   props.params.menu,
+  //   getFgaProject(state),
+  // );
   return {
     user: getUser(state),
     projectPath: props.params.project,
