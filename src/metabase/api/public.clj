@@ -207,7 +207,7 @@
 
   Throws a 404 immediately if the Card isn't part of the Dashboard. Throws a 405 immediately if the Card has is_write
   set to true, as those are meant to only be executed through the actions api. Returns a `StreamingResponse`."
-  {:arglists '([& {:keys [dashboard-id card-id dashcard-id export-format parameters] :as options}])}
+  {:arglists '([& {:keys [dashboard-id card-id dashcard-id export-format parameters ignore_cache] :as options}])}
   [& {:keys [export-format parameters qp-runner card-id]
       :or   {qp-runner     qp/process-query-and-save-execution!
              export-format :api}
@@ -231,7 +231,7 @@
 (api/defendpoint ^:streaming GET "/dashboard/:uuid/dashcard/:dashcard-id/card/:card-id"
   "Fetch the results for a Card in a publicly-accessible Dashboard. Does not require auth credentials. Public
    sharing must be enabled."
-  [uuid card-id dashcard-id parameters fga-schema project-role power-level]
+  [uuid card-id dashcard-id parameters ignore_cache fga-schema project-role power-level]
   {parameters (s/maybe su/JSONString)}
   (validation/check-public-sharing-enabled)
   (println "public dashboard" fga-schema)
@@ -242,6 +242,7 @@
      :dashcard-id   dashcard-id
      :export-format :api
      :parameters    parameters
+     :ignore_cache   (= ignore_cache "true")
      :middleware {:fga-schema fga-schema :project-role project-role :power-level power-level})))
 
 (api/defendpoint GET "/oembed"
