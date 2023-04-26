@@ -27,7 +27,7 @@ import LoadingSpinner from "metabase/components/LoadingSpinner";
 import { isDark } from "metabase/dashboard/components/utils/dark";
 import ConfigConnector from "../components/config_panel/ConfigConnector";
 import "../css/utils.css";
-import { getGrowthProjectPath } from "../utils/utils";
+import { checkIsNeedContactUs, getGrowthProjectPath } from "../utils/utils";
 
 const { Text } = Typography;
 const ConnectorList = props => {
@@ -98,8 +98,11 @@ const ConnectorList = props => {
     }
   };
   const [connectors, setConnectors] = useState([]);
+
+  const [modal, contextHolder] = Modal.useModal();
   return (
     <div className=" flex flex-column items-center">
+      {contextHolder}
       <div
         className=" flex flex-column items-center"
         style={{
@@ -169,7 +172,17 @@ const ConnectorList = props => {
                                   ? false
                                   : true
                               }
-                              onClick={() => showDrawer(item)}
+                              onClick={() => {
+                                checkIsNeedContactUs(
+                                  modal,
+                                  project,
+                                  () => {
+                                    showDrawer(item);
+                                  },
+                                  () => {},
+                                  true,
+                                );
+                              }}
                             >
                               Connect
                             </Button>,

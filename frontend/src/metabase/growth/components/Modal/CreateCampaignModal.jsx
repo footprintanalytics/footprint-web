@@ -32,6 +32,7 @@ import {
   createFgaProjectModalShowAction,
 } from "metabase/redux/control";
 import "../../css/utils.css";
+import { checkIsNeedContactUs } from "metabase/growth/utils/utils";
 const { Option } = Select;
 const { TextArea } = Input;
 const layout = {
@@ -87,7 +88,8 @@ const CreateCampaignModal = props => {
             ...item,
           };
           setCampaignSelected(social_connect_campaign);
-          socialType && setupSelectedChannel(socialType, social_connect_campaign);
+          socialType &&
+            setupSelectedChannel(socialType, social_connect_campaign);
           return;
         }
       });
@@ -420,67 +422,70 @@ const CreateCampaignModal = props => {
       });
   };
 
+  const [modal, contextHolder] = Modal.useModal();
   return (
-    <Modal
-      // title={`Create ${socialType} Opt-In`}
-      title={
-        <div className="text-bold text-center">
-          <Avatar
-            src={`https://footprint-imgs.oss-us-east-1.aliyuncs.com/${
-              socialType === "Twitter" ? "20220516201254" : "20220516201343"
-            }.png`}
-            size={25}
-            className="bg-white mr1"
-          ></Avatar>
-          {socialType === "Twitter"
-            ? "Enter the Tweet URL in the below"
-            : "Invite the Discord Bot"}
-        </div>
-      }
-      width={600}
-      open={isShow}
-      footer={null}
-      afterClose={() => {
-        setShowDiscordStep3({ show: false });
-        setEditable(true);
-        setPreviewChannel([]);
-        setChannelSelectedValue([]);
-      }}
-      // onOk={handleOk}
-      onCancel={onCancel}
-    >
-      <Divider className="my2" />
-      {showDiscordStep3?.show ? (
-        <div className="rounded p1 mt2" style={{ background: "#182034" }}>
-          <div className="flex flex-col mt2 items-center">
-            <img
-              src="https://footprint-imgs.oss-us-east-1.aliyuncs.com/20220317121550.png"
-              style={{ width: 100, height: 100 }}
-            />
-            <Typography.Title level={4} className="mt2">
-              Create Discord Bot successfully!
-            </Typography.Title>
-            <Typography.Text type="secondary">
-              But you still have one final step to complete :
-            </Typography.Text>
-            <Typography.Text type="secondary">
-              Send the command to your channel
-            </Typography.Text>
-            <CopyToClipboard
-              text={showDiscordStep3?.botInitCmd}
-              onCopy={() => {
-                onSuccess?.();
-              }}
-            >
-              <Button
-                type={"primary"}
-                className="my3"
-                style={{ borderRadius: 4 }}
+    <>
+      {contextHolder}
+      <Modal
+        // title={`Create ${socialType} Opt-In`}
+        title={
+          <div className="text-bold text-center">
+            <Avatar
+              src={`https://footprint-imgs.oss-us-east-1.aliyuncs.com/${
+                socialType === "Twitter" ? "20220516201254" : "20220516201343"
+              }.png`}
+              size={25}
+              className="bg-white mr1"
+            ></Avatar>
+            {socialType === "Twitter"
+              ? "Enter the Tweet URL in the below"
+              : "Invite the Discord Bot"}
+          </div>
+        }
+        width={600}
+        open={isShow}
+        footer={null}
+        afterClose={() => {
+          setShowDiscordStep3({ show: false });
+          setEditable(true);
+          setPreviewChannel([]);
+          setChannelSelectedValue([]);
+        }}
+        // onOk={handleOk}
+        onCancel={onCancel}
+      >
+        <Divider className="my2" />
+        {showDiscordStep3?.show ? (
+          <div className="rounded p1 mt2" style={{ background: "#182034" }}>
+            <div className="flex flex-col mt2 items-center">
+              <img
+                src="https://footprint-imgs.oss-us-east-1.aliyuncs.com/20220317121550.png"
+                style={{ width: 100, height: 100 }}
+              />
+              <Typography.Title level={4} className="mt2">
+                Create Discord Bot successfully!
+              </Typography.Title>
+              <Typography.Text type="secondary">
+                But you still have one final step to complete :
+              </Typography.Text>
+              <Typography.Text type="secondary">
+                Send the command to your channel
+              </Typography.Text>
+              <CopyToClipboard
+                text={showDiscordStep3?.botInitCmd}
+                onCopy={() => {
+                  onSuccess?.();
+                }}
               >
-                Copy Command
-              </Button>
-            </CopyToClipboard>
-            {/* <Typography.Text className="mb2 text-center mx3">
+                <Button
+                  type={"primary"}
+                  className="my3"
+                  style={{ borderRadius: 4 }}
+                >
+                  Copy Command
+                </Button>
+              </CopyToClipboard>
+              {/* <Typography.Text className="mb2 text-center mx3">
               {`If you still haven't `}
               <a
                 href={showDiscordStep3?.botInviteUrl}
@@ -491,135 +496,141 @@ const CreateCampaignModal = props => {
               </a>
               {`, please do so before proceeding.`}
             </Typography.Text> */}
+            </div>
           </div>
-        </div>
-      ) : (
-        <>
-          {isLoading || !campaignSelected ? (
-            <LoadingSpinner message="Loading..." />
-          ) : (
-            <div
-              style={{ height: "100%", width: "100%" }}
-              className="flex flex-column w-full"
-            >
-              <Form
-                className="w-full"
-                {...layout}
-                colon={false}
-                labelWrap
-                initialValues={{
-                  campaignType: campaignSelected?.campaignType,
-                }}
-                ref={formRef}
-                scrollToFirstError={true}
-                layout="horizontal"
-                name="control-ref"
-                labelAlign="left"
-                onFinish={onFinish}
-                style={{ width: "100%" }}
+        ) : (
+          <>
+            {isLoading || !campaignSelected ? (
+              <LoadingSpinner message="Loading..." />
+            ) : (
+              <div
+                style={{ height: "100%", width: "100%" }}
+                className="flex flex-column w-full"
               >
-                <div
-                  className="rounded p1 mt1"
-                  style={{ background: "#182034" }}
+                <Form
+                  className="w-full"
+                  {...layout}
+                  colon={false}
+                  labelWrap
+                  initialValues={{
+                    campaignType: campaignSelected?.campaignType,
+                  }}
+                  ref={formRef}
+                  scrollToFirstError={true}
+                  layout="horizontal"
+                  name="control-ref"
+                  labelAlign="left"
+                  onFinish={onFinish}
+                  style={{ width: "100%" }}
                 >
-                  {(previewChannel?.length > 0
-                    ? previewChannel
-                    : channelSelectedValue
-                  )?.map(channelItem => {
-                    if (channelItem.details && channelItem.details.length > 0) {
-                      return (
-                        <>
-                          <div>
-                            {getChannelConfigPanel(channelItem.details)}
-                            {socialType === "Discord" && (
-                              <div className="mb2">
-                                <div className="flex flex-row mt3 items-center">
-                                  <div>
-                                    {channelItem.details.length + 1}. Invite the
-                                    bot to your server
-                                  </div>
-                                  <Button
-                                    type="primary"
-                                    size="small"
-                                    className="ml2"
-                                    onClick={() => {
-                                      window.open(
-                                        channel?.details?.botInviteUrl ??
-                                          "https://discord.com/api/oauth2/authorize?client_id=1089756391889178745&permissions=268435456&scope=bot",
-                                        "_blank",
-                                      );
-                                    }}
-                                    style={{ fontSize: 10, borderRadius: 4 }}
-                                  >
-                                    Invite Now
-                                  </Button>
-                                </div>
-                                {channel?.details?.botInitCmd && (
+                  <div
+                    className="rounded p1 mt1"
+                    style={{ background: "#182034" }}
+                  >
+                    {(previewChannel?.length > 0
+                      ? previewChannel
+                      : channelSelectedValue
+                    )?.map(channelItem => {
+                      if (
+                        channelItem.details &&
+                        channelItem.details.length > 0
+                      ) {
+                        return (
+                          <>
+                            <div>
+                              {getChannelConfigPanel(channelItem.details)}
+                              {socialType === "Discord" && (
+                                <div className="mb2">
                                   <div className="flex flex-row mt3 items-center">
                                     <div>
-                                      {channelItem.details.length + 2}. Send
-                                      command to your server
+                                      {channelItem.details.length + 1}. Invite
+                                      the bot to your server
                                     </div>
-                                    <CopyToClipboard
-                                      text={channel?.details?.botInitCmd}
-                                      onCopy={() => {
-                                        message.success("Copied Successfully!");
+                                    <Button
+                                      type="primary"
+                                      size="small"
+                                      className="ml2"
+                                      onClick={() => {
+                                        window.open(
+                                          channel?.details?.botInviteUrl ??
+                                            "https://discord.com/api/oauth2/authorize?client_id=1089756391889178745&permissions=268435456&scope=bot",
+                                          "_blank",
+                                        );
                                       }}
+                                      style={{ fontSize: 10, borderRadius: 4 }}
                                     >
-                                      <Button
-                                        type="primary"
-                                        size="small"
-                                        className="ml2"
-                                        style={{
-                                          fontSize: 10,
-                                          borderRadius: 4,
+                                      Invite Now
+                                    </Button>
+                                  </div>
+                                  {channel?.details?.botInitCmd && (
+                                    <div className="flex flex-row mt3 items-center">
+                                      <div>
+                                        {channelItem.details.length + 2}. Send
+                                        command to your server
+                                      </div>
+                                      <CopyToClipboard
+                                        text={channel?.details?.botInitCmd}
+                                        onCopy={() => {
+                                          message.success(
+                                            "Copied Successfully!",
+                                          );
                                         }}
                                       >
-                                        Copy Command
-                                      </Button>
-                                    </CopyToClipboard>
-                                  </div>
-                                )}
-                              </div>
-                            )}
-                          </div>
-                        </>
-                      );
-                    }
-                  })}
-                </div>
-                <Form.Item
-                  {...tailLayout}
-                  className="mt2"
-                  style={{ marginBottom: !0 }}
-                >
-                  <div className="flex w-full flex-row-reverse">
-                    <Button
-                      type="primary"
-                      htmlType="submit"
-                      disabled={!isEditable}
-                      className="ml-10  bg-blue-500 rounded"
-                      loading={isSubmiting}
-                    >
-                      Create
-                    </Button>
-                    <Button
-                      htmlType="button"
-                      onClick={() => {
-                        onCancel?.();
-                      }}
-                      className="rounded"
-                    >
-                      Cancel
-                    </Button>
+                                        <Button
+                                          type="primary"
+                                          size="small"
+                                          className="ml2"
+                                          style={{
+                                            fontSize: 10,
+                                            borderRadius: 4,
+                                          }}
+                                        >
+                                          Copy Command
+                                        </Button>
+                                      </CopyToClipboard>
+                                    </div>
+                                  )}
+                                </div>
+                              )}
+                            </div>
+                          </>
+                        );
+                      }
+                    })}
                   </div>
-                </Form.Item>
-              </Form>
-            </div>
-          )}
-        </>
-      )}
-    </Modal>
+                  <Form.Item
+                    {...tailLayout}
+                    className="mt2"
+                    style={{ marginBottom: !0 }}
+                  >
+                    <div className="flex w-full flex-row-reverse">
+                      <Button
+                        type="primary"
+                        htmlType="submit"
+                        disabled={!isEditable}
+                        className="ml-10  bg-blue-500 rounded"
+                        loading={isSubmiting}
+                      >
+                        Create
+                      </Button>
+                      <Button
+                        htmlType="button"
+                        onClick={() => {
+                          onCancel?.();
+                        }}
+                        className="rounded"
+                      >
+                        Cancel
+                      </Button>
+                    </div>
+                  </Form.Item>
+                </Form>
+              </div>
+            )}
+          </>
+        )}
+      </Modal>
+    </>
   );
 };
 
