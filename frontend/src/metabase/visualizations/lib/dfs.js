@@ -5,7 +5,6 @@ class Dfs {
     this.visited = {};
   }
 
-  // 是否有环
   isLoop(edges) {
     let result = false
     let nodes = [];
@@ -17,9 +16,7 @@ class Dfs {
     nodes = [...new Set(nodes)];
     this._init(nodes, edges);
 
-    // 保证每个节点都遍历到，排除有的结点没有边的情况
     for (let i = 0; i < nodes.length; i++) {
-      // 该节点被访问过，跳过它
       if (this.visited[nodes[i]] === -1) {
         continue;
       }
@@ -49,28 +46,24 @@ class Dfs {
     }
 
     for (let i = 0; i < nodes.length; i++) {
-      this.visited[nodes[i]] = 0; // 初始数据，表示一开始所有顶点都未被访问过
+      this.visited[nodes[i]] = 0;
     }
   }
 
   _DFS(i, nodes) {
-    // 设置结点 i 变为访问过的状态
     this.visited[nodes[i]] = 1;
     for (let j = 0, len = nodes.length; j < len; j++) {
-      // 如果当前结点有指向的结点
       if (this.graph[nodes[i]][nodes[j]] !== 0) {
-        // 并且已经被访问过
         if (this.visited[nodes[j]] === 1) {
-          this.isDAG = false; // 有环
+          this.isDAG = false;
           break;
         } else if (this.visited[nodes[j]] === -1) {
-          continue; // 当前结点后边的结点都被访问过，直接跳至下一个结点
+          continue;
         } else {
           this._DFS(j, nodes)
         }
       }
     }
-    // 遍历过所有相连的结点后，把本节点标记为 -1
     this.visited[nodes[i]] = -1;
   }
 }
