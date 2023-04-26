@@ -280,7 +280,11 @@ const Project = props => {
     }
     if (current_tab === "Custom Analysis") {
       return (
-        <CustomAnalysis location={location} router={router}></CustomAnalysis>
+        <CustomAnalysis
+          project={getProjectObject()}
+          location={location}
+          router={router}
+        ></CustomAnalysis>
       );
     }
     if (current_tab === "CreateCampaign") {
