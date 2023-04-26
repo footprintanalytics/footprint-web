@@ -23,6 +23,7 @@ import {
 import LoadingSpinner from "metabase/components/LoadingSpinner";
 import "../css/utils.css";
 import { isDark } from "metabase/dashboard/components/utils/dark";
+import { checkIsNeedContactUs } from "../utils/utils";
 const { Text } = Typography;
 
 const ChannelList = props => {
@@ -157,8 +158,11 @@ const ChannelList = props => {
       showDrawer(item);
     }
   };
+
+  const [modal, contextHolder] = Modal.useModal();
   return (
     <div className=" flex flex-column items-center">
+      {contextHolder}
       <div
         className=" flex flex-column items-center"
         style={{
@@ -190,7 +194,7 @@ const ChannelList = props => {
                   <List.Item
                     style={{
                       borderRadius: 10,
-                      backgroundColor: isDark ? "#182034": "white",
+                      backgroundColor: isDark ? "#182034" : "white",
                       paddingLeft: 10,
                       paddingRight: 10,
                       cursor: "pointer",
@@ -219,7 +223,15 @@ const ChannelList = props => {
                               // }
                               disabled={true}
                               onClick={() => {
-                                showDrawer(item);
+                                checkIsNeedContactUs(
+                                  modal,
+                                  project,
+                                  () => {
+                                    showDrawer(item);
+                                  },
+                                  () => {},
+                                  true,
+                                );
                               }}
                             >
                               Add
@@ -228,7 +240,12 @@ const ChannelList = props => {
                     }
                   >
                     <List.Item.Meta
-                      avatar={<Avatar src={item?.icon} style={{ backgroundColor: '#fff' }}/>}
+                      avatar={
+                        <Avatar
+                          src={item?.icon}
+                          style={{ backgroundColor: "#fff" }}
+                        />
+                      }
                       title={item?.name}
                       description={item?.desc}
                     />

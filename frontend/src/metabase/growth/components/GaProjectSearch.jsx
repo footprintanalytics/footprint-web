@@ -20,7 +20,7 @@ import {
   saveLatestGAProjectId,
   getGrowthProjectPath,
   getDashboardDatas,
-  contactUs,
+  checkIsNeedContactUs,
 } from "../utils/utils";
 
 const GaProjectSearch = props => {
@@ -78,15 +78,13 @@ const GaProjectSearch = props => {
       } else {
         setUserProject([]);
         if (user) {
-          contactUs(
+          checkIsNeedContactUs(
             modal,
-            user,
+            null,
             () => {
               setCreateFgaProjectModalShowAction({ show: true });
             },
-            () => {
-              logout?.(location.pathname);
-            },
+            () => {},
             false,
           );
           // setCreateFgaProjectModalShowAction?.({

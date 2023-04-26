@@ -8,8 +8,9 @@ import {
   getLatestGAProjectId,
   getGrowthProjectPath,
   showCohortSuccessModal,
+  checkIsNeedContactUs,
 } from "metabase/growth/utils/utils";
-import { getUser } from "metabase/selectors/user";
+import { getFgaProject, getUser } from "metabase/selectors/user";
 import {
   loginModalShowAction,
   createFgaProjectModalShowAction,
@@ -23,6 +24,7 @@ const CreateCohort = ({
   setLoginModalShowAction,
   setCreateFgaProjectModalShowAction,
   project,
+  projectPath,
   btnText,
   router,
 }) => {
@@ -87,7 +89,6 @@ const CreateCohort = ({
       setWalletList([]);
     }
   };
-
   const isWalletAddress = address => {
     return (
       address && address.toLowerCase().startsWith("0x") && address.length <= 42
@@ -132,13 +133,16 @@ const CreateCohort = ({
     },
   ];
   const onMenuItemClick = ({ key }) => {
+    if (checkIsNeedContactUs(modal, project)) {
+      return;
+    }
     switch (key) {
       case "upload":
         setCohortModalOpen(true);
         break;
       case "filter":
         router?.push({
-          pathname: getGrowthProjectPath(project, "Potential Users"),
+          pathname: getGrowthProjectPath(projectPath, "Potential Users"),
         });
         break;
     }
@@ -213,7 +217,8 @@ const mapDispatchToProps = {
 const mapStateToProps = (state, props) => {
   return {
     user: getUser(state),
-    project: props.params.project,
+    project: getFgaProject(state),
+    projectPath: props.params.project,
     menu: props.params.menu,
   };
 };

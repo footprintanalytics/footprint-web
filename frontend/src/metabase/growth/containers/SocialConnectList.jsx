@@ -24,6 +24,7 @@ import { getUser } from "metabase/selectors/user";
 import LoadingSpinner from "metabase/components/LoadingSpinner";
 import { getCampaign, createCampaignCohort } from "metabase/new-service";
 import {
+  checkIsNeedContactUs,
   formatType,
   getGrowthProjectPath,
   showCohortSuccessModal,
@@ -148,11 +149,19 @@ const SocialConnectList = props => {
             type="link"
             disabled={!(record?.performanceDetails?.numberOfWalletAddress > 0)}
             onClick={() => {
-              setOpenCreatingCohort({
-                open: true,
-                campaignId: record?.campaignId,
-                count: record?.performanceDetails?.numberOfWalletAddress,
-              });
+              checkIsNeedContactUs(
+                modal,
+                project,
+                () => {
+                  setOpenCreatingCohort({
+                    open: true,
+                    campaignId: record?.campaignId,
+                    count: record?.performanceDetails?.numberOfWalletAddress,
+                  });
+                },
+                () => {},
+                true,
+              );
             }}
           >
             Save as cohort
@@ -288,7 +297,15 @@ const SocialConnectList = props => {
               className=" rounded"
               style={{ width: "100%" }}
               onClick={() => {
-                setIsModalOpen({ open: true, type: "Twitter" });
+                checkIsNeedContactUs(
+                  modal,
+                  project,
+                  () => {
+                    setIsModalOpen({ open: true, type: "Twitter" });
+                  },
+                  () => {},
+                  true,
+                );
               }}
             >
               <div className=" flex flex-column items-center" style={{}}>
@@ -314,7 +331,15 @@ const SocialConnectList = props => {
               hoverable
               style={{ width: "100%" }}
               onClick={() => {
-                setIsModalOpen({ open: true, type: "Discord" });
+                checkIsNeedContactUs(
+                  modal,
+                  project,
+                  () => {
+                    setIsModalOpen({ open: true, type: "Discord" });
+                  },
+                  () => {},
+                  true,
+                );
               }}
             >
               <div className=" flex flex-column items-center" style={{}}>

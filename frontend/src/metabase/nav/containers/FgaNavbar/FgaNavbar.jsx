@@ -45,7 +45,7 @@ import EntityMenu from "metabase/components/EntityMenu";
 import UserAvatar from "metabase/components/UserAvatar";
 import VipIcon from "metabase/components/VipIcon";
 import CreateProjectModal from "metabase/growth/components/Modal/CreateProjectModal";
-import { contactUs } from "metabase/growth/utils/utils";
+import { checkIsNeedContactUs } from "metabase/growth/utils/utils";
 import { getContext, getPath, getUser } from "../selectors";
 
 import { isDark } from "../../../dashboard/components/utils/dark";
@@ -387,15 +387,13 @@ class FgaNavbar extends Component {
       trackStructEvent(`click Navbar Add My Project`);
       console.log("onCreateAction");
       if (user) {
-        contactUs(
+        checkIsNeedContactUs(
           modal,
-          user,
+          null,
           () => {
             setCreateFgaProjectModalShowAction({ show: true });
           },
-          () => {
-            this.props.logout(location.pathname);
-          },
+          () => {},
           true,
         );
         // this.setState({ ...this.state, isProjectModalOpen: true });
