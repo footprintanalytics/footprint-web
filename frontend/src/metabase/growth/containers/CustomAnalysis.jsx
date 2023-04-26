@@ -8,12 +8,12 @@ import { template_gallery } from "../utils/data";
 
 const { Meta } = Card;
 const CustomAnalysis = props => {
-  const { router, location, children, user } = props;
+  const { router, location, children, user, project } = props;
 
   return (
     <div className="flex flex-column items-center">
       <div className="flex flex-column" style={{ width: "80%" }}>
-        {template_gallery.map(i => {
+        {template_gallery(project).map(i => {
           return (
             <div key={i.category}>
               <h2 className=" mt3">{i.category}</h2>
