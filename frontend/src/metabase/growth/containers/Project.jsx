@@ -34,6 +34,8 @@ const Project = props => {
   const [currentMenu, setCurrentMenu] = useState(menu);
   const [gaMenuTabs, setGaMenuTabs] = useState();
 
+  const showRefreshButton = user?.id === 10 || user?.id === 22278;
+
   useEffect(() => {
     if (menu && menu !== currentMenu) {
       setCurrentMenu(menu);
@@ -168,6 +170,7 @@ const Project = props => {
           hideTitle={true}
           key={projectObject?.protocolSlug}
           hideFooter
+          showRefreshButton={showRefreshButton}
         />
       ) : (
         <LoadingSpinner message="Loading..." />
@@ -197,6 +200,7 @@ const Project = props => {
           hideTitle={true}
           key={projectObject?.protocolSlug}
           hideFooter
+          showRefreshButton={showRefreshButton}
         />
       ) : (
         <LoadingSpinner message="Loading..." />
