@@ -6,10 +6,11 @@ import { isArray } from "lodash";
 import { withRouter } from "react-router";
 import { CreateFgaCohort } from "metabase/new-service";
 import {
+  checkIsNeedContactUs,
   getLatestGAProjectId,
   showCohortSuccessModal,
 } from "metabase/growth/utils/utils";
-import { getUser } from "metabase/selectors/user";
+import { getUser, getFgaProject } from "metabase/selectors/user";
 import {
   loginModalShowAction,
   createFgaProjectModalShowAction,
@@ -26,6 +27,7 @@ const CreateFliterCohort = ({
   setLoginModalShowAction,
   setCreateFgaProjectModalShowAction,
   btnText,
+  project,
 }) => {
   const [isCohortModalOpen, setCohortModalOpen] = useState(false);
   const [loading, setLoading] = useState(false);
@@ -64,7 +66,7 @@ const CreateFliterCohort = ({
       });
       return;
     }
-    const projectId = getLatestGAProjectId();
+    const projectId = project?.id ?? getLatestGAProjectId();
     if (!projectId) {
       setCohortModalOpen(false);
       message.warning("Please create your project before proceeding.");
@@ -180,7 +182,15 @@ const CreateFliterCohort = ({
         type="primary"
         style={style}
         onClick={() => {
-          setCohortModalOpen(true);
+          checkIsNeedContactUs(
+            modal,
+            project,
+            () => {
+              setCohortModalOpen(true);
+            },
+            () => {},
+            true,
+          );
         }}
       >
         {btnText ?? "Create Cohort"}
@@ -243,6 +253,7 @@ const mapDispatchToProps = {
 const mapStateToProps = state => {
   return {
     user: getUser(state),
+    project: getFgaProject(state),
   };
 };
 export default withRouter(
