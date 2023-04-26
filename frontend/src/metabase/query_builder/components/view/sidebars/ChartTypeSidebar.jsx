@@ -43,6 +43,7 @@ const FIXED_LAYOUT = [
     "barstack",
     "doublescalar",
     "graph",
+    "sankey",
     "fgatable",
   ],
 ];

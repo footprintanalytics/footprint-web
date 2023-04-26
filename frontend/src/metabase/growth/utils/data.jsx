@@ -312,11 +312,6 @@ export const fga_menu_data = [
         id: 7490,
         uuid: "d137a1ef-34a3-4553-84cb-2203bd9d2baf",
       },
-      {
-        name: "Social Connect",
-        id: null,
-        uuid: null,
-      },
     ],
   },
   {
@@ -395,6 +390,11 @@ export const fga_menu_data = [
     id: null,
     children: [
       // { name: "General", id: null, uuid: null },
+      {
+        name: "Social Connect",
+        id: null,
+        uuid: null,
+      },
       { name: "Connector", id: null, uuid: null },
       { name: "Channel", id: null, uuid: null },
     ],

@@ -1,7 +1,8 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 /* eslint-disable react/prop-types */
 import React, { useState, useEffect, useMemo } from "react";
 import { connect } from "react-redux";
-import { Select } from "antd";
+import { Select, Modal } from "antd";
 import { withRouter } from "react-router";
 import { useQuery } from "react-query";
 import { set } from "lodash";
@@ -10,7 +11,6 @@ import { QUERY_OPTIONS } from "metabase/containers/dashboards/shared/config";
 import { GetFgaProject } from "metabase/new-service";
 import { PublicApi, maybeUsePivotEndpoint } from "metabase/services";
 import { loadCurrentFgaProject } from "metabase/redux/user";
-import { top_protocols } from "../utils/data";
 import "../css/index.css";
 import {
   getGASearchHistory,
@@ -20,6 +20,7 @@ import {
   saveLatestGAProjectId,
   getGrowthProjectPath,
   getDashboardDatas,
+  contactUs,
 } from "../utils/utils";
 
 const GaProjectSearch = props => {
@@ -30,6 +31,7 @@ const GaProjectSearch = props => {
     menu,
     projectPath,
     setCreateFgaProjectModalShowAction,
+    logout,
   } = props;
   const [userProject, setUserProject] = useState([]);
   const [currentProject, setCurrentProject] = useState(projectPath);
@@ -47,14 +49,13 @@ const GaProjectSearch = props => {
 
   useEffect(() => {
     if (!isLoading && data?.data) {
-      console.log("isLoading data?.data finish", data?.data?.length);
       if (data?.data?.length > 0) {
         const projects = [];
         data?.data?.map(p => {
           projects.push({
             ...p,
             value: p.protocolSlug,
-            label: p.name,
+            label: p.protocolName ?? p.name,
             key: p.protocolSlug + p.id,
           });
         });
@@ -65,7 +66,11 @@ const GaProjectSearch = props => {
         saveLatestGAProjectId(projects[projectIndex].id);
         loadProjectDetail(projects[projectIndex].id);
         setUserProject(projects);
-        if (index === -1 || location.pathname === "/growth") {
+        if (
+          index === -1 ||
+          location.pathname === "/growth" ||
+          location.pathname.startsWith("/growth/project")
+        ) {
           router?.push({
             pathname: getGrowthProjectPath(projects[projectIndex].value, menu),
           });
@@ -73,27 +78,28 @@ const GaProjectSearch = props => {
       } else {
         setUserProject([]);
         if (user) {
-          setCreateFgaProjectModalShowAction?.({
-            show: true,
-            force: true,
-          });
+          contactUs(
+            modal,
+            user,
+            () => {
+              setCreateFgaProjectModalShowAction({ show: true });
+            },
+            () => {
+              logout?.(location.pathname);
+            },
+            false,
+          );
+          // setCreateFgaProjectModalShowAction?.({
+          //   show: true,
+          //   force: true,
+          // });
         }
       }
     }
     // getAllProtocol();
   }, [data, isLoading]);
 
-  // monitor data
-  const recommendOptions = useMemo(() => {
-    return [
-      {
-        ...top_protocols[0],
-        value: top_protocols[0].protocolSlug,
-        key: top_protocols[0].protocolSlug + "-recommend",
-        label: top_protocols[0].protocolName,
-      },
-    ];
-  }, []);
+  const [modal, contextHolder] = Modal.useModal();
 
   useEffect(() => {
     if (projectPath) {
@@ -102,28 +108,21 @@ const GaProjectSearch = props => {
     } else {
       const temp_project =
         getLatestGAProject() ??
-        (userProject?.length > 0
-          ? userProject[0].value
-          : recommendOptions[0].value);
-      setCurrentProject(temp_project);
-      saveLatestGAProject(temp_project);
-      if (
-        location.pathname.startsWith("/growth/project") ||
-        location.pathname === "/growth"
-      ) {
-        router?.push({
-          pathname: getGrowthProjectPath(temp_project, menu),
-        });
+        (userProject?.length > 0 ? userProject[0].value : null);
+      if (temp_project) {
+        saveLatestGAProject(temp_project);
+        setCurrentProject(temp_project);
+        if (
+          location.pathname.startsWith("/growth/project") ||
+          location.pathname === "/growth"
+        ) {
+          router?.push({
+            pathname: getGrowthProjectPath(temp_project),
+          });
+        }
       }
     }
-  }, [
-    projectPath,
-    menu,
-    userProject,
-    recommendOptions,
-    router,
-    location.pathname,
-  ]);
+  }, [projectPath]);
   const handleProjectChange = (value, option) => {
     saveLatestGAProject(option.value);
     setCurrentProject(option.value);
@@ -136,8 +135,9 @@ const GaProjectSearch = props => {
         location.pathname === "/growth") &&
       option.value
     ) {
+      // window.location.href = getGrowthProjectPath(option.value);
       router?.push({
-        pathname: getGrowthProjectPath(option.value, menu),
+        pathname: getGrowthProjectPath(option.value),
       });
     }
   };
@@ -158,13 +158,10 @@ const GaProjectSearch = props => {
               .join(",")
               .includes(input.toLowerCase())
           }
-          options={
-            userProject?.length > 0
-              ? userProject
-              : [{ label: "Recommend Projects", options: recommendOptions }]
-          }
+          options={userProject?.length > 0 ? userProject : []}
         />
       )}
+      {contextHolder}
     </div>
   );
 };

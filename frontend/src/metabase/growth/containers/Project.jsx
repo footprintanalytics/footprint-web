@@ -12,7 +12,7 @@ import {
   getGrowthProjectPath,
   getLatestGAProjectId,
 } from "../utils/utils";
-import { fga_menu_data, top_protocols } from "../utils/data";
+import { fga_menu_data } from "../utils/data";
 import LoadingDashboard from "../components/LoadingDashboard";
 import ConnectorList from "./ConnectorList";
 import ChannelList from "./ChannelList";
@@ -31,44 +31,56 @@ import "../css/index.css";
 const Project = props => {
   const { router, location, children, user, menu, projectPath, projectObject } =
     props;
-  const tabs_data = fga_menu_data;
-  const [tab, setTab] = useState(menu);
-  const [project, setProject] = useState(projectPath);
-  const demoProjectData = top_protocols[0];
+  const [currentMenu, setCurrentMenu] = useState(menu);
   const [gaMenuTabs, setGaMenuTabs] = useState();
 
   useEffect(() => {
-    if (!project) {
-      return;
+    if (menu && menu !== currentMenu && projectObject) {
+      setCurrentMenu(menu);
     }
-    if (menu) {
-      setTab(menu);
-    } else {
-      const tempMenu =
-        gaMenuTabs?.menuTabs[0]?.children?.length > 0
-          ? gaMenuTabs?.menuTabs[0].children[0].key
-          : gaMenuTabs?.menuTabs[0]?.key;
-      setTab(tempMenu);
-      router.push(getGrowthProjectPath(project, tempMenu));
-    }
-  }, [gaMenuTabs, menu, project, router]);
+  }, [menu]);
 
   useEffect(() => {
-    setGaMenuTabs(
-      getGaMenuTabs(
-        tabs_data,
-        (projectObject ?? demoProjectData).protocolType,
-        (projectObject ?? demoProjectData).nftCollectionAddress?.length > 0,
+    if (projectObject) {
+      const newMenu = getGaMenuTabs(
+        fga_menu_data,
+        projectObject.protocolType,
+        projectObject?.nftCollectionAddress?.length > 0,
         user,
-      ),
-    );
-  }, [demoProjectData, projectObject, tabs_data, user]);
-
-  useEffect(() => {
-    if (projectPath) {
-      setProject(projectPath);
+      );
+      setGaMenuTabs(newMenu);
+      if (!currentMenu || !findMenu(currentMenu, newMenu?.menuTabs)) {
+        const firstMenu =
+          newMenu?.menuTabs[0]?.children?.length > 0
+            ? newMenu?.menuTabs[0].children[0].key
+            : newMenu?.menuTabs[0]?.key;
+        // setCurrentMenu(firstMenu);
+        router.push(
+          getGrowthProjectPath(projectObject?.protocolSlug, firstMenu),
+        );
+      } else {
+        router.replace(
+          getGrowthProjectPath(projectObject?.protocolSlug, currentMenu),
+        );
+      }
     }
-  }, [projectPath]);
+  }, [projectObject, user]);
+
+  function findMenu(targetMenu, menuListData) {
+    let subMenu = null;
+    for (let i = 0; i < menuListData.length && !subMenu; i++) {
+      const item = menuListData[i];
+      if (item.children?.length > 0) {
+        subMenu = item.children.find(s => s.key === targetMenu);
+        if (subMenu) {
+          return true; // found the submenu, exit the function and return `true`
+        }
+      } else if (item.key === targetMenu) {
+        return true; // found the menu item, exit the function and return `true`
+      }
+    }
+    return false; // submenu or menu item not found, return `false`
+  }
 
   const getProjectObject = () => {
     return projectObject
@@ -78,11 +90,6 @@ const Project = props => {
           discord_guild_id: projectObject?.discord?.guildId,
         }
       : null;
-    // return {
-    //   ...(projectObject ?? demoProjectData),
-    //   twitter_handler: projectObject?.twitter?.handler,
-    //   discord_guild_id: projectObject?.discord?.guildId,
-    // };
   };
 
   const comingSoon = page => {
@@ -96,7 +103,7 @@ const Project = props => {
           }}
         >
           <>
-            {gaMenuTabs?.dashboardMap && tab ? (
+            {gaMenuTabs?.dashboardMap && currentMenu ? (
               <Result
                 style={{
                   margin: 0,
@@ -121,14 +128,15 @@ const Project = props => {
                   />
                 }
                 // title="There is currently no data available for this project."
-                subTitle={`I'm sorry, the content for this ${page} page is not yet ready. You can visit our homepage for now and stay tuned for more high-quality content coming soon. We appreciate your patience.`}
+                // subTitle={`I'm sorry, the content for this ${page} page is not yet ready. You can visit our homepage for now and stay tuned for more high-quality content coming soon. We appreciate your patience.`}
+                subTitle="Coming Soon~"
                 extra={
                   <Button
                     type="primary"
                     onClick={() => {
                       router.push(
                         getGrowthProjectPath(
-                          project,
+                          projectObject?.protocolSlug,
                           gaMenuTabs?.menuTabs?.[0].children?.length > 0
                             ? gaMenuTabs?.menuTabs?.[0].children[0].key
                             : gaMenuTabs?.menuTabs?.[0].key,
@@ -150,19 +158,20 @@ const Project = props => {
   };
 
   const getContentPannel = current_tab => {
-    const WrapPublicDashboard = projectObject?.protocolSlug ? (
-      <PublicDashboard
-        params={{ uuid: gaMenuTabs?.dashboardMap?.get(current_tab) }}
-        location={location}
-        project={getProjectObject()}
-        isFullscreen={false}
-        hideTitle={true}
-        key={projectObject?.protocolSlug}
-        hideFooter
-      />
-    ) : (
-      <LoadingSpinner message="Loading..." />
-    );
+    const WrapPublicDashboard = current_tab =>
+      projectObject?.protocolSlug ? (
+        <PublicDashboard
+          params={{ uuid: gaMenuTabs?.dashboardMap?.get(current_tab) }}
+          location={location}
+          project={getProjectObject()}
+          isFullscreen={false}
+          hideTitle={true}
+          key={projectObject?.protocolSlug}
+          hideFooter
+        />
+      ) : (
+        <LoadingSpinner message="Loading..." />
+      );
     if (current_tab === "UserTemplate" || current_tab === "Potential Users") {
       //|| current_tab === "Potential Users"
       return (
@@ -174,12 +183,31 @@ const Project = props => {
         ></UserTemplate>
       );
     }
+    if (
+      current_tab === "GameFi" &&
+      !projectObject?.nftCollectionAddress?.length > 0
+    ) {
+      // GameFi Project without NFT
+      return projectObject?.protocolSlug ? (
+        <PublicDashboard
+          params={{ uuid: "82cf8827-1962-47d3-a31e-dd72d9262520" }}
+          location={location}
+          project={getProjectObject()}
+          isFullscreen={false}
+          hideTitle={true}
+          key={projectObject?.protocolSlug}
+          hideFooter
+        />
+      ) : (
+        <LoadingSpinner message="Loading..." />
+      );
+    }
     if (current_tab === "UserProfile") {
       return (
         <UserProfile
           location={location}
           router={router}
-          project={getProjectObject(project)}
+          project={getProjectObject()}
         />
       );
     }
@@ -191,7 +219,7 @@ const Project = props => {
           }
           location={location}
           router={router}
-          project={getProjectObject(project)}
+          project={getProjectObject()}
           projectId={getLatestGAProjectId()}
         ></ConnectorList>
       );
@@ -201,7 +229,7 @@ const Project = props => {
         <ChannelList
           location={location}
           router={router}
-          project={getProjectObject(project)}
+          project={getProjectObject()}
           projectId={getLatestGAProjectId()}
         ></ChannelList>
       );
@@ -211,7 +239,7 @@ const Project = props => {
         <ProjectInfo
           location={location}
           router={router}
-          project={getProjectObject(project)}
+          project={getProjectObject()}
         ></ProjectInfo>
       );
     }
@@ -228,7 +256,7 @@ const Project = props => {
         <SocialConnectList
           location={location}
           router={router}
-          project={getProjectObject(project)}
+          project={getProjectObject()}
         ></SocialConnectList>
       );
     }
@@ -237,7 +265,7 @@ const Project = props => {
         <Community
           location={location}
           router={router}
-          project={getProjectObject(project)}
+          project={getProjectObject()}
         ></Community>
       );
     }
@@ -245,7 +273,7 @@ const Project = props => {
       return (
         <PotentialUsers
           location={location}
-          project={getProjectObject(project)}
+          project={getProjectObject()}
           router={router}
         />
       );
@@ -260,13 +288,12 @@ const Project = props => {
         <CampaignCreate
           location={location}
           router={router}
-          project={getProjectObject(project)}
+          project={getProjectObject()}
           projectId={getLatestGAProjectId()}
         ></CampaignCreate>
       );
     }
     if (current_tab === "Campaign") {
-      // return comingSoon("Campaign");
       return <CampaignList router={router} location={location}></CampaignList>;
     }
     if (current_tab === "CampaignDetail") {
@@ -275,7 +302,7 @@ const Project = props => {
           router={router}
           location={location}
           projectPath={projectPath}
-          project={getProjectObject(project)}
+          project={getProjectObject()}
         ></CampaignDetail>
       );
     }
@@ -284,7 +311,7 @@ const Project = props => {
         <CohortList
           router={router}
           location={location}
-          project={getProjectObject(project)}
+          project={getProjectObject()}
         ></CohortList>
       );
     }
@@ -294,11 +321,11 @@ const Project = props => {
           <LoadingDashboard
             router={router}
             sourceDefinitionId={projectObject?.twitter?.sourceDefinitionId}
-            project={getProjectObject(project)}
+            project={getProjectObject()}
             projectId={parseInt(getLatestGAProjectId())}
             current_tab={current_tab}
           >
-            {WrapPublicDashboard}
+            {WrapPublicDashboard(current_tab)}
           </LoadingDashboard>
         );
       }
@@ -307,11 +334,11 @@ const Project = props => {
           <LoadingDashboard
             router={router}
             sourceDefinitionId={projectObject?.discord?.sourceDefinitionId}
-            project={getProjectObject(project)}
+            project={getProjectObject()}
             projectId={parseInt(getLatestGAProjectId())}
             current_tab={current_tab}
           >
-            {WrapPublicDashboard}
+            {WrapPublicDashboard(current_tab)}
           </LoadingDashboard>
         );
       }
@@ -320,19 +347,29 @@ const Project = props => {
           <LoadingDashboard
             router={router}
             sourceDefinitionId={projectObject?.ga?.sourceDefinitionId}
-            project={getProjectObject(project)}
+            project={getProjectObject()}
             projectId={parseInt(getLatestGAProjectId())}
             current_tab={current_tab}
           >
-            {WrapPublicDashboard}
+            {WrapPublicDashboard(current_tab)}
           </LoadingDashboard>
         );
       }
-      return WrapPublicDashboard;
+      return WrapPublicDashboard(current_tab);
     }
     return comingSoon("");
   };
-  return <>{getContentPannel(tab)}</>;
+  return (
+    <>
+      {projectObject ? (
+        <>{currentMenu && getContentPannel(currentMenu)}</>
+      ) : (
+        <>
+          <LoadingSpinner message="Loading..." />
+        </>
+      )}
+    </>
+  );
 };
 
 const mapStateToProps = (state, props) => {

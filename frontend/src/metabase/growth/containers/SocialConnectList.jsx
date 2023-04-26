@@ -15,6 +15,7 @@ import {
   Tooltip,
   Input,
   message,
+  Divider,
 } from "antd";
 import { useQuery } from "react-query";
 import dayjs from "dayjs";
@@ -67,37 +68,6 @@ const SocialConnectList = props => {
       dataIndex: "createdAt",
       render: text => dayjs(text).format("YYYY-MM-DD HH:mm"),
     },
-    // {
-    //   title: "Title",
-    //   render: (_, row) => (
-    //     <Typography.Link
-    //       onClick={() => {
-    //         props.router?.push({
-    //           pathname: getGrowthProjectPath(
-    //             props.router?.params?.project,
-    //             "CampaignDetail",
-    //           ),
-    //           hash: "#id=" + row.campaignId,
-    //         });
-    //       }}
-    //     >
-    //       {row.title}
-    //     </Typography.Link>
-    //   ),
-    // },
-    // {
-    //   title: "Status",
-    //   dataIndex: "status",
-    //   render: text => <CampaignStatus value={text} />,
-    // },
-    // {
-    //   title: "Campaign Type",
-    //   dataIndex: "campaignType",
-    //   key: "campaignType",
-    //   render: text => {
-    //     return <Tag>{text}</Tag>;
-    //   },
-    // },
     {
       title: "Type",
       dataIndex: "channels",
@@ -181,11 +151,12 @@ const SocialConnectList = props => {
               setOpenCreatingCohort({
                 open: true,
                 campaignId: record?.campaignId,
+                count: record?.performanceDetails?.numberOfWalletAddress,
               });
             }}
           >
             Save as cohort
-          </Button>{" "}
+          </Button>
           <Button
             type="link"
             disabled={true}
@@ -223,18 +194,18 @@ const SocialConnectList = props => {
     open: isOpenCreatingCohort?.open,
     content: (
       <div>
-        <Typography.Text type="secondary">
-          Create a new cohort based on the mapping data
-        </Typography.Text>
+        <Divider className="my2" />
+        <h4>Cohort Name</h4>
         <Input
-          className="mt1 mb2"
+          className="mt1 mb1"
           placeholder="Input cohort name"
           onChange={event => {
             setCohortName(event.target.value);
             // title = event.target.value;
           }}
         />
-        <div className="flex flex-row-reverse">
+        <h5>You have selected {isOpenCreatingCohort?.count} addresses.</h5>
+        <div className="flex flex-row-reverse mt2">
           <Button
             type="primary"
             loading={isCreatingCohort}
@@ -266,6 +237,12 @@ const SocialConnectList = props => {
             }}
           >
             {isCreatingCohort ? "Creating..." : "Create"}
+          </Button>
+          <Button
+            className="mr1"
+            onClick={() => setOpenCreatingCohort({ open: false })}
+          >
+            Cancel
           </Button>
         </div>
       </div>

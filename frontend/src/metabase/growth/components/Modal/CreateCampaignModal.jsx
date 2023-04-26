@@ -6,13 +6,14 @@ import {
   Checkbox,
   Select,
   Button,
+  Divider,
   Form,
   Modal,
   Input,
   Switch,
   message,
   Typography,
-} from "antd"
+} from "antd";
 import { connect } from "react-redux"
 import { useQuery } from "react-query"
 import Title from "antd/lib/typography/Title"
@@ -448,6 +449,7 @@ const CreateCampaignModal = props => {
       // onOk={handleOk}
       onCancel={onCancel}
     >
+      <Divider className="my2" />
       {showDiscordStep3?.show ? (
         <div className="rounded p1 mt2" style={{ background: "#182034" }}>
           <div className="flex flex-col mt2 items-center">

@@ -72,7 +72,7 @@ const CampaignList = props => {
       },
     },
     {
-      title: "Create Time",
+      title: "Created Time",
       dataIndex: "createdAt",
       render: text => dayjs(text).format("YYYY-MM-DD HH:mm"),
     },
