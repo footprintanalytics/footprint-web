@@ -359,7 +359,6 @@ const Project = props => {
     }
     return comingSoon("");
   };
-  // return comingSoon("");
   return (
     <>
       {projectObject ? (
