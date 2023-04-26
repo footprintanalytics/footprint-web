@@ -179,7 +179,7 @@ const Community = props => {
       title: "Address",
       dataIndex: "address",
       key: "address",
-      render: (text, { ens, discordAvatar, twitterAvatar }, index) => (
+      render: (text, { ens }) => (
         <div className="flex flex-row">
           {/* <Avatar
             size={35}
@@ -210,7 +210,7 @@ const Community = props => {
       key: "tags",
       dataIndex: "tags",
       render: (_, { tags }) => {
-        tags = tags.map(i => formatTag(i));
+        tags = tags?.map(i => formatTag(i));
         return (
           <Typography.Paragraph
             ellipsis={{

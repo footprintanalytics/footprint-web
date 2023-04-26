@@ -156,7 +156,7 @@ const PotentialUsers = props => {
       key: "tags",
       dataIndex: "tags",
       render: (_, { tags }) => {
-        tags = tags.map(i => formatTag(i));
+        tags = tags?.map(i => formatTag(i));
         return (
           <Typography.Paragraph
             ellipsis={{
