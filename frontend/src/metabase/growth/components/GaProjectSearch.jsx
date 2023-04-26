@@ -141,24 +141,23 @@ const GaProjectSearch = props => {
   };
   return (
     <div className="flex flex-column items-center" style={{ minWidth: 300 }}>
-      {user && user.email !== "fga@footprint.network" && (
-        <Select
-          showSearch
-          style={{ width: 300 }}
-          value={currentProject}
-          loading={isLoading}
-          onChange={handleProjectChange}
-          placeholder="Search by protocol or nft collection address"
-          optionFilterProp="children"
-          filterOption={(input, option) =>
-            (option?.label ?? "").toLowerCase().includes(input.toLowerCase()) ||
-            (option?.collections_list ?? [])
-              .join(",")
-              .includes(input.toLowerCase())
-          }
-          options={userProject?.length > 0 ? userProject : []}
-        />
-      )}
+      <Select
+        showSearch
+        style={{ width: 300 }}
+        value={currentProject}
+        loading={isLoading}
+        onChange={handleProjectChange}
+        placeholder="Search by protocol or nft collection address"
+        optionFilterProp="children"
+        filterOption={(input, option) =>
+          (option?.label ?? "").toLowerCase().includes(input.toLowerCase()) ||
+          (option?.collections_list ?? [])
+            .join(",")
+            .includes(input.toLowerCase())
+        }
+        options={userProject?.length > 0 ? userProject : []}
+      />
+
       {contextHolder}
     </div>
   );
