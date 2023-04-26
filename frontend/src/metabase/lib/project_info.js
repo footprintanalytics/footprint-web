@@ -12,7 +12,8 @@ export const isDefi360 = project => {
 export const getLatestGAProjectId = () => {
   // return null;
   const userId = window.localStorage.getItem("GAUserId");
-  if (userId === null) {
+  const isFgaDemoProject = window.localStorage.getItem("IsFgaDemoProject");
+  if (userId === null || isFgaDemoProject === "true") {
     return null;
   }
   if (!window.location.pathname.startsWith("/growth") && userId !== "6") {

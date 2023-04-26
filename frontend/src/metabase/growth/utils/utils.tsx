@@ -283,6 +283,7 @@ export function clearGACache() {
   localStorage.removeItem("LatestGAProjectId");
   localStorage.removeItem("LatestGAProject");
   localStorage.removeItem("GAUserId");
+  localStorage.removeItem("IsFgaDemoProject");
 }
 
 export function saveLatestGAProject(LatestGAProject: string) {
