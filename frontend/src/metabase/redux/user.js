@@ -165,27 +165,8 @@ export const refreshCurrentFgaProject = createThunkAction(
         projectId: project_id,
       });
       window.localStorage.setItem("IsFgaDemoProject", res?.isDemo);
-      if (res?.isDemo) {
-        window.localStorage.setItem("LatestGAProjectId", 53);
-        return {
-          ...res,
-          id: 53,
-          twitter: {
-            handler: "Footprint_Data",
-            sourceDefinitionId: "abdc8efa-c24e-43ed-91f8-71e0996d56b2",
-          },
-          discord: {
-            guildId: "864829036294307881",
-            guildName: "",
-            sourceDefinitionId: "1d496caa-9e7b-4ae7-a118-3af0d5082ecb",
-          },
-          ga: {
-            sourceDefinitionId: "3cc2eafd-84aa-4dca-93af-322d9dfeec1a",
-          },
-        };
-      } else {
-        return res;
-      }
+      window.localStorage.setItem("LatestGAProjectId", res?.id);
+      return res;
     } catch (e) {
       return null;
     }
