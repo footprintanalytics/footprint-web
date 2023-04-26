@@ -35,7 +35,7 @@ const Project = props => {
   const [gaMenuTabs, setGaMenuTabs] = useState();
 
   useEffect(() => {
-    if (menu && menu !== currentMenu && projectObject) {
+    if (menu && menu !== currentMenu) {
       setCurrentMenu(menu);
     }
   }, [menu]);
@@ -59,9 +59,9 @@ const Project = props => {
           getGrowthProjectPath(projectObject?.protocolSlug, firstMenu),
         );
       } else {
-        router.replace(
-          getGrowthProjectPath(projectObject?.protocolSlug, currentMenu),
-        );
+        // router.replace(
+        //   getGrowthProjectPath(projectObject?.protocolSlug, currentMenu),
+        // );
       }
     }
   }, [projectObject, user]);
@@ -373,6 +373,7 @@ const Project = props => {
 };
 
 const mapStateToProps = (state, props) => {
+  // console.log("project state", getFgaProject(state));
   return {
     user: getUser(state),
     projectPath: props.params.project,

@@ -31,7 +31,7 @@ const AboutStart = ({
         <ul>
           <li>
             <CreateImage />
-            <h2>25+ Chains</h2>
+            <h2>26 Chains</h2>
           </li>
           <li>
             <CreateImage />

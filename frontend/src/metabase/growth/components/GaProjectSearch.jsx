@@ -135,10 +135,10 @@ const GaProjectSearch = props => {
         location.pathname === "/growth") &&
       option.value
     ) {
-      // window.location.href = getGrowthProjectPath(option.value);
-      router?.push({
-        pathname: getGrowthProjectPath(option.value),
-      });
+      window.location.href = getGrowthProjectPath(option.value);
+      // router?.push({
+      //   pathname: getGrowthProjectPath(option.value),
+      // });
     }
   };
   return (

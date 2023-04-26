@@ -81,7 +81,10 @@
 
 (defn handle-convert [sql col fga-schema]
   (let [fga-tables (into [] (get-fga-table-white-list))
-        is_include (some #(str/includes? col %) fga-tables)]
+        col-format (str/replace col  "\"" "")
+        col-format-list (str/split col-format #"\.")
+        fixed-result (last col-format-list)
+        is_include (some #(= fixed-result %) fga-tables)]
     (if is_include
       (let [trimTable (str/trim col)
             hasDot (str/includes? trimTable ".")]
@@ -94,7 +97,10 @@
 
 (defn canConvert [col]
   (let [fga-tables (into [] (get-fga-table-white-list))
-        is_include (some #(str/includes? col %) fga-tables)]
+        col-format (str/replace col  "\"" "")
+        col-format-list (str/split col-format #"\.")
+        fixed-result (last col-format-list)
+        is_include (some #(= fixed-result %) fga-tables)]
     is_include))
 
 (defn canRunFGAConvert [sqlTables]
