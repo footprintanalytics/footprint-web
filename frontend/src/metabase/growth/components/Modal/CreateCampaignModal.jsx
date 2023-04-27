@@ -22,7 +22,6 @@ import { Link } from "react-router";
 import { QUERY_OPTIONS } from "metabase/containers/dashboards/shared/config";
 import {
   getCampaignTemplate,
-  GetFgaCohort,
   addCampaign,
 } from "metabase/new-service";
 import { getUser } from "metabase/selectors/user";

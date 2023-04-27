@@ -27,7 +27,9 @@ import { cohortTips } from "../utils/data";
 const CohortList = props => {
   const { isLoading, data, refetch } = useQuery(
     ["getCohort", props.project],
-    GetFgaCohort,
+    async () => {
+      return GetFgaCohort({ projectId: props.project?.id });
+    },
     {
       refetchInterval: 5000,
     },
@@ -40,6 +42,7 @@ const CohortList = props => {
     )
     ?.filter(f => !["hhh", "all"].includes(f.title));
 
+  console.log("cohort", data, dataSource);
   const columns = [
     {
       title: "Title",
