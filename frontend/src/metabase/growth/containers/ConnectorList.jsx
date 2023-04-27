@@ -146,7 +146,17 @@ const ConnectorList = props => {
                             <Button
                               key="Detail"
                               style={{ borderRadius: 5, width: 90 }}
-                              onClick={() => showDrawer(item)}
+                              onClick={() =>
+                                checkIsNeedContactUs(
+                                  modal,
+                                  project,
+                                  () => {
+                                    showDrawer(item);
+                                  },
+                                  () => {},
+                                  true,
+                                )
+                              }
                             >
                               Detail
                             </Button>,
