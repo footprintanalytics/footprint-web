@@ -428,7 +428,7 @@ const Community = props => {
       ) : (
         <>
           <ValueFilter
-            className="mt2"
+            className="mt1"
             data={valueFilterOptionsList}
             onFliterChange={valueFilter => {
               if (!valueFilter) return;

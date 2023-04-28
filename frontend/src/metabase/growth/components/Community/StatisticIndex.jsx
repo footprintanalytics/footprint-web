@@ -8,7 +8,11 @@ import LoadingConnectorButton from "metabase/growth/components/LoadingConnectorB
 export const StatisticIndex = props => {
   const { data, isLoading, refetchData, router, project } = props;
   return (
-    <Row gutter={[15, 15]} className="w-full ">
+    <Row
+      gutter={[15, 15]}
+      className="w-full"
+      style={{ marginBottom: "0.5rem" }}
+    >
       {data?.map((option, index) => {
         return (
           <Col sm={24} md={12} lg={8} xl={6} xxl={4} key={option?.title}>
