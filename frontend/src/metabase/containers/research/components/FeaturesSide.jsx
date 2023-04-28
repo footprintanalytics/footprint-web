@@ -15,6 +15,7 @@ import {
   ScheduleOutlined, SmileOutlined, TagOutlined, TrademarkCircleOutlined,
 } from "@ant-design/icons/lib/icons";
 import { flattenDeep, get } from "lodash";
+import Link from "metabase/core/components/Link/Link";
 
 const { Sider } = Layout;
 
@@ -77,6 +78,7 @@ const FeaturesSide = ({
         style={{
           borderRight: "0px",
           width: "100%",
+          flex: 1,
         }}
         theme="light"
         mode="inline"
@@ -92,23 +94,32 @@ const FeaturesSide = ({
     );
   };
 
+  const renderNavButton = () => {
+    return (
+      <div className="feature-side__nav-button">
+        <h4>Need more other data?</h4>
+        <Link to={"/dashboards"}><span>{"Explore and customize your analysis on the Analytics APP >>"}</span></Link>
+      </div>
+    )
+  }
   return (
-    <Sider
-      trigger={null}
-      width="310px"
+    <div
+      className="flex flex-column full-height overflow-auto Features-side__root"
       style={{
+        width: 309,
         display: "flex",
         flexDirection: "column",
         overflow: "auto",
         height: "100%",
         position: "fixed",
-        background: "#121728",
-        borderRight: "1px solid #4A5568",
+        marginBottom: 100,
+        padding: "0 0 240px",
       }}
     >
       {renderDataSet()}
       {renderSeoData()}
-    </Sider>
+      {renderNavButton()}
+    </div>
   );
 };
 
