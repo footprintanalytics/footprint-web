@@ -44,6 +44,7 @@ class EmbedFrame extends Component {
       hideTitle,
       hideFooter,
       isNightMode,
+      innerClassName,
     } = this.props;
     const { innerScroll } = this.state;
 
@@ -60,7 +61,6 @@ class EmbedFrame extends Component {
         (!hide_download_button && actionButtons));
 
     const name = titled && !hideTitle ? this.props.name : null;
-
     return (
       <div
         id="html2canvas-Dashboard"
@@ -71,7 +71,7 @@ class EmbedFrame extends Component {
         })}
       >
         <div
-          className={cx("flex flex-column flex-full relative", {
+          className={cx("flex flex-column flex-full relative", innerClassName, {
             "scroll-y": innerScroll,
           })}
         >
