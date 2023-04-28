@@ -142,6 +142,18 @@ export const getRoutes = store => (
         <Route path=":menu/:subMenu" />
       </Route>
 
+      <Route path="/research">
+        <IndexRoute component={props => <LazyLoad.Research {...props} classify="nft" />}/>
+        <Route path="nft" component={props => <LazyLoad.Research {...props} classify="nft" />}>
+          <Route path=":menu/:subMenu" />
+          <Route path=":menu/:subMenu/:value" />
+        </Route>
+        <Route path="gamefi" component={props => <LazyLoad.Research {...props} classify="gamefi" />}>
+          <Route path=":menu/:subMenu" />
+          <Route path=":menu/:subMenu/:value" />
+        </Route>
+      </Route>
+
       <Route path="/dashboards" component={LazyLoad.Dashboards} />
 
       <Route path="/data-api">

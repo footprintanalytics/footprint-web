@@ -274,6 +274,7 @@ class PublicDashboard extends Component {
       hideAllParams,
       disableBreadcrumb,
       className,
+      innerClassName,
       router,
       showRefreshButton,
     } = this.props;
@@ -344,6 +345,7 @@ class PublicDashboard extends Component {
         isNightMode={shouldRenderAsNightMode}
         hideFooter={hideFooter || isFgaPublicDashboard}
         className={cx(className, isFgaPublicDashboard && "ml-250 mt-60")}
+        innerClassName={cx(innerClassName)}
       >
         <>
           <LoadingAndErrorWrapper

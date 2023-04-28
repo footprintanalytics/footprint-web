@@ -101,6 +101,7 @@
   text-overflow: ellipsis;
   font-size: 14px;
   padding: 1px 0;
+  color: var(--color-text-dark) !important;
 }
 
 .search-results-modal__list-date {
