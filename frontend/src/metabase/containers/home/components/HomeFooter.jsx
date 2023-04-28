@@ -44,10 +44,14 @@ const footers = [
   {
     title: "Analytics",
     items: [
-      /*{
-        label: "GameFi Protocols",
-        url: "/protocols",
-      },*/
+      {
+        label: "NFT Research",
+        url: "/research/nft",
+      },
+      {
+        label: "GameFi Research",
+        url: "/research/gamefi",
+      },
       {
         label: "Projects Analytics",
         url: "/projects",

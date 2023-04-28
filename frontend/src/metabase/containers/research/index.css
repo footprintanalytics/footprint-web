@@ -6,11 +6,11 @@
 .Features-side {
   width: 310px;
   transition: 0.3s width;
-  background: white;
+  background: #121728;
   height: 100%;
-  border-right: 1px solid var(--color-border);
   overflow-x: hidden;
   position: relative;
+  border-right: 1px solid #4A5568;
 }
 
 .Features-main {
@@ -90,4 +90,27 @@
 
 .ant-tree-treenode-selected .features-side__sub-menus-desc {
   color: #8989d2;
+}
+
+.feature-side__nav-button {
+  position: fixed;
+  bottom: 0;
+  padding: 10px 20px;
+  background: var(--color-bg-dark);
+  width: 280px;
+}
+
+.feature-side__nav-button h4 {
+  color: #fff;
+}
+
+.feature-side__nav-button span {
+  color: var(--color-primary-dark);
+}
+
+.features-side__classify {
+  padding: 16px 0 20px 0 ;
+  text-align: center;
+  margin: 0 auto;
+  background-color: var(--color-bg-dark);
 }

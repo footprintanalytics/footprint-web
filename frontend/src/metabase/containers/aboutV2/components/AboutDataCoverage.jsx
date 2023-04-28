@@ -9,7 +9,7 @@ const AboutDataCoverage = () => {
   const data = [
     {
       label: "Wallet Addresses",
-      value: "120 Million",
+      value: "400 Million",
     },
     {
       label: "Tags",

@@ -8,11 +8,11 @@ import DashboardArea from "./components/DashboardArea";
 import ChartArea from "./components/ChartArea";
 import ResourceBox from "./components/ResourceBox";
 import { loginModalShowAction } from "metabase/redux/control";
-import { useDeviceInfo } from "metabase-lib/lib/Device";
 import myData from "./utils/data";
 import { push, replace } from "react-router-redux";
 import _ from "underscore";
-import { browserHistory, withRouter } from "react-router";
+import { withRouter } from "react-router";
+import { Select } from "antd";
 
 const Index = props => {
   const {
@@ -63,9 +63,40 @@ const Index = props => {
     return <DashboardArea location={location} item={tempItem} />
   }
 
+  const renderSelectClassify = () => {
+    return (
+      <div className="features-side__classify">
+        <Select
+          defaultValue={classify}
+          style={{ width: 200 }}
+          onChange={value => value !== classify && replace(`/${type}/${value}`)}
+          options={
+            [{ value: "nft", label: "NFT Research" }, { value: "gamefi", label: "GameFi Research" }]
+          }
+        />
+      </div>
+    )
+  }
+
+  const renderBack = () => {
+    return (
+      <div
+        className="cursor-pointer"
+        style={{ color: "#ffffffe0", padding: "10px 20px 0" }}
+        onClick={() => {
+          const lastIndex = location.pathname.lastIndexOf("/");
+          replace(location.pathname.substr(0, lastIndex));
+        }}
+      >
+        {"<- Back"}
+      </div>
+    )
+  }
+
   return (
     <div className="Features bg-gray flex">
       <div className="Features-side">
+        {renderSelectClassify()}
         {menu && subMenu && (
           <FeaturesSide
             defaultMenu={menu}
@@ -82,14 +113,8 @@ const Index = props => {
           overflow: "hidden"
         }}
       >
-        {value && (
-          <div onClick={() => {
-            const lastIndex = location.pathname.lastIndexOf("/");
-            replace(location.pathname.substr(0, lastIndex));
-          }}>{"<- Back"}</div>
-        )}
+        {value && (renderBack())}
         {renderArea(item)}
-
       </div>
       {children}
     </div>
