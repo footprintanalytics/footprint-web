@@ -34,6 +34,8 @@ import QueryDownloadWidgetFP from "metabase/query_builder/components/QueryDownlo
 import { parseTitleId } from "metabase/lib/urls";
 import { parseHashOptions } from "metabase/lib/browser";
 import { Breadcrumb } from "antd";
+import cx from "classnames";
+import { canShowDarkMode } from "metabase/dashboard/components/utils/dark";
 
 const mapStateToProps = state => ({
   metadata: getMetadata(state),
@@ -176,6 +178,9 @@ class PublicQuestion extends Component {
       // params: { uuid, token, titleAndId },
       metadata,
       router,
+      className,
+      hideFooter,
+      isNightMode,
     } = this.props;
     const { card, result, initialized, parameterValues } = this.state;
     // const publicUuid = uuid || parseTitleId(titleAndId).id;
@@ -223,6 +228,7 @@ class PublicQuestion extends Component {
       );
       hideTitle = true;
     }
+    const shouldRenderAsNightMode = isNightMode || canShowDarkMode();
     return (
       <EmbedFrame
         name={card && card.name}
@@ -232,8 +238,9 @@ class PublicQuestion extends Component {
         headerLayout={header}
         parameterValues={parameterValues}
         hideTitle={hideTitle}
-        className={`${isFgaPublicDashboard ? "ml-250 mt-60" : ""}`}
-        hideFooter={isFgaPublicDashboard}
+        isNightMode={shouldRenderAsNightMode}
+        className={cx(className,`${isFgaPublicDashboard ? "ml-250 mt-60" : ""}`)}
+        hideFooter={hideFooter || isFgaPublicDashboard}
         setParameterValue={this.setParameterValue}
       >
         <LoadingAndErrorWrapper
