@@ -48,7 +48,7 @@ const CustomAnalysis = props => {
                               style={{
                                 background: "white",
                                 width: "100%",
-                                minHeight: 150,
+                                height: 160,
                               }}
                               alt={item.dashboardName}
                               src={`https://statichk.footprint.network/dashboard/${item.id}.png?image_process=resize,w_600/crop,h_310/format,jpg`}
