@@ -16,6 +16,7 @@ import { fga_menu_data } from "../utils/data";
 import LoadingDashboard from "../components/LoadingDashboard";
 import ConnectorList from "./ConnectorList";
 import ChannelList from "./ChannelList";
+import WalletProfile from "./WalletProfile";
 import CampaignDetail from "./CampaignDetail";
 import CampaignList from "./CampaignList";
 import CustomAnalysis from "./CustomAnalysis";
@@ -50,7 +51,6 @@ const Project = props => {
   }, [menu]);
 
   useEffect(() => {
-    console.log("Project.jsx useEffect projectObject => ", projectObject);
     if (projectObject) {
       const newMenu = getGaMenuTabs(
         fga_menu_data,
@@ -59,17 +59,16 @@ const Project = props => {
         user,
       );
       setGaMenuTabs(newMenu);
-      console.log(
-        "Project.jsx useEffect findMenu => ",
-        currentMenu,
-        findMenu(currentMenu, newMenu?.menuTabs),
-      );
-      if (!currentMenu || !findMenu(currentMenu, newMenu?.menuTabs)) {
+
+      if (
+        !currentMenu ||
+        (!findMenu(currentMenu, newMenu?.menuTabs) &&
+          ["GameFi", "NFT"].includes(currentMenu))
+      ) {
         const firstMenu =
           newMenu?.menuTabs[0]?.children?.length > 0
             ? newMenu?.menuTabs[0].children[0].key
             : newMenu?.menuTabs[0]?.key;
-        console.log("Project.jsx useEffect reset to firstMenu => ", firstMenu);
         setCurrentMenu(firstMenu);
         router.push(
           getGrowthProjectPath(projectObject?.protocolSlug, firstMenu),
@@ -229,6 +228,15 @@ const Project = props => {
     if (current_tab === "UserProfile") {
       return (
         <UserProfile
+          location={location}
+          router={router}
+          project={getProjectObject()}
+        />
+      );
+    }
+    if (current_tab === "WalletProfile") {
+      return (
+        <WalletProfile
           location={location}
           router={router}
           project={getProjectObject()}
