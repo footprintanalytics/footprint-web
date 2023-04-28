@@ -13,8 +13,9 @@ import { getErrorMessage } from "metabase/components/form/FormMessage";
 import BindUserWithWalletAddressModal from "./BindUserWithWalletAddressModal";
 
 const mapStateToProps = (state, props) => {
+  const isFga = props.location.pathname.includes("/growth");
   return {
-    channel: getChannel(state, props),
+    channel: isFga ? "FGA" : getChannel(state, props),
   };
 };
 
