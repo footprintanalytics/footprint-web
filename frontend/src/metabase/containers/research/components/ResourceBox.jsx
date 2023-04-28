@@ -10,7 +10,6 @@ import Link from "metabase/core/components/Link";
 
 const ResourceBox = props => {
   const { item, type, classify, replace, menu, subMenu, location } = props;
-  console.log("ResourceBox", item);
   const resources = item && item.resources;
   return (
     <div className="ResourceBox">

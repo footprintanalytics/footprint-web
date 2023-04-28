@@ -38,7 +38,6 @@ const FeaturesSide = ({
         ];
       }),
     );
-    console.log("links", links)
     return (
       <div style={{ display: "none" }}>
         {links.map(link => {
