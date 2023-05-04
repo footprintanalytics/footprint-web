@@ -23,7 +23,9 @@ const LoadingDashboard = ({
     async () => GetFgaConnectorJob({ projectId, fgaConnectorId }),
     {
       refetchInterval: data =>
-        getDataStatus(data) === "succeeded" ? false : 10000,
+        getDataStatus(data) === "succeeded" || getDataStatus(data) === "failed"
+          ? false
+          : 10000,
       enabled: !!fgaConnectorId,
     },
   );
@@ -32,11 +34,11 @@ const LoadingDashboard = ({
     switch (type) {
       case "twitter":
         return data?.twitter?.twitter_tweet_metrics?.status;
-      // TODO: add google_analytics: need complete backend
-      // case "google_analytics":
-      //   return data?.google_analytics?.google_analytics_metrics?.status;
       case "discord":
         return data?.discord?.members?.status;
+      case "funnel":
+        // TODO: add funnel: need complete backend
+        return data?.ga?.status;
     }
   }
 
@@ -145,6 +147,17 @@ const LoadingDashboard = ({
         </Card>
       </div>
     );
+  } else if (fgaConnectorId && getDataStatus(data) === "failed") {
+    <div style={{ padding: 20 }}>
+      <Card title={current_tab}>
+        <Alert
+          message="Load data failed."
+          description="Failed to load data, please check your connector config or contact us"
+          type="error"
+          showIcon
+        />
+      </Card>
+    </div>;
   } else if (
     fgaConnectorId &&
     getDataStatus(data) !== "succeeded" &&

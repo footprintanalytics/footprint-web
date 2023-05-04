@@ -384,7 +384,7 @@ const Project = props => {
         return (
           <LoadingDashboard
             router={router}
-            type="google_analytics"
+            type="funnel"
             fgaConnectorId={projectObject?.ga?.fgaConnectorId}
             project={getProjectObject()}
             projectId={parseInt(getLatestGAProjectId())}
