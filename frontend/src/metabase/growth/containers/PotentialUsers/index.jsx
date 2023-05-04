@@ -1,6 +1,6 @@
 /* eslint-disable react/display-name */
 /* eslint-disable react/prop-types */
-import React, { useEffect } from "react";
+import React from "react";
 import "../../css/index.css";
 import "./index.css";
 import { push } from "react-router-redux";
@@ -23,6 +23,7 @@ import { QUERY_OPTIONS } from "metabase/containers/dashboards/shared/config";
 import Link from "metabase/core/components/Link/Link";
 import { formatTableTitle } from "metabase/lib/formatting/footprint";
 import { ItemFilter } from "./ItemFilter";
+import { OtherFilter } from "./OtherFilter";
 import { formatTag, valueFormat } from "metabase/growth/utils/utils";
 
 const PotentialUsers = props => {
@@ -37,6 +38,9 @@ const PotentialUsers = props => {
     collectionSlugs: [],
     excludeTags: [],
   });
+
+  const [otherOptionsList, setOtherOptionsList] = React.useState([])
+
 
   // const [walletListParams, setWalletListParams] = React.useState({
   //   pageSize: location.query?.pageSize
@@ -319,6 +323,31 @@ const PotentialUsers = props => {
                     current: 1,
                   });
                 }}
+                onMoreChange={value => {
+                  const temp = [
+                    {
+                      label: "NFT Holding Value >=",
+                      indicator: "nftHoldingValue",
+                      comparisonSymbol: "gte",
+                      ui: "input",
+                    },
+                    {
+                      label: "Token Holding Value >=",
+                      indicator: "tokenHoldingValue",
+                      comparisonSymbol: "gte",
+                      ui: "input",
+                    },
+                    {
+                      label: "Trading Value(30D) >=",
+                      indicator: "tradingValue",
+                      comparisonSymbol: "gte",
+                      ui: "input",
+                    },
+                  ]
+                  setOtherOptionsList(value.map(item => {
+                    return temp.find(a => a.indicator === item)
+                  }));
+                }}
                 onFilterChange={valueFilter => {
                   if (!valueFilter) {
                     return;
@@ -351,6 +380,34 @@ const PotentialUsers = props => {
                     ...walletListParams,
                     current: 1,
                     tags: tag ? [tag?.value] : [],
+                  });
+                }}
+              />
+              <OtherFilter
+                className="mt2"
+                onSelectChange={selectObject => {
+                  setWalletListParams({
+                    ...walletListParams,
+                    ...selectObject,
+                    current: 1,
+                  });
+                }}
+                optionsList={otherOptionsList}
+                onFilterChange={valueFilter => {
+                  if (!valueFilter) {
+                    return;
+                  }
+                  let temp = [...walletListParams.filters];
+                  temp = temp.filter(
+                    item => item.indicator !== valueFilter.indicator,
+                  );
+                  if (valueFilter.comparisonValue) {
+                    temp.push(valueFilter);
+                  }
+                  setWalletListParams({
+                    ...walletListParams,
+                    filters: temp,
+                    current: 1,
                   });
                 }}
               />

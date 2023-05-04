@@ -1,6 +1,6 @@
 /* eslint-disable react/prop-types */
 import React from "react";
-import { Col, Row } from "antd";
+import { Col, Row, Select } from "antd";
 import MuiSelect from "metabase/growth/components/MuiSelect";
 import cx from "classnames";
 import FloatInput from "metabase/growth/components/FloatInput";
@@ -12,6 +12,7 @@ export const ItemFilter = props => {
     className,
     onSelectChange,
     onFilterChange,
+    onMoreChange,
   } = props;
   // mock datas
   const optionsList = [
@@ -51,25 +52,95 @@ export const ItemFilter = props => {
       comparisonSymbol: "gte",
       ui: "input",
     },
+    // {
+    //   label: "NFT Holding Value >=",
+    //   indicator: "nftHoldingValue",
+    //   comparisonSymbol: "gte",
+    //   ui: "input",
+    // },
+    // {
+    //   label: "Token Holding Value >=",
+    //   indicator: "tokenHoldingValue",
+    //   comparisonSymbol: "gte",
+    //   ui: "input",
+    // },
+    // {
+    //   label: "Trading Value(30D) >=",
+    //   indicator: "tradingValue",
+    //   comparisonSymbol: "gte",
+    //   ui: "input",
+    // },
     {
-      label: "NFT Holding Value >=",
-      indicator: "nftHoldingValue",
-      comparisonSymbol: "gte",
-      ui: "input",
-    },
-    {
-      label: "Token Holding Value >=",
-      indicator: "tokenHoldingValue",
-      comparisonSymbol: "gte",
-      ui: "input",
-    },
-    {
-      label: "Trading Value(30D) >=",
-      indicator: "tradingValue",
-      comparisonSymbol: "gte",
-      ui: "input",
+      label: "More",
+      ui: "more",
+      options: [
+        {
+          value: "nftHoldingValue",
+          label: "Nft Holding Value >=",
+        },
+        {
+          value: "tokenHoldingValue",
+          label: "Token Holding Value >=",
+        },
+        {
+          value: "tradingValue",
+          label: "Trading Value(30D) >=",
+        },
+      ]
     },
   ];
+  const handleChange = (value) => {
+    onMoreChange?.(value);
+  };
+  const renderUi = (item) => {
+    if (item.ui === "more") {
+      return (
+        <div className="more-filter">
+          <Select
+            height={40}
+            style={{ width: "100%", height: 40 }}
+            label={item.label}
+            options={item.options}
+            mode="multiple"
+            allowClear
+            placeholder="More"
+            onChange={handleChange}
+          />
+          <div className="more-text">More</div>
+        </div>
+      )
+    }
+    if (item.ui === "select") {
+      return (
+        <MuiSelect
+          height={40}
+          style={{ width: "100%", height: 40 }}
+          label={item.label}
+          onValueChange={value => {
+            onSelectChange?.(item.resultFormatFunction?.(value));
+          }}
+          options={item.options}
+        />
+      )
+    }
+    return (
+      <FloatInput
+        height={40}
+        style={{ width: "100%", height: 40 }}
+        onChange={val => {
+          onFilterChange?.({
+            comparisonValue: parseFloat(val),
+            indicator: item.indicator,
+            comparisonSymbol: item.comparisonSymbol,
+          });
+        }}
+        label={item.label}
+        // placeholder="Email here please"
+        name={item.value}
+      />
+    )
+  }
+
   return (
     <div
       className={cx(
@@ -81,32 +152,7 @@ export const ItemFilter = props => {
       <Row gutter={[10, 10]} className="w-full">
         {optionsList.map(item => (
           <Col sm={24} md={12} lg={8} xl={6} xxl={4} key={item.label}>
-            {item.ui === "select" ? (
-              <MuiSelect
-                height={40}
-                style={{ width: "100%", height: 40 }}
-                label={item.label}
-                onValueChange={value => {
-                  onSelectChange?.(item.resultFormatFunction?.(value));
-                }}
-                options={item.options}
-              />
-            ) : (
-              <FloatInput
-                height={40}
-                style={{ width: "100%", height: 40 }}
-                onChange={val => {
-                  onFilterChange?.({
-                    comparisonValue: parseFloat(val),
-                    indicator: item.indicator,
-                    comparisonSymbol: item.comparisonSymbol,
-                  });
-                }}
-                label={item.label}
-                // placeholder="Email here please"
-                name={item.value}
-              />
-            )}
+            {renderUi(item)}
           </Col>
         ))}
       </Row>

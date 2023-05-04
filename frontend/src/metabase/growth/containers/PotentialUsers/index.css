@@ -30,3 +30,18 @@
   height: 400px;
   width: 50%;
 }
+
+.more-filter .ant-select-selection-overflow {
+  display: none;
+}
+
+.more-filter .ant-select-selection-placeholder {
+  display: none;
+}
+
+.more-filter .more-text {
+  position: absolute;
+  top: 0;
+  margin: 6px 0 0 10px;
+  color: gray;
+}
