@@ -310,6 +310,23 @@ const PotentialUsers = props => {
             </Card>
           ) : (
             <>
+              <QuickFilter
+                title={"Tags"}
+                defaultValue={location?.query?.tag}
+                optionsList={getQuickFilterOptionList(
+                  orderBy(filterTagResult?.data?.data, ["tag"]),
+                )}
+                formatFunction={name =>
+                  formatTableTitle(name?.replace(/-/g, " "))
+                }
+                onFliterChange={tag => {
+                  setWalletListParams({
+                    ...walletListParams,
+                    current: 1,
+                    tags: tag ? [tag?.value] : [],
+                  });
+                }}
+              />
               <ItemFilter
                 className="mt2"
                 projectData={orderBy(filterProjectResult?.data?.data, ["name"])}
@@ -363,23 +380,6 @@ const PotentialUsers = props => {
                     ...walletListParams,
                     filters: temp,
                     current: 1,
-                  });
-                }}
-              />
-              <QuickFilter
-                title={"Tags"}
-                defaultValue={location?.query?.tag}
-                optionsList={getQuickFilterOptionList(
-                  orderBy(filterTagResult?.data?.data, ["tag"]),
-                )}
-                formatFunction={name =>
-                  formatTableTitle(name?.replace(/-/g, " "))
-                }
-                onFliterChange={tag => {
-                  setWalletListParams({
-                    ...walletListParams,
-                    current: 1,
-                    tags: tag ? [tag?.value] : [],
                   });
                 }}
               />
