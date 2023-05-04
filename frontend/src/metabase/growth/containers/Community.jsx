@@ -33,41 +33,49 @@ const Community = props => {
       : [],
     filters: location.query?.filters ? JSON.parse(location.query?.filters) : [],
   });
+const [queryType, setQueryType] = React.useState(null);
+const [walletListData, setWalletListData] = React.useState(null);
 
-  useEffect(() => {
-    router.replace({
-      pathname: location.pathname,
-      query: {
-        ...location.query,
-        page: walletListParams.current,
-        pageSize: walletListParams.pageSize,
-        quickFilter: walletListParams.quickFilter,
-        filters: JSON.stringify(walletListParams.filters),
-      },
-    });
-  }, [walletListParams]);
+useEffect(() => {
+  router.replace({
+    pathname: location.pathname,
+    query: {
+      ...location.query,
+      page: walletListParams.current,
+      pageSize: walletListParams.pageSize,
+      quickFilter: walletListParams.quickFilter,
+      filters: JSON.stringify(walletListParams.filters),
+    },
+  });
+}, [walletListParams]);
 
-  const infoResult = useQuery(
-    ["getCommunityInfo", project?.id],
-    async () => getCommunityInfo({ projectId: parseInt(project?.id) }),
-    { ...QUERY_OPTIONS, enabled: !!project?.id },
-  );
+const infoResult = useQuery(
+  ["getCommunityInfo", project?.id],
+  async () => getCommunityInfo({ projectId: parseInt(project?.id) }),
+  { ...QUERY_OPTIONS, enabled: !!project?.id },
+);
 
-  const filterResult = useQuery(
-    ["getCommunityQuickFilter", project?.id],
-    async () => getCommunityQuickFilter({ projectId: parseInt(project?.id) }),
-    { ...QUERY_OPTIONS, enabled: !!project?.id },
-  );
+const filterResult = useQuery(
+  ["getCommunityQuickFilter", project?.id],
+  async () => getCommunityQuickFilter({ projectId: parseInt(project?.id) }),
+  { ...QUERY_OPTIONS, enabled: !!project?.id },
+);
 
-  const listResult = useQuery(
-    ["getCommunityWalletAddress", project?.id, walletListParams],
-    async () =>
-      getCommunityWalletAddress({
-        ...walletListParams,
-        projectId: parseInt(project?.id),
-      }),
-    { ...QUERY_OPTIONS, enabled: !!project?.id },
-  );
+const listResult = useQuery(
+  ["getCommunityWalletAddress", project?.id, walletListParams],
+  async () =>
+    getCommunityWalletAddress({
+      ...walletListParams,
+      projectId: parseInt(project?.id),
+    }),
+  { ...QUERY_OPTIONS, enabled: !!project?.id },
+);
+
+useEffect(() => {
+  if (!listResult?.isLoading) {
+    setWalletListData(listResult?.data);
+  }
+}, [listResult?.isLoading]);
 
   function formatInfoResult(data) {
     const dataList = [];
@@ -429,9 +437,11 @@ const Community = props => {
         <>
           <ValueFilter
             className="mt1"
+            isLoading={queryType === "valueFilter" && listResult.isLoading}
             data={valueFilterOptionsList}
             onFliterChange={valueFilter => {
               if (!valueFilter) return;
+              setQueryType("valueFilter");
               let temp = [...walletListParams.filters];
               temp = temp.filter(
                 item => item.indicator !== valueFilter.indicator,
@@ -447,6 +457,7 @@ const Community = props => {
             }}
           />
           <QuickFilter
+            isLoading={queryType === "quickFilter" && listResult.isLoading}
             optionsList={getQuickFilterOptionList(filterResult?.data?.data)}
             defaultValue={
               walletListParams.quickFilter?.length > 0
@@ -454,6 +465,7 @@ const Community = props => {
                 : null
             }
             onFliterChange={tag => {
+              setQueryType("quickFilter");
               setWalletListParams({
                 ...walletListParams,
                 current: 1,
@@ -463,7 +475,7 @@ const Community = props => {
           />
         </>
       )}
-      {listResult.isLoading | !project?.id ? (
+      {listResult.isLoading | !project?.id && !walletListData ? (
         <div className="w-full p1">
           <Card className="w-full rounded" style={{ height: 650 }}>
             <LoadingSpinner />
@@ -472,9 +484,9 @@ const Community = props => {
       ) : (
         <WalletList
           router={router}
-          // isLoading={listResult?.isLoading}
+          isLoading={listResult?.isLoading}
           // isRefetching={listResult?.isFetching}
-          data={listResult?.data}
+          data={walletListData}
           actions={actions}
           onPageChange={(page, pageSize) => {
             setWalletListParams({

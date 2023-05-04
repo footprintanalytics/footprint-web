@@ -1,6 +1,6 @@
 /* eslint-disable react/prop-types */
 import React, { useState } from "react";
-import { Space, Tag, Row, Typography } from "antd";
+import { Space, Tag, Row, Typography, Button } from "antd";
 const { CheckableTag } = Tag;
 
 export const QuickFilter = props => {
@@ -21,17 +21,26 @@ export const QuickFilter = props => {
   };
   return (
     <div className="flex flex-row w-full p1">
+      {/* <Button
+        type="text"
+        loading={isLoading}
+        style={{
+          marginRight: 8,
+          marginTop: 5,
+        }}
+      > */}
       <span
         style={{
           marginRight: 8,
+          marginTop: 5,
           color: "white",
           whiteSpace: "nowrap",
-          marginTop: 5,
           width: titleWidth,
         }}
       >
         {title}:
       </span>
+      {/* </Button> */}
       <Space size={[0, 8]} wrap>
         {optionsList?.map(tag => (
           <CheckableTag

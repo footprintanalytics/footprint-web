@@ -43,9 +43,16 @@ export const WalletList = props => {
     <div className="flex flex-col w-full rounded p1">
       <Card bordered={false} className="">
         <div className="flex flex-row w-full justify-between align-end mb2">
-          <Typography.Text type="secondary">
-            Filtered {data?.total.toLocaleString("en-US")} Addresses
-          </Typography.Text>
+          <Button loading={isLoading} type="text" style={{ padding: 0 }}>
+            {isLoading ? (
+              <Typography.Text type="secondary">Loading ...</Typography.Text>
+            ) : (
+              <Typography.Text type="secondary">
+                Filtered {data?.total.toLocaleString("en-US")} Addresses
+              </Typography.Text>
+            )}
+          </Button>
+
           <Dropdown menu={{ items: actionItems }} trigger={["click", "hover"]}>
             <Button type="primary" className=" rounded">
               User Actions
@@ -68,7 +75,7 @@ export const WalletList = props => {
             },
           }}
           dataSource={data?.data}
-          loading={isRefetching || isLoading}
+          // loading={isRefetching || isLoading}
         />
       </Card>
     </div>
