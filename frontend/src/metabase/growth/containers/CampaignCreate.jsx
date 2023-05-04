@@ -72,12 +72,14 @@ const CampaignCreate = props => {
     ["getCohort", campaignSelected?.campaignType],
     async () => {
       if (campaignSelected?.cohortRequired) {
-        return await GetFgaCohort();
+        return await GetFgaCohort({projectId:project?.id});
       } else {
         return;
       }
     },
   );
+
+  
 
   useEffect(() => {
     if (cohortData) {

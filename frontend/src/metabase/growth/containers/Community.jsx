@@ -18,7 +18,7 @@ import { StatisticIndex } from "../components/Community/StatisticIndex";
 import { QuickFilter } from "../components/Community/QuickFilter";
 import { ValueFilter } from "../components/Community/ValueFilter";
 import { WalletList } from "../components/Community/WalletList";
-import { getGrowthProjectPath, valueFormat } from "../utils/utils";
+import { formatTag, getGrowthProjectPath, valueFormat } from "../utils/utils";
 const Community = props => {
   const { router, location, children, user, projectPath, menu, project } =
     props;
@@ -97,7 +97,7 @@ const Community = props => {
 
   const valueFilterOptionsList = [
     {
-      label: "Net Worth >=",
+      label: "In-Game Net Worth >=",
       indicator: "netWorth",
       comparisonSymbol: "gte",
       defaultValue:
@@ -105,7 +105,7 @@ const Community = props => {
           ?.comparisonValue ?? null,
     },
     {
-      label: "NFT Holding Value >=",
+      label: "In-Game NFT Holding Value >=",
       indicator: "nftHoldingValue",
       comparisonSymbol: "gte",
       defaultValue:
@@ -114,12 +114,21 @@ const Community = props => {
         )?.comparisonValue ?? null,
     },
     {
-      label: "Token Holding Value >=",
+      label: "In-Game Token Holding Value >=",
       indicator: "tokenHoldingValue",
       comparisonSymbol: "gte",
       defaultValue:
         walletListParams?.filters?.find(
           item => item.indicator === "tokenHoldingValue",
+        )?.comparisonValue ?? null,
+    },
+    {
+      label: "In-Game Trading Value(30D) >=",
+      indicator: "tradingValue",
+      comparisonSymbol: "gte",
+      defaultValue:
+        walletListParams?.filters?.find(
+          item => item.indicator === "tradingValue",
         )?.comparisonValue ?? null,
     },
     // { label: "Profit >=", indicator: "profit", comparisonSymbol: "gte" },
@@ -153,17 +162,17 @@ const Community = props => {
             props.router?.push({
               pathname: getGrowthProjectPath(
                 props.router?.params?.project,
-                "Opt-In Tool",
+                "Social Connect",
               ),
             })
           }
         >
-          Opt-In
+          Social Connect
         </a>
       ),
-      title: "Opt-In", //required
+      title: "Social Connect", //required
       link: null,
-      disabled: true,
+      disabled: false,
     },
   ];
 
@@ -172,7 +181,7 @@ const Community = props => {
       title: "Address",
       dataIndex: "address",
       key: "address",
-      render: (text, { ens, discordAvatar, twitterAvatar }, index) => (
+      render: (text, { ens }) => (
         <div className="flex flex-row">
           {/* <Avatar
             size={35}
@@ -202,25 +211,27 @@ const Community = props => {
       title: "Tag",
       key: "tags",
       dataIndex: "tags",
-      render: (_, { tags }) => (
-        <Typography.Paragraph
-          ellipsis={{
-            rows: 2,
-            expandable: true,
-            suffix: "",
-            symbol: "more",
-          }}
-          style={{
-            minWidth: 150,
-            maxWidth: 500,
-            fontSize: 10,
-            marginBottom: 0,
-          }}
-        >
-          {tags?.length > 0 ? (
-            <>
-              {tags?.join(", ")}
-              {/* {tags?.map(tag => {
+      render: (_, { tags }) => {
+        tags = tags?.map(i => formatTag(i));
+        return (
+          <Typography.Paragraph
+            ellipsis={{
+              rows: 2,
+              expandable: true,
+              suffix: "",
+              symbol: "more",
+            }}
+            style={{
+              minWidth: 150,
+              maxWidth: 500,
+              fontSize: 10,
+              marginBottom: 0,
+            }}
+          >
+            {tags?.length > 0 ? (
+              <>
+                {tags?.join(", ")}
+                {/* {tags?.map(tag => {
                 return (
                   <Tag
                     className="rounded"
@@ -231,12 +242,13 @@ const Community = props => {
                   </Tag>
                 );
               })} */}
-            </>
-          ) : (
-            <></>
-          )}
-        </Typography.Paragraph>
-      ),
+              </>
+            ) : (
+              <></>
+            )}
+          </Typography.Paragraph>
+        );
+      },
     },
     {
       title: "In-Game Net Worth",
@@ -270,6 +282,13 @@ const Community = props => {
       title: "In-Game Token Value",
       dataIndex: "holdingTokenValue",
       key: "holdingTokenValue",
+      align: "right",
+      render: text => (text !== null ? "$" + valueFormat(text) : ""),
+    },
+    {
+      title: "In-Game Trading Value(30D)",
+      dataIndex: "tradingValue",
+      key: "tradingValue",
       align: "right",
       render: text => (text !== null ? "$" + valueFormat(text) : ""),
     },
@@ -411,7 +430,7 @@ const Community = props => {
       ) : (
         <>
           <ValueFilter
-            className="mt2"
+            className="mt1"
             data={valueFilterOptionsList}
             onFliterChange={valueFilter => {
               if (!valueFilter) return;

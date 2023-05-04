@@ -19,12 +19,13 @@ import cx from "classnames";
 import { isDark } from "metabase/dashboard/components/utils/dark";
 
 const mapStatusToProps = (state, props) => {
+  const isFga = props.location.pathname.includes("/growth");
   return {
     from: localStorage.getItem("login-modal-from") || "",
     loginState: props.fromNav ? undefined : props.location.query.loginState,
     token: props.location.query.token,
     user: getUser(state),
-    channel: getChannel(state) || "homepage",
+    channel: isFga ? "FGA" : getChannel(state) || "homepage",
     project: props.project || props.location.query.project || "footprint",
     hideClose: props.hideClose,
     signTabState: props.signTabState,

@@ -42,7 +42,7 @@ const AboutDepth = () => {
       buttons: [
         {
           buttonText: "Check Research Report Dashboards",
-          link: "https://www.footprint.network/dashboards?category=Report&sortBy=&sortDirection=&current=1&model=",
+          link: "https://www.footprint.network/research/nft",
         },
         {
           buttonText: "GameFi Drill Down Analysis",

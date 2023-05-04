@@ -143,15 +143,16 @@ function App({
         description={undefined}
         keywords={undefined}
       />
-      <ConfigProvider
-        theme={getThemeConfig()}
-      >
+      <ConfigProvider theme={getThemeConfig()}>
         <ErrorBoundary onError={onError}>
           <ScrollToTop>
             <AppContainer className="spread">
               {/*<AppBanner />*/}
               {/*{isAppBarVisible && <AppBar isNavBarVisible={isNavBarVisible} />}*/}
-              <AppContentContainer className={isDark() ? "dark": ""} isAdminApp={isAdminApp}>
+              <AppContentContainer
+                className={isDark() ? "dark" : ""}
+                isAdminApp={isAdminApp}
+              >
                 {isNavBarVisible && <Navbar location={location} />}
 
                 <AppContent
@@ -159,7 +160,9 @@ function App({
                   id="app-content"
                   ref={setViewportElement}
                   key={`${user?.id}`}
-                  style={{ backgroundColor: isDark()? "#121828" : "transparent" }}
+                  style={{
+                    backgroundColor: isDark() ? "#121828" : "transparent",
+                  }}
                 >
                   <ContentViewportContext.Provider
                     value={viewportElement ?? null}

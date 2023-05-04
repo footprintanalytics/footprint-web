@@ -5,12 +5,20 @@ import { notification, Button, Modal } from "antd";
 import Link from "antd/lib/typography/Link";
 import { PublicApi, maybeUsePivotEndpoint } from "metabase/services";
 
+//  quickFilter --> Quick Filter
+export function formatKeyLabel(label: string) {
+  return label
+    .replace(/(?:^|\s)\S/g, (char: string) => char.toUpperCase())
+    .replace(/([a-z])([A-Z])/g, "$1 $2");
+}
+
+//  quick-filter --> Quick Filter
 export function formatTag(tag: string) {
   const words = tag.split("-");
   for (let i = 0; i < words.length; i++) {
     words[i] = words[i].charAt(0).toUpperCase() + words[i].slice(1);
   }
-  return words.join(" ");
+  return words.join(" ").replaceAll("Nft", "NFT");
 }
 export function formatType(tag: string) {
   const words = tag.split(" ");
@@ -19,7 +27,15 @@ export function formatType(tag: string) {
   }
   return words.join(" ");
 }
-
+// format number into 1,000,000.00
+export function valueFormat(value: number): string {
+  const formatter = new Intl.NumberFormat("en-US", {
+    style: "decimal",
+    minimumFractionDigits: 0,
+    maximumFractionDigits: 2,
+  });
+  return formatter.format(value);
+}
 export function showCohortSuccessModal(
   modalApi = Modal,
   cohort: any,
@@ -32,30 +48,22 @@ export function showCohortSuccessModal(
     content: "You can now view the User Profile of this cohort .",
     onOk() {
       router?.push({
-        pathname: `/growth/public/dashboard/55b1eb29-b15e-458f-9241-1862a0d19d3b`,
-        query: { tag: cohort?.title, cohort_title: cohort?.title },
-        hash: `#from=${from}`,
+        pathname: getGrowthProjectPath(router?.params?.project, "Cohort"),
       });
+      // router?.push({
+      //   pathname: `/growth/public/dashboard/55b1eb29-b15e-458f-9241-1862a0d19d3b`,
+      //   query: { tag: cohort?.title, cohort_title: cohort?.title ,cohortId: cohort?.id},
+      //   hash: `#from=${from}`,
+      // });
     },
     onCancel() {
       onCancel?.();
     },
     closable: true,
-    okText: "View User Profile",
+    okText: "View Cohort",
     cancelText: "Close",
   });
 }
-
-// format number into 1,000,000.00
-export function valueFormat(value: number): string {
-  const formatter = new Intl.NumberFormat("en-US", {
-    style: "decimal",
-    minimumFractionDigits: 0,
-    maximumFractionDigits: 2,
-  });
-  return formatter.format(value);
-}
-
 export function updateHashValue(
   hash: string,
   key: string,
@@ -72,25 +80,23 @@ export function updateHashValue(
       .join("&")
   );
 }
-
-export function checkIsDemoAccountAndAlert(
-  notificationApi = notification,
-  user: any,
+export function checkIsNeedContactUs(
+  modal = Modal,
+  project: any = null,
   action: () => any,
-  logout: () => any,
+  onBlockAction: () => any,
+  closable = true,
 ) {
-  if (user && user.email === "fga@footprint.network") {
-    const key = "checkIsDemoAccountAndAlert";
-    notificationApi.info({
-      key,
-      message: `Contact Us`,
-      description: (
+  // if (user && user.email === "fga@footprint.network") {
+  if (project?.isDemo || !project) {
+    modal.info({
+      title: "Contact Us",
+      closable: closable,
+      content: (
         <>
           <div className=" mt1 text-light">
-            This account is a public demo account for Footprint GA. If you wish
-            to view data dashboards related to your own project, please create a
-            new account and link it to your corresponding project. For any other
-            inquiries, please feel free to contact our BD team. Thank you.
+            If you wish to view data dashboards related to your own project,
+            please feel free to contact our BD team. Thank you.
           </div>
           <div className="mt2">
             <Link target="_blank" href="mailto:sales@footprint.network">
@@ -108,35 +114,21 @@ export function checkIsDemoAccountAndAlert(
           </div>
         </>
       ),
-      placement: "top",
-      btn: (
-        <>
-          <Button
-            type="default"
-            size="small"
-            target="_blank"
-            href="https://forms.gle/Xs8WahhYh26xKoDj7"
-          >
-            Book a meeting
-          </Button>
-          <Button
-            type="primary"
-            size="small"
-            className="ml1"
-            onClick={async () => {
-              await logout?.();
-              notificationApi.destroy(key);
-              localStorage.setItem("sign-out-demo-account", "true");
-            }}
-          >
-            Create account
-          </Button>
-        </>
-      ),
+      okText: "Book a meeting",
+      onOk() {
+        window.open("https://forms.gle/Xs8WahhYh26xKoDj7", "_blank");
+      },
     });
+    onBlockAction?.();
+    return true;
   } else {
-    action();
+    action?.();
+    return false;
   }
+
+  // } else {
+  //   action();
+  // }
 }
 
 export function updateDashboardPara(
@@ -233,6 +225,7 @@ export function getGaMenuTabs(
         "Project Info",
         "Template Gallery",
         "Opt-In Tool",
+        "Social Connect",
         "Custom Analysis",
         "Activator",
         "Channel",
@@ -262,9 +255,9 @@ export function getGaMenuTabs(
         disabled: disabled,
         label: item.name,
         dashboard_uuid: item.uuid ?? null,
+        // type: children.length > 0 ? "group" : null,
       });
     }
-
     if (!disabled) {
       menuTabs.push({
         key: `${item.name}${children.length > 0 ? "-sub" : ""}`,
@@ -273,6 +266,7 @@ export function getGaMenuTabs(
         disabled: disabled,
         label: item.name,
         dashboard_uuid: item.uuid ?? null,
+        // type: children.length > 0 ? "group" : null,
       });
     }
     if (item.uuid) {
@@ -290,6 +284,7 @@ export function clearGACache() {
   localStorage.removeItem("LatestGAProjectId");
   localStorage.removeItem("LatestGAProject");
   localStorage.removeItem("GAUserId");
+  localStorage.removeItem("IsFgaDemoProject");
 }
 
 export function saveLatestGAProject(LatestGAProject: string) {

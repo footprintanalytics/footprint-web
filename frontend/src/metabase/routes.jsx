@@ -142,6 +142,28 @@ export const getRoutes = store => (
         <Route path=":menu/:subMenu" />
       </Route>
 
+      <Route path="/research">
+        <IndexRoute
+          component={props => <LazyLoad.Research {...props} classify="nft" />}
+        />
+        <Route
+          path="nft"
+          component={props => <LazyLoad.Research {...props} classify="nft" />}
+        >
+          <Route path=":menu/:subMenu" />
+          <Route path=":menu/:subMenu/:value" />
+        </Route>
+        <Route
+          path="gamefi"
+          component={props => (
+            <LazyLoad.Research {...props} classify="gamefi" />
+          )}
+        >
+          <Route path=":menu/:subMenu" />
+          <Route path=":menu/:subMenu/:value" />
+        </Route>
+      </Route>
+
       <Route path="/dashboards" component={LazyLoad.Dashboards} />
 
       <Route path="/data-api">
@@ -402,92 +424,98 @@ export const getRoutes = store => (
           path="chart/:titleAndId"
           component={LazyLoad.GuestQuestion}
         />
-
-        {/* ----------- Growth Analytics 👇 --------- */}
-        <Route
-          title={t`Dashboard`}
-          path="/growth/@:name/:dashboardName"
-          component={LazyLoad.DashboardApp}
-        >
-          <ModalRoute
-            title={t`Move`}
-            path="move"
-            modal={LazyLoad.DashboardMoveModal}
-          />
-          <ModalRoute
-            title={t`Copy`}
-            path="copy"
-            modal={LazyLoad.DashboardCopyModal}
-          />
-          <ModalRoute
-            title={t`Details`}
-            path="details"
-            modal={LazyLoad.DashboardDetailsModal}
-          />
-          <ModalRoute
-            title={t`Archive`}
-            path="archive"
-            modal={LazyLoad.ArchiveDashboardModal}
-          />
-        </Route>
-        <Route
-          title={t`Public Dashboard`}
-          path="/growth/public/dashboard/:uuid"
-          component={LazyLoad.PublicDashboard}
+      </Route>
+      {/* ----------- Growth Analytics 👇 --------- */}
+      <Route
+        title={t`Dashboard`}
+        path="/growth/@:name/:dashboardName"
+        component={LazyLoad.DashboardApp}
+      >
+        <ModalRoute
+          title={t`Move`}
+          path="move"
+          modal={LazyLoad.DashboardMoveModal}
         />
-        <Route
-          title={t`Chart`}
-          path="/growth/guest/chart/:titleAndId"
-          component={LazyLoad.GuestQuestion}
+        <ModalRoute
+          title={t`Copy`}
+          path="copy"
+          modal={LazyLoad.DashboardCopyModal}
         />
-        <Route
-          path="/growth/public/scene/chart/:titleAndId"
-          component={LazyLoad.PublicQuestion}
+        <ModalRoute
+          title={t`Details`}
+          path="details"
+          modal={LazyLoad.DashboardDetailsModal}
         />
-        <Route
-          path="/growth/public/widget/chart/:uuid"
-          component={LazyLoad.WidgetPublic}
-        />
-        <Route
-          path="/growth/public/chart/:titleAndId"
-          component={LazyLoad.PublicQuestion}
-        />
-        <Route
-          title={t`Question`}
-          path="/growth/chart"
-          component={LazyLoad.Question}
-        >
-          <Route
-            title={t`Custom Upload`}
-            path="custom-upload"
-            component={LazyLoad.CustomUpload}
-          />
-          <Route
-            title={t`Buffet`}
-            path=":slug/buffet"
-            component={LazyLoad.Question}
-          />
-          <Route
-            title={t`Notebook`}
-            path="notebook"
-            component={LazyLoad.Question}
-          />
-          <Route title={t`Detail`} path=":slug" component={LazyLoad.Question} />
-          <Route
-            title={t`Detail Notebook`}
-            path=":slug/notebook"
-            component={LazyLoad.Question}
-          />
-        </Route>
-        <Route path="/growth" component={LazyLoad.GaProjectContainer}>
-          <Route path="project/:project(/:menu)" />
-        </Route>
-        <Route
-          title={t`Submit Contract`}
-          path="/growth/submit/contract/add"
-          component={LazyLoad.SubmitContractAdd}
+        <ModalRoute
+          title={t`Archive`}
+          path="archive"
+          modal={LazyLoad.ArchiveDashboardModal}
         />
       </Route>
+      <Route
+        title={t`Public Dashboard`}
+        path="/growth/public/dashboard/:uuid"
+        component={LazyLoad.PublicDashboard}
+      />
+      <Route
+        title={t`Chart`}
+        path="/growth/guest/chart/:titleAndId"
+        component={LazyLoad.GuestQuestion}
+      />
+      <Route
+        title={t`Chart`}
+        path="/growth/public/scene/chart/:titleAndId"
+        component={LazyLoad.PublicQuestion}
+      />
+      <Route
+        title={t`Chart`}
+        path="/growth/public/widget/chart/:uuid"
+        component={LazyLoad.WidgetPublic}
+      />
+      <Route
+        title={t`Chart`}
+        path="/growth/public/chart/:titleAndId"
+        component={LazyLoad.PublicQuestion}
+      />
+      <Route
+        title={t`Question`}
+        path="/growth/chart"
+        component={LazyLoad.Question}
+      >
+        <Route
+          title={t`Custom Upload`}
+          path="custom-upload"
+          component={LazyLoad.CustomUpload}
+        />
+        <Route
+          title={t`Buffet`}
+          path=":slug/buffet"
+          component={LazyLoad.Question}
+        />
+        <Route
+          title={t`Notebook`}
+          path="notebook"
+          component={LazyLoad.Question}
+        />
+        <Route title={t`Detail`} path=":slug" component={LazyLoad.Question} />
+        <Route
+          title={t`Detail Notebook`}
+          path=":slug/notebook"
+          component={LazyLoad.Question}
+        />
+      </Route>
+      <Route
+        title={t`Growth`}
+        path="/growth"
+        component={LazyLoad.GaProjectContainer}
+      >
+        <Route path="project/:project(/:menu)" />
+      </Route>
+      <Route
+        title={t`Submit Contract`}
+        path="/growth/submit/contract/add"
+        component={LazyLoad.SubmitContractAdd}
+      />
       {/* ----------- Growth Analytics 👆 --------- */}
 
       <Route title={t`Question`} path="/chart" component={LazyLoad.Question}>

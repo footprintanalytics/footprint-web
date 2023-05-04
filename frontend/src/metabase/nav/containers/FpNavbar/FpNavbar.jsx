@@ -116,6 +116,20 @@ const leftMenuData = [
 const rightMenuData = [
   // { url: "/moon-men", name: "Moon Men" },
   {
+    name: "Research",
+    icon: "protocols",
+    menu: [
+      {
+        title: "NFT Research",
+        link: "/research/nft",
+      },
+      {
+        title: "GameFi Research",
+        link: "/research/gamefi",
+      },
+    ],
+  },
+  {
     name: "Data",
     icon: "protocols",
     menu: [
@@ -635,7 +649,6 @@ class FpNavbar extends Component {
       if (block) {
         return;
       }
-      console.log("onCreateAction");
       afterSuccess();
     };
 
@@ -689,11 +702,11 @@ class FpNavbar extends Component {
         </div>
       );
     };
-    const isDark = window?.location?.pathname === "/";
-
+    const isDark = window?.location?.pathname === "/" || window?.location?.pathname?.startsWith("/research");
+    const isHome = window?.location?.pathname === "/";
     return (
       <div className={cx({ "dark": isDark })}>
-        <div className="Nav" style={{ display: rootDisplay }}>
+        <div className="Nav" style={{ display: rootDisplay, borderBottom: isHome ? "none" : "" }}>
           <div className="Nav__left">
             <MobileMenuIcon />
             <Link

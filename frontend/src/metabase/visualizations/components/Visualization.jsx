@@ -44,6 +44,7 @@ import { getOssUrl } from "metabase/lib/image";
 import ErrorGuide from "metabase/query_builder/components/ErrorGuide";
 import CreateCampaign from "metabase/growth/components/buttons/CreateCampaign";
 import CreateCohort from "metabase/growth/components/buttons/CreateCohort";
+import SocialConnect from "metabase/growth/components/buttons/SocialConnect";
 import CreateFliterCohort from "metabase/growth/components/buttons/CreateFliterCohort";
 import FgaErrorGuide from "metabase/growth/components/FgaErrorGuide";
 import { datasetContainsNoResults } from "metabase-lib/queries/utils/dataset";
@@ -510,11 +511,17 @@ class Visualization extends React.PureComponent {
             </Tooltip>
           </div>
         )}
-        {!hideWatermark && !isText && !isImage && !isVideo && !isEmbed && !isTableau && !noResults && (
-          <div className="waterMarkHome">
-            <span />
-          </div>
-        )}
+        {!hideWatermark &&
+          !isText &&
+          !isImage &&
+          !isVideo &&
+          !isEmbed &&
+          !isTableau &&
+          !noResults && (
+            <div className="waterMarkHome">
+              <span />
+            </div>
+          )}
         {!!hasHeader && (
           <div className="p1 flex-no-shrink">
             <ChartCaption
@@ -629,6 +636,22 @@ class Visualization extends React.PureComponent {
           </div>
         ) : (
           <>
+            {!this.props.isEditing &&
+              isDashboard &&
+              ["Discord Members Info", "Twitter Followers Info"].includes(
+                this.props.dashcard?.card?.name,
+              ) && (
+                <div
+                  className="flex"
+                  style={{
+                    position: "absolute",
+                    right: 25,
+                    top: 10,
+                  }}
+                >
+                  <SocialConnect />
+                </div>
+              )}
             {this.state.visualization?.identifier === "fgatable" &&
               !this.props.isEditing &&
               isDashboard && (
@@ -669,7 +692,7 @@ class Visualization extends React.PureComponent {
             <CardVisualization
               {...this.props}
               // NOTE: CardVisualization class used to target ExplicitSize HOC
-              className="CardVisualization flex-full flex-basis-none"
+              className="CardVisualization flex-full flex-basis-none overflow-auto"
               isPlaceholder={isPlaceholder}
               series={series}
               settings={settings}

@@ -7,8 +7,8 @@ export const apiGet = async api => {
 };
 
 // FGA Api
-export const GetFgaCohort = async () => {
-  return GET("/api/v1/fga/cohort");
+export const GetFgaCohort = async params => {
+  return GET("/api/v1/fga/cohort", params);
 };
 
 export const CreateFgaCohort = async params => {
@@ -74,7 +74,9 @@ export const getCampaign = async params => {
 export const getCampaignDetail = async params => {
   return GET(`/api/v1/fga/campaign/${params.id}`);
 };
-
+export const createCampaignCohort = async params => {
+  return POST(`/api/v1/fga/campaign/mapping/cohort`, params);
+};
 export const getCommunityInfo = async params => {
   return GET(`/api/v1/fga/community/info`, params);
 };
@@ -84,7 +86,6 @@ export const getCommunityQuickFilter = async params => {
 export const getCommunityWalletAddress = async params => {
   return POST(`/api/v1/fga/community/wallet-address`, params);
 };
-
 export const getPotentialUseFilterProject = async params => {
   return GET(`/api/v1/fga/potential-user/filter/project`, params);
 };

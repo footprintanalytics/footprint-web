@@ -10,6 +10,7 @@ import { getUser } from "metabase/selectors/user";
 import { parseHashOptions } from "metabase/lib/browser";
 import { getGrowthProjectPath, updateHashValue } from "../utils/utils";
 
+// TODO: Experimental feature, user profile page with tab switch
 const UserProfile = props => {
   const { location, router, project, projectPath } = props;
   const [currentTab, setCurrentTab] = useState(null);

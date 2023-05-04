@@ -13,10 +13,11 @@ import {
 import { connect } from "react-redux";
 import { CreateFgaCohortByAddress } from "metabase/new-service";
 import {
+  checkIsNeedContactUs,
   getLatestGAProjectId,
   showCohortSuccessModal,
 } from "metabase/growth/utils/utils";
-import { getUser } from "metabase/selectors/user";
+import { getUser, getFgaProject } from "metabase/selectors/user";
 import {
   loginModalShowAction,
   createFgaProjectModalShowAction,
@@ -29,6 +30,7 @@ const UploadWallets = ({
   setCreateFgaProjectModalShowAction,
   btnText,
   refetchData,
+  project,
   router,
 }) => {
   const [isCohortModalOpen, setCohortModalOpen] = useState(false);
@@ -37,6 +39,20 @@ const UploadWallets = ({
   const [walletList, setWalletList] = useState([]);
 
   const onSend = async () => {
+    if (
+      checkIsNeedContactUs(
+        modal,
+        project,
+        () => {},
+        () => {
+          setCohortModalOpen(false);
+        },
+        true,
+      )
+    ) {
+      return;
+    }
+
     if (!cohortName) {
       message.error("Please enter the name of your cohort.");
       return;
@@ -136,7 +152,15 @@ const UploadWallets = ({
     <>
       <div
         onClick={() => {
-          setCohortModalOpen(true);
+          checkIsNeedContactUs(
+            modal,
+            project,
+            () => {
+              setCohortModalOpen(true);
+            },
+            () => {},
+            true,
+          );
         }}
       >
         Upload Wallets
@@ -194,6 +218,7 @@ const mapDispatchToProps = {
 
 const mapStateToProps = (state, props) => {
   return {
+    project: getFgaProject(state),
     user: getUser(state),
   };
 };

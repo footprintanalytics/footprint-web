@@ -3,16 +3,17 @@ import React from "react";
 import { getOssUrl } from "metabase/lib/image";
 import AboutButton from "metabase/containers/aboutV2/components/AboutButton";
 import AboutImage from "metabase/containers/aboutV2/components/AboutImage";
+import { CHAIN_COUNT } from "metabase/lib/constants";
 
 const AboutDataCoverage = () => {
   const data = [
     {
       label: "Wallet Addresses",
-      value: 7541322,
+      value: "400 Million",
     },
     {
       label: "Tags",
-      value: 9265652,
+      value: "450 Million",
     },
     {
       label: "NFT Collections",
@@ -33,11 +34,11 @@ const AboutDataCoverage = () => {
         Data Coverage
       </div>
       <div className="About__data-coverage-chain">
-        25 Chains
+        {`${CHAIN_COUNT}`} Chains
       </div>
       <AboutImage
         className="About__data-image"
-        src={getOssUrl("home-v2/img_data_coverage.png?1=1")}
+        src={getOssUrl("home-v2/img_data_coverage_v2.png?1=1")}
         alt={"data coverage"}
       />
       <ul>

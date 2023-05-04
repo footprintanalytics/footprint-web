@@ -230,9 +230,13 @@
   color: #3434b2;
 }
 
+.home .nav {
+  border-bottom: none !important;
+}
+
 .dark .Nav {
   background-color: #121828;
-  border-bottom: none;
+  border-bottom: 1px var(--color-border-dark) solid;
 }
 
 .dark .Nav__menu-item-color {

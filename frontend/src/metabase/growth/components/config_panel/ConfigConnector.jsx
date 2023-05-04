@@ -87,9 +87,6 @@ const ConfigConnector = props => {
         });
     }
   };
-  const onEdit = value => {
-    // setEditable(true);
-  };
 
   const showDiscordBotLink = values => {
     const link = `https://discord.com/oauth2/authorize?client_id=${values.bot_id}&scope=bot&permissions=0&guild_id=${values.guild_id}`;
@@ -113,6 +110,7 @@ const ConfigConnector = props => {
     });
   };
 
+  // add ga connector need to authorization by google
   const toAuthorization = propertyId => {
     if (!user) {
       setOpenDrawer({ show: false });
@@ -159,7 +157,7 @@ const ConfigConnector = props => {
   connector?.connectionSpecification?.map(item => {
     initialValues[item.key] = item.value;
   });
-  console.log(initialValues);
+
   return (
     <div
       className="flex flex-col w-full p-5"
@@ -215,7 +213,19 @@ const ConfigConnector = props => {
                   ) : null}
                 </Space>
               }
-              rules={[{ required: i.required }]}
+              rules={[
+                { required: i.required },
+                i.key === "screen_name" && {
+                  validator: (_, value) => {
+                    if (value && value.startsWith("@")) {
+                      return Promise.reject(
+                        new Error("Twitter handler cannot start with @ symbol"),
+                      );
+                    }
+                    return Promise.resolve();
+                  },
+                },
+              ]}
             >
               {i.type === "text" && (
                 <Input
@@ -279,6 +289,6 @@ const ConfigConnector = props => {
       </Form>
     </div>
   );
-};
+};;
 
 export default ConfigConnector;

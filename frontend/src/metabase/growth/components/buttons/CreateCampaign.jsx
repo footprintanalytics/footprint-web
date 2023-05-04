@@ -6,7 +6,7 @@ import {
   loginModalShowAction,
   createFgaProjectModalShowAction,
 } from "metabase/redux/control";
-import { getUser } from "metabase/selectors/user";
+import { getFgaProject, getUser } from "metabase/selectors/user";
 import { getGrowthProjectPath } from "metabase/growth/utils/utils";
 
 const CreateCampaign = ({
@@ -15,6 +15,7 @@ const CreateCampaign = ({
   setLoginModalShowAction,
   setCreateFgaProjectModalShowAction,
   project,
+  projectDetails,
   plain,
 }) => {
   const onClickCreateCampaign = () => {
@@ -40,6 +41,7 @@ const mapDispatchToProps = {
 const mapStateToProps = (state, props) => {
   return {
     user: getUser(state),
+    projectDetails: getFgaProject(state),
     project: props.params.project,
     menu: props.params.menu,
   };

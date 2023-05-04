@@ -45,221 +45,230 @@ export const top_protocols = [
   },
 ];
 
-export const template_gallery = [
-  // {
-  //   category: "Campaign Analysis",
-  //   desc: "Campaign Analysis is the technique of evaluating marketing campaigns to determine their effectiveness in achieving specific business objectives.",
-  //   items: [
-  //     {
-  //       dashboardName: "Token Airdrop Monitoring",
-  //       id: 7426,
-  //       dashboardLink: "/growth/public/dashboard/7426#from=Custom Analysis",
-  //     },
-  //     {
-  //       dashboardName: "Dashboard for NFT Minting",
-  //       dashboardLink:
-  //         "/growth/public/dashboard/7569?campaign_id=5284#from=Custom Analysis",
-  //       id: 7569,
-  //     },
-  //   ],
-  // },
-  {
-    category: "Campaign Analysis",
-    desc: "Analyze campaign data to determine which platforms and campaigns are the most popular, and identify the most precise target audience.",
-    items: [
-      {
-        dashboardName: "Blur Airdrop",
-        id: 7121,
-        dashboardLink: "/growth/public/dashboard/7121#from=Custom Analysis",
-      },
-      {
-        dashboardName: "Token Airdrop Monitoring",
-        id: 7426,
-        dashboardLink: "/growth/public/dashboard/7426#from=Custom Analysis",
-      },
-      {
-        dashboardName: "Dashboard for NFT Minting",
-        dashboardLink:
-          "/growth/public/dashboard/7569?campaign_id=5284#from=Custom Analysis",
-        id: 7569,
-      },
-      {
-        category: "Go to market",
-        dashboardName: "Galxe Campaign Overall Stats",
-        id: 7408,
-        dashboardLink: "/growth/public/dashboard/7408#from=Custom Analysis",
-      },
-      {
-        category: "Go to market",
-        desc: "",
-        dashboardName: "Galxe Campaign Analysis",
-        dashboardLink:
-          "/growth/public/dashboard/7407?campaign_id=5284#from=Custom Analysis",
-        id: 7407,
-      },
-      {
-        category: "Go to market",
-        desc: "",
-        dashboardName: "Galxe Campaign Comparison",
-        dashboardLink:
-          "/growth/public/dashboard/7409?campaign_a_id=5284&campaign_b_id=8087#from=Custom Analysis",
-        id: 7409,
-      },
-      {
-        category: "Go to market",
-        desc: "",
-        dashboardName: "Galxe Campaign Reward Analysis",
-        dashboardLink:
-          "/growth/public/dashboard/7584?series_date=past90days&campaign_name=galxe#from=Custom Analysis",
-        id: 7584,
-      },
-    ],
-  },
-  {
-    category: "GameFi",
-    desc: "Gain deep industry insights by thoroughly understanding industry data, and develop a comprehensive understanding of operational status by analyzing games.",
-    items: [
-      {
-        category: "GameFi",
-        desc: "Gain deep industry insights by thoroughly understanding industry data, and develop a comprehensive understanding of operational status by analyzing games.",
-        dashboardName: "GameFi Industry Insights & Ranking",
-        dashboardLink:
-          "/growth/public/dashboard/7164?series_date=past90days#from=Custom Analysis",
-        id: 7164,
-      },
-      {
-        category: "GameFi",
-        desc: "",
-        dashboardName: "GameFi Drill Down Analysis",
-        dashboardLink: "/growth/public/dashboard/5947#from=Custom Analysis",
-        id: 5947,
-      },
-      {
-        category: "GameFi",
-        desc: "",
-        dashboardName: "GameFi Users Overview",
-        dashboardLink:
-          "/growth/public/dashboard/3578?date__=past180days&chain=BNB%20Chain#from=Custom Analysis",
-        id: 3578,
-      },
-      {
-        category: "GameFi",
-        desc: "",
-        dashboardName: "Gamer Profile",
-        id: 6345,
-        dashboardLink:
-          "/growth/public/dashboard/6345?wallet_address=0x81e4fb0c64bf49f89b57f6648562fc9a791b2e92#from=Custom Analysis",
-      },
-      {
-        category: "GameFi",
-        desc: "",
-        dashboardName: "GameFi Project Summary",
-        id: 5911,
-        dashboardLink:
-          "/growth/public/dashboard/5911?gamefi_name=splinterlands&date_range=past90days#from=Custom Analysis",
-      },
-      {
-        category: "GameFi",
-        desc: "",
-        dashboardName: "GameFi Compare",
-        id: 6390,
-        dashboardLink:
-          "/growth/public/dashboard/6390?game_a=walken&game_b=stepn&chain=Solana#from=Custom Analysis",
-      },
-    ],
-  },
-  {
-    category: "NFT",
-    desc: "Gain a deeper understanding  by analyzing the overview and holder profit&loss of NFTs.",
-    items: [
-      {
-        category: "NFT",
-        desc: "Gain a deeper understanding  by analyzing the overview and holder profit&loss of NFTs.",
-        dashboardName: "Top X NFT by Trading Vol",
-        id: 7175,
-        dashboardLink:
-          "/growth/public/dashboard/7175?trading_vol._%253E%253D=1000000#from=Custom Analysis",
-      },
-      {
-        category: "NFT",
-        desc: "",
-        dashboardName: "Multi-NFT Overview",
-        id: 7185,
-        dashboardLink:
-          "/growth/public/dashboard/7185?nft_collection_contract_address=0xed55e4477b795eaa9bb4bca24df42214e1a05c18&series_date=past30days#from=Custom Analysis",
-      },
-      {
-        category: "NFT",
-        desc: "",
-        dashboardName: "NFT Overview",
-        id: 7139,
-        dashboardLink:
-          "/growth/public/dashboard/7139?nft_collection_contract_address=0xed55e4477b795eaa9bb4bca24df42214e1a05c18&nft_collection_contract_address=0x16a1dcd0f76947dc3d3ba5158952107ef0321ad9&nft_collection_contract_address=0x5891eb497d1ddb4e3933981b55b37d5f98bbfbcf&nft_collection_contract_address=0xb55a820d92809bcff91d568fc1ef0e451c69f5e8&nft_collection_contract_address=0x15f3e5a30e45a58b15bba610f27689fbc7de8c3c&data=past3months#from=Custom Analysis",
-      },
-      {
-        category: "NFT",
-        desc: "",
-        id: 7192,
-        dashboardName: "Profit Leaderboard for Collection",
-        dashboardLink:
-          "/growth/public/dashboard/7192?collection_contract_address=0xa342f5d851e866e18ff98f351f2c6637f4478db5#from=Custom Analysis",
-      },
-      {
-        category: "NFT",
-        desc: "",
-        dashboardName: "Multi-NFT Collections Royalties",
-        id: 7188,
-        dashboardLink:
-          "/growth/public/dashboard/7188?nft_collections=0x6a570bb15bc67968868c19b0ec7dcccdfd8ed089&nft_collections=0xed55e4477b795eaa9bb4bca24df42214e1a05c18&nft_collections=0x16a1dcd0f76947dc3d3ba5158952107ef0321ad9&nft_collections=0xb55a820d92809bcff91d568fc1ef0e451c69f5e8&nft_collections=0x5891eb497d1ddb4e3933981b55b37d5f98bbfbcf&nft_collections=0x15f3e5a30e45a58b15bba610f27689fbc7de8c3c&series_date=past30days#from=Custom Analysis",
-      },
-      {
-        category: "NFT",
-        desc: "",
-        id: 6808,
-        dashboardName: "Wallet Tracing",
-        dashboardLink:
-          "/growth/public/dashboard/6808?collection=benji-bananas-membership-pass&date_range=past30days#from=Custom Analysis",
-      },
-      {
-        category: "NFT",
-        desc: "",
-        id: 7187,
-        dashboardName: "Owner Analysis",
-        dashboardLink:
-          "/growth/public/dashboard/7187?target_collection=0xed55e4477b795eaa9bb4bca24df42214e1a05c18&selected_collections=0x16a1dcd0f76947dc3d3ba5158952107ef0321ad9&selected_collections=0xb55a820d92809bcff91d568fc1ef0e451c69f5e8&selected_collections=0x6a570bb15bc67968868c19b0ec7dcccdfd8ed089&selected_collections=0x5891eb497d1ddb4e3933981b55b37d5f98bbfbcf&selected_collections=0x15f3e5a30e45a58b15bba610f27689fbc7de8c3c&selected_collections=0x34d85c9cdeb23fa97cb08333b511ac86e1c4e258&selected_collections=0xbc4ca0eda7647a8ab7c2061c2e118a18a936f13d&selected_collection_balance_%253E%253D=0&wallet_address=0x950fca90ae7eb55cd35326eb8e6350747d4cf32e#from=Custom Analysis",
-      },
-      {
-        category: "NFT",
-        desc: "",
-        id: 7170,
-        dashboardName: "Mutual Holders",
-        dashboardLink:
-          "/growth/public/dashboard/7170?collection_a_=0xbc4ca0eda7647a8ab7c2061c2e118a18a936f13d&collection_b=0xb47e3cd837ddf8e4c57f05d70ab865de6e193bbb&holder_tag=mutual_holders#from=Custom Analysis",
-      },
-    ],
-  },
-  {
-    category: "Investment Portfolio",
-    desc: "Stay up-to-date on industry financing trends and keep a close eye on investment institutions' portfolios",
-    items: [
-      {
-        category: "Investment Portfolio",
-        desc: "Stay up-to-date on industry financing trends and keep a close eye on investment institutions' portfolios",
-        dashboardName: "Investment History of Project",
-        id: 3462,
-        dashboardLink:
-          "/growth/public/chart/Investment-History-of-Project-fp-d24f9ed8-82ce-402d-b89c-cf4554c4f683#from=Custom Analysis",
-      },
-      {
-        category: "Investment Portfolio",
-        desc: "",
-        id: 824,
-        dashboardName: "Investment History of VC",
-        dashboardLink: "/growth/public/dashboard/824#from=Custom Analysis",
-      },
-    ],
-  },
-];
+export const template_gallery = project => {
+  const protocolSlug = project?.protocolSlug;
+  const project_name = project?.protocolName;
+  const twitterHandler = project?.twitter?.handler;
+  const nftCollectionAddressFirst = project?.nftCollectionAddress?.[0];
+  const guild_id = project?.discord?.guildId;
+  const params = `${
+    protocolSlug
+      ? "protocol_slug=" + protocolSlug + "&gamefi=" + protocolSlug
+      : ""
+  }${twitterHandler ? "&twitter_handler=" + twitterHandler : ""}${
+    nftCollectionAddressFirst
+      ? "&collection_contract_address=" +
+        nftCollectionAddressFirst?.address +
+        "&chain=" +
+        nftCollectionAddressFirst?.chain
+      : ""
+  }${guild_id ? "&guild_id=" + guild_id : ""}${
+    project_name ? "&project_name=" + project_name : ""
+  }#from=Custom Analysis`;
+  console.log("template_gallery params", params);
+  return [
+    // {
+    //   category: "Campaign Analysis",
+    //   desc: "Campaign Analysis is the technique of evaluating marketing campaigns to determine their effectiveness in achieving specific business objectives.",
+    //   items: [
+    //     {
+    //       dashboardName: "Token Airdrop Monitoring",
+    //       id: 7426,
+    //       dashboardLink: "/growth/public/dashboard/7426#from=Custom Analysis",
+    //     },
+    //     {
+    //       dashboardName: "Dashboard for NFT Minting",
+    //       dashboardLink:
+    //         "/growth/public/dashboard/7569?campaign_id=5284#from=Custom Analysis",
+    //       id: 7569,
+    //     },
+    //   ],
+    // },
+    {
+      category: "Campaign Analysis",
+      desc: "Analyze campaign data to determine which platforms and campaigns are the most popular, and identify the most precise target audience.",
+      items: [
+        {
+          dashboardName: "Looksrare Airdrop Effect",
+          id: 7901,
+          dashboardLink: `/growth/public/dashboard/908f02a9-90c1-4aa3-960a-293d3641f94f?tag_as_potential=active-nft-trader&${params}`,
+        },
+        {
+          dashboardName: "Blur Airdrop",
+          id: 7121,
+          dashboardLink: `/growth/public/dashboard/37c8520e-bd79-4fe1-8667-5c4ab73cf79b?${params}`,
+        },
+        {
+          dashboardName: "Token Airdrop Monitoring",
+          id: 7426,
+          dashboardLink: `/growth/public/dashboard/c676fe55-c785-4015-bc8a-27c18b57826f?${params}`,
+        },
+        {
+          dashboardName: "Dashboard for NFT Minting",
+          dashboardLink: `/growth/public/dashboard/340f11c8-144e-4c24-a298-b5564c4a88a8?campaign_id=5284&${params}`,
+          id: 7569,
+        },
+        {
+          category: "Go to market",
+          dashboardName: "Galxe Campaign Overall Stats",
+          id: 7408,
+          dashboardLink: `/growth/public/dashboard/b4658254-37a3-4965-87e5-acbd548aaa93?${params}`,
+        },
+        {
+          category: "Go to market",
+          desc: "",
+          dashboardName: "Galxe Campaign Analysis",
+          dashboardLink: `/growth/public/dashboard/f1c6f82d-2b7d-448d-b86c-6149e93c4e4a?campaign_id=5284&${params}`,
+          id: 7407,
+        },
+        {
+          category: "Go to market",
+          desc: "",
+          dashboardName: "Galxe Campaign Comparison",
+          dashboardLink: `/growth/public/dashboard/25c72dde-126d-4676-b409-c40612e87c31?campaign_a_id=5284&campaign_b_id=8087&${params}`,
+          id: 7409,
+        },
+        {
+          category: "Go to market",
+          desc: "",
+          dashboardName: "Galxe Campaign Reward Analysis",
+          dashboardLink: `/growth/public/dashboard/a42336af-e56a-4f2c-bcd2-1ce12f43191f?series_date=past90days&campaign_name=galxe&${params}`,
+          id: 7584,
+        },
+      ],
+    },
+    {
+      category: "GameFi",
+      desc: "Gain deep industry insights by thoroughly understanding industry data, and develop a comprehensive understanding of operational status by analyzing games.",
+      items: [
+        {
+          category: "GameFi",
+          desc: "Gain deep industry insights by thoroughly understanding industry data, and develop a comprehensive understanding of operational status by analyzing games.",
+          dashboardName: "GameFi Industry Insights & Ranking",
+          dashboardLink: `/growth/public/dashboard/c9c94943-7ec3-45bf-a2c1-29ffed28c8dc?series_date=past90days&${params}`,
+          id: 7164,
+        },
+        {
+          category: "GameFi",
+          desc: "",
+          dashboardName: "GameFi Drill Down Analysis",
+          dashboardLink: `/growth/public/dashboard/2855f92d-c2c4-45b1-bb30-5083e8e0c4ae?${params}`,
+          id: 5947,
+        },
+        {
+          category: "GameFi",
+          desc: "",
+          dashboardName: "GameFi Users Overview",
+          dashboardLink: `/growth/public/dashboard/ece95985-e16c-4a6c-bf95-9d3b523ccfe3?date__=past180days&chain=BNB%20Chain&${params}`,
+          id: 3578,
+        },
+        {
+          category: "GameFi",
+          desc: "",
+          dashboardName: "Gamer Profile",
+          id: 6345,
+          dashboardLink: `/growth/public/dashboard/aca032dc-5faf-462a-8be5-124d68226328?wallet_address=0x81e4fb0c64bf49f89b57f6648562fc9a791b2e92&${params}`,
+        },
+        {
+          category: "GameFi",
+          desc: "",
+          dashboardName: "GameFi Project Summary",
+          id: 5911,
+          dashboardLink: `/growth/public/dashboard/5138a6a9-6bdd-4d95-a00f-7f330e555aad?gamefi_name=splinterlands&date_range=past90days&${params}`,
+        },
+        {
+          category: "GameFi",
+          desc: "",
+          dashboardName: "GameFi Compare",
+          id: 6390,
+          dashboardLink: `/growth/public/dashboard/8ea15e07-fea9-435b-95fa-791bc87c68ac?game_a=walken&game_b=stepn&chain=Solana&${params}`,
+        },
+      ],
+    },
+    {
+      category: "NFT",
+      desc: "Gain a deeper understanding  by analyzing the overview and holder profit&loss of NFTs.",
+      items: [
+        {
+          category: "NFT",
+          desc: "Gain a deeper understanding  by analyzing the overview and holder profit&loss of NFTs.",
+          dashboardName: "Top X NFT by Trading Vol",
+          id: 7175,
+          dashboardLink: `/growth/public/dashboard/c20b5c20-d2d4-4c92-aed3-a6e4be48c70a?trading_vol._%253E%253D=1000000&${params}`,
+        },
+        {
+          category: "NFT",
+          desc: "",
+          dashboardName: "Multi-NFT Overview",
+          id: 7185,
+          dashboardLink: `/growth/public/dashboard/bfe2c3b8-b2b6-4980-86b0-acdca654d413?nft_collection_contract_address=0xed55e4477b795eaa9bb4bca24df42214e1a05c18&series_date=past30days&${params}`,
+        },
+        {
+          category: "NFT",
+          desc: "",
+          dashboardName: "NFT Overview",
+          id: 7139,
+          dashboardLink: `/growth/public/dashboard/46b4bf34-2b15-46c7-89a0-fe626fe04b76?nft_collection_contract_address=0xed55e4477b795eaa9bb4bca24df42214e1a05c18&nft_collection_contract_address=0x16a1dcd0f76947dc3d3ba5158952107ef0321ad9&nft_collection_contract_address=0x5891eb497d1ddb4e3933981b55b37d5f98bbfbcf&nft_collection_contract_address=0xb55a820d92809bcff91d568fc1ef0e451c69f5e8&nft_collection_contract_address=0x15f3e5a30e45a58b15bba610f27689fbc7de8c3c&data=past3months&${params}`,
+        },
+        {
+          category: "NFT",
+          desc: "",
+          id: 7192,
+          dashboardName: "Profit Leaderboard for Collection",
+          dashboardLink: `/growth/public/dashboard/3e9f9af4-93a8-46d4-8ee7-bc472201da7d?collection_contract_address=0xa342f5d851e866e18ff98f351f2c6637f4478db5&${params}`,
+        },
+        {
+          category: "NFT",
+          desc: "",
+          dashboardName: "Multi-NFT Collections Royalties",
+          id: 7188,
+          dashboardLink: `/growth/public/dashboard/97d34558-8df9-4028-a5b9-1024fa0eb426?nft_collections=0x6a570bb15bc67968868c19b0ec7dcccdfd8ed089&nft_collections=0xed55e4477b795eaa9bb4bca24df42214e1a05c18&nft_collections=0x16a1dcd0f76947dc3d3ba5158952107ef0321ad9&nft_collections=0xb55a820d92809bcff91d568fc1ef0e451c69f5e8&nft_collections=0x5891eb497d1ddb4e3933981b55b37d5f98bbfbcf&nft_collections=0x15f3e5a30e45a58b15bba610f27689fbc7de8c3c&series_date=past30days&${params}`,
+        },
+        {
+          category: "NFT",
+          desc: "",
+          id: 6808,
+          dashboardName: "Wallet Tracing",
+          dashboardLink: `/growth/public/dashboard/27b8343b-80c5-49f8-861f-990652329895?collection=benji-bananas-membership-pass&date_range=past30days&${params}`,
+        },
+        {
+          category: "NFT",
+          desc: "",
+          id: 7187,
+          dashboardName: "Owner Analysis",
+          dashboardLink: `/growth/public/dashboard/1b28aa29-4dea-4e48-bfcd-69afc71fb728?target_collection=0xed55e4477b795eaa9bb4bca24df42214e1a05c18&selected_collections=0x16a1dcd0f76947dc3d3ba5158952107ef0321ad9&selected_collections=0xb55a820d92809bcff91d568fc1ef0e451c69f5e8&selected_collections=0x6a570bb15bc67968868c19b0ec7dcccdfd8ed089&selected_collections=0x5891eb497d1ddb4e3933981b55b37d5f98bbfbcf&selected_collections=0x15f3e5a30e45a58b15bba610f27689fbc7de8c3c&selected_collections=0x34d85c9cdeb23fa97cb08333b511ac86e1c4e258&selected_collections=0xbc4ca0eda7647a8ab7c2061c2e118a18a936f13d&selected_collection_balance_%253E%253D=0&wallet_address=0x950fca90ae7eb55cd35326eb8e6350747d4cf32e&${params}`,
+        },
+        {
+          category: "NFT",
+          desc: "",
+          id: 7170,
+          dashboardName: "Mutual Holders",
+          dashboardLink: `/growth/public/dashboard/5f67bd14-6a8b-478c-a574-184063150d03?collection_a_=0xbc4ca0eda7647a8ab7c2061c2e118a18a936f13d&collection_b=0xb47e3cd837ddf8e4c57f05d70ab865de6e193bbb&holder_tag=mutual_holders&${params}`,
+        },
+      ],
+    },
+    {
+      category: "Investment Portfolio",
+      desc: "Stay up-to-date on industry financing trends and keep a close eye on investment institutions' portfolios",
+      items: [
+        {
+          category: "Investment Portfolio",
+          desc: "Stay up-to-date on industry financing trends and keep a close eye on investment institutions' portfolios",
+          dashboardName: "Investment History of Project",
+          id: 7902,
+          dashboardLink: `/growth/public/dashboard/ffaa758e-e1f8-4d22-af54-7d952aa12edd?${params}`,
+        },
+        {
+          category: "Investment Portfolio",
+          desc: "",
+          id: 824,
+          dashboardName: "Investment History of VC",
+          dashboardLink: `/growth/public/dashboard/ce2a23a7-b88b-44a9-93c3-dc1dc0f3a7ae?${params}`,
+        },
+      ],
+    },
+  ];
+};
 
 export const fga_menu_data = [
   {
@@ -312,11 +321,6 @@ export const fga_menu_data = [
         id: 7490,
         uuid: "d137a1ef-34a3-4553-84cb-2203bd9d2baf",
       },
-      // {
-      //   name: "Opt-In Tool",
-      //   id: null,
-      //   uuid: null,
-      // },
     ],
   },
   {
@@ -395,6 +399,11 @@ export const fga_menu_data = [
     id: null,
     children: [
       // { name: "General", id: null, uuid: null },
+      {
+        name: "Social Connect",
+        id: null,
+        uuid: null,
+      },
       { name: "Connector", id: null, uuid: null },
       { name: "Channel", id: null, uuid: null },
     ],

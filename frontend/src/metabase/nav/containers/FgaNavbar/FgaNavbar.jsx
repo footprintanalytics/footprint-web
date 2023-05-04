@@ -5,7 +5,7 @@ import { connect } from "react-redux";
 import { push } from "react-router-redux";
 import "./FgaNavbar.css";
 import PropTypes from "prop-types";
-import { notification } from "antd";
+import { notification, Modal as AntdModal } from "antd";
 import { getChannel } from "metabase/selectors/app";
 import { logout } from "metabase/auth/actions";
 import {
@@ -45,7 +45,7 @@ import EntityMenu from "metabase/components/EntityMenu";
 import UserAvatar from "metabase/components/UserAvatar";
 import VipIcon from "metabase/components/VipIcon";
 import CreateProjectModal from "metabase/growth/components/Modal/CreateProjectModal";
-import { checkIsDemoAccountAndAlert } from "metabase/growth/utils/utils";
+import { checkIsNeedContactUs } from "metabase/growth/utils/utils";
 import { getContext, getPath, getUser } from "../selectors";
 
 import { isDark } from "../../../dashboard/components/utils/dark";
@@ -96,9 +96,9 @@ class FgaNavbar extends Component {
 
   forceLogin() {
     const { user, setLoginModalShow } = this.props;
-    if (!user) {
-      setLoginModalShow({ show: true, from: "navbar_fga_signin" });
-    }
+    // if (!user) {
+    //   setLoginModalShow({ show: true, from: "navbar_fga_signin" });
+    // }
   }
 
   componentDidUpdate() {
@@ -200,7 +200,7 @@ class FgaNavbar extends Component {
         fromNav={true}
         defaultRegister={loginModalDefaultRegister}
         redirect={loginModalRedirect}
-        hideClose={true}
+        hideClose={false}
         signTabState={isSignOutDemoAccount ? "signUp" : "signIn"}
       />
     );
@@ -344,7 +344,7 @@ class FgaNavbar extends Component {
             <Icon name="search" color={color2} />
           </Link>
           <Link onClick={onCreateAction}>
-            <Icon name="add" size={12} color={color2}/>
+            <Icon name="add" size={12} color={color2} />
           </Link>
         </div>
       );
@@ -365,31 +365,36 @@ class FgaNavbar extends Component {
     };
 
     const CreateMenu = () => {
-      const [notificationApi, notificationContextHolder] = notification.useNotification();
+      const [modal, contextHolder] = AntdModal.useModal();
       return (
-        <div
-          className="bg-brand Nav__menu-create footprint-primary-text"
-          onClick={() => onCreateAction(notificationApi)}
-        >
-          <Icon name="plus" size={12} />
-          <span>Add My Project</span>
-          {notificationContextHolder}
-        </div>
+        <>
+          <div
+            className="bg-brand Nav__menu-create footprint-primary-text"
+            onClick={e => {
+              e.preventDefault();
+              onCreateAction(modal);
+            }}
+          >
+            <Icon name="plus" size={12} />
+            <span>Add My Project</span>
+          </div>
+          {contextHolder}
+        </>
       );
     };
 
-    const onCreateAction = (notificationApi) => {
+    const onCreateAction = modal => {
       trackStructEvent(`click Navbar Add My Project`);
+      console.log("onCreateAction");
       if (user) {
-        checkIsDemoAccountAndAlert(
-          notificationApi,
-          user,
+        checkIsNeedContactUs(
+          modal,
+          null,
           () => {
             setCreateFgaProjectModalShowAction({ show: true });
           },
-          () => {
-            this.props.logout(location.pathname);
-          },
+          () => {},
+          true,
         );
         // this.setState({ ...this.state, isProjectModalOpen: true });
       } else {
@@ -413,7 +418,11 @@ class FgaNavbar extends Component {
               }}
               trigger={
                 <div className="relative" style={{ padding: 10 }}>
-                  <UserAvatar user={user} size={["2.5em", "2.5em"]} bg="#6C70FF"/>
+                  <UserAvatar
+                    user={user}
+                    size={["2.5em", "2.5em"]}
+                    bg="#6C70FF"
+                  />
                   <div
                     className="absolute right bottom mb1"
                     style={{ marginRight: 2 }}
@@ -467,6 +476,7 @@ class FgaNavbar extends Component {
           <div className="Nav__search-bar">
             <GaProjectSearch
               location={location}
+              logout={this.props.logout}
               setCreateFgaProjectModalShowAction={
                 setCreateFgaProjectModalShowAction
               }

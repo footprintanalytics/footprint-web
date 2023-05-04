@@ -1,31 +1,39 @@
 /* eslint-disable react/display-name */
 /* eslint-disable react/prop-types */
-import React, { useEffect, useState } from "react"
-import { connect } from "react-redux"
+import React, { useEffect, useState } from "react";
+import { connect } from "react-redux";
 import {
   Button,
   Card,
   Table,
   Typography,
-  Tag,
+  Modal,
   Col,
   Row,
   Avatar,
   Space,
   Tooltip,
-} from "antd"
-import { useQuery } from "react-query"
-import dayjs from "dayjs"
-import { QUERY_OPTIONS } from "metabase/containers/dashboards/shared/config"
-import { getUser } from "metabase/selectors/user"
-import LoadingSpinner from "metabase/components/LoadingSpinner"
-import { getCampaign } from "metabase/new-service"
-import { formatType, getGrowthProjectPath, valueFormat } from "../utils/utils";
+  Input,
+  message,
+  Divider,
+} from "antd";
+import { useQuery } from "react-query";
+import dayjs from "dayjs";
+import { QUERY_OPTIONS } from "metabase/containers/dashboards/shared/config";
+import { getUser } from "metabase/selectors/user";
+import LoadingSpinner from "metabase/components/LoadingSpinner";
+import { getCampaign, createCampaignCohort } from "metabase/new-service";
+import {
+  checkIsNeedContactUs,
+  formatType,
+  getGrowthProjectPath,
+  showCohortSuccessModal,
+  valueFormat,
+} from "../utils/utils";
 import CreateCampaignModal from "../components/Modal/CreateCampaignModal";
-import ViewOptInModal from "../components/Modal/ViewOptInModal";
 import "../css/utils.css";
 
-const OptInList = props => {
+const SocialConnectList = props => {
   const { router, location, project } = props;
   const [isModalOpen, setIsModalOpen] = useState({
     open: false,
@@ -42,14 +50,11 @@ const OptInList = props => {
   useEffect(() => {
     if (data) {
       const dataSourceTemp = data?.list
-        ?.filter(i => {
-          // only show the campaign with channel: Discord bot or Tweet URL
-          return (
-            i.channels.findIndex(j =>
-              ["Discord bot", "Tweet URL"].includes(j.channelName),
-            ) !== -1
-          );
-        })
+        ?.filter(
+          i =>
+            // only show the campaignType : User Contact
+            i.campaignType === "User Contact",
+        )
         ?.sort(
           (a, b) =>
             new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime(),
@@ -64,37 +69,6 @@ const OptInList = props => {
       dataIndex: "createdAt",
       render: text => dayjs(text).format("YYYY-MM-DD HH:mm"),
     },
-    // {
-    //   title: "Title",
-    //   render: (_, row) => (
-    //     <Typography.Link
-    //       onClick={() => {
-    //         props.router?.push({
-    //           pathname: getGrowthProjectPath(
-    //             props.router?.params?.project,
-    //             "CampaignDetail",
-    //           ),
-    //           hash: "#id=" + row.campaignId,
-    //         });
-    //       }}
-    //     >
-    //       {row.title}
-    //     </Typography.Link>
-    //   ),
-    // },
-    // {
-    //   title: "Status",
-    //   dataIndex: "status",
-    //   render: text => <CampaignStatus value={text} />,
-    // },
-    // {
-    //   title: "Campaign Type",
-    //   dataIndex: "campaignType",
-    //   key: "campaignType",
-    //   render: text => {
-    //     return <Tag>{text}</Tag>;
-    //   },
-    // },
     {
       title: "Type",
       dataIndex: "channels",
@@ -127,27 +101,27 @@ const OptInList = props => {
     },
     {
       title: "Number of Wallet Address",
-      dataIndex: "status",
+      dataIndex: "performanceDetails",
       align: "right",
-      render: text => "--",
+      render: item => valueFormat(item?.numberOfWalletAddress ?? 0),
     },
     {
       title: "Number of Twitter Name",
-      dataIndex: "status",
+      dataIndex: "performanceDetails",
       align: "right",
-      render: text => "--",
+      render: item => valueFormat(item?.numberOfTwitterName ?? 0),
     },
     {
       title: "Number of Discord Name",
-      dataIndex: "status",
+      dataIndex: "performanceDetails",
       align: "right",
-      render: text => "--",
+      render: item => valueFormat(item?.numberOfDiscordName ?? 0),
     },
     {
       title: "Number of Email",
-      dataIndex: "status",
+      dataIndex: "performanceDetails",
       align: "right",
-      render: text => "--",
+      render: item => valueFormat(item?.numberOfEmail ?? 0),
     },
     {
       title: "Action",
@@ -171,6 +145,28 @@ const OptInList = props => {
             View
           </Button>
           <Button
+            className="p0"
+            type="link"
+            disabled={!(record?.performanceDetails?.numberOfWalletAddress > 0)}
+            onClick={() => {
+              checkIsNeedContactUs(
+                modal,
+                project,
+                () => {
+                  setOpenCreatingCohort({
+                    open: true,
+                    campaignId: record?.campaignId,
+                    count: record?.performanceDetails?.numberOfWalletAddress,
+                  });
+                },
+                () => {},
+                true,
+              );
+            }}
+          >
+            Save as cohort
+          </Button>
+          <Button
             type="link"
             disabled={true}
             className="p0"
@@ -189,17 +185,94 @@ const OptInList = props => {
           >
             Detail
           </Button>
-
-          <Button className="p0" type="link" disabled={true}>
-            Save as cohort
-          </Button>
         </Space>
       ),
     },
   ];
 
+  const [cohortName, setCohortName] = useState("");
+  const [isCreatingCohort, setCreatingCohort] = useState(false);
+  const [isOpenCreatingCohort, setOpenCreatingCohort] = useState({
+    open: false,
+    campaignId: null,
+  });
+  const modalProps = {
+    title: "Save as cohort",
+    confirmLoading: isCreatingCohort,
+    footer: null,
+    open: isOpenCreatingCohort?.open,
+    content: (
+      <div>
+        <Divider className="my2" />
+        <h4>Cohort Name</h4>
+        <Input
+          className="mt1 mb1"
+          placeholder="Input cohort name"
+          onChange={event => {
+            setCohortName(event.target.value);
+            // title = event.target.value;
+          }}
+        />
+        <h5>You have selected {isOpenCreatingCohort?.count} addresses.</h5>
+        <div className="flex flex-row-reverse mt2">
+          <Button
+            type="primary"
+            loading={isCreatingCohort}
+            onClick={() => {
+              if (!cohortName?.length > 0) {
+                message.error("Please input cohort name");
+                return false;
+              }
+              setCreatingCohort(true);
+              createCampaignCohort({
+                campaignId: isOpenCreatingCohort?.campaignId,
+                title: cohortName,
+              })
+                .then(result => {
+                  setOpenCreatingCohort({ open: false });
+                  showCohortSuccessModal(
+                    modal,
+                    result,
+                    router,
+                    "Social Connect",
+                  );
+                })
+                .catch(error => {
+                  console.log("toAddCohort error", error);
+                })
+                .finally(() => {
+                  setCreatingCohort(false);
+                });
+            }}
+          >
+            {isCreatingCohort ? "Creating..." : "Create"}
+          </Button>
+          <Button
+            className="mr1"
+            onClick={() => setOpenCreatingCohort({ open: false })}
+          >
+            Cancel
+          </Button>
+        </div>
+      </div>
+    ),
+    closable: true,
+    maskClosable: true,
+    cancelText: "Cancel",
+    okText: "Create",
+    onCancel() {
+      setCreatingCohort(false);
+      setOpenCreatingCohort({ open: false });
+    },
+  };
+
+  const [modal, contextHolder] = Modal.useModal();
   return (
     <div className="w-full" style={{ padding: 20 }}>
+      {contextHolder}
+      {isOpenCreatingCohort?.open && (
+        <Modal {...modalProps}>{modalProps.content}</Modal>
+      )}
       <div className="w-full flex flex-row">
         <Row
           gutter={[15, 15]}
@@ -208,7 +281,7 @@ const OptInList = props => {
         >
           <Col span={24} key="desc" className=" text-center">
             <Typography.Title level={4}>
-              Use Footprint GA Opt-In Tool to speed up user information
+              Use Footprint GA Social Connect Tool to speed up user information
               collection
             </Typography.Title>
             <Typography.Paragraph>
@@ -224,7 +297,15 @@ const OptInList = props => {
               className=" rounded"
               style={{ width: "100%" }}
               onClick={() => {
-                setIsModalOpen({ open: true, type: "Twitter" });
+                checkIsNeedContactUs(
+                  modal,
+                  project,
+                  () => {
+                    setIsModalOpen({ open: true, type: "Twitter" });
+                  },
+                  () => {},
+                  true,
+                );
               }}
             >
               <div className=" flex flex-column items-center" style={{}}>
@@ -250,7 +331,15 @@ const OptInList = props => {
               hoverable
               style={{ width: "100%" }}
               onClick={() => {
-                setIsModalOpen({ open: true, type: "Discord" });
+                checkIsNeedContactUs(
+                  modal,
+                  project,
+                  () => {
+                    setIsModalOpen({ open: true, type: "Discord" });
+                  },
+                  () => {},
+                  true,
+                );
               }}
             >
               <div className=" flex flex-column items-center" style={{}}>
@@ -273,13 +362,14 @@ const OptInList = props => {
           </Col>
         </Row>
       </div>
-      <Card title="Opt-In List" className="mt2">
+      <Card title="Social Connect" className="mt2">
         {isLoading || isFetching || !project?.id ? (
           <LoadingSpinner message="Loading..." />
         ) : (
           <Table
             rowKey="campaignId"
             loading={isLoading}
+            minHeight={400}
             dataSource={dataSource}
             columns={columns}
             pagination={false}
@@ -289,7 +379,7 @@ const OptInList = props => {
       {isModalOpen?.open && (
         <CreateCampaignModal
           open={isModalOpen?.open}
-          optInType={isModalOpen?.type}
+          socialType={isModalOpen?.type}
           channel={isModalOpen?.channel}
           location={location}
           project={project}
@@ -313,4 +403,4 @@ const mapStateToProps = state => {
   };
 };
 
-export default connect(mapStateToProps)(OptInList);
+export default connect(mapStateToProps)(SocialConnectList);

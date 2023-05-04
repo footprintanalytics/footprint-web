@@ -17,6 +17,7 @@ import ChartSchema from "./ChartSchema";
 import "./SaveChartToUdModal.css";
 import Code from "../containers/buffet/components/Code";
 import { trackStructEvent } from "../lib/analytics";
+import TableBelong from "../containers/customUpload/components/Confirm/TableBelong";
 
 const SaveChartToUdModal = ({
   onClose,
@@ -25,7 +26,9 @@ const SaveChartToUdModal = ({
   creatorId,
   user,
   enableSave = true,
+  setNeedPermissionModal,
 }) => {
+  const isPaidUser = user && user.vipInfo && user.vipInfo.type !== "free";
   const [loading, setLoading] = useState(false);
 
   const { isLoading, data, refetch } = useQuery(
@@ -42,6 +45,11 @@ const SaveChartToUdModal = ({
   const checkMutate = useMutation(checkTableNameChart);
   const checkNameMessage = checkMutate?.data?.message;
   const isOwner = user && (user.id === creatorId);
+  const [belongType, setBelongType] = useState(data?.belongType);
+
+  useEffect(() => {
+    setBelongType(data?.belongType || "public");
+  }, [data?.belongType]);
 
   const callbackTime = useCallback(
     ({ status, tableName, successCount }) => {
@@ -67,6 +75,11 @@ const SaveChartToUdModal = ({
       message.info("Do not support sql with parameters, please remove the parameters")
       return ;
     }
+    if (!isPaidUser && belongType === "private") {
+      onCancel();
+      setNeedPermissionModal("Upgrade to the Business Plan to protect your data privacy");
+      return ;
+    }
     const tableName = targetTableName || data.name;
     setLoading(true);
     let result = null;
@@ -75,6 +88,7 @@ const SaveChartToUdModal = ({
         "source": "chartTrino",
         "sourceId": cardId,
         "targetTableName": tableName,
+        "belongType": belongType,
       });
     } catch (e) {
     }
@@ -186,38 +200,30 @@ const SaveChartToUdModal = ({
             )}
 
             {showMainButton && (
-              <>
+              <div className="flex flex-column">
+                <TableBelong
+                  belongType={belongType}
+                  setBelongType={setBelongType}
+                />
                 <Button
+                  style={{
+                    "margin": "18px auto 0",
+                    "width": 200
+                  }}
                   type="primary"
                   size="large"
                   htmlType="submit"
-                  className="right"
+                  className="mt2"
                   disabled={!data || (!hasSavedToUd && !debouncedTableName) || checkMutate.isLoading || checkMutate?.data?.result === 1}
                   loading={loading}
                 >
                   {checkMutate.isLoading ? "Checking..." : (hasSavedToUd ? "Update" : "Save")}
                 </Button>
-               {/* {chartConfig?.tableId && (
-                  <Link
-                    className="mt2"
-                    target="_blank"
-                    to={udTableLink}
-                    onClick={v => {
-                      v.preventDefault();
-                      if (chartConfig?.tableId) {
-                        window.open(udTableLink);
-                      }
-                    }}>
-                    To create chart
-                  </Link>
-                )}*/}
-              </>
+              </div>
             )}
           </div>
         </Form>
-      )
-      }
-
+      )}
     </Modal>
   );
 };

@@ -27,7 +27,9 @@ import { cohortTips } from "../utils/data";
 const CohortList = props => {
   const { isLoading, data, refetch } = useQuery(
     ["getCohort", props.project],
-    GetFgaCohort,
+    async () => {
+      return GetFgaCohort({ projectId: props.project?.id });
+    },
     {
       refetchInterval: 5000,
     },
@@ -40,16 +42,18 @@ const CohortList = props => {
     )
     ?.filter(f => !["hhh", "all"].includes(f.title));
 
+  console.log("cohort", data, dataSource);
   const columns = [
     {
       title: "Title",
       dataIndex: "title",
-      render: (text, { createdBy }) => {
+      render: (text, { createdBy, numberOfWallets, cohortId }) => {
         // only format tag for system cohorts
         const title = createdBy !== "user" ? formatTag(text) : text;
         return (
           <Link
-            to={`/growth/public/dashboard/55b1eb29-b15e-458f-9241-1862a0d19d3b?tag=${text}&cohort_title=${text}#from=Cohort`}
+            disabled={numberOfWallets === 0}
+            to={`/growth/public/dashboard/55b1eb29-b15e-458f-9241-1862a0d19d3b?cohort_id=${cohortId}&tag=${text}&cohort_title=${text}#from=Cohort`}
           >
             {title}
           </Link>
@@ -60,9 +64,20 @@ const CohortList = props => {
       title: "Number of Wallets",
       dataIndex: "numberOfWallets",
       key: "numberOfWallets",
-      render: text => {
+      render: (text, { status }) => {
         if (!Number(text)) {
-          return <Badge status="processing" text="Loading" />;
+          switch (status) {
+            case "Ready":
+              return Number(text).toLocaleString();
+            case "Init":
+            case "Generating":
+            case "Failed":
+            default:
+              return <Badge status="processing" text="Loading" />;
+            // return <Badge status="processing" text="Initing" />;
+            // case "Failed":
+            //   return <Badge status="error" text="Failed" />;
+          }
         }
         return Number(text).toLocaleString();
       },
@@ -86,11 +101,13 @@ const CohortList = props => {
       render: (_, record) => (
         <Space size="middle">
           <Link
-            to={`/growth/public/dashboard/55b1eb29-b15e-458f-9241-1862a0d19d3b?tag=${record.title}&cohort_title=${record.title}#from=Cohort`}
+            disabled={record.numberOfWallets === 0}
+            to={`/growth/public/dashboard/55b1eb29-b15e-458f-9241-1862a0d19d3b?cohort_id=${record.cohortId}&tag=${record.title}&cohort_title=${record.title}#from=Cohort`}
           >
             User Profile
           </Link>
           <Link
+            disabled={record.numberOfWallets === 0}
             to={`/growth/public/dashboard/dce33214-a079-4eb8-b53f-defaabde2eba?cohort_id=${record.cohortId}&cohort_title=${record.title}#from=Cohort`}
           >
             Wallet List

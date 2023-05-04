@@ -7,7 +7,7 @@ import { withRouter } from "react-router";
 
 import _ from "underscore";
 import { debounce, isArray } from "lodash";
-import { Breadcrumb } from "antd";
+import { Breadcrumb, message } from "antd";
 import { IFRAMED } from "metabase/lib/dom";
 
 import LoadingAndErrorWrapper from "metabase/components/LoadingAndErrorWrapper";
@@ -45,6 +45,8 @@ import {
 import { cons } from "cljs/cljs.core";
 import { canShowDarkMode } from "metabase/dashboard/components/utils/dark";
 import EmbedFrame from "../components/EmbedFrame";
+import { trackStructEvent } from "metabase/lib/analytics";
+import Button from "metabase/core/components/Button/Button";
 
 const mapStateToProps = (state, props) => {
   const parameters = getParameters(state, props);
@@ -181,6 +183,18 @@ class PublicDashboard extends Component {
     },
   );
 
+  _fetchDashboardCardDataRefresh = debounce(
+    (params) => {
+      console.log("params", params)
+      this.props.fetchDashboardCardData({ reload: false, clear: true, ignoreCache: true });
+    },
+    1000,
+    {
+      leading: true,
+      trailing: false,
+    },
+  );
+
   _initialize = async () => {
     const {
       initialize,
@@ -225,6 +239,27 @@ class PublicDashboard extends Component {
     }
   }
 
+  renderRefreshButton = () => {
+    return (
+      <Button
+        onlyIcon
+        className="Question-header-btn"
+        iconColor="#7A819B"
+        icon={"refresh"}
+        iconSize={16}
+        style={{
+          "position": "fixed",
+          "right": "40px",
+          "top": "100px",
+          "zIndex": 2,
+        }}
+        onClick={() => {
+          this._fetchDashboardCardDataRefresh({ ignoreCache: true })
+        }}
+      />
+    );
+  }
+
   render() {
     let {
       dashboard,
@@ -239,7 +274,9 @@ class PublicDashboard extends Component {
       hideAllParams,
       disableBreadcrumb,
       className,
+      innerClassName,
       router,
+      showRefreshButton,
     } = this.props;
     const buttons = !IFRAMED
       ? getDashboardActions(this, { ...this.props, isPublic: true })
@@ -308,6 +345,7 @@ class PublicDashboard extends Component {
         isNightMode={shouldRenderAsNightMode}
         hideFooter={hideFooter || isFgaPublicDashboard}
         className={cx(className, isFgaPublicDashboard && "ml-250 mt-60")}
+        innerClassName={cx(innerClassName)}
       >
         <>
           <LoadingAndErrorWrapper
@@ -330,6 +368,7 @@ class PublicDashboard extends Component {
               />
             )}
           </LoadingAndErrorWrapper>
+          {showRefreshButton && !!dashboard && (this.renderRefreshButton())}
         </>
       </EmbedFrame>
     );

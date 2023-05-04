@@ -5,10 +5,12 @@ import { connect } from "react-redux";
 import { push } from "react-router-redux";
 import { omit, isArray, keys } from "lodash";
 import {
+  checkIsNeedContactUs,
+  formatKeyLabel,
   getGrowthProjectPath,
   showCohortSuccessModal,
 } from "metabase/growth/utils/utils";
-import { getUser } from "metabase/selectors/user";
+import { getUser, getFgaProject } from "metabase/selectors/user";
 import {
   createFgaProjectModalShowAction,
   loginModalShowAction,
@@ -47,13 +49,13 @@ const CreateCohort2 = ({
       if (isArray(params[k]) && params[k].length > 0 && params[k] !== 0) {
         if (k === "filters") {
           conditions.push({
-            name: k,
+            name: formatKeyLabel(k),
             value: params[k].map(item => {
               return `${item.indicator} ${item.comparisonSymbol} ${item.comparisonValue}\n`;
             }),
           });
         } else {
-          conditions.push({ name: k, value: params[k] });
+          conditions.push({ name: formatKeyLabel(k), value: params[k] });
         }
       }
     });
@@ -134,12 +136,21 @@ const CreateCohort2 = ({
   };
   return (
     <>
+      {contextHolder}
       {isButtonStyle ? (
         <Button
           type="text"
           disabled={disable}
           onClick={() => {
-            setCohortModalOpen(true);
+            checkIsNeedContactUs(
+              modal,
+              project,
+              () => {
+                setCohortModalOpen(true);
+              },
+              () => {},
+              true,
+            );
           }}
         >
           {btnText}
@@ -147,7 +158,15 @@ const CreateCohort2 = ({
       ) : (
         <div
           onClick={() => {
-            setCohortModalOpen(true);
+            checkIsNeedContactUs(
+              modal,
+              project,
+              () => {
+                setCohortModalOpen(true);
+              },
+              () => {},
+              true,
+            );
           }}
         >
           {btnText}
@@ -216,6 +235,7 @@ const mapDispatchToProps = {
 };
 const mapStateToProps = state => {
   return {
+    project: getFgaProject(state),
     user: getUser(state),
   };
 };
