@@ -120,7 +120,6 @@ export function articleTitle(item) {
   if (!item) {
     return item;
   }
-  console.log("item", item)
   return item.type === "article" ? formatArticleTitle(item.title) : item.title;
 }
 
