@@ -40,6 +40,7 @@
 :local .Text .text-card-markdown {
   pointer-events: all;
   word-break: break-word;
+  height: 100%;
 }
 
 :local .Text .text-card-markdown h1,
