@@ -115,20 +115,20 @@ const leftMenuData = [
 
 const rightMenuData = [
   // { url: "/moon-men", name: "Moon Men" },
-  /*{
+  {
     name: "Research",
     icon: "protocols",
     menu: [
       {
-        title: "NFT",
+        title: "NFT Research",
         link: "/research/nft",
       },
       {
-        title: "GameFi",
+        title: "GameFi Research",
         link: "/research/gamefi",
       },
     ],
-  },*/
+  },
   {
     name: "Data",
     icon: "protocols",

@@ -2,7 +2,7 @@
   width: 100%;
   display: flex;
   justify-content: center;
-  padding: 20px;
+  padding: 40px 20px;
 }
 
 .ResourceBox__container ul {
@@ -10,12 +10,12 @@
   display: grid;
   grid-row-gap: var(--footprint-spacing-l);
   grid-column-gap: var(--footprint-spacing-l);
-  grid-template-columns: 1fr 1fr 1fr;
+  grid-template-columns: 1fr 1fr;
 }
 
 
 .ResourceBox__container ul li {
-  width: 300px;
+  width: 400px;
   display: flex;
   flex-direction: column;
   justify-content: center;
@@ -29,7 +29,7 @@
 }
 
 .ResourceBox__container ul img {
-  width: 300px;
+  width: 400px;
   object-fit: scale-down;
 }
 
