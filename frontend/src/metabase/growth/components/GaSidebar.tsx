@@ -32,7 +32,6 @@ const GaSidebar = (props: IGaSidebarProp) => {
     props;
   const [items, setItems] = useState<any[]>([]);
   const [rootSubmenuKeys, setRootSubmenuKeys] = useState<any[]>([]);
-  const [selectMenu, setSelectMenu] = useState<string>(currentMenu!);
   useEffect(() => {
     if (!projectObject) return;
     const itemsTemp: any[] = getGaMenuTabs(
@@ -50,14 +49,20 @@ const GaSidebar = (props: IGaSidebarProp) => {
   }, [projectObject]);
 
   useEffect(() => {
-    // setTab(
-    //   currentTab ??
-    //     (items[0]?.children?.length > 0
-    //       ? items[0].children[0].key
-    //       : items[0]?.key),
-    // );
     if (currentMenu) {
-      setSelectMenu(currentMenu);
+      items?.map(i => {
+        if (i.key === currentMenu) {
+          setOpenKeys([i.key]);
+          return;
+        }
+        if (i.children?.length > 0) {
+          i.children.map((child: { key: string }) => {
+            if (child.key === currentMenu) {
+              setOpenKeys([i.key]);
+            }
+          });
+        }
+      });
     }
   }, [currentMenu, items]);
 
