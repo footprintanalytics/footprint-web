@@ -32,6 +32,8 @@ const GaSidebar = (props: IGaSidebarProp) => {
     props;
   const [items, setItems] = useState<any[]>([]);
   const [rootSubmenuKeys, setRootSubmenuKeys] = useState<any[]>([]);
+  const [openKeys, setOpenKeys] = useState<string[]>([currentMenu!]);
+
   useEffect(() => {
     if (!projectObject) return;
     const itemsTemp: any[] = getGaMenuTabs(
@@ -50,6 +52,7 @@ const GaSidebar = (props: IGaSidebarProp) => {
 
   useEffect(() => {
     if (currentMenu) {
+      console.log("currentMenu", currentMenu, items);
       items?.map(i => {
         if (i.key === currentMenu) {
           setOpenKeys([i.key]);
@@ -66,8 +69,6 @@ const GaSidebar = (props: IGaSidebarProp) => {
     }
   }, [currentMenu, items]);
 
-  const [openKeys, setOpenKeys] = useState<string[]>([currentMenu!]);
-
   const onOpenChange: MenuProps["onOpenChange"] = keys => {
     const latestOpenKey = keys.find(key => openKeys.indexOf(key) === -1);
     if (!rootSubmenuKeys.includes(latestOpenKey)) {
@@ -76,6 +77,7 @@ const GaSidebar = (props: IGaSidebarProp) => {
       setOpenKeys(latestOpenKey ? [latestOpenKey] : []);
     }
   };
+
   return (
     <Sider
       trigger={null}
@@ -96,24 +98,20 @@ const GaSidebar = (props: IGaSidebarProp) => {
             style={{
               borderRight: "0px",
               width: "100%",
-              // paddingBottom: 50,
-              // paddingTop: 20,
+              flex: 1,
             }}
             theme="light"
-            // className="ant-menu-inline ant-menu-item"
             mode="inline"
             openKeys={openKeys}
             onOpenChange={onOpenChange}
             selectedKeys={[currentMenu!]}
             onSelect={item => {
               saveLatestGAMenuTag(item.key);
-              setSelectMenu(item.key);
               router.push({
                 pathname: getGrowthProjectPath(
                   currentProject ?? getLatestGAProject() ?? "",
                   item.key,
                 ),
-                // query: { ...location.query, tab: item.key },
               });
             }}
             items={items}

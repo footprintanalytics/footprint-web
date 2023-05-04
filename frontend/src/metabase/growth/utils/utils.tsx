@@ -255,9 +255,9 @@ export function getGaMenuTabs(
         disabled: disabled,
         label: item.name,
         dashboard_uuid: item.uuid ?? null,
+        // type: children.length > 0 ? "group" : null,
       });
     }
-
     if (!disabled) {
       menuTabs.push({
         key: `${item.name}${children.length > 0 ? "-sub" : ""}`,
@@ -266,6 +266,7 @@ export function getGaMenuTabs(
         disabled: disabled,
         label: item.name,
         dashboard_uuid: item.uuid ?? null,
+        // type: children.length > 0 ? "group" : null,
       });
     }
     if (item.uuid) {
