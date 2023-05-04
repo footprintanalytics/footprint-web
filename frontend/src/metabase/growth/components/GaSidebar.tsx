@@ -112,7 +112,6 @@ const GaSidebar = (props: IGaSidebarProp) => {
                   currentProject ?? getLatestGAProject() ?? "",
                   item.key,
                 ),
-                // query: { ...location.query, tab: item.key },
               });
             }}
             items={items}
