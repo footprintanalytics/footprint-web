@@ -43,10 +43,11 @@ export function formatTitle(title) {
   }
   const titleBlock = title.split(" ");
   if (titleBlock && titleBlock.length > 0) {
-    return titleBlock
+    const result = titleBlock
       .map(item => mapFunction(item))
       .join(" ")
       .trim();
+    return upperFirst(result);
   }
 
   return title.trim();
@@ -119,6 +120,7 @@ export function articleTitle(item) {
   if (!item) {
     return item;
   }
+  console.log("item", item)
   return item.type === "article" ? formatArticleTitle(item.title) : item.title;
 }
 

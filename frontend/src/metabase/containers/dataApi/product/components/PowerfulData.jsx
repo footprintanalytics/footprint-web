@@ -26,7 +26,7 @@ const DomainDetail = () => {
       img: getOssUrl("img_dap_power_2022102304.png"),
     },
     {
-      title: "Wash trade filter",
+      title: "Wash Trading filter",
       desc: "Reduce misleading data and assess the NFT market accurately",
       img: getOssUrl("img_dap_power_2022102305.png"),
     },

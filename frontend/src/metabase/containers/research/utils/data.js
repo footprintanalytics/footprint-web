@@ -86,48 +86,48 @@ const nftData = [
       },
     ],
   }, {
-    "label": "NFT Wash Trade Stats",
+    "label": "NFT Wash Trading Stats",
     "value": "nft-wash-trade-stats",
     "subMenus": [
       {
-        "label": "Wash Trade Overview",
+        "label": "Wash Trading Overview",
         "value": "wash-trade-overview",
         "publicUuid": "723ace6e-f7de-4f70-86a5-4788a6c0a18a",
       },
       {
-        "label": "Top Most Washtraded Collections",
-        "value": "top-most-washtraded-collections",
-        "publicUuid": "a516bea0-325f-4b6d-83a9-383c969eb94c",
+        "label": "Top Most Wash Trading Collections",
+        "value": "top-most-wash-trading-collections",
+        "publicUuid": "d922939c-c451-41eb-8d29-b94e7109c9dd",
       },
       {
-        "label": "Top Most Washtraded Bluechip Collections",
-        "value": "top-most-washtraded-bluechip-collections",
+        "label": "Top Most Wash Trading Bluechip Collections",
+        "value": "top-most-wash-trading-bluechip-collections",
         "publicUuid": "b9167f1e-c391-473d-a1d8-23a1b8691ff7",
       },
       {
-        "label": "Top Washtrade Wallet Addresses",
-        "value": "top-washtrade-wallet-addresses",
+        "label": "Top Wash Trading Wallet Addresses",
+        "value": "top-wash-trading-wallet-addresses",
         "publicUuid": "3e83bba9-6b4f-4ac3-b8ab-01d07467c89d",
       },
       {
-        "label": "Washtrade on Marketplaces",
-        "value": "washtrade-on-marketplaces",
+        "label": "Wash Trading on Marketplaces",
+        "value": "wash-trading-on-marketplaces",
         "resources": [
           {
             "publicUuid": "b99c103e-8a85-497f-b5cb-8434567260d0",
-            "label": "Washtrade on OpenSea",
+            "label": "Wash Trading on OpenSea",
             "value": "opensea",
             "image": "dashboard/7205.png",
           },
           {
             "publicUuid": "bf226577-5119-4fc4-8244-43e5b73b8994",
-            "label": "Washtrade on Looksrare",
+            "label": "Wash Trading on Looksrare",
             "value": "looksrare",
             "image": "dashboard/7207.png",
           },
           {
             "publicUuid": "ee17bfb9-47bb-4d49-8671-e46134475713",
-            "label": "Washtrade on X2Y2",
+            "label": "Wash Trading on X2Y2",
             "value": "x2y2",
             "image": "dashboard/7206.png",
           },
