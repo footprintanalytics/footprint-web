@@ -1,6 +1,6 @@
 /* eslint-disable react/prop-types */
 import React, { useState } from "react";
-import { Space, Col, Row, Tag, Input, Typography } from "antd";
+import { Space, Col, Row, Tag, Input, Typography, Button } from "antd";
 import cx from "classnames";
 import FloatInput from "../FloatInput";
 
@@ -13,13 +13,16 @@ export const ValueFilter = props => {
         className,
       )}
     >
+      {/* <Button type="text" loading={isLoading} style={{ marginRight: 8 }}> */}
       <Typography.Text
         ellipsis={false}
         rows={1}
-        style={{ marginRight: 8, color: "white", whiteSpace: "nowrap" }}
+        style={{ color: "white", whiteSpace: "nowrap", marginRight: 8 }}
       >
         Value Filter:
       </Typography.Text>
+      {/* </Button> */}
+
       <Row gutter={[10, 10]} className="w-full">
         {data?.map(item => (
           <Col sm={24} md={12} lg={8} xl={6} xxl={4} key={item.label}>
@@ -28,6 +31,7 @@ export const ValueFilter = props => {
               height={40}
               style={{ width: "100%", height: 40 }}
               value={item.defaultValue}
+              isLoading={isLoading}
               onChange={val => {
                 onFliterChange?.({
                   comparisonValue: parseFloat(val),

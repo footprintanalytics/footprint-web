@@ -6,7 +6,7 @@ import { debounce } from "lodash";
 import "./index.css";
 
 const FloatInput = props => {
-  let { label, value, placeholder, type, required } = props;
+  let { label, value, placeholder, type, required, isLoading } = props;
   const [focus, setFocus] = useState(false);
   const [currentValue, setCurrentValue] = useState(value ?? "");
   if (!placeholder) placeholder = label;
@@ -31,6 +31,7 @@ const FloatInput = props => {
       <Input
         style={{ height: 40 }}
         className="rounded"
+        isLoading={isLoading}
         onChange={e => handleInputChange(e.target.value)}
         type={type}
         defaultValue={value ?? ""}
