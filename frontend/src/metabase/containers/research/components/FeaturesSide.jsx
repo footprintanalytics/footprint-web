@@ -35,7 +35,7 @@ const FeaturesSide = ({
       researchData &&
       researchData.map(a => {
         return [
-          a && a.subMenus && a.subMenus.map(b => `/${type}/${classify}/${a.value}/${b.value}`),
+          a && a.subMenus && a.subMenus.map(b => `/${type}/${classify}/${a.value}/${b.value}${b.search || ""}`),
         ];
       }),
     );
@@ -86,7 +86,9 @@ const FeaturesSide = ({
         selectedKeys={[defaultSubMenu]}
         onOpenChange={onOpenChange}
         onSelect={item => {
-          replace(`/${type}/${classify}/${item.keyPath[1]}/${item.keyPath[0]}`);
+          const menuData = researchData?.find(i => i.value === item.keyPath[1]);
+          const subMenusData = menuData?.subMenus?.find(i => i.value === item.keyPath[0]);
+          replace(`/${type}/${classify}/${item.keyPath[1]}/${item.keyPath[0]}${subMenusData?.search || ""}`);
         }}
         items={items}
       />
