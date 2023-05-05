@@ -69,6 +69,14 @@ const PotentialUsers = props => {
   //   });
   // }, [walletListParams]);
 
+  const filterResult = useQuery(
+    ["getPotentialUseFilter"],
+    async () => {
+      return getPotentialUseFilterProject();
+    },
+    { ...QUERY_OPTIONS },
+  );
+  console.log("filterResult", filterResult)
   const filterProjectResult = useQuery(
     ["getPotentialUseFilterProject", project?.id],
     async () => {

@@ -48,8 +48,8 @@ const MuiInput = props => {
         notFoundContent={(<div />)}
         onDropdownVisibleChange={(visible) => setOpen(visible)}
         dropdownRender={(menu) => (
-          <div>
-            <div className="flex full-width justify-evenly align-center">
+          <div className="p2">
+            <div className="flex full-width justify-evenly align-center mb3">
               {">="}
               <Input
                 style={{
@@ -60,7 +60,6 @@ const MuiInput = props => {
                 }}
               />
             </div>
-            {menu}
             <div className="flex justify-center">
               <Button type="primary" onClick={() => {
                 const tempInputValue = `${comparisonSymbolMapping[comparisonSymbol]}${inputValue}`;

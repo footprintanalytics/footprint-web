@@ -86,6 +86,9 @@ export const getCommunityQuickFilter = async params => {
 export const getCommunityWalletAddress = async params => {
   return POST(`/api/v1/fga/community/wallet-address`, params);
 };
+export const getPotentialUseFilter = async params => {
+  return GET(`/api/v1/fga/potential-user/filter`, params);
+};
 export const getPotentialUseFilterProject = async params => {
   return GET(`/api/v1/fga/potential-user/filter/project`, params);
 };
