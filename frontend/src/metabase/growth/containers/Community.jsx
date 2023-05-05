@@ -1,6 +1,6 @@
 /* eslint-disable react/display-name */
 /* eslint-disable react/prop-types */
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { connect } from "react-redux";
 import { Card, Tag, Avatar, Typography, Button, Tooltip } from "antd";
 import { useQuery } from "react-query";
@@ -23,7 +23,7 @@ const Community = props => {
   const { router, location, children, user, projectPath, menu, project } =
     props;
 
-  const [walletListParams, setWalletListParams] = React.useState({
+  const [walletListParams, setWalletListParams] = useState({
     pageSize: location.query?.pageSize
       ? parseInt(location.query?.pageSize)
       : 10,
@@ -33,49 +33,49 @@ const Community = props => {
       : [],
     filters: location.query?.filters ? JSON.parse(location.query?.filters) : [],
   });
-const [queryType, setQueryType] = React.useState(null);
-const [walletListData, setWalletListData] = React.useState(null);
+  const [queryType, setQueryType] = useState(null);
+  const [walletListData, setWalletListData] = useState(null);
 
-useEffect(() => {
-  router.replace({
-    pathname: location.pathname,
-    query: {
-      ...location.query,
-      page: walletListParams.current,
-      pageSize: walletListParams.pageSize,
-      quickFilter: walletListParams.quickFilter,
-      filters: JSON.stringify(walletListParams.filters),
-    },
-  });
-}, [walletListParams]);
+  useEffect(() => {
+    router.replace({
+      pathname: location.pathname,
+      query: {
+        ...location.query,
+        page: walletListParams.current,
+        pageSize: walletListParams.pageSize,
+        quickFilter: walletListParams.quickFilter,
+        filters: JSON.stringify(walletListParams.filters),
+      },
+    });
+  }, [walletListParams]);
 
-const infoResult = useQuery(
-  ["getCommunityInfo", project?.id],
-  async () => getCommunityInfo({ projectId: parseInt(project?.id) }),
-  { ...QUERY_OPTIONS, enabled: !!project?.id },
-);
+  const infoResult = useQuery(
+    ["getCommunityInfo", project?.id],
+    async () => getCommunityInfo({ projectId: parseInt(project?.id) }),
+    { ...QUERY_OPTIONS, enabled: !!project?.id },
+  );
 
-const filterResult = useQuery(
-  ["getCommunityQuickFilter", project?.id],
-  async () => getCommunityQuickFilter({ projectId: parseInt(project?.id) }),
-  { ...QUERY_OPTIONS, enabled: !!project?.id },
-);
+  const filterResult = useQuery(
+    ["getCommunityQuickFilter", project?.id],
+    async () => getCommunityQuickFilter({ projectId: parseInt(project?.id) }),
+    { ...QUERY_OPTIONS, enabled: !!project?.id },
+  );
 
-const listResult = useQuery(
-  ["getCommunityWalletAddress", project?.id, walletListParams],
-  async () =>
-    getCommunityWalletAddress({
-      ...walletListParams,
-      projectId: parseInt(project?.id),
-    }),
-  { ...QUERY_OPTIONS, enabled: !!project?.id },
-);
+  const listResult = useQuery(
+    ["getCommunityWalletAddress", project?.id, walletListParams],
+    async () =>
+      getCommunityWalletAddress({
+        ...walletListParams,
+        projectId: parseInt(project?.id),
+      }),
+    { ...QUERY_OPTIONS, enabled: !!project?.id },
+  );
 
-useEffect(() => {
-  if (!listResult?.isLoading) {
-    setWalletListData(listResult?.data);
-  }
-}, [listResult?.isLoading]);
+  useEffect(() => {
+    if (!listResult?.isLoading) {
+      setWalletListData(listResult?.data);
+    }
+  }, [listResult]);
 
   function formatInfoResult(data) {
     const dataList = [];
@@ -475,7 +475,7 @@ useEffect(() => {
           />
         </>
       )}
-      {listResult.isLoading | !project?.id && !walletListData ? (
+      {listResult.isLoading | !project?.id && walletListData === null ? (
         <div className="w-full p1">
           <Card className="w-full rounded" style={{ height: 650 }}>
             <LoadingSpinner />

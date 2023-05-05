@@ -66,8 +66,10 @@ const GaProjectSearch = props => {
           location.pathname === "/growth" ||
           location.pathname.startsWith("/growth/project")
         ) {
+          console.log("push", router);
           router?.push({
             pathname: getGrowthProjectPath(projects[projectIndex].value, menu),
+            query: router?.location?.query,
           });
         }
       } else {

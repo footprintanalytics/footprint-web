@@ -1,8 +1,17 @@
 /* eslint-disable react/display-name */
 /* eslint-disable react/prop-types */
 /* eslint-disable-next-line react/display-name */
-import React from "react";
-import { Table, Typography, Button, Card, Dropdown } from "antd";
+import React, { useEffect, useState } from "react";
+import {
+  Table,
+  Typography,
+  Button,
+  Card,
+  Dropdown,
+  Pagination,
+  Spin,
+} from "antd";
+import { LoadingOutlined } from "@ant-design/icons";
 import { valueFormat } from "metabase/growth/utils/utils";
 
 export const WalletList = props => {
@@ -16,6 +25,10 @@ export const WalletList = props => {
     onPageChange,
     actions,
   } = props;
+  const [currentPage, setCurrentPage] = useState(1);
+  useEffect(() => {
+    setCurrentPage(data?.current);
+  }, [data]);
   const actionItems = [];
   actions?.map(item => {
     actionItems.push({
@@ -33,9 +46,13 @@ export const WalletList = props => {
       ),
     });
   });
-  const itemRender = (current, type, originalElement) => {
+  const itemRender = (current, type, originalElement, isLoading) => {
     if (type === "page") {
-      return <a>{valueFormat(current)}</a>;
+      return current === currentPage && isLoading ? (
+        <Spin indicator={<LoadingOutlined style={{ fontSize: 24 }} spin />} />
+      ) : (
+        <a>{valueFormat(current)}</a>
+      );
     }
     return originalElement;
   };
@@ -62,16 +79,22 @@ export const WalletList = props => {
         <Table
           columns={columns}
           key="address"
+          // pagination={false}
           pagination={{
             pageSize: data?.pageSize,
             total: data?.total,
             showSizeChanger: true,
-            current: data?.current,
-            itemRender: itemRender,
+            current: currentPage,
+            itemRender: (current, type, originalElement) => {
+              return itemRender(current, type, originalElement, isLoading);
+            },
             onChange: (page, pageSize) => {
-              pageSize !== data?.pageSize
-                ? onPageChange?.(1, pageSize)
-                : onPageChange?.(page, pageSize);
+              if (pageSize !== data?.pageSize) {
+                onPageChange?.(1, pageSize);
+              } else {
+                setCurrentPage(page);
+                onPageChange?.(page, pageSize);
+              }
             },
           }}
           dataSource={data?.data}
