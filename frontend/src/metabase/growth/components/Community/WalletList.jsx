@@ -49,7 +49,7 @@ export const WalletList = props => {
   const itemRender = (current, type, originalElement, isLoading) => {
     if (type === "page") {
       return current === currentPage && isLoading ? (
-        <Spin indicator={<LoadingOutlined style={{ fontSize: 24 }} spin />} />
+        <Spin indicator={<LoadingOutlined style={{ fontSize: 14 }} spin />} />
       ) : (
         <a>{valueFormat(current)}</a>
       );

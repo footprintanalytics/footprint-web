@@ -222,6 +222,7 @@ export function getGaMenuTabs(
         "Campaign",
         "Community",
         "Members",
+        "Wallet Profile",
         "Project Info",
         "Template Gallery",
         "Opt-In Tool",

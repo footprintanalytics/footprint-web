@@ -240,7 +240,8 @@ const Project = props => {
         />
       );
     }
-    if (current_tab === "WalletProfile") {
+
+    if (["Wallet Profile", "WalletProfile"].includes(current_tab)) {
       return (
         <WalletProfile
           location={location}

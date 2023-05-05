@@ -8,7 +8,9 @@ import {
   ProjectOutlined,
   CommentOutlined,
 } from "@ant-design/icons";
-
+//public/dashboard/uuid
+export const wallet_profile_link = '/growth/public/dashboard/fa040fe5-46b3-483b-b257-aa2373559fab'//query: wallet_address
+export const user_profile_link  = '/growth/public/dashboard/c06826fc-511e-4f03-bfa7-fc8eaa2facfa' //query: cohort_title
 export const top_protocols = [
   {
     protocolSlug: "the-sandbox",
@@ -293,6 +295,11 @@ export const fga_menu_data = [
     children: [
       {
         name: "Members",
+        id: null,
+        uuid: null,
+      },
+      {
+        name: "Wallet Profile",
         id: null,
         uuid: null,
       },
