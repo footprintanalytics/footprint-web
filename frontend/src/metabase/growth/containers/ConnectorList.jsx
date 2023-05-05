@@ -27,7 +27,7 @@ import LoadingSpinner from "metabase/components/LoadingSpinner";
 import { isDark } from "metabase/dashboard/components/utils/dark";
 import ConfigConnector from "../components/config_panel/ConfigConnector";
 import "../css/utils.css";
-import { checkIsNeedContactUs, getGrowthProjectPath } from "../utils/utils";
+import { getGrowthProjectPath } from "../utils/utils";
 
 const { Text } = Typography;
 const ConnectorList = props => {
@@ -146,17 +146,7 @@ const ConnectorList = props => {
                             <Button
                               key="Detail"
                               style={{ borderRadius: 5, width: 90 }}
-                              onClick={() =>
-                                checkIsNeedContactUs(
-                                  modal,
-                                  project,
-                                  () => {
-                                    showDrawer(item);
-                                  },
-                                  () => {},
-                                  true,
-                                )
-                              }
+                              onClick={() => showDrawer(item)}
                             >
                               Detail
                             </Button>,
@@ -183,15 +173,7 @@ const ConnectorList = props => {
                                   : true
                               }
                               onClick={() => {
-                                checkIsNeedContactUs(
-                                  modal,
-                                  project,
-                                  () => {
-                                    showDrawer(item);
-                                  },
-                                  () => {},
-                                  true,
-                                );
+                                showDrawer(item);
                               }}
                             >
                               Connect
@@ -265,6 +247,8 @@ const ConnectorList = props => {
             connector={openDrawer.connector}
             onAddConnector={onAddConnector}
             user={user}
+            modal={modal}
+            project={project}
             setOpenDrawer={setOpenDrawer}
             setLoginModalShowAction={setLoginModalShowAction}
             setCreateFgaProjectModalShowAction={

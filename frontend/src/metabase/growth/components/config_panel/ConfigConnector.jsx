@@ -16,6 +16,7 @@ import {
 import { Link } from "react-router";
 import { QuestionCircleOutlined, InfoCircleOutlined } from "@ant-design/icons";
 import { addConnectors } from "metabase/new-service";
+import { checkIsNeedContactUs } from "../../utils/utils";
 
 const layout = {
   labelCol: { span: 24 },
@@ -34,11 +35,18 @@ const ConfigConnector = props => {
     setLoginModalShowAction,
     setCreateFgaProjectModalShowAction,
     setOpenDrawer,
+    modal,
+    project,
   } = props;
   const formRef = React.useRef(null);
   const [editable, setEditable] = useState(!connector?.configured);
   const [loading, setLoading] = useState(false);
   const onSave = values => {
+    if (checkIsNeedContactUs(modal, project)) {
+      return;
+    }
+
+
     if (!user) {
       message.warning("Kindly log in before proceeding.");
       onAddConnector(false);

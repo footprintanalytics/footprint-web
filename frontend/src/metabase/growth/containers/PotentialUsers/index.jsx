@@ -38,6 +38,7 @@ const PotentialUsers = props => {
     excludeTags: [],
   });
 
+  const [walletListData, setWalletListData] = React.useState(null);
   // const [walletListParams, setWalletListParams] = React.useState({
   //   pageSize: location.query?.pageSize
   //     ? parseInt(location.query?.pageSize)
@@ -101,7 +102,11 @@ const PotentialUsers = props => {
     },
     { ...QUERY_OPTIONS, enabled: !!project?.id },
   );
-
+  useEffect(() => {
+    if (!listResult?.isLoading) {
+      setWalletListData(listResult?.data);
+    }
+  }, [listResult]);
   const actions = [
     {
       title: "Create Cohort",
@@ -356,15 +361,15 @@ const PotentialUsers = props => {
               />
             </>
           )}
-          {listResult.isLoading ? (
+          {listResult.isLoading && !walletListData ? (
             <Card className="w-full rounded m1" style={{ height: 650 }}>
               <LoadingSpinner message="Loading..." />
             </Card>
           ) : (
             <WalletList
               router={router}
-              // isLoading={listResult?.isLoading}
-              data={listResult?.data}
+              isLoading={listResult?.isLoading}
+              data={walletListData}
               actions={actions}
               onPageChange={(page, pageSize) => {
                 setWalletListParams({

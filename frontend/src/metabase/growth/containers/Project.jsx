@@ -70,13 +70,19 @@ const Project = props => {
             ? newMenu?.menuTabs[0].children[0].key
             : newMenu?.menuTabs[0]?.key;
         setCurrentMenu(firstMenu);
-        router.push(
-          getGrowthProjectPath(projectObject?.protocolSlug, firstMenu),
-        );
+        router.push({
+          pathname: getGrowthProjectPath(
+            projectObject?.protocolSlug,
+            firstMenu,
+          ),
+        });
       } else {
-        router.replace(
-          getGrowthProjectPath(projectObject?.protocolSlug, currentMenu),
-        );
+        router.replace({
+          pathname: getGrowthProjectPath(
+            projectObject?.protocolSlug,
+            currentMenu,
+          ),
+        });
       }
     } else {
       setGaMenuTabs(null);
