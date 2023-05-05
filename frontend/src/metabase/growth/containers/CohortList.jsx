@@ -22,7 +22,11 @@ import { GetFgaCohort } from "metabase/new-service";
 import Link from "metabase/core/components/Link/Link";
 import UploadWallets from "../components/buttons/UploadWallets";
 import { formatTag, getGrowthProjectPath } from "../utils/utils";
-import { cohortTips } from "../utils/data";
+import {
+  cohortTips,
+  user_profile_link,
+  wallet_profile_link,
+} from "../utils/data";
 
 const CohortList = props => {
   const { isLoading, data, refetch } = useQuery(
@@ -53,7 +57,7 @@ const CohortList = props => {
         return (
           <Link
             disabled={numberOfWallets === 0}
-            to={`/growth/public/dashboard/55b1eb29-b15e-458f-9241-1862a0d19d3b?cohort_id=${cohortId}&tag=${text}&cohort_title=${text}#from=Cohort`}
+            to={`${user_profile_link}?cohort_id=${cohortId}&tag=${text}&cohort_title=${text}#from=Cohort`}
           >
             {title}
           </Link>
@@ -102,7 +106,7 @@ const CohortList = props => {
         <Space size="middle">
           <Link
             disabled={record.numberOfWallets === 0}
-            to={`/growth/public/dashboard/55b1eb29-b15e-458f-9241-1862a0d19d3b?cohort_id=${record.cohortId}&tag=${record.title}&cohort_title=${record.title}#from=Cohort`}
+            to={`${user_profile_link}?cohort_id=${record.cohortId}&tag=${record.title}&cohort_title=${record.title}#from=Cohort`}
           >
             User Profile
           </Link>
