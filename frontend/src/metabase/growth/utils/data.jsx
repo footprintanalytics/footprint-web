@@ -299,6 +299,11 @@ export const fga_menu_data = [
         uuid: null,
       },
       {
+        name: "Wallet Profile",
+        id: null,
+        uuid: null,
+      },
+      {
         name: "Potential Users List",
         id: null,
         uuid: null,
