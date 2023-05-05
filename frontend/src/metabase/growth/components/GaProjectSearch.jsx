@@ -68,6 +68,7 @@ const GaProjectSearch = props => {
         ) {
           router?.push({
             pathname: getGrowthProjectPath(projects[projectIndex].value, menu),
+            query: router?.location?.query,
           });
         }
       } else {

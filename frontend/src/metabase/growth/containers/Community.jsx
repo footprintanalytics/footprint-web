@@ -1,6 +1,6 @@
 /* eslint-disable react/display-name */
 /* eslint-disable react/prop-types */
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { connect } from "react-redux";
 import { Card, Tag, Avatar, Typography, Button, Tooltip } from "antd";
 import { useQuery } from "react-query";
@@ -23,7 +23,7 @@ const Community = props => {
   const { router, location, children, user, projectPath, menu, project } =
     props;
 
-  const [walletListParams, setWalletListParams] = React.useState({
+  const [walletListParams, setWalletListParams] = useState({
     pageSize: location.query?.pageSize
       ? parseInt(location.query?.pageSize)
       : 10,
@@ -33,6 +33,8 @@ const Community = props => {
       : [],
     filters: location.query?.filters ? JSON.parse(location.query?.filters) : [],
   });
+  const [queryType, setQueryType] = useState(null);
+  const [walletListData, setWalletListData] = useState(null);
 
   useEffect(() => {
     router.replace({
@@ -68,6 +70,12 @@ const Community = props => {
       }),
     { ...QUERY_OPTIONS, enabled: !!project?.id },
   );
+
+  useEffect(() => {
+    if (!listResult?.isLoading) {
+      setWalletListData(listResult?.data);
+    }
+  }, [listResult]);
 
   function formatInfoResult(data) {
     const dataList = [];
@@ -429,9 +437,11 @@ const Community = props => {
         <>
           <ValueFilter
             className="mt1"
+            isLoading={queryType === "valueFilter" && listResult.isLoading}
             data={valueFilterOptionsList}
             onFliterChange={valueFilter => {
               if (!valueFilter) return;
+              setQueryType("valueFilter");
               let temp = [...walletListParams.filters];
               temp = temp.filter(
                 item => item.indicator !== valueFilter.indicator,
@@ -447,6 +457,7 @@ const Community = props => {
             }}
           />
           <QuickFilter
+            isLoading={queryType === "quickFilter" && listResult.isLoading}
             optionsList={getQuickFilterOptionList(filterResult?.data?.data)}
             defaultValue={
               walletListParams.quickFilter?.length > 0
@@ -454,6 +465,7 @@ const Community = props => {
                 : null
             }
             onFliterChange={tag => {
+              setQueryType("quickFilter");
               setWalletListParams({
                 ...walletListParams,
                 current: 1,
@@ -463,7 +475,7 @@ const Community = props => {
           />
         </>
       )}
-      {listResult.isLoading | !project?.id ? (
+      {listResult.isLoading | !project?.id && walletListData === null ? (
         <div className="w-full p1">
           <Card className="w-full rounded" style={{ height: 650 }}>
             <LoadingSpinner />
@@ -472,9 +484,9 @@ const Community = props => {
       ) : (
         <WalletList
           router={router}
-          // isLoading={listResult?.isLoading}
+          isLoading={listResult?.isLoading}
           // isRefetching={listResult?.isFetching}
-          data={listResult?.data}
+          data={walletListData}
           actions={actions}
           onPageChange={(page, pageSize) => {
             setWalletListParams({

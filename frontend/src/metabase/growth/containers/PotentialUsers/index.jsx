@@ -14,16 +14,18 @@ import { QuickFilter } from "metabase/growth/components/Community/QuickFilter";
 import { getFgaProject, getUser } from "metabase/selectors/user";
 import CreateCohort2 from "metabase/growth/containers/PotentialUsers/CreateFliterCohort";
 import {
+  getPotentialUseFilter,
   getPotentialUseFilterProject,
-  queryPotentialUser,
   getPotentialUserFilterCollection,
+  getPotentialUserFilterFeaturedTag,
   getPotentialUserFilterTag,
+  getPotentialUserFilterToken,
+  queryPotentialUserByFilter,
 } from "metabase/new-service";
 import { QUERY_OPTIONS } from "metabase/containers/dashboards/shared/config";
 import Link from "metabase/core/components/Link/Link";
 import { formatTableTitle } from "metabase/lib/formatting/footprint";
 import { ItemFilter } from "./ItemFilter";
-import { OtherFilter } from "./OtherFilter";
 import { formatTag, valueFormat } from "metabase/growth/utils/utils";
 
 const PotentialUsers = props => {
@@ -33,15 +35,12 @@ const PotentialUsers = props => {
     pageSize: 10,
     current: 1,
     filters: [],
-    tags: location?.query?.tag ? [location?.query?.tag.replace("+", " ")] : [],
-    protocolSlugs: [],
-    collectionSlugs: [],
-    excludeTags: [],
   });
 
   const [otherOptionsList, setOtherOptionsList] = React.useState([])
 
 
+  const [walletListData, setWalletListData] = React.useState(null);
   // const [walletListParams, setWalletListParams] = React.useState({
   //   pageSize: location.query?.pageSize
   //     ? parseInt(location.query?.pageSize)
@@ -72,11 +71,10 @@ const PotentialUsers = props => {
   const filterResult = useQuery(
     ["getPotentialUseFilter"],
     async () => {
-      return getPotentialUseFilterProject();
+      return getPotentialUseFilter();
     },
     { ...QUERY_OPTIONS },
   );
-  console.log("filterResult", filterResult)
   const filterProjectResult = useQuery(
     ["getPotentialUseFilterProject", project?.id],
     async () => {
@@ -95,6 +93,16 @@ const PotentialUsers = props => {
     { ...QUERY_OPTIONS, enabled: !!project?.id },
   );
 
+  const filterTokenResult = useQuery(
+    ["getPotentialUserFilterToken", project?.id],
+    async () => {
+      return getPotentialUserFilterToken({
+        projectId: parseInt(project?.id),
+      });
+    },
+    { ...QUERY_OPTIONS, enabled: !!project?.id },
+  );
+
   const filterTagResult = useQuery(
     ["getPotentialUserFilterTag", project?.id],
     async () => {
@@ -103,17 +111,29 @@ const PotentialUsers = props => {
     { ...QUERY_OPTIONS, enabled: !!project?.id },
   );
 
-  const listResult = useQuery(
-    ["queryPotentialUser", project?.id, walletListParams],
+  const filterFeaturedTagResult = useQuery(
+    ["getPotentialUserFilterFeaturedTag", project?.id],
     async () => {
-      return queryPotentialUser({
+      return getPotentialUserFilterFeaturedTag({ projectId: parseInt(project?.id) });
+    },
+    { ...QUERY_OPTIONS, enabled: !!project?.id },
+  );
+
+  const listResult = useQuery(
+    ["queryPotentialUserByFilter", project?.id, walletListParams],
+    async () => {
+      return queryPotentialUserByFilter({
         ...walletListParams,
         projectId: parseInt(project?.id),
       });
     },
     { ...QUERY_OPTIONS, enabled: !!project?.id },
   );
-
+  React.useEffect(() => {
+    if (!listResult?.isLoading) {
+      setWalletListData(listResult?.data);
+    }
+  }, [listResult]);
   const actions = [
     {
       title: "Create Cohort",
@@ -322,7 +342,7 @@ const PotentialUsers = props => {
                 title={"Tags"}
                 defaultValue={location?.query?.tag}
                 optionsList={getQuickFilterOptionList(
-                  orderBy(filterTagResult?.data?.data, ["tag"]),
+                  orderBy(filterFeaturedTagResult?.data?.data, ["tag"]),
                 )}
                 formatFunction={name =>
                   formatTableTitle(name?.replace(/-/g, " "))
@@ -337,40 +357,24 @@ const PotentialUsers = props => {
               />
               <ItemFilter
                 className="mt2"
+                filterResultData={filterResult?.data}
+                tagsData={orderBy(filterTagResult?.data?.data, ["tag"])}
                 projectData={orderBy(filterProjectResult?.data?.data, ["name"])}
+                tokenData={orderBy(filterTokenResult?.data?.data, ["name"])}
                 collectionData={orderBy(filterCollectionResult?.data?.data, [
                   "name",
                 ])}
                 onSelectChange={selectObject => {
                   setWalletListParams({
                     ...walletListParams,
-                    ...selectObject,
+                    filters: [...walletListParams?.filters?.filter(i => i.indicator !== selectObject.indicator), selectObject],
                     current: 1,
                   });
                 }}
-                onMoreChange={value => {
-                  const temp = [
-                    {
-                      label: "NFT Holding Value",
-                      indicator: "nftHoldingValue",
-                      comparisonSymbol: "gte",
-                      ui: "input",
-                    },
-                    {
-                      label: "Token Holding Value",
-                      indicator: "tokenHoldingValue",
-                      comparisonSymbol: "gte",
-                      ui: "input",
-                    },
-                    {
-                      label: "Trading Value(30D)",
-                      indicator: "tradingValue",
-                      comparisonSymbol: "gte",
-                      ui: "input",
-                    },
-                  ]
+                enableMoreSelect={true}
+                onMoreChange={(value, data) => {
                   setOtherOptionsList(value.map(item => {
-                    return temp.find(a => a.indicator === item)
+                    return data.find(a => a.indicator === item)
                   }));
                 }}
                 onFilterChange={valueFilter => {
@@ -391,16 +395,24 @@ const PotentialUsers = props => {
                   });
                 }}
               />
-              <OtherFilter
-                className="mt2"
+              <ItemFilter
+                className="mb1"
+                tagsData={orderBy(filterTagResult?.data?.data, ["tag"])}
+                projectData={orderBy(filterProjectResult?.data?.data, ["name"])}
+                tokenData={orderBy(filterTokenResult?.data?.data, ["name"])}
+                collectionData={orderBy(filterCollectionResult?.data?.data, [
+                  "name",
+                ])}
                 onSelectChange={selectObject => {
                   setWalletListParams({
                     ...walletListParams,
-                    ...selectObject,
+                    filters: [...walletListParams?.filters?.filter(i => i.indicator !== selectObject.indicator), selectObject],
                     current: 1,
                   });
                 }}
-                optionsList={otherOptionsList}
+                visibleCount={0}
+                titleColor="transparent"
+                filterResultData={otherOptionsList}
                 onFilterChange={valueFilter => {
                   if (!valueFilter) {
                     return;
@@ -421,15 +433,15 @@ const PotentialUsers = props => {
               />
             </>
           )}
-          {listResult.isLoading ? (
+          {listResult.isLoading && !walletListData ? (
             <Card className="w-full rounded m1" style={{ height: 650 }}>
               <LoadingSpinner message="Loading..." />
             </Card>
           ) : (
             <WalletList
               router={router}
-              // isLoading={listResult?.isLoading}
-              data={listResult?.data}
+              isLoading={listResult?.isLoading}
+              data={walletListData}
               actions={actions}
               onPageChange={(page, pageSize) => {
                 setWalletListParams({

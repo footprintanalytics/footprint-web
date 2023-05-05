@@ -362,3 +362,49 @@ export function getGAFavoritedTemplate() {
     ? JSON.parse(localStorage.getItem("GAFavoritedTemplate")!)
     : [];
 }
+
+export const filterResultMapFunction = ({ projectData, collectionData, tokenData, tagsData } : { projectData: any, collectionData: any, tokenData: any, tagsData: any }) => {
+  return (item: any) => {
+    let optionsObject = {};
+    if (item.indicator === "protocolSlugs") {
+      optionsObject = { options: projectData?.map((item: any) => {
+          return {
+            value: item.protocolSlug,
+            label: item.name,
+          };
+        })
+      }
+    }
+    if (item.indicator === "nftCollectionSlugs") {
+      optionsObject = { options: collectionData?.map((item: any) => {
+          return {
+            value: item.collectionSlug,
+            label: item.name,
+          };
+        })
+      }
+    }
+    if (item.indicator === "tokenSlugs") {
+      optionsObject = { options: tokenData.map((item: any) => {
+          return {
+            value: item.tokenSlug,
+            label: item.name,
+          };
+        })
+      }
+    }
+    if (item.indicator === "tags") {
+      optionsObject = { options: tagsData?.map((item: any) => {
+          return {
+            value: item.tag,
+            label: item.tag,
+          };
+        })
+      }
+    }
+    return {
+      ...item,
+      ...optionsObject,
+    }
+  }
+}

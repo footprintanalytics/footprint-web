@@ -3,107 +3,75 @@ import React from "react";
 import { Col, Row, Select } from "antd";
 import MuiSelect from "metabase/growth/components/MuiSelect";
 import cx from "classnames";
-import FloatInput from "metabase/growth/components/FloatInput";
 import MuiInput from "metabase/growth/components/MuiInput";
+import { filterResultMapFunction } from "metabase/growth/utils/utils";
 
 export const ItemFilter = props => {
   const {
+    tagsData,
+    filterResultData,
     projectData,
+    tokenData,
     collectionData,
     className,
     onSelectChange,
     onFilterChange,
     onMoreChange,
+    titleColor = "white",
+    enableMoreSelect,
+    visibleCount = 3,
   } = props;
-  // mock datas
-  const optionsList = [
-    {
-      label: "Project",
-      indicator: "project",
-      ui: "select",
-      comparisonSymbol: "ge",
-      resultFormatFunction: value => {
-        return { protocolSlugs: value ? [value] : [] };
-      },
-      options: projectData?.map(item => {
-        return {
-          value: item.protocolSlug,
-          label: item.name,
-        };
-      }),
-    },
-    {
-      label: "NFT collection",
-      indicator: "nft_collection",
-      ui: "select",
-      comparisonSymbol: "ge",
-      resultFormatFunction: value => {
-        return { collectionSlugs: value ? [value] : [] };
-      },
-      options: collectionData?.map(item => {
-        return {
-          value: item.collectionSlug,
-          label: item.name,
-        };
-      }),
-    },
-    {
-      label: "Net Worth",
-      indicator: "netWorth",
-      comparisonSymbol: "gte",
-      ui: "input",
-    },
-    // {
-    //   label: "NFT Holding Value >=",
-    //   indicator: "nftHoldingValue",
-    //   comparisonSymbol: "gte",
-    //   ui: "input",
-    // },
-    // {
-    //   label: "Token Holding Value >=",
-    //   indicator: "tokenHoldingValue",
-    //   comparisonSymbol: "gte",
-    //   ui: "input",
-    // },
-    // {
-    //   label: "Trading Value(30D) >=",
-    //   indicator: "tradingValue",
-    //   comparisonSymbol: "gte",
-    //   ui: "input",
-    // },
-    {
-      label: "More",
-      ui: "more",
-      options: [
-        {
+
+  const filterDataToOptionsList = () => {
+    let sliceResultData = filterResultData;
+    if (visibleCount > 0) {
+      sliceResultData = filterResultData?.slice(0, visibleCount);
+    }
+    const result = sliceResultData?.map(filterResultMapFunction({projectData, collectionData, tokenData, tagsData})) || [];
+    if (filterResultData === null) {
+      return [];
+    }
+    if (enableMoreSelect) {
+      result?.push({
+        label: "More",
+        type: "more",
+        options: [
+          {
             label: "Recent",
-            options: [{
-              value: "nftHoldingValue",
-              label: "Nft Holding Value",
-            },
-          ]
-        },
-        {
+            options: filterResultData?.slice(visibleCount, visibleCount + 1)?.map(i => {
+              return {
+                value: i?.indicator,
+                label: i?.label,
+              };
+            }) || [],
+          },
+          {
             label: "Hot",
-            options: [
-            {
-              value: "tokenHoldingValue",
-              label: "Token Holding Value",
-            },
-            {
-              value: "tradingValue",
-              label: "Trading Value(30D)",
-            },
-          ]
-        },
-      ]
-    },
-  ];
+            options: filterResultData?.slice(visibleCount + 1, filterResultData?.length)?.map(i => {
+              return {
+                value: i.indicator,
+                label: i.label,
+              };
+            }) || [],
+          },
+        ],
+      })
+    }
+    return result;
+  }
+
+  const optionsList = filterDataToOptionsList();
+
   const handleChange = (value) => {
-    onMoreChange?.(value);
+    console.log("handleChange", value)
+    onMoreChange?.(value, filterResultData?.map(filterResultMapFunction({projectData, collectionData, tokenData, tagsData})));
   };
   const renderUi = (item) => {
-    if (item.ui === "more") {
+    if (item === null) {
+      return <div />
+    }
+
+    if (item.type === "more") {
       return (
         <div className="more-filter">
           <Select
@@ -120,14 +88,18 @@ export const ItemFilter = props => {
         </div>
       )
     }
-    if (item.ui === "select") {
+    if (item.type === "string" && item.isArray) {
       return (
         <MuiSelect
           height={40}
           style={{ width: "100%", height: 40 }}
           label={item.label}
           onValueChange={value => {
-            onSelectChange?.(item.resultFormatFunction?.(value));
+            onSelectChange?.({
+              "indicator": item.indicator,
+              "comparisonSymbol": "in",
+              "comparisonValue": [value]
+            });
           }}
           options={item.options}
         />
@@ -137,16 +109,15 @@ export const ItemFilter = props => {
       <MuiInput
         height={40}
         style={{ width: "100%", height: 40 }}
-        onValueChange={val => {
+        onValueChange={(val, comparisonSymbol) => {
           onFilterChange?.({
             comparisonValue: parseFloat(val),
             indicator: item.indicator,
-            comparisonSymbol: item.comparisonSymbol,
+            comparisonSymbol: comparisonSymbol,
           });
         }}
         comparisonSymbol={item.comparisonSymbol}
         label={item.label}
-        // placeholder="Email here please"
         name={item.value}
       />
     )
@@ -159,10 +130,10 @@ export const ItemFilter = props => {
         className,
       )}
     >
-      <span style={{ marginRight: 8, color: "white" }}>Filters:</span>
+      <span style={{ marginRight: 8, color: titleColor }}>Filters:</span>
       <Row gutter={[10, 10]} className="w-full">
-        {optionsList.map(item => (
-          <Col sm={24} md={12} lg={8} xl={6} xxl={4} key={item.label}>
+        {optionsList?.map((item, index) => (
+          <Col sm={24} md={12} lg={8} xl={6} xxl={4} key={index}>
             {renderUi(item)}
           </Col>
         ))}
