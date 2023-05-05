@@ -93,7 +93,7 @@ export const getPotentialUserFilterCollection = async params => {
   return GET(`/api/v1/fga/potential-user/filter/collection`, params);
 };
 export const getPotentialUserFilterTag = async params => {
-  return GET(`/api/v1/fga/potential-user/filter/tag`, params);
+  return GET(`/api/v1/fga/potential-user/filter/featuredTag`, params);
 };
 export const queryPotentialUser = async params => {
   return POST(`/api/v1/fga/potential-user`, params);
