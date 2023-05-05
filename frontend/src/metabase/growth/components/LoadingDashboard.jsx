@@ -14,9 +14,10 @@ const LoadingDashboard = ({
   children,
   type = "twitter",
 }) => {
+  // return children;
   // status :  "succeeded" | "failed" | "running"
   // twitter : twitter_tweet_metrics | user_details
-  // google_analytics : google_analytics_metrics
+  // google_analytics : events_daily
   // discord : members | messages
   const { data } = useQuery(
     ["GetFgaConnectorJob", projectId, fgaConnectorId],
@@ -38,7 +39,7 @@ const LoadingDashboard = ({
         return data?.discord?.members?.status;
       case "funnel":
         // TODO: add funnel: need complete backend
-        return data?.ga?.status;
+        return data?.ga?.events_daily?.status;
     }
   }
 
@@ -178,6 +179,6 @@ const LoadingDashboard = ({
   } else {
     return children;
   }
-};
+};;;
 
 export default LoadingDashboard;

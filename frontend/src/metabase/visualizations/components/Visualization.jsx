@@ -485,10 +485,8 @@ class Visualization extends React.PureComponent {
     const isFga = location.pathname.startsWith("/growth");
     const isFgaTwitter = isFga && location.pathname.includes("/Twitter");
     const isFgaDiscord = isFga && location.pathname.includes("/Discord");
-    const isFgaGoogleAnalysis =
-      isFga && location.pathname.includes("/User%20Funnel");
+    const isFgaGoogleAnalysis = isFga && location.pathname.includes("/Funnel");
     const cardId = get(this.props.rawSeries, 0)?.card?.id;
-
     return (
       <div
         id="html2canvas-Card"
@@ -553,7 +551,19 @@ class Visualization extends React.PureComponent {
             {!small && <span className="h4 text-bold">{t`No results!`}</span>}*/}
             <>
               {isFgaDiscord || isFgaTwitter || isFgaGoogleAnalysis ? (
-                <FgaErrorGuide></FgaErrorGuide>
+                <FgaErrorGuide
+                  cardName={this.props.dashcard?.card?.name}
+                  cardId={cardId}
+                  connectorType={
+                    isFgaDiscord
+                      ? "discord"
+                      : isFgaTwitter
+                      ? "twitter"
+                      : isFgaGoogleAnalysis
+                      ? "ga"
+                      : "other"
+                  }
+                ></FgaErrorGuide>
               ) : (
                 <div className="noResults">
                   <h4>No results!</h4>
@@ -585,7 +595,20 @@ class Visualization extends React.PureComponent {
           >
             <>
               {isFgaDiscord || isFgaTwitter || isFgaGoogleAnalysis ? (
-                <FgaErrorGuide></FgaErrorGuide>
+                <FgaErrorGuide
+                  cardName={this.props.dashcard?.card?.name}
+                  tips={error}
+                  cardId={cardId}
+                  connectorType={
+                    isFgaDiscord
+                      ? "discord"
+                      : isFgaTwitter
+                      ? "twitter"
+                      : isFgaGoogleAnalysis
+                      ? "ga"
+                      : "other"
+                  }
+                ></FgaErrorGuide>
               ) : (
                 <>
                   <Tooltip tooltip={error} isEnabled={small}>
