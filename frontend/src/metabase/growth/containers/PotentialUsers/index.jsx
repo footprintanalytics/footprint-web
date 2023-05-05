@@ -106,7 +106,7 @@ const PotentialUsers = props => {
     if (!listResult?.isLoading) {
       setWalletListData(listResult?.data);
     }
-  }, [listResult?.isLoading]);
+  }, [listResult]);
   const actions = [
     {
       title: "Create Cohort",
