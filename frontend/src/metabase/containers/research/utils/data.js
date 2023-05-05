@@ -236,11 +236,36 @@ const gamefiData = [
         "value": "gaming-tokens",
         "publicUuid": "db808eeb-3709-4a75-8a9b-418236b5b707",
       },
+      {
+        "label": "Top Winners",
+        "value": "top-winners",
+        "publicUuid": "68f25843-b845-461e-a494-e7e43ffe2c29",
+        "type": "chart",
+        "search": "?on_date=2023-04-12",
+      },
+      {
+        "label": "Top Losers",
+        "value": "top-losers",
+        "publicUuid": "fbdf3cea-c70c-4540-a9df-b2eb84104ed1",
+        "type": "chart",
+        "search": "?on_date=2023-04-12",
+      },
     ],
   },
   {
-    "value": "fundraising",
+    "label": "GameFi Protocos",
+    "value": "gamefi-protocos",
+    "subMenus": [
+      {
+        "label": "Single GameFi Protocos Stats",
+        "value": "single-gamefi-protocos-stats",
+        "publicUuid": "5138a6a9-6bdd-4d95-a00f-7f330e555aad",
+      },
+    ],
+  },
+  {
     "label": "Fundraising",
+    "value": "fundraising",
     "subMenus": [
       {
         "label": "Fundraising Overview",
@@ -268,6 +293,57 @@ const gamefiData = [
         "label": "GameFi NFT Stats",
         "value": "gamefi-nft-stats",
         "publicUuid": "eb7d6ff7-6c76-4160-ba88-62a42232f86b",
+      },
+    ],
+  },
+  {
+    "label": "Featured Dashboards",
+    "value": "featured-dashboards",
+    "subMenus": [
+      {
+        "label": "PlanetIX Data Overview",
+        "value": "planetix-data-overview",
+        "publicUuid": "ec71fc42-2db4-43c6-9b9b-c06fc789758e",
+      },
+      {
+        "label": "PlanetIX Assets Tracker",
+        "value": "planetix-assets-tracker",
+        "publicUuid": "be1e7872-0c20-4188-b683-dbe429fc961d",
+      },
+      {
+        "label": "Walken Data Overview",
+        "value": "walken-data-overview",
+        "publicUuid": "0bc7f1b3-feb1-430a-9596-5a513c3fd216",
+      },
+      {
+        "label": "Era7 Key Metrics",
+        "value": "era7-key-metrics",
+        "publicUuid": "879d17b3-fa17-477a-a7f4-b21b9381f3c3",
+      },
+      {
+        "label": "Solana GameFi Overview",
+        "value": "solana-gamefi-overview",
+        "publicUuid": "022aa15f-40c7-4dc2-95be-bc498c9114fd",
+      },
+      {
+        "label": "GAMEE Health",
+        "value": "gamee-health",
+        "publicUuid": "83cb8c4e-6755-4e9a-9dc1-2c96979f8e95",
+      },
+      {
+        "label": "Stats about GameFi from 2022",
+        "value": "stats-about-gamefi-from-2022",
+        "publicUuid": "9642de24-1795-40cc-ab47-24418690b727",
+      },
+      {
+        "label": "GameFi Weekly Dashboard",
+        "value": "gamefi-weekly-dashboard",
+        "publicUuid": "5e7798d2-be24-428b-8792-a926b4822012",
+      },
+      {
+        "label": "GameFi Metrics",
+        "value": "gamefi-metrics",
+        "publicUuid": "e4a95701-0f0b-4593-bd6e-2a441660c555",
       },
     ],
   },
