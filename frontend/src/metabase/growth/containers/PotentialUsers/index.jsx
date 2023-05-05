@@ -343,19 +343,19 @@ const PotentialUsers = props => {
                 onMoreChange={value => {
                   const temp = [
                     {
-                      label: "NFT Holding Value >=",
+                      label: "NFT Holding Value",
                       indicator: "nftHoldingValue",
                       comparisonSymbol: "gte",
                       ui: "input",
                     },
                     {
-                      label: "Token Holding Value >=",
+                      label: "Token Holding Value",
                       indicator: "tokenHoldingValue",
                       comparisonSymbol: "gte",
                       ui: "input",
                     },
                     {
-                      label: "Trading Value(30D) >=",
+                      label: "Trading Value(30D)",
                       indicator: "tradingValue",
                       comparisonSymbol: "gte",
                       ui: "input",

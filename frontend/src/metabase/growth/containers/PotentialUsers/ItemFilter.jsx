@@ -4,6 +4,7 @@ import { Col, Row, Select } from "antd";
 import MuiSelect from "metabase/growth/components/MuiSelect";
 import cx from "classnames";
 import FloatInput from "metabase/growth/components/FloatInput";
+import MuiInput from "metabase/growth/components/MuiInput";
 
 export const ItemFilter = props => {
   const {
@@ -47,7 +48,7 @@ export const ItemFilter = props => {
       }),
     },
     {
-      label: "Net Worth >=",
+      label: "Net Worth",
       indicator: "netWorth",
       comparisonSymbol: "gte",
       ui: "input",
@@ -75,16 +76,25 @@ export const ItemFilter = props => {
       ui: "more",
       options: [
         {
-          value: "nftHoldingValue",
-          label: "Nft Holding Value >=",
+            label: "Recent",
+            options: [{
+              value: "nftHoldingValue",
+              label: "Nft Holding Value",
+            },
+          ]
         },
         {
-          value: "tokenHoldingValue",
-          label: "Token Holding Value >=",
-        },
-        {
-          value: "tradingValue",
-          label: "Trading Value(30D) >=",
+            label: "Hot",
+            options: [
+            {
+              value: "tokenHoldingValue",
+              label: "Token Holding Value",
+            },
+            {
+              value: "tradingValue",
+              label: "Trading Value(30D)",
+            },
+          ]
         },
       ]
     },
@@ -124,16 +134,17 @@ export const ItemFilter = props => {
       )
     }
     return (
-      <FloatInput
+      <MuiInput
         height={40}
         style={{ width: "100%", height: 40 }}
-        onChange={val => {
+        onValueChange={val => {
           onFilterChange?.({
             comparisonValue: parseFloat(val),
             indicator: item.indicator,
             comparisonSymbol: item.comparisonSymbol,
           });
         }}
+        comparisonSymbol={item.comparisonSymbol}
         label={item.label}
         // placeholder="Email here please"
         name={item.value}
