@@ -44,7 +44,7 @@ const CohortList = props => {
       (a, b) =>
         new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime(),
     )
-    ?.filter(f => !["hhh", "all"].includes(f.title));
+    ?.filter(f => !["hhh", "all"].includes(f.title) && f.numberOfWallets > 0);
 
   console.log("cohort", data, dataSource);
   const columns = [
