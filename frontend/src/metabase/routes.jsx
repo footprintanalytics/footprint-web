@@ -393,7 +393,7 @@ export const getRoutes = store => (
         />
       </Route>
       <Route title={t`Academy`} path="/academy" component={LazyLoad.Academy} />
-      <Route title={t`Explore`} path="/explore" component={LazyLoad.Explore}>
+      {/*<Route title={t`Explore`} path="/explore" component={LazyLoad.Explore}>
         <Route title={t`Dashboard`} path="dashboard/:slug">
           <ModalRoute
             title={t`Copy`}
@@ -401,7 +401,7 @@ export const getRoutes = store => (
             modal={LazyLoad.DashboardCopyModal}
           />
         </Route>
-      </Route>
+      </Route>*/}
       <Route title={t`Guest`} path="guest">
         <Route
           title={t`Dashboard`}
