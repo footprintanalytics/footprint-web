@@ -5,14 +5,15 @@ import MuiSelect from "metabase/growth/components/MuiSelect";
 import cx from "classnames";
 import MuiInput from "metabase/growth/components/MuiInput";
 import { filterResultMapFunction } from "metabase/growth/utils/utils";
+import {
+  getPotentialUseFilterProject,
+  getPotentialUserFilterCollection, getPotentialUserFilterTag,
+  getPotentialUserFilterToken,
+} from "metabase/new-service";
 
 export const ItemFilter = props => {
   const {
-    tagsData,
     filterResultData,
-    projectData,
-    tokenData,
-    collectionData,
     className,
     onSelectChange,
     onFilterChange,
@@ -27,7 +28,7 @@ export const ItemFilter = props => {
     if (visibleCount > 0) {
       sliceResultData = filterResultData?.slice(0, visibleCount);
     }
-    const result = sliceResultData?.map(filterResultMapFunction({projectData, collectionData, tokenData, tagsData})) || [];
+    const result = sliceResultData;
     if (filterResultData === null) {
       return [];
     }
@@ -63,9 +64,68 @@ export const ItemFilter = props => {
   const optionsList = filterDataToOptionsList();
 
   const handleChange = (value) => {
-    console.log("handleChange", value)
-    onMoreChange?.(value, filterResultData?.map(filterResultMapFunction({projectData, collectionData, tokenData, tagsData})));
+    onMoreChange?.(value, filterResultData);
   };
+  const getApiFunction = (item) => {
+    if (item.indicator === "protocolSlugs") {
+      return getPotentialUseFilterProject;
+    }
+    if (item.indicator === "nftCollectionSlugs") {
+      return getPotentialUserFilterCollection;
+    }
+    if (item.indicator === "tokenSlugs") {
+      return getPotentialUserFilterToken;
+    }
+    if (item.indicator === "tags") {
+      return getPotentialUserFilterTag;
+    }
+    return getPotentialUseFilterProject;
+  }
+  const getResultMappingFunction = (item) => {
+    let optionsObject = null;
+    optionsObject = (item) => {
+      return {
+        value: item.protocolSlug,
+        label: item.name,
+      };
+    }
+    if (item.indicator === "protocolSlugs") {
+      optionsObject = (item) => {
+          return {
+            value: item.protocolSlug,
+            label: item.name,
+          };
+        }
+
+    }
+    if (item.indicator === "nftCollectionSlugs") {
+      optionsObject = (item) => {
+          return {
+            value: item.collectionSlug,
+            label: item.name,
+          };
+        }
+
+    }
+    if (item.indicator === "tokenSlugs") {
+      optionsObject = (item) => {
+          return {
+            value: item.tokenSlug,
+            label: item.name,
+          };
+        }
+
+    }
+    if (item.indicator === "tags") {
+      optionsObject = (item) => {
+          return {
+            value: item.tag,
+            label: item.tag,
+          };
+        }
+    }
+    return optionsObject;
+  }
   const renderUi = (item) => {
     if (item === null) {
       return <div />
@@ -102,6 +162,8 @@ export const ItemFilter = props => {
             });
           }}
           options={item.options}
+          resultMappingFunction={getResultMappingFunction(item)}
+          apiFunction={getApiFunction(item)}
         />
       )
     }

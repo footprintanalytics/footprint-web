@@ -15,11 +15,7 @@ import { getFgaProject, getUser } from "metabase/selectors/user";
 import CreateCohort2 from "metabase/growth/containers/PotentialUsers/CreateFliterCohort";
 import {
   getPotentialUseFilter,
-  getPotentialUseFilterProject,
-  getPotentialUserFilterCollection,
   getPotentialUserFilterFeaturedTag,
-  getPotentialUserFilterTag,
-  getPotentialUserFilterToken,
   queryPotentialUserByFilter,
 } from "metabase/new-service";
 import { QUERY_OPTIONS } from "metabase/containers/dashboards/shared/config";
@@ -74,41 +70,6 @@ const PotentialUsers = props => {
       return getPotentialUseFilter();
     },
     { ...QUERY_OPTIONS },
-  );
-  const filterProjectResult = useQuery(
-    ["getPotentialUseFilterProject", project?.id],
-    async () => {
-      return getPotentialUseFilterProject({ projectId: parseInt(project?.id) });
-    },
-    { ...QUERY_OPTIONS, enabled: !!project?.id },
-  );
-
-  const filterCollectionResult = useQuery(
-    ["getPotentialUserFilterCollection", project?.id],
-    async () => {
-      return getPotentialUserFilterCollection({
-        projectId: parseInt(project?.id),
-      });
-    },
-    { ...QUERY_OPTIONS, enabled: !!project?.id },
-  );
-
-  const filterTokenResult = useQuery(
-    ["getPotentialUserFilterToken", project?.id],
-    async () => {
-      return getPotentialUserFilterToken({
-        projectId: parseInt(project?.id),
-      });
-    },
-    { ...QUERY_OPTIONS, enabled: !!project?.id },
-  );
-
-  const filterTagResult = useQuery(
-    ["getPotentialUserFilterTag", project?.id],
-    async () => {
-      return getPotentialUserFilterTag({ projectId: parseInt(project?.id) });
-    },
-    { ...QUERY_OPTIONS, enabled: !!project?.id },
   );
 
   const filterFeaturedTagResult = useQuery(
@@ -329,10 +290,9 @@ const PotentialUsers = props => {
       {project?.id ? (
         <div className="flex flex-column w-full p2">
           {renderHint()}
-          {filterProjectResult?.isLoading &&
-          filterCollectionResult?.isLoading &&
-          listResult?.isLoading &&
-          filterTagResult?.isLoading ? (
+          {
+          filterFeaturedTagResult?.isLoading &&
+          filterResult?.isLoading ? (
             <Card className="w-full rounded m1" style={{ height: 150 }}>
               <LoadingSpinner message="Loading..." />
             </Card>
@@ -358,12 +318,6 @@ const PotentialUsers = props => {
               <ItemFilter
                 className="mt2"
                 filterResultData={filterResult?.data}
-                tagsData={orderBy(filterTagResult?.data?.data, ["tag"])}
-                projectData={orderBy(filterProjectResult?.data?.data, ["name"])}
-                tokenData={orderBy(filterTokenResult?.data?.data, ["name"])}
-                collectionData={orderBy(filterCollectionResult?.data?.data, [
-                  "name",
-                ])}
                 onSelectChange={selectObject => {
                   setWalletListParams({
                     ...walletListParams,
@@ -397,12 +351,6 @@ const PotentialUsers = props => {
               />
               <ItemFilter
                 className="mb1"
-                tagsData={orderBy(filterTagResult?.data?.data, ["tag"])}
-                projectData={orderBy(filterProjectResult?.data?.data, ["name"])}
-                tokenData={orderBy(filterTokenResult?.data?.data, ["name"])}
-                collectionData={orderBy(filterCollectionResult?.data?.data, [
-                  "name",
-                ])}
                 onSelectChange={selectObject => {
                   setWalletListParams({
                     ...walletListParams,
