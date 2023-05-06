@@ -52,6 +52,7 @@ export const refreshCurrentUser = createAction(
       }
       return res;
     } catch (e) {
+      clearGACache();
       return null;
     }
   },
