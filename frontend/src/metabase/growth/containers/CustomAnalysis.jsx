@@ -14,6 +14,12 @@ const CustomAnalysis = props => {
     <div className="flex flex-column items-center">
       <div className="flex flex-column" style={{ width: "80%" }}>
         {template_gallery(project).map(i => {
+          const items = i.items.filter(
+            item =>
+              item.id !== 7873 ||
+              (item.id === 7873 &&
+                project?.protocolSlug === "my-crypto-heroes"),
+          );
           return (
             <div key={i.category}>
               <h2 className=" mt3">{i.category}</h2>
@@ -29,37 +35,39 @@ const CustomAnalysis = props => {
                     xl: 3,
                     xxl: 4,
                   }}
-                  dataSource={i.items}
-                  renderItem={item => (
-                    <List.Item>
-                      <Link to={item.dashboardLink}>
-                        <Card
-                          hoverable
-                          style={{
-                            borderRadius: 5,
-                            padding: 5,
-                            borderWidth: 1,
-                            borderStyle: "solid",
-                          }}
-                          cover={
-                            <Image
-                              preview={false}
-                              fallback="https://statichk.footprint.network/dashboard/6863.png?image_process=resize,w_600/crop,h_310/format,jpg"
-                              style={{
-                                background: "white",
-                                width: "100%",
-                                height: 160,
-                              }}
-                              alt={item.dashboardName}
-                              src={`https://statichk.footprint.network/dashboard/${item.id}.png?image_process=resize,w_600/crop,h_310/format,jpg`}
-                            />
-                          }
-                        >
-                          <Meta title={item.dashboardName} />
-                        </Card>
-                      </Link>
-                    </List.Item>
-                  )}
+                  dataSource={items}
+                  renderItem={(item, index) => {
+                    return (
+                      <List.Item>
+                        <Link to={item.dashboardLink}>
+                          <Card
+                            hoverable
+                            style={{
+                              borderRadius: 5,
+                              padding: 5,
+                              borderWidth: 1,
+                              borderStyle: "solid",
+                            }}
+                            cover={
+                              <Image
+                                preview={false}
+                                fallback="https://statichk.footprint.network/dashboard/6863.png?image_process=resize,w_600/crop,h_310/format,jpg"
+                                style={{
+                                  background: "white",
+                                  width: "100%",
+                                  height: 160,
+                                }}
+                                alt={item.dashboardName}
+                                src={`https://statichk.footprint.network/dashboard/${item.id}.png?image_process=resize,w_600/crop,h_310/format,jpg`}
+                              />
+                            }
+                          >
+                            <Meta title={item.dashboardName} />
+                          </Card>
+                        </Link>
+                      </List.Item>
+                    );
+                  }}
                 />
                 {/* {i.items.map(j => {
                   return <div key={j.dashboardName}>{j.dashboardName}</div>;
