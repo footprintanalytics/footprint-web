@@ -5,6 +5,21 @@ import { notification, Button, Modal } from "antd";
 import Link from "antd/lib/typography/Link";
 import { PublicApi, maybeUsePivotEndpoint } from "metabase/services";
 
+export function parseDashboardLink(url: string) {
+  if (!url.includes("/@")) {
+    return null;
+  }
+  if (url.includes("?")) {
+    url = url.split("?")[0];
+  }
+  const regex = /https?:\/\/[^\s]+\/@([^\/]+)\/([^\/\s]+)/;
+  const match = url.match(regex);
+  const username = match ? match[1] : null;
+  const dashboardName = match ? match[2] : null;
+  if (!username || !dashboardName) return null;
+  return { username, dashboardName };
+}
+
 //  quickFilter --> Quick Filter
 export function formatKeyLabel(label: string) {
   return label
