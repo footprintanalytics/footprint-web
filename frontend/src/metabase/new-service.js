@@ -498,6 +498,10 @@ export const loadAppConfig = params => {
   return GET(`api/v1/config`, params, { silent: true });
 };
 
+export const answerGPT = params => {
+  return POST(`api/v1/gpt/answer`, params, { silent: true });
+};
+
 export const chartInfo = params => {
   return POST(`api/v1/dataDictionary/chartInfo`, params);
 };

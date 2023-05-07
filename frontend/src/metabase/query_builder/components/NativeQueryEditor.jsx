@@ -50,6 +50,7 @@ import NativeVariablesButton from "metabase/query_builder/components/view/Native
 // import SnippetSidebarButton from "metabase/query_builder/components/view/SnippetSidebarButton";
 import DarkModeButton from "metabase/query_builder/components/view/DarkModeButton";
 import SqlOptimizeButton from "metabase/query_builder/components/view/SqlOptimizeButton";
+import SqlGPTButton from "metabase/query_builder/components/view/SqlGPTButton";
 
 const AUTOCOMPLETE_DEBOUNCE_DURATION = 700;
 const AUTOCOMPLETE_CACHE_DURATION = AUTOCOMPLETE_DEBOUNCE_DURATION * 1.2; // tolerate 20%
@@ -568,6 +569,7 @@ class NativeQueryEditor extends Component {
                   <DarkModeButton {...this.props} size={18}/>
                 )}
                 <SqlOptimizeButton {...this.props} size={18}/>
+                <SqlGPTButton {...this.props} size={18}/>
               </div>
             )}
 
