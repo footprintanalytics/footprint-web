@@ -57,7 +57,7 @@ const MyAnalysis = props => {
     if (url.includes("footprint.network")) {
       router.push(url + "#from=My Analysis");
     } else {
-      window.open(url, "_blank");
+      window.open(url.startsWith("http") ? url : "https://" + url, "_blank");
     }
   };
   return (
