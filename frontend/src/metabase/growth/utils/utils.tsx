@@ -6,7 +6,7 @@ import Link from "antd/lib/typography/Link";
 import { PublicApi, maybeUsePivotEndpoint } from "metabase/services";
 
 export function parseDashboardLink(url: string) {
-  if (!url.includes("/@")) {
+  if (!url.includes("/@") || !url.includes("footprint.network/")) {
     return null;
   }
   if (url.includes("?")) {
@@ -102,6 +102,7 @@ export function checkIsNeedContactUs(
   onBlockAction: () => any,
   closable = true,
 ) {
+  console.log("checkIsNeedContactUs", project);
   // if (user && user.email === "fga@footprint.network") {
   if (project?.isDemo || !project) {
     modal.info({

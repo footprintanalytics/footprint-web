@@ -118,6 +118,8 @@ function errorHandle(err) {
   }
 }
 
+export const axiosInstance = axios;
+
 export const GET = async (url, params) => axios.get(url, { params });
 
 export const POST = async (url, params, config) =>

@@ -1,7 +1,7 @@
 /* eslint-disable react/prop-types */
 import React from "react";
 import { connect } from "react-redux";
-import { List, Card, Image, Typography, message } from "antd";
+import { List, Card, Image, Typography, message, Modal } from "antd";
 import { Link } from "react-router";
 import {
   EditOutlined,
@@ -17,14 +17,14 @@ import {
   GetWebsiteNesting,
   DelectWebsiteNesting,
 } from "metabase/new-service";
-import { template_gallery } from "../utils/data";
+import { axiosInstance } from "metabase/lib/new-api";
 import AddMyAnalysisModal from "../components/Modal/AddMyAnalysisModal";
-import { parseDashboardLink } from "../utils/utils";
+import { checkIsNeedContactUs, parseDashboardLink } from "../utils/utils";
 
 const { Meta } = Card;
 const MyAnalysis = props => {
   const { router, location, children, user, project } = props;
-  const [showAdd, setShowAdd] = React.useState(false);
+  const [showAdd, setShowAdd] = React.useState({ open: false, item: null });
   const { isLoading, data, refetch, isFetching } = useQuery(
     ["GetWebsiteNesting", project],
     async () => {
@@ -38,6 +38,7 @@ const MyAnalysis = props => {
       content: "Deleting..",
       duration: 0,
     });
+
     DelectWebsiteNesting({ id: id })
       .then(() => {
         messageApi.destroy();
@@ -55,14 +56,15 @@ const MyAnalysis = props => {
   return (
     <div className="flex flex-column items-center">
       {contextHolder}
-      {showAdd && (
+      {showAdd?.open && (
         <AddMyAnalysisModal
-          open={showAdd}
+          open={showAdd?.open}
+          item={showAdd?.item}
           project={project}
-          onCancel={() => setShowAdd(false)}
+          onCancel={() => setShowAdd({ open: false })}
           onSuccess={() => {
             refetch();
-            setShowAdd(false);
+            setShowAdd({ open: false });
           }}
         />
       )}
@@ -73,7 +75,7 @@ const MyAnalysis = props => {
           <div>
             <h2 className=" mt3">{"My Analysis"}</h2>
             <div style={{ color: "#ffffff80" }}>
-              {"Add any dashboards, websites or links you find interesting."}
+              {"Add any dashboards you find interesting."}
             </div>
             <div className=" mt1">
               <List
@@ -93,7 +95,7 @@ const MyAnalysis = props => {
                     return (
                       <List.Item
                         onClick={() => {
-                          setShowAdd(true);
+                          setShowAdd({ open: true });
                         }}
                       >
                         <Card
@@ -101,7 +103,7 @@ const MyAnalysis = props => {
                           style={{
                             borderRadius: 5,
                             padding: 10,
-                            height: 236,
+                            height: 240,
                             borderWidth: 1,
                             borderStyle: "solid",
                           }}
@@ -136,16 +138,17 @@ const MyAnalysis = props => {
                   }
                   return (
                     <List.Item>
-                      <Link to={item.url + "#from=My Analysis"}>
-                        <Card
-                          hoverable
-                          style={{
-                            borderRadius: 5,
-                            padding: 5,
-                            borderWidth: 1,
-                            borderStyle: "solid",
-                          }}
-                          cover={
+                      <Card
+                        hoverable
+                        style={{
+                          borderRadius: 5,
+                          padding: 5,
+                          borderWidth: 1,
+                          borderStyle: "solid",
+                        }}
+                        cover={
+                          <Link to={item.url + "#from=My Analysis"}>
+                            {" "}
                             <Image
                               preview={false}
                               // fallback="https://statichk.footprint.network/dashboard/6863.png?image_process=resize,w_600/crop,h_310/format,jpg"
@@ -157,24 +160,32 @@ const MyAnalysis = props => {
                               alt={item.title}
                               src={item?.imageUrl}
                             />
-                          }
-                        >
-                          <div className="flex flex-row justify-between items-center">
+                          </Link>
+                        }
+                      >
+                        <div className="flex flex-row justify-between items-center">
+                          <Link to={item.url + "#from=My Analysis"}>
                             <div className=" flex-full">{item.title}</div>
-                            <div className="flex flex-row">
-                              {/* <EditOutlined key="edit" disabled={true} /> */}
-                              <DeleteOutlined
-                                key="delete"
-                                onClick={e => {
-                                  e.preventDefault();
-                                  delectDashboard(item.id);
-                                }}
-                              />
-                            </div>
+                          </Link>
+                          <div className="flex flex-row">
+                            <EditOutlined
+                              key="edit"
+                              className="mr1"
+                              onClick={e => {
+                                e.preventDefault();
+                                setShowAdd({ open: true, item: item });
+                              }}
+                            />
+                            <DeleteOutlined
+                              key="delete"
+                              onClick={e => {
+                                e.preventDefault();
+                                delectDashboard(item.id);
+                              }}
+                            />
                           </div>
-                          {/* <Meta title={item.title} /> */}
-                        </Card>
-                      </Link>
+                        </div>
+                      </Card>
                     </List.Item>
                   );
                 }}
