@@ -10,6 +10,7 @@ import {
   getPotentialUserFilterCollection, getPotentialUserFilterTag,
   getPotentialUserFilterToken,
 } from "metabase/new-service";
+import { formatTableTitle } from "metabase/lib/formatting/footprint";
 
 export const ItemFilter = props => {
   const {
@@ -120,7 +121,7 @@ export const ItemFilter = props => {
       optionsObject = (item) => {
           return {
             value: item.tag,
-            label: item.tag,
+            label: formatTableTitle(item.tag?.replace(/-/g, " ")),
           };
         }
     }
@@ -133,18 +134,21 @@ export const ItemFilter = props => {
 
     if (item.type === "more") {
       return (
-        <div className="more-filter">
-          <Select
-            height={40}
-            style={{ width: "100%", height: 40 }}
-            label={item.label}
-            options={item.options}
-            mode="multiple"
-            allowClear
-            placeholder="More"
-            onChange={handleChange}
-          />
-          <div className="more-text">More</div>
+        <div className="flex align-center">
+          <div className="more-filter-division"/>
+          <div className="more-filter">
+            <Select
+              height={40}
+              style={{ width: "100%", height: 40 }}
+              label={item.label}
+              options={item.options}
+              mode="multiple"
+              allowClear
+              placeholder="More"
+              onChange={handleChange}
+            />
+            <div className="more-text">More</div>
+          </div>
         </div>
       )
     }
@@ -181,6 +185,7 @@ export const ItemFilter = props => {
         comparisonSymbol={item.comparisonSymbol}
         label={item.label}
         name={item.value}
+        frontSymbol={["netWorth", "nftHoldingValue", "tokenHoldingValue"].includes(item.indicator) ? "$" : ""}
       />
     )
   }

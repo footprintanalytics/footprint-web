@@ -1,6 +1,7 @@
 /* eslint-disable react/prop-types */
 import React, { useEffect, useState } from "react";
 import { Select } from "antd";
+import { orderBy } from "lodash";
 
 import "./index.css";
 
@@ -23,7 +24,7 @@ const MuiSelect = props => {
     const runApi = async () => {
       setLoading(true);
       const data = await apiFunction?.();
-      setOptions((data?.data?.map(resultMappingFunction)));
+      setOptions(orderBy(data?.data?.map(resultMappingFunction), "label"));
       setLoading(false);
     }
 

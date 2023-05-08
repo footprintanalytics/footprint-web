@@ -31,6 +31,17 @@
   width: 50%;
 }
 
+.more-filter {
+  width: 100%;
+  margin-left: 16px;
+}
+
+.more-filter-division {
+  border-right: var(--color-primary-dark) 1px solid;
+  height: 36px;
+  margin-left: 6px;
+}
+
 .more-filter .ant-select-selection-overflow {
   display: none;
 }

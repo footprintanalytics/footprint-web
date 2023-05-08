@@ -1,12 +1,11 @@
 /* eslint-disable react/prop-types */
 import React, { useState } from "react";
-import { Button, Input, Select, Radio, Space } from "antd";
+import { Button, Input, Radio, Select, Space } from "antd";
 
 import "./index.css";
-import { Option } from "antd/lib/mentions";
 
 const MuiInput = props => {
-  let { label, value, placeholder, required, onValueChange } = props;
+  let { label, value, placeholder, required, onValueChange, frontSymbol } = props;
   const [focus, setFocus] = useState(false);
   const [currentValue, setCurrentValue] = useState(value ?? "");
   const [inputValue, setInputValue] = useState();
@@ -61,9 +60,10 @@ const MuiInput = props => {
                     <Radio value={i.symbol} key={i.symbol} >
                       <div className="flex full-width justify-evenly align-center mb1">
                         <span className="mr2">{i.label}</span>
+                        {frontSymbol && (<span className="mr1">{frontSymbol}</span>)}
                         <Input
                           style={{
-                            width: 150
+                            width: 130
                           }}
                           disabled={comparisonSymbol !== i.symbol}
                           onChange={e => {
