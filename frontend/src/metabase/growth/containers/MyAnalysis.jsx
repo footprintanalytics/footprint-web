@@ -1,7 +1,7 @@
 /* eslint-disable react/prop-types */
 import React from "react";
 import { connect } from "react-redux";
-import { List, Card, Image, Typography, message, Modal } from "antd";
+import { List, Card, Image, Typography, message, Popconfirm } from "antd";
 import { Link } from "react-router";
 import {
   EditOutlined,
@@ -88,7 +88,13 @@ const MyAnalysis = props => {
                   xl: 3,
                   xxl: 4,
                 }}
-                dataSource={[{ isFirstItem: true }].concat(data || [])}
+                dataSource={[{ isFirstItem: true }].concat(
+                  data?.sort(
+                    (a, b) =>
+                      new Date(b.updatedAt).getTime() -
+                      new Date(a.updatedAt).getTime(),
+                  ) || [],
+                )}
                 // dataSource={data}
                 renderItem={(item, index) => {
                   if (index === 0) {
@@ -176,13 +182,25 @@ const MyAnalysis = props => {
                                 setShowAdd({ open: true, item: item });
                               }}
                             />
-                            <DeleteOutlined
-                              key="delete"
-                              onClick={e => {
-                                e.preventDefault();
+                            <Popconfirm
+                              title="Delete the dashboard?"
+                              description="Are you sure to delete this dashboard?"
+                              onConfirm={() => {
                                 delectDashboard(item.id);
                               }}
-                            />
+                              placement="topRight"
+                              onCancel={() => {}}
+                              okText="Yes"
+                              cancelText="No"
+                            >
+                              <DeleteOutlined
+                                key="delete"
+                                // onClick={e => {
+                                //   e.preventDefault();
+                                //   delectDashboard(item.id);
+                                // }}
+                              />
+                            </Popconfirm>
                           </div>
                         </div>
                       </Card>
