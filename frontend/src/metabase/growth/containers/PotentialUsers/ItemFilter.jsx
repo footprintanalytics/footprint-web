@@ -1,71 +1,34 @@
 /* eslint-disable react/prop-types */
 import React from "react";
-import { Col, Row, Select } from "antd";
+import { Col, Row, Select, Skeleton } from "antd";
 import MuiSelect from "metabase/growth/components/MuiSelect";
 import cx from "classnames";
 import MuiInput from "metabase/growth/components/MuiInput";
-import { filterResultMapFunction } from "metabase/growth/utils/utils";
 import {
   getPotentialUseFilterProject,
   getPotentialUserFilterCollection, getPotentialUserFilterTag,
   getPotentialUserFilterToken,
 } from "metabase/new-service";
 import { formatTableTitle } from "metabase/lib/formatting/footprint";
+import Icon from "metabase/components/Icon";
 
 export const ItemFilter = props => {
   const {
-    filterResultData,
+    visibleFilterResultData,
+    moreFilterResultData,
     className,
     onSelectChange,
     onFilterChange,
     onMoreChange,
     titleColor = "white",
-    enableMoreSelect,
-    visibleCount = 3,
+    isOtherFilter,
+    onCloseAction,
+    selectMoreValue = [],
   } = props;
 
-  const filterDataToOptionsList = () => {
-    let sliceResultData = filterResultData;
-    if (visibleCount > 0) {
-      sliceResultData = filterResultData?.slice(0, visibleCount);
-    }
-    const result = sliceResultData;
-    if (filterResultData === null) {
-      return [];
-    }
-    if (enableMoreSelect) {
-      result?.push({
-        label: "More",
-        type: "more",
-        options: [
-          {
-            label: "Recent",
-            options: filterResultData?.slice(visibleCount, visibleCount + 1)?.map(i => {
-              return {
-                value: i?.indicator,
-                label: i?.label,
-              };
-            }) || [],
-          },
-          {
-            label: "Hot",
-            options: filterResultData?.slice(visibleCount + 1, filterResultData?.length)?.map(i => {
-              return {
-                value: i.indicator,
-                label: i.label,
-              };
-            }) || [],
-          },
-        ],
-      })
-    }
-    return result;
-  }
-
-  const optionsList = filterDataToOptionsList();
-
   const handleChange = (value) => {
-    onMoreChange?.(value, filterResultData);
+    console.log("handleChange value", value)
+    onMoreChange?.(value, visibleFilterResultData, moreFilterResultData);
   };
   const getApiFunction = (item) => {
     if (item.indicator === "protocolSlugs") {
@@ -127,27 +90,29 @@ export const ItemFilter = props => {
     }
     return optionsObject;
   }
+
   const renderUi = (item) => {
-    if (item === null) {
+    if (!item) {
       return <div />
     }
 
     if (item.type === "more") {
       return (
         <div className="flex align-center">
-          <div className="more-filter-division"/>
           <div className="more-filter">
+            <div className="more-text"><Icon name="add" size={12} className="mr1"/> Add Filter</div>
             <Select
               height={40}
-              style={{ width: "100%", height: 40 }}
+              style={{ width: "130px", height: 40 }}
               label={item.label}
               options={item.options}
+              value={selectMoreValue}
+              bordered={false}
               mode="multiple"
-              allowClear
-              placeholder="More"
+              showSearch={false}
               onChange={handleChange}
+              dropdownMatchSelectWidth={250}
             />
-            <div className="more-text">More</div>
           </div>
         </div>
       )
@@ -162,12 +127,17 @@ export const ItemFilter = props => {
             onSelectChange?.({
               "indicator": item.indicator,
               "comparisonSymbol": "in",
-              "comparisonValue": [value]
+              "comparisonValue": value ? [value] : null,
             });
           }}
           options={item.options}
           resultMappingFunction={getResultMappingFunction(item)}
           apiFunction={getApiFunction(item)}
+          showClose={isOtherFilter}
+          autoFocus={isOtherFilter}
+          defaultOpen={isOtherFilter}
+          dropdownMatchSelectWidth={isOtherFilter ? 250 : null}
+          onCloseAction={() => onCloseAction(item)}
         />
       )
     }
@@ -186,8 +156,16 @@ export const ItemFilter = props => {
         label={item.label}
         name={item.value}
         frontSymbol={["netWorth", "nftHoldingValue", "tokenHoldingValue"].includes(item.indicator) ? "$" : ""}
+        showClose={isOtherFilter}
+        autoFocus={isOtherFilter}
+        dropdownMatchSelectWidth={isOtherFilter ? 250 : null}
+        onCloseAction={() => onCloseAction(item)}
       />
     )
+  }
+
+  if (!visibleFilterResultData) {
+    return <Skeleton />
   }
 
   return (
@@ -199,8 +177,13 @@ export const ItemFilter = props => {
     >
       <span style={{ marginRight: 8, color: titleColor }}>Filters:</span>
       <Row gutter={[10, 10]} className="w-full">
-        {optionsList?.map((item, index) => (
+        {visibleFilterResultData?.map((item, index) => (
           <Col sm={24} md={12} lg={8} xl={6} xxl={4} key={index}>
+            {renderUi(item)}
+          </Col>
+        ))}
+        {moreFilterResultData?.map((item, index) => (
+          <Col sm={24} md={12} lg={8} xl={6} xxl={4} key={`${item.label} ${index}`}>
             {renderUi(item)}
           </Col>
         ))}

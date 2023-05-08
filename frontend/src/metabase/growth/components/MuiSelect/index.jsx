@@ -4,9 +4,10 @@ import { Select } from "antd";
 import { orderBy } from "lodash";
 
 import "./index.css";
+import Icon from "metabase/components/Icon";
 
 const MuiSelect = props => {
-  let { label, value, placeholder, required, onValueChange, resultMappingFunction, apiFunction } = props;
+  let { label, value, placeholder, required, onValueChange, resultMappingFunction, apiFunction, showClose, onCloseAction, allowClear, autoFocus, defaultOpen, dropdownMatchSelectWidth } = props;
   const [focus, setFocus] = useState(false);
   const [currentValue, setCurrentValue] = useState(value ?? "");
   const [options, setOptions] = useState(null);
@@ -38,12 +39,16 @@ const MuiSelect = props => {
       className={"mui-select"}
       onBlur={() => setFocus(false)}
       onFocus={() => setFocus(true)}
+      style={{ marginRight: showClose ? 20 : 0}}
     >
       <Select
         style={{ width: "100%", height: 40 }}
         showSearch
-        allowClear
+        allowClear={allowClear || true}
         optionFilterProp="children"
+        autoFocus={autoFocus}
+        defaultOpen={defaultOpen}
+        dropdownMatchSelectWidth={dropdownMatchSelectWidth}
         onChange={e => {
           if (currentValue !== e) {
             setCurrentValue(e);
@@ -64,6 +69,9 @@ const MuiSelect = props => {
       <label className={labelClass}>
         {isOccupied ? label : placeholder} {requiredMark}
       </label>
+      {showClose && (
+        <Icon className="ml1 close-action" name="close" onClick={onCloseAction}/>
+      )}
     </div>
   );
 };

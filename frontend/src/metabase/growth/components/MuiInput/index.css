@@ -29,3 +29,18 @@
   border-radius: 4px;
   padding-top: 4px;
 }
+
+.close-action {
+  border-radius: 50%;
+  color: #666666;
+  border: 2px solid #666666;
+  cursor: pointer;
+  background: var(--color-bg-dark);
+}
+
+.close-action:hover {
+  border-radius: 50%;
+  color: #cccccc;
+  border: 2px solid #cccccc;
+  background: var(--color-bg-dark);
+}

@@ -59,4 +59,6 @@
   top: 0;
   margin: 8px 0 0 10px;
   color: gray;
+  display: flex;
+  align-items: center;
 }

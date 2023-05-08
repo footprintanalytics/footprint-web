@@ -3,9 +3,10 @@ import React, { useState } from "react";
 import { Button, Input, Radio, Select, Space } from "antd";
 
 import "./index.css";
+import Icon from "metabase/components/Icon";
 
 const MuiInput = props => {
-  let { label, value, placeholder, required, onValueChange, frontSymbol } = props;
+  let { label, value, placeholder, required, onValueChange, frontSymbol, showClose, onCloseAction, autoFocus, dropdownMatchSelectWidth } = props;
   const [focus, setFocus] = useState(false);
   const [currentValue, setCurrentValue] = useState(value ?? "");
   const [inputValue, setInputValue] = useState();
@@ -44,12 +45,15 @@ const MuiInput = props => {
       className={"mui-select"}
       onBlur={() => setFocus(false)}
       onFocus={() => setFocus(true)}
+      style={{ marginRight: showClose ? 20 : 0}}
     >
       <Select
         style={{ width: "100%", height: 40 }}
         open={open}
         value={currentValue}
+        autoFocus={autoFocus}
         notFoundContent={(<div />)}
+        dropdownMatchSelectWidth={dropdownMatchSelectWidth}
         onDropdownVisibleChange={(visible) => setOpen(visible)}
         dropdownRender={(menu) => (
           <div className="p2 flex flex-column">
@@ -97,6 +101,9 @@ const MuiInput = props => {
       <label className={labelClass}>
         {isOccupied ? label : placeholder} {requiredMark}
       </label>
+      {showClose && (
+        <Icon className="ml1 close-action" name="close" onClick={onCloseAction}/>
+      )}
     </div>
   );
 };

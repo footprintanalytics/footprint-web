@@ -27,6 +27,8 @@ import { formatTag, valueFormat } from "metabase/growth/utils/utils";
 const PotentialUsers = props => {
   const { router, location, project } = props;
 
+  const visibleCount = 3;
+
   const [walletListParams, setWalletListParams] = React.useState({
     pageSize: 10,
     current: 1,
@@ -34,6 +36,7 @@ const PotentialUsers = props => {
   });
 
   const [otherOptionsList, setOtherOptionsList] = React.useState([])
+  const [selectMoreValue, setSelectMoreValue] = React.useState([])
 
 
   const [walletListData, setWalletListData] = React.useState(null);
@@ -90,11 +93,28 @@ const PotentialUsers = props => {
     },
     { ...QUERY_OPTIONS, enabled: !!project?.id },
   );
+
   React.useEffect(() => {
     if (!listResult?.isLoading) {
       setWalletListData(listResult?.data);
     }
   }, [listResult]);
+
+  React.useEffect(() => {
+    if (visibleFilterResultData && otherOptionsList) {
+      const allList = [...visibleFilterResultData, ...otherOptionsList].map(y => y.indicator);
+      console.log("visibleFilterResultData", visibleFilterResultData)
+      console.log("otherOptionsList", otherOptionsList)
+      console.log("allList", allList)
+      console.log("walletListParams?.filters?.filter(i => allList.includes(i.indicator))", walletListParams?.filters?.filter(i => allList.includes(i.indicator)))
+      setWalletListParams({
+        ...walletListParams,
+        filters: [...walletListParams?.filters?.filter(i => allList?.includes(i?.indicator))],
+        current: 1,
+      });
+    }
+  }, [otherOptionsList, visibleFilterResultData]);
+
   const actions = [
     {
       title: "Create Cohort",
@@ -285,6 +305,34 @@ const PotentialUsers = props => {
     );
   };
 
+  const filterResultData = filterResult?.data;
+  const visibleFilterResultData = filterResultData?.slice(0, visibleCount);
+  const otherFilterResultData = filterResultData?.slice(visibleCount, filterResultData?.length);
+  const moreFilterResultData = filterResultData ? [{
+    label: "More",
+    type: "more",
+    options: [
+      {
+        label: "Recent",
+        options: filterResultData?.slice(visibleCount, visibleCount + 1)?.map(i => {
+          return {
+            value: i?.indicator,
+            label: i?.label,
+          };
+        }) || [],
+      },
+      {
+        label: "Hot",
+        options: filterResultData?.slice(visibleCount + 1, filterResultData?.length)?.map(i => {
+          return {
+            value: i.indicator,
+            label: i.label,
+          };
+        }) || [],
+      },
+    ],
+  }] : [];
+
   return (
     <>
       {project?.id ? (
@@ -318,17 +366,22 @@ const PotentialUsers = props => {
               <ItemFilter
                 className="mt2"
                 filterResultData={filterResult?.data}
+                visibleFilterResultData={visibleFilterResultData}
+                moreFilterResultData={moreFilterResultData}
+                selectMoreValue={selectMoreValue}
                 onSelectChange={selectObject => {
+                  const finalSelectObject = selectObject?.comparisonValue ? [selectObject] : []
                   setWalletListParams({
                     ...walletListParams,
-                    filters: [...walletListParams?.filters?.filter(i => i.indicator !== selectObject.indicator), selectObject],
+                    filters: [...walletListParams?.filters?.filter(i => i.indicator !== selectObject.indicator), ...finalSelectObject],
                     current: 1,
                   });
                 }}
                 enableMoreSelect={true}
-                onMoreChange={(value, data) => {
+                onMoreChange={(value) => {
+                  setSelectMoreValue(value);
                   setOtherOptionsList(value.map(item => {
-                    return data.find(a => a.indicator === item)
+                    return otherFilterResultData?.find(a => a.indicator === item)
                   }));
                 }}
                 onFilterChange={valueFilter => {
@@ -352,15 +405,16 @@ const PotentialUsers = props => {
               <ItemFilter
                 className="mb1"
                 onSelectChange={selectObject => {
+                  const finalSelectObject = selectObject?.comparisonValue ? [selectObject] : []
                   setWalletListParams({
                     ...walletListParams,
-                    filters: [...walletListParams?.filters?.filter(i => i.indicator !== selectObject.indicator), selectObject],
+                    filters: [...walletListParams?.filters?.filter(i => i.indicator !== selectObject.indicator), ...finalSelectObject],
                     current: 1,
                   });
                 }}
-                visibleCount={0}
                 titleColor="transparent"
-                filterResultData={otherOptionsList}
+                visibleFilterResultData={otherOptionsList}
+                isOtherFilter={true}
                 onFilterChange={valueFilter => {
                   if (!valueFilter) {
                     return;
@@ -377,6 +431,10 @@ const PotentialUsers = props => {
                     filters: temp,
                     current: 1,
                   });
+                }}
+                onCloseAction={item => {
+                  setSelectMoreValue(selectMoreValue.filter(i => i !== item.indicator))
+                  setOtherOptionsList(otherOptionsList.filter(i => i.indicator !== item.indicator))
                 }}
               />
             </>
