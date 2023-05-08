@@ -84,3 +84,4 @@ dev/src/dev/nocommit/
 
 .calva/
 .prettierrc
+package-lock.json

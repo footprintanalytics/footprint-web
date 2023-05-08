@@ -398,6 +398,12 @@ export const fga_menu_data = [
         uuid: null,
         children: [],
       },
+      {
+        name: "My Analysis",
+        id: null,
+        uuid: null,
+        children: [],
+      },
     ],
   },
   {

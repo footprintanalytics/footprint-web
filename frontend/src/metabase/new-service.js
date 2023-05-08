@@ -7,6 +7,41 @@ export const apiGet = async api => {
 };
 
 // FGA Api
+export const GetThirdpartWebsiteInfo = async params => {
+  // params: {
+  //   "url": "string",
+  // }
+  return POST("/api/v1/fga/website-nesting/preview-graph", params);
+};
+
+export const AddWebsiteNesting = async params => {
+  // params: {
+  //   "projectId": 0,
+  //   "url": "string",
+  //   "imageUrl": "string",
+  //   "title": "string"
+  // }
+  return POST("/api/v1/fga/website-nesting", params);
+};
+
+export const UpdateWebsiteNesting = async (id, params) => {
+  // params: {
+  //   "projectId": 0,
+  //   "url": "string",
+  //   "imageUrl": "string",
+  //   "title": "string"
+  // }
+  return PUT(`/api/v1/fga/website-nesting/${id}`, params);
+};
+
+export const GetWebsiteNesting = async params => {
+  // {projectId}
+  return GET("/api/v1/fga/website-nesting", params);
+};
+export const DelectWebsiteNesting = async params => {
+  //{id}
+  return DELETE(`/api/v1/fga/website-nesting`, { data: params });
+};
 export const GetFgaCohort = async params => {
   return GET("/api/v1/fga/cohort", params);
 };
