@@ -12,6 +12,7 @@ import {
   GetFgaProjectDetail,
 } from "metabase/new-service";
 import arms from "metabase/lib/arms";
+import { clearGACache } from "metabase/growth/utils/utils";
 
 export const REFRESH_CURRENT_USER = "metabase/user/REFRESH_CURRENT_USER";
 /*export const refreshCurrentUser = createAction(REFRESH_CURRENT_USER, () => {

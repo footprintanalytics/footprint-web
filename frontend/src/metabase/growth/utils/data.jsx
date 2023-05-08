@@ -8,7 +8,9 @@ import {
   ProjectOutlined,
   CommentOutlined,
 } from "@ant-design/icons";
-
+//public/dashboard/uuid
+export const wallet_profile_link = '/growth/public/dashboard/fa040fe5-46b3-483b-b257-aa2373559fab'//query: wallet_address
+export const user_profile_link  = '/growth/public/dashboard/c06826fc-511e-4f03-bfa7-fc8eaa2facfa' //query: cohort_title
 export const top_protocols = [
   {
     protocolSlug: "the-sandbox",
@@ -65,7 +67,6 @@ export const template_gallery = project => {
   }${guild_id ? "&guild_id=" + guild_id : ""}${
     project_name ? "&project_name=" + project_name : ""
   }#from=Custom Analysis`;
-  console.log("template_gallery params", params);
   return [
     // {
     //   category: "Campaign Analysis",
@@ -142,15 +143,16 @@ export const template_gallery = project => {
       desc: "Gain deep industry insights by thoroughly understanding industry data, and develop a comprehensive understanding of operational status by analyzing games.",
       items: [
         {
-          category: "GameFi",
-          desc: "Gain deep industry insights by thoroughly understanding industry data, and develop a comprehensive understanding of operational status by analyzing games.",
+          dashboardName: "MCH Duel Analysis",
+          dashboardLink: `/growth/public/dashboard/d01e55ec-1ad4-4fba-9a5c-282771e3f8d0?date_filter=2022-11-01~2022-12-01&${params}`,
+          id: 7873,
+        },
+        {
           dashboardName: "GameFi Industry Insights & Ranking",
           dashboardLink: `/growth/public/dashboard/c9c94943-7ec3-45bf-a2c1-29ffed28c8dc?series_date=past90days&${params}`,
           id: 7164,
         },
         {
-          category: "GameFi",
-          desc: "",
           dashboardName: "GameFi Drill Down Analysis",
           dashboardLink: `/growth/public/dashboard/2855f92d-c2c4-45b1-bb30-5083e8e0c4ae?${params}`,
           id: 5947,
@@ -297,6 +299,11 @@ export const fga_menu_data = [
         uuid: null,
       },
       {
+        name: "Wallet Profile",
+        id: null,
+        uuid: null,
+      },
+      {
         name: "Potential Users List",
         id: null,
         uuid: null,
@@ -387,6 +394,12 @@ export const fga_menu_data = [
       // },
       {
         name: "Custom Analysis",
+        id: null,
+        uuid: null,
+        children: [],
+      },
+      {
+        name: "My Analysis",
         id: null,
         uuid: null,
         children: [],

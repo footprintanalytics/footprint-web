@@ -23,6 +23,7 @@ import Link from "metabase/core/components/Link/Link";
 import { formatTableTitle } from "metabase/lib/formatting/footprint";
 import { ItemFilter } from "./ItemFilter";
 import { formatTag, valueFormat } from "metabase/growth/utils/utils";
+import { wallet_profile_link } from "metabase/growth/utils/data";
 
 const PotentialUsers = props => {
   const { router, location, project } = props;
@@ -35,37 +36,9 @@ const PotentialUsers = props => {
     filters: [],
   });
 
+  const [walletListData, setWalletListData] = React.useState(null);
   const [otherOptionsList, setOtherOptionsList] = React.useState([])
   const [selectMoreValue, setSelectMoreValue] = React.useState([])
-
-
-  const [walletListData, setWalletListData] = React.useState(null);
-  // const [walletListParams, setWalletListParams] = React.useState({
-  //   pageSize: location.query?.pageSize
-  //     ? parseInt(location.query?.pageSize)
-  //     : 10,
-  //   current: location.query?.page ? parseInt(location.query?.page) : 1,
-  //   filters: location.query?.filters ? JSON.parse(location.query?.filters) : [],
-  //   tag: location.query?.tag
-  //     ? [location.query?.tag.replace("+", " ")]
-  //     : [],
-  //   protocolSlugs: [],
-  //   collectionSlugs: [],
-  //   excludeTags: [],
-  // });
-  //
-  // useEffect(() => {
-  //   router.replace({
-  //     pathname: location.pathname,
-  //     query: {
-  //       ...location.query,
-  //       page: walletListParams.current,
-  //       pageSize: walletListParams.pageSize,
-  //       tag: walletListParams.tag,
-  //       filters: JSON.stringify(walletListParams.filters),
-  //     },
-  //   });
-  // }, [walletListParams]);
 
   const filterResult = useQuery(
     ["getPotentialUseFilter"],
@@ -103,10 +76,6 @@ const PotentialUsers = props => {
   React.useEffect(() => {
     if (visibleFilterResultData && otherOptionsList) {
       const allList = [...visibleFilterResultData, ...otherOptionsList].map(y => y.indicator);
-      console.log("visibleFilterResultData", visibleFilterResultData)
-      console.log("otherOptionsList", otherOptionsList)
-      console.log("allList", allList)
-      console.log("walletListParams?.filters?.filter(i => allList.includes(i.indicator))", walletListParams?.filters?.filter(i => allList.includes(i.indicator)))
       setWalletListParams({
         ...walletListParams,
         filters: [...walletListParams?.filters?.filter(i => allList?.includes(i?.indicator))],
@@ -140,21 +109,8 @@ const PotentialUsers = props => {
       key: "Wallet",
       render: (text, { ens, discordAvatar, twitterAvatar }, index) => (
         <div className="flex flex-row">
-          {/* <Avatar
-            size={35}
-            className="mr1"
-            src={
-              twitterAvatar?.length > 0
-                ? twitterAvatar
-                : discordAvatar?.length > 0
-                ? discordAvatar
-                : `https://xsgames.co/randomusers/assets/avatars/pixel/${
-                    index % 50
-                  }.jpg`
-            }
-          /> */}
           <Link
-            to={`/growth/public/dashboard/f7cd2f21-1e14-438d-8820-011418607450?wallet_address=${text}#from=Potential User`}
+            to={`${wallet_profile_link}?wallet_address=${text}#from=Potential User`}
           >
             <div className="flex flex-col">
               {String(text).slice(0, 4) + "..." + String(text).slice(-4)}

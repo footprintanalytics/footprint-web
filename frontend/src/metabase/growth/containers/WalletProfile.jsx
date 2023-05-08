@@ -8,6 +8,7 @@ import {
   Typography,
   Divider,
   message,
+  Card,
 } from "antd";
 import { connect } from "react-redux";
 import cx from "classnames";
@@ -15,6 +16,7 @@ import { getUser, getFgaProject } from "metabase/selectors/user";
 import { getOssUrl } from "metabase/lib/image";
 import { getGrowthProjectPath } from "../utils/utils";
 import { isAddress } from "metabase-lib/types/utils/isa";
+import { wallet_profile_link } from "../utils/data";
 const { Text } = Typography;
 
 const WalletProfile = props => {
@@ -23,73 +25,80 @@ const WalletProfile = props => {
 
   const workDemoList = [
     {
-      title:
-        "Gain access to and analyze over 120 million wallet profiles and tags.",
-      desc: "View holding detailed information on any wallet address, including their token assets and NFTs.\nView historical activities and preferences on any wallet address to mine new opportunities.",
-      img: getOssUrl("img_potential1.png"),
+      title: "Evaluate user potential value",
+      desc: "By monitoring the token and NFT assets held by users through their wallet addresses, Web3 projects can identify what tokens and NFTs users own, their quantity and value, position and interests in ecosystem",
+      img: getOssUrl("wallet_profile_img1.png"),
     },
     {
-      title:
-        "Identify valuable users from the top NFTs, protocols, and chains.",
-      desc: "Select on-chain users of any contract，NFTs, protocols, and chains.\nFilter by holding assets and historical active protocols to build your ideal audience.\nFilter out bot,Sybil and low-value users to boost your campaign ROI.",
-      img: getOssUrl("img_potential2.png"),
+      title: "Identify user behavior preferences",
+      desc: "Analyzing which games users have played and where they have conducted transactions can provide insights into user activity levels and preferences",
+      img: getOssUrl("wallet_profile_img2.png"),
       reverse: true,
-    },
-    {
-      title:
-        "Dive deep into analyzing target audiences' holding value and activities on the chain.",
-      desc: "View unique user profiling that is cross-chain, cross-protocol, and integrates off-chain data.\nView more preference indicators and performance analysis.",
-      img: getOssUrl("img_potential3.png"),
     },
   ];
   const [wallet_address, setWallet] = useState("");
   return (
     <div
-      className="flex flex-column items-center"
+      className="flex flex-column items-center p1"
       style={{ marginBottom: 100 }}
     >
       <div
         className="flex flex-column items-center"
-        style={{ width: "90%", maxWidth: 1000, minWidth: 600 }}
+        style={{ width: "100%", maxWidth: 1000, minWidth: 600 }}
       >
-        <h1 className=" mt-50  w-full text-centered">
-          Expore User Wallet Profiles
-        </h1>
-        <Typography.Text className=" w-full text-centered">
-          {
-            "Gain insight into your users' financial behavior and transaction history by exploring their wallet profiles with ease."
-          }
-        </Typography.Text>
-        <Space.Compact className="mt3" style={{ width: "100%", maxWidth: 500 }}>
-          <Input
-            size="large"
-            onChange={e => setWallet(e.target.value)}
-            className="rounded"
-            placeholder={
-              "Input the wallet which you want to explore user profile."
-            }
-          />
-          <Button
-            type="primary"
-            size="large"
-            onClick={() => {
-              const wallet = wallet_address?.trim()?.toLowerCase();
-              if (!wallet?.length > 0 || !wallet?.startsWith("0x")) {
-                message.error("Please provide a valid wallet address.");
-                return;
+        <Card className=" mt-50 w-full ">
+          <div className="flex flex-column items-center  w-full ">
+            <h1 className="w-full text-centered">
+              Expore User Wallet Profiles
+            </h1>
+            <Typography.Text className=" w-full text-centered">
+              {
+                "Gain insight into your users' financial behavior and transaction history by exploring their wallet profiles with ease."
               }
-              router?.push({
-                pathname:
-                  "/growth/public/dashboard/f7cd2f21-1e14-438d-8820-011418607450",
-                query: { wallet_address: wallet },
-                hash: "#from=Wallet Profile",
-              });
-            }}
-          >
-            Expore
-          </Button>
-        </Space.Compact>
-        <h2 className=" mt-60 w-full text-centered">How it work?</h2>
+            </Typography.Text>
+            <div
+              className="mt3 flex flex-row"
+              style={{ width: "100%", maxWidth: 500 }}
+            >
+              <Input
+                size="large"
+                onChange={e => setWallet(e.target.value)}
+                style={{
+                  borderTopLeftRadius: 5,
+                  borderBottomLeftRadius: 5,
+                  borderTopRightRadius: 0,
+                  borderBottomRightRadius: 0,
+                }}
+                className="rounded"
+                placeholder={
+                  "Input the wallet which you want to explore user profile."
+                }
+              />
+              <Button
+                type="primary"
+                size="large"
+                style={{ borderTopRightRadius: 5, borderBottomRightRadius: 5 }}
+                onClick={() => {
+                  const wallet = wallet_address?.trim()?.toLowerCase();
+                  if (!wallet?.length > 0 || !wallet?.startsWith("0x")) {
+                    message.error("Please provide a valid wallet address.");
+                    return;
+                  }
+                  router?.push({
+                    pathname: wallet_profile_link,
+                    query: { wallet_address: wallet },
+                    hash: "#from=Explore",
+                  });
+                }}
+              >
+                Expore
+              </Button>
+            </div>
+          </div>
+        </Card>
+        <h2 className=" mt-60 w-full text-centered">
+          Explore preferences and spending habits beyond behavior and assets
+        </h2>
         {workDemoList.map(item => {
           return (
             <div
@@ -99,9 +108,12 @@ const WalletProfile = props => {
                 { "flex-row-reverse": item.reverse },
               )}
             >
-              <img src={item.img} style={{ width: "40%" }} alt={item.title} />
-              <div className="flex flex-column p2" style={{ width: "50%" }}>
-                <h3>{item.title}</h3>
+              <img src={item.img} style={{ width: "50%" }} alt={item.title} />
+              <div
+                className="flex flex-column p2"
+                style={{ width: "50%", textAlign: "left" }}
+              >
+                <h2>{item.title}</h2>
                 <Text className="mt1" style={{ whiteSpace: "pre-line" }}>
                   {item.desc}
                 </Text>

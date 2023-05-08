@@ -17,6 +17,7 @@ import LoadingDashboard from "../components/LoadingDashboard";
 import ConnectorList from "./ConnectorList";
 import ChannelList from "./ChannelList";
 import WalletProfile from "./WalletProfile";
+import MyAnalysis from "./MyAnalysis";
 import CampaignDetail from "./CampaignDetail";
 import CampaignList from "./CampaignList";
 import CustomAnalysis from "./CustomAnalysis";
@@ -240,9 +241,19 @@ const Project = props => {
         />
       );
     }
-    if (current_tab === "WalletProfile") {
+
+    if (["Wallet Profile", "WalletProfile"].includes(current_tab)) {
       return (
         <WalletProfile
+          location={location}
+          router={router}
+          project={getProjectObject()}
+        />
+      );
+    }
+    if (["My Analysis", "MyAnalysis"].includes(current_tab)) {
+      return (
+        <MyAnalysis
           location={location}
           router={router}
           project={getProjectObject()}
