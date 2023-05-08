@@ -25,6 +25,7 @@ import {
   dashboardIdInfo,
   AddWebsiteNesting,
   UpdateWebsiteNesting,
+  GetThirdpartWebsiteInfo,
 } from "metabase/new-service";
 import { getUser } from "metabase/selectors/user";
 import {
@@ -47,6 +48,7 @@ const AddMyAnalysisModal = props => {
   );
   const [previewLoading, setPreviewLoading] = useState(false);
   const [loading, setLoading] = useState(false);
+
   const addNewDashboard = async dashboardInfo => {
     setLoading(true);
     const param = { ...dashboardInfo, projectId: project?.id };
@@ -59,6 +61,7 @@ const AddMyAnalysisModal = props => {
     }
     setLoading(false);
   };
+
   const updateDashboard = async dashboardInfo => {
     setLoading(true);
     const param = { ...dashboardInfo, projectId: project?.id, status: "Init" };
@@ -71,6 +74,7 @@ const AddMyAnalysisModal = props => {
     }
     setLoading(false);
   };
+
   const getDashboardInfo = async (urlDashboardName, urlUserName, query) => {
     try {
       const { uuid, id } = await dashboardIdInfo({
@@ -89,11 +93,34 @@ const AddMyAnalysisModal = props => {
     }
     setPreviewLoading(false);
   };
+  const getThirdpartWebsiteInfo = async url => {
+    try {
+      const { result } = await GetThirdpartWebsiteInfo({ url });
+      if (result?.success) {
+        setDashboardInfo({
+          title: result?.ogTitle,
+          originalUrl: url,
+          url,
+          imageUrl:
+            result?.ogImage?.[0]?.url ||
+            result?.twitterImage?.[0]?.url ||
+            "https://static.footprint.network/img_why_top_center.png",
+        });
+      } else {
+        throw new Error("The link provided is not valid. ");
+      }
+    } catch (error) {
+      setDashboardInfo(null);
+      message.error("The link provided is not valid. ");
+    }
+    setPreviewLoading(false);
+  };
   const handleInputChange = debounce(val => {
     if (currentValue !== val) {
       setCurrentValue(val);
     }
   }, 1000);
+
   useEffect(() => {
     if (currentValue) {
       setPreviewLoading(true);
@@ -104,9 +131,7 @@ const AddMyAnalysisModal = props => {
           : "";
         getDashboardInfo(info?.dashboardName, info?.username, query);
       } else {
-        message.error("The link provided is not valid. ");
-        setDashboardInfo(null);
-        setPreviewLoading(false);
+        getThirdpartWebsiteInfo(currentValue);
       }
     } else {
       setDashboardInfo(null);
@@ -118,7 +143,7 @@ const AddMyAnalysisModal = props => {
     <div>
       {contextHolder}
       <Modal
-        title="Add new one"
+        title={item ? "Edit detail" : "Add new one"}
         open={open}
         footer={null}
         // onOk={handleOk}
@@ -131,7 +156,8 @@ const AddMyAnalysisModal = props => {
             className="mt1"
             size="large"
             autoFocus
-            value={currentValue}
+            defaultValue={currentValue}
+            // value={currentValue}
             onChange={e => handleInputChange(e.target.value)}
             placeholder="Please input the new dashboard link here."
           />
@@ -160,10 +186,11 @@ const AddMyAnalysisModal = props => {
                 dashboardInfo?.imageUrl ? (
                   <Image
                     preview={false}
-                    // fallback="https://footprint-imgs.oss-us-east-1.aliyuncs.com/icon_side_nft.png"
+                    fallback="https://footprint-imgs.oss-us-east-1.aliyuncs.com/20210701141436.png"
                     style={{
                       background: "#222b47",
                       width: "100%",
+                      objectFit: "contain",
                       height: 240,
                     }}
                     src={dashboardInfo?.imageUrl}

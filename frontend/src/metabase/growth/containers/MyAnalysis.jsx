@@ -53,6 +53,13 @@ const MyAnalysis = props => {
         messageApi.destroy();
       });
   };
+  const openPage = url => {
+    if (url.includes("footprint.network")) {
+      router.push(url + "#from=My Analysis");
+    } else {
+      window.open(url, "_blank");
+    }
+  };
   return (
     <div className="flex flex-column items-center">
       {contextHolder}
@@ -75,7 +82,7 @@ const MyAnalysis = props => {
           <div>
             <h2 className=" mt3">{"My Analysis"}</h2>
             <div style={{ color: "#ffffff80" }}>
-              {"Add any dashboards you find interesting."}
+              {"Add any dashboards, websites or links you find interesting. "}
             </div>
             <div className=" mt1">
               <List
@@ -89,11 +96,13 @@ const MyAnalysis = props => {
                   xxl: 4,
                 }}
                 dataSource={[{ isFirstItem: true }].concat(
-                  data?.sort(
-                    (a, b) =>
-                      new Date(b.updatedAt).getTime() -
-                      new Date(a.updatedAt).getTime(),
-                  ) || [],
+                  data
+                    ?.filter(i => i.projectId === project?.id)
+                    ?.sort(
+                      (a, b) =>
+                        new Date(b.updatedAt).getTime() -
+                        new Date(a.updatedAt).getTime(),
+                    ) || [],
                 )}
                 // dataSource={data}
                 renderItem={(item, index) => {
@@ -153,26 +162,34 @@ const MyAnalysis = props => {
                           borderStyle: "solid",
                         }}
                         cover={
-                          <Link to={item.url + "#from=My Analysis"}>
-                            {" "}
-                            <Image
-                              preview={false}
-                              // fallback="https://statichk.footprint.network/dashboard/6863.png?image_process=resize,w_600/crop,h_310/format,jpg"
-                              style={{
-                                background: "white",
-                                width: "100%",
-                                height: 160,
-                              }}
-                              alt={item.title}
-                              src={item?.imageUrl}
-                            />
-                          </Link>
+                          <Image
+                            preview={false}
+                            onClick={() => {
+                              openPage(item.url);
+                            }}
+                            // fallback="https://statichk.footprint.network/dashboard/6863.png?image_process=resize,w_600/crop,h_310/format,jpg"
+                            style={{
+                              background: "white",
+                              width: "100%",
+                              height: 160,
+                              objectFit: "contain",
+                            }}
+                            alt={item.title}
+                            src={item?.imageUrl}
+                          />
                         }
                       >
-                        <div className="flex flex-row justify-between items-center">
-                          <Link to={item.url + "#from=My Analysis"}>
-                            <div className=" flex-full">{item.title}</div>
-                          </Link>
+                        <div className="flex flex-row justify-between items-center w-full flex-1">
+                          <Typography.Text
+                            ellipsis={true}
+                            onClick={() => {
+                              openPage(item.url);
+                            }}
+                            className=" flex-1"
+                          >
+                            {item.title}
+                          </Typography.Text>
+
                           <div className="flex flex-row">
                             <EditOutlined
                               key="edit"

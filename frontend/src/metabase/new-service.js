@@ -7,6 +7,13 @@ export const apiGet = async api => {
 };
 
 // FGA Api
+export const GetThirdpartWebsiteInfo = async params => {
+  // params: {
+  //   "url": "string",
+  // }
+  return POST("/api/v1/fga/website-nesting/preview-graph", params);
+};
+
 export const AddWebsiteNesting = async params => {
   // params: {
   //   "projectId": 0,
