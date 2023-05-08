@@ -9,7 +9,18 @@ const MuiInput = props => {
   let { label, value, placeholder, required, onValueChange, frontSymbol, showClose, onCloseAction, autoFocus, dropdownMatchSelectWidth } = props;
   const [focus, setFocus] = useState(false);
   const [currentValue, setCurrentValue] = useState(value ?? "");
-  const [inputValue, setInputValue] = useState();
+  const [inputValue, setInputValue] = useState([
+    {
+      symbol: "gte",
+      label: ">=",
+      value: null,
+    },
+    {
+      symbol: "lte",
+      label: "<=",
+      value: null,
+    },
+  ]);
   const [comparisonSymbol, setComparisonSymbol] = useState("gte");
 
   if (!placeholder) {
@@ -29,16 +40,12 @@ const MuiInput = props => {
     "lte": "<=",
   }
 
-  const data = [
-    {
-      symbol: "gte",
-      label: ">=",
-    },
-    {
-      symbol: "lte",
-      label: "<=",
-    },
-  ]
+  const data = inputValue.map(i => {
+    return {
+      symbol: i.symbol,
+      label: i.label,
+    }
+  })
 
   return (
     <div
@@ -52,6 +59,11 @@ const MuiInput = props => {
         open={open}
         value={currentValue}
         autoFocus={autoFocus}
+        allowClear={true}
+        onClear={() => {
+          setCurrentValue("")
+          onValueChange("", "");
+        }}
         notFoundContent={(<div />)}
         dropdownMatchSelectWidth={dropdownMatchSelectWidth}
         onDropdownVisibleChange={(visible) => setOpen(visible)}
@@ -71,7 +83,14 @@ const MuiInput = props => {
                           }}
                           disabled={comparisonSymbol !== i.symbol}
                           onChange={e => {
-                            setInputValue(e.target.value)
+
+                            setInputValue(inputValue.map(j => {
+                              return {
+                                symbol: j.symbol,
+                                label: j.label,
+                                value: j.symbol === i.symbol ? e.target.value : j.value,
+                              }
+                            }))
                           }}
                         />
                       </div>
@@ -83,12 +102,13 @@ const MuiInput = props => {
 
             <div className="flex justify-end mt2">
               <Button type="primary" onClick={() => {
-                const tempInputValue = `${comparisonSymbolMapping[comparisonSymbol]}${inputValue}`;
+                const value = inputValue.find(i => i.symbol === comparisonSymbol).value;
+                const tempInputValue = `${comparisonSymbolMapping[comparisonSymbol]}${value}`;
                 if (currentValue !== tempInputValue) {
                   setCurrentValue(tempInputValue);
                 }
                 if (onValueChange) {
-                  onValueChange(inputValue || null, comparisonSymbol);
+                  onValueChange(value, comparisonSymbol);
                 }
                 setOpen(false)
               }}>

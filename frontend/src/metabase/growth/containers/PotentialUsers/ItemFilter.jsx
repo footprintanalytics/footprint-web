@@ -27,7 +27,6 @@ export const ItemFilter = props => {
   } = props;
 
   const handleChange = (value) => {
-    console.log("handleChange value", value)
     onMoreChange?.(value, visibleFilterResultData, moreFilterResultData);
   };
   const getApiFunction = (item) => {
