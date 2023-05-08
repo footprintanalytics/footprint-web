@@ -98,11 +98,14 @@ const mapStateToProps = (state, props) => {
         ) !== -1
           ? queryCollection
           : queryCollectionInUrl ?? project.nftCollectionAddress?.[0]?.address;
-      updateDashboardPara(parameters, parameterValues, key, queryCollection);
-      if (queryCollection === project.nftCollectionAddress?.[0]?.address) {
-        updateDashboardPara(parameters, parameterValues, "chain", [
-          project.nftCollectionAddress?.[0].chain,
-        ]);
+      if (
+        updateDashboardPara(parameters, parameterValues, key, queryCollection)
+      ) {
+        if (queryCollection === project.nftCollectionAddress?.[0]?.address) {
+          updateDashboardPara(parameters, parameterValues, "chain", [
+            project.nftCollectionAddress?.[0].chain,
+          ]);
+        }
       }
     }
     // mutiple collection
