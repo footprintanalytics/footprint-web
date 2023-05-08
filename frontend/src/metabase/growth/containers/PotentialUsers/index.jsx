@@ -21,9 +21,9 @@ import {
 import { QUERY_OPTIONS } from "metabase/containers/dashboards/shared/config";
 import Link from "metabase/core/components/Link/Link";
 import { formatTableTitle } from "metabase/lib/formatting/footprint";
-import { ItemFilter } from "./ItemFilter";
 import { formatTag, valueFormat } from "metabase/growth/utils/utils";
 import { wallet_profile_link } from "metabase/growth/utils/data";
+import { ItemFilter } from "./ItemFilter";
 
 const PotentialUsers = props => {
   const { router, location, project } = props;
