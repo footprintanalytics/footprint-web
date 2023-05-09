@@ -1,5 +1,5 @@
 /* eslint-disable react/prop-types */
-import React from "react";
+import React, { useState } from "react";
 import { Col, Row, Select, Skeleton } from "antd";
 import MuiSelect from "metabase/growth/components/MuiSelect";
 import cx from "classnames";
@@ -25,10 +25,13 @@ export const ItemFilter = props => {
     onCloseAction,
     selectMoreValue = [],
   } = props;
+  const [openMoreSelect, setOpenMoreSelect] = useState(false);
 
   const handleChange = (value) => {
     onMoreChange?.(value, visibleFilterResultData, moreFilterResultData);
+    setOpenMoreSelect(false);
   };
+
   const getApiFunction = (item) => {
     if (item.indicator === "protocolSlugs") {
       return getPotentialUseFilterProject;
@@ -44,6 +47,7 @@ export const ItemFilter = props => {
     }
     return getPotentialUseFilterProject;
   }
+
   const getResultMappingFunction = (item) => {
     let optionsObject = null;
     optionsObject = (item) => {
@@ -102,11 +106,14 @@ export const ItemFilter = props => {
             <div className="more-text"><Icon name="add" size={12} className="mr1"/> Add Filter</div>
             <Select
               height={40}
+              open={openMoreSelect}
               style={{ width: "130px", height: 40 }}
               label={item.label}
               options={item.options}
               value={selectMoreValue}
+              onDropdownVisibleChange={(visible) => setOpenMoreSelect(visible)}
               bordered={false}
+              showArrow={false}
               mode="multiple"
               showSearch={false}
               onChange={handleChange}

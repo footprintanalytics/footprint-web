@@ -39,7 +39,6 @@ const MuiSelect = props => {
       className={"mui-select"}
       onBlur={() => setFocus(false)}
       onFocus={() => setFocus(true)}
-      style={{ marginRight: showClose ? 20 : 0}}
     >
       <Select
         style={{ width: "100%", height: 40 }}

@@ -49,10 +49,9 @@ const MuiInput = props => {
 
   return (
     <div
-      className={"mui-select"}
+      className={"mui-input"}
       onBlur={() => setFocus(false)}
       onFocus={() => setFocus(true)}
-      style={{ marginRight: showClose ? 20 : 0}}
     >
       <Select
         style={{ width: "100%", height: 40 }}
@@ -74,8 +73,8 @@ const MuiInput = props => {
                 {data?.map(i => {
                   return (
                     <Radio value={i.symbol} key={i.symbol} >
-                      <div className="flex full-width justify-evenly align-center mb1">
-                        <span className="mr2">{i.label}</span>
+                      <div className="flex full-width justify-evenly align-center">
+                        <span className="mr2" style={{ marginBottom: 4 }}>{i.label}</span>
                         {frontSymbol && (<span className="mr1">{frontSymbol}</span>)}
                         <Input
                           style={{
@@ -103,12 +102,14 @@ const MuiInput = props => {
             <div className="flex justify-end mt2">
               <Button type="primary" onClick={() => {
                 const value = inputValue.find(i => i.symbol === comparisonSymbol).value;
-                const tempInputValue = `${comparisonSymbolMapping[comparisonSymbol]}${value}`;
-                if (currentValue !== tempInputValue) {
-                  setCurrentValue(tempInputValue);
-                }
-                if (onValueChange) {
-                  onValueChange(value, comparisonSymbol);
+                if (value) {
+                  const tempInputValue = `${comparisonSymbolMapping[comparisonSymbol]}${value}`;
+                  if (currentValue !== tempInputValue) {
+                    setCurrentValue(tempInputValue);
+                  }
+                  if (onValueChange) {
+                    onValueChange(value, comparisonSymbol);
+                  }
                 }
                 setOpen(false)
               }}>
