@@ -134,7 +134,7 @@ export const getPotentialUserFilterToken = async params => {
   return GET(`/api/v1/fga/potential-user/filter/token`, params);
 };
 export const getPotentialUserFilterTag = async params => {
-  return GET(`/api/v1/fga/potential-user/filter/featuredTag`, params);
+  return GET(`/api/v1/fga/potential-user/filter/tag`, params);
 };
 export const getPotentialUserFilterFeaturedTag = async params => {
   return GET(`/api/v1/fga/potential-user/filter/featuredTag`, params);
