@@ -102,7 +102,6 @@ export function checkIsNeedContactUs(
   onBlockAction: () => any,
   closable = true,
 ) {
-  console.log("checkIsNeedContactUs", project);
   // if (user && user.email === "fga@footprint.network") {
   if (project?.isDemo || !project) {
     modal.info({

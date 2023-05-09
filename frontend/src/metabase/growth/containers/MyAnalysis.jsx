@@ -1,7 +1,15 @@
 /* eslint-disable react/prop-types */
 import React from "react";
 import { connect } from "react-redux";
-import { List, Card, Image, Typography, message, Popconfirm } from "antd";
+import {
+  List,
+  Card,
+  Image,
+  Typography,
+  message,
+  Popconfirm,
+  Modal,
+} from "antd";
 import { Link } from "react-router";
 import {
   EditOutlined,
@@ -32,6 +40,7 @@ const MyAnalysis = props => {
     },
   );
   const [messageApi, contextHolder] = message.useMessage();
+
   const delectDashboard = id => {
     messageApi.open({
       type: "loading",
@@ -60,9 +69,11 @@ const MyAnalysis = props => {
       window.open(url.startsWith("http") ? url : "https://" + url, "_blank");
     }
   };
+  const [modal, modalContextHolder] = Modal.useModal();
   return (
     <div className="flex flex-column items-center">
       {contextHolder}
+      {modalContextHolder}
       {showAdd?.open && (
         <AddMyAnalysisModal
           open={showAdd?.open}
@@ -203,7 +214,9 @@ const MyAnalysis = props => {
                               title="Delete the dashboard?"
                               description="Are you sure to delete this dashboard?"
                               onConfirm={() => {
-                                delectDashboard(item.id);
+                                if (!checkIsNeedContactUs(modal, project)) {
+                                  delectDashboard(item.id);
+                                }
                               }}
                               placement="topRight"
                               onCancel={() => {}}
