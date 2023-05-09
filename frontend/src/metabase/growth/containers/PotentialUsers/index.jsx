@@ -7,7 +7,7 @@ import { push } from "react-router-redux";
 import { connect } from "react-redux";
 import { Alert, Card, Input, Radio, Typography, Space } from "antd";
 import { useQuery } from "react-query";
-import { orderBy } from "lodash";
+import { omit, orderBy, union } from "lodash";
 import { WalletList } from "metabase/growth/components/Community/WalletList";
 import LoadingSpinner from "metabase/components/LoadingSpinner/LoadingSpinner";
 import { QuickFilter } from "metabase/growth/components/Community/QuickFilter";
@@ -60,7 +60,7 @@ const PotentialUsers = props => {
     ["queryPotentialUserByFilter", project?.id, walletListParams],
     async () => {
       return queryPotentialUserByFilter({
-        ...walletListParams,
+        ...mergeFiltersByTags(walletListParams),
         projectId: parseInt(project?.id),
       });
     },
@@ -84,6 +84,33 @@ const PotentialUsers = props => {
     }
   }, [otherOptionsList, visibleFilterResultData]);
 
+  // tags must convert and merge to filters.tags
+  const mergeFiltersByTags = (params) => {
+    let tags = params?.tags || [];
+    const filters = params?.filters || [];
+    let tagFilter = filters?.find(i => i.indicator === "tags");
+    if (tagFilter && tags?.length > 0) {
+      tags = union([...tagFilter.comparisonValue, ...tags])
+    }
+    if (tags?.length > 0) {
+      tagFilter = {
+        indicator: "tags",
+        comparisonSymbol: "in",
+        comparisonValue: tags
+      }
+    }
+    const fixFilters = [
+      ...filters.filter(i => i.indicator !== "tags"),
+    ]
+    if (tagFilter) {
+      fixFilters.push(tagFilter);
+    }
+    return {
+      ...omit(params, ["tags"]),
+      filters: fixFilters,
+    };
+  }
+
   const actions = [
     {
       title: "Create Cohort",
@@ -93,7 +120,7 @@ const PotentialUsers = props => {
           router={router}
           addressListCount={listResult?.data?.total}
           params={{
-            ...walletListParams,
+            ...mergeFiltersByTags(walletListParams),
             projectId: parseInt(project?.id),
           }}
           isButtonStyle={false}
