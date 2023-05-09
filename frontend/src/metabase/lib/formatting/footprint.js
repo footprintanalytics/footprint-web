@@ -31,6 +31,7 @@ export function formatTitle(title) {
   ];
   const upperArray = [
     "nft",
+    "ens",
   ];
   const mapFunction = (item) => {
     if (lowerArray.includes(item?.toLowerCase())) {
