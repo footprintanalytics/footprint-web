@@ -83,6 +83,7 @@ const Project = props => {
             projectObject?.protocolSlug,
             currentMenu,
           ),
+          query: { ...location.query },
         });
       }
     } else {
