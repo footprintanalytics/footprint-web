@@ -71,6 +71,7 @@ const Project = props => {
             ? newMenu?.menuTabs[0].children[0].key
             : newMenu?.menuTabs[0]?.key;
         setCurrentMenu(firstMenu);
+        console.log(2);
         router.push({
           pathname: getGrowthProjectPath(
             projectObject?.protocolSlug,
@@ -78,11 +79,13 @@ const Project = props => {
           ),
         });
       } else {
+        console.log(1);
         router.replace({
           pathname: getGrowthProjectPath(
             projectObject?.protocolSlug,
             currentMenu,
           ),
+          query: { ...location.query },
         });
       }
     } else {
