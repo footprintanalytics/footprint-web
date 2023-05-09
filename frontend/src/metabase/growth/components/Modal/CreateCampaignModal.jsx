@@ -54,7 +54,7 @@ const CreateCampaignModal = props => {
     onCancel,
     onSuccess,
     socialType,
-    channel,
+    channel, //view channel detail
   } = props;
   const [isSubmiting, setSubmiting] = useState(false);
   const [isShow, setShow] = useState(false);
