@@ -116,7 +116,7 @@ const AddMyAnalysisModal = props => {
     if (currentValue !== val) {
       setCurrentValue(val);
     }
-  }, 600);
+  }, 800);
 
   useEffect(() => {
     if (currentValue) {
