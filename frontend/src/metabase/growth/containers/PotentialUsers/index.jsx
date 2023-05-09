@@ -1,11 +1,11 @@
 /* eslint-disable react/display-name */
 /* eslint-disable react/prop-types */
-import React, { useEffect } from "react";
+import React from "react";
 import "../../css/index.css";
 import "./index.css";
 import { push } from "react-router-redux";
 import { connect } from "react-redux";
-import { Alert, Card, Typography } from "antd";
+import { Alert, Card, Input, Radio, Typography, Space } from "antd";
 import { useQuery } from "react-query";
 import { orderBy } from "lodash";
 import { WalletList } from "metabase/growth/components/Community/WalletList";
@@ -14,100 +14,76 @@ import { QuickFilter } from "metabase/growth/components/Community/QuickFilter";
 import { getFgaProject, getUser } from "metabase/selectors/user";
 import CreateCohort2 from "metabase/growth/containers/PotentialUsers/CreateFliterCohort";
 import {
-  getPotentialUseFilterProject,
-  queryPotentialUser,
-  getPotentialUserFilterCollection,
-  getPotentialUserFilterTag,
+  getPotentialUseFilter,
+  getPotentialUserFilterFeaturedTag,
+  queryPotentialUserByFilter,
 } from "metabase/new-service";
 import { QUERY_OPTIONS } from "metabase/containers/dashboards/shared/config";
 import Link from "metabase/core/components/Link/Link";
 import { formatTableTitle } from "metabase/lib/formatting/footprint";
-import { ItemFilter } from "./ItemFilter";
 import { formatTag, valueFormat } from "metabase/growth/utils/utils";
 import { wallet_profile_link } from "metabase/growth/utils/data";
+import { ItemFilter } from "./ItemFilter";
 
 const PotentialUsers = props => {
   const { router, location, project } = props;
+
+  const visibleCount = 3;
 
   const [walletListParams, setWalletListParams] = React.useState({
     pageSize: 10,
     current: 1,
     filters: [],
-    tags: location?.query?.tag ? [location?.query?.tag.replace("+", " ")] : [],
-    protocolSlugs: [],
-    collectionSlugs: [],
-    excludeTags: [],
   });
 
   const [walletListData, setWalletListData] = React.useState(null);
-  // const [walletListParams, setWalletListParams] = React.useState({
-  //   pageSize: location.query?.pageSize
-  //     ? parseInt(location.query?.pageSize)
-  //     : 10,
-  //   current: location.query?.page ? parseInt(location.query?.page) : 1,
-  //   filters: location.query?.filters ? JSON.parse(location.query?.filters) : [],
-  //   tag: location.query?.tag
-  //     ? [location.query?.tag.replace("+", " ")]
-  //     : [],
-  //   protocolSlugs: [],
-  //   collectionSlugs: [],
-  //   excludeTags: [],
-  // });
-  //
-  // useEffect(() => {
-  //   router.replace({
-  //     pathname: location.pathname,
-  //     query: {
-  //       ...location.query,
-  //       page: walletListParams.current,
-  //       pageSize: walletListParams.pageSize,
-  //       tag: walletListParams.tag,
-  //       filters: JSON.stringify(walletListParams.filters),
-  //     },
-  //   });
-  // }, [walletListParams]);
+  const [otherOptionsList, setOtherOptionsList] = React.useState([])
+  const [selectMoreValue, setSelectMoreValue] = React.useState([])
 
-  const filterProjectResult = useQuery(
-    ["getPotentialUseFilterProject", project?.id],
+  const filterResult = useQuery(
+    ["getPotentialUseFilter"],
     async () => {
-      return getPotentialUseFilterProject({ projectId: parseInt(project?.id) });
+      return getPotentialUseFilter();
     },
-    { ...QUERY_OPTIONS, enabled: !!project?.id },
+    { ...QUERY_OPTIONS },
   );
 
-  const filterCollectionResult = useQuery(
-    ["getPotentialUserFilterCollection", project?.id],
+  const filterFeaturedTagResult = useQuery(
+    ["getPotentialUserFilterFeaturedTag", project?.id],
     async () => {
-      return getPotentialUserFilterCollection({
-        projectId: parseInt(project?.id),
-      });
-    },
-    { ...QUERY_OPTIONS, enabled: !!project?.id },
-  );
-
-  const filterTagResult = useQuery(
-    ["getPotentialUserFilterTag", project?.id],
-    async () => {
-      return getPotentialUserFilterTag({ projectId: parseInt(project?.id) });
+      return getPotentialUserFilterFeaturedTag({ projectId: parseInt(project?.id) });
     },
     { ...QUERY_OPTIONS, enabled: !!project?.id },
   );
 
   const listResult = useQuery(
-    ["queryPotentialUser", project?.id, walletListParams],
+    ["queryPotentialUserByFilter", project?.id, walletListParams],
     async () => {
-      return queryPotentialUser({
+      return queryPotentialUserByFilter({
         ...walletListParams,
         projectId: parseInt(project?.id),
       });
     },
     { ...QUERY_OPTIONS, enabled: !!project?.id },
   );
-  useEffect(() => {
+
+  React.useEffect(() => {
     if (!listResult?.isLoading) {
       setWalletListData(listResult?.data);
     }
   }, [listResult]);
+
+  React.useEffect(() => {
+    if (visibleFilterResultData && otherOptionsList) {
+      const allList = [...visibleFilterResultData, ...otherOptionsList].map(y => y.indicator);
+      setWalletListParams({
+        ...walletListParams,
+        filters: [...walletListParams?.filters?.filter(i => allList?.includes(i?.indicator))],
+        current: 1,
+      });
+    }
+  }, [otherOptionsList, visibleFilterResultData]);
+
   const actions = [
     {
       title: "Create Cohort",
@@ -285,32 +261,84 @@ const PotentialUsers = props => {
     );
   };
 
+  const filterResultData = filterResult?.data;
+  const visibleFilterResultData = filterResultData?.slice(0, visibleCount);
+  const otherFilterResultData = filterResultData?.slice(visibleCount, filterResultData?.length);
+  const moreFilterResultData = filterResultData ? [{
+    label: "More",
+    type: "more",
+    options: [
+      {
+        label: "Recent",
+        options: filterResultData?.slice(visibleCount, visibleCount + 1)?.map(i => {
+          return {
+            value: i?.indicator,
+            label: i?.label,
+          };
+        }) || [],
+      },
+      {
+        label: "Hot",
+        options: filterResultData?.slice(visibleCount + 1, filterResultData?.length)?.map(i => {
+          return {
+            value: i.indicator,
+            label: i.label,
+          };
+        }) || [],
+      },
+    ],
+  }] : [];
+
   return (
     <>
       {project?.id ? (
         <div className="flex flex-column w-full p2">
           {renderHint()}
-          {filterProjectResult?.isLoading &&
-          filterCollectionResult?.isLoading &&
-          listResult?.isLoading &&
-          filterTagResult?.isLoading ? (
+          {
+          filterFeaturedTagResult?.isLoading &&
+          filterResult?.isLoading ? (
             <Card className="w-full rounded m1" style={{ height: 150 }}>
               <LoadingSpinner message="Loading..." />
             </Card>
           ) : (
             <>
-              <ItemFilter
-                className="mt2"
-                projectData={orderBy(filterProjectResult?.data?.data, ["name"])}
-                collectionData={orderBy(filterCollectionResult?.data?.data, [
-                  "name",
-                ])}
-                onSelectChange={selectObject => {
+              <QuickFilter
+                title={"Tags"}
+                defaultValue={location?.query?.tag}
+                optionsList={getQuickFilterOptionList(
+                  orderBy(filterFeaturedTagResult?.data?.data, ["tag"]),
+                )}
+                formatFunction={name =>
+                  formatTableTitle(name?.replace(/-/g, " "))
+                }
+                onFliterChange={tag => {
                   setWalletListParams({
                     ...walletListParams,
-                    ...selectObject,
+                    current: 1,
+                    tags: tag ? [tag?.value] : [],
+                  });
+                }}
+              />
+              <ItemFilter
+                className="mt2"
+                filterResultData={filterResult?.data}
+                visibleFilterResultData={visibleFilterResultData}
+                moreFilterResultData={moreFilterResultData}
+                selectMoreValue={selectMoreValue}
+                onSelectChange={selectObject => {
+                  const finalSelectObject = selectObject?.comparisonValue ? [selectObject] : []
+                  setWalletListParams({
+                    ...walletListParams,
+                    filters: [...walletListParams?.filters?.filter(i => i.indicator !== selectObject.indicator), ...finalSelectObject],
                     current: 1,
                   });
+                }}
+                enableMoreSelect={true}
+                onMoreChange={(value) => {
+                  setSelectMoreValue(value);
+                  setOtherOptionsList(value.map(item => {
+                    return otherFilterResultData?.find(a => a.indicator === item)
+                  }));
                 }}
                 onFilterChange={valueFilter => {
                   if (!valueFilter) {
@@ -330,21 +358,39 @@ const PotentialUsers = props => {
                   });
                 }}
               />
-              <QuickFilter
-                title={"Tags"}
-                defaultValue={location?.query?.tag}
-                optionsList={getQuickFilterOptionList(
-                  orderBy(filterTagResult?.data?.data, ["tag"]),
-                )}
-                formatFunction={name =>
-                  formatTableTitle(name?.replace(/-/g, " "))
-                }
-                onFliterChange={tag => {
+              <ItemFilter
+                className="mb1"
+                onSelectChange={selectObject => {
+                  const finalSelectObject = selectObject?.comparisonValue ? [selectObject] : []
                   setWalletListParams({
                     ...walletListParams,
+                    filters: [...walletListParams?.filters?.filter(i => i.indicator !== selectObject.indicator), ...finalSelectObject],
                     current: 1,
-                    tags: tag ? [tag?.value] : [],
                   });
+                }}
+                titleColor="transparent"
+                visibleFilterResultData={otherOptionsList}
+                isOtherFilter={true}
+                onFilterChange={valueFilter => {
+                  if (!valueFilter) {
+                    return;
+                  }
+                  let temp = [...walletListParams.filters];
+                  temp = temp.filter(
+                    item => item.indicator !== valueFilter.indicator,
+                  );
+                  if (valueFilter.comparisonValue) {
+                    temp.push(valueFilter);
+                  }
+                  setWalletListParams({
+                    ...walletListParams,
+                    filters: temp,
+                    current: 1,
+                  });
+                }}
+                onCloseAction={item => {
+                  setSelectMoreValue(selectMoreValue.filter(i => i !== item.indicator))
+                  setOtherOptionsList(otherOptionsList.filter(i => i.indicator !== item.indicator))
                 }}
               />
             </>
