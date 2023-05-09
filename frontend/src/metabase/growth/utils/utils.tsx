@@ -156,6 +156,9 @@ export function updateDashboardPara(
   const name_index = parameters.findIndex(i => i.slug === newValueKey);
   if (name_index !== -1 && parameterValues[parameters[name_index].id]) {
     set(parameterValues, parameters[name_index].id, newValue);
+    return true
+  }else{
+    return false
   }
 }
 

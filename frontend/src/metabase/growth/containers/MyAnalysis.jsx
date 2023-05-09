@@ -57,7 +57,7 @@ const MyAnalysis = props => {
     if (url.includes("footprint.network")) {
       router.push(url + "#from=My Analysis");
     } else {
-      window.open(url, "_blank");
+      window.open(url.startsWith("http") ? url : "https://" + url, "_blank");
     }
   };
   return (
@@ -172,7 +172,7 @@ const MyAnalysis = props => {
                               background: "white",
                               width: "100%",
                               height: 160,
-                              objectFit: "contain",
+                              objectFit: "cover",
                             }}
                             alt={item.title}
                             src={item?.imageUrl}
