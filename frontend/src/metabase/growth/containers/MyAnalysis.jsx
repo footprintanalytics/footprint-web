@@ -172,7 +172,7 @@ const MyAnalysis = props => {
                               background: "white",
                               width: "100%",
                               height: 160,
-                              objectFit: "contain",
+                              objectFit: "cover",
                             }}
                             alt={item.title}
                             src={item?.imageUrl}

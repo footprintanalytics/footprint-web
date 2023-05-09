@@ -96,19 +96,16 @@ const AddMyAnalysisModal = props => {
   const getThirdpartWebsiteInfo = async url => {
     try {
       const { result } = await GetThirdpartWebsiteInfo({ url });
-      if (result?.success) {
-        setDashboardInfo({
-          title: result?.ogTitle,
-          originalUrl: url,
-          url,
-          imageUrl:
-            result?.ogImage?.[0]?.url ||
-            result?.twitterImage?.[0]?.url ||
-            "https://static.footprint.network/img_why_top_center.png",
-        });
-      } else {
-        throw new Error("The link provided is not valid. ");
-      }
+      // result?.success && setDashboardInfo(result?.data);
+      setDashboardInfo({
+        title: result?.ogTitle || url,
+        originalUrl: url,
+        url,
+        imageUrl:
+          result?.ogImage?.[0]?.url ||
+          result?.twitterImage?.[0]?.url ||
+          "https://static.footprint.network/20230303142500.jpg",
+      });
     } catch (error) {
       setDashboardInfo(null);
       message.error("The link provided is not valid. ");
@@ -119,7 +116,7 @@ const AddMyAnalysisModal = props => {
     if (currentValue !== val) {
       setCurrentValue(val);
     }
-  }, 1000);
+  }, 600);
 
   useEffect(() => {
     if (currentValue) {
@@ -186,11 +183,11 @@ const AddMyAnalysisModal = props => {
                 dashboardInfo?.imageUrl ? (
                   <Image
                     preview={false}
-                    fallback="https://footprint-imgs.oss-us-east-1.aliyuncs.com/20210701141436.png"
+                    fallback="https://static.footprint.network/20230303142500.jpg"
                     style={{
                       background: "#222b47",
                       width: "100%",
-                      objectFit: "contain",
+                      objectFit: "cover",
                       height: 240,
                     }}
                     src={dashboardInfo?.imageUrl}
