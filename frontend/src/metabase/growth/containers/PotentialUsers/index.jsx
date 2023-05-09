@@ -88,7 +88,7 @@ const PotentialUsers = props => {
   const mergeFiltersByTags = (params) => {
     let tags = params?.tags || [];
     const filters = params?.filters || [];
-    let tagFilter = filters?.find(i => i.indicator === "tags");
+    let tagFilter = filters.find(i => i.indicator === "tags");
     if (tagFilter && tags?.length > 0) {
       tags = union([...tagFilter.comparisonValue, ...tags])
     }
@@ -99,9 +99,7 @@ const PotentialUsers = props => {
         comparisonValue: tags
       }
     }
-    const fixFilters = [
-      ...filters.filter(i => i.indicator !== "tags"),
-    ]
+    const fixFilters = filters.filter(i => i.indicator !== "tags");
     if (tagFilter) {
       fixFilters.push(tagFilter);
     }
