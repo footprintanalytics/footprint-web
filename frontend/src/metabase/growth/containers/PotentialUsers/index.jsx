@@ -328,6 +328,7 @@ const PotentialUsers = props => {
           ) : (
             <>
               <QuickFilter
+                className="mt2"
                 title={"Tags"}
                 defaultValue={location?.query?.tag}
                 optionsList={getQuickFilterOptionList(
@@ -345,7 +346,6 @@ const PotentialUsers = props => {
                 }}
               />
               <ItemFilter
-                className="mt2"
                 filterResultData={filterResult?.data}
                 visibleFilterResultData={visibleFilterResultData}
                 moreFilterResultData={moreFilterResultData}

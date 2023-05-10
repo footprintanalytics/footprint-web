@@ -174,6 +174,10 @@ export const ItemFilter = props => {
     return <Skeleton />
   }
 
+  if (visibleFilterResultData.length === 0) {
+    return <div className="mb1"/>
+  }
+
   return (
     <div
       className={cx(
