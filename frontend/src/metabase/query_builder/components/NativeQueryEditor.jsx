@@ -1,7 +1,7 @@
 /*global ace*/
 /* eslint-disable react/prop-types */
 import { t } from "ttag";
-import React, { Component } from "react";
+import React, { Component, memo } from "react";
 import cx from "classnames";
 import "ace/ace";
 import "ace/ext-language_tools";
@@ -519,6 +519,7 @@ class NativeQueryEditor extends Component {
       setDatasetQuery,
       darkMode,
       snippets,
+      user,
     } = this.props;
     const parameters = query.question().parameters();
 
@@ -539,6 +540,8 @@ class NativeQueryEditor extends Component {
     // );
 
     const showDarkModeButton = true;
+    const isAdmin = user && user.is_superuser;
+    const showSqlGptButton = isAdmin || user?.groups?.includes("Inner");
 
     return (
       <NativeQueryEditorRoot className={cx("NativeQueryEditor bg-light full", { DarkMode: darkMode })}>
@@ -569,7 +572,9 @@ class NativeQueryEditor extends Component {
                   <DarkModeButton {...this.props} size={18}/>
                 )}
                 <SqlOptimizeButton {...this.props} size={18}/>
-                <SqlGPTButton {...this.props} size={18}/>
+                {showSqlGptButton && (
+                  <SqlGPTButton {...this.props} size={18}/>
+                )}
               </div>
             )}
 
@@ -658,4 +663,4 @@ export default _.compose(
   Snippets.loadList({ loadingAndErrorWrapper: false }),
   SnippetCollections.loadList({ loadingAndErrorWrapper: false }),
   connect(null, mapDispatchToProps),
-)(NativeQueryEditor);
+)(memo(NativeQueryEditor));

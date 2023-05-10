@@ -19,6 +19,7 @@
     "@fontsource/roboto": "^4.5.8",
     "@jupyterlab/services": "^6.3.3",
     "@loadable/component": "^5.15.0",
+    "@microsoft/fetch-event-source": "^2.0.1",
     "@react-hook/resize-observer": "^1.2.2",
     "@react-oauth/google": "^0.4.0",
     "@snowplow/browser-tracker": "^3.1.6",

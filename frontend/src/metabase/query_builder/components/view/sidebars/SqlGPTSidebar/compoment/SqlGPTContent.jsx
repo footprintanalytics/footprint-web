@@ -1,57 +1,73 @@
 /* eslint-disable react/prop-types */
 import React, { useState } from "react";
 import "./SqlGPTContent.css";
-import { answerGPT } from "metabase/new-service";
 import { Button, Form, Input } from "antd";
+import { fetchEventSource } from "@microsoft/fetch-event-source";
 
 const SqlGPTContent = ({
   updateQuestion,
   question,
   databaseId,
-  sql
 }) => {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(false);
   const [success, setSuccess] = useState(false);
+  // const [result, setResult] = useState("")
   const onFinish = (values) => {
     runApi(values.input);
   }
+  let tempString = "";
+  const fetchData = async (query) => {
+    tempString = ""
+    // setResult(tempString)
+    await fetchEventSource(
+      `https://gpt.footprint.network/answer`,
+      // `http://localhost:3002/test`,
+      {
+      method: "POST",
+      headers: {
+        "Content-Type": 'application/json',
+      },
+      body: JSON.stringify({
+        "uri": "7/en",
+        "query": query,
+        "is_stream": true,
+      }),
+      onopen(res) {
+        console.log("onopen", res)
+      },
+      onmessage: (event) => {
+        tempString = tempString.concat(event.data)
+        // setResult(tempString)
+        console.log("sql", tempString)
+        const nativeQuery = {
+          type: "native",
+          native: { query: tempString.replace(/;/g, "") },
+          database: databaseId,
+        };
+
+        updateQuestion(question.setDatasetQuery(nativeQuery));
+      },
+      onclose() {
+        // console.log("Connection closed by the server");
+        setLoading(false);
+      },
+      onerror(err) {
+        // console.log("There was an error from server", err);
+        setLoading(false);
+      },
+    });
+  };
 
   const runApi = async (query) => {
     setLoading(true);
     setError("");
     setSuccess(false);
-    let data;
     try {
-      data = await answerGPT({
-        "uri": "1/en",
-        "query": query,
-      });
-      const regex = /```([^`]*)```/g;
-      const regResult = regex.exec(data?.answer);
-
-      const regex2 = /###([^`]*)###/g;
-      const regResult2 = regex2.exec(data?.answer);
-      const queryText = regResult ? regResult[1] : (regResult2 ? regResult2[1] : "")
-      console.log("regResult", regResult)
-      console.log("regResult2", regResult2)
-      if (!queryText) {
-        setError(data?.answer)
-      } else {
-        const nativeQuery = {
-          type: "native",
-          native: { query: queryText.replace(/;/g, "") },
-          database: databaseId,
-        };
-
-        updateQuestion(question.setDatasetQuery(nativeQuery));
-        window._editor && window._editor.focus();
-        setSuccess(true);
-      }
+      fetchData(query);
     } catch (e) {
       console.log("error", e)
     }
-    setLoading(false);
   }
 
   return (
@@ -59,15 +75,24 @@ const SqlGPTContent = ({
       <Form
         layout="vertical"
         initialValues={{
-          input: "how can i query aave last 7 day volume?",
+          // input: "query total mint of doodles and azuki?",
         }}
         style={{
           maxWidth: 1000,
         }}
         onFinish={onFinish}
       >
-        <Form.Item label="Please describe your needs. e.g. How can i query aave last 7 day volume?" name="input" >
-          <Input.TextArea style={{ height: 200 }}/>
+        <Form.Item
+          label="Please describe your question and you will get the answer."
+          name="input"
+          rules={[
+             {
+               required: true,
+               message: "Please describe your question. e.g. query total mint of doodles and azuki",
+             },
+          ]}
+        >
+          <Input.TextArea placeholder="Your question" style={{ height: 160 }}/>
         </Form.Item>
         <div className="text-centered">
           <Button type="primary" htmlType="submit" loading={loading}>Explore</Button>
@@ -81,10 +106,29 @@ const SqlGPTContent = ({
             <span>{error}</span>
           </div>
         )}
+        {/*{result && (
+          <>
+            <div>Outputs:</div>
+            <div style={{ width: 250, height: 300, textAlign: "left", border: "1px white solid", lineHeight: 1.5, padding: 20, whiteSpace: "pre-wrap", overflow: "auto" }}>{result}</div>
+            <div className="text-centered">
+              <Button type="primary" onClick={() => {
+                if (result) {
+                  const nativeQuery = {
+                    type: "native",
+                    native: { query: result.replace(/;/g, "") },
+                    database: databaseId,
+                  };
+
+                  updateQuestion(question.setDatasetQuery(nativeQuery));
+                  window._editor && window._editor.focus();
+                }
+              }}>Sync to edit box</Button>
+            </div>
+          </>
+        )}*/}
       </Form>
     </div>
   );
 };
-
 
 export default React.memo(SqlGPTContent);

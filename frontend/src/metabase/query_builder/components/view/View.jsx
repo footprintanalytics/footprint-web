@@ -269,7 +269,6 @@ class View extends React.Component {
         />
       );
     }
-    console.log("this.props", this.props)
     if (isShowingSqlGPTSidebar) {
       return (
         <SqlGPTSidebar
