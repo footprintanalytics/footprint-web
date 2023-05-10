@@ -134,12 +134,12 @@ const CreateCampaignModalNew = props => {
           campaignType &&
             setupSelectedChannel(campaignType, nitification_campaign);
           const templates = [];
-          nitification_campaign?.channels?.forEach(item => {
+          nitification_campaign?.channels?.forEach((item, index) => {
             templates.push({
               key: item.channelName,
               label: item.channelName,
               value: item.channelName,
-              disabled: item.disabled,
+              disabled: index === 0 ? false : true,
               ...item,
             });
           });
@@ -462,28 +462,6 @@ const CreateCampaignModalNew = props => {
                       options={channelTemplates}
                     />
                   </Form.Item>
-                  {/* <Form.Item
-                      rules={[{ required: true }]}
-                      name={"TargetChannel"}
-                      label="Target Channel"
-                    >
-                      <Select
-                        placeholder="Select a target channel"
-                        // mode="multiple"
-                        onChange={value => {
-                          const channels = [];
-                          const values = Array.isArray(value) ? value : [value];
-                          values?.map(v => {
-                            channels.push(
-                              channelTemplates.find(item => item.value === v),
-                            );
-                          });
-                          setChannelSelectedValue(channels);
-                        }}
-                        // loading={loadingCohort}
-                        options={channelTemplates}
-                      />
-                    </Form.Item> */}
                 </div>
                 {channelSelectedValue?.map(channel => {
                   if (channel?.details && channel?.details?.length > 0) {
@@ -530,20 +508,6 @@ const CreateCampaignModalNew = props => {
                   {campaignSelected?.details?.length > 0 && (
                     <div>{getChannelConfigPanel(campaignSelected.details)}</div>
                   )}
-                  {/* {(previewChannel?.length > 0
-                    ? previewChannel
-                    : channelSelectedValue
-                  )?.map(channelItem => {
-                    if (channelItem.details && channelItem.details.length > 0) {
-                      return (
-                        <>
-                          <div>
-                            {getChannelConfigPanel(channelItem.details)}
-                          </div>
-                        </>
-                      );
-                    }
-                  })} */}
                 </div>
                 <Form.Item
                   {...tailLayout}
