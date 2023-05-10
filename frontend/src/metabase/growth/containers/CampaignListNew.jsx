@@ -16,6 +16,7 @@ import {
   Input,
   message,
   Divider,
+  Image,
 } from "antd";
 import { useQuery } from "react-query";
 import dayjs from "dayjs";
@@ -30,10 +31,10 @@ import {
   showCohortSuccessModal,
   valueFormat,
 } from "../utils/utils";
-import CreateCampaignModal from "../components/Modal/CreateCampaignModal";
+import CreateCampaignModalNew from "../components/Modal/CreateCampaignModalNew";
 import "../css/utils.css";
 
-const SocialConnectList = props => {
+const CampaignListNew = props => {
   const { router, location, project } = props;
   const [isModalOpen, setIsModalOpen] = useState({
     open: false,
@@ -45,7 +46,7 @@ const SocialConnectList = props => {
     async () => {
       return await getCampaign({
         projectId: parseInt(project?.id),
-        campaignType: "User Contact",
+        campaignType: "Notification",
       });
     },
     { ...QUERY_OPTIONS, enabled: !!project?.id },
@@ -55,8 +56,10 @@ const SocialConnectList = props => {
       const dataSourceTemp = data?.list
         ?.filter(
           i =>
-            // only show the campaignType : User Contact
-            i.campaignType === "User Contact",
+            // only show the campaignType : Notification / Quest / Airdrop
+            i.campaignType === "Notification" ||
+            i.campaignType === "Quest" ||
+            i.campaignType === "Airdrop",
         )
         ?.sort(
           (a, b) =>
@@ -82,20 +85,31 @@ const SocialConnectList = props => {
             {channels.map(channel => {
               // return <Tag key={channel.id}>{channel.channelName}</Tag>
               return (
-                <Tooltip
-                  key={channel.id}
-                  title={formatType(channel.channelName)}
-                >
-                  <Avatar
-                    src={`https://footprint-imgs.oss-us-east-1.aliyuncs.com/${
-                      channel.channelName === "Tweet URL"
-                        ? "20220516201254"
-                        : "20220516201343"
-                    }.png`}
-                    size={25}
-                    className="bg-white mr1"
-                  ></Avatar>
-                </Tooltip>
+                <>
+                  <Tooltip
+                    key={channel.id}
+                    title={formatType(channel.campaignType)}
+                  >
+                    <Image
+                      preview={false}
+                      src={toolIcons.get(channel.campaignType)}
+                      width={25}
+                      height={25}
+                    ></Image>
+                  </Tooltip>
+                  <Tooltip
+                    key={channel.id}
+                    className="ml1"
+                    title={formatType(channel.channelName)}
+                  >
+                    <Image
+                      preview={false}
+                      src={channelIcons.get(channel.channelName)}
+                      width={25}
+                      height={25}
+                    ></Image>
+                  </Tooltip>
+                </>
               );
             })}
           </div>
@@ -103,54 +117,46 @@ const SocialConnectList = props => {
       },
     },
     {
-      title: "Number of Wallet Address",
+      title: "Total Number",
       dataIndex: "performanceDetails",
       align: "right",
-      render: item => valueFormat(item?.numberOfWalletAddress ?? 0),
+      render: item => valueFormat(item?.numberOfTotal ?? 0),
     },
     {
-      title: "Number of Twitter Name",
+      title: "Number of Success",
       dataIndex: "performanceDetails",
       align: "right",
-      render: item => valueFormat(item?.numberOfTwitterName ?? 0),
+      render: item => valueFormat(item?.numberOfSuccess ?? 0),
     },
     {
-      title: "Number of Discord Name",
+      title: "Number of Failed",
       dataIndex: "performanceDetails",
       align: "right",
-      render: item => valueFormat(item?.numberOfDiscordName ?? 0),
+      render: item => valueFormat(item?.numberOfFailed ?? 0),
     },
-    {
-      title: "Number of Email",
-      dataIndex: "performanceDetails",
-      align: "right",
-      render: item => valueFormat(item?.numberOfEmail ?? 0),
-    },
+
     {
       title: "Action",
       key: "action",
       render: (_, record) => (
         <Space size="middle">
-          <Button
+          {/* <Button
             type="link"
             className="p0"
             onClick={() => {
               setIsModalOpen({
                 open: true,
-                type:
-                  record?.channels?.[0]?.channelName === "Tweet URL"
-                    ? "Twitter"
-                    : "Discord",
-                channel: record?.channels?.[0],
+                type: record?.campaignType,
+                campaign: record,
               });
             }}
           >
             View
-          </Button>
+          </Button> */}
           <Button
             className="p0"
             type="link"
-            disabled={!(record?.performanceDetails?.numberOfWalletAddress > 0)}
+            disabled={!(record?.performanceDetails?.numberOfTotal > 0)}
             onClick={() => {
               checkIsNeedContactUs(
                 modal,
@@ -159,7 +165,7 @@ const SocialConnectList = props => {
                   setOpenCreatingCohort({
                     open: true,
                     campaignId: record?.campaignId,
-                    count: record?.performanceDetails?.numberOfWalletAddress,
+                    count: record?.performanceDetails?.numberOfTotal,
                   });
                 },
                 () => {},
@@ -192,19 +198,41 @@ const SocialConnectList = props => {
       ),
     },
   ];
-  //tool : Twitter Tweet/ Discord Bot
+  const toolIcons = new Map([
+    [
+      "Notification",
+      "https://static.footprint.network/campaign_notification_icon.svg",
+    ],
+    ["Quest", "https://static.footprint.network/campaign_quest_icon.svg"],
+    ["Airdrop", "https://static.footprint.network/campaign_airdrop_icon.svg"],
+  ]);
+  // email, telegram, discord
+  const channelIcons = new Map([
+    ["Footprint GA Email", "https://static.footprint.network/icon_email2.png"],
+    ["Email", "https://static.footprint.network/icon_email2.png"],
+    ["FGA:Email", "https://static.footprint.network/icon_email2.png"],
+    ["Telegram", "https://static.footprint.network/20220516201327.png"],
+    ["Discord", "https://static.footprint.network/20220516201343.png"],
+  ]);
+  // tools : Notification/Quest/Aurdrop
   const toolList = [
     {
-      name: "Twitter Tweet",
-      type: "Twitter",
-      icon: "https://footprint-imgs.oss-us-east-1.aliyuncs.com/20220516201254.png",
+      name: "Notification",
+      type: "Notification",
+      icon: toolIcons.get("Notification"),
       enabled: true,
     },
     {
-      name: "Discord Bot",
-      type: "Discord",
-      icon: "https://footprint-imgs.oss-us-east-1.aliyuncs.com/20220516201343.png",
-      enabled: true,
+      name: "Quest",
+      type: "Quest",
+      icon: toolIcons.get("Quest"),
+      enabled: false,
+    },
+    {
+      name: "Airdrop",
+      type: "Airdrop",
+      icon: toolIcons.get("Airdrop"),
+      enabled: false,
     },
   ];
   const [cohortName, setCohortName] = useState("");
@@ -213,6 +241,7 @@ const SocialConnectList = props => {
     open: false,
     campaignId: null,
   });
+  // save as cohort
   const modalProps = {
     title: "Save as cohort",
     confirmLoading: isCreatingCohort,
@@ -282,7 +311,6 @@ const SocialConnectList = props => {
       setOpenCreatingCohort({ open: false });
     },
   };
-
   const [modal, contextHolder] = Modal.useModal();
   return (
     <div className="w-full" style={{ padding: 20 }}>
@@ -298,30 +326,29 @@ const SocialConnectList = props => {
         >
           <Col span={24} key="desc" className=" text-center">
             <Typography.Title level={4}>
-              Use Footprint GA Social Connect Tool to speed up user information
-              collection
+              Use Footprint GA Campaign Tool to create new campaign links to
+              attribute acquired users
             </Typography.Title>
             <Typography.Paragraph>
-              Gain valuable insights about your customers and optimize your
-              products and services. Easily track user behaviors and preferences
-              for better products and services, making your business more
-              competitive.
+              Curate incentive campaigns, run superior quests, reward your
+              community with token gating, manage allowlists & run targeted
+              airdrops.
             </Typography.Paragraph>
           </Col>
-          {toolList.map(tool => {
+          {toolList.map((item, index) => {
             return (
-              <Col sm={24} md={12} lg={8} xl={6} xxl={4} key={tool.type}>
+              <Col sm={24} md={12} lg={8} xl={6} xxl={4} key={item.type}>
                 <Card
                   hoverable
-                  className=" rounded"
+                  className="rounded"
                   style={{ width: "100%" }}
                   onClick={() => {
-                    if (!tool.enabled) return;
+                    if (!item.enabled) return;
                     checkIsNeedContactUs(
                       modal,
                       project,
                       () => {
-                        setIsModalOpen({ open: true, type: tool.type });
+                        setIsModalOpen({ open: true, type: item.type });
                       },
                       () => {},
                       true,
@@ -329,20 +356,22 @@ const SocialConnectList = props => {
                   }}
                 >
                   <div className=" flex flex-column items-center" style={{}}>
-                    <Avatar
-                      src={tool.icon}
-                      size={45}
-                      className="bg-white mb1"
-                    ></Avatar>
-                    <Typography.Text ellipsis={true}>
-                      {tool.name}
+                    <Image
+                      preview={false}
+                      src={item.icon}
+                      width={40}
+                      height={40}
+                    ></Image>
+
+                    <Typography.Text className=" mt1" ellipsis={true}>
+                      {item.name}
                     </Typography.Text>
                     <Button
                       type="primary"
                       className=" rounded mt1"
-                      disabled={!tool.enabled}
+                      disabled={!item.enabled}
                     >
-                      {tool.enabled ? "Set up now" : "Coming soon"}
+                      {item.enabled ? "Set up now" : "Coming soon"}
                     </Button>
                   </div>
                 </Card>
@@ -351,7 +380,7 @@ const SocialConnectList = props => {
           })}
         </Row>
       </div>
-      <Card title="Social Connect" className="mt2">
+      <Card title="Campaign" className="mt2">
         {isLoading || isFetching || !project?.id ? (
           <LoadingSpinner message="Loading..." />
         ) : (
@@ -366,12 +395,13 @@ const SocialConnectList = props => {
         )}
       </Card>
       {isModalOpen?.open && (
-        <CreateCampaignModal
+        <CreateCampaignModalNew
           open={isModalOpen?.open}
-          socialType={isModalOpen?.type}
+          campaignType={isModalOpen?.type}
           channel={isModalOpen?.channel}
           location={location}
           project={project}
+          toolIcons={toolIcons}
           router={router}
           onSuccess={() => {
             refetch();
@@ -392,4 +422,4 @@ const mapStateToProps = state => {
   };
 };
 
-export default connect(mapStateToProps)(SocialConnectList);
+export default connect(mapStateToProps)(CampaignListNew);
