@@ -259,7 +259,7 @@ const gamefiData = [
       {
         "label": "Single GameFi Protocos Stats",
         "value": "single-gamefi-protocos-stats",
-        "publicUuid": "5138a6a9-6bdd-4d95-a00f-7f330e555aad",
+        "publicUuid": "5d0b85bb-56e1-48cf-9d5c-40dbccd87faa",
       },
     ],
   },
