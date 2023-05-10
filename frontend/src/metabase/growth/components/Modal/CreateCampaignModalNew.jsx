@@ -44,8 +44,8 @@ const layout = {
   wrapperCol: { span: 24 },
 };
 const horizontalLayout = {
-  labelCol: { span: 6 },
-  wrapperCol: { span: 18 },
+  labelCol: { span: 4 },
+  wrapperCol: { span: 20 },
 };
 const tailLayout = {
   wrapperCol: { offset: 0, span: 24 },
@@ -178,14 +178,6 @@ const CreateCampaignModalNew = props => {
   };
 
   const setupSelectedChannel = (socialType, campaign) => {
-    // const channelType = socialType;
-    // const channelTemp = campaign?.channels?.find(
-    //   item => item.channelName === channelType,
-    // );
-    // if (channelTemp) {
-    //   setChannelSelectedValue([channelTemp]);
-    // }
-    console.log("setupSelectedChannel", campaign);
     setChannelSelectedValue([campaign?.channels?.[0]]);
   };
 
@@ -373,7 +365,6 @@ const CreateCampaignModalNew = props => {
       details: campaignDetails,
       channels: channelsParam,
     };
-    console.log("requestParam", requestParam);
     addCampaign(requestParam)
       .then(result => {
         message.success("The campaign creation was successful.");
@@ -450,7 +441,7 @@ const CreateCampaignModalNew = props => {
                 <div className="rounded mt1">
                   <Form.Item
                     name="TargetChannel"
-                    label="Target Channel"
+                    label="Type"
                     {...horizontalLayout}
                     valuePropName="value"
                     rules={[{ required: true }]}
@@ -515,10 +506,10 @@ const CreateCampaignModalNew = props => {
                         rules={[{ required: true }]}
                         {...horizontalLayout}
                         name={"TargetCohort"}
-                        label="Target Cohort"
+                        label="Cohort"
                       >
                         <Select
-                          placeholder="Select a target cohort"
+                          placeholder="Select a cohort"
                           mode="multiple"
                           loading={isLoadingCohort}
                           optionLabelProp="label"

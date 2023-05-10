@@ -85,17 +85,31 @@ const CampaignListNew = props => {
             {channels.map(channel => {
               // return <Tag key={channel.id}>{channel.channelName}</Tag>
               return (
-                <Tooltip
-                  key={channel.id}
-                  title={formatType(channel.channelName)}
-                >
-                  <Image
-                    preview={false}
-                    src={toolIcons.get(channel.campaignType)}
-                    width={25}
-                    height={25}
-                  ></Image>
-                </Tooltip>
+                <>
+                  <Tooltip
+                    key={channel.id}
+                    title={formatType(channel.campaignType)}
+                  >
+                    <Image
+                      preview={false}
+                      src={toolIcons.get(channel.campaignType)}
+                      width={25}
+                      height={25}
+                    ></Image>
+                  </Tooltip>
+                  <Tooltip
+                    key={channel.id}
+                    className="ml1"
+                    title={formatType(channel.channelName)}
+                  >
+                    <Image
+                      preview={false}
+                      src={channelIcons.get(channel.channelName)}
+                      width={25}
+                      height={25}
+                    ></Image>
+                  </Tooltip>
+                </>
               );
             })}
           </div>
@@ -109,13 +123,13 @@ const CampaignListNew = props => {
       render: item => valueFormat(item?.numberOfTotal ?? 0),
     },
     {
-      title: "Number of success",
+      title: "Number of Success",
       dataIndex: "performanceDetails",
       align: "right",
       render: item => valueFormat(item?.numberOfSuccess ?? 0),
     },
     {
-      title: "Number of failed",
+      title: "Number of Failed",
       dataIndex: "performanceDetails",
       align: "right",
       render: item => valueFormat(item?.numberOfFailed ?? 0),
@@ -126,7 +140,7 @@ const CampaignListNew = props => {
       key: "action",
       render: (_, record) => (
         <Space size="middle">
-          <Button
+          {/* <Button
             type="link"
             className="p0"
             onClick={() => {
@@ -138,11 +152,11 @@ const CampaignListNew = props => {
             }}
           >
             View
-          </Button>
+          </Button> */}
           <Button
             className="p0"
             type="link"
-            disabled={!(record?.performanceDetails?.numberOfWalletAddress > 0)}
+            disabled={!(record?.performanceDetails?.numberOfTotal > 0)}
             onClick={() => {
               checkIsNeedContactUs(
                 modal,
@@ -151,7 +165,7 @@ const CampaignListNew = props => {
                   setOpenCreatingCohort({
                     open: true,
                     campaignId: record?.campaignId,
-                    count: record?.performanceDetails?.numberOfWalletAddress,
+                    count: record?.performanceDetails?.numberOfTotal,
                   });
                 },
                 () => {},
@@ -191,6 +205,14 @@ const CampaignListNew = props => {
     ],
     ["Quest", "https://static.footprint.network/campaign_quest_icon.svg"],
     ["Airdrop", "https://static.footprint.network/campaign_airdrop_icon.svg"],
+  ]);
+  // email, telegram, discord
+  const channelIcons = new Map([
+    ["Footprint GA Email", "https://static.footprint.network/icon_email2.png"],
+    ["Email", "https://static.footprint.network/icon_email2.png"],
+    ["FGA:Email", "https://static.footprint.network/icon_email2.png"],
+    ["Telegram", "https://static.footprint.network/20220516201327.png"],
+    ["Discord", "https://static.footprint.network/20220516201343.png"],
   ]);
   // tools : Notification/Quest/Aurdrop
   const toolList = [
@@ -358,7 +380,7 @@ const CampaignListNew = props => {
           })}
         </Row>
       </div>
-      <Card title="Social Connect" className="mt2">
+      <Card title="Campaign" className="mt2">
         {isLoading || isFetching || !project?.id ? (
           <LoadingSpinner message="Loading..." />
         ) : (
