@@ -107,8 +107,8 @@ const CampaignCreate = props => {
           label: item.campaignName ?? item.campaignType,
           // description: item.description,
           value: item.campaignType,
-          disabled: false,
-          // disabled: item.status !== "enable",
+          // disabled: false,
+          disabled: item.status !== "enable",
           ...item,
         });
       });
