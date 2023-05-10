@@ -145,6 +145,9 @@ export const queryPotentialUser = async params => {
 export const queryPotentialUserByFilter = async params => {
   return POST(`/api/v1/fga/potential-user/list/queryByFilter`, params);
 };
+export const createPotentialUserCohortByFilter = async params => {
+  return POST(`/api/v1/fga/potential-user/list/queryByFilter/cohort`, params);
+};
 export const createPotentialUserCohort = async params => {
   return POST(`/api/v1/fga/potential-user/cohort`, params);
 };
