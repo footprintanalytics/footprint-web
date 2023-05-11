@@ -57,6 +57,12 @@ export const onOpenSqlOptimize = createAction(
 export const onCloseSqlOptimize = createAction(
   "metabase/qb/CLOSE_SQL_OPTIMIZE",
 );
+export const onOpenSqlGPT = createAction(
+  "metabase/qb/OPEN_SQL_GPT",
+);
+export const onCloseSqlGPT = createAction(
+  "metabase/qb/CLOSE_SQL_GPT",
+);
 
 export const onOpenTimelines = createAction("metabase/qb/OPEN_TIMELINES");
 export const onCloseTimelines = createAction("metabase/qb/CLOSE_TIMELINES");

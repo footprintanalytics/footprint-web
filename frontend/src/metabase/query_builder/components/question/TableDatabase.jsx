@@ -9,7 +9,7 @@ import { Select } from "antd";
 const TableDatabase = props => {
   const {
     setDatabaseId,
-    card,
+    isNative,
     replace,
     databases,
     isEditing,
@@ -17,7 +17,7 @@ const TableDatabase = props => {
   } = props;
   const onChange = value => {
     setDatabaseId(value);
-    if (get(card, "dataset_query.type") === "native") {
+    if (isNative) {
       replace(Urls.newQuestion({ databaseId: value, type: "native" }));
     } else {
       replace(`/chart?dbId=${value}`);
