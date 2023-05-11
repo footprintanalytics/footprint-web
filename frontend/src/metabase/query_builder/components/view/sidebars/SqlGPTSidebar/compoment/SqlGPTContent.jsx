@@ -34,12 +34,12 @@ const SqlGPTContent = ({
         "is_stream": true,
       }),
       onopen(res) {
-        console.log("onopen", res)
+        console.log("sse onopen", res)
       },
       onmessage: (event) => {
         tempString = tempString.concat(event.data)
         // setResult(tempString)
-        console.log("sql", tempString)
+        console.log("sse sql", tempString)
         const nativeQuery = {
           type: "native",
           native: { query: tempString.replace(/;/g, "") },
@@ -51,9 +51,12 @@ const SqlGPTContent = ({
       onclose() {
         // console.log("Connection closed by the server");
         setLoading(false);
+        if (!(tempString.trim())) {
+          setError("This query did not explore the correct sql. Please try again with a different question.");
+        }
       },
       onerror(err) {
-        // console.log("There was an error from server", err);
+        console.log("sse error", err);
         setLoading(false);
       },
     });
@@ -88,13 +91,13 @@ const SqlGPTContent = ({
           rules={[
              {
                required: true,
-               message: "Please describe your question. e.g. query total mint of doodles and azuki",
+               message: "Please describe your question. e.g. How to query total mint of doodles and azuki",
              },
           ]}
         >
           <Input.TextArea placeholder="Your question" style={{ height: 160 }}/>
         </Form.Item>
-        <div className="text-centered">
+        <div className="text-centered mt1">
           <Button type="primary" htmlType="submit" loading={loading}>Explore</Button>
         </div>
         {success && (
@@ -102,7 +105,7 @@ const SqlGPTContent = ({
         )}
         {error && (
           <div style={{ color: "red", lineHeight: "20px", margin: "12px 0" }}>
-            <h3>The result does not contain sql, please try again. </h3>
+            {/*<h3>The result does not contain sql, please try again. </h3>*/}
             <span>{error}</span>
           </div>
         )}
