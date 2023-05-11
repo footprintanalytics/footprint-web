@@ -1,75 +1,183 @@
 /* eslint-disable react/prop-types */
-import React from "react";
-import { Col, Row } from "antd";
+import React, { useState } from "react";
+import { Col, Row, Select, Skeleton } from "antd";
 import MuiSelect from "metabase/growth/components/MuiSelect";
 import cx from "classnames";
-import FloatInput from "metabase/growth/components/FloatInput";
+import MuiInput from "metabase/growth/components/MuiInput";
+import {
+  getPotentialUseFilterProject,
+  getPotentialUserFilterCollection, getPotentialUserFilterTag,
+  getPotentialUserFilterToken,
+} from "metabase/new-service";
+import { formatTableTitle } from "metabase/lib/formatting/footprint";
+import Icon from "metabase/components/Icon";
 
 export const ItemFilter = props => {
   const {
-    projectData,
-    collectionData,
+    visibleFilterResultData,
+    moreFilterResultData,
     className,
     onSelectChange,
     onFilterChange,
+    onMoreChange,
+    titleColor = "white",
+    isOtherFilter,
+    onCloseAction,
+    selectMoreValue = [],
   } = props;
-  // mock datas
-  const optionsList = [
-    {
-      label: "Project",
-      indicator: "project",
-      ui: "select",
-      comparisonSymbol: "ge",
-      resultFormatFunction: value => {
-        return { protocolSlugs: value ? [value] : [] };
-      },
-      options: projectData?.map(item => {
-        return {
-          value: item.protocolSlug,
-          label: item.name,
-        };
-      }),
-    },
-    {
-      label: "NFT collection",
-      indicator: "nft_collection",
-      ui: "select",
-      comparisonSymbol: "ge",
-      resultFormatFunction: value => {
-        return { collectionSlugs: value ? [value] : [] };
-      },
-      options: collectionData?.map(item => {
-        return {
-          value: item.collectionSlug,
-          label: item.name,
-        };
-      }),
-    },
-    {
-      label: "Net Worth >=",
-      indicator: "netWorth",
-      comparisonSymbol: "gte",
-      ui: "input",
-    },
-    {
-      label: "NFT Holding Value >=",
-      indicator: "nftHoldingValue",
-      comparisonSymbol: "gte",
-      ui: "input",
-    },
-    {
-      label: "Token Holding Value >=",
-      indicator: "tokenHoldingValue",
-      comparisonSymbol: "gte",
-      ui: "input",
-    },
-    {
-      label: "Trading Value(30D) >=",
-      indicator: "tradingValue",
-      comparisonSymbol: "gte",
-      ui: "input",
-    },
-  ];
+  const [openMoreSelect, setOpenMoreSelect] = useState(false);
+
+  const handleChange = (value) => {
+    onMoreChange?.(value, visibleFilterResultData, moreFilterResultData);
+    setOpenMoreSelect(false);
+  };
+
+  const getApiFunction = (item) => {
+    if (item.indicator === "protocolSlugs") {
+      return getPotentialUseFilterProject;
+    }
+    if (item.indicator === "nftCollectionSlugs") {
+      return getPotentialUserFilterCollection;
+    }
+    if (item.indicator === "tokenSlugs") {
+      return getPotentialUserFilterToken;
+    }
+    if (item.indicator === "tags") {
+      return getPotentialUserFilterTag;
+    }
+    return getPotentialUseFilterProject;
+  }
+
+  const getResultMappingFunction = (item) => {
+    let optionsObject = null;
+    optionsObject = (item) => {
+      return {
+        value: item.protocolSlug,
+        label: item.name,
+      };
+    }
+    if (item.indicator === "protocolSlugs") {
+      optionsObject = (item) => {
+          return {
+            value: item.protocolSlug,
+            label: item.name,
+          };
+        }
+
+    }
+    if (item.indicator === "nftCollectionSlugs") {
+      optionsObject = (item) => {
+          return {
+            value: item.collectionSlug,
+            label: item.name,
+          };
+        }
+
+    }
+    if (item.indicator === "tokenSlugs") {
+      optionsObject = (item) => {
+          return {
+            value: item.tokenSlug,
+            label: item.name,
+          };
+        }
+
+    }
+    if (item.indicator === "tags") {
+      optionsObject = (item) => {
+          return {
+            value: item.tag,
+            label: formatTableTitle(item.tag?.replace(/-/g, " ")),
+          };
+        }
+    }
+    return optionsObject;
+  }
+
+  const renderUi = (item) => {
+    if (!item) {
+      return <div />
+    }
+
+    if (item.type === "more") {
+      return (
+        <div className="flex align-center">
+          <div className="more-filter">
+            <div className="more-text"><Icon name="add" size={12} className="mr1"/> Add Filter</div>
+            <Select
+              height={40}
+              open={openMoreSelect}
+              style={{ width: "130px", height: 40 }}
+              label={item.label}
+              options={item.options}
+              value={selectMoreValue}
+              onDropdownVisibleChange={(visible) => setOpenMoreSelect(visible)}
+              bordered={false}
+              showArrow={false}
+              mode="multiple"
+              showSearch={false}
+              onChange={handleChange}
+              dropdownMatchSelectWidth={250}
+            />
+          </div>
+        </div>
+      )
+    }
+    if (item.type === "string" && item.isArray) {
+      return (
+        <MuiSelect
+          height={40}
+          style={{ width: "100%", height: 40 }}
+          label={item.label}
+          onValueChange={value => {
+            onSelectChange?.({
+              "indicator": item.indicator,
+              "comparisonSymbol": "in",
+              "comparisonValue": value ? [value] : null,
+            });
+          }}
+          options={item.options}
+          resultMappingFunction={getResultMappingFunction(item)}
+          apiFunction={getApiFunction(item)}
+          showClose={isOtherFilter}
+          autoFocus={isOtherFilter}
+          defaultOpen={isOtherFilter}
+          dropdownMatchSelectWidth={isOtherFilter ? 250 : null}
+          onCloseAction={() => onCloseAction(item)}
+        />
+      )
+    }
+    return (
+      <MuiInput
+        height={40}
+        style={{ width: "100%", height: 40 }}
+        onValueChange={(val, comparisonSymbol) => {
+          onFilterChange?.({
+            comparisonValue: parseFloat(val),
+            indicator: item.indicator,
+            comparisonSymbol: comparisonSymbol,
+          });
+        }}
+        comparisonSymbol={item.comparisonSymbol}
+        label={item.label}
+        name={item.value}
+        frontSymbol={["netWorth", "nftHoldingValue", "tokenHoldingValue"].includes(item.indicator) ? "$" : ""}
+        showClose={isOtherFilter}
+        autoFocus={isOtherFilter}
+        dropdownMatchSelectWidth={isOtherFilter ? 250 : null}
+        onCloseAction={() => onCloseAction(item)}
+      />
+    )
+  }
+
+  if (!visibleFilterResultData) {
+    return <Skeleton />
+  }
+
+  if (visibleFilterResultData.length === 0) {
+    return <div className="mb1"/>
+  }
+
   return (
     <div
       className={cx(
@@ -77,36 +185,16 @@ export const ItemFilter = props => {
         className,
       )}
     >
-      <span style={{ marginRight: 8, color: "white" }}>Filters:</span>
+      <span style={{ marginRight: 8, color: titleColor }}>Filters:</span>
       <Row gutter={[10, 10]} className="w-full">
-        {optionsList.map(item => (
-          <Col sm={24} md={12} lg={8} xl={6} xxl={4} key={item.label}>
-            {item.ui === "select" ? (
-              <MuiSelect
-                height={40}
-                style={{ width: "100%", height: 40 }}
-                label={item.label}
-                onValueChange={value => {
-                  onSelectChange?.(item.resultFormatFunction?.(value));
-                }}
-                options={item.options}
-              />
-            ) : (
-              <FloatInput
-                height={40}
-                style={{ width: "100%", height: 40 }}
-                onChange={val => {
-                  onFilterChange?.({
-                    comparisonValue: parseFloat(val),
-                    indicator: item.indicator,
-                    comparisonSymbol: item.comparisonSymbol,
-                  });
-                }}
-                label={item.label}
-                // placeholder="Email here please"
-                name={item.value}
-              />
-            )}
+        {visibleFilterResultData?.map((item, index) => (
+          <Col sm={24} md={12} lg={8} xl={6} xxl={4} key={index}>
+            {renderUi(item)}
+          </Col>
+        ))}
+        {moreFilterResultData?.map((item, index) => (
+          <Col sm={24} md={12} lg={8} xl={6} xxl={4} key={`${item.label} ${index}`}>
+            {renderUi(item)}
           </Col>
         ))}
       </Row>

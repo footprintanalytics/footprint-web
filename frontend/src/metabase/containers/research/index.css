@@ -95,9 +95,10 @@
 .feature-side__nav-button {
   position: fixed;
   bottom: 0;
-  padding: 10px 20px;
+  padding: 30px;
   background: var(--color-bg-dark);
   width: 280px;
+  font-size: 18px;
 }
 
 .feature-side__nav-button h4 {

@@ -1,10 +1,13 @@
 /* eslint-disable react/prop-types */
 import React, { useState } from "react";
-import { Space, Tag, Row, Typography, Button } from "antd";
+import { Space, Tag } from "antd";
+import cx from "classnames";
+
 const { CheckableTag } = Tag;
 
 export const QuickFilter = props => {
   const {
+    className,
     optionsList,
     formatFunction,
     isLoading,
@@ -20,7 +23,12 @@ export const QuickFilter = props => {
     onFliterChange?.(checked ? tag : null);
   };
   return (
-    <div className="flex flex-row w-full p1">
+    <div
+      className={cx(
+        "flex flex-row w-full p1",
+        className,
+      )}
+    >
       {/* <Button
         type="text"
         loading={isLoading}

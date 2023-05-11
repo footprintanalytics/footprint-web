@@ -99,8 +99,7 @@ const FeaturesSide = ({
   const renderNavButton = () => {
     return (
       <div className="feature-side__nav-button">
-        <h4>Need more other data?</h4>
-        <Link to={"/dashboards"}><span>{"Explore and customize your analysis on the Analytics APP >>"}</span></Link>
+        <Link to={"/dashboards"}><span>{"Custom Analysis >>"}</span></Link>
       </div>
     )
   }

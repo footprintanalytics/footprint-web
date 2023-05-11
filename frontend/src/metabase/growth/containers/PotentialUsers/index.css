@@ -30,3 +30,35 @@
   height: 400px;
   width: 50%;
 }
+
+.more-filter {
+  width: 100%;
+  margin-left: 16px;
+}
+
+.more-filter-division {
+  border-right: var(--color-primary-dark) 1px solid;
+  height: 36px;
+  margin-left: 6px;
+}
+
+.more-filter .ant-select-selection-overflow {
+  display: none;
+}
+
+.more-filter .ant-select-selection-placeholder {
+  display: none;
+}
+
+.more-filter .ant-select-selector {
+  height: 40px;
+}
+
+.more-filter .more-text {
+  position: absolute;
+  top: 0;
+  margin: 8px 0 0 10px;
+  color: gray;
+  display: flex;
+  align-items: center;
+}

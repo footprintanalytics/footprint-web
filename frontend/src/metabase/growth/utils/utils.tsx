@@ -5,6 +5,21 @@ import { notification, Button, Modal } from "antd";
 import Link from "antd/lib/typography/Link";
 import { PublicApi, maybeUsePivotEndpoint } from "metabase/services";
 
+export function parseDashboardLink(url: string) {
+  if (!url.includes("/@") || !url.includes("footprint.network/")) {
+    return null;
+  }
+  if (url.includes("?")) {
+    url = url.split("?")[0];
+  }
+  const regex = /https?:\/\/[^\s]+\/@([^\/]+)\/([^\/\s]+)/;
+  const match = url.match(regex);
+  const username = match ? match[1] : null;
+  const dashboardName = match ? match[2] : null;
+  if (!username || !dashboardName) return null;
+  return { username, dashboardName };
+}
+
 //  quickFilter --> Quick Filter
 export function formatKeyLabel(label: string) {
   return label
@@ -140,6 +155,9 @@ export function updateDashboardPara(
   const name_index = parameters.findIndex(i => i.slug === newValueKey);
   if (name_index !== -1 && parameterValues[parameters[name_index].id]) {
     set(parameterValues, parameters[name_index].id, newValue);
+    return true
+  }else{
+    return false
   }
 }
 
@@ -245,19 +263,6 @@ export function getGaMenuTabs(
     if (["Token Airdrop"].includes(item.name)) {
       //token airdrop is only for demo account
       disabled = user?.email === "fga@footprint.network" ? false : true;
-    }
-    if (["Campaign"].includes(item.name)) {
-      // TODO: Campaign need to display but disabled temporarily
-      disabled = true;
-      menuTabs.push({
-        key: `${item.name}${children.length > 0 ? "-sub" : ""}`,
-        icon: item.icon,
-        children: children.length > 0 ? children : null,
-        disabled: disabled,
-        label: item.name,
-        dashboard_uuid: item.uuid ?? null,
-        // type: children.length > 0 ? "group" : null,
-      });
     }
     if (!disabled) {
       menuTabs.push({
