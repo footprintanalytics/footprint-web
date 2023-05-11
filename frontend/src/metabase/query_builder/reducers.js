@@ -11,6 +11,7 @@ import {
   TOGGLE_DATA_REFERENCE,
   TOGGLE_TEMPLATE_TAGS_EDITOR,
   TOGGLE_SQL_OPTIMIZE,
+  TOGGLE_SQL_GPT,
   TOGGLE_SNIPPET_SIDEBAR,
   SET_IS_SHOWING_TEMPLATE_TAGS_EDITOR,
   SET_NATIVE_EDITOR_SELECTED_RANGE,
@@ -58,6 +59,8 @@ import {
   onCloseTimelines,
   onOpenSqlOptimize,
   onCloseSqlOptimize,
+  onOpenSqlGPT,
+  onCloseSqlGPT,
   SHOW_TIMELINES,
   HIDE_TIMELINES,
   SELECT_TIMELINE_EVENTS,
@@ -80,6 +83,7 @@ const DEFAULT_UI_CONTROLS = {
   isShowingQuestionInfoSidebar: false,
   isShowingTimelineSidebar: false,
   isShowingSqlOptimizeSidebar: false,
+  isShowingSqlGPTSidebar: false,
   initialChartSetting: null,
   isShowingRawTable: false, // table/viz toggle
   queryBuilderMode: false, // "view" | "notebook" | "dataset"
@@ -102,6 +106,7 @@ const UI_CONTROLS_SIDEBAR_DEFAULTS = {
   isShowingChartTypeSidebar: false,
   isShowingTimelineSidebar: false,
   isShowingSqlOptimizeSidebar: false,
+  isShowingSqlGPTSidebar: false,
   isShowingQuestionInfoSidebar: false,
 };
 
@@ -112,6 +117,7 @@ const CLOSED_NATIVE_EDITOR_SIDEBARS = {
   isShowingDataReference: false,
   isShowingTimelineSidebar: false,
   isShowingSqlOptimizeSidebar: false,
+  isShowingSqlGPTSidebar: false,
 };
 
 function setUIControls(state, changes) {
@@ -195,6 +201,13 @@ export const uiControls = handleActions(
         ...state,
         ...CLOSED_NATIVE_EDITOR_SIDEBARS,
         isShowingSqlOptimizeSidebar: !state.isShowingSqlOptimizeSidebar,
+      }),
+    },
+    [TOGGLE_SQL_GPT]: {
+      next: (state, { payload }) => ({
+        ...state,
+        ...CLOSED_NATIVE_EDITOR_SIDEBARS,
+        isShowingSqlGPTSidebar: !state.isShowingSqlGPTSidebar,
       }),
     },
     [SHOW_SQL_OPTIMIZE]: {
@@ -315,7 +328,17 @@ export const uiControls = handleActions(
       ...CLOSED_NATIVE_EDITOR_SIDEBARS,
       isShowingSqlOptimizeSidebar: true,
     }),
+    [onOpenSqlGPT]: state => ({
+      ...state,
+      ...UI_CONTROLS_SIDEBAR_DEFAULTS,
+      ...CLOSED_NATIVE_EDITOR_SIDEBARS,
+      isShowingSqlGPTSidebar: true,
+    }),
     [onCloseSqlOptimize]: state => ({
+      ...state,
+      ...UI_CONTROLS_SIDEBAR_DEFAULTS,
+    }),
+    [onCloseSqlGPT]: state => ({
       ...state,
       ...UI_CONTROLS_SIDEBAR_DEFAULTS,
     }),

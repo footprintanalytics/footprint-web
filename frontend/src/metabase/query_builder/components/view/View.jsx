@@ -52,6 +52,7 @@ import {
 } from "./View.styled";
 import TagsPanel from "metabase/query_builder/components/view/TagsPanel";
 import SqlOptimizeSidebar from "metabase/query_builder/components/view/sidebars/SqlOptimizeSidebar";
+import SqlGPTSidebar from "metabase/query_builder/components/view/sidebars/SqlGPTSidebar";
 
 const DEFAULT_POPOVER_STATE = {
   aggregationIndex: null,
@@ -217,8 +218,10 @@ class View extends React.Component {
       isShowingSnippetSidebar,
       isShowingTimelineSidebar,
       isShowingSqlOptimizeSidebar,
+      isShowingSqlGPTSidebar,
       isShowingQuestionInfoSidebar,
       toggleSqlOptimize,
+      toggleSqlGPT,
       toggleTemplateTagsEditor,
       toggleDataReference,
       toggleSnippetSidebar,
@@ -263,6 +266,14 @@ class View extends React.Component {
         <SqlOptimizeSidebar
           {...this.props}
           onClose={toggleSqlOptimize}
+        />
+      );
+    }
+    if (isShowingSqlGPTSidebar) {
+      return (
+        <SqlGPTSidebar
+          {...this.props}
+          onClose={toggleSqlGPT}
         />
       );
     }
