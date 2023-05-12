@@ -1,13 +1,14 @@
 /* eslint-disable react/prop-types */
 import React, { useState, useEffect } from "react";
 import { connect } from "react-redux";
+import { Button } from "antd";
 import { ArrowLeftOutlined } from "@ant-design/icons";
 import { getUser, getFgaProject } from "metabase/selectors/user";
 import LandingPage from "./LandingPage";
 import ScanningPage from "./ScanningPage";
+import OptimizePage from "./OptimizePage";
 import ResultPage from "./ResultPage";
 import "animate.css";
-import { Button } from "antd";
 
 const WalletProfile = props => {
   const { router, location, user, project } = props;
@@ -66,7 +67,20 @@ const WalletProfile = props => {
         )}
         {currentStep === "result" && (
           <div>
-            <ResultPage></ResultPage>
+            <ResultPage
+              onOptimize={() => {
+                setCurrentStep("optimizing");
+              }}
+            ></ResultPage>
+          </div>
+        )}
+        {currentStep === "optimizing" && (
+          <div>
+            <OptimizePage
+              onOptimize={() => {
+                setCurrentStep("optimizing");
+              }}
+            ></OptimizePage>
           </div>
         )}
       </div>

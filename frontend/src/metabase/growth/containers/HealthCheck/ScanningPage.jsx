@@ -43,19 +43,25 @@ const ScanningPage = props => {
       animationData: data_scanning,
     });
     // animation.play();
-    const intervalTime = 100;
-    const totalTime = 5000;
-    let timerId = setInterval(() => {
-      setPercent(percent => percent + intervalTime / (totalTime / 100));
-    }, intervalTime);
-    setTimeout(() => {
-      clearInterval(timerId);
-    }, 6000);
-
+    startCountdown(5000);
     return () => {
       animation?.destroy();
     };
   }, []);
+
+  const startCountdown = totalTime => {
+    const intervalTime = 100;
+    let timerId = setInterval(() => {
+      setPercent(
+        percent => percent + Math.ceil((intervalTime * 100) / totalTime),
+      );
+    }, intervalTime);
+    setTimeout(() => {
+      clearInterval(timerId);
+      onCheckFinish?.();
+    }, totalTime + intervalTime);
+  };
+
   const [checkItems, setCheckItems] = useState([
     {
       title: "Holdings score",

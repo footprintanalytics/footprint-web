@@ -31,20 +31,25 @@ const { Text } = Typography;
 import "animate.css";
 
 const ResultPage = props => {
-  const { router, children, user, project } = props;
+  const { router, children, user, project, onOptimize } = props;
   const ref = useRef();
   const [cohortId, setCohortId] = useState(router?.location?.query?.id);
-
-  // useEffect(() => {
-  //   const animation = lottie.loadAnimation({
-  //     container: ref.current,
-  //     renderer: "svg",
-  //     loop: true,
-  //     autoplay: true,
-  //     animationData: data_scanning,
-  //   });
-  // }, []);
-
+  const [score, setScore] = useState(0);
+  useEffect(() => {
+    startCountdown(2000, 90);
+  }, []);
+  const startCountdown = (totalTime, targetScore) => {
+    const intervalTime = 2000 / targetScore;
+    let timerId = setInterval(() => {
+      setScore(
+        score => score + Math.floor(intervalTime / (totalTime / targetScore)),
+      );
+    }, intervalTime);
+    setTimeout(() => {
+      clearInterval(timerId);
+      setScore(targetScore);
+    }, totalTime + intervalTime);
+  };
   const [checkItems, setCheckItems] = useState([
     {
       title: "Holdings score",
@@ -110,14 +115,20 @@ const ResultPage = props => {
                     </span>
                   </div>
                 )}
-                percent={90}
+                percent={score}
                 strokeColor={{ "0%": "#108ee9", "100%": "#87d068" }}
               />
             </div>
             <div className="flex-1 flex flex-col mx3 w-full animate__animated animate__faster animate__zoomIn">
               <h1> 3 points need to be optimized </h1>
               <div>
-                <Button className="mt2" type="primary">
+                <Button
+                  className="mt2"
+                  type="primary"
+                  onClick={() => {
+                    onOptimize?.();
+                  }}
+                >
                   Optimize wallet list
                 </Button>
               </div>
@@ -130,22 +141,28 @@ const ResultPage = props => {
                   key={item?.title}
                   style={{
                     alignItems: "flex-start",
-                    backgroundColor: "#131723",
+                    // backgroundColor: "#131723",
                   }}
                   className={`animate__animated animate__faster animate__fadeInDown animate__delay-${
                     1 + index
                   } flex flex-row  w-full mt4 p2 rounded`}
                 >
-                  <div className="flex flex-row items-center w-1_3">
-                    <Avatar src={item?.icon} size={42}></Avatar>
-                    <h3 className="ml1">{item.title} </h3>
+                  <div
+                    className="flex flex-row items-center"
+                    style={{ width: "40%" }}
+                  >
+                    <Avatar src={item?.icon} size={32}></Avatar>
+                    <h2 className="ml1">{item.title} </h2>
                   </div>
 
                   <div className="flex flex-col flex-full ml2">
+                    <h3 style={{ marginTop: 5 }}>
+                      {item?.items?.length} optimization points were identified.
+                    </h3>
                     {item?.items?.map((subItem, subIndex) => {
                       return (
-                        <div key={subIndex} className="flex flex-row">
-                          <Typography.Text className="mb1">
+                        <div key={subIndex} className="flex flex-row mt1">
+                          <Typography.Text type="secondary" className="">
                             {subItem?.title}
                           </Typography.Text>
                         </div>

@@ -190,6 +190,9 @@
 .mt-650 {
   margin-top: 650px;
 }
+.w-2_5{
+  width: '40%';
+}
 .items-center {
   align-items: center;
 }
