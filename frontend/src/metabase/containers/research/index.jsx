@@ -13,6 +13,8 @@ import { push, replace } from "react-router-redux";
 import _ from "underscore";
 import { withRouter } from "react-router";
 import { Select } from "antd";
+import Meta from "metabase/components/Meta";
+import { formatTitle } from "metabase/lib/formatting";
 
 const Index = props => {
   const {
@@ -93,31 +95,36 @@ const Index = props => {
     )
   }
 
+  const title = formatTitle(`${classify} Research`);
+
   return (
-    <div className="Features bg-gray flex">
-      <div className="Features-side">
-        {renderSelectClassify()}
-        {menu && subMenu && (
-          <FeaturesSide
-            defaultMenu={menu}
-            defaultSubMenu={subMenu}
-            type="research"
-            classify={classify}
-            researchData={researchData}
-          />
-        )}
+    <>
+      <Meta title={title} />
+      <div className="Features bg-gray flex">
+        <div className="Features-side">
+          {renderSelectClassify()}
+          {menu && subMenu && (
+            <FeaturesSide
+              defaultMenu={menu}
+              defaultSubMenu={subMenu}
+              type="research"
+              classify={classify}
+              researchData={researchData}
+            />
+          )}
+        </div>
+        <div
+          className="Features-main"
+          style={{
+            overflow: "hidden"
+          }}
+        >
+          {value && (renderBack())}
+          {renderArea(item)}
+        </div>
+        {children}
       </div>
-      <div
-        className="Features-main"
-        style={{
-          overflow: "hidden"
-        }}
-      >
-        {value && (renderBack())}
-        {renderArea(item)}
-      </div>
-      {children}
-    </div>
+    </>
   );
 };
 
