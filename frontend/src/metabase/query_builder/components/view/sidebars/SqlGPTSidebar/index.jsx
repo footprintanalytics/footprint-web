@@ -20,7 +20,7 @@ const SqlGPTSidebar = ({
   return (
     <SidebarContent
       className="full-height chart-side-bar__char-type"
-      title={t`SQL Explore (Experiment)`}
+      title={t`SQL Assistant`}
       onClose={onClose}
     >
       <SqlGPTContent
