@@ -101,7 +101,7 @@ export const toggleSqlGPT = createAction(
   () => {
     MetabaseAnalytics.trackStructEvent(
       "QueryBuilder",
-      "Toggle sql explore",
+      "Toggle SQL Assistant",
     );
   },
 );
