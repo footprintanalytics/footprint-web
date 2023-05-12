@@ -9,12 +9,12 @@ import { trackStructEvent } from "metabase/lib/analytics";
 const SqlGPTButton = ({ isShowingSqlGPTSidebar, toggleSqlGPT, size = 16 }) => {
 
   return (
-    <Tooltip tooltip={t`SQL Explore`}>
+    <Tooltip tooltip={t`SQL Assistant`}>
       <Button
         className={cx(`ml1 Question-header-btn`, {
           "Question-header-btn--primary": isShowingSqlGPTSidebar,
         })}
-        icon="radar"
+        icon="gpt"
         iconColor="#7A819B"
         iconSize={size}
         onClick={() => {
