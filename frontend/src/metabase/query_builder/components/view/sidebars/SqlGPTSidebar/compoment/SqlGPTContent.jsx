@@ -37,7 +37,11 @@ const SqlGPTContent = ({
         console.log("sse onopen", res)
       },
       onmessage: (event) => {
-        tempString = tempString.concat(event.data)
+        let data = event.data;
+        if (!data) {
+          data = " ";
+        }
+        tempString = tempString.concat(data)
         // setResult(tempString)
         console.log("sse sql", tempString)
         const nativeQuery = {
