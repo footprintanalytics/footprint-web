@@ -333,6 +333,10 @@ export default {
   GaProjectContainer: loadable(() =>
     import("metabase/growth/containers/Project"),
   ),
+  GaHealthCheck: loadable(() =>
+    import("metabase/growth/containers/HealthCheck/HealthCheck"),
+  ),
+
   // Metadata / Data model
   DataModelApp: loadable(() =>
     import("metabase/admin/datamodel/containers/DataModelApp"),

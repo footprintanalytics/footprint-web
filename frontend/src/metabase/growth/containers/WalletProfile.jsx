@@ -14,8 +14,6 @@ import { connect } from "react-redux";
 import cx from "classnames";
 import { getUser, getFgaProject } from "metabase/selectors/user";
 import { getOssUrl } from "metabase/lib/image";
-import { getGrowthProjectPath } from "../utils/utils";
-import { isAddress } from "metabase-lib/types/utils/isa";
 import { wallet_profile_link } from "../utils/data";
 const { Text } = Typography;
 

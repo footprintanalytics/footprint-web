@@ -19,7 +19,7 @@ import ChannelList from "./ChannelList";
 import WalletProfile from "./WalletProfile";
 import MyAnalysis from "./MyAnalysis";
 import CampaignDetail from "./CampaignDetail";
-import CampaignList from "./CampaignList";
+import HealthCheck from "./HealthCheck/HealthCheck";
 import CampaignListNew from "./CampaignListNew";
 import CustomAnalysis from "./CustomAnalysis";
 import CampaignCreate from "./CampaignCreate";
@@ -247,6 +247,15 @@ const Project = props => {
     if (["Wallet Profile", "WalletProfile"].includes(current_tab)) {
       return (
         <WalletProfile
+          location={location}
+          router={router}
+          project={getProjectObject()}
+        />
+      );
+    }
+    if (["Health Check", "HealthCheck"].includes(current_tab)) {
+      return (
+        <HealthCheck
           location={location}
           router={router}
           project={getProjectObject()}

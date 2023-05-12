@@ -1,5 +1,4 @@
 /* eslint-disable react/prop-types */
-import Icon, { SettingOutlined, CheckCircleTwoTone } from "@ant-design/icons";
 import React, { useEffect, useState } from "react";
 import {
   Avatar,
@@ -17,9 +16,6 @@ import {
 } from "antd";
 import { connect } from "react-redux";
 import { useQuery } from "react-query";
-import Title from "antd/lib/typography/Title";
-import CopyToClipboard from "react-copy-to-clipboard";
-import { Link } from "react-router";
 import { QUERY_OPTIONS } from "metabase/containers/dashboards/shared/config";
 import {
   getCampaignTemplate,
@@ -33,10 +29,6 @@ import {
   createFgaProjectModalShowAction,
 } from "metabase/redux/control";
 import "../../css/utils.css";
-import {
-  checkIsNeedContactUs,
-  getGrowthProjectPath,
-} from "metabase/growth/utils/utils";
 const { Option } = Select;
 const { TextArea } = Input;
 const layout = {

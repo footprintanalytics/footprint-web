@@ -193,3 +193,33 @@
 .items-center {
   align-items: center;
 }
+.animate__delay-1{
+  animation-delay: 0.5s;
+}
+.animate__delay-2{
+  animation-delay: 1.0s;
+}
+.animate__delay-3{
+  animation-delay: 1.5s;
+}
+.animate__delay-4{
+  animation-delay: 2s;
+}
+.animate__delay-5{
+  animation-delay: 2.5s;
+}
+.animate__delay-6{
+  animation-delay: 3s;
+}
+.animate__delay-7{
+  animation-delay: 3.5s;
+}
+.animate__delay-8{
+  animation-delay: 4s;
+}
+.animate__delay-9{
+  animation-delay: 4.5s;
+}
+.animate__delay-10{
+  animation-delay: 5s;
+}
