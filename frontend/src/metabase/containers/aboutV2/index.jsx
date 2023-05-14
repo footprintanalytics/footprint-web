@@ -15,6 +15,7 @@ import AboutDataCoverage from "metabase/containers/aboutV2/components/AboutDataC
 import AboutDemo from "metabase/containers/aboutV2/components/AboutDemo";
 import AboutDepth from "metabase/containers/aboutV2/components/AboutDepth";
 import AboutPartnerV2 from "metabase/containers/aboutV2/components/AboutPartnerV2";
+import AboutGrantedBy from "metabase/containers/aboutV2/components/AboutGrantedBy";
 import HomeFooter from "../home/components/HomeFooter";
 import data from "./data";
 import AboutBacked from "./components/AboutBacked";
@@ -74,6 +75,9 @@ const About = props => {
         </LazyLoadAbout>
         <LazyLoadAbout>
           <AboutPartnerV2 list={data.partnerList} />
+        </LazyLoadAbout>
+        <LazyLoadAbout>
+          <AboutGrantedBy />
         </LazyLoadAbout>
         <div className="About__depth-dividing-line-gray" />
         <LazyLoadAbout>
