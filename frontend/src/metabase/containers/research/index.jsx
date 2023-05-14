@@ -14,7 +14,8 @@ import _ from "underscore";
 import { withRouter } from "react-router";
 import { Select } from "antd";
 import Meta from "metabase/components/Meta";
-import { formatTitle } from "metabase/lib/formatting";
+import { formatSectionTitle } from "metabase/lib/formatting";
+import title from "metabase/hoc/Title";
 
 const Index = props => {
   const {
@@ -95,7 +96,11 @@ const Index = props => {
     )
   }
 
-  const title = formatTitle(`${classify} Research`);
+  const getTitle = (item) => {
+    return item?.label || classify;
+  }
+
+  const title = `${getTitle(item)} - Footprint Analytics`;
 
   return (
     <>
@@ -147,4 +152,5 @@ const mapStateToProps = (state, props) => {
 export default _.compose(
   connect(mapStateToProps, mapDispatchToProps),
   withRouter,
+  title(({ subMenu }) => subMenu && formatSectionTitle(subMenu))
 )(Index);

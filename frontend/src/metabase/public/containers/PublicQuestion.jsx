@@ -279,6 +279,6 @@ class PublicQuestion extends Component {
 
 export default _.compose(
   connect(mapStateToProps, mapDispatchToProps),
-  title(({ card }) => card && card.name),
+  title(({ disableUpdateTitle, card }) => !disableUpdateTitle && card && card.name),
   ExplicitSize({ refreshMode: "debounceLeading" }),
 )(PublicQuestion);
