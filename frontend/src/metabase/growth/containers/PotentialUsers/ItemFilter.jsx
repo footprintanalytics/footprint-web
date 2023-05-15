@@ -6,11 +6,12 @@ import cx from "classnames";
 import MuiInput from "metabase/growth/components/MuiInput";
 import {
   getPotentialUseFilterProject,
-  getPotentialUserFilterCollection, getPotentialUserFilterTag,
+  getPotentialUserFilterCollection,
   getPotentialUserFilterToken,
 } from "metabase/new-service";
 import { formatTableTitle } from "metabase/lib/formatting/footprint";
 import Icon from "metabase/components/Icon";
+import { orderBy } from "lodash";
 
 export const ItemFilter = props => {
   const {
@@ -42,10 +43,10 @@ export const ItemFilter = props => {
     if (item.indicator === "tokenSlugs") {
       return getPotentialUserFilterToken;
     }
-    if (item.indicator === "tags") {
+   /* if (item.indicator === "tags") {
       return getPotentialUserFilterTag;
-    }
-    return getPotentialUseFilterProject;
+    }*/
+    return null;
   }
 
   const getResultMappingFunction = (item) => {
@@ -63,7 +64,6 @@ export const ItemFilter = props => {
             label: item.name,
           };
         }
-
     }
     if (item.indicator === "nftCollectionSlugs") {
       optionsObject = (item) => {
@@ -72,7 +72,6 @@ export const ItemFilter = props => {
             label: item.name,
           };
         }
-
     }
     if (item.indicator === "tokenSlugs") {
       optionsObject = (item) => {
@@ -81,9 +80,8 @@ export const ItemFilter = props => {
             label: item.name,
           };
         }
-
     }
-    if (item.indicator === "tags") {
+    if (item.indicator === "tags" || item.indicator === "projectTags") {
       optionsObject = (item) => {
           return {
             value: item.tag,
@@ -92,6 +90,15 @@ export const ItemFilter = props => {
         }
     }
     return optionsObject;
+  }
+
+  const getItemMappingFunction = (item) => {
+    return (item) => {
+      return {
+        value: item,
+        label: formatTableTitle(item?.replace(/-/g, " ")),
+      };
+    };
   }
 
   const renderUi = (item) => {
@@ -144,6 +151,7 @@ export const ItemFilter = props => {
           defaultOpen={isOtherFilter}
           dropdownMatchSelectWidth={isOtherFilter ? 250 : null}
           onCloseAction={() => onCloseAction(item)}
+          defaultOptions={item.value && item.value.length > 0 ? orderBy(item.value?.map(getItemMappingFunction(item)), "label") : null}
         />
       )
     }
