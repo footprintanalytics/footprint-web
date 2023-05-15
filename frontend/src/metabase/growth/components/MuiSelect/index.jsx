@@ -23,6 +23,9 @@ const MuiSelect = props => {
 
   useEffect(() => {
     const runApi = async () => {
+      if (!apiFunction) {
+        return ;
+      }
       setLoading(true);
       const data = await apiFunction?.();
       setOptions(orderBy(data?.data?.map(resultMappingFunction), "label"));

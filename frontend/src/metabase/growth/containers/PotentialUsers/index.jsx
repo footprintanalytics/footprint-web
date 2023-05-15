@@ -294,8 +294,8 @@ const PotentialUsers = props => {
     type: "more",
     options: [
       {
-        label: "Recent",
-        options: filterResultData?.slice(visibleCount, visibleCount + 1)?.map(i => {
+        label: "Tags",
+        options: filterResultData?.slice(visibleCount, visibleCount + 2)?.map(i => {
           return {
             value: i?.indicator,
             label: i?.label,
@@ -304,7 +304,7 @@ const PotentialUsers = props => {
       },
       {
         label: "Hot",
-        options: filterResultData?.slice(visibleCount + 1, filterResultData?.length)?.map(i => {
+        options: filterResultData?.slice(visibleCount + 2, filterResultData?.length)?.map(i => {
           return {
             value: i.indicator,
             label: i.label,

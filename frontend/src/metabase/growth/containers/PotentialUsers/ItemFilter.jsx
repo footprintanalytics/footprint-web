@@ -45,7 +45,7 @@ export const ItemFilter = props => {
     if (item.indicator === "tags") {
       return getPotentialUserFilterTag;
     }
-    return getPotentialUseFilterProject;
+    return null;
   }
 
   const getResultMappingFunction = (item) => {
