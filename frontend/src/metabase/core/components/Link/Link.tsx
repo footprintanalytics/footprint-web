@@ -22,10 +22,20 @@ const Link = ({
   tooltip,
   ...props
 }: LinkProps): JSX.Element => {
+  //https://www.footprint.network/@rogerD/NFT-Overview-Random-Games-Heros?nft_collection_contract_address=0x6a570bb15bc67968868c19b0ec7dcccdfd8ed089&series_date=past30days
+  let toLink = to;
+  if (location?.pathname?.includes("/growth/") && !to?.includes("/growth/")) {
+    if (to?.includes("/@")) {
+      toLink = to.replace("/@", "/growth/@");
+    } else if (to?.includes("/public/")) {
+      toLink = to.replace("/public/", "/growth/public/");
+    }
+  }
+
   const link = (
     <LinkRoot
       {...props}
-      to={to}
+      to={toLink}
       className={cx(props.className, "Link")}
       disabled={disabled}
       tabIndex={disabled ? -1 : undefined}
