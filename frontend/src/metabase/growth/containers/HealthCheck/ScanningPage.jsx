@@ -64,15 +64,15 @@ const ScanningPage = props => {
 
   const [checkItems, setCheckItems] = useState([
     {
-      title: "Holdings score",
-      description: "Analyzing the performance of wallet Holdings score.",
+      title: "Wallet holding value check",
+      description: "Analyzing the performance of wallet holdings score.",
       status: "success",
       percent: 100,
       icon: "https://static.footprint.network/img_da_bg_2022100833.png",
     },
     {
-      title: "Active score",
-      description: "Analyzing the performance of wallet Active score.",
+      title: "On-chain activities check",
+      description: "Analyzing the performance of wallet active score.",
       status: "success",
       percent: 100,
       icon: "https://static.footprint.network/img_da_bg_2022100834.png",
@@ -85,7 +85,7 @@ const ScanningPage = props => {
       icon: "https://static.footprint.network/img_da_bg_2022100832.png",
     },
     {
-      title: "Trading volume",
+      title: "Trading volume check",
       description: "Analyzing the performance of wallet trading volume.",
       status: "warning",
       percent: 100,
@@ -168,9 +168,9 @@ const ScanningPage = props => {
                       className="animate__animated animate__faster animate__rotateIn"
                       src={
                         item.status === "success"
-                          ? "https://static.footprint.network/20220317121550.png"
+                          ? "https://static.footprint.network/20220317121550.png?x-oss-process=image/resize,m_fill,h_100,w_100"
                           : item.status === "warning"
-                          ? "https://static.footprint.network/icon_warning.png"
+                          ? "https://static.footprint.network/icon_warning.png?x-oss-process=image/resize,m_fill,h_100,w_100"
                           : ""
                       }
                       size={24}

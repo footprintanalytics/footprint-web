@@ -52,41 +52,47 @@ const ResultPage = props => {
   };
   const [checkItems, setCheckItems] = useState([
     {
-      title: "Holdings score",
+      title: "Wallet holding value check",
       icon: "https://static.footprint.network/img_da_bg_2022100833.png",
       items: [
-        { title: "10% wallets are 20" },
-        { title: "20% wallets are 40" },
-        { title: "20% wallets are 60" },
-        { title: "40% wallets are 80" },
-        { title: "10% wallets are 100" },
+        { title: "10% wallets are 20", status: "error" },
+        { title: "20% wallets are 40", status: "error" },
+        { title: "20% wallets are 60", status: "warning" },
+        { title: "40% wallets are 80", status: "warning" },
+        { title: "10% wallets are 100", status: "success" },
       ],
     },
     {
-      title: "Active score",
+      title: "On-chain activities check",
       icon: "https://static.footprint.network/img_da_bg_2022100834.png",
       items: [
-        { title: "10% wallets are 20" },
-        { title: "20% wallets are 40" },
-        { title: "20% wallets are 60" },
-        { title: "30% wallets are 80" },
-        { title: "20% wallets are 100" },
+        { title: "10% wallets are 20", status: "error" },
+        { title: "20% wallets are 40", status: "error" },
+        { title: "20% wallets are 60", status: "warning" },
+        { title: "30% wallets are 80", status: "warning" },
+        { title: "20% wallets are 100", status: "success" },
       ],
     },
     {
       title: "Blacklist checking",
       icon: "https://static.footprint.network/img_da_bg_2022100832.png",
       items: [
-        { title: "3% wallets are Bot" },
-        { title: "6% wallets are Sybil" },
+        { title: "3% wallets are Bot", status: "error" },
+        { title: "6% wallets are Sybil", status: "error" },
       ],
     },
     {
-      title: "Trading volume",
+      title: "Trading volume check",
       icon: "https://static.footprint.network/img_da_bg_2022100831.png",
       items: [
-        { title: "40% wallets lower than avg trading volume" },
-        { title: "60% wallets higher than avg trading volume" },
+        {
+          title: "40% wallets lower than avg trading volume",
+          status: "warning",
+        },
+        {
+          title: "60% wallets higher than avg trading volume",
+          status: "success",
+        },
       ],
     },
   ]);
@@ -134,7 +140,16 @@ const ResultPage = props => {
               </div>
             </div>
           </div>
+
           <div className="flex flex-col w-full pb4">
+            <Alert
+              className={`w-full animate__animated animate__faster animate__zoomIn mt4`}
+              message="23 wallets has no score."
+              // description="23 wallets has no score."
+              type="warning"
+              showIcon
+              // closable
+            />
             {checkItems.map((item, index) => {
               return (
                 <div
@@ -143,28 +158,45 @@ const ResultPage = props => {
                     alignItems: "flex-start",
                     // backgroundColor: "#131723",
                   }}
-                  className={`animate__animated animate__faster animate__fadeInDown animate__delay-${
-                    1 + index
-                  } flex flex-row  w-full mt4 p2 rounded`}
+                  className={` flex flex-row  w-full mt4 p2 rounded animate__animated animate__faster animate__zoomIn`}
                 >
                   <div
                     className="flex flex-row items-center"
                     style={{ width: "40%" }}
                   >
-                    <Avatar src={item?.icon} size={32}></Avatar>
+                    <Avatar src={item?.icon} size={54}></Avatar>
                     <h2 className="ml1">{item.title} </h2>
                   </div>
 
                   <div className="flex flex-col flex-full ml2">
                     <h3 style={{ marginTop: 5 }}>
-                      {item?.items?.length} optimization points were identified.
+                      {item?.items?.filter(i => i.status != "success")?.length}{" "}
+                      optimization points were identified.
                     </h3>
                     {item?.items?.map((subItem, subIndex) => {
                       return (
-                        <div key={subIndex} className="flex flex-row mt1">
+                        <div
+                          key={subIndex}
+                          className={`flex flex-row mt1 justify-between animate__animated animate__faster animate__fadeInDown animate__delay-${
+                            1 + subIndex
+                          }`}
+                        >
                           <Typography.Text type="secondary" className="">
                             {subItem?.title}
                           </Typography.Text>
+                          <Avatar
+                            className={`animate__animated animate__faster animate__rotateIn animate__animated animate__faster animate__fadeInDown animate__delay-${
+                              2 + subIndex
+                            }`}
+                            src={
+                              subItem.status === "success"
+                                ? "https://static.footprint.network/20220317121550.png?x-oss-process=image/resize,m_fill,h_100,w_100"
+                                : subItem.status === "warning"
+                                ? "https://static.footprint.network/icon_warning.png?x-oss-process=image/resize,m_fill,h_100,w_100"
+                                : "https://static.footprint.network/icon_error.png?x-oss-process=image/resize,m_fill,h_100,w_100"
+                            }
+                            size={18}
+                          ></Avatar>
                         </div>
                       );
                     })}
@@ -173,16 +205,6 @@ const ResultPage = props => {
               );
             })}
           </div>
-          <Alert
-            className={`w-full animate__animated animate__faster animate__fadeInDown animate__delay-${
-              checkItems?.length + 1
-            }`}
-            message="23 wallets has no score."
-            // description="23 wallets has no score."
-            type="warning"
-            showIcon
-            // closable
-          />
         </div>
       </Card>
     </div>
