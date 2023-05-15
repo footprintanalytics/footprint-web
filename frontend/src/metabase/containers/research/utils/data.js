@@ -24,7 +24,7 @@ const nftData = [
         "value": "collections",
         "publicUuid": "2538542f-efcf-4399-bc3d-d0bfe97e33a8",
       }, {
-        "label": "Loyalty fees",
+        "label": "Loyalty",
         "value": "loyalty-fees",
         "publicUuid": "c485c035-5688-4371-9943-0752d1152bce",
       }, {
@@ -237,16 +237,9 @@ const gamefiData = [
         "publicUuid": "db808eeb-3709-4a75-8a9b-418236b5b707",
       },
       {
-        "label": "Top Winners",
+        "label": "GameFi Market Leaderboard",
         "value": "top-winners",
         "publicUuid": "68f25843-b845-461e-a494-e7e43ffe2c29",
-        "type": "chart",
-        "search": "?on_date=2023-04-12",
-      },
-      {
-        "label": "Top Losers",
-        "value": "top-losers",
-        "publicUuid": "fbdf3cea-c70c-4540-a9df-b2eb84104ed1",
         "type": "chart",
         "search": "?on_date=2023-04-12",
       },

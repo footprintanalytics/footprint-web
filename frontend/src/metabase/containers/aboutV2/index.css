@@ -1497,6 +1497,29 @@
   padding: 20px 0 80px;
 }
 
+.About__granted-by {
+  max-width: 1920px;
+  text-align: center;
+  padding-bottom: 40px;
+}
+
+.About__granted-by ul {
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  margin: 60px 0;
+}
+
+.About__granted-by ul li {
+  margin: 0 20px;
+  max-width: 454px;
+}
+
+.About__granted-by ul li img {
+  object-fit: cover;
+  width: 100%;
+}
+
 @media screen and (--footprint-breakpoint-max-pad) {
   .About__depth-tabs li {
     width: 160px;

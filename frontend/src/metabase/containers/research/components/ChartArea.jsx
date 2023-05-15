@@ -20,6 +20,7 @@ const DashboardArea = props => {
           location={location}
           isFullscreen={false}
           hideTitle={true}
+          disableUpdateTitle={true}
           hideFooter
         />
       )}

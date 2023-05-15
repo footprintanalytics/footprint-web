@@ -15,6 +15,7 @@ export const MainContainer = styled.div`
 `;
 
 export const LegendContainer = styled.div`
+  line-height: 1.1rem;
   display: ${({ isVertical }) => (isVertical ? "block" : "flex")};
   max-width: ${({ isVertical }) => (isVertical ? "25%" : "")};
   max-width: ${({ isVertical }) => (isVertical ? "min(25%, 20rem)" : "")};
