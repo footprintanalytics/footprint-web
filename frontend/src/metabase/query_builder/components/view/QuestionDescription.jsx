@@ -22,7 +22,7 @@ const QuestionDescription = ({
   const cardName = get(question, "_card.name")
   if (cardName && createMethod !== "preview") {
     return (
-      <Ellipsified lines={3} style={{ maxWidth: 600, lineHeight: 1.3 }}>
+      <Ellipsified lines={3} style={{ maxWidth: 600, lineHeight: 1.3, display: "flex", alignItems: "center" }}>
         {cardName}
       </Ellipsified>
     );

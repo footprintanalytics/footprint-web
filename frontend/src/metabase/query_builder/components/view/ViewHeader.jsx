@@ -59,6 +59,7 @@ import QuestionNotebookButton from "./QuestionNotebookButton";
 import QuestionDescription from "./QuestionDescription";
 import { HeadBreadcrumbs } from "./HeaderBreadcrumbs";
 import "./ViewHeader.css";
+import RunButton from "../RunButton";
 
 const viewTitleHeaderPropTypes = {
   question: PropTypes.object.isRequired,
@@ -647,6 +648,9 @@ function ViewTitleHeaderRightSide(props) {
     card,
     canNativeQuery,
     router,
+    isRunning,
+    runQuestionQuery,
+    cancelQuery,
     downloadImageAction,
     updateQuestion,
   } = props;
@@ -776,6 +780,22 @@ function ViewTitleHeaderRightSide(props) {
             />
           </Tooltip>
         )}
+        <Tooltip tooltip={t`Refresh`}>
+          <RunButton
+            className={cx("text-brand-hover text-dark", {
+              "text-white-hover": isResultDirty,
+            })}
+            iconSize={16}
+            onlyIcon
+            compact
+            iconColor="#7A819B"
+            result={result}
+            isRunning={isRunning}
+            isDirty={isResultDirty}
+            onRun={() => runQuestionQuery({ shouldUpdateUrl: false, ignoreCache: true })}
+            onCancel={cancelQuery}
+          />
+        </Tooltip>
         {canShowSaveUdButton && hasQueryData && (
           <Tooltip tooltip={t`Save chart to ud table`}>
             <Button
