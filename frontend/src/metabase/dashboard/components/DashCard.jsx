@@ -125,7 +125,7 @@ class DashCard extends Component {
         mainCard.display === "tableau" ||
         mainCard.display === "video"))
       ? ""
-      : "18px 24px";
+      : "";
   };
 
   // eslint-disable-next-line complexity

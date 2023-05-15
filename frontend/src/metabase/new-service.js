@@ -121,17 +121,32 @@ export const getCommunityQuickFilter = async params => {
 export const getCommunityWalletAddress = async params => {
   return POST(`/api/v1/fga/community/wallet-address`, params);
 };
+export const getPotentialUseFilter = async params => {
+  return GET(`/api/v1/fga/potential-user/filter`, params);
+};
 export const getPotentialUseFilterProject = async params => {
   return GET(`/api/v1/fga/potential-user/filter/project`, params);
 };
 export const getPotentialUserFilterCollection = async params => {
   return GET(`/api/v1/fga/potential-user/filter/collection`, params);
 };
+export const getPotentialUserFilterToken = async params => {
+  return GET(`/api/v1/fga/potential-user/filter/token`, params);
+};
 export const getPotentialUserFilterTag = async params => {
+  return GET(`/api/v1/fga/potential-user/filter/tag`, params);
+};
+export const getPotentialUserFilterFeaturedTag = async params => {
   return GET(`/api/v1/fga/potential-user/filter/featuredTag`, params);
 };
 export const queryPotentialUser = async params => {
   return POST(`/api/v1/fga/potential-user`, params);
+};
+export const queryPotentialUserByFilter = async params => {
+  return POST(`/api/v1/fga/potential-user/list/queryByFilter`, params);
+};
+export const createPotentialUserCohortByFilter = async params => {
+  return POST(`/api/v1/fga/potential-user/list/queryByFilter/cohort`, params);
 };
 export const createPotentialUserCohort = async params => {
   return POST(`/api/v1/fga/potential-user/cohort`, params);

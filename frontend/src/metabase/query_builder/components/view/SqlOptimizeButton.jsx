@@ -8,7 +8,7 @@ import { trackStructEvent } from "metabase/lib/analytics";
 import { useDebouncedValue } from "metabase/hooks/use-debounced-value";
 import getSqlOptimize from "metabase/query_builder/components/view/sidebars/SqlOptimizeSidebar/helper";
 
-const SqlOptimizeButton = ({ question, isShowingSqlOptimizeSidebar, showSqlOptimize, toggleSqlOptimize, size = 16 }) => {
+const SqlOptimizeButton = ({ question, isShowingSqlOptimizeSidebar, isShowingSqlGPTSidebar, showSqlOptimize, toggleSqlOptimize, size = 16 }) => {
   const [isShow, setIsShow] = useState(false);
   const isSaved = question.isSaved();
   const query = question?.card().dataset_query?.native?.query || "";
@@ -22,13 +22,13 @@ const SqlOptimizeButton = ({ question, isShowingSqlOptimizeSidebar, showSqlOptim
 
 
   useEffect(() => {
-    if (!isSaved && !isShow && hasTips) {
+    if (!isSaved && !isShow && hasTips && !isShowingSqlGPTSidebar) {
       showSqlOptimize();
       // eslint-disable-next-line react-hooks/exhaustive-deps
       setIsShow(true);
     }
-  }, [isShow, isSaved, showSqlOptimize, hasTips]);
-  
+  }, [isShow, isSaved, showSqlOptimize, hasTips, isShowingSqlGPTSidebar]);
+
   return (
     <Tooltip tooltip={t`How to query faster`}>
       <Button

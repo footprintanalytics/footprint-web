@@ -380,6 +380,6 @@ class PublicDashboard extends Component {
 
 export default _.compose(
   connect(mapStateToProps, mapDispatchToProps),
-  title(({ dashboard }) => dashboard && dashboard.name),
+  title(({ disableUpdateTitle, dashboard }) => !disableUpdateTitle && dashboard && dashboard.name),
   DashboardControls,
 )(PublicDashboard);

@@ -13,6 +13,9 @@ import { push, replace } from "react-router-redux";
 import _ from "underscore";
 import { withRouter } from "react-router";
 import { Select } from "antd";
+import Meta from "metabase/components/Meta";
+import { formatSectionTitle } from "metabase/lib/formatting";
+import title from "metabase/hoc/Title";
 
 const Index = props => {
   const {
@@ -93,31 +96,40 @@ const Index = props => {
     )
   }
 
+  const getTitle = (item) => {
+    return item?.label || classify;
+  }
+
+  const title = `${getTitle(item)} - Footprint Analytics`;
+
   return (
-    <div className="Features bg-gray flex">
-      <div className="Features-side">
-        {renderSelectClassify()}
-        {menu && subMenu && (
-          <FeaturesSide
-            defaultMenu={menu}
-            defaultSubMenu={subMenu}
-            type="research"
-            classify={classify}
-            researchData={researchData}
-          />
-        )}
+    <>
+      <Meta title={title} />
+      <div className="Features bg-gray flex">
+        <div className="Features-side">
+          {renderSelectClassify()}
+          {menu && subMenu && (
+            <FeaturesSide
+              defaultMenu={menu}
+              defaultSubMenu={subMenu}
+              type="research"
+              classify={classify}
+              researchData={researchData}
+            />
+          )}
+        </div>
+        <div
+          className="Features-main"
+          style={{
+            overflow: "hidden"
+          }}
+        >
+          {value && (renderBack())}
+          {renderArea(item)}
+        </div>
+        {children}
       </div>
-      <div
-        className="Features-main"
-        style={{
-          overflow: "hidden"
-        }}
-      >
-        {value && (renderBack())}
-        {renderArea(item)}
-      </div>
-      {children}
-    </div>
+    </>
   );
 };
 
@@ -140,4 +152,5 @@ const mapStateToProps = (state, props) => {
 export default _.compose(
   connect(mapStateToProps, mapDispatchToProps),
   withRouter,
+  title(({ subMenu }) => subMenu && formatSectionTitle(subMenu))
 )(Index);

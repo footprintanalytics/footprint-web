@@ -17,8 +17,8 @@ import {
 } from "metabase/redux/control";
 import { FilterOut } from "metabase/growth/components/FilterOut";
 import {
-  createPotentialUserCohort,
   createCommunityUserCohort,
+  createPotentialUserCohortByFilter,
 } from "metabase/new-service";
 
 const CreateCohort2 = ({
@@ -104,6 +104,7 @@ const CreateCohort2 = ({
       </>
     );
   };
+
   const createCohortAction = async () => {
     if (!cohortName) {
       message.error("Please enter the name of your cohort.");
@@ -115,6 +116,15 @@ const CreateCohort2 = ({
     }
     setCreateCohortLoading(true);
     console.log("params", type, params);
+
+    const filters = params.filters || [];
+    if (filterOutValues?.length > 0) {
+      filters.push({
+        "indicator": "excludeTags",
+        "comparisonSymbol": "in",
+        "comparisonValue": filterOutValues
+      })
+    }
     const result =
       type === "Members"
         ? await createCommunityUserCohort({
@@ -122,10 +132,10 @@ const CreateCohort2 = ({
             title: cohortName,
             excludeTags: [...filterOutValues],
           })
-        : await createPotentialUserCohort({
+        : await createPotentialUserCohortByFilter({
             ...omit(params, ["pageSize", "current"]),
             title: cohortName,
-            excludeTags: [...filterOutValues],
+            filters: filters,
           });
     setCohortModalOpen(false);
     setCreateCohortLoading(false);

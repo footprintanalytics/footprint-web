@@ -1,8 +1,8 @@
 import { map, get, intersection } from "lodash";
 import { getTableNameListFromSQL } from "metabase/lib/formatting/footprint";
 export const isRealtimeChart = (dashcard, realtimeList = []) => {
-  const datasetQuery = dashcard.card.dataset_query;
-  if (datasetQuery.type === "native") {
+  const datasetQuery = dashcard?.card?.dataset_query;
+  if (datasetQuery?.type === "native") {
     const tableNameList = getTableNameListFromSQL(datasetQuery.native.query);
     const names = realtimeList.map(item => item.tableName).filter(i => i);
     return names.length > 0 && intersection(tableNameList, names);

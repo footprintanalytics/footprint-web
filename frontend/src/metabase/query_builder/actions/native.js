@@ -94,6 +94,17 @@ export const toggleSqlOptimize = createAction(
     );
   },
 );
+export const TOGGLE_SQL_GPT =
+  "metabase/qb/TOGGLE_SQL_GPT";
+export const toggleSqlGPT = createAction(
+  TOGGLE_SQL_GPT,
+  () => {
+    MetabaseAnalytics.trackStructEvent(
+      "QueryBuilder",
+      "Toggle SQL Assistant",
+    );
+  },
+);
 export const SHOW_SQL_OPTIMIZE =
   "metabase/qb/SHOW_SQL_OPTIMIZE";
 export const showSqlOptimize = createAction(

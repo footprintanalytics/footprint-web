@@ -20,6 +20,7 @@ import WalletProfile from "./WalletProfile";
 import MyAnalysis from "./MyAnalysis";
 import CampaignDetail from "./CampaignDetail";
 import CampaignList from "./CampaignList";
+import CampaignListNew from "./CampaignListNew";
 import CustomAnalysis from "./CustomAnalysis";
 import CampaignCreate from "./CampaignCreate";
 import PotentialUsers from "./PotentialUsers";
@@ -348,7 +349,14 @@ const Project = props => {
       );
     }
     if (current_tab === "Campaign") {
-      return <CampaignList router={router} location={location}></CampaignList>;
+      // return <CampaignList router={router} location={location}></CampaignList>;
+      return (
+        <CampaignListNew
+          router={router}
+          location={location}
+          project={getProjectObject()}
+        ></CampaignListNew>
+      );
     }
     if (current_tab === "CampaignDetail") {
       return (
