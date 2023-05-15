@@ -32,7 +32,6 @@ import "animate.css";
 
 const ResultPage = props => {
   const { router, children, user, project, onOptimize } = props;
-  const ref = useRef();
   const [cohortId, setCohortId] = useState(router?.location?.query?.id);
   const [score, setScore] = useState(0);
   useEffect(() => {
@@ -164,7 +163,10 @@ const ResultPage = props => {
                     className="flex flex-row items-center"
                     style={{ width: "40%" }}
                   >
-                    <Avatar src={item?.icon} size={54}></Avatar>
+                    <div style={{ width: 54, height: 54 }}>
+                      <Avatar src={item?.icon} size={54}></Avatar>
+                    </div>
+
                     <h2 className="ml1">{item.title} </h2>
                   </div>
 
