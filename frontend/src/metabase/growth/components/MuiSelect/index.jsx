@@ -7,10 +7,11 @@ import "./index.css";
 import Icon from "metabase/components/Icon";
 
 const MuiSelect = props => {
-  let { label, value, placeholder, required, onValueChange, resultMappingFunction, apiFunction, showClose, onCloseAction, allowClear, autoFocus, defaultOpen, dropdownMatchSelectWidth } = props;
+  let { label, value, placeholder, required, onValueChange, resultMappingFunction, apiFunction, showClose, onCloseAction, allowClear, autoFocus, defaultOpen, dropdownMatchSelectWidth, defaultOptions } = props;
   const [focus, setFocus] = useState(false);
   const [currentValue, setCurrentValue] = useState(value ?? "");
-  const [options, setOptions] = useState(null);
+  const [options, setOptions] = useState(defaultOptions);
+
   const [loading, setLoading] = useState(false);
   if (!placeholder) {
     placeholder = label;
