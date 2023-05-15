@@ -161,7 +161,7 @@ export const template_gallery = project => {
           category: "GameFi",
           desc: "",
           dashboardName: "GameFi Users Overview",
-          dashboardLink: `/growth/public/dashboard/ece95985-e16c-4a6c-bf95-9d3b523ccfe3?date__=past180days&chain=BNB%20Chain&${params}`,
+          dashboardLink: `/growth/public/dashboard/ece95985-e16c-4a6c-bf95-9d3b523ccfe3?date__=past180days&${params}`,
           id: 3578,
         },
         {
@@ -217,7 +217,7 @@ export const template_gallery = project => {
           desc: "",
           id: 7192,
           dashboardName: "Profit Leaderboard for Collection",
-          dashboardLink: `/growth/public/dashboard/3e9f9af4-93a8-46d4-8ee7-bc472201da7d?collection_contract_address=0xa342f5d851e866e18ff98f351f2c6637f4478db5&${params}`,
+          dashboardLink: `/growth/public/dashboard/3e9f9af4-93a8-46d4-8ee7-bc472201da7d?${params}`,
         },
         {
           category: "NFT",
