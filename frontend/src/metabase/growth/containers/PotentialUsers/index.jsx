@@ -5,7 +5,7 @@ import "../../css/index.css";
 import "./index.css";
 import { push } from "react-router-redux";
 import { connect } from "react-redux";
-import { Alert, Card, Input, Radio, Typography, Space } from "antd";
+import { Alert, Card, Typography } from "antd";
 import { useQuery } from "react-query";
 import { omit, orderBy, union } from "lodash";
 import { WalletList } from "metabase/growth/components/Community/WalletList";
@@ -28,7 +28,7 @@ import { ItemFilter } from "./ItemFilter";
 const PotentialUsers = props => {
   const { router, location, project } = props;
 
-  const visibleCount = 3;
+  // const visibleCount = 3;
 
   const [walletListParams, setWalletListParams] = React.useState({
     pageSize: 10,
@@ -287,15 +287,21 @@ const PotentialUsers = props => {
   };
 
   const filterResultData = filterResult?.data;
-  const visibleFilterResultData = filterResultData?.slice(0, visibleCount);
-  const otherFilterResultData = filterResultData?.slice(visibleCount, filterResultData?.length);
+  const visibleFilterResultData = filterResultData?.filter(item => item.isCommon);
+  const otherFilterResultData = filterResultData?.filter(item => !item.isCommon);
   const moreFilterResultData = filterResultData ? [{
     label: "More",
     type: "more",
-    options: [
+    options: otherFilterResultData?.map(i => {
+      return {
+        value: i?.indicator,
+        label: i?.label,
+      };
+    }) || [],
+    /*options: [
       {
-        label: "Recent",
-        options: filterResultData?.slice(visibleCount, visibleCount + 1)?.map(i => {
+        label: "Tags",
+        options: filterResultData?.slice(visibleCount, visibleCount + 2)?.map(i => {
           return {
             value: i?.indicator,
             label: i?.label,
@@ -304,14 +310,14 @@ const PotentialUsers = props => {
       },
       {
         label: "Hot",
-        options: filterResultData?.slice(visibleCount + 1, filterResultData?.length)?.map(i => {
+        options: filterResultData?.slice(visibleCount + 2, filterResultData?.length)?.map(i => {
           return {
             value: i.indicator,
             label: i.label,
           };
         }) || [],
       },
-    ],
+    ],*/
   }] : [];
 
   return (
