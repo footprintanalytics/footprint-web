@@ -183,6 +183,7 @@ export default class Text extends Component {
 
   handleTextChange(text) {
     this.props.onUpdateVisualizationSettings({ text: text });
+    this.setState({ ...this.state, content: text });
   }
 
   preventDragging = e => e.stopPropagation();
