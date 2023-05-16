@@ -114,6 +114,7 @@ export default class Text extends Component {
 
     this.state = {
       text: "",
+      content: props.settings["text"],
     };
   }
 
@@ -210,6 +211,22 @@ export default class Text extends Component {
 
   componentDidMount() {
     this.handlerTextScreenAdapter();
+    this.formatLink(this.props.settings["text"])
+  }
+
+  async formatLink (content)  {
+    const linkRegex = /\[([^\]]+)\]\(([^)]+)\)/g;
+    let match;
+    const links = [];
+    while ((match = linkRegex.exec(content))) {
+      const [fullMatch, title, url] = match;
+      const formatedUrl = await formatLink2Growth(location?.pathname,url)
+      links.push({ fullMatch, formated:`[${title}](${formatedUrl||url})`});
+    }
+    if(links.length>0){
+      const newContent = links.reduce((acc,link)=>acc.replace(link.fullMatch,link.formated),content)
+      this.setState({...this.state,content:newContent})
+    }
   }
 
   componentWillUnmount() {
@@ -278,7 +295,7 @@ export default class Text extends Component {
       }, {});
     }
 
-    let content = settings["text"];
+    let content = this.state.content;
     if (!_.isEmpty(parametersByTag)) {
       // Temporarily override language to use site language, so that all viewers of a dashboard see parameter values
       // translated the same way.
@@ -361,9 +378,6 @@ export default class Text extends Component {
           <ReactMarkdown
             remarkPlugins={REMARK_PLUGINS}
             linkTarget="_blank"
-            transformLinkUri={(href, children, title) => {
-              return formatLink2Growth(location?.pathname, href);
-            }}
             className={cx(
               "flex-full flex flex-column",
               styles["text-card-markdown"],

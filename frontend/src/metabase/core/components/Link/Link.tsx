@@ -1,4 +1,10 @@
-import React, { CSSProperties, HTMLAttributes, ReactNode } from "react";
+import React, {
+  CSSProperties,
+  HTMLAttributes,
+  ReactNode,
+  useEffect,
+  useState,
+} from "react";
 import Tooltip from "metabase/components/Tooltip";
 import { TooltipProps } from "metabase/components/Tooltip/Tooltip";
 import { LinkRoot } from "./Link.styled";
@@ -23,18 +29,34 @@ const Link = ({
   tooltip,
   ...props
 }: LinkProps): JSX.Element => {
-  const link = (
+  const [link, setLink] = useState(
     <LinkRoot
       {...props}
-      to={formatLink2Growth(location?.pathname, to)}
+      to={to}
       className={cx(props.className, "Link")}
       disabled={disabled}
       tabIndex={disabled ? -1 : undefined}
       aria-disabled={disabled}
     >
       {children}
-    </LinkRoot>
+    </LinkRoot>,
   );
+  useEffect(() => {
+    formatLink2Growth(location?.pathname, to).then(data => {
+      setLink(
+        <LinkRoot
+          {...props}
+          to={data}
+          className={cx(props.className, "Link")}
+          disabled={disabled}
+          tabIndex={disabled ? -1 : undefined}
+          aria-disabled={disabled}
+        >
+          {children}
+        </LinkRoot>,
+      );
+    });
+  }, [to]);
 
   const tooltipProps =
     typeof tooltip === "string"

@@ -40,14 +40,7 @@ const Project = props => {
   const showRefreshButton = user?.id === 10 || user?.id === 22278;
 
   useEffect(() => {
-    console.log(
-      "Project.jsx useEffect menu => ",
-      "current: " + currentMenu,
-      ", new: " + menu,
-      projectObject,
-    );
     if (menu && menu !== currentMenu && projectObject) {
-      console.log("Project.jsx useEffect reset menu to => ", menu);
       setCurrentMenu(menu);
     }
   }, [menu]);
