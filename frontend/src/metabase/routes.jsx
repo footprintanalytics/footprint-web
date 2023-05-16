@@ -253,7 +253,12 @@ export const getRoutes = store => (
       <Route path="/moon-men" component={LazyLoad.NftPage} />
       {/*<Route title={t`Kcc`} path="/kcc" component={LazyLoad.Zkspace} />*/}
       <Route title={t`News`} path="/news" component={LazyLoad.News}>
-        <IndexRoute component={LazyLoad.Featured} />
+        <IndexRoute component={props => <LazyLoad.Articles {...props} type="all" />} />
+        <Route
+          title={t`All`}
+          path="all-article"
+          component={props => <LazyLoad.Articles {...props} type="all" />}
+        />
         <Route
           title={t`Articles`}
           path="articles"
@@ -318,12 +323,6 @@ export const getRoutes = store => (
           path="daily-news"
           hidden
           component={props => <LazyLoad.Articles {...props} type="dailyNews" />}
-        />
-        <Route
-          title={t`All Articles`}
-          path="all-article"
-          hidden
-          component={props => <LazyLoad.Articles {...props} />}
         />
         <Route
           title={t`Write for Us`}

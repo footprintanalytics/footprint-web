@@ -65,12 +65,12 @@ const News = props => {
       >
         Flash
       </Link>
-      <Link
+      {/*<Link
         className="news__publish ml2"
         to="/news/all-article"
       >
         All
-      </Link>
+      </Link>*/}
       {/*<Button
         className="news__publish"
         iconColor="#7A819B"
