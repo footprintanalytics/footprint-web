@@ -256,7 +256,7 @@ export const getRoutes = store => (
         <IndexRoute component={props => <LazyLoad.Articles {...props} type="all" />} />
         <Route
           title={t`All`}
-          path="all-article"
+          path="all"
           component={props => <LazyLoad.Articles {...props} type="all" />}
         />
         <Route

@@ -152,7 +152,7 @@ const rightMenuData = [
       {
         title: "Blog",
         desc: "Analyze the trends of each domain in the Web3 industry",
-        link: "/news/articles",
+        link: "/news/all",
       },
       {
         title: "Academy",

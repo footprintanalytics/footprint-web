@@ -67,7 +67,7 @@ const News = props => {
       </Link>
       {/*<Link
         className="news__publish ml2"
-        to="/news/all-article"
+        to="/news/all"
       >
         All
       </Link>*/}
