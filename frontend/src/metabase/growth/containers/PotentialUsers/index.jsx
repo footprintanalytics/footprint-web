@@ -33,8 +33,9 @@ const PotentialUsers = props => {
   const [walletListParams, setWalletListParams] = React.useState({
     pageSize: 10,
     current: 1,
-    filters: [],
-  });
+    tags: location?.query?.tag ? [location?.query?.tag] : [],
+    filters: []
+  })
 
   const [walletListData, setWalletListData] = React.useState(null);
   const [otherOptionsList, setOtherOptionsList] = React.useState([])
