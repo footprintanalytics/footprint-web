@@ -144,7 +144,7 @@ export const template_gallery = project => {
       items: [
         {
           dashboardName: "MCH Duel Analysis",
-          dashboardLink: `/growth/public/dashboard/d01e55ec-1ad4-4fba-9a5c-282771e3f8d0?date_filter=2022-11-01~2022-12-01&${params}`,
+          dashboardLink: `/growth/public/dashboard/617f6a66-c58d-4c57-8e4f-804f7df26257?date_filter=2023-04-01~2023-04-30&${params}`,
           id: 7873,
         },
         {
