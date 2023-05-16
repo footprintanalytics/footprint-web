@@ -5,6 +5,19 @@ import { notification, Button, Modal } from "antd";
 import Link from "antd/lib/typography/Link";
 import { PublicApi, maybeUsePivotEndpoint } from "metabase/services";
 
+
+export function formatLink2Growth(pathname: string, href: string) {
+  let toLink = href;
+  if (pathname?.includes("/growth/") && !href?.includes("/growth/")) {
+    if (href?.includes("/@")) {
+      toLink = href.replace("/@", "/growth/@");
+    } else if (href?.includes("/public/")) {
+      toLink = href.replace("/public/", "/growth/public/");
+    }
+  }
+  return toLink;
+}
+
 export function parseDashboardLink(url: string) {
   if (!url.includes("/@") || !url.includes("footprint.network/")) {
     return null;

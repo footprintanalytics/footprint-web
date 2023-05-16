@@ -16,6 +16,7 @@ import { Popover } from "antd";
 import { withInstanceLanguage, siteLocale } from "metabase/lib/i18n";
 import { substitute_tags } from "cljs/metabase.shared.parameters.parameters";
 import styles from "./Text.css";
+import { formatLink2Growth } from "metabase/growth/utils/utils";
 
 const getSettingsStyle = settings => ({
   "align-center": settings["text.align_horizontal"] === "center",
@@ -290,7 +291,7 @@ export default class Text extends Component {
       return (
         <div
           className={cx(className, styles.Text, {
-            "padded": !isPreviewing,
+            padded: !isPreviewing,
           })}
         >
           {isPreviewing ? (
@@ -307,19 +308,19 @@ export default class Text extends Component {
           ) : (
             <div className="Text-wrap">
               <div className="full flex-full flex flex-column">
-              <textarea
-                className={cx(
-                  "full flex-full flex flex-column bg-light bordered drag-disabled",
-                  styles["text-card-textarea"],
-                )}
-                name="text"
-                placeholder={t`Write here, and use Markdown if you'd like, and include variables {{like_this}}`}
-                value={settings.text}
-                onChange={e => this.handleTextChange(e.target.value)}
-                // Prevents text cards from dragging when you actually want to select text
-                // See: https://github.com/metabase/metabase/issues/17039
-                onMouseDown={this.preventDragging}
-              />
+                <textarea
+                  className={cx(
+                    "full flex-full flex flex-column bg-light bordered drag-disabled",
+                    styles["text-card-textarea"],
+                  )}
+                  name="text"
+                  placeholder={t`Write here, and use Markdown if you'd like, and include variables {{like_this}}`}
+                  value={settings.text}
+                  onChange={e => this.handleTextChange(e.target.value)}
+                  // Prevents text cards from dragging when you actually want to select text
+                  // See: https://github.com/metabase/metabase/issues/17039
+                  onMouseDown={this.preventDragging}
+                />
               </div>
               <div className={styles["Text-wrap-tip"]}>
                 <Popover
@@ -360,6 +361,9 @@ export default class Text extends Component {
           <ReactMarkdown
             remarkPlugins={REMARK_PLUGINS}
             linkTarget="_blank"
+            transformLinkUri={(href, children, title) => {
+              return formatLink2Growth(location?.pathname, href);
+            }}
             className={cx(
               "flex-full flex flex-column",
               styles["text-card-markdown"],
