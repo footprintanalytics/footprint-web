@@ -4,18 +4,47 @@ import { set } from "lodash";
 import { notification, Button, Modal } from "antd";
 import Link from "antd/lib/typography/Link";
 import { PublicApi, maybeUsePivotEndpoint } from "metabase/services";
+import { dashboardIdInfo } from "metabase/new-service";
 
-
-export function formatLink2Growth(pathname: string, href: string) {
+export async function formatLink2Growth(pathname: string, href: string) {
   let toLink = href;
   if (pathname?.includes("/growth/") && !href?.includes("/growth/")) {
     if (href?.includes("/@")) {
-      toLink = href.replace("/@", "/growth/@");
+      const info = parseDashboardLink(href);
+      if (info) {
+        const query = href.includes("?") ? href.split("?")[1] : "";
+        const data = await getDashboardInfo(
+          info?.dashboardName,
+          info?.username,
+        );
+        if (data?.uuid) {
+          toLink = `https://www.footprint.network/growth/public/dashboard/${data?.uuid}?${query}`;
+        }
+      }
+      // toLink = href.replace("/@", "/growth/@");
     } else if (href?.includes("/public/")) {
       toLink = href.replace("/public/", "/growth/public/");
     }
   }
   return toLink;
+}
+
+export async function getDashboardInfo(
+  urlDashboardName: string,
+  urlUserName: string,
+) {
+  try {
+    const result = await dashboardIdInfo({
+      dashboardName: encodeURIComponent(urlDashboardName),
+      userName: urlUserName,
+    });
+    // /getDashboardInfo
+    // console.log("getDashboardInfo", result);
+    return { id: result?.id, uuid: result?.uuid };
+  } catch (error) {
+    console.log("getDashboardInfo", error);
+    return null;
+  }
 }
 
 export function parseDashboardLink(url: string) {
