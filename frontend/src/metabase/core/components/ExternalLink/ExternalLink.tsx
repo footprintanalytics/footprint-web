@@ -1,5 +1,13 @@
-import React, { AnchorHTMLAttributes, forwardRef, ReactNode, Ref } from "react";
+import React, {
+  AnchorHTMLAttributes,
+  forwardRef,
+  ReactNode,
+  Ref,
+  useEffect,
+  useState,
+} from "react";
 import { getUrlTarget } from "metabase/lib/dom";
+import { formatLink2Growth } from "metabase/growth/utils/utils";
 import { LinkRoot } from "./ExternalLink.styled";
 
 interface Props extends AnchorHTMLAttributes<HTMLAnchorElement> {
@@ -13,6 +21,16 @@ const ExternalLink = forwardRef(function ExternalLink(
   { href, target = getUrlTarget(href), className, children, ...props }: Props,
   ref: Ref<HTMLAnchorElement>,
 ) {
+  // const [link, setLink] = useState(href);
+  // useEffect(() => {
+  //   if (href && ref) {
+  //     formatLink2Growth(location?.pathname, href).then(data => {
+  //       if (data && data !== href) {
+  //         setLink(data);
+  //       }
+  //     });
+  //   }
+  // }, [href, ref]);
   return (
     <LinkRoot
       ref={ref}

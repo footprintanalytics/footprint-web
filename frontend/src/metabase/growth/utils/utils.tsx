@@ -11,7 +11,7 @@ export async function formatLink2Growth(pathname: string, href: string) {
   if (pathname?.includes("/growth/") && !href?.includes("/growth/")) {
     if (href?.includes("/@")) {
       const info = parseDashboardLink(href);
-      if (info) {
+      if (info?.dashboardName && info?.username) {
         const query = href.includes("?") ? href.split("?")[1] : "";
         const data = await getDashboardInfo(
           info?.dashboardName,
@@ -43,7 +43,7 @@ export async function getDashboardInfo(
     return { id: result?.id, uuid: result?.uuid };
   } catch (error) {
     console.log("getDashboardInfo", error);
-    return null;
+    return { id: null, uuid: null };
   }
 }
 
