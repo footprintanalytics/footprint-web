@@ -334,7 +334,7 @@ export default {
     import("metabase/growth/containers/Project"),
   ),
   GaHealthCheck: loadable(() =>
-    import("metabase/growth/containers/HealthCheck/HealthCheck"),
+    import("metabase/growth/containers/HealthCheck/Index"),
   ),
 
   // Metadata / Data model

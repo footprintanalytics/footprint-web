@@ -1,42 +1,22 @@
 /* eslint-disable react/prop-types */
 import React, { useState, useEffect, useRef } from "react";
-import {
-  Button,
-  Alert,
-  Breadcrumb,
-  Progress,
-  Typography,
-  Spin,
-  Avatar,
-  Card,
-  Divider,
-} from "antd";
-import {
-  EditOutlined,
-  LoadingOutlined,
-  DeleteOutlined,
-  FileImageOutlined,
-} from "@ant-design/icons";
+import { Button, Alert, Progress, Typography, Avatar, Card } from "antd";
 import { connect } from "react-redux";
-import { useQuery } from "react-query";
-import lottie from "lottie-web/build/player/lottie_svg";
 import { withRouter } from "react-router";
-import cx from "classnames";
-import { QUERY_OPTIONS } from "metabase/containers/dashboards/shared/config";
 import { getUser, getFgaProject } from "metabase/selectors/user";
-import { getOssUrl } from "metabase/lib/image";
-import { GetFgaCohort } from "metabase/new-service";
-import { data_scanning } from "../../utils/data-scanning";
-const { Text } = Typography;
 import "animate.css";
+import { calculateAvgScore } from "metabase/growth/utils/utils";
 
 const ResultPage = props => {
-  const { router, children, user, project, onOptimize } = props;
+  const { router, children, user, project, onOptimize, data } = props;
   const [cohortId, setCohortId] = useState(router?.location?.query?.id);
   const [score, setScore] = useState(0);
+  const [healthScore, setHealthScore] = useState(0);
   useEffect(() => {
-    startCountdown(2000, 90);
-  }, []);
+    if (healthScore > 0) {
+      startCountdown(2000, healthScore);
+    }
+  }, [healthScore]);
   const startCountdown = (totalTime, targetScore) => {
     const intervalTime = 2000 / targetScore;
     let timerId = setInterval(() => {
@@ -49,52 +29,158 @@ const ResultPage = props => {
       setScore(targetScore);
     }, totalTime + intervalTime);
   };
-  const [checkItems, setCheckItems] = useState([
-    {
-      title: "Wallet holding value check",
-      icon: "https://static.footprint.network/img_da_bg_2022100833.png",
-      items: [
-        { title: "10% wallets are 20", status: "error" },
-        { title: "20% wallets are 40", status: "error" },
-        { title: "20% wallets are 60", status: "warning" },
-        { title: "40% wallets are 80", status: "warning" },
-        { title: "10% wallets are 100", status: "success" },
-      ],
-    },
-    {
-      title: "On-chain activities check",
-      icon: "https://static.footprint.network/img_da_bg_2022100834.png",
-      items: [
-        { title: "10% wallets are 20", status: "error" },
-        { title: "20% wallets are 40", status: "error" },
-        { title: "20% wallets are 60", status: "warning" },
-        { title: "30% wallets are 80", status: "warning" },
-        { title: "20% wallets are 100", status: "success" },
-      ],
-    },
-    {
-      title: "Blacklist checking",
-      icon: "https://static.footprint.network/img_da_bg_2022100832.png",
-      items: [
-        { title: "3% wallets are Bot", status: "error" },
-        { title: "6% wallets are Sybil", status: "error" },
-      ],
-    },
-    {
-      title: "Trading volume check",
-      icon: "https://static.footprint.network/img_da_bg_2022100831.png",
-      items: [
+  useEffect(() => {
+    if (data?.length > 0) {
+      setHealthScore(calculateAvgScore(data, "fgaScore").toFixed(0));
+      const tradingVolumeAvg = calculateAvgScore(data, "tradingVolume");
+      let holdingScore20 = 0;
+      let holdingScore40 = 0;
+      let holdingScore60 = 0;
+      let holdingScore80 = 0;
+      let holdingScore100 = 0;
+      let activityScore20 = 0;
+      let activityScore40 = 0;
+      let activityScore60 = 0;
+      let activityScore80 = 0;
+      let activityScore100 = 0;
+      let botCount = 0;
+      let lessAvgTradingVolume = 0;
+      let moreAvgTradingVolume = 0;
+      data.forEach(item => {
+        item.botScore < 60 && botCount++;
+        item.tradingVolume < tradingVolumeAvg
+          ? lessAvgTradingVolume++
+          : moreAvgTradingVolume++;
+        item.holdingScore < 20 && holdingScore20++;
+        20 <= item.holdingScore && item.holdingScore < 40 && holdingScore40++;
+        40 <= item.holdingScore && item.holdingScore < 60 && holdingScore60++;
+        60 <= item.holdingScore && item.holdingScore < 80 && holdingScore80++;
+        80 <= item.holdingScore &&
+          item.holdingScore <= 100 &&
+          holdingScore100++;
+        item.activityScore < 20 && activityScore20++;
+        20 <= item.activityScore &&
+          item.activityScore < 40 &&
+          activityScore40++;
+        40 <= item.activityScore &&
+          item.activityScore < 60 &&
+          activityScore60++;
+        60 <= item.activityScore &&
+          item.activityScore < 80 &&
+          activityScore80++;
+        80 <= item.activityScore &&
+          item.activityScore <= 100 &&
+          activityScore100++;
+      });
+      setCheckItems([
         {
-          title: "40% wallets lower than avg trading volume",
-          status: "warning",
+          title: "Wallet holding value check",
+          icon: "https://static.footprint.network/img_da_bg_2022100833.png",
+          items: [
+            {
+              title: `${((holdingScore20 / data.length) * 100).toFixed(
+                2,
+              )}% wallets are 20`,
+              status: "error",
+            },
+            {
+              title: `${((holdingScore40 / data.length) * 100).toFixed(
+                2,
+              )}% wallets are 40`,
+              status: "error",
+            },
+            {
+              title: `${((holdingScore60 / data.length) * 100).toFixed(
+                2,
+              )}% wallets are 60`,
+              status: "warning",
+            },
+            {
+              title: `${((holdingScore80 / data.length) * 100).toFixed(
+                2,
+              )}% wallets are 80`,
+              status: "warning",
+            },
+            {
+              title: `${((holdingScore100 / data.length) * 100).toFixed(
+                2,
+              )}% wallets are 100`,
+              status: "success",
+            },
+          ],
         },
         {
-          title: "60% wallets higher than avg trading volume",
-          status: "success",
+          title: "On-chain activities check",
+          icon: "https://static.footprint.network/img_da_bg_2022100834.png",
+          items: [
+            {
+              title: `${((activityScore20 / data.length) * 100).toFixed(
+                2,
+              )}% wallets are 20`,
+              status: "error",
+            },
+            {
+              title: `${((activityScore40 / data.length) * 100).toFixed(
+                2,
+              )}% wallets are 40`,
+              status: "error",
+            },
+            {
+              title: `${((activityScore60 / data.length) * 100).toFixed(
+                2,
+              )}% wallets are 60`,
+              status: "warning",
+            },
+            {
+              title: `${((activityScore80 / data.length) * 100).toFixed(
+                2,
+              )}% wallets are 80`,
+              status: "warning",
+            },
+            {
+              title: `${((activityScore100 / data.length) * 100).toFixed(
+                2,
+              )}% wallets are 100`,
+              status: "success",
+            },
+          ],
         },
-      ],
-    },
-  ]);
+        {
+          title: "Blacklist checking",
+          icon: "https://static.footprint.network/img_da_bg_2022100832.png",
+          items: [
+            {
+              title: `${((botCount / data.length) * 100).toFixed(
+                2,
+              )}% wallets are Bot`,
+              status: "error",
+            },
+            // { title: "6% wallets are Sybil", status: "error" },
+          ],
+        },
+        {
+          title: "Trading volume check",
+          icon: "https://static.footprint.network/img_da_bg_2022100831.png",
+          items: [
+            {
+              title: `${((lessAvgTradingVolume / data.length) * 100).toFixed(
+                2,
+              )}% wallets lower than avg trading volume`,
+              status: "warning",
+            },
+            {
+              title: `${(
+                (1 - lessAvgTradingVolume / data.length) *
+                100
+              ).toFixed(2)}% wallets higher than avg trading volume`,
+              status: "success",
+            },
+          ],
+        },
+      ]);
+    }
+  }, [data]);
+  const [checkItems, setCheckItems] = useState([]);
 
   return (
     <div
@@ -141,14 +227,14 @@ const ResultPage = props => {
           </div>
 
           <div className="flex flex-col w-full pb4">
-            <Alert
+            {/* <Alert
               className={`w-full animate__animated animate__faster animate__zoomIn mt4`}
               message="23 wallets has no score."
               // description="23 wallets has no score."
               type="warning"
               showIcon
               // closable
-            />
+            /> */}
             {checkItems.map((item, index) => {
               return (
                 <div

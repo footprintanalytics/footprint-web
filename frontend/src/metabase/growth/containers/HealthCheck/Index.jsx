@@ -4,18 +4,38 @@ import { connect } from "react-redux";
 import { Button } from "antd";
 import { ArrowLeftOutlined } from "@ant-design/icons";
 import { getUser, getFgaProject } from "metabase/selectors/user";
+import { mock_data } from "../../utils/mock_score_v2";
 import LandingPage from "./LandingPage";
 import ScanningPage from "./ScanningPage";
 import OptimizePage from "./OptimizePage";
 import ResultPage from "./ResultPage";
 import "animate.css";
 
-const WalletProfile = props => {
+const Index = props => {
   const { router, location, user, project } = props;
 
   const [cohort, setCohort] = useState(null);
   //landing, scanning, result,optimizing
   const [currentStep, setCurrentStep] = useState("landing");
+  const [mockData, setMockData] = useState([]);
+  useEffect(() => {
+    setMockData(processData(mock_data));
+  }, []);
+
+  const processData = data => {
+    const result = [];
+    const columns = data.columns;
+    const rows = data.data;
+    rows.map(row => {
+      const obj = {};
+      columns.map((column, index) => {
+        obj[column.name] = row[index];
+      });
+      result.push(obj);
+    });
+    console.log("mockData result", columns, rows?.length, result);
+    return result;
+  };
 
   return (
     <div
@@ -68,6 +88,7 @@ const WalletProfile = props => {
         {currentStep === "result" && (
           <div>
             <ResultPage
+              data={mockData}
               onOptimize={() => {
                 setCurrentStep("optimizing");
               }}
@@ -77,6 +98,7 @@ const WalletProfile = props => {
         {currentStep === "optimizing" && (
           <div>
             <OptimizePage
+              data={mockData}
               onOptimize={() => {
                 setCurrentStep("optimizing");
               }}
@@ -95,4 +117,4 @@ const mapStateToProps = (state, props) => {
   };
 };
 
-export default connect(mapStateToProps)(WalletProfile);
+export default connect(mapStateToProps)(Index);

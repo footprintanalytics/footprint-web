@@ -19,7 +19,7 @@ import ChannelList from "./ChannelList";
 import WalletProfile from "./WalletProfile";
 import MyAnalysis from "./MyAnalysis";
 import CampaignDetail from "./CampaignDetail";
-import HealthCheck from "./HealthCheck/HealthCheck";
+import HealthCheck from "./HealthCheck/Index";
 import CampaignListNew from "./CampaignListNew";
 import CustomAnalysis from "./CustomAnalysis";
 import CampaignCreate from "./CampaignCreate";

@@ -5,6 +5,21 @@ import { notification, Button, Modal } from "antd";
 import Link from "antd/lib/typography/Link";
 import { PublicApi, maybeUsePivotEndpoint } from "metabase/services";
 
+/**
+ *
+ * @param datas : array of object [{name:100}, {}, {}]
+ * @param indexName  : name of index ,ex: name
+ * @returns  average score
+ */
+export function calculateAvgScore(datas = [], indexName:string){
+  if (datas.length === 0) {return 0;}
+  const sum = datas.reduce(
+    (accumulator, currentValue) => accumulator + currentValue[indexName],
+    0,
+  );
+  const average = sum / datas.length;
+  return average;
+}
 
 export function formatLink2Growth(pathname: string, href: string) {
   let toLink = href;

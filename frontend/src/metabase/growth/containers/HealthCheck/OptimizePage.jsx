@@ -1,96 +1,120 @@
 /* eslint-disable react/prop-types */
 import React, { useState, useEffect, useRef } from "react";
-import {
-  Col,
-  Row,
-  Checkbox,
-  Slider,
-  Typography,
-  Spin,
-  Avatar,
-  Card,
-  Divider,
-  Button,
-} from "antd";
-import {
-  EditOutlined,
-  LoadingOutlined,
-  DeleteOutlined,
-  FileImageOutlined,
-} from "@ant-design/icons";
+import { Col, Row, Checkbox, Slider, Typography, Card, Button } from "antd";
 import { connect } from "react-redux";
-import { useQuery } from "react-query";
-import lottie from "lottie-web/build/player/lottie_svg";
 import { withRouter } from "react-router";
-import cx from "classnames";
-import { QUERY_OPTIONS } from "metabase/containers/dashboards/shared/config";
 import { getUser, getFgaProject } from "metabase/selectors/user";
-import { getOssUrl } from "metabase/lib/image";
-import { GetFgaCohort } from "metabase/new-service";
-import { data_scanning } from "../../utils/data-scanning";
-const { Text } = Typography;
 import "animate.css";
+import { calculateAvgScore } from "metabase/growth/utils/utils";
 
 const OptimizePage = props => {
-  const { router, children, user, project, onOptimize } = props;
-  const [cohortId, setCohortId] = useState(router?.location?.query?.id);
-  const [score, setScore] = useState(0);
-
-  const health_score_chart = useRef(null);
+  const { router, children, user, project, onOptimize, data = [] } = props;
+  const [fillterParams, setFillterParams] = useState({
+    holdingScore: 80,
+    activityScore: 80,
+    excludeBot: true,
+  });
+  const [filterResult, setFilterResult] = useState([]);
+  const holding_score_chart = useRef(null);
   const trading_volumn_chart = useRef(null);
   const wallet_account_chart = useRef(null);
 
   useEffect(() => {
-    const chartHealth = window.echarts.init(health_score_chart.current);
-    const chartTrading = window.echarts.init(trading_volumn_chart.current);
-    const chartWallet = window.echarts.init(wallet_account_chart.current);
-    chartHealth.setOption(option);
-    chartTrading.setOption(option);
-    chartWallet.setOption(option);
-  }, []);
+    if (data?.length > 0 && filterResult?.length >= 0) {
+      const chartHolding = window.echarts.init(holding_score_chart.current);
+      const chartTrading = window.echarts.init(trading_volumn_chart.current);
+      const chartWallet = window.echarts.init(wallet_account_chart.current);
+      chartHolding.setOption(
+        parseOption([
+          calculateAvgScore(data, "holdingScore"),
+          calculateAvgScore(filterResult, "holdingScore"),
+        ]),
+      );
+      chartTrading.setOption(
+        parseOption([
+          calculateAvgScore(data, "tradingVolume"),
+          calculateAvgScore(filterResult, "tradingVolume"),
+        ]),
+      );
+      chartWallet.setOption(parseOption([data?.length, filterResult?.length]));
+    }
+  }, [data, filterResult]);
 
-  const option = {
-    xAxis: {
-      type: "category",
-      data: ["before", "after"],
-    },
-    yAxis: {
-      type: "value",
-      splitLine: {
-        show: false,
+  useEffect(() => {
+    if (data?.length > 0 && fillterParams) {
+      const result = data.filter(
+        item =>
+          item.holdingScore >= fillterParams.holdingScore &&
+          item.activityScore >= fillterParams.activityScore &&
+          (fillterParams.excludeBot ? item.botScore > 60 : true),
+      );
+      setFilterResult(result);
+      // chartWallet?.setOption(option([data?.length, result?.length]));
+    }
+  }, [data, fillterParams]);
+
+  const parseOption = (datas = [200, 120]) => {
+    const tempDatas = datas.map((item, index) => {
+      return {
+        value: item,
+        itemStyle: {
+          color: index === 0 ? "#1890ff" : item > datas[0] ? "green" : "red",
+        },
+      };
+    });
+    return {
+      xAxis: {
+        type: "category",
+        data: ["before", "after"],
       },
-    },
-    tooltip: {
-      trigger: "axis",
-      axisPointer: {
-        type: "shadow",
-      },
-    },
-    animationEasing: "bounceOut",
-    animationDelayUpdate: function (idx) {
-      return idx * 100;
-    },
-    series: [
-      {
-        data: [200, 140],
-        type: "bar",
-        barWidth: 20,
-        markLine: {
-          animationEasing: "bounceOut",
-          animationDelay: function (idx) {
-            return idx * 200;
-          },
-          Animation: true,
-          lineStyle: {
-            type: "dashed",
-          },
-          label: {
-            show: false, // 不显示标记线上的数值
-          },
-          data: [[{ type: "max" }, { type: "min" }]],
+      yAxis: {
+        type: "value",
+
+        splitLine: {
+          show: false,
         },
       },
-    ],
+      tooltip: {
+        trigger: "axis",
+        axisPointer: {
+          type: "shadow",
+        },
+      },
+      label: {
+        show: false,
+      },
+      animationEasing: "bounceOut",
+      animationDelayUpdate: function (idx) {
+        return idx * 100;
+      },
+      series: [
+        {
+          data: tempDatas,
+          type: "bar",
+          barWidth: 20,
+          markLine: datas[0] !== datas[1] && {
+            animationEasing: "bounceOut",
+            animationDelay: function (idx) {
+              return idx * 200;
+            },
+            Animation: true,
+            lineStyle: {
+              type: "dashed",
+            },
+            label: {
+              show: false,
+            },
+            data: [
+              datas[0] === datas[1]
+                ? { type: "average" }
+                : datas[0] > datas[1]
+                ? [{ type: "max" }, { type: "min" }]
+                : [{ type: "min" }, { type: "max" }],
+            ],
+          },
+        },
+      ],
+    };
   };
 
   return (
@@ -103,8 +127,8 @@ const OptimizePage = props => {
           <div className="flex flex-column p2 flex-full">
             <h3>Holdings score</h3>
             <div
-              id="health_score_chart"
-              ref={health_score_chart}
+              id="holding_score_chart"
+              ref={holding_score_chart}
               style={{ width: "100%", height: 300 }}
             />
             <h3>Wallet account</h3>
@@ -140,41 +164,44 @@ const OptimizePage = props => {
             <h3>Holdings score</h3>
             <Slider
               className="mt2"
-              defaultValue={80}
+              defaultValue={fillterParams.holdingScore}
               max={100}
               min={0}
               marks={{ 0: "0", 100: "100" }}
               onAfterChange={value => {
-                console.log("adjust Holdings score", value);
+                setFillterParams({ ...fillterParams, holdingScore: value });
               }}
             />
             <h3 className="mt4">Active score</h3>
             <Slider
               className="mt2"
-              defaultValue={80}
+              defaultValue={fillterParams.activityScore}
               max={100}
               min={0}
               marks={{ 0: "0", 100: "100" }}
               onAfterChange={value => {
-                console.log("adjust Active score", value);
+                setFillterParams({ ...fillterParams, activityScore: value });
               }}
             />
             <h3 className="mt4">{"Exclude(blacklist)"}</h3>
             <Checkbox.Group
               className="mt2"
               style={{ width: "100%" }}
-              defaultValue={["Bot", "Sybil"]}
-              onChange={checkedValue =>
-                console.log("Active score", checkedValue)
-              }
+              defaultValue={fillterParams.excludeBot ? ["Bot"] : []}
+              onChange={checkedValue => {
+                setFillterParams({
+                  ...fillterParams,
+                  excludeBot: checkedValue.includes("Bot"),
+                });
+              }}
             >
               <Row>
                 <Col span={24}>
                   <Checkbox value="Bot">Bot</Checkbox>
                 </Col>
-                <Col span={24}>
+                {/* <Col span={24}>
                   <Checkbox value="Sybil">Sybil</Checkbox>
-                </Col>
+                </Col> */}
               </Row>
             </Checkbox.Group>
           </div>
