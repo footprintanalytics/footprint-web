@@ -342,5 +342,115 @@ const gamefiData = [
   },
 ]
 
+const chainData = [
+  {
+    "label": "Chain Stats",
+    "value": "chain-stats",
+    "icon": "https://statichk.footprint.network/icon_side_analysis.png",
+    "subMenus": [
+      {
+        "label": "Single Chain Stats",
+        "value": "single-chain-stats",
+        "publicUuid": "34596daa-c683-49b3-b182-b7698c585729",
+      },
+    ],
+  },
+  {
+    "label": "Chain Trends",
+    "value": "chain-trends",
+    "subMenus": [
+      {
+        "label": "Top Chains",
+        "value": "top-chains",
+        "publicUuid": "83af3336-a4d4-4ba6-8d83-c7080a27de2a",
+        "type": "chart",
+      },
+    ],
+  },
+  {
+    "label": "Bridge Stats",
+    "value": "bridge-stats",
+    "subMenus": [
+      {
+        "label": "Bridge Overview",
+        "value": "bridge-overview",
+        "publicUuid": "5e10b775-d392-4ec3-b449-6758456f005c",
+      },
+      {
+        "label": "Bridge by Chain",
+        "value": "bridge-by-chain",
+        "publicUuid": "154f7853-646a-4e3f-95a7-6239e9ba7d8b",
+      },
+      {
+        "label": "Bridge Key Stats",
+        "value": "bridge-key-stats",
+        "publicUuid": "e35d6071-5f1d-4c62-8ba9-6c2e41c67c52",
+      },
+    ],
+  },
+  {
+    "label": "Featured Dashboards",
+    "value": "featured-dashboards",
+    "subMenus": [
+      {
+        "label": "Bitcoin Chain Stats",
+        "value": "bitcoin-chain-stats",
+        "publicUuid": "3211cede-f9d4-4f59-8e4e-393561d38340",
+      },
+      {
+        "label": "Harmony Stats",
+        "value": "harmony-stats",
+        "publicUuid": "280fd659-a3bf-4183-97bf-e6d9be075870",
+      },
+      {
+        "label": "Solana GameFi Overview",
+        "value": "solana-gamefi-overview",
+        "publicUuid": "022aa15f-40c7-4dc2-95be-bc498c9114fd",
+      },
+      {
+        "label": "Polygon Deep Dive",
+        "value": "polygon-deep-dive",
+        "publicUuid": "5e0b0446-4395-4974-8079-b3341e5954bc",
+      },
+      {
+        "label": "LayerZero Key Stats",
+        "value": "layerzero-key-stats",
+        "publicUuid": "9f3987d5-ea2a-4447-9b9b-89f5efdb6e86",
+      },
+      {
+        "label": "zkSync Bridge Stats",
+        "value": "zksync-bridge-stats",
+        "publicUuid": "e6d450d4-1571-4261-8f4b-ca4e87fe81bc",
+      },
+      {
+        "label": "zkSync Address Checker",
+        "value": "zksync-address-checker",
+        "publicUuid": "375354e5-8fc0-4858-b075-6a1defa0093f",
+      },
+      {
+        "label": "StarkNet Bridge Stats",
+        "value": "starknet-bridge-stats",
+        "publicUuid": "d3e53215-fa4f-4264-a012-71952b5ecb6c",
+      },
+      {
+        "label": "StarkNet Address Checker",
+        "value": "starknet-address-checker",
+        "publicUuid": "74dc2c6f-b2f7-4445-bfb9-968e5adbc3b4",
+      },
+      {
+        "label": "OASYS Stats",
+        "value": "oasys-stats",
+        "publicUuid": "b9554960-7f9a-4052-ac12-ccb026ff823d",
+      },
+    ],
+  },
+]
 
-export default { nftData, gamefiData };
+const data = {
+  "nft": nftData,
+  "gamefi": gamefiData,
+  "chain": chainData,
+}
+
+
+export default data ;

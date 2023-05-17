@@ -127,6 +127,10 @@ const rightMenuData = [
         title: "GameFi Research",
         link: "/research/gamefi",
       },
+      {
+        title: "Chain Research",
+        link: "/research/chain",
+      },
     ],
   },
   {
@@ -152,7 +156,7 @@ const rightMenuData = [
       {
         title: "Blog",
         desc: "Analyze the trends of each domain in the Web3 industry",
-        link: "/news/articles",
+        link: "/news/all",
       },
       {
         title: "Academy",
