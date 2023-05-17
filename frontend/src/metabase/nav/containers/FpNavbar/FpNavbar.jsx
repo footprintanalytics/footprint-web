@@ -127,6 +127,10 @@ const rightMenuData = [
         title: "GameFi Research",
         link: "/research/gamefi",
       },
+      {
+        title: "Chain Research",
+        link: "/research/chain",
+      },
     ],
   },
   {

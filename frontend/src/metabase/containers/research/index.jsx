@@ -28,7 +28,7 @@ const Index = props => {
     replace,
   } = props;
 
-  const researchData = classify === "gamefi" ? myData.gamefiData : myData.nftData;
+  const researchData = myData[classify];
   const type = "research";
 
 
@@ -74,7 +74,7 @@ const Index = props => {
           style={{ width: 200 }}
           onChange={value => value !== classify && replace(`/${type}/${value}`)}
           options={
-            [{ value: "nft", label: "NFT Research" }, { value: "gamefi", label: "GameFi Research" }]
+            [{ value: "nft", label: "NFT Research" }, { value: "gamefi", label: "GameFi Research" }, { value: "chain", label: "Chain Research" }]
           }
         />
       </div>

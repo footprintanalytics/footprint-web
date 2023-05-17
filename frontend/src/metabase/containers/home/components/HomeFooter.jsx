@@ -53,6 +53,10 @@ const footers = [
         url: "/research/gamefi",
       },
       {
+        label: "Chain Research",
+        url: "/research/chain",
+      },
+      {
         label: "Projects Analytics",
         url: "/projects",
       },
