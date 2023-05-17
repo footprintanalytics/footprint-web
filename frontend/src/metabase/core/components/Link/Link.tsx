@@ -29,34 +29,19 @@ const Link = ({
   tooltip,
   ...props
 }: LinkProps): JSX.Element => {
-  const [link, setLink] = useState(
+  const link = (
     <LinkRoot
       {...props}
-      to={to}
+      to={formatLink2Growth(location?.pathname, to)}
       className={cx(props.className, "Link")}
       disabled={disabled}
       tabIndex={disabled ? -1 : undefined}
       aria-disabled={disabled}
     >
       {children}
-    </LinkRoot>,
+    </LinkRoot>
   );
-  useEffect(() => {
-    formatLink2Growth(location?.pathname, to).then(data => {
-      setLink(
-        <LinkRoot
-          {...props}
-          to={data}
-          className={cx(props.className, "Link")}
-          disabled={disabled}
-          tabIndex={disabled ? -1 : undefined}
-          aria-disabled={disabled}
-        >
-          {children}
-        </LinkRoot>,
-      );
-    });
-  }, [to]);
+
 
   const tooltipProps =
     typeof tooltip === "string"

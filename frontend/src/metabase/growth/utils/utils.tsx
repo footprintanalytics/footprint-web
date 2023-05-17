@@ -6,22 +6,14 @@ import Link from "antd/lib/typography/Link";
 import { PublicApi, maybeUsePivotEndpoint } from "metabase/services";
 import { dashboardIdInfo } from "metabase/new-service";
 
-export async function formatLink2Growth(pathname: string, href: string) {
+export function formatLink2Growth(pathname: string, href: string | undefined) {
+  if (!href) {
+    return "";
+  }
   let toLink = href;
   if (pathname?.includes("/growth/") && !href?.includes("/growth/")) {
     if (href?.includes("/@")) {
-      const info = parseDashboardLink(href);
-      if (info?.dashboardName && info?.username) {
-        const query = href.includes("?") ? href.split("?")[1] : "";
-        const data = await getDashboardInfo(
-          info?.dashboardName,
-          info?.username,
-        );
-        if (data?.uuid) {
-          toLink = `https://www.footprint.network/growth/public/dashboard/${data?.uuid}?${query}`;
-        }
-      }
-      // toLink = href.replace("/@", "/growth/@");
+      toLink = href.replace("/@", "/growth/@");
     } else if (href?.includes("/public/")) {
       toLink = href.replace("/public/", "/growth/public/");
     }

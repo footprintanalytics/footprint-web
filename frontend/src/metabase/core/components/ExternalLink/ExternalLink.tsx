@@ -21,20 +21,10 @@ const ExternalLink = forwardRef(function ExternalLink(
   { href, target = getUrlTarget(href), className, children, ...props }: Props,
   ref: Ref<HTMLAnchorElement>,
 ) {
-  // const [link, setLink] = useState(href);
-  // useEffect(() => {
-  //   if (href && ref) {
-  //     formatLink2Growth(location?.pathname, href).then(data => {
-  //       if (data && data !== href) {
-  //         setLink(data);
-  //       }
-  //     });
-  //   }
-  // }, [href, ref]);
   return (
     <LinkRoot
       ref={ref}
-      href={href}
+      href={formatLink2Growth(location?.pathname, href)}
       className={className || "link"}
       target={target}
       // prevent malicious pages from navigating us away
