@@ -330,6 +330,10 @@ export default {
   ),
   // GrowthAnalytics
   GaAboutContainer: loadable(() => import("metabase/growth/containers/About")),
+  WrapDashboard: loadable(
+    () => import("metabase/growth/containers/WrapDashboard"),
+    options,
+  ),
   GaProjectContainer: loadable(() =>
     import("metabase/growth/containers/Project"),
   ),

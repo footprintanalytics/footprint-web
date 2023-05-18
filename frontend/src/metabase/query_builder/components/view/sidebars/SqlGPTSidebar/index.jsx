@@ -9,6 +9,7 @@ const SqlGPTSidebar = ({
   onClose,
   question,
   updateQuestion,
+  runQuestionQuery,
   query,
 }) => {
   const nativeQuery = question?.card().dataset_query?.native?.query || "";
@@ -26,6 +27,7 @@ const SqlGPTSidebar = ({
       <SqlGPTContent
         sql={sql}
         updateQuestion={updateQuestion}
+        runQuestionQuery={runQuestionQuery}
         question={question}
         databaseId={query.databaseId()}
       />
