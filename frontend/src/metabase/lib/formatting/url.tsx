@@ -1,14 +1,14 @@
 import React from "react";
 
 import ExternalLink from "metabase/core/components/ExternalLink";
+import { formatLink2Growth } from "metabase/growth/utils/utils";
+import { IFRAMED } from "metabase/lib/dom";
 import { getDataFromClicked } from "metabase-lib/parameters/utils/click-behavior";
 import { isURL } from "metabase-lib/types/utils/isa";
 import { renderLinkTextForClick, renderLinkURLForClick } from "./link";
 import { formatValue, getRemappedValue } from "./value";
-import { IFRAMED } from "metabase/lib/dom";
 
 import type { OptionsType } from "./types";
-import { formatLink2Growth } from "metabase/growth/utils/utils";
 
 function isSafeProtocol(protocol: string) {
   return (
@@ -35,14 +35,29 @@ export function formatUrl(value: string, options: OptionsType = {}) {
   const { jsx, rich } = options;
 
   const url = getLinkUrl(value, options);
-
+  console.log("formatUrl", {
+    url,
+    pathname: location?.pathname,
+  });
   if (jsx && rich && url) {
     const text = getLinkText(value, options);
     const targetObject = IFRAMED ? { target: "_blank" } : {};
+    let formated = url;
+    if (
+      location?.pathname?.includes("/growth/") &&
+      !url?.includes("/growth/")
+    ) {
+      if (url?.includes("/@")) {
+        formated = url.replace("/@", "/growth/@");
+      } else if (url?.includes("/public/")) {
+        formated = url.replace("/public/", "/growth/public/");
+      }
+    }
+
     return (
       <ExternalLink
         className="link link--wrappable"
-        href={url}
+        href={formated}
         {...targetObject}
       >
         {text}
