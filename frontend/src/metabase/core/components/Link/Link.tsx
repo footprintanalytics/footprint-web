@@ -56,7 +56,7 @@ const Link = ({
         </LinkRoot>,
       );
     });
-  }, [to]);
+  }, [to, children]);
 
   const tooltipProps =
     typeof tooltip === "string"
