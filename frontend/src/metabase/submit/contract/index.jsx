@@ -1,21 +1,114 @@
 /* eslint-disable react/display-name */
 /* eslint-disable react/prop-types */
 import "./index.css";
-import React from "react";
-import { Table, Form, Row, Col, Button, Typography, Tag } from "antd";
-import { useQuery } from "react-query";
-import { getContractSubmittedList } from "metabase/new-service";
+import React, { useState } from "react";
+import { Button, Col, Form, Radio, Row, Table, Tag } from "antd";
+import { useMutation, useQuery } from "react-query";
+import { connect } from "react-redux";
+import { getUser, getUserIsAdmin } from "metabase/selectors/user";
+import { getContractSubmittedList, reviewContract } from "metabase/new-service";
 import Link from "metabase/core/components/Link";
 import ContractTable from "metabase/submit/contract/components/ContractTable";
 import LoadingSpinner from "metabase/components/LoadingSpinner/LoadingSpinner";
 
 const SubmitContract = props => {
-  const { isLoading, data } = useQuery(
-    ["getContractSubmittedList"],
-    async () => getContractSubmittedList(),
+
+  const statusOptions = [
+    {
+      label: "Pending",
+      value: "pending",
+    },
+    {
+      label: "All",
+      value: "all",
+    }]
+
+  const operatorOptions = [
+    {
+      label: "Audit",
+      value: "all",
+    },
+    {
+      label: "Personal",
+      value: "",
+    }]
+
+  const { isAdmin, user } = props;
+  const [operator, setOperator] = useState("");
+  const [status, setStatus] = useState("all");
+  const [isReviewLoading, setReviewLoading] = useState(false);
+  const params = {
+    operator: operator,
+  }
+
+  const { isLoading, data, refetch } = useQuery(
+    ["getContractSubmittedList", params],
+    async () => getContractSubmittedList(params),
     { refetchOnWindowFocus: false, retry: 0 },
   );
-  console.log("data", data)
+
+  const reviewMutate = useMutation(reviewContract);
+
+  const filterPending = (data) => {
+    const pendingData = data?.map(item => {
+      return {
+        ...item,
+        submit_list: item.submit_list.filter(s => s.status === "pending")
+      }
+    })
+    return pendingData?.filter(p => p.submit_list.length > 0);
+  }
+
+  const renderTable = () => {
+    const tempData = status === "pending" ? filterPending(data) : data;
+    if (isLoading) {
+      return (<LoadingSpinner message="Loading..." />)
+    }
+    if (!tempData || tempData?.length === 0) {
+      return (
+        <Table
+          size="small"
+          rowKey="_id"
+          dataSource={null}
+          pagination={false}
+        />
+      );
+    }
+
+    return tempData?.map(item => {
+      const isNew = item.submit_list[0].is_new_protocol;
+      return (
+        <div key={item.protocol_name} className="pt2">
+          <div className="flex align-center">
+            <h3 className="my2">{item.protocol_name}</h3>
+            {isNew && (<div className="ml2"><Tag color="#108ee9">New</Tag></div>)}
+          </div>
+          <ContractTable
+            data={item.submit_list}
+            isReviewLoading={isReviewLoading}
+            showAction={operator === "all"}
+            onReviewAction={async (record, status) => {
+              const params = {
+                "contractAddress": record.contract_address,
+                "id": record._id,
+                "status": status, // reject & approved
+                "operator": user?.name,
+              };
+              try {
+                setReviewLoading(true);
+                await reviewMutate.mutateAsync(params)
+                await refetch()
+                setReviewLoading(false);
+              } catch (error) {
+                console.log(error)
+              }
+            }}
+          />
+        </div>
+      )
+    })
+  }
+
   return (
     <div className="SubmitContract">
       <h1>
@@ -48,20 +141,42 @@ const SubmitContract = props => {
           </Col>
         </Row>
       </Form>
-      {isLoading?
-        (<LoadingSpinner message="Loading..." />)
-        :
-        data?.map(item => {
-          return (
-            <div key={item.protocol_name} className="pt2">
-              <h3 className="my2">{item.protocol_name}</h3>
-              <ContractTable data={item.submit_list}/>
-            </div>
-          )
-        })
-      }
+      {isAdmin && (
+        <div
+          className="mb1"
+          style={{ float: "right" }}
+        >
+          {operator === "all" && (
+            <Radio.Group
+              options={statusOptions}
+              onChange={e => {
+                setStatus(e.target.value)
+              }}
+              value={status}
+              optionType="button"
+              buttonStyle="solid"
+            />
+          )}
+          <Radio.Group
+            className="ml3"
+            options={operatorOptions}
+            onChange={e => {
+              setOperator(e.target.value)
+            }}
+            value={operator}
+            optionType="button"
+            buttonStyle="solid"
+          />
+        </div>
+      )}
+      {renderTable()}
     </div>
   );
 };
 
-export default SubmitContract;
+const mapStateToProps = (state, props) => ({
+  isAdmin: getUserIsAdmin(state, props),
+  user: getUser(state),
+});
+
+export default connect(mapStateToProps)(SubmitContract);

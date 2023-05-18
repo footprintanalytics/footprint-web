@@ -1,11 +1,11 @@
 /* eslint-disable react/prop-types */
 /* eslint-disable curly */
 import React from "react";
-import { Table, Tag, Typography } from "antd";
+import { Button, Table, Tag, Typography } from "antd";
 import dayjs from "dayjs";
 
 
-const ContractTable = ({ data }) => {
+const ContractTable = ({ data, onReviewAction, showAction, isReviewLoading }) => {
 
   const columns = [
     {
@@ -28,18 +28,23 @@ const ContractTable = ({ data }) => {
       },
     },
     {
-      title: "Website",
-      width: 250,
-      dataIndex: "website",
+      title: "Protocol Slug",
+      width: 200,
+      dataIndex: "protocol_slug",
     },
     {
       title: "Category",
-      width: 150,
+      width: 120,
       dataIndex: "project_category",
     },
     {
+      title: "Website",
+      width: 300,
+      dataIndex: "website",
+    },
+    {
       title: "Status",
-      width: 200,
+      width: 120,
       dataIndex: "status",
       // filters: [
       //   { text: "pending", value: "pending" },
@@ -60,13 +65,28 @@ const ContractTable = ({ data }) => {
     },
     {
       title: "Submitted at",
-      width: 200,
+      width: 150,
       dataIndex: "submitted_at",
       render: text => {
         return dayjs(text).format("YYYY-MM-DD HH:mm");
       },
     },
-  ];
+    showAction ? {
+      title: "",
+      key: "action",
+      align: "right",
+      width: 200,
+      render: (_, record) => {
+        console.log("record", record)
+        return record.status === "pending" && (
+          <div className="flex justify-evenly">
+            <Button disabled={isReviewLoading} size="small" type="primary" onClick={() => onReviewAction(record, "approved")}>Pass</Button>
+            <Button disabled={isReviewLoading} size="small" type="default" onClick={() => onReviewAction(record, "reject")}>Reject</Button>
+          </div>
+        );
+      },
+    } : null
+  ].filter(i => i);
 
   return (
     <Table
