@@ -5,11 +5,11 @@ import React, {
   useEffect,
   useState,
 } from "react";
+import cx from "classnames";
 import Tooltip from "metabase/components/Tooltip";
 import { TooltipProps } from "metabase/components/Tooltip/Tooltip";
+import { formatUrl2Growth } from "metabase/lib/formatting";
 import { LinkRoot } from "./Link.styled";
-import cx from "classnames";
-import { formatLink2Growth } from "metabase/growth/utils/utils";
 
 export interface LinkProps extends HTMLAttributes<HTMLAnchorElement> {
   to: string;
@@ -29,34 +29,18 @@ const Link = ({
   tooltip,
   ...props
 }: LinkProps): JSX.Element => {
-  const [link, setLink] = useState(
+  const link = (
     <LinkRoot
       {...props}
-      to={to}
+      to={formatUrl2Growth(location?.pathname, to)}
       className={cx(props.className, "Link")}
       disabled={disabled}
       tabIndex={disabled ? -1 : undefined}
       aria-disabled={disabled}
     >
       {children}
-    </LinkRoot>,
+    </LinkRoot>
   );
-  useEffect(() => {
-    formatLink2Growth(location?.pathname, to).then(data => {
-      setLink(
-        <LinkRoot
-          {...props}
-          to={data}
-          className={cx(props.className, "Link")}
-          disabled={disabled}
-          tabIndex={disabled ? -1 : undefined}
-          aria-disabled={disabled}
-        >
-          {children}
-        </LinkRoot>,
-      );
-    });
-  }, [to]);
 
   const tooltipProps =
     typeof tooltip === "string"
