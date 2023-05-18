@@ -43,18 +43,21 @@ const Index = props => {
   const [fetching, setFetching] = useState(false);
   const getData = cohortId => {
     setFetching(true);
+    setDatas([]);
     GetCohortWalletScoreList({ cohortId })
       .then(res => {
         console.log("GetCohortWalletScoreList", res);
         if (res) {
           setDatas(processData(res));
         }
+        setFetching(false);
       })
       .catch(err => {
         message.error(err.message);
+        setCurrentStep("landing");
       })
       .finally(() => {
-        setFetching(false);
+
       });
   };
 
