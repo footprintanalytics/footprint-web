@@ -24,7 +24,7 @@ const ExternalLink = forwardRef(function ExternalLink(
   return (
     <LinkRoot
       ref={ref}
-      href={formatLink2Growth(location?.pathname, href)}
+      href={href}
       className={className || "link"}
       target={target}
       // prevent malicious pages from navigating us away

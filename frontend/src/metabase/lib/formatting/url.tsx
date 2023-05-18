@@ -8,6 +8,7 @@ import { formatValue, getRemappedValue } from "./value";
 import { IFRAMED } from "metabase/lib/dom";
 
 import type { OptionsType } from "./types";
+import { formatLink2Growth } from "metabase/growth/utils/utils";
 
 function isSafeProtocol(protocol: string) {
   return (
@@ -39,7 +40,11 @@ export function formatUrl(value: string, options: OptionsType = {}) {
     const text = getLinkText(value, options);
     const targetObject = IFRAMED ? { target: "_blank" } : {};
     return (
-      <ExternalLink className="link link--wrappable" href={url} {...targetObject}>
+      <ExternalLink
+        className="link link--wrappable"
+        href={url}
+        {...targetObject}
+      >
         {text}
       </ExternalLink>
     );
