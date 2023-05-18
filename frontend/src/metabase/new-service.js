@@ -7,6 +7,34 @@ export const apiGet = async api => {
 };
 
 // FGA Api
+/**
+ * get all the wallet address and their score by cohortId
+ * @param {*} params : {cohortId:1}
+ * @returns
+ */
+export const GetCohortWalletScoreList = async params => {
+  return GET("/api/v1/fga/cohort/health/wallet", params);
+};
+
+/**
+ * save optimize wallet list into a new cohort
+ * @param {*} params
+  params = {
+  "projectId": 0,
+  "cohortId": 0,
+  "title": "string",
+  "holdingScore": 0,
+  "activityScore": 0,
+  "botScore": 0,
+  "tradingVolume": 0,
+  "fgaScore": 0
+}
+ * @returns
+ */
+export const CreateOptimizeWallets2Cohort = async params => {
+  return POST("/api/v1/fga/cohort/health/create-cohort", params);
+};
+
 export const GetThirdpartWebsiteInfo = async params => {
   // params: {
   //   "url": "string",

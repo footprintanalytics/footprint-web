@@ -6,12 +6,24 @@ import { withRouter } from "react-router";
 import { getUser, getFgaProject } from "metabase/selectors/user";
 import "animate.css";
 import { calculateAvgScore } from "metabase/growth/utils/utils";
+import CreateOptimizeCohort from "./CreateOptimizeCohort";
 
 const OptimizePage = props => {
-  const { router, children, user, project, onOptimize, data = [] } = props;
+  const {
+    router,
+    children,
+    user,
+    project,
+    onOptimize,
+    data = [],
+    cohort,
+  } = props;
   const [fillterParams, setFillterParams] = useState({
-    holdingScore: 80,
-    activityScore: 80,
+    holdingScore: parseInt(calculateAvgScore(data, "holdingScore").toFixed(0)),
+    activityScore: parseInt(
+      calculateAvgScore(data, "activityScore").toFixed(0),
+    ),
+    botScore: 60,
     excludeBot: true,
   });
   const [filterResult, setFilterResult] = useState([]);
@@ -41,12 +53,14 @@ const OptimizePage = props => {
   }, [data, filterResult]);
 
   useEffect(() => {
+    console.log("fillterParams data", fillterParams, data);
     if (data?.length > 0 && fillterParams) {
       const result = data.filter(
         item =>
           item.holdingScore >= fillterParams.holdingScore &&
           item.activityScore >= fillterParams.activityScore &&
-          (fillterParams.excludeBot ? item.botScore > 60 : true),
+          item.botScore <= fillterParams.botScore,
+        // (fillterParams.excludeBot ? item.botScore < 60 : true),
       );
       setFilterResult(result);
       // chartWallet?.setOption(option([data?.length, result?.length]));
@@ -58,7 +72,8 @@ const OptimizePage = props => {
       return {
         value: item,
         itemStyle: {
-          color: index === 0 ? "#1890ff" : item > datas[0] ? "green" : "red",
+          color:
+            index === 0 ? "#1890ff" : item > datas[0] ? "#3CB371" : "#DAA520",
         },
       };
     });
@@ -124,34 +139,6 @@ const OptimizePage = props => {
     >
       <Card className="w-full rounded">
         <div className="flex flex-row justify-between w-full ">
-          <div className="flex flex-column p2 flex-full">
-            <h3>Holdings score</h3>
-            <div
-              id="holding_score_chart"
-              ref={holding_score_chart}
-              style={{ width: "100%", height: 300 }}
-            />
-            <h3>Wallet account</h3>
-            <div
-              id="wallet_account_chart"
-              ref={wallet_account_chart}
-              style={{ width: "100%", height: 300 }}
-            />
-            <h3>Trading volume per wallet</h3>
-            <div
-              id="trading_volumn_chart"
-              ref={trading_volumn_chart}
-              style={{ width: "100%", height: 300 }}
-            />
-
-            <div className="flex flex-row items-center justify-center mt4 w-full">
-              <Button type="primary">Check wallet list</Button>
-              <Button type="default" className="ml2">
-                Save as cohort
-              </Button>
-            </div>
-          </div>
-
           {/* config pannel */}
           <div
             className="flex flex-column p2"
@@ -183,7 +170,18 @@ const OptimizePage = props => {
                 setFillterParams({ ...fillterParams, activityScore: value });
               }}
             />
-            <h3 className="mt4">{"Exclude(blacklist)"}</h3>
+            <h3 className="mt4">Bot score</h3>
+            <Slider
+              className="mt2"
+              defaultValue={fillterParams.botScore}
+              max={100}
+              min={0}
+              marks={{ 0: "0", 100: "100" }}
+              onAfterChange={value => {
+                setFillterParams({ ...fillterParams, botScore: value });
+              }}
+            />
+            {/* <h3 className="mt4">{"Exclude(blacklist)"}</h3>
             <Checkbox.Group
               className="mt2"
               style={{ width: "100%" }}
@@ -199,11 +197,45 @@ const OptimizePage = props => {
                 <Col span={24}>
                   <Checkbox value="Bot">Bot</Checkbox>
                 </Col>
-                {/* <Col span={24}>
-                  <Checkbox value="Sybil">Sybil</Checkbox>
-                </Col> */}
               </Row>
-            </Checkbox.Group>
+            </Checkbox.Group> */}
+          </div>
+          <div className="flex flex-column p2 flex-full ml2">
+            <h3>Holdings score</h3>
+            <div
+              id="holding_score_chart"
+              ref={holding_score_chart}
+              style={{ width: "100%", height: 300 }}
+            />
+            <h3>Wallet account</h3>
+            <div
+              id="wallet_account_chart"
+              ref={wallet_account_chart}
+              style={{ width: "100%", height: 300 }}
+            />
+            <h3>Trading volume per wallet</h3>
+            <div
+              id="trading_volumn_chart"
+              ref={trading_volumn_chart}
+              style={{ width: "100%", height: 300 }}
+            />
+
+            <div className="flex flex-row items-center justify-center mt4 w-full">
+              {/* <Button type="primary">Check wallet list</Button> */}
+              {/* <Button type="primary" className="ml2">
+                Save as cohort
+              </Button> */}
+              <CreateOptimizeCohort
+                project={project}
+                router={router}
+                params={{
+                  ...fillterParams,
+                  projectId: project?.id,
+                  cohortId: cohort?.cohortId,
+                }}
+                addressListCount={filterResult?.length}
+              />
+            </div>
           </div>
         </div>
       </Card>

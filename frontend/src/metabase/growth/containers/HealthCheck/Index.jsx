@@ -1,7 +1,7 @@
 /* eslint-disable react/prop-types */
 import React, { useState, useEffect } from "react";
 import { connect } from "react-redux";
-import { Button } from "antd";
+import { Button, message } from "antd";
 import { ArrowLeftOutlined } from "@ant-design/icons";
 import { getUser, getFgaProject } from "metabase/selectors/user";
 import { mock_data } from "../../utils/mock_score_v2";
@@ -10,6 +10,8 @@ import ScanningPage from "./ScanningPage";
 import OptimizePage from "./OptimizePage";
 import ResultPage from "./ResultPage";
 import "animate.css";
+import { GetCohortWalletScoreList } from "metabase/new-service";
+import { error } from "cljs/schema.utils";
 
 const Index = props => {
   const { router, location, user, project } = props;
@@ -17,11 +19,8 @@ const Index = props => {
   const [cohort, setCohort] = useState(null);
   //landing, scanning, result,optimizing
   const [currentStep, setCurrentStep] = useState("landing");
-  const [mockData, setMockData] = useState([]);
-  useEffect(() => {
-    setMockData(processData(mock_data));
-  }, []);
-
+  const [datas, setDatas] = useState([]);
+  const [noScoreCount, setNoScoreCount] = useState(0);
   const processData = data => {
     const result = [];
     const columns = data.columns;
@@ -33,8 +32,30 @@ const Index = props => {
       });
       result.push(obj);
     });
-    console.log("mockData result", columns, rows?.length, result);
-    return result;
+    const fillterData = result.filter(item => item.fgaScore !== null); //filter null fgaScore
+    fillterData.map(item => {
+      item.tradingVolume = item.tradingVolume ?? 0;
+    }); //fill null tradingVolume
+    setNoScoreCount(rows.length - fillterData.length);
+    return fillterData;
+  };
+
+  const [fetching, setFetching] = useState(false);
+  const getData = cohortId => {
+    setFetching(true);
+    GetCohortWalletScoreList({ cohortId })
+      .then(res => {
+        console.log("GetCohortWalletScoreList", res);
+        if (res) {
+          setDatas(processData(res));
+        }
+      })
+      .catch(err => {
+        message.error(err.message);
+      })
+      .finally(() => {
+        setFetching(false);
+      });
   };
 
   return (
@@ -71,6 +92,7 @@ const Index = props => {
             <LandingPage
               onSelectCohort={item => {
                 setCohort(item);
+                getData(item.cohortId);
                 setCurrentStep("scanning");
               }}
             ></LandingPage>
@@ -79,6 +101,7 @@ const Index = props => {
         {currentStep === "scanning" && (
           <div>
             <ScanningPage
+              fetching={fetching}
               onCheckFinish={() => {
                 setCurrentStep("result");
               }}
@@ -88,7 +111,8 @@ const Index = props => {
         {currentStep === "result" && (
           <div>
             <ResultPage
-              data={mockData}
+              data={datas}
+              noScoreCount={noScoreCount}
               onOptimize={() => {
                 setCurrentStep("optimizing");
               }}
@@ -98,7 +122,8 @@ const Index = props => {
         {currentStep === "optimizing" && (
           <div>
             <OptimizePage
-              data={mockData}
+              data={datas}
+              cohort={cohort}
               onOptimize={() => {
                 setCurrentStep("optimizing");
               }}

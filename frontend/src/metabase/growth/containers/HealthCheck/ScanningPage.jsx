@@ -31,9 +31,10 @@ const { Text } = Typography;
 import "animate.css";
 
 const ScanningPage = props => {
-  const { router, children, user, project, onCheckFinish } = props;
+  const { router, children, user, project, onCheckFinish, fetching } = props;
   const ref = useRef();
   const [percent, setPercent] = useState(0);
+  const [loading, setLoading] = useState(false);
   useEffect(() => {
     const animation = lottie.loadAnimation({
       container: ref.current,
@@ -43,22 +44,31 @@ const ScanningPage = props => {
       animationData: data_scanning,
     });
     // animation.play();
-    startCountdown(5000);
+    startCountdown(8000);
     return () => {
       animation?.destroy();
     };
   }, []);
+  useEffect(() => {
+    if (!loading && !fetching) {
+      onCheckFinish?.();
+    }
+  }, [loading, fetching]);
 
   const startCountdown = totalTime => {
+    setLoading(true);
     const intervalTime = 100;
     let timerId = setInterval(() => {
-      setPercent(
-        percent => percent + Math.ceil((intervalTime * 100) / totalTime),
-      );
+      setPercent(percent => {
+        const newPercent =
+          percent + Math.ceil((intervalTime * 100) / totalTime);
+        return newPercent > 99 ? 99 : newPercent;
+      });
     }, intervalTime);
     setTimeout(() => {
       clearInterval(timerId);
-      onCheckFinish?.();
+      setLoading(false);
+      // onCheckFinish?.();
     }, totalTime + intervalTime);
   };
 
