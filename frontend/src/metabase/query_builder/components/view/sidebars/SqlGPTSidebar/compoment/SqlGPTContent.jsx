@@ -6,6 +6,7 @@ import { fetchEventSource } from "@microsoft/fetch-event-source";
 
 const SqlGPTContent = ({
   updateQuestion,
+  runQuestionQuery,
   question,
   databaseId,
 }) => {
@@ -58,6 +59,9 @@ const SqlGPTContent = ({
         if (!(tempString.trim())) {
           setError("This query did not explore the correct sql. Please try again with a different question.");
         }
+        if (tempString?.includes("SELECT")) {
+          runQuestionQuery();
+        }
       },
       onerror(err) {
         console.log("sse error", err);
@@ -95,13 +99,13 @@ const SqlGPTContent = ({
           rules={[
              {
                required: true,
-               message: "Please describe your question. e.g. How to query total mint of doodles and azuki",
+               message: "Please describe your question. e.g. how to query the price of SAND last 3 days",
              },
           ]}
         >
           <Input.TextArea placeholder="Your question" style={{ height: 160 }}/>
         </Form.Item>
-        <div className="text-centered mt1">
+        <div className="text-centered mt1 pt1">
           <Button type="primary" htmlType="submit" loading={loading}>Explore</Button>
         </div>
         {success && (
