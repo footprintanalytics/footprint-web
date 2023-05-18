@@ -1,5 +1,5 @@
 .SubmitContract {
-  height: calc(100vh - 60px);
+  min-height: calc(100vh - 60px);
   padding: 60px;
   background-color: #f0f0ff;
 }
@@ -20,4 +20,8 @@
 
 .dark .SubmitContract__add p {
   color: #ffffffb0;
+}
+
+.SubmitContract .ant-tabs-top >.ant-tabs-nav, .ant-tabs-bottom >.ant-tabs-nav, .ant-tabs-top >div>.ant-tabs-nav, .ant-tabs-bottom >div>.ant-tabs-nav {
+  margin: 0 0 8px 0;
 }

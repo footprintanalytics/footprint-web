@@ -683,8 +683,13 @@ export const getRoutes = store => (
         />
         <Route
           title={t`Submit Contract`}
-          path="/submit/contract/add"
+          path="/submit/contract/add-v1"
           component={LazyLoad.SubmitContractAdd}
+        />
+        <Route
+          title={t`Submit Contract`}
+          path="/submit/contract/add"
+          component={LazyLoad.SubmitContractAddV2}
         />
         <Route
           title={t`Submit Contract`}

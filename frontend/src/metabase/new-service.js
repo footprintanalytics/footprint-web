@@ -593,8 +593,16 @@ export const getContractProtocolByAddress = params => {
   return GET(`/api/v1/protocol/find/list`, params);
 };
 
+export const getProtocolInfoByAddress = params => {
+  return GET(`/api/v1/protocol/find/info`, params);
+};
+
 export const submitContract = params => {
   return POST(`/api/v1/contract/submit`, params);
+};
+
+export const batchSubmitContract = params => {
+  return POST(`/api/v1/contract/batchSubmit`, params);
 };
 
 export const publicDashboard = (uuid, params) => {

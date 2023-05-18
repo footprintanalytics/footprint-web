@@ -28,8 +28,8 @@ const PROTOCOL_CATEGORY_LIST = [
 const ContractDetails = ({ formData, onFinish }) => {
   const [form] = Form.useForm();
   const isNewProtocol =
-    !formData.contractExists.contractAddress ||
-    !formData.contractExists.abi?.length;
+    !formData?.contractExists?.contractAddress ||
+    !formData?.contractExists?.abi?.length;
 
   const contractProtocolByAddress = useQuery(
     ["getContractProtocolByAddress", formData],
@@ -37,26 +37,26 @@ const ContractDetails = ({ formData, onFinish }) => {
     {
       refetchOnWindowFocus: false,
       retry: 0,
-      enabled: !!formData.chain && !!formData.contractAddress,
+      enabled: !!formData?.chain && !!formData?.contractAddress,
       onSuccess: () => {
         if (isNewProtocol) return;
         form.setFieldsValue({
-          protocolName: formData.contractExists.protocolName,
+          protocolName: formData?.contractExists?.protocolName,
         });
       },
     },
   );
 
   const contractSource = useQuery(
-    ["getContractSource", formData.contractAddress],
+    ["getContractSource", formData?.contractAddress],
     async () => {
-      const url = `https://api.etherscan.io/api?module=contract&action=getsourcecode&address=${formData.contractAddress}&apikey=M51KVY1GP9PJK67V7JACYHUB1IKQBN17RN`;
+      const url = `https://api.etherscan.io/api?module=contract&action=getsourcecode&address=${formData?.contractAddress}&apikey=M51KVY1GP9PJK67V7JACYHUB1IKQBN17RN`;
       return (await fetch(url)).json();
     },
     {
       refetchOnWindowFocus: false,
       retry: 0,
-      enabled: !!formData.contractAddress && formData.chain === "Ethereum",
+      enabled: !!formData?.contractAddress && formData?.chain === "Ethereum",
       onSuccess: data => {
         if (!data.result?.length) return;
         form.setFieldsValue({

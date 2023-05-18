@@ -6,7 +6,8 @@ import { Table, Form, Row, Col, Button, Typography, Tag } from "antd";
 import { useQuery } from "react-query";
 import { getContractSubmittedList } from "metabase/new-service";
 import Link from "metabase/core/components/Link";
-import dayjs from "dayjs";
+import ContractTable from "metabase/submit/contract/components/ContractTable";
+import LoadingSpinner from "metabase/components/LoadingSpinner/LoadingSpinner";
 
 const SubmitContract = props => {
   const { isLoading, data } = useQuery(
@@ -14,55 +15,7 @@ const SubmitContract = props => {
     async () => getContractSubmittedList(),
     { refetchOnWindowFocus: false, retry: 0 },
   );
-
-  const columns = [
-    {
-      title: "Contract",
-      render: (_, record) => {
-        return (
-          <>
-            <Typography.Text>{record.contract_name}</Typography.Text>
-            <br />
-            <Typography.Text type="secondary">
-              {record.contract_address}
-            </Typography.Text>
-          </>
-        );
-      },
-    },
-    {
-      title: "Project",
-      dataIndex: "protocol_name",
-    },
-    {
-      title: "Status",
-      dataIndex: "status",
-      // filters: [
-      //   { text: "pending", value: "pending" },
-      //   { text: "reject", value: "reject" },
-      //   { text: "approved", value: "approved" },
-      // ],
-      // onFilter: (value, record) => record.status.indexOf(value) === 0,
-      render: text => {
-        switch (text) {
-          case "reject":
-            return <Tag color="error">{text}</Tag>;
-          case "approved":
-            return <Tag color="success">{text}</Tag>;
-          default:
-            return <Tag color="processing">{text}</Tag>;
-        }
-      },
-    },
-    {
-      title: "Submitted at",
-      dataIndex: "submitted_at",
-      render: text => {
-        return dayjs(text).format("YYYY-MM-DD HH:mm");
-      },
-    },
-  ];
-
+  console.log("data", data)
   return (
     <div className="SubmitContract">
       <h1>
@@ -95,14 +48,18 @@ const SubmitContract = props => {
           </Col>
         </Row>
       </Form>
-      <Table
-        size="small"
-        rowKey="_id"
-        loading={isLoading}
-        columns={columns}
-        dataSource={data}
-        pagination={false}
-      />
+      {isLoading?
+        (<LoadingSpinner message="Loading..." />)
+        :
+        data?.map(item => {
+          return (
+            <div key={item.protocol_name} className="pt2">
+              <h3 className="my2">{item.protocol_name}</h3>
+              <ContractTable data={item.submit_list}/>
+            </div>
+          )
+        })
+      }
     </div>
   );
 };
