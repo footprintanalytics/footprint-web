@@ -1,7 +1,6 @@
 import React from "react";
 
 import ExternalLink from "metabase/core/components/ExternalLink";
-import { formatLink2Growth } from "metabase/growth/utils/utils";
 import { IFRAMED } from "metabase/lib/dom";
 import { getDataFromClicked } from "metabase-lib/parameters/utils/click-behavior";
 import { isURL } from "metabase-lib/types/utils/isa";
@@ -35,29 +34,14 @@ export function formatUrl(value: string, options: OptionsType = {}) {
   const { jsx, rich } = options;
 
   const url = getLinkUrl(value, options);
-  console.log("formatUrl", {
-    url,
-    pathname: location?.pathname,
-  });
   if (jsx && rich && url) {
     const text = getLinkText(value, options);
     const targetObject = IFRAMED ? { target: "_blank" } : {};
-    let formated = url;
-    if (
-      location?.pathname?.includes("/growth/") &&
-      !url?.includes("/growth/")
-    ) {
-      if (url?.includes("/@")) {
-        formated = url.replace("/@", "/growth/@");
-      } else if (url?.includes("/public/")) {
-        formated = url.replace("/public/", "/growth/public/");
-      }
-    }
-
+    const formatedURL = formatUrl2Growth(location?.pathname, url);
     return (
       <ExternalLink
         className="link link--wrappable"
-        href={formated}
+        href={formatedURL}
         {...targetObject}
       >
         {text}
@@ -123,6 +107,23 @@ function getLinkUrl(
   return null;
 }
 
+export function formatUrl2Growth(
+  pathname: string,
+  href: string | undefined,
+): string {
+  if (!href) {
+    return "";
+  }
+  let toLink = href;
+  if (pathname?.includes("/growth/") && !href?.includes("/growth/")) {
+    if (href?.includes("/@")) {
+      toLink = href.replace("/@", "/growth/@");
+    } else if (href?.includes("/public/")) {
+      toLink = href.replace("/public/", "/growth/public/");
+    }
+  }
+  return toLink ?? "";
+}
 export function slugify(name: string) {
   return name && encodeURIComponent(name.toLowerCase().replace(/\s/g, "_"));
 }

@@ -7,7 +7,6 @@ import React, {
   useState,
 } from "react";
 import { getUrlTarget } from "metabase/lib/dom";
-import { formatLink2Growth } from "metabase/growth/utils/utils";
 import { LinkRoot } from "./ExternalLink.styled";
 
 interface Props extends AnchorHTMLAttributes<HTMLAnchorElement> {

@@ -15,8 +15,8 @@ import { CaretDownOutlined } from "@ant-design/icons";
 import { Popover } from "antd";
 import { withInstanceLanguage, siteLocale } from "metabase/lib/i18n";
 import { substitute_tags } from "cljs/metabase.shared.parameters.parameters";
+import { formatUrl2Growth } from "metabase/lib/formatting";
 import styles from "./Text.css";
-import { formatLink2Growth } from "metabase/growth/utils/utils";
 
 const getSettingsStyle = settings => ({
   "align-center": settings["text.align_horizontal"] === "center",
@@ -363,7 +363,7 @@ export default class Text extends Component {
             remarkPlugins={REMARK_PLUGINS}
             linkTarget="_blank"
             transformLinkUri={(href, children, title) => {
-              return formatLink2Growth(location?.pathname, href);
+              return formatUrl2Growth(location?.pathname, href);
             }}
             className={cx(
               "flex-full flex flex-column",

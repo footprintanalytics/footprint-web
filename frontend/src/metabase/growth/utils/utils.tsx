@@ -6,24 +6,6 @@ import Link from "antd/lib/typography/Link";
 import { PublicApi, maybeUsePivotEndpoint } from "metabase/services";
 import { dashboardIdInfo } from "metabase/new-service";
 
-export function formatLink2Growth(
-  pathname: string,
-  href: string | undefined,
-): string {
-  // if (!href) {
-  //   return "";
-  // }
-  // let toLink = href;
-  // if (pathname?.includes("/growth/") && !href?.includes("/growth/")) {
-  //   if (href?.includes("/@")) {
-  //     toLink = href.replace("/@", "/growth/@");
-  //   } else if (href?.includes("/public/")) {
-  //     toLink = href.replace("/public/", "/growth/public/");
-  //   }
-  // }
-  return href ?? "";
-}
-
 export async function getDashboardInfo(
   urlDashboardName: string,
   urlUserName: string,
