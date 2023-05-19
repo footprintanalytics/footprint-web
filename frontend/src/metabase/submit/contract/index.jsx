@@ -34,7 +34,7 @@ const SubmitContract = props => {
     }]
 
   const { isAdmin, user } = props;
-  const isAuditPerson = isAdmin;
+  const isAuditPerson = isAdmin || user?.id === 30; //pb
   const [operator, setOperator] = useState("");
   const [status, setStatus] = useState("");
   const [isReviewLoading, setReviewLoading] = useState(false);
@@ -64,6 +64,8 @@ const SubmitContract = props => {
   useEffect(() => {
     if (operator === "all") {
       setStatus("pending")
+    } else {
+      setStatus("")
     }
   }, [operator])
 
