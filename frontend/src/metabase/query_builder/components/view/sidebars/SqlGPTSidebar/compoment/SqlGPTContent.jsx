@@ -12,17 +12,18 @@ const SqlGPTContent = ({
 }) => {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(false);
+  const [input, setInput] = useState(null);
   const [success, setSuccess] = useState(false);
   // const [result, setResult] = useState("")
   const onFinish = (values) => {
-    runApi(values.input);
+    runApi(values.input, "a");
   }
   let tempString = "";
-  const fetchData = async (query) => {
+  const fetchData = async (query, from) => {
     tempString = ""
     // setResult(tempString)
     await fetchEventSource(
-      `https://footprint-gpt-production.up.railway.app/answer`,
+      from === "r" ? `https://footprint-gpt-production.up.railway.app/answer` : `https://gpt.footprint.network/answer`,
       // `https://gpt.footprint.network/answer`,
       // `http://localhost:3002/test`,
       {
@@ -71,12 +72,12 @@ const SqlGPTContent = ({
     });
   };
 
-  const runApi = async (query) => {
+  const runApi = async (query, from) => {
     setLoading(true);
     setError("");
     setSuccess(false);
     try {
-      fetchData(query);
+      fetchData(query, from);
     } catch (e) {
       console.log("error", e)
     }
@@ -104,10 +105,13 @@ const SqlGPTContent = ({
              },
           ]}
         >
-          <Input.TextArea placeholder="Your question" style={{ height: 160 }}/>
+          <Input.TextArea placeholder="Your question" style={{ height: 160 }} onChange={(e) => setInput(e.target.value)}/>
         </Form.Item>
         <div className="text-centered mt1 pt1">
-          <Button type="primary" htmlType="submit" loading={loading}>Explore</Button>
+          <Button type="primary" htmlType="submit" loading={loading}>Explore(a)</Button>
+          <Button loading={loading} onClick={() => {
+            runApi(input, "r")
+          }}>Explore(r)</Button>
         </div>
         {success && (
           <div className="mt2">The sql is already displayed in the middle sql edit box.</div>
