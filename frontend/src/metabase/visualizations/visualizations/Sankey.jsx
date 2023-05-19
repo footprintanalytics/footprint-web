@@ -109,7 +109,7 @@ class Sankey extends Component {
           data: this.data.data,
           links: this.data.links,
           label: {
-            color: "#B9B8CE",
+            color: "#949aab",
           },
         },
       ],
