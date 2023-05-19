@@ -100,16 +100,19 @@ class Sankey extends Component {
   getChart = _.debounce(() => {
     const option = {
       tooltip: {
-        trigger: 'item',
-        triggerOn: 'mousemove'
+        trigger: "item",
+        triggerOn: "mousemove",
       },
       series: [
         {
-          type: 'sankey',
+          type: "sankey",
           data: this.data.data,
           links: this.data.links,
-        }
-      ]
+          label: {
+            color: "#B9B8CE",
+          },
+        },
+      ],
     };
 
     this.chart.setOption(option);
