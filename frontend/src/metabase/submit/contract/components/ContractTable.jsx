@@ -82,7 +82,6 @@ const ContractTable = ({ data, onReviewAction, showAction, isReviewLoading }) =>
       align: "right",
       width: 200,
       render: (_, record) => {
-        console.log("record", record)
         return record.status === "pending" && (
           <div className="flex justify-evenly">
             <Button disabled={isReviewLoading} size="small" type="primary" onClick={() => onReviewAction(record, "approved")}>Pass</Button>

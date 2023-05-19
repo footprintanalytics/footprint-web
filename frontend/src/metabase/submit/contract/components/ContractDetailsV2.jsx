@@ -42,12 +42,6 @@ const ContractDetailsV2 = ({ onFinish }) => {
     {
       refetchOnWindowFocus: false,
       retry: 0,
-      onSuccess: () => {
-        // if (isNewProtocol) return;
-        // form.setFieldsValue({
-        //   protocolName: formData?.contractExists?.protocolName,
-        // });
-      },
     },
   );
 
