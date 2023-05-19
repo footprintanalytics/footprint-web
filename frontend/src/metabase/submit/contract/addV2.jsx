@@ -14,7 +14,7 @@ const SubmitContractAdd = props => {
     <div className="SubmitContract">
       <div className="SubmitContract__add">
         <h1>Submit smart contracts for decoding</h1>
-        <p>1 steps to add new contracts to Footprint</p>
+        <p>One step to add new contracts to Footprint</p>
         <ContractDetailsV2
           formData={formData}
           onFinish={() => {

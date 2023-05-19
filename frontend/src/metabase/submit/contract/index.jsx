@@ -35,10 +35,11 @@ const SubmitContract = props => {
 
   const { isAdmin, user } = props;
   const [operator, setOperator] = useState("");
-  const [status, setStatus] = useState("all");
+  const [status, setStatus] = useState("pending");
   const [isReviewLoading, setReviewLoading] = useState(false);
   const params = {
     operator: operator,
+    status: status === "all" ? "": status,
   }
 
   const { isLoading, data, refetch } = useQuery(
@@ -49,7 +50,7 @@ const SubmitContract = props => {
 
   const reviewMutate = useMutation(reviewContract);
 
-  const filterPending = (data) => {
+  /*const filterPending = (data) => {
     const pendingData = data?.map(item => {
       return {
         ...item,
@@ -57,10 +58,10 @@ const SubmitContract = props => {
       }
     })
     return pendingData?.filter(p => p.submit_list.length > 0);
-  }
+  }*/
 
   const renderTable = () => {
-    const tempData = status === "pending" ? filterPending(data) : data;
+    const tempData = data;
     if (isLoading) {
       return (<LoadingSpinner message="Loading..." />)
     }

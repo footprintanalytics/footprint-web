@@ -1,6 +1,6 @@
 /* eslint-disable react/prop-types */
 /* eslint-disable curly */
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { AutoComplete, Button, Form, Input, message, Select, Tabs, Tooltip } from "antd";
 import { useMutation, useQuery } from "react-query";
 import { batchSubmitContract, getContractProtocolByAddress, getProtocolInfoByAddress } from "metabase/new-service";
@@ -69,6 +69,17 @@ const ContractDetailsV2 = ({ onFinish }) => {
     },
   );
 
+  useEffect(() => {
+    if (!protocolSlug) {
+      form.setFieldsValue({
+        projectCategory: null,
+        website: null,
+      });
+      setDisableCategory(false)
+      setDisableWebsite(false)
+    }
+  }, [protocolSlug])
+
   const { isLoading, mutateAsync } = useMutation(batchSubmitContract);
 
   const isValidContractAddress = (chain) => {
@@ -96,7 +107,6 @@ const ContractDetailsV2 = ({ onFinish }) => {
   const isSameAddress = (contractAddress) => {
     const array = contractAddress.split("\n").map(i => i.toLowerCase());
     const result = union(array)
-    console.log("result11", result, array)
     return result.length !== array.length && array.length > 1
   }
 
