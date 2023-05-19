@@ -1,7 +1,7 @@
 /* eslint-disable react/display-name */
 /* eslint-disable react/prop-types */
 import "./index.css";
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Button, Col, Form, Radio, Row, Table, Tag } from "antd";
 import { useMutation, useQuery } from "react-query";
 import { connect } from "react-redux";
@@ -34,8 +34,9 @@ const SubmitContract = props => {
     }]
 
   const { isAdmin, user } = props;
+  const isAuditPerson = isAdmin;
   const [operator, setOperator] = useState("");
-  const [status, setStatus] = useState("pending");
+  const [status, setStatus] = useState("");
   const [isReviewLoading, setReviewLoading] = useState(false);
   const params = {
     operator: operator,
@@ -59,6 +60,12 @@ const SubmitContract = props => {
     })
     return pendingData?.filter(p => p.submit_list.length > 0);
   }*/
+
+  useEffect(() => {
+    if (operator === "all") {
+      setStatus("pending")
+    }
+  }, [operator])
 
   const renderTable = () => {
     const tempData = data;
@@ -142,7 +149,7 @@ const SubmitContract = props => {
           </Col>
         </Row>
       </Form>
-      {isAdmin && (
+      {isAuditPerson && (
         <div
           className="mb1"
           style={{ float: "right" }}

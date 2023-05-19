@@ -63,6 +63,11 @@ const ContractTable = ({ data, onReviewAction, showAction, isReviewLoading }) =>
         }
       },
     },
+    showAction ? {
+      title: "UserId",
+      width: 100,
+      dataIndex: "submit_user_id",
+    } : null,
     {
       title: "Submitted at",
       width: 150,
