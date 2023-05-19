@@ -23,7 +23,7 @@ const SqlGPTContent = ({
     tempString = ""
     // setResult(tempString)
     await fetchEventSource(
-      from === "r" ? `https://footprint-gpt-production.up.railway.app/answer` : `https://gpt.footprint.network/answer`,
+      from === "r" ? `https://footprint-gpt-production.up.railway.app/answer` : `http://footprint-gpt:3000/answer`,
       // `https://gpt.footprint.network/answer`,
       // `http://localhost:3002/test`,
       {
