@@ -144,7 +144,7 @@ const ContractDetailsV2 = ({ onFinish }) => {
       return `The smart contract does not look correct on the ${chain} protocol. Please check your submission and try again.`;
     }
     if (isSameContractAddress(chain)) {
-      return "The contact addresses is duplicate. Please check your submission and try again.";
+      return "The contract addresses is duplicate. Please check your submission and try again.";
     }
 
     return null;
@@ -235,7 +235,7 @@ const ContractDetailsV2 = ({ onFinish }) => {
         <Input disabled={disableWebsite} placeholder="https://your-website.com" />
       </Form.Item>
       <Form.Item
-        label="Add Contact"
+        label="Add Contract"
         rules={[{ required: true, message: "" }]}
         name="chain"
       >
