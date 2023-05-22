@@ -660,7 +660,7 @@ class FpNavbar extends Component {
       return (
         <div className="Nav__right">
           {this.renderLink({})}
-          {showCreate && (<CreateMenu />)}
+          <CreateMenu />
           <React.Fragment>
             <RightMenuMobile />
             <RightMenuPad />
