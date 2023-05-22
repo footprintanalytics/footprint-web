@@ -12,72 +12,71 @@ const SqlGPTContent = ({
 }) => {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(false);
-  const [input, setInput] = useState(null);
   const [success, setSuccess] = useState(false);
   // const [result, setResult] = useState("")
   const onFinish = (values) => {
-    runApi(values.input, "a");
+    runApi(values.input);
   }
   let tempString = "";
-  const fetchData = async (query, from) => {
+  const fetchData = async (query) => {
     tempString = ""
     // setResult(tempString)
     await fetchEventSource(
-      from === "r" ? `https://footprint-gpt-production.up.railway.app/answer` : `https://gpt.footprint.network/answer`,
-      // `https://gpt.footprint.network/answer`,
+      // `https://footprint-gpt-production.up.railway.app/answer`,
+      `https://gpt.footprint.network/answer`,
       // `http://localhost:3002/test`,
       {
-      method: "POST",
-      headers: {
-        "Content-Type": 'application/json',
-      },
-      body: JSON.stringify({
-        "uri": "7/en",
-        "query": query,
-        "is_stream": true,
-      }),
-      onopen(res) {
-        console.log("sse onopen", res)
-      },
-      onmessage: (event) => {
-        let data = event.data;
-        if (!data) {
-          data = " ";
-        }
-        tempString = tempString.concat(data)
-        // setResult(tempString)
-        console.log("sse sql", tempString)
-        const nativeQuery = {
-          type: "native",
-          native: { query: tempString.replace(/;/g, "") },
-          database: databaseId,
-        };
+        method: "POST",
+        headers: {
+          "Content-Type": 'application/json',
+        },
+        body: JSON.stringify({
+          "uri": "7/en",
+          "query": query,
+          "is_stream": true,
+        }),
+        onopen(res) {
+          console.log("sse onopen", res)
+        },
+        onmessage: (event) => {
+          let data = event.data;
+          if (!data) {
+            data = " ";
+          }
+          tempString = tempString.concat(data)
+          // setResult(tempString)
+          console.log("sse sql", tempString)
+          const nativeQuery = {
+            type: "native",
+            native: { query: tempString.replace(/;/g, "") },
+            database: databaseId,
+          };
 
-        updateQuestion(question.setDatasetQuery(nativeQuery));
-      },
-      onclose() {
-        // console.log("Connection closed by the server");
-        setLoading(false);
-        if (!(tempString.trim())) {
-          setError("This query did not explore the correct sql. Please try again with a different question.");
-        }
-        if (tempString?.includes("SELECT")) {
-          runQuestionQuery();
-        }
-      },
-      onerror(err) {
-        console.log("sse error", err);
-        setLoading(false);
-      },
-    });
+          updateQuestion(question.setDatasetQuery(nativeQuery));
+        },
+        onclose() {
+          // console.log("Connection closed by the server");
+          setLoading(false);
+          if (!(tempString.trim())) {
+            setError("This query did not explore the correct sql. Please try again with a different question.");
+          }
+          if (tempString?.includes("SELECT")) {
+            runQuestionQuery();
+          }
+        },
+        onerror(err) {
+          console.log("sse error", err);
+          setLoading(false);
+        },
+      });
   };
 
-  const runApi = async (query, from) => {
+  const runApi = async (query) => {
     setLoading(true);
     setError("");
     setSuccess(false);
     try {
-      fetchData(query, from);
+      fetchData(query);
     } catch (e) {
       console.log("error", e)
     }
@@ -96,22 +95,19 @@ const SqlGPTContent = ({
         onFinish={onFinish}
       >
         <Form.Item
-          label="Please describe your question and you will get the answer."
+          label="Please describe your question and you will get the answer. e.g. how to query nft opensea last 7 days transaction"
           name="input"
           rules={[
-             {
-               required: true,
-               message: "Please describe your question. e.g. how to query the price of SAND last 3 days",
-             },
+            {
+              required: true,
+              message: "Please describe your question. ",
+            },
           ]}
         >
-          <Input.TextArea placeholder="Your question" style={{ height: 160 }} onChange={(e) => setInput(e.target.value)}/>
+          <Input.TextArea placeholder="Your question" style={{ height: 160 }}/>
         </Form.Item>
         <div className="text-centered mt1 pt1">
-          <Button type="primary" htmlType="submit" loading={loading}>Explore(a)</Button>
-          <Button loading={loading} onClick={() => {
-            runApi(input, "r")
-          }}>Explore(r)</Button>
+          <Button type="primary" htmlType="submit" loading={loading}>Explore</Button>
         </div>
         {success && (
           <div className="mt2">The sql is already displayed in the middle sql edit box.</div>
