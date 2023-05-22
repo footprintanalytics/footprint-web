@@ -348,7 +348,13 @@ const CampaignListNew = props => {
                       modal,
                       project,
                       () => {
-                        setIsModalOpen({ open: true, type: item.type });
+                        if (item.type === "Notification") {
+                          router.push(
+                            `/growth/campaign/${item.type.toLowerCase()}`,
+                          );
+                          return;
+                        }
+                        // setIsModalOpen({ open: true, type: item.type });
                       },
                       () => {},
                       true,

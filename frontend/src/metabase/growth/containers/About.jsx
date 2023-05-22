@@ -1,6 +1,7 @@
 /* eslint-disable react/prop-types */
 import React from "react";
 import { connect } from "react-redux";
+import LoadingSpinner from "metabase/components/LoadingSpinner";
 import { getUser, getFgaProject } from "metabase/selectors/user";
 
 const About = props => {
