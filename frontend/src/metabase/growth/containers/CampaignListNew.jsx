@@ -349,9 +349,9 @@ const CampaignListNew = props => {
                       project,
                       () => {
                         if (item.type === "Notification") {
-                          router.push(
-                            `/growth/campaign/${item.type.toLowerCase()}`,
-                          );
+                          router.push({
+                            pathname: `/growth/campaign/${item.type}`,
+                          });
                           return;
                         }
                         // setIsModalOpen({ open: true, type: item.type });

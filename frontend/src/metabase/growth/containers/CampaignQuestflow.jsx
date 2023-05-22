@@ -1,5 +1,6 @@
 /* eslint-disable react/prop-types */
 import React, { useEffect, useState } from "react";
+import { Modal } from "antd";
 import { connect } from "react-redux";
 import { useQuery } from "react-query";
 import Canvas from "@questflow/canvas";
@@ -7,7 +8,7 @@ import { QUERY_OPTIONS } from "metabase/containers/dashboards/shared/config";
 import { loginQuestflow, createQuestflowCampaign } from "metabase/new-service";
 import { getUser, getFgaProject } from "metabase/selectors/user";
 import LoadingSpinner from "metabase/components/LoadingSpinner";
-
+window.React = React;
 const CampaignQuestflow = props => {
   const { router, location, children, user, project, type } = props;
   const { isLoading, data } = useQuery(
@@ -15,30 +16,54 @@ const CampaignQuestflow = props => {
     async () => {
       return await loginQuestflow({ projectId: parseInt(project?.id) });
     },
-    { ...QUERY_OPTIONS, enabled: !!project?.id && user },
+    { ...QUERY_OPTIONS, enabled: !!project?.id && !!user?.id },
   );
+  console.log("params", type, project, user);
   useEffect(() => {
-    console.log("params", type, project, user);
     if (!isLoading && data) {
       console.log("loginQuestflow", data);
     }
   }, [data, isLoading]);
-  const idToken =
-    "eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCIsImtpZCI6ImRQRmFnYnhObW1KM21zdHk2RXpuTmV1WGhpTE5LMGpmSlZhdlZDWXZtRWMifQ.eyJzdWIiOiI2NDVjYWFhMGVhM2UwZDk3YjcyNWNmY2UiLCJhdF9oYXNoIjoiUWljOEtpV0pBenRuUEliQnNSamdEdyIsInNpZCI6Ik9qeFhHQXVJa2lNWU1iaGpVVEtGTSIsImF1ZCI6ImZvb3RwcmludCIsImV4cCI6MTY4MzgyNjg5MCwiaWF0IjoxNjgzODIzMjkwLCJpc3MiOiJodHRwOi8vbG9jYWxob3N0OjMwMDAvYXBpL29pZGMifQ.S8Rrrn-r2mOwUpclVkWd2P6Rv3oNhOWvHwnDIjRTVjFMkeujBMWgH3aTWhvtoGBKPy3si7E2EmV5O572UTaaEr_mBljSjIiCabzvdYhbwnSw6MSpwNdt-io-G9Rxb8Zm9VFHsvnxNif2ueHc50eo9vPtAI6m47e1MU6irVBOOOmEz_6xHMCv397PXxVfpTF4peHsMNueceK-BYgjAbiXP52JJ4AeIvgwOEo5vR4ZdLMzS5KdSvELa08j_ag8KumKuK2njlaontIo2-56j_f2SvUSs7hWJfHC7F1k0VYMWcLjdmxcbucHIaViIyWszS-hmZXjQvkjUaM8blvjSd_Zfg";
   const onPublish = flow => {
     console.log(flow);
+    createQuestflowCampaign({
+      projectId: parseInt(project?.id),
+      campaignType: type,
+      workflowId: flow.flowId,
+      webhook: flow.webhook
+    }).then(res => {
+      Modal.success({
+        content: 'Campaign created successfully!',
+        okText: 'View Campaigns',
+        onOk: () => {
+          router?.push({
+            pathname: `/growth/project/${project?.protocolSlug}/Campaign`,
+          });
+        }
+      });
+      console.log(res);
+    }).catch(err => {
+      console.log(err);
+    }).finally(() => {
+
+    });
   };
+
   return (
     <div className="flex flex-column items-center">
       {isLoading ? (
         <LoadingSpinner />
       ) : (
-        <div>
+        <div className="w-full h-full">
           <Canvas
-            flowId="644a36d563b13a9b5199b672"
-            idToken={idToken}
-            questflowURL={"http://localhost:3000"}
+            flowId={data?.flowId}
+            idToken={data?.id_token}
+            // TODO: need a questflowURL in production
+            // questflowURL={data?.questflowURL}
             onPublish={onPublish}
+            onPre={() => {
+              router?.goBack();
+            }}
             showSave={false}
             showPublish={true}
           />
