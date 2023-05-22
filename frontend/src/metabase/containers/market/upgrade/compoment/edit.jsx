@@ -18,12 +18,20 @@ const EditUserUpgradeModal = props => {
         label: "Business",
       },
       {
+        value: "business_trial",
+        label: "Business Trial",
+      },
+      {
         value: "growth",
         label: "Growth",
       },
       {
         value: "scale",
         label: "Scale",
+      },
+      {
+        value: "scale_trial",
+        label: "Scale Trial",
       },
     ]
     return (
@@ -83,7 +91,7 @@ const EditUserUpgradeModal = props => {
           >
             <Select
               initialValues=""
-              style={{ width: 120 }}
+              style={{ width: 200 }}
               onChange={handleChange}
             >
               {renderTypeSelectData()}

@@ -1,8 +1,9 @@
 /* eslint-disable react/prop-types */
 import React, { useState } from "react";
-import { Button, Checkbox, Modal } from "antd";
+import { Button, Checkbox, Modal, Tooltip } from "antd";
 import { payProduct } from "metabase/new-service";
 import { getOssUrl } from "metabase/lib/image";
+import Icon from "metabase/components/Icon";
 
 const PricingModal = ({ user, sign, subscribeOptions, visible, onClose, setCallback }) => {
   const [options, setOptions] = useState(subscribeOptions);
@@ -39,7 +40,7 @@ const PricingModal = ({ user, sign, subscribeOptions, visible, onClose, setCallb
       setCallback(true);
     }
   };
-
+  console.log("options", options)
   return (
     <>
       <Modal
@@ -71,7 +72,10 @@ const PricingModal = ({ user, sign, subscribeOptions, visible, onClose, setCallb
                   )}
                 />
                 <div className="Pricing_modal-option">
-                  <h4>{item.title}</h4>
+                  <div className="flex">
+                    <h4>{item.title}</h4>
+                    {item.tips && (<Tooltip title={item.tips}><span className="ml1"><Icon name="question" size={16} /></span></Tooltip>)}
+                  </div>
                   {!!item.yearlyPrice && (
                     <span>
                       {item.yearlyPrice} per month,{" "}

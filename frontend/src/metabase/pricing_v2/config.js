@@ -35,7 +35,9 @@ export const getSubscribeOptions = user => {
   return options;
 };
 
-export const getComparePlans = ({user, canBusinessSevenTrial, subscriptionDetailList, canTeamPay}) => ({
+export const getComparePlans = ({user, canBusinessSevenTrial, subscriptionDetailList, canTeamPay}) => {
+  console.log("!isStripeSubscribe({ subscriptionDetailList, service: \"footprint\", groupType: \"business\" }) && canBusinessSevenTrial", !isStripeSubscribe({ subscriptionDetailList, service: "footprint", groupType: "business" }) , canBusinessSevenTrial)
+  return {
   title: "Compare plans",
   columns: [
     {
@@ -429,4 +431,4 @@ export const getComparePlans = ({user, canBusinessSevenTrial, subscriptionDetail
       ],
     },
   ],
-});
+}};

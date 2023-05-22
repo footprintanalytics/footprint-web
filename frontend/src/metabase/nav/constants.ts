@@ -10,12 +10,14 @@ export const VipLevel = {
   PRO: "pro",
   TEAM: "team",
   BUSINESS: "business",
+  BUSINESS_TRIAL: "business_trial",
   ENTERPRISE: "enterprise",
 };
 
 export const VipLevelDataApi = {
   GROWTH: "growth",
   SCALE: "scale",
+  SCALE_TRIAL: "scale_trial",
 };
 
 import { color, lighten } from "metabase/lib/colors";

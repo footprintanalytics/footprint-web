@@ -6,6 +6,7 @@ import { capitalize } from "lodash";
 import dayjs from "dayjs";
 import { getOssUrl } from "metabase/lib/image";
 import { VipLevel } from "metabase/nav/constants";
+import { formatTableTitle } from "metabase/lib/formatting/footprint";
 
 const VipIcon = ({ vipInfo, isOwner }) => {
   const renderData = ({ pic, text, className }) => {
@@ -28,16 +29,17 @@ const VipIcon = ({ vipInfo, isOwner }) => {
     case VipLevel.BASIC:
     case VipLevel.BUSINESS:
     case "team":
+    case "business_trial":
     case VipLevel.PRO:
       return renderData({
         pic: "icon_vip_basic.png",
-        text: capitalize(type),
+        text: formatTableTitle(type),
         className: "vip-icon__basic",
       });
     case VipLevel.ENTERPRISE:
       return renderData({
         pic: "icon_vip_pro.png",
-        text: capitalize(type),
+        text: formatTableTitle(type),
         className: "vip-icon__pro",
       });
     default:
