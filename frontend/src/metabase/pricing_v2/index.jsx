@@ -29,7 +29,7 @@ const Pricing = ({ user, setLoginModalShow, onCancelSubscription }) => {
       </div>
     );
   }
-  console.log("data?.groups", data?.groups)
+
   return (
     <div className="Pricing">
       <div className="Pricing__title">

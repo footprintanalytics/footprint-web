@@ -46,7 +46,7 @@ const PricingContainer = ({ location, user, setLoginModalShow }) => {
       onCancel: () => {},
     });
   };
-  console.log("status", status)
+
   return (
     <>
     <Meta

@@ -40,7 +40,7 @@ const PricingModal = ({ user, sign, subscribeOptions, visible, onClose, setCallb
       setCallback(true);
     }
   };
-  console.log("options", options)
+
   return (
     <>
       <Modal
