@@ -12,6 +12,8 @@ import {
   Typography,
   Alert,
   Checkbox,
+  Row,
+  Col,
 } from "antd";
 import { Link } from "react-router";
 import { QuestionCircleOutlined, InfoCircleOutlined } from "@ant-design/icons";
@@ -257,11 +259,13 @@ const ConfigConnector = props => {
             rules={[{ required: true }]}
           >
             <Checkbox.Group
-              options={connector.streamConfig.list.map(m => ({
-                ...m,
-                disabled: m.required,
-              }))}
-            />
+            className="flex flex-wrap"
+            options={connector.streamConfig.list.map(m => ({
+              ...m,
+              disabled: m.required,
+            }))}
+            >
+            </Checkbox.Group>
           </Form.Item>
         ) : null}
         {connector.docLink ? (
@@ -297,6 +301,6 @@ const ConfigConnector = props => {
       </Form>
     </div>
   );
-};;
+};
 
 export default ConfigConnector;
