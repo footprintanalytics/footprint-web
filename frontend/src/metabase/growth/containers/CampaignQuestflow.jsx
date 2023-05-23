@@ -47,7 +47,7 @@ const CampaignQuestflow = props => {
 
   return (
     <div className="flex flex-column items-center">
-      {isLoading || data === null ? (
+      {isLoading || !data?.idToken ? (
         <LoadingSpinner />
       ) : (
         <div className="w-full h-full">
@@ -57,12 +57,12 @@ const CampaignQuestflow = props => {
             idToken={data?.idToken}
             // TODO: need a questflowURL in production
             // questflowURL={data?.questflowURL}
-            onPublish={onPublish}
-            onPre={() => {
-              router?.goBack();
-            }}
-            showSave={false}
-            showPublish={true}
+            // onPublish={onPublish}
+            // onPre={() => {
+            //   router?.goBack();
+            // }}
+            // showSave={false}
+            // showPublish={true}
           />
         </div>
       )}
