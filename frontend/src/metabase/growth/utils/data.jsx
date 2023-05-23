@@ -290,7 +290,7 @@ function getItem(label, key, icon, children, type) {
 }
 /**
  *
- * @param {*} protocolTypp : 1: GameFi, 2: NFT, 3: GameFi&NFT
+ * @param {*} protocolTypp : 1: GameFi, 2: NFT, 3: GameFi_NFT
  * @returns
  */
 export const fga_menu_data_v2 = protocolTypp => {
@@ -302,11 +302,16 @@ export const fga_menu_data_v2 = protocolTypp => {
         ? "346f0d3d-5486-404b-a5d2-17ce52150fe1"
         : "2f4f1fe9-7163-4ecf-91db-76c87a9306ed",
     ],
-    ["twitter", "fd4d94f3-06f7-445d-ada3-0ce82bcefa39"],
-    ["discord", "d137a1ef-34a3-4553-84cb-2203bd9d2baf"],
+    // ["game_tokenomics",""],
     ["game_revenue", "8932389c-42cc-4ce7-a20f-a6a146cd31a2"],
     ["game_token_holder", "ff4ddbe9-8818-4abf-8a6c-91c3559071af"],
     ["game_active_users", "6d84b4a6-ceef-4b30-a9ad-b233038fd8d3"],
+    ["nft_leaderboard", "3e9f9af4-93a8-46d4-8ee7-bc472201da7d"],
+    ["nft_nft_holder", "58047ca6-0116-438d-9ac3-79ac81dfa764"],
+    // ["nft_sales_mints",""],
+    // ["nft_revenue",""],
+    ["twitter", "fd4d94f3-06f7-445d-ada3-0ce82bcefa39"],
+    ["discord", "d137a1ef-34a3-4553-84cb-2203bd9d2baf"],
   ]);
   const items = [
     getItem(
@@ -344,7 +349,7 @@ export const fga_menu_data_v2 = protocolTypp => {
       [
         getItem("Members", "members", <TeamOutlined />, [
           getItem("Segment", "segment", null),
-          getItem("Members", "members", null),
+          getItem("Members", "members_members", null),
           getItem("ID Connect", "id_connect", null),
         ]),
         getItem("Acquisition", "acquisition", <TagsOutlined />, [
@@ -364,8 +369,24 @@ export const fga_menu_data_v2 = protocolTypp => {
       "group",
     ),
   ];
-  return { items, uuidMap };
+  const keys = getKeys(items);
+  return { items, keys,uuidMap};
 };
+
+const getKeys = (items) => {
+  let keys = [];
+  items?.map((item) => {
+    if(item){
+      if(item?.children?.length>0){
+        keys = keys.concat(getKeys(item.children))
+      }else{
+        keys.push(item?.key)
+      }
+    }
+  });
+  return keys;
+}
+
 export const fga_menu_data = [
   {
     name: "Overview",
