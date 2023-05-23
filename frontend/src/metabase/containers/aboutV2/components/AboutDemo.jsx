@@ -36,12 +36,19 @@ const AboutDemo = () => {
           <h3>Data API</h3>
           <h4>Build your application with the Data API</h4>
           <span>A unified data API for NFTs, GameFi, and DeFi across all major chain <br/>ecosystems. <br/>Support not only raw data but also statistics metrics with one line of code.</span>
-          <AboutButton
-            className="mt4 mb4"
-            buttonText="Explore Data API"
-            link="https://www.footprint.network/data-api"
-          />
-          <AboutImage className="About__demo-long-api-container" src={getOssUrl("home-v2/img_data_api.png")} alt="Data API" />
+          <div className="About__demo-data-api-buttons">
+            <AboutButton
+              className="mt4 mb4"
+              buttonText="Explore Data API"
+              link="https://www.footprint.network/data-api"
+            />
+            <AboutButton
+              className="mt4 mb4"
+              buttonText="Explore Batch API"
+              link="https://www.footprint.network/batch-download"
+            />
+          </div>
+          <AboutImage className="About__demo-long-api-container" src={getOssUrl("home-v2/img_data_api_v2.png")} alt="Data API" />
         </div>
       </div>
     </div>
