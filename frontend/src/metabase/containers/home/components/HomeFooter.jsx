@@ -131,11 +131,11 @@ const footers = [
 ];
 
 const HomeFooter = props => {
-  // const { user, onChangeLocation } = props;
+  const { style } = props;
   // const emailRef = React.createRef();
 
   return (
-    <footer className="home-footer-container footprint-primary-text">
+    <footer className="home-footer-container footprint-primary-text" style={style}>
       <div className="home-footer">
         <div className="home-footer-left">
           <img

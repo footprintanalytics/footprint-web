@@ -181,6 +181,10 @@ export const getRoutes = store => (
         <Route path="/data-api/product" component={LazyLoad.dataApiProduct} />
       </Route>
 
+      <Route path="/batch-download">
+        <IndexRoute component={LazyLoad.batchDownload} />
+      </Route>
+
       <Route
         title={t`Protocols`}
         path="/protocols"
