@@ -39,14 +39,17 @@ export function formatTitle(title) {
     "defi": "DeFi",
   }
   const mapFunction = (item) => {
-    if (lowerArray.includes(item?.toLowerCase())) {
+    if (!item) {
+      return item;
+    }
+    if (lowerArray.includes(item.toLowerCase())) {
       return lowerCase(item);
     }
-    if (upperArray.includes(item?.toLowerCase())) {
+    if (upperArray.includes(item.toLowerCase())) {
       return upperCase(item);
     }
-    if (keys(mappingObject).includes(item?.toLowerCase())) {
-      return mappingObject[item];
+    if (keys(mappingObject).includes(item.toLowerCase())) {
+      return mappingObject[item.toLowerCase()];
     }
     return upperFirst(item);
   }
