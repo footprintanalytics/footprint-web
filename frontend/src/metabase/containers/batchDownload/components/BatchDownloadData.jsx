@@ -46,7 +46,7 @@ const BatchDownloadData = () => {
                 <li>
                   <img src={getOssUrl(item.img)} alt={item.title} />
                   <h3>{item.title}</h3>
-                  <Link to={item.link}>{item.buttonText}</Link>
+                  <Link>{item.buttonText}</Link>
                 </li>
               </Link>
             );
