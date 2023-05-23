@@ -13,7 +13,7 @@ const BatchDownloadStart = () => {
         </h1>
         <h2>
           Start building DApps immediately, not in months. <br />
-          Built for money tracking, backtesting, machine learning, and more
+          Built for money tracking, backtesting, machine learning, and more.
         </h2>
         <BatchDownloadButtons />
       </div>

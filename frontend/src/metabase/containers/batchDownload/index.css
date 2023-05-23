@@ -13,7 +13,7 @@
 }
 
 .batch-download__start-bg {
-  background-image: url("https://static.footprint.network/batch-download/img_start_bg.png");
+  background-image: url("https://static.footprint.network/batch-download/img_start_bg.png?1=1");
   background-size: 1920px 680px;
   background-repeat: no-repeat;
   background-position: center;
@@ -103,7 +103,7 @@
   justify-content: center;
   align-items: center;
   flex-direction: column;
-  padding: 100px 0 60px;
+  padding: 100px 0 160px;
   position: relative;
 }
 
@@ -126,7 +126,7 @@
   background: #B8E2FF;
   top: 600px;
   left: 80px;
-  filter: blur(60px) opacity(0.6);
+  filter: blur(80px);
   border-radius: 50%;
   z-index: 0;
 }
@@ -151,7 +151,7 @@
 .batch-download__best-practices ul {
   display: grid;
   flex-wrap: wrap;
-  grid-gap: 20px;
+  grid-gap: 40px;
   grid-template-columns: repeat(3, 1fr);
   margin-top: 30px;
 }
@@ -159,7 +159,7 @@
 .batch-download__best-practices li {
   display: flex;
   height: 400px;
-  width: 436px;
+  width: 454px;
   flex-direction: column;
   background: white;
   padding: 30px;
@@ -184,7 +184,7 @@
   justify-content: center;
   align-items: center;
   flex-direction: column;
-  padding: 100px 0 60px;
+  padding: 100px 0 160px;
 }
 
 .batch-download__why h1 {
@@ -198,7 +198,7 @@
 .batch-download__why-one ul {
   display: grid;
   flex-wrap: wrap;
-  grid-gap: 20px;
+  grid-gap: 40px;
   grid-template-columns: repeat(3, 1fr);
   margin-top: 30px;
 }
@@ -242,15 +242,15 @@
 .batch-download__why-two ul {
   display: grid;
   flex-wrap: wrap;
-  grid-gap: 20px;
+  grid-gap: 40px;
   grid-template-columns: repeat(2, 1fr);
-  margin-top: 30px;
+  margin-top: 40px;
 }
 
 .batch-download__why-two-li {
   display: flex;
   height: 410px;
-  width: 692px;
+  width: 700px;
   flex-direction: column;
   padding: 30px;
   border-radius: 10px;
@@ -267,7 +267,7 @@
   justify-content: center;
   align-items: center;
   flex-direction: column;
-  padding: 100px 0 60px;
+  padding: 100px 0 160px;
 }
 
 .batch-download__how-steps {

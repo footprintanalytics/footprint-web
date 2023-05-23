@@ -12,6 +12,7 @@ import DataApiGameFi from "metabase/containers/dataApi/components/DataApiGameFi"
 import DataApiNFT from "metabase/containers/dataApi/components/DataApiNFT";
 import DataApiIntroduce from "metabase/containers/dataApi/components/DataApiIntroduce";
 import Meta from "metabase/components/Meta";
+import HomeFooter from "metabase/containers/home/components/HomeFooter";
 
 const DataApi = () => {
   const defaultDesc =
@@ -30,6 +31,7 @@ const DataApi = () => {
         <DataApiLowering />
         {/*<DataApiAlphaTest />*/}
         <DataApiPower />
+        <HomeFooter />
       </div>
     </>
   );

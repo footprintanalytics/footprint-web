@@ -44,7 +44,7 @@ const AboutDemo = () => {
             />
             <AboutButton
               className="mt4 mb4"
-              buttonText="Explore Batch API"
+              buttonText="Batch Download"
               link="https://www.footprint.network/batch-download"
             />
           </div>

@@ -1,7 +1,6 @@
 /* eslint-disable react/prop-types */
 import React from "react";
 import "../index.css";
-import Link from "metabase/core/components/Link";
 import { getOssUrl } from "metabase/lib/image";
 
 const BatchDownloadWhy = () => {

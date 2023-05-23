@@ -2,7 +2,6 @@
 import React from "react";
 import "../index.css";
 import Link from "metabase/core/components/Link";
-import { Steps } from "antd";
 
 const BatchDownloadHow = () => {
 
@@ -10,7 +9,7 @@ const BatchDownloadHow = () => {
     {
       title: "Select data",
       desc: (
-        <div>Speak with our sales team to build your custom data plan. To get started,
+        <div>{"Speak with our sales team to build your custom data plan. To get started, "}
           <Link
             target="_blank"
             className="text-underline text-underline-hover"
