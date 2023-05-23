@@ -25,7 +25,7 @@ const nftData = [
         "publicUuid": "2538542f-efcf-4399-bc3d-d0bfe97e33a8",
       }, {
         "label": "Royalty",
-        "value": "royalty-fees",
+        "value": "royalty",
         "publicUuid": "c485c035-5688-4371-9943-0752d1152bce",
       }, {
         "label": "Aggregators Overview",
