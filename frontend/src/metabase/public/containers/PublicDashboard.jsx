@@ -51,6 +51,7 @@ import Button from "metabase/core/components/Button/Button";
 const mapStateToProps = (state, props) => {
   const parameters = getParameters(state, props);
   const parameterValues = getParameterValues(state, props);
+  console.log("parameters", parameters);
   const project = props.project;
   const location = props.location;
   if (project) {
@@ -61,6 +62,12 @@ const mapStateToProps = (state, props) => {
     updateDashboardPara(parameters, parameterValues, "protocol_slug", [
       project.protocolSlug,
     ]);
+    if(project.tokenAddress?.length>0&&project.tokenAddress[0].address){
+      console.log('token_address',project.tokenAddress[0].address);
+      updateDashboardPara(parameters, parameterValues, "token_address",
+        [project.tokenAddress[0].address]
+      );
+    }
     if (project.template) {
       const key = "tag";
       const queryCollection = getDefaultDashboardPara(

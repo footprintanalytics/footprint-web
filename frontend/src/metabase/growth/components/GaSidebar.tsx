@@ -46,7 +46,7 @@ const GaSidebar = (props: IGaSidebarProp) => {
     if(protocolType==='GameFi'&&projectObject.nftCollectionAddress?.length > 0){
       protocolType = 'GameFi_NFT'
     }
-    const itemsTemp: any[] = fga_menu_data_v2(protocolType).items;
+    const itemsTemp: any[] = fga_menu_data_v2(projectObject).menuTabs;
     const rootSubmenuKeysTemp: any[] = [];
     itemsTemp?.map(i => {
       i?.children?.map((j: any) => {

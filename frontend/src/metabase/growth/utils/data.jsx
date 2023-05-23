@@ -290,15 +290,17 @@ function getItem(label, key, icon, children, type) {
 }
 /**
  *
- * @param {*} protocolTypp : 1: GameFi, 2: NFT, 3: GameFi_NFT
+ * @param {*} protocolType : 1: GameFi, 2: NFT, 3: GameFi_NFT
  * @returns
  */
-export const fga_menu_data_v2 = protocolTypp => {
-  console.log("fga_menu_data_v2 protocolTypp = ", protocolTypp);
-  const uuidMap = new Map([
+export const fga_menu_data_v2 = (project) => {
+  const protocolType = project.protocolType === 'GameFi' && project?.nftCollectionAddress?.length > 0
+  ? 'GameFi_NFT'
+  : project.protocolType;
+  const dashboardMap = new Map([
     [
       "home",
-      protocolTypp === "NFT"
+      protocolType === "NFT"
         ? "346f0d3d-5486-404b-a5d2-17ce52150fe1"
         : "2f4f1fe9-7163-4ecf-91db-76c87a9306ed",
     ],
@@ -313,27 +315,27 @@ export const fga_menu_data_v2 = protocolTypp => {
     ["twitter", "fd4d94f3-06f7-445d-ada3-0ce82bcefa39"],
     ["discord", "d137a1ef-34a3-4553-84cb-2203bd9d2baf"],
   ]);
-  const items = [
+  const menuTabs = [
     getItem(
       "Analysis",
       "analysis",
       null,
       [
         getItem("Home", "home", <HomeOutlined />),
-        protocolTypp !== "NFT" &&
+        protocolType !== "NFT" &&
           getItem("Game", "game", <ShopOutlined />, [
             getItem("Tokenomics", "game_tokenomics", null),
             getItem("Revenue", "game_revenue", null),
             getItem("Token Holder", "game_token_holder", null),
             getItem("Active Users", "game_active_users", null),
           ]),
-        protocolTypp !== "GameFi" &&
+        protocolType !== "GameFi" &&
           getItem("NFT", "nft", <FileImageOutlined />, [
-            protocolTypp === "NFT" &&
+            protocolType === "NFT" &&
               getItem("Leaderboard", "nft_leaderboard", null),
             getItem("NFT Holder", "nft_nft_holder", null),
             getItem("Sales & Mints", "nft_sales_mints", null),
-            protocolTypp === "NFT" && getItem("Revenue", "nft_revenue", null),
+            protocolType === "NFT" && getItem("Revenue", "nft_revenue", null),
           ]),
         getItem("Social", "social", <GatewayOutlined />, [
           getItem("Twitter", "twitter", null),
@@ -347,9 +349,9 @@ export const fga_menu_data_v2 = protocolTypp => {
       "growth",
       null,
       [
-        getItem("Members", "members", <TeamOutlined />, [
+        getItem("Members", "members_root", <TeamOutlined />, [
           getItem("Segment", "segment", null),
-          getItem("Members", "members_members", null),
+          getItem("Members", "members", null),
           getItem("ID Connect", "id_connect", null),
         ]),
         getItem("Acquisition", "acquisition", <TagsOutlined />, [
@@ -357,7 +359,7 @@ export const fga_menu_data_v2 = protocolTypp => {
           getItem("Wallet Profile", "wallet_profile", null),
         ]),
         getItem("Activation", "activation", <CommentOutlined />),
-        getItem("Custom Analysis", "custom", <ShopOutlined />, [
+        getItem("Custom Analysis", "custom", <BarChartOutlined />, [
           getItem("Custom Analysis", "custom_analysis", null),
           getItem("My Analysis", "my_analysis", null),
         ]),
@@ -369,8 +371,8 @@ export const fga_menu_data_v2 = protocolTypp => {
       "group",
     ),
   ];
-  const keys = getKeys(items);
-  return { items, keys,uuidMap};
+  const keys = getKeys(menuTabs);
+  return { menuTabs, keys,dashboardMap};
 };
 
 const getKeys = (items) => {
