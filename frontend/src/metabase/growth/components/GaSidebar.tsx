@@ -7,7 +7,7 @@ import { connect } from "react-redux";
 import { withRouter } from "react-router";
 import { getUser, getFgaProject } from "metabase/selectors/user";
 import LoadingSpinner from "metabase/components/LoadingSpinner";
-import { fga_menu_data } from "../utils/data";
+import { fga_menu_data, fga_menu_data_v2 } from "../utils/data";
 import {
   getGrowthProjectPath,
   getLatestGAMenuTag,
@@ -36,6 +36,10 @@ const GaSidebar = (props: IGaSidebarProp) => {
 
   useEffect(() => {
     if (!projectObject) return;
+    console.log(
+      "fga_menu_data_v2",
+      fga_menu_data_v2(projectObject.protocolType),
+    );
     const itemsTemp: any[] = getGaMenuTabs(
       fga_menu_data,
       projectObject.protocolType,
