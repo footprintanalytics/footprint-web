@@ -259,13 +259,12 @@ const ConfigConnector = props => {
             rules={[{ required: true }]}
           >
             <Checkbox.Group
-            className="flex flex-wrap"
-            options={connector.streamConfig.list.map(m => ({
-              ...m,
-              disabled: m.required,
-            }))}
-            >
-            </Checkbox.Group>
+              className="flex flex-wrap"
+              options={connector.streamConfig.list.map(m => ({
+                ...m,
+                disabled: m.required,
+              }))}
+            ></Checkbox.Group>
           </Form.Item>
         ) : null}
         {connector.docLink ? (
