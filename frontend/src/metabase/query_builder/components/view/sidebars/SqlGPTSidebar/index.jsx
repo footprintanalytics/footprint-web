@@ -11,6 +11,7 @@ const SqlGPTSidebar = ({
   updateQuestion,
   runQuestionQuery,
   query,
+  user,
 }) => {
   const nativeQuery = question?.card().dataset_query?.native?.query || "";
   const debouncedQuery = useDebouncedValue(nativeQuery, 1000);
@@ -30,6 +31,7 @@ const SqlGPTSidebar = ({
         runQuestionQuery={runQuestionQuery}
         question={question}
         databaseId={query.databaseId()}
+        user={user}
       />
     </SidebarContent>
   );

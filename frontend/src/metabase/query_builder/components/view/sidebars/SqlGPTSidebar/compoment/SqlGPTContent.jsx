@@ -9,6 +9,7 @@ const SqlGPTContent = ({
   runQuestionQuery,
   question,
   databaseId,
+  user,
 }) => {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(false);
@@ -20,6 +21,7 @@ const SqlGPTContent = ({
   let tempString = "";
   const fetchData = async (query) => {
     tempString = ""
+    let abortController = new AbortController();
     // setResult(tempString)
     await fetchEventSource(
       // `https://footprint-gpt-production.up.railway.app/answer`,
@@ -30,10 +32,12 @@ const SqlGPTContent = ({
         headers: {
           "Content-Type": 'application/json',
         },
+        signal: abortController.signal,
         body: JSON.stringify({
           "uri": "7/en",
           "query": query,
           "is_stream": true,
+          "user_id": user?.id,
         }),
         onopen(res) {
           console.log("sse onopen", res)
@@ -57,6 +61,10 @@ const SqlGPTContent = ({
         onclose() {
           // console.log("Connection closed by the server");
           setLoading(false);
+          if (abortController) {
+            abortController.abort()
+            abortController = null
+          }
           if (!(tempString.trim())) {
             setError("This query did not explore the correct sql. Please try again with a different question.");
           }
@@ -67,6 +75,10 @@ const SqlGPTContent = ({
         onerror(err) {
           console.log("sse error", err);
           setLoading(false);
+          if (abortController) {
+            abortController.abort()
+            abortController = null
+          }
         },
       });
   };
@@ -98,10 +110,16 @@ const SqlGPTContent = ({
           label="Please describe your question and you will get the answer. e.g. how to query nft opensea last 7 days transaction"
           name="input"
           rules={[
-            {
+            () => ({
               required: true,
-              message: "Please describe your question. ",
-            },
+              validator(_, value) {
+                const regex = /^[A-Za-z0-9!"#$%&'()*+,-.:;<=>?@[\]^_`{|}~ ]+$/
+                if (regex.test(value)) {
+                  return Promise.resolve();
+                }
+                return Promise.reject(new Error("Please describe your question, in English only."));
+              },
+            }),
           ]}
         >
           <Input.TextArea placeholder="Your question" style={{ height: 160 }}/>
