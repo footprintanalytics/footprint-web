@@ -5,11 +5,12 @@ import { Button, Form, Input } from "antd";
 import { fetchEventSource } from "@microsoft/fetch-event-source";
 
 const SqlGPTContent = ({
-  updateQuestion,
-  runQuestionQuery,
-  question,
-  databaseId,
-}) => {
+   updateQuestion,
+   runQuestionQuery,
+   question,
+   databaseId,
+   user,
+ }) => {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(false);
   const [success, setSuccess] = useState(false);
@@ -20,55 +21,66 @@ const SqlGPTContent = ({
   let tempString = "";
   const fetchData = async (query) => {
     tempString = ""
+    let abortController = new AbortController();
     // setResult(tempString)
     await fetchEventSource(
-      `https://footprint-gpt-production.up.railway.app/answer`,
-      // `https://gpt.footprint.network/answer`,
+      // `https://footprint-gpt-production.up.railway.app/answer`,
+      `https://gpt.footprint.network/answer`,
       // `http://localhost:3002/test`,
       {
-      method: "POST",
-      headers: {
-        "Content-Type": 'application/json',
-      },
-      body: JSON.stringify({
-        "uri": "7/en",
-        "query": query,
-        "is_stream": true,
-      }),
-      onopen(res) {
-        console.log("sse onopen", res)
-      },
-      onmessage: (event) => {
-        let data = event.data;
-        if (!data) {
-          data = " ";
-        }
-        tempString = tempString.concat(data)
-        // setResult(tempString)
-        console.log("sse sql", tempString)
-        const nativeQuery = {
-          type: "native",
-          native: { query: tempString.replace(/;/g, "") },
-          database: databaseId,
-        };
+        method: "POST",
+        headers: {
+          "Content-Type": 'application/json',
+        },
+        signal: abortController.signal,
+        body: JSON.stringify({
+          "uri": "7/en",
+          "query": query,
+          "is_stream": true,
+          "user_id": user?.id,
+        }),
+        onopen(res) {
+          console.log("sse onopen", res)
+        },
+        onmessage: (event) => {
+          let data = event.data;
+          if (!data) {
+            data = " ";
+          }
+          tempString = tempString.concat(data)
+          // setResult(tempString)
+          console.log("sse sql", tempString)
+          const nativeQuery = {
+            type: "native",
+            native: { query: tempString.replace(/;/g, "") },
+            database: databaseId,
+          };
 
-        updateQuestion(question.setDatasetQuery(nativeQuery));
-      },
-      onclose() {
-        // console.log("Connection closed by the server");
-        setLoading(false);
-        if (!(tempString.trim())) {
-          setError("This query did not explore the correct sql. Please try again with a different question.");
-        }
-        if (tempString?.includes("SELECT")) {
-          runQuestionQuery();
-        }
-      },
-      onerror(err) {
-        console.log("sse error", err);
-        setLoading(false);
-      },
-    });
+          updateQuestion(question.setDatasetQuery(nativeQuery));
+        },
+        onclose() {
+          // console.log("Connection closed by the server");
+          setLoading(false);
+          if (abortController) {
+            abortController.abort()
+            abortController = null
+          }
+          if (!(tempString.trim())) {
+            setError("This query did not explore the correct sql. Please try again with a different question.");
+          }
+          if (tempString?.includes("SELECT")) {
+            runQuestionQuery();
+          }
+        },
+        onerror(err) {
+          console.log("sse error", err);
+          setLoading(false);
+          if (abortController) {
+            abortController.abort()
+            abortController = null
+          }
+        },
+      });
   };
 
   const runApi = async (query) => {
@@ -95,13 +107,19 @@ const SqlGPTContent = ({
         onFinish={onFinish}
       >
         <Form.Item
-          label="Please describe your question and you will get the answer."
+          label="Please describe your question and you will get the answer. e.g. how to query nft opensea last 7 days transaction"
           name="input"
           rules={[
-             {
-               required: true,
-               message: "Please describe your question. e.g. how to query the price of SAND last 3 days",
-             },
+            () => ({
+              required: true,
+              validator(_, value) {
+                const regex = /^[A-Za-z0-9!"#$%&'()*+,-.:;<=>?@[\]^_`{|}~ ]+$/
+                if (regex.test(value)) {
+                  return Promise.resolve();
+                }
+                return Promise.reject(new Error("Please describe your question, in English only."));
+              },
+            }),
           ]}
         >
           <Input.TextArea placeholder="Your question" style={{ height: 160 }}/>
