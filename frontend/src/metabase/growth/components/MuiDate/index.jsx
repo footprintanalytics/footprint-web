@@ -116,7 +116,6 @@ const MuiDate = props => {
             <div className="flex justify-end mt2">
               <Button type="primary" onClick={() => {
                 const value = inputValue.find(i => i.symbol === comparisonSymbol).value;
-                console.log("xxxx", value)
                 if (value) {
                   const tempInputValue = `${comparisonSymbolMapping[comparisonSymbol]}${value}`;
                   if (currentValue !== tempInputValue) {

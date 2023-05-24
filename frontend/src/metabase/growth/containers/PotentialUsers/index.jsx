@@ -26,9 +26,10 @@ import { wallet_profile_link } from "metabase/growth/utils/data";
 import { ItemFilter } from "./ItemFilter";
 
 const PotentialUsers = props => {
-  const { router, location, project } = props;
+  const { router, location, project, user } = props;
 
   // const visibleCount = 3;
+  // const canShowTagging = user?.id === 23145 || user?.id === 10;
   const canShowTagging = true;
 
   const [walletListParams, setWalletListParams] = React.useState({
@@ -107,7 +108,6 @@ const PotentialUsers = props => {
 
   // tags must convert and merge to filters.tags
   const mergeFiltersByTags = (params) => {
-    console.log("mergeFiltersByTags params", params)
     let tags = params?.tags || [];
     const filters = params?.filters || [];
     let tagFilter = filters.find(i => i.indicator === "tags");
@@ -452,7 +452,6 @@ const PotentialUsers = props => {
                 visibleFilterResultData={otherOptionsList}
                 isOtherFilter={true}
                 onFilterChange={valueFilter => {
-                  console.log("onFilterChange", valueFilter)
                   if (!valueFilter) {
                     return;
                   }
@@ -461,10 +460,8 @@ const PotentialUsers = props => {
                     item => item.indicator !== valueFilter.indicator,
                   );
                   if (valueFilter.comparisonValue || valueFilter.comparisonType === "boolean") {
-                  console.log("ppp", temp)
                     temp.push(valueFilter);
                   }
-                  console.log("temp", temp)
                   setWalletListParams({
                     ...walletListParams,
                     filters: temp,
