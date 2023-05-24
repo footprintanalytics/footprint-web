@@ -92,6 +92,7 @@ const CampaignListNew = props => {
                   >
                     <Image
                       preview={false}
+                      style={{borderRadius: '50%'}}
                       src={toolIcons.get(channel.campaignType)}
                       width={25}
                       height={25}
@@ -104,6 +105,7 @@ const CampaignListNew = props => {
                   >
                     <Image
                       preview={false}
+                      style={{borderRadius: '50%'}}
                       src={channelIcons.get(channel.channelName)}
                       width={25}
                       height={25}
@@ -213,6 +215,7 @@ const CampaignListNew = props => {
     ["FGA:Email", "https://static.footprint.network/icon_email2.png"],
     ["Telegram", "https://static.footprint.network/20220516201327.png"],
     ["Discord", "https://static.footprint.network/20220516201343.png"],
+    ["Quest Flow", "https://static.footprint.network/Questflow.jpg"],
   ]);
   // tools : Notification/Quest/Aurdrop
   const toolList = [
