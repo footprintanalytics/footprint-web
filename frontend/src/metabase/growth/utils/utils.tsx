@@ -6,6 +6,7 @@ import Link from "antd/lib/typography/Link";
 import { PublicApi, maybeUsePivotEndpoint } from "metabase/services";
 import { dashboardIdInfo } from "metabase/new-service";
 
+
 export function getFirstAddressByPriory(datas:{address: string, chain: string}[]) {
   if (datas.length === 0) return null;
   const chainPriory = ["Ethereum", "Polygon", "BNB Chain", "Harmony"];
@@ -188,7 +189,7 @@ export function updateDashboardPara(
   newValue: [],
 ) {
   const name_index = parameters.findIndex(i => i.slug === newValueKey);
-  if (name_index !== -1) {
+  if (name_index !== -1 ) {
     set(parameterValues, parameters[name_index].id, newValue);
     return true
   }else{

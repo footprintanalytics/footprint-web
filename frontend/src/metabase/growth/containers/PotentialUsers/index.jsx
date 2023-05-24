@@ -428,7 +428,7 @@ const PotentialUsers = props => {
                   temp = temp.filter(
                     item => item.indicator !== valueFilter.indicator,
                   );
-                  if (valueFilter.comparisonValue || (valueFilter.comparisonType === "boolean" && valueFilter.comparisonType === false)) {
+                  if (valueFilter.comparisonValue || valueFilter.comparisonType === "boolean") {
                     temp.push(valueFilter);
                   }
                   setWalletListParams({
