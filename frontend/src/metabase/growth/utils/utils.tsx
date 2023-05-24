@@ -6,23 +6,6 @@ import Link from "antd/lib/typography/Link";
 import { PublicApi, maybeUsePivotEndpoint } from "metabase/services";
 import { dashboardIdInfo } from "metabase/new-service";
 
-
-export function getFirstAddressByPriory(datas:{address: string, chain: string}[]) {
-  if (datas.length === 0) return null;
-  const chainPriory = ["Ethereum", "Polygon", "BNB Chain", "Harmony"];
-  //sort datas by chainPriory
-  datas = datas.sort((a, b) => {
-    return chainPriory.indexOf(a.chain) - chainPriory.indexOf(b.chain);
-  });
-  // find first address by chainPriory
-  let first = datas.find((data) => chainPriory.includes(data.chain));
-  // if not found, return first address
-  if (!first){
-    first = datas[0]
-  }
-  return first;
-}
-
 export async function getDashboardInfo(
   urlDashboardName: string,
   urlUserName: string,
@@ -138,49 +121,48 @@ export function checkIsNeedContactUs(
   onBlockAction: () => any,
   closable = true,
 ) {
-  action();
-  // // if (user && user.email === "fga@footprint.network") {
-  // if (project?.isDemo || !project) {
-  //   modal.info({
-  //     title: "Contact Us",
-  //     closable: closable,
-  //     content: (
-  //       <>
-  //         <div className=" mt1 text-light">
-  //           If you wish to view data dashboards related to your own project,
-  //           please feel free to contact our BD team. Thank you.
-  //         </div>
-  //         <div className="mt2">
-  //           <Link target="_blank" href="mailto:sales@footprint.network">
-  //             Email: sales@footprint.network
-  //           </Link>
-  //         </div>
-  //         <div>
-  //           <Link
-  //             target="_blank"
-  //             className="mt2"
-  //             href="https://t.me/joinchat/4-ocuURAr2thODFh"
-  //           >
-  //             Telegram: @dplinnn
-  //           </Link>
-  //         </div>
-  //       </>
-  //     ),
-  //     okText: "Book a meeting",
-  //     onOk() {
-  //       window.open("https://forms.gle/Xs8WahhYh26xKoDj7", "_blank");
-  //     },
-  //   });
-  //   onBlockAction?.();
-  //   return true;
+  // if (user && user.email === "fga@footprint.network") {
+  if (project?.isDemo || !project) {
+    modal.info({
+      title: "Contact Us",
+      closable: closable,
+      content: (
+        <>
+          <div className=" mt1 text-light">
+            If you wish to view data dashboards related to your own project,
+            please feel free to contact our BD team. Thank you.
+          </div>
+          <div className="mt2">
+            <Link target="_blank" href="mailto:sales@footprint.network">
+              Email: sales@footprint.network
+            </Link>
+          </div>
+          <div>
+            <Link
+              target="_blank"
+              className="mt2"
+              href="https://t.me/joinchat/4-ocuURAr2thODFh"
+            >
+              Telegram: @dplinnn
+            </Link>
+          </div>
+        </>
+      ),
+      okText: "Book a meeting",
+      onOk() {
+        window.open("https://forms.gle/Xs8WahhYh26xKoDj7", "_blank");
+      },
+    });
+    onBlockAction?.();
+    return true;
+  } else {
+    action?.();
+    return false;
+  }
+
   // } else {
-  //   action?.();
-  //   return false;
+  //   action();
   // }
-  //
-  // // } else {
-  // //   action();
-  // // }
 }
 
 export function updateDashboardPara(
@@ -190,7 +172,7 @@ export function updateDashboardPara(
   newValue: [],
 ) {
   const name_index = parameters.findIndex(i => i.slug === newValueKey);
-  if (name_index !== -1 ) {
+  if (name_index !== -1 && parameterValues[parameters[name_index].id]) {
     set(parameterValues, parameters[name_index].id, newValue);
     return true
   }else{
