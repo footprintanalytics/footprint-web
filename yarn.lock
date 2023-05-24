@@ -6649,10 +6649,10 @@
   resolved "https://registry.yarnpkg.com/@popperjs/core/-/core-2.11.7.tgz#ccab5c8f7dc557a52ca3288c10075c9ccd37fff7"
   integrity sha512-Cr4OjIkipTtcXKjAsm8agyleBuDHvxzeBoa1v543lbv1YaIwQjESsVcmjiWiPEbC1FIeHOG/Op9kdCmAmiS3Kw==
 
-"@questflow/canvas@^0.1.6":
-  version "0.1.6"
-  resolved "https://registry.yarnpkg.com/@questflow/canvas/-/canvas-0.1.6.tgz#f31dedaeafa47a6425ba8bf09d1f56a15133f524"
-  integrity sha512-ugAmZdWa6mB/6n2yyVyJkjfprP7w6uUop2j5w5g3eIcyHO6+b4bNbNV21xxeJMAUOYHDvLNzFMtQnLij62C3cA==
+"@questflow/canvas@^0.1.7":
+  version "0.1.7"
+  resolved "https://registry.yarnpkg.com/@questflow/canvas/-/canvas-0.1.7.tgz#36844f0fd7916e1e2d52e5800ccb71ad7c908172"
+  integrity sha512-gZMAA3f9wdPB4phzTNsK0VF8w0vQT4oGOIq0N8qb093/uxWW8h9siUgjJP4hW93t2H6Gy/M2Os8RH+tH2O0oYg==
   dependencies:
     "@apollo/client" "^3.7.0"
     "@aws-sdk/client-scheduler" "^3.272.0"
