@@ -24,8 +24,8 @@ const nftData = [
         "value": "collections",
         "publicUuid": "2538542f-efcf-4399-bc3d-d0bfe97e33a8",
       }, {
-        "label": "Loyalty",
-        "value": "loyalty-fees",
+        "label": "Royalty",
+        "value": "royalty",
         "publicUuid": "c485c035-5688-4371-9943-0752d1152bce",
       }, {
         "label": "Aggregators Overview",
@@ -59,10 +59,9 @@ const nftData = [
         "publicUuid": "a3faa3d4-b306-4105-b653-35b74f9011cd",
         "type": "chart",
       }, {
-        "label": "Top Collections by Loyalty",
-        "value": "top-collections-by-loyalty",
-        "publicUuid": "f3bbc1b3-cbaa-4f85-8b7b-7be25ac48ec3",
-        "type": "chart",
+        "label": "Top Collections by Royalty",
+        "value": "top-collections-by-royalty",
+        "publicUuid": "8b839ff6-2cb3-43e7-b2a8-7d54bd4d431e",
       }, {
         "label": "Top Wallet Address by Trading Value",
         "value": "top-wallet-address-by-trading-value",

@@ -77,23 +77,47 @@ export const template_gallery = project => {
     project_name ? "&project_name=" + project_name : ""
   }#from=Custom Analysis`;
   return [
-    // {
-    //   category: "Campaign Analysis",
-    //   desc: "Campaign Analysis is the technique of evaluating marketing campaigns to determine their effectiveness in achieving specific business objectives.",
-    //   items: [
-    //     {
-    //       dashboardName: "Token Airdrop Monitoring",
-    //       id: 7426,
-    //       dashboardLink: "/growth/public/dashboard/7426#from=Custom Analysis",
-    //     },
-    //     {
-    //       dashboardName: "Dashboard for NFT Minting",
-    //       dashboardLink:
-    //         "/growth/public/dashboard/7569?campaign_id=5284#from=Custom Analysis",
-    //       id: 7569,
-    //     },
-    //   ],
-    // },
+    {
+      category: "Typical Use Case",
+      desc: "Help create more profitable games, increase player engagement and retention, improve their monetization strategies, and stay ahead of the competition.",
+      items: [
+        {
+          dashboardName: "Revenue and ARPU Analysis",
+          id: 7961,
+          dashboardLink: `/growth/public/dashboard/b9319fd1-c074-43ce-ac07-104c88be4073?${params}`,
+        },
+        {
+          dashboardName: "Moneyflow Monitor to Check Game Health",
+          dashboardLink:
+            `/growth/public/dashboard/22304b4e-458b-4861-a34e-11bd0724a76b?${params}`,
+          id: 7964,
+        },
+        {
+          dashboardName: "In-Game Duel Analysis (Presenting by Web2 data)",
+          dashboardLink:
+            `/growth/public/dashboard/22b77726-f47d-4e0c-995a-bec002c70a0b?${params}`,
+          id: 7963,
+        },
+        {
+          dashboardName: "Airdrop: select users by FGA user profiling",
+          dashboardLink:
+            `/growth/public/dashboard/59ad5548-8e80-4402-9193-78e3b4db99c9?${params}`,
+          id:7962 ,
+        },
+        {
+          dashboardName: "Gamer Profile",
+          dashboardLink:
+            `/growth/public/dashboard/aca032dc-5faf-462a-8be5-124d68226328?${params}`,
+          id:6345 ,
+        },
+        {
+          dashboardName: "Bot detection",
+          dashboardLink:
+            `/growth/public/dashboard/0dcef7ac-8318-47fd-b675-7b60fdcd068e?${params}`,
+          id:7887 ,
+        },
+      ],
+    },
     {
       category: "Campaign Analysis",
       desc: "Analyze campaign data to determine which platforms and campaigns are the most popular, and identify the most precise target audience.",
@@ -151,6 +175,13 @@ export const template_gallery = project => {
       category: "GameFi",
       desc: "Gain deep industry insights by thoroughly understanding industry data, and develop a comprehensive understanding of operational status by analyzing games.",
       items: [
+
+        {
+          dashboardName: "GameFi Market Overview",
+          dashboardLink:
+            `/growth/public/dashboard/db6aac3e-48e4-4465-87b2-94be114475aa?${params}`,
+          id: 7871,
+        },
         {
           dashboardName: "MCH Duel Analysis",
           dashboardLink: `/growth/public/dashboard/617f6a66-c58d-4c57-8e4f-804f7df26257?date_filter=2023-04-01~2023-04-30&${params}`,
@@ -200,6 +231,12 @@ export const template_gallery = project => {
       category: "NFT",
       desc: "Gain a deeper understanding  by analyzing the overview and holder profit&loss of NFTs.",
       items: [
+        {
+          dashboardName: "NFT Market Overview",
+          dashboardLink:
+            `/growth/public/dashboard/25e7f940-7fc8-4737-bcfa-d4b04a4b6196?${params}`,
+          id: 7842,
+        },
         {
           category: "NFT",
           desc: "Gain a deeper understanding  by analyzing the overview and holder profit&loss of NFTs.",

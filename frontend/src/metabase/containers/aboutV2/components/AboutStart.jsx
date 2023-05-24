@@ -7,6 +7,7 @@ import { loginModalShowAction } from "metabase/redux/control";
 import { getUser } from "metabase/selectors/user";
 import AboutImage from "metabase/containers/aboutV2/components/AboutImage";
 import AboutButton from "metabase/containers/aboutV2/components/AboutButton";
+import { CHAIN_COUNT } from "metabase/lib/constants";
 
 const AboutStart = ({
   user,
@@ -31,7 +32,7 @@ const AboutStart = ({
         <ul>
           <li>
             <CreateImage />
-            <h2>26 Chains</h2>
+            <h2>{CHAIN_COUNT} Chains</h2>
           </li>
           <li>
             <CreateImage />

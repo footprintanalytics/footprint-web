@@ -119,6 +119,7 @@ export default {
   Widget: loadable(() => import("metabase/containers/widget")),
   About: loadable(() => import("metabase/containers/aboutV2")),
   NftPage: loadable(() => import("metabase/containers/nftPage")),
+  batchDownload: loadable(() => import("metabase/containers/batchDownload")),
   dataApi: loadable(() => import("metabase/containers/dataApi")),
   dataApiPrice: loadable(() => import("metabase/containers/dataApi/price")),
   dataApiProduct: loadable(() => import("metabase/containers/dataApi/product")),
