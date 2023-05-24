@@ -14,6 +14,7 @@ import {
   CommentOutlined,
 } from "@ant-design/icons";
 import { get } from "underscore";
+import { disabled } from "styled-system"
 //public/dashboard/uuid
 export const wallet_profile_link =
   "/growth/public/dashboard/fa040fe5-46b3-483b-b257-aa2373559fab"; //query: wallet_address
@@ -279,15 +280,18 @@ export const template_gallery = project => {
     },
   ];
 };
-function getItem(label, key, icon, children, type) {
+
+function getItem(label, key, icon, children, type,disabled = false) {
   return {
     key,
     icon,
     children,
     label,
     type,
+    disabled
   };
 }
+
 /**
  *
  * @param {*} protocolType : 1: GameFi, 2: NFT, 3: GameFi_NFT
@@ -310,8 +314,8 @@ export const fga_menu_data_v2 = (project) => {
     ["game_active_users", "6d84b4a6-ceef-4b30-a9ad-b233038fd8d3"],
     ["nft_leaderboard", "3e9f9af4-93a8-46d4-8ee7-bc472201da7d"],
     ["nft_nft_holder", "58047ca6-0116-438d-9ac3-79ac81dfa764"],
-    // ["nft_sales_mints",""],
-    // ["nft_revenue",""],
+    ["nft_sales_mints","08fb03cf-4ca4-4041-9d91-315a49d78615"],
+    ["nft_revenue","b98b0a6b-64cb-4e09-979d-693040ea3ec9"],
     ["twitter", "fd4d94f3-06f7-445d-ada3-0ce82bcefa39"],
     ["discord", "d137a1ef-34a3-4553-84cb-2203bd9d2baf"],
   ]);
@@ -324,7 +328,7 @@ export const fga_menu_data_v2 = (project) => {
         getItem("Home", "home", <HomeOutlined />),
         protocolType !== "NFT" &&
           getItem("Game", "game", <ShopOutlined />, [
-            getItem("Tokenomics", "game_tokenomics", null),
+            getItem("Tokenomics", "game_tokenomics", null,null,null, true),
             getItem("Revenue", "game_revenue", null),
             getItem("Token Holder", "game_token_holder", null),
             getItem("Active Users", "game_active_users", null),
