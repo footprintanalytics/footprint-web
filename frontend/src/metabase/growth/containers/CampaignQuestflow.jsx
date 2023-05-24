@@ -57,12 +57,12 @@ const CampaignQuestflow = props => {
             idToken={data?.idToken}
             // TODO: need a questflowURL in production
             // questflowURL={data?.questflowURL}
-            // onPublish={onPublish}
-            // onPre={() => {
-            //   router?.goBack();
-            // }}
-            // showSave={false}
-            // showPublish={true}
+            onPublish={onPublish}
+            onPre={() => {
+              router?.goBack();
+            }}
+            showSave={false}
+            showPublish={true}
           />
         </div>
       )}
