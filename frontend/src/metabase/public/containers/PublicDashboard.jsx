@@ -5,7 +5,7 @@ import { push } from "react-router-redux";
 import cx from "classnames";
 import { withRouter } from "react-router";
 
-import _ from "underscore";
+import _, { get } from "underscore";
 import { debounce, isArray } from "lodash";
 import { Breadcrumb, message } from "antd";
 import { IFRAMED } from "metabase/lib/dom";
@@ -41,6 +41,7 @@ import { parseTitleId } from "metabase/lib/urls";
 import {
   updateDashboardPara,
   getDefaultDashboardPara,
+  getFirstAddressByPriory,
 } from "metabase/growth/utils/utils";
 import { cons } from "cljs/cljs.core";
 import { canShowDarkMode } from "metabase/dashboard/components/utils/dark";
@@ -61,10 +62,13 @@ const mapStateToProps = (state, props) => {
     updateDashboardPara(parameters, parameterValues, "protocol_slug", [
       project.protocolSlug,
     ]);
-    if(project.tokenAddress?.length>0&&project.tokenAddress[0].address){
-      updateDashboardPara(parameters, parameterValues, "token_address",
+    if(project.tokenAddress?.length>0){
+      const data = getFirstAddressByPriory(project.tokenAddress);
+      if(data?.address){
+        updateDashboardPara(parameters, parameterValues, "token_address",
         [project.tokenAddress[0].address]
       );
+      }
     }
     if (project.template) {
       const key = "tag";
@@ -82,6 +86,7 @@ const mapStateToProps = (state, props) => {
       );
     }
     if (project.nftCollectionAddress?.length > 0) {
+      const firstAddress = getFirstAddressByPriory( project.nftCollectionAddress);
       const key = "collection_contract_address";
       let queryCollection = getDefaultDashboardPara(
         parameters,
@@ -102,13 +107,13 @@ const mapStateToProps = (state, props) => {
           item => item.address === queryCollectionInUrl,
         ) !== -1
           ? queryCollection
-          : queryCollectionInUrl ?? project.nftCollectionAddress?.[0]?.address;
+          : queryCollectionInUrl ?? firstAddress?.address;
       if (
         updateDashboardPara(parameters, parameterValues, key, queryCollection)
       ) {
-        if (queryCollection === project.nftCollectionAddress?.[0]?.address) {
+        if (queryCollection === firstAddress?.address) {
           updateDashboardPara(parameters, parameterValues, "chain", [
-            project.nftCollectionAddress?.[0].chain,
+            firstAddress.chain,
           ]);
         }
       }
