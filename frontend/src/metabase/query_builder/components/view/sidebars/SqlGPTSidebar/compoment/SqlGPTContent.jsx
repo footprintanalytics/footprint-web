@@ -9,6 +9,7 @@ const SqlGPTContent = ({
   runQuestionQuery,
   question,
   databaseId,
+  user,
 }) => {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(false);
@@ -36,6 +37,7 @@ const SqlGPTContent = ({
           "uri": "7/en",
           "query": query,
           "is_stream": true,
+          "user_id": user?.id,
         }),
         onopen(res) {
           console.log("sse onopen", res)
