@@ -6,6 +6,23 @@ import Link from "antd/lib/typography/Link";
 import { PublicApi, maybeUsePivotEndpoint } from "metabase/services";
 import { dashboardIdInfo } from "metabase/new-service";
 
+
+export function getFirstAddressByPriory(datas:{address: string, chain: string}[]) {
+  if (datas.length === 0) return null;
+  const chainPriory = ["Ethereum", "Polygon", "BNB Chain", "Harmony"];
+  //sort datas by chainPriory
+  datas = datas.sort((a, b) => {
+    return chainPriory.indexOf(a.chain) - chainPriory.indexOf(b.chain);
+  });
+  // find first address by chainPriory
+  let first = datas.find((data) => chainPriory.includes(data.chain));
+  // if not found, return first address
+  if (!first){
+    first = datas[0]
+  }
+  return first;
+}
+
 export async function getDashboardInfo(
   urlDashboardName: string,
   urlUserName: string,
