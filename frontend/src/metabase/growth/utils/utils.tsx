@@ -121,48 +121,49 @@ export function checkIsNeedContactUs(
   onBlockAction: () => any,
   closable = true,
 ) {
-  // if (user && user.email === "fga@footprint.network") {
-  if (project?.isDemo || !project) {
-    modal.info({
-      title: "Contact Us",
-      closable: closable,
-      content: (
-        <>
-          <div className=" mt1 text-light">
-            If you wish to view data dashboards related to your own project,
-            please feel free to contact our BD team. Thank you.
-          </div>
-          <div className="mt2">
-            <Link target="_blank" href="mailto:sales@footprint.network">
-              Email: sales@footprint.network
-            </Link>
-          </div>
-          <div>
-            <Link
-              target="_blank"
-              className="mt2"
-              href="https://t.me/joinchat/4-ocuURAr2thODFh"
-            >
-              Telegram: @dplinnn
-            </Link>
-          </div>
-        </>
-      ),
-      okText: "Book a meeting",
-      onOk() {
-        window.open("https://forms.gle/Xs8WahhYh26xKoDj7", "_blank");
-      },
-    });
-    onBlockAction?.();
-    return true;
-  } else {
-    action?.();
-    return false;
-  }
-
+  action();
+  // // if (user && user.email === "fga@footprint.network") {
+  // if (project?.isDemo || !project) {
+  //   modal.info({
+  //     title: "Contact Us",
+  //     closable: closable,
+  //     content: (
+  //       <>
+  //         <div className=" mt1 text-light">
+  //           If you wish to view data dashboards related to your own project,
+  //           please feel free to contact our BD team. Thank you.
+  //         </div>
+  //         <div className="mt2">
+  //           <Link target="_blank" href="mailto:sales@footprint.network">
+  //             Email: sales@footprint.network
+  //           </Link>
+  //         </div>
+  //         <div>
+  //           <Link
+  //             target="_blank"
+  //             className="mt2"
+  //             href="https://t.me/joinchat/4-ocuURAr2thODFh"
+  //           >
+  //             Telegram: @dplinnn
+  //           </Link>
+  //         </div>
+  //       </>
+  //     ),
+  //     okText: "Book a meeting",
+  //     onOk() {
+  //       window.open("https://forms.gle/Xs8WahhYh26xKoDj7", "_blank");
+  //     },
+  //   });
+  //   onBlockAction?.();
+  //   return true;
   // } else {
-  //   action();
+  //   action?.();
+  //   return false;
   // }
+  //
+  // // } else {
+  // //   action();
+  // // }
 }
 
 export function updateDashboardPara(
