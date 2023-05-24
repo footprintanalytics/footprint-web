@@ -18,7 +18,7 @@ import {
 import { FilterOut } from "metabase/growth/components/FilterOut";
 import {
   createCommunityUserCohort,
-  createPotentialUserCohortByFilter,
+  createPotentialUserCohortByFilter, createPotentialUserTagging,
 } from "metabase/new-service";
 
 const CreateCohort2 = ({
@@ -31,6 +31,7 @@ const CreateCohort2 = ({
   params = {},
   type = "Potential User",
   isButtonStyle = true,
+  isTagging = false,
 }) => {
   const [isCohortModalOpen, setCohortModalOpen] = useState(false);
   const [createCohortLoading, setCreateCohortLoading] = useState(false);
@@ -105,6 +106,8 @@ const CreateCohort2 = ({
     );
   };
 
+  const createPotentialUserApi = isTagging ? createPotentialUserTagging : createPotentialUserCohortByFilter;
+
   const createCohortAction = async () => {
     if (!cohortName) {
       message.error("Please enter the name of your cohort.");
@@ -132,7 +135,7 @@ const CreateCohort2 = ({
             title: cohortName,
             excludeTags: [...filterOutValues],
           })
-        : await createPotentialUserCohortByFilter({
+        : await createPotentialUserApi({
             ...omit(params, ["pageSize", "current"]),
             title: cohortName,
             filters: filters,
@@ -140,9 +143,13 @@ const CreateCohort2 = ({
     setCohortModalOpen(false);
     setCreateCohortLoading(false);
     // onChangeLocation(getGrowthProjectPath(project?.protocolSlug, "Cohort"));
-    showCohortSuccessModal(modal, result, router, type, () => {
-      onChangeLocation(getGrowthProjectPath(project?.protocolSlug, "Cohort"));
-    });
+    if (isTagging) {
+      message.success("Tagging Success")
+    } else {
+      showCohortSuccessModal(modal, result, router, type, () => {
+        onChangeLocation(getGrowthProjectPath(project?.protocolSlug, "Cohort"));
+      });
+    }
   };
   return (
     <>
@@ -208,7 +215,7 @@ const CreateCohort2 = ({
         title={`${btnText}`}
       >
         <Divider className="my2" />
-        <h4>Cohort Name</h4>
+        <h4>{isTagging ? "Tag Name" : "Cohort Name"}</h4>
         <div className="mt1" />
         <AutoComplete
           style={{

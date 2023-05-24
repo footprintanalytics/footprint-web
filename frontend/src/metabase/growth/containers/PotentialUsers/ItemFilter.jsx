@@ -1,9 +1,11 @@
 /* eslint-disable react/prop-types */
 import React, { useState } from "react";
-import { Col, Row, Select, Skeleton } from "antd";
-import MuiSelect from "metabase/growth/components/MuiSelect";
+import { Col, Row, Select, Cascader, Skeleton } from "antd";
 import cx from "classnames";
+import { orderBy } from "lodash";
+import MuiSelect from "metabase/growth/components/MuiSelect";
 import MuiInput from "metabase/growth/components/MuiInput";
+import MuiDate from "metabase/growth/components/MuiDate";
 import {
   getPotentialUseFilterProject,
   getPotentialUserFilterCollection,
@@ -11,7 +13,7 @@ import {
 } from "metabase/new-service";
 import { formatTableTitle } from "metabase/lib/formatting/footprint";
 import Icon from "metabase/components/Icon";
-import { orderBy } from "lodash";
+import MuiBoolean from "metabase/growth/components/MuiBoolean";
 
 export const ItemFilter = props => {
   const {
@@ -111,25 +113,27 @@ export const ItemFilter = props => {
         <div className="flex align-center">
           <div className="more-filter">
             <div className="more-text"><Icon name="add" size={12} className="mr1"/> Add Filter</div>
-            <Select
+            <Cascader
+              popupClassName={"more-filter-cascader"}
               height={40}
               open={openMoreSelect}
-              style={{ width: "130px", height: 40 }}
+              style={{ width: "130px" }}
               label={item.label}
               options={item.options}
-              value={selectMoreValue}
+              value={null}
               onDropdownVisibleChange={(visible) => setOpenMoreSelect(visible)}
               bordered={false}
               showArrow={false}
               mode="multiple"
+              // multiple={true}
               showSearch={false}
               onChange={handleChange}
-              dropdownMatchSelectWidth={250}
             />
           </div>
         </div>
       )
     }
+
     if (item.type === "string" && item.isArray) {
       return (
         <MuiSelect
@@ -141,6 +145,7 @@ export const ItemFilter = props => {
               "indicator": item.indicator,
               "comparisonSymbol": "in",
               "comparisonValue": value ? [value] : null,
+              comparisonType: item.type,
             });
           }}
           options={item.options}
@@ -155,6 +160,54 @@ export const ItemFilter = props => {
         />
       )
     }
+    if (item.type === "boolean") {
+      return (
+        <MuiBoolean
+          height={40}
+          style={{ width: "100%", height: 40 }}
+          onValueChange={(val, comparisonSymbol) => {
+            onFilterChange?.({
+              comparisonValue: val,
+              indicator: item.indicator,
+              comparisonSymbol: comparisonSymbol,
+              comparisonType: item.type,
+            });
+          }}
+          comparisonSymbol={item.comparisonSymbol}
+          label={item.label}
+          name={item.value}
+          frontSymbol={["netWorth", "nftHoldingValue", "tokenHoldingValue"].includes(item.indicator) ? "$" : ""}
+          showClose={isOtherFilter}
+          autoFocus={isOtherFilter}
+          dropdownMatchSelectWidth={isOtherFilter ? 250 : null}
+          onCloseAction={() => onCloseAction(item)}
+        />
+      )
+    }
+    if (item.type === "date") {
+      return (
+        <MuiDate
+          height={40}
+          style={{ width: "100%", height: 40 }}
+          onValueChange={(val, comparisonSymbol) => {
+            onFilterChange?.({
+              comparisonValue: val,
+              indicator: item.indicator,
+              comparisonSymbol: comparisonSymbol,
+              comparisonType: item.type,
+            });
+          }}
+          comparisonSymbol={item.comparisonSymbol}
+          label={item.label}
+          name={item.value}
+          frontSymbol={["netWorth", "nftHoldingValue", "tokenHoldingValue"].includes(item.indicator) ? "$" : ""}
+          showClose={isOtherFilter}
+          autoFocus={isOtherFilter}
+          dropdownMatchSelectWidth={isOtherFilter ? 250 : null}
+          onCloseAction={() => onCloseAction(item)}
+        />
+      )
+    }
     return (
       <MuiInput
         height={40}
@@ -164,6 +217,7 @@ export const ItemFilter = props => {
             comparisonValue: parseFloat(val),
             indicator: item.indicator,
             comparisonSymbol: comparisonSymbol,
+            comparisonType: item.type,
           });
         }}
         comparisonSymbol={item.comparisonSymbol}
