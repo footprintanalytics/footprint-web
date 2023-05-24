@@ -113,6 +113,9 @@ const SqlGPTContent = ({
             () => ({
               required: true,
               validator(_, value) {
+                if (!(value?.trim())) {
+                  return Promise.reject(new Error("Please describe your question."));
+                }
                 const regex = /^[A-Za-z0-9!"#$%&'()*+,-.:;<=>?@[\]^_`{|}~ ]+$/
                 if (regex.test(value)) {
                   return Promise.resolve();
