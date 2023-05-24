@@ -1,7 +1,7 @@
 /* eslint-disable react/prop-types */
 import React from "react";
 import { connect } from "react-redux";
-import { List, Card, Image } from "antd";
+import { List, Card, Image, Tooltip, Typography } from "antd";
 import { Link } from "react-router";
 import { getUser } from "metabase/selectors/user";
 import { template_gallery } from "../utils/data";
@@ -62,7 +62,7 @@ const CustomAnalysis = props => {
                               />
                             }
                           >
-                            <Meta title={item.dashboardName} />
+                            <div style={{minHeight:45}}> <Typography.Text >{item.dashboardName}</Typography.Text></div>
                           </Card>
                         </Link>
                       </List.Item>

@@ -365,7 +365,7 @@ export const fga_menu_data_v2 = (project) => {
         getItem("Home", "home", <HomeOutlined />),
         protocolType !== "NFT" &&
           getItem("Game", "game", <ShopOutlined />, [
-            getItem("Tokenomics", "game_tokenomics", null,null,null, true),
+            // getItem("Tokenomics", "game_tokenomics", null,null,null, true),
             getItem("Revenue", "game_revenue", null),
             getItem("Token Holder", "game_token_holder", null),
             getItem("Active Users", "game_active_users", null),
@@ -376,7 +376,7 @@ export const fga_menu_data_v2 = (project) => {
               getItem("Leaderboard", "nft_leaderboard", null),
             getItem("NFT Holder", "nft_nft_holder", null),
             getItem("Sales & Mints", "nft_sales_mints", null),
-            protocolType === "NFT" && getItem("Revenue", "nft_revenue", null),
+            // protocolType === "NFT" && getItem("Revenue", "nft_revenue", null),
           ]),
         getItem("Social", "social", <GatewayOutlined />, [
           getItem("Twitter", "twitter", null),
