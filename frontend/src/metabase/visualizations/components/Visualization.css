@@ -35,7 +35,8 @@
   display: block;
   text-align: center;
   line-height: 100%;
-  background-image: url("https://footprint-imgs.oss-accelerate.aliyuncs.com/img_watermark_2.png");
+  background-image: url("https://footprint-imgs.oss-accelerate.aliyuncs.com/img_watermark.svg?2=2");
+  opacity: 0.16;
   width: calc(100% - 40px);
   background-size: 40%;
   background-repeat: no-repeat;

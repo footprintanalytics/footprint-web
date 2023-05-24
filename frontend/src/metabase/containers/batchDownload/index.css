@@ -1,0 +1,434 @@
+.batch-download__about {
+  min-height: calc(100vh - 60px);
+  font-family: roboto;
+  background: #06061E;
+}
+
+.batch-download__start {
+  background-color: #00061D;
+  height: 680px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.batch-download__start-bg {
+  background-image: url("https://static.footprint.network/batch-download/img_start_bg.png?1=1");
+  background-size: 1920px 680px;
+  background-repeat: no-repeat;
+  background-position: center;
+}
+
+.batch-download__start-container {
+  margin-right: 800px;
+  margin-bottom: 5%;
+  text-align: left;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+}
+
+.batch-download__text-bland {
+  color: #3434b2;
+  font-weight: bold;
+}
+
+.batch-download__buttons {
+  display: flex;
+  flex-direction: row;
+  column-gap: 20px;
+}
+
+.batch-download__button {
+  width: 220px;
+  height: 48px;
+  font-weight: bold;
+}
+
+.batch-download__button-black {
+  width: 160px;
+  height: 48px;
+  background: #1E1E1E;
+  border: 1px solid white;
+  color: white;
+  font-weight: bold;
+}
+
+.batch-download__button-white {
+  width: 160px;
+  height: 48px;
+  background: white;
+  color: black;
+  font-weight: bold;
+}
+
+.batch-download__button-bland {
+  width: 160px;
+  height: 48px;
+  background: #4444FF;
+  color: white;
+  font-weight: bold;
+  border: 0;
+}
+
+.batch-download__start h1 {
+  font-size: 42px;
+  line-height: 1.2;
+  text-align: left;
+  color: white;
+}
+
+.batch-download__start h2 {
+  color: white;
+  font-size: 18px;
+  max-width: 800px;
+  font-weight: normal;
+  line-height: 1.5;
+  margin: 20px 0 50px;
+  text-align: left;
+}
+
+.batch-download__box {
+  height: 550px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  padding: 20px;
+}
+
+.batch-download__data {
+  background-color: #F4F6FF;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+  padding: 100px 0 160px;
+  position: relative;
+}
+
+.batch-download__data-circle-1 {
+  width: 240px;
+  height: 480px;
+  position: absolute;
+  background: #FFC2E2;
+  top: 100px;
+  left: 0;
+  filter: blur(100px);
+  border-radius: 0 50% 50% 0;
+  z-index: 0;
+}
+
+.batch-download__data-circle-2 {
+  width: 380px;
+  height: 380px;
+  position: absolute;
+  background: #B8E2FF;
+  top: 600px;
+  left: 80px;
+  filter: blur(80px);
+  border-radius: 50%;
+  z-index: 0;
+}
+
+.batch-download__data-circle-3 {
+  width: 210px;
+  height: 420px;
+  position: absolute;
+  background: #BDCAFF;
+  top: 100px;
+  right: 0;
+  filter: blur(80px);
+  border-radius: 50% 0 0 50%;
+  z-index: 0;
+}
+
+.batch-download__data-pic {
+  margin: 60px 0 120px;
+  z-index: 1;
+}
+
+.batch-download__best-practices ul {
+  display: grid;
+  flex-wrap: wrap;
+  grid-gap: 40px;
+  grid-template-columns: repeat(3, 1fr);
+  margin-top: 30px;
+}
+
+.batch-download__best-practices li {
+  display: flex;
+  height: 400px;
+  width: 454px;
+  flex-direction: column;
+  background: white;
+  padding: 30px;
+  border-radius: 10px;
+  border: 1px solid #4A5568;
+}
+
+.batch-download__best-practices li img {
+  object-fit: scale-down;
+  width: 100%;
+  height: 211px;
+}
+
+.batch-download__best-practices h3 {
+  font-size: 18px;
+  margin: 10px 0 20px;
+}
+
+.batch-download__why {
+  background-color: #121828;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+  padding: 100px 0 160px;
+}
+
+.batch-download__why h1 {
+  color: white;
+}
+
+.batch-download__why span {
+  color: white;
+}
+
+.batch-download__why-one ul {
+  display: grid;
+  flex-wrap: wrap;
+  grid-gap: 40px;
+  grid-template-columns: repeat(3, 1fr);
+  margin-top: 30px;
+}
+
+.batch-download__why-one-li {
+  display: flex;
+  width: 454px;
+  height: 500px;
+  flex-direction: column;
+  padding: 30px;
+  border-radius: 10px;
+  border: 1px solid #4A5568;
+  background-size: cover;
+  background-repeat: no-repeat;
+  background-color: #F7F8FD;
+  position: relative;
+}
+
+.batch-download__why-two h3,
+.batch-download__why-one h3 {
+  font-weight: bold;
+  font-size: 40px;
+  color: black;
+  z-index: 1;
+}
+
+.batch-download__why-li-inner-li {
+  font-size: 16px;
+  color: black;
+  margin-left: 20px;
+  list-style: circle;
+  line-height: 1.3;
+}
+
+.batch-download__why-li-inner {
+  z-index: 1;
+  padding-left: 20px;
+}
+
+
+.batch-download__why-two ul {
+  display: grid;
+  flex-wrap: wrap;
+  grid-gap: 40px;
+  grid-template-columns: repeat(2, 1fr);
+  margin-top: 40px;
+}
+
+.batch-download__why-two-li {
+  display: flex;
+  height: 410px;
+  width: 700px;
+  flex-direction: column;
+  padding: 30px;
+  border-radius: 10px;
+  border: 1px solid #4A5568;
+  background-size: cover;
+  background-repeat: no-repeat;
+  background-color: #F7F8FD;
+  position: relative;
+}
+
+.batch-download__how {
+  background-color: #FFFFFF;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+  padding: 100px 0 160px;
+}
+
+.batch-download__how-steps {
+  width: 600px;
+  display: flex;
+  align-items: center;
+  position: relative;
+}
+
+.batch-download__how-step {
+  width: 48px;
+  height: 48px;
+  background: #3334B2;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  color: white;
+  border-radius: 50%;
+  font-size: 24px;
+}
+
+.batch-download__how-arrow-box {
+  margin-right: 70px;
+  width: 10px;
+  height: 10px;
+  border-top: 2px solid #3334B2;
+  border-right: 2px solid #3334B2;
+  transform: rotate(45deg);
+  position: absolute;
+  right: 0;
+}
+
+.batch-download__how-arrow {
+  background: #3334B2;
+  height: 2px;
+  flex: 1;
+  margin: 0 20px;
+}
+
+.batch-download__how ul {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  column-gap: 40px;
+  margin-top: 20px;
+}
+
+.batch-download__how ul li {
+  width: 480px;
+  height: 220px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 40px;
+  background: #F5F5F5;
+}
+
+.batch-download__how ul li h3 {
+  font-size: 20px;
+}
+
+.batch-download__how ul li span {
+  text-align: center;
+  margin-top: 10px;
+}
+
+.batch-download__ready {
+  height: 360px;
+  display: flex;
+  justify-content: center;
+  background-color: #3334B2;
+  padding: 80px 0 100px;
+  background-image: url(https://static.footprint.network/batch-download/img_get_start_pic.png);
+  background-position: bottom right;
+  background-size: 800px 360px;
+  background-repeat: no-repeat;
+}
+
+.batch-download__ready-inner {
+  display: flex;
+  flex-direction: column;
+  margin: 0 auto;
+  padding-right: 600px;
+}
+
+.batch-download__ready h2 {
+  color: white;
+  font-size: 42px;
+}
+
+.batch-download__ready span {
+  color: white;
+  line-height: 1.3;
+}
+
+.batch-download__dividing-line-gray {
+  max-width: 1440px;
+  margin: 0 auto;
+  border-bottom: 1px solid #353C4A;
+}
+
+@media screen and (--footprint-breakpoint-max-home-width) {
+  .batch-download__start-container {
+    margin-right: 500px;
+  }
+  .batch-download__data-pic img {
+    width: 900px;
+  }
+  .batch-download__best-practices li {
+    width: 340px;
+  }
+  .batch-download__why-one-li {
+    width: 360px;
+  }
+  .batch-download__why-two-li {
+    width: 540px;
+  }
+  .batch-download__how ul li {
+    width: 440px;
+  }
+  .batch-download__ready-inner {
+    padding-right: 400px;
+  }
+  .batch-download__why-two h3,
+  .batch-download__why-one h3 {
+    font-size: 28px;
+  }
+  .batch-download__why-li-inner-li {
+    font-size: 14px;
+  }
+}
+
+@media screen and (--footprint-breakpoint-max-pad) {
+  .batch-download__start-container {
+    margin-right: 300px;
+  }
+  .batch-download__data-pic img {
+    width: 800px;
+  }
+  .batch-download__best-practices li {
+    width: 300px;
+  }
+  .batch-download__why-one-li {
+    width: 320px;
+  }
+  .batch-download__why-two-li {
+    width: 500px;
+  }
+  .batch-download__how ul li {
+    width: 400px;
+  }
+  .batch-download__ready-inner {
+    padding-right: 300px;
+  }
+  .batch-download__why-two h3,
+  .batch-download__why-one h3 {
+    font-size: 24px;
+  }
+  .batch-download__why-li-inner-li {
+    font-size: 14px;
+    margin-left: 0px;
+  }
+}
