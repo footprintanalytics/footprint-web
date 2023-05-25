@@ -180,6 +180,9 @@ export const queryPotentialUserByFilter = async params => {
 export const createPotentialUserCohortByFilter = async params => {
   return POST(`/api/v1/fga/potential-user/list/queryByFilter/cohort`, params);
 };
+export const createPotentialUserTagging = async params => {
+  return POST(`/api/v1/fga/potential-user/list/queryByFilter/addressTag`, params);
+};
 export const createPotentialUserCohort = async params => {
   return POST(`/api/v1/fga/potential-user/cohort`, params);
 };

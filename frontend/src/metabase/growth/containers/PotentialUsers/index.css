@@ -62,3 +62,11 @@
   display: flex;
   align-items: center;
 }
+
+.more-filter-cascader .ant-cascader-menu {
+  height: 300px
+}
+
+.cohort_modal .ant-modal-content {
+  width: 640px;
+}
