@@ -7,7 +7,7 @@ import { connect } from "react-redux";
 import { withRouter } from "react-router";
 import { getUser, getFgaProject } from "metabase/selectors/user";
 import LoadingSpinner from "metabase/components/LoadingSpinner";
-import { fga_menu_data } from "../utils/data";
+import { fga_menu_data, fga_menu_data_v2 } from "../utils/data";
 import {
   getGrowthProjectPath,
   getLatestGAMenuTag,

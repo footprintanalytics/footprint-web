@@ -15,7 +15,7 @@ const DashboardMask = props => {
         position: "absolute",
         top: 0,
         left: 0,
-        zIndex: 10,
+        zIndex: 3,
       }}
     >
       <Card className="mt-250">

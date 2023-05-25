@@ -12,7 +12,7 @@ import {
   getGrowthProjectPath,
   getLatestGAProjectId,
 } from "../utils/utils";
-import { fga_menu_data } from "../utils/data";
+import { fga_menu_data, fga_menu_data_v2 } from "../utils/data";
 import LoadingDashboard from "../components/LoadingDashboard";
 import DashboardMask from "../components/DashboardMask";
 import ConnectorList from "./ConnectorList";
