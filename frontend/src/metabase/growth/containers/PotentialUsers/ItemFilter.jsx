@@ -6,6 +6,7 @@ import { orderBy } from "lodash";
 import MuiSelect from "metabase/growth/components/MuiSelect";
 import MuiInput from "metabase/growth/components/MuiInput";
 import MuiDate from "metabase/growth/components/MuiDate";
+import MuiString from "metabase/growth/components/MuiString";
 import {
   getPotentialUseFilterProject,
   getPotentialUserFilterCollection,
@@ -114,7 +115,7 @@ export const ItemFilter = props => {
           <div className="more-filter">
             <div className="more-text"><Icon name="add" size={12} className="mr1"/> Add Filter</div>
             <Cascader
-              popupClassName={"more-filter-cascader"}
+              rootClassName={"more-filter-cascader"}
               height={40}
               open={openMoreSelect}
               style={{ width: "130px" }}
@@ -148,7 +149,31 @@ export const ItemFilter = props => {
               comparisonType: item.type,
             });
           }}
-          options={item.options}
+          resultMappingFunction={getResultMappingFunction(item)}
+          apiFunction={getApiFunction(item)}
+          showClose={isOtherFilter}
+          autoFocus={isOtherFilter}
+          defaultOpen={isOtherFilter}
+          dropdownMatchSelectWidth={isOtherFilter ? 250 : null}
+          onCloseAction={() => onCloseAction(item)}
+          defaultOptions={item.value && item.value.length > 0 ? orderBy(item.value?.map(getItemMappingFunction(item)), "label") : null}
+        />
+      )
+    }
+    if (item.type === "string") {
+      return (
+        <MuiString
+          height={40}
+          style={{ width: "100%", height: 40 }}
+          label={item.label}
+          onValueChange={value => {
+            onSelectChange?.({
+              "indicator": item.indicator,
+              "comparisonSymbol": "in",
+              "comparisonValue": value ? [value] : null,
+              comparisonType: item.type,
+            });
+          }}
           resultMappingFunction={getResultMappingFunction(item)}
           apiFunction={getApiFunction(item)}
           showClose={isOtherFilter}
@@ -249,13 +274,13 @@ export const ItemFilter = props => {
     >
       <span style={{ marginRight: 8, color: titleColor }}>Filters:</span>
       <Row gutter={[10, 10]} className="w-full">
-        {visibleFilterResultData?.map((item, index) => (
-          <Col sm={24} md={12} lg={8} xl={6} xxl={4} key={index}>
+        {visibleFilterResultData?.map(item => (
+          <Col sm={24} md={12} lg={8} xl={6} xxl={4} key={item.indicator}>
             {renderUi(item)}
           </Col>
         ))}
-        {moreFilterResultData?.map((item, index) => (
-          <Col sm={24} md={12} lg={8} xl={6} xxl={4} key={`${item.label} ${index}`}>
+        {moreFilterResultData?.map(item => (
+          <Col sm={24} md={12} lg={8} xl={6} xxl={4} key={`${item.indicator}`}>
             {renderUi(item)}
           </Col>
         ))}
