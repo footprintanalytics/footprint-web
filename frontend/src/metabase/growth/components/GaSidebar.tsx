@@ -36,7 +36,12 @@ const GaSidebar = (props: IGaSidebarProp) => {
 
   useEffect(() => {
     if (!projectObject) return;
-
+    // const itemsTemp: any[] = getGaMenuTabs(
+    //   fga_menu_data,
+    //   projectObject.protocolType,
+    //   projectObject.nftCollectionAddress?.length > 0,
+    //   user,
+    // )?.menuTabs;
     let protocolType = projectObject.protocolType;
     if(protocolType==='GameFi'&&projectObject.nftCollectionAddress?.length > 0){
       protocolType = 'GameFi_NFT'
@@ -44,8 +49,14 @@ const GaSidebar = (props: IGaSidebarProp) => {
     const itemsTemp: any[] = fga_menu_data_v2(projectObject).menuTabs;
     const rootSubmenuKeysTemp: any[] = [];
     itemsTemp?.map(i => {
-      rootSubmenuKeysTemp.push(i.key);
-    });
+      i?.children?.map((j: any) => {
+        if (j) {
+          rootSubmenuKeysTemp.push(j?.key);
+        }
+      });
+      // rootSubmenuKeysTemp.push(i.key);
+    }
+    );
     setRootSubmenuKeys(rootSubmenuKeysTemp);
     setItems(itemsTemp);
   }, [projectObject]);
@@ -57,11 +68,16 @@ const GaSidebar = (props: IGaSidebarProp) => {
         if (i.key === currentMenu) {
           setOpenKeys([i.key]);
           return;
-        }
-        if (i.children?.length > 0) {
-          i.children.map((child: { key: string }) => {
+        } else if (i.children?.length > 0) {
+          i.children.map((child: { key: string; children: [] }) => {
             if (child.key === currentMenu) {
               setOpenKeys([i.key]);
+            } else if (child.children?.length > 0) {
+              child.children.map((child2: { key: string }) => {
+                if (child2.key === currentMenu) {
+                  setOpenKeys([child.key]);
+                }
+              });
             }
           });
         }
@@ -106,6 +122,7 @@ const GaSidebar = (props: IGaSidebarProp) => {
             onOpenChange={onOpenChange}
             selectedKeys={[currentMenu!]}
             onSelect={item => {
+              console.log("item", item);
               saveLatestGAMenuTag(item.key);
               router.push({
                 pathname: getGrowthProjectPath(
