@@ -30,7 +30,7 @@ const PotentialUsers = props => {
   const { router, location, project, user } = props;
 
   // const visibleCount = 3;
-  const canShowTagging = user?.id === 23145 || user?.id === 10;
+  const canShowTagging = user?.id === 23145 || user?.id === 10 || user?.id === 6;
   // const canShowTagging = true;
 
   const [walletListParams, setWalletListParams] = React.useState({

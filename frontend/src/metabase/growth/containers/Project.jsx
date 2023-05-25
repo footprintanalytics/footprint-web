@@ -12,7 +12,7 @@ import {
   getGrowthProjectPath,
   getLatestGAProjectId,
 } from "../utils/utils";
-import { fga_menu_data, fga_menu_data_v2 } from "../utils/data";
+import { fga_menu_data } from "../utils/data";
 import LoadingDashboard from "../components/LoadingDashboard";
 import DashboardMask from "../components/DashboardMask";
 import ConnectorList from "./ConnectorList";
@@ -350,7 +350,7 @@ const Project = props => {
         ></CampaignDetail>
       );
     }
-    if (["Cohort", "segment"].includes(current_tab)) {
+    if (current_tab === "Cohort") {
       return (
         <CohortList
           router={router}
@@ -360,7 +360,7 @@ const Project = props => {
       );
     }
     if (gaMenuTabs?.dashboardMap?.has(current_tab)) {
-      if (["Twitter", "twitter"].includes(current_tab)) {
+      if (current_tab === "Twitter") {
         return (
           <LoadingDashboard
             router={router}
@@ -373,7 +373,7 @@ const Project = props => {
           </LoadingDashboard>
         );
       }
-      if (["Discord", "discord"].includes(current_tab)) {
+      if (current_tab === "Discord") {
         return (
           <LoadingDashboard
             router={router}
@@ -386,7 +386,7 @@ const Project = props => {
           </LoadingDashboard>
         );
       }
-      if (["Funnel", "funnel"].includes(current_tab)) {
+      if (current_tab === "Funnel") {
         return (
           <LoadingDashboard
             router={router}
@@ -422,6 +422,12 @@ const Project = props => {
 };
 
 const mapStateToProps = (state, props) => {
+  // console.log(
+  //   "project mapStateToProps => ",
+  //   props.params.project,
+  //   props.params.menu,
+  //   getFgaProject(state),
+  // );
   return {
     user: getUser(state),
     projectPath: props.params.project,
