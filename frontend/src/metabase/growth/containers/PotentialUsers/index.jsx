@@ -1,12 +1,13 @@
 /* eslint-disable react/display-name */
 /* eslint-disable react/prop-types */
-import React from "react";
+import React, { useEffect } from "react";
 import "../../css/index.css";
 import "./index.css";
 import { push } from "react-router-redux";
 import { connect } from "react-redux";
 import { Alert, Card, Typography } from "antd";
 import { useQuery } from "react-query";
+import { formatTitle } from "metabase/lib/formatting";
 import { omit, orderBy, union } from "lodash";
 import { WalletList } from "metabase/growth/components/Community/WalletList";
 import LoadingSpinner from "metabase/components/LoadingSpinner/LoadingSpinner";
@@ -26,9 +27,11 @@ import { wallet_profile_link } from "metabase/growth/utils/data";
 import { ItemFilter } from "./ItemFilter";
 
 const PotentialUsers = props => {
-  const { router, location, project } = props;
+  const { router, location, project, user } = props;
 
   // const visibleCount = 3;
+  const canShowTagging = user?.id === 23145 || user?.id === 10;
+  // const canShowTagging = true;
 
   const [walletListParams, setWalletListParams] = React.useState({
     pageSize: 10,
@@ -39,7 +42,26 @@ const PotentialUsers = props => {
 
   const [walletListData, setWalletListData] = React.useState(null);
   const [otherOptionsList, setOtherOptionsList] = React.useState([])
-  const [selectMoreValue, setSelectMoreValue] = React.useState([])
+  const [moreSelectOptions, setMoreSelectOptions] = React.useState([]);
+
+  useEffect(() => {
+    setOtherOptionsList(moreSelectOptions.map(item => {
+      const firstOption = otherFilterResultData?.find(a => {
+        if (a.indicator === item[0]) {
+          return true;
+        }
+        if (a.children?.map(c => c.indicator)?.includes(item[0])) {
+          return true;
+        }
+        return false;
+      })
+      if (firstOption?.children) {
+        return firstOption?.children?.find(c => c.indicator === item[1]);
+      } else {
+        return firstOption;
+      }
+    }));
+  }, [moreSelectOptions, otherFilterResultData])
 
   const filterResult = useQuery(
     ["getPotentialUseFilter"],
@@ -97,7 +119,8 @@ const PotentialUsers = props => {
       tagFilter = {
         indicator: "tags",
         comparisonSymbol: "in",
-        comparisonValue: tags
+        comparisonValue: tags,
+        comparisonType: "string",
       }
     }
     const fixFilters = filters.filter(i => i.indicator !== "tags");
@@ -126,7 +149,24 @@ const PotentialUsers = props => {
         />
       ),
     },
-  ];
+    canShowTagging ? {
+      title: "Tagging",
+      component: (
+        <CreateCohort2
+          project={project}
+          router={router}
+          addressListCount={listResult?.data?.total}
+          params={{
+            ...mergeFiltersByTags(walletListParams),
+            projectId: parseInt(project?.id),
+          }}
+          btnText="Tagging"
+          isTagging
+          isButtonStyle={false}
+        />
+      ),
+    } : null,
+  ].filter(i => i);
 
   const tableColumns = [
     {
@@ -169,7 +209,7 @@ const PotentialUsers = props => {
           >
             {tags?.length > 0 ? (
               <>
-                {tags?.join(", ")}
+                {tags?.map(t => formatTitle(t)).join(", ")}
                 {/* {tags?.map(tag => {
               return (
                 <Tag
@@ -287,7 +327,7 @@ const PotentialUsers = props => {
     );
   };
 
-  const filterResultData = filterResult?.data;
+  const filterResultData = filterResult?.data?.filter(i => (canShowTagging && i.children?.length > 0) || !i.children);
   const visibleFilterResultData = filterResultData?.filter(item => item.isCommon);
   const otherFilterResultData = filterResultData?.filter(item => !item.isCommon);
   const moreFilterResultData = filterResultData ? [{
@@ -297,6 +337,12 @@ const PotentialUsers = props => {
       return {
         value: i?.indicator,
         label: i?.label,
+        children: i?.children?.map(j => {
+          return {
+            value: j?.indicator,
+            label: j?.label,
+          }
+        })
       };
     }) || [],
     /*options: [
@@ -356,7 +402,6 @@ const PotentialUsers = props => {
                 filterResultData={filterResult?.data}
                 visibleFilterResultData={visibleFilterResultData}
                 moreFilterResultData={moreFilterResultData}
-                selectMoreValue={selectMoreValue}
                 onSelectChange={selectObject => {
                   const finalSelectObject = selectObject?.comparisonValue ? [selectObject] : []
                   setWalletListParams({
@@ -367,10 +412,14 @@ const PotentialUsers = props => {
                 }}
                 enableMoreSelect={true}
                 onMoreChange={(value) => {
-                  setSelectMoreValue(value);
-                  setOtherOptionsList(value.map(item => {
-                    return otherFilterResultData?.find(a => a.indicator === item)
-                  }));
+                  let tempOptions
+                  if (moreSelectOptions.find(i => i.join("") === value.join(""))) {
+                    tempOptions = moreSelectOptions.filter(i => i.join("") !== value.join(""));
+                    setMoreSelectOptions(tempOptions)
+                  } else {
+                    tempOptions = [...moreSelectOptions, value];
+                    setMoreSelectOptions(tempOptions);
+                  }
                 }}
                 onFilterChange={valueFilter => {
                   if (!valueFilter) {
@@ -380,7 +429,7 @@ const PotentialUsers = props => {
                   temp = temp.filter(
                     item => item.indicator !== valueFilter.indicator,
                   );
-                  if (valueFilter.comparisonValue) {
+                  if (valueFilter.comparisonValue || valueFilter.comparisonType === "boolean") {
                     temp.push(valueFilter);
                   }
                   setWalletListParams({
@@ -411,7 +460,7 @@ const PotentialUsers = props => {
                   temp = temp.filter(
                     item => item.indicator !== valueFilter.indicator,
                   );
-                  if (valueFilter.comparisonValue) {
+                  if (valueFilter.comparisonValue || valueFilter.comparisonType === "boolean") {
                     temp.push(valueFilter);
                   }
                   setWalletListParams({
@@ -421,8 +470,7 @@ const PotentialUsers = props => {
                   });
                 }}
                 onCloseAction={item => {
-                  setSelectMoreValue(selectMoreValue.filter(i => i !== item.indicator))
-                  setOtherOptionsList(otherOptionsList.filter(i => i.indicator !== item.indicator))
+                  setMoreSelectOptions(moreSelectOptions.filter(i => !i.includes(item.indicator)))
                 }}
               />
             </>

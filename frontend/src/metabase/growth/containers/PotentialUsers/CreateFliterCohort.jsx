@@ -19,6 +19,7 @@ import { FilterOut } from "metabase/growth/components/FilterOut";
 import {
   createCommunityUserCohort,
   createPotentialUserCohortByFilter,
+  createPotentialUserTagging,
 } from "metabase/new-service";
 
 const CreateCohort2 = ({
@@ -31,6 +32,7 @@ const CreateCohort2 = ({
   params = {},
   type = "Potential User",
   isButtonStyle = true,
+  isTagging = false,
 }) => {
   const [isCohortModalOpen, setCohortModalOpen] = useState(false);
   const [createCohortLoading, setCreateCohortLoading] = useState(false);
@@ -105,6 +107,10 @@ const CreateCohort2 = ({
     );
   };
 
+  const createPotentialUserApi = isTagging
+    ? createPotentialUserTagging
+    : createPotentialUserCohortByFilter;
+
   const createCohortAction = async () => {
     if (!cohortName) {
       message.error("Please enter the name of your cohort.");
@@ -120,29 +126,39 @@ const CreateCohort2 = ({
     const filters = params.filters || [];
     if (filterOutValues?.length > 0) {
       filters.push({
-        "indicator": "excludeTags",
-        "comparisonSymbol": "in",
-        "comparisonValue": filterOutValues
-      })
+        indicator: "excludeTags",
+        comparisonSymbol: "in",
+        comparisonValue: filterOutValues,
+      });
     }
-    const result =
-      type === "Members"
-        ? await createCommunityUserCohort({
-            ...omit(params, ["pageSize", "current"]),
-            title: cohortName,
-            excludeTags: [...filterOutValues],
-          })
-        : await createPotentialUserCohortByFilter({
-            ...omit(params, ["pageSize", "current"]),
-            title: cohortName,
-            filters: filters,
-          });
-    setCohortModalOpen(false);
+    try {
+      const result =
+        type === "Members"
+          ? await createCommunityUserCohort({
+              ...omit(params, ["pageSize", "current"]),
+              title: cohortName,
+              excludeTags: [...filterOutValues],
+            })
+          : await createPotentialUserApi({
+              ...omit(params, ["pageSize", "current"]),
+              title: cohortName,
+              filters: filters,
+            });
+      setCohortModalOpen(false);
+      // onChangeLocation(getGrowthProjectPath(project?.protocolSlug, "Cohort"));
+      if (isTagging) {
+        message.success("Tagging Success");
+      } else {
+        showCohortSuccessModal(modal, result, router, type, () => {
+          onChangeLocation(
+            getGrowthProjectPath(project?.protocolSlug, "Cohort"),
+          );
+        });
+      }
+    } catch (error) {
+      console.log("error", error);
+    }
     setCreateCohortLoading(false);
-    // onChangeLocation(getGrowthProjectPath(project?.protocolSlug, "Cohort"));
-    showCohortSuccessModal(modal, result, router, type, () => {
-      onChangeLocation(getGrowthProjectPath(project?.protocolSlug, "Cohort"));
-    });
   };
   return (
     <>
@@ -184,6 +200,7 @@ const CreateCohort2 = ({
       )}
 
       <Modal
+        rootClassName="cohort_modal"
         open={isCohortModalOpen}
         onCancel={() => setCohortModalOpen(false)}
         footer={[
@@ -208,7 +225,7 @@ const CreateCohort2 = ({
         title={`${btnText}`}
       >
         <Divider className="my2" />
-        <h4>Cohort Name</h4>
+        <h4>{isTagging ? "Tag Name" : "Cohort Name"}</h4>
         <div className="mt1" />
         <AutoComplete
           style={{

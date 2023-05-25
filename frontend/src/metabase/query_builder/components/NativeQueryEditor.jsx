@@ -541,7 +541,8 @@ class NativeQueryEditor extends Component {
 
     const showDarkModeButton = true;
     const isAdmin = user && user.is_superuser;
-    const showSqlGptButton = isAdmin || user?.groups?.includes("Inner");
+    // const showSqlGptButton = isAdmin || user?.groups?.includes("Inner");
+    const showSqlGptButton = true;
 
     return (
       <NativeQueryEditorRoot className={cx("NativeQueryEditor bg-light full", { DarkMode: darkMode })}>
