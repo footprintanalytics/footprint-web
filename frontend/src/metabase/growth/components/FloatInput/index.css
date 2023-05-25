@@ -9,6 +9,10 @@
   left: 12px;
   top: 9px;
   transition: 0.2s ease all;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  width: 75%;
 }
 
 .as-placeholder {
