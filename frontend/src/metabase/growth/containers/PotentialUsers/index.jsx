@@ -7,6 +7,7 @@ import { push } from "react-router-redux";
 import { connect } from "react-redux";
 import { Alert, Card, Typography } from "antd";
 import { useQuery } from "react-query";
+import { formatTitle } from "metabase/lib/formatting";
 import { omit, orderBy, union } from "lodash";
 import { WalletList } from "metabase/growth/components/Community/WalletList";
 import LoadingSpinner from "metabase/components/LoadingSpinner/LoadingSpinner";
@@ -208,7 +209,7 @@ const PotentialUsers = props => {
           >
             {tags?.length > 0 ? (
               <>
-                {tags?.join(", ")}
+                {tags?.map(t => formatTitle(t)).join(", ")}
                 {/* {tags?.map(tag => {
               return (
                 <Tag
