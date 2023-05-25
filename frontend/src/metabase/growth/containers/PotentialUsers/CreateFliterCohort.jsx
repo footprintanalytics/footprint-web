@@ -18,7 +18,8 @@ import {
 import { FilterOut } from "metabase/growth/components/FilterOut";
 import {
   createCommunityUserCohort,
-  createPotentialUserCohortByFilter, createPotentialUserTagging,
+  createPotentialUserCohortByFilter,
+  createPotentialUserTagging,
 } from "metabase/new-service";
 
 const CreateCohort2 = ({
@@ -106,7 +107,9 @@ const CreateCohort2 = ({
     );
   };
 
-  const createPotentialUserApi = isTagging ? createPotentialUserTagging : createPotentialUserCohortByFilter;
+  const createPotentialUserApi = isTagging
+    ? createPotentialUserTagging
+    : createPotentialUserCohortByFilter;
 
   const createCohortAction = async () => {
     if (!cohortName) {
@@ -123,33 +126,39 @@ const CreateCohort2 = ({
     const filters = params.filters || [];
     if (filterOutValues?.length > 0) {
       filters.push({
-        "indicator": "excludeTags",
-        "comparisonSymbol": "in",
-        "comparisonValue": filterOutValues
-      })
-    }
-    const result =
-      type === "Members"
-        ? await createCommunityUserCohort({
-            ...omit(params, ["pageSize", "current"]),
-            title: cohortName,
-            excludeTags: [...filterOutValues],
-          })
-        : await createPotentialUserApi({
-            ...omit(params, ["pageSize", "current"]),
-            title: cohortName,
-            filters: filters,
-          });
-    setCohortModalOpen(false);
-    setCreateCohortLoading(false);
-    // onChangeLocation(getGrowthProjectPath(project?.protocolSlug, "Cohort"));
-    if (isTagging) {
-      message.success("Tagging Success")
-    } else {
-      showCohortSuccessModal(modal, result, router, type, () => {
-        onChangeLocation(getGrowthProjectPath(project?.protocolSlug, "Cohort"));
+        indicator: "excludeTags",
+        comparisonSymbol: "in",
+        comparisonValue: filterOutValues,
       });
     }
+    try {
+      const result =
+        type === "Members"
+          ? await createCommunityUserCohort({
+              ...omit(params, ["pageSize", "current"]),
+              title: cohortName,
+              excludeTags: [...filterOutValues],
+            })
+          : await createPotentialUserApi({
+              ...omit(params, ["pageSize", "current"]),
+              title: cohortName,
+              filters: filters,
+            });
+      setCohortModalOpen(false);
+      // onChangeLocation(getGrowthProjectPath(project?.protocolSlug, "Cohort"));
+      if (isTagging) {
+        message.success("Tagging Success");
+      } else {
+        showCohortSuccessModal(modal, result, router, type, () => {
+          onChangeLocation(
+            getGrowthProjectPath(project?.protocolSlug, "Cohort"),
+          );
+        });
+      }
+    } catch (error) {
+      console.log("error", error);
+    }
+    setCreateCohortLoading(false);
   };
   return (
     <>
