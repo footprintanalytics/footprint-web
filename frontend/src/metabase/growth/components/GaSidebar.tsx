@@ -36,12 +36,7 @@ const GaSidebar = (props: IGaSidebarProp) => {
 
   useEffect(() => {
     if (!projectObject) return;
-    // const itemsTemp: any[] = getGaMenuTabs(
-    //   fga_menu_data,
-    //   projectObject.protocolType,
-    //   projectObject.nftCollectionAddress?.length > 0,
-    //   user,
-    // )?.menuTabs;
+
     let protocolType = projectObject.protocolType;
     if(protocolType==='GameFi'&&projectObject.nftCollectionAddress?.length > 0){
       protocolType = 'GameFi_NFT'

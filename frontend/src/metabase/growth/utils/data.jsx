@@ -442,6 +442,10 @@ const getKeys = items => {
   return keys;
 };
 
+/**
+ * @description: 获取菜单数据
+ * v1 version
+ */
 export const fga_menu_data = [
   {
     name: "Overview",
