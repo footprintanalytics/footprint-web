@@ -14,7 +14,7 @@ import {
   CommentOutlined,
 } from "@ant-design/icons";
 import { get } from "underscore";
-import { disabled } from "styled-system"
+import { disabled } from "styled-system";
 //public/dashboard/uuid
 export const wallet_profile_link =
   "/growth/public/dashboard/fa040fe5-46b3-483b-b257-aa2373559fab"; //query: wallet_address
@@ -88,33 +88,28 @@ export const template_gallery = project => {
         },
         {
           dashboardName: "Moneyflow Monitor to Check Game Health",
-          dashboardLink:
-            `/growth/public/dashboard/22304b4e-458b-4861-a34e-11bd0724a76b?${params}`,
+          dashboardLink: `/growth/public/dashboard/22304b4e-458b-4861-a34e-11bd0724a76b?${params}`,
           id: 7964,
         },
         {
           dashboardName: "In-Game Duel Analysis (Presenting by Web2 data)",
-          dashboardLink:
-            `/growth/public/dashboard/22b77726-f47d-4e0c-995a-bec002c70a0b?${params}`,
+          dashboardLink: `/growth/public/dashboard/22b77726-f47d-4e0c-995a-bec002c70a0b?${params}`,
           id: 7963,
         },
         {
           dashboardName: "Airdrop: select users by FGA user profiling",
-          dashboardLink:
-            `/growth/public/dashboard/59ad5548-8e80-4402-9193-78e3b4db99c9?${params}`,
-          id:7962 ,
+          dashboardLink: `/growth/public/dashboard/59ad5548-8e80-4402-9193-78e3b4db99c9?${params}`,
+          id: 7962,
         },
         {
           dashboardName: "Gamer Profile",
-          dashboardLink:
-            `/growth/public/dashboard/aca032dc-5faf-462a-8be5-124d68226328?${params}`,
-          id:6345 ,
+          dashboardLink: `/growth/public/dashboard/aca032dc-5faf-462a-8be5-124d68226328?${params}`,
+          id: 6345,
         },
         {
           dashboardName: "Bot detection",
-          dashboardLink:
-            `/growth/public/dashboard/0dcef7ac-8318-47fd-b675-7b60fdcd068e?${params}`,
-          id:7887 ,
+          dashboardLink: `/growth/public/dashboard/0dcef7ac-8318-47fd-b675-7b60fdcd068e?${params}`,
+          id: 7887,
         },
       ],
     },
@@ -175,11 +170,9 @@ export const template_gallery = project => {
       category: "GameFi",
       desc: "Gain deep industry insights by thoroughly understanding industry data, and develop a comprehensive understanding of operational status by analyzing games.",
       items: [
-
         {
           dashboardName: "GameFi Market Overview",
-          dashboardLink:
-            `/growth/public/dashboard/db6aac3e-48e4-4465-87b2-94be114475aa?${params}`,
+          dashboardLink: `/growth/public/dashboard/db6aac3e-48e4-4465-87b2-94be114475aa?${params}`,
           id: 7871,
         },
         {
@@ -233,8 +226,7 @@ export const template_gallery = project => {
       items: [
         {
           dashboardName: "NFT Market Overview",
-          dashboardLink:
-            `/growth/public/dashboard/25e7f940-7fc8-4737-bcfa-d4b04a4b6196?${params}`,
+          dashboardLink: `/growth/public/dashboard/25e7f940-7fc8-4737-bcfa-d4b04a4b6196?${params}`,
           id: 7842,
         },
         {
@@ -318,14 +310,14 @@ export const template_gallery = project => {
   ];
 };
 
-function getItem(label, key, icon, children, type,disabled = false) {
+function getItem(label, key, icon, children, type, disabled = false) {
   return {
     key,
     icon,
     children,
     label,
     type,
-    disabled
+    disabled,
   };
 }
 
@@ -334,10 +326,12 @@ function getItem(label, key, icon, children, type,disabled = false) {
  * @param {*} protocolType : 1: GameFi, 2: NFT, 3: GameFi_NFT
  * @returns
  */
-export const fga_menu_data_v2 = (project) => {
-  const protocolType = project.protocolType === 'GameFi' && project?.nftCollectionAddress?.length > 0
-  ? 'GameFi_NFT'
-  : project.protocolType;
+export const fga_menu_data_v2 = project => {
+  const protocolType =
+    project.protocolType === "GameFi" &&
+    project?.nftCollectionAddress?.length > 0
+      ? "GameFi_NFT"
+      : project.protocolType;
   const dashboardMap = new Map([
     [
       "home",
@@ -351,10 +345,22 @@ export const fga_menu_data_v2 = (project) => {
     ["game_active_users", "6d84b4a6-ceef-4b30-a9ad-b233038fd8d3"],
     ["nft_leaderboard", "3e9f9af4-93a8-46d4-8ee7-bc472201da7d"],
     ["nft_nft_holder", "58047ca6-0116-438d-9ac3-79ac81dfa764"],
-    ["nft_sales_mints","08fb03cf-4ca4-4041-9d91-315a49d78615"],
-    ["nft_revenue","b98b0a6b-64cb-4e09-979d-693040ea3ec9"],
+    ["nft_sales_mints", "08fb03cf-4ca4-4041-9d91-315a49d78615"],
+    ["nft_revenue", "b98b0a6b-64cb-4e09-979d-693040ea3ec9"],
     ["twitter", "fd4d94f3-06f7-445d-ada3-0ce82bcefa39"],
     ["discord", "d137a1ef-34a3-4553-84cb-2203bd9d2baf"],
+  ]);
+  const gameFiMenu = getItem("Game", "game", <ShopOutlined />, [
+    // getItem("Tokenomics", "game_tokenomics", null,null,null, true),
+    getItem("Revenue", "game_revenue", null),
+    getItem("Token Holder", "game_token_holder", null),
+    getItem("Active Users", "game_active_users", null),
+  ]);
+  const NFTMenu = getItem("NFT", "nft", <FileImageOutlined />, [
+    protocolType === "NFT" && getItem("Leaderboard", "nft_leaderboard", null),
+    getItem("NFT Holder", "nft_nft_holder", null),
+    getItem("Sales & Mints", "nft_sales_mints", null),
+    // protocolType === "NFT" && getItem("Revenue", "nft_revenue", null),
   ]);
   const menuTabs = [
     getItem(
@@ -363,21 +369,8 @@ export const fga_menu_data_v2 = (project) => {
       null,
       [
         getItem("Home", "home", <HomeOutlined />),
-        protocolType !== "NFT" &&
-          getItem("Game", "game", <ShopOutlined />, [
-            // getItem("Tokenomics", "game_tokenomics", null,null,null, true),
-            getItem("Revenue", "game_revenue", null),
-            getItem("Token Holder", "game_token_holder", null),
-            getItem("Active Users", "game_active_users", null),
-          ]),
-        protocolType !== "GameFi" &&
-          getItem("NFT", "nft", <FileImageOutlined />, [
-            protocolType === "NFT" &&
-              getItem("Leaderboard", "nft_leaderboard", null),
-            getItem("NFT Holder", "nft_nft_holder", null),
-            getItem("Sales & Mints", "nft_sales_mints", null),
-            // protocolType === "NFT" && getItem("Revenue", "nft_revenue", null),
-          ]),
+        protocolType !== "NFT" && gameFiMenu,
+        protocolType !== "GameFi" && NFTMenu,
         getItem("Social", "social", <GatewayOutlined />, [
           getItem("Twitter", "twitter", null),
           getItem("Discord", "discord", null),
@@ -412,23 +405,42 @@ export const fga_menu_data_v2 = (project) => {
       "group",
     ),
   ];
+  const liveKeys = []
+  gameFiMenu.children?.map(item => {
+    if (item) {
+      if (item?.children?.length > 0) {
+        liveKeys.push(item?.children[0]?.key);
+      } else {
+        liveKeys.push(item?.key);
+      }
+    }
+  });
+  NFTMenu.children?.map(item => {
+    if (item) {
+      if (item?.children?.length > 0) {
+        liveKeys.push(item?.children[0]?.key);
+      } else {
+        liveKeys.push(item?.key);
+      }
+    }
+  });
   const keys = getKeys(menuTabs);
-  return { menuTabs, keys,dashboardMap};
+  return { menuTabs, keys, dashboardMap ,liveKeys};
 };
 
-const getKeys = (items) => {
+const getKeys = items => {
   let keys = [];
-  items?.map((item) => {
-    if(item){
-      if(item?.children?.length>0){
-        keys = keys.concat(getKeys(item.children))
-      }else{
-        keys.push(item?.key)
+  items?.map(item => {
+    if (item) {
+      if (item?.children?.length > 0) {
+        keys = keys.concat(getKeys(item.children));
+      } else {
+        keys.push(item?.key);
       }
     }
   });
   return keys;
-}
+};
 
 export const fga_menu_data = [
   {

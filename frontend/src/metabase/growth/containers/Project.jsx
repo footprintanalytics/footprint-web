@@ -87,8 +87,9 @@ const Project = props => {
     if (projectObject) {
       const menuData = fga_menu_data_v2(projectObject)
       const menuKeys = menuData.keys
+      const liveKeys = menuData.liveKeys
       setGaMenuTabs(menuData)
-      if(!currentMenu || !menuKeys.includes(currentMenu)){
+      if(!currentMenu||(liveKeys.includes(currentMenu)&&!menuKeys.includes(currentMenu))){
         const firstMenu = menuKeys[0]
         setCurrentMenu(firstMenu)
         router.push({
