@@ -5,6 +5,9 @@
   /* line-height: 35px !important; */
   /* height: 35px !important; */
 }
+.ant-card-body {
+  padding: 12px !important;
+}
 .ant-form-item2 {
   margin-bottom: 0;
 }
@@ -39,6 +42,12 @@
 
 .ga-full-content {
   height: calc(100vh - 60px - 20px - 20px);
+}
+
+.fga-mask {
+  /* background: linear-gradient(rgba(0, 0, 0, 0) 20%, rgb(0, 26, 44) 80%); */
+  background: linear-gradient(to bottom,rgba(0, 0, 0, 0.3),rgba( 0, 0, 0));
+  backdrop-filter: blur(2px);
 }
 
 .ga-btn {

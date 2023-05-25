@@ -129,7 +129,7 @@ const MyAnalysis = props => {
                           style={{
                             borderRadius: 5,
                             padding: 10,
-                            height: 240,
+                            height: 218,
                             borderWidth: 1,
                             borderStyle: "solid",
                           }}
@@ -143,7 +143,7 @@ const MyAnalysis = props => {
                                 alignItems: "center",
                                 borderRadius: 5,
                                 borderWidth: 1,
-                                height: 216,
+                                height: 198,
                                 borderColor: "#4A5568",
                                 borderStyle: "dashed",
                               }}
