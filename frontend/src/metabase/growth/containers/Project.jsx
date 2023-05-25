@@ -422,12 +422,6 @@ const Project = props => {
 };
 
 const mapStateToProps = (state, props) => {
-  // console.log(
-  //   "project mapStateToProps => ",
-  //   props.params.project,
-  //   props.params.menu,
-  //   getFgaProject(state),
-  // );
   return {
     user: getUser(state),
     projectPath: props.params.project,

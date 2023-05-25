@@ -22,7 +22,7 @@ const LoadingDashboard = ({
     },
   );
 
-  const connector = current_tab === "Funnel" ? "Google Analytics" : current_tab;
+  const connector = ["Funnel",'funnel'].includes(current_tab)? "Google Analytics" : current_tab;
 
   const Setup = (
     <Button
@@ -65,6 +65,7 @@ const LoadingDashboard = ({
       );
       break;
     case "Twitter":
+      case "twitter":
       message = `Connect Twitter data`;
       description = (
         <>
@@ -90,6 +91,7 @@ const LoadingDashboard = ({
       );
       break;
     case "Discord":
+      case "discord":
       message = `Connect Discord data`;
       description = (
         <>
