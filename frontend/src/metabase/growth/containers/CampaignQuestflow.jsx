@@ -33,7 +33,7 @@ const CampaignQuestflow = props => {
           okText: "View Campaigns",
           onOk: () => {
             router?.push({
-              pathname: `/growth/project/${project?.protocolSlug}/Campaign`,
+              pathname: `/growth/project/${project?.protocolSlug}/activation`,
             });
           },
         });
