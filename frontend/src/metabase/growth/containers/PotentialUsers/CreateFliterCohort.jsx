@@ -191,6 +191,7 @@ const CreateCohort2 = ({
       )}
 
       <Modal
+        rootClassName="cohort_modal"
         open={isCohortModalOpen}
         onCancel={() => setCohortModalOpen(false)}
         footer={[
