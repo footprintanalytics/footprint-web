@@ -7,7 +7,6 @@ import { push } from "react-router-redux";
 import { connect } from "react-redux";
 import { Alert, Card, Typography } from "antd";
 import { useQuery } from "react-query";
-import { formatTitle } from "metabase/lib/formatting";
 import { omit, orderBy, union } from "lodash";
 import { WalletList } from "metabase/growth/components/Community/WalletList";
 import LoadingSpinner from "metabase/components/LoadingSpinner/LoadingSpinner";
@@ -30,7 +29,7 @@ const PotentialUsers = props => {
   const { router, location, project, user } = props;
 
   // const visibleCount = 3;
-  const canShowTagging = user?.id === 23145 || user?.id === 10;
+  const canShowTagging = user?.id === 23145 || user?.id === 10 || user?.id === 6;
   // const canShowTagging = true;
 
   const [walletListParams, setWalletListParams] = React.useState({
@@ -209,7 +208,7 @@ const PotentialUsers = props => {
           >
             {tags?.length > 0 ? (
               <>
-                {tags?.map(t => formatTitle(t)).join(", ")}
+                {tags?.join(", ")}
                 {/* {tags?.map(tag => {
               return (
                 <Tag
