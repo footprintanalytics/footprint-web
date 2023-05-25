@@ -20,6 +20,7 @@ import { ValueFilter } from "../components/Community/ValueFilter";
 import { WalletList } from "../components/Community/WalletList";
 import { formatTag, getGrowthProjectPath, valueFormat } from "../utils/utils";
 import { wallet_profile_link } from "../utils/data";
+import { formatTitle } from "metabase/lib/formatting/footprint";
 const Community = props => {
   const { router, location, children, user, projectPath, menu, project } =
     props;
@@ -224,7 +225,7 @@ const Community = props => {
           >
             {tags?.length > 0 ? (
               <>
-                {tags?.join(", ")}
+                {tags?.map(t => formatTitle(t)).join(", ")}
                 {/* {tags?.map(tag => {
                 return (
                   <Tag
