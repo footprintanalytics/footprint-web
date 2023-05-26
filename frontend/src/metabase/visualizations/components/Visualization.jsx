@@ -491,20 +491,20 @@ class Visualization extends React.PureComponent {
 
     const renderNoResult = () => {
       if (isFgaDiscord || isFgaTwitter || isFgaGoogleAnalysis) {
-        return (<FgaErrorGuide />);
+        return <FgaErrorGuide />;
       }
       if (isFga) {
         return (
           <div className="noResults">
-            Data is being prepared.
-            <br/>
-            Please wait or contact{" "}
+            The data is not yet available, please
+            <br />
+            feel free to contact our{" "}
             <Link target="_blank" href="mailto:sales@footprint.network">
-              sales
+              BD team
             </Link>
-            {" "}.
+            .
           </div>
-        )
+        );
       }
       return (
         <div className="noResults">
@@ -525,9 +525,8 @@ class Visualization extends React.PureComponent {
             </li>
           </ol>
         </div>
-      )
-    }
-
+      );
+    };
 
     return (
       <div
