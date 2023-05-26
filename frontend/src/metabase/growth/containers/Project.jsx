@@ -1,7 +1,7 @@
 /* eslint-disable react/prop-types */
 import React, { useEffect, useState } from "react";
 import { connect } from "react-redux";
-import { Button, Image, Result } from "antd";
+import { Button, Card, Image, Result, Typography } from "antd";
 import PublicDashboard from "metabase/public/containers/PublicDashboard";
 import { getUser, getFgaProject } from "metabase/selectors/user";
 import LoadingSpinner from "metabase/components/LoadingSpinner";
@@ -14,6 +14,7 @@ import {
 } from "../utils/utils";
 import { fga_menu_data, fga_menu_data_v2 } from "../utils/data";
 import LoadingDashboard from "../components/LoadingDashboard";
+import DashboardMask from "../components/DashboardMask";
 import ConnectorList from "./ConnectorList";
 import ChannelList from "./ChannelList";
 import WalletProfile from "./WalletProfile";
@@ -45,59 +46,25 @@ const Project = props => {
     }
   }, [menu]);
 
-  // useEffect(() => {
-  //   if (projectObject) {
-  //     const newMenu = getGaMenuTabs(
-  //       fga_menu_data,
-  //       projectObject.protocolType,
-  //       projectObject?.nftCollectionAddress?.length > 0,
-  //       user,
-  //     );
-  //     setGaMenuTabs(newMenu);
-  //     if (
-  //       !currentMenu ||
-  //       (!findMenu(currentMenu, newMenu?.menuTabs) &&
-  //         ["GameFi", "NFT"].includes(currentMenu))
-  //     ) {
-  //       const firstMenu =
-  //         newMenu?.menuTabs[0]?.children?.length > 0
-  //           ? newMenu?.menuTabs[0].children[0].key
-  //           : newMenu?.menuTabs[0]?.key;
-  //       setCurrentMenu(firstMenu);
-  //       router.push({
-  //         pathname: getGrowthProjectPath(
-  //           projectObject?.protocolSlug,
-  //           firstMenu,
-  //         ),
-  //       });
-  //     } else {
-  //       router.replace({
-  //         pathname: getGrowthProjectPath(
-  //           projectObject?.protocolSlug,
-  //           currentMenu,
-  //         ),
-  //         query: { ...location.query },
-  //       });
-  //     }
-  //   } else {
-  //     setGaMenuTabs(null);
-  //   }
-  // }, [projectObject, user]);
   useEffect(() => {
     if (projectObject) {
-      const menuData = fga_menu_data_v2(projectObject)
-      const menuKeys = menuData.keys
-      setGaMenuTabs(menuData)
-      if(!currentMenu || !menuKeys.includes(currentMenu)){
-        const firstMenu = menuKeys[0]
-        setCurrentMenu(firstMenu)
+      const menuData = fga_menu_data_v2(projectObject);
+      const menuKeys = menuData.keys;
+      const liveKeys = menuData.liveKeys;
+      setGaMenuTabs(menuData);
+      if (
+        !currentMenu ||
+        (liveKeys.includes(currentMenu) && !menuKeys.includes(currentMenu))
+      ) {
+        const firstMenu = menuKeys[0];
+        setCurrentMenu(firstMenu);
         router.push({
           pathname: getGrowthProjectPath(
             projectObject?.protocolSlug,
             firstMenu,
           ),
         });
-      }else{
+      } else {
         router.replace({
           pathname: getGrowthProjectPath(
             projectObject?.protocolSlug,
@@ -110,22 +77,6 @@ const Project = props => {
       setGaMenuTabs(null);
     }
   }, [projectObject, user]);
-
-  // function findMenu(targetMenu, menuListData) {
-  //   let subMenu = null;
-  //   for (let i = 0; i < menuListData.length && !subMenu; i++) {
-  //     const item = menuListData[i];
-  //     if (item.children?.length > 0) {
-  //       subMenu = item.children.find(s => s.key === targetMenu);
-  //       if (subMenu) {
-  //         return true; // found the submenu, exit the function and return `true`
-  //       }
-  //     } else if (item.key === targetMenu) {
-  //       return true; // found the menu item, exit the function and return `true`
-  //     }
-  //   }
-  //   return false; // submenu or menu item not found, return `false`
-  // }
 
   const getProjectObject = () => {
     return projectObject
@@ -209,20 +160,28 @@ const Project = props => {
     console.log("Project.jsx getContentPannel current_tab => ", current_tab);
     const WrapPublicDashboard = current_tab =>
       projectObject?.protocolSlug ? (
-        <PublicDashboard
-          params={{ uuid: gaMenuTabs?.dashboardMap?.get(current_tab) }}
-          location={location}
-          project={getProjectObject()}
-          isFullscreen={false}
-          hideTitle={true}
-          key={projectObject?.protocolSlug}
-          hideFooter
-          showRefreshButton={showRefreshButton}
-        />
+        <div style={{ display: "relative" }}>
+          <PublicDashboard
+            params={{ uuid: gaMenuTabs?.dashboardMap?.get(current_tab) }}
+            location={location}
+            project={getProjectObject()}
+            isFullscreen={false}
+            hideTitle={true}
+            key={projectObject?.protocolSlug}
+            hideFooter
+            showRefreshButton={showRefreshButton}
+          />
+          {projectObject?.protocolSlug !== "the-sandbox" && (['game_token_holder','nft_nft_holder'].includes(currentMenu))&&<DashboardMask/>}
+
+        </div>
       ) : (
         <LoadingSpinner message="Loading..." />
       );
-    if (current_tab === "UserTemplate" ||current_tab === "build_audience" || current_tab === "Potential Users") {
+    if (
+      current_tab === "UserTemplate" ||
+      current_tab === "build_audience" ||
+      current_tab === "Potential Users"
+    ) {
       return (
         <UserTemplate
           location={location}
@@ -262,7 +221,11 @@ const Project = props => {
       );
     }
 
-    if (["Wallet Profile", "WalletProfile","wallet_profile"].includes(current_tab)) {
+    if (
+      ["Wallet Profile", "WalletProfile", "wallet_profile"].includes(
+        current_tab,
+      )
+    ) {
       return (
         <WalletProfile
           location={location}
@@ -271,7 +234,7 @@ const Project = props => {
         />
       );
     }
-    if (["My Analysis", "MyAnalysis","my_analysis"].includes(current_tab)) {
+    if (["My Analysis", "MyAnalysis", "my_analysis"].includes(current_tab)) {
       return (
         <MyAnalysis
           location={location}
@@ -280,7 +243,7 @@ const Project = props => {
         />
       );
     }
-    if (["Connector","integration"].includes(current_tab)) {
+    if (["Connector", "integration"].includes(current_tab)) {
       return (
         <ConnectorList
           refetchProject={() =>
@@ -293,7 +256,7 @@ const Project = props => {
         ></ConnectorList>
       );
     }
-    if (["Channel","channel"].includes(current_tab)) {
+    if (["Channel", "channel"].includes(current_tab)) {
       return (
         <ChannelList
           location={location}
@@ -319,7 +282,7 @@ const Project = props => {
         "OptIn",
         "Opt-In Tool",
         "Social Connect",
-        "id_connect"
+        "id_connect",
       ].includes(current_tab)
     ) {
       return (
@@ -330,7 +293,7 @@ const Project = props => {
         ></SocialConnectList>
       );
     }
-    if (["Community", "Members","members"].includes(current_tab)) {
+    if (["Community", "Members", "members"].includes(current_tab)) {
       return (
         <Community
           location={location}
@@ -348,7 +311,7 @@ const Project = props => {
         />
       );
     }
-    if (["Custom Analysis","custom_analysis"].includes(current_tab))  {
+    if (["Custom Analysis", "custom_analysis"].includes(current_tab)) {
       return (
         <CustomAnalysis
           project={getProjectObject()}
@@ -367,7 +330,7 @@ const Project = props => {
         ></CampaignCreate>
       );
     }
-    if (["Campaign", "activation","campaign_list"].includes(current_tab)) {
+    if (["Campaign", "activation", "campaign_list"].includes(current_tab)) {
       // return <CampaignList router={router} location={location}></CampaignList>;
       return (
         <CampaignListNew
