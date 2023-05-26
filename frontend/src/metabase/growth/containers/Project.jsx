@@ -350,7 +350,7 @@ const Project = props => {
         ></CampaignDetail>
       );
     }
-    if (current_tab === "Cohort") {
+    if (["Cohort", "segment"].includes(current_tab)) {
       return (
         <CohortList
           router={router}
@@ -360,7 +360,7 @@ const Project = props => {
       );
     }
     if (gaMenuTabs?.dashboardMap?.has(current_tab)) {
-      if (current_tab === "Twitter") {
+      if (["Twitter", "twitter"].includes(current_tab)) {
         return (
           <LoadingDashboard
             router={router}
@@ -373,7 +373,7 @@ const Project = props => {
           </LoadingDashboard>
         );
       }
-      if (current_tab === "Discord") {
+      if (["Discord", "discord"].includes(current_tab)) {
         return (
           <LoadingDashboard
             router={router}
@@ -386,7 +386,7 @@ const Project = props => {
           </LoadingDashboard>
         );
       }
-      if (current_tab === "Funnel") {
+      if (["Funnel", "funnel"].includes(current_tab)) {
         return (
           <LoadingDashboard
             router={router}
