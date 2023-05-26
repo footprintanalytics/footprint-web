@@ -318,14 +318,12 @@ class FgaNavbar extends Component {
 
     const RightMenuPad = () => {
       const color2 = isDark ? "white" : color("footprint-color-title");
-      const [modal, contextHolder] = AntdModal.useModal();
       return (
         <div className="Nav__right-pad-icon">
-          {contextHolder}
           <Link to="/growth/pricing">
             <Icon name="price" color={color2} />
           </Link>
-          <Link onClick={onCreateAction(modal)}>
+          <Link onClick={onCreateAction}>
             <Icon name="add" size={12} color={color2} />
           </Link>
         </div>
@@ -334,14 +332,12 @@ class FgaNavbar extends Component {
 
     const RightMenuMobile = () => {
       const color2 = isDark ? "white" : color("footprint-color-title");
-      const [modal, contextHolder] = AntdModal.useModal();
       return (
         <div className="Nav__right-mobile-icon">
-          {contextHolder}
           <Link to="/growth/pricing">
             <Icon name="price" color={color2} />
           </Link>
-          <Link onClick={onCreateAction(modal)}>
+          <Link onClick={onCreateAction}>
             <Icon name="add" size={12} />
           </Link>
         </div>
