@@ -23,7 +23,7 @@ const DashboardMask = props => {
           <h3 className="text-white">The data is not yet available.</h3>
           <Typography.Text className="mt2">
             {
-              "We're still prepping the data, but don't panic. Reach out to our sales team and we'll fast-track the production process."
+              "If you wish to view data dashboards related to your own project, please feel free to contact our BD team. Thank you."
             }
           </Typography.Text>
           <div className="mt1">
@@ -40,10 +40,10 @@ const DashboardMask = props => {
               Telegram: @dplinnn
             </Link>
           </div>
-          <div className="flex flex-row items-center justify-center w-full">
+          <div className="flex flex-row items-center justify-end w-full">
             <Button
               type="primary"
-              className="mt2 w-1_2"
+              className="mt2"
               onClick={() => {
                 window.open("https://forms.gle/Xs8WahhYh26xKoDj7", "_blank");
               }}
