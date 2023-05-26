@@ -48,12 +48,13 @@ const CampaignQuestflow = props => {
   return (
     <div className="flex flex-column items-center">
       {isLoading || !data?.idToken ? (
-        <LoadingSpinner />
+        <LoadingSpinner message="Loading~"/>
       ) : (
         <div className="w-full h-full">
           <Canvas
             // flowName={''}
             // flowDescription={''}
+            theme = 'dark'
             idToken={data?.idToken}
             // TODO: need a questflowURL in production
             // questflowURL={data?.questflowURL}

@@ -54,6 +54,9 @@
   justify-content: center;
   cursor: pointer;
 }
+.textarea {
+  min-height: initial !important;
+}
 
 .ga-btn--white {
   background-color: #fff;
