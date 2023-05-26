@@ -7,7 +7,7 @@ const CSS_SRC = glob.sync(SRC_PATH + "/css/**/*.css");
 
 module.exports = {
   plugins: {
-    // "postcss-css-variables": { preserve: true },
+    "postcss-css-variables": { preserve: true },
     "postcss-import": {},
     "postcss-url": {},
     "postcss-preset-env": {
