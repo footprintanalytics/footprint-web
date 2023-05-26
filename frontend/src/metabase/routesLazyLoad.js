@@ -335,6 +335,7 @@ export default {
   CreateCampaign: loadable(() =>
     import("metabase/growth/containers/CampaignQuestflow"),
   ),
+  FgaPrice: loadable(() => import("metabase/growth/containers/price")),
   WrapDashboard: loadable(
     () => import("metabase/growth/containers/WrapDashboard"),
     options,

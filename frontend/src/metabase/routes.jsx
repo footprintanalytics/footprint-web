@@ -529,6 +529,11 @@ export const getRoutes = store => (
         <Route path="project/:project(/:menu)" />
       </Route>
       <Route
+        title={t`Pricing`}
+        path="/growth/pricing"
+        component={LazyLoad.FgaPrice}
+      />
+      <Route
         title={t`Submit Contract`}
         path="/growth/submit/contract/add"
         component={LazyLoad.SubmitContractAdd}
