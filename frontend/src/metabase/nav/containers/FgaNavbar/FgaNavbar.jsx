@@ -5,7 +5,7 @@ import { connect } from "react-redux";
 import { push } from "react-router-redux";
 import "./FgaNavbar.css";
 import PropTypes from "prop-types";
-import { notification, Modal as AntdModal } from "antd";
+import { notification, Modal as AntdModal, Button } from "antd";
 import { getChannel } from "metabase/selectors/app";
 import { logout } from "metabase/auth/actions";
 import {
@@ -205,23 +205,6 @@ class FgaNavbar extends Component {
       />
     );
   }
-
-  renderSubmitAddrZkspaceModal() {
-    const { setSubmitAddrZkspaceModal, getSubmitAddrZkspaceModal } = this.props;
-    return (
-      getSubmitAddrZkspaceModal && (
-        <ActivityZkspaceSubmitModal
-          onClose={() =>
-            setSubmitAddrZkspaceModal({ submitAddrZkspaceModal: false })
-          }
-          onClick={() => {
-            setSubmitAddrZkspaceModal({ submitAddrZkspaceModal: false });
-          }}
-        />
-      )
-    );
-  }
-
   renderCancelFeedbackModal() {
     const { cancelFeedbackAction, cancelFeedback } = this.props;
     return (
@@ -335,15 +318,14 @@ class FgaNavbar extends Component {
 
     const RightMenuPad = () => {
       const color2 = isDark ? "white" : color("footprint-color-title");
+      const [modal, contextHolder] = AntdModal.useModal();
       return (
         <div className="Nav__right-pad-icon">
-          <Link to="https://docs.footprint.network/docs" target="_blank">
-            <Icon name="docs" color={color2} />
+          {contextHolder}
+          <Link to="/growth/pricing">
+            <Icon name="price" color={color2} />
           </Link>
-          <Link to="/search">
-            <Icon name="search" color={color2} />
-          </Link>
-          <Link onClick={onCreateAction}>
+          <Link onClick={onCreateAction(modal)}>
             <Icon name="add" size={12} color={color2} />
           </Link>
         </div>
@@ -352,12 +334,14 @@ class FgaNavbar extends Component {
 
     const RightMenuMobile = () => {
       const color2 = isDark ? "white" : color("footprint-color-title");
+      const [modal, contextHolder] = AntdModal.useModal();
       return (
         <div className="Nav__right-mobile-icon">
-          <Link to="/search">
-            <Icon name="search" color={color2} />
+          {contextHolder}
+          <Link to="/growth/pricing">
+            <Icon name="price" color={color2} />
           </Link>
-          <Link onClick={onCreateAction}>
+          <Link onClick={onCreateAction(modal)}>
             <Icon name="add" size={12} />
           </Link>
         </div>
@@ -405,6 +389,7 @@ class FgaNavbar extends Component {
     const RightMenu = () => {
       return (
         <div className="Nav__right">
+          <Button size='large' href="/growth/pricing" type="text">Pricing</Button>
           <CreateMenu />
           <React.Fragment>
             <RightMenuMobile />
@@ -503,7 +488,6 @@ class FgaNavbar extends Component {
         </React.Fragment>
         <RightMenu />
         {this.renderModal()}
-        {zkspaceDate() && this.renderSubmitAddrZkspaceModal()}
         {this.renderLoginModal()}
         {this.renderCancelFeedbackModal()}
         <CreateProjectModal

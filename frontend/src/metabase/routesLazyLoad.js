@@ -332,6 +332,7 @@ export default {
   ),
   // GrowthAnalytics
   GaAboutContainer: loadable(() => import("metabase/growth/containers/About")),
+  FgaPrice: loadable(() => import("metabase/growth/containers/price")),
   WrapDashboard: loadable(
     () => import("metabase/growth/containers/WrapDashboard"),
     options,
