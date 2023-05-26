@@ -30,7 +30,7 @@ const PotentialUsers = props => {
   const { router, location, project, user } = props;
 
   // const visibleCount = 3;
-  const canShowTagging = user?.id === 23145 || user?.id === 10;
+  const canShowTagging = user?.id === 23145 || user?.id === 10 || user?.id === 6;
   // const canShowTagging = true;
 
   const [walletListParams, setWalletListParams] = React.useState({
@@ -290,7 +290,7 @@ const PotentialUsers = props => {
   const getQuickFilterOptionList = data => {
     return data?.map(option => {
       return {
-        label: option.tag,
+        label: formatTitle(option.tag),
         value: option.tag,
       };
     });
@@ -327,7 +327,7 @@ const PotentialUsers = props => {
     );
   };
 
-  const filterResultData = filterResult?.data?.filter(i => (canShowTagging && i.children?.length > 0) || !i.children);
+  const filterResultData = filterResult?.data?.filter(i => ((project?.isDemo || !project || canShowTagging) && i.children?.length > 0) || !i.children);
   const visibleFilterResultData = filterResultData?.filter(item => item.isCommon);
   const otherFilterResultData = filterResultData?.filter(item => !item.isCommon);
   const moreFilterResultData = filterResultData ? [{
@@ -336,11 +336,11 @@ const PotentialUsers = props => {
     options: otherFilterResultData?.map(i => {
       return {
         value: i?.indicator,
-        label: i?.label,
+        label: formatTitle(i?.label),
         children: i?.children?.map(j => {
           return {
             value: j?.indicator,
-            label: j?.label,
+            label: formatTitle(j?.label),
           }
         })
       };

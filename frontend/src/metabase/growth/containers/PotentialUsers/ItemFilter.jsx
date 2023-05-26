@@ -12,7 +12,7 @@ import {
   getPotentialUserFilterCollection,
   getPotentialUserFilterToken,
 } from "metabase/new-service";
-import { formatTableTitle } from "metabase/lib/formatting/footprint";
+import { formatTableTitle, formatTitle } from "metabase/lib/formatting/footprint";
 import Icon from "metabase/components/Icon";
 import MuiBoolean from "metabase/growth/components/MuiBoolean";
 
@@ -27,7 +27,6 @@ export const ItemFilter = props => {
     titleColor = "white",
     isOtherFilter,
     onCloseAction,
-    selectMoreValue = [],
   } = props;
   const [openMoreSelect, setOpenMoreSelect] = useState(false);
 
@@ -57,14 +56,14 @@ export const ItemFilter = props => {
     optionsObject = (item) => {
       return {
         value: item.protocolSlug,
-        label: item.name,
+        label: formatTitle(item.name),
       };
     }
     if (item.indicator === "protocolSlugs") {
       optionsObject = (item) => {
           return {
             value: item.protocolSlug,
-            label: item.name,
+            label: formatTitle(item.name),
           };
         }
     }
@@ -72,7 +71,7 @@ export const ItemFilter = props => {
       optionsObject = (item) => {
           return {
             value: item.collectionSlug,
-            label: item.name,
+            label: formatTitle(item.name),
           };
         }
     }
@@ -80,7 +79,7 @@ export const ItemFilter = props => {
       optionsObject = (item) => {
           return {
             value: item.tokenSlug,
-            label: item.name,
+            label: formatTitle(item.name),
           };
         }
     }
@@ -268,7 +267,7 @@ export const ItemFilter = props => {
   return (
     <div
       className={cx(
-        "flex flex-row w-full p1 items-center  text-nowrap",
+        "flex flex-row w-full p1 items-center text-nowrap item-filter",
         className,
       )}
     >
