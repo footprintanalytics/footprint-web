@@ -489,6 +489,46 @@ class Visualization extends React.PureComponent {
       isFga && location.pathname.includes("/User%20Funnel");
     const cardId = get(this.props.rawSeries, 0)?.card?.id;
 
+    const renderNoResult = () => {
+      if (isFgaDiscord || isFgaTwitter || isFgaGoogleAnalysis) {
+        return (<FgaErrorGuide />);
+      }
+      if (isFga) {
+        return (
+          <div className="noResults">
+            Data is being prepared.
+            <br/>
+            Please wait or contact{" "}
+            <Link target="_blank" href="mailto:sales@footprint.network">
+              sales
+            </Link>
+            {" "}.
+          </div>
+        )
+      }
+      return (
+        <div className="noResults">
+          <h4>No results!</h4>
+          <ol>
+            <li>You can try refreshing your browser.</li>
+            <li>You can try changing your filters.</li>
+            <li>
+              You can try contacting us on{" "}
+              <Link
+                href="https://discord.gg/3HYaR6USM7"
+                rel="nofollow"
+                target="_blank"
+              >
+                Discord
+              </Link>
+              .
+            </li>
+          </ol>
+        </div>
+      )
+    }
+
+
     return (
       <div
         id="html2canvas-Card"
@@ -551,30 +591,7 @@ class Visualization extends React.PureComponent {
               <img data-testid="no-results-image" src={NoResults} />
             </Tooltip>
             {!small && <span className="h4 text-bold">{t`No results!`}</span>}*/}
-            <>
-              {isFgaDiscord || isFgaTwitter || isFgaGoogleAnalysis ? (
-                <FgaErrorGuide></FgaErrorGuide>
-              ) : (
-                <div className="noResults">
-                  <h4>No results!</h4>
-                  <ol>
-                    <li>You can try refreshing your browser.</li>
-                    <li>You can try changing your filters.</li>
-                    <li>
-                      You can try contacting us on{" "}
-                      <Link
-                        href="https://discord.gg/3HYaR6USM7"
-                        rel="nofollow"
-                        target="_blank"
-                      >
-                        Discord
-                      </Link>
-                      .
-                    </li>
-                  </ol>
-                </div>
-              )}
-            </>
+            {renderNoResult()}
           </div>
         ) : error ? (
           <div
