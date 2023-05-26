@@ -15,8 +15,10 @@ import {
 import { get } from "underscore";
 import { disabled } from "styled-system";
 //public/dashboard/uuid
-export const wallet_profile_link = '/growth/public/dashboard/fa040fe5-46b3-483b-b257-aa2373559fab'//query: wallet_address
-export const user_profile_link  = '/growth/public/dashboard/c06826fc-511e-4f03-bfa7-fc8eaa2facfa' //query: cohort_title
+export const wallet_profile_link =
+  "/growth/public/dashboard/fa040fe5-46b3-483b-b257-aa2373559fab"; //query: wallet_address
+export const user_profile_link =
+  "/growth/public/dashboard/c06826fc-511e-4f03-bfa7-fc8eaa2facfa"; //query: cohort_title
 export const top_protocols = [
   {
     protocolSlug: "the-sandbox",
@@ -402,7 +404,7 @@ export const fga_menu_data_v2 = project => {
       "group",
     ),
   ];
-  const liveKeys = []
+  const liveKeys = [];
   gameFiMenu.children?.map(item => {
     if (item) {
       if (item?.children?.length > 0) {
@@ -422,7 +424,7 @@ export const fga_menu_data_v2 = project => {
     }
   });
   const keys = getKeys(menuTabs);
-  return { menuTabs, keys, dashboardMap ,liveKeys};
+  return { menuTabs, keys, dashboardMap, liveKeys };
 };
 
 const getKeys = items => {
@@ -621,3 +623,364 @@ export const cohortTips = new Map([
     "All wallets that have interacted with the project's smart contracts.",
   ],
 ]);
+
+/**
+ *
+ * @param {*} param0
+ * @returns
+ */
+export const getFgaComparePlans = ({
+  user
+}) => ({
+  title: 'Compare plans',
+  columns: [
+    {
+      label: 'Free',
+      value: 'free',
+      desc: 'For star-up and mini projects',
+      price: '$0',
+      unit: 'month',
+    },
+    {
+      label: 'Growth',
+      value: 'growth',
+      desc: 'For mid-size projects',
+      price: '$99',
+      unit: 'month',
+    },
+    {
+      label: 'Scale',
+      value: 'scale',
+      desc: 'For lager projects',
+      price: '$999',
+      unit: 'month',
+    },
+    {
+      label: 'Enterprise',
+      value: 'enterprise',
+      desc: 'Contact us to find the right solution for your business',
+      price: 'Custom',
+    },
+  ],
+  list: [
+    // {
+    //   type: 'Team Size',
+    //   list: [
+    //     {
+    //       name: 'DAU',
+    //       free: '< 500 Daily Active Wallets',
+    //       growth: '< 1000 Daily Active Wallets',
+    //       scale: '< 10000 Daily Active Wallets',
+    //       enterprise: 'Unlimited',
+    //     },
+    //     {
+    //       name: 'NFT Holder',
+    //       free: '< 1000 Holder',
+    //       growth: '< 5000 Holder',
+    //       scale: '< 10000 Holder',
+    //       enterprise: 'Unlimited',
+    //     },
+    //   ],
+    // },
+    {
+      type: 'Social Connect',
+      list: [
+        {
+          name: 'Twitter',
+          free: true,
+          growth: true,
+          scale: true,
+          enterprise: true,
+        },
+        {
+          name: 'Discord',
+          free: true,
+          growth: true,
+          scale: true,
+          enterprise: true,
+        },
+        {
+          name: 'Telegram',
+          free: true,
+          growth: true,
+          scale: true,
+          enterprise: true,
+        },
+      ],
+    },
+    {
+      type: 'Data Integration',
+      list: [
+        {
+          name: 'Upload Connector',
+          free: false,
+          growth: false,
+          scale: {enable: true, tip: 'Limited'},
+          enterprise: {enable: true, tip: 'Unlimited Connectors'},
+        },
+
+        {
+          name: 'Database and Warehouses',
+          free: false,
+          growth: false,
+          scale: {enable: true, tip: 'Limited'},
+          enterprise: {enable: true, tip: 'Unlimited Connectors'},
+        },
+
+        {
+          name: 'Prodcut and Marketing Analytics',
+          free: false,
+          growth: false,
+          scale: {enable: true, tip: 'Limited'},
+          enterprise: {enable: true, tip: 'Unlimited Connectors'},
+        },
+
+        {
+          name: 'Web3 Marketing Platforms',
+          free: false,
+          growth: false,
+          scale: {enable: true, tip: 'Limited'},
+          enterprise: {enable: true, tip: 'Unlimited Connectors'},
+        },
+        {
+          name: 'Other Connectors',
+          free: false,
+          growth: false,
+          scale: {enable: true, tip: 'Limited'},
+          enterprise: {enable: true, tip: 'Unlimited Connectors'},
+        },
+      ],
+    },
+    {
+      type: 'Analysis',
+      list: [
+        {
+          name: 'Project Overview',
+          free: true,
+          growth: true,
+          scale: true,
+          enterprise: true,
+        },
+        {
+          name: 'User Profile',
+          free: true,
+          growth: true,
+          scale: true,
+          enterprise: true,
+        },
+        {
+          name: 'Wallet Tags & Score',
+          free: true,
+          growth: true,
+          scale: true,
+          enterprise: true,
+        },
+        {
+          name: 'Social Members',
+          free: true,
+          growth: true,
+          scale: true,
+          enterprise: true,
+        },
+        {
+          name: 'Social Engagement',
+          free: false,
+          growth: true,
+          scale: true,
+          enterprise: true,
+        },
+        {
+          name: 'User Segmentation',
+          free: false,
+          growth: true,
+          scale: true,
+          enterprise: true,
+        },
+        {
+          name: 'Tokenomics',
+          free: false,
+          growth: true,
+          scale: true,
+          enterprise: true,
+        },
+        {
+          name: 'Revenue Analysis',
+          free: false,
+          growth: true,
+          scale: true,
+          enterprise: true,
+        },
+        {
+          name: 'Channel Analysis',
+          free: false,
+          growth: false,
+          scale: true,
+          enterprise: true,
+        },
+        {
+          name: 'Comparison Analysis',
+          free: false,
+          growth: false,
+          scale: true,
+          enterprise: true,
+        },
+        {
+          name: 'Web3 Campaign Analysis',
+          free: false,
+          growth: false,
+          scale: true,
+          enterprise: true,
+        },
+        {
+          name: 'Drill Down Analysis',
+          free: false,
+          growth: false,
+          scale: true,
+          enterprise: true,
+        },
+        {
+          name: 'Custom Analysis',
+          free: false,
+          growth: false,
+          scale: true,
+          enterprise: true,
+        },
+      ],
+    },
+    {
+      type: 'Social ID Connect',
+      list: [
+        {
+          name: 'Twitter',
+          free: true,
+          growth: true,
+          scale: true,
+          enterprise: true,
+        },
+        {
+          name: 'Discord',
+          free: true,
+          growth: true,
+          scale: true,
+          enterprise: true,
+        },
+        {
+          name: 'Import CSV',
+          free: true,
+          growth: true,
+          scale: true,
+          enterprise: true,
+        },
+      ],
+    },
+    {
+      type: 'Cohorts',
+      list: [
+        {
+          name: 'Unlock System Cohorts',
+          free: {enable:true,tip:'total 5'},
+          growth: {enable:true,tip:'total 20'},
+          scale: {enable:true,tip:'total 100'},
+          enterprise: {enable:true,tip:'Unlimited'},
+        },
+        {
+          name: 'Filter Wallets Saving as Cohort',
+          free: {enable:true,tip:'total 5'},
+          growth: {enable:true,tip:'total 20'},
+          scale: {enable:true,tip:'total 100'},
+          enterprise: {enable:true,tip:'Unlimited'},
+        },
+        {
+          name: 'Import Wallets as Cohort',
+          free: {enable:true,tip:'total 5'},
+          growth: {enable:true,tip:'total 20'},
+          scale: {enable:true,tip:'total 100'},
+          enterprise: {enable:true,tip:'Unlimited'},
+        },
+        {
+          name: 'Filter Wallets',
+          free: '5 Indicatiors',
+          growth: '10 Indicatiors',
+          scale: '50 Indicatiors',
+          enterprise: 'Unlimited Indicators',
+        },
+        {
+          name: 'Export Wallet Tags & Features',
+          free: false,
+          growth: true,
+          scale: true,
+          enterprise: true,
+        },
+      ],
+    },
+    {
+      type: 'Activation Campaigns',
+      list: [
+        {
+          name: 'Quest',
+          free: {enable:true,tip:'Limited'},
+          growth: {enable:true,tip:'Unlimited'},
+          scale: {enable:true,tip:'Unlimited'},
+          enterprise: {enable:true,tip:'Unlimited'},
+        },
+        {
+          name: 'Airdrop',
+          free: {enable:true,tip:'Limited'},
+          growth: {enable:true,tip:'Unlimited'},
+          scale: {enable:true,tip:'Unlimited'},
+          enterprise: {enable:true,tip:'Unlimited'},
+        },
+        {
+          name: 'Giveaway',
+          free: {enable:true,tip:'Limited'},
+          growth: {enable:true,tip:'Unlimited'},
+          scale: {enable:true,tip:'Unlimited'},
+          enterprise: {enable:true,tip:'Unlimited'},
+        },
+        {
+          name: 'Notification',
+          free: {enable:true,tip:'Limited'},
+          growth: {enable:true,tip:'Unlimited'},
+          scale: {enable:true,tip:'Unlimited'},
+          enterprise: {enable:true,tip:'Unlimited'},
+        },
+      ],
+    },
+    {
+      type: 'Bot Detection',
+      list: [
+        {
+          name: '',
+          free: false,
+          growth: true,
+          scale: true,
+          enterprise: true,
+        },
+      ],
+    },
+    {
+      type: 'Team Cooperation',
+      list: [
+        {
+          name: '',
+          free: false,
+          growth: '2 Seats',
+          scale: '5 Seats',
+          enterprise: 'Customized',
+        },
+      ],
+    },
+    {
+      type: 'Customer Service',
+      list: [
+        {
+          name: '',
+          free: 'Basic',
+          growth: 'Standard',
+          scale: 'Enhanced',
+          enterprise: 'Premium',
+        },
+      ],
+    },
+  ],
+});
