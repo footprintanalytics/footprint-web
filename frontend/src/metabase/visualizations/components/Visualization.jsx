@@ -496,13 +496,13 @@ class Visualization extends React.PureComponent {
       if (isFga) {
         return (
           <div className="noResults">
-            {"We're still prepping the data, but don't panic. "}
+            Data is being prepared.
             <br/>
-            {"Reach out to our sales team and we'll fast-track the production process."}
-            <br/>
+            Please wait or contact{" "}
             <Link target="_blank" href="mailto:sales@footprint.network">
-              Email: sales@footprint.network
+              sales
             </Link>
+            {" "}.
           </div>
         )
       }
