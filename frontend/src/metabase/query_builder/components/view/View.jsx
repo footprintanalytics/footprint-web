@@ -466,7 +466,6 @@ class View extends React.Component {
       user,
       error,
     } = this.props;
-
     // if we don't have a card at all or no databases then we are initializing, so keep it simple
     if (!card || !databases) {
       return <LoadingAndErrorWrapper className="full-height" loading error={error}/>;
