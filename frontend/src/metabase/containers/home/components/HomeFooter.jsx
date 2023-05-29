@@ -97,6 +97,10 @@ const footers = [
         label: "Privacy Policy",
         url: "https://static.footprint.network/site/privacy-policy.html",
       },
+      {
+        label: "Terms of Service",
+        url: "https://static.footprint.network/site/terms-of-service.html",
+      },
     ],
   },
   {
