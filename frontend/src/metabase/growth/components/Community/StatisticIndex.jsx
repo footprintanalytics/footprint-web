@@ -18,7 +18,7 @@ export const StatisticIndex = props => {
                 <LoadingConnectorButton
                   router={router}
                   project={project}
-                  className="mt1"
+                  className="mt3"
                   disableCheck={
                     option?.value !== null && option?.value >= 0 ? true : false
                   }
