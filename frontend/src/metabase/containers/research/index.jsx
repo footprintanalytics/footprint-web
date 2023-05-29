@@ -29,8 +29,8 @@ const Index = props => {
   } = props;
 
   const researchData = myData[classify];
+  const metaInfo = myData["metaObject"][classify];
   const type = "research";
-
 
   const findItemByData = ({ menu, subMenu }) => {
     const menuData = researchData?.find(item => item.value === menu);
@@ -96,15 +96,9 @@ const Index = props => {
     )
   }
 
-  const getTitle = (item) => {
-    return item?.label || classify;
-  }
-
-  const title = `${getTitle(item)} - Footprint Analytics`;
-
   return (
     <>
-      <Meta title={title} />
+      <Meta description={metaInfo["description"]} keywords={metaInfo["keywords"]} title={metaInfo["title"]} />
       <div className="Features bg-gray flex">
         <div className="Features-side">
           {renderSelectClassify()}

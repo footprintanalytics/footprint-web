@@ -445,10 +445,30 @@ const chainData = [
   },
 ]
 
+const metaObject = {
+  "nft": {
+    title: "NFT Research | Unlock the power of data",
+    description: "Covers all the NFT data you need from industry overview to individual NFTs with insightful metrics, such as NFT \n" +
+      "Wash Trading, Blue Chip, Royalty Fee, Floor Price and more.",
+    keywords: "NFT Research, NFT data, NFT Wash Trading, NFT Blue Chip, NFT Royalty, NFT Floor Price, Top Buyers, Top Sellers, Top Sales, NFT Fundraising",
+  },
+  "gamefi": {
+    title: "GameFi Research | All in one research tool",
+    description: "Covers all the GameFi data you need from industry overview to individual games with insightful metrics, such as gamers, in-game nft holders, Gamer Profile and more ",
+    keywords: "GameFi Research, GameFi data, Web3 Gaming, In-game NFT, Gamer profile, GameFi Fundraising, Game Chain, GameFi report, Game tokenomics",
+  },
+  "chain": {
+    title: "Chain Research | Built by researcher for researchers",
+    description: "Covering most chains and support from real-time raw data to analytic metrics",
+    keywords: "Chain Ecosystem, Chain Research, Blockchain industry, chain transaction data, chain token transfer data, chain events, chain log, Chain Gas Fee",
+  },
+}
+
 const data = {
   "nft": nftData,
   "gamefi": gamefiData,
   "chain": chainData,
+  "metaObject": metaObject,
 }
 
 
