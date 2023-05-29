@@ -167,7 +167,7 @@ const SocialConnectList = props => {
               );
             }}
           >
-            Save as cohort
+            Save as segment
           </Button>
           <Button
             type="link"
@@ -177,7 +177,7 @@ const SocialConnectList = props => {
               props.router?.push({
                 pathname: getGrowthProjectPath(
                   props.router?.params?.project,
-                  "CampaignDetail",
+                  "ActivationDetail",
                 ),
                 hash: "#id=" + record.campaignId,
               });
@@ -214,17 +214,17 @@ const SocialConnectList = props => {
     campaignId: null,
   });
   const modalProps = {
-    title: "Save as cohort",
+    title: "Save as segment",
     confirmLoading: isCreatingCohort,
     footer: null,
     open: isOpenCreatingCohort?.open,
     content: (
       <div>
         <Divider className="my2" />
-        <h4>Cohort Name</h4>
+        <h4>Segment Name</h4>
         <Input
           className="mt1 mb1"
-          placeholder="Input cohort name"
+          placeholder="Input segment name"
           onChange={event => {
             setCohortName(event.target.value);
             // title = event.target.value;
@@ -237,7 +237,7 @@ const SocialConnectList = props => {
             loading={isCreatingCohort}
             onClick={() => {
               if (!cohortName?.length > 0) {
-                message.error("Please input cohort name");
+                message.error("Please input segment name");
                 return false;
               }
               setCreatingCohort(true);

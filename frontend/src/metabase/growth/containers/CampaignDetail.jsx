@@ -46,7 +46,7 @@ const CampaignDetail = props => {
       preProtocolSlug.current !== projectPath
     ) {
       router?.push({
-        pathname: getGrowthProjectPath(projectPath, "Campaign"),
+        pathname: getGrowthProjectPath(projectPath, "ativation"),
       });
     }
     preProtocolSlug.current = projectPath;
@@ -82,17 +82,17 @@ const CampaignDetail = props => {
                     router.push({
                       pathname: getGrowthProjectPath(
                         project?.protocolSlug,
-                        "Campaign",
+                        "activation",
                       ),
                     });
                   }}
                 >
-                  Campaign
+                  Activation
                 </a>
               ),
             },
             {
-              title: "Campaign Detail",
+              title: "Activation Detail",
             },
           ]}
         />
@@ -102,7 +102,7 @@ const CampaignDetail = props => {
           ) : data ? (
             <Descriptions bordered>
               <Descriptions.Item label="Name">{data.title}</Descriptions.Item>
-              <Descriptions.Item label="Campaign Type">
+              <Descriptions.Item label="Activation Type">
                 {data?.campaignType}
               </Descriptions.Item>
               <Descriptions.Item label="Channel Type">
@@ -205,8 +205,8 @@ const CampaignDetail = props => {
               <div style={{ marginTop: 10 }}>
                 <Card>
                   <Alert
-                    message="Your campaign is waiting to be started..."
-                    description="Please make sure you have completed the campaign steps above and the data will be presented after the steps are completed."
+                    message="Your activation is waiting to be started..."
+                    description="Please make sure you have completed the activation steps above and the data will be presented after the steps are completed."
                     type="info"
                     showIcon
                   />

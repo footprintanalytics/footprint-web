@@ -93,15 +93,15 @@ export function showCohortSuccessModal(
   modalApi = Modal,
   cohort: any,
   router: any,
-  from = "Cohort",
+  from = "segment",
   onCancel = () => {},
 ) {
   return modalApi.success({
-    title: "Cohort created successfully",
-    content: "You can now view the User Profile of this cohort .",
+    title: "Segment created successfully",
+    content: "You can now view the User Profile of this segment .",
     onOk() {
       router?.push({
-        pathname: getGrowthProjectPath(router?.params?.project, "Cohort"),
+        pathname: getGrowthProjectPath(router?.params?.project, "segment"),
       });
       // router?.push({
       //   pathname: `/growth/public/dashboard/55b1eb29-b15e-458f-9241-1862a0d19d3b`,
@@ -113,7 +113,7 @@ export function showCohortSuccessModal(
       onCancel?.();
     },
     closable: true,
-    okText: "View Cohort",
+    okText: "View Segment",
     cancelText: "Close",
   });
 }
@@ -276,6 +276,7 @@ export function getGaMenuTabs(
       [
         "Connector",
         "Campaign",
+        "Activation",
         "Community",
         "Members",
         "Wallet Profile",

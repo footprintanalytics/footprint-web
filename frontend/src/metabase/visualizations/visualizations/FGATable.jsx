@@ -13,19 +13,19 @@ export default class FGATable extends Table {
     ...super.settings,
     "table.create_cohort": {
       section: t`Columns`,
-      title: t`Create cohort`,
+      title: t`Create segment`,
       widget: "toggle",
       getDefault: () => false,
     },
     "table.create_filter_cohort": {
       section: t`Columns`,
-      title: t`Create filter cohort`,
+      title: t`Create filter segment`,
       widget: "toggle",
       getDefault: () => false,
     },
     "table.create_campaign": {
       section: t`Columns`,
-      title: t`Create campaign`,
+      title: t`Create activation`,
       widget: "toggle",
       getDefault: () => false,
     },

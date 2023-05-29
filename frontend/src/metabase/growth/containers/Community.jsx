@@ -144,7 +144,7 @@ const Community = props => {
 
   const actions = [
     {
-      title: "Create Cohort",
+      title: "Create Segment",
       disabled: false,
       component: (
         <CreateCohort2

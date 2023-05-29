@@ -34,7 +34,7 @@ const CampaignList = props => {
             props.router?.push({
               pathname: getGrowthProjectPath(
                 props.router?.params?.project,
-                "CampaignDetail",
+                "ActivationDetail",
               ),
               hash: "#id=" + row.campaignId,
             });
@@ -50,7 +50,7 @@ const CampaignList = props => {
       render: text => <CampaignStatus value={text} />,
     },
     {
-      title: "Campaign Type",
+      title: "Activation Type",
       dataIndex: "campaignType",
       key: "campaignType",
       render: text => {
@@ -81,7 +81,7 @@ const CampaignList = props => {
   return (
     <div style={{ padding: 20 }}>
       <Card
-        title="Campaign"
+        title="Activation"
         extra={
           // <Dropdown menu={{ items }}>
           <Button
@@ -90,12 +90,12 @@ const CampaignList = props => {
               props.router?.push({
                 pathname: getGrowthProjectPath(
                   props.router?.params?.project,
-                  "CreateCampaign",
+                  "CreateActivation",
                 ),
               })
             }
           >
-            Create Campaign
+            Create Activation
           </Button>
           // </Dropdown>
         }

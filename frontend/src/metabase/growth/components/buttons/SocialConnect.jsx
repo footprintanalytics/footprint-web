@@ -11,11 +11,9 @@ import {
   Typography,
 } from "antd";
 import { connect } from "react-redux";
-import { CreateFgaCohortByAddress } from "metabase/new-service";
 import {
   getLatestGAProjectId,
   getGrowthProjectPath,
-  showCohortSuccessModal,
 } from "metabase/growth/utils/utils";
 import { getUser } from "metabase/selectors/user";
 import {

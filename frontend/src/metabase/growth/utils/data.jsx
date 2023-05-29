@@ -504,11 +504,11 @@ export const fga_menu_data = [
     ],
   },
   {
-    name: "Cohort",
+    name: "Segment",
     icon: React.createElement(TagsOutlined),
     children: [
       {
-        name: "Cohort",
+        name: "Segment",
         id: null,
         //  id: 7210,
         //  uuid: "4454f1ce-202b-45eb-8f83-3d78beff6756",
@@ -710,11 +710,11 @@ export const getFgaComparePlans = ({ user }) => ({
       type: "Data Integration",
       list: [
         {
-          name: "Upload Connector",
+          name: "Upload Integration",
           free: false,
           growth: false,
           scale: { enable: true, tip: "Limited" },
-          enterprise: { enable: true, tip: "Unlimited Connectors" },
+          enterprise: { enable: true, tip: "Unlimited Integrations" },
         },
 
         {
@@ -722,7 +722,7 @@ export const getFgaComparePlans = ({ user }) => ({
           free: false,
           growth: false,
           scale: { enable: true, tip: "Limited" },
-          enterprise: { enable: true, tip: "Unlimited Connectors" },
+          enterprise: { enable: true, tip: "Unlimited Integrations" },
         },
 
         {
@@ -730,7 +730,7 @@ export const getFgaComparePlans = ({ user }) => ({
           free: false,
           growth: false,
           scale: { enable: true, tip: "Limited" },
-          enterprise: { enable: true, tip: "Unlimited Connectors" },
+          enterprise: { enable: true, tip: "Unlimited Integrations" },
         },
 
         {
@@ -738,14 +738,14 @@ export const getFgaComparePlans = ({ user }) => ({
           free: false,
           growth: false,
           scale: { enable: true, tip: "Limited" },
-          enterprise: { enable: true, tip: "Unlimited Connectors" },
+          enterprise: { enable: true, tip: "Unlimited Integrations" },
         },
         {
-          name: "Other Connectors",
+          name: "Other Integrations",
           free: false,
           growth: false,
           scale: { enable: true, tip: "Limited" },
-          enterprise: { enable: true, tip: "Unlimited Connectors" },
+          enterprise: { enable: true, tip: "Unlimited Integrations" },
         },
       ],
     },
@@ -872,24 +872,24 @@ export const getFgaComparePlans = ({ user }) => ({
       ],
     },
     {
-      type: "Cohorts",
+      type: "Segments",
       list: [
         {
-          name: "Unlock System Cohorts",
+          name: "Unlock System Segments",
           free: { enable: true, tip: "Total 5" },
           growth: { enable: true, tip: "Total 20" },
           scale: { enable: true, tip: "Total 100" },
           enterprise: { enable: true, tip: "Unlimited" },
         },
         {
-          name: "Filter Wallets Saving as Cohort",
+          name: "Filter Wallets Saving as Segment",
           free: { enable: true, tip: "Total 5" },
           growth: { enable: true, tip: "Total 20" },
           scale: { enable: true, tip: "Total 100" },
           enterprise: { enable: true, tip: "Unlimited" },
         },
         {
-          name: "Import Wallets as Cohort",
+          name: "Import Wallets as Segment",
           free: { enable: true, tip: "Total 5" },
           growth: { enable: true, tip: "Total 20" },
           scale: { enable: true, tip: "Total 100" },

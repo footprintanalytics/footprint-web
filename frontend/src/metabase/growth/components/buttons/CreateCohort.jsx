@@ -34,7 +34,7 @@ const CreateCohort = ({
   const [walletList, setWalletList] = useState([]);
   const onSend = async () => {
     if (!cohortName) {
-      message.error("Please enter the name of your cohort.");
+      message.error("Please enter the name of your segment.");
       return;
     }
     if (walletList.length <= 0) {
@@ -46,7 +46,7 @@ const CreateCohort = ({
       message.warning("Please sign in before proceeding.");
       setLoginModalShowAction({
         show: true,
-        from: "add cohort",
+        from: "add segment",
         redirect: location.pathname,
         channel: "FGA",
       });
@@ -99,7 +99,7 @@ const CreateCohort = ({
     return (
       <>
         <h4>
-          Please enter all the addresses you wish to add to this new cohort.
+          Please enter all the addresses you wish to add to this new segment.
         </h4>
         <TextArea
           // value={pasteValue}
@@ -108,7 +108,7 @@ const CreateCohort = ({
             // setPasteValue(e.target.value);
             parseWalletAddress(e.target.value);
           }}
-          placeholder="Please paste all the addresses you wish to add to this new cohort, separated by line breaks ."
+          placeholder="Please paste all the addresses you wish to add to this new segment, separated by line breaks ."
           autoSize={{ minRows: 10, maxRows: 15 }}
         />
         <div className=" flex flex-row items-center justify-between full-width">
@@ -158,7 +158,7 @@ const CreateCohort = ({
         arrow={{ pointAtCenter: true }}
       >
         <Button type="primary" style={style} onClick={e => e.preventDefault()}>
-          {btnText ?? "Create cohort"}
+          {btnText ?? "Create segment"}
         </Button>
       </Dropdown>
       <Modal
@@ -179,10 +179,10 @@ const CreateCohort = ({
           </Button>,
         ]}
         closable={false}
-        title={`${btnText ?? "Upload to create cohort"}`}
+        title={`${btnText ?? "Upload to create segment"}`}
       >
         <Typography>
-          <h3>Cohort Name</h3>
+          <h3>Segment Name</h3>
           <div className="mt1" />
           <AutoComplete
             style={{
@@ -193,7 +193,7 @@ const CreateCohort = ({
               setCohortName(value);
             }}
             // options={options}
-            placeholder="Enter the name of this cohort "
+            placeholder="Enter the name of this segment "
             filterOption={(inputValue, option) =>
               option?.value.toUpperCase().indexOf(inputValue.toUpperCase()) !==
               -1
