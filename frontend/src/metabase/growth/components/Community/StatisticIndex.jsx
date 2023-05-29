@@ -28,7 +28,7 @@ export const StatisticIndex = props => {
                   <>
                     <Typography.Title
                       level={3}
-                      style={{ marginTop: 10, marginBottom: 5 }}
+                      style={{ marginTop: 20, marginBottom: 5 }}
                     >
                       {option?.value?.toLocaleString("en-US")}
                     </Typography.Title>

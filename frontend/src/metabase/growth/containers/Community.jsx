@@ -208,40 +208,26 @@ const Community = props => {
       dataIndex: "tags",
       render: (_, { tags }) => {
         tags = tags?.map(i => formatTag(i));
+        const tagStr = tags?.map(t => formatTitle(t)).join(", ");
         return (
-          <Typography.Paragraph
-            ellipsis={{
-              rows: 2,
-              expandable: true,
-              suffix: "",
-              symbol: "more",
-            }}
-            style={{
-              minWidth: 150,
-              maxWidth: 500,
-              fontSize: 10,
-              marginBottom: 0,
-            }}
-          >
-            {tags?.length > 0 ? (
-              <>
-                {tags?.map(t => formatTitle(t)).join(", ")}
-                {/* {tags?.map(tag => {
-                return (
-                  <Tag
-                    className="rounded"
-                    style={{ margin: 2.5, fontSize: 8, display: "inline" }}
-                    key={tag}
-                  >
-                    {tag}
-                  </Tag>
-                );
-              })} */}
-              </>
-            ) : (
-              <></>
-            )}
-          </Typography.Paragraph>
+          <Tooltip title={tagStr} placement="topLeft">
+            <Typography.Paragraph
+              ellipsis={{
+                rows: 2,
+                expandable: true,
+                suffix: "",
+                symbol: "more",
+              }}
+              style={{
+                minWidth: 150,
+                maxWidth: 500,
+                fontSize: 10,
+                marginBottom: 0,
+              }}
+            >
+              {tags?.length > 0 ? <>{tagStr}</> : <></>}
+            </Typography.Paragraph>
+          </Tooltip>
         );
       },
     },
