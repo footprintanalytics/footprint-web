@@ -183,21 +183,21 @@ const CohortList = props => {
     if (data) {
       if(data.numberOfActiveWallets>=0){
         dataList.push({
-          title: "of Unique Active Wallet",
+          title: "Unique Active Wallet",
           value: data.numberOfActiveWallets,
           change: 0,
         });
       }
       if(data.numberOfNFTHolder>=0){
         dataList.push({
-          title: "of NFT Holder",
+          title: "NFT Holder",
           value: data.numberOfNFTHolder,
           change: 0,
         });
       }
       if(data.nftHolderActivity>=0){
         dataList.push({
-          title: "NFT holder/UAW %",
+          title: "NFT Holder/UAW %",
           value: data.nftHolderActivity,
           valueSuffix: "%",
           change: 0,
@@ -205,14 +205,14 @@ const CohortList = props => {
       }
       if(data.numberOfWhale>=0){
         dataList.push({
-          title: "of Whale",
+          title: "Whale",
           value: data.numberOfWhale,
           change: 0,
         });
       }
       if(data.numberOfLoyalUser>=0){
         dataList.push({
-          title: "of Loyal User",
+          title: "Loyal User",
           value: data.numberOfLoyalUser,
           change: 0,
         });
@@ -220,7 +220,7 @@ const CohortList = props => {
 
       if(data.numberOfHighTradingActiveUser>=0){
         dataList.push({
-          title: "of High-trading Active User",
+          title: "High-trading Active User",
           value: data.numberOfHighTradingActiveUser,
           change: 0,
         });

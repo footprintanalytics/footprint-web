@@ -51,11 +51,11 @@ const Community = props => {
     });
   }, [walletListParams]);
 
-  const infoResult = useQuery(
-    ["getCommunityInfo", project?.id],
-    async () => getCommunityInfo({ projectId: parseInt(project?.id) }),
-    { ...QUERY_OPTIONS, enabled: !!project?.id },
-  );
+  // const infoResult = useQuery(
+  //   ["getCommunityInfo", project?.id],
+  //   async () => getCommunityInfo({ projectId: parseInt(project?.id) }),
+  //   { ...QUERY_OPTIONS, enabled: !!project?.id },
+  // );
 
   const filterResult = useQuery(
     ["getCommunityQuickFilter", project?.id],
@@ -79,29 +79,29 @@ const Community = props => {
     }
   }, [listResult]);
 
-  function formatInfoResult(data) {
-    const dataList = [];
-    if (data) {
-      dataList.push({
-        title: "Addresses",
-        value: data.wallets,
-        change: data.walletsChange,
-      });
-      dataList.push({
-        title: "Twitter Followers",
-        value: data.twitterFollowers,
-        change: data.twitterFollowersChange,
-        sourceDefinitionId: project?.twitter?.sourceDefinitionId,
-      });
-      dataList.push({
-        title: "Discord Members",
-        value: data.discordMembers,
-        change: data.discordMembersChange,
-        sourceDefinitionId: project?.discord?.sourceDefinitionId,
-      });
-    }
-    return dataList;
-  }
+  // function formatInfoResult(data) {
+  //   const dataList = [];
+  //   if (data) {
+  //     dataList.push({
+  //       title: "Addresses",
+  //       value: data.wallets,
+  //       change: data.walletsChange,
+  //     });
+  //     dataList.push({
+  //       title: "Twitter Followers",
+  //       value: data.twitterFollowers,
+  //       change: data.twitterFollowersChange,
+  //       sourceDefinitionId: project?.twitter?.sourceDefinitionId,
+  //     });
+  //     dataList.push({
+  //       title: "Discord Members",
+  //       value: data.discordMembers,
+  //       change: data.discordMembersChange,
+  //       sourceDefinitionId: project?.discord?.sourceDefinitionId,
+  //     });
+  //   }
+  //   return dataList;
+  // }
 
   const valueFilterOptionsList = [
     {
@@ -384,7 +384,7 @@ const Community = props => {
 
   return (
     <div className="flex flex-column items-center w-full p2">
-      {infoResult.isLoading || !project?.id ? (
+      {/* {infoResult.isLoading || !project?.id ? (
         <div className="w-full p1">
           <Card className="w-full rounded" style={{ height: 140 }}>
             <LoadingSpinner />
@@ -401,7 +401,7 @@ const Community = props => {
             />
           )}
         </>
-      )}
+      )} */}
       {filterResult.isLoading || !project?.id ? (
         <div className="w-full p1">
           <Card className="w-full rounded" style={{ height: 110 }}>

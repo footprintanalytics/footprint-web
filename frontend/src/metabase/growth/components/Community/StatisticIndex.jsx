@@ -14,7 +14,6 @@ export const StatisticIndex = props => {
           <Col sm={24} md={12} lg={8} xl={6} xxl={4} key={option?.title}>
             <Card bordered={false} style={{ minHeight: 140 }}>
               <div className="flex flex-col items-center">
-                <Typography.Text>{option?.title}</Typography.Text>
                 <LoadingConnectorButton
                   router={router}
                   project={project}
@@ -30,29 +29,33 @@ export const StatisticIndex = props => {
                       level={3}
                       style={{ marginTop: 20, marginBottom: 5 }}
                     >
-                      {`${option?.value?.toLocaleString("en-US")}${option?.valueSuffix?' '+option?.valueSuffix:''}`}
-
+                      {`${option?.value?.toLocaleString("en-US")}${
+                        option?.valueSuffix ? " " + option?.valueSuffix : ""
+                      }`}
                     </Typography.Title>
-                    {option?.change !== 0 && (
-                      <Typography.Text
-                        type={`${
-                          option?.change < 0
-                            ? "danger"
-                            : option?.change > 0
-                            ? "success"
-                            : "secondary"
-                        }`}
-                      >
-                        {option?.change > 0 ? (
-                          <ArrowUpOutlined />
-                        ) : option?.change < 0 ? (
-                          <ArrowDownOutlined />
-                        ) : null}
-                        {Math.abs(option?.change)?.toLocaleString("en-US")}
-                      </Typography.Text>
-                    )}
                   </>
                 </LoadingConnectorButton>
+                <>
+                  <Typography.Text>{option?.title}</Typography.Text>
+                  {option?.change !== 0 && (
+                    <Typography.Text
+                      type={`${
+                        option?.change < 0
+                          ? "danger"
+                          : option?.change > 0
+                          ? "success"
+                          : "secondary"
+                      }`}
+                    >
+                      {option?.change > 0 ? (
+                        <ArrowUpOutlined />
+                      ) : option?.change < 0 ? (
+                        <ArrowDownOutlined />
+                      ) : null}
+                      {Math.abs(option?.change)?.toLocaleString("en-US")}
+                    </Typography.Text>
+                  )}
+                </>
               </div>
             </Card>
           </Col>
