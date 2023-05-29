@@ -41,7 +41,7 @@ const FgaErrorGuide = ({ router, project, menu }) => {
           <Button
             type="primary"
             onClick={() => {
-              router.push(getGrowthProjectPath(project, "Integration"));
+              router.push(getGrowthProjectPath(project, "integration"));
             }}
           >
             Config Integration now
