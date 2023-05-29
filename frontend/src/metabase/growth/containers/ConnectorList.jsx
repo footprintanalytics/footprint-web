@@ -48,26 +48,28 @@ const ConnectorList = props => {
   const { isLoading, data } = useQuery(
     ["getAvailableConnectors", projectId, count],
     async () => {
-      if (projectId) {
-        return await getAvailableConnectors({ projectId: parseInt(projectId) });
-      } else {
-        return;
-      }
+      return await getAvailableConnectors({ projectId: parseInt(projectId) });
     },
-    QUERY_OPTIONS,
+    { ...QUERY_OPTIONS, enabled: !!projectId },
   );
 
   useEffect(() => {
     if (projectId && !isLoading && data) {
       console.log("getAvailableIntegrations", data);
       const availableConnectors = data?.availableConnectorConfig;
-      // setCurrentConnectors()
-      if (project?.isDemo && !projectId) {
-        // if this project is demo project (the sandbox), set all connectors to configured
-        availableConnectors.map((j, index) => {
+      const groupMap  = new Map();
+       availableConnectors.map((j, index) => {
+        if (project?.isDemo && !projectId) {
+          // if this project is demo project (the sandbox), set all connectors to configured
           j.configured = true;
-        });
-      }
+        }
+        if(groupMap.has(j.group)){
+          j.group = "";
+        }else{
+          groupMap.set(j.group, 1);
+        }
+
+      });
       setConnectors(availableConnectors);
     }
   }, [projectId, isLoading, data, user]);
@@ -131,6 +133,8 @@ const ConnectorList = props => {
                 dataSource={connectors}
                 split={false}
                 renderItem={item => (
+                  <>
+                  {item?.group&&<Typography.Text style={{marginLeft:8}}>{item?.group}</Typography.Text>}
                   <List.Item
                     style={{
                       borderRadius: 10,
@@ -192,6 +196,7 @@ const ConnectorList = props => {
                       description={item?.description}
                     />
                   </List.Item>
+                  </>
                 )}
               />
             )}
