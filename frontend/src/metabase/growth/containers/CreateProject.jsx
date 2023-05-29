@@ -17,7 +17,7 @@ const steps = [
   {
     title: "Step 2",
     key: "config_connector",
-    description: "Config connector",
+    description: "Config integration",
   },
   {
     title: "Step 3",

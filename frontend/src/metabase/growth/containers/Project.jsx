@@ -320,7 +320,7 @@ const Project = props => {
         ></CustomAnalysis>
       );
     }
-    if (current_tab === "CreateCampaign") {
+    if ([ "CreateCampaign","CreateActivation"].includes(current_tab)) {
       return (
         <CampaignCreate
           location={location}
@@ -340,7 +340,7 @@ const Project = props => {
         ></CampaignListNew>
       );
     }
-    if (current_tab === "CampaignDetail") {
+    if (["CampaignDetail", "ActivationDetail"].includes(current_tab)) {
       return (
         <CampaignDetail
           router={router}

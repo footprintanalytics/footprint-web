@@ -9,15 +9,15 @@ const CampaignStatus = ({ value }) => {
   switch (value) {
     case "init":
       status = "warning";
-      text = "Campaign is waiting to be started";
+      text = "Activation is waiting to be started";
       break;
     case "done":
       status = "success";
-      text = "Campaign was successfully completed";
+      text = "Activation was successfully completed";
       break;
     default:
       status = "processing";
-      text = "Campaign is in progress";
+      text = "Activation is in progress";
       break;
   }
 

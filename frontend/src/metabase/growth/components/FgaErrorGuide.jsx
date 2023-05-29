@@ -36,15 +36,15 @@ const FgaErrorGuide = ({ router, project, menu }) => {
           />
         }
         // title="There is currently no data available for this project."
-        subTitle="Unfortunately, there is no data available for the current project. However, if you have configured the connector, you can gain valuable insights about your users by accessing additional data."
+        subTitle="Unfortunately, there is no data available for the current project. However, if you have configured the integration, you can gain valuable insights about your users by accessing additional data."
         extra={
           <Button
             type="primary"
             onClick={() => {
-              router.push(getGrowthProjectPath(project, "Connector"));
+              router.push(getGrowthProjectPath(project, "Integration"));
             }}
           >
-            Config Connector now
+            Config Integration now
           </Button>
         }
       />
@@ -61,7 +61,7 @@ const FgaErrorGuide = ({ router, project, menu }) => {
     //     // target="_blank"
     //     onClick={() => trackStructEvent(`error-guide-fix-${cardId}`)}
     //   >
-    //     Goto config connector now.
+    //     Goto config Integration now.
     //   </Link>
     //   {/* <div className="ml2"/>
     //   <Link

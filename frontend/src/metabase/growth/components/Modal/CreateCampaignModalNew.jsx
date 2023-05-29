@@ -306,7 +306,7 @@ const CreateCampaignModalNew = props => {
       message.warning("Kindly log in before proceeding.");
       setLoginModalShowAction({
         show: true,
-        from: "create campaign",
+        from: "create activation",
         redirect: location.pathname,
         channel: "FGA",
       });
@@ -367,7 +367,7 @@ const CreateCampaignModalNew = props => {
     };
     addCampaign(requestParam)
       .then(result => {
-        message.success("The campaign creation was successful.");
+        message.success("The activation creation was successful.");
         if (campaignType === "Discord") {
           //  /connect campaign_id:2 twitter_handler:enable email:enable
           setShowDiscordStep3({
@@ -484,10 +484,10 @@ const CreateCampaignModalNew = props => {
                         rules={[{ required: true }]}
                         {...horizontalLayout}
                         name={"TargetCohort"}
-                        label="Cohort"
+                        label="Segment"
                       >
                         <Select
-                          placeholder="Select a cohort"
+                          placeholder="Select a segment"
                           mode="multiple"
                           loading={isLoadingCohort}
                           optionLabelProp="label"

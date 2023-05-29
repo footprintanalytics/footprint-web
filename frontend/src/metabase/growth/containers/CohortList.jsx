@@ -50,7 +50,7 @@ const CohortList = props => {
         !(f.numberOfWallets <= 0 && f.status === "Ready"),
     );
 
-  console.log("cohort", data, dataSource);
+  console.log("segment", data, dataSource);
   const columns = [
     {
       title: "Title",
@@ -61,7 +61,7 @@ const CohortList = props => {
         return (
           <Link
             disabled={numberOfWallets === 0}
-            to={`${user_profile_link}?cohort_id=${cohortId}&tag=${text}&cohort_title=${text}#from=Cohort`}
+            to={`${user_profile_link}?cohort_id=${cohortId}&tag=${text}&cohort_title=${text}#from=Segment`}
           >
             {title}
           </Link>
@@ -110,23 +110,23 @@ const CohortList = props => {
         <Space size="middle">
           <Link
             disabled={record.numberOfWallets === 0}
-            to={`${user_profile_link}?cohort_id=${record.cohortId}&tag=${record.title}&cohort_title=${record.title}#from=Cohort`}
+            to={`${user_profile_link}?cohort_id=${record.cohortId}&tag=${record.title}&cohort_title=${record.title}#from=Segment`}
           >
             User Profile
           </Link>
           <Link
             disabled={record.numberOfWallets === 0}
-            to={`/growth/public/dashboard/dce33214-a079-4eb8-b53f-defaabde2eba?cohort_id=${record.cohortId}&cohort_title=${record.title}#from=Cohort`}
+            to={`/growth/public/dashboard/dce33214-a079-4eb8-b53f-defaabde2eba?cohort_id=${record.cohortId}&cohort_title=${record.title}#from=Segment`}
           >
             Wallet List
           </Link>
           {/*<Link
             to={getGrowthProjectPath(
               props.router?.params?.project,
-              "CreateCampaign",
+              "CreateActivation",
             )}
           >
-            Create Campaign
+            Create Activation
           </Link>*/}
         </Space>
       ),
@@ -181,7 +181,7 @@ const CohortList = props => {
             title={
               <div className="flex flex-col m1">
                 <Typography.Title level={5}>
-                  Cohort Description
+                Segment Description
                 </Typography.Title>
                 <Divider className="my1" />
                 {tooltipTitle}
@@ -189,13 +189,13 @@ const CohortList = props => {
             }
             arrow={true}
           >
-            {"Cohort "}
+            {"Segment "}
             <QuestionCircleOutlined />
           </Tooltip>
         }
         extra={
           <Dropdown menu={{ items }}>
-            <Button type="primary">Create Cohort</Button>
+            <Button type="primary">Create Segment</Button>
           </Dropdown>
         }
       >

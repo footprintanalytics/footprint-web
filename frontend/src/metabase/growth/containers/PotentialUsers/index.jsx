@@ -135,7 +135,7 @@ const PotentialUsers = props => {
 
   const actions = [
     {
-      title: "Create Cohort",
+      title: "Create Segment",
       component: (
         <CreateCohort2
           project={project}

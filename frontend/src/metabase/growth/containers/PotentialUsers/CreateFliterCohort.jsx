@@ -23,7 +23,7 @@ import {
 } from "metabase/new-service";
 
 const CreateCohort2 = ({
-  btnText = "Create Cohort",
+  btnText = "Create Segment",
   onChangeLocation,
   project,
   disable = false,
@@ -113,7 +113,7 @@ const CreateCohort2 = ({
 
   const createCohortAction = async () => {
     if (!cohortName) {
-      message.error("Please enter the name of your cohort.");
+      message.error("Please enter the name of your segment.");
       return;
     }
     if (addressListCount === 0) {
@@ -151,7 +151,7 @@ const CreateCohort2 = ({
       } else {
         showCohortSuccessModal(modal, result, router, type, () => {
           onChangeLocation(
-            getGrowthProjectPath(project?.protocolSlug, "Cohort"),
+            getGrowthProjectPath(project?.protocolSlug, "segment"),
           );
         });
       }
@@ -225,7 +225,7 @@ const CreateCohort2 = ({
         title={`${btnText}`}
       >
         <Divider className="my2" />
-        <h4>{isTagging ? "Tag Name" : "Cohort Name"}</h4>
+        <h4>{isTagging ? "Tag Name" : "Segment Name"}</h4>
         <div className="mt1" />
         <AutoComplete
           style={{
@@ -236,7 +236,7 @@ const CreateCohort2 = ({
           onChange={value => {
             setCohortName(value.trim());
           }}
-          placeholder="Enter the name of this cohort "
+          placeholder="Enter the name of this segment "
           filterOption={(inputValue, option) =>
             option?.value.toUpperCase().indexOf(inputValue.toUpperCase()) !== -1
           }
