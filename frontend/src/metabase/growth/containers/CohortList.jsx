@@ -181,27 +181,6 @@ const CohortList = props => {
   function formatInfoResult(data) {
     const dataList = [];
     if (data) {
-      if(data.numberOfLoyalUser>=0){
-        dataList.push({
-          title: "of Loyal User",
-          value: data.numberOfLoyalUser,
-          change: 0,
-        });
-      }
-      if(data.numberOfWhale>=0){
-        dataList.push({
-          title: "of Whale",
-          value: data.numberOfWhale,
-          change: 0,
-        });
-      }
-      if(data.numberOfHighTradingActiveUser>=0){
-        dataList.push({
-          title: "of High-trading Active User",
-          value: data.numberOfHighTradingActiveUser,
-          change: 0,
-        });
-      }
       if(data.numberOfActiveWallets>=0){
         dataList.push({
           title: "of Unique Active Wallet",
@@ -216,7 +195,36 @@ const CohortList = props => {
           change: 0,
         });
       }
+      if(data.nftHolderActivity>=0){
+        dataList.push({
+          title: "NFT holder/UAW %",
+          value: data.nftHolderActivity,
+          valueSuffix: "%",
+          change: 0,
+        });
+      }
+      if(data.numberOfWhale>=0){
+        dataList.push({
+          title: "of Whale",
+          value: data.numberOfWhale,
+          change: 0,
+        });
+      }
+      if(data.numberOfLoyalUser>=0){
+        dataList.push({
+          title: "of Loyal User",
+          value: data.numberOfLoyalUser,
+          change: 0,
+        });
+      }
 
+      if(data.numberOfHighTradingActiveUser>=0){
+        dataList.push({
+          title: "of High-trading Active User",
+          value: data.numberOfHighTradingActiveUser,
+          change: 0,
+        });
+      }
     }
     return dataList;
   }
