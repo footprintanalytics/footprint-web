@@ -69,7 +69,7 @@ const SqlGPTContent = ({
             setError("This query did not explore the correct sql. Please try again with a different question.");
           }
           if (tempString?.includes("SELECT")) {
-            runQuestionQuery();
+            runQuestionQuery({from: "GPT"});
           }
         },
         onerror(err) {
@@ -107,7 +107,7 @@ const SqlGPTContent = ({
         onFinish={onFinish}
       >
         <Form.Item
-          label="Please describe your question and you will get the answer. e.g. how to query nft opensea last 7 days transaction"
+          label="Please describe your question and you will get the answer. e.g. How to query NFT OpenSea transactions last 7 days, grouped by each hour?"
           name="input"
           rules={[
             () => ({
