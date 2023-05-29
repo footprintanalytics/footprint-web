@@ -24,10 +24,10 @@ const CreateCampaign = ({
   return (
     <>
       {plain ? (
-        <div onClick={onClickCreateCampaign}>Create Campaign</div>
+        <div onClick={onClickCreateCampaign}>Create Activation</div>
       ) : (
         <Button type="primary" style={style} onClick={onClickCreateCampaign}>
-          Create Campaign
+          Create Activation
         </Button>
       )}
     </>

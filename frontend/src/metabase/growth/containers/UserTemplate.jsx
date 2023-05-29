@@ -13,7 +13,7 @@ const UserTemplate = props => {
     props;
   const templates = [
     {
-      name: "Campaign",
+      name: "Activation",
       name2: "Participant",
       icon: "https://footprint-imgs.oss-us-east-1.aliyuncs.com/airdrop2.svg",
       bg: "https://footprint-imgs.oss-us-east-1.aliyuncs.com/token_airdrop.png",

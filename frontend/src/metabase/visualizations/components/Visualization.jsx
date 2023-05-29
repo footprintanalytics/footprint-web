@@ -689,7 +689,7 @@ class Visualization extends React.PureComponent {
                     <CreateFliterCohort
                       state={this.state}
                       propData={this.props}
-                      btnText="Create cohort"
+                      btnText="Create segment"
                       style={{ marginLeft: 10 }}
                     />
                   )}

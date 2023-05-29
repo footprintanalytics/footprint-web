@@ -52,7 +52,7 @@ const CreateFliterCohort = ({
       : null;
   const onSend = async () => {
     if (!cohortName) {
-      message.error("Please enter cohort name!");
+      message.error("Please enter segment name!");
       return;
     }
     if (!user) {
@@ -60,7 +60,7 @@ const CreateFliterCohort = ({
       message.warning("Please sign in before proceeding.");
       setLoginModalShowAction({
         show: true,
-        from: "add cohort",
+        from: "add segment",
         redirect: location.pathname,
         channel: "FGA",
       });
@@ -193,7 +193,7 @@ const CreateFliterCohort = ({
           );
         }}
       >
-        {btnText ?? "Create Cohort"}
+        {btnText ?? "Create Segment"}
       </Button>
 
       <Modal
@@ -217,7 +217,7 @@ const CreateFliterCohort = ({
         closable={false}
         title={`${btnText}`}
       >
-        <h3>Cohort Name</h3>
+        <h3>Segment Name</h3>
         <div className="mt1" />
         <AutoComplete
           style={{
@@ -228,7 +228,7 @@ const CreateFliterCohort = ({
             setCohortName(value);
           }}
           // options={options}
-          placeholder="Enter the name of this cohort "
+          placeholder="Enter the name of this segment "
           filterOption={(inputValue, option) =>
             option?.value.toUpperCase().indexOf(inputValue.toUpperCase()) !== -1
           }

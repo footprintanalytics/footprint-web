@@ -52,7 +52,7 @@ const ConfigConnector = props => {
       onAddConnector(false);
       setLoginModalShowAction({
         show: true,
-        from: "add connector",
+        from: "add integration",
         redirect: location.pathname,
         channel: "FGA",
       });
@@ -79,15 +79,15 @@ const ConfigConnector = props => {
       };
       addConnectors(data)
         .then(result => {
-          console.log("add connector", result);
+          console.log("add Integration", result);
           if (result?.result === "success") {
-            message.success("Successfully configured connector.");
+            message.success("Successfully configured integration.");
             onAddConnector(true);
             // if (connector.name === "Discord") {
             //   showDiscordBotLink(values);
             // }
           } else {
-            message.error(`Configured connector ${result?.result}`);
+            message.error(`Configured integration ${result?.result}`);
           }
         })
         .finally(() => {
@@ -103,7 +103,7 @@ const ConfigConnector = props => {
       content: (
         <div style={{ marginTop: 20 }}>
           <p>
-            In order for the connector to function, you must incorporate our
+            In order for the Integration to function, you must incorporate our
             Discord bot into your guild.
           </p>
           <Link target="_blank" href={link}>
@@ -125,7 +125,7 @@ const ConfigConnector = props => {
       message.warning("Kindly log in before proceeding.");
       setLoginModalShowAction({
         show: true,
-        from: "add connector",
+        from: "add Integration",
         redirect: location.pathname,
         channel: "FGA",
       });
@@ -149,7 +149,7 @@ const ConfigConnector = props => {
       userId: user.id,
       projectId: projectId,
       propertyId: propertyId,
-      page: `${window.location.origin}${location.pathname}?tab=Connectors`,
+      page: `${window.location.origin}${location.pathname}?tab=integration`,
     });
     const scope = "https://www.googleapis.com/auth/analytics.readonly";
     const url = `https://accounts.google.com/o/oauth2/v2/auth?scope=${scope}&access_type=offline&include_granted_scopes=true&response_type=code&redirect_uri=${redirect_uri}&client_id=${client_id}&prompt=consent&state=${state}`;

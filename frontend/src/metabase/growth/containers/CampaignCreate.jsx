@@ -137,11 +137,11 @@ const CampaignCreate = props => {
           ? [
               {
                 title: "Content",
-                key: "Campaign",
+                key: "Activation",
               },
               {
-                title: "Cohort",
-                key: "Cohort",
+                title: "Segment",
+                key: "Segment",
               },
               {
                 title: "Channel",
@@ -151,7 +151,7 @@ const CampaignCreate = props => {
           : [
               {
                 title: "Content",
-                key: "Campaign",
+                key: "Activation",
               },
               {
                 title: "Channel",
@@ -166,7 +166,7 @@ const CampaignCreate = props => {
     if (channelSelectedValue?.length > 0) {
       setCurrentStep(steps?.findIndex(item => item.key === "Channel") + 1);
     } else if (cohortSelectedValue?.length > 0) {
-      setCurrentStep(steps?.findIndex(item => item.key === "Cohort") + 1);
+      setCurrentStep(steps?.findIndex(item => item.key === "Segment") + 1);
     } else {
       setCurrentStep(1);
     }
@@ -298,7 +298,7 @@ const CampaignCreate = props => {
       message.warning("Kindly log in before proceeding.");
       setLoginModalShowAction({
         show: true,
-        from: "create campaign",
+        from: "create activation",
         redirect: location.pathname,
         channel: "FGA",
       });
@@ -357,16 +357,16 @@ const CampaignCreate = props => {
       details: campaignDetails,
       channels: channelsParam,
     };
-    console.log("toAddCampaign requestParam\n", requestParam);
+    console.log("toAddActivation requestParam\n", requestParam);
     addCampaign(requestParam)
       .then(result => {
-        console.log("toAddCampaign result", result);
-        message.success("The campaign creation was successful.");
-        // router.push(getGrowthProjectPath(project?.protocolSlug, "Campaign"));
+        console.log("toAddActivation result", result);
+        message.success("The activation creation was successful.");
+        // router.push(getGrowthProjectPath(project?.protocolSlug, "activation"));
         router.push({
           pathname: getGrowthProjectPath(
             project?.protocolSlug,
-            "CampaignDetail",
+            "ActivationDetail",
           ),
           hash: "#id=" + result?.campaignId,
         });
@@ -391,7 +391,7 @@ const CampaignCreate = props => {
       >
         <div className=" flex flex-row justify-between w-full mb1">
           <Title width={"100%"} level={4} style={{ marginBottom: 0 }}>
-            Create Campaign
+            Create Activation
           </Title>
         </div>
         {isLoading || !campaignSelected ? (
@@ -433,7 +433,7 @@ const CampaignCreate = props => {
                 <div className="rounded p1 pt3">
                   <Form.Item
                     name="campaignType"
-                    label="Campaign Type"
+                    label="Activation Type"
                     valuePropName="value"
                     rules={[{ required: true }]}
                   >
@@ -451,11 +451,11 @@ const CampaignCreate = props => {
                   </Form.Item>
                   <Form.Item
                     name="campaignName"
-                    label="Campaign Name"
+                    label="Activation Name"
                     rules={[{ required: true }]}
                   >
                     <Input
-                      placeholder={"Input the name of this new campaign"}
+                      placeholder={"Input the name of this new activation"}
                     />
                   </Form.Item>
                 </div>
@@ -474,28 +474,28 @@ const CampaignCreate = props => {
                 {campaignSelected?.cohortRequired && (
                   <>
                     <div className="flex flex-row items-center justify-between mt2">
-                      <Title level={5}>{`Cohort`}</Title>
+                      <Title level={5}>{`Segment`}</Title>
                       <Button
                         target="_blank"
                         href={getGrowthProjectPath(
                           project?.protocolSlug,
-                          "Cohort",
+                          "segment",
                         )}
                         // size="small"
                         icon={<SettingOutlined />}
                         type="text"
                       >
-                        Create cohort
+                        Create segment
                       </Button>
                     </div>
                     <div className="rounded p1 mt1  pt3">
                       <Form.Item
                         rules={[{ required: true }]}
                         name={"TargetCohort"}
-                        label="Target Cohort"
+                        label="Target Segment"
                       >
                         <Select
-                          placeholder="Select a target cohort"
+                          placeholder="Select a target segment"
                           mode="multiple"
                           loading={isLoadingCohort}
                           optionLabelProp="label"

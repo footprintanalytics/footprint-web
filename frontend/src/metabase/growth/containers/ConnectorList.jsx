@@ -59,7 +59,7 @@ const ConnectorList = props => {
 
   useEffect(() => {
     if (projectId && !isLoading && data) {
-      console.log("getAvailableConnectors", data);
+      console.log("getAvailableIntegrations", data);
       const availableConnectors = data?.availableConnectorConfig;
       // setCurrentConnectors()
       if (project?.isDemo && !projectId) {
@@ -116,7 +116,7 @@ const ConnectorList = props => {
       >
         <div className=" flex flex-row justify-between w-full mb2">
           <Title width={"100%"} level={4} style={{ marginBottom: 0 }}>
-            Connectors
+          Integrations
           </Title>
         </div>
 
@@ -199,7 +199,7 @@ const ConnectorList = props => {
         )}
       </div>
       <Modal
-        title="Select connector type"
+        title="Select integration type"
         open={isModalOpen}
         footer={null}
         // onOk={handleOk}
@@ -235,7 +235,7 @@ const ConnectorList = props => {
         />
       </Modal>
       <Drawer
-        title={`Config ${openDrawer?.connector?.name} Connector`}
+        title={`Config ${openDrawer?.connector?.name} Integration`}
         placement="right"
         maskClosable={false}
         width={500}
