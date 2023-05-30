@@ -14,9 +14,10 @@ const SqlGPTContent = ({
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(false);
   const [success, setSuccess] = useState(false);
+  const [form] = Form.useForm();
   // const [result, setResult] = useState("")
   const onFinish = (values) => {
-    runApi(values.input);
+    runApi(values?.input?.trim());
   }
   let tempString = "";
   const fetchData = async (query) => {
@@ -94,9 +95,16 @@ const SqlGPTContent = ({
     }
   }
 
+  const handleKeyPress = (event) => {
+    if (event.key === 'Enter') {
+      event.preventDefault();
+    }
+  };
+
   return (
     <div className="p2" style={{ maxWidth: 1000, margin: "0 auto" }}>
       <Form
+        form={form}
         layout="vertical"
         initialValues={{
           // input: "query total mint of doodles and azuki?",
@@ -117,15 +125,24 @@ const SqlGPTContent = ({
                   return Promise.reject(new Error("Please describe your question."));
                 }
                 const regex = /^[A-Za-z0-9!"#$%&'()*+,-.:;<=>?@[\]^_`{|}~ ]+$/
-                if (regex.test(value)) {
+                if (regex.test(value?.trim())) {
                   return Promise.resolve();
                 }
-                return Promise.reject(new Error("Please describe your question, in English only."));
+                return Promise.reject(new Error("Please describe your question using English language."));
               },
             }),
           ]}
         >
-          <Input.TextArea placeholder="Your question" style={{ height: 160 }}/>
+          <Input.TextArea
+            placeholder="Your question"
+            style={{ height: 160 }}
+            onPressEnter={() => {
+              if (!loading) {
+                form.submit();
+              }
+            }}
+            onKeyPress={handleKeyPress}
+          />
         </Form.Item>
         <div className="text-centered mt1 pt1">
           <Button type="primary" htmlType="submit" loading={loading}>Explore</Button>
