@@ -239,7 +239,7 @@ const Project = props => {
         />
       );
     }
-    if (["My Analysis", "MyAnalysis", "my_analysis"].includes(current_tab)) {
+    if (["My Analysis", "MyAnalysis", "my_analysis", "my_analytics"].includes(current_tab)) {
       return (
         <MyAnalysis
           location={location}
@@ -316,7 +316,7 @@ const Project = props => {
         />
       );
     }
-    if (["Custom Analysis", "custom_analysis"].includes(current_tab)) {
+    if (["Custom Analysis", "custom_analysis", "custom_analytics"].includes(current_tab)) {
       return (
         <CustomAnalysis
           project={getProjectObject()}

@@ -138,8 +138,8 @@ const CampaignQuestflow = props => {
       ) : (
         <div className="w-full h-full">
           <Canvas
-            flowName={"Footprint Growth Analysis Email Flow"}
-            flowDescription={"Footprint Growth Analysis Email Flow"}
+            flowName={"Footprint Growth Analytics Email Flow"}
+            flowDescription={"Footprint Growth Analytics Email Flow"}
             theme="dark"
             idToken={data?.idToken}
             template={flowTemplate}
