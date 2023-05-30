@@ -85,7 +85,7 @@ const CampaignQuestflow = props => {
           validate: false,
           parameters: {
             subject: "Your email subject here.",
-            body: "your email content here.",
+            body: "Your email content here.",
           },
         },
       },
