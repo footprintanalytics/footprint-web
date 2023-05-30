@@ -19,11 +19,13 @@ const Index = () => {
   const isChart = window?.location?.pathname?.startsWith("/chart");
   const isAdminPage = window?.location?.pathname?.startsWith("/admin");
   const isGrowth = window.location.pathname.startsWith("/growth");
+  const isResearch = window.location.pathname.startsWith("/research");
   const showSocialPanel =
     !isChart
     && !isAdminPage
     && !deviceInfo.isMobile
-    && !isGrowth;
+    && !isGrowth
+    && !isResearch;
   const showHelpButtonPanel = false;
   const isDark = window?.location?.pathname === "/";
 

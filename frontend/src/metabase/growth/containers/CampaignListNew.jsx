@@ -175,7 +175,7 @@ const CampaignListNew = props => {
               );
             }}
           >
-            Save as cohort
+            Save as segment
           </Button>
           <Button
             type="link"
@@ -185,7 +185,7 @@ const CampaignListNew = props => {
               props.router?.push({
                 pathname: getGrowthProjectPath(
                   props.router?.params?.project,
-                  "CampaignDetail",
+                  "ActivationDetail",
                 ),
                 hash: "#id=" + record.campaignId,
               });
@@ -246,17 +246,17 @@ const CampaignListNew = props => {
   });
   // save as cohort
   const modalProps = {
-    title: "Save as cohort",
+    title: "Save as segment",
     confirmLoading: isCreatingCohort,
     footer: null,
     open: isOpenCreatingCohort?.open,
     content: (
       <div>
         <Divider className="my2" />
-        <h4>Cohort Name</h4>
+        <h4>Segment Name</h4>
         <Input
           className="mt1 mb1"
-          placeholder="Input cohort name"
+          placeholder="Input segment name"
           onChange={event => {
             setCohortName(event.target.value);
             // title = event.target.value;
@@ -269,7 +269,7 @@ const CampaignListNew = props => {
             loading={isCreatingCohort}
             onClick={() => {
               if (!cohortName?.length > 0) {
-                message.error("Please input cohort name");
+                message.error("Please input segment name");
                 return false;
               }
               setCreatingCohort(true);
@@ -287,7 +287,7 @@ const CampaignListNew = props => {
                   );
                 })
                 .catch(error => {
-                  console.log("toAddCohort error", error);
+                  console.log("toAddSegment error", error);
                 })
                 .finally(() => {
                   setCreatingCohort(false);
@@ -329,11 +329,11 @@ const CampaignListNew = props => {
         >
           <Col span={24} key="desc" className=" text-center">
             <Typography.Title level={4}>
-              Use Footprint GA Campaign Tool to create new campaign links to
+              Use Footprint GA Activation Tool to create new activation links to
               attribute acquired users
             </Typography.Title>
             <Typography.Paragraph>
-              Curate incentive campaigns, run superior quests, reward your
+              Curate incentive ativations, run superior quests, reward your
               community with token gating, manage allowlists & run targeted
               airdrops.
             </Typography.Paragraph>
@@ -389,7 +389,7 @@ const CampaignListNew = props => {
           })}
         </Row>
       </div>
-      <Card title="Campaign" className="mt2">
+      <Card title="Activation" className="mt2">
         {isLoading || isFetching || !project?.id ? (
           <LoadingSpinner message="Loading..." />
         ) : (

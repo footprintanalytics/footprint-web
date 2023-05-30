@@ -54,7 +54,7 @@ const UploadWallets = ({
     }
 
     if (!cohortName) {
-      message.error("Please enter the name of your cohort.");
+      message.error("Please enter the name of your segment.");
       return;
     }
     if (walletList.length <= 0) {
@@ -66,7 +66,7 @@ const UploadWallets = ({
       message.warning("Please sign in before proceeding.");
       setLoginModalShowAction({
         show: true,
-        from: "add cohort",
+        from: "add segment",
         redirect: location.pathname,
         channel: "FGA",
       });
@@ -122,7 +122,7 @@ const UploadWallets = ({
     return (
       <>
         <h5>
-          Please enter all the addresses you wish to add to this new cohort.
+          Please enter all the addresses you wish to add to this new segment.
         </h5>
         <TextArea
           // value={pasteValue}
@@ -131,7 +131,7 @@ const UploadWallets = ({
             // setPasteValue(e.target.value);
             parseWalletAddress(e.target.value);
           }}
-          placeholder="Please paste all the addresses you wish to add to this new cohort, separated by line breaks ."
+          placeholder="Please paste all the addresses you wish to add to this new segment, separated by line breaks ."
           autoSize={{ minRows: 10, maxRows: 15 }}
         />
         <div
@@ -183,10 +183,10 @@ const UploadWallets = ({
           </Button>,
         ]}
         closable={false}
-        title={`${btnText ?? "Upload to create cohort"}`}
+        title={`${btnText ?? "Upload to create segment"}`}
       >
         <Divider className="my2" />
-        <h5>Cohort Name</h5>
+        <h5>Segment Name</h5>
         <div className="mt1" />
         <AutoComplete
           style={{
@@ -197,7 +197,7 @@ const UploadWallets = ({
             setCohortName(value);
           }}
           // options={options}
-          placeholder="Enter the name of this cohort "
+          placeholder="Enter the name of this segment "
           filterOption={(inputValue, option) =>
             option?.value.toUpperCase().indexOf(inputValue.toUpperCase()) !== -1
           }

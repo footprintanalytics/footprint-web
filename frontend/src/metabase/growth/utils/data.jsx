@@ -338,7 +338,7 @@ export const fga_menu_data_v2 = project => {
         ? "346f0d3d-5486-404b-a5d2-17ce52150fe1"
         : "2f4f1fe9-7163-4ecf-91db-76c87a9306ed",
     ],
-    // ["game_tokenomics",""],
+    ["game_tokenomics","530dfa4f-2ddd-4ba7-8e9c-d6ccbe84bc00"],
     ["game_revenue", "8932389c-42cc-4ce7-a20f-a6a146cd31a2"],
     ["game_token_holder", "ff4ddbe9-8818-4abf-8a6c-91c3559071af"],
     ["game_active_users", "6d84b4a6-ceef-4b30-a9ad-b233038fd8d3"],
@@ -351,6 +351,7 @@ export const fga_menu_data_v2 = project => {
   ]);
   const gameFiMenu = getItem("Game", "game", <ShopOutlined />, [
     // getItem("Tokenomics", "game_tokenomics", null,null,null, true),
+    getItem("Tokenomics", "game_tokenomics", null),
     getItem("Revenue", "game_revenue", null),
     getItem("Token Holder", "game_token_holder", null),
     getItem("Active Users", "game_active_users", null),
@@ -504,11 +505,11 @@ export const fga_menu_data = [
     ],
   },
   {
-    name: "Cohort",
+    name: "Segment",
     icon: React.createElement(TagsOutlined),
     children: [
       {
-        name: "Cohort",
+        name: "Segment",
         id: null,
         //  id: 7210,
         //  uuid: "4454f1ce-202b-45eb-8f83-3d78beff6756",
@@ -710,11 +711,11 @@ export const getFgaComparePlans = ({ user }) => ({
       type: "Data Integration",
       list: [
         {
-          name: "Upload Connector",
+          name: "Upload Integration",
           free: false,
           growth: false,
           scale: { enable: true, tip: "Limited" },
-          enterprise: { enable: true, tip: "Unlimited Connectors" },
+          enterprise: { enable: true, tip: "Unlimited Integrations" },
         },
 
         {
@@ -722,7 +723,7 @@ export const getFgaComparePlans = ({ user }) => ({
           free: false,
           growth: false,
           scale: { enable: true, tip: "Limited" },
-          enterprise: { enable: true, tip: "Unlimited Connectors" },
+          enterprise: { enable: true, tip: "Unlimited Integrations" },
         },
 
         {
@@ -730,7 +731,7 @@ export const getFgaComparePlans = ({ user }) => ({
           free: false,
           growth: false,
           scale: { enable: true, tip: "Limited" },
-          enterprise: { enable: true, tip: "Unlimited Connectors" },
+          enterprise: { enable: true, tip: "Unlimited Integrations" },
         },
 
         {
@@ -738,14 +739,14 @@ export const getFgaComparePlans = ({ user }) => ({
           free: false,
           growth: false,
           scale: { enable: true, tip: "Limited" },
-          enterprise: { enable: true, tip: "Unlimited Connectors" },
+          enterprise: { enable: true, tip: "Unlimited Integrations" },
         },
         {
-          name: "Other Connectors",
+          name: "Other Integrations",
           free: false,
           growth: false,
           scale: { enable: true, tip: "Limited" },
-          enterprise: { enable: true, tip: "Unlimited Connectors" },
+          enterprise: { enable: true, tip: "Unlimited Integrations" },
         },
       ],
     },
@@ -872,24 +873,24 @@ export const getFgaComparePlans = ({ user }) => ({
       ],
     },
     {
-      type: "Cohorts",
+      type: "Segments",
       list: [
         {
-          name: "Unlock System Cohorts",
+          name: "Unlock System Segments",
           free: { enable: true, tip: "Total 5" },
           growth: { enable: true, tip: "Total 20" },
           scale: { enable: true, tip: "Total 100" },
           enterprise: { enable: true, tip: "Unlimited" },
         },
         {
-          name: "Filter Wallets Saving as Cohort",
+          name: "Filter Wallets Saving as Segment",
           free: { enable: true, tip: "Total 5" },
           growth: { enable: true, tip: "Total 20" },
           scale: { enable: true, tip: "Total 100" },
           enterprise: { enable: true, tip: "Unlimited" },
         },
         {
-          name: "Import Wallets as Cohort",
+          name: "Import Wallets as Segment",
           free: { enable: true, tip: "Total 5" },
           growth: { enable: true, tip: "Total 20" },
           scale: { enable: true, tip: "Total 100" },

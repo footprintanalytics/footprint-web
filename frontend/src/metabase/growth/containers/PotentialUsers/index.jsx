@@ -5,7 +5,7 @@ import "../../css/index.css";
 import "./index.css";
 import { push } from "react-router-redux";
 import { connect } from "react-redux";
-import { Alert, Card, Typography } from "antd";
+import { Alert, Card, Tooltip, Typography } from "antd";
 import { useQuery } from "react-query";
 import { formatTitle } from "metabase/lib/formatting";
 import { omit, orderBy, union } from "lodash";
@@ -135,7 +135,7 @@ const PotentialUsers = props => {
 
   const actions = [
     {
-      title: "Create Cohort",
+      title: "Create Segment",
       component: (
         <CreateCohort2
           project={project}
@@ -192,40 +192,26 @@ const PotentialUsers = props => {
       dataIndex: "tags",
       render: (_, { tags }) => {
         tags = tags?.map(i => formatTag(i));
+        const tagStr = tags?.map(t => formatTitle(t)).join(", ");
         return (
-          <Typography.Paragraph
-            ellipsis={{
-              rows: 2,
-              expandable: true,
-              suffix: "",
-              symbol: "more",
-            }}
-            style={{
-              minWidth: 150,
-              maxWidth: 500,
-              fontSize: 10,
-              marginBottom: 0,
-            }}
-          >
-            {tags?.length > 0 ? (
-              <>
-                {tags?.map(t => formatTitle(t)).join(", ")}
-                {/* {tags?.map(tag => {
-              return (
-                <Tag
-                  className="rounded"
-                  style={{ margin: 2.5, fontSize: 8, display: "inline" }}
-                  key={tag}
-                >
-                  {tag}
-                </Tag>
-              );
-            })} */}
-              </>
-            ) : (
-              <></>
-            )}
-          </Typography.Paragraph>
+          <Tooltip title={tagStr} placement="topLeft">
+            <Typography.Paragraph
+              ellipsis={{
+                rows: 2,
+                expandable: true,
+                suffix: "",
+                symbol: "more",
+              }}
+              style={{
+                minWidth: 150,
+                maxWidth: 500,
+                fontSize: 10,
+                marginBottom: 0,
+              }}
+            >
+              {tags?.length > 0 ? <>{tagStr}</> : <></>}
+            </Typography.Paragraph>
+          </Tooltip>
         );
       },
     },

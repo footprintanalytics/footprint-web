@@ -42,7 +42,7 @@ const Index = ({
 
   if (isLoading) {
     return (
-      <div className="Pricing">
+      <div className="pricing-container__top m4">
         <Skeleton active />
       </div>
     );
@@ -79,7 +79,7 @@ const Index = ({
             title: (
               <span>
                 <span className="data-api__price-text-highlight">5</span>{" "}
-                Cohorts
+                Segments
               </span>
             ),
           },
@@ -151,7 +151,7 @@ const Index = ({
             title: (
               <span>
                 <span className="data-api__price-text-highlight">20</span>{" "}
-                Cohorts
+                Segments
               </span>
             ),
           },
@@ -226,7 +226,7 @@ const Index = ({
             title: (
               <span>
                 <span className="data-api__price-text-highlight">100</span>{" "}
-                Cohorts
+                Segments
               </span>
             ),
           },
@@ -292,7 +292,7 @@ const Index = ({
                 <span className="data-api__price-text-highlight">
                   Unlimited
                 </span>{" "}
-                Cohorts
+                Segments
               </span>
             ),
           },
@@ -302,7 +302,7 @@ const Index = ({
                 <span className="data-api__price-text-highlight">
                   Unlimited
                 </span>{" "}
-                Connectors
+                Integrations
               </span>
             ),
           },

@@ -77,7 +77,9 @@ export const DelectWebsiteNesting = async params => {
 export const GetFgaCohort = async params => {
   return GET("/api/v1/fga/cohort", params);
 };
-
+export const GetMemberInfo = async params => {
+  return GET("/api/v1/fga/community/info/new", params);
+};
 export const CreateFgaCohort = async params => {
   return POST("/api/v1/fga/cohort", params);
 };

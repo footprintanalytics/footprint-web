@@ -2,7 +2,6 @@
 import React, { useState } from "react";
 import { Button, Input, Form, message, Modal, Switch, Divider } from "antd";
 import { Link } from "react-router";
-import { addConnectors } from "metabase/new-service";
 const layout = {
   labelCol: { span: 24 },
   wrapperCol: { span: 24 },

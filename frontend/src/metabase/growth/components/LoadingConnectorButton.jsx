@@ -40,7 +40,7 @@ const LoadingConnectorButton = ({
           router?.push({
             pathname: getGrowthProjectPath(
               router?.params?.project,
-              "Connector",
+              "integration",
             ),
           });
         }}
@@ -59,7 +59,7 @@ const LoadingConnectorButton = ({
             router?.push({
               pathname: getGrowthProjectPath(
                 router?.params?.project,
-                "Connector",
+                "integration",
               ),
             });
           }}
@@ -67,7 +67,7 @@ const LoadingConnectorButton = ({
           Edit Now
         </Button>
         <Typography.Text type="danger" className="mt1">
-          Connector job exce fail.
+        Integration job exce fail.
         </Typography.Text>
       </>
     );
@@ -87,7 +87,7 @@ const LoadingConnectorButton = ({
           router?.push({
             pathname: getGrowthProjectPath(
               router?.params?.project,
-              "Connector",
+              "integration",
             ),
           });
         }}

@@ -95,10 +95,13 @@
 .feature-side__nav-button {
   position: fixed;
   bottom: 0;
-  padding: 30px;
+  padding: 20px 30px;
   background: var(--color-bg-dark);
   width: 280px;
   font-size: 18px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
 }
 
 .feature-side__nav-button h4 {

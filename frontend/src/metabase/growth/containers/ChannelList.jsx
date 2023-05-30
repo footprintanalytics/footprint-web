@@ -141,7 +141,7 @@ const ChannelList = props => {
       message.warning("Kindly log in before proceeding.");
       setLoginModalShowAction({
         show: true,
-        from: "add connector",
+        from: "add Integration",
         redirect: location.pathname,
         channel: "FGA",
       });
@@ -205,7 +205,8 @@ const ChannelList = props => {
                       paddingLeft: 10,
                       paddingRight: 10,
                       cursor: "pointer",
-                      margin: 8,
+                      marginTop: 8,
+                      marginBottom: 8,
                     }}
                     actions={
                       item.statu === "connected"
@@ -241,7 +242,7 @@ const ChannelList = props => {
                                 );
                               }}
                             >
-                              Add
+                              Coming Soon
                             </Button>,
                           ]
                     }
@@ -264,7 +265,7 @@ const ChannelList = props => {
         )}
       </div>
       <Modal
-        title="Select connector type"
+        title="Select integration type"
         open={isModalOpen}
         footer={null}
         // onOk={handleOk}
@@ -301,7 +302,7 @@ const ChannelList = props => {
         />
       </Modal>
       <Drawer
-        title={`Config ${openDrawer?.connector?.name} Connector`}
+        title={`Config ${openDrawer?.connector?.name} Integration`}
         placement="right"
         maskClosable={false}
         width={500}

@@ -28,7 +28,7 @@ const LoadingDashboard = ({
     <Button
       type="primary"
       onClick={() => {
-        router.push(getGrowthProjectPath(project.protocolSlug, "Connector"));
+        router.push(getGrowthProjectPath(project.protocolSlug, "integration"));
       }}
     >
       Set up now

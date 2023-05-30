@@ -343,7 +343,7 @@ const CreateCampaignModal = props => {
       message.warning("Kindly log in before proceeding.");
       setLoginModalShowAction({
         show: true,
-        from: "create campaign",
+        from: "create activation",
         redirect: location.pathname,
         channel: "FGA",
       });
@@ -404,7 +404,7 @@ const CreateCampaignModal = props => {
     };
     addCampaign(requestParam)
       .then(result => {
-        message.success("The campaign creation was successful.");
+        message.success("The activation creation was successful.");
         if (socialType === "Discord") {
           //  /connect campaign_id:2 twitter_handler:enable email:enable
           setShowDiscordStep3({
