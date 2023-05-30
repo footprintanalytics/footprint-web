@@ -16,6 +16,7 @@ import {
 } from "@ant-design/icons/lib/icons";
 import { flattenDeep, get } from "lodash";
 import Link from "metabase/core/components/Link/Link";
+import SocialLayout from "metabase/components/GlobalContactPanel/components/SocialLayout";
 
 const { Sider } = Layout;
 
@@ -99,7 +100,8 @@ const FeaturesSide = ({
   const renderNavButton = () => {
     return (
       <div className="feature-side__nav-button">
-        <Link to={"/dashboards"}><span>{"Custom Analysis >>"}</span></Link>
+        <Link className="mb1" to={"/dashboards"}><span>{"Custom Analysis >>"}</span></Link>
+        <SocialLayout />
       </div>
     )
   }
