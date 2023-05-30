@@ -30,7 +30,7 @@ export const StatisticIndex = props => {
                       style={{ marginTop: 20, marginBottom: 5 }}
                     >
                       {`${option?.value?.toLocaleString("en-US")}${
-                        option?.valueSuffix ? " " + option?.valueSuffix : ""
+                        option?.valueSuffix ? option?.valueSuffix : ""
                       }`}
                     </Typography.Title>
                   </>

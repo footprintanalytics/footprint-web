@@ -15,7 +15,7 @@ module.exports = {
       features: {
         "custom-media-queries": true,
         "custom-properties": {
-          preserve: false,
+          preserve: true,
         },
         "color-mod-function": true,
         "focus-visible-pseudo-class": false,

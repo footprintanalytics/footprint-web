@@ -164,9 +164,7 @@ export const getRoutes = store => (
         </Route>
         <Route
           path="chain"
-          component={props => (
-            <LazyLoad.Research {...props} classify="chain" />
-          )}
+          component={props => <LazyLoad.Research {...props} classify="chain" />}
         >
           <Route path=":menu/:subMenu" />
           <Route path=":menu/:subMenu/:value" />
@@ -470,6 +468,11 @@ export const getRoutes = store => (
         title={t`Public Dashboard`}
         path="/growth/public/dashboard/:uuid"
         component={LazyLoad.PublicDashboard}
+      />
+      <Route
+        title={t`Create Campaign`}
+        path="/growth/campaign(/:type)"
+        component={LazyLoad.CreateCampaign}
       />
       <Route
         title={t`Chart`}

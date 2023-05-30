@@ -92,6 +92,7 @@ const CampaignListNew = props => {
                   >
                     <Image
                       preview={false}
+                      style={{borderRadius: '50%'}}
                       src={toolIcons.get(channel.campaignType)}
                       width={25}
                       height={25}
@@ -104,6 +105,7 @@ const CampaignListNew = props => {
                   >
                     <Image
                       preview={false}
+                      style={{borderRadius: '50%'}}
                       src={channelIcons.get(channel.channelName)}
                       width={25}
                       height={25}
@@ -213,6 +215,8 @@ const CampaignListNew = props => {
     ["FGA:Email", "https://static.footprint.network/icon_email2.png"],
     ["Telegram", "https://static.footprint.network/20220516201327.png"],
     ["Discord", "https://static.footprint.network/20220516201343.png"],
+    ["Quest Flow", "https://static.footprint.network/Questflow.jpg"],
+    ["Questflow", "https://static.footprint.network/Questflow.jpg"],
   ]);
   // tools : Notification/Quest/Aurdrop
   const toolList = [
@@ -324,7 +328,7 @@ const CampaignListNew = props => {
           className="w-full items-center"
           style={{ minHeight: 200 }}
         >
-          <Col span={24} key="desc" className=" text-center">
+          <Col span={24} key="desc" className="">
             <Typography.Title level={4}>
               Use Footprint GA Activation Tool to create new activation links to
               attribute acquired users
@@ -348,7 +352,13 @@ const CampaignListNew = props => {
                       modal,
                       project,
                       () => {
-                        setIsModalOpen({ open: true, type: item.type });
+                        if (item.type === "Notification") {
+                          router.push({
+                            pathname: `/growth/campaign/${item.type}`,
+                          });
+                          return;
+                        }
+                        // setIsModalOpen({ open: true, type: item.type });
                       },
                       () => {},
                       true,

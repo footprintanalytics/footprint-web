@@ -7,20 +7,52 @@ export const apiGet = async api => {
 };
 
 // FGA Api
+
+/**
+ *
+ * @param {*} params {projectId:1}
+ * @returns
+ */
+export const loginQuestflow = async params => {
+  return POST("/api/v1/fga/quest-flow/login", params);
+};
+
+/**
+ *
+ * @param {*} params {
+  "projectId": 0,
+  "campaignType": "Quest",
+  "workflowId": "string",
+  "webhook": "string"
+}
+ * @returns
+ */
+export const createQuestflowCampaign = async params => {
+  return POST("/api/v1/fga/quest-flow/campaign", params);
+};
+
+/**
+ *
+ * @param {*} params  {
+     "url": "string",
+   }
+ * @returns
+ */
 export const GetThirdpartWebsiteInfo = async params => {
-  // params: {
-  //   "url": "string",
-  // }
   return POST("/api/v1/fga/website-nesting/preview-graph", params);
 };
 
+/**
+ *
+ * @param {*} params : {
+    "projectId": 0,
+    "url": "string",
+    "imageUrl": "string",
+    "title": "string"
+  }
+ * @returns
+ */
 export const AddWebsiteNesting = async params => {
-  // params: {
-  //   "projectId": 0,
-  //   "url": "string",
-  //   "imageUrl": "string",
-  //   "title": "string"
-  // }
   return POST("/api/v1/fga/website-nesting", params);
 };
 

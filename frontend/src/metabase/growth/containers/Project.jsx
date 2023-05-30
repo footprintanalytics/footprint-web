@@ -171,7 +171,15 @@ const Project = props => {
             hideFooter
             showRefreshButton={showRefreshButton}
           />
-          {projectObject?.protocolSlug !== "the-sandbox" && (['game_token_holder','nft_nft_holder','game_tokenomics','game_revenue'].includes(currentMenu))&&<DashboardMask/>}
+          {projectObject?.protocolSlug !== "the-sandbox" &&
+            [
+              "game_token_holder",
+              "nft_nft_holder",
+              "game_tokenomics",
+              "game_revenue",
+            ].includes(currentMenu) && (
+              <DashboardMask currentMenu={currentMenu} router={router} />
+            )}
         </div>
       ) : (
         <LoadingSpinner message="Loading..." />
@@ -319,7 +327,7 @@ const Project = props => {
         ></CustomAnalysis>
       );
     }
-    if ([ "CreateCampaign","CreateActivation"].includes(current_tab)) {
+    if (["CreateCampaign", "CreateActivation"].includes(current_tab)) {
       return (
         <CampaignCreate
           location={location}

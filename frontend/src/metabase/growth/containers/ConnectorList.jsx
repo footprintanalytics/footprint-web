@@ -48,26 +48,27 @@ const ConnectorList = props => {
   const { isLoading, data } = useQuery(
     ["getAvailableConnectors", projectId, count],
     async () => {
-      if (projectId) {
-        return await getAvailableConnectors({ projectId: parseInt(projectId) });
-      } else {
-        return;
-      }
+      return await getAvailableConnectors({ projectId: parseInt(projectId) });
     },
-    QUERY_OPTIONS,
+    { ...QUERY_OPTIONS, enabled: !!projectId },
   );
 
   useEffect(() => {
     if (projectId && !isLoading && data) {
       console.log("getAvailableIntegrations", data);
       const availableConnectors = data?.availableConnectorConfig;
-      // setCurrentConnectors()
-      if (project?.isDemo && !projectId) {
-        // if this project is demo project (the sandbox), set all connectors to configured
-        availableConnectors.map((j, index) => {
+      const groupMap = new Map();
+      availableConnectors.map((j, index) => {
+        if (project?.isDemo && !projectId) {
+          // if this project is demo project (the sandbox), set all connectors to configured
           j.configured = true;
-        });
-      }
+        }
+        if (groupMap.has(j.group)) {
+          j.group = "";
+        } else {
+          groupMap.set(j.group, 1);
+        }
+      });
       setConnectors(availableConnectors);
     }
   }, [projectId, isLoading, data, user]);
@@ -114,10 +115,19 @@ const ConnectorList = props => {
           minHeight: 800,
         }}
       >
-        <div className=" flex flex-row justify-between w-full mb2">
+        <div className="flex flex-row justify-between align-center w-full">
           <Title width={"100%"} level={4} style={{ marginBottom: 0 }}>
-          Integrations
+            Integrations
           </Title>
+          <Typography.Text>
+            {"Didn't find the integration you were looking for? Please "}
+            <Typography.Link
+              href="https://forms.gle/Xs8WahhYh26xKoDj7"
+              target="_blank"
+            >
+              contact us.
+            </Typography.Link>
+          </Typography.Text>
         </div>
 
         {isLoading ? (
@@ -131,67 +141,84 @@ const ConnectorList = props => {
                 dataSource={connectors}
                 split={false}
                 renderItem={item => (
-                  <List.Item
-                    style={{
-                      borderRadius: 10,
-                      backgroundColor: isDark ? "#182034" : "white",
-                      paddingLeft: 10,
-                      paddingRight: 10,
-                      cursor: "pointer",
-                      margin: 8,
-                    }}
-                    actions={
-                      item.configured
-                        ? [
-                            <Button
-                              key="Detail"
-                              style={{ borderRadius: 5, width: 90 }}
-                              onClick={() => showDrawer(item)}
-                            >
-                              Detail
-                            </Button>,
-                            // <a
-                            //   key="list-loadmore-edit"
-                            //   onClick={() => {
-                            //     showDrawer(item);
-                            //   }}
-                            // >
-                            //   detail
-                            // </a>,
-                            // <a key="list-loadmore-more" disabled={true}>
-                            //   delete
-                            // </a>,
-                          ]
-                        : [
-                            <Button
-                              type={"primary"}
-                              key="Connect"
-                              style={{ borderRadius: 5, width: 90 }}
-                              disabled={
-                                projectId !== "undefined" && item.active
-                                  ? false
-                                  : true
-                              }
-                              onClick={() => {
-                                showDrawer(item);
-                              }}
-                            >
-                              Connect
-                            </Button>,
-                          ]
-                    }
-                  >
-                    <List.Item.Meta
-                      avatar={
-                        <Avatar
-                          src={item?.icon}
-                          style={{ backgroundColor: "#fff" }}
-                        />
+                  <>
+                    {item?.group && (
+                      <Typography.Title level={5} className="mt3">
+                        {item?.group}
+                      </Typography.Title>
+                    )}
+                    <List.Item
+                      style={{
+                        borderRadius: 10,
+                        backgroundColor: isDark ? "#182034" : "white",
+                        paddingLeft: 10,
+                        paddingRight: 10,
+                        cursor: "pointer",
+                        marginTop: 8,
+                        marginBottom: 8,
+                      }}
+                      actions={
+                        item.configured
+                          ? [
+                              <Button
+                                key="Detail"
+                                style={{ borderRadius: 5, width: 120 }}
+                                onClick={() => showDrawer(item)}
+                              >
+                                Detail
+                              </Button>,
+                              // <a
+                              //   key="list-loadmore-edit"
+                              //   onClick={() => {
+                              //     showDrawer(item);
+                              //   }}
+                              // >
+                              //   detail
+                              // </a>,
+                              // <a key="list-loadmore-more" disabled={true}>
+                              //   delete
+                              // </a>,
+                            ]
+                          : projectId !== "undefined" && item.active
+                          ? [
+                              <Button
+                                type={"primary"}
+                                key="Connect"
+                                style={{ borderRadius: 5, width: 120 }}
+                                onClick={() => {
+                                  showDrawer(item);
+                                }}
+                              >
+                                Connect
+                              </Button>,
+                            ]
+                          : [
+                              <Button
+                                type={"primary"}
+                                key="Contact"
+                                style={{ borderRadius: 5, width: 120 }}
+                                disabled
+                                onClick={() => {
+                                  showDrawer(item);
+                                }}
+                              >
+                                Coming Soon
+                              </Button>,
+                            ]
                       }
-                      title={item?.name}
-                      description={item?.description}
-                    />
-                  </List.Item>
+                    >
+                      <List.Item.Meta
+                        avatar={
+                          <Avatar
+                            src={item?.icon}
+                            style={{ backgroundColor: "#fff" }}
+                          />
+                        }
+                        title={item?.name}
+                        description={item?.description}
+                      />
+                    </List.Item>
+                  </>
                 )}
               />
             )}
