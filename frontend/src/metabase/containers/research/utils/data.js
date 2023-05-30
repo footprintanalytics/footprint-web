@@ -343,14 +343,136 @@ const gamefiData = [
 
 const chainData = [
   {
+    "label": "Chain Ecosystem",
+    "value": "chain-ecosystem",
+    "icon": "https://statichk.footprint.network/icon_side_analysis.png",
+    "subMenus": [
+      {
+        "label": "Chain Overview",
+        "value": "chain-overview",
+        "publicUuid": "9e0a1aa1-eeae-4608-b77d-cf23271d92a1",
+      },
+      {
+        "label": "Chain Comparison",
+        "value": "chain-comparison",
+        "publicUuid": "79eaf62d-95ac-4838-b34d-3cfdbdf3fa18",
+      },
+    ],
+  },
+  {
     "label": "Chain Stats",
     "value": "chain-stats",
     "icon": "https://statichk.footprint.network/icon_side_analysis.png",
     "subMenus": [
       {
-        "label": "Single Chain Stats",
-        "value": "single-chain-stats",
-        "publicUuid": "34596daa-c683-49b3-b182-b7698c585729",
+        "label": "Ethereum Overview",
+        "value": "ethereum-overview",
+        "publicUuid": "9996a833-d601-4cab-9685-283ae1f7ea3c",
+      },
+      {
+        "label": "BNB Chain Overview",
+        "value": "bnb-chain-overview",
+        "publicUuid": "f0ab345a-e86c-45c9-ae5f-6be93e717012",
+      },
+      {
+        "label": "Avalanche Overview",
+        "value": "avalanche-overview",
+        "publicUuid": "02224360-662d-43ac-9633-b89cf2b8c59d",
+      },
+      {
+        "label": "Polygon Overview",
+        "value": "polygon-overview",
+        "publicUuid": "36d92106-55be-4c4a-bb23-9da368d8e7d4",
+      },
+      {
+        "label": "Solana Overview",
+        "value": "solana-overview",
+        "publicUuid": "8d04ec19-7e5d-4ff6-8a14-07980c8597ae",
+      },
+      {
+        "label": "Optimism Overview",
+        "value": "optimism-overview",
+        "publicUuid": "075e8eab-bc83-4b46-9051-08acdd65a91d",
+      },
+      {
+        "label": "Fantom Overview",
+        "value": "fantom-overview",
+        "publicUuid": "3117dbba-0872-448a-bce5-7dd3454046c6",
+      },
+      {
+        "label": "Boba Network Overview",
+        "value": "boba-network-overview",
+        "publicUuid": "f46cb011-db68-4228-9f3d-ce8f20e6819b",
+      },
+      {
+        "label": "Harmony Overview",
+        "value": "harmony-overview",
+        "publicUuid": "f58fcef6-b8f4-4b60-9a38-41ea0d9d38d4",
+      },
+      {
+        "label": "Moonriver Overview",
+        "value": "Moonriver Overview",
+        "publicUuid": "5b9678ea-477c-4615-aaac-a01504d5da68",
+      },
+      {
+        "label": "Moonbeam Overview",
+        "value": "moonbeam-overview",
+        "publicUuid": "473805df-49ee-4ec4-a8b4-e483f5108664",
+      },
+      {
+        "label": "Celo Overview",
+        "value": "celo-overview",
+        "publicUuid": "320b1212-214a-484c-a445-595d54e3e663",
+      },
+      {
+        "label": "DFK Overview",
+        "value": "dfk-overview",
+        "publicUuid": "cce7e0b7-2d7e-4454-8f2a-64afe9e99ade",
+      },
+      {
+        "label": "Ronin Overview",
+        "value": "ronin-overview",
+        "publicUuid": "a903e63d-f71c-4ea1-87b1-827d1faccb46",
+      },
+      {
+        "label": "Bitcoin Overview",
+        "value": "bitcoin-overview",
+        "publicUuid": "dfd9112d-4cb2-47b3-9b2a-78cdf8006c4f",
+      },
+      {
+        "label": "MCH Verse GameFi Overview",
+        "value": "mch-verse-gamefi-overview",
+        "publicUuid": "f0b59b4a-9b38-4745-9a15-1e1c47052d2d",
+      },
+      {
+        "label": "IoTex Overview",
+        "value": "iotex-overview",
+        "publicUuid": "1a1e160e-4414-417a-a04a-54646f86e42d",
+      },
+      {
+        "label": "Arbitrum Overview",
+        "value": "arbitrum-overview",
+        "publicUuid": "1a3b2077-06c7-41a8-9ba3-4598ff5e3b30",
+      },
+      {
+        "label": "Cronos Overview",
+        "value": "cronos-overview",
+        "publicUuid": "70849eb6-aa3d-475f-8f76-acd85320f6f9",
+      },
+      {
+        "label": "Thundercore Overview",
+        "value": "thundercore-overview",
+        "publicUuid": "912bb075-9468-49f9-8c04-542c84cc20ef",
+      },
+      {
+        "label": "Oasys Overview",
+        "value": "oasys-overview",
+        "publicUuid": "e7547583-dacc-4794-9c09-deab7364c9fb",
+      },
+      {
+        "label": "Hive Overview",
+        "value": "hive-overview",
+        "publicUuid": "3cf8c067-c63b-4a88-a74e-cc34096d0af5",
       },
     ],
   },
@@ -362,6 +484,12 @@ const chainData = [
         "label": "Top Chains",
         "value": "top-chains",
         "publicUuid": "83af3336-a4d4-4ba6-8d83-c7080a27de2a",
+        "type": "chart",
+      },
+      {
+        "label": "On-Chain Data Ranking",
+        "value": "on-chain-data-ranking",
+        "publicUuid": "20b1088e-0377-4bd4-849b-04ebcacf1940",
         "type": "chart",
       },
     ],

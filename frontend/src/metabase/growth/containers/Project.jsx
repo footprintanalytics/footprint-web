@@ -171,8 +171,7 @@ const Project = props => {
             hideFooter
             showRefreshButton={showRefreshButton}
           />
-          {projectObject?.protocolSlug !== "the-sandbox" && (['game_token_holder','nft_nft_holder'].includes(currentMenu))&&<DashboardMask/>}
-
+          {projectObject?.protocolSlug !== "the-sandbox" && (['game_token_holder','nft_nft_holder','game_tokenomics','game_revenue'].includes(currentMenu))&&<DashboardMask/>}
         </div>
       ) : (
         <LoadingSpinner message="Loading..." />
