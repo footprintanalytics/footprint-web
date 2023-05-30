@@ -51,11 +51,11 @@ const Community = props => {
     });
   }, [walletListParams]);
 
-  const infoResult = useQuery(
-    ["getCommunityInfo", project?.id],
-    async () => getCommunityInfo({ projectId: parseInt(project?.id) }),
-    { ...QUERY_OPTIONS, enabled: !!project?.id },
-  );
+  // const infoResult = useQuery(
+  //   ["getCommunityInfo", project?.id],
+  //   async () => getCommunityInfo({ projectId: parseInt(project?.id) }),
+  //   { ...QUERY_OPTIONS, enabled: !!project?.id },
+  // );
 
   const filterResult = useQuery(
     ["getCommunityQuickFilter", project?.id],
@@ -79,29 +79,29 @@ const Community = props => {
     }
   }, [listResult]);
 
-  function formatInfoResult(data) {
-    const dataList = [];
-    if (data) {
-      dataList.push({
-        title: "Addresses",
-        value: data.wallets,
-        change: data.walletsChange,
-      });
-      dataList.push({
-        title: "Twitter Followers",
-        value: data.twitterFollowers,
-        change: data.twitterFollowersChange,
-        sourceDefinitionId: project?.twitter?.sourceDefinitionId,
-      });
-      dataList.push({
-        title: "Discord Members",
-        value: data.discordMembers,
-        change: data.discordMembersChange,
-        sourceDefinitionId: project?.discord?.sourceDefinitionId,
-      });
-    }
-    return dataList;
-  }
+  // function formatInfoResult(data) {
+  //   const dataList = [];
+  //   if (data) {
+  //     dataList.push({
+  //       title: "Addresses",
+  //       value: data.wallets,
+  //       change: data.walletsChange,
+  //     });
+  //     dataList.push({
+  //       title: "Twitter Followers",
+  //       value: data.twitterFollowers,
+  //       change: data.twitterFollowersChange,
+  //       sourceDefinitionId: project?.twitter?.sourceDefinitionId,
+  //     });
+  //     dataList.push({
+  //       title: "Discord Members",
+  //       value: data.discordMembers,
+  //       change: data.discordMembersChange,
+  //       sourceDefinitionId: project?.discord?.sourceDefinitionId,
+  //     });
+  //   }
+  //   return dataList;
+  // }
 
   const valueFilterOptionsList = [
     {
@@ -208,40 +208,26 @@ const Community = props => {
       dataIndex: "tags",
       render: (_, { tags }) => {
         tags = tags?.map(i => formatTag(i));
+        const tagStr = tags?.map(t => formatTitle(t)).join(", ");
         return (
-          <Typography.Paragraph
-            ellipsis={{
-              rows: 2,
-              expandable: true,
-              suffix: "",
-              symbol: "more",
-            }}
-            style={{
-              minWidth: 150,
-              maxWidth: 500,
-              fontSize: 10,
-              marginBottom: 0,
-            }}
-          >
-            {tags?.length > 0 ? (
-              <>
-                {tags?.map(t => formatTitle(t)).join(", ")}
-                {/* {tags?.map(tag => {
-                return (
-                  <Tag
-                    className="rounded"
-                    style={{ margin: 2.5, fontSize: 8, display: "inline" }}
-                    key={tag}
-                  >
-                    {tag}
-                  </Tag>
-                );
-              })} */}
-              </>
-            ) : (
-              <></>
-            )}
-          </Typography.Paragraph>
+          <Tooltip title={tagStr} placement="topLeft">
+            <Typography.Paragraph
+              ellipsis={{
+                rows: 2,
+                expandable: true,
+                suffix: "",
+                symbol: "more",
+              }}
+              style={{
+                minWidth: 150,
+                maxWidth: 500,
+                fontSize: 10,
+                marginBottom: 0,
+              }}
+            >
+              {tags?.length > 0 ? <>{tagStr}</> : <></>}
+            </Typography.Paragraph>
+          </Tooltip>
         );
       },
     },
@@ -398,7 +384,7 @@ const Community = props => {
 
   return (
     <div className="flex flex-column items-center w-full p2">
-      {infoResult.isLoading || !project?.id ? (
+      {/* {infoResult.isLoading || !project?.id ? (
         <div className="w-full p1">
           <Card className="w-full rounded" style={{ height: 140 }}>
             <LoadingSpinner />
@@ -415,7 +401,7 @@ const Community = props => {
             />
           )}
         </>
-      )}
+      )} */}
       {filterResult.isLoading || !project?.id ? (
         <div className="w-full p1">
           <Card className="w-full rounded" style={{ height: 110 }}>

@@ -15,18 +15,21 @@ import {
   Divider,
 } from "antd";
 import { QuestionCircleOutlined } from "@ant-design/icons";
-import { useQuery } from "react-query";
 import dayjs from "dayjs";
+import { useQuery } from "react-query";
+import { QUERY_OPTIONS } from "metabase/containers/dashboards/shared/config";
 import { getUser } from "metabase/selectors/user";
-import { GetFgaCohort } from "metabase/new-service";
+import { GetFgaCohort ,GetMemberInfo} from "metabase/new-service";
 import Link from "metabase/core/components/Link/Link";
 import UploadWallets from "../components/buttons/UploadWallets";
+import { StatisticIndex } from "../components/Community/StatisticIndex";
 import { formatTag, getGrowthProjectPath } from "../utils/utils";
 import {
   cohortTips,
   user_profile_link,
   wallet_profile_link,
 } from "../utils/data";
+import LoadingSpinner from "metabase/components/LoadingSpinner/LoadingSpinner"
 
 const CohortList = props => {
   const { isLoading, data, refetch } = useQuery(
@@ -37,6 +40,12 @@ const CohortList = props => {
     {
       refetchInterval: 5000,
     },
+  );
+
+  const infoResult = useQuery(
+    ["GetMemberInfo", props.project?.id],
+    async () => GetMemberInfo({ projectId: parseInt(props.project?.id) }),
+    { ...QUERY_OPTIONS, enabled: !!props.project?.id },
   );
 
   const dataSource = data?.list
@@ -50,7 +59,6 @@ const CohortList = props => {
         !(f.numberOfWallets <= 0 && f.status === "Ready"),
     );
 
-  console.log("segment", data, dataSource);
   const columns = [
     {
       title: "Title",
@@ -170,9 +178,71 @@ const CohortList = props => {
     </div>
   ));
 
+  function formatInfoResult(data) {
+    const dataList = [];
+    if (data) {
+      if(data.numberOfActiveWallets>=0){
+        dataList.push({
+          title: "Unique Active Wallet",
+          value: data.numberOfActiveWallets,
+          change: 0,
+        });
+      }
+      if(data.numberOfNFTHolder>=0){
+        dataList.push({
+          title: "NFT Holder",
+          value: data.numberOfNFTHolder,
+          change: 0,
+        });
+      }
+      if(data.nftHolderActivity>=0){
+        dataList.push({
+          title: "NFT Holder/UAW %",
+          value: data.nftHolderActivity,
+          valueSuffix: "%",
+          change: 0,
+        });
+      }
+      if(data.numberOfWhale>=0){
+        dataList.push({
+          title: "Whale",
+          value: data.numberOfWhale,
+          change: 0,
+        });
+      }
+      if(data.numberOfLoyalUser>=0){
+        dataList.push({
+          title: "Loyal User",
+          value: data.numberOfLoyalUser,
+          change: 0,
+        });
+      }
+
+      if(data.numberOfHighTradingActiveUser>=0){
+        dataList.push({
+          title: "High-trading Active User",
+          value: data.numberOfHighTradingActiveUser,
+          change: 0,
+        });
+      }
+    }
+    return dataList;
+  }
+
   return (
     <div style={{ padding: 20 }}>
+        <>
+          {!infoResult.isLoading ? (
+            <StatisticIndex
+              data={formatInfoResult(infoResult?.data)}
+              project={props.project}
+              refetchData={infoResult.refetch}
+              router={props.router}
+            />
+          ):(<div style={{height: 140}}><LoadingSpinner></LoadingSpinner></div>)}
+        </>
       <Card
+        className="mt2"
         title={
           <Tooltip
             placement="rightTop"
@@ -199,13 +269,14 @@ const CohortList = props => {
           </Dropdown>
         }
       >
-        <Table
+        {isLoading?<div style={{height: 240}}><LoadingSpinner></LoadingSpinner></div>:<Table
           rowKey="cohortId"
           loading={isLoading}
           dataSource={dataSource}
           columns={columns}
           pagination={false}
-        />
+        />}
+
       </Card>
     </div>
   );

@@ -42,7 +42,7 @@ const Index = ({
 
   if (isLoading) {
     return (
-      <div className="Pricing">
+      <div className="pricing-container__top m4">
         <Skeleton active />
       </div>
     );
