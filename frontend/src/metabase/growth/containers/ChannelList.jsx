@@ -205,7 +205,8 @@ const ChannelList = props => {
                       paddingLeft: 10,
                       paddingRight: 10,
                       cursor: "pointer",
-                      margin: 8,
+                      marginTop: 8,
+                      marginBottom: 8,
                     }}
                     actions={
                       item.statu === "connected"
@@ -241,7 +242,7 @@ const ChannelList = props => {
                                 );
                               }}
                             >
-                              Add
+                              Coming Soon
                             </Button>,
                           ]
                     }
