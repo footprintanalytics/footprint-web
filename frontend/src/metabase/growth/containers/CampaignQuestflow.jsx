@@ -59,7 +59,8 @@ const CampaignQuestflow = props => {
         data: {
           appKey: "fp-start",
           key: "fp-start:start-campaign",
-          label: "Start",
+          label: "Footprint GA",
+          name:'Start',
           testResult: {
             status: "success",
           },
@@ -79,7 +80,8 @@ const CampaignQuestflow = props => {
         data: {
           appKey: "fp-email-cohort",
           key: "fp:send-email-to-cohort",
-          label: "Email Cohort",
+          name:'Select a segment and send an email',
+          label: "Email",
           validate: false,
           parameters: {
             subject: "Your email subject here.",
