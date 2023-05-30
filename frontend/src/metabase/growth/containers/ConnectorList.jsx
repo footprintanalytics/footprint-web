@@ -115,17 +115,17 @@ const ConnectorList = props => {
           minHeight: 800,
         }}
       >
-        <div className="flex flex-row justify-between w-full mb2">
+        <div className="flex flex-row justify-between align-center w-full">
           <Title width={"100%"} level={4} style={{ marginBottom: 0 }}>
             Integrations
           </Title>
           <Typography.Text>
-            {"Didn't find what you're looking for? "}
+            {"Didn't find the integration you were looking for? Please "}
             <Typography.Link
               href="https://forms.gle/Xs8WahhYh26xKoDj7"
               target="_blank"
             >
-              Contact us.
+              contact us.
             </Typography.Link>
           </Typography.Text>
         </div>
@@ -143,7 +143,7 @@ const ConnectorList = props => {
                 renderItem={item => (
                   <>
                     {item?.group && (
-                      <Typography.Title level={5}>
+                      <Typography.Title level={5} className="mt3">
                         {item?.group}
                       </Typography.Title>
                     )}
