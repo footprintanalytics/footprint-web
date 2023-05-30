@@ -98,13 +98,13 @@ const Index = ({
             title: "Activation Campaigns",
           },
           {
-            title: "Project Analysis",
+            title: "Project Analytics",
           },
           {
             title: "User Profile",
           },
           {
-            title: "Social Members Analysis",
+            title: "Social Members Analytics",
           },
         ],
       },
@@ -178,7 +178,7 @@ const Index = ({
             title: "Bot Detection ",
           },
           {
-            title: "Social Engagement Analysis",
+            title: "Social Engagement Analytics",
           },
           {
             title: "User Segmentation",
@@ -187,7 +187,7 @@ const Index = ({
             title: "Tokenomics ",
           },
           {
-            title: "Reveune Analysis",
+            title: "Reveune Analytics",
           },
         ],
       },
@@ -254,19 +254,19 @@ const Index = ({
             ),
           },
           {
-            title: "Channel Analysis",
+            title: "Channel Analytics",
           },
           {
-            title: "Comparison Analysis",
+            title: "Comparison Analytics",
           },
           {
-            title: "Web3 Campaign Analysis",
+            title: "Web3 Campaign Analytics",
           },
           {
-            title: "Drill Down Analysis",
+            title: "Drill Down Analytics",
           },
           {
-            title: "Custom Analysis",
+            title: "Custom Analytics",
           },
         ],
       },
@@ -321,7 +321,7 @@ const Index = ({
           },
 
           {
-            title: "Customized Analysis",
+            title: "Customized Analytics",
           },
         ],
       },

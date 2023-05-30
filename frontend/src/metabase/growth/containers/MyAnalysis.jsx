@@ -64,7 +64,7 @@ const MyAnalysis = props => {
   };
   const openPage = url => {
     if (url.includes("footprint.network")) {
-      router.push(url + "#from=My Analysis");
+      router.push(url + "#from=My Analytics");
     } else {
       window.open(url.startsWith("http") ? url : "https://" + url, "_blank");
     }
@@ -91,7 +91,7 @@ const MyAnalysis = props => {
       ) : (
         <div className="flex flex-column" style={{ width: "80%" }}>
           <div>
-            <h2 className=" mt3">{"My Analysis"}</h2>
+            <h2 className=" mt3">{"My Analytics"}</h2>
             <div style={{ color: "#ffffff80" }}>
               {"Add any dashboards, websites or links you find interesting. "}
             </div>
