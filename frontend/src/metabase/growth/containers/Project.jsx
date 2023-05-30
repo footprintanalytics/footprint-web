@@ -173,8 +173,6 @@ const Project = props => {
           />
           {projectObject?.protocolSlug !== "the-sandbox" &&
             [
-              "game_token_holder",
-              "nft_nft_holder",
               "game_tokenomics",
               "game_revenue",
             ].includes(currentMenu) && (
