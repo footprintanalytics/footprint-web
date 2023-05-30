@@ -338,7 +338,7 @@ export const fga_menu_data_v2 = project => {
         ? "346f0d3d-5486-404b-a5d2-17ce52150fe1"
         : "2f4f1fe9-7163-4ecf-91db-76c87a9306ed",
     ],
-    // ["game_tokenomics",""],
+    ["game_tokenomics","530dfa4f-2ddd-4ba7-8e9c-d6ccbe84bc00"],
     ["game_revenue", "8932389c-42cc-4ce7-a20f-a6a146cd31a2"],
     ["game_token_holder", "ff4ddbe9-8818-4abf-8a6c-91c3559071af"],
     ["game_active_users", "6d84b4a6-ceef-4b30-a9ad-b233038fd8d3"],
@@ -351,6 +351,7 @@ export const fga_menu_data_v2 = project => {
   ]);
   const gameFiMenu = getItem("Game", "game", <ShopOutlined />, [
     // getItem("Tokenomics", "game_tokenomics", null,null,null, true),
+    getItem("Tokenomics", "game_tokenomics", null),
     getItem("Revenue", "game_revenue", null),
     getItem("Token Holder", "game_token_holder", null),
     getItem("Active Users", "game_active_users", null),
