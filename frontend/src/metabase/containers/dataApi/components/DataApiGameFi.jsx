@@ -27,7 +27,7 @@ const DataApiGameFi = () => {
               to single game.
             </span>
             <Link
-              to="https://docs.footprint.network/reference/get_protocol-transactions"
+              to="https://docs.footprint.network/reference/get_protocol-statistics"
               target="_blank"
             >
               <Button className="data-api__button-bland">
