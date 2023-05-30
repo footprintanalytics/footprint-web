@@ -128,6 +128,17 @@ const CohortList = props => {
           >
             Wallet List
           </Link>
+
+          <Link
+            disabled={true}
+            onClick={() => {
+              // TODO: download cohort, need a new api, not implemented yet
+              // 需要增加用户等级 level（Growth 以上）来判断是否能下载
+              console.log('download : ',record);
+            }}
+            >
+            Download
+          </Link>
           {/*<Link
             to={getGrowthProjectPath(
               props.router?.params?.project,
