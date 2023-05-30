@@ -216,6 +216,7 @@ const CampaignListNew = props => {
     ["Telegram", "https://static.footprint.network/20220516201327.png"],
     ["Discord", "https://static.footprint.network/20220516201343.png"],
     ["Quest Flow", "https://static.footprint.network/Questflow.jpg"],
+    ["Questflow", "https://static.footprint.network/Questflow.jpg"],
   ]);
   // tools : Notification/Quest/Aurdrop
   const toolList = [
@@ -327,7 +328,7 @@ const CampaignListNew = props => {
           className="w-full items-center"
           style={{ minHeight: 200 }}
         >
-          <Col span={24} key="desc" className=" text-center">
+          <Col span={24} key="desc" className="">
             <Typography.Title level={4}>
               Use Footprint GA Activation Tool to create new activation links to
               attribute acquired users

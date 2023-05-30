@@ -45,19 +45,103 @@ const CampaignQuestflow = props => {
       .finally(() => {});
   };
 
+  const flowTemplate = {
+    nodes: [
+      {
+        id: "quest-start",
+        type: "quest",
+        selected: false,
+        position: {
+          x: 0,
+          y: 0,
+        },
+        draggable: false,
+        data: {
+          appKey: "fp-start",
+          key: "fp-start:start-campaign",
+          label: "Start",
+          testResult: {
+            status: "success",
+          },
+          validate: true,
+          parameters: {},
+        },
+      },
+      {
+        id: "defaultNode-o0kSJ",
+        type: "action",
+        selected: true,
+        position: {
+          x: 0,
+          y: 150,
+        },
+        draggable: false,
+        data: {
+          appKey: "fp-email-cohort",
+          key: "fp:send-email-to-cohort",
+          label: "Email Cohort",
+          validate: false,
+          parameters: {
+            subject: "Your email subject here.",
+            body: "your email content here.",
+          },
+        },
+      },
+      {
+        id: "end",
+        position: {
+          x: 0,
+          y: 300,
+        },
+        height: 42,
+        width: 150,
+        type: "defaultNode",
+        data: {
+          label: "end",
+        },
+        style: {
+          opacity: 0,
+        },
+        draggable: false,
+        deletable: false,
+        selected: false,
+      },
+    ],
+    edges: [
+      {
+        id: "quest-start@defaultNode-o0kSJ",
+        type: "withPlusEdge",
+        source: "quest-start",
+        target: "defaultNode-o0kSJ",
+        data: {
+          text: "+",
+        },
+      },
+      {
+        id: "defaultNode-o0kSJ@end",
+        type: "endWithAdd",
+        source: "defaultNode-o0kSJ",
+        target: "end",
+        data: {
+          text: "+",
+        },
+      },
+    ],
+  };
+
   return (
     <div className="flex flex-column items-center">
       {isLoading || !data?.idToken ? (
-        <LoadingSpinner message="Loading~"/>
+        <LoadingSpinner message="Loading~" />
       ) : (
         <div className="w-full h-full">
           <Canvas
-            // flowName={''}
-            // flowDescription={''}
-            theme = 'dark'
+            flowName={"Footprint Growth Analysis Email Flow"}
+            flowDescription={"Footprint Growth Analysis Email Flow"}
+            theme="dark"
             idToken={data?.idToken}
-            // TODO: need a questflowURL in production
-            // questflowURL={data?.questflowURL}
+            template={flowTemplate}
+            questflowURL={data?.host}
             onPublish={onPublish}
             onPre={() => {
               router?.goBack();
