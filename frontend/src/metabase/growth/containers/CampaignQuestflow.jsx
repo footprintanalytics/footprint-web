@@ -60,7 +60,7 @@ const CampaignQuestflow = props => {
           appKey: "fp-start",
           key: "fp-start:start-campaign",
           label: "Footprint GA",
-          name:'Start',
+          name: "Start a Campaign",
           testResult: {
             status: "success",
           },
@@ -80,12 +80,12 @@ const CampaignQuestflow = props => {
         data: {
           appKey: "fp-email-cohort",
           key: "fp:send-email-to-cohort",
-          name:'Select a segment and send an email',
+          name: "Send an Email",
           label: "Email",
           validate: false,
           parameters: {
             subject: "Your email subject here.",
-            body: "your email content here.",
+            body: "Your email content here.",
           },
         },
       },
@@ -138,8 +138,8 @@ const CampaignQuestflow = props => {
       ) : (
         <div className="w-full h-full">
           <Canvas
-            flowName={"Footprint Growth Analysis Email Flow"}
-            flowDescription={"Footprint Growth Analysis Email Flow"}
+            flowName={"Footprint Growth Analytics Email Flow"}
+            flowDescription={"Footprint Growth Analytics Email Flow"}
             theme="dark"
             idToken={data?.idToken}
             template={flowTemplate}
