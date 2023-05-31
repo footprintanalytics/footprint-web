@@ -81,6 +81,11 @@ export const template_gallery = project => {
       desc: "Help create more profitable games, increase player engagement and retention, improve their monetization strategies, and stay ahead of the competition.",
       items: [
         {
+          dashboardName: "Tokenomics for IXT (price,holder, staking, liquidity)",
+          id: 8055,
+          dashboardLink: `/growth/public/dashboard/584a27d8-b93b-4cb2-9fba-15f4e2ee9d4d?${params}`,
+        },
+        {
           dashboardName: "Revenue and ARPU Analysis",
           id: 7961,
           dashboardLink: `/growth/public/dashboard/b9319fd1-c074-43ce-ac07-104c88be4073?${params}`,
@@ -109,6 +114,11 @@ export const template_gallery = project => {
           dashboardName: "Bot detection",
           dashboardLink: `/growth/public/dashboard/0dcef7ac-8318-47fd-b675-7b60fdcd068e?${params}`,
           id: 7887,
+        },
+        {
+          dashboardName: "Channel Analysis",
+          dashboardLink: `/growth/public/dashboard/0bb1e2b8-c6a5-425a-a420-a9b6febdcddd?${params}`,
+          id: 8051,
         },
       ],
     },
