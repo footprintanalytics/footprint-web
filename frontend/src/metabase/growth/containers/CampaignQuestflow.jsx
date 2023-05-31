@@ -143,7 +143,7 @@ const CampaignQuestflow = props => {
     <>
       {showLoading && (
         <div className="w-full h-full">
-          <LoadingSpinner message="Loading~" />
+          <LoadingSpinner message="Loading..." />
         </div>
       )}
       <div className="flex flex-column items-center w-full h-full">
