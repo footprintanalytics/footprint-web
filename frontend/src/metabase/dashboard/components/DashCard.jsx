@@ -128,6 +128,53 @@ class DashCard extends Component {
       : "";
   };
 
+  extractErrorColumn = (text) => {
+    const pattern = /Column '([^']+)'/;
+    const matches = text.match(pattern);
+    if (matches && matches.length >= 2) {
+      return matches[1];
+    } else {
+      return null;
+    }
+  }
+
+  mappingErrorColumn = (text) => {
+    console.log("mappingErrorColumn", text)
+    const map = {
+      "footprint.token_daily_stats.token_unique_symbol": "token_daily_stats.token_symbol",
+      "footprint.token_daily_stats.address": "token_daily_stats.token_slug",
+      "footprint.token_daily_stats.coin_id": "token_daily_stats.token_slug",
+      "token_daily_stats.day": "token_daily_stats.on_date",
+      "gamefi_protocol_daily_stats.day": "gamefi_protocol_daily_stats.on_date",
+      "footprint.nft_collection_daily_stats.protocol_slug": "nft_collection_daily_stats.collection_slug",
+      "token_daily_stats.token_unique_symbol": "token_daily_stats.token_symbol",
+      "token_daily_stats.symbol": "token_daily_stats.token_symbol",
+      "footprint.nft_transactions.marketplace_name": "nft_transactions.marketplace_slug",
+    }
+
+    return map[text] || "";
+  }
+
+  mappingErrorTip = error => {
+    if (!error) {
+      return error;
+    }
+    console.log("mappingErrorTip", error)
+    if (error.startsWith("Cannot determine the source table or query")) {
+      return "Cannot determine the source or query. \nTip: Update the column of filter on the dashboard."
+    }
+    if (error.indexOf("Column") && error.indexOf("cannot be resolved")) {
+      const column = this.extractErrorColumn(error)
+      const fixResult = this.mappingErrorColumn(column)
+      if (fixResult) {
+        return `The column cannot be resolved.\nTip: Use the field ${fixResult} instead of the field ${column} `
+      }
+      const pattern = /\s\([^)]+\): line \d+:\d+/;
+      return error.replace(pattern, "").replace("footprint.", "")
+    }
+    return error
+  }
+
   // eslint-disable-next-line complexity
   render() {
     const {
@@ -211,11 +258,7 @@ class DashCard extends Component {
       errorMessage = ERROR_MESSAGE_PERMISSION;
       errorIcon = "key";
     } else if (errors.length > 0) {
-      if (IS_EMBED_PREVIEW) {
-        errorMessage = (errors[0] && errors[0].data) || ERROR_MESSAGE_GENERIC;
-      } else {
-        errorMessage = ERROR_MESSAGE_GENERIC;
-      }
+      errorMessage = this.mappingErrorTip((errors[0] && errors[0].data) || errors[0] ) || ERROR_MESSAGE_GENERIC;
       errorIcon = "warning";
     }
 
@@ -223,7 +266,6 @@ class DashCard extends Component {
       dashboard.parameters,
       parameterValues,
     );
-
     const isTextDisplay = mainCard.display === "text";
     const isImageDisplay = mainCard.display === "image";
     const isVideoDisplay = mainCard.display === "video";
