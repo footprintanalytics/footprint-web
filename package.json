@@ -99,6 +99,7 @@
     "simple-statistics": "^3.0.0",
     "slugg": "^1.2.1",
     "styled-system": "2.2.5",
+    "stylis": "^4.2.0",
     "tether": "^1.2.0",
     "tippy.js": "^6.3.5",
     "ttag": "1.7.15",
