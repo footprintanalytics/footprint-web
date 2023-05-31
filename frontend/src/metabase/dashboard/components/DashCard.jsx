@@ -139,7 +139,6 @@ class DashCard extends Component {
   }
 
   mappingErrorColumn = (text) => {
-    console.log("mappingErrorColumn", text)
     const map = {
       "footprint.token_daily_stats.token_unique_symbol": "token_daily_stats.token_symbol",
       "footprint.token_daily_stats.address": "token_daily_stats.token_slug",
@@ -159,7 +158,6 @@ class DashCard extends Component {
     if (!error) {
       return error;
     }
-    console.log("mappingErrorTip", error)
     if (error.startsWith("Cannot determine the source table or query")) {
       return "Cannot determine the source or query. \nTip: Update the column of filter on the dashboard."
     }
