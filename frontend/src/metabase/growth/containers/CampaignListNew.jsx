@@ -137,69 +137,68 @@ const CampaignListNew = props => {
       align: "right",
       render: item => valueFormat(item?.numberOfFailed ?? 0),
     },
-
-    {
-      title: "Action",
-      key: "action",
-      render: (_, record) => (
-        <Space size="middle">
-          {/* <Button
-            type="link"
-            className="p0"
-            onClick={() => {
-              setIsModalOpen({
-                open: true,
-                type: record?.campaignType,
-                campaign: record,
-              });
-            }}
-          >
-            View
-          </Button> */}
-          <Button
-            className="p0"
-            type="link"
-            disabled={!(record?.performanceDetails?.numberOfTotal > 0)}
-            onClick={() => {
-              checkIsNeedContactUs(
-                modal,
-                project,
-                () => {
-                  setOpenCreatingCohort({
-                    open: true,
-                    campaignId: record?.campaignId,
-                    count: record?.performanceDetails?.numberOfTotal,
-                  });
-                },
-                () => {},
-                true,
-              );
-            }}
-          >
-            Save as segment
-          </Button>
-          <Button
-            type="link"
-            disabled={true}
-            className="p0"
-            onClick={() => {
-              props.router?.push({
-                pathname: getGrowthProjectPath(
-                  props.router?.params?.project,
-                  "ActivationDetail",
-                ),
-                hash: "#id=" + record.campaignId,
-              });
-              // props.router?.push({
-              //   pathname: `/growth/public/dashboard/55b1eb29-b15e-458f-9241-1862a0d19d3b?tag=${record.title}&cohort_title=${record.title}#from=Cohort`,
-              // });
-            }}
-          >
-            Detail
-          </Button>
-        </Space>
-      ),
-    },
+    // {
+    //   title: "Action",
+    //   key: "action",
+    //   render: (_, record) => (
+    //     <Space size="middle">
+    //       {/* <Button
+    //         type="link"
+    //         className="p0"
+    //         onClick={() => {
+    //           setIsModalOpen({
+    //             open: true,
+    //             type: record?.campaignType,
+    //             campaign: record,
+    //           });
+    //         }}
+    //       >
+    //         View
+    //       </Button> */}
+    //       <Button
+    //         className="p0"
+    //         type="link"
+    //         disabled={!(record?.performanceDetails?.numberOfTotal > 0)}
+    //         onClick={() => {
+    //           checkIsNeedContactUs(
+    //             modal,
+    //             project,
+    //             () => {
+    //               setOpenCreatingCohort({
+    //                 open: true,
+    //                 campaignId: record?.campaignId,
+    //                 count: record?.performanceDetails?.numberOfTotal,
+    //               });
+    //             },
+    //             () => {},
+    //             true,
+    //           );
+    //         }}
+    //       >
+    //         Save as segment
+    //       </Button>
+    //       <Button
+    //         type="link"
+    //         disabled={true}
+    //         className="p0"
+    //         onClick={() => {
+    //           props.router?.push({
+    //             pathname: getGrowthProjectPath(
+    //               props.router?.params?.project,
+    //               "ActivationDetail",
+    //             ),
+    //             hash: "#id=" + record.campaignId,
+    //           });
+    //           // props.router?.push({
+    //           //   pathname: `/growth/public/dashboard/55b1eb29-b15e-458f-9241-1862a0d19d3b?tag=${record.title}&cohort_title=${record.title}#from=Cohort`,
+    //           // });
+    //         }}
+    //       >
+    //         Detail
+    //       </Button>
+    //     </Space>
+    //   ),
+    // },
   ];
   const toolIcons = new Map([
     [
