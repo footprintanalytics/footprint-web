@@ -11,6 +11,7 @@ import LoadingSpinner from "metabase/components/LoadingSpinner";
 window.React = React;
 const CampaignQuestflow = props => {
   const { router, location, children, user, project, type } = props;
+  const [showLoading, setShowLoading] = useState(true);
   const { isLoading, data } = useQuery(
     ["loginQuestflow", project?.id, user],
     async () => {
@@ -18,6 +19,13 @@ const CampaignQuestflow = props => {
     },
     { ...QUERY_OPTIONS, enabled: !!project?.id && !!user?.id },
   );
+  useEffect(() => {
+    if (!isLoading && data) {
+      setTimeout(() => {
+        setShowLoading(false);
+      }, 5000);
+    }
+  }, [data]);
 
   const onPublish = flow => {
     console.log(flow);
@@ -132,28 +140,33 @@ const CampaignQuestflow = props => {
   };
 
   return (
-    <div className="flex flex-column items-center">
-      {isLoading || !data?.idToken ? (
-        <LoadingSpinner message="Loading~" />
-      ) : (
+    <>
+      {showLoading && (
         <div className="w-full h-full">
-          <Canvas
-            flowName={"Footprint Growth Analytics Email Flow"}
-            flowDescription={"Footprint Growth Analytics Email Flow"}
-            theme="dark"
-            idToken={data?.idToken}
-            template={flowTemplate}
-            questflowURL={data?.host}
-            onPublish={onPublish}
-            onPre={() => {
-              router?.goBack();
-            }}
-            showSave={false}
-            showPublish={true}
-          />
+          <LoadingSpinner message="Loading~" />
         </div>
       )}
-    </div>
+      <div className="flex flex-column items-center w-full h-full">
+        {data?.idToken && (
+          <div className="w-full h-full">
+            <Canvas
+              flowName={"Footprint Growth Analytics Email Flow"}
+              flowDescription={"Footprint Growth Analytics Email Flow"}
+              theme="dark"
+              idToken={data?.idToken}
+              template={flowTemplate}
+              questflowURL={data?.host}
+              onPublish={onPublish}
+              onPre={() => {
+                router?.goBack();
+              }}
+              showSave={false}
+              showPublish={true}
+            />
+          </div>
+        )}
+      </div>
+    </>
   );
 };
 

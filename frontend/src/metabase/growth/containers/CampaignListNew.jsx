@@ -17,6 +17,7 @@ import {
   message,
   Divider,
   Image,
+  Badge,
 } from "antd";
 import { useQuery } from "react-query";
 import dayjs from "dayjs";
@@ -92,7 +93,7 @@ const CampaignListNew = props => {
                   >
                     <Image
                       preview={false}
-                      style={{borderRadius: '50%'}}
+                      style={{ borderRadius: "50%" }}
                       src={toolIcons.get(channel.campaignType)}
                       width={25}
                       height={25}
@@ -105,7 +106,7 @@ const CampaignListNew = props => {
                   >
                     <Image
                       preview={false}
-                      style={{borderRadius: '50%'}}
+                      style={{ borderRadius: "50%" }}
                       src={channelIcons.get(channel.channelName)}
                       width={25}
                       height={25}
@@ -316,6 +317,50 @@ const CampaignListNew = props => {
     },
   };
   const [modal, contextHolder] = Modal.useModal();
+
+  const getChannel = item => {
+    return (
+      <Card
+        hoverable
+        className="rounded"
+        style={{ width: "100%" }}
+        onClick={() => {
+          if (!item.enabled) return;
+          checkIsNeedContactUs(
+            modal,
+            project,
+            () => {
+              if (item.type === "Notification") {
+                router.push({
+                  pathname: `/growth/campaign/${item.type}`,
+                });
+                return;
+              }
+              // setIsModalOpen({ open: true, type: item.type });
+            },
+            () => {},
+            true,
+          );
+        }}
+      >
+        <div className=" flex flex-column items-center" style={{}}>
+          <Image preview={false} src={item.icon} width={40} height={40}></Image>
+
+          <Typography.Text className=" mt1" ellipsis={true}>
+            {item.name}
+          </Typography.Text>
+          <Button
+            type="primary"
+            className=" rounded mt1"
+            disabled={!item.enabled}
+          >
+            {item.enabled ? "Set up now" : "Coming soon"}
+          </Button>
+        </div>
+      </Card>
+    );
+  };
+
   return (
     <div className="w-full" style={{ padding: 20 }}>
       {contextHolder}
@@ -342,49 +387,13 @@ const CampaignListNew = props => {
           {toolList.map((item, index) => {
             return (
               <Col sm={24} md={12} lg={8} xl={6} xxl={4} key={item.type}>
-                <Card
-                  hoverable
-                  className="rounded"
-                  style={{ width: "100%" }}
-                  onClick={() => {
-                    if (!item.enabled) return;
-                    checkIsNeedContactUs(
-                      modal,
-                      project,
-                      () => {
-                        if (item.type === "Notification") {
-                          router.push({
-                            pathname: `/growth/campaign/${item.type}`,
-                          });
-                          return;
-                        }
-                        // setIsModalOpen({ open: true, type: item.type });
-                      },
-                      () => {},
-                      true,
-                    );
-                  }}
-                >
-                  <div className=" flex flex-column items-center" style={{}}>
-                    <Image
-                      preview={false}
-                      src={item.icon}
-                      width={40}
-                      height={40}
-                    ></Image>
-
-                    <Typography.Text className=" mt1" ellipsis={true}>
-                      {item.name}
-                    </Typography.Text>
-                    <Button
-                      type="primary"
-                      className=" rounded mt1"
-                      disabled={!item.enabled}
-                    >
-                      {item.enabled ? "Set up now" : "Coming soon"}
-                    </Button>
-                  </div>
-                </Card>
+                {index === 0 ? (
+                  <Badge.Ribbon text={"Beta"} color="green">
+                    {getChannel(item)}
+                  </Badge.Ribbon>
+                ) : (
+                  getChannel(item)
+                )}
               </Col>
             );
           })}
