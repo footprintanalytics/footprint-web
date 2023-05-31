@@ -31,6 +31,7 @@ import {
   valueFormat,
 } from "../utils/utils";
 import CreateCampaignModal from "../components/Modal/CreateCampaignModal";
+import UploadMappingModal from "../components/Modal/UploadMappingModal";
 import "../css/utils.css";
 
 const SocialConnectList = props => {
@@ -206,6 +207,12 @@ const SocialConnectList = props => {
       icon: "https://footprint-imgs.oss-us-east-1.aliyuncs.com/20220516201343.png",
       enabled: true,
     },
+    {
+      name: "Upload Mapping",
+      type: "Upload",
+      icon: "https://footprint-imgs.oss-us-east-1.aliyuncs.com/upload_mapping_green.png",
+      enabled: true,
+    },
   ];
   const [cohortName, setCohortName] = useState("");
   const [isCreatingCohort, setCreatingCohort] = useState(false);
@@ -365,23 +372,38 @@ const SocialConnectList = props => {
           />
         )}
       </Card>
-      {isModalOpen?.open && (
-        <CreateCampaignModal
-          open={isModalOpen?.open}
-          socialType={isModalOpen?.type}
-          channel={isModalOpen?.channel}
-          location={location}
-          project={project}
-          router={router}
-          onSuccess={() => {
-            refetch();
-            setIsModalOpen({ open: false });
-          }}
-          onCancel={() => {
-            setIsModalOpen({ open: false });
-          }}
-        />
-      )}
+      {isModalOpen?.open &&
+        (isModalOpen?.type !== "Upload" ? (
+          <CreateCampaignModal
+            open={isModalOpen?.open}
+            socialType={isModalOpen?.type}
+            channel={isModalOpen?.channel}
+            location={location}
+            project={project}
+            router={router}
+            onSuccess={() => {
+              refetch();
+              setIsModalOpen({ open: false });
+            }}
+            onCancel={() => {
+              setIsModalOpen({ open: false });
+            }}
+          />
+        ) : (
+          <UploadMappingModal
+            open={isModalOpen?.open}
+            location={location}
+            project={project}
+            router={router}
+            onSuccess={() => {
+              refetch();
+              setIsModalOpen({ open: false });
+            }}
+            onCancel={() => {
+              setIsModalOpen({ open: false });
+            }}
+          ></UploadMappingModal>
+        ))}
     </div>
   );
 };
