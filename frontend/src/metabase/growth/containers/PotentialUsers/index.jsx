@@ -30,38 +30,44 @@ const PotentialUsers = props => {
   const { router, location, project, user } = props;
 
   // const visibleCount = 3;
-  const canShowTagging = user?.id === 23145 || user?.id === 10 || user?.id === 6;
+  const canShowTagging =
+    user?.id === 23145 ||
+    user?.id === 10 ||
+    user?.id === 6 ||
+    user?.id === 21707;
   // const canShowTagging = true;
 
   const [walletListParams, setWalletListParams] = React.useState({
     pageSize: 10,
     current: 1,
     tags: location?.query?.tag ? [location?.query?.tag] : [],
-    filters: []
-  })
+    filters: [],
+  });
 
   const [walletListData, setWalletListData] = React.useState(null);
-  const [otherOptionsList, setOtherOptionsList] = React.useState([])
+  const [otherOptionsList, setOtherOptionsList] = React.useState([]);
   const [moreSelectOptions, setMoreSelectOptions] = React.useState([]);
 
   useEffect(() => {
-    setOtherOptionsList(moreSelectOptions.map(item => {
-      const firstOption = otherFilterResultData?.find(a => {
-        if (a.indicator === item[0]) {
-          return true;
+    setOtherOptionsList(
+      moreSelectOptions.map(item => {
+        const firstOption = otherFilterResultData?.find(a => {
+          if (a.indicator === item[0]) {
+            return true;
+          }
+          if (a.children?.map(c => c.indicator)?.includes(item[0])) {
+            return true;
+          }
+          return false;
+        });
+        if (firstOption?.children) {
+          return firstOption?.children?.find(c => c.indicator === item[1]);
+        } else {
+          return firstOption;
         }
-        if (a.children?.map(c => c.indicator)?.includes(item[0])) {
-          return true;
-        }
-        return false;
-      })
-      if (firstOption?.children) {
-        return firstOption?.children?.find(c => c.indicator === item[1]);
-      } else {
-        return firstOption;
-      }
-    }));
-  }, [moreSelectOptions, otherFilterResultData])
+      }),
+    );
+  }, [moreSelectOptions, otherFilterResultData]);
 
   const filterResult = useQuery(
     ["getPotentialUseFilter"],
@@ -74,7 +80,9 @@ const PotentialUsers = props => {
   const filterFeaturedTagResult = useQuery(
     ["getPotentialUserFilterFeaturedTag", project?.id],
     async () => {
-      return getPotentialUserFilterFeaturedTag({ projectId: parseInt(project?.id) });
+      return getPotentialUserFilterFeaturedTag({
+        projectId: parseInt(project?.id),
+      });
     },
     { ...QUERY_OPTIONS, enabled: !!project?.id },
   );
@@ -98,22 +106,28 @@ const PotentialUsers = props => {
 
   React.useEffect(() => {
     if (visibleFilterResultData && otherOptionsList) {
-      const allList = [...visibleFilterResultData, ...otherOptionsList].map(y => y.indicator);
+      const allList = [...visibleFilterResultData, ...otherOptionsList].map(
+        y => y.indicator,
+      );
       setWalletListParams({
         ...walletListParams,
-        filters: [...walletListParams?.filters?.filter(i => allList?.includes(i?.indicator))],
+        filters: [
+          ...walletListParams?.filters?.filter(i =>
+            allList?.includes(i?.indicator),
+          ),
+        ],
         current: 1,
       });
     }
   }, [otherOptionsList, visibleFilterResultData]);
 
   // tags must convert and merge to filters.tags
-  const mergeFiltersByTags = (params) => {
+  const mergeFiltersByTags = params => {
     let tags = params?.tags || [];
     const filters = params?.filters || [];
     let tagFilter = filters.find(i => i.indicator === "tags");
     if (tagFilter && tags?.length > 0) {
-      tags = union([...tagFilter.comparisonValue, ...tags])
+      tags = union([...tagFilter.comparisonValue, ...tags]);
     }
     if (tags?.length > 0) {
       tagFilter = {
@@ -121,7 +135,7 @@ const PotentialUsers = props => {
         comparisonSymbol: "in",
         comparisonValue: tags,
         comparisonType: "string",
-      }
+      };
     }
     const fixFilters = filters.filter(i => i.indicator !== "tags");
     if (tagFilter) {
@@ -131,7 +145,7 @@ const PotentialUsers = props => {
       ...omit(params, ["tags"]),
       filters: fixFilters,
     };
-  }
+  };
 
   const actions = [
     {
@@ -149,23 +163,25 @@ const PotentialUsers = props => {
         />
       ),
     },
-    canShowTagging ? {
-      title: "Tagging",
-      component: (
-        <CreateCohort2
-          project={project}
-          router={router}
-          addressListCount={listResult?.data?.total}
-          params={{
-            ...mergeFiltersByTags(walletListParams),
-            projectId: parseInt(project?.id),
-          }}
-          btnText="Tagging"
-          isTagging
-          isButtonStyle={false}
-        />
-      ),
-    } : null,
+    canShowTagging
+      ? {
+          title: "Tagging",
+          component: (
+            <CreateCohort2
+              project={project}
+              router={router}
+              addressListCount={listResult?.data?.total}
+              params={{
+                ...mergeFiltersByTags(walletListParams),
+                projectId: parseInt(project?.id),
+              }}
+              btnText="Tagging"
+              isTagging
+              isButtonStyle={false}
+            />
+          ),
+        }
+      : null,
   ].filter(i => i);
 
   const tableColumns = [
@@ -313,25 +329,37 @@ const PotentialUsers = props => {
     );
   };
 
-  const filterResultData = filterResult?.data?.filter(i => ((project?.isDemo || !project || canShowTagging) && i.children?.length > 0) || !i.children);
-  const visibleFilterResultData = filterResultData?.filter(item => item.isCommon);
-  const otherFilterResultData = filterResultData?.filter(item => !item.isCommon);
-  const moreFilterResultData = filterResultData ? [{
-    label: "More",
-    type: "more",
-    options: otherFilterResultData?.map(i => {
-      return {
-        value: i?.indicator,
-        label: formatTitle(i?.label),
-        children: i?.children?.map(j => {
-          return {
-            value: j?.indicator,
-            label: formatTitle(j?.label),
-          }
-        })
-      };
-    }) || [],
-    /*options: [
+  const filterResultData = filterResult?.data?.filter(
+    i =>
+      ((project?.isDemo || !project || canShowTagging) &&
+        i.children?.length > 0) ||
+      !i.children,
+  );
+  const visibleFilterResultData = filterResultData?.filter(
+    item => item.isCommon,
+  );
+  const otherFilterResultData = filterResultData?.filter(
+    item => !item.isCommon,
+  );
+  const moreFilterResultData = filterResultData
+    ? [
+        {
+          label: "More",
+          type: "more",
+          options:
+            otherFilterResultData?.map(i => {
+              return {
+                value: i?.indicator,
+                label: formatTitle(i?.label),
+                children: i?.children?.map(j => {
+                  return {
+                    value: j?.indicator,
+                    label: formatTitle(j?.label),
+                  };
+                }),
+              };
+            }) || [],
+          /*options: [
       {
         label: "Tags",
         options: filterResultData?.slice(visibleCount, visibleCount + 2)?.map(i => {
@@ -351,16 +379,16 @@ const PotentialUsers = props => {
         }) || [],
       },
     ],*/
-  }] : [];
+        },
+      ]
+    : [];
 
   return (
     <>
       {project?.id ? (
         <div className="flex flex-column w-full p2">
           {renderHint()}
-          {
-          filterFeaturedTagResult?.isLoading &&
-          filterResult?.isLoading ? (
+          {filterFeaturedTagResult?.isLoading && filterResult?.isLoading ? (
             <Card className="w-full rounded m1" style={{ height: 150 }}>
               <LoadingSpinner message="Loading..." />
             </Card>
@@ -389,19 +417,30 @@ const PotentialUsers = props => {
                 visibleFilterResultData={visibleFilterResultData}
                 moreFilterResultData={moreFilterResultData}
                 onSelectChange={selectObject => {
-                  const finalSelectObject = selectObject?.comparisonValue ? [selectObject] : []
+                  const finalSelectObject = selectObject?.comparisonValue
+                    ? [selectObject]
+                    : [];
                   setWalletListParams({
                     ...walletListParams,
-                    filters: [...walletListParams?.filters?.filter(i => i.indicator !== selectObject.indicator), ...finalSelectObject],
+                    filters: [
+                      ...walletListParams?.filters?.filter(
+                        i => i.indicator !== selectObject.indicator,
+                      ),
+                      ...finalSelectObject,
+                    ],
                     current: 1,
                   });
                 }}
                 enableMoreSelect={true}
-                onMoreChange={(value) => {
-                  let tempOptions
-                  if (moreSelectOptions.find(i => i.join("") === value.join(""))) {
-                    tempOptions = moreSelectOptions.filter(i => i.join("") !== value.join(""));
-                    setMoreSelectOptions(tempOptions)
+                onMoreChange={value => {
+                  let tempOptions;
+                  if (
+                    moreSelectOptions.find(i => i.join("") === value.join(""))
+                  ) {
+                    tempOptions = moreSelectOptions.filter(
+                      i => i.join("") !== value.join(""),
+                    );
+                    setMoreSelectOptions(tempOptions);
                   } else {
                     tempOptions = [...moreSelectOptions, value];
                     setMoreSelectOptions(tempOptions);
@@ -415,7 +454,10 @@ const PotentialUsers = props => {
                   temp = temp.filter(
                     item => item.indicator !== valueFilter.indicator,
                   );
-                  if (valueFilter.comparisonValue || valueFilter.comparisonType === "boolean") {
+                  if (
+                    valueFilter.comparisonValue ||
+                    valueFilter.comparisonType === "boolean"
+                  ) {
                     temp.push(valueFilter);
                   }
                   setWalletListParams({
@@ -428,10 +470,17 @@ const PotentialUsers = props => {
               <ItemFilter
                 className="mb1"
                 onSelectChange={selectObject => {
-                  const finalSelectObject = selectObject?.comparisonValue ? [selectObject] : []
+                  const finalSelectObject = selectObject?.comparisonValue
+                    ? [selectObject]
+                    : [];
                   setWalletListParams({
                     ...walletListParams,
-                    filters: [...walletListParams?.filters?.filter(i => i.indicator !== selectObject.indicator), ...finalSelectObject],
+                    filters: [
+                      ...walletListParams?.filters?.filter(
+                        i => i.indicator !== selectObject.indicator,
+                      ),
+                      ...finalSelectObject,
+                    ],
                     current: 1,
                   });
                 }}
@@ -446,7 +495,10 @@ const PotentialUsers = props => {
                   temp = temp.filter(
                     item => item.indicator !== valueFilter.indicator,
                   );
-                  if (valueFilter.comparisonValue || valueFilter.comparisonType === "boolean") {
+                  if (
+                    valueFilter.comparisonValue ||
+                    valueFilter.comparisonType === "boolean"
+                  ) {
                     temp.push(valueFilter);
                   }
                   setWalletListParams({
@@ -456,7 +508,9 @@ const PotentialUsers = props => {
                   });
                 }}
                 onCloseAction={item => {
-                  setMoreSelectOptions(moreSelectOptions.filter(i => !i.includes(item.indicator)))
+                  setMoreSelectOptions(
+                    moreSelectOptions.filter(i => !i.includes(item.indicator)),
+                  );
                 }}
               />
             </>
