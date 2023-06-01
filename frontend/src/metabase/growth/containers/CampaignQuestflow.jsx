@@ -26,9 +26,8 @@ const CampaignQuestflow = props => {
       }, 5000);
     }
   }, [data]);
-
+  const [modal, contextHolder] = Modal.useModal();
   const onPublish = flow => {
-    console.log(flow);
     createQuestflowCampaign({
       projectId: parseInt(project?.id),
       campaignType: type,
@@ -36,16 +35,16 @@ const CampaignQuestflow = props => {
       webhook: flow.webhook,
     })
       .then(res => {
-        Modal.success({
+        modal.success({
           content: "Campaign created successfully!",
           okText: "View Campaigns",
           onOk: () => {
-            router?.push({
-              pathname: `/growth/project/${project?.protocolSlug}/activation`,
-            });
+            window.location.href = `/growth/project/${project?.protocolSlug}/activation`;
+            // router?.push({
+            //   pathname: `/growth/project/${project?.protocolSlug}/activation`,
+            // });
           },
         });
-        console.log(res);
       })
       .catch(err => {
         console.log(err);
@@ -141,6 +140,7 @@ const CampaignQuestflow = props => {
 
   return (
     <>
+      {contextHolder}
       {showLoading && (
         <div className="w-full h-full">
           <LoadingSpinner message="Loading..." />
@@ -158,7 +158,8 @@ const CampaignQuestflow = props => {
               questflowURL={data?.host}
               onPublish={onPublish}
               onPre={() => {
-                router?.goBack();
+                // router?.goBack();
+                window.location.href = `/growth/project/${project?.protocolSlug}/activation`;
               }}
               showSave={false}
               showPublish={true}

@@ -616,7 +616,7 @@ class Visualization extends React.PureComponent {
                       className="h4 text-bold flex-column"
                       style={{ display: small ? "none" : "" }}
                     >
-                      <div>{error}</div>
+                      <div style={{ whiteSpace: "pre-wrap", lineHeight: 1.2, maxWidth: "80%", margin: "0 auto" }}>{error}</div>
                       {errorIcon !== "key" && <ErrorGuide cardId={cardId} />}
                     </div>
                   }
