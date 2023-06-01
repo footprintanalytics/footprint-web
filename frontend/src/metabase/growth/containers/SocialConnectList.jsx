@@ -51,6 +51,20 @@ const SocialConnectList = props => {
     },
     { ...QUERY_OPTIONS, enabled: !!project?.id },
   );
+
+  const getChannelIcon = channelName => {
+    // Discord bot 、Tweet URL 、Import CSV
+    switch (channelName) {
+      case "Discord bot":
+        return "https://footprint-imgs.oss-us-east-1.aliyuncs.com/20220516201343.png";
+      case "Tweet URL":
+        return "https://footprint-imgs.oss-us-east-1.aliyuncs.com/20220516201254.png";
+      case "Import CSV":
+      default:
+        return "https://footprint-imgs.oss-us-east-1.aliyuncs.com/upload_mapping_green.png";
+    }
+  };
+
   useEffect(() => {
     if (data) {
       const dataSourceTemp = data?.list
@@ -88,11 +102,7 @@ const SocialConnectList = props => {
                   title={formatType(channel.channelName)}
                 >
                   <Avatar
-                    src={`https://footprint-imgs.oss-us-east-1.aliyuncs.com/${
-                      channel.channelName === "Tweet URL"
-                        ? "20220516201254"
-                        : "20220516201343"
-                    }.png`}
+                    src={getChannelIcon(channel.channelName)}
                     size={25}
                     className="bg-white mr1"
                   ></Avatar>
@@ -208,8 +218,8 @@ const SocialConnectList = props => {
       enabled: true,
     },
     {
-      name: "Upload Mapping",
-      type: "Upload",
+      name: "Import CSV",
+      type: "Import",
       icon: "https://footprint-imgs.oss-us-east-1.aliyuncs.com/upload_mapping_green.png",
       enabled: true,
     },
@@ -373,7 +383,7 @@ const SocialConnectList = props => {
         )}
       </Card>
       {isModalOpen?.open &&
-        (isModalOpen?.type !== "Upload" ? (
+        (isModalOpen?.type !== "Import" ? (
           <CreateCampaignModal
             open={isModalOpen?.open}
             socialType={isModalOpen?.type}
