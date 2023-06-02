@@ -31,6 +31,7 @@ import {
   valueFormat,
 } from "../utils/utils";
 import CreateCampaignModal from "../components/Modal/CreateCampaignModal";
+import UploadMappingModal from "../components/Modal/UploadMappingModal";
 import "../css/utils.css";
 
 const SocialConnectList = props => {
@@ -50,6 +51,37 @@ const SocialConnectList = props => {
     },
     { ...QUERY_OPTIONS, enabled: !!project?.id },
   );
+
+  const getChannelIcon = channelName => {
+    // Discord bot 、Tweet URL 、Import CSV
+    switch (channelName) {
+      case "Discord bot":
+        return "https://footprint-imgs.oss-us-east-1.aliyuncs.com/20220516201343.png";
+      case "Tweet URL":
+        return "https://footprint-imgs.oss-us-east-1.aliyuncs.com/20220516201254.png";
+      case "Import CSV":
+      case "Customize Upload":
+        return "https://footprint-imgs.oss-us-east-1.aliyuncs.com/upload_mapping_green.png";
+      default:
+        return "";
+    }
+  };
+
+  const mapChannel = channelName => {
+    switch (channelName) {
+      case "Discord bot":
+        return "Discord Bot";
+      case "Tweet URL":
+        return "Twitter Tweet";
+      case "Import CSV":
+      case "Customize Upload":
+        return "Import CSV";
+      default:
+        return channelName;
+    }
+  };
+
+
   useEffect(() => {
     if (data) {
       const dataSourceTemp = data?.list
@@ -84,14 +116,11 @@ const SocialConnectList = props => {
               return (
                 <Tooltip
                   key={channel.id}
-                  title={formatType(channel.channelName)}
+                  // title={formatType(channel.channelName)}
+                  title = {mapChannel(channel.channelName)}
                 >
                   <Avatar
-                    src={`https://footprint-imgs.oss-us-east-1.aliyuncs.com/${
-                      channel.channelName === "Tweet URL"
-                        ? "20220516201254"
-                        : "20220516201343"
-                    }.png`}
+                    src={getChannelIcon(channel.channelName)}
                     size={25}
                     className="bg-white mr1"
                   ></Avatar>
@@ -150,7 +179,7 @@ const SocialConnectList = props => {
           <Button
             className="p0"
             type="link"
-            disabled={!(record?.performanceDetails?.numberOfWalletAddress > 0)}
+            disabled={!(record?.performanceDetails?.numberOfWalletAddress > 0)||_.channels?.[0]?.channelName === "Customize Upload"}
             onClick={() => {
               checkIsNeedContactUs(
                 modal,
@@ -204,6 +233,12 @@ const SocialConnectList = props => {
       name: "Discord Bot",
       type: "Discord",
       icon: "https://footprint-imgs.oss-us-east-1.aliyuncs.com/20220516201343.png",
+      enabled: true,
+    },
+    {
+      name: "Import CSV",
+      type: "Import",
+      icon: "https://footprint-imgs.oss-us-east-1.aliyuncs.com/upload_mapping_green.png",
       enabled: true,
     },
   ];
@@ -365,23 +400,38 @@ const SocialConnectList = props => {
           />
         )}
       </Card>
-      {isModalOpen?.open && (
-        <CreateCampaignModal
-          open={isModalOpen?.open}
-          socialType={isModalOpen?.type}
-          channel={isModalOpen?.channel}
-          location={location}
-          project={project}
-          router={router}
-          onSuccess={() => {
-            refetch();
-            setIsModalOpen({ open: false });
-          }}
-          onCancel={() => {
-            setIsModalOpen({ open: false });
-          }}
-        />
-      )}
+      {isModalOpen?.open &&
+        (isModalOpen?.type !== "Import" ? (
+          <CreateCampaignModal
+            open={isModalOpen?.open}
+            socialType={isModalOpen?.type}
+            channel={isModalOpen?.channel}
+            location={location}
+            project={project}
+            router={router}
+            onSuccess={() => {
+              refetch();
+              setIsModalOpen({ open: false });
+            }}
+            onCancel={() => {
+              setIsModalOpen({ open: false });
+            }}
+          />
+        ) : (
+          <UploadMappingModal
+            open={isModalOpen?.open}
+            location={location}
+            project={project}
+            router={router}
+            onSuccess={() => {
+              refetch();
+              setIsModalOpen({ open: false });
+            }}
+            onCancel={() => {
+              setIsModalOpen({ open: false });
+            }}
+          ></UploadMappingModal>
+        ))}
     </div>
   );
 };

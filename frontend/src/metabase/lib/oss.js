@@ -15,6 +15,16 @@ export const uploadFile = async ({ fileName, file }) => {
   try {
     await client.put(ossPath(fileName), file);
   } catch (error) {
+    console.log(error);
+    message.error("Upload failed, please try again later");
+  }
+};
+
+export const uploadFile2 = async ({ fileName, file }) => {
+  try {
+    await client.put(fileName, file);
+  } catch (error) {
+    console.log(error);
     message.error("Upload failed, please try again later");
   }
 };

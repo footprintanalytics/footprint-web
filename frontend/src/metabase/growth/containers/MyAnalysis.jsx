@@ -9,6 +9,7 @@ import {
   message,
   Popconfirm,
   Modal,
+  Button,
 } from "antd";
 import { Link } from "react-router";
 import {
@@ -25,13 +26,14 @@ import {
   GetWebsiteNesting,
   DelectWebsiteNesting,
 } from "metabase/new-service";
-import { axiosInstance } from "metabase/lib/new-api";
+import { createModalShowAction } from "metabase/redux/control";
 import AddMyAnalysisModal from "../components/Modal/AddMyAnalysisModal";
 import { checkIsNeedContactUs, parseDashboardLink } from "../utils/utils";
 
 const { Meta } = Card;
 const MyAnalysis = props => {
-  const { router, location, children, user, project } = props;
+  const { router, location, children, user, project, setCreateModalShow } =
+    props;
   const [showAdd, setShowAdd] = React.useState({ open: false, item: null });
   const { isLoading, data, refetch, isFetching } = useQuery(
     ["GetWebsiteNesting", project],
@@ -91,7 +93,20 @@ const MyAnalysis = props => {
       ) : (
         <div className="flex flex-column" style={{ width: "80%" }}>
           <div>
-            <h2 className=" mt3">{"My Analytics"}</h2>
+            <div className="flex mt2 flex-row items-center">
+              <h2>{"My Analytics"}</h2>{" "}
+              <Button
+                className="ml-10"
+                type="primary"
+                onClick={() => {
+                  if (!checkIsNeedContactUs(modal, project)) {
+                    setCreateModalShow({ show: true })
+                  }
+                }}
+              >
+                Create
+              </Button>
+            </div>
             <div style={{ color: "#ffffff80" }}>
               {"Add any dashboards, websites or links you find interesting. "}
             </div>
@@ -246,10 +261,14 @@ const MyAnalysis = props => {
   );
 };
 
+const mapDispatchToProps = {
+  setCreateModalShow: createModalShowAction,
+};
+
 const mapStateToProps = state => {
   return {
     user: getUser(state),
   };
 };
 
-export default connect(mapStateToProps)(MyAnalysis);
+export default connect(mapStateToProps, mapDispatchToProps)(MyAnalysis);
