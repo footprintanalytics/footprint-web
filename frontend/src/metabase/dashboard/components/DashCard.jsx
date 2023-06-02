@@ -155,7 +155,7 @@ class DashCard extends Component {
   }
 
   mappingErrorTip = error => {
-    if (!error) {
+    if (!error || !_.isString(error)) {
       return error;
     }
     if (error.startsWith("Cannot determine the source table or query")) {

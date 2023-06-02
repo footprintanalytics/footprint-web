@@ -142,13 +142,14 @@
 (api/defendpoint ^:streaming GET "/card/:uuid/query"
   "Fetch a publicly-accessible Card an return query results as well as `:card` information. Does not require auth
    credentials. Public sharing must be enabled."
-  [uuid parameters fga-schema project-role power-level]
+  [uuid parameters fga-schema project-role power-level ignore_cache]
   {parameters (s/maybe su/JSONString)}
   (run-query-for-card-with-public-uuid-async
    uuid
    :api
     (json/parse-string parameters keyword)
    :constraints nil
+   :ignore_cache (= ignore_cache "true")
    :middleware {:fga-schema fga-schema :project-role project-role :power-level power-level}))
 
 (api/defendpoint ^:streaming GET "/card/:uuid/query/:export-format"
