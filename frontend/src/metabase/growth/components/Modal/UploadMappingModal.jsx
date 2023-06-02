@@ -18,6 +18,7 @@ import Link from "antd/lib/typography/Link";
 import { withRouter } from "react-router";
 import { v4 as uuidv4 } from "uuid";
 import { connect } from "react-redux";
+import { uploadMapping } from "metabase/new-service"
 import { uploadFile2 } from "metabase/lib/oss";
 import { getUser } from "metabase/selectors/user";
 import LoadingSpinner from "metabase/components/LoadingSpinner/LoadingSpinner";
@@ -104,6 +105,19 @@ const UploadMappingModal = props => {
       header: true,
     });
   }
+  const [createLoading, setCreateLoading] = useState(false);
+  const createMapping = (url) => {
+    setCreateLoading(true)
+    uploadMapping(url).then(res => {
+        message.success("Your CSV file import was successful!");
+        onSuccess?.()
+    }).catch(err => {
+      message.error("Your CSV file import was failed!");
+      console.log("createMapping err => ", err);
+    }).finally(() => {
+      setCreateLoading(false)
+    });
+  }
 
   return (
     <Modal
@@ -179,15 +193,17 @@ const UploadMappingModal = props => {
               <Button
                 className=" ml-10"
                 type="primary"
+                loading={createLoading}
                 onClick={() => {
                   // save file link to server
                   console.log(
                     "save file link to server\n",
                     uploadedFile?.fileUrl,
                   );
+                  createMapping(uploadedFile?.fileUrl);
                 }}
               >
-                Save
+                Comfirm & Save
               </Button>
             </div>
           </div>

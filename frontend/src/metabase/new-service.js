@@ -33,6 +33,15 @@ export const createQuestflowCampaign = async params => {
 
 /**
  *
+ * @param {*} params {projectId,url}
+ * @returns
+ */
+export const uploadMapping = async params => {
+  return POST("/api/v1/fga/campaign/mapping/customize-upload", params);
+};
+
+/**
+ *
  * @param {*} params  {
      "url": "string",
    }
