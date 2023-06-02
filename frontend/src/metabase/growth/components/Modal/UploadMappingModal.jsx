@@ -81,7 +81,6 @@ const UploadMappingModal = props => {
     ];
     Papa.parse(file, {
       complete: function (results, file) {
-        console.log("Parsing complete:", results);
         const missFilds = [];
         requiredFields.forEach(field => {
           if (!results?.meta?.fields?.includes(field)) {
@@ -93,7 +92,7 @@ const UploadMappingModal = props => {
           message.error(`Missing fields: ${missFilds.join(", ")}`);
           setLoading(false);
         } else {
-          console.log("validFile pass, uploading: ", file);
+          calFieldDatas(results.data);
           handleUpload(file);
         }
       },
@@ -105,10 +104,38 @@ const UploadMappingModal = props => {
       header: true,
     });
   }
+  const [fieldDatas, setFieldDatas] = useState(null);
+  const calFieldDatas = (datas) => {
+    let numberOfWalletAddress = 0;
+    let numberOfDiscordName = 0;
+    let numberOfEmail = 0;
+    let numberOfTwitterName = 0;
+    datas.forEach(data => {
+      if (data.wallet_address) numberOfWalletAddress++;
+      if (data.discord_name) numberOfDiscordName++;
+      if (data.email) numberOfEmail++;
+      if (data.twitter_name) numberOfTwitterName++;
+    });
+    const result = {
+      numberOfWalletAddress,
+      numberOfDiscordName,
+      numberOfEmail,
+      numberOfTwitterName,
+    }
+    setFieldDatas(result)
+  }
+
   const [createLoading, setCreateLoading] = useState(false);
   const createMapping = (url) => {
     setCreateLoading(true)
-    uploadMapping(url).then(res => {
+    uploadMapping({
+      projectId:parseInt(project?.id),
+      url,
+      numberOfWalletAddress:fieldDatas?.numberOfWalletAddress,
+      numberOfDiscordName:fieldDatas?.numberOfDiscordName,
+      numberOfEmail:fieldDatas?.numberOfEmail,
+      numberOfTwitterName:fieldDatas?.numberOfTwitterName,
+    }).then(res => {
         message.success("Your CSV file import was successful!");
         onSuccess?.()
     }).catch(err => {
@@ -196,10 +223,6 @@ const UploadMappingModal = props => {
                 loading={createLoading}
                 onClick={() => {
                   // save file link to server
-                  console.log(
-                    "save file link to server\n",
-                    uploadedFile?.fileUrl,
-                  );
                   createMapping(uploadedFile?.fileUrl);
                 }}
               >

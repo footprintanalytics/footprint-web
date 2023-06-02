@@ -60,10 +60,27 @@ const SocialConnectList = props => {
       case "Tweet URL":
         return "https://footprint-imgs.oss-us-east-1.aliyuncs.com/20220516201254.png";
       case "Import CSV":
-      default:
+      case "Customize Upload":
         return "https://footprint-imgs.oss-us-east-1.aliyuncs.com/upload_mapping_green.png";
+      default:
+        return "";
     }
   };
+
+  const mapChannel = channelName => {
+    switch (channelName) {
+      case "Discord bot":
+        return "Discord Bot";
+      case "Tweet URL":
+        return "Twitter Tweet";
+      case "Import CSV":
+      case "Customize Upload":
+        return "Import CSV";
+      default:
+        return channelName;
+    }
+  };
+
 
   useEffect(() => {
     if (data) {
@@ -99,7 +116,8 @@ const SocialConnectList = props => {
               return (
                 <Tooltip
                   key={channel.id}
-                  title={formatType(channel.channelName)}
+                  // title={formatType(channel.channelName)}
+                  title = {mapChannel(channel.channelName)}
                 >
                   <Avatar
                     src={getChannelIcon(channel.channelName)}
