@@ -179,7 +179,7 @@ const SocialConnectList = props => {
           <Button
             className="p0"
             type="link"
-            disabled={!(record?.performanceDetails?.numberOfWalletAddress > 0)}
+            disabled={!(record?.performanceDetails?.numberOfWalletAddress > 0)||_.channels?.[0]?.channelName === "Customize Upload"}
             onClick={() => {
               checkIsNeedContactUs(
                 modal,
