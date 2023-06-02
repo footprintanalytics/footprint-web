@@ -60,11 +60,10 @@ const runMedia = async ({ type, feedUrl, siteUrl, outputName }) => {
   const feed = new RSS(feedOptions);
 
   const medias = await getMediaList(type);
-  medias.list.forEach(item => {
+  medias.list.slice(0, 60).forEach(item => {
     const url = item.url || `${hostname}/${articleDetailUrl(item)}`;
     const date = new Date(item.publishTime);
-    const dateStr = dayjs()
-      .set(date)
+    const dateStr = dayjs(date)
       .format("YYYY-MM-DD");
     feed.item({
       title: item.title,
