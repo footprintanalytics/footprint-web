@@ -120,6 +120,11 @@ export const template_gallery = project => {
           dashboardLink: `/growth/public/dashboard/0bb1e2b8-c6a5-425a-a420-a9b6febdcddd?${params}`,
           id: 8051,
         },
+        {
+          dashboardName: "User Funnel to Check Conversion Rate",
+          dashboardLink: `/growth/public/dashboard/d72a4dea-73c1-47a1-968c-b854ce586047?${params}`,
+          id: 8069,
+        },
       ],
     },
     {
@@ -849,8 +854,8 @@ export const getFgaComparePlans = ({ user }) => ({
         },
         {
           name: "Custom Analysis",
-          free: false,
-          growth: false,
+          free: true,
+          growth: true,
           scale: true,
           enterprise: true,
         },
