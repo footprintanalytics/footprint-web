@@ -10,7 +10,7 @@ export function getFirstAddressByPriory(datas:{address: string, chain: string}[]
   if (datas.length === 0) return null;
   // if sandbox, return sandbox top 1 address
   const sandbox = datas.find((data) => data.address === "0xa342f5d851e866e18ff98f351f2c6637f4478db5");
-  if (sandbox) return sandbox;
+  if (sandbox) {return sandbox;}
   const chainPriory = ["Ethereum", "Polygon", "BNB Chain", "Harmony"];
   //sort datas by chainPriory
   datas = datas.sort((a, b) => {
@@ -23,6 +23,36 @@ export function getFirstAddressByPriory(datas:{address: string, chain: string}[]
     first = datas[0]
   }
   return first;
+}
+
+/**
+ *
+ * @param vipGrade : Enterprise, Scale, Growth, Free
+ * @param menu
+ * @returns
+ */
+export function checkVipMenuPermisson(vipGrade:string,menu:string){
+  console.log("checkVipMenuPermisson",vipGrade,menu);
+  // all access for Enterprise
+  if(vipGrade === "Enterprise"){
+    return true;
+  }
+  const menuPermission = new Map([
+    ["game_tokenomics", ["Enterprise", "Scale","Growth"]],
+    ["game_revenue", ["Enterprise", "Scale","Growth"]],
+    ["nft_revenue", ["Enterprise", "Scale","Growth"]],
+    // ["twitter", ["Enterprise", "Scale","Growth"]],
+    // ["discord", ["Enterprise", "Scale","Growth"]],
+  ]);
+  if(!menuPermission.has(menu)){
+    // menu not need any permission, return true
+    return true;
+  }
+  if(menuPermission.get(menu)?.includes(vipGrade)){
+    // menu need permission, and vipGrade has permission, return true
+    return true;
+  }
+  return false;
 }
 
 export async function getDashboardInfo(
@@ -43,6 +73,11 @@ export async function getDashboardInfo(
   }
 }
 
+/**
+ * parse data from dashboard link
+ * @param url
+ * @returns { username, dashboardName }
+ */
 export function parseDashboardLink(url: string) {
   if (!url.includes("/@") || !url.includes("footprint.network/")) {
     return null;
@@ -73,6 +108,7 @@ export function formatTag(tag: string) {
   }
   return words.join(" ").replaceAll("Nft", "NFT");
 }
+
 export function formatType(tag: string) {
   const words = tag.split(" ");
   for (let i = 0; i < words.length; i++) {
@@ -80,6 +116,7 @@ export function formatType(tag: string) {
   }
   return words.join(" ");
 }
+
 // format number into 1,000,000.00
 export function valueFormat(value: number): string {
   const formatter = new Intl.NumberFormat("en-US", {
@@ -117,6 +154,7 @@ export function showCohortSuccessModal(
     cancelText: "Close",
   });
 }
+
 export function updateHashValue(
   hash: string,
   key: string,
@@ -133,6 +171,7 @@ export function updateHashValue(
       .join("&")
   );
 }
+
 export function checkIsNeedContactUs(
   modal = Modal,
   project: any = null,

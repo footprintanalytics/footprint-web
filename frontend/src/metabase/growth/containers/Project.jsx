@@ -8,6 +8,7 @@ import LoadingSpinner from "metabase/components/LoadingSpinner";
 import { loadCurrentFgaProject } from "metabase/redux/user";
 import ProjectInfo from "../components/ProjectInfo";
 import {
+  checkVipMenuPermisson,
   getGaMenuTabs,
   getGrowthProjectPath,
   getLatestGAProjectId,
@@ -160,25 +161,16 @@ const Project = props => {
     console.log("Project.jsx getContentPannel current_tab => ", current_tab);
     const WrapPublicDashboard = current_tab =>
       projectObject?.protocolSlug ? (
-        <div style={{ display: "relative" }}>
-          <PublicDashboard
-            params={{ uuid: gaMenuTabs?.dashboardMap?.get(current_tab) }}
-            location={location}
-            project={getProjectObject()}
-            isFullscreen={false}
-            hideTitle={true}
-            key={projectObject?.protocolSlug}
-            hideFooter
-            showRefreshButton={showRefreshButton}
-          />
-          {projectObject?.protocolSlug !== "the-sandbox" &&
-            [
-              "game_tokenomics",
-              "game_revenue",
-            ].includes(currentMenu) && (
-              <DashboardMask currentMenu={currentMenu} router={router} />
-            )}
-        </div>
+        <PublicDashboard
+          params={{ uuid: gaMenuTabs?.dashboardMap?.get(current_tab) }}
+          location={location}
+          project={getProjectObject()}
+          isFullscreen={false}
+          hideTitle={true}
+          key={projectObject?.protocolSlug}
+          hideFooter
+          showRefreshButton={showRefreshButton}
+        />
       ) : (
         <LoadingSpinner message="Loading..." />
       );
@@ -239,7 +231,11 @@ const Project = props => {
         />
       );
     }
-    if (["My Analysis", "MyAnalysis", "my_analysis", "my_analytics"].includes(current_tab)) {
+    if (
+      ["My Analysis", "MyAnalysis", "my_analysis", "my_analytics"].includes(
+        current_tab,
+      )
+    ) {
       return (
         <MyAnalysis
           location={location}
@@ -316,7 +312,11 @@ const Project = props => {
         />
       );
     }
-    if (["Custom Analysis", "custom_analysis", "custom_analytics"].includes(current_tab)) {
+    if (
+      ["Custom Analysis", "custom_analysis", "custom_analytics"].includes(
+        current_tab,
+      )
+    ) {
       return (
         <CustomAnalysis
           project={getProjectObject()}
@@ -412,10 +412,19 @@ const Project = props => {
     <>
       {projectObject ? (
         <>
-          {currentMenu &&
-            projectObject &&
-            gaMenuTabs &&
-            getContentPannel(currentMenu)}
+          <div style={{ display: "relative" }}>
+            {currentMenu &&
+              projectObject &&
+              gaMenuTabs &&
+              getContentPannel(currentMenu)}
+            {/* TODO: need to add real user fga vip grade */}
+            {!checkVipMenuPermisson(
+              projectObject?.protocolSlug === "the-sandbox"
+                ? "Enterprise"
+                : "Free",
+              currentMenu,
+            ) && <DashboardMask currentMenu={currentMenu} router={router} />}
+          </div>
         </>
       ) : (
         <>
