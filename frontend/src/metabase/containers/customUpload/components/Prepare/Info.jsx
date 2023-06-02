@@ -18,7 +18,7 @@ const Info = () => {
           Field and file name may only contain lowercase letters, numbers, and
           underscores
         </li>
-        <li>The data will be visible to everyone</li>
+        <li>You can set your data to private once you upgrade your account to the Business Plan.</li>
       </ul>
       <Table
         prepareData={{
