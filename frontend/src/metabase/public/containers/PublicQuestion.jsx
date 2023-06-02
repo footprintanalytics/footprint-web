@@ -36,6 +36,7 @@ import { parseHashOptions } from "metabase/lib/browser";
 import { Breadcrumb } from "antd";
 import cx from "classnames";
 import { canShowDarkMode } from "metabase/dashboard/components/utils/dark";
+import { get, has } from "lodash";
 
 const mapStateToProps = state => ({
   metadata: getMetadata(state),
@@ -57,6 +58,7 @@ class PublicQuestion extends Component {
       parameterValues: {},
     };
   }
+
 
   async UNSAFE_componentWillMount() {
     const {
@@ -126,6 +128,18 @@ class PublicQuestion extends Component {
     );
   };
 
+  getCacheOption() {
+    const { location } = this.props;
+    const ignoreCache = get(location?.query, "ignore_cache");
+    if (
+      has(location?.query, "ignore_cache") &&
+      (!ignoreCache || ignoreCache === "true")
+    ) {
+      return { ignore_cache: true };
+    }
+    return null;
+  }
+
   run = async () => {
     const {
       setErrorPage,
@@ -159,8 +173,9 @@ class PublicQuestion extends Component {
           PublicApi.cardQuery,
           card,
         )({
-          uuid: publicUuid,
-          parameters: JSON.stringify(datasetQuery.parameters),
+            uuid: publicUuid,
+            parameters: JSON.stringify(datasetQuery.parameters),
+            ...this.getCacheOption(),
         });
       } else {
         throw { status: 404 };
