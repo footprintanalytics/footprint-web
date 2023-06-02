@@ -96,14 +96,15 @@ const MyAnalysis = props => {
             <div className="flex mt2 flex-row items-center">
               <h2>{"My Analytics"}</h2>{" "}
               <Button
-                className=" ml-10"
+                className="ml-10"
                 type="primary"
                 onClick={() => {
-                  setCreateModalShow({ show: true })
-                  // window.open("https://www.baidu.com", "_blank");
+                  if (!checkIsNeedContactUs(modal, project)) {
+                    setCreateModalShow({ show: true })
+                  }
                 }}
               >
-                Create Query
+                Create
               </Button>
             </div>
             <div style={{ color: "#ffffff80" }}>
