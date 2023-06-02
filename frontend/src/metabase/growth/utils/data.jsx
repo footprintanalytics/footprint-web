@@ -341,11 +341,14 @@ function getItem(label, key, icon, children, type, disabled = false) {
  * @returns
  */
 export const fga_menu_data_v2 = project => {
-  const protocolType =
-    project.protocolType === "GameFi" &&
-    project?.nftCollectionAddress?.length > 0
-      ? "GameFi_NFT"
-      : project.protocolType;
+  let protocolType = project.protocolType;
+  if(project?.nftCollectionAddress?.length > 0){
+    if(protocolType==='GameFi'){
+      protocolType = 'GameFi_NFT'
+    }else{
+      protocolType = 'NFT'
+    }
+  }
   const dashboardMap = new Map([
     [
       "home",
@@ -375,7 +378,7 @@ export const fga_menu_data_v2 = project => {
     protocolType === "NFT" && getItem("Leaderboard", "nft_leaderboard", null),
     getItem("NFT Holder", "nft_nft_holder", null),
     getItem("Sales & Mints", "nft_sales_mints", null),
-    // protocolType === "NFT" && getItem("Revenue", "nft_revenue", null),
+    protocolType === "NFT" && getItem("Revenue", "nft_revenue", null),
   ]);
   const menuTabs = [
     getItem(

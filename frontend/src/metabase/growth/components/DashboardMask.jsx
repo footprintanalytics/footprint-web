@@ -17,7 +17,8 @@ const DashboardMask = props => {
     </div>
   );
 
-  if (["game_tokenomics", "game_revenue"].includes(props.currentMenu)) {
+  if (["game_tokenomics", "game_revenue", "nft_revenue"].includes(props.currentMenu)) {
+    // need to upgrade plan
     content = (
       <div className="flex flex-col justify-center p2" style={{ width: 500 }}>
         <h3 className="text-white">You need to upgrade plan.</h3>
@@ -53,6 +54,7 @@ const DashboardMask = props => {
       </div>
     );
   } else {
+    // data is not yet available
     content = (
       <div className="flex flex-col justify-center p2" style={{ width: 500 }}>
         <h3 className="text-white">The data is not yet available.</h3>
