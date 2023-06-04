@@ -332,6 +332,10 @@ class Visualization extends React.PureComponent {
     }
   };
 
+  renderHideHintToCatch = () => {
+    return (<div style={{ display: "none" }}>error or no result</div>)
+  }
+
   // eslint-disable-next-line complexity
   render() {
     const {
@@ -491,11 +495,17 @@ class Visualization extends React.PureComponent {
 
     const renderNoResult = () => {
       if (isFgaDiscord || isFgaTwitter || isFgaGoogleAnalysis) {
-        return <FgaErrorGuide />;
+        return (
+          <>
+            {this.renderHideHintToCatch()}
+            <FgaErrorGuide />
+          </>
+        )
       }
       if (isFga) {
         return (
           <div className="noResults">
+            {this.renderHideHintToCatch()}
             The data is not yet available, please
             <br />
             feel free to contact our{" "}
@@ -508,6 +518,7 @@ class Visualization extends React.PureComponent {
       }
       return (
         <div className="noResults">
+          {this.renderHideHintToCatch()}
           <h4>No results!</h4>
           <ol>
             <li>You can try refreshing your browser.</li>
@@ -600,6 +611,7 @@ class Visualization extends React.PureComponent {
             }
           >
             <>
+              {this.renderHideHintToCatch()}
               {isFgaDiscord || isFgaTwitter || isFgaGoogleAnalysis ? (
                 <FgaErrorGuide></FgaErrorGuide>
               ) : (
