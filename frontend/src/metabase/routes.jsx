@@ -499,6 +499,9 @@ export const getRoutes = store => (
         path="/growth/chart"
         component={LazyLoad.Question}
       >
+        {/* <IndexRoute component={Question} /> */}
+        {/* NEW QUESTION FLOW */}
+        {/* <Route path="new" title={t`New query`} component={NewQueryOptions} /> */}
         <Route
           title={t`Custom Upload`}
           path="custom-upload"
