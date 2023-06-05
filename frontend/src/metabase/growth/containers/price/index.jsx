@@ -106,6 +106,9 @@ const Index = ({
           {
             title: "Social Members Analytics",
           },
+          {
+            title: "Custom Analytics",
+          },
         ],
       },
     },
@@ -264,9 +267,6 @@ const Index = ({
           },
           {
             title: "Drill Down Analytics",
-          },
-          {
-            title: "Custom Analytics",
           },
         ],
       },
