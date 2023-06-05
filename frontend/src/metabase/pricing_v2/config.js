@@ -297,7 +297,7 @@ export const getComparePlans = ({user, canBusinessSevenTrial, subscriptionDetail
         {
           name: "Keep uploaded data private",
           free: false,
-          business: "Coming soon",
+          business: true,
           enterprise: "Coming soon",
         },
         {
