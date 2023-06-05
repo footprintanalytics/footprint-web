@@ -62,13 +62,21 @@ const mapStateToProps = (state, props) => {
     updateDashboardPara(parameters, parameterValues, "protocol_slug", [
       project.protocolSlug,
     ]);
-    if(project.tokenAddress?.length>0){
+    if (project.tokenAddress?.length > 0) {
+      const key = "token_address";
       const data = getFirstAddressByPriory(project.tokenAddress);
-      if(data?.address){
-        updateDashboardPara(parameters, parameterValues, "token_address",
-        [project.tokenAddress[0].address]
+      let queryCollection = getDefaultDashboardPara(
+        parameters,
+        parameterValues,
+        key,
       );
-      }
+      queryCollection =
+        queryCollection &&
+        project.tokenAddress.findIndex(t => t.address === queryCollection) !==
+          -1
+          ? queryCollection
+          : data?.address;
+      updateDashboardPara(parameters, parameterValues, key, queryCollection);
     }
     if (project.template) {
       const key = "tag";
@@ -86,30 +94,24 @@ const mapStateToProps = (state, props) => {
       );
     }
     if (project.nftCollectionAddress?.length > 0) {
-      const firstAddress = getFirstAddressByPriory( project.nftCollectionAddress);
+      const firstAddress = getFirstAddressByPriory(
+        project.nftCollectionAddress,
+      );
       const key = "collection_contract_address";
       let queryCollection = getDefaultDashboardPara(
         parameters,
         parameterValues,
         key,
       );
-      let queryCollectionInUrl = location.query.collection_contract_address;
-      queryCollectionInUrl =
-        project.nftCollectionAddress.findIndex(
-          item => item.address === queryCollectionInUrl,
-        ) !== -1
-          ? queryCollectionInUrl
-          : null;
       queryCollection =
         queryCollection &&
-        !isArray(queryCollection) &&
         project.nftCollectionAddress.findIndex(
-          item => item.address === queryCollectionInUrl,
+          item => item.address === queryCollection,
         ) !== -1
           ? queryCollection
-          : queryCollectionInUrl ?? firstAddress?.address;
+          : firstAddress?.address;
       if (
-        updateDashboardPara(parameters, parameterValues, key, queryCollection)
+        !updateDashboardPara(parameters, parameterValues, key, queryCollection)
       ) {
         if (queryCollection === firstAddress?.address) {
           updateDashboardPara(parameters, parameterValues, "chain", [
@@ -197,8 +199,12 @@ class PublicDashboard extends Component {
   );
 
   _fetchDashboardCardDataRefresh = debounce(
-    (params) => {
-      this.props.fetchDashboardCardData({ reload: false, clear: true, ignoreCache: true });
+    params => {
+      this.props.fetchDashboardCardData({
+        reload: false,
+        clear: true,
+        ignoreCache: true,
+      });
     },
     1000,
     {
@@ -260,17 +266,17 @@ class PublicDashboard extends Component {
         icon={"refresh"}
         iconSize={16}
         style={{
-          "position": "fixed",
-          "right": "40px",
-          "top": "100px",
-          "zIndex": 2,
+          position: "fixed",
+          right: "40px",
+          top: "100px",
+          zIndex: 2,
         }}
         onClick={() => {
-          this._fetchDashboardCardDataRefresh({ ignoreCache: true })
+          this._fetchDashboardCardDataRefresh({ ignoreCache: true });
         }}
       />
     );
-  }
+  };
 
   render() {
     let {
@@ -380,7 +386,7 @@ class PublicDashboard extends Component {
               />
             )}
           </LoadingAndErrorWrapper>
-          {showRefreshButton && !!dashboard && (this.renderRefreshButton())}
+          {showRefreshButton && !!dashboard && this.renderRefreshButton()}
         </>
       </EmbedFrame>
     );
@@ -389,6 +395,9 @@ class PublicDashboard extends Component {
 
 export default _.compose(
   connect(mapStateToProps, mapDispatchToProps),
-  title(({ disableUpdateTitle, dashboard }) => !disableUpdateTitle && dashboard && dashboard.name),
+  title(
+    ({ disableUpdateTitle, dashboard }) =>
+      !disableUpdateTitle && dashboard && dashboard.name,
+  ),
   DashboardControls,
 )(PublicDashboard);
