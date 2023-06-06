@@ -55,6 +55,7 @@ const mapStateToProps = (state, props) => {
   const project = props.project;
   const location = props.location;
   if (project) {
+    let currentChain = null;
     // switch protocol
     updateDashboardPara(parameters, parameterValues, "gamefi", [
       project.protocolSlug,
@@ -76,7 +77,13 @@ const mapStateToProps = (state, props) => {
           -1
           ? queryCollection
           : data?.address;
-      updateDashboardPara(parameters, parameterValues, key, queryCollection);
+      if (
+        updateDashboardPara(parameters, parameterValues, key, queryCollection)
+      ) {
+        currentChain = project.tokenAddress.find(
+          item => item.address === queryCollection,
+        ).chain;
+      }
     }
     if (project.template) {
       const key = "tag";
@@ -111,13 +118,11 @@ const mapStateToProps = (state, props) => {
           ? queryCollection
           : firstAddress?.address;
       if (
-        !updateDashboardPara(parameters, parameterValues, key, queryCollection)
+        updateDashboardPara(parameters, parameterValues, key, queryCollection)
       ) {
-        if (queryCollection === firstAddress?.address) {
-          updateDashboardPara(parameters, parameterValues, "chain", [
-            firstAddress.chain,
-          ]);
-        }
+        currentChain = project.nftCollectionAddress.find(
+          item => item.address === queryCollection,
+        ).chain;
       }
     }
     // mutiple collection
@@ -159,6 +164,36 @@ const mapStateToProps = (state, props) => {
         key,
         project.campaignTitle,
       );
+    }
+    // switch chain
+    currentChain =
+      currentChain ??
+      getFirstAddressByPriory(project.tokenAddress)?.chain ??
+      getFirstAddressByPriory(project.nftCollectionAddress)?.chain;
+    if (currentChain) {
+      const key = "chain";
+      const defaultQuerryChain = getDefaultDashboardPara(
+        parameters,
+        parameterValues,
+        key,
+      );
+      const chainList = [];
+      project.tokenAddress.concat(project.nftCollectionAddress).map(item => {
+        if (chainList.findIndex(t => t === item.chain) === -1) {
+          chainList.push(item.chain);
+        }
+      });
+      // if defaultQuerryChain is not in chainList, set defaultQuerryChain to currentChain
+      const querryChain =
+        defaultQuerryChain &&
+        chainList.findIndex(t =>
+          t.chain === isArray(defaultQuerryChain)
+            ? defaultQuerryChain[0]
+            : defaultQuerryChain,
+        ) !== -1
+          ? defaultQuerryChain
+          : currentChain;
+      updateDashboardPara(parameters, parameterValues, key, querryChain);
     }
   }
   return {

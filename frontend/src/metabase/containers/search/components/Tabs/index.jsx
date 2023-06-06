@@ -45,6 +45,7 @@ const Index = ({
 
   const isFavoritesTab = model === "favorite";
   const isMyTablesTab = model === "table";
+  const isCreatorTabStyle = isCreator() && isOwnCreator;
 
   const isCreatorAndOwner = () => {
     return isCreator() && router?.params?.name === user?.name;
@@ -200,7 +201,7 @@ const Index = ({
   };
 
   return (
-    <div className={cx("search__tabs relative", className)}>
+    <div className={cx("search__tabs relative", { "creator__tabs": isCreatorTabStyle }, className)}>
       <Tabs
         key={data ? Object.keys(data).join(",") : ""}
         activeKey={model}
