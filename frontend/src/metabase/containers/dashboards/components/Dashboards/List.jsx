@@ -34,6 +34,7 @@ import getListColumns from "./getListColums";
 import getListColumnsCommonPage from "./getListColumsCommonPage";
 import getListQueryParams from "./getListQueryParams";
 import "../../../explore/index.css";
+import { isFgaPath } from "metabase/growth/utils/utils"
 
 const List = ({
   router,
@@ -95,7 +96,7 @@ const List = ({
     },
     { ...QUERY_OPTIONS, retry: 0 },
   );
-
+  const isFga = isFgaPath()
   const device = useDeviceInfo();
   const showHeader = device.isPC;
 
@@ -172,8 +173,8 @@ const List = ({
         columns={columns}
         rowClassName={(record, index) => {
           return index % 2 === 1
-            ? "dashboards__table-columns-odd"
-            : "dashboards__table-columns-even";
+            ?`dashboards__table-columns-odd${isFga&&'-dark'}`
+            : `dashboards__table-columns-even${isFga&&'-dark'}`;
         }}
         pagination={pagination}
         showHeader={showHeader}

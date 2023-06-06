@@ -438,6 +438,8 @@ export const getRoutes = store => (
         />
       </Route>
       {/* ----------- Growth Analytics 👇 --------- */}
+
+      <Route title={t`Creator`} path="/growth/@:name" component={LazyLoad.Creator} />
       <Route
         title={t`Dashboard`}
         path="/growth/@:name/:dashboardName"

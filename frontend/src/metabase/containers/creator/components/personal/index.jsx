@@ -15,11 +15,13 @@ import { getOssUrl } from "metabase/lib/image";
 import VipIconDataApi from "metabase/containers/creator/components/personal/VipIconDataApi";
 import { useGetPaymentSubscriptionDetail } from "metabase/pricing_v2/use";
 import SubscriptionDetailModal from "metabase/containers/creator/components/personal/SubscriptionDetailModal";
+import { isFgaPath } from "metabase/growth/utils/utils";
 
 const Index = ({ router, user, data }) => {
   const [loading, setLoading] = useState(false);
-  const [showSubscriptionDetailModal, setShowSubscriptionDetailModal] = useState(false);
-
+  const [showSubscriptionDetailModal, setShowSubscriptionDetailModal] =
+    useState(false);
+  const isFga = isFgaPath();
   const totalInfo = [
     {
       title: "Dashboards",
@@ -39,7 +41,10 @@ const Index = ({ router, user, data }) => {
     },
   ];
 
-  const { subscriptionDetailData } = useGetPaymentSubscriptionDetail(user, "footprint");
+  const { subscriptionDetailData } = useGetPaymentSubscriptionDetail(
+    user,
+    "footprint",
+  );
   const subscriptionDetailList = subscriptionDetailData?.list;
   const showSubscriptionCancelButton = subscriptionDetailList?.length > 0;
 
@@ -51,7 +56,7 @@ const Index = ({ router, user, data }) => {
   const discord = get(data, "userInfo.discord");
   // const email = get(data, "userInfo.email");
 
-  const onCancelSubscription = async (productId) => {
+  const onCancelSubscription = async productId => {
     Modal.confirm({
       title: "Do you want to cancel automatic renewal?",
       icon: <ExclamationCircleOutlined />,
@@ -82,10 +87,10 @@ const Index = ({ router, user, data }) => {
             {String(userName.charAt(0)).toUpperCase()}
           </Avatar>
         )}
-        <div className="creator__personal-cell">
+        <div className="creator__personal-cell" >
           {userName && (
             <div style={{ display: "flex", alignItems: "center" }}>
-              <h3 style={{ WebkitBoxOrient: "vertical" }}>{userName}</h3>
+              <h3 style={{ WebkitBoxOrient: "vertical",color:isFga?'white':'#303440' }}>{userName}</h3>
               <VipIcon
                 vipInfo={data.vipInfo}
                 isOwner={user?.id === get(data, "userInfo.metabaseId")}
@@ -128,35 +133,39 @@ const Index = ({ router, user, data }) => {
                       target="_blank"
                       onClick={() => trackStructEvent("creator click upgrade")}
                     >
-                      <Button>Upgrade</Button>
+                      <Button type="primary" ghost>Upgrade</Button>
                     </Link>
                   )}
                   {showSubscriptionCancelButton && (
-                    <Button onClick={() => setShowSubscriptionDetailModal(true)}>
+                    <Button
+                      onClick={() => setShowSubscriptionDetailModal(true)}
+                    >
                       Cancel Automatic Renewal
                     </Button>
                   )}
                 </div>
               )}
             </div>
-            <div className="creator__personal-right">
-              {totalInfo.map((item, index) => {
-                return (
-                  <div
-                    key={item.title}
-                    className="creator__personal-right-item"
-                  >
-                    {index > 0 && (
-                      <div className="creator__personal-right-item-split" />
-                    )}
-                    <div className="creator__personal-right-item-left">
-                      <h3>{get(data, item.count)}</h3>
-                      <div>{item.title}</div>
+            {!isFga && (
+              <div className="creator__personal-right">
+                {totalInfo.map((item, index) => {
+                  return (
+                    <div
+                      key={item.title}
+                      className="creator__personal-right-item"
+                    >
+                      {index > 0 && (
+                        <div className="creator__personal-right-item-split" />
+                      )}
+                      <div className="creator__personal-right-item-left">
+                        <h3>{get(data, item.count)}</h3>
+                        <div>{item.title}</div>
+                      </div>
                     </div>
-                  </div>
-                );
-              })}
-            </div>
+                  );
+                })}
+              </div>
+            )}
           </div>
           {/*<div>
             {socialData.map(item => {
@@ -185,7 +194,7 @@ const Index = ({ router, user, data }) => {
           subscriptionDetailList={subscriptionDetailList}
           onCancelSubscription={onCancelSubscription}
           onClose={() => {
-            setShowSubscriptionDetailModal(false)
+            setShowSubscriptionDetailModal(false);
           }}
         />
       )}

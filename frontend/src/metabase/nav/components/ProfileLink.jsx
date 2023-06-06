@@ -27,7 +27,7 @@ export default connect(mapStateToProps)(ProfileLink);
 function ProfileLink({ user, adminItems, onLogout, trigger }) {
   const [modalOpen, setModalOpen] = useState(null);
   // const [bugReportDetails, setBugReportDetails] = useState(null);
-
+  const isFga = location.pathname.includes("/growth");
   const openModal = modalName => {
     setModalOpen(modalName);
   };
@@ -52,7 +52,7 @@ function ProfileLink({ user, adminItems, onLogout, trigger }) {
       {
         title: t`My Profile`,
         icon: null,
-        link: Urls.myProfileUrl(userName),
+        link: `${isFga?'/growth':''}${Urls.myProfileUrl(userName)}`,
         event: `Navbar;Profile Dropdown;My Profile`,
       },
       {

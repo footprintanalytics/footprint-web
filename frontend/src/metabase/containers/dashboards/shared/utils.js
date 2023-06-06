@@ -116,7 +116,7 @@ export const isProtocol = () => {
 };
 
 export const isCreator = () => {
-  return window.location.pathname.startsWith("/@");
+  return window.location.pathname.startsWith("/@")||window.location.pathname.startsWith("/growth/@");
 };
 
 export const isDashboards = () => {

@@ -16,6 +16,7 @@ import TableChartInfo from "metabase/query_builder/components/TableChartInfo";
 import Tags from "../Tags";
 import IconValue from "../IconValue";
 import { sortMap } from "../../shared/config";
+import { isFgaPath } from "metabase/growth/utils/utils";
 
 const colors = ["#E4E4FE", "#D9F8F3", "#FFF5D9", "#FFDFE8"];
 
@@ -34,12 +35,21 @@ export default ({
 }) => {
   const isMarket = user && user.isMarket;
   const isAdmin = user && user.is_superuser;
+  const isFga = isFgaPath();
   // const isInner = user?.groups?.includes("Inner");
   const query = router?.location?.query;
   const getLink = record => {
-    return record?.model === "dashboard" || record?.type === "dashboard"
-      ? Urls.dashboard(record)
-      : Urls.guestUrl(record);
+    let link =
+      record?.model === "dashboard" || record?.type === "dashboard"
+        ? Urls.dashboard(record)
+        : Urls.guestUrl(record);
+    if (!link.startsWith("/")) {
+      link = "/" + link;
+    }
+    if (isFga) {
+      link = "/growth" + link;
+    }
+    return link;
   };
   const name = {
     title: "Name",
@@ -81,7 +91,12 @@ export default ({
                 trackStructEvent(`${gaCategory} Name`, record.name)
               }
             >
-              <h3 style={{ WebkitBoxOrient: "vertical" }}>
+              <h3
+                style={{
+                  WebkitBoxOrient: "vertical",
+                  color: isFga ? "white" : "",
+                }}
+              >
                 <Highlighter
                   highlightClassName="highlight"
                   searchWords={searchWords}
