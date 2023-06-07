@@ -134,29 +134,29 @@ const FeaturesSide = ({
   const renderNavButton = () => {
     return (
       <div className="feature-side__nav-button">
-        {!isCustom && (<Link className="mb1" to={"/dashboards"} target={isPublic ? "_blank" : ""}><h5>{"Custom Analysis >>"}</h5></Link>)}
-        {!isPublic && (
-          <Tooltip tooltip="Embed Widget">
-            <Button
-              onlyIcon
-              className="Question-header-btn my1"
-              iconColor="#7A819B"
-              icon="embed"
-              iconSize={16}
-              onClick={() => {
-                setEmbedModal({ open: true, publicUrl: getEmbedUrl() })
-              }}
-            />
-            <EmbedModal
-              resource={embedModal}
-              onClose={() => {
-                setEmbedModal({ open: false })
-              }}
-            />
-
-          </Tooltip>
-        )}
-        {!isPublic && <SocialLayout />}
+        <div className="flex flex-column" style={{ width: 160 }}>
+          {!isCustom && (<Link className="mb1" to={"/dashboards"} target={isPublic ? "_blank" : ""}><h5>{"Custom Analysis >>"}</h5></Link>)}
+          {!isPublic && (
+            <>
+              <div
+                className="cursor-pointer"
+                onClick={() => {
+                  console.log("xxx")
+                  setEmbedModal({ open: true, publicUrl: getEmbedUrl() })
+                }}
+              >
+                <h5>{"Public Embed >>"}</h5>
+              </div>
+              <EmbedModal
+                  resource={embedModal}
+                  onClose={() => {
+                  setEmbedModal({ open: false })
+                }}
+              />
+            </>
+          )}
+        </div>
+        {!isPublic && <SocialLayout className="mt1"/>}
         {isPublic && (renderBrandInfo())}
       </div>
     )

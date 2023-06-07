@@ -4,12 +4,13 @@ import "../index.css";
 import Link from "metabase/core/components/Link";
 import { trackStructEvent } from "metabase/lib/analytics";
 import { socialData } from "metabase/components/GlobalContactPanel/data";
+import cx from "classnames";
 
 const SocialLayout = props => {
-  const { title } = props;
+  const { title, className } = props;
 
   return (
-    <div className="global-contact-panel__social-layout">
+    <div className={cx("global-contact-panel__social-layout", className)}>
       {title && (<span className="mr1">{title}</span>)}
       {socialData
         .filter(item => item.icon)

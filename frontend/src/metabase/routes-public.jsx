@@ -70,7 +70,7 @@ export const getRoutes = store => (
           path="custom/:partner"
           component={props => <LazyLoad.Research {...props} classify="custom" />}
         >
-          <Route path=":menu" />
+          <Route path=":menu(/:subMenu)" />
         </Route>
       </Route>
       <Route path="widget/chart/:uuid" component={LazyLoad.WidgetPublic} />

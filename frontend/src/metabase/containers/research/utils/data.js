@@ -574,17 +574,39 @@ const chainData = [
 ]
 
 const customData = {
-  duke: [
+  partner: [
     {
-      "label": "Chain Overview",
-      "value": "chain-overview",
-      "publicUuid": "9e0a1aa1-eeae-4608-b77d-cf23271d92a1",
+      "label": "GameFi Market",
+      "value": "gamefi-market",
+      "icon": "https://statichk.footprint.network/icon_side_analysis.png",
+      "subMenus": [
+        {
+          "label": "Market Overview",
+          "value": "market-overview",
+          "publicUuid": "db6aac3e-48e4-4465-87b2-94be114475aa",
+        },
+        {
+          "label": "Chain Stats",
+          "value": "chain-stats",
+          "publicUuid": "fe3ddee1-1f8f-41bf-9a79-9241077d904b",
+        },
+        {
+          "label": "Single Chain",
+          "value": "single-chain",
+          "publicUuid": "f37919b4-977b-4a35-9b43-ff29c02e6ba9",
+        },
+      ],
     },
     {
-      "label": "Chain Comparison",
-      "value": "chain-comparison",
-      "publicUuid": "79eaf62d-95ac-4838-b34d-3cfdbdf3fa18",
+      "label": "Top Games",
+      "value": "top-games",
+      "publicUuid": "d8e8ac13-bc3f-4cc6-9368-4168d52beeb5",
     },
+    {
+      "label": "Trending Marketplaces",
+      "value": "trending-marketplaces",
+      "publicUuid": "253fee18-97da-496b-833b-3d2a46516ec8",
+    }
   ]
 }
 
