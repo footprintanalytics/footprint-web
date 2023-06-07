@@ -51,6 +51,8 @@ interface SharingPaneProps {
   getGuestUrl: any;
   sharePage: () => void;
   onlyEmbed: boolean;
+  iframeHeight: number;
+  iframeWidth: number;
 }
 
 export default function SharingPane({
@@ -68,13 +70,15 @@ export default function SharingPane({
   getGuestUrl,
   sharePage,
   onlyEmbed,
+  iframeHeight,
+  iframeWidth,
 }: SharingPaneProps) {
   const [extensionState, setExtension] = useState<Extension>(null);
   const [showVip, setShowVip] = useState(false);
   const inputRef: any = React.createRef();
 
   const guestUrl = getGuestUrl(resource, extensionState);
-  const iframeSource = getPublicEmbedHTML(getPublicUrl(resource));
+  const iframeSource = getPublicEmbedHTML({iframeUrl: getPublicUrl(resource), height: iframeHeight, width: iframeWidth});
 
   const shouldDisableEmbedding = !isAdmin || !isApplicationEmbeddingEnabled;
   const shareUrl = guestUrl;
