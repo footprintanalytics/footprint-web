@@ -12,14 +12,19 @@ import {
   MessageOutlined,
   PicCenterOutlined,
   PropertySafetyOutlined,
-  ScheduleOutlined, SmileOutlined, TagOutlined, TrademarkCircleOutlined,
+  ScheduleOutlined,
+  SmileOutlined,
+  TagOutlined,
+  TrademarkCircleOutlined,
 } from "@ant-design/icons/lib/icons";
-import { flattenDeep, get } from "lodash";
+import { flattenDeep } from "lodash";
 import Link from "metabase/core/components/Link/Link";
 import SocialLayout from "metabase/components/GlobalContactPanel/components/SocialLayout";
-
-const { Sider } = Layout;
-
+import MetabaseSettings from "metabase/lib/settings";
+import LogoBadge from "metabase/public/components/LogoBadge";
+import Button from "metabase/core/components/Button/Button";
+import Tooltip from "metabase/components/Tooltip";
+import EmbedModal from "metabase/containers/home/components/EmbedModal";
 
 const FeaturesSide = ({
   replace,
@@ -27,8 +32,15 @@ const FeaturesSide = ({
   defaultSubMenu,
   type,
   classify,
+  partner,
   researchData,
+  isCustom,
+  isPublic,
+  location,
 }) => {
+  const partnerStr = partner ? `/${partner}` : "";
+  const prefixPath = isPublic ? "/public" : "";
+  const [embedModal, setEmbedModal] = useState({});
   // eslint-disable-next-line react/jsx-key
   const icons = [<MessageOutlined/>, <MailOutlined/>, <PicCenterOutlined/>, <PropertySafetyOutlined/>, <ScheduleOutlined/>, <SmileOutlined/>, <TagOutlined/>, <TrademarkCircleOutlined/>]
   const renderSeoData = () => {
@@ -58,10 +70,12 @@ const FeaturesSide = ({
         type,
       };
     }
-
     const items = researchData.map((item, index) => {
+      if (item.subMenus) {
+        return getItem(item.label, item.value, icons[index % icons.length], item.subMenus.map(i => getItem(i.label, i.value)))
+      }
       return (
-        getItem(item.label, item.value, icons[index % icons.length], item.subMenus.map(i => getItem(i.label, i.value)))
+        getItem(item.label, item.value)
       );
     });
     const rootSubmenuKeys = researchData.map(item => item.value);
@@ -84,12 +98,18 @@ const FeaturesSide = ({
         theme="light"
         mode="inline"
         openKeys={openKeys}
-        selectedKeys={[defaultSubMenu]}
+        selectedKeys={[defaultMenu, defaultSubMenu]}
         onOpenChange={onOpenChange}
         onSelect={item => {
           const menuData = researchData?.find(i => i.value === item.keyPath[1]);
           const subMenusData = menuData?.subMenus?.find(i => i.value === item.keyPath[0]);
-          replace(`/${type}/${classify}/${item.keyPath[1]}/${item.keyPath[0]}${subMenusData?.search || ""}`);
+          let keyString;
+          if (item.keyPath.length === 2) {
+            keyString = `${item.keyPath[1]}/${item.keyPath[0]}`
+          } else {
+            keyString = `${item.keyPath[0]}`
+          }
+          replace(`${prefixPath}/${type}/${classify}${partnerStr}/${keyString}${subMenusData?.search || ""}`);
         }}
         items={items}
       />
@@ -97,17 +117,53 @@ const FeaturesSide = ({
     );
   };
 
+  const renderBrandInfo = () => {
+    return (
+      <div className="EmbedFrame-footer p1 md-p2 lg-p3 border-top flex-no-shrink flex align-center mp2" style={{ fontSize: 12 }}>
+        {!MetabaseSettings.hideEmbedBranding() && (
+          <LogoBadge dark="night" />
+        )}
+      </div>
+    )
+  }
+
+  const getEmbedUrl = () => {
+    return `${MetabaseSettings.get("site-url")}/public${location.pathname}`;
+  }
+
   const renderNavButton = () => {
     return (
       <div className="feature-side__nav-button">
-        <Link className="mb1" to={"/dashboards"}><span>{"Custom Analysis >>"}</span></Link>
-        <SocialLayout />
+        {!isCustom && (<Link className="mb1" to={"/dashboards"} target={isPublic ? "_blank" : ""}><h5>{"Custom Analysis >>"}</h5></Link>)}
+        {!isPublic && (
+          <Tooltip tooltip="Embed Widget">
+            <Button
+              onlyIcon
+              className="Question-header-btn my1"
+              iconColor="#7A819B"
+              icon="embed"
+              iconSize={16}
+              onClick={() => {
+                setEmbedModal({ open: true, publicUrl: getEmbedUrl() })
+              }}
+            />
+            <EmbedModal
+              resource={embedModal}
+              onClose={() => {
+                setEmbedModal({ open: false })
+              }}
+            />
+
+          </Tooltip>
+        )}
+        {!isPublic && <SocialLayout />}
+        {isPublic && (renderBrandInfo())}
       </div>
     )
   }
   return (
     <div
-      className="flex flex-column full-height overflow-auto Features-side__root"
+      className="flex flex-column full-height overflow-auto Features-side__root Theme--night"
       style={{
         width: 309,
         display: "flex",

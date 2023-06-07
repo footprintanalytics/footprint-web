@@ -573,6 +573,21 @@ const chainData = [
   },
 ]
 
+const customData = {
+  duke: [
+    {
+      "label": "Chain Overview",
+      "value": "chain-overview",
+      "publicUuid": "9e0a1aa1-eeae-4608-b77d-cf23271d92a1",
+    },
+    {
+      "label": "Chain Comparison",
+      "value": "chain-comparison",
+      "publicUuid": "79eaf62d-95ac-4838-b34d-3cfdbdf3fa18",
+    },
+  ]
+}
+
 const metaObject = {
   "nft": {
     title: "NFT Research | Unlock the power of data",
@@ -596,8 +611,9 @@ const data = {
   "nft": nftData,
   "gamefi": gamefiData,
   "chain": chainData,
+  "custom": customData,
   "metaObject": metaObject,
 }
 
 
-export default data ;
+export default data;

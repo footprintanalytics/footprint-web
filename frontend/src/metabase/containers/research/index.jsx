@@ -16,6 +16,7 @@ import { Select } from "antd";
 import Meta from "metabase/components/Meta";
 import { formatSectionTitle } from "metabase/lib/formatting";
 import title from "metabase/hoc/Title";
+import cx from "classnames";
 
 const Index = props => {
   const {
@@ -25,22 +26,33 @@ const Index = props => {
     location,
     children,
     classify,
+    partner,
     replace,
   } = props;
-
-  const researchData = myData[classify];
-  const metaInfo = myData["metaObject"][classify];
+  const isPublic = window.location.pathname.startsWith("/public");
+  const partnerStr = partner ? `/${partner}` : "";
+  const prefixPath = isPublic ? "/public" : "";
+  const isCustom = classify === "custom";
+  const researchData = isCustom ? myData[classify][partner] : myData[classify];
+  const metaInfo = myData["metaObject"][classify] || {};
   const type = "research";
 
   const findItemByData = ({ menu, subMenu }) => {
     const menuData = researchData?.find(item => item.value === menu);
-    return menuData?.subMenus?.find(item => item.value === subMenu) || researchData[0].subMenus[0];
+    if (!menuData?.subMenus) {
+      return menuData;
+    }
+    return menuData?.subMenus?.find(item => item.value === subMenu) || researchData[0]?.subMenus[0];
   }
 
   const item = findItemByData({ menu, subMenu, value });
 
   if (!menu && !subMenu) {
-    replace(`/${type}/${classify}/${researchData[0].value}/${researchData[0].subMenus[0].value}`);
+    if (researchData[0].subMenus) {
+      replace(`${prefixPath}/${type}/${classify}${partnerStr}/${researchData[0].value}/${researchData[0]?.subMenus[0]?.value}`);
+    } else {
+      replace(`${prefixPath}/${type}/${classify}${partnerStr}/${researchData[0].value}`);
+    }
   }
 
   const renderArea = (item) => {
@@ -72,7 +84,11 @@ const Index = props => {
         <Select
           defaultValue={classify}
           style={{ width: 200 }}
-          onChange={value => value !== classify && replace(`/${type}/${value}`)}
+          onChange={value => {
+            if (value !== classify) {
+              replace(`${prefixPath}/${type}/${value}`)
+            }
+          }}
           options={
             [{ value: "nft", label: "NFT Research" }, { value: "gamefi", label: "GameFi Research" }, { value: "chain", label: "Chain Research" }]
           }
@@ -96,19 +112,24 @@ const Index = props => {
     )
   }
 
+
   return (
     <>
-      <Meta description={metaInfo["description"]} keywords={metaInfo["keywords"]} title={metaInfo["title"]} />
-      <div className="Features bg-gray flex">
+      <Meta description={metaInfo["description"] || ""} keywords={metaInfo["keywords"] || ""} title={metaInfo["title"] || ""} />
+      <div className={cx("bg-gray flex flex", isPublic ? "Features-public" : "Features")}>
         <div className="Features-side">
-          {renderSelectClassify()}
-          {menu && subMenu && (
+          {!isCustom && renderSelectClassify()}
+          {menu && (
             <FeaturesSide
               defaultMenu={menu}
               defaultSubMenu={subMenu}
               type="research"
               classify={classify}
+              partner={partner}
               researchData={researchData}
+              isCustom={isCustom}
+              isPublic={isPublic}
+              location={location}
             />
           )}
         </div>
@@ -135,6 +156,7 @@ const mapDispatchToProps = {
 
 const mapStateToProps = (state, props) => {
   return {
+    partner: props.params.partner,
     menu: props.params.menu,
     subMenu: props.params.subMenu,
     value: props.params.value,
