@@ -141,7 +141,6 @@ const FeaturesSide = ({
               <div
                 className="cursor-pointer"
                 onClick={() => {
-                  console.log("xxx")
                   setEmbedModal({ open: true, publicUrl: getEmbedUrl() })
                 }}
               >
