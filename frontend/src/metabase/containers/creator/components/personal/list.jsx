@@ -9,7 +9,7 @@ import { useQuery } from "react-query";
 import SearchTabs from "metabase/containers/search/components/Tabs";
 import { navigationNum } from "metabase/new-service";
 import { QUERY_OPTIONS } from "metabase/containers/dashboards/shared/config";
-import { isFgaPath } from "metabase/growth/utils/utils"
+import { isFgaPath } from "metabase/growth/utils/utils";
 
 const List = ({ router, user, name }) => {
   const isFavoritesTab = router.location.query.model === "favorite";
@@ -32,8 +32,15 @@ const List = ({ router, user, name }) => {
   );
 
   return (
-    <div className="search" data-nosnippet style={{background:isFgaPath()?"#121728":''}}>
-      <div className="search__wrap search__content" >
+    <div
+      className="search"
+      data-nosnippet
+      style={{ background: isFgaPath() ? "#121728" : "" }}
+    >
+      <div
+        className="search__wrap search__content"
+        style={{ alignItems: "center" ,flexDirection: "column"}}
+      >
         <SearchTabs
           router={router}
           user={user}

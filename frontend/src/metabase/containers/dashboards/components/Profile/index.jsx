@@ -96,7 +96,7 @@ const Profile = props => {
                   {item.title}
                 </div>
               </div>
-            );
+            )
           })}
         </div>
         <div className="dashboards__profile-also">

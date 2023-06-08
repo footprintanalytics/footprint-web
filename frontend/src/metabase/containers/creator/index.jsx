@@ -79,7 +79,6 @@ const Index = ({ router, user, params, userInfoDataApi }) => {
       <div className="creator__wrap" style={{background:isFga?'#121728':'white'}}>
         <Personal router={router} user={user} data={data} />
         <List
-         style={{background:'#121728'}}
           router={router}
           user={user}
           name={name}
