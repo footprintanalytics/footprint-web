@@ -81,7 +81,8 @@ export const template_gallery = project => {
       desc: "Help create more profitable games, increase player engagement and retention, improve their monetization strategies, and stay ahead of the competition.",
       items: [
         {
-          dashboardName: "Tokenomics for IXT (price,holder, staking, liquidity)",
+          dashboardName:
+            "Tokenomics for IXT (price,holder, staking, liquidity)",
           id: 8055,
           dashboardLink: `/growth/public/dashboard/584a27d8-b93b-4cb2-9fba-15f4e2ee9d4d?${params}`,
         },
@@ -342,11 +343,11 @@ function getItem(label, key, icon, children, type, disabled = false) {
  */
 export const fga_menu_data_v2 = project => {
   let protocolType = project.protocolType;
-  if(project?.nftCollectionAddress?.length > 0){
-    if(protocolType==='GameFi'){
-      protocolType = 'GameFi_NFT'
-    }else{
-      protocolType = 'NFT'
+  if (project?.nftCollectionAddress?.length > 0) {
+    if (protocolType === "GameFi") {
+      protocolType = "GameFi_NFT";
+    } else {
+      protocolType = "NFT";
     }
   }
   const dashboardMap = new Map([
@@ -356,7 +357,7 @@ export const fga_menu_data_v2 = project => {
         ? "346f0d3d-5486-404b-a5d2-17ce52150fe1"
         : "2f4f1fe9-7163-4ecf-91db-76c87a9306ed",
     ],
-    ["game_tokenomics","530dfa4f-2ddd-4ba7-8e9c-d6ccbe84bc00"],
+    ["game_tokenomics", "530dfa4f-2ddd-4ba7-8e9c-d6ccbe84bc00"],
     ["game_revenue", "8932389c-42cc-4ce7-a20f-a6a146cd31a2"],
     ["game_token_holder", "ff4ddbe9-8818-4abf-8a6c-91c3559071af"],
     ["game_active_users", "6d84b4a6-ceef-4b30-a9ad-b233038fd8d3"],
@@ -936,30 +937,30 @@ export const getFgaComparePlans = ({ user }) => ({
         {
           name: "Quest",
           free: { enable: true, tip: "Limited" },
-          growth: { enable: true, tip: "Unlimited" },
-          scale: { enable: true, tip: "Unlimited" },
-          enterprise: { enable: true, tip: "Unlimited" },
+          growth: { enable: true, tip: "Limited" },
+          scale: { enable: true, tip: "Limited" },
+          enterprise: { enable: true, tip: "Limited" },
         },
         {
           name: "Airdrop",
           free: { enable: true, tip: "Limited" },
-          growth: { enable: true, tip: "Unlimited" },
-          scale: { enable: true, tip: "Unlimited" },
-          enterprise: { enable: true, tip: "Unlimited" },
+          growth: { enable: true, tip: "Limited" },
+          scale: { enable: true, tip: "Limited" },
+          enterprise: { enable: true, tip: "Limited" },
         },
         {
           name: "Giveaway",
           free: { enable: true, tip: "Limited" },
-          growth: { enable: true, tip: "Unlimited" },
-          scale: { enable: true, tip: "Unlimited" },
-          enterprise: { enable: true, tip: "Unlimited" },
+          growth: { enable: true, tip: "Limited" },
+          scale: { enable: true, tip: "Limited" },
+          enterprise: { enable: true, tip: "Limited" },
         },
         {
           name: "Notification",
           free: { enable: true, tip: "Limited" },
-          growth: { enable: true, tip: "Unlimited" },
-          scale: { enable: true, tip: "Unlimited" },
-          enterprise: { enable: true, tip: "Unlimited" },
+          growth: { enable: true, tip: "Limited" },
+          scale: { enable: true, tip: "Limited" },
+          enterprise: { enable: true, tip: "Limited" },
         },
       ],
     },
