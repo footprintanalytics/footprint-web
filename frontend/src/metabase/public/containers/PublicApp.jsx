@@ -7,6 +7,7 @@ import PublicError from "metabase/public/components/PublicError";
 import cx from "classnames";
 import getThemeConfig from "metabase/theme-helper";
 import { ConfigProvider } from "antd";
+import { isDark } from "../../../../../resources/frontend_client/app/dist/public_components_widgets_EmbedModalContent_jsx.bundle.91ad8b8ea199aef7b63a";
 
 const mapStateToProps = (state, props) => ({
   errorPage: state.app.errorPage,
@@ -15,7 +16,6 @@ const mapStateToProps = (state, props) => ({
 class PublicApp extends Component {
   render() {
     const { children, errorPage } = this.props;
-    const isDark = window?.location?.pathname?.startsWith("/public/research");
     if (errorPage) {
       if (errorPage.status === 404) {
         return <PublicNotFound />;
@@ -25,7 +25,7 @@ class PublicApp extends Component {
     } else {
       return (
         <ConfigProvider theme={getThemeConfig()}>
-          <div className={cx({ "dark": isDark })}>
+          <div className={cx({ "dark": isDark() })}>
             {children}
           </div>
         </ConfigProvider>
