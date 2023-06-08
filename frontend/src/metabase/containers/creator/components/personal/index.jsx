@@ -84,7 +84,9 @@ const Index = ({ router, user, data }) => {
           />
         ) : (
           <Avatar size="large" style={{ backgroundColor: "#E4E4FE" }}>
-            {String(userName.charAt(0)).toUpperCase()}
+            <span style={{ fontSize: 40 }}>
+              {String(userName.charAt(0)).toUpperCase()}
+            </span>
           </Avatar>
         )}
         <div className="creator__personal-cell">
