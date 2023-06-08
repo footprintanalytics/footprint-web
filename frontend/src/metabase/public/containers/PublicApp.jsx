@@ -4,6 +4,10 @@ import { connect } from "react-redux";
 
 import PublicNotFound from "metabase/public/components/PublicNotFound";
 import PublicError from "metabase/public/components/PublicError";
+import cx from "classnames";
+import getThemeConfig from "metabase/theme-helper";
+import { ConfigProvider } from "antd";
+import { isDark } from "metabase/dashboard/components/utils/dark";
 
 const mapStateToProps = (state, props) => ({
   errorPage: state.app.errorPage,
@@ -19,7 +23,13 @@ class PublicApp extends Component {
         return <PublicError />;
       }
     } else {
-      return children;
+      return (
+        <ConfigProvider theme={getThemeConfig()}>
+          <div className={cx({ "dark": isDark() })}>
+            {children}
+          </div>
+        </ConfigProvider>
+      );
     }
   }
 }

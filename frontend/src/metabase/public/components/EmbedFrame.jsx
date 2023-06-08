@@ -48,7 +48,7 @@ class EmbedFrame extends Component {
     } = this.props;
     const { innerScroll } = this.state;
 
-    const { bordered, titled, theme, hide_parameters, hide_download_button } = {
+    const { bordered, titled, theme, hide_parameters, hide_download_button, bg_color } = {
       ...DEFAULT_OPTIONS,
       ...parseHashOptions(location.hash),
     };
@@ -61,6 +61,9 @@ class EmbedFrame extends Component {
         (!hide_download_button && actionButtons));
 
     const name = titled && !hideTitle ? this.props.name : null;
+
+    const backgroundColor = bg_color === "black" ? "black": "";
+    
     return (
       <div
         id="html2canvas-Dashboard"
@@ -69,6 +72,7 @@ class EmbedFrame extends Component {
           "bordered rounded shadowed": bordered,
           [`Theme--${curTheme}`]: !!curTheme,
         })}
+        style={{ backgroundColor: backgroundColor }}
       >
         <div
           className={cx("flex flex-column flex-full relative", innerClassName, {
@@ -77,7 +81,7 @@ class EmbedFrame extends Component {
         >
           {headerLayout}
           {name || parameters?.length > 0 ? (
-            <div className="EmbedFrame-header flex flex-column p1 sm-p2 lg-p3">
+            <div className="EmbedFrame-header flex flex-column p1 sm-p2 lg-p3" style={{ backgroundColor: backgroundColor }}>
               {name && (
                 <TitleAndDescription
                   title={name}
@@ -107,7 +111,7 @@ class EmbedFrame extends Component {
           </div>
         </div>
         {showFooter && (
-          <div className="EmbedFrame-footer p1 md-p2 lg-p3 border-top flex-no-shrink flex align-center">
+          <div className="EmbedFrame-footer p1 md-p2 lg-p3 border-top flex-no-shrink flex align-center" style={{ backgroundColor: backgroundColor }}>
             {!MetabaseSettings.hideEmbedBranding() && (
               <LogoBadge dark={curTheme} />
             )}

@@ -119,15 +119,12 @@ const ConnectorList = props => {
           <Title width={"100%"} level={4} style={{ marginBottom: 0 }}>
             Integrations
           </Title>
-          <Typography.Text>
-            {"Didn't find the integration you were looking for? Please "}
-            <Typography.Link
-              href="https://forms.gle/Xs8WahhYh26xKoDj7"
-              target="_blank"
-            >
-              contact us.
-            </Typography.Link>
-          </Typography.Text>
+          <Typography.Link
+            href="https://docs.footprint.network/docs/integrations"
+            target="_blank"
+          >
+            How to use integrations?
+          </Typography.Link>
         </div>
 
         {isLoading ? (

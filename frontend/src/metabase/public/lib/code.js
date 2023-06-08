@@ -1,9 +1,9 @@
 import { optionsToHashParams } from "./embed";
 
-export const getPublicEmbedOptions = ({ iframeUrl }) => [
+export const getPublicEmbedOptions = ({ iframeUrl, height, width }) => [
   {
     name: "HTML",
-    source: () => html({ iframeUrl: `"${iframeUrl}"` }),
+    source: () => html({ iframeUrl: `"${iframeUrl}"`, height, width }),
     mode: "ace/mode/html",
   },
 ];
@@ -38,15 +38,15 @@ export const getSignTokenOptions = params => [
   { name: "Clojure", source: () => clojure(params), mode: "ace/mode/clojure" },
 ];
 
-export const getPublicEmbedHTML = iframeUrl =>
-  html({ iframeUrl: JSON.stringify(iframeUrl) });
+export const getPublicEmbedHTML = ({iframeUrl, height, width}) =>
+  html({ iframeUrl: JSON.stringify(iframeUrl), height, width });
 
-const html = ({ iframeUrl }) =>
+const html = ({ iframeUrl, width=800, height=600 }) =>
   `<iframe
     src=${iframeUrl}
     frameborder="0"
-    width="800"
-    height="600"
+    width={${width}}
+    height={${height}}
     allowtransparency
 ></iframe>`;
 
