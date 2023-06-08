@@ -45,7 +45,7 @@ import EntityMenu from "metabase/components/EntityMenu";
 import UserAvatar from "metabase/components/UserAvatar";
 import VipIcon from "metabase/components/VipIcon";
 import CreateProjectModal from "metabase/growth/components/Modal/CreateProjectModal";
-import { checkIsNeedContactUs } from "metabase/growth/utils/utils";
+import { checkIsNeedContactUs, isFgaPath } from "metabase/growth/utils/utils";
 import { getContext, getPath, getUser } from "../selectors";
 
 import { isDark } from "../../../dashboard/components/utils/dark";
@@ -129,7 +129,7 @@ class FgaNavbar extends Component {
           <CreateActionModal
             showNewDashboard={() => {
               const newDashboardUrl = `${
-                isDefi360() ? "/defi360" : ""
+                isFgaPath() ? "/growth" : ""
               }/dashboard/new`;
               window.open(newDashboardUrl);
             }}
@@ -447,9 +447,9 @@ class FgaNavbar extends Component {
         </div>
       );
     };
-
+// className={ "dark"}
     return (
-      <div className="fga-Nav" style={{ display: rootDisplay }}>
+      <div className="fga-Nav" style={{ display: rootDisplay,backgroundColor:'var(--color-bg-dark)' }}>
         <div className="Nav__left">
           <MobileMenuIcon />
           <Link

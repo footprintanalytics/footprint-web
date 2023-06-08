@@ -8,6 +8,7 @@ import Question, { QuestionCreatorOpts } from "metabase-lib/Question";
 
 import { appendSlug, dashboardQuestionUrl, extractQueryParams, guestUrl, publicUrl } from "./utils";
 import { optionsToHashParams } from "metabase/public/lib/embed";
+import { isFgaPath } from "metabase/growth/utils/utils"
 
 type Card = Partial<BaseCard> & {
   id?: number | string;
@@ -114,13 +115,13 @@ export function newQuestion({
     creationType,
     query: objectId ? { objectId } : undefined,
   });
-
+  const isFga = isFgaPath()
   const entity = question.isDataset() ? "model" : "chart";
 
   if (mode) {
-    return url.replace(/^\/(chart|model)/, `/${entity}\/${mode}`);
+    return (isFga?"/growth":"") + url.replace(/^\/(chart|model)/, `/${entity}\/${mode}`);
   } else {
-    return url;
+    return (isFga?"/growth":"") + url;
   }
 }
 

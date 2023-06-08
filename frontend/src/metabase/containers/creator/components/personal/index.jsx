@@ -87,10 +87,17 @@ const Index = ({ router, user, data }) => {
             {String(userName.charAt(0)).toUpperCase()}
           </Avatar>
         )}
-        <div className="creator__personal-cell" >
+        <div className="creator__personal-cell">
           {userName && (
             <div style={{ display: "flex", alignItems: "center" }}>
-              <h3 style={{ WebkitBoxOrient: "vertical",color:isFga?'white':'#303440' }}>{userName}</h3>
+              <h3
+                style={{
+                  WebkitBoxOrient: "vertical",
+                  color: isFga ? "white" : "#303440",
+                }}
+              >
+                {userName}
+              </h3>
               <VipIcon
                 vipInfo={data.vipInfo}
                 isOwner={user?.id === get(data, "userInfo.metabaseId")}
@@ -117,7 +124,7 @@ const Index = ({ router, user, data }) => {
                   // { href: `mailto:${email}`, icon: "20220516201357.png" },
                 ]}
               />
-              {user?.id === get(data, "userInfo.metabaseId") && (
+              {user?.id === get(data, "userInfo.metabaseId") && !isFga && (
                 <div className="creator__personal-cell-buttons">
                   <Link
                     to="/account/profile"
@@ -133,7 +140,9 @@ const Index = ({ router, user, data }) => {
                       target="_blank"
                       onClick={() => trackStructEvent("creator click upgrade")}
                     >
-                      <Button type="primary" ghost>Upgrade</Button>
+                      <Button type="primary" ghost>
+                        Upgrade
+                      </Button>
                     </Link>
                   )}
                   {showSubscriptionCancelButton && (

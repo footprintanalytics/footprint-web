@@ -7,6 +7,7 @@ import Confirm from "./components/Confirm";
 import Prepare from "./components/Prepare";
 import Result from "./components/Result";
 import "./index.css";
+import { isFgaPath } from "metabase/growth/utils/utils"
 
 const Index = ({ router, user }) => {
   const [step, setStep] = useState(
@@ -15,9 +16,9 @@ const Index = ({ router, user }) => {
     // "RESULT",
   );
   const [prepareData, setPrepareData] = useState();
-
+  const isFga = isFgaPath()
   return (
-    <div className="custom-upload">
+    <div className={`custom-upload`}>
       {step === "PREPARE" && (
         <Prepare
           onNext={prepareData => {

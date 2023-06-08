@@ -26,6 +26,7 @@ import Search from "antd/es/input/Search";
 import { debounce } from "lodash";
 import * as MetabaseAnalytics from "metabase/lib/analytics";
 import { sortMap } from "metabase/containers/dashboards/shared/config";
+import { isFgaPath } from "metabase/growth/utils/utils";
 
 const Index = ({
   router,
@@ -46,7 +47,7 @@ const Index = ({
   const isFavoritesTab = model === "favorite";
   const isMyTablesTab = model === "table";
   const isCreatorTabStyle = isCreator() && isOwnCreator;
-
+  const isFga = isFgaPath();
   const isCreatorAndOwner = () => {
     return isCreator() && router?.params?.name === user?.name;
   };
@@ -179,29 +180,37 @@ const Index = ({
             className="search__tabs-search"
           />
         )}
-        <div
-          className="ml1 p1 cursor-pointer"
-          onClick={() => {
-            setIsList(!isList);
-            const newState = !isList ? "list" : "grid";
-            trackStructEvent(`search click switch ${newState}`);
-            localStorage.setItem("creator-view-type", newState);
-          }}
-        >
-          <Tooltip tooltip={isList ? "Grid view" : "List view"}>
-            <Icon
-              name={isList ? "switch_list" : "switch_grid"}
-              size={20}
-              color={"#A6AABE"}
-            />
-          </Tooltip>
-        </div>
+        {!isFga && (
+          <div
+            className="ml1 p1 cursor-pointer"
+            onClick={() => {
+              setIsList(!isList);
+              const newState = !isList ? "list" : "grid";
+              trackStructEvent(`search click switch ${newState}`);
+              localStorage.setItem("creator-view-type", newState);
+            }}
+          >
+            <Tooltip tooltip={isList ? "Grid view" : "List view"}>
+              <Icon
+                name={isList ? "switch_list" : "switch_grid"}
+                size={20}
+                color={"#A6AABE"}
+              />
+            </Tooltip>
+          </div>
+        )}
       </div>
     );
   };
 
   return (
-    <div className={cx("search__tabs relative", { "creator__tabs": isCreatorTabStyle }, className)}>
+    <div
+      className={cx(
+        "search__tabs relative",
+        { creator__tabs: isCreatorTabStyle },
+        className,
+      )}
+    >
       <Tabs
         key={data ? Object.keys(data).join(",") : ""}
         activeKey={model}

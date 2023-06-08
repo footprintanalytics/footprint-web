@@ -12,10 +12,10 @@ import GaSidebar from "./GaSidebar";
 
 const GaLayout = props => {
   const pathname = location.pathname;
-  const isChart = pathname.includes("/growth/chart");
+  const isHideSidebar = pathname.includes("/growth/chart")||pathname.includes("/growth/dashboard/");
   return (
     <StateProvider>
-      <LayoutView {...props} isChart={isChart} />
+      <LayoutView {...props} isChart={isHideSidebar} />
     </StateProvider>
   );
 };

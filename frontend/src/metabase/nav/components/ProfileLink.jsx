@@ -70,7 +70,7 @@ function ProfileLink({ user, adminItems, onLogout, trigger }) {
       {
         title: t`Submit Contract`,
         icon: null,
-        link: "/submit/contract",
+        link: `${isFga?'/growth':''}/submit/contract`,
         event: `Navbar;Profile Dropdown;Submit Contract`,
       },
       admin && {

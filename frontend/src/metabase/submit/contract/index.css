@@ -18,6 +18,10 @@
   background-color: var(--color-bg-dark);
 }
 
+.dark .SubmitContract span,p {
+  color: #ffffffb0;
+}
+
 .dark .SubmitContract__add p {
   color: #ffffffb0;
 }

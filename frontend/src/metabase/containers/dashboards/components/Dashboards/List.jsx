@@ -1,5 +1,5 @@
 /* eslint-disable react/prop-types */
-import { Pagination, Skeleton, Table } from "antd";
+import {  Pagination, Skeleton, Table } from "antd";
 import React, { useState } from "react";
 import { useQuery } from "react-query";
 import {
@@ -34,7 +34,7 @@ import getListColumns from "./getListColums";
 import getListColumnsCommonPage from "./getListColumsCommonPage";
 import getListQueryParams from "./getListQueryParams";
 import "../../../explore/index.css";
-import { isFgaPath } from "metabase/growth/utils/utils"
+import { isFgaPath } from "metabase/growth/utils/utils";
 
 const List = ({
   router,
@@ -96,7 +96,7 @@ const List = ({
     },
     { ...QUERY_OPTIONS, retry: 0 },
   );
-  const isFga = isFgaPath()
+  const isFga = isFgaPath();
   const device = useDeviceInfo();
   const showHeader = device.isPC;
 
@@ -173,8 +173,8 @@ const List = ({
         columns={columns}
         rowClassName={(record, index) => {
           return index % 2 === 1
-            ?`dashboards__table-columns-odd${isFga&&'-dark'}`
-            : `dashboards__table-columns-even${isFga&&'-dark'}`;
+            ? `dashboards__table-columns-odd${isFga && "-dark"}`
+            : `dashboards__table-columns-even${isFga && "-dark"}`;
         }}
         pagination={pagination}
         showHeader={showHeader}
@@ -205,62 +205,64 @@ const List = ({
 
   return (
     <>
-      {isSearch() && data?.isFeature && <NoData />}
-      {isSearch() && data?.isFeature && (
-        <div className="dashboards__recommend">Recommend</div>
-      )}
-      {isProtocol() && data?.total && (
-        <div className="dashboards__more-relevant-dashboard">
-          More Relevant Dashboard
-        </div>
-      )}
-      {isList ? renderTable() : renderGrid()}
-      <div />
-      <DashboardCopyModal
-        isOpen={!!dashboardCopyModal.id}
-        onClose={() => setDashboardCopyModal({})}
-        dashboardId={dashboardCopyModal.id}
-        dashboard={{
-          name: dashboardCopyModal.name,
-          description: dashboardCopyModal.description,
-        }}
-        fromRoute={false}
-      />
-      <QueryCopyModal
-        open={!!cardCopyModal.id}
-        cardId={cardCopyModal.id}
-        name={cardCopyModal.name}
-        description={cardCopyModal.description}
-        onClose={() => setCardCopyModal({})}
-      />
-      <ShareModal
-        resource={shareModalResource}
-        onAfterChangePublicUuid={({ newUuid }) => {
-          if (!newUuid) {
-            refetch();
-            setShareModalResource({});
-          }
-        }}
-        onClose={() => setShareModalResource({})}
-      />
-      {seoTaggingModal.id && (
-        <TaggingModal
-          onClose={() => setSeoTaggingModal({})}
-          id={seoTaggingModal.id}
-          name={seoTaggingModal.name}
-          creatorId={seoTaggingModal.creatorId}
-          type="dashboard"
+
+        {isSearch() && data?.isFeature && <NoData />}
+        {isSearch() && data?.isFeature && (
+          <div className="dashboards__recommend">Recommend</div>
+        )}
+        {isProtocol() && data?.total && (
+          <div className="dashboards__more-relevant-dashboard">
+            More Relevant Dashboard
+          </div>
+        )}
+        {isList ? renderTable() : renderGrid()}
+        <div />
+
+        <DashboardCopyModal
+          isOpen={!!dashboardCopyModal.id}
+          onClose={() => setDashboardCopyModal({})}
+          dashboardId={dashboardCopyModal.id}
+          dashboard={{
+            name: dashboardCopyModal.name,
+            description: dashboardCopyModal.description,
+          }}
+          fromRoute={false}
         />
-      )}
-      {homePriorityModal.id && (
-        <HomePriorityModal
-          onClose={() => setHomePriorityModal({})}
-          onSuccess={() => refetch()}
-          id={homePriorityModal.id}
-          name={homePriorityModal.name}
-          type="dashboard"
+        <QueryCopyModal
+          open={!!cardCopyModal.id}
+          cardId={cardCopyModal.id}
+          name={cardCopyModal.name}
+          description={cardCopyModal.description}
+          onClose={() => setCardCopyModal({})}
         />
-      )}
+        <ShareModal
+          resource={shareModalResource}
+          onAfterChangePublicUuid={({ newUuid }) => {
+            if (!newUuid) {
+              refetch();
+              setShareModalResource({});
+            }
+          }}
+          onClose={() => setShareModalResource({})}
+        />
+        {seoTaggingModal.id && (
+          <TaggingModal
+            onClose={() => setSeoTaggingModal({})}
+            id={seoTaggingModal.id}
+            name={seoTaggingModal.name}
+            creatorId={seoTaggingModal.creatorId}
+            type="dashboard"
+          />
+        )}
+        {homePriorityModal.id && (
+          <HomePriorityModal
+            onClose={() => setHomePriorityModal({})}
+            onSuccess={() => refetch()}
+            id={homePriorityModal.id}
+            name={homePriorityModal.name}
+            type="dashboard"
+          />
+        )}
     </>
   );
 };

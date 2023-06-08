@@ -127,6 +127,26 @@ export const getRoutes = store => (
         }
         done();
       }}
+      onChange={(prevState, nextState, replace) => {
+        let { pathname: prevPathname } = prevState.location;
+        if (!prevPathname.startsWith("/")) {
+          prevPathname = "/" + prevPathname;
+        }
+        let { pathname: nextPathname, hash, search } = nextState.location;
+        if (!nextPathname.startsWith("/")) {
+          nextPathname = "/" + nextPathname;
+        }
+        if (
+          prevPathname.startsWith("/growth") &&
+          !nextPathname.startsWith("/growth")
+        ) {
+          console.log("Route replace ",nextPathname, ` --> /growth${nextPathname}${search}${hash}`);
+          replace(`/growth${nextPathname}${search}${hash}`);
+        }
+        if (prevPathname !== nextPathname) {
+          trackPageView(nextPathname, "Change");
+        }
+      }}
     >
       <Route path="/" component={LazyLoad.About}>
         {/*<IndexRedirect to="/about" />*/}
@@ -438,8 +458,21 @@ export const getRoutes = store => (
         />
       </Route>
       {/* ----------- Growth Analytics 👇 --------- */}
-
-      <Route title={t`Creator`} path="/growth/@:name" component={LazyLoad.Creator} />
+      <Route
+          path="/growth/dashboard/:slug"
+          title={t`Dashboard`}
+          component={LazyLoad.DashboardApp}
+        >
+          <ModalRoute path="move" modal={LazyLoad.DashboardMoveModal} />
+          <ModalRoute path="copy" modal={LazyLoad.DashboardCopyModal} />
+          <ModalRoute path="archive" modal={LazyLoad.ArchiveDashboardModal} />
+          <ModalRoute path="details" modal={LazyLoad.DashboardDetailsModal} />
+        </Route>
+      <Route
+        title={t`Creator`}
+        path="/growth/@:name"
+        component={LazyLoad.Creator}
+      />
       <Route
         title={t`Dashboard`}
         path="/growth/@:name/:dashboardName"
@@ -541,8 +574,20 @@ export const getRoutes = store => (
       <Route
         title={t`Submit Contract`}
         path="/growth/submit/contract/add"
-        component={LazyLoad.SubmitContractAdd}
+        component={LazyLoad.SubmitContractAddV2}
       />
+
+      <Route
+        title={t`Submit Contract`}
+        path="/growth/submit/contract"
+        component={LazyLoad.SubmitContract}
+      />
+      <Route
+        title={t`Submit Contract`}
+        path="/growth/submit/contract/success"
+        component={LazyLoad.SubmitContractSuccess}
+      />
+
       {/* ----------- Growth Analytics 👆 --------- */}
 
       <Route title={t`Question`} path="/chart" component={LazyLoad.Question}>
