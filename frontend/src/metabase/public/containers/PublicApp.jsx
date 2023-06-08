@@ -7,7 +7,7 @@ import PublicError from "metabase/public/components/PublicError";
 import cx from "classnames";
 import getThemeConfig from "metabase/theme-helper";
 import { ConfigProvider } from "antd";
-import { isDark } from "../../../../../resources/frontend_client/app/dist/public_components_widgets_EmbedModalContent_jsx.bundle.91ad8b8ea199aef7b63a";
+import { isDark } from "metabase/dashboard/components/utils/dark";
 
 const mapStateToProps = (state, props) => ({
   errorPage: state.app.errorPage,
