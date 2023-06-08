@@ -22,7 +22,7 @@ const WrapDashboard = props => {
   );
   useEffect(() => {
     if (!isLoading && data?.uuid) {
-      router.push({
+      router.replace({
         pathname: `/growth/public/dashboard/${data?.uuid}`,
         query: router?.location?.query,
       });

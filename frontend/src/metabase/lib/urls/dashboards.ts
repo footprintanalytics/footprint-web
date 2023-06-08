@@ -9,6 +9,7 @@ import { appendSlug, publicUrl } from "./utils";
 import { optionsToHashParams } from "metabase/public/lib/embed";
 
 import { get } from "lodash";
+import { isFgaPath } from "metabase/growth/utils/utils";
 
 export const newDashboard = (collectionId: CollectionId) =>
   `collection/${collectionId}/new_dashboard`;
@@ -35,11 +36,13 @@ export function dashboard(
   } else {
     path = appendSlug(dashboard.id, slugg(dashboard.name));
     const hash = stringifyHashOptions(options);
-    return hash ? `/dashboard/${path}#${hash}` : `/dashboard/${path}`;
+    return hash
+      ? `/dashboard/${path}#${hash}`
+      : `/dashboard/${path}`;
   }
 }
 
-export function dashboardUrl({ creator, uniqueName, unique_name } : Dashboard) {
+export function dashboardUrl({ creator, uniqueName, unique_name }: Dashboard) {
   const userName = get(creator, "name");
   const dashboardName = uniqueName || unique_name;
   return `@${userName}/${dashboardName}`;
@@ -56,13 +59,18 @@ export function embedDashboard(token: string) {
 }
 
 interface publicDashboardType {
-  uuid: string,
-  name: string,
-  search: string,
-  options: any,
+  uuid: string;
+  name: string;
+  search: string;
+  options: any;
 }
 
-export function publicDashboard({ uuid, name, search = "", options = null }: publicDashboardType) {
+export function publicDashboard({
+  uuid,
+  name,
+  search = "",
+  options = null,
+}: publicDashboardType) {
   const siteUrl = MetabaseSettings.get("site-url");
 
   return `${siteUrl}/${publicUrl({
@@ -73,22 +81,22 @@ export function publicDashboard({ uuid, name, search = "", options = null }: pub
 }
 
 interface guestDashboardType {
-  uuid: string,
-  name: string,
-  search: string,
-  uniqueName: string,
-  options: any,
-  creator: any,
+  uuid: string;
+  name: string;
+  search: string;
+  uniqueName: string;
+  options: any;
+  creator: any;
 }
 
 export function guestDashboard({
-   uuid,
-   name,
-   search = "",
-   options = null,
-   uniqueName,
-   creator,
- }: guestDashboardType) {
+  uuid,
+  name,
+  search = "",
+  options = null,
+  uniqueName,
+  creator,
+}: guestDashboardType) {
   const siteUrl = `${MetabaseSettings.get("site-url")}`;
   // @ts-ignore
   return `${siteUrl}/${dashboardUrl({

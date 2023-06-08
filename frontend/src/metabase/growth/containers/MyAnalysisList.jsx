@@ -9,7 +9,7 @@ import { createModalShowAction } from "metabase/redux/control";
 const MyAnalysisList = props => {
   const { router, location, children, user, project, setCreateModalShow } =
     props;
-
+  router.params.name = user?.name;
   const [messageApi, contextHolder] = message.useMessage();
 
   const [modal, modalContextHolder] = Modal.useModal();

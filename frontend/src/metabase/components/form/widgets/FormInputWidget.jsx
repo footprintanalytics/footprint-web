@@ -34,6 +34,7 @@ const FormInputWidget = forwardRef(function FormInputWidget(
     <Input
       {...formDomOnlyProps(field)}
       type={type}
+      style={{backgroundColor:!'white',border:!'1px solid #dcdee4'} }
       placeholder={placeholder}
       aria-labelledby={`${field.name}-label`}
       readOnly={readOnly}
