@@ -7,6 +7,11 @@
   cursor: pointer;
   margin: 0 10px;
 }
+
+.dash-card__download-button {
+  border: 0 !important;
+  padding: 0 !important;
+}
 .dash-card__button-normal {
   display: none;
   position: relative;

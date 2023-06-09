@@ -43,11 +43,13 @@ import {
   getDefaultDashboardPara,
   getFirstAddressByPriory,
 } from "metabase/growth/utils/utils";
-import { cons } from "cljs/cljs.core";
 import { canShowDarkMode } from "metabase/dashboard/components/utils/dark";
 import EmbedFrame from "../components/EmbedFrame";
-import { trackStructEvent } from "metabase/lib/analytics";
 import Button from "metabase/core/components/Button/Button";
+import { loginModalShowAction } from "metabase/redux/control";
+import QueryCopyModal from "metabase/components/QueryCopyModal";
+import { getUser } from "metabase/selectors/user";
+import { replaceTemplateCardUrl } from "metabase/guest/utils";
 
 const mapStateToProps = (state, props) => {
   const parameters = getParameters(state, props);
@@ -210,6 +212,7 @@ const mapStateToProps = (state, props) => {
     slowCards: getSlowCards(state, props),
     parameters: parameters,
     parameterValues: parameterValues,
+    user: getUser(state),
   };
 };
 
@@ -218,10 +221,18 @@ const mapDispatchToProps = {
   fetchDatabaseMetadata,
   setErrorPage,
   onChangeLocation: push,
+  setLoginModalShow: loginModalShowAction,
 };
 
 // NOTE: this should use DashboardData HoC
 class PublicDashboard extends Component {
+  constructor() {
+    super();
+    this.state = {
+      cardId: "",
+      cardName: "",
+    };
+  }
   _fetchDashboardCardData = debounce(
     () => {
       this.props.fetchDashboardCardData({ reload: false, clear: true });
@@ -311,6 +322,31 @@ class PublicDashboard extends Component {
         }}
       />
     );
+  };
+
+  duplicateAction = async item => {
+    if (this.props.user) {
+      this.setState({
+        cardId: item.id,
+        cardName: item.name,
+      });
+    } else {
+      this.props.setLoginModalShow({
+        show: true,
+        from: "publicDashboard_query_duplicate",
+      });
+    }
+  };
+
+  previewAction = (cardId) => {
+    if (this.props.user) {
+      replaceTemplateCardUrl(this.props, cardId);
+    } else {
+      this.props.setLoginModalShow({
+        show: true,
+        from: "publicDashboard_query_preview",
+      });
+    }
   };
 
   render() {
@@ -418,10 +454,22 @@ class PublicDashboard extends Component {
                 hideWatermark={dashboard && dashboard.hideWatermark}
                 chartStyle={chart_style}
                 isNightMode={shouldRenderAsNightMode}
+                duplicateAction={this.duplicateAction}
+                previewAction={this.previewAction}
               />
             )}
           </LoadingAndErrorWrapper>
           {showRefreshButton && !!dashboard && this.renderRefreshButton()}
+          <QueryCopyModal
+            open={this.state.cardId}
+            cardId={this.state.cardId}
+            name={this.state.cardName}
+            onClose={() =>
+              this.setState({
+                cardId: null,
+              })
+            }
+          />
         </>
       </EmbedFrame>
     );
