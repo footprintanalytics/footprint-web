@@ -128,11 +128,12 @@ export const getRoutes = store => (
         done();
       }}
       onChange={(prevState, nextState, replace) => {
+        console.log("Route replace onChange ",{prevState, nextState})
         let { pathname: prevPathname } = prevState.location;
         if (!prevPathname.startsWith("/")) {
           prevPathname = "/" + prevPathname;
         }
-        let { pathname: nextPathname, hash, search } = nextState.location;
+        let { pathname: nextPathname } = nextState.location;
         if (!nextPathname.startsWith("/")) {
           nextPathname = "/" + nextPathname;
         }
@@ -140,11 +141,8 @@ export const getRoutes = store => (
           prevPathname.startsWith("/growth") &&
           !nextPathname.startsWith("/growth")
         ) {
-          console.log("Route replace ",nextPathname, ` --> /growth${nextPathname}${search}${hash}`);
-          replace(`/growth${nextPathname}${search}${hash}`);
-        }
-        if (prevPathname !== nextPathname) {
-          trackPageView(nextPathname, "Change");
+          nextState.location.pathname = `/growth${nextPathname}`
+          replace(nextState.location)
         }
       }}
     >

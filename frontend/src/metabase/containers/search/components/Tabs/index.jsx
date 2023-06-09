@@ -190,7 +190,7 @@ const Index = ({
             className="search__tabs-search"
           />
         )}
-        {/* {isFga && (
+        {isFga && (
           <Button
             className="ml1 text-center"
             type="primary"
@@ -200,7 +200,7 @@ const Index = ({
           >
             Create
           </Button>
-        )} */}
+        )}
         {!isFga && (
           <div
             className="ml1 p1 cursor-pointer"

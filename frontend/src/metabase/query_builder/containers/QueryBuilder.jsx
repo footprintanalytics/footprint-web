@@ -433,7 +433,7 @@ function QueryBuilder(props) {
   useEffect(() => {
     if (previousLocation && location !== previousLocation) {
       console.log("useEffect locationChanged = ", location, previousLocation,params);
-      // locationChanged(previousLocation, location, params);
+      locationChanged(previousLocation, location, params);
     }
   }, [location, params, previousLocation, locationChanged]);
 
