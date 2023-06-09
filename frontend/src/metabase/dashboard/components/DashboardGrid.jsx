@@ -70,6 +70,7 @@ class DashboardGrid extends Component {
     user: PropTypes.any,
 
     hideWatermark: PropTypes.bool,
+    allLoad: PropTypes.bool,
   };
 
   static defaultProps = {
@@ -292,18 +293,7 @@ class DashboardGrid extends Component {
   };
 
   renderDashCard(dc, { isMobile, gridItemWidth, totalNumGridCols }) {
-    return (
-      <LazyLoad
-        className="full-height"
-        // unmountIfInvisible
-        placeholder={
-          <div style={{ padding: 20 }}>
-            <Skeleton active />
-          </div>
-        }
-        // offset={500}
-        scrollContainer="#html2canvas-Dashboard"
-      >
+    const view = (
       <DashCard
         dashcard={dc}
         headerIcon={this.getDashboardCardIcon(dc)}
@@ -345,6 +335,23 @@ class DashboardGrid extends Component {
         user={this.props.user}
         refreshCardData={this.props.refreshCardData}
       />
+    )
+    if (this.props.allLoad) {
+      return view;
+    }
+    return (
+      <LazyLoad
+        className="full-height"
+        // unmountIfInvisible
+        placeholder={
+          <div style={{ padding: 20 }}>
+            <Skeleton active />
+          </div>
+        }
+        // offset={500}
+        scrollContainer="#html2canvas-Dashboard"
+      >
+        {view}
       </LazyLoad>
     );
   }
