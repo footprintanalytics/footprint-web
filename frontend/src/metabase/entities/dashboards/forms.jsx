@@ -17,6 +17,7 @@ function createNameField() {
     autoFocus: true,
     validate: validate.required().checkDashboardTitle(),
     normalize: name => formatDashboardChartSaveTitle(name),
+    lightMode: true,
   };
 }
 

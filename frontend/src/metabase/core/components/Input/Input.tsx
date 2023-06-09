@@ -34,6 +34,7 @@ export interface InputProps extends InputAttributes {
   subtitle?: string;
   onLeftIconClick?: (event: MouseEvent<HTMLButtonElement>) => void;
   onRightIconClick?: (event: MouseEvent<HTMLButtonElement>) => void;
+  lightMode?: boolean;
 }
 
 const Input = forwardRef(function Input(
@@ -51,6 +52,7 @@ const Input = forwardRef(function Input(
     onLeftIconClick,
     onRightIconClick,
     subtitle,
+    lightMode,
     ...props
   }: InputProps,
   ref: Ref<HTMLDivElement>,
@@ -70,7 +72,7 @@ const Input = forwardRef(function Input(
         fieldSize={size}
         hasError={error}
         fullWidth={fullWidth}
-        isDark={isDark()}
+        isDark={!lightMode && isDark()}
         hasSubtitle={Boolean(subtitle)}
         hasLeftIcon={Boolean(leftIcon)}
         hasRightIcon={Boolean(rightIcon)}

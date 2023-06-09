@@ -6,7 +6,7 @@ import validate from "metabase/lib/validate";
 import { PLUGIN_CACHING } from "metabase/plugins";
 
 const FORM_FIELDS = [
-  { name: "name", title: t`Name`, validate: validate.required() },
+  { name: "name", title: t`Name`, validate: validate.required(), lightMode: true },
   {
     name: "description",
     title: t`Description`,

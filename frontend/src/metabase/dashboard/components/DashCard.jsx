@@ -270,6 +270,8 @@ class DashCard extends Component {
     const isEmbedDisplay = mainCard.display === "embed";
     const isTableauDisplay = mainCard.display === "tableau";
 
+    const isResearch = window.location.pathname.startsWith("/research");
+
     const isAction = isActionCard(mainCard);
 
     const hideBackground =
@@ -295,7 +297,7 @@ class DashCard extends Component {
     //   mainCard.display === "image" ||
     //   mainCard.display === "video";
     const showEdit = isOwner && !!dashcard.card.id;
-    const isPublic = mode && mode.name === PublicMode.name;
+    const isPublic = window.location.pathname.startsWith("/public") || window.location.pathname.startsWith("/growth");
 
     const hideDuplicate = isTextDisplay || isImageDisplay || isVideoDisplay || isEmbedDisplay || isTableauDisplay;
 
@@ -424,9 +426,11 @@ class DashCard extends Component {
               isResultDirty: false,
             }) && (
               <QueryDownloadWidgetFP
-              className="html2canvas-filter dash-card__button"
-              card={dashcard.card}
-              result={result}
+                className="html2canvas-filter dash-card__button"
+                card={dashcard.card}
+                result={result}
+                iconColor={"#9AA0AF"}
+                buttonClassName="dash-card__download-button"
               />
             )
           }

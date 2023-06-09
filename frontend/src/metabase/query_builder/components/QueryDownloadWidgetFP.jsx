@@ -30,13 +30,14 @@ const QueryDownloadWidgetFP = ({
   iconColor = "#7A819B",
   params,
   visualizationSettings,
+  buttonClassName="Question-header-btn",
 }) => (
   <PopoverWithTrigger
     triggerElement={
       <Tooltip tooltip={t`Download full results`}>
         <Button
           onlyIcon
-          className="Question-header-btn"
+          className={cx(buttonClassName)}
           iconColor={iconColor}
           icon={icon}
           iconSize={16}
