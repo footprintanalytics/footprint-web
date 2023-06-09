@@ -14,12 +14,11 @@ const CreateCampaign = ({
   user,
   setLoginModalShowAction,
   setCreateFgaProjectModalShowAction,
-  project,
   projectDetails,
   plain,
 }) => {
   const onClickCreateCampaign = () => {
-    getGrowthProjectPath(project, "CreateCampaign");
+    getGrowthProjectPath(projectDetails?.protocolSlug, "CreateCampaign");
   };
   return (
     <>
@@ -42,8 +41,6 @@ const mapStateToProps = (state, props) => {
   return {
     user: getUser(state),
     projectDetails: getFgaProject(state),
-    project: props.params.project,
-    menu: props.params.menu,
   };
 };
 
