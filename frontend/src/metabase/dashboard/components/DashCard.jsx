@@ -299,7 +299,7 @@ class DashCard extends Component {
     const showEdit = isOwner && !!dashcard.card.id;
     const isPublic = window.location.pathname.startsWith("/public") || window.location.pathname.startsWith("/growth");
 
-    const hideDuplicate = isTextDisplay || isImageDisplay || isVideoDisplay || isEmbedDisplay || isTableauDisplay;
+    const hideDuplicate = isTextDisplay || isImageDisplay || isVideoDisplay || isEmbedDisplay || isTableauDisplay || isPublic;
 
     const hideWatermark =
       clearWatermark || isTextDisplay || isImageDisplay || isVideoDisplay || isEmbedDisplay || isTableauDisplay;
