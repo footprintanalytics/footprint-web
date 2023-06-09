@@ -128,7 +128,6 @@ export const getRoutes = store => (
         done();
       }}
       onChange={(prevState, nextState, replace) => {
-        console.log("Route replace onChange ",{prevState, nextState})
         let { pathname: prevPathname } = prevState.location;
         if (!prevPathname.startsWith("/")) {
           prevPathname = "/" + prevPathname;
@@ -475,6 +474,11 @@ export const getRoutes = store => (
         title={t`Dashboard`}
         path="/growth/@:name/:dashboardName"
         component={LazyLoad.WrapDashboard}
+      />
+      <Route
+        title={t`Dashboard`}
+        path="/growth/dashboard/@:name/:dashboardName"
+        component={LazyLoad.DashboardApp}
       >
         <ModalRoute
           title={t`Move`}

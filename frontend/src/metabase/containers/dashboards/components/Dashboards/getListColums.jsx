@@ -41,7 +41,7 @@ export default ({
   const getLink = record => {
     let link =
       record?.model === "dashboard" || record?.type === "dashboard"
-        ? Urls.dashboard(record)
+        ?`${Urls.dashboard(record)}#type=dashboard`
         : Urls.guestUrl(record);
     if (!link.startsWith("/")) {
       link = "/" + link;
