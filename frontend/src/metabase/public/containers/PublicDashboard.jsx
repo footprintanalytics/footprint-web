@@ -417,6 +417,11 @@ class PublicDashboard extends Component {
       });
     }
     const shouldRenderAsNightMode = isNightMode || canShowDarkMode(dashboard);
+
+    const { all_load } = {
+      ...parseHashOptions(location.hash),
+    };
+
     return (
       <EmbedFrame
         name={dashboard && dashboard.name}
@@ -456,6 +461,7 @@ class PublicDashboard extends Component {
                 isNightMode={shouldRenderAsNightMode}
                 duplicateAction={this.duplicateAction}
                 previewAction={this.previewAction}
+                allLoad={!!all_load}
               />
             )}
           </LoadingAndErrorWrapper>
