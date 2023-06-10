@@ -48,7 +48,7 @@ class EmbedFrame extends Component {
     } = this.props;
     const { innerScroll } = this.state;
 
-    const { bordered, titled, theme, hide_parameters, hide_download_button, bg_color } = {
+    const { bordered, titled, theme, hide_parameters, hide_download_button, bg_color, all_load } = {
       ...DEFAULT_OPTIONS,
       ...parseHashOptions(location.hash),
     };
@@ -63,7 +63,9 @@ class EmbedFrame extends Component {
     const name = titled && !hideTitle ? this.props.name : null;
 
     const backgroundColor = bg_color === "black" ? "black": "";
-    
+
+    const coverOverflowY = all_load ? {overflowY: "auto"} : {}
+
     return (
       <div
         id="html2canvas-Dashboard"
@@ -72,7 +74,7 @@ class EmbedFrame extends Component {
           "bordered rounded shadowed": bordered,
           [`Theme--${curTheme}`]: !!curTheme,
         })}
-        style={{ backgroundColor: backgroundColor }}
+        style={{ backgroundColor: backgroundColor, ...coverOverflowY }}
       >
         <div
           className={cx("flex flex-column flex-full relative", innerClassName, {
