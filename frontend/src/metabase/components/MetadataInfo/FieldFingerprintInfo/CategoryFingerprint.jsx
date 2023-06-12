@@ -71,7 +71,8 @@ export function CategoryFingerprint({
     }
   }, [fieldId, shouldFetchFieldValues, safeFetchFieldValues]);
 
-  const showDistinctCount = isLoading || distinctCount != null;
+  const showDistinctCount = false;
+  // const showDistinctCount = isLoading || distinctCount != null;
   const showFieldValuesBlock = isLoading || fieldValues.length > 0;
   const showComponent = showDistinctCount || showFieldValuesBlock;
 
