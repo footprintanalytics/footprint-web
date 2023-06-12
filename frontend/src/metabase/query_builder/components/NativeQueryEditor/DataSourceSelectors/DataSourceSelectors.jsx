@@ -38,6 +38,7 @@ const DatabaseSelectorPropTypes = {
 
 const SingleDatabaseNamePropTypes = {
   database: PropTypes.object,
+  name: PropTypes.string,
 };
 
 const TableSelectorPropTypes = {
@@ -110,7 +111,7 @@ const PopulatedDataSourceSelectors = ({
     );
   } else if (database) {
     dataSourceSelectors.push(
-      <SingleDatabaseName key="db" database={database} />,
+      <SingleDatabaseName key="db" name="Footprint" database={database} />,
     );
   }
 
@@ -156,8 +157,8 @@ const DatabaseSelector = ({
 
 DatabaseSelector.propTypes = DatabaseSelectorPropTypes;
 
-const SingleDatabaseName = ({ database }) => (
-  <div className="p2 text-bold text-grey">{database.name}</div>
+const SingleDatabaseName = ({ name, database }) => (
+  <div className="p2 text-bold text-grey">{name || database.name}</div>
 );
 
 SingleDatabaseName.propTypes = SingleDatabaseNamePropTypes;
