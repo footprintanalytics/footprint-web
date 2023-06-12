@@ -432,7 +432,6 @@ function QueryBuilder(props) {
 
   useEffect(() => {
     if (previousLocation && location !== previousLocation) {
-      console.log("useEffect locationChanged = ", location, previousLocation,params);
       locationChanged(previousLocation, location, params);
     }
   }, [location, params, previousLocation, locationChanged]);
@@ -495,7 +494,6 @@ function QueryBuilder(props) {
     );
   };
   if (uuid) {
-    console.log("rendering PublicQuestion uuid ");
     return <PublicQuestion {...props} uuid={uuid} />;
   }
 

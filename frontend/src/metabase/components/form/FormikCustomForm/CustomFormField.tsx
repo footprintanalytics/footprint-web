@@ -98,7 +98,6 @@ function RawCustomFormField(
 
   const hasCustomWidget = isCustomWidget(formField);
   const Widget = hasCustomWidget ? formField.widget : FormWidget;
-  console.log("hasCustomWidget", hasCustomWidget, formField,Widget);
 
   return (
     <FormField {...fieldProps}>

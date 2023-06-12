@@ -79,7 +79,6 @@ const DashboardCopyModalInner = ({
 
   const title = getTitle(dashboard, fpIsShallowCopy);
 
-  console.log("DashboardCopyModalInner", title);
   const renderModal = context => {
     return (
       showVip && (
