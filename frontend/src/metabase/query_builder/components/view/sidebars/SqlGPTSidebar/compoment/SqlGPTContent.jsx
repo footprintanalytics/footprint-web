@@ -115,7 +115,7 @@ const SqlGPTContent = ({
         onFinish={onFinish}
       >
         <Form.Item
-          label="Please describe your question and you will get the answer. e.g. How to query NFT OpenSea transactions last 7 days, grouped by each hour?"
+          label="Please describe your question and you will get the answer. e.g. How to query OpenSea NFT marketplace transactions last 7 days, grouped by each hour?"
           name="input"
           rules={[
             () => ({
