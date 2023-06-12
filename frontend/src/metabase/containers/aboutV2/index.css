@@ -486,24 +486,19 @@
 }
 
 .About__demo span {
-  font-size: 16px;
+  font-size: 14px;
   color: white;
   margin-top: 20px;
   line-height: 1.4;
 }
 
 .About__demo-growth-analytics {
+  max-width: 1440px;
   display: flex;
   flex-direction: row;
-  justify-content: space-between;
-  max-width: 1440px;
-  padding: 0 80px 0 0;
-  background-color: #182034ee;
-  background-image: url("https://static.footprint.network/home-v2/img_growth_analytics_bg.png?1=1");
-  background-size: 1236px 396px;
-  background-repeat: no-repeat;
-  background-position: bottom 0 center;
-  border-radius: 30px;
+  justify-content: center;
+  align-items: center;
+  margin: 40px 0;
 }
 
 .About__demo-growth-analytics-image {
@@ -519,25 +514,26 @@
 }
 
 .About__demo-bottom {
-  max-width: 1440px;
+  width: 1440px;
   display: flex;
   flex-direction: row;
   justify-content: center;
   align-items: center;
-  margin: 40px 0;
+  margin: 20px 0;
+  flex-wrap: wrap;
+  gap: 40px;
 }
 
 .About__demo-analytics-app {
   display: flex;
   flex-direction: column;
+  min-width: calc((100% - 100px) / 2);
   flex: 1;
-  margin: 0 20px 0 0;
   background-color: #182034ee;
-  padding: 120px 0 0 60px;
-  height: 860px;
+  padding: 80px 0 0 60px;
+  height: 700px;
   border-radius: 30px;
-  background-image: url("https://static.footprint.network/home-v2/img_analytics_app_bg.png");
-  background-size: 700px 862px;
+  background-size: 700px 700px;
   background-repeat: no-repeat;
   background-position: bottom center;
 }
@@ -548,11 +544,11 @@
   flex: 1;
   margin: 0 0 0 20px;
   background-color: #182034ee;
-  padding: 120px 0 0 60px;
-  height: 860px;
+  padding: 80px 0 0 60px;
+  height: 700px;
   border-radius: 30px;
-  background-image: url("https://static.footprint.network/home-v2/img_data_api_bg.png");
-  background-size: 700px 862px;
+  background-image: url("https://static.footprint.network/home-v2/img-demo-4-2.png");
+  background-size: 700px 700px;
   background-repeat: no-repeat;
   background-position: bottom center;
 }
@@ -1524,6 +1520,12 @@
 .About__granted-by ul li img {
   object-fit: cover;
   width: 100%;
+}
+
+@media screen and (--footprint-breakpoint-max-home-width) {
+  .About__demo-bottom {
+    width: 100%;
+  }
 }
 
 @media screen and (--footprint-breakpoint-max-pad) {
