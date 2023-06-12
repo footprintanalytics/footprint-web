@@ -208,7 +208,7 @@ const HomeFooter = props => {
                 itemType="http://www.schema.org/SiteNavigationElement"
               >
                 {n.items.map(item => (
-                  <li key={item.label} itemProp="name" className={cx("duke",{ "mt2": item.startNewPanel })}>
+                  <li key={item.label} itemProp="name" className={cx({ "mt2": item.startNewPanel })}>
                     {item.url.startsWith("mailto") ? (
                       <ExternalLink className="_" href={item.url}>
                         {item.label}
