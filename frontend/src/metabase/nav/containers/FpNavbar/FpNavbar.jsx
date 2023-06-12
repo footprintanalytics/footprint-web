@@ -88,35 +88,8 @@ const leftMenuData = [
     path: "/growth",
     auth: false,
   },
-  /*{
-    name: "Data API",
-    icon: "protocols",
-    menu: [
-      {
-        title: "Data API",
-        desc: "Unified API for Web3 developers",
-        link: "/data-api",
-      },
-      {
-        title: "BingoNFT",
-        desc: "A window into NFTs powered by Footprint Data API",
-        link: "https://nft.footprint.network/",
-        externalLink: true,
-      },
-      {
-        title: "Footrace",
-        desc: "A realtime alert platform powered by Footprint Data API",
-        link: "https://footrace.io/",
-        externalLink: true,
-      },
-    ],
-  },*/
-];
-
-const rightMenuData = [
-  // { url: "/moon-men", name: "Moon Men" },
   {
-    name: "Research",
+    name: "Research 🔥",
     icon: "protocols",
     menu: [
       {
@@ -133,6 +106,9 @@ const rightMenuData = [
       },
     ],
   },
+];
+
+const rightMenuData = [
   {
     name: "Data",
     icon: "protocols",
