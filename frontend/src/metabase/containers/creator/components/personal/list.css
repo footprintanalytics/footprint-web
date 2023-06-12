@@ -1,7 +1,10 @@
 .creator__wrap .search__tabs {
   width: 100% !important;
 }
-
+.my__analysis .search__tabs {
+  width: 100% !important;
+  max-width: 1120px !important;
+}
 .creator__wrap .search__content {
   margin-top: 0;
 }
