@@ -534,7 +534,7 @@ class FpNavbar extends Component {
           {leftMenuData.map((item, index) => {
             if (item.menu) {
               return (
-                <div className="relative" key={index}>
+                <div key={index}>
                   {this.renderNavEntityMenu({
                     item,
                     className: `text-brand-hover Nav__menu-item Nav__menu-item-color`,
