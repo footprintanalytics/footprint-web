@@ -89,9 +89,8 @@ const leftMenuData = [
     auth: false,
   },
   {
-    name: "Research",
+    name: "Research 🔥",
     icon: "protocols",
-    hot: true,
     menu: [
       {
         title: "NFT Research",
@@ -536,11 +535,6 @@ class FpNavbar extends Component {
             if (item.menu) {
               return (
                 <div className="relative" key={index}>
-                  <img
-                    className="Nav__menu-item-hot"
-                    src={getOssUrl("icon_hot.svg")}
-                    alt={`Hot`}
-                  />
                   {this.renderNavEntityMenu({
                     item,
                     className: `text-brand-hover Nav__menu-item Nav__menu-item-color`,

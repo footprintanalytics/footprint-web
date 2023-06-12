@@ -78,12 +78,6 @@
   margin: 0 16px;
 }
 
-.Nav__menu-item-hot {
-  position: absolute;
-  top: 20px;
-  right: -4px;
-}
-
 .Nav__menu-item svg {
   height: 16px;
 }
