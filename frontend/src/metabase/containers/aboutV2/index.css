@@ -1211,10 +1211,6 @@
   background-color: #121827;
 }
 
-.About .home-footer {
-  width: 1200px;
-}
-
 .About__social {
   display: flex;
   grid-column-gap: 12px;
