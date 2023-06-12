@@ -88,36 +88,10 @@ const leftMenuData = [
     path: "/growth",
     auth: false,
   },
-  /*{
-    name: "Data API",
-    icon: "protocols",
-    menu: [
-      {
-        title: "Data API",
-        desc: "Unified API for Web3 developers",
-        link: "/data-api",
-      },
-      {
-        title: "BingoNFT",
-        desc: "A window into NFTs powered by Footprint Data API",
-        link: "https://nft.footprint.network/",
-        externalLink: true,
-      },
-      {
-        title: "Footrace",
-        desc: "A realtime alert platform powered by Footprint Data API",
-        link: "https://footrace.io/",
-        externalLink: true,
-      },
-    ],
-  },*/
-];
-
-const rightMenuData = [
-  // { url: "/moon-men", name: "Moon Men" },
   {
     name: "Research",
     icon: "protocols",
+    hot: true,
     menu: [
       {
         title: "NFT Research",
@@ -133,6 +107,9 @@ const rightMenuData = [
       },
     ],
   },
+];
+
+const rightMenuData = [
   {
     name: "Data",
     icon: "protocols",
@@ -558,7 +535,12 @@ class FpNavbar extends Component {
           {leftMenuData.map((item, index) => {
             if (item.menu) {
               return (
-                <div key={index}>
+                <div className="relative" key={index}>
+                  <img
+                    className="Nav__menu-item-hot"
+                    src={getOssUrl("icon_hot.svg")}
+                    alt={`Hot`}
+                  />
                   {this.renderNavEntityMenu({
                     item,
                     className: `text-brand-hover Nav__menu-item Nav__menu-item-color`,
