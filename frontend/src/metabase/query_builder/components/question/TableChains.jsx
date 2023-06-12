@@ -59,6 +59,11 @@ const TableChains = props => {
         icon: getOssUrl("fp-chains/boba.webp"),
       },
       {
+        value: "cronos",
+        label: "Cronos",
+        icon: getOssUrl("fp-chains/cronos.webp"),
+      },
+      {
         value: "celo",
         label: "Celo",
         icon: getOssUrl("fp-chains/celo.webp"),
@@ -67,6 +72,11 @@ const TableChains = props => {
         value: "dfk",
         label: "DFK",
         icon: getOssUrl("fp-chains/dfk.webp"),
+      },
+      {
+        value: "doge",
+        label: "Doge",
+        icon: getOssUrl("fp-chains/doge.webp"),
       },
       {
         value: "eos",
@@ -94,6 +104,11 @@ const TableChains = props => {
         icon: getOssUrl("fp-chains/iotex.webp"),
       },
       {
+        value: "mch",
+        label: "MCH Verse",
+        icon: getOssUrl("fp-chains/mch_verse.webp"),
+      },
+      {
         value: "moonbeam",
         label: "Moonbeam",
         icon: getOssUrl("fp-chains/moonbeam.webp"),
@@ -107,6 +122,11 @@ const TableChains = props => {
         value: "oasys",
         label: "Oasys",
         icon: getOssUrl("fp-chains/oasys.webp"),
+      },
+      {
+        value: "ronin",
+        label: "Ronin",
+        icon: getOssUrl("fp-chains/ronin.webp"),
       },
       {
         value: "thundercore",
