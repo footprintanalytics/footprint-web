@@ -89,7 +89,7 @@
 }
 
 .home-footer-right-section ul li {
-  margin-bottom: 10px;
+  margin-bottom: 6px;
   cursor: pointer;
   color: var(--footprint-color-secondary-text2);
   /* font-size: 14px; */

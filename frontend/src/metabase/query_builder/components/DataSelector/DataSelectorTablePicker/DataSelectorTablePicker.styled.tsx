@@ -6,7 +6,7 @@ import { space } from "metabase/styled-components/theme";
 
 export const DataSelectorTablePickerContainer = styled.div`
   overflow-y: auto;
-  width: 300px;
+  width: 360px;
 `;
 
 export const DataSelectorTablePickerHeaderContainer = styled.div`
