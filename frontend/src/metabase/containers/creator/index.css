@@ -8,7 +8,16 @@
 .creator__wrap .search__wrap {
   width: 1120px;
 }
-
+.my__analysis {
+  width: 100%;
+}
+.my__analysis .search__wrap {
+  width: 100%!important ;
+  max-width: 1120px!important ;
+}
+.my__analysis .search__tabs {
+  width: 100%!important ;
+}
 .creator__wrap .explore__list {
   padding: 0;
 }

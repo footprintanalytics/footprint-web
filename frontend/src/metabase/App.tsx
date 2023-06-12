@@ -150,6 +150,7 @@ function App({
               {/*<AppBanner />*/}
               {/*{isAppBarVisible && <AppBar isNavBarVisible={isNavBarVisible} />}*/}
               <AppContentContainer
+                // className={ "dark"}
                 className={isDark() ? "dark" : ""}
                 isAdminApp={isAdminApp}
               >

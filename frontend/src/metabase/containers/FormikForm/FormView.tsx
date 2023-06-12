@@ -15,7 +15,6 @@ function FormView<Values extends BaseFieldValues>(
 ) {
   const FormComponent =
     props.formComponent || (props.children ? CustomForm : StandardForm);
-
   return <FormComponent {...props} />;
 }
 

@@ -12,6 +12,7 @@ import { getPersonalCollectionId } from "metabase/lib/collection";
 import { getUserCreateQueryPermission } from "metabase/selectors/user";
 import NeedPermissionModal from "metabase/components/NeedPermissionModal";
 import { getProject } from "metabase/lib/project_info";
+import { isFgaPath } from "metabase/growth/utils/utils"
 
 const QueryCopyModal = (props) => {
   return props.open ? <QueryCopyInnerModal {...props} /> : <React.Fragment />;
@@ -27,6 +28,7 @@ const QueryCopyInnerModal = ({
 }) => {
   const publicAnalyticPermission = user && user.publicAnalytic === "write";
   const [showVip, setShowVip] = useState(false);
+  console.log("QueryCopyInnerModal");
   return (
     <>
       <Modal onClose={onClose}>
@@ -65,7 +67,11 @@ const QueryCopyInnerModal = ({
           onSaved={async card => {
             if (card.id) {
               // onChangeLocation(Urls.question(card));
-              window.open(Urls.question(card));
+              let url = Urls.question(card);
+              if(isFgaPath()) {
+                url = url.startsWith('/') ?`/growth${url}`:`growth/${url}`;
+              }
+              window.open(url);
             } else {
               throw card;
             }

@@ -16,12 +16,14 @@ import { getCreatorQueryLink } from "metabase/containers/dashboards/shared/utils
 import { sortMap } from "metabase/containers/dashboards/shared/config";
 import NeedPermissionModal from "metabase/components/NeedPermissionModal";
 import getListQueryParams from "metabase/containers/search/components/MyTables/getListQueryParams";
+import { isFgaPath } from "metabase/growth/utils/utils";
 
 const Index = ({ router, user }) => {
   const isPaidUser = user && user.vipInfo && user.vipInfo.type !== "free";
   const params = getListQueryParams(router.location.query);
   const device = useDeviceInfo();
   const showHeader = device.isPC;
+  const isFga = isFgaPath();
   const [showVip, setShowVip] = useState(false);
 
   const [open, setOpen] = useState({});
@@ -29,9 +31,9 @@ const Index = ({ router, user }) => {
   const handleOk = async () => {
     setConfirmLoading(true);
     await setTableBelongType({
-      "tableId": open.tableId,
-      "belongType": open.belongType === "private" ? "public" : "private"
-    })
+      tableId: open.tableId,
+      belongType: open.belongType === "private" ? "public" : "private",
+    });
     await refetch();
     setOpen({ open: false });
     setConfirmLoading(false);
@@ -60,18 +62,17 @@ const Index = ({ router, user }) => {
     return <NoData />;
   }
 
-
   const setTableType = async ({ tableId, belongType }) => {
     if (!isPaidUser) {
       setShowVip(true);
-      return ;
+      return;
     }
     setOpen({ open: true, tableId, belongType });
-  }
+  };
 
   const jumpToChart = ({ chartId }) => {
-    window.open(`/chart/${chartId}`);
-  }
+    window.open(`${isFga?'/growth':''}/chart/${chartId}`);
+  };
 
   const columns = getListColums({
     router,
@@ -99,8 +100,8 @@ const Index = ({ router, user }) => {
         showHeader={showHeader}
         rowClassName={(record, index) => {
           return index % 2 === 1
-            ? "dashboards__table-columns-odd"
-            : "dashboards__table-columns-even";
+            ? `dashboards__table-columns-odd${isFga && "-dark"}`
+            : `dashboards__table-columns-even${isFga && "-dark"}`;
         }}
         onChange={(pagination, filters, sorter, extra) => {
           const link = getCreatorQueryLink({
@@ -127,7 +128,9 @@ const Index = ({ router, user }) => {
         confirmLoading={confirmLoading}
         onCancel={handleCancel}
       >
-        <p>{`Do you set this data to ${open.belongType === "private" ? "public" : "private"} ?`}</p>
+        <p>{`Do you set this data to ${
+          open.belongType === "private" ? "public" : "private"
+        } ?`}</p>
       </Modal>
     </>
   );

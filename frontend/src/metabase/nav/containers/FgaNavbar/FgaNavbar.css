@@ -215,7 +215,7 @@
 }
 
 .dark .fga-Nav {
-  background-color: #121828;
+  background-color: var(--color-bg-dark);
   border-bottom: 1px var(--color-border-dark) solid;
 }
 

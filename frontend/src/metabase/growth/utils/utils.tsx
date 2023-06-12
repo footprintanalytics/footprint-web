@@ -286,6 +286,10 @@ export async function getDashboardDatas(uuid: string) {
   return datas;
 }
 
+export function isFgaPath(){
+  return location.pathname.includes("/growth");
+}
+
 export function getGrowthProjectPath(project: string, menu?: string) {
   return `/growth/project/${project}/${menu ?? ""}`;
 }

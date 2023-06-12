@@ -27,7 +27,7 @@ export default connect(mapStateToProps)(ProfileLink);
 function ProfileLink({ user, adminItems, onLogout, trigger }) {
   const [modalOpen, setModalOpen] = useState(null);
   // const [bugReportDetails, setBugReportDetails] = useState(null);
-
+  const isFga = location.pathname.includes("/growth");
   const openModal = modalName => {
     setModalOpen(modalName);
   };
@@ -52,16 +52,16 @@ function ProfileLink({ user, adminItems, onLogout, trigger }) {
       {
         title: t`My Profile`,
         icon: null,
-        link: Urls.myProfileUrl(userName),
+        link: `${isFga ? "/growth" : ""}${Urls.myProfileUrl(userName)}`,
         event: `Navbar;Profile Dropdown;My Profile`,
       },
-      {
+      !isFga && {
         title: t`Account settings`,
         icon: null,
         link: Urls.accountSettings(),
         event: `Navbar;Profile Dropdown;Edit Profile`,
       },
-      {
+      !isFga && {
         title: t`Moon men`,
         icon: null,
         link: "/moon-men",
@@ -70,7 +70,7 @@ function ProfileLink({ user, adminItems, onLogout, trigger }) {
       {
         title: t`Submit Contract`,
         icon: null,
-        link: "/submit/contract",
+        link: `${isFga ? "/growth" : ""}/submit/contract`,
         event: `Navbar;Profile Dropdown;Submit Contract`,
       },
       admin && {
@@ -123,7 +123,7 @@ function ProfileLink({ user, adminItems, onLogout, trigger }) {
     ].filter(Boolean);
   };
 
-/*  useEffect(() => {
+  /*  useEffect(() => {
     const isAdmin = user?.is_superuser;
     if (isAdmin && MetabaseSettings.isPaidPlan()) {
       UtilApi.bug_report_details().then(setBugReportDetails);

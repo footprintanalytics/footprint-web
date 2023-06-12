@@ -11,6 +11,7 @@ import { loginModalShowAction } from "metabase/redux/control";
 import { getUser } from "metabase/selectors/user";
 import { isDefi360 } from "metabase/lib/project_info";
 import * as Urls from "metabase/lib/urls";
+import { isFgaPath } from "metabase/growth/utils/utils"
 
 const Profile = props => {
   const { user, setLoginModalShow, onChangeLocation } = props;
@@ -30,7 +31,7 @@ const Profile = props => {
     {
       title: "Create\nDashboard",
       background: "#7155FF",
-      action: `${isDefi360() ? "/defi360" : ""}/dashboard/new`,
+      action: `${isFgaPath() ? "/growth" : ""}/dashboard/new`,
       icon: "create_dashboard",
     },
   ];
@@ -95,7 +96,7 @@ const Profile = props => {
                   {item.title}
                 </div>
               </div>
-            );
+            )
           })}
         </div>
         <div className="dashboards__profile-also">

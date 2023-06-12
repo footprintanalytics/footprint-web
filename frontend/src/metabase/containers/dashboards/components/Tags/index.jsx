@@ -12,6 +12,7 @@ import "./index.css";
 import Item from "./Item";
 // eslint-disable-next-line import/order
 import { uniq } from "lodash";
+import { isFgaPath } from "metabase/growth/utils/utils"
 
 const Tags = ({
   router,
@@ -21,7 +22,7 @@ const Tags = ({
   searchWords,
 }) => {
   const tags = getDashboardQueryTags(router.location.query.tags);
-
+  const isFga = isFgaPath();
   const getLinkProps = item => {
     const getLink = isSearch()
       ? getSearchDashboardQueryLink
@@ -36,7 +37,7 @@ const Tags = ({
   };
 
   return (
-    <div className="dashboards__tags">
+    <div className={`dashboards__tags${isFga?'-dark':''}`}>
       {list.map((item, index) =>
         link ? (
           <Link key={item + index} {...getLinkProps(item)}>

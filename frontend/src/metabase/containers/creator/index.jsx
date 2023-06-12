@@ -16,10 +16,11 @@ import Meta from "metabase/components/Meta";
 import { getOssUrl } from "metabase/lib/image";
 import { ossPath } from "metabase/lib/ossPath";
 import { get } from "lodash";
+import { isFgaPath } from "metabase/growth/utils/utils"
 
 const Index = ({ router, user, params, userInfoDataApi }) => {
   const name = params?.name?.replace("@", "") || "";
-
+  const isFga = isFgaPath()
   if (name) {
     updateTitle(`@${name}`);
   }
@@ -75,7 +76,7 @@ const Index = ({ router, user, params, userInfoDataApi }) => {
           keywords={name}
         />
       )}
-      <div className="creator__wrap">
+      <div className="creator__wrap" style={{background:isFga?'#121728':'white'}}>
         <Personal router={router} user={user} data={data} />
         <List
           router={router}

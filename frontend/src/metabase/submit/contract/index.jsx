@@ -10,6 +10,7 @@ import { getContractSubmittedList, reviewContract } from "metabase/new-service";
 import Link from "metabase/core/components/Link";
 import ContractTable from "metabase/submit/contract/components/ContractTable";
 import LoadingSpinner from "metabase/components/LoadingSpinner/LoadingSpinner";
+import { isFgaPath } from "metabase/growth/utils/utils"
 
 const SubmitContract = props => {
 
@@ -142,7 +143,7 @@ const SubmitContract = props => {
               <Button
                 type="primary"
                 onClick={() => {
-                  props.router.push("/submit/contract/add");
+                  props.router.push(`${isFgaPath()?'/growth':''}/submit/contract/add`);
                 }}
               >
                 Add contract

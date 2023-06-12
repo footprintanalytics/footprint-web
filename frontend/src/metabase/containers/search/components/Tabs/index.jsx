@@ -1,6 +1,6 @@
 /* eslint-disable react/prop-types */
 /* eslint-disable react/display-name */
-import { Tabs } from "antd";
+import { Button, Tabs } from "antd";
 import React, { useState } from "react";
 import { connect } from "react-redux";
 import "./index.css";
@@ -10,6 +10,7 @@ import PageList from "../Page/Index";
 import CreatorList from "../Creator/Index";
 import DataSetList from "../DataSet/Index";
 import MyTables from "../MyTables/Index";
+import { createModalShowAction } from "metabase/redux/control";
 import cx from "classnames";
 import {
   getCreatorQueryLink,
@@ -26,6 +27,7 @@ import Search from "antd/es/input/Search";
 import { debounce } from "lodash";
 import * as MetabaseAnalytics from "metabase/lib/analytics";
 import { sortMap } from "metabase/containers/dashboards/shared/config";
+import { isFgaPath } from "metabase/growth/utils/utils";
 
 const Index = ({
   router,
@@ -35,6 +37,7 @@ const Index = ({
   name,
   className,
   setLoginModalShow,
+  setCreateModalShow,
   creatorViewType,
 }) => {
   const [isList, setIsList] = useState(creatorViewType === "list");
@@ -46,7 +49,7 @@ const Index = ({
   const isFavoritesTab = model === "favorite";
   const isMyTablesTab = model === "table";
   const isCreatorTabStyle = isCreator() && isOwnCreator;
-
+  const isFga = isFgaPath();
   const isCreatorAndOwner = () => {
     return isCreator() && router?.params?.name === user?.name;
   };
@@ -124,6 +127,14 @@ const Index = ({
       },
       show: isSearch(),
     },
+    // {
+    //   key: "create",
+    //   tab: "Create",
+    //   render: params => {
+    //     return null;
+    //   },
+    //   show: isFga&&isCreator(),
+    // },
   ];
 
   const showSwitchGraph = isCreator() && !isMyTablesTab;
@@ -179,29 +190,48 @@ const Index = ({
             className="search__tabs-search"
           />
         )}
-        <div
-          className="ml1 p1 cursor-pointer"
-          onClick={() => {
-            setIsList(!isList);
-            const newState = !isList ? "list" : "grid";
-            trackStructEvent(`search click switch ${newState}`);
-            localStorage.setItem("creator-view-type", newState);
-          }}
-        >
-          <Tooltip tooltip={isList ? "Grid view" : "List view"}>
-            <Icon
-              name={isList ? "switch_list" : "switch_grid"}
-              size={20}
-              color={"#A6AABE"}
-            />
-          </Tooltip>
-        </div>
+        {isFga && (
+          <Button
+            className="ml1 text-center"
+            type="primary"
+            onClick={() => {
+              setCreateModalShow({show: true})
+            }}
+          >
+            Create
+          </Button>
+        )}
+        {!isFga && (
+          <div
+            className="ml1 p1 cursor-pointer"
+            onClick={() => {
+              setIsList(!isList);
+              const newState = !isList ? "list" : "grid";
+              trackStructEvent(`search click switch ${newState}`);
+              localStorage.setItem("creator-view-type", newState);
+            }}
+          >
+            <Tooltip tooltip={isList ? "Grid view" : "List view"}>
+              <Icon
+                name={isList ? "switch_list" : "switch_grid"}
+                size={20}
+                color={"#A6AABE"}
+              />
+            </Tooltip>
+          </div>
+        )}
       </div>
     );
   };
 
   return (
-    <div className={cx("search__tabs relative", { "creator__tabs": isCreatorTabStyle }, className)}>
+    <div
+      className={cx(
+        "search__tabs relative",
+        { creator__tabs: isCreatorTabStyle },
+        className,
+      )}
+    >
       <Tabs
         key={data ? Object.keys(data).join(",") : ""}
         activeKey={model}
@@ -247,6 +277,7 @@ const mapStateToProps = state => {
 
 const mapDispatchToProps = {
   setLoginModalShow: loginModalShowAction,
+  setCreateModalShow: createModalShowAction,
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(Index);

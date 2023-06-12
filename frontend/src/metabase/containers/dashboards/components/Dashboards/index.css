@@ -87,6 +87,15 @@
   background: #ffffff;
 }
 
+
+.dashboards__table-columns-odd-dark {
+  background: #1d263e;
+}
+
+.dashboards__table-columns-even-dark {
+  background: #182034;
+}
+
 .dashboards__table .ant-table {
   border-radius: 4px;
   overflow: hidden;

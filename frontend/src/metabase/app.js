@@ -138,6 +138,7 @@ function _init(reducers, getRoutes, callback) {
       "/chart",
       "/chart/notebook",
       "/dashboard/new",
+      "/growth/dashboard/new",
     ].includes(location.pathname);
     const isEditing = store.getState().dashboard?.isEditing?.id;
     if (isEditPaths || isEditing) {

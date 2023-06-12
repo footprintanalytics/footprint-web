@@ -30,6 +30,7 @@ import UserTemplate from "./UserTemplate";
 import CohortList from "./CohortList";
 import Community from "./Community";
 import UserProfile from "./UserProfile";
+import MyAnalysisList from "./MyAnalysisList";
 import SocialConnectList from "./SocialConnectList";
 import "../css/index.css";
 
@@ -237,7 +238,12 @@ const Project = props => {
       )
     ) {
       return (
-        <MyAnalysis
+        // <MyAnalysis
+        //   location={location}
+        //   router={router}
+        //   project={getProjectObject()}
+        // />
+        <MyAnalysisList
           location={location}
           router={router}
           project={getProjectObject()}

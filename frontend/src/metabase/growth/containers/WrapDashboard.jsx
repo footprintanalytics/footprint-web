@@ -6,10 +6,12 @@ import { QUERY_OPTIONS } from "metabase/containers/dashboards/shared/config";
 import { getUser } from "metabase/selectors/user";
 import LoadingSpinner from "metabase/components/LoadingSpinner";
 import { dashboardIdInfo } from "metabase/new-service";
+import { parseHashOptions } from "metabase/lib/browser"
 
 const WrapDashboard = props => {
   const { router, location, children, user, name, dashboardName } = props;
-  console.log("WrapDashboard", name, dashboardName);
+  const type = parseHashOptions(location.hash).type;
+
   const { isLoading, data } = useQuery(
     ["dashboardIdInfo", name, dashboardName],
     async () => {
@@ -18,16 +20,23 @@ const WrapDashboard = props => {
         userName: name,
       });
     },
-    QUERY_OPTIONS,
+    {...QUERY_OPTIONS,enabled: type !== "dashboard"},
   );
   useEffect(() => {
     if (!isLoading && data?.uuid) {
-      router.push({
+      router.replace({
         pathname: `/growth/public/dashboard/${data?.uuid}`,
         query: router?.location?.query,
       });
     }
   }, [isLoading]);
+
+  if(type === "dashboard") {
+    location.pathname = location.pathname.replace("/growth", "/growth/dashboard");
+    console.log('WrapDashboard to dashboard',location);
+    router.replace(location);
+    return <></>
+  }
   return (
     <div className="flex flex-column items-center">
       <LoadingSpinner message="Loading..." />

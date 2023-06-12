@@ -251,7 +251,6 @@ function QueryBuilder(props) {
   const wasNativeEditorOpen = usePrevious(isNativeEditorOpen);
   const hasQuestion = question != null;
   const collectionId = question?.collectionId();
-
   const openModal = useCallback(
     (modal, modalContext, params = {}) => setUIControls({ modal, modalContext, ...params }),
     [setUIControls],

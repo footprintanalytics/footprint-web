@@ -127,6 +127,23 @@ export const getRoutes = store => (
         }
         done();
       }}
+      onChange={(prevState, nextState, replace) => {
+        let { pathname: prevPathname } = prevState.location;
+        if (!prevPathname.startsWith("/")) {
+          prevPathname = "/" + prevPathname;
+        }
+        let { pathname: nextPathname } = nextState.location;
+        if (!nextPathname.startsWith("/")) {
+          nextPathname = "/" + nextPathname;
+        }
+        if (
+          prevPathname.startsWith("/growth") &&
+          !nextPathname.startsWith("/growth")
+        ) {
+          nextState.location.pathname = `/growth${nextPathname}`
+          replace(nextState.location)
+        }
+      }}
     >
       <Route path="/" component={LazyLoad.About}>
         {/*<IndexRedirect to="/about" />*/}
@@ -439,9 +456,29 @@ export const getRoutes = store => (
       </Route>
       {/* ----------- Growth Analytics 👇 --------- */}
       <Route
+          path="/growth/dashboard/:slug"
+          title={t`Dashboard`}
+          component={LazyLoad.DashboardApp}
+        >
+          <ModalRoute path="move" modal={LazyLoad.DashboardMoveModal} />
+          <ModalRoute path="copy" modal={LazyLoad.DashboardCopyModal} />
+          <ModalRoute path="archive" modal={LazyLoad.ArchiveDashboardModal} />
+          <ModalRoute path="details" modal={LazyLoad.DashboardDetailsModal} />
+        </Route>
+      <Route
+        title={t`Creator`}
+        path="/growth/@:name"
+        component={LazyLoad.Creator}
+      />
+      <Route
         title={t`Dashboard`}
         path="/growth/@:name/:dashboardName"
         component={LazyLoad.WrapDashboard}
+      />
+      <Route
+        title={t`Dashboard`}
+        path="/growth/dashboard/@:name/:dashboardName"
+        component={LazyLoad.DashboardApp}
       >
         <ModalRoute
           title={t`Move`}
@@ -499,6 +536,9 @@ export const getRoutes = store => (
         path="/growth/chart"
         component={LazyLoad.Question}
       >
+        {/* <IndexRoute component={Question} /> */}
+        {/* NEW QUESTION FLOW */}
+        {/* <Route path="new" title={t`New query`} component={NewQueryOptions} /> */}
         <Route
           title={t`Custom Upload`}
           path="custom-upload"
@@ -536,8 +576,20 @@ export const getRoutes = store => (
       <Route
         title={t`Submit Contract`}
         path="/growth/submit/contract/add"
-        component={LazyLoad.SubmitContractAdd}
+        component={LazyLoad.SubmitContractAddV2}
       />
+
+      <Route
+        title={t`Submit Contract`}
+        path="/growth/submit/contract"
+        component={LazyLoad.SubmitContract}
+      />
+      <Route
+        title={t`Submit Contract`}
+        path="/growth/submit/contract/success"
+        component={LazyLoad.SubmitContractSuccess}
+      />
+
       {/* ----------- Growth Analytics 👆 --------- */}
 
       <Route title={t`Question`} path="/chart" component={LazyLoad.Question}>

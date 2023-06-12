@@ -11,9 +11,11 @@ import "../css/index.css";
 import GaSidebar from "./GaSidebar";
 
 const GaLayout = props => {
+  const pathname = location.pathname;
+  const isHideSidebar = pathname.includes("/growth/chart")||pathname.includes("/growth/dashboard/");
   return (
     <StateProvider>
-      <LayoutView {...props} />
+      <LayoutView {...props} isChart={isHideSidebar} />
     </StateProvider>
   );
 };
@@ -44,10 +46,10 @@ const LayoutView = props => {
         }`}
         style={{ backgroundColor: "#121828" }}
       >
-        <GaSidebar />
+        {!props.isChart && <GaSidebar />}
         <Content
           className="h-full ga-layout__content"
-          style={{ marginLeft: 250 }}
+          style={{ marginLeft: props.isChart ? 0 : 250 }}
         >
           {props.children}
         </Content>
