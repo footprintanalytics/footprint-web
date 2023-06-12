@@ -150,7 +150,7 @@ const CohortList = props => {
             props.router?.push({
               pathname: getGrowthProjectPath(
                 props.router?.params?.project,
-                "Potential Users",
+                "members",
               ),
             })
           }

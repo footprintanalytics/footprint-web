@@ -9,8 +9,12 @@ import {
   Input,
   Typography,
   Divider,
+  Upload,
 } from "antd";
+import { UploadOutlined } from "@ant-design/icons";
 import { connect } from "react-redux";
+import SplitLine from "metabase/components/SplitLine";
+import Papa from "papaparse";
 import { CreateFgaCohortByAddress } from "metabase/new-service";
 import {
   checkIsNeedContactUs,
@@ -36,6 +40,7 @@ const UploadWallets = ({
   const [isCohortModalOpen, setCohortModalOpen] = useState(false);
   const [loading, setLoading] = useState(false);
   const [cohortName, setCohortName] = useState();
+  const [pasteValue, setPasteValue] = useState("");
   const [walletList, setWalletList] = useState([]);
 
   const onSend = async () => {
@@ -117,18 +122,84 @@ const UploadWallets = ({
       address && address.toLowerCase().startsWith("0x") && address.length <= 42
     );
   };
+  const propsUpload = {
+    multiple: false,
+    maxCount: 1,
+    accept: ".csv",
+    beforeUpload: async file => {
+      const isCsv = file.type === "text/csv";
+      if (!isCsv) {
+        message.error("You can only upload CSV file!");
+        return false;
+      }
+      if (file.size > 1024 * 1024 * 5) {
+        message.warning("Max size of 5MB");
+        return false;
+      }
+      parseFile(file);
+      return false;
+    },
+    showUploadList: false,
+    onDrop(e) {
+      console.log("Dropped files", e.dataTransfer.files);
+    },
+  };
 
+  function parseFile(file) {
+    const requiredFields = ["wallet_address"];
+    Papa.parse(file, {
+      complete: function (results, file) {
+        const missFilds = [];
+        requiredFields.forEach(field => {
+          if (!results?.meta?.fields?.includes(field)) {
+            console.log("Missing field", field);
+            missFilds.push(field);
+          }
+        });
+        if (missFilds.length > 0) {
+          message.error(`Missing fields: ${missFilds.join(", ")}`);
+        } else {
+          const wallets = results.data.map(item => item.wallet_address);
+          setWalletList(wallets);
+          setPasteValue(wallets.join("\n"));
+        }
+      },
+      error: function (error, file) {
+        console.log("Error:", error, file);
+        message.error("Error parsing file");
+      },
+      header: true,
+    });
+  }
   const getPannel = () => {
     return (
       <>
         <h5>
-          Please enter all the addresses you wish to add to this new segment.
+          Please enter all the addresses you wish to add to this new segment, or{" "}
+          <Upload {...propsUpload}>
+            <Button size="small" icon={<UploadOutlined />}>
+              Click to Upload CSV
+            </Button>
+          </Upload>{" "}
+          (Download{" "}
+          <Typography.Link
+            onClick={() => {
+              message.info("Your download will begin shortly.");
+              window.open(
+                "https://static.footprint.network/fga/upload-segment-template.csv",
+                "_blank",
+              );
+            }}
+          >
+            Template
+          </Typography.Link>
+          )
         </h5>
         <TextArea
-          // value={pasteValue}
           style={{ marginTop: 20 }}
+          value={pasteValue}
           onChange={e => {
-            // setPasteValue(e.target.value);
+            setPasteValue(e.target.value);
             parseWalletAddress(e.target.value);
           }}
           placeholder="Please paste all the addresses you wish to add to this new segment, separated by line breaks ."

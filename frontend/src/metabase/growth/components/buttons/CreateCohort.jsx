@@ -142,7 +142,7 @@ const CreateCohort = ({
         break;
       case "filter":
         router?.push({
-          pathname: getGrowthProjectPath(projectPath, "Potential Users"),
+          pathname: getGrowthProjectPath(projectPath, "members"),
         });
         break;
     }
