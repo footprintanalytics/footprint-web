@@ -113,12 +113,12 @@ export const ItemFilter = props => {
         <div className="flex align-center">
           <div className="more-filter">
             {/* <div className="more-text"><Icon name="add" size={12} className="mr1"/> Add Filter</div> */}
-            <Button type="primary" size="large" style={{borderRadius:5}}><Icon name="add" size={12} className="mr1"/> Add Filter</Button>
+            <Button type="primary" size="large" style={{borderRadius:5}} onClick={()=>{setOpenMoreSelect(true)}}><Icon name="add" size={12} className="mr1"/> Add Filter</Button>
             <Cascader
               rootClassName={"more-filter-cascader"}
               height={40}
               open={openMoreSelect}
-              style={{ width: "130px" }}
+              style={{ width: "40px" }}
               label={item.label}
               options={item.options}
               value={null}
