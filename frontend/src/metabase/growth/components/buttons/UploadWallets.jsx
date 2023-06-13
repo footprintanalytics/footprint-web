@@ -221,7 +221,8 @@ const UploadWallets = ({
   const [modal, contextHolder] = Modal.useModal();
   return (
     <>
-      <div
+      <Button
+        type="primary"
         onClick={() => {
           checkIsNeedContactUs(
             modal,
@@ -235,7 +236,7 @@ const UploadWallets = ({
         }}
       >
         Upload Wallets
-      </div>
+      </Button>
       <Modal
         open={isCohortModalOpen}
         onCancel={() => setCohortModalOpen(false)}

@@ -381,6 +381,10 @@ export const fga_menu_data_v2 = project => {
     getItem("Sales & Mints", "nft_sales_mints", null),
     protocolType === "NFT" && getItem("Revenue", "nft_revenue", null),
   ]);
+  const socialMenu = getItem("Social", "social", <GatewayOutlined />, [
+    getItem("Twitter", "twitter", null),
+    getItem("Discord", "discord", null),
+  ]);
   const menuTabs = [
     getItem(
       "Analysis",
@@ -390,10 +394,7 @@ export const fga_menu_data_v2 = project => {
         getItem("Home", "home", <HomeOutlined />),
         protocolType !== "NFT" && gameFiMenu,
         protocolType !== "GameFi" && NFTMenu,
-        getItem("Social", "social", <GatewayOutlined />, [
-          getItem("Twitter", "twitter", null),
-          getItem("Discord", "discord", null),
-        ]),
+        socialMenu,
       ],
       "group",
     ),
@@ -405,6 +406,7 @@ export const fga_menu_data_v2 = project => {
         getItem("Members", "members_root", <TeamOutlined />, [
           getItem("Segment", "segment", null),
           getItem("Members", "members", null),
+          // getItem("Airdrop", "airdrop", null),
           getItem("ID Connect", "id_connect", null),
         ]),
         getItem("Acquisition", "acquisition", <TagsOutlined />, [
@@ -418,6 +420,7 @@ export const fga_menu_data_v2 = project => {
         ]),
         getItem("Integration", "integration", <LinkOutlined />),
         getItem("Settings", "settings", <SettingOutlined />, [
+          getItem("General", "general", null),
           getItem("Channel", "channel", null),
         ]),
       ],
@@ -604,7 +607,7 @@ export const fga_menu_data = [
     icon: React.createElement(SettingOutlined),
     id: null,
     children: [
-      // { name: "General", id: null, uuid: null },
+      { name: "General", id: null, uuid: null },
       {
         name: "Social Connect",
         id: null,
@@ -816,7 +819,7 @@ export const getFgaComparePlans = ({ user }) => ({
         },
         {
           name: "Tokenomics",
-          free: false,
+          free: true,
           growth: true,
           scale: true,
           enterprise: true,

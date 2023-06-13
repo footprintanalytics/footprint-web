@@ -20,6 +20,7 @@ import ConnectorList from "./ConnectorList";
 import ChannelList from "./ChannelList";
 import WalletProfile from "./WalletProfile";
 import MyAnalysis from "./MyAnalysis";
+import Airdrop from "./Airdrop";
 import CampaignDetail from "./CampaignDetail";
 import CampaignList from "./CampaignList";
 import CampaignListNew from "./CampaignListNew";
@@ -189,6 +190,9 @@ const Project = props => {
         ></UserTemplate>
       );
     }
+    if(['airdrop'].includes(current_tab)){
+      return <Airdrop location={location} router={router} project={getProjectObject()} />
+    }
     if (
       current_tab === "GameFi" &&
       !projectObject?.nftCollectionAddress?.length > 0
@@ -273,7 +277,7 @@ const Project = props => {
         ></ChannelList>
       );
     }
-    if (current_tab === "General") {
+    if (["general", "General"].includes(current_tab)) {
       return (
         <ProjectInfo
           location={location}

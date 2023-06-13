@@ -38,7 +38,7 @@ export function checkVipMenuPermisson(vipGrade:string,menu:string){
     return true;
   }
   const menuPermission = new Map([
-    ["game_tokenomics", ["Enterprise", "Scale","Growth"]],
+    // ["game_tokenomics", ["Enterprise", "Scale","Growth"]],
     ["game_revenue", ["Enterprise", "Scale","Growth"]],
     ["nft_revenue", ["Enterprise", "Scale","Growth"]],
     // ["twitter", ["Enterprise", "Scale","Growth"]],

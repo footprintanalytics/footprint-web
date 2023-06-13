@@ -109,6 +109,9 @@ const Index = ({
           {
             title: "Custom Analytics",
           },
+          {
+            title: "Tokenomics ",
+          },
         ],
       },
     },
@@ -185,9 +188,6 @@ const Index = ({
           },
           {
             title: "User Segmentation",
-          },
-          {
-            title: "Tokenomics ",
           },
           {
             title: "Reveune Analytics",
