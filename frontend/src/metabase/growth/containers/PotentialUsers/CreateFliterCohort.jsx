@@ -165,7 +165,7 @@ const CreateCohort2 = ({
       {contextHolder}
       {isButtonStyle ? (
         <Button
-          type="text"
+          type="primary"
           disabled={disable}
           onClick={() => {
             checkIsNeedContactUs(

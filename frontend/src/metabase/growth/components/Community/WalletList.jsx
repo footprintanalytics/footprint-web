@@ -37,6 +37,7 @@ export const WalletList = props => {
       label: item.component ?? (
         <Button
           type="text"
+          disabled={item.disabled}
           onClick={() => {
             router?.push({ pathname: item.link });
           }}
@@ -70,11 +71,16 @@ export const WalletList = props => {
             )}
           </Button>
 
-          <Dropdown menu={{ items: actionItems }} trigger={["click", "hover"]}>
+          <div className="flex flex-row" style={{gap:10}}>
+            {actionItems.map(item => {
+              return item.label;
+            })}
+          </div>
+          {/* <Dropdown menu={{ items: actionItems }} trigger={["click", "hover"]}>
             <Button type="primary" className=" rounded">
               User Actions
             </Button>
-          </Dropdown>
+          </Dropdown> */}
         </div>
         <Table
           columns={columns}

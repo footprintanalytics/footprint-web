@@ -149,17 +149,18 @@ const PotentialUsers = props => {
 
   const actions = [
     {
-      title: "Create Segment",
+      title: "Save as Segment",
       component: (
         <CreateCohort2
           project={project}
           router={router}
+          btnText="Save as Segment"
           addressListCount={listResult?.data?.total}
           params={{
             ...mergeFiltersByTags(walletListParams),
             projectId: parseInt(project?.id),
           }}
-          isButtonStyle={false}
+          isButtonStyle={true}
         />
       ),
     },
@@ -177,7 +178,7 @@ const PotentialUsers = props => {
               }}
               btnText="Tagging"
               isTagging
-              isButtonStyle={false}
+              isButtonStyle={true}
             />
           ),
         }

@@ -148,24 +148,25 @@ const Community = props => {
       disabled: false,
       component: (
         <CreateCohort2
-          disable={true}
+          disable={false}
           project={project}
           router={router}
+          btnText="Save as Segment"
           type="Members"
           addressListCount={listResult?.data?.total}
           params={{
             ...walletListParams,
             projectId: parseInt(project?.id),
           }}
-          isButtonStyle={false}
+          isButtonStyle={true}
         />
       ),
     },
     {
       component: (
-        <a
-          type="text"
-          className="p0"
+        <Button
+          type="primary"
+          // className="p0"
           onClick={() =>
             props.router?.push({
               pathname: getGrowthProjectPath(
@@ -176,7 +177,7 @@ const Community = props => {
           }
         >
           Social Connect
-        </a>
+        </Button>
       ),
       title: "Social Connect", //required
       link: null,

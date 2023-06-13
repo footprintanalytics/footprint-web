@@ -10,13 +10,16 @@ import {
   Divider,
   Tabs,
   message,
+  Button,
+  Typography,
 } from "antd";
-import Link from "antd/lib/typography/Link";
+// import Link from "antd/lib/typography/Link";
 import { connect } from "react-redux";
 import Title from "antd/lib/typography/Title";
 import CopyToClipboard from "react-copy-to-clipboard";
 import { getUser } from "metabase/selectors/user";
 import "../css/index.css";
+import Link from "metabase/core/components/Link/Link";
 
 const ProjectInfo = props => {
   const { router, project, location } = props;
@@ -63,8 +66,14 @@ const ProjectInfo = props => {
             </span>
           }
         >
-          <Link href="growth/submit/contract/add">Submit Now</Link>
-          {/* <Button type="primary">Submit Now</Button> */}
+          <Button
+            type="link"
+            onClick={() => {
+              router?.push({ pathname: "/submit/contract/add" });
+            }}
+          >
+            Submit Now
+          </Button>
         </Empty>
       );
     }
@@ -73,6 +82,21 @@ const ProjectInfo = props => {
         className="demo-loadmore-list"
         itemLayout="horizontal"
         dataSource={datas}
+        footer={
+          <div className="w-full text-centered">
+            <Typography.Text type="secondary">
+              You can{" "}
+              <Typography.Link
+                onClick={() => {
+                  router?.push({ pathname: "/submit/contract/add" });
+                }}
+              >
+                click here{" "}
+              </Typography.Link>{" "}
+              and submit more contract!
+            </Typography.Text>
+          </div>
+        }
         renderItem={item => (
           <List.Item
             actions={[
@@ -138,14 +162,15 @@ const ProjectInfo = props => {
             <div className="flex flex-col">
               <div className="flex flex-row">
                 <img
-                  src={currentProject.logo}
+                  src={currentProject.logo??'https://static.footprint.network/logo80.png'}
                   width={80}
                   height={80}
                   style={{
                     borderRadius: 40,
                     borderWidth: 0.5,
-                    borderStyle: "solid",
-                    borderColor: "#f8fafb",
+                    padding: 5,
+                    // borderStyle: "solid",
+                    // borderColor: "#f8fafb",
                   }}
                   alt="Project Icon"
                 />

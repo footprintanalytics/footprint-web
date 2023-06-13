@@ -1,6 +1,6 @@
 /* eslint-disable react/prop-types */
 import React, { useState } from "react";
-import { Col, Row, Select, Cascader, Skeleton } from "antd";
+import { Col, Row, Select, Cascader, Skeleton, Button } from "antd";
 import cx from "classnames";
 import { orderBy } from "lodash";
 import MuiSelect from "metabase/growth/components/MuiSelect";
@@ -112,12 +112,13 @@ export const ItemFilter = props => {
       return (
         <div className="flex align-center">
           <div className="more-filter">
-            <div className="more-text"><Icon name="add" size={12} className="mr1"/> Add Filter</div>
+            {/* <div className="more-text"><Icon name="add" size={12} className="mr1"/> Add Filter</div> */}
+            <Button type="primary" size="large" style={{borderRadius:5}} onClick={()=>{setOpenMoreSelect(true)}}><Icon name="add" size={12} className="mr1"/> Add Filter</Button>
             <Cascader
               rootClassName={"more-filter-cascader"}
               height={40}
               open={openMoreSelect}
-              style={{ width: "130px" }}
+              style={{ width: "40px" }}
               label={item.label}
               options={item.options}
               value={null}

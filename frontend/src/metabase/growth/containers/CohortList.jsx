@@ -19,7 +19,7 @@ import dayjs from "dayjs";
 import { useQuery } from "react-query";
 import { QUERY_OPTIONS } from "metabase/containers/dashboards/shared/config";
 import { getUser } from "metabase/selectors/user";
-import { GetFgaCohort ,GetMemberInfo} from "metabase/new-service";
+import { GetFgaCohort, GetMemberInfo } from "metabase/new-service";
 import Link from "metabase/core/components/Link/Link";
 import UploadWallets from "../components/buttons/UploadWallets";
 import { StatisticIndex } from "../components/Community/StatisticIndex";
@@ -29,7 +29,7 @@ import {
   user_profile_link,
   wallet_profile_link,
 } from "../utils/data";
-import LoadingSpinner from "metabase/components/LoadingSpinner/LoadingSpinner"
+import LoadingSpinner from "metabase/components/LoadingSpinner/LoadingSpinner";
 
 const CohortList = props => {
   const { isLoading, data, refetch } = useQuery(
@@ -145,7 +145,8 @@ const CohortList = props => {
     {
       key: "1",
       label: (
-        <div
+        <Button
+          type="primary"
           onClick={() =>
             props.router?.push({
               pathname: getGrowthProjectPath(
@@ -156,7 +157,7 @@ const CohortList = props => {
           }
         >
           Filter Wallets
-        </div>
+        </Button>
       ),
     },
     {
@@ -181,21 +182,21 @@ const CohortList = props => {
   function formatInfoResult(data) {
     const dataList = [];
     if (data) {
-      if(data.numberOfActiveWallets>=0){
+      if (data.numberOfActiveWallets >= 0) {
         dataList.push({
           title: "Unique Active Wallet",
           value: data.numberOfActiveWallets,
           change: 0,
         });
       }
-      if(data.numberOfNFTHolder>=0){
+      if (data.numberOfNFTHolder >= 0) {
         dataList.push({
           title: "NFT Holder",
           value: data.numberOfNFTHolder,
           change: 0,
         });
       }
-      if(data.nftHolderActivity>=0){
+      if (data.nftHolderActivity >= 0) {
         dataList.push({
           title: "NFT Holder/UAW %",
           value: data.nftHolderActivity,
@@ -203,14 +204,14 @@ const CohortList = props => {
           change: 0,
         });
       }
-      if(data.numberOfWhale>=0){
+      if (data.numberOfWhale >= 0) {
         dataList.push({
           title: "Whale",
           value: data.numberOfWhale,
           change: 0,
         });
       }
-      if(data.numberOfLoyalUser>=0){
+      if (data.numberOfLoyalUser >= 0) {
         dataList.push({
           title: "Loyal User",
           value: data.numberOfLoyalUser,
@@ -218,7 +219,7 @@ const CohortList = props => {
         });
       }
 
-      if(data.numberOfHighTradingActiveUser>=0){
+      if (data.numberOfHighTradingActiveUser >= 0) {
         dataList.push({
           title: "High-trading Active User",
           value: data.numberOfHighTradingActiveUser,
@@ -231,16 +232,20 @@ const CohortList = props => {
 
   return (
     <div style={{ padding: 20 }}>
-        <>
-          {!infoResult.isLoading ? (
-            <StatisticIndex
-              data={formatInfoResult(infoResult?.data)}
-              project={props.project}
-              refetchData={infoResult.refetch}
-              router={props.router}
-            />
-          ):(<div style={{height: 140}}><LoadingSpinner></LoadingSpinner></div>)}
-        </>
+      <>
+        {!infoResult.isLoading ? (
+          <StatisticIndex
+            data={formatInfoResult(infoResult?.data)}
+            project={props.project}
+            refetchData={infoResult.refetch}
+            router={props.router}
+          />
+        ) : (
+          <div style={{ height: 140 }}>
+            <LoadingSpinner></LoadingSpinner>
+          </div>
+        )}
+      </>
       <Card
         className="mt2"
         title={
@@ -251,7 +256,7 @@ const CohortList = props => {
             title={
               <div className="flex flex-col m1">
                 <Typography.Title level={5}>
-                Segment Description
+                  Segment Description
                 </Typography.Title>
                 <Divider className="my1" />
                 {tooltipTitle}
@@ -264,19 +269,27 @@ const CohortList = props => {
           </Tooltip>
         }
         extra={
-          <Dropdown menu={{ items }}>
-            <Button type="primary">Create Segment</Button>
-          </Dropdown>
+          <div className="flex flex-row" style={{ gap: 10 }}>
+            {items?.map(item => item.label)}
+          </div>
+          // <Dropdown menu={{ items }}>
+          //   <Button type="primary">Create Segment</Button>
+          // </Dropdown>
         }
       >
-        {isLoading?<div style={{height: 240}}><LoadingSpinner></LoadingSpinner></div>:<Table
-          rowKey="cohortId"
-          loading={isLoading}
-          dataSource={dataSource}
-          columns={columns}
-          pagination={false}
-        />}
-
+        {isLoading ? (
+          <div style={{ height: 240 }}>
+            <LoadingSpinner></LoadingSpinner>
+          </div>
+        ) : (
+          <Table
+            rowKey="cohortId"
+            loading={isLoading}
+            dataSource={dataSource}
+            columns={columns}
+            pagination={false}
+          />
+        )}
       </Card>
     </div>
   );
