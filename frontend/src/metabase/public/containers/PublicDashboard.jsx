@@ -418,9 +418,11 @@ class PublicDashboard extends Component {
     }
     const shouldRenderAsNightMode = isNightMode || canShowDarkMode(dashboard);
 
-    const { all_load } = {
+    const { all_load, bg_color } = {
       ...parseHashOptions(location.hash),
     };
+
+    const backgroundColor = bg_color === "black" ? "black": "";
 
     return (
       <EmbedFrame
@@ -447,6 +449,7 @@ class PublicDashboard extends Component {
               "Dashboard--fullscreen": isFullscreen,
               "Dashboard--night": shouldRenderAsNightMode,
             })}
+            style={{ backgroundColor: backgroundColor }}
             loading={!dashboard}
           >
             {() => (
