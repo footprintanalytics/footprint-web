@@ -211,7 +211,7 @@ const UploadWallets = ({
         >
           <div>
             Detect <span style={{ color: "red" }}>{walletList.length}</span>{" "}
-            addresses.Up to <span style={{ color: "red" }}>1000</span> addresses
+            addresses.Up to <span style={{ color: "red" }}>5000</span> addresses
             can be processed at once.
           </div>
         </div>
