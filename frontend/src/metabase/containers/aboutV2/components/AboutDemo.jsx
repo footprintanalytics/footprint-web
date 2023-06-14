@@ -31,6 +31,7 @@ const AboutDemo = () => {
       ],
       image: "home-v2/img-demo-2-1.png",
       bg: "home-v2/img-demo-2-2.png",
+      align: "center"
     },
     {
       title: "Analytics APP",
@@ -70,22 +71,24 @@ const AboutDemo = () => {
         {data.map(item => {
           return (
             <div key={item.title} className="About__demo-analytics-app" style={{ backgroundImage: `url("${getOssUrl(item.bg)}")`}}>
-              <h3>{item.title}</h3>
-              <h4>{item.desc}</h4>
-              {item.content}
-              <div className="About__demo-data-api-buttons">
-                {item.buttons.map(button => {
-                  return (
-                    <AboutButton
-                      key={button.buttonText}
-                      className="mt4 mb4"
-                      buttonText={button.buttonText}
-                      link={button.link}
-                    />
-                  )
-                })}
+              <div style={{ paddingLeft: 60 }}>
+                <h3>{item.title}</h3>
+                <h4>{item.desc}</h4>
+                {item.content}
+                <div className="About__demo-data-api-buttons">
+                  {item.buttons.map(button => {
+                    return (
+                      <AboutButton
+                        key={button.buttonText}
+                        className="mt4 mb4"
+                        buttonText={button.buttonText}
+                        link={button.link}
+                      />
+                    )
+                  })}
+                </div>
               </div>
-              <AboutImage className="About__demo-long-app-container" src={getOssUrl(item.image)} alt="Research Portal" />
+              <AboutImage className="About__demo-long-app-container x" src={getOssUrl(item.image)} alt="Research Portal" style={{ justifyContent: item.align || "flex-end" }}/>
             </div>
           )
         })}
