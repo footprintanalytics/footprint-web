@@ -15,6 +15,7 @@ import {
   getLatestGAProject,
   getGaMenuTabs,
 } from "../utils/utils";
+import { set } from "js-cookie"
 
 interface IGaSidebarProp {
   className?: string;
@@ -79,7 +80,7 @@ const GaSidebar = (props: IGaSidebarProp) => {
             } else if (child.children?.length > 0) {
               child.children.map((child2: { key: string }) => {
                 if (child2.key === currentMenu) {
-                  setOpenKeys([child.key]);
+                  setOpenKeys([i.key,child.key]);
                 }
               });
             }
@@ -90,12 +91,13 @@ const GaSidebar = (props: IGaSidebarProp) => {
   }, [currentMenu, items]);
 
   const onOpenChange: MenuProps["onOpenChange"] = keys => {
-    const latestOpenKey = keys.find(key => openKeys.indexOf(key) === -1);
-    if (!rootSubmenuKeys.includes(latestOpenKey)) {
-      setOpenKeys(keys);
-    } else {
-      setOpenKeys(latestOpenKey ? [latestOpenKey] : []);
-    }
+    // const latestOpenKey = keys.find(key => openKeys.indexOf(key) === -1);
+    // if (!rootSubmenuKeys.includes(latestOpenKey)) {
+    //   setOpenKeys(keys);
+    // } else {
+    //   setOpenKeys(latestOpenKey ? [latestOpenKey] : []);
+    // }
+    setOpenKeys(keys);
   };
 
   return (

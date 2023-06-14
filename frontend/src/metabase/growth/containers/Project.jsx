@@ -323,7 +323,7 @@ const Project = props => {
       );
     }
     if (
-      ["Custom Analysis", "custom_analysis", "custom_analytics"].includes(
+      ["Custom Analysis", "custom_analysis", "custom_analytics","templates"].includes(
         current_tab,
       )
     ) {
