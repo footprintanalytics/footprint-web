@@ -171,12 +171,12 @@ const Community = props => {
             props.router?.push({
               pathname: getGrowthProjectPath(
                 props.router?.params?.project,
-                "Social Connect",
+                "id_connect",
               ),
             })
           }
         >
-          Social Connect
+          ID Connect
         </Button>
       ),
       title: "Social Connect", //required
