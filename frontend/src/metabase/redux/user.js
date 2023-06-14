@@ -165,6 +165,9 @@ export const refreshCurrentFgaProject = createThunkAction(
       const res = await GetFgaProjectDetail({
         projectId: project_id,
       });
+      if(!res?.protocolSlug||res?.protocolSlug===''){
+        res.protocolSlug = 'default';
+      }
       window.localStorage.setItem("IsFgaDemoProject", res?.isDemo);
       window.localStorage.setItem("LatestGAProjectId", res?.id);
       return res;
