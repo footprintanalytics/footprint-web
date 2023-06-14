@@ -1,14 +1,16 @@
 /* eslint-disable react/prop-types */
-import React, { useContext } from "react";
+import React, { useContext,useState } from "react";
 import { connect } from "react-redux";
 import { Button, Card, Typography } from "antd";
 import Link from "metabase/core/components/Link/Link";
 import { getUser } from "metabase/selectors/user";
 import "../css/index.css";
+import UpdateProjectModal from "./Modal/UpdateProjectModal"
 
 const DashboardMask = props => {
   let content = ``;
 
+  const [projectModalShow, setProjectModalShow] = useState({show:false,force:false});
   const contact = (
     <div className="mt2">
       <Link target="_blank" href="mailto:sales@footprint.network">
@@ -16,8 +18,47 @@ const DashboardMask = props => {
       </Link>
     </div>
   );
-
-  if (["game_tokenomics", "game_revenue", "nft_revenue"].includes(props.currentMenu)) {
+  if (["set_protocol"].includes(props.currentMenu)) {
+    // need to set protocol
+    content = (
+      <div className="flex flex-col justify-center p2" style={{ width: 500 }}>
+        <h3 className="text-white">You need to set up a protocol.</h3>
+        <Typography.Text className="mt2">
+          This project does not currently set up a protocol.You can set one and
+          unlock more features to use.
+          <br />
+          <br />
+          If you have any questions, please feel free to contact our BD team.
+          Thank you.
+        </Typography.Text>
+        {contact}
+        <div>
+          <Link
+            target="_blank"
+            className="mt2"
+            href="https://t.me/joinchat/4-ocuURAr2thODFh"
+          >
+            Telegram: @dplinnn
+          </Link>
+        </div>
+        <div className="flex flex-row items-center justify-end w-full">
+          <Button
+            type="primary"
+            className="mt2"
+            onClick={() => {
+              setProjectModalShow({show:true,force:false});
+            }}
+          >
+            Set up now
+          </Button>
+        </div>
+      </div>
+    );
+  } else if (
+    ["game_tokenomics", "game_revenue", "nft_revenue"].includes(
+      props.currentMenu,
+    )
+  ) {
     // need to upgrade plan
     content = (
       <div className="flex flex-col justify-center p2" style={{ width: 500 }}>
@@ -99,6 +140,17 @@ const DashboardMask = props => {
       }}
     >
       <Card className="mt-250">{content}</Card>
+      <UpdateProjectModal
+          open={projectModalShow?.show}
+          force={projectModalShow?.force}
+          location={location}
+          onSuccess={() => {
+            setProjectModalShow({ show: false });
+          }}
+          onCancel={() => {
+            setProjectModalShow({ show: false });
+          }}
+        ></UpdateProjectModal>
     </div>
   );
 };

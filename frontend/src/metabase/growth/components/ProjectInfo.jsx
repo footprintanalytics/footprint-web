@@ -17,13 +17,15 @@ import {
 import { connect } from "react-redux";
 import Title from "antd/lib/typography/Title";
 import CopyToClipboard from "react-copy-to-clipboard";
-import { getUser } from "metabase/selectors/user";
+import { getFgaProject, getUser } from "metabase/selectors/user";
 import "../css/index.css";
 import Link from "metabase/core/components/Link/Link";
+import UpdateProjectModal from "./Modal/UpdateProjectModal";
 
 const ProjectInfo = props => {
   const { router, project, location } = props;
   const [currentProject, setCurrentProject] = useState(project);
+  const [projectModalShow, setProjectModalShow] = useState({show:false,force:false});
   useEffect(() => {
     setCurrentProject(project);
   }, [project]);
@@ -158,11 +160,14 @@ const ProjectInfo = props => {
             borderRadius: 10,
           }}
         >
-          {currentProject ? (
+          {currentProject?.protocolSlug !== "default" ? (
             <div className="flex flex-col">
               <div className="flex flex-row">
                 <img
-                  src={currentProject.logo??'https://static.footprint.network/logo80.png'}
+                  src={
+                    currentProject.logo ??
+                    "https://static.footprint.network/logo80.png"
+                  }
                   width={80}
                   height={80}
                   style={{
@@ -218,23 +223,36 @@ const ProjectInfo = props => {
             </div>
           ) : (
             <Empty
+              className="m4"
               image="https://gw.alipayobjects.com/zos/antfincdn/ZHrcdLPrvN/empty.svg"
               imageStyle={{
                 height: 100,
               }}
               description={
-                <span>
-                  This project does not currently include the relevant contract
-                  address information. You can assist us in enhancing it by
-                  providing this information!
-                </span>
+                <>
+                  <span>
+                    This project does not currently set up a protocol.
+                  </span>
+                  <span>You can set one and unlock more features to use.</span>
+                </>
               }
             >
-              {/* <Button type="primary">Create Now</Button> */}
+              <Button type="primary" onClick={()=>{setProjectModalShow({show:true})}}>Set up now</Button>
             </Empty>
           )}
         </Card>
       </div>
+      <UpdateProjectModal
+          open={projectModalShow?.show}
+          force={projectModalShow?.force}
+          location={location}
+          onSuccess={() => {
+            setProjectModalShow({ show: false });
+          }}
+          onCancel={() => {
+            setProjectModalShow({ show: false });
+          }}
+        ></UpdateProjectModal>
     </div>
   );
 };
@@ -242,6 +260,7 @@ const ProjectInfo = props => {
 const mapStateToProps = state => {
   return {
     user: getUser(state),
+    project: getFgaProject(state),
   };
 };
 

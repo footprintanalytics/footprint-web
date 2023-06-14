@@ -49,7 +49,10 @@ const GaProjectSearch = props => {
         data?.data?.map(p => {
           projects.push({
             ...p,
-            value: p.protocolSlug,
+            value:
+              !p.protocolSlug || p.protocolSlug === ""
+                ? "default"
+                : p.protocolSlug,
             label: p.protocolName ?? p.name,
             key: p.protocolSlug + p.id,
           });
@@ -138,31 +141,39 @@ const GaProjectSearch = props => {
   };
   return (
     <div className="flex flex-column items-center" style={{ minWidth: 300 }}>
-      {userProject?.length > 0 ? (
-        <Select
-          showSearch
-          style={{ width: 300 }}
-          value={currentProject}
-          loading={isLoading}
-          onChange={handleProjectChange}
-          placeholder="Search by protocol or nft collection address"
-          optionFilterProp="children"
-          filterOption={(input, option) =>
-            (option?.label ?? "").toLowerCase().includes(input.toLowerCase()) ||
-            (option?.collections_list ?? [])
-              .join(",")
-              .includes(input.toLowerCase())
-          }
-          options={userProject?.length > 0 ? userProject : []}
-        />
-      ) : (
-        <Skeleton.Button
-          active={true}
-          className="flex flex-column items-center"
-          style={{ width: 300, height: 30, marginTop: 15, padding: 0 }}
-          paragraph={false}
-        />
-      )}
+      {!isLoading && (
+        <>
+          {userProject?.length > 1 && (
+            <Select
+              showSearch
+              style={{ width: 300 }}
+              value={currentProject}
+              loading={isLoading}
+              onChange={handleProjectChange}
+              placeholder="Search by protocol or nft collection address"
+              optionFilterProp="children"
+              filterOption={(input, option) =>
+                (option?.label ?? "")
+                  .toLowerCase()
+                  .includes(input.toLowerCase()) ||
+                (option?.collections_list ?? [])
+                  .join(",")
+                  .includes(input.toLowerCase())
+              }
+              options={userProject?.length > 0 ? userProject : []}
+            />
+          )}
+        </>
+      )
+      //  : (
+      //   <Skeleton.Button
+      //     active={true}
+      //     className="flex flex-column items-center"
+      //     style={{ width: 300, height: 30, marginTop: 15, padding: 0 }}
+      //     paragraph={false}
+      //   />
+      // )
+      }
 
       {contextHolder}
     </div>
