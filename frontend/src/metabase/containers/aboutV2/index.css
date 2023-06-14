@@ -530,7 +530,7 @@
   min-width: calc((100% - 100px) / 2);
   flex: 1;
   background-color: #182034ee;
-  padding: 80px 0 0 60px;
+  padding: 80px 0 0 0;
   height: 700px;
   border-radius: 30px;
   background-size: 700px 700px;
