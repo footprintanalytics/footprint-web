@@ -333,7 +333,7 @@ const SocialConnectList = props => {
         >
           <Col span={24} key="desc" className=" text-center">
             <Typography.Title level={4}>
-              Use Footprint GA Social Connect Tool to speed up user information
+              Use Footprint GA ID Connect Tool to speed up user information
               collection
             </Typography.Title>
             <Typography.Paragraph>
