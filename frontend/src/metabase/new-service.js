@@ -682,3 +682,7 @@ export const setTableBelongType = (params) => {
 export const ownerTable = (params) => {
   return POST(`api/v1/userPage/owner/table`, params);
 };
+
+export const getChartSql = (params) => {
+  return POST(`api/v1/userPage/owner/table`, params);
+};

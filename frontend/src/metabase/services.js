@@ -142,6 +142,9 @@ export const DashboardApi = {
   cardQuery: POST(
     "/api/v1/dashboard/:dashboardId/dashcard/:dashcardId/card/:cardId/query",
   ),
+  cardQuerySQL: POST(
+    "/api/dashboard/:dashboardId/dashcard/:dashcardId/card/:cardId/sql",
+  ),
   cardQueryPivot: POST(
     "/api/dashboard/pivot/:dashboardId/dashcard/:dashcardId/card/:cardId/query",
   ),

@@ -1,10 +1,12 @@
 import { unset } from "lodash";
 import querystring from "querystring";
-import { message } from "antd";
+import { message, Modal } from "antd";
 import { loadCardForPreview } from "metabase/lib/card";
 import { utf8_to_b64url } from "metabase/lib/encoding";
 import { guestUrl } from "metabase/lib/urls";
 import * as Urls from "metabase/lib/urls";
+import { DashboardApi } from "metabase/services";
+import copy from 'copy-to-clipboard';
 
 export function navigateToGuestQuery(
   { dashcard },
@@ -54,4 +56,44 @@ export async function replaceTemplateCardUrl(props, cardId) {
   hide();
   unset(card, ["visualization_settings", "card.title"]);
   window.open(Urls.newQuestion({ ...card, create_method: "preview" }));
+}
+
+export async function getSqlAndJumpToDoc(props, { cardId, dashcardId, dashboardId }) {
+  const { user, setLoginModalShow } = props;
+  if (!user) {
+    setLoginModalShow({ show: true, from: "dashcard_preview" });
+    return;
+  }
+  const hide = message.loading("Loading...", 0);
+  const result = await DashboardApi.cardQuerySQL({
+    "dashboardId": dashboardId,
+    "dashcardId": dashcardId,
+    "cardId": cardId,
+  });
+  hide();
+  // const showGetChartDataViaSqlApi = !localStorage.getItem("showGetChartDataViaSqlApi");
+  if (result?.query) {
+    // if (showGetChartDataViaSqlApi) {
+    //   localStorage.setItem("showGetChartDataViaSqlApi", "true");
+      Modal.confirm({
+        title: 'Tips',
+        content: "You can get chart data via SQL API.\n1. Copy chart sql\n2. Paste the sql into the SQL API to call it",
+        okText: 'Get chart data',
+        cancelText: 'Cancel',
+        onOk: () => {
+          copyToDoc(result?.query)
+        },
+      })
+    // } else {
+    //   copyToDoc(result?.query)
+    // }
+  }
+}
+
+const copyToDoc = (query) => {
+  copy(query);
+  message.success("Chart SQL already copied.")
+  setTimeout(() => {
+    window.open("https://docs.footprint.network/reference/post_native-async");
+  }, 1000)
 }

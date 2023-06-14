@@ -41,7 +41,7 @@ import * as Urls from "metabase/lib/urls";
 import Dashboards from "metabase/entities/dashboards";
 
 import DataAppContext from "metabase/writeback/containers/DataAppContext";
-import { replaceTemplateCardUrl } from "metabase/guest/utils";
+import { getSqlAndJumpToDoc, replaceTemplateCardUrl } from "metabase/guest/utils";
 import * as dashboardActions from "../actions";
 import { toggleSidebar } from "../actions";
 import {
@@ -201,6 +201,17 @@ const DashboardApp = props => {
     }
   };
 
+  const getDataViaSqlApiAction = ({ cardId, dashcardId, dashboardId }) => {
+    if (props.user) {
+      getSqlAndJumpToDoc(props, { cardId, dashcardId, dashboardId });
+    } else {
+      props.setLoginModalShow({
+        show: true,
+        from: "publicDashboard_get_data_via_sql_api",
+      });
+    }
+  }
+
   return (
     <DataAppContext>
       <div className="shrink-below-content-size full-height">
@@ -209,6 +220,7 @@ const DashboardApp = props => {
           addCardOnLoad={addCardOnLoad}
           duplicateAction={duplicateAction}
           previewAction={previewAction}
+          getDataViaSqlApiAction={getDataViaSqlApiAction}
           {...props}
         />
         <QueryCopyModal

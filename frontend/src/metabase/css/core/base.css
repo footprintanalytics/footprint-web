@@ -114,3 +114,7 @@ textarea {
 .outline-none {
   outline: none;
 }
+
+.ant-modal-confirm-content {
+  white-space: pre-wrap;
+}

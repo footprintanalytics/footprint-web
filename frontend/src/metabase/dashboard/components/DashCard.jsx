@@ -197,6 +197,7 @@ class DashCard extends Component {
       clearWatermark,
       duplicateAction,
       previewAction,
+      getDataViaSqlApiAction,
       chartStyle,
       realtimeList,
     } = this.props;
@@ -313,6 +314,7 @@ class DashCard extends Component {
       !isTableauDisplay &&
       !isVideoDisplay;
 
+    const showGetDataViaSqlApi = showEdit || showPreview;
     const showChartInfo =
       !isPublic && !isTextDisplay && !isImageDisplay && !isVideoDisplay && !isEmbedDisplay && isTableauDisplay;
 
@@ -434,6 +436,20 @@ class DashCard extends Component {
               />
             )
           }
+          {showGetDataViaSqlApi && (
+            <Tooltip key="GetDataViaSqlApi" tooltip={t`Get data via sql API`}>
+              <a
+                className="html2canvas-filter dash-card__button"
+                onClick={() => {
+                  console.log("xxx", dashcard, dashboard)
+                  getDataViaSqlApiAction && getDataViaSqlApiAction({ cardId: dashcard.card.id, dashcardId: dashcard.id, dashboardId: dashboard.entityId || dashboard.id })
+                  trackStructEvent(`dashcard click to preview`);
+                }}
+              >
+                <Icon name={"getChartViaSql"} size={14} color={"#9AA0AF"} />
+              </a>
+            </Tooltip>
+          )}
           {/* {!hideDownload && (
             <a
               className="html2canvas-filter"
