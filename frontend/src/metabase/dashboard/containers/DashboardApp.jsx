@@ -41,7 +41,7 @@ import * as Urls from "metabase/lib/urls";
 import Dashboards from "metabase/entities/dashboards";
 
 import DataAppContext from "metabase/writeback/containers/DataAppContext";
-import { replaceTemplateCardUrl } from "metabase/guest/utils";
+import { getSqlAndJumpToDoc, replaceTemplateCardUrl } from "metabase/guest/utils";
 import * as dashboardActions from "../actions";
 import { toggleSidebar } from "../actions";
 import {
@@ -67,6 +67,7 @@ import {
   getIsHeaderVisible,
   getIsAdditionalInfoVisible,
 } from "../selectors";
+import { trackStructEvent } from "metabase/lib/analytics";
 
 function getDashboardId({ dashboardId, location, params }) {
   if (dashboardId) {
@@ -177,6 +178,7 @@ const DashboardApp = props => {
   }, []);
 
   const duplicateAction = async item => {
+    trackStructEvent(`dashcard click duplicate`);
     if (props.user) {
       setCardInfo({
         cardId: item.id,
@@ -191,6 +193,7 @@ const DashboardApp = props => {
   };
 
   const previewAction = (cardId) => {
+    trackStructEvent(`dashcard click preview`);
     if (props.user) {
       replaceTemplateCardUrl(props, cardId);
     } else {
@@ -201,6 +204,18 @@ const DashboardApp = props => {
     }
   };
 
+  const getDataViaSqlApiAction = ({ cardId, dashcardId, dashboardId }) => {
+    trackStructEvent(`dashcard click get-data-via-sql-api`);
+    if (props.user) {
+      getSqlAndJumpToDoc(props, { cardId, dashcardId, dashboardId });
+    } else {
+      props.setLoginModalShow({
+        show: true,
+        from: "publicDashboard_get_data_via_sql_api",
+      });
+    }
+  }
+
   return (
     <DataAppContext>
       <div className="shrink-below-content-size full-height">
@@ -209,6 +224,7 @@ const DashboardApp = props => {
           addCardOnLoad={addCardOnLoad}
           duplicateAction={duplicateAction}
           previewAction={previewAction}
+          getDataViaSqlApiAction={getDataViaSqlApiAction}
           {...props}
         />
         <QueryCopyModal

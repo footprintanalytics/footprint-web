@@ -20,6 +20,7 @@ import * as Q_DEPRECATED from "metabase-lib/queries/utils";
 import { generateQueryDescription } from "metabase-lib/queries/utils/description";
 
 import "./SaveQuestionModal.css";
+import { trackStructEvent } from "metabase/lib/analytics";
 
 
 export default class SaveQuestionModal extends Component {

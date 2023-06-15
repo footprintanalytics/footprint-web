@@ -1,10 +1,13 @@
 import { unset } from "lodash";
 import querystring from "querystring";
-import { message } from "antd";
+import { message, Modal } from "antd";
 import { loadCardForPreview } from "metabase/lib/card";
 import { utf8_to_b64url } from "metabase/lib/encoding";
 import { guestUrl } from "metabase/lib/urls";
 import * as Urls from "metabase/lib/urls";
+import { DashboardApi } from "metabase/services";
+import copy from 'copy-to-clipboard';
+import { trackStructEvent } from "metabase/lib/analytics";
 
 export function navigateToGuestQuery(
   { dashcard },
@@ -54,4 +57,41 @@ export async function replaceTemplateCardUrl(props, cardId) {
   hide();
   unset(card, ["visualization_settings", "card.title"]);
   window.open(Urls.newQuestion({ ...card, create_method: "preview" }));
+}
+
+export async function getSqlAndJumpToDoc(props, { cardId, dashcardId, dashboardId }) {
+  const { user, setLoginModalShow } = props;
+  if (!user) {
+    setLoginModalShow({ show: true, from: "dashcard_preview" });
+    return;
+  }
+  trackStructEvent(`dashcard getSqlAndJumpToDoc`);
+  const hide = message.loading("Loading...", 0);
+  const result = await DashboardApi.cardQuerySQL({
+    "dashboardId": dashboardId,
+    "dashcardId": dashcardId,
+    "cardId": cardId,
+  });
+  hide();
+  if (result?.query) {
+    trackStructEvent(`dashcard getSqlAndJumpToDoc Modal`);
+    Modal.confirm({
+      title: 'How to get this data via SQL API?',
+      content: "1. Click the button 'Get chart data' and copy SQL query\n2. Paste the query into the BODY PARAMS on the next page",
+      okText: 'Get chart data',
+      cancelText: 'Cancel',
+      onOk: () => {
+        trackStructEvent(`dashcard getSqlAndJumpToDoc Modal-ok`);
+        copyToDoc(result?.query)
+      },
+    })
+  }
+}
+
+const copyToDoc = (query) => {
+  copy(query);
+  message.success("Chart SQL already copied.")
+  setTimeout(() => {
+    window.open("https://docs.footprint.network/reference/post_native");
+  }, 1000)
 }

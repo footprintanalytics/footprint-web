@@ -49,7 +49,8 @@ import Button from "metabase/core/components/Button/Button";
 import { loginModalShowAction } from "metabase/redux/control";
 import QueryCopyModal from "metabase/components/QueryCopyModal";
 import { getUser } from "metabase/selectors/user";
-import { replaceTemplateCardUrl } from "metabase/guest/utils";
+import { getSqlAndJumpToDoc, replaceTemplateCardUrl } from "metabase/guest/utils";
+import { trackStructEvent } from "metabase/lib/analytics";
 
 const mapStateToProps = (state, props) => {
   const parameters = getParameters(state, props);
@@ -325,6 +326,7 @@ class PublicDashboard extends Component {
   };
 
   duplicateAction = async item => {
+    trackStructEvent(`dashcard click duplicate`);
     if (this.props.user) {
       this.setState({
         cardId: item.id,
@@ -339,6 +341,7 @@ class PublicDashboard extends Component {
   };
 
   previewAction = (cardId) => {
+    trackStructEvent(`dashcard click preview`);
     if (this.props.user) {
       replaceTemplateCardUrl(this.props, cardId);
     } else {
@@ -348,6 +351,18 @@ class PublicDashboard extends Component {
       });
     }
   };
+
+  getDataViaSqlApiAction = ({ cardId, dashcardId, dashboardId }) => {
+    trackStructEvent(`dashcard click get-data-via-sql-api`);
+    if (this.props.user) {
+      getSqlAndJumpToDoc(this.props, { cardId, dashcardId, dashboardId });
+    } else {
+      this.props.setLoginModalShow({
+        show: true,
+        from: "publicDashboard_get_data_via_sql_api",
+      });
+    }
+  }
 
   render() {
     let {
@@ -464,6 +479,7 @@ class PublicDashboard extends Component {
                 isNightMode={shouldRenderAsNightMode}
                 duplicateAction={this.duplicateAction}
                 previewAction={this.previewAction}
+                getDataViaSqlApiAction={this.getDataViaSqlApiAction}
                 allLoad={!!all_load}
               />
             )}

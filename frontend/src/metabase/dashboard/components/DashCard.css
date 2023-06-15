@@ -8,6 +8,13 @@
   margin: 0 10px;
 }
 
+.dash-card__button-always {
+  display: inline;
+  position: relative;
+  cursor: pointer;
+  margin: 0 10px;
+}
+
 .dash-card__download-button {
   border: 0 !important;
   padding: 0 !important;
