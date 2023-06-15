@@ -402,6 +402,7 @@ class FgaNavbar extends Component {
             onClick={() => {
               this.props.onChangeLocation("/growth/pricing");
             }}
+            style={{color:"white"}}
             type="text"
           >
             Pricing
