@@ -92,6 +92,8 @@ const Project = props => {
           }
         : {
             // if no protocolSlug, use sandbox as default
+            id: projectObject?.id,
+            isDemo: projectObject?.isDemo,
             origin_protocol_slug: projectObject?.protocolSlug,
             protocolName: "Demo",
             protocolSlug: "the-sandbox",
@@ -182,7 +184,6 @@ const Project = props => {
     if (!projectObject || !currentMenu || !gaMenuTabs) {
       return <LoadingSpinner message="Loading..." />;
     }
-    console.log("Project.jsx getContentPannel current_tab => ", current_tab);
     const WrapPublicDashboard = current_tab =>
       getProjectObject()?.protocolSlug ? (
         <>
@@ -196,9 +197,11 @@ const Project = props => {
             hideFooter
             showRefreshButton={showRefreshButton}
           />
-          {getProjectObject()?.origin_protocol_slug === "default" && (
-            <DashboardMask currentMenu={"set_protocol"} router={router} />
-          )}
+          {/* all dashboart except twitter and discord , need a mask when no protocol */}
+          {getProjectObject()?.origin_protocol_slug === "default" &&
+            !["twitter", "discord"].includes(currentMenu) && (
+              <DashboardMask currentMenu={"set_protocol"} router={router} />
+            )}
         </>
       ) : (
         <LoadingSpinner message="Loading..." />
@@ -470,7 +473,7 @@ const Project = props => {
               ) && <DashboardMask currentMenu={currentMenu} router={router} />}
             {projectObject?.protocolSlug === "default" &&
               ["members"].includes(currentMenu) && (
-                <DashboardMask currentMenu={'set_protocol'} router={router} />
+                <DashboardMask currentMenu={"set_protocol"} router={router} />
               )}
           </div>
         </>

@@ -23,7 +23,7 @@ import Link from "metabase/core/components/Link/Link";
 import UpdateProjectModal from "./Modal/UpdateProjectModal";
 
 const ProjectInfo = props => {
-  const { router, project, location } = props;
+  const { router, project, location,user } = props;
   const [currentProject, setCurrentProject] = useState(project);
   const [projectModalShow, setProjectModalShow] = useState({show:false,force:false});
   useEffect(() => {
@@ -71,6 +71,10 @@ const ProjectInfo = props => {
           <Button
             type="link"
             onClick={() => {
+              if(!user){
+                message.error('Please login first!');
+                return;
+              }
               router?.push({ pathname: "/submit/contract/add" });
             }}
           >
@@ -90,6 +94,10 @@ const ProjectInfo = props => {
               You can{" "}
               <Typography.Link
                 onClick={() => {
+                  if(!user){
+                    message.error('Please login first!');
+                    return;
+                  }
                   router?.push({ pathname: "/submit/contract/add" });
                 }}
               >

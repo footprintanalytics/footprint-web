@@ -42,6 +42,7 @@ const CampaignListNew = props => {
     type: "",
   });
   const [dataSource, setDataSource] = useState([]);
+  console.log("CampaignListNew", project);
   const { isLoading, data, refetch, isFetching } = useQuery(
     ["getCampaign", project?.id],
     async () => {
@@ -404,7 +405,7 @@ const CampaignListNew = props => {
         ) : (
           <Table
             rowKey="campaignId"
-            loading={isLoading}
+            // loading={isLoading}
             minHeight={400}
             dataSource={dataSource}
             columns={columns}
