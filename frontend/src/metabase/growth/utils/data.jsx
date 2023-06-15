@@ -424,7 +424,7 @@ export const fga_menu_data_v2 = project => {
       "growth",
       <LineChartOutlined />,
       [
-        getItem("Find Wallets", "build_audience", null),
+        getItem("Find Wallets", "find_wallets", null),
         getItem("Airdrop", "airdrop", null),
         getItem("Single Wallet Profile", "wallet_profile", null),
         getItem("Activation", "activation", null),

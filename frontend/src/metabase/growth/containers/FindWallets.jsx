@@ -7,8 +7,9 @@ import { getGrowthProjectPath } from "../utils/utils";
 const { Text } = Typography;
 import { getOssUrl } from "metabase/lib/image";
 import cx from "classnames";
+import SegmentListPanel from "../components/SegmentListPanel"
 
-const UserTemplate = props => {
+const FindWallets = props => {
   const { router, location, children, user, projectPath, menu, projectObject } =
     props;
   const templates = [
@@ -72,16 +73,17 @@ const UserTemplate = props => {
 
   return (
     <div
-      className="flex flex-column items-center"
+      className="flex flex-column items-center p4"
       style={{ marginBottom: 100 }}
     >
       <div
-        className="flex flex-column"
-        style={{ width: "90%", maxWidth: 1000, minWidth: 600 }}
+        className="flex flex-column w-full"
+        // style={{ width: "90%", maxWidth: 1000, minWidth: 600 }}
+
       >
-        <div className=" mt-50 flex flex-row w-full items-center justify-between align-center">
+        <div className=" flex flex-row w-full items-center justify-between align-center">
           <h2>Which type of user are you looking for?</h2>
-          <Button
+          {/* <Button
             type="link"
             onClick={() => {
               // setTemplate("CustomerFilter");
@@ -94,7 +96,7 @@ const UserTemplate = props => {
             }}
           >
             {"Custom Filter >"}
-          </Button>
+          </Button> */}
         </div>
         <div className="flex flex-row items-center mt4 w-full">
           <List
@@ -102,11 +104,11 @@ const UserTemplate = props => {
             grid={{
               gutter: 10,
               xs: 2,
-              sm: 2,
-              md: 2,
-              lg: 4,
-              xl: 4,
-              xxl: 4,
+              sm: 3,
+              md: 3,
+              lg: 6,
+              xl: 6,
+              xxl: 6,
             }}
             dataSource={templates}
             renderItem={item => (
@@ -156,8 +158,8 @@ const UserTemplate = props => {
             )}
           />
         </div>
-
-        <h2 className="m mt4 w-full text-centered">How it work?</h2>
+        <SegmentListPanel router={router} segmentType = {'potentialUser'}></SegmentListPanel>
+        {/* <h2 className="m mt4 w-full text-centered">How it work?</h2>
         {workDemoList.map(item => {
           return (
             <div
@@ -176,7 +178,7 @@ const UserTemplate = props => {
               </div>
             </div>
           );
-        })}
+        })} */}
       </div>
     </div>
   );
@@ -189,4 +191,4 @@ const mapStateToProps = (state, props) => {
   };
 };
 
-export default connect(mapStateToProps)(UserTemplate);
+export default connect(mapStateToProps)(FindWallets);

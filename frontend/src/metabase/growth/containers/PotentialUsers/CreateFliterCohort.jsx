@@ -151,7 +151,10 @@ const CreateCohort2 = ({
       } else {
         showCohortSuccessModal(modal, result, router, type, () => {
           onChangeLocation(
-            getGrowthProjectPath(project?.protocolSlug, "segment"),
+            getGrowthProjectPath(
+              project?.protocolSlug,
+              type === "Members" ? "segment" : "find_wallets",
+            ),
           );
         });
       }

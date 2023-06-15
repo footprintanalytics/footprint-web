@@ -27,7 +27,7 @@ import CampaignListNew from "./CampaignListNew";
 import CustomAnalysis from "./CustomAnalysis";
 import CampaignCreate from "./CampaignCreate";
 import PotentialUsers from "./PotentialUsers";
-import UserTemplate from "./UserTemplate";
+import FindWallets from "./FindWallets";
 import CohortList from "./CohortList";
 import Community from "./Community";
 import UserProfile from "./UserProfile";
@@ -209,15 +209,16 @@ const Project = props => {
     if (
       current_tab === "UserTemplate" ||
       current_tab === "build_audience" ||
+      current_tab === "find_wallets" ||
       current_tab === "Potential Users"
     ) {
       return (
-        <UserTemplate
+        <FindWallets
           location={location}
           router={router}
           projectId={getLatestGAProjectId()}
           projectPath={projectPath}
-        ></UserTemplate>
+        ></FindWallets>
       );
     }
     if (["airdrop"].includes(current_tab)) {
@@ -349,7 +350,7 @@ const Project = props => {
         ></Community>
       );
     }
-    if (["Potential Users List", "Potential Users"].includes(current_tab)) {
+    if (["Potential Users List", "Potential Users","find_potential_wallets"].includes(current_tab)) {
       return (
         <PotentialUsers
           location={location}
