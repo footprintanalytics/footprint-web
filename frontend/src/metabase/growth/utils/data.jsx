@@ -373,6 +373,115 @@ export const fga_menu_data_v2 = project => {
     ["twitter", "fd4d94f3-06f7-445d-ada3-0ce82bcefa39"],
     ["discord", "d137a1ef-34a3-4553-84cb-2203bd9d2baf"],
   ]);
+  const gameFiMenu = getItem("Game", "game", <ShopOutlined />, [
+    // getItem("Tokenomics", "game_tokenomics", null,null,null, true),
+    getItem("Tokenomics", "game_tokenomics", null),
+    getItem("Revenue", "game_revenue", null),
+    getItem("Token Holder", "game_token_holder", null),
+    getItem("Active Users", "game_active_users", null),
+  ]);
+  const NFTMenu = getItem("NFT", "nft", <FileImageOutlined />, [
+    protocolType === "NFT" && getItem("Leaderboard", "nft_leaderboard", null),
+    getItem("NFT Holder", "nft_nft_holder", null),
+    getItem("Sales & Mints", "nft_sales_mints", null),
+    protocolType === "NFT" && getItem("Revenue", "nft_revenue", null),
+  ]);
+  const socialMenu = getItem("Social", "social", <GatewayOutlined />, [
+    getItem("Twitter", "twitter", null),
+    getItem("Discord", "discord", null),
+  ]);
+  const menuTabs = [
+    getItem(
+      "Analysis",
+      "analysis",
+      null,
+      [
+        getItem("Home", "home", <HomeOutlined />),
+        protocolType !== "NFT" && gameFiMenu,
+        protocolType !== "GameFi" && NFTMenu,
+        socialMenu,
+      ],
+      "group",
+    ),
+    getItem(
+      "Growth",
+      "growth",
+      null,
+      [
+        getItem("Members", "members_root", <TeamOutlined />, [
+          getItem("Segment", "segment", null),
+          getItem("Members", "members", null),
+          // getItem("Airdrop", "airdrop", null),
+          getItem("ID Connect", "id_connect", null),
+        ]),
+        getItem("Acquisition", "acquisition", <TagsOutlined />, [
+          getItem("Build Audience", "build_audience", null),
+          getItem("Wallet Profile", "wallet_profile", null),
+        ]),
+        getItem("Activation", "activation", <CommentOutlined />),
+        getItem("Custom Analysis", "custom", <BarChartOutlined />, [
+          getItem("Custom Analysis", "custom_analysis", null),
+          getItem("My Analysis", "my_analysis", null),
+        ]),
+        getItem("Integration", "integration", <LinkOutlined />),
+        getItem("Settings", "settings", <SettingOutlined />, [
+          getItem("General", "general", null),
+          getItem("Channel", "channel", null),
+        ]),
+      ],
+      "group",
+    ),
+  ];
+  const liveKeys = [];
+  gameFiMenu.children?.map(item => {
+    if (item) {
+      if (item?.children?.length > 0) {
+        liveKeys.push(item?.children[0]?.key);
+      } else {
+        liveKeys.push(item?.key);
+      }
+    }
+  });
+  NFTMenu.children?.map(item => {
+    if (item) {
+      if (item?.children?.length > 0) {
+        liveKeys.push(item?.children[0]?.key);
+      } else {
+        liveKeys.push(item?.key);
+      }
+    }
+  });
+  const keys = getKeys(menuTabs);
+  return { menuTabs, keys, dashboardMap, liveKeys };
+};
+
+export const fga_menu_data_v3 = project => {
+  let protocolType = project.protocolType;
+  if (project?.nftCollectionAddress?.length > 0) {
+    if (protocolType === "GameFi") {
+      protocolType = "GameFi_NFT";
+    } else {
+      protocolType = "NFT";
+    }
+  }
+  const dashboardMap = new Map([
+    [
+      "home",
+      protocolType === "NFT"
+        ? "346f0d3d-5486-404b-a5d2-17ce52150fe1"
+        : "2f4f1fe9-7163-4ecf-91db-76c87a9306ed",
+    ],
+    ["game_tokenomics", "530dfa4f-2ddd-4ba7-8e9c-d6ccbe84bc00"],
+    ["game_revenue", "8932389c-42cc-4ce7-a20f-a6a146cd31a2"],
+    ["game_token_holder", "ff4ddbe9-8818-4abf-8a6c-91c3559071af"],
+    ["game_active_users", "6d84b4a6-ceef-4b30-a9ad-b233038fd8d3"],
+    ["nft_leaderboard", "3e9f9af4-93a8-46d4-8ee7-bc472201da7d"],
+    ["nft_nft_holder", "58047ca6-0116-438d-9ac3-79ac81dfa764"],
+    ["nft_sales_mints", "08fb03cf-4ca4-4041-9d91-315a49d78615"],
+    ["nft_revenue", "b98b0a6b-64cb-4e09-979d-693040ea3ec9"],
+    ["twitter", "fd4d94f3-06f7-445d-ada3-0ce82bcefa39"],
+    ["discord", "d137a1ef-34a3-4553-84cb-2203bd9d2baf"],
+  ]);
   const menuTabs = [
     getItem(
       "Analysis",

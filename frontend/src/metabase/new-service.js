@@ -114,6 +114,15 @@ export const UpdateFgaProject = async params => {
   return PUT("/api/v1/fga/project", params);
 };
 
+/**
+ *
+ * @param {*} params {projectId:4 ,cohortId:61}
+ * @returns
+ */
+export const downloadCohortAddress = async params => {
+  return GET("/api/v1/fga/cohort/address/csv", params);
+};
+
 export const GetFgaProject = async params => {
   return GET("/api/v1/fga/project", params);
 };

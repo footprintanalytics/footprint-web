@@ -7,6 +7,7 @@ import {
   Card,
   Table,
   Dropdown,
+  message,
   Space,
   Badge,
   Tooltip,
@@ -19,7 +20,7 @@ import dayjs from "dayjs";
 import { useQuery } from "react-query";
 import { QUERY_OPTIONS } from "metabase/containers/dashboards/shared/config";
 import { getUser, getFgaProject } from "metabase/selectors/user";
-import { GetFgaCohort } from "metabase/new-service";
+import { GetFgaCohort, downloadCohortAddress } from "metabase/new-service";
 import Link from "metabase/core/components/Link/Link";
 import LoadingSpinner from "metabase/components/LoadingSpinner/LoadingSpinner";
 import { formatTag, getGrowthProjectPath } from "../utils/utils";
@@ -123,6 +124,20 @@ const SegmentListPanel = props => {
             to={`/growth/public/dashboard/dce33214-a079-4eb8-b53f-defaabde2eba?cohort_id=${record.cohortId}&cohort_title=${record.title}#from=Segment`}
           >
             Wallet List
+          </Link>
+          <Link
+            disabled={record.numberOfWallets === 0}
+            onClick={() => {
+              message.info("Download will start soon...");
+              window
+                .open(
+                  `/api/v1/fga/cohort/address/csv?cohortId=${record.cohortId}&projectId=${project?.id}`,
+                  "_blank",
+                )
+                .focus();
+            }}
+          >
+            Download CSV
           </Link>
           {/*<Link
             to={getGrowthProjectPath(
