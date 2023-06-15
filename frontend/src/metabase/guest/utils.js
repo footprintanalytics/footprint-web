@@ -76,8 +76,8 @@ export async function getSqlAndJumpToDoc(props, { cardId, dashcardId, dashboardI
     // if (showGetChartDataViaSqlApi) {
     //   localStorage.setItem("showGetChartDataViaSqlApi", "true");
       Modal.confirm({
-        title: 'Tips',
-        content: "How to get this data via SQL API? \n1. Click the button 'Get chart data' and copy SQL query\n2. Paste the query into the BODY PARAMS on the next page",
+        title: 'How to get this data via SQL API?',
+        content: "1. Click the button 'Get chart data' and copy SQL query\n2. Paste the query into the BODY PARAMS on the next page",
         okText: 'Get chart data',
         cancelText: 'Cancel',
         onOk: () => {
