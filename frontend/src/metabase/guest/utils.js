@@ -7,6 +7,7 @@ import { guestUrl } from "metabase/lib/urls";
 import * as Urls from "metabase/lib/urls";
 import { DashboardApi } from "metabase/services";
 import copy from 'copy-to-clipboard';
+import { trackStructEvent } from "metabase/lib/analytics";
 
 export function navigateToGuestQuery(
   { dashcard },
@@ -64,6 +65,7 @@ export async function getSqlAndJumpToDoc(props, { cardId, dashcardId, dashboardI
     setLoginModalShow({ show: true, from: "dashcard_preview" });
     return;
   }
+  trackStructEvent(`dashcard getSqlAndJumpToDoc`);
   const hide = message.loading("Loading...", 0);
   const result = await DashboardApi.cardQuerySQL({
     "dashboardId": dashboardId,
@@ -75,12 +77,14 @@ export async function getSqlAndJumpToDoc(props, { cardId, dashcardId, dashboardI
   if (result?.query) {
     // if (showGetChartDataViaSqlApi) {
     //   localStorage.setItem("showGetChartDataViaSqlApi", "true");
+    trackStructEvent(`dashcard getSqlAndJumpToDoc Modal`);
       Modal.confirm({
         title: 'How to get this data via SQL API?',
         content: "1. Click the button 'Get chart data' and copy SQL query\n2. Paste the query into the BODY PARAMS on the next page",
         okText: 'Get chart data',
         cancelText: 'Cancel',
         onOk: () => {
+          trackStructEvent(`dashcard getSqlAndJumpToDoc Modal-ok`);
           copyToDoc(result?.query)
         },
       })

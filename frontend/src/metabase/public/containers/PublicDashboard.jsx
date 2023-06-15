@@ -50,6 +50,7 @@ import { loginModalShowAction } from "metabase/redux/control";
 import QueryCopyModal from "metabase/components/QueryCopyModal";
 import { getUser } from "metabase/selectors/user";
 import { getSqlAndJumpToDoc, replaceTemplateCardUrl } from "metabase/guest/utils";
+import { trackStructEvent } from "metabase/lib/analytics";
 
 const mapStateToProps = (state, props) => {
   const parameters = getParameters(state, props);
@@ -325,6 +326,7 @@ class PublicDashboard extends Component {
   };
 
   duplicateAction = async item => {
+    trackStructEvent(`dashcard click duplicate`);
     if (this.props.user) {
       this.setState({
         cardId: item.id,
@@ -339,6 +341,7 @@ class PublicDashboard extends Component {
   };
 
   previewAction = (cardId) => {
+    trackStructEvent(`dashcard click preview`);
     if (this.props.user) {
       replaceTemplateCardUrl(this.props, cardId);
     } else {
@@ -350,6 +353,7 @@ class PublicDashboard extends Component {
   };
 
   getDataViaSqlApiAction = ({ cardId, dashcardId, dashboardId }) => {
+    trackStructEvent(`dashcard click get-data-via-sql-api`);
     if (this.props.user) {
       getSqlAndJumpToDoc(this.props, { cardId, dashcardId, dashboardId });
     } else {
