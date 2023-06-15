@@ -16,6 +16,7 @@ import {
 // import Link from "antd/lib/typography/Link";
 import { connect } from "react-redux";
 import Title from "antd/lib/typography/Title";
+import { SwapOutlined } from "@ant-design/icons";
 import CopyToClipboard from "react-copy-to-clipboard";
 import { getFgaProject, getUser } from "metabase/selectors/user";
 import "../css/index.css";
@@ -23,9 +24,12 @@ import Link from "metabase/core/components/Link/Link";
 import UpdateProjectModal from "./Modal/UpdateProjectModal";
 
 const ProjectInfo = props => {
-  const { router, project, location,user } = props;
+  const { router, project, location, user } = props;
   const [currentProject, setCurrentProject] = useState(project);
-  const [projectModalShow, setProjectModalShow] = useState({show:false,force:false});
+  const [projectModalShow, setProjectModalShow] = useState({
+    show: false,
+    force: false,
+  });
   useEffect(() => {
     setCurrentProject(project);
   }, [project]);
@@ -71,8 +75,8 @@ const ProjectInfo = props => {
           <Button
             type="link"
             onClick={() => {
-              if(!user){
-                message.error('Please login first!');
+              if (!user) {
+                message.error("Please login first!");
                 return;
               }
               router?.push({ pathname: "/submit/contract/add" });
@@ -94,8 +98,8 @@ const ProjectInfo = props => {
               You can{" "}
               <Typography.Link
                 onClick={() => {
-                  if(!user){
-                    message.error('Please login first!');
+                  if (!user) {
+                    message.error("Please login first!");
                     return;
                   }
                   router?.push({ pathname: "/submit/contract/add" });
@@ -190,6 +194,16 @@ const ProjectInfo = props => {
                 <div className="flex flex-col ml3">
                   <div style={{ fontSize: 22, fontWeight: 500 }}>
                     {currentProject.protocolName}
+                    <Button
+                      className="ml0"
+                      type="text"
+                      hidden={true}
+                      onClick={() => {
+                        setProjectModalShow({ show: true });
+                      }}
+                    >
+                      <SwapOutlined />
+                    </Button>
                   </div>
                   <div className=" mt1">
                     {currentProject?.protocolType &&
@@ -245,22 +259,29 @@ const ProjectInfo = props => {
                 </>
               }
             >
-              <Button type="primary" onClick={()=>{setProjectModalShow({show:true})}}>Set up now</Button>
+              <Button
+                type="primary"
+                onClick={() => {
+                  setProjectModalShow({ show: true });
+                }}
+              >
+                Set up now
+              </Button>
             </Empty>
           )}
         </Card>
       </div>
       <UpdateProjectModal
-          open={projectModalShow?.show}
-          force={projectModalShow?.force}
-          location={location}
-          onSuccess={() => {
-            setProjectModalShow({ show: false });
-          }}
-          onCancel={() => {
-            setProjectModalShow({ show: false });
-          }}
-        ></UpdateProjectModal>
+        open={projectModalShow?.show}
+        force={projectModalShow?.force}
+        location={location}
+        onSuccess={() => {
+          setProjectModalShow({ show: false });
+        }}
+        onCancel={() => {
+          setProjectModalShow({ show: false });
+        }}
+      ></UpdateProjectModal>
     </div>
   );
 };
