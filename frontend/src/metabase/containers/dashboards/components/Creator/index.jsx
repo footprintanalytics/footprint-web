@@ -13,6 +13,15 @@ import { QUERY_OPTIONS } from "../../shared/config";
 
 const Creator = () => {
   const hotsData = [
+    "PlanetIX",
+    "JunyaKonishi",
+    "jianshu",
+    "tomfutago",
+    "wuliGy",
+    "ApostleOfFinance",
+    "drraphaswan",
+    "piffie",
+    "BuShiTong",
     "HarmonyONE",
     "Beosin",
     "kaixuan",
@@ -42,12 +51,12 @@ const Creator = () => {
     "2H0j6vbqFL",
     "Momir597295",
   ];
-  const maxNums = 50;
+  const maxNums = 60;
   const paramsHots = {
     sortDirection: "desc",
     sortBy: "dashboard_count",
     current: 1,
-    pageSize: 100,
+    pageSize: 120,
     model: "creator",
     qs: hotsData,
   };
@@ -56,7 +65,7 @@ const Creator = () => {
     sortDirection: "desc",
     sortBy: "dashboard_count",
     current: 1,
-    pageSize: 50,
+    pageSize: 60,
     model: "creator",
     qs: [],
   };
