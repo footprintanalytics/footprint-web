@@ -341,7 +341,7 @@ class DashCard extends Component {
     return (
       <DashCardRoot
         id={id}
-        className={cx("Card rounded flex flex-column hover-parent hover--visibility", cardDomKey,)}
+        className={cx("Card ")}
         style={
           hideBackground
             ? { border: 0, background: "transparent", boxShadow: "none" }
@@ -428,7 +428,7 @@ class DashCard extends Component {
               isResultDirty: false,
             }) && (
               <QueryDownloadWidgetFP
-                className="html2canvas-filter dash-card__button"
+                className="html2canvas-filter dash-card__button-always"
                 card={dashcard.card}
                 result={result}
                 iconColor={"#9AA0AF"}
@@ -437,18 +437,23 @@ class DashCard extends Component {
             )
           }
           {showGetDataViaSqlApi && (
-            <Tooltip key="GetDataViaSqlApi" tooltip={t`Get data via sql API`}>
-              <a
-                className="html2canvas-filter dash-card__button"
-                onClick={() => {
-                  console.log("xxx", dashcard, dashboard)
-                  getDataViaSqlApiAction && getDataViaSqlApiAction({ cardId: dashcard.card.id, dashcardId: dashcard.id, dashboardId: dashboard.entityId || dashboard.id })
-                  trackStructEvent(`dashcard click to preview`);
-                }}
-              >
-                <Icon name={"getChartViaSql"} size={14} color={"#9AA0AF"} />
-              </a>
-            </Tooltip>
+            QueryDownloadWidget.shouldRender({
+              result,
+              isResultDirty: false,
+            }) && (
+              <Tooltip key="GetDataViaSqlApi" tooltip={t`Get data via SQL API`}>
+                <a
+                  className="html2canvas-filter dash-card__button-always"
+                  onClick={() => {
+                    console.log("xxx", dashcard, dashboard)
+                    getDataViaSqlApiAction && getDataViaSqlApiAction({ cardId: dashcard.card.id, dashcardId: dashcard.id, dashboardId: dashboard.entityId || dashboard.id })
+                    trackStructEvent(`dashcard click to preview`);
+                  }}
+                >
+                  <Icon name={"getChartViaSql"} size={14} color={"#9AA0AF"} />
+                </a>
+              </Tooltip>
+            )
           )}
           {/* {!hideDownload && (
             <a

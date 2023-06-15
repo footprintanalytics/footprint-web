@@ -77,7 +77,7 @@ export async function getSqlAndJumpToDoc(props, { cardId, dashcardId, dashboardI
     //   localStorage.setItem("showGetChartDataViaSqlApi", "true");
       Modal.confirm({
         title: 'Tips',
-        content: "You can get chart data via SQL API.\n1. Copy chart sql\n2. Paste the sql into the SQL API to call it",
+        content: "How to get this data via SQL API? \n1. Click the button 'Get chart data' and copy SQL query\n2. Paste the query into the BODY PARAMS on the next page",
         okText: 'Get chart data',
         cancelText: 'Cancel',
         onOk: () => {
@@ -94,6 +94,6 @@ const copyToDoc = (query) => {
   copy(query);
   message.success("Chart SQL already copied.")
   setTimeout(() => {
-    window.open("https://docs.footprint.network/reference/post_native-async");
+    window.open("https://docs.footprint.network/reference/post_native");
   }, 1000)
 }
