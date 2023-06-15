@@ -105,9 +105,23 @@ export const CreateFgaProject = async params => {
   return POST("/api/v1/fga/project", params);
 };
 
+/**
+ *
+ * @param {*} params {projectId,name,creatorId,protocolSlug,protocolName}
+ * @returns
+ */
+export const UpdateFgaProject = async params => {
+  return PUT("/api/v1/fga/project", params);
+};
+
 export const GetFgaProject = async params => {
   return GET("/api/v1/fga/project", params);
 };
+
+export const GetAllProtocol = async params => {
+  return GET("/api/v1/fga/potential-user/protocolInfo", params);
+};
+
 
 export const GetFgaProjectDetail = async params => {
   return POST("/api/v1/fga/project/detail", params);

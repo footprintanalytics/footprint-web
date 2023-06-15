@@ -83,11 +83,35 @@ const Project = props => {
 
   const getProjectObject = () => {
     return projectObject
-      ? {
-          ...projectObject,
-          twitter_handler: projectObject?.twitter?.handler,
-          discord_guild_id: projectObject?.discord?.guildId,
-        }
+      ? projectObject.protocolSlug !== "default"
+        ? {
+            ...projectObject,
+            origin_protocol_slug: projectObject?.protocolSlug,
+            twitter_handler: projectObject?.twitter?.handler,
+            discord_guild_id: projectObject?.discord?.guildId,
+          }
+        : {
+            // if no protocolSlug, use sandbox as default
+            id: projectObject?.id,
+            isDemo: projectObject?.isDemo,
+            origin_protocol_slug: projectObject?.protocolSlug,
+            protocolName: "Demo",
+            protocolSlug: "the-sandbox",
+            protocolType: "GameFi",
+            logo: "https://footprint-imgs.oss-us-east-1.aliyuncs.com/logo_images/the-sandbox.jpg",
+            nftCollectionAddress: [
+              {
+                address: "0xa342f5d851e866e18ff98f351f2c6637f4478db5",
+                chain: "Ethereum",
+              },
+            ],
+            tokenAddress: [
+              {
+                address: "0x3845badade8e6dff049820680d1f14bd3903a5d0",
+                chain: "Ethereum",
+              },
+            ],
+          }
       : null;
   };
 
@@ -160,19 +184,25 @@ const Project = props => {
     if (!projectObject || !currentMenu || !gaMenuTabs) {
       return <LoadingSpinner message="Loading..." />;
     }
-    console.log("Project.jsx getContentPannel current_tab => ", current_tab);
     const WrapPublicDashboard = current_tab =>
-      projectObject?.protocolSlug ? (
-        <PublicDashboard
-          params={{ uuid: gaMenuTabs?.dashboardMap?.get(current_tab) }}
-          location={location}
-          project={getProjectObject()}
-          isFullscreen={false}
-          hideTitle={true}
-          key={projectObject?.protocolSlug}
-          hideFooter
-          showRefreshButton={showRefreshButton}
-        />
+      getProjectObject()?.protocolSlug ? (
+        <>
+          <PublicDashboard
+            params={{ uuid: gaMenuTabs?.dashboardMap?.get(current_tab) }}
+            location={location}
+            project={getProjectObject()}
+            isFullscreen={false}
+            hideTitle={true}
+            key={projectObject?.protocolSlug}
+            hideFooter
+            showRefreshButton={showRefreshButton}
+          />
+          {/* all dashboart except twitter and discord , need a mask when no protocol */}
+          {getProjectObject()?.origin_protocol_slug === "default" &&
+            !["twitter", "discord"].includes(currentMenu) && (
+              <DashboardMask currentMenu={"set_protocol"} router={router} />
+            )}
+        </>
       ) : (
         <LoadingSpinner message="Loading..." />
       );
@@ -190,8 +220,14 @@ const Project = props => {
         ></UserTemplate>
       );
     }
-    if(['airdrop'].includes(current_tab)){
-      return <Airdrop location={location} router={router} project={getProjectObject()} />
+    if (["airdrop"].includes(current_tab)) {
+      return (
+        <Airdrop
+          location={location}
+          router={router}
+          project={getProjectObject()}
+        />
+      );
     }
     if (
       current_tab === "GameFi" &&
@@ -282,7 +318,7 @@ const Project = props => {
         <ProjectInfo
           location={location}
           router={router}
-          project={getProjectObject()}
+          // project={getProjectObject()}
         ></ProjectInfo>
       );
     }
@@ -428,12 +464,17 @@ const Project = props => {
               gaMenuTabs &&
               getContentPannel(currentMenu)}
             {/* TODO: need to add real user fga vip grade */}
-            {!checkVipMenuPermisson(
-              projectObject?.protocolSlug === "the-sandbox"
-                ? "Enterprise"
-                : "Free",
-              currentMenu,
-            ) && <DashboardMask currentMenu={currentMenu} router={router} />}
+            {projectObject?.protocolSlug !== "default" &&
+              !checkVipMenuPermisson(
+                projectObject?.protocolSlug === "the-sandbox"
+                  ? "Enterprise"
+                  : "Free",
+                currentMenu,
+              ) && <DashboardMask currentMenu={currentMenu} router={router} />}
+            {projectObject?.protocolSlug === "default" &&
+              ["members"].includes(currentMenu) && (
+                <DashboardMask currentMenu={"set_protocol"} router={router} />
+              )}
           </div>
         </>
       ) : (

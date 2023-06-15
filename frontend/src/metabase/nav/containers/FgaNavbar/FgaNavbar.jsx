@@ -406,7 +406,7 @@ class FgaNavbar extends Component {
           >
             Pricing
           </Button>
-          <CreateMenu />
+          {/* <CreateMenu /> */}
           <React.Fragment>
             <RightMenuMobile />
             <RightMenuPad />
