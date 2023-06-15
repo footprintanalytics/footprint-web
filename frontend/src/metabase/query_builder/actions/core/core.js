@@ -42,6 +42,7 @@ import { updateQuestion } from "./updateQuestion";
 import { loadMetadataForCard } from "./metadata";
 import { getQuestionWithDefaultVisualizationSettings } from "./utils";
 import { loadCurrentUserVip } from "metabase/redux/user";
+import { trackStructEvent } from "../../../lib/analytics";
 
 export const RESET_QB = "metabase/qb/RESET_QB";
 export const resetQB = createAction(RESET_QB);
@@ -202,6 +203,7 @@ export const apiCreateQuestion = question => {
       "Create Card",
       createdQuestion.query().datasetQuery().type,
     );
+    trackStructEvent(`chart save success`);
     trackNewQuestionSaved(
       question,
       createdQuestion,

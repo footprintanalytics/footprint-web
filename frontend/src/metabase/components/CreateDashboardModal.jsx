@@ -13,6 +13,7 @@ import { loadCurrentUserVip } from "metabase/redux/user";
 import { getUserCreateDashboardPermission } from "metabase/selectors/user";
 import { getUser } from "metabase/reference/selectors";
 import NeedPermissionModal from "./NeedPermissionModal";
+import { trackStructEvent } from "metabase/lib/analytics";
 
 const mapStateToProps = (state, props) => ({
   initialCollectionId: Collection.selectors.getInitialCollectionId(
@@ -50,6 +51,8 @@ class CreateDashboardModal extends Component {
     if (onClose) {
       onClose();
     }
+
+    trackStructEvent(`dashboard save success`);
 
 /*    const url = Urls.dashboard(dashboard, { editMode: true });
     onChangeLocation(url);*/

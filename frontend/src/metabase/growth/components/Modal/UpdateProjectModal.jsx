@@ -61,11 +61,9 @@ const UpdateProjectModal = props => {
         });
     }
   }, [open]);
-
   const loadProjectDetail = project_id => {
     props.dispatch(loadCurrentFgaProject(parseInt(project_id),true));
   };
-
   function updateProject(projectName, protocol) {
     const hide = message.loading("Loading...", 10);
     setLoading(true);
@@ -78,7 +76,6 @@ const UpdateProjectModal = props => {
       nftContractAddress: [],
     })
       .then(result => {
-        console.log(result);
         loadProjectDetail(project?.id)
         saveLatestGAProject(result.protocolSlug);
         saveLatestGAProjectId(result.id);
