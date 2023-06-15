@@ -341,7 +341,7 @@ class DashCard extends Component {
     return (
       <DashCardRoot
         id={id}
-        className={cx("Card ")}
+        className={cx("Card rounded flex flex-column hover-parent hover--visibility", cardDomKey,)}
         style={
           hideBackground
             ? { border: 0, background: "transparent", boxShadow: "none" }
