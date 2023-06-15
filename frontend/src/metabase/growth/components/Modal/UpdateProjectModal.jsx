@@ -15,6 +15,7 @@ import { withRouter } from "react-router";
 import { connect } from "react-redux";
 import { UpdateFgaProject, GetAllProtocol } from "metabase/new-service";
 import { getFgaProject, getUser } from "metabase/selectors/user";
+import { loadCurrentFgaProject } from "metabase/redux/user";
 import {
   getDashboardDatas,
   getGrowthProjectPath,
@@ -60,7 +61,9 @@ const UpdateProjectModal = props => {
         });
     }
   }, [open]);
-
+  const loadProjectDetail = project_id => {
+    props.dispatch(loadCurrentFgaProject(parseInt(project_id),true));
+  };
   function updateProject(projectName, protocol) {
     const hide = message.loading("Loading...", 10);
     setLoading(true);
@@ -73,14 +76,11 @@ const UpdateProjectModal = props => {
       nftContractAddress: [],
     })
       .then(result => {
-        console.log(result);
+        console.log(result)
         saveLatestGAProject(result.protocolSlug);
         saveLatestGAProjectId(result.id);
         onSuccess?.();
-        window.location.href = getGrowthProjectPath(result.protocolSlug);
-        //  router?.push({
-        //    pathname: getGrowthProjectPath(result.protocolSlug),
-        //  });
+        loadProjectDetail(project?.id);
         return true;
       })
       .catch(error => {
