@@ -24,7 +24,7 @@ const DashboardMask = props => {
       <div className="flex flex-col justify-center p2" style={{ width: 500 }}>
         <h3 className="text-white">You need to set up a protocol.</h3>
         <Typography.Text className="mt2">
-          This project does not currently set up a protocol.You can set one and
+          This project does not currently set up a protocol. You can set one and
           unlock more features to use.
           <br />
           <br />
