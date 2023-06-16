@@ -86,7 +86,7 @@ const CohortList = props => {
       </>
       <SegmentListPanel
         router={props.router}
-        segmentType={"projectUser"}
+        sourceType={"projectUser"}
       ></SegmentListPanel>
     </div>
   );

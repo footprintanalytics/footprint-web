@@ -6,7 +6,7 @@ import {
   Button,
   Card,
   Table,
-  Dropdown,
+  Modal,
   message,
   Space,
   Badge,
@@ -23,7 +23,11 @@ import { getUser, getFgaProject } from "metabase/selectors/user";
 import { GetFgaCohort, downloadCohortAddress } from "metabase/new-service";
 import Link from "metabase/core/components/Link/Link";
 import LoadingSpinner from "metabase/components/LoadingSpinner/LoadingSpinner";
-import { formatTag, getGrowthProjectPath } from "../utils/utils";
+import {
+  checkIsNeedContactUs,
+  formatTag,
+  getGrowthProjectPath,
+} from "../utils/utils";
 import {
   cohortTips,
   user_profile_link,
@@ -32,8 +36,8 @@ import {
 import UploadWallets from "./buttons/UploadWallets";
 
 const SegmentListPanel = props => {
-  // segmentType: projectUser, potentialUser
-  const { project, router, user, segmentType } = props;
+  // sourceType: projectUser, potentialUser
+  const { project, router, user, sourceType } = props;
   const { isLoading, data, refetch } = useQuery(
     ["getCohort", project],
     async () => {
@@ -52,7 +56,7 @@ const SegmentListPanel = props => {
     ?.filter(
       f =>
         !["hhh", "all"].includes(f.title) &&
-        f.createdSource === segmentType &&
+        f.createdSource === sourceType &&
         !(f.numberOfWallets <= 0 && f.status === "Ready"),
     );
 
@@ -128,6 +132,9 @@ const SegmentListPanel = props => {
           <Link
             disabled={record.numberOfWallets === 0}
             onClick={() => {
+              if (checkIsNeedContactUs(modal, project)) {
+                return;
+              }
               message.info("Download will start soon...");
               window
                 .open(
@@ -162,7 +169,7 @@ const SegmentListPanel = props => {
             router?.push({
               pathname: getGrowthProjectPath(
                 router?.params?.project,
-                segmentType === "projectUser"
+                sourceType === "projectUser"
                   ? "members"
                   : "find_potential_wallets",
               ),
@@ -173,9 +180,9 @@ const SegmentListPanel = props => {
         </Button>
       ),
     },
-    segmentType === "projectUser" && {
+    {
       key: "2",
-      label: <UploadWallets refetchData={refetch} />,
+      label: <UploadWallets sourceType={sourceType} refetchData={refetch} />,
     },
   ];
 
@@ -192,60 +199,62 @@ const SegmentListPanel = props => {
     </div>
   ));
 
+  const [modal, contextHolder] = Modal.useModal();
   return (
-    // <div style={{ padding: 20 }}>
-    <Card
-      className="mt2"
-      title={
-        <>
-          {segmentType === "projectUser" ? (
-            <Tooltip
-              placement="rightTop"
-              trigger={["click", "hover"]}
-              overlayClassName="my-tooltip"
-              title={
-                <div className="flex flex-col m1">
-                  <Typography.Title level={5}>
-                    Segment Description
-                  </Typography.Title>
-                  <Divider className="my1" />
-                  {tooltipTitle}
-                </div>
-              }
-              arrow={true}
-            >
-              {"Segment "}
-              <QuestionCircleOutlined />
-            </Tooltip>
-          ) : (
-            <>{"Segment"}</>
-          )}
-        </>
-      }
-      extra={
-        <div className="flex flex-row" style={{ gap: 10 }}>
-          {items?.map(item => item.label)}
-        </div>
-        // <Dropdown menu={{ items }}>
-        //   <Button type="primary">Create Segment</Button>
-        // </Dropdown>
-      }
-    >
-      {isLoading ? (
-        <div style={{ height: 240 }}>
-          <LoadingSpinner></LoadingSpinner>
-        </div>
-      ) : (
-        <Table
-          rowKey="cohortId"
-          loading={isLoading}
-          dataSource={dataSource}
-          columns={columns}
-          pagination={false}
-        />
-      )}
-    </Card>
-    //  </div>
+    <div>
+      {contextHolder}
+      <Card
+        className="mt2"
+        title={
+          <>
+            {sourceType === "projectUser" ? (
+              <Tooltip
+                placement="rightTop"
+                trigger={["click", "hover"]}
+                overlayClassName="my-tooltip"
+                title={
+                  <div className="flex flex-col m1">
+                    <Typography.Title level={5}>
+                      Segment Description
+                    </Typography.Title>
+                    <Divider className="my1" />
+                    {tooltipTitle}
+                  </div>
+                }
+                arrow={true}
+              >
+                {"Segment "}
+                <QuestionCircleOutlined />
+              </Tooltip>
+            ) : (
+              <>{"Segment"}</>
+            )}
+          </>
+        }
+        extra={
+          <div className="flex flex-row" style={{ gap: 10 }}>
+            {items?.map(item => item.label)}
+          </div>
+          // <Dropdown menu={{ items }}>
+          //   <Button type="primary">Create Segment</Button>
+          // </Dropdown>
+        }
+      >
+        {isLoading ? (
+          <div style={{ height: 240 }}>
+            <LoadingSpinner></LoadingSpinner>
+          </div>
+        ) : (
+          <Table
+            rowKey="cohortId"
+            loading={isLoading}
+            dataSource={dataSource}
+            columns={columns}
+            pagination={false}
+          />
+        )}
+      </Card>
+    </div>
   );
 };
 

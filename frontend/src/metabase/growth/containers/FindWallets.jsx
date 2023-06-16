@@ -103,11 +103,11 @@ const FindWallets = props => {
             className="w-full"
             grid={{
               gutter: 10,
-              xs: 2,
-              sm: 3,
-              md: 3,
-              lg: 6,
-              xl: 6,
+              xs: 1,
+              sm: 2,
+              md: 2,
+              lg: 3,
+              xl: 4,
               xxl: 6,
             }}
             dataSource={templates}
@@ -158,7 +158,7 @@ const FindWallets = props => {
             )}
           />
         </div>
-        <SegmentListPanel router={router} segmentType = {'potentialUser'}></SegmentListPanel>
+        <SegmentListPanel router={router} sourceType = {'potentialUser'}></SegmentListPanel>
         {/* <h2 className="m mt4 w-full text-centered">How it work?</h2>
         {workDemoList.map(item => {
           return (
