@@ -76,11 +76,10 @@ const UpdateProjectModal = props => {
       nftContractAddress: [],
     })
       .then(result => {
-        console.log(result)
+        loadProjectDetail(project?.id)
         saveLatestGAProject(result.protocolSlug);
         saveLatestGAProjectId(result.id);
         onSuccess?.();
-        loadProjectDetail(project?.id);
         return true;
       })
       .catch(error => {

@@ -135,11 +135,11 @@ export function showCohortSuccessModal(
 ) {
   return modalApi.success({
     title: "Segment created successfully",
-    content: "You can now view the User Profile of this segment .",
+    content: "You can view the User Profile of this segment after few mins.",
     onOk() {
-      router?.push({
-        pathname: getGrowthProjectPath(router?.params?.project, "segment"),
-      });
+      // router?.push({
+      //   pathname: getGrowthProjectPath(router?.params?.project, from),
+      // });
       // router?.push({
       //   pathname: `/growth/public/dashboard/55b1eb29-b15e-458f-9241-1862a0d19d3b`,
       //   query: { tag: cohort?.title, cohort_title: cohort?.title ,cohortId: cohort?.id},

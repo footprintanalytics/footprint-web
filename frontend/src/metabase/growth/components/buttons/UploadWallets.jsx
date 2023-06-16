@@ -13,9 +13,12 @@ import {
 } from "antd";
 import { UploadOutlined } from "@ant-design/icons";
 import { connect } from "react-redux";
-import SplitLine from "metabase/components/SplitLine";
 import Papa from "papaparse";
-import { CreateFgaCohortByAddress } from "metabase/new-service";
+import SplitLine from "metabase/components/SplitLine";
+import {
+  CreateFgaCohortByAddress,
+  CreateFgaPotentialCohortByAddress,
+} from "metabase/new-service";
 import {
   checkIsNeedContactUs,
   getLatestGAProjectId,
@@ -36,6 +39,7 @@ const UploadWallets = ({
   refetchData,
   project,
   router,
+  sourceType = "projectUser",
 }) => {
   const [isCohortModalOpen, setCohortModalOpen] = useState(false);
   const [loading, setLoading] = useState(false);
@@ -91,7 +95,9 @@ const UploadWallets = ({
       addressList: walletList ?? [],
     };
     try {
-      const result = await CreateFgaCohortByAddress(parms);
+      const result = await (sourceType === "projectUser"
+        ? CreateFgaCohortByAddress(parms)
+        : CreateFgaPotentialCohortByAddress(parms));
       if (result) {
         // message.success("Successfully create a cohort!");
         showCohortSuccessModal(modal, result, router);
@@ -159,7 +165,8 @@ const UploadWallets = ({
         if (missFilds.length > 0) {
           message.error(`Missing fields: ${missFilds.join(", ")}`);
         } else {
-          const wallets = results.data.map(item => item.wallet_address);
+          let wallets = results.data.map(item => item.wallet_address);
+          wallets = wallets.filter(item => item.trim() !== '');
           setWalletList(wallets);
           setPasteValue(wallets.join("\n"));
         }

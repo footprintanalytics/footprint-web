@@ -4,12 +4,17 @@ import {
   ShopOutlined,
   TagsOutlined,
   TeamOutlined,
+  LineChartOutlined,
   LinkOutlined,
+  WalletOutlined,
   FileImageOutlined,
+  PieChartOutlined,
   GatewayOutlined,
   HomeOutlined,
   SettingOutlined,
+  DollarOutlined,
   ProjectOutlined,
+  AreaChartOutlined,
   CommentOutlined,
 } from "@ant-design/icons";
 import { get } from "underscore";
@@ -341,7 +346,7 @@ function getItem(label, key, icon, children, type, disabled = false) {
  * @param {*} protocolType : 1: GameFi, 2: NFT, 3: GameFi_NFT
  * @returns
  */
-export const fga_menu_data_v2 = project => {
+export const fga_menu_data_v2_old = project => {
   let protocolType = project.protocolType;
   if (project?.nftCollectionAddress?.length > 0) {
     if (protocolType === "GameFi") {
@@ -446,6 +451,114 @@ export const fga_menu_data_v2 = project => {
       }
     }
   });
+  const keys = getKeys(menuTabs);
+  return { menuTabs, keys, dashboardMap, liveKeys };
+};
+
+export const fga_menu_data_v2 = project => {
+  let protocolType = project.protocolType;
+  if (project?.nftCollectionAddress?.length > 0) {
+    if (protocolType === "GameFi") {
+      protocolType = "GameFi_NFT";
+    } else {
+      protocolType = "NFT";
+    }
+  }
+  const dashboardMap = new Map([
+    [
+      "home",
+      protocolType === "NFT"
+        ? "346f0d3d-5486-404b-a5d2-17ce52150fe1"
+        : "2f4f1fe9-7163-4ecf-91db-76c87a9306ed",
+    ],
+    ["game_tokenomics", "530dfa4f-2ddd-4ba7-8e9c-d6ccbe84bc00"],
+    ["game_revenue", "8932389c-42cc-4ce7-a20f-a6a146cd31a2"],
+    ["game_token_holder", "ff4ddbe9-8818-4abf-8a6c-91c3559071af"],
+    ["users_overview", "6d84b4a6-ceef-4b30-a9ad-b233038fd8d3"],
+    ["game_active_users", "6d84b4a6-ceef-4b30-a9ad-b233038fd8d3"],
+    ["nft_leaderboard", "3e9f9af4-93a8-46d4-8ee7-bc472201da7d"],
+    ["nft_nft_holder", "58047ca6-0116-438d-9ac3-79ac81dfa764"],
+    ["nft_sales_mints", "08fb03cf-4ca4-4041-9d91-315a49d78615"],
+    ["nft_revenue", "b98b0a6b-64cb-4e09-979d-693040ea3ec9"],
+    ["twitter", "fd4d94f3-06f7-445d-ada3-0ce82bcefa39"],
+    ["discord", "d137a1ef-34a3-4553-84cb-2203bd9d2baf"],
+  ]);
+  const menuTabs = [
+    getItem(
+      "Analysis",
+      "analysis",
+      <PieChartOutlined />,
+      [
+        getItem("Home", "home", null),
+        getItem("Users", "users", null, [
+          //<TeamOutlined />
+          protocolType !== "NFT" && getItem("Overview", "users_overview", null),
+          getItem("Segment", "segment", null),
+          getItem("Members", "members", null),
+        ]),
+        getItem("Assets", "assets", null, [
+          //<WalletOutlined />
+          protocolType !== "NFT" &&
+            getItem("Tokenomics", "game_tokenomics", null),
+          protocolType !== "NFT" &&
+            getItem("Token Holder", "game_token_holder", null),
+          //  protocolType !== "NFT" && getItem("Active Users", "game_active_users", null),
+          protocolType !== "GameFi" &&
+            getItem("NFT Sales&Mints", "nft_sales_mints", null),
+          protocolType !== "GameFi" &&
+            getItem("NFT Leaderboard", "nft_leaderboard", null),
+          protocolType !== "GameFi" &&
+            getItem("NFT Holder", "nft_nft_holder", null),
+        ]),
+        getItem("Social", "social", null, [
+          // <GatewayOutlined />
+          getItem("Twitter", "twitter", null),
+          getItem("Discord", "discord", null),
+          getItem("ID Connect", "id_connect", null),
+        ]),
+        getItem("Revenue", "revenue", null, [
+          //<DollarOutlined />
+          protocolType !== "NFT" && getItem("Revenue", "game_revenue", null),
+          protocolType !== "GameFi" &&
+            getItem("NFT Revenue", "nft_revenue", null),
+        ]),
+      ],
+      // "group",
+    ),
+    getItem(
+      "Growth",
+      "growth",
+      <LineChartOutlined />,
+      [
+        getItem("Find Wallets", "find_wallets", null),
+        // getItem("Airdrop", "airdrop", null),
+        getItem("Single Wallet Profile", "wallet_profile", null),
+        getItem("Activation", "activation", null),
+      ],
+      // "group",
+    ),
+    getItem("Custom Analysis", "custom", <BarChartOutlined />, [
+      getItem("Templates", "templates", null),
+      getItem("My Analysis", "my_analysis", null),
+    ]),
+    getItem("Settings", "settings", <SettingOutlined />, [
+      getItem("Integration", "integration", null),
+      getItem("Project Info", "general", null),
+      getItem("Channel", "channel", null),
+    ]),
+  ];
+  const liveKeys = [
+    "home_nft",
+    "home_game",
+    "nft_nft_holder",
+    "nft_leaderboard",
+    "nft_sales_mints",
+    "game_tokenomics",
+    "game_token_holder",
+    "game_active_users",
+    "game_revenue",
+    "nft_revenue",
+  ];
   const keys = getKeys(menuTabs);
   return { menuTabs, keys, dashboardMap, liveKeys };
 };
