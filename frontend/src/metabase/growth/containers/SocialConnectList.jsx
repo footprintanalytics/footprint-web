@@ -286,7 +286,7 @@ const SocialConnectList = props => {
                     modal,
                     result,
                     router,
-                    "Social Connect",
+                    "segment",
                   );
                 })
                 .catch(error => {

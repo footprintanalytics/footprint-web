@@ -100,7 +100,7 @@ const UploadWallets = ({
         : CreateFgaPotentialCohortByAddress(parms));
       if (result) {
         // message.success("Successfully create a cohort!");
-        showCohortSuccessModal(modal, result, router);
+        showCohortSuccessModal(modal, result, router, sourceType==='projectUser'?'segment':'find_wallets');
         refetchData?.();
         setCohortModalOpen(false);
       }
