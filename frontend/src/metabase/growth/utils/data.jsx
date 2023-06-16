@@ -346,7 +346,7 @@ function getItem(label, key, icon, children, type, disabled = false) {
  * @param {*} protocolType : 1: GameFi, 2: NFT, 3: GameFi_NFT
  * @returns
  */
-export const fga_menu_data_v2 = project => {
+export const fga_menu_data_v2_old = project => {
   let protocolType = project.protocolType;
   if (project?.nftCollectionAddress?.length > 0) {
     if (protocolType === "GameFi") {
@@ -455,7 +455,7 @@ export const fga_menu_data_v2 = project => {
   return { menuTabs, keys, dashboardMap, liveKeys };
 };
 
-export const fga_menu_data_v3 = project => {
+export const fga_menu_data_v2 = project => {
   let protocolType = project.protocolType;
   if (project?.nftCollectionAddress?.length > 0) {
     if (protocolType === "GameFi") {
@@ -474,6 +474,7 @@ export const fga_menu_data_v3 = project => {
     ["game_tokenomics", "530dfa4f-2ddd-4ba7-8e9c-d6ccbe84bc00"],
     ["game_revenue", "8932389c-42cc-4ce7-a20f-a6a146cd31a2"],
     ["game_token_holder", "ff4ddbe9-8818-4abf-8a6c-91c3559071af"],
+    ["users_overview", "6d84b4a6-ceef-4b30-a9ad-b233038fd8d3"],
     ["game_active_users", "6d84b4a6-ceef-4b30-a9ad-b233038fd8d3"],
     ["nft_leaderboard", "3e9f9af4-93a8-46d4-8ee7-bc472201da7d"],
     ["nft_nft_holder", "58047ca6-0116-438d-9ac3-79ac81dfa764"],
@@ -488,14 +489,10 @@ export const fga_menu_data_v3 = project => {
       "analysis",
       <PieChartOutlined />,
       [
-        getItem("Home", "home", null, [
-          // <HomeOutlined />
-          protocolType !== "NFT" && getItem("Game", "home_game", null),
-          protocolType !== "GameFi" && getItem("NFT", "home_nft", null),
-        ]),
+        getItem("Home", "home", null),
         getItem("Users", "users", null, [
           //<TeamOutlined />
-          getItem("Overview", "Overview", null),
+          protocolType !== "NFT" && getItem("Overview", "users_overview", null),
           getItem("Segment", "segment", null),
           getItem("Members", "members", null),
         ]),
@@ -534,7 +531,7 @@ export const fga_menu_data_v3 = project => {
       <LineChartOutlined />,
       [
         getItem("Find Wallets", "find_wallets", null),
-        getItem("Airdrop", "airdrop", null),
+        // getItem("Airdrop", "airdrop", null),
         getItem("Single Wallet Profile", "wallet_profile", null),
         getItem("Activation", "activation", null),
       ],

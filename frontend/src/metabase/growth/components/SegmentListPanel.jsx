@@ -138,7 +138,7 @@ const SegmentListPanel = props => {
               message.info("Download will start soon...");
               window
                 .open(
-                  `/api/v1/fga/cohort/address/csv?cohortId=${record.cohortId}&projectId=${project?.id}`,
+                  `/api/v1/fga/cohort/address/csv?cohortId=${record.cohortId}&projectId=${project?.id}&cohortTitle=${record.title}}`,
                   "_blank",
                 )
                 .focus();
