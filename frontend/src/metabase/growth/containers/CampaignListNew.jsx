@@ -285,7 +285,7 @@ const CampaignListNew = props => {
                     modal,
                     result,
                     router,
-                    "Social Connect",
+                    "segment",
                   );
                 })
                 .catch(error => {

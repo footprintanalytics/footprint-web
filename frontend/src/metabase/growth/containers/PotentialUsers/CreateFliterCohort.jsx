@@ -145,18 +145,16 @@ const CreateCohort2 = ({
               filters: filters,
             });
       setCohortModalOpen(false);
-      // onChangeLocation(getGrowthProjectPath(project?.protocolSlug, "Cohort"));
       if (isTagging) {
         message.success("Tagging Success");
       } else {
-        showCohortSuccessModal(modal, result, router, type, () => {
-          onChangeLocation(
-            getGrowthProjectPath(
-              project?.protocolSlug,
-              type === "Members" ? "segment" : "find_wallets",
-            ),
-          );
-        });
+        showCohortSuccessModal(
+          modal,
+          result,
+          router,
+          type === "Members" ? "segment" : "find_wallets",
+          () => {},
+        );
       }
     } catch (error) {
       console.log("error", error);
