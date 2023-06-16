@@ -1,12 +1,10 @@
 /* eslint-disable react/prop-types */
-import React, { useState, useEffect } from "react";
-import { Button, Card, Breadcrumb, List, Typography } from "antd";
+import React from "react";
+import {  Card, List, Typography } from "antd";
 import { connect } from "react-redux";
 import { getUser, getFgaProject } from "metabase/selectors/user";
 import { getGrowthProjectPath } from "../utils/utils";
 const { Text } = Typography;
-import { getOssUrl } from "metabase/lib/image";
-import cx from "classnames";
 import SegmentListPanel from "../components/SegmentListPanel"
 
 const FindWallets = props => {
@@ -49,28 +47,6 @@ const FindWallets = props => {
     },
   ];
 
-  const workDemoList = [
-    {
-      title:
-        "Gain access to and analyze over 120 million wallet profiles and tags.",
-      desc: "View holding detailed information on any wallet address, including their token assets and NFTs.\nView historical activities and preferences on any wallet address to mine new opportunities.",
-      img: getOssUrl("img_potential1.png"),
-    },
-    {
-      title:
-        "Identify valuable users from the top NFTs, protocols, and chains.",
-      desc: "Select on-chain users of any contract，NFTs, protocols, and chains.\nFilter by holding assets and historical active protocols to build your ideal audience.\nFilter out bot,Sybil and low-value users to boost your campaign ROI.",
-      img: getOssUrl("img_potential2.png"),
-      reverse: true,
-    },
-    {
-      title:
-        "Dive deep into analyzing target audiences' holding value and activities on the chain.",
-      desc: "View unique user profiling that is cross-chain, cross-protocol, and integrates off-chain data.\nView more preference indicators and performance analysis.",
-      img: getOssUrl("img_potential3.png"),
-    },
-  ];
-
   return (
     <div
       className="flex flex-column items-center p4"
@@ -78,25 +54,10 @@ const FindWallets = props => {
     >
       <div
         className="flex flex-column w-full"
-        // style={{ width: "90%", maxWidth: 1000, minWidth: 600 }}
-
       >
         <div className=" flex flex-row w-full items-center justify-between align-center">
           <h2>Which type of user are you looking for?</h2>
-          {/* <Button
-            type="link"
-            onClick={() => {
-              // setTemplate("CustomerFilter");
-              router.push({
-                pathname: getGrowthProjectPath(
-                  projectPath,
-                  "Potential Users List",
-                ),
-              });
-            }}
-          >
-            {"Custom Filter >"}
-          </Button> */}
+
         </div>
         <div className="flex flex-row items-center mt4 w-full">
           <List
@@ -159,26 +120,7 @@ const FindWallets = props => {
           />
         </div>
         <SegmentListPanel router={router} sourceType = {'potentialUser'}></SegmentListPanel>
-        {/* <h2 className="m mt4 w-full text-centered">How it work?</h2>
-        {workDemoList.map(item => {
-          return (
-            <div
-              key={item.title}
-              className={cx(
-                "mt4 flex flex-row w-full items-center justify-between",
-                { "flex-row-reverse": item.reverse },
-              )}
-            >
-              <img src={item.img} style={{ width: "40%" }} alt={item.title} />
-              <div className="flex flex-column p2" style={{ width: "50%" }}>
-                <h3>{item.title}</h3>
-                <Text className="mt1" style={{ whiteSpace: "pre-line" }}>
-                  {item.desc}
-                </Text>
-              </div>
-            </div>
-          );
-        })} */}
+
       </div>
     </div>
   );
