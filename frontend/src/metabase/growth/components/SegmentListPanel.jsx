@@ -129,6 +129,7 @@ const SegmentListPanel = props => {
           >
             Wallet List
           </Link>
+
           <Link
             disabled={record.numberOfWallets === 0}
             onClick={() => {
