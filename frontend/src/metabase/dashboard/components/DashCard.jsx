@@ -445,12 +445,11 @@ class DashCard extends Component {
                 <a
                   className="html2canvas-filter dash-card__button-always"
                   onClick={() => {
-                    console.log("xxx", dashcard, dashboard)
                     getDataViaSqlApiAction && getDataViaSqlApiAction({ cardId: dashcard.card.id, dashcardId: dashcard.id, dashboardId: dashboard.entityId || dashboard.id })
-                    trackStructEvent(`dashcard click to preview`);
+                    trackStructEvent(`dashcard click to sql api`);
                   }}
                 >
-                  <Icon name={"getChartViaSql"} size={14} color={"#9AA0AF"} />
+                  <Icon name={"getChartViaSql"} size={16} color={"#9AA0AF"} />
                 </a>
               </Tooltip>
             )
