@@ -313,7 +313,7 @@ export const getRoutes = store => (
         <Route
           title={t`Product`}
           path="product"
-          component={props => <LazyLoad.Articles {...props} type="product" />}
+          component={props => <LazyLoad.Reports {...props} type="product" />}
         />
         <Route
           title={t`Academy`}

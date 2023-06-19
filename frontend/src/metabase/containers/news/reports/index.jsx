@@ -47,6 +47,17 @@ const Index = ({ router, type }) => {
         { label: "Activities", value: "Activities" },
       ],
     },
+    product: {
+      label: "Product",
+      value: "product",
+      subMenus: [
+        {
+          label: "Spotlight",
+          value: "Spotlight",
+        },
+        { label: "Use Case", value: "Use Case" },
+      ],
+    },
     academy: {
       label: "Academy",
       value: "academy",
