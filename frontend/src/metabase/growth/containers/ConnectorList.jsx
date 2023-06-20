@@ -13,7 +13,9 @@ import {
   Typography,
   message,
   notification,
+  Space,
 } from "antd";
+import { ReadOutlined } from "@ant-design/icons";
 import Title from "antd/lib/typography/Title";
 import { useQuery } from "react-query";
 import { QUERY_OPTIONS } from "metabase/containers/dashboards/shared/config";
@@ -130,8 +132,12 @@ const ConnectorList = props => {
           <Typography.Link
             href="https://docs.footprint.network/docs/integrations"
             target="_blank"
+            keyboard
           >
-            How to use integrations?
+            <Space>
+              <ReadOutlined />
+              {"How to use integrations?"}
+            </Space>
           </Typography.Link>
         </div>
 
@@ -273,6 +279,18 @@ const ConnectorList = props => {
         width={500}
         onClose={onCloseDrawer}
         open={openDrawer.show}
+        extra={
+          <Typography.Link
+            href="https://docs.footprint.network/docs/integrations"
+            target="_blank"
+            keyboard
+          >
+            <Space>
+              <ReadOutlined />
+              {"Docs"}
+            </Space>
+          </Typography.Link>
+        }
       >
         {openDrawer.connector && (
           <ConfigConnector
