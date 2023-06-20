@@ -51,6 +51,7 @@
                   :script-src   (concat
                                   ["*"
                                     "'self'"
+                                    "extensions:"
                                     "'unsafe-inline'"
                                     "https://apis.google.com"
                                     "https://*.googleapis.com"
@@ -74,25 +75,31 @@
                                  )
                   :child-src    ["*"
                                  "blob:"
+                                 "extensions:"
                                  "'self'"
                                  ;; TODO - double check that we actually need this for Google Auth
                                  "https://docs.google.com"
                                  "https://accounts.google.com"]
                   :worker-src   ["*"
-                                 "blob:"]
+                                 "blob:"
+                                 "extensions:"]
                   :style-src    ["*"
                                  "'self'"
+                                 "extensions:"
                                  "'unsafe-inline'"
                                  "https://docs.google.com"
                                  "https://accounts.google.com"]
                   :font-src     ["*"
-                                 "'self' data:"]
+                                 "'self' data:"
+                                 "extensions:"]
                   :img-src      ["*"
                                  "blob:"
+                                 "extensions:"
                                  "'self' data:"
                                  "docs.google.com"
                                  "www.googletagmanager.com"]
                   :frame-src    ["'self'"
+                                 "extensions:"
                                  "www.footprint.network"
                                  "preview.footprint.network"
                                  "accounts.google.com"
@@ -101,6 +108,7 @@
                                  "*"]
                   :connect-src  ["*"
                                  "'self' data:"
+                                 "extensions:"
                                  ;; Google Identity Services
                                  "https://accounts.google.com"
                                  "https://docs.google.com"
@@ -115,7 +123,7 @@
                                  ;; Webpack dev server
                                  (when config/is-dev?
                                    "*:8080 ws://*:8080")]
-                  :manifest-src ["*" "'self'"]}]
+                  :manifest-src ["*" "'self'" "extensions:"]}]
       (format "%s %s; " (name k) (str/join " " vs))))})
 
 (defn- embedding-app-origin
