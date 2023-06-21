@@ -376,6 +376,9 @@ class PublicDashboard extends Component {
       hideFooter,
       hideTitle,
       hideAllParams,
+      hideParameters,
+      hideParametersOuter,
+      allLoadOuter,
       disableBreadcrumb,
       className,
       innerClassName,
@@ -390,7 +393,7 @@ class PublicDashboard extends Component {
       ...parseHashOptions(location.hash),
     };
     const isFgaPublicDashboard = location.pathname.startsWith("/growth");
-    let hideParameters = isFgaPublicDashboard
+    let hideParametersForCustom = isFgaPublicDashboard
       ? "gamefi,protocol_slug,twitter_handler,project_name,guild_id"
       : "";
     const hashData = parseHashOptions(location?.hash);
@@ -428,7 +431,7 @@ class PublicDashboard extends Component {
     }
     if (hideAllParams) {
       parameters.map((para, index) => {
-        hideParameters = hideParameters + (index !== 0 ? "," : "") + para.slug;
+        hideParametersForCustom = hideParametersForCustom + (index !== 0 ? "," : "") + para.slug;
       });
     }
     const shouldRenderAsNightMode = isNightMode || canShowDarkMode(dashboard);
@@ -445,7 +448,7 @@ class PublicDashboard extends Component {
         description={dashboard && dashboard.description}
         dashboard={dashboard}
         parameters={parameters}
-        hideParameters={hideParameters}
+        hideParameters={hideParametersOuter || hideParameters || hideParametersForCustom}
         hideTitle={hideTitle}
         headerLayout={header}
         parameterValues={parameterValues}
@@ -457,6 +460,7 @@ class PublicDashboard extends Component {
         hideFooter={hideFooter || isFgaPublicDashboard}
         className={cx(className, isFgaPublicDashboard && "ml-250 mt-60")}
         innerClassName={cx(innerClassName)}
+        allLoadOuter={allLoadOuter}
       >
         <>
           <LoadingAndErrorWrapper
@@ -480,7 +484,7 @@ class PublicDashboard extends Component {
                 duplicateAction={this.duplicateAction}
                 previewAction={this.previewAction}
                 getDataViaSqlApiAction={this.getDataViaSqlApiAction}
-                allLoad={!!all_load}
+                allLoad={allLoadOuter || !!all_load}
               />
             )}
           </LoadingAndErrorWrapper>

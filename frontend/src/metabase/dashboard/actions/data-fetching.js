@@ -343,8 +343,11 @@ export const fetchCardData = createThunkAction(
           ),
         );
       } else if (dashboardType === "public") {
+        // const isDataApiStatPage = location.pathname === "/data-api/statistics";
+        const isDataApiStatPage = false;
         result = await fetchDataOrError(
-          maybeUsePivotEndpoint(PublicApi.dashboardCardQuery, card)(
+          maybeUsePivotEndpoint(
+            isDataApiStatPage ? PublicApi.dashboardCardQueryDataApiStat : PublicApi.dashboardCardQuery, card)(
             {
               uuid: dashboard_id,
               dashcardId: dashcard.id,

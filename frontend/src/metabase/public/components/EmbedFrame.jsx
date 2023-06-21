@@ -45,6 +45,7 @@ class EmbedFrame extends Component {
       hideFooter,
       isNightMode,
       innerClassName,
+      allLoadOuter,
     } = this.props;
     const { innerScroll } = this.state;
 
@@ -64,7 +65,7 @@ class EmbedFrame extends Component {
 
     const backgroundColor = bg_color === "black" ? "black": "";
 
-    const coverOverflowY = all_load ? {overflowY: "auto"} : {}
+    const coverOverflowY = allLoadOuter || all_load ? {overflowY: "auto"} : {}
 
     return (
       <div

@@ -8,8 +8,9 @@ import PublicDashboard from "metabase/public/containers/PublicDashboard";
 import "./DashboardArea.css";
 
 const DashboardArea = props => {
-  const { item, location } = props;
+  const { item, location, hideParameters, all_load } = props;
   const uuid = item && item.publicUuid;
+
   return (
     <React.Fragment>
       {uuid && (
@@ -23,6 +24,8 @@ const DashboardArea = props => {
           hideTitle={true}
           disableUpdateTitle={true}
           hideFooter
+          hideParametersOuter={hideParameters}
+          allLoadOuter={all_load}
         />
       )}
       {!uuid && <NoDashboardData />}
