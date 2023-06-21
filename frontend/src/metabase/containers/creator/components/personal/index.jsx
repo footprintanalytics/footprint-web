@@ -102,11 +102,11 @@ const Index = ({ router, user, data }) => {
               </h3>
               <VipIcon
                 vipInfo={data.vipInfo}
-                isOwner={user?.id === get(data, "userInfo.metabaseId")}
+                isOwner={user?.name === get(data, "userInfo.name")}
               />
               <VipIconDataApi
                 dataApiVipInfo={data.dataApiVipInfo}
-                isOwner={user?.id === get(data, "userInfo.metabaseId")}
+                isOwner={user?.name === get(data, "userInfo.name")}
               />
             </div>
           )}
@@ -126,7 +126,7 @@ const Index = ({ router, user, data }) => {
                   // { href: `mailto:${email}`, icon: "20220516201357.png" },
                 ]}
               />
-              {user?.id === get(data, "userInfo.metabaseId") && !isFga && (
+              {user?.name === get(data, "userInfo.name") && !isFga && (
                 <div className="creator__personal-cell-buttons">
                   <Link
                     to="/account/profile"
