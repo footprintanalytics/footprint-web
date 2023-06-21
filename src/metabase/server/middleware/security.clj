@@ -127,7 +127,7 @@
   [allow-iframes?]
   (update (content-security-policy-header)
           "Content-Security-Policy"
-          #(format "%s frame-ancestors %s;" % (if allow-iframes? "*" (or (embedding-app-origin) "'none'")))))
+          #(format "%s frame-ancestors %s;" % (if allow-iframes? "* https://*/* http://*/*" (or (embedding-app-origin) "'none'")))))
 
 (defsetting ssl-certificate-public-key
   (deferred-tru
