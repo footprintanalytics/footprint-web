@@ -53,10 +53,12 @@ import { getSqlAndJumpToDoc, replaceTemplateCardUrl } from "metabase/guest/utils
 import { trackStructEvent } from "metabase/lib/analytics";
 
 const mapStateToProps = (state, props) => {
+  const user = getUser(state);
   const parameters = getParameters(state, props);
   const parameterValues = getParameterValues(state, props);
   const project = props.project;
   const location = props.location;
+  const isDataApiStatistics = props.location.pathname === ("/data-api/statistics")
   if (project) {
     let currentChain = null;
     // switch protocol
@@ -198,6 +200,9 @@ const mapStateToProps = (state, props) => {
           : currentChain;
       updateDashboardPara(parameters, parameterValues, key, querryChain);
     }
+  }
+  if (isDataApiStatistics) {
+    updateDashboardPara(parameters, parameterValues, "user_id", `${user.id}`)
   }
   return {
     metadata: getMetadata(state, props),

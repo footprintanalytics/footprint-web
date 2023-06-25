@@ -4,6 +4,7 @@ import { connect } from "react-redux";
 import { loginModalShowAction } from "metabase/redux/control";
 import { push } from "react-router-redux";
 import DashboardArea from "metabase/containers/research/components/DashboardArea";
+import "./index.css";
 
 const Statistics = ({location}) => {
   const tempItem = {
@@ -13,7 +14,7 @@ const Statistics = ({location}) => {
   }
   return (
     <>
-      <div style={{ background: "white", padding: 20 }}>
+      <div className={"data-api__statistics"}>
         <h1>
           Data API Usage
         </h1>

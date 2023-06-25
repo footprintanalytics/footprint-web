@@ -1,0 +1,5 @@
+.data-api__statistics {
+  min-height: calc(100vh - 60px);
+  background: white;
+  padding: 20px;
+}
