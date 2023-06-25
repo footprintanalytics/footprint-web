@@ -241,7 +241,7 @@ class PublicDashboard extends Component {
   }
   _fetchDashboardCardData = debounce(
     () => {
-      this.props.fetchDashboardCardData({ reload: false, clear: true });
+      this.props.fetchDashboardCardData({ reload: false, clear: true, ignoreCache: this.props.ignoreCache });
     },
     100,
     {

@@ -26,6 +26,7 @@ const DashboardArea = props => {
           hideFooter
           hideParametersOuter={hideParameters}
           allLoadOuter={all_load}
+          ignoreCache={true}
         />
       )}
       {!uuid && <NoDashboardData />}
