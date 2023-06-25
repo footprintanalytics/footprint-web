@@ -48,7 +48,7 @@ const Index = ({ router, user, data }) => {
   const subscriptionDetailList = subscriptionDetailData?.list;
   const showSubscriptionCancelButton = subscriptionDetailList?.length > 0;
   const isInner = user?.groups?.includes("Inner");
-  const showDataApiStat = true;
+  const showDataApiStat = user?.name === get(data, "userInfo.name") && isInner;
 
   const logo = get(data, "userInfo.avatar");
   const userName = get(data, "userInfo.name");
