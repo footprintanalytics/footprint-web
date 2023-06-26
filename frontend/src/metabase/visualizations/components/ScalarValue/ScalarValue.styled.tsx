@@ -54,9 +54,9 @@ export const ScalarTitleContent = styled.h3`
 `;
 
 export const ScalarDescriptionContainer = styled.div`
-  cursor: pointer;
+  cursor: default;
   width: 1.5rem;
-  margin-top: 0.25rem;
+  margin-top: 0.15rem;
   padding-left: 0.5rem;
 
   &:hover {
