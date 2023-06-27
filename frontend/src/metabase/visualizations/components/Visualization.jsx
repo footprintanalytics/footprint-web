@@ -333,8 +333,8 @@ class Visualization extends React.PureComponent {
   };
 
   renderHideHintToCatch = () => {
-    return (<div style={{ display: "none" }}>error or no result</div>)
-  }
+    return <div style={{ display: "none" }}>error or no result</div>;
+  };
 
   // eslint-disable-next-line complexity
   render() {
@@ -500,7 +500,7 @@ class Visualization extends React.PureComponent {
             {this.renderHideHintToCatch()}
             <FgaErrorGuide />
           </>
-        )
+        );
       }
       if (isFga) {
         return (
@@ -538,6 +538,22 @@ class Visualization extends React.PureComponent {
         </div>
       );
     };
+    // update column description into column settings
+    if (settings?.column_settings) {
+      const columns = []
+      settings["table.columns"]?.map((item, index) => {
+        if (settings?.column_settings[`["name","${item.name}"]`]?.column_description) {
+          item = {
+            ...item,
+            description:
+              settings?.column_settings[`["name","${item.name}"]`]
+                .column_description,
+          };
+        }
+        columns.push(item);
+      });
+      settings["table.columns"] = columns;
+    }
 
     return (
       <div
@@ -628,7 +644,16 @@ class Visualization extends React.PureComponent {
                       className="h4 text-bold flex-column"
                       style={{ display: small ? "none" : "" }}
                     >
-                      <div style={{ whiteSpace: "pre-wrap", lineHeight: 1.2, maxWidth: "80%", margin: "0 auto" }}>{error}</div>
+                      <div
+                        style={{
+                          whiteSpace: "pre-wrap",
+                          lineHeight: 1.2,
+                          maxWidth: "80%",
+                          margin: "0 auto",
+                        }}
+                      >
+                        {error}
+                      </div>
                       {errorIcon !== "key" && <ErrorGuide cardId={cardId} />}
                     </div>
                   }
