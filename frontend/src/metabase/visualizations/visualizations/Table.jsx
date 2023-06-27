@@ -259,7 +259,7 @@ export default class Table extends Component {
         title: t`Column description`,
         widget: "input",
         hint: "input a description for the column",
-        // getDefault: column => formatColumn(column),
+        getDefault: '',
       },
       click_behavior: {},
     };

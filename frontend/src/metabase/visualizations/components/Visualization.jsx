@@ -540,14 +540,22 @@ class Visualization extends React.PureComponent {
     };
     // update column description into column settings
     if (settings?.column_settings) {
-      const columns = []
+      const columns = [];
+      console.log(
+        "settings",
+        settings?.column_settings,
+        settings["table.columns"],
+      );
       settings["table.columns"]?.map((item, index) => {
-        if (settings?.column_settings[`["name","${item.name}"]`]?.column_description) {
+        const column_description =
+          settings?.column_settings[`["name","${item.name}"]`]
+            ?.column_description ??
+          settings?.column_settings[`["ref",${JSON.stringify(item.fieldRef)}]`]
+            ?.column_description;
+        if (column_description) {
           item = {
             ...item,
-            description:
-              settings?.column_settings[`["name","${item.name}"]`]
-                .column_description,
+            description: column_description,
           };
         }
         columns.push(item);
