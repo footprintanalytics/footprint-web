@@ -166,7 +166,7 @@ function TableSimple({
             <Ellipsified tooltip={title?.description ?? title?.title}>
               <div style={{display:'flex',flexDirection:'row'}}>
                 {title?.title}
-                {title?.description && <TipIcon name="question" />}
+                {title?.description && <TipIcon name="info" />}
               </div>
             </Ellipsified>
           </TableHeaderCellContent>
