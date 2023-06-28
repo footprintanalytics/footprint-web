@@ -119,13 +119,17 @@ class ParameterValueWidget extends Component {
     const renderSeriesDate = () => {
       const seriesData = [
         {
+          value: "past1days",
+          label: "1D",
+        },
+        {
           value: "past7days",
           label: "7D",
         },
-        {
-          value: "past14days",
-          label: "14D",
-        },
+        // {
+        //   value: "past14days",
+        //   label: "14D",
+        // },
         {
           value: "past30days",
           label: "30D",
@@ -133,6 +137,10 @@ class ParameterValueWidget extends Component {
         {
           value: "past90days",
           label: "90D",
+        },
+        {
+          value: "past180days",
+          label: "180D",
         },
         {
           value: "2010-01-01~",
@@ -165,32 +173,36 @@ class ParameterValueWidget extends Component {
     }
     const renderSeriesTime = () => {
       const seriesTime = [
+        // {
+        //   value: "past5minutes",
+        //   label: "5Mins",
+        // },
+        // {
+        //   value: "past10minutes",
+        //   label: "10Mins",
+        // },
+        // {
+        //   value: "past30minutes",
+        //   label: "30Mins",
+        // },
         {
-          value: "past5minutes",
-          label: "5Mins",
-        },
-        {
-          value: "past10minutes",
-          label: "10Mins",
-        },
-        {
-          value: "past30minutes",
-          label: "30Mins",
-        },
-        {
-          value: "past60minutes",
+          value: "past1hours",
           label: "1H",
         },
         {
-          value: "past360minutes",
+          value: "past3hours",
+          label: "3H",
+        },
+        {
+          value: "past6hours",
           label: "6H",
         },
         {
-          value: "past720minutes",
+          value: "past12hours",
           label: "12H",
         },
         {
-          value: "past1days",
+          value: "past24hours",
           label: "24H",
         },
       ];
