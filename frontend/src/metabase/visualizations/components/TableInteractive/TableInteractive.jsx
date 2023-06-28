@@ -796,7 +796,7 @@ class TableInteractive extends Component {
             disabled={this.props.clicked != null}
           >
             {renderTableHeaderWrapper(
-              <Ellipsified tooltip={columnTitle}>
+              <Ellipsified tooltip={columnTitle?.description??columnTitle?.title}>
                 {isSortable && isRightAligned && (
                   <Icon
                     className="Icon mr1"
@@ -804,7 +804,7 @@ class TableInteractive extends Component {
                     size={8}
                   />
                 )}
-                {columnTitle}
+                {columnTitle?.title}
                 {isSortable && !isRightAligned && (
                   <Icon
                     className="Icon ml1"
