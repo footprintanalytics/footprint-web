@@ -541,11 +541,6 @@ class Visualization extends React.PureComponent {
     // update column description into column settings
     if (settings?.column_settings) {
       const columns = [];
-      console.log(
-        "settings",
-        settings?.column_settings,
-        settings["table.columns"],
-      );
       settings["table.columns"]?.map((item, index) => {
         const column_description =
           settings?.column_settings[`["name","${item.name}"]`]

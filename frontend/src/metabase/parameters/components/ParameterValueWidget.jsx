@@ -166,53 +166,33 @@ class ParameterValueWidget extends Component {
     const renderSeriesTime = () => {
       const seriesTime = [
         {
-          value: "past5mins",
+          value: "past5minutes",
           label: "5Mins",
         },
         {
-          value: "past10mins",
+          value: "past10minutes",
           label: "10Mins",
         },
         {
-          value: "past30mins",
+          value: "past30minutes",
           label: "30Mins",
         },
         {
-          value: "past60mins",
+          value: "past60minutes",
           label: "1H",
         },
         {
-          value: "past360mins",
+          value: "past360minutes",
           label: "6H",
         },
         {
-          value: "past720mins",
+          value: "past720minutes",
           label: "12H",
         },
         {
           value: "past1days",
           label: "24H",
         },
-        // {
-        //   value: "past7days",
-        //   label: "7D",
-        // },
-        // {
-        //   value: "past14days",
-        //   label: "14D",
-        // },
-        // {
-        //   value: "past30days",
-        //   label: "30D",
-        // },
-        // {
-        //   value: "past90days",
-        //   label: "90D",
-        // },
-        // {
-        //   value: "2010-01-01~",
-        //   label: "Max",
-        // },
       ];
       const { setValue, value } = this.props;
       return (

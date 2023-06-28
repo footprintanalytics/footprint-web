@@ -208,34 +208,6 @@ export const DATE_MBQL_FILTER_MAPPING: FilterMap = {
     name: t`Yesterday`,
     mapping: ["=", null, ["relative-datetime", -1, "day"]],
   },
-  past5mins: {
-    name: t`Past 5 Mins`,
-    mapping: ["time-interval", null, -5, "minute"],
-  },
-  past10mins: {
-    name: t`Past 10 Mins`,
-    mapping: ["time-interval", null, -10, "minute"],
-  },
-  past30mins: {
-    name: t`Past 30 Mins`,
-    mapping: ["time-interval", null, -30, "minute"],
-  },
-  past60mins: {
-    name: t`Past 1H`,
-    mapping: ["time-interval", null, -1, "hour"],
-  },
-  past360mins: {
-    name: t`Past 6H`,
-    mapping: ["time-interval", null, -6, "hour"],
-  },
-  past720mins: {
-    name: t`Past 12H`,
-    mapping: ["time-interval", null, -12, "hour"],
-  },
-  past1440mins: {
-    name: t`Past 24H`,
-    mapping: ["time-interval", null, -1, "day"],
-  },
   past7days: {
     name: t`Past 7 Days`,
     mapping: ["time-interval", null, -7, "day"],
