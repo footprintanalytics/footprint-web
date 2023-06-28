@@ -76,6 +76,10 @@
   color: var(--footprint-color-title);
 }
 
+.dark .creator__personal-cell h3 {
+  color: white;
+}
+
 .creator__personal-cell-desc {
   font-size: 16px;
   color: var(--footprint-color-primary-text);

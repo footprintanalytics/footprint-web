@@ -13,14 +13,17 @@ import { personalInfo } from "metabase/new-service";
 import { getProject } from "metabase/lib/project_info";
 import Link from "metabase/core/components/Link";
 import Meta from "metabase/components/Meta";
-import { getOssUrl } from "metabase/lib/image";
-import { ossPath } from "metabase/lib/ossPath";
 import { get } from "lodash";
-import { isFgaPath } from "metabase/growth/utils/utils"
+import { logout } from "metabase/auth/actions";
+import { replace } from "react-router-redux";
+import { loginModalShowAction } from "metabase/redux/control";
 
-const Index = ({ router, user, params, userInfoDataApi }) => {
-  const name = params?.name?.replace("@", "") || "";
-  const isFga = isFgaPath()
+const Index = ({ router, user, params, creator_name, replace }) => {
+  console.log("params", params)
+  const name = creator_name || params?.name?.replace("@", "") || "";
+
+  replace(`/my-studio/@${name}`)
+
   if (name) {
     updateTitle(`@${name}`);
   }
@@ -76,7 +79,7 @@ const Index = ({ router, user, params, userInfoDataApi }) => {
           keywords={name}
         />
       )}
-      <div className="creator__wrap" style={{background:isFga?'#121728':'white'}}>
+      <div className="creator__wrap">
         <Personal router={router} user={user} data={data} />
         <List
           router={router}
@@ -92,12 +95,16 @@ const Index = ({ router, user, params, userInfoDataApi }) => {
 const mapStateToProps = state => {
   return {
     user: state.currentUser,
-    userInfoDataApi: state.vipInfoDataApi,
   };
 };
 
+const mapDispatchToProps = {
+  replace,
+};
+
+
 export default compose(
-  connect(mapStateToProps),
+  connect(mapStateToProps, mapDispatchToProps),
   MetaViewportControls,
   title(),
 )(Index);

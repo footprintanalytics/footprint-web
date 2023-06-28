@@ -11,9 +11,15 @@ import { navigationNum } from "metabase/new-service";
 import { QUERY_OPTIONS } from "metabase/containers/dashboards/shared/config";
 import { isFgaPath } from "metabase/growth/utils/utils";
 
-const List = ({ router, user, name }) => {
+const List = ({
+  router,
+  user,
+  name,
+  showTabs,
+  defaultModel = "all",
+}) => {
+  console.log("router.location.query.model", router.location.query.model)
   const isFavoritesTab = router.location.query.model === "favorite";
-  const defaultModel = "all";
   const model =
     user || !isFavoritesTab
       ? router.location.query.model || defaultModel
@@ -48,6 +54,7 @@ const List = ({ router, user, name }) => {
           data={navigationNumQuery?.data}
           model={model}
           location={router.location}
+          showTabs={showTabs}
         />
       </div>
     </div>

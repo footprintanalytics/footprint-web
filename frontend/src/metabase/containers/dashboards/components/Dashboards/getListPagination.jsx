@@ -6,7 +6,7 @@ import {
   getDashboardQueryLink,
   getProtocolQueryLink,
   getSearchDashboardQueryLink,
-  isCreator,
+  isCreator, isGrowthPage, isMyStudio,
   isProtocol,
   isSearch,
 } from "../../shared/utils";
@@ -27,7 +27,7 @@ export default ({ router, current, pageSize, total }) => ({
       : isSearch()
       ? getSearchDashboardQueryLink
       : getDashboardQueryLink;
-    if (isCreator()) {
+    if (isCreator() || isGrowthPage() || isMyStudio()) {
       linkFunc = getCreatorQueryLink;
     }
     const link = linkFunc({

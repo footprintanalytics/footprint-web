@@ -94,7 +94,6 @@ export default ({
               <h3
                 style={{
                   WebkitBoxOrient: "vertical",
-                  color: isFga ? "white" : "",
                 }}
               >
                 <Highlighter

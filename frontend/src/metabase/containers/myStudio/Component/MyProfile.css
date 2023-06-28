@@ -1,0 +1,14 @@
+.my-profile {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 20px;
+  flex-direction: column;
+}
+
+.my-profile .creator__personal-base-logo {
+  width: 60px;
+  height: 60px;
+  min-width: 60px;
+  border-radius: 50%;
+}

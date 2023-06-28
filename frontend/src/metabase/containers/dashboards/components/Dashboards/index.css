@@ -83,16 +83,15 @@
   background: #fafafc;
 }
 
+.dark .dashboards__table-columns-odd {
+  background: #1d263e;
+}
+
 .dashboards__table-columns-even {
   background: #ffffff;
 }
 
-
-.dashboards__table-columns-odd-dark {
-  background: #1d263e;
-}
-
-.dashboards__table-columns-even-dark {
+.dark .dashboards__table-columns-even {
   background: #182034;
 }
 
@@ -141,9 +140,9 @@
 }
 
 .dashboards__table-name-avatar {
-  min-width: 25px;
-  width: 25px;
-  height: 25px;
+  min-width: 32px;
+  width: 32px;
+  height: 32px;
   border-radius: 50%;
 }
 
@@ -173,6 +172,10 @@
   -webkit-line-clamp: 2;
   overflow: hidden;
   text-overflow: ellipsis;
+}
+
+.dark .dashboards__table-name-info h3 {
+  color: white;
 }
 
 .Dashboard--night .dashboards__table-name-info h3 {

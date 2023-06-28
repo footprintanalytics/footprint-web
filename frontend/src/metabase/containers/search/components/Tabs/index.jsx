@@ -14,7 +14,7 @@ import { createModalShowAction } from "metabase/redux/control";
 import cx from "classnames";
 import {
   getCreatorQueryLink,
-  isCreator,
+  isCreator, isGrowthPage, isMyStudio,
   isSearch,
 } from "metabase/containers/dashboards/shared/utils";
 import Link from "metabase/core/components/Link";
@@ -39,19 +39,26 @@ const Index = ({
   setLoginModalShow,
   setCreateModalShow,
   creatorViewType,
+  showTabs = {
+    all: true,
+    dashboard: true,
+    card: true,
+    favorite: true,
+    table: true,
+  }
 }) => {
   const [isList, setIsList] = useState(creatorViewType === "list");
-
+  console.log("model", model)
   const { isMobile } = useDeviceInfo();
 
   const isOwnCreator = user && user.name === router?.params?.name;
 
   const isFavoritesTab = model === "favorite";
   const isMyTablesTab = model === "table";
-  const isCreatorTabStyle = isCreator() && isOwnCreator;
+  const isCreatorTabStyle = (isCreator() || isGrowthPage() || isMyStudio()) && isOwnCreator;
   const isFga = isFgaPath();
   const isCreatorAndOwner = () => {
-    return isCreator() && router?.params?.name === user?.name;
+    return (isCreator() || isGrowthPage() || isMyStudio()) && router?.params?.name === user?.name;
   };
 
   const tabData = [
@@ -61,7 +68,7 @@ const Index = ({
       render: params => {
         return <DashboardsList isCommon={isSearch()} {...params} />;
       },
-      show: true,
+      show: !!showTabs?.all,
     },
     {
       key: "dashboard",
@@ -69,7 +76,7 @@ const Index = ({
       render: params => {
         return <DashboardsList {...params} />;
       },
-      show: true,
+      show: !!showTabs?.dashboard,
     },
     {
       key: "card",
@@ -77,7 +84,7 @@ const Index = ({
       render: params => {
         return <DashboardsList {...params} />;
       },
-      show: true,
+      show: !!showTabs?.card,
     },
     {
       key: "flex",
@@ -85,7 +92,7 @@ const Index = ({
       render: params => {
         return null;
       },
-      show: isCreator() && isOwnCreator,
+      show: (isGrowthPage() || isCreator() || isMyStudio()) && isOwnCreator,
     },
     {
       key: "favorite",
@@ -93,7 +100,7 @@ const Index = ({
       render: params => {
         return <DashboardsList {...params} />;
       },
-      show: isCreator() && isOwnCreator,
+      show: !!showTabs?.favorite && (isGrowthPage() || isCreator() || isMyStudio()) && isOwnCreator,
     },
     {
       key: "table",
@@ -101,7 +108,7 @@ const Index = ({
       render: params => {
         return <MyTables {...params} />;
       },
-      show: isCreator() && isOwnCreator,
+      show: !!showTabs?.table && (isGrowthPage() || isCreator() || isMyStudio()) && isOwnCreator,
     },
     {
       key: "creator",
@@ -137,7 +144,7 @@ const Index = ({
     // },
   ];
 
-  const showSwitchGraph = isCreator() && !isMyTablesTab;
+  const showSwitchGraph = (isCreator() || isGrowthPage() || isMyStudio()) && !isMyTablesTab;
 
   const getTab = (key, tab) => {
     const num = data && data[key];
@@ -269,7 +276,7 @@ const Index = ({
 const mapStateToProps = state => {
   return {
     user: state.currentUser,
-    creatorViewType: isCreator()
+    creatorViewType: isCreator() || isGrowthPage() || isMyStudio()
       ? localStorage.getItem("creator-view-type") || "list"
       : "list",
   };

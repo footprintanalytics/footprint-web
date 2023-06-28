@@ -25,9 +25,11 @@ import LogoBadge from "metabase/public/components/LogoBadge";
 import Button from "metabase/core/components/Button/Button";
 import Tooltip from "metabase/components/Tooltip";
 import EmbedModal from "metabase/containers/home/components/EmbedModal";
+import flatten from "underscore/modules/_flatten";
 
 const FeaturesSide = ({
   replace,
+  onChangeLocation,
   defaultMenu,
   defaultSubMenu,
   type,
@@ -37,9 +39,13 @@ const FeaturesSide = ({
   isCustom,
   isPublic,
   location,
+  showSeo = false,
+  showSocial = true,
+  menuMode = "inline",
 }) => {
   const partnerStr = partner ? `/${partner}` : "";
   const prefixPath = isPublic ? "/public" : "";
+  const showResearchActionButtons = window.location.pathname.startsWith("/research") || window.location.pathname.startsWith("/public/research");
   const [embedModal, setEmbedModal] = useState({});
   // eslint-disable-next-line react/jsx-key
   const icons = [<MessageOutlined/>, <MailOutlined/>, <PicCenterOutlined/>, <PropertySafetyOutlined/>, <ScheduleOutlined/>, <SmileOutlined/>, <TagOutlined/>, <TrademarkCircleOutlined/>]
@@ -72,10 +78,18 @@ const FeaturesSide = ({
     }
     const items = researchData.map((item, index) => {
       if (item.subMenus) {
-        return getItem(item.label, item.value, icons[index % icons.length], item.subMenus.map(i => getItem(i.label, i.value)))
+        return getItem(item.label, item.value, icons[index % icons.length], item.subMenus.map(i => {
+          if (i.icon) {
+            return getItem(i.label, i.value, icons[index % icons.length])
+          }
+          return getItem(i.label, i.value)
+        }), item.itemType)
+      }
+      if (item.icon) {
+        return getItem(item.label, item.value, icons[index % icons.length], item.itemType)
       }
       return (
-        getItem(item.label, item.value)
+        getItem(item.label, item.value, item.itemType)
       );
     });
     const rootSubmenuKeys = researchData.map(item => item.value);
@@ -96,13 +110,35 @@ const FeaturesSide = ({
           flex: 1,
         }}
         theme="light"
-        mode="inline"
+        mode={menuMode}
         openKeys={openKeys}
         selectedKeys={[defaultMenu, defaultSubMenu]}
         onOpenChange={onOpenChange}
         onSelect={item => {
-          const menuData = researchData?.find(i => i.value === item.keyPath[1]);
-          const subMenusData = menuData?.subMenus?.find(i => i.value === item.keyPath[0]);
+          let menuData;
+          let subMenusData;
+          const array = [
+            ...flatten(researchData?.filter(f => f.itemType === "group")?.map(i => i.subMenus)),
+            ...researchData,
+          ];
+          if (item.keyPath.length === 2) {
+            menuData = array?.find(i => i.value === item.keyPath[1]);
+            subMenusData = menuData?.subMenus?.find(i => i.value === item.keyPath[0]);
+          } else {
+            menuData = array?.find(i => i.value === item.keyPath[0]);
+          }
+          if (subMenusData?.action) {
+            subMenusData?.action()
+            return ;
+          }
+          if (menuData?.action) {
+            menuData?.action()
+            return ;
+          }
+          if (menuData?.url || subMenusData?.url) {
+            window.open(subMenusData?.url || menuData?.url);
+            return ;
+          }
           let keyString;
           if (item.keyPath.length === 2) {
             keyString = `${item.keyPath[1]}/${item.keyPath[0]}`
@@ -134,28 +170,32 @@ const FeaturesSide = ({
   const renderNavButton = () => {
     return (
       <div className="feature-side__nav-button">
-        <div className="flex flex-column" style={{ width: 160 }}>
-          {!isCustom && (<Link className="mb1" to={"/dashboards"} target={isPublic ? "_blank" : ""}><h5>{"Custom Analysis >>"}</h5></Link>)}
-          {!isPublic && (
-            <>
-              <div
-                className="cursor-pointer"
-                onClick={() => {
-                  setEmbedModal({ open: true, publicUrl: getEmbedUrl() })
-                }}
-              >
-                <h5>{"Public Embed >>"}</h5>
-              </div>
-              <EmbedModal
+        {showResearchActionButtons && (
+          <div className="flex flex-column" style={{ width: 160 }}>
+            {!isCustom && (
+              <Link className="mb1" to={"/dashboards"} target={isPublic ? "_blank" : ""}><h5>{"Custom Analysis >>"}</h5>
+              </Link>)}
+            {!isPublic && (
+              <>
+                <div
+                  className="cursor-pointer"
+                  onClick={() => {
+                    setEmbedModal({ open: true, publicUrl: getEmbedUrl() })
+                  }}
+                >
+                  <h5>{"Public Embed >>"}</h5>
+                </div>
+                <EmbedModal
                   resource={embedModal}
                   onClose={() => {
-                  setEmbedModal({ open: false })
-                }}
-              />
-            </>
-          )}
-        </div>
-        {!isPublic && <SocialLayout className="mt1"/>}
+                    setEmbedModal({ open: false })
+                  }}
+                />
+              </>
+            )}
+          </div>
+        )}
+        {!isPublic && showSocial && <SocialLayout className="mt1"/>}
         {isPublic && (renderBrandInfo())}
       </div>
     )
@@ -175,7 +215,7 @@ const FeaturesSide = ({
       }}
     >
       {renderDataSet()}
-      {renderSeoData()}
+      {showSeo && renderSeoData()}
       {renderNavButton()}
     </div>
   );

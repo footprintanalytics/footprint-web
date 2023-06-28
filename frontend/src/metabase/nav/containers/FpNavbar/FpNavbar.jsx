@@ -44,6 +44,7 @@ import UserAvatar from "metabase/components/UserAvatar";
 import VipIcon from "metabase/components/VipIcon";
 import { getContext, getPath, getUser } from "../selectors";
 import { getLoginModalDefaultRegister } from "../../../selectors/control";
+import { isDark } from "../../../dashboard/components/utils/dark";
 
 const mapStateToProps = (state, props) => ({
   path: getPath(state, props),
@@ -597,7 +598,7 @@ class FpNavbar extends Component {
     };
 
     const RightMenuMobile = () => {
-      const color2 = isDark ? "white" : color("footprint-color-title");
+      const color2 = isDark() ? "white" : color("footprint-color-title");
       return (
         <div className="Nav__right-mobile-icon">
           <Link to="/search">
@@ -642,21 +643,24 @@ class FpNavbar extends Component {
             <RightMenuPad />
           </React.Fragment>
           {user ? (
-            <ProfileLink
-              {...this.props}
-              onLogout={() => this.props.logout()}
-              trigger={
-                <div className="relative" style={{ padding: 10 }}>
-                  <UserAvatar user={user} size={["2.5em", "2.5em"]} />
-                  <div
-                    className="absolute right bottom mb1"
-                    style={{ marginRight: 2 }}
-                  >
-                    <VipIcon user={user} />
-                  </div>
-                </div>
-              }
-            />
+            <Link to={`/my-studio/@${user.name}`}>
+              <span className="footprint-primary-text ml1 my-studio-button">My Studio</span>
+            </Link>
+            // /*<ProfileLink
+            //   {...this.props}
+            //   onLogout={() => this.props.logout()}
+            //   trigger={
+            //     <div className="relative" style={{ padding: 10 }}>
+            //       <UserAvatar user={user} size={["2.5em", "2.5em"]} />
+            //       <div
+            //         className="absolute right bottom mb1"
+            //         style={{ marginRight: 2 }}
+            //       >
+            //         <VipIcon user={user} />
+            //       </div>
+            //     </div>
+            //   }
+            // />*/
           ) : (
             <>
               <Link
@@ -682,10 +686,9 @@ class FpNavbar extends Component {
         </div>
       );
     };
-    const isDark = window?.location?.pathname === "/" || window?.location?.pathname?.startsWith("/research");
     const isHome = window?.location?.pathname === "/";
     return (
-      <div className={cx({ "dark": isDark })}>
+      <div className={cx({ "dark": isDark() })}>
         <div className="Nav" style={{ display: rootDisplay, borderBottom: isHome ? "none" : "" }}>
           <div className="Nav__left">
             <MobileMenuIcon />
@@ -699,7 +702,7 @@ class FpNavbar extends Component {
               }}
             >
               <img
-                src={getOssUrl(isDark ? "img_nav_logo_v5_white.svg": "img_nav_logo_v5.svg")}
+                src={getOssUrl(isDark() ? "img_nav_logo_v5_white.svg": "img_nav_logo_v5.svg")}
                 width={188}
                 height={28}
                 style={{ marginBottom: 2 }}
@@ -713,7 +716,7 @@ class FpNavbar extends Component {
               <SearchBar
                 location={location}
                 onChangeLocation={onChangeLocation}
-                isDark={isDark}
+                isDark={isDark()}
               />
             </div>
             <div className="Nav__mobile-logo">

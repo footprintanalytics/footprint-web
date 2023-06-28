@@ -1,0 +1,10 @@
+.my-studio {
+
+}
+
+.my-studio_top-buttons {
+  display: flex;
+  justify-content: center;
+  padding: 20px;
+}
+

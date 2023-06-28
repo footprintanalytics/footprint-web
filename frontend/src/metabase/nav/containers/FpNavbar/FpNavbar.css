@@ -264,6 +264,17 @@
   display: flex;
 }
 
+.Nav .my-studio-button {
+  display: flex;
+  align-items: center;
+  padding: var(--footprint-spacing-xs) var(--footprint-spacing-xs);
+  border: 1px solid #3b4f83;
+  border-radius: 4px;
+  cursor: pointer;
+  margin: 0 var(--footprint-spacing-s);
+  height: 36px;
+}
+
 @media screen and (--footprint-breakpoint-max-pad) {
   .Nav__menu,
   .Nav__menu-create,
