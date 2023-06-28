@@ -46,6 +46,7 @@ const DATE_WIDGETS = {
   "date/quarter-year": DateQuarterYearWidget,
   "date/all-options": DateAllOptionsWidget,
   "date/series-date": DateAllOptionsWidget,
+  "date/series-time": DateAllOptionsWidget,
 };
 
 class ParameterValueWidget extends Component {
@@ -162,6 +163,81 @@ class ParameterValueWidget extends Component {
         </Radio.Group>
       );
     }
+    const renderSeriesTime = () => {
+      const seriesTime = [
+        {
+          value: "past5mins",
+          label: "5Mins",
+        },
+        {
+          value: "past10mins",
+          label: "10Mins",
+        },
+        {
+          value: "past30mins",
+          label: "30Mins",
+        },
+        {
+          value: "past60mins",
+          label: "1H",
+        },
+        {
+          value: "past360mins",
+          label: "6H",
+        },
+        {
+          value: "past720mins",
+          label: "12H",
+        },
+        {
+          value: "past1days",
+          label: "24H",
+        },
+        // {
+        //   value: "past7days",
+        //   label: "7D",
+        // },
+        // {
+        //   value: "past14days",
+        //   label: "14D",
+        // },
+        // {
+        //   value: "past30days",
+        //   label: "30D",
+        // },
+        // {
+        //   value: "past90days",
+        //   label: "90D",
+        // },
+        // {
+        //   value: "2010-01-01~",
+        //   label: "Max",
+        // },
+      ];
+      const { setValue, value } = this.props;
+      return (
+        <Radio.Group
+          className="parameter-value-widget__series-date-group"
+          value={value}
+          buttonStyle="solid"
+          onChange={({ target }) => {
+            setValue(target.value);
+          }}
+        >
+          {seriesTime.map(item => {
+            return (
+              <Radio.Button
+                key={item.value}
+                className="parameter-value-widget__series-date-group-item"
+                value={item.value}
+              >
+                {item.label}
+              </Radio.Button>
+            );
+          })}
+        </Radio.Group>
+      );
+    }
 
     if (parameter.type === "date/series-date") {
       return (
@@ -180,7 +256,23 @@ class ParameterValueWidget extends Component {
         </div>
       );
     }
-
+    if (parameter.type === "date/series-time") {
+      return (
+        <div className="flex align-center">
+          {renderSeriesTime()}
+          {hasValue && (
+            <WidgetStatusIcon
+              isFullscreen={isFullscreen}
+              hasValue={hasValue}
+              noReset={noReset}
+              noPopover={noPopover}
+              isFocused={isFocused}
+              setValue={setValue}
+            />
+          )}
+        </div>
+      );
+    }
     /*if (parameter.type === "series_category" && !!dashboard) {
       return (
         <div className="flex align-center">

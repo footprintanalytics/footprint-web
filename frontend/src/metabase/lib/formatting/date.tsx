@@ -87,6 +87,7 @@ export function getDateFormatFromStyle(
 }
 
 export function formatDateTimeForParameter(value: string, unit: DatetimeUnit) {
+  console.log("formatDateTimeForParameter", value, unit);
   const m = parseTimestamp(value, unit);
   if (!m.isValid()) {
     return String(value);
@@ -107,10 +108,11 @@ export function formatDateTimeForParameter(value: string, unit: DatetimeUnit) {
     }
 
     const isSameDay = start.isSame(end, "day");
-
-    return isSameDay
-      ? start.format("YYYY-MM-DD")
-      : `${start.format("YYYY-MM-DD")}~${end.format("YYYY-MM-DD")}`;
+    const result = isSameDay
+    ? start.format("YYYY-MM-DD")
+    : `${start.format("YYYY-MM-DD")}~${end.format("YYYY-MM-DD")}`;
+    console.log("formatDateTimeForParameter result: ", result);
+    return result;
   }
 }
 

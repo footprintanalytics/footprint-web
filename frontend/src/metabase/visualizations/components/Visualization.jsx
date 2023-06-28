@@ -616,7 +616,7 @@ class Visualization extends React.PureComponent {
                 <FgaErrorGuide></FgaErrorGuide>
               ) : (
                 <>
-                  <Tooltip tooltip={error} isEnabled={small}>
+                  <Tooltip tooltip={error?.message} isEnabled={small}>
                     <Icon
                       className="mb2"
                       name={errorIcon || "warning"}

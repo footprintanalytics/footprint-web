@@ -291,6 +291,8 @@ function formatDateForParameterType(value, parameterType, unit) {
     return formatDateTimeForParameter(value, unit);
   } else if (parameterType === "date/series-date") {
     return formatDateTimeForParameter(value, unit);
+  } else if (parameterType === "date/series-time") {
+    return formatDateTimeForParameter(value, unit);
   }
   return value;
 }
