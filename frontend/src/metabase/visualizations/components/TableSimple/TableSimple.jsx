@@ -25,6 +25,7 @@ import {
   TableContainer,
   TableHeaderCellContent,
   SortIcon,
+  TipIcon,
 } from "./TableSimple.styled";
 
 import "./TableSimple.css";
@@ -75,17 +76,14 @@ function TableSimple({
   const isTranspose = tableTranspose === "transpose";
 
   useLayoutEffect(() => {
-    const { height: headerHeight, width: headerWidth } = getBoundingClientRectSafe(headerRef);
+    const { height: headerHeight, width: headerWidth } =
+      getBoundingClientRectSafe(headerRef);
     const { height: footerHeight = 0 } = getBoundingClientRectSafe(footerRef);
-    const { height: rowHeight = 0, width: rowWidth = 0 } = getBoundingClientRectSafe(firstRowRef);
-    const currentPageSize = isTranspose ?
-      Math.floor(
-        (width - headerWidth) / (rowWidth + 1),
-      )
-      :
-      Math.floor(
-      (height - headerHeight - footerHeight) / (rowHeight + 1),
-    );
+    const { height: rowHeight = 0, width: rowWidth = 0 } =
+      getBoundingClientRectSafe(firstRowRef);
+    const currentPageSize = isTranspose
+      ? Math.floor((width - headerWidth) / (rowWidth + 1))
+      : Math.floor((height - headerHeight - footerHeight) / (rowHeight + 1));
     const normalizedPageSize = Math.max(1, currentPageSize);
     if (pageSize !== normalizedPageSize) {
       setPageSize(normalizedPageSize);
@@ -156,15 +154,21 @@ function TableSimple({
     (col, colIndex) => {
       const iconName = sortDirection === "desc" ? "chevrondown" : "chevronup";
       const onClick = () => setSort(colIndex);
+      const title = getColumnTitle(colIndex);
       return (
         <th key={colIndex} data-testid="column-header">
           <TableHeaderCellContent
             isSorted={colIndex === sortColumn}
             onClick={onClick}
-            isRightAligned={isTranspose ? null: isColumnRightAligned(col)}
+            isRightAligned={isTranspose ? null : isColumnRightAligned(col)}
           >
             <SortIcon name={iconName} />
-            <Ellipsified>{getColumnTitle(colIndex)}</Ellipsified>
+            <Ellipsified tooltip={title?.description ?? title?.title}>
+              <div style={{display:'flex',flexDirection:'row'}}>
+                {title?.title}
+                {title?.description && <TipIcon name="info" />}
+              </div>
+            </Ellipsified>
           </TableHeaderCellContent>
         </th>
       );
@@ -209,10 +213,13 @@ function TableSimple({
   );
 
   return (
-    <Root className={cx(className, {"table-transpose": isTranspose})}>
+    <Root className={cx(className, { "table-transpose": isTranspose })}>
       <ContentContainer>
         <TableContainer className="scroll-show scroll-show--hover">
-          <Table className="fullscreen-normal-text fullscreen-night-text" isTranspose={isTranspose}>
+          <Table
+            className="fullscreen-normal-text fullscreen-night-text"
+            isTranspose={isTranspose}
+          >
             <thead ref={headerRef}>
               <tr>{cols.map(renderColumnHeader)}</tr>
             </thead>
