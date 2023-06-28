@@ -65,9 +65,14 @@ export const Table = styled.table<FpTableProps>`
 export const SortIcon = styled(Icon)`
   margin-right: 3px;
 `;
-
+export const TipIcon = styled(Icon)`
+  margin-left: 3px;
+`;
 SortIcon.defaultProps = {
   size: 8,
+};
+TipIcon.defaultProps = {
+  size: 12,
 };
 
 export const TableHeaderCellContent = styled.button<{

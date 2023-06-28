@@ -37,6 +37,7 @@ import { Breadcrumb } from "antd";
 import cx from "classnames";
 import { canShowDarkMode } from "metabase/dashboard/components/utils/dark";
 import { get, has } from "lodash";
+import { c } from "ttag";
 
 const mapStateToProps = state => ({
   metadata: getMetadata(state),
@@ -58,7 +59,6 @@ class PublicQuestion extends Component {
       parameterValues: {},
     };
   }
-
 
   async UNSAFE_componentWillMount() {
     const {
@@ -83,7 +83,6 @@ class PublicQuestion extends Component {
       } else {
         throw { status: 404 };
       }
-
       if (card.param_values) {
         await this.props.addParamValues(card.param_values);
       }
@@ -102,7 +101,6 @@ class PublicQuestion extends Component {
         query,
         this.props.metadata,
       );
-
       this.setState(
         { card, parameterValues: parameterValuesById },
         async () => {
@@ -173,9 +171,9 @@ class PublicQuestion extends Component {
           PublicApi.cardQuery,
           card,
         )({
-            uuid: publicUuid,
-            parameters: JSON.stringify(datasetQuery.parameters),
-            ...this.getCacheOption(),
+          uuid: publicUuid,
+          parameters: JSON.stringify(datasetQuery.parameters),
+          ...this.getCacheOption(),
         });
       } else {
         throw { status: 404 };
@@ -254,7 +252,10 @@ class PublicQuestion extends Component {
         parameterValues={parameterValues}
         hideTitle={hideTitle}
         isNightMode={shouldRenderAsNightMode}
-        className={cx(className,`${isFgaPublicDashboard ? "ml-250 mt-60" : ""}`)}
+        className={cx(
+          className,
+          `${isFgaPublicDashboard ? "ml-250 mt-60" : ""}`,
+        )}
         hideFooter={hideFooter || isFgaPublicDashboard}
         setParameterValue={this.setParameterValue}
       >
@@ -269,15 +270,15 @@ class PublicQuestion extends Component {
               error={result && result.error}
               rawSeries={[{ card: card, data: result && result.data }]}
               className="full flex-full z1"
-              onUpdateVisualizationSettings={settings =>
+              onUpdateVisualizationSettings={settings => {
                 this.setState({
                   result: updateIn(
                     result,
                     ["card", "visualization_settings"],
                     s => ({ ...s, ...settings }),
                   ),
-                })
-              }
+                });
+              }}
               gridUnit={12}
               showTitle={false}
               isDashboard
@@ -294,6 +295,8 @@ class PublicQuestion extends Component {
 
 export default _.compose(
   connect(mapStateToProps, mapDispatchToProps),
-  title(({ disableUpdateTitle, card }) => !disableUpdateTitle && card && card.name),
+  title(
+    ({ disableUpdateTitle, card }) => !disableUpdateTitle && card && card.name,
+  ),
   ExplicitSize({ refreshMode: "debounceLeading" }),
 )(PublicQuestion);
