@@ -4,6 +4,7 @@ import { t } from "ttag";
 import cx from "classnames";
 import _ from "underscore";
 
+import dayjs from "dayjs";
 import {
   getParameterIconName,
   getParameterWidgetTitle,
@@ -34,7 +35,7 @@ import {
 import ParameterFieldWidget from "./widgets/ParameterFieldWidget/ParameterFieldWidget";
 import SeriesCategory from "metabase/parameters/components/SeriesCategory";
 import S from "./ParameterWidget.css";
-import { Radio } from "antd";
+import { Radio, DatePicker } from "antd";
 import { get } from "lodash";
 import "./ParameterValueWidget.css";
 
@@ -148,29 +149,55 @@ class ParameterValueWidget extends Component {
         },
       ];
       const { setValue, value } = this.props;
+      const dateRange = !value?.startsWith("past") ?  value?.split("~"):[];
+
       return (
-        <Radio.Group
-          className="parameter-value-widget__series-date-group"
-          value={value}
-          buttonStyle="solid"
-          onChange={({ target }) => {
-            setValue(target.value);
-          }}
-        >
-          {seriesData.map(item => {
-            return (
-              <Radio.Button
-                key={item.value}
-                className="parameter-value-widget__series-date-group-item"
-                value={item.value}
-              >
-                {item.label}
-              </Radio.Button>
-            );
-          })}
-        </Radio.Group>
+        <>
+          <Radio.Group
+            className="parameter-value-widget__series-date-group"
+            value={value}
+            buttonStyle="solid"
+            onChange={({ target }) => {
+              setValue(target.value);
+            }}
+          >
+            {seriesData.map(item => {
+              return (
+                <Radio.Button
+                  key={item.value}
+                  className="parameter-value-widget__series-date-group-item"
+                  value={item.value}
+                >
+                  {item.label}
+                </Radio.Button>
+              );
+            })}
+          </Radio.Group>
+          <DatePicker.RangePicker
+            bordered={false}
+            format="YYYY-MM-DD"
+            allowClear={false}
+            defaultValue={
+              dateRange?.length > 0
+                ? [
+                    dayjs(dateRange[0], "YYYY-MM-DD"),
+                    dayjs(dateRange[1], "YYYY-MM-DD"),
+                  ]
+                : null
+            }
+            showTime={false}
+            onChange={(values, formatString) => {
+              if (formatString) {
+                setValue(`${formatString[0]}~${formatString[1]}`);
+              }
+            }}
+            className={`DatePicker ${
+              value?.startsWith("past") ? "" : "DatePickerActive"
+            }`}
+          />
+        </>
       );
-    }
+    };
     const renderSeriesTime = () => {
       const seriesTime = [
         // {
@@ -207,6 +234,7 @@ class ParameterValueWidget extends Component {
         },
       ];
       const { setValue, value } = this.props;
+
       return (
         <Radio.Group
           className="parameter-value-widget__series-date-group"
@@ -229,7 +257,7 @@ class ParameterValueWidget extends Component {
           })}
         </Radio.Group>
       );
-    }
+    };
 
     if (parameter.type === "date/series-date") {
       return (

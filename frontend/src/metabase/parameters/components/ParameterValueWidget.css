@@ -51,6 +51,26 @@
   color: var(--color-text-axis);
 }
 
+.DatePicker .ant-picker-input {
+  display: none;
+}
+.DatePicker .ant-picker-range-separator {
+  display: none;
+}
+
+.DatePickerActive .anticon {
+  color: var(--color-brand);
+}
+
+.DatePicker .ant-picker-suffix {
+  margin-inline-start: 0px;
+  font-size: 18px;
+}
+.ant-picker {
+  padding: 4px 4px 4px 0px;
+  cursor: pointer;
+}
+
 .Dashboard--night .parameter-widget-input {
   color: var(--color-text-white);
 }
