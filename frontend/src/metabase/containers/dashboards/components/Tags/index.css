@@ -1,4 +1,4 @@
-.dark .ant-tag {
+.ant-tag {
   background-color: #f2f2f2;
   border-radius: 2px;
   font-size: 13px;
@@ -10,13 +10,13 @@
 }
 
 .dark .ant-tag {
-  background-color: #404040;
+  background-color: #2A3246;
   border-radius: 2px;
-  font-size: 13px;
+  font-size: 12px;
   line-height: 1;
-  color: #f2f2f2;
+  color: #ffffffaa;
   margin: 0 2px 2px 0;
-  padding: 2px 4px;
+  padding: 4px 6px;
   border: 0;
 }
 

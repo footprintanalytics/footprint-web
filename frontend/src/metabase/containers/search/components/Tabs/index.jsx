@@ -1,6 +1,6 @@
 /* eslint-disable react/prop-types */
 /* eslint-disable react/display-name */
-import { Button, Tabs } from "antd";
+import { Button, Tabs, Input } from "antd";
 import React, { useState } from "react";
 import { connect } from "react-redux";
 import "./index.css";
@@ -23,7 +23,6 @@ import { loginModalShowAction } from "metabase/redux/control";
 import { trackStructEvent } from "metabase/lib/analytics";
 import Tooltip from "metabase/components/Tooltip";
 import Icon from "metabase/components/Icon";
-import Search from "antd/es/input/Search";
 import { debounce } from "lodash";
 import * as MetabaseAnalytics from "metabase/lib/analytics";
 import { sortMap } from "metabase/containers/dashboards/shared/config";
@@ -39,6 +38,7 @@ const Index = ({
   setLoginModalShow,
   setCreateModalShow,
   creatorViewType,
+  hideTabsBar = false,
   showTabs = {
     all: true,
     dashboard: true,
@@ -85,14 +85,6 @@ const Index = ({
         return <DashboardsList {...params} />;
       },
       show: !!showTabs?.card,
-    },
-    {
-      key: "flex",
-      tab: "",
-      render: params => {
-        return null;
-      },
-      show: (isGrowthPage() || isCreator() || isMyStudio()) && isOwnCreator,
     },
     {
       key: "favorite",
@@ -190,7 +182,7 @@ const Index = ({
     return (
       <div className="search__tabs-other flex justify-end">
         {!isFavoritesTab && !isMyTablesTab && (
-          <Search
+          <Input.Search
             allowClear
             placeholder="Search..."
             onChange={e => changeHandler(e.target.value)}
@@ -245,6 +237,7 @@ const Index = ({
         size="large"
         tabBarGutter={isMobile ? 20 : null}
         animated={false}
+        tabBarStyle={hideTabsBar ? {display: "none"} : {}}
         destroyInactiveTabPane={true}
         onChange={model => {
           router.replace(getUrl(model));

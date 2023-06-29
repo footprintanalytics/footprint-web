@@ -13,6 +13,7 @@ import { logout } from "metabase/auth/actions";
 import { replace } from "react-router-redux";
 import MyProfile from "metabase/containers/myStudio/Component/MyProfile";
 import { loginModalShowAction } from "metabase/redux/control";
+import flatten from "underscore/modules/_flatten";
 
 const MyStudio = props => {
   const isPublic = window.location.pathname.startsWith("/public");
@@ -32,30 +33,32 @@ const MyStudio = props => {
     setLoginModalShow,
   } = props;
   const researchData = myData["getMyStudioData"]({ params, router, user, name: params.name, onLogout: logout });
-
+  const array = [
+    ...flatten(researchData?.filter(f => f.itemType === "group")?.map(i => i.subMenus)),
+    ...researchData.filter(f => f.itemType !== "group"),
+  ]
   const findItemByData = ({ menu, subMenu }) => {
-    const menuData = researchData?.find(item => item.value === menu);
-    console.log("menuData", menuData, menu, subMenu)
+    const menuData = array?.find(item => item.value === menu);
     if (!menuData?.subMenus) {
       return menuData;
     }
-    return menuData?.subMenus?.find(item => item.value === subMenu) || researchData[0]?.subMenus[0];
+    return menuData?.subMenus?.find(item => item.value === subMenu) || array[0]?.subMenus[0];
   }
 
   const item = findItemByData({ menu, subMenu, value });
-  console.log("menu", menu, params.name, researchData[0].value)
+
   if (!menu) {
-    if (researchData[0].subMenus) {
+    if (array[0].subMenus) {
       if (params.name) {
-        replace(`my-studio/@${params.name}/${researchData[0].value}/${researchData[0]?.subMenus[0]?.value}`);
+        replace(`my-studio/@${params.name}/${array[0].value}/${array[0]?.subMenus[0]?.value}`);
       }
     } else {
       if (params.name) {
-        console.log("xxx", `my-studio/@${params.name}/${researchData[0].value}`)
-        replace(`my-studio/@${params.name}/${researchData[0].value}`);
+        replace(`my-studio/@${params.name}/${array[0].value}`);
       }
     }
   }
+
   return (
     <>
       <div className={cx("bg-gray flex flex", isPublic ? "Features-public" : "Features")}>

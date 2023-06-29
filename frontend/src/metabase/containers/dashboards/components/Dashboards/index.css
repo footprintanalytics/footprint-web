@@ -128,6 +128,10 @@
   color: #84848a;
 }
 
+.dark .dashboards__table-date {
+  color: #ffffffdd;
+}
+
 .dashboards__table-custom {
   font-size: 14px;
   color: #303440;
@@ -175,11 +179,11 @@
 }
 
 .dark .dashboards__table-name-info h3 {
-  color: white;
+  color: #ffffffdc;
 }
 
 .Dashboard--night .dashboards__table-name-info h3 {
-  color: white;
+  color: #ffffffdd;
 }
 
 .dashboards__table-name-info h3 img {
@@ -211,6 +215,10 @@
   cursor: default;
 }
 
+.dark .dashboards__table-chart {
+  background: #f6f6fecc;
+}
+
 .dashboards__table-name-info-creator {
   display: block;
   font-size: 14px;
@@ -225,10 +233,14 @@
   color: white;
 }
 
+.my__analysis .dashboards__table-name-info-creator {
+  color: var(--color-primary-dark);
+}
+
 .dashboards__table-action {
   cursor: pointer;
-  width: 24px;
-  height: 24px;
+  width: 18px;
+  height: 18px;
   border-radius: 50%;
   display: inline-flex;
   align-items: center;
@@ -236,9 +248,13 @@
   background-color: #f1f1f1;
 }
 
+.dark .dashboards__table-action {
+  background-color: #A0AEC0;
+}
+
 .dashboards__table-action img {
   width: 3px;
-  height: 15px;
+  height: 10px;
 }
 
 @media screen and (max-width: 1440px) {

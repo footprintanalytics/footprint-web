@@ -18,7 +18,7 @@ import IconValue from "../IconValue";
 import { sortMap } from "../../shared/config";
 import { isFgaPath } from "metabase/growth/utils/utils";
 
-const colors = ["#E4E4FE", "#D9F8F3", "#FFF5D9", "#FFDFE8"];
+const colors = ["#E4E4FEdd", "#D9F8F3dd", "#FFF5D9dd", "#FFDFE8dd"];
 
 export default ({
   router,

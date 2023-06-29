@@ -79,6 +79,11 @@ const FeaturesSide = ({
     const items = researchData.map((item, index) => {
       if (item.subMenus) {
         return getItem(item.label, item.value, icons[index % icons.length], item.subMenus.map(i => {
+          if (i.subMenus) {
+            return getItem(i.label, i.value, icons[index % icons.length], i.subMenus.map(i2 => {
+              return getItem(i2.label, i2.value)
+            }));
+          }
           if (i.icon) {
             return getItem(i.label, i.value, icons[index % icons.length])
           }

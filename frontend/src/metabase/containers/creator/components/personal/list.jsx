@@ -17,8 +17,8 @@ const List = ({
   name,
   showTabs,
   defaultModel = "all",
+  hideTabsBar,
 }) => {
-  console.log("router.location.query.model", router.location.query.model)
   const isFavoritesTab = router.location.query.model === "favorite";
   const model =
     user || !isFavoritesTab
@@ -55,6 +55,7 @@ const List = ({
           model={model}
           location={router.location}
           showTabs={showTabs}
+          hideTabsBar={hideTabsBar}
         />
       </div>
     </div>
