@@ -46,6 +46,7 @@ const DATE_WIDGETS = {
   "date/quarter-year": DateQuarterYearWidget,
   "date/all-options": DateAllOptionsWidget,
   "date/series-date": DateAllOptionsWidget,
+  "date/series-time": DateAllOptionsWidget,
 };
 
 class ParameterValueWidget extends Component {
@@ -118,13 +119,17 @@ class ParameterValueWidget extends Component {
     const renderSeriesDate = () => {
       const seriesData = [
         {
+          value: "past1days",
+          label: "1D",
+        },
+        {
           value: "past7days",
           label: "7D",
         },
-        {
-          value: "past14days",
-          label: "14D",
-        },
+        // {
+        //   value: "past14days",
+        //   label: "14D",
+        // },
         {
           value: "past30days",
           label: "30D",
@@ -132,6 +137,10 @@ class ParameterValueWidget extends Component {
         {
           value: "past90days",
           label: "90D",
+        },
+        {
+          value: "past180days",
+          label: "180D",
         },
         {
           value: "2010-01-01~",
@@ -149,6 +158,65 @@ class ParameterValueWidget extends Component {
           }}
         >
           {seriesData.map(item => {
+            return (
+              <Radio.Button
+                key={item.value}
+                className="parameter-value-widget__series-date-group-item"
+                value={item.value}
+              >
+                {item.label}
+              </Radio.Button>
+            );
+          })}
+        </Radio.Group>
+      );
+    }
+    const renderSeriesTime = () => {
+      const seriesTime = [
+        // {
+        //   value: "past5minutes",
+        //   label: "5Mins",
+        // },
+        // {
+        //   value: "past10minutes",
+        //   label: "10Mins",
+        // },
+        // {
+        //   value: "past30minutes",
+        //   label: "30Mins",
+        // },
+        {
+          value: "past1hours",
+          label: "1H",
+        },
+        {
+          value: "past3hours",
+          label: "3H",
+        },
+        {
+          value: "past6hours",
+          label: "6H",
+        },
+        {
+          value: "past12hours",
+          label: "12H",
+        },
+        {
+          value: "past24hours",
+          label: "24H",
+        },
+      ];
+      const { setValue, value } = this.props;
+      return (
+        <Radio.Group
+          className="parameter-value-widget__series-date-group"
+          value={value}
+          buttonStyle="solid"
+          onChange={({ target }) => {
+            setValue(target.value);
+          }}
+        >
+          {seriesTime.map(item => {
             return (
               <Radio.Button
                 key={item.value}
@@ -180,7 +248,23 @@ class ParameterValueWidget extends Component {
         </div>
       );
     }
-
+    if (parameter.type === "date/series-time") {
+      return (
+        <div className="flex align-center">
+          {renderSeriesTime()}
+          {hasValue && (
+            <WidgetStatusIcon
+              isFullscreen={isFullscreen}
+              hasValue={hasValue}
+              noReset={noReset}
+              noPopover={noPopover}
+              isFocused={isFocused}
+              setValue={setValue}
+            />
+          )}
+        </div>
+      );
+    }
     /*if (parameter.type === "series_category" && !!dashboard) {
       return (
         <div className="flex align-center">
