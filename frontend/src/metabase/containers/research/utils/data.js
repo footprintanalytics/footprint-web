@@ -1,7 +1,19 @@
+import React from "react";
+import {
+  MessageOutlined,
+  PicCenterOutlined,
+  PropertySafetyOutlined,
+  ScheduleOutlined,
+  SmileOutlined,
+  TagOutlined,
+  TrademarkCircleOutlined,
+} from "@ant-design/icons/lib/icons";
+
 const nftData = [
   {
     "label": "NFT Market",
     "value": "nft-market",
+    "icon": <MessageOutlined />,
     "subMenus": [
       {
         "label": "Market Overview",
@@ -40,6 +52,7 @@ const nftData = [
   }, {
     "label": "NFT Trends",
     "value": "nft-trends",
+    "icon": <PicCenterOutlined />,
     "subMenus": [
       {
         "label": "Trending Chains",
@@ -87,6 +100,7 @@ const nftData = [
   }, {
     "label": "NFT Wash Trading Stats",
     "value": "nft-wash-trade-stats",
+    "icon": <PropertySafetyOutlined />,
     "subMenus": [
       {
         "label": "Wash Trading Overview",
@@ -136,6 +150,7 @@ const nftData = [
   }, {
     "label": "Fundraising",
     "value": "fundraising",
+    "icon": <ScheduleOutlined />,
     "subMenus": [
       {
         "label": "Fundraising Overview",
@@ -153,7 +168,7 @@ const nftData = [
   {
     "label": "NFT Collections",
     "value": "nft-collections",
-    "icon": "https://statichk.footprint.network/icon_side_ranking.png",
+    "icon": <SmileOutlined />,
     "subMenus": [
       {
         "label": "Single Collection Stats",
@@ -165,7 +180,7 @@ const nftData = [
   {
     "label": "Themetic analysis",
     "value": "themetic-analysis",
-    "icon": "https://statichk.footprint.network/icon_side_ranking.png",
+    "icon": <TagOutlined />,
     "subMenus": [
       {
         "label": "Blur Airdrop",
@@ -202,7 +217,7 @@ const gamefiData = [
   {
     "label": "GameFi Market",
     "value": "gamefi-market",
-    "icon": "https://statichk.footprint.network/icon_side_analysis.png",
+    "icon": <MessageOutlined />,
     "subMenus": [
       {
         "label": "Market Overview",
@@ -224,6 +239,7 @@ const gamefiData = [
   {
     "value": "web3 gaming-trends",
     "label": "Web3 Gaming Trends",
+    "icon": <PicCenterOutlined />,
     "subMenus": [
       {
         "label": "Top Games",
@@ -247,6 +263,7 @@ const gamefiData = [
   {
     "label": "GameFi Protocos",
     "value": "gamefi-protocos",
+    "icon": <PropertySafetyOutlined />,
     "subMenus": [
       {
         "label": "Single GameFi Protocos Stats",
@@ -258,6 +275,7 @@ const gamefiData = [
   {
     "label": "Fundraising",
     "value": "fundraising",
+    "icon": <ScheduleOutlined />,
     "subMenus": [
       {
         "label": "Fundraising Overview",
@@ -275,6 +293,7 @@ const gamefiData = [
   {
     "label": "Themetic analysis",
     "value": "themetic-analysis",
+    "icon": <SmileOutlined />,
     "subMenus": [
       {
         "label": "Gamer Profile",
@@ -291,6 +310,7 @@ const gamefiData = [
   {
     "label": "Featured Dashboards",
     "value": "featured-dashboards",
+    "icon": <TagOutlined />,
     "subMenus": [
       {
         "label": "PlanetIX Data Overview",
@@ -345,7 +365,7 @@ const chainData = [
   {
     "label": "Chain Ecosystem",
     "value": "chain-ecosystem",
-    "icon": "https://statichk.footprint.network/icon_side_analysis.png",
+    "icon": <MessageOutlined />,
     "subMenus": [
       {
         "label": "Chain Overview",
@@ -362,7 +382,7 @@ const chainData = [
   {
     "label": "Chain Stats",
     "value": "chain-stats",
-    "icon": "https://statichk.footprint.network/icon_side_analysis.png",
+    "icon": <PicCenterOutlined />,
     "subMenus": [
       {
         "label": "Ethereum Overview",
@@ -479,6 +499,7 @@ const chainData = [
   {
     "label": "Chain Trends",
     "value": "chain-trends",
+    "icon": <PropertySafetyOutlined />,
     "subMenus": [
       {
         "label": "Top Chains",
@@ -497,6 +518,7 @@ const chainData = [
   {
     "label": "Bridge Stats",
     "value": "bridge-stats",
+    "icon": <ScheduleOutlined />,
     "subMenus": [
       {
         "label": "Bridge Overview",
@@ -518,6 +540,7 @@ const chainData = [
   {
     "label": "Featured Dashboards",
     "value": "featured-dashboards",
+    "icon": <SmileOutlined />,
     "subMenus": [
       {
         "label": "Bitcoin Chain Stats",
@@ -578,7 +601,7 @@ const customData = {
     {
       "label": "GameFi Market",
       "value": "gamefi-market",
-      "icon": "https://statichk.footprint.network/icon_side_analysis.png",
+      "icon": <MessageOutlined />,
       "subMenus": [
         {
           "label": "Market Overview",

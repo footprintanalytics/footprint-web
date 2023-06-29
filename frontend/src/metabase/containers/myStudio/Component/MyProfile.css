@@ -1,9 +1,7 @@
 .my-profile {
   display: flex;
-  justify-content: center;
   align-items: center;
   padding: 20px 20px 0;
-  flex-direction: column;
 }
 
 .my-profile .creator__personal-base-logo {
@@ -11,4 +9,9 @@
   height: 60px;
   min-width: 60px;
   border-radius: 50%;
+}
+
+.my-profile__right {
+  display: flex;
+  flex-direction: column;
 }

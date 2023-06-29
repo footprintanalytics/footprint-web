@@ -105,19 +105,21 @@ const MyProfile = props => {
             </Avatar>
           )}
         </Tooltip>
-        {userName && (
-          <div style={{ display: "flex", alignItems: "center", marginTop: 10 }}>
-            <h3 style={{ WebkitBoxOrient: "vertical", }}>{userName}</h3>
-          </div>
-        )}
-        <SocialList
-          list={[
-            { href: twitter, icon: "20220516201254.png", isBlank: true },
-            { href: telegram, icon: "20220516201327.png", isBlank: true },
-            { href: discord, icon: "20220516201343.png", isBlank: true },
-            // { href: `mailto:${email}`, icon: "20220516201357.png" },
-          ]}
-        />
+        <div className="my-profile__right">
+          {userName && (
+            <div style={{ display: "flex", alignItems: "center", marginTop: 10 }}>
+              <h3 style={{ WebkitBoxOrient: "vertical", }}>{userName}</h3>
+            </div>
+          )}
+          <SocialList
+            list={[
+              { href: twitter, icon: "20220516201254.png", isBlank: true },
+              { href: telegram, icon: "20220516201327.png", isBlank: true },
+              { href: discord, icon: "20220516201343.png", isBlank: true },
+              // { href: `mailto:${email}`, icon: "20220516201357.png" },
+            ]}
+          />
+        </div>
       </div>
     </>
   );

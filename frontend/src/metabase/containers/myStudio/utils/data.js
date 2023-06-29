@@ -4,6 +4,16 @@ import MyAnalysis from "metabase/containers/myStudio/Component/MyAnalysis";
 import * as Urls from "metabase/lib/urls";
 import List from "metabase/containers/creator/components/personal/list";
 
+import {
+  MessageOutlined,
+  PicCenterOutlined,
+  PropertySafetyOutlined,
+  ScheduleOutlined,
+  SmileOutlined,
+  TagOutlined,
+  TrademarkCircleOutlined,
+} from "@ant-design/icons/lib/icons";
+
 const comingSoonDiv = () => {
   return <div className="flex justify-center p4"><h2>Coming soon~</h2></div>;
 };
@@ -19,7 +29,7 @@ const getMyStudioData = ({ name, params, router, user, onLogout }) => {
         {
           "label": "My Analysis",
           "value": "my-analysis",
-          "icon": true,
+          "icon": <MessageOutlined />,
           "component": (
             <MyAnalysis
               key="my-analysis"
@@ -32,7 +42,7 @@ const getMyStudioData = ({ name, params, router, user, onLogout }) => {
         isOwner && {
           "label": "My Datasets",
           "value": "my-datasets",
-          "icon": true,
+          "icon": <PicCenterOutlined />,
           "component": (
             <List
               key="my-datasets"
@@ -57,7 +67,7 @@ const getMyStudioData = ({ name, params, router, user, onLogout }) => {
         isOwner && {
           "label": "My API",
           "value": "my-api",
-          "icon": true,
+          "icon": <PropertySafetyOutlined />,
           "component": (
             <MyApi
               location={location}
@@ -67,12 +77,13 @@ const getMyStudioData = ({ name, params, router, user, onLogout }) => {
         isOwner && {
           "label": "My Apps",
           "value": "my-apps",
-          "icon": true,
+          "icon": <ScheduleOutlined />,
           "component": comingSoonDiv(),
         },
         isOwner && {
           "label": "Setting",
           "value": "setting",
+          "icon": <SmileOutlined />,
           "subMenus": [
             {
               "label": "Account settings",
@@ -111,20 +122,20 @@ const getMyStudioData = ({ name, params, router, user, onLogout }) => {
         isOwner && {
           "label": "App Store",
           "value": "app-store",
-          "icon": true,
+          "icon": <SmileOutlined />,
           "component": comingSoonDiv(),
         },
         isOwner && {
           "label": "Publish App",
           "value": "publish-app",
-          "icon": true,
+          "icon": <TagOutlined />,
           "component": comingSoonDiv(),
         },
         {
           "label": "Submit contract",
           "value": "submit-contract",
           "url": "/submit/contract",
-          "icon": true,
+          "icon": <TrademarkCircleOutlined />,
         },
       ].filter(Boolean),
     },
@@ -136,7 +147,7 @@ const getMyStudioData = ({ name, params, router, user, onLogout }) => {
         "label": "New Dashboard",
         "value": "new-dashboard",
         "url": "/dashboard/new",
-        "icon": true,
+        "icon": <MessageOutlined />,
       }].filter(Boolean),
     },
 

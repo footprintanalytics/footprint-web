@@ -3,7 +3,7 @@
 import React, { useState } from "react";
 import { connect } from "react-redux";
 import { push, replace } from "react-router-redux";
-import { Layout, Menu } from "antd";
+import { Menu } from "antd";
 import { MailOutlined } from "@ant-design/icons";
 import "./FeaturesSide.css";
 import { getUser } from "metabase/selectors/user";
@@ -22,8 +22,6 @@ import Link from "metabase/core/components/Link/Link";
 import SocialLayout from "metabase/components/GlobalContactPanel/components/SocialLayout";
 import MetabaseSettings from "metabase/lib/settings";
 import LogoBadge from "metabase/public/components/LogoBadge";
-import Button from "metabase/core/components/Button/Button";
-import Tooltip from "metabase/components/Tooltip";
 import EmbedModal from "metabase/containers/home/components/EmbedModal";
 import flatten from "underscore/modules/_flatten";
 
@@ -80,18 +78,23 @@ const FeaturesSide = ({
       if (item.subMenus) {
         return getItem(item.label, item.value, icons[index % icons.length], item.subMenus.map(i => {
           if (i.subMenus) {
-            return getItem(i.label, i.value, icons[index % icons.length], i.subMenus.map(i2 => {
+            if (i.icon) {
+              return getItem(i.label, i.value, i.icon, i.subMenus.map(i2 => {
+                return getItem(i2.label, i2.value)
+              }));
+            }
+            return getItem(i.label, i.value, i.icon, i.subMenus.map(i2 => {
               return getItem(i2.label, i2.value)
             }));
           }
           if (i.icon) {
-            return getItem(i.label, i.value, icons[index % icons.length])
+            return getItem(i.label, i.value, i.icon)
           }
           return getItem(i.label, i.value)
         }), item.itemType)
       }
       if (item.icon) {
-        return getItem(item.label, item.value, icons[index % icons.length], item.itemType)
+        return getItem(item.label, item.value, item.icon, item.itemType)
       }
       return (
         getItem(item.label, item.value, item.itemType)
