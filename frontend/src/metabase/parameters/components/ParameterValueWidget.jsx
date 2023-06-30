@@ -205,6 +205,7 @@ class ParameterValueWidget extends Component {
             }
             value={
               value?.startsWith("past")?null:[dayjs(this.state.dateRange[0]),dayjs(this.state.dateRange[1])]
+
               // this.state.dateRange?.length > 1
               //   ? [
               //       dayjs(this.state.dateRange[0], "YYYY-MM-DD"),
