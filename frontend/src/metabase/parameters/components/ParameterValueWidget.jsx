@@ -36,7 +36,6 @@ import ParameterFieldWidget from "./widgets/ParameterFieldWidget/ParameterFieldW
 import SeriesCategory from "metabase/parameters/components/SeriesCategory";
 import S from "./ParameterWidget.css";
 import { Radio, DatePicker } from "antd";
-import { get } from "lodash";
 import "./ParameterValueWidget.css";
 
 const DATE_WIDGETS = {
@@ -67,7 +66,7 @@ class ParameterValueWidget extends Component {
     dashboard: PropTypes.object,
   };
 
-  state = { isFocused: false };
+  state = { isFocused: false, dateRange: this.props.value?.split("~")??[] };
 
   constructor(props) {
     super(props);
@@ -81,7 +80,7 @@ class ParameterValueWidget extends Component {
     if (parentFocusChanged) {
       parentFocusChanged(isFocused);
     }
-    this.setState({ isFocused });
+    this.setState({ ...this.state, isFocused });
   };
 
   onPopoverClose = () => {
@@ -149,7 +148,6 @@ class ParameterValueWidget extends Component {
         },
       ];
       const { setValue, value } = this.props;
-      const dateRange = !value?.startsWith("past") ?  value?.split("~"):[];
 
       return (
         <>
@@ -159,6 +157,10 @@ class ParameterValueWidget extends Component {
             buttonStyle="solid"
             onChange={({ target }) => {
               setValue(target.value);
+              this.setState({
+                ...this.state,
+                dateRange: convertToRange(target.value)?.split("~") ?? [],
+              });
             }}
           >
             {seriesData.map(item => {
@@ -177,17 +179,19 @@ class ParameterValueWidget extends Component {
             bordered={false}
             format="YYYY-MM-DD"
             allowClear={false}
-            defaultValue={
-              dateRange?.length > 0
+            // defaultValue={}
+            value={
+              this.state.dateRange?.length > 1
                 ? [
-                    dayjs(dateRange[0], "YYYY-MM-DD"),
-                    dayjs(dateRange[1], "YYYY-MM-DD"),
+                    dayjs(this.state.dateRange[0], "YYYY-MM-DD"),
+                    dayjs(this.state.dateRange[1], "YYYY-MM-DD"),
                   ]
                 : null
             }
             showTime={false}
             onChange={(values, formatString) => {
               if (formatString) {
+                this.setState({ ...this.state, dateRange: formatString });
                 setValue(`${formatString[0]}~${formatString[1]}`);
               }
             }}
@@ -200,14 +204,6 @@ class ParameterValueWidget extends Component {
     };
     const renderSeriesTime = () => {
       const seriesTime = [
-        // {
-        //   value: "past5minutes",
-        //   label: "5Mins",
-        // },
-        // {
-        //   value: "past10minutes",
-        //   label: "10Mins",
-        // },
         // {
         //   value: "past30minutes",
         //   label: "30Mins",
@@ -418,6 +414,25 @@ function getFields(metadata, parameter) {
 function getFieldIds(parameter) {
   const { field_ids = [], field_id } = parameter;
   return field_id ? [field_id] : field_ids;
+}
+
+/**
+ * past10days -> 2023-06-20~2023-06-30
+ * @param {*} dateString
+ * @returns
+ */
+function convertToRange(dateString) {
+  const today = new Date(); // 获取当前日期
+  const endDate = today.toISOString().slice(0, 10);
+  const match = dateString.match(/^past(\d+)days$/);
+  if (match) {
+    const step = match[1];
+    const startDate = new Date(today.getTime() - step * 24 * 60 * 60 * 1000);
+    const startDateString = startDate.toISOString().slice(0, 10);
+    return `${startDateString}~${endDate}`;
+  } else {
+    return null;
+  }
 }
 
 function Widget({
