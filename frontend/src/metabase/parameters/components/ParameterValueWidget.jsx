@@ -66,7 +66,12 @@ class ParameterValueWidget extends Component {
     dashboard: PropTypes.object,
   };
 
-  state = { isFocused: false, dateRange: this.props.value?.split("~")??[] };
+  state = {
+    isFocused: false,
+    dateRange: this.props.value?.startsWith("past")
+      ? convertToRange(this.props.value)?.split("~") ?? []
+      : this.props.value?.split("~") ?? [],
+  };
 
   constructor(props) {
     super(props);
@@ -148,7 +153,6 @@ class ParameterValueWidget extends Component {
         },
       ];
       const { setValue, value } = this.props;
-
       return (
         <>
           <Radio.Group
@@ -179,6 +183,17 @@ class ParameterValueWidget extends Component {
             bordered={false}
             format="YYYY-MM-DD"
             allowClear={false}
+            suffixIcon={
+              <Icon
+                style={{
+                  color: value?.startsWith("past")
+                    ? "inherit"
+                    : "var(--color-brand)",
+                }}
+                name={"range_picker"}
+                size={18}
+              />
+            }
             // defaultValue={}
             value={
               this.state.dateRange?.length > 1
