@@ -68,9 +68,7 @@ class ParameterValueWidget extends Component {
 
   state = {
     isFocused: false,
-    dateRange: this.props.value?.startsWith("past")
-      ? convertToRange(this.props.value)?.split("~") ?? []
-      : this.props.value?.split("~") ?? [],
+    dateRange: [],
   };
 
   constructor(props) {
