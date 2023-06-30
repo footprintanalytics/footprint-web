@@ -153,6 +153,11 @@ class ParameterValueWidget extends Component {
         },
       ];
       const { setValue, value } = this.props;
+      const defaultDateRange = value?.startsWith("past")?[]:value?.split("~")??[];
+      const disabledDate = (current) => {
+        // Can not select days before today and today
+        return current > dayjs().endOf('day')||current<dayjs('2010-01-01');
+      };
       return (
         <>
           <Radio.Group
@@ -183,6 +188,7 @@ class ParameterValueWidget extends Component {
             bordered={false}
             format="YYYY-MM-DD"
             allowClear={false}
+            disabledDate={disabledDate}
             suffixIcon={
               <Icon
                 style={{
@@ -194,14 +200,18 @@ class ParameterValueWidget extends Component {
                 size={18}
               />
             }
-            // defaultValue={}
+            defaultValue={
+              defaultDateRange?.length > 1?[dayjs(defaultDateRange[0]),dayjs(defaultDateRange[1])]:null
+            }
             value={
-              this.state.dateRange?.length > 1
-                ? [
-                    dayjs(this.state.dateRange[0], "YYYY-MM-DD"),
-                    dayjs(this.state.dateRange[1], "YYYY-MM-DD"),
-                  ]
-                : null
+              value?.startsWith("past")?null:[dayjs(this.state.dateRange[0]),dayjs(this.state.dateRange[1])]
+
+              // this.state.dateRange?.length > 1
+              //   ? [
+              //       dayjs(this.state.dateRange[0], "YYYY-MM-DD"),
+              //       dayjs(this.state.dateRange[1], "YYYY-MM-DD"),
+              //     ]
+              //   : null
             }
             showTime={false}
             onChange={(values, formatString) => {
