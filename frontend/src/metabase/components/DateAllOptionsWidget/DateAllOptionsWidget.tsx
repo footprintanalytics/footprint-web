@@ -41,7 +41,6 @@ const DateAllOptionsWidget = ({
     const filterValues = filter.slice(2);
     return filterValues.every((value: any) => value != null);
   };
-  console.log('DateAllOptionsWidgetProps',filter,value,disableOperatorSelection);
   return (
     <WidgetRoot>
       <DatePicker
