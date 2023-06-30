@@ -4,6 +4,7 @@ import { t } from "ttag";
 import cx from "classnames";
 import _ from "underscore";
 
+import dayjs from "dayjs";
 import {
   getParameterIconName,
   getParameterWidgetTitle,
@@ -34,8 +35,7 @@ import {
 import ParameterFieldWidget from "./widgets/ParameterFieldWidget/ParameterFieldWidget";
 import SeriesCategory from "metabase/parameters/components/SeriesCategory";
 import S from "./ParameterWidget.css";
-import { Radio } from "antd";
-import { get } from "lodash";
+import { Radio, DatePicker } from "antd";
 import "./ParameterValueWidget.css";
 
 const DATE_WIDGETS = {
@@ -66,7 +66,12 @@ class ParameterValueWidget extends Component {
     dashboard: PropTypes.object,
   };
 
-  state = { isFocused: false };
+  state = {
+    isFocused: false,
+    dateRange: this.props.value?.startsWith("past")
+      ? convertToRange(this.props.value)?.split("~") ?? []
+      : this.props.value?.split("~") ?? [],
+  };
 
   constructor(props) {
     super(props);
@@ -80,7 +85,7 @@ class ParameterValueWidget extends Component {
     if (parentFocusChanged) {
       parentFocusChanged(isFocused);
     }
-    this.setState({ isFocused });
+    this.setState({ ...this.state, isFocused });
   };
 
   onPopoverClose = () => {
@@ -149,38 +154,71 @@ class ParameterValueWidget extends Component {
       ];
       const { setValue, value } = this.props;
       return (
-        <Radio.Group
-          className="parameter-value-widget__series-date-group"
-          value={value}
-          buttonStyle="solid"
-          onChange={({ target }) => {
-            setValue(target.value);
-          }}
-        >
-          {seriesData.map(item => {
-            return (
-              <Radio.Button
-                key={item.value}
-                className="parameter-value-widget__series-date-group-item"
-                value={item.value}
-              >
-                {item.label}
-              </Radio.Button>
-            );
-          })}
-        </Radio.Group>
+        <>
+          <Radio.Group
+            className="parameter-value-widget__series-date-group"
+            value={value}
+            buttonStyle="solid"
+            onChange={({ target }) => {
+              setValue(target.value);
+              this.setState({
+                ...this.state,
+                dateRange: convertToRange(target.value)?.split("~") ?? [],
+              });
+            }}
+          >
+            {seriesData.map(item => {
+              return (
+                <Radio.Button
+                  key={item.value}
+                  className="parameter-value-widget__series-date-group-item"
+                  value={item.value}
+                >
+                  {item.label}
+                </Radio.Button>
+              );
+            })}
+          </Radio.Group>
+          <DatePicker.RangePicker
+            bordered={false}
+            format="YYYY-MM-DD"
+            allowClear={false}
+            suffixIcon={
+              <Icon
+                style={{
+                  color: value?.startsWith("past")
+                    ? "inherit"
+                    : "var(--color-brand)",
+                }}
+                name={"range_picker"}
+                size={18}
+              />
+            }
+            // defaultValue={}
+            value={
+              this.state.dateRange?.length > 1
+                ? [
+                    dayjs(this.state.dateRange[0], "YYYY-MM-DD"),
+                    dayjs(this.state.dateRange[1], "YYYY-MM-DD"),
+                  ]
+                : null
+            }
+            showTime={false}
+            onChange={(values, formatString) => {
+              if (formatString) {
+                this.setState({ ...this.state, dateRange: formatString });
+                setValue(`${formatString[0]}~${formatString[1]}`);
+              }
+            }}
+            className={`DatePicker ${
+              value?.startsWith("past") ? "" : "DatePickerActive"
+            }`}
+          />
+        </>
       );
-    }
+    };
     const renderSeriesTime = () => {
       const seriesTime = [
-        // {
-        //   value: "past5minutes",
-        //   label: "5Mins",
-        // },
-        // {
-        //   value: "past10minutes",
-        //   label: "10Mins",
-        // },
         // {
         //   value: "past30minutes",
         //   label: "30Mins",
@@ -207,6 +245,7 @@ class ParameterValueWidget extends Component {
         },
       ];
       const { setValue, value } = this.props;
+
       return (
         <Radio.Group
           className="parameter-value-widget__series-date-group"
@@ -229,7 +268,7 @@ class ParameterValueWidget extends Component {
           })}
         </Radio.Group>
       );
-    }
+    };
 
     if (parameter.type === "date/series-date") {
       return (
@@ -390,6 +429,25 @@ function getFields(metadata, parameter) {
 function getFieldIds(parameter) {
   const { field_ids = [], field_id } = parameter;
   return field_id ? [field_id] : field_ids;
+}
+
+/**
+ * past10days -> 2023-06-20~2023-06-30
+ * @param {*} dateString
+ * @returns
+ */
+function convertToRange(dateString) {
+  const today = new Date(); // 获取当前日期
+  const endDate = today.toISOString().slice(0, 10);
+  const match = dateString.match(/^past(\d+)days$/);
+  if (match) {
+    const step = match[1];
+    const startDate = new Date(today.getTime() - step * 24 * 60 * 60 * 1000);
+    const startDateString = startDate.toISOString().slice(0, 10);
+    return `${startDateString}~${endDate}`;
+  } else {
+    return null;
+  }
 }
 
 function Widget({
