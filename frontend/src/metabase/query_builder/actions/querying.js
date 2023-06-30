@@ -92,7 +92,9 @@ const handleQuestionVisualType = (question, cols) => {
   const amountN = cols?.find(i => i.name === "amount")?.name;
   const volumeN = cols?.find(i => i.name === "volume")?.name;
   const valueN = cols?.find(i => i.name === "value")?.name;
-  const valueName = amountN || volumeN || valueN || cols?.find(i => i.base_type === "type/Float")?.name;
+  const valueName = amountN || volumeN || valueN
+    || cols?.find(i => i.base_type === "type/Float")?.name
+    || cols?.find(i => i.base_type === "type/BigInteger")?.name;
   // bar
   if (dateName && valueName) {
     question.card().create_method = "GPT";
