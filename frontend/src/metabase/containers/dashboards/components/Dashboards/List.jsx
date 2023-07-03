@@ -41,6 +41,7 @@ const List = ({
   user,
   protocolName,
   name,
+  model,
   isList = true,
   isCommon = false,
 }) => {
@@ -58,6 +59,7 @@ const List = ({
           ...router.location.query,
           user,
           params: router.params,
+          model: model || router.location.query.model,
         }),
         ...(name && { name: name }),
       };
@@ -81,7 +83,7 @@ const List = ({
         return elasticSearch(params);
       }
       if (isCreator() || isGrowthPage() || isMyStudio()) {
-        if (router?.location?.query?.model === "favorite") {
+        if ((model || router?.location?.query?.model) === "favorite") {
           const favoriteParams = {
             pageSize: params.pageSize,
             current: params.current,
@@ -151,7 +153,7 @@ const List = ({
           exploreTotal={data?.total}
           createPanel={false}
           showArchiveButton={
-            (isCreator() || isGrowthPage() || isMyStudio()) && router?.location?.query?.model !== "favorite"
+            (isCreator() || isGrowthPage() || isMyStudio()) && (model || router?.location?.query?.model) !== "favorite"
           }
           onAfterChangePublicUuid={() => refetch()}
           favoriteClickSuccess={() => refetch()}

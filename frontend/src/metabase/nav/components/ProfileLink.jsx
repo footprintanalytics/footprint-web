@@ -50,11 +50,17 @@ function ProfileLink({ user, adminItems, onLogout, trigger }) {
 
     return [
       {
+        title: t`My Studio`,
+        icon: null,
+        link: isFga ? `/growth${Urls.myProfileUrl(userName)}` : "/studio",
+        event: `Navbar;Profile Dropdown;My Profile`,
+      },
+      /*{
         title: t`My Profile`,
         icon: null,
         link: `${isFga ? "/growth" : ""}${Urls.myProfileUrl(userName)}`,
         event: `Navbar;Profile Dropdown;My Profile`,
-      },
+      },*/
       !isFga && {
         title: t`Account settings`,
         icon: null,

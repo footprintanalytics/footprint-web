@@ -506,11 +506,7 @@ class FpNavbar extends Component {
       ? "none"
       : "flex";
 
-    const showCreate =
-      window.location.pathname !== "/" &&
-      window.location.pathname !== "/data-api"
-    const showSignup =
-      !showCreate;
+    const showSignup = false;
 
     const MobileMenuIcon = () => {
       return (
@@ -637,30 +633,30 @@ class FpNavbar extends Component {
       return (
         <div className="Nav__right">
           {this.renderLink({})}
-          <CreateMenu />
+          {/*<CreateMenu />*/}
           <React.Fragment>
             <RightMenuMobile />
             <RightMenuPad />
           </React.Fragment>
           {user ? (
-            <Link to={`/my-studio/@${user.name}`}>
-              <span className="footprint-primary-text ml1 my-studio-button">My Studio</span>
-            </Link>
-            // /*<ProfileLink
-            //   {...this.props}
-            //   onLogout={() => this.props.logout()}
-            //   trigger={
-            //     <div className="relative" style={{ padding: 10 }}>
-            //       <UserAvatar user={user} size={["2.5em", "2.5em"]} />
-            //       <div
-            //         className="absolute right bottom mb1"
-            //         style={{ marginRight: 2 }}
-            //       >
-            //         <VipIcon user={user} />
-            //       </div>
-            //     </div>
-            //   }
-            // />*/
+            // <Link to={`/studio/@${user.name}`}>
+            //   <span className="footprint-primary-text ml1 my-studio-button">My Studio</span>
+            // </Link>
+            <ProfileLink
+              {...this.props}
+              onLogout={() => this.props.logout()}
+              trigger={
+                <div className="relative" style={{ padding: 10 }}>
+                  <UserAvatar user={user} size={["2.5em", "2.5em"]} />
+                  <div
+                    className="absolute right bottom mb1"
+                    style={{ marginRight: 2 }}
+                  >
+                    <VipIcon user={user} />
+                  </div>
+                </div>
+              }
+            />
           ) : (
             <>
               <Link

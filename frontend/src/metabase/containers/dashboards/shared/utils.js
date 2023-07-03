@@ -124,7 +124,7 @@ export const isGrowthPage = () => {
 };
 
 export const isMyStudio = () => {
-  return window.location.pathname.startsWith("/my-studio");
+  return window.location.pathname.startsWith("/studio");
 };
 
 export const isDashboards = () => {

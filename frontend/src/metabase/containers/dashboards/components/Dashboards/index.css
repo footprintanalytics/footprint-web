@@ -204,6 +204,10 @@
   cursor: default;
 }
 
+.dark .dashboards__table-private {
+  background: #f6f6fecc;
+}
+
 .dashboards__table-chart {
   color: #3434b2;
   background: #f6f6fe;

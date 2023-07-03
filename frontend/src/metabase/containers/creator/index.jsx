@@ -22,8 +22,6 @@ const Index = ({ router, user, params, creator_name, replace }) => {
   console.log("params", params)
   const name = creator_name || params?.name?.replace("@", "") || "";
 
-  replace(`/my-studio/@${name}`)
-
   if (name) {
     updateTitle(`@${name}`);
   }

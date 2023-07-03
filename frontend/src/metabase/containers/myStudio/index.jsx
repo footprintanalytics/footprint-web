@@ -6,7 +6,7 @@ import "../research/index.css";
 import cx from "classnames";
 import FeaturesSide from "metabase/containers/research/components/FeaturesSide";
 import myData from "./utils/data";
-import { Button } from "antd";
+import { Button, Dropdown } from "antd";
 import Icon from "metabase/components/Icon";
 import * as Urls from "metabase/lib/urls";
 import { logout } from "metabase/auth/actions";
@@ -32,7 +32,7 @@ const MyStudio = props => {
     logout,
     setLoginModalShow,
   } = props;
-  const researchData = myData["getMyStudioData"]({ params, router, user, name: params.name, onLogout: logout });
+  const researchData = myData["getMyStudioData"]({ params, router, user, name: user.name, onLogout: logout });
   const array = [
     ...flatten(researchData?.filter(f => f.itemType === "group")?.map(i => i.subMenus)),
     ...researchData.filter(f => f.itemType !== "group"),
@@ -47,67 +47,103 @@ const MyStudio = props => {
 
   const item = findItemByData({ menu, subMenu, value });
 
-  if (!menu) {
+  if (!menu && !subMenu) {
     if (array[0].subMenus) {
-      if (params.name) {
-        replace(`my-studio/@${params.name}/${array[0].value}/${array[0]?.subMenus[0]?.value}`);
-      }
+      replace(`studio/${array[0].value}/${array[0]?.subMenus[0]?.value}`);
     } else {
-      if (params.name) {
-        replace(`my-studio/@${params.name}/${array[0].value}`);
-      }
+      replace(`studio/${array[0].value}`);
     }
   }
-
   return (
     <>
       <div className={cx("bg-gray flex flex", isPublic ? "Features-public" : "Features")}>
         <div className="Features-side">
-          <MyProfile user={user} name={params.name}/>
-          <div className="my-studio_top-buttons">
-            <Button
-              type="primary"
-              className="mr2 flex align-center"
-              onClick={() => {
-                if (!user) {
-                  setLoginModalShow({ show: true, from: "new chart" });
-                  return ;
-                }
-                window.open(Urls.newQuestion({ type: "query" }))
+          <MyProfile user={user} name={user.name}/>
+
+          <div className="flex flex-column p2">
+            <Dropdown
+              menu={{
+                items: [
+                  {
+                    key: "1",
+                    label: (
+                      <div
+                        className="mr2 flex align-center"
+                        onClick={() => {
+                          if (!user) {
+                            setLoginModalShow({ show: true, from: "new chart" });
+                            return ;
+                          }
+                          window.open(Urls.newQuestion({ type: "query" }))
+                        }}
+                      >
+                        New Chart
+                      </div>
+                    )
+                  },
+                  {
+                    key: "2",
+                    label: (
+                      <div
+                        className="flex align-center"
+                        onClick={() => {
+                          if (!user) {
+                            setLoginModalShow({ show: true, from: "sql query" });
+                            return ;
+                          }
+                          window.open(Urls.newQuestion({
+                            type: "native",
+                            creationType: "native_question",
+                          }))
+                        }}
+                      >
+                        SQL Query
+                      </div>
+                    )
+                  },
+                  {
+                    key: "3",
+                    label: (
+                      <div
+                        className="flex align-center"
+                        onClick={() => {
+                          if (!user) {
+                            setLoginModalShow({ show: true, from: "sql query" });
+                            return ;
+                          }
+                          window.open("dashboard/new")
+                        }}
+                      >
+                        New Dashboard
+                      </div>
+                    )
+                  }
+                ]
               }}
+              placement="right"
             >
-              <Icon name="plus" size={12} className="mr1"/>
-              New Chart
-            </Button>
-            <Button
-              className="flex align-center"
-              onClick={() => {
-                if (!user) {
-                  setLoginModalShow({ show: true, from: "sql query" });
-                  return ;
-                }
-                window.open(Urls.newQuestion({
-                  type: "native",
-                  creationType: "native_question",
-                }))
-              }}
-            >
-              <Icon name="plus" size={12} className="mr1"/>
-              SQL Query
+              <Button >
+                <Icon name="plus" size={12} className="mr1"/> create
+              </Button>
+            </Dropdown>
+            <Button className="mt1" onClick={() => {
+              window.open(Urls.newQuestion({ type: "query" }))}
+            }>
+              Footprint Dataset
             </Button>
           </div>
-          <FeaturesSide
-            defaultMenu={menu}
-            defaultSubMenu={subMenu}
-            type="my-studio"
-            classify={`@${params.name}`}
-            partner={partner}
-            researchData={researchData}
-            isCustom={false}
-            isPublic={isPublic}
-            location={location}
-            menuMode="vertical"
-          />
+          {menu && (
+            <FeaturesSide
+              defaultMenu={menu}
+              defaultSubMenu={subMenu}
+              type="studio"
+              partner={partner}
+              researchData={researchData}
+              isCustom={false}
+              isPublic={isPublic}
+              location={location}
+            />
+          )}
         </div>
         <div
           className="Features-main"

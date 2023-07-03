@@ -6,17 +6,21 @@ import "./MyApi.css";
 import Statistics from "metabase/containers/dataApi/statistics";
 
 const MyApi = props => {
-  const { location } = props;
+  const { location, showUsage, showApiKey } = props;
   return (
     <>
       <div className={"my-api"}>
-        <div className="my-api__developer">
-          <h2>Data API Key</h2>
-          <div className="my-api__developer-app">
-            <DeveloperApp />
+        {showApiKey && (
+          <div className="my-api__developer">
+            <h2>Data API Key</h2>
+            <div className="my-api__developer-app">
+              <DeveloperApp />
+            </div>
           </div>
-        </div>
-        <Statistics location={location}/>
+        )}
+        {showUsage && (
+          <Statistics location={location}/>
+        )}
       </div>
     </>
   );

@@ -45,13 +45,13 @@ const Index = ({
     card: true,
     favorite: true,
     table: true,
-  }
+  },
+  hideToggleView = false,
 }) => {
   const [isList, setIsList] = useState(creatorViewType === "list");
-  console.log("model", model)
   const { isMobile } = useDeviceInfo();
 
-  const isOwnCreator = user && user.name === router?.params?.name;
+  const isOwnCreator = user && user.name === (name || router?.params?.name);
 
   const isFavoritesTab = model === "favorite";
   const isMyTablesTab = model === "table";
@@ -74,7 +74,7 @@ const Index = ({
       key: "dashboard",
       tab: "Dashboards",
       render: params => {
-        return <DashboardsList {...params} />;
+        return <DashboardsList model="dashboard" {...params} />;
       },
       show: !!showTabs?.dashboard,
     },
@@ -82,7 +82,7 @@ const Index = ({
       key: "card",
       tab: "Charts",
       render: params => {
-        return <DashboardsList {...params} />;
+        return <DashboardsList model="card" {...params} />;
       },
       show: !!showTabs?.card,
     },
@@ -90,7 +90,7 @@ const Index = ({
       key: "favorite",
       tab: "My Favorites",
       render: params => {
-        return <DashboardsList {...params} />;
+        return <DashboardsList model="favorite" {...params} />;
       },
       show: !!showTabs?.favorite && (isGrowthPage() || isCreator() || isMyStudio()) && isOwnCreator,
     },
@@ -200,7 +200,7 @@ const Index = ({
             Create
           </Button>
         )}
-        {!isFga && (
+        {!isFga && !hideToggleView && (
           <div
             className="ml1 p1 cursor-pointer"
             onClick={() => {

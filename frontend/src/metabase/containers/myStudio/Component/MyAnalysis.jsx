@@ -10,12 +10,12 @@ import List from "metabase/containers/creator/components/personal/list";
 
 const MyAnalysis = props => {
   console.log("MyAnalysis")
-  const { router, name, user } = props;
-  const personalInfoParams = {
+  const { router, name, user, showTabs } = props;
+  /*const personalInfoParams = {
     name: name,
-  };
+  };*/
 
-  const { isLoading, data, error } = useQuery(
+/*  const { isLoading, data, error } = useQuery(
     ["personalInfo", personalInfoParams],
     async () => {
       return personalInfo(personalInfoParams);
@@ -24,9 +24,9 @@ const MyAnalysis = props => {
       refetchOnWindowFocus: false,
       retry: false,
     },
-  );
+  );*/
 
-  const totalInfo = [
+  /*const totalInfo = [
     {
       title: "Dashboards",
       count: "dashboardTotal",
@@ -43,12 +43,12 @@ const MyAnalysis = props => {
       title: "Favorites",
       count: "favoriteTotal",
     },
-  ];
+  ];*/
 
   return (
     <>
       <div className={"my-analysis"}>
-        <ul className="my-analysis__stat">
+        {/*<ul className="my-analysis__stat">
           {!isLoading ? totalInfo.map((item, index) => {
             return (
               <div
@@ -66,7 +66,7 @@ const MyAnalysis = props => {
             );
           }) : <Skeleton active />
           }
-        </ul>
+        </ul>*/}
         <div
           className="my__analysis"
           style={{ width: "100%", padding: "0px 20px" }}

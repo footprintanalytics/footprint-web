@@ -47,12 +47,13 @@ const FeaturesSide = ({
   const [embedModal, setEmbedModal] = useState({});
   // eslint-disable-next-line react/jsx-key
   const icons = [<MessageOutlined/>, <MailOutlined/>, <PicCenterOutlined/>, <PropertySafetyOutlined/>, <ScheduleOutlined/>, <SmileOutlined/>, <TagOutlined/>, <TrademarkCircleOutlined/>]
+  const classifyStr = classify ? `/${classify}` : "";
   const renderSeoData = () => {
     const links = flattenDeep(
       researchData &&
       researchData.map(a => {
         return [
-          a && a.subMenus && a.subMenus.map(b => `/${type}/${classify}/${a.value}/${b.value}${b.search || ""}`),
+          a && a.subMenus && a.subMenus.map(b => `/${type}${classifyStr}/${a.value}/${b.value}${b.search || ""}`),
         ];
       }),
     );
@@ -153,7 +154,7 @@ const FeaturesSide = ({
           } else {
             keyString = `${item.keyPath[0]}`
           }
-          replace(`${prefixPath}/${type}/${classify}${partnerStr}/${keyString}${subMenusData?.search || ""}`);
+          replace(`${prefixPath}/${type}${classifyStr}${partnerStr}/${keyString}${subMenusData?.search || ""}`);
         }}
         items={items}
       />

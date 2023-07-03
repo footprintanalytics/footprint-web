@@ -11,6 +11,9 @@ import VisualizationError from "./VisualizationError";
 import VisualizationResult from "./VisualizationResult";
 import Warnings from "./Warnings";
 import RunButtonWithTooltip from "./RunButtonWithTooltip";
+import Link from "metabase/core/components/Link/Link";
+import * as Urls from "metabase/lib/urls";
+import { Button } from "antd";
 
 export default class QueryVisualization extends Component {
   constructor(props, context) {
@@ -109,8 +112,38 @@ export default class QueryVisualization extends Component {
 }
 
 export const VisualizationEmptyState = ({ className }) => (
-  <div className={cx(className, "flex flex-column layout-centered text-light")}>
-    <h3>{t`Here's where your results will appear`}</h3>
+  <div className={cx(className, "flex flex-column layout-centered text-light text-centered")}>
+    <>
+      <p style={{ fontSize: 20 }}>
+        Pick the data on the left to create your SQL query
+        <br />
+        or
+      </p>
+      <div className="flex" style={{ gap: 20 }}>
+        <Link target="_blank" to={Urls.newQuestion({ type: "query" })}>
+          <Button
+            className="Question-main--empty-button"
+            size="large"
+          >
+            0 Coding Chart
+          </Button>
+        </Link>
+        <Link
+          target="_blank"
+          to={Urls.newQuestion({
+            type: "native",
+            creationType: "native_question",
+          })
+          }>
+          <Button
+            className="Question-main--empty-button"
+            size="large"
+          >
+            SQL Chart
+          </Button>
+        </Link>
+      </div>
+    </>
   </div>
 );
 

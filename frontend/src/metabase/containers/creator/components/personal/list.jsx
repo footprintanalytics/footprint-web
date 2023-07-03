@@ -18,6 +18,7 @@ const List = ({
   showTabs,
   defaultModel = "all",
   hideTabsBar,
+  hideToggleView,
 }) => {
   const isFavoritesTab = router.location.query.model === "favorite";
   const model =
@@ -56,6 +57,7 @@ const List = ({
           location={router.location}
           showTabs={showTabs}
           hideTabsBar={hideTabsBar}
+          hideToggleView={hideToggleView}
         />
       </div>
     </div>
