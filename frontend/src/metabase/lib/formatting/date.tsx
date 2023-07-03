@@ -107,10 +107,10 @@ export function formatDateTimeForParameter(value: string, unit: DatetimeUnit) {
     }
 
     const isSameDay = start.isSame(end, "day");
-
-    return isSameDay
-      ? start.format("YYYY-MM-DD")
-      : `${start.format("YYYY-MM-DD")}~${end.format("YYYY-MM-DD")}`;
+    const result = isSameDay
+    ? start.format("YYYY-MM-DD")
+    : `${start.format("YYYY-MM-DD")}~${end.format("YYYY-MM-DD")}`;
+    return result;
   }
 }
 
