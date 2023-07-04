@@ -4,6 +4,7 @@ import styled from "@emotion/styled";
 import { connect } from "react-redux";
 import PropTypes from "prop-types";
 import ReactDOM from "react-dom";
+import { get } from "lodash";
 import { t } from "ttag";
 import cx from "classnames";
 import _ from "underscore";
@@ -337,6 +338,7 @@ class DashCard extends Component {
       && isRealtimeUser;
     const cacheTooOldByOneDay = true;
     const showRefreshButton = !singleDisplay && cacheTooOldByOneDay;
+
     return (
       <DashCardRoot
         id={id}
@@ -354,8 +356,8 @@ class DashCard extends Component {
           style={{
             textAlign: "right",
             position: "absolute",
-            right: 8,
-            bottom: 8,
+            right: 0,
+            bottom: 0,
             zIndex: 2,
           }}
         >
@@ -363,7 +365,7 @@ class DashCard extends Component {
             <QueryRealtimeButton dashcard={this.props.dashcard} refreshCardData={this.props.refreshCardData}/>
           )}*/}
           {showRefreshButton && (
-            <QueryRefreshButton dashcard={this.props.dashcard} refreshCardData={this.props.refreshCardData}/>
+            <QueryRefreshButton dashcard={this.props.dashcard} refreshCardData={this.props.refreshCardData} data={get(get(dashcardData, dashcard.id), dashcard.card_id)}/>
           )}
         </div>
         <div

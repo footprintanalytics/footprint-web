@@ -11,17 +11,22 @@ import "./QueryRefreshButton.css";
 const QueryRefreshButton = ({
    refreshCardData,
    dashcard,
-   fetchCardData,
+   data,
 }) => {
-  const [statusText, setStatusText] = React.useState(timeAgo(dashcard.card.updated_at + '.000000Z'));
+  const updated_at = data?.updated_at || data?.started_at;
+  const [statusText, setStatusText] = React.useState("");
   const [status, setStatus] = React.useState("normal");
   const [loading, setLoading] = React.useState(false);
 
   React.useEffect(() => {
-    initStatus(dashcard.card.updated_at + '.000000Z')
-  }, [dashcard]);
+    initStatus(updated_at)
+    setStatusText(timeAgo(updated_at))
+  }, [dashcard, updated_at]);
 
   function initStatus(timestamp) {
+    if (!timestamp) {
+      return ;
+    }
     const currentDate = new Date();
     const targetDate = new Date(timestamp);
 
@@ -33,6 +38,9 @@ const QueryRefreshButton = ({
     }
   }
   function timeAgo(timestamp) {
+    if (!timestamp) {
+      return "";
+    }
     const currentDate = new Date();
     const targetDate = new Date(timestamp);
 
@@ -57,7 +65,7 @@ const QueryRefreshButton = ({
         key="queryRefresh"
         tooltip={"Query refresh"}
       >
-        {!loading && (
+        {!!data && !loading && (
           <div
             className={cx("cursor-pointer", "dash-card__button-normal-always")}
             onClick={async () => {
@@ -66,6 +74,7 @@ const QueryRefreshButton = ({
               const result = await refreshCardData({ dashcard, card: dashcard.card, clear: false });
               setLoading(false);
               setStatusText(timeAgo(result.payload.result.started_at));
+              initStatus(result.payload.result.started_at)
               // refreshCardData({ dashcard, card: dashcard.card, clear: true });
             }
           }>
@@ -73,7 +82,7 @@ const QueryRefreshButton = ({
               className={cx("ml1")}
               name="refresh"
               size={10}
-              color={"#9AA0AF"}
+              color={status === "normal" ? "#52c41a" : "#f79009"}
             />
           </div>
         )}
