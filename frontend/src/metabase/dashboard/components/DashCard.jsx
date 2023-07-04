@@ -44,6 +44,7 @@ import { addTextDashCardToDashboard, toggleSidebar } from "metabase/dashboard/ac
 import QueryRealtimeButton from "metabase/query_builder/components/QueryRealtimeButton";
 import { isRealtimeChart } from "metabase/dashboard/components/utils/realtime";
 import { getRealtimeList } from "metabase/selectors/config";
+import QueryRefreshButton from "metabase/query_builder/components/QueryRefreshButton";
 
 const DATASET_USUALLY_FAST_THRESHOLD = 15 * 1000;
 
@@ -303,23 +304,16 @@ class DashCard extends Component {
       || window.location.pathname.startsWith("/data-api/statistics")
     ;
 
-    const hideDuplicate = isTextDisplay || isImageDisplay || isVideoDisplay || isEmbedDisplay || isTableauDisplay || isPublic;
+    const singleDisplay = isTextDisplay || isImageDisplay || isVideoDisplay || isEmbedDisplay || isTableauDisplay;
 
-    const hideWatermark =
-      clearWatermark || isTextDisplay || isImageDisplay || isVideoDisplay || isEmbedDisplay || isTableauDisplay;
+    const hideDuplicate = singleDisplay || isPublic;
 
-    const showPreview =
-      !isPublic &&
-      !showEdit &&
-      !isTextDisplay &&
-      !isImageDisplay &&
-      !isEmbedDisplay &&
-      !isTableauDisplay &&
-      !isVideoDisplay;
+    const hideWatermark = clearWatermark || singleDisplay;
+
+    const showPreview = !isPublic && !showEdit && !singleDisplay;
 
     const showGetDataViaSqlApi = showEdit || showPreview;
-    const showChartInfo =
-      !isPublic && !isTextDisplay && !isImageDisplay && !isVideoDisplay && !isEmbedDisplay && isTableauDisplay;
+    const showChartInfo = !isPublic && !singleDisplay;
 
     const editAction = card => {
       window.open(`/chart/${card.id}?editingOnLoad=true`);
@@ -341,6 +335,8 @@ class DashCard extends Component {
     const showReadTimeMode = !isPublic && !isTextDisplay && !isImageDisplay && !isVideoDisplay && !isEmbedDisplay && !isTableauDisplay && result && !result.error
       && includeRealtimeTable
       && isRealtimeUser;
+    const cacheTooOldByOneDay = true;
+    const showRefreshButton = !singleDisplay && cacheTooOldByOneDay;
     return (
       <DashCardRoot
         id={id}
@@ -354,6 +350,7 @@ class DashCard extends Component {
         isUsuallySlow={isSlow === "usually-slow"}
       >
         <div
+          className="html2canvas-filter"
           style={{
             textAlign: "right",
             position: "absolute",
@@ -362,8 +359,11 @@ class DashCard extends Component {
             zIndex: 2,
           }}
         >
-          {showReadTimeMode && (
+          {/*{showReadTimeMode && (
             <QueryRealtimeButton dashcard={this.props.dashcard} refreshCardData={this.props.refreshCardData}/>
+          )}*/}
+          {showRefreshButton && (
+            <QueryRefreshButton dashcard={this.props.dashcard} refreshCardData={this.props.refreshCardData}/>
           )}
         </div>
         <div
