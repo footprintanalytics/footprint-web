@@ -295,6 +295,7 @@ class DashboardGrid extends Component {
   renderDashCard(dc, { isMobile, gridItemWidth, totalNumGridCols }) {
     const view = (
       <DashCard
+        {...this.props}
         dashcard={dc}
         headerIcon={this.getDashboardCardIcon(dc)}
         dashcardData={this.props.dashcardData}
@@ -336,7 +337,7 @@ class DashboardGrid extends Component {
         user={this.props.user}
         refreshCardData={this.props.refreshCardData}
       />
-    )
+    );
     if (this.props.allLoad) {
       return view;
     }

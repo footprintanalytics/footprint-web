@@ -40,7 +40,10 @@ import { DashCardRoot } from "./DashCard.styled";
 import DashCardParameterMapper from "./DashCardParameterMapper";
 import "./DashCard.css";
 import QueryDownloadWidgetFP from "metabase/query_builder/components/QueryDownloadWidgetFP";
-import { addTextDashCardToDashboard, toggleSidebar } from "metabase/dashboard/actions";
+import {
+  addTextDashCardToDashboard,
+  toggleSidebar,
+} from "metabase/dashboard/actions";
 import QueryRealtimeButton from "metabase/query_builder/components/QueryRealtimeButton";
 import { isRealtimeChart } from "metabase/dashboard/components/utils/realtime";
 import { getRealtimeList } from "metabase/selectors/config";
@@ -118,17 +121,18 @@ class DashCard extends Component {
       return "6px";
     }
     return hideBackground ||
-    (isEditing &&
-      (mainCard.display === "text" ||
-        mainCard.display === "image" ||
-        mainCard.display === "embed" ||
-        mainCard.display === "tableau" ||
-        mainCard.display === "video"))
+      (isEditing &&
+        (mainCard.display === "text" ||
+          mainCard.display === "image" ||
+          mainCard.display === "embed" ||
+          mainCard.display === "tableau" ||
+          mainCard.display === "filter" ||
+          mainCard.display === "video"))
       ? ""
       : "";
   };
 
-  extractErrorColumn = (text) => {
+  extractErrorColumn = text => {
     const pattern = /Column '([^']+)'/;
     const matches = text.match(pattern);
     if (matches && matches.length >= 2) {
@@ -136,42 +140,45 @@ class DashCard extends Component {
     } else {
       return null;
     }
-  }
+  };
 
-  mappingErrorColumn = (text) => {
+  mappingErrorColumn = text => {
     const map = {
-      "footprint.token_daily_stats.token_unique_symbol": "token_daily_stats.token_symbol",
+      "footprint.token_daily_stats.token_unique_symbol":
+        "token_daily_stats.token_symbol",
       "footprint.token_daily_stats.address": "token_daily_stats.token_slug",
       "footprint.token_daily_stats.coin_id": "token_daily_stats.token_slug",
       "token_daily_stats.day": "token_daily_stats.on_date",
       "gamefi_protocol_daily_stats.day": "gamefi_protocol_daily_stats.on_date",
-      "footprint.nft_collection_daily_stats.protocol_slug": "nft_collection_daily_stats.collection_slug",
+      "footprint.nft_collection_daily_stats.protocol_slug":
+        "nft_collection_daily_stats.collection_slug",
       "token_daily_stats.token_unique_symbol": "token_daily_stats.token_symbol",
       "token_daily_stats.symbol": "token_daily_stats.token_symbol",
-      "footprint.nft_transactions.marketplace_name": "nft_transactions.marketplace_slug",
-    }
+      "footprint.nft_transactions.marketplace_name":
+        "nft_transactions.marketplace_slug",
+    };
 
     return map[text] || "";
-  }
+  };
 
   mappingErrorTip = error => {
     if (!error || !_.isString(error)) {
       return error;
     }
     if (error.startsWith("Cannot determine the source table or query")) {
-      return "Cannot determine the source or query. \nTip: Update the column of filter on the dashboard."
+      return "Cannot determine the source or query. \nTip: Update the column of filter on the dashboard.";
     }
     if (error.indexOf("Column") && error.indexOf("cannot be resolved")) {
-      const column = this.extractErrorColumn(error)
-      const fixResult = this.mappingErrorColumn(column)
+      const column = this.extractErrorColumn(error);
+      const fixResult = this.mappingErrorColumn(column);
       if (fixResult) {
-        return `The column cannot be resolved.\nTip: Use the field ${fixResult} instead of the field ${column} `
+        return `The column cannot be resolved.\nTip: Use the field ${fixResult} instead of the field ${column} `;
       }
       const pattern = /\s\([^)]+\): line \d+:\d+/;
-      return error.replace(pattern, "").replace("footprint.", "")
+      return error.replace(pattern, "").replace("footprint.", "");
     }
-    return error
-  }
+    return error;
+  };
 
   // eslint-disable-next-line complexity
   render() {
@@ -229,6 +236,7 @@ class DashCard extends Component {
       display !== "image" &&
       display !== "embed" &&
       display !== "tableau" &&
+      display !== "filter" &&
       display !== "video";
 
     const expectedDuration = Math.max(
@@ -249,7 +257,11 @@ class DashCard extends Component {
 
     let errorMessage, errorIcon;
 
-    const fpCustomError = errors?.length > 0 && errors[0] && errors[0].code === -1 && errors[0].message;
+    const fpCustomError =
+      errors?.length > 0 &&
+      errors[0] &&
+      errors[0].code === -1 &&
+      errors[0].message;
     if (fpCustomError) {
       errorMessage = fpCustomError;
       errorIcon = "key";
@@ -257,7 +269,9 @@ class DashCard extends Component {
       errorMessage = ERROR_MESSAGE_PERMISSION;
       errorIcon = "key";
     } else if (errors.length > 0) {
-      errorMessage = this.mappingErrorTip((errors[0] && errors[0].data) || errors[0] ) || ERROR_MESSAGE_GENERIC;
+      errorMessage =
+        this.mappingErrorTip((errors[0] && errors[0].data) || errors[0]) ||
+        ERROR_MESSAGE_GENERIC;
       errorIcon = "warning";
     }
 
@@ -270,6 +284,7 @@ class DashCard extends Component {
     const isVideoDisplay = mainCard.display === "video";
     const isEmbedDisplay = mainCard.display === "embed";
     const isTableauDisplay = mainCard.display === "tableau";
+    const isFilterDisplay = mainCard.display === "filter";
 
     const isResearch = window.location.pathname.startsWith("/research");
 
@@ -298,15 +313,27 @@ class DashCard extends Component {
     //   mainCard.display === "image" ||
     //   mainCard.display === "video";
     const showEdit = isOwner && !!dashcard.card.id;
-    const isPublic = window.location.pathname.startsWith("/public")
-      || window.location.pathname.startsWith("/growth")
-      || window.location.pathname.startsWith("/data-api/statistics")
-    ;
-
-    const hideDuplicate = isTextDisplay || isImageDisplay || isVideoDisplay || isEmbedDisplay || isTableauDisplay || isPublic;
+    const isPublic =
+      window.location.pathname.startsWith("/public") ||
+      window.location.pathname.startsWith("/growth") ||
+      window.location.pathname.startsWith("/data-api/statistics");
+    const hideDuplicate =
+      isTextDisplay ||
+      isImageDisplay ||
+      isVideoDisplay ||
+      isEmbedDisplay ||
+      isTableauDisplay ||
+      isFilterDisplay ||
+      isPublic;
 
     const hideWatermark =
-      clearWatermark || isTextDisplay || isImageDisplay || isVideoDisplay || isEmbedDisplay || isTableauDisplay;
+      clearWatermark ||
+      isTextDisplay ||
+      isImageDisplay ||
+      isVideoDisplay ||
+      isEmbedDisplay ||
+      isTableauDisplay ||
+      isFilterDisplay;
 
     const showPreview =
       !isPublic &&
@@ -315,11 +342,18 @@ class DashCard extends Component {
       !isImageDisplay &&
       !isEmbedDisplay &&
       !isTableauDisplay &&
+      !isFilterDisplay &&
       !isVideoDisplay;
 
     const showGetDataViaSqlApi = showEdit || showPreview;
     const showChartInfo =
-      !isPublic && !isTextDisplay && !isImageDisplay && !isVideoDisplay && !isEmbedDisplay && isTableauDisplay;
+      !isPublic &&
+      !isTextDisplay &&
+      !isImageDisplay &&
+      !isVideoDisplay &&
+      !isFilterDisplay &&
+      !isEmbedDisplay &&
+      isTableauDisplay;
 
     const editAction = card => {
       window.open(`/chart/${card.id}?editingOnLoad=true`);
@@ -335,16 +369,33 @@ class DashCard extends Component {
       mainCard,
     });
 
-    const notShowReplacementContent = isImageDisplay || isVideoDisplay || isEmbedDisplay || isTableauDisplay;
+    const notShowReplacementContent =
+      isImageDisplay ||
+      isVideoDisplay ||
+      isEmbedDisplay ||
+      isTableauDisplay ||
+      isFilterDisplay;
     const includeRealtimeTable = isRealtimeChart(dashcard, realtimeList);
     const isRealtimeUser = user?.id === 20103;
-    const showReadTimeMode = !isPublic && !isTextDisplay && !isImageDisplay && !isVideoDisplay && !isEmbedDisplay && !isTableauDisplay && result && !result.error
-      && includeRealtimeTable
-      && isRealtimeUser;
+    const showReadTimeMode =
+      !isPublic &&
+      !isTextDisplay &&
+      !isImageDisplay &&
+      !isVideoDisplay &&
+      !isEmbedDisplay &&
+      !isTableauDisplay &&
+      !isFilterDisplay &&
+      result &&
+      !result.error &&
+      includeRealtimeTable &&
+      isRealtimeUser;
     return (
       <DashCardRoot
         id={id}
-        className={cx("Card rounded flex flex-column hover-parent hover--visibility", cardDomKey,)}
+        className={cx(
+          "Card rounded flex flex-column hover-parent hover--visibility",
+          cardDomKey,
+        )}
         style={
           hideBackground
             ? { border: 0, background: "transparent", boxShadow: "none" }
@@ -363,7 +414,10 @@ class DashCard extends Component {
           }}
         >
           {showReadTimeMode && (
-            <QueryRealtimeButton dashcard={this.props.dashcard} refreshCardData={this.props.refreshCardData}/>
+            <QueryRealtimeButton
+              dashcard={this.props.dashcard}
+              refreshCardData={this.props.refreshCardData}
+            />
           )}
         </div>
         <div
@@ -393,7 +447,7 @@ class DashCard extends Component {
               <a
                 className="html2canvas-filter dash-card__button"
                 onClick={() => {
-                  previewAction && previewAction(dashcard.card.id)
+                  previewAction && previewAction(dashcard.card.id);
                   trackStructEvent(`dashcard click to preview`);
                 }}
               >
@@ -425,7 +479,8 @@ class DashCard extends Component {
               />
             </Tooltip>
           )}
-          {!isEditing && !isPublic &&
+          {!isEditing &&
+            !isPublic &&
             QueryDownloadWidget.shouldRender({
               result,
               isResultDirty: false,
@@ -437,9 +492,8 @@ class DashCard extends Component {
                 iconColor={"#9AA0AF"}
                 buttonClassName="dash-card__download-button"
               />
-            )
-          }
-          {showGetDataViaSqlApi && (
+            )}
+          {showGetDataViaSqlApi &&
             QueryDownloadWidget.shouldRender({
               result,
               isResultDirty: false,
@@ -448,15 +502,19 @@ class DashCard extends Component {
                 <a
                   className="html2canvas-filter dash-card__button-always"
                   onClick={() => {
-                    getDataViaSqlApiAction && getDataViaSqlApiAction({ cardId: dashcard.card.id, dashcardId: dashcard.id, dashboardId: dashboard.entityId || dashboard.id })
+                    getDataViaSqlApiAction &&
+                      getDataViaSqlApiAction({
+                        cardId: dashcard.card.id,
+                        dashcardId: dashcard.id,
+                        dashboardId: dashboard.entityId || dashboard.id,
+                      });
                     trackStructEvent(`dashcard click to sql api`);
                   }}
                 >
                   <Icon name={"getChartViaSql"} size={16} color={"#9AA0AF"} />
                 </a>
               </Tooltip>
-            )
-          )}
+            )}
           {/* {!hideDownload && (
             <a
               className="html2canvas-filter"
@@ -502,6 +560,7 @@ class DashCard extends Component {
           </DashboardCardActionsPanel>
         ) : null}
         <WrappedVisualization
+          {...this.props}
           className={cx("flex-full overflow-hidden", {
             "pointer-events-none": isEditingDashboardLayout,
           })}
@@ -550,9 +609,8 @@ class DashCard extends Component {
             this.props.onUpdateVisualizationSettings
           }
           replacementContent={
-            notShowReplacementContent ? null :
-            clickBehaviorSidebarDashcard != null &&
-            isVirtualDashCard(dashcard) ? (
+            notShowReplacementContent ? null : clickBehaviorSidebarDashcard !=
+                null && isVirtualDashCard(dashcard) ? (
               <div className="flex full-height align-center justify-center">
                 <h4 className="text-medium">
                   {dashcard.visualization_settings.virtual_card.display ===

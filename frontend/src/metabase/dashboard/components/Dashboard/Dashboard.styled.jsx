@@ -95,7 +95,7 @@ export const ParametersAndCardsContainer = styled.div`
 
 export const ParametersWidgetContainer = styled(FullWidthContainer)`
   align-items: flex-start;
-  background-color: ${props => props.isNightMode ? "transparency" : "white"};
+  background-color: ${props => props.isNightMode||props.isTransparency ? "transparency" : "white"};
   border-bottom: ${props => props.isNightMode ? `1px solid ${color("border-dark")}` : `1px solid ${color("bg-light")}`};
   display: flex;
   flex-direction: column;

@@ -2,7 +2,7 @@ import { getParameterType } from "metabase-lib/parameters/utils/parameter-type";
 
 export function getValuePopulatedParameters(parameters, parameterValues) {
   return parameterValues
-    ? parameters.map(parameter => {
+    ? parameters?.map(parameter => {
         return parameter.id in parameterValues
           ? {
               ...parameter,
