@@ -152,8 +152,38 @@
   box-shadow: 0 0 30px #06041a0d;
 }
 
+.global-contact-panel__social-layout {
+  display: flex;
+  color: white;
+  align-items: center;
+  border: 0;
+}
+
+.global-contact-panel__social-layout .global-contact-panel__social-item {
+  margin: 0 4px;
+}
+
 .global-contact-panel__social-item {
   display: flex;
   flex-direction: column;
+  justify-content: center;
+  align-items: center;
   padding: 8px;
+}
+.global-contact-panel__social-item svg {
+  z-index: 1;
+}
+
+.global-contact-panel__social-item-icon-bg {
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  background-color: white;
+  position: absolute;
+}
+
+.dark .global-contact-panel__social {
+  background-color: #182034;
+  border: 1px solid #4A5568;
+  border-radius: 4px;
 }

@@ -87,10 +87,11 @@
   [{error-type :error_type, :as results}]
   ;; if the query failed instead, unless the error type is specified and is EXPLICITLY allowed to be shown for embeds,
   ;; instead of returning anything about the query just return a generic error message
-  (merge
+;  (merge
    (select-keys results [:status :error :error_type])
-   (when-not (qp.error-type/show-in-embeds? error-type)
-     {:error (tru "An error occurred while running the query.")})))
+;   (when-not (qp.error-type/show-in-embeds? error-type)
+;     {:error (tru "An error occurred while running the query.")}))
+  )
 
 (defn public-reducedf
   "Reducer function for public data"
@@ -207,7 +208,7 @@
 
   Throws a 404 immediately if the Card isn't part of the Dashboard. Throws a 405 immediately if the Card has is_write
   set to true, as those are meant to only be executed through the actions api. Returns a `StreamingResponse`."
-  {:arglists '([& {:keys [dashboard-id card-id dashcard-id export-format parameters] :as options}])}
+  {:arglists '([& {:keys [dashboard-id card-id dashcard-id export-format parameters ignore_cache] :as options}])}
   [& {:keys [export-format parameters qp-runner card-id]
       :or   {qp-runner     qp/process-query-and-save-execution!
              export-format :api}

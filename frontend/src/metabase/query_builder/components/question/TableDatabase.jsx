@@ -9,7 +9,7 @@ import { Select } from "antd";
 const TableDatabase = props => {
   const {
     setDatabaseId,
-    card,
+    isNative,
     replace,
     databases,
     isEditing,
@@ -17,7 +17,7 @@ const TableDatabase = props => {
   } = props;
   const onChange = value => {
     setDatabaseId(value);
-    if (get(card, "dataset_query.type") === "native") {
+    if (isNative) {
       replace(Urls.newQuestion({ databaseId: value, type: "native" }));
     } else {
       replace(`/chart?dbId=${value}`);
@@ -31,7 +31,7 @@ const TableDatabase = props => {
   return (
     <Select
       disabled={!!isEditing}
-      style={{ width: "100%", marginBottom: "15px" }}
+      style={{ margin: "10px 15px 0 15px" }}
       showSearch={databases.length > 1}
       placeholder="Select Database"
       defaultValue={databaseId}

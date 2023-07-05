@@ -32,6 +32,12 @@ import { applyParameters } from "metabase-lib/queries/utils/card";
 import EmbedFrame from "../components/EmbedFrame";
 import QueryDownloadWidgetFP from "metabase/query_builder/components/QueryDownloadWidgetFP";
 import { parseTitleId } from "metabase/lib/urls";
+import { parseHashOptions } from "metabase/lib/browser";
+import { Breadcrumb } from "antd";
+import cx from "classnames";
+import { canShowDarkMode } from "metabase/dashboard/components/utils/dark";
+import { get, has } from "lodash";
+import { c } from "ttag";
 
 const mapStateToProps = state => ({
   metadata: getMetadata(state),
@@ -77,7 +83,6 @@ class PublicQuestion extends Component {
       } else {
         throw { status: 404 };
       }
-
       if (card.param_values) {
         await this.props.addParamValues(card.param_values);
       }
@@ -96,7 +101,6 @@ class PublicQuestion extends Component {
         query,
         this.props.metadata,
       );
-
       this.setState(
         { card, parameterValues: parameterValuesById },
         async () => {
@@ -121,6 +125,18 @@ class PublicQuestion extends Component {
       this.run,
     );
   };
+
+  getCacheOption() {
+    const { location } = this.props;
+    const ignoreCache = get(location?.query, "ignore_cache");
+    if (
+      has(location?.query, "ignore_cache") &&
+      (!ignoreCache || ignoreCache === "true")
+    ) {
+      return { ignore_cache: true };
+    }
+    return null;
+  }
 
   run = async () => {
     const {
@@ -157,6 +173,7 @@ class PublicQuestion extends Component {
         )({
           uuid: publicUuid,
           parameters: JSON.stringify(datasetQuery.parameters),
+          ...this.getCacheOption(),
         });
       } else {
         throw { status: 404 };
@@ -173,11 +190,15 @@ class PublicQuestion extends Component {
     const {
       // params: { uuid, token, titleAndId },
       metadata,
+      router,
+      className,
+      hideFooter,
+      isNightMode,
     } = this.props;
     const { card, result, initialized, parameterValues } = this.state;
     // const publicUuid = uuid || parseTitleId(titleAndId).id;
 
-/*    const actionButtons = result && (
+    /*    const actionButtons = result && (
       <QueryDownloadWidgetFP
         className="m1 text-medium-hover"
         uuid={publicUuid}
@@ -189,14 +210,53 @@ class PublicQuestion extends Component {
     const parameters =
       card &&
       getCardUiParameters(card, metadata, {}, card.parameters || undefined);
-
+    const isFgaPublicDashboard = location.pathname.startsWith("/growth");
+    const hashData = parseHashOptions(location?.hash);
+    let header = <></>;
+    let hideTitle = false;
+    if (isFgaPublicDashboard && hashData?.from && card) {
+      header = (
+        <>
+          <Breadcrumb
+            className="pl1 py2"
+            items={[
+              {
+                title: (
+                  <a
+                    onClick={() => {
+                      router?.goBack();
+                    }}
+                  >
+                    {hashData?.from}
+                  </a>
+                ),
+              },
+              {
+                title: card && card.name,
+              },
+            ]}
+          />
+          {header}
+        </>
+      );
+      hideTitle = true;
+    }
+    const shouldRenderAsNightMode = isNightMode || canShowDarkMode();
     return (
       <EmbedFrame
         name={card && card.name}
         description={card && card.description}
         // actionButtons={actionButtons}
         parameters={initialized ? parameters : []}
+        headerLayout={header}
         parameterValues={parameterValues}
+        hideTitle={hideTitle}
+        isNightMode={shouldRenderAsNightMode}
+        className={cx(
+          className,
+          `${isFgaPublicDashboard ? "ml-250 mt-60" : ""}`,
+        )}
+        hideFooter={hideFooter || isFgaPublicDashboard}
         setParameterValue={this.setParameterValue}
       >
         <LoadingAndErrorWrapper
@@ -210,15 +270,15 @@ class PublicQuestion extends Component {
               error={result && result.error}
               rawSeries={[{ card: card, data: result && result.data }]}
               className="full flex-full z1"
-              onUpdateVisualizationSettings={settings =>
+              onUpdateVisualizationSettings={settings => {
                 this.setState({
                   result: updateIn(
                     result,
                     ["card", "visualization_settings"],
                     s => ({ ...s, ...settings }),
                   ),
-                })
-              }
+                });
+              }}
               gridUnit={12}
               showTitle={false}
               isDashboard
@@ -235,6 +295,8 @@ class PublicQuestion extends Component {
 
 export default _.compose(
   connect(mapStateToProps, mapDispatchToProps),
-  title(({ card }) => card && card.name),
+  title(
+    ({ disableUpdateTitle, card }) => !disableUpdateTitle && card && card.name,
+  ),
   ExplicitSize({ refreshMode: "debounceLeading" }),
 )(PublicQuestion);

@@ -133,7 +133,6 @@
   height: 60px;
   line-height: 60px;
 }
-
 .Nav__right-menu:hover {
   color: #3434b2;
 }
@@ -142,15 +141,23 @@
   border-bottom: 4px solid #3434b2 !important;
 }
 
+.dark .Nav__right-menu:hover {
+  color: #4444FF;
+}
+
+.dark .Nav__right-menu-select {
+  border-bottom: 4px solid #4444FF !important;
+}
+
 .Nav__menu-create {
   display: flex;
   align-items: center;
   color: white;
-  padding: var(--footprint-spacing-xs) var(--footprint-spacing-s);
+  padding: var(--footprint-spacing-xs) var(--footprint-spacing-xs);
   border-radius: 4px;
   cursor: pointer;
   margin: 0 var(--footprint-spacing-s);
-  height: 40px;
+  height: 36px;
 }
 
 .Nav__menu-create span {
@@ -169,10 +176,31 @@
   border-radius: 6px;
   white-space: nowrap;
   height: 32px;
+  margin-left: 10px;
 }
 
 .Nav__sign-up:hover {
   color: #3434b2;
+}
+
+.Nav__sign-up-start {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: 1px solid #3434b2;
+  background: #3434b2;
+  color: white;
+  font-size: 14px;
+  padding: 0 18px;
+  cursor: pointer;
+  border-radius: 6px;
+  white-space: nowrap;
+  height: 32px;
+  margin-left: 10px;
+}
+
+.Nav__sign-up-start:hover {
+  color: #eee;
 }
 
 .Nav__right-mobile-icon,
@@ -202,6 +230,40 @@
   color: #3434b2;
 }
 
+.home .nav {
+  border-bottom: none !important;
+}
+
+.dark .Nav {
+  background-color: #121828;
+  border-bottom: 1px var(--color-border-dark) solid;
+}
+
+.dark .Nav__menu-item-color {
+  color: white;
+}
+
+.dark .Nav__menu-item-color:hover {
+  color: #4444FF;
+}
+
+.dark .footprint-primary-text {
+  color: white;
+}
+
+.dark .Nav__sign-up {
+  border: 1px solid #B4C8FA;
+  color: #B4C8FA;
+}
+
+.dark .Nav__sign-up:hover {
+  color: #4444FF;
+}
+
+.Nav__logo {
+  display: flex;
+}
+
 @media screen and (--footprint-breakpoint-max-pad) {
   .Nav__menu,
   .Nav__menu-create,
@@ -216,6 +278,10 @@
   .Nav__right-pad-icon,
   .Nav__side-menu-icon {
     display: flex;
+  }
+
+  .dark .Nav__side-menu-icon {
+    color: white;
   }
 
   .Nav__mobile-logo {

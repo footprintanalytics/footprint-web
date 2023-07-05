@@ -6,8 +6,13 @@ import {
 import { UserApi } from "metabase/services";
 // import { CLOSE_QB_NEWB_MODAL } from "metabase/query_builder/actions";
 import Users from "metabase/entities/users";
-import { getUserVipInfo, getDataApiVipInfo } from "metabase/new-service";
+import {
+  getUserVipInfo,
+  getDataApiVipInfo,
+  GetFgaProjectDetail,
+} from "metabase/new-service";
 import arms from "metabase/lib/arms";
+import { clearGACache } from "metabase/growth/utils/utils";
 
 export const REFRESH_CURRENT_USER = "metabase/user/REFRESH_CURRENT_USER";
 /*export const refreshCurrentUser = createAction(REFRESH_CURRENT_USER, () => {
@@ -145,6 +150,67 @@ export const currentUser = handleActions(
           return { ...state, subscribeInfo: payload };
         }
         return state;
+      },
+    },
+  },
+  null,
+);
+
+export const REFRESH_CURRENT_FGA_PROJECT =
+  "metabase/user/REFRESH_CURRENT_FGA_PROJECT";
+export const refreshCurrentFgaProject = createThunkAction(
+  REFRESH_CURRENT_FGA_PROJECT,
+  async project_id => {
+    try {
+      const res = await GetFgaProjectDetail({
+        projectId: project_id,
+      });
+      if(!res?.protocolSlug||res?.protocolSlug===''){
+        res.protocolSlug = 'default';
+      }
+      window.localStorage.setItem("IsFgaDemoProject", res?.isDemo);
+      window.localStorage.setItem("LatestGAProjectId", res?.id);
+      return res;
+    } catch (e) {
+      return null;
+    }
+  },
+);
+
+export const LOAD_CURRENT_FGA_PROJECT =
+  "metabase/user/LOAD_CURRENT_FGA_PROJECT";
+export const loadCurrentFgaProject = createThunkAction(
+  LOAD_CURRENT_FGA_PROJECT,
+  (project_id, force = false) =>
+    async (dispatch, getState) => {
+      if (!project_id) {
+        return;
+      }
+      if (
+        force ||
+        !getState().currentFgaProject ||
+        getState().currentFgaProject?.id !== project_id
+      ) {
+        dispatch(clearCurrentFgaProject());
+        await dispatch(refreshCurrentFgaProject(project_id));
+      }
+    },
+);
+
+export const CLEAR_CURRENT_FGA_PROJECT =
+  "metabase/user/CLEAR_CURRENT_FGA_PROJECT";
+export const clearCurrentFgaProject = createAction(CLEAR_CURRENT_FGA_PROJECT);
+
+export const currentFgaProject = handleActions(
+  {
+    [CLEAR_CURRENT_FGA_PROJECT]: { next: (state, payload) => null },
+    [REFRESH_CURRENT_FGA_PROJECT]: {
+      next: (state, { payload }) => {
+        console.log("REFRESH_CURRENT_FGA_PROJECT", payload);
+        if (!payload) {
+          return payload;
+        }
+        return { ...state, ...payload };
       },
     },
   },

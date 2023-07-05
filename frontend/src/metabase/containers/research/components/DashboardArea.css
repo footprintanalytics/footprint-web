@@ -1,0 +1,9 @@
+.dashboard-area__public-dashboard {
+  position: revert !important;
+  width: 100% !important;
+  height: 100%;
+}
+
+.dashboard-area__public-dashboard-inner {
+  overflow-y: hidden !important;
+}

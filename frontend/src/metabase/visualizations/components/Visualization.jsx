@@ -44,6 +44,7 @@ import { getOssUrl } from "metabase/lib/image";
 import ErrorGuide from "metabase/query_builder/components/ErrorGuide";
 import CreateCampaign from "metabase/growth/components/buttons/CreateCampaign";
 import CreateCohort from "metabase/growth/components/buttons/CreateCohort";
+import SocialConnect from "metabase/growth/components/buttons/SocialConnect";
 import CreateFliterCohort from "metabase/growth/components/buttons/CreateFliterCohort";
 import FgaErrorGuide from "metabase/growth/components/FgaErrorGuide";
 import { datasetContainsNoResults } from "metabase-lib/queries/utils/dataset";
@@ -331,6 +332,10 @@ class Visualization extends React.PureComponent {
     }
   };
 
+  renderHideHintToCatch = () => {
+    return <div style={{ display: "none" }}>error or no result</div>;
+  };
+
   // eslint-disable-next-line complexity
   render() {
     const {
@@ -476,6 +481,12 @@ class Visualization extends React.PureComponent {
       dashcard?.visualization_settings?.virtual_card?.display === "image";
     const isVideo =
       dashcard?.visualization_settings?.virtual_card?.display === "video";
+    const isEmbed =
+      dashcard?.visualization_settings?.virtual_card?.display === "embed";
+    const isTableau =
+      dashcard?.visualization_settings?.virtual_card?.display === "tableau";
+    const isFilter =
+      dashcard?.visualization_settings?.virtual_card?.display === "filter";
     const isPublic = location.pathname.startsWith("/public"); // iframe 里面也是 work 的，true
     const isFga = location.pathname.startsWith("/growth");
     const isFgaTwitter = isFga && location.pathname.includes("/Twitter");
@@ -483,6 +494,71 @@ class Visualization extends React.PureComponent {
     const isFgaGoogleAnalysis =
       isFga && location.pathname.includes("/User%20Funnel");
     const cardId = get(this.props.rawSeries, 0)?.card?.id;
+
+    const renderNoResult = () => {
+      if (isFgaDiscord || isFgaTwitter || isFgaGoogleAnalysis) {
+        return (
+          <>
+            {this.renderHideHintToCatch()}
+            <FgaErrorGuide />
+          </>
+        );
+      }
+      if (isFga) {
+        return (
+          <div className="noResults">
+            {this.renderHideHintToCatch()}
+            The data is not yet available, please
+            <br />
+            feel free to contact our{" "}
+            <Link target="_blank" href="mailto:sales@footprint.network">
+              BD team
+            </Link>
+            .
+          </div>
+        );
+      }
+      return (
+        <div className="noResults">
+          {this.renderHideHintToCatch()}
+          <h4>No results!</h4>
+          <ol>
+            <li>You can try refreshing your browser.</li>
+            <li>You can try changing your filters.</li>
+            <li>
+              You can try contacting us on{" "}
+              <Link
+                href="https://discord.gg/3HYaR6USM7"
+                rel="nofollow"
+                target="_blank"
+              >
+                Discord
+              </Link>
+              .
+            </li>
+          </ol>
+        </div>
+      );
+    };
+    // update column description into column settings
+    if (settings?.column_settings) {
+      const columns = [];
+      settings["table.columns"]?.map((item, index) => {
+        const column_description =
+          settings?.column_settings[`["name","${item.name}"]`]
+            ?.column_description ??
+          settings?.column_settings[`["ref",${JSON.stringify(item.fieldRef)}]`]
+            ?.column_description;
+        if (column_description) {
+          item = {
+            ...item,
+            description: column_description,
+          };
+        }
+        columns.push(item);
+      });
+      settings["table.columns"] = columns;
+    }
 
     return (
       <div
@@ -506,11 +582,18 @@ class Visualization extends React.PureComponent {
             </Tooltip>
           </div>
         )}
-        {!hideWatermark && !isText && !isImage && !isVideo && !noResults && (
-          <div className="waterMarkHome">
-            <span />
-          </div>
-        )}
+        {!hideWatermark &&
+          !isText &&
+          !isImage &&
+          !isVideo &&
+          !isEmbed &&
+          !isTableau &&
+          !isFilter &&
+          !noResults && (
+            <div className="waterMarkHome">
+              <span />
+            </div>
+          )}
         {!!hasHeader && (
           <div className="p1 flex-no-shrink">
             <ChartCaption
@@ -540,30 +623,7 @@ class Visualization extends React.PureComponent {
               <img data-testid="no-results-image" src={NoResults} />
             </Tooltip>
             {!small && <span className="h4 text-bold">{t`No results!`}</span>}*/}
-            <>
-              {isFgaDiscord || isFgaTwitter || isFgaGoogleAnalysis ? (
-                <FgaErrorGuide></FgaErrorGuide>
-              ) : (
-                <div className="noResults">
-                  <h4>No results!</h4>
-                  <ol>
-                    <li>You can try refreshing your browser.</li>
-                    <li>You can try changing your filters.</li>
-                    <li>
-                      You can try contacting us on{" "}
-                      <Link
-                        href="https://discord.gg/3HYaR6USM7"
-                        rel="nofollow"
-                        target="_blank"
-                      >
-                        Discord
-                      </Link>
-                      .
-                    </li>
-                  </ol>
-                </div>
-              )}
-            </>
+            {renderNoResult()}
           </div>
         ) : error ? (
           <div
@@ -573,11 +633,12 @@ class Visualization extends React.PureComponent {
             }
           >
             <>
+              {this.renderHideHintToCatch()}
               {isFgaDiscord || isFgaTwitter || isFgaGoogleAnalysis ? (
                 <FgaErrorGuide></FgaErrorGuide>
               ) : (
                 <>
-                  <Tooltip tooltip={error} isEnabled={small}>
+                  <Tooltip tooltip={error?.message} isEnabled={small}>
                     <Icon
                       className="mb2"
                       name={errorIcon || "warning"}
@@ -589,7 +650,16 @@ class Visualization extends React.PureComponent {
                       className="h4 text-bold flex-column"
                       style={{ display: small ? "none" : "" }}
                     >
-                      <div>{error}</div>
+                      <div
+                        style={{
+                          whiteSpace: "pre-wrap",
+                          lineHeight: 1.2,
+                          maxWidth: "80%",
+                          margin: "0 auto",
+                        }}
+                      >
+                        {error}
+                      </div>
                       {errorIcon !== "key" && <ErrorGuide cardId={cardId} />}
                     </div>
                   }
@@ -625,6 +695,22 @@ class Visualization extends React.PureComponent {
           </div>
         ) : (
           <>
+            {!this.props.isEditing &&
+              isDashboard &&
+              ["Discord Members Info", "Twitter Followers Info"].includes(
+                this.props.dashcard?.card?.name,
+              ) && (
+                <div
+                  className="flex"
+                  style={{
+                    position: "absolute",
+                    right: 25,
+                    top: 10,
+                  }}
+                >
+                  <SocialConnect />
+                </div>
+              )}
             {this.state.visualization?.identifier === "fgatable" &&
               !this.props.isEditing &&
               isDashboard && (
@@ -646,7 +732,7 @@ class Visualization extends React.PureComponent {
                     <CreateFliterCohort
                       state={this.state}
                       propData={this.props}
-                      btnText="Create cohort"
+                      btnText="Create segment"
                       style={{ marginLeft: 10 }}
                     />
                   )}

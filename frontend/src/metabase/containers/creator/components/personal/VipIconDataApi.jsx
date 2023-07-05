@@ -6,6 +6,7 @@ import { capitalize } from "lodash";
 import "./VipIconDataApi.css";
 import dayjs from "dayjs";
 import { VipLevelDataApi } from "metabase/nav/constants";
+import { formatTableTitle, formatTitle } from "metabase/lib/formatting/footprint";
 
 const VipIconDataApi = ({ dataApiVipInfo, isOwner }) => {
   const renderData = ({ text, className }) => {
@@ -26,8 +27,9 @@ const VipIconDataApi = ({ dataApiVipInfo, isOwner }) => {
   switch (type) {
     case VipLevelDataApi.GROWTH:
     case VipLevelDataApi.SCALE:
+    case "scale_trial":
       return renderData({
-        text: capitalize(type),
+        text: formatTableTitle(type),
       });
     default:
       return null;

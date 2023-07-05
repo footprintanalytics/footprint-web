@@ -1,10 +1,11 @@
 /* eslint-disable react/prop-types */
 /* eslint-disable react/forbid-component-props */
-import React, { Component, useState } from "react";
+import React, { Component } from "react";
 import { connect } from "react-redux";
 import { push } from "react-router-redux";
 import "./FgaNavbar.css";
 import PropTypes from "prop-types";
+import { notification, Modal as AntdModal, Button } from "antd";
 import { getChannel } from "metabase/selectors/app";
 import { logout } from "metabase/auth/actions";
 import {
@@ -15,6 +16,7 @@ import {
   getCreateFgaProjectModalShow,
   getLoginModalShow,
   getSubmitAddrZkspaceModal,
+  getLoginModalDefaultRegister,
 } from "metabase/selectors/control";
 import {
   cancelFeedbackAction,
@@ -43,13 +45,17 @@ import EntityMenu from "metabase/components/EntityMenu";
 import UserAvatar from "metabase/components/UserAvatar";
 import VipIcon from "metabase/components/VipIcon";
 import CreateProjectModal from "metabase/growth/components/Modal/CreateProjectModal";
+import { checkIsNeedContactUs, isFgaPath } from "metabase/growth/utils/utils";
 import { getContext, getPath, getUser } from "../selectors";
+
+import { isDark } from "../../../dashboard/components/utils/dark";
 
 const mapStateToProps = (state, props) => ({
   path: getPath(state, props),
   context: getContext(state, props),
   user: getUser(state),
   loginModalShow: getLoginModalShow(state, props),
+  loginModalDefaultRegister: getLoginModalDefaultRegister(state, props),
   createFgaProjectModalShow: getCreateFgaProjectModalShow(state, props),
   loginModalRedirect: getLoginModalRedirect(state, props),
   createModalShow: getCreateModalShow(state, props),
@@ -87,6 +93,22 @@ class FgaNavbar extends Component {
     showZkspaceModal: true,
     // isProjectModalOpen: false,
   };
+
+  forceLogin() {
+    const { user, setLoginModalShow } = this.props;
+    // if (!user) {
+    //   setLoginModalShow({ show: true, from: "navbar_fga_signin" });
+    // }
+  }
+
+  componentDidUpdate() {
+    this.forceLogin();
+  }
+
+  componentDidMount() {
+    this.forceLogin();
+  }
+
   isActive(path) {
     return this.props.path === path;
   }
@@ -107,7 +129,7 @@ class FgaNavbar extends Component {
           <CreateActionModal
             showNewDashboard={() => {
               const newDashboardUrl = `${
-                isDefi360() ? "/defi360" : ""
+                isFgaPath() ? "/growth" : ""
               }/dashboard/new`;
               window.open(newDashboardUrl);
             }}
@@ -123,7 +145,7 @@ class FgaNavbar extends Component {
     return (
       // NOTE: DO NOT REMOVE `Nav` CLASS FOR NOW, USED BY MODALS, FULLSCREEN DASHBOARD, ETC
       // TODO: hide nav using state in redux instead?
-      <nav className="Nav sm-py1 relative">
+      <nav className="fga-Nav sm-py1 relative">
         <ul className="wrapper flex align-center">
           <li>
             <Link
@@ -160,8 +182,14 @@ class FgaNavbar extends Component {
     return false;
   };
   renderLoginModal() {
-    const { location, loginModalShow, loginModalRedirect, setLoginModalShow } =
-      this.props;
+    const {
+      location,
+      loginModalShow,
+      loginModalRedirect,
+      loginModalDefaultRegister,
+      setLoginModalShow,
+    } = this.props;
+    const isSignOutDemoAccount = localStorage.getItem("sign-out-demo-account");
     return (
       <LoginModal
         isOpen={loginModalShow}
@@ -170,27 +198,13 @@ class FgaNavbar extends Component {
         channel={"FGA"}
         location={this.props.location}
         fromNav={true}
+        defaultRegister={loginModalDefaultRegister}
         redirect={loginModalRedirect}
+        hideClose={false}
+        signTabState={isSignOutDemoAccount ? "signUp" : "signIn"}
       />
     );
   }
-
-  renderSubmitAddrZkspaceModal() {
-    const { setSubmitAddrZkspaceModal, getSubmitAddrZkspaceModal } = this.props;
-    return (
-      getSubmitAddrZkspaceModal && (
-        <ActivityZkspaceSubmitModal
-          onClose={() =>
-            setSubmitAddrZkspaceModal({ submitAddrZkspaceModal: false })
-          }
-          onClick={() => {
-            setSubmitAddrZkspaceModal({ submitAddrZkspaceModal: false });
-          }}
-        />
-      )
-    );
-  }
-
   renderCancelFeedbackModal() {
     const { cancelFeedbackAction, cancelFeedback } = this.props;
     return (
@@ -303,28 +317,39 @@ class FgaNavbar extends Component {
     };
 
     const RightMenuPad = () => {
+      const color2 = isDark ? "white" : color("footprint-color-title");
+      const [modal, contextHolder] = AntdModal.useModal();
       return (
         <div className="Nav__right-pad-icon">
-          <Link to="https://docs.footprint.network/docs" target="_blank">
-            <Icon name="docs" color={color("footprint-color-title")} />
+          {contextHolder}
+          <Link to="/growth/pricing">
+            <Icon name="price" color={color2} />
           </Link>
-          <Link to="/search">
-            <Icon name="search" color={color("footprint-color-title")} />
-          </Link>
-          <Link onClick={onCreateAction}>
-            <Icon name="add" size={12} />
+          <Link
+            onClick={() => {
+              onCreateAction(modal);
+            }}
+          >
+            <Icon name="add" size={12} color={color2} />
           </Link>
         </div>
       );
     };
 
     const RightMenuMobile = () => {
+      const color2 = isDark ? "white" : color("footprint-color-title");
+      const [modal, contextHolder] = AntdModal.useModal();
       return (
         <div className="Nav__right-mobile-icon">
-          <Link to="/search">
-            <Icon name="search" color={color("footprint-color-title")} />
+          {contextHolder}
+          <Link to="/growth/pricing">
+            <Icon name="price" color={color2} />
           </Link>
-          <Link onClick={onCreateAction}>
+          <Link
+            onClick={() => {
+              onCreateAction(modal);
+            }}
+          >
             <Icon name="add" size={12} />
           </Link>
         </div>
@@ -332,21 +357,37 @@ class FgaNavbar extends Component {
     };
 
     const CreateMenu = () => {
+      const [modal, contextHolder] = AntdModal.useModal();
       return (
-        <div
-          className="bg-brand Nav__menu-create footprint-primary-text"
-          onClick={onCreateAction}
-        >
-          <Icon name="plus" size={12} />
-          <span>Add My Project</span>
-        </div>
+        <>
+          <div
+            className="bg-brand Nav__menu-create footprint-primary-text"
+            onClick={e => {
+              e.preventDefault();
+              onCreateAction(modal);
+            }}
+          >
+            <Icon name="plus" size={12} />
+            <span>Add My Project</span>
+          </div>
+          {contextHolder}
+        </>
       );
     };
 
-    const onCreateAction = () => {
+    const onCreateAction = modal => {
       trackStructEvent(`click Navbar Add My Project`);
+      console.log("onCreateAction");
       if (user) {
-        setCreateFgaProjectModalShowAction({ show: true });
+        checkIsNeedContactUs(
+          modal,
+          null,
+          () => {
+            setCreateFgaProjectModalShowAction({ show: true });
+          },
+          () => {},
+          true,
+        );
         // this.setState({ ...this.state, isProjectModalOpen: true });
       } else {
         setLoginModalShow({ show: true, from: "navbar_fga_signin" });
@@ -356,7 +397,17 @@ class FgaNavbar extends Component {
     const RightMenu = () => {
       return (
         <div className="Nav__right">
-          <CreateMenu />
+          <Button
+            size="large"
+            onClick={() => {
+              this.props.onChangeLocation("/growth/pricing");
+            }}
+            style={{color:"white"}}
+            type="text"
+          >
+            Pricing
+          </Button>
+          {/* <CreateMenu /> */}
           <React.Fragment>
             <RightMenuMobile />
             <RightMenuPad />
@@ -369,7 +420,11 @@ class FgaNavbar extends Component {
               }}
               trigger={
                 <div className="relative" style={{ padding: 10 }}>
-                  <UserAvatar user={user} size={["2.5em", "2.5em"]} />
+                  <UserAvatar
+                    user={user}
+                    size={["2.5em", "2.5em"]}
+                    bg="#6C70FF"
+                  />
                   <div
                     className="absolute right bottom mb1"
                     style={{ marginRight: 2 }}
@@ -393,9 +448,9 @@ class FgaNavbar extends Component {
         </div>
       );
     };
-
+// className={ "dark"}
     return (
-      <div className="Nav" style={{ display: rootDisplay }}>
+      <div className="fga-Nav" style={{ display: rootDisplay,backgroundColor:'var(--color-bg-dark)' }}>
         <div className="Nav__left">
           <MobileMenuIcon />
           <Link
@@ -408,7 +463,9 @@ class FgaNavbar extends Component {
             }}
           >
             <img
-              src={getOssUrl("20230228153645.svg")}
+              src={getOssUrl(
+                isDark ? "img_logo_ga_dark.svg" : "20230228153645.svg",
+              )}
               width={160}
               height={42}
               style={{ marginBottom: 2 }}
@@ -419,7 +476,13 @@ class FgaNavbar extends Component {
         </div>
         <React.Fragment>
           <div className="Nav__search-bar">
-            <GaProjectSearch location={location}></GaProjectSearch>
+            <GaProjectSearch
+              location={location}
+              logout={this.props.logout}
+              setCreateFgaProjectModalShowAction={
+                setCreateFgaProjectModalShowAction
+              }
+            ></GaProjectSearch>
           </div>
           <div className="Nav__mobile-logo">
             <Link
@@ -442,20 +505,17 @@ class FgaNavbar extends Component {
         </React.Fragment>
         <RightMenu />
         {this.renderModal()}
-        {zkspaceDate() && this.renderSubmitAddrZkspaceModal()}
         {this.renderLoginModal()}
         {this.renderCancelFeedbackModal()}
         <CreateProjectModal
-          // open={this.state.isProjectModalOpen}
-          open={createFgaProjectModalShow}
+          open={createFgaProjectModalShow?.show}
+          force={createFgaProjectModalShow?.force}
           location={location}
           onSuccess={() => {
             setCreateFgaProjectModalShowAction({ show: false });
-            // this.setState({ ...this.state, isProjectModalOpen: false });
           }}
           onCancel={() => {
             setCreateFgaProjectModalShowAction({ show: false });
-            // this.setState({ ...this.state, isProjectModalOpen: false });
           }}
         ></CreateProjectModal>
       </div>
@@ -464,7 +524,6 @@ class FgaNavbar extends Component {
 
   render() {
     const { context } = this.props;
-
     switch (context) {
       case "auth":
         return null;

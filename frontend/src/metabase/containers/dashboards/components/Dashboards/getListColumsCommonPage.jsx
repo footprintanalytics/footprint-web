@@ -15,6 +15,7 @@ import PageBox from "metabase/containers/search/components/CommonPage/pageBox";
 import DashboardBox from "metabase/containers/search/components/CommonPage/dashboardBox";
 import Link from "metabase/core/components/Link";
 import getActionMenus from "metabase/containers/dashboards/components/Dashboards/helper";
+import { isFgaPath } from "metabase/growth/utils/utils"
 
 export default ({
   router,
@@ -29,6 +30,7 @@ export default ({
 }) => {
   const isMarket = user && user.isMarket;
   const isAdmin = user && user.is_superuser;
+  const isFga = isFgaPath()
   const array = [
     {
       model: "creator",
@@ -102,7 +104,7 @@ export default ({
           >
             <h3
               className="ml2 common-page__title"
-              style={{ WebkitBoxOrient: "vertical" }}
+              style={{ WebkitBoxOrient: "vertical" ,color: isFga ? "#fff" : ""}}
             >
               <Highlighter
                 highlightClassName="highlight"

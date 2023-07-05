@@ -87,6 +87,28 @@ export const runDirtyQuestionQuery = () => async (dispatch, getState) => {
   return dispatch(runQuestionQuery());
 };
 
+const handleQuestionVisualType = (question, cols) => {
+  const dateName = cols?.find(i => ["type/DateTimeWithTZ", "type/Date", "type/DateTime"].includes(i.base_type))?.name;
+  const amountN = cols?.find(i => i.name === "amount")?.name;
+  const volumeN = cols?.find(i => i.name === "volume")?.name;
+  const valueN = cols?.find(i => i.name === "value")?.name;
+  const valueName = amountN || volumeN || valueN
+    || cols?.find(i => ["type/Float", "type/BigInteger", "type/Integer", "type/number"].includes(i.base_type))?.name;
+  // bar
+  if (dateName && valueName) {
+    question.card().create_method = "GPT";
+    return question.setSettings({"graph.dimensions": [dateName], "graph.metrics": [valueName]}).setDisplay("bar");
+  }
+  const pieTextName = cols?.find(i => ["type/Text"].includes(i.base_type))?.name;
+  const pieValueName = cols?.find(i => ["type/Float", "type/BigInteger", "type/Integer", "type/number"].includes(i.base_type))?.name;
+  // pie
+  if (pieTextName && pieValueName) {
+    question.card().create_method = "GPT";
+    return question.setSettings({"graph.dimensions": [pieTextName], "graph.metrics": [pieValueName]}).setDisplay("pie");
+  }
+  return question;
+}
+
 /**
  * Queries the result for the currently active question or alternatively for the card provided in `overrideWithCard`.
  * The API queries triggered by this action creator can be cancelled using the deferred provided in RUN_QUERY action.
@@ -96,6 +118,7 @@ export const runQuestionQuery = ({
   shouldUpdateUrl = true,
   ignoreCache = false,
   overrideWithCard = null,
+  from = null,
 } = {}) => {
   return async (dispatch, getState) => {
     dispatch(loadStartUIControls());
@@ -142,7 +165,11 @@ export const runQuestionQuery = ({
             duration,
           ),
         );
-        return dispatch(queryCompleted(question, queryResults));
+        let queryCompletedQuestion = question;
+        if (from === "GPT") {
+          queryCompletedQuestion = handleQuestionVisualType(question, queryResults[0]?.data?.cols)
+        }
+        return dispatch(queryCompleted(queryCompletedQuestion, queryResults));
       })
       .catch(error => dispatch(queryErrored(startTime, error)));
 
@@ -194,7 +221,7 @@ export const queryCompleted = (question, queryResults) => {
       // Otherwise, trust that the question was saved with the correct display.
       const createMethod = question.card().create_method;
       // const newGuide = canShowNewGuideStart(getState().currentUser);
-      if (createMethod !== "template" && createMethod !== "preview") {
+      if (createMethod !== "template" && createMethod !== "preview" && createMethod !== "GPT") {
         question = question
           // if we are going to trigger autoselection logic, check if the locked display no longer is "sensible".
           .maybeUnlockDisplay(

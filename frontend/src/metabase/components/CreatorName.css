@@ -1,0 +1,9 @@
+.create-name-link {
+  color: var(--color-brand);
+  text-decoration-color: var(--color-brand);
+}
+
+.Dashboard--night .create-name-link {
+  color: white;
+  text-decoration-color: white;
+}

@@ -17,6 +17,7 @@ import {
 } from "./ScalarValue.styled";
 
 import { findSize, getMaxFontSize } from "./utils";
+import { LegendDescriptionIcon } from "metabase/visualizations/components/legend/LegendCaption.styled";
 
 const HORIZONTAL_PADDING = 32;
 
@@ -41,13 +42,13 @@ const ScalarValue = ({
         unit: "rem",
         step: 0.4,
         min: 1,
-        max: gridSize ? getMaxFontSize(gridSize.width, totalNumGridCols) / 1.5 : 4,
+        max: gridSize ? getMaxFontSize(gridSize.width, totalNumGridCols) / 1.6 : 4,
       }),
     [fontFamily, gridSize, totalNumGridCols, value, width],
   );
 
   return (
-    <ScalarValueWrapper className="ScalarValue" fontSize={fontSize}>
+    <ScalarValueWrapper className="ScalarValue fullscreen-night-text" fontSize={fontSize}>
       {value}
     </ScalarValueWrapper>
   );
@@ -70,9 +71,9 @@ export const ScalarTitle = ({ title, description, onClick }) => (
       </Ellipsified>
     </ScalarTitleContent>
     {description && description.length > 0 && (
-      <ScalarDescriptionContainer className="hover-child">
+      <ScalarDescriptionContainer className="html2canvas-filter">
         <Tooltip tooltip={description} maxWidth="22em">
-          <Icon name="info_outline" />
+          <LegendDescriptionIcon />
         </Tooltip>
       </ScalarDescriptionContainer>
     )}

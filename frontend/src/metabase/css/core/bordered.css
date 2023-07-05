@@ -15,6 +15,11 @@
   border: var(--border-size) var(--border-style) var(--color-border);
 }
 
+.dark .bordered,
+:local(.dark .bordered) {
+  border: var(--border-size) var(--border-style) var(--color-border-dark);
+}
+
 .border-bottom,
 :local(.border-bottom) {
   border-bottom: var(--border-size) var(--border-style) var(--color-border);
@@ -57,6 +62,10 @@
 
 .border-left {
   border-left: var(--border-size) var(--border-style) var(--color-border);
+}
+
+.dark .border-left {
+  border-left: var(--border-size) var(--border-style) var(--color-border-dark);
 }
 
 .border-light {

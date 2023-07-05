@@ -101,6 +101,26 @@ export const AddToolPopover = props => {
                 Add video
               </Button>
               <Button
+                icon={<YoutubeOutlined />}
+                type="dashed"
+                onClick={() => {
+                  props.addEmbedDashCardToDashboard({ dashId });
+                  trackStructEvent("Add Tooltip", "Add embed");
+                }}
+              >
+                Add embed
+              </Button>
+              <Button
+                icon={<YoutubeOutlined />}
+                type="dashed"
+                onClick={() => {
+                  props.addTableauDashCardToDashboard({ dashId });
+                  trackStructEvent("Add Tooltip", "Add tableau");
+                }}
+              >
+                Add tableau
+              </Button>
+              <Button
                 icon={<FilterOutlined />}
                 type="dashed"
                 onClick={() => {

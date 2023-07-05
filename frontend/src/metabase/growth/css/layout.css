@@ -33,6 +33,10 @@
   overflow: auto;
 }
 
+.dark .ga-layout__content {
+  background-color: var(--color-bg-dark);
+}
+
 .ga-layout__logo {
   display: flex;
   align-items: center;
@@ -74,4 +78,41 @@
   border-radius: 4px !important;
   border: 1px solid #3434b2;
   color: #3434b2;
+}
+
+.dark h1,
+.dark h2,
+.dark h3,
+.dark h4,
+.dark h5,
+.dark h6 {
+  color: #ffffffe0;
+}
+
+.ga-layout .ant-layout {
+  background: #000000;
+}
+
+.ga-layout .ant-menu-inline .ant-menu-item, .ant-menu-vertical .ant-menu-item, .ant-menu-inline .ant-menu-submenu-title, .ant-menu-vertical .ant-menu-submenu-title {
+  width: 100%;
+}
+
+.ga-layout .ant-menu-light .ant-menu-submenu-selected >.ant-menu-submenu-title, .ant-menu-light>.ant-menu .ant-menu-submenu-selected >.ant-menu-submenu-title {
+  color: rgba(255, 255, 255, 0.85);
+}
+
+.ga-layout .Link {
+  color: #6C70FF;
+}
+
+.ga-layout .ant-btn-default {
+  border-color: #6C70FF;
+}
+
+.ga-layout .ant-segmented .ant-segmented-item-disabled, .ant-segmented .ant-segmented-item-disabled:hover, .ant-segmented .ant-segmented-item-disabled:focus {
+  color: revert;
+}
+
+.ga-layout .ant-segmented .ant-segmented-item-selected {
+  background: var(--color-primary-dark);
 }

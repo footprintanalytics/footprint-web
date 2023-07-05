@@ -12,13 +12,14 @@ import undo from "metabase/redux/undo";
 import entities, { enhanceRequestsReducer } from "metabase/redux/entities";
 
 /* user */
-import { currentUser } from "metabase/redux/user";
+import { currentUser, currentFgaProject } from "metabase/redux/user";
 
 export default {
   // global reducers
   app,
   embed,
   currentUser,
+  currentFgaProject,
   // "entities" framework needs control over "requests" state
   requests: enhanceRequestsReducer(requests),
   settings,

@@ -26,6 +26,9 @@ import PivotTable from "./visualizations/PivotTable";
 import ListViz from "./visualizations/List";
 import Image from "./visualizations/Image";
 import Video from "./visualizations/Video";
+import Embed from "./visualizations/Embed";
+import Tableau from "./visualizations/Tableau";
+import Filter from "./visualizations/Filter";
 import RowRace from "./visualizations/RowRace";
 import LineRace from "./visualizations/LineRace";
 import Circle from "./visualizations/Circle";
@@ -38,6 +41,7 @@ import BarStack from "./visualizations/BarStack";
 import Bubble from "./visualizations/Bubble";
 import DoubleScalar from "metabase/visualizations/visualizations/DoubleScalar";
 import Graph from "./visualizations/Graph";
+import Sankey from "./visualizations/Sankey";
 import FGATable from "./visualizations/FGATable";
 
 export default function () {
@@ -65,6 +69,9 @@ export default function () {
   //footprint
   registerVisualization(Image);
   registerVisualization(Video);
+  registerVisualization(Embed);
+  registerVisualization(Tableau);
+  registerVisualization(Filter);
   registerVisualization(RowRace);
   registerVisualization(LineRace);
   registerVisualization(Circle);
@@ -77,6 +84,7 @@ export default function () {
   registerVisualization(Bubble);
   registerVisualization(DoubleScalar);
   registerVisualization(Graph);
+  registerVisualization(Sankey);
   registerVisualization(FGATable);
 
 

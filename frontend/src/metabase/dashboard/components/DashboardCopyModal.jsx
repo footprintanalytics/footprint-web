@@ -21,6 +21,7 @@ import { getUser } from "metabase/reference/selectors";
 import Modal from "metabase/components/Modal";
 import { getPersonalCollectionId } from "metabase/lib/collection";
 import { getDashboardComplete } from "../selectors";
+import { isFgaPath } from "metabase/growth/utils/utils";
 
 const mapStateToProps = (state, props) => {
   const dashboard = props.dashboard || getDashboardComplete(state, props);
@@ -63,7 +64,7 @@ const DashboardCopyModalInner = ({
   user,
   dashboardId,
   loadVip,
-                                   canCreate,
+  canCreate,
   ...props
 }) => {
   const [isShallowCopy, setIsShallowCopy] = useState(true);
@@ -94,53 +95,60 @@ const DashboardCopyModalInner = ({
   };
 
   const InnerPanel = () => {
-
-    return (<div>
-      <EntityCopyModal
-        entityType="dashboards"
-        entityObject={{
-          ...dashboard,
-          collection_id: initialCollectionId,
-          is_shallow_copy: fpIsShallowCopy,
-        }}
-        form={
-          publicAnalyticPermission
-          ? Dashboards.forms.duplicate
-          : Dashboards.forms.userDuplicate
-        }
-
-        title={title}
-        overwriteOnInitialValuesChange
-        copy={async object => {
-          await loadVip();
-          if (!canCreate) {
-            setShowVip(true);
-            throw { data: "" };
+    return (
+      <div>
+        <EntityCopyModal
+          entityType="dashboards"
+          entityObject={{
+            ...dashboard,
+            collection_id: initialCollectionId,
+            is_shallow_copy: fpIsShallowCopy,
+          }}
+          form={
+            publicAnalyticPermission
+              ? Dashboards.forms.duplicate
+              : Dashboards.forms.userDuplicate
           }
-          if (user && !publicAnalyticPermission) {
-            object.collection_id = getPersonalCollectionId(user);
-          }
-          try {
-            return copyDashboard({ id: initialDashboardId }, dissoc(object, "id"));
-          } catch (e) {
-            console.log(e);
-          }
-          return null;
-        }}
-        onClose={onClose}
-        onSaved={dashboard => {
-          loadVip();
-          onClose && onClose();
-          setTimeout(() => {
-            window.open(Urls.dashboard(dashboard));
-          }, 10);
-        }}
-        {...props}
-        onValuesChange={handleValuesChange}
-      />
-      {renderModal(this)}
-    </div>
-  )};
+          title={title}
+          overwriteOnInitialValuesChange
+          copy={async object => {
+            await loadVip();
+            if (!canCreate) {
+              setShowVip(true);
+              throw { data: "" };
+            }
+            if (user && !publicAnalyticPermission) {
+              object.collection_id = getPersonalCollectionId(user);
+            }
+            try {
+              return copyDashboard(
+                { id: initialDashboardId },
+                dissoc(object, "id"),
+              );
+            } catch (e) {
+              console.log(e);
+            }
+            return null;
+          }}
+          onClose={onClose}
+          onSaved={dashboard => {
+            loadVip();
+            onClose && onClose();
+            setTimeout(() => {
+              let url = Urls.dashboard(dashboard);
+              if (isFgaPath()) {
+                url = url.startsWith('/') ?`/growth${url}`:`growth/${url}`;
+              }
+              window.open(url);
+            }, 10);
+          }}
+          {...props}
+          onValuesChange={handleValuesChange}
+        />
+        {renderModal(this)}
+      </div>
+    );
+  };
 
   return !fromRoute ? (
     isOpen ? (

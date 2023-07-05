@@ -7,16 +7,98 @@ export const apiGet = async api => {
 };
 
 // FGA Api
-export const GetFgaCohort = async () => {
-  return GET("/api/v1/fga/cohort");
+
+/**
+ *
+ * @param {*} params {projectId:1}
+ * @returns
+ */
+export const loginQuestflow = async params => {
+  return POST("/api/v1/fga/quest-flow/login", params);
 };
 
+/**
+ *
+ * @param {*} params {
+  "projectId": 0,
+  "campaignType": "Quest",
+  "workflowId": "string",
+  "webhook": "string"
+}
+ * @returns
+ */
+export const createQuestflowCampaign = async params => {
+  return POST("/api/v1/fga/quest-flow/campaign", params);
+};
+
+/**
+ *
+ * @param {*} params {projectId,url}
+ * @returns
+ */
+export const uploadMapping = async params => {
+  return POST("/api/v1/fga/campaign/mapping/customize-upload", params);
+};
+
+/**
+ *
+ * @param {*} params  {
+     "url": "string",
+   }
+ * @returns
+ */
+export const GetThirdpartWebsiteInfo = async params => {
+  return POST("/api/v1/fga/website-nesting/preview-graph", params);
+};
+
+/**
+ *
+ * @param {*} params : {
+    "projectId": 0,
+    "url": "string",
+    "imageUrl": "string",
+    "title": "string"
+  }
+ * @returns
+ */
+export const AddWebsiteNesting = async params => {
+  return POST("/api/v1/fga/website-nesting", params);
+};
+
+export const UpdateWebsiteNesting = async (id, params) => {
+  // params: {
+  //   "projectId": 0,
+  //   "url": "string",
+  //   "imageUrl": "string",
+  //   "title": "string"
+  // }
+  return PUT(`/api/v1/fga/website-nesting/${id}`, params);
+};
+
+export const GetWebsiteNesting = async params => {
+  // {projectId}
+  return GET("/api/v1/fga/website-nesting", params);
+};
+export const DelectWebsiteNesting = async params => {
+  //{id}
+  return DELETE(`/api/v1/fga/website-nesting`, { data: params });
+};
+export const GetFgaCohort = async params => {
+  return GET("/api/v1/fga/cohort", params);
+};
+export const GetMemberInfo = async params => {
+  return GET("/api/v1/fga/community/info/new", params);
+};
 export const CreateFgaCohort = async params => {
   return POST("/api/v1/fga/cohort", params);
 };
 
 export const CreateFgaCohortByAddress = async params => {
   return POST("/api/v1/fga/cohort/address", params);
+};
+
+export const CreateFgaPotentialCohortByAddress = async params => {
+  return POST("/api/v1/fga/potential-user/list/address/cohort", params);
 };
 
 export const CreateFgaCampaign = async params => {
@@ -27,9 +109,32 @@ export const CreateFgaProject = async params => {
   return POST("/api/v1/fga/project", params);
 };
 
+/**
+ *
+ * @param {*} params {projectId,name,creatorId,protocolSlug,protocolName}
+ * @returns
+ */
+export const UpdateFgaProject = async params => {
+  return PUT("/api/v1/fga/project", params);
+};
+
+/**
+ *
+ * @param {*} params {projectId:4 ,cohortId:61}
+ * @returns
+ */
+export const downloadCohortAddress = async params => {
+  return GET("/api/v1/fga/cohort/address/csv", params);
+};
+
 export const GetFgaProject = async params => {
   return GET("/api/v1/fga/project", params);
 };
+
+export const GetAllProtocol = async params => {
+  return GET("/api/v1/fga/potential-user/protocolInfo", params);
+};
+
 
 export const GetFgaProjectDetail = async params => {
   return POST("/api/v1/fga/project/detail", params);
@@ -58,8 +163,71 @@ export const getAvailableConnectors = async params => {
 export const addConnectors = async params => {
   return POST(`/api/v1/fga/connector-config`, params);
 };
+// camppaign process: getCampaignTemplate() --> addCampaign() --> getCampaign() --> getCampaignDetail()
+export const getCampaignTemplate = async params => {
+  return GET(`/api/v1/fga/campaign/template`, params);
+};
+// create a new Campaign
+export const addCampaign = async params => {
+  return POST(`/api/v1/fga/campaign`, params);
+};
+// get Campaign list
+export const getCampaign = async params => {
+  return GET(`/api/v1/fga/campaign`, params);
+};
 
-// FP Api
+export const getCampaignDetail = async params => {
+  return GET(`/api/v1/fga/campaign/${params.id}`);
+};
+export const createCampaignCohort = async params => {
+  return POST(`/api/v1/fga/campaign/mapping/cohort`, params);
+};
+export const getCommunityInfo = async params => {
+  return GET(`/api/v1/fga/community/info`, params);
+};
+export const getCommunityQuickFilter = async params => {
+  return GET(`/api/v1/fga/community/quick-filter`, params);
+};
+export const getCommunityWalletAddress = async params => {
+  return POST(`/api/v1/fga/community/wallet-address`, params);
+};
+export const getPotentialUseFilter = async params => {
+  return GET(`/api/v1/fga/potential-user/filter`, params);
+};
+export const getPotentialUseFilterProject = async params => {
+  return GET(`/api/v1/fga/potential-user/filter/project`, params);
+};
+export const getPotentialUserFilterCollection = async params => {
+  return GET(`/api/v1/fga/potential-user/filter/collection`, params);
+};
+export const getPotentialUserFilterToken = async params => {
+  return GET(`/api/v1/fga/potential-user/filter/token`, params);
+};
+export const getPotentialUserFilterTag = async params => {
+  return GET(`/api/v1/fga/potential-user/filter/tag`, params);
+};
+export const getPotentialUserFilterFeaturedTag = async params => {
+  return GET(`/api/v1/fga/potential-user/filter/featuredTag`, params);
+};
+export const queryPotentialUser = async params => {
+  return POST(`/api/v1/fga/potential-user`, params);
+};
+export const queryPotentialUserByFilter = async params => {
+  return POST(`/api/v1/fga/potential-user/list/queryByFilter`, params);
+};
+export const createPotentialUserCohortByFilter = async params => {
+  return POST(`/api/v1/fga/potential-user/list/queryByFilter/cohort`, params);
+};
+export const createPotentialUserTagging = async params => {
+  return POST(`/api/v1/fga/potential-user/list/queryByFilter/addressTag`, params);
+};
+export const createPotentialUserCohort = async params => {
+  return POST(`/api/v1/fga/potential-user/cohort`, params);
+};
+export const createCommunityUserCohort = async params => {
+  return POST(`/api/v1/fga/community/cohort`, params);
+};
+// FP Api ---------------
 export const UserRegister = async params => {
   return POST("/api/v1/user/signup", params);
 };
@@ -153,6 +321,10 @@ export const deleteTag = async params => {
 
 export const getDataset = async params => {
   return POST(`/api/v1/database/dataset/list`, params);
+};
+
+export const queryDataset = async params => {
+  return POST(`/api/v1/database/dataset`, params);
 };
 
 export const getTable = async params => {
@@ -482,6 +654,10 @@ export const userinfoProfile = params => {
   return PUT(`api/v1/userinfo/profile`, params);
 };
 
+export const reviewContract = params => {
+  return POST(`/api/v1/contract/review`, params);
+};
+
 export const getContractSubmittedList = params => {
   return GET(`/api/v1/contract/submitted/list`, params);
 };
@@ -494,8 +670,16 @@ export const getContractProtocolByAddress = params => {
   return GET(`/api/v1/protocol/find/list`, params);
 };
 
+export const getProtocolInfoByAddress = params => {
+  return GET(`/api/v1/protocol/find/info`, params);
+};
+
 export const submitContract = params => {
   return POST(`/api/v1/contract/submit`, params);
+};
+
+export const batchSubmitContract = params => {
+  return POST(`/api/v1/contract/batchSubmit`, params);
 };
 
 export const publicDashboard = (uuid, params) => {
@@ -516,4 +700,12 @@ export const udTableDetail = (params) => {
 
 export const udTableSaveModelConfig = (params) => {
   return POST(`api/v1/udTable/saveModelConfig`, params);
+};
+
+export const setTableBelongType = (params) => {
+  return POST(`api/v1/userPage/setTableBelongType`, params);
+};
+
+export const ownerTable = (params) => {
+  return POST(`api/v1/userPage/owner/table`, params);
 };

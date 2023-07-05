@@ -10,22 +10,28 @@ import {
   Divider,
   Tabs,
   message,
+  Button,
+  Typography,
 } from "antd";
-import Link from "antd/lib/typography/Link";
+// import Link from "antd/lib/typography/Link";
 import { connect } from "react-redux";
 import Title from "antd/lib/typography/Title";
+import { SwapOutlined } from "@ant-design/icons";
 import CopyToClipboard from "react-copy-to-clipboard";
-import { getUser } from "metabase/selectors/user";
-import { top_protocols } from "../utils/data";
+import { getFgaProject, getUser } from "metabase/selectors/user";
 import "../css/index.css";
+import Link from "metabase/core/components/Link/Link";
+import UpdateProjectModal from "./Modal/UpdateProjectModal";
 
 const ProjectInfo = props => {
-  const { router, project, location } = props;
-  const [currentProject, setCurrentProject] = useState();
+  const { router, project, location, user } = props;
+  const [currentProject, setCurrentProject] = useState(project);
+  const [projectModalShow, setProjectModalShow] = useState({
+    show: false,
+    force: false,
+  });
   useEffect(() => {
-    //TODO 这里要换成从数据源api 读取 project 数据
-    const p = top_protocols.find(i => i.protocol_slug === project);
-    setCurrentProject(p ?? null);
+    setCurrentProject(project);
   }, [project]);
   const onTabChange = key => {
     console.log(key);
@@ -40,18 +46,18 @@ const ProjectInfo = props => {
     let datas = [];
     switch (type) {
       case "NFT":
-        datas = currentProject?.collections_list;
+        datas = currentProject?.nftCollectionAddress;
         break;
       case "Contract":
         datas = [];
         break;
       case "Token":
-        datas = [];
+        datas = currentProject?.tokenAddress;
         break;
       default:
         datas = [];
     }
-    if (datas.length <= 0) {
+    if (!Array.isArray(datas) || datas.length <= 0) {
       return (
         <Empty
           image="https://gw.alipayobjects.com/zos/antfincdn/ZHrcdLPrvN/empty.svg"
@@ -66,8 +72,18 @@ const ProjectInfo = props => {
             </span>
           }
         >
-          <Link href="growth/submit/contract/add">Submit Now</Link>
-          {/* <Button type="primary">Submit Now</Button> */}
+          <Button
+            type="link"
+            onClick={() => {
+              if (!user) {
+                message.error("Please login first!");
+                return;
+              }
+              router?.push({ pathname: "/submit/contract/add" });
+            }}
+          >
+            Submit Now
+          </Button>
         </Empty>
       );
     }
@@ -76,12 +92,31 @@ const ProjectInfo = props => {
         className="demo-loadmore-list"
         itemLayout="horizontal"
         dataSource={datas}
+        footer={
+          <div className="w-full text-centered">
+            <Typography.Text type="secondary">
+              You can{" "}
+              <Typography.Link
+                onClick={() => {
+                  if (!user) {
+                    message.error("Please login first!");
+                    return;
+                  }
+                  router?.push({ pathname: "/submit/contract/add" });
+                }}
+              >
+                click here{" "}
+              </Typography.Link>{" "}
+              and submit more contract!
+            </Typography.Text>
+          </div>
+        }
         renderItem={item => (
           <List.Item
             actions={[
               <CopyToClipboard
                 key="list-copy"
-                text={item}
+                text={`${item.address}`}
                 onCopy={() => {
                   message.success("Copied!");
                 }}
@@ -90,20 +125,20 @@ const ProjectInfo = props => {
                   <a>copy</a>
                 </Tooltip>
               </CopyToClipboard>,
-              <Tooltip key="list-more" title={`View in scan!`}>
-                <a
-                  onClick={() => {
-                    window.open(getScanLink(item), "_blank");
-                  }}
-                >
-                  more
-                </a>
-              </Tooltip>,
+              // <Tooltip key="list-more" title={`View in scan!`}>
+              //   <a
+              //     onClick={() => {
+              //       window.open(getScanLink(item), "_blank");
+              //     }}
+              //   >
+              //     more
+              //   </a>
+              // </Tooltip>,
             ]}
           >
             <div>
               <Avatar style={{ marginRight: 5 }}>{type}</Avatar>
-              {item}
+              {item.address} <Tag>{item.chain}</Tag>
             </div>
           </List.Item>
         )}
@@ -123,12 +158,12 @@ const ProjectInfo = props => {
           minHeight: 800,
         }}
       >
-        <div className=" flex flex-row justify-between w-full">
+        <div className=" flex flex-row justify-between w-full mb2">
           <Title width={"100%"} level={4} style={{ marginBottom: 0 }}>
             General
           </Title>
         </div>
-        <Divider></Divider>
+
         <Card
           style={{
             width: "100%",
@@ -137,28 +172,50 @@ const ProjectInfo = props => {
             borderRadius: 10,
           }}
         >
-          {currentProject ? (
+          {currentProject?.protocolSlug !== "default" ? (
             <div className="flex flex-col">
               <div className="flex flex-row">
                 <img
-                  src={currentProject.logo}
+                  src={
+                    currentProject.logo ??
+                    "https://static.footprint.network/logo80.png"
+                  }
                   width={80}
                   height={80}
                   style={{
                     borderRadius: 40,
                     borderWidth: 0.5,
-                    borderStyle: "solid",
-                    borderColor: "#f8fafb",
+                    padding: 5,
+                    // borderStyle: "solid",
+                    // borderColor: "#f8fafb",
                   }}
                   alt="Project Icon"
                 />
                 <div className="flex flex-col ml3">
                   <div style={{ fontSize: 22, fontWeight: 500 }}>
-                    {currentProject.protocol_name}
+                    {currentProject.protocolName}
+                    <Button
+                      className="ml0"
+                      type="text"
+                      hidden={true}
+                      onClick={() => {
+                        setProjectModalShow({ show: true });
+                      }}
+                    >
+                      <SwapOutlined />
+                    </Button>
                   </div>
                   <div className=" mt1">
-                    <Tag>{currentProject.chain}</Tag>
-                    <Tag>NFT</Tag>
+                    {currentProject?.protocolType &&
+                      currentProject?.protocolType !== "NFT" && (
+                        <Tag>{currentProject?.protocolType}</Tag>
+                      )}
+                    {currentProject?.nftCollectionAddress?.length > 0 && (
+                      <Tag>NFT</Tag>
+                    )}
+                    {currentProject?.tokenAddress?.length > 0 && (
+                      <Tag>Token</Tag>
+                    )}
                   </div>
                 </div>
               </div>
@@ -188,23 +245,43 @@ const ProjectInfo = props => {
             </div>
           ) : (
             <Empty
+              className="m4"
               image="https://gw.alipayobjects.com/zos/antfincdn/ZHrcdLPrvN/empty.svg"
               imageStyle={{
                 height: 100,
               }}
               description={
-                <span>
-                  This project does not currently include the relevant contract
-                  address information. You can assist us in enhancing it by
-                  providing this information!
-                </span>
+                <>
+                  <span>
+                    This project does not currently set up a protocol.
+                  </span>
+                  <span>You can set one and unlock more features to use.</span>
+                </>
               }
             >
-              {/* <Button type="primary">Create Now</Button> */}
+              <Button
+                type="primary"
+                onClick={() => {
+                  setProjectModalShow({ show: true });
+                }}
+              >
+                Set up now
+              </Button>
             </Empty>
           )}
         </Card>
       </div>
+      <UpdateProjectModal
+        open={projectModalShow?.show}
+        force={projectModalShow?.force}
+        location={location}
+        onSuccess={() => {
+          setProjectModalShow({ show: false });
+        }}
+        onCancel={() => {
+          setProjectModalShow({ show: false });
+        }}
+      ></UpdateProjectModal>
     </div>
   );
 };
@@ -212,6 +289,7 @@ const ProjectInfo = props => {
 const mapStateToProps = state => {
   return {
     user: getUser(state),
+    project: getFgaProject(state),
   };
 };
 

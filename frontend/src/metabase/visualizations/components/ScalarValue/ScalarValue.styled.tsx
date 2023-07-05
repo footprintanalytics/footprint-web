@@ -37,7 +37,7 @@ export const ScalarTitleContainer = styled.div`
   height: ${TITLE_LINE_HEIGHT_REM * TITLE_MAX_LINES}rem;
   display: flex;
   justify-content: center;
-  padding: 0 1rem;
+  padding: 0 0.2rem;
   width: 100%;
 `;
 
@@ -54,9 +54,9 @@ export const ScalarTitleContent = styled.h3`
 `;
 
 export const ScalarDescriptionContainer = styled.div`
-  cursor: pointer;
+  cursor: default;
   width: 1.5rem;
-  margin-top: 0.25rem;
+  margin-top: 0.15rem;
   padding-left: 0.5rem;
 
   &:hover {

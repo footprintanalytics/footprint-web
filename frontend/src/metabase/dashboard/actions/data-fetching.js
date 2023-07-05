@@ -205,6 +205,10 @@ export const fetchDashboard = createThunkAction(
         result = await DashboardApi.get({ dashId: dashId });
       }
 
+      if (result?.code === -1) {
+        throw result?.message
+      }
+
       if (dashboardType === "normal" || dashboardType === "transient") {
         await dispatch(loadMetadataForDashboard(result.ordered_cards));
       }
@@ -339,8 +343,10 @@ export const fetchCardData = createThunkAction(
           ),
         );
       } else if (dashboardType === "public") {
+        const isDataApiStatPage = location.pathname === "/data-api/statistics";
         result = await fetchDataOrError(
-          maybeUsePivotEndpoint(PublicApi.dashboardCardQuery, card)(
+          maybeUsePivotEndpoint(
+            isDataApiStatPage ? PublicApi.dashboardCardQueryDataApiStat : PublicApi.dashboardCardQuery, card)(
             {
               uuid: dashboard_id,
               dashcardId: dashcard.id,

@@ -59,7 +59,7 @@ const FormAvatarWidget = ({ values, onChangeField }) => {
           className="FormAvatarWidget__avatar"
           style={{ backgroundColor: "#E3E3FF" }}
         >
-          {String(values?.name[0]).toUpperCase()}
+          <span>{String(values?.name[0]).toUpperCase()}</span>
         </Avatar>
       )}
       <div className="FormAvatarWidget__action">

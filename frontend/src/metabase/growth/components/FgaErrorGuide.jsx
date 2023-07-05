@@ -36,42 +36,20 @@ const FgaErrorGuide = ({ router, project, menu }) => {
           />
         }
         // title="There is currently no data available for this project."
-        subTitle="Unfortunately, there is no data available for the current project. However, if you have configured the connector, you can gain valuable insights about your users by accessing additional data."
+        subTitle="Unfortunately, there is no data available for the current project. However, if you have configured the integration, you can gain valuable insights about your users by accessing additional data."
         extra={
           <Button
             type="primary"
             onClick={() => {
-              router.push(getGrowthProjectPath(project, "Connector"));
+              router.push(getGrowthProjectPath(project, "integration"));
             }}
           >
-            Config Connector now
+            Config Integration now
           </Button>
         }
       />
     </div>
-    // <div
-    //   className="text-brand text-underline html2canvas-filter"
-    //   style={{
-    //     display: "flex",
-    //     justifyContent: "center",
-    //   }}
-    // >
-    //   <Link
-    //     to="https://docs.footprint.network/docs/sql-compatible"
-    //     // target="_blank"
-    //     onClick={() => trackStructEvent(`error-guide-fix-${cardId}`)}
-    //   >
-    //     Goto config connector now.
-    //   </Link>
-    //   {/* <div className="ml2"/>
-    //   <Link
-    //     to="https://discord.gg/3HYaR6USM7"
-    //     target="_blank"
-    //     onClick={() => trackStructEvent(`error-guide-report-${cardId}`)}
-    //   >
-    //     Report to community
-    //   </Link> */}
-    // </div>
+
   );
 };
 

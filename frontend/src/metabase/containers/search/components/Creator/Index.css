@@ -8,3 +8,11 @@
 .dashboards__creator-url {
   margin: 6px 0;
 }
+
+.dashboards__table-columns-odd {
+  background: #fafafc;
+}
+
+.dashboards__table-columns-even {
+  background: #ffffff;
+}

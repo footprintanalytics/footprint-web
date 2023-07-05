@@ -30,6 +30,7 @@ import { initializeQB, setCardAndRun } from "./core";
 import { zoomInRow, resetRowZoom } from "./object-detail";
 import { cancelQuery } from "./querying";
 import { setQueryBuilderMode } from "./ui";
+import { isFgaPath } from "metabase/growth/utils/utils"
 
 export const SET_CURRENT_STATE = "metabase/qb/SET_CURRENT_STATE";
 const setCurrentState = createAction(SET_CURRENT_STATE);
@@ -199,7 +200,9 @@ export const updateUrl = createThunkAction(
 
       // this is necessary because we can't get the state from history.state
       dispatch(setCurrentState(newState));
-
+      if(isFgaPath()&&locationDescriptor?.pathname.startsWith('/chart')){
+        locationDescriptor.pathname = `/growth${locationDescriptor.pathname}`
+      }
       try {
         if (replaceState) {
           dispatch(replace(locationDescriptor));

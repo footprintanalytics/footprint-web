@@ -39,6 +39,7 @@ interface DashboardHeaderProps {
   isEditing: boolean;
   isEditingInfo: boolean;
   isNavBarOpen: boolean;
+  isNightMode: boolean;
   dashboard: Dashboard;
   isBadgeVisible: boolean;
   isLastEditInfoVisible: boolean;
@@ -61,6 +62,7 @@ const DashboardHeader = ({
   headerClassName = "py1 lg-py2 xl-py3 wrapper",
   headerModalMessage,
   isEditing,
+  isNightMode,
   isNavBarOpen,
   dashboard,
   isLastEditInfoVisible,
@@ -142,13 +144,14 @@ const DashboardHeader = ({
         ref={header}
       >
         <HeaderContent hasSubHeader={!isDataApp} showSubHeader={true}>
-          <div className="flex">
+          <div className="flex fullscreen-night-text">
             <IconBack router={router} />
             <HeaderCaptionContainer>
               <HeaderCaption
                 key={dashboard.name}
                 initialValue={dashboard.name}
                 placeholder={t`Add title`}
+                isNightMode={isNightMode}
                 isDisabled={!dashboard.can_write}
                 data-testid="dashboard-name-heading"
                 onChange={handleUpdateCaption}

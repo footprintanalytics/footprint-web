@@ -97,7 +97,8 @@
                                  "preview.footprint.network"
                                  "accounts.google.com"
                                  "docs.google.com"
-                                 "www.youtube.com"]
+                                 "www.youtube.com"
+                                 "*"]
                   :connect-src  ["*"
                                  "'self' data:"
                                  ;; Google Identity Services
@@ -126,7 +127,7 @@
   [allow-iframes?]
   (update (content-security-policy-header)
           "Content-Security-Policy"
-          #(format "%s frame-ancestors %s;" % (if allow-iframes? "*" (or (embedding-app-origin) "'none'")))))
+          #(format "%s %s;" % (if allow-iframes? "" (or (embedding-app-origin) "frame-ancestors 'none'")))))
 
 (defsetting ssl-certificate-public-key
   (deferred-tru

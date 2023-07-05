@@ -18,6 +18,7 @@ import { trackStructEvent } from "metabase/lib/analytics";
 import { isDemo, demoTip } from "../defi/utils/dashboard";
 import NeedPermissionModal from "./NeedPermissionModal";
 import "./CreateActionModal.css";
+import { isFgaPath } from "metabase/growth/utils/utils"
 
 const mapStateToProps = state => {
   return {
@@ -169,7 +170,7 @@ class CreateActionModal extends Component {
                 onClick={() => {
                   trackStructEvent(`create-modal click Submit contract`);
                   if (isLogin()) {
-                    window.open("/submit/contract");
+                    window.open(`${isFgaPath()?"/growth":""}/submit/contract`);
                   }
                 }}
               >

@@ -6,7 +6,7 @@ import "./index.css";
 const IconValue = ({
   iconName,
   iconSize = 16,
-  iconColor = "#acacb2",
+  iconColor = "#7A819B",
   value,
 }) => {
   return (

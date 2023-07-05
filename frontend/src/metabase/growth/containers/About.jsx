@@ -1,10 +1,12 @@
 /* eslint-disable react/prop-types */
 import React from "react";
 import { connect } from "react-redux";
-import { getUser } from "metabase/selectors/user";
+import LoadingSpinner from "metabase/components/LoadingSpinner";
+import { getUser, getFgaProject } from "metabase/selectors/user";
 
 const About = props => {
-  const { router, location, children, user } = props;
+  const { router, location, children, user, projectPath, menu, projectObject } =
+    props;
   return (
     <div className="flex flex-column items-center">
       <iframe
@@ -16,15 +18,18 @@ const About = props => {
         marginHeight="0"
         marginWidth="0"
       >
-        Loading...s
+        Loading...
       </iframe>
     </div>
   );
 };
 
-const mapStateToProps = state => {
+const mapStateToProps = (state, props) => {
   return {
     user: getUser(state),
+    projectPath: props.params.project,
+    projectObject: getFgaProject(state),
+    menu: props.params.menu,
   };
 };
 

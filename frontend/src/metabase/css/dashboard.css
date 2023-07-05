@@ -36,7 +36,7 @@
 
 /* Night mode */
 .Dashboard.Dashboard--night {
-  background-color: var(--color-bg-black);
+  background-color: var(--color-bg-dark);
 }
 
 .Dashboard.Dashboard--night .Card {
@@ -53,6 +53,11 @@
 }
 
 .Dashboard.Dashboard--night.Dashboard--fullscreen .fullscreen-night-text {
+  color: color-mod(var(--color-text-white) alpha(-14%));
+  transition: color 1s linear;
+}
+
+.Dashboard.Dashboard--night .fullscreen-night-text {
   color: color-mod(var(--color-text-white) alpha(-14%));
   transition: color 1s linear;
 }
@@ -147,7 +152,7 @@
 }
 
 .DashCard .Card {
-  border-radius: 8px;
+  border-radius: 4px;
   box-shadow: 0px 1px 3px var(--color-shadow);
 }
 

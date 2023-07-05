@@ -43,6 +43,7 @@ import EntityMenu from "metabase/components/EntityMenu";
 import UserAvatar from "metabase/components/UserAvatar";
 import VipIcon from "metabase/components/VipIcon";
 import { getContext, getPath, getUser } from "../selectors";
+import { getLoginModalDefaultRegister } from "../../../selectors/control";
 
 const mapStateToProps = (state, props) => ({
   path: getPath(state, props),
@@ -50,6 +51,7 @@ const mapStateToProps = (state, props) => ({
   user: getUser(state),
   loginModalShow: getLoginModalShow(state, props),
   loginModalRedirect: getLoginModalRedirect(state, props),
+  loginModalDefaultRegister: getLoginModalDefaultRegister(state, props),
   createModalShow: getCreateModalShow(state, props),
   cancelFeedback: getCancelFeedback(state, props),
   getIsUserFeedbackBlock: getIsUserFeedbackBlock(state, props),
@@ -69,52 +71,48 @@ const mapDispatchToProps = {
 
 const leftMenuData = [
   {
-    title: "Analytics",
+    title: "Analytics App",
     icon: "menu_home",
     path: "/dashboards",
     auth: false,
   },
   {
-    name: "Data API",
+    title: "Data API",
+    icon: "menu_home",
+    path: "/data-api",
+    auth: false,
+  },
+  {
+    title: "Growth Analytics",
+    icon: "menu_home",
+    path: "/growth",
+    auth: false,
+  },
+  {
+    name: "Research 🔥",
     icon: "protocols",
     menu: [
       {
-        title: "Data API",
-        desc: "Unified API for Web3 developers",
-        link: "/data-api",
+        title: "NFT Research",
+        link: "/research/nft",
       },
       {
-        title: "BingoNFT",
-        desc: "A window into NFTs powered by Footprint Data API",
-        link: "https://nft.footprint.network/",
-        externalLink: true,
+        title: "GameFi Research",
+        link: "/research/gamefi",
       },
       {
-        title: "Footrace",
-        desc: "A realtime alert platform powered by Footprint Data API",
-        link: "https://footrace.io/",
-        externalLink: true,
+        title: "Chain Research",
+        link: "/research/chain",
       },
     ],
   },
 ];
 
 const rightMenuData = [
-  // { url: "/moon-men", name: "Moon Men" },
   {
-    name: "Learn",
+    name: "Data",
     icon: "protocols",
     menu: [
-      {
-        title: "Blog",
-        desc: "Analyze the trends of each domain in the Web3 industry",
-        link: "/news/articles",
-      },
-      {
-        title: "Academy",
-        desc: "The premier Web3 education platform with industry leading courses",
-        link: "/news/academy",
-      },
       {
         title: "Data Overview",
         desc: "Check the data coverage of most comprehensive data provider",
@@ -124,6 +122,22 @@ const rightMenuData = [
         title: "Data Dictionary",
         desc: "Quick access to each data table definitions and metadata",
         link: "/@Footprint/Footprint-Datasets-Data-Dictionary",
+      },
+    ],
+  },
+  {
+    name: "Learn",
+    icon: "protocols",
+    menu: [
+      {
+        title: "Blog",
+        desc: "Analyze the trends of each domain in the Web3 industry",
+        link: "/news/all",
+      },
+      {
+        title: "Academy",
+        desc: "The premier Web3 education platform with industry leading courses",
+        link: "/news/academy",
       },
       {
         title: "YouTube",
@@ -311,9 +325,8 @@ class FpNavbar extends Component {
   }
 
   renderLoginModal() {
-    const { location, loginModalShow, loginModalRedirect, setLoginModalShow } =
+    const { location, loginModalShow, loginModalRedirect, loginModalDefaultRegister, setLoginModalShow } =
       this.props;
-
     return (
       <LoginModal
         isOpen={loginModalShow}
@@ -322,6 +335,7 @@ class FpNavbar extends Component {
         channel={location.query.channel || location.query.cnl}
         location={this.props.location}
         fromNav={true}
+        defaultRegister={loginModalDefaultRegister}
         redirect={loginModalRedirect}
       />
     );
@@ -491,6 +505,12 @@ class FpNavbar extends Component {
       ? "none"
       : "flex";
 
+    const showCreate =
+      window.location.pathname !== "/" &&
+      window.location.pathname !== "/data-api"
+    const showSignup =
+      !showCreate;
+
     const MobileMenuIcon = () => {
       return (
         <div
@@ -560,26 +580,28 @@ class FpNavbar extends Component {
     };
 
     const RightMenuPad = () => {
+      const color2 = isDark ? "white" : color("footprint-color-title");
       return (
         <div className="Nav__right-pad-icon">
           <Link to="https://docs.footprint.network/docs" target="_blank">
-            <Icon name="docs" color={color("footprint-color-title")} />
+            <Icon name="docs" color={color2} />
           </Link>
           <Link to="/search">
-            <Icon name="search" color={color("footprint-color-title")} />
+            <Icon name="search" color={color2} />
           </Link>
           <Link onClick={onCreateAction}>
-            <Icon name="add" size={12} />
+            <Icon name="add" size={12} color={color2}/>
           </Link>
         </div>
       );
     };
 
     const RightMenuMobile = () => {
+      const color2 = isDark ? "white" : color("footprint-color-title");
       return (
         <div className="Nav__right-mobile-icon">
           <Link to="/search">
-            <Icon name="search" color={color("footprint-color-title")} />
+            <Icon name="search" color={color2} />
           </Link>
           <Link onClick={onCreateAction}>
             <Icon name="add" size={12} />
@@ -607,7 +629,6 @@ class FpNavbar extends Component {
       if (block) {
         return;
       }
-      console.log("onCreateAction");
       afterSuccess();
     };
 
@@ -637,51 +658,37 @@ class FpNavbar extends Component {
               }
             />
           ) : (
-            <Link
-              className="Nav__sign-up"
-              onClick={() => {
-                trackStructEvent(`click Sign in`);
-                setLoginModalShow({ show: true, from: "navbar_signin" });
-              }}
-            >
-              Sign in
-            </Link>
+            <>
+              <Link
+                className="Nav__sign-up"
+                onClick={() => {
+                  trackStructEvent(`click Sign in`);
+                  setLoginModalShow({ show: true, from: "navbar_signin" });
+                }}
+              >
+                Sign in
+              </Link>
+              {showSignup && (<Link
+                className="Nav__sign-up-start"
+                onClick={() => {
+                  trackStructEvent(`click Sign up`);
+                  setLoginModalShow({ show: true, from: "navbar_signup", defaultRegister: true });
+                }}
+              >
+                Start for Free
+              </Link>)}
+            </>
           )}
         </div>
       );
     };
-
+    const isDark = window?.location?.pathname === "/" || window?.location?.pathname?.startsWith("/research");
+    const isHome = window?.location?.pathname === "/";
     return (
-      <div className="Nav" style={{ display: rootDisplay }}>
-        <div className="Nav__left">
-          <MobileMenuIcon />
-          <Link
-            className="Nav__logo"
-            to="/"
-            onClick={e => {
-              e.preventDefault();
-              trackStructEvent(`navbar-click-logo`);
-              this.goLink(e, "/");
-            }}
-          >
-            <img
-              src={getOssUrl("img_nav_logo_v5.svg")}
-              width={188}
-              height={28}
-              style={{ marginBottom: 2 }}
-              alt="Footprint - One Step Closer to Blockchain Insights"
-            />
-          </Link>
-          <LeftMenu />
-        </div>
-        <React.Fragment>
-          <div className="Nav__search-bar">
-            <SearchBar
-              location={location}
-              onChangeLocation={onChangeLocation}
-            />
-          </div>
-          <div className="Nav__mobile-logo">
+      <div className={cx({ "dark": isDark })}>
+        <div className="Nav" style={{ display: rootDisplay, borderBottom: isHome ? "none" : "" }}>
+          <div className="Nav__left">
+            <MobileMenuIcon />
             <Link
               className="Nav__logo"
               to="/"
@@ -692,20 +699,49 @@ class FpNavbar extends Component {
               }}
             >
               <img
-                src={getOssUrl("img_nav_logo_mobile.svg")}
-                width={40}
-                height={36}
+                src={getOssUrl(isDark ? "img_nav_logo_v5_white.svg": "img_nav_logo_v5.svg")}
+                width={188}
+                height={28}
+                style={{ marginBottom: 2 }}
                 alt="Footprint - One Step Closer to Blockchain Insights"
               />
             </Link>
+            <LeftMenu />
           </div>
-        </React.Fragment>
-        <RightMenu />
-        {this.renderModal()}
-        {zkspaceDate() && this.renderSubmitAddrZkspaceModal()}
-        {this.renderSideNav()}
-        {this.renderLoginModal()}
-        {this.renderCancelFeedbackModal()}
+          <React.Fragment>
+            <div className="Nav__search-bar">
+              <SearchBar
+                location={location}
+                onChangeLocation={onChangeLocation}
+                isDark={isDark}
+              />
+            </div>
+            <div className="Nav__mobile-logo">
+              <Link
+                className="Nav__logo"
+                to="/"
+                onClick={e => {
+                  e.preventDefault();
+                  trackStructEvent(`navbar-click-logo`);
+                  this.goLink(e, "/");
+                }}
+              >
+                <img
+                  src={getOssUrl("img_nav_logo_mobile.svg")}
+                  width={40}
+                  height={36}
+                  alt="Footprint - One Step Closer to Blockchain Insights"
+                />
+              </Link>
+            </div>
+          </React.Fragment>
+          <RightMenu />
+          {this.renderModal()}
+          {zkspaceDate() && this.renderSubmitAddrZkspaceModal()}
+          {this.renderSideNav()}
+          {this.renderLoginModal()}
+          {this.renderCancelFeedbackModal()}
+        </div>
       </div>
     );
   }

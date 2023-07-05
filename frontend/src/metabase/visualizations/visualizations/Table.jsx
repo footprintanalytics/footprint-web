@@ -234,6 +234,18 @@ export default class Table extends Component {
       },
       readDependencies: [DataGrid.COLUMN_FORMATTING_SETTING, "table.pivot"],
     },
+    "table.table_transpose": {
+      section: t`Columns`,
+      title: t`Table transpose`,
+      widget: "radio",
+      props: {
+        options: [
+          { name: t`Auto`, value: "auto" },
+          { name: t`Transpose`, value: "transpose" },
+        ],
+      },
+      default: "auto",
+    },
   };
 
   static columnSettings = column => {
@@ -242,6 +254,12 @@ export default class Table extends Component {
         title: t`Column title`,
         widget: "input",
         getDefault: column => formatColumn(column),
+      },
+      column_description: {
+        title: t`Column description`,
+        widget: "input",
+        hint: "input a description for the column",
+        getDefault: '',
       },
       click_behavior: {},
     };
@@ -399,10 +417,11 @@ export default class Table extends Component {
           findColumnIndexForColumnSetting(cols, columnSetting),
         )
         .filter(columnIndex => columnIndex >= 0 && columnIndex < cols.length);
-
       this.setState({
         data: {
-          cols: columnIndexes.map(i => cols[i]),
+          cols: columnIndexes.map(i =>{
+            return {...cols[i],description:columnSettings?.find(columnSetting => columnSetting.name === cols[i]?.name)?.description}
+          }),
           rows: rows.map(row => columnIndexes.map(i => row[i])),
         },
       });
@@ -419,13 +438,15 @@ export default class Table extends Component {
     const { series, settings } = this.props;
     const isPivoted = Table.isPivoted(series, settings);
     const column = cols[columnIndex];
+    let columnTitle = null;
     if (isPivoted) {
-      return formatColumn(column) || (columnIndex !== 0 ? t`Unset` : null);
+      columnTitle =
+        formatColumn(column) || (columnIndex !== 0 ? t`Unset` : null);
     } else {
-      return (
-        settings.column(column)["_column_title_full"] || formatColumn(column)
-      );
+      columnTitle =
+        settings.column(column)["_column_title_full"] || formatColumn(column);
     }
+    return {title:columnTitle,description:column?.description};
   };
 
   render() {

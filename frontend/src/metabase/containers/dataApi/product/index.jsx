@@ -9,6 +9,8 @@ import GetStart from "metabase/containers/dataApi/product/components/GetStart";
 import DomainDetail from "metabase/containers/dataApi/product/components/DomainDetail";
 import PowerfulData from "metabase/containers/dataApi/product/components/PowerfulData";
 import ReadyBuild from "metabase/containers/dataApi/product/components/ReadyBuild";
+import DataApiPower from "metabase/containers/dataApi/components/DataApiPower";
+import HomeFooter from "metabase/containers/home/components/HomeFooter";
 
 const Index = ({ user, setLoginModalShow, onChangeLocation }) => {
   const domainData = [
@@ -96,6 +98,7 @@ const Index = ({ user, setLoginModalShow, onChangeLocation }) => {
       })}
       <PowerfulData />
       <ReadyBuild />
+      <HomeFooter style={{ width: "100%" }}/>
     </div>
   );
 };

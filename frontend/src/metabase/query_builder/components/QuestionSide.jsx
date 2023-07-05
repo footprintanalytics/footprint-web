@@ -1,6 +1,6 @@
 /* eslint-disable react-hooks/rules-of-hooks */
 /* eslint-disable react/prop-types */
-import React, { useCallback, useEffect, useMemo, useState } from "react";
+import React, { useCallback, useEffect, useMemo, useState, memo } from "react";
 import { connect } from "react-redux";
 import { withRouter } from "react-router";
 import { replace } from "react-router-redux";
@@ -51,6 +51,7 @@ import * as Urls from "metabase/lib/urls";
 import dateFieldMapping from "metabase/query_builder/data/data";
 import TableChains from "metabase/query_builder/components/question/TableChains";
 import { isChartPage } from "metabase/lib/urls";
+import QuestionSideTab from "metabase/query_builder/components/QuestionSideTab";
 import NativeQuery from "metabase-lib/queries/NativeQuery";
 import {
   getNativeEditorCursorOffset,
@@ -61,11 +62,11 @@ import {
 
 function QuestionSide({
   question,
+  query,
+  card,
   databases,
   dbId,
   replace,
-  query,
-  card,
   isEditing,
   nativeEditorCursorOffset,
   nativeEditorSelectedText,
@@ -78,7 +79,6 @@ function QuestionSide({
   user,
   getNewGuideInfo,
   setNewGuideInfo,
-  nextChartPopoverAction,
   updateQuestion,
 }) {
   const [databaseId, setDatabaseId] = useState(dbId || 3);
@@ -276,22 +276,14 @@ function QuestionSide({
     setChain(value);
   };
 
-  const tabInfos = [
-    { tab: " All ", key: "all" },
-    { tab: "Gold", key: "gold" },
-    { tab: "Silver", key: "silver" },
-    { tab: "Bronze", key: "bronze" },
-    { tab: "Community", key: "community" },
-  ];
-
   return (
     <div
-      className="flex flex-column p2 full-height overflow-auto relative"
+      className="flex flex-column full-height overflow-auto relative"
     >
       {!formDataSelector && (
         <TableDatabase
           setDatabaseId={setDatabaseId}
-          card={card}
+          isNative={isNative}
           replace={replace}
           databases={databases}
           isEditing={isEditing}
@@ -315,63 +307,43 @@ function QuestionSide({
           chain={chain}
         />
       )}
-      <>
-        <Tabs
-          tabBarGutter={20}
-          defaultActiveKey={tabInfos[0].key}
-          destroyInactiveTabPane
-          className="flex-full"
-          activeKey={level}
-          moreIcon={<div />}
-          centered
-          tabBarUnderlineStyle={{ transform: "scaleX(0.9)" }}
-          tabBarExtraContent={<div />}
-          onChange={activeKey => {
-            setLevel(activeKey);
-          }}
-        >
-          {tabInfos.map(tabInfo => {
-            return (
-              <Tabs.TabPane tab={tabInfo.tab} key={tabInfo.key}>
-                <TableDataList
-                  isLoading={isLoading}
-                  isFeature={data?.isFeature}
-                  dataSets={
-                    canShowNewGuide
-                      ? handleNewGuideTableData(dataSets)
-                      : dataSets
-                  }
-                  isEditing={isEditing}
-                  handleSelectTable={useCallback(setHandleSelectTable, [
-                    setHandleSelectTable,
-                  ])}
-                  setShowPreviewChart={useCallback(setShowPreviewChart, [
-                    setShowPreviewChart,
-                  ])}
-                  closeTemplateData={closeTemplateData}
-                  databaseId={databaseId}
-                  databaseName={databaseName}
-                  formDataSelector={formDataSelector}
-                  sourceTableId={sourceTableId}
-                  pageSize={pageSize}
-                  updateColumnsData={data => {
-                    setColumnDataMap(origin => { return { ...origin, ...data } });
-                  }}
-                  isTooMore={data?.isTooMore}
-                  user={user}
-                  searchKeyValue={searchKeyValue}
-                  qs={qs}
-                  isByCategory={isByCategory}
-                  isNewQuestion={isNewQuestion}
-                  setShowNewGuideStart={setShowNewGuideStart}
-                />
-              </Tabs.TabPane>
-            );
-          })}
-        </Tabs>
+      <QuestionSideTab
+        setColumnDataMap={setColumnDataMap}
+        level={level}
+        setLevel={setLevel}
+        isLoading={isLoading}
+        isFeature={data?.isFeature}
+        dataSets={
+          canShowNewGuide
+            ? handleNewGuideTableData(dataSets)
+            : dataSets
+        }
+        isEditing={isEditing}
+        handleSelectTable={useCallback(setHandleSelectTable, [
+          setHandleSelectTable,
+        ])}
+        setShowPreviewChart={useCallback(setShowPreviewChart, [
+          setShowPreviewChart,
+        ])}
+        closeTemplateData={closeTemplateData}
+        databaseId={databaseId}
+        databaseName={databaseName}
+        formDataSelector={formDataSelector}
+        sourceTableId={sourceTableId}
+        pageSize={pageSize}
+        isTooMore={data?.isTooMore}
+        user={user}
+        searchKeyValue={searchKeyValue}
+        qs={qs}
+        isByCategory={isByCategory}
+        isNewQuestion={isNewQuestion}
+        setShowNewGuideStart={setShowNewGuideStart}
+      />
+
+      <div style={{ margin: "10px 15px" }}>
         <SubmitContract />
         <UploadData />
-      </>
+      </div>
       <Modal isOpen={confirmModal}>
         <ConfirmContent
           title={t`You have unsaved changes`}
@@ -440,7 +412,7 @@ function getIsEditing(props) {
   return get(card, "original_card_id");
 }
 
-function getFilterTableIds(props) {
+/*function getFilterTableIds(props) {
   if (!getIsEditing(props)) {
     return [];
   }
@@ -451,17 +423,17 @@ function getFilterTableIds(props) {
     get(card, "dataset_query.query.source-query.source-table");
   const joins = get(card, "dataset_query.query.joins", []);
   return [sourceTableId, ...joins.map(n => n["source-table"])];
-}
+}*/
 
 function mapStateToProps(state, props) {
   return {
     question: getQuestion(state),
-    dbId: getDatabaseId(props),
+    // filterTableIds: getFilterTableIds(props),
     card: getCard(props),
-    metadata: getMetadata(state),
     query: getQuery(state),
+    dbId: getDatabaseId(props),
+    metadata: getMetadata(state),
     isEditing: getIsEditing(props),
-    filterTableIds: getFilterTableIds(props),
     nativeEditorCursorOffset: getNativeEditorCursorOffset(state),
     nativeEditorSelectedText: getNativeEditorSelectedText(state),
     user: getUser(state),
@@ -483,4 +455,4 @@ export default compose(
     setNewGuideInfo,
     nextChartPopoverAction,
   }),
-)(QuestionSide);
+)(memo(QuestionSide));

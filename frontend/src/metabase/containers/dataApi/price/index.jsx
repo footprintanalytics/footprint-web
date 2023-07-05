@@ -285,7 +285,7 @@ const Index = ({
           {
             title: (
               <span>
-                <span className="data-api__price-text-highlight">10</span> rows data return (static endpoint)
+                <span className="data-api__price-text-highlight">10</span> rows data return (static endpoint) <DataStaticTooltip type="scale"/>
               </span>
             ),
           },

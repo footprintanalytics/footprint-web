@@ -47,6 +47,7 @@ export function createParameter(
     id: generateParameterId(),
     type: option.type,
     sectionId: option.sectionId,
+    dashcardId: option.dashcardId,
   };
   return setParameterName(parameter, name);
 }

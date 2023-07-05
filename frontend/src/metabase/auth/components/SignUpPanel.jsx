@@ -20,6 +20,7 @@ const SignUpPanel = ({
   changeToSignIn,
   project,
   redirect,
+  channel,
 }) => {
   const passwordComplexity = MetabaseSettings.passwordComplexityDescription();
   const ref = React.createRef();
@@ -102,7 +103,7 @@ const SignUpPanel = ({
               normalize={value => value.trim()}
               onKeyDown={e => onkeydown(e)}
             />
-            <div className="mt1"/>
+            <div className="mt1" />
             <FormMessage />
             <div className="Form-actions text-centered">
               <FormSubmit className="block full sign-in-button">

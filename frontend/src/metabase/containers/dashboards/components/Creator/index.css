@@ -12,7 +12,7 @@
   display: flex;
   align-items: center;
   justify-content: space-between;
-  padding: 16px;
+  padding: 14px;
 }
 
 .dashboards__creator-list li:last-child .dashboards__creator-list-item {
@@ -31,7 +31,8 @@
   max-width: 170px;
   color: #303440;
   font-weight: normal;
-  line-height: 12px;
+  line-height: 14px;
+  height: 14px;
   font-size: 14px;
 }
 
@@ -41,9 +42,9 @@
 }
 
 .dashboards__creator-list-l img {
-  width: 25px;
-  height: 25px;
-  min-width: 25px;
+  width: 32px;
+  height: 32px;
+  min-width: 32px;
   border-radius: 100%;
   margin-right: 10px;
 }

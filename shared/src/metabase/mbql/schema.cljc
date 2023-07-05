@@ -1491,15 +1491,16 @@
    :location/country  {:allowed-for #{:location/country}}
 
    ;; date range types -- these match a range of dates
-   :date/range        {:type :date, :allowed-for #{:date/range :date/all-options :date/series-date}}
-   :date/month-year   {:type :date, :allowed-for #{:date/month-year :date/all-options :date/series-date}}
-   :date/quarter-year {:type :date, :allowed-for #{:date/quarter-year :date/all-options :date/series-date}}
-   :date/relative     {:type :date, :allowed-for #{:date/relative :date/all-options :date/series-date}}
+   :date/range        {:type :date, :allowed-for #{:date/range :date/all-options :date/series-date :date/series-time}}
+   :date/month-year   {:type :date, :allowed-for #{:date/month-year :date/all-options :date/series-date :date/series-time}}
+   :date/quarter-year {:type :date, :allowed-for #{:date/quarter-year :date/all-options :date/series-date :date/series-time}}
+   :date/relative     {:type :date, :allowed-for #{:date/relative :date/all-options :date/series-date :date/series-time}}
 
    ;; Like `:id` and `:category` above, `:date/all-options` is primarily a widget type. It means that we should allow
    ;; any date option above.
    :date/all-options {:type :date, :allowed-for #{:date/all-options}}
    :date/series-date {:type :date, :allowed-for #{:date/series-date}}
+   :date/series-time {:type :date, :allowed-for #{:date/series-time}}
 
    ;; "operator" parameter types.
    :number/!=               {:type :numeric, :operator :variadic, :allowed-for #{:number/!=}}

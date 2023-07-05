@@ -142,6 +142,9 @@ export const DashboardApi = {
   cardQuery: POST(
     "/api/v1/dashboard/:dashboardId/dashcard/:dashcardId/card/:cardId/query",
   ),
+  cardQuerySQL: POST(
+    "/api/dashboard/:dashboardId/dashcard/:dashcardId/card/:cardId/sql",
+  ),
   cardQueryPivot: POST(
     "/api/dashboard/pivot/:dashboardId/dashcard/:dashcardId/card/:cardId/query",
   ),
@@ -185,6 +188,9 @@ export const PublicApi = {
   // dashboard: GET("/api/public/dashboard/:uuid"),
   dashboardCardQuery: GET(
     "/api/v1/public/dashboard/:uuid/dashcard/:dashcardId/card/:cardId",
+  ),
+  dashboardCardQueryDataApiStat: GET(
+    "/api/v1/public/dashboard/:uuid/dashcard/:dashcardId/card/:cardId/queryWithId",
   ),
   dashboardCardQueryPivot: GET(
     PIVOT_PUBLIC_PREFIX + "dashboard/:uuid/dashcard/:dashcardId/card/:cardId",

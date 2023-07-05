@@ -14,6 +14,10 @@
   background-color: rgb(227, 227, 255);
 }
 
+.FormAvatarWidget__avatar .ant-avatar-string {
+  font-size: 30px;
+}
+
 .FormAvatarWidget__avatar--loading {
   display: flex;
   align-items: center;

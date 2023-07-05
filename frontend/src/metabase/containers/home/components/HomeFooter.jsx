@@ -7,79 +7,88 @@ import { getOssUrl } from "metabase/lib/image";
 import "./HomeFooter.css";
 import Link from "metabase/core/components/Link";
 import ExternalLink from "metabase/core/components/ExternalLink";
-import { CHAIN_COUNT } from "metabase/lib/constants";
+import cx from "classnames";
 // import { isDefi360 } from "metabase/lib/project_info";
 
 const footers = [
   {
-    title: "Learn",
+    title: "Products",
     items: [
       {
-        label: "Insights",
-        url: "/news/featured",
-      },
-      {
-        label: "Docs",
-        url: "https://docs.footprint.network/",
-      },
-      /*{
-        label: "Tutorials",
-        url: "/tutorials/visualizations",
-      },*/
-      {
-        label: "Data Dictionary",
-        url:
-          "https://www.footprint.network/@Footprint/Footprint-Datasets-Data-Dictionary",
-      },
-      {
-        label: "Pricing",
-        url: "/pricing",
+        label: "Analytics App",
+        url: "/dashboards",
       },
       {
         label: "Data API",
         url: "/data-api",
       },
+      {
+        label: "Batch Download",
+        url: "/batch-download",
+      },
+      {
+        label: "Growth Analytics",
+        url: "/growth",
+      },
+      {
+        label: "GameFi Research",
+        url: "/research/gamefi",
+        startNewPanel: true,
+      },
+      {
+        label: "NFT Research",
+        url: "/research/nft",
+      },
+      {
+        label: "Chain Research",
+        url: "/research/chain",
+      },
     ],
   },
   {
-    title: "Analytics",
+    title: "Resources",
     items: [
-      /*{
-        label: "GameFi Protocols",
-        url: "/protocols",
-      },*/
       {
-        label: "Projects Analytics",
-        url: "/projects",
+        label: "Data Overview",
+        url: "/@Footprint/Footprint-Data-Overview",
       },
       {
-        label: "Chains Analytics",
-        url: "/chains",
+        label: "Data Dictionary",
+        url: "/@Footprint/Footprint-Datasets-Data-Dictionary",
       },
       {
-        label: "Submit Contract",
-        url: "/submit/contract",
+        label: "Docs",
+        url: "https://docs.footprint.network/docs/get-started",
       },
-      /*{
-        label: "Footprint Enterprise",
-        url: "/defi360",
-      },*/
+      {
+        label: "Blog",
+        url: "/news/all",
+        startNewPanel: true,
+      },
+      {
+        label: "Reports",
+        url: "/news/reports",
+      },
+      {
+        label: "Academy",
+        url: "/news/academy",
+      },
+      {
+        label: "Case Studies",
+        url: "https://docs.footprint.network/docs/clients-studies",
+      },
     ],
   },
   {
     title: "Company",
     items: [
-      /*{
-        label: "Why Footprint",
-        url: "/about",
-      },*/
       {
-        label: "News",
-        url: "/news/featured",
+        label: "Press Kit",
+        url: "https://docs.footprint.network/docs/press-kit",
       },
       {
-        label: "Write for Us",
-        url: "/news/write-for-us",
+        label: "Pricing",
+        url: "/pricing",
       },
       {
         label: "Contact Us",
@@ -88,6 +97,28 @@ const footers = [
       {
         label: "Privacy Policy",
         url: "https://static.footprint.network/site/privacy-policy.html",
+        startNewPanel: true,
+      },
+      {
+        label: "Terms of Service",
+        url: "https://static.footprint.network/site/terms-of-service.html",
+      },
+    ],
+  },
+  {
+    title: "Contribute",
+    items: [
+      {
+        label: "Submit Contract",
+        url: "/submit/contract",
+      },
+      {
+        label: "Write for Us",
+        url: "/news/write-for-us",
+      },
+      {
+        label: "Github",
+        url: "https://github.com/footprintanalytics",
       },
     ],
   },
@@ -115,19 +146,19 @@ const footers = [
         url: "https://www.youtube.com/channel/UCKwZbKyuhWveetGhZcNtSTg",
       },
       {
-        label: "Github",
-        url: "https://github.com/footprintanalytics",
+        label: "LinkedIn",
+        url: "https://www.linkedin.com/company/footprintanalytics",
       },
     ],
   },
 ];
 
 const HomeFooter = props => {
-  // const { user, onChangeLocation } = props;
+  const { style } = props;
   // const emailRef = React.createRef();
 
   return (
-    <footer className="home-footer-container footprint-primary-text">
+    <footer className="home-footer-container footprint-primary-text" style={style}>
       <div className="home-footer">
         <div className="home-footer-left">
           <img
@@ -135,11 +166,7 @@ const HomeFooter = props => {
             alt="Footprint analytics"
           />
           <span data-nosnippet>
-            Footprint Analytics is a tool to uncover and visualize data across
-            the blockchain, including NFT and GameFi data. It currently
-            collects, parses and cleans data from {`${CHAIN_COUNT}`} chains and lets users build
-            charts and dashboards without code using a drag-and-drop interface
-            as well as with SQL or Python.
+            Footprint Analytics is a data platform blending web2 and web3 data with abstractions. We help analysts, builders, and investors turn blockchain data into insights with accessible visualization tools and a powerful multi-chain API across 20+ chains for NFTs, GameFi, and DeFi. We also provide Footprint Growth Analytics to help with effective growth in GameFi and any web3 projects.
           </span>
           <span data-nosnippet>
             Disclaimer: All data and articles on Footprint Analytics are for
@@ -181,7 +208,7 @@ const HomeFooter = props => {
                 itemType="http://www.schema.org/SiteNavigationElement"
               >
                 {n.items.map(item => (
-                  <li key={item.label} itemProp="name">
+                  <li key={item.label} itemProp="name" className={cx({ "mt2": item.startNewPanel })}>
                     {item.url.startsWith("mailto") ? (
                       <ExternalLink className="_" href={item.url}>
                         {item.label}

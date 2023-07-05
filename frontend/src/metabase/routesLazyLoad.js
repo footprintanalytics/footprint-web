@@ -85,6 +85,7 @@ export default {
   Pricing: loadable(() => import("metabase/pricing_v3/index")),
   Explore: loadable(() => import("metabase/containers/explore/index")),
   Features: loadable(() => import("metabase/containers/features/index")),
+  Research: loadable(() => import("metabase/containers/research/index")),
   GuestDashboard: loadable(() => import("metabase/guest/Dashboard")),
   GuestQuestion: loadable(() => import("metabase/guest/Question")),
   // My: loadable(() => import("metabase/containers/my/index")),
@@ -116,11 +117,13 @@ export default {
   Protocols: loadable(() => import("metabase/containers/protocols")),
   Creator: loadable(() => import("metabase/containers/creator"), options),
   Widget: loadable(() => import("metabase/containers/widget")),
-  About: loadable(() => import("metabase/containers/about")),
+  About: loadable(() => import("metabase/containers/aboutV2")),
   NftPage: loadable(() => import("metabase/containers/nftPage")),
+  batchDownload: loadable(() => import("metabase/containers/batchDownload")),
   dataApi: loadable(() => import("metabase/containers/dataApi")),
   dataApiPrice: loadable(() => import("metabase/containers/dataApi/price")),
   dataApiProduct: loadable(() => import("metabase/containers/dataApi/product")),
+  dataApiStatistics: loadable(() => import("metabase/containers/dataApi/statistics")),
   //
   // // account
   AccountApp: loadable(() => import("./account/app/containers/AccountApp")),
@@ -182,6 +185,7 @@ export default {
   // submit
   SubmitContract: loadable(() => import("metabase/submit/contract/index")),
   SubmitContractAdd: loadable(() => import("metabase/submit/contract/add")),
+  SubmitContractAddV2: loadable(() => import("metabase/submit/contract/addV2")),
   SubmitContractSuccess: loadable(() =>
     import("metabase/submit/contract/success"),
   ),
@@ -327,21 +331,18 @@ export default {
   GroupDetailApp: loadable(() =>
     import("metabase/admin/people/containers/GroupDetailApp"),
   ),
-
   // GrowthAnalytics
   GaAboutContainer: loadable(() => import("metabase/growth/containers/About")),
-  GaConfigContainer: loadable(() =>
-    import("metabase/growth/containers/CreateProject"),
+  CreateCampaign: loadable(() =>
+    import("metabase/growth/containers/CampaignQuestflow"),
   ),
-  GaConnectorsContainer: loadable(() =>
-    import("metabase/growth/containers/Connectors"),
+  FgaPrice: loadable(() => import("metabase/growth/containers/price")),
+  WrapDashboard: loadable(
+    () => import("metabase/growth/containers/WrapDashboard"),
+    options,
   ),
   GaProjectContainer: loadable(() =>
     import("metabase/growth/containers/Project"),
-  ),
-  GaHomeContainer: loadable(() => import("metabase/growth/containers/Home")),
-  GaCreateContainer: loadable(() =>
-    import("metabase/growth/containers/CreateProject"),
   ),
   // Metadata / Data model
   DataModelApp: loadable(() =>

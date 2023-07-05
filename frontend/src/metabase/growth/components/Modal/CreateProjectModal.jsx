@@ -1,12 +1,11 @@
 /* eslint-disable react/prop-types */
 import React, { useEffect, useState } from "react";
-import { Modal, Select, Button, Input, Form, message } from "antd";
+import { Modal, Select, Button, Input, Form, message,Divider,Typography } from "antd";
 import Link from "antd/lib/typography/Link";
 import { withRouter } from "react-router";
 import { connect } from "react-redux";
 import { CreateFgaProject } from "metabase/new-service";
 import { getUser } from "metabase/selectors/user";
-import { top_protocols } from "../../utils/data";
 import {
   getDashboardDatas,
   getGrowthProjectPath,
@@ -23,7 +22,7 @@ const tailLayout = {
 };
 
 const CreateProjectModal = props => {
-  const { open, onCancel, onSuccess, router, location, user } = props;
+  const { open, onCancel, onSuccess, router, location, user,force } = props;
   const [form] = Form.useForm();
   const [options, setOptions] = useState([]);
   const [loadingData, setLoadingData] = useState(false);
@@ -53,31 +52,35 @@ const CreateProjectModal = props => {
     }
   }, [open]);
 
-  async function createProject(projectName, protocol) {
-    const hide = message.loading("Loading...", 10);
-    setLoading(true);
-    try {
-      const result = await CreateFgaProject({
-        name: projectName.trim().replaceAll(" ", "-"),
-        protocolSlug: protocol,
-        protocolName: projectName,
-        nftContractAddress: [],
-      });
-      if (result) {
-        saveLatestGAProject(result.protocolSlug);
-        saveLatestGAProjectId(result.id);
-        onSuccess?.();
-        router?.push({
-          pathname: getGrowthProjectPath(result.protocolSlug),
-        });
-      }
-    } catch (error) {
-      console.log(error);
-    }
-    setLoading(false);
-    hide();
-    return true;
-  }
+   function createProject(projectName, protocol) {
+     const hide = message.loading("Loading...", 10);
+     setLoading(true);
+     CreateFgaProject({
+       name: projectName.trim().replaceAll(" ", "-"),
+       protocolSlug: protocol,
+       protocolName: projectName,
+       nftContractAddress: [],
+     })
+       .then(result => {
+         console.log(result);
+         saveLatestGAProject(result.protocolSlug);
+         saveLatestGAProjectId(result.id);
+         onSuccess?.();
+         window.location.href = getGrowthProjectPath(result.protocolSlug);
+         //  router?.push({
+         //    pathname: getGrowthProjectPath(result.protocolSlug),
+         //  });
+         return true;
+       })
+       .catch(error => {
+         console.log(error);
+         return false;
+       })
+       .finally(() => {
+         setLoading(false);
+         hide();
+       });
+   }
   const onFinish = values => {
     createProject(values.projectName, values.protocol);
   };
@@ -90,10 +93,30 @@ const CreateProjectModal = props => {
       title="Create your own project"
       open={open}
       footer={null}
+      closable={!force}
+      maskClosable={!force}
       // onOk={handleOk}
       onCancel={onCancel}
     >
-      <Form {...layout} form={form} name="control-hooks" onFinish={onFinish}>
+      <Divider />
+      {force && (
+        <div style={{ marginBottom: 20 }}>
+          <Typography.Text type="warning">
+            {
+              "Before embarking on your magical FGA journey, please choose a project that you fancy."
+            }
+          </Typography.Text>
+        </div>
+      )}
+      <Form
+        {...layout}
+        labelAlign="left"
+        colon={false}
+        labelWrap
+        form={form}
+        name="control-hooks"
+        onFinish={onFinish}
+      >
         <Form.Item
           name="protocol"
           label="Protocol"

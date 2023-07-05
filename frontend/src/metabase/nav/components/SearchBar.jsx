@@ -14,22 +14,22 @@ import { push } from "react-router-redux";
 const SearchWrapper = styled.div`
   position: relative;
   border-radius: 16px;
-  border: 1px solid #dcdee4;
+  border: ${props => props.isDark ? "1px solid #4A5568" : "1px solid #dcdee4"};
   flex: 1 1 auto;
   display: flex;
   column-gap: 8px;
   height: 32px;
   align-items: center;
-  color: white;
+  color: ${props => props.isDark ? "#A0AEC0" : "white"};
   transition: background 300ms ease-in;
-  background-color: #f9f9f9;
+  background-color: ${props => props.isDark ? "#2A3246" : "#f9f9f9"};
 `;
 
 const SearchInput = styled.input`
   background-color: transparent;
   width: 100%;
   border: none;
-  color: #000;
+  color: ${props => props.isDark ? "#fff" : "#000"};
   font-size: 1em;
   font-weight: 500;
   &:focus {
@@ -110,6 +110,7 @@ class SearchBar extends React.Component {
 
   render() {
     const { active, searchText } = this.state;
+    const { isDark } = this.props;
 
     return (
       <OnClickOutsideWrapper
@@ -118,6 +119,7 @@ class SearchBar extends React.Component {
         <SearchWrapper
           onClick={() => this.setState({ active: true })}
           active={active}
+          isDark={isDark}
         >
           <Icon name="search" ml={["10px", 2]} className="text-medium" />
           <SearchInput
@@ -125,6 +127,7 @@ class SearchBar extends React.Component {
             pr={[0, 2]}
             pl={1}
             ref={ref => (this.searchInput = ref)}
+            isDark={isDark}
             value={searchText}
             maxLength={200}
             placeholder={"Search chain/protocol/token/NFT/creator/dashboard…"}

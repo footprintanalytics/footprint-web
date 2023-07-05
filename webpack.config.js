@@ -152,6 +152,12 @@ const config = (module.exports = {
           { loader: "postcss-loader" },
         ],
       },
+      {
+        test: /\.m?js/,
+        resolve: {
+          fullySpecified: false,
+        },
+      },
     ],
   },
   resolve: {
@@ -240,7 +246,8 @@ const config = (module.exports = {
       filename: "../../public.html",
       chunksSortMode: "manual",
       chunks: ["vendor", "styles", "app-public"],
-      template: __dirname + "/resources/frontend_client/index_template_public.html",
+      template:
+        __dirname + "/resources/frontend_client/index_template_public.html",
       inject: "body",
       // scriptLoading: "blocking",
       alwaysWriteToDisk: true,

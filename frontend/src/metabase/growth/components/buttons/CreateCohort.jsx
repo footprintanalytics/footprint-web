@@ -1,18 +1,21 @@
 /* eslint-disable react/prop-types */
 import React, { useState } from "react";
 import { withRouter } from "react-router";
-import { Button, message, Modal, Dropdown, AutoComplete, Input } from "antd";
+import { Button, message, Modal, Dropdown, AutoComplete, Input, Typography } from "antd";
 import { connect } from "react-redux";
 import { CreateFgaCohortByAddress } from "metabase/new-service";
 import {
   getLatestGAProjectId,
   getGrowthProjectPath,
+  showCohortSuccessModal,
+  checkIsNeedContactUs,
 } from "metabase/growth/utils/utils";
-import { getUser } from "metabase/selectors/user";
+import { getFgaProject, getUser } from "metabase/selectors/user";
 import {
   loginModalShowAction,
   createFgaProjectModalShowAction,
 } from "metabase/redux/control";
+import { FilterOut } from "metabase/growth/components/FilterOut";
 const { TextArea } = Input;
 
 const CreateCohort = ({
@@ -21,6 +24,7 @@ const CreateCohort = ({
   setLoginModalShowAction,
   setCreateFgaProjectModalShowAction,
   project,
+  projectPath,
   btnText,
   router,
 }) => {
@@ -30,7 +34,7 @@ const CreateCohort = ({
   const [walletList, setWalletList] = useState([]);
   const onSend = async () => {
     if (!cohortName) {
-      message.error("Please enter the name of your cohort.");
+      message.error("Please enter the name of your segment.");
       return;
     }
     if (walletList.length <= 0) {
@@ -42,7 +46,7 @@ const CreateCohort = ({
       message.warning("Please sign in before proceeding.");
       setLoginModalShowAction({
         show: true,
-        from: "add cohort",
+        from: "add segment",
         redirect: location.pathname,
         channel: "FGA",
       });
@@ -64,7 +68,8 @@ const CreateCohort = ({
     try {
       const result = await CreateFgaCohortByAddress(parms);
       if (result) {
-        message.success("Successfully create a cohort!");
+        // message.success("Successfully create a cohort!");
+        showCohortSuccessModal(modal, result, router);
         setCohortModalOpen(false);
       }
     } catch (error) {
@@ -84,7 +89,6 @@ const CreateCohort = ({
       setWalletList([]);
     }
   };
-
   const isWalletAddress = address => {
     return (
       address && address.toLowerCase().startsWith("0x") && address.length <= 42
@@ -95,7 +99,7 @@ const CreateCohort = ({
     return (
       <>
         <h4>
-          Please enter all the addresses you wish to add to this new cohort.
+          Please enter all the addresses you wish to add to this new segment.
         </h4>
         <TextArea
           // value={pasteValue}
@@ -104,13 +108,13 @@ const CreateCohort = ({
             // setPasteValue(e.target.value);
             parseWalletAddress(e.target.value);
           }}
-          placeholder="Please paste all the addresses you wish to add to this new cohort, separated by line breaks ."
+          placeholder="Please paste all the addresses you wish to add to this new segment, separated by line breaks ."
           autoSize={{ minRows: 10, maxRows: 15 }}
         />
         <div className=" flex flex-row items-center justify-between full-width">
           <div>
             Detect <span style={{ color: "red" }}>{walletList.length}</span>{" "}
-            addressse.Up to <span style={{ color: "red" }}>1000</span> addresses
+            addresses.Up to <span style={{ color: "red" }}>1000</span> addresses
             can be processed at once.
           </div>
         </div>
@@ -129,27 +133,32 @@ const CreateCohort = ({
     },
   ];
   const onMenuItemClick = ({ key }) => {
+    if (checkIsNeedContactUs(modal, project)) {
+      return;
+    }
     switch (key) {
       case "upload":
         setCohortModalOpen(true);
         break;
       case "filter":
         router?.push({
-          pathname: getGrowthProjectPath(project, "Potential Users"),
+          pathname: getGrowthProjectPath(projectPath, "members"),
         });
         break;
     }
   };
 
+  const [modal, contextHolder] = Modal.useModal();
   return (
     <>
+      {contextHolder}
       <Dropdown
         menu={{ items, onClick: onMenuItemClick }}
         placement="bottom"
         arrow={{ pointAtCenter: true }}
       >
         <Button type="primary" style={style} onClick={e => e.preventDefault()}>
-          {btnText ?? "Create cohort"}
+          {btnText ?? "Create segment"}
         </Button>
       </Dropdown>
       <Modal
@@ -170,27 +179,31 @@ const CreateCohort = ({
           </Button>,
         ]}
         closable={false}
-        title={`${btnText ?? "Upload to create cohort"}`}
+        title={`${btnText ?? "Upload to create segment"}`}
       >
-        <h3>Cohort Name</h3>
-        <div className="mt1" />
-        <AutoComplete
-          style={{
-            width: "100%",
-          }}
-          allowClear
-          onChange={value => {
-            setCohortName(value);
-          }}
-          // options={options}
-          placeholder="Enter the name of this cohort "
-          filterOption={(inputValue, option) =>
-            option?.value.toUpperCase().indexOf(inputValue.toUpperCase()) !== -1
-          }
-        />
-        <div className="mt2" />
-        {getPannel()}
-        <div className="mb2" />
+        <Typography>
+          <h3>Segment Name</h3>
+          <div className="mt1" />
+          <AutoComplete
+            style={{
+              width: "100%",
+            }}
+            allowClear
+            onChange={value => {
+              setCohortName(value);
+            }}
+            // options={options}
+            placeholder="Enter the name of this segment "
+            filterOption={(inputValue, option) =>
+              option?.value.toUpperCase().indexOf(inputValue.toUpperCase()) !==
+              -1
+            }
+          />
+          <div className="mt2" />
+          {getPannel()}
+          <div className="mb2" />
+          <FilterOut />
+        </Typography>
       </Modal>
     </>
   );
@@ -204,7 +217,8 @@ const mapDispatchToProps = {
 const mapStateToProps = (state, props) => {
   return {
     user: getUser(state),
-    project: props.params.project,
+    project: getFgaProject(state),
+    projectPath: props.params.project,
     menu: props.params.menu,
   };
 };

@@ -5,8 +5,13 @@ export const getControl = state => state.control;
 
 export const getCreateFgaProjectModalShow = createSelector(
   [getControl],
-  ({ createFgaProjectModalShow }) => {
-    return createFgaProjectModalShow || false;
+  ({
+    createFgaProjectModalShow = false,
+    createFgaProjectModalForce = false,
+  }) => {
+    return createFgaProjectModalShow
+      ? { show: createFgaProjectModalShow, force: createFgaProjectModalForce }
+      : null;
   },
 );
 
@@ -21,6 +26,13 @@ export const getLoginModalRedirect = createSelector(
   [getControl],
   ({ loginModalRedirect }) => {
     return loginModalRedirect;
+  },
+);
+
+export const getLoginModalDefaultRegister = createSelector(
+  [getControl],
+  ({ loginModalDefaultRegister }) => {
+    return loginModalDefaultRegister;
   },
 );
 

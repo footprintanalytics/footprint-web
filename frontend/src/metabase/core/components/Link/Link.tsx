@@ -1,6 +1,14 @@
-import React, { CSSProperties, HTMLAttributes, ReactNode } from "react";
+import React, {
+  CSSProperties,
+  HTMLAttributes,
+  ReactNode,
+  useEffect,
+  useState,
+} from "react";
+import cx from "classnames";
 import Tooltip from "metabase/components/Tooltip";
 import { TooltipProps } from "metabase/components/Tooltip/Tooltip";
+import { formatUrl2Growth } from "metabase/lib/formatting";
 import { LinkRoot } from "./Link.styled";
 
 export interface LinkProps extends HTMLAttributes<HTMLAnchorElement> {
@@ -24,7 +32,8 @@ const Link = ({
   const link = (
     <LinkRoot
       {...props}
-      to={to}
+      to={formatUrl2Growth(location?.pathname, to)}
+      className={cx(props.className, "Link")}
       disabled={disabled}
       tabIndex={disabled ? -1 : undefined}
       aria-disabled={disabled}

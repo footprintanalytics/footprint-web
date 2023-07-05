@@ -70,6 +70,7 @@ class DashboardGrid extends Component {
     user: PropTypes.any,
 
     hideWatermark: PropTypes.bool,
+    allLoad: PropTypes.bool,
   };
 
   static defaultProps = {
@@ -292,19 +293,9 @@ class DashboardGrid extends Component {
   };
 
   renderDashCard(dc, { isMobile, gridItemWidth, totalNumGridCols }) {
-    return (
-      <LazyLoad
-        className="full-height"
-        // unmountIfInvisible
-        placeholder={
-          <div style={{ padding: 20 }}>
-            <Skeleton active />
-          </div>
-        }
-        // offset={500}
-        scrollContainer="#html2canvas-Dashboard"
-      >
+    const view = (
       <DashCard
+        {...this.props}
         dashcard={dc}
         headerIcon={this.getDashboardCardIcon(dc)}
         dashcardData={this.props.dashcardData}
@@ -340,11 +331,29 @@ class DashboardGrid extends Component {
         clickBehaviorSidebarDashcard={this.props.clickBehaviorSidebarDashcard}
         duplicateAction={this.props.duplicateAction}
         previewAction={this.props.previewAction}
+        getDataViaSqlApiAction={this.props.getDataViaSqlApiAction}
         clearWatermark={this.props.hideWatermark}
         chartStyle={this.props.chartStyle}
         user={this.props.user}
         refreshCardData={this.props.refreshCardData}
       />
+    );
+    if (this.props.allLoad) {
+      return view;
+    }
+    return (
+      <LazyLoad
+        className="full-height"
+        // unmountIfInvisible
+        placeholder={
+          <div style={{ padding: 20 }}>
+            <Skeleton active />
+          </div>
+        }
+        // offset={500}
+        scrollContainer="#html2canvas-Dashboard"
+      >
+        {view}
       </LazyLoad>
     );
   }

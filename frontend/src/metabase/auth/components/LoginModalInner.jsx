@@ -39,10 +39,17 @@ const LoginModalInner = props => {
     channel,
     hideClose,
     redirect,
+    defaultRegister,
   } = props;
 
   const disableCheckLogin =
     props.disableCheckLogin || location.query.disableCheckLogin;
+
+  useEffect(() => {
+    if (defaultRegister) {
+      changeToSignUp();
+    }
+  }, [defaultRegister]);
 
   useEffect(() => {
     if (props.project) {
@@ -80,6 +87,7 @@ const LoginModalInner = props => {
 
   const onCloseAction = () => {
     setSignTabState("signIn");
+    localStorage.removeItem("sign-out-demo-account");
     onClose && onClose();
   };
 
@@ -215,6 +223,7 @@ const LoginModalInner = props => {
           project={project}
           channel={getChannel()}
           redirect={redirect}
+          hideClose={hideClose}
         />
         <SignUpPanel
           show={isSignUp()}

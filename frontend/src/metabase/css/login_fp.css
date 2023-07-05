@@ -58,6 +58,10 @@
   color: #2d2d2d;
 }
 
+.dark .NavTitleActive {
+  color: #ffffffe0;
+}
+
 .LoginSliderBg {
   position: relative;
   background-color: #100c20;
@@ -113,6 +117,10 @@
 .forgotPassword .link {
   color: #1585ff;
   font-weight: normal;
+}
+
+.dark .link {
+  color: var(--color-primary-dark);
 }
 
 .signUpProgressLine {
@@ -178,6 +186,10 @@
   justify-content: center;
 }
 
+.dark .loginModalInner {
+ background: var(--color-bg-card-dark);
+}
+
 .loginModalClose {
   position: absolute;
   right: 75px;
@@ -207,6 +219,11 @@
 .loginModalGoogleButton {
   height: 43px;
   border-radius: 4px;
+}
+
+.dark .loginModalGoogleButton {
+  background: var(--color-bg-dark);
+  color: #ffffffe0;
 }
 
 .sign-in-button {

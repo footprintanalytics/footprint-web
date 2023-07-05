@@ -3,6 +3,7 @@ import React from "react";
 import upperFirst from "lodash/upperFirst";
 import upperCase from "lodash/upperCase";
 import lowerCase from "lodash/lowerCase";
+import keys from "lodash/keys";
 import { DEFAULT_DATE_STYLE, DEFAULT_TIME_STYLE, getTimeFormatFromStyle, hasHour } from "metabase/lib/formatting/date";
 
 
@@ -31,22 +32,34 @@ export function formatTitle(title) {
   ];
   const upperArray = [
     "nft",
+    "ens",
+    "bnb",
   ];
+  const mappingObject = {
+    "defi": "DeFi",
+  }
   const mapFunction = (item) => {
-    if (lowerArray.includes(item?.toLowerCase())) {
+    if (!item) {
+      return item;
+    }
+    if (lowerArray.includes(item.toLowerCase())) {
       return lowerCase(item);
     }
-    if (upperArray.includes(item?.toLowerCase())) {
+    if (upperArray.includes(item.toLowerCase())) {
       return upperCase(item);
+    }
+    if (keys(mappingObject).includes(item.toLowerCase())) {
+      return mappingObject[item.toLowerCase()];
     }
     return upperFirst(item);
   }
   const titleBlock = title.split(" ");
   if (titleBlock && titleBlock.length > 0) {
-    return titleBlock
+    const result = titleBlock
       .map(item => mapFunction(item))
       .join(" ")
       .trim();
+    return upperFirst(result);
   }
 
   return title.trim();

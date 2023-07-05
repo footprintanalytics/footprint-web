@@ -4,13 +4,13 @@ import { t } from "ttag";
 import cx from "classnames";
 
 import { ScissorOutlined } from "@ant-design/icons";
+import { get, set } from "lodash";
+import { Dropdown, Menu } from "antd";
 import * as Urls from "metabase/lib/urls";
-import { SERVER_ERROR_TYPES } from "metabase/lib/errors";
 import MetabaseSettings from "metabase/lib/settings";
 
 import Link from "metabase/core/components/Link";
 import ViewButton from "metabase/query_builder/components/view/ViewButton";
-import { get, set } from "lodash";
 import { usePrevious } from "metabase/hooks/use-previous";
 import { useToggle } from "metabase/hooks/use-toggle";
 import { MODAL_TYPES } from "metabase/query_builder/constants";
@@ -18,6 +18,7 @@ import SavedQuestionHeaderButton
   from "metabase/query_builder/components/SavedQuestionHeaderButton/SavedQuestionHeaderButton";
 
 import Button from "metabase/core/components/Button";
+import { snapshot } from "metabase/dashboard/components/utils/snapshot";
 import RunButtonWithTooltip from "../RunButtonWithTooltip";
 import TableBeta from "../TableBeta";
 import TableDictionary from "../TableDictionary";
@@ -29,12 +30,17 @@ import EditBar from "../../../components/EditBar";
 import TableUpgrade from "../TableUpgrade";
 import Modal from "../../../components/Modal";
 import ConfirmContent from "../../../components/ConfirmContent";
-import { HeadBreadcrumbs } from "./HeaderBreadcrumbs";
-import QuestionDescription from "./QuestionDescription";
-import QuestionNotebookButton from "./QuestionNotebookButton";
-import QuestionFilters, { FilterHeader, QuestionFilterWidget } from "./QuestionFilters";
-import { QuestionSummarizeWidget } from "./QuestionSummaries";
-import NativeQueryButton from "./NativeQueryButton";
+import { closeNewGuide } from "../../../containers/newguide/newGuide";
+import NeedPermissionModal from "../../../components/NeedPermissionModal";
+import DashboardCardDisplayInfo from "../../../components/DashboardCardDisplayInfo";
+import Tooltip from "../../../components/Tooltip";
+import Favorite from "../../../containers/explore/components/Favorite";
+import QueryDownloadWidget from "../QueryDownloadWidget";
+import QuestionEmbedWidget from "../../containers/QuestionEmbedWidget";
+import QueryMoreWidget from "../QueryMoreWidget";
+import QueryDownloadWidgetFP from "../QueryDownloadWidgetFP";
+import SaveChartToUdModal from "../../../components/SaveChartToUdModal";
+import QuestionRunningTime from "./QuestionRunningTime";
 import {
   AdHocLeftSideRoot,
   AdHocViewHeading,
@@ -46,20 +52,14 @@ import {
   ViewHeaderIconButtonContainer,
   ViewHeaderMainLeftContentContainer,
 } from "./ViewHeader.styled";
-import QuestionRunningTime from "./QuestionRunningTime";
-import { closeNewGuide } from "../../../containers/newguide/newGuide";
-import { Dropdown, Menu } from "antd";
-import NeedPermissionModal from "../../../components/NeedPermissionModal";
-import DashboardCardDisplayInfo from "../../../components/DashboardCardDisplayInfo";
-import Tooltip from "../../../components/Tooltip";
-import Favorite from "../../../containers/explore/components/Favorite";
-import QueryDownloadWidget from "../QueryDownloadWidget";
-import QuestionEmbedWidget from "../../containers/QuestionEmbedWidget";
-import QueryMoreWidget from "../QueryMoreWidget";
-import QueryDownloadWidgetFP from "../QueryDownloadWidgetFP";
-import { snapshot } from "metabase/dashboard/components/utils/snapshot";
-import SaveChartToUdModal from "../../../components/SaveChartToUdModal";
+import NativeQueryButton from "./NativeQueryButton";
+import { QuestionSummarizeWidget } from "./QuestionSummaries";
+import QuestionFilters, { FilterHeader, QuestionFilterWidget } from "./QuestionFilters";
+import QuestionNotebookButton from "./QuestionNotebookButton";
+import QuestionDescription from "./QuestionDescription";
+import { HeadBreadcrumbs } from "./HeaderBreadcrumbs";
 import "./ViewHeader.css";
+import RunButton from "../RunButton";
 
 const viewTitleHeaderPropTypes = {
   question: PropTypes.object.isRequired,
@@ -96,6 +96,7 @@ const viewTitleHeaderPropTypes = {
   questionSideHideAction: PropTypes.func,
   closeNewGuide: PropTypes.func,
   card: PropTypes.object,
+  user: PropTypes.any,
   onCloseSidebars: PropTypes.func,
 };
 
@@ -647,10 +648,13 @@ function ViewTitleHeaderRightSide(props) {
     card,
     canNativeQuery,
     router,
+    isRunning,
+    runQuestionQuery,
+    cancelQuery,
     downloadImageAction,
     updateQuestion,
   } = props;
-  const [showVip, setShowVip] = useState(false);
+  const [needPermissionModal, setNeedPermissionModal] = useState();
   const [showSaveChartToUd, setSaveChartToUd] = useState(false);
   const isShowingNotebook = queryBuilderMode === "notebook";
   const query = question.query();
@@ -776,6 +780,22 @@ function ViewTitleHeaderRightSide(props) {
             />
           </Tooltip>
         )}
+        <Tooltip tooltip={t`Refresh`}>
+          <RunButton
+            className={cx("text-brand-hover text-dark", {
+              "text-white-hover": isResultDirty,
+            })}
+            iconSize={16}
+            onlyIcon
+            compact
+            iconColor="#7A819B"
+            result={result}
+            isRunning={isRunning}
+            isDirty={isResultDirty}
+            onRun={() => runQuestionQuery({ shouldUpdateUrl: false, ignoreCache: true })}
+            onCancel={cancelQuery}
+          />
+        </Tooltip>
         {canShowSaveUdButton && hasQueryData && (
           <Tooltip tooltip={t`Save chart to ud table`}>
             <Button
@@ -798,6 +818,7 @@ function ViewTitleHeaderRightSide(props) {
             creatorId={question.card().creator_id}
             user={user}
             enableSave={enableSaveUd}
+            setNeedPermissionModal={setNeedPermissionModal}
           />
         )}
         {(!!card.public_uuid || isOwner || isAdmin) && (
@@ -861,9 +882,9 @@ function ViewTitleHeaderRightSide(props) {
             isInner={isInner}
             onOpenModal={onOpenModal}
             user={user}
-            setShowSeoTagging={() =>
+            /*setShowSeoTagging={() =>
               this.setState({ showSeoTaggingModal: true })
-            }
+            }*/
             card={card}
             question={question}
             downloadImageAction={downloadImageAction}
@@ -882,6 +903,15 @@ function ViewTitleHeaderRightSide(props) {
           onInfoClick={handleInfoClick}
           onModelPersistenceChange={onModelPersistenceChange}
         />*/}
+        {needPermissionModal && (
+          <NeedPermissionModal
+            title={needPermissionModal}
+            onClose={() => setNeedPermissionModal(null)}
+            afterChangeLocation={() => {
+              setNeedPermissionModal(null);
+            }}
+          />
+        )}
       </ViewHeaderActionPanel>
     )
   }
@@ -1011,15 +1041,6 @@ function ViewTitleHeaderRightSide(props) {
             ml={1}
           />
         </Dropdown>
-      )}
-      {showVip && (
-        <NeedPermissionModal
-          title="Upgrade your account to access SQL query"
-          onClose={() => setShowVip(false)}
-          afterChangeLocation={() => {
-            setShowVip(false);
-          }}
-        />
       )}
       {hasExploreResultsLink && <ExploreResultsLink question={question} />}
       {/*{hasRunButton && !isShowingNotebook && (

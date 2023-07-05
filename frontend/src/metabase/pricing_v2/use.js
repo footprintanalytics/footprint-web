@@ -7,7 +7,7 @@ export const useGetProductInfo = (service) => {
   }
 
   const { isLoading, data } = useQuery(
-    ["getProductInfo"],
+    ["getProductInfo", params],
     async () => {
       return getProductInfo(params);
     },
@@ -29,7 +29,7 @@ export const useGetPaymentSubscriptionDetail = (user, service) => {
   }
 
   const { isLoading, data } = useQuery(
-    ["paymentSubscriptionDetail"],
+    ["paymentSubscriptionDetail", params],
     async () => {
       return paymentSubscriptionDetail(params);
     },

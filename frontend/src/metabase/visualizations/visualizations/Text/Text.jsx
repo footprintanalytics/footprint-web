@@ -15,6 +15,7 @@ import { CaretDownOutlined } from "@ant-design/icons";
 import { Popover } from "antd";
 import { withInstanceLanguage, siteLocale } from "metabase/lib/i18n";
 import { substitute_tags } from "cljs/metabase.shared.parameters.parameters";
+import { formatUrl2Growth } from "metabase/lib/formatting";
 import styles from "./Text.css";
 
 const getSettingsStyle = settings => ({
@@ -181,6 +182,7 @@ export default class Text extends Component {
 
   handleTextChange(text) {
     this.props.onUpdateVisualizationSettings({ text: text });
+    this.setState({ ...this.state, content: text });
   }
 
   preventDragging = e => e.stopPropagation();
@@ -290,7 +292,7 @@ export default class Text extends Component {
       return (
         <div
           className={cx(className, styles.Text, {
-            "padded": !isPreviewing,
+            padded: !isPreviewing,
           })}
         >
           {isPreviewing ? (
@@ -307,19 +309,19 @@ export default class Text extends Component {
           ) : (
             <div className="Text-wrap">
               <div className="full flex-full flex flex-column">
-              <textarea
-                className={cx(
-                  "full flex-full flex flex-column bg-light bordered drag-disabled",
-                  styles["text-card-textarea"],
-                )}
-                name="text"
-                placeholder={t`Write here, and use Markdown if you'd like, and include variables {{like_this}}`}
-                value={settings.text}
-                onChange={e => this.handleTextChange(e.target.value)}
-                // Prevents text cards from dragging when you actually want to select text
-                // See: https://github.com/metabase/metabase/issues/17039
-                onMouseDown={this.preventDragging}
-              />
+                <textarea
+                  className={cx(
+                    "full flex-full flex flex-column bg-light bordered drag-disabled",
+                    styles["text-card-textarea"],
+                  )}
+                  name="text"
+                  placeholder={t`Write here, and use Markdown if you'd like, and include variables {{like_this}}`}
+                  value={settings.text}
+                  onChange={e => this.handleTextChange(e.target.value)}
+                  // Prevents text cards from dragging when you actually want to select text
+                  // See: https://github.com/metabase/metabase/issues/17039
+                  onMouseDown={this.preventDragging}
+                />
               </div>
               <div className={styles["Text-wrap-tip"]}>
                 <Popover
@@ -347,7 +349,7 @@ export default class Text extends Component {
       return (
         <div
           ref={r => (this.chartRef = r)}
-          className={cx(className, styles.Text, {
+          className={cx(className, styles.Text, "Text", {
             /* if the card is not showing a background we should adjust the left
              * padding to help align the titles with the wrapper */
             pl0: !settings["dashcard.background"],
@@ -360,9 +362,13 @@ export default class Text extends Component {
           <ReactMarkdown
             remarkPlugins={REMARK_PLUGINS}
             linkTarget="_blank"
+            transformLinkUri={(href, children, title) => {
+              return formatUrl2Growth(location?.pathname, href);
+            }}
             className={cx(
               "flex-full flex flex-column",
               styles["text-card-markdown"],
+              "fullscreen-night-text",
               getSettingsStyle(settings),
             )}
           >

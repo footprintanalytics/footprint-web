@@ -36,23 +36,36 @@ class EmbedFrame extends Component {
       description,
       actionButtons,
       location,
+      headerLayout,
       parameters,
       parameterValues,
+      hideParameters,
       setParameterValue,
+      hideTitle,
       hideFooter,
+      isNightMode,
+      innerClassName,
+      allLoadOuter,
     } = this.props;
     const { innerScroll } = this.state;
 
-    const { bordered, titled, theme, hide_parameters, hide_download_button } = {
+    const { bordered, titled, theme, hide_parameters, hide_download_button, bg_color, all_load } = {
       ...DEFAULT_OPTIONS,
       ...parseHashOptions(location.hash),
     };
+
+    const curTheme = isNightMode ? "night" : theme;
+
     const showFooter =
       !hideFooter &&
       (!MetabaseSettings.hideEmbedBranding() ||
         (!hide_download_button && actionButtons));
 
-    const name = titled ? this.props.name : null;
+    const name = titled && !hideTitle ? this.props.name : null;
+
+    const backgroundColor = bg_color === "black" ? "black": "";
+
+    const coverOverflowY = allLoadOuter || all_load ? {overflowY: "auto"} : {}
 
     return (
       <div
@@ -60,16 +73,18 @@ class EmbedFrame extends Component {
         className={cx("EmbedFrame flex flex-column", className, {
           spread: innerScroll,
           "bordered rounded shadowed": bordered,
-          [`Theme--${theme}`]: !!theme,
+          [`Theme--${curTheme}`]: !!curTheme,
         })}
+        style={{ backgroundColor: backgroundColor, ...coverOverflowY }}
       >
         <div
-          className={cx("flex flex-column flex-full relative", {
+          className={cx("flex flex-column flex-full relative", innerClassName, {
             "scroll-y": innerScroll,
           })}
         >
+          {headerLayout}
           {name || parameters?.length > 0 ? (
-            <div className="EmbedFrame-header flex flex-column p1 sm-p2 lg-p3">
+            <div className="EmbedFrame-header flex flex-column p1 sm-p2 lg-p3" style={{ backgroundColor: backgroundColor }}>
               {name && (
                 <TitleAndDescription
                   title={name}
@@ -81,13 +96,14 @@ class EmbedFrame extends Component {
                 <div className="flex">
                   <SyncedParametersList
                     className="mt1"
+                    isNightMode={isNightMode}
                     dashboard={this.props.dashboard}
                     parameters={getValuePopulatedParameters(
                       parameters,
                       parameterValues,
                     )}
                     setParameterValue={setParameterValue}
-                    hideParameters={hide_parameters}
+                    hideParameters={hideParameters ?? hide_parameters}
                   />
                 </div>
               ) : null}
@@ -98,9 +114,9 @@ class EmbedFrame extends Component {
           </div>
         </div>
         {showFooter && (
-          <div className="EmbedFrame-footer p1 md-p2 lg-p3 border-top flex-no-shrink flex align-center">
+          <div className="EmbedFrame-footer p1 md-p2 lg-p3 border-top flex-no-shrink flex align-center" style={{ backgroundColor: backgroundColor }}>
             {!MetabaseSettings.hideEmbedBranding() && (
-              <LogoBadge dark={theme} />
+              <LogoBadge dark={curTheme} />
             )}
             {actionButtons && (
               <div className="flex-align-right text-medium">

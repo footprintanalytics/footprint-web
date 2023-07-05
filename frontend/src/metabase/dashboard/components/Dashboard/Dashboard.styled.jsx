@@ -82,6 +82,7 @@ export const HeaderContainer = styled.header`
   ${({ isNightMode }) =>
     isNightMode &&
     css`
+      background-color: transparent;
       color: ${color("text-white")};
     `}
 `;
@@ -94,8 +95,8 @@ export const ParametersAndCardsContainer = styled.div`
 
 export const ParametersWidgetContainer = styled(FullWidthContainer)`
   align-items: flex-start;
-  background-color: white;
-  border-bottom: 1px solid ${color("bg-light")};
+  background-color: ${props => props.isNightMode||props.isTransparency ? "transparency" : "white"};
+  border-bottom: ${props => props.isNightMode ? `1px solid ${color("border-dark")}` : `1px solid ${color("bg-light")}`};
   display: flex;
   flex-direction: column;
   z-index: 3;

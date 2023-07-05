@@ -40,11 +40,22 @@ const Index = ({ router, type }) => {
           label: "Establishing Strategic Partnerships",
           value: "Establishing Strategic Partnerships",
         },
-        { label: "Activities", value: "Activities" },
-        { label: "AMA", value: "AMA" },
         { label: "Space", value: "Space" },
-        { label: "Footprint Analytics Tutorials", value: "Footprint Analytics Tutorials" },
+        { label: "Data Drive", value: "Data Drive" },
         { label: "Learn From Workshops", value: "Learn From Workshops" },
+        { label: "AMA", value: "AMA" },
+        { label: "Activities", value: "Activities" },
+      ],
+    },
+    product: {
+      label: "Product",
+      value: "product",
+      subMenus: [
+        {
+          label: "Spotlight",
+          value: "Spotlight",
+        },
+        { label: "Use Case", value: "Use Case" },
       ],
     },
     academy: {
@@ -66,6 +77,8 @@ const Index = ({ router, type }) => {
         { label: "Footprint for SQL", value: "Footprint for SQL" },
         { label: "Footprint for Developer", value: "Footprint for Developer" },
         { label: "Footprint for Crypto Investor", value: "Footprint for Crypto Investor" },
+        { label: "Footprint Analytics Tutorials", value: "Footprint Analytics Tutorials" },
+        { label: "Footprint for Marketing", value: "Footprint for Marketing" },
       ],
     },
   };
