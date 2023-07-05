@@ -45,6 +45,7 @@ import { addTextDashCardToDashboard, toggleSidebar } from "metabase/dashboard/ac
 import QueryRealtimeButton from "metabase/query_builder/components/QueryRealtimeButton";
 import { isRealtimeChart } from "metabase/dashboard/components/utils/realtime";
 import { getRealtimeList } from "metabase/selectors/config";
+import QueryStatusButton from "metabase/query_builder/components/QueryStatusButton";
 import QueryRefreshButton from "metabase/query_builder/components/QueryRefreshButton";
 
 const DATASET_USUALLY_FAST_THRESHOLD = 15 * 1000;
@@ -81,6 +82,7 @@ class DashCard extends Component {
 
     this.state = {
       isPreviewingCard: false,
+      isLoading: false,
     };
   }
 
@@ -314,7 +316,9 @@ class DashCard extends Component {
     const showPreview = !isPublic && !showEdit && !singleDisplay;
 
     const showGetDataViaSqlApi = showEdit || showPreview;
-    const showChartInfo = !isPublic && !singleDisplay;
+    const showChartInfo = false;
+    const showChartRefresh = !isPublic;
+    const showStatusButton = isResearch;
 
     const editAction = card => {
       window.open(`/chart/${card.id}?editingOnLoad=true`);
@@ -336,8 +340,6 @@ class DashCard extends Component {
     const showReadTimeMode = !isPublic && !isTextDisplay && !isImageDisplay && !isVideoDisplay && !isEmbedDisplay && !isTableauDisplay && result && !result.error
       && includeRealtimeTable
       && isRealtimeUser;
-    const cacheTooOldByOneDay = true;
-    const showRefreshButton = !singleDisplay && cacheTooOldByOneDay;
 
     return (
       <DashCardRoot
@@ -356,16 +358,24 @@ class DashCard extends Component {
           style={{
             textAlign: "right",
             position: "absolute",
-            right: 0,
-            bottom: 0,
+            right: 4,
+            bottom: 4,
             zIndex: 2,
           }}
         >
           {/*{showReadTimeMode && (
             <QueryRealtimeButton dashcard={this.props.dashcard} refreshCardData={this.props.refreshCardData}/>
           )}*/}
-          {showRefreshButton && (
-            <QueryRefreshButton dashcard={this.props.dashcard} refreshCardData={this.props.refreshCardData} data={get(get(dashcardData, dashcard.id), dashcard.card_id)}/>
+          {showStatusButton && (
+            <QueryStatusButton
+              dashcard={this.props.dashcard}
+              refreshCardData={this.props.refreshCardData}
+              data={get(get(dashcardData, dashcard.id), dashcard.card_id)}
+              loading={this.state.loading}
+              setLoading={(loading) => {
+                this.setState({ loading })
+              }}
+            />
           )}
         </div>
         <div
@@ -425,6 +435,24 @@ class DashCard extends Component {
                 tableName={dashcard?.card?.table_name}
                 tableId={dashcard?.card?.table_id}
               />
+            </Tooltip>
+          )}
+          {showChartRefresh && (
+            <Tooltip key="ChartRefresh" tooltip={t`Chart Refresh`}>
+              <div
+                className="html2canvas-filter dash-card__button"
+                onClick={async () => {
+                  trackStructEvent(`dashcard click to chart refresh`);
+                  this.setState({ loading: true })
+                  await this.props.refreshCardData({ dashcard, card: dashcard.card, clear: false })
+                  this.setState({ loading: false })
+                }}>
+                <Icon
+                  name="refresh"
+                  size={14}
+                  color={"#9AA0AF"}
+                />
+              </div>
             </Tooltip>
           )}
           {!isEditing && !isPublic &&

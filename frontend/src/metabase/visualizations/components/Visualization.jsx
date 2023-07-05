@@ -562,7 +562,7 @@ class Visualization extends React.PureComponent {
       <div
         id="html2canvas-Card"
         className={cx(className, "flex flex-column full-height")}
-        style={{ ...style, position: "relative", padding: "20px 0" }}
+        style={{ ...style, position: "relative", padding: "12px 0" }}
       >
         {!isPublic && showDataUpdateTime && !isEditing && (
           <div className="Visualization__table-chart-info">
