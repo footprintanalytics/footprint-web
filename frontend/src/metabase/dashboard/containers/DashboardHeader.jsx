@@ -576,7 +576,6 @@ class DashboardHeader extends Component {
               icon="camera"
               iconSize={16}
               onClick={() => {
-                console.log("this.props.dashboard", this.props.dashboard);
                 trackStructEvent("click Download dashboard");
                 if (user) {
                   const { id, public_uuid } = this.props.dashboard;

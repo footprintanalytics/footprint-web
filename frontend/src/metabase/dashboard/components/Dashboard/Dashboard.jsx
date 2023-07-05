@@ -472,7 +472,6 @@ class Dashboard extends Component {
 
   onAfterChangePublicUuid = ({ newUuid }) => {
     this.props.dashboard.public_uuid = newUuid;
-    console.log("this.props.dashboard", this.props.dashboard);
   };
 
   render() {

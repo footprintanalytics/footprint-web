@@ -87,10 +87,10 @@ export default class Filter extends Component {
       dashcard,
       editingParameter,
       isFullscreen,
+      isNightMode,
       dashboard,
       hideParameters,
       setParameterIndex,
-      shouldRenderAsNightMode,
       parameterValues,
       setEditingParameter,
       setParameterValue,
@@ -108,7 +108,7 @@ export default class Filter extends Component {
             dashboard={dashboard}
             dashcard={dashcard}
             isFullscreen={isFullscreen}
-            // isNightMode={shouldRenderAsNightMode}
+            isNightMode={isNightMode}
             isEditing={isEditing}
             setParameterValue={setParameterValue}
             setParameterIndex={setParameterIndex}
@@ -126,7 +126,7 @@ export default class Filter extends Component {
           data-testid="edit-dashboard-parameters-widget-container"
           isEditing={isEditing}
           isTransparency={true}
-          // isNightMode={shouldRenderAsNightMode}
+          isNightMode={isNightMode}
         >
           {parametersWidget()}
         </ParametersWidgetContainer>
@@ -207,7 +207,7 @@ export default class Filter extends Component {
                 data-testid="edit-dashboard-parameters-widget-container"
                 style={{ flex: 1, border: 0 }}
                 isEditing={isEditing}
-                isNightMode={shouldRenderAsNightMode}
+                isNightMode={isNightMode}
               >
                 {parametersWidget()}
               </ParametersWidgetContainer>
