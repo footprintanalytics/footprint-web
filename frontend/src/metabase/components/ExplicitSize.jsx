@@ -37,8 +37,8 @@ export default ({ selector, wrapped, refreshMode = "throttle" } = {}) =>
 
       _getElement() {
         const element = ReactDOM.findDOMNode(this);
-        if (selector) {
-          return element.querySelector(selector) || element;
+        if (selector && element) {
+          return element?.querySelector(selector) || element;
         }
         return element;
       }

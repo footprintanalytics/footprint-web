@@ -29,7 +29,7 @@ export default class Filter extends Component {
     };
   }
 
-   async saveChart(props) {
+  async saveChart(props) {
     const hide = message.loading("Filter adding...", 0);
     const result = await props.saveDashboardAndCards?.(props?.dashboard?.id);
     hide();
@@ -82,9 +82,6 @@ export default class Filter extends Component {
       className,
       settings,
       isEditing,
-      isAddParameterPopoverOpen,
-      showAddParameterPopover,
-      hideAddParameterPopover,
       addParameter,
       parameters,
       dashcard,
@@ -129,7 +126,7 @@ export default class Filter extends Component {
           data-testid="edit-dashboard-parameters-widget-container"
           isEditing={isEditing}
           isTransparency={true}
-          isNightMode={shouldRenderAsNightMode}
+          // isNightMode={shouldRenderAsNightMode}
         >
           {parametersWidget()}
         </ParametersWidgetContainer>
@@ -140,14 +137,12 @@ export default class Filter extends Component {
         <span key="add-a-filter" style={{ maxWidth: "150px" }}>
           <TippyPopover
             placement="bottom-start"
-            // onClose={hideAddParameterPopover}
             onClose={() => {
               this.setState({
                 ...this.state,
                 isShowAddParameterPopover: false,
               });
             }}
-            // visible={isAddParameterPopoverOpen}
             visible={this.state.isShowAddParameterPopover}
             content={
               <ParametersPopover
@@ -158,7 +153,6 @@ export default class Filter extends Component {
                     dashcardId: dashcard?.id,
                   });
                 }}
-                // onClose={hideAddParameterPopover}
                 onClose={() => {
                   this.setState({
                     ...this.state,
@@ -168,7 +162,7 @@ export default class Filter extends Component {
               />
             }
           >
-            <div className="">
+            <div>
               <Button
                 key="parameters"
                 onlyIcon
@@ -182,7 +176,6 @@ export default class Filter extends Component {
                 }}
                 iconSize={16}
                 onClick={e => {
-                  // showAddParameterPopover(dashcard?.id);
                   this.setState({
                     ...this.state,
                     isShowAddParameterPopover: true,
@@ -203,7 +196,7 @@ export default class Filter extends Component {
       return (
         <div className={cx(className, styles.Text)}>
           {this.props.isPreviewing ? (
-            <React.Fragment>{renderFilter({ settings })}</React.Fragment>
+            <React.Fragment>{renderFilter()}</React.Fragment>
           ) : (
             <div
               style={{ pointerEvents: "all" }}

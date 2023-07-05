@@ -658,7 +658,7 @@ class Visualization extends React.PureComponent {
                           margin: "0 auto",
                         }}
                       >
-                        {error}
+                        {error?.message}
                       </div>
                       {errorIcon !== "key" && <ErrorGuide cardId={cardId} />}
                     </div>
