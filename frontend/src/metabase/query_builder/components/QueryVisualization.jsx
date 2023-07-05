@@ -139,7 +139,7 @@ export const VisualizationEmptyState = ({ className }) => (
             className="Question-main--empty-button"
             size="large"
           >
-            SQL Chart
+            SQL Query
           </Button>
         </Link>
       </div>

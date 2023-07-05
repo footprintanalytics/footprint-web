@@ -77,7 +77,7 @@ const MyStudio = props => {
                           window.open(Urls.newQuestion({ type: "query" }))
                         }}
                       >
-                        New Chart
+                        0 Coding Chart
                       </div>
                     )
                   },
@@ -97,7 +97,7 @@ const MyStudio = props => {
                           }))
                         }}
                       >
-                        SQL Query
+                        SQL Chart
                       </div>
                     )
                   },
@@ -123,13 +123,13 @@ const MyStudio = props => {
               placement="right"
             >
               <Button >
-                <Icon name="plus" size={12} className="mr1"/> create
+                <Icon name="plus" size={12} className="mr1"/> Create
               </Button>
             </Dropdown>
             <Button className="mt1" onClick={() => {
               window.open(Urls.newQuestion({ type: "query" }))}
             }>
-              Footprint Dataset
+              Footprint Datasets
             </Button>
           </div>
           {menu && (

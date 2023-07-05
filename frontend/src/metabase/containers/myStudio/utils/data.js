@@ -4,6 +4,7 @@ import * as Urls from "metabase/lib/urls";
 import List from "metabase/containers/creator/components/personal/list";
 
 import { MessageOutlined, PicCenterOutlined, SmileOutlined } from "@ant-design/icons/lib/icons";
+import ConnectorList from "metabase/growth/containers/ConnectorList";
 
 const comingSoonDiv = () => {
   return <div className="flex justify-center p4"><h2>Coming soon~</h2></div>;
@@ -120,6 +121,14 @@ const getMyStudioData = ({ name, params, router, user, onLogout }) => {
             }
           />
         ),
+      }, {
+        "label": "Integration",
+        "value": "integration",
+        "component": (
+          <ConnectorList
+            key="integration"
+          />
+        ),
       }],
     },
     {
@@ -148,7 +157,7 @@ const getMyStudioData = ({ name, params, router, user, onLogout }) => {
         },
       ]
     },
-    /*{
+    {
       "label": "Apps",
       "value": "apps",
       subMenus: [
@@ -168,7 +177,7 @@ const getMyStudioData = ({ name, params, router, user, onLogout }) => {
           "component": comingSoonDiv(),
         },
       ]
-    },*/
+    },
     {
       "label": "Setting",
       "value": "setting",
@@ -179,11 +188,11 @@ const getMyStudioData = ({ name, params, router, user, onLogout }) => {
           "value": "account-settings",
           "url": Urls.accountSettings(),
         },
-        {
-          "label": "Moon men",
-          "value": "moon-men",
-          "url": "/moon-men",
-        },
+        // {
+        //   "label": "Moon men",
+        //   "value": "moon-men",
+        //   "url": "/moon-men",
+        // },
         user?.is_superuser && {
           "label": "Admin settings",
           "value": "admin-settings",
