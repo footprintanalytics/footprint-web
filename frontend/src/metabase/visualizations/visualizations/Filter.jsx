@@ -20,10 +20,6 @@ export default class Filter extends Component {
   constructor(props) {
     super(props);
     if (props?.dashcard?.id < 1 && props?.dashboard?.id) {
-      console.log("Filter constructor, new filter new save first!", {
-        dashcardId: props?.dashcard?.id,
-        dashboardId: props?.dashboard?.id,
-      });
       props.saveDashboardAndCards?.(props?.dashboard?.id);
     }
     this.state = {
@@ -31,7 +27,6 @@ export default class Filter extends Component {
       fontSize: 1,
       isShowAddParameterPopover: false,
     };
-    console.log("Filter constructor", props, this.state);
   }
 
   static uiName = "Filter";
@@ -126,7 +121,6 @@ export default class Filter extends Component {
       return (
         <ParametersWidgetContainer
           data-testid="edit-dashboard-parameters-widget-container"
-          style={{ backgroundColor:'transparency' }}
           isEditing={isEditing}
           isTransparency={true}
           isNightMode={shouldRenderAsNightMode}
@@ -153,10 +147,6 @@ export default class Filter extends Component {
               <ParametersPopover
                 // onAddParameter={addParameter}
                 onAddParameter={parameter => {
-                  console.log("add parameter", {
-                    ...parameter,
-                    dashcardId: dashcard?.id,
-                  });
                   addParameter?.({
                     ...parameter,
                     dashcardId: dashcard?.id,
@@ -172,7 +162,7 @@ export default class Filter extends Component {
               />
             }
           >
-            <div >
+            <div className="">
               <Button
                 key="parameters"
                 onlyIcon
@@ -196,7 +186,7 @@ export default class Filter extends Component {
               >
                 Add a filter
               </Button>
-              <div style={{ fontSize: 18,fontWeight:600 ,height:40}}>{" :"}</div>
+              <span style={{ fontSize: 18,fontWeight:600 }}>{" :"}</span>
             </div>
           </TippyPopover>
         </span>
@@ -211,12 +201,12 @@ export default class Filter extends Component {
           ) : (
             <div
               style={{ pointerEvents: "all" }}
-              className="full flex flex-row "
+              className="full flex flex-row items-center"
             >
               {renderAddParameterButton()}
               <ParametersWidgetContainer
                 data-testid="edit-dashboard-parameters-widget-container"
-                style={{ flex: 1 }}
+                style={{ flex: 1,border:0 }}
                 isEditing={isEditing}
                 isNightMode={shouldRenderAsNightMode}
               >
