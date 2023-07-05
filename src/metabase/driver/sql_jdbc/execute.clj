@@ -24,6 +24,7 @@
             [metabase.query-processor.util :as qp.util]
             [metabase.util :as u]
             [metabase.util.convert_sql :as convert]
+            [metabase.util.convert_sql_dynamic_by_table :as convert_sql_dynamic_by_table]
             [metabase.util.i18n :refer [trs tru]]
             [potemkin :as p])
   (:import [java.sql Connection JDBCType PreparedStatement ResultSet ResultSetMetaData Statement Types]
@@ -497,6 +498,7 @@
          max-rows (limit/determine-query-max-rows outer-query)
          execution-mode (:execution-mode (:middleware outer-query))
          schema-id (:fga-schema (:middleware outer-query))
+         _sql (convert_sql_dynamic_by_table/convert-sql _sql)
          _convert-sql (convert/convert-sql _sql schema-id)
          pattern (re-pattern (str "(?i)" "limit"))
          is-include-limit (not (nil? (re-find pattern _convert-sql)))
