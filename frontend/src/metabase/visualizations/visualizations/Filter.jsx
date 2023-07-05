@@ -1,6 +1,6 @@
 /* eslint-disable react/prop-types */
 import React, { Component } from "react";
-// import { Button } from "antd";
+import { message } from "antd";
 
 import cx from "classnames";
 import { t } from "ttag";
@@ -20,13 +20,19 @@ export default class Filter extends Component {
   constructor(props) {
     super(props);
     if (props?.dashcard?.id < 1 && props?.dashboard?.id) {
-      props.saveDashboardAndCards?.(props?.dashboard?.id);
+      this.saveChart(props);
     }
     this.state = {
       text: "",
       fontSize: 1,
       isShowAddParameterPopover: false,
     };
+  }
+
+   async saveChart(props) {
+    const hide = message.loading("Filter adding...", 0);
+    const result = await props.saveDashboardAndCards?.(props?.dashboard?.id);
+    hide();
   }
 
   static uiName = "Filter";
@@ -186,7 +192,7 @@ export default class Filter extends Component {
               >
                 Add a filter
               </Button>
-              <span style={{ fontSize: 18,fontWeight:600 }}>{" :"}</span>
+              <span style={{ fontSize: 18, fontWeight: 600 }}>{" :"}</span>
             </div>
           </TippyPopover>
         </span>
@@ -206,7 +212,7 @@ export default class Filter extends Component {
               {renderAddParameterButton()}
               <ParametersWidgetContainer
                 data-testid="edit-dashboard-parameters-widget-container"
-                style={{ flex: 1,border:0 }}
+                style={{ flex: 1, border: 0 }}
                 isEditing={isEditing}
                 isNightMode={shouldRenderAsNightMode}
               >

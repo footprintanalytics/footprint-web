@@ -59,7 +59,8 @@ export function setParameterName(
   if (!name) {
     name = "unnamed";
   }
-  const slug = slugify(name);
+  const slug = parameter.dashcardId?`${slugify(name)}-${parameter.dashcardId}`:slugify(name);
+  // const slug = slugify(name);
   return {
     ...parameter,
     name: name,

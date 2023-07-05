@@ -127,7 +127,6 @@ const mapDispatchToProps = {
 
 // NOTE: should use DashboardControls and DashboardData HoCs here0?
 const DashboardApp = props => {
-  console.log("DashboardApp props", props);
   const options = parseHashOptions(window.location.hash);
   const { isRunning, isLoadingComplete, dashboard } = props;
 

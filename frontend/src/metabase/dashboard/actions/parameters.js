@@ -80,7 +80,6 @@ export const addParameter = createThunkAction(
     let parameter;
     updateParameters(dispatch, getState, parameters => {
       parameter = createParameter(parameterOption, parameters);
-      console.log("addParameter.js", parameterOption,parameters,parameter);
       return parameters.concat(parameter);
     });
 
