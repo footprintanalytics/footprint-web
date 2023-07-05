@@ -88,18 +88,19 @@ export const runDirtyQuestionQuery = () => async (dispatch, getState) => {
 };
 
 const handleQuestionVisualType = (question, cols) => {
-  const dateName = cols?.find(i => i.base_type === "type/DateTimeWithTZ")?.name;
+  const dateName = cols?.find(i => ["type/DateTimeWithTZ", "type/Date", "type/DateTime"].includes(i.base_type))?.name;
   const amountN = cols?.find(i => i.name === "amount")?.name;
   const volumeN = cols?.find(i => i.name === "volume")?.name;
   const valueN = cols?.find(i => i.name === "value")?.name;
-  const valueName = amountN || volumeN || valueN || cols?.find(i => i.base_type === "type/Float")?.name;
+  const valueName = amountN || volumeN || valueN
+    || cols?.find(i => ["type/Float", "type/BigInteger", "type/Integer", "type/number"].includes(i.base_type))?.name;
   // bar
   if (dateName && valueName) {
     question.card().create_method = "GPT";
     return question.setSettings({"graph.dimensions": [dateName], "graph.metrics": [valueName]}).setDisplay("bar");
   }
   const pieTextName = cols?.find(i => ["type/Text"].includes(i.base_type))?.name;
-  const pieValueName = cols?.find(i => ["type/Float", "type/BigInteger"].includes(i.base_type))?.name;
+  const pieValueName = cols?.find(i => ["type/Float", "type/BigInteger", "type/Integer", "type/number"].includes(i.base_type))?.name;
   // pie
   if (pieTextName && pieValueName) {
     question.card().create_method = "GPT";

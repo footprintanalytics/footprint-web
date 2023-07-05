@@ -105,6 +105,13 @@ export const PARAMETER_OPERATOR_TYPES = {
       description: t`Quickly select a date`,
     },
     {
+      type: "date/series-time",
+      operator: "series-time",
+      name: t`Series Time`,
+      menuName: t`Series Time`,
+      description: t`Quickly select a time`,
+    },
+    {
       type: "date/all-options",
       operator: "all-options",
       name: t`Date Filter`,

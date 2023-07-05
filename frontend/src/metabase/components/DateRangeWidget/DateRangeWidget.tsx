@@ -14,7 +14,6 @@ const DateRangeWidget = ({ value, ...props }: DateRangeWidgetProps) => {
     value == null
       ? `${moment().format("YYYY-MM-DD")}~${moment().format("YYYY-MM-DD")}`
       : value;
-
   return (
     <DateAllOptionsWidget
       {...props}
