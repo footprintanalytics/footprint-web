@@ -317,7 +317,7 @@ class DashCard extends Component {
 
     const showGetDataViaSqlApi = showEdit || showPreview;
     const showChartInfo = false;
-    const showChartRefresh = !isPublic;
+    const showChartRefresh = !isPublic && !showEdit && !singleDisplay;
     // const showStatusButton = isResearch;
     const showStatusButton = false;
 
