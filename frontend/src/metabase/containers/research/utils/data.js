@@ -359,7 +359,7 @@ const chainData = [
       },
     ],
   },
-  {
+  /*{
     "label": "Chain Stats",
     "value": "chain-stats",
     "icon": "https://statichk.footprint.network/icon_side_analysis.png",
@@ -475,7 +475,7 @@ const chainData = [
         "publicUuid": "3cf8c067-c63b-4a88-a74e-cc34096d0af5",
       },
     ],
-  },
+  },*/
   {
     "label": "Chain Trends",
     "value": "chain-trends",
