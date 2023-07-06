@@ -59,9 +59,9 @@ export const addCardToDashboard =
   };
 
 export const refreshCardData =
-  ({ dashcard, card }) =>
+  ({ dashcard, card, clear= false }) =>
   async (dispatch, getState) => {
-    return await dispatch(fetchCardData(card, dashcard, { reload: true, clear: false, ignoreCache: true }));
+    return await dispatch(fetchCardData(card, dashcard, { reload: true, clear, ignoreCache: true }));
   };
 
 export const addDashCardToDashboard = function ({ dashId, dashcardOverrides }) {

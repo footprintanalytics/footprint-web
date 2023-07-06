@@ -4,6 +4,7 @@ import styled from "@emotion/styled";
 import { connect } from "react-redux";
 import PropTypes from "prop-types";
 import ReactDOM from "react-dom";
+import { get } from "lodash";
 import { t } from "ttag";
 import cx from "classnames";
 import _ from "underscore";
@@ -44,6 +45,8 @@ import { addTextDashCardToDashboard, toggleSidebar } from "metabase/dashboard/ac
 import QueryRealtimeButton from "metabase/query_builder/components/QueryRealtimeButton";
 import { isRealtimeChart } from "metabase/dashboard/components/utils/realtime";
 import { getRealtimeList } from "metabase/selectors/config";
+import QueryStatusButton from "metabase/query_builder/components/QueryStatusButton";
+import QueryRefreshButton from "metabase/query_builder/components/QueryRefreshButton";
 
 const DATASET_USUALLY_FAST_THRESHOLD = 15 * 1000;
 
@@ -79,6 +82,7 @@ class DashCard extends Component {
 
     this.state = {
       isPreviewingCard: false,
+      isLoading: false,
     };
   }
 
@@ -303,23 +307,19 @@ class DashCard extends Component {
       || window.location.pathname.startsWith("/data-api/statistics")
     ;
 
-    const hideDuplicate = isTextDisplay || isImageDisplay || isVideoDisplay || isEmbedDisplay || isTableauDisplay || isPublic;
+    const singleDisplay = isTextDisplay || isImageDisplay || isVideoDisplay || isEmbedDisplay || isTableauDisplay;
 
-    const hideWatermark =
-      clearWatermark || isTextDisplay || isImageDisplay || isVideoDisplay || isEmbedDisplay || isTableauDisplay;
+    const hideDuplicate = singleDisplay || isPublic;
 
-    const showPreview =
-      !isPublic &&
-      !showEdit &&
-      !isTextDisplay &&
-      !isImageDisplay &&
-      !isEmbedDisplay &&
-      !isTableauDisplay &&
-      !isVideoDisplay;
+    const hideWatermark = clearWatermark || singleDisplay;
+
+    const showPreview = !isPublic && !showEdit && !singleDisplay;
 
     const showGetDataViaSqlApi = showEdit || showPreview;
-    const showChartInfo =
-      !isPublic && !isTextDisplay && !isImageDisplay && !isVideoDisplay && !isEmbedDisplay && isTableauDisplay;
+    const showChartInfo = false;
+    const showChartRefresh = !isPublic && !showEdit && !singleDisplay;
+    // const showStatusButton = isResearch;
+    const showStatusButton = false;
 
     const editAction = card => {
       window.open(`/chart/${card.id}?editingOnLoad=true`);
@@ -341,6 +341,7 @@ class DashCard extends Component {
     const showReadTimeMode = !isPublic && !isTextDisplay && !isImageDisplay && !isVideoDisplay && !isEmbedDisplay && !isTableauDisplay && result && !result.error
       && includeRealtimeTable
       && isRealtimeUser;
+
     return (
       <DashCardRoot
         id={id}
@@ -354,16 +355,28 @@ class DashCard extends Component {
         isUsuallySlow={isSlow === "usually-slow"}
       >
         <div
+          className="html2canvas-filter"
           style={{
             textAlign: "right",
             position: "absolute",
-            right: 8,
-            bottom: 8,
+            right: 4,
+            bottom: 4,
             zIndex: 2,
           }}
         >
-          {showReadTimeMode && (
+          {/*{showReadTimeMode && (
             <QueryRealtimeButton dashcard={this.props.dashcard} refreshCardData={this.props.refreshCardData}/>
+          )}*/}
+          {showStatusButton && (
+            <QueryStatusButton
+              dashcard={this.props.dashcard}
+              refreshCardData={this.props.refreshCardData}
+              data={get(get(dashcardData, dashcard.id), dashcard.card_id)}
+              loading={this.state.loading}
+              setLoading={(loading) => {
+                this.setState({ loading })
+              }}
+            />
           )}
         </div>
         <div
@@ -423,6 +436,24 @@ class DashCard extends Component {
                 tableName={dashcard?.card?.table_name}
                 tableId={dashcard?.card?.table_id}
               />
+            </Tooltip>
+          )}
+          {showChartRefresh && (
+            <Tooltip key="ChartRefresh" tooltip={t`Chart Refresh`}>
+              <div
+                className="html2canvas-filter dash-card__button"
+                onClick={async () => {
+                  trackStructEvent(`dashcard click to chart refresh`);
+                  this.setState({ loading: true })
+                  await this.props.refreshCardData({ dashcard, card: dashcard.card, clear: false })
+                  this.setState({ loading: false })
+                }}>
+                <Icon
+                  name="refresh"
+                  size={14}
+                  color={"#9AA0AF"}
+                />
+              </div>
             </Tooltip>
           )}
           {!isEditing && !isPublic &&
