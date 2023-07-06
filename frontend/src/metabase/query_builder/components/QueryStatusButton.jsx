@@ -14,15 +14,18 @@ const QueryStatusButton = ({
    setLoading,
 }) => {
   const updated_at = data?.updated_at || data?.started_at;
+  const cached = data?.cached;
+  console.log("data", data)
   const [statusText, setStatusText] = React.useState("");
   const tableUpdated = new Date(dashcard.card.tableLastUpdated);
+  console.log("timeAgo(updated_at)", dashcard.card)
   React.useEffect(() => {
     const timeDiff = getTimeDiff(updated_at);
     setStatusText(timeAgo(updated_at))
-    if (tableUpdated > updated_at || timeDiff > 24 * 60 * 60 * 1000) {
+    if (cached && tableUpdated > updated_at || timeDiff > 24 * 60 * 60 * 1000) {
       refresh();
     }
-  }, [dashcard, refresh, updated_at]);
+  }, [cached, dashcard, refresh, tableUpdated, updated_at]);
 
   function getTimeDiff(timestamp) {
     if (!timestamp) {

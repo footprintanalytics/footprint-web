@@ -318,7 +318,8 @@ class DashCard extends Component {
     const showGetDataViaSqlApi = showEdit || showPreview;
     const showChartInfo = false;
     const showChartRefresh = !isPublic;
-    const showStatusButton = isResearch;
+    // const showStatusButton = isResearch;
+    const showStatusButton = false;
 
     const editAction = card => {
       window.open(`/chart/${card.id}?editingOnLoad=true`);
