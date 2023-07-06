@@ -4,7 +4,6 @@ import cx from "classnames";
 import { connect } from "react-redux";
 import { fetchCardData } from "metabase/dashboard/actions";
 import "./QueryStatusButton.css";
-import Icon from "metabase/components/Icon";
 
 const QueryStatusButton = ({
    refreshCardData,
@@ -18,6 +17,7 @@ const QueryStatusButton = ({
   const updated_at = data?.updated_at || data?.started_at;
   const cached = data?.cached;
   const [statusText, setStatusText] = React.useState("");
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   const tableUpdated = new Date(dashcard.card.tableLastUpdated);
   const isInner = user?.groups?.includes("Inner");
 
@@ -27,7 +27,7 @@ const QueryStatusButton = ({
     if (isInner && cached && tableUpdated > updated_at || timeDiff > 24 * 60 * 60 * 1000) {
       refresh();
     }
-  }, [cached, dashcard, isInner, refresh, tableUpdated, updated_at]);
+  }, [cached, dashcard, isInner, tableUpdated, updated_at]);
 
   React.useEffect(() => {
     if (statusText) {
