@@ -12,20 +12,37 @@ const QueryStatusButton = ({
    data,
    loading,
    setLoading,
+   user,
 }) => {
+  const prevLoading = React.useRef(loading);
   const updated_at = data?.updated_at || data?.started_at;
   const cached = data?.cached;
-  console.log("data", data)
   const [statusText, setStatusText] = React.useState("");
   const tableUpdated = new Date(dashcard.card.tableLastUpdated);
-  console.log("timeAgo(updated_at)", dashcard.card)
+  const isInner = user?.groups?.includes("Inner");
+
   React.useEffect(() => {
     const timeDiff = getTimeDiff(updated_at);
-    setStatusText(timeAgo(updated_at))
-    if (cached && tableUpdated > updated_at || timeDiff > 24 * 60 * 60 * 1000) {
+    // setStatusText(timeAgo(updated_at))
+    if (isInner && cached && tableUpdated > updated_at || timeDiff > 24 * 60 * 60 * 1000) {
       refresh();
     }
-  }, [cached, dashcard, refresh, tableUpdated, updated_at]);
+  }, [cached, dashcard, isInner, refresh, tableUpdated, updated_at]);
+
+  React.useEffect(() => {
+    if (statusText) {
+      setTimeout(() => {
+        setStatusText("");
+      }, 1000);
+    }
+  }, [statusText]);
+
+  React.useEffect(() => {
+    if (prevLoading.current && !loading) {
+      setStatusText("Done");
+    }
+    prevLoading.current = loading;
+  }, [loading]);
 
   function getTimeDiff(timestamp) {
     if (!timestamp) {
@@ -37,7 +54,7 @@ const QueryStatusButton = ({
     return Math.abs(currentDate - targetDate);
   }
 
-  function timeAgo(timestamp) {
+ /* function timeAgo(timestamp) {
     if (!timestamp) {
       return "";
     }
@@ -59,20 +76,20 @@ const QueryStatusButton = ({
     } else {
       return `${days} days ago`;
     }
-  }
+  }*/
 
   const refresh = async () => {
     setLoading(true);
-    const result = await refreshCardData({ dashcard, card: dashcard.card, clear: false });
+    await refreshCardData({ dashcard, card: dashcard.card, clear: false });
     setLoading(false);
-    setStatusText(timeAgo(result.payload.result.started_at));
+    // setStatusText(timeAgo(result.payload.result.started_at));
   }
 
   return (
     <div className={cx("query-refresh__root flex align-center", {"query-refresh__normal": !loading, "query-refresh__warning": loading})}>
       {!loading && (<div>{statusText}</div>)}
       {loading && (<div>Running...</div>)}
-      {!!data && !loading && status === "normal" && (<Icon className="ml1" name={"query_finish"} color="#52c41a" size={10} />)}
+      {/*{!!data && !loading && status === "normal" && (<Icon className="ml1" name={"query_finish"} color="#52c41a" size={10} />)}*/}
     </div>
   );
 }

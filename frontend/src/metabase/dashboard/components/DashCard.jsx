@@ -318,8 +318,7 @@ class DashCard extends Component {
     const showGetDataViaSqlApi = showEdit || showPreview;
     const showChartInfo = false;
     const showChartRefresh = !isPublic && !showEdit && !singleDisplay;
-    // const showStatusButton = isResearch;
-    const showStatusButton = false;
+    const showStatusButton = showChartRefresh;
 
     const editAction = card => {
       window.open(`/chart/${card.id}?editingOnLoad=true`);
@@ -376,6 +375,7 @@ class DashCard extends Component {
               setLoading={(loading) => {
                 this.setState({ loading })
               }}
+              user={user}
             />
           )}
         </div>
@@ -444,6 +444,9 @@ class DashCard extends Component {
                 className="html2canvas-filter dash-card__button"
                 onClick={async () => {
                   trackStructEvent(`dashcard click to chart refresh`);
+                  if (this.state.loading) {
+                    return ;
+                  }
                   this.setState({ loading: true })
                   await this.props.refreshCardData({ dashcard, card: dashcard.card, clear: false })
                   this.setState({ loading: false })
