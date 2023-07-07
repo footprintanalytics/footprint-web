@@ -27,6 +27,7 @@ import {
   isEmail,
   isImageURL,
   isAvatarURL,
+  isNumberArray,
 } from "metabase-lib/types/utils/isa";
 import { findColumnIndexForColumnSetting } from "metabase-lib/queries/utils/dataset";
 import * as Q_DEPRECATED from "metabase-lib/queries/utils";
@@ -263,7 +264,7 @@ export default class Table extends Component {
       },
       click_behavior: {},
     };
-    if (isNumber(column)) {
+    if (isNumber(column)&&settings["view_as"] !== "line_chart"&&settings["view_as"] !== "bar_chart") {
       settings["show_mini_bar"] = {
         title: t`Show a mini bar chart`,
         widget: "toggle",
@@ -281,6 +282,13 @@ export default class Table extends Component {
       defaultValue = "email_link";
       options.push({ name: t`Email link`, value: "email_link" });
     }
+
+    if (!column.semantic_type || isNumberArray(column)) {
+      defaultValue = "line_chart";
+      options.push({ name: t`Line Chart`, value: "line_chart" });
+      options.push({ name: t`Bar Chart`, value: "bar_chart" });
+    }
+
     if (!column.semantic_type || isImageURL(column) || isAvatarURL(column)) {
       defaultValue = "image";
       options.push({ name: t`Image`, value: "image" });

@@ -164,7 +164,7 @@ function TableSimple({
           >
             <SortIcon name={iconName} />
             <Ellipsified tooltip={title?.description ?? title?.title}>
-              <div style={{display:'flex',flexDirection:'row'}}>
+              <div style={{ display: "flex", flexDirection: "row" }}>
                 {title?.title}
                 {title?.description && <TipIcon name="info" />}
               </div>

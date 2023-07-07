@@ -282,7 +282,7 @@ class ParameterValueWidget extends Component {
       return (
         <div className="flex align-center">
           {renderSeriesDate()}
-          {hasValue && (
+        {hasValue && (
             <WidgetStatusIcon
               isFullscreen={isFullscreen}
               hasValue={hasValue}

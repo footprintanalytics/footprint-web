@@ -21,6 +21,7 @@ export const CATEGORY = "CATEGORY";
 export const SERIES_CATEGORY = "SERIES_CATEGORY";
 export const FP_ENUM = "FP_ENUM";
 export const DIMENSION = "DIMENSION";
+export const NUMBER_ARRAY = "NUMBER_ARRAY";
 
 export const UNKNOWN = "UNKNOWN";
 
@@ -30,6 +31,11 @@ export const TYPE_HIERARCHIES = {
     base: [TYPE.Temporal],
     effective: [TYPE.Temporal],
     semantic: [TYPE.Temporal],
+  },
+  [NUMBER_ARRAY]: {
+    base: [TYPE.Number],
+    effective: [TYPE.Number],
+    semantic: [TYPE.Number],
   },
   [NUMBER]: {
     base: [TYPE.Number],

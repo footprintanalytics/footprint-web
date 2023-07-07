@@ -9,6 +9,9 @@ import {
   getTableCellClickedObject,
   getTableClickedObjectRowData,
   isColumnRightAligned,
+  isShowChart,
+  parseChart,
+  parseValue2ChartData,
 } from "metabase/visualizations/lib/table";
 import { getColumnExtent } from "metabase/visualizations/lib/utils";
 import { isID, isFK } from "metabase-lib/types/utils/isa";
@@ -141,14 +144,24 @@ function TableCell({
       backgroundColor={backgroundColor}
       isRightAligned={isColumnRightAligned(column)}
     >
-      <CellContent
-        className="cellData"
-        isClickable={isClickable}
-        onClick={isClickable ? onClick : undefined}
-        data-testid="cell-data"
-      >
-        {cellData}
-      </CellContent>
+      {isShowChart(columnSettings["view_as"]) ? (
+        <div className="full" style={{height:'100%'}} id={`cell-${rowIndex}-${columnIndex}`}>
+          {parseChart(
+            parseValue2ChartData(cellData),
+            columnSettings["view_as"],
+            `cell-${rowIndex}-${columnIndex}`,
+          )}
+        </div>
+      ) : (
+        <CellContent
+          className="cellData"
+          isClickable={isClickable}
+          onClick={isClickable ? onClick : undefined}
+          data-testid="cell-data"
+        >
+          <>{cellData}</>
+        </CellContent>
+      )}
     </CellRoot>
   );
 }

@@ -110,3 +110,58 @@ export function isColumnRightAligned(column) {
   }
   return isNumber(column) || isCoordinate(column);
 }
+
+export function parseChart(datas, chartType, cellId) {
+  const chartDom = document.getElementById(cellId);
+  if (!chartDom) return;
+  const chart = window.echarts?.init(chartDom);
+  if (!chart) return;
+  const option = {
+    xAxis: {
+      type: "category",
+      show: false,
+    },
+    yAxis: {
+      type: "value",
+      show: false,
+      splitLine: { show: false },
+    },
+    grid: [
+      {
+        left: 2,
+        top: 4,
+        right: 2,
+        bottom: 4,
+      },
+    ],
+    series: [
+      {
+        data: datas,
+        type: chartType === "bar_chart" ? "bar" : "line",
+        areaStyle: {},
+        smooth: true,
+        barMaxWidth: 15,
+        barMinHeight: 3,
+      },
+    ],
+  };
+  chart?.setOption(option);
+  // chart?.resize()
+}
+
+export function parseValue2ChartData(str) {
+  try {
+    const arr = JSON.parse(str);
+    if (Array.isArray(arr)) {
+      return arr.map(Number);
+    } else {
+      return [];
+    }
+  } catch (error) {
+    return [];
+  }
+}
+
+export function isShowChart(str) {
+  return str === "bar_chart" || str === "line_chart";
+}
