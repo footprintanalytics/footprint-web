@@ -211,7 +211,6 @@ export default ComposedComponent =>
           this._refreshElapsedHook(elapsed);
         }
       };
-
       render() {
         return (
           <ComposedComponent
