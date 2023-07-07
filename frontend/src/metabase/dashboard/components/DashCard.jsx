@@ -4,6 +4,7 @@ import styled from "@emotion/styled";
 import { connect } from "react-redux";
 import PropTypes from "prop-types";
 import ReactDOM from "react-dom";
+import { get } from "lodash";
 import { t } from "ttag";
 import cx from "classnames";
 import _ from "underscore";
@@ -47,6 +48,8 @@ import {
 import QueryRealtimeButton from "metabase/query_builder/components/QueryRealtimeButton";
 import { isRealtimeChart } from "metabase/dashboard/components/utils/realtime";
 import { getRealtimeList } from "metabase/selectors/config";
+import QueryStatusButton from "metabase/query_builder/components/QueryStatusButton";
+import QueryRefreshButton from "metabase/query_builder/components/QueryRefreshButton";
 
 const DATASET_USUALLY_FAST_THRESHOLD = 15 * 1000;
 
@@ -82,6 +85,7 @@ class DashCard extends Component {
 
     this.state = {
       isPreviewingCard: false,
+      isLoading: false,
     };
   }
 
@@ -313,47 +317,23 @@ class DashCard extends Component {
     //   mainCard.display === "image" ||
     //   mainCard.display === "video";
     const showEdit = isOwner && !!dashcard.card.id;
-    const isPublic =
-      window.location.pathname.startsWith("/public") ||
-      window.location.pathname.startsWith("/growth") ||
-      window.location.pathname.startsWith("/data-api/statistics");
-    const hideDuplicate =
-      isTextDisplay ||
-      isImageDisplay ||
-      isVideoDisplay ||
-      isEmbedDisplay ||
-      isTableauDisplay ||
-      isFilterDisplay ||
-      isPublic;
+    const isPublic = window.location.pathname.startsWith("/public")
+      || window.location.pathname.startsWith("/growth")
+      || window.location.pathname.startsWith("/data-api/statistics")
+    ;
 
-    const hideWatermark =
-      clearWatermark ||
-      isTextDisplay ||
-      isImageDisplay ||
-      isVideoDisplay ||
-      isEmbedDisplay ||
-      isTableauDisplay ||
-      isFilterDisplay;
+    const singleDisplay = isTextDisplay || isImageDisplay || isVideoDisplay || isEmbedDisplay || isTableauDisplay;
 
-    const showPreview =
-      !isPublic &&
-      !showEdit &&
-      !isTextDisplay &&
-      !isImageDisplay &&
-      !isEmbedDisplay &&
-      !isTableauDisplay &&
-      !isFilterDisplay &&
-      !isVideoDisplay;
+    const hideDuplicate = singleDisplay || isPublic;
+
+    const hideWatermark = clearWatermark || singleDisplay;
+
+    const showPreview = !isPublic && !showEdit && !singleDisplay;
 
     const showGetDataViaSqlApi = showEdit || showPreview;
-    const showChartInfo =
-      !isPublic &&
-      !isTextDisplay &&
-      !isImageDisplay &&
-      !isVideoDisplay &&
-      !isFilterDisplay &&
-      !isEmbedDisplay &&
-      isTableauDisplay;
+    const showChartInfo = false;
+    const showChartRefresh = !isPublic && !singleDisplay;
+    const showStatusButton = showChartRefresh;
 
     const editAction = card => {
       window.open(`/chart/${card.id}?editingOnLoad=true`);
@@ -377,18 +357,10 @@ class DashCard extends Component {
       isFilterDisplay;
     const includeRealtimeTable = isRealtimeChart(dashcard, realtimeList);
     const isRealtimeUser = user?.id === 20103;
-    const showReadTimeMode =
-      !isPublic &&
-      !isTextDisplay &&
-      !isImageDisplay &&
-      !isVideoDisplay &&
-      !isEmbedDisplay &&
-      !isTableauDisplay &&
-      !isFilterDisplay &&
-      result &&
-      !result.error &&
-      includeRealtimeTable &&
-      isRealtimeUser;
+    const showReadTimeMode = !isPublic && !isTextDisplay && !isImageDisplay && !isVideoDisplay && !isEmbedDisplay && !isTableauDisplay && result && !result.error
+      && includeRealtimeTable
+      && isRealtimeUser;
+
     return (
       <DashCardRoot
         id={id}
@@ -405,18 +377,28 @@ class DashCard extends Component {
         isUsuallySlow={isSlow === "usually-slow"}
       >
         <div
+          className="html2canvas-filter"
           style={{
             textAlign: "right",
             position: "absolute",
-            right: 8,
-            bottom: 8,
+            right: 4,
+            bottom: 4,
             zIndex: 2,
           }}
         >
-          {showReadTimeMode && (
-            <QueryRealtimeButton
+          {/*{showReadTimeMode && (
+            <QueryRealtimeButton dashcard={this.props.dashcard} refreshCardData={this.props.refreshCardData}/>
+          )}*/}
+          {showStatusButton && (
+            <QueryStatusButton
               dashcard={this.props.dashcard}
               refreshCardData={this.props.refreshCardData}
+              data={get(get(dashcardData, dashcard.id), dashcard.card_id)}
+              loading={this.state.loading}
+              setLoading={(loading) => {
+                this.setState({ loading })
+              }}
+              user={user}
             />
           )}
         </div>
@@ -479,8 +461,28 @@ class DashCard extends Component {
               />
             </Tooltip>
           )}
-          {!isEditing &&
-            !isPublic &&
+          {showChartRefresh && (
+            <Tooltip key="ChartRefresh" tooltip={t`Chart Refresh`}>
+              <div
+                className="html2canvas-filter dash-card__button"
+                onClick={async () => {
+                  trackStructEvent(`dashcard click to chart refresh`);
+                  if (this.state.loading) {
+                    return ;
+                  }
+                  this.setState({ loading: true })
+                  await this.props.refreshCardData({ dashcard, card: dashcard.card, clear: false })
+                  this.setState({ loading: false })
+                }}>
+                <Icon
+                  name="refresh"
+                  size={14}
+                  color={"#9AA0AF"}
+                />
+              </div>
+            </Tooltip>
+          )}
+          {!isEditing && !isPublic &&
             QueryDownloadWidget.shouldRender({
               result,
               isResultDirty: false,

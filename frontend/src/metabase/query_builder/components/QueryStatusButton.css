@@ -1,0 +1,14 @@
+.query-refresh__root {
+  padding: 0 4px;
+  font-size: 10px;
+}
+
+.query-refresh__normal {
+  background: #52c41a11;
+  color: #52c41aee;
+}
+
+.query-refresh__warning {
+  background: #f7900911;
+  color: #f79009ee;
+}

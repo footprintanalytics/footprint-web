@@ -109,7 +109,7 @@ const QueryMoreWidget = ({
               </Button>
             </div>
           )}
-          {isAdmin && (
+          {(isAdmin || isInner) && (
             <div style={{ width: "100%"}}>
               <Button
                 className="Question-header-btn Question-header-btn--full"

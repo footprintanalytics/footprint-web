@@ -475,7 +475,7 @@ class DashboardHeader extends Component {
           },
         });
       }
-      if (canEdit && isAdmin) {
+      if (canEdit && (isAdmin || isInner)) {
         extraButtons.push({
           title: t`Move`,
           icon: "",
