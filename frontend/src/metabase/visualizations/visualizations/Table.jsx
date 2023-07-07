@@ -250,6 +250,7 @@ export default class Table extends Component {
   };
 
   static columnSettings = column => {
+    console.log("columnSettings column", column);
     const settings = {
       column_title: {
         title: t`Column title`,
@@ -260,11 +261,15 @@ export default class Table extends Component {
         title: t`Column description`,
         widget: "input",
         hint: "input a description for the column",
-        getDefault: '',
+        getDefault: "",
       },
       click_behavior: {},
     };
-    if (isNumber(column)&&settings["view_as"] !== "line_chart"&&settings["view_as"] !== "bar_chart") {
+    if (
+      isNumber(column) &&
+      settings["view_as"] !== "line_chart" &&
+      settings["view_as"] !== "bar_chart"
+    ) {
       settings["show_mini_bar"] = {
         title: t`Show a mini bar chart`,
         widget: "toggle",
@@ -364,6 +369,7 @@ export default class Table extends Component {
       },
     };
 
+    console.log("columnSettings settings", settings);
     return settings;
   };
 
@@ -427,8 +433,13 @@ export default class Table extends Component {
         .filter(columnIndex => columnIndex >= 0 && columnIndex < cols.length);
       this.setState({
         data: {
-          cols: columnIndexes.map(i =>{
-            return {...cols[i],description:columnSettings?.find(columnSetting => columnSetting.name === cols[i]?.name)?.description}
+          cols: columnIndexes.map(i => {
+            return {
+              ...cols[i],
+              description: columnSettings?.find(
+                columnSetting => columnSetting.name === cols[i]?.name,
+              )?.description,
+            };
           }),
           rows: rows.map(row => columnIndexes.map(i => row[i])),
         },
@@ -454,10 +465,11 @@ export default class Table extends Component {
       columnTitle =
         settings.column(column)["_column_title_full"] || formatColumn(column);
     }
-    return {title:columnTitle,description:column?.description};
+    return { title: columnTitle, description: column?.description };
   };
 
   render() {
+    console.log("Table render", this.props, this.state);
     const { series, isDashboard, settings } = this.props;
     const { data } = this.state;
     const [{ card }] = series;

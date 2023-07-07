@@ -1,5 +1,5 @@
 /* eslint-disable react/prop-types */
-import React, { useMemo } from "react";
+import React, { useEffect, useMemo } from "react";
 import cx from "classnames";
 
 import ExternalLink from "metabase/core/components/ExternalLink";
@@ -128,6 +128,14 @@ function TableCell({
     [value, rowIndex, column, getCellBackgroundColor],
   );
 
+  useEffect(() => {
+    parseChart(
+      parseValue2ChartData(cellData),
+      columnSettings["view_as"],
+      `cell-${rowIndex}-${columnIndex}`,
+    );
+  }, [rowIndex, columnIndex, cellData, columnSettings]);
+
   const classNames = useMemo(
     () =>
       cx("fullscreen-normal-text fullscreen-night-text", {
@@ -145,12 +153,11 @@ function TableCell({
       isRightAligned={isColumnRightAligned(column)}
     >
       {isShowChart(columnSettings["view_as"]) ? (
-        <div className="full" style={{height:'100%'}} id={`cell-${rowIndex}-${columnIndex}`}>
-          {parseChart(
-            parseValue2ChartData(cellData),
-            columnSettings["view_as"],
-            `cell-${rowIndex}-${columnIndex}`,
-          )}
+        <div className="w-full h-full flex flex-row justify-end">
+          <div
+            style={{ height: "100%", width: 15*parseValue2ChartData(cellData)?.length ,maxWidth: 250}}
+            id={`cell-${rowIndex}-${columnIndex}`}
+          />
         </div>
       ) : (
         <CellContent

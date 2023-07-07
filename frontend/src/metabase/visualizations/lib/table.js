@@ -140,6 +140,7 @@ export function parseChart(datas, chartType, cellId) {
         type: chartType === "bar_chart" ? "bar" : "line",
         areaStyle: {},
         smooth: true,
+        symbol: 'none',
         barMaxWidth: 15,
         barMinHeight: 3,
       },

@@ -986,7 +986,6 @@ class TableInteractive extends Component {
       className,
       scrollToColumn,
     } = this.props;
-    console.log("TableInteractive render", this.props, this.state);
     if (!width || !height) {
       return <div className={className} />;
     }
