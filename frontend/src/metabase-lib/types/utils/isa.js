@@ -170,8 +170,6 @@ export const isCity = field => field && isa(field.semantic_type, TYPE.City);
 export const isState = field => field && isa(field.semantic_type, TYPE.State);
 export const isZipCode = field =>
   field && isa(field.semantic_type, TYPE.ZipCode);
-export const isNumberArray = field =>
-  field && isa(field.semantic_type, TYPE.NumberArray);
 export const isCountry = field =>
   field && isa(field.semantic_type, TYPE.Country);
 export const isCoordinate = field =>

@@ -250,7 +250,6 @@ export default class Table extends Component {
   };
 
   static columnSettings = column => {
-    console.log("columnSettings column", column);
     const settings = {
       column_title: {
         title: t`Column title`,
@@ -368,8 +367,6 @@ export default class Table extends Component {
         };
       },
     };
-
-    console.log("columnSettings settings", settings);
     return settings;
   };
 
@@ -469,7 +466,6 @@ export default class Table extends Component {
   };
 
   render() {
-    console.log("Table render", this.props, this.state);
     const { series, isDashboard, settings } = this.props;
     const { data } = this.state;
     const [{ card }] = series;
