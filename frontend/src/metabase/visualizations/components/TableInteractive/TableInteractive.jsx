@@ -496,8 +496,6 @@ class TableInteractive extends Component {
     }
   };
 
-
-
   cellRenderer = ({ key, style, rowIndex, columnIndex }) => {
     const { data, settings } = this.props;
     const { dragColIndex, showDetailShortcut } = this.state;
@@ -537,7 +535,6 @@ class TableInteractive extends Component {
     return (
       <div
         key={key}
-        id={`cell-${rowIndex}-${columnIndex}`}
         style={{
           ...style,
           // use computed left if dragging
@@ -587,13 +584,16 @@ class TableInteractive extends Component {
         {isShowChart(columnSettings["view_as"]) ? (
           <>
             {cellData?.length > 0 ? (
-              <>
+              <div
+                className="w-full h-full"
+                id={`cell-${rowIndex}-${columnIndex}`}
+              >
                 {parseChart(
                   cellData,
                   columnSettings["view_as"],
                   `cell-${rowIndex}-${columnIndex}`,
                 )}
-              </>
+              </div>
             ) : (
               <></>
             )}
