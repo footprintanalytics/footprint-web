@@ -21,13 +21,13 @@ const QueryStatusButton = ({
   const tableUpdated = new Date(dashcard.card.tableLastUpdated);
   const isInner = user?.groups?.includes("Inner");
 
-  React.useEffect(() => {
+  /*React.useEffect(() => {
     const timeDiff = getTimeDiff(updated_at);
     // setStatusText(timeAgo(updated_at))
     if (isInner && cached && tableUpdated > updated_at || timeDiff > 24 * 60 * 60 * 1000) {
       refresh();
     }
-  }, [cached, dashcard, isInner, tableUpdated, updated_at]);
+  }, [cached, dashcard, isInner, tableUpdated, updated_at]);*/
 
   React.useEffect(() => {
     if (statusText) {
