@@ -142,7 +142,15 @@ class DashboardHeader extends Component {
   }
 
   onAddTableauBox() {
-    this.props.addTableauDashCardToDashboard({ dashId: this.props.dashboard.id });
+    this.props.addTableauDashCardToDashboard({
+      dashId: this.props.dashboard.id,
+    });
+  }
+
+  onAddFilterBox() {
+    this.props.addFilterDashCardToDashboard({
+      dashId: this.props.dashboard.id,
+    });
   }
 
   onAddAction() {
@@ -249,8 +257,12 @@ class DashboardHeader extends Component {
 
     const isDataAppPage = false;
     const isLoaded = !!dashboard;
-    const canEdit = dashboard.can_write && isEditable && !!dashboard &&
-      user && (user.is_superuser || user.id === dashboard?.creator_id);
+    const canEdit =
+      dashboard.can_write &&
+      isEditable &&
+      !!dashboard &&
+      user &&
+      (user.is_superuser || user.id === dashboard?.creator_id);
     const isAdmin = user && user.is_superuser;
     const isMarket = user && user.isMarket;
     const isOwner =
@@ -284,27 +296,29 @@ class DashboardHeader extends Component {
 
       buttons.push(
         // <Tooltip tooltip={addQuestionButtonHint}>
-          /*<DashboardHeaderButton
+        /*<DashboardHeaderButton
             icon="add"
             isActive={activeSidebarName === SIDEBAR_NAME.addQuestion}
             onClick={() => toggleSidebar(SIDEBAR_NAME.addQuestion)}
             data-metabase-event="Dashboard;Add Card Sidebar"
           />*/
-          <Button
-            onlyIcon
-            className={`ml1 Question-header-btn-new ${
-              activeSidebarName === SIDEBAR_NAME.addQuestion ? "Question-header-btn--primary-new" : ""
-            }`}
-            iconColor="#7A819B"
-            icon="add"
-            iconSize={16}
-            onClick={e => {
-              toggleSidebar(SIDEBAR_NAME.addQuestion);
-              trackStructEvent("click Toggle Add Question Sidebar");
-            }}
-          >
-            Add chart
-          </Button>
+        <Button
+          onlyIcon
+          className={`ml1 Question-header-btn-new ${
+            activeSidebarName === SIDEBAR_NAME.addQuestion
+              ? "Question-header-btn--primary-new"
+              : ""
+          }`}
+          iconColor="#7A819B"
+          icon="add"
+          iconSize={16}
+          onClick={e => {
+            toggleSidebar(SIDEBAR_NAME.addQuestion);
+            trackStructEvent("click Toggle Add Question Sidebar");
+          }}
+        >
+          Add chart
+        </Button>,
         // </Tooltip>,
       );
 
@@ -363,26 +377,26 @@ class DashboardHeader extends Component {
           >
             <div>
               {/*<Tooltip tooltip={t`Add a filter`}>*/}
-                {/*<DashboardHeaderButton
+              {/*<DashboardHeaderButton
                   key="parameters"
                   onClick={showAddParameterPopover}
                 >
                   <Icon name="filter" />
                 </DashboardHeaderButton>*/}
-                <Button
-                  key="parameters"
-                  onlyIcon
-                  className="ml1 Question-header-btn-new"
-                  iconColor="#7A819B"
-                  icon="dashboard_filter"
-                  iconSize={16}
-                  onClick={e => {
-                    showAddParameterPopover();
-                    trackStructEvent("click Add Fillter");
-                  }}
-                >
-                  Add a filter
-                </Button>
+              <Button
+                key="parameters"
+                onlyIcon
+                className="ml1 Question-header-btn-new"
+                iconColor="#7A819B"
+                icon="dashboard_filter"
+                iconSize={16}
+                onClick={e => {
+                  showAddParameterPopover();
+                  trackStructEvent("click Add Fillter");
+                }}
+              >
+                Add a filter
+              </Button>
               {/*</Tooltip>*/}
             </div>
           </TippyPopover>
@@ -444,21 +458,21 @@ class DashboardHeader extends Component {
           title: "Seo tagging",
           icon: "",
           event: "Dashboard;Seo-tagging",
-          action: (e) => {
+          action: e => {
             this.setState({
               showSeoTaggingModal: true,
             });
-          }
+          },
         });
         extraButtons.push({
           title: "Home priority",
           icon: "",
           event: "Dashboard;Home-priority",
-          action: (e) => {
+          action: e => {
             this.setState({
               showHomePriorityModal: true,
             });
-          }
+          },
         });
       }
       if (canEdit && (isAdmin || isInner)) {
@@ -543,8 +557,8 @@ class DashboardHeader extends Component {
             }}
           >
             {dashboard &&
-            dashboard.statistics &&
-            `${dashboard.statistics.copy}`}
+              dashboard.statistics &&
+              `${dashboard.statistics.copy}`}
           </Button>
         </Tooltip>,
       );
@@ -562,12 +576,11 @@ class DashboardHeader extends Component {
               icon="camera"
               iconSize={16}
               onClick={() => {
-                console.log("this.props.dashboard", this.props.dashboard)
                 trackStructEvent("click Download dashboard");
                 if (user) {
                   const { id, public_uuid } = this.props.dashboard;
                   const uuid = MetabaseUtils.isUUID(id) ? id : public_uuid;
-                  if (!uuid ) {
+                  if (!uuid) {
                     message.warning("Please open share first to use snapshot.");
                     return;
                   }
@@ -628,7 +641,7 @@ class DashboardHeader extends Component {
     if (extraButtons.length > 0 && !isEditing) {
       buttons.push(
         ...[
-        /* <DashboardHeaderActionDivider key="dashboard-button-divider" />,
+          /* <DashboardHeaderActionDivider key="dashboard-button-divider" />,
          <DashboardBookmark
            key="dashboard-bookmark-button"
            dashboard={dashboard}
@@ -705,6 +718,12 @@ class DashboardHeader extends Component {
           this.onAddTableauBox();
         },
       },
+      {
+        type: "Filter",
+        onclick: () => {
+          this.onAddFilterBox();
+        },
+      },
     ];
     return (
       <Popover
@@ -735,54 +754,55 @@ class DashboardHeader extends Component {
       setSidebar,
     } = this.props;
 
-    const {
-      showSeoTaggingModal,
-      showHomePriorityModal,
-    } = this.state;
-    const dashboardId = MetabaseUtils.isUUID(dashboard.id) ? dashboard.entityId : dashboard.id;
+    const { showSeoTaggingModal, showHomePriorityModal } = this.state;
+    const dashboardId = MetabaseUtils.isUUID(dashboard.id)
+      ? dashboard.entityId
+      : dashboard.id;
     const isDataAppPage = false;
     const hasLastEditInfo = dashboard["last-edit-info"] != null;
 
     return (
       <>
-      <Header
-        headerClassName="wrapper"
-        objectType="dashboard"
-        analyticsContext="Dashboard"
-        dashboard={dashboard}
-        isEditing={isEditing}
-        isNightMode={isNightMode}
-        isBadgeVisible={!isEditing && !isFullscreen && isAdditionalInfoVisible}
-        isLastEditInfoVisible={
-          // !isDataAppPage && hasLastEditInfo && isAdditionalInfoVisible
-          false
-        }
-        isEditingInfo={isEditing}
-        isNavBarOpen={this.props.isNavBarOpen}
-        headerButtons={this.getHeaderButtons()}
-        editWarning={this.getEditWarning(dashboard)}
-        editingTitle={t`You're editing this dashboard.`}
-        editingButtons={this.getEditingButtons()}
-        setDashboardAttribute={setDashboardAttribute}
-        onLastEditInfoClick={() => setSidebar({ name: SIDEBAR_NAME.info })}
-        onSave={() => this.onSave()}
-        titleRightPanel={
-          !this.props.isEditing ? (
-            <DashboardCardDisplayInfo
-              authorName={
-                dashboard && dashboard.creator && dashboard.creator.name
-              }
-              date={
-                dashboard && (dashboard.created_at || dashboard.createdAt)
-              }
-              read={
-                dashboard && dashboard.statistics && dashboard.statistics.view
-              }
-            />
-          ) : null
-        }
-        router={this.props.router}
-      />
+        <Header
+          headerClassName="wrapper"
+          objectType="dashboard"
+          analyticsContext="Dashboard"
+          dashboard={dashboard}
+          isEditing={isEditing}
+          isNightMode={isNightMode}
+          isBadgeVisible={
+            !isEditing && !isFullscreen && isAdditionalInfoVisible
+          }
+          isLastEditInfoVisible={
+            // !isDataAppPage && hasLastEditInfo && isAdditionalInfoVisible
+            false
+          }
+          isEditingInfo={isEditing}
+          isNavBarOpen={this.props.isNavBarOpen}
+          headerButtons={this.getHeaderButtons()}
+          editWarning={this.getEditWarning(dashboard)}
+          editingTitle={t`You're editing this dashboard.`}
+          editingButtons={this.getEditingButtons()}
+          setDashboardAttribute={setDashboardAttribute}
+          onLastEditInfoClick={() => setSidebar({ name: SIDEBAR_NAME.info })}
+          onSave={() => this.onSave()}
+          titleRightPanel={
+            !this.props.isEditing ? (
+              <DashboardCardDisplayInfo
+                authorName={
+                  dashboard && dashboard.creator && dashboard.creator.name
+                }
+                date={
+                  dashboard && (dashboard.created_at || dashboard.createdAt)
+                }
+                read={
+                  dashboard && dashboard.statistics && dashboard.statistics.view
+                }
+              />
+            ) : null
+          }
+          router={this.props.router}
+        />
         {showSeoTaggingModal && (
           <TaggingModal
             onClose={() => this.setState({ showSeoTaggingModal: false })}

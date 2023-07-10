@@ -33,6 +33,7 @@ export type ParameterMapping = {
 export type ParameterMappingOptions = {
   name: string;
   sectionId: string;
+  dashcardId?: number;
   combinedName?: string;
   type: ParameterType;
 };
@@ -43,6 +44,7 @@ export interface Parameter {
   type: ParameterType;
   slug: string;
   sectionId?: string;
+  dashcardId?: number;
   default?: any;
   filteringParameters?: ParameterId[];
   isMultiSelect?: boolean;
