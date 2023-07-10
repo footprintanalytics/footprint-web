@@ -178,7 +178,7 @@ class Dashboard extends Component {
     THROTTLE_PERIOD,
   );
 
-/*  throttleParameterWidgetStickiness = _.throttle(
+  /*  throttleParameterWidgetStickiness = _.throttle(
     () => updateParametersWidgetStickiness(this),
     SCROLL_THROTTLE_INTERVAL,
   );*/
@@ -345,7 +345,7 @@ class Dashboard extends Component {
     });
   };
 
-  onSharingClick = (params) => {
+  onSharingClick = params => {
     // this.props.setSharing(true);
     const { dashboard } = this.props;
     this.setState({
@@ -472,7 +472,6 @@ class Dashboard extends Component {
 
   onAfterChangePublicUuid = ({ newUuid }) => {
     this.props.dashboard.public_uuid = newUuid;
-    console.log("this.props.dashboard", this.props.dashboard)
   };
 
   render() {
@@ -497,7 +496,8 @@ class Dashboard extends Component {
     } = this.props;
     const { error, isParametersWidgetSticky, shareModalResource } = this.state;
     // const shouldRenderAsNightMode = isNightMode && isFullscreen;
-    const shouldRenderAsNightMode = (isNightMode || canShowDarkMode(dashboard)) && !isEditing;
+    const shouldRenderAsNightMode =
+      (isNightMode || canShowDarkMode(dashboard)) && !isEditing;
 
     const dashboardHasCards = dashboard => dashboard.ordered_cards.length > 0;
     const visibleParameters = getVisibleParameters(parameters);
@@ -546,139 +546,149 @@ class Dashboard extends Component {
             )}
           />
         )}
-      <DashboardLoadingAndErrorWrapper
-        isFullHeight={isEditing || isSharing}
-        isFullscreen={isFullscreen}
-        isNightMode={shouldRenderAsNightMode}
-        loading={!dashboard}
-        error={error}
-      >
-        {() => (
-          <DashboardStyled>
-            {isHeaderVisible && (
-              <HeaderContainer
-                isFullscreen={isFullscreen}
-                isNightMode={shouldRenderAsNightMode}
-                isDataApp={false}
-              >
-                <DashboardHeader
-                  {...this.props}
+        <DashboardLoadingAndErrorWrapper
+          isFullHeight={isEditing || isSharing}
+          isFullscreen={isFullscreen}
+          isNightMode={shouldRenderAsNightMode}
+          loading={!dashboard}
+          error={error}
+        >
+          {() => (
+            <DashboardStyled>
+              {isHeaderVisible && (
+                <HeaderContainer
+                  isFullscreen={isFullscreen}
                   isNightMode={shouldRenderAsNightMode}
-                  onEditingChange={this.setEditing}
-                  setDashboardAttribute={this.setDashboardAttribute}
-                  addParameter={addParameter}
-                  parametersWidget={parametersWidget}
-                  onSharingClick={this.onSharingClick}
-                  showNewDashboardModal={this.onShowNewDashboardModal}
-                  saveAction={this.saveAction}
-                  onRevert={this.onRevert}
-                  onRefreshCache={this.onRefreshCache}
-                />
-
-                {shouldRenderParametersWidgetInEditMode && (
-                  <ParametersWidgetContainer
-                    data-testid="edit-dashboard-parameters-widget-container"
-                    isEditing={isEditing}
+                  isDataApp={false}
+                >
+                  <DashboardHeader
+                    {...this.props}
                     isNightMode={shouldRenderAsNightMode}
-                  >
-                    {parametersWidget}
-                  </ParametersWidgetContainer>
-                )}
-              </HeaderContainer>
-            )}
-            <DashboardLazyLoadContainer className="flex-full flex flex-column flex-basis-none">
-            <DashboardBody isEditingOrSharing={isEditing || isSharing}>
-              <ParametersAndCardsContainer
-                data-testid="dashboard-parameters-and-cards"
-                ref={element => (this.parametersAndCardsContainerRef = element)}
-              >
-                <div className={cx("TagWidgetContainer hove", shouldRenderAsNightMode ? "bg-transparent" : "bg-white")}>
-                  <div className="pl2 pr2" style={{ display: isEditing ? "none" : "flex" }}>
-                    {this.tagPanel({ shouldRenderAsNightMode })}
-                  </div>
-                  {shouldRenderParametersWidgetInViewMode && (
+                    onEditingChange={this.setEditing}
+                    setDashboardAttribute={this.setDashboardAttribute}
+                    addParameter={addParameter}
+                    parametersWidget={parametersWidget}
+                    onSharingClick={this.onSharingClick}
+                    showNewDashboardModal={this.onShowNewDashboardModal}
+                    saveAction={this.saveAction}
+                    onRevert={this.onRevert}
+                    onRefreshCache={this.onRefreshCache}
+                  />
+
+                  {shouldRenderParametersWidgetInEditMode && (
                     <ParametersWidgetContainer
-                      data-testid="dashboard-parameters-widget-container"
-                      ref={element => (this.parametersWidgetRef = element)}
-                      isNavbarOpen={isNavbarOpen}
-                      isSticky={isParametersWidgetSticky}
-                      topNav={embedOptions?.top_nav}
+                      data-testid="edit-dashboard-parameters-widget-container"
+                      isEditing={isEditing}
                       isNightMode={shouldRenderAsNightMode}
                     >
                       {parametersWidget}
                     </ParametersWidgetContainer>
                   )}
-                </div>
-
-                <CardsContainer
-                  addMarginTop={cardsContainerShouldHaveMarginTop}
-                >
-                  {dashboardHasCards(dashboard) ? (
-                    <DashboardGrid
-                      {...this.props}
-                      isNightMode={shouldRenderAsNightMode}
-                      onEditingChange={this.setEditing}
-                      hideWatermark={dashboard && dashboard.hideWatermark}
-                      navigateToNewCardFromDashboard={dashboard => {
-                        const user = this.props.user;
-                        const dashcard = dashboard && dashboard.dashcard;
-                        const isAdmin = user && user.is_superuser;
-                        const isOwner =
-                          user && user.id === get(dashcard, "creator.id");
-                        if (isAdmin || isOwner) {
-                          this.props.navigateToNewCardFromDashboard(
-                            dashboard,
-                          );
-                        } else {
-                          navigateToGuestQuery(dashboard, this.props);
-                        }
-                      }}
-                      chartStyle={chart_style}
-                    />
-                  ) : (
-                    <DashboardEmptyState
-                      isDataApp={false}
-                      isNightMode={shouldRenderAsNightMode}
-                      isEditing={isEditing}
-                      onToggleAddQuestionSidebar={() =>
-                        this.props.toggleSidebar(SIDEBAR_NAME.addQuestion)
-                      }
-                      {...this.props}
-                    />
-                  )}
-                </CardsContainer>
-              </ParametersAndCardsContainer>
-              <DashboardSidebars
-                {...this.props}
-                onCancel={this.onCancel}
-                setDashboardAttribute={this.setDashboardAttribute}
-              />
-            </DashboardBody>
-              {!isEditing && (
-                <div style={{ padding: "0 18px" }}>
-                  <DashboardAd
-                    dashboardId={this.state.id || this.props.dashboardId}
-                    isNightMode={shouldRenderAsNightMode}
-                  />
-                </div>
+                </HeaderContainer>
               )}
-            </DashboardLazyLoadContainer>
-          </DashboardStyled>
-        )}
-        <ShareModal
-          resource={shareModalResource}
-          onAfterChangePublicUuid={this.onAfterChangePublicUuid}
-          onClose={() => this.setState({ shareModalResource: {} })}
-        />
-        <DashboardCopyModal
-          isOpen={this.state.showDashboardCopyModal}
-          onClose={() => this.setState({ showDashboardCopyModal: null })}
-          dashboardId={this.props.dashboardId}
-          fromRoute={false}
-        />
-        {this.renderNewDashboardModal()}
-        {this.renderCancelModal()}
-      </DashboardLoadingAndErrorWrapper>
+              <DashboardLazyLoadContainer className="flex-full flex flex-column flex-basis-none">
+                <DashboardBody isEditingOrSharing={isEditing || isSharing}>
+                  <ParametersAndCardsContainer
+                    data-testid="dashboard-parameters-and-cards"
+                    ref={element =>
+                      (this.parametersAndCardsContainerRef = element)
+                    }
+                  >
+                    <div
+                      className={cx(
+                        "TagWidgetContainer hove",
+                        shouldRenderAsNightMode ? "bg-transparent" : "bg-white",
+                      )}
+                    >
+                      <div
+                        className="pl2 pr2"
+                        style={{ display: isEditing ? "none" : "flex" }}
+                      >
+                        {this.tagPanel({ shouldRenderAsNightMode })}
+                      </div>
+                      {shouldRenderParametersWidgetInViewMode && (
+                        <ParametersWidgetContainer
+                          data-testid="dashboard-parameters-widget-container"
+                          ref={element => (this.parametersWidgetRef = element)}
+                          isNavbarOpen={isNavbarOpen}
+                          isSticky={isParametersWidgetSticky}
+                          topNav={embedOptions?.top_nav}
+                          isNightMode={shouldRenderAsNightMode}
+                        >
+                          {parametersWidget}
+                        </ParametersWidgetContainer>
+                      )}
+                    </div>
+
+                    <CardsContainer
+                      addMarginTop={cardsContainerShouldHaveMarginTop}
+                    >
+                      {dashboardHasCards(dashboard) ? (
+                        <DashboardGrid
+                          {...this.props}
+                          isNightMode={shouldRenderAsNightMode}
+                          onEditingChange={this.setEditing}
+                          hideWatermark={dashboard && dashboard.hideWatermark}
+                          navigateToNewCardFromDashboard={dashboard => {
+                            const user = this.props.user;
+                            const dashcard = dashboard && dashboard.dashcard;
+                            const isAdmin = user && user.is_superuser;
+                            const isOwner =
+                              user && user.id === get(dashcard, "creator.id");
+                            if (isAdmin || isOwner) {
+                              this.props.navigateToNewCardFromDashboard(
+                                dashboard,
+                              );
+                            } else {
+                              navigateToGuestQuery(dashboard, this.props);
+                            }
+                          }}
+                          chartStyle={chart_style}
+                        />
+                      ) : (
+                        <DashboardEmptyState
+                          isDataApp={false}
+                          isNightMode={shouldRenderAsNightMode}
+                          isEditing={isEditing}
+                          onToggleAddQuestionSidebar={() =>
+                            this.props.toggleSidebar(SIDEBAR_NAME.addQuestion)
+                          }
+                          {...this.props}
+                        />
+                      )}
+                    </CardsContainer>
+                  </ParametersAndCardsContainer>
+                  <DashboardSidebars
+                    {...this.props}
+                    onCancel={this.onCancel}
+                    setDashboardAttribute={this.setDashboardAttribute}
+                  />
+                </DashboardBody>
+                {!isEditing && (
+                  <div style={{ padding: "0 18px" }}>
+                    <DashboardAd
+                      dashboardId={this.state.id || this.props.dashboardId}
+                      isNightMode={shouldRenderAsNightMode}
+                    />
+                  </div>
+                )}
+              </DashboardLazyLoadContainer>
+            </DashboardStyled>
+          )}
+          <ShareModal
+            resource={shareModalResource}
+            onAfterChangePublicUuid={this.onAfterChangePublicUuid}
+            onClose={() => this.setState({ shareModalResource: {} })}
+          />
+          <DashboardCopyModal
+            isOpen={this.state.showDashboardCopyModal}
+            onClose={() => this.setState({ showDashboardCopyModal: null })}
+            dashboardId={this.props.dashboardId}
+            fromRoute={false}
+          />
+          {this.renderNewDashboardModal()}
+          {this.renderCancelModal()}
+        </DashboardLoadingAndErrorWrapper>
       </>
     );
   }

@@ -485,6 +485,8 @@ class Visualization extends React.PureComponent {
       dashcard?.visualization_settings?.virtual_card?.display === "embed";
     const isTableau =
       dashcard?.visualization_settings?.virtual_card?.display === "tableau";
+    const isFilter =
+      dashcard?.visualization_settings?.virtual_card?.display === "filter";
     const isPublic = location.pathname.startsWith("/public"); // iframe 里面也是 work 的，true
     const isFga = location.pathname.startsWith("/growth");
     const isFgaTwitter = isFga && location.pathname.includes("/Twitter");
@@ -586,6 +588,7 @@ class Visualization extends React.PureComponent {
           !isVideo &&
           !isEmbed &&
           !isTableau &&
+          !isFilter &&
           !noResults && (
             <div className="waterMarkHome">
               <span />
@@ -655,7 +658,7 @@ class Visualization extends React.PureComponent {
                           margin: "0 auto",
                         }}
                       >
-                        {error}
+                        {error?.message}
                       </div>
                       {errorIcon !== "key" && <ErrorGuide cardId={cardId} />}
                     </div>

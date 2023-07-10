@@ -28,6 +28,7 @@ import Image from "./visualizations/Image";
 import Video from "./visualizations/Video";
 import Embed from "./visualizations/Embed";
 import Tableau from "./visualizations/Tableau";
+import Filter from "./visualizations/Filter";
 import RowRace from "./visualizations/RowRace";
 import LineRace from "./visualizations/LineRace";
 import Circle from "./visualizations/Circle";
@@ -70,6 +71,7 @@ export default function () {
   registerVisualization(Video);
   registerVisualization(Embed);
   registerVisualization(Tableau);
+  registerVisualization(Filter);
   registerVisualization(RowRace);
   registerVisualization(LineRace);
   registerVisualization(Circle);
