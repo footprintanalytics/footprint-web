@@ -1,16 +1,14 @@
 /* eslint-disable react/prop-types */
 import React, { Component } from "react";
-import { message } from "antd";
 
 import cx from "classnames";
 import { t } from "ttag";
 import Button from "metabase/core/components/Button";
 
+import LoadingSpinner from "metabase/components/LoadingSpinner/LoadingSpinner";
 import ParametersPopover from "metabase/dashboard/components/ParametersPopover";
 import TippyPopover from "metabase/components/Popover/TippyPopover";
-import { createAction, createThunkAction } from "metabase/lib/redux";
 import SyncedParametersList from "metabase/parameters/components/SyncedParametersList/SyncedParametersList";
-import { SHOW_ADD_PARAMETER_POPOVER } from "metabase/dashboard/actions";
 import { ParametersWidgetContainer } from "metabase/dashboard/components/Dashboard/Dashboard.styled";
 import { trackStructEvent } from "metabase/lib/analytics";
 import { getValuePopulatedParameters } from "metabase-lib/parameters/utils/parameter-values";
@@ -19,20 +17,16 @@ import styles from "./Text/Text.css";
 export default class Filter extends Component {
   constructor(props) {
     super(props);
-    if (props?.dashcard?.id < 1 && props?.dashboard?.id) {
-      this.saveChart(props);
-    }
     this.state = {
       text: "",
       fontSize: 1,
       isShowAddParameterPopover: false,
+      savingDashcardId: null,
     };
   }
 
   async saveChart(props) {
-    const hide = message.loading("Filter adding...", 0);
     const result = await props.saveDashboardAndCards?.(props?.dashboard?.id);
-    hide();
   }
 
   static uiName = "Filter";
@@ -192,7 +186,17 @@ export default class Filter extends Component {
       );
     };
 
-    if (isEditing) {
+    if (isEditing && dashboard?.id && dashcard?.id < 1) {
+      if (this.state.savingDashcardId !== dashcard?.id) {
+        this.setState({ ...this.state, savingDashcardId: dashcard?.id });
+        this.saveChart(this.props);
+      }
+      return (
+        <div>
+          <LoadingSpinner />
+        </div>
+      );
+    } else if (isEditing) {
       return (
         <div className={cx(className, styles.Text)}>
           {this.props.isPreviewing ? (
