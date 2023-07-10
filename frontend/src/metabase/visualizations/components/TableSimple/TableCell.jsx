@@ -1,5 +1,5 @@
 /* eslint-disable react/prop-types */
-import React, { useMemo } from "react";
+import React, { useEffect, useMemo } from "react";
 import cx from "classnames";
 
 import ExternalLink from "metabase/core/components/ExternalLink";
@@ -9,6 +9,9 @@ import {
   getTableCellClickedObject,
   getTableClickedObjectRowData,
   isColumnRightAligned,
+  isShowChart,
+  parseChart,
+  parseValue2ChartData,
 } from "metabase/visualizations/lib/table";
 import { getColumnExtent } from "metabase/visualizations/lib/utils";
 import { isID, isFK } from "metabase-lib/types/utils/isa";
@@ -125,6 +128,14 @@ function TableCell({
     [value, rowIndex, column, getCellBackgroundColor],
   );
 
+  useEffect(() => {
+    parseChart(
+      parseValue2ChartData(cellData),
+      columnSettings["view_as"],
+      `cell-${rowIndex}-${columnIndex}`,
+    );
+  }, [rowIndex, columnIndex, cellData, columnSettings]);
+
   const classNames = useMemo(
     () =>
       cx("fullscreen-normal-text fullscreen-night-text", {
@@ -141,14 +152,23 @@ function TableCell({
       backgroundColor={backgroundColor}
       isRightAligned={isColumnRightAligned(column)}
     >
-      <CellContent
-        className="cellData"
-        isClickable={isClickable}
-        onClick={isClickable ? onClick : undefined}
-        data-testid="cell-data"
-      >
-        {cellData}
-      </CellContent>
+      {isShowChart(columnSettings["view_as"]) ? (
+        <div className="w-full h-full flex flex-row justify-end">
+          <div
+            style={{ height: "100%", width: 15*parseValue2ChartData(cellData)?.length ,maxWidth: 250}}
+            id={`cell-${rowIndex}-${columnIndex}`}
+          />
+        </div>
+      ) : (
+        <CellContent
+          className="cellData"
+          isClickable={isClickable}
+          onClick={isClickable ? onClick : undefined}
+          data-testid="cell-data"
+        >
+          <>{cellData}</>
+        </CellContent>
+      )}
     </CellRoot>
   );
 }

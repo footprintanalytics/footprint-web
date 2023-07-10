@@ -1,5 +1,5 @@
 /* eslint-disable react/prop-types */
-import React, { Component } from "react";
+import React, { Component, useRef } from "react";
 import PropTypes from "prop-types";
 import ReactDOM from "react-dom";
 import { t } from "ttag";
@@ -22,6 +22,9 @@ import {
   getTableHeaderClickedObject,
   getTableClickedObjectRowData,
   isColumnRightAligned,
+  parseChart,
+  parseValue2ChartData,
+  isShowChart,
 } from "metabase/visualizations/lib/table";
 import { getColumnExtent } from "metabase/visualizations/lib/utils";
 import { getScrollBarSize } from "metabase/lib/dom";
@@ -48,7 +51,7 @@ import {
 const TRUNCATE_WIDTH = 780;
 
 const HEADER_HEIGHT = 36;
-const ROW_HEIGHT = 36;
+const ROW_HEIGHT = 42;
 const SIDEBAR_WIDTH = 38;
 
 const MIN_COLUMN_WIDTH = ROW_HEIGHT;
@@ -481,7 +484,7 @@ class TableInteractive extends Component {
   onKeyDown = event => {
     const detailEl = this.detailShortcutRef.current;
     if (!detailEl) {
-      return ;
+      return;
     }
     const visibleDetailButton =
       !!detailEl && Array.from(detailEl.classList).includes("show") && detailEl;
@@ -497,7 +500,6 @@ class TableInteractive extends Component {
     const { data, settings } = this.props;
     const { dragColIndex, showDetailShortcut } = this.state;
     const { rows, cols } = data;
-
     const column = cols[columnIndex];
     const row = rows[rowIndex];
     const value = row[columnIndex];
@@ -512,6 +514,8 @@ class TableInteractive extends Component {
         extent={getColumnExtent(data.cols, data.rows, columnIndex)}
         cellHeight={ROW_HEIGHT}
       />
+    ) : isShowChart(columnSettings["view_as"]) ? (
+      parseValue2ChartData(value)
     ) : (
       this.getCellFormattedValue(value, columnSettings, clicked)
       /* using formatValue instead of <Value> here for performance. The later wraps in an extra <span> */
@@ -577,7 +581,26 @@ class TableInteractive extends Component {
         }
         tabIndex="0"
       >
-        {this.props.renderTableCellWrapper(cellData)}
+        {isShowChart(columnSettings["view_as"]) ? (
+          <>
+            {cellData?.length > 0 ? (
+              <div
+                className="w-full h-full"
+                id={`cell-${rowIndex}-${columnIndex}`}
+              >
+                {parseChart(
+                  cellData,
+                  columnSettings["view_as"],
+                  `cell-${rowIndex}-${columnIndex}`,
+                )}
+              </div>
+            ) : (
+              <></>
+            )}
+          </>
+        ) : (
+          this.props.renderTableCellWrapper(cellData)
+        )}
         {isCollapsed && (
           <ExpandButton
             data-testid="expand-column"
@@ -796,7 +819,9 @@ class TableInteractive extends Component {
             disabled={this.props.clicked != null}
           >
             {renderTableHeaderWrapper(
-              <Ellipsified tooltip={columnTitle?.description??columnTitle?.title}>
+              <Ellipsified
+                tooltip={columnTitle?.description ?? columnTitle?.title}
+              >
                 {isSortable && isRightAligned && (
                   <Icon
                     className="Icon mr1"
@@ -961,7 +986,6 @@ class TableInteractive extends Component {
       className,
       scrollToColumn,
     } = this.props;
-
     if (!width || !height) {
       return <div className={className} />;
     }

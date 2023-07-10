@@ -27,6 +27,7 @@ import {
   isEmail,
   isImageURL,
   isAvatarURL,
+  isNumberArray,
 } from "metabase-lib/types/utils/isa";
 import { findColumnIndexForColumnSetting } from "metabase-lib/queries/utils/dataset";
 import * as Q_DEPRECATED from "metabase-lib/queries/utils";
@@ -259,11 +260,15 @@ export default class Table extends Component {
         title: t`Column description`,
         widget: "input",
         hint: "input a description for the column",
-        getDefault: '',
+        getDefault: "",
       },
       click_behavior: {},
     };
-    if (isNumber(column)) {
+    if (
+      isNumber(column) &&
+      settings["view_as"] !== "line_chart" &&
+      settings["view_as"] !== "bar_chart"
+    ) {
       settings["show_mini_bar"] = {
         title: t`Show a mini bar chart`,
         widget: "toggle",
@@ -281,6 +286,13 @@ export default class Table extends Component {
       defaultValue = "email_link";
       options.push({ name: t`Email link`, value: "email_link" });
     }
+
+    if (!column.semantic_type || isNumberArray(column)) {
+      defaultValue = "line_chart";
+      options.push({ name: t`Line Chart`, value: "line_chart" });
+      options.push({ name: t`Bar Chart`, value: "bar_chart" });
+    }
+
     if (!column.semantic_type || isImageURL(column) || isAvatarURL(column)) {
       defaultValue = "image";
       options.push({ name: t`Image`, value: "image" });
@@ -355,7 +367,6 @@ export default class Table extends Component {
         };
       },
     };
-
     return settings;
   };
 
@@ -419,8 +430,13 @@ export default class Table extends Component {
         .filter(columnIndex => columnIndex >= 0 && columnIndex < cols.length);
       this.setState({
         data: {
-          cols: columnIndexes.map(i =>{
-            return {...cols[i],description:columnSettings?.find(columnSetting => columnSetting.name === cols[i]?.name)?.description}
+          cols: columnIndexes.map(i => {
+            return {
+              ...cols[i],
+              description: columnSettings?.find(
+                columnSetting => columnSetting.name === cols[i]?.name,
+              )?.description,
+            };
           }),
           rows: rows.map(row => columnIndexes.map(i => row[i])),
         },
@@ -446,7 +462,7 @@ export default class Table extends Component {
       columnTitle =
         settings.column(column)["_column_title_full"] || formatColumn(column);
     }
-    return {title:columnTitle,description:column?.description};
+    return { title: columnTitle, description: column?.description };
   };
 
   render() {

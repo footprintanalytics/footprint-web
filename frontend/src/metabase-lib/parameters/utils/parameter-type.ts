@@ -6,7 +6,7 @@ import { FIELD_FILTER_PARAMETER_TYPES } from "metabase-lib/parameters/constants"
 export function getParameterType(parameter: Parameter | string) {
   return typeof parameter === "string"
     ? splitType(parameter)[0]
-    : parameter.sectionId || splitType(parameter)[0];
+    : parameter?.sectionId || splitType(parameter)[0];
 }
 
 export function getParameterSubType(parameter: Parameter) {
