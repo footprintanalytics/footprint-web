@@ -27,6 +27,7 @@ import ListViz from "./visualizations/List";
 import Image from "./visualizations/Image";
 import Video from "./visualizations/Video";
 import Embed from "./visualizations/Embed";
+import MultiEmbed from "./visualizations/MultiEmbed";
 import Tableau from "./visualizations/Tableau";
 import Filter from "./visualizations/Filter";
 import RowRace from "./visualizations/RowRace";
@@ -70,6 +71,7 @@ export default function () {
   registerVisualization(Image);
   registerVisualization(Video);
   registerVisualization(Embed);
+  registerVisualization(MultiEmbed);
   registerVisualization(Tableau);
   registerVisualization(Filter);
   registerVisualization(RowRace);

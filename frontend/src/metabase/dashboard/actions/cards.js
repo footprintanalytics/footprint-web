@@ -110,6 +110,8 @@ export const addFilterDashCardToDashboard = function ({ dashId }) {
 
   const dashcardOverrides = {
     card: virtualTextCard,
+    size_x: 6,
+    size_y: 1,
     visualization_settings: {
       virtual_card: virtualTextCard,
     },
@@ -157,6 +159,23 @@ export const addVideoDashCardToDashboard = function ({ dashId }) {
 export const addEmbedDashCardToDashboard = function ({ dashId }) {
   const virtualTextCard = createCard();
   virtualTextCard.display = "embed";
+  virtualTextCard.archived = false;
+
+  const dashcardOverrides = {
+    card: virtualTextCard,
+    visualization_settings: {
+      virtual_card: virtualTextCard,
+    },
+  };
+  return addDashCardToDashboard({
+    dashId: dashId,
+    dashcardOverrides: dashcardOverrides,
+  });
+};
+
+export const addMultiEmbedDashCardToDashboard = function ({ dashId }) {
+  const virtualTextCard = createCard();
+  virtualTextCard.display = "multi_embed";
   virtualTextCard.archived = false;
 
   const dashcardOverrides = {

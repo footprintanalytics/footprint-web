@@ -482,7 +482,7 @@ class Visualization extends React.PureComponent {
     const isVideo =
       dashcard?.visualization_settings?.virtual_card?.display === "video";
     const isEmbed =
-      dashcard?.visualization_settings?.virtual_card?.display === "embed";
+      dashcard?.visualization_settings?.virtual_card?.display === "embed"||dashcard?.visualization_settings?.virtual_card?.display === "multi_embed";
     const isTableau =
       dashcard?.visualization_settings?.virtual_card?.display === "tableau";
     const isFilter =
