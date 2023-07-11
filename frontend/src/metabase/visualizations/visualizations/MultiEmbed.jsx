@@ -12,12 +12,13 @@ import "./MultiEmbed.css";
 export default class MultiEmbed extends Component {
   constructor(props) {
     super(props);
-
+    const { text } = props.card?.visualization_settings;
+    const itemsTab = text ? this.parseText(text) : [];
     this.state = {
       text: "",
       fontSize: 1,
-      itemsTab: [],
-      activeKey: null,
+      itemsTab: itemsTab,
+      activeKey: itemsTab.length > 0 ? itemsTab[0].key : "",
       showAddModal: false,
     };
   }
@@ -71,10 +72,36 @@ export default class MultiEmbed extends Component {
     this.props.onUpdateVisualizationSettings({ text: text });
   }
 
+  parseText(text) {
+    if(!text) {return [];}
+    try {
+      let items = JSON.parse(text);
+      if (items?.length <= 0) {
+        return null;
+      }
+      items = items.map(item => {
+        return {
+          label: item.label,
+          key: item.key,
+          closable: true,
+          children: (
+            <ItemEmbed
+              className="w-full flex-full"
+              item={{ mediaUrl: item.url }}
+            />
+          ),
+        };
+      });
+      return items;
+    } catch (error) {
+      console.log("renderEmbed error", error);
+      return [];
+    }
+  }
+
   preventDragging = e => e.stopPropagation();
 
   onChange = newActiveKey => {
-    // setActiveKey(newActiveKey);
     this.setState({ ...this.state, activeKey: newActiveKey });
   };
 
@@ -124,38 +151,20 @@ export default class MultiEmbed extends Component {
     if (!settings.text) {
       return null;
     }
-    try {
-      let items = JSON.parse(settings.text);
-      if (items?.length <= 0) {
-        return null;
-      }
-      items = items.map(item => {
-        return {
-          label: item.label,
-          key: item.key,
-          closable: true,
-          children: (
-            <ItemEmbed
-              className="w-full flex-full"
-              item={{ mediaUrl: item.url }}
-            />
-          ),
-        };
-      });
-      return (
-        <div className="full flex-full flex flex-column h-full">
-          <Tabs
-            type="card"
-            className="w-full h-full"
-            onChange={this.onChange}
-            items={items}
-          />
-        </div>
-      );
-    } catch (error) {
-      console.log("renderEmbed error", error);
+    const items = this.parseText(settings.text);
+    if (items?.length <= 0) {
       return null;
     }
+    return (
+      <div className="full flex-full flex flex-column h-full">
+        <Tabs
+          type="card"
+          className="w-full h-full"
+          onChange={this.onChange}
+          items={items}
+        />
+      </div>
+    );
   };
 
   render() {
@@ -197,7 +206,6 @@ export default class MultiEmbed extends Component {
                 <Tabs
                   type="editable-card"
                   onChange={this.onChange}
-                  // addIcon = {<Button type='text' >Add new embed</Button>}
                   activeKey={this.state.activeKey}
                   onEdit={onEdit}
                   items={this.state.itemsTab}
