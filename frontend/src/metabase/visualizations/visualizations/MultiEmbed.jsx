@@ -1,13 +1,13 @@
 /* eslint-disable react/prop-types */
 import React, { Component } from "react";
+import { Button, Empty, Form, Input, Modal, Space, Tabs, message } from "antd";
 
 import cx from "classnames";
 import { t } from "ttag";
-
+import { slugify } from "metabase/lib/formatting";
 import ItemEmbed from "../../containers/dashboards/components/Recommendations/ItemEmbed";
 import styles from "./Text/Text.css";
 import "./MultiEmbed.css";
-import { Button, Empty, Modal, Tabs } from "antd";
 
 export default class MultiEmbed extends Component {
   constructor(props) {
@@ -16,8 +16,8 @@ export default class MultiEmbed extends Component {
     this.state = {
       text: "",
       fontSize: 1,
-      itemsTab: this.initialItems,
-      activeKey: "1",
+      itemsTab: [],
+      activeKey: null,
       showAddModal: false,
     };
   }
@@ -37,45 +37,7 @@ export default class MultiEmbed extends Component {
   static checkRenderable() {
     // text can always be rendered, nothing needed here
   }
-  initialItems = [
-    {
-      label: "Tab 1",
-      children: (
-        <ItemEmbed
-          className="w-full flex-full"
-          item={{
-            mediaUrl:
-              "https://www.footprint.network/public/dashboard/Test-fliter-fp-be3285ec-2f53-48ce-9f2f-62fbee115eba?greater_than_or_equal_to=100&series_text=hello%20world&text_starts_with=0x",
-          }}
-        />
-      ),
-      key: "1",
-    },
-    {
-      label: "Tab 2",
-      children: (
-        <ItemEmbed
-          className="w-full flex-full"
-          item={{
-            mediaUrl:
-              "https://www.footprint.network/@alpha/Test-fliter?greater_than_or_equal_to=100&series_text=hello%20world&text_starts_with=0x",
-          }}
-        />
-      ),
-      key: "2",
-    },
-    {
-      label: "Tab 3",
-      children: (
-        <ItemEmbed
-          className="w-full flex-full"
-          item={{ mediaUrl: "https://huaban.com/" }}
-        />
-      ),
-      key: "3",
-      closable: true,
-    },
-  ];
+
   static settings = {
     "card.title": {
       dashboard: false,
@@ -96,7 +58,16 @@ export default class MultiEmbed extends Component {
     },
   };
 
-  handleTextChange(text) {
+  handleTextChange(newPanes) {
+    const text = JSON.stringify(
+      newPanes.map(item => {
+        return {
+          label: item.label,
+          key: item.key,
+          url: item.children.props.item.mediaUrl,
+        };
+      }),
+    );
     this.props.onUpdateVisualizationSettings({ text: text });
   }
 
@@ -106,6 +77,7 @@ export default class MultiEmbed extends Component {
     // setActiveKey(newActiveKey);
     this.setState({ ...this.state, activeKey: newActiveKey });
   };
+
   remove = targetKey => {
     let newActiveKey = this.state.activeKey;
     let lastIndex = -1;
@@ -122,67 +94,98 @@ export default class MultiEmbed extends Component {
         newActiveKey = newPanes[0].key;
       }
     }
-    console.log("remove", newActiveKey, newPanes);
+    this.handleTextChange(newPanes);
     this.setState({
       ...this.state,
       activeKey: newActiveKey,
       itemsTab: newPanes,
     });
-    // setItems(newPanes);
-    // setActiveKey(newActiveKey);
   };
-  add = () => {
-    const newActiveKey = `newTab`;
+
+  add = (title, link) => {
+    const newActiveKey = `${slugify(title)}-${Date.now()}`;
     const newPanes = [...this.state.itemsTab];
     newPanes.push({
-      label: "New Tab",
-      children: <div> {"Content of new Tab"}</div>,
+      label: title,
+      children: (
+        <ItemEmbed className="w-full flex-full" item={{ mediaUrl: link }} />
+      ),
       key: newActiveKey,
     });
-    // setItems(newPanes);
-    // setActiveKey(newActiveKey);
-    console.log("add", newActiveKey, newPanes);
+    this.handleTextChange(newPanes);
     this.setState({
       ...this.state,
       activeKey: newActiveKey,
       itemsTab: newPanes,
     });
   };
+
   renderEmbed = ({ settings }) => {
-    // if (!settings.text) {
-    //   return null;
-    // }
-    // return <ItemEmbed item={{ mediaUrl: settings.text }} />;
-    return (
-      <div className="full flex-full flex flex-column h-full">
-        <Tabs
-          type="card"
-          className="w-full h-full"
-          onChange={this.onChange}
-          items={this.state.itemsTab}
-        />
-      </div>
-    );
+    if (!settings.text) {
+      return null;
+    }
+    try {
+      let items = JSON.parse(settings.text);
+      if (items?.length <= 0) {
+        return null;
+      }
+      items = items.map(item => {
+        return {
+          label: item.label,
+          key: item.key,
+          closable: true,
+          children: (
+            <ItemEmbed
+              className="w-full flex-full"
+              item={{ mediaUrl: item.url }}
+            />
+          ),
+        };
+      });
+      return (
+        <div className="full flex-full flex flex-column h-full">
+          <Tabs
+            type="card"
+            className="w-full h-full"
+            onChange={this.onChange}
+            items={items}
+          />
+        </div>
+      );
+    } catch (error) {
+      console.log("renderEmbed error", error);
+      return null;
+    }
   };
 
   render() {
     const { className, settings, isEditing } = this.props;
-    console.log("render", this.state);
     const onEdit = (
       targetKey,
       action, //'add' | 'remove'
     ) => {
-      console.log("onEdit", targetKey, action);
       if (action === "add") {
-        // this.add();
         this.setState({ ...this.state, showAddModal: true });
       } else {
         this.remove(targetKey);
       }
     };
+
+    const onFinish = values => {
+      this.add(values.title, values.url);
+      this.setState({ ...this.state, showAddModal: false });
+    };
+
+    const onFinishFailed = () => {
+      message.error("Submit failed!");
+    };
+
     if (isEditing) {
       return (
-        <div className={cx(className, styles.Text, "MultiEmbed")}>
+        <div
+          className={cx(className, styles.Text, "MultiEmbed")}
+          style={{ pointerEvents: "all" }}
+        >
           {this.props.isPreviewing ? (
             <React.Fragment>{this.renderEmbed({ settings })}</React.Fragment>
           ) : (
@@ -217,30 +220,61 @@ export default class MultiEmbed extends Component {
                 title="Add new embed"
                 centered
                 open={this.state.showAddModal}
-                onOk={() => {
-                  this.setState({ ...this.state, showAddModal: false });
-                }}
+                footer={null}
                 onCancel={() => {
                   this.setState({ ...this.state, showAddModal: false });
                 }}
               >
-                <p>some contents...</p>
-                <p>some contents...</p>
-                <p>some contents...</p>
+                <Form
+                  layout="vertical"
+                  onMouseDown={this.preventDragging}
+                  onFinish={onFinish}
+                  onFinishFailed={onFinishFailed}
+                  autoComplete="off"
+                >
+                  <Form.Item
+                    label="Title"
+                    name="title"
+                    className=" mt3"
+                    rules={[{ required: true }]}
+                  >
+                    <Input
+                      placeholder="Please enter the title of the embedded website."
+                      allowClear
+                    />
+                  </Form.Item>
+                  <Form.Item
+                    name="url"
+                    className=" mb3"
+                    label="URL"
+                    rules={[
+                      { required: true },
+                      { type: "url", warningOnly: true },
+                    ]}
+                  >
+                    <Input
+                      placeholder="Please provide the url to the embedded website."
+                      allowClear
+                    />
+                  </Form.Item>
+                  <Form.Item>
+                    <div className="flex flex-row-reverse w-full items-center">
+                      <Button type="primary" htmlType="submit">
+                        Comfirm
+                      </Button>
+                      <Button
+                        htmlType="button"
+                        className="mr2"
+                        onClick={() => {
+                          this.setState({ ...this.state, showAddModal: false });
+                        }}
+                      >
+                        Cancel
+                      </Button>
+                    </div>
+                  </Form.Item>
+                </Form>
               </Modal>
-              {/* <textarea
-                className={cx(
-                  "full flex-full flex flex-column bg-light bordered drag-disabled",
-                  styles["text-card-textarea"],
-                )}
-                name="text"
-                placeholder={t`Type or paste website url here, tableau public url are supported now, e.g. https://public.tableau.com/views/your-tableau-view-url`}
-                value={settings.text}
-                onChange={e => this.handleTextChange(e.target.value)}
-                // Prevents text cards from dragging when you actually want to select text
-                // See: https://github.com/metabase/metabase/issues/17039
-                onMouseDown={this.preventDragging}
-              /> */}
             </div>
           )}
         </div>

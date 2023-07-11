@@ -5,6 +5,7 @@ import {
 
 import ActionViz from "metabase/writeback/components/ActionViz";
 
+import DoubleScalar from "metabase/visualizations/visualizations/DoubleScalar";
 import Scalar from "./visualizations/Scalar";
 import SmartScalar from "./visualizations/SmartScalar";
 import Progress from "./visualizations/Progress";
@@ -40,7 +41,6 @@ import Rose from "./visualizations/Rose";
 import NestedPies from "./visualizations/NestedPies";
 import BarStack from "./visualizations/BarStack";
 import Bubble from "./visualizations/Bubble";
-import DoubleScalar from "metabase/visualizations/visualizations/DoubleScalar";
 import Graph from "./visualizations/Graph";
 import Sankey from "./visualizations/Sankey";
 import FGATable from "./visualizations/FGATable";
