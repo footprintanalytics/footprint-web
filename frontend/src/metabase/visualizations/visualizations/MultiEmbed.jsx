@@ -83,6 +83,7 @@ export default class MultiEmbed extends Component {
         return {
           label: item.label,
           key: item.key,
+          url: item.url,
           closable: true,
           children: (
             <ItemEmbed

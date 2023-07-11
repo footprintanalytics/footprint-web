@@ -110,8 +110,6 @@ export const addFilterDashCardToDashboard = function ({ dashId }) {
 
   const dashcardOverrides = {
     card: virtualTextCard,
-    size_x: 6,
-    size_y: 1,
     visualization_settings: {
       virtual_card: virtualTextCard,
     },

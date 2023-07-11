@@ -12,6 +12,9 @@ import {
   FileTextOutlined,
   FileImageOutlined,
   YoutubeOutlined,
+  DotChartOutlined,
+  AppstoreOutlined ,
+  AppstoreAddOutlined,
   FilterOutlined,
   CloseOutlined,
 } from "@ant-design/icons";
@@ -101,7 +104,7 @@ export const AddToolPopover = props => {
                 Add video
               </Button>
               <Button
-                icon={<YoutubeOutlined />}
+                icon={<AppstoreOutlined />}
                 type="dashed"
                 onClick={() => {
                   props.addEmbedDashCardToDashboard({ dashId });
@@ -111,7 +114,7 @@ export const AddToolPopover = props => {
                 Add embed
               </Button>
               <Button
-                icon={<YoutubeOutlined />}
+                icon={<AppstoreAddOutlined />}
                 type="dashed"
                 onClick={() => {
                   props.addMultiEmbedDashCardToDashboard({ dashId });
@@ -121,7 +124,7 @@ export const AddToolPopover = props => {
                 Add multi embed
               </Button>
               <Button
-                icon={<YoutubeOutlined />}
+                icon={<DotChartOutlined />}
                 type="dashed"
                 onClick={() => {
                   props.addTableauDashCardToDashboard({ dashId });
