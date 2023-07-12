@@ -70,17 +70,17 @@ const AboutDemo = () => {
       render: (
         <div className="flex flex-column align-center">
           <AboutImage
-            src={getOssUrl("home-v2/img_demo_studio_1.png")}
+            src={getOssUrl("home-v2/img_demo_studio_1.png?1=1")}
             alt={"studio1"}
           />
           <div className="mt2" />
           <AboutImage
-            src={getOssUrl("home-v2/img_demo_studio_2.png")}
+            src={getOssUrl("home-v2/img_demo_studio_2.png?1=1")}
             alt={"studio1"}
           />
           <div className="mt2" />
           <AboutImage
-            src={getOssUrl("home-v2/img_demo_studio_3.png")}
+            src={getOssUrl("home-v2/img_demo_studio_3.png?1=1")}
             alt={"studio1"}
           />
         </div>
