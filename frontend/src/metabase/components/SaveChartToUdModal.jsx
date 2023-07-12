@@ -59,7 +59,7 @@ const SaveChartToUdModal = ({
     setBelongType(data?.belongType || "public");
   }, [data?.belongType]);
   useEffect(() => {
-    const cron = get(crons, '[0].cronLabel') || "daily"
+    const cron = get(crons, '[0].cronLabel') || "never"
     setCronLabel(cron);
     form?.setFieldsValue({
       cron: cron,
@@ -274,6 +274,7 @@ const SaveChartToUdModal = ({
                         { value: 'every 12 hours', label: 'Every 12 hours' },
                         { value: 'every 8 hours', label: 'Every 8 hours' },
                         { value: 'every 4 hours', label: 'Every 4 hours' },
+                        { value: 'never', label: 'Never' },
                       ]}
                     />
                   </Form.Item>
@@ -296,21 +297,6 @@ const SaveChartToUdModal = ({
                   >
                     {checkMutate.isLoading ? "Checking..." : (hasSavedToUd ? "Update" : "Save")}
                   </Button>
-                  {showDisableUpdate && chartCronLabel && (
-                    <Button
-                      style={{
-                        width: 180,
-                        height: 40,
-                        fontSize: 14,
-                        marginLeft: "10px",
-                      }}
-                      loading={stopLoading}
-                      onClick={() => {
-                      stopAction()
-                    }}>
-                      Disable Data Updates
-                    </Button>
-                  )}
                 </div>
               </div>
             )}
