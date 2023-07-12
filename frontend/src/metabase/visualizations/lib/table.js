@@ -134,6 +134,11 @@ export function parseChart(datas, chartType, cellId) {
         bottom: 4,
       },
     ],
+    tooltip:{
+      show:true,
+      trigger:'item',
+      positon:'bottom',
+    },
     series: [
       {
         data: datas,
@@ -154,7 +159,15 @@ export function parseValue2ChartData(str) {
   try {
     const arr = JSON.parse(str);
     if (Array.isArray(arr)) {
-      return arr.map(Number);
+      let datas = arr.map(Number)
+      if (datas.length < 7) {
+        datas = datas.reverse()
+        for (let i = 0; i < 7 - datas.length; i++) {
+          datas.push(0)
+        }
+        datas = datas.reverse()
+      }
+      return datas;
     } else {
       return [];
     }

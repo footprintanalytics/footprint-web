@@ -155,7 +155,7 @@ function TableCell({
       {isShowChart(columnSettings["view_as"]) ? (
         <div className="w-full h-full flex flex-row justify-end">
           <div
-            style={{ height: "100%", width: 15*parseValue2ChartData(cellData)?.length ,maxWidth: 250}}
+            style={{ height: "100%", width: 15*parseValue2ChartData(cellData)?.length,minWidth:120,maxWidth: 250}}
             id={`cell-${rowIndex}-${columnIndex}`}
           />
         </div>
