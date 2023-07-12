@@ -91,6 +91,7 @@ class DashboardHeader extends Component {
     addImageDashCardToDashboard: PropTypes.func.isRequired,
     addVideoDashCardToDashboard: PropTypes.func.isRequired,
     addEmbedDashCardToDashboard: PropTypes.func.isRequired,
+    addMultiEmbedDashCardToDashboard: PropTypes.func.isRequired,
     addActionDashCardToDashboard: PropTypes.func.isRequired,
     fetchDashboard: PropTypes.func.isRequired,
     saveDashboardAndCards: PropTypes.func.isRequired,
@@ -139,6 +140,10 @@ class DashboardHeader extends Component {
 
   onAddEmbedBox() {
     this.props.addEmbedDashCardToDashboard({ dashId: this.props.dashboard.id });
+  }
+
+  onAddMultiEmbedBox() {
+    this.props.addMultiEmbedDashCardToDashboard({ dashId: this.props.dashboard.id });
   }
 
   onAddTableauBox() {
@@ -605,7 +610,6 @@ class DashboardHeader extends Component {
     if (!isEditing && !isEmpty) {
       // const extraButtonClassNames =
       //   "bg-brand-hover text-white-hover py2 px3 text-bold block cursor-pointer";
-
       buttons.push(
         <Tooltip tooltip="Embed Widget">
           <Button
@@ -710,6 +714,12 @@ class DashboardHeader extends Component {
         type: "Embed",
         onclick: () => {
           this.onAddEmbedBox();
+        },
+      },
+      {
+        type: "Tab Bar",
+        onclick: () => {
+          this.onAddMultiEmbedBox();
         },
       },
       {

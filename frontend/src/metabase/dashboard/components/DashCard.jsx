@@ -129,6 +129,7 @@ class DashCard extends Component {
         (mainCard.display === "text" ||
           mainCard.display === "image" ||
           mainCard.display === "embed" ||
+          mainCard.display === "multi_embed" ||
           mainCard.display === "tableau" ||
           mainCard.display === "filter" ||
           mainCard.display === "video"))
@@ -239,6 +240,7 @@ class DashCard extends Component {
       display !== "text" &&
       display !== "image" &&
       display !== "embed" &&
+      display !== "multi_embed" &&
       display !== "tableau" &&
       display !== "filter" &&
       display !== "video";
@@ -287,6 +289,7 @@ class DashCard extends Component {
     const isImageDisplay = mainCard.display === "image";
     const isVideoDisplay = mainCard.display === "video";
     const isEmbedDisplay = mainCard.display === "embed";
+    const isMultiEmbedDisplay = mainCard.display === "multi_embed";
     const isTableauDisplay = mainCard.display === "tableau";
     const isFilterDisplay = mainCard.display === "filter";
 
@@ -322,7 +325,7 @@ class DashCard extends Component {
       || window.location.pathname.startsWith("/data-api/statistics")
     ;
 
-    const singleDisplay = isTextDisplay || isImageDisplay || isVideoDisplay || isEmbedDisplay || isTableauDisplay;
+    const singleDisplay = isTextDisplay || isImageDisplay || isVideoDisplay || isEmbedDisplay || isMultiEmbedDisplay || isTableauDisplay;
 
     const hideDuplicate = singleDisplay || isPublic;
 
@@ -353,11 +356,12 @@ class DashCard extends Component {
       isImageDisplay ||
       isVideoDisplay ||
       isEmbedDisplay ||
+      isMultiEmbedDisplay ||
       isTableauDisplay ||
       isFilterDisplay;
     const includeRealtimeTable = isRealtimeChart(dashcard, realtimeList);
     const isRealtimeUser = user?.id === 20103;
-    const showReadTimeMode = !isPublic && !isTextDisplay && !isImageDisplay && !isVideoDisplay && !isEmbedDisplay && !isTableauDisplay && result && !result.error
+    const showReadTimeMode = !isPublic && !isTextDisplay && !isImageDisplay && !isVideoDisplay &&!isMultiEmbedDisplay && !isEmbedDisplay && !isTableauDisplay && result && !result.error
       && includeRealtimeTable
       && isRealtimeUser;
 
