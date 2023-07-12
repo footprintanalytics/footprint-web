@@ -203,15 +203,17 @@ const SaveChartToUdModal = ({
                   </h3>
                 </div>
               )}
-              <div className="ud-chart__form-item ml2">
-                <div>Update frequency</div>
-                <h3 className="text-left bg-gray">
-                  {capitalize(chartCronLabel) || "Never"}
-                  <Popover className="cursor-pointer" content={getCronMappingTint(chartCronLabel)} >
-                    <Icon name="info_outline" className="mx1" />
-                  </Popover>
-                </h3>
-              </div>
+              {chartConfig?.targetTableName && (
+                <div className="ud-chart__form-item ml2">
+                  <div>Update frequency</div>
+                  <h3 className="text-left bg-gray">
+                    {capitalize(chartCronLabel) || "Never"}
+                    <Popover className="cursor-pointer" content={getCronMappingTint(chartCronLabel)} >
+                      <Icon name="info_outline" className="mx1" />
+                    </Popover>
+                  </h3>
+                </div>
+              )}
               {data?.newestLog?.sql && (
                 <Popover className="ml4 cursor-pointer" content={<Code value={data?.newestLog?.sql} marginTop={0}/>} title="SQL" overlayStyle={{ width: 600, maxHeight: 300, padding: "12px 0" }}>
                   <div>SQL</div>
