@@ -30,6 +30,7 @@ const SaveChartToUdModal = ({
   enableSave = true,
   setNeedPermissionModal,
 }) => {
+  const [form] = Form.useForm();
   const isPaidUser = user && user.vipInfo && user.vipInfo.type !== "free";
   const [loading, setLoading] = useState(false);
   const [stopLoading, setStopLoading] = useState(false);
@@ -58,7 +59,11 @@ const SaveChartToUdModal = ({
     setBelongType(data?.belongType || "public");
   }, [data?.belongType]);
   useEffect(() => {
-    setCronLabel(get(crons, '[0].cronLabel') || "daily");
+    const cron = get(crons, '[0].cronLabel') || "daily"
+    setCronLabel(cron);
+    form?.setFieldsValue({
+      cron: cron,
+    });
   }, [crons]);
 
   const callbackTime = useCallback(
@@ -80,7 +85,6 @@ const SaveChartToUdModal = ({
     checkMutate.mutate({ tableName: debouncedTableName, tableType: "chart", cardId: cardId });
   }, [debouncedTableName, hasSavedToUd]);
   const onSave = async (data) => {
-    console.log("data", data)
     trackStructEvent("SaveChartToUdModal onSave")
     if (!enableSave) {
       message.info("Do not support sql with parameters, please remove the parameters")
@@ -139,7 +143,6 @@ const SaveChartToUdModal = ({
       "every 8 hours": "Run the task three times daily at 12:00 AM, 8:00 AM, and 4:00 PM UTC",
       "every 4 hours": "Run the task four times daily at 12:00 AM, 4:00 AM, 8:00 AM, 12:00 PM, 4:00 PM and 8:00 PM UTC",
     }
-    console.log("chartCronLabel", chartCronLabel)
     return data[chartCronLabel] || "Never run the update task"
   }
 
@@ -169,6 +172,7 @@ const SaveChartToUdModal = ({
         <Skeleton active />
       ) : (
         <Form
+          form={form}
           layout="vertical"
           name="control-ref"
           onFinish={onSave}
