@@ -332,7 +332,7 @@ export default class MultiEmbed extends Component {
                       name="url"
                       className=" mb3"
                       label="URL"
-                      tooltip="If you want to embed a dashboard, please provide the url of public embed in share,such as: https://www.footprint.network/public/dashboard/..."
+                      tooltip="If you would like to embed a dashboard, please provide the URL of the publicly shared embed,such as: https://www.footprint.network/public/dashboard/..."
                       rules={[
                         { required: true },
                         { type: "url", warningOnly: true },
