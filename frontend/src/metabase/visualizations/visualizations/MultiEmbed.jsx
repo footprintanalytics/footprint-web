@@ -8,6 +8,7 @@ import { slugify } from "metabase/lib/formatting";
 import ItemEmbed from "../../containers/dashboards/components/Recommendations/ItemEmbed";
 import styles from "./Text/Text.css";
 import "./MultiEmbed.css";
+import { json } from "d3";
 
 export default class MultiEmbed extends Component {
   constructor(props) {
@@ -20,6 +21,7 @@ export default class MultiEmbed extends Component {
       itemsTab: itemsTab,
       activeKey: itemsTab.length > 0 ? itemsTab[0].key : "",
       showAddModal: false,
+      showConfigModal: false,
     };
   }
 
@@ -73,7 +75,9 @@ export default class MultiEmbed extends Component {
   }
 
   parseText(text) {
-    if(!text) {return [];}
+    if (!text) {
+      return [];
+    }
     try {
       let items = JSON.parse(text);
       if (items?.length <= 0) {
@@ -148,6 +152,21 @@ export default class MultiEmbed extends Component {
     });
   };
 
+  getConfigJson = newPanes => {
+    const text = JSON.stringify(
+      newPanes.map(item => {
+        return {
+          label: item.label,
+          // key: item.key,
+          url: item.children.props.item.mediaUrl,
+        };
+      }),
+      null,
+      2,
+    );
+    return text;
+  };
+
   renderEmbed = ({ settings }) => {
     if (!settings.text) {
       return null;
@@ -186,8 +205,49 @@ export default class MultiEmbed extends Component {
       this.setState({ ...this.state, showAddModal: false });
     };
 
+    const onEditConfigFinish = values => {
+      const newPanes = [];
+      JSON.parse(values.config)?.forEach(item => {
+        const newActiveKey = `${slugify(item.label)}-${Date.now()}`;
+        newPanes.push({
+          label: item.label,
+          children: (
+            <ItemEmbed
+              className="w-full flex-full"
+              item={{ mediaUrl: item.url }}
+            />
+          ),
+          key: newActiveKey,
+        });
+      });
+      this.handleTextChange(newPanes);
+      this.setState({
+        ...this.state,
+        activeKey: newPanes[0]?.key ?? null,
+        itemsTab: newPanes,
+        showConfigModal: false,
+      });
+    };
+
     const onFinishFailed = () => {
       message.error("Submit failed!");
+    };
+
+    const validateJsonString = (_, value) => {
+      try {
+        const obj = JSON.parse(value);
+        if (!Array.isArray(obj)) {
+          return Promise.reject("Please enter a valid JSON string: Object should be Array");
+        }
+        obj.forEach(item => {
+          if (!item.label || !item.url) {
+            return Promise.reject("Please enter a valid JSON string: Object item should have label and url");
+          }
+        });
+      } catch (error) {
+        return Promise.reject("Please enter a valid JSON string");
+      }
+      return Promise.resolve();
     };
 
     if (isEditing) {
@@ -206,6 +266,16 @@ export default class MultiEmbed extends Component {
               {this.state.itemsTab?.length > 0 ? (
                 <Tabs
                   type="editable-card"
+                  tabBarExtraContent={
+                    <Button
+                      type="link"
+                      onClick={() =>
+                        this.setState({ ...this.state, showConfigModal: true })
+                      }
+                    >
+                      Advance config
+                    </Button>
+                  }
                   onChange={this.onChange}
                   activeKey={this.state.activeKey}
                   onEdit={onEdit}
@@ -225,65 +295,127 @@ export default class MultiEmbed extends Component {
                   </Empty>
                 </div>
               )}
-              <Modal
-                title="Add new embed"
-                centered
-                open={this.state.showAddModal}
-                footer={null}
-                onCancel={() => {
-                  this.setState({ ...this.state, showAddModal: false });
-                }}
-              >
-                <Form
-                  layout="vertical"
-                  onMouseDown={this.preventDragging}
-                  onFinish={onFinish}
-                  onFinishFailed={onFinishFailed}
-                  autoComplete="off"
+              {this.state.showAddModal && (
+                <Modal
+                  title="Add new embed"
+                  centered
+                  open={this.state.showAddModal}
+                  footer={null}
+                  onCancel={() => {
+                    this.setState({ ...this.state, showAddModal: false });
+                  }}
                 >
-                  <Form.Item
-                    label="Title"
-                    name="title"
-                    className=" mt3"
-                    rules={[{ required: true }]}
+                  <Form
+                    layout="vertical"
+                    onMouseDown={this.preventDragging}
+                    onFinish={onFinish}
+                    onFinishFailed={onFinishFailed}
+                    autoComplete="off"
                   >
-                    <Input
-                      placeholder="Please enter the title of the embedded website."
-                      allowClear
-                    />
-                  </Form.Item>
-                  <Form.Item
-                    name="url"
-                    className=" mb3"
-                    label="URL"
-                    rules={[
-                      { required: true },
-                      { type: "url", warningOnly: true },
-                    ]}
+                    <Form.Item
+                      label="Title"
+                      name="title"
+                      className=" mt3"
+                      rules={[{ required: true }]}
+                    >
+                      <Input
+                        placeholder="Please enter the title of the embedded website."
+                        allowClear
+                      />
+                    </Form.Item>
+                    <Form.Item
+                      name="url"
+                      className=" mb3"
+                      label="URL"
+                      rules={[
+                        { required: true },
+                        { type: "url", warningOnly: true },
+                      ]}
+                    >
+                      <Input
+                        placeholder="Please provide the url to the embedded website."
+                        allowClear
+                      />
+                    </Form.Item>
+                    <Form.Item>
+                      <div className="flex flex-row-reverse w-full items-center">
+                        <Button type="primary" htmlType="submit">
+                          Comfirm
+                        </Button>
+                        <Button
+                          htmlType="button"
+                          className="mr2"
+                          onClick={() => {
+                            this.setState({
+                              ...this.state,
+                              showAddModal: false,
+                            });
+                          }}
+                        >
+                          Cancel
+                        </Button>
+                      </div>
+                    </Form.Item>
+                  </Form>
+                </Modal>
+              )}
+              {this.state.showConfigModal && (
+                <Modal
+                  title="Edit advance config"
+                  centered
+                  open={this.state.showConfigModal}
+                  footer={null}
+                  onCancel={() => {
+                    this.setState({ ...this.state, showConfigModal: false });
+                  }}
+                >
+                  <Form
+                    layout="vertical"
+                    onMouseDown={this.preventDragging}
+                    onFinish={onEditConfigFinish}
+                    onFinishFailed={onFinishFailed}
+                    initialValues={{
+                      config: this.getConfigJson(this.state.itemsTab),
+                    }}
+                    autoComplete="off"
                   >
-                    <Input
-                      placeholder="Please provide the url to the embedded website."
-                      allowClear
-                    />
-                  </Form.Item>
-                  <Form.Item>
-                    <div className="flex flex-row-reverse w-full items-center">
-                      <Button type="primary" htmlType="submit">
-                        Comfirm
-                      </Button>
-                      <Button
-                        htmlType="button"
-                        className="mr2"
-                        onClick={() => {
-                          this.setState({ ...this.state, showAddModal: false });
-                        }}
-                      >
-                        Cancel
-                      </Button>
-                    </div>
-                  </Form.Item>
-                </Form>
-              </Modal>
+                    <Form.Item
+                      label="Config Json"
+                      name="config"
+                      className="mt3"
+                      rules={[
+                        { required: true },
+                        { validator: validateJsonString },
+                      ]}
+                    >
+                      <Input.TextArea
+                        placeholder="Please enter the config json of the embedded website."
+                        allowClear
+                        autoSize={{ minRows: 6, maxRows: 14 }}
+                      />
+                    </Form.Item>
+                    <Form.Item>
+                      <div className="flex flex-row-reverse w-full items-center">
+                        <Button type="primary" htmlType="submit">
+                          Save
+                        </Button>
+                        <Button
+                          htmlType="button"
+                          className="mr2"
+                          onClick={() => {
+                            this.setState({
+                              ...this.state,
+                              showConfigModal: false,
+                            });
+                          }}
+                        >
+                          Cancel
+                        </Button>
+                      </div>
+                    </Form.Item>
+                  </Form>
+                </Modal>
+              )}
             </div>
           )}
         </div>

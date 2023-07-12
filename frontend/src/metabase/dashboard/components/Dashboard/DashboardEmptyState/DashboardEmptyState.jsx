@@ -11,6 +11,7 @@ import {
   LineChartOutlined,
   FileTextOutlined,
   FileImageOutlined,
+  InsertRowAboveOutlined,
   YoutubeOutlined,
   DotChartOutlined,
   AppstoreOutlined ,
@@ -114,14 +115,14 @@ export const AddToolPopover = props => {
                 Add embed
               </Button>
               <Button
-                icon={<AppstoreAddOutlined />}
+                icon={<InsertRowAboveOutlined />}
                 type="dashed"
                 onClick={() => {
                   props.addMultiEmbedDashCardToDashboard({ dashId });
-                  trackStructEvent("Add Tooltip", "Add multi embed");
+                  trackStructEvent("Add Tooltip", "Add tab bar");
                 }}
               >
-                Add multi embed
+                Add tab bar
               </Button>
               <Button
                 icon={<DotChartOutlined />}

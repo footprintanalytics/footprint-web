@@ -717,7 +717,7 @@ class DashboardHeader extends Component {
         },
       },
       {
-        type: "Multi Embed",
+        type: "Tab Bar",
         onclick: () => {
           this.onAddMultiEmbedBox();
         },
