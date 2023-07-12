@@ -171,6 +171,23 @@ export const addEmbedDashCardToDashboard = function ({ dashId }) {
   });
 };
 
+export const addMultiEmbedDashCardToDashboard = function ({ dashId }) {
+  const virtualTextCard = createCard();
+  virtualTextCard.display = "multi_embed";
+  virtualTextCard.archived = false;
+
+  const dashcardOverrides = {
+    card: virtualTextCard,
+    visualization_settings: {
+      virtual_card: virtualTextCard,
+    },
+  };
+  return addDashCardToDashboard({
+    dashId: dashId,
+    dashcardOverrides: dashcardOverrides,
+  });
+};
+
 export const addTableauDashCardToDashboard = function ({ dashId }) {
   const virtualTextCard = createCard();
   virtualTextCard.display = "tableau";

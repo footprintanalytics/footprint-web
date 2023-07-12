@@ -11,7 +11,7 @@ const ItemEmbed = ({ item }) => {
         src={item.mediaUrl}
         frameBorder="0"
         allowFullScreen
-        scrolling="no"
+        // scrolling="no"
       />
       <ItemCommon url={item.url} name={item.name} target="_blank" />
     </>
