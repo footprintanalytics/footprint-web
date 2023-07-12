@@ -52,6 +52,7 @@ const SaveChartToUdModal = ({
   const checkNameMessage = checkMutate?.data?.message;
   const isOwner = user && (user.id === creatorId);
   const [belongType, setBelongType] = useState(data?.belongType);
+  const showDisableUpdate = true;
 
   useEffect(() => {
     setBelongType(data?.belongType || "public");
@@ -288,15 +289,21 @@ const SaveChartToUdModal = ({
                   >
                     {checkMutate.isLoading ? "Checking..." : (hasSavedToUd ? "Update" : "Save")}
                   </Button>
-                  <Button
-                    style={{
-                      "width": 200,
-                      height: 40
-                    }}
-                    loading={stopLoading}
-                    onClick={() => {
-                    stopAction()
-                  }}>Stop</Button>
+                  {showDisableUpdate && chartCronLabel && (
+                    <Button
+                      style={{
+                        width: 180,
+                        height: 40,
+                        fontSize: 14,
+                        marginLeft: "10px",
+                      }}
+                      loading={stopLoading}
+                      onClick={() => {
+                      stopAction()
+                    }}>
+                      Disable Data Updates
+                    </Button>
+                  )}
                 </div>
               </div>
             )}
