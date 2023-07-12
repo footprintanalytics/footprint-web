@@ -28,15 +28,15 @@ const AboutStart = ({
   return (
     <div className="About__start">
       <div className="About__start-title">
-        <h1>Empower Decisions <br/>with Unified Off-Chain <br/>and Web3 Data</h1>
+        <h1>Empower Decisions <br/>with Unified Web2 <br/>and Web3 Data</h1>
         <ul>
           <li>
             <CreateImage />
-            <h2>{CHAIN_COUNT} Chains</h2>
+            <h2>{CHAIN_COUNT}+ Chains</h2>
           </li>
           <li>
             <CreateImage />
-            <h2>GameFi, NFT, DeFi Sectors</h2>
+            <h2>GameFi, NFT, and DeFi sectors</h2>
           </li>
           <li>
             <CreateImage />
