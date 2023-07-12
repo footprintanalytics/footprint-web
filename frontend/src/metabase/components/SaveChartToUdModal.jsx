@@ -137,8 +137,9 @@ const SaveChartToUdModal = ({
       "daily": "Run the task daily at 12:00 PM UTC",
       "every 12 hours": "Run the task twice daily at 12:00 AM and 12:00 PM UTC",
       "every 8 hours": "Run the task three times daily at 12:00 AM, 8:00 AM, and 4:00 PM UTC",
-      "every 6 hours": "Run the task four times daily at 12:00 AM, 6:00 AM, 12:00 PM, and 6:00 PM UTC",
+      "every 4 hours": "Run the task four times daily at 12:00 AM, 4:00 AM, 8:00 AM, 12:00 PM, 4:00 PM and 8:00 PM UTC",
     }
+    console.log("chartCronLabel", chartCronLabel)
     return data[chartCronLabel] || "Never run the update task"
   }
 
