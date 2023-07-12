@@ -26,7 +26,7 @@ const AboutDepth = () => {
         },
         {
           buttonText: "Market Overview",
-          link: "",
+          link: "https://www.footprint.network/@DamonSalvatore/GameFi-Overview",
         },
       ],
       img: "home-v2/img_depth_right_1.png",
@@ -37,16 +37,16 @@ const AboutDepth = () => {
       title: "Fetch NFT data from ownerships to sales to \nmetadata for more than 2 million NFT collections.",
       buttons: [
         {
-          buttonText: "Hot Mints",
-          link: "https://www.footprint.network/@Higi/Hot-Mints",
+          buttonText: "Top Collections",
+          link: "https://www.footprint.network/@Higi/Trending-Collections",
         },
         {
-          buttonText: "Whale Signals",
-          link: "",
+          buttonText: "Hot Mints",
+          link: "https://www.footprint.network/@Higi/Hot-Mints?series_time=past6hours",
         },
         {
           buttonText: "Market Overview",
-          link: "",
+          link: "https://www.footprint.network/@NFT/NFT-Market-overview",
         },
       ],
       img: "home-v2/img_depth_right_2.png",
@@ -58,11 +58,11 @@ const AboutDepth = () => {
       buttons: [
         {
           buttonText: "Top Chains",
-          link: "https://www.footprint.network/chart/Key-Stats-by-Chain-fp-38001",
+          link: "https://www.footprint.network/chart/Top-Chain-Tokens-fp-41015",
         },
         {
           buttonText: "Chain Overview",
-          link: "",
+          link: "https://www.footprint.network/@Higi/All-Chain-Overview",
         },
       ],
       img: "home-v2/img_depth_right_3.png",
