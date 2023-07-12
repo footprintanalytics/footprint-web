@@ -702,6 +702,10 @@ export const udTableSaveModelConfig = (params) => {
   return POST(`api/v1/udTable/saveModelConfig`, params);
 };
 
+export const udTableDisable = (params) => {
+  return POST(`api/v1/udTable/disable`, params);
+};
+
 export const setTableBelongType = (params) => {
   return POST(`api/v1/userPage/setTableBelongType`, params);
 };

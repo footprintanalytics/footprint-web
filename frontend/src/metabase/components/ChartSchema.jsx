@@ -19,12 +19,13 @@ const ChartSchema = ({
     },
   ];
   return (
-    <div style={{ maxHeight: 180, overflow: "auto"}}>
+    <div style={{ maxHeight: 150, overflow: "auto"}}>
       <Table
         columns={columns}
         dataSource={metadata}
         pagination={false}
         sticky={true}
+        size="small"
       />
     </div>
   );

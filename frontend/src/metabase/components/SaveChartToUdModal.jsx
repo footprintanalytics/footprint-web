@@ -1,10 +1,10 @@
 /* eslint-disable react/prop-types */
 import React, { useCallback, useEffect, useState } from "react";
-import { Alert, Button, Form, Input, message, Modal, Skeleton, Card, Popover } from "antd";
+import { Alert, Button, Form, Input, message, Modal, Skeleton, Card, Popover, Select, Tooltip } from "antd";
 import "./TaggingModal.css";
 import { connect } from "react-redux";
 import { getUser } from "metabase/selectors/user";
-import { checkTableNameChart, udTableDetail, udTableSaveModelConfig } from "../new-service";
+import { checkTableNameChart, udTableDetail, udTableDisable, udTableSaveModelConfig } from "../new-service";
 import { useMutation, useQuery } from "react-query";
 import { QUERY_OPTIONS } from "../containers/dashboards/shared/config";
 import moment from "moment-timezone";
@@ -18,6 +18,8 @@ import "./SaveChartToUdModal.css";
 import Code from "../containers/buffet/components/Code";
 import { trackStructEvent } from "../lib/analytics";
 import TableBelong from "../containers/customUpload/components/Confirm/TableBelong";
+import { get, capitalize } from "lodash";
+import Icon from "./Icon";
 
 const SaveChartToUdModal = ({
   onClose,
@@ -30,6 +32,7 @@ const SaveChartToUdModal = ({
 }) => {
   const isPaidUser = user && user.vipInfo && user.vipInfo.type !== "free";
   const [loading, setLoading] = useState(false);
+  const [stopLoading, setStopLoading] = useState(false);
 
   const { isLoading, data, refetch } = useQuery(
     ["udTableDetail", cardId],
@@ -40,6 +43,9 @@ const SaveChartToUdModal = ({
   );
 
   const chartConfig = data?.chartConfig;
+  const crons = data?.crons;
+  const chartCronLabel = get(crons, '[0].cronLabel');
+  const [cronLabel, setCronLabel] = useState(chartCronLabel);
   const [tableName, setTableName] = useState(data?.chartConfig?.targetTableName);
   const debouncedTableName = useDebounce(tableName, { wait: 500 });
   const checkMutate = useMutation(checkTableNameChart);
@@ -50,6 +56,9 @@ const SaveChartToUdModal = ({
   useEffect(() => {
     setBelongType(data?.belongType || "public");
   }, [data?.belongType]);
+  useEffect(() => {
+    setCronLabel(get(crons, '[0].cronLabel') || "daily");
+  }, [crons]);
 
   const callbackTime = useCallback(
     ({ status, tableName, successCount }) => {
@@ -70,6 +79,7 @@ const SaveChartToUdModal = ({
     checkMutate.mutate({ tableName: debouncedTableName, tableType: "chart", cardId: cardId });
   }, [debouncedTableName, hasSavedToUd]);
   const onSave = async (data) => {
+    console.log("data", data)
     trackStructEvent("SaveChartToUdModal onSave")
     if (!enableSave) {
       message.info("Do not support sql with parameters, please remove the parameters")
@@ -80,6 +90,12 @@ const SaveChartToUdModal = ({
       setNeedPermissionModal("Upgrade to the Business Plan to protect your data privacy");
       return ;
     }
+    if (!isPaidUser && data?.cron !== "daily" && data?.cron) {
+      onCancel();
+      setNeedPermissionModal("Upgrade to the Business Plan to change updating frequency");
+      return ;
+    }
+    const cronsObject = {crons: [{identifier: 1, cronLabel: data?.cron || "daily" }]};
     const tableName = targetTableName || data.name;
     setLoading(true);
     let result = null;
@@ -89,6 +105,7 @@ const SaveChartToUdModal = ({
         "sourceId": cardId,
         "targetTableName": tableName,
         "belongType": belongType,
+        ...cronsObject,
       });
     } catch (e) {
     }
@@ -114,6 +131,29 @@ const SaveChartToUdModal = ({
     setTableName(value);
   }
 
+  const getCronMappingTint = (chartCronLabel) => {
+    const data = {
+      "daily": "Run the task daily at 12:00 PM UTC",
+      "every 12 hours": "Run the task twice daily at 12:00 AM and 12:00 PM UTC",
+      "every 8 hours": "Run the task three times daily at 12:00 AM, 8:00 AM, and 4:00 PM UTC",
+      "every 6 hours": "Run the task four times daily at 12:00 AM, 6:00 AM, 12:00 PM, and 6:00 PM UTC",
+    }
+    return data[chartCronLabel] || "Never run the update task"
+  }
+
+  const stopAction = async () => {
+    setStopLoading(true);
+    try {
+      await udTableDisable({
+        "udTableModelId": chartConfig?.udTableModelId,
+      });
+      message.success(`${data?.chartConfig?.targetTableName} update stopped successfully.`);
+      await refetch();
+    } catch (e) {
+    }
+    setStopLoading(false);
+  }
+
   return (
     <Modal
       className="save-chart-to-ud-modal"
@@ -132,7 +172,7 @@ const SaveChartToUdModal = ({
           onFinish={onSave}
         >
           <div className="text-centered flex flex-column">
-            <div className="save-chart-to-ud-modal__desc">You can save the data of this chart to the ud table. ud table will run the latest data once a day at 12:00 utc, and use the intermediate table to solve the case of large computation.</div>
+            <div className="save-chart-to-ud-modal__desc">You can save the data of this chart to the UD table. The UD table will run with the latest data every day and use an intermediate table to handle computationally intensive situations.</div>
             <Card title="UD table info">
             <div className="flex">
               {chartConfig?.targetTableName && (
@@ -162,6 +202,15 @@ const SaveChartToUdModal = ({
                   </h3>
                 </div>
               )}
+              <div className="ud-chart__form-item ml2">
+                <div>Update frequency</div>
+                <h3 className="text-left bg-gray">
+                  {capitalize(chartCronLabel) || "Never"}
+                  <Popover className="cursor-pointer" content={getCronMappingTint(chartCronLabel)} >
+                    <Icon name="info_outline" className="mx1" />
+                  </Popover>
+                </h3>
+              </div>
               {data?.newestLog?.sql && (
                 <Popover className="ml4 cursor-pointer" content={<Code value={data?.newestLog?.sql} marginTop={0}/>} title="SQL" overlayStyle={{ width: 600, maxHeight: 300, padding: "12px 0" }}>
                   <div>SQL</div>
@@ -201,24 +250,54 @@ const SaveChartToUdModal = ({
 
             {showMainButton && (
               <div className="flex flex-column">
-                <TableBelong
-                  belongType={belongType}
-                  setBelongType={setBelongType}
-                />
-                <Button
-                  style={{
-                    "margin": "18px auto 0",
-                    "width": 200
-                  }}
-                  type="primary"
-                  size="large"
-                  htmlType="submit"
-                  className="mt2"
-                  disabled={!data || (!hasSavedToUd && !debouncedTableName) || checkMutate.isLoading || checkMutate?.data?.result === 1}
-                  loading={loading}
-                >
-                  {checkMutate.isLoading ? "Checking..." : (hasSavedToUd ? "Update" : "Save")}
-                </Button>
+                <Card title="Setting">
+                  <Form.Item
+                    wrapperCol={{ span: 6 }}
+                    name="cron"
+                    label="Update frequency"
+                  >
+                    <Select
+                      defaultValue={cronLabel}
+                      value={cronLabel}
+                      onChange={value => setCronLabel(value)}
+                      style={{ width: 160 }}
+                      options={[
+                        { value: 'daily', label: 'Daily' },
+                        { value: 'every 12 hours', label: 'Every 12 hours' },
+                        { value: 'every 8 hours', label: 'Every 8 hours' },
+                        { value: 'every 4 hours', label: 'Every 4 hours' },
+                      ]}
+                    />
+                  </Form.Item>
+                  <div className="text-left">
+                    <TableBelong
+                      belongType={belongType}
+                      setBelongType={setBelongType} />
+                  </div>
+                </Card>
+                <div className="flex mt2 justify-center">
+                  <Button
+                    style={{
+                      "width": 200
+                    }}
+                    type="primary"
+                    size="large"
+                    htmlType="submit"
+                    disabled={!data || (!hasSavedToUd && !debouncedTableName) || checkMutate.isLoading || checkMutate?.data?.result === 1}
+                    loading={loading}
+                  >
+                    {checkMutate.isLoading ? "Checking..." : (hasSavedToUd ? "Update" : "Save")}
+                  </Button>
+                  <Button
+                    style={{
+                      "width": 200,
+                      height: 40
+                    }}
+                    loading={stopLoading}
+                    onClick={() => {
+                    stopAction()
+                  }}>Stop</Button>
+                </div>
               </div>
             )}
           </div>
