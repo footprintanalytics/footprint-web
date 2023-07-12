@@ -237,13 +237,18 @@ export default class MultiEmbed extends Component {
       try {
         const obj = JSON.parse(value);
         if (!Array.isArray(obj)) {
-          return Promise.reject("Please enter a valid JSON string: Object should be Array");
+          return Promise.reject(
+            "Please enter a valid JSON string: Object should be Array",
+          );
         }
-        obj.forEach(item => {
+        for (let item of obj) {
           if (!item.label || !item.url) {
-            return Promise.reject("Please enter a valid JSON string: Object item should have label and url");
+           return Promise.reject(
+              "Please enter a valid JSON string: Object item should have label and url",
+            );
           }
-        });
+        }
+
       } catch (error) {
         return Promise.reject("Please enter a valid JSON string");
       }
