@@ -134,15 +134,31 @@ export function parseChart(datas, chartType, cellId) {
         bottom: 4,
       },
     ],
+    tooltip: {
+      show: true,
+      trigger:"item",
+      // trigger: chartType === "bar_chart" ?"item":"axis",
+      position: [0, 0],
+      padding: [3, 3],
+      textStyle: {
+        fontSize: 6,
+      },
+      formatter: function (params) {
+        const value = params?.value;
+        return value.toString();
+      },
+    },
     series: [
       {
         data: datas,
         type: chartType === "bar_chart" ? "bar" : "line",
         areaStyle: {},
         smooth: true,
-        symbol: 'none',
+        symbol: "circle",
         barMaxWidth: 15,
-        barMinHeight: 3,
+        barMinWidth: 3,
+        barMinHeight: 1,
+
       },
     ],
   };
@@ -154,7 +170,15 @@ export function parseValue2ChartData(str) {
   try {
     const arr = JSON.parse(str);
     if (Array.isArray(arr)) {
-      return arr.map(Number);
+      let datas = arr.map(Number);
+      if (datas.length < 7) {
+        const datasReverse = [...datas.reverse()];
+        for (let i = 0; i < 7 - datas.length; i++) {
+          datasReverse.push(0);
+        }
+        datas = datasReverse.reverse();
+      }
+      return datas;
     } else {
       return [];
     }
