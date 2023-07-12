@@ -20,6 +20,8 @@ import HomeFooter from "../home/components/HomeFooter";
 import data from "./data";
 import AboutBacked from "./components/AboutBacked";
 import AboutStart from "./components/AboutStart";
+import AboutBanner from "./components/AboutBanner";
+import AboutSolution from "./components/AboutSolutions";
 
 const About = props => {
   const {
@@ -53,13 +55,16 @@ const About = props => {
         <AboutStart />
         <div className="About__depth-dividing-line" />
         <LazyLoadAbout>
+          <AboutBanner />
+        </LazyLoadAbout>
+        <LazyLoadAbout>
+          <AboutSolution />
+        </LazyLoadAbout>
+        <LazyLoadAbout>
           <AboutDepth />
         </LazyLoadAbout>
         <LazyLoadAbout>
           <AboutDemo />
-        </LazyLoadAbout>
-        <LazyLoadAbout>
-          <AboutDataCoverage />
         </LazyLoadAbout>
         <LazyLoadAbout>
           <AboutDataFeature />
