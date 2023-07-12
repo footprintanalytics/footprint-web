@@ -127,7 +127,7 @@
   [allow-iframes?]
   (update (content-security-policy-header)
           "Content-Security-Policy"
-          #(format "%s %s;" % (if allow-iframes? "" (or (embedding-app-origin) "frame-ancestors 'none'")))))
+          #(format "%s %s;" % (if allow-iframes? "" (or (embedding-app-origin) "")))))
 
 (defsetting ssl-certificate-public-key
   (deferred-tru
@@ -153,7 +153,7 @@
      (cache-far-future-headers)
      (cache-prevention-headers))
    strict-transport-security-header
-  ;;  (content-security-policy-header-with-frame-ancestors allow-iframes?)
+   (content-security-policy-header-with-frame-ancestors allow-iframes?)
    (when-not allow-iframes?
      ;; Tell browsers not to render our site as an iframe (prevent clickjacking)
      {"X-Frame-Options"                 (if (embedding-app-origin)
