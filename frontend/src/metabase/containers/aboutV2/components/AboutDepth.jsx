@@ -70,7 +70,7 @@ const AboutDepth = () => {
     {
       icon: "home-v2/img_depth_tab_4.png",
       label: "Wallet",
-      title: "Track and trace activities, holdings, and profiles over \nx million addresses.",
+      title: "Track and trace activities, holdings, and profiles over \n100+ million addresses.",
       desc: "Coming soon",
       img: "home-v2/img_depth_right_4.png",
     },
@@ -87,8 +87,8 @@ const AboutDepth = () => {
     <div className="About__depth">
       <div className="About__depth-circle-bg"/>
       <h3>Footprint Datasets</h3>
-      <h4>300+ datasets, and counting</h4>
-      <h5>We decode and interpret a wide range of datasets so that you can build next-level <br/>apps with cutting-edge protocols today and tomorrow.</h5>
+      <h4>200+ datasets, and counting</h4>
+      <h5>We index and structure a wide range of datasets, making it easy for you to explore data and build next-generation applications whenever required.</h5>
       <AboutButton className="About__depth-button" buttonText="Explore Datasets" link={Urls.newQuestion()}/>
       <div className="About__depth-panel">
         <div className="About__depth-tabs">

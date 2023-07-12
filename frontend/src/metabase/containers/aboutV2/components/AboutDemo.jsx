@@ -20,8 +20,7 @@ const AboutDemo = () => {
       "title": "Find Wallets",
       "desc": "Find eligible wallet addresses in 26 chains for airdrops or other \nmarketing campaigns",
       "content": "Get the current and historical portfolio and transactions data of \nspecific tokens or protocols",
-      "buttonText": "Go and find",
-      "action": () => {message.info("Coming soon.")}
+      "buttonText": "Coming Soon",
     },
   ]
 
@@ -143,7 +142,7 @@ const AboutDemo = () => {
 
   return (
     <div className="About__demo">
-      <div className="About__depth-circle-bg" style={{ top: "200px" }}/>
+      <div className="About__depth-circle-bg" style={{ top: "200px", background: "rgba(68, 68, 255, 0.40)"}}/>
       <div className="About__title my4">Flagship Products and Services</div>
 
       <div className="About__demo-analytics-app About__demo-data-api"

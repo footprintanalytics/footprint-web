@@ -36,6 +36,7 @@
   line-height: 1.2;
   text-align: center;
   font-weight: bold;
+  filter: brightness(1);
 }
 
 .About__title-white {
@@ -265,11 +266,6 @@
   max-width: 1920px;
   margin: 0 auto;
   padding: 160px 0 40px 0;
-  background-image: url("https://static.footprint.network/home-v2/img_hexagon_bg_6.png"),
-  url("https://static.footprint.network/home-v2/img_hexagon_bg_8.png?1=1");
-  background-size: 580px 572px, 469px 514px;
-  background-repeat: no-repeat, no-repeat;
-  background-position: bottom left, top right;
 }
 
 .About__data-feature ul {
@@ -528,7 +524,8 @@
   display: flex;
   flex-direction: column;
   align-items: center;
-  margin-right: 60px
+  margin-right: 110px;
+  margin-top: 30px;
 }
 
 .About__demo-top-right-bottom {
@@ -639,6 +636,9 @@
 
 .About__demo-data-api {
   width: 1440px;
+  height: 640px;
+  padding: 0;
+  margin-top: 20px;
   flex-direction: row;
   justify-content: space-between;
 }
@@ -689,6 +689,7 @@
 
 .About__depth-button {
   margin: 40px 0 60px 0;
+  filter: brightness(1);
 }
 
 .About__depth-tabs {
@@ -721,7 +722,7 @@
 
 .About__depth-tabs li span {
   text-align: center;
-  font-size: 14px;
+  font-size: 16px;
   margin-left: 10px;
 }
 
@@ -737,7 +738,7 @@
 .About__depth-panel-inner {
   display: flex;
   max-width: 1440px;
-  height: 600px;
+  height: 508px;
   z-index: 1;
 }
 
@@ -745,14 +746,13 @@
   display: flex;
   width: 700px;
   flex-direction: column;
-  padding: 150px 60px 0 60px;
+  padding: 150px 50px 0 60px;
   flex: 1;
 }
 
 .About__depth-panel-buttons {
   display: flex;
   flex-direction: column;
-  margin-top: 20px;
 }
 
 .About__depth-panel-buttons Link {
@@ -1647,11 +1647,21 @@
   max-width: 1440px;
   height: 280px;
   margin: -70px auto 0;
-  background-image: url("https://static.footprint.network/home-v2/img_solutions_bg.png");
-  background-size: 1440px 280px;
-  background-repeat: no-repeat;
-  background-position: bottom center;
+  background: linear-gradient(135deg, #212A43 0%, #182034 52.28%);
+  border-radius: 24px;
+  border: 1px solid #ffffff11;
+}
+
+.About__banner2 {
+  height: 100%;
+  background-image:
+    url("https://static.footprint.network/home-v2/img_solutions_bg_1.png"),
+    url("https://static.footprint.network/home-v2/img_solutions_bg_2.png");
+  background-size: 492px 280px, 646px 280px;
+  background-repeat: no-repeat, no-repeat;
+  background-position: left center, right center;
   padding: 20px;
+  border-radius: 24px;
 }
 
 .About__banner-inner {
@@ -1666,9 +1676,10 @@
 
 .About__banner h4 {
   font-size: 16px;
-  font-weight: bold;
+  font-weight: normal;
   margin-top: 30px;
   color: white;
+  letter-spacing: 1.6px;
 }
 
 .About__banner span {
@@ -1739,6 +1750,15 @@
 }
 
 @media screen and (--footprint-breakpoint-max-pad) {
+  .About__banner {
+    margin: 0 20px;
+  }
+
+  .About__banner h3 {
+    margin: 5px 0 15px 0;
+    line-height: 1;
+  }
+
   .About__depth-tabs li {
     width: 160px;
   }
@@ -1751,6 +1771,7 @@
   .About__depth-panel-inner {
     width: 100%;
     flex-direction: column;
+    height: 900px;
   }
 
   .About__demo-analytics-app,
@@ -1820,5 +1841,9 @@
   .About__basic-item-box {
     padding: 36px 8px;
     width: 220px;
+  }
+
+  .About__depth-panel-right {
+    margin: 0 auto;
   }
 }
