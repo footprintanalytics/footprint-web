@@ -1,6 +1,16 @@
 /* eslint-disable react/prop-types */
 import React, { Component } from "react";
-import { Button, Empty, Form, Input, Modal, Space, Tabs, message } from "antd";
+import {
+  Button,
+  Empty,
+  Form,
+  Input,
+  Modal,
+  Space,
+  Tabs,
+  Typography,
+  message,
+} from "antd";
 
 import cx from "classnames";
 import { t } from "ttag";
@@ -8,7 +18,6 @@ import { slugify } from "metabase/lib/formatting";
 import ItemEmbed from "../../containers/dashboards/components/Recommendations/ItemEmbed";
 import styles from "./Text/Text.css";
 import "./MultiEmbed.css";
-import { json } from "d3";
 
 export default class MultiEmbed extends Component {
   constructor(props) {
@@ -243,12 +252,11 @@ export default class MultiEmbed extends Component {
         }
         for (let item of obj) {
           if (!item.label || !item.url) {
-           return Promise.reject(
+            return Promise.reject(
               "Please enter a valid JSON string: Object item should have label and url",
             );
           }
         }
-
       } catch (error) {
         return Promise.reject("Please enter a valid JSON string");
       }
@@ -332,7 +340,6 @@ export default class MultiEmbed extends Component {
                       name="url"
                       className=" mb3"
                       label="URL"
-                      tooltip="If you would like to embed a dashboard, please provide the URL of the publicly shared embed,such as: https://www.footprint.network/public/dashboard/..."
                       rules={[
                         { required: true },
                         { type: "url", warningOnly: true },
@@ -342,6 +349,24 @@ export default class MultiEmbed extends Component {
                         placeholder="Please provide the url to the embedded website."
                         allowClear
                       />
+                      <Typography.Text
+                        style={{ fontSize: 10 }}
+                        type="secondary"
+                      >
+                        Please provide a{' '}
+                        <span style={{ color: '#696969' }}>
+                          <strong>public embed link</strong>
+                        </span>
+                        {' '}for Footprint Dashboard or Chart.
+                        <Typography.Link
+                          style={{ fontSize: 10 }}
+                          rel="noreferrer"
+                          href="https://docs.footprint.network/docs/embed"
+                          target="_blank"
+                        >
+                          {"Check how to get the link>>"}
+                        </Typography.Link>
+                      </Typography.Text>
                     </Form.Item>
                     <Form.Item>
                       <div className="flex flex-row-reverse w-full items-center">
