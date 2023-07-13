@@ -213,8 +213,8 @@ const nftData = [
 
 const gamefiData = [
   {
-    "value": "Game Rankings",
     "label": "Game Rankings",
+    "value": "game-rankings",
     "subMenus": [
       {
         "label": "Top Games",
@@ -586,6 +586,31 @@ const chainData = [
   },
 ]
 
+const walletData = [
+  {
+    "label": "Wallet Tracker",
+    "value": "wallet-tracker",
+    "icon": "https://statichk.footprint.network/icon_side_analysis.png",
+    "subMenus": [
+      {
+        "label": "NFT Trades of Wallet",
+        "value": "nft-trades-of-wallet",
+        "publicUuid": "050bea21-f999-44c5-b6aa-be7ac68274ff",
+      },
+      {
+        "label": "Gamer Profile of Wallet",
+        "value": "gamer-profile-of-wallet",
+        "publicUuid": "69b1113b-8bfa-451d-a2f4-d540942a6279",
+      },
+      {
+        "label": "Money Flow of Wallet",
+        "value": "money-flow-of-wallet",
+        "publicUuid": "3ed912f6-4c65-464e-93a1-4ad86c656689",
+      },
+    ],
+  },
+]
+
 const customData = {
   partner: [
     {
@@ -640,12 +665,18 @@ const metaObject = {
     description: "Covering most chains and support from real-time raw data to analytic metrics",
     keywords: "Chain Ecosystem, Chain Research, Blockchain industry, chain transaction data, chain token transfer data, chain events, chain log, Chain Gas Fee",
   },
+  "wallet": {
+    title: "Wallet Research | Built by researcher for researchers",
+    description: "Covers all the wallets data you need from industry overview to individual wallets with insightful metrics, such as money flow",
+    keywords: "NFT Trades of Wallet, Gamer Profile of Wallet, Money Flow of Wallet",
+  },
 }
 
 const data = {
   "nft": nftData,
   "gamefi": gamefiData,
   "chain": chainData,
+  "wallet": walletData,
   "custom": customData,
   "metaObject": metaObject,
 }
