@@ -52,18 +52,23 @@ const SaveChartToUdModal = ({
   const checkNameMessage = checkMutate?.data?.message;
   const isOwner = user && (user.id === creatorId);
   const [belongType, setBelongType] = useState(data?.belongType);
+  const targetTableName = chartConfig?.targetTableName;
+  const hasSavedToUd = !!chartConfig?.targetTableName;
+
 
   useEffect(() => {
     setBelongType(data?.belongType || "public");
   }, [data?.belongType]);
 
   useEffect(() => {
-    const cron = get(crons, '[0].cronLabel') || "never"
-    setCronLabel(cron);
-    form?.setFieldsValue({
-      cron: cron,
-    });
-  }, [crons]);
+    if (data) {
+      const cron = get(data?.crons, '[0].cronLabel') || (data?.chartConfig?.targetTableName ? "never" : "daily")
+      setCronLabel(cron);
+      form?.setFieldsValue({
+        cron: cron,
+      });
+    }
+  }, [data]);
 
   const callbackTime = useCallback(
     ({ status, tableName, successCount }) => {
@@ -77,14 +82,11 @@ const SaveChartToUdModal = ({
       refetch();
     }, [refetch]);
 
-  const targetTableName = chartConfig?.targetTableName;
-  const hasSavedToUd = !!chartConfig?.targetTableName;
-
   useEffect(() => {
     if (!debouncedTableName || hasSavedToUd) return;
     checkMutate.mutate({ tableName: debouncedTableName, tableType: "chart", cardId: cardId });
   }, [debouncedTableName, hasSavedToUd]);
-  
+
   const onSave = async (data) => {
     trackStructEvent("SaveChartToUdModal onSave")
     if (!enableSave) {
@@ -96,11 +98,16 @@ const SaveChartToUdModal = ({
       setNeedPermissionModal("Upgrade to the Business Plan to protect your data privacy");
       return ;
     }
-    if (!isPaidUser && data?.cron !== "daily" && data?.cron) {
+    if (!isPaidUser
+      && data?.cron
+      && data?.cron !== "daily"
+      && data?.cron !== "never"
+    ) {
       onCancel();
       setNeedPermissionModal("Upgrade to the Business Plan to change updating frequency");
       return ;
     }
+
     const cronsObject = {crons: [{identifier: 1, cronLabel: data?.cron || "daily" }]};
     const tableName = targetTableName || data.name;
     setLoading(true);
