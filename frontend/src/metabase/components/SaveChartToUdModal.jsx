@@ -56,6 +56,7 @@ const SaveChartToUdModal = ({
   useEffect(() => {
     setBelongType(data?.belongType || "public");
   }, [data?.belongType]);
+
   useEffect(() => {
     const cron = get(crons, '[0].cronLabel') || "never"
     setCronLabel(cron);
@@ -78,10 +79,12 @@ const SaveChartToUdModal = ({
 
   const targetTableName = chartConfig?.targetTableName;
   const hasSavedToUd = !!chartConfig?.targetTableName;
+
   useEffect(() => {
     if (!debouncedTableName || hasSavedToUd) return;
     checkMutate.mutate({ tableName: debouncedTableName, tableType: "chart", cardId: cardId });
   }, [debouncedTableName, hasSavedToUd]);
+  
   const onSave = async (data) => {
     trackStructEvent("SaveChartToUdModal onSave")
     if (!enableSave) {
