@@ -158,7 +158,6 @@ export function parseChart(datas, chartType, cellId) {
         barMaxWidth: 15,
         barMinWidth: 3,
         barMinHeight: 0,
-
       },
     ],
   };
