@@ -296,21 +296,22 @@ export default class MultiEmbed extends Component {
                 />
               ) : (
                 <div className="flex full h-full flex-column items-center justify-center">
-                  <Empty description={"Click here to add the first embed."}>
+                  <Empty description={"Click here to add the first tab."}>
                     <Button
                       type="primary"
                       onClick={() =>
                         this.setState({ ...this.state, showAddModal: true })
                       }
                     >
-                      Add new embed
+                      Add new tab
                     </Button>
                   </Empty>
                 </div>
               )}
               {this.state.showAddModal && (
                 <Modal
-                  title="Add new embed"
+                  title="Add new tab"
+                  maskClosable={false}
                   centered
                   open={this.state.showAddModal}
                   footer={null}
@@ -332,13 +333,13 @@ export default class MultiEmbed extends Component {
                       rules={[{ required: true }]}
                     >
                       <Input
-                        placeholder="Please enter the title of the embedded website."
+                        placeholder="Please enter the title of the tab."
                         allowClear
                       />
                     </Form.Item>
                     <Form.Item
                       name="url"
-                      className=" mb3"
+                      className="mb0"
                       label="URL"
                       rules={[
                         { required: true },
@@ -346,11 +347,12 @@ export default class MultiEmbed extends Component {
                       ]}
                     >
                       <Input
-                        placeholder="Please provide the url to the embedded website."
+                        placeholder="Please provide the website url to the tab."
                         allowClear
                       />
-                      <Typography.Text
-                        style={{ fontSize: 10 }}
+                    </Form.Item>
+                    <Typography.Text
+                        style={{ fontSize: 10,marginBottom:20 }}
                         type="secondary"
                       >
                         Please provide a{' '}
@@ -367,7 +369,6 @@ export default class MultiEmbed extends Component {
                           {"Check how to get the link>>"}
                         </Typography.Link>
                       </Typography.Text>
-                    </Form.Item>
                     <Form.Item>
                       <div className="flex flex-row-reverse w-full items-center">
                         <Button type="primary" htmlType="submit">
@@ -394,6 +395,7 @@ export default class MultiEmbed extends Component {
                 <Modal
                   title="Edit advance config"
                   centered
+                  maskClosable={false}
                   open={this.state.showConfigModal}
                   footer={null}
                   onCancel={() => {
