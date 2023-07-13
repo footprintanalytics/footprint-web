@@ -1,10 +1,10 @@
 /* eslint-disable react/prop-types */
 import React, { useCallback, useEffect, useState } from "react";
-import { Alert, Button, Form, Input, message, Modal, Skeleton, Card, Popover, Select, Tooltip } from "antd";
+import { Alert, Button, Card, Form, Input, message, Modal, Popover, Select, Skeleton } from "antd";
 import "./TaggingModal.css";
 import { connect } from "react-redux";
 import { getUser } from "metabase/selectors/user";
-import { checkTableNameChart, udTableDetail, udTableDisable, udTableSaveModelConfig } from "../new-service";
+import { checkTableNameChart, udTableDetail, udTableSaveModelConfig } from "../new-service";
 import { useMutation, useQuery } from "react-query";
 import { QUERY_OPTIONS } from "../containers/dashboards/shared/config";
 import moment from "moment-timezone";
@@ -18,7 +18,7 @@ import "./SaveChartToUdModal.css";
 import Code from "../containers/buffet/components/Code";
 import { trackStructEvent } from "../lib/analytics";
 import TableBelong from "../containers/customUpload/components/Confirm/TableBelong";
-import { get, capitalize } from "lodash";
+import { capitalize, get } from "lodash";
 import Icon from "./Icon";
 
 const SaveChartToUdModal = ({
@@ -33,7 +33,6 @@ const SaveChartToUdModal = ({
   const [form] = Form.useForm();
   const isPaidUser = user && user.vipInfo && user.vipInfo.type !== "free";
   const [loading, setLoading] = useState(false);
-  const [stopLoading, setStopLoading] = useState(false);
 
   const { isLoading, data, refetch } = useQuery(
     ["udTableDetail", cardId],
@@ -53,7 +52,6 @@ const SaveChartToUdModal = ({
   const checkNameMessage = checkMutate?.data?.message;
   const isOwner = user && (user.id === creatorId);
   const [belongType, setBelongType] = useState(data?.belongType);
-  const showDisableUpdate = true;
 
   useEffect(() => {
     setBelongType(data?.belongType || "public");
@@ -141,22 +139,9 @@ const SaveChartToUdModal = ({
       "daily": "Run the task daily at 12:00 PM UTC",
       "every 12 hours": "Run the task twice daily at 12:00 AM and 12:00 PM UTC",
       "every 8 hours": "Run the task three times daily at 12:00 AM, 8:00 AM, and 4:00 PM UTC",
-      "every 4 hours": "Run the task four times daily at 12:00 AM, 4:00 AM, 8:00 AM, 12:00 PM, 4:00 PM and 8:00 PM UTC",
+      "every 4 hours": "Run the task six times daily at 12:00 AM, 4:00 AM, 8:00 AM, 12:00 PM, 4:00 PM and 8:00 PM UTC",
     }
     return data[chartCronLabel] || "Never run the update task"
-  }
-
-  const stopAction = async () => {
-    setStopLoading(true);
-    try {
-      await udTableDisable({
-        "udTableModelId": chartConfig?.udTableModelId,
-      });
-      message.success(`${data?.chartConfig?.targetTableName} update stopped successfully.`);
-      await refetch();
-    } catch (e) {
-    }
-    setStopLoading(false);
   }
 
   return (
