@@ -128,10 +128,10 @@ export function parseChart(datas, chartType, cellId) {
     },
     grid: [
       {
-        left: 2,
-        top: 4,
-        right: 2,
-        bottom: 4,
+        left: 1,
+        top: 8,
+        right: 1,
+        bottom: 0,
       },
     ],
     tooltip: {
@@ -157,8 +157,7 @@ export function parseChart(datas, chartType, cellId) {
         symbol: "circle",
         barMaxWidth: 15,
         barMinWidth: 3,
-        barMinHeight: 1,
-
+        barMinHeight: 0,
       },
     ],
   };
