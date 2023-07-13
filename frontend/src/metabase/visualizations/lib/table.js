@@ -157,7 +157,7 @@ export function parseChart(datas, chartType, cellId) {
         symbol: "circle",
         barMaxWidth: 15,
         barMinWidth: 3,
-        barMinHeight: 1,
+        barMinHeight: 0,
 
       },
     ],
