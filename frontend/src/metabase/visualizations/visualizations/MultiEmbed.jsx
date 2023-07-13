@@ -311,6 +311,7 @@ export default class MultiEmbed extends Component {
               {this.state.showAddModal && (
                 <Modal
                   title="Add new tab"
+                  maskClosable={false}
                   centered
                   open={this.state.showAddModal}
                   footer={null}
@@ -338,7 +339,7 @@ export default class MultiEmbed extends Component {
                     </Form.Item>
                     <Form.Item
                       name="url"
-                      className=" mb3"
+                      className="mb0"
                       label="URL"
                       rules={[
                         { required: true },
@@ -349,8 +350,9 @@ export default class MultiEmbed extends Component {
                         placeholder="Please provide the website url to the tab."
                         allowClear
                       />
-                      <Typography.Text
-                        style={{ fontSize: 10 }}
+                    </Form.Item>
+                    <Typography.Text
+                        style={{ fontSize: 10,marginBottom:20 }}
                         type="secondary"
                       >
                         Please provide a{' '}
@@ -367,7 +369,6 @@ export default class MultiEmbed extends Component {
                           {"Check how to get the link>>"}
                         </Typography.Link>
                       </Typography.Text>
-                    </Form.Item>
                     <Form.Item>
                       <div className="flex flex-row-reverse w-full items-center">
                         <Button type="primary" htmlType="submit">
@@ -394,6 +395,7 @@ export default class MultiEmbed extends Component {
                 <Modal
                   title="Edit advance config"
                   centered
+                  maskClosable={false}
                   open={this.state.showConfigModal}
                   footer={null}
                   onCancel={() => {
