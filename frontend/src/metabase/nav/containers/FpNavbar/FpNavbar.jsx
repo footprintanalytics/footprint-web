@@ -93,16 +93,20 @@ const leftMenuData = [
     icon: "protocols",
     menu: [
       {
-        title: "NFT Research",
-        link: "/research/nft",
-      },
-      {
         title: "GameFi Research",
         link: "/research/gamefi",
       },
       {
+        title: "NFT Research",
+        link: "/research/nft",
+      },
+      {
         title: "Chain Research",
         link: "/research/chain",
+      },
+      {
+        title: "Wallet Research",
+        link: "/research/wallet",
       },
     ],
   },

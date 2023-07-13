@@ -1,5 +1,71 @@
 const nftData = [
   {
+    "label": "NFT Rankings",
+    "value": "nft-rankings",
+    "subMenus": [
+      {
+        "label": "Top Collections",
+        "value": "top-collections",
+        "publicUuid": "a516bea0-325f-4b6d-83a9-383c969eb94c",
+      }, {
+        "label": "Top Marketplaces",
+        "value": "top-marketplaces",
+        "publicUuid": "fa41577e-ceb7-4c82-a98d-189e9b43290d",
+        "type": "chart",
+      }, {
+        "label": "Top Chains",
+        "value": "top-chains",
+        "publicUuid": "995ca151-df73-42e4-9afa-b5e1a5c34212",
+        "type": "chart",
+      }, {
+        "label": "Newly Added",
+        "value": "newly-added",
+        "publicUuid": "a3faa3d4-b306-4105-b653-35b74f9011cd",
+        "type": "chart",
+      }, {
+        "label": "Top Collections by Royalty",
+        "value": "top-collections-by-royalty",
+        "publicUuid": "8b839ff6-2cb3-43e7-b2a8-7d54bd4d431e",
+      }, {
+        "label": "Top Wallet Address by Trading Value",
+        "value": "top-wallet-address-by-trading-value",
+        "publicUuid": "645c7f1c-263e-474a-b270-65a5b479e45c",
+        "type": "chart",
+      }, {
+        "label": "Top Buyers List",
+        "value": "top-buyers-list",
+        "publicUuid": "341c99ec-f226-4fc9-8f4f-3ab54bda92e7",
+        "type": "chart",
+      }, {
+        "label": "Top Sellers List",
+        "value": "top-sellers-list",
+        "publicUuid": "9e9f179e-6748-424a-a2d2-de3639377fb5",
+        "type": "chart",
+      },
+    ],
+  }, {
+    "label": "NFT Signals",
+    "value": "nft-signals",
+    "subMenus": [
+      {
+        "label": "Trending",
+        "value": "trending",
+        "publicUuid": "c4bc6cf6-ba29-4c3c-af18-8ea224d1740e",
+      }, {
+        "label": "Hot Mints",
+        "value": "hot-mints",
+        "publicUuid": "f2d99351-3a14-40df-923c-f3877639c4bc",
+      }, {
+        "label": "Sweeps",
+        "value": "sweeps",
+        "publicUuid": "46f89c33-a9f1-42ac-896d-ffa8d21d74a5",
+      }, {
+        "label": "Top Sales",
+        "value": "top-sales",
+        "publicUuid": "41f7fb51-cc98-48ef-b481-ec5675eeb1d2",
+      },
+    ],
+  }, {
     "label": "NFT Market",
     "value": "nft-market",
     "subMenus": [
@@ -38,53 +104,29 @@ const nftData = [
       },
     ],
   }, {
-    "label": "NFT Trends",
-    "value": "nft-trends",
+    "label": "NFT Collections",
+    "value": "nft-collections",
     "subMenus": [
       {
-        "label": "Trending Chains",
-        "value": "trending-chains",
-        "publicUuid": "f87745e0-89d1-4845-9ca7-f62d9a535281",
-      }, {
-        "label": "Trending Marketplaces",
-        "value": "trending-marketplaces",
-        "publicUuid": "253fee18-97da-496b-833b-3d2a46516ec8",
-      }, {
-        "label": "Trending Collections",
-        "value": "trending-collections",
-        "publicUuid": "a516bea0-325f-4b6d-83a9-383c969eb94c",
-      }, {
-        "label": "Newly Added",
-        "value": "newly-added",
-        "publicUuid": "a3faa3d4-b306-4105-b653-35b74f9011cd",
-        "type": "chart",
-      }, {
-        "label": "Top Collections by Royalty",
-        "value": "top-collections-by-royalty",
-        "publicUuid": "8b839ff6-2cb3-43e7-b2a8-7d54bd4d431e",
-      }, {
-        "label": "Top Wallet Address by Trading Value",
-        "value": "top-wallet-address-by-trading-value",
-        "publicUuid": "645c7f1c-263e-474a-b270-65a5b479e45c",
-        "type": "chart",
-      }, {
-        "label": "Top Buyers List",
-        "value": "top-buyers-list",
-        "publicUuid": "341c99ec-f226-4fc9-8f4f-3ab54bda92e7",
-        "type": "chart",
-      }, {
-        "label": "Top Sellers List",
-        "value": "top-sellers-list",
-        "publicUuid": "9e9f179e-6748-424a-a2d2-de3639377fb5",
-        "type": "chart",
-      }, {
-        "label": "Top Sales",
-        "value": "top-sales",
-        "publicUuid": "786c284d-f4e8-4138-be14-0d1226cf402c",
-        "type": "chart",
+        "label": "Single Collection",
+        "value": "single-collection",
+        "publicUuid": "4f2c0f87-57ff-4f0f-b63e-5e7addb93da7",
       },
     ],
-  }, {
+  },
+  {
+    "label": "NFT Marketplace",
+    "value": "nft-marketplace",
+    "icon": "https://statichk.footprint.network/icon_side_ranking.png",
+    "subMenus": [
+      {
+        "label": "Single Marketplace",
+        "value": "single-marketplace",
+        "publicUuid": "f464b6dd-83b5-4f94-a659-737de62b0599",
+      },
+    ],
+  },
+  {
     "label": "NFT Wash Trading Stats",
     "value": "nft-wash-trade-stats",
     "subMenus": [
@@ -151,18 +193,6 @@ const nftData = [
     ],
   },
   {
-    "label": "NFT Collections",
-    "value": "nft-collections",
-    "icon": "https://statichk.footprint.network/icon_side_ranking.png",
-    "subMenus": [
-      {
-        "label": "Single Collection Stats",
-        "value": "single collection stats",
-        "publicUuid": "4f2c0f87-57ff-4f0f-b63e-5e7addb93da7",
-      },
-    ],
-  },
-  {
     "label": "Themetic analysis",
     "value": "themetic-analysis",
     "icon": "https://statichk.footprint.network/icon_side_ranking.png",
@@ -179,35 +209,62 @@ const nftData = [
       },
     ],
   },
-  /*{
-    "value": "Blog",
-    "label": "Blog",
-    "icon": "https://statichk.footprint.network/icon_side_ranking.png",
-    "subMenus": [
-      {
-        "label": "NFT Insights",
-        "value": "NFT-Insights",
-        "publicUuid": "",
-      },
-      {
-        "label": "NFT Research",
-        "value": "NFT-Research",
-        "publicUuid": "",
-      },
-    ],
-  },*/
 ];
 
 const gamefiData = [
   {
-    "label": "GameFi Market",
-    "value": "gamefi-market",
-    "icon": "https://statichk.footprint.network/icon_side_analysis.png",
+    "label": "Game Rankings",
+    "value": "game-rankings",
     "subMenus": [
       {
-        "label": "Market Overview",
-        "value": "market-overview",
-        "publicUuid": "db6aac3e-48e4-4465-87b2-94be114475aa",
+        "label": "Top Games",
+        "value": "top-games",
+        "publicUuid": "d8e8ac13-bc3f-4cc6-9368-4168d52beeb5",
+      },
+      {
+        "label": "Game Tokens",
+        "value": "game-tokens",
+        "publicUuid": "db808eeb-3709-4a75-8a9b-418236b5b707",
+      },
+      {
+        "label": "GameFi Market Leaderboard",
+        "value": "gamefi-market-leaderboard",
+        "publicUuid": "9c2cf0ca-de0a-4699-9a6c-cd24ffd6252c",
+      },
+      {
+        "label": "Hot Games on Ethereum",
+        "value": "hot-games-on-ethereum",
+        "publicUuid": "b61310f5-7775-4415-b604-6e8b74d44256",
+        "search": "?date=past7days",
+      },
+      {
+        "label": "Hot Games on Polygon",
+        "value": "hot-games-on-polygon",
+        "publicUuid": "b61310f5-7775-4415-b604-6e8b74d44256",
+        "search": "?chain=Polygon&date=past7days",
+      },
+      {
+        "label": "Hot Games on BNB",
+        "value": "hot-games-on-bnb",
+        "publicUuid": "b61310f5-7775-4415-b604-6e8b74d44256",
+        "search": "?chain=BNB%20Chain&date=past7days",
+      },
+      {
+        "label": "Hot Games on Arbitrum",
+        "value": "hot-games-on-arbitrum",
+        "publicUuid": "b61310f5-7775-4415-b604-6e8b74d44256",
+        "search": "?chain=Arbitrum&date=past7days",
+      },
+    ],
+  },
+  {
+    "label": "Game Overview",
+    "value": "game-overview",
+    "subMenus": [
+      {
+        "label": "Game Market",
+        "value": "game-market",
+        "publicUuid": "deba0706-064b-478b-b34b-86d8a7350df2",
       },
       {
         "label": "Chain Stats",
@@ -218,40 +275,6 @@ const gamefiData = [
         "label": "Single Chain",
         "value": "single-chain",
         "publicUuid": "f37919b4-977b-4a35-9b43-ff29c02e6ba9",
-      },
-    ],
-  },
-  {
-    "value": "web3 gaming-trends",
-    "label": "Web3 Gaming Trends",
-    "subMenus": [
-      {
-        "label": "Top Games",
-        "value": "top-games",
-        "publicUuid": "d8e8ac13-bc3f-4cc6-9368-4168d52beeb5",
-      },
-      {
-        "label": "Gaming Tokens",
-        "value": "gaming-tokens",
-        "publicUuid": "db808eeb-3709-4a75-8a9b-418236b5b707",
-      },
-      {
-        "label": "GameFi Market Leaderboard",
-        "value": "top-winners",
-        "publicUuid": "68f25843-b845-461e-a494-e7e43ffe2c29",
-        "type": "chart",
-        "search": "?on_date=2023-04-12",
-      },
-    ],
-  },
-  {
-    "label": "GameFi Protocos",
-    "value": "gamefi-protocos",
-    "subMenus": [
-      {
-        "label": "Single GameFi Protocos Stats",
-        "value": "single-gamefi-protocos-stats",
-        "publicUuid": "5d0b85bb-56e1-48cf-9d5c-40dbccd87faa",
       },
     ],
   },
@@ -343,23 +366,19 @@ const gamefiData = [
 
 const chainData = [
   {
-    "label": "Chain Ecosystem",
-    "value": "chain-ecosystem",
+    "label": "Chain Rankings",
+    "value": "chain-rankings",
     "icon": "https://statichk.footprint.network/icon_side_analysis.png",
     "subMenus": [
       {
-        "label": "Chain Overview",
-        "value": "chain-overview",
-        "publicUuid": "9e0a1aa1-eeae-4608-b77d-cf23271d92a1",
-      },
-      {
-        "label": "Chain Comparison",
-        "value": "chain-comparison",
-        "publicUuid": "79eaf62d-95ac-4838-b34d-3cfdbdf3fa18",
+        "label": "Top Chains",
+        "value": "top-chains",
+        "publicUuid": "83af3336-a4d4-4ba6-8d83-c7080a27de2a",
+        "type": "chart",
       },
     ],
   },
-  /*{
+  {
     "label": "Chain Stats",
     "value": "chain-stats",
     "icon": "https://statichk.footprint.network/icon_side_analysis.png",
@@ -383,11 +402,6 @@ const chainData = [
         "label": "Polygon Overview",
         "value": "polygon-overview",
         "publicUuid": "36d92106-55be-4c4a-bb23-9da368d8e7d4",
-      },
-      {
-        "label": "Solana Overview",
-        "value": "solana-overview",
-        "publicUuid": "8d04ec19-7e5d-4ff6-8a14-07980c8597ae",
       },
       {
         "label": "Optimism Overview",
@@ -435,11 +449,6 @@ const chainData = [
         "publicUuid": "a903e63d-f71c-4ea1-87b1-827d1faccb46",
       },
       {
-        "label": "Bitcoin Overview",
-        "value": "bitcoin-overview",
-        "publicUuid": "dfd9112d-4cb2-47b3-9b2a-78cdf8006c4f",
-      },
-      {
         "label": "MCH Verse GameFi Overview",
         "value": "mch-verse-gamefi-overview",
         "publicUuid": "f0b59b4a-9b38-4745-9a15-1e1c47052d2d",
@@ -474,23 +483,27 @@ const chainData = [
         "value": "hive-overview",
         "publicUuid": "3cf8c067-c63b-4a88-a74e-cc34096d0af5",
       },
+      {
+        "label": "zkSync Era Overview",
+        "value": "zksync-era-overview",
+        "publicUuid": "a9035d8e-bd3f-4bd5-84ce-dbcd44c7a868",
+      },
     ],
-  },*/
+  },
   {
-    "label": "Chain Trends",
-    "value": "chain-trends",
+    "label": "Chain Ecosystem",
+    "value": "chain-ecosystem",
+    "icon": "https://statichk.footprint.network/icon_side_analysis.png",
     "subMenus": [
       {
-        "label": "Top Chains",
-        "value": "top-chains",
-        "publicUuid": "83af3336-a4d4-4ba6-8d83-c7080a27de2a",
-        "type": "chart",
+        "label": "Chain Overview",
+        "value": "chain-overview",
+        "publicUuid": "9e0a1aa1-eeae-4608-b77d-cf23271d92a1",
       },
       {
-        "label": "On-Chain Data Ranking",
-        "value": "on-chain-data-ranking",
-        "publicUuid": "20b1088e-0377-4bd4-849b-04ebcacf1940",
-        "type": "chart",
+        "label": "Chain Comparison",
+        "value": "chain-comparison",
+        "publicUuid": "79eaf62d-95ac-4838-b34d-3cfdbdf3fa18",
       },
     ],
   },
@@ -573,6 +586,31 @@ const chainData = [
   },
 ]
 
+const walletData = [
+  {
+    "label": "Wallet Tracker",
+    "value": "wallet-tracker",
+    "icon": "https://statichk.footprint.network/icon_side_analysis.png",
+    "subMenus": [
+      {
+        "label": "NFT Trades of Wallet",
+        "value": "nft-trades-of-wallet",
+        "publicUuid": "050bea21-f999-44c5-b6aa-be7ac68274ff",
+      },
+      {
+        "label": "Gamer Profile of Wallet",
+        "value": "gamer-profile-of-wallet",
+        "publicUuid": "69b1113b-8bfa-451d-a2f4-d540942a6279",
+      },
+      {
+        "label": "Money Flow of Wallet",
+        "value": "money-flow-of-wallet",
+        "publicUuid": "3ed912f6-4c65-464e-93a1-4ad86c656689",
+      },
+    ],
+  },
+]
+
 const customData = {
   partner: [
     {
@@ -627,12 +665,18 @@ const metaObject = {
     description: "Covering most chains and support from real-time raw data to analytic metrics",
     keywords: "Chain Ecosystem, Chain Research, Blockchain industry, chain transaction data, chain token transfer data, chain events, chain log, Chain Gas Fee",
   },
+  "wallet": {
+    title: "Wallet Research | Built by researcher for researchers",
+    description: "Covers all the wallets data you need from industry overview to individual wallets with insightful metrics, such as money flow",
+    keywords: "NFT Trades of Wallet, Gamer Profile of Wallet, Money Flow of Wallet",
+  },
 }
 
 const data = {
   "nft": nftData,
   "gamefi": gamefiData,
   "chain": chainData,
+  "wallet": walletData,
   "custom": customData,
   "metaObject": metaObject,
 }

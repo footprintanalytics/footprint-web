@@ -43,6 +43,10 @@ const footers = [
         label: "Chain Research",
         url: "/research/chain",
       },
+      {
+        label: "Wallet Research",
+        url: "/research/wallet",
+      },
     ],
   },
   {
