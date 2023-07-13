@@ -1,6 +1,6 @@
 /* eslint-disable react/prop-types */
 import React, { Component } from "react";
-import { Button, Empty, Form, Input, Modal, Space, Tabs, message } from "antd";
+import { Button, Empty, Form, Input, Modal, Space, Tabs, Typography, message } from "antd";
 
 import cx from "classnames";
 import { t } from "ttag";
@@ -332,7 +332,6 @@ export default class MultiEmbed extends Component {
                       name="url"
                       className=" mb3"
                       label="URL"
-                      tooltip="If you would like to embed a dashboard, please provide the URL of the publicly shared embed,such as: https://www.footprint.network/public/dashboard/..."
                       rules={[
                         { required: true },
                         { type: "url", warningOnly: true },
@@ -342,6 +341,7 @@ export default class MultiEmbed extends Component {
                         placeholder="Please provide the url to the embedded website."
                         allowClear
                       />
+                      <Typography.Text style={{fontSize:10}} type="secondary" >Please provide a <strong>public embed link</strong> for Footprint Dashboard or Chart. <Typography.Link style={{fontSize:10}} rel="noreferrer" href="https://docs.footprint.network/docs/embed" target="_blank" >{"Check how to get the link>>"}</Typography.Link></Typography.Text>
                     </Form.Item>
                     <Form.Item>
                       <div className="flex flex-row-reverse w-full items-center">
