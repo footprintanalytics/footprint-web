@@ -129,11 +129,15 @@ function TableCell({
   );
 
   useEffect(() => {
-    parseChart(
-      parseValue2ChartData(cellData),
-      columnSettings["view_as"],
-      `cell-${rowIndex}-${columnIndex}`,
-    );
+    const cellId = `cell-${rowIndex}-${columnIndex}`;
+    const chartDom = document.getElementById(cellId);
+    if ( chartDom?.children?.length === 0) {
+      parseChart(
+        parseValue2ChartData(cellData),
+        columnSettings["view_as"],
+        cellId,
+      );
+    }
   }, [rowIndex, columnIndex, cellData, columnSettings]);
 
   const classNames = useMemo(
@@ -155,9 +159,20 @@ function TableCell({
       {isShowChart(columnSettings["view_as"]) ? (
         <div className="w-full h-full flex flex-row justify-end">
           <div
-            style={{ height: "100%", width: 15*parseValue2ChartData(cellData)?.length,minWidth:120,maxWidth: 250}}
+            style={{
+              height: "100%",
+              width: 15 * parseValue2ChartData(cellData)?.length,
+              minWidth: 120,
+              maxWidth: 250,
+            }}
             id={`cell-${rowIndex}-${columnIndex}`}
-          />
+          >
+            {parseChart(
+              parseValue2ChartData(cellData),
+              columnSettings["view_as"],
+              `cell-${rowIndex}-${columnIndex}`,
+            )}
+          </div>
         </div>
       ) : (
         <CellContent
