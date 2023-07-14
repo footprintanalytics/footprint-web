@@ -135,3 +135,10 @@
   margin: 0 auto;
   background-color: var(--color-bg-dark);
 }
+
+.research-time-text {
+  color: #ffffff88;
+  text-align: center;
+  width: 100%;
+  padding: 10px 0 0 0;
+}
