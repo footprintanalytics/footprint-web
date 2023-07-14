@@ -129,14 +129,16 @@ function TableCell({
   );
 
   useEffect(() => {
-    const cellId = `cell-${rowIndex}-${columnIndex}`;
-    const chartDom = document.getElementById(cellId);
-    if ( chartDom?.children?.length === 0) {
-      parseChart(
-        parseValue2ChartData(cellData),
-        columnSettings["view_as"],
-        cellId,
-      );
+    if(isShowChart(columnSettings["view_as"])){
+      const cellId = `cell-${rowIndex}-${columnIndex}`;
+      const chartDom = document.getElementById(cellId);
+      if ( chartDom?.children?.length === 0) {
+        parseChart(
+          parseValue2ChartData(cellData),
+          columnSettings["view_as"],
+          cellId,
+        );
+      }
     }
   }, [rowIndex, columnIndex, cellData, columnSettings]);
 
