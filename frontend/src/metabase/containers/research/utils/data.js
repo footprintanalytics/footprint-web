@@ -10,13 +10,11 @@ const nftData = [
       }, {
         "label": "Top Marketplaces",
         "value": "top-marketplaces",
-        "publicUuid": "fa41577e-ceb7-4c82-a98d-189e9b43290d",
-        "type": "chart",
+        "publicUuid": "4566e4ff-636d-4e9b-b479-e330eb0bec01",
       }, {
         "label": "Top Chains",
         "value": "top-chains",
-        "publicUuid": "995ca151-df73-42e4-9afa-b5e1a5c34212",
-        "type": "chart",
+        "publicUuid": "694e6a3d-7b4c-4863-8b0a-87f517f1c48b",
       }, {
         "label": "Newly Added",
         "value": "newly-added",
@@ -25,12 +23,14 @@ const nftData = [
       }, {
         "label": "Top Collections by Royalty",
         "value": "top-collections-by-royalty",
-        "publicUuid": "8b839ff6-2cb3-43e7-b2a8-7d54bd4d431e",
+        "publicUuid": "f3bbc1b3-cbaa-4f85-8b7b-7be25ac48ec3",
+        "type": "chart",
       }, {
         "label": "Top Wallet Address by Trading Value",
         "value": "top-wallet-address-by-trading-value",
-        "publicUuid": "645c7f1c-263e-474a-b270-65a5b479e45c",
+        "publicUuid": "0d409482-14df-4de0-a3be-862aca1021c2",
         "type": "chart",
+        "search": "block_timestamp=past7days",
       }, {
         "label": "Top Buyers List",
         "value": "top-buyers-list",
@@ -43,7 +43,8 @@ const nftData = [
         "type": "chart",
       },
     ],
-  }, {
+  },
+  /*{
     "label": "NFT Signals",
     "value": "nft-signals",
     "subMenus": [
@@ -65,7 +66,8 @@ const nftData = [
         "publicUuid": "41f7fb51-cc98-48ef-b481-ec5675eeb1d2",
       },
     ],
-  }, {
+  }, */
+  {
     "label": "NFT Market",
     "value": "nft-market",
     "subMenus": [
@@ -93,7 +95,8 @@ const nftData = [
         "label": "Royalty",
         "value": "royalty",
         "publicUuid": "c485c035-5688-4371-9943-0752d1152bce",
-      }, {
+      },
+      /*{
         "label": "Aggregators Overview",
         "value": "aggregators-overview",
         "publicUuid": "b79c6adb-a387-474b-973d-921a8022ebc9",
@@ -101,7 +104,7 @@ const nftData = [
         "label": "Aggregators",
         "value": "aggregators",
         "publicUuid": "52b5f658-5a06-4de3-9242-8470c87bdde5",
-      },
+      },*/
     ],
   }, {
     "label": "NFT Collections",
@@ -275,6 +278,17 @@ const gamefiData = [
         "label": "Single Chain",
         "value": "single-chain",
         "publicUuid": "f37919b4-977b-4a35-9b43-ff29c02e6ba9",
+      },
+    ],
+  },
+  {
+    "label": "Game Protocols",
+    "value": "game-protocols",
+    "subMenus": [
+      {
+        "label": "Single Game Stats",
+        "value": "single-game-stats",
+        "publicUuid": "1f882ec5-0fa7-4d9b-aafd-4ba21458e3fb",
       },
     ],
   },

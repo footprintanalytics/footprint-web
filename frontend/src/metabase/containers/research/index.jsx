@@ -117,12 +117,12 @@ const Index = props => {
     )
   }
 
-  console.log("item", item)
   return (
     <>
       <Meta description={metaInfo["description"] || ""} keywords={metaInfo["keywords"] || ""} title={metaInfo["title"] || ""} />
       <div className={cx("bg-gray flex flex", isPublic ? "Features-public" : "Features")}>
         <div className="Features-side">
+          <div className="research-time-text">All times shown are in UTC timezone.</div>
           {!isCustom && renderSelectClassify()}
           {menu && (
             <FeaturesSide
