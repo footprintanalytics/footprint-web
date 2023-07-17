@@ -261,6 +261,27 @@ const gamefiData = [
     ],
   },
   {
+    "label": "In-Game NFT Rankings",
+    "value": "in-game-nft-rankings",
+    "subMenus": [
+      {
+        "label": "Top In-Game NFT on Ethereum",
+        "value": "top-in-game-nft-on-ethereum",
+        "publicUuid": "50b5948d-de7f-4161-843a-f497f9fbe575",
+      },
+      {
+        "label": "Top In-Game NFT on Polygon",
+        "value": "top-in-game-nft-on-polygon",
+        "publicUuid": "0e4c60f0-b91f-40cf-b6e1-d59409cde609",
+      },
+      {
+        "label": "Top In-Game NFT on BNB",
+        "value": "top-in-game-nft-on-bnb",
+        "publicUuid": "019b3291-5514-4dcf-98f5-ad45ed4c935d",
+      },
+    ],
+  },
+  {
     "label": "Game Overview",
     "value": "game-overview",
     "subMenus": [
