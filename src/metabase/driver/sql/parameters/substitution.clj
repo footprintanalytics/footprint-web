@@ -243,15 +243,27 @@
     ;; in case anyone needs to know we're compiling a Field filter.
     ::compiling-field-filter? true}])
 
+(s/defn ^:private fixTimestampResult
+  [result]
+  (subs result 5 (-(count result) 1)))
+
 (s/defn ^:private field->identifier :- su/NonBlankString
   "Return an approprate snippet to represent this `field` in SQL given its param type.
    For non-date Fields, this is just a quoted identifier; for dates, the SQL includes appropriately bucketing based on
    the `param-type`."
   [driver field param-type]
-  (->> (field->clause driver field param-type)
-       (sql.qp/->honeysql driver)
-       (honeysql->replacement-snippet-info driver)
-       :replacement-snippet))
+  (let [isFixTimestamp (or (= (:base_type field) :type/DateTimeWithTZ)
+            (= (:base_type field) :type/DateTime))
+        result (->> (field->clause driver field param-type)
+                    (sql.qp/->honeysql driver)
+                    (honeysql->replacement-snippet-info driver)
+                    :replacement-snippet)
+        isStartDate (str/starts-with? result "date")
+        fixResult (fixTimestampResult result)
+        ]
+    (if (and isFixTimestamp isStartDate)
+      (fixTimestampResult result)
+      result)))
 
 (s/defn ^:private field-filter->replacement-snippet-info :- ParamSnippetInfo
   "Return `[replacement-snippet & prepared-statement-args]` appropriate for a field filter parameter."
