@@ -223,10 +223,11 @@ const TableDataList = props => {
                 MetabaseAnalytics.trackStructEvent(
                   `question-side click category ${n.name}`,
                 );
+                console.log("n", n)
                 handleSelectTable({
                   tableId: id,
                   tableName: n.name,
-                  columns: n.columns,
+                  timePeriodId: n.time_period_id,
                 });
               }}
             >
@@ -261,11 +262,12 @@ const TableDataList = props => {
                 MetabaseAnalytics.trackStructEvent(
                   `question-side click item ${n.name} ${field.name}`,
                 );
+                console.log("n", n)
                 handleSelectTable({
                   tableId: id,
                   tableName: n.name,
                   columnName: field.name,
-                  columns: n.columns,
+                  timePeriodId: n.time_period_id,
                 });
               }}
             >
