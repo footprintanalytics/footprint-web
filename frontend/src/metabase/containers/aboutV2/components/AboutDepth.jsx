@@ -65,7 +65,7 @@ const AboutDepth = () => {
           link: "https://www.footprint.network/@Higi/All-Chain-Overview",
         },
       ],
-      img: "home-v2/img_depth_right_3.png",
+      img: "home-v2/img_depth_right_31.png",
     },
     {
       icon: "home-v2/img_depth_tab_4.png",
