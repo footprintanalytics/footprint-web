@@ -4,9 +4,10 @@ import { getOssUrl } from "metabase/lib/image";
 
 const AboutGrantedBy = () => {
   const data = [
-    "home-v2/img_by_near.png",
-    "home-v2/img_by_cronos.png",
-    "home-v2/img_by_optimism.png",
+    "home-v2/img_by_near_v2.png?image_process=resize,w_330/crop,h_146/format,jpg",
+    "home-v2/img_by_cronos_v2.png?image_process=resize,w_330/crop,h_146/format,jpg",
+    "home-v2/img_by_optimism_v2.png?image_process=resize,w_330/crop,h_146/format,jpg",
+    "home-v2/img_by_sui.png?image_process=resize,w_330/crop,h_146/format,jpg",
   ];
 
   return (
