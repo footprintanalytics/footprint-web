@@ -44,7 +44,7 @@ const nftData = [
       },
     ],
   },
-  /*{
+  {
     "label": "NFT Signals",
     "value": "nft-signals",
     "subMenus": [
@@ -66,7 +66,7 @@ const nftData = [
         "publicUuid": "41f7fb51-cc98-48ef-b481-ec5675eeb1d2",
       },
     ],
-  }, */
+  },
   {
     "label": "NFT Market",
     "value": "nft-market",
