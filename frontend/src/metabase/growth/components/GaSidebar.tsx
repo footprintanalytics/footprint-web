@@ -51,7 +51,7 @@ const GaSidebar = (props: IGaSidebarProp) => {
         protocolType = 'NFT'
       }
     }
-    const itemsTemp: any[] = fga_menu_data_v2(projectObject).menuTabs;
+    const itemsTemp: any[] = fga_menu_data_v2(projectObject, user).menuTabs;
     const rootSubmenuKeysTemp: any[] = [];
     itemsTemp?.map(i => {
       i?.children?.map((j: any) => {
