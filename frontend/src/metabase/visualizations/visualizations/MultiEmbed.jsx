@@ -18,6 +18,7 @@ import { slugify } from "metabase/lib/formatting";
 import ItemEmbed from "../../containers/dashboards/components/Recommendations/ItemEmbed";
 import styles from "./Text/Text.css";
 import "./MultiEmbed.css";
+import MultiEmbedChild from "metabase/visualizations/visualizations/MultiEmbedChild";
 
 export default class MultiEmbed extends Component {
   constructor(props) {
@@ -83,7 +84,7 @@ export default class MultiEmbed extends Component {
     this.props.onUpdateVisualizationSettings({ text: text });
   }
 
-  parseText(text) {
+  parseText = (text) => {
     if (!text) {
       return [];
     }
@@ -176,26 +177,6 @@ export default class MultiEmbed extends Component {
     return text;
   };
 
-  renderEmbed = ({ settings }) => {
-    if (!settings.text) {
-      return null;
-    }
-    const items = this.parseText(settings.text);
-    if (items?.length <= 0) {
-      return null;
-    }
-    return (
-      <div className="full flex-full flex flex-column h-full">
-        <Tabs
-          type="card"
-          className="w-full h-full"
-          onChange={this.onChange}
-          items={items}
-        />
-      </div>
-    );
-  };
-
   render() {
     const { className, settings, isEditing } = this.props;
     const onEdit = (
@@ -270,7 +251,7 @@ export default class MultiEmbed extends Component {
           style={{ pointerEvents: "all" }}
         >
           {this.props.isPreviewing ? (
-            <React.Fragment>{this.renderEmbed({ settings })}</React.Fragment>
+            <MultiEmbedChild settings={settings} onChange={this.onChange}/>
           ) : (
             <div
               className="full flex-full flex flex-column"
@@ -463,7 +444,7 @@ export default class MultiEmbed extends Component {
             pl0: !settings["dashcard.background"],
           })}
         >
-          {this.renderEmbed({ settings })}
+          <MultiEmbedChild settings={settings} onChange={this.onChange}/>
         </div>
       );
     }
