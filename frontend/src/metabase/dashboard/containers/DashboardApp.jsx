@@ -25,7 +25,8 @@ import QueryCopyModal from "metabase/components/QueryCopyModal";
 import {
   getUserIsAdmin,
   canManageSubscriptions,
-  getUser, getFgaProject,
+  getUser,
+  getFgaProject,
 } from "metabase/selectors/user";
 
 import {

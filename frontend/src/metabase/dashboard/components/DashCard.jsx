@@ -365,6 +365,7 @@ class DashCard extends Component {
       && includeRealtimeTable
       && isRealtimeUser;
     const isGrowth = window.location.pathname.startsWith("/growth");
+    const showButtons = !isGrowth;
     return (
       <DashCardRoot
         id={id}
@@ -380,7 +381,7 @@ class DashCard extends Component {
         isNightMode={isNightMode}
         isUsuallySlow={isSlow === "usually-slow"}
       >
-        {!isGrowth && (<div
+        {showButtons && (<div
           className="html2canvas-filter"
           style={{
             textAlign: "right",
@@ -406,7 +407,7 @@ class DashCard extends Component {
             />
           )}
         </div>)}
-        {!isGrowth && (<div
+        {showButtons && (<div
           style={{
             textAlign: "right",
             position: "absolute",
