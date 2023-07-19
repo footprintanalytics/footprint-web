@@ -21,6 +21,8 @@ export const isGrowthNeedDark = () => {
     window.location.pathname.startsWith("/growth/guest")||
     window.location.pathname.startsWith("/growth/pricing")||
     window.location.pathname.startsWith("/growth/submit")||
+    window.location.pathname.startsWith("/growth/dashboard")||
+    window.location.pathname.startsWith("/growth/chart")||
     window.location.pathname.startsWith("/growth/campaign")
   );
 };
