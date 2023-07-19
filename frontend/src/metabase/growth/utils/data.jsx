@@ -456,7 +456,6 @@ export const fga_menu_data_v2_old = project => {
 };
 
 export const fga_menu_data_v2 = (project, user) => {
-  console.log("user", user, user?.id, user?.id === 20103)
   let protocolType = project.protocolType;
   if (project?.nftCollectionAddress?.length > 0) {
     if (protocolType === "GameFi") {
