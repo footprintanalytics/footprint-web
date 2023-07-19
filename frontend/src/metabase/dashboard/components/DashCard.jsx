@@ -364,7 +364,7 @@ class DashCard extends Component {
     const showReadTimeMode = !isPublic && !isTextDisplay && !isImageDisplay && !isVideoDisplay &&!isMultiEmbedDisplay && !isEmbedDisplay && !isTableauDisplay && result && !result.error
       && includeRealtimeTable
       && isRealtimeUser;
-
+    const isGrowth = window.location.pathname.startsWith("/growth");
     return (
       <DashCardRoot
         id={id}
@@ -380,7 +380,7 @@ class DashCard extends Component {
         isNightMode={isNightMode}
         isUsuallySlow={isSlow === "usually-slow"}
       >
-        <div
+        {!isGrowth && (<div
           className="html2canvas-filter"
           style={{
             textAlign: "right",
@@ -405,8 +405,8 @@ class DashCard extends Component {
               user={user}
             />
           )}
-        </div>
-        <div
+        </div>)}
+        {!isGrowth && (<div
           style={{
             textAlign: "right",
             position: "absolute",
@@ -542,7 +542,7 @@ class DashCard extends Component {
               <Icon name={"camera"} size={14} color={"#9AA0AF"} />
             </a>
           )} */}
-        </div>
+        </div>)}
         {isEditingDashboardLayout ? (
           <DashboardCardActionsPanel onMouseDown={this.preventDragging}>
             <DashCardActionButtons
