@@ -192,7 +192,6 @@ function QuestionSide({
   useEffect(() => {
     if (handleSelectTable) {
       const { tableId, tableName, columnName, timePeriodId } = handleSelectTable;
-      console.log("handleSelectTable", handleSelectTable)
       closeNewGuide({ key: "table" });
       if (selectTableAction) {
         selectTableAction({ tableId, tableName, columnName });
