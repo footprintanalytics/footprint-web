@@ -495,6 +495,7 @@ class Dashboard extends Component {
       hideParameters,
     } = this.props;
     const { error, isParametersWidgetSticky, shareModalResource } = this.state;
+    const hideEdit = window?.location?.hash?.includes("hide_edit");
     // const shouldRenderAsNightMode = isNightMode && isFullscreen;
     const shouldRenderAsNightMode =
       (isNightMode || canShowDarkMode(dashboard)) && !isEditing;
@@ -527,10 +528,11 @@ class Dashboard extends Component {
       !shouldRenderParametersWidgetInViewMode &&
       (!isEditing || isEditingParameter);
 
-    const { chart_style } = {
+    const { chart_style, theme } = {
       ...parseHashOptions(location.hash),
     };
 
+    const curTheme = shouldRenderAsNightMode ? "night" : theme;
     return (
       <>
         {dashboard && (
@@ -561,19 +563,21 @@ class Dashboard extends Component {
                   isNightMode={shouldRenderAsNightMode}
                   isDataApp={false}
                 >
-                  <DashboardHeader
-                    {...this.props}
-                    isNightMode={shouldRenderAsNightMode}
-                    onEditingChange={this.setEditing}
-                    setDashboardAttribute={this.setDashboardAttribute}
-                    addParameter={addParameter}
-                    parametersWidget={parametersWidget}
-                    onSharingClick={this.onSharingClick}
-                    showNewDashboardModal={this.onShowNewDashboardModal}
-                    saveAction={this.saveAction}
-                    onRevert={this.onRevert}
-                    onRefreshCache={this.onRefreshCache}
-                  />
+                  {!hideEdit && (
+                    <DashboardHeader
+                      {...this.props}
+                      isNightMode={shouldRenderAsNightMode}
+                      onEditingChange={this.setEditing}
+                      setDashboardAttribute={this.setDashboardAttribute}
+                      addParameter={addParameter}
+                      parametersWidget={parametersWidget}
+                      onSharingClick={this.onSharingClick}
+                      showNewDashboardModal={this.onShowNewDashboardModal}
+                      saveAction={this.saveAction}
+                      onRevert={this.onRevert}
+                      onRefreshCache={this.onRefreshCache}
+                    />
+                  )}
 
                   {shouldRenderParametersWidgetInEditMode && (
                     <ParametersWidgetContainer
@@ -586,7 +590,7 @@ class Dashboard extends Component {
                   )}
                 </HeaderContainer>
               )}
-              <DashboardLazyLoadContainer className="flex-full flex flex-column flex-basis-none">
+              <DashboardLazyLoadContainer className={cx("flex-full flex flex-column flex-basis-none", {[`Theme--${curTheme}`]: !!curTheme})}>
                 <DashboardBody isEditingOrSharing={isEditing || isSharing}>
                   <ParametersAndCardsContainer
                     data-testid="dashboard-parameters-and-cards"
@@ -600,12 +604,14 @@ class Dashboard extends Component {
                         shouldRenderAsNightMode ? "bg-transparent" : "bg-white",
                       )}
                     >
-                      <div
-                        className="pl2 pr2"
-                        style={{ display: isEditing ? "none" : "flex" }}
-                      >
-                        {this.tagPanel({ shouldRenderAsNightMode })}
-                      </div>
+                      {!hideEdit && (
+                        <div
+                          className="pl2 pr2"
+                          style={{ display: isEditing ? "none" : "flex" }}
+                        >
+                          {this.tagPanel({ shouldRenderAsNightMode })}
+                        </div>
+                      )}
                       {shouldRenderParametersWidgetInViewMode && (
                         <ParametersWidgetContainer
                           data-testid="dashboard-parameters-widget-container"
@@ -664,7 +670,7 @@ class Dashboard extends Component {
                     setDashboardAttribute={this.setDashboardAttribute}
                   />
                 </DashboardBody>
-                {!isEditing && (
+                {!isEditing && !hideEdit && (
                   <div style={{ padding: "0 18px" }}>
                     <DashboardAd
                       dashboardId={this.state.id || this.props.dashboardId}

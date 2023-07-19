@@ -455,7 +455,7 @@ export const fga_menu_data_v2_old = project => {
   return { menuTabs, keys, dashboardMap, liveKeys };
 };
 
-export const fga_menu_data_v2 = project => {
+export const fga_menu_data_v2 = (project, user) => {
   let protocolType = project.protocolType;
   if (project?.nftCollectionAddress?.length > 0) {
     if (protocolType === "GameFi") {
@@ -495,6 +495,7 @@ export const fga_menu_data_v2 = project => {
           protocolType !== "NFT" && getItem("Overview", "users_overview", null),
           getItem("Segment", "segment", null),
           getItem("Members", "members", null),
+          user?.id === 20103 && getItem("Funnel", "funnel", null),
         ]),
         getItem("Assets", "assets", null, [
           //<WalletOutlined />
