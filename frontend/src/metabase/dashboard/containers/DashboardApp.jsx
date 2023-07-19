@@ -26,6 +26,7 @@ import {
   getUserIsAdmin,
   canManageSubscriptions,
   getUser,
+  getFgaProject,
 } from "metabase/selectors/user";
 
 import {
@@ -111,6 +112,7 @@ const mapStateToProps = (state, props) => {
     urlDashboardName: props.params.dashboardName,
     urlUserName: props.params.name,
     user: getUser(state),
+    projectObject: getFgaProject(state),
   };
 };
 
@@ -128,7 +130,7 @@ const mapDispatchToProps = {
 // NOTE: should use DashboardControls and DashboardData HoCs here0?
 const DashboardApp = props => {
   const options = parseHashOptions(window.location.hash);
-  const { isRunning, isLoadingComplete, dashboard } = props;
+  const { isRunning, isLoadingComplete, dashboard, projectObject, router } = props;
 
   const [editingOnLoad] = useState(options.edit);
   const [addCardOnLoad] = useState(options.add && parseInt(options.add));
@@ -136,6 +138,13 @@ const DashboardApp = props => {
   const [isShowingToaster, setIsShowingToaster] = useState(false);
 
   const [cardInfo, setCardInfo] = useState(null);
+
+
+  useEffect(() => {
+    if (projectObject?.protocolSlug !== "mocaverse" && location.pathname === "/growth/dashboard/@0xABS/User-Journey-of-Mocaverse-FGA") {
+      router.replace("/growth")
+    }
+  }, [router, projectObject]);
 
   const onTimeout = useCallback(() => {
     if ("Notification" in window && Notification.permission === "default") {
@@ -225,6 +234,7 @@ const DashboardApp = props => {
           duplicateAction={duplicateAction}
           previewAction={previewAction}
           getDataViaSqlApiAction={getDataViaSqlApiAction}
+          projectObject={projectObject}
           {...props}
         />
         <QueryCopyModal
