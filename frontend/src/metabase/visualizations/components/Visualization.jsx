@@ -53,6 +53,7 @@ import Mode from "metabase-lib/Mode";
 import { memoizeClass } from "metabase-lib/utils";
 import { VisualizationSlowSpinner } from "./Visualization.styled";
 import "./Visualization.css";
+import AboutImage from "metabase/containers/aboutV2/components/AboutImage";
 
 // NOTE: pass `CardVisualization` so that we don't include header when providing size to child element
 
@@ -494,12 +495,12 @@ class Visualization extends React.PureComponent {
     const isFgaGoogleAnalysis =
       isFga && location.pathname.includes("/User%20Funnel");
     const cardId = get(this.props.rawSeries, 0)?.card?.id;
+    const isResearch = window.location.pathname.startsWith("/research");
 
     const renderNoResult = () => {
       if (isFgaDiscord || isFgaTwitter || isFgaGoogleAnalysis) {
         return (
           <>
-            {this.renderHideHintToCatch()}
             <FgaErrorGuide />
           </>
         );
@@ -507,7 +508,6 @@ class Visualization extends React.PureComponent {
       if (isFga) {
         return (
           <div className="noResults">
-            {this.renderHideHintToCatch()}
             The data is not yet available, please
             <br />
             feel free to contact our{" "}
@@ -518,9 +518,27 @@ class Visualization extends React.PureComponent {
           </div>
         );
       }
+      if (isResearch) {
+        return (
+          <div>
+            <span style={{fontSize: 13, color: "#808898"}}>No data.</span>
+            <br />
+            <span style={{fontSize: 13, color: "#808898"}}>Try to change the filters, or</span>
+            <br />
+            <Link
+              className="text-underline text-underline-hover"
+              href="https://discord.gg/3HYaR6USM7"
+              rel="nofollow"
+              target="_blank"
+              style={{fontSize: 11, color: "#3C7EEB"}}
+            >
+              Report the issue
+            </Link>
+          </div>
+        )
+      }
       return (
         <div className="noResults">
-          {this.renderHideHintToCatch()}
           <h4>No results!</h4>
           <ol>
             <li>You can try refreshing your browser.</li>
@@ -540,6 +558,95 @@ class Visualization extends React.PureComponent {
         </div>
       );
     };
+
+    const renderErrorLayout = () => {
+      if (isFgaDiscord || isFgaTwitter || isFgaGoogleAnalysis) {
+        return (<FgaErrorGuide />);
+      }
+      if (isResearch) {
+        return (
+          <div>
+            <AboutImage src={getOssUrl("home-v2/img-no-data.png")} />
+            <span style={{fontSize: 13, color: "#808898"}}>No data.</span>
+            <br/>
+            <Link
+              className="text-underline text-underline-hover"
+              href="https://discord.gg/3HYaR6USM7"
+              rel="nofollow"
+              target="_blank"
+              style={{fontSize: 11, color: "#3C7EEB"}}
+            >
+              Report the issue
+            </Link>
+          </div>
+        )
+      }
+      return (
+        <>
+          <Tooltip tooltip={error?.message} isEnabled={small}>
+            <Icon
+              className="mb2"
+              name={errorIcon || "warning"}
+              size={50}
+            />
+          </Tooltip>
+          {
+            <div
+              className="h4 text-bold flex-column"
+              style={{ display: small ? "none" : "" }}
+            >
+              <div
+                style={{
+                  whiteSpace: "pre-wrap",
+                  lineHeight: 1.2,
+                  maxWidth: "80%",
+                  margin: "0 auto",
+                }}
+              >
+                {error?.message}
+              </div>
+              {errorIcon !== "key" && <ErrorGuide cardId={cardId} />}
+            </div>
+          }
+        </>
+      )
+    }
+
+    const renderLoadingLayout = () => {
+      if (isResearch) {
+        return (
+          <>
+            <LoadingSpinner className="text-slate" />
+            <br/>
+            {isSlow && (<span style={{color: "#808898", fontSize: 12}}>You can view other pages and come back later.</span>)}
+          </>
+        )
+      }
+      return isSlow ? (
+        <div className="text-slate">
+          <div className="h4 text-bold mb1">{t`Still Waiting...`}</div>
+          {isSlow === "usually-slow" ? (
+            <div>
+              {expectedDuration > 0 &&
+              jt`This usually takes an average of ${(
+                <span style={{ whiteSpace: "nowrap" }}>
+                      {duration(expectedDuration)}
+                    </span>
+              )}.`}
+              <br />
+              {t`(This is a bit long for a dashboard)`}
+            </div>
+          ) : (
+            <div>
+              {t`This is usually pretty fast but seems to be taking a while right now.`}
+            </div>
+          )}
+        </div>
+      ) : (
+        <LoadingSpinner className="text-slate" />
+      )
+    }
+
     // update column description into column settings
     if (settings?.column_settings) {
       const columns = [];
@@ -589,6 +696,8 @@ class Visualization extends React.PureComponent {
           !isEmbed &&
           !isTableau &&
           !isFilter &&
+          !error &&
+          !loading &&
           !noResults && (
             <div className="waterMarkHome">
               <span />
@@ -619,10 +728,7 @@ class Visualization extends React.PureComponent {
               (isDashboard ? "text-slate-light" : "text-slate")
             }
           >
-            {/*<Tooltip tooltip={t`No results!`} isEnabled={small}>
-              <img data-testid="no-results-image" src={NoResults} />
-            </Tooltip>
-            {!small && <span className="h4 text-bold">{t`No results!`}</span>}*/}
+            {this.renderHideHintToCatch()}
             {renderNoResult()}
           </div>
         ) : error ? (
@@ -634,64 +740,12 @@ class Visualization extends React.PureComponent {
           >
             <>
               {this.renderHideHintToCatch()}
-              {isFgaDiscord || isFgaTwitter || isFgaGoogleAnalysis ? (
-                <FgaErrorGuide></FgaErrorGuide>
-              ) : (
-                <>
-                  <Tooltip tooltip={error?.message} isEnabled={small}>
-                    <Icon
-                      className="mb2"
-                      name={errorIcon || "warning"}
-                      size={50}
-                    />
-                  </Tooltip>
-                  {
-                    <div
-                      className="h4 text-bold flex-column"
-                      style={{ display: small ? "none" : "" }}
-                    >
-                      <div
-                        style={{
-                          whiteSpace: "pre-wrap",
-                          lineHeight: 1.2,
-                          maxWidth: "80%",
-                          margin: "0 auto",
-                        }}
-                      >
-                        {error?.message}
-                      </div>
-                      {errorIcon !== "key" && <ErrorGuide cardId={cardId} />}
-                    </div>
-                  }
-                </>
-              )}
+              {renderErrorLayout()}
             </>
           </div>
         ) : loading ? (
           <div className="flex-full p1 text-centered text-brand flex flex-column layout-centered">
-            {isSlow ? (
-              <div className="text-slate">
-                <div className="h4 text-bold mb1">{t`Still Waiting...`}</div>
-                {isSlow === "usually-slow" ? (
-                  <div>
-                    {expectedDuration > 0 &&
-                      jt`This usually takes an average of ${(
-                        <span style={{ whiteSpace: "nowrap" }}>
-                          {duration(expectedDuration)}
-                        </span>
-                      )}.`}
-                    <br />
-                    {t`(This is a bit long for a dashboard)`}
-                  </div>
-                ) : (
-                  <div>
-                    {t`This is usually pretty fast but seems to be taking a while right now.`}
-                  </div>
-                )}
-              </div>
-            ) : (
-              <LoadingSpinner className="text-slate" />
-            )}
+            {renderLoadingLayout()}
           </div>
         ) : (
           <>
