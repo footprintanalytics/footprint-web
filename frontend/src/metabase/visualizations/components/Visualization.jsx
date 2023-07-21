@@ -501,7 +501,6 @@ class Visualization extends React.PureComponent {
       if (isFgaDiscord || isFgaTwitter || isFgaGoogleAnalysis) {
         return (
           <>
-            {this.renderHideHintToCatch()}
             <FgaErrorGuide />
           </>
         );
@@ -509,7 +508,6 @@ class Visualization extends React.PureComponent {
       if (isFga) {
         return (
           <div className="noResults">
-            {this.renderHideHintToCatch()}
             The data is not yet available, please
             <br />
             feel free to contact our{" "}
@@ -541,7 +539,6 @@ class Visualization extends React.PureComponent {
       }
       return (
         <div className="noResults">
-          {this.renderHideHintToCatch()}
           <h4>No results!</h4>
           <ol>
             <li>You can try refreshing your browser.</li>
@@ -731,6 +728,7 @@ class Visualization extends React.PureComponent {
               (isDashboard ? "text-slate-light" : "text-slate")
             }
           >
+            {this.renderHideHintToCatch()}
             {renderNoResult()}
           </div>
         ) : error ? (
