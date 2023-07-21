@@ -54,6 +54,7 @@ import { memoizeClass } from "metabase-lib/utils";
 import { VisualizationSlowSpinner } from "./Visualization.styled";
 import "./Visualization.css";
 import AboutImage from "metabase/containers/aboutV2/components/AboutImage";
+import ResearchNoData from "metabase/visualizations/components/ResearchNoData";
 
 // NOTE: pass `CardVisualization` so that we don't include header when providing size to child element
 
@@ -520,20 +521,24 @@ class Visualization extends React.PureComponent {
       }
       if (isResearch) {
         return (
-          <div>
-            <span style={{fontSize: 13, color: "#808898"}}>No data.</span>
+          <div style={{lineHeight: 1.1}}>
+            <ResearchNoData />
+            <br/>
+            <span style={{fontSize: 11, color: "#808898"}}>No data.</span>
             <br />
-            <span style={{fontSize: 13, color: "#808898"}}>Try to change the filters, or</span>
+            <span style={{fontSize: 11, color: "#808898"}}>Try to change the filters, or</span>
             <br />
-            <Link
-              className="text-underline text-underline-hover"
-              href="https://discord.gg/3HYaR6USM7"
-              rel="nofollow"
-              target="_blank"
-              style={{fontSize: 11, color: "#3C7EEB"}}
-            >
-              Report the issue
-            </Link>
+            <div style={{marginTop: 2}}>
+              <Link
+                className="text-underline text-underline-hover"
+                href="https://discord.gg/3HYaR6USM7"
+                rel="nofollow"
+                target="_blank"
+                style={{fontSize: 11, color: "#3C7EEB"}}
+              >
+                Report the issue
+              </Link>
+            </div>
           </div>
         )
       }
@@ -565,19 +570,22 @@ class Visualization extends React.PureComponent {
       }
       if (isResearch) {
         return (
-          <div>
-            <AboutImage src={getOssUrl("home-v2/img-no-data.png")} />
-            <span style={{fontSize: 13, color: "#808898"}}>No data.</span>
+          <div style={{lineHeight: 1.1}}>
+            <ResearchNoData />
             <br/>
-            <Link
-              className="text-underline text-underline-hover"
-              href="https://discord.gg/3HYaR6USM7"
-              rel="nofollow"
-              target="_blank"
-              style={{fontSize: 11, color: "#3C7EEB"}}
-            >
-              Report the issue
-            </Link>
+            <span style={{fontSize: 11, color: "#808898"}}>No data.</span>
+            <br/>
+            <div style={{marginTop: 2}}>
+              <Link
+                className="text-underline text-underline-hover"
+                href="https://discord.gg/3HYaR6USM7"
+                rel="nofollow"
+                target="_blank"
+                style={{fontSize: 11, color: "#3C7EEB"}}
+              >
+                Report the issue
+              </Link>
+            </div>
           </div>
         )
       }
