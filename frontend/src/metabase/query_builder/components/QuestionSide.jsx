@@ -174,17 +174,11 @@ function QuestionSide({
     }
   }, [newGuideShowTable, dataSets, getNewGuideInfo, setNewGuideInfo]);
 
-  const getFilter = ({ tableName, columns }) => {
+  const getFilter = ({ tableName, timePeriodId }) => {
     let filter = null;
-    const mapping = dateFieldMapping.mapping.find(
-      mapping => mapping.tableName === tableName,
-    ) || dateFieldMapping.dateFieldSuffix.find(suffixObject => tableName.endsWith(suffixObject.tableName));
-    if (mapping && columns) {
-      const { dateField } = mapping;
-      const dateColumn = columns.find(column => column.name === dateField);
-      if (dateColumn) {
-        filter = ["time-interval", ["field", dateColumn.id, null], -7, "day"];
-      }
+    const mapping = dateFieldMapping.mapping.find(name => name === tableName)
+    if (!mapping && timePeriodId && timePeriodId !== -1) {
+      filter = ["time-interval", ["field", timePeriodId, null], -7, "day"];
     }
     return filter;
   };
@@ -197,7 +191,7 @@ function QuestionSide({
 
   useEffect(() => {
     if (handleSelectTable) {
-      const { tableId, tableName, columnName, columns } = handleSelectTable;
+      const { tableId, tableName, columnName, timePeriodId } = handleSelectTable;
       closeNewGuide({ key: "table" });
       if (selectTableAction) {
         selectTableAction({ tableId, tableName, columnName });
@@ -206,7 +200,7 @@ function QuestionSide({
       if (isEditing) {
         return;
       }
-      setNextTableObject({ tableId, tableName, columns });
+      setNextTableObject({ tableId, tableName, timePeriodId });
       if (isNative) {
         updateNativeEditorSelect({
           databaseId,
@@ -224,7 +218,7 @@ function QuestionSide({
         setConfirmModal(true);
         return;
       }
-      const filter = getFilter({ tableName, columns });
+      const filter = getFilter({ tableName, timePeriodId });
       replaceUrl({ tableId, filter });
       afterAction();
     }
@@ -353,8 +347,8 @@ function QuestionSide({
           }}
           onAction={() => {
             setConfirmModal(false);
-            const { tableId, tableName, columns } = nextTableObject;
-            const filter = getFilter({ tableName, columns });
+            const { tableId, tableName, timePeriodId } = nextTableObject;
+            const filter = getFilter({ tableName, timePeriodId });
             replaceUrl({ tableId, filter });
             afterAction();
           }}

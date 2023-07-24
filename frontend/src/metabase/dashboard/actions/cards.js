@@ -59,9 +59,9 @@ export const addCardToDashboard =
   };
 
 export const refreshCardData =
-  ({ dashcard, card }) =>
+  ({ dashcard, card, clear= false }) =>
   async (dispatch, getState) => {
-    return await dispatch(fetchCardData(card, dashcard, { reload: true, clear: false, ignoreCache: true }));
+    return await dispatch(fetchCardData(card, dashcard, { reload: true, clear, ignoreCache: true }));
   };
 
 export const addDashCardToDashboard = function ({ dashId, dashcardOverrides }) {
@@ -89,6 +89,23 @@ export const addDashCardToDashboard = function ({ dashId, dashcardOverrides }) {
 export const addTextDashCardToDashboard = function ({ dashId }) {
   const virtualTextCard = createCard();
   virtualTextCard.display = "text";
+  virtualTextCard.archived = false;
+
+  const dashcardOverrides = {
+    card: virtualTextCard,
+    visualization_settings: {
+      virtual_card: virtualTextCard,
+    },
+  };
+  return addDashCardToDashboard({
+    dashId: dashId,
+    dashcardOverrides: dashcardOverrides,
+  });
+};
+
+export const addFilterDashCardToDashboard = function ({ dashId }) {
+  const virtualTextCard = createCard();
+  virtualTextCard.display = "filter";
   virtualTextCard.archived = false;
 
   const dashcardOverrides = {
@@ -140,6 +157,23 @@ export const addVideoDashCardToDashboard = function ({ dashId }) {
 export const addEmbedDashCardToDashboard = function ({ dashId }) {
   const virtualTextCard = createCard();
   virtualTextCard.display = "embed";
+  virtualTextCard.archived = false;
+
+  const dashcardOverrides = {
+    card: virtualTextCard,
+    visualization_settings: {
+      virtual_card: virtualTextCard,
+    },
+  };
+  return addDashCardToDashboard({
+    dashId: dashId,
+    dashcardOverrides: dashcardOverrides,
+  });
+};
+
+export const addMultiEmbedDashCardToDashboard = function ({ dashId }) {
+  const virtualTextCard = createCard();
+  virtualTextCard.display = "multi_embed";
   virtualTextCard.archived = false;
 
   const dashcardOverrides = {

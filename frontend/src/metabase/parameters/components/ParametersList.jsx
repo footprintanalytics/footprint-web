@@ -38,6 +38,7 @@ function ParametersList({
 
   parameters,
   dashboard,
+  dashcard,
   editingParameter,
 
   isFullscreen,
@@ -52,7 +53,7 @@ function ParametersList({
   removeParameter,
   setEditingParameter,
 }) {
-  const [showNormalVisibleParams, setShowNormalVisibleParams] = useState(false)
+  const [showNormalVisibleParams, setShowNormalVisibleParams] = useState(false);
 
   const handleSortStart = () => {
     document.body.classList.add("grabbing");
@@ -80,62 +81,76 @@ function ParametersList({
     ParameterWidgetList = StaticParameterWidgetList;
   }
 
-  const fgaVisibleValuePopulatedParameters = visibleValuePopulatedParameters
-    ?.filter(item => item.sectionId === "fp_enum");
-  const normalVisibleValuePopulatedParameters = visibleValuePopulatedParameters
-    ?.filter(item => item.sectionId !== "fp_enum");
+  const fgaVisibleValuePopulatedParameters =
+    visibleValuePopulatedParameters?.filter(
+      item => item.sectionId === "fp_enum",
+    );
+  const normalVisibleValuePopulatedParameters =
+    visibleValuePopulatedParameters?.filter(
+      item => item.sectionId !== "fp_enum",
+    );
 
-  const showAdvanced = fgaVisibleValuePopulatedParameters.length > 0 && !isEditing;
+  const showAdvanced =
+    fgaVisibleValuePopulatedParameters.length > 0 && !isEditing;
 
   return visibleValuePopulatedParameters.length > 0 ? (
     <div className="flex flex-column w-full">
       <div className="flex flex-row justify-between">
-      <ParameterWidgetList
-        className={cx(
-          className,
-          "flex flex-wrap",
-          "flex-column",
-        )}
-        axis="x"
-        distance={9}
-        onSortStart={handleSortStart}
-        onSortEnd={handleSortEnd}
-      >
-        {fgaVisibleValuePopulatedParameters.map((valuePopulatedParameter, index) => (
-          <StaticParameterWidgetFga
-            key={valuePopulatedParameter.id}
-            className={cx({ mb2: vertical })}
-            isEditing={isEditing}
-            isFullscreen={isFullscreen}
-            isNightMode={isNightMode}
-            parameter={valuePopulatedParameter}
-            parameters={parameters}
-            dashboard={dashboard}
-            editingParameter={editingParameter}
-            setEditingParameter={setEditingParameter}
-            index={index}
-            setValue={
-              setParameterValue &&
-              (value => setParameterValue(valuePopulatedParameter.id, value))
-            }
-            commitImmediately={commitImmediately}
-            dragHandle={
-              isEditing && setParameterIndex ? <SortableParameterHandle /> : null
-            }
-          />
-        ))}
-      </ParameterWidgetList>
+        <ParameterWidgetList
+          className={cx(className, "flex flex-wrap", "flex-column")}
+          axis="x"
+          distance={9}
+          onSortStart={handleSortStart}
+          onSortEnd={handleSortEnd}
+        >
+          {fgaVisibleValuePopulatedParameters.map(
+            (valuePopulatedParameter, index) => (
+              <StaticParameterWidgetFga
+                key={valuePopulatedParameter.id}
+                className={cx({ mb2: vertical })}
+                isEditing={isEditing}
+                isFullscreen={isFullscreen}
+                isNightMode={isNightMode}
+                parameter={valuePopulatedParameter}
+                parameters={parameters}
+                dashboard={dashboard}
+                editingParameter={editingParameter}
+                setEditingParameter={setEditingParameter}
+                index={index}
+                setValue={
+                  setParameterValue &&
+                  (value =>
+                    setParameterValue(valuePopulatedParameter.id, value))
+                }
+                commitImmediately={commitImmediately}
+                dragHandle={
+                  isEditing && setParameterIndex ? (
+                    <SortableParameterHandle />
+                  ) : null
+                }
+              />
+            ),
+          )}
+        </ParameterWidgetList>
         {showAdvanced && (
           <div className="flex align-end">
             <Button
               className="cursor-pointer flex align-center mb1"
               style={{ padding: "4px 6px", color: "#7A819B" }}
               onClick={() => {
-                setShowNormalVisibleParams(!showNormalVisibleParams)
+                setShowNormalVisibleParams(!showNormalVisibleParams);
               }}
             >
               <span>Advanced</span>
-              <Icon className="ml1" name={showNormalVisibleParams ? "search_arrow_down" : "search_arrow_up"} size={12}/>
+              <Icon
+                className="ml1"
+                name={
+                  showNormalVisibleParams
+                    ? "search_arrow_down"
+                    : "search_arrow_up"
+                }
+                size={12}
+              />
             </Button>
           </div>
         )}
@@ -152,29 +167,35 @@ function ParametersList({
           onSortStart={handleSortStart}
           onSortEnd={handleSortEnd}
         >
-          {normalVisibleValuePopulatedParameters.map((valuePopulatedParameter, index) => (
-            <ParameterWidget
-              key={valuePopulatedParameter.id}
-              className={cx({ mb2: vertical })}
-              isEditing={isEditing}
-              isFullscreen={isFullscreen}
-              isNightMode={isNightMode}
-              parameter={valuePopulatedParameter}
-              parameters={parameters}
-              dashboard={dashboard}
-              editingParameter={editingParameter}
-              setEditingParameter={setEditingParameter}
-              index={index}
-              setValue={
-                setParameterValue &&
-                (value => setParameterValue(valuePopulatedParameter.id, value))
-              }
-              commitImmediately={commitImmediately}
-              dragHandle={
-                isEditing && setParameterIndex ? <SortableParameterHandle /> : null
-              }
-            />
-          ))}
+          {normalVisibleValuePopulatedParameters.filter(p=>dashcard?p?.dashcardId===dashcard?.id:!p?.dashcardId).map(
+            (valuePopulatedParameter, index) => (
+              <ParameterWidget
+                key={valuePopulatedParameter.id}
+                className={cx({ mb2: vertical })}
+                isEditing={isEditing}
+                isFullscreen={isFullscreen}
+                isNightMode={isNightMode}
+                parameter={valuePopulatedParameter}
+                parameters={parameters}
+                dashboard={dashboard}
+                dashcard={dashcard}
+                editingParameter={editingParameter}
+                setEditingParameter={setEditingParameter}
+                index={index}
+                setValue={
+                  setParameterValue &&
+                  (value =>
+                    setParameterValue(valuePopulatedParameter.id, value))
+                }
+                commitImmediately={commitImmediately}
+                dragHandle={
+                  isEditing && setParameterIndex ? (
+                    <SortableParameterHandle />
+                  ) : null
+                }
+              />
+            ),
+          )}
         </ParameterWidgetList>
       )}
     </div>

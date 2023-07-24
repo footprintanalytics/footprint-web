@@ -45,13 +45,17 @@ const Project = props => {
 
   useEffect(() => {
     if (menu && menu !== currentMenu && projectObject) {
+      if (menu === "funnel") {
+        router.replace("/growth/dashboard/@0xABS/User-Journey-of-Mocaverse-FGA?series_date=past30days#type=dashboard&hide_edit")
+        return
+      }
       setCurrentMenu(menu);
     }
   }, [menu]);
 
   useEffect(() => {
     if (projectObject) {
-      const menuData = fga_menu_data_v2(projectObject);
+      const menuData = fga_menu_data_v2(projectObject, user);
       const menuKeys = menuData.keys;
       const liveKeys = menuData.liveKeys;
       setGaMenuTabs(menuData);

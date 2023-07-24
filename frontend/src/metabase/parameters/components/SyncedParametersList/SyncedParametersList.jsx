@@ -9,6 +9,7 @@ const propTypes = {
   parameters: PropTypes.array.isRequired,
   editingParameter: PropTypes.object,
   dashboard: PropTypes.object,
+  dashcard: PropTypes.object,
 
   className: PropTypes.string,
   hideParameters: PropTypes.string,
@@ -27,6 +28,7 @@ export function SyncedParametersList({
   parameters,
   editingParameter,
   dashboard,
+  dashcard,
 
   className,
   hideParameters,
@@ -54,6 +56,7 @@ export function SyncedParametersList({
     <ParametersList
       className={className}
       parameters={parameters}
+      dashcard={dashcard}
       dashboard={dashboard}
       editingParameter={editingParameter}
       isFullscreen={isFullscreen}

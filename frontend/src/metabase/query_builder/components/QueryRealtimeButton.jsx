@@ -46,7 +46,7 @@ const QueryRealtimeButton = ({
   const _refreshCardData = async () => {
     _clearRefreshInterval()
     setRealTimeLoading(true);
-    await refreshCardData({ dashcard, card: dashcard.card });
+    await refreshCardData({ dashcard, card: dashcard.card, clear: false });
     setRealTimeLoading(false);
     setStatus("Refresh done");
     setTimeout(() => {

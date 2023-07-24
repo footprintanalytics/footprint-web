@@ -73,9 +73,9 @@ const Index = props => {
       )
     }
     if (tempItem?.type === "chart") {
-      return <ChartArea location={location} item={tempItem} />
+      return <ChartArea key={`${tempItem?.publicUuid}${tempItem?.search}`} location={location} item={tempItem} />
     }
-    return <DashboardArea location={location} item={tempItem} />
+    return <DashboardArea key={`${tempItem?.publicUuid}${tempItem?.search}`} location={location} item={tempItem} />
   }
 
   const renderSelectClassify = () => {
@@ -90,7 +90,12 @@ const Index = props => {
             }
           }}
           options={
-            [{ value: "nft", label: "NFT Research" }, { value: "gamefi", label: "GameFi Research" }, { value: "chain", label: "Chain Research" }]
+            [
+              { value: "gamefi", label: "GameFi Research" },
+              { value: "nft", label: "NFT Research" },
+              { value: "chain", label: "Chain Research" },
+              { value: "wallet", label: "Wallet Research" },
+            ]
           }
         />
       </div>
@@ -112,12 +117,12 @@ const Index = props => {
     )
   }
 
-
   return (
     <>
       <Meta description={metaInfo["description"] || ""} keywords={metaInfo["keywords"] || ""} title={metaInfo["title"] || ""} />
       <div className={cx("bg-gray flex flex", isPublic ? "Features-public" : "Features")}>
         <div className="Features-side">
+          <div className="research-time-text">All times shown are in UTC timezone.</div>
           {!isCustom && renderSelectClassify()}
           {menu && (
             <FeaturesSide

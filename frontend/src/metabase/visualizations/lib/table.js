@@ -110,3 +110,82 @@ export function isColumnRightAligned(column) {
   }
   return isNumber(column) || isCoordinate(column);
 }
+
+export function parseChart(datas, chartType, cellId) {
+  const chartDom = document.getElementById(cellId);
+  if (!chartDom) return;
+  const chart = window.echarts?.init(chartDom);
+  if (!chart) return;
+  const option = {
+    xAxis: {
+      type: "category",
+      show: false,
+    },
+    yAxis: {
+      type: "value",
+      show: false,
+      splitLine: { show: false },
+    },
+    grid: [
+      {
+        left: 1,
+        top: 8,
+        right: 1,
+        bottom: 0,
+      },
+    ],
+    tooltip: {
+      show: true,
+      trigger:"item",
+      // trigger: chartType === "bar_chart" ?"item":"axis",
+      position: [0, 0],
+      padding: [3, 3],
+      textStyle: {
+        fontSize: 6,
+      },
+      formatter: function (params) {
+        const value = params?.value;
+        return value.toString();
+      },
+    },
+    series: [
+      {
+        data: datas,
+        type: chartType === "bar_chart" ? "bar" : "line",
+        areaStyle: {},
+        smooth: true,
+        symbol: "circle",
+        barMaxWidth: 15,
+        barMinWidth: 3,
+        barMinHeight: 0,
+      },
+    ],
+  };
+  chart?.setOption(option);
+  // chart?.resize()
+}
+
+export function parseValue2ChartData(str) {
+  try {
+    const arr = JSON.parse(str);
+    if (Array.isArray(arr)) {
+      let datas = arr.map(Number);
+      if (datas.length < 7) {
+        const datasReverse = [...datas.reverse()];
+        for (let i = 0; i < 7 - datas.length; i++) {
+          datasReverse.push(0);
+        }
+        datas = datasReverse.reverse();
+      }
+      return datas;
+    } else {
+      return [];
+    }
+  } catch (error) {
+    return [];
+  }
+}
+
+export function isShowChart(str) {
+  return str === "bar_chart" || str === "line_chart";
+}

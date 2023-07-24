@@ -47,7 +47,10 @@
   box-shadow: 0 0 0 0 !important;
   border-radius: 6px !important;
 }
-
+.parameter-value-widget__series-date-group .ant-radio-button {
+   width: 0px !important;
+   height: 0px !important;
+}
 .parameter-widget-input {
   color: var(--color-text-axis);
 }

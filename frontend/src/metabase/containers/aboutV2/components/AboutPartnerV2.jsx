@@ -11,6 +11,14 @@ const AboutPartnerV2 = () => {
     "home-v2/img_partner_4.png",
     "home-v2/img_partner_5.png",
     "home-v2/img_partner_6.png",
+    "home-v2/img_partner_34.png",
+    "home-v2/img_partner_21.png",
+    "home-v2/img_partner_22.png",
+    "home-v2/img_partner_23.png",
+    "home-v2/img_partner_24.png",
+    "home-v2/img_partner_25.png",
+    "home-v2/img_partner_26.png",
+    "home-v2/img_partner_27.png",
     "home-v2/img_partner_7.png",
     "home-v2/img_partner_8.png",
     "home-v2/img_partner_9.png",
@@ -20,15 +28,21 @@ const AboutPartnerV2 = () => {
     "home-v2/img_partner_13.png",
     "home-v2/img_partner_14.png",
     "home-v2/img_partner_15.png",
-    "home-v2/img_partner_16.png",
+    // "home-v2/img_partner_16.png",
     "home-v2/img_partner_17.png",
     "home-v2/img_partner_18.png",
     "home-v2/img_partner_19.png",
     "home-v2/img_partner_20.png",
+    "home-v2/img_partner_28.png",
+    "home-v2/img_partner_29.png",
+    "home-v2/img_partner_30.png",
+    "home-v2/img_partner_31.png",
+    "home-v2/img_partner_32.png",
+    "home-v2/img_partner_33.png",
   ];
 
-  const topData = [...data.slice(0, 10), ...data.slice(0, 10), ]
-  const bottomData = [...data.slice(10, 20), ...data.slice(10, 20), ]
+  const topData = [...data.slice(0, 16), ...data.slice(0, 16), ]
+  const bottomData = [...data.slice(16, 33), ...data.slice(16, 33), ]
 
   return (
     <div className="About__partnerV2">

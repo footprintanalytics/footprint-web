@@ -44,7 +44,7 @@
   [card]
   (mi/instance
    Card
-   (u/select-nested-keys card [:id :name :description :display :visualization_settings
+   (u/select-nested-keys card [:id :name :description :display :visualization_settings :updated_at
                                [:dataset_query :type :native :query [:native :query :template-tags]]])))
 
 (defn public-card
@@ -81,6 +81,8 @@
    [[:data :cols :rows :rows_truncated :insights :requested_timezone :results_timezone]
     [:json_query :parameters]
     :cached
+    :started_at
+    :updated_at
     :status]))
 
 (defmethod transform-results :failed
@@ -183,7 +185,7 @@
       (update :ordered_cards (fn [dashcards]
                                (for [dashcard dashcards]
                                  (-> (select-keys dashcard [:id :card :card_id :dashboard_id :series :col :row :size_x
-                                                            :size_y :parameter_mappings :visualization_settings])
+                                                            :size_y :parameter_mappings :visualization_settings :updated_at])
                                      (update :card remove-card-non-public-columns)
                                      (update :series (fn [series]
                                                        (for [series series]

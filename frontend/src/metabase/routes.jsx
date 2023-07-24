@@ -186,6 +186,13 @@ export const getRoutes = store => (
           <Route path=":menu/:subMenu" />
           <Route path=":menu/:subMenu/:value" />
         </Route>
+        <Route
+          path="wallet"
+          component={props => <LazyLoad.Research {...props} classify="wallet" />}
+        >
+          <Route path=":menu/:subMenu" />
+          <Route path=":menu/:subMenu/:value" />
+        </Route>
       </Route>
 
       <Route path="/dashboards" component={LazyLoad.Dashboards} />

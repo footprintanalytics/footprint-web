@@ -5,6 +5,7 @@ import {
 
 import ActionViz from "metabase/writeback/components/ActionViz";
 
+import DoubleScalar from "metabase/visualizations/visualizations/DoubleScalar";
 import Scalar from "./visualizations/Scalar";
 import SmartScalar from "./visualizations/SmartScalar";
 import Progress from "./visualizations/Progress";
@@ -27,7 +28,9 @@ import ListViz from "./visualizations/List";
 import Image from "./visualizations/Image";
 import Video from "./visualizations/Video";
 import Embed from "./visualizations/Embed";
+import MultiEmbed from "./visualizations/MultiEmbed";
 import Tableau from "./visualizations/Tableau";
+import Filter from "./visualizations/Filter";
 import RowRace from "./visualizations/RowRace";
 import LineRace from "./visualizations/LineRace";
 import Circle from "./visualizations/Circle";
@@ -38,7 +41,6 @@ import Rose from "./visualizations/Rose";
 import NestedPies from "./visualizations/NestedPies";
 import BarStack from "./visualizations/BarStack";
 import Bubble from "./visualizations/Bubble";
-import DoubleScalar from "metabase/visualizations/visualizations/DoubleScalar";
 import Graph from "./visualizations/Graph";
 import Sankey from "./visualizations/Sankey";
 import FGATable from "./visualizations/FGATable";
@@ -69,7 +71,9 @@ export default function () {
   registerVisualization(Image);
   registerVisualization(Video);
   registerVisualization(Embed);
+  registerVisualization(MultiEmbed);
   registerVisualization(Tableau);
+  registerVisualization(Filter);
   registerVisualization(RowRace);
   registerVisualization(LineRace);
   registerVisualization(Circle);
