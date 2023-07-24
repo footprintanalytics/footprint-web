@@ -32,7 +32,7 @@ const MultiEmbedChild = props => {
           const queryUrl = new URLParse(item.url)
           const searchParams = querystring.parse(search?.replace("?", ""));
           const otherQueryParams = querystring.parse(queryUrl.query?.replace("?", ""));
-          const mergedQueryParams = Object.assign({}, searchParams, otherQueryParams);
+          const mergedQueryParams = Object.assign({}, otherQueryParams, searchParams);
           queryUrl.set('query', mergedQueryParams);
           url = queryUrl.toString();
         }
