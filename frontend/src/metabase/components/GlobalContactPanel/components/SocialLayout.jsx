@@ -11,7 +11,7 @@ const SocialLayout = props => {
 
   return (
     <div className={cx("global-contact-panel__social-layout", className)}>
-      {title && (<span className="mr1">{title}</span>)}
+      {title && (<span className="mr1 global-contact-panel__social-title">{title}</span>)}
       {socialData
         .filter(item => item.icon)
         .map(item => {

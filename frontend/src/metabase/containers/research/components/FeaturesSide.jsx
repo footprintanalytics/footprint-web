@@ -24,6 +24,7 @@ import MetabaseSettings from "metabase/lib/settings";
 import LogoBadge from "metabase/public/components/LogoBadge";
 import EmbedModal from "metabase/containers/home/components/EmbedModal";
 import flatten from "underscore/modules/_flatten";
+import MyProfile from "metabase/containers/myStudio/Component/MyProfile";
 
 const FeaturesSide = ({
   replace,
@@ -40,6 +41,7 @@ const FeaturesSide = ({
   showSeo = false,
   showSocial = true,
   menuMode = "inline",
+  user,
 }) => {
   const partnerStr = partner ? `/${partner}` : "";
   const prefixPath = isPublic ? "/public" : "";
@@ -179,6 +181,7 @@ const FeaturesSide = ({
   const renderNavButton = () => {
     return (
       <div className="feature-side__nav-button">
+        <div className="feature-side__line"/>
         {showResearchActionButtons && (
           <div className="flex flex-column" style={{ width: 160 }}>
             {!isCustom && (
@@ -204,8 +207,10 @@ const FeaturesSide = ({
             )}
           </div>
         )}
-        {!isPublic && showSocial && <SocialLayout className="mt1"/>}
+        {!isPublic && showSocial && <SocialLayout title={"Contact us"}/>}
         {isPublic && (renderBrandInfo())}
+        <div className="feature-side__line"/>
+        <MyProfile user={user} name={user.name}/>
       </div>
     )
   }

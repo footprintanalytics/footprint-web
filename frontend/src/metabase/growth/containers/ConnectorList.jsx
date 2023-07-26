@@ -43,6 +43,7 @@ const ConnectorList = props => {
     setLoginModalShowAction,
     setCreateFgaProjectModalShowAction,
     refetchProject,
+    demoData,
   } = props;
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [openDrawer, setOpenDrawer] = useState({ show: false, connector: {} });
@@ -52,13 +53,15 @@ const ConnectorList = props => {
     async () => {
       return await getAvailableConnectors({ projectId: parseInt(projectId) });
     },
-    { ...QUERY_OPTIONS, enabled: !!projectId },
+    { ...QUERY_OPTIONS, enabled: !!projectId && !demoData },
   );
 
+  const connectorData = demoData || data;
+
   useEffect(() => {
-    if (projectId && !isLoading && data) {
-      console.log("getAvailableIntegrations", data);
-      const availableConnectors = data?.availableConnectorConfig;
+    if (projectId && !isLoading && connectorData) {
+      console.log("getAvailableIntegrations", connectorData);
+      const availableConnectors = connectorData?.availableConnectorConfig;
       const groupMap = new Map();
       availableConnectors.map((j, index) => {
         if (project?.isDemo && !projectId) {
@@ -73,7 +76,7 @@ const ConnectorList = props => {
       });
       setConnectors(availableConnectors);
     }
-  }, [projectId, isLoading, data, user]);
+  }, [projectId, isLoading, connectorData, user]);
 
   const showDrawer = c => {
     setOpenDrawer({ show: true, connector: c });

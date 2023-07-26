@@ -14,6 +14,9 @@ import { replace } from "react-router-redux";
 import MyProfile from "metabase/containers/myStudio/Component/MyProfile";
 import { loginModalShowAction } from "metabase/redux/control";
 import flatten from "underscore/modules/_flatten";
+import ResourceBox from "metabase/containers/research/components/ResourceBox";
+import ChartArea from "metabase/containers/research/components/ChartArea";
+import DashboardArea from "metabase/containers/research/components/DashboardArea";
 
 const MyStudio = props => {
   const isPublic = window.location.pathname.startsWith("/public");
@@ -32,6 +35,7 @@ const MyStudio = props => {
     logout,
     setLoginModalShow,
   } = props;
+  const type = "studio";
   const researchData = myData["getMyStudioData"]({ params, router, user, name: user.name, onLogout: logout });
   const array = [
     ...flatten(researchData?.filter(f => f.itemType === "group")?.map(i => i.subMenus)),
@@ -46,7 +50,7 @@ const MyStudio = props => {
   }
 
   const item = findItemByData({ menu, subMenu, value });
-
+  console.log("item", item)
   if (!menu && !subMenu) {
     if (array[0].subMenus) {
       replace(`studio/${array[0].value}/${array[0]?.subMenus[0]?.value}`);
@@ -54,84 +58,34 @@ const MyStudio = props => {
       replace(`studio/${array[0].value}`);
     }
   }
+
+  const renderArea = (item) => {
+    let tempItem = item;
+    if (value) {
+      tempItem = item?.resources?.find(i => i.value === value);
+    }
+    if (tempItem?.resources) {
+      return (
+        <ResourceBox
+          location={location}
+          item={tempItem}
+          type={type}
+          classify={classify}
+          menu={menu}
+          subMenu={subMenu}
+        />
+      )
+    }
+    if (tempItem?.type === "chart") {
+      return <ChartArea key={`${tempItem?.publicUuid}${tempItem?.search}`} location={location} item={tempItem} />
+    }
+    return <DashboardArea key={`${tempItem?.publicUuid}${tempItem?.search}`} location={location} item={tempItem} />
+  }
+
   return (
     <>
-      <div className={cx("bg-gray flex flex", isPublic ? "Features-public" : "Features")}>
+      <div className={cx("bg-gray flex flex my-studio", isPublic ? "Features-public" : "Features")}>
         <div className="Features-side">
-          <MyProfile user={user} name={user.name}/>
-
-          <div className="flex flex-column p2">
-            <Dropdown
-              menu={{
-                items: [
-                  {
-                    key: "1",
-                    label: (
-                      <div
-                        className="mr2 flex align-center"
-                        onClick={() => {
-                          if (!user) {
-                            setLoginModalShow({ show: true, from: "new chart" });
-                            return ;
-                          }
-                          window.open(Urls.newQuestion({ type: "query" }))
-                        }}
-                      >
-                        0 Coding Chart
-                      </div>
-                    )
-                  },
-                  {
-                    key: "2",
-                    label: (
-                      <div
-                        className="flex align-center"
-                        onClick={() => {
-                          if (!user) {
-                            setLoginModalShow({ show: true, from: "sql query" });
-                            return ;
-                          }
-                          window.open(Urls.newQuestion({
-                            type: "native",
-                            creationType: "native_question",
-                          }))
-                        }}
-                      >
-                        SQL Chart
-                      </div>
-                    )
-                  },
-                  {
-                    key: "3",
-                    label: (
-                      <div
-                        className="flex align-center"
-                        onClick={() => {
-                          if (!user) {
-                            setLoginModalShow({ show: true, from: "sql query" });
-                            return ;
-                          }
-                          window.open("dashboard/new")
-                        }}
-                      >
-                        New Dashboard
-                      </div>
-                    )
-                  }
-                ]
-              }}
-              placement="right"
-            >
-              <Button >
-                <Icon name="plus" size={12} className="mr1"/> Create
-              </Button>
-            </Dropdown>
-            <Button className="mt1" onClick={() => {
-              window.open(Urls.newQuestion({ type: "query" }))}
-            }>
-              Footprint Datasets
-            </Button>
-          </div>
           {menu && (
             <FeaturesSide
               defaultMenu={menu}
@@ -142,6 +96,7 @@ const MyStudio = props => {
               isCustom={false}
               isPublic={isPublic}
               location={location}
+              user={user}
             />
           )}
         </div>
@@ -151,7 +106,7 @@ const MyStudio = props => {
             overflow: "auto"
           }}
         >
-          {item?.component}
+          {item?.component || renderArea(item)}
         </div>
         {children}
       </div>

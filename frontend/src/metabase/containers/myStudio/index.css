@@ -7,3 +7,35 @@
   justify-content: center;
   padding: 20px;
 }
+
+.my-studio .search__tabs {
+  width: 100%;
+}
+
+.studio__line {
+  width: 100%;
+  border-top: 1px solid #ffffff20;
+}
+
+.studio-title {
+  display: flex;
+  flex-direction: column;
+}
+
+.studio-title__text {
+  color: #ffffff;
+  padding: 20px 40px;
+  font-size: 24px;
+}
+
+.my-studio .search__tabs {
+  width: 100%;
+}
+
+.my-studio .search__tabs-other {
+  top: -30px;
+}
+
+.my-studio .search__content {
+  margin-top: 40px;
+}

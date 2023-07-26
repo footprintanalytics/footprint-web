@@ -48,6 +48,7 @@ const Index = ({
   },
   hideToggleView = false,
 }) => {
+  console.log("showTabs", showTabs)
   const [isList, setIsList] = useState(creatorViewType === "list");
   const { isMobile } = useDeviceInfo();
 
@@ -92,7 +93,7 @@ const Index = ({
       render: params => {
         return <DashboardsList model="favorite" {...params} />;
       },
-      show: !!showTabs?.favorite && (isGrowthPage() || isCreator() || isMyStudio()) && isOwnCreator,
+      show: !!showTabs?.favorite && (((isGrowthPage() || isCreator()) && isOwnCreator) || isMyStudio()),
     },
     {
       key: "table",
@@ -100,7 +101,7 @@ const Index = ({
       render: params => {
         return <MyTables {...params} />;
       },
-      show: !!showTabs?.table && (isGrowthPage() || isCreator() || isMyStudio()) && isOwnCreator,
+      show: !!showTabs?.table && (((isGrowthPage() || isCreator()) && isOwnCreator) || isMyStudio()),
     },
     {
       key: "creator",

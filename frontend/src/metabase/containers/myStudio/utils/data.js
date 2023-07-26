@@ -5,6 +5,10 @@ import List from "metabase/containers/creator/components/personal/list";
 
 import { MessageOutlined, PicCenterOutlined, SmileOutlined } from "@ant-design/icons/lib/icons";
 import ConnectorList from "metabase/growth/containers/ConnectorList";
+import ChartCreate from "../Component/ChartCreate";
+import { integrationData } from "metabase/components/GlobalContactPanel/data";
+import StudioDashboards from "metabase/containers/myStudio/Component/MyAnalysis/StudioDashboards";
+import DashboardArea from "metabase/containers/features/components/DashboardArea";
 
 const comingSoonDiv = () => {
   return <div className="flex justify-center p4"><h2>Coming soon~</h2></div>;
@@ -14,6 +18,18 @@ const getMyStudioData = ({ name, params, router, user, onLogout }) => {
   const isOwner = user?.name === name;
   return [
     {
+      "label": "+ Create",
+      "value": "create",
+      "component": (
+        <ChartCreate />
+      )
+    },
+    {
+      "label": "Footprint Datasets",
+      "value": "footprint-datasets",
+      "publicUuid": "5aca24eb-aae3-44ef-8e4b-a275fee42847",
+    },
+    {
       "label": "My Analysis",
       "value": "my-analysis",
       subMenus: [
@@ -22,24 +38,7 @@ const getMyStudioData = ({ name, params, router, user, onLogout }) => {
           "value": "dashboards",
           "icon": <MessageOutlined />,
           "component": (
-            <List
-              key="dashboards"
-              user={user}
-              name={name}
-              location={router.location}
-              router={router}
-              defaultModel="dashboard"
-              hideToggleView
-              showTabs={
-                {
-                  all: false,
-                  dashboard: true,
-                  card: false,
-                  favorite: false,
-                  table: false,
-                }
-              }
-            />
+            <StudioDashboards title="Dashboards" type="dashboards" router={router} user={user}/>
           ),
         },
         {
@@ -47,24 +46,7 @@ const getMyStudioData = ({ name, params, router, user, onLogout }) => {
           "value": "charts",
           "icon": <MessageOutlined />,
           "component": (
-            <List
-              key="charts"
-              user={user}
-              name={name}
-              location={router.location}
-              router={router}
-              defaultModel="card"
-              hideToggleView
-              showTabs={
-                {
-                  all: false,
-                  dashboard: false,
-                  card: true,
-                  favorite: false,
-                  table: false,
-                }
-              }
-            />
+            <StudioDashboards title="Charts" type="charts" router={router} user={user}/>
           ),
         },
         {
@@ -72,24 +54,7 @@ const getMyStudioData = ({ name, params, router, user, onLogout }) => {
           "value": "favorites",
           "icon": <MessageOutlined />,
           "component": (
-            <List
-              key="favorites"
-              user={user}
-              name={name}
-              location={router.location}
-              router={router}
-              defaultModel="favorite"
-              hideToggleView
-              showTabs={
-                {
-                  all: false,
-                  dashboard: false,
-                  card: false,
-                  favorite: true,
-                  table: false,
-                }
-              }
-            />
+            <StudioDashboards title="Favorites" type="favorites" router={router} user={user}/>
           ),
         },
       ].filter(Boolean),
@@ -102,24 +67,7 @@ const getMyStudioData = ({ name, params, router, user, onLogout }) => {
         "label": "Datasets",
         "value": "datasets",
         "component": (
-          <List
-            key="my-datasets"
-            user={user}
-            name={name}
-            location={router.location}
-            router={router}
-            defaultModel="table"
-            hideTabsBar={true}
-            showTabs={
-              {
-                all: false,
-                dashboard: false,
-                card: false,
-                favorite: false,
-                table: true,
-              }
-            }
-          />
+          <StudioDashboards title="Datasets" type="datasets" router={router} user={user}/>
         ),
       }, {
         "label": "Integration",
@@ -127,6 +75,8 @@ const getMyStudioData = ({ name, params, router, user, onLogout }) => {
         "component": (
           <ConnectorList
             key="integration"
+            demoData={integrationData}
+            projectId="demo"
           />
         ),
       }],

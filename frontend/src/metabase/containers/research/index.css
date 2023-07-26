@@ -102,7 +102,7 @@
   bottom: 60px;
   padding: 16px 0;
   background: #121828;
-  width: 294px;
+  width: 309px;
   font-size: 18px;
   display: flex;
   flex-direction: column;
@@ -114,7 +114,7 @@
   bottom: 0;
   padding: 16px 0;
   background: #121828;
-  width: 294px;
+  width: 309px;
   font-size: 18px;
   display: flex;
   flex-direction: column;
@@ -141,4 +141,9 @@
   text-align: center;
   width: 100%;
   padding: 10px 0 0 0;
+}
+
+.feature-side__line {
+  width: 100%;
+  border-top: 1px solid #4A5568;
 }

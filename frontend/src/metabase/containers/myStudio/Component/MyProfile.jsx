@@ -10,6 +10,8 @@ import { getProject } from "metabase/lib/project_info";
 import { getOssUrl } from "metabase/lib/image";
 import "./MyProfile.css";
 import "../../creator/components/personal/index.css";
+import Icon from "metabase/components/Icon";
+import AboutImage from "metabase/containers/aboutV2/components/AboutImage";
 
 const MyProfile = props => {
   const { user, name, location } = props;
@@ -101,19 +103,22 @@ const MyProfile = props => {
         </Tooltip>
         <div className="my-profile__right">
           {userName && (
-            <div style={{ display: "flex", alignItems: "center", marginTop: 10 }}>
-              <h3 style={{ WebkitBoxOrient: "vertical", }}>{userName}</h3>
+            <div style={{ display: "flex", alignItems: "center"}}>
+              <h3>{userName}</h3>
+              <AboutImage src={getOssUrl("/studio/img-fp-vip.png")} />
+              <AboutImage src={getOssUrl("/studio/img-api-vip.png")} />
             </div>
           )}
-          <SocialList
+          {/*<SocialList
             list={[
               { href: twitter, icon: "20220516201254.png", isBlank: true },
               { href: telegram, icon: "20220516201327.png", isBlank: true },
               { href: discord, icon: "20220516201343.png", isBlank: true },
               // { href: `mailto:${email}`, icon: "20220516201357.png" },
             ]}
-          />
+          />*/}
         </div>
+        <Icon name="arrow_right_simple" size={24} color="#ffffff90"/>
       </div>
     </>
   );

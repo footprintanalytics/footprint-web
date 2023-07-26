@@ -35,7 +35,7 @@ const List = ({
         name: name,
       });
     },
-    { ...QUERY_OPTIONS, retry: 0 },
+    { ...QUERY_OPTIONS, retry: 0, enabled: !hideTabsBar },
   );
 
   return (
