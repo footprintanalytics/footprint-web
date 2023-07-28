@@ -496,7 +496,9 @@ class FpNavbar extends Component {
       ? "none"
       : "flex";
 
-    const showSignup = false;
+    const showSignup =
+      window.location.pathname === "/" ||
+      window.location.pathname === "/data-api";
 
     const MobileMenuIcon = () => {
       return (

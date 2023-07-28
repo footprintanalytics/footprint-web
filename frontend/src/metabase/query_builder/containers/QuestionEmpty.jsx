@@ -5,7 +5,6 @@ import { UploadOutlined, PlusCircleOutlined } from "@ant-design/icons";
 import { getOssUrl } from "metabase/lib/image";
 import Link from "metabase/core/components/Link";
 import "./QuestionEmpty.css";
-import * as Urls from "metabase/lib/urls";
 
 export default function QuestionEmpty({ showUpload }) {
   return (
@@ -20,26 +19,22 @@ export default function QuestionEmpty({ showUpload }) {
             or
           </p>
           <div className="flex" style={{ gap: 20 }}>
-            <Link target="_blank" to={Urls.newQuestion({ type: "query" })}>
+            <Link to="/submit/contract">
               <Button
                 className="Question-main--empty-button"
                 size="large"
+                icon={<PlusCircleOutlined />}
               >
-                0 Coding Chart
+                Submit contract
               </Button>
             </Link>
-            <Link
-              target="_blank"
-              to={Urls.newQuestion({
-                type: "native",
-                creationType: "native_question",
-              })
-            }>
+            <Link to="/chart/custom-upload">
               <Button
                 className="Question-main--empty-button"
                 size="large"
+                icon={<UploadOutlined />}
               >
-                SQL Chart
+                Upload your data
               </Button>
             </Link>
           </div>

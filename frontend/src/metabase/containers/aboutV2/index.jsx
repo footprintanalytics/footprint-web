@@ -15,14 +15,10 @@ import AboutDataCoverage from "metabase/containers/aboutV2/components/AboutDataC
 import AboutDemo from "metabase/containers/aboutV2/components/AboutDemo";
 import AboutDepth from "metabase/containers/aboutV2/components/AboutDepth";
 import AboutPartnerV2 from "metabase/containers/aboutV2/components/AboutPartnerV2";
-import AboutGrantedBy from "metabase/containers/aboutV2/components/AboutGrantedBy";
 import HomeFooter from "../home/components/HomeFooter";
 import data from "./data";
 import AboutBacked from "./components/AboutBacked";
 import AboutStart from "./components/AboutStart";
-import AboutBanner from "./components/AboutBanner";
-import AboutSolution from "./components/AboutSolutions";
-import ResearchContent from "metabase/nav/containers/FpNavbar/components/ResearchContent";
 
 const About = props => {
   const {
@@ -51,7 +47,41 @@ const About = props => {
   };
   return (
     <>
-      <ResearchContent />
+      <Meta description={defaultDesc} keywords={keywords} title={title} />
+      <div className="About">
+        <AboutStart />
+        <div className="About__depth-dividing-line" />
+        <LazyLoadAbout>
+          <AboutDepth />
+        </LazyLoadAbout>
+        <LazyLoadAbout>
+          <AboutDemo />
+        </LazyLoadAbout>
+        <LazyLoadAbout>
+          <AboutDataCoverage />
+        </LazyLoadAbout>
+        <LazyLoadAbout>
+          <AboutDataFeature />
+        </LazyLoadAbout>
+        <LazyLoadAbout>
+          <AboutDataModel />
+        </LazyLoadAbout>
+        <LazyLoadAbout>
+          <AboutBacked list={data.backedList} />
+        </LazyLoadAbout>
+        <LazyLoadAbout>
+          <AboutDataTrusted />
+        </LazyLoadAbout>
+        <LazyLoadAbout>
+          <AboutPartnerV2 list={data.partnerList} />
+        </LazyLoadAbout>
+        <div className="About__depth-dividing-line-gray" />
+        <LazyLoadAbout>
+          <HomeFooter />
+        </LazyLoadAbout>
+
+        {children}
+      </div>
     </>
   );
 };
