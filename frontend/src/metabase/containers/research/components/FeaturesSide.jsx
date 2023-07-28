@@ -182,7 +182,7 @@ const FeaturesSide = ({
 
   const renderNavButton = () => {
     return (
-      <div className="feature-side__nav-button" style={{padding: showMyProfile ? "16px 0": "0"}}>
+      <div className="feature-side__nav-button">
         {showMyProfile && (<div className="feature-side__line"/>)}
         {showResearchActionButtons && (
           <div className="flex flex-column" style={{ width: 160 }}>

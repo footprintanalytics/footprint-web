@@ -80,6 +80,8 @@ const getMyStudioData = ({ name, params, router, user, onLogout }) => {
             key="integration"
             demoData={integrationData}
             projectId="demo"
+            width="100%"
+            padding="20px 40px"
           />
         ),
       }],

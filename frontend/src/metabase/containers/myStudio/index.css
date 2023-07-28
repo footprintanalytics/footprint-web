@@ -39,3 +39,12 @@
 .my-studio .search__content {
   margin-top: 40px;
 }
+
+.my-studio .global-contact-panel__social-layout {
+  width: 100%;
+  margin-left: 60px;
+}
+
+.my-studio .feature-side__nav-button {
+  padding: 0;
+}

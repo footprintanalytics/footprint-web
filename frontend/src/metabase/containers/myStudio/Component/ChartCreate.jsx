@@ -20,13 +20,13 @@ const ChartCreate = () => {
       title: "SQL Chart",
       desc: "For more complicated queries, you can write your own SQL or native query.",
       url: Urls.newQuestion({ type: "native", creationType: "native_question" }),
-      icon: getOssUrl("/studio/img-studio-create-2.png"),
+      icon: getOssUrl("/studio/img-studio-create-3.png"),
     },
     {
       title: "New Dashboard",
       desc: "Pick some data, view it, and easily filter, summarize, and visualize it.",
       url: "dashboard/new",
-      icon: getOssUrl("/studio/img-studio-create-3.png"),
+      icon: getOssUrl("/studio/img-studio-create-2.png"),
     },
 
   ]
@@ -46,7 +46,7 @@ const ChartCreate = () => {
                 <h3>{item.title}</h3>
                 <span>{item.desc}</span>
                 <Link className="chart-create__button" to={item.url}>
-                  Create
+                  + Create
                 </Link>
               </li>
             )

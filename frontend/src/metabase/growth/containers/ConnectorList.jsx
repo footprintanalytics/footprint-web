@@ -44,6 +44,8 @@ const ConnectorList = props => {
     setCreateFgaProjectModalShowAction,
     refetchProject,
     demoData,
+    width,
+    padding,
   } = props;
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [openDrawer, setOpenDrawer] = useState({ show: false, connector: {} });
@@ -120,10 +122,10 @@ const ConnectorList = props => {
       <div
         className=" flex flex-column items-center"
         style={{
-          width: 800,
+          width: width || 800,
           // backgroundColor: "white",
           borderRadius: 10,
-          padding: 20,
+          padding: padding || 20,
           marginTop: 20,
           minHeight: 800,
         }}

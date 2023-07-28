@@ -125,46 +125,49 @@ const MyProfile = props => {
 
   return (
     <>
-      <Dropdown
-        menu={{ items: getContent() }}
-        placement="rightBottom"
-      >
-        <div className="my-profile">
-          <Tooltip title={desc}>
-            {logo ? (
-              <img
-                src={logo + "?x-oss-process=image/resize,m_fill,h_30,w_30"}
-                className="creator__personal-base-logo"
-                alt={userName}
-              />
-            ) : (
-              <Avatar size="large" style={{ backgroundColor: "#E4E4FE", width: 30, height: 30, lineHeight: "50px" }}>
-                <span style={{ fontSize: 30 }}>
-                  {String(userName.charAt(0)).toUpperCase()}
-                </span>
-              </Avatar>
-            )}
-          </Tooltip>
-          <div className="my-profile__right">
-            {userName && (
-              <div style={{ display: "flex", alignItems: "center"}}>
-                <h3>{userName}</h3>
-                <AboutImage className="ml1" src={getOssUrl("/studio/img-fp-vip.png")} />
-                <AboutImage className="ml1" src={getOssUrl("/studio/img-api-vip.png")} />
-              </div>
-            )}
-            {/*<SocialList
-              list={[
-                { href: twitter, icon: "20220516201254.png", isBlank: true },
-                { href: telegram, icon: "20220516201327.png", isBlank: true },
-                { href: discord, icon: "20220516201343.png", isBlank: true },
-                // { href: `mailto:${email}`, icon: "20220516201357.png" },
-              ]}
-            />*/}
-          </div>
-          <Icon name="arrow_right_simple" size={14} color="#ffffff90"/>
+      <div className="my-profile">
+        <Tooltip title={desc}>
+          {logo ? (
+            <img
+              src={logo + "?x-oss-process=image/resize,m_fill,h_30,w_30"}
+              className="creator__personal-base-logo"
+              alt={userName}
+            />
+          ) : (
+            <Avatar size="large" style={{ backgroundColor: "#E4E4FE", width: 30, height: 30, lineHeight: "50px" }}>
+              <span style={{ fontSize: 30 }}>
+                {String(userName.charAt(0)).toUpperCase()}
+              </span>
+            </Avatar>
+          )}
+        </Tooltip>
+        <div className="my-profile__right">
+          {userName && (
+            <div style={{ display: "flex", alignItems: "center"}}>
+              <h3>{userName}</h3>
+              <AboutImage className="ml1" src={getOssUrl("/studio/img-fp-vip.png")} />
+              <AboutImage className="ml1" src={getOssUrl("/studio/img-api-vip.png")} />
+            </div>
+          )}
+          {/*<SocialList
+            list={[
+              { href: twitter, icon: "20220516201254.png", isBlank: true },
+              { href: telegram, icon: "20220516201327.png", isBlank: true },
+              { href: discord, icon: "20220516201343.png", isBlank: true },
+              // { href: `mailto:${email}`, icon: "20220516201357.png" },
+            ]}
+          />*/}
         </div>
-      </Dropdown>
+        <div className="my-profile__vertical-line"/>
+        <Dropdown
+          menu={{ items: getContent() }}
+          placement="rightBottom"
+        >
+          <div className="px3">
+            <Icon name="arrow_right_simple" size={14} color="#ffffff90"/>
+          </div>
+        </Dropdown>
+      </div>
     </>
   );
 };
