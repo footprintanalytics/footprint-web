@@ -9,9 +9,7 @@ import Icon from "../../../../components/Icon";
 import Link from "../../../../core/components/Link";
 
 const ResearchContent = props => {
-  const { name, content } = props;
   const [select, setSelect] = useState("gamefi");
-
 
   const tabs = [
     {
@@ -202,11 +200,6 @@ const ResearchContent = props => {
             link: "/research/chain/chain-stats/cronos-overview",
           },
           {
-            title: "Hive",
-            img: getOssUrl("studio/img-chain-7.png"),
-            link: "/research/chain/chain-stats/hive-overview",
-          },
-          {
             title: "DFK",
             img: getOssUrl("studio/img-chain-11.png"),
             link: "/research/chain/chain-stats/dfk-overview",
@@ -242,34 +235,9 @@ const ResearchContent = props => {
             link: "/research/chain/chain-stats/thundercore-overview",
           },
           {
-            title: "Wax",
-            img: getOssUrl("studio/img-chain-21.png"),
-            link: "/research/chain/chain-rankings/top-chains",
-          },
-          {
-            title: "IoTeX",
-            img: getOssUrl("studio/img-chain-22.png"),
-            link: "/research/chain/chain-stats/iotex-overview",
-          },
-          {
-            title: "EOS",
-            img: getOssUrl("studio/img-chain-23.png"),
-            link: "/research/chain/chain-rankings/top-chains",
-          },
-          {
             title: "Boba",
             img: getOssUrl("studio/img-chain-24.png"),
             link: "/research/chain/chain-stats/boba-network-overview",
-          },
-          {
-            title: "Bitcoin",
-            img: getOssUrl("studio/img-chain-25.png"),
-            link: "/research/chain/chain-rankings/top-chains",
-          },
-          {
-            title: "Doge",
-            img: getOssUrl("studio/img-chain-26.png"),
-            link: "/research/chain/chain-rankings/top-chains",
           },
           {
             title: "Sui",
@@ -397,12 +365,19 @@ const ResearchContent = props => {
     );
   };
 
-  const renderMore = ({ url }) => {
+  const renderLink = (data) => {
     return (
-      <Link to={url} className="main-menu__more-layout">
-        More
-        <Icon className="ml1" name="collapse_arrow_right" size={10} />
-      </Link>
+      <div className="main-menu__more-layout">
+        {data?.map(item => {
+          const { url, title } = item;
+          return (
+            <Link to={url} key={title}>
+              {title}
+              <Icon className="ml1" name="collapse_arrow_right" size={10} />
+            </Link>
+          )
+        })}
+      </div>
     )
   }
 
@@ -414,7 +389,7 @@ const ResearchContent = props => {
           {MainMenuFunction.renderVerticalMenu({ data: tabData?.rankingsData })}
           {MainMenuFunction.renderVerticalMenu({ data: tabData?.industryData })}
           {MainMenuFunction.renderVerticalMenu({ data: tabData?.gameData })}
-          {renderMore({url: "/research/gamefi"})}
+          {renderLink([{title: "Submit Contract", url: "/submit/contract/add" },{title: "More", url: "/research/gamefi"}])}
         </div>
       );
     }
@@ -431,7 +406,7 @@ const ResearchContent = props => {
           </div>
           {MainMenuFunction.renderVerticalMenu({ data: tabData?.signalsData })}
           {MainMenuFunction.renderVerticalMenu({ data: tabData?.industryData })}
-          {renderMore({url: "/research/nft"})}
+          {renderLink([{title: "Submit Contract", url: "/submit/contract/add" },{title: "More", url: "/research/nft"}])}
         </div>
       );
     }

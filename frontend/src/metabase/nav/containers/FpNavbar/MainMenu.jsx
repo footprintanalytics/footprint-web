@@ -24,8 +24,7 @@ const MainMenu = props => {
         arrow={false}
         overlayInnerStyle={{
           borderRadius: 10,
-          paddingLeft: 0,
-          paddingRight: 0,
+          padding: 0,
           border: "1px solid #4A5568",
         }}
       >

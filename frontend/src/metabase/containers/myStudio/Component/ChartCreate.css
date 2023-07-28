@@ -43,3 +43,7 @@
   align-items: center;
   border-radius: 4px;
 }
+
+.chart-create__button:hover {
+  color: #ffffff;
+}

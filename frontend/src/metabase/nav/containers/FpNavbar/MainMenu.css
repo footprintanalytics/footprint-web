@@ -221,6 +221,8 @@
   right: 40px;
   bottom: 40px;
   color: #3C7EEB;
+  display: flex;
+  flex-direction: column;
 }
 
 .main-menu__inner-single-collection {
@@ -230,6 +232,7 @@
 .main-menu__wallet-right {
   background-color: #161D2F;
   padding: 40px;
+  border-bottom-right-radius: 10px;
 }
 
 .main-menu__wallet-padding {
@@ -243,4 +246,5 @@
 .main-menu__inner-data-api-left {
   padding: 40px;
   background-color: #161D2F;
+  border-bottom-left-radius: 10px;
 }

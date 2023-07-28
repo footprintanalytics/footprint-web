@@ -163,7 +163,7 @@ const MyProfile = props => {
           menu={{ items: getContent() }}
           placement="rightBottom"
         >
-          <div className="px3">
+          <div className="px3 cursor-pointer">
             <Icon name="arrow_right_simple" size={14} color="#ffffff90"/>
           </div>
         </Dropdown>

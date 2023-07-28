@@ -76,10 +76,13 @@ const ProductContent = props => {
         sqlApiData: {
           topic: "SQL API",
           desc: "A flexible SQL API customization for robust requirements",
+          link: "https://docs.footprint.network/reference/web-application-sql-api",
+          externalLink: true,
         },
         batchDownloadData: {
           topic: "Batch Download",
           desc: "A flexible SQL API customization for robust requirements",
+          link: "/batch-download",
         },
       },
     },
@@ -91,12 +94,13 @@ const ProductContent = props => {
           img: getOssUrl("studio/img-menu-wallet.png"),
           title: "0- coding analytics as Tableau for crypto.",
         },
-        sqlApiData: {
+        analyticsToolData: {
           topic: "Analytics Tool",
           data: [
             {
               title: "Footprint Datasets",
               icon: ReactIcons.fpDatasetIcon,
+              link: "/studio/footprint-datasets",
             }
           ]
         },
@@ -106,14 +110,17 @@ const ProductContent = props => {
             {
               title: "0-coding chart",
               icon: ReactIcons.codingChartIcon,
+              link: "/studio/create",
             },
             {
               title: "SQL chart",
               icon: ReactIcons.sqlChartIcon,
+              link: "/studio/create",
             },
             {
               title: "New dashboard",
               icon: ReactIcons.newDashboardIcon,
+              link: "/studio/create",
             },
           ]
         },
@@ -123,16 +130,19 @@ const ProductContent = props => {
             {
               title: "My dashboards",
               icon: ReactIcons.myDashboardIcon,
+              link: "/studio/my-analysis/dashboards",
             },
             {
               title: "My charts",
               icon: ReactIcons.myChartIcon,
+              link: "/studio/my-analysis/charts",
             }
           ]
         },
         connectorData: {
           topic: "Data Connector",
           desc: "Coming soon",
+          // link: "/studio/my-datasets/integration",
         },
         appBuilderData: {
           topic: "No-coding App Builder",
@@ -187,9 +197,9 @@ const ProductContent = props => {
             {MainMenuFunction.renderStandardImageText({data: tabData?.studioDescData})}
           </div>
           <div className="ml4 main-menu__data-api-padding">
-            {MainMenuFunction.renderVerticalMenu({data: tabData?.sqlApiData})}
-            {MainMenuFunction.renderVerticalMenu({data: tabData?.createData})}
-            {MainMenuFunction.renderVerticalMenu({data: tabData?.myAnalysisData})}
+            {MainMenuFunction.renderVerticalMenu({data: tabData?.analyticsToolData})}
+            {MainMenuFunction.renderVerticalMenu({data: tabData?.createData, className: "mt2"})}
+            {MainMenuFunction.renderVerticalMenu({data: tabData?.myAnalysisData, className: "mt2"})}
           </div>
           <div className="ml3 main-menu__data-api-padding">
             {MainMenuFunction.renderVerticalMenu({data: tabData?.connectorData})}

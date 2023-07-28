@@ -33,6 +33,7 @@ import Meta from "metabase/components/Meta";
 import { getOssUrl } from "metabase/lib/image";
 import { ossPath } from "metabase/lib/ossPath";
 import Icon from "metabase/components/Icon";
+import QuestionStudioBack from "metabase/query_builder/containers/QuestionStudioBack";
 
 const mapStateToProps = state => {
   return {
@@ -163,6 +164,8 @@ class Question extends Component {
     const showSide =
       (location.hash || location.query.dbId || showCustomBuilder) && user;
 
+    const showStudioBack = isNewQuestion && location.hash;
+
     return (
       <>
       {question && (
@@ -182,13 +185,7 @@ class Question extends Component {
           </div>
         ) : null}
         <div className="Question-main">
-          <div className="flex">
-            <div>
-              <Icon name="arrow_left" size={16}/>
-              Back
-            </div>
-            <span>0 Coding Chart</span>
-          </div>
+          {showStudioBack && (<QuestionStudioBack title={isNative ? "SQL Chart" : "0 Coding Chart"} />)}
           {showTemplate ? (
             <QueryTemplate
               databaseId={showTemplateChart.databaseId}
