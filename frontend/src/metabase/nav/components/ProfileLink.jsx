@@ -67,12 +67,12 @@ function ProfileLink({ user, adminItems, onLogout, trigger }) {
         link: Urls.accountSettings(),
         event: `Navbar;Profile Dropdown;Edit Profile`,
       },
-      !isFga && {
+      /*!isFga && {
         title: t`Moon men`,
         icon: null,
         link: "/moon-men",
         event: `Navbar;Profile Dropdown;Moon men`,
-      },
+      },*/
       {
         title: t`Submit Contract`,
         icon: null,
@@ -108,12 +108,12 @@ function ProfileLink({ user, adminItems, onLogout, trigger }) {
         action: () => openModal("about"),
         event: `Navbar;Profile Dropdown;About ${tag}`,
       },*/
-      publicAnalyticPermission && {
+      /*publicAnalyticPermission && {
         title: t`Public Analyst`,
         icon: null,
         link: "/collection/root",
         event: `Navbar;Profile Dropdown;Root`,
-      },
+      },*/
       (isAdmin || isMarket) && {
         title: t`Upgrade Vip`,
         icon: null,

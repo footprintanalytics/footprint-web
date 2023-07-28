@@ -7,7 +7,6 @@ import cx from "classnames";
 import "./FpNavbar.css";
 import PropTypes from "prop-types";
 import { Drawer, message, Button } from "antd";
-import MetabaseButton from "metabase/core/components/Button";
 import { getChannel } from "metabase/selectors/app";
 import { logout } from "metabase/auth/actions";
 import {
@@ -48,6 +47,7 @@ import { isDark } from "../../../dashboard/components/utils/dark";
 import MainMenu from "./MainMenu";
 import ResearchContent from "./components/ResearchContent";
 import ProductContent from "./components/ProductContent";
+import UseCasesContent from "./components/UseCasesContent";
 import { ReactIcons } from "./utils/data";
 
 const mapStateToProps = (state, props) => ({
@@ -88,21 +88,7 @@ const leftMenuData = [
   {
     name: "Use Cases",
     icon: "protocols",
-    title: "GameFi Data as a Service",
-    menu: [
-      {
-        title: "Solution",
-        link: "https://docs.google.com/presentation/d/1HO_wAM2835yOoHdib1nAS9Qrf4XR15pm8VHOUBl-SGE/edit#slide=id.g25866ee599b_0_215",
-        icon: ReactIcons.solutionIcon,
-        externalLink: true,
-      },
-      {
-        title: "How to onboard",
-        link: "https://docs.footprint.network/docs/game-developer-onboard",
-        icon: ReactIcons.howOnboardIcon,
-        externalLink: true,
-      },
-    ],
+    content: <UseCasesContent />
   },
   /*{
     name: "Data",
@@ -649,7 +635,7 @@ class FpNavbar extends Component {
             // <Link to={`/studio/@${user.name}`}>
             //   <span className="footprint-primary-text ml1 my-studio-button">My Studio</span>
             // </Link>
-            /*<ProfileLink
+            <ProfileLink
               {...this.props}
               onLogout={() => this.props.logout()}
               trigger={
@@ -663,12 +649,12 @@ class FpNavbar extends Component {
                   </div>
                 </div>
               }
-            />*/
-            <div className="Nav__menu-create footprint-primary-text">
+            />
+            /*<div className="Nav__menu-create footprint-primary-text">
               <Link to="/studio">
                 My Studio
               </Link>
-            </div>
+            </div>*/
           ) : (
             <>
               <Link

@@ -26,6 +26,18 @@ const ProductContent = props => {
           desc: "One unified API for Web3 developers",
           data: [
             {
+              title: "Wallet Profile API",
+              desc: "Identify wallet age, chain activity, as well as support for domain lookups such as ENS and Unstoppable Domains.",
+              link: "https://docs.footprint.network/reference/get_v3-address-getwalletage",
+              icon: ReactIcons.topSalesIcon,
+            },
+            {
+              title: "Reference Data API",
+              desc: "Check matching of contract addresses, developers, protocols, and wallets, entities, etc.",
+              link: "https://docs.footprint.network/reference/get_contract-getcontractdeploymentinfo",
+              icon: ReactIcons.refDataApiIcon,
+            },
+            {
               title: "Balance API",
               desc: "Get native, token, and NFT balances by wallet address.",
               link: "https://docs.footprint.network/reference/get_v3-address-getwalletnativetokenbalance",
@@ -65,12 +77,6 @@ const ProductContent = props => {
               desc: "Coming soon",
               link: "",
               icon: ReactIcons.moneyFlowIcon,
-            },
-            {
-              title: "Reference Data API",
-              desc: "Coming soon",
-              link: "",
-              icon: ReactIcons.refDataApiIcon,
             },
           ],
         },
@@ -150,6 +156,11 @@ const ProductContent = props => {
           desc: "Coming soon",
         },
       }
+    },
+    {
+      name: "Moon men",
+      value: "moon-men",
+      link: "/moon-men",
     }
   ];
 
@@ -162,7 +173,11 @@ const ProductContent = props => {
               key={item.value}
               type={item.value === select ? "primary" : "text"}
               onClick={() => {
-                setSelect(item.value);
+                if (item.value !== "moon-men") {
+                  setSelect(item.value);
+                  return;
+                }
+                window.open(item.link);
               }}
             >
               {item.name}

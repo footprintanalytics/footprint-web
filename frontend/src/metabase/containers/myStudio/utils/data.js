@@ -76,7 +76,8 @@ const getMyStudioData = ({ name, params, router, user, onLogout }) => {
             key="integration"
             demoData={integrationData}
             projectId="demo"
-            width="100%"
+            hideComingSoon
+            showContactUs
             padding="20px 40px"
           />
         ),

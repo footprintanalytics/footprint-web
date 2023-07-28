@@ -46,6 +46,8 @@ const ConnectorList = props => {
     demoData,
     width,
     padding,
+    hideComingSoon,
+    showContactUs,
   } = props;
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [openDrawer, setOpenDrawer] = useState({ show: false, connector: {} });
@@ -134,16 +136,31 @@ const ConnectorList = props => {
           <Title width={"100%"} level={4} style={{ marginBottom: 0 }}>
             Integrations
           </Title>
-          <Typography.Link
-            href="https://docs.footprint.network/docs/integrations"
-            target="_blank"
-            keyboard
-          >
-            <Space>
-              <ReadOutlined />
-              {"How to use integrations?"}
-            </Space>
-          </Typography.Link>
+          <div className="flex flex-column">
+            <Typography.Link
+              href="https://docs.footprint.network/docs/integrations"
+              target="_blank"
+              keyboard
+            >
+              <Space>
+                <ReadOutlined />
+                {"How to use integrations?"}
+              </Space>
+            </Typography.Link>
+            {showContactUs && (
+              <Typography.Link
+                className="mt1"
+                href="https://docs.footprint.network/docs/integrations"
+                target="_blank"
+                keyboard
+              >
+                <Space>
+                  <ReadOutlined />
+                  {"Contact us?"}
+                </Space>
+              </Typography.Link>
+            )}
+          </div>
         </div>
 
         {isLoading ? (
@@ -174,7 +191,7 @@ const ConnectorList = props => {
                         marginBottom: 8,
                       }}
                       actions={
-                        item.configured
+                        hideComingSoon ? null : (item.configured
                           ? [
                               <Button
                                 key="Detail"
@@ -221,6 +238,7 @@ const ConnectorList = props => {
                                 Coming Soon
                               </Button>,
                             ]
+                        )
                       }
                     >
                       <List.Item.Meta

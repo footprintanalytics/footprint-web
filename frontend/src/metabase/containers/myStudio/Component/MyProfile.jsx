@@ -92,7 +92,7 @@ const MyProfile = props => {
        key: 'account-settings',
        label: (
          <Link to={Urls.accountSettings()}>
-           Admin settings
+           Account settings
          </Link>
        ),
      },
