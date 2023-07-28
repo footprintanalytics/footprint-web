@@ -148,8 +148,8 @@ const ProductContent = props => {
         },
         connectorData: {
           topic: "Data Connector",
-          desc: "Coming soon",
-          // link: "/studio/my-datasets/integration",
+          desc: "Seamlessly integrate Web3 and Web2 channels with our data connectors",
+          link: "/studio/my-datasets/integration",
         },
         appBuilderData: {
           topic: "No-coding App Builder",
