@@ -10,6 +10,7 @@ import { integrationData } from "metabase/components/GlobalContactPanel/data";
 import StudioDashboards from "metabase/containers/myStudio/Component/MyAnalysis/StudioDashboards";
 import DashboardArea from "metabase/containers/features/components/DashboardArea";
 import Icon from "metabase/components/Icon";
+import { ReactIcons } from "metabase/nav/containers/FpNavbar/utils/data";
 
 const comingSoonDiv = () => {
   return <div className="flex justify-center p4"><h2>Coming soon~</h2></div>;
@@ -35,11 +36,11 @@ const getMyStudioData = ({ name, params, router, user, onLogout }) => {
     {
       "label": "My Analysis",
       "value": "my-analysis",
+      "icon": ReactIcons.myAnalysisIcon,
       subMenus: [
         {
           "label": "Dashboards",
           "value": "dashboards",
-          "icon": <MessageOutlined />,
           "component": (
             <StudioDashboards title="Dashboards" type="dashboards" router={router} user={user}/>
           ),
@@ -47,7 +48,6 @@ const getMyStudioData = ({ name, params, router, user, onLogout }) => {
         {
           "label": "Charts",
           "value": "charts",
-          "icon": <MessageOutlined />,
           "component": (
             <StudioDashboards title="Charts" type="charts" router={router} user={user}/>
           ),
@@ -55,7 +55,6 @@ const getMyStudioData = ({ name, params, router, user, onLogout }) => {
         {
           "label": "Favorites",
           "value": "favorites",
-          "icon": <MessageOutlined />,
           "component": (
             <StudioDashboards title="Favorites" type="favorites" router={router} user={user}/>
           ),
@@ -89,6 +88,7 @@ const getMyStudioData = ({ name, params, router, user, onLogout }) => {
     {
       "label": "Data API",
       "value": "data-api",
+      "icon": ReactIcons.dataApiIcon,
       subMenus: [
         {
           "label": "Usage Dashboard",
@@ -115,6 +115,7 @@ const getMyStudioData = ({ name, params, router, user, onLogout }) => {
     {
       "label": "Apps",
       "value": "apps",
+      "icon": ReactIcons.appsIcon,
       subMenus: [
         {
           "label": "My apps",

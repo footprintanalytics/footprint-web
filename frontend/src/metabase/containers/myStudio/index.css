@@ -10,6 +10,7 @@
 
 .my-studio .search__tabs {
   width: 100%;
+  margin-top: 10px;
 }
 
 .studio__line {
@@ -33,7 +34,7 @@
 }
 
 .my-studio .search__tabs-other {
-  top: -30px;
+  top: -35px;
 }
 
 .my-studio .search__content {
@@ -47,4 +48,20 @@
 
 .my-studio .feature-side__nav-button {
   padding: 0;
+}
+
+.dark .my-studio .dashboards__table-columns-even {
+  background: #121728;
+}
+
+.dark .my-studio .dashboards__table-columns-odd {
+  background: #121728;
+}
+
+.dark .my-studio .dashboards__table .ant-table-tbody > tr > td {
+  border-bottom: 1px solid #ffffff20;
+}
+
+.dark .my-studio .dashboards__table .ant-table-thead > tr > th {
+  border-bottom: 1px solid #ffffff20;
 }

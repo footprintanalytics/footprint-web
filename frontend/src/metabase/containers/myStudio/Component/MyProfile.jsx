@@ -77,11 +77,11 @@ const MyProfile = props => {
 
   if (isLoading) {
     return (
-      <div className="p2 flex flex-column align-center">
-        <Skeleton.Avatar active style={{ width: 60, height: 60 }}>
-        </Skeleton.Avatar>
-        <br />
-        <Skeleton.Button active size="small"/>
+      <div className="my-profile">
+        <Skeleton.Avatar active style={{ width: 30, height: 30 }}/>
+        <Skeleton.Button active size="small" className="pl1"/>
+        <Skeleton.Button active size="small" className="pl1"/>
+        <Skeleton.Button active size="small" className="pl1"/>
       </div>
     );
   }

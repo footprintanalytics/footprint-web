@@ -18,6 +18,10 @@
   gap: 10px;
 }
 
+.main-menu__tabs Button {
+  color: white;
+}
+
 .main-menu__tabs .ant-btn {
   border-radius: 20px;
 }
