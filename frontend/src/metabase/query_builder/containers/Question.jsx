@@ -32,6 +32,7 @@ import "./Question.css";
 import Meta from "metabase/components/Meta";
 import { getOssUrl } from "metabase/lib/image";
 import { ossPath } from "metabase/lib/ossPath";
+import Icon from "metabase/components/Icon";
 
 const mapStateToProps = state => {
   return {
@@ -181,6 +182,13 @@ class Question extends Component {
           </div>
         ) : null}
         <div className="Question-main">
+          <div className="flex">
+            <div>
+              <Icon name="arrow_left" size={16}/>
+              Back
+            </div>
+            <span>0 Coding Chart</span>
+          </div>
           {showTemplate ? (
             <QueryTemplate
               databaseId={showTemplateChart.databaseId}
