@@ -2,13 +2,13 @@
   display: flex;
   width: 100%;
   align-items: center;
-  padding: 20px 20px 0;
+  padding: 20px 20px 0 40px;
 }
 
 .my-profile .creator__personal-base-logo {
-  width: 60px;
-  height: 60px;
-  min-width: 60px;
+  width: 30px;
+  height: 30px;
+  min-width: 30px;
   border-radius: 50%;
 }
 
@@ -20,6 +20,7 @@
 }
 
 .my-profile__right h3 {
+  font-size: 14px;
   overflow: hidden;
   white-space: nowrap;
   text-overflow: ellipsis;

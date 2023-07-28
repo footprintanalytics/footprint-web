@@ -15,7 +15,7 @@
   height: 100%;
   overflow-x: hidden;
   position: relative;
-  border-right: 1px solid #4A5568;
+  border-right: 1px solid #FFFFFF20;
 }
 
 .Features-main {
@@ -145,5 +145,5 @@
 
 .feature-side__line {
   width: 100%;
-  border-top: 1px solid #4A5568;
+  border-top: 1px solid #FFFFFF20;
 }

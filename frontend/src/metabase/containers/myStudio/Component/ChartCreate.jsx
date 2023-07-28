@@ -46,7 +46,7 @@ const ChartCreate = () => {
                 <h3>{item.title}</h3>
                 <span>{item.desc}</span>
                 <Link className="chart-create__button" to={item.url}>
-                  + Create
+                  Create
                 </Link>
               </li>
             )

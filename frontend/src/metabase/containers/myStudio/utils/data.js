@@ -9,6 +9,7 @@ import ChartCreate from "../Component/ChartCreate";
 import { integrationData } from "metabase/components/GlobalContactPanel/data";
 import StudioDashboards from "metabase/containers/myStudio/Component/MyAnalysis/StudioDashboards";
 import DashboardArea from "metabase/containers/features/components/DashboardArea";
+import Icon from "metabase/components/Icon";
 
 const comingSoonDiv = () => {
   return <div className="flex justify-center p4"><h2>Coming soon~</h2></div>;
@@ -18,8 +19,9 @@ const getMyStudioData = ({ name, params, router, user, onLogout }) => {
   const isOwner = user?.name === name;
   return [
     {
-      "label": "+ Create",
+      "label": "Create",
       "value": "create",
+      "icon": <Icon name="add" size={14}/>,
       "component": (
         <ChartCreate />
       )
@@ -27,6 +29,7 @@ const getMyStudioData = ({ name, params, router, user, onLogout }) => {
     {
       "label": "Footprint Datasets",
       "value": "footprint-datasets",
+      "icon": <Icon name="database" size={14}/>,
       "publicUuid": "5aca24eb-aae3-44ef-8e4b-a275fee42847",
     },
     {
@@ -62,7 +65,7 @@ const getMyStudioData = ({ name, params, router, user, onLogout }) => {
     {
       "label": "My Datasets",
       "value": "my-datasets",
-      "icon": <PicCenterOutlined />,
+      "icon": <Icon name="database" size={14}/>,
       subMenus: [{
         "label": "Datasets",
         "value": "datasets",
@@ -128,7 +131,7 @@ const getMyStudioData = ({ name, params, router, user, onLogout }) => {
         },
       ]
     },
-    {
+    /*{
       "label": "Setting",
       "value": "setting",
       "icon": <SmileOutlined />,
@@ -159,7 +162,7 @@ const getMyStudioData = ({ name, params, router, user, onLogout }) => {
           "action": () => onLogout(),
         },
       ].filter(Boolean),
-    },
+    },*/
   ].filter(Boolean);
 };
 

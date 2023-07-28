@@ -94,9 +94,11 @@ const MyStudio = props => {
               partner={partner}
               researchData={researchData}
               isCustom={false}
+              showSocial={false}
               isPublic={isPublic}
               location={location}
               user={user}
+              showMyProfile
             />
           )}
         </div>

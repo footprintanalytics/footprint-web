@@ -101,10 +101,12 @@
 
 .Nav__search-bar {
   min-width: 100px;
-  max-width: 360px;
+  max-width: 200px;
   margin: 0 12px;
   font-size: 12px;
   flex: 1;
+  display: flex;
+  align-items: center;
 }
 
 .Nav__right-menu-mobile {
@@ -158,6 +160,11 @@
   cursor: pointer;
   margin: 0 var(--footprint-spacing-s);
   height: 36px;
+  background: #4444FF;
+}
+
+.Nav__menu-create:hover{
+  color: black;
 }
 
 .Nav__menu-create span {

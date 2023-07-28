@@ -25,6 +25,7 @@ import LogoBadge from "metabase/public/components/LogoBadge";
 import EmbedModal from "metabase/containers/home/components/EmbedModal";
 import flatten from "underscore/modules/_flatten";
 import MyProfile from "metabase/containers/myStudio/Component/MyProfile";
+import { studioSocialData } from "metabase/components/GlobalContactPanel/data";
 
 const FeaturesSide = ({
   replace,
@@ -40,6 +41,7 @@ const FeaturesSide = ({
   location,
   showSeo = false,
   showSocial = true,
+  showMyProfile = false,
   menuMode = "inline",
   user,
 }) => {
@@ -180,8 +182,8 @@ const FeaturesSide = ({
 
   const renderNavButton = () => {
     return (
-      <div className="feature-side__nav-button">
-        <div className="feature-side__line"/>
+      <div className="feature-side__nav-button" style={{padding: showMyProfile ? "16px 0": "0"}}>
+        {showMyProfile && (<div className="feature-side__line"/>)}
         {showResearchActionButtons && (
           <div className="flex flex-column" style={{ width: 160 }}>
             {!isCustom && (
@@ -207,10 +209,15 @@ const FeaturesSide = ({
             )}
           </div>
         )}
-        {!isPublic && showSocial && <SocialLayout title={"Contact us"}/>}
+        {!isPublic && showSocial && <SocialLayout />}
         {isPublic && (renderBrandInfo())}
-        <div className="feature-side__line"/>
-        <MyProfile user={user} name={user.name}/>
+        {showMyProfile && (
+          <>
+            <SocialLayout title={"Contact us"} data={studioSocialData}/>
+            <div className="feature-side__line"/>
+            <MyProfile user={user} name={user.name}/>
+          </>
+        )}
       </div>
     )
   }

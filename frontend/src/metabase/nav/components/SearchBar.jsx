@@ -130,7 +130,7 @@ class SearchBar extends React.Component {
             isDark={isDark}
             value={searchText}
             maxLength={200}
-            placeholder={"Search chain/protocol/token/NFT/creator/dashboard…"}
+            placeholder={"Search..."}
             onClick={() => this.setState({ active: true })}
             onChange={e => this.setState({ searchText: e.target.value })}
             onKeyDown={e => this.onkeydown(e)}

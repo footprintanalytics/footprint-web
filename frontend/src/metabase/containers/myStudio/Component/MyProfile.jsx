@@ -3,7 +3,7 @@ import React from "react";
 import { connect } from "react-redux";
 import "./MyApi.css";
 import { get } from "lodash";
-import { Avatar, Skeleton, Tooltip } from "antd";
+import { Avatar, Button, Dropdown, Skeleton, Tooltip } from "antd";
 import { useQuery } from "react-query";
 import { personalInfo } from "metabase/new-service";
 import { getProject } from "metabase/lib/project_info";
@@ -12,9 +12,12 @@ import "./MyProfile.css";
 import "../../creator/components/personal/index.css";
 import Icon from "metabase/components/Icon";
 import AboutImage from "metabase/containers/aboutV2/components/AboutImage";
+import Link from "metabase/core/components/Link";
+import { logout } from "metabase/auth/actions";
+import * as Urls from "metabase/lib/urls";
 
 const MyProfile = props => {
-  const { user, name, location } = props;
+  const { user, name, onLogout } = props;
 
   const personalInfoParams = {
     name: name,
@@ -83,43 +86,85 @@ const MyProfile = props => {
     );
   }
 
+  const getContent = () => {
+   return [
+     {
+       key: 'account-settings',
+       label: (
+         <Link to={Urls.accountSettings()}>
+           Admin settings
+         </Link>
+       ),
+     },
+     user?.is_superuser && {
+        key: 'admin-settings',
+        label: (
+          <Link to="/admin">
+            Admin settings
+          </Link>
+        ),
+      },
+     (user?.is_superuser || user?.isMarket) && {
+        key: 'upgrade-vip',
+        label: (
+          <Link to="/market/upgrade">
+            Upgrade Vip
+          </Link>
+        ),
+      },
+      {
+        key: 'sign-out',
+        label: (
+          <Link onClick={() => onLogout()}>
+            Sign out
+          </Link>
+        ),
+      },
+     ]
+  }
+
   return (
     <>
-      <div className="my-profile">
-        <Tooltip title={desc}>
-          {logo ? (
-            <img
-              src={logo + "?x-oss-process=image/resize,m_fill,h_60,w_60"}
-              className="creator__personal-base-logo"
-              alt={userName}
-            />
-          ) : (
-            <Avatar size="large" style={{ backgroundColor: "#E4E4FE", width: 60, height: 60, lineHeight: "50px" }}>
-              <span style={{ fontSize: 30 }}>
-                {String(userName.charAt(0)).toUpperCase()}
-              </span>
-            </Avatar>
-          )}
-        </Tooltip>
-        <div className="my-profile__right">
-          {userName && (
-            <div style={{ display: "flex", alignItems: "center"}}>
-              <h3>{userName}</h3>
-              <AboutImage src={getOssUrl("/studio/img-fp-vip.png")} />
-              <AboutImage src={getOssUrl("/studio/img-api-vip.png")} />
-            </div>
-          )}
-          {/*<SocialList
-            list={[
-              { href: twitter, icon: "20220516201254.png", isBlank: true },
-              { href: telegram, icon: "20220516201327.png", isBlank: true },
-              { href: discord, icon: "20220516201343.png", isBlank: true },
-              // { href: `mailto:${email}`, icon: "20220516201357.png" },
-            ]}
-          />*/}
+      <Dropdown
+        menu={{ items: getContent() }}
+        placement="rightBottom"
+      >
+        <div className="my-profile">
+          <Tooltip title={desc}>
+            {logo ? (
+              <img
+                src={logo + "?x-oss-process=image/resize,m_fill,h_30,w_30"}
+                className="creator__personal-base-logo"
+                alt={userName}
+              />
+            ) : (
+              <Avatar size="large" style={{ backgroundColor: "#E4E4FE", width: 30, height: 30, lineHeight: "50px" }}>
+                <span style={{ fontSize: 30 }}>
+                  {String(userName.charAt(0)).toUpperCase()}
+                </span>
+              </Avatar>
+            )}
+          </Tooltip>
+          <div className="my-profile__right">
+            {userName && (
+              <div style={{ display: "flex", alignItems: "center"}}>
+                <h3>{userName}</h3>
+                <AboutImage className="ml1" src={getOssUrl("/studio/img-fp-vip.png")} />
+                <AboutImage className="ml1" src={getOssUrl("/studio/img-api-vip.png")} />
+              </div>
+            )}
+            {/*<SocialList
+              list={[
+                { href: twitter, icon: "20220516201254.png", isBlank: true },
+                { href: telegram, icon: "20220516201327.png", isBlank: true },
+                { href: discord, icon: "20220516201343.png", isBlank: true },
+                // { href: `mailto:${email}`, icon: "20220516201357.png" },
+              ]}
+            />*/}
+          </div>
+          <Icon name="arrow_right_simple" size={14} color="#ffffff90"/>
         </div>
-        <Icon name="arrow_right_simple" size={24} color="#ffffff90"/>
-      </div>
+      </Dropdown>
     </>
   );
 };
@@ -130,4 +175,8 @@ const mapStateToProps = (state, props) => {
   };
 };
 
-export default connect(mapStateToProps)(MyProfile);
+const mapDispatchToProps = {
+  onLogout: logout,
+};
+
+export default connect(mapStateToProps, mapDispatchToProps)(MyProfile);
