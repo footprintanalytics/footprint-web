@@ -167,7 +167,7 @@ class Question extends Component {
     const showStudioBack = isNewQuestion && location.hash;
 
     return (
-      <>
+      <div className="flex flex-column">
       {question && (
         <Meta
           title={`${question?.card()?.name} - Footprint Analytics`}
@@ -178,6 +178,7 @@ class Question extends Component {
           )}
         />
       )}
+      {showStudioBack && (<QuestionStudioBack title={isNative ? "SQL Chart" : "0 Coding Chart"} />)}
       <div className="flex Question">
         {showSide ? (
           <div className="Question-side" style={questionSideStyle}>
@@ -185,7 +186,6 @@ class Question extends Component {
           </div>
         ) : null}
         <div className="Question-main">
-          {showStudioBack && (<QuestionStudioBack title={isNative ? "SQL Chart" : "0 Coding Chart"} />)}
           {showTemplate ? (
             <QueryTemplate
               databaseId={showTemplateChart.databaseId}
@@ -201,7 +201,7 @@ class Question extends Component {
           {showPreviewChart.show && <QueryPreview {...this.props} />}
         </div>
       </div>
-      </>
+      </div>
     );
   }
 }

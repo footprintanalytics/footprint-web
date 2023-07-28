@@ -47,6 +47,7 @@ import { SIDEBAR_NAME } from "metabase/dashboard/constants";
 import { DashboardLazyLoadContainer } from "metabase/dashboard/components/Dashboard/DashboardLazyLoadContainer";
 import cx from "classnames";
 import { canShowDarkMode } from "metabase/dashboard/components/utils/dark";
+import QuestionStudioBack from "metabase/query_builder/containers/QuestionStudioBack";
 
 // const SCROLL_THROTTLE_INTERVAL = 1000 / 24;
 const THROTTLE_PERIOD = 300;
@@ -528,13 +529,16 @@ class Dashboard extends Component {
       !shouldRenderParametersWidgetInViewMode &&
       (!isEditing || isEditingParameter);
 
-    const { chart_style, theme } = {
+    const { chart_style, theme, from } = {
       ...parseHashOptions(location.hash),
     };
 
     const curTheme = shouldRenderAsNightMode ? "night" : theme;
+
+    const showStudioBack = from === "studio";
+
     return (
-      <>
+      <div className="flex flex-column" style={{ height: "calc(100% - 45px)" }}>
         {dashboard && (
           <Meta
             title={`${dashboard.name} - Footprint Analytics`}
@@ -548,6 +552,7 @@ class Dashboard extends Component {
             )}
           />
         )}
+        {showStudioBack && (<QuestionStudioBack title={"New Dashboard"} />)}
         <DashboardLoadingAndErrorWrapper
           isFullHeight={isEditing || isSharing}
           isFullscreen={isFullscreen}
@@ -695,7 +700,7 @@ class Dashboard extends Component {
           {this.renderNewDashboardModal()}
           {this.renderCancelModal()}
         </DashboardLoadingAndErrorWrapper>
-      </>
+      </div>
     );
   }
 }

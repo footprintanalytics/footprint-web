@@ -216,12 +216,12 @@ const ResearchContent = props => {
           },
           {
             title: "Moonbeam",
-            img: getOssUrl("studio/img-chain-14.png"),
+            img: getOssUrl("studio/img-chain-14.png?1=1"),
             link: "/research/chain/chain-stats/moonbeam-overview",
           },
           {
             title: "Moonriver",
-            img: getOssUrl("studio/img-chain-15.png"),
+            img: getOssUrl("studio/img-chain-15.png?1=1"),
             link: "/research/chain/chain-stats/moonriver-overview",
           },
           {
@@ -236,7 +236,7 @@ const ResearchContent = props => {
           },
           {
             title: "Boba",
-            img: getOssUrl("studio/img-chain-24.png"),
+            img: getOssUrl("studio/img-chain-24.png?1=1"),
             link: "/research/chain/chain-stats/boba-network-overview",
           },
           {

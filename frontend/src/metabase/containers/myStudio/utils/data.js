@@ -11,10 +11,7 @@ import StudioDashboards from "metabase/containers/myStudio/Component/MyAnalysis/
 import DashboardArea from "metabase/containers/features/components/DashboardArea";
 import Icon from "metabase/components/Icon";
 import { ReactIcons } from "metabase/nav/containers/FpNavbar/utils/data";
-
-const comingSoonDiv = () => {
-  return <div className="flex justify-center p4"><h2>Coming soon~</h2></div>;
-};
+import ComingSoonView from "metabase/containers/myStudio/Component/ComingSoonView";
 
 const getMyStudioData = ({ name, params, router, user, onLogout }) => {
   const isOwner = user?.name === name;
@@ -83,7 +80,12 @@ const getMyStudioData = ({ name, params, router, user, onLogout }) => {
             padding="20px 40px"
           />
         ),
-      }],
+      }, {
+        "label": "Submit contract",
+        "value": "submit-contract",
+        "url": "submit/contract/add",
+      }
+      ],
     },
     {
       "label": "Data API",
@@ -120,17 +122,17 @@ const getMyStudioData = ({ name, params, router, user, onLogout }) => {
         {
           "label": "My apps",
           "value": "my-apps",
-          "component": comingSoonDiv(),
+          "component": <ComingSoonView title="My apps"/>,
         },
         {
           "label": "App Store",
           "value": "app-store",
-          "component": comingSoonDiv(),
+          "component": <ComingSoonView title="App Store"/>,
         },
         {
           "label": "Publish app",
           "value": "publish-app",
-          "component": comingSoonDiv(),
+          "component": <ComingSoonView title="Publish app"/>,
         },
       ]
     },

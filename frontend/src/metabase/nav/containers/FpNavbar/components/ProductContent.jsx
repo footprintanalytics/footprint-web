@@ -5,6 +5,7 @@ import { Button } from "antd";
 import { getOssUrl } from "metabase/lib/image";
 import { MainMenuFunction } from "metabase/nav/containers/FpNavbar/utils/function";
 import { ReactIcons } from "../utils/data";
+import * as Urls from "../../../../lib/urls";
 
 const ProductContent = props => {
   const { name, content } = props;
@@ -17,7 +18,7 @@ const ProductContent = props => {
       value: "data-api",
       data: {
         dataApiDescData: {
-          img: getOssUrl("studio/img-menu-wallet.png"),
+          img: getOssUrl("studio/img-data-api-pic.png"),
           title: "Everything you need to build in Web3 can be found here. ",
         },
         restApiData: {
@@ -91,7 +92,7 @@ const ProductContent = props => {
       value: "analytics-studio",
       data: {
         studioDescData: {
-          img: getOssUrl("studio/img-menu-wallet.png"),
+          img: getOssUrl("studio/img-studio-pic.png"),
           title: "0- coding analytics as Tableau for crypto.",
         },
         analyticsToolData: {
@@ -110,17 +111,17 @@ const ProductContent = props => {
             {
               title: "0-coding chart",
               icon: ReactIcons.codingChartIcon,
-              link: "/studio/create",
+              link: Urls.newQuestion({ type: "query" }),
             },
             {
               title: "SQL chart",
               icon: ReactIcons.sqlChartIcon,
-              link: "/studio/create",
+              link: Urls.newQuestion({ type: "native", creationType: "native_question" }),
             },
             {
               title: "New dashboard",
               icon: ReactIcons.newDashboardIcon,
-              link: "/studio/create",
+              link: "dashboard/new#from=studio",
             },
           ]
         },

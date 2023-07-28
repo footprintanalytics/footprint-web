@@ -22,6 +22,7 @@ import AboutBacked from "./components/AboutBacked";
 import AboutStart from "./components/AboutStart";
 import AboutBanner from "./components/AboutBanner";
 import AboutSolution from "./components/AboutSolutions";
+import ResearchContent from "metabase/nav/containers/FpNavbar/components/ResearchContent";
 
 const About = props => {
   const {
@@ -50,47 +51,7 @@ const About = props => {
   };
   return (
     <>
-      <Meta description={defaultDesc} keywords={keywords} title={title} />
-      <div className="About">
-        <AboutStart />
-        <div className="About__depth-dividing-line" />
-        <LazyLoadAbout>
-          <AboutBanner />
-        </LazyLoadAbout>
-        <LazyLoadAbout>
-          <AboutSolution />
-        </LazyLoadAbout>
-        <LazyLoadAbout>
-          <AboutDepth />
-        </LazyLoadAbout>
-        <LazyLoadAbout>
-          <AboutDemo />
-        </LazyLoadAbout>
-        <LazyLoadAbout>
-          <AboutDataFeature />
-        </LazyLoadAbout>
-        <LazyLoadAbout>
-          <AboutDataModel />
-        </LazyLoadAbout>
-        <LazyLoadAbout>
-          <AboutBacked list={data.backedList} />
-        </LazyLoadAbout>
-        <LazyLoadAbout>
-          <AboutDataTrusted />
-        </LazyLoadAbout>
-        <LazyLoadAbout>
-          <AboutPartnerV2 list={data.partnerList} />
-        </LazyLoadAbout>
-        <LazyLoadAbout>
-          <AboutGrantedBy />
-        </LazyLoadAbout>
-        <div className="About__depth-dividing-line-gray" />
-        <LazyLoadAbout>
-          <HomeFooter />
-        </LazyLoadAbout>
-
-        {children}
-      </div>
+      <ResearchContent />
     </>
   );
 };
