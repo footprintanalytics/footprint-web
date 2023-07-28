@@ -61,7 +61,7 @@ const renderVerticalMenu = ({data, className}) => {
                 to={item.link}
                 target={item.externalLink ? "_blank" : null}
               >
-                {item.icon}
+                <div className="main-menu__vertical-menu-icon">{item.icon}</div>
                 <div className="main-menu__vertical-menu-right">
                   {item.title && (<h4>{item.title}</h4>)}
                   {item.desc && (<span>{item.desc}</span>)}

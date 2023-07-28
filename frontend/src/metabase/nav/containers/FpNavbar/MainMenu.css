@@ -254,3 +254,8 @@
   background-color: #161D2F;
   border-bottom-left-radius: 10px;
 }
+
+.main-menu__vertical-menu-icon {
+  width: 20px;
+  height: 20px;
+}
