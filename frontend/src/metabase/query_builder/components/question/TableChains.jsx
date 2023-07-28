@@ -73,16 +73,16 @@ const TableChains = props => {
         label: "DFK",
         icon: getOssUrl("fp-chains/dfk.webp"),
       },
-      {
+      /*{
         value: "doge",
         label: "Doge",
         icon: getOssUrl("fp-chains/doge.webp"),
-      },
-      {
+      },*/
+      /*{
         value: "eos",
         label: "EOS",
         icon: getOssUrl("fp-chains/eos.webp"),
-      },
+      },*/
       {
         value: "fantom",
         label: "Fantom",
@@ -93,16 +93,16 @@ const TableChains = props => {
         label: "Harmony",
         icon: getOssUrl("fp-chains/harmony.webp"),
       },
-      {
+      /*{
         value: "hive",
         label: "Hive",
         icon: getOssUrl("fp-chains/hive.webp"),
-      },
-      {
+      },*/
+      /*{
         value: "iotex",
         label: "Iotex",
         icon: getOssUrl("fp-chains/iotex.webp"),
-      },
+      },*/
       {
         value: "mch",
         label: "MCH Verse",
@@ -133,11 +133,11 @@ const TableChains = props => {
         label: "Thundercore",
         icon: getOssUrl("fp-chains/thundercore.webp"),
       },
-      {
+      /*{
         value: "wax",
         label: "Wax",
         icon: getOssUrl("fp-chains/wax.webp"),
-      },
+      },*/
     ],
     ["value"],
   );
