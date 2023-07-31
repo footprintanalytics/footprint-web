@@ -47,12 +47,12 @@ export const HeaderSubtitle = styled.h3`
 export const HeaderAvatar = styled(UserAvatar)`
   width: 3em;
   height: 3em;
-  margin-bottom: ${space(1)};
+  /* margin-bottom: ${space(1)}; */
 
   ${breakpointMinSmall} {
     width: 4em;
     height: 4em;
-    margin-bottom: ${space(2)};
+    /* margin-bottom: ${space(2)}; */
   }
 
   ${breakpointMinMedium} {
