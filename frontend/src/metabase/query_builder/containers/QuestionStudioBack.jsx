@@ -9,7 +9,7 @@ const QuestionStudioBack = props => {
     title
   } = props;
   return (
-    <div className="question-studio__back" onClick={() => console.log("bb")}>
+    <div className="question-studio__back" >
       <Link className="question-studio__back-left" to="/studio">
         <Icon name="collapse_arrow_left" size={16}/>
         <span className="footprint-primary-text">Back</span>

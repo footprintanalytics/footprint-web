@@ -358,11 +358,9 @@ class FpNavbar extends Component {
   }
 
   goLink = (e, url, open = false) => {
-    console.log("goLink")
     e.preventDefault();
     this.setState({ sideNavModal: false });
     const afterSuccess = () => {
-      console.log("afterSuccess", url, this.props.onChangeLocation)
       if (open) {
         window.open(url);
       } else {

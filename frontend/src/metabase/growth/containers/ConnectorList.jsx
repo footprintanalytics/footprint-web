@@ -64,7 +64,6 @@ const ConnectorList = props => {
 
   useEffect(() => {
     if (projectId && !isLoading && connectorData) {
-      console.log("getAvailableIntegrations", connectorData);
       const availableConnectors = connectorData?.availableConnectorConfig;
       const groupMap = new Map();
       availableConnectors.map((j, index) => {

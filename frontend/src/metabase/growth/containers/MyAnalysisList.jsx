@@ -14,7 +14,6 @@ const MyAnalysisList = props => {
     props;
   router.params.name = user?.name;
   const [messageApi, contextHolder] = message.useMessage();
-  console.log("user",user)
   const [modal, modalContextHolder] = Modal.useModal();
   return (
     <div className="flex flex-column items-center justify-center w-full">

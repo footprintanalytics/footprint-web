@@ -48,7 +48,6 @@ const Index = ({
   },
   hideToggleView = false,
 }) => {
-  console.log("showTabs", showTabs)
   const [isList, setIsList] = useState(creatorViewType === "list");
   const { isMobile } = useDeviceInfo();
 

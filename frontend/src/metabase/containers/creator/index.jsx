@@ -14,12 +14,9 @@ import { getProject } from "metabase/lib/project_info";
 import Link from "metabase/core/components/Link";
 import Meta from "metabase/components/Meta";
 import { get } from "lodash";
-import { logout } from "metabase/auth/actions";
 import { replace } from "react-router-redux";
-import { loginModalShowAction } from "metabase/redux/control";
 
 const Index = ({ router, user, params, creator_name, replace }) => {
-  console.log("params", params)
   const name = creator_name || params?.name?.replace("@", "") || "";
 
   if (name) {

@@ -1,15 +1,10 @@
 /* eslint-disable react/prop-types */
 import React from "react";
-import { useQuery } from "react-query";
-import { personalInfo } from "metabase/new-service";
-import { get } from "lodash";
 import "./MyAnalysis.css";
 import "../../creator/components/personal/index.css";
-import { Skeleton } from "antd";
 import List from "metabase/containers/creator/components/personal/list";
 
 const MyAnalysis = props => {
-  console.log("MyAnalysis")
   const { router, name, user, showTabs } = props;
   /*const personalInfoParams = {
     name: name,

@@ -186,7 +186,6 @@ const MyProfile = props => {
           menu={{ items: getContent() }}
           overlayStyle={{ borderRadius: 10, border: "1px solid #ffffff20", background: "#121728" }}
           dropdownRender={(menu) => {
-            console.log("menuj", menu)
             return (
               <div className="my-profile__menu">
                 {menu.props.items.filter(Boolean).map(item => {
