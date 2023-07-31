@@ -54,7 +54,15 @@
   background: #121728;
 }
 
+.dark .my-studio .dashboards__table-columns-even-dark {
+  background: #121728;
+}
+
 .dark .my-studio .dashboards__table-columns-odd {
+  background: #121728;
+}
+
+.dark .my-studio .dashboards__table-columns-odd-dark {
   background: #121728;
 }
 
@@ -64,4 +72,10 @@
 
 .dark .my-studio .dashboards__table .ant-table-thead > tr > th {
   border-bottom: 1px solid #ffffff20;
+}
+
+.my-profile__menu-link {
+  width: 100%;
+  height: 100%;
+  color: white;
 }

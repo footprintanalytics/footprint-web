@@ -24,6 +24,7 @@ const Index = ({ router, user }) => {
   const device = useDeviceInfo();
   const showHeader = device.isPC;
   const isFga = isFgaPath();
+  const isStudio = window.location.pathname.startsWith("/studio");
   const [showVip, setShowVip] = useState(false);
 
   const [open, setOpen] = useState({});
@@ -100,8 +101,8 @@ const Index = ({ router, user }) => {
         showHeader={showHeader}
         rowClassName={(record, index) => {
           return index % 2 === 1
-            ? `dashboards__table-columns-odd${isFga && "-dark"}`
-            : `dashboards__table-columns-even${isFga && "-dark"}`;
+            ? `dashboards__table-columns-odd${isFga || isStudio ? "-dark" : ""}`
+            : `dashboards__table-columns-even${isFga || isStudio ? "-dark" : ""}`;
         }}
         onChange={(pagination, filters, sorter, extra) => {
           const link = getCreatorQueryLink({

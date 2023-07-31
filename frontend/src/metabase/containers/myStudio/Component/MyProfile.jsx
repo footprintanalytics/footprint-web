@@ -93,7 +93,7 @@ const MyProfile = props => {
      {
        key: 'account-settings',
        label: (
-         <Link className="full-width full-height" to={Urls.accountSettings()}>
+         <Link className="my-profile__menu-link" to={Urls.accountSettings()} style={{ color: "white" }}>
            Account settings
          </Link>
        ),
@@ -101,7 +101,7 @@ const MyProfile = props => {
      user?.is_superuser && {
         key: 'admin-settings',
         label: (
-          <Link className="full-width full-height" to="/admin">
+          <Link className="my-profile__menu-link" to="/admin"  style={{ color: "white" }}>
             Admin settings
           </Link>
         ),
@@ -109,7 +109,7 @@ const MyProfile = props => {
      (user?.is_superuser || user?.isMarket) && {
         key: 'upgrade-vip',
         label: (
-          <Link className="full-width full-height" to="/market/upgrade">
+          <Link className="my-profile__menu-link" to="/market/upgrade"  style={{ color: "white" }}>
             Upgrade Vip
           </Link>
         ),
@@ -117,7 +117,7 @@ const MyProfile = props => {
       {
         key: 'sign-out',
         label: (
-          <Link className="full-width full-height" onClick={() => onLogout()}>
+          <Link className="my-profile__menu-link" onClick={() => onLogout()}  style={{ color: "white" }}>
             Sign out
           </Link>
         ),
@@ -143,8 +143,8 @@ const MyProfile = props => {
               alt={userName}
             />
           ) : (
-            <Avatar size="large" style={{ backgroundColor: "#E4E4FE", width: 30, height: 30, lineHeight: "50px" }}>
-              <span style={{ fontSize: 30 }}>
+            <Avatar size="large" style={{ backgroundColor: "#E4E4FE", width: 30, height: 30, lineHeight: "30px" }}>
+              <span style={{ fontSize: 20 }}>
                 {String(userName.charAt(0)).toUpperCase()}
               </span>
             </Avatar>
