@@ -50,7 +50,6 @@ const About = props => {
       <Meta description={defaultDesc} keywords={keywords} title={title} />
       <div className="About">
         <AboutStart />
-        <div className="About__depth-dividing-line" />
         <LazyLoadAbout>
           <AboutDepth />
         </LazyLoadAbout>
