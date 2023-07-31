@@ -344,6 +344,9 @@ export default {
   GaProjectContainer: loadable(() =>
     import("metabase/growth/containers/Project"),
   ),
+  ABProjectContainer: loadable(() =>
+    import("metabase/ab/containers/Project"),
+  ),
   // Metadata / Data model
   DataModelApp: loadable(() =>
     import("metabase/admin/datamodel/containers/DataModelApp"),

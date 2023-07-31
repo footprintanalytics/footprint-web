@@ -28,6 +28,7 @@ const GaProjectSearch = props => {
     setCreateFgaProjectModalShowAction,
     logout,
   } = props;
+  console.log("GaProjectSearch")
   const [userProject, setUserProject] = useState([]);
   const [currentProject, setCurrentProject] = useState(projectPath);
   const { isLoading, data } = useQuery(

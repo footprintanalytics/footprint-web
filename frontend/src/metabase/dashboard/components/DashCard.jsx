@@ -365,7 +365,8 @@ class DashCard extends Component {
       && includeRealtimeTable
       && isRealtimeUser;
     const isGrowth = window.location.pathname.startsWith("/growth");
-    const showButtons = !isGrowth;
+    const isAB = window.location.pathname.startsWith("/ab");
+    const showButtons = !isGrowth || !isAB;
     return (
       <DashCardRoot
         id={id}

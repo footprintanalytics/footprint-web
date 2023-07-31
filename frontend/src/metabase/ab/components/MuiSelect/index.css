@@ -1,0 +1,52 @@
+.label {
+  font-weight: normal;
+  position: absolute;
+  pointer-events: none;
+  left: 12px;
+  top: 11px;
+  transition: 0.2s ease all;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  width: 75%;
+}
+
+.as-placeholder {
+  color: gray;
+}
+
+.as-label {
+  top: -8px;
+  font-size: 12px !important;
+  background: #121828;
+  color:white;
+  padding: 0 4px;
+  margin-left: -4px;
+}
+
+.mui-select {
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+
+.mui-select .ant-select-single:not(.ant-select-customize-input) .ant-select-selector {
+  height: 40px;
+  border-radius: 4px;
+  padding-top: 4px;
+}
+
+.close-action {
+  border-radius: 50%;
+  color: #666666;
+  border: 2px solid #666666;
+  cursor: pointer;
+  background: var(--color-bg-dark);
+}
+
+.close-action:hover {
+  border-radius: 50%;
+  color: #cccccc;
+  border: 2px solid #cccccc;
+  background: var(--color-bg-dark);
+}

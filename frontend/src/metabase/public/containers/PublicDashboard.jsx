@@ -51,6 +51,7 @@ import QueryCopyModal from "metabase/components/QueryCopyModal";
 import { getUser } from "metabase/selectors/user";
 import { getSqlAndJumpToDoc, replaceTemplateCardUrl } from "metabase/guest/utils";
 import { trackStructEvent } from "metabase/lib/analytics";
+import { isFgaPath } from "metabase/growth/utils/utils"
 
 const mapStateToProps = (state, props) => {
   const user = getUser(state);
@@ -397,13 +398,13 @@ class PublicDashboard extends Component {
     const { chart_style } = {
       ...parseHashOptions(location.hash),
     };
-    const isFgaPublicDashboard = location.pathname.startsWith("/growth");
-    let hideParametersForCustom = isFgaPublicDashboard
+
+    let hideParametersForCustom = isFgaPath()
       ? "gamefi,protocol_slug,twitter_handler,project_name,guild_id"
       : "";
     const hashData = parseHashOptions(location?.hash);
     if (
-      isFgaPublicDashboard &&
+      isFgaPath() &&
       hashData?.from &&
       dashboard &&
       !disableBreadcrumb
@@ -462,8 +463,8 @@ class PublicDashboard extends Component {
           buttons.length > 0 && <div className="flex">{buttons}</div>
         }
         isNightMode={shouldRenderAsNightMode}
-        hideFooter={hideFooter || isFgaPublicDashboard}
-        className={cx(className, isFgaPublicDashboard && "ml-250 mt-60")}
+        hideFooter={hideFooter || isFgaPath()}
+        className={cx(className, isFgaPath() && "ml-250 mt-60")}
         innerClassName={cx(innerClassName)}
         allLoadOuter={allLoadOuter}
       >
