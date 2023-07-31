@@ -1,6 +1,6 @@
 /* eslint-disable react/prop-types */
 /* eslint-disable react/display-name */
-import { Button, Tabs } from "antd";
+import { Button, Tabs, Input } from "antd";
 import React, { useState } from "react";
 import { connect } from "react-redux";
 import "./index.css";
@@ -14,7 +14,7 @@ import { createModalShowAction } from "metabase/redux/control";
 import cx from "classnames";
 import {
   getCreatorQueryLink,
-  isCreator,
+  isCreator, isGrowthPage, isMyStudio,
   isSearch,
 } from "metabase/containers/dashboards/shared/utils";
 import Link from "metabase/core/components/Link";
@@ -23,7 +23,6 @@ import { loginModalShowAction } from "metabase/redux/control";
 import { trackStructEvent } from "metabase/lib/analytics";
 import Tooltip from "metabase/components/Tooltip";
 import Icon from "metabase/components/Icon";
-import Search from "antd/es/input/Search";
 import { debounce } from "lodash";
 import * as MetabaseAnalytics from "metabase/lib/analytics";
 import { sortMap } from "metabase/containers/dashboards/shared/config";
@@ -39,19 +38,27 @@ const Index = ({
   setLoginModalShow,
   setCreateModalShow,
   creatorViewType,
+  hideTabsBar = false,
+  showTabs = {
+    all: true,
+    dashboard: true,
+    card: true,
+    favorite: true,
+    table: true,
+  },
+  hideToggleView = false,
 }) => {
   const [isList, setIsList] = useState(creatorViewType === "list");
-
   const { isMobile } = useDeviceInfo();
 
-  const isOwnCreator = user && user.name === router?.params?.name;
+  const isOwnCreator = user && user.name === (name || router?.params?.name);
 
   const isFavoritesTab = model === "favorite";
   const isMyTablesTab = model === "table";
-  const isCreatorTabStyle = isCreator() && isOwnCreator;
+  const isCreatorTabStyle = (isCreator() || isGrowthPage() || isMyStudio()) && isOwnCreator;
   const isFga = isFgaPath();
   const isCreatorAndOwner = () => {
-    return isCreator() && router?.params?.name === user?.name;
+    return (isCreator() || isGrowthPage() || isMyStudio()) && router?.params?.name === user?.name;
   };
 
   const tabData = [
@@ -61,39 +68,31 @@ const Index = ({
       render: params => {
         return <DashboardsList isCommon={isSearch()} {...params} />;
       },
-      show: true,
+      show: !!showTabs?.all,
     },
     {
       key: "dashboard",
       tab: "Dashboards",
       render: params => {
-        return <DashboardsList {...params} />;
+        return <DashboardsList model="dashboard" {...params} />;
       },
-      show: true,
+      show: !!showTabs?.dashboard,
     },
     {
       key: "card",
       tab: "Charts",
       render: params => {
-        return <DashboardsList {...params} />;
+        return <DashboardsList model="card" {...params} />;
       },
-      show: true,
-    },
-    {
-      key: "flex",
-      tab: "",
-      render: params => {
-        return null;
-      },
-      show: isCreator() && isOwnCreator,
+      show: !!showTabs?.card,
     },
     {
       key: "favorite",
       tab: "My Favorites",
       render: params => {
-        return <DashboardsList {...params} />;
+        return <DashboardsList model="favorite" {...params} />;
       },
-      show: isCreator() && isOwnCreator,
+      show: !!showTabs?.favorite && (((isGrowthPage() || isCreator()) && isOwnCreator) || isMyStudio()),
     },
     {
       key: "table",
@@ -101,7 +100,7 @@ const Index = ({
       render: params => {
         return <MyTables {...params} />;
       },
-      show: isCreator() && isOwnCreator,
+      show: !!showTabs?.table && (((isGrowthPage() || isCreator()) && isOwnCreator) || isMyStudio()),
     },
     {
       key: "creator",
@@ -137,7 +136,7 @@ const Index = ({
     // },
   ];
 
-  const showSwitchGraph = isCreator() && !isMyTablesTab;
+  const showSwitchGraph = (isCreator() || isGrowthPage() || isMyStudio()) && !isMyTablesTab;
 
   const getTab = (key, tab) => {
     const num = data && data[key];
@@ -183,7 +182,7 @@ const Index = ({
     return (
       <div className="search__tabs-other flex justify-end">
         {!isFavoritesTab && !isMyTablesTab && (
-          <Search
+          <Input.Search
             allowClear
             placeholder="Search..."
             onChange={e => changeHandler(e.target.value)}
@@ -201,7 +200,7 @@ const Index = ({
             Create
           </Button>
         )}
-        {!isFga && (
+        {!isFga && !hideToggleView && (
           <div
             className="ml1 p1 cursor-pointer"
             onClick={() => {
@@ -238,6 +237,7 @@ const Index = ({
         size="large"
         tabBarGutter={isMobile ? 20 : null}
         animated={false}
+        tabBarStyle={hideTabsBar ? {display: "none"} : {}}
         destroyInactiveTabPane={true}
         onChange={model => {
           router.replace(getUrl(model));
@@ -269,7 +269,7 @@ const Index = ({
 const mapStateToProps = state => {
   return {
     user: state.currentUser,
-    creatorViewType: isCreator()
+    creatorViewType: isCreator() || isGrowthPage() || isMyStudio()
       ? localStorage.getItem("creator-view-type") || "list"
       : "list",
   };

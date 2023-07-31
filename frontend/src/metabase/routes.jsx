@@ -798,6 +798,11 @@ export const getRoutes = store => (
           }}
         />*/}
 
+        <Route path="/studio" component={LazyLoad.MyStudio}>
+          <Route path=":menu/:subMenu" />
+          <Route path=":menu" />
+        </Route>
+
         <Route title={t`Market`} path="market">
           <Route
             title={t`Upgrade`}

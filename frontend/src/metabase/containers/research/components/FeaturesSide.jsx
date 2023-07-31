@@ -3,7 +3,7 @@
 import React, { useState } from "react";
 import { connect } from "react-redux";
 import { push, replace } from "react-router-redux";
-import { Layout, Menu } from "antd";
+import { Menu } from "antd";
 import { MailOutlined } from "@ant-design/icons";
 import "./FeaturesSide.css";
 import { getUser } from "metabase/selectors/user";
@@ -22,12 +22,14 @@ import Link from "metabase/core/components/Link/Link";
 import SocialLayout from "metabase/components/GlobalContactPanel/components/SocialLayout";
 import MetabaseSettings from "metabase/lib/settings";
 import LogoBadge from "metabase/public/components/LogoBadge";
-import Button from "metabase/core/components/Button/Button";
-import Tooltip from "metabase/components/Tooltip";
 import EmbedModal from "metabase/containers/home/components/EmbedModal";
+import flatten from "underscore/modules/_flatten";
+import MyProfile from "metabase/containers/myStudio/Component/MyProfile";
+import { studioSocialData } from "metabase/components/GlobalContactPanel/data";
 
 const FeaturesSide = ({
   replace,
+  onChangeLocation,
   defaultMenu,
   defaultSubMenu,
   type,
@@ -37,18 +39,25 @@ const FeaturesSide = ({
   isCustom,
   isPublic,
   location,
+  showSeo = false,
+  showSocial = true,
+  showMyProfile = false,
+  menuMode = "inline",
+  user,
 }) => {
   const partnerStr = partner ? `/${partner}` : "";
   const prefixPath = isPublic ? "/public" : "";
+  const showResearchActionButtons = window.location.pathname.startsWith("/research") || window.location.pathname.startsWith("/public/research");
   const [embedModal, setEmbedModal] = useState({});
   // eslint-disable-next-line react/jsx-key
   const icons = [<MessageOutlined/>, <MailOutlined/>, <PicCenterOutlined/>, <PropertySafetyOutlined/>, <ScheduleOutlined/>, <SmileOutlined/>, <TagOutlined/>, <TrademarkCircleOutlined/>]
+  const classifyStr = classify ? `/${classify}` : "";
   const renderSeoData = () => {
     const links = flattenDeep(
       researchData &&
       researchData.map(a => {
         return [
-          a && a.subMenus && a.subMenus.map(b => `/${type}/${classify}/${a.value}/${b.value}${b.search || ""}`),
+          a && a.subMenus && a.subMenus.map(b => `/${type}${classifyStr}/${a.value}/${b.value}${b.search || ""}`),
         ];
       }),
     );
@@ -71,11 +80,30 @@ const FeaturesSide = ({
       };
     }
     const items = researchData.map((item, index) => {
+      const icon = item.icon || icons[index % icons.length]
       if (item.subMenus) {
-        return getItem(item.label, item.value, icons[index % icons.length], item.subMenus.map(i => getItem(i.label, i.value)))
+        return getItem(item.label, item.value, icon, item.subMenus.map(i => {
+          if (i.subMenus) {
+            if (i.icon) {
+              return getItem(i.label, i.value, i.icon, i.subMenus.map(i2 => {
+                return getItem(i2.label, i2.value)
+              }));
+            }
+            return getItem(i.label, i.value, i.icon, i.subMenus.map(i2 => {
+              return getItem(i2.label, i2.value)
+            }));
+          }
+          if (i.icon) {
+            return getItem(i.label, i.value, i.icon)
+          }
+          return getItem(i.label, i.value)
+        }), item.itemType)
+      }
+      if (item.icon) {
+        return getItem(item.label, item.value, item.icon, item.itemType)
       }
       return (
-        getItem(item.label, item.value)
+        getItem(item.label, item.value, item.itemType)
       );
     });
     const rootSubmenuKeys = researchData.map(item => item.value);
@@ -96,20 +124,42 @@ const FeaturesSide = ({
           flex: 1,
         }}
         theme="light"
-        mode="inline"
+        mode={menuMode}
         openKeys={openKeys}
         selectedKeys={[defaultMenu, defaultSubMenu]}
         onOpenChange={onOpenChange}
         onSelect={item => {
-          const menuData = researchData?.find(i => i.value === item.keyPath[1]);
-          const subMenusData = menuData?.subMenus?.find(i => i.value === item.keyPath[0]);
+          let menuData;
+          let subMenusData;
+          const array = [
+            ...flatten(researchData?.filter(f => f.itemType === "group")?.map(i => i.subMenus)),
+            ...researchData,
+          ];
+          if (item.keyPath.length === 2) {
+            menuData = array?.find(i => i.value === item.keyPath[1]);
+            subMenusData = menuData?.subMenus?.find(i => i.value === item.keyPath[0]);
+          } else {
+            menuData = array?.find(i => i.value === item.keyPath[0]);
+          }
+          if (subMenusData?.action) {
+            subMenusData?.action()
+            return ;
+          }
+          if (menuData?.action) {
+            menuData?.action()
+            return ;
+          }
+          if (menuData?.url || subMenusData?.url) {
+            window.open(subMenusData?.url || menuData?.url);
+            return ;
+          }
           let keyString;
           if (item.keyPath.length === 2) {
             keyString = `${item.keyPath[1]}/${item.keyPath[0]}`
           } else {
             keyString = `${item.keyPath[0]}`
           }
-          replace(`${prefixPath}/${type}/${classify}${partnerStr}/${keyString}${subMenusData?.search || ""}`);
+          replace(`${prefixPath}/${type}${classifyStr}${partnerStr}/${keyString}${subMenusData?.search || ""}`);
         }}
         items={items}
       />
@@ -134,29 +184,41 @@ const FeaturesSide = ({
   const renderNavButton = () => {
     return (
       <div className="feature-side__nav-button">
-        <div className="flex flex-column" style={{ width: 160 }}>
-          {!isCustom && (<Link className="mb1" to={"/dashboards"} target={isPublic ? "_blank" : ""}><h5>{"Custom Analysis >>"}</h5></Link>)}
-          {!isPublic && (
-            <>
-              <div
-                className="cursor-pointer"
-                onClick={() => {
-                  setEmbedModal({ open: true, publicUrl: getEmbedUrl() })
-                }}
-              >
-                <h5>{"Public Embed >>"}</h5>
-              </div>
-              <EmbedModal
+        {showMyProfile && (<div className="feature-side__line"/>)}
+        {showResearchActionButtons && (
+          <div className="flex flex-column" style={{ width: 160 }}>
+            {!isCustom && (
+              <Link className="mb1" to={"/dashboards"} target={isPublic ? "_blank" : ""}><h5>{"Custom Analysis >>"}</h5>
+              </Link>)}
+            {!isPublic && (
+              <>
+                <div
+                  className="cursor-pointer"
+                  onClick={() => {
+                    setEmbedModal({ open: true, publicUrl: getEmbedUrl() })
+                  }}
+                >
+                  <h5>{"Public Embed >>"}</h5>
+                </div>
+                <EmbedModal
                   resource={embedModal}
                   onClose={() => {
-                  setEmbedModal({ open: false })
-                }}
-              />
-            </>
-          )}
-        </div>
-        {!isPublic && <SocialLayout className="mt1"/>}
+                    setEmbedModal({ open: false })
+                  }}
+                />
+              </>
+            )}
+          </div>
+        )}
+        {!isPublic && showSocial && <SocialLayout />}
         {isPublic && (renderBrandInfo())}
+        {showMyProfile && (
+          <>
+            <SocialLayout title={"Contact us"} data={studioSocialData}/>
+            <div className="feature-side__line"/>
+            <MyProfile user={user} name={user.name}/>
+          </>
+        )}
       </div>
     )
   }
@@ -175,7 +237,7 @@ const FeaturesSide = ({
       }}
     >
       {renderDataSet()}
-      {renderSeoData()}
+      {showSeo && renderSeoData()}
       {renderNavButton()}
     </div>
   );

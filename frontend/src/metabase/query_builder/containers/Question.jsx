@@ -32,6 +32,8 @@ import "./Question.css";
 import Meta from "metabase/components/Meta";
 import { getOssUrl } from "metabase/lib/image";
 import { ossPath } from "metabase/lib/ossPath";
+import Icon from "metabase/components/Icon";
+import QuestionStudioBack from "metabase/query_builder/containers/QuestionStudioBack";
 
 const mapStateToProps = state => {
   return {
@@ -162,8 +164,10 @@ class Question extends Component {
     const showSide =
       (location.hash || location.query.dbId || showCustomBuilder) && user;
 
+    const showStudioBack = isNewQuestion && location.hash;
+
     return (
-      <>
+      <div className="flex flex-column" >
       {question && (
         <Meta
           title={`${question?.card()?.name} - Footprint Analytics`}
@@ -174,7 +178,11 @@ class Question extends Component {
           )}
         />
       )}
-      <div className="flex Question">
+      {showStudioBack && (<QuestionStudioBack title={isNative ? "SQL Chart" : "0 Coding Chart"} />)}
+      <div
+        className="flex Question"
+        style={{height: showStudioBack ? "calc(100vh - 108px)" : "calc(100vh - 60px)"}}
+      >
         {showSide ? (
           <div className="Question-side" style={questionSideStyle}>
             <QuestionSide closeTemplateData={this.closeQueryTemplate} updateQuestion={updateQuestion}/>
@@ -196,7 +204,7 @@ class Question extends Component {
           {showPreviewChart.show && <QueryPreview {...this.props} />}
         </div>
       </div>
-      </>
+      </div>
     );
   }
 }

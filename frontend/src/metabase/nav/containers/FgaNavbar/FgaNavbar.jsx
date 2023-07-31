@@ -5,24 +5,24 @@ import { connect } from "react-redux";
 import { push } from "react-router-redux";
 import "./FgaNavbar.css";
 import PropTypes from "prop-types";
-import { notification, Modal as AntdModal, Button } from "antd";
+import { Button, Modal as AntdModal } from "antd";
 import { getChannel } from "metabase/selectors/app";
 import { logout } from "metabase/auth/actions";
 import {
   getCancelFeedback,
+  getCreateFgaProjectModalShow,
   getCreateModalShow,
   getIsUserFeedbackBlock,
+  getLoginModalDefaultRegister,
   getLoginModalRedirect,
-  getCreateFgaProjectModalShow,
   getLoginModalShow,
   getSubmitAddrZkspaceModal,
-  getLoginModalDefaultRegister,
 } from "metabase/selectors/control";
 import {
   cancelFeedbackAction,
+  createFgaProjectModalShowAction,
   createModalShowAction,
   loginModalShowAction,
-  createFgaProjectModalShowAction,
   setIsCancelFeedbackBlockAction,
   setSubmitAddrZkspaceModal,
 } from "metabase/redux/control";
@@ -30,20 +30,16 @@ import GaProjectSearch from "metabase/growth/components/GaProjectSearch";
 import ProfileLink from "metabase/nav/components/ProfileLink";
 import Link from "metabase/core/components/Link";
 import LoginModal from "metabase/auth/containers/LoginModal";
-import { zkspaceDate } from "metabase/lib/register-activity";
 import { getOssUrl } from "metabase/lib/image";
 import { trackStructEvent } from "metabase/lib/analytics";
 import Modal from "metabase/components/Modal";
-import { isDefi360 } from "metabase/lib/project_info";
 import CreateActionModal from "metabase/components/CreateActionModal";
 import { color } from "metabase/lib/colors";
 import Icon from "metabase/components/Icon";
 import UserCancelFeedbackModal from "metabase/components/UserCancelFeedbackModal";
 import LogoIcon from "metabase/components/LogoIcon";
-import ActivityZkspaceSubmitModal from "metabase/components/ActivityZkspaceSubmitModal";
 import EntityMenu from "metabase/components/EntityMenu";
 import UserAvatar from "metabase/components/UserAvatar";
-import VipIcon from "metabase/components/VipIcon";
 import CreateProjectModal from "metabase/growth/components/Modal/CreateProjectModal";
 import { checkIsNeedContactUs, isFgaPath } from "metabase/growth/utils/utils";
 import { getContext, getPath, getUser } from "../selectors";
@@ -425,12 +421,12 @@ class FgaNavbar extends Component {
                     size={["2.5em", "2.5em"]}
                     bg="#6C70FF"
                   />
-                  <div
+                  {/*<div
                     className="absolute right bottom mb1"
                     style={{ marginRight: 2 }}
                   >
                     <VipIcon user={user} />
-                  </div>
+                  </div>*/}
                 </div>
               }
             />

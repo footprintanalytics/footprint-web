@@ -11,3 +11,7 @@
   font-size: 14px;
   color: #7A819B;
 }
+
+.dark .dashboards__icon-value span {
+  color: #ffffffdd;
+}

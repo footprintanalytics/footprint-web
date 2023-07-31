@@ -67,6 +67,7 @@ export default function getActionMenus({
           type={record.model}
           isLike={record.isFavorite}
           hideNumber={true}
+          isPlain={true}
         />
       </Menu.Item>
       {user && (

@@ -1,0 +1,14 @@
+.my-analysis__stat {
+  display: flex;
+  width: 800px;
+  margin: 20px auto 20px;
+  background: var(--color-bg-card-dark);
+}
+
+.my-analysis__stat .creator__personal-right-item-left {
+  width: 100%;
+}
+
+.my-analysis__stat .creator__personal-right-item {
+  width: 100%;
+}

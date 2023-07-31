@@ -159,6 +159,11 @@
   cursor: pointer;
   margin: 0 0 0 var(--footprint-spacing-s);
   height: 36px;
+  background: #4444FF;
+}
+
+.Nav__menu-create:hover{
+  color: black;
 }
 
 .Nav__menu-create span {

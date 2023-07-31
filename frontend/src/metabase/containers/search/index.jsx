@@ -11,7 +11,7 @@ import MetaViewportControls from "metabase/dashboard/hoc/MetaViewportControls";
 import SearchTabs from "./components/Tabs";
 import SearchHeader from "./components/SearchHeader";
 
-const Index = ({ router, user }) => {
+const Index = ({ router, user, showMyDataset }) => {
   const model = router.location.query.model || "dashboard";
 
   const navigationNumQuery = null;
@@ -26,6 +26,7 @@ const Index = ({ router, user }) => {
           data={navigationNumQuery?.data}
           model={model}
           location={router.location}
+          showMyDataset={showMyDataset}
         />
         <div className="search__hot">{<HotDashboard />}</div>
       </div>

@@ -50,23 +50,29 @@ function ProfileLink({ user, adminItems, onLogout, trigger }) {
 
     return [
       {
+        title: t`My Studio`,
+        icon: null,
+        link: isFga ? `/growth${Urls.myProfileUrl(userName)}` : "/studio/create",
+        event: `Navbar;Profile Dropdown;My Profile`,
+      },
+      /*{
         title: t`My Profile`,
         icon: null,
         link: `${isFga ? "/growth" : ""}${Urls.myProfileUrl(userName)}`,
         event: `Navbar;Profile Dropdown;My Profile`,
-      },
+      },*/
       !isFga && {
         title: t`Account settings`,
         icon: null,
         link: Urls.accountSettings(),
         event: `Navbar;Profile Dropdown;Edit Profile`,
       },
-      !isFga && {
+      /*!isFga && {
         title: t`Moon men`,
         icon: null,
         link: "/moon-men",
         event: `Navbar;Profile Dropdown;Moon men`,
-      },
+      },*/
       {
         title: t`Submit Contract`,
         icon: null,
@@ -102,12 +108,12 @@ function ProfileLink({ user, adminItems, onLogout, trigger }) {
         action: () => openModal("about"),
         event: `Navbar;Profile Dropdown;About ${tag}`,
       },*/
-      publicAnalyticPermission && {
+      /*publicAnalyticPermission && {
         title: t`Public Analyst`,
         icon: null,
         link: "/collection/root",
         event: `Navbar;Profile Dropdown;Root`,
-      },
+      },*/
       (isAdmin || isMarket) && {
         title: t`Upgrade Vip`,
         icon: null,
@@ -176,7 +182,7 @@ function ProfileLink({ user, adminItems, onLogout, trigger }) {
               )}
             </div>
           </div>
-          {showTrademark && (
+         {/* {showTrademark && (
             <div
               style={{ borderWidth: "2px" }}
               className="p2 h5 text-centered text-medium border-top"
@@ -187,7 +193,7 @@ function ProfileLink({ user, adminItems, onLogout, trigger }) {
               </span>
               <span>{t`and is built with care by a team from all across this pale blue dot.`}</span>
             </div>
-          )}
+          )}*/}
         </Modal>
       ) : null}
     </div>

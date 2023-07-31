@@ -37,7 +37,7 @@ const Tags = ({
   };
 
   return (
-    <div className={`dashboards__tags${isFga?'-dark':''}`}>
+    <div>
       {list.map((item, index) =>
         link ? (
           <Link key={item + index} {...getLinkProps(item)}>

@@ -10,11 +10,10 @@ import {
 } from "metabase/redux/control";
 
 const MyAnalysisList = props => {
-  const { router, location, children, user, project, setCreateModalShow ,setLoginModalShow} =
+  const { router, location, children, user, project, setCreateModalShow ,setLoginModalShow, showTabs, defaultModel} =
     props;
   router.params.name = user?.name;
   const [messageApi, contextHolder] = message.useMessage();
-
   const [modal, modalContextHolder] = Modal.useModal();
   return (
     <div className="flex flex-column items-center justify-center w-full">
@@ -30,6 +29,8 @@ const MyAnalysisList = props => {
             user={user}
             name={user?.name}
             location={router.location}
+            showTabs={showTabs}
+            defaultModel={defaultModel}
           />
         </div>
       ) : (

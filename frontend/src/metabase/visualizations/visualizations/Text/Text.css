@@ -245,6 +245,10 @@ li.Text-wrap-tip-item:last-child {
   border-bottom: 0;
 }
 
+.dark code {
+  background: #ffffff20;
+}
+
 
 @media screen and (--footprint-breakpoint-max-pad) {
   :local .Text {

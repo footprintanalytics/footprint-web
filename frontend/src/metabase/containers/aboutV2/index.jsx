@@ -15,13 +15,10 @@ import AboutDataCoverage from "metabase/containers/aboutV2/components/AboutDataC
 import AboutDemo from "metabase/containers/aboutV2/components/AboutDemo";
 import AboutDepth from "metabase/containers/aboutV2/components/AboutDepth";
 import AboutPartnerV2 from "metabase/containers/aboutV2/components/AboutPartnerV2";
-import AboutGrantedBy from "metabase/containers/aboutV2/components/AboutGrantedBy";
 import HomeFooter from "../home/components/HomeFooter";
 import data from "./data";
 import AboutBacked from "./components/AboutBacked";
 import AboutStart from "./components/AboutStart";
-import AboutBanner from "./components/AboutBanner";
-import AboutSolution from "./components/AboutSolutions";
 
 const About = props => {
   const {
@@ -55,16 +52,13 @@ const About = props => {
         <AboutStart />
         <div className="About__depth-dividing-line" />
         <LazyLoadAbout>
-          <AboutBanner />
-        </LazyLoadAbout>
-        <LazyLoadAbout>
-          <AboutSolution />
-        </LazyLoadAbout>
-        <LazyLoadAbout>
           <AboutDepth />
         </LazyLoadAbout>
         <LazyLoadAbout>
           <AboutDemo />
+        </LazyLoadAbout>
+        <LazyLoadAbout>
+          <AboutDataCoverage />
         </LazyLoadAbout>
         <LazyLoadAbout>
           <AboutDataFeature />
@@ -80,9 +74,6 @@ const About = props => {
         </LazyLoadAbout>
         <LazyLoadAbout>
           <AboutPartnerV2 list={data.partnerList} />
-        </LazyLoadAbout>
-        <LazyLoadAbout>
-          <AboutGrantedBy />
         </LazyLoadAbout>
         <div className="About__depth-dividing-line-gray" />
         <LazyLoadAbout>

@@ -3,6 +3,11 @@
   min-height: calc(100vh - 60px);
 }
 
+.dark .search {
+  background: var(--color-bg-dark);
+  min-height: calc(100vh - 60px);
+}
+
 .search .dashboards__cell {
   padding-top: 15px;
 }

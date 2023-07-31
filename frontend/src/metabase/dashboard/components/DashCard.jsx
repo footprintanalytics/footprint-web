@@ -324,6 +324,7 @@ class DashCard extends Component {
       || window.location.pathname.startsWith("/growth")
       || window.location.pathname.startsWith("/ab")
       || window.location.pathname.startsWith("/data-api/statistics")
+      || window.location.pathname.startsWith("/studio")
     ;
 
     const singleDisplay = isTextDisplay || isImageDisplay || isVideoDisplay || isEmbedDisplay || isMultiEmbedDisplay || isTableauDisplay;

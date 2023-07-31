@@ -1,18 +1,18 @@
 /* eslint-disable react/prop-types */
 import React from "react";
 import "../index.css";
+import cx from "classnames";
 import Link from "metabase/core/components/Link";
 import { trackStructEvent } from "metabase/lib/analytics";
 import { socialData } from "metabase/components/GlobalContactPanel/data";
-import cx from "classnames";
 
 const SocialLayout = props => {
-  const { title, className } = props;
+  const { title, className, data = socialData } = props;
 
   return (
     <div className={cx("global-contact-panel__social-layout", className)}>
-      {title && (<span className="mr1">{title}</span>)}
-      {socialData
+      {title && (<span className="mr1 global-contact-panel__social-title">{title}</span>)}
+      {data
         .filter(item => item.icon)
         .map(item => {
           return (

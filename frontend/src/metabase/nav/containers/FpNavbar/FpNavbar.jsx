@@ -6,7 +6,7 @@ import { push } from "react-router-redux";
 import cx from "classnames";
 import "./FpNavbar.css";
 import PropTypes from "prop-types";
-import { Drawer, message } from "antd";
+import { Drawer, message, Button } from "antd";
 import { getChannel } from "metabase/selectors/app";
 import { logout } from "metabase/auth/actions";
 import {
@@ -39,11 +39,16 @@ import Icon from "metabase/components/Icon";
 import UserCancelFeedbackModal from "metabase/components/UserCancelFeedbackModal";
 import LogoIcon from "metabase/components/LogoIcon";
 import ActivityZkspaceSubmitModal from "metabase/components/ActivityZkspaceSubmitModal";
-import EntityMenu from "metabase/components/EntityMenu";
 import UserAvatar from "metabase/components/UserAvatar";
 import VipIcon from "metabase/components/VipIcon";
 import { getContext, getPath, getUser } from "../selectors";
 import { getLoginModalDefaultRegister } from "../../../selectors/control";
+import { isDark } from "../../../dashboard/components/utils/dark";
+import MainMenu from "./MainMenu";
+import ResearchContent from "./components/ResearchContent";
+import ProductContent from "./components/ProductContent";
+import UseCasesContent from "./components/UseCasesContent";
+import { ReactIcons } from "./utils/data";
 
 const mapStateToProps = (state, props) => ({
   path: getPath(state, props),
@@ -71,49 +76,21 @@ const mapDispatchToProps = {
 
 const leftMenuData = [
   {
-    title: "Analytics App",
-    icon: "menu_home",
-    path: "/dashboards",
-    auth: false,
-  },
-  {
-    title: "Data API",
-    icon: "menu_home",
-    path: "/data-api",
-    auth: false,
-  },
-  {
-    title: "Growth Analytics",
-    icon: "menu_home",
-    path: "/growth",
-    auth: false,
-  },
-  {
-    name: "Research 🔥",
+    name: "Research",
     icon: "protocols",
-    menu: [
-      {
-        title: "GameFi Research",
-        link: "/research/gamefi",
-      },
-      {
-        title: "NFT Research",
-        link: "/research/nft",
-      },
-      {
-        title: "Chain Research",
-        link: "/research/chain",
-      },
-      {
-        title: "Wallet Research",
-        link: "/research/wallet",
-      },
-    ],
+    content: <ResearchContent />
   },
-];
-
-const rightMenuData = [
   {
+    name: "Products",
+    icon: "protocols",
+    content: <ProductContent />
+  },
+  {
+    name: "Use Cases",
+    icon: "protocols",
+    content: <UseCasesContent />
+  },
+  /*{
     name: "Data",
     icon: "protocols",
     menu: [
@@ -128,7 +105,7 @@ const rightMenuData = [
         link: "/@Footprint/Footprint-Datasets-Data-Dictionary",
       },
     ],
-  },
+  },*/
   {
     name: "Learn",
     icon: "protocols",
@@ -136,22 +113,26 @@ const rightMenuData = [
       {
         title: "Blog",
         desc: "Analyze the trends of each domain in the Web3 industry",
+        icon: ReactIcons.blogIcon,
         link: "/news/all",
       },
       {
         title: "Academy",
         desc: "The premier Web3 education platform with industry leading courses",
+        icon: ReactIcons.academyIcon,
         link: "/news/academy",
       },
       {
         title: "YouTube",
         desc: "Unravel Web3 and learn how to do analysis and build dapps via Videos",
+        icon: ReactIcons.youtubeIcon,
         link: "https://www.youtube.com/@FootprintAnalytics",
         externalLink: true,
       },
       {
         title: "GitHub",
         desc: "Open source community welcomes you to join and become a contributor",
+        icon: ReactIcons.githubIcon,
         link: "https://github.com/footprintanalytics",
         externalLink: true,
       },
@@ -159,13 +140,16 @@ const rightMenuData = [
   },
   {
     url: "https://docs.footprint.network/docs",
-    name: "Docs",
+    title: "Docs",
     open: true,
   },
   {
     url: "/pricing",
-    name: "Pricing",
+    title: "Pricing",
   },
+];
+
+const rightMenuData = [
 ];
 
 const AdminNavItem = ({ name, path, currentPath }) => (
@@ -426,14 +410,14 @@ class FpNavbar extends Component {
                   this.goLink(e, item.url, item.open);
                 }
 
-                trackStructEvent(`navbar-click-${item.name}`);
+                trackStructEvent(`navbar-click-${item.title}`);
               }}
               className={`Nav__right-menu footprint-primary-text ${
                 location.pathname === item.url ? "Nav__right-menu-select" : ""
               }`}
               target={item.open ? "_blank" : ""}
             >
-              {item.name}
+              {item.title}
             </Link>
           );
         })}
@@ -472,7 +456,8 @@ class FpNavbar extends Component {
       );
     }
     return (
-      <EntityMenu
+      <MainMenu name={item.name} content={item.content} menu={item.menu} title={item.title}/>
+      /*<EntityMenu
         items={item.menu}
         triggerProps={{
           style: {
@@ -488,12 +473,12 @@ class FpNavbar extends Component {
             className={className}
             onClick={() => trackStructEvent(`navbar-click-${item.name}`)}
           >
-            {/*{item.icon && <Icon name={item.icon} size={16} />}*/}
+            {/!*{item.icon && <Icon name={item.icon} size={16} />}*!/}
             <span>{item.name}</span>
             <Icon className="ml1" name="search_arrow_up" size={12} />
           </div>
         }
-      />
+      />*/
     );
   }
 
@@ -509,11 +494,9 @@ class FpNavbar extends Component {
       ? "none"
       : "flex";
 
-    const showCreate =
-      window.location.pathname !== "/" &&
-      window.location.pathname !== "/data-api"
     const showSignup =
-      !showCreate;
+      window.location.pathname === "/" ||
+      window.location.pathname === "/data-api";
 
     const MobileMenuIcon = () => {
       return (
@@ -536,7 +519,7 @@ class FpNavbar extends Component {
           itemType="http://www.schema.org/SiteNavigationElement"
         >
           {leftMenuData.map((item, index) => {
-            if (item.menu) {
+            if (item.menu || item.content) {
               return (
                 <div key={index}>
                   {this.renderNavEntityMenu({
@@ -549,12 +532,12 @@ class FpNavbar extends Component {
             return (
               <Link
                 itemProp="url"
-                to={item.path}
-                className={`text-brand-hover Nav__menu-item ${
+                to={item.url}
+                /*className={`text-brand-hover Nav__menu-item ${
                   this.isActive(item.path, item.subPath)
                     ? "Nav__menu-item-color--select"
                     : "Nav__menu-item-color"
-                }`}
+                }`}*/
                 key={index}
                 onClick={e => {
                   e.preventDefault();
@@ -566,16 +549,19 @@ class FpNavbar extends Component {
                     setLoginModalShow({ show: true, from: item.title });
                     this.setState({ sideNavModal: false });
                   } else {
-                    this.goLink(e, item.path, item.open);
+                    this.goLink(e, item.url, item.open);
                   }
                   trackStructEvent(`navbar-click-${item.title}`);
                 }}
               >
+                <Button type="text">
+                  <span>{item.title}</span>
+                </Button>
                 {/*<Icon name={item.icon} size={16} />*/}
-                <span>{item.title}</span>
-                {this.isActive(item.path, item.subPath) && (
-                  <div className="Nav__menu-item--select" />
-                )}
+
+                {/*{this.isActive(item.path, item.subPath) && (*/}
+                {/*  <div className="Nav__menu-item--select" />*/}
+                {/*)}*/}
               </Link>
             );
           })}
@@ -601,7 +587,7 @@ class FpNavbar extends Component {
     };
 
     const RightMenuMobile = () => {
-      const color2 = isDark ? "white" : color("footprint-color-title");
+      const color2 = isDark() ? "white" : color("footprint-color-title");
       return (
         <div className="Nav__right-mobile-icon">
           <Link to="/search">
@@ -640,27 +626,35 @@ class FpNavbar extends Component {
       return (
         <div className="Nav__right">
           {this.renderLink({})}
-          <CreateMenu />
+          {/*<CreateMenu />*/}
           <React.Fragment>
             <RightMenuMobile />
             <RightMenuPad />
           </React.Fragment>
           {user ? (
+            // <Link to={`/studio/@${user.name}`}>
+            //   <span className="footprint-primary-text ml1 my-studio-button">My Studio</span>
+            // </Link>
             <ProfileLink
               {...this.props}
               onLogout={() => this.props.logout()}
               trigger={
                 <div className="relative" style={{ padding: 10 }}>
                   <UserAvatar user={user} size={["2.5em", "2.5em"]} />
-                  <div
+                  {/*<div
                     className="absolute right bottom mb1"
                     style={{ marginRight: 2 }}
                   >
                     <VipIcon user={user} />
-                  </div>
+                  </div>*/}
                 </div>
               }
             />
+            /*<div className="Nav__menu-create footprint-primary-text">
+              <Link to="/studio">
+                My Studio
+              </Link>
+            </div>*/
           ) : (
             <>
               <Link
@@ -686,10 +680,9 @@ class FpNavbar extends Component {
         </div>
       );
     };
-    const isDark = window?.location?.pathname === "/" || window?.location?.pathname?.startsWith("/research");
     const isHome = window?.location?.pathname === "/";
     return (
-      <div className={cx({ "dark": isDark })}>
+      <div id="fpNavbar" className={cx({ "dark": isDark() })}>
         <div className="Nav" style={{ display: rootDisplay, borderBottom: isHome ? "none" : "" }}>
           <div className="Nav__left">
             <MobileMenuIcon />
@@ -703,21 +696,21 @@ class FpNavbar extends Component {
               }}
             >
               <img
-                src={getOssUrl(isDark ? "img_nav_logo_v5_white.svg": "img_nav_logo_v5.svg")}
+                src={getOssUrl(isDark() ? "img_nav_logo_v5_white.svg": "img_nav_logo_v5.svg")}
                 width={188}
                 height={28}
                 style={{ marginBottom: 2 }}
                 alt="Footprint - One Step Closer to Blockchain Insights"
               />
             </Link>
-            <LeftMenu />
           </div>
-          <React.Fragment>
+          <div className="flex">
+            <LeftMenu />
             <div className="Nav__search-bar">
               <SearchBar
                 location={location}
                 onChangeLocation={onChangeLocation}
-                isDark={isDark}
+                isDark={isDark()}
               />
             </div>
             <div className="Nav__mobile-logo">
@@ -738,7 +731,7 @@ class FpNavbar extends Component {
                 />
               </Link>
             </div>
-          </React.Fragment>
+          </div>
           <RightMenu />
           {this.renderModal()}
           {zkspaceDate() && this.renderSubmitAddrZkspaceModal()}

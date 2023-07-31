@@ -1,7 +1,7 @@
 import { getProject } from "metabase/lib/project_info";
 import { getSearchTexts } from "metabase/nav/components/utils";
 import { sortMap } from "../../shared/config";
-import { getDashboardQueryTags, isCreator, isSearch } from "../../shared/utils";
+import { getDashboardQueryTags, isCreator, isGrowthPage, isMyStudio, isSearch } from "../../shared/utils";
 
 export default query => {
   const {
@@ -19,7 +19,7 @@ export default query => {
   const qs = q ? getSearchTexts(q) : [];
 
   const isCreatorAndOwner = () => {
-    return isCreator() && params?.name === user?.name;
+    return isCreator() || isGrowthPage() || isMyStudio() && params?.name === user?.name;
   };
 
   const getSortByStr = () => {
@@ -42,7 +42,7 @@ export default query => {
     tags: getDashboardQueryTags(tags),
     isSort: !!sortBy,
     project: getProject(),
-    model: model || (isCreator() ? "all" : "dashboard"),
+    model: model || (isCreator() || isGrowthPage() || isMyStudio() ? "all" : "dashboard"),
     qs: qs,
   };
 };

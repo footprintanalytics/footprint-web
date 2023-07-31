@@ -1,0 +1,10 @@
+.my-api__developer {
+  /*padding: 20px;*/
+}
+
+.my-api__developer-app {
+  width: 800px;
+  margin: 60px auto;
+  padding: 40px;
+  border: 1px solid #ffffff20;
+}
