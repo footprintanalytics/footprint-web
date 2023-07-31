@@ -29,6 +29,8 @@ import CampaignCreate from "./CampaignCreate";
 import PotentialUsers from "./PotentialUsers";
 import FindWallets from "./FindWallets";
 import Journey from "./Journey";
+import JourneyEdit from "./Journey/component/edit";
+import JourneyList from "./Journey/component/list";
 import ProjectHealth from "./ProjectHealth";
 import CohortList from "./CohortList";
 import Community from "./Community";
@@ -44,7 +46,8 @@ const Project = props => {
   const [gaMenuTabs, setGaMenuTabs] = useState(null);
 
   const showRefreshButton = user?.id === 10 || user?.id === 22278;
-  console.log("ProjectProject")
+
+  console.log("ProjectProject", menu, currentMenu, projectObject, gaMenuTabs)
   useEffect(() => {
     if (menu && menu !== currentMenu && projectObject) {
       if (menu === "funnel") {
@@ -187,6 +190,7 @@ const Project = props => {
   };
 
   const getContentPannel = current_tab => {
+    console.log("current_tab", current_tab)
     if (!projectObject || !currentMenu || !gaMenuTabs) {
       return <LoadingSpinner message="Loading..." />;
     }
@@ -232,7 +236,35 @@ const Project = props => {
     ) {
       return (
         <Journey
+          location={location}
+          router={router}
+          projectId={getLatestGAProjectId()}
+          projectPath={projectPath}
         ></Journey>
+      );
+    }
+    if (
+      current_tab === "journey-edit"
+    ) {
+      return (
+        <JourneyEdit
+          location={location}
+          router={router}
+          projectId={getLatestGAProjectId()}
+          projectPath={projectPath}
+        />
+      );
+    }
+    if (
+      current_tab === "journey-list"
+    ) {
+      return (
+        <JourneyList
+          location={location}
+          router={router}
+          projectId={getLatestGAProjectId()}
+          projectPath={projectPath}
+        />
       );
     }
     if (
@@ -240,6 +272,10 @@ const Project = props => {
     ) {
       return (
         <ProjectHealth
+          location={location}
+          router={router}
+          projectId={getLatestGAProjectId()}
+          projectPath={projectPath}
         ></ProjectHealth>
       );
     }

@@ -1,0 +1,47 @@
+.journey__split-line {
+  height: 1px;
+  width: 100%;
+  border-top: 1px solid #ffffff20;
+}
+
+.journey__vertical-line {
+  height: 100%;
+  width: 1px;
+  border-left: 1px solid #ffffff20;
+}
+
+.journey-edit {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 100%;
+  padding: 20px;
+  color: white;
+  background: #101014;
+}
+
+.journey-edit__main {
+  width: 100%;
+  display: flex;
+  border-radius: 20px;
+  background: #1B1B1E;
+}
+
+.journey-edit__condition {
+  width: 300px;
+  display: flex;
+  flex-direction: column;
+  border-right: 1px solid #ffffff20;
+  padding: 20px;
+}
+
+.journey-edit__chart {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+}
+
+.journey-list {
+  padding: 20px;
+}

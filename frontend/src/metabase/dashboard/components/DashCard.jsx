@@ -322,6 +322,7 @@ class DashCard extends Component {
     const showEdit = isOwner && !!dashcard.card.id;
     const isPublic = window.location.pathname.startsWith("/public")
       || window.location.pathname.startsWith("/growth")
+      || window.location.pathname.startsWith("/ab")
       || window.location.pathname.startsWith("/data-api/statistics")
     ;
 
