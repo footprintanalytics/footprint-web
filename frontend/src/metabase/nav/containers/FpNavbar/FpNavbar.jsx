@@ -643,12 +643,12 @@ class FpNavbar extends Component {
               trigger={
                 <div className="relative" style={{ padding: 10 }}>
                   <UserAvatar user={user} size={["2.5em", "2.5em"]} />
-                  <div
+                  {/*<div
                     className="absolute right bottom mb1"
                     style={{ marginRight: 2 }}
                   >
                     <VipIcon user={user} />
-                  </div>
+                  </div>*/}
                 </div>
               }
             />

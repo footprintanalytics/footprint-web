@@ -39,3 +39,23 @@
   justify-content: center;
   padding: 4px;
 }
+
+.my-profile__menu {
+  width: 160px;
+  padding: 1px 0;
+}
+
+.my-profile__menu li {
+  height: 40px;
+  line-height: 30px;
+  display: flex;
+  align-items: center;
+  padding: 4px 10px;
+}
+
+.my-profile__menu li:hover {
+  height: 40px;
+  background: #ffffff20;
+  border-radius: 10px;
+  cursor: pointer;
+}

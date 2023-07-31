@@ -93,7 +93,7 @@ const MyProfile = props => {
      {
        key: 'account-settings',
        label: (
-         <Link to={Urls.accountSettings()}>
+         <Link className="full-width full-height" to={Urls.accountSettings()}>
            Account settings
          </Link>
        ),
@@ -101,7 +101,7 @@ const MyProfile = props => {
      user?.is_superuser && {
         key: 'admin-settings',
         label: (
-          <Link to="/admin">
+          <Link className="full-width full-height" to="/admin">
             Admin settings
           </Link>
         ),
@@ -109,7 +109,7 @@ const MyProfile = props => {
      (user?.is_superuser || user?.isMarket) && {
         key: 'upgrade-vip',
         label: (
-          <Link to="/market/upgrade">
+          <Link className="full-width full-height" to="/market/upgrade">
             Upgrade Vip
           </Link>
         ),
@@ -117,19 +117,17 @@ const MyProfile = props => {
       {
         key: 'sign-out',
         label: (
-          <Link onClick={() => onLogout()}>
+          <Link className="full-width full-height" onClick={() => onLogout()}>
             Sign out
           </Link>
         ),
       },
      ]
   }
-  console.log("user", user)
   const vipInfo = user?.vipInfo;
-  const dataApiVipInfo = user?.dataApiVipInfo;
+  const dataApiVipInfo = user?.vipInfoDataApi;
   const showFpVip = vipInfo && vipInfo?.type !== "free";
   const showApiVip = dataApiVipInfo && dataApiVipInfo?.type !== "free";
-
   const getVipToolTip = (info, title) => {
     return `${title}: ${formatTableTitle(info?.type)} plan to ${dayjs(info.validEndDate).format("YYYY-MM-DD")}`;
   }
@@ -165,17 +163,10 @@ const MyProfile = props => {
                   </div>
                 </Tooltip>
               )}
-              {showFpVip && (
-                <Tooltip title={getVipToolTip(vipInfo, "Footprint web")}>
-                  <div className="my-profile__vip-inner">
-                    <AboutImage src={getOssUrl("/studio/img-fp-vip.png?x-oss-process=image/resize,m_fill,h_18,w_18")} />
-                  </div>
-                </Tooltip>
-              )}
               {showApiVip && (
                 <Tooltip title={getVipToolTip(dataApiVipInfo, "Data API")}>
-                  <div className="my-profile__vip-inner">
-                    <AboutImage className="ml1" src={getOssUrl("/studio/img-api-vip.png?x-oss-process=image/resize,m_fill,h_30,w_30")} />
+                  <div className="flex justify-center p1">
+                    <AboutImage src={getOssUrl("/studio/img-api-vip.png?x-oss-process=image/resize,m_fill,h_20,w_20")} />
                   </div>
                 </Tooltip>
               )}
@@ -193,6 +184,22 @@ const MyProfile = props => {
         <div className="my-profile__vertical-line"/>
         <Dropdown
           menu={{ items: getContent() }}
+          overlayStyle={{ borderRadius: 10, border: "1px solid #ffffff20", background: "#121728" }}
+          dropdownRender={(menu) => {
+            console.log("menuj", menu)
+            return (
+              <div className="my-profile__menu">
+                {menu.props.items.filter(Boolean).map(item => {
+                  return (
+                    <li key={item.key}>
+                      {item.label}
+                    </li>
+                  )
+                })}
+
+              </div>
+            )
+          }}
           placement="rightBottom"
         >
           <div className="px3 cursor-pointer">
