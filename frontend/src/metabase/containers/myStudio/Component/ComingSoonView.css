@@ -1,0 +1,20 @@
+.coming-soon-view {
+  display: flex;
+  flex-direction: column;
+}
+
+.coming-soon-view h4 {
+  color: #A0AEC0;
+  font-size: 16px;
+  margin-top: 30px;
+}
+
+.coming-soon-view__inner {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding-top: 100px;
+}

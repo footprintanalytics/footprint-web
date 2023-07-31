@@ -15,7 +15,7 @@ import {
   InputSubtitle,
 } from "./Input.styled";
 import { InputSize } from "./types";
-import { isDark } from "../../../dashboard/components/utils/dark";
+import { isDark, isStudio } from "../../../dashboard/components/utils/dark";
 
 export type InputAttributes = Omit<
   InputHTMLAttributes<HTMLInputElement>,
@@ -57,6 +57,7 @@ const Input = forwardRef(function Input(
   }: InputProps,
   ref: Ref<HTMLDivElement>,
 ) {
+  // @ts-ignore
   return (
     <InputRoot
       ref={ref}
@@ -73,6 +74,7 @@ const Input = forwardRef(function Input(
         hasError={error}
         fullWidth={fullWidth}
         isDark={!lightMode && isDark()}
+        isStudio={isStudio()}
         hasSubtitle={Boolean(subtitle)}
         hasLeftIcon={Boolean(leftIcon)}
         hasRightIcon={Boolean(rightIcon)}

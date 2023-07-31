@@ -30,3 +30,14 @@
 .SubmitContract .ant-tabs-top >.ant-tabs-nav, .ant-tabs-bottom >.ant-tabs-nav, .ant-tabs-top >div>.ant-tabs-nav, .ant-tabs-bottom >div>.ant-tabs-nav {
   margin: 0 0 8px 0;
 }
+
+.SubmitContract__back {
+  display: flex;
+  align-items: center;
+  margin-bottom: 10px;
+  width: fit-content;
+}
+
+.SubmitContract__back span {
+  margin-left: 4px;
+}

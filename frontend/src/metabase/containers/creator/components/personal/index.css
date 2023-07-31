@@ -76,6 +76,10 @@
   color: var(--footprint-color-title);
 }
 
+.dark .creator__personal-cell h3 {
+  color: white;
+}
+
 .creator__personal-cell-desc {
   font-size: 16px;
   color: var(--footprint-color-primary-text);
@@ -114,6 +118,10 @@
 .creator__personal-right-item-left {
 }
 
+.dark .creator__personal-right-item-left {
+  color: #ffffffdd;
+}
+
 .creator__personal-right-item-split {
   height: 20px;
   width: 1px;
@@ -121,9 +129,17 @@
   margin: 0 36px;
 }
 
+.dark .creator__personal-right-item-split {
+  border-left: solid 1px var(--color-border-dark);
+}
+
 .creator__personal-right-item h3 {
   font-size: 20px;
   font-weight: bold;
+}
+
+.dark .creator__personal-right-item h3 {
+  color: #ffffffdd;
 }
 
 @media screen and (--footprint-breakpoint-max-mobile) {

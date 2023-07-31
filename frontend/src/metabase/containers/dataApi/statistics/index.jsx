@@ -1,8 +1,8 @@
 /* eslint-disable react/prop-types */
 import React from "react";
 import { connect } from "react-redux";
-import { loginModalShowAction } from "metabase/redux/control";
 import { push } from "react-router-redux";
+import { loginModalShowAction } from "metabase/redux/control";
 import DashboardArea from "metabase/containers/research/components/DashboardArea";
 import "./index.css";
 
@@ -30,8 +30,7 @@ const Statistics = ({ location, user, setLoginModalShow }) => {
   return (
     <>
       <div className={"data-api__statistics"}>
-        <h1>Data API Usage</h1>
-        <DashboardArea location={location} item={tempItem} hideParameters="user_id" all_load={true} ignoreCache={true}/>
+        <DashboardArea location={location} item={tempItem} hideParameters="user_id" all_load={true} isDataApiStatistics={true}/>
       </div>
     </>
   );

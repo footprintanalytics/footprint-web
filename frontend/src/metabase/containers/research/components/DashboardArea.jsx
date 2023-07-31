@@ -8,7 +8,7 @@ import PublicDashboard from "metabase/public/containers/PublicDashboard";
 import "./DashboardArea.css";
 
 const DashboardArea = props => {
-  const { item, location, hideParameters, all_load, ignoreCache } = props;
+  const { item, location, hideParameters, all_load, isDataApiStatistics, ignoreCache } = props;
   const uuid = item && item.publicUuid;
 
   return (
@@ -26,6 +26,7 @@ const DashboardArea = props => {
           hideFooter
           hideParametersOuter={hideParameters}
           allLoadOuter={all_load}
+          isDataApiStatistics={isDataApiStatistics}
           ignoreCache={ignoreCache}
         />
       )}

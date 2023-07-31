@@ -13,6 +13,7 @@ export interface InputProps {
   hasLeftIcon?: boolean;
   hasRightIcon?: boolean;
   isDark?: boolean;
+  isStudio?: boolean;
 }
 
 export const InputRoot = styled.div<InputProps>`
@@ -33,6 +34,9 @@ export const InputField = styled.input<InputProps>`
 
   border: 1px solid ${props => props.isDark ? color("--color-border-dark") : color("border")};
   background-color: ${props => {
+    if (props.isStudio) {
+      return "#182034";
+    }
     if (props.isDark) {
       return color(props.readOnly ? "--color-bg-black" : "--color-bg-dark")
     }

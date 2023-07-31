@@ -1,0 +1,49 @@
+.chart-create {
+}
+
+.chart-create ul {
+  display: flex;
+  flex-direction: row;
+  padding: 23px 46px;
+  gap: 40px;
+}
+
+.chart-create li {
+  width: 370px;
+  height: 270px;
+  padding: 30px;
+  background: var(--color-bg-card-dark);
+  border: 1px var(--color-border-dark) solid;
+  border-radius: 10px;
+}
+
+.chart-create h3 {
+  font-size: 20px;
+  color: white;
+  margin-top: 20px;
+  margin-bottom: 10px;
+}
+
+.chart-create span {
+  font-size: 13px;
+  color: #ffffff99;
+  white-space: pre-line;
+  line-height: 1;
+}
+
+.chart-create__button {
+  color: #ffffff;
+  padding: 10px;
+  margin-top: 20px;
+  border: 1px solid var(--color-border-dark);
+  background: #2A3246;
+  font-size: 14px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border-radius: 4px;
+}
+
+.chart-create__button:hover {
+  color: #ffffff;
+}

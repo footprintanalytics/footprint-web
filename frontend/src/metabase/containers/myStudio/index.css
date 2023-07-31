@@ -1,0 +1,81 @@
+.my-studio {
+
+}
+
+.my-studio_top-buttons {
+  display: flex;
+  justify-content: center;
+  padding: 20px;
+}
+
+.my-studio .search__tabs {
+  width: 100%;
+  margin-top: 10px;
+}
+
+.studio__line {
+  width: 100%;
+  border-top: 1px solid #ffffff20;
+}
+
+.studio-title {
+  display: flex;
+  flex-direction: column;
+}
+
+.studio-title__text {
+  color: #ffffff;
+  padding: 20px 40px;
+  font-size: 24px;
+}
+
+.my-studio .search__tabs {
+  width: 100%;
+}
+
+.my-studio .search__tabs-other {
+  top: -35px;
+}
+
+.my-studio .search__content {
+  margin-top: 40px;
+}
+
+.my-studio .global-contact-panel__social-layout {
+  width: 100%;
+  margin-left: 60px;
+}
+
+.my-studio .feature-side__nav-button {
+  padding: 0;
+}
+
+.dark .my-studio .dashboards__table-columns-even {
+  background: #121728;
+}
+
+.dark .my-studio .dashboards__table-columns-even-dark {
+  background: #121728;
+}
+
+.dark .my-studio .dashboards__table-columns-odd {
+  background: #121728;
+}
+
+.dark .my-studio .dashboards__table-columns-odd-dark {
+  background: #121728;
+}
+
+.dark .my-studio .dashboards__table .ant-table-tbody > tr > td {
+  border-bottom: 1px solid #ffffff20;
+}
+
+.dark .my-studio .dashboards__table .ant-table-thead > tr > th {
+  border-bottom: 1px solid #ffffff20;
+}
+
+.my-profile__menu-link {
+  width: 100%;
+  height: 100%;
+  color: white;
+}

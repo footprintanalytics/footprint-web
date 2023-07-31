@@ -323,6 +323,7 @@ class DashCard extends Component {
     const isPublic = window.location.pathname.startsWith("/public")
       || window.location.pathname.startsWith("/growth")
       || window.location.pathname.startsWith("/data-api/statistics")
+      || window.location.pathname.startsWith("/studio")
     ;
 
     const singleDisplay = isTextDisplay || isImageDisplay || isVideoDisplay || isEmbedDisplay || isMultiEmbedDisplay || isTableauDisplay;

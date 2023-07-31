@@ -157,10 +157,17 @@
   color: white;
   align-items: center;
   border: 0;
+  height: 64px;
 }
 
 .global-contact-panel__social-layout .global-contact-panel__social-item {
-  margin: 0 4px;
+  margin: 0;
+}
+
+.global-contact-panel__social-layout .global-contact-panel__social-title {
+  margin-right: 20px;
+  font-size: 14px;
+  color: #ffffff90;
 }
 
 .global-contact-panel__social-item {

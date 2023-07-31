@@ -24,7 +24,7 @@ import {
   getDashboardQueryLink,
   getProtocolQueryLink,
   getSearchDashboardQueryLink,
-  isCreator,
+  isCreator, isGrowthPage, isMyStudio,
   isProtocol,
   isSearch,
 } from "../../shared/utils";
@@ -41,6 +41,7 @@ const List = ({
   user,
   protocolName,
   name,
+  model,
   isList = true,
   isCommon = false,
 }) => {
@@ -58,6 +59,7 @@ const List = ({
           ...router.location.query,
           user,
           params: router.params,
+          model: model || router.location.query.model,
         }),
         ...(name && { name: name }),
       };
@@ -80,8 +82,8 @@ const List = ({
       if (isSearch()) {
         return elasticSearch(params);
       }
-      if (isCreator()) {
-        if (router?.location?.query?.model === "favorite") {
+      if (isCreator() || isGrowthPage() || isMyStudio()) {
+        if ((model || router?.location?.query?.model) === "favorite") {
           const favoriteParams = {
             pageSize: params.pageSize,
             current: params.current,
@@ -151,7 +153,7 @@ const List = ({
           exploreTotal={data?.total}
           createPanel={false}
           showArchiveButton={
-            isCreator() && router?.location?.query?.model !== "favorite"
+            (isCreator() || isGrowthPage() || isMyStudio()) && (model || router?.location?.query?.model) !== "favorite"
           }
           onAfterChangePublicUuid={() => refetch()}
           favoriteClickSuccess={() => refetch()}
@@ -173,8 +175,8 @@ const List = ({
         columns={columns}
         rowClassName={(record, index) => {
           return index % 2 === 1
-            ? `dashboards__table-columns-odd${isFga && "-dark"}`
-            : `dashboards__table-columns-even${isFga && "-dark"}`;
+            ? `dashboards__table-columns-odd`
+            : `dashboards__table-columns-even`;
         }}
         pagination={pagination}
         showHeader={showHeader}
@@ -182,10 +184,10 @@ const List = ({
           if (extra.action === "sort") {
             let linkFunc = isProtocol()
               ? getProtocolQueryLink
-              : isSearch() || isCreator()
+              : isSearch() || (isCreator() || isGrowthPage() || isMyStudio())
               ? getSearchDashboardQueryLink
               : getDashboardQueryLink;
-            if (isCreator()) {
+            if (isCreator() || isGrowthPage() || isMyStudio()) {
               linkFunc = getCreatorQueryLink;
             }
             const link = linkFunc({

@@ -23,6 +23,7 @@ import { debounce } from "lodash";
 import { deviceInfo } from "metabase-lib/lib/Device";
 import { trackStructEvent } from "../../../lib/analytics";
 import MetabaseUtil from "metabase/lib/utils";
+import Icon from "../../../components/Icon";
 
 function Favorite({
   className,
@@ -38,6 +39,7 @@ function Favorite({
   iconColor,
   onlyViewByButton,
   hideNumber,
+  isPlain = false,
 }) {
   const [isFavorite, setIsFavorite] = useState(false);
   const [favorite, setFavorite] = useState(0);
@@ -122,6 +124,22 @@ function Favorite({
     if (isFavorite) return "Added";
     return deviceInfo().isMobile ? "" : "Add to favorite list";
   };
+
+  if (isPlain) {
+    return (
+      <div
+        className={cx(
+          className,
+          "flex",
+          !borderless && (isFavorite ? "favorite-active" : "favorite-normal"),
+        )}
+        onClick={debounceEventHandler(onButtonClick, 100)}
+      >
+        <Icon name="star" size={16} color={iconColor ? iconColor : isFavorite ? "#FFCC00" : "#7A819B"}/>
+        <span style={{ color: "#7A819B" }}>{getFavoriteText()}</span>
+      </div>
+    )
+  }
 
   return (
     <Button

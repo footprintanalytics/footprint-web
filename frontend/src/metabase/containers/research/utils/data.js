@@ -460,7 +460,7 @@ const chainData = [
       },
       {
         "label": "Moonriver Overview",
-        "value": "Moonriver Overview",
+        "value": "moonriver-overview",
         "publicUuid": "5b9678ea-477c-4615-aaac-a01504d5da68",
       },
       {

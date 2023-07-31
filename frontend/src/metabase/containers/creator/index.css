@@ -5,6 +5,13 @@
   flex-direction: column;
 }
 
+.dark .creator__wrap {
+  background-color: var(--color-bg-dark);
+  min-height: 1000px;
+  display: flex;
+  flex-direction: column;
+}
+
 .creator__wrap .search__wrap {
   width: 1120px;
 }

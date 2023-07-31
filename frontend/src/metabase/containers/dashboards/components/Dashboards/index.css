@@ -83,16 +83,15 @@
   background: #fafafc;
 }
 
+.dark .dashboards__table-columns-odd {
+  background: #1d263e;
+}
+
 .dashboards__table-columns-even {
   background: #ffffff;
 }
 
-
-.dashboards__table-columns-odd-dark {
-  background: #1d263e;
-}
-
-.dashboards__table-columns-even-dark {
+.dark .dashboards__table-columns-even {
   background: #182034;
 }
 
@@ -129,6 +128,10 @@
   color: #84848a;
 }
 
+.dark .dashboards__table-date {
+  color: #ffffffdd;
+}
+
 .dashboards__table-custom {
   font-size: 14px;
   color: #303440;
@@ -141,9 +144,9 @@
 }
 
 .dashboards__table-name-avatar {
-  min-width: 25px;
-  width: 25px;
-  height: 25px;
+  min-width: 32px;
+  width: 32px;
+  height: 32px;
   border-radius: 50%;
 }
 
@@ -175,8 +178,12 @@
   text-overflow: ellipsis;
 }
 
+.dark .dashboards__table-name-info h3 {
+  color: #ffffffdc;
+}
+
 .Dashboard--night .dashboards__table-name-info h3 {
-  color: white;
+  color: #ffffffdd;
 }
 
 .dashboards__table-name-info h3 img {
@@ -197,6 +204,10 @@
   cursor: default;
 }
 
+.dark .dashboards__table-private {
+  background: #f6f6fecc;
+}
+
 .dashboards__table-chart {
   color: #3434b2;
   background: #f6f6fe;
@@ -206,6 +217,10 @@
   padding: 1px 4px;
   margin: 2px 4px 0 6px;
   cursor: default;
+}
+
+.dark .dashboards__table-chart {
+  background: #f6f6fecc;
 }
 
 .dashboards__table-name-info-creator {
@@ -222,10 +237,14 @@
   color: white;
 }
 
+.my__analysis .dashboards__table-name-info-creator {
+  color: var(--color-primary-dark);
+}
+
 .dashboards__table-action {
   cursor: pointer;
-  width: 24px;
-  height: 24px;
+  width: 18px;
+  height: 18px;
   border-radius: 50%;
   display: inline-flex;
   align-items: center;
@@ -233,9 +252,13 @@
   background-color: #f1f1f1;
 }
 
+.dark .dashboards__table-action {
+  background-color: #A0AEC0;
+}
+
 .dashboards__table-action img {
   width: 3px;
-  height: 15px;
+  height: 10px;
 }
 
 @media screen and (max-width: 1440px) {

@@ -58,7 +58,7 @@ const mapStateToProps = (state, props) => {
   const parameterValues = getParameterValues(state, props);
   const project = props.project;
   const location = props.location;
-  const isDataApiStatistics = props.location.pathname === ("/data-api/statistics")
+  const isDataApiStatistics = props.isDataApiStatistics;
   if (project) {
     let currentChain = null;
     // switch protocol

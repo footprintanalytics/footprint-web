@@ -11,8 +11,8 @@ export const Root = styled(FullWidthContainer)<{ admin: boolean }>`
   justify-content: space-between;
   position: relative;
 
-  padding-top: 0.5rem;
-  padding-bottom: 0.5rem;
+  padding-top: 0.3rem;
+  padding-bottom: 0.3rem;
 
   background-color: #f6f6fe;
 

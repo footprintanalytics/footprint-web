@@ -97,7 +97,6 @@ const Index = ({ router, user, data }) => {
               <h3
                 style={{
                   WebkitBoxOrient: "vertical",
-                  color: isFga ? "white" : "#303440",
                 }}
               >
                 {userName}

@@ -43,6 +43,11 @@ const ConnectorList = props => {
     setLoginModalShowAction,
     setCreateFgaProjectModalShowAction,
     refetchProject,
+    demoData,
+    width,
+    padding,
+    hideComingSoon,
+    showContactUs,
   } = props;
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [openDrawer, setOpenDrawer] = useState({ show: false, connector: {} });
@@ -52,13 +57,14 @@ const ConnectorList = props => {
     async () => {
       return await getAvailableConnectors({ projectId: parseInt(projectId) });
     },
-    { ...QUERY_OPTIONS, enabled: !!projectId },
+    { ...QUERY_OPTIONS, enabled: !!projectId && !demoData },
   );
 
+  const connectorData = demoData || data;
+
   useEffect(() => {
-    if (projectId && !isLoading && data) {
-      console.log("getAvailableIntegrations", data);
-      const availableConnectors = data?.availableConnectorConfig;
+    if (projectId && !isLoading && connectorData) {
+      const availableConnectors = connectorData?.availableConnectorConfig;
       const groupMap = new Map();
       availableConnectors.map((j, index) => {
         if (project?.isDemo && !projectId) {
@@ -73,7 +79,7 @@ const ConnectorList = props => {
       });
       setConnectors(availableConnectors);
     }
-  }, [projectId, isLoading, data, user]);
+  }, [projectId, isLoading, connectorData, user]);
 
   const showDrawer = c => {
     setOpenDrawer({ show: true, connector: c });
@@ -117,10 +123,10 @@ const ConnectorList = props => {
       <div
         className=" flex flex-column items-center"
         style={{
-          width: 800,
+          width: width || 800,
           // backgroundColor: "white",
           borderRadius: 10,
-          padding: 20,
+          padding: padding || 20,
           marginTop: 20,
           minHeight: 800,
         }}
@@ -129,16 +135,31 @@ const ConnectorList = props => {
           <Title width={"100%"} level={4} style={{ marginBottom: 0 }}>
             Integrations
           </Title>
-          <Typography.Link
-            href="https://docs.footprint.network/docs/integrations"
-            target="_blank"
-            keyboard
-          >
-            <Space>
-              <ReadOutlined />
-              {"How to use integrations?"}
-            </Space>
-          </Typography.Link>
+          <div className="flex flex-column">
+            <Typography.Link
+              href="https://docs.footprint.network/docs/integrations"
+              target="_blank"
+              keyboard
+            >
+              <Space>
+                <ReadOutlined />
+                {"How to use integrations?"}
+              </Space>
+            </Typography.Link>
+            {showContactUs && (
+              <Typography.Link
+                className="mt1"
+                href="mailto:sales@footprint.network"
+                target="_blank"
+                keyboard
+              >
+                <Space>
+                  <ReadOutlined />
+                  {"Contact us"}
+                </Space>
+              </Typography.Link>
+            )}
+          </div>
         </div>
 
         {isLoading ? (
@@ -169,7 +190,7 @@ const ConnectorList = props => {
                         marginBottom: 8,
                       }}
                       actions={
-                        item.configured
+                        hideComingSoon ? null : (item.configured
                           ? [
                               <Button
                                 key="Detail"
@@ -216,6 +237,7 @@ const ConnectorList = props => {
                                 Coming Soon
                               </Button>,
                             ]
+                        )
                       }
                     >
                       <List.Item.Meta

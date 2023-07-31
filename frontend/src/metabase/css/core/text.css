@@ -241,6 +241,10 @@
   font-weight: 600;
 }
 
+.dark .footprint-title2 {
+  color: white;
+}
+
 .footprint-primary-text,
 :local(.footprint-primary-text) {
   font-size: 14px;

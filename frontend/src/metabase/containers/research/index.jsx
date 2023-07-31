@@ -135,6 +135,7 @@ const Index = props => {
               isCustom={isCustom}
               isPublic={isPublic}
               location={location}
+              showSeo={false}
             />
           )}
         </div>

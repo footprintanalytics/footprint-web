@@ -145,7 +145,7 @@ const DashboardHeader = ({
       >
         <HeaderContent hasSubHeader={!isDataApp} showSubHeader={true}>
           <div className="flex fullscreen-night-text">
-            <IconBack router={router} />
+            <IconBack router={router} text="Back"/>
             <HeaderCaptionContainer>
               <HeaderCaption
                 key={dashboard.name}

@@ -1,0 +1,61 @@
+.my-profile {
+  display: flex;
+  width: 100%;
+  height: 60px;
+  align-items: center;
+  padding: 0 0 0 30px;
+}
+
+.my-profile .creator__personal-base-logo {
+  width: 30px;
+  height: 30px;
+  min-width: 30px;
+  border-radius: 50%;
+  margin-left: 0;
+}
+
+.my-profile__right {
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  margin-left: 12px;
+}
+
+.my-profile__right h3 {
+  font-size: 14px;
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  max-width: 95px;
+}
+
+.my-profile__vertical-line {
+  height: 100%;
+  border-left: 1px solid #FFFFFF20;
+}
+
+.my-profile__vip-inner {
+  display: flex;
+  justify-content: center;
+  padding: 4px;
+}
+
+.my-profile__menu {
+  width: 160px;
+  padding: 1px 0;
+}
+
+.my-profile__menu li {
+  height: 40px;
+  line-height: 30px;
+  display: flex;
+  align-items: center;
+  padding: 4px 10px;
+}
+
+.my-profile__menu li:hover {
+  height: 40px;
+  background: #ffffff20;
+  border-radius: 10px;
+  cursor: pointer;
+}
