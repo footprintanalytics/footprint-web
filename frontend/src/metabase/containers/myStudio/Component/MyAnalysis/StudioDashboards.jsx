@@ -5,7 +5,7 @@ import StudioTitle from "metabase/containers/myStudio/Component/StudioTitle";
 
 const StudioDashboards = props => {
   const {user, router, type, title} = props
-
+  const name = user?.name;
   const renderComponent = (type) => {
     if (type === "dashboards") {
       return (
