@@ -54,7 +54,7 @@
 .Pricing__compare-body-item li section {
   flex: 1;
   text-align: center;
-  color:#dbdde2;
+  color: #dbdde2;
 }
 
 .Pricing__compare-body-item li span {
@@ -185,7 +185,7 @@
   color: white;
   border-radius: 6px;
   font-weight: bold;
-  height: 48px
+  height: 48px;
 }
 
 .data-api__price-item {
