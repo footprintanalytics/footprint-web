@@ -52,7 +52,7 @@ function ProfileLink({ user, adminItems, onLogout, trigger }) {
       {
         title: t`My Studio`,
         icon: null,
-        link: isFga ? `/growth${Urls.myProfileUrl(userName)}` : "/studio",
+        link: isFga ? `/growth${Urls.myProfileUrl(userName)}` : "/studio/create",
         event: `Navbar;Profile Dropdown;My Profile`,
       },
       /*{
@@ -182,7 +182,7 @@ function ProfileLink({ user, adminItems, onLogout, trigger }) {
               )}
             </div>
           </div>
-          {showTrademark && (
+         {/* {showTrademark && (
             <div
               style={{ borderWidth: "2px" }}
               className="p2 h5 text-centered text-medium border-top"
@@ -193,7 +193,7 @@ function ProfileLink({ user, adminItems, onLogout, trigger }) {
               </span>
               <span>{t`and is built with care by a team from all across this pale blue dot.`}</span>
             </div>
-          )}
+          )}*/}
         </Modal>
       ) : null}
     </div>

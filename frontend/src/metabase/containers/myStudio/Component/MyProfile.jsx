@@ -15,6 +15,8 @@ import AboutImage from "metabase/containers/aboutV2/components/AboutImage";
 import Link from "metabase/core/components/Link";
 import { logout } from "metabase/auth/actions";
 import * as Urls from "metabase/lib/urls";
+import { formatTableTitle } from "metabase/lib/formatting/footprint";
+import dayjs from "dayjs";
 
 const MyProfile = props => {
   const { user, name, onLogout } = props;
@@ -122,6 +124,15 @@ const MyProfile = props => {
       },
      ]
   }
+  console.log("user", user)
+  const vipInfo = user?.vipInfo;
+  const dataApiVipInfo = user?.dataApiVipInfo;
+  const showFpVip = vipInfo && vipInfo?.type !== "free";
+  const showApiVip = dataApiVipInfo && dataApiVipInfo?.type !== "free";
+
+  const getVipToolTip = (info, title) => {
+    return `${title}: ${formatTableTitle(info?.type)} plan to ${dayjs(info.validEndDate).format("YYYY-MM-DD")}`;
+  }
 
   return (
     <>
@@ -144,9 +155,30 @@ const MyProfile = props => {
         <div className="my-profile__right">
           {userName && (
             <div style={{ display: "flex", alignItems: "center"}}>
-              <h3>{userName}</h3>
-              <AboutImage className="ml1" src={getOssUrl("/studio/img-fp-vip.png")} />
-              <AboutImage className="ml1" src={getOssUrl("/studio/img-api-vip.png")} />
+              <Tooltip title={userName}>
+                <h3 className="mr1">{userName}</h3>
+              </Tooltip>
+              {showFpVip && (
+                <Tooltip title={getVipToolTip(vipInfo, "Footprint web")}>
+                  <div className="flex justify-center p1">
+                    <AboutImage src={getOssUrl("/studio/img-fp-vip.png?x-oss-process=image/resize,m_fill,h_20,w_20")} />
+                  </div>
+                </Tooltip>
+              )}
+              {showFpVip && (
+                <Tooltip title={getVipToolTip(vipInfo, "Footprint web")}>
+                  <div className="my-profile__vip-inner">
+                    <AboutImage src={getOssUrl("/studio/img-fp-vip.png?x-oss-process=image/resize,m_fill,h_18,w_18")} />
+                  </div>
+                </Tooltip>
+              )}
+              {showApiVip && (
+                <Tooltip title={getVipToolTip(dataApiVipInfo, "Data API")}>
+                  <div className="my-profile__vip-inner">
+                    <AboutImage className="ml1" src={getOssUrl("/studio/img-api-vip.png?x-oss-process=image/resize,m_fill,h_30,w_30")} />
+                  </div>
+                </Tooltip>
+              )}
             </div>
           )}
           {/*<SocialList

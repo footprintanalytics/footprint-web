@@ -36,17 +36,17 @@ const renderVerticalMenu = ({data, className}) => {
   return (
     <div className={cx("main-menu__vertical-menu", className)}>
       {link ? (<Link
-        className="flex cursor-pointer"
+        className="main-menu__vertical-menu-link"
         to={link}
         target={externalLink ? "_blank" : null}
       >
-        <div className="flex flex-column">
+        <div className="flex flex-column p1">
           {topic && (<h3>{topic}</h3>)}
           {title && (<h5>{title}</h5>)}
           {desc && (<h6>{desc}</h6>)}
         </div>
       </Link>) :
-        <div className="flex flex-column">
+        <div className="flex flex-column p1">
           {topic && (<h3>{topic}</h3>)}
           {title && (<h5>{title}</h5>)}
           {desc && (<h6>{desc}</h6>)}

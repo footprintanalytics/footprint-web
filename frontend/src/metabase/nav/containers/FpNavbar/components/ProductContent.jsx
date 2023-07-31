@@ -6,6 +6,8 @@ import { getOssUrl } from "metabase/lib/image";
 import { MainMenuFunction } from "metabase/nav/containers/FpNavbar/utils/function";
 import { ReactIcons } from "../utils/data";
 import * as Urls from "../../../../lib/urls";
+import Icon from "../../../../components/Icon";
+import "../MainMenu.css"
 
 const ProductContent = props => {
   const { name, content } = props;
@@ -58,13 +60,13 @@ const ProductContent = props => {
               icon: ReactIcons.transferApiIcon,
               externalLink: true,
             },
-            {
+            /*{
               title: "Ownership API",
               desc: "Identify the owner of an NFT in just a single API call.",
               link: "https://docs.footprint.network/reference/get_v2-nft-collection-owners",
               icon: ReactIcons.ownershipApiIcon,
               externalLink: true,
-            },
+            },*/
             {
               title: "NFT API",
               desc: "Get multichain NFT transfers, metadata,price and more.",
@@ -72,12 +74,12 @@ const ProductContent = props => {
               icon: ReactIcons.nftApiIcon,
               externalLink: true,
             },
-            {
+            /*{
               title: "Money Flow API",
               desc: "Coming soon",
               link: "",
               icon: ReactIcons.moneyFlowIcon,
-            },
+            },*/
           ],
         },
         sqlApiData: {
@@ -88,7 +90,7 @@ const ProductContent = props => {
         },
         batchDownloadData: {
           topic: "Batch Download",
-          desc: "A flexible SQL API customization for robust requirements",
+          desc: "Sync blockchain historical data in one batch",
           link: "/batch-download",
         },
       },
@@ -127,7 +129,7 @@ const ProductContent = props => {
             {
               title: "New dashboard",
               icon: ReactIcons.newDashboardIcon,
-              link: "dashboard/new#from=studio",
+              link: "dashboard/new",
             },
           ]
         },
@@ -181,6 +183,7 @@ const ProductContent = props => {
               }}
             >
               {item.name}
+              {item.link ? <Icon name="arrow_right_up" size={16} color="white"/> : null}
             </Button>
           );
         })}

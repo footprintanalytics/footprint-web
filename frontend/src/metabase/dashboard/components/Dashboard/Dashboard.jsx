@@ -535,10 +535,8 @@ class Dashboard extends Component {
 
     const curTheme = shouldRenderAsNightMode ? "night" : theme;
 
-    const showStudioBack = from === "studio";
-
     return (
-      <div className="flex flex-column" style={{ height: "calc(100% - 45px)" }}>
+      <>
         {dashboard && (
           <Meta
             title={`${dashboard.name} - Footprint Analytics`}
@@ -552,7 +550,6 @@ class Dashboard extends Component {
             )}
           />
         )}
-        {showStudioBack && (<QuestionStudioBack title={"New Dashboard"} />)}
         <DashboardLoadingAndErrorWrapper
           isFullHeight={isEditing || isSharing}
           isFullscreen={isFullscreen}
@@ -700,7 +697,7 @@ class Dashboard extends Component {
           {this.renderNewDashboardModal()}
           {this.renderCancelModal()}
         </DashboardLoadingAndErrorWrapper>
-      </div>
+      </>
     );
   }
 }

@@ -279,15 +279,15 @@ const githubIcon =
   </svg>
 
 const myAnalysisIcon =
-  <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 14 14" fill="none">
-    <path d="M1.16602 12.25H12.8327" stroke="#6C70FF" strokeLinecap="round" strokeLinejoin="round"/>
-    <path d="M4.08398 8.16675H2.33398V12.2501H4.08398V8.16675Z" stroke="#6C70FF" strokeLinejoin="round"/>
-    <path d="M7.875 5.25H6.125V12.25H7.875V5.25Z" stroke="#6C70FF" strokeLinejoin="round"/>
-    <path d="M11.666 1.75H9.91602V12.25H11.666V1.75Z" stroke="#6C70FF" strokeLinejoin="round"/>
+  <svg width="14" height="14" viewBox="0 0 14 14" fill="none">
+    <path d="M1.16602 12.25H12.8327" stroke="#ACAEB4" strokeLinecap="round" strokeLinejoin="round"/>
+    <path d="M4.08398 8.16675H2.33398V12.2501H4.08398V8.16675Z" stroke="#ACAEB4" strokeLinejoin="round"/>
+    <path d="M7.875 5.25H6.125V12.25H7.875V5.25Z" stroke="#ACAEB4" strokeLinejoin="round"/>
+    <path d="M11.666 1.75H9.91602V12.25H11.666V1.75Z" stroke="#ACAEB4" strokeLinejoin="round"/>
   </svg>
 
 const dataApiIcon =
-  <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 14 14" fill="none">
+  <svg width="14" height="14" viewBox="0 0 14 14" fill="none">
     <g clipPath="url(#clip0_543_1299)">
       <path d="M5.25 6.98176V2.91675C5.25 1.95025 6.0335 1.16675 7 1.16675C7.9665 1.16675 8.75 1.95025 8.75 2.91675V3.50174" stroke="#ACAEB4" strokeLinecap="round"/>
       <path d="M8.75 7.00098V11.0833C8.75 12.0498 7.9665 12.8333 7 12.8333C6.0335 12.8333 5.25 12.0498 5.25 11.0833V10.4912" stroke="#ACAEB4" strokeLinecap="round"/>
@@ -302,11 +302,26 @@ const dataApiIcon =
   </svg>
 
 const appsIcon =
-  <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 14 14" fill="none">
+  <svg width="14" height="14" viewBox="0 0 14 14" fill="none">
     <path d="M5.25 1.75H2.33333C2.01117 1.75 1.75 2.01117 1.75 2.33333V5.25C1.75 5.57218 2.01117 5.83333 2.33333 5.83333H5.25C5.57218 5.83333 5.83333 5.57218 5.83333 5.25V2.33333C5.83333 2.01117 5.57218 1.75 5.25 1.75Z" stroke="#ACAEB4" strokeLinejoin="round"/>
     <path d="M5.25 8.16675H2.33333C2.01117 8.16675 1.75 8.42791 1.75 8.75008V11.6667C1.75 11.9889 2.01117 12.2501 2.33333 12.2501H5.25C5.57218 12.2501 5.83333 11.9889 5.83333 11.6667V8.75008C5.83333 8.42791 5.57218 8.16675 5.25 8.16675Z" stroke="#ACAEB4" strokeLinejoin="round"/>
     <path d="M11.666 1.75H8.74935C8.42717 1.75 8.16602 2.01117 8.16602 2.33333V5.25C8.16602 5.57218 8.42717 5.83333 8.74935 5.83333H11.666C11.9882 5.83333 12.2493 5.57218 12.2493 5.25V2.33333C12.2493 2.01117 11.9882 1.75 11.666 1.75Z" stroke="#ACAEB4" strokeLinejoin="round"/>
     <path d="M11.666 8.16675H8.74935C8.42717 8.16675 8.16602 8.42791 8.16602 8.75008V11.6667C8.16602 11.9889 8.42717 12.2501 8.74935 12.2501H11.666C11.9882 12.2501 12.2493 11.9889 12.2493 11.6667V8.75008C12.2493 8.42791 11.9882 8.16675 11.666 8.16675Z" stroke="#ACAEB4" strokeLinejoin="round"/>
+  </svg>
+
+const datasetsIcon =
+  <svg width="14" height="14" viewBox="0 0 14 14" fill="none">
+    <g clipPath="url(#clip0_543_852)">
+      <path d="M6.99935 4.9585C10.221 4.9585 12.8327 4.17499 12.8327 3.2085C12.8327 2.242 10.221 1.4585 6.99935 1.4585C3.77769 1.4585 1.16602 2.242 1.16602 3.2085C1.16602 4.17499 3.77769 4.9585 6.99935 4.9585Z" stroke="#ACAEB4" strokeLinecap="round" strokeLinejoin="round"/>
+      <path d="M3.14086 4.521C1.92983 4.84165 1.16602 5.31083 1.16602 5.8335C1.16602 6.79999 3.77769 7.5835 6.99935 7.5835C10.221 7.5835 12.8327 6.79999 12.8327 5.8335C12.8327 5.31083 12.0689 4.84165 10.8578 4.521C9.82954 4.79327 8.47874 4.9585 6.99935 4.9585C5.51996 4.9585 4.16916 4.79327 3.14086 4.521Z" stroke="#ACAEB4" strokeLinecap="round" strokeLinejoin="round"/>
+      <path d="M3.14086 7.146C1.92983 7.46665 1.16602 7.93583 1.16602 8.4585C1.16602 9.42499 3.77769 10.2085 6.99935 10.2085C10.221 10.2085 12.8327 9.42499 12.8327 8.4585C12.8327 7.93583 12.0689 7.46665 10.8578 7.146C9.82954 7.41827 8.47874 7.5835 6.99935 7.5835C5.51996 7.5835 4.16916 7.41827 3.14086 7.146Z" stroke="#ACAEB4" strokeLinecap="round" strokeLinejoin="round"/>
+      <path d="M3.14086 9.771C1.92983 10.0917 1.16602 10.5608 1.16602 11.0835C1.16602 12.05 3.77769 12.8335 6.99935 12.8335C10.221 12.8335 12.8327 12.05 12.8327 11.0835C12.8327 10.5608 12.0689 10.0917 10.8578 9.771C9.82954 10.0433 8.47874 10.2085 6.99935 10.2085C5.51996 10.2085 4.16916 10.0433 3.14086 9.771Z" stroke="#ACAEB4" strokeLinecap="round" strokeLinejoin="round"/>
+    </g>
+    <defs>
+      <clipPath id="clip0_543_852">
+        <rect width="14" height="14" fill="white"/>
+      </clipPath>
+    </defs>
   </svg>
 
 export const ReactIcons = {
@@ -348,4 +363,5 @@ export const ReactIcons = {
   myAnalysisIcon,
   dataApiIcon,
   appsIcon,
+  datasetsIcon,
 }

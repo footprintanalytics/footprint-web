@@ -147,3 +147,8 @@
   width: 100%;
   border-top: 1px solid #FFFFFF20;
 }
+
+.feature-side__icon {
+  width: 14px;
+  height: 14px;
+}

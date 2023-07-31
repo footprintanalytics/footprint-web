@@ -358,6 +358,7 @@ const ResearchContent = props => {
               }}
             >
               {item.name}
+              {item.link ? <Icon name="arrow_right_up" size={16} color="white"/> : null}
             </Button>
           );
         })}

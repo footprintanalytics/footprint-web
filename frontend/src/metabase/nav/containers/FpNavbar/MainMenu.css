@@ -21,6 +21,8 @@
 
 .main-menu__tabs Button {
   color: white;
+  display: flex;
+  align-items: center;
 }
 
 .main-menu__tabs .ant-btn {
@@ -43,7 +45,7 @@
 }
 
 .main-menu__vertical-menu li {
-  padding: 12px 2px;
+  padding: 12px 6px;
   max-width: 340px;
   cursor: pointer;
 }
@@ -218,6 +220,10 @@
   width: 1140px;
 }
 
+.main-menu__use-cases-content {
+  width: 700px;
+}
+
 .main-menu__single-content {
   width: 380px;
 }
@@ -258,4 +264,42 @@
 .main-menu__vertical-menu-icon {
   width: 20px;
   height: 20px;
+}
+
+.main-menu__vertical-menu-link {
+  display: flex;
+  cursor: pointer;
+}
+
+.main-menu__vertical-menu-link:hover {
+  background: #ffffff20;
+}
+
+
+@media screen and (--footprint-breakpoint-max-home-width) {
+  .main-menu__data-api-padding {
+    padding: 10px 40px 10px 0;
+  }
+
+  .main-menu__vertical-menu span {
+    font-size: 10px;
+  }
+
+  .main-menu__vertical-menu li {
+    padding: 4px 6px;
+  }
+}
+
+@media screen and (--footprint-breakpoint-max-pad) {
+  .main-menu__data-api-padding {
+    padding: 10px 40px 10px 0;
+  }
+
+  .main-menu__vertical-menu span {
+    font-size: 10px;
+  }
+
+  .main-menu__vertical-menu li {
+    padding: 4px 6px;
+  }
 }

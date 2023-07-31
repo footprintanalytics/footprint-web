@@ -150,13 +150,13 @@ const ConnectorList = props => {
             {showContactUs && (
               <Typography.Link
                 className="mt1"
-                href="https://docs.footprint.network/docs/integrations"
+                href="mailto:sales@footprint.network"
                 target="_blank"
                 keyboard
               >
                 <Space>
                   <ReadOutlined />
-                  {"Contact us?"}
+                  {"Contact us"}
                 </Space>
               </Typography.Link>
             )}

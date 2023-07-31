@@ -6,12 +6,8 @@ import "../research/index.css";
 import cx from "classnames";
 import FeaturesSide from "metabase/containers/research/components/FeaturesSide";
 import myData from "./utils/data";
-import { Button, Dropdown } from "antd";
-import Icon from "metabase/components/Icon";
-import * as Urls from "metabase/lib/urls";
 import { logout } from "metabase/auth/actions";
 import { replace } from "react-router-redux";
-import MyProfile from "metabase/containers/myStudio/Component/MyProfile";
 import { loginModalShowAction } from "metabase/redux/control";
 import flatten from "underscore/modules/_flatten";
 import ResourceBox from "metabase/containers/research/components/ResourceBox";
@@ -50,7 +46,6 @@ const MyStudio = props => {
   }
 
   const item = findItemByData({ menu, subMenu, value });
-  console.log("item", item)
   if (!menu && !subMenu) {
     if (array[0].subMenus) {
       replace(`studio/${array[0].value}/${array[0]?.subMenus[0]?.value}`);

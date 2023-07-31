@@ -1,17 +1,12 @@
 import React from "react";
 import MyApi from "metabase/containers/myStudio/Component/MyApi";
-import * as Urls from "metabase/lib/urls";
-import List from "metabase/containers/creator/components/personal/list";
-
-import { MessageOutlined, PicCenterOutlined, SmileOutlined } from "@ant-design/icons/lib/icons";
 import ConnectorList from "metabase/growth/containers/ConnectorList";
 import ChartCreate from "../Component/ChartCreate";
 import { integrationData } from "metabase/components/GlobalContactPanel/data";
 import StudioDashboards from "metabase/containers/myStudio/Component/MyAnalysis/StudioDashboards";
-import DashboardArea from "metabase/containers/features/components/DashboardArea";
 import Icon from "metabase/components/Icon";
-import { ReactIcons } from "metabase/nav/containers/FpNavbar/utils/data";
 import ComingSoonView from "metabase/containers/myStudio/Component/ComingSoonView";
+import { ReactIcons } from "metabase/nav/containers/FpNavbar/utils/data";
 
 const getMyStudioData = ({ name, params, router, user, onLogout }) => {
   const isOwner = user?.name === name;
@@ -27,7 +22,7 @@ const getMyStudioData = ({ name, params, router, user, onLogout }) => {
     {
       "label": "Footprint Datasets",
       "value": "footprint-datasets",
-      "icon": <Icon name="database" size={14}/>,
+      "icon": ReactIcons.datasetsIcon,
       "publicUuid": "5aca24eb-aae3-44ef-8e4b-a275fee42847",
     },
     {
@@ -61,7 +56,7 @@ const getMyStudioData = ({ name, params, router, user, onLogout }) => {
     {
       "label": "My Datasets",
       "value": "my-datasets",
-      "icon": <Icon name="database" size={14}/>,
+      "icon": ReactIcons.datasetsIcon,
       subMenus: [{
         "label": "Datasets",
         "value": "datasets",
@@ -82,9 +77,9 @@ const getMyStudioData = ({ name, params, router, user, onLogout }) => {
           />
         ),
       }, {
-        "label": "Submit contract",
-        "value": "submit-contract",
-        "url": "submit/contract/add",
+        "label": "My Contracts",
+        "value": "my-contracts",
+        "url": "submit/contract",
       }
       ],
     },

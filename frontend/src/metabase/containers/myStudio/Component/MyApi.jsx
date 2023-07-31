@@ -4,6 +4,7 @@ import { connect } from "react-redux";
 import DeveloperApp from "metabase/account/developer/containers/DeveloperApp/DeveloperApp";
 import "./MyApi.css";
 import Statistics from "metabase/containers/dataApi/statistics";
+import StudioTitle from "metabase/containers/myStudio/Component/StudioTitle";
 
 const MyApi = props => {
   const { location, showUsage, showApiKey } = props;
@@ -12,14 +13,17 @@ const MyApi = props => {
       <div className={"my-api"}>
         {showApiKey && (
           <div className="my-api__developer">
-            <h2>Data API Key</h2>
+            <StudioTitle title="Data API Key" />
             <div className="my-api__developer-app">
               <DeveloperApp />
             </div>
           </div>
         )}
         {showUsage && (
-          <Statistics location={location}/>
+          <>
+            <StudioTitle title="Data API Usage" />
+            <Statistics location={location}/>
+          </>
         )}
       </div>
     </>

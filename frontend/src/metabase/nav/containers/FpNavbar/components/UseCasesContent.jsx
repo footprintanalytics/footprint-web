@@ -60,14 +60,14 @@ const UseCasesContent = props => {
         <div className="main-menu__inner-layout">
           {MainMenuFunction.renderVerticalMenu({ data: tabData?.gamefiData })}
           {MainMenuFunction.renderVerticalMenu({ data: tabData?.researchData })}
-          {MainMenuFunction.renderVerticalMenu({ data: tabData?.growthData })}
+          {/*{MainMenuFunction.renderVerticalMenu({ data: tabData?.growthData })}*/}
         </div>
       </>
     );
   };
 
   return (
-    <div className="main-menu__product-content">
+    <div className="main-menu__use-cases-content">
       <div className="main-menu__inner">
         {renderTabContent()}
       </div>

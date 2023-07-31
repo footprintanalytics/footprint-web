@@ -26,9 +26,16 @@
   overflow: hidden;
   white-space: nowrap;
   text-overflow: ellipsis;
+  max-width: 95px;
 }
 
 .my-profile__vertical-line {
   height: 100%;
   border-left: 1px solid #FFFFFF20;
+}
+
+.my-profile__vip-inner {
+  display: flex;
+  justify-content: center;
+  padding: 4px;
 }

@@ -25,7 +25,7 @@ const ChartCreate = () => {
     {
       title: "New Dashboard",
       desc: "Pick some data, view it, and easily filter, summarize, and visualize it.",
-      url: "dashboard/new#from=studio",
+      url: "dashboard/new",
       icon: getOssUrl("/studio/img-studio-create-2.png"),
     },
 

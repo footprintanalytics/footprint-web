@@ -30,7 +30,6 @@ const Statistics = ({ location, user, setLoginModalShow }) => {
   return (
     <>
       <div className={"data-api__statistics"}>
-        <h2>Data API Usage</h2>
         <DashboardArea location={location} item={tempItem} hideParameters="user_id" all_load={true} isDataApiStatistics={true}/>
       </div>
     </>

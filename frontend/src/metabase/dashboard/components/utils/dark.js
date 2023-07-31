@@ -28,3 +28,5 @@ export const isGrowthNeedDark = () => {
     window.location.pathname.startsWith("/growth/campaign")
   );
 };
+
+export const isStudio = () => window.location.pathname.startsWith("/studio");

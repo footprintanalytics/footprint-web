@@ -1,10 +1,10 @@
 .my-api__developer {
-  padding: 20px;
+  /*padding: 20px;*/
 }
 
 .my-api__developer-app {
   width: 800px;
-  margin: 20px auto;
+  margin: 60px auto;
   padding: 40px;
-  background: var(--color-bg-card-dark);
+  border: 1px solid #ffffff20;
 }
