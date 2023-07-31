@@ -488,11 +488,11 @@ const chainData = [
         "value": "mch-verse-gamefi-overview",
         "publicUuid": "f0b59b4a-9b38-4745-9a15-1e1c47052d2d",
       },
-      {
+      /*{
         "label": "IoTex Overview",
         "value": "iotex-overview",
         "publicUuid": "1a1e160e-4414-417a-a04a-54646f86e42d",
-      },
+      },*/
       {
         "label": "Arbitrum Overview",
         "value": "arbitrum-overview",
@@ -513,11 +513,11 @@ const chainData = [
         "value": "oasys-overview",
         "publicUuid": "e7547583-dacc-4794-9c09-deab7364c9fb",
       },
-      {
+      /*{
         "label": "Hive Overview",
         "value": "hive-overview",
         "publicUuid": "3cf8c067-c63b-4a88-a74e-cc34096d0af5",
-      },
+      },*/
       {
         "label": "zkSync Era Overview",
         "value": "zksync-era-overview",
