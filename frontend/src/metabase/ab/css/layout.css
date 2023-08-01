@@ -116,3 +116,16 @@
 .ga-layout .ant-segmented .ant-segmented-item-selected {
   background: var(--color-primary-dark);
 }
+
+.dark .ga-layout .ant-btn-default {
+  border-color: #58585B;
+  background-color: #1B1B1E;
+}
+
+.dark .ga-layout .ant-menu .ant-menu-item, .ant-menu .ant-menu-submenu, .ant-menu .ant-menu-submenu-title {
+  background-color: #1B1B1E;
+}
+
+.dark .ga-layout .ant-layout-sider-children {
+  background-color: #1B1B1E;
+}

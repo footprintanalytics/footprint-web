@@ -434,7 +434,7 @@ class ABNavbar extends Component {
     };
 // className={ "dark"}
     return (
-      <div className="fga-Nav" style={{ display: rootDisplay,backgroundColor:'var(--color-bg-dark)' }}>
+      <div className="fga-Nav" style={{ display: rootDisplay,backgroundColor:'var(--color-ab-bg-dark)' }}>
         <div className="Nav__left">
           <MobileMenuIcon />
           <Link

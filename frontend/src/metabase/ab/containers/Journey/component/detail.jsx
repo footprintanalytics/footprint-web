@@ -1,24 +1,26 @@
 /* eslint-disable react/prop-types */
 import React from "react";
 import { Button, Table } from "antd";
+import { SearchOutlined, DownloadOutlined } from "@ant-design/icons";
+import HistoryChart from "metabase/ab/containers/Journey/component/HistoryChart";
 
 const Detail = props => {
   const {data} = props;
 
   const renderInfo = () => {
     return (
-      <div className="flex flex-column full-width" style={{color: "white"}}>
+      <div className="journey-detail" style={{color: "white"}}>
         <div className="flex justify-between">
           <div className="flex flex-column">
             <span>{data?.name}</span>
             <span>{data?.value} Sessions</span>
           </div>
           <div className="flex">
-            <Button>Search wallets</Button>
-            <Button>Export</Button>
+            <Button icon={<SearchOutlined />}>Search wallets</Button>
+            <Button className="ml1" icon={<DownloadOutlined />}>Export</Button>
           </div>
         </div>
-        <div style={{ height: 200, background: "#005500", margin: "20px 0" }}>Line Chart</div>
+        <HistoryChart />
       </div>
     )
   }

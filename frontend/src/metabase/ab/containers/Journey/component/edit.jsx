@@ -1,144 +1,74 @@
 /* eslint-disable react/prop-types */
 import React, { useEffect, useState } from "react";
 import { debounce } from "lodash";
-import { Drawer, DatePicker, Button, Select, Modal, Form, Input } from "antd";
+import { Drawer, DatePicker, Button, Select, Modal, Form, Input, Cascader } from "antd";
 import Detail from "./detail";
 import Icon from "metabase/components/Icon";
 import dayjs from "dayjs";
 import "../index.css";
 import { ExclamationCircleOutlined } from "@ant-design/icons";
 import Head from "metabase/ab/containers/Journey/component/Head";
+import SankeyChart from "metabase/ab/containers/Journey/component/SankeyChart";
+import UserFilter from "metabase/ab/containers/Journey/component/UserFilter";
+import { getFgaProject } from "metabase/selectors/user";
+import { connect } from "react-redux";
 
 const Edit = props => {
-  const { router } = props;
+  const { router, projectObject } = props;
+  const projectName = projectObject?.protocolSlug;
   const ref = React.createRef();
   const [nodeDetail, setNodeDetail] = useState();
-  const dateFormat = 'YYYY/MM/DD';
 
   const [modal, contextHolder] = Modal.useModal();
 
-  const customFormat = (value) => `Date: ${value.format(dateFormat)}`;
-  useEffect(() => {
-    const option = {
-      title: {
-        text: 'Sankey Diagram'
-      },
-      tooltip: {
-        trigger: 'item',
-        triggerOn: 'mousemove'
-      },
-      series: {
-        type: 'sankey',
-        layout: 'none',
-        nodeWidth: 80,
-        nodeGap: 30,
-        draggable: false,
-        emphasis: {
-          focus: 'adjacency'
-        },
-        label: {
-          show: true,
-          position: "top",
-          formatter: params => {
-            return params.name
-          }
-        },
-        data: [
-          {
-            name: 'a',
-            value: 100
-          },
-          {
-            name: 'b',
-            value: 200
-          },
-          {
-            name: 'c',
-            value: 30
-          },
-          {
-            name: 'd',
-            value: 30
-          }
-        ],
-        links: [
-          {
-            source: 'a',
-            target: 'b',
-            value: 5
-          },
-          {
-            source: 'a',
-            target: 'c',
-            value: 9
-          },
-          {
-            source: 'b',
-            target: 'd',
-            value: 20
-          },
-          {
-            source: 'c',
-            target: 'd',
-            value: 20
-          },
-          {
-            source: 'a',
-            target: 'd',
-            value: 5
-          }
-        ]
-      }
-    };
-    const chart = window.echarts.init(ref.current);
-    console.log("window.echarts", window.echarts)
-    console.log("ref.current", ref.current)
-    console.log("chart", chart)
-    chart.setOption(option);
-
-    chart.on('click', function(params) {
-      if (params.componentType === 'series' && params.seriesType === 'sankey' && params.dataType === 'node') {
-        onclick(params.data)
-      }
-    });
-  }, [ref])
-
-  const onclick = debounce(data => {
-    setNodeDetail(data);
-    console.log("vvvvvv", data)
-  }, 300);
-
   const renderConditions = () => {
+    const options = [
+      {
+        label: 'Light',
+        value: 'light',
+        children: new Array(20).fill(null).map((_, index) => ({
+          label: `Number ${index}`,
+          value: index,
+        })),
+      },
+      {
+        label: 'Bamboo',
+        value: 'bamboo',
+        children: [
+          {
+            label: 'Toy Cards',
+            value: 'cards',
+          },
+          {
+            label: 'Toy Bird',
+            value: 'bird',
+          },
+        ],
+      },
+    ];
+    const onChange = (value) => {
+      console.log(value);
+    };
     return (
       <div className="journey-edit__condition">
-        <h3>Analysis Conditions</h3>
-        <div>
+        <div className="p2">
+          <h3>Analysis Conditions</h3>
+        </div>
+        <div className="flex flex-column p2" style={{ gap: 10 }}>
           Select Events
-          <Select
-            defaultValue="lucy"
+          <Cascader
             style={{
-              width: 120,
+              width: '100%',
             }}
-            onChange={() => {}}
-            options={[
-              {
-                value: 'jack',
-                label: 'Jack',
-              },
-              {
-                value: 'lucy',
-                label: 'Lucy',
-              },
-              {
-                value: 'Yiminghe',
-                label: 'yiminghe',
-              },
-            ]}
+            options={options}
+            onChange={onChange}
+            multiple
+            maxTagCount="responsive"
           />
         </div>
-        <div className="flex flex-column">
+        <div className="flex flex-column p2" style={{ gap: 10 }}>
           <span>Set</span>
-          <div className="flex">
+          <div className="flex align-center" style={{ gap: 10 }}>
             <Select
               defaultValue="lucy"
               style={{
@@ -175,53 +105,50 @@ const Edit = props => {
               ]}
             />
           </div>
-          <div className="flex flex-column">
-            <span>Maximum Session Interval</span>
-            <div className="flex">
-              <Select
-                defaultValue="30"
-                style={{
-                  width: 120,
-                }}
-                onChange={() => {}}
-                options={[
-                  {
-                    value: '30',
-                    label: '30',
-                  },
-                  {
-                    value: '60',
-                    label: '60',
-                  },
-                ]}
-              />
-              <Select
-                defaultValue="first-event"
-                style={{
-                  width: 120,
-                }}
-                onChange={() => {}}
-                options={[
-                  {
-                    value: 'Minute',
-                    label: 'minute',
-                  },
-                  {
-                    value: 'Hour',
-                    label: 'hour',
-                  },
-                ]}
-              />
-            </div>
+        </div>
+        <div className="flex flex-column p2" style={{ gap: 10 }}>
+          <span>Maximum Session Interval</span>
+          <div className="flex" style={{ gap: 10 }}>
+            <Select
+              defaultValue="30"
+              style={{
+                width: 60,
+              }}
+              onChange={() => {}}
+              options={[
+                {
+                  value: '30',
+                  label: '30',
+                },
+                {
+                  value: '60',
+                  label: '60',
+                },
+              ]}
+            />
+            <Select
+              defaultValue="minute"
+              style={{
+                width: 100,
+              }}
+              onChange={() => {}}
+              options={[
+                {
+                  value: 'Minute',
+                  label: 'minute',
+                },
+                {
+                  value: 'Hour',
+                  label: 'hour',
+                },
+              ]}
+            />
           </div>
-          <div className="flex justify-between">
-            <h3>User Filter</h3>
-            <Icon name="add" />
-          </div>
-          <div className="flex">
-            <Button onClick={() => confirm()}>Save</Button>
-            <Button>Calculate</Button>
-          </div>
+          <UserFilter />
+        </div>
+        <div className="journey-edit__condition-bottom">
+          <Button onClick={() => confirm()}>Save</Button>
+          <Button type="primary">Calculate</Button>
         </div>
       </div>
     )
@@ -251,7 +178,7 @@ const Edit = props => {
             name="description"
             rules={[{ required: true, message: 'Please input your description!' }]}
           >
-            <Input />
+            <Input.TextArea autoSize={{ minRows: 4, maxRows: 6 }}/>
           </Form.Item>
 
         </Form>
@@ -262,44 +189,31 @@ const Edit = props => {
       content: content,
       okText: 'Save',
       cancelText: 'Cancel',
+      getContainer: ref.current,
+      onOk: () => {
+        router.replace(`/ab/project/${projectName}/journey`)
+      }
     });
   };
   return (
-    <div className="journey-edit">
-      <Head title="Journey" isBack buttons={["list"]} router={router}/>
+    <div className="journey-edit" ref={ref}>
+      <Head title="Journey" isBack buttons={["list"]} router={router} backLink={`/ab/project/${projectName}/journey`}/>
       <div className="journey-edit__main">
         {renderConditions()}
-        <div className="journey__vertical-line"/>
-        <div className="journey-edit__chart">
-          <div className="flex justify-between p2">
-            <div className="flex">
-              <span>Name 1</span>
-              <Icon className="ml1" name="edit_document" />
-            </div>
-            <div className="flex">
-              <Icon name="refresh" />
-              <DatePicker defaultValue={dayjs('2015/01/01', dateFormat)} format={customFormat} />
-            </div>
-          </div>
-          <div className="journey__split-line" />
-          <div ref={ref} style={{ width: "100%", height: 600, }}/>
-        </div>
-
-
+        <SankeyChart title="Name 1" canEdit canRefresh/>
       </div>
-      <Drawer
-        title="View Users"
-        placement="right"
-        width={780}
-        onClose={() => setNodeDetail(null)}
-        open={!!nodeDetail}
-      >
-        <Detail data={nodeDetail} />
-      </Drawer>
       {contextHolder}
     </div>
   );
 };
 
+const mapStateToProps = (state, props) => {
+  return {
+    projectObject: getFgaProject(state),
+  };
+};
 
-export default Edit;
+export default connect(
+  mapStateToProps,
+  null,
+)(Edit);
