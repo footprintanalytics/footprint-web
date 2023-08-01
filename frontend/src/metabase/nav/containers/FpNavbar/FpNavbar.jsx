@@ -570,7 +570,7 @@ class FpNavbar extends Component {
     };
 
     const RightMenuPad = () => {
-      const color2 = isDark ? "white" : color("footprint-color-title");
+      const color2 = isDark() ? "white" : color("footprint-color-title");
       return (
         <div className="Nav__right-pad-icon">
           <Link to="https://docs.footprint.network/docs" target="_blank">

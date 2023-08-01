@@ -7,9 +7,9 @@ import WrapLink from "metabase/containers/about/components/WrapLink";
 const AboutButton = ({ className, buttonClassName, buttonText, link, onClick }) => {
   return (
     <WrapLink className={className} {...(link ? {url: link} : {}) } onClick={onClick}>
-      <Button className={cx("About__btn", buttonClassName)}>
+      <div className={cx("About__btn", buttonClassName)}>
         {buttonText}
-      </Button>
+      </div>
     </WrapLink>
   );
 };

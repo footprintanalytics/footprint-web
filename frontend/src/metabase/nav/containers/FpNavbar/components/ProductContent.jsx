@@ -196,9 +196,6 @@ const ProductContent = props => {
     if (tab === "data-api") {
       return (
         <>
-          <div className="main-menu__inner-data-api-left">
-            {MainMenuFunction.renderStandardImageText({data: tabData?.dataApiDescData})}
-          </div>
           <div className="ml4 main-menu__data-api-padding">
             {MainMenuFunction.renderVerticalMenu({data: tabData?.restApiData})}
           </div>
@@ -206,15 +203,15 @@ const ProductContent = props => {
             {MainMenuFunction.renderVerticalMenu({data: tabData?.sqlApiData})}
             {MainMenuFunction.renderVerticalMenu({data: tabData?.batchDownloadData, className: "mt4"})}
           </div>
+          <div className="main-menu__inner-data-api-left">
+            {MainMenuFunction.renderStandardImageText({data: tabData?.dataApiDescData})}
+          </div>
         </>
       );
     }
     if (tab === "analytics-studio") {
       return (
         <>
-          <div className="main-menu__inner-data-api-left">
-            {MainMenuFunction.renderStandardImageText({data: tabData?.studioDescData})}
-          </div>
           <div className="ml4 main-menu__data-api-padding">
             {MainMenuFunction.renderVerticalMenu({data: tabData?.analyticsToolData})}
             {MainMenuFunction.renderVerticalMenu({data: tabData?.createData, className: "mt2"})}
@@ -223,6 +220,9 @@ const ProductContent = props => {
           <div className="ml3 main-menu__data-api-padding">
             {MainMenuFunction.renderVerticalMenu({data: tabData?.connectorData})}
             {MainMenuFunction.renderVerticalMenu({data: tabData?.appBuilderData, className: "mt4"})}
+          </div>
+          <div className="main-menu__inner-data-api-left">
+            {MainMenuFunction.renderStandardImageText({data: tabData?.studioDescData})}
           </div>
         </>
       );

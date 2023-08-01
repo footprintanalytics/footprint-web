@@ -15,4 +15,4 @@ export const NULL_DISPLAY_VALUE = t`(empty)`;
 // crossfilter converts strings to numbers when grouping starts with numeric data
 export const TOTAL_ORDINAL_VALUE = "Infinity";
 
-export const CHAIN_COUNT = 27;
+export const CHAIN_COUNT = "20+";
