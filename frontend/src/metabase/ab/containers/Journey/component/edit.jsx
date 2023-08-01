@@ -12,12 +12,15 @@ import SankeyChart from "metabase/ab/containers/Journey/component/SankeyChart";
 import UserFilter from "metabase/ab/containers/Journey/component/UserFilter";
 import { getFgaProject } from "metabase/selectors/user";
 import { connect } from "react-redux";
+import { journeyPathAnalyze } from "metabase/new-service";
 
 const Edit = props => {
   const { router, projectObject } = props;
   const projectName = projectObject?.protocolSlug;
   const ref = React.createRef();
   const [nodeDetail, setNodeDetail] = useState();
+  const [isLoading, setLoading] = useState();
+  const [chartData, setChartData] = useState([{data: null, links: null}]);
 
   const [modal, contextHolder] = Modal.useModal();
 
@@ -49,6 +52,22 @@ const Edit = props => {
     const onChange = (value) => {
       console.log(value);
     };
+
+    const calAction = async () => {
+      setLoading(true);
+      const result = await journeyPathAnalyze({
+        "eventIds": ["login","session"],
+        "initialEventId": "login",
+        "startTime": "2023-07-01",
+        "endTime": "2023-08-01",
+      });
+      setChartData({
+        data: result?.nodes,
+        links: result?.links,
+      })
+      setLoading(false);
+    }
+
     return (
       <div className="journey-edit__condition">
         <div className="p2">
@@ -148,7 +167,7 @@ const Edit = props => {
         </div>
         <div className="journey-edit__condition-bottom">
           <Button onClick={() => confirm()}>Save</Button>
-          <Button type="primary">Calculate</Button>
+          <Button type="primary" onClick={() => calAction()}>Calculate</Button>
         </div>
       </div>
     )
@@ -200,7 +219,10 @@ const Edit = props => {
       <Head title="Journey" isBack buttons={["list"]} router={router} backLink={`/ab/project/${projectName}/journey`}/>
       <div className="journey-edit__main">
         {renderConditions()}
-        <SankeyChart title="Name 1" canEdit canRefresh/>
+        <SankeyChart
+          isLoading={isLoading}
+          title="Name 1" canEdit canRefresh data={chartData?.data} links={chartData?.links}
+        />
       </div>
       {contextHolder}
     </div>

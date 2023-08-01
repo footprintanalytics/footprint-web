@@ -1,7 +1,7 @@
 /* eslint-disable react/prop-types */
 import React, { useEffect, useState } from "react";
 import { debounce } from "lodash";
-import { Button, DatePicker, Drawer, Form, Input, Modal, Select } from "antd";
+import { Button, DatePicker, Drawer, Form, Input, Modal, Select, Skeleton } from "antd";
 const { RangePicker } = DatePicker;
 import { useSize } from 'ahooks';
 import Detail from "./detail";
@@ -12,7 +12,54 @@ import { getFgaProject } from "metabase/selectors/user";
 import { connect } from "react-redux";
 
 const SankeyChart = props => {
-  const { projectObject, router, title, canEdit = false, canRefresh = false, } = props;
+  const { projectObject, router, title, canEdit = false, canRefresh = false, isLoading,
+    data=[
+      {
+        name: 'a',
+        value: 100
+      },
+      {
+        name: 'b',
+        value: 200
+      },
+      {
+        name: 'c',
+        value: 30
+      },
+      {
+        name: 'd',
+        value: 30
+      }
+    ],
+    links=[
+      {
+        source: 'a',
+        target: 'b',
+        value: 5
+      },
+      {
+        source: 'a',
+        target: 'c',
+        value: 9
+      },
+      {
+        source: 'b',
+        target: 'd',
+        value: 20
+      },
+      {
+        source: 'c',
+        target: 'd',
+        value: 20
+      },
+      {
+        source: 'a',
+        target: 'd',
+        value: 5
+      }
+    ],
+
+  } = props;
   const projectName = projectObject.protocolSlug
   const ref = React.createRef();
   const [nodeDetail, setNodeDetail] = useState();
@@ -55,7 +102,6 @@ const SankeyChart = props => {
         tooltip: {
           show: true,
           formatter: ({ data }) => {
-            console.log("data", data)
             if (data.name) {
               return `${data.name}<br />Sessions: ${data.value}`
             } else {
@@ -64,66 +110,23 @@ const SankeyChart = props => {
 
           }
         },
-        data: [
-          {
-            name: 'a',
-            value: 100
-          },
-          {
-            name: 'b',
-            value: 200
-          },
-          {
-            name: 'c',
-            value: 30
-          },
-          {
-            name: 'd',
-            value: 30
-          }
-        ],
-        links: [
-          {
-            source: 'a',
-            target: 'b',
-            value: 5
-          },
-          {
-            source: 'a',
-            target: 'c',
-            value: 9
-          },
-          {
-            source: 'b',
-            target: 'd',
-            value: 20
-          },
-          {
-            source: 'c',
-            target: 'd',
-            value: 20
-          },
-          {
-            source: 'a',
-            target: 'd',
-            value: 5
-          }
-        ]
+        data: data,
+        links: links,
       }
     };
-    const chart = window.echarts.init(ref.current);
-    console.log("window.echarts", window.echarts)
-    console.log("ref.current", ref.current)
-    console.log("chart", chart)
-    chart.setOption(option);
+    let tempChart = chart;
+    if (!tempChart) {
+      tempChart = window.echarts.init(ref.current);
+      setChart(tempChart);
+    }
+    tempChart.setOption(option);
 
-    chart.on('click', function(params) {
+    tempChart.on('click', function(params) {
       if (params.componentType === 'series' && params.seriesType === 'sankey' && params.dataType === 'node') {
         onclickDebounce(params.data)
       }
     });
-    setChart(chart);
-  }, [onclickDebounce, ref])
+  }, [onclickDebounce, ref, chart, data, links])
 
   useEffect(() => {
     if (rootSize) {
@@ -131,6 +134,11 @@ const SankeyChart = props => {
     }
     console.log("rootSize", rootSize)
   }, [chartResizeDebounce, rootSize]);
+  useEffect(() => {
+    if (isLoading) {
+      chart?.clear()
+    }
+  }, [isLoading]);
 
   const chartResizeDebounce = debounce(data => {
     chart?.resize();
@@ -139,6 +147,8 @@ const SankeyChart = props => {
   const onclickDebounce = debounce(data => {
     setNodeDetail(data);
   }, 300);
+
+
 
   return (
     <>
