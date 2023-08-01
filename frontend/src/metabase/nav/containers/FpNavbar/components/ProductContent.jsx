@@ -32,12 +32,14 @@ const ProductContent = props => {
               desc: "Identify wallet age, chain activity, as well as support for domain lookups such as ENS and Unstoppable Domains.",
               link: "https://docs.footprint.network/reference/get_v3-address-getwalletage",
               icon: ReactIcons.topSalesIcon,
+              externalLink: true,
             },
             {
               title: "Reference Data API",
               desc: "Check matching of contract addresses, developers, protocols, and wallets, entities, etc.",
               link: "https://docs.footprint.network/reference/get_contract-getcontractdeploymentinfo",
               icon: ReactIcons.refDataApiIcon,
+              externalLink: true,
             },
             {
               title: "Balance API",
@@ -159,11 +161,11 @@ const ProductContent = props => {
         },
       }
     },
-    {
+    /*{
       name: "Moon men",
       value: "moon-men",
       link: "/moon-men",
-    }
+    }*/
   ];
 
   const renderTabs = (data) => {
