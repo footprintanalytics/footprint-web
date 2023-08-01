@@ -32,7 +32,7 @@ const AboutStart = ({
         <ul>
           <li>
             <CreateImage />
-            <h2>{CHAIN_COUNT}+ Chains</h2>
+            <h2>{CHAIN_COUNT} Chains</h2>
           </li>
           <li>
             <CreateImage />

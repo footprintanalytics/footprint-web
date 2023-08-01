@@ -324,6 +324,27 @@ const datasetsIcon =
     </defs>
   </svg>
 
+const solutionIcon2 =
+  <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 20 20" fill="none">
+    <path d="M16.6673 8.33317C16.6673 11.1697 14.8958 13.5925 12.3988 14.5555H10.0007H7.60253C5.10548 13.5925 3.33398 11.1697 3.33398 8.33317C3.33398 4.65125 6.31873 1.6665 10.0007 1.6665C13.6826 1.6665 16.6673 4.65125 16.6673 8.33317Z" stroke="#6262FF" strokeLinecap="round" strokeLinejoin="round"/>
+    <path d="M12.3979 14.5557L12.1149 17.9513C12.0969 18.1672 11.9164 18.3333 11.6996 18.3333H8.29977C8.08306 18.3333 7.90252 18.1672 7.88456 17.9513L7.60156 14.5557" stroke="#6262FF" strokeLinecap="round" strokeLinejoin="round"/>
+    <path d="M7.5 7.0835V9.5835L10 8.3335L12.5 9.5835V7.0835" stroke="#6262FF" strokeLinecap="round" strokeLinejoin="round"/>
+  </svg>
+
+const useCaseIcon =
+  <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 20 20" fill="none">
+    <path d="M9.99935 8.33317C11.8403 8.33317 13.3327 6.84079 13.3327 4.99984C13.3327 3.15889 11.8403 1.6665 9.99935 1.6665C8.1584 1.6665 6.66602 3.15889 6.66602 4.99984C6.66602 6.84079 8.1584 8.33317 9.99935 8.33317Z" stroke="#6262FF" strokeLinecap="round" strokeLinejoin="round"/>
+    <path d="M17.5 18.3335C17.5 14.1914 14.1421 10.8335 10 10.8335C5.85787 10.8335 2.5 14.1914 2.5 18.3335" stroke="#6262FF" strokeLinecap="round" strokeLinejoin="round"/>
+    <path d="M10.0007 18.3335L11.6673 16.2502L10.0007 10.8335L8.33398 16.2502L10.0007 18.3335Z" stroke="#6262FF" strokeLinecap="round" strokeLinejoin="round"/>
+  </svg>
+
+const onBoardIcon =
+  <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 20 20" fill="none">
+    <path d="M7.91667 8.33333C9.5275 8.33333 10.8333 7.0275 10.8333 5.41667C10.8333 3.80584 9.5275 2.5 7.91667 2.5C6.30583 2.5 5 3.80584 5 5.41667C5 7.0275 6.30583 8.33333 7.91667 8.33333Z" stroke="#6262FF" strokeLinecap="round" strokeLinejoin="round"/>
+    <path d="M1.66602 16.9998V17.4998H14.166V16.9998C14.166 15.133 14.166 14.1996 13.8027 13.4865C13.4831 12.8593 12.9732 12.3494 12.346 12.0298C11.6329 11.6665 10.6995 11.6665 8.83268 11.6665H6.99935C5.13252 11.6665 4.1991 11.6665 3.48605 12.0298C2.85884 12.3494 2.3489 12.8593 2.02933 13.4865C1.66602 14.1996 1.66602 15.133 1.66602 16.9998Z" stroke="#6262FF" strokeLinecap="round" strokeLinejoin="round"/>
+    <path d="M15.834 5.4165V10.4165M13.334 7.9165H18.334" stroke="#6262FF" strokeLinecap="round" strokeLinejoin="round"/>
+  </svg>
+
 export const ReactIcons = {
   topGameIcon,
   gameTokensIcon,
@@ -364,4 +385,7 @@ export const ReactIcons = {
   dataApiIcon,
   appsIcon,
   datasetsIcon,
+  solutionIcon2,
+  useCaseIcon,
+  onBoardIcon,
 }
