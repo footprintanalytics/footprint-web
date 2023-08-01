@@ -7,8 +7,10 @@ import Icon from "metabase/components/Icon";
 import dayjs from "dayjs";
 import "../index.css";
 import { ExclamationCircleOutlined } from "@ant-design/icons";
+import Head from "metabase/ab/containers/Journey/component/Head";
 
 const Edit = props => {
+  const { router } = props;
   const ref = React.createRef();
   const [nodeDetail, setNodeDetail] = useState();
   const dateFormat = 'YYYY/MM/DD';
@@ -264,10 +266,7 @@ const Edit = props => {
   };
   return (
     <div className="journey-edit">
-      <div className="flex justify-between full-width">
-        <h2>Journey</h2>
-        <Button>Saved Journey</Button>
-      </div>
+      <Head title="Journey" isBack buttons={["list"]} router={router}/>
       <div className="journey-edit__main">
         {renderConditions()}
         <div className="journey__vertical-line"/>

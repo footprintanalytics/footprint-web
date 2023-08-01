@@ -10,9 +10,11 @@ import "../index.css";
 import { getProject } from "metabase/lib/project_info";
 import { getFgaProject, getUser } from "metabase/selectors/user";
 import { connect } from "react-redux";
+import Buttons from "metabase/ab/containers/Journey/component/Buttons";
+import Head from "metabase/ab/containers/Journey/component/Head";
 
 const View = props => {
-  const {projectObject} = props;
+  const { projectObject, router } = props;
   const projectName = projectObject.protocolSlug
   const ref = React.createRef();
   const [nodeDetail, setNodeDetail] = useState();
@@ -268,14 +270,8 @@ const View = props => {
     });
   };
   return (
-    <div className="journey-edit">
-      <div className="flex justify-between full-width">
-        <h2>Journey</h2>
-        <div className="flex">
-          <Button><Link to={`/ab/project/${projectName}/journey-edit`}>create</Link></Button>
-          <Button><Link to={`/ab/project/${projectName}/journey-list`}>Saved Journey</Link></Button>
-        </div>
-      </div>
+    <div className="journey-view">
+      <Head title="Journey" buttons={["create", "list"]} router={router}/>
       <div className="journey-edit__main">
         <div className="journey-edit__chart">
           <div className="flex justify-between p2">

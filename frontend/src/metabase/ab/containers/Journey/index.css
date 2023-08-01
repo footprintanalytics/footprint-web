@@ -20,6 +20,26 @@
   background: #101014;
 }
 
+.journey-view {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 100%;
+  padding: 20px;
+  color: white;
+  background: #101014;
+}
+
+.journey-list {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 100%;
+  padding: 20px;
+  color: white;
+  background: #101014;
+}
+
 .journey-edit__main {
   width: 100%;
   display: flex;
@@ -42,6 +62,34 @@
   flex: 1;
 }
 
-.journey-list {
+.journey-head h3 {
+  color: rgba(255, 255, 255, 0.85);
+  font-size: 24px;
+  font-style: normal;
+  font-weight: 600;
+  line-height: normal;
+}
+
+.journey-list .ant-table-cell {
+  background: #1B1B1E;
+}
+
+.journey-list .ant-table-tbody > tr > td {
+  border-bottom: 1px solid #ffffff20;
+}
+
+.journey-list .ant-table-tbody > tr > th {
+  border-bottom: 1px solid #ffffff20;
+}
+
+.journey-list .ant-table-wrapper .ant-table-thead >tr>th, .ant-table-wrapper .ant-table-thead >tr>td {
+  background: #242428;
+  border-bottom: 1px solid #ffffff20;
+}
+
+.journey-list__table {
   padding: 20px;
+  width: 100%;
+  border-radius: 10px;
+  background: #1B1B1E;
 }

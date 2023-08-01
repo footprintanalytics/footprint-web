@@ -41,12 +41,12 @@
   color: #666666;
   border: 2px solid #666666;
   cursor: pointer;
-  background: var(--color-bg-dark);
+  background: var(--color-ab-bg-dark);
 }
 
 .close-action:hover {
   border-radius: 50%;
   color: #cccccc;
   border: 2px solid #cccccc;
-  background: var(--color-bg-dark);
+  background: var(--color-ab-bg-dark);
 }
