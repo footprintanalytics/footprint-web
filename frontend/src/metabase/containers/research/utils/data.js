@@ -120,7 +120,6 @@ const nftData = [
   {
     "label": "NFT Marketplace",
     "value": "nft-marketplace",
-    "icon": "https://statichk.footprint.network/icon_side_ranking.png",
     "subMenus": [
       {
         "label": "Single Marketplace",
@@ -198,7 +197,6 @@ const nftData = [
   {
     "label": "Themetic analysis",
     "value": "themetic-analysis",
-    "icon": "https://statichk.footprint.network/icon_side_ranking.png",
     "subMenus": [
       {
         "label": "Blur Airdrop",
@@ -403,7 +401,6 @@ const chainData = [
   {
     "label": "Chain Rankings",
     "value": "chain-rankings",
-    "icon": "https://statichk.footprint.network/icon_side_analysis.png",
     "subMenus": [
       {
         "label": "Top Chains",
@@ -416,7 +413,6 @@ const chainData = [
   {
     "label": "Chain Stats",
     "value": "chain-stats",
-    "icon": "https://statichk.footprint.network/icon_side_analysis.png",
     "subMenus": [
       {
         "label": "Ethereum Overview",
@@ -528,7 +524,6 @@ const chainData = [
   {
     "label": "Chain Ecosystem",
     "value": "chain-ecosystem",
-    "icon": "https://statichk.footprint.network/icon_side_analysis.png",
     "subMenus": [
       {
         "label": "Chain Overview",
@@ -625,7 +620,6 @@ const walletData = [
   {
     "label": "Wallet Tracker",
     "value": "wallet-tracker",
-    "icon": "https://statichk.footprint.network/icon_side_analysis.png",
     "subMenus": [
       {
         "label": "NFT Trades of Wallet",
@@ -651,7 +645,6 @@ const customData = {
     {
       "label": "GameFi Market",
       "value": "gamefi-market",
-      "icon": "https://statichk.footprint.network/icon_side_analysis.png",
       "subMenus": [
         {
           "label": "Market Overview",
