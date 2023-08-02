@@ -1,9 +1,8 @@
 /* eslint-disable react/prop-types */
 import React, { useEffect, useState } from "react";
-import { debounce } from "lodash";
-import { Button, DatePicker, Drawer, Form, Input, Modal, Select, Skeleton } from "antd";
-const { RangePicker } = DatePicker;
-import { useSize } from 'ahooks';
+import { debounce, startCase } from "lodash";
+import { Button, DatePicker, Drawer, Modal } from "antd";
+import { useSize } from "ahooks";
 import Detail from "./detail";
 import Icon from "metabase/components/Icon";
 import dayjs from "dayjs";
@@ -11,55 +10,18 @@ import "../index.css";
 import { getFgaProject } from "metabase/selectors/user";
 import { connect } from "react-redux";
 
+const { RangePicker } = DatePicker;
+
 const SankeyChart = props => {
   const { projectObject, router, title, canEdit = false, canRefresh = false, isLoading,
-    data=[
-      {
-        name: 'a',
-        value: 100
-      },
-      {
-        name: 'b',
-        value: 200
-      },
-      {
-        name: 'c',
-        value: 30
-      },
-      {
-        name: 'd',
-        value: 30
-      }
-    ],
-    links=[
-      {
-        source: 'a',
-        target: 'b',
-        value: 5
-      },
-      {
-        source: 'a',
-        target: 'c',
-        value: 9
-      },
-      {
-        source: 'b',
-        target: 'd',
-        value: 20
-      },
-      {
-        source: 'c',
-        target: 'd',
-        value: 20
-      },
-      {
-        source: 'a',
-        target: 'd',
-        value: 5
-      }
-    ],
+    nodes=[],
+    links=[],
     onDateRangeChange,
   } = props;
+
+  console.log("SankeyChart nodes", nodes)
+  console.log("SankeyChart links", links)
+
   const projectName = projectObject.protocolSlug
   const ref = React.createRef();
   const [nodeDetail, setNodeDetail] = useState();
@@ -70,7 +32,10 @@ const SankeyChart = props => {
   const rootRef = React.createRef();
   const rootSize = useSize(rootRef);
 
-  const customFormat = (value) => `${value.format(dateFormat)}`;
+  const getNodeName = (id) => {
+    return nodes.find(node => node.id === id)?.name || id;
+  }
+
   useEffect(() => {
     const option = {
       title: {
@@ -105,12 +70,11 @@ const SankeyChart = props => {
             if (data.name) {
               return `${data.name}<br />Events: ${data.value}`
             } else {
-              return `${data.source} -> ${data.target}<br />Events: ${data.value}`
+              return `${getNodeName(data.source)} -> ${getNodeName(data.target)}<br />Events: ${data.value}`
             }
-
           }
         },
-        data: data,
+        data: nodes,
         links: links,
       }
     };
@@ -127,7 +91,7 @@ const SankeyChart = props => {
         onclickDebounce(params.data)
       }
     });
-  }, [onclickDebounce, ref, chart, data, links])
+  }, [onclickDebounce, ref, chart, nodes, links])
 
   useEffect(() => {
     if (rootSize) {
@@ -171,7 +135,7 @@ const SankeyChart = props => {
               </Button>
             )}
             <RangePicker
-              defaultValue={[dayjs().add(-7, 'd'), dayjs()]}
+              defaultValue={[dayjs().add(-32, 'd'), dayjs()]}
               onChange={(dates, dateStrings) => {
                 onDateRangeChange?.(dateStrings)
                 console.log("dateStrings", dateStrings)
@@ -193,7 +157,7 @@ const SankeyChart = props => {
         onClose={() => setNodeDetail(null)}
         open={!!nodeDetail}
       >
-        <Detail data={nodeDetail} />
+        <Detail nodeDetail={nodeDetail}/>
       </Drawer>
       {contextHolder}
     </>

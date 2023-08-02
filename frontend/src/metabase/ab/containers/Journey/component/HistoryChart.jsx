@@ -9,11 +9,11 @@ import { connect } from "react-redux";
 const { RangePicker } = DatePicker;
 
 const HistoryChart = props => {
-  const { projectObject, router, title, canEdit = false, canRefresh = false, } = props;
+  const { projectObject, isLoading, router, title, canEdit = false, canRefresh = false, data, } = props;
+  const [chart, setChart] = useState();
   const projectName = projectObject.protocolSlug
   const ref = React.createRef();
   const [nodeDetail, setNodeDetail] = useState();
-  const [chart, setChart] = useState();
   const dateFormat = 'YYYY/MM/DD';
 
   const [modal, contextHolder] = Modal.useModal();
@@ -21,6 +21,7 @@ const HistoryChart = props => {
   const rootSize = useSize(rootRef);
 
   const customFormat = (value) => `${value.format(dateFormat)}`;
+
   useEffect(() => {
     const option = {
       tooltip: {
@@ -29,7 +30,7 @@ const HistoryChart = props => {
       xAxis: {
         type: 'category',
         boundaryGap: false,
-        data: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun']
+        data: data?.map(item => item.event_date)
       },
       yAxis: {
         type: 'value',
@@ -43,7 +44,7 @@ const HistoryChart = props => {
       },
       series: [
         {
-          data: [820, 932, 901, 934, 1290, 1330, 1320],
+          data: data?.map(item => item.value),
           type: 'line',
           symbol: 'circle',
           symbolSize: 3,
@@ -66,14 +67,28 @@ const HistoryChart = props => {
         }
       ]
     };
-    const chart = window.echarts.init(ref.current);
-    console.log("window.echarts", window.echarts)
-    console.log("ref.current", ref.current)
-    console.log("chart", chart)
-    chart.setOption(option);
+    let tempChart = chart;
+    if (!tempChart) {
+      tempChart = window.echarts.init(ref.current);
+      setChart(tempChart);
+    }
+    tempChart.setOption(option);
 
-    setChart(chart);
+    setChart(tempChart);
   }, [ref])
+  
+  useEffect(() => {
+    if (isLoading) {
+      chart?.showLoading({
+        text: 'Loading...',
+        maskColor: '#1B1B1E',
+        textColor: '#fff',
+        fontSize: 16,
+      });
+    } else {
+      chart?.hideLoading();
+    }
+  }, [chart, isLoading]);
 
   return (
     <>

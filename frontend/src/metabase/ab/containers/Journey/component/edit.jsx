@@ -1,68 +1,64 @@
 /* eslint-disable react/prop-types */
-import React, { useEffect, useState } from "react";
-import { debounce } from "lodash";
-import { Drawer, DatePicker, Button, Select, Modal, Form, Input, Cascader } from "antd";
-import Detail from "./detail";
-import Icon from "metabase/components/Icon";
+import React, { useState } from "react";
+import { Button, Form, Input, Modal, Select } from "antd";
 import dayjs from "dayjs";
 import "../index.css";
-import { ExclamationCircleOutlined } from "@ant-design/icons";
 import Head from "metabase/ab/containers/Journey/component/Head";
 import SankeyChart from "metabase/ab/containers/Journey/component/SankeyChart";
-import UserFilter from "metabase/ab/containers/Journey/component/UserFilter";
 import { getFgaProject } from "metabase/selectors/user";
 import { connect } from "react-redux";
 import { journeyPathAnalyze } from "metabase/new-service";
+import demoData from "metabase/ab/containers/Journey/util/data";
 
 const Edit = props => {
   const { router, projectObject } = props;
   const projectName = projectObject?.protocolSlug;
   const ref = React.createRef();
-  const [nodeDetail, setNodeDetail] = useState();
   const [isLoading, setLoading] = useState();
-  const [chartData, setChartData] = useState([{data: null, links: null}]);
+  const [chartData, setChartData] = useState({nodes: demoData.nodes, links: demoData.links});
+  console.log("chartData", chartData?.nodes, chartData?.links)
   const [params, setParams] = useState({
-    "eventIds": ["login","session"],
-    "initialEventId": "login",
+    "eventNames": ["login","play_games"],
+    "initialEventName": "login",
     "project": "benji",
-    "startTime": dayjs().add(-7, 'd').format("YYYY-MM-DD"),
+    "startTime": dayjs().add(-32, 'd').format("YYYY-MM-DD"),
     "endTime": dayjs().format("YYYY-MM-DD"),
     "levelLimit": 6,
   });
+  const options = [
+    {
+      label: 'login',
+      value: 'login',
+    },
+    {
+      label: 'Play Games',
+      value: 'play_games',
+    },
+    {
+      label: 'Purchase',
+      value: 'purchase',
+    },
+    {
+      label: 'NFT Reward',
+      value: 'nft_reward',
+    },
+    {
+      label: 'Close App',
+      value: 'close_app',
+    },
+    {
+      label: 'Open App',
+      value: 'open_app',
+    },
+  ];
 
   const [modal, contextHolder] = Modal.useModal();
 
   const renderConditions = () => {
-    const options = [
-          {
-            label: 'login',
-            value: 'login',
-          },
-          {
-            label: 'session',
-            value: 'session',
-          },
-          {
-            label: 'open',
-            value: 'open',
-          },
-          {
-            label: 'purchase',
-            value: 'purchase',
-          },
-          {
-            label: 'close',
-            value: 'close',
-          },
-          {
-            label: 'reward',
-            value: 'reward',
-          },
-    ];
     const onChange = (value) => {
       setParams({
         ...params,
-        eventIds: value,
+        eventNames: value,
       })
     };
 
@@ -70,7 +66,7 @@ const Edit = props => {
       setLoading(true);
       const result = await journeyPathAnalyze(params);
       setChartData({
-        data: result?.nodes,
+        nodes: result?.nodes,
         links: result?.links,
       })
       setLoading(false);
@@ -87,7 +83,7 @@ const Edit = props => {
             style={{
               width: '100%',
             }}
-            defaultValue={["login","session"]}
+            defaultValue={["login","play_games"]}
             options={options}
             onChange={onChange}
             mode="multiple"
@@ -105,35 +101,10 @@ const Edit = props => {
               onChange={(value) => {
                 setParams({
                   ...params,
-                  initialEventId: value,
+                  initialEventName: value,
                 })
               }}
-              options={[
-                {
-                  label: 'login',
-                  value: 'login',
-                },
-                {
-                  label: 'session',
-                  value: 'session',
-                },
-                {
-                  label: 'open',
-                  value: 'open',
-                },
-                {
-                  label: 'purchase',
-                  value: 'purchase',
-                },
-                {
-                  label: 'close',
-                  value: 'close',
-                },
-                {
-                  label: 'reward',
-                  value: 'reward',
-                },
-              ]}
+              options={options}
             />
             <span>as</span>
             <span className="ml1">First Event</span>
@@ -211,7 +182,6 @@ const Edit = props => {
           labelCol={{ span: 8 }}
           wrapperCol={{ span: 16 }}
           style={{ maxWidth: 600 }}
-          initialValues={{ remember: true }}
           onFinish={() => {}}
           autoComplete="off"
         >
@@ -230,7 +200,6 @@ const Edit = props => {
           >
             <Input.TextArea autoSize={{ minRows: 4, maxRows: 6 }}/>
           </Form.Item>
-
         </Form>
       </div>
     )
@@ -252,7 +221,10 @@ const Edit = props => {
         {renderConditions()}
         <SankeyChart
           isLoading={isLoading}
-          title="Name 1" canEdit data={chartData?.data} links={chartData?.links}
+          title="Name 1"
+          canEdit
+          nodes={chartData?.nodes}
+          links={chartData?.links}
           onDateRangeChange={(strings) => {
             setParams({
               ...params,
