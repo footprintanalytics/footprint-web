@@ -370,7 +370,6 @@ export const fga_menu_data_v2_old = project => {
     ["nft_nft_holder", "9edaeba8-9c3b-4726-b139-73b2ca738c13"],
     ["nft_sales_mints", "08fb03cf-4ca4-4041-9d91-315a49d78615"],
     ["nft_revenue", "b98b0a6b-64cb-4e09-979d-693040ea3ec9"],
-    ["social", "0b478d57-59cf-4ba2-b0e0-9873272f13ce"],
     ["twitter", "fd4d94f3-06f7-445d-ada3-0ce82bcefa39"],
     ["discord", "d137a1ef-34a3-4553-84cb-2203bd9d2baf"],
   ]);
@@ -484,6 +483,7 @@ export const fga_menu_data_v2 = (project, user) => {
     ["twitter", "fd4d94f3-06f7-445d-ada3-0ce82bcefa39"],
     ["discord", "d137a1ef-34a3-4553-84cb-2203bd9d2baf"],
     ["project_health", "79b4c0c1-bc0d-4fde-ba2d-8e7bc9b0ea18"],
+    ["social", "0b478d57-59cf-4ba2-b0e0-9873272f13ce"],
   ]);
 
   const menuTabs = [
@@ -515,11 +515,11 @@ export const fga_menu_data_v2 = (project, user) => {
       getItem("Tokenomics", "game_tokenomics", null),
       //  protocolType !== "NFT" && getItem("Active Users", "game_active_users", null),
     ]),
-    getItem("Social", "social", <GatewayOutlined />, [
-      getItem("Twitter", "twitter", null),
-      getItem("Discord", "discord", null),
-      // getItem("ID Connect", "id_connect", null),
-    ]),
+    getItem("Social Stats", "social", <GatewayOutlined />, [
+      getItem("Social Stats", "social", null),
+        // getItem("Discord", "discord", null),
+      ]
+    ),
     getItem("Custom Analysis", "custom", <BarChartOutlined />, [
       getItem("Templates", "templates", null),
       getItem("My Analysis", "my_analysis", null),
