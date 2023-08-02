@@ -484,6 +484,7 @@ export const fga_menu_data_v2 = (project, user) => {
     ["discord", "d137a1ef-34a3-4553-84cb-2203bd9d2baf"],
     ["project_health", "79b4c0c1-bc0d-4fde-ba2d-8e7bc9b0ea18"],
     ["social", "0b478d57-59cf-4ba2-b0e0-9873272f13ce"],
+    ["gaming", "9666f52b-1b05-46f2-b474-fd46f85690ab"],
   ]);
 
   const menuTabs = [
@@ -502,7 +503,10 @@ export const fga_menu_data_v2 = (project, user) => {
       "Gaming Stats",
       "gaming_stats",
       <PieChartOutlined />,
-      [],
+      [
+        protocolType !== "NFT" &&
+        getItem("Gaming", "gaming", null),
+      ],
     ),
     getItem("Assets", "assets", <WalletOutlined />, [
       protocolType !== "GameFi" &&
@@ -516,7 +520,7 @@ export const fga_menu_data_v2 = (project, user) => {
       //  protocolType !== "NFT" && getItem("Active Users", "game_active_users", null),
     ]),
     getItem("Social Stats", "social", <GatewayOutlined />, [
-      getItem("Social Stats", "social", null),
+      getItem("Social", "social", null),
         // getItem("Discord", "discord", null),
       ]
     ),
