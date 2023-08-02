@@ -13,7 +13,7 @@ const Detail = props => {
         <div className="flex justify-between">
           <div className="flex flex-column">
             <span>{data?.name}</span>
-            <span>{data?.value} Sessions</span>
+            <span>{data?.value} Events</span>
           </div>
           <div className="flex">
             <Button icon={<SearchOutlined />}>Search wallets</Button>

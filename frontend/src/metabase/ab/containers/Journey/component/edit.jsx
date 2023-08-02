@@ -21,46 +21,54 @@ const Edit = props => {
   const [nodeDetail, setNodeDetail] = useState();
   const [isLoading, setLoading] = useState();
   const [chartData, setChartData] = useState([{data: null, links: null}]);
+  const [params, setParams] = useState({
+    "eventIds": ["login","session"],
+    "initialEventId": "login",
+    "project": "benji",
+    "startTime": dayjs().add(-7, 'd').format("YYYY-MM-DD"),
+    "endTime": dayjs().format("YYYY-MM-DD"),
+    "levelLimit": 6,
+  });
 
   const [modal, contextHolder] = Modal.useModal();
 
   const renderConditions = () => {
     const options = [
-      {
-        label: 'Light',
-        value: 'light',
-        children: new Array(20).fill(null).map((_, index) => ({
-          label: `Number ${index}`,
-          value: index,
-        })),
-      },
-      {
-        label: 'Bamboo',
-        value: 'bamboo',
-        children: [
           {
-            label: 'Toy Cards',
-            value: 'cards',
+            label: 'login',
+            value: 'login',
           },
           {
-            label: 'Toy Bird',
-            value: 'bird',
+            label: 'session',
+            value: 'session',
           },
-        ],
-      },
+          {
+            label: 'open',
+            value: 'open',
+          },
+          {
+            label: 'purchase',
+            value: 'purchase',
+          },
+          {
+            label: 'close',
+            value: 'close',
+          },
+          {
+            label: 'reward',
+            value: 'reward',
+          },
     ];
     const onChange = (value) => {
-      console.log(value);
+      setParams({
+        ...params,
+        eventIds: value,
+      })
     };
 
     const calAction = async () => {
       setLoading(true);
-      const result = await journeyPathAnalyze({
-        "eventIds": ["login","session"],
-        "initialEventId": "login",
-        "startTime": "2023-07-01",
-        "endTime": "2023-08-01",
-      });
+      const result = await journeyPathAnalyze(params);
       setChartData({
         data: result?.nodes,
         links: result?.links,
@@ -75,38 +83,61 @@ const Edit = props => {
         </div>
         <div className="flex flex-column p2" style={{ gap: 10 }}>
           Select Events
-          <Cascader
+          <Select
             style={{
               width: '100%',
             }}
+            defaultValue={["login","session"]}
             options={options}
             onChange={onChange}
-            multiple
-            maxTagCount="responsive"
+            mode="multiple"
+            optionLabelProp="label"
           />
         </div>
         <div className="flex flex-column p2" style={{ gap: 10 }}>
           <span>Set</span>
           <div className="flex align-center" style={{ gap: 10 }}>
             <Select
-              defaultValue="lucy"
+              defaultValue="login"
               style={{
                 width: 120,
               }}
-              onChange={() => {}}
+              onChange={(value) => {
+                setParams({
+                  ...params,
+                  initialEventId: value,
+                })
+              }}
               options={[
                 {
-                  value: 'Game Start',
-                  label: 'game-start',
+                  label: 'login',
+                  value: 'login',
                 },
                 {
-                  value: 'Pay for',
-                  label: 'pay-for',
+                  label: 'session',
+                  value: 'session',
+                },
+                {
+                  label: 'open',
+                  value: 'open',
+                },
+                {
+                  label: 'purchase',
+                  value: 'purchase',
+                },
+                {
+                  label: 'close',
+                  value: 'close',
+                },
+                {
+                  label: 'reward',
+                  value: 'reward',
                 },
               ]}
             />
             <span>as</span>
-            <Select
+            <span className="ml1">First Event</span>
+            {/*<Select
               defaultValue="first-event"
               style={{
                 width: 120,
@@ -114,18 +145,18 @@ const Edit = props => {
               onChange={() => {}}
               options={[
                 {
-                  value: 'First Event',
-                  label: 'first-event',
+                  label: 'First Event',
+                  value: 'first-event',
                 },
                 {
-                  value: 'Last Event',
-                  label: 'last-event',
+                  label: 'Last Event',
+                  value: 'last-event',
                 },
               ]}
-            />
+            />*/}
           </div>
         </div>
-        <div className="flex flex-column p2" style={{ gap: 10 }}>
+        {/*<div className="flex flex-column p2" style={{ gap: 10 }}>
           <span>Maximum Session Interval</span>
           <div className="flex" style={{ gap: 10 }}>
             <Select
@@ -164,7 +195,7 @@ const Edit = props => {
             />
           </div>
           <UserFilter />
-        </div>
+        </div>*/}
         <div className="journey-edit__condition-bottom">
           <Button onClick={() => confirm()}>Save</Button>
           <Button type="primary" onClick={() => calAction()}>Calculate</Button>
@@ -221,7 +252,14 @@ const Edit = props => {
         {renderConditions()}
         <SankeyChart
           isLoading={isLoading}
-          title="Name 1" canEdit canRefresh data={chartData?.data} links={chartData?.links}
+          title="Name 1" canEdit data={chartData?.data} links={chartData?.links}
+          onDateRangeChange={(strings) => {
+            setParams({
+              ...params,
+              startTime: strings[0],
+              endTime: strings[1],
+            })
+          }}
         />
       </div>
       {contextHolder}

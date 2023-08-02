@@ -58,7 +58,7 @@ const SankeyChart = props => {
         value: 5
       }
     ],
-
+    onDateRangeChange,
   } = props;
   const projectName = projectObject.protocolSlug
   const ref = React.createRef();
@@ -103,9 +103,9 @@ const SankeyChart = props => {
           show: true,
           formatter: ({ data }) => {
             if (data.name) {
-              return `${data.name}<br />Sessions: ${data.value}`
+              return `${data.name}<br />Events: ${data.value}`
             } else {
-              return `${data.source} -> ${data.target}<br />Sessions: ${data.value}`
+              return `${data.source} -> ${data.target}<br />Events: ${data.value}`
             }
 
           }
@@ -120,6 +120,7 @@ const SankeyChart = props => {
       setChart(tempChart);
     }
     tempChart.setOption(option);
+    console.log("option", option)
 
     tempChart.on('click', function(params) {
       if (params.componentType === 'series' && params.seriesType === 'sankey' && params.dataType === 'node') {
@@ -132,11 +133,18 @@ const SankeyChart = props => {
     if (rootSize) {
       chartResizeDebounce();
     }
-    console.log("rootSize", rootSize)
   }, [chartResizeDebounce, rootSize]);
+
   useEffect(() => {
     if (isLoading) {
-      chart?.clear()
+      chart?.showLoading({
+        text: 'Loading...',
+        maskColor: '#1B1B1E',
+        textColor: '#fff',
+        fontSize: 16,
+      });
+    } else {
+      chart?.hideLoading();
     }
   }, [isLoading]);
 
@@ -147,8 +155,6 @@ const SankeyChart = props => {
   const onclickDebounce = debounce(data => {
     setNodeDetail(data);
   }, 300);
-
-
 
   return (
     <>
@@ -166,13 +172,16 @@ const SankeyChart = props => {
             )}
             <RangePicker
               defaultValue={[dayjs().add(-7, 'd'), dayjs()]}
+              onChange={(dates, dateStrings) => {
+                onDateRangeChange?.(dateStrings)
+                console.log("dateStrings", dateStrings)
+              }}
             />
           </div>
         </div>
         <div className="journey__split-line" />
         <div ref={ref} style={{ width: rootSize?.width, height: rootSize?.height - 80, }}/>
       </div>
-
 
       <Drawer
         className="journey-detail__drawer"
