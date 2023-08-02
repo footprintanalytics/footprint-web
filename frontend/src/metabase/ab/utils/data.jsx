@@ -340,12 +340,13 @@ function getItem(label, key, icon, children, type, disabled = false) {
     disabled,
   };
 }
+/*
 
-/**
+/!**
  *
  * @param {*} protocolType : 1: GameFi, 2: NFT, 3: GameFi_NFT
  * @returns
- */
+ *!/
 export const fga_menu_data_v2_old = project => {
   let protocolType = project.protocolType;
   if (project?.nftCollectionAddress?.length > 0) {
@@ -454,6 +455,7 @@ export const fga_menu_data_v2_old = project => {
   const keys = getKeys(menuTabs);
   return { menuTabs, keys, dashboardMap, liveKeys };
 };
+*/
 
 export const fga_menu_data_v2 = (project, user) => {
   let protocolType = project.protocolType;
@@ -471,14 +473,14 @@ export const fga_menu_data_v2 = (project, user) => {
         ? "346f0d3d-5486-404b-a5d2-17ce52150fe1"
         : "2f4f1fe9-7163-4ecf-91db-76c87a9306ed",
     ],
-    ["game_tokenomics", "530dfa4f-2ddd-4ba7-8e9c-d6ccbe84bc00"],
+    ["game_tokenomics", "70018d58-83e4-4484-b089-15cf327d3974"],
     ["game_revenue", "8932389c-42cc-4ce7-a20f-a6a146cd31a2"],
     ["game_token_holder", "ff4ddbe9-8818-4abf-8a6c-91c3559071af"],
     ["users_overview", "6d84b4a6-ceef-4b30-a9ad-b233038fd8d3"],
     ["game_active_users", "6d84b4a6-ceef-4b30-a9ad-b233038fd8d3"],
     ["nft_leaderboard", "b0ce22de-a4bd-4f46-827c-75463c725fcd"],
-    ["nft_nft_holder", "58047ca6-0116-438d-9ac3-79ac81dfa764"],
-    ["nft_sales_mints", "08fb03cf-4ca4-4041-9d91-315a49d78615"],
+    ["nft_nft_holder", "9edaeba8-9c3b-4726-b139-73b2ca738c13"],
+    ["nft_sales_mints", "aefc83f1-ed4b-4dba-a21f-6f85a1de471c"],
     ["nft_revenue", "b98b0a6b-64cb-4e09-979d-693040ea3ec9"],
     ["twitter", "fd4d94f3-06f7-445d-ada3-0ce82bcefa39"],
     ["discord", "d137a1ef-34a3-4553-84cb-2203bd9d2baf"],

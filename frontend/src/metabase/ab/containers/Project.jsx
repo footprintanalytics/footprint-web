@@ -1,19 +1,14 @@
 /* eslint-disable react/prop-types */
 import React, { useEffect, useState } from "react";
 import { connect } from "react-redux";
-import { Button, Card, Image, Result, Typography } from "antd";
+import { Button, Image, Result } from "antd";
 import PublicDashboard from "metabase/public/containers/PublicDashboard";
-import { getUser, getFgaProject } from "metabase/selectors/user";
+import { getFgaProject, getUser } from "metabase/selectors/user";
 import LoadingSpinner from "metabase/components/LoadingSpinner";
 import { loadCurrentFgaProject } from "metabase/redux/user";
 import ProjectInfo from "../components/ProjectInfo";
-import {
-  checkVipMenuPermisson,
-  getGaMenuTabs,
-  getGrowthProjectPath,
-  getLatestGAProjectId,
-} from "../utils/utils";
-import { fga_menu_data, fga_menu_data_v2 } from "../utils/data";
+import { checkVipMenuPermisson, getGrowthProjectPath, getLatestGAProjectId } from "../utils/utils";
+import { fga_menu_data_v2 } from "../utils/data";
 import LoadingDashboard from "../components/LoadingDashboard";
 import DashboardMask from "../components/DashboardMask";
 import ConnectorList from "./ConnectorList";
@@ -22,7 +17,6 @@ import WalletProfile from "./WalletProfile";
 import MyAnalysis from "./MyAnalysis";
 import Airdrop from "./Airdrop";
 import CampaignDetail from "./CampaignDetail";
-import CampaignList from "./CampaignList";
 import CampaignListNew from "./CampaignListNew";
 import CustomAnalysis from "./CustomAnalysis";
 import CampaignCreate from "./CampaignCreate";
@@ -31,7 +25,6 @@ import FindWallets from "./FindWallets";
 import Journey from "./Journey";
 import JourneyEdit from "./Journey/component/edit";
 import JourneyList from "./Journey/component/list";
-import ProjectHealth from "./ProjectHealth";
 import CohortList from "./CohortList";
 import Community from "./Community";
 import UserProfile from "./UserProfile";
@@ -45,14 +38,11 @@ const Project = props => {
   const [currentMenu, setCurrentMenu] = useState(menu);
   const [gaMenuTabs, setGaMenuTabs] = useState(null);
 
-  const showRefreshButton = user?.id === 10 || user?.id === 22278;
-
-  console.log("ProjectProject", menu, currentMenu, projectObject, gaMenuTabs)
   useEffect(() => {
     if (menu && menu !== currentMenu && projectObject) {
       if (menu === "funnel") {
-        router.replace("/ab/dashboard/@0xABS/User-Journey-of-Mocaverse-FGA?series_date=past30days#type=dashboard&hide_edit")
-        return
+        router.replace("/ab/dashboard/@0xABS/User-Journey-of-Mocaverse-FGA?series_date=past30days#type=dashboard&hide_edit");
+        return;
       }
       setCurrentMenu(menu);
     }
@@ -94,33 +84,33 @@ const Project = props => {
     return projectObject
       ? projectObject.protocolSlug !== "default"
         ? {
-            ...projectObject,
-            origin_protocol_slug: projectObject?.protocolSlug,
-            twitter_handler: projectObject?.twitter?.handler,
-            discord_guild_id: projectObject?.discord?.guildId,
-          }
+          ...projectObject,
+          origin_protocol_slug: projectObject?.protocolSlug,
+          twitter_handler: projectObject?.twitter?.handler,
+          discord_guild_id: projectObject?.discord?.guildId,
+        }
         : {
-            // if no protocolSlug, use sandbox as default
-            id: projectObject?.id,
-            isDemo: projectObject?.isDemo,
-            origin_protocol_slug: projectObject?.protocolSlug,
-            protocolName: "Demo",
-            protocolSlug: "the-sandbox",
-            protocolType: "GameFi",
-            logo: "https://footprint-imgs.oss-us-east-1.aliyuncs.com/logo_images/the-sandbox.jpg",
-            nftCollectionAddress: [
-              {
-                address: "0xa342f5d851e866e18ff98f351f2c6637f4478db5",
-                chain: "Ethereum",
-              },
-            ],
-            tokenAddress: [
-              {
-                address: "0x3845badade8e6dff049820680d1f14bd3903a5d0",
-                chain: "Ethereum",
-              },
-            ],
-          }
+          // if no protocolSlug, use sandbox as default
+          id: projectObject?.id,
+          isDemo: projectObject?.isDemo,
+          origin_protocol_slug: projectObject?.protocolSlug,
+          protocolName: "Demo",
+          protocolSlug: "the-sandbox",
+          protocolType: "GameFi",
+          logo: "https://footprint-imgs.oss-us-east-1.aliyuncs.com/logo_images/the-sandbox.jpg",
+          nftCollectionAddress: [
+            {
+              address: "0xa342f5d851e866e18ff98f351f2c6637f4478db5",
+              chain: "Ethereum",
+            },
+          ],
+          tokenAddress: [
+            {
+              address: "0x3845badade8e6dff049820680d1f14bd3903a5d0",
+              chain: "Ethereum",
+            },
+          ],
+        }
       : null;
   };
 
@@ -190,7 +180,7 @@ const Project = props => {
   };
 
   const getContentPannel = current_tab => {
-    console.log("current_tab", current_tab)
+    console.log("current_tab", current_tab);
     if (!projectObject || !currentMenu || !gaMenuTabs) {
       return <LoadingSpinner message="Loading..." />;
     }
@@ -205,13 +195,12 @@ const Project = props => {
             hideTitle={true}
             key={projectObject?.protocolSlug}
             hideFooter
-            showRefreshButton={showRefreshButton}
           />
           {/* all dashboart except twitter and discord , need a mask when no protocol */}
           {getProjectObject()?.origin_protocol_slug === "default" &&
-            !["twitter", "discord"].includes(currentMenu) && (
-              <DashboardMask currentMenu={"set_protocol"} router={router} />
-            )}
+          !["twitter", "discord"].includes(currentMenu) && (
+            <DashboardMask currentMenu={"set_protocol"} router={router} />
+          )}
         </>
       ) : (
         <LoadingSpinner message="Loading..." />
@@ -408,7 +397,7 @@ const Project = props => {
         ></Community>
       );
     }
-    if (["Potential Users List", "Potential Users","find_potential_wallets"].includes(current_tab)) {
+    if (["Potential Users List", "Potential Users", "find_potential_wallets"].includes(current_tab)) {
       return (
         <PotentialUsers
           location={location}
@@ -418,7 +407,7 @@ const Project = props => {
       );
     }
     if (
-      ["Custom Analysis", "custom_analysis", "custom_analytics","templates"].includes(
+      ["Custom Analysis", "custom_analysis", "custom_analytics", "templates"].includes(
         current_tab,
       )
     ) {
@@ -519,21 +508,21 @@ const Project = props => {
         <>
           <div style={{ display: "relative" }}>
             {currentMenu &&
-              projectObject &&
-              gaMenuTabs &&
-              getContentPannel(currentMenu)}
+            projectObject &&
+            gaMenuTabs &&
+            getContentPannel(currentMenu)}
             {/* TODO: need to add real user fga vip grade */}
             {projectObject?.protocolSlug !== "default" &&
-              !checkVipMenuPermisson(
-                projectObject?.protocolSlug === "the-sandbox"
-                  ? "Enterprise"
-                  : "Free",
-                currentMenu,
-              ) && <DashboardMask currentMenu={currentMenu} router={router} />}
+            !checkVipMenuPermisson(
+              projectObject?.protocolSlug === "the-sandbox"
+                ? "Enterprise"
+                : "Free",
+              currentMenu,
+            ) && <DashboardMask currentMenu={currentMenu} router={router} />}
             {projectObject?.protocolSlug === "default" &&
-              ["members"].includes(currentMenu) && (
-                <DashboardMask currentMenu={"set_protocol"} router={router} />
-              )}
+            ["members"].includes(currentMenu) && (
+              <DashboardMask currentMenu={"set_protocol"} router={router} />
+            )}
           </div>
         </>
       ) : (

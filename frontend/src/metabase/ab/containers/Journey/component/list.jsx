@@ -3,7 +3,7 @@ import React from "react";
 import "../index.css";
 import Icon from "metabase/components/Icon";
 import { Space, Modal, Table } from "antd";
-import Link from "antd/es/typography/Link";
+import Link from "metabase/core/components/Link";
 import Head from "metabase/ab/containers/Journey/component/Head";
 import { getFgaProject } from "metabase/selectors/user";
 import { connect } from "react-redux";
@@ -17,7 +17,7 @@ const List = props => {
       title: 'Name',
       dataIndex: 'name',
       key: 'name',
-      render: (text) => <a>{text}</a>,
+      render: (text) => <Link to={`/ab/project/${projectName}/journey`}>{text}</Link>,
     },
     {
       title: 'Description',
