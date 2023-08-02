@@ -6,16 +6,16 @@ coverage:
   status:
     project:
       back-end:
-        # Project must always have at least 78% coverage (by line)
-        target: 78%
+        # Project must always have at least 83% coverage (by line)
+        target: 83%
         # Whole-project test coverage is allowed to drop up to 5%. (For situtations where we delete code with full coverage)
-        threshold: 5%
+        threshold: 7%
         flags:
           - back-end
 
       front-end:
-        target: 40%
-        threshold: 5%
+        target: 48%
+        threshold: 9%
         flags:
           - front-end
 
