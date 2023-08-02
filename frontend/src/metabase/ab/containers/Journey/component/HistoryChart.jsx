@@ -76,7 +76,7 @@ const HistoryChart = props => {
 
     setChart(tempChart);
   }, [ref])
-  
+
   useEffect(() => {
     if (isLoading) {
       chart?.showLoading({

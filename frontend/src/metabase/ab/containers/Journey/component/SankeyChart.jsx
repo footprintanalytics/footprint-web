@@ -136,6 +136,7 @@ const SankeyChart = props => {
             )}
             <RangePicker
               defaultValue={[dayjs().add(-32, 'd'), dayjs()]}
+              style={{ padding: "4px 10px"}}
               onChange={(dates, dateStrings) => {
                 onDateRangeChange?.(dateStrings)
                 console.log("dateStrings", dateStrings)

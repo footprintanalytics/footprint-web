@@ -16,7 +16,7 @@ const Buttons = props => {
       <Link className="flex align-center" to={`/ab/project/${projectName}/journey-edit`}>
         <Button className="mx1" type="primary">
           <Icon className="mr1" name="add" size={10} />
-          create
+            Create
         </Button>
       </Link>
     );

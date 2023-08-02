@@ -267,7 +267,7 @@ const Project = props => {
         />
       );
     }
-    if (
+    /*if (
       current_tab === "project_health"
     ) {
       return (
@@ -278,7 +278,7 @@ const Project = props => {
           projectPath={projectPath}
         ></ProjectHealth>
       );
-    }
+    }*/
     if (["airdrop"].includes(current_tab)) {
       return (
         <Airdrop

@@ -362,14 +362,15 @@ export const fga_menu_data_v2_old = project => {
         ? "346f0d3d-5486-404b-a5d2-17ce52150fe1"
         : "2f4f1fe9-7163-4ecf-91db-76c87a9306ed",
     ],
-    ["game_tokenomics", "530dfa4f-2ddd-4ba7-8e9c-d6ccbe84bc00"],
+    ["game_tokenomics", "70018d58-83e4-4484-b089-15cf327d3974"],
     ["game_revenue", "8932389c-42cc-4ce7-a20f-a6a146cd31a2"],
     ["game_token_holder", "ff4ddbe9-8818-4abf-8a6c-91c3559071af"],
     ["game_active_users", "6d84b4a6-ceef-4b30-a9ad-b233038fd8d3"],
     ["nft_leaderboard", "3e9f9af4-93a8-46d4-8ee7-bc472201da7d"],
-    ["nft_nft_holder", "58047ca6-0116-438d-9ac3-79ac81dfa764"],
+    ["nft_nft_holder", "9edaeba8-9c3b-4726-b139-73b2ca738c13"],
     ["nft_sales_mints", "08fb03cf-4ca4-4041-9d91-315a49d78615"],
     ["nft_revenue", "b98b0a6b-64cb-4e09-979d-693040ea3ec9"],
+    ["social", "0b478d57-59cf-4ba2-b0e0-9873272f13ce"],
     ["twitter", "fd4d94f3-06f7-445d-ada3-0ce82bcefa39"],
     ["discord", "d137a1ef-34a3-4553-84cb-2203bd9d2baf"],
   ]);
@@ -386,9 +387,9 @@ export const fga_menu_data_v2_old = project => {
     getItem("Sales & Mints", "nft_sales_mints", null),
     protocolType === "NFT" && getItem("Revenue", "nft_revenue", null),
   ]);
-  const socialMenu = getItem("Social", "social", <GatewayOutlined />, [
-    getItem("Twitter", "twitter", null),
-    getItem("Discord", "discord", null),
+  const socialMenu = getItem("Social Stats", "social", <GatewayOutlined />, [
+    getItem("Social Stats", "social", null),
+    // getItem("Discord", "discord", null),
   ]);
   const menuTabs = [
     getItem(
@@ -476,59 +477,58 @@ export const fga_menu_data_v2 = (project, user) => {
     ["game_token_holder", "ff4ddbe9-8818-4abf-8a6c-91c3559071af"],
     ["users_overview", "6d84b4a6-ceef-4b30-a9ad-b233038fd8d3"],
     ["game_active_users", "6d84b4a6-ceef-4b30-a9ad-b233038fd8d3"],
-    ["nft_leaderboard", "3e9f9af4-93a8-46d4-8ee7-bc472201da7d"],
+    ["nft_leaderboard", "b0ce22de-a4bd-4f46-827c-75463c725fcd"],
     ["nft_nft_holder", "58047ca6-0116-438d-9ac3-79ac81dfa764"],
     ["nft_sales_mints", "08fb03cf-4ca4-4041-9d91-315a49d78615"],
     ["nft_revenue", "b98b0a6b-64cb-4e09-979d-693040ea3ec9"],
     ["twitter", "fd4d94f3-06f7-445d-ada3-0ce82bcefa39"],
     ["discord", "d137a1ef-34a3-4553-84cb-2203bd9d2baf"],
+    ["project_health", "79b4c0c1-bc0d-4fde-ba2d-8e7bc9b0ea18"],
   ]);
 
   const menuTabs = [
+    getItem("Home", "home", <HomeOutlined />, [
+      getItem("Project Health", "project_health", null),
+    ]),
+    getItem("Users", "users", <GatewayOutlined />, [
+      //<TeamOutlined />
+      protocolType !== "NFT" && getItem("Overview", "users_overview", null),
+      getItem("Segment", "segment", null),
+      getItem("Members", "members", null),
+      getItem("Journey", "journey", null),
+      project?.protocolSlug === "mocaverse" && user?.id === 20103 && getItem("Funnel", "funnel", null),
+    ]),
     getItem(
-      "Analysis",
-      "analysis",
+      "Gaming Stats",
+      "gaming_stats",
       <PieChartOutlined />,
-      [
-        getItem("Home", "home", null),
-        getItem("Project Health", "project_health", null),
-        getItem("Users", "users", null, [
-          //<TeamOutlined />
-          protocolType !== "NFT" && getItem("Overview", "users_overview", null),
-          getItem("Segment", "segment", null),
-          getItem("Members", "members", null),
-          getItem("Journey", "journey", null),
-          project?.protocolSlug === "mocaverse" && user?.id === 20103 && getItem("Funnel", "funnel", null),
-        ]),
-        getItem("Assets", "assets", null, [
-          //<WalletOutlined />
-          protocolType !== "NFT" &&
-            getItem("Tokenomics", "game_tokenomics", null),
-          protocolType !== "NFT" &&
-            getItem("Token Holder", "game_token_holder", null),
-          //  protocolType !== "NFT" && getItem("Active Users", "game_active_users", null),
-          protocolType !== "GameFi" &&
-            getItem("NFT Sales&Mints", "nft_sales_mints", null),
-          protocolType !== "GameFi" &&
-            getItem("NFT Leaderboard", "nft_leaderboard", null),
-          protocolType !== "GameFi" &&
-            getItem("NFT Holder", "nft_nft_holder", null),
-        ]),
-        getItem("Social", "social", null, [
-          // <GatewayOutlined />
-          getItem("Twitter", "twitter", null),
-          getItem("Discord", "discord", null),
-          getItem("ID Connect", "id_connect", null),
-        ]),
-        getItem("Revenue", "revenue", null, [
-          //<DollarOutlined />
-          protocolType !== "NFT" && getItem("Revenue", "game_revenue", null),
-          protocolType !== "GameFi" &&
-            getItem("NFT Revenue", "nft_revenue", null),
-        ]),
-      ],
-      // "group",
+      [],
     ),
+    getItem("Assets", "assets", <WalletOutlined />, [
+      protocolType !== "GameFi" &&
+      getItem("NFT Sales&Mints", "nft_sales_mints", null),
+      protocolType !== "GameFi" &&
+      getItem("NFT Leaderboard", "nft_leaderboard", null),
+      protocolType !== "GameFi" &&
+      getItem("Holder of NFT & Token", "nft_nft_holder", null),
+      protocolType !== "NFT" &&
+      getItem("Tokenomics", "game_tokenomics", null),
+      //  protocolType !== "NFT" && getItem("Active Users", "game_active_users", null),
+    ]),
+    getItem("Social", "social", <GatewayOutlined />, [
+      getItem("Twitter", "twitter", null),
+      getItem("Discord", "discord", null),
+      // getItem("ID Connect", "id_connect", null),
+    ]),
+    getItem("Custom Analysis", "custom", <BarChartOutlined />, [
+      getItem("Templates", "templates", null),
+      getItem("My Analysis", "my_analysis", null),
+    ]),
+    getItem("Settings", "settings", <SettingOutlined />, [
+      getItem("Integration", "integration", null),
+      getItem("Project Info", "general", null),
+      getItem("Channel", "channel", null),
+    ]),
     getItem(
       "Growth",
       "growth",
@@ -541,15 +541,13 @@ export const fga_menu_data_v2 = (project, user) => {
       ],
       // "group",
     ),
-    getItem("Custom Analysis", "custom", <BarChartOutlined />, [
-      getItem("Templates", "templates", null),
-      getItem("My Analysis", "my_analysis", null),
-    ]),
-    getItem("Settings", "settings", <SettingOutlined />, [
-      getItem("Integration", "integration", null),
-      getItem("Project Info", "general", null),
-      getItem("Channel", "channel", null),
-    ]),
+    getItem(
+      "Login",
+      "login",
+      <LinkOutlined />,
+      [],
+    ),
+
   ];
   const liveKeys = [
     "home_nft",
