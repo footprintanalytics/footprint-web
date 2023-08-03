@@ -74,8 +74,7 @@ const GaSidebar = (props: IGaSidebarProp) => {
 
   useEffect(() => {
     if (currentMenu) {
-      console.log("currentMenu", currentMenu, items);
-      items?.map(i => {
+      [...items, ...itemsPlatform]?.map(i => {
         if (i.key === currentMenu) {
           setOpenKeys([i.key]);
           return;
