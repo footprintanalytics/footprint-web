@@ -49,13 +49,49 @@ const GaProjectSearch = props => {
           },
           {
             "id": 341,
-            "name": "The-Sandbox",
+            "name": "Crazy Dense Hero",
             "creatorId": 20103,
             "dbId": 22,
             "schema": "fga_341_data",
             "active": 1,
-            "protocolSlug": "the-sandbox",
-            "protocolName": "The-Sandbox",
+            "protocolSlug": "crazy-dense-hero",
+            "protocolName": "Crazy Dense Hero",
+            "nftContractAddress": [],
+            "createdAt": "2023-07-17T09:09:36.000Z"
+          },
+          {
+            "id": 35,
+            "name": "Benji Banana",
+            "creatorId": 20103,
+            "dbId": 22,
+            "schema": "fga_35_data",
+            "active": 1,
+            "protocolSlug": "benji-banana",
+            "protocolName": "Benji Banana",
+            "nftContractAddress": [],
+            "createdAt": "2023-07-17T09:09:36.000Z"
+          },
+          {
+            "id": 36,
+            "name": "GAMEE",
+            "creatorId": 20103,
+            "dbId": 22,
+            "schema": "fga_36_data",
+            "active": 1,
+            "protocolSlug": "gamee",
+            "protocolName": "GAMEE",
+            "nftContractAddress": [],
+            "createdAt": "2023-07-17T09:09:36.000Z"
+          },
+          {
+            "id": 10,
+            "name": "Open Campus",
+            "creatorId": 20103,
+            "dbId": 22,
+            "schema": "fga_36_data",
+            "active": 1,
+            "protocolSlug": "open-campus",
+            "protocolName": "Open Campus",
             "nftContractAddress": [],
             "createdAt": "2023-07-17T09:09:36.000Z"
           }
