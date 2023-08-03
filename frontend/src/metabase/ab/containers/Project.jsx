@@ -221,7 +221,7 @@ const Project = props => {
       );
     }
     if (
-      current_tab === "journey"
+      current_tab === "journey" || current_tab === "journey-platform"
     ) {
       return (
         <Journey
@@ -388,7 +388,7 @@ const Project = props => {
         ></SocialConnectList>
       );
     }
-    if (["Community", "Members", "members"].includes(current_tab)) {
+    if (["Community", "Members", "members-platform", "members"].includes(current_tab)) {
       return (
         <Community
           location={location}
@@ -449,7 +449,7 @@ const Project = props => {
         ></CampaignDetail>
       );
     }
-    if (["Cohort", "segment"].includes(current_tab)) {
+    if (["Cohort", "segment", "segment-platform"].includes(current_tab)) {
       return (
         <CohortList
           router={router}

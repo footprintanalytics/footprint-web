@@ -487,8 +487,25 @@ export const fga_menu_data_v2 = (project, user) => {
     ["project_health", "79b4c0c1-bc0d-4fde-ba2d-8e7bc9b0ea18"],
     ["social", "0b478d57-59cf-4ba2-b0e0-9873272f13ce"],
     ["gaming", "9666f52b-1b05-46f2-b474-fd46f85690ab"],
+
+
+    ["project_health-platform", "79b4c0c1-bc0d-4fde-ba2d-8e7bc9b0ea18"],
+    ["users_overview-platform", "6d84b4a6-ceef-4b30-a9ad-b233038fd8d3"],
   ]);
 
+
+  const platformMenuTabs = [
+    getItem("Home", "home-platform", <HomeOutlined />, [
+      getItem("Project Health", "project_health-platform", null),
+    ]),
+    getItem("Users", "users-platform", <GatewayOutlined />, [
+      //<TeamOutlined />
+      protocolType !== "NFT" && getItem("Overview", "users_overview-platform", null),
+      getItem("Segment", "segment-platform", null),
+      getItem("Members", "members-platform", null),
+      getItem("Journey", "journey-platform", null),
+    ]),
+  ];
   const menuTabs = [
     getItem("Home", "home", <HomeOutlined />, [
       getItem("Project Health", "project_health", null),
@@ -499,7 +516,6 @@ export const fga_menu_data_v2 = (project, user) => {
       getItem("Segment", "segment", null),
       getItem("Members", "members", null),
       getItem("Journey", "journey", null),
-      project?.protocolSlug === "mocaverse" && user?.id === 20103 && getItem("Funnel", "funnel", null),
     ]),
     getItem(
       "Gaming Stats",
@@ -543,16 +559,16 @@ export const fga_menu_data_v2 = (project, user) => {
         getItem("Find Wallets", "find_wallets", null),
         // getItem("Airdrop", "airdrop", null),
         getItem("Single Wallet Profile", "wallet_profile", null),
-        getItem("Activation", "activation", null),
+        // getItem("Activation", "activation", null),
       ],
       // "group",
     ),
-    getItem(
-      "Login",
-      "login",
-      <LinkOutlined />,
-      [],
-    ),
+    // getItem(
+    //   "Login",
+    //   "login",
+    //   <LinkOutlined />,
+    //   [],
+    // ),
 
   ];
   const liveKeys = [
@@ -567,8 +583,8 @@ export const fga_menu_data_v2 = (project, user) => {
     "game_revenue",
     "nft_revenue",
   ];
-  const keys = getKeys(menuTabs);
-  return { menuTabs, keys, dashboardMap, liveKeys };
+  const keys = getKeys([...menuTabs, ...platformMenuTabs]);
+  return { menuTabs, platformMenuTabs, keys, dashboardMap, liveKeys };
 };
 
 const getKeys = items => {

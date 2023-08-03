@@ -13,7 +13,6 @@ import GaSidebar from "./GaSidebar";
 const GaLayout = props => {
   const pathname = location.pathname;
   const isHideSidebar = pathname.includes("/ab/chart");
-  console.log("vvvv")
   return (
     <StateProvider>
       <LayoutView {...props} isChart={isHideSidebar} />

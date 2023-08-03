@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { Layout, Menu } from "antd";
+import { Divider, Layout, Menu } from "antd";
 import type { MenuProps } from "antd";
 const { Sider } = Layout;
 import "../css/utils.css";
@@ -8,6 +8,7 @@ import { withRouter } from "react-router";
 import { getUser, getFgaProject } from "metabase/selectors/user";
 import LoadingSpinner from "metabase/components/LoadingSpinner";
 import { fga_menu_data, fga_menu_data_v2 } from "../utils/data";
+import GaProjectSearch from "metabase/ab/components/GaProjectSearch";
 import {
   getGrowthProjectPath,
   getLatestGAMenuTag,
@@ -32,7 +33,8 @@ const GaSidebar = (props: IGaSidebarProp) => {
   const { currentProject, router, location, currentMenu, projectObject, user } =
     props;
   const [items, setItems] = useState<any[]>([]);
-  const [rootSubmenuKeys, setRootSubmenuKeys] = useState<any[]>([]);
+  const [itemsPlatform, setItemsPlatform] = useState<any[]>([]);
+  // const [rootSubmenuKeys, setRootSubmenuKeys] = useState<any[]>([]);
   const [openKeys, setOpenKeys] = useState<string[]>([currentMenu!]);
 
   useEffect(() => {
@@ -52,7 +54,7 @@ const GaSidebar = (props: IGaSidebarProp) => {
       }
     }
     const itemsTemp: any[] = fga_menu_data_v2(projectObject, user).menuTabs;
-    const rootSubmenuKeysTemp: any[] = [];
+    /*const rootSubmenuKeysTemp: any[] = [];
     itemsTemp?.map(i => {
       i?.children?.map((j: any) => {
         if (j) {
@@ -61,9 +63,12 @@ const GaSidebar = (props: IGaSidebarProp) => {
       });
       // rootSubmenuKeysTemp.push(i.key);
     }
-    );
-    setRootSubmenuKeys(rootSubmenuKeysTemp);
+    );*/
+    // setRootSubmenuKeys(rootSubmenuKeysTemp);
     setItems(itemsTemp);
+
+    const itemsPlatformTemp: any[] = fga_menu_data_v2(projectObject, user).platformMenuTabs;
+    setItemsPlatform(itemsPlatformTemp);
   }, [projectObject]);
 
   useEffect(() => {
@@ -111,34 +116,68 @@ const GaSidebar = (props: IGaSidebarProp) => {
         height: "100%",
         position: "fixed",
         background: "#121728",
-        borderRight: "1px solid #4A5568",
+        borderRight: "1px solid #ffffff20",
       }}
     >
       <>
         {projectObject && items?.length > 0 ? (
-          <Menu
-            style={{
-              borderRight: "0px",
-              width: "100%",
-              flex: 1,
-            }}
-            theme="light"
-            mode="inline"
-            openKeys={openKeys}
-            onOpenChange={onOpenChange}
-            selectedKeys={[currentMenu!]}
-            onSelect={item => {
-              console.log("item", item);
-              saveLatestGAMenuTag(item.key);
-              router.push({
-                pathname: getGrowthProjectPath(
-                  currentProject ?? getLatestGAProject() ?? "",
-                  item.key,
-                ),
-              });
-            }}
-            items={items}
-          />
+          <>
+            <div className="ga-side-bar__title">
+              <h3>Platform</h3>
+            </div>
+            <Menu
+              className="ga-side-bar-menu"
+              style={{
+                borderRight: "0px",
+                width: "100%",
+                flex: 1,
+              }}
+              theme="light"
+              mode="inline"
+              openKeys={openKeys}
+              onOpenChange={onOpenChange}
+              selectedKeys={[currentMenu!]}
+              onSelect={item => {
+                saveLatestGAMenuTag(item.key);
+                router.push({
+                  pathname: getGrowthProjectPath(
+                    currentProject ?? getLatestGAProject() ?? "",
+                    item.key,
+                  ),
+                });
+              }}
+              items={itemsPlatform}
+            />
+            <div className="ga__line mt1"/>
+            <div className="ga-side-bar__title">
+              <h3>Project</h3>
+            </div>
+            <GaProjectSearch
+              location={location}
+            />
+            <Menu
+              style={{
+                borderRight: "0px",
+                width: "100%",
+                flex: 1,
+              }}
+              theme="light"
+              mode="inline"
+              openKeys={openKeys}
+              onOpenChange={onOpenChange}
+              selectedKeys={[currentMenu!]}
+              onSelect={item => {
+                saveLatestGAMenuTag(item.key);
+                router.push({
+                  pathname: getGrowthProjectPath(
+                    currentProject ?? getLatestGAProject() ?? "",
+                    item.key,
+                  ),
+                });
+              }}
+              items={items}
+            />
+          </>
         ) : (
           <LoadingSpinner message="Loading..." />
         )}

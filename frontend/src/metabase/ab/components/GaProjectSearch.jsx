@@ -28,7 +28,6 @@ const GaProjectSearch = props => {
     setCreateFgaProjectModalShowAction,
     logout,
   } = props;
-  console.log("ccvvvvv")
   const [userProject, setUserProject] = useState([]);
   const [currentProject, setCurrentProject] = useState(projectPath);
   const { isLoading, data } = useQuery(
@@ -141,13 +140,13 @@ const GaProjectSearch = props => {
     }
   };
   return (
-    <div className="flex flex-column items-center" style={{ minWidth: 300 }}>
+    <div className="flex flex-column items-center ga-project-search" style={{ minWidth: 210 }}>
       {!isLoading && (
         <>
           {userProject?.length > 1 && (
             <Select
               showSearch
-              style={{ width: 300 }}
+              style={{ width: 210, borderRadius: 4, border: "1px solid #58585B", background: "#1B1B1E" }}
               value={currentProject}
               loading={isLoading}
               onChange={handleProjectChange}

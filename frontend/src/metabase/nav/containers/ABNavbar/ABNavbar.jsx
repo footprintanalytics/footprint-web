@@ -392,10 +392,10 @@ class ABNavbar extends Component {
       return (
         <div className="Nav__right">
           {/* <CreateMenu /> */}
-          <React.Fragment>
-            <RightMenuMobile />
-            <RightMenuPad />
-          </React.Fragment>
+          {/*<React.Fragment>*/}
+            {/*<RightMenuMobile />*/}
+            {/*<RightMenuPad />*/}
+          {/*</React.Fragment>*/}
           {user ? (
             <ProfileLink
               {...this.props}
@@ -459,7 +459,7 @@ class ABNavbar extends Component {
           {/* <LeftMenu /> */}
         </div>
         <React.Fragment>
-          <div className="Nav__search-bar">
+          <div className="Nav__search-bar display-none" style={{display: "none"}}>
             <GaProjectSearch
               location={location}
               logout={this.props.logout}
