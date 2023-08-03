@@ -180,7 +180,6 @@ const Project = props => {
   };
 
   const getContentPannel = current_tab => {
-    console.log("current_tab", current_tab);
     if (!projectObject || !currentMenu || !gaMenuTabs) {
       return <LoadingSpinner message="Loading..." />;
     }
@@ -291,7 +290,6 @@ const Project = props => {
           hideTitle={true}
           key={projectObject?.protocolSlug}
           hideFooter
-          showRefreshButton={showRefreshButton}
         />
       ) : (
         <LoadingSpinner message="Loading..." />

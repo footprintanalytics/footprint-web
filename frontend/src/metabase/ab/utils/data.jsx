@@ -484,7 +484,7 @@ export const fga_menu_data_v2 = (project, user) => {
     ["nft_revenue", "b98b0a6b-64cb-4e09-979d-693040ea3ec9"],
     ["twitter", "fd4d94f3-06f7-445d-ada3-0ce82bcefa39"],
     ["discord", "d137a1ef-34a3-4553-84cb-2203bd9d2baf"],
-    ["project_health", "79b4c0c1-bc0d-4fde-ba2d-8e7bc9b0ea18"],
+    ["project_health", "f5c31ad5-259d-4a2b-8e68-346201201486"],
     ["social", "0b478d57-59cf-4ba2-b0e0-9873272f13ce"],
     ["gaming", "4c826e96-6f7d-45f3-8122-d46cd15e408d"],
     ["listing", "20ae0361-4a39-4b66-bd56-fb9f012bfd3c"],
@@ -585,7 +585,8 @@ export const fga_menu_data_v2 = (project, user) => {
     "game_revenue",
     "nft_revenue",
   ];
-  const keys = getKeys([...menuTabs, ...platformMenuTabs]);
+  const toggle_platform_project = localStorage.getItem('toggle_platform_project')
+  const keys = getKeys(toggle_platform_project === "project" ? [...menuTabs, ...platformMenuTabs] : [...platformMenuTabs, ...menuTabs]);
   return { menuTabs, platformMenuTabs, keys, dashboardMap, liveKeys };
 };
 

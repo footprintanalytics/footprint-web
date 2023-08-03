@@ -168,7 +168,7 @@ export const refreshCurrentFgaProject = createThunkAction(
           "id": project_id,
           "isDemo": false,
           "protocolName": "Open Campus",
-          "protocolSlug": "open-campus",
+          "protocolSlug": "Open Campus",
           "logo": "https://footprint-imgs.oss-us-east-1.aliyuncs.com/logo_images/the-sandbox.jpg",
           "protocolType": "GameFi",
           "tokenAddress": [
@@ -193,7 +193,7 @@ export const refreshCurrentFgaProject = createThunkAction(
           "id": project_id,
           "isDemo": false,
           "protocolName": "GAMEE",
-          "protocolSlug": "gamee",
+          "protocolSlug": "GAMEE",
           "logo": "https://footprint-imgs.oss-us-east-1.aliyuncs.com/logo_images/the-sandbox.jpg",
           "protocolType": "GameFi",
           "tokenAddress": [
@@ -218,7 +218,7 @@ export const refreshCurrentFgaProject = createThunkAction(
           "id": project_id,
           "isDemo": false,
           "protocolName": "Benji Banana",
-          "protocolSlug": "benji-banana",
+          "protocolSlug": "Benji Banana",
           "logo": "https://footprint-imgs.oss-us-east-1.aliyuncs.com/logo_images/the-sandbox.jpg",
           "protocolType": "GameFi",
           "tokenAddress": [
@@ -243,8 +243,8 @@ export const refreshCurrentFgaProject = createThunkAction(
         res = {
           "id": project_id,
           "isDemo": false,
-          "protocolName": "Crazy Dense Hero",
-          "protocolSlug": "crazy-dense-hero",
+          "protocolName": "Crazy Defense Hero",
+          "protocolSlug": "Crazy Defense Hero",
           "logo": "https://footprint-imgs.oss-us-east-1.aliyuncs.com/logo_images/the-sandbox.jpg",
           "protocolType": "GameFi",
           "tokenAddress": [
@@ -268,8 +268,8 @@ export const refreshCurrentFgaProject = createThunkAction(
         res = {
           "id": 153,
           "isDemo": false,
-          "protocolName": "mocaverse",
-          "protocolSlug": "mocaverse",
+          "protocolName": "Mocaverse",
+          "protocolSlug": "Mocaverse",
           "logo": "",
           "protocolType": "",
           "tokenAddress": [],

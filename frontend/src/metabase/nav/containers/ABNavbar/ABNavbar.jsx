@@ -2,7 +2,7 @@
 /* eslint-disable react/forbid-component-props */
 import React, { Component } from "react";
 import { connect } from "react-redux";
-import { push } from "react-router-redux";
+import { push, replace } from "react-router-redux";
 import "./ABNavbar.css";
 import PropTypes from "prop-types";
 import { notification, Modal as AntdModal, Button } from "antd";
@@ -74,6 +74,7 @@ const mapDispatchToProps = {
   setIsCancelFeedbackBlockAction,
   setSubmitAddrZkspaceModal,
   logout,
+  replace,
 };
 
 // @Database.loadList({
@@ -396,6 +397,16 @@ class ABNavbar extends Component {
             {/*<RightMenuMobile />*/}
             {/*<RightMenuPad />*/}
           {/*</React.Fragment>*/}
+          <Button onClick={() => {
+            const toggle_platform_project = localStorage.getItem('toggle_platform_project')
+            if (toggle_platform_project === "project") {
+              localStorage.setItem('toggle_platform_project', "platform");
+            } else {
+              localStorage.setItem('toggle_platform_project', "project");
+            }
+
+            window.location.replace("/ab")
+          }}>Toggle Platform / Project</Button>
           {user ? (
             <ProfileLink
               {...this.props}

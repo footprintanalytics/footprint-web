@@ -32,6 +32,7 @@ interface IGaSidebarProp {
 const GaSidebar = (props: IGaSidebarProp) => {
   const { currentProject, router, location, currentMenu, projectObject, user } =
     props;
+  console.log("currentMenu", currentMenu)
   const [items, setItems] = useState<any[]>([]);
   const [itemsPlatform, setItemsPlatform] = useState<any[]>([]);
   // const [rootSubmenuKeys, setRootSubmenuKeys] = useState<any[]>([]);
@@ -104,7 +105,8 @@ const GaSidebar = (props: IGaSidebarProp) => {
     // }
     setOpenKeys(keys);
   };
-
+  const toggle_platform_project = localStorage.getItem('toggle_platform_project')
+  const isProject = toggle_platform_project === "project"
   return (
     <Sider
       trigger={null}
@@ -122,39 +124,42 @@ const GaSidebar = (props: IGaSidebarProp) => {
       <>
         {projectObject && items?.length > 0 ? (
           <>
-            <div className="ga-side-bar__title">
-              <h3>Platform</h3>
-            </div>
-            <Menu
-              className="ga-side-bar-menu"
-              style={{
-                borderRight: "0px",
-                width: "100%",
-                flex: 1,
-              }}
-              theme="light"
-              mode="inline"
-              openKeys={openKeys}
-              onOpenChange={onOpenChange}
-              selectedKeys={[currentMenu!]}
-              onSelect={item => {
-                saveLatestGAMenuTag(item.key);
-                router.push({
-                  pathname: getGrowthProjectPath(
-                    currentProject ?? getLatestGAProject() ?? "",
-                    item.key,
-                  ),
-                });
-              }}
-              items={itemsPlatform}
-            />
-            <div className="ga__line mt1"/>
-            <div className="ga-side-bar__title">
-              <h3>Project</h3>
-            </div>
-            <GaProjectSearch
-              location={location}
-            />
+            {!isProject && (<>
+              <div className="ga-side-bar__title">
+                <h3>Platform</h3>
+              </div>
+              <Menu
+                className="ga-side-bar-menu"
+                style={{
+                  borderRight: "0px",
+                  width: "100%",
+                  flex: 1,
+                }}
+                theme="light"
+                mode="inline"
+                openKeys={openKeys}
+                onOpenChange={onOpenChange}
+                selectedKeys={[currentMenu!]}
+                onSelect={item => {
+                  saveLatestGAMenuTag(item.key);
+                  router.push({
+                    pathname: getGrowthProjectPath(
+                      currentProject ?? getLatestGAProject() ?? "",
+                      item.key,
+                    ),
+                  });
+                }}
+                items={itemsPlatform}
+              />
+              <div className="ga__line mt1"/>
+              <div className="ga-side-bar__title">
+                <h3>Project</h3>
+              </div>
+              <GaProjectSearch
+                location={location}
+              />
+            </>
+            )}
             <Menu
               style={{
                 borderRight: "0px",

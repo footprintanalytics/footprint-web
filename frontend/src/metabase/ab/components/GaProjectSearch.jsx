@@ -33,6 +33,25 @@ const GaProjectSearch = props => {
   const { isLoading, data } = useQuery(
     ["GetFgaProject", user?.id],
     async () => {
+      const toggle_platform_project = localStorage.getItem('toggle_platform_project')
+      if (toggle_platform_project === "project") {
+        return {
+          "data": [
+          {
+            "id": 153,
+            "name": "mocaverse",
+            "creatorId": 20103,
+            "dbId": 22,
+            "schema": "fga_153_data",
+            "active": 1,
+            "protocolSlug": "Mocaverse",
+            "protocolName": "Mocaverse",
+            "nftContractAddress": [],
+            "createdAt": "2023-04-25T10:51:11.000Z"
+          }
+          ]
+        }
+      }
       return {
         "data": [
           {
@@ -42,7 +61,7 @@ const GaProjectSearch = props => {
             "dbId": 22,
             "schema": "fga_153_data",
             "active": 1,
-            "protocolSlug": "mocaverse",
+            "protocolSlug": "Mocaverse",
             "protocolName": "Mocaverse",
             "nftContractAddress": [],
             "createdAt": "2023-04-25T10:51:11.000Z"
@@ -54,7 +73,7 @@ const GaProjectSearch = props => {
             "dbId": 22,
             "schema": "fga_341_data",
             "active": 1,
-            "protocolSlug": "crazy-dense-hero",
+            "protocolSlug": "Crazy Dense Hero",
             "protocolName": "Crazy Dense Hero",
             "nftContractAddress": [],
             "createdAt": "2023-07-17T09:09:36.000Z"
@@ -66,7 +85,7 @@ const GaProjectSearch = props => {
             "dbId": 22,
             "schema": "fga_35_data",
             "active": 1,
-            "protocolSlug": "benji-banana",
+            "protocolSlug": "Benji Banana",
             "protocolName": "Benji Banana",
             "nftContractAddress": [],
             "createdAt": "2023-07-17T09:09:36.000Z"
@@ -78,7 +97,7 @@ const GaProjectSearch = props => {
             "dbId": 22,
             "schema": "fga_36_data",
             "active": 1,
-            "protocolSlug": "gamee",
+            "protocolSlug": "GAMEE",
             "protocolName": "GAMEE",
             "nftContractAddress": [],
             "createdAt": "2023-07-17T09:09:36.000Z"
@@ -90,7 +109,7 @@ const GaProjectSearch = props => {
             "dbId": 22,
             "schema": "fga_36_data",
             "active": 1,
-            "protocolSlug": "open-campus",
+            "protocolSlug": "Open Campus",
             "protocolName": "Open Campus",
             "nftContractAddress": [],
             "createdAt": "2023-07-17T09:09:36.000Z"
