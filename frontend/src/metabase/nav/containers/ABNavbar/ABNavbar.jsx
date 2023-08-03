@@ -459,7 +459,8 @@ class ABNavbar extends Component {
           {/* <LeftMenu /> */}
         </div>
         <React.Fragment>
-          <div className="Nav__search-bar display-none" style={{display: "none"}}>
+          <div className="flex justify-start" style={{ flex: 1, paddingLeft: 30, fontSize: 20, color: "#FFFFFF" }}>{`👏 Welcome, ${user?.name || "Animoca"}`}</div>
+          <div className="Nav__search-bar" style={{display: "none"}}>
             <GaProjectSearch
               location={location}
               logout={this.props.logout}

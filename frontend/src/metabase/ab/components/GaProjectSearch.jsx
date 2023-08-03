@@ -33,7 +33,35 @@ const GaProjectSearch = props => {
   const { isLoading, data } = useQuery(
     ["GetFgaProject", user?.id],
     async () => {
-      return await GetFgaProject();
+      return {
+        "data": [
+          {
+            "id": 153,
+            "name": "mocaverse",
+            "creatorId": 20103,
+            "dbId": 22,
+            "schema": "fga_153_data",
+            "active": 1,
+            "protocolSlug": "mocaverse",
+            "protocolName": "Mocaverse",
+            "nftContractAddress": [],
+            "createdAt": "2023-04-25T10:51:11.000Z"
+          },
+          {
+            "id": 341,
+            "name": "The-Sandbox",
+            "creatorId": 20103,
+            "dbId": 22,
+            "schema": "fga_341_data",
+            "active": 1,
+            "protocolSlug": "the-sandbox",
+            "protocolName": "The-Sandbox",
+            "nftContractAddress": [],
+            "createdAt": "2023-07-17T09:09:36.000Z"
+          }
+        ]
+      }
+      // return await GetFgaProject();
     },
     QUERY_OPTIONS,
   );
@@ -143,7 +171,7 @@ const GaProjectSearch = props => {
     <div className="flex flex-column items-center ga-project-search" style={{ minWidth: 210 }}>
       {!isLoading && (
         <>
-          {userProject?.length > 1 && (
+          {userProject?.length > 0 && (
             <Select
               showSearch
               style={{ width: 210, borderRadius: 4, border: "1px solid #58585B", background: "#1B1B1E" }}
