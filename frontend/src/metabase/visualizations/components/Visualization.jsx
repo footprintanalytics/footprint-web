@@ -564,7 +564,7 @@ class Visualization extends React.PureComponent {
       );
     };
 
-    const renderErrorLayout = () => {
+    const renderErrorLayout = (error) => {
       if (isFgaDiscord || isFgaTwitter || isFgaGoogleAnalysis) {
         return (<FgaErrorGuide />);
       }
@@ -591,7 +591,7 @@ class Visualization extends React.PureComponent {
       }
       return (
         <>
-          <Tooltip tooltip={error?.message} isEnabled={small}>
+          <Tooltip tooltip={error?.message || error} isEnabled={small}>
             <Icon
               className="mb2"
               name={errorIcon || "warning"}
@@ -611,7 +611,7 @@ class Visualization extends React.PureComponent {
                   margin: "0 auto",
                 }}
               >
-                {error?.message}
+                {error?.message || error}
               </div>
               {errorIcon !== "key" && <ErrorGuide cardId={cardId} />}
             </div>
@@ -748,7 +748,7 @@ class Visualization extends React.PureComponent {
           >
             <>
               {this.renderHideHintToCatch()}
-              {renderErrorLayout()}
+              {renderErrorLayout(error)}
             </>
           </div>
         ) : loading ? (
