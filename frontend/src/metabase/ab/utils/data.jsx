@@ -523,7 +523,6 @@ export const fga_menu_data_v2 = (project, user) => {
       "gaming_stats",
       <PieChartOutlined />,
       [
-        protocolType !== "NFT" &&
         getItem("Gaming", "gaming", null),
       ],
     ),
