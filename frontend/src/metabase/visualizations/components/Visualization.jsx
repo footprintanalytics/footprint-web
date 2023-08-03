@@ -929,7 +929,7 @@ const mapStateToProps = state => ({
   fontFamily: getFont(state),
 });
 
-export default            _.compose(
+export default _.compose(
   ExplicitSize({
     selector: ".CardVisualization",
     refreshMode: props => (props.isVisible ? "throttle" : "debounce"),
