@@ -486,7 +486,7 @@ export const fga_menu_data_v2 = (project, user) => {
     ["discord", "d137a1ef-34a3-4553-84cb-2203bd9d2baf"],
     ["project_health", "f5c31ad5-259d-4a2b-8e68-346201201486"],
     ["social", "0b478d57-59cf-4ba2-b0e0-9873272f13ce"],
-    ["gaming", "4c826e96-6f7d-45f3-8122-d46cd15e408d"],
+    ["gaming", "9666f52b-1b05-46f2-b474-fd46f85690ab"],
     ["listing", "20ae0361-4a39-4b66-bd56-fb9f012bfd3c"],
 
 

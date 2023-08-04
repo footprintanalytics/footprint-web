@@ -44,12 +44,14 @@ const SankeyChart = props => {
         trigger: 'item',
         triggerOn: 'mousemove'
       },
-      color: ["#306FFF"],
-      animation: false,
+      color: ["#4582E6"],
       series: {
         type: 'sankey',
         layout: 'none',
-        nodeWidth: 80,
+        top: "8%",
+        bottom: "8%",
+        right: "5%",
+        nodeWidth: 60,
         nodeGap: 30,
         nodeAlign: 'left',
         draggable: false,
@@ -65,16 +67,16 @@ const SankeyChart = props => {
           color: "white",
         },
         lineStyle: {
-          color: '#306FFF18',
+          color: '#4582E690',
           curveness: 0.5
         },
         tooltip: {
           show: true,
           formatter: ({ data }) => {
             if (data.name) {
-              return `${data.name}<br />Events: ${data.value}`
+              return `${data.name}<br />Sessions: ${data.value}`
             } else {
-              return `${getNodeName(data.source)} -> ${getNodeName(data.target)}<br />Events: ${data.value}`
+              return `${getNodeName(data.source)} -> ${getNodeName(data.target)}<br />Sessions: ${data.value}`
             }
           }
         },
@@ -118,7 +120,7 @@ const SankeyChart = props => {
 
   const chartResizeDebounce = debounce(data => {
     chart?.resize();
-  }, 300);
+  }, 1000);
 
   const onclickDebounce = debounce(data => {
     setNodeDetail(data);

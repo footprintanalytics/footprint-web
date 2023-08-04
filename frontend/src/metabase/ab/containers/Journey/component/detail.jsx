@@ -40,8 +40,8 @@ const Detail = props => {
       <div className="journey-detail" style={{color: "white"}}>
         <div className="flex justify-between">
           <div className="flex flex-column">
-            <span>{nodeDetail?.name}</span>
-            <span>{nodeDetail?.value} Events</span>
+            <h4>{nodeDetail?.name}</h4>
+            <span>{nodeDetail?.value} Sessions</span>
           </div>
           <div className="flex">
             {/*<Button icon={<SearchOutlined />}>Search wallets</Button>*/}

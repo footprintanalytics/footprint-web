@@ -127,7 +127,9 @@ export function formatValueRaw(
   if (remapped !== undefined && options.view_as !== "link") {
     return remapped;
   }
-
+  if (options.column.name === "project") {
+    console.log("options", options)
+  }
   if (value === NULL_NUMERIC_VALUE) {
     return NULL_DISPLAY_VALUE;
   } else if (value == null) {
@@ -138,6 +140,7 @@ export function formatValueRaw(
     clickBehaviorIsValid(options.click_behavior) &&
     options.jsx
   ) {
+    console.log("11111")
     // Style this like a link if we're in a jsx context.
     // It's not actually a link since we handle the click differently for dashboard and question targets.
     return (
@@ -149,6 +152,8 @@ export function formatValueRaw(
     options.click_behavior &&
     options.click_behavior.linkTextTemplate
   ) {
+    console.log("2222222")
+
     return renderLinkTextForClick(
       options.click_behavior.linkTextTemplate,
       getDataFromClicked(options.clicked) as any,
@@ -157,6 +162,8 @@ export function formatValueRaw(
     (isURL(column) && options.view_as == null) ||
     options.view_as === "link"
   ) {
+    console.log("33333")
+
     return formatUrl(value as string, options);
   } else if (isEmail(column)) {
     return formatEmail(value as string, options);
@@ -203,6 +210,7 @@ export function formatValueRaw(
     // no extra whitespace for table cells
     return JSON.stringify(value);
   } else {
+    console.log("5555")
     return String(value);
   }
 }

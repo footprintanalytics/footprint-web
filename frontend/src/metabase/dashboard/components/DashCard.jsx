@@ -319,7 +319,7 @@ class DashCard extends Component {
     //   mainCard.display === "text" ||
     //   mainCard.display === "image" ||
     //   mainCard.display === "video";
-    const showEdit = isOwner && !!dashcard.card.id;
+    const showEdit = isOwner && !!dashcard.card.id && !window.location.pathname.startsWith("/ab");
     const isPublic = window.location.pathname.startsWith("/public")
       || window.location.pathname.startsWith("/growth")
       || window.location.pathname.startsWith("/ab")

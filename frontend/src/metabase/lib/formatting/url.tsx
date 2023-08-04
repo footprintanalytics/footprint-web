@@ -1,6 +1,7 @@
 import React from "react";
 
 import ExternalLink from "metabase/core/components/ExternalLink";
+import Link from "metabase/core/components/Link";
 import { IFRAMED } from "metabase/lib/dom";
 import { getDataFromClicked } from "metabase-lib/parameters/utils/click-behavior";
 import { isURL } from "metabase-lib/types/utils/isa";
@@ -37,7 +38,18 @@ export function formatUrl(value: string, options: OptionsType = {}) {
   if (jsx && rich && url) {
     const text = getLinkText(value, options);
     const targetObject = IFRAMED ? { target: "_blank" } : {};
-    const formatedURL = formatUrl2Growth(location?.pathname, url);
+    let formatedURL = formatUrl2Growth(location?.pathname, url);
+    formatedURL = formatUrl2AB(location?.pathname, formatedURL);
+    if (formatedURL.startsWith("/ab")) {
+      return (
+        <Link
+          to={formatedURL}
+          {...targetObject}
+        >
+          {text}
+        </Link>
+      );
+    }
     return (
       <ExternalLink
         className="link link--wrappable"
@@ -120,6 +132,24 @@ export function formatUrl2Growth(
       toLink = href.replace("/@", "/growth/@");
     } else if (href?.includes("/public/")) {
       toLink = href.replace("/public/", "/growth/public/");
+    }
+  }
+  return toLink ?? "";
+}
+
+export function formatUrl2AB(
+  pathname: string,
+  href: string | undefined,
+): string {
+  if (!href) {
+    return "";
+  }
+  let toLink = href;
+  if (pathname?.includes("/ab/") && !href?.includes("/ab/")) {
+    if (href?.includes("/@")) {
+      toLink = href.replace("/@", "/ab/@");
+    } else if (href?.includes("/public/")) {
+      toLink = href.replace("/public/", "/ab/public/");
     }
   }
   return toLink ?? "";

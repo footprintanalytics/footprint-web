@@ -243,8 +243,8 @@ export const refreshCurrentFgaProject = createThunkAction(
         res = {
           "id": project_id,
           "isDemo": false,
-          "protocolName": "Crazy Defense Hero",
-          "protocolSlug": "Crazy Defense Hero",
+          "protocolName": "Crazy Defense Heroes",
+          "protocolSlug": "Crazy Defense Heroes",
           "logo": "https://footprint-imgs.oss-us-east-1.aliyuncs.com/logo_images/the-sandbox.jpg",
           "protocolType": "GameFi",
           "tokenAddress": [

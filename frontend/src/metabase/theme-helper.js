@@ -5,7 +5,7 @@ const { darkAlgorithm, defaultAlgorithm } = theme;
 
 const getThemeConfig = () => {
   if (isDark()) {
-    const colorPrimary = "#6C70FF";
+    const colorPrimary = "#44F";
     const background = "#121828";
     const cardBg = "#182034";
     return {

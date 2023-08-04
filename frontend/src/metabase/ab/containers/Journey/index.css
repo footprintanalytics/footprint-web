@@ -142,3 +142,13 @@
 .journey-edit .ant-textarea {
   background: #1B1B1E;
 }
+
+.journey-detail h4 {
+  color: #ffffffc0;
+  font-size: 16px;
+}
+
+.journey-detail span {
+  color: #ffffff90;
+  font-size: 14px;
+}

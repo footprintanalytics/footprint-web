@@ -17,6 +17,7 @@ import {
   getGrowthProjectPath,
   checkIsNeedContactUs,
 } from "../utils/utils";
+import { getOssUrl } from "metabase/lib/image";
 
 const GaProjectSearch = props => {
   const {
@@ -68,13 +69,13 @@ const GaProjectSearch = props => {
           },
           {
             "id": 341,
-            "name": "Crazy Dense Hero",
+            "name": "Crazy Defense Heroes",
             "creatorId": 20103,
             "dbId": 22,
             "schema": "fga_341_data",
             "active": 1,
-            "protocolSlug": "Crazy Dense Hero",
-            "protocolName": "Crazy Dense Hero",
+            "protocolSlug": "Crazy Defense Heroes",
+            "protocolName": "Crazy Defense Heroes",
             "nftContractAddress": [],
             "createdAt": "2023-07-17T09:09:36.000Z"
           },
@@ -136,7 +137,11 @@ const GaProjectSearch = props => {
               !p.protocolSlug || p.protocolSlug === ""
                 ? "default"
                 : p.protocolSlug,
-            label: p.protocolName ?? p.name,
+            label:
+              <div className="flex align-center">
+                <img className="mr1" src={getOssUrl(`/ab/${p.protocolName}.png?image_process=resize,w_16/crop,h_16/format,jpg`)} alt={p.protocolName}/>
+                {p.protocolName ?? p.name}
+              </div>,
             key: p.protocolSlug + p.id,
           });
         });
@@ -228,7 +233,7 @@ const GaProjectSearch = props => {
         <>
           {userProject?.length > 0 && (
             <Select
-              showSearch
+              // showSearch
               style={{ width: 218, borderRadius: 4, border: "1px solid #58585B", background: "#1B1B1E" }}
               dropdownStyle={{
                 background: "#1C1C1E",
