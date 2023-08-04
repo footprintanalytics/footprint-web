@@ -81,13 +81,13 @@ const GaProjectSearch = props => {
           },
           {
             "id": 35,
-            "name": "Benji Banana",
+            "name": "Benji Bananas",
             "creatorId": 20103,
             "dbId": 22,
             "schema": "fga_35_data",
             "active": 1,
-            "protocolSlug": "Benji Banana",
-            "protocolName": "Benji Banana",
+            "protocolSlug": "Benji Bananas",
+            "protocolName": "Benji Bananas",
             "nftContractAddress": [],
             "createdAt": "2023-07-17T09:09:36.000Z"
           },

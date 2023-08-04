@@ -108,6 +108,7 @@ const GaSidebar = (props: IGaSidebarProp) => {
   const isProject = toggle_platform_project === "project"
   return (
     <Sider
+      className="ga-side-bar"
       trigger={null}
       width="250px"
       style={{

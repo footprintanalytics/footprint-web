@@ -636,7 +636,8 @@ class Dashboard extends Component {
                           {...this.props}
                           isNightMode={shouldRenderAsNightMode}
                           onEditingChange={this.setEditing}
-                          hideWatermark={dashboard && dashboard.hideWatermark}
+                          hideWatermark={true}
+                          // hideWatermark={dashboard && dashboard.hideWatermark}
                           navigateToNewCardFromDashboard={dashboard => {
                             const user = this.props.user;
                             const dashcard = dashboard && dashboard.dashcard;

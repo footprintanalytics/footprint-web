@@ -133,3 +133,9 @@
 .dark .ga-layout .ant-menu-root {
   background-color: #1B1B1E;
 }
+
+.ga-side-bar::-webkit-scrollbar { width: 0 !important }
+
+.ga-side-bar { -ms-overflow-style: none; }
+
+.ga-side-bar { overflow: -moz-scrollbars-none; }

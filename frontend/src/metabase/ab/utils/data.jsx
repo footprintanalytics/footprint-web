@@ -19,6 +19,7 @@ import {
 } from "@ant-design/icons";
 import { get } from "underscore";
 import { disabled } from "styled-system";
+import { ReactIcons } from "../../nav/containers/FpNavbar/utils/data";
 //public/dashboard/uuid
 export const wallet_profile_link =
   "/ab/public/dashboard/fa040fe5-46b3-483b-b257-aa2373559fab"; //query: wallet_address
@@ -496,10 +497,10 @@ export const fga_menu_data_v2 = (project, user) => {
 
 
   const platformMenuTabs = [
-    getItem("Home", "home-platform", <HomeOutlined />, [
+    getItem("Home", "home-platform", ReactIcons.myAnalysisIcon, [
       getItem("Project Health", "project_health-platform", null),
     ]),
-    getItem("Users", "users-platform", <GatewayOutlined />, [
+    getItem("Users", "users-platform", ReactIcons.userIcon, [
       //<TeamOutlined />
       protocolType !== "NFT" && getItem("Overview", "users_overview-platform", null),
       getItem("Segment", "segment-platform", null),
@@ -508,10 +509,10 @@ export const fga_menu_data_v2 = (project, user) => {
     ]),
   ];
   const menuTabs = [
-    getItem("Home", "home", <HomeOutlined />, [
+    getItem("Home", "home", ReactIcons.myAnalysisIcon, [
       getItem("Project Health", "project_health", null),
     ]),
-    getItem("Users", "users", <GatewayOutlined />, [
+    getItem("Users", "users", ReactIcons.userIcon, [
       //<TeamOutlined />
       protocolType !== "NFT" && getItem("Overview", "users_overview", null),
       getItem("Segment", "segment", null),
@@ -521,12 +522,12 @@ export const fga_menu_data_v2 = (project, user) => {
     getItem(
       "Gaming Stats",
       "gaming_stats",
-      <PieChartOutlined />,
+      ReactIcons.gamingStatIcon,
       [
         getItem("Gaming", "gaming", null),
       ],
     ),
-    getItem("Assets", "assets", <WalletOutlined />, [
+    getItem("Assets", "assets", ReactIcons.assetIcon, [
       protocolType !== "GameFi" &&
       getItem("NFT Sales&Mints", "nft_sales_mints", null),
       protocolType !== "GameFi" &&
@@ -539,12 +540,12 @@ export const fga_menu_data_v2 = (project, user) => {
       getItem("Tokenomics", "game_tokenomics", null),
       //  protocolType !== "NFT" && getItem("Active Users", "game_active_users", null),
     ]),
-    getItem("Social Stats", "social", <GatewayOutlined />, [
+    getItem("Social Stats", "social", ReactIcons.appsIcon, [
       getItem("Social", "social", null),
         // getItem("Discord", "discord", null),
       ]
     ),
-    getItem("Custom Analysis", "custom", <BarChartOutlined />, [
+    getItem("Custom Analysis", "custom", ReactIcons.customAnalysisIcon, [
       getItem("Templates", "templates", null),
       getItem("My Analysis", "my_analysis", null),
     ]),
@@ -556,7 +557,7 @@ export const fga_menu_data_v2 = (project, user) => {
     getItem(
       "Growth",
       "growth",
-      <LineChartOutlined />,
+      ReactIcons.growthIcon,
       [
         getItem("Find Wallets", "find_wallets", null),
         // getItem("Airdrop", "airdrop", null),
