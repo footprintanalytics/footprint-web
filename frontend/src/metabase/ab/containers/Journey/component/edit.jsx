@@ -54,6 +54,16 @@ const Edit = props => {
 
   const [modal, contextHolder] = Modal.useModal();
 
+  const calAction = async () => {
+    setLoading(true);
+    const result = await journeyPathAnalyze(params);
+    setChartData({
+      nodes: result?.nodes,
+      links: result?.links,
+    })
+    setLoading(false);
+  }
+
   const renderConditions = () => {
     const onChange = (value) => {
       setParams({
@@ -62,15 +72,6 @@ const Edit = props => {
       })
     };
 
-    const calAction = async () => {
-      setLoading(true);
-      const result = await journeyPathAnalyze(params);
-      setChartData({
-        nodes: result?.nodes,
-        links: result?.links,
-      })
-      setLoading(false);
-    }
 
     return (
       <div className="journey-edit__condition">
@@ -226,10 +227,14 @@ const Edit = props => {
           nodes={chartData?.nodes}
           links={chartData?.links}
           onDateRangeChange={(strings) => {
+            console.log("ggggg")
             setParams({
               ...params,
               startTime: strings[0],
               endTime: strings[1],
+            }, () => {
+              console.log("nnnnnn")
+              calAction()
             })
           }}
         />

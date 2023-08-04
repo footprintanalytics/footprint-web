@@ -223,13 +223,18 @@ const GaProjectSearch = props => {
     }
   };
   return (
-    <div className="flex flex-column items-center ga-project-search" style={{ minWidth: 210 }}>
+    <div className="flex flex-column items-center ga-project-search" style={{ minWidth: 218 }}>
       {!isLoading && (
         <>
           {userProject?.length > 0 && (
             <Select
               showSearch
-              style={{ width: 210, borderRadius: 4, border: "1px solid #58585B", background: "#1B1B1E" }}
+              style={{ width: 218, borderRadius: 4, border: "1px solid #58585B", background: "#1B1B1E" }}
+              dropdownStyle={{
+                background: "#1C1C1E",
+                color: "white",
+                border: "1px solid #ffffff20"
+              }}
               value={currentProject}
               loading={isLoading}
               onChange={handleProjectChange}

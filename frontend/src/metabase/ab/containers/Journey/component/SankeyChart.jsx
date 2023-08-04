@@ -44,7 +44,7 @@ const SankeyChart = props => {
         trigger: 'item',
         triggerOn: 'mousemove'
       },
-      color: ["#6588E3"],
+      color: ["#306FFF"],
       animation: false,
       series: {
         type: 'sankey',
@@ -63,6 +63,10 @@ const SankeyChart = props => {
             return params.name
           },
           color: "white",
+        },
+        lineStyle: {
+          color: '#306FFF18',
+          curveness: 0.5
         },
         tooltip: {
           show: true,
@@ -136,7 +140,7 @@ const SankeyChart = props => {
             )}
             <RangePicker
               defaultValue={[dayjs().add(-32, 'd'), dayjs()]}
-              style={{ padding: "4px 10px"}}
+              style={{ borderRadius: 4, border: "1px solid #58585B", background: "#1B1B1E", padding: "4px 10px" }}
               onChange={(dates, dateStrings) => {
                 onDateRangeChange?.(dateStrings)
                 console.log("dateStrings", dateStrings)
