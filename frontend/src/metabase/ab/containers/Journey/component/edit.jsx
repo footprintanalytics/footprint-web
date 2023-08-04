@@ -81,9 +81,7 @@ const Edit = props => {
         <div className="flex flex-column p2" style={{ gap: 10 }}>
           Select Events
           <Select
-            style={{
-              width: '100%',
-            }}
+            style={{ width: '100%' }}
             defaultValue={["login","play_games"]}
             options={options}
             onChange={onChange}
