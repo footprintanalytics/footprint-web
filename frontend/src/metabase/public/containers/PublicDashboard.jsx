@@ -69,6 +69,9 @@ const mapStateToProps = (state, props) => {
     updateDashboardPara(parameters, parameterValues, "protocol_slug", [
       project.protocolSlug,
     ]);
+    updateDashboardPara(parameters, parameterValues, "project_name", [
+      project.protocolName,
+    ]);
     if (project.tokenAddress?.length > 0) {
       const key = "token_address";
       const data = getFirstAddressByPriory(project.tokenAddress);
