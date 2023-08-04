@@ -225,15 +225,14 @@ const Edit = props => {
           nodes={chartData?.nodes}
           links={chartData?.links}
           onDateRangeChange={(strings) => {
-            console.log("ggggg")
             setParams({
               ...params,
               startTime: strings[0],
               endTime: strings[1],
-            }, () => {
-              console.log("nnnnnn")
-              calAction()
             })
+          }}
+          runData={() => {
+            calAction()
           }}
         />
       </div>

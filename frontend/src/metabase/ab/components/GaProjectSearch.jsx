@@ -139,7 +139,7 @@ const GaProjectSearch = props => {
                 : p.protocolSlug,
             label:
               <div className="flex align-center">
-                <img className="mr1" src={getOssUrl(`/ab/${p.protocolName}.png?image_process=resize,w_16/crop,h_16/format,jpg`)} alt={p.protocolName}/>
+                <img className="mr1" style={{width: 16, height: 16}} src={getOssUrl(`/ab/${p.protocolName}.png?image_process=resize,w_16/crop,h_16/format,jpg`)} alt={p.protocolName}/>
                 {p.protocolName ?? p.name}
               </div>,
             key: p.protocolSlug + p.id,

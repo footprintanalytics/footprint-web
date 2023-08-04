@@ -17,6 +17,7 @@ const SankeyChart = props => {
     nodes=[],
     links=[],
     onDateRangeChange,
+    runData,
   } = props;
 
   console.log("SankeyChart nodes", nodes)
@@ -146,6 +147,11 @@ const SankeyChart = props => {
               onChange={(dates, dateStrings) => {
                 onDateRangeChange?.(dateStrings)
                 console.log("dateStrings", dateStrings)
+              }}
+              onOpenChange={(open) => {
+                if (!open) {
+                  runData();
+                }
               }}
             />
           </div>
