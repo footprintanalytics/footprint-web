@@ -535,7 +535,7 @@ const Project = props => {
 const mapStateToProps = (state, props) => {
   return {
     user: getUser(state),
-    projectPath: props.params.project,
+    projectPath: decodeURIComponent(props.params.project),
     projectObject: getFgaProject(state),
     menu: props.params.menu,
   };
