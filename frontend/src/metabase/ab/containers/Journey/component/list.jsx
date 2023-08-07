@@ -53,21 +53,21 @@ const List = props => {
       name: 'John Brown',
       description: "Add multiple metrics within the same report",
       lastUpdatedBy: "Admin",
-      updateTime: 121212121,
+      updateTime: "2023-08-01",
     },
     {
       key: '2',
       name: 'Jim Green',
       description: "Add multiple metrics within the same report",
       lastUpdatedBy: "Admin",
-      updateTime: 121212121,
+      updateTime: "2023-08-01",
     },
     {
       key: '3',
       name: 'Joe Black',
       description: "Add multiple metrics within the same report",
       lastUpdatedBy: "Admin",
-      updateTime: 121212121,
+      updateTime: "2023-08-01",
     },
   ];
   return (
