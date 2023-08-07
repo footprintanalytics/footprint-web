@@ -5,7 +5,7 @@ import { connect } from "react-redux";
 import { push, replace } from "react-router-redux";
 import "./ABNavbar.css";
 import PropTypes from "prop-types";
-import { notification, Modal as AntdModal, Button } from "antd";
+import { notification, Modal as AntdModal, Button, message } from "antd";
 import { getChannel } from "metabase/selectors/app";
 import { logout } from "metabase/auth/actions";
 import {
@@ -49,7 +49,6 @@ import { checkIsNeedContactUs, isFgaPath } from "metabase/ab/utils/utils";
 import { getContext, getPath, getUser } from "../selectors";
 
 import { isDark } from "../../../dashboard/components/utils/dark";
-import { message } from "antd";
 
 const mapStateToProps = (state, props) => ({
   path: getPath(state, props),

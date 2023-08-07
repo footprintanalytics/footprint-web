@@ -165,6 +165,7 @@ const GaSidebar = (props: IGaSidebarProp) => {
                 borderRight: "0px",
                 width: "100%",
                 flex: 1,
+                paddingBottom: 80,
               }}
               theme="light"
               mode="inline"

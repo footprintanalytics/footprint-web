@@ -16,7 +16,7 @@ const Edit = props => {
   const ref = React.createRef();
   const [isLoading, setLoading] = useState();
   const [chartData, setChartData] = useState({nodes: demoData.nodes, links: demoData.links});
-  console.log("chartData", chartData?.nodes, chartData?.links)
+
   const [params, setParams] = useState({
     "eventNames": ["login","play_games"],
     "initialEventName": "login",
@@ -81,7 +81,12 @@ const Edit = props => {
         <div className="flex flex-column p2" style={{ gap: 10 }}>
           Select Events
           <Select
-            style={{ width: '100%' }}
+            style={{ width: '100%', borderRadius: 4, border: "1px solid #58585B", background: "#1B1B1E" }}
+            dropdownStyle={{
+              background: "#1C1C1E",
+              color: "white",
+              border: "1px solid #ffffff20"
+            }}
             defaultValue={["login","play_games"]}
             options={options}
             onChange={onChange}
@@ -94,8 +99,11 @@ const Edit = props => {
           <div className="flex align-center" style={{ gap: 10 }}>
             <Select
               defaultValue="login"
-              style={{
-                width: 120,
+              style={{ width: 120,borderRadius: 4, border: "1px solid #58585B", background: "#1B1B1E" }}
+              dropdownStyle={{
+                background: "#1C1C1E",
+                color: "white",
+                border: "1px solid #ffffff20"
               }}
               onChange={(value) => {
                 setParams({

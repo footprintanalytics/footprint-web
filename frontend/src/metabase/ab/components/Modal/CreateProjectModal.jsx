@@ -124,6 +124,12 @@ const CreateProjectModal = props => {
         >
           <Select
             showSearch
+            style={{ borderRadius: 4, border: "1px solid #58585B", background: "#1B1B1E" }}
+            dropdownStyle={{
+              background: "#1C1C1E",
+              color: "white",
+              border: "1px solid #ffffff20"
+            }}
             loading={loadingData}
             // value={currentProject}
             onChange={handleProjectChange}

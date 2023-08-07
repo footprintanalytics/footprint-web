@@ -25,10 +25,13 @@ const UserFilter = props => {
         return (
           <Space key={index} wrap>
             <Select
-              defaultValue="lucy"
-              style={{
-                width: 120,
+              style={{ width: 120, borderRadius: 4, border: "1px solid #58585B", background: "#1B1B1E" }}
+              dropdownStyle={{
+                background: "#1C1C1E",
+                color: "white",
+                border: "1px solid #ffffff20"
               }}
+              defaultValue="lucy"
               options={[
                 {
                   value: "cohort1",
@@ -50,10 +53,13 @@ const UserFilter = props => {
             />
 
             <Select
-              defaultValue="include"
-              style={{
-                width: 120,
+              style={{ width: 120, borderRadius: 4, border: "1px solid #58585B", background: "#1B1B1E" }}
+              dropdownStyle={{
+                background: "#1C1C1E",
+                color: "white",
+                border: "1px solid #ffffff20"
               }}
+              defaultValue="include"
               options={[
                 {
                   value: "include",

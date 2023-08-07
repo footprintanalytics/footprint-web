@@ -487,6 +487,12 @@ const CreateCampaignModalNew = props => {
                         label="Segment"
                       >
                         <Select
+                          style={{ borderRadius: 4, border: "1px solid #58585B", background: "#1B1B1E" }}
+                          dropdownStyle={{
+                            background: "#1C1C1E",
+                            color: "white",
+                            border: "1px solid #ffffff20"
+                          }}
                           placeholder="Select a segment"
                           mode="multiple"
                           loading={isLoadingCohort}
