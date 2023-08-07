@@ -12,7 +12,7 @@ const BatchDownloadButtons = ({
   onChangeLocation,
   blandButtonText = "Contact sales",
   secondButtonText = "Data dictionary",
-  secondButtonLink = "https://docs.footprint.network/@Footprint/Footprint-Datasets-Data-Dictionary",
+  secondButtonLink = "https://www.footprint.network/studio/footprint-datasets",
   showGetApiKeyHelp = false,
 }) => {
   return (
