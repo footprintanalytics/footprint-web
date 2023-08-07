@@ -552,7 +552,7 @@ export const fga_menu_data_v2 = (project, user) => {
     getItem("Settings", "settings", <SettingOutlined />, [
       getItem("Integration", "integration", null),
       getItem("Project Info", "general", null),
-      getItem("Channel", "channel", null),
+      // getItem("Channel", "channel", null),
     ]),
     getItem(
       "Growth",
