@@ -201,7 +201,7 @@ const ChannelList = props => {
                   <List.Item
                     style={{
                       borderRadius: 10,
-                      backgroundColor: isDark ? "#182034" : "white",
+                      // backgroundColor: isDark ? "#182034" : "white",
                       paddingLeft: 10,
                       paddingRight: 10,
                       cursor: "pointer",

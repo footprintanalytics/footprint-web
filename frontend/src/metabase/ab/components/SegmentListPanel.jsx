@@ -133,7 +133,8 @@ const SegmentListPanel = props => {
           <Link
             disabled={record.numberOfWallets === 0}
             onClick={() => {
-              if (checkIsNeedContactUs(modal, project)) {
+              message.info("Coming soon...")
+              /*if (checkIsNeedContactUs(modal, project)) {
                 return;
               }
               message.info("Download will start soon...");
@@ -142,7 +143,7 @@ const SegmentListPanel = props => {
                   `/api/v1/fga/cohort/address/csv?cohortId=${record.cohortId}&projectId=${project?.id}&cohortTitle=${record.title}`,
                   "_blank",
                 )
-                .focus();
+                .focus();*/
             }}
           >
             Download CSV
