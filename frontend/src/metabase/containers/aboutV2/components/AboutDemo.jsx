@@ -129,7 +129,7 @@ const AboutDemo = () => {
       "title": "SQL API",
       "desc": "A flexible SQL API customization for robust requirements",
       "buttonText": "Explore SQL API",
-      "buttonLink": "https://docs.footprint.network/reference/examples",
+      "buttonLink": "https://docs.footprint.network/reference/web-application-sql-api",
     },
     {
       "img": getOssUrl("home-v2/img_demo_3.png"),
