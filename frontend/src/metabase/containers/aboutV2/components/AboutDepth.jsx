@@ -18,15 +18,15 @@ const AboutDepth = () => {
       buttons: [
         {
           buttonText: "Top Games",
-          link: "https://www.footprint.network/@0xAlina/Game-Ranking",
+          link: "https://www.footprint.network/research/gamefi/game-rankings/top-games",
         },
         {
           buttonText: "In-Game NFT",
-          link: "https://www.footprint.network/@DamonSalvatore/Top-In-Game-NFT-on-Ethereum",
+          link: "https://www.footprint.network/research/gamefi/in-game-nft-rankings/top-in-game-nft-on-ethereum",
         },
         {
           buttonText: "Market Overview",
-          link: "https://www.footprint.network/@DamonSalvatore/GameFi-Overview",
+          link: "https://www.footprint.network/research/gamefi/game-overview/game-market",
         },
       ],
       img: "home-v2/img_depth_right_1.png",
@@ -38,15 +38,15 @@ const AboutDepth = () => {
       buttons: [
         {
           buttonText: "Top Collections",
-          link: "https://www.footprint.network/@Higi/Trending-Collections",
+          link: "https://www.footprint.network/research/nft/nft-rankings/top-collections",
         },
         {
           buttonText: "Hot Mints",
-          link: "https://www.footprint.network/@Higi/Hot-Mints?series_time=past6hours",
+          link: "https://www.footprint.network/research/nft/nft-signals/hot-mints",
         },
         {
           buttonText: "Market Overview",
-          link: "https://www.footprint.network/@NFT/NFT-Market-overview",
+          link: "https://www.footprint.network/research/nft/nft-market/market-overview",
         },
       ],
       img: "home-v2/img_depth_right_2.png",
@@ -54,15 +54,15 @@ const AboutDepth = () => {
     {
       icon: "home-v2/img_depth_tab_3.png",
       label: "Chain",
-      title: `Embark on a journey across ${CHAIN_COUNT}+ blockchain \nchains, unlocking real-time and comprehensive \nblockchain network data.`,
+      title: `Embark on a journey across ${CHAIN_COUNT} blockchain \nchains, unlocking real-time and comprehensive \nblockchain network data.`,
       buttons: [
         {
           buttonText: "Top Chains",
-          link: "https://www.footprint.network/chart/Top-Chain-Tokens-fp-41015",
+          link: "https://www.footprint.network/research/chain/chain-rankings/top-chains",
         },
         {
           buttonText: "Chain Overview",
-          link: "https://www.footprint.network/@Higi/All-Chain-Overview",
+          link: "https://www.footprint.network/research/chain/chain-ecosystem/chain-overview",
         },
       ],
       img: "home-v2/img_depth_right_31.png",
@@ -71,7 +71,20 @@ const AboutDepth = () => {
       icon: "home-v2/img_depth_tab_4.png",
       label: "Wallet",
       title: "Track and trace activities, holdings, and profiles over \n100+ million addresses.",
-      desc: "Coming soon",
+      buttons: [
+        {
+          buttonText: "NFT Trades",
+          link: "https://www.footprint.network/research/wallet/wallet-tracker/nft-trades-of-wallet",
+        },
+        {
+          buttonText: "Gamer Profile",
+          link: "https://www.footprint.network/research/wallet/wallet-tracker/gamer-profile-of-wallet",
+        },
+        {
+          buttonText: "Money Flow",
+          link: "https://www.footprint.network/research/wallet/wallet-tracker/money-flow-of-wallet",
+        },
+      ],
       img: "home-v2/img_depth_right_4.png",
     },
     {
@@ -89,7 +102,7 @@ const AboutDepth = () => {
       <h3>Footprint Datasets</h3>
       <h4>200+ datasets, and counting</h4>
       <h5>We index and structure a wide range of datasets, making it easy for you to explore data and build next-generation applications whenever required.</h5>
-      <AboutButton className="About__depth-button" buttonText="Explore Datasets" link={Urls.newQuestion()}/>
+      <AboutButton className="About__depth-button" buttonText="Explore Datasets" link={"/studio/footprint-datasets"}/>
       <div className="About__depth-panel">
         <div className="About__depth-tabs">
           <ul>
