@@ -160,6 +160,13 @@ const SegmentListPanel = props => {
     },
   ];
 
+  const getMembersUrl = () => {
+    if (window.location.pathname.includes("-platform")) {
+      return "members-platform"
+    }
+    return "members";
+  }
+
   const items = [
     {
       key: "1",
@@ -171,7 +178,7 @@ const SegmentListPanel = props => {
               pathname: getGrowthProjectPath(
                 router?.params?.project,
                 sourceType === "projectUser"
-                  ? "members"
+                  ? getMembersUrl()
                   : "find_potential_wallets",
               ),
             })

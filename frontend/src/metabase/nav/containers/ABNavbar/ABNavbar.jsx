@@ -49,6 +49,7 @@ import { checkIsNeedContactUs, isFgaPath } from "metabase/ab/utils/utils";
 import { getContext, getPath, getUser } from "../selectors";
 
 import { isDark } from "../../../dashboard/components/utils/dark";
+import { message } from "antd";
 
 const mapStateToProps = (state, props) => ({
   path: getPath(state, props),
@@ -430,15 +431,16 @@ class ABNavbar extends Component {
               }
             />
           ) : (
-            <Link
-              className="Nav__sign-up"
+            <Button
+              className="ml2"
               onClick={() => {
                 trackStructEvent(`click Sign in`);
-                setLoginModalShow({ show: true, from: "navbar_fga_signin" });
+                message.info("Coming soon...")
+                // setLoginModalShow({ show: true, from: "navbar_fga_signin" });
               }}
             >
               Sign in
-            </Link>
+            </Button>
           )}
         </div>
       );

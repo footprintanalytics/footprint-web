@@ -545,10 +545,10 @@ export const fga_menu_data_v2 = (project, user) => {
         // getItem("Discord", "discord", null),
       ]
     ),
-    getItem("Custom Analysis", "custom", ReactIcons.customAnalysisIcon, [
+    /*getItem("Custom Analysis", "custom", ReactIcons.customAnalysisIcon, [
       getItem("Templates", "templates", null),
       getItem("My Analysis", "my_analysis", null),
-    ]),
+    ]),*/
     getItem("Settings", "settings", <SettingOutlined />, [
       getItem("Integration", "integration", null),
       getItem("Project Info", "general", null),

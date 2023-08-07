@@ -18,6 +18,7 @@ export const QuickFilter = props => {
     title = "Quick Filter",
   } = props;
   const [selectedTags, setSelectedTags] = useState(defaultValue);
+  console.log("selectedTags", selectedTags)
   const handleChange = (tag, checked) => {
     setSelectedTags(checked ? tag.value : null);
     onFliterChange?.(checked ? tag : null);
