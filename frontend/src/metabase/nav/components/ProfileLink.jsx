@@ -28,6 +28,7 @@ function ProfileLink({ user, adminItems, onLogout, trigger }) {
   const [modalOpen, setModalOpen] = useState(null);
   // const [bugReportDetails, setBugReportDetails] = useState(null);
   const isFga = location.pathname.includes("/growth");
+  const isAB =  location.pathname.includes("/ab");
   const openModal = modalName => {
     setModalOpen(modalName);
   };
@@ -49,19 +50,19 @@ function ProfileLink({ user, adminItems, onLogout, trigger }) {
     );*/
 
     return [
-      {
+      !isAB && ({
         title: t`My Studio`,
         icon: null,
         link: isFga ? `/growth${Urls.myProfileUrl(userName)}` : "/studio/create",
         event: `Navbar;Profile Dropdown;My Profile`,
-      },
+      }),
       /*{
         title: t`My Profile`,
         icon: null,
         link: `${isFga ? "/growth" : ""}${Urls.myProfileUrl(userName)}`,
         event: `Navbar;Profile Dropdown;My Profile`,
       },*/
-      !isFga && {
+      !isAB && !isFga && {
         title: t`Account settings`,
         icon: null,
         link: Urls.accountSettings(),
@@ -73,7 +74,7 @@ function ProfileLink({ user, adminItems, onLogout, trigger }) {
         link: "/moon-men",
         event: `Navbar;Profile Dropdown;Moon men`,
       },*/
-      {
+      !isAB && {
         title: t`Submit Contract`,
         icon: null,
         link: `${isFga ? "/growth" : ""}/submit/contract`,
@@ -114,7 +115,7 @@ function ProfileLink({ user, adminItems, onLogout, trigger }) {
         link: "/collection/root",
         event: `Navbar;Profile Dropdown;Root`,
       },*/
-      (isAdmin || isMarket) && {
+      !isAB && (isAdmin || isMarket) && {
         title: t`Upgrade Vip`,
         icon: null,
         link: "/market/upgrade",

@@ -319,9 +319,10 @@ class DashCard extends Component {
     //   mainCard.display === "text" ||
     //   mainCard.display === "image" ||
     //   mainCard.display === "video";
-    const showEdit = isOwner && !!dashcard.card.id;
+    const showEdit = isOwner && !!dashcard.card.id && !window.location.pathname.startsWith("/ab");
     const isPublic = window.location.pathname.startsWith("/public")
       || window.location.pathname.startsWith("/growth")
+      || window.location.pathname.startsWith("/ab")
       || window.location.pathname.startsWith("/data-api/statistics")
       || window.location.pathname.startsWith("/studio")
     ;
@@ -366,7 +367,8 @@ class DashCard extends Component {
       && includeRealtimeTable
       && isRealtimeUser;
     const isGrowth = window.location.pathname.startsWith("/growth");
-    const showButtons = !isGrowth;
+    const isAB = window.location.pathname.startsWith("/ab");
+    const showButtons = !isGrowth || !isAB;
     return (
       <DashCardRoot
         id={id}

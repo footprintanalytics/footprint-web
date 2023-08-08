@@ -152,6 +152,7 @@
 }
 
 .DashCard .Card {
+  margin: 4px;
   border-radius: 4px;
   box-shadow: 0px 1px 3px var(--color-shadow);
 }
@@ -375,6 +376,6 @@
 }
 
 #html2canvas-Dashboard {
-  overflow-y: scroll;
+  overflow-y: auto;
   overflow-x: hidden;
 }

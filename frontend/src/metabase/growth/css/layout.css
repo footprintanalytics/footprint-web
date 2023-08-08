@@ -34,7 +34,7 @@
 }
 
 .dark .ga-layout__content {
-  background-color: var(--color-bg-dark);
+  background-color: var(--color-ab-bg-dark);
 }
 
 .ga-layout__logo {
@@ -116,3 +116,7 @@
 .ga-layout .ant-segmented .ant-segmented-item-selected {
   background: var(--color-primary-dark);
 }
+
+/*.dark .ga-layout .ant-btn-default {
+  border-color: #d9d9d9;
+}*/

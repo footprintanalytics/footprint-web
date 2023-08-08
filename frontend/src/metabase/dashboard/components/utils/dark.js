@@ -2,9 +2,9 @@ import { parseHashOptions } from "../../../lib/browser";
 
 export const isDark = () => {
   const options = parseHashOptions(location.hash);
-  const isGrowth = isGrowthNeedDark();
   const isLandPage = window.location.pathname === ("/");
   const isMyStudio = window.location.pathname.startsWith("/studio");
+  const isGrowth = isGrowthNeedDark() || isABNeedDark();
   const isResearch = window.location.pathname.startsWith("/research") || window.location.pathname.startsWith("/public/research");
   const isPublicDashboardNight = options?.theme === 'night' && window.location.pathname.startsWith("/public/dashboard");
   return isLandPage || isGrowth || isResearch || isMyStudio || isPublicDashboardNight;
@@ -30,3 +30,18 @@ export const isGrowthNeedDark = () => {
 };
 
 export const isStudio = () => window.location.pathname.startsWith("/studio");
+
+export const isABNeedDark = () => {
+  return (
+    window.location.pathname === "/ab" ||
+    window.location.pathname.startsWith("/ab/project")||
+    window.location.pathname.startsWith("/ab/@")||
+    window.location.pathname.startsWith("/ab/public")||
+    window.location.pathname.startsWith("/ab/guest")||
+    window.location.pathname.startsWith("/ab/pricing")||
+    window.location.pathname.startsWith("/ab/submit")||
+    window.location.pathname.startsWith("/ab/dashboard")||
+    window.location.pathname.startsWith("/ab/chart")||
+    window.location.pathname.startsWith("/ab/campaign")
+  );
+};

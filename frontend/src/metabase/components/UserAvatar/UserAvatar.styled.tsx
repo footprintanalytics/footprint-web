@@ -10,8 +10,8 @@ export interface AvatarProps {
 
 export const Avatar = styled.div<AvatarProps>`
   color: ${color("white")};
-  width: 3em;
-  height: 3em;
+  width: 2.5em;
+  height: 2.5em;
   display: flex;
   justify-content: center;
   align-items: center;

@@ -1,0 +1,72 @@
+.potential-users__filter {
+  padding: 40px;
+  margin: 0 40px 0 40px;
+}
+
+.potential-users__profile {
+  display: flex;
+  flex-direction: column;
+  padding: 0 40px 40px 40px;
+  margin: 0 40px 40px 40px;
+}
+
+.Potential-Users__condition {
+  width: 400px;
+  height: 150px;
+  padding: 10px;
+  margin: 4px;
+  background: white;
+}
+
+.Potential-Users__total {
+  width: 200px;
+  height: 150px;
+  padding: 10px;
+  margin: 4px;
+  background: white;
+}
+
+.Potential-Users__profile {
+  height: 400px;
+  width: 50%;
+}
+
+.more-filter {
+  width: 100%;
+  margin-left: 0px;
+}
+
+.more-filter-division {
+  border-right: var(--color-primary-dark) 1px solid;
+  height: 36px;
+  margin-left: 6px;
+}
+
+.more-filter .ant-select-selection-overflow {
+  display: none;
+}
+
+.more-filter .ant-select-selection-placeholder {
+  display: none;
+}
+
+.more-filter .ant-select-selector {
+  height: 40px;
+}
+
+.more-filter .more-text {
+  position: absolute;
+  top: 0;
+  margin: 8px 0 0 10px;
+  color: gray;
+  display: flex;
+  align-items: center;
+}
+
+.more-filter-cascader .ant-cascader-menu {
+  height: 300px
+}
+
+.cohort_modal .ant-modal-content {
+  width: 640px;
+}
