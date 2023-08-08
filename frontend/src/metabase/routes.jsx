@@ -140,8 +140,8 @@ export const getRoutes = store => (
           prevPathname.startsWith("/growth") &&
           !nextPathname.startsWith("/growth")
         ) {
-          nextState.location.pathname = `/growth${nextPathname}`
-          replace(nextState.location)
+          nextState.location.pathname = `/growth${nextPathname}`;
+          replace(nextState.location);
         }
       }}
     >
@@ -188,7 +188,9 @@ export const getRoutes = store => (
         </Route>
         <Route
           path="wallet"
-          component={props => <LazyLoad.Research {...props} classify="wallet" />}
+          component={props => (
+            <LazyLoad.Research {...props} classify="wallet" />
+          )}
         >
           <Route path=":menu/:subMenu" />
           <Route path=":menu/:subMenu/:value" />
@@ -201,7 +203,10 @@ export const getRoutes = store => (
         <IndexRoute component={LazyLoad.dataApi} />
         <Route path="/data-api/pricing" component={LazyLoad.dataApiPrice} />
         <Route path="/data-api/product" component={LazyLoad.dataApiProduct} />
-        <Route path="/data-api/statistics" component={LazyLoad.dataApiStatistics} />
+        <Route
+          path="/data-api/statistics"
+          component={LazyLoad.dataApiStatistics}
+        />
       </Route>
 
       <Route path="/batch-download">
@@ -464,15 +469,15 @@ export const getRoutes = store => (
       </Route>
       {/* ----------- Growth Analytics 👇 --------- */}
       <Route
-          path="/growth/dashboard/:slug"
-          title={t`Dashboard`}
-          component={LazyLoad.DashboardApp}
-        >
-          <ModalRoute path="move" modal={LazyLoad.DashboardMoveModal} />
-          <ModalRoute path="copy" modal={LazyLoad.DashboardCopyModal} />
-          <ModalRoute path="archive" modal={LazyLoad.ArchiveDashboardModal} />
-          <ModalRoute path="details" modal={LazyLoad.DashboardDetailsModal} />
-        </Route>
+        path="/growth/dashboard/:slug"
+        title={t`Dashboard`}
+        component={LazyLoad.DashboardApp}
+      >
+        <ModalRoute path="move" modal={LazyLoad.DashboardMoveModal} />
+        <ModalRoute path="copy" modal={LazyLoad.DashboardCopyModal} />
+        <ModalRoute path="archive" modal={LazyLoad.ArchiveDashboardModal} />
+        <ModalRoute path="details" modal={LazyLoad.DashboardDetailsModal} />
+      </Route>
       <Route
         title={t`Creator`}
         path="/growth/@:name"
@@ -586,7 +591,6 @@ export const getRoutes = store => (
         path="/growth/submit/contract/add"
         component={LazyLoad.SubmitContractAddV2}
       />
-
       <Route
         title={t`Submit Contract`}
         path="/growth/submit/contract"
@@ -599,6 +603,15 @@ export const getRoutes = store => (
       />
 
       {/* ----------- Growth Analytics 👆 --------- */}
+      {/* reference data 👇 */}
+      <Route path="/reference">
+        <Route
+          title={t`Submit Contract`}
+          path="submit/contract"
+          component={LazyLoad.SubmitRefContractAdd}
+        />
+      </Route>
+      {/* reference data 👆 */}
 
       <Route title={t`Question`} path="/chart" component={LazyLoad.Question}>
         {/* <IndexRoute component={Question} /> */}
@@ -775,7 +788,6 @@ export const getRoutes = store => (
           path="/submit/contract/success"
           component={LazyLoad.SubmitContractSuccess}
         />
-
         <Route path="/collections">
           <Route path="create" component={LazyLoad.CollectionCreate} />
         </Route>
