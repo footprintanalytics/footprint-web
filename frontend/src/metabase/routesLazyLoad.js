@@ -188,6 +188,7 @@ export default {
   SubmitContractAdd: loadable(() => import("metabase/submit/contract/add")),
   SubmitContractAddV2: loadable(() => import("metabase/submit/contract/addV2")),
   SubmitRefContractAdd: loadable(() => import("metabase/submit/contract/reference/add")),
+  SubmitRefContract: loadable(() => import("metabase/submit/contract/reference/index")),
   SubmitContractSuccess: loadable(() =>
     import("metabase/submit/contract/success"),
   ),

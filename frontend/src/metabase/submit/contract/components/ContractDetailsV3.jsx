@@ -19,16 +19,11 @@ import { debounce, flatten, toLower, union } from "lodash";
 import {
   batchSubmitContract,
   getContractProtocolByAddress,
+  getRefProtocolList,
   getProtocolInfoByAddress,
 } from "metabase/new-service";
 import ContractDecoding from "./ContractDecoding";
 
-const PROTOCOL_CATEGORY_LIST = [
-  { value: "NFT", label: "NFT" },
-  { value: "DeFi", label: "DeFi" },
-  { value: "GameFi", label: "GameFi" },
-  { value: "Others", label: "Others" },
-];
 
 const CHAIN_LIST = [
   { value: "Ethereum", label: "Ethereum" },
@@ -41,7 +36,7 @@ const CHAIN_LIST = [
   { value: "Harmony", label: "Harmony" },
 ];
 
-const ContractDetailsV3 = ({ onFinish, user }) => {
+const ContractDetailsV3 = ({ onFinish, user,onClosed }) => {
   const [refresh, setRefresh] = useState(0);
   const [contract, setContract] = useState([]);
   const [disableCategory, setDisableCategory] = useState(false);
@@ -52,43 +47,33 @@ const ContractDetailsV3 = ({ onFinish, user }) => {
   const [protocolSlug, setProtocolSlug] = useState();
   const ref = useRef();
 
-  const contractProtocolByAddress = useQuery(
-    ["getContractProtocolByAddress"],
-    async () => getContractProtocolByAddress(),
+  const getProtocolList = useQuery(
+    ["getRefProtocolList"],
+    async () => getRefProtocolList(),
     {
       refetchOnWindowFocus: false,
       retry: 0,
-    },
-  );
-
-  useQuery(
-    ["getContractProtocolByAddress", protocolSlug],
-    async () => getProtocolInfoByAddress({ protocolSlug }),
-    {
-      refetchOnWindowFocus: false,
-      retry: 0,
-      enabled: !!protocolSlug,
-      onSuccess: data => {
-        form.setFieldsValue({
-          // projectCategory: data.projectCategory,
-          email: user?.email,
-          website: data.website,
-        });
-        setDisableCategory(!!data.projectCategory);
-        setDisableWebsite(!!data.website);
-      },
     },
   );
 
   useEffect(() => {
     if (!protocolSlug) {
       form.setFieldsValue({
-        // projectCategory: null,
         email: user?.email,
         website: null,
       });
       setDisableCategory(false);
       setDisableWebsite(false);
+    }else{
+      getProtocolList?.data?.forEach(item=>{
+        if(item.protocol_slug===protocolSlug){
+          console.log("find website => ",item);
+          form.setFieldsValue({
+            email: user?.email,
+            website: item.website,
+          });
+        }
+      })
     }
   }, [protocolSlug]);
 
@@ -188,7 +173,7 @@ const ContractDetailsV3 = ({ onFinish, user }) => {
         }}
         onFinish={async values => {
           console.log("ref submit contracts", values);
-          const isNewProtocol = !contractProtocolByAddress?.data
+          const isNewProtocol = !getProtocolList?.data
             ?.map(item => item.protocolName)
             ?.includes(values?.protocolName);
           const isValidContract = contract.every(item =>
@@ -206,7 +191,8 @@ const ContractDetailsV3 = ({ onFinish, user }) => {
               protocolSlug: values.protocolSlug || slug(values.protocolName),
               isNewProtocol,
             };
-            setIsModalOpen({ open: true, param });
+            // setIsModalOpen({ open: true, param });
+            onClosed?.(param);
             // const res = await mutateAsync(param);
             // console.log("ref submit contracts", res);
             // onFinish();
@@ -222,21 +208,21 @@ const ContractDetailsV3 = ({ onFinish, user }) => {
         >
           <AutoComplete
             placeholder="Select project name"
-            loading={contractProtocolByAddress.isLoading}
-            options={contractProtocolByAddress?.data?.map(item => ({
-              value: item.protocolName,
+            loading={getProtocolList.isLoading}
+            options={getProtocolList?.data?.map(item => ({
+              value: item.protocol_name,
             }))}
             dropdownRender={menu =>
-              contractProtocolByAddress.isLoading ? (
+              getProtocolList.isLoading ? (
                 <div className="p2">Loading...</div>
               ) : (
                 menu
               )
             }
             onChange={value => {
-              const protocolSlug = contractProtocolByAddress?.data?.find(
-                item => item.protocolName === value,
-              )?.protocolSlug;
+              const protocolSlug = getProtocolList?.data?.find(
+                item => item.protocol_name === value,
+              )?.protocol_slug;
               // form.setFieldValue("protocolSlug", protocolSlug);
               setProtocolSlug(protocolSlug);
             }}
@@ -374,7 +360,7 @@ const ContractDetailsV3 = ({ onFinish, user }) => {
         open={isModalOpen?.open}
         centered
         destroyOnClose={true}
-        closable={false}
+        closable={true}
         maskClosable={false}
         width={700}
         footer={null}
