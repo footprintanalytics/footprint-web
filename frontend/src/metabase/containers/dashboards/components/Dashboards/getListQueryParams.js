@@ -19,7 +19,7 @@ export default query => {
   const qs = q ? getSearchTexts(q) : [];
 
   const isCreatorAndOwner = () => {
-    return isCreator() || isGrowthPage() || isMyStudio() && params?.name === user?.name;
+    return (isCreator() && params?.name === user?.name) || isGrowthPage() || isMyStudio();
   };
 
   const getSortByStr = () => {
