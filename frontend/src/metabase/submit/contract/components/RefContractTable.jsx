@@ -8,17 +8,17 @@ import dayjs from "dayjs";
 const RefContractTable = ({ data}) => {
 
   const columns = [
-    {
-      title: "Type",
-      width: 200,
-      dataIndex: "type",
-    },
+    // {
+    //   title: "Type",
+    //   width: 200,
+    //   dataIndex: "type",
+    // },
     {
       title: "Name",
       render: (_, record) => {
         return (
           <>
-            <Typography.Text>{record?.data?.protocol}</Typography.Text>
+            <Typography.Text>{record?.data?.protocol_name??record?.data?.protocol??record?.data?.protocol_slug}</Typography.Text>
             {/* <br />
             <Typography.Text type="secondary">
               {record.contract_address}
@@ -36,6 +36,14 @@ const RefContractTable = ({ data}) => {
       },
     },
     {
+      title: "Contracts",
+      render: (_, record) => {
+        return (
+            <Typography.Text>Total: {record?.data?.contracts?.length??0}</Typography.Text>
+        );
+      },
+    },
+    {
       title: "Status",
       width: 120,
       dataIndex: "status",
@@ -48,6 +56,15 @@ const RefContractTable = ({ data}) => {
           default:
             return <Tag color="processing">{text}</Tag>;
         }
+      },
+    },
+    {
+      title: "Submitted by",
+      width: 240,
+      render: (_, record) => {
+        return (
+            <Typography.Text>{record?.data?.email}</Typography.Text>
+        );
       },
     },
     {

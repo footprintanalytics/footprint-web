@@ -127,6 +127,9 @@ const SubmitContract = props => {
           </Col>
         </Row>
       </Form>
+      <h2 className=" p1">
+      All commited records
+      </h2>
       {isLoading ? (
         <LoadingSpinner message="Loading..." />
       ) : (
