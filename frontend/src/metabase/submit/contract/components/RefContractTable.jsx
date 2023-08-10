@@ -36,14 +36,6 @@ const RefContractTable = ({ data}) => {
       },
     },
     {
-      title: "Submitted at",
-      width: 150,
-      dataIndex: "createdAt",
-      render: text => {
-        return dayjs(text).format("YYYY-MM-DD HH:mm");
-      },
-    },
-    {
       title: "Status",
       width: 120,
       dataIndex: "status",
@@ -56,6 +48,14 @@ const RefContractTable = ({ data}) => {
           default:
             return <Tag color="processing">{text}</Tag>;
         }
+      },
+    },
+    {
+      title: "Submitted at",
+      width: 150,
+      dataIndex: "createdAt",
+      render: text => {
+        return dayjs(text).format("YYYY-MM-DD HH:mm");
       },
     },
   ].filter(i => i);

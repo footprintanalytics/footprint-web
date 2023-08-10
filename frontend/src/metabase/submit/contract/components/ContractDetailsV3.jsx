@@ -24,7 +24,6 @@ import {
 } from "metabase/new-service";
 import ContractDecoding from "./ContractDecoding";
 
-
 const CHAIN_LIST = [
   { value: "Ethereum", label: "Ethereum" },
   { value: "Polygon", label: "Polygon" },
@@ -36,7 +35,7 @@ const CHAIN_LIST = [
   { value: "Harmony", label: "Harmony" },
 ];
 
-const ContractDetailsV3 = ({ onFinish, user,onClosed }) => {
+const ContractDetailsV3 = ({ onFinish, user, onClosed }) => {
   const [refresh, setRefresh] = useState(0);
   const [contract, setContract] = useState([]);
   const [disableCategory, setDisableCategory] = useState(false);
@@ -64,16 +63,16 @@ const ContractDetailsV3 = ({ onFinish, user,onClosed }) => {
       });
       setDisableCategory(false);
       setDisableWebsite(false);
-    }else{
-      getProtocolList?.data?.forEach(item=>{
-        if(item.protocol_slug===protocolSlug){
-          console.log("find website => ",item);
+    } else {
+      getProtocolList?.data?.forEach(item => {
+        if (item.protocol_slug === protocolSlug) {
+          console.log("find website => ", item);
           form.setFieldsValue({
             email: user?.email,
             website: item.website,
           });
         }
-      })
+      });
     }
   }, [protocolSlug]);
 
@@ -251,11 +250,11 @@ const ContractDetailsV3 = ({ onFinish, user,onClosed }) => {
             }),
           ]}
         >
-          <Input placeholder="https://your-website.com" />
+          <Input placeholder="https://project-website.com" />
         </Form.Item>
         <Form.Item
           label="Your Email Address"
-          tooltip="Please provide your email address so that we can notify you when contracts are successfully decoded and calculate your contribution value."
+          tooltip="Please provide your email address so that we can notify you when contracts or protocols are successfully decoded and calculate your contribution value."
           name="email"
           rules={[
             () => ({
@@ -313,42 +312,44 @@ const ContractDetailsV3 = ({ onFinish, user,onClosed }) => {
           // rules={[{ required: true, message: "" }]}
           name="contracts"
         >
-          <Tabs>
-            {contract?.map(item => {
-              return (
-                <Tabs.TabPane
-                  key={item.chain}
-                  tab={
-                    <div>
-                      {`${item.chain} `}
-                      {item.isValid ? (
-                        <CheckOutlined style={{ color: "#389e0d" }} />
-                      ) : (
-                        <Tooltip title={getError(item.chain)}>
-                          <ExclamationCircleOutlined
-                            style={{ color: "#f5222d" }}
-                          />
-                        </Tooltip>
-                      )}
+          {contract?.length > 0 && (
+            <Tabs>
+              {contract?.map(item => {
+                return (
+                  <Tabs.TabPane
+                    key={item.chain}
+                    tab={
+                      <div>
+                        {`${item.chain} `}
+                        {item.isValid ? (
+                          <CheckOutlined style={{ color: "#389e0d" }} />
+                        ) : (
+                          <Tooltip title={getError(item.chain)}>
+                            <ExclamationCircleOutlined
+                              style={{ color: "#f5222d" }}
+                            />
+                          </Tooltip>
+                        )}
+                      </div>
+                    }
+                  >
+                    <div className="mb1">
+                      Be sure to add one smart contract per line. Errors could
+                      cause your contracts to be rejected!
                     </div>
-                  }
-                >
-                  <div className="mb1">
-                    Be sure to add one smart contract per line. Errors could
-                    cause your contracts to be rejected!
-                  </div>
-                  <Input.TextArea
-                    placeholder={`Input contract address in ${item.chain}`}
-                    style={{ height: 160 }}
-                    onChange={e => {
-                      delayedChange(item, e.target.value);
-                    }}
-                  />
-                  {renderError(item.chain)}
-                </Tabs.TabPane>
-              );
-            })}
-          </Tabs>
+                    <Input.TextArea
+                      placeholder={`Input contract address in ${item.chain}`}
+                      style={{ height: 160 }}
+                      onChange={e => {
+                        delayedChange(item, e.target.value);
+                      }}
+                    />
+                    {renderError(item.chain)}
+                  </Tabs.TabPane>
+                );
+              })}
+            </Tabs>
+          )}
         </Form.Item>
         <Form.Item>
           <Button loading={isLoading} type="primary" htmlType="submit">

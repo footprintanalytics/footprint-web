@@ -665,13 +665,13 @@ export const getContractSubmittedList = params => {
 };
 
 export const getRefContractSubmittedList = () => {
-  // return GET(`https://ref-api-adapter.footprint.network/api/v1/protocol/submit/record`);
-  return GET(`http://10.10.16.38:3000/api/v1/protocol/submit/record`);
+  return GET(`https://ref-api-adapter.footprint.network/api/v1/protocol/submit/record`);
+  // return GET(`http://10.10.16.38:3000/api/v1/protocol/submit/record`);
 };
 
 export const getRefProtocolList = () => {
-  // return GET(`https://ref-api-adapter.footprint.network/api/v1/protocol/list`);
-  return GET(`http://10.10.16.38:3000/api/v1/protocol/list`);
+  return GET(`https://ref-api-adapter.footprint.network/api/v1/protocol/list`);
+  // return GET(`http://10.10.16.38:3000/api/v1/protocol/list`);
 };
 
 export const getContractSubmittedByAddress = params => {

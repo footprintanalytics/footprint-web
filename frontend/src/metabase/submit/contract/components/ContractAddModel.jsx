@@ -1,7 +1,7 @@
 /* eslint-disable react/prop-types */
 /* eslint-disable curly */
 import React, { useState, useEffect, useRef } from "react";
-import { Modal } from "antd";
+import { Divider, Modal } from "antd";
 import ContractDetailsV3 from "../components/ContractDetailsV3";
 import ContractDecoding from "./ContractDecoding"
 
@@ -19,8 +19,9 @@ const ContractAddModel = ({ user,open,onClosed}) => {
       onCancel={() => onClosed?.()}
     >
       <div className="w-full flex flex-col">
-        <h1>Submit smart contracts for decoding</h1>
-        <p>One step to add new contracts to Footprint</p>
+        <h1>Submit contracts or protocols for decoding</h1>
+        <p>One step to add new contracts or protocols to Footprint</p>
+        <Divider className=" my1"></Divider>
         {!isDecodingProcessOpen?.open&& <ContractDetailsV3
           user={user}
           onClosed={param => {

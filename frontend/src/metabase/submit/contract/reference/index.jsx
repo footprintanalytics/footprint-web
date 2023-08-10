@@ -93,11 +93,11 @@ const SubmitContract = props => {
   return (
     <div className="SubmitContract">
       <h1>
-        Welcome to submit more contracts to help us better display the data you
+        Welcome to submit more contracts or protocols to help us better display the data you
         want
       </h1>
       <span>
-        Contract submissions normally take a few minutes to get processed.
+        Submissions normally take a few minutes to get processed.
       </span>
       <p>
         {"If you have any questions, please "}
@@ -121,7 +121,7 @@ const SubmitContract = props => {
                   // props.router.push(`${isFgaPath()?'/growth':''}/submit/contract/add`);
                 }}
               >
-                Add contract
+                Add contract or protocol
               </Button>
             </Form.Item>
           </Col>
