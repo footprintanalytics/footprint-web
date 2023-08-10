@@ -141,43 +141,44 @@
 .ga-side-bar { overflow: -moz-scrollbars-none; }
 
 
-.ant-table-cell {
+.dark .ant-table-cell {
   background: #1B1B1E;
 }
 
-.ant-table-cell {
+.dark .ant-table-cell {
   background: #1B1B1E;
 }
 
-.ant-table-tbody > tr > td {
+.dark .ant-table-tbody > tr > td {
   border-bottom: 1px solid #ffffff20 !important;
 }
 
-.ant-table-tbody > tr > td {
+.dark .ant-table-tbody > tr > td {
   border-bottom: 1px solid #ffffff20 !important;
 }
 
-.ant-table-tbody > tr > th {
+.dark .ant-table-tbody > tr > th {
   border-bottom: 1px solid #ffffff20 !important;
 }
 
-.ant-table-tbody > tr > th {
+.dark .ant-table-tbody > tr > th {
   border-bottom: 1px solid #ffffff20  !important;
 }
 
-.ant-table-wrapper .ant-table-thead >tr>th, .ant-table-wrapper .ant-table-thead >tr>td {
+.dark .ant-table-wrapper .ant-table-thead >tr>th, .ant-table-wrapper .ant-table-thead >tr>td {
   background: #242428;
   border-bottom: 1px solid #ffffff20 !important;
 }
-.ant-table-wrapper .ant-table-thead >tr>th, .ant-table-wrapper .ant-table-thead >tr>td {
+
+.dark .ant-table-wrapper .ant-table-thead >tr>th, .ant-table-wrapper .ant-table-thead >tr>td {
   background: #242428;
   border-bottom: 1px solid #ffffff20;
 }
 
-.ant-card {
+.dark .ant-card {
   background: #1B1B1E;
 }
 
-.ant-list-item {
+.dark .ant-list-item {
   background: #1B1B1E;
 }
