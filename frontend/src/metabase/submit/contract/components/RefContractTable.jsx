@@ -63,7 +63,7 @@ const RefContractTable = ({ data}) => {
       width: 240,
       render: (_, record) => {
         return (
-            <Typography.Text>{record?.data?.email}</Typography.Text>
+            <Typography.Text>{record?.email}</Typography.Text>
         );
       },
     },
