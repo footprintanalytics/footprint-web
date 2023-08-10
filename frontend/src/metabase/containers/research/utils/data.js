@@ -517,7 +517,7 @@ const chainData = [
       {
         "label": "zkSync Era Overview",
         "value": "zksync-era-overview",
-        "publicUuid": "a9035d8e-bd3f-4bd5-84ce-dbcd44c7a868",
+        "publicUuid": "89b91903-fcfc-4122-978b-62c7a3ba3f41",
       },
     ],
   },
