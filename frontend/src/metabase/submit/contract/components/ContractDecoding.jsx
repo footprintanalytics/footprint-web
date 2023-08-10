@@ -15,11 +15,10 @@ const ContractDecoding = ({ param, onSuccess }) => {
   const [logDatas, setLogDatas] = useState(["start scanning..."]);
   const [loadCompleted, setLoadCompleted] = useState(false);
   const [title, setTitle] = useState(`${param?.protocolName} is decoding...`);
-  const domain = "10.10.16.38";
-  const socket = new WebSocket(`ws://${domain}:7081`);
-  let animation = null
+  const domain = "wss://ref-api-adapter.footprint.network/ws";
+  const socket = new WebSocket(domain);
+  let animation = null;
   useEffect(() => {
-    console.log("play animation");
     animation = loadAnimation();
     handleSocket();
     return () => {
@@ -102,13 +101,22 @@ const ContractDecoding = ({ param, onSuccess }) => {
         <Typography.Title level={4}>{title}</Typography.Title>
         <Card
           bordered={false}
+          className="w-full h-full flex-1"
           style={{
             backgroundColor: "var(--footprint-color-bg)",
             height: 160,
           }}
         >
-          <div className="w-full flex flex-col">
-            {logDatas?.reverse()?.map((item, index) => {
+          <div className="w-full h-full flex flex-col">
+            <Typography.Paragraph
+              style={{ whiteSpace: "pre-wrap" }}
+              type="secondary"
+              className="w-full h-full"
+              ellipsis={{ rows: 6 }}
+            >
+              {logDatas?.reverse()?.join("\n")}
+            </Typography.Paragraph>
+            {/* {logDatas?.reverse()?.map((item, index) => {
               if (index < 5) {
                 return (
                   <Typography.Text key={index} type="secondary">
@@ -116,7 +124,7 @@ const ContractDecoding = ({ param, onSuccess }) => {
                   </Typography.Text>
                 );
               }
-            })}
+            })} */}
           </div>
         </Card>
         <div className=" mt-10 w-full flex flex-row-reverse">
@@ -128,7 +136,7 @@ const ContractDecoding = ({ param, onSuccess }) => {
                 onSuccess?.();
               }}
             >
-              Comfirm
+              Close
             </Button>
           )}
         </div>
