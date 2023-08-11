@@ -455,7 +455,7 @@ class ABNavbar extends Component {
               this.goLink(e, "/ab");
             }}
           >
-            <div style={{ color: "white", fontSize: 18, fontWeight: 600 }}>Grow Analytic</div>
+            <div style={{ color: "white", fontSize: 18, fontWeight: 600 }}>Growth Analytics</div>
           </Link>
           {/* <LeftMenu /> */}
         </div>
