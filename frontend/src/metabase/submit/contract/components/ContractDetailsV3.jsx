@@ -1,6 +1,6 @@
 /* eslint-disable react/prop-types */
 /* eslint-disable curly */
-import React, { useState, useEffect, useRef } from "react";
+import React, { useState, useEffect} from "react";
 import {
   AutoComplete,
   Button,
@@ -12,15 +12,12 @@ import {
   Modal,
   Tooltip,
 } from "antd";
-import { useMutation, useQuery } from "react-query";
+import {  useQuery } from "react-query";
 import slug from "slug";
 import { CheckOutlined, ExclamationCircleOutlined } from "@ant-design/icons";
 import { debounce, flatten, toLower, union } from "lodash";
 import {
-  batchSubmitContract,
-  getContractProtocolByAddress,
   getRefProtocolList,
-  getProtocolInfoByAddress,
 } from "metabase/new-service";
 import ContractDecoding from "./ContractDecoding";
 
@@ -38,13 +35,10 @@ const CHAIN_LIST = [
 const ContractDetailsV3 = ({ onFinish, user, onClosed }) => {
   const [refresh, setRefresh] = useState(0);
   const [contract, setContract] = useState([]);
-  const [disableCategory, setDisableCategory] = useState(false);
-  const [disableWebsite, setDisableWebsite] = useState(false);
   const [isModalOpen, setIsModalOpen] = useState({ open: false, param: null });
   const [form] = Form.useForm();
   const [openAddContractSelect, setOpenAddContractSelect] = useState(false);
   const [protocolSlug, setProtocolSlug] = useState();
-  const ref = useRef();
 
   const getProtocolList = useQuery(
     ["getRefProtocolList"],
@@ -61,12 +55,9 @@ const ContractDetailsV3 = ({ onFinish, user, onClosed }) => {
         email: user?.email,
         website: null,
       });
-      setDisableCategory(false);
-      setDisableWebsite(false);
     } else {
       getProtocolList?.data?.forEach(item => {
         if (item.protocol_slug === protocolSlug) {
-          console.log("find website => ", item);
           form.setFieldsValue({
             email: user?.email,
             website: item.website,
@@ -75,8 +66,6 @@ const ContractDetailsV3 = ({ onFinish, user, onClosed }) => {
       });
     }
   }, [protocolSlug]);
-
-  const { isLoading, mutateAsync } = useMutation(batchSubmitContract);
 
   const isValidContractAddress = chain => {
     const contractAddress =
@@ -171,14 +160,12 @@ const ContractDetailsV3 = ({ onFinish, user, onClosed }) => {
           // projectCategory: null,
         }}
         onFinish={async values => {
-          console.log("ref submit contracts", values);
           const isNewProtocol = !getProtocolList?.data
             ?.map(item => item.protocolName)
             ?.includes(values?.protocolName);
           const isValidContract = contract.every(item =>
             isValidContractAddress(item.chain, contract),
           );
-          console.log("ref submit contracts", isNewProtocol, isValidContract);
           if (!isValidContract) {
             message.info("Please input valid contract address");
             return;
@@ -190,11 +177,7 @@ const ContractDetailsV3 = ({ onFinish, user, onClosed }) => {
               protocolSlug: values.protocolSlug || slug(values.protocolName),
               isNewProtocol,
             };
-            // setIsModalOpen({ open: true, param });
             onClosed?.(param);
-            // const res = await mutateAsync(param);
-            // console.log("ref submit contracts", res);
-            // onFinish();
           } catch (error) {
             console.log("ref submit contracts error:\n", error);
           }
@@ -233,6 +216,7 @@ const ContractDetailsV3 = ({ onFinish, user, onClosed }) => {
         <Form.Item
           label="Website"
           name="website"
+          tooltip="Please provide the website of the project you are submitting. This will help us verify the project and mapping more contract for this project."
           rules={[
             () => ({
               required: true,
@@ -352,7 +336,7 @@ const ContractDetailsV3 = ({ onFinish, user, onClosed }) => {
           )}
         </Form.Item>
         <Form.Item>
-          <Button loading={isLoading} type="primary" htmlType="submit">
+          <Button type="primary" htmlType="submit">
             Submit
           </Button>
         </Form.Item>
