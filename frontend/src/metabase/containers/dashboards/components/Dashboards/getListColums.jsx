@@ -17,6 +17,7 @@ import Tags from "../Tags";
 import IconValue from "../IconValue";
 import { sortMap } from "../../shared/config";
 import { isFgaPath } from "metabase/growth/utils/utils";
+import { isABPath } from "metabase/ab/utils/utils";
 
 const colors = ["#E4E4FEdd", "#D9F8F3dd", "#FFF5D9dd", "#FFDFE8dd"];
 
@@ -36,6 +37,7 @@ export default ({
   const isMarket = user && user.isMarket;
   const isAdmin = user && user.is_superuser;
   const isFga = isFgaPath();
+  const isAB = isABPath();
   // const isInner = user?.groups?.includes("Inner");
   const query = router?.location?.query;
   const getLink = record => {
@@ -48,6 +50,8 @@ export default ({
     }
     if (isFga) {
       link = "/growth" + link;
+    } else if (isAB) {
+      link = "/fga" + link;
     }
     return link;
   };

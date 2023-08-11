@@ -51,6 +51,8 @@ import QueryCopyModal from "metabase/components/QueryCopyModal";
 import { getUser } from "metabase/selectors/user";
 import { getSqlAndJumpToDoc, replaceTemplateCardUrl } from "metabase/guest/utils";
 import { trackStructEvent } from "metabase/lib/analytics";
+import { isFgaPath } from "metabase/growth/utils/utils"
+import { isABPath } from "metabase/ab/utils/utils"
 
 const mapStateToProps = (state, props) => {
   const user = getUser(state);
@@ -67,6 +69,9 @@ const mapStateToProps = (state, props) => {
     ]);
     updateDashboardPara(parameters, parameterValues, "protocol_slug", [
       project.protocolSlug,
+    ]);
+    updateDashboardPara(parameters, parameterValues, "project_name", [
+      project.protocolName,
     ]);
     if (project.tokenAddress?.length > 0) {
       const key = "token_address";
@@ -397,13 +402,18 @@ class PublicDashboard extends Component {
     const { chart_style } = {
       ...parseHashOptions(location.hash),
     };
-    const isFgaPublicDashboard = location.pathname.startsWith("/growth");
-    let hideParametersForCustom = isFgaPublicDashboard
-      ? "gamefi,protocol_slug,twitter_handler,project_name,guild_id"
-      : "";
+
+    let hideParametersForCustom = "";
+
+    if (isFgaPath()) {
+      hideParametersForCustom = "gamefi,protocol_slug,twitter_handler,project_name,guild_id";
+    }
+    if (isABPath()) {
+      hideParametersForCustom = "gamefi,protocol_slug,twitter_handler,project_name,guild_id,project,collection_contract_address";
+    }
     const hashData = parseHashOptions(location?.hash);
     if (
-      isFgaPublicDashboard &&
+      isFgaPath() &&
       hashData?.from &&
       dashboard &&
       !disableBreadcrumb
@@ -462,8 +472,8 @@ class PublicDashboard extends Component {
           buttons.length > 0 && <div className="flex">{buttons}</div>
         }
         isNightMode={shouldRenderAsNightMode}
-        hideFooter={hideFooter || isFgaPublicDashboard}
-        className={cx(className, isFgaPublicDashboard && "ml-250 mt-60")}
+        hideFooter={hideFooter || isFgaPath() || isABPath()}
+        className={cx(className, (isFgaPath() || isABPath()) && "ml-250 mt-60")}
         innerClassName={cx(innerClassName)}
         allLoadOuter={allLoadOuter}
       >
@@ -483,7 +493,7 @@ class PublicDashboard extends Component {
                 mode={PublicMode}
                 metadata={this.props.metadata}
                 navigateToNewCardFromDashboard={() => {}}
-                hideWatermark={dashboard && dashboard.hideWatermark}
+                hideWatermark={isABPath() || (dashboard && dashboard.hideWatermark)}
                 chartStyle={chart_style}
                 isNightMode={shouldRenderAsNightMode}
                 duplicateAction={this.duplicateAction}

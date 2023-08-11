@@ -10,18 +10,27 @@
 }
 
 .dark .ant-tag {
-  background-color: #2A3246;
   border-radius: 2px;
   font-size: 12px;
   line-height: 1;
   color: #ffffffaa;
   margin: 0 2px 2px 0;
   padding: 4px 6px;
-  border: 0;
+  border: 1px solid #3b4f83;
+  background: #121728;
 }
 
 .dark .ant-tag-close-icon {
   font-size: 12px;
   color: #2f3441;
   margin-left: 8px;
+}
+
+.dark .ant-tag-checkable-checked {
+  border: 1px solid #656ae8;
+}
+
+.dark .ant-tag:hover {
+  color: #ffffffaa;
+  border: 1px solid #656ae8;
 }

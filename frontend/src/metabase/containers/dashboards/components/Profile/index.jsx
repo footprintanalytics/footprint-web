@@ -12,6 +12,7 @@ import { getUser } from "metabase/selectors/user";
 import { isDefi360 } from "metabase/lib/project_info";
 import * as Urls from "metabase/lib/urls";
 import { isFgaPath } from "metabase/growth/utils/utils"
+import { isABPath } from "metabase/ab/utils/utils";
 
 const Profile = props => {
   const { user, setLoginModalShow, onChangeLocation } = props;
@@ -31,7 +32,7 @@ const Profile = props => {
     {
       title: "Create\nDashboard",
       background: "#7155FF",
-      action: `${isFgaPath() ? "/growth" : ""}/dashboard/new`,
+      action: `${isABPath() ? "/ab" : (isFgaPath() ? "/growth" : "")}/dashboard/new`,
       icon: "create_dashboard",
     },
   ];

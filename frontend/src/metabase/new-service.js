@@ -709,3 +709,15 @@ export const setTableBelongType = (params) => {
 export const ownerTable = (params) => {
   return POST(`api/v1/userPage/owner/table`, params);
 };
+
+export const journeyPathAnalyze = (params) => {
+  return POST(`api/v1/ab/user-journey/path-analyze`, params);
+};
+
+export const journeyPathUserDetail = (params) => {
+  return POST(`api/v1/ab/user-journey/path-user-detail`, params);
+};
+
+export const journeyPathUserTrend = (params) => {
+  return POST(`api/v1/ab/user-journey/path-user-trend`, params);
+};

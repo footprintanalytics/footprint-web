@@ -25,6 +25,13 @@
   border-color: var(--color-bg-dark);
 }
 
+.ab-page .EmbedFrame-header,
+.ab-page .EmbedFrame-footer {
+  color: color-mod(var(--color-text-white) alpha(-14%));
+  background-color: var(--color-ab-bg-dark);
+  border-color: var(--color-ab-bg-dark);
+}
+
 .Theme--night .EmbedFrame-header h2,
 .Theme--night .EmbedFrame-footer h2 {
   color: color-mod(var(--color-text-white) alpha(-14%));
@@ -44,6 +51,10 @@
 
 .Theme--night.EmbedFrame .DashCard .Card {
   background-color: var(--color-bg-card-dark);
+}
+
+.ab-page .Theme--night.EmbedFrame .DashCard .Card {
+  background-color: var(--color-ab-bg-card-dark);
 }
 
 .Theme--night.EmbedFrame .enable-dots-onhover .dc-tooltip circle.dot:hover,

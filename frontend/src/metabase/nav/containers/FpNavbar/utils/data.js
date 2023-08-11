@@ -325,24 +325,75 @@ const datasetsIcon =
   </svg>
 
 const solutionIcon2 =
-  <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 20 20" fill="none">
+  <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
     <path d="M16.6673 8.33317C16.6673 11.1697 14.8958 13.5925 12.3988 14.5555H10.0007H7.60253C5.10548 13.5925 3.33398 11.1697 3.33398 8.33317C3.33398 4.65125 6.31873 1.6665 10.0007 1.6665C13.6826 1.6665 16.6673 4.65125 16.6673 8.33317Z" stroke="#6262FF" strokeLinecap="round" strokeLinejoin="round"/>
     <path d="M12.3979 14.5557L12.1149 17.9513C12.0969 18.1672 11.9164 18.3333 11.6996 18.3333H8.29977C8.08306 18.3333 7.90252 18.1672 7.88456 17.9513L7.60156 14.5557" stroke="#6262FF" strokeLinecap="round" strokeLinejoin="round"/>
     <path d="M7.5 7.0835V9.5835L10 8.3335L12.5 9.5835V7.0835" stroke="#6262FF" strokeLinecap="round" strokeLinejoin="round"/>
   </svg>
 
 const useCaseIcon =
-  <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 20 20" fill="none">
+  <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
     <path d="M9.99935 8.33317C11.8403 8.33317 13.3327 6.84079 13.3327 4.99984C13.3327 3.15889 11.8403 1.6665 9.99935 1.6665C8.1584 1.6665 6.66602 3.15889 6.66602 4.99984C6.66602 6.84079 8.1584 8.33317 9.99935 8.33317Z" stroke="#6262FF" strokeLinecap="round" strokeLinejoin="round"/>
     <path d="M17.5 18.3335C17.5 14.1914 14.1421 10.8335 10 10.8335C5.85787 10.8335 2.5 14.1914 2.5 18.3335" stroke="#6262FF" strokeLinecap="round" strokeLinejoin="round"/>
     <path d="M10.0007 18.3335L11.6673 16.2502L10.0007 10.8335L8.33398 16.2502L10.0007 18.3335Z" stroke="#6262FF" strokeLinecap="round" strokeLinejoin="round"/>
   </svg>
 
 const onBoardIcon =
-  <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 20 20" fill="none">
+  <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
     <path d="M7.91667 8.33333C9.5275 8.33333 10.8333 7.0275 10.8333 5.41667C10.8333 3.80584 9.5275 2.5 7.91667 2.5C6.30583 2.5 5 3.80584 5 5.41667C5 7.0275 6.30583 8.33333 7.91667 8.33333Z" stroke="#6262FF" strokeLinecap="round" strokeLinejoin="round"/>
     <path d="M1.66602 16.9998V17.4998H14.166V16.9998C14.166 15.133 14.166 14.1996 13.8027 13.4865C13.4831 12.8593 12.9732 12.3494 12.346 12.0298C11.6329 11.6665 10.6995 11.6665 8.83268 11.6665H6.99935C5.13252 11.6665 4.1991 11.6665 3.48605 12.0298C2.85884 12.3494 2.3489 12.8593 2.02933 13.4865C1.66602 14.1996 1.66602 15.133 1.66602 16.9998Z" stroke="#6262FF" strokeLinecap="round" strokeLinejoin="round"/>
     <path d="M15.834 5.4165V10.4165M13.334 7.9165H18.334" stroke="#6262FF" strokeLinecap="round" strokeLinejoin="round"/>
+  </svg>
+
+const userIcon =
+  <svg width="14" height="14" viewBox="0 0 14 14" fill="none">
+    <path d="M5.54167 5.83333C6.66925 5.83333 7.58333 4.91925 7.58333 3.79167C7.58333 2.66409 6.66925 1.75 5.54167 1.75C4.41408 1.75 3.5 2.66409 3.5 3.79167C3.5 4.91925 4.41408 5.83333 5.54167 5.83333Z" stroke="#ACAEB4" strokeLinecap="round" strokeLinejoin="round"/>
+    <path d="M9.51057 2.04169C10.1035 2.39895 10.5 3.04902 10.5 3.79169C10.5 4.53436 10.1035 5.18442 9.51057 5.54169" stroke="#ACAEB4" strokeLinecap="round" strokeLinejoin="round"/>
+    <path d="M1.16667 11.9V12.25H9.91667V11.9C9.91667 10.5932 9.91667 9.93985 9.66237 9.44072C9.43866 9.00167 9.08169 8.6447 8.64264 8.42099C8.14351 8.16669 7.49012 8.16669 6.18334 8.16669H4.9C3.59322 8.16669 2.93983 8.16669 2.4407 8.42099C2.00165 8.6447 1.64469 9.00167 1.42099 9.44072C1.16667 9.93985 1.16667 10.5932 1.16667 11.9Z" stroke="#ACAEB4" strokeLinecap="round" strokeLinejoin="round"/>
+    <path d="M12.8333 12.25V11.9C12.8333 10.5932 12.8333 9.93984 12.579 9.44072C12.3553 9.00167 11.9983 8.64473 11.5593 8.42102" stroke="#ACAEB4" strokeLinecap="round" strokeLinejoin="round"/>
+  </svg>
+
+const gamingStatIcon =
+  <svg width="14" height="14" viewBox="0 0 14 14" fill="none">
+    <path d="M12.25 2.33331H1.75001C1.42784 2.33331 1.16667 2.59448 1.16667 2.91665V11.0833C1.16667 11.4055 1.42784 11.6666 1.75001 11.6666H12.25C12.5722 11.6666 12.8333 11.4055 12.8333 11.0833V2.91665C12.8333 2.59448 12.5722 2.33331 12.25 2.33331Z" stroke="#ACAEB4"/>
+    <path d="M7 4.95831V9.04165" stroke="#ACAEB4" strokeLinecap="round"/>
+    <path d="M9.33333 7V9.04167" stroke="#ACAEB4" strokeLinecap="round"/>
+    <path d="M4.66667 6.41669V9.04169" stroke="#ACAEB4" strokeLinecap="round"/>
+  </svg>
+
+const assetIcon =
+  <svg width="14" height="14" viewBox="0 0 14 14" fill="none">
+    <g clipPath="url(#clip0_493_608)">
+      <path d="M12.8333 4.08335L7.00001 1.16669L1.16667 4.08335V9.91669L7.00001 12.8334L12.8333 9.91669V4.08335Z" stroke="#ACAEB4" strokeLinejoin="round"/>
+      <path d="M1.16667 4.08331L7.00001 6.99998" stroke="#ACAEB4" strokeLinecap="round" strokeLinejoin="round"/>
+      <path d="M7 12.8333V7" stroke="#ACAEB4" strokeLinecap="round" strokeLinejoin="round"/>
+      <path d="M12.8333 4.08331L7 6.99998" stroke="#ACAEB4" strokeLinecap="round" strokeLinejoin="round"/>
+      <path d="M9.91666 2.625L4.08333 5.54167" stroke="#ACAEB4" strokeLinecap="round" strokeLinejoin="round"/>
+    </g>
+    <defs>
+      <clipPath id="clip0_493_608">
+        <rect width="14" height="14" fill="white"/>
+      </clipPath>
+    </defs>
+  </svg>
+
+const customAnalysisIcon =
+  <svg width="14" height="14" viewBox="0 0 14 14" fill="none">
+    <g clipPath="url(#clip0_493_631)">
+      <path d="M12.8333 7.00002C12.8333 10.2217 10.2217 12.8334 7.00001 12.8334C3.77834 12.8334 1.16667 10.2217 1.16667 7.00002C1.16667 3.77836 3.77834 1.16669 7.00001 1.16669V7.00002H12.8333Z" stroke="#ACAEB4" strokeLinecap="round" strokeLinejoin="round"/>
+      <path d="M12.5663 5.25002H8.75V1.43372C10.5642 2.00353 11.9965 3.43579 12.5663 5.25002Z" stroke="#ACAEB4" strokeLinecap="round" strokeLinejoin="round"/>
+    </g>
+    <defs>
+      <clipPath id="clip0_493_631">
+        <rect width="14" height="14" fill="white"/>
+      </clipPath>
+    </defs>
+  </svg>
+
+const growthIcon =
+  <svg width="14" height="14" viewBox="0 0 14 14" fill="none">
+    <path d="M1.75 1.75V12.25H12.25" stroke="#ACAEB4" strokeLinecap="round" strokeLinejoin="round"/>
+    <path d="M4.08333 9.91667L6.41666 5.25L9.33333 7.875L12.25 1.75" stroke="#ACAEB4" strokeLinecap="round" strokeLinejoin="round"/>
   </svg>
 
 export const ReactIcons = {
@@ -388,4 +439,9 @@ export const ReactIcons = {
   solutionIcon2,
   useCaseIcon,
   onBoardIcon,
+  userIcon,
+  gamingStatIcon,
+  assetIcon,
+  customAnalysisIcon,
+  growthIcon,
 }

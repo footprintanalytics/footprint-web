@@ -17,6 +17,7 @@ import { sortMap } from "metabase/containers/dashboards/shared/config";
 import NeedPermissionModal from "metabase/components/NeedPermissionModal";
 import getListQueryParams from "metabase/containers/search/components/MyTables/getListQueryParams";
 import { isFgaPath } from "metabase/growth/utils/utils";
+import { isABPath } from "metabase/ab/utils/utils";
 
 const Index = ({ router, user }) => {
   const isPaidUser = user && user.vipInfo && user.vipInfo.type !== "free";
@@ -24,6 +25,7 @@ const Index = ({ router, user }) => {
   const device = useDeviceInfo();
   const showHeader = device.isPC;
   const isFga = isFgaPath();
+  const isAB = isABPath();
   const isStudio = window.location.pathname.startsWith("/studio");
   const [showVip, setShowVip] = useState(false);
 
@@ -72,7 +74,13 @@ const Index = ({ router, user }) => {
   };
 
   const jumpToChart = ({ chartId }) => {
-    window.open(`${isFga?'/growth':''}/chart/${chartId}`);
+    let prefix = "";
+    if (isFga) {
+      prefix = "/growth";
+    } else if (isAB) {
+      prefix = "/fga";
+    }
+    window.open(`${prefix}/chart/${chartId}`);
   };
 
   const columns = getListColums({

@@ -2,8 +2,16 @@ import "./index.css";
 import React from "react";
 import { Result, Typography } from "antd";
 import { isFgaPath } from "metabase/growth/utils/utils"
+import { isABPath } from "metabase/ab/utils/utils"
 
 const SubmitContractSuccess = () => {
+  let prefix = "";
+  if (isFgaPath()) {
+    prefix = "/growth";
+  }
+  if (isABPath()) {
+    prefix = "/fga";
+  }
   return (
     <div className="SubmitContract">
       <Result
@@ -13,7 +21,7 @@ const SubmitContractSuccess = () => {
         extra={
           <span>
             You can check the progress of the review{" "}
-            <Typography.Link href={`${isFgaPath()?"/growth":""}/submit/contract`} underline>
+            <Typography.Link href={`${prefix}/submit/contract`} underline>
               here
             </Typography.Link>
           </span>
