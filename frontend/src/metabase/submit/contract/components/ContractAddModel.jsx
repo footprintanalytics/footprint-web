@@ -19,7 +19,7 @@ const ContractAddModel = ({ user,open,onClosed}) => {
       onCancel={() => onClosed?.()}
     >
       <div className="w-full flex flex-col">
-        <h1>Submit contracts or protocols for decoding</h1>
+        <h1>Submit contracts or protocols</h1>
         <p>One step to add new contracts or protocols to Footprint</p>
         <Divider className=" my1"></Divider>
         {!isDecodingProcessOpen?.open&& <ContractDetailsV3

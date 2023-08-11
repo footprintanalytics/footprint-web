@@ -3,6 +3,7 @@
 import React, { useState, useRef, useEffect } from "react";
 import { Typography, Card, message, Button } from "antd";
 import lottie from "lottie-web/build/player/lottie_svg";
+import TextArea from "antd/es/input/TextArea";
 import {
   data_scanning,
   animation_complete,
@@ -12,9 +13,11 @@ import "animate.css";
 
 const ContractDecoding = ({ param, onSuccess }) => {
   const ref = useRef();
-  const [logDatas, setLogDatas] = useState(["start scanning..."]);
+  const [logDatas, setLogDatas] = useState(["start processing..."]);
   const [loadCompleted, setLoadCompleted] = useState(false);
-  const [title, setTitle] = useState(`${param?.protocolName} is decoding...`);
+  const [title, setTitle] = useState(
+    `The system is currently processing [${param?.protocolName}]`,
+  );
   const domain = "wss://ref-api-adapter.footprint.network/ws";
   const socket = new WebSocket(domain);
   let animation = null;
@@ -39,6 +42,7 @@ const ContractDecoding = ({ param, onSuccess }) => {
               website: param?.website,
               email: param?.email,
               contracts: param?.contracts,
+              source: "user",
             },
           }),
         );
@@ -47,11 +51,11 @@ const ContractDecoding = ({ param, onSuccess }) => {
           const data = JSON.parse(msg.data);
           if (data?.event === "completed" || data === "done") {
             animation = loadAnimation("completed");
-            setTitle(`${param?.protocolName} is decode completed.`);
+            setTitle(`The system is currently process [${param?.protocolName}] completed.`);
             setLogDatas(datas => {
-              return [...datas, "contract decoding completed."];
+              return [...datas, "protocol process completed."];
             });
-            message.success("contract decoding completed.");
+            message.success("protocol process completed.");
             socket?.close();
             setLoadCompleted(true);
             return;
@@ -98,34 +102,29 @@ const ContractDecoding = ({ param, onSuccess }) => {
         style={{ width: 200, height: 200 }}
       />
       <div className="w-full flex flex-col p3">
-        <Typography.Title level={4}>{title}</Typography.Title>
+        <Typography.Title level={5}>{title}</Typography.Title>
+        <Typography.Text type="secondary">
+          This task may take a few minutes. You can come back later to check the
+          results.
+        </Typography.Text>
         <Card
           bordered={false}
           className="w-full h-full flex-1"
           style={{
             backgroundColor: "var(--footprint-color-bg)",
-            height: 160,
+            height: 290,
           }}
         >
-          <div className="w-full h-full flex flex-col">
-            <Typography.Paragraph
-              style={{ whiteSpace: "pre-wrap" }}
-              type="secondary"
-              className="w-full h-full"
-              ellipsis={{ rows: 6 }}
-            >
-              {logDatas?.reverse()?.join("\n")}
-            </Typography.Paragraph>
-            {/* {logDatas?.reverse()?.map((item, index) => {
-              if (index < 5) {
-                return (
-                  <Typography.Text key={index} type="secondary">
-                    {item}
-                  </Typography.Text>
-                );
-              }
-            })} */}
-          </div>
+          <TextArea
+            bordered={false}
+            // height={260}
+            // style={{height:!260}}
+            autoSize={{ minRows: 2, maxRows: 12 }}
+            value={logDatas?.reverse()?.join("\n")}
+            placeholder="Processing logs"
+            disabled
+          />
+
         </Card>
         <div className=" mt-10 w-full flex flex-row-reverse">
           {loadCompleted && (
