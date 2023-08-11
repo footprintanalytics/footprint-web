@@ -32,7 +32,6 @@ interface IGaSidebarProp {
 const GaSidebar = (props: IGaSidebarProp) => {
   const { currentProject, router, location, currentMenu, projectObject, user } =
     props;
-  console.log("currentMenu", currentMenu)
   const [items, setItems] = useState<any[]>([]);
   const [itemsPlatform, setItemsPlatform] = useState<any[]>([]);
   // const [rootSubmenuKeys, setRootSubmenuKeys] = useState<any[]>([]);
@@ -155,11 +154,11 @@ const GaSidebar = (props: IGaSidebarProp) => {
               <div className="ga-side-bar__title">
                 <h3>Project</h3>
               </div>
-              <GaProjectSearch
-                location={location}
-              />
             </>
             )}
+            <GaProjectSearch
+              location={location}
+            />
             <Menu
               style={{
                 borderRight: "0px",

@@ -169,8 +169,8 @@ export const refreshCurrentFgaProject = createThunkAction(
           res = {
             "id": project_id,
             "isDemo": false,
-            "protocolName": "Open Campus",
-            "protocolSlug": "Open Campus",
+            "protocolName": "Project E",
+            "protocolSlug": "project e",
             "logo": "https://footprint-imgs.oss-us-east-1.aliyuncs.com/logo_images/the-sandbox.jpg",
             "protocolType": "GameFi",
             "tokenAddress": [
@@ -193,8 +193,8 @@ export const refreshCurrentFgaProject = createThunkAction(
           res = {
             "id": project_id,
             "isDemo": false,
-            "protocolName": "GAMEE",
-            "protocolSlug": "GAMEE",
+            "protocolName": "Project D",
+            "protocolSlug": "project d",
             "logo": "https://footprint-imgs.oss-us-east-1.aliyuncs.com/logo_images/the-sandbox.jpg",
             "protocolType": "GameFi",
             "tokenAddress": [
@@ -217,8 +217,8 @@ export const refreshCurrentFgaProject = createThunkAction(
           res = {
             "id": project_id,
             "isDemo": false,
-            "protocolName": "Benji Banana",
-            "protocolSlug": "Benji Banana",
+            "protocolName": "Project C",
+            "protocolSlug": "project c",
             "logo": "https://footprint-imgs.oss-us-east-1.aliyuncs.com/logo_images/the-sandbox.jpg",
             "protocolType": "GameFi",
             "tokenAddress": [
@@ -241,8 +241,8 @@ export const refreshCurrentFgaProject = createThunkAction(
           res = {
             "id": project_id,
             "isDemo": false,
-            "protocolName": "Crazy Defense Heroes",
-            "protocolSlug": "Crazy Defense Heroes",
+            "protocolName": "Project B",
+            "protocolSlug": "project b",
             "logo": "https://footprint-imgs.oss-us-east-1.aliyuncs.com/logo_images/the-sandbox.jpg",
             "protocolType": "GameFi",
             "tokenAddress": [
@@ -265,8 +265,8 @@ export const refreshCurrentFgaProject = createThunkAction(
           res = {
             "id": 153,
             "isDemo": false,
-            "protocolName": "Mocaverse",
-            "protocolSlug": "Mocaverse",
+            "protocolName": "Project A",
+            "protocolSlug": "project a",
             "logo": "",
             "protocolType": "",
             "tokenAddress": [],
@@ -280,11 +280,11 @@ export const refreshCurrentFgaProject = createThunkAction(
             "discord": {},
             "ga": {}
           }
-        } else {
-          res = await GetFgaProjectDetail({
-            projectId: project_id,
-          });
         }
+      } else {
+        res = await GetFgaProjectDetail({
+          projectId: project_id,
+        });
       }
       if(!res?.protocolSlug||res?.protocolSlug===''){
         res.protocolSlug = 'default';

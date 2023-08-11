@@ -502,7 +502,7 @@ export const fga_menu_data_v2 = (project, user) => {
     ]),
     getItem("Users", "users-platform", ReactIcons.userIcon, [
       //<TeamOutlined />
-      protocolType !== "NFT" && getItem("Overview", "users_overview-platform", null),
+      // protocolType !== "NFT" && getItem("Overview", "users_overview-platform", null),
       getItem("Segment", "segment-platform", null),
       getItem("Members", "members-platform", null),
       getItem("Journey", "journey-platform", null),
@@ -514,7 +514,7 @@ export const fga_menu_data_v2 = (project, user) => {
     ]),
     getItem("Users", "users", ReactIcons.userIcon, [
       //<TeamOutlined />
-      protocolType !== "NFT" && getItem("Overview", "users_overview", null),
+      // protocolType !== "NFT" && getItem("Overview", "users_overview", null),
       getItem("Segment", "segment", null),
       getItem("Members", "members", null),
       getItem("Journey", "journey", null),
