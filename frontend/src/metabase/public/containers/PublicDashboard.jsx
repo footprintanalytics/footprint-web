@@ -403,9 +403,14 @@ class PublicDashboard extends Component {
       ...parseHashOptions(location.hash),
     };
 
-    let hideParametersForCustom = isFgaPath() || isABPath()
-      ? "gamefi,protocol_slug,twitter_handler,project_name,guild_id"
-      : "";
+    let hideParametersForCustom = "";
+
+    if (isFgaPath()) {
+      hideParametersForCustom = "gamefi,protocol_slug,twitter_handler,project_name,guild_id";
+    }
+    if (isABPath()) {
+      hideParametersForCustom = "gamefi,protocol_slug,twitter_handler,project_name,guild_id,project,collection_contract_address";
+    }
     const hashData = parseHashOptions(location?.hash);
     if (
       isFgaPath() &&

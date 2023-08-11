@@ -154,11 +154,11 @@ const GaSidebar = (props: IGaSidebarProp) => {
               <div className="ga-side-bar__title">
                 <h3>Project</h3>
               </div>
+              <GaProjectSearch
+                location={location}
+              />
             </>
             )}
-            <GaProjectSearch
-              location={location}
-            />
             <Menu
               style={{
                 borderRight: "0px",

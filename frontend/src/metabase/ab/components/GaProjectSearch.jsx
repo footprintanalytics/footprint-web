@@ -45,7 +45,7 @@ const GaProjectSearch = props => {
             "dbId": 22,
             "schema": "fga_153_data",
             "active": 1,
-            "protocolSlug": "project a",
+            "protocolSlug": "Project A",
             "protocolName": "Project A",
             "nftContractAddress": [],
             "createdAt": "2023-04-25T10:51:11.000Z"
@@ -62,59 +62,11 @@ const GaProjectSearch = props => {
             "dbId": 22,
             "schema": "fga_153_data",
             "active": 1,
-            "protocolSlug": "project a",
+            "protocolSlug": "Project A",
             "protocolName": "Project A",
             "nftContractAddress": [],
             "createdAt": "2023-04-25T10:51:11.000Z"
           },
-          {
-            "id": 341,
-            "name": "Project B",
-            "creatorId": 20103,
-            "dbId": 22,
-            "schema": "fga_341_data",
-            "active": 1,
-            "protocolSlug": "project b",
-            "protocolName": "Project B",
-            "nftContractAddress": [],
-            "createdAt": "2023-07-17T09:09:36.000Z"
-          },
-          {
-            "id": 35,
-            "name": "Project C",
-            "creatorId": 20103,
-            "dbId": 22,
-            "schema": "fga_35_data",
-            "active": 1,
-            "protocolSlug": "project c",
-            "protocolName": "Project C",
-            "nftContractAddress": [],
-            "createdAt": "2023-07-17T09:09:36.000Z"
-          },
-          {
-            "id": 36,
-            "name": "Project D",
-            "creatorId": 20103,
-            "dbId": 22,
-            "schema": "fga_36_data",
-            "active": 1,
-            "protocolSlug": "project d",
-            "protocolName": "Project D",
-            "nftContractAddress": [],
-            "createdAt": "2023-07-17T09:09:36.000Z"
-          },
-          {
-            "id": 10,
-            "name": "Project E",
-            "creatorId": 20103,
-            "dbId": 22,
-            "schema": "fga_36_data",
-            "active": 1,
-            "protocolSlug": "project e",
-            "protocolName": "Project E",
-            "nftContractAddress": [],
-            "createdAt": "2023-07-17T09:09:36.000Z"
-          }
         ]
       }
       // return await GetFgaProject();

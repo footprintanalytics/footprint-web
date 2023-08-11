@@ -474,24 +474,24 @@ export const fga_menu_data_v2 = (project, user) => {
         ? "346f0d3d-5486-404b-a5d2-17ce52150fe1"
         : "2f4f1fe9-7163-4ecf-91db-76c87a9306ed",
     ],
-    ["game_tokenomics", "70018d58-83e4-4484-b089-15cf327d3974"],
+    ["game_tokenomics", "84dc5fec-fb37-42bd-ae99-b38d4c41425f"],
     ["game_revenue", "8932389c-42cc-4ce7-a20f-a6a146cd31a2"],
     ["game_token_holder", "ff4ddbe9-8818-4abf-8a6c-91c3559071af"],
     ["users_overview", "6d84b4a6-ceef-4b30-a9ad-b233038fd8d3"],
     ["game_active_users", "6d84b4a6-ceef-4b30-a9ad-b233038fd8d3"],
-    ["nft_leaderboard", "b0ce22de-a4bd-4f46-827c-75463c725fcd"],
-    ["nft_nft_holder", "9edaeba8-9c3b-4726-b139-73b2ca738c13"],
-    ["nft_sales_mints", "aefc83f1-ed4b-4dba-a21f-6f85a1de471c"],
+    ["nft_leaderboard", "21a0555b-4e8b-45cc-858d-ae41861ba9ee"],
+    ["nft_nft_holder", "d13ca440-553a-4759-b120-1b84eb41054f"],
+    ["nft_sales_mints", "9d9e9149-1dbc-4e0e-88a4-f9c64d1c10e1"],
     ["nft_revenue", "b98b0a6b-64cb-4e09-979d-693040ea3ec9"],
     ["twitter", "fd4d94f3-06f7-445d-ada3-0ce82bcefa39"],
     ["discord", "d137a1ef-34a3-4553-84cb-2203bd9d2baf"],
-    ["project_health", "f5c31ad5-259d-4a2b-8e68-346201201486"],
-    ["social", "8a6b7c66-b5e2-4779-abe2-a37008345278"],
-    ["gaming", "eb9f7bce-a8fa-4cda-9ca9-6f76ad4e54e6"],
-    ["listing", "20ae0361-4a39-4b66-bd56-fb9f012bfd3c"],
+    ["project_health", "d14ebd54-b6ab-4111-a877-c9d66e253be8"],
+    ["social", "5492ee87-4d65-49e2-878d-8a2aa9d5b745"],
+    ["gaming", "878b2412-a464-4286-903f-05a2950a5f6d"],
+    ["listing", "dcc2860f-8693-4de3-8123-6c5ba12c0d1c"],
 
 
-    ["project_health-platform", "79b4c0c1-bc0d-4fde-ba2d-8e7bc9b0ea18"],
+    ["project_health-platform", "7a275541-580a-4720-8e10-f455335de137"],
     ["users_overview-platform", "6d84b4a6-ceef-4b30-a9ad-b233038fd8d3"],
   ]);
 
