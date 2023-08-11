@@ -78,7 +78,7 @@ const Index = ({ router, user }) => {
     if (isFga) {
       prefix = "/growth";
     } else if (isAB) {
-      prefix = "/ab";
+      prefix = "/fga";
     }
     window.open(`${prefix}/chart/${chartId}`);
   };

@@ -127,7 +127,7 @@ class ABNavbar extends Component {
           <CreateActionModal
             showNewDashboard={() => {
               const newDashboardUrl = `${
-                isABPath() ? "/ab" : ""
+                isABPath() ? "/fga" : ""
               }/dashboard/new`;
               window.open(newDashboardUrl);
             }}
@@ -147,12 +147,12 @@ class ABNavbar extends Component {
         <ul className="wrapper flex align-center">
           <li>
             <Link
-              to="/ab"
+              to="/fga"
               data-metabase-event={"Navbar;Logo"}
               className="NavItem cursor-pointer flex align-center"
               onClick={e => {
                 e.preventDefault();
-                this.goLink(e, "/ab");
+                this.goLink(e, "/fga");
               }}
             >
               <LogoIcon className="text-brand my2" />
@@ -402,8 +402,8 @@ class ABNavbar extends Component {
               localStorage.setItem('toggle_platform_project', "project");
             }
 
-            window.location.replace("/ab")
-          }}>Toggle Platform / Project</Button>
+            window.location.replace("/fga")
+          }}>Manager / MKT</Button>
           {user ? (
             <ProfileLink
               {...this.props}
@@ -448,14 +448,14 @@ class ABNavbar extends Component {
           <MobileMenuIcon />
           <Link
             className="Nav__logo"
-            to="/ab"
+            to="/fga"
             onClick={e => {
               e.preventDefault();
               trackStructEvent(`navbar-click-logo`);
-              this.goLink(e, "/ab");
+              this.goLink(e, "/fga");
             }}
           >
-            <div style={{ color: "white", fontSize: 18, fontWeight: 600 }}>Grow Analytic</div>
+            <div style={{ color: "white", fontSize: 18, fontWeight: 600 }}>Growth Analytics</div>
           </Link>
           {/* <LeftMenu /> */}
         </div>
@@ -473,11 +473,11 @@ class ABNavbar extends Component {
           <div className="Nav__mobile-logo">
             <Link
               className="Nav__logo"
-              to="/ab"
+              to="/fga"
               onClick={e => {
                 e.preventDefault();
                 trackStructEvent(`navbar-click-logo`);
-                this.goLink(e, "/ab");
+                this.goLink(e, "/fga");
               }}
             >
               <img

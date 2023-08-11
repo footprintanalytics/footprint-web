@@ -65,12 +65,12 @@ const Index = ({
           e.preventDefault();
           setLoginModalShow({
             show: true,
-            redirect: "/ab",
+            redirect: "/fga",
             from: "Growth price free",
           });
           return;
         }
-        onChangeLocation("/ab");
+        onChangeLocation("/fga");
       },
       detail: {
         title: "Free access to:",
@@ -135,7 +135,7 @@ const Index = ({
           e.preventDefault();
           setLoginModalShow({
             show: true,
-            redirect: "/ab/pricing",
+            redirect: "/fga/pricing",
             from: "Growth price growth",
           });
           return;
@@ -210,7 +210,7 @@ const Index = ({
           e.preventDefault();
           setLoginModalShow({
             show: true,
-            redirect: "/ab/pricing?type=data-api",
+            redirect: "/fga/pricing?type=data-api",
             from: "Data api price scale",
           });
           return;

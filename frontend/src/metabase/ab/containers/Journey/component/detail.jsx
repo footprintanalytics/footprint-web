@@ -25,12 +25,12 @@ const Detail = props => {
       const demoData = [
         {
           "user_id": "user_id_1",
-          "common_id": "common_id_1",
+          "uuid": "uuid_1",
           "wallet_address": "0xb290a2bdd6550091d1b1d5398c5b8ae1626289e1"
         },
         {
           "user_id": "user_id_3",
-          "common_id": "common_id_2",
+          "uuid": "uuid_2",
           "wallet_address": "0xa5ddb19f19468a2e39e31e885d9d358420bf7b81",
         },
       ];
@@ -102,9 +102,9 @@ const Detail = props => {
         key: 'user_id',
       },
       {
-        title: 'Common Id',
-        dataIndex: 'common_id',
-        key: 'common_id',
+        title: 'UUID',
+        dataIndex: 'uuid',
+        key: 'uuid',
       },
       {
         title: 'Wallet',

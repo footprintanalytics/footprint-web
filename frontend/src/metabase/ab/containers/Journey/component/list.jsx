@@ -17,7 +17,7 @@ const List = props => {
       title: 'Name',
       dataIndex: 'name',
       key: 'name',
-      render: (text) => <Link to={`/ab/project/${projectName}/journey`}>{text}</Link>,
+      render: (text) => <Link to={`/fga/project/${projectName}/journey`}>{text}</Link>,
     },
     {
       title: 'Description',
@@ -39,7 +39,7 @@ const List = props => {
       key: 'action',
       render: (_, record) => (
         <Space size="middle">
-          <Link onClick={() => router.push(`/ab/project/${projectName}/journey-edit`)}><Icon name="edit_document" size={12} color="white"/></Link>
+          <Link onClick={() => router.push(`/fga/project/${projectName}/journey-edit`)}><Icon name="edit_document" size={12} color="white"/></Link>
           <a onClick={() => {
             modal.info({ title: "Delete"})
           }}><Icon name="trash" size={12} color="white"/></a>

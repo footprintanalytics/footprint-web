@@ -33,15 +33,15 @@ export const isStudio = () => window.location.pathname.startsWith("/studio");
 
 export const isABNeedDark = () => {
   return (
-    window.location.pathname === "/ab" ||
-    window.location.pathname.startsWith("/ab/project")||
-    window.location.pathname.startsWith("/ab/@")||
-    window.location.pathname.startsWith("/ab/public")||
-    window.location.pathname.startsWith("/ab/guest")||
-    window.location.pathname.startsWith("/ab/pricing")||
-    window.location.pathname.startsWith("/ab/submit")||
-    window.location.pathname.startsWith("/ab/dashboard")||
-    window.location.pathname.startsWith("/ab/chart")||
-    window.location.pathname.startsWith("/ab/campaign")
+    window.location.pathname === "/fga" ||
+    window.location.pathname.startsWith("/fga/project")||
+    window.location.pathname.startsWith("/fga/@")||
+    window.location.pathname.startsWith("/fga/public")||
+    window.location.pathname.startsWith("/fga/guest")||
+    window.location.pathname.startsWith("/fga/pricing")||
+    window.location.pathname.startsWith("/fga/submit")||
+    window.location.pathname.startsWith("/fga/dashboard")||
+    window.location.pathname.startsWith("/fga/chart")||
+    window.location.pathname.startsWith("/fga/campaign")
   );
 };

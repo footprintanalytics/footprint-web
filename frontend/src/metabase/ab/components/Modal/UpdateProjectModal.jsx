@@ -195,7 +195,7 @@ const UpdateProjectModal = props => {
       >
         <Link
           onClick={() => {
-            router?.push({ pathname: "/ab/submit/contract/add" });
+            router?.push({ pathname: "/fga/submit/contract/add" });
           }}
         >
           Can not find the protocol? Submit now!

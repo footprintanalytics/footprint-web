@@ -141,7 +141,7 @@ const DashboardCopyModalInner = ({
                 url = url.startsWith('/') ?`/growth${url}`:`growth/${url}`;
               }
               if(isABPath()) {
-                url = url.startsWith('/') ?`/ab${url}`:`ab/${url}`;
+                url = url.startsWith('/') ?`/fga${url}`:`fga/${url}`;
               }
               window.open(url);
             }, 10);
