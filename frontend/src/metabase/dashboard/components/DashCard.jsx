@@ -50,6 +50,8 @@ import { isRealtimeChart } from "metabase/dashboard/components/utils/realtime";
 import { getRealtimeList } from "metabase/selectors/config";
 import QueryStatusButton from "metabase/query_builder/components/QueryStatusButton";
 import QueryRefreshButton from "metabase/query_builder/components/QueryRefreshButton";
+import { isFgaPath } from "metabase/growth/utils/utils";
+import { isABPath } from "metabase/ab/utils/utils";
 
 const DATASET_USUALLY_FAST_THRESHOLD = 15 * 1000;
 
@@ -319,10 +321,10 @@ class DashCard extends Component {
     //   mainCard.display === "text" ||
     //   mainCard.display === "image" ||
     //   mainCard.display === "video";
-    const showEdit = isOwner && !!dashcard.card.id && !window.location.pathname.startsWith("/ab");
+    const showEdit = isOwner && !!dashcard.card.id && !isABPath();
     const isPublic = window.location.pathname.startsWith("/public")
-      || window.location.pathname.startsWith("/growth")
-      || window.location.pathname.startsWith("/ab")
+      || isFgaPath()
+      || isABPath()
       || window.location.pathname.startsWith("/data-api/statistics")
       || window.location.pathname.startsWith("/studio")
     ;
@@ -366,8 +368,8 @@ class DashCard extends Component {
     const showReadTimeMode = !isPublic && !isTextDisplay && !isImageDisplay && !isVideoDisplay &&!isMultiEmbedDisplay && !isEmbedDisplay && !isTableauDisplay && result && !result.error
       && includeRealtimeTable
       && isRealtimeUser;
-    const isGrowth = window.location.pathname.startsWith("/growth");
-    const isAB = window.location.pathname.startsWith("/ab");
+    const isGrowth = isFgaPath();
+    const isAB = isABPath();
     const showButtons = !isGrowth || !isAB;
     return (
       <DashCardRoot
