@@ -202,7 +202,6 @@ export function formatValueRaw(
     // no extra whitespace for table cells
     return JSON.stringify(value);
   } else {
-    console.log("5555")
     return String(value);
   }
 }

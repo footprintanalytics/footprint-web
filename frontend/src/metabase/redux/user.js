@@ -13,6 +13,7 @@ import {
 } from "metabase/new-service";
 import arms from "metabase/lib/arms";
 import { clearGACache } from "metabase/growth/utils/utils";
+import { isABPath } from "metabase/ab/utils/utils";
 
 export const REFRESH_CURRENT_USER = "metabase/user/REFRESH_CURRENT_USER";
 /*export const refreshCurrentUser = createAction(REFRESH_CURRENT_USER, () => {
@@ -163,130 +164,127 @@ export const refreshCurrentFgaProject = createThunkAction(
   async project_id => {
     try {
       let res
-      if (project_id === 10) {
-        res = {
-          "id": project_id,
-          "isDemo": false,
-          "protocolName": "Open Campus",
-          "protocolSlug": "Open Campus",
-          "logo": "https://footprint-imgs.oss-us-east-1.aliyuncs.com/logo_images/the-sandbox.jpg",
-          "protocolType": "GameFi",
-          "tokenAddress": [
-            {
-              "address": "0x3845badade8e6dff049820680d1f14bd3903a5d0",
-              "chain": "Ethereum"
-            },
-          ],
-          "nftCollectionAddress": [
-            {
-              "address": "0x50f5474724e0ee42d9a4e711ccfb275809fd6d4a",
-              "chain": "Ethereum"
-            },
-          ],
-          "twitter": {},
-          "discord": {},
-          "ga": {}
+      if (isABPath()) {
+        if (project_id === 10) {
+          res = {
+            "id": project_id,
+            "isDemo": false,
+            "protocolName": "Open Campus",
+            "protocolSlug": "Open Campus",
+            "logo": "https://footprint-imgs.oss-us-east-1.aliyuncs.com/logo_images/the-sandbox.jpg",
+            "protocolType": "GameFi",
+            "tokenAddress": [
+              {
+                "address": "0x3845badade8e6dff049820680d1f14bd3903a5d0",
+                "chain": "Ethereum"
+              },
+            ],
+            "nftCollectionAddress": [
+              {
+                "address": "0x50f5474724e0ee42d9a4e711ccfb275809fd6d4a",
+                "chain": "Ethereum"
+              },
+            ],
+            "twitter": {},
+            "discord": {},
+            "ga": {}
+          }
+        } else if (project_id === 36) {
+          res = {
+            "id": project_id,
+            "isDemo": false,
+            "protocolName": "GAMEE",
+            "protocolSlug": "GAMEE",
+            "logo": "https://footprint-imgs.oss-us-east-1.aliyuncs.com/logo_images/the-sandbox.jpg",
+            "protocolType": "GameFi",
+            "tokenAddress": [
+              {
+                "address": "0x3845badade8e6dff049820680d1f14bd3903a5d0",
+                "chain": "Ethereum"
+              },
+            ],
+            "nftCollectionAddress": [
+              {
+                "address": "0x50f5474724e0ee42d9a4e711ccfb275809fd6d4a",
+                "chain": "Ethereum"
+              },
+            ],
+            "twitter": {},
+            "discord": {},
+            "ga": {}
+          }
+        } else if (project_id === 35) {
+          res = {
+            "id": project_id,
+            "isDemo": false,
+            "protocolName": "Benji Banana",
+            "protocolSlug": "Benji Banana",
+            "logo": "https://footprint-imgs.oss-us-east-1.aliyuncs.com/logo_images/the-sandbox.jpg",
+            "protocolType": "GameFi",
+            "tokenAddress": [
+              {
+                "address": "0x3845badade8e6dff049820680d1f14bd3903a5d0",
+                "chain": "Ethereum"
+              },
+            ],
+            "nftCollectionAddress": [
+              {
+                "address": "0x50f5474724e0ee42d9a4e711ccfb275809fd6d4a",
+                "chain": "Ethereum"
+              },
+            ],
+            "twitter": {},
+            "discord": {},
+            "ga": {}
+          }
+        } else if (project_id === 341) {
+          res = {
+            "id": project_id,
+            "isDemo": false,
+            "protocolName": "Crazy Defense Heroes",
+            "protocolSlug": "Crazy Defense Heroes",
+            "logo": "https://footprint-imgs.oss-us-east-1.aliyuncs.com/logo_images/the-sandbox.jpg",
+            "protocolType": "GameFi",
+            "tokenAddress": [
+              {
+                "address": "0x3845badade8e6dff049820680d1f14bd3903a5d0",
+                "chain": "Ethereum"
+              },
+            ],
+            "nftCollectionAddress": [
+              {
+                "address": "0x50f5474724e0ee42d9a4e711ccfb275809fd6d4a",
+                "chain": "Ethereum"
+              },
+            ],
+            "twitter": {},
+            "discord": {},
+            "ga": {}
+          }
+        } else if (project_id === 153) {
+          res = {
+            "id": 153,
+            "isDemo": false,
+            "protocolName": "Mocaverse",
+            "protocolSlug": "Mocaverse",
+            "logo": "",
+            "protocolType": "",
+            "tokenAddress": [],
+            "nftCollectionAddress": [
+              {
+                "address": "0x59325733eb952a92e069c87f0a6168b29e80627f",
+                "chain": "Ethereum"
+              }
+            ],
+            "twitter": {},
+            "discord": {},
+            "ga": {}
+          }
+        } else {
+          res = await GetFgaProjectDetail({
+            projectId: project_id,
+          });
         }
-      } else
-      if (project_id === 36) {
-        res = {
-          "id": project_id,
-          "isDemo": false,
-          "protocolName": "GAMEE",
-          "protocolSlug": "GAMEE",
-          "logo": "https://footprint-imgs.oss-us-east-1.aliyuncs.com/logo_images/the-sandbox.jpg",
-          "protocolType": "GameFi",
-          "tokenAddress": [
-            {
-              "address": "0x3845badade8e6dff049820680d1f14bd3903a5d0",
-              "chain": "Ethereum"
-            },
-          ],
-          "nftCollectionAddress": [
-            {
-              "address": "0x50f5474724e0ee42d9a4e711ccfb275809fd6d4a",
-              "chain": "Ethereum"
-            },
-          ],
-          "twitter": {},
-          "discord": {},
-          "ga": {}
-        }
-      } else
-      if (project_id === 35) {
-        res = {
-          "id": project_id,
-          "isDemo": false,
-          "protocolName": "Benji Banana",
-          "protocolSlug": "Benji Banana",
-          "logo": "https://footprint-imgs.oss-us-east-1.aliyuncs.com/logo_images/the-sandbox.jpg",
-          "protocolType": "GameFi",
-          "tokenAddress": [
-            {
-              "address": "0x3845badade8e6dff049820680d1f14bd3903a5d0",
-              "chain": "Ethereum"
-            },
-          ],
-          "nftCollectionAddress": [
-            {
-              "address": "0x50f5474724e0ee42d9a4e711ccfb275809fd6d4a",
-              "chain": "Ethereum"
-            },
-          ],
-          "twitter": {},
-          "discord": {},
-          "ga": {}
-        }
-      }
-
-     else  if (project_id === 341) {
-        res = {
-          "id": project_id,
-          "isDemo": false,
-          "protocolName": "Crazy Defense Heroes",
-          "protocolSlug": "Crazy Defense Heroes",
-          "logo": "https://footprint-imgs.oss-us-east-1.aliyuncs.com/logo_images/the-sandbox.jpg",
-          "protocolType": "GameFi",
-          "tokenAddress": [
-            {
-              "address": "0x3845badade8e6dff049820680d1f14bd3903a5d0",
-              "chain": "Ethereum"
-            },
-          ],
-          "nftCollectionAddress": [
-            {
-              "address": "0x50f5474724e0ee42d9a4e711ccfb275809fd6d4a",
-              "chain": "Ethereum"
-            },
-          ],
-          "twitter": {},
-          "discord": {},
-          "ga": {}
-        }
-      }
-      else if (project_id === 153) {
-        res = {
-          "id": 153,
-          "isDemo": false,
-          "protocolName": "Mocaverse",
-          "protocolSlug": "Mocaverse",
-          "logo": "",
-          "protocolType": "",
-          "tokenAddress": [],
-          "nftCollectionAddress": [
-            {
-              "address": "0x59325733eb952a92e069c87f0a6168b29e80627f",
-              "chain": "Ethereum"
-            }
-          ],
-          "twitter": {},
-          "discord": {},
-          "ga": {}
-        }
-      } else {
-        res = await GetFgaProjectDetail({
-          projectId: project_id,
-        });
       }
       if(!res?.protocolSlug||res?.protocolSlug===''){
         res.protocolSlug = 'default';

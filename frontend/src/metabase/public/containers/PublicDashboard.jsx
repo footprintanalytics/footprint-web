@@ -488,8 +488,7 @@ class PublicDashboard extends Component {
                 mode={PublicMode}
                 metadata={this.props.metadata}
                 navigateToNewCardFromDashboard={() => {}}
-                hideWatermark={true}
-                // hideWatermark={dashboard && dashboard.hideWatermark}
+                hideWatermark={isABPath() || (dashboard && dashboard.hideWatermark)}
                 chartStyle={chart_style}
                 isNightMode={shouldRenderAsNightMode}
                 duplicateAction={this.duplicateAction}
