@@ -17,7 +17,7 @@ import {
   getGrowthProjectPath,
   checkIsNeedContactUs,
 } from "../utils/utils";
-import { getOssUrl } from "metabase/lib/image";
+import Icon from "metabase/components/Icon";
 
 const GaProjectSearch = props => {
   const {
@@ -40,13 +40,13 @@ const GaProjectSearch = props => {
           "data": [
           {
             "id": 153,
-            "name": "mocaverse",
+            "name": "Project A",
             "creatorId": 20103,
             "dbId": 22,
             "schema": "fga_153_data",
             "active": 1,
-            "protocolSlug": "Mocaverse",
-            "protocolName": "Mocaverse",
+            "protocolSlug": "Project A",
+            "protocolName": "Project A",
             "nftContractAddress": [],
             "createdAt": "2023-04-25T10:51:11.000Z"
           }
@@ -57,64 +57,16 @@ const GaProjectSearch = props => {
         "data": [
           {
             "id": 153,
-            "name": "mocaverse",
+            "name": "Project A",
             "creatorId": 20103,
             "dbId": 22,
             "schema": "fga_153_data",
             "active": 1,
-            "protocolSlug": "Mocaverse",
-            "protocolName": "Mocaverse",
+            "protocolSlug": "Project A",
+            "protocolName": "Project A",
             "nftContractAddress": [],
             "createdAt": "2023-04-25T10:51:11.000Z"
           },
-          {
-            "id": 341,
-            "name": "Crazy Defense Heroes",
-            "creatorId": 20103,
-            "dbId": 22,
-            "schema": "fga_341_data",
-            "active": 1,
-            "protocolSlug": "Crazy Defense Heroes",
-            "protocolName": "Crazy Defense Heroes",
-            "nftContractAddress": [],
-            "createdAt": "2023-07-17T09:09:36.000Z"
-          },
-          {
-            "id": 35,
-            "name": "Benji Bananas",
-            "creatorId": 20103,
-            "dbId": 22,
-            "schema": "fga_35_data",
-            "active": 1,
-            "protocolSlug": "Benji Bananas",
-            "protocolName": "Benji Bananas",
-            "nftContractAddress": [],
-            "createdAt": "2023-07-17T09:09:36.000Z"
-          },
-          {
-            "id": 36,
-            "name": "GAMEE",
-            "creatorId": 20103,
-            "dbId": 22,
-            "schema": "fga_36_data",
-            "active": 1,
-            "protocolSlug": "GAMEE",
-            "protocolName": "GAMEE",
-            "nftContractAddress": [],
-            "createdAt": "2023-07-17T09:09:36.000Z"
-          },
-          {
-            "id": 10,
-            "name": "Open Campus",
-            "creatorId": 20103,
-            "dbId": 22,
-            "schema": "fga_36_data",
-            "active": 1,
-            "protocolSlug": "Open Campus",
-            "protocolName": "Open Campus",
-            "nftContractAddress": [],
-            "createdAt": "2023-07-17T09:09:36.000Z"
-          }
         ]
       }
       // return await GetFgaProject();
@@ -139,7 +91,7 @@ const GaProjectSearch = props => {
                 : p.protocolSlug,
             label:
               <div className="flex align-center">
-                <img className="mr1" style={{width: 16, height: 16}} src={getOssUrl(`/ab/${p.protocolName}.png?image_process=resize,w_16/crop,h_16/format,jpg`)} alt={p.protocolName}/>
+                {/*<Icon className="mr1" name="circle" size={16}/>*/}
                 {p.protocolName ?? p.name}
               </div>,
             key: p.protocolSlug + p.id,
@@ -157,7 +109,6 @@ const GaProjectSearch = props => {
           location.pathname === "/fga" ||
           location.pathname.startsWith("/fga/project")
         ) {
-          console.log("push", router);
           router?.push({
             pathname: getGrowthProjectPath(projects[projectIndex].value, menu),
             query: router?.location?.query,

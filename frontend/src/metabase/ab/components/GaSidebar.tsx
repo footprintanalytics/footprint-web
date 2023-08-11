@@ -32,7 +32,6 @@ interface IGaSidebarProp {
 const GaSidebar = (props: IGaSidebarProp) => {
   const { currentProject, router, location, currentMenu, projectObject, user } =
     props;
-  console.log("currentMenu", currentMenu)
   const [items, setItems] = useState<any[]>([]);
   const [itemsPlatform, setItemsPlatform] = useState<any[]>([]);
   // const [rootSubmenuKeys, setRootSubmenuKeys] = useState<any[]>([]);
