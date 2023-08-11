@@ -16,7 +16,7 @@ const footers = [
     items: [
       {
         label: "Footprint Dataset",
-        url: "/studio/footprint-datasets",
+        url: "/@Footprint/Footprint-Datasets-Data-Dictionary",
       },
       {
         label: "GameFi Data",

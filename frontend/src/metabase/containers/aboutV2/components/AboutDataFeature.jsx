@@ -43,7 +43,7 @@ const AboutDataFeature = () => {
           </li>)
         )}
       </ul>
-      <AboutButton buttonText="Know More About Data" link="https://docs.footprint.network/docs/get-started"/>
+      <AboutButton buttonText="Know More About Footprint" link="https://docs.footprint.network/docs/get-started"/>
     </div>
   );
 };

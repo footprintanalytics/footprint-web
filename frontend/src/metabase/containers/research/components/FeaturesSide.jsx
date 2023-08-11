@@ -178,7 +178,7 @@ const FeaturesSide = ({
   }
 
   const getEmbedUrl = () => {
-    return `${MetabaseSettings.get("site-url")}/public${location.pathname}`;
+    return `${MetabaseSettings.get("site-url")}/public${location.pathname}${window.location.search}`;
   }
 
   const renderNavButton = () => {
