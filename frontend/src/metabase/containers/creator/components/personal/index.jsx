@@ -16,12 +16,14 @@ import VipIconDataApi from "metabase/containers/creator/components/personal/VipI
 import { useGetPaymentSubscriptionDetail } from "metabase/pricing_v2/use";
 import SubscriptionDetailModal from "metabase/containers/creator/components/personal/SubscriptionDetailModal";
 import { isFgaPath } from "metabase/growth/utils/utils";
+import { isABPath } from "metabase/ab/utils/utils";
 
 const Index = ({ router, user, data }) => {
   const [loading, setLoading] = useState(false);
   const [showSubscriptionDetailModal, setShowSubscriptionDetailModal] =
     useState(false);
   const isFga = isFgaPath();
+  const isAB = isABPath();
   const totalInfo = [
     {
       title: "Dashboards",
@@ -127,7 +129,7 @@ const Index = ({ router, user, data }) => {
                   // { href: `mailto:${email}`, icon: "20220516201357.png" },
                 ]}
               />
-              {user?.name === get(data, "userInfo.name") && !isFga && (
+              {user?.name === get(data, "userInfo.name") && !isFga && !isAB && (
                 <div className="creator__personal-cell-buttons">
                   <Link
                     to="/account/profile"
@@ -167,7 +169,7 @@ const Index = ({ router, user, data }) => {
                 </div>
               )}
             </div>
-            {!isFga && (
+            {!isFga && !isAB && (
               <div className="creator__personal-right">
                 {totalInfo.map((item, index) => {
                   return (

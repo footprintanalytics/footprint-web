@@ -39,6 +39,10 @@
   background-color: var(--color-bg-dark);
 }
 
+.ab-page .Dashboard.Dashboard--night {
+  background-color: var(--color-ab-bg-dark);
+}
+
 .Dashboard.Dashboard--night .Card {
   color: var(--color-text-white);
 }

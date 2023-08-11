@@ -13,6 +13,7 @@ import { getUserCreateQueryPermission } from "metabase/selectors/user";
 import NeedPermissionModal from "metabase/components/NeedPermissionModal";
 import { getProject } from "metabase/lib/project_info";
 import { isFgaPath } from "metabase/growth/utils/utils"
+import { isABPath } from "metabase/ab/utils/utils";
 
 const QueryCopyModal = (props) => {
   return props.open ? <QueryCopyInnerModal {...props} /> : <React.Fragment />;
@@ -70,6 +71,9 @@ const QueryCopyInnerModal = ({
               let url = Urls.question(card);
               if(isFgaPath()) {
                 url = url.startsWith('/') ?`/growth${url}`:`growth/${url}`;
+              }
+              if(isABPath()) {
+                url = url.startsWith('/') ?`/ab${url}`:`ab/${url}`;
               }
               window.open(url);
             } else {

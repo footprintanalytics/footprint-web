@@ -18,6 +18,7 @@ import CreateActionModal from "metabase/components/CreateActionModal";
 import { isPublicPath } from "metabase/lib/urls";
 import { isDefi360 } from "metabase/lib/project_info";
 import { isFgaPath } from "metabase/growth/utils/utils"
+import { isABPath } from "metabase/ab/utils/utils"
 
 function ExplorerList({
   exploreList,
@@ -38,6 +39,7 @@ function ExplorerList({
   const [showCreateModal, setShowCreateModal] = useState(false);
   const [hasMore, setHasMore] = useState(exploreList.length < exploreTotal);
   const isFga = isFgaPath();
+  const isAB = isABPath();
   if (exploreTotal === undefined) {
     return <Skeleton style={{ maxWidth: "1350px", margin: "0 auto" }} active />;
   }
@@ -51,7 +53,7 @@ function ExplorerList({
       >
         <div
           className="preview-dashboard-card footprint-p-s"
-          style={{ background:isFga?'#182034':'' }}
+          style={{ background: isFga || isAB ? '#182034':'' }}
           onClick={() => {
             if (isPublicPath()) {
               setShowCreateModal(true);

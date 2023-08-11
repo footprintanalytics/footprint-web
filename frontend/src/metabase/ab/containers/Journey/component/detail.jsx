@@ -22,7 +22,20 @@ const Detail = props => {
   const detailResult = useQuery(
     ["journeyPathUserDetail", params],
     async () => {
-      return await journeyPathUserDetail(params);
+      const demoData = [
+        {
+          "user_id": "user_id_1",
+          "common_id": "common_id_1",
+          "wallet_address": "0xb290a2bdd6550091d1b1d5398c5b8ae1626289e1"
+        },
+        {
+          "user_id": "user_id_3",
+          "common_id": "common_id_2",
+          "wallet_address": "0xa5ddb19f19468a2e39e31e885d9d358420bf7b81",
+        },
+      ];
+      return demoData;
+      // return await journeyPathUserDetail(params);
     },
     { ...QUERY_OPTIONS, enabled: !!nodeDetail?.id },
   );
@@ -30,7 +43,34 @@ const Detail = props => {
   const detailTrend = useQuery(
     ["journeyPathUserTrend", params],
     async () => {
-      return await journeyPathUserTrend(params);
+      const demoData = [
+          {
+            "event_date": "2023-07-02",
+            "value": 5
+          },
+          {
+            "event_date": "2023-07-03",
+            "value": 5
+          },
+          {
+            "event_date": "2023-07-04",
+            "value": 1
+          },
+          {
+            "event_date": "2023-07-07",
+            "value": 1
+          },
+          {
+            "event_date": "2023-07-08",
+            "value": 4
+          },
+          {
+            "event_date": "2023-07-12",
+            "value": 4
+          }
+      ];
+      return demoData;
+      // return await journeyPathUserTrend(params);
     },
     { ...QUERY_OPTIONS, enabled: !!nodeDetail?.id },
   );
@@ -62,9 +102,9 @@ const Detail = props => {
         key: 'user_id',
       },
       {
-        title: 'Animoca Id',
-        dataIndex: 'animoca_id',
-        key: 'animoca_id',
+        title: 'Common Id',
+        dataIndex: 'common_id',
+        key: 'common_id',
       },
       {
         title: 'Wallet',

@@ -56,12 +56,49 @@ const Edit = props => {
 
   const calAction = async () => {
     setLoading(true);
-    const result = await journeyPathAnalyze(params);
-    setChartData({
-      nodes: result?.nodes,
-      links: result?.links,
-    })
-    setLoading(false);
+    // const result = await journeyPathAnalyze(params);
+    // setChartData({
+    //   nodes: result?.nodes,
+    //   links: result?.links,
+    // })
+    const demoData = {
+      "nodes": [
+        {
+          "name": "play_games",
+          "value": 1,
+          "id": "play_games_3"
+        },
+        {
+          "name": "play_games",
+          "value": 4,
+          "id": "play_games_2"
+        },
+        {
+          "name": "login",
+          "value": 5,
+          "id": "login_1"
+        }
+      ],
+      "links": [
+        {
+          "source": "play_games_2",
+          "target": "play_games_3",
+          "value": 1
+        },
+        {
+          "source": "login_1",
+          "target": "play_games_2",
+          "value": 4
+        }
+      ]
+    }
+    setTimeout(() => {
+      setLoading(false);
+      setChartData({
+        nodes: demoData?.nodes,
+        links: demoData?.links,
+      })
+    }, 2000)
   }
 
   const renderConditions = () => {
@@ -240,7 +277,7 @@ const Edit = props => {
             })
           }}
           runData={() => {
-            calAction()
+            // calAction()
           }}
         />
       </div>

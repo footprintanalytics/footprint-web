@@ -5,10 +5,11 @@ import _ from "underscore";
 
 import { updateIn } from "icepick";
 import Visualization from "metabase/visualizations/components/Visualization";
-import QueryDownloadWidget from "metabase/query_builder/components/QueryDownloadWidget";
 import LoadingAndErrorWrapper from "metabase/components/LoadingAndErrorWrapper";
 import ExplicitSize from "metabase/components/ExplicitSize";
 import title from "metabase/hoc/Title";
+import { isFgaPath } from "metabase/growth/utils/utils";
+import { isABPath } from "metabase/ab/utils/utils";
 
 import { getParameterValuesByIdFromQueryParams } from "metabase/parameters/utils/parameter-values";
 
@@ -30,14 +31,12 @@ import { getParameterValuesBySlug } from "metabase-lib/parameters/utils/paramete
 import { getParametersFromCard } from "metabase-lib/parameters/utils/template-tags";
 import { applyParameters } from "metabase-lib/queries/utils/card";
 import EmbedFrame from "../components/EmbedFrame";
-import QueryDownloadWidgetFP from "metabase/query_builder/components/QueryDownloadWidgetFP";
 import { parseTitleId } from "metabase/lib/urls";
 import { parseHashOptions } from "metabase/lib/browser";
 import { Breadcrumb } from "antd";
 import cx from "classnames";
 import { canShowDarkMode } from "metabase/dashboard/components/utils/dark";
 import { get, has } from "lodash";
-import { c } from "ttag";
 
 const mapStateToProps = state => ({
   metadata: getMetadata(state),
@@ -210,11 +209,12 @@ class PublicQuestion extends Component {
     const parameters =
       card &&
       getCardUiParameters(card, metadata, {}, card.parameters || undefined);
-    const isFgaPublicDashboard = location.pathname.startsWith("/growth");
+    const isFgaPublicDashboard = isFgaPath();
+    const isABPublicDashboard = isABPath();
     const hashData = parseHashOptions(location?.hash);
     let header = <></>;
     let hideTitle = false;
-    if (isFgaPublicDashboard && hashData?.from && card) {
+    if ((isFgaPublicDashboard || isABPublicDashboard) && hashData?.from && card) {
       header = (
         <>
           <Breadcrumb
@@ -254,9 +254,9 @@ class PublicQuestion extends Component {
         isNightMode={shouldRenderAsNightMode}
         className={cx(
           className,
-          `${isFgaPublicDashboard ? "ml-250 mt-60" : ""}`,
+          `${(isFgaPublicDashboard || isABPublicDashboard) ? "ml-250 mt-60" : ""}`,
         )}
-        hideFooter={hideFooter || isFgaPublicDashboard}
+        hideFooter={hideFooter || (isFgaPublicDashboard || isABPublicDashboard)}
         setParameterValue={this.setParameterValue}
       >
         <LoadingAndErrorWrapper
