@@ -22,7 +22,13 @@ const SubmitContract = props => {
   const { isLoading, data, refetch } = useQuery(
     ["getRefContractSubmittedList"],
     async () => getRefContractSubmittedList(),
-    { refetchOnWindowFocus: false, retry: 0, onSuccess: data => {console.log('getRefContractSubmittedList onSuccess=> ',data)} },
+    {
+      refetchOnWindowFocus: false,
+      retry: 0,
+      onSuccess: data => {
+        console.log("getRefContractSubmittedList onSuccess=> ", data);
+      },
+    },
   );
 
   const tempData2 = [
@@ -93,12 +99,10 @@ const SubmitContract = props => {
   return (
     <div className="SubmitContract">
       <h1>
-        Welcome to submit more contracts or protocols to help us better display the data you
-        want
+        Welcome to submit more contracts or protocols to help us better display
+        the data you want
       </h1>
-      <span>
-        Submissions normally take a few minutes to get processed.
-      </span>
+      <span>Submissions normally take a few minutes to get processed.</span>
       <p>
         {"If you have any questions, please "}
         <Link
@@ -127,9 +131,7 @@ const SubmitContract = props => {
           </Col>
         </Row>
       </Form>
-      <h2 className=" p1">
-      All commited records
-      </h2>
+      <h2 className=" p1">Latest submitted records</h2>
       {isLoading ? (
         <LoadingSpinner message="Loading..." />
       ) : (
