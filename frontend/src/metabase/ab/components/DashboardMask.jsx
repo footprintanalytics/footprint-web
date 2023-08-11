@@ -86,7 +86,7 @@ const DashboardMask = props => {
             type="primary"
             className="mt2"
             onClick={() => {
-              props.router.push("/ab/pricing");
+              props.router.push("/fga/pricing");
             }}
           >
             Upgrade Plan

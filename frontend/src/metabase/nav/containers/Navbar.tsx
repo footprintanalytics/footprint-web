@@ -40,7 +40,7 @@ function Navbar({ isOpen, user, location, params, adminPaths }: NavbarProps) {
   }, [location.pathname]);
 
   const isABApp = useMemo(() => {
-    return location.pathname.startsWith("/ab");
+    return location.pathname.startsWith("/fga");
   }, [location.pathname]);
 
   if (isAdminApp && user) {

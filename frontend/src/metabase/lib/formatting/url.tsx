@@ -40,7 +40,7 @@ export function formatUrl(value: string, options: OptionsType = {}) {
     const targetObject = IFRAMED ? { target: "_blank" } : {};
     let formatedURL = formatUrl2Growth(location?.pathname, url);
     formatedURL = formatUrl2AB(location?.pathname, formatedURL);
-    if (formatedURL.startsWith("/ab")) {
+    if (formatedURL.startsWith("/fga")) {
       return (
         <Link
           to={formatedURL}
@@ -145,11 +145,11 @@ export function formatUrl2AB(
     return "";
   }
   let toLink = href;
-  if (pathname?.includes("/ab/") && !href?.includes("/ab/")) {
+  if (pathname?.includes("/fga/") && !href?.includes("/fga/")) {
     if (href?.includes("/@")) {
-      toLink = href.replace("/@", "/ab/@");
+      toLink = href.replace("/@", "/fga/@");
     } else if (href?.includes("/public/")) {
-      toLink = href.replace("/public/", "/ab/public/");
+      toLink = href.replace("/public/", "/fga/public/");
     }
   }
   return toLink ?? "";

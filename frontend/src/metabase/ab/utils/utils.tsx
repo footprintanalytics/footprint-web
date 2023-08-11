@@ -287,11 +287,11 @@ export async function getDashboardDatas(uuid: string) {
 }
 
 export function isABPath(){
-  return location.pathname.startsWith("/ab");
+  return location.pathname.startsWith("/fga");
 }
 
 export function getGrowthProjectPath(project: string, menu?: string) {
-  return `/ab/project/${project}/${menu ?? ""}`;
+  return `/fga/project/${project}/${menu ?? ""}`;
 }
 export function getGaMenuTabs(
   tabs_data: any[],

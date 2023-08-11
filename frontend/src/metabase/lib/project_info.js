@@ -19,7 +19,7 @@ export const getLatestGAProjectId = () => {
   if (!window.location.pathname.startsWith("/growth") && userId !== "6") {
     return null;
   }
-  if (window.location.pathname.startsWith("/ab")) {
+  if (window.location.pathname.startsWith("/fga")) {
     return null;
   }
   const projectIdStr = window.localStorage.getItem("LatestGAProjectId");

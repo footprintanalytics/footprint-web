@@ -137,10 +137,17 @@ export const getRoutes = store => (
           nextPathname = "/" + nextPathname;
         }
         if (
-          prevPathname.startsWith("/ab") &&
-          !nextPathname.startsWith("/ab")
+          prevPathname.startsWith("/growth") &&
+          !nextPathname.startsWith("/growth")
         ) {
-          nextState.location.pathname = `/ab${nextPathname}`
+          nextState.location.pathname = `/growth${nextPathname}`
+          replace(nextState.location)
+        }
+        if (
+          prevPathname.startsWith("/fga") &&
+          !nextPathname.startsWith("/fga")
+        ) {
+          nextState.location.pathname = `/fga${nextPathname}`
           replace(nextState.location)
         }
       }}
@@ -602,7 +609,7 @@ export const getRoutes = store => (
 
       {/* ----------- AB Analytics 👇 --------- */}
       <Route
-        path="/ab/dashboard/:slug"
+        path="/fga/dashboard/:slug"
         title={t`Dashboard`}
         component={LazyLoad.DashboardApp}
       >
@@ -613,17 +620,17 @@ export const getRoutes = store => (
       </Route>
       <Route
         title={t`Creator`}
-        path="/ab/@:name"
+        path="/fga/@:name"
         component={LazyLoad.Creator}
       />
       <Route
         title={t`Dashboard`}
-        path="/ab/@:name/:dashboardName"
+        path="/fga/@:name/:dashboardName"
         component={LazyLoad.WrapDashboard}
       />
       <Route
         title={t`Dashboard`}
-        path="/ab/dashboard/@:name/:dashboardName"
+        path="/fga/dashboard/@:name/:dashboardName"
         component={LazyLoad.DashboardApp}
       >
         <ModalRoute
@@ -649,37 +656,37 @@ export const getRoutes = store => (
       </Route>
       <Route
         title={t`Public Dashboard`}
-        path="/ab/public/dashboard/:uuid"
+        path="/fga/public/dashboard/:uuid"
         component={LazyLoad.PublicDashboard}
       />
       <Route
         title={t`Create Campaign`}
-        path="/ab/campaign(/:type)"
+        path="/fga/campaign(/:type)"
         component={LazyLoad.CreateCampaign}
       />
       <Route
         title={t`Chart`}
-        path="/ab/guest/chart/:titleAndId"
+        path="/fga/guest/chart/:titleAndId"
         component={LazyLoad.GuestQuestion}
       />
       <Route
         title={t`Chart`}
-        path="/ab/public/scene/chart/:titleAndId"
+        path="/fga/public/scene/chart/:titleAndId"
         component={LazyLoad.PublicQuestion}
       />
       <Route
         title={t`Chart`}
-        path="/ab/public/widget/chart/:uuid"
+        path="/fga/public/widget/chart/:uuid"
         component={LazyLoad.WidgetPublic}
       />
       <Route
         title={t`Chart`}
-        path="/ab/public/chart/:titleAndId"
+        path="/fga/public/chart/:titleAndId"
         component={LazyLoad.PublicQuestion}
       />
       <Route
         title={t`Question`}
-        path="/ab/chart"
+        path="/fga/chart"
         component={LazyLoad.Question}
       >
         {/* <IndexRoute component={Question} /> */}
@@ -709,30 +716,30 @@ export const getRoutes = store => (
       </Route>
       <Route
         title={t`Growth`}
-        path="/ab"
+        path="/fga"
         component={LazyLoad.ABProjectContainer}
       >
         <Route path="project/:project(/:menu)" />
       </Route>
       <Route
         title={t`Pricing`}
-        path="/ab/pricing"
+        path="/fga/pricing"
         component={LazyLoad.FgaPrice}
       />
       <Route
         title={t`Submit Contract`}
-        path="/ab/submit/contract/add"
+        path="/fga/submit/contract/add"
         component={LazyLoad.SubmitContractAddV2}
       />
 
       <Route
         title={t`Submit Contract`}
-        path="/ab/submit/contract"
+        path="/fga/submit/contract"
         component={LazyLoad.SubmitContract}
       />
       <Route
         title={t`Submit Contract`}
-        path="/ab/submit/contract/success"
+        path="/fga/submit/contract/success"
         component={LazyLoad.SubmitContractSuccess}
       />
 

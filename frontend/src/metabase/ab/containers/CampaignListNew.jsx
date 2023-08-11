@@ -332,7 +332,7 @@ const CampaignListNew = props => {
             () => {
               if (item.type === "Notification") {
                 router.push({
-                  pathname: `/ab/campaign/${item.type}`,
+                  pathname: `/fga/campaign/${item.type}`,
                 });
                 return;
               }

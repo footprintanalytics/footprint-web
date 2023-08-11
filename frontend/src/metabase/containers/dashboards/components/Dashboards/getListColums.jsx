@@ -51,7 +51,7 @@ export default ({
     if (isFga) {
       link = "/growth" + link;
     } else if (isAB) {
-      link = "/ab" + link;
+      link = "/fga" + link;
     }
     return link;
   };

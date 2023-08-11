@@ -125,7 +125,7 @@ const SegmentListPanel = props => {
           </Link>
           <Link
             disabled={record.numberOfWallets === 0}
-            to={`/ab/public/dashboard/dce33214-a079-4eb8-b53f-defaabde2eba?cohort_id=${record.cohortId}&cohort_title=${record.title}#from=Segment`}
+            to={`/fga/public/dashboard/dce33214-a079-4eb8-b53f-defaabde2eba?cohort_id=${record.cohortId}&cohort_title=${record.title}#from=Segment`}
           >
             Wallet List
           </Link>

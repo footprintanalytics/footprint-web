@@ -25,14 +25,14 @@ const WrapDashboard = props => {
   useEffect(() => {
     if (!isLoading && data?.uuid) {
       router.replace({
-        pathname: `/ab/public/dashboard/${data?.uuid}`,
+        pathname: `/fga/public/dashboard/${data?.uuid}`,
         query: router?.location?.query,
       });
     }
   }, [isLoading]);
 
   if(type === "dashboard") {
-    location.pathname = location.pathname.replace("/ab", "/ab/dashboard");
+    location.pathname = location.pathname.replace("/fga", "/fga/dashboard");
     console.log('WrapDashboard to dashboard',location);
     router.replace(location);
     return <></>

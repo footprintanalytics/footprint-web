@@ -154,8 +154,8 @@ const GaProjectSearch = props => {
         setUserProject(projects);
         if (
           index === -1 ||
-          location.pathname === "/ab" ||
-          location.pathname.startsWith("/ab/project")
+          location.pathname === "/fga" ||
+          location.pathname.startsWith("/fga/project")
         ) {
           console.log("push", router);
           router?.push({
@@ -199,8 +199,8 @@ const GaProjectSearch = props => {
         saveLatestGAProject(temp_project);
         setCurrentProject(temp_project);
         if (
-          location.pathname.startsWith("/ab/project") ||
-          location.pathname === "/ab"
+          location.pathname.startsWith("/fga/project") ||
+          location.pathname === "/fga"
         ) {
           router?.push({
             pathname: getGrowthProjectPath(temp_project),
@@ -217,8 +217,8 @@ const GaProjectSearch = props => {
       loadProjectDetail(option.id);
     }
     if (
-      (location.pathname.startsWith("/ab/project") ||
-        location.pathname === "/ab") &&
+      (location.pathname.startsWith("/fga/project") ||
+        location.pathname === "/fga") &&
       option.value
     ) {
       // window.location.href = getGrowthProjectPath(option.value);

@@ -173,7 +173,7 @@ class CreateActionModal extends Component {
                   if (isLogin()) {
                     let prefix = "";
                     if (isABPath()) {
-                      prefix = "/ab";
+                      prefix = "/fga";
                     }
                     if (isFgaPath()) {
                       prefix = "/growth";

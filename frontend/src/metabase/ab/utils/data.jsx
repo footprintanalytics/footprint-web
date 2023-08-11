@@ -22,9 +22,9 @@ import { disabled } from "styled-system";
 import { ReactIcons } from "../../nav/containers/FpNavbar/utils/data";
 //public/dashboard/uuid
 export const wallet_profile_link =
-  "/ab/public/dashboard/fa040fe5-46b3-483b-b257-aa2373559fab"; //query: wallet_address
+  "/fga/public/dashboard/fa040fe5-46b3-483b-b257-aa2373559fab"; //query: wallet_address
 export const user_profile_link =
-  "/ab/public/dashboard/c06826fc-511e-4f03-bfa7-fc8eaa2facfa"; //query: cohort_title
+  "/fga/public/dashboard/c06826fc-511e-4f03-bfa7-fc8eaa2facfa"; //query: cohort_title
 export const top_protocols = [
   {
     protocolSlug: "the-sandbox",
@@ -90,46 +90,46 @@ export const template_gallery = project => {
           dashboardName:
             "Tokenomics for IXT (price,holder, staking, liquidity)",
           id: 8055,
-          dashboardLink: `/ab/public/dashboard/584a27d8-b93b-4cb2-9fba-15f4e2ee9d4d?${params}`,
+          dashboardLink: `/fga/public/dashboard/584a27d8-b93b-4cb2-9fba-15f4e2ee9d4d?${params}`,
         },
         {
           dashboardName: "Revenue and ARPU Analysis",
           id: 7961,
-          dashboardLink: `/ab/public/dashboard/b9319fd1-c074-43ce-ac07-104c88be4073?${params}`,
+          dashboardLink: `/fga/public/dashboard/b9319fd1-c074-43ce-ac07-104c88be4073?${params}`,
         },
         {
           dashboardName: "Moneyflow Monitor to Check Game Health",
-          dashboardLink: `/ab/public/dashboard/22304b4e-458b-4861-a34e-11bd0724a76b?${params}`,
+          dashboardLink: `/fga/public/dashboard/22304b4e-458b-4861-a34e-11bd0724a76b?${params}`,
           id: 7964,
         },
         {
           dashboardName: "In-Game Duel Analysis (Presenting by Web2 data)",
-          dashboardLink: `/ab/public/dashboard/22b77726-f47d-4e0c-995a-bec002c70a0b?${params}`,
+          dashboardLink: `/fga/public/dashboard/22b77726-f47d-4e0c-995a-bec002c70a0b?${params}`,
           id: 7963,
         },
         {
           dashboardName: "Airdrop: select users by FGA user profiling",
-          dashboardLink: `/ab/public/dashboard/59ad5548-8e80-4402-9193-78e3b4db99c9?${params}`,
+          dashboardLink: `/fga/public/dashboard/59ad5548-8e80-4402-9193-78e3b4db99c9?${params}`,
           id: 7962,
         },
         {
           dashboardName: "Gamer Profile",
-          dashboardLink: `/ab/public/dashboard/aca032dc-5faf-462a-8be5-124d68226328?${params}`,
+          dashboardLink: `/fga/public/dashboard/aca032dc-5faf-462a-8be5-124d68226328?${params}`,
           id: 6345,
         },
         {
           dashboardName: "Bot detection",
-          dashboardLink: `/ab/public/dashboard/0dcef7ac-8318-47fd-b675-7b60fdcd068e?${params}`,
+          dashboardLink: `/fga/public/dashboard/0dcef7ac-8318-47fd-b675-7b60fdcd068e?${params}`,
           id: 7887,
         },
         {
           dashboardName: "Channel Analysis",
-          dashboardLink: `/ab/public/dashboard/0bb1e2b8-c6a5-425a-a420-a9b6febdcddd?${params}`,
+          dashboardLink: `/fga/public/dashboard/0bb1e2b8-c6a5-425a-a420-a9b6febdcddd?${params}`,
           id: 8051,
         },
         {
           dashboardName: "User Funnel to Check Conversion Rate",
-          dashboardLink: `/ab/public/dashboard/d72a4dea-73c1-47a1-968c-b854ce586047?${params}`,
+          dashboardLink: `/fga/public/dashboard/d72a4dea-73c1-47a1-968c-b854ce586047?${params}`,
           id: 8069,
         },
       ],
@@ -141,48 +141,48 @@ export const template_gallery = project => {
         {
           dashboardName: "Looksrare Airdrop Effect",
           id: 7901,
-          dashboardLink: `/ab/public/dashboard/908f02a9-90c1-4aa3-960a-293d3641f94f?tag_as_potential=active-nft-trader&${params}`,
+          dashboardLink: `/fga/public/dashboard/908f02a9-90c1-4aa3-960a-293d3641f94f?tag_as_potential=active-nft-trader&${params}`,
         },
         {
           dashboardName: "Blur Airdrop",
           id: 7121,
-          dashboardLink: `/ab/public/dashboard/37c8520e-bd79-4fe1-8667-5c4ab73cf79b?${params}`,
+          dashboardLink: `/fga/public/dashboard/37c8520e-bd79-4fe1-8667-5c4ab73cf79b?${params}`,
         },
         {
           dashboardName: "Token Airdrop Monitoring",
           id: 7426,
-          dashboardLink: `/ab/public/dashboard/c676fe55-c785-4015-bc8a-27c18b57826f?${params}`,
+          dashboardLink: `/fga/public/dashboard/c676fe55-c785-4015-bc8a-27c18b57826f?${params}`,
         },
         {
           dashboardName: "Dashboard for NFT Minting",
-          dashboardLink: `/ab/public/dashboard/340f11c8-144e-4c24-a298-b5564c4a88a8?campaign_id=5284&${params}`,
+          dashboardLink: `/fga/public/dashboard/340f11c8-144e-4c24-a298-b5564c4a88a8?campaign_id=5284&${params}`,
           id: 7569,
         },
         {
           category: "Go to market",
           dashboardName: "Galxe Campaign Overall Stats",
           id: 7408,
-          dashboardLink: `/ab/public/dashboard/b4658254-37a3-4965-87e5-acbd548aaa93?${params}`,
+          dashboardLink: `/fga/public/dashboard/b4658254-37a3-4965-87e5-acbd548aaa93?${params}`,
         },
         {
           category: "Go to market",
           desc: "",
           dashboardName: "Galxe Campaign Analysis",
-          dashboardLink: `/ab/public/dashboard/f1c6f82d-2b7d-448d-b86c-6149e93c4e4a?campaign_id=5284&${params}`,
+          dashboardLink: `/fga/public/dashboard/f1c6f82d-2b7d-448d-b86c-6149e93c4e4a?campaign_id=5284&${params}`,
           id: 7407,
         },
         {
           category: "Go to market",
           desc: "",
           dashboardName: "Galxe Campaign Comparison",
-          dashboardLink: `/ab/public/dashboard/25c72dde-126d-4676-b409-c40612e87c31?campaign_a_id=5284&campaign_b_id=8087&${params}`,
+          dashboardLink: `/fga/public/dashboard/25c72dde-126d-4676-b409-c40612e87c31?campaign_a_id=5284&campaign_b_id=8087&${params}`,
           id: 7409,
         },
         {
           category: "Go to market",
           desc: "",
           dashboardName: "Galxe Campaign Reward Analysis",
-          dashboardLink: `/ab/public/dashboard/a42336af-e56a-4f2c-bcd2-1ce12f43191f?series_date=past90days&campaign_name=galxe&${params}`,
+          dashboardLink: `/fga/public/dashboard/a42336af-e56a-4f2c-bcd2-1ce12f43191f?series_date=past90days&campaign_name=galxe&${params}`,
           id: 7584,
         },
       ],
@@ -193,29 +193,29 @@ export const template_gallery = project => {
       items: [
         {
           dashboardName: "GameFi Market Overview",
-          dashboardLink: `/ab/public/dashboard/db6aac3e-48e4-4465-87b2-94be114475aa?${params}`,
+          dashboardLink: `/fga/public/dashboard/db6aac3e-48e4-4465-87b2-94be114475aa?${params}`,
           id: 7871,
         },
         {
           dashboardName: "MCH Duel Analysis",
-          dashboardLink: `/ab/public/dashboard/617f6a66-c58d-4c57-8e4f-804f7df26257?date_filter=2023-04-01~2023-04-30&${params}`,
+          dashboardLink: `/fga/public/dashboard/617f6a66-c58d-4c57-8e4f-804f7df26257?date_filter=2023-04-01~2023-04-30&${params}`,
           id: 7873,
         },
         {
           dashboardName: "GameFi Industry Insights & Ranking",
-          dashboardLink: `/ab/public/dashboard/c9c94943-7ec3-45bf-a2c1-29ffed28c8dc?series_date=past90days&${params}`,
+          dashboardLink: `/fga/public/dashboard/c9c94943-7ec3-45bf-a2c1-29ffed28c8dc?series_date=past90days&${params}`,
           id: 7164,
         },
         {
           dashboardName: "GameFi Drill Down Analysis",
-          dashboardLink: `/ab/public/dashboard/2855f92d-c2c4-45b1-bb30-5083e8e0c4ae?${params}`,
+          dashboardLink: `/fga/public/dashboard/2855f92d-c2c4-45b1-bb30-5083e8e0c4ae?${params}`,
           id: 5947,
         },
         {
           category: "GameFi",
           desc: "",
           dashboardName: "GameFi Users Overview",
-          dashboardLink: `/ab/public/dashboard/ece95985-e16c-4a6c-bf95-9d3b523ccfe3?date__=past180days&${params}`,
+          dashboardLink: `/fga/public/dashboard/ece95985-e16c-4a6c-bf95-9d3b523ccfe3?date__=past180days&${params}`,
           id: 3578,
         },
         {
@@ -223,21 +223,21 @@ export const template_gallery = project => {
           desc: "",
           dashboardName: "Gamer Profile",
           id: 6345,
-          dashboardLink: `/ab/public/dashboard/aca032dc-5faf-462a-8be5-124d68226328?wallet_address=0x81e4fb0c64bf49f89b57f6648562fc9a791b2e92&${params}`,
+          dashboardLink: `/fga/public/dashboard/aca032dc-5faf-462a-8be5-124d68226328?wallet_address=0x81e4fb0c64bf49f89b57f6648562fc9a791b2e92&${params}`,
         },
         {
           category: "GameFi",
           desc: "",
           dashboardName: "GameFi Project Summary",
           id: 5911,
-          dashboardLink: `/ab/public/dashboard/5138a6a9-6bdd-4d95-a00f-7f330e555aad?gamefi_name=splinterlands&date_range=past90days&${params}`,
+          dashboardLink: `/fga/public/dashboard/5138a6a9-6bdd-4d95-a00f-7f330e555aad?gamefi_name=splinterlands&date_range=past90days&${params}`,
         },
         {
           category: "GameFi",
           desc: "",
           dashboardName: "GameFi Compare",
           id: 6390,
-          dashboardLink: `/ab/public/dashboard/8ea15e07-fea9-435b-95fa-791bc87c68ac?game_a=walken&game_b=stepn&chain=Solana&${params}`,
+          dashboardLink: `/fga/public/dashboard/8ea15e07-fea9-435b-95fa-791bc87c68ac?game_a=walken&game_b=stepn&chain=Solana&${params}`,
         },
       ],
     },
@@ -247,7 +247,7 @@ export const template_gallery = project => {
       items: [
         {
           dashboardName: "NFT Market Overview",
-          dashboardLink: `/ab/public/dashboard/25e7f940-7fc8-4737-bcfa-d4b04a4b6196?${params}`,
+          dashboardLink: `/fga/public/dashboard/25e7f940-7fc8-4737-bcfa-d4b04a4b6196?${params}`,
           id: 7842,
         },
         {
@@ -255,56 +255,56 @@ export const template_gallery = project => {
           desc: "Gain a deeper understanding  by analyzing the overview and holder profit&loss of NFTs.",
           dashboardName: "Top X NFT by Trading Vol",
           id: 7175,
-          dashboardLink: `/ab/public/dashboard/c20b5c20-d2d4-4c92-aed3-a6e4be48c70a?trading_vol._%253E%253D=1000000&${params}`,
+          dashboardLink: `/fga/public/dashboard/c20b5c20-d2d4-4c92-aed3-a6e4be48c70a?trading_vol._%253E%253D=1000000&${params}`,
         },
         {
           category: "NFT",
           desc: "",
           dashboardName: "Multi-NFT Overview",
           id: 7185,
-          dashboardLink: `/ab/public/dashboard/bfe2c3b8-b2b6-4980-86b0-acdca654d413?nft_collection_contract_address=0xed55e4477b795eaa9bb4bca24df42214e1a05c18&series_date=past30days&${params}`,
+          dashboardLink: `/fga/public/dashboard/bfe2c3b8-b2b6-4980-86b0-acdca654d413?nft_collection_contract_address=0xed55e4477b795eaa9bb4bca24df42214e1a05c18&series_date=past30days&${params}`,
         },
         {
           category: "NFT",
           desc: "",
           dashboardName: "NFT Overview",
           id: 7139,
-          dashboardLink: `/ab/public/dashboard/46b4bf34-2b15-46c7-89a0-fe626fe04b76?nft_collection_contract_address=0xed55e4477b795eaa9bb4bca24df42214e1a05c18&nft_collection_contract_address=0x16a1dcd0f76947dc3d3ba5158952107ef0321ad9&nft_collection_contract_address=0x5891eb497d1ddb4e3933981b55b37d5f98bbfbcf&nft_collection_contract_address=0xb55a820d92809bcff91d568fc1ef0e451c69f5e8&nft_collection_contract_address=0x15f3e5a30e45a58b15bba610f27689fbc7de8c3c&data=past3months&${params}`,
+          dashboardLink: `/fga/public/dashboard/46b4bf34-2b15-46c7-89a0-fe626fe04b76?nft_collection_contract_address=0xed55e4477b795eaa9bb4bca24df42214e1a05c18&nft_collection_contract_address=0x16a1dcd0f76947dc3d3ba5158952107ef0321ad9&nft_collection_contract_address=0x5891eb497d1ddb4e3933981b55b37d5f98bbfbcf&nft_collection_contract_address=0xb55a820d92809bcff91d568fc1ef0e451c69f5e8&nft_collection_contract_address=0x15f3e5a30e45a58b15bba610f27689fbc7de8c3c&data=past3months&${params}`,
         },
         {
           category: "NFT",
           desc: "",
           id: 7192,
           dashboardName: "Profit Leaderboard for Collection",
-          dashboardLink: `/ab/public/dashboard/3e9f9af4-93a8-46d4-8ee7-bc472201da7d?${params}`,
+          dashboardLink: `/fga/public/dashboard/3e9f9af4-93a8-46d4-8ee7-bc472201da7d?${params}`,
         },
         {
           category: "NFT",
           desc: "",
           dashboardName: "Multi-NFT Collections Royalties",
           id: 7188,
-          dashboardLink: `/ab/public/dashboard/97d34558-8df9-4028-a5b9-1024fa0eb426?nft_collections=0x6a570bb15bc67968868c19b0ec7dcccdfd8ed089&nft_collections=0xed55e4477b795eaa9bb4bca24df42214e1a05c18&nft_collections=0x16a1dcd0f76947dc3d3ba5158952107ef0321ad9&nft_collections=0xb55a820d92809bcff91d568fc1ef0e451c69f5e8&nft_collections=0x5891eb497d1ddb4e3933981b55b37d5f98bbfbcf&nft_collections=0x15f3e5a30e45a58b15bba610f27689fbc7de8c3c&series_date=past30days&${params}`,
+          dashboardLink: `/fga/public/dashboard/97d34558-8df9-4028-a5b9-1024fa0eb426?nft_collections=0x6a570bb15bc67968868c19b0ec7dcccdfd8ed089&nft_collections=0xed55e4477b795eaa9bb4bca24df42214e1a05c18&nft_collections=0x16a1dcd0f76947dc3d3ba5158952107ef0321ad9&nft_collections=0xb55a820d92809bcff91d568fc1ef0e451c69f5e8&nft_collections=0x5891eb497d1ddb4e3933981b55b37d5f98bbfbcf&nft_collections=0x15f3e5a30e45a58b15bba610f27689fbc7de8c3c&series_date=past30days&${params}`,
         },
         {
           category: "NFT",
           desc: "",
           id: 6808,
           dashboardName: "Wallet Tracing",
-          dashboardLink: `/ab/public/dashboard/27b8343b-80c5-49f8-861f-990652329895?collection=benji-bananas-membership-pass&date_range=past30days&${params}`,
+          dashboardLink: `/fga/public/dashboard/27b8343b-80c5-49f8-861f-990652329895?collection=benji-bananas-membership-pass&date_range=past30days&${params}`,
         },
         {
           category: "NFT",
           desc: "",
           id: 7187,
           dashboardName: "Owner Analysis",
-          dashboardLink: `/ab/public/dashboard/1b28aa29-4dea-4e48-bfcd-69afc71fb728?target_collection=0xed55e4477b795eaa9bb4bca24df42214e1a05c18&selected_collections=0x16a1dcd0f76947dc3d3ba5158952107ef0321ad9&selected_collections=0xb55a820d92809bcff91d568fc1ef0e451c69f5e8&selected_collections=0x6a570bb15bc67968868c19b0ec7dcccdfd8ed089&selected_collections=0x5891eb497d1ddb4e3933981b55b37d5f98bbfbcf&selected_collections=0x15f3e5a30e45a58b15bba610f27689fbc7de8c3c&selected_collections=0x34d85c9cdeb23fa97cb08333b511ac86e1c4e258&selected_collections=0xbc4ca0eda7647a8ab7c2061c2e118a18a936f13d&selected_collection_balance_%253E%253D=0&wallet_address=0x950fca90ae7eb55cd35326eb8e6350747d4cf32e&${params}`,
+          dashboardLink: `/fga/public/dashboard/1b28aa29-4dea-4e48-bfcd-69afc71fb728?target_collection=0xed55e4477b795eaa9bb4bca24df42214e1a05c18&selected_collections=0x16a1dcd0f76947dc3d3ba5158952107ef0321ad9&selected_collections=0xb55a820d92809bcff91d568fc1ef0e451c69f5e8&selected_collections=0x6a570bb15bc67968868c19b0ec7dcccdfd8ed089&selected_collections=0x5891eb497d1ddb4e3933981b55b37d5f98bbfbcf&selected_collections=0x15f3e5a30e45a58b15bba610f27689fbc7de8c3c&selected_collections=0x34d85c9cdeb23fa97cb08333b511ac86e1c4e258&selected_collections=0xbc4ca0eda7647a8ab7c2061c2e118a18a936f13d&selected_collection_balance_%253E%253D=0&wallet_address=0x950fca90ae7eb55cd35326eb8e6350747d4cf32e&${params}`,
         },
         {
           category: "NFT",
           desc: "",
           id: 7170,
           dashboardName: "Mutual Holders",
-          dashboardLink: `/ab/public/dashboard/5f67bd14-6a8b-478c-a574-184063150d03?collection_a_=0xbc4ca0eda7647a8ab7c2061c2e118a18a936f13d&collection_b=0xb47e3cd837ddf8e4c57f05d70ab865de6e193bbb&holder_tag=mutual_holders&${params}`,
+          dashboardLink: `/fga/public/dashboard/5f67bd14-6a8b-478c-a574-184063150d03?collection_a_=0xbc4ca0eda7647a8ab7c2061c2e118a18a936f13d&collection_b=0xb47e3cd837ddf8e4c57f05d70ab865de6e193bbb&holder_tag=mutual_holders&${params}`,
         },
       ],
     },
@@ -317,14 +317,14 @@ export const template_gallery = project => {
           desc: "Stay up-to-date on industry financing trends and keep a close eye on investment institutions' portfolios",
           dashboardName: "Investment History of Project",
           id: 7902,
-          dashboardLink: `/ab/public/dashboard/ffaa758e-e1f8-4d22-af54-7d952aa12edd?${params}`,
+          dashboardLink: `/fga/public/dashboard/ffaa758e-e1f8-4d22-af54-7d952aa12edd?${params}`,
         },
         {
           category: "Investment Portfolio",
           desc: "",
           id: 824,
           dashboardName: "Investment History of VC",
-          dashboardLink: `/ab/public/dashboard/ce2a23a7-b88b-44a9-93c3-dc1dc0f3a7ae?${params}`,
+          dashboardLink: `/fga/public/dashboard/ce2a23a7-b88b-44a9-93c3-dc1dc0f3a7ae?${params}`,
         },
       ],
     },
@@ -486,8 +486,8 @@ export const fga_menu_data_v2 = (project, user) => {
     ["twitter", "fd4d94f3-06f7-445d-ada3-0ce82bcefa39"],
     ["discord", "d137a1ef-34a3-4553-84cb-2203bd9d2baf"],
     ["project_health", "f5c31ad5-259d-4a2b-8e68-346201201486"],
-    ["social", "0b478d57-59cf-4ba2-b0e0-9873272f13ce"],
-    ["gaming", "9666f52b-1b05-46f2-b474-fd46f85690ab"],
+    ["social", "8a6b7c66-b5e2-4779-abe2-a37008345278"],
+    ["gaming", "eb9f7bce-a8fa-4cda-9ca9-6f76ad4e54e6"],
     ["listing", "20ae0361-4a39-4b66-bd56-fb9f012bfd3c"],
 
 

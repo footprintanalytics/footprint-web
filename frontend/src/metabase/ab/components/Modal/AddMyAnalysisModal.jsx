@@ -84,7 +84,7 @@ const AddMyAnalysisModal = props => {
       setDashboardInfo({
         title: urlDashboardName,
         originalUrl: currentValue,
-        url: `https://www.footprint.network/ab/public/dashboard/${uuid}?${query}`,
+        url: `https://www.footprint.network/fga/public/dashboard/${uuid}?${query}`,
         imageUrl: `https://statichk.footprint.network/dashboard/${id}.png?image_process=resize,w_600/crop,h_310/format,jpg`,
       });
     } catch (error) {

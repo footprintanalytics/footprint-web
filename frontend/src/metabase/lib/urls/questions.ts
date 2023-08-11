@@ -123,7 +123,7 @@ export function newQuestion({
     prefix = "/growth";
   }
   if (isABPath()) {
-    prefix = "/ab";
+    prefix = "/fga";
   }
   if (mode) {
     return prefix + url.replace(/^\/(chart|model)/, `/${entity}\/${mode}`);

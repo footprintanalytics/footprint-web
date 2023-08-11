@@ -10,7 +10,7 @@ const SubmitContractSuccess = () => {
     prefix = "/growth";
   }
   if (isABPath()) {
-    prefix = "/ab";
+    prefix = "/fga";
   }
   return (
     <div className="SubmitContract">
