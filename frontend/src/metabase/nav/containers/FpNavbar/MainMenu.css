@@ -45,9 +45,12 @@
 }
 
 .main-menu__vertical-menu li {
-  padding: 12px 6px;
   max-width: 340px;
   cursor: pointer;
+}
+
+.main-menu__vertical-menu li .Link {
+  padding: 12px 6px;
 }
 
 .main-menu__vertical-menu li:hover {
@@ -102,6 +105,17 @@
   justify-content: space-between;
   gap: 20px;
   padding: 20px 40px 20px 40px;
+}
+
+.single-menu__inner {
+  display: flex;
+  justify-content: space-between;
+  gap: 20px;
+  padding: 10px;
+}
+
+.vertical-menu__layout {
+  width: 180px;
 }
 
 .main-menu__vertical-menu-right {
@@ -226,6 +240,10 @@
 
 .main-menu__single-content {
   width: 380px;
+}
+
+.single-menu__content {
+  width: 200px;
 }
 
 .main-menu__more-layout {

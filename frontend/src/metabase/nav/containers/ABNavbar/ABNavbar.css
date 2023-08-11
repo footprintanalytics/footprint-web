@@ -252,6 +252,11 @@
   color: #4444FF;
 }
 
+.fga-Nav .ant-btn-default {
+  border-color: #58585B !important;
+  background-color: var(--color-ab-bg-card-dark) !important;
+}
+
 @media screen and (--footprint-breakpoint-max-pad) {
   .Nav__menu,
   .Nav__menu-create,

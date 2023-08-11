@@ -5,7 +5,7 @@ import { connect } from "react-redux";
 import { push, replace } from "react-router-redux";
 import "./ABNavbar.css";
 import PropTypes from "prop-types";
-import { notification, Modal as AntdModal, Button, message } from "antd";
+import { Modal as AntdModal, Button, message } from "antd";
 import { getChannel } from "metabase/selectors/app";
 import { logout } from "metabase/auth/actions";
 import {
@@ -30,22 +30,19 @@ import GaProjectSearch from "metabase/ab/components/GaProjectSearch";
 import ProfileLink from "metabase/nav/components/ProfileLink";
 import Link from "metabase/core/components/Link";
 import LoginModal from "metabase/auth/containers/LoginModal";
-import { zkspaceDate } from "metabase/lib/register-activity";
 import { getOssUrl } from "metabase/lib/image";
 import { trackStructEvent } from "metabase/lib/analytics";
 import Modal from "metabase/components/Modal";
-import { isDefi360 } from "metabase/lib/project_info";
 import CreateActionModal from "metabase/components/CreateActionModal";
 import { color } from "metabase/lib/colors";
 import Icon from "metabase/components/Icon";
 import UserCancelFeedbackModal from "metabase/components/UserCancelFeedbackModal";
 import LogoIcon from "metabase/components/LogoIcon";
-import ActivityZkspaceSubmitModal from "metabase/components/ActivityZkspaceSubmitModal";
 import EntityMenu from "metabase/components/EntityMenu";
 import UserAvatar from "metabase/components/UserAvatar";
 import VipIcon from "metabase/components/VipIcon";
 import CreateProjectModal from "metabase/ab/components/Modal/CreateProjectModal";
-import { checkIsNeedContactUs, isFgaPath } from "metabase/ab/utils/utils";
+import { checkIsNeedContactUs, isABPath } from "metabase/ab/utils/utils";
 import { getContext, getPath, getUser } from "../selectors";
 
 import { isDark } from "../../../dashboard/components/utils/dark";
@@ -130,7 +127,7 @@ class ABNavbar extends Component {
           <CreateActionModal
             showNewDashboard={() => {
               const newDashboardUrl = `${
-                isFgaPath() ? "/ab" : ""
+                isABPath() ? "/ab" : ""
               }/dashboard/new`;
               window.open(newDashboardUrl);
             }}
@@ -458,20 +455,12 @@ class ABNavbar extends Component {
               this.goLink(e, "/ab");
             }}
           >
-            <img
-              src={getOssUrl(
-                "img-animoca-brands.png",
-              )}
-              width={67}
-              height={38}
-              style={{ marginBottom: 2 }}
-              alt="Footprint Growth Analytics - One Step Closer to Blockchain Marketing Insights"
-            />
+            <div style={{ color: "white", fontSize: 18, fontWeight: 600 }}>Grow Analytic</div>
           </Link>
           {/* <LeftMenu /> */}
         </div>
         <React.Fragment>
-          <div className="flex justify-start" style={{ flex: 1, paddingLeft: 30, fontSize: 20, color: "#FFFFFF" }}>{`👏 Welcome, ${user?.name || "Animoca"}`}</div>
+          <div className="flex justify-start" style={{ flex: 1, paddingLeft: 30, fontSize: 20, color: "#FFFFFF" }}>{`👏 Welcome`}</div>
           <div className="Nav__search-bar" style={{display: "none"}}>
             <GaProjectSearch
               location={location}

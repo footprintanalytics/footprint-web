@@ -117,7 +117,7 @@ const GaSidebar = (props: IGaSidebarProp) => {
         overflow: "auto",
         height: "100%",
         position: "fixed",
-        background: "#121728",
+        background: "#1B1B1E",
         borderRight: "1px solid #ffffff20",
       }}
     >

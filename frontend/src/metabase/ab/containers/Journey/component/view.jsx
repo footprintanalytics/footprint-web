@@ -52,7 +52,7 @@ const View = props => {
             })
           }}
           runData={() => {
-            calAction()
+            // calAction()
           }}
         />
       </div>

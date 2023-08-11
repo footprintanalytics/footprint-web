@@ -34,7 +34,6 @@ import getListColumns from "./getListColums";
 import getListColumnsCommonPage from "./getListColumsCommonPage";
 import getListQueryParams from "./getListQueryParams";
 import "../../../explore/index.css";
-import { isFgaPath } from "metabase/growth/utils/utils";
 
 const List = ({
   router,
@@ -98,7 +97,6 @@ const List = ({
     },
     { ...QUERY_OPTIONS, retry: 0 },
   );
-  const isFga = isFgaPath();
   const device = useDeviceInfo();
   const showHeader = device.isPC;
 

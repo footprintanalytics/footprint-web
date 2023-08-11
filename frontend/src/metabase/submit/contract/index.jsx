@@ -11,6 +11,7 @@ import Link from "metabase/core/components/Link";
 import ContractTable from "metabase/submit/contract/components/ContractTable";
 import LoadingSpinner from "metabase/components/LoadingSpinner/LoadingSpinner";
 import { isFgaPath } from "metabase/growth/utils/utils"
+import { isABPath } from "metabase/ab/utils/utils";
 
 const SubmitContract = props => {
 
@@ -119,7 +120,13 @@ const SubmitContract = props => {
       )
     })
   }
-
+  let prefix = "";
+  if (isFgaPath()) {
+    prefix = "/growth";
+  }
+  if (isABPath()) {
+    prefix = "/ab";
+  }
   return (
     <div className="SubmitContract">
       <h1>
@@ -143,7 +150,7 @@ const SubmitContract = props => {
               <Button
                 type="primary"
                 onClick={() => {
-                  props.router.push(`${isFgaPath()?'/growth':''}/submit/contract/add`);
+                  props.router.push(`${prefix}/submit/contract/add`);
                 }}
               >
                 Add contract

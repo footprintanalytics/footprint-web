@@ -155,20 +155,21 @@
   display: flex;
   align-items: center;
   color: white;
-  padding: var(--footprint-spacing-xs) var(--footprint-spacing-xs);
+  width: 80px;
+  justify-content: center;
   border-radius: 4px;
   cursor: pointer;
-  margin: 0 var(--footprint-spacing-s);
-  height: 36px;
-  background: #4444FF;
+  margin: 0 8px;
+  height: 32px;
+  background: #3434b2;
 }
 
-.Nav__menu-create .Link:hover{
-  color: white;
-}
+/*.Nav__menu-create:hover{*/
+/*  color: white;*/
+/*}*/
 
 .Nav__menu-create span {
-  margin-left: var(--footprint-spacing-xs);
+  margin-left: 4px;
 }
 
 .Nav__sign-up {

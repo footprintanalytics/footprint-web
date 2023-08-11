@@ -16,6 +16,7 @@ import DashboardBox from "metabase/containers/search/components/CommonPage/dashb
 import Link from "metabase/core/components/Link";
 import getActionMenus from "metabase/containers/dashboards/components/Dashboards/helper";
 import { isFgaPath } from "metabase/growth/utils/utils"
+import { isABPath } from "metabase/ab/utils/utils";
 
 export default ({
   router,
@@ -31,6 +32,7 @@ export default ({
   const isMarket = user && user.isMarket;
   const isAdmin = user && user.is_superuser;
   const isFga = isFgaPath()
+  const isAB = isABPath()
   const array = [
     {
       model: "creator",
@@ -104,7 +106,7 @@ export default ({
           >
             <h3
               className="ml2 common-page__title"
-              style={{ WebkitBoxOrient: "vertical" ,color: isFga ? "#fff" : ""}}
+              style={{ WebkitBoxOrient: "vertical" ,color: isFga || isAB ? "#fff" : ""}}
             >
               <Highlighter
                 highlightClassName="highlight"

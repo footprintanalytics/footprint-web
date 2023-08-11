@@ -40,7 +40,6 @@ import UserCancelFeedbackModal from "metabase/components/UserCancelFeedbackModal
 import LogoIcon from "metabase/components/LogoIcon";
 import ActivityZkspaceSubmitModal from "metabase/components/ActivityZkspaceSubmitModal";
 import UserAvatar from "metabase/components/UserAvatar";
-import VipIcon from "metabase/components/VipIcon";
 import { getContext, getPath, getUser } from "../selectors";
 import { getLoginModalDefaultRegister } from "../../../selectors/control";
 import { isDark } from "../../../dashboard/components/utils/dark";
@@ -49,6 +48,8 @@ import ResearchContent from "./components/ResearchContent";
 import ProductContent from "./components/ProductContent";
 import UseCasesContent from "./components/UseCasesContent";
 import { ReactIcons } from "./utils/data";
+import * as Urls from "../../../lib/urls";
+import SimpleMenu from "./SImpleMenu";
 
 const mapStateToProps = (state, props) => ({
   path: getPath(state, props),
@@ -601,14 +602,32 @@ class FpNavbar extends Component {
     };
 
     const CreateMenu = () => {
+      const menu = [
+        {
+          title: "0 Coding Chart",
+          link: Urls.newQuestion({ type: "query" }),
+          externalLink: true,
+        },
+        {
+          title: "SQL Chart",
+          link: Urls.newQuestion({ type: "native", creationType: "native_question" }),
+          externalLink: true,
+        },
+        {
+          title: "New Dashboard",
+          link: "dashboard/new",
+          externalLink: true,
+        },
+      ];
       return (
-        <div
-          className="bg-brand Nav__menu-create footprint-primary-text"
-          onClick={onCreateAction}
-        >
-          <Icon name="plus" size={12} />
-          <span>Create</span>
-        </div>
+        <SimpleMenu menu={menu}>
+          <div
+            className="Nav__menu-create"
+          >
+            <Icon name="plus" size={12} />
+            <span >Create</span>
+          </div>
+        </SimpleMenu>
       );
     };
 
@@ -626,7 +645,7 @@ class FpNavbar extends Component {
       return (
         <div className="Nav__right">
           {this.renderLink({})}
-          {/*<CreateMenu />*/}
+          {user && (<CreateMenu />)}
           <React.Fragment>
             <RightMenuMobile />
             <RightMenuPad />

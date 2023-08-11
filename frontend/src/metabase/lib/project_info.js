@@ -19,6 +19,9 @@ export const getLatestGAProjectId = () => {
   if (!window.location.pathname.startsWith("/growth") && userId !== "6") {
     return null;
   }
+  if (window.location.pathname.startsWith("/ab")) {
+    return null;
+  }
   const projectIdStr = window.localStorage.getItem("LatestGAProjectId");
   let projectId;
   try {

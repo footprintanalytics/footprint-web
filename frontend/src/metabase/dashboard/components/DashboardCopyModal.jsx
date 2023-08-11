@@ -22,6 +22,7 @@ import Modal from "metabase/components/Modal";
 import { getPersonalCollectionId } from "metabase/lib/collection";
 import { getDashboardComplete } from "../selectors";
 import { isFgaPath } from "metabase/growth/utils/utils";
+import { isABPath } from "metabase/ab/utils/utils";
 
 const mapStateToProps = (state, props) => {
   const dashboard = props.dashboard || getDashboardComplete(state, props);
@@ -138,6 +139,9 @@ const DashboardCopyModalInner = ({
               let url = Urls.dashboard(dashboard);
               if (isFgaPath()) {
                 url = url.startsWith('/') ?`/growth${url}`:`growth/${url}`;
+              }
+              if(isABPath()) {
+                url = url.startsWith('/') ?`/ab${url}`:`ab/${url}`;
               }
               window.open(url);
             }, 10);
