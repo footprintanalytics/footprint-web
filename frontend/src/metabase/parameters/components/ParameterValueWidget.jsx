@@ -122,11 +122,11 @@ class ParameterValueWidget extends Component {
     const renderSeriesDate = () => {
       const seriesData = [
         {
-          value: "past1days～",
+          value: "past1days~",
           label: "1D",
         },
         {
-          value: "past7days～",
+          value: "past7days~",
           label: "7D",
         },
         // {
@@ -134,15 +134,15 @@ class ParameterValueWidget extends Component {
         //   label: "14D",
         // },
         {
-          value: "past30days～",
+          value: "past30days~",
           label: "30D",
         },
         {
-          value: "past90days～",
+          value: "past90days~",
           label: "90D",
         },
         {
-          value: "past180days～",
+          value: "past180days~",
           label: "180D",
         },
         {
