@@ -181,7 +181,7 @@
               (let [dt-offset (cond-> dt
                                 unit-1 (t/minus ((get-in operations-by-date-unit [unit-1 :to-period]) int-value-1)))
                     dt-resolution (maybe-reduce-resolution unit dt-offset)]
-                (unit-range (t/minus dt-resolution (to-period  int-value))
+                (unit-range (t/minus dt-resolution (to-period int-value))
                             (t/minus dt-resolution (to-period (if (include-current? relative-suffix) -1 0))))))
 
     :filter (fn [{:keys [unit int-value relative-suffix unit-1 int-value-1]} field-clause]
