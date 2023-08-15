@@ -18,8 +18,13 @@ const ContractDecoding = ({ param, onSuccess }) => {
   const [title, setTitle] = useState(
     `The system is currently processing [${param?.protocolName}]`,
   );
-  const domain = "wss://ref-api-adapter.footprint.network/ws";
-  const socket = new WebSocket(domain);
+  const domain = window.location.hostname;
+  const endpoint =
+    domain === "localhost"
+      ? "ws://localhost:7081" // local test
+      : "wss://ref-api-adapter.footprint.network/ws"; // production
+  // const endpoint = "wss://ref-api-adapter.footprint.network/ws";
+  const socket = new WebSocket(endpoint);
   let animation = null;
   useEffect(() => {
     animation = loadAnimation();
@@ -49,9 +54,11 @@ const ContractDecoding = ({ param, onSuccess }) => {
         socket.onmessage = function (msg) {
           console.log("get msg ", msg);
           const data = JSON.parse(msg.data);
-          if (data?.event === "completed" || data === "done") {
+          if (data?.event === "done" || data === "done") {
             animation = loadAnimation("completed");
-            setTitle(`The system is currently process [${param?.protocolName}] completed.`);
+            setTitle(
+              `The system is currently process [${param?.protocolName}] completed.`,
+            );
             setLogDatas(datas => {
               return [...datas, "protocol process completed."];
             });
@@ -61,7 +68,7 @@ const ContractDecoding = ({ param, onSuccess }) => {
             return;
           }
           setLogDatas(datas => {
-            return [...datas, data];
+            return [...datas, `${data?.data?.message ?? data}`];
           });
         };
       };
@@ -113,18 +120,14 @@ const ContractDecoding = ({ param, onSuccess }) => {
           style={{
             backgroundColor: "var(--footprint-color-bg)",
             height: 290,
+            overflow: "auto",
           }}
         >
-          <TextArea
-            bordered={false}
-            // height={260}
-            // style={{height:!260}}
-            autoSize={{ minRows: 2, maxRows: 12 }}
-            value={logDatas?.reverse()?.join("\n")}
-            placeholder="Processing logs"
-            disabled
-          />
-
+          <div className="flex flex-column-reverse w-full ">
+            {logDatas?.map((log, index) => {
+              return <div key={index}>{log}</div>;
+            })}
+          </div>
         </Card>
         <div className=" mt-10 w-full flex flex-row-reverse">
           {loadCompleted && (
