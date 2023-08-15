@@ -1,7 +1,7 @@
 /* eslint-disable react/prop-types */
 /* eslint-disable curly */
 import React from "react";
-import { Button, Table, Tag, Tooltip, Typography } from "antd";
+import { Button, Popover, Table, Tag, Tooltip, Typography } from "antd";
 import { QuestionCircleOutlined } from "@ant-design/icons";
 import dayjs from "dayjs";
 
@@ -43,10 +43,27 @@ const RefContractTable = ({ data }) => {
         </Tooltip>
       ),
       render: (_, record) => {
-        return (
-          <Typography.Text>
-            Total: {record?.data?.contracts?.length ?? 0}
-          </Typography.Text>
+        return record?.data?.contracts?.length > 0 ? (
+          <Popover
+            content={
+              <div>
+                {record?.data?.contracts?.map((c, index) => {
+                  return (
+                    <p key={index}>
+                      {c.chain}: {c.contractAddress}
+                    </p>
+                  );
+                })}
+              </div>
+            }
+            title="Contracts"
+          >
+            <Typography.Text>
+              {record?.data?.contracts?.length ?? 0} contracts
+            </Typography.Text>
+          </Popover>
+        ) : (
+          "-"
         );
       },
     },
@@ -57,27 +74,44 @@ const RefContractTable = ({ data }) => {
         </Tooltip>
       ),
       render: (_, record) => {
-        return (
-          <Typography.Text>
-            Total: {record?.data?.contracts?.length ?? 0}
-          </Typography.Text>
+        return record?.data?.find_contracts?.length > 0 ? (
+          <Popover
+            content={
+              <div>
+                {record?.data?.find_contracts?.map((c, index) => {
+                  return (
+                    <p key={index}>
+                      {c.protocol_slug}: {c.address}
+                    </p>
+                  );
+                })}
+              </div>
+            }
+            title="Contracts"
+          >
+            <Typography.Text>
+              {record?.data?.find_contracts?.length ?? 0} contracts
+            </Typography.Text>
+          </Popover>
+        ) : (
+          "-"
         );
       },
     },
-    {
-      title: (
-        <Tooltip title="Finally adopted and stored in the database..">
-          Adopted contracts <QuestionCircleOutlined />
-        </Tooltip>
-      ),
-      render: (_, record) => {
-        return (
-          <Typography.Text>
-            Total: {record?.data?.contracts?.length ?? 0}
-          </Typography.Text>
-        );
-      },
-    },
+    // {
+    //   title: (
+    //     <Tooltip title="Finally adopted and stored in the database..">
+    //       Adopted contracts <QuestionCircleOutlined />
+    //     </Tooltip>
+    //   ),
+    //   render: (_, record) => {
+    //     return (
+    //       <Typography.Text>
+    //         Total: {record?.data?.adopted_contracts?.length ?? 0}
+    //       </Typography.Text>
+    //     );
+    //   },
+    // },
     {
       title: "Status",
       width: 120,
