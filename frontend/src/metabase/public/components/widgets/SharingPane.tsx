@@ -121,7 +121,7 @@ export default function SharingPane({
   const copyChannelUrl = () => {
     const channel = inputRef.current.value.trim();
     let separator = "";
-    const url = shareUrl;
+    const url = onlyEmbed ? getPublicUrl(resource) : shareUrl;
     if (!url.includes("?")) {
       separator = "?";
     } else if (!url.endsWith("?") && !url.endsWith("&")){
@@ -136,6 +136,14 @@ export default function SharingPane({
   return (
     <div className="pt2 ml-auto mr-auto" style={{ maxWidth: 600 }}>
       {renderModal()}
+      {(isMarket || isAdmin) && (
+        <div className="flex justify-between border-bottom pb2">
+          <input className="Button mr1" ref={inputRef} placeholder="Dashboard channel" />
+          <Button onClick={copyChannelUrl}>
+            create channel link
+          </Button>
+        </div>
+      )}
       {!onlyEmbed && (
         <>
           {isPublicSharingEnabled && (
@@ -198,14 +206,6 @@ export default function SharingPane({
                   </Toggle>
                 )}
               </div>
-            </div>
-          )}
-          {(isMarket || isAdmin) && (
-            <div className="flex justify-between border-bottom pb2">
-              <input className="Button mr1" ref={inputRef} placeholder="Dashboard channel" />
-              <Button onClick={copyChannelUrl}>
-                create channel link
-              </Button>
             </div>
           )}
           {/*{(isMarket || isAdmin) && (

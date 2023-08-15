@@ -9,7 +9,6 @@ import { appendSlug, publicUrl } from "./utils";
 import { optionsToHashParams } from "metabase/public/lib/embed";
 
 import { get } from "lodash";
-import { isFgaPath } from "metabase/growth/utils/utils";
 
 export const newDashboard = (collectionId: CollectionId) =>
   `collection/${collectionId}/new_dashboard`;

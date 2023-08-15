@@ -13,6 +13,7 @@ import {
 } from "metabase/new-service";
 import arms from "metabase/lib/arms";
 import { clearGACache } from "metabase/growth/utils/utils";
+import { isABPath } from "metabase/ab/utils/utils";
 
 export const REFRESH_CURRENT_USER = "metabase/user/REFRESH_CURRENT_USER";
 /*export const refreshCurrentUser = createAction(REFRESH_CURRENT_USER, () => {
@@ -162,9 +163,33 @@ export const refreshCurrentFgaProject = createThunkAction(
   REFRESH_CURRENT_FGA_PROJECT,
   async project_id => {
     try {
-      const res = await GetFgaProjectDetail({
-        projectId: project_id,
-      });
+      let res
+      if (isABPath()) {
+        if (project_id === 153) {
+          res = {
+            "id": 153,
+            "isDemo": false,
+            "protocolName": "Project A",
+            "protocolSlug": "Project A",
+            "logo": "",
+            "protocolType": "",
+            "tokenAddress": [],
+            "nftCollectionAddress": [
+              {
+                "address": "0x59325733eb952a92e069c87f0a6168b29e80627f",
+                "chain": "Ethereum"
+              }
+            ],
+            "twitter": {},
+            "discord": {},
+            "ga": {}
+          }
+        }
+      } else {
+        res = await GetFgaProjectDetail({
+          projectId: project_id,
+        });
+      }
       if(!res?.protocolSlug||res?.protocolSlug===''){
         res.protocolSlug = 'default';
       }

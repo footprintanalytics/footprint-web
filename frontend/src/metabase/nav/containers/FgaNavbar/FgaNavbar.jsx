@@ -318,9 +318,9 @@ class FgaNavbar extends Component {
       return (
         <div className="Nav__right-pad-icon">
           {contextHolder}
-          <Link to="/growth/pricing">
+          {/*<Link to="/growth/pricing">
             <Icon name="price" color={color2} />
-          </Link>
+          </Link>*/}
           <Link
             onClick={() => {
               onCreateAction(modal);
@@ -338,9 +338,9 @@ class FgaNavbar extends Component {
       return (
         <div className="Nav__right-mobile-icon">
           {contextHolder}
-          <Link to="/growth/pricing">
+          {/*<Link to="/growth/pricing">
             <Icon name="price" color={color2} />
-          </Link>
+          </Link>*/}
           <Link
             onClick={() => {
               onCreateAction(modal);
@@ -393,7 +393,7 @@ class FgaNavbar extends Component {
     const RightMenu = () => {
       return (
         <div className="Nav__right">
-          <Button
+          {/*<Button
             size="large"
             onClick={() => {
               this.props.onChangeLocation("/growth/pricing");
@@ -402,7 +402,7 @@ class FgaNavbar extends Component {
             type="text"
           >
             Pricing
-          </Button>
+          </Button>*/}
           {/* <CreateMenu /> */}
           <React.Fragment>
             <RightMenuMobile />

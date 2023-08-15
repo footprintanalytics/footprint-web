@@ -48,6 +48,7 @@ import { DashboardLazyLoadContainer } from "metabase/dashboard/components/Dashbo
 import cx from "classnames";
 import { canShowDarkMode } from "metabase/dashboard/components/utils/dark";
 import QuestionStudioBack from "metabase/query_builder/containers/QuestionStudioBack";
+import { isABPath } from "metabase/ab/utils/utils";
 
 // const SCROLL_THROTTLE_INTERVAL = 1000 / 24;
 const THROTTLE_PERIOD = 300;
@@ -636,7 +637,7 @@ class Dashboard extends Component {
                           {...this.props}
                           isNightMode={shouldRenderAsNightMode}
                           onEditingChange={this.setEditing}
-                          hideWatermark={dashboard && dashboard.hideWatermark}
+                          hideWatermark={isABPath() || (dashboard && dashboard.hideWatermark)}
                           navigateToNewCardFromDashboard={dashboard => {
                             const user = this.props.user;
                             const dashcard = dashboard && dashboard.dashcard;

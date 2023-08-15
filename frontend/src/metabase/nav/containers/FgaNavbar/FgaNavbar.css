@@ -150,25 +150,10 @@
   border-bottom: 4px solid #3434b2 !important;
 }
 
-.Nav__menu-create {
-  display: flex;
-  align-items: center;
-  color: white;
-  padding: var(--footprint-spacing-xs) var(--footprint-spacing-s);
-  border-radius: 4px;
-  cursor: pointer;
-  margin: 0 0 0 var(--footprint-spacing-s);
-  height: 36px;
-  background: #4444FF;
-}
 
-.Nav__menu-create:hover{
-  color: black;
-}
-
-.Nav__menu-create span {
-  margin-left: var(--footprint-spacing-xs);
-}
+/*.Nav__menu-create:hover{*/
+/*  color: black;*/
+/*}*/
 
 .Nav__sign-up {
   display: flex;

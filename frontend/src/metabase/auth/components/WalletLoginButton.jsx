@@ -11,9 +11,11 @@ import {
 } from "metabase/new-service";
 import { getErrorMessage } from "metabase/components/form/FormMessage";
 import BindUserWithWalletAddressModal from "./BindUserWithWalletAddressModal";
+import { isFgaPath } from "metabase/growth/utils/utils";
+import { isABPath } from "metabase/ab/utils/utils";
 
 const mapStateToProps = (state, props) => {
-  const isFga = props.location.pathname.includes("/growth");
+  const isFga = isFgaPath() || isABPath();
   return {
     channel: isFga ? "FGA" : getChannel(state, props),
   };

@@ -10,6 +10,7 @@ import SearchTabs from "metabase/containers/search/components/Tabs";
 import { navigationNum } from "metabase/new-service";
 import { QUERY_OPTIONS } from "metabase/containers/dashboards/shared/config";
 import { isFgaPath } from "metabase/growth/utils/utils";
+import { isABPath } from "metabase/ab/utils/utils";
 
 const List = ({
   router,
@@ -42,7 +43,7 @@ const List = ({
     <div
       className="search"
       data-nosnippet
-      style={{ background: isFgaPath() ? "#121728" : "" }}
+      style={{ background: (isFgaPath() || isABPath()) ? "#121728" : "" }}
     >
       <div
         className="search__wrap search__content"

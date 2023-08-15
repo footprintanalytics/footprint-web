@@ -32,6 +32,7 @@ import { AppErrorDescriptor, State } from "metabase-types/store";
 import GlobalContactPanel from "metabase/components/GlobalContactPanel/";
 
 import { AppContainer, AppContent, AppContentContainer } from "./App.styled";
+import ABLayout from "./ab/components/GaLayout";
 import GaLayout from "./growth/components/GaLayout";
 import cx from "classnames";
 import { ConfigProvider, theme } from "antd";
@@ -117,6 +118,7 @@ function App({
   const [viewportElement, setViewportElement] = useState<HTMLElement | null>();
   const hideScrollbar = location.pathname === "/";
   const isFga = location.pathname.startsWith("/growth");
+  const isAB = location.pathname.startsWith("/fga");
   const handleChannel = () => {
     const channel = location.query.channel || location.query.cnl || "homepage";
     setChannel(channel);
@@ -168,7 +170,11 @@ function App({
                   <ContentViewportContext.Provider
                     value={viewportElement ?? null}
                   >
-                    {isFga ? (
+                    {isAB ? (
+                      <ABLayout>
+                        {errorPage ? getErrorComponent(errorPage) : children}
+                      </ABLayout>
+                    ) : isFga ? (
                       <GaLayout>
                         {errorPage ? getErrorComponent(errorPage) : children}
                       </GaLayout>

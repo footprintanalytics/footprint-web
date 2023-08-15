@@ -23,7 +23,7 @@ const getMyStudioData = ({ name, params, router, user, onLogout }) => {
       "label": "Footprint Datasets",
       "value": "footprint-datasets",
       "icon": ReactIcons.datasetsIcon,
-      "publicUuid": "5aca24eb-aae3-44ef-8e4b-a275fee42847",
+      "publicUuid": "05628958-0cb8-413c-862e-50b26ffacd6f",
     },
     {
       "label": "My Analysis",

@@ -62,7 +62,7 @@ const AboutDemo = () => {
       buttons: [
         {
           buttonText: "Explore Analytics Studio",
-          link: "https://www.footprint.network/dashboards",
+          link: "https://www.footprint.network/studio/create",
         }
       ],
       image: "home-v2/img-demo-3-1.png",

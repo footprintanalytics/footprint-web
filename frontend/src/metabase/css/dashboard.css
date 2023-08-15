@@ -39,6 +39,10 @@
   background-color: var(--color-bg-dark);
 }
 
+.ab-page .Dashboard.Dashboard--night {
+  background-color: var(--color-ab-bg-dark);
+}
+
 .Dashboard.Dashboard--night .Card {
   color: var(--color-text-white);
 }
@@ -152,6 +156,7 @@
 }
 
 .DashCard .Card {
+  margin: 4px;
   border-radius: 4px;
   box-shadow: 0px 1px 3px var(--color-shadow);
 }
@@ -375,6 +380,6 @@
 }
 
 #html2canvas-Dashboard {
-  overflow-y: scroll;
+  overflow-y: auto;
   overflow-x: hidden;
 }

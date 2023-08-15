@@ -127,7 +127,6 @@ export function formatValueRaw(
   if (remapped !== undefined && options.view_as !== "link") {
     return remapped;
   }
-
   if (value === NULL_NUMERIC_VALUE) {
     return NULL_DISPLAY_VALUE;
   } else if (value == null) {

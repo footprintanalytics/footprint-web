@@ -31,6 +31,7 @@ import { zoomInRow, resetRowZoom } from "./object-detail";
 import { cancelQuery } from "./querying";
 import { setQueryBuilderMode } from "./ui";
 import { isFgaPath } from "metabase/growth/utils/utils"
+import { isABPath } from "metabase/ab/utils/utils";
 
 export const SET_CURRENT_STATE = "metabase/qb/SET_CURRENT_STATE";
 const setCurrentState = createAction(SET_CURRENT_STATE);
@@ -197,10 +198,9 @@ export const updateUrl = createThunkAction(
         // e.x. when saving a new card we want to replace the state and URL with one with the new card ID
         replaceState = isSameCard && isSameMode;
       }
-
       // this is necessary because we can't get the state from history.state
       dispatch(setCurrentState(newState));
-      if(isFgaPath()&&locationDescriptor?.pathname.startsWith('/chart')){
+      if((isFgaPath() || isABPath())&&locationDescriptor?.pathname.startsWith('/chart')){
         locationDescriptor.pathname = `/growth${locationDescriptor.pathname}`
       }
       try {
