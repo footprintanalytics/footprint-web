@@ -46,7 +46,7 @@ const RefContractTable = ({ data }) => {
         return record?.data?.contracts?.length > 0 ? (
           <Popover
             content={
-              <div>
+              <div style={{maxHeight:300,overflow:'auto'}}>
                 {record?.data?.contracts?.map((c, index) => {
                   return (
                     <p key={index}>
@@ -77,7 +77,7 @@ const RefContractTable = ({ data }) => {
         return record?.data?.find_contracts?.length > 0 ? (
           <Popover
             content={
-              <div>
+              <div  style={{maxHeight:300,overflow:'auto'}}>
                 {record?.data?.find_contracts?.map((c, index) => {
                   return (
                     <p key={index}>

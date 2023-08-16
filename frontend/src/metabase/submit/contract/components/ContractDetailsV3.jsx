@@ -31,6 +31,12 @@ const CHAIN_LIST = [
   { value: "Cronos", label: "Cronos" },
   { value: "Harmony", label: "Harmony" },
 ];
+const PROTOCOL_CATEGORY_LIST = [
+  { value: "NFT", label: "NFT" },
+  { value: "DeFi", label: "DeFi" },
+  { value: "GameFi", label: "GameFi" },
+  { value: "Others", label: "Others" },
+];
 
 const ContractDetailsV3 = ({ onFinish, user, onClosed }) => {
   const [refresh, setRefresh] = useState(0);
@@ -213,6 +219,13 @@ const ContractDetailsV3 = ({ onFinish, user, onClosed }) => {
             }
           />
         </Form.Item>
+        <Form.Item
+        label="Project category"
+        rules={[{ required: true, message: "Select project category" }]}
+        name="projectCategory"
+      >
+        <Select placeholder="Select project category" options={PROTOCOL_CATEGORY_LIST} />
+      </Form.Item>
         <Form.Item
           label="Website"
           name="website"
