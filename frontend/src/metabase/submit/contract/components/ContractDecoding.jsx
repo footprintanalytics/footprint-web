@@ -44,10 +44,11 @@ const ContractDecoding = ({ param, onSuccess }) => {
             event: "submit_protocol",
             data: {
               protocol: param?.protocolName,
+              category: param?.projectCategory,
               website: param?.website,
               email: param?.email,
               contracts: param?.contracts,
-              source: "user",
+              source: "web_user",
             },
           }),
         );

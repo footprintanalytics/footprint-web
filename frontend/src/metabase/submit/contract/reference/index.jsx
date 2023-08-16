@@ -25,8 +25,9 @@ const SubmitContract = props => {
     {
       refetchOnWindowFocus: false,
       retry: 0,
+      refetchInterval: 10000,
       onSuccess: data => {
-        console.log("getRefContractSubmittedList onSuccess=> ", data);
+        console.log("getRefContractSubmittedList onSuccess=> \n", data);
       },
     },
   );
