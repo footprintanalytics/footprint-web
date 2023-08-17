@@ -440,6 +440,11 @@ const chainData = [
         "publicUuid": "075e8eab-bc83-4b46-9051-08acdd65a91d",
       },
       {
+        "label": "Starknet Overview",
+        "value": "starknet-overview",
+        "publicUuid": "d3e53215-fa4f-4264-a012-71952b5ecb6c",
+      },
+      {
         "label": "Fantom Overview",
         "value": "fantom-overview",
         "publicUuid": "3117dbba-0872-448a-bce5-7dd3454046c6",

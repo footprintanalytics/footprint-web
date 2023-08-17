@@ -285,8 +285,7 @@ const ResearchContent = props => {
           {
             title: "Starknet",
             img: getOssUrl("studio/img-chain-38.png"),
-            link: "/research/chain/chain-rankings/top-chains",
-            desc: "Coming soon",
+            link: "/research/chain/chain-stats/starknet-overview",
           },
         ],
         addData: {
