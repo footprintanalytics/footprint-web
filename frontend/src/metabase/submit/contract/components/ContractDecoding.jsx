@@ -3,7 +3,6 @@
 import React, { useState, useRef, useEffect } from "react";
 import { Typography, Card, message, Button } from "antd";
 import lottie from "lottie-web/build/player/lottie_svg";
-import TextArea from "antd/es/input/TextArea";
 import {
   data_scanning,
   animation_complete,
