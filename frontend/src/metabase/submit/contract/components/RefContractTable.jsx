@@ -2,10 +2,20 @@
 /* eslint-disable curly */
 import React from "react";
 import { Button, Popover, Table, Tag, Tooltip, Typography } from "antd";
-import { QuestionCircleOutlined } from "@ant-design/icons";
+import { QuestionCircleOutlined,SyncOutlined } from "@ant-design/icons";
 import dayjs from "dayjs";
 
 const RefContractTable = ({ data }) => {
+
+  function isWithinHalfHour(createdAt) {
+    const halfHourAgo = new Date();
+    halfHourAgo.setMinutes(halfHourAgo.getMinutes() - 30);
+
+    const createdAtDate = new Date(createdAt);
+
+    return createdAtDate > halfHourAgo && createdAtDate <= new Date();
+  }
+
   const columns = [
     // {
     //   title: "Type",
@@ -69,8 +79,8 @@ const RefContractTable = ({ data }) => {
     },
     {
       title: (
-        <Tooltip title="Mapping from the website of this project.">
-          Mapping Contracts <QuestionCircleOutlined />
+        <Tooltip title="Detected from the website of this project.">
+          Detected Contracts <QuestionCircleOutlined />
         </Tooltip>
       ),
       render: (_, record) => {
@@ -94,7 +104,7 @@ const RefContractTable = ({ data }) => {
             </Typography.Text>
           </Popover>
         ) : (
-          "-"
+          isWithinHalfHour(record.createdAt)?<Tag icon={<SyncOutlined spin />} color="processing">{'detecting'}</Tag>:'-'
         );
       },
     },
@@ -123,7 +133,7 @@ const RefContractTable = ({ data }) => {
           case "submitted":
             return <Tag color="success">{text}</Tag>;
           default:
-            return <Tag color="processing">{text}</Tag>;
+            return <Tag icon={<SyncOutlined spin />} color="processing">{text}</Tag>;
         }
       },
     },

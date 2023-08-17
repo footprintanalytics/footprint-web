@@ -30,11 +30,13 @@ const CHAIN_LIST = [
   { value: "Avalanche", label: "Avalanche" },
   { value: "Cronos", label: "Cronos" },
   { value: "Harmony", label: "Harmony" },
+  { value: "zkSync Era", label: "zkSync Era" },
 ];
 const PROTOCOL_CATEGORY_LIST = [
   { value: "NFT", label: "NFT" },
   { value: "DeFi", label: "DeFi" },
   { value: "GameFi", label: "GameFi" },
+  { value: "Marketplace", label: "Marketplace" },
   { value: "Others", label: "Others" },
 ];
 
@@ -60,6 +62,7 @@ const ContractDetailsV3 = ({ onFinish, user, onClosed }) => {
       form.setFieldsValue({
         email: user?.email,
         website: null,
+        projectCategory:null
       });
     } else {
       getProtocolList?.data?.forEach(item => {
@@ -67,6 +70,7 @@ const ContractDetailsV3 = ({ onFinish, user, onClosed }) => {
           form.setFieldsValue({
             email: user?.email,
             website: item.website,
+            projectCategory: item.category,
           });
         }
       });
