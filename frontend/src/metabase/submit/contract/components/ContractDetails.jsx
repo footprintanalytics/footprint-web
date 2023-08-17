@@ -11,12 +11,12 @@ import {
   AutoComplete,
 } from "antd";
 import { useMutation, useQuery } from "react-query";
+import slug from "slug";
+import { toLower } from "lodash";
 import {
   getContractProtocolByAddress,
   submitContract,
 } from "metabase/new-service";
-import { toLower } from "lodash";
-import slug from "slug";
 
 const PROTOCOL_CATEGORY_LIST = [
   { value: "NFT", label: "NFT" },
