@@ -3,6 +3,7 @@ import React from "react";
 import { Button } from "antd";
 import { getComparePlans } from "metabase/pricing_v2/config";
 import { getOssUrl } from "metabase/lib/image";
+import DataStaticTooltip from "metabase/containers/dataApi/components/DataStaticTooltip";
 
 const PricingSelect = ({ user, onSign, onSubscribe, onCancelSubscription, groups, subscriptionDetailList }) => {
   const canBusinessSevenTrial = !!groups
@@ -84,6 +85,7 @@ const PricingSelect = ({ user, onSign, onSubscribe, onCancelSubscription, groups
                     height={12}
                   />
                   {item}
+                  {item === "Reference Data" && (<DataStaticTooltip type="business" />)}
                 </li>
               ))}
             </ul>

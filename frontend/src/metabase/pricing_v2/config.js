@@ -135,6 +135,7 @@ export const getComparePlans = ({
           "Keep uploaded data private",
           "Keep dashboard private",
           "Remove dashboard watermarks",
+          "Reference Data",
         ],
       },
       // dataApi: {
