@@ -20,7 +20,7 @@ const PricingContainer = ({ location, user, setLoginModalShow }) => {
   const sign = () =>
     setLoginModalShow({ show: true, from: "handle_pay_data_api" });
 
-  const [status, setStatus] = useState(location?.query?.type || "footprint");
+  const [status, setStatus] = useState(location?.query?.type || "data-api");
   useEffect(() => {
     if (location?.query?.type) {
       setStatus(location?.query?.type);
