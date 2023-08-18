@@ -2,14 +2,13 @@
 /* eslint-disable curly */
 import React from "react";
 import { Button, Popover, Table, Tag, Tooltip, Typography } from "antd";
-import { QuestionCircleOutlined,SyncOutlined } from "@ant-design/icons";
+import { QuestionCircleOutlined, SyncOutlined } from "@ant-design/icons";
 import dayjs from "dayjs";
 
 const RefContractTable = ({ data }) => {
-
-  function isWithinHalfHour(createdAt) {
+  function isWithinMins(createdAt, mins = 30) {
     const halfHourAgo = new Date();
-    halfHourAgo.setMinutes(halfHourAgo.getMinutes() - 30);
+    halfHourAgo.setMinutes(halfHourAgo.getMinutes() - mins);
 
     const createdAtDate = new Date(createdAt);
 
@@ -43,7 +42,11 @@ const RefContractTable = ({ data }) => {
     {
       title: "Website",
       render: (_, record) => {
-        return <Typography.Link>{record?.data?.website}</Typography.Link>;
+        return (
+          <Typography.Link href={record?.data?.website} target="_blank">
+            {record?.data?.website}
+          </Typography.Link>
+        );
       },
     },
     {
@@ -56,7 +59,7 @@ const RefContractTable = ({ data }) => {
         return record?.data?.contracts?.length > 0 ? (
           <Popover
             content={
-              <div style={{maxHeight:300,overflow:'auto'}}>
+              <div style={{ maxHeight: 300, overflow: "auto" }}>
                 {record?.data?.contracts?.map((c, index) => {
                   return (
                     <p key={index}>
@@ -87,7 +90,7 @@ const RefContractTable = ({ data }) => {
         return record?.data?.find_contracts?.length > 0 ? (
           <Popover
             content={
-              <div  style={{maxHeight:300,overflow:'auto'}}>
+              <div style={{ maxHeight: 300, overflow: "auto" }}>
                 {record?.data?.find_contracts?.map((c, index) => {
                   return (
                     <p key={index}>
@@ -103,53 +106,119 @@ const RefContractTable = ({ data }) => {
               {record?.data?.find_contracts?.length ?? 0} contracts
             </Typography.Text>
           </Popover>
+        ) : isWithinMins(record.createdAt) ? (
+          <Tag icon={<SyncOutlined spin />} color="processing">
+            {"detecting"}
+          </Tag>
         ) : (
-          isWithinHalfHour(record.createdAt)?<Tag icon={<SyncOutlined spin />} color="processing">{'detecting'}</Tag>:'-'
+          "-"
         );
       },
     },
-    // {
-    //   title: (
-    //     <Tooltip title="Finally adopted and stored in the database..">
-    //       Adopted contracts <QuestionCircleOutlined />
-    //     </Tooltip>
-    //   ),
-    //   render: (_, record) => {
-    //     return (
-    //       <Typography.Text>
-    //         Total: {record?.data?.adopted_contracts?.length ?? 0}
-    //       </Typography.Text>
-    //     );
-    //   },
-    // },
+    {
+      title: (
+        <Tooltip title="All the contracts of this project.">
+          Mapping Contracts <QuestionCircleOutlined />
+        </Tooltip>
+      ),
+      render: (_, record) => {
+        return record?.data?.mapping_contracts?.length > 0 ? (
+          <Popover
+            content={
+              <div style={{ maxHeight: 300, overflow: "auto" }}>
+                {record?.data?.mapping_contracts?.map((c, index) => {
+                  return (
+                    <p key={index}>
+                      {c.chain}: {c.contract_address}
+                    </p>
+                  );
+                })}
+              </div>
+            }
+            title="Contracts"
+          >
+            <Typography.Text>
+              {record?.data?.mapping_contracts?.length >= 500
+                ? ">500"
+                : record?.data?.mapping_contracts?.length}
+              contracts
+            </Typography.Text>
+          </Popover>
+        ) : isWithinMins(record.createdAt, 60) ? (
+          <Tag icon={<SyncOutlined spin />} color="processing">
+            {"mapping"}
+          </Tag>
+        ) : (
+          "-"
+        );
+      },
+    },
     {
       title: "Status",
-      width: 120,
-      dataIndex: "status",
-      render: text => {
+      // width: 120,
+      // dataIndex: "status",
+      render: (_, { status, createdAt }) => {
+        const text = status;
         switch (text) {
           case "error":
             return <Tag color="error">{text}</Tag>;
           case "submitted":
             return <Tag color="success">{text}</Tag>;
           default:
-            return <Tag icon={<SyncOutlined spin />} color="processing">{text}</Tag>;
+            return isWithinMins(createdAt, 120) ? (
+              <Tag icon={<SyncOutlined spin />} color="processing">
+                {text}
+              </Tag>
+            ) : (
+              <Tag color="warning">{"fail"}</Tag>
+            );
         }
       },
     },
     {
       title: "Submitted by",
-      width: 240,
+      // width: 240,
       render: (_, record) => {
         return <Typography.Text>{record?.email}</Typography.Text>;
       },
     },
     {
       title: "Submitted at",
-      width: 150,
+      // width: 150,
       dataIndex: "createdAt",
       render: text => {
         return dayjs(text).format("YYYY-MM-DD HH:mm");
+      },
+    },
+    {
+      title: "Actions",
+      // width: 150,
+      render: (_, record) => {
+        return (
+          <div>
+            <Button
+              type="link"
+              href={`https://www.footprint.network/@rogerD/Address-Analysis-of-GameFi-Project?protocol_name=${record?.data?.protocol_slug}&date_range=past90days#type=dashboard`}
+              target={"_blank"}
+            >
+              Analytic
+            </Button>
+            <Button
+              type="link"
+              href={`https://www.footprint.network/@Bond/Protocol-static-info?protocol_slug=${record?.data?.protocol_slug}`}
+              target={"_blank"}
+            >
+              Detail
+            </Button>
+            <Button
+              type="link"
+              href="https://docs.footprint.network/reference/get_protocol-getprotocolcontractlist"
+              target={"_blank"}
+            >
+              Api
+            </Button>
+          </div>
+        );
       },
     },
   ].filter(i => i);
