@@ -53,7 +53,7 @@ const ContractDecoding = ({ param, onSuccess }) => {
           }),
         );
         socket.onmessage = function (msg) {
-          console.log("get msg ", msg);
+          console.log("on message: ", msg);
           const data = JSON.parse(msg.data);
           if (data?.event === "done" || data === "done") {
             animation = loadAnimation("completed");
