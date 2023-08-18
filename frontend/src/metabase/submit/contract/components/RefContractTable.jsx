@@ -141,7 +141,7 @@ const RefContractTable = ({ data }) => {
               {record?.data?.mapping_contracts?.length >= 500
                 ? ">500"
                 : record?.data?.mapping_contracts?.length}
-              contracts
+              {' '}contracts
             </Typography.Text>
           </Popover>
         ) : isWithinMins(record.createdAt, 60) ? (
