@@ -129,7 +129,7 @@ const RefContractTable = ({ data }) => {
                 {record?.data?.mapping_contracts?.map((c, index) => {
                   return (
                     <p key={index}>
-                      {c.chain}: {c.address}
+                      {c.chain}: {c.contract_address}
                     </p>
                   );
                 })}
@@ -138,9 +138,16 @@ const RefContractTable = ({ data }) => {
             title="Contracts"
           >
             <Typography.Text>
-              {record?.data?.mapping_contracts?.length ?? 0} contracts
+              {record?.data?.mapping_contracts?.length >= 500
+                ? ">500"
+                : record?.data?.mapping_contracts?.length}
+              contracts
             </Typography.Text>
           </Popover>
+        ) : isWithinMins(record.createdAt, 60) ? (
+          <Tag icon={<SyncOutlined spin />} color="processing">
+            {"mapping"}
+          </Tag>
         ) : (
           "-"
         );
@@ -149,21 +156,21 @@ const RefContractTable = ({ data }) => {
     {
       title: "Status",
       // width: 120,
-      dataIndex: "status",
-      render: text => {
+      // dataIndex: "status",
+      render: (_, { status, createdAt }) => {
+        const text = status;
         switch (text) {
           case "error":
             return <Tag color="error">{text}</Tag>;
           case "submitted":
             return <Tag color="success">{text}</Tag>;
           default:
-            return (
-              isWithinMins(120)?
+            return isWithinMins(createdAt, 120) ? (
               <Tag icon={<SyncOutlined spin />} color="processing">
                 {text}
-              </Tag>:<Tag color="warning">
-                {'fail'}
               </Tag>
+            ) : (
+              <Tag color="warning">{"fail"}</Tag>
             );
         }
       },
