@@ -11,7 +11,7 @@ import Link from "metabase/core/components/Link";
 const ChartCreate = () => {
   const data = [
     {
-      title: "0 Coding Chart",
+      title: "Zero-coding Chart",
       desc: "Pick some data, view it, and easily filter, summarize, and visualize it.",
       url: Urls.newQuestion({ type: "query" }),
       icon: getOssUrl("/studio/img-studio-create-1.png"),

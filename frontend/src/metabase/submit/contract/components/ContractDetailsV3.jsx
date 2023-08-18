@@ -1,6 +1,6 @@
 /* eslint-disable react/prop-types */
 /* eslint-disable curly */
-import React, { useState, useEffect} from "react";
+import React, { useState, useEffect } from "react";
 import {
   AutoComplete,
   Button,
@@ -12,13 +12,11 @@ import {
   Modal,
   Tooltip,
 } from "antd";
-import {  useQuery } from "react-query";
+import { useQuery } from "react-query";
 import slug from "slug";
 import { CheckOutlined, ExclamationCircleOutlined } from "@ant-design/icons";
 import { debounce, flatten, toLower, union } from "lodash";
-import {
-  getRefProtocolList,
-} from "metabase/new-service";
+import { getRefProtocolList } from "metabase/new-service";
 import ContractDecoding from "./ContractDecoding";
 
 const CHAIN_LIST = [
@@ -30,11 +28,13 @@ const CHAIN_LIST = [
   { value: "Avalanche", label: "Avalanche" },
   { value: "Cronos", label: "Cronos" },
   { value: "Harmony", label: "Harmony" },
+  { value: "zkSync Era", label: "zkSync Era" },
 ];
 const PROTOCOL_CATEGORY_LIST = [
   { value: "NFT", label: "NFT" },
   { value: "DeFi", label: "DeFi" },
   { value: "GameFi", label: "GameFi" },
+  { value: "Marketplace", label: "Marketplace" },
   { value: "Others", label: "Others" },
 ];
 
@@ -60,6 +60,7 @@ const ContractDetailsV3 = ({ onFinish, user, onClosed }) => {
       form.setFieldsValue({
         email: user?.email,
         website: null,
+        projectCategory: null,
       });
     } else {
       getProtocolList?.data?.forEach(item => {
@@ -67,6 +68,7 @@ const ContractDetailsV3 = ({ onFinish, user, onClosed }) => {
           form.setFieldsValue({
             email: user?.email,
             website: item.website,
+            projectCategory: item.protocol_type,
           });
         }
       });
@@ -167,7 +169,7 @@ const ContractDetailsV3 = ({ onFinish, user, onClosed }) => {
         }}
         onFinish={async values => {
           const isNewProtocol = !getProtocolList?.data
-            ?.map(item => item.protocolName)
+            ?.map(item => item.protocol_name ?? item.protocol_slug)
             ?.includes(values?.protocolName);
           const isValidContract = contract.every(item =>
             isValidContractAddress(item.chain, contract),
@@ -176,6 +178,7 @@ const ContractDetailsV3 = ({ onFinish, user, onClosed }) => {
             message.info("Please input valid contract address");
             return;
           }
+
           try {
             const param = {
               ...values,
@@ -220,12 +223,15 @@ const ContractDetailsV3 = ({ onFinish, user, onClosed }) => {
           />
         </Form.Item>
         <Form.Item
-        label="Project category"
-        rules={[{ required: true, message: "Select project category" }]}
-        name="projectCategory"
-      >
-        <Select placeholder="Select project category" options={PROTOCOL_CATEGORY_LIST} />
-      </Form.Item>
+          label="Project category"
+          rules={[{ required: true, message: "Select project category" }]}
+          name="projectCategory"
+        >
+          <Select
+            placeholder="Select project category"
+            options={PROTOCOL_CATEGORY_LIST}
+          />
+        </Form.Item>
         <Form.Item
           label="Website"
           name="website"

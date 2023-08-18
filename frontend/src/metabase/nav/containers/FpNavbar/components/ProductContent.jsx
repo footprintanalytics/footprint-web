@@ -25,7 +25,7 @@ const ProductContent = props => {
         },
         restApiData: {
           topic: "REST API",
-          desc: "One unified API for Web3 developers",
+          desc: "Free API for Web3 developers",
           data: [
             {
               title: "Wallet Profile API",
@@ -103,7 +103,7 @@ const ProductContent = props => {
       data: {
         studioDescData: {
           img: getOssUrl("studio/img-studio-pic.png"),
-          title: "0- coding analytics as Tableau for crypto.",
+          title: "Zero-coding analytics as Tableau for crypto.",
         },
         analyticsToolData: {
           topic: "Analytics Tool",
@@ -119,7 +119,7 @@ const ProductContent = props => {
           desc: "CREATE",
           data: [
             {
-              title: "0-coding chart",
+              title: "Zero-coding chart",
               icon: ReactIcons.codingChartIcon,
               link: Urls.newQuestion({ type: "query" }),
             },

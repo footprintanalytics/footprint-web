@@ -604,7 +604,7 @@ class FpNavbar extends Component {
     const CreateMenu = () => {
       const menu = [
         {
-          title: "0 Coding Chart",
+          title: "Zero-coding Chart",
           link: Urls.newQuestion({ type: "query" }),
           externalLink: true,
         },

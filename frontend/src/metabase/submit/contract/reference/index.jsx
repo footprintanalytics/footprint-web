@@ -26,74 +26,18 @@ const SubmitContract = props => {
       refetchOnWindowFocus: false,
       retry: 0,
       refetchInterval: 10000,
-      onSuccess: data => {
-        console.log("getRefContractSubmittedList onSuccess=> \n", data);
-      },
     },
   );
 
-  const tempData2 = [
-    {
-      _id: "64d333973aef703023f548aa",
-      data: {
-        protocol: "syncswap",
-        website: "https://syncswap.xyz/",
-      },
-      status: "submitted",
-      type: "protocol",
-      createdAt: "2023-08-09T06:35:03.369Z",
-      updatedAt: "2023-08-09T06:35:27.496Z",
-      __v: 0,
-    },
-    {
-      _id: "64d334b6d41f01d57ea1f7e5",
-      data: {
-        protocol: "freeliquid",
-        website: "https://freeliquid.io/",
-      },
-      status: "submitted",
-      type: "protocol",
-      createdAt: "2023-08-09T06:39:50.834Z",
-      updatedAt: "2023-08-09T06:39:52.077Z",
-      __v: 0,
-    },
-    {
-      _id: "64d334b6d41f01d57ea1f7e6",
-      data: {
-        protocol: "frontier-game",
-        website: "https://www.missingfrontier.com/",
-      },
-      status: "submitted",
-      type: "protocol",
-      createdAt: "2023-08-09T06:39:50.835Z",
-      updatedAt: "2023-08-09T06:39:52.068Z",
-      __v: 0,
-    },
-    {
-      _id: "64d334b6a74043a2b1d03157",
-      data: {
-        protocol: "g-uni",
-        website: null,
-      },
-      status: "error",
-      type: "protocol",
-      createdAt: "2023-08-09T06:39:50.838Z",
-      updatedAt: "2023-08-09T06:39:50.863Z",
-      __v: 0,
-      error: "website not found",
-    },
-  ];
 
   const renderTable = () => {
     // const tempData = data;
-    console.log("getRefContractSubmittedList", data);
-    const tempData = data ?? tempData2;
+    const tempData = data ?? [];
     if (!tempData || tempData?.length === 0) {
       return (
         <Table size="small" rowKey="_id" dataSource={null} pagination={false} />
       );
     }
-    console.log("loadin data => ", tempData);
     return <RefContractTable data={tempData} />;
   };
 
