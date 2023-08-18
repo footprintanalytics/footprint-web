@@ -3,6 +3,7 @@
 import React, { useState, useRef, useEffect } from "react";
 import { Typography, Card, message, Button } from "antd";
 import lottie from "lottie-web/build/player/lottie_svg";
+import dayjs from "dayjs";
 import {
   data_scanning,
   animation_complete,
@@ -12,7 +13,9 @@ import "animate.css";
 
 const ContractDecoding = ({ param, onSuccess }) => {
   const ref = useRef();
-  const [logDatas, setLogDatas] = useState(["start processing..."]);
+  const [logDatas, setLogDatas] = useState([
+    { date: getTimeNow(), message: "start processing..." },
+  ]);
   const [loadCompleted, setLoadCompleted] = useState(false);
   const [title, setTitle] = useState(
     `The system is currently processing [${param?.protocolName}]`,
@@ -33,6 +36,10 @@ const ContractDecoding = ({ param, onSuccess }) => {
       animation?.destroy();
     };
   }, []);
+
+  function getTimeNow() {
+    return dayjs(new Date()).format("HH:mm:ss");
+  }
 
   const handleSocket = () => {
     try {
@@ -61,7 +68,14 @@ const ContractDecoding = ({ param, onSuccess }) => {
               `The system is currently process [${param?.protocolName}] completed.`,
             );
             setLogDatas(datas => {
-              return [...datas, "protocol process completed."];
+              return [
+                ...datas,
+
+                {
+                  date: getTimeNow(),
+                  message: "protocol process completed.",
+                },
+              ];
             });
             message.success("protocol process completed.");
             socket?.close();
@@ -69,7 +83,13 @@ const ContractDecoding = ({ param, onSuccess }) => {
             return;
           }
           setLogDatas(datas => {
-            return [...datas, `${data?.data?.message ?? data}`];
+            return [
+              ...datas,
+              {
+                date: getTimeNow(),
+                message: `${data?.data?.message ?? data}`,
+              },
+            ];
           });
         };
       };
@@ -126,7 +146,16 @@ const ContractDecoding = ({ param, onSuccess }) => {
         >
           <div className="flex flex-column-reverse w-full ">
             {logDatas?.map((log, index) => {
-              return <div key={index}>{log}</div>;
+              return (
+                <div key={index} className="flex flex-row w-full mb1">
+                  <Typography.Text type="secondary" className="mr1 text-nowrap">
+                    {`${log.date}:`}
+                  </Typography.Text>
+                  <Typography.Text type="success" className="flex-1">
+                    {log.message}
+                  </Typography.Text>
+                </div>
+              );
             })}
           </div>
         </Card>
