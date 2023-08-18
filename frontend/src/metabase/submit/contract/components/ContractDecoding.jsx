@@ -42,7 +42,8 @@ const ContractDecoding = ({ param, onSuccess }) => {
           JSON.stringify({
             event: "submit_protocol",
             data: {
-              protocol: param?.protocolName,
+              protocol_name: param?.protocolName,
+              protocol_slug: param?.protocolSlug,
               protocol_type: param?.projectCategory,
               website: param?.website,
               email: param?.email,
