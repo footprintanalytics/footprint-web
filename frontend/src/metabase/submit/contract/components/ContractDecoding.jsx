@@ -42,7 +42,8 @@ const ContractDecoding = ({ param, onSuccess }) => {
           JSON.stringify({
             event: "submit_protocol",
             data: {
-              protocol: param?.protocolName,
+              protocol_name: param?.protocolName,
+              protocol_slug: param?.protocolSlug,
               protocol_type: param?.projectCategory,
               website: param?.website,
               email: param?.email,
@@ -52,7 +53,7 @@ const ContractDecoding = ({ param, onSuccess }) => {
           }),
         );
         socket.onmessage = function (msg) {
-          console.log("get msg ", msg);
+          console.log("on message: ", msg);
           const data = JSON.parse(msg.data);
           if (data?.event === "done" || data === "done") {
             animation = loadAnimation("completed");
