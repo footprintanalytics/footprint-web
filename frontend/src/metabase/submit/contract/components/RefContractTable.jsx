@@ -155,8 +155,6 @@ const RefContractTable = ({ data }) => {
     },
     {
       title: "Status",
-      // width: 120,
-      // dataIndex: "status",
       render: (_, { status, createdAt }) => {
         const text = status;
         switch (text) {
@@ -184,7 +182,6 @@ const RefContractTable = ({ data }) => {
     },
     {
       title: "Submitted at",
-      // width: 150,
       dataIndex: "createdAt",
       render: text => {
         return dayjs(text).format("YYYY-MM-DD HH:mm");
@@ -192,7 +189,6 @@ const RefContractTable = ({ data }) => {
     },
     {
       title: "Actions",
-      // width: 150,
       render: (_, record) => {
         return (
           <div>
