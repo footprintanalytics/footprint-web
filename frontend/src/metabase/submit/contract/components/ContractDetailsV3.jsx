@@ -178,6 +178,7 @@ const ContractDetailsV3 = ({ onFinish, user, onClosed }) => {
             message.info("Please input valid contract address");
             return;
           }
+
           try {
             const param = {
               ...values,
