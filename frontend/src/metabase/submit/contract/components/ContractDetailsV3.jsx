@@ -11,7 +11,6 @@ import {
   Tabs,
   Modal,
   Tooltip,
-  Typography,
   Upload,
 } from "antd";
 import { useQuery } from "react-query";
@@ -27,7 +26,6 @@ import {
 import { debounce, flatten, toLower, union } from "lodash";
 import { v4 as uuidv4 } from "uuid";
 import { getRefProtocolList } from "metabase/new-service";
-import { getSuffix } from "metabase/containers/news/util/handle";
 import { uploadFile } from "metabase/lib/oss";
 import { ossPath } from "metabase/lib/ossPath";
 import ContractDecoding from "./ContractDecoding";
@@ -187,9 +185,7 @@ const ContractDetailsV3 = ({ onFinish, user, onClosed }) => {
   };
   const [imageUploading, setImageUploading] = useState(false);
   const uploadProps = {
-    // action: "https://www.mocky.io/v2/5cc8019d300000980a055e76",
     accept: ".png, .jpg, .jpeg, .gif, .svg, .webp",
-    // listType: "text",
     showUploadList: false,
     maxCount: 1,
     beforeUpload: async file => {
@@ -206,7 +202,6 @@ const ContractDetailsV3 = ({ onFinish, user, onClosed }) => {
         logo: fileUrl,
       });
       setImageUploading(false)
-      // return (isImage && isLt2M) || Upload.LIST_IGNORE;
     },
   };
   return (
@@ -458,7 +453,6 @@ const ContractDetailsV3 = ({ onFinish, user, onClosed }) => {
             <Form.Item
               label="Twitter"
               name="twitter"
-              // tooltip="Please provide the Twitter of the project"
               rules={[
                 () => ({
                   required: false,
@@ -481,7 +475,6 @@ const ContractDetailsV3 = ({ onFinish, user, onClosed }) => {
             <Form.Item
               label="Discord"
               name="discord"
-              // tooltip="Please provide the Discord of the project"
               rules={[
                 () => ({
                   required: false,
@@ -504,7 +497,6 @@ const ContractDetailsV3 = ({ onFinish, user, onClosed }) => {
             <Form.Item
               label="Telegram"
               name="telegram"
-              // tooltip="Please provide the Telegram of the project"
               rules={[
                 () => ({
                   required: false,
@@ -527,7 +519,6 @@ const ContractDetailsV3 = ({ onFinish, user, onClosed }) => {
             <Form.Item
               label="Github"
               name="github"
-              // tooltip="Please provide the Github of the project"
               rules={[
                 () => ({
                   required: false,
