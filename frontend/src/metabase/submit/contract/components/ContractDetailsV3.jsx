@@ -193,7 +193,6 @@ const ContractDetailsV3 = ({ onFinish, user, onClosed }) => {
     showUploadList: false,
     maxCount: 1,
     beforeUpload: async file => {
-      console.log("uploadProps beforeUpload", file);
       const isLt2M = file.size / 1024 / 1024 < 2;
       if (!isLt2M) {
         message.error("Image must smaller than 2MB!");
