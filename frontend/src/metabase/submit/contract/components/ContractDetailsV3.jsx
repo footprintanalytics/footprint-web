@@ -453,7 +453,7 @@ const ContractDetailsV3 = ({ onFinish, user, onClosed }) => {
                 }),
               ]}
             >
-              <Input placeholder="Please provide the Logo of the project" />
+              <Input placeholder="Please provide the logo url of the project" />
             </Form.Item>
             <Form.Item
               label="Twitter"
@@ -476,7 +476,7 @@ const ContractDetailsV3 = ({ onFinish, user, onClosed }) => {
                 }),
               ]}
             >
-              <Input placeholder="Please provide the Twitter of the project" />
+              <Input placeholder="Please provide the twitter url of the project,such as https://twitter.com/Footprint_Data" />
             </Form.Item>
             <Form.Item
               label="Discord"
@@ -499,7 +499,7 @@ const ContractDetailsV3 = ({ onFinish, user, onClosed }) => {
                 }),
               ]}
             >
-              <Input placeholder="Please provide the Discord of the project" />
+              <Input placeholder="Please provide the discord invite url of the project,such as https://discord.gg/***" />
             </Form.Item>
             <Form.Item
               label="Telegram"
@@ -522,7 +522,7 @@ const ContractDetailsV3 = ({ onFinish, user, onClosed }) => {
                 }),
               ]}
             >
-              <Input placeholder="Please provide the Telegram of the project" />
+              <Input placeholder="Please provide the telegram join url of the project,such as https://t.me/joinchat/***" />
             </Form.Item>
             <Form.Item
               label="Github"
@@ -545,7 +545,13 @@ const ContractDetailsV3 = ({ onFinish, user, onClosed }) => {
                 }),
               ]}
             >
-              <Input placeholder="Please provide the Github of the project" />
+              <Input placeholder="Please provide the github url of the project" />
+            </Form.Item>
+            <Form.Item
+              label="Description"
+              name="description"
+            >
+              <Input placeholder="Please provide the description of the project" />
             </Form.Item>
           </div>
         )}

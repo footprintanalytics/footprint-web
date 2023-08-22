@@ -59,6 +59,7 @@ const ContractDecoding = ({ param, onSuccess }) => {
               telegram: param?.telegram,
               github: param?.github,
               logo: param?.logo,
+              description: param?.description,
               contracts: param?.contracts,
               source: "web_user",
             },
