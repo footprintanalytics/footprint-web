@@ -11,12 +11,25 @@ import {
   Tabs,
   Modal,
   Tooltip,
+  Typography,
+  Upload,
 } from "antd";
 import { useQuery } from "react-query";
 import slug from "slug";
-import { CheckOutlined, ExclamationCircleOutlined } from "@ant-design/icons";
+import {
+  CheckOutlined,
+  ExclamationCircleOutlined,
+  DownOutlined,
+  UpOutlined,
+  SyncOutlined,
+  UploadOutlined,
+} from "@ant-design/icons";
 import { debounce, flatten, toLower, union } from "lodash";
+import { v4 as uuidv4 } from "uuid";
 import { getRefProtocolList } from "metabase/new-service";
+import { getSuffix } from "metabase/containers/news/util/handle";
+import { uploadFile } from "metabase/lib/oss";
+import { ossPath } from "metabase/lib/ossPath";
 import ContractDecoding from "./ContractDecoding";
 
 const CHAIN_LIST = [
@@ -45,6 +58,7 @@ const ContractDetailsV3 = ({ onFinish, user, onClosed }) => {
   const [form] = Form.useForm();
   const [openAddContractSelect, setOpenAddContractSelect] = useState(false);
   const [protocolSlug, setProtocolSlug] = useState();
+  const [isMoreOptions, setMoreOptions] = useState(false);
 
   const getProtocolList = useQuery(
     ["getRefProtocolList"],
@@ -61,6 +75,7 @@ const ContractDetailsV3 = ({ onFinish, user, onClosed }) => {
         email: user?.email,
         website: null,
         projectCategory: null,
+        logo: null,
       });
     } else {
       getProtocolList?.data?.forEach(item => {
@@ -157,7 +172,44 @@ const ContractDetailsV3 = ({ onFinish, user, onClosed }) => {
     }
     return null;
   };
-
+  const moreOptionBtn = () => {
+    return (
+      <Button
+        type="link"
+        style={{ padding: "4px 0px" }}
+        onClick={() => {
+          setMoreOptions(!isMoreOptions);
+        }}
+      >
+        {isMoreOptions ? <UpOutlined /> : <DownOutlined />} More options
+      </Button>
+    );
+  };
+  const [imageUploading, setImageUploading] = useState(false);
+  const uploadProps = {
+    // action: "https://www.mocky.io/v2/5cc8019d300000980a055e76",
+    accept: ".png, .jpg, .jpeg, .gif, .svg, .webp",
+    // listType: "text",
+    showUploadList: false,
+    maxCount: 1,
+    beforeUpload: async file => {
+      console.log("uploadProps beforeUpload", file);
+      const isLt2M = file.size / 1024 / 1024 < 2;
+      if (!isLt2M) {
+        message.error("Image must smaller than 2MB!");
+        return false;
+      }
+      const fileName = `logo_images/${uuidv4()}-${file.name}`;
+      setImageUploading(true)
+      await uploadFile({ fileName, file });
+      const fileUrl = `https://static.footprint.network/${ossPath(fileName)}`;
+      form.setFieldsValue({
+        logo: fileUrl,
+      });
+      setImageUploading(false)
+      // return (isImage && isLt2M) || Upload.LIST_IGNORE;
+    },
+  };
   return (
     <div>
       <Form
@@ -310,12 +362,12 @@ const ContractDetailsV3 = ({ onFinish, user, onClosed }) => {
             }
           />
         </Form.Item>
-        <Form.Item
-          label=""
-          // rules={[{ required: true, message: "" }]}
-          name="contracts"
-        >
-          {contract?.length > 0 && (
+        {contract?.length > 0 && (
+          <Form.Item
+            label=""
+            // rules={[{ required: true, message: "" }]}
+            name="contracts"
+          >
             <Tabs>
               {contract?.map(item => {
                 return (
@@ -352,12 +404,159 @@ const ContractDetailsV3 = ({ onFinish, user, onClosed }) => {
                 );
               })}
             </Tabs>
-          )}
-        </Form.Item>
+          </Form.Item>
+        )}
+        {isMoreOptions && moreOptionBtn()}
+        {isMoreOptions && (
+          <div
+            style={{
+              backgroundColor: "var(--color-bg-light)",
+              padding: "10px",
+              marginBottom: "10px",
+              borderRadius: 10,
+            }}
+          >
+            <Form.Item
+              label={
+                <>
+                  Logo{" "}
+                  <Upload {...uploadProps} className="ml1">
+                    <Button
+                      size="small"
+                      icon={
+                        imageUploading ? (
+                          <SyncOutlined spin />
+                        ) : (
+                          <UploadOutlined />
+                        )
+                      }
+                    >
+                      {imageUploading ? "Uploading" : "Upload"}
+                    </Button>
+                  </Upload>
+                </>
+              }
+              name="logo"
+              rules={[
+                () => ({
+                  required: false,
+                  validator(_, value) {
+                    if (
+                      value?.startsWith("https://") ||
+                      value?.startsWith("http://")
+                    ) {
+                      return Promise.resolve();
+                    }
+                    return Promise.reject(
+                      new Error("Please start with https:// or http://"),
+                    );
+                  },
+                }),
+              ]}
+            >
+              <Input placeholder="Please provide the Logo of the project" />
+            </Form.Item>
+            <Form.Item
+              label="Twitter"
+              name="twitter"
+              // tooltip="Please provide the Twitter of the project"
+              rules={[
+                () => ({
+                  required: false,
+                  validator(_, value) {
+                    if (
+                      value?.startsWith("https://") ||
+                      value?.startsWith("http://")
+                    ) {
+                      return Promise.resolve();
+                    }
+                    return Promise.reject(
+                      new Error("Please start with https:// or http://"),
+                    );
+                  },
+                }),
+              ]}
+            >
+              <Input placeholder="Please provide the Twitter of the project" />
+            </Form.Item>
+            <Form.Item
+              label="Discord"
+              name="discord"
+              // tooltip="Please provide the Discord of the project"
+              rules={[
+                () => ({
+                  required: false,
+                  validator(_, value) {
+                    if (
+                      value?.startsWith("https://") ||
+                      value?.startsWith("http://")
+                    ) {
+                      return Promise.resolve();
+                    }
+                    return Promise.reject(
+                      new Error("Please start with https:// or http://"),
+                    );
+                  },
+                }),
+              ]}
+            >
+              <Input placeholder="Please provide the Discord of the project" />
+            </Form.Item>
+            <Form.Item
+              label="Telegram"
+              name="telegram"
+              // tooltip="Please provide the Telegram of the project"
+              rules={[
+                () => ({
+                  required: false,
+                  validator(_, value) {
+                    if (
+                      value?.startsWith("https://") ||
+                      value?.startsWith("http://")
+                    ) {
+                      return Promise.resolve();
+                    }
+                    return Promise.reject(
+                      new Error("Please start with https:// or http://"),
+                    );
+                  },
+                }),
+              ]}
+            >
+              <Input placeholder="Please provide the Telegram of the project" />
+            </Form.Item>
+            <Form.Item
+              label="Github"
+              name="github"
+              // tooltip="Please provide the Github of the project"
+              rules={[
+                () => ({
+                  required: false,
+                  validator(_, value) {
+                    if (
+                      value?.startsWith("https://") ||
+                      value?.startsWith("http://")
+                    ) {
+                      return Promise.resolve();
+                    }
+                    return Promise.reject(
+                      new Error("Please start with https:// or http://"),
+                    );
+                  },
+                }),
+              ]}
+            >
+              <Input placeholder="Please provide the Github of the project" />
+            </Form.Item>
+          </div>
+        )}
         <Form.Item>
-          <Button type="primary" htmlType="submit">
-            Submit
-          </Button>
+          <div className="w-full flex flex-row-reverse justify-between align-center">
+            <Button type="primary" htmlType="submit">
+              Submit
+            </Button>
+            {!isMoreOptions && moreOptionBtn()}
+          </div>
         </Form.Item>
       </Form>
       <Modal
