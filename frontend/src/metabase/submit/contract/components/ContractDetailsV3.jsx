@@ -40,6 +40,7 @@ const CHAIN_LIST = [
   { value: "Cronos", label: "Cronos" },
   { value: "Harmony", label: "Harmony" },
   { value: "zkSync Era", label: "zkSync Era" },
+  { value: "Sui", label: "Sui" },
 ];
 const PROTOCOL_CATEGORY_LIST = [
   { value: "NFT", label: "NFT" },
@@ -435,7 +436,7 @@ const ContractDetailsV3 = ({ onFinish, user, onClosed }) => {
                 () => ({
                   required: false,
                   validator(_, value) {
-                    if (
+                    if (!value||
                       value?.startsWith("https://") ||
                       value?.startsWith("http://")
                     ) {
@@ -457,7 +458,7 @@ const ContractDetailsV3 = ({ onFinish, user, onClosed }) => {
                 () => ({
                   required: false,
                   validator(_, value) {
-                    if (
+                    if (!value||
                       value?.startsWith("https://") ||
                       value?.startsWith("http://")
                     ) {
@@ -479,7 +480,7 @@ const ContractDetailsV3 = ({ onFinish, user, onClosed }) => {
                 () => ({
                   required: false,
                   validator(_, value) {
-                    if (
+                    if (!value||
                       value?.startsWith("https://") ||
                       value?.startsWith("http://")
                     ) {
@@ -501,7 +502,7 @@ const ContractDetailsV3 = ({ onFinish, user, onClosed }) => {
                 () => ({
                   required: false,
                   validator(_, value) {
-                    if (
+                    if (!value||
                       value?.startsWith("https://") ||
                       value?.startsWith("http://")
                     ) {
@@ -523,7 +524,7 @@ const ContractDetailsV3 = ({ onFinish, user, onClosed }) => {
                 () => ({
                   required: false,
                   validator(_, value) {
-                    if (
+                    if (!value||
                       value?.startsWith("https://") ||
                       value?.startsWith("http://")
                     ) {
