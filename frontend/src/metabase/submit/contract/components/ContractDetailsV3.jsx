@@ -108,7 +108,7 @@ const ContractDetailsV3 = ({ onFinish, user, onClosed }) => {
   };
 
   const isValidAddress = contractAddress => {
-    const regex = /^(0x)?[0-9a-fA-F]{40}$/;
+    const regex = /^(0x)?[0-9a-fA-F]{40,}$/;
     const array = contractAddress.split("\n");
     return array.every(address => regex.test(address));
   };

@@ -21,7 +21,7 @@ const ContractDecoding = ({ param, onSuccess }) => {
     `The system is currently processing [${param?.protocolName}]`,
   );
   const domain = window.location.hostname;
-  const endpoint =
+  let endpoint =
     domain === "localhost"
       ? "ws://localhost:7081" // local test
       : "wss://ref-api-adapter.footprint.network/ws"; // production
