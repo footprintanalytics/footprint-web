@@ -106,7 +106,7 @@ const RefContractTable = ({ data }) => {
               {record?.data?.find_contracts?.length ?? 0} contracts
             </Typography.Text>
           </Popover>
-        ) : isWithinMins(record.createdAt) ? (
+        ) : isWithinMins(record.createdAt)&&record.status!=='rejected' ? (
           <Tag icon={<SyncOutlined spin />} color="processing">
             {"detecting"}
           </Tag>
@@ -144,7 +144,7 @@ const RefContractTable = ({ data }) => {
               {' '}contracts
             </Typography.Text>
           </Popover>
-        ) : isWithinMins(record.createdAt, 60) ? (
+        ) : isWithinMins(record.createdAt, 60)&&record.status!=='rejected' ? (
           <Tag icon={<SyncOutlined spin />} color="processing">
             {"mapping"}
           </Tag>
@@ -155,13 +155,15 @@ const RefContractTable = ({ data }) => {
     },
     {
       title: "Status",
-      render: (_, { status, createdAt }) => {
+      render: (_, { status, createdAt, error }) => {
         const text = status;
         switch (text) {
           case "error":
             return <Tag color="error">{text}</Tag>;
           case "submitted":
             return <Tag color="success">{text}</Tag>;
+          case "rejected":
+            return <Tooltip title={error}><Tag color="error">{text}</Tag></Tooltip>;
           default:
             return isWithinMins(createdAt, 120) ? (
               <Tag icon={<SyncOutlined spin />} color="processing">
@@ -197,7 +199,7 @@ const RefContractTable = ({ data }) => {
               href={`https://www.footprint.network/@rogerD/Address-Analysis-of-GameFi-Project?protocol_name=${record?.data?.protocol_slug}&date_range=past90days#type=dashboard`}
               target={"_blank"}
             >
-              Analytic
+              Analytics
             </Button>
             <Button
               type="link"
