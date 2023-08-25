@@ -180,7 +180,7 @@ const ContractDetailsV3 = ({ onFinish, user, onClosed }) => {
           setMoreOptions(!isMoreOptions);
         }}
       >
-        {isMoreOptions ? <UpOutlined /> : <DownOutlined />} More options
+        {isMoreOptions ? <UpOutlined /> : <DownOutlined />} {`More options ${!isMoreOptions?'(Logo,Twitter,Discord,Telegram,Github,Description)':''}`}
       </Button>
     );
   };
@@ -229,6 +229,7 @@ const ContractDetailsV3 = ({ onFinish, user, onClosed }) => {
           try {
             const param = {
               ...values,
+              username: user?.name,
               contracts: formatContracts(values.contracts),
               protocolSlug: values.protocolSlug || slug(values.protocolName),
               isNewProtocol,

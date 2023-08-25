@@ -53,6 +53,7 @@ const ContractDecoding = ({ param, onSuccess }) => {
               protocol_slug: param?.protocolSlug,
               protocol_type: param?.projectCategory,
               website: param?.website,
+              username: param?.username,
               email: param?.email,
               twitter: param?.twitter,
               discord: param?.discord,
