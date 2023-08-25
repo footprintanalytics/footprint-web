@@ -139,7 +139,7 @@ const RefContractTable = ({ data }) => {
           >
             <Typography.Text>
               {record?.data?.mapping_contracts?.length >= 500
-                ? ">500"
+                ? "> 500"
                 : record?.data?.mapping_contracts?.length}
             </Typography.Text>
           </Popover>
