@@ -72,7 +72,7 @@ const RefContractTable = ({ data }) => {
             title="Contracts"
           >
             <Typography.Text>
-              {record?.data?.contracts?.length ?? 0} contracts
+              {record?.data?.contracts?.length ?? 0}
             </Typography.Text>
           </Popover>
         ) : (
@@ -103,10 +103,10 @@ const RefContractTable = ({ data }) => {
             title="Contracts"
           >
             <Typography.Text>
-              {record?.data?.find_contracts?.length ?? 0} contracts
+              {record?.data?.find_contracts?.length ?? 0}
             </Typography.Text>
           </Popover>
-        ) : isWithinMins(record.createdAt)&&record.status!=='rejected' ? (
+        ) : isWithinMins(record.createdAt) && record.status !== "rejected" ? (
           <Tag icon={<SyncOutlined spin />} color="processing">
             {"detecting"}
           </Tag>
@@ -139,12 +139,12 @@ const RefContractTable = ({ data }) => {
           >
             <Typography.Text>
               {record?.data?.mapping_contracts?.length >= 500
-                ? ">500"
+                ? "> 500"
                 : record?.data?.mapping_contracts?.length}
-              {' '}contracts
             </Typography.Text>
           </Popover>
-        ) : isWithinMins(record.createdAt, 60)&&record.status!=='rejected' ? (
+        ) : isWithinMins(record.createdAt, 60) &&
+          record.status !== "rejected" ? (
           <Tag icon={<SyncOutlined spin />} color="processing">
             {"mapping"}
           </Tag>
@@ -163,7 +163,11 @@ const RefContractTable = ({ data }) => {
           case "submitted":
             return <Tag color="success">{text}</Tag>;
           case "rejected":
-            return <Tooltip title={error}><Tag color="error">{text}</Tag></Tooltip>;
+            return (
+              <Tooltip title={error}>
+                <Tag color="error">{text}</Tag>
+              </Tooltip>
+            );
           default:
             return isWithinMins(createdAt, 120) ? (
               <Tag icon={<SyncOutlined spin />} color="processing">
@@ -179,7 +183,17 @@ const RefContractTable = ({ data }) => {
       title: "Submitted by",
       // width: 240,
       render: (_, record) => {
-        return <Typography.Text>{record?.email}</Typography.Text>;
+        if(record?.username === ""){
+          record.username = null;
+        }
+        if(record?.email === ""){
+          record.email = null;
+        }
+        return (
+          <Typography.Text>
+            {record?.username ?? record?.email ?? "-"}
+          </Typography.Text>
+        );
       },
     },
     {
@@ -213,7 +227,7 @@ const RefContractTable = ({ data }) => {
               href="https://docs.footprint.network/reference/get_protocol-getprotocolcontractlist"
               target={"_blank"}
             >
-              Api
+              API
             </Button>
           </div>
         );
