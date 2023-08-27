@@ -88,6 +88,10 @@ export const runDirtyQuestionQuery = () => async (dispatch, getState) => {
 };
 
 const handleQuestionVisualType = (question, cols) => {
+  const query = question?.dataset_query?.native?.query;
+  if (query?.includes("select *") || query?.includes("SELECT *")) {
+    return question;
+  }
   const dateName = cols?.find(i => ["type/DateTimeWithTZ", "type/Date", "type/DateTime"].includes(i.base_type))?.name;
   const amountN = cols?.find(i => i.name === "amount")?.name;
   const volumeN = cols?.find(i => i.name === "volume")?.name;

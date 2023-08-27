@@ -70,7 +70,7 @@ class Question extends Component {
     const query = this.props?.location?.query;
     const hash = this.props?.location?.hash;
     if (hash && query?.sql) {
-      localStorage.setItem("QUERY_SQL", atob(query?.sql || ""));
+      localStorage.setItem("QUERY_SQL", atob(query?.sql?.replace(" ", "+") || ""));
     } else {
       localStorage.setItem("QUERY_SQL", "");
     }
