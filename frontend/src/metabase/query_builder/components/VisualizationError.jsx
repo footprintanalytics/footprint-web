@@ -148,7 +148,7 @@ class VisualizationError extends Component {
         processedError = stripRemarks(processedError);
       }
       return (
-        <QueryError className={className}>
+        <QueryError id="html2canvas-Card" className={className}>
           <QueryErrorIcon>
             <Icon name="warning" size="40" />
           </QueryErrorIcon>
