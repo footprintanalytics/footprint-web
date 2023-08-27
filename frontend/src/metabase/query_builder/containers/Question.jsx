@@ -62,6 +62,18 @@ class Question extends Component {
     this.props.setIsCancelFeedbackBlockAction({
       isUserFeedbackBlock: this.isCancelFeedbackBlock,
     });
+
+    this.handleQuerySql();
+  }
+
+  handleQuerySql = () => {
+    const query = this.props?.location?.query;
+    const hash = this.props?.location?.hash;
+    if (hash && query?.sql) {
+      localStorage.setItem("QUERY_SQL", atob(query?.sql || ""));
+    } else {
+      localStorage.setItem("QUERY_SQL", "");
+    }
   }
 
   isCancelFeedbackBlock = () => {

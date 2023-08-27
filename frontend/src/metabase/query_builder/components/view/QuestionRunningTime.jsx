@@ -30,7 +30,7 @@ const QuestionRunningTime = props => {
   return (
     <div className="ml2 footprint-secondary-text1">
       {!!runningTime && (
-        <div className="flex flex-column" style={{ lineHeight: "normal" }}>
+        <div className="flex flex-column" style={{ lineHeight: "1.1" }}>
           <span>Last run time: {dayjs(start).format("YYYY-MM-DD HH:mm")}</span>
           <span>Last duration: {formatTime(runningTime)} s</span>
         </div>

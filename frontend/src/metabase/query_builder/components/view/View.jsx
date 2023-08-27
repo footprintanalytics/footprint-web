@@ -18,7 +18,7 @@ import { getUserNativeQueryPermission } from "metabase/selectors/user";
 import { setNewGuideInfo } from "metabase/redux/control";
 import { getDarkMode, getNewGuideInfo } from "metabase/selectors/control";
 import { questionSideHideAction } from "metabase/redux/config";
-import { updateQuestion } from "metabase/query_builder/actions";
+import { runQuestionQuery, updateQuestion } from "metabase/query_builder/actions";
 import NativeQuery from "metabase-lib/queries/NativeQuery";
 import StructuredQuery from "metabase-lib/queries/StructuredQuery";
 
@@ -499,12 +499,19 @@ class View extends React.Component {
         this.props.questionSideHideAction({ hide: false });
       }
     }
-
+    // for ai service
+    const demo_sql = localStorage.getItem("QUERY_SQL", "");
+    if (demo_sql && !this.canNotRunDemoSQL) {
+      this.canNotRunDemoSQL = true
+      setTimeout(() => {
+        this.props.runQuestionQuery({from: "GPT"});
+      }, 2000)
+    }
     if (isNewQuestion || !query.databaseId()) {
       if (query instanceof NativeQuery) {
         const nativeQuery = {
           type: "native",
-          native: { query: "select * from " },
+          native: { query: demo_sql ? demo_sql: "select * from " },
           database: 3,
         };
         updateQuestion(question.setDatasetQuery(nativeQuery));
