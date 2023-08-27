@@ -62,6 +62,9 @@ class Question extends Component {
     this.props.setIsCancelFeedbackBlockAction({
       isUserFeedbackBlock: this.isCancelFeedbackBlock,
     });
+
+    const search = this.props?.location?.search;
+    localStorage.setItem("DEMO_SQL", atob(search?.replace("?sql=", "" || "")));
   }
 
   isCancelFeedbackBlock = () => {
