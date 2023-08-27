@@ -500,7 +500,7 @@ class View extends React.Component {
       }
     }
     // for ai service
-    const demo_sql = localStorage.getItem("DEMO_SQL", "");
+    const demo_sql = localStorage.getItem("QUERY_SQL", "");
     if (demo_sql && !this.canNotRunDemoSQL) {
       this.canNotRunDemoSQL = true
       setTimeout(() => {

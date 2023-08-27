@@ -63,8 +63,13 @@ class Question extends Component {
       isUserFeedbackBlock: this.isCancelFeedbackBlock,
     });
 
-    const search = this.props?.location?.search;
-    localStorage.setItem("DEMO_SQL", atob(search?.replace("?sql=", "" || "")));
+    const query = this.props?.location?.query;
+    const hash = this.props?.location?.hash;
+    if (hash && query?.sql) {
+      localStorage.setItem("QUERY_SQL", atob(query?.sql || ""));
+    } else {
+      localStorage.setItem("QUERY_SQL", "");
+    }
   }
 
   isCancelFeedbackBlock = () => {
