@@ -358,21 +358,21 @@ const gamefiData = [
         "value": "planetix-assets-tracker",
         "publicUuid": "be1e7872-0c20-4188-b683-dbe429fc961d",
       },
-      {
+      /*{
         "label": "Walken Data Overview",
         "value": "walken-data-overview",
         "publicUuid": "0bc7f1b3-feb1-430a-9596-5a513c3fd216",
-      },
+      },*/
       {
         "label": "Era7 Key Metrics",
         "value": "era7-key-metrics",
         "publicUuid": "879d17b3-fa17-477a-a7f4-b21b9381f3c3",
       },
-      {
+      /*{
         "label": "Solana GameFi Overview",
         "value": "solana-gamefi-overview",
         "publicUuid": "022aa15f-40c7-4dc2-95be-bc498c9114fd",
-      },
+      },*/
       {
         "label": "GAMEE Health",
         "value": "gamee-health",
@@ -577,11 +577,11 @@ const chainData = [
         "value": "harmony-stats",
         "publicUuid": "280fd659-a3bf-4183-97bf-e6d9be075870",
       },
-      {
+      /*{
         "label": "Solana GameFi Overview",
         "value": "solana-gamefi-overview",
         "publicUuid": "022aa15f-40c7-4dc2-95be-bc498c9114fd",
-      },
+      },*/
       {
         "label": "Polygon Deep Dive",
         "value": "polygon-deep-dive",

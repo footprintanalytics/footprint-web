@@ -29,11 +29,11 @@ const TableChains = props => {
       label: "Polygon",
       icon: getOssUrl("fp-chains/polygon.webp"),
     },
-    {
+    /*{
       value: "solana",
       label: "Solana",
       icon: getOssUrl("fp-chains/solana.webp"),
-    },
+    },*/
     {
       value: "optimism",
       label: "Optimism",

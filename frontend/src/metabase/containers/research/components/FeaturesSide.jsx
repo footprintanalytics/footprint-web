@@ -233,7 +233,7 @@ const FeaturesSide = ({
         height: "100%",
         position: "fixed",
         marginBottom: 100,
-        padding: "0 0 240px",
+        padding: "0 0 300px",
       }}
     >
       {renderDataSet()}
