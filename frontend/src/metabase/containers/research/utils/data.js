@@ -177,7 +177,8 @@ const nftData = [
         ],
       },
     ],
-  }, {
+  },
+  /*{
     "label": "Fundraising",
     "value": "fundraising",
     "subMenus": [
@@ -193,7 +194,7 @@ const nftData = [
         "type": "chart",
       },
     ],
-  },
+  },*/
   {
     "label": "Themetic analysis",
     "value": "themetic-analysis",
@@ -311,7 +312,7 @@ const gamefiData = [
       },
     ],
   },
-  {
+  /*{
     "label": "Fundraising",
     "value": "fundraising",
     "subMenus": [
@@ -327,7 +328,7 @@ const gamefiData = [
         "type": "chart",
       },
     ],
-  },
+  },*/
   {
     "label": "Themetic analysis",
     "value": "themetic-analysis",
