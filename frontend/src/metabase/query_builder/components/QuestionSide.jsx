@@ -178,7 +178,7 @@ function QuestionSide({
     let filter = null;
     const mapping = dateFieldMapping.mapping.find(name => name === tableName)
     if (!mapping && timePeriodId && timePeriodId !== -1) {
-      filter = ["time-interval", ["field", timePeriodId, null], -7, "day"];
+      filter = ["time-interval", ["field", timePeriodId, null], -7, "day", {"include-current": true}];
     }
     return filter;
   };
