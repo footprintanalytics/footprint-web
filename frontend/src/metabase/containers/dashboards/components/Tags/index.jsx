@@ -12,7 +12,6 @@ import "./index.css";
 import Item from "./Item";
 // eslint-disable-next-line import/order
 import { uniq } from "lodash";
-import { isFgaPath } from "metabase/growth/utils/utils"
 
 const Tags = ({
   router,
@@ -22,7 +21,6 @@ const Tags = ({
   searchWords,
 }) => {
   const tags = getDashboardQueryTags(router.location.query.tags);
-  const isFga = isFgaPath();
   const getLinkProps = item => {
     const getLink = isSearch()
       ? getSearchDashboardQueryLink

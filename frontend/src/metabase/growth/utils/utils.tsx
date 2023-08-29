@@ -287,7 +287,7 @@ export async function getDashboardDatas(uuid: string) {
 }
 
 export function isFgaPath(){
-  return location.pathname.includes("/growth");
+  return location.pathname.startsWith("/growth");
 }
 
 export function getGrowthProjectPath(project: string, menu?: string) {

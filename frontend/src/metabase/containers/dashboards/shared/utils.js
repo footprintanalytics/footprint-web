@@ -116,11 +116,14 @@ export const isProtocol = () => {
 };
 
 export const isCreator = () => {
-  return window.location.pathname.startsWith("/@")||window.location.pathname.startsWith("/growth/@");
+  return window.location.pathname.startsWith("/@")
+    || window.location.pathname.startsWith("/growth/@")
+    || window.location.pathname.startsWith("/fga/@");
 };
 
 export const isGrowthPage = () => {
-  return window.location.pathname.startsWith("/growth/project");
+  return window.location.pathname.startsWith("/growth/project")
+  || window.location.pathname.startsWith("/fga/project");
 };
 
 export const isMyStudio = () => {

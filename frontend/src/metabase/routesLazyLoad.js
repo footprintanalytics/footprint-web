@@ -184,9 +184,13 @@ export default {
   // GroupDetailApp: loadable(() => import("metabase/admin/people/containers/GroupDetailApp")),
 
   // submit
-  SubmitContract: loadable(() => import("metabase/submit/contract/index")),
   SubmitContractAdd: loadable(() => import("metabase/submit/contract/add")),
-  SubmitContractAddV2: loadable(() => import("metabase/submit/contract/addV2")),
+  // SubmitContract: loadable(() => import("metabase/submit/contract/index")),
+  // SubmitContractAddV2: loadable(() => import("metabase/submit/contract/addV2")),
+  SubmitContract: loadable(() => import("metabase/submit/contract/reference/index")),
+  SubmitContractAddV2: loadable(() => import("metabase/submit/contract/reference/index")),
+  SubmitRefContractAdd: loadable(() => import("metabase/submit/contract/reference/add")),
+  SubmitRefContract: loadable(() => import("metabase/submit/contract/reference/index")),
   SubmitContractSuccess: loadable(() =>
     import("metabase/submit/contract/success"),
   ),
@@ -344,6 +348,9 @@ export default {
   ),
   GaProjectContainer: loadable(() =>
     import("metabase/growth/containers/Project"),
+  ),
+  ABProjectContainer: loadable(() =>
+    import("metabase/ab/containers/Project"),
   ),
   // Metadata / Data model
   DataModelApp: loadable(() =>

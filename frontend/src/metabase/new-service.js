@@ -135,7 +135,6 @@ export const GetAllProtocol = async params => {
   return GET("/api/v1/fga/potential-user/protocolInfo", params);
 };
 
-
 export const GetFgaProjectDetail = async params => {
   return POST("/api/v1/fga/project/detail", params);
 };
@@ -219,7 +218,10 @@ export const createPotentialUserCohortByFilter = async params => {
   return POST(`/api/v1/fga/potential-user/list/queryByFilter/cohort`, params);
 };
 export const createPotentialUserTagging = async params => {
-  return POST(`/api/v1/fga/potential-user/list/queryByFilter/addressTag`, params);
+  return POST(
+    `/api/v1/fga/potential-user/list/queryByFilter/addressTag`,
+    params,
+  );
 };
 export const createPotentialUserCohort = async params => {
   return POST(`/api/v1/fga/potential-user/cohort`, params);
@@ -279,7 +281,7 @@ export const postUserInterests = async params => {
   return POST(`/api/v1/user/interests`, params);
 };
 
-export const getProductInfo = async (params) => {
+export const getProductInfo = async params => {
   return POST(`/api/v1/payment/product/list`, params);
 };
 
@@ -642,11 +644,11 @@ export const datasetDownload = (params, config) => {
   return POST(`api/v1/card/dataset/download`, formData, config);
 };
 
-export const paymentSubscriptionDetail = (params) => {
+export const paymentSubscriptionDetail = params => {
   return POST(`api/v1/payment/subscription/detail`, params);
 };
 
-export const cancelSubscription = (params) => {
+export const cancelSubscription = params => {
   return POST(`api/v1/payment/subscription/cancel`, params);
 };
 
@@ -660,6 +662,18 @@ export const reviewContract = params => {
 
 export const getContractSubmittedList = params => {
   return GET(`/api/v1/contract/submitted/list`, params);
+};
+
+export const getRefContractSubmittedList = () => {
+  return GET(`https://ref-api-adapter.footprint.network/api/v1/protocol/submit/record`);
+  // return GET(`http://localhost:3001/api/v1/protocol/submit/record`);
+  // return GET(`http://10.10.16.38:3000/api/v1/protocol/submit/record`);
+};
+
+export const getRefProtocolList = () => {
+  return GET(`https://ref-api-adapter.footprint.network/api/v1/protocol/list`);
+  // return GET(`http://localhost:3001/api/v1/protocol/list`);
+  // return GET(`http://10.10.16.38:3000/api/v1/protocol/list`);
 };
 
 export const getContractSubmittedByAddress = params => {
@@ -690,22 +704,34 @@ export const publicDashboardChartData = (uuid, cardId, params) => {
   return GET(`api/public/dashboard/${uuid}/card/${cardId}`, { silentFp: true });
 };
 
-export const tableColumns = (params) => {
+export const tableColumns = params => {
   return POST(`api/v1/database/table/column`, params);
 };
 
-export const udTableDetail = (params) => {
+export const udTableDetail = params => {
   return POST(`api/v1/udTable/detail`, params);
 };
 
-export const udTableSaveModelConfig = (params) => {
+export const udTableSaveModelConfig = params => {
   return POST(`api/v1/udTable/saveModelConfig`, params);
 };
 
-export const setTableBelongType = (params) => {
+export const setTableBelongType = params => {
   return POST(`api/v1/userPage/setTableBelongType`, params);
 };
 
-export const ownerTable = (params) => {
+export const ownerTable = params => {
   return POST(`api/v1/userPage/owner/table`, params);
+};
+
+export const journeyPathAnalyze = (params) => {
+  return POST(`api/v1/ab/user-journey/path-analyze`, params);
+};
+
+export const journeyPathUserDetail = (params) => {
+  return POST(`api/v1/ab/user-journey/path-user-detail`, params);
+};
+
+export const journeyPathUserTrend = (params) => {
+  return POST(`api/v1/ab/user-journey/path-user-trend`, params);
 };

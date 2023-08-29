@@ -462,6 +462,16 @@ const Index = ({
               {
                 title: (
                   <span>
+                    <span className="data-api__price-text-highlight">
+                      Unlimited
+                    </span>{" "}
+                    calls
+                  </span>
+                ),
+              },
+              {
+                title: (
+                  <span>
                     <span className="data-api__price-text-highlight">30</span>{" "}
                     calls per second
                   </span>

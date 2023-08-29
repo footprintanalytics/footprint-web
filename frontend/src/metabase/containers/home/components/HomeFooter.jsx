@@ -12,40 +12,58 @@ import cx from "classnames";
 
 const footers = [
   {
+    title: "Footprint Data",
+    items: [
+      {
+        label: "Footprint Dataset",
+        url: "/@Footprint/Footprint-Datasets-Data-Dictionary",
+      },
+      {
+        label: "GameFi Data",
+        url: "/research/gamefi/game-rankings/top-games",
+        startNewPanel: true,
+      },
+      {
+        label: "NFT Data",
+        url: "/research/nft/nft-rankings/top-collections?series_date=past7days",
+      },
+      {
+        label: "Wallet Data",
+        url: "/research/wallet/wallet-tracker/nft-trades-of-wallet",
+      },
+      {
+        label: "Chain Data",
+        url: "/research/chain/chain-rankings/top-chains",
+      },
+      {
+        label: "Community Insight",
+        url: "/dashboards",
+      },
+    ],
+  },
+  {
     title: "Products",
     items: [
       {
-        label: "Analytics App",
-        url: "/dashboards",
-      },
-      {
         label: "Data API",
         url: "/data-api",
+      },
+      {
+        label: "REST API",
+        url: "https://docs.footprint.network/reference/introduction",
+      },
+      {
+        label: "SQL API",
+        url: "https://docs.footprint.network/reference/web-application-sql-api",
       },
       {
         label: "Batch Download",
         url: "/batch-download",
       },
       {
-        label: "Growth Analytics",
-        url: "/growth",
-      },
-      {
-        label: "GameFi Research",
-        url: "/research/gamefi",
+        label: "Analytics Studio",
+        url: "/studio/create",
         startNewPanel: true,
-      },
-      {
-        label: "NFT Research",
-        url: "/research/nft",
-      },
-      {
-        label: "Chain Research",
-        url: "/research/chain",
-      },
-      {
-        label: "Wallet Research",
-        url: "/research/wallet",
       },
     ],
   },
@@ -53,21 +71,12 @@ const footers = [
     title: "Resources",
     items: [
       {
-        label: "Data Overview",
-        url: "/@Footprint/Footprint-Data-Overview",
-      },
-      {
-        label: "Data Dictionary",
-        url: "/@Footprint/Footprint-Datasets-Data-Dictionary",
-      },
-      {
         label: "Docs",
         url: "https://docs.footprint.network/docs/get-started",
       },
       {
         label: "Blog",
         url: "/news/all",
-        startNewPanel: true,
       },
       {
         label: "Reports",
@@ -78,8 +87,26 @@ const footers = [
         url: "/news/academy",
       },
       {
-        label: "Case Studies",
-        url: "https://docs.footprint.network/docs/clients-studies",
+        label: "Moon Men",
+        url: "/moon-men",
+        startNewPanel: true,
+      },
+    ],
+  },
+  {
+    title: "Use Case",
+    items: [
+      {
+        label: "GameFi data as a service",
+        url: "https://docs.google.com/presentation/d/1HO_wAM2835yOoHdib1nAS9Qrf4XR15pm8VHOUBl-SGE/edit#slide=id.g25866ee599b_0_215",
+      },
+      {
+        label: "Research data as a service",
+        url: "https://docs.google.com/presentation/d/1ScCt50CX9vVkD-pl5Rzg7g25LSz0ugaIToXzG9WI2B8/edit#slide=id.g25c23df782d_0_0",
+      },
+      {
+        label: "Data solution for growth tools",
+        url: "/growth",
       },
     ],
   },
@@ -97,21 +124,8 @@ const footers = [
       {
         label: "Contact Us",
         url: "mailto:analytics@footprint.network",
-      },
-      {
-        label: "Privacy Policy",
-        url: "https://static.footprint.network/site/privacy-policy.html",
         startNewPanel: true,
       },
-      {
-        label: "Terms of Service",
-        url: "https://static.footprint.network/site/terms-of-service.html",
-      },
-    ],
-  },
-  {
-    title: "Contribute",
-    items: [
       {
         label: "Submit Contract",
         url: "/submit/contract",
@@ -123,6 +137,15 @@ const footers = [
       {
         label: "Github",
         url: "https://github.com/footprintanalytics",
+      },
+      {
+        label: "Privacy Policy",
+        url: "https://static.footprint.network/site/privacy-policy.html",
+        startNewPanel: true,
+      },
+      {
+        label: "Terms of Service",
+        url: "https://static.footprint.network/site/terms-of-service.html",
       },
     ],
   },

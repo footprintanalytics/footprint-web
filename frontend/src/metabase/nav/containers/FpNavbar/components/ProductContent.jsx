@@ -19,13 +19,13 @@ const ProductContent = props => {
       name: "DATA API",
       value: "data-api",
       data: {
-        dataApiDescData: {
-          img: getOssUrl("studio/img-data-api-pic.png"),
-          title: "Everything you need to build in Web3 can be found here. ",
-        },
+        // dataApiDescData: {
+        //   img: getOssUrl("studio/img-data-api-pic.png"),
+        //   title: "Everything you need to build in Web3 can be found here. ",
+        // },
         restApiData: {
           topic: "REST API",
-          desc: "One unified API for Web3 developers",
+          desc: "Free API for Web3 developers",
           data: [
             {
               title: "Wallet Profile API",
@@ -101,10 +101,10 @@ const ProductContent = props => {
       name: "Analytics Studio",
       value: "analytics-studio",
       data: {
-        studioDescData: {
-          img: getOssUrl("studio/img-studio-pic.png"),
-          title: "0- coding analytics as Tableau for crypto.",
-        },
+        // studioDescData: {
+        //   img: getOssUrl("studio/img-studio-pic.png"),
+        //   title: "Zero-coding analytics as Tableau for crypto.",
+        // },
         analyticsToolData: {
           topic: "Analytics Tool",
           data: [
@@ -119,7 +119,7 @@ const ProductContent = props => {
           desc: "CREATE",
           data: [
             {
-              title: "0-coding chart",
+              title: "Zero-coding chart",
               icon: ReactIcons.codingChartIcon,
               link: Urls.newQuestion({ type: "query" }),
             },
@@ -152,7 +152,7 @@ const ProductContent = props => {
         },
         connectorData: {
           topic: "Data Connector",
-          desc: "Seamlessly integrate Web3 and Web2 channels with our data connectors",
+          desc: "Seamlessly integrate Web3 and Web2 channels \nwith our data connectors",
           link: "/studio/my-datasets/integration",
         },
         appBuilderData: {
@@ -201,12 +201,9 @@ const ProductContent = props => {
           <div className="ml4 main-menu__data-api-padding">
             {MainMenuFunction.renderVerticalMenu({data: tabData?.restApiData})}
           </div>
-          <div className="ml3 main-menu__data-api-padding">
+          <div className="ml4 main-menu__data-api-padding-bottom">
             {MainMenuFunction.renderVerticalMenu({data: tabData?.sqlApiData})}
-            {MainMenuFunction.renderVerticalMenu({data: tabData?.batchDownloadData, className: "mt4"})}
-          </div>
-          <div className="main-menu__inner-data-api-left">
-            {MainMenuFunction.renderStandardImageText({data: tabData?.dataApiDescData})}
+            {MainMenuFunction.renderVerticalMenu({data: tabData?.batchDownloadData})}
           </div>
         </>
       );
@@ -215,16 +212,13 @@ const ProductContent = props => {
       return (
         <>
           <div className="ml4 main-menu__data-api-padding">
-            {MainMenuFunction.renderVerticalMenu({data: tabData?.analyticsToolData})}
-            {MainMenuFunction.renderVerticalMenu({data: tabData?.createData, className: "mt2"})}
-            {MainMenuFunction.renderVerticalMenu({data: tabData?.myAnalysisData, className: "mt2"})}
+            {MainMenuFunction.renderVerticalMenu({data: tabData?.analyticsToolData, className: "main-menu__vertical-menu2"})}
+            {MainMenuFunction.renderVerticalMenu({data: tabData?.createData, className: "main-menu__vertical-menu3"})}
+            {MainMenuFunction.renderVerticalMenu({data: tabData?.myAnalysisData, className: "main-menu__vertical-menu3"})}
           </div>
-          <div className="ml3 main-menu__data-api-padding">
+          <div className="ml4 main-menu__data-api-padding-bottom">
             {MainMenuFunction.renderVerticalMenu({data: tabData?.connectorData})}
-            {MainMenuFunction.renderVerticalMenu({data: tabData?.appBuilderData, className: "mt4"})}
-          </div>
-          <div className="main-menu__inner-data-api-left">
-            {MainMenuFunction.renderStandardImageText({data: tabData?.studioDescData})}
+            {MainMenuFunction.renderVerticalMenu({data: tabData?.appBuilderData})}
           </div>
         </>
       );

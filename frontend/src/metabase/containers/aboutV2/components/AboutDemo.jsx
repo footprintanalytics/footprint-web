@@ -10,7 +10,7 @@ const AboutDemo = () => {
     {
       "img": getOssUrl("home-v2/img_demo_tool_1.png"),
       "title": "Website Embedment",
-      "desc": "0-coding website builder for all the developers and KOLs",
+      "desc": "Zero-coding website builder for all the developers and KOLs",
       "content": "Free embed Footprint Research Portal, Dashboards, or Apps you make with one click to build your website",
       "buttonText": "How to embed",
       "buttonLink": "https://docs.footprint.network/docs/embed",
@@ -57,12 +57,12 @@ const AboutDemo = () => {
   const data = [
     {
       title: "Analytics Studio",
-      desc: "0-coding analytics as Tableau for crypto",
+      desc: "Zero-coding analytics as Tableau for crypto",
       content: <span>Use Footprint real-time on-chain and uploaded data to showcase cutting-edge <br/>insights using a drag-and-drop interface or SQL. Build a website in minutes to <br/>brand yourself.</span>,
       buttons: [
         {
           buttonText: "Explore Analytics Studio",
-          link: "https://www.footprint.network/dashboards",
+          link: "https://www.footprint.network/studio/create",
         }
       ],
       image: "home-v2/img-demo-3-1.png",
@@ -129,7 +129,7 @@ const AboutDemo = () => {
       "title": "SQL API",
       "desc": "A flexible SQL API customization for robust requirements",
       "buttonText": "Explore SQL API",
-      "buttonLink": "https://docs.footprint.network/reference/examples",
+      "buttonLink": "https://docs.footprint.network/reference/web-application-sql-api",
     },
     {
       "img": getOssUrl("home-v2/img_demo_3.png"),

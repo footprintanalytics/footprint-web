@@ -12,6 +12,7 @@ import { User } from "metabase-types/api";
 import { AdminPath, State } from "metabase-types/store";
 
 import { AdminNavbar } from "../components/AdminNavbar";
+import ABNavbar from "./ABNavbar/ABNavbar";
 import FpNavbar from "./FpNavbar/FpNavbar";
 import FgaNavbar from "./FgaNavbar/FgaNavbar";
 
@@ -38,8 +39,16 @@ function Navbar({ isOpen, user, location, params, adminPaths }: NavbarProps) {
     return location.pathname.startsWith("/growth");
   }, [location.pathname]);
 
+  const isABApp = useMemo(() => {
+    return location.pathname.startsWith("/fga");
+  }, [location.pathname]);
+
   if (isAdminApp && user) {
     return <AdminNavbar user={user} path={location.pathname} adminPaths={adminPaths} />;
+  }
+
+  if (isABApp) {
+    return <ABNavbar isOpen={isOpen} location={location} params={params} />;
   }
 
   if (isFgaApp) {

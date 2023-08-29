@@ -177,7 +177,8 @@ const nftData = [
         ],
       },
     ],
-  }, {
+  },
+  /*{
     "label": "Fundraising",
     "value": "fundraising",
     "subMenus": [
@@ -193,7 +194,7 @@ const nftData = [
         "type": "chart",
       },
     ],
-  },
+  },*/
   {
     "label": "Themetic analysis",
     "value": "themetic-analysis",
@@ -311,7 +312,7 @@ const gamefiData = [
       },
     ],
   },
-  {
+  /*{
     "label": "Fundraising",
     "value": "fundraising",
     "subMenus": [
@@ -327,7 +328,7 @@ const gamefiData = [
         "type": "chart",
       },
     ],
-  },
+  },*/
   {
     "label": "Themetic analysis",
     "value": "themetic-analysis",
@@ -358,21 +359,21 @@ const gamefiData = [
         "value": "planetix-assets-tracker",
         "publicUuid": "be1e7872-0c20-4188-b683-dbe429fc961d",
       },
-      {
+      /*{
         "label": "Walken Data Overview",
         "value": "walken-data-overview",
         "publicUuid": "0bc7f1b3-feb1-430a-9596-5a513c3fd216",
-      },
+      },*/
       {
         "label": "Era7 Key Metrics",
         "value": "era7-key-metrics",
         "publicUuid": "879d17b3-fa17-477a-a7f4-b21b9381f3c3",
       },
-      {
+      /*{
         "label": "Solana GameFi Overview",
         "value": "solana-gamefi-overview",
         "publicUuid": "022aa15f-40c7-4dc2-95be-bc498c9114fd",
-      },
+      },*/
       {
         "label": "GAMEE Health",
         "value": "gamee-health",
@@ -438,6 +439,11 @@ const chainData = [
         "label": "Optimism Overview",
         "value": "optimism-overview",
         "publicUuid": "075e8eab-bc83-4b46-9051-08acdd65a91d",
+      },
+      {
+        "label": "Starknet Overview",
+        "value": "starknet-overview",
+        "publicUuid": "d3e53215-fa4f-4264-a012-71952b5ecb6c",
       },
       {
         "label": "Fantom Overview",
@@ -517,7 +523,7 @@ const chainData = [
       {
         "label": "zkSync Era Overview",
         "value": "zksync-era-overview",
-        "publicUuid": "a9035d8e-bd3f-4bd5-84ce-dbcd44c7a868",
+        "publicUuid": "89b91903-fcfc-4122-978b-62c7a3ba3f41",
       },
     ],
   },
@@ -572,11 +578,11 @@ const chainData = [
         "value": "harmony-stats",
         "publicUuid": "280fd659-a3bf-4183-97bf-e6d9be075870",
       },
-      {
+      /*{
         "label": "Solana GameFi Overview",
         "value": "solana-gamefi-overview",
         "publicUuid": "022aa15f-40c7-4dc2-95be-bc498c9114fd",
-      },
+      },*/
       {
         "label": "Polygon Deep Dive",
         "value": "polygon-deep-dive",
