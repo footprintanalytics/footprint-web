@@ -22,7 +22,7 @@ const ResearchContent = props => {
               title: "Top Games",
               desc: "Explore the exciting realm of blockchain games.",
               link: "/research/gamefi/game-rankings/top-games",
-              icon: ReactIcons.hotGamesIcon,
+              icon: ReactIcons.topGameIcon,
             },
             {
               title: "Game Tokens",
@@ -34,7 +34,7 @@ const ResearchContent = props => {
               title: "Hot Games",
               desc: "Evaluate games from multiple views by gamers, NFTs, etc.",
               link: "/research/gamefi/game-rankings/hot-games-on-ethereum",
-              icon: ReactIcons.topGameIcon,
+              icon: ReactIcons.hotGamesIcon,
             },
             {
               title: "In-Game NFT",
@@ -196,7 +196,7 @@ const ResearchContent = props => {
           },
           {
             title: "Cronos",
-            img: getOssUrl("studio/img-chain-6.png"),
+            img: getOssUrl("studio/img-chain-6.png?image_process=resize,w_36/crop,h_36/format,png"),
             link: "/research/chain/chain-stats/cronos-overview",
           },
           {
@@ -231,7 +231,7 @@ const ResearchContent = props => {
           },
           {
             title: "ThunderCore",
-            img: getOssUrl("studio/img-chain-17.png"),
+            img: getOssUrl("studio/img-chain-17.png?image_process=resize,w_36/crop,h_36/format,png"),
             link: "/research/chain/chain-stats/thundercore-overview",
           },
           {
@@ -269,7 +269,7 @@ const ResearchContent = props => {
           },
           {
             title: "HOME Verse",
-            img: getOssUrl("studio/img-chain-35.png"),
+            img: getOssUrl("studio/img-chain-35.png?image_process=resize,w_36/crop,h_36/format,png"),
             link: "/research/chain/chain-rankings/top-chains",
           },
           {
@@ -327,10 +327,10 @@ const ResearchContent = props => {
             },
           ],
         },
-        walletDescData: {
-          img: getOssUrl("studio/img-menu-wallet.png"),
-          title: "Track and trace activities, holdings, and profiles over 100+ million addresses.",
-        },
+        // walletDescData: {
+        //   img: getOssUrl("studio/img-menu-wallet.png"),
+        //   title: "Track and trace activities, holdings, and profiles over 100+ million addresses.",
+        // },
       },
     },
     {
@@ -369,11 +369,12 @@ const ResearchContent = props => {
     return (
       <div className="main-menu__more-layout">
         {data?.map(item => {
-          const { url, title } = item;
+          const { url, title, hasAdd, hasArrow } = item;
           return (
             <Link to={url} key={title}>
+              {hasAdd && (<div className="main-menu__more-layout-add-root"><span>+</span></div>)}
               {title}
-              <Icon className="ml1" name="collapse_arrow_right" size={10} />
+              {hasArrow && (<Icon className="ml1" name="collapse_arrow_right" size={10} />)}
             </Link>
           )
         })}
@@ -389,24 +390,21 @@ const ResearchContent = props => {
           {MainMenuFunction.renderVerticalMenu({ data: tabData?.rankingsData })}
           {MainMenuFunction.renderVerticalMenu({ data: tabData?.industryData })}
           {MainMenuFunction.renderVerticalMenu({ data: tabData?.gameData })}
-          {renderLink([{title: "Submit Contract", url: "/submit/contract/add" },{title: "More", url: "/research/gamefi"}])}
+          {renderLink([{title: "Submit Contract", url: "/submit/contract/add", hasAdd: true, },{title: "More", url: "/research/gamefi", hasArrow: true }])}
         </div>
       );
     }
     if (tab === "nft") {
       return (
         <div className="main-menu__inner-layout">
-          <div className="flex flex-column">
-            {MainMenuFunction.renderVerticalMenu({ data: tabData?.rankingsData })}
-            {MainMenuFunction.renderVerticalMenu({
-              data: tabData?.collectionData,
-              title: "COLLECTION",
-              className: "main-menu__inner-single-collection",
-            })}
-          </div>
+          {MainMenuFunction.renderVerticalMenu({ data: tabData?.rankingsData })}
           {MainMenuFunction.renderVerticalMenu({ data: tabData?.signalsData })}
           {MainMenuFunction.renderVerticalMenu({ data: tabData?.industryData })}
-          {renderLink([{title: "Submit Contract", url: "/submit/contract/add" },{title: "More", url: "/research/nft"}])}
+          {MainMenuFunction.renderVerticalMenu({
+            data: tabData?.collectionData,
+            title: "COLLECTION",
+          })}
+          {renderLink([{title: "Submit Contract", url: "/submit/contract/add", hasAdd: true, },{title: "More", url: "/research/nft", hasArrow: true}])}
         </div>
       );
     }
@@ -426,9 +424,6 @@ const ResearchContent = props => {
       return (
         <>
           {MainMenuFunction.renderVerticalMenu({ data: tabData?.walletTrackerData, className: "main-menu__wallet-padding" })}
-          <div className="main-menu__wallet-right">
-            {MainMenuFunction.renderStandardImageText({ data: tabData?.walletDescData })}
-          </div>
         </>
       );
     }

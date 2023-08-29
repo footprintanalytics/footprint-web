@@ -40,13 +40,13 @@ const renderVerticalMenu = ({data, className}) => {
         to={link}
         target={externalLink ? "_blank" : null}
       >
-        <div className="flex flex-column p1">
+        <div className="flex flex-column px1">
           {topic && (<h3>{topic}</h3>)}
           {title && (<h5>{title}</h5>)}
           {desc && (<h6>{desc}</h6>)}
         </div>
       </Link>) :
-        <div className="flex flex-column p1">
+        <div className="flex flex-column px1">
           {topic && (<h3>{topic}</h3>)}
           {title && (<h5>{title}</h5>)}
           {desc && (<h6>{desc}</h6>)}

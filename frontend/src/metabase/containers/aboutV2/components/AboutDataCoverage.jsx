@@ -38,7 +38,7 @@ const AboutDataCoverage = () => {
       </div>
       <AboutImage
         className="About__data-image"
-        src={getOssUrl("home-v2/img_data_coverage_v2.png?1=1")}
+        src={getOssUrl("home-v2/img_data_coverage_v2.png?2=2")}
         alt={"data coverage"}
       />
       <ul>

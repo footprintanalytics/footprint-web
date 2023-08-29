@@ -16,7 +16,7 @@ const UseCasesContent = props => {
         data: [
           {
             title: "Crypto Games Solution",
-            link: "https://docs.google.com/presentation/d/1HO_wAM2835yOoHdib1nAS9Qrf4XR15pm8VHOUBl-SGE/edit#slide=id.g25866ee599b_0_215",
+            link: "https://docs.google.com/presentation/d/1G1E6MYAEo6X2KUXC4GBaJFcwH-fxmqGt9xjSIO6XxuE/edit#slide=id.g25866ee599b_0_215",
             externalLink: true,
             icon: ReactIcons.solutionIcon2,
           },
