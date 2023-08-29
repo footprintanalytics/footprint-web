@@ -22,8 +22,6 @@ import AboutStart from "./components/AboutStart";
 import AboutBanner from "./components/AboutBanner";
 import AboutSolutions from "./components/AboutSolutions";
 import AboutGrantedBy from "./components/AboutGrantedBy";
-import SimpleContent from "metabase/nav/containers/FpNavbar/components/SimpleContent";
-import { ReactIcons } from "metabase/nav/containers/FpNavbar/utils/data";
 
 const About = props => {
   const {
@@ -54,39 +52,46 @@ const About = props => {
     <>
       <Meta description={defaultDesc} keywords={keywords} title={title} />
       <div className="About">
-        <SimpleContent
-          rootClassName="single-menu__content"
-          innerClassName="single-menu__inner"
-          verticalMenuClassName="vertical-menu__layout"
-          menu={[
-            {
-              title: "Blog",
-              desc: "Analyze the trends of each domain in the Web3 industry",
-              icon: ReactIcons.blogIcon,
-              link: "/news/all",
-            },
-            {
-              title: "Academy",
-              desc: "The premier Web3 education platform with industry leading courses",
-              icon: ReactIcons.academyIcon,
-              link: "/news/academy",
-            },
-            {
-              title: "YouTube",
-              desc: "Unravel Web3 and learn how to do analysis and build dapps via Videos",
-              icon: ReactIcons.youtubeIcon,
-              link: "https://www.youtube.com/@FootprintAnalytics",
-              externalLink: true,
-            },
-            {
-              title: "GitHub",
-              desc: "Open source community welcomes you to join and become a contributor",
-              icon: ReactIcons.githubIcon,
-              link: "https://github.com/footprintanalytics",
-              externalLink: true,
-            },
-          ]}
-          title={title}/>
+        <AboutStart />
+        <LazyLoadAbout>
+          <AboutBanner />
+        </LazyLoadAbout>
+        <LazyLoadAbout>
+          <AboutSolutions />
+        </LazyLoadAbout>
+        <LazyLoadAbout>
+          <AboutDepth />
+        </LazyLoadAbout>
+        <LazyLoadAbout>
+          <AboutDemo />
+        </LazyLoadAbout>
+        <LazyLoadAbout>
+          <AboutDataCoverage />
+        </LazyLoadAbout>
+        <LazyLoadAbout>
+          <AboutDataFeature />
+        </LazyLoadAbout>
+        <LazyLoadAbout>
+          <AboutDataModel />
+        </LazyLoadAbout>
+        <LazyLoadAbout>
+          <AboutBacked list={data.backedList} />
+        </LazyLoadAbout>
+        <LazyLoadAbout>
+          <AboutDataTrusted />
+        </LazyLoadAbout>
+        <LazyLoadAbout>
+          <AboutPartnerV2 list={data.partnerList} />
+        </LazyLoadAbout>
+        <LazyLoadAbout>
+          <AboutGrantedBy />
+        </LazyLoadAbout>
+        <div className="About__depth-dividing-line-gray" />
+        <LazyLoadAbout>
+          <HomeFooter />
+        </LazyLoadAbout>
+
+        {children}
       </div>
     </>
   );
@@ -104,3 +109,4 @@ const mapDispatchToProps = {
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(About);
+
