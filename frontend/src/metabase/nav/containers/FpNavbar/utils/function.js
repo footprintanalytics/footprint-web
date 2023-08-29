@@ -75,6 +75,55 @@ const renderVerticalMenu = ({data, className}) => {
   );
 };
 
+const renderVerticalMenuSimple = ({data, className}) => {
+  const title = data?.title;
+  const desc = data?.desc;
+  const topic = data?.topic;
+  const link = data?.link;
+  const externalLink = data?.externalLink;
+
+  return (
+    <div className={cx("main-menu__vertical-menu main-menu__vertical-menu-simple", className)}>
+      {link ? (<Link
+        className="main-menu__vertical-menu-link"
+        to={link}
+        target={externalLink ? "_blank" : null}
+      >
+        <div className="flex flex-column px1">
+          {topic && (<h3>{topic}</h3>)}
+          {title && (<h5>{title}</h5>)}
+          {desc && (<h6>{desc}</h6>)}
+        </div>
+      </Link>) :
+        <div className="flex flex-column px1">
+          {topic && (<h3>{topic}</h3>)}
+          {title && (<h5>{title}</h5>)}
+          {desc && (<h6>{desc}</h6>)}
+        </div>
+      }
+      <ul>
+        {data?.data?.map(item => {
+          return (
+            <li key={item.title}>
+              <Link
+                className="flex cursor-pointer"
+                to={item.link}
+                target={item.externalLink ? "_blank" : null}
+              >
+                {item.icon && (<div className="main-menu__vertical-menu-icon">{item.icon}</div>)}
+                <div className="main-menu__vertical-menu-right">
+                  {item.title && (<h4>{item.title}</h4>)}
+                  {item.desc && (<span>{item.desc}</span>)}
+                </div>
+              </Link>
+            </li>
+          );
+        })}
+      </ul>
+    </div>
+  );
+};
+
 const renderChainLayout = ({data, title}) => {
   return (
     <div>
@@ -112,6 +161,7 @@ export const MainMenuFunction = {
   renderChainLayout,
   renderStandardImageText,
   renderVerticalMenu,
+  renderVerticalMenuSimple,
   renderStandardShow,
 }
 

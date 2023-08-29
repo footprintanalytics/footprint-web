@@ -46,6 +46,12 @@
   grid-template-columns: 1fr 1fr 1fr 1fr;
 }
 
+.main-menu__vertical-menu-simple ul {
+  gap: 10px;
+  display: flex;
+  flex-direction: column;
+}
+
 .main-menu__vertical-menu li {
   width: 260px;
   cursor: pointer;
@@ -254,7 +260,7 @@
 }
 
 .main-menu__use-cases-content {
-  width: 800px;
+  width: 880px;
 }
 
 .main-menu__single-content {

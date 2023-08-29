@@ -8,7 +8,7 @@ const SimpleContent = props => {
   const renderTabContent = () => {
     return (
       <div className={innerClassName || "main-menu__inner-layout"}>
-        {MainMenuFunction.renderVerticalMenu({data: { title, data: menu }, className: verticalMenuClassName })}
+        {MainMenuFunction.renderVerticalMenuSimple({data: { title, data: menu }, className: verticalMenuClassName })}
       </div>
     );
   };
