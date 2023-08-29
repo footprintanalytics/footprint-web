@@ -288,9 +288,83 @@ const ResearchContent = props => {
             link: "/research/chain/chain-stats/starknet-overview",
           },
         ],
+        layout3Data: [
+          {
+            title: "Cosmos",
+            img: getOssUrl("studio/img-chain-40.png"),
+            link: "mailto:sales@footprint.network",
+            target: "_blank",
+          },
+          {
+            title: "Heco",
+            img: getOssUrl("studio/img-chain-41.png"),
+            link: "mailto:sales@footprint.network",
+            target: "_blank",
+          },
+          {
+            title: "Steem",
+            img: getOssUrl("studio/img-chain-42.png"),
+            link: "mailto:sales@footprint.network",
+            target: "_blank",
+          },
+          {
+            title: "Tron",
+            img: getOssUrl("studio/img-chain-43.png"),
+            link: "mailto:sales@footprint.network",
+            target: "_blank",
+          },
+          {
+            title: "HSC",
+            img: getOssUrl("studio/img-chain-44.png"),
+            link: "mailto:sales@footprint.network",
+            target: "_blank",
+          },
+          {
+            title: "Tcg Verse",
+            img: getOssUrl("studio/img-chain-45.png"),
+            link: "mailto:sales@footprint.network",
+            target: "_blank",
+          },
+          {
+            title: "Hive",
+            img: getOssUrl("studio/img-chain-7.png"),
+            link: "mailto:sales@footprint.network",
+            target: "_blank",
+          },
+          {
+            title: "Wax",
+            img: getOssUrl("studio/img-chain-21.png"),
+            link: "mailto:sales@footprint.network",
+            target: "_blank",
+          },
+          {
+            title: "IoTeX",
+            img: getOssUrl("studio/img-chain-22.png"),
+            link: "mailto:sales@footprint.network",
+            target: "_blank",
+          },
+          {
+            title: "EOS",
+            img: getOssUrl("studio/img-chain-42.png"),
+            link: "mailto:sales@footprint.network",
+            target: "_blank",
+          },
+          {
+            title: "Bitcoin",
+            img: getOssUrl("studio/img-chain-25.png"),
+            link: "mailto:sales@footprint.network",
+            target: "_blank",
+          },
+          {
+            title: "Doge",
+            img: getOssUrl("studio/img-chain-26.png"),
+            link: "mailto:sales@footprint.network",
+            target: "_blank",
+          },
+        ],
         addData: {
           title: "Request a chain",
-          desc: "Request a chain we don't currently support",
+          desc: "Request a chain we don't currently \nsupport",
           link: "https://forms.gle/Z5ha1KYircHS7Pwi7",
           externalLink: true,
           layout: (
@@ -414,8 +488,11 @@ const ResearchContent = props => {
           {MainMenuFunction.renderVerticalMenu({ data: tabData?.industryData })}
           <div className="main-menu__inner-chain-layout">
             {MainMenuFunction.renderChainLayout({ data: tabData?.layoutData, title: "LAYER1" })}
-            {MainMenuFunction.renderChainLayout({ data: tabData?.layout2Data, title: "LAYER2" })}
-            {MainMenuFunction.renderStandardShow({ data: tabData?.addData, className: "mt4" })}
+            <div className="flex">
+              {MainMenuFunction.renderChainLayout({ data: tabData?.layout2Data, title: "LAYER2" })}
+              {MainMenuFunction.renderStandardShow({ data: tabData?.addData, className: "ml2" })}
+            </div>
+            {MainMenuFunction.renderChainLayout({ data: tabData?.layout3Data, title: "CONTACT SALES" })}
           </div>
         </div>
       );

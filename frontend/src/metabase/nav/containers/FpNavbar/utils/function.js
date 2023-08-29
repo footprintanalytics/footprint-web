@@ -82,9 +82,9 @@ const renderChainLayout = ({data, title}) => {
       <ul>
         {data?.map(item => {
           return (
-            <Link key={item.title} to={item.link}>
+            <Link key={item.title} to={item.link} target={item.target || ""}>
               <li>
-                <AboutImage src={item.img} alt={item.title}/>
+                <AboutImage src={item.img} alt={item.title} />
                 <h4>{item.title}</h4>
                 <span>{item.desc}</span>
               </li>
