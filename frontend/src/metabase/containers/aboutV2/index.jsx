@@ -19,6 +19,9 @@ import HomeFooter from "../home/components/HomeFooter";
 import data from "./data";
 import AboutBacked from "./components/AboutBacked";
 import AboutStart from "./components/AboutStart";
+import AboutBanner from "./components/AboutBanner";
+import AboutSolutions from "./components/AboutSolutions";
+import AboutGrantedBy from "./components/AboutGrantedBy";
 
 const About = props => {
   const {
@@ -51,6 +54,12 @@ const About = props => {
       <div className="About">
         <AboutStart />
         <LazyLoadAbout>
+          <AboutBanner />
+        </LazyLoadAbout>
+        <LazyLoadAbout>
+          <AboutSolutions />
+        </LazyLoadAbout>
+        <LazyLoadAbout>
           <AboutDepth />
         </LazyLoadAbout>
         <LazyLoadAbout>
@@ -73,6 +82,9 @@ const About = props => {
         </LazyLoadAbout>
         <LazyLoadAbout>
           <AboutPartnerV2 list={data.partnerList} />
+        </LazyLoadAbout>
+        <LazyLoadAbout>
+          <AboutGrantedBy />
         </LazyLoadAbout>
         <div className="About__depth-dividing-line-gray" />
         <LazyLoadAbout>
@@ -97,3 +109,4 @@ const mapDispatchToProps = {
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(About);
+
