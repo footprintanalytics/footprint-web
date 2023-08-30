@@ -57,6 +57,11 @@
   cursor: pointer;
 }
 
+.main-menu__vertical-menu-simple li {
+  width: 100%;
+  cursor: pointer;
+}
+
 .main-menu__vertical-menu3 {
   margin-top: 15px;
 }
