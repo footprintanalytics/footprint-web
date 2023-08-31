@@ -36,11 +36,11 @@ const AboutDataCoverage = () => {
       <div className="About__data-coverage-chain">
         {`${CHAIN_COUNT}`} Chains
       </div>
-      <AboutImage
+      {/*<AboutImage
         className="About__data-image"
         src={getOssUrl("home-v2/img_data_coverage_v2.png?2=2")}
         alt={"data coverage"}
-      />
+      />*/}
       <ul>
         {data.map(item =>
           <li key={item.label}>

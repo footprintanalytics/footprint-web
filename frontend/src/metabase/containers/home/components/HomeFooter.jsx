@@ -106,7 +106,7 @@ const footers = [
       },
       {
         label: "Data solution for growth tools",
-        url: "/growth",
+        url: "/fga",
       },
     ],
   },
