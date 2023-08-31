@@ -61,6 +61,7 @@ function TableCell({
   getExtraDataForClick,
   checkIsVisualizationClickable,
   onVisualizationClick,
+  cardId,
 }) {
   const { rows, cols } = data;
   const column = cols[columnIndex];
@@ -130,7 +131,7 @@ function TableCell({
 
   useEffect(() => {
     if(isShowChart(columnSettings["view_as"])){
-      const cellId = `cell-${rowIndex}-${columnIndex}`;
+      const cellId = `cell-${cardId}-${rowIndex}-${columnIndex}`;
       const chartDom = document.getElementById(cellId);
       if ( chartDom?.children?.length === 0) {
         parseChart(
@@ -167,13 +168,13 @@ function TableCell({
               minWidth: 120,
               maxWidth: 250,
             }}
-            id={`cell-${rowIndex}-${columnIndex}`}
+            id={`cell-${cardId}-${rowIndex}-${columnIndex}`}
           >
-            {parseChart(
-              parseValue2ChartData(cellData),
-              columnSettings["view_as"],
-              `cell-${rowIndex}-${columnIndex}`,
-            )}
+            {/*{parseChart(*/}
+            {/*  parseValue2ChartData(cellData),*/}
+            {/*  columnSettings["view_as"],*/}
+            {/*  `cell-${rowIndex}-${columnIndex}`,*/}
+            {/*)}*/}
           </div>
         </div>
       ) : (

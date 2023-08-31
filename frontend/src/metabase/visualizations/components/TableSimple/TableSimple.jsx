@@ -184,6 +184,7 @@ function TableSimple({
           {data.rows[rowIndex].map((value, columnIndex) => (
             <TableCell
               key={`${rowIndex}-${columnIndex}`}
+              cardId={card?.id}
               value={value}
               data={data}
               series={series}
