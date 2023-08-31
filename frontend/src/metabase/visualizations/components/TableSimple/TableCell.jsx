@@ -162,7 +162,7 @@ function TableCell({
         <div className="w-full h-full flex flex-row justify-end">
           <div
             style={{
-              height: "100%",
+              height: 35,
               width: 15 * parseValue2ChartData(cellData)?.length,
               minWidth: 120,
               maxWidth: 250,
