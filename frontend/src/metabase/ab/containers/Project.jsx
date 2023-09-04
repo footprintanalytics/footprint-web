@@ -457,7 +457,7 @@ const Project = props => {
       );
     }
     if (gaMenuTabs?.dashboardMap?.has(current_tab)) {
-      if (["Twitter", "twitter"].includes(current_tab)) {
+      /*if (["Twitter", "twitter"].includes(current_tab)) {
         return (
           <LoadingDashboard
             router={router}
@@ -469,8 +469,8 @@ const Project = props => {
             {WrapPublicDashboard(current_tab)}
           </LoadingDashboard>
         );
-      }
-      if (["Discord", "discord"].includes(current_tab)) {
+      }*/
+      /*if (["Discord", "discord"].includes(current_tab)) {
         return (
           <LoadingDashboard
             router={router}
@@ -482,7 +482,7 @@ const Project = props => {
             {WrapPublicDashboard(current_tab)}
           </LoadingDashboard>
         );
-      }
+      }*/
       if (["Funnel", "funnel"].includes(current_tab)) {
         return (
           <LoadingDashboard
