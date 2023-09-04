@@ -493,7 +493,7 @@ export const fga_menu_data_v2 = (project, user) => {
     ["retention", "73ce13a3-0815-45dd-bc30-59a75ae7e0c0"],
     ["acquisition", "43325414-b798-44cb-ad2d-745d374b22f2"],
     ["gaming_user", "16d26c02-b0f4-4c78-9385-44a9212a826b"],
-    ["nft_summary", "aefc83f1-ed4b-4dba-a21f-6f85a1de471c"],
+    ["nft_summary", "25c5de28-0591-4893-a574-cbe913c80043"],
     ["nft_sales_mints", "aefc83f1-ed4b-4dba-a21f-6f85a1de471c"],
     ["listing", "20ae0361-4a39-4b66-bd56-fb9f012bfd3c"],
     ["gaming_spend", "c86f7c43-41fd-4c75-9d8a-3ebc381ae62e"],
