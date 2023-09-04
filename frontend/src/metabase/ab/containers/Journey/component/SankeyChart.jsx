@@ -37,6 +37,17 @@ const SankeyChart = props => {
     return nodes.find(node => node.id === id)?.name || id;
   }
 
+  const getNodeValue = (id) => {
+    return nodes.find(node => node.id === id)?.value;
+  }
+
+  const getPercentage = (source, value) => {
+    if (getNodeValue(source) === 0) {
+      return "0%";
+    }
+    return `${(value / getNodeValue(source) * 100).toFixed(0)}%`;
+  }
+
   useEffect(() => {
     const option = {
       title: {
@@ -77,7 +88,7 @@ const SankeyChart = props => {
             if (data.name) {
               return `${data.name}<br />Sessions: ${data.value}`
             } else {
-              return `${getNodeName(data.source)} -> ${getNodeName(data.target)}<br />Sessions: ${data.value}`
+              return `${getNodeName(data.source)} -> ${getNodeName(data.target)}<br />Sessions: ${data.value}<br />Rate: ${getPercentage(data.source, data.value)}`
             }
           }
         },
@@ -142,7 +153,7 @@ const SankeyChart = props => {
               </Button>
             )}
             <RangePicker
-              defaultValue={[dayjs().add(-32, 'd'), dayjs()]}
+              defaultValue={[dayjs().add(-40, 'd'), dayjs()]}
               style={{ borderRadius: 4, border: "1px solid #58585B", background: "#1B1B1E", padding: "4px 10px" }}
               onChange={(dates, dateStrings) => {
                 onDateRangeChange?.(dateStrings)
@@ -170,7 +181,7 @@ const SankeyChart = props => {
         onClose={() => setNodeDetail(null)}
         open={!!nodeDetail}
       >
-        <Detail nodeDetail={nodeDetail}/>
+        <Detail nodeDetail={nodeDetail} router={router}/>
       </Drawer>
       {contextHolder}
     </>

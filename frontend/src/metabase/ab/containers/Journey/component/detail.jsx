@@ -1,16 +1,20 @@
 /* eslint-disable react/prop-types */
 import React from "react";
-import { Button, Skeleton, Table } from "antd";
+import { Button, Skeleton, Table, message } from "antd";
 import { DownloadOutlined, SearchOutlined } from "@ant-design/icons";
 import HistoryChart from "metabase/ab/containers/Journey/component/HistoryChart";
 import { useQuery } from "react-query";
 import { journeyPathUserDetail, journeyPathUserTrend } from "metabase/new-service";
 import { QUERY_OPTIONS } from "metabase/containers/dashboards/shared/config";
+import Link from "metabase/core/components/Link";
+import {getFgaProject} from "metabase/selectors/user";
+import {connect} from "react-redux";
 
 const Detail = props => {
-  const { nodeDetail, } = props;
+  const { router, nodeDetail, projectObject } = props;
+  const projectName = projectObject.protocolSlug;
   const params = {
-    "eventNames": ["login", "play_games", "close_app", "purchase", "open_app", "nft_reward"],
+    "eventNames": ["login", "play_games", "close_app"],
     "initialEventName": "login",
     "project": "benji",
     "startTime": "2023-07-01",
@@ -30,7 +34,7 @@ const Detail = props => {
         },
         {
           "user_id": "user_id_3",
-          "uuid": "uuid_2",
+          "uuid": "uuid_3",
           "wallet_address": "0xa5ddb19f19468a2e39e31e885d9d358420bf7b81",
         },
       ];
@@ -44,30 +48,30 @@ const Detail = props => {
     ["journeyPathUserTrend", params],
     async () => {
       const demoData = [
-          {
-            "event_date": "2023-07-02",
-            "value": 5
-          },
-          {
-            "event_date": "2023-07-03",
-            "value": 5
-          },
-          {
-            "event_date": "2023-07-04",
-            "value": 1
-          },
-          {
-            "event_date": "2023-07-07",
-            "value": 1
-          },
-          {
-            "event_date": "2023-07-08",
-            "value": 4
-          },
-          {
-            "event_date": "2023-07-12",
-            "value": 4
-          }
+        {
+          "event_date": "2023-07-02",
+          "value": 5
+        },
+        {
+          "event_date": "2023-07-03",
+          "value": 5
+        },
+        {
+          "event_date": "2023-07-04",
+          "value": 1
+        },
+        {
+          "event_date": "2023-07-07",
+          "value": 1
+        },
+        {
+          "event_date": "2023-07-08",
+          "value": 4
+        },
+        {
+          "event_date": "2023-07-12",
+          "value": 4
+        }
       ];
       return demoData;
       // return await journeyPathUserTrend(params);
@@ -84,7 +88,13 @@ const Detail = props => {
             <span>{nodeDetail?.value} Sessions</span>
           </div>
           <div className="flex">
-            {/*<Button icon={<SearchOutlined />}>Search wallets</Button>*/}
+            <Link onClick={() => {
+              const hide = message.loading('Generating cohort ...');
+              setTimeout(() => {
+                hide();
+                router?.push(`/fga/project/${projectName}/segment`);
+              }, 2000);
+            }}><Button icon={<SearchOutlined />}>Analyse Cohort</Button></Link>
             <Button className="ml1" icon={<DownloadOutlined />}>Export</Button>
           </div>
         </div>
@@ -130,5 +140,13 @@ const Detail = props => {
   );
 };
 
+const mapStateToProps = (state, props) => {
+  return {
+    projectObject: getFgaProject(state),
+  };
+};
 
-export default Detail;
+export default connect(
+  mapStateToProps,
+  null,
+)(Detail);
