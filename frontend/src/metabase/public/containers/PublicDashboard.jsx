@@ -409,7 +409,7 @@ class PublicDashboard extends Component {
       hideParametersForCustom = "gamefi,protocol_slug,twitter_handler,project_name,guild_id";
     }
     if (isABPath()) {
-      hideParametersForCustom = "gamefi,protocol_slug,twitter_handler,project_name,guild_id,project,collection_contract_address";
+      hideParametersForCustom = "gamefi,protocol_slug,twitter_handler,project_name,guild_id,project,collection_contract_address,asset_address,asset_contract_address";
     }
     const hashData = parseHashOptions(location?.hash);
     if (
