@@ -3,25 +3,27 @@ import React, { useState } from "react";
 import { Button, Form, Input, Modal, Select } from "antd";
 import dayjs from "dayjs";
 import "../index.css";
+import { some } from "lodash";
 import Head from "metabase/ab/containers/Journey/component/Head";
 import SankeyChart from "metabase/ab/containers/Journey/component/SankeyChart";
 import { getFgaProject } from "metabase/selectors/user";
 import { connect } from "react-redux";
 import { journeyPathAnalyze } from "metabase/new-service";
 import demoData from "metabase/ab/containers/Journey/util/data";
+import handleErrorNodes from "metabase/ab/containers/Journey/util/handle";
 
 const Edit = props => {
   const { router, projectObject } = props;
   const projectName = projectObject?.protocolSlug;
   const ref = React.createRef();
   const [isLoading, setLoading] = useState();
-  const [chartData, setChartData] = useState({nodes: demoData.nodes, links: demoData.links});
+  const [chartData, setChartData] = useState({nodes: demoData.demoViewData.nodes, links: demoData.demoViewData.links});
 
   const [params, setParams] = useState({
-    "eventNames": ["login","play_games"],
+    "eventNames": ["login","play_games", "close_app"],
     "initialEventName": "login",
     "project": "benji",
-    "startTime": dayjs().add(-32, 'd').format("YYYY-MM-DD"),
+    "startTime": dayjs().add(-40, 'd').format("YYYY-MM-DD"),
     "endTime": dayjs().format("YYYY-MM-DD"),
     "levelLimit": 6,
   });
@@ -51,6 +53,16 @@ const Edit = props => {
       value: 'open_app',
     },
   ];
+  const firstOptions = [
+    {
+      label: 'Open App',
+      value: 'open_app',
+    },
+    {
+      label: 'login',
+      value: 'login',
+    },
+  ];
 
   const [modal, contextHolder] = Modal.useModal();
 
@@ -61,43 +73,20 @@ const Edit = props => {
     //   nodes: result?.nodes,
     //   links: result?.links,
     // })
-    const demoData = {
-      "nodes": [
-        {
-          "name": "play_games",
-          "value": 1,
-          "id": "play_games_3"
-        },
-        {
-          "name": "play_games",
-          "value": 4,
-          "id": "play_games_2"
-        },
-        {
-          "name": "login",
-          "value": 5,
-          "id": "login_1"
-        }
-      ],
-      "links": [
-        {
-          "source": "play_games_2",
-          "target": "play_games_3",
-          "value": 1
-        },
-        {
-          "source": "login_1",
-          "target": "play_games_2",
-          "value": 4
-        }
-      ]
+    let nodes = demoData.demoAllData.nodes.filter(item => some(params.eventNames, (name) => item.name.includes(name)))
+    if (params.initialEventName === "login") {
+      nodes = nodes.filter(item => !item.name.includes("open_app"))
     }
+    let links = demoData.demoAllData.links;
+    links = links.filter(item => {
+      const some1 = some(params.eventNames, (name) => item.source.includes(name));
+      const some2 = some(params.eventNames, (name) => item.target.includes(name));
+      return some1 && some2;
+    })
+    nodes = handleErrorNodes(nodes, links, params.initialEventName);
     setTimeout(() => {
       setLoading(false);
-      setChartData({
-        nodes: demoData?.nodes,
-        links: demoData?.links,
-      })
+      setChartData({nodes: nodes, links: demoData.demoAllData.links})
     }, 2000)
   }
 
@@ -118,13 +107,8 @@ const Edit = props => {
         <div className="flex flex-column p2" style={{ gap: 10 }}>
           Select Events
           <Select
-            style={{ width: '100%', borderRadius: 4, border: "1px solid #58585B", background: "#1B1B1E" }}
-            dropdownStyle={{
-              background: "#1C1C1E",
-              color: "white",
-              border: "1px solid #ffffff20"
-            }}
-            defaultValue={["login","play_games"]}
+            style={{ width: '100%' }}
+            defaultValue={params.eventNames}
             options={options}
             onChange={onChange}
             mode="multiple"
@@ -136,19 +120,14 @@ const Edit = props => {
           <div className="flex align-center" style={{ gap: 10 }}>
             <Select
               defaultValue="login"
-              style={{ width: 120,borderRadius: 4, border: "1px solid #58585B", background: "#1B1B1E" }}
-              dropdownStyle={{
-                background: "#1C1C1E",
-                color: "white",
-                border: "1px solid #ffffff20"
-              }}
+              style={{ width: 120 }}
               onChange={(value) => {
                 setParams({
                   ...params,
                   initialEventName: value,
                 })
               }}
-              options={options}
+              options={firstOptions}
             />
             <span>as</span>
             <span className="ml1">First Event</span>
@@ -276,8 +255,9 @@ const Edit = props => {
               endTime: strings[1],
             })
           }}
+          router={router}
           runData={() => {
-            // calAction()
+            calAction()
           }}
         />
       </div>

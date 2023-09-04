@@ -25,12 +25,7 @@ const UserFilter = props => {
         return (
           <Space key={index} wrap>
             <Select
-              style={{ width: 120, borderRadius: 4, border: "1px solid #58585B", background: "#1B1B1E" }}
-              dropdownStyle={{
-                background: "#1C1C1E",
-                color: "white",
-                border: "1px solid #ffffff20"
-              }}
+              style={{ width: 120 }}
               defaultValue="lucy"
               options={[
                 {
@@ -53,12 +48,7 @@ const UserFilter = props => {
             />
 
             <Select
-              style={{ width: 120, borderRadius: 4, border: "1px solid #58585B", background: "#1B1B1E" }}
-              dropdownStyle={{
-                background: "#1C1C1E",
-                color: "white",
-                border: "1px solid #ffffff20"
-              }}
+              style={{ width: 120 }}
               defaultValue="include"
               options={[
                 {
