@@ -483,12 +483,21 @@ export const fga_menu_data_v2 = (project, user) => {
     ["nft_nft_holder", "d13ca440-553a-4759-b120-1b84eb41054f"],
     ["nft_sales_mints", "9d9e9149-1dbc-4e0e-88a4-f9c64d1c10e1"],
     ["nft_revenue", "b98b0a6b-64cb-4e09-979d-693040ea3ec9"],
-    ["twitter", "fd4d94f3-06f7-445d-ada3-0ce82bcefa39"],
-    ["discord", "d137a1ef-34a3-4553-84cb-2203bd9d2baf"],
+    ["twitter", "773e9e27-d131-43a6-ba05-518136a52fd3"],
+    ["discord", "0d6f82b3-21cf-4b9c-9766-775454b8d7d2"],
     ["project_health", "d14ebd54-b6ab-4111-a877-c9d66e253be8"],
     ["social", "5492ee87-4d65-49e2-878d-8a2aa9d5b745"],
     ["gaming", "878b2412-a464-4286-903f-05a2950a5f6d"],
     ["listing", "dcc2860f-8693-4de3-8123-6c5ba12c0d1c"],
+    ["project_overlap", "64f35dd4-89e8-4c27-a2fc-3453ac23254d"],
+    ["retention", "73ce13a3-0815-45dd-bc30-59a75ae7e0c0"],
+    ["acquisition", "43325414-b798-44cb-ad2d-745d374b22f2"],
+    ["gaming_user", "16d26c02-b0f4-4c78-9385-44a9212a826b"],
+    ["nft_summary", "aefc83f1-ed4b-4dba-a21f-6f85a1de471c"],
+    ["nft_sales_mints", "aefc83f1-ed4b-4dba-a21f-6f85a1de471c"],
+    ["listing", "20ae0361-4a39-4b66-bd56-fb9f012bfd3c"],
+    ["gaming_spend", "c86f7c43-41fd-4c75-9d8a-3ebc381ae62e"],
+    ["gaming_engagement", "b0eee809-7c27-4c86-adf2-5644fa6a7529"],
 
 
     ["project_health-platform", "7a275541-580a-4720-8e10-f455335de137"],
@@ -503,76 +512,87 @@ export const fga_menu_data_v2 = (project, user) => {
     getItem("Users", "users-platform", ReactIcons.userIcon, [
       //<TeamOutlined />
       // protocolType !== "NFT" && getItem("Overview", "users_overview-platform", null),
-      getItem("Segment", "segment-platform", null),
+      getItem("Segmentation", "segment-platform", null),
       getItem("Members", "members-platform", null),
-      getItem("Journey", "journey-platform", null),
+      getItem("Journey Explorer", "journey-platform", null),
     ]),
   ];
   const menuTabs = [
     getItem("Home", "home", ReactIcons.myAnalysisIcon, [
       getItem("Project Health", "project_health", null),
+      getItem("Project Overlap", "project_overlap", null),
+    ]),
+    getItem("Assets", "assets", ReactIcons.assetIcon, [
+      protocolType !== "GameFi" &&
+      getItem("NFT", "nft", null, [
+          getItem("Summary", "nft_summary", null),
+          getItem("NFT Sales&Mints", "nft_sales_mints", null),
+          getItem("NFT Listing", "listing", null),
+        ]
+      ),
+
+      protocolType !== "NFT" &&
+      getItem("Token", "game_tokenomics", null),
+      getItem("Game", "gaming", null, [
+        getItem("Overview", "gaming", null),
+        getItem("User", "gaming_user", null),
+        getItem("Engagement", "gaming_engagement", null),
+        getItem("Spend", "gaming_spend", null),
+
+      ]),
+      getItem("Community", "social_stats", null, [
+          getItem("Twitter", "twitter", null),
+          getItem("Discord", "discord", null),
+        ]
+      ),
+      protocolType !== "GameFi" &&
+      getItem("Holders", "nft_nft_holder", null),
+      getItem("Momentum", "momentum", null, [
+          getItem("Retention", "retention", null),
+          getItem("Acquisition", "acquisition", null),
+        ]
+      ),
+      //  protocolType !== "NFT" && getItem("Active Users", "game_active_users", null),
     ]),
     getItem("Users", "users", ReactIcons.userIcon, [
       //<TeamOutlined />
       // protocolType !== "NFT" && getItem("Overview", "users_overview", null),
-      getItem("Segment", "segment", null),
-      getItem("Members", "members", null),
-      getItem("Journey", "journey", null),
+      getItem("Profiles", "user_profile", null),
+      protocolType !== "GameFi" &&
+      getItem("Leaderboard", "nft_leaderboard", null),
+      getItem("Journey Explorer", "journey", null),
+      getItem("Segmentation", "segment", null),
     ]),
-    getItem(
+    /*getItem(
       "Gaming Stats",
       "gaming_stats",
       ReactIcons.gamingStatIcon,
       [
         getItem("Gaming", "gaming", null),
       ],
-    ),
-    getItem("Assets", "assets", ReactIcons.assetIcon, [
-      protocolType !== "GameFi" &&
-      getItem("NFT Sales&Mints", "nft_sales_mints", null),
-      protocolType !== "GameFi" &&
-      getItem("NFT Listing", "listing", null),
-      protocolType !== "GameFi" &&
-      getItem("NFT Leaderboard", "nft_leaderboard", null),
-      protocolType !== "GameFi" &&
-      getItem("Holder of NFT & Token", "nft_nft_holder", null),
-      protocolType !== "NFT" &&
-      getItem("Tokenomics", "game_tokenomics", null),
-      //  protocolType !== "NFT" && getItem("Active Users", "game_active_users", null),
-    ]),
-    getItem("Social Stats", "social", ReactIcons.appsIcon, [
-      getItem("Social", "social", null),
-        // getItem("Discord", "discord", null),
-      ]
-    ),
+    ),*/
     /*getItem("Custom Analysis", "custom", ReactIcons.customAnalysisIcon, [
       getItem("Templates", "templates", null),
       getItem("My Analysis", "my_analysis", null),
     ]),*/
-    getItem("Settings", "settings", <SettingOutlined />, [
-      getItem("Integration", "integration", null),
-      getItem("Project Info", "general", null),
-      // getItem("Channel", "channel", null),
-    ]),
     getItem(
       "Growth",
       "growth",
       ReactIcons.growthIcon,
       [
-        getItem("Find Wallets", "find_wallets", null),
+        getItem("Wallets Explorer", "members", null),
+        getItem("Snapshot Tools", "snapshot_tools", null),
         // getItem("Airdrop", "airdrop", null),
-        getItem("Single Wallet Profile", "wallet_profile", null),
+        // getItem("Single Wallet Profile", "wallet_profile", null),
         // getItem("Activation", "activation", null),
       ],
       // "group",
     ),
-    // getItem(
-    //   "Login",
-    //   "login",
-    //   <LinkOutlined />,
-    //   [],
-    // ),
-
+    getItem("Settings", "settings", <SettingOutlined />, [
+      getItem("Integration", "integration", null),
+      getItem("Project Info", "general", null),
+      // getItem("Channel", "channel", null),
+    ]),
   ];
   const liveKeys = [
     "home_nft",
