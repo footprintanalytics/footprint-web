@@ -24,7 +24,7 @@ import { ReactIcons } from "../../nav/containers/FpNavbar/utils/data";
 export const wallet_profile_link =
   "/fga/public/dashboard/fa040fe5-46b3-483b-b257-aa2373559fab"; //query: wallet_address
 export const user_profile_link =
-  "/fga/public/dashboard/c06826fc-511e-4f03-bfa7-fc8eaa2facfa"; //query: cohort_title
+  "/fga/public/dashboard/345aa907-c4e9-431a-923a-0dfd36188191"; //query: cohort_title
 export const top_protocols = [
   {
     protocolSlug: "the-sandbox",
@@ -487,7 +487,7 @@ export const fga_menu_data_v2 = (project, user) => {
     ["discord", "0d6f82b3-21cf-4b9c-9766-775454b8d7d2"],
     ["project_health", "d14ebd54-b6ab-4111-a877-c9d66e253be8"],
     ["social", "5492ee87-4d65-49e2-878d-8a2aa9d5b745"],
-    ["gaming", "878b2412-a464-4286-903f-05a2950a5f6d"],
+    ["gaming_overview", "878b2412-a464-4286-903f-05a2950a5f6d"],
     ["listing", "dcc2860f-8693-4de3-8123-6c5ba12c0d1c"],
     ["project_overlap", "64f35dd4-89e8-4c27-a2fc-3453ac23254d"],
     ["retention", "73ce13a3-0815-45dd-bc30-59a75ae7e0c0"],
@@ -534,7 +534,7 @@ export const fga_menu_data_v2 = (project, user) => {
       protocolType !== "NFT" &&
       getItem("Token", "game_tokenomics", null),
       getItem("Game", "gaming", null, [
-        getItem("Overview", "gaming", null),
+        getItem("Overview", "gaming_overview", null),
         getItem("User", "gaming_user", null),
         getItem("Engagement", "gaming_engagement", null),
         getItem("Spend", "gaming_spend", null),
