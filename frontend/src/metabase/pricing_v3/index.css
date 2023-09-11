@@ -27,6 +27,7 @@
 .pricing-container__tabs {
   margin: 10px 0 40px;
   display: flex;
+  height: 70px;
 }
 
 .pricing-container__button-normal {
@@ -39,10 +40,16 @@
   border-bottom: 1px solid #8f8f94;
 }
 
+.pricing-container__button-normal:hover {
+  background: transparent;
+  border-bottom: 2px solid #3434b250;
+}
+
+.pricing-container__button-selected:hover,
 .pricing-container__button-selected {
   color: #3434b2;
   font-size: 28px;
-  border-bottom: 3px solid #3434b2;
+  border-bottom: 2px solid #3434b2;
 }
 
 .pricing-container__bg {

@@ -1,11 +1,13 @@
 /* eslint-disable react/prop-types */
-import React, { useState } from "react";
+import React, { useState, useRef } from "react";
 import { Button, Checkbox, Modal, Tooltip } from "antd";
 import { payProduct } from "metabase/new-service";
 import { getOssUrl } from "metabase/lib/image";
 import Icon from "metabase/components/Icon";
-
+import Link from "metabase/core/components/Link";
 const PricingModal = ({ user, sign, subscribeOptions, visible, onClose, setCallback }) => {
+  const termsRef = useRef();
+  const [termsCheck, setTermsCheck] = useState(false);
   const [options, setOptions] = useState(subscribeOptions);
   const [loading, setLoading] = useState(false);
   const [auto, setAuto] = useState(true);
@@ -86,7 +88,14 @@ const PricingModal = ({ user, sign, subscribeOptions, visible, onClose, setCallb
               </li>
             ))}
           </ul>
-          <Button type="primary" size="large" onClick={onPay} loading={loading}>
+          <Checkbox ref={termsRef} className="mb2" onChange={e => setTermsCheck(e.target.checked)}>
+            By ordering you agree to our {" "}
+            <Link className="text-underline-hover text-underline" target="_blank" to={"https://static.footprint.network/site/terms-of-service.html?2"}>Terms of Service</Link>
+            {" "} and our {" "}
+            <Link className="text-underline-hover text-underline" target="_blank" to={"https://static.footprint.network/site/privacy-policy.html"}>Privacy Policy</Link>
+            .
+          </Checkbox>
+          <Button type="primary" size="large" onClick={onPay} loading={loading} disabled={!termsCheck}>
             Subscribe Now
           </Button>
           {subscription && (
