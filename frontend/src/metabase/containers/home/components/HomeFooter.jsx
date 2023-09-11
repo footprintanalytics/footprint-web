@@ -145,7 +145,7 @@ const footers = [
       },
       {
         label: "Terms of Service",
-        url: "https://static.footprint.network/site/terms-of-service.html",
+        url: "https://static.footprint.network/site/terms-of-service.html?2",
       },
     ],
   },

@@ -24,7 +24,7 @@ const Pricing = ({ user, setLoginModalShow, onCancelSubscription }) => {
 
   if (isLoading) {
     return (
-      <div className="Pricing">
+      <div className="Pricing" style={{ width: 1200 }}>
         <Skeleton active />
       </div>
     );
