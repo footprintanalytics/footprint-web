@@ -8,6 +8,7 @@ const AboutGrantedBy = () => {
     "home-v2/img_by_cronos_v2.png?image_process=resize,w_330/crop,h_146/format,jpg",
     "home-v2/img_by_optimism_v2.png?image_process=resize,w_330/crop,h_146/format,jpg",
     "home-v2/img_by_sui.png?image_process=resize,w_330/crop,h_146/format,jpg",
+    "home-v2/img_by_combo.png?image_process=resize,w_330/crop,h_146/format,jpg",
   ];
 
   return (
