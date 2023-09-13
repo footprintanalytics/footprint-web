@@ -173,7 +173,7 @@
 .main-menu__inner-chain-layout ul {
   display: flex;
   flex-wrap: wrap;
-  gap: 16px;
+  gap: 10px;
   margin: 10px 0 20px;
 }
 
@@ -220,7 +220,7 @@
   flex-direction: column;
   justify-content: center;
   align-items: flex-start;
-  margin-left: 20px;
+  margin-left: 10px;
 }
 
 .main-menu__add-root {

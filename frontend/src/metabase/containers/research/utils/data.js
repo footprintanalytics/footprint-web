@@ -525,6 +525,11 @@ const chainData = [
         "value": "zksync-era-overview",
         "publicUuid": "89b91903-fcfc-4122-978b-62c7a3ba3f41",
       },
+      {
+        "label": "Sui Overview",
+        "value": "sui-overview",
+        "publicUuid": "e569cb10-4132-46db-a391-3803feb3a203",
+      },
     ],
   },
   {

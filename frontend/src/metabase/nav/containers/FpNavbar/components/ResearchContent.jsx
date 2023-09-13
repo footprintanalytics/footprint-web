@@ -235,15 +235,9 @@ const ResearchContent = props => {
             link: "/research/chain/chain-stats/thundercore-overview",
           },
           {
-            title: "Boba",
-            img: getOssUrl("studio/img-chain-24.png?1=1"),
-            link: "/research/chain/chain-stats/boba-network-overview",
-          },
-          {
             title: "Sui",
             img: getOssUrl("studio/img-chain-27.png"),
-            link: "/research/chain/chain-rankings/top-chains",
-            desc: "Coming soon",
+            link: "/research/chain/chain-stats/sui-overview",
           },
         ],
         layout2Data: [
@@ -286,6 +280,11 @@ const ResearchContent = props => {
             title: "Starknet",
             img: getOssUrl("studio/img-chain-38.png"),
             link: "/research/chain/chain-stats/starknet-overview",
+          },
+          {
+            title: "Boba",
+            img: getOssUrl("studio/img-chain-24.png?1=1"),
+            link: "/research/chain/chain-stats/boba-network-overview",
           },
         ],
         layout3Data: [
