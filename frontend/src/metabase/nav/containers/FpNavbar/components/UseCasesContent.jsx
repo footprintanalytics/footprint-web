@@ -50,8 +50,9 @@ const UseCasesContent = props => {
         data: [
           {
             title: "Growth Tools Solution",
-            link: "https://docs.google.com/presentation/d/1HO_wAM2835yOoHdib1nAS9Qrf4XR15pm8VHOUBl-SGE/edit#slide=id.g25866ee599b_0_215",
+            link: "https://docs.google.com/presentation/d/1UXiE1dvMIKhsUHwwVpzixc4v7lVHJNzG3WIYgpfw0AU/edit#slide=id.g25c23df782d_0_0",
             externalLink: true,
+            icon: ReactIcons.solutionIcon2,
           },
         ],
       },
@@ -65,7 +66,7 @@ const UseCasesContent = props => {
         <div className="main-menu__inner-layout">
           {MainMenuFunction.renderVerticalMenu({ data: tabData?.gamefiData })}
           {MainMenuFunction.renderVerticalMenu({ data: tabData?.researchData })}
-          {/*{MainMenuFunction.renderVerticalMenu({ data: tabData?.growthData })}*/}
+          {MainMenuFunction.renderVerticalMenu({ data: tabData?.growthData })}
         </div>
       </>
     );
