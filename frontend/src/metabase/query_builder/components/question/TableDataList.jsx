@@ -67,7 +67,7 @@ const TableDataList = props => {
         // setExpandedKeys([...flatten(dataSets.map(item => `${item.id}`))]);
       }
     } else {
-      if (dataSets && dataSets.length > 0 && dataSets[0].category) {
+      /*if (dataSets && dataSets.length > 0 && dataSets[0].category) {
         setExpandedKeys([
           ...flatten(
             dataSets
@@ -75,7 +75,7 @@ const TableDataList = props => {
               .map(item => item.category.value),
           ),
         ]);
-      }
+      }*/
       // setExpandedKeys([]);
     }
     if (
