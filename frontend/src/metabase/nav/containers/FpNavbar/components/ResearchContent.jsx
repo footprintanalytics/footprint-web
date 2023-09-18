@@ -239,6 +239,11 @@ const ResearchContent = props => {
             img: getOssUrl("studio/img-chain-27.png"),
             link: "/research/chain/chain-stats/sui-overview",
           },
+          {
+            title: "Polygon",
+            img: getOssUrl("studio/img-chain-34.png"),
+            link: "/research/chain/chain-stats/polygon-overview",
+          },
         ],
         layout2Data: [
           {
@@ -255,11 +260,6 @@ const ResearchContent = props => {
             title: "Optimism",
             img: getOssUrl("studio/img-chain-33.png"),
             link: "/research/chain/chain-stats/optimism-overview",
-          },
-          {
-            title: "Polygon",
-            img: getOssUrl("studio/img-chain-34.png"),
-            link: "/research/chain/chain-stats/polygon-overview",
           },
           {
             title: "HOME Verse",
@@ -486,7 +486,7 @@ const ResearchContent = props => {
         <div className="main-menu__inner-layout">
           {MainMenuFunction.renderVerticalMenu({ data: tabData?.industryData })}
           <div className="main-menu__inner-chain-layout">
-            {MainMenuFunction.renderChainLayout({ data: tabData?.layoutData, title: "LAYER1" })}
+            {MainMenuFunction.renderChainLayout({ data: tabData?.layoutData, title: "PUBLIC CHAIN" })}
             <div className="flex">
               {MainMenuFunction.renderChainLayout({ data: tabData?.layout2Data, title: "LAYER2" })}
               {MainMenuFunction.renderStandardShow({ data: tabData?.addData, className: "ml2" })}
