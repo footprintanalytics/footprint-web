@@ -124,7 +124,7 @@ const GaSidebar = (props: IGaSidebarProp) => {
         {projectObject && items?.length > 0 ? (
           <>
             {!isProject && (<>
-              <div className="ga-side-bar__title">
+              {/*<div className="ga-side-bar__title">
                 <h3>Platform</h3>
               </div>
               <Menu
@@ -150,7 +150,7 @@ const GaSidebar = (props: IGaSidebarProp) => {
                 }}
                 items={itemsPlatform}
               />
-              <div className="ga__line mt1"/>
+              <div className="ga__line mt1"/>*/}
               <div className="ga-side-bar__title">
                 <h3>Project</h3>
               </div>

@@ -31,13 +31,14 @@ import UserProfile from "./UserProfile";
 import MyAnalysisList from "./MyAnalysisList";
 import SocialConnectList from "./SocialConnectList";
 import "../css/index.css";
+import GameList from "./gameList";
 
 const Project = props => {
   const { router, location, children, user, menu, projectPath, projectObject } =
     props;
   const [currentMenu, setCurrentMenu] = useState(menu);
   const [gaMenuTabs, setGaMenuTabs] = useState(null);
-
+  console.log("projectPath", projectPath, menu, projectObject)
   useEffect(() => {
     if (menu && menu !== currentMenu && projectObject) {
       if (menu === "funnel") {
@@ -54,11 +55,13 @@ const Project = props => {
       const menuKeys = menuData.keys;
       const liveKeys = menuData.liveKeys;
       setGaMenuTabs(menuData);
+      console.log("ppppp1", !currentMenu, (liveKeys.includes(currentMenu), !menuKeys.includes(currentMenu)))
       if (
         !currentMenu ||
         (liveKeys.includes(currentMenu) && !menuKeys.includes(currentMenu))
       ) {
         const firstMenu = menuKeys[0];
+        console.log("useEffect, firstMenu", firstMenu)
         setCurrentMenu(firstMenu);
         router.push({
           pathname: getGrowthProjectPath(
@@ -76,6 +79,7 @@ const Project = props => {
         });
       }
     } else {
+      console.log("ppppp2")
       setGaMenuTabs(null);
     }
   }, [projectObject, user]);
@@ -180,6 +184,7 @@ const Project = props => {
   };
 
   const getContentPannel = current_tab => {
+    console.log("current_tab", current_tab)
     if (!projectObject || !currentMenu || !gaMenuTabs) {
       return <LoadingSpinner message="Loading..." />;
     }
@@ -217,6 +222,15 @@ const Project = props => {
           projectId={getLatestGAProjectId()}
           projectPath={projectPath}
         ></FindWallets>
+      );
+    }
+    if (["games-manage"].includes(current_tab)) {
+      return (
+        <GameList
+          location={location}
+          router={router}
+          // project={getProjectObject()}
+        />
       );
     }
     if (
@@ -456,6 +470,8 @@ const Project = props => {
         ></CohortList>
       );
     }
+
+
     if (gaMenuTabs?.dashboardMap?.has(current_tab)) {
       /*if (["Twitter", "twitter"].includes(current_tab)) {
         return (
@@ -484,6 +500,21 @@ const Project = props => {
         );
       }*/
       if (["Funnel", "funnel"].includes(current_tab)) {
+        return (
+          <LoadingDashboard
+            router={router}
+            sourceDefinitionId={projectObject?.ga?.sourceDefinitionId}
+            project={getProjectObject()}
+            projectId={parseInt(getLatestGAProjectId())}
+            current_tab={current_tab}
+          >
+            {WrapPublicDashboard(current_tab)}
+          </LoadingDashboard>
+        );
+      }
+      const twitterEnable = localStorage.getItem("twitterEnable");
+      console.log("twitterEnable", twitterEnable)
+      if ((twitterEnable !== "enable") && (projectPath === 'TorqueSquad') && ["Twitter", "twitter", "Discord", "discord"].includes(current_tab)) {
         return (
           <LoadingDashboard
             router={router}

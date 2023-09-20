@@ -7,6 +7,7 @@ import StudioDashboards from "metabase/containers/myStudio/Component/MyAnalysis/
 import Icon from "metabase/components/Icon";
 import ComingSoonView from "metabase/containers/myStudio/Component/ComingSoonView";
 import { ReactIcons } from "metabase/nav/containers/FpNavbar/utils/data";
+import AppStore from "metabase/containers/myStudio/Component/AppStore";
 
 const getMyStudioData = ({ name, params, router, user, onLogout }) => {
   const isOwner = user?.name === name;
@@ -123,7 +124,7 @@ const getMyStudioData = ({ name, params, router, user, onLogout }) => {
         {
           "label": "App Store",
           "value": "app-store",
-          "component": <ComingSoonView title="App Store"/>,
+          "component": <AppStore title="App Store"/>,
         },
         {
           "label": "Publish app",

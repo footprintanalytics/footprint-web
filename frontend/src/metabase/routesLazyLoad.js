@@ -342,6 +342,9 @@ export default {
     import("metabase/growth/containers/CampaignQuestflow"),
   ),
   FgaPrice: loadable(() => import("metabase/growth/containers/price")),
+  GameList: loadable(() =>
+    import("metabase/ab/containers/gameList"),
+  ),
   WrapDashboard: loadable(
     () => import("metabase/growth/containers/WrapDashboard"),
     options,

@@ -185,6 +185,86 @@ export const refreshCurrentFgaProject = createThunkAction(
             "ga": {}
           }
         }
+        if (project_id === 154) {
+          res = {
+            "id": 154,
+            "isDemo": false,
+            "protocolName": "Mocaverse",
+            "protocolSlug": "Mocaverse",
+            "logo": "",
+            "protocolType": "",
+            "tokenAddress": [],
+            "nftCollectionAddress": [
+              {
+                "address": "0x59325733eb952a92e069c87f0a6168b29e80627f",
+                "chain": "Ethereum"
+              }
+            ],
+            "twitter": {},
+            "discord": {},
+            "ga": {}
+          }
+        }
+        if (project_id === 155) {
+          res = {
+            "id": 155,
+            "isDemo": false,
+            "protocolName": "xxx",
+            "protocolSlug": "xxx",
+            "logo": "",
+            "protocolType": "",
+            "tokenAddress": [],
+            "nftCollectionAddress": [
+              {
+                "address": "0x59325733eb952a92e069c87f0a6168b29e80627f",
+                "chain": "Ethereum"
+              }
+            ],
+            "twitter": {},
+            "discord": {},
+            "ga": {}
+          }
+        }
+        if (project_id === 156) {
+          res = {
+            "id": 156,
+            "isDemo": false,
+            "protocolName": "duke",
+            "protocolSlug": "duke",
+            "logo": "",
+            "protocolType": "",
+            "tokenAddress": [],
+            "nftCollectionAddress": [
+              {
+                "address": "0x59325733eb952a92e069c87f0a6168b29e80627f",
+                "chain": "Ethereum"
+              }
+            ],
+            "twitter": {},
+            "discord": {},
+            "ga": {}
+          }
+        }
+        if (project_id === 157) {
+          res = {
+            "id": 157,
+            "isDemo": false,
+            "protocolName": "TorqueSquad",
+            "protocolSlug": "TorqueSquad",
+            "logo": "",
+            "protocolType": "",
+            "tokenAddress": [],
+            "nftCollectionAddress": [
+              {
+                "address": "0x59325733eb952a92e069c87f0a6168b29e80627f",
+                "chain": "Ethereum"
+              }
+            ],
+            "twitter": {},
+            "discord": {},
+            "ga": {}
+          }
+        }
       } else {
         res = await GetFgaProjectDetail({
           projectId: project_id,
@@ -211,6 +291,7 @@ export const loadCurrentFgaProject = createThunkAction(
       if (!project_id) {
         return;
       }
+      console.log("pooo", getState().currentFgaProject, project_id)
       if (
         force ||
         !getState().currentFgaProject ||
@@ -231,7 +312,6 @@ export const currentFgaProject = handleActions(
     [CLEAR_CURRENT_FGA_PROJECT]: { next: (state, payload) => null },
     [REFRESH_CURRENT_FGA_PROJECT]: {
       next: (state, { payload }) => {
-        console.log("REFRESH_CURRENT_FGA_PROJECT", payload);
         if (!payload) {
           return payload;
         }

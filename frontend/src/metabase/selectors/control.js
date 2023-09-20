@@ -1,5 +1,6 @@
 import { createSelector } from "reselect";
 import { getXraysEnabled } from "metabase/selectors/settings";
+import { setGames } from "../redux/control";
 
 export const getControl = state => state.control;
 
@@ -108,4 +109,12 @@ export const getNewGuideInfo = createSelector(
 
 export const getDarkMode = createSelector([getControl], ({ darkMode }) => {
   return darkMode;
+});
+
+export const getGamesByRedux = createSelector([getControl], ({ games }) => {
+  return games || [];
+});
+
+export const getHistoryGamesByRedux = createSelector([getControl], ({ historyGames }) => {
+  return historyGames || [];
 });

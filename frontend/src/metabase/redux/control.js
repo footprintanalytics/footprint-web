@@ -28,6 +28,8 @@ export const CLOSE_ALL_CHART_POPOVER_Action =
   "metabase/control/closeAllChartPopoverAction";
 export const SET_NEW_GUIDE_INFO = "metabase/control/setNewGuideInfo";
 export const SET_DARK_MODE = "metabase/control/setDarkMode";
+export const SET_GAMES = "metabase/control/SET_GAMES";
+export const SET_HISTORY_GAMES = "metabase/control/SET_HISTORY_GAMES";
 
 export const createFgaProjectModalShowAction = createThunkAction(
   CREATE_FGA_PROJECT_MODAL_SHOW,
@@ -132,6 +134,15 @@ export const setNewGuideInfo = createThunkAction(
 export const setDarkMode = createThunkAction(SET_DARK_MODE, darkMode => {
   localStorage.setItem("sql-editor-dark-mode", darkMode);
   return darkMode;
+});
+
+export const setGames = createThunkAction(SET_GAMES, games => {
+  return games;
+});
+
+export const setHistoryGames = createThunkAction(SET_HISTORY_GAMES, games => {
+  console.log("setHistoryGamessetHistoryGames", games)
+  return games;
 });
 
 export const control = handleActions(
@@ -240,6 +251,23 @@ export const control = handleActions(
         return {
           ...state,
           darkMode: payload,
+        };
+      },
+    },
+    [SET_GAMES]: {
+      next: (state, { payload }) => {
+        return {
+          ...state,
+          games: payload,
+        };
+      },
+    },
+    [SET_HISTORY_GAMES]: {
+      next: (state, { payload }) => {
+        console.log("SET_HISTORY_GAMESSET_HISTORY_GAMESSET_HISTORY_GAMES", payload)
+        return {
+          ...state,
+          historyGames: payload,
         };
       },
     },

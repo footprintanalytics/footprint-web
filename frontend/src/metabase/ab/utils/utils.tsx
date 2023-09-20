@@ -32,7 +32,6 @@ export function getFirstAddressByPriory(datas:{address: string, chain: string}[]
  * @returns
  */
 export function checkVipMenuPermisson(vipGrade:string,menu:string){
-  console.log("checkVipMenuPermisson",vipGrade,menu);
   // all access for Enterprise
   if(vipGrade === "Enterprise"){
     return true;

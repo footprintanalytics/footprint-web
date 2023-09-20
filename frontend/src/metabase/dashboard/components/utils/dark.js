@@ -34,6 +34,7 @@ export const isStudio = () => window.location.pathname.startsWith("/studio");
 export const isABNeedDark = () => {
   return (
     window.location.pathname === "/fga" ||
+    window.location.pathname.startsWith("/fga/games-manage")||
     window.location.pathname.startsWith("/fga/project")||
     window.location.pathname.startsWith("/fga/@")||
     window.location.pathname.startsWith("/fga/public")||
