@@ -394,7 +394,8 @@ class ABNavbar extends Component {
             {/*<RightMenuMobile />*/}
             {/*<RightMenuPad />*/}
           {/*</React.Fragment>*/}
-          <Button onClick={() => {
+          <div style={{ lineHeight: 1.2, color: "white", marginRight: 20 }}>If you need ecosystem metric<br/><Link className="text-underline-hover text-underline" target="_blank" href="mailto:sales@footprint.network">contact us</Link></div>
+          {/*<Button onClick={() => {
             const toggle_platform_project = localStorage.getItem('toggle_platform_project')
             if (toggle_platform_project === "project") {
               localStorage.setItem('toggle_platform_project', "platform");
@@ -403,7 +404,7 @@ class ABNavbar extends Component {
             }
 
             window.location.replace("/fga")
-          }}>Manager / MKT</Button>
+          }}>Manager / MKT</Button>*/}
           {user ? (
             <ProfileLink
               {...this.props}
