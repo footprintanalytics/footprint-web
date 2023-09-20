@@ -44,7 +44,6 @@ const ConnectorList = props => {
     setCreateFgaProjectModalShowAction,
     refetchProject,
   } = props;
-  localStorage.setItem("twitterEnable", "enable");
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [openDrawer, setOpenDrawer] = useState({ show: false, connector: {} });
   const [count, setCount] = useState(1);
@@ -295,6 +294,7 @@ const ConnectorList = props => {
       >
         {openDrawer.connector && (
           <ConfigConnector
+            router={router}
             connector={openDrawer.connector}
             onAddConnector={onAddConnector}
             user={user}

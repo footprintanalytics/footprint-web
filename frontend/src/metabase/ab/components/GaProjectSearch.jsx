@@ -235,6 +235,9 @@ const GaProjectSearch = props => {
     }
   }, [projectPath]);
   const handleProjectChange = async (value, option2) => {
+    if (value !== "Project A") {
+      localStorage.setItem("twitterEnable", "");
+    }
     const option = userProject.find(item => item.protocolSlug === value) || option2
     console.log("handleProjectChange", option, getGrowthProjectPath(option.value))
     saveLatestGAProject(option.value);
@@ -254,20 +257,6 @@ const GaProjectSearch = props => {
       });
     }
   };
-
-  const isClaimGame = (slug) => {
-    console.log("cgamescgames", cgames, slug)
-    return cgames.includes(slug);
-  }
-
-  const claimGame = (slug) => {
-    const hide = message.loading("Claim game...", 2000);
-    setTimeout(() => {
-      hide();
-      message.success("Successfully claim!");
-      setcgames([...cgames, slug])
-    }, 2000)
-  }
 
   return (
     <div className="flex flex-column items-center ga-project-search" style={{ minWidth: 218 }}>
@@ -361,7 +350,7 @@ const GaProjectSearch = props => {
               options={
                 [
                   historyGames.length > 0 && {
-                    label: 'Recent Project',
+                    label: 'Recent',
                     options: historyGames.map(item=> {return {label: item, value: item}}),
                   },
                   games.length > 0 && {
@@ -369,7 +358,7 @@ const GaProjectSearch = props => {
                     options: games.map(item=> {return {label: item, value: item}}),
                   },
                   {
-                    label: 'Demo',
+                    label: 'Sample Project',
                     options: [{ label: 'Project A', value: 'Project A' }],
                   },
                 ].filter(Boolean)}
@@ -390,14 +379,21 @@ const GaProjectSearch = props => {
         open={open}
         setOpen={setOpen}
         onSuccess={gameInfo => {
-          const name = gameInfo.name;
-          const games2 = games || []
-          console.log("CreateMyProjectModal before", games)
-          if (!games2.includes(name)) {
-            setGames([...games2, name])
-            console.log("CreateMyProjectModal after", [...games, name])
-            router.replace(`/fga/project/${name}/project_health`)
-          }
+          const hide = message.loading("create a new game...", 20000);
+          setTimeout(async () => {
+            hide();
+            const name = gameInfo.name;
+            const games2 = games || []
+            console.log("CreateMyProjectModal before", games)
+            if (!games2.includes(name)) {
+              setGames([...games2, name])
+              const option = userProject.find(item => item.protocolSlug === name)
+              await loadProjectDetail(option?.id);
+              console.log("CreateMyProjectModal after", [...games, name])
+              router.replace(`/fga/project/${name}/project_health`)
+            }
+          }, 2000)
+
         }}
       />
       {contextHolder}

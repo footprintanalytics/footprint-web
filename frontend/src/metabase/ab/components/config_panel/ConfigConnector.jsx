@@ -37,6 +37,7 @@ const ConfigConnector = props => {
     setOpenDrawer,
     modal,
     project,
+    router,
   } = props;
   const formRef = React.useRef(null);
   const [editable, setEditable] = useState(!connector?.configured);
@@ -282,10 +283,20 @@ const ConfigConnector = props => {
           <div className="flex w-full flex-row-reverse">
             <Button
               type="primary"
-              htmlType="submit"
+              // htmlType="submit"
               loading={loading}
               className="bg-blue-500 ml-10"
               // disabled={!editable}
+              onClick={() => {
+                modal.success({
+                  content: "Connect successfully!",
+                  okText: "View Data",
+                  onOk: () => {
+                    router.replace(`/fga/project/${project?.protocolSlug}/${connector.name.toLowerCase()}`);
+                    localStorage.setItem("twitterEnable", "enable");
+                  },
+                });
+              }}
             >
               Save
             </Button>

@@ -8,13 +8,12 @@ import Statistics from "metabase/containers/dataApi/statistics";
 import StudioTitle from "metabase/containers/myStudio/Component/StudioTitle";
 import Link from "metabase/core/components/Link";
 import "./AppStore.css";
-import { SettingOutlined } from "@ant-design/icons";
 
 const AppStore = props => {
   const { location, showUsage, showApiKey } = props;
   const data = [
     {
-      img: "https://statichk.footprint.network/dashboard/7961.png?image_process=resize,w_600/crop,h_310/format,jpg",
+      img: "https://static.footprint.network/img-studio-fga.png?image_process=resize,w_600/crop,h_310/format,jpg",
       title: "FGA",
       link: "/fga",
     },

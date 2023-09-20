@@ -2,7 +2,7 @@
 /* eslint-disable react-hooks/rules-of-hooks */
 import React, {useState} from "react";
 import {connect} from "react-redux";
-import {Button, message, Skeleton, Space, Table} from "antd";
+import {Input, message, Skeleton, Space, Table} from "antd";
 import {getFgaProject, getUser} from "metabase/selectors/user";
 import {useQuery} from "react-query";
 import {QUERY_OPTIONS} from "metabase/containers/dashboards/shared/config";
@@ -11,6 +11,7 @@ import Icon from "metabase/components/Icon";
 import { loadCurrentFgaProject } from "metabase/redux/user";
 import { setGames, setHistoryGames } from "metabase/redux/control";
 import { getGamesByRedux } from "metabase/selectors/control";
+const { Search } = Input;
 
 const projectList = props => {
   const { router, location, children, user, projectPath, menu, projectObject, games, setGames, loadCurrentFgaProject } =
@@ -31,12 +32,16 @@ const projectList = props => {
       "id": 154,
       "protocolSlug": "mocaverse",
       "protocolName": "Mocaverse",
+      "chain": "BNB Chain, Polygon",
+      "Active Users": 3234,
       "icon": "https://i.seadn.io/gcs/files/649cd263c9518915328df38b2db1a6f3.png?auto=format&w=256"
     },
     {
       "id": 157,
       "protocolSlug": "TorqueSquad",
       "protocolName": "TorqueSquad",
+      "chain": "BNB Chain, Polygon",
+      "Active Users": 1000,
       "icon": "https://footprint-imgs.oss-us-east-1.aliyuncs.com/logo_images/torque-squad.png"
     },
   ];
@@ -49,7 +54,7 @@ const projectList = props => {
       dataIndex: 'protocolName',
       key: 'protocolName',
       render: (_, record) => (
-        <a onClick={async () => {
+        <a className="text-underline text-underline-hover" onClick={async () => {
           await loadProjectDetail(record.id);
           router.replace(`/fga/project/${record.protocolName}/project_health`)
         }}>
@@ -58,12 +63,14 @@ const projectList = props => {
       ),
     },
     {
-      title: 'Protocol Type',
-      // dataIndex: 'protocolType',
-      key: 'protocolType',
-      render: (type) => (
-        <div>GameFi</div>
-      ),
+      title: 'chain',
+      dataIndex: 'chain',
+      key: 'chain',
+    },
+    {
+      title: 'Active Users',
+      dataIndex: 'Active Users',
+      key: 'Active Users',
     },
     {
       title: 'Action',
@@ -72,8 +79,13 @@ const projectList = props => {
         <Space size="middle">
           <Link ></Link>
           <a onClick={() => {
-            setGames([...games, record.protocolName])
-            router.replace(`/fga/project/${record.protocolName}/project_health`)
+            const hide = message.loading("Claim game...", 20000);
+            setTimeout(async () => {
+              hide();
+              setGames([...games, record.protocolName])
+              await loadProjectDetail(record.id);
+              router.replace(`/fga/project/${record.protocolName}/project_health`)
+            }, 2000)
           }}>
             Claim game
           </a>
@@ -111,6 +123,14 @@ const projectList = props => {
               Add Game
             </Button>
           </div>*/}
+          <div className="flex justify-end">
+            <Search
+              placeholder="search game"
+              allowClear
+              enterButton="Search"
+              style={{ width: 200, margin: "4px 0" }}
+            />
+          </div>
           <Table dataSource={data} columns={columns}/>
         </div>
       )}
