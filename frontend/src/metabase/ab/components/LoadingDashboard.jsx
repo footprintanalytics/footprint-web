@@ -118,6 +118,19 @@ const LoadingDashboard = ({
       );
       break;
     default:
+      message = `Connect Data`;
+      description = (
+        <>
+          {Setup}
+          <div className="mt2">
+            <p>
+              Get access to social media engagement. Use this data to identify
+              any obstacles to grow your business.
+            </p>
+            You can connect your Data
+          </div>
+        </>
+      );
       break;
   }
 

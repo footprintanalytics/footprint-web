@@ -386,7 +386,7 @@ const GaProjectSearch = props => {
               setGames([...games2, name])
               const option = userProject.find(item => item.protocolSlug === name)
               await loadProjectDetail(option?.id);
-              console.log("CreateMyProjectModal after", [...games, name])
+              console.log("CreateMyProjectModal after", [...games, name], option)
               router.replace(`/fga/project/${name}/project_health`)
             }
           }, 2000)

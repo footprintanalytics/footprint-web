@@ -227,6 +227,19 @@ const Project = props => {
         ></FindWallets>
       );
     }
+    if (projectPath === 'duke' && current_tab !== 'integration') {
+      return (
+        <LoadingDashboard
+          router={router}
+          sourceDefinitionId={projectObject?.ga?.sourceDefinitionId}
+          project={getProjectObject()}
+          projectId={parseInt(getLatestGAProjectId())}
+          current_tab={current_tab}
+        >
+          {WrapPublicDashboard(current_tab)}
+        </LoadingDashboard>
+      );
+    }
     if (["games-manage"].includes(current_tab)) {
       return (
         <GameList
