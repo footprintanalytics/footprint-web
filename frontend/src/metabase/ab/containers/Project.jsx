@@ -514,7 +514,7 @@ const Project = props => {
       }
       const twitterEnable = localStorage.getItem("twitterEnable");
       console.log("twitterEnable", twitterEnable)
-      if ((twitterEnable !== "enable") && (projectPath === 'TorqueSquad') && ["Twitter", "twitter", "Discord", "discord"].includes(current_tab)) {
+      if ((twitterEnable !== "enable") && (projectPath === 'TorqueSquad' || projectPath === 'Mocaverse' || projectPath === 'duke' || projectPath === 'xxx') && ["Twitter", "twitter", "Discord", "discord"].includes(current_tab)) {
         return (
           <LoadingDashboard
             router={router}
