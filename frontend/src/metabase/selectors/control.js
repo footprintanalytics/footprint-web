@@ -118,3 +118,7 @@ export const getGamesByRedux = createSelector([getControl], ({ games }) => {
 export const getHistoryGamesByRedux = createSelector([getControl], ({ historyGames }) => {
   return historyGames || [];
 });
+
+export const getBindGameMapping = createSelector([getControl], ({ bindGameMapping }) => {
+  return bindGameMapping || {};
+});

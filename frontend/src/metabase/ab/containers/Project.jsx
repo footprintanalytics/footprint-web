@@ -32,9 +32,11 @@ import MyAnalysisList from "./MyAnalysisList";
 import SocialConnectList from "./SocialConnectList";
 import "../css/index.css";
 import GameList from "./gameList";
+import BindGame from "./bindGame";
+import { getBindGameMapping } from "metabase/selectors/control";
 
 const Project = props => {
-  const { router, location, children, user, menu, projectPath, projectObject } =
+  const { router, location, children, user, menu, projectPath, projectObject, bindGameMapping } =
     props;
   const [currentMenu, setCurrentMenu] = useState(menu);
   const [gaMenuTabs, setGaMenuTabs] = useState(null);
@@ -227,7 +229,21 @@ const Project = props => {
         ></FindWallets>
       );
     }
-    if (projectPath === 'duke' && current_tab !== 'integration') {
+    console.log("bindGameMappingbindGameMapping", bindGameMapping)
+    if (!(bindGameMapping[projectObject?.protocolName] && [
+      "project_health",
+      "project_overlap",
+      "nft_summary",
+      "nft_sales_mints",
+      "listing",
+      "gaming_overview",
+      "gaming_user",
+      "gaming_engagement",
+      "gaming_spend",
+      "nft_nft_holder",
+      "user_profile",
+      "project_health-platform",
+    ].includes(current_tab)) && projectPath === 'duke' && current_tab !== 'integration') {
       return (
         <LoadingDashboard
           router={router}
@@ -243,6 +259,15 @@ const Project = props => {
     if (["games-manage"].includes(current_tab)) {
       return (
         <GameList
+          location={location}
+          router={router}
+          // project={getProjectObject()}
+        />
+      );
+    }
+    if (["bind-game"].includes(current_tab)) {
+      return (
+        <BindGame
           location={location}
           router={router}
           // project={getProjectObject()}
@@ -585,6 +610,7 @@ const mapStateToProps = (state, props) => {
     projectPath: decodeURIComponent(props.params.project),
     projectObject: getFgaProject(state),
     menu: props.params.menu,
+    bindGameMapping: getBindGameMapping(state),
   };
 };
 

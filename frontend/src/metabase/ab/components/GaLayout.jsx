@@ -23,7 +23,8 @@ const GaLayout = props => {
 const LayoutView = props => {
   const { isOpenSubMenu } = useContext(StateContext);
   const isGamesManage = window.location.pathname.startsWith("/fga/games-manage")
-  const showSidebar = !props.isChart || isGamesManage;
+  const isBindGame = window.location.pathname.startsWith("/fga/bind-game")
+  const showSidebar = !props.isChart || isGamesManage || isBindGame;
   const defaultDesc =
     "Unlock your growth potential in a web3 world. Dive into data insights and get an edge in your marketing strategy with Footprint GA by bringing all of your Web2 and Wed3 data sources together.";
   const keywords =

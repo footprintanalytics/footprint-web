@@ -345,6 +345,9 @@ export default {
   GameList: loadable(() =>
     import("metabase/ab/containers/gameList"),
   ),
+  bindGame: loadable(() =>
+    import("metabase/ab/containers/bindGame"),
+  ),
   WrapDashboard: loadable(
     () => import("metabase/growth/containers/WrapDashboard"),
     options,

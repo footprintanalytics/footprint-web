@@ -745,6 +745,11 @@ export const getRoutes = store => (
         component={LazyLoad.GameList}
       />
       <Route
+        title={t`Growth`}
+        path="/fga/bind-game"
+        component={LazyLoad.bindGame}
+      />
+      <Route
         title={t`Pricing`}
         path="/fga/pricing"
         component={LazyLoad.FgaPrice}

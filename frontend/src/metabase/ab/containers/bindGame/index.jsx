@@ -9,13 +9,13 @@ import {QUERY_OPTIONS} from "metabase/containers/dashboards/shared/config";
 import Link from "metabase/core/components/Link/Link";
 import Icon from "metabase/components/Icon";
 import { loadCurrentFgaProject } from "metabase/redux/user";
-import { setGames, setHistoryGames } from "metabase/redux/control";
-import { getGamesByRedux } from "metabase/selectors/control";
+import { setBindGameMapping, setGames, setHistoryGames } from "metabase/redux/control";
+import { getBindGameMapping, getGamesByRedux } from "metabase/selectors/control";
 const { Search } = Input;
-import { StarFilled } from '@ant-design/icons';
+import { StarFilled, StarOutlined } from "@ant-design/icons";
 
-const projectList = props => {
-  const { router, location, children, user, projectPath, menu, projectObject, games, setGames, loadCurrentFgaProject } =
+const bindGame = props => {
+  const { router, location, children, user, projectPath, menu, projectObject, games, setGames, loadCurrentFgaProject, setBindGameMapping, bindGameMapping } =
     props;
   const userId = 158;
   const projectId = 153;
@@ -69,14 +69,6 @@ const projectList = props => {
       title: 'Protocol Name',
       dataIndex: 'protocolName',
       key: 'protocolName',
-      render: (_, record) => (
-        <a className="text-underline text-underline-hover" onClick={async () => {
-          await loadProjectDetail(record.id);
-          router.replace(`/fga/project/${record.protocolName}/project_health`)
-        }}>
-          {record.protocolName}
-        </a>
-      ),
     },
     {
       title: 'chain',
@@ -104,16 +96,16 @@ const projectList = props => {
             const hide = message.loading("Loading...", 20000);
             setTimeout(async () => {
               hide();
-              message.success(`Project ${record.protocolSlug} added to favorite project`);
-              if (games.includes(record.protocolName)) {
-                setGames(games.filter(game => game !== record.protocolName))
-              } else {
-                setGames([...games, record.protocolName])
-              }
+              message.success(`Project ${record.protocolSlug} bind to project`);
+              let object = {};
+              object[projectObject.protocolName] = record.protocolName
+              setBindGameMapping(object)
+              await loadProjectDetail(record.id);
+              router.replace(`/fga/project/${projectObject.protocolName}/project_health`)
 
             }, 2000)
           }}>
-            <StarFilled style={{ fontSize: '16px', color: isFavoriteProject(record.protocolName) ? '#ff0000' : '#888888' }}/>
+            bind
           </a>
         </Space>
       ),
@@ -139,7 +131,7 @@ const projectList = props => {
       {projectObject && (
         <div style={{ width: 800 }}>
           <div className="flex">
-            <h2>Games</h2>
+            <h2>Bind a game info your project {`'${projectObject.protocolSlug}'`}</h2>
           </div>
           {/*<div className="flex justify-end full-width mb1">
             <Button onClick={() => {
@@ -167,13 +159,15 @@ const projectList = props => {
 const mapDispatchToProps = {
   setGames: setGames,
   loadCurrentFgaProject,
+  setBindGameMapping: setBindGameMapping,
 };
 const mapStateToProps = (state, props) => {
   return {
     user: getUser(state),
     projectObject: getFgaProject(state),
     games: getGamesByRedux(state),
+    bindGameMapping: getBindGameMapping(state),
   };
 };
 
-export default connect(mapStateToProps, mapDispatchToProps)(projectList);
+export default connect(mapStateToProps, mapDispatchToProps)(bindGame);
