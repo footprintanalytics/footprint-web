@@ -235,9 +235,6 @@ const GaProjectSearch = props => {
     }
   }, [projectPath]);
   const handleProjectChange = async (value, option2) => {
-    if (value !== "Project A") {
-      localStorage.setItem("twitterEnable", "");
-    }
     const option = userProject.find(item => item.protocolSlug === value) || option2
     console.log("handleProjectChange", option, getGrowthProjectPath(option.value))
     saveLatestGAProject(option.value);

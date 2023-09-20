@@ -82,6 +82,9 @@ const Project = props => {
       console.log("ppppp2")
       setGaMenuTabs(null);
     }
+    if (projectPath !== "Project A") {
+      localStorage.setItem("twitterEnable", "");
+    }
   }, [projectObject, user]);
 
   const getProjectObject = () => {
