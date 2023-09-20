@@ -21,7 +21,7 @@ import {
 } from "../utils/utils";
 import _ from "underscore";
 import { getGamesByRedux, getHistoryGamesByRedux } from "metabase/selectors/control";
-import { setGames, setHistoryGames } from "metabase/redux/control";
+import { loginModalShowAction, setGames, setHistoryGames } from "metabase/redux/control";
 import CreateMyProjectModal from "metabase/ab/components/Modal/CreateMyProjectModal";
 
 const GaProjectSearch = props => {
@@ -39,6 +39,7 @@ const GaProjectSearch = props => {
     games,
     historyGames,
     projectObject,
+    setLoginModalShowAction,
     loadCurrentFgaProject,
   } = props;
   const [userProject, setUserProject] = useState([]);
@@ -326,9 +327,31 @@ const GaProjectSearch = props => {
                       {menu}
                       <div style={{ margin: "10px 0", borderTop: "1px solid #ffffff20" }}/>
                       <Button className="full-width" type="primary" onClick={() => {
+                        if (!user) {
+                          message.warning("Kindly login before to create a project.");
+                          setLoginModalShowAction({
+                            show: true,
+                            from: "create activation",
+                            redirect: location.pathname,
+                            channel: "FGA",
+                          });
+                          return;
+                        }
                         setOpen(true);
                       }} >Create your project</Button>
-                      <Link to={"/fga/games-manage"}><Button className="full-width" type="text"  >See other project</Button></Link>
+                      <Link onClick={() => {
+                        if (!user) {
+                          message.warning("Kindly login before see other project.");
+                          setLoginModalShowAction({
+                            show: true,
+                            from: "create activation",
+                            redirect: location.pathname,
+                            channel: "FGA",
+                          });
+                          return;
+                        }
+                        router.push("/fga/games-manage")
+                      }}><Button className="full-width" type="text"  >See other project</Button></Link>
                     </div>
                   )}
               value={currentProject}
@@ -402,6 +425,7 @@ const mapDispatchToProps = {
   loadCurrentFgaProject,
   setGames: setGames,
   setHistoryGames: setHistoryGames,
+  setLoginModalShowAction: loginModalShowAction,
 };
 
 const mapStateToProps = (state, props) => {

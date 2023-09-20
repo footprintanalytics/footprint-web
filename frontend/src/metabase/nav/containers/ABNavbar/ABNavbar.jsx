@@ -432,8 +432,8 @@ class ABNavbar extends Component {
               className="ml2"
               onClick={() => {
                 trackStructEvent(`click Sign in`);
-                message.info("Coming soon...")
-                // setLoginModalShow({ show: true, from: "navbar_fga_signin" });
+                // message.info("Coming soon...")
+                setLoginModalShow({ show: true, from: "navbar_fga_signin" });
               }}
             >
               Sign in

@@ -104,7 +104,8 @@ const GaSidebar = (props: IGaSidebarProp) => {
     setOpenKeys(keys);
   };
   const toggle_platform_project = localStorage.getItem('toggle_platform_project')
-  const isProject = toggle_platform_project === "project"
+  // const isProject = toggle_platform_project === "project"
+  const isProject = false
   return (
     <Sider
       className="ga-side-bar"
