@@ -10,7 +10,7 @@ import { StateProvider, StateContext } from "./StateProvider";
 import "../css/index.css";
 import GaSidebar from "./GaSidebar";
 
-const GaLayout = props => {
+const ABLayout = props => {
   const pathname = location.pathname;
   const isHideSidebar = pathname.includes("/fga/chart");
   return (
@@ -22,8 +22,8 @@ const GaLayout = props => {
 
 const LayoutView = props => {
   const { isOpenSubMenu } = useContext(StateContext);
-  const isGamesManage = window.location.pathname.startsWith("/fga/games-manage")
-  const isBindGame = window.location.pathname.startsWith("/fga/bind-game")
+  const isGamesManage = window.location.pathname.startsWith("/fga/") && window.location.pathname.includes("games-manage")
+  const isBindGame = window.location.pathname.startsWith("/fga/") && window.location.pathname.includes("bind-game")
   const showSidebar = !props.isChart || isGamesManage || isBindGame;
   const defaultDesc =
     "Unlock your growth potential in a web3 world. Dive into data insights and get an edge in your marketing strategy with Footprint GA by bringing all of your Web2 and Wed3 data sources together.";
@@ -67,4 +67,4 @@ const mapStateToProps = state => {
   };
 };
 
-export default connect(mapStateToProps)(GaLayout);
+export default connect(mapStateToProps)(ABLayout);

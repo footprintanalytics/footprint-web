@@ -1,6 +1,7 @@
 import axios from "axios";
 import { GET, POST, PUT, DELETE } from "metabase/lib/new-api";
 import { getProject, isDefi360 } from "./lib/project_info";
+import { protocol_name } from "../cljs/schema.core";
 
 export const apiGet = async api => {
   return await axios.get(api);
@@ -228,6 +229,12 @@ export const createPotentialUserCohort = async params => {
 };
 export const createCommunityUserCohort = async params => {
   return POST(`/api/v1/fga/community/cohort`, params);
+};
+export const getPublicChainProjects = async params => {
+  return GET(`https://www.footprint.network/api/v1/public/card/3604fc56-8d81-4ffb-a010-86671c4888d5/query?parameters=%5B%7B%22id%22%3A%229b5b908e-b060-3dfe-f9c1-6c0cad410de6%22%2C%22type%22%3A%22string%2F%3D%22%2C%22target%22%3A%5B%22dimension%22%2C%5B%22template-tag%22%2C%22chain%22%5D%5D%2C%22name%22%3A%22Chain%22%2C%22slug%22%3A%22chain%22%2C%22default%22%3A%5B%22Ethereum%22%5D%2C%22value%22%3A%5B%22Ethereum%22%5D%7D%5D`, params);
+};
+export const getPublicChainProjectDetail = async params => {
+  return GET(`https://www.footprint.network/api/v1/public/card/87dcf516-5b30-4200-97d8-42862c366bab/query?parameters=%5B%7B%22id%22%3A%229b5b908e-b060-3dfe-f9c1-6c0cad410de6%22%2C%22type%22%3A%22string%2F%3D%22%2C%22target%22%3A%5B%22dimension%22%2C%5B%22template-tag%22%2C%22chain%22%5D%5D%2C%22name%22%3A%22Chain%22%2C%22slug%22%3A%22chain%22%2C%22default%22%3A%5B%22Ethereum%22%5D%2C%22value%22%3A%5B%22Ethereum%22%5D%7D%2C%7B%22id%22%3A%227f0ee48e-2d9b-8f17-d159-47dbee3b865d%22%2C%22type%22%3A%22category%22%2C%22target%22%3A%5B%22variable%22%2C%5B%22template-tag%22%2C%22protocol_slug%22%5D%5D%2C%22name%22%3A%22Protocol%20slug%22%2C%22slug%22%3A%22protocol_name%22%2C%22value%22%3A%22${params.protocolSlug}%22%7D%5D`, params);
 };
 // FP Api ---------------
 export const UserRegister = async params => {

@@ -8,18 +8,19 @@ import {useQuery} from "react-query";
 import {QUERY_OPTIONS} from "metabase/containers/dashboards/shared/config";
 import Link from "metabase/core/components/Link/Link";
 import Icon from "metabase/components/Icon";
-import { loadCurrentFgaProject } from "metabase/redux/user";
+import { loadCurrentFgaProjectNew } from "metabase/redux/user";
 import { setGames, setHistoryGames } from "metabase/redux/control";
 import { getGamesByRedux } from "metabase/selectors/control";
 const { Search } = Input;
 import { StarFilled } from '@ant-design/icons';
+import { getPublicChainProjects } from "metabase/new-service";
 
 const projectList = props => {
-  const { router, location, children, user, projectPath, menu, projectObject, games, setGames, loadCurrentFgaProject } =
+  const { router, location, children, user, projectPath, menu, projectObject, games, setGames, loadCurrentFgaProjectNew, businessType } =
     props;
   const userId = 158;
   const projectId = 153;
-
+  console.log("projectList")
   const [isSubmitModalOpen, setSubmitModalOpen] = useState({
     open: false,
     param: null,
@@ -28,28 +29,61 @@ const projectList = props => {
   const params = {
     ecosystemId: 415,
   };
-  const data = [
-    {
-      "id": 154,
-      "protocolSlug": "mocaverse",
-      "protocolName": "Mocaverse",
-      "chain": "BNB Chain, Polygon",
-      "Active Users": 3234,
-      "Transactions": 223456,
-      "icon": "https://i.seadn.io/gcs/files/649cd263c9518915328df38b2db1a6f3.png?auto=format&w=256"
+
+  const { isLoading, data: data2 } = useQuery(
+    ["GetFgaProject", user?.id],
+    async () => {
+      // const toggle_platform_project = localStorage.getItem('toggle_platform_project')
+      // if (toggle_platform_project === "project") {
+      //   return {
+      //     "data": [
+      //     {
+      //       "protocolSlug": "Project A",
+      //       "protocolName": "Project A",
+      //     }
+      //     ]
+      //   }
+      // }
+      if (businessType === "public-chain") {
+        return await getPublicChainProjects();
+      }
+      return {
+        "data": [
+          {
+            "id": 154,
+            "protocolSlug": "mocaverse",
+            "protocolName": "Mocaverse",
+            "chain": "BNB Chain, Polygon",
+            "Active Users": 3234,
+            "Transactions": 223456,
+            "icon": "https://i.seadn.io/gcs/files/649cd263c9518915328df38b2db1a6f3.png?auto=format&w=256"
+          },
+          {
+            "id": 157,
+            "protocolSlug": "TorqueSquad",
+            "protocolName": "TorqueSquad",
+            "chain": "BNB Chain, Polygon",
+            "Active Users": 1000,
+            "Transactions": 88355,
+            "icon": "https://footprint-imgs.oss-us-east-1.aliyuncs.com/logo_images/torque-squad.png"
+          },
+        ]
+      }
+      // return await getPublicChainProjects();
     },
-    {
-      "id": 157,
-      "protocolSlug": "TorqueSquad",
-      "protocolName": "TorqueSquad",
-      "chain": "BNB Chain, Polygon",
-      "Active Users": 1000,
-      "Transactions": 88355,
-      "icon": "https://footprint-imgs.oss-us-east-1.aliyuncs.com/logo_images/torque-squad.png"
-    },
-  ];
-  const loadProjectDetail = project_id => {
-    loadCurrentFgaProject(parseInt(project_id));
+    QUERY_OPTIONS,
+  );
+
+  const data = (businessType === "public-chain") ? data2?.rows?.map(row => {
+      return {
+        "protocolSlug": row[1],
+        "protocolName": row[1],
+        "icon": row[0]
+      }
+    }) : data2;
+  console.log("dddddddata", data)
+  const loadProjectDetail = projectSlug => {
+    loadCurrentFgaProjectNew(projectSlug);
   };
 
   const isFavoriteProject = (name) => {
@@ -71,28 +105,28 @@ const projectList = props => {
       key: 'protocolName',
       render: (_, record) => (
         <a className="text-underline text-underline-hover" onClick={async () => {
-          await loadProjectDetail(record.id);
-          router.replace(`/fga/project/${record.protocolName}/project_health`)
+          await loadProjectDetail(record.protocolName);
+          router.replace(`/fga/${businessType}/project/${record.protocolName}`)
         }}>
           {record.protocolName}
         </a>
       ),
     },
-    {
-      title: 'chain',
-      dataIndex: 'chain',
-      key: 'chain',
-    },
-    {
-      title: 'Active Users',
-      dataIndex: 'Active Users',
-      key: 'Active Users',
-    },
-    {
-      title: 'Transactions',
-      dataIndex: 'Transactions',
-      key: 'Transactions',
-    },
+    // {
+    //   title: 'chain',
+    //   dataIndex: 'chain',
+    //   key: 'chain',
+    // },
+    // {
+    //   title: 'Active Users',
+    //   dataIndex: 'Active Users',
+    //   key: 'Active Users',
+    // },
+    // {
+    //   title: 'Transactions',
+    //   dataIndex: 'Transactions',
+    //   key: 'Transactions',
+    // },
     {
       title: 'Action',
       key: 'action',
@@ -166,13 +200,14 @@ const projectList = props => {
 
 const mapDispatchToProps = {
   setGames: setGames,
-  loadCurrentFgaProject,
+  loadCurrentFgaProjectNew,
 };
 const mapStateToProps = (state, props) => {
   return {
     user: getUser(state),
     projectObject: getFgaProject(state),
     games: getGamesByRedux(state),
+    businessType: props.params.businessType,
   };
 };
 

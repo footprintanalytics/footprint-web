@@ -7,8 +7,8 @@ import { withRouter } from "react-router";
 import { useQuery } from "react-query";
 import { getFgaProject, getUser } from "metabase/selectors/user";
 import { QUERY_OPTIONS } from "metabase/containers/dashboards/shared/config";
-import { GetFgaProject } from "metabase/new-service";
-import { loadCurrentFgaProject } from "metabase/redux/user";
+import { GetFgaProject, getPublicChainProjects } from "metabase/new-service";
+import { loadCurrentFgaProjectNew } from "metabase/redux/user";
 import Link from "metabase/core/components/Link";
 import "../css/index.css";
 import { take } from "lodash";
@@ -23,6 +23,7 @@ import _ from "underscore";
 import { getGamesByRedux, getHistoryGamesByRedux } from "metabase/selectors/control";
 import { loginModalShowAction, setGames, setHistoryGames } from "metabase/redux/control";
 import CreateMyProjectModal from "metabase/ab/components/Modal/CreateMyProjectModal";
+import { getOssUrl } from "metabase/lib/image";
 
 const GaProjectSearch = props => {
   const {
@@ -40,109 +41,70 @@ const GaProjectSearch = props => {
     historyGames,
     projectObject,
     setLoginModalShowAction,
-    loadCurrentFgaProject,
+    loadCurrentFgaProjectNew,
+    businessType,
   } = props;
   const [userProject, setUserProject] = useState([]);
   const [open, setOpen] = useState(false);
-  const [cgames, setcgames] = useState([]);
   const [currentProject, setCurrentProject] = useState(projectPath);
-  console.log("gamesgames", games, historyGames)
-  const { isLoading, data } = useQuery(
+  const { isLoading, data: data2 } = useQuery(
     ["GetFgaProject", user?.id],
     async () => {
-      const toggle_platform_project = localStorage.getItem('toggle_platform_project')
-      if (toggle_platform_project === "project") {
-        return {
-          "data": [
-          {
-            "id": 153,
-            "name": "Project A",
-            "creatorId": 20103,
-            "dbId": 22,
-            "schema": "fga_153_data",
-            "active": 1,
-            "protocolSlug": "Project A",
-            "protocolName": "Project A",
-            "nftContractAddress": [],
-            "createdAt": "2023-04-25T10:51:11.000Z"
-          }
-          ]
-        }
+      // const toggle_platform_project = localStorage.getItem('toggle_platform_project')
+      // if (toggle_platform_project === "project") {
+      //   return {
+      //     "data": [
+      //     {
+      //       "protocolSlug": "Project A",
+      //       "protocolName": "Project A",
+      //     }
+      //     ]
+      //   }
+      // }
+      if (businessType === "public-chain") {
+        return await getPublicChainProjects();
       }
       return {
         "data": [
           {
-            "id": 153,
-            "name": "Project A",
-            "creatorId": 20103,
-            "dbId": 22,
-            "schema": "fga_153_data",
-            "active": 1,
             "protocolSlug": "Project A",
             "protocolName": "Project A",
-            "nftContractAddress": [],
-            "createdAt": "2023-04-25T10:51:11.000Z"
           },
           {
-            "id": 154,
-            "name": "Mocaverse",
-            "creatorId": 20103,
-            "dbId": 22,
-            "schema": "fga_153_data",
-            "active": 1,
             "protocolSlug": "Mocaverse",
             "protocolName": "Mocaverse",
-            "nftContractAddress": [],
-            "createdAt": "2023-04-25T10:51:11.000Z"
           },
           {
-            "id": 155,
-            "name": "xxx",
-            "creatorId": 20103,
-            "dbId": 22,
-            "schema": "fga_153_data",
-            "active": 1,
             "protocolSlug": "xxx",
             "protocolName": "xxx",
-            "nftContractAddress": [],
-            "createdAt": "2023-04-25T10:51:11.000Z"
           },
           {
-            "id": 156,
-            "name": "duke",
-            "creatorId": 20103,
-            "dbId": 22,
-            "schema": "fga_153_data",
-            "active": 1,
             "protocolSlug": "duke",
             "protocolName": "duke",
-            "nftContractAddress": [],
-            "createdAt": "2023-04-25T10:51:11.000Z"
           },
           {
-            "id": 157,
-            "name": "TorqueSquad",
-            "creatorId": 20103,
-            "dbId": 22,
-            "schema": "fga_153_data",
-            "active": 1,
             "protocolSlug": "TorqueSquad",
             "protocolName": "TorqueSquad",
-            "nftContractAddress": [],
-            "createdAt": "2023-04-25T10:51:11.000Z"
           },
         ]
       }
-      // return await GetFgaProject();
+      // return await getPublicChainProjects();
     },
     QUERY_OPTIONS,
   );
 
-  const loadProjectDetail = project_id => {
-    loadCurrentFgaProject(parseInt(project_id));
+  const loadProjectDetail = protocolSlug => {
+    console.log("loadProjectDetail2")
+    loadCurrentFgaProjectNew(protocolSlug);
   };
 
   useEffect(() => {
+    const data = (businessType === "public-chain") ? {data: data2?.rows?.map(row => {
+      return {
+        "protocolSlug": row[1],
+        "protocolName": row[1],
+      }
+    })} : data2;
     if (!isLoading && data?.data) {
       if (data?.data?.length > 0) {
         const projects = [];
@@ -155,24 +117,25 @@ const GaProjectSearch = props => {
                 : p.protocolSlug,
             label:
               <div className="flex align-center">
-                {/*<Icon className="mr1" name="circle" size={16}/>*/}
-                {p.protocolName ?? p.name}
+                <img className="mr1" style={{width: 16, height: 16}} src={p.icon ? p.icon : getOssUrl(`/ab/Project A.png?image_process=resize,w_16/crop,h_16/format,jpg`)} alt={p.protocolName}/>
+                {p.protocolName}
               </div>,
-            key: p.protocolSlug + p.id,
+            key: p.protocolSlug,
           });
         });
+        console.log("projects", projects)
         const index = projects.findIndex(i => i.value === currentProject);
         const projectIndex = index === -1 ? 0 : index;
-        console.log("projects[projectIndex]", currentProject, projects, projects[projectIndex])
         setCurrentProject(projects[projectIndex].value);
-        saveLatestGAProject(projects[projectIndex].value);
-        saveLatestGAProjectId(projects[projectIndex].id);
-        loadProjectDetail(projects[projectIndex].id);
+        // saveLatestGAProject(projects[projectIndex].value);
+        // // saveLatestGAProjectId(projects[projectIndex].id);
+        console.log("vvv", projects[projectIndex].protocolSlug)
+        loadProjectDetail(projects[projectIndex].protocolSlug);
         setUserProject(projects);
         if (
           index === -1 ||
           location.pathname === "/fga" ||
-          location.pathname.startsWith("/fga/project")
+          (location.pathname.startsWith("/fga") && location.pathname.includes("project/"))
         ) {
           router?.push({
             pathname: getGrowthProjectPath(projects[projectIndex].value, menu),
@@ -199,7 +162,7 @@ const GaProjectSearch = props => {
       }
     }
     // getAllProtocol();
-  }, [data, isLoading]);
+  }, [data2, isLoading]);
 
   useEffect(() => {
     if (projectObject) {
@@ -240,10 +203,8 @@ const GaProjectSearch = props => {
     console.log("handleProjectChange", option, getGrowthProjectPath(option.value))
     saveLatestGAProject(option.value);
     setCurrentProject(option.value);
-    if (option.id) {
-      saveLatestGAProjectId(option.id);
-      await loadProjectDetail(option.id);
-    }
+    saveLatestGAProjectId(option.protocolSlug);
+    loadProjectDetail(option.protocolSlug);
     if (
       (location.pathname.startsWith("/fga/project") ||
         location.pathname === "/fga") &&
@@ -350,7 +311,7 @@ const GaProjectSearch = props => {
                           });
                           return;
                         }
-                        router.push("/fga/games-manage")
+                        router.push(`/fga/${businessType}/games-manage`)
                       }}><Button className="full-width" type="text"  >See other project</Button></Link>
                     </div>
                   )}
@@ -377,10 +338,10 @@ const GaProjectSearch = props => {
                     label: 'My Projects',
                     options: games.map(item=> {return {label: item, value: item}}),
                   },
-                  {
-                    label: 'Sample Project',
-                    options: [{ label: 'Project A', value: 'Project A' }],
-                  },
+                  // {
+                  //   label: 'Sample Project',
+                  //   options: [{ label: 'Project A', value: 'Project A' }],
+                  // },
                 ].filter(Boolean)}
             />
           )}
@@ -408,7 +369,7 @@ const GaProjectSearch = props => {
             if (!games2.includes(name)) {
               setGames([...games2, name])
               const option = userProject.find(item => item.protocolSlug === name)
-              await loadProjectDetail(option?.id);
+              await loadProjectDetail(option?.protocolSlug);
               console.log("CreateMyProjectModal after", [...games, name], option)
               router.replace(`/fga/project/${name}/project_health`)
             }
@@ -422,7 +383,7 @@ const GaProjectSearch = props => {
 };
 
 const mapDispatchToProps = {
-  loadCurrentFgaProject,
+  loadCurrentFgaProjectNew,
   setGames: setGames,
   setHistoryGames: setHistoryGames,
   setLoginModalShowAction: loginModalShowAction,
@@ -437,6 +398,7 @@ const mapStateToProps = (state, props) => {
     control: state.control,
     games: getGamesByRedux(state),
     historyGames: getHistoryGamesByRedux(state),
+    businessType: props.params.businessType,
   };
 };
 

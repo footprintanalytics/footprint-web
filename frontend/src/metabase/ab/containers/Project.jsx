@@ -36,7 +36,7 @@ import BindGame from "./bindGame";
 import { getBindGameMapping } from "metabase/selectors/control";
 
 const Project = props => {
-  const { router, location, children, user, menu, projectPath, projectObject, bindGameMapping } =
+  const { router, location, children, user, menu, projectPath, projectObject, bindGameMapping, businessType } =
     props;
   const [currentMenu, setCurrentMenu] = useState(menu);
   const [gaMenuTabs, setGaMenuTabs] = useState(null);
@@ -53,11 +53,10 @@ const Project = props => {
 
   useEffect(() => {
     if (projectObject) {
-      const menuData = fga_menu_data_v2(projectObject, user);
+      const menuData = fga_menu_data_v2(businessType, projectObject, user);
       const menuKeys = menuData.keys;
       const liveKeys = menuData.liveKeys;
       setGaMenuTabs(menuData);
-      console.log("ppppp1", !currentMenu, (liveKeys.includes(currentMenu), !menuKeys.includes(currentMenu)))
       if (
         !currentMenu ||
         (liveKeys.includes(currentMenu) && !menuKeys.includes(currentMenu))
@@ -81,7 +80,6 @@ const Project = props => {
         });
       }
     } else {
-      console.log("ppppp2")
       setGaMenuTabs(null);
     }
     if (projectPath !== "Project A") {
@@ -554,7 +552,6 @@ const Project = props => {
         );
       }
       const twitterEnable = localStorage.getItem("twitterEnable");
-      console.log("twitterEnable", twitterEnable)
       if ((twitterEnable !== "enable") && (projectPath === 'TorqueSquad' || projectPath === 'Mocaverse' || projectPath === 'duke' || projectPath === 'xxx') && ["Twitter", "twitter", "Discord", "discord"].includes(current_tab)) {
         return (
           <LoadingDashboard
@@ -610,6 +607,7 @@ const mapStateToProps = (state, props) => {
     projectPath: decodeURIComponent(props.params.project),
     projectObject: getFgaProject(state),
     menu: props.params.menu,
+    businessType: props.params.businessType,
     bindGameMapping: getBindGameMapping(state),
   };
 };

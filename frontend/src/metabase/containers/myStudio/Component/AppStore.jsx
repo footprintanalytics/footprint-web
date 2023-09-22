@@ -17,6 +17,11 @@ const AppStore = props => {
       title: "FGA",
       link: "/fga",
     },
+    {
+      img: "https://static.footprint.network/img-studio-fga.png?image_process=resize,w_600/crop,h_310/format,jpg",
+      title: "FGA",
+      link: "/fga",
+    },
   ];
   return (
     <>
