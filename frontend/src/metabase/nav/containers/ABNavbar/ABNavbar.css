@@ -220,6 +220,7 @@
 
 .Nav__logo {
   display: flex;
+  position: relative;
 }
 
 .dark .fga-Nav {

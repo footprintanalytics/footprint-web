@@ -311,9 +311,14 @@ export const refreshCurrentFgaProjectNew = createThunkAction(
             protocolSlug: result.rows[0][2],
             protocolType: result.rows[0][4],
             tokenAddress: [],
-            nftCollectionAddress: result.rows.map(row => row[5])
+            nftCollectionAddress: result.rows.map(row => {
+              return {
+                address: row[5],
+                chain: result.rows[0][3],
+              }
+            })
           } : {}
-          console.log("result", result, temp)
+          // res = result.rows?.length > 0 ? temp : res;
         }
 
        else if (isABPath()) {

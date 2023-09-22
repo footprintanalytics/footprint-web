@@ -143,6 +143,13 @@ const mapStateToProps = (state, props) => {
       });
       updateDashboardPara(parameters, parameterValues, key, mutipleCollection);
     }
+    if (project.nftCollectionAddress?.length > 0) {
+      const key = "contract_collection";
+      const mutipleCollection = project.nftCollectionAddress.map(item => {
+        return item.address;
+      });
+      updateDashboardPara(parameters, parameterValues, key, mutipleCollection[0]);
+    }
     if (project.twitter_handler) {
       const key = "twitter_handler";
       updateDashboardPara(

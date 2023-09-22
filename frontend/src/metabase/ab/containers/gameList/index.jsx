@@ -106,7 +106,7 @@ const projectList = props => {
       render: (_, record) => (
         <a className="text-underline text-underline-hover" onClick={async () => {
           await loadProjectDetail(record.protocolName);
-          router.replace(`/fga/${businessType}/project/${record.protocolName}`)
+          router.replace(`/fga/${businessType}/project/${record.protocolName}/nft_summary`)
         }}>
           {record.protocolName}
         </a>
