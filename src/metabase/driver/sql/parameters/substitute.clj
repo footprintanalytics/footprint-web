@@ -7,15 +7,27 @@
             [metabase.query-processor.error-type :as qp.error-type]
             [metabase.util :as u]
             [metabase.util.i18n :refer [tru]]))
-
+(defn is-before-with-from-question-mark [sql]
+  (try
+    (let [
+           isEndWithFrom (str/ends-with? (str/trim sql) "from")
+           ]
+      isEndWithFrom
+      )
+    (catch Throwable e
+      false
+      )
+    )
+  )
 (defn- substitute-field-filter [[sql args missing] in-optional? k {:keys [_field value], :as v}]
   (if (and (= params/no-value value) in-optional?)
     ;; no-value field filters inside optional clauses are ignored, and eventually emitted entirely
     [sql args (conj missing k)]
     ;; otherwise no values get replaced with `1 = 1` and other values get replaced normally
-    (let [{:keys [replacement-snippet prepared-statement-args]}
+    (let [isFromTable (is-before-with-from-question-mark sql )
+           {:keys [replacement-snippet prepared-statement-args]}
           (sql.params.substitution/->replacement-snippet-info driver/*driver* v)]
-      [(str sql replacement-snippet) (concat args prepared-statement-args) missing])))
+      [(str sql (if isFromTable "?" replacement-snippet)) (concat args prepared-statement-args) missing])))
 
 (defn- substitute-card-query [[sql args missing] v]
   (let [{:keys [replacement-snippet prepared-statement-args]}

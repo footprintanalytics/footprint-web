@@ -86,6 +86,23 @@
   driver/dispatch-on-initialized-driver
   :hierarchy #'driver/hierarchy)
 
+(defn is-before-with-from-question-mark [sql match]
+  (try
+    (let [
+           flagString "!!!!=!!!+!"
+           firstReplaceString (str/replace-first sql match flagString)
+           index (.indexOf firstReplaceString flagString)
+           firstStr (subs sql 0 index)
+           isEndWithFrom (str/ends-with? (str/trim firstStr) "from")
+           ]
+      isEndWithFrom
+      )
+    (catch Throwable e
+      false
+      )
+    )
+  )
+
 (defmethod unprepare :sql [driver [sql & args]]
   (transduce
    identity
@@ -97,9 +114,12 @@
       ;; TODO - this is not smart enough to handle question marks in non argument contexts, for example if someone
       ;; were to have a question mark inside an identifier such as a table name. I think we'd have to parse the SQL in
       ;; order to handle those situations.
-      (let [v (str (unprepare-value driver arg))]
+      (let [v (str (unprepare-value driver arg))
+            isFromTable (is-before-with-from-question-mark sql #"(?<!\?)\?(?!\?)")]
         (log/tracef "Splice %s as %s" (pr-str arg) (pr-str v))
-        (str/replace-first sql #"(?<!\?)\?(?!\?)" (str/re-quote-replacement v))))
+        (str/replace-first sql #"(?<!\?)\?(?!\?)"
+                           (if isFromTable arg (str/re-quote-replacement v))
+                           )))
     (fn [spliced-sql]
       (log/tracef "Spliced %s\n-> %s" (u/colorize 'green (pr-str sql)) (u/colorize 'blue (pr-str spliced-sql)))
       spliced-sql))
