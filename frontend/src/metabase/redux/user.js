@@ -318,6 +318,10 @@ export const refreshCurrentFgaProjectNew = createThunkAction(
               }
             })
           } : {}
+        res.protocolName = temp.protocolName
+        res.protocolSlug = temp.protocolName
+        res.nftCollectionAddress = temp.nftCollectionAddress
+        console.log("xxxxxx", res, temp)
           // res = result.rows?.length > 0 ? temp : res;
         }
 
