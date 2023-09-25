@@ -99,7 +99,7 @@
 }
 
 .data-api__price-item {
-  width: 300px;
+  width: 380px;
   display: flex;
   flex-direction: column;
   border: 1px solid #dcdee4;
@@ -110,7 +110,7 @@
 }
 
 .data-api__price-item-second {
-  width: 300px;
+  width: 380px;
   display: flex;
   flex-direction: column;
   border: 1px solid #dcdee4;
@@ -119,7 +119,7 @@
 }
 
 .data-api__price-item-last {
-  width: 300px;
+  width: 380px;
   display: flex;
   flex-direction: column;
   border: 1px solid #dcdee4;
