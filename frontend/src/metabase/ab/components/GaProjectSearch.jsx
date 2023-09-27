@@ -20,8 +20,8 @@ import {
   saveLatestGAProjectId,
 } from "../utils/utils";
 import _ from "underscore";
-import { getGamesByRedux, getHistoryGamesByRedux } from "metabase/selectors/control";
-import { loginModalShowAction, setGames, setHistoryGames } from "metabase/redux/control";
+import { getFgaChain, getFgaFavoriteList, getGamesByRedux, getHistoryGamesByRedux } from "metabase/selectors/control";
+import { loadFgaFavoriteList, loginModalShowAction, setGames, setHistoryGames } from "metabase/redux/control";
 import CreateMyProjectModal from "metabase/ab/components/Modal/CreateMyProjectModal";
 import { getOssUrl } from "metabase/lib/image";
 
@@ -43,6 +43,9 @@ const GaProjectSearch = props => {
     setLoginModalShowAction,
     loadCurrentFgaProjectNew,
     businessType,
+    chain,
+    favoriteList,
+    loadFgaFavoriteList,
   } = props;
   const [userProject, setUserProject] = useState([]);
   const [open, setOpen] = useState(false);
@@ -62,7 +65,7 @@ const GaProjectSearch = props => {
       //   }
       // }
       if (businessType === "public-chain") {
-        return await getProtocolList();
+        return await getProtocolList({ chain });
       }
       return {
         "data": [
@@ -96,6 +99,10 @@ const GaProjectSearch = props => {
   const loadProjectDetail = protocolSlug => {
     loadCurrentFgaProjectNew(protocolSlug);
   };
+
+  useEffect(() => {
+    loadFgaFavoriteList();
+  }, [])
 
   useEffect(() => {
     // const data = (businessType === "public-chain") ? {data: data2?.rows?.map(row => {
@@ -335,9 +342,10 @@ const GaProjectSearch = props => {
                     label: 'Recent',
                     options: historyGames.map(item=> {return {label: item, value: item}}),
                   },
-                  games.length > 0 && {
+                  favoriteList.length > 0 && {
                     label: 'My Projects',
-                    options: games.map(item=> {return {label: item, value: item}}),
+                    options: favoriteList.map(item=> {return {label: item.protocolName, value: item.protocolSlug}}),
+                    // options: games.map(item=> {return {label: item, value: item}}),
                   },
                   // {
                   //   label: 'Sample Project',
@@ -388,6 +396,7 @@ const mapDispatchToProps = {
   setGames: setGames,
   setHistoryGames: setHistoryGames,
   setLoginModalShowAction: loginModalShowAction,
+  loadFgaFavoriteList,
 };
 
 const mapStateToProps = (state, props) => {
@@ -400,6 +409,8 @@ const mapStateToProps = (state, props) => {
     games: getGamesByRedux(state),
     historyGames: getHistoryGamesByRedux(state),
     businessType: props.params.businessType,
+    chain: getFgaChain(state),
+    favoriteList: getFgaFavoriteList(state),
   };
 };
 

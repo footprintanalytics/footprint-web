@@ -126,3 +126,8 @@ export const getBindGameMapping = createSelector([getControl], ({ bindGameMappin
 export const getFgaChain = createSelector([getControl], ({ chain }) => {
   return chain || "Ethereum";
 });
+
+export const getFgaFavoriteList = createSelector([getControl], (data) => {
+  console.log("getFgaFavoriteList data", data)
+  return data?.fgaFavoriteList || [];
+});

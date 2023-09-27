@@ -1,28 +1,21 @@
 /* eslint-disable react/prop-types */
 /* eslint-disable react-hooks/rules-of-hooks */
-import React, {useState} from "react";
-import {connect} from "react-redux";
-import {Input, message, Skeleton, Space, Table} from "antd";
-import {getFgaProject, getUser} from "metabase/selectors/user";
-import {useQuery} from "react-query";
-import {QUERY_OPTIONS} from "metabase/containers/dashboards/shared/config";
-import Link from "metabase/core/components/Link/Link";
-import Icon from "metabase/components/Icon";
+import React, { useEffect, useState } from "react";
+import { connect } from "react-redux";
+import { Input, message, Space, Table } from "antd";
+import { getFgaProject, getUser } from "metabase/selectors/user";
+import { useQuery } from "react-query";
+import { QUERY_OPTIONS } from "metabase/containers/dashboards/shared/config";
 import { loadCurrentFgaProjectNew } from "metabase/redux/user";
-import { setGames, setHistoryGames } from "metabase/redux/control";
-import { getGamesByRedux } from "metabase/selectors/control";
+import { loadFgaFavoriteList, setGames } from "metabase/redux/control";
+import { getFgaChain, getFgaFavoriteList, getGamesByRedux } from "metabase/selectors/control";
+import { StarFilled } from "@ant-design/icons";
+import { deleteProtocolFavorite, getProtocolList, postProtocolFavorite } from "metabase/new-service";
+
 const { Search } = Input;
-import { StarFilled } from '@ant-design/icons';
-import {
-  deleteProtocolFavorite,
-  getProtocolFavorite,
-  getProtocolList,
-  getPublicChainProjects,
-  postProtocolFavorite,
-} from "metabase/new-service";
 
 const projectList = props => {
-  const { router, location, children, user, projectPath, menu, projectObject, games, setGames, loadCurrentFgaProjectNew, businessType } =
+  const { router, location, children, user, projectPath, menu, projectObject, games, setGames, loadCurrentFgaProjectNew, businessType, chain, loadFgaFavoriteList, favoriteList } =
     props;
   const userId = 158;
   const projectId = 153;
@@ -31,20 +24,20 @@ const projectList = props => {
     open: false,
     param: null,
   });
+  const [searchKey, setSearchKey] = useState();
 
   const params = {
     ecosystemId: 415,
   };
 
-  const { isLoading: isFavoriteLoading, data: favoriteData, refetch: favoriteRefetch } = useQuery(["getProtocolFavorite"],
+/*  const { isLoading: isFavoriteLoading, data: favoriteData, refetch: favoriteRefetch } = useQuery(["getProtocolFavorite"],
     () => {
       return getProtocolFavorite();
     },
     QUERY_OPTIONS,
-  );
+  );*/
 
-  const favoriteList = favoriteData?.protocolList;
-  console.log("favoriteData", favoriteData)
+  console.log("favoriteData", favoriteList)
   const { isLoading, data: data2 } = useQuery(
     ["GetFgaProject", user?.id],
     async () => {
@@ -60,7 +53,7 @@ const projectList = props => {
       //   }
       // }
       if (businessType === "public-chain") {
-        return await getProtocolList();
+        return await getProtocolList({chain});
       }
       return {
         "data": [
@@ -99,8 +92,11 @@ const projectList = props => {
 
   const data = data2;
   if (data) {
-    data.data = data.protocolList;
+    data.data = data.protocolList?.filter(item => {
+      return searchKey ? item.protocolSlug.includes(searchKey) || item.protocolName.includes(searchKey) : true;
+    });
   }
+  console.log("data.data", data.data)
 
   const loadProjectDetail = projectSlug => {
     loadCurrentFgaProjectNew(projectSlug);
@@ -114,18 +110,23 @@ const projectList = props => {
   const favoriteAction = async (record) => {
     const hide = message.loading("Loading...", 20000);
     let api;
-    if (isFavoriteProject(record.protocolName)) {
+    let successText;
+    const favorite = isFavoriteProject(record.protocolName);
+
+    if (favorite) {
       api = deleteProtocolFavorite;
+      successText = `Project ${record.protocolName} removed to favorite project`;
     } else {
       api = postProtocolFavorite;
+      successText = `Project ${record.protocolName} added to favorite project`;
     }
-    const result = await api({
+    await api({
       protocolSlug: record.protocolSlug,
       protocolName: record.protocolName,
     })
-    favoriteRefetch();
+    await loadFgaFavoriteList();
     hide();
-    console.log("result", result)
+    message.success(successText);
   }
 
   const columns = [
@@ -133,8 +134,9 @@ const projectList = props => {
       title: 'Logo',
       dataIndex: 'logo',
       key: 'logo',
+      width: 60,
       render: (_, record) => (
-        record.logo ? <img src={record.logo} style={{height: 20, width: 20}}/> : <div style={{height: 20, width: 20, background: "#888"}}/>
+        record.logo && record.logo !== 'N/A' ? <img src={record.logo} style={{height: 20, width: 20}}/> : <div style={{height: 20, width: 20, background: "#888"}}/>
       ),
     },
     {
@@ -168,9 +170,9 @@ const projectList = props => {
     {
       title: 'Action',
       key: 'action',
+      width: 100,
       render: (_, record) => (
         <Space size="middle">
-          <Link ></Link>
           <a onClick={() => {
             console.log("manage-games", games)
             favoriteAction(record);
@@ -221,11 +223,12 @@ const projectList = props => {
               Add Game
             </Button>
           </div>*/}
-          <div className="flex justify-end">
+          <div className="flex justify-end mb1">
             <Search
               placeholder="search name"
               allowClear
               enterButton="Search"
+              onChange={e => setSearchKey(e.target.value)}
               style={{ width: 200, margin: "4px 0" }}
             />
           </div>
@@ -239,14 +242,17 @@ const projectList = props => {
 const mapDispatchToProps = {
   setGames: setGames,
   loadCurrentFgaProjectNew,
+  loadFgaFavoriteList,
 };
 
 const mapStateToProps = (state, props) => {
   return {
     user: getUser(state),
     projectObject: getFgaProject(state),
+    chain: getFgaChain(state),
     games: getGamesByRedux(state),
     businessType: props.params.businessType,
+    favoriteList: getFgaFavoriteList(state),
   };
 };
 

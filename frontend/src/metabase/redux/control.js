@@ -8,6 +8,8 @@ import {
   setShowZkspaceFinishTask,
   setShowZkspaceSubmitModal,
 } from "metabase/lib/register-activity";
+import { clearCurrentFgaProject, refreshCurrentFgaProjectNew } from "./user";
+import { getProtocolFavorite } from "../new-service";
 
 export const LOGIN_MODAL_SHOW = "metabase/control/loginModalShow";
 export const CREATE_FGA_PROJECT_MODAL_SHOW =
@@ -154,6 +156,16 @@ export const setFgaChain = createThunkAction(SET_FGA_CHAIN, chain => {
   return chain;
 });
 
+export const LOAD_FGA_FAVORITE_LIST =
+  "metabase/user/LOAD_FGA_FAVORITE_LIST";
+export const loadFgaFavoriteList = createThunkAction(
+  LOAD_FGA_FAVORITE_LIST,
+  () =>
+    async (dispatch, getState) => {
+        return await getProtocolFavorite();
+    },
+);
+
 export const control = handleActions(
   {
     [CREATE_FGA_PROJECT_MODAL_SHOW]: {
@@ -292,6 +304,14 @@ export const control = handleActions(
         return {
           ...state,
           chain: payload,
+        };
+      },
+    },
+    [LOAD_FGA_FAVORITE_LIST]: {
+      next: (state, { payload }) => {
+        return {
+          ...state,
+          fgaFavoriteList: payload?.protocolList,
         };
       },
     },
