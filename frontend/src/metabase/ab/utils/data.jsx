@@ -475,36 +475,43 @@ export const fga_menu_data_v2 = (businessType, project, user) => {
 
   const publicChainData = {
     "platformMenuTabs": [
-      getItem("Home", "ecosystem-home", ReactIcons.myAnalysisIcon, [
+      getItem("Ecosystem", "ecosystem-home", ReactIcons.myAnalysisIcon, [
         getItem("Transaction Monitor", "transaction_monitor", null),
-        getItem("Ecosystem Development", "ecosystem_development", null),
-        getItem("Ecosystem Projects", "ecosystem_projects", null),
+        getItem("Development", "ecosystem_development", null),
+        getItem("Projects", "ecosystem_projects", null),
         getItem("Project Directory", "project_directory", null),
       ])
     ],
     "menuTabs": [
-      // getItem("Home", "home", ReactIcons.myAnalysisIcon, [
-      //   getItem("Project Summary", "coming_soon", null),
-      // ]),
+      getItem("Project Summary", "project_summary", ReactIcons.myAnalysisIcon, [
+        getItem("Users", "project-users-coming-soon", null),
+        getItem("Engagement", "gaming_engagement", null),
+      ]),
       getItem("Assets", "assets", ReactIcons.assetIcon, [
         protocolType !== "GameFi" &&
         getItem("NFT", "nft", null, [
-            getItem("Summary", "nft_summary", null),
+            getItem("NFT Summary", "nft_summary", null),
             getItem("NFT Sales&Mints", "nft_sales_mints", null),
             getItem("NFT Listing", "listing", null),
+            getItem("NFT Holders", "nft-holders-coming-soon", null),
+            getItem("Leaderboard", "leaderboard-coming-soon", null),
           ]
         ),
 
-        protocolType !== "NFT" &&
-          getItem("Token", "game_tokenomics", null),
+        project?.tokenAddress?.length > 0 &&
+        getItem("Token", "token", null, [
+            getItem("Token Summary", "game_tokenomics", null),
+            getItem("Token Holders", "token-holders-coming-soon", null),
+          ]
+        ),
         //  protocolType !== "NFT" && getItem("Active Users", "game_active_users", null),
       ]),
-      getItem("Operation Metrics", "operation_metrics", ReactIcons.assetIcon, [
+      /*getItem("Operation Metrics", "operation_metrics", ReactIcons.assetIcon, [
         getItem("User", "User_coming_soon", null),
         getItem("Engagement", "Engagement_coming_soon", null),
         getItem("Spend", "Spend_coming_soon", null),
-      ]),
-      getItem("Community", "social_stats", ReactIcons.userIcon, [
+      ]),*/
+     /* getItem("Community", "social_stats", ReactIcons.userIcon, [
           getItem("Twitter", "Twitter_coming_soon", null),
           getItem("Discord", "Discord_coming_soon", null),
         ]
@@ -524,14 +531,14 @@ export const fga_menu_data_v2 = (businessType, project, user) => {
           getItem("Leaderboard", "nft_leaderboard", null),
         getItem("Journey Explorer", "journey", null),
         getItem("Segmentation", "segment", null),
-      ]),
+      ]),*/
     ]
   }
 
   const platformMenuTabs = businessType === "public-chain" ? publicChainData.platformMenuTabs : standardData.platformMenuTabs;
   const menuTabs = businessType === "public-chain" ? publicChainData.menuTabs : standardData.menuTabs;
 
-  const platformMenuTitle = businessType === "public-chain" ? "Chain Ecosystem" : "Platform";
+  const platformMenuTitle = businessType === "public-chain" ? "Public Chain" : "Platform";
   const menuTitle = "Project";
 
   const liveKeys = [

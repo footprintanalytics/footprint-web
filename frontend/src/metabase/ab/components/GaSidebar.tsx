@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { Divider, Layout, Menu } from "antd";
+import { Divider, Layout, Menu, Select } from "antd";
 import type { MenuProps } from "antd";
 const { Sider } = Layout;
 import "../css/utils.css";
@@ -111,6 +111,21 @@ const GaSidebar = (props: IGaSidebarProp) => {
             {itemsPlatform.length > 0 && (<>
               <div className="ga-side-bar__title">
                 <h3>{platformMenuTitle}</h3>
+              </div>
+              <div className={"flex justify-center p2"}>
+                <Select
+                  defaultValue={"Ethereum"}
+                  style={{ width: 200 }}
+                  onChange={value => {
+                  }}
+                  options={
+                    [
+                      { value: "Ethereum", label: "Ethereum" },
+                      { value: "Polygon", label: "Polygon" },
+                      { value: "BNB Chain", label: "BNB Chain" },
+                    ]
+                  }
+                />
               </div>
               <Menu
                 className="ga-side-bar-menu"
