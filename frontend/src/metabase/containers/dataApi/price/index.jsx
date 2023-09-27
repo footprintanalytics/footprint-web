@@ -362,7 +362,7 @@ const Index = ({
                   </span>
                 ),
                 powerful: true,
-                url: "https://docs.footprint.network/reference/post_native",
+                url: "https://docs.footprint.network/reference/post_native-async",
                 open: true,
               },
               {
@@ -472,6 +472,22 @@ const Index = ({
               {
                 title: (
                   <span>
+                    <span className="data-api__price-text-highlight">10</span>{" "}
+                    domains (Wallet Profile/GameFi/NFT...)
+                  </span>
+                ),
+              },
+              {
+                title: (
+                  <span>
+                    <span className="data-api__price-text-highlight">20+</span>{" "}
+                    chains
+                  </span>
+                ),
+              },
+              {
+                title: (
+                  <span>
                     <span className="data-api__price-text-highlight">30</span>{" "}
                     calls per second
                   </span>
@@ -484,6 +500,16 @@ const Index = ({
                     rows data return
                   </span>
                 ),
+              },
+              {
+                title: (
+                  <span className="data-api__price-text-highlight">
+                    SQL API
+                  </span>
+                ),
+                basic: true,
+                url: "https://docs.footprint.network/reference/post_native-async",
+                open: true,
               },
               {
                 title: "Community support",
@@ -547,7 +573,7 @@ const Index = ({
                   </span>
                 ),
                 powerful: true,
-                url: "https://docs.footprint.network/reference/post_native",
+                url: "https://docs.footprint.network/reference/post_native-async",
                 open: true,
               },
               {
@@ -651,6 +677,11 @@ const Index = ({
                           {obj.powerful && (
                             <div className="data-api__price-item-powerful">
                               Powerful
+                            </div>
+                          )}
+                          {obj.basic && (
+                            <div className="data-api__price-item-powerful">
+                              Basic
                             </div>
                           )}
                         </span>

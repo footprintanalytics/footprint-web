@@ -122,3 +122,7 @@ export const getHistoryGamesByRedux = createSelector([getControl], ({ historyGam
 export const getBindGameMapping = createSelector([getControl], ({ bindGameMapping }) => {
   return bindGameMapping || {};
 });
+
+export const getFgaChain = createSelector([getControl], ({ chain }) => {
+  return chain || "Ethereum";
+});

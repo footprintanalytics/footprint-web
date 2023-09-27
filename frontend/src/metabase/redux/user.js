@@ -470,7 +470,6 @@ export const loadCurrentFgaProjectNew = createThunkAction(
   LOAD_CURRENT_FGA_PROJECT_NEW,
   (protocolSlug, force = false) =>
     async (dispatch, getState) => {
-    console.log("loadCurrentFgaProjectNew", getState().currentFgaProject, protocolSlug)
       if (
         force ||
         !getState().currentFgaProject ||

@@ -17,11 +17,11 @@ const Filter = props => {
     <div className="flex">
       <span className="mr2">And</span>
       <Select
-        style={{ width: 300,borderRadius: 4, border: "1px solid #58585B", background: "#1B1B1E" }}
+        style={{ width: 300 }}
         dropdownStyle={{
           background: "#1C1C1E",
           color: "white",
-          border: "1px solid #ffffff20"
+          border: "1px solid #ffffff30"
         }}
         options={[
           {
@@ -44,11 +44,11 @@ const Filter = props => {
         onChange={value => setKey(value)}
       />
       <Select
-        style={{ width: 120, borderRadius: 4, border: "1px solid #58585B", background: "#1B1B1E" }}
+        style={{ width: 120 }}
         dropdownStyle={{
           background: "#1C1C1E",
           color: "white",
-          border: "1px solid #ffffff20"
+          border: "1px solid #ffffff30"
         }}
         options={[
           {

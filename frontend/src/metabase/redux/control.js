@@ -31,6 +31,7 @@ export const SET_DARK_MODE = "metabase/control/setDarkMode";
 export const SET_GAMES = "metabase/control/SET_GAMES";
 export const SET_HISTORY_GAMES = "metabase/control/SET_HISTORY_GAMES";
 export const SET_BIND_GAME_MAPPING = "metabase/control/SET_BIND_GAME_MAPPING";
+export const SET_FGA_CHAIN = "metabase/control/SET_FGA_CHAIN";
 
 export const createFgaProjectModalShowAction = createThunkAction(
   CREATE_FGA_PROJECT_MODAL_SHOW,
@@ -147,6 +148,10 @@ export const setHistoryGames = createThunkAction(SET_HISTORY_GAMES, games => {
 
 export const setBindGameMapping = createThunkAction(SET_BIND_GAME_MAPPING, mapping => {
   return mapping;
+});
+
+export const setFgaChain = createThunkAction(SET_FGA_CHAIN, chain => {
+  return chain;
 });
 
 export const control = handleActions(
@@ -279,6 +284,14 @@ export const control = handleActions(
         return {
           ...state,
           bindGameMapping: payload,
+        };
+      },
+    },
+    [SET_FGA_CHAIN]: {
+      next: (state, { payload }) => {
+        return {
+          ...state,
+          chain: payload,
         };
       },
     },

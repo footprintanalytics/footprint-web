@@ -17,6 +17,9 @@ import {
   getGaMenuTabs,
 } from "../utils/utils";
 import { set } from "js-cookie"
+import { getFgaChain } from "../../selectors/control";
+import { push } from "react-router-redux";
+import { setFgaChain } from "../../redux/control";
 
 interface IGaSidebarProp {
   className?: string;
@@ -29,6 +32,8 @@ interface IGaSidebarProp {
   items: any[];
   projects?: any[];
   projectObject?: any;
+  getFgaChain?: any;
+  setFgaChain?: any;
 }
 
 interface MenuObjectProp {
@@ -41,7 +46,7 @@ interface MenuObjectProp {
   platformMenuTitle: any;
 }
 const GaSidebar = (props: IGaSidebarProp) => {
-  const { currentProject, router, location, currentMenu, projectObject, user, businessType } =
+  const { currentProject, router, location, currentMenu, projectObject, user, businessType, setFgaChain, getFgaChain } =
     props;
   console.log("projectObject", projectObject)
   const [menuData, setMenuData] = useState<MenuObjectProp>();
@@ -115,8 +120,14 @@ const GaSidebar = (props: IGaSidebarProp) => {
               <div className={"flex justify-center p2"}>
                 <Select
                   defaultValue={"Ethereum"}
-                  style={{ width: 200 }}
+                  style={{ width: 218 }}
+                  dropdownStyle={{
+                    background: "#1C1C1E",
+                    color: "white",
+                    border: "1px solid #ffffff30"
+                  }}
                   onChange={value => {
+                    setFgaChain(value);
                   }}
                   options={
                     [
@@ -203,7 +214,12 @@ const mapStateToProps = (state: any, props: any) => {
     currentProject: props.params.project,
     currentMenu: props.params.menu,
     businessType: props.params.businessType,
+    chain: getFgaChain(state),
   };
 };
 
-export default withRouter(connect(mapStateToProps)(GaSidebar));
+const mapDispatchToProps = {
+  setFgaChain: setFgaChain,
+};
+
+export default withRouter(connect(mapStateToProps, mapDispatchToProps)(GaSidebar));

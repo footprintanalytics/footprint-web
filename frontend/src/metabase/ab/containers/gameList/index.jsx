@@ -81,7 +81,7 @@ const projectList = props => {
         "icon": row[0]
       }
     }) : data2;
-  console.log("dddddddata", data)
+
   const loadProjectDetail = projectSlug => {
     loadCurrentFgaProjectNew(projectSlug);
   };
@@ -202,6 +202,7 @@ const mapDispatchToProps = {
   setGames: setGames,
   loadCurrentFgaProjectNew,
 };
+
 const mapStateToProps = (state, props) => {
   return {
     user: getUser(state),

@@ -111,7 +111,7 @@ const ProductContent = props => {
             {
               title: "Footprint Datasets",
               icon: ReactIcons.fpDatasetIcon,
-              link: "/studio/footprint-datasets",
+              link: "/@Footprint/Footprint-Datasets-Data-Dictionary",
             }
           ]
         },

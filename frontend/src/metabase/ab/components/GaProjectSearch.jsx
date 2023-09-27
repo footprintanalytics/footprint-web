@@ -94,7 +94,6 @@ const GaProjectSearch = props => {
   );
 
   const loadProjectDetail = protocolSlug => {
-    console.log("loadProjectDetail2")
     loadCurrentFgaProjectNew(protocolSlug);
   };
 
@@ -129,7 +128,6 @@ const GaProjectSearch = props => {
         setCurrentProject(projects[projectIndex].value);
         // saveLatestGAProject(projects[projectIndex].value);
         // // saveLatestGAProjectId(projects[projectIndex].id);
-        console.log("vvv", projects[projectIndex].protocolSlug)
         loadProjectDetail(projects[projectIndex].protocolSlug);
         setUserProject(projects);
         if (
@@ -168,7 +166,6 @@ const GaProjectSearch = props => {
     if (projectObject) {
       const protocolSlug = projectObject.protocolSlug;
       if (!historyGames.includes(protocolSlug)) {
-        console.log("projectObject change", historyGames, protocolSlug, take([protocolSlug, ...(historyGames || [])], 2))
         setHistoryGames(take([protocolSlug, ...(historyGames || [])], 2))
       }
     }
@@ -277,11 +274,11 @@ const GaProjectSearch = props => {
             // </Select>
             <Select
               // showSearch
-              style={{ width: 218, borderRadius: 4, border: "1px solid #58585B", background: "#1B1B1E" }}
+              style={{ width: 218 }}
               dropdownStyle={{
                 background: "#1C1C1E",
                 color: "white",
-                border: "1px solid #ffffff20"
+                border: "1px solid #ffffff30"
               }}
               dropdownRender={(menu) => (
                     <div>

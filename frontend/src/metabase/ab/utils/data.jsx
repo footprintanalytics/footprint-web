@@ -352,9 +352,9 @@ export const fga_menu_data_v2 = (businessType, project, user) => {
     }
   }
   const dashboardMap = new Map([
-    ["transaction_monitor", "5d93bed5-68cf-49f7-8c77-3ee440edadcd"],
-    ["ecosystem_development", "ecc34c3c-925c-439b-b30e-4529d15eab36"],
-    ["ecosystem_projects", "51b7e0de-5238-46ea-9664-752ec470021d"],
+    ["transaction_monitor", "5448e85b-442e-44b7-9c88-e22a1bd11d11"],
+    ["ecosystem_development", "0b6bbe4d-5480-4e1c-8860-ead23619492b"],
+    ["ecosystem_projects", "8750f228-16d7-4b40-91de-92dfb4b7e0c6"],
     ["project_directory", "dc9fd9b4-b65b-448d-afea-f72aa9a4f7e0"],
     [
       "home",

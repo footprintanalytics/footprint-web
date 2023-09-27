@@ -33,10 +33,11 @@ import SocialConnectList from "./SocialConnectList";
 import "../css/index.css";
 import GameList from "./gameList";
 import BindGame from "./bindGame";
-import { getBindGameMapping } from "metabase/selectors/control";
+import { getBindGameMapping, getFgaChain, getGamesByRedux } from "metabase/selectors/control";
+import { setGames } from "metabase/redux/control";
 
 const Project = props => {
-  const { router, location, children, user, menu, projectPath, projectObject, bindGameMapping, businessType } =
+  const { router, location, children, user, menu, projectPath, projectObject, bindGameMapping, businessType, chain, setGames, games } =
     props;
   const [currentMenu, setCurrentMenu] = useState(menu);
   const [gaMenuTabs, setGaMenuTabs] = useState(null);
@@ -53,6 +54,7 @@ const Project = props => {
 
   useEffect(() => {
     if (projectObject) {
+
       const menuData = fga_menu_data_v2(businessType, projectObject, user);
       const menuKeys = menuData.keys;
       const liveKeys = menuData.liveKeys;
@@ -198,9 +200,10 @@ const Project = props => {
             params={{ uuid: gaMenuTabs?.dashboardMap?.get(current_tab) }}
             location={location}
             project={getProjectObject()}
+            chain={chain}
             isFullscreen={false}
             hideTitle={true}
-            key={projectObject?.protocolSlug}
+            key={`${chain}${projectObject?.protocolSlug}`}
             hideFooter
           />
           {/* all dashboart except twitter and discord , need a mask when no protocol */}
@@ -601,15 +604,21 @@ const Project = props => {
   );
 };
 
+const mapDispatchToProps = {
+  setGames: setGames,
+};
+
 const mapStateToProps = (state, props) => {
   return {
     user: getUser(state),
     projectPath: decodeURIComponent(props.params.project),
     projectObject: getFgaProject(state),
+    chain: getFgaChain(state),
+    games: getGamesByRedux(state),
     menu: props.params.menu,
     businessType: props.params.businessType,
     bindGameMapping: getBindGameMapping(state),
   };
 };
 
-export default connect(mapStateToProps)(Project);
+export default connect(mapStateToProps, mapDispatchToProps)(Project);
