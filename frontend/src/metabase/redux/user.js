@@ -9,7 +9,7 @@ import Users from "metabase/entities/users";
 import {
   getUserVipInfo,
   getDataApiVipInfo,
-  GetFgaProjectDetail, getPublicChainProjectDetail,
+  GetFgaProjectDetail, getPublicChainProjectDetail, getProtocolDetail,
 } from "metabase/new-service";
 import arms from "metabase/lib/arms";
 import { clearGACache } from "metabase/growth/utils/utils";
@@ -292,36 +292,37 @@ export const refreshCurrentFgaProjectNew = createThunkAction(
     try {
       let res
       if (isBusinessTypePath("public-chain")) {
-          res = {
-            // "id": 153,
-            "protocolName": protocolSlug,
-            "protocolSlug": protocolSlug,
-            "protocolType": "",
-            "tokenAddress": [],
-            "nftCollectionAddress": [
-              {
-                "address": "0x2ed4db5636835acfc583af96c66cde1d8c2c1a25",
-                "chain": "Ethereum"
-              }
-            ],
-          }
-          const result = await getPublicChainProjectDetail({ "protocolSlug": protocolSlug });
-          const temp = result.rows?.length > 0 ? {
-            protocolName: result.rows[0][1],
-            protocolSlug: result.rows[0][2],
-            protocolType: result.rows[0][4],
-            tokenAddress: [],
-            nftCollectionAddress: result.rows.map(row => {
-              return {
-                address: row[5],
-                chain: result.rows[0][3],
-              }
-            })
-          } : {}
-        res.protocolName = temp.protocolName
-        res.protocolSlug = temp.protocolName
-        res.nftCollectionAddress = temp.nftCollectionAddress
-        console.log("xxxxxx", res, temp)
+          // res = {
+          //   // "id": 153,
+          //   "protocolName": protocolSlug,
+          //   "protocolSlug": protocolSlug,
+          //   "protocolType": "",
+          //   "tokenAddress": [],
+          //   "nftCollectionAddress": [
+          //     {
+          //       "address": "0x2ed4db5636835acfc583af96c66cde1d8c2c1a25",
+          //       "chain": "Ethereum"
+          //     }
+          //   ],
+          // }
+          res = await getProtocolDetail({ "protocolSlug": protocolSlug });
+        //   const result = await getPublicChainProjectDetail({ "protocolSlug": protocolSlug });
+        //   const temp = result.rows?.length > 0 ? {
+        //     protocolName: result.rows[0][1],
+        //     protocolSlug: result.rows[0][2],
+        //     protocolType: result.rows[0][4],
+        //     tokenAddress: [],
+        //     nftCollectionAddress: result.rows.map(row => {
+        //       return {
+        //         address: row[5],
+        //         chain: result.rows[0][3],
+        //       }
+        //     })
+        //   } : {}
+        // res.protocolName = temp.protocolName
+        // res.protocolSlug = temp.protocolName
+        // res.nftCollectionAddress = temp.nftCollectionAddress
+        // console.log("xxxxxx", res, temp)
           // res = result.rows?.length > 0 ? temp : res;
         }
 
@@ -436,6 +437,7 @@ export const refreshCurrentFgaProjectNew = createThunkAction(
       }
       window.localStorage.setItem("IsFgaDemoProject", res?.isDemo);
       window.localStorage.setItem("LatestGAProjectId", res?.id);
+      res.id=153;
       console.log("res", res)
       return res;
     } catch (e) {

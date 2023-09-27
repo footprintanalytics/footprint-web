@@ -7,7 +7,7 @@ import { withRouter } from "react-router";
 import { useQuery } from "react-query";
 import { getFgaProject, getUser } from "metabase/selectors/user";
 import { QUERY_OPTIONS } from "metabase/containers/dashboards/shared/config";
-import { GetFgaProject, getPublicChainProjects } from "metabase/new-service";
+import { GetFgaProject, getProtocolList, getPublicChainProjects } from "metabase/new-service";
 import { loadCurrentFgaProjectNew } from "metabase/redux/user";
 import Link from "metabase/core/components/Link";
 import "../css/index.css";
@@ -62,7 +62,7 @@ const GaProjectSearch = props => {
       //   }
       // }
       if (businessType === "public-chain") {
-        return await getPublicChainProjects();
+        return await getProtocolList();
       }
       return {
         "data": [
@@ -98,12 +98,16 @@ const GaProjectSearch = props => {
   };
 
   useEffect(() => {
-    const data = (businessType === "public-chain") ? {data: data2?.rows?.map(row => {
-      return {
-        "protocolSlug": row[1],
-        "protocolName": row[1],
-      }
-    })} : data2;
+    // const data = (businessType === "public-chain") ? {data: data2?.rows?.map(row => {
+    //   return {
+    //     "protocolSlug": row[1],
+    //     "protocolName": row[1],
+    //   }
+    // })} : data2;
+    const data = data2;
+    if (data) {
+      data.data = data.protocolList;
+    }
     if (!isLoading && data?.data) {
       if (data?.data?.length > 0) {
         const projects = [];

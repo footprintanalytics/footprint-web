@@ -386,6 +386,9 @@ export const fga_menu_data_v2 = (businessType, project, user) => {
     ["listing", "20ae0361-4a39-4b66-bd56-fb9f012bfd3c"],
     ["gaming_spend", "c86f7c43-41fd-4c75-9d8a-3ebc381ae62e"],
     ["gaming_engagement", "b0eee809-7c27-4c86-adf2-5644fa6a7529"],
+    ["project_summary", "6fd5b004-29c2-4560-84ab-9894a7567c12"],
+    ["project_users", "9d4e9931-5c29-4913-99a4-ec0147712bcb"],
+    ["project_transaction", "4a076f7b-4b4f-4060-b36a-8c1b849d3692"],
 
 
     ["project_health-platform", "7a275541-580a-4720-8e10-f455335de137"],
@@ -483,29 +486,31 @@ export const fga_menu_data_v2 = (businessType, project, user) => {
       ])
     ],
     "menuTabs": [
-      getItem("Project Summary", "project_summary", ReactIcons.myAnalysisIcon, [
-        getItem("Users", "project-users-coming-soon", null),
-        getItem("Engagement", "gaming_engagement", null),
+      getItem("Project Overview", "project_overview", ReactIcons.myAnalysisIcon, [
+        getItem("Project Summary", "project_summary", null),
+        getItem("Users", "project_users", null),
+        getItem("Transaction", "project_transaction", null),
       ]),
-      getItem("Assets", "assets", ReactIcons.assetIcon, [
-        protocolType !== "GameFi" &&
-        getItem("NFT", "nft", null, [
-            getItem("NFT Summary", "nft_summary", null),
-            getItem("NFT Sales&Mints", "nft_sales_mints", null),
-            getItem("NFT Listing", "listing", null),
-            getItem("NFT Holders", "nft-holders-coming-soon", null),
-            getItem("Leaderboard", "leaderboard-coming-soon", null),
-          ]
-        ),
+      (project?.nftCollectionAddress?.length > 0 || project?.tokenAddress?.length > 0) &&
+        getItem("Assets", "assets", ReactIcons.assetIcon, [
+          project?.nftCollectionAddress?.length > 0 &&
+            getItem("NFT", "nft", null, [
+                getItem("NFT Summary", "nft_summary", null),
+                getItem("NFT Sales&Mints", "nft_sales_mints", null),
+                getItem("NFT Listing", "listing", null),
+                // getItem("NFT Holders", "nft-holders-coming-soon", null),
+                getItem("Leaderboard", "nft_leaderboard", null),
+              ]
+            ),
 
-        // project?.tokenAddress?.length > 0 &&
-        getItem("Token", "token", null, [
-            getItem("Token Summary", "game_tokenomics", null),
-            getItem("Token Holders", "token-holders-coming-soon", null),
-          ]
-        ),
-        //  protocolType !== "NFT" && getItem("Active Users", "game_active_users", null),
-      ]),
+          project?.tokenAddress?.length > 0 &&
+            getItem("Token", "token", null, [
+                getItem("Token Summary", "game_tokenomics", null),
+                // getItem("Token Holders", "token-holders-coming-soon", null),
+              ]
+            ),
+          //  protocolType !== "NFT" && getItem("Active Users", "game_active_users", null),
+        ]),
       /*getItem("Operation Metrics", "operation_metrics", ReactIcons.assetIcon, [
         getItem("User", "User_coming_soon", null),
         getItem("Engagement", "Engagement_coming_soon", null),

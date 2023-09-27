@@ -13,7 +13,13 @@ import { setGames, setHistoryGames } from "metabase/redux/control";
 import { getGamesByRedux } from "metabase/selectors/control";
 const { Search } = Input;
 import { StarFilled } from '@ant-design/icons';
-import { getPublicChainProjects } from "metabase/new-service";
+import {
+  deleteProtocolFavorite,
+  getProtocolFavorite,
+  getProtocolList,
+  getPublicChainProjects,
+  postProtocolFavorite,
+} from "metabase/new-service";
 
 const projectList = props => {
   const { router, location, children, user, projectPath, menu, projectObject, games, setGames, loadCurrentFgaProjectNew, businessType } =
@@ -30,6 +36,15 @@ const projectList = props => {
     ecosystemId: 415,
   };
 
+  const { isLoading: isFavoriteLoading, data: favoriteData, refetch: favoriteRefetch } = useQuery(["getProtocolFavorite"],
+    () => {
+      return getProtocolFavorite();
+    },
+    QUERY_OPTIONS,
+  );
+
+  const favoriteList = favoriteData?.protocolList;
+  console.log("favoriteData", favoriteData)
   const { isLoading, data: data2 } = useQuery(
     ["GetFgaProject", user?.id],
     async () => {
@@ -45,7 +60,7 @@ const projectList = props => {
       //   }
       // }
       if (businessType === "public-chain") {
-        return await getPublicChainProjects();
+        return await getProtocolList();
       }
       return {
         "data": [
@@ -74,20 +89,43 @@ const projectList = props => {
     QUERY_OPTIONS,
   );
 
-  const data = (businessType === "public-chain") ? data2?.rows?.map(row => {
-      return {
-        "protocolSlug": row[1],
-        "protocolName": row[1],
-        "icon": row[0]
-      }
-    }) : data2;
+  // const data = (businessType === "public-chain") ? data2?.rows?.map(row => {
+  //     return {
+  //       "protocolSlug": row[1],
+  //       "protocolName": row[1],
+  //       "icon": row[0]
+  //     }
+  //   }) : data2;
+
+  const data = data2;
+  if (data) {
+    data.data = data.protocolList;
+  }
 
   const loadProjectDetail = projectSlug => {
     loadCurrentFgaProjectNew(projectSlug);
   };
 
   const isFavoriteProject = (name) => {
-    return games?.includes(name)
+    return favoriteList?.map(f => f.protocolName)?.includes(name)
+    // return games?.includes(name)
+  }
+
+  const favoriteAction = async (record) => {
+    const hide = message.loading("Loading...", 20000);
+    let api;
+    if (isFavoriteProject(record.protocolName)) {
+      api = deleteProtocolFavorite;
+    } else {
+      api = postProtocolFavorite;
+    }
+    const result = await api({
+      protocolSlug: record.protocolSlug,
+      protocolName: record.protocolName,
+    })
+    favoriteRefetch();
+    hide();
+    console.log("result", result)
   }
 
   const columns = [
@@ -96,7 +134,7 @@ const projectList = props => {
       dataIndex: 'logo',
       key: 'logo',
       render: (_, record) => (
-        record.icon ? <img src={record.icon} style={{height: 20, width: 20}}/> : <div style={{height: 20, width: 20, background: "#888"}}/>
+        record.logo ? <img src={record.logo} style={{height: 20, width: 20}}/> : <div style={{height: 20, width: 20, background: "#888"}}/>
       ),
     },
     {
@@ -105,8 +143,8 @@ const projectList = props => {
       key: 'protocolName',
       render: (_, record) => (
         <a className="text-underline text-underline-hover" onClick={async () => {
-          await loadProjectDetail(record.protocolName);
-          router.replace(`/fga/${businessType}/project/${record.protocolName}/nft_summary`)
+          await loadProjectDetail(record.protocolSlug);
+          router.replace(`/fga/${businessType}/project/${record.protocolSlug}/project_summary`)
         }}>
           {record.protocolName}
         </a>
@@ -135,17 +173,17 @@ const projectList = props => {
           <Link ></Link>
           <a onClick={() => {
             console.log("manage-games", games)
-            const hide = message.loading("Loading...", 20000);
-            setTimeout(async () => {
-              hide();
-              message.success(`Project ${record.protocolSlug} added to favorite project`);
-              if (games.includes(record.protocolName)) {
-                setGames(games.filter(game => game !== record.protocolName))
-              } else {
-                setGames([...games, record.protocolName])
-              }
-
-            }, 2000)
+            favoriteAction(record);
+            // setTimeout(async () => {
+            //   hide();
+            //   message.success(`Project ${record.protocolSlug} added to favorite project`);
+            //   if (games.includes(record.protocolName)) {
+            //     setGames(games.filter(game => game !== record.protocolName))
+            //   } else {
+            //     setGames([...games, record.protocolName])
+            //   }
+            //
+            // }, 2000)
           }}>
             <StarFilled style={{ fontSize: '16px', color: isFavoriteProject(record.protocolName) ? '#ff0000' : '#888888' }}/>
           </a>
@@ -191,7 +229,7 @@ const projectList = props => {
               style={{ width: 200, margin: "4px 0" }}
             />
           </div>
-          <Table dataSource={data} columns={columns}/>
+          <Table dataSource={data?.data} columns={columns}/>
         </div>
       )}
     </div>

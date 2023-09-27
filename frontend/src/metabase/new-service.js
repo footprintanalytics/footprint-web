@@ -236,6 +236,22 @@ export const getPublicChainProjects = async params => {
 export const getPublicChainProjectDetail = async params => {
   return GET(`https://www.footprint.network/api/v1/public/card/87dcf516-5b30-4200-97d8-42862c366bab/query?parameters=%5B%7B%22id%22%3A%229b5b908e-b060-3dfe-f9c1-6c0cad410de6%22%2C%22type%22%3A%22string%2F%3D%22%2C%22target%22%3A%5B%22dimension%22%2C%5B%22template-tag%22%2C%22chain%22%5D%5D%2C%22name%22%3A%22Chain%22%2C%22slug%22%3A%22chain%22%2C%22default%22%3A%5B%22Ethereum%22%5D%2C%22value%22%3A%5B%22Ethereum%22%5D%7D%2C%7B%22id%22%3A%2249264363-3612-16cc-ccd0-3d519aa5f917%22%2C%22type%22%3A%22category%22%2C%22target%22%3A%5B%22variable%22%2C%5B%22template-tag%22%2C%22protocol_name%22%5D%5D%2C%22name%22%3A%22Protocol%20name%22%2C%22slug%22%3A%22protocol_name%22%2C%22value%22%3A%5B%22${params.protocolSlug}%22%5D%7D%5D`, params);
 };
+export const getProtocolFavorite = async params => {
+  return GET(`/api/v1/project/protocol/favorite`, params);
+};
+export const postProtocolFavorite = async params => {
+  return POST(`/api/v1/project/protocol/favorite`, params);
+};
+export const deleteProtocolFavorite = async params => {
+  return DELETE(`/api/v1/project/protocol/favorite`, { data: params });
+};
+export const getProtocolList = async params => {
+  return GET(`/api/v1/project/protocol/list`, params);
+};
+export const getProtocolDetail = async params => {
+  return GET(`/api/v1/project/protocol/detail`, params);
+};
+
 // FP Api ---------------
 export const UserRegister = async params => {
   return POST("/api/v1/user/signup", params);
