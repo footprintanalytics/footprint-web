@@ -452,7 +452,8 @@ class ABNavbar extends Component {
             onClick={e => {
               e.preventDefault();
               trackStructEvent(`navbar-click-logo`);
-              this.goLink(e, "/fga");
+              const path = location.pathname.includes("public-chain") ? "/public-chain" : "";
+              this.goLink(e, `/fga${path}`);
             }}
           >
             <div style={{ color: "white", fontSize: 18, fontWeight: 600 }}>Growth Analytics</div>

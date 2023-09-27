@@ -8,6 +8,7 @@ const getThemeConfig = () => {
     const colorPrimary = "#6C70FF";
     const background = "#121828";
     const cardBg = "#182034";
+    const selectBackground = "#1B1B1E";
     return {
       hashed: false,
       token: {
@@ -50,7 +51,26 @@ const getThemeConfig = () => {
         },
         Radio: {
           colorPrimary: colorPrimary,
-        }
+        },
+        Select: {
+          colorBgContainer: selectBackground,
+          colorBgElevated: "#1C1C1E",
+        },
+        Input: {
+          colorBgContainer: selectBackground,
+        },
+        InputNumber: {
+          colorBgContainer: selectBackground,
+        },
+        Modal: {
+          colorBgElevated: "#1B1B1E",
+        },
+        Tooltip: {
+          colorBgSpotlight: "#2B2B2E",
+        },
+        Popover: {
+          colorBgElevated: "#2B2B2E",
+        },
       },
       algorithm: isDark() ? darkAlgorithm : defaultAlgorithm,
     };

@@ -54,11 +54,11 @@ const MuiBoolean = props => {
       onFocus={() => setFocus(true)}
     >
       <Select
-        style={{ width: "100%", height: 40, borderRadius: 4, border: "1px solid #58585B", background: "#1B1B1E" }}
+        style={{ width: "100%", height: 40 }}
         dropdownStyle={{
           background: "#1C1C1E",
           color: "white",
-          border: "1px solid #ffffff20"
+          border: "1px solid #ffffff30"
         }}
         open={open}
         value={currentValue}

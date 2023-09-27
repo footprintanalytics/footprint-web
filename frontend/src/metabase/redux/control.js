@@ -28,6 +28,10 @@ export const CLOSE_ALL_CHART_POPOVER_Action =
   "metabase/control/closeAllChartPopoverAction";
 export const SET_NEW_GUIDE_INFO = "metabase/control/setNewGuideInfo";
 export const SET_DARK_MODE = "metabase/control/setDarkMode";
+export const SET_GAMES = "metabase/control/SET_GAMES";
+export const SET_HISTORY_GAMES = "metabase/control/SET_HISTORY_GAMES";
+export const SET_BIND_GAME_MAPPING = "metabase/control/SET_BIND_GAME_MAPPING";
+export const SET_FGA_CHAIN = "metabase/control/SET_FGA_CHAIN";
 
 export const createFgaProjectModalShowAction = createThunkAction(
   CREATE_FGA_PROJECT_MODAL_SHOW,
@@ -132,6 +136,22 @@ export const setNewGuideInfo = createThunkAction(
 export const setDarkMode = createThunkAction(SET_DARK_MODE, darkMode => {
   localStorage.setItem("sql-editor-dark-mode", darkMode);
   return darkMode;
+});
+
+export const setGames = createThunkAction(SET_GAMES, games => {
+  return games;
+});
+
+export const setHistoryGames = createThunkAction(SET_HISTORY_GAMES, games => {
+  return games;
+});
+
+export const setBindGameMapping = createThunkAction(SET_BIND_GAME_MAPPING, mapping => {
+  return mapping;
+});
+
+export const setFgaChain = createThunkAction(SET_FGA_CHAIN, chain => {
+  return chain;
 });
 
 export const control = handleActions(
@@ -240,6 +260,38 @@ export const control = handleActions(
         return {
           ...state,
           darkMode: payload,
+        };
+      },
+    },
+    [SET_GAMES]: {
+      next: (state, { payload }) => {
+        return {
+          ...state,
+          games: payload,
+        };
+      },
+    },
+    [SET_HISTORY_GAMES]: {
+      next: (state, { payload }) => {
+        return {
+          ...state,
+          historyGames: payload,
+        };
+      },
+    },
+    [SET_BIND_GAME_MAPPING]: {
+      next: (state, { payload }) => {
+        return {
+          ...state,
+          bindGameMapping: payload,
+        };
+      },
+    },
+    [SET_FGA_CHAIN]: {
+      next: (state, { payload }) => {
+        return {
+          ...state,
+          chain: payload,
         };
       },
     },

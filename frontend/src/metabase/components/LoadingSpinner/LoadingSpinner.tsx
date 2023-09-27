@@ -19,14 +19,13 @@ interface Props {
 
 const LoadingSpinner = ({ className, size = 32, borderWidth = 4, message }: Props) => {
   const ref: React.Ref<any> = useRef();
-  const isAB = window.location.pathname.startsWith("/fga");
   useEffect(() => {
     lottie.loadAnimation({
       container: ref.current,
       renderer: "svg",
       loop: true,
       autoplay: true,
-      animationData: isWhiteLabel || isAB
+      animationData: isWhiteLabel
         ? LoadingSpinnerDataNormal
         : LoadingSpinnerData,
       rendererSettings: {

@@ -341,15 +341,9 @@ function getItem(label, key, icon, children, type, disabled = false) {
     disabled,
   };
 }
-/*
 
-/!**
- *
- * @param {*} protocolType : 1: GameFi, 2: NFT, 3: GameFi_NFT
- * @returns
- *!/
-export const fga_menu_data_v2_old = project => {
-  let protocolType = project.protocolType;
+export const fga_menu_data_v2 = (businessType, project, user) => {
+  let protocolType = project?.protocolType;
   if (project?.nftCollectionAddress?.length > 0) {
     if (protocolType === "GameFi") {
       protocolType = "GameFi_NFT";
@@ -358,116 +352,10 @@ export const fga_menu_data_v2_old = project => {
     }
   }
   const dashboardMap = new Map([
-    [
-      "home",
-      protocolType === "NFT"
-        ? "346f0d3d-5486-404b-a5d2-17ce52150fe1"
-        : "2f4f1fe9-7163-4ecf-91db-76c87a9306ed",
-    ],
-    ["game_tokenomics", "70018d58-83e4-4484-b089-15cf327d3974"],
-    ["game_revenue", "8932389c-42cc-4ce7-a20f-a6a146cd31a2"],
-    ["game_token_holder", "ff4ddbe9-8818-4abf-8a6c-91c3559071af"],
-    ["game_active_users", "6d84b4a6-ceef-4b30-a9ad-b233038fd8d3"],
-    ["nft_leaderboard", "3e9f9af4-93a8-46d4-8ee7-bc472201da7d"],
-    ["nft_nft_holder", "9edaeba8-9c3b-4726-b139-73b2ca738c13"],
-    ["nft_sales_mints", "08fb03cf-4ca4-4041-9d91-315a49d78615"],
-    ["nft_revenue", "b98b0a6b-64cb-4e09-979d-693040ea3ec9"],
-    ["twitter", "fd4d94f3-06f7-445d-ada3-0ce82bcefa39"],
-    ["discord", "d137a1ef-34a3-4553-84cb-2203bd9d2baf"],
-  ]);
-  const gameFiMenu = getItem("Game", "game", <ShopOutlined />, [
-    // getItem("Tokenomics", "game_tokenomics", null,null,null, true),
-    getItem("Tokenomics", "game_tokenomics", null),
-    getItem("Revenue", "game_revenue", null),
-    getItem("Token Holder", "game_token_holder", null),
-    getItem("Active Users", "game_active_users", null),
-  ]);
-  const NFTMenu = getItem("NFT", "nft", <FileImageOutlined />, [
-    protocolType === "NFT" && getItem("Leaderboard", "nft_leaderboard", null),
-    getItem("NFT Holder", "nft_nft_holder", null),
-    getItem("Sales & Mints", "nft_sales_mints", null),
-    protocolType === "NFT" && getItem("Revenue", "nft_revenue", null),
-  ]);
-  const socialMenu = getItem("Social Stats", "social", <GatewayOutlined />, [
-    getItem("Social Stats", "social", null),
-    // getItem("Discord", "discord", null),
-  ]);
-  const menuTabs = [
-    getItem(
-      "Analysis",
-      "analysis",
-      null,
-      [
-        getItem("Home", "home", <HomeOutlined />),
-        protocolType !== "NFT" && gameFiMenu,
-        protocolType !== "GameFi" && NFTMenu,
-        socialMenu,
-      ],
-      "group",
-    ),
-    getItem(
-      "Growth",
-      "growth",
-      null,
-      [
-        getItem("Members", "members_root", <TeamOutlined />, [
-          getItem("Segment", "segment", null),
-          getItem("Members", "members", null),
-          // getItem("Airdrop", "airdrop", null),
-          getItem("ID Connect", "id_connect", null),
-        ]),
-        getItem("Acquisition", "acquisition", <TagsOutlined />, [
-          getItem("Build Audience", "build_audience", null),
-          getItem("Wallet Profile", "wallet_profile", null),
-        ]),
-        getItem("Activation", "activation", <CommentOutlined />),
-        getItem("Custom Analysis", "custom", <BarChartOutlined />, [
-          getItem("Custom Analysis", "custom_analysis", null),
-          getItem("My Analysis", "my_analysis", null),
-        ]),
-        getItem("Integration", "integration", <LinkOutlined />),
-        getItem("Settings", "settings", <SettingOutlined />, [
-          getItem("General", "general", null),
-          getItem("Channel", "channel", null),
-        ]),
-      ],
-      "group",
-    ),
-  ];
-  const liveKeys = [];
-  gameFiMenu.children?.map(item => {
-    if (item) {
-      if (item?.children?.length > 0) {
-        liveKeys.push(item?.children[0]?.key);
-      } else {
-        liveKeys.push(item?.key);
-      }
-    }
-  });
-  NFTMenu.children?.map(item => {
-    if (item) {
-      if (item?.children?.length > 0) {
-        liveKeys.push(item?.children[0]?.key);
-      } else {
-        liveKeys.push(item?.key);
-      }
-    }
-  });
-  const keys = getKeys(menuTabs);
-  return { menuTabs, keys, dashboardMap, liveKeys };
-};
-*/
-
-export const fga_menu_data_v2 = (project, user) => {
-  let protocolType = project.protocolType;
-  if (project?.nftCollectionAddress?.length > 0) {
-    if (protocolType === "GameFi") {
-      protocolType = "GameFi_NFT";
-    } else {
-      protocolType = "NFT";
-    }
-  }
-  const dashboardMap = new Map([
+    ["transaction_monitor", "5448e85b-442e-44b7-9c88-e22a1bd11d11"],
+    ["ecosystem_development", "0b6bbe4d-5480-4e1c-8860-ead23619492b"],
+    ["ecosystem_projects", "8750f228-16d7-4b40-91de-92dfb4b7e0c6"],
+    ["project_directory", "dc9fd9b4-b65b-448d-afea-f72aa9a4f7e0"],
     [
       "home",
       protocolType === "NFT"
@@ -505,95 +393,154 @@ export const fga_menu_data_v2 = (project, user) => {
   ]);
 
 
-  const platformMenuTabs = [
-    getItem("Home", "home-platform", ReactIcons.myAnalysisIcon, [
-      getItem("Project Health", "project_health-platform", null),
-    ]),
-    getItem("Users", "users-platform", ReactIcons.userIcon, [
-      //<TeamOutlined />
-      // protocolType !== "NFT" && getItem("Overview", "users_overview-platform", null),
-      getItem("Segmentation", "segment-platform", null),
-      getItem("Members", "members-platform", null),
-      getItem("Journey Explorer", "journey-platform", null),
-    ]),
-  ];
-  const menuTabs = [
-    getItem("Home", "home", ReactIcons.myAnalysisIcon, [
-      getItem("Project Health", "project_health", null),
-      getItem("Project Overlap", "project_overlap", null),
-    ]),
-    getItem("Assets", "assets", ReactIcons.assetIcon, [
-      protocolType !== "GameFi" &&
-      getItem("NFT", "nft", null, [
-          getItem("Summary", "nft_summary", null),
-          getItem("NFT Sales&Mints", "nft_sales_mints", null),
-          getItem("NFT Listing", "listing", null),
-        ]
-      ),
-
-      protocolType !== "NFT" &&
-      getItem("Token", "game_tokenomics", null),
-      getItem("Game", "gaming", null, [
-        getItem("Overview", "gaming_overview", null),
-        getItem("User", "gaming_user", null),
-        getItem("Engagement", "gaming_engagement", null),
-        getItem("Spend", "gaming_spend", null),
-
+  const standardData = {
+    "platformMenuTabs": [
+      getItem("Home", "home-platform", ReactIcons.myAnalysisIcon, [
+        getItem("Project Health", "project_health-platform", null),
       ]),
-      getItem("Community", "social_stats", null, [
-          getItem("Twitter", "twitter", null),
-          getItem("Discord", "discord", null),
+      getItem("Users", "users-platform", ReactIcons.userIcon, [
+        //<TeamOutlined />
+        // protocolType !== "NFT" && getItem("Overview", "users_overview-platform", null),
+        getItem("Segmentation", "segment-platform", null),
+        getItem("Members", "members-platform", null),
+        getItem("Journey Explorer", "journey-platform", null),
+      ]),
+    ],
+    "menuTabs": [
+      getItem("Home", "home", ReactIcons.myAnalysisIcon, [
+        getItem("Project Health", "project_health", null),
+        getItem("Project Overlap", "project_overlap", null),
+      ]),
+      getItem("Assets", "assets", ReactIcons.assetIcon, [
+        protocolType !== "GameFi" &&
+        getItem("NFT", "nft", null, [
+            getItem("Summary", "nft_summary", null),
+            getItem("NFT Sales&Mints", "nft_sales_mints", null),
+            getItem("NFT Listing", "listing", null),
+          ]
+        ),
+
+        protocolType !== "NFT" &&
+        getItem("Token", "game_tokenomics", null),
+        getItem("Game", "gaming", null, [
+          getItem("Overview", "gaming_overview", null),
+          getItem("User", "gaming_user", null),
+          getItem("Engagement", "gaming_engagement", null),
+          getItem("Spend", "gaming_spend", null),
+
+        ]),
+        getItem("Community", "social_stats", null, [
+            getItem("Twitter", "twitter", null),
+            getItem("Discord", "discord", null),
+          ]
+        ),
+        protocolType !== "GameFi" &&
+        getItem("Holders", "nft_nft_holder", null),
+        getItem("Momentum", "momentum", null, [
+            getItem("Retention", "retention", null),
+            getItem("Acquisition", "acquisition", null),
+          ]
+        ),
+        //  protocolType !== "NFT" && getItem("Active Users", "game_active_users", null),
+      ]),
+      getItem("Users", "users", ReactIcons.userIcon, [
+        //<TeamOutlined />
+        // protocolType !== "NFT" && getItem("Overview", "users_overview", null),
+        getItem("Profiles", "user_profile", null),
+        protocolType !== "GameFi" &&
+        getItem("Leaderboard", "nft_leaderboard", null),
+        getItem("Journey Explorer", "journey", null),
+        getItem("Segmentation", "segment", null),
+      ]),
+      getItem(
+        "Growth",
+        "growth",
+        ReactIcons.growthIcon,
+        [
+          getItem("Wallets Explorer", "members", null),
+          getItem("Snapshot Tools", "snapshot_tools", null),
+          // getItem("Airdrop", "airdrop", null),
+          // getItem("Single Wallet Profile", "wallet_profile", null),
+          // getItem("Activation", "activation", null),
+        ],
+        // "group",
+      ),
+      getItem("Settings", "settings", <SettingOutlined />, [
+        getItem("Integration", "integration", null),
+        getItem("Project Info", "general", null),
+        // getItem("Channel", "channel", null),
+      ]),
+    ]
+  }
+
+  const publicChainData = {
+    "platformMenuTabs": [
+      getItem("Ecosystem", "ecosystem-home", ReactIcons.myAnalysisIcon, [
+        getItem("Transaction Monitor", "transaction_monitor", null),
+        getItem("Development", "ecosystem_development", null),
+        getItem("Projects", "ecosystem_projects", null),
+        getItem("Project Directory", "project_directory", null),
+      ])
+    ],
+    "menuTabs": [
+      getItem("Project Summary", "project_summary", ReactIcons.myAnalysisIcon, [
+        getItem("Users", "project-users-coming-soon", null),
+        getItem("Engagement", "gaming_engagement", null),
+      ]),
+      getItem("Assets", "assets", ReactIcons.assetIcon, [
+        protocolType !== "GameFi" &&
+        getItem("NFT", "nft", null, [
+            getItem("NFT Summary", "nft_summary", null),
+            getItem("NFT Sales&Mints", "nft_sales_mints", null),
+            getItem("NFT Listing", "listing", null),
+            getItem("NFT Holders", "nft-holders-coming-soon", null),
+            getItem("Leaderboard", "leaderboard-coming-soon", null),
+          ]
+        ),
+
+        // project?.tokenAddress?.length > 0 &&
+        getItem("Token", "token", null, [
+            getItem("Token Summary", "game_tokenomics", null),
+            getItem("Token Holders", "token-holders-coming-soon", null),
+          ]
+        ),
+        //  protocolType !== "NFT" && getItem("Active Users", "game_active_users", null),
+      ]),
+      /*getItem("Operation Metrics", "operation_metrics", ReactIcons.assetIcon, [
+        getItem("User", "User_coming_soon", null),
+        getItem("Engagement", "Engagement_coming_soon", null),
+        getItem("Spend", "Spend_coming_soon", null),
+      ]),*/
+     /* getItem("Community", "social_stats", ReactIcons.userIcon, [
+          getItem("Twitter", "Twitter_coming_soon", null),
+          getItem("Discord", "Discord_coming_soon", null),
         ]
       ),
       protocolType !== "GameFi" &&
-      getItem("Holders", "nft_nft_holder", null),
-      getItem("Momentum", "momentum", null, [
-          getItem("Retention", "retention", null),
-          getItem("Acquisition", "acquisition", null),
-        ]
-      ),
-      //  protocolType !== "NFT" && getItem("Active Users", "game_active_users", null),
-    ]),
-    getItem("Users", "users", ReactIcons.userIcon, [
-      //<TeamOutlined />
-      // protocolType !== "NFT" && getItem("Overview", "users_overview", null),
-      getItem("Profiles", "user_profile", null),
-      protocolType !== "GameFi" &&
-      getItem("Leaderboard", "nft_leaderboard", null),
-      getItem("Journey Explorer", "journey", null),
-      getItem("Segmentation", "segment", null),
-    ]),
-    /*getItem(
-      "Gaming Stats",
-      "gaming_stats",
-      ReactIcons.gamingStatIcon,
-      [
-        getItem("Gaming", "gaming", null),
-      ],
-    ),*/
-    /*getItem("Custom Analysis", "custom", ReactIcons.customAnalysisIcon, [
-      getItem("Templates", "templates", null),
-      getItem("My Analysis", "my_analysis", null),
-    ]),*/
-    getItem(
-      "Growth",
-      "growth",
-      ReactIcons.growthIcon,
-      [
-        getItem("Wallets Explorer", "members", null),
-        getItem("Snapshot Tools", "snapshot_tools", null),
-        // getItem("Airdrop", "airdrop", null),
-        // getItem("Single Wallet Profile", "wallet_profile", null),
-        // getItem("Activation", "activation", null),
-      ],
-      // "group",
-    ),
-    getItem("Settings", "settings", <SettingOutlined />, [
-      getItem("Integration", "integration", null),
-      getItem("Project Info", "general", null),
-      // getItem("Channel", "channel", null),
-    ]),
-  ];
+        getItem("Holders", "Holders_coming_soon", ReactIcons.userIcon),
+        getItem("Momentum", "momentum", ReactIcons.userIcon, [
+            getItem("Retention", "Retention_coming_soon", null),
+            getItem("Acquisition", "Acquisition_coming_soon", null),
+          ]
+        ),
+      getItem("Users", "users", ReactIcons.userIcon, [
+        //<TeamOutlined />
+        // protocolType !== "NFT" && getItem("Overview", "users_overview", null),
+        getItem("Profiles", "user_profile", null),
+        protocolType !== "GameFi" &&
+          getItem("Leaderboard", "nft_leaderboard", null),
+        getItem("Journey Explorer", "journey", null),
+        getItem("Segmentation", "segment", null),
+      ]),*/
+    ]
+  }
+
+  const platformMenuTabs = businessType === "public-chain" ? publicChainData.platformMenuTabs : standardData.platformMenuTabs;
+  const menuTabs = businessType === "public-chain" ? publicChainData.menuTabs : standardData.menuTabs;
+
+  const platformMenuTitle = businessType === "public-chain" ? "Public Chain" : "Platform";
+  const menuTitle = "Project";
+
   const liveKeys = [
     "home_nft",
     "home_game",
@@ -608,7 +555,7 @@ export const fga_menu_data_v2 = (project, user) => {
   ];
   const toggle_platform_project = localStorage.getItem('toggle_platform_project')
   const keys = getKeys(toggle_platform_project === "project" ? [...menuTabs, ...platformMenuTabs] : [...platformMenuTabs, ...menuTabs]);
-  return { menuTabs, platformMenuTabs, keys, dashboardMap, liveKeys };
+  return { menuTabs, platformMenuTabs, keys, dashboardMap, liveKeys, menuTitle, platformMenuTitle, };
 };
 
 const getKeys = items => {
@@ -624,161 +571,6 @@ const getKeys = items => {
   });
   return keys;
 };
-
-/**
- * @description: 获取菜单数据
- * v1 version
- */
-export const fga_menu_data = [
-  {
-    name: "Overview",
-    icon: React.createElement(ShopOutlined),
-    children: [
-      {
-        name: "GameFi",
-        id: 7582,
-        uuid: "8c277761-b6c6-464e-8219-cdc6948f2012",
-      },
-      {
-        name: "NFT",
-        id: 7342,
-        uuid: "65cb5f69-f01d-4719-995d-b54880eb6865",
-      },
-    ],
-  },
-  {
-    name: "Community",
-    icon: React.createElement(TeamOutlined),
-    children: [
-      {
-        name: "Members",
-        id: null,
-        uuid: null,
-      },
-      {
-        name: "Wallet Profile",
-        id: null,
-        uuid: null,
-      },
-      {
-        name: "Potential Users List",
-        id: null,
-        uuid: null,
-      },
-      {
-        name: "Funnel",
-        id: 7118,
-        uuid: "b1682d12-bddd-4b10-99a3-a403a3a6a78c",
-      },
-      // {
-      //   name: "Project Users",
-      //   id: 7773,
-      //   uuid: "451d53ab-9d62-40ff-931e-9ec197595f0b",
-      // },
-      {
-        name: "Twitter",
-        id: 7476,
-        uuid: "fd4d94f3-06f7-445d-ada3-0ce82bcefa39",
-      },
-      {
-        name: "Discord",
-        id: 7490,
-        uuid: "d137a1ef-34a3-4553-84cb-2203bd9d2baf",
-      },
-    ],
-  },
-  {
-    name: "Segment",
-    icon: React.createElement(TagsOutlined),
-    children: [
-      {
-        name: "Segment",
-        id: null,
-        //  id: 7210,
-        //  uuid: "4454f1ce-202b-45eb-8f83-3d78beff6756",
-      },
-      {
-        name: "Potential Users",
-        id: 7180,
-        uuid: "b46fc872-c97d-4300-a83e-45fa61760ad2",
-      },
-    ],
-  },
-  {
-    name: "Campaign",
-    icon: React.createElement(CommentOutlined),
-    id: null,
-    children: [
-      // { name: "Campaign", id: null, uuid: null },
-      // {
-      //   name: "Token Airdrop",
-      //   id: 7426,
-      //   uuid: "c676fe55-c785-4015-bc8a-27c18b57826f",
-      // },
-      // {
-      //   name: "NFT Minting",
-      //   id: 7569,
-      //   uuid: "340f11c8-144e-4c24-a298-b5564c4a88a8",
-      // },
-    ],
-  },
-  // {
-  //   name: "User Analysis",
-  //   icon: React.createElement(BarChartOutlined),
-  //   id: null,
-  //   children: [
-  //     {
-  //       name: "User Profile",
-  //       id: 7514,
-  //       uuid: "55b1eb29-b15e-458f-9241-1862a0d19d3b",
-  //     },
-  //   ],
-  // },
-  {
-    name: "Discover",
-    icon: React.createElement(ProjectOutlined),
-    id: null,
-    children: [
-      {
-        name: "Industry Overview",
-        id: 7284,
-        uuid: "7edf6b30-83e5-4fca-a1d5-7c3002560ea5",
-      },
-      // {
-      //   name: "Competitor Comparison",
-      //   id: 7248,
-      //   uuid: "63114b7c-094c-402c-8fe8-a9bf1db1369d",
-      // },
-      {
-        name: "Custom Analysis",
-        id: null,
-        uuid: null,
-        children: [],
-      },
-      {
-        name: "My Analysis",
-        id: null,
-        uuid: null,
-        children: [],
-      },
-    ],
-  },
-  {
-    name: "Settings",
-    icon: React.createElement(SettingOutlined),
-    id: null,
-    children: [
-      { name: "General", id: null, uuid: null },
-      {
-        name: "Social Connect",
-        id: null,
-        uuid: null,
-      },
-      { name: "Connector", id: null, uuid: null },
-      { name: "Channel", id: null, uuid: null },
-    ],
-  },
-];
 
 export const cohortTips = new Map([
   ["Token Whale", "Has a project's token balance of at least $1,000,000."],
@@ -807,362 +599,3 @@ export const cohortTips = new Map([
     "All wallets that have interacted with the project's smart contracts.",
   ],
 ]);
-
-/**
- *
- * @param {*} param0
- * @returns
- */
-export const getFgaComparePlans = ({ user }) => ({
-  title: "Compare plans",
-  columns: [
-    {
-      label: "Free",
-      value: "free",
-      desc: "For star-up and mini projects",
-      price: "$0",
-      unit: "month",
-    },
-    {
-      label: "Growth",
-      value: "growth",
-      desc: "For mid-size projects",
-      price: "$99",
-      unit: "month",
-    },
-    {
-      label: "Scale",
-      value: "scale",
-      desc: "For lager projects",
-      price: "$999",
-      unit: "month",
-    },
-    {
-      label: "Enterprise",
-      value: "enterprise",
-      desc: "Contact us to find the right solution for your business",
-      price: "Custom",
-    },
-  ],
-  list: [
-    // {
-    //   type: 'Team Size',
-    //   list: [
-    //     {
-    //       name: 'DAU',
-    //       free: '< 500 Daily Active Wallets',
-    //       growth: '< 1000 Daily Active Wallets',
-    //       scale: '< 10000 Daily Active Wallets',
-    //       enterprise: 'Unlimited',
-    //     },
-    //     {
-    //       name: 'NFT Holder',
-    //       free: '< 1000 Holder',
-    //       growth: '< 5000 Holder',
-    //       scale: '< 10000 Holder',
-    //       enterprise: 'Unlimited',
-    //     },
-    //   ],
-    // },
-    {
-      type: "Social Connect",
-      list: [
-        {
-          name: "Twitter",
-          free: true,
-          growth: true,
-          scale: true,
-          enterprise: true,
-        },
-        {
-          name: "Discord",
-          free: true,
-          growth: true,
-          scale: true,
-          enterprise: true,
-        },
-        {
-          name: "Telegram",
-          free: true,
-          growth: true,
-          scale: true,
-          enterprise: true,
-        },
-      ],
-    },
-    {
-      type: "Data Integration",
-      list: [
-        {
-          name: "Upload Integration",
-          free: false,
-          growth: false,
-          scale: { enable: true, tip: "Limited" },
-          enterprise: { enable: true, tip: "Unlimited Integrations" },
-        },
-
-        {
-          name: "Database and Warehouses",
-          free: false,
-          growth: false,
-          scale: { enable: true, tip: "Limited" },
-          enterprise: { enable: true, tip: "Unlimited Integrations" },
-        },
-
-        {
-          name: "Prodcut and Marketing Analytics",
-          free: false,
-          growth: false,
-          scale: { enable: true, tip: "Limited" },
-          enterprise: { enable: true, tip: "Unlimited Integrations" },
-        },
-
-        {
-          name: "Web3 Marketing Platforms",
-          free: false,
-          growth: false,
-          scale: { enable: true, tip: "Limited" },
-          enterprise: { enable: true, tip: "Unlimited Integrations" },
-        },
-        {
-          name: "Other Integrations",
-          free: false,
-          growth: false,
-          scale: { enable: true, tip: "Limited" },
-          enterprise: { enable: true, tip: "Unlimited Integrations" },
-        },
-      ],
-    },
-    {
-      type: "Analysis",
-      list: [
-        {
-          name: "Project Overview",
-          free: true,
-          growth: true,
-          scale: true,
-          enterprise: true,
-        },
-        {
-          name: "User Profile",
-          free: true,
-          growth: true,
-          scale: true,
-          enterprise: true,
-        },
-        {
-          name: "Wallet Tags & Score",
-          free: true,
-          growth: true,
-          scale: true,
-          enterprise: true,
-        },
-        {
-          name: "Social Members",
-          free: true,
-          growth: true,
-          scale: true,
-          enterprise: true,
-        },
-        {
-          name: "Social Engagement",
-          free: false,
-          growth: true,
-          scale: true,
-          enterprise: true,
-        },
-        {
-          name: "User Segmentation",
-          free: false,
-          growth: true,
-          scale: true,
-          enterprise: true,
-        },
-        {
-          name: "Tokenomics",
-          free: true,
-          growth: true,
-          scale: true,
-          enterprise: true,
-        },
-        {
-          name: "Revenue Analysis",
-          free: false,
-          growth: true,
-          scale: true,
-          enterprise: true,
-        },
-        {
-          name: "Channel Analysis",
-          free: false,
-          growth: false,
-          scale: true,
-          enterprise: true,
-        },
-        {
-          name: "Comparison Analysis",
-          free: false,
-          growth: false,
-          scale: true,
-          enterprise: true,
-        },
-        {
-          name: "Web3 Campaign Analysis",
-          free: false,
-          growth: false,
-          scale: true,
-          enterprise: true,
-        },
-        {
-          name: "Drill Down Analysis",
-          free: false,
-          growth: false,
-          scale: true,
-          enterprise: true,
-        },
-        {
-          name: "Custom Analysis",
-          free: true,
-          growth: true,
-          scale: true,
-          enterprise: true,
-        },
-      ],
-    },
-    {
-      type: "Social ID Connect",
-      list: [
-        {
-          name: "Twitter",
-          free: true,
-          growth: true,
-          scale: true,
-          enterprise: true,
-        },
-        {
-          name: "Discord",
-          free: true,
-          growth: true,
-          scale: true,
-          enterprise: true,
-        },
-        {
-          name: "Import CSV",
-          free: true,
-          growth: true,
-          scale: true,
-          enterprise: true,
-        },
-      ],
-    },
-    {
-      type: "Segments",
-      list: [
-        {
-          name: "Unlock System Segments",
-          free: { enable: true, tip: "Total 5" },
-          growth: { enable: true, tip: "Total 20" },
-          scale: { enable: true, tip: "Total 100" },
-          enterprise: { enable: true, tip: "Unlimited" },
-        },
-        {
-          name: "Filter Wallets Saving as Segment",
-          free: { enable: true, tip: "Total 5" },
-          growth: { enable: true, tip: "Total 20" },
-          scale: { enable: true, tip: "Total 100" },
-          enterprise: { enable: true, tip: "Unlimited" },
-        },
-        {
-          name: "Import Wallets as Segment",
-          free: { enable: true, tip: "Total 5" },
-          growth: { enable: true, tip: "Total 20" },
-          scale: { enable: true, tip: "Total 100" },
-          enterprise: { enable: true, tip: "Unlimited" },
-        },
-        {
-          name: "Filter Wallets",
-          free: "5 Indicatiors",
-          growth: "10 Indicatiors",
-          scale: "50 Indicatiors",
-          enterprise: "Unlimited Indicators",
-        },
-        {
-          name: "Export Wallet Tags & Features",
-          free: false,
-          growth: true,
-          scale: true,
-          enterprise: true,
-        },
-      ],
-    },
-    {
-      type: "Activation Campaigns",
-      list: [
-        {
-          name: "Quest",
-          free: { enable: true, tip: "Limited" },
-          growth: { enable: true, tip: "Limited" },
-          scale: { enable: true, tip: "Limited" },
-          enterprise: { enable: true, tip: "Limited" },
-        },
-        {
-          name: "Airdrop",
-          free: { enable: true, tip: "Limited" },
-          growth: { enable: true, tip: "Limited" },
-          scale: { enable: true, tip: "Limited" },
-          enterprise: { enable: true, tip: "Limited" },
-        },
-        {
-          name: "Giveaway",
-          free: { enable: true, tip: "Limited" },
-          growth: { enable: true, tip: "Limited" },
-          scale: { enable: true, tip: "Limited" },
-          enterprise: { enable: true, tip: "Limited" },
-        },
-        {
-          name: "Notification",
-          free: { enable: true, tip: "Limited" },
-          growth: { enable: true, tip: "Limited" },
-          scale: { enable: true, tip: "Limited" },
-          enterprise: { enable: true, tip: "Limited" },
-        },
-      ],
-    },
-    {
-      type: "Bot Detection",
-      list: [
-        {
-          name: "",
-          free: false,
-          growth: true,
-          scale: true,
-          enterprise: true,
-        },
-      ],
-    },
-    {
-      type: "Team Cooperation",
-      list: [
-        {
-          name: "",
-          free: false,
-          growth: "2 Seats",
-          scale: "5 Seats",
-          enterprise: "Customized",
-        },
-      ],
-    },
-    {
-      type: "Customer Service",
-      list: [
-        {
-          name: "",
-          free: "Basic",
-          growth: "Standard",
-          scale: "Enhanced",
-          enterprise: "Premium",
-        },
-      ],
-    },
-  ],
-});
