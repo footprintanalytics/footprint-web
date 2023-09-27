@@ -250,7 +250,7 @@ class PublicQuestion extends Component {
         parameters={initialized ? parameters : []}
         headerLayout={header}
         parameterValues={parameterValues}
-        hideTitle={hideTitle}
+        hideTitle={hideTitle || hashData?.hide_title}
         isNightMode={shouldRenderAsNightMode}
         className={cx(
           className,
