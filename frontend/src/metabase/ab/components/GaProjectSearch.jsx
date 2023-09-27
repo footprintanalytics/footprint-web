@@ -287,7 +287,7 @@ const GaProjectSearch = props => {
                     <div>
                       {menu}
                       <div style={{ margin: "10px 0", borderTop: "1px solid #ffffff20" }}/>
-                      <Button className="full-width" type="primary" onClick={() => {
+                      {/*<Button className="full-width" type="primary" onClick={() => {
                         if (!user) {
                           message.warning("Kindly login before to create a project.");
                           setLoginModalShowAction({
@@ -299,7 +299,7 @@ const GaProjectSearch = props => {
                           return;
                         }
                         setOpen(true);
-                      }} >Create your project</Button>
+                      }} >Create your project</Button>*/}
                       <Link onClick={() => {
                         if (!user) {
                           message.warning("Kindly login before see other project.");

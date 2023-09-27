@@ -498,7 +498,7 @@ export const fga_menu_data_v2 = (businessType, project, user) => {
           ]
         ),
 
-        project?.tokenAddress?.length > 0 &&
+        // project?.tokenAddress?.length > 0 &&
         getItem("Token", "token", null, [
             getItem("Token Summary", "game_tokenomics", null),
             getItem("Token Holders", "token-holders-coming-soon", null),
