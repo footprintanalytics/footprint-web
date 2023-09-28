@@ -22,13 +22,52 @@ const LoadingDashboard = ({
     },
   );
 
-  const connector = ["Funnel",'funnel'].includes(current_tab)? "Google Analytics" : current_tab;
+  const getConnector = () => {
+    if ([
+      "project_health",
+      "project_overlap",
+      "nft_summary",
+      "nft_sales_mints",
+      "listing",
+      "gaming_overview",
+      "gaming_user",
+      "gaming_engagement",
+      "gaming_spend",
+      "nft_nft_holder",
+      "user_profile",
+      "project_health-platform",
+    ].includes(current_tab)) {
+      return "web3";
+    }
+    if ([
+      "gaming_overview",
+      "gaming_user",
+      "gaming_engagement",
+      "gaming_spend",
+      "retention",
+      "acquisition",
+    ].includes(current_tab)) {
+      return "web2";
+    }
+    if (["Funnel",'funnel'].includes(current_tab)) {
+      return "Google Analytics";
+    }
+    return current_tab;
+  }
+
+  const connector = getConnector();
 
   const Setup = (
     <Button
       type="primary"
       onClick={() => {
-        router.push(getGrowthProjectPath(project.protocolSlug, "integration"));
+        if (connector === "web3") {
+          router.push("/fga/bind-game");
+        } else if (connector === "web2") {
+          router.push(getGrowthProjectPath(project.protocolSlug, "integration"));
+        } else {
+          router.push(getGrowthProjectPath(project.protocolSlug, "integration"));
+        }
       }}
     >
       Set up now
@@ -113,6 +152,36 @@ const LoadingDashboard = ({
                 project operations and token / NFT prices.
               </li>
             </ul>
+          </div>
+        </>
+      );
+      break;
+    case "web3":
+      message = `Connect on-chain Data`;
+      description = (
+        <>
+          {Setup}
+          <div className="mt2">
+            <p>
+              Get access to web3 project . Use this data to identify
+              any obstacles to grow your business.
+            </p>
+            You can connect your on-chain Data
+          </div>
+        </>
+      );
+      break;
+    case "web2":
+      message = `Connect off-chain Data`;
+      description = (
+        <>
+          {Setup}
+          <div className="mt2">
+            <p>
+              Get access to web2 data . Use this data to identify
+              any obstacles to grow your business.
+            </p>
+            You can connect your off-chain Data
           </div>
         </>
       );

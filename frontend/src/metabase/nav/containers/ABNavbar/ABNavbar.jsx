@@ -394,7 +394,8 @@ class ABNavbar extends Component {
             {/*<RightMenuMobile />*/}
             {/*<RightMenuPad />*/}
           {/*</React.Fragment>*/}
-          <Button onClick={() => {
+          {/*<div style={{ lineHeight: 1.2, color: "white", marginRight: 20 }}>Any ecosystem metric ?<br/><Link className="text-underline-hover text-underline" target="_blank" href="mailto:sales@footprint.network">contact us</Link></div>*/}
+          {/*<Button onClick={() => {
             const toggle_platform_project = localStorage.getItem('toggle_platform_project')
             if (toggle_platform_project === "project") {
               localStorage.setItem('toggle_platform_project', "platform");
@@ -403,7 +404,7 @@ class ABNavbar extends Component {
             }
 
             window.location.replace("/fga")
-          }}>Manager / MKT</Button>
+          }}>Manager / MKT</Button>*/}
           {user ? (
             <ProfileLink
               {...this.props}
@@ -431,8 +432,8 @@ class ABNavbar extends Component {
               className="ml2"
               onClick={() => {
                 trackStructEvent(`click Sign in`);
-                message.info("Coming soon...")
-                // setLoginModalShow({ show: true, from: "navbar_fga_signin" });
+                // message.info("Coming soon...")
+                setLoginModalShow({ show: true, from: "navbar_fga_signin" });
               }}
             >
               Sign in
@@ -452,10 +453,14 @@ class ABNavbar extends Component {
             onClick={e => {
               e.preventDefault();
               trackStructEvent(`navbar-click-logo`);
-              this.goLink(e, "/fga");
+              const path = location.pathname.includes("public-chain") ? "/public-chain" : "";
+              this.goLink(e, `/fga${path}`);
             }}
           >
-            <div style={{ color: "white", fontSize: 18, fontWeight: 600 }}>Growth Analytics</div>
+            <div className="flex flex-column" style={{ lineHeight: 1.2 }}>
+              <span style={{ color: "white", fontSize: 18, fontWeight: 600 }}>Growth Analytics</span>
+              <span style={{ color: "white", fontSize: 11, textAlign: "center" }}>Public Chain</span>
+            </div>
           </Link>
           {/* <LeftMenu /> */}
         </div>

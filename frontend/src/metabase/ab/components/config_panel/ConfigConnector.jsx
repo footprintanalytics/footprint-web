@@ -37,6 +37,7 @@ const ConfigConnector = props => {
     setOpenDrawer,
     modal,
     project,
+    router,
   } = props;
   const formRef = React.useRef(null);
   const [editable, setEditable] = useState(!connector?.configured);
@@ -286,6 +287,16 @@ const ConfigConnector = props => {
               loading={loading}
               className="bg-blue-500 ml-10"
               // disabled={!editable}
+             /* onClick={() => {
+                modal.success({
+                  content: "Connect successfully!",
+                  okText: "View Data",
+                  onOk: () => {
+                    router.replace(`/fga/public-chain/project/${project?.protocolSlug}/${connector.name.toLowerCase()}`);
+                    localStorage.setItem("twitterEnable", "enable");
+                  },
+                });
+              }}*/
             >
               Save
             </Button>

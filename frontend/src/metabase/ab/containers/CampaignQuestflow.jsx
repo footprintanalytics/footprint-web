@@ -39,7 +39,7 @@ const CampaignQuestflow = props => {
           content: "Campaign created successfully!",
           okText: "View Campaigns",
           onOk: () => {
-            window.location.href = `/fga/project/${project?.protocolSlug}/activation`;
+            window.location.href = `/fga/public-chain/project/${project?.protocolSlug}/activation`;
             // router?.push({
             //   pathname: `/ab/project/${project?.protocolSlug}/activation`,
             // });
@@ -159,7 +159,7 @@ const CampaignQuestflow = props => {
               onPublish={onPublish}
               onPre={() => {
                 // router?.goBack();
-                window.location.href = `/fga/project/${project?.protocolSlug}/activation`;
+                window.location.href = `/fga/public-chain/project/${project?.protocolSlug}/activation`;
               }}
               showSave={false}
               showPublish={true}

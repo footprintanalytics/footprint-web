@@ -294,6 +294,7 @@ const ConnectorList = props => {
       >
         {openDrawer.connector && (
           <ConfigConnector
+            router={router}
             connector={openDrawer.connector}
             onAddConnector={onAddConnector}
             user={user}

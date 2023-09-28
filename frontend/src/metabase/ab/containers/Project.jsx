@@ -31,13 +31,16 @@ import UserProfile from "./UserProfile";
 import MyAnalysisList from "./MyAnalysisList";
 import SocialConnectList from "./SocialConnectList";
 import "../css/index.css";
+import GameList from "./gameList";
+import BindGame from "./bindGame";
+import { getBindGameMapping, getFgaChain, getGamesByRedux } from "metabase/selectors/control";
+import { setGames } from "metabase/redux/control";
 
 const Project = props => {
-  const { router, location, children, user, menu, projectPath, projectObject } =
+  const { router, location, children, user, menu, projectPath, projectObject, bindGameMapping, businessType, chain, setGames, games } =
     props;
   const [currentMenu, setCurrentMenu] = useState(menu);
   const [gaMenuTabs, setGaMenuTabs] = useState(null);
-
   useEffect(() => {
     if (menu && menu !== currentMenu && projectObject) {
       if (menu === "funnel") {
@@ -50,7 +53,8 @@ const Project = props => {
 
   useEffect(() => {
     if (projectObject) {
-      const menuData = fga_menu_data_v2(projectObject, user);
+
+      const menuData = fga_menu_data_v2(businessType, projectObject, user);
       const menuKeys = menuData.keys;
       const liveKeys = menuData.liveKeys;
       setGaMenuTabs(menuData);
@@ -59,6 +63,7 @@ const Project = props => {
         (liveKeys.includes(currentMenu) && !menuKeys.includes(currentMenu))
       ) {
         const firstMenu = menuKeys[0];
+        console.log("useEffect, firstMenu", firstMenu)
         setCurrentMenu(firstMenu);
         router.push({
           pathname: getGrowthProjectPath(
@@ -78,7 +83,14 @@ const Project = props => {
     } else {
       setGaMenuTabs(null);
     }
+    /*if (projectPath !== "Project A") {
+      localStorage.setItem("twitterEnable", "");
+    }*/
   }, [projectObject, user]);
+
+  if (!businessType) {
+    return null;
+  }
 
   const getProjectObject = () => {
     return projectObject
@@ -190,9 +202,10 @@ const Project = props => {
             params={{ uuid: gaMenuTabs?.dashboardMap?.get(current_tab) }}
             location={location}
             project={getProjectObject()}
+            chain={chain}
             isFullscreen={false}
             hideTitle={true}
-            key={projectObject?.protocolSlug}
+            key={`${chain}${projectObject?.protocolSlug}`}
             hideFooter
           />
           {/* all dashboart except twitter and discord , need a mask when no protocol */}
@@ -217,6 +230,41 @@ const Project = props => {
           projectId={getLatestGAProjectId()}
           projectPath={projectPath}
         ></FindWallets>
+      );
+    }
+    if (!(bindGameMapping[projectObject?.protocolName] && [
+      "project_health",
+      "project_overlap",
+      "nft_summary",
+      "nft_sales_mints",
+      "listing",
+      "gaming_overview",
+      "gaming_user",
+      "gaming_engagement",
+      "gaming_spend",
+      "nft_nft_holder",
+      "user_profile",
+      "project_health-platform",
+    ].includes(current_tab)) && projectPath === 'duke' && current_tab !== 'integration') {
+      return (
+        <LoadingDashboard
+          router={router}
+          sourceDefinitionId={projectObject?.ga?.sourceDefinitionId}
+          project={getProjectObject()}
+          projectId={parseInt(getLatestGAProjectId())}
+          current_tab={current_tab}
+        >
+          {WrapPublicDashboard(current_tab)}
+        </LoadingDashboard>
+      );
+    }
+    if (["bind-game"].includes(current_tab)) {
+      return (
+        <BindGame
+          location={location}
+          router={router}
+          // project={getProjectObject()}
+        />
       );
     }
     if (
@@ -456,6 +504,8 @@ const Project = props => {
         ></CohortList>
       );
     }
+
+
     if (gaMenuTabs?.dashboardMap?.has(current_tab)) {
       /*if (["Twitter", "twitter"].includes(current_tab)) {
         return (
@@ -496,6 +546,20 @@ const Project = props => {
           </LoadingDashboard>
         );
       }
+      // const twitterEnable = localStorage.getItem("twitterEnable");
+      /*if ((twitterEnable !== "enable") && (projectPath === 'TorqueSquad' || projectPath === 'Mocaverse' || projectPath === 'duke' || projectPath === 'xxx') && ["Twitter", "twitter", "Discord", "discord"].includes(current_tab)) {
+        return (
+          <LoadingDashboard
+            router={router}
+            sourceDefinitionId={projectObject?.ga?.sourceDefinitionId}
+            project={getProjectObject()}
+            projectId={parseInt(getLatestGAProjectId())}
+            current_tab={current_tab}
+          >
+            {WrapPublicDashboard(current_tab)}
+          </LoadingDashboard>
+        );
+      }*/
       return WrapPublicDashboard(current_tab);
     }
     return comingSoon("");
@@ -510,7 +574,7 @@ const Project = props => {
             gaMenuTabs &&
             getContentPannel(currentMenu)}
             {/* TODO: need to add real user fga vip grade */}
-            {projectObject?.protocolSlug !== "default" &&
+            {/*{projectObject?.protocolSlug !== "default" &&
             !checkVipMenuPermisson(
               projectObject?.protocolSlug === "the-sandbox"
                 ? "Enterprise"
@@ -520,7 +584,7 @@ const Project = props => {
             {projectObject?.protocolSlug === "default" &&
             ["members"].includes(currentMenu) && (
               <DashboardMask currentMenu={"set_protocol"} router={router} />
-            )}
+            )}*/}
           </div>
         </>
       ) : (
@@ -532,13 +596,21 @@ const Project = props => {
   );
 };
 
+const mapDispatchToProps = {
+  setGames: setGames,
+};
+
 const mapStateToProps = (state, props) => {
   return {
     user: getUser(state),
-    projectPath: decodeURIComponent(props.params.project),
+    projectPath: decodeURIComponent(props.params?.project),
     projectObject: getFgaProject(state),
-    menu: props.params.menu,
+    chain: getFgaChain(state),
+    games: getGamesByRedux(state),
+    menu: props.params?.menu,
+    businessType: props.params?.businessType,
+    bindGameMapping: getBindGameMapping(state),
   };
 };
 
-export default connect(mapStateToProps)(Project);
+export default connect(mapStateToProps, mapDispatchToProps)(Project);

@@ -233,13 +233,13 @@ const Edit = props => {
       cancelText: 'Cancel',
       getContainer: ref.current,
       onOk: () => {
-        router.replace(`/fga/project/${projectName}/journey`)
+        router.replace(`/fga/public-chain/roject/${projectName}/journey`)
       }
     });
   };
   return (
     <div className="journey-edit" ref={ref}>
-      <Head title="Journey" isBack buttons={["list"]} router={router} backLink={`/fga/project/${projectName}/journey`}/>
+      <Head title="Journey" isBack buttons={["list"]} router={router} backLink={`/fga/public-chain/project/${projectName}/journey`}/>
       <div className="journey-edit__main">
         {renderConditions()}
         <SankeyChart

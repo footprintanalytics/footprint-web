@@ -495,11 +495,10 @@ const CampaignCreate = props => {
                         label="Target Segment"
                       >
                         <Select
-                          style={{ borderRadius: 4, border: "1px solid #58585B", background: "#1B1B1E" }}
                           dropdownStyle={{
                             background: "#1C1C1E",
                             color: "white",
-                            border: "1px solid #ffffff20"
+                            border: "1px solid #ffffff30"
                           }}
                           placeholder="Select a target segment"
                           mode="multiple"
@@ -538,11 +537,10 @@ const CampaignCreate = props => {
                     label="Target Channel"
                   >
                     <Select
-                      style={{ borderRadius: 4, border: "1px solid #58585B", background: "#1B1B1E" }}
                       dropdownStyle={{
                         background: "#1C1C1E",
                         color: "white",
-                        border: "1px solid #ffffff20"
+                        border: "1px solid #ffffff30"
                       }}
                       placeholder="Select a target channel"
                       // mode="multiple"

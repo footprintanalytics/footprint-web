@@ -32,7 +32,6 @@ export function getFirstAddressByPriory(datas:{address: string, chain: string}[]
  * @returns
  */
 export function checkVipMenuPermisson(vipGrade:string,menu:string){
-  console.log("checkVipMenuPermisson",vipGrade,menu);
   // all access for Enterprise
   if(vipGrade === "Enterprise"){
     return true;
@@ -290,8 +289,12 @@ export function isABPath(){
   return location.pathname.startsWith("/fga");
 }
 
+export function isBusinessTypePath(businessType: string){
+  return location.pathname.startsWith(`/fga/${businessType}`);
+}
+
 export function getGrowthProjectPath(project: string, menu?: string) {
-  return `/fga/project/${project}/${menu ?? ""}`;
+  return `/fga/public-chain/project/${project}/${menu ?? ""}`;
 }
 export function getGaMenuTabs(
   tabs_data: any[],

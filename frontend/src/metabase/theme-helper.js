@@ -1,5 +1,6 @@
 import { theme } from "antd";
 import { isDark } from "./dashboard/components/utils/dark";
+import { isABPath } from "./ab/utils/utils";
 
 const { darkAlgorithm, defaultAlgorithm } = theme;
 
@@ -8,6 +9,31 @@ const getThemeConfig = () => {
     const colorPrimary = "#6C70FF";
     const background = "#121828";
     const cardBg = "#182034";
+    const selectBackground = "#1B1B1E";
+    let abThemeConfig = {};
+    if (isABPath()) {
+      abThemeConfig = {
+        Select: {
+          colorBgContainer: selectBackground,
+          colorBgElevated: "#1C1C1E",
+        },
+        Input: {
+          colorBgContainer: selectBackground,
+        },
+        InputNumber: {
+          colorBgContainer: selectBackground,
+        },
+        Modal: {
+          colorBgElevated: "#1B1B1E",
+        },
+        Tooltip: {
+          colorBgSpotlight: "#2B2B2E",
+        },
+        Popover: {
+          colorBgElevated: "#2B2B2E",
+        },
+      }
+    }
     return {
       hashed: false,
       token: {
@@ -22,11 +48,11 @@ const getThemeConfig = () => {
       },
       components: {
         Menu: {
-          colorItemTextHover: colorPrimary,
-          colorItemTextHoverHorizontal: colorPrimary,
-          colorSubItemBg: background,
-          colorItemBgHover: "#4444FF22",
-          colorItemTextSelected: colorPrimary,
+          itemHoverColor: colorPrimary,
+          horizontalItemHoverColor: colorPrimary,
+          subMenuItemBg: background,
+          itemHoverBg: "#4444FF22",
+          itemSelectedColor: colorPrimary,
         },
         Card: {
           colorBgContainer: cardBg,
@@ -50,7 +76,8 @@ const getThemeConfig = () => {
         },
         Radio: {
           colorPrimary: colorPrimary,
-        }
+        },
+        ...abThemeConfig,
       },
       algorithm: isDark() ? darkAlgorithm : defaultAlgorithm,
     };
