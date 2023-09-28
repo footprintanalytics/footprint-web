@@ -543,7 +543,7 @@ export const fga_menu_data_v2 = (businessType, project, user) => {
   const platformMenuTabs = businessType === "public-chain" ? publicChainData.platformMenuTabs : standardData.platformMenuTabs;
   const menuTabs = businessType === "public-chain" ? publicChainData.menuTabs : standardData.menuTabs;
 
-  const platformMenuTitle = businessType === "public-chain" ? "Public Chain" : "Platform";
+  const platformMenuTitle = businessType === "public-chain" ? "Chain" : "Platform";
   const menuTitle = "Project";
 
   const liveKeys = [

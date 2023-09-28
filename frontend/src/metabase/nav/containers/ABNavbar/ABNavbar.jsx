@@ -457,8 +457,10 @@ class ABNavbar extends Component {
               this.goLink(e, `/fga${path}`);
             }}
           >
-            <div style={{ color: "white", fontSize: 18, fontWeight: 600 }}>Growth Analytics</div>
-            {/*<div style={{ color: "white", fontSize: 10, fontWeight: 600, position: "absolute", right: -45, top: -15 }}>Public Chain</div>*/}
+            <div className="flex flex-column" style={{ lineHeight: 1.2 }}>
+              <span style={{ color: "white", fontSize: 18, fontWeight: 600 }}>Growth Analytics</span>
+              <span style={{ color: "white", fontSize: 11, textAlign: "center" }}>Public Chain</span>
+            </div>
           </Link>
           {/* <LeftMenu /> */}
         </div>
