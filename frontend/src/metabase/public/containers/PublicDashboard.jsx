@@ -74,9 +74,11 @@ const mapStateToProps = (state, props) => {
     updateDashboardPara(parameters, parameterValues, "project_name", [
       project.protocolName,
     ]);
-    updateDashboardPara(parameters, parameterValues, "chain", [
-      chain,
-    ]);
+    if (isABPath()) {
+      updateDashboardPara(parameters, parameterValues, "chain", [
+        chain,
+      ]);
+    }
     if (project.tokenAddress?.length > 0) {
       const key = "token_address";
       const data = getFirstAddressByPriory(project.tokenAddress);

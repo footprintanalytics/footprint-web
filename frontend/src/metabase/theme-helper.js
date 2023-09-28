@@ -1,5 +1,6 @@
 import { theme } from "antd";
 import { isDark } from "./dashboard/components/utils/dark";
+import { isABPath } from "./ab/utils/utils";
 
 const { darkAlgorithm, defaultAlgorithm } = theme;
 
@@ -9,6 +10,30 @@ const getThemeConfig = () => {
     const background = "#121828";
     const cardBg = "#182034";
     const selectBackground = "#1B1B1E";
+    let abThemeConfig = {};
+    if (isABPath()) {
+      abThemeConfig = {
+        Select: {
+          colorBgContainer: selectBackground,
+          colorBgElevated: "#1C1C1E",
+        },
+        Input: {
+          colorBgContainer: selectBackground,
+        },
+        InputNumber: {
+          colorBgContainer: selectBackground,
+        },
+        Modal: {
+          colorBgElevated: "#1B1B1E",
+        },
+        Tooltip: {
+          colorBgSpotlight: "#2B2B2E",
+        },
+        Popover: {
+          colorBgElevated: "#2B2B2E",
+        },
+      }
+    }
     return {
       hashed: false,
       token: {
@@ -52,25 +77,7 @@ const getThemeConfig = () => {
         Radio: {
           colorPrimary: colorPrimary,
         },
-        Select: {
-          colorBgContainer: selectBackground,
-          colorBgElevated: "#1C1C1E",
-        },
-        Input: {
-          colorBgContainer: selectBackground,
-        },
-        InputNumber: {
-          colorBgContainer: selectBackground,
-        },
-        Modal: {
-          colorBgElevated: "#1B1B1E",
-        },
-        Tooltip: {
-          colorBgSpotlight: "#2B2B2E",
-        },
-        Popover: {
-          colorBgElevated: "#2B2B2E",
-        },
+        ...abThemeConfig,
       },
       algorithm: isDark() ? darkAlgorithm : defaultAlgorithm,
     };
