@@ -283,11 +283,11 @@ const ConfigConnector = props => {
           <div className="flex w-full flex-row-reverse">
             <Button
               type="primary"
-              // htmlType="submit"
+              htmlType="submit"
               loading={loading}
               className="bg-blue-500 ml-10"
               // disabled={!editable}
-              onClick={() => {
+             /* onClick={() => {
                 modal.success({
                   content: "Connect successfully!",
                   okText: "View Data",
@@ -296,7 +296,7 @@ const ConfigConnector = props => {
                     localStorage.setItem("twitterEnable", "enable");
                   },
                 });
-              }}
+              }}*/
             >
               Save
             </Button>

@@ -201,11 +201,11 @@ const GaProjectSearch = props => {
     //   }
     // }
   }, [projectPath]);
-  const handleProjectChange = async (value, option2) => {
+  const handleProjectChange = async (value, uiOption) => {
     const option = userProject.find(item => item.protocolSlug === value) ||
       {
-        protocolName: option2.label,
-        protocolSlug: option2.value,
+        protocolName: uiOption.label,
+        protocolSlug: uiOption.value,
       }
     // saveLatestGAProject(option.protocolSlug);
     // setCurrentProject(option.protocolSlug);

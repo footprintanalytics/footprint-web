@@ -6,7 +6,7 @@ import { Content } from "antd/lib/layout/layout";
 import { getUser } from "metabase/selectors/user";
 import { getOssUrl } from "metabase/lib/image";
 import Meta from "metabase/components/Meta";
-import { StateContext, StateProvider } from "./StateProvider";
+import { StateProvider, StateContext } from "./StateProvider";
 import "../css/index.css";
 import GaSidebar from "./GaSidebar";
 

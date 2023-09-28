@@ -48,7 +48,6 @@ interface MenuObjectProp {
 const GaSidebar = (props: IGaSidebarProp) => {
   const { currentProject, router, location, currentMenu, projectObject, user, businessType, setFgaChain, getFgaChain } =
     props;
-  console.log("projectObject", projectObject)
   const [menuData, setMenuData] = useState<MenuObjectProp>();
   // const [rootSubmenuKeys, setRootSubmenuKeys] = useState<any[]>([]);
   const [openKeys, setOpenKeys] = useState<string[]>([currentMenu!]);
@@ -62,7 +61,6 @@ const GaSidebar = (props: IGaSidebarProp) => {
   }, [projectObject]);
 
   useEffect(() => {
-    console.log("router", props, router)
     if (!businessType) {
       router.replace("/fga/public-chain")
     }

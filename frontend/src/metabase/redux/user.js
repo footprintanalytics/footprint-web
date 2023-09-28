@@ -162,7 +162,6 @@ export const REFRESH_CURRENT_FGA_PROJECT =
 export const refreshCurrentFgaProject = createThunkAction(
   REFRESH_CURRENT_FGA_PROJECT,
   async project_id => {
-    console.log("refreshCurrentFgaProject")
     try {
       let res
       if (isABPath()) {

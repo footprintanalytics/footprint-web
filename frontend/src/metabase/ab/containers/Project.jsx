@@ -83,9 +83,9 @@ const Project = props => {
     } else {
       setGaMenuTabs(null);
     }
-    if (projectPath !== "Project A") {
+    /*if (projectPath !== "Project A") {
       localStorage.setItem("twitterEnable", "");
-    }
+    }*/
   }, [projectObject, user]);
 
   if (!businessType) {
@@ -192,7 +192,6 @@ const Project = props => {
   };
 
   const getContentPannel = current_tab => {
-    console.log("current_tab", current_tab)
     if (!projectObject || !currentMenu || !gaMenuTabs) {
       return <LoadingSpinner message="Loading..." />;
     }
@@ -547,8 +546,8 @@ const Project = props => {
           </LoadingDashboard>
         );
       }
-      const twitterEnable = localStorage.getItem("twitterEnable");
-      if ((twitterEnable !== "enable") && (projectPath === 'TorqueSquad' || projectPath === 'Mocaverse' || projectPath === 'duke' || projectPath === 'xxx') && ["Twitter", "twitter", "Discord", "discord"].includes(current_tab)) {
+      // const twitterEnable = localStorage.getItem("twitterEnable");
+      /*if ((twitterEnable !== "enable") && (projectPath === 'TorqueSquad' || projectPath === 'Mocaverse' || projectPath === 'duke' || projectPath === 'xxx') && ["Twitter", "twitter", "Discord", "discord"].includes(current_tab)) {
         return (
           <LoadingDashboard
             router={router}
@@ -560,7 +559,7 @@ const Project = props => {
             {WrapPublicDashboard(current_tab)}
           </LoadingDashboard>
         );
-      }
+      }*/
       return WrapPublicDashboard(current_tab);
     }
     return comingSoon("");
@@ -602,7 +601,6 @@ const mapDispatchToProps = {
 };
 
 const mapStateToProps = (state, props) => {
-  console.log("props.params", props.params)
   return {
     user: getUser(state),
     projectPath: decodeURIComponent(props.params?.project),

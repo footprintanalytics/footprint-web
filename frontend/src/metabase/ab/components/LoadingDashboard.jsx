@@ -61,7 +61,6 @@ const LoadingDashboard = ({
     <Button
       type="primary"
       onClick={() => {
-        console.log("bbbbb", connector)
         if (connector === "web3") {
           router.push("/fga/bind-game");
         } else if (connector === "web2") {
