@@ -131,6 +131,12 @@ const GaProjectSearch = props => {
   }, [user])
 
   useEffect(() => {
+    if (projectPath) {
+      loadProjectDetail(projectPath);
+    }
+  }, [projectPath])
+
+  useEffect(() => {
     if (protocolList?.length === 0) {
       loadFgaProtocolList(chain);
     }
@@ -210,7 +216,7 @@ const GaProjectSearch = props => {
     // saveLatestGAProject(option.protocolSlug);
     // setCurrentProject(option.protocolSlug);
     // saveLatestGAProjectId(option.value);
-    loadProjectDetail(option.protocolSlug);
+    // loadProjectDetail(option.protocolSlug);
     if (option.protocolSlug) {
       router?.push({
         pathname: getGrowthProjectPath(option.protocolSlug),
