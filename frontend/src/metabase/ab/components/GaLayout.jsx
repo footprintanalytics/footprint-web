@@ -6,7 +6,7 @@ import { Content } from "antd/lib/layout/layout";
 import { getUser } from "metabase/selectors/user";
 import { getOssUrl } from "metabase/lib/image";
 import Meta from "metabase/components/Meta";
-import { StateProvider, StateContext } from "./StateProvider";
+import { StateContext, StateProvider } from "./StateProvider";
 import "../css/index.css";
 import GaSidebar from "./GaSidebar";
 
@@ -22,7 +22,7 @@ const ABLayout = props => {
 
 const LayoutView = props => {
   const { isOpenSubMenu } = useContext(StateContext);
-  const isGamesManage = window.location.pathname.startsWith("/fga/") && window.location.pathname.includes("games-manage")
+  const isGamesManage = window.location.pathname.startsWith("/fga/") && window.location.pathname.includes("project-manage")
   const isBindGame = window.location.pathname.startsWith("/fga/") && window.location.pathname.includes("bind-game")
   const showSidebar = !props.isChart || isGamesManage || isBindGame;
   const defaultDesc =

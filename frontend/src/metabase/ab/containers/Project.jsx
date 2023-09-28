@@ -41,7 +41,6 @@ const Project = props => {
     props;
   const [currentMenu, setCurrentMenu] = useState(menu);
   const [gaMenuTabs, setGaMenuTabs] = useState(null);
-  console.log("projectPath", projectPath, menu, projectObject)
   useEffect(() => {
     if (menu && menu !== currentMenu && projectObject) {
       if (menu === "funnel") {
@@ -88,6 +87,10 @@ const Project = props => {
       localStorage.setItem("twitterEnable", "");
     }
   }, [projectObject, user]);
+
+  if (!businessType) {
+    return null;
+  }
 
   const getProjectObject = () => {
     return projectObject
@@ -230,7 +233,6 @@ const Project = props => {
         ></FindWallets>
       );
     }
-    console.log("bindGameMappingbindGameMapping", bindGameMapping)
     if (!(bindGameMapping[projectObject?.protocolName] && [
       "project_health",
       "project_overlap",
@@ -255,15 +257,6 @@ const Project = props => {
         >
           {WrapPublicDashboard(current_tab)}
         </LoadingDashboard>
-      );
-    }
-    if (["games-manage"].includes(current_tab)) {
-      return (
-        <GameList
-          location={location}
-          router={router}
-          // project={getProjectObject()}
-        />
       );
     }
     if (["bind-game"].includes(current_tab)) {
@@ -582,7 +575,7 @@ const Project = props => {
             gaMenuTabs &&
             getContentPannel(currentMenu)}
             {/* TODO: need to add real user fga vip grade */}
-            {projectObject?.protocolSlug !== "default" &&
+            {/*{projectObject?.protocolSlug !== "default" &&
             !checkVipMenuPermisson(
               projectObject?.protocolSlug === "the-sandbox"
                 ? "Enterprise"
@@ -592,7 +585,7 @@ const Project = props => {
             {projectObject?.protocolSlug === "default" &&
             ["members"].includes(currentMenu) && (
               <DashboardMask currentMenu={"set_protocol"} router={router} />
-            )}
+            )}*/}
           </div>
         </>
       ) : (
@@ -609,14 +602,15 @@ const mapDispatchToProps = {
 };
 
 const mapStateToProps = (state, props) => {
+  console.log("props.params", props.params)
   return {
     user: getUser(state),
-    projectPath: decodeURIComponent(props.params.project),
+    projectPath: decodeURIComponent(props.params?.project),
     projectObject: getFgaProject(state),
     chain: getFgaChain(state),
     games: getGamesByRedux(state),
-    menu: props.params.menu,
-    businessType: props.params.businessType,
+    menu: props.params?.menu,
+    businessType: props.params?.businessType,
     bindGameMapping: getBindGameMapping(state),
   };
 };

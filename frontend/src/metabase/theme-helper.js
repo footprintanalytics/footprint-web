@@ -23,11 +23,11 @@ const getThemeConfig = () => {
       },
       components: {
         Menu: {
-          colorItemTextHover: colorPrimary,
-          colorItemTextHoverHorizontal: colorPrimary,
-          colorSubItemBg: background,
-          colorItemBgHover: "#4444FF22",
-          colorItemTextSelected: colorPrimary,
+          itemHoverColor: colorPrimary,
+          horizontalItemHoverColor: colorPrimary,
+          subMenuItemBg: background,
+          itemHoverBg: "#4444FF22",
+          itemSelectedColor: colorPrimary,
         },
         Card: {
           colorBgContainer: cardBg,

@@ -62,6 +62,14 @@ const GaSidebar = (props: IGaSidebarProp) => {
   }, [projectObject]);
 
   useEffect(() => {
+    console.log("router", props, router)
+    if (!businessType) {
+      router.replace("/fga/public-chain")
+    }
+  }, [businessType])
+
+
+  useEffect(() => {
     if (currentMenu) {
       [...items, ...itemsPlatform]?.map(i => {
         if (i.key === currentMenu) {
@@ -117,7 +125,7 @@ const GaSidebar = (props: IGaSidebarProp) => {
               <div className="ga-side-bar__title">
                 <h3>{platformMenuTitle}</h3>
               </div>
-              <div className={"flex justify-center p2"}>
+              <div className={"flex justify-center pm2"}>
                 <Select
                   defaultValue={"Ethereum"}
                   style={{ width: 218 }}
@@ -132,8 +140,8 @@ const GaSidebar = (props: IGaSidebarProp) => {
                   options={
                     [
                       { value: "Ethereum", label: "Ethereum" },
-                      { value: "Polygon", label: "Polygon" },
-                      { value: "BNB Chain", label: "BNB Chain" },
+                      // { value: "Polygon", label: "Polygon" },
+                      // { value: "BNB Chain", label: "BNB Chain" },
                     ]
                   }
                 />

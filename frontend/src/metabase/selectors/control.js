@@ -116,7 +116,13 @@ export const getGamesByRedux = createSelector([getControl], ({ games }) => {
 });
 
 export const getHistoryGamesByRedux = createSelector([getControl], ({ historyGames }) => {
-  return historyGames || [];
+  const historyGamesStr = window.localStorage.getItem("historyGames")
+  let historyGamesInit = []
+  try {
+    historyGamesInit = JSON.parse(historyGamesStr) || []
+  } catch (e) {
+  }
+  return historyGames || historyGamesInit;
 });
 
 export const getBindGameMapping = createSelector([getControl], ({ bindGameMapping }) => {
@@ -128,6 +134,9 @@ export const getFgaChain = createSelector([getControl], ({ chain }) => {
 });
 
 export const getFgaFavoriteList = createSelector([getControl], (data) => {
-  console.log("getFgaFavoriteList data", data)
-  return data?.fgaFavoriteList || [];
+  return data?.fgaFavoriteList;
+});
+
+export const getFgaProtocolList = createSelector([getControl], (data) => {
+  return data?.fgaProtocolList || [];
 });

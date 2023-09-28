@@ -92,7 +92,7 @@ const Detail = props => {
               const hide = message.loading('Generating cohort ...');
               setTimeout(() => {
                 hide();
-                router?.push(`/fga/project/${projectName}/segment`);
+                router?.push(`/fga/public-chain/project/${projectName}/segment`);
               }, 2000);
             }}><Button icon={<SearchOutlined />}>Analyse Cohort</Button></Link>
             <Button className="ml1" icon={<DownloadOutlined />}>Export</Button>

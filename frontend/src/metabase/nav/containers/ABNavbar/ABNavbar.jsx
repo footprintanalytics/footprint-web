@@ -458,7 +458,7 @@ class ABNavbar extends Component {
             }}
           >
             <div style={{ color: "white", fontSize: 18, fontWeight: 600 }}>Growth Analytics</div>
-            <div style={{ color: "white", fontSize: 10, fontWeight: 600, position: "absolute", right: -45, top: -15 }}>Public Chain</div>
+            {/*<div style={{ color: "white", fontSize: 10, fontWeight: 600, position: "absolute", right: -45, top: -15 }}>Public Chain</div>*/}
           </Link>
           {/* <LeftMenu /> */}
         </div>

@@ -292,7 +292,7 @@ const ConfigConnector = props => {
                   content: "Connect successfully!",
                   okText: "View Data",
                   onOk: () => {
-                    router.replace(`/fga/project/${project?.protocolSlug}/${connector.name.toLowerCase()}`);
+                    router.replace(`/fga/public-chain/project/${project?.protocolSlug}/${connector.name.toLowerCase()}`);
                     localStorage.setItem("twitterEnable", "enable");
                   },
                 });

@@ -1,21 +1,19 @@
 /* eslint-disable react/prop-types */
 /* eslint-disable react-hooks/rules-of-hooks */
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import { connect } from "react-redux";
 import { Input, message, Space, Table } from "antd";
 import { getFgaProject, getUser } from "metabase/selectors/user";
-import { useQuery } from "react-query";
-import { QUERY_OPTIONS } from "metabase/containers/dashboards/shared/config";
 import { loadCurrentFgaProjectNew } from "metabase/redux/user";
 import { loadFgaFavoriteList, setGames } from "metabase/redux/control";
-import { getFgaChain, getFgaFavoriteList, getGamesByRedux } from "metabase/selectors/control";
+import { getFgaChain, getFgaFavoriteList, getFgaProtocolList, getGamesByRedux } from "metabase/selectors/control";
 import { StarFilled } from "@ant-design/icons";
-import { deleteProtocolFavorite, getProtocolList, postProtocolFavorite } from "metabase/new-service";
+import { deleteProtocolFavorite, postProtocolFavorite } from "metabase/new-service";
 
 const { Search } = Input;
 
 const projectList = props => {
-  const { router, location, children, user, projectPath, menu, projectObject, games, setGames, loadCurrentFgaProjectNew, businessType, chain, loadFgaFavoriteList, favoriteList } =
+  const { router, location, children, user, projectPath, menu, projectObject, games, setGames, loadCurrentFgaProjectNew, businessType, chain, loadFgaFavoriteList, favoriteList, protocolList } =
     props;
   const userId = 158;
   const projectId = 153;
@@ -37,50 +35,49 @@ const projectList = props => {
     QUERY_OPTIONS,
   );*/
 
-  console.log("favoriteData", favoriteList)
-  const { isLoading, data: data2 } = useQuery(
-    ["GetFgaProject", user?.id],
-    async () => {
-      // const toggle_platform_project = localStorage.getItem('toggle_platform_project')
-      // if (toggle_platform_project === "project") {
-      //   return {
-      //     "data": [
-      //     {
-      //       "protocolSlug": "Project A",
-      //       "protocolName": "Project A",
-      //     }
-      //     ]
-      //   }
-      // }
-      if (businessType === "public-chain") {
-        return await getProtocolList({chain});
-      }
-      return {
-        "data": [
-          {
-            "id": 154,
-            "protocolSlug": "mocaverse",
-            "protocolName": "Mocaverse",
-            "chain": "BNB Chain, Polygon",
-            "Active Users": 3234,
-            "Transactions": 223456,
-            "icon": "https://i.seadn.io/gcs/files/649cd263c9518915328df38b2db1a6f3.png?auto=format&w=256"
-          },
-          {
-            "id": 157,
-            "protocolSlug": "TorqueSquad",
-            "protocolName": "TorqueSquad",
-            "chain": "BNB Chain, Polygon",
-            "Active Users": 1000,
-            "Transactions": 88355,
-            "icon": "https://footprint-imgs.oss-us-east-1.aliyuncs.com/logo_images/torque-squad.png"
-          },
-        ]
-      }
-      // return await getPublicChainProjects();
-    },
-    QUERY_OPTIONS,
-  );
+  // const { isLoading, data: data2 } = useQuery(
+  //   ["GetFgaProject", user?.id],
+  //   async () => {
+  //     // const toggle_platform_project = localStorage.getItem('toggle_platform_project')
+  //     // if (toggle_platform_project === "project") {
+  //     //   return {
+  //     //     "data": [
+  //     //     {
+  //     //       "protocolSlug": "Project A",
+  //     //       "protocolName": "Project A",
+  //     //     }
+  //     //     ]
+  //     //   }
+  //     // }
+  //     if (businessType === "public-chain") {
+  //       return await getProtocolList({chain});
+  //     }
+  //     return {
+  //       "data": [
+  //         {
+  //           "id": 154,
+  //           "protocolSlug": "mocaverse",
+  //           "protocolName": "Mocaverse",
+  //           "chain": "BNB Chain, Polygon",
+  //           "Active Users": 3234,
+  //           "Transactions": 223456,
+  //           "icon": "https://i.seadn.io/gcs/files/649cd263c9518915328df38b2db1a6f3.png?auto=format&w=256"
+  //         },
+  //         {
+  //           "id": 157,
+  //           "protocolSlug": "TorqueSquad",
+  //           "protocolName": "TorqueSquad",
+  //           "chain": "BNB Chain, Polygon",
+  //           "Active Users": 1000,
+  //           "Transactions": 88355,
+  //           "icon": "https://footprint-imgs.oss-us-east-1.aliyuncs.com/logo_images/torque-squad.png"
+  //         },
+  //       ]
+  //     }
+  //     // return await getPublicChainProjects();
+  //   },
+  //   QUERY_OPTIONS,
+  // );
 
   // const data = (businessType === "public-chain") ? data2?.rows?.map(row => {
   //     return {
@@ -90,13 +87,12 @@ const projectList = props => {
   //     }
   //   }) : data2;
 
-  const data = data2;
-  if (data) {
-    data.data = data.protocolList?.filter(item => {
+  let data;
+  if (protocolList) {
+    data = protocolList?.sort((a, b) => a.protocolSlug < b.protocolSlug ? -1 : 1)?.filter(item => {
       return searchKey ? item.protocolSlug.includes(searchKey) || item.protocolName.includes(searchKey) : true;
     });
   }
-  console.log("data.data", data.data)
 
   const loadProjectDetail = projectSlug => {
     loadCurrentFgaProjectNew(projectSlug);
@@ -115,10 +111,10 @@ const projectList = props => {
 
     if (favorite) {
       api = deleteProtocolFavorite;
-      successText = `Project ${record.protocolName} removed to favorite project`;
+      successText = `Project ${record.protocolName} removed to my project`;
     } else {
       api = postProtocolFavorite;
-      successText = `Project ${record.protocolName} added to favorite project`;
+      successText = `Project ${record.protocolName} added to my project`;
     }
     await api({
       protocolSlug: record.protocolSlug,
@@ -136,7 +132,7 @@ const projectList = props => {
       key: 'logo',
       width: 60,
       render: (_, record) => (
-        record.logo && record.logo !== 'N/A' ? <img src={record.logo} style={{height: 20, width: 20}}/> : <div style={{height: 20, width: 20, background: "#888"}}/>
+        record.logo && record.logo !== 'N/A' ? <img src={record.logo} style={{height: 32, width: 32}}/> : <div style={{height: 32, width: 32, background: "#222"}}/>
       ),
     },
     {
@@ -187,7 +183,7 @@ const projectList = props => {
             //
             // }, 2000)
           }}>
-            <StarFilled style={{ fontSize: '16px', color: isFavoriteProject(record.protocolName) ? '#ff0000' : '#888888' }}/>
+            <StarFilled style={{ fontSize: '16px', color: isFavoriteProject(record.protocolName) ? '#fa8c16' : '#8c8c8c' }}/>
           </a>
         </Space>
       ),
@@ -232,7 +228,7 @@ const projectList = props => {
               style={{ width: 200, margin: "4px 0" }}
             />
           </div>
-          <Table dataSource={data?.data} columns={columns}/>
+          <Table dataSource={data} columns={columns}/>
         </div>
       )}
     </div>
@@ -253,6 +249,7 @@ const mapStateToProps = (state, props) => {
     games: getGamesByRedux(state),
     businessType: props.params.businessType,
     favoriteList: getFgaFavoriteList(state),
+    protocolList: getFgaProtocolList(state),
   };
 };
 

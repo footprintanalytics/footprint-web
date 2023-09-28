@@ -101,7 +101,7 @@ const bindGame = props => {
               object[projectObject.protocolName] = record.protocolName
               setBindGameMapping(object)
               await loadProjectDetail(record.id);
-              router.replace(`/fga/project/${projectObject.protocolName}/project_health`)
+              router.replace(`/fga/public-chain/project/${projectObject.protocolName}/project_health`)
 
             }, 2000)
           }}>
