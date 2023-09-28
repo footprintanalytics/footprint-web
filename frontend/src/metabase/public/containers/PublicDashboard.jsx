@@ -59,7 +59,6 @@ const mapStateToProps = (state, props) => {
   const parameters = getParameters(state, props);
   const parameterValues = getParameterValues(state, props);
   const project = props.project;
-  const chain = props.chain;
   const location = props.location;
   const isDataApiStatistics = props.isDataApiStatistics;
   if (project) {
@@ -74,11 +73,6 @@ const mapStateToProps = (state, props) => {
     updateDashboardPara(parameters, parameterValues, "project_name", [
       project.protocolName,
     ]);
-    if (isABPath()) {
-      updateDashboardPara(parameters, parameterValues, "chain", [
-        chain,
-      ]);
-    }
     if (project.tokenAddress?.length > 0) {
       const key = "token_address";
       const data = getFirstAddressByPriory(project.tokenAddress);
@@ -148,13 +142,6 @@ const mapStateToProps = (state, props) => {
         return item.address;
       });
       updateDashboardPara(parameters, parameterValues, key, mutipleCollection);
-    }
-    if (project.nftCollectionAddress?.length > 0) {
-      const key = "contract_collection";
-      const mutipleCollection = project.nftCollectionAddress.map(item => {
-        return item.address;
-      });
-      updateDashboardPara(parameters, parameterValues, key, mutipleCollection[0]);
     }
     if (project.twitter_handler) {
       const key = "twitter_handler";
@@ -422,7 +409,7 @@ class PublicDashboard extends Component {
       hideParametersForCustom = "gamefi,protocol_slug,twitter_handler,project_name,guild_id";
     }
     if (isABPath()) {
-      hideParametersForCustom = "gamefi,protocol_slug,twitter_handler,project_name,guild_id,project,collection_contract_address,asset_address,asset_contract_address,chain";
+      hideParametersForCustom = "gamefi,protocol_slug,twitter_handler,project_name,guild_id,project,collection_contract_address,asset_address,asset_contract_address";
     }
     const hashData = parseHashOptions(location?.hash);
     if (
