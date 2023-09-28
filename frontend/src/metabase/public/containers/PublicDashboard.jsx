@@ -464,7 +464,7 @@ class PublicDashboard extends Component {
     }
     const shouldRenderAsNightMode = isNightMode || canShowDarkMode(dashboard);
 
-    const { all_load, bg_color } = {
+    const { all_load, bg_color, hide_title } = {
       ...parseHashOptions(location.hash),
     };
 
@@ -477,7 +477,7 @@ class PublicDashboard extends Component {
         dashboard={dashboard}
         parameters={parameters}
         hideParameters={hideParametersOuter || hideParameters || hideParametersForCustom}
-        hideTitle={hideTitle}
+        hideTitle={hideTitle || hide_title}
         headerLayout={header}
         parameterValues={parameterValues}
         setParameterValue={this.props.setParameterValue}
