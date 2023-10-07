@@ -386,7 +386,6 @@ const GaProjectSearch = props => {
             />
           )}
         </>
-      )
       {/*<CreateMyProjectModal
         open={open}
         setOpen={setOpen}

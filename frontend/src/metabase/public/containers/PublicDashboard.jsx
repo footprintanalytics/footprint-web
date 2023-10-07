@@ -3,11 +3,10 @@ import React, { Component } from "react";
 import { connect } from "react-redux";
 import { push } from "react-router-redux";
 import cx from "classnames";
-import { withRouter } from "react-router";
 
-import _, { get } from "underscore";
-import { debounce, isArray } from "lodash";
-import { Breadcrumb, message } from "antd";
+import _ from "underscore";
+import {debounce, isArray, startCase} from "lodash";
+import { Breadcrumb, Select } from "antd";
 import { IFRAMED } from "metabase/lib/dom";
 
 import LoadingAndErrorWrapper from "metabase/components/LoadingAndErrorWrapper";
@@ -24,24 +23,22 @@ import { parseHashOptions } from "metabase/lib/browser";
 import PublicMode from "metabase/modes/components/modes/PublicMode";
 
 import {
-  getDashboardComplete,
   getCardData,
-  getSlowCards,
+  getDashboardComplete,
   getParameters,
   getParameterValues,
+  getSlowCards,
 } from "metabase/dashboard/selectors";
 
 import * as dashboardActions from "metabase/dashboard/actions";
 
-import {
-  setPublicDashboardEndpoints,
-  setEmbedDashboardEndpoints,
-} from "metabase/services";
+import { setEmbedDashboardEndpoints, setPublicDashboardEndpoints } from "metabase/services";
 import { parseTitleId } from "metabase/lib/urls";
 import {
-  updateDashboardPara,
   getDefaultDashboardPara,
   getFirstAddressByPriory,
+  isFgaPath,
+  updateDashboardPara,
 } from "metabase/growth/utils/utils";
 import { canShowDarkMode } from "metabase/dashboard/components/utils/dark";
 import EmbedFrame from "../components/EmbedFrame";
@@ -51,8 +48,7 @@ import QueryCopyModal from "metabase/components/QueryCopyModal";
 import { getUser } from "metabase/selectors/user";
 import { getSqlAndJumpToDoc, replaceTemplateCardUrl } from "metabase/guest/utils";
 import { trackStructEvent } from "metabase/lib/analytics";
-import { isFgaPath } from "metabase/growth/utils/utils"
-import { isABPath } from "metabase/ab/utils/utils"
+import { isABPath } from "metabase/ab/utils/utils";
 
 const mapStateToProps = (state, props) => {
   const user = getUser(state);
@@ -283,6 +279,30 @@ class PublicDashboard extends Component {
     },
   );
 
+  getFgaMultiKeyObject = () => {
+    if (isABPath()) {
+      const needMultiSelectHeaderSlugs = ["contract_address", "collection_contract_address", "asset_address", "asset_contract_address", "contract_collection"];
+      return this.props.parameters.find(item => needMultiSelectHeaderSlugs.includes(item.slug));
+    }
+    return null;
+  }
+
+  getFgaMultiKeyObjectAsset = () => {
+    if (isABPath()) {
+      const needMultiSelectHeaderSlugs = ["asset_address", "asset_contract_address"];
+      return this.props.parameters.find(item => needMultiSelectHeaderSlugs.includes(item.slug));
+    }
+    return null;
+  }
+
+  getFgaMultiKeyObjectToken = () => {
+    if (isABPath()) {
+      const needMultiSelectHeaderSlugs = ["token_contract_address"];
+      return this.props.parameters.find(item => needMultiSelectHeaderSlugs.includes(item.slug));
+    }
+    return null;
+  }
+
   _initialize = async () => {
     const {
       initialize,
@@ -304,6 +324,19 @@ class PublicDashboard extends Component {
     try {
       await fetchDashboard(dashboardId || publicUuid || token, location.query);
       this._fetchDashboardCardData();
+
+      const keyObject = this.getFgaMultiKeyObject();
+      if (keyObject) {
+        this.props.setParameterValue(keyObject.id, this.props.project.nftCollectionAddress[0].address)
+      }
+      const keyObjectToken = this.getFgaMultiKeyObjectToken();
+      if (keyObjectToken) {
+        this.props.setParameterValue(keyObjectToken.id, this.props.project.tokenAddress[0].address)
+      }
+      // const keyObjectAsset = this.getFgaMultiKeyObjectAsset();
+      // if (keyObjectAsset) {
+      //   this.props.setParameterValue(keyObjectAsset.id, this.props.project.nftCollectionAddress[0].address)
+      // }
     } catch (error) {
       console.error(error);
       setErrorPage(error);
@@ -387,6 +420,38 @@ class PublicDashboard extends Component {
     }
   }
 
+  handleFgaMultiAddressUiSelectHeader = (type, keyObject) => {
+    let {
+      project,
+    } = this.props;
+    let data = [];
+    if (type === "token") {
+      data = project?.tokenAddress
+    } else if (type === "asset") {
+      data = [...(project?.tokenAddress || []), ...(project?.nftCollectionAddress || [])];
+    } else {
+      data = project?.nftCollectionAddress;
+    }
+    return (<div className="flex flex-column p2" style={{ background: "#0F0F14" }}>
+      <span className="text-white" style={{ marginBottom: 4 }}>{startCase(keyObject.slug)}</span>
+      <Select
+        defaultValue={data?.[0]?.address}
+        style={{
+          width: 420,
+        }}
+        onChange={e => {
+          this.props.setParameterValue(keyObject.id, e)
+        }}
+        options={data?.map(item => {
+          return {
+            value: item.address,
+            label: item.address,
+          }
+        })}
+      />
+    </div>)
+  }
+
   render() {
     let {
       dashboard,
@@ -425,6 +490,23 @@ class PublicDashboard extends Component {
       hideParametersForCustom = "gamefi,protocol_slug,twitter_handler,project_name,guild_id,project,collection_contract_address,asset_address,asset_contract_address,chain";
     }
     const hashData = parseHashOptions(location?.hash);
+
+    //fga multi select header
+    const keyObject = this.getFgaMultiKeyObject();
+    if (keyObject) {
+      header = this.handleFgaMultiAddressUiSelectHeader("nft", keyObject);
+      hideParametersForCustom = `${hideParametersForCustom},${keyObject.slug}`;
+    }
+    const keyObjectToken = this.getFgaMultiKeyObjectToken();
+    if (keyObjectToken) {
+      header = this.handleFgaMultiAddressUiSelectHeader("token", keyObjectToken);
+      hideParametersForCustom = `${hideParametersForCustom},${keyObjectToken.slug}`;
+    }
+    // const keyObjectAsset = this.getFgaMultiKeyObjectAsset();
+    // if (keyObjectAsset) {
+    //   header = this.handleFgaMultiAddressUiSelectHeader("asset", keyObjectAsset);
+    //   hideParametersForCustom = `${hideParametersForCustom},${keyObjectAsset.slug}`;
+    // }
     if (
       isFgaPath() &&
       hashData?.from &&
