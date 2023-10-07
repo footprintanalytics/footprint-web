@@ -118,7 +118,7 @@
             isFromTable (is-before-with-from-question-mark sql #"(?<!\?)\?(?!\?)")]
         (log/tracef "Splice %s as %s" (pr-str arg) (pr-str v))
         (str/replace-first sql #"(?<!\?)\?(?!\?)"
-                           (if isFromTable arg (str/re-quote-replacement v))
+                           (if isFromTable (str/replace arg "BNB Chain" "bsc") (str/re-quote-replacement v))
                            )))
     (fn [spliced-sql]
       (log/tracef "Spliced %s\n-> %s" (u/colorize 'green (pr-str sql)) (u/colorize 'blue (pr-str spliced-sql)))
