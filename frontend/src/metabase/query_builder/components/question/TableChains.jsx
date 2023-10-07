@@ -133,6 +133,26 @@ const TableChains = props => {
         label: "Thundercore",
         icon: getOssUrl("fp-chains/thundercore.webp"),
       },
+      {
+        value: "sui",
+        label: "Sui",
+        icon: getOssUrl("studio/img-chain-27.png?image_process=resize,w_36/crop,h_36/format,webp"),
+      },
+      {
+        value: "tcg",
+        label: "TCG Verse",
+        icon: getOssUrl("studio/img-chain-37.png?image_process=resize,w_36/crop,h_36/format,webp"),
+      },
+      {
+        value: "home",
+        label: "HOME Verse",
+        icon: getOssUrl("studio/img-chain-35.png?image_process=resize,w_36/crop,h_36/format,webp"),
+      },
+      {
+        value: "zksync",
+        label: "zkSync Era",
+        icon: getOssUrl("studio/img-chain-31.png?image_process=resize,w_36/crop,h_36/format,webp"),
+      },
       /*{
         value: "wax",
         label: "Wax",
