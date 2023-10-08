@@ -48,8 +48,8 @@ const AboutPartnerV2 = () => {
     <div className="About__partnerV2">
       <div className="About__partnerV2-list-top">
         <ul>
-          {topData.map(item =>
-            <li key={item}>
+          {topData.map((item, index) =>
+            <li key={index}>
               <div className="About__partnerV2-list-item">
                 <AboutImage src={getOssUrl(item)} alt={item} placeholder={null}/>
               </div>
@@ -59,8 +59,8 @@ const AboutPartnerV2 = () => {
       </div>
       <div className="About__partnerV2-list-bottom">
         <ul>
-          {bottomData.map(item =>
-            <li key={item}>
+          {bottomData.map((item, index) =>
+            <li key={index}>
               <div className="About__partnerV2-list-item">
                 <AboutImage src={getOssUrl(item)} alt={item} placeholder={null}/>
               </div>

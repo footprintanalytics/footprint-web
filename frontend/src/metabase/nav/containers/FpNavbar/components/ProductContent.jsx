@@ -98,6 +98,27 @@ const ProductContent = props => {
       },
     },
     {
+      name: "MetaMosaic",
+      value: "meta-mosaic",
+      data: {
+        metamosaic: {
+          topic: "MetaMosaic",
+          desc: "One-stop turnkey solution for reference data",
+          link: "https://www.metamosaic.io/",
+          externalLink: true,
+          data: [
+            {
+              title: "APP Directory",
+              icon: ReactIcons.fpDatasetIcon,
+              link: "https://www.metamosaic.io/Ethereum/protocols",
+              externalLink: true,
+              desc: "Provide a holistic view of a chain and protocol with reference data",
+            }
+          ]
+        }
+      }
+    },
+    {
       name: "Analytics Studio",
       value: "analytics-studio",
       data: {
@@ -150,14 +171,24 @@ const ProductContent = props => {
             }
           ]
         },
+        appBuilderData: {
+          topic: "Growth Analytics Builder",
+          desc: "A turnkey solution to connect Web2 and Web3 data for enterprises",
+          data: [
+            {
+              title: "Portfolio Management",
+              desc: "Coming soon",
+            },
+            {
+              title: "Project Management",
+              desc: "Coming soon",
+            },
+          ]
+        },
         connectorData: {
           topic: "Data Connector",
           desc: "Seamlessly integrate Web3 and Web2 channels \nwith our data connectors",
           link: "/studio/my-datasets/integration",
-        },
-        appBuilderData: {
-          topic: "No-coding App Builder",
-          desc: "Coming soon",
         },
       }
     },
@@ -218,7 +249,18 @@ const ProductContent = props => {
           </div>
           <div className="ml4 main-menu__data-api-padding-bottom">
             {MainMenuFunction.renderVerticalMenu({data: tabData?.connectorData})}
+          </div>
+          <div className="ml4 main-menu__data-api-padding-bottom">
             {MainMenuFunction.renderVerticalMenu({data: tabData?.appBuilderData})}
+          </div>
+        </>
+      );
+    }
+    if (tab === "meta-mosaic") {
+      return (
+        <>
+          <div className="ml4 main-menu__data-api-padding">
+            {MainMenuFunction.renderVerticalMenu({data: tabData?.metamosaic, className: "main-menu__vertical-menu"})}
           </div>
         </>
       );
