@@ -59,8 +59,10 @@ const GaProjectSearch = props => {
     loadFgaFavoriteList,
     protocolList,
     loadFgaProtocolList,
+    disableLoadList,
   } = props;
   const selectRef = useRef();
+  const userId = user?.id;
   const [userProject, setUserProject] = useState([]);
   const [open, setOpen] = useState(false);
   const [currentProject, setCurrentProject] = useState(projectPath);
@@ -121,14 +123,10 @@ const GaProjectSearch = props => {
   };
 
   useEffect(() => {
-    if (!favoriteList) {
+    if ((!favoriteList || !userId) && !disableLoadList) {
       loadFgaFavoriteList();
     }
-  }, [favoriteList])
-
-  useEffect(() => {
-    loadFgaFavoriteList();
-  }, [user])
+  }, [favoriteList, userId, disableLoadList])
 
   useEffect(() => {
     if (projectPath) {
@@ -137,10 +135,10 @@ const GaProjectSearch = props => {
   }, [projectPath])
 
   useEffect(() => {
-    if (protocolList?.length === 0) {
+    if (protocolList?.length === 0 && !disableLoadList) {
       loadFgaProtocolList(chain);
     }
-  }, [])
+  }, [disableLoadList])
 
 
   useEffect(() => {
