@@ -181,6 +181,14 @@ export const loadFgaProtocolList = createThunkAction(
     },
 );
 
+export const resetFgaProtocolList = createThunkAction(
+  LOAD_FGA_PROTOCOL_LIST,
+  () =>
+    async (dispatch, getState) => {
+      return null;
+    },
+);
+
 export const control = handleActions(
   {
     [CREATE_FGA_PROJECT_MODAL_SHOW]: {

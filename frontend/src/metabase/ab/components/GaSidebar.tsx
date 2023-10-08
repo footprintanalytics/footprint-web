@@ -1,7 +1,8 @@
 import React, { useState, useEffect } from "react";
-import { Divider, Layout, Menu, Select } from "antd";
+import { Divider, Image, Layout, Menu, Select } from "antd";
 import type { MenuProps } from "antd";
 const { Sider } = Layout;
+import { getChainDataList } from "metabase/query_builder/components/question/handle";
 import "../css/utils.css";
 import { connect } from "react-redux";
 import { withRouter } from "react-router";
@@ -11,15 +12,11 @@ import { fga_menu_data_v2 } from "../utils/data";
 import GaProjectSearch from "metabase/ab/components/GaProjectSearch";
 import {
   getGrowthProjectPath,
-  getLatestGAMenuTag,
   saveLatestGAMenuTag,
   getLatestGAProject,
-  getGaMenuTabs,
 } from "../utils/utils";
-import { set } from "js-cookie"
 import { getFgaChain } from "../../selectors/control";
-import { push } from "react-router-redux";
-import { setFgaChain } from "../../redux/control";
+import { resetFgaProtocolList, setFgaChain } from "../../redux/control";
 
 interface IGaSidebarProp {
   className?: string;
@@ -34,6 +31,8 @@ interface IGaSidebarProp {
   projectObject?: any;
   getFgaChain?: any;
   setFgaChain?: any;
+  chain: any;
+  resetFgaProtocolList: any;
 }
 
 interface MenuObjectProp {
@@ -46,26 +45,25 @@ interface MenuObjectProp {
   platformMenuTitle: any;
 }
 const GaSidebar = (props: IGaSidebarProp) => {
-  const { currentProject, router, location, currentMenu, projectObject, user, businessType, setFgaChain, getFgaChain } =
+  const { currentProject, router, location, currentMenu, projectObject, user, businessType, setFgaChain, chain, resetFgaProtocolList } =
     props;
   const [menuData, setMenuData] = useState<MenuObjectProp>();
   // const [rootSubmenuKeys, setRootSubmenuKeys] = useState<any[]>([]);
   const [openKeys, setOpenKeys] = useState<string[]>([currentMenu!]);
-  const menuTitle = fga_menu_data_v2(businessType, projectObject, user).menuTitle;
-  const platformMenuTitle = fga_menu_data_v2(businessType, projectObject, user).platformMenuTitle;
+  const menuTitle = fga_menu_data_v2(businessType, projectObject, chain).menuTitle;
+  const platformMenuTitle = fga_menu_data_v2(businessType, projectObject, chain).platformMenuTitle;
   const items = menuData?.menuTabs || [];
   const itemsPlatform = menuData?.platformMenuTabs || [];
   useEffect(() => {
     if (!projectObject) return;
-    setMenuData(fga_menu_data_v2(businessType, projectObject, user));
-  }, [projectObject]);
+    setMenuData(fga_menu_data_v2(businessType, projectObject, chain));
+  }, [projectObject, chain]);
 
   useEffect(() => {
     if (!businessType) {
       router.replace("/fga/public-chain")
     }
   }, [businessType])
-
 
   useEffect(() => {
     if (currentMenu) {
@@ -101,6 +99,28 @@ const GaSidebar = (props: IGaSidebarProp) => {
   };
   const toggle_platform_project = localStorage.getItem('toggle_platform_project')
   // const isProject = toggle_platform_project === "project"
+
+  // @ts-ignore
+  const chainData = getChainDataList({ includeAll: false }).filter(item => !item.noTransactions)
+    .map(item => {
+      return {
+        ...item,
+        value: item.transactionName || item.label,
+      }
+    });
+
+  const pushFirstRouter = () => {
+    const menuData = fga_menu_data_v2(businessType, projectObject, chain);
+    const menuKeys = menuData.keys;
+    const firstMenu = menuKeys[0];
+    router.push({
+      pathname: getGrowthProjectPath(
+        projectObject?.protocolSlug,
+        firstMenu,
+      ),
+    });
+  }
+
   return (
     <Sider
       className="ga-side-bar"
@@ -125,7 +145,7 @@ const GaSidebar = (props: IGaSidebarProp) => {
               </div>
               <div className={"flex justify-center pm2"}>
                 <Select
-                  defaultValue={"Ethereum"}
+                  defaultValue={chain}
                   style={{ width: 218 }}
                   dropdownStyle={{
                     background: "#1C1C1E",
@@ -134,17 +154,22 @@ const GaSidebar = (props: IGaSidebarProp) => {
                   }}
                   onChange={value => {
                     setFgaChain(value);
+                    resetFgaProtocolList();
+                    pushFirstRouter();
                   }}
-                  options={
-                    [
-                      { value: "Ethereum", label: "Ethereum" },
-                      // { value: "Polygon", label: "Polygon" },
-                      // { value: "BNB Chain", label: "BNB Chain" },
-                    ]
-                  }
-                />
+                >
+                  {chainData.map(n => (
+                    <Select.Option key={`${n.value}-${n.label}`} value={n.value}>
+                      <div className="question-side__chains-item">
+                        <Image src={n.icon} width={20} height={20} preview={false} />
+                        <span className="ml1">{n.label}</span>
+                      </div>
+                    </Select.Option>
+                  ))}
+                </Select>
               </div>
               <Menu
+                key={chain}
                 className="ga-side-bar-menu"
                 style={{
                   borderRight: "0px",
@@ -227,6 +252,7 @@ const mapStateToProps = (state: any, props: any) => {
 
 const mapDispatchToProps = {
   setFgaChain: setFgaChain,
+  resetFgaProtocolList,
 };
 
 export default withRouter(connect(mapStateToProps, mapDispatchToProps)(GaSidebar));

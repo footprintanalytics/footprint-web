@@ -66,6 +66,7 @@ const GaProjectSearch = props => {
   const [userProject, setUserProject] = useState([]);
   const [open, setOpen] = useState(false);
   const [currentProject, setCurrentProject] = useState(projectPath);
+  const protocolListLen = protocolList?.length;
   const defaultProject = {
     protocolSlug: "the-sandbox",
     protocolName: "The Sandbox",
@@ -135,10 +136,10 @@ const GaProjectSearch = props => {
   }, [projectPath])
 
   useEffect(() => {
-    if (protocolList?.length === 0 && !disableLoadList) {
+    if (protocolListLen === 0 && !disableLoadList) {
       loadFgaProtocolList(chain);
     }
-  }, [disableLoadList])
+  }, [disableLoadList, chain, protocolListLen])
 
 
   useEffect(() => {
