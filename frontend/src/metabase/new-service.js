@@ -231,10 +231,16 @@ export const createCommunityUserCohort = async params => {
   return POST(`/api/v1/fga/community/cohort`, params);
 };
 export const getPublicChainProjects = async params => {
-  return GET(`https://www.footprint.network/api/v1/public/card/3604fc56-8d81-4ffb-a010-86671c4888d5/query?parameters=%5B%7B%22id%22%3A%229b5b908e-b060-3dfe-f9c1-6c0cad410de6%22%2C%22type%22%3A%22string%2F%3D%22%2C%22target%22%3A%5B%22dimension%22%2C%5B%22template-tag%22%2C%22chain%22%5D%5D%2C%22name%22%3A%22Chain%22%2C%22slug%22%3A%22chain%22%2C%22default%22%3A%5B%22Ethereum%22%5D%2C%22value%22%3A%5B%22Ethereum%22%5D%7D%5D`, params);
+  return GET(
+    `https://www.footprint.network/api/v1/public/card/3604fc56-8d81-4ffb-a010-86671c4888d5/query?parameters=%5B%7B%22id%22%3A%229b5b908e-b060-3dfe-f9c1-6c0cad410de6%22%2C%22type%22%3A%22string%2F%3D%22%2C%22target%22%3A%5B%22dimension%22%2C%5B%22template-tag%22%2C%22chain%22%5D%5D%2C%22name%22%3A%22Chain%22%2C%22slug%22%3A%22chain%22%2C%22default%22%3A%5B%22Ethereum%22%5D%2C%22value%22%3A%5B%22Ethereum%22%5D%7D%5D`,
+    params,
+  );
 };
 export const getPublicChainProjectDetail = async params => {
-  return GET(`https://www.footprint.network/api/v1/public/card/87dcf516-5b30-4200-97d8-42862c366bab/query?parameters=%5B%7B%22id%22%3A%229b5b908e-b060-3dfe-f9c1-6c0cad410de6%22%2C%22type%22%3A%22string%2F%3D%22%2C%22target%22%3A%5B%22dimension%22%2C%5B%22template-tag%22%2C%22chain%22%5D%5D%2C%22name%22%3A%22Chain%22%2C%22slug%22%3A%22chain%22%2C%22default%22%3A%5B%22Ethereum%22%5D%2C%22value%22%3A%5B%22Ethereum%22%5D%7D%2C%7B%22id%22%3A%2249264363-3612-16cc-ccd0-3d519aa5f917%22%2C%22type%22%3A%22category%22%2C%22target%22%3A%5B%22variable%22%2C%5B%22template-tag%22%2C%22protocol_name%22%5D%5D%2C%22name%22%3A%22Protocol%20name%22%2C%22slug%22%3A%22protocol_name%22%2C%22value%22%3A%5B%22${params.protocolSlug}%22%5D%7D%5D`, params);
+  return GET(
+    `https://www.footprint.network/api/v1/public/card/87dcf516-5b30-4200-97d8-42862c366bab/query?parameters=%5B%7B%22id%22%3A%229b5b908e-b060-3dfe-f9c1-6c0cad410de6%22%2C%22type%22%3A%22string%2F%3D%22%2C%22target%22%3A%5B%22dimension%22%2C%5B%22template-tag%22%2C%22chain%22%5D%5D%2C%22name%22%3A%22Chain%22%2C%22slug%22%3A%22chain%22%2C%22default%22%3A%5B%22Ethereum%22%5D%2C%22value%22%3A%5B%22Ethereum%22%5D%7D%2C%7B%22id%22%3A%2249264363-3612-16cc-ccd0-3d519aa5f917%22%2C%22type%22%3A%22category%22%2C%22target%22%3A%5B%22variable%22%2C%5B%22template-tag%22%2C%22protocol_name%22%5D%5D%2C%22name%22%3A%22Protocol%20name%22%2C%22slug%22%3A%22protocol_name%22%2C%22value%22%3A%5B%22${params.protocolSlug}%22%5D%7D%5D`,
+    params,
+  );
 };
 export const getProtocolFavorite = async params => {
   return GET(`/api/v1/project/protocol/favorite`, params);
@@ -688,9 +694,16 @@ export const getContractSubmittedList = params => {
 };
 
 export const getRefContractSubmittedList = () => {
-  return GET(`https://ref-api-adapter.footprint.network/api/v1/protocol/submit/record`);
+  return GET(
+    `https://ref-api-adapter.footprint.network/api/v1/protocol/submit/record`,
+  );
   // return GET(`http://localhost:3001/api/v1/protocol/submit/record`);
   // return GET(`http://10.10.16.38:3000/api/v1/protocol/submit/record`);
+};
+
+// get audit list ,status = ['pending review']
+export const getRefAuditList = params => {
+  return GET(`http://34.85.138.78:3000/api/v1/protocol/audit/list`, params);
 };
 
 export const getRefProtocolList = () => {
@@ -747,14 +760,14 @@ export const ownerTable = params => {
   return POST(`api/v1/userPage/owner/table`, params);
 };
 
-export const journeyPathAnalyze = (params) => {
+export const journeyPathAnalyze = params => {
   return POST(`api/v1/ab/user-journey/path-analyze`, params);
 };
 
-export const journeyPathUserDetail = (params) => {
+export const journeyPathUserDetail = params => {
   return POST(`api/v1/ab/user-journey/path-user-detail`, params);
 };
 
-export const journeyPathUserTrend = (params) => {
+export const journeyPathUserTrend = params => {
   return POST(`api/v1/ab/user-journey/path-user-trend`, params);
 };

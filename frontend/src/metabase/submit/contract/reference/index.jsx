@@ -2,43 +2,96 @@
 /* eslint-disable react/prop-types */
 import "../index.css";
 import React, { useState, useEffect } from "react";
-import { Button, Col, Form, Modal, Radio, Row, Table, Tag } from "antd";
+import { Button, Col, Form, Radio, Row, Table, Tag } from "antd";
 import { useMutation, useQuery } from "react-query";
 import { connect } from "react-redux";
 import { getUser, getUserIsAdmin } from "metabase/selectors/user";
-import { getRefContractSubmittedList } from "metabase/new-service";
-import Link from "metabase/core/components/Link";
 import RefContractTable from "metabase/submit/contract/components/RefContractTable";
+import {
+  getContractSubmittedList,
+  getRefContractSubmittedList,
+  reviewContract,
+} from "metabase/new-service";
+import Link from "metabase/core/components/Link";
+import ContractTable from "metabase/submit/contract/components/ContractTable";
+import RefAuditTable from "metabase/submit/contract/components/RefAuditTable";
 import LoadingSpinner from "metabase/components/LoadingSpinner/LoadingSpinner";
 import ContractAddModel from "../components/ContractAddModel";
 
 const SubmitContract = props => {
-  const { user } = props;
+  const statusOptions = [
+    {
+      label: "Pending",
+      value: "pending",
+    },
+    {
+      label: "All",
+      value: "all",
+    },
+  ];
+
+  const operatorOptions = [
+    {
+      label: "Audit",
+      value: "all",
+    },
+    {
+      label: "Personal",
+      value: "personal",
+    },
+  ];
+
   const [isSubmitModalOpen, setSubmitModalOpen] = useState({
     open: false,
     param: null,
   });
 
+  const { isAdmin, user } = props;
+  const isAuditPerson = isAdmin || user?.id === 30 || user?.id === 9; // 30 -> pb, 9 -> alpha in preview
+  const [operator, setOperator] = useState("personal");
+  const [status, setStatus] = useState("");
+  const [isReviewLoading, setReviewLoading] = useState(false);
+  // const params = {
+  //   operator: operator,
+  //   status: status === "all" ? "" : status,
+  // };
+
   const { isLoading, data, refetch } = useQuery(
     ["getRefContractSubmittedList"],
     async () => getRefContractSubmittedList(),
-    {
-      refetchOnWindowFocus: false,
-      retry: 0,
-      refetchInterval: 10000,
-    },
+    { refetchOnWindowFocus: false, retry: 0 },
   );
 
+  const reviewMutate = useMutation(reviewContract);
+
+  useEffect(() => {
+    if (operator === "all") {
+      setStatus("pending");
+    } else {
+      setStatus("");
+    }
+  }, [operator]);
 
   const renderTable = () => {
-    // const tempData = data;
-    const tempData = data ?? [];
-    if (!tempData || tempData?.length === 0) {
-      return (
-        <Table size="small" rowKey="_id" dataSource={null} pagination={false} />
-      );
+    if (operator === "personal") {
+      const tempData = data ?? [];
+      if (isLoading) {
+        return <LoadingSpinner message="Loading..." />;
+      }
+      if (!tempData || tempData?.length === 0) {
+        return (
+          <Table
+            size="small"
+            rowKey="_id"
+            dataSource={null}
+            pagination={false}
+          />
+        );
+      }
+      return <RefContractTable data={tempData} />;
+    } else if (operator === "all") {
+      return <RefAuditTable operator={user?.name} type={status} />;
     }
-    return <RefContractTable data={tempData} />;
   };
 
   return (
@@ -67,7 +120,6 @@ const SubmitContract = props => {
                 type="primary"
                 onClick={() => {
                   setSubmitModalOpen({ open: true, param: null });
-                  // props.router.push(`${isFgaPath()?'/growth':''}/submit/contract/add`);
                 }}
               >
                 Add contract or protocol
@@ -76,12 +128,32 @@ const SubmitContract = props => {
           </Col>
         </Row>
       </Form>
-      <h2 className=" p1">Latest submitted records</h2>
-      {isLoading ? (
-        <LoadingSpinner message="Loading..." />
-      ) : (
-        <>{renderTable()}</>
+      {isAuditPerson && (
+        <div className="mb1" style={{ float: "right" }}>
+          {operator === "all" && (
+            <Radio.Group
+              options={statusOptions}
+              onChange={e => {
+                setStatus(e.target.value);
+              }}
+              value={status}
+              optionType="button"
+              buttonStyle="solid"
+            />
+          )}
+          <Radio.Group
+            className="ml3"
+            options={operatorOptions}
+            onChange={e => {
+              setOperator(e.target.value);
+            }}
+            value={operator}
+            optionType="button"
+            buttonStyle="solid"
+          />
+        </div>
       )}
+      {renderTable()}
       {isSubmitModalOpen?.open && (
         <ContractAddModel
           user={user}
