@@ -209,7 +209,7 @@ const projectList = props => {
       {projectObject && (
         <div style={{ width: 800 }}>
           <div className="flex">
-            <h2>Projects</h2>
+            <h2>Projects ({`${chain}`})</h2>
           </div>
           {/*<div className="flex justify-end full-width mb1">
             <Button onClick={() => {
