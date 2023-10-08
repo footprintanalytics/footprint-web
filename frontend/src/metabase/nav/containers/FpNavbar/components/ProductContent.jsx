@@ -260,7 +260,7 @@ const ProductContent = props => {
       return (
         <>
           <div className="ml4 main-menu__data-api-padding">
-            {MainMenuFunction.renderVerticalMenu({data: tabData?.metamosaic, className: "main-menu__vertical-menu"})}
+            {MainMenuFunction.renderVerticalMenu({data: tabData?.metamosaic, className: "main-menu__vertical-menu main-menu__vertical-menu-single"})}
           </div>
         </>
       );
