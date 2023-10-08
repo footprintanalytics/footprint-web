@@ -5,6 +5,7 @@
   TODO -- since this is no longer strictly a 'util' namespace (most `:sql-jdbc` drivers need to implement one or
   methods from here) let's rename this `metabase.driver.sql.unprepare` when we get a chance."
   (:require [clojure.string :as str]
+            [metabase.api.common.table-name-util :as table-name-util]
             [clojure.tools.logging :as log]
             [java-time :as t]
             [metabase.driver :as driver]
@@ -103,6 +104,21 @@
     )
   )
 
+(defn replace-all-table-name [input-str mapping]
+  (reduce (fn [result [find replace]]
+            (str/replace result find replace))
+          input-str
+          mapping))
+
+(defn replaceSpecificChain [origin]
+  (try
+    (replace-all-table-name origin table-name-util/filterChainTableNameMapping)
+    (catch Throwable e
+      origin
+      )
+    )
+  )
+
 (defmethod unprepare :sql [driver [sql & args]]
   (transduce
    identity
@@ -118,7 +134,7 @@
             isFromTable (is-before-with-from-question-mark sql #"(?<!\?)\?(?!\?)")]
         (log/tracef "Splice %s as %s" (pr-str arg) (pr-str v))
         (str/replace-first sql #"(?<!\?)\?(?!\?)"
-                           (if isFromTable (str/replace arg "BNB Chain" "bsc") (str/re-quote-replacement v))
+                           (if isFromTable (replaceSpecificChain arg) (str/re-quote-replacement v))
                            )))
     (fn [spliced-sql]
       (log/tracef "Spliced %s\n-> %s" (u/colorize 'green (pr-str sql)) (u/colorize 'blue (pr-str spliced-sql)))
