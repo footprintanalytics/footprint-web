@@ -178,6 +178,7 @@ const GaSidebar = (props: IGaSidebarProp) => {
                 </div>
                 <GaProjectSearch
                   location={location}
+                  disableLoadList={true}
                 />
                 <Menu
                   style={{
