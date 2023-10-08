@@ -7,7 +7,7 @@ import { getChainDataList } from "metabase/query_builder/components/question/han
 const TableChains = props => {
   const { chainChange, chain, disabled } = props;
 
-  const data = getChainDataList({ includeAll: false });
+  const data = getChainDataList({ includeAll: true });
 
   const onChange = value => {
     chainChange && chainChange(value);
