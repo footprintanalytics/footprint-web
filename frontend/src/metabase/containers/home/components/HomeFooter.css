@@ -18,7 +18,7 @@
   display: flex;
   flex-direction: column;
   margin-right: 60px;
-  width: 40%;
+  width: 30%;
   margin-bottom: 20px;
 }
 
@@ -92,12 +92,20 @@
   margin-bottom: 6px;
   cursor: pointer;
   color: var(--footprint-color-secondary-text2);
+  white-space: pre-line;
   /* font-size: 14px; */
 }
 
 .home-footer-right-section ul li:hover {
   color: #3434b2;
   text-decoration: underline;
+}
+
+.home-footer-right-section ul .no-link,
+.home-footer-right-section ul .no-link:hover {
+  text-decoration: none;
+  cursor: auto;
+  color: #ffffffa0;
 }
 
 @media screen and (--footprint-breakpoint-max-pad) {

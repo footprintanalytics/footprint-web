@@ -47,6 +47,7 @@ const footers = [
       {
         label: "Data API",
         url: "/data-api",
+        bold: true,
       },
       {
         label: "REST API",
@@ -61,9 +62,32 @@ const footers = [
         url: "/batch-download",
       },
       {
-        label: "Analytics Studio",
-        url: "/studio/create",
+        label: "MetaMosaic",
+        url: "https://www.metamosaic.io/",
         startNewPanel: true,
+        bold: true,
+      },
+      {
+        label: "APP Directory",
+        url: "https://www.metamosaic.io/Ethereum/protocols",
+      },
+      {
+        label: "Analytics Studio",
+        url: "",
+        startNewPanel: true,
+        bold: true,
+      },
+      {
+        label: "Analytics Tool",
+        url: "/studio/create",
+      },
+      {
+        label: "Growth Analytics Builder\n(Coming soon)",
+        url: "",
+      },
+      {
+        label: "Data Connector",
+        url: "/studio/my-datasets/integration",
       },
     ],
   },
@@ -96,17 +120,26 @@ const footers = [
   {
     title: "Use Case",
     items: [
-      {
-        label: "GameFi data as a service",
-        url: "https://docs.google.com/presentation/d/1HO_wAM2835yOoHdib1nAS9Qrf4XR15pm8VHOUBl-SGE/edit#slide=id.g25866ee599b_0_215",
-      },
-      {
-        label: "Research data as a service",
-        url: "https://docs.google.com/presentation/d/1ScCt50CX9vVkD-pl5Rzg7g25LSz0ugaIToXzG9WI2B8/edit#slide=id.g25c23df782d_0_0",
-      },
-      {
-        label: "Data solution for growth tools",
+      /*{
+        label: "Game Ecosystem Management",
         url: "/fga",
+      },*/
+      {
+        label: "Chain Ecosystem Management",
+        url: "/fga",
+      },
+      {
+        label: "Chain Ecosystem Monitor Solution",
+        url: "https://docs.google.com/presentation/d/1vKXAHaKqp7oUBnQP1qxmr84WpFX1pmXChGIl6R9Fle4/edit#slide=id.g128e0ee6714_0_0",
+        startNewPanel: true,
+      },
+      {
+        label: "Crypto Games Solution",
+        url: "https://docs.google.com/presentation/d/1G1E6MYAEo6X2KUXC4GBaJFcwH-fxmqGt9xjSIO6XxuE/edit#slide=id.g25866ee599b_0_215",
+      },
+      {
+        label: "Analyst Solution",
+        url: "https://docs.google.com/presentation/d/1ScCt50CX9vVkD-pl5Rzg7g25LSz0ugaIToXzG9WI2B8/edit#slide=id.g25c23df782d_0_0",
       },
     ],
   },
@@ -114,7 +147,7 @@ const footers = [
     title: "Company",
     items: [
       {
-        label: "Press Kit",
+        label: "Media Kit",
         url: "https://docs.footprint.network/docs/press-kit",
       },
       {
@@ -235,12 +268,17 @@ const HomeFooter = props => {
                 itemType="http://www.schema.org/SiteNavigationElement"
               >
                 {n.items.map(item => (
-                  <li key={item.label} itemProp="name" className={cx({ "mt2": item.startNewPanel })}>
+                  <li key={item.label} itemProp="name" className={cx({ "mt2": item.startNewPanel, "no-link": !item.url, "text-bold": item.bold })}>
                     {item.url.startsWith("mailto") ? (
                       <ExternalLink className="_" href={item.url}>
                         {item.label}
                       </ExternalLink>
                     ) : (
+                      !item.url ? (
+                          <span className="no-link">
+                            {item.label}
+                          </span>
+                        ): (
                       <Link
                         itemProp="url"
                         to={item.url}
@@ -253,7 +291,7 @@ const HomeFooter = props => {
                       >
                         {item.label}
                       </Link>
-                    )}
+                      ))}
                   </li>
                 ))}
               </ul>

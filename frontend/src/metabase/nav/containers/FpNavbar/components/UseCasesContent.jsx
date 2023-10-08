@@ -11,6 +11,33 @@ const UseCasesContent = props => {
 
   const tabs = [
     {
+      growthAnalytics: {
+        title: "Growth Analytics",
+        desc: "Enterprise-level customized services",
+        data: [
+          /*{
+            title: "Game Ecosystem Management",
+            link: "/fga",
+            icon: ReactIcons.solutionIcon2,
+          },*/
+          {
+            title: "Chain Ecosystem Management",
+            link: "/fga",
+            icon: ReactIcons.chainStatsIcon,
+          },
+        ],
+      },
+      chain: {
+        title: "Chain",
+        data: [
+          {
+            title: "Chain Ecosystem Monitor Solution",
+            link: "https://docs.google.com/presentation/d/1vKXAHaKqp7oUBnQP1qxmr84WpFX1pmXChGIl6R9Fle4/edit#slide=id.g128e0ee6714_0_0",
+            icon: ReactIcons.chainOverviewIcon,
+            externalLink: true,
+          },
+        ],
+      },
       gamefiData: {
         title: "Crypto Games",
         data: [
@@ -64,6 +91,8 @@ const UseCasesContent = props => {
     return (
       <>
         <div className="main-menu__inner-layout">
+          {MainMenuFunction.renderVerticalMenu({ data: tabData?.growthAnalytics })}
+          {MainMenuFunction.renderVerticalMenu({ data: tabData?.chain })}
           {MainMenuFunction.renderVerticalMenu({ data: tabData?.gamefiData })}
           {MainMenuFunction.renderVerticalMenu({ data: tabData?.researchData })}
           {MainMenuFunction.renderVerticalMenu({ data: tabData?.growthData })}
