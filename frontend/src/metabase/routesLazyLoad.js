@@ -185,10 +185,10 @@ export default {
 
   // submit
   SubmitContractAdd: loadable(() => import("metabase/submit/contract/add")),
-  SubmitContract: loadable(() => import("metabase/submit/contract/index")),
-  SubmitContractAddV2: loadable(() => import("metabase/submit/contract/addV2")),
-  // SubmitContract: loadable(() => import("metabase/submit/contract/reference/index")),
-  // SubmitContractAddV2: loadable(() => import("metabase/submit/contract/reference/index")),
+  // SubmitContract: loadable(() => import("metabase/submit/contract/index")),
+  // SubmitContractAddV2: loadable(() => import("metabase/submit/contract/addV2")),
+  SubmitContract: loadable(() => import("metabase/submit/contract/reference/index")),
+  SubmitContractAddV2: loadable(() => import("metabase/submit/contract/reference/index")),
   SubmitRefContractAdd: loadable(() => import("metabase/submit/contract/reference/add")),
   SubmitRefContract: loadable(() => import("metabase/submit/contract/reference/index")),
   SubmitContractSuccess: loadable(() =>
