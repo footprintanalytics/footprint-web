@@ -47,7 +47,8 @@ const SubmitContract = props => {
   });
 
   const { isAdmin, user } = props;
-  const isAuditPerson = isAdmin || user?.id === 30 || user?.id === 9; // 30 -> pb, 9 -> alpha in preview
+  const isAuditPerson =
+    isAdmin || user?.id === 30 || user?.id === 9 || user?.id === 2268; // 30 -> pb, 9 -> alpha in preview ,2268 -> Eason
   const [operator, setOperator] = useState("personal");
   const [status, setStatus] = useState("");
   const [isReviewLoading, setReviewLoading] = useState(false);

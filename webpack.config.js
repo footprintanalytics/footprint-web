@@ -280,11 +280,11 @@ const config = (module.exports = {
 });
 
 if (WEBPACK_BUNDLE === "hot") {
-
-  const localIpAddress = getLocalIpAddress("IPv4") || getLocalIpAddress("IPv6") || "0.0.0.0";
+  const localIpAddress =
+    getLocalIpAddress("IPv4") || getLocalIpAddress("IPv6") || "0.0.0.0";
 
   const webpackPort = 8080;
-  const webpackHost = `http://${localIpAddress}:${webpackPort}`
+  const webpackHost = `http://${localIpAddress}:${webpackPort}`;
   config.target = "web";
   // suffixing with ".hot" allows us to run both `yarn run build-hot` and `yarn run test` or `yarn run test-watch` simultaneously
   config.output.filename = "[name].hot.bundle.js?[contenthash]";
@@ -313,7 +313,7 @@ if (WEBPACK_BUNDLE === "hot") {
     hot: true,
     client: {
       progress: true,
-      overlay: false
+      overlay: false,
     },
     headers: {
       "Access-Control-Allow-Origin": "*",
@@ -423,8 +423,10 @@ function getLocalIpAddress(ipFamily) {
     .map(iface => networkInterfaces[iface])
     .reduce((interfaces, iface) => interfaces.concat(iface));
 
-  const externalInterfaces = interfaces.filter(iface => !iface.internal)
+  const externalInterfaces = interfaces.filter(iface => !iface.internal);
 
-  const { address } = externalInterfaces.filter(({ family }) => family === ipFamily).shift();
+  const { address } = externalInterfaces
+    .filter(({ family }) => family === ipFamily)
+    .shift();
   return address;
 }

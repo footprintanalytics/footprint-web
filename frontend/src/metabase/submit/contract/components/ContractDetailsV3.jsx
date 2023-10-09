@@ -12,11 +12,13 @@ import {
   Modal,
   Tooltip,
   Upload,
+  Spin,
 } from "antd";
 import { useQuery } from "react-query";
 import slug from "slug";
 import {
   CheckOutlined,
+  LoadingOutlined,
   ExclamationCircleOutlined,
   DownOutlined,
   UpOutlined,
@@ -180,7 +182,12 @@ const ContractDetailsV3 = ({ onFinish, user, onClosed }) => {
           setMoreOptions(!isMoreOptions);
         }}
       >
-        {isMoreOptions ? <UpOutlined /> : <DownOutlined />} {`More options ${!isMoreOptions?'(Logo,Twitter,Discord,Telegram,Github,Description)':''}`}
+        {isMoreOptions ? <UpOutlined /> : <DownOutlined />}{" "}
+        {`More options ${
+          !isMoreOptions
+            ? "(Logo,Twitter,Discord,Telegram,Github,Description)"
+            : ""
+        }`}
       </Button>
     );
   };
@@ -196,13 +203,13 @@ const ContractDetailsV3 = ({ onFinish, user, onClosed }) => {
         return false;
       }
       const fileName = `logo_images/${uuidv4()}-${file.name}`;
-      setImageUploading(true)
+      setImageUploading(true);
       await uploadFile({ fileName, file });
       const fileUrl = `https://static.footprint.network/${ossPath(fileName)}`;
       form.setFieldsValue({
         logo: fileUrl,
       });
-      setImageUploading(false)
+      setImageUploading(false);
     },
   };
   return (
@@ -241,13 +248,26 @@ const ContractDetailsV3 = ({ onFinish, user, onClosed }) => {
         }}
       >
         <Form.Item
-          label="Project name"
+          label={
+            <>
+              Project name{" "}
+              {getProtocolList.isLoading && (
+                <Spin
+                  className=" ml-10"
+                  size="small"
+                  indicator={<LoadingOutlined style={{ fontSize: 16 }} spin />}
+                ></Spin>
+              )}
+            </>
+          }
           rules={[{ required: true, message: "Select project name" }]}
           name="protocolName"
         >
           <AutoComplete
-            placeholder="Select project name"
-            loading={getProtocolList.isLoading}
+            placeholder={
+              getProtocolList.isLoading ? "Loading..." : "Select project name"
+            }
+            disabled={getProtocolList.isLoading}
             options={getProtocolList?.data?.map(item => ({
               value: item.protocol_name,
             }))}
@@ -437,7 +457,8 @@ const ContractDetailsV3 = ({ onFinish, user, onClosed }) => {
                 () => ({
                   required: false,
                   validator(_, value) {
-                    if (!value||
+                    if (
+                      !value ||
                       value?.startsWith("https://") ||
                       value?.startsWith("http://")
                     ) {
@@ -459,7 +480,8 @@ const ContractDetailsV3 = ({ onFinish, user, onClosed }) => {
                 () => ({
                   required: false,
                   validator(_, value) {
-                    if (!value||
+                    if (
+                      !value ||
                       value?.startsWith("https://") ||
                       value?.startsWith("http://")
                     ) {
@@ -481,7 +503,8 @@ const ContractDetailsV3 = ({ onFinish, user, onClosed }) => {
                 () => ({
                   required: false,
                   validator(_, value) {
-                    if (!value||
+                    if (
+                      !value ||
                       value?.startsWith("https://") ||
                       value?.startsWith("http://")
                     ) {
@@ -503,7 +526,8 @@ const ContractDetailsV3 = ({ onFinish, user, onClosed }) => {
                 () => ({
                   required: false,
                   validator(_, value) {
-                    if (!value||
+                    if (
+                      !value ||
                       value?.startsWith("https://") ||
                       value?.startsWith("http://")
                     ) {
@@ -525,7 +549,8 @@ const ContractDetailsV3 = ({ onFinish, user, onClosed }) => {
                 () => ({
                   required: false,
                   validator(_, value) {
-                    if (!value||
+                    if (
+                      !value ||
                       value?.startsWith("https://") ||
                       value?.startsWith("http://")
                     ) {
@@ -540,10 +565,7 @@ const ContractDetailsV3 = ({ onFinish, user, onClosed }) => {
             >
               <Input placeholder="Please provide the github url of the project" />
             </Form.Item>
-            <Form.Item
-              label="Description"
-              name="description"
-            >
+            <Form.Item label="Description" name="description">
               <Input placeholder="Please provide the description of the project" />
             </Form.Item>
           </div>

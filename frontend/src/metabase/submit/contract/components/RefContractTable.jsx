@@ -161,6 +161,7 @@ const RefContractTable = ({ data }) => {
           case "error":
             return <Tag color="error">{text}</Tag>;
           case "submitted":
+          case "approved":
             return <Tag color="success">{text}</Tag>;
           case "rejected":
             return (
@@ -183,10 +184,10 @@ const RefContractTable = ({ data }) => {
       title: "Submitted by",
       // width: 240,
       render: (_, record) => {
-        if(record?.username === ""){
+        if (record?.username === "") {
           record.username = null;
         }
-        if(record?.email === ""){
+        if (record?.email === "") {
           record.email = null;
         }
         return (
