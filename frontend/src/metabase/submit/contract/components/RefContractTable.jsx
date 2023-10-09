@@ -162,7 +162,11 @@ const RefContractTable = ({ data }) => {
             return <Tag color="error">{text}</Tag>;
           case "submitted":
           case "approved":
-            return <Tag color="success">{text}</Tag>;
+            return (
+              <Tooltip title={error}>
+                <Tag color="success">{text}</Tag>
+              </Tooltip>
+            );
           case "rejected":
             return (
               <Tooltip title={error}>
@@ -175,7 +179,10 @@ const RefContractTable = ({ data }) => {
                 {text}
               </Tag>
             ) : (
-              <Tag color="warning">{"fail"}</Tag>
+              <Tooltip title={error}>
+                {" "}
+                <Tag color="warning">{"fail"}</Tag>
+              </Tooltip>
             );
         }
       },

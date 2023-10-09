@@ -183,7 +183,11 @@ const RefAuditTable = ({ operator, type }) => {
             return <Tag color="processing">{"pending"}</Tag>;
           case "submitted":
           case "approved":
-            return <Tag color="success">{text}</Tag>;
+            return (
+              <Tooltip title={reason}>
+                <Tag color="success">{text}</Tag>
+              </Tooltip>
+            );
           case "rejected":
             return (
               <Tooltip title={reason}>
@@ -191,7 +195,9 @@ const RefAuditTable = ({ operator, type }) => {
               </Tooltip>
             );
           default:
-            <Tag color="warning">{"fail"}</Tag>;
+            <Tooltip title={reason}>
+              <Tag color="warning">{"fail"}</Tag>
+            </Tooltip>;
         }
       },
     },

@@ -697,20 +697,31 @@ export const getRefContractSubmittedList = () => {
   // return GET(
   //   `https://ref-api-adapter.footprint.network/api/v1/protocol/submit/record`,
   // );
-  return GET(`http://34.85.138.78:3000/api/v1/protocol/submit/record`);
+  return GET(
+    `https://beta-footprint-ref-data.footprint.network/api/v1/protocol/submit/record`,
+  );
 };
 
 export const submitRefProtocols = params => {
-  return POST(`http://34.85.138.78:3000/api/v1/protocol/submit`, params);
+  return POST(
+    `https://beta-footprint-ref-data.footprint.network/api/v1/protocol/submit`,
+    params,
+  );
 };
 
 // get audit list ,status = ['reviewing']
 export const getRefAuditList = params => {
-  return GET(`http://34.85.138.78:3000/api/v1/protocol/audit/list`, params);
+  return GET(
+    `https://beta-footprint-ref-data.footprint.network/api/v1/protocol/audit/list`,
+    params,
+  );
 };
 // {record_id, status:approved/rejected,reason,operator}
 export const doRefAudit = params => {
-  return POST(`http://34.85.138.78:3000/api/v1/protocol/audit`, params);
+  return POST(
+    `https://beta-footprint-ref-data.footprint.network/api/v1/protocol/audit`,
+    params,
+  );
 };
 
 export const getRefProtocolList = () => {
