@@ -589,6 +589,19 @@ class Visualization extends React.PureComponent {
           </div>
         )
       }
+      if (isFga && error.indexOf("iceberg.footprint.") && error.indexOf("_address_nft_latest_balance") && error.indexOf("does not exist")) {
+        return (
+          <div className="noResults">
+            The data is not yet available, please
+            <br />
+            feel free to contact our{" "}
+            <Link target="_blank" href="mailto:sales@footprint.network">
+              BD team
+            </Link>
+            .
+          </div>
+        );
+      }
       return (
         <>
           <Tooltip tooltip={error?.message || error} isEnabled={small}>

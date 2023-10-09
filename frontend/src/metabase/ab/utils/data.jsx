@@ -328,7 +328,7 @@ export const getDashboardMap = (businessType, project, chain) => {
   let protocolType = project?.protocolType;
   const chainConfig = getChainDataList({ includeAll: false }).find(item => item.label === chain);
   const dashboardMap = new Map([
-    ["transaction_monitor", chainConfig?.hasTraces ? "5448e85b-442e-44b7-9c88-e22a1bd11d11" : "d320f0d7-c82e-47d1-9e60-377c2a2d87c9"],
+    ["transaction_monitor", "5448e85b-442e-44b7-9c88-e22a1bd11d11"],
     ["ecosystem_development", "0b6bbe4d-5480-4e1c-8860-ead23619492b"],
     ["ecosystem_projects", "8750f228-16d7-4b40-91de-92dfb4b7e0c6"],
     ["project_directory", "dc9fd9b4-b65b-448d-afea-f72aa9a4f7e0"],

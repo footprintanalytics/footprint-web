@@ -214,8 +214,8 @@ export function getChainDataList({ includeAll = true }) {
         label: "Boba",
         icon: getOssUrl("fp-chains/boba.webp"),
         defaultProject: {
-          protocolSlug: "",
-          protocolName: "",
+          protocolSlug: "domination-finance",
+          protocolName: "Domination Finance",
         },
       },
       {
