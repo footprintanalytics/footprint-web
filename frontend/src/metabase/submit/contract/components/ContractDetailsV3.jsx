@@ -238,7 +238,10 @@ const ContractDetailsV3 = ({ onFinish, user, onClosed }) => {
               ...values,
               username: user?.name,
               contracts: formatContracts(values.contracts),
-              protocolSlug: values.protocolSlug || slug(values.protocolName),
+              protocolSlug:
+                protocolSlug ||
+                values.protocolSlug ||
+                slug(values.protocolName),
               isNewProtocol,
             };
             onClosed?.(param);
@@ -282,6 +285,7 @@ const ContractDetailsV3 = ({ onFinish, user, onClosed }) => {
               const protocolSlug = getProtocolList?.data?.find(
                 item => item.protocol_name === value,
               )?.protocol_slug;
+              console.log("select protocolSlug => ", value, protocolSlug);
               // form.setFieldValue("protocolSlug", protocolSlug);
               setProtocolSlug(protocolSlug);
             }}
