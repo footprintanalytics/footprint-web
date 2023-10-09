@@ -1,10 +1,16 @@
 import axios from "axios";
 import { GET, POST, PUT, DELETE } from "metabase/lib/new-api";
 import { getProject, isDefi360 } from "./lib/project_info";
-import { protocol_name } from "../cljs/schema.core";
 
 export const apiGet = async api => {
   return await axios.get(api);
+};
+
+export const getRefBaseApi = () => {
+  const domain = window.location.hostname;
+  return domain === "localhost" || domain === "preview.footprint.network"
+    ? "https://beta-footprint-ref-data.footprint.network" // local test
+    : "https://ref-api-adapter.footprint.network"; // production
 };
 
 // FGA Api
@@ -694,38 +700,24 @@ export const getContractSubmittedList = params => {
 };
 
 export const getRefContractSubmittedList = () => {
-  // return GET(
-  //   `https://ref-api-adapter.footprint.network/api/v1/protocol/submit/record`,
-  // );
-  return GET(
-    `https://beta-footprint-ref-data.footprint.network/api/v1/protocol/submit/record`,
-  );
+  return GET(`${getRefBaseApi()}/api/v1/protocol/submit/record`);
 };
 
 export const submitRefProtocols = params => {
-  return POST(
-    `https://beta-footprint-ref-data.footprint.network/api/v1/protocol/submit`,
-    params,
-  );
+  return POST(`${getRefBaseApi()}/api/v1/protocol/submit`, params);
 };
 
 // get audit list ,status = ['reviewing']
 export const getRefAuditList = params => {
-  return GET(
-    `https://beta-footprint-ref-data.footprint.network/api/v1/protocol/audit/list`,
-    params,
-  );
+  return GET(`${getRefBaseApi()}/api/v1/protocol/audit/list`, params);
 };
 // {record_id, status:approved/rejected,reason,operator}
 export const doRefAudit = params => {
-  return POST(
-    `https://beta-footprint-ref-data.footprint.network/api/v1/protocol/audit`,
-    params,
-  );
+  return POST(`${getRefBaseApi()}/api/v1/protocol/audit`, params);
 };
 
 export const getRefProtocolList = () => {
-  return GET(`https://ref-api-adapter.footprint.network/api/v1/protocol/list`);
+  return GET(`${getRefBaseApi()}/api/v1/protocol/list`);
 };
 
 export const getContractSubmittedByAddress = params => {

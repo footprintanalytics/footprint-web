@@ -10,7 +10,7 @@ import {
   animation_complete2,
 } from "./data-scanning";
 import "animate.css";
-import { submitRefProtocols } from "metabase/new-service";
+import { getRefBaseApi, submitRefProtocols } from "metabase/new-service";
 
 const ContractDecoding = ({ param, onSuccess }) => {
   const ref = useRef();
@@ -21,12 +21,8 @@ const ContractDecoding = ({ param, onSuccess }) => {
   const [title, setTitle] = useState(
     `The system is currently processing [${param?.protocolName}]`,
   );
-  const domain = window.location.hostname;
-  let endpoint =
-    domain === "localhost" || domain === "preview.footprint.network"
-      ? "wss://beta-footprint-ref-data.footprint.network/ws" // local test
-      : "wss://ref-api-adapter.footprint.network/ws"; // production
-  // const endpoint = "wss://ref-api-adapter.footprint.network/ws";
+
+  const endpoint = `wss://${getRefBaseApi().replace("https://", "")}/ws`;
   let socket;
   let animation = null;
   useEffect(() => {

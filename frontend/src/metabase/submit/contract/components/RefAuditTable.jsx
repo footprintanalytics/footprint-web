@@ -93,7 +93,6 @@ const RefAuditTable = ({ operator, type }) => {
         });
       }
     }
-    console.log("findDifferentFields", differentFields);
     return differentFields;
   };
 
