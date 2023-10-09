@@ -490,7 +490,7 @@ class Visualization extends React.PureComponent {
     const isFilter =
       dashcard?.visualization_settings?.virtual_card?.display === "filter";
     const isPublic = location.pathname.startsWith("/public"); // iframe 里面也是 work 的，true
-    const isFga = location.pathname.startsWith("/growth");
+    const isFga = location.pathname.startsWith("/growth") || location.pathname.startsWith("/fga");
     const isFgaTwitter = isFga && location.pathname.includes("/Twitter");
     const isFgaDiscord = isFga && location.pathname.includes("/Discord");
     const isFgaGoogleAnalysis =

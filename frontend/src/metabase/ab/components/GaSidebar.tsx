@@ -101,7 +101,7 @@ const GaSidebar = (props: IGaSidebarProp) => {
   // const isProject = toggle_platform_project === "project"
 
   // @ts-ignore
-  const chainData = getChainDataList({ includeAll: false }).filter(item => !item.noTransactions)
+  const chainData = getChainDataList({ includeAll: false }).filter(item => !item.noTransactions && !item.noProtocol)
     .map(item => {
       return {
         ...item,
@@ -109,13 +109,19 @@ const GaSidebar = (props: IGaSidebarProp) => {
       }
     });
 
-  const pushFirstRouter = () => {
+  const pushFirstRouter = (chain: string | undefined) => {
     const menuData = fga_menu_data_v2(businessType, projectObject, chain);
     const menuKeys = menuData.keys;
     const firstMenu = menuKeys[0];
+    // @ts-ignore
+    const defaultProject = getChainDataList({ includeAll: false })?.find(item => item.label === chain)?.defaultProject ||
+      {
+        protocolSlug: "the-sandbox",
+        protocolName: "The Sandbox",
+      }
     router.push({
       pathname: getGrowthProjectPath(
-        projectObject?.protocolSlug,
+        defaultProject?.protocolSlug,
         firstMenu,
       ),
     });
@@ -153,9 +159,9 @@ const GaSidebar = (props: IGaSidebarProp) => {
                     border: "1px solid #ffffff30"
                   }}
                   onChange={value => {
+                    pushFirstRouter(value);
                     setFgaChain(value);
                     resetFgaProtocolList();
-                    pushFirstRouter();
                   }}
                 >
                   {chainData.map(n => (

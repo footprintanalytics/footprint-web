@@ -35,6 +35,7 @@ import {
   setHistoryGames,
 } from "metabase/redux/control";
 import CreateMyProjectModal from "metabase/ab/components/Modal/CreateMyProjectModal";
+import { getChainDataList } from "metabase/query_builder/components/question/handle";
 
 const GaProjectSearch = props => {
   const {
@@ -67,11 +68,11 @@ const GaProjectSearch = props => {
   const [open, setOpen] = useState(false);
   const [currentProject, setCurrentProject] = useState(projectPath);
   const protocolListLen = protocolList?.length;
-  const defaultProject = {
-    protocolSlug: "the-sandbox",
-    protocolName: "The Sandbox",
-  }
-
+  const defaultProject = getChainDataList({ includeAll: false })?.find(item => item.label === chain)?.defaultProject ||
+    {
+      protocolSlug: "the-sandbox",
+      protocolName: "The Sandbox",
+    }
   // console.log("currentProject", currentProject)
   // const { isLoading, data: data2 } = useQuery(
   //   ["GetFgaProject", user?.id],
