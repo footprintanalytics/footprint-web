@@ -161,7 +161,12 @@ const RefContractTable = ({ data }) => {
           case "error":
             return <Tag color="error">{text}</Tag>;
           case "submitted":
-            return <Tag color="success">{text}</Tag>;
+          case "approved":
+            return (
+              <Tooltip title={error}>
+                <Tag color="success">{text}</Tag>
+              </Tooltip>
+            );
           case "rejected":
             return (
               <Tooltip title={error}>
@@ -174,7 +179,10 @@ const RefContractTable = ({ data }) => {
                 {text}
               </Tag>
             ) : (
-              <Tag color="warning">{"fail"}</Tag>
+              <Tooltip title={error}>
+                {" "}
+                <Tag color="warning">{"fail"}</Tag>
+              </Tooltip>
             );
         }
       },
@@ -183,10 +191,10 @@ const RefContractTable = ({ data }) => {
       title: "Submitted by",
       // width: 240,
       render: (_, record) => {
-        if(record?.username === ""){
+        if (record?.username === "") {
           record.username = null;
         }
-        if(record?.email === ""){
+        if (record?.email === "") {
           record.email = null;
         }
         return (

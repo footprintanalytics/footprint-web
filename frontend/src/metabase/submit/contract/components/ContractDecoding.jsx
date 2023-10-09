@@ -10,6 +10,7 @@ import {
   animation_complete2,
 } from "./data-scanning";
 import "animate.css";
+import { getRefBaseApi, submitRefProtocols } from "metabase/new-service";
 
 const ContractDecoding = ({ param, onSuccess }) => {
   const ref = useRef();
@@ -20,13 +21,9 @@ const ContractDecoding = ({ param, onSuccess }) => {
   const [title, setTitle] = useState(
     `The system is currently processing [${param?.protocolName}]`,
   );
-  const domain = window.location.hostname;
-  let endpoint =
-    domain === "localhost"
-      ? "ws://localhost:7081" // local test
-      : "wss://ref-api-adapter.footprint.network/ws"; // production
-  // const endpoint = "wss://ref-api-adapter.footprint.network/ws";
-  const socket = new WebSocket(endpoint);
+
+  const endpoint = `wss://${getRefBaseApi().replace("https://", "")}/ws`;
+  let socket;
   let animation = null;
   useEffect(() => {
     animation = loadAnimation();
@@ -42,68 +39,86 @@ const ContractDecoding = ({ param, onSuccess }) => {
   }
 
   const handleSocket = () => {
+    const params = {
+      protocol_name: param?.protocolName,
+      protocol_slug: param?.protocolSlug,
+      protocol_type: param?.projectCategory,
+      website: param?.website,
+      username: param?.username,
+      email: param?.email,
+      twitter: param?.twitter,
+      discord: param?.discord,
+      telegram: param?.telegram,
+      github: param?.github,
+      logo: param?.logo,
+      description: param?.description,
+      contracts: param?.contracts,
+      source: "web_user",
+    };
+    console.log("handleSocket => ", params);
     try {
+      socket = new WebSocket(endpoint);
+      socket.onerror = function (error) {
+        console.error("WebSocket on error: ", error);
+        submitByHttp(params);
+      };
       socket.onopen = function () {
         console.log("Connected");
         socket.send(
           JSON.stringify({
             event: "submit_protocol",
-            data: {
-              protocol_name: param?.protocolName,
-              protocol_slug: param?.protocolSlug,
-              protocol_type: param?.projectCategory,
-              website: param?.website,
-              username: param?.username,
-              email: param?.email,
-              twitter: param?.twitter,
-              discord: param?.discord,
-              telegram: param?.telegram,
-              github: param?.github,
-              logo: param?.logo,
-              description: param?.description,
-              contracts: param?.contracts,
-              source: "web_user",
-            },
+            data: params,
           }),
         );
         socket.onmessage = function (msg) {
           console.log("on message: ", msg);
           const data = JSON.parse(msg.data);
           if (data?.event === "done" || data === "done") {
-            animation = loadAnimation("completed");
-            setTitle(
-              `The system is currently process [${param?.protocolName}] completed.`,
-            );
-            setLogDatas(datas => {
-              return [
-                ...datas,
-
-                {
-                  date: getTimeNow(),
-                  message: "protocol process completed.",
-                },
-              ];
-            });
-            message.success("protocol process completed.");
             socket?.close();
-            setLoadCompleted(true);
+            SubmitSuccess();
             return;
           }
-          setLogDatas(datas => {
-            return [
-              ...datas,
-              {
-                date: getTimeNow(),
-                message: `${data?.data?.message ?? data}`,
-              },
-            ];
-          });
+          setLog(`${data?.data?.message ?? data}`);
         };
       };
     } catch (error) {
       console.log("error=> ", error);
       socket?.close();
+      submitByHttp(params);
     }
+  };
+
+  const SubmitSuccess = () => {
+    animation = loadAnimation("completed");
+    setTitle(
+      `The system is currently process [${param?.protocolName}] completed.`,
+    );
+    setLog("protocol process completed.");
+    message.success("protocol process completed.");
+    setLoadCompleted(true);
+  };
+  const setLog = log => {
+    setLogDatas(datas => {
+      return [
+        ...datas,
+        {
+          date: getTimeNow(),
+          message: log,
+        },
+      ];
+    });
+  };
+  const submitByHttp = params => {
+    setLog("start submit protocol by http.");
+    submitRefProtocols(params)
+      .then(res => {
+        SubmitSuccess();
+      })
+      .catch(err => {
+        setLog("submit protocol by http error.Please retry later");
+        console.log("submit protocol by http error=> ", err);
+      })
+      .finally(() => {});
   };
 
   const loadAnimation = type => {
