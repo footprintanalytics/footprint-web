@@ -23,7 +23,7 @@ const ContractDecoding = ({ param, onSuccess }) => {
   );
   const domain = window.location.hostname;
   let endpoint =
-    domain === "localhost"
+    domain === "localhost" || domain === "preview.footprint.network"
       ? "ws://34.85.138.78:3000" // local test
       : "wss://ref-api-adapter.footprint.network/ws"; // production
   // const endpoint = "wss://ref-api-adapter.footprint.network/ws";
