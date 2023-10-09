@@ -127,7 +127,7 @@ const GaProjectSearch = props => {
     if ((!favoriteList || !userId) && !disableLoadList) {
       loadFgaFavoriteList();
     }
-  }, [favoriteList, userId, disableLoadList])
+  }, [userId, disableLoadList])
 
   useEffect(() => {
     if (projectPath) {
