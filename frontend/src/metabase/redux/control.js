@@ -10,6 +10,7 @@ import {
 } from "metabase/lib/register-activity";
 import { clearCurrentFgaProject, refreshCurrentFgaProjectNew } from "./user";
 import { getProtocolFavorite, getProtocolList } from "../new-service";
+import { isBusinessTypePath } from "../ab/utils/utils";
 
 export const LOGIN_MODAL_SHOW = "metabase/control/loginModalShow";
 export const CREATE_FGA_PROJECT_MODAL_SHOW =
@@ -177,7 +178,18 @@ export const loadFgaProtocolList = createThunkAction(
   LOAD_FGA_PROTOCOL_LIST,
   (chain) =>
     async (dispatch, getState) => {
-      return await getProtocolList({ chain });
+      if (isBusinessTypePath("public-chain")) {
+        return await getProtocolList({ chain });
+      }
+      return {
+          "protocolList": [
+            {
+              "logo": null,
+              "protocolSlug": "Project A",
+              "protocolName": "Project A",
+            },
+          ]
+      }
     },
 );
 
