@@ -325,7 +325,7 @@ const Project = props => {
     }
     if (
       current_tab === "GameFi" &&
-      !projectObject?.nftCollectionAddress?.length > 0
+      !projectObject?.nftCollectionAddress?.filter(item => item.chain === chain)?.length > 0
     ) {
       // GameFi Project without NFT
       return projectObject?.protocolSlug ? (

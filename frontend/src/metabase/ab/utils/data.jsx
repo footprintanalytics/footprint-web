@@ -376,7 +376,7 @@ export const getDashboardMap = (businessType, project, chain) => {
 export const fga_menu_data_v2 = (businessType, project, chain) => {
   let protocolType = project?.protocolType;
   const chainConfig = getChainDataList({ includeAll: false }).find(item => item.label === chain);
-  if (project?.nftCollectionAddress?.length > 0) {
+  if (project?.nftCollectionAddress?.filter(item => item.chain === chain)?.length > 0) {
     if (protocolType === "GameFi") {
       protocolType = "GameFi_NFT";
     } else {
@@ -480,9 +480,9 @@ export const fga_menu_data_v2 = (businessType, project, chain) => {
         getItem("Users", "project_users", null),
         getItem("Transaction", "project_transaction", null),
       ]),
-      (project?.nftCollectionAddress?.length > 0 || project?.tokenAddress?.length > 0) &&
+      (project?.nftCollectionAddress?.filter(item => item.chain === chain)?.length > 0 || project?.tokenAddress?.filter(item => item.chain === chain)?.length > 0) &&
         getItem("Assets", "assets", ReactIcons.assetIcon, [
-          project?.nftCollectionAddress?.length > 0 &&
+          project?.nftCollectionAddress?.filter(item => item.chain === chain)?.length > 0 &&
             getItem("NFT", "nft", null, [
                 getItem("NFT Summary", "nft_summary", null),
                 getItem("NFT Sales&Mints", "nft_sales_mints", null),
@@ -492,7 +492,7 @@ export const fga_menu_data_v2 = (businessType, project, chain) => {
               ]
             ),
 
-          project?.tokenAddress?.length > 0 &&
+          project?.tokenAddress?.filter(item => item.chain === chain)?.length > 0 &&
             getItem("Token", "token", null, [
                 getItem("Token Summary", "game_tokenomics", null),
                 // getItem("Token Holders", "token-holders-coming-soon", null),

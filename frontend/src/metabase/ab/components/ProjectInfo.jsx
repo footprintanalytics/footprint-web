@@ -22,9 +22,10 @@ import { getFgaProject, getUser } from "metabase/selectors/user";
 import "../css/index.css";
 import Link from "metabase/core/components/Link/Link";
 import UpdateProjectModal from "./Modal/UpdateProjectModal";
+import { getFgaChain } from "metabase/selectors/control";
 
 const ProjectInfo = props => {
-  const { router, project, location, user } = props;
+  const { router, project, location, user, chain } = props;
   const [currentProject, setCurrentProject] = useState(project);
   const [projectModalShow, setProjectModalShow] = useState({
     show: false,
@@ -46,13 +47,13 @@ const ProjectInfo = props => {
     let datas = [];
     switch (type) {
       case "NFT":
-        datas = currentProject?.nftCollectionAddress;
+        datas = currentProject?.nftCollectionAddress?.filter(item => item.chain === chain);
         break;
       case "Contract":
         datas = [];
         break;
       case "Token":
-        datas = currentProject?.tokenAddress;
+        datas = currentProject?.tokenAddress?.filter(item => item.chain === chain);
         break;
       default:
         datas = [];
@@ -210,10 +211,10 @@ const ProjectInfo = props => {
                       currentProject?.protocolType !== "NFT" && (
                         <Tag>{currentProject?.protocolType}</Tag>
                       )}
-                    {currentProject?.nftCollectionAddress?.length > 0 && (
+                    {currentProject?.nftCollectionAddress?.filter(item => item.chain === chain)?.length > 0 && (
                       <Tag>NFT</Tag>
                     )}
-                    {currentProject?.tokenAddress?.length > 0 && (
+                    {currentProject?.tokenAddress?.filter(item => item.chain === chain)?.length > 0 && (
                       <Tag>Token</Tag>
                     )}
                   </div>
@@ -290,6 +291,7 @@ const mapStateToProps = state => {
   return {
     user: getUser(state),
     project: getFgaProject(state),
+    chain: getFgaChain(state),
   };
 };
 
