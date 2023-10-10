@@ -113,6 +113,8 @@ const GaSidebar = (props: IGaSidebarProp) => {
     const menuData = fga_menu_data_v2(businessType, projectObject, chain);
     const menuKeys = menuData.keys;
     const firstMenu = menuKeys[0];
+    const hasNewChainData = projectObject?.contractAddress?.find((item: any) => item.chain === chain);
+    const hasNewChainCurrentMenu = menuKeys.includes(currentMenu);
     // @ts-ignore
     const defaultProject = getChainDataList({ includeAll: false })?.find(item => item.label === chain)?.defaultProject ||
       {
@@ -121,8 +123,8 @@ const GaSidebar = (props: IGaSidebarProp) => {
       }
     router.push({
       pathname: getGrowthProjectPath(
-        defaultProject?.protocolSlug,
-        firstMenu,
+        hasNewChainData ? projectObject?.protocolSlug : defaultProject?.protocolSlug,
+        hasNewChainData && hasNewChainCurrentMenu ? currentMenu : firstMenu,
       ),
     });
   }
