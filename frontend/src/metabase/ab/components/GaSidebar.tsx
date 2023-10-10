@@ -129,6 +129,8 @@ const GaSidebar = (props: IGaSidebarProp) => {
     });
   }
 
+  const showChainSelect = businessType === "public-chain";
+
   return (
     <Sider
       className="ga-side-bar"
@@ -151,7 +153,7 @@ const GaSidebar = (props: IGaSidebarProp) => {
               <div className="ga-side-bar__title">
                 <h3>{platformMenuTitle}</h3>
               </div>
-              <div className={"flex justify-center pm2"}>
+                {showChainSelect && (<div className={"flex justify-center pm2"}>
                 <Select
                   defaultValue={chain}
                   style={{ width: 218 }}
@@ -175,7 +177,7 @@ const GaSidebar = (props: IGaSidebarProp) => {
                     </Select.Option>
                   ))}
                 </Select>
-              </div>
+              </div>)}
               <Menu
                 key={chain}
                 className="ga-side-bar-menu"

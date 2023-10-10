@@ -164,6 +164,11 @@ export const refreshCurrentFgaProject = createThunkAction(
   async project_id => {
     try {
       let res
+      if (window.location.pathname.startsWith("/fga/public-chain")) {
+        res = await GetFgaProjectDetail({
+          projectId: project_id,
+        });
+      } else
       if (isABPath()) {
         if (project_id === 153) {
           res = {
