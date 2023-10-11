@@ -65,7 +65,7 @@ const AboutDepth = () => {
           link: "https://www.footprint.network/research/chain/chain-ecosystem/chain-overview",
         },
       ],
-      img: "home-v2/img_depth_right_chain.png",
+      img: "home-v2/img_depth_right_chain_v2.png",
     },
     {
       icon: "home-v2/img_depth_tab_4.png",

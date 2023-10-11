@@ -244,6 +244,11 @@ const ResearchContent = props => {
             img: getOssUrl("studio/img-chain-34.png"),
             link: "/research/chain/chain-stats/polygon-overview",
           },
+          {
+            title: "Nautilus",
+            img: getOssUrl("fp-chains/nautilus.png?1=1&image_process=resize,w_36/crop,h_36/format,webp"),
+            link: "/research/chain/chain-stats/nautilus-overview",
+          },
         ],
         layout2Data: [
           {
