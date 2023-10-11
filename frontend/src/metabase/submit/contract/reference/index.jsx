@@ -41,6 +41,20 @@ const SubmitContract = props => {
     },
   ];
 
+  const recordType = [
+    {
+      label: "Protocol",
+      value: "protocol",
+    },
+    {
+      label: "Contract",
+      value: "contract",
+    },
+  ];
+  const [currentRecordType, setCurrentRecordType] = useState(
+    recordType[0].value,
+  );
+
   const [isSubmitModalOpen, setSubmitModalOpen] = useState({
     open: false,
     param: null,
@@ -58,8 +72,8 @@ const SubmitContract = props => {
   // };
 
   const { isLoading, data, refetch } = useQuery(
-    ["getRefContractSubmittedList"],
-    async () => getRefContractSubmittedList(),
+    ["getRefContractSubmittedList", currentRecordType],
+    async () => getRefContractSubmittedList({ type: currentRecordType }),
     { refetchOnWindowFocus: false, retry: 0 },
   );
 
@@ -89,9 +103,17 @@ const SubmitContract = props => {
           />
         );
       }
-      return <RefContractTable data={tempData} />;
+      return (
+        <RefContractTable data={tempData} recordType={currentRecordType} />
+      );
     } else if (operator === "all") {
-      return <RefAuditTable operator={user?.name} type={status} />;
+      return (
+        <RefAuditTable
+          operator={user?.name}
+          type={status}
+          recordType={currentRecordType}
+        />
+      );
     }
   };
 
@@ -129,31 +151,46 @@ const SubmitContract = props => {
           </Col>
         </Row>
       </Form>
-      {isAuditPerson && (
-        <div className="mb1" style={{ float: "right" }}>
-          {operator === "all" && (
+
+      <div className="mb1" style={{ float: "right" }}>
+        <Radio.Group
+          className="ml3"
+          options={recordType}
+          onChange={e => {
+            setCurrentRecordType(e.target.value);
+          }}
+          value={currentRecordType}
+          optionType="button"
+          buttonStyle="solid"
+        />
+        {isAuditPerson && (
+          <>
+            {operator === "all" && (
+              <Radio.Group
+                options={statusOptions}
+                className="ml3"
+                onChange={e => {
+                  setStatus(e.target.value);
+                }}
+                value={status}
+                optionType="button"
+                buttonStyle="solid"
+              />
+            )}
             <Radio.Group
-              options={statusOptions}
+              className="ml3"
+              options={operatorOptions}
               onChange={e => {
-                setStatus(e.target.value);
+                setOperator(e.target.value);
               }}
-              value={status}
+              value={operator}
               optionType="button"
               buttonStyle="solid"
             />
-          )}
-          <Radio.Group
-            className="ml3"
-            options={operatorOptions}
-            onChange={e => {
-              setOperator(e.target.value);
-            }}
-            value={operator}
-            optionType="button"
-            buttonStyle="solid"
-          />
-        </div>
-      )}
+          </>
+        )}
+      </div>
+
       {renderTable()}
       {isSubmitModalOpen?.open && (
         <ContractAddModel
