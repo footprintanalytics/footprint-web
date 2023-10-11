@@ -46,6 +46,7 @@ import { checkIsNeedContactUs, isABPath } from "metabase/ab/utils/utils";
 import { getContext, getPath, getUser } from "../selectors";
 
 import { isDark } from "../../../dashboard/components/utils/dark";
+import { isBusinessTypePath } from "../../../ab/utils/utils";
 
 const mapStateToProps = (state, props) => ({
   path: getPath(state, props),
@@ -450,16 +451,16 @@ class ABNavbar extends Component {
           <Link
             className="Nav__logo"
             to="/fga"
-            onClick={e => {
+            /*onClick={e => {
               e.preventDefault();
               trackStructEvent(`navbar-click-logo`);
               const path = location.pathname.includes("public-chain") ? "/public-chain" : "";
               this.goLink(e, `/fga${path}`);
-            }}
+            }}*/
           >
             <div className="flex flex-column" style={{ lineHeight: 1.2 }}>
               <span style={{ color: "white", fontSize: 18, fontWeight: 600 }}>Growth Analytics</span>
-              <span style={{ color: "white", fontSize: 11, textAlign: "center" }}>Public Chain</span>
+              {isBusinessTypePath("public-chain") && (<span style={{ color: "white", fontSize: 11, textAlign: "center" }}>Public Chain</span>)}
             </div>
           </Link>
           {/* <LeftMenu /> */}

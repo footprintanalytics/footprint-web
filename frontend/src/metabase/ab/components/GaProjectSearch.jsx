@@ -1,24 +1,15 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 /* eslint-disable react/prop-types */
-import React, { useEffect, useState, useRef } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { connect } from "react-redux";
-import { Button, message, Modal, Select, Tooltip } from "antd";
+import { Button, message, Modal, Select } from "antd";
 import { withRouter } from "react-router";
-import { useQuery } from "react-query";
 import { getFgaProject, getUser } from "metabase/selectors/user";
-import { QUERY_OPTIONS } from "metabase/containers/dashboards/shared/config";
-import { GetFgaProject, getProtocolList, getPublicChainProjects } from "metabase/new-service";
 import { loadCurrentFgaProjectNew } from "metabase/redux/user";
 import Link from "metabase/core/components/Link";
 import "../css/index.css";
 import { take } from "lodash";
-import {
-  checkIsNeedContactUs,
-  getGrowthProjectPath,
-  getLatestGAProject,
-  saveLatestGAProject,
-  saveLatestGAProjectId,
-} from "../utils/utils";
+import { getGrowthProjectPath, isBusinessTypePath, saveLatestGAProject } from "../utils/utils";
 import _ from "underscore";
 import {
   getFgaChain,
@@ -34,7 +25,7 @@ import {
   setGames,
   setHistoryGames,
 } from "metabase/redux/control";
-import CreateMyProjectModal from "metabase/ab/components/Modal/CreateMyProjectModal";
+import { getChainDataList } from "metabase/query_builder/components/question/handle";
 
 const GaProjectSearch = props => {
   const {
@@ -66,10 +57,23 @@ const GaProjectSearch = props => {
   const [userProject, setUserProject] = useState([]);
   const [open, setOpen] = useState(false);
   const [currentProject, setCurrentProject] = useState(projectPath);
-  const defaultProject = {
-    protocolSlug: "the-sandbox",
-    protocolName: "The Sandbox",
+  const protocolListLen = protocolList?.length;
+
+  let defaultProject;
+  if (isBusinessTypePath("public-chain")) {
+    defaultProject = getChainDataList({ includeAll: false })?.find(item => item.label === chain)?.defaultProject ||
+      {
+        protocolSlug: "the-sandbox",
+        protocolName: "The Sandbox",
+      }
+  } else {
+    defaultProject =
+      {
+        "protocolName": "Project A",
+        "protocolSlug": "Project A",
+      }
   }
+
 
   // console.log("currentProject", currentProject)
   // const { isLoading, data: data2 } = useQuery(
@@ -126,7 +130,7 @@ const GaProjectSearch = props => {
     if ((!favoriteList || !userId) && !disableLoadList) {
       loadFgaFavoriteList();
     }
-  }, [favoriteList, userId, disableLoadList])
+  }, [userId, disableLoadList])
 
   useEffect(() => {
     if (projectPath) {
@@ -135,10 +139,10 @@ const GaProjectSearch = props => {
   }, [projectPath])
 
   useEffect(() => {
-    if (protocolList?.length === 0 && !disableLoadList) {
+    if (protocolListLen === 0 && !disableLoadList) {
       loadFgaProtocolList(chain);
     }
-  }, [disableLoadList])
+  }, [disableLoadList, chain, protocolListLen])
 
 
   useEffect(() => {
@@ -167,7 +171,7 @@ const GaProjectSearch = props => {
   }, [protocolList]);
 
   useEffect(() => {
-    if (projectObject) {
+    if (projectObject && isBusinessTypePath("public-chain")) {
       const protocolSlug = projectObject.protocolSlug;
       const protocolName = projectObject.protocolName;
       const newObject = {
@@ -252,8 +256,10 @@ const GaProjectSearch = props => {
     }
   }
 
-  const selectOptions =
-    [
+  let selectOptions
+
+  if (isBusinessTypePath("public-chain")) {
+    selectOptions = [
       historyGames?.length > 0 && {
         label: "Recent",
         key: "Recent",
@@ -264,6 +270,14 @@ const GaProjectSearch = props => {
         options: favoriteList.map(selectDataMapFunction("My Projects")),
       },
     ].filter(Boolean)
+  } else {
+    selectOptions = [
+      {
+        value: "Project A",
+        label: "Project A",
+      }
+    ]
+  }
 
   return (
     <div className="flex flex-column items-center ga-project-search" style={{ minWidth: 218 }}>
@@ -336,7 +350,6 @@ const GaProjectSearch = props => {
               dropdownRender={(menu) => (
                     <div>
                       {menu}
-                      <div style={{ margin: "6px 0", borderTop: "1px solid #ffffff20" }}/>
                       {/*<Button className="full-width" type="primary" onClick={() => {
                         if (!user) {
                           message.warning("Kindly login before to create a project.");
@@ -350,22 +363,30 @@ const GaProjectSearch = props => {
                         }
                         setOpen(true);
                       }} >Create your project</Button>*/}
-                      <Link onClick={() => {
-                        if (!user) {
-                          message.warning("Kindly login before see other project.");
-                          setLoginModalShowAction({
-                            show: true,
-                            from: "create activation",
-                            redirect: location.pathname,
-                            channel: "FGA",
-                          });
-                          return;
-                        }
-                        setOpen(false)
-                        setTimeout(() => {
-                          router.push(`/fga/${businessType}/project-manage`)
-                        }, 300)
-                      }}><Button className="full-width" type="text"  >See other project</Button></Link>
+                      {isBusinessTypePath("public-chain") && (
+                        <>
+                          <div style={{ margin: "6px 0", borderTop: "1px solid #ffffff20" }}/>
+                          <Link
+                            onClick={() => {
+                            if (!user) {
+                              message.warning("Kindly login before see other project.");
+                              setLoginModalShowAction({
+                                show: true,
+                                from: "create activation",
+                                redirect: location.pathname,
+                                channel: "FGA",
+                              });
+                              return;
+                            }
+                            setOpen(false)
+                            setTimeout(() => {
+                              router.push(`/fga/${businessType}/project-manage`)
+                            }, 300)
+                          }}>
+                            <Button className="full-width" type="text" >See other project</Button>
+                          </Link>
+                        </>
+                      )}
                     </div>
                   )}
               value={currentProject}

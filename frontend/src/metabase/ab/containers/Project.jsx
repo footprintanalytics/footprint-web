@@ -8,7 +8,7 @@ import LoadingSpinner from "metabase/components/LoadingSpinner";
 import { loadCurrentFgaProject } from "metabase/redux/user";
 import ProjectInfo from "../components/ProjectInfo";
 import { checkVipMenuPermisson, getGrowthProjectPath, getLatestGAProjectId } from "../utils/utils";
-import { fga_menu_data_v2 } from "../utils/data";
+import { fga_menu_data_v2, getDashboardMap } from "../utils/data";
 import LoadingDashboard from "../components/LoadingDashboard";
 import DashboardMask from "../components/DashboardMask";
 import ConnectorList from "./ConnectorList";
@@ -53,8 +53,7 @@ const Project = props => {
 
   useEffect(() => {
     if (projectObject) {
-
-      const menuData = fga_menu_data_v2(businessType, projectObject, user);
+      const menuData = fga_menu_data_v2(businessType, projectObject, chain);
       const menuKeys = menuData.keys;
       const liveKeys = menuData.liveKeys;
       setGaMenuTabs(menuData);
@@ -199,7 +198,7 @@ const Project = props => {
       getProjectObject()?.protocolSlug ? (
         <>
           <PublicDashboard
-            params={{ uuid: gaMenuTabs?.dashboardMap?.get(current_tab) }}
+            params={{ uuid: getDashboardMap(businessType, projectObject, chain)?.get(current_tab) }}
             location={location}
             project={getProjectObject()}
             chain={chain}
@@ -326,7 +325,7 @@ const Project = props => {
     }
     if (
       current_tab === "GameFi" &&
-      !projectObject?.nftCollectionAddress?.length > 0
+      !projectObject?.nftCollectionAddress?.filter(item => item.chain === chain)?.length > 0
     ) {
       // GameFi Project without NFT
       return projectObject?.protocolSlug ? (

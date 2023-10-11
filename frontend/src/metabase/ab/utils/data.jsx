@@ -1,25 +1,7 @@
 import React from "react";
-import {
-  BarChartOutlined,
-  ShopOutlined,
-  TagsOutlined,
-  TeamOutlined,
-  LineChartOutlined,
-  LinkOutlined,
-  WalletOutlined,
-  FileImageOutlined,
-  PieChartOutlined,
-  GatewayOutlined,
-  HomeOutlined,
-  SettingOutlined,
-  DollarOutlined,
-  ProjectOutlined,
-  AreaChartOutlined,
-  CommentOutlined,
-} from "@ant-design/icons";
-import { get } from "underscore";
-import { disabled } from "styled-system";
+import { SettingOutlined } from "@ant-design/icons";
 import { ReactIcons } from "../../nav/containers/FpNavbar/utils/data";
+import { getChainDataList } from "../../query_builder/components/question/handle";
 //public/dashboard/uuid
 export const wallet_profile_link =
   "/fga/public/dashboard/fa040fe5-46b3-483b-b257-aa2373559fab"; //query: wallet_address
@@ -342,15 +324,9 @@ function getItem(label, key, icon, children, type, disabled = false) {
   };
 }
 
-export const fga_menu_data_v2 = (businessType, project, user) => {
+export const getDashboardMap = (businessType, project, chain) => {
   let protocolType = project?.protocolType;
-  if (project?.nftCollectionAddress?.length > 0) {
-    if (protocolType === "GameFi") {
-      protocolType = "GameFi_NFT";
-    } else {
-      protocolType = "NFT";
-    }
-  }
+  const chainConfig = getChainDataList({ includeAll: false }).find(item => item.label === chain);
   const dashboardMap = new Map([
     ["transaction_monitor", "5448e85b-442e-44b7-9c88-e22a1bd11d11"],
     ["ecosystem_development", "0b6bbe4d-5480-4e1c-8860-ead23619492b"],
@@ -394,7 +370,20 @@ export const fga_menu_data_v2 = (businessType, project, user) => {
     ["project_health-platform", "7a275541-580a-4720-8e10-f455335de137"],
     ["users_overview-platform", "6d84b4a6-ceef-4b30-a9ad-b233038fd8d3"],
   ]);
+  return dashboardMap;
+}
 
+export const fga_menu_data_v2 = (businessType, project, chain) => {
+  let protocolType = project?.protocolType;
+  const chainConfig = getChainDataList({ includeAll: false }).find(item => item.label === chain);
+  if (project?.nftCollectionAddress?.filter(item => item.chain === chain)?.length > 0) {
+    if (protocolType === "GameFi") {
+      protocolType = "GameFi_NFT";
+    } else {
+      protocolType = "NFT";
+    }
+  }
+  const dashboardMap = getDashboardMap(businessType, project, chain);
 
   const standardData = {
     "platformMenuTabs": [
@@ -480,10 +469,10 @@ export const fga_menu_data_v2 = (businessType, project, user) => {
     "platformMenuTabs": [
       getItem("Ecosystem", "ecosystem-home", ReactIcons.myAnalysisIcon, [
         getItem("Transaction Monitor", "transaction_monitor", null),
-        getItem("Development", "ecosystem_development", null),
+        chainConfig?.hasDevelopment ? getItem("Development", "ecosystem_development", null) : null,
         getItem("Projects", "ecosystem_projects", null),
         getItem("Project Directory", "project_directory", null),
-      ])
+      ].filter(i => i))
     ],
     "menuTabs": [
       getItem("Project Overview", "project_overview", ReactIcons.myAnalysisIcon, [
@@ -491,9 +480,9 @@ export const fga_menu_data_v2 = (businessType, project, user) => {
         getItem("Users", "project_users", null),
         getItem("Transaction", "project_transaction", null),
       ]),
-      (project?.nftCollectionAddress?.length > 0 || project?.tokenAddress?.length > 0) &&
+      (project?.nftCollectionAddress?.filter(item => item.chain === chain)?.length > 0 || project?.tokenAddress?.filter(item => item.chain === chain)?.length > 0) &&
         getItem("Assets", "assets", ReactIcons.assetIcon, [
-          project?.nftCollectionAddress?.length > 0 &&
+          project?.nftCollectionAddress?.filter(item => item.chain === chain)?.length > 0 &&
             getItem("NFT", "nft", null, [
                 getItem("NFT Summary", "nft_summary", null),
                 getItem("NFT Sales&Mints", "nft_sales_mints", null),
@@ -503,7 +492,7 @@ export const fga_menu_data_v2 = (businessType, project, user) => {
               ]
             ),
 
-          project?.tokenAddress?.length > 0 &&
+          project?.tokenAddress?.filter(item => item.chain === chain)?.length > 0 &&
             getItem("Token", "token", null, [
                 getItem("Token Summary", "game_tokenomics", null),
                 // getItem("Token Holders", "token-holders-coming-soon", null),
