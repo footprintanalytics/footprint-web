@@ -500,6 +500,7 @@ const Project = props => {
           router={router}
           location={location}
           project={getProjectObject()}
+          businessType={businessType}
         ></CohortList>
       );
     }

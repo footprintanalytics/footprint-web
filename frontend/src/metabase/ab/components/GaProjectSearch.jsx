@@ -69,8 +69,8 @@ const GaProjectSearch = props => {
   } else {
     defaultProject =
       {
-        "protocolName": "Project A",
-        "protocolSlug": "Project A",
+        "protocolName": "The Sandbox",
+        "protocolSlug": "the-sandbox",
       }
   }
 
@@ -273,8 +273,8 @@ const GaProjectSearch = props => {
   } else {
     selectOptions = [
       {
-        value: "Project A",
-        label: "Project A",
+        value: "the-sandbox",
+        label: "The Sandbox",
       }
     ]
   }

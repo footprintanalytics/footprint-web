@@ -87,12 +87,13 @@ const CohortList = props => {
       <SegmentListPanel
         router={props.router}
         sourceType={"projectUser"}
+        businessType={props.businessType}
       ></SegmentListPanel>
     </div>
   );
 };
 
-const mapStateToProps = state => {
+const mapStateToProps = (state, props) => {
   return {
     user: getUser(state),
   };
