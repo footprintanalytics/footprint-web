@@ -515,7 +515,6 @@ class PublicDashboard extends Component {
     //   hideParametersForCustom = `${hideParametersForCustom},${keyObjectAsset.slug}`;
     // }
 
-    console.log("this.props.favoriteList", isFgaPath(), isBusinessTypePath("game-portfolio"), (this.props.favoriteList?.length || 0) === 0)
     if (isABPath() && isBusinessTypePath("game-portfolio") && (this.props.favoriteList?.length || 0) === 0) {
       header = <div style={{ padding: "10px 20px", color: "white" }}>Please select your {" "}
         <Link className="text-underline text-underline-hover" to={"/fga/game-portfolio/project-manage"}>favorite project list</Link>
