@@ -3,6 +3,7 @@ import React, { Component } from "react";
 import { connect } from "react-redux";
 import { push } from "react-router-redux";
 import cx from "classnames";
+import Link from "metabase/core/components/Link";
 
 import _ from "underscore";
 import {debounce, isArray, startCase} from "lodash";
@@ -72,7 +73,7 @@ const mapStateToProps = (state, props) => {
       project.protocolName,
     ]);
     if (isABPath() && isBusinessTypePath("game-portfolio") && props.fgaMenu?.includes("platform")) {
-      updateDashboardPara(parameters, parameterValues, "protocol_slugs", favoriteList.map(item => item.protocolSlug));
+      updateDashboardPara(parameters, parameterValues, "protocol_slugs", favoriteList?.map(item => item.protocolSlug));
     }
     if (isABPath()) {
       updateDashboardPara(parameters, parameterValues, "chain", [
@@ -513,6 +514,12 @@ class PublicDashboard extends Component {
     //   header = this.handleFgaMultiAddressUiSelectHeader("asset", keyObjectAsset);
     //   hideParametersForCustom = `${hideParametersForCustom},${keyObjectAsset.slug}`;
     // }
+
+    if (isABPath() && isBusinessTypePath("game-portfolio") && (this.props.favoriteList?.length || 0) === 0) {
+      header = <div style={{ padding: "10px 20px", color: "white" }}>Please select your {" "}
+        <Link className="text-underline text-underline-hover" to={"/fga/game-portfolio/project-manage"}>favorite project list</Link>
+        {" "} and then can analyze your projects.</div>
+    }
     if (
       isFgaPath() &&
       hashData?.from &&
