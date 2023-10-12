@@ -461,7 +461,7 @@ export const fga_menu_data_v2 = (businessType, project, chain) => {
 
   const gameProjectData = {
     "platformMenuTabs": [
-        getItem("Project Holder Overlap", "platform-holder_overlap", null),
+        // getItem("Project Holder Overlap", "platform-holder_overlap", null),
     ],
     "menuTabs": [
       getItem("Project Overview", "project_overview", ReactIcons.myAnalysisIcon, [
