@@ -22,7 +22,7 @@ import AboutStart from "./components/AboutStart";
 import AboutBanner from "./components/AboutBanner";
 import AboutSolutions from "./components/AboutSolutions";
 import AboutGrantedBy from "./components/AboutGrantedBy";
-
+import { uniqBy } from "lodash";
 const About = props => {
   const {
     children,
@@ -48,48 +48,66 @@ const About = props => {
       </LazyLoad>
     );
   };
+
+  const x = [
+    {
+      slug: "a",
+      name: "A",
+    },
+    {
+      slug: "a",
+      name: "A",
+    },
+    {
+      slug: "b",
+      name: "B",
+    }
+  ]
+
+  console.log("xxx", uniqBy(x, obj => obj.slug))
+
   return (
     <>
       <Meta description={defaultDesc} keywords={keywords} title={title} />
       <div className="About">
-        <AboutStart />
-        <LazyLoadAbout>
-          <AboutBanner />
-        </LazyLoadAbout>
-        <LazyLoadAbout>
-          <AboutSolutions />
-        </LazyLoadAbout>
-        <LazyLoadAbout>
-          <AboutDepth />
-        </LazyLoadAbout>
-        <LazyLoadAbout>
-          <AboutDemo />
-        </LazyLoadAbout>
-        <LazyLoadAbout>
-          <AboutDataCoverage />
-        </LazyLoadAbout>
-        <LazyLoadAbout>
-          <AboutDataFeature />
-        </LazyLoadAbout>
-        <LazyLoadAbout>
-          <AboutDataModel />
-        </LazyLoadAbout>
-        <LazyLoadAbout>
-          <AboutBacked list={data.backedList} />
-        </LazyLoadAbout>
-        <LazyLoadAbout>
-          <AboutDataTrusted />
-        </LazyLoadAbout>
-        <LazyLoadAbout>
-          <AboutPartnerV2 list={data.partnerList} />
-        </LazyLoadAbout>
-        <LazyLoadAbout>
-          <AboutGrantedBy />
-        </LazyLoadAbout>
-        <div className="About__depth-dividing-line-gray" />
-        <LazyLoadAbout>
-          <HomeFooter />
-        </LazyLoadAbout>
+        {/*<AboutStart />*/}
+        {/*<LazyLoadAbout>*/}
+        {/*  <AboutBanner />*/}
+        {/*</LazyLoadAbout>*/}
+        {/*<LazyLoadAbout>*/}
+        {/*  <AboutSolutions />*/}
+        {/*</LazyLoadAbout>*/}
+        {/*<LazyLoadAbout>*/}
+        {/*  <AboutDepth />*/}
+        {/*</LazyLoadAbout>*/}
+        {/*<LazyLoadAbout>*/}
+        {/*  <AboutDemo />*/}
+        {/*</LazyLoadAbout>*/}
+        {/*<LazyLoadAbout>*/}
+        {/*  <AboutDataCoverage />*/}
+        {/*</LazyLoadAbout>*/}
+        {/*<LazyLoadAbout>*/}
+        {/*  <AboutDataFeature />*/}
+        {/*</LazyLoadAbout>*/}
+        {/*<LazyLoadAbout>*/}
+        {/*  <AboutDataModel />*/}
+        {/*</LazyLoadAbout>*/}
+        {/*<LazyLoadAbout>*/}
+        {/*  <AboutBacked list={data.backedList} />*/}
+        {/*</LazyLoadAbout>*/}
+        {/*<LazyLoadAbout>*/}
+        {/*  <AboutDataTrusted />*/}
+        {/*</LazyLoadAbout>*/}
+        {/*<LazyLoadAbout>*/}
+        {/*  <AboutPartnerV2 list={data.partnerList} />*/}
+        {/*</LazyLoadAbout>*/}
+        {/*<LazyLoadAbout>*/}
+        {/*  <AboutGrantedBy />*/}
+        {/*</LazyLoadAbout>*/}
+        {/*<div className="About__depth-dividing-line-gray" />*/}
+        {/*<LazyLoadAbout>*/}
+        {/*  <HomeFooter />*/}
+        {/*</LazyLoadAbout>*/}
 
         {children}
       </div>

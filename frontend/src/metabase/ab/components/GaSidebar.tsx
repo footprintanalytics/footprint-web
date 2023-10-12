@@ -13,7 +13,7 @@ import GaProjectSearch from "metabase/ab/components/GaProjectSearch";
 import {
   getGrowthProjectPath,
   saveLatestGAMenuTag,
-  getLatestGAProject,
+  getLatestGAProject, isBusinessTypePath,
 } from "../utils/utils";
 import { getFgaChain } from "../../selectors/control";
 import { resetFgaProtocolList, setFgaChain } from "../../redux/control";
@@ -59,11 +59,11 @@ const GaSidebar = (props: IGaSidebarProp) => {
     setMenuData(fga_menu_data_v2(businessType, projectObject, chain));
   }, [projectObject, chain]);
 
-  useEffect(() => {
-    if (!businessType) {
-      router.replace("/fga/public-chain")
-    }
-  }, [businessType])
+  // useEffect(() => {
+  //   if (!businessType) {
+  //     router.replace("/fga/public-chain")
+  //   }
+  // }, [businessType])
 
   useEffect(() => {
     if (currentMenu) {
@@ -149,7 +149,7 @@ const GaSidebar = (props: IGaSidebarProp) => {
       <>
         {projectObject && items?.length > 0 ? (
           <>
-            {itemsPlatform.length > 0 && (<>
+            {!isBusinessTypePath("game-project") && itemsPlatform.length > 0 && (<>
               <div className="ga-side-bar__title">
                 <h3>{platformMenuTitle}</h3>
               </div>
@@ -178,6 +178,7 @@ const GaSidebar = (props: IGaSidebarProp) => {
                   ))}
                 </Select>
               </div>)}
+
               <Menu
                 key={chain}
                 className="ga-side-bar-menu"

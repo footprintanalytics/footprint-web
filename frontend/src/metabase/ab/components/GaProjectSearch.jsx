@@ -258,7 +258,7 @@ const GaProjectSearch = props => {
 
   let selectOptions
 
-  if (isBusinessTypePath("public-chain")) {
+  // if (isBusinessTypePath("public-chain")) {
     selectOptions = [
       historyGames?.length > 0 && {
         label: "Recent",
@@ -270,14 +270,14 @@ const GaProjectSearch = props => {
         options: favoriteList.map(selectDataMapFunction("My Projects")),
       },
     ].filter(Boolean)
-  } else {
-    selectOptions = [
-      {
-        value: "the-sandbox",
-        label: "The Sandbox",
-      }
-    ]
-  }
+  // } else {
+  //   selectOptions = [
+  //     {
+  //       value: "the-sandbox",
+  //       label: "The Sandbox",
+  //     }
+  //   ]
+  // }
 
   return (
     <div className="flex flex-column items-center ga-project-search" style={{ minWidth: 218 }}>
@@ -363,7 +363,7 @@ const GaProjectSearch = props => {
                         }
                         setOpen(true);
                       }} >Create your project</Button>*/}
-                      {isBusinessTypePath("public-chain") && (
+                      {/*{isBusinessTypePath("public-chain") && (*/}
                         <>
                           <div style={{ margin: "6px 0", borderTop: "1px solid #ffffff20" }}/>
                           <Link
@@ -386,7 +386,7 @@ const GaProjectSearch = props => {
                             <Button className="full-width" type="text" >See other project</Button>
                           </Link>
                         </>
-                      )}
+                      {/*)}*/}
                     </div>
                   )}
               value={currentProject}
