@@ -424,7 +424,7 @@ export const fga_menu_data_v2 = (businessType, project, chain) => {
           //   ]
           // ),
         ]),
-      getItem("Game", "gaming", ReactIcons.gamingStatIcon, [
+      /*getItem("Game", "gaming", ReactIcons.gamingStatIcon, [
         getItem("Game States", "gaming_overview", null),
         getItem("Monetization", "monetization", null),
         getItem("User", "game-user", null, [
@@ -437,7 +437,7 @@ export const fga_menu_data_v2 = (businessType, project, chain) => {
         getItem("Members", "members", null),
         getItem("Journey Explorer", "journey", null),
         getItem("Segmentation", "segment", null),
-      ]),
+      ]),*/
       /*getItem(
         "Growth",
         "growth",
@@ -451,11 +451,11 @@ export const fga_menu_data_v2 = (businessType, project, chain) => {
         ],
         // "group",
       ),*/
-      getItem("Settings", "settings", <SettingOutlined />, [
+      /*getItem("Settings", "settings", <SettingOutlined />, [
         getItem("Integration", "integration", null),
         getItem("Project Info", "general", null),
         // getItem("Channel", "channel", null),
-      ]),
+      ]),*/
     ]
   }
 
