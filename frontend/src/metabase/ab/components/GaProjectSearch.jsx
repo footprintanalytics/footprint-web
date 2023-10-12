@@ -160,7 +160,7 @@ const GaProjectSearch = props => {
       loadProjectDetail(project.protocolSlug);
       setUserProject(projects);
       if (
-        index === -1 && location.pathname.startsWith("/fga/public-chain") && location.pathname.includes("/project")
+        index === -1 && location.pathname.startsWith("/fga/") && location.pathname.includes("/project")
       ) {
         router?.push({
           pathname: getGrowthProjectPath(project.protocolSlug, menu),
@@ -171,7 +171,7 @@ const GaProjectSearch = props => {
   }, [protocolList]);
 
   useEffect(() => {
-    if (projectObject && isBusinessTypePath("public-chain")) {
+    if (projectObject) {
       const protocolSlug = projectObject.protocolSlug;
       const protocolName = projectObject.protocolName;
       const newObject = {

@@ -59,11 +59,11 @@ const GaSidebar = (props: IGaSidebarProp) => {
     setMenuData(fga_menu_data_v2(businessType, projectObject, chain));
   }, [projectObject, chain]);
 
-  // useEffect(() => {
-  //   if (!businessType) {
-  //     router.replace("/fga/public-chain")
-  //   }
-  // }, [businessType])
+  useEffect(() => {
+    if (location.pathname === '/fga' || location.pathname === '/fga/') {
+      router.replace("/fga/public-chain")
+    }
+  }, [location.pathname])
 
   useEffect(() => {
     if (currentMenu) {

@@ -201,6 +201,7 @@ const Project = props => {
             params={{ uuid: getDashboardMap(businessType, projectObject, chain)?.get(current_tab) }}
             location={location}
             project={getProjectObject()}
+            router={router}
             chain={chain}
             fgaMenu={currentMenu}
             favoriteList={favoriteList}
