@@ -479,6 +479,8 @@ class PublicDashboard extends Component {
       innerClassName,
       router,
       showRefreshButton,
+      setLoginModalShow,
+      user,
     } = this.props;
     const buttons = !IFRAMED
       ? getDashboardActions(this, { ...this.props, isPublic: true })
@@ -517,7 +519,24 @@ class PublicDashboard extends Component {
 
     if (isABPath() && isBusinessTypePath("game-portfolio") && (this.props.favoriteList?.length || 0) === 0) {
       header = <div style={{ padding: "10px 20px", color: "white" }}>Please select your {" "}
-        <Link className="text-underline text-underline-hover" to={"/fga/game-portfolio/project-manage"}>favorite project list</Link>
+        <Link
+          className="text-underline text-underline-hover"
+          onClick={event => {
+            if (!user) {
+              event.preventDefault();
+              setLoginModalShow({
+                show: true,
+                from: "dashboard-set-favorite-list",
+                redirect: "/fga/game-portfolio/project-manage",
+                channel: "FGA",
+              });
+            } else {
+              router?.push("/fga/game-portfolio/project-manage");
+            }
+          }}
+        >
+          favorite project list
+        </Link>
         {" "} and then can analyze your projects.</div>
     }
     if (
