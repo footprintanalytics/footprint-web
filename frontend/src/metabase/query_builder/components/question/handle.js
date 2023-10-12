@@ -152,7 +152,6 @@ export function getChainDataList({ includeAll = true }) {
       value: "bsc",
       label: "BNB Chain",
       hasTraces: true,
-      hasDevelopment: true,
       icon: getOssUrl("fp-chains/bsc.webp"),
       defaultProject: {
         protocolSlug: "secondlive",
@@ -163,7 +162,6 @@ export function getChainDataList({ includeAll = true }) {
       value: "polygon",
       label: "Polygon",
       hasTraces: true,
-      hasDevelopment: true,
       icon: getOssUrl("fp-chains/polygon.webp"),
       defaultProject: {
         protocolSlug: "planet-ix",
@@ -193,7 +191,6 @@ export function getChainDataList({ includeAll = true }) {
         value: "arbitrum",
         label: "Arbitrum",
         hasTraces: true,
-        hasDevelopment: true,
         icon: getOssUrl("fp-chains/arbitrum.webp"),
         defaultProject: {
           protocolSlug: "meeet",
