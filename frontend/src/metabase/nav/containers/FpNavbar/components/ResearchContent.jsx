@@ -269,7 +269,7 @@ const ResearchContent = props => {
           {
             title: "HOME Verse",
             img: getOssUrl("studio/img-chain-35.png?image_process=resize,w_36/crop,h_36/format,png"),
-            link: "/research/chain/chain-rankings/top-chains",
+            link: "/research/chain/chain-stats/home-verse-overview",
           },
           {
             title: "MCH Verse",
