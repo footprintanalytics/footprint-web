@@ -48,7 +48,7 @@ import QueryCopyModal from "metabase/components/QueryCopyModal";
 import { getUser } from "metabase/selectors/user";
 import { getSqlAndJumpToDoc, replaceTemplateCardUrl } from "metabase/guest/utils";
 import { trackStructEvent } from "metabase/lib/analytics";
-import { isABPath } from "metabase/ab/utils/utils";
+import { isABPath, isBusinessTypePath } from "metabase/ab/utils/utils";
 
 const mapStateToProps = (state, props) => {
   const user = getUser(state);
@@ -57,6 +57,7 @@ const mapStateToProps = (state, props) => {
   const project = props.project;
   const chain = props.chain;
   const location = props.location;
+  const favoriteList = props.favoriteList;
   const isDataApiStatistics = props.isDataApiStatistics;
   if (project) {
     let currentChain = null;
@@ -70,6 +71,9 @@ const mapStateToProps = (state, props) => {
     updateDashboardPara(parameters, parameterValues, "project_name", [
       project.protocolName,
     ]);
+    if (isABPath() && isBusinessTypePath("game-portfolio") && props.fgaMenu?.includes("platform")) {
+      updateDashboardPara(parameters, parameterValues, "protocol_slugs", favoriteList.map(item => item.protocolSlug));
+    }
     if (isABPath()) {
       updateDashboardPara(parameters, parameterValues, "chain", [
         chain,

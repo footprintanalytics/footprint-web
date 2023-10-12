@@ -461,6 +461,7 @@ class ABNavbar extends Component {
             <div className="flex flex-column" style={{ lineHeight: 1.2 }}>
               <span style={{ color: "white", fontSize: 18, fontWeight: 600 }}>Growth Analytics</span>
               {isBusinessTypePath("public-chain") && (<span style={{ color: "white", fontSize: 11, textAlign: "center" }}>Public Chain</span>)}
+              {isBusinessTypePath("game-portfolio") && (<span style={{ color: "white", fontSize: 11, textAlign: "center" }}>Game Portfolio</span>)}
             </div>
           </Link>
           {/* <LeftMenu /> */}

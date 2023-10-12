@@ -7,6 +7,12 @@ import { IndexRoute } from "react-router";
 
 const getRoutes = (store, IsAuthenticated) => {
   return (
+    <>
+      <Route
+        title={t`Public Dashboard`}
+        path="/fga/:businessType/public/dashboard/:uuid"
+        component={LazyLoad.PublicDashboard}
+      />
     <Route
       title={t`Growth`}
       path="/fga"
@@ -22,6 +28,11 @@ const getRoutes = (store, IsAuthenticated) => {
           component={LazyLoad.ABProjectContainer}
         />
         <Route
+          title={t`Pricing`}
+          path="/pricing"
+          component={LazyLoad.FgaPrice}
+        />
+        <Route
           title={t`Growth`}
           path="/project-manage"
           component={LazyLoad.GameList}
@@ -30,11 +41,6 @@ const getRoutes = (store, IsAuthenticated) => {
           title={t`Growth`}
           path="/bind-game"
           component={LazyLoad.bindGame}
-        />
-        <Route
-          title={t`Pricing`}
-          path="/pricing"
-          component={LazyLoad.FgaPrice}
         />
         <Route
           title={t`Submit Contract`}
@@ -161,7 +167,7 @@ const getRoutes = (store, IsAuthenticated) => {
         <Route path="project/:project(/:menu)" component={LazyLoad.ABProjectContainer}/>
       </Route>
     </Route>
-
+    </>
 
   );
 };

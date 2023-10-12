@@ -164,113 +164,114 @@ export const refreshCurrentFgaProject = createThunkAction(
   async project_id => {
     try {
       let res
-      if (window.location.pathname.startsWith("/fga/public-chain")) {
+      if (isABPath()) {
         res = await GetFgaProjectDetail({
           projectId: project_id,
         });
-      } else
-      if (isABPath()) {
-        if (project_id === 153) {
-          res = {
-            "id": 153,
-            "isDemo": false,
-            "protocolName": "Project A",
-            "protocolSlug": "Project A",
-            "logo": "",
-            "protocolType": "",
-            "tokenAddress": [],
-            "nftCollectionAddress": [
-              {
-                "address": "0x59325733eb952a92e069c87f0a6168b29e80627f",
-                "chain": "Ethereum"
-              }
-            ],
-            "twitter": {},
-            "discord": {},
-            "ga": {}
-          }
-        }
-        if (project_id === 154) {
-          res = {
-            "id": 154,
-            "isDemo": false,
-            "protocolName": "Mocaverse",
-            "protocolSlug": "Mocaverse",
-            "logo": "",
-            "protocolType": "",
-            "tokenAddress": [],
-            "nftCollectionAddress": [
-              {
-                "address": "0x59325733eb952a92e069c87f0a6168b29e80627f",
-                "chain": "Ethereum"
-              }
-            ],
-            "twitter": {},
-            "discord": {},
-            "ga": {}
-          }
-        }
-        if (project_id === 155) {
-          res = {
-            "id": 155,
-            "isDemo": false,
-            "protocolName": "xxx",
-            "protocolSlug": "xxx",
-            "logo": "",
-            "protocolType": "",
-            "tokenAddress": [],
-            "nftCollectionAddress": [
-              {
-                "address": "0x59325733eb952a92e069c87f0a6168b29e80627f",
-                "chain": "Ethereum"
-              }
-            ],
-            "twitter": {},
-            "discord": {},
-            "ga": {}
-          }
-        }
-        if (project_id === 156) {
-          res = {
-            "id": 156,
-            "isDemo": false,
-            "protocolName": "duke",
-            "protocolSlug": "duke",
-            "logo": "",
-            "protocolType": "",
-            "tokenAddress": [],
-            "nftCollectionAddress": [
-              {
-                "address": "0x59325733eb952a92e069c87f0a6168b29e80627f",
-                "chain": "Ethereum"
-              }
-            ],
-            "twitter": {},
-            "discord": {},
-            "ga": {}
-          }
-        }
-        if (project_id === 157) {
-          res = {
-            "id": 157,
-            "isDemo": false,
-            "protocolName": "TorqueSquad",
-            "protocolSlug": "TorqueSquad",
-            "logo": "",
-            "protocolType": "",
-            "tokenAddress": [],
-            "nftCollectionAddress": [
-              {
-                "address": "0x59325733eb952a92e069c87f0a6168b29e80627f",
-                "chain": "Ethereum"
-              }
-            ],
-            "twitter": {},
-            "discord": {},
-            "ga": {}
-          }
-        }
-      } else {
+      }
+      // if (isABPath()) {
+      //   if (project_id === 153) {
+      //     res = {
+      //       "id": 153,
+      //       "isDemo": false,
+      //       "protocolName": "Project A",
+      //       "protocolSlug": "Project A",
+      //       "logo": "",
+      //       "protocolType": "",
+      //       "tokenAddress": [],
+      //       "nftCollectionAddress": [
+      //         {
+      //           "address": "0x59325733eb952a92e069c87f0a6168b29e80627f",
+      //           "chain": "Ethereum"
+      //         }
+      //       ],
+      //       "twitter": {},
+      //       "discord": {},
+      //       "ga": {}
+      //     }
+      //   }
+      //   if (project_id === 154) {
+      //     res = {
+      //       "id": 154,
+      //       "isDemo": false,
+      //       "protocolName": "Mocaverse",
+      //       "protocolSlug": "Mocaverse",
+      //       "logo": "",
+      //       "protocolType": "",
+      //       "tokenAddress": [],
+      //       "nftCollectionAddress": [
+      //         {
+      //           "address": "0x59325733eb952a92e069c87f0a6168b29e80627f",
+      //           "chain": "Ethereum"
+      //         }
+      //       ],
+      //       "twitter": {},
+      //       "discord": {},
+      //       "ga": {}
+      //     }
+      //   }
+      //   if (project_id === 155) {
+      //     res = {
+      //       "id": 155,
+      //       "isDemo": false,
+      //       "protocolName": "xxx",
+      //       "protocolSlug": "xxx",
+      //       "logo": "",
+      //       "protocolType": "",
+      //       "tokenAddress": [],
+      //       "nftCollectionAddress": [
+      //         {
+      //           "address": "0x59325733eb952a92e069c87f0a6168b29e80627f",
+      //           "chain": "Ethereum"
+      //         }
+      //       ],
+      //       "twitter": {},
+      //       "discord": {},
+      //       "ga": {}
+      //     }
+      //   }
+      //   if (project_id === 156) {
+      //     res = {
+      //       "id": 156,
+      //       "isDemo": false,
+      //       "protocolName": "duke",
+      //       "protocolSlug": "duke",
+      //       "logo": "",
+      //       "protocolType": "",
+      //       "tokenAddress": [],
+      //       "nftCollectionAddress": [
+      //         {
+      //           "address": "0x59325733eb952a92e069c87f0a6168b29e80627f",
+      //           "chain": "Ethereum"
+      //         }
+      //       ],
+      //       "twitter": {},
+      //       "discord": {},
+      //       "ga": {}
+      //     }
+      //   }
+      //   if (project_id === 157) {
+      //     res = {
+      //       "id": 157,
+      //       "isDemo": false,
+      //       "protocolName": "TorqueSquad",
+      //       "protocolSlug": "TorqueSquad",
+      //       "logo": "",
+      //       "protocolType": "",
+      //       "tokenAddress": [],
+      //       "nftCollectionAddress": [
+      //         {
+      //           "address": "0x59325733eb952a92e069c87f0a6168b29e80627f",
+      //           "chain": "Ethereum"
+      //         }
+      //       ],
+      //       "twitter": {},
+      //       "discord": {},
+      //       "ga": {}
+      //     }
+      //   }
+      // }
+      else {
         res = await GetFgaProjectDetail({
           projectId: project_id,
         });
@@ -295,7 +296,7 @@ export const refreshCurrentFgaProjectNew = createThunkAction(
     console.log("refreshCurrentFgaProjectNew", protocolSlug)
     try {
       let res
-      if (isBusinessTypePath("public-chain")) {
+      if (isABPath()) {
           // res = {
           //   // "id": 153,
           //   "protocolName": protocolSlug,
@@ -328,109 +329,109 @@ export const refreshCurrentFgaProjectNew = createThunkAction(
         // res.nftCollectionAddress = temp.nftCollectionAddress
         // console.log("xxxxxx", res, temp)
           // res = result.rows?.length > 0 ? temp : res;
-        }
+        // }
 
-       else if (isABPath()) {
-        if (protocolSlug === "Project A") {
-          res = {
-            "id": 153,
-            "isDemo": false,
-            "protocolName": "Project A",
-            "protocolSlug": "Project A",
-            "logo": "",
-            "protocolType": "",
-            "tokenAddress": [],
-            "nftCollectionAddress": [
-              {
-                "address": "0x59325733eb952a92e069c87f0a6168b29e80627f",
-                "chain": "Ethereum"
-              }
-            ],
-            "twitter": {},
-            "discord": {},
-            "ga": {}
-          }
-        }
-        if (protocolSlug === "Mocaverse") {
-          res = {
-            "id": 154,
-            "isDemo": false,
-            "protocolName": "Mocaverse",
-            "protocolSlug": "Mocaverse",
-            "logo": "",
-            "protocolType": "",
-            "tokenAddress": [],
-            "nftCollectionAddress": [
-              {
-                "address": "0x59325733eb952a92e069c87f0a6168b29e80627f",
-                "chain": "Ethereum"
-              }
-            ],
-            "twitter": {},
-            "discord": {},
-            "ga": {}
-          }
-        }
-        if (protocolSlug === "xxx") {
-          res = {
-            "id": 155,
-            "isDemo": false,
-            "protocolName": "xxx",
-            "protocolSlug": "xxx",
-            "logo": "",
-            "protocolType": "",
-            "tokenAddress": [],
-            "nftCollectionAddress": [
-              {
-                "address": "0x59325733eb952a92e069c87f0a6168b29e80627f",
-                "chain": "Ethereum"
-              }
-            ],
-            "twitter": {},
-            "discord": {},
-            "ga": {}
-          }
-        }
-        if (protocolSlug === "duke") {
-          res = {
-            "id": 156,
-            "isDemo": false,
-            "protocolName": "duke",
-            "protocolSlug": "duke",
-            "logo": "",
-            "protocolType": "",
-            "tokenAddress": [],
-            "nftCollectionAddress": [
-              {
-                "address": "0x59325733eb952a92e069c87f0a6168b29e80627f",
-                "chain": "Ethereum"
-              }
-            ],
-            "twitter": {},
-            "discord": {},
-            "ga": {}
-          }
-        }
-        if (protocolSlug === "TorqueSquad") {
-          res = {
-            "id": 157,
-            "isDemo": false,
-            "protocolName": "TorqueSquad",
-            "protocolSlug": "TorqueSquad",
-            "logo": "",
-            "protocolType": "",
-            "tokenAddress": [],
-            "nftCollectionAddress": [
-              {
-                "address": "0x59325733eb952a92e069c87f0a6168b29e80627f",
-                "chain": "Ethereum"
-              }
-            ],
-            "twitter": {},
-            "discord": {},
-            "ga": {}
-          }
-        }
+       // else if (isABPath()) {
+       //  if (protocolSlug === "Project A") {
+       //    res = {
+       //      "id": 153,
+       //      "isDemo": false,
+       //      "protocolName": "Project A",
+       //      "protocolSlug": "Project A",
+       //      "logo": "",
+       //      "protocolType": "",
+       //      "tokenAddress": [],
+       //      "nftCollectionAddress": [
+       //        {
+       //          "address": "0x59325733eb952a92e069c87f0a6168b29e80627f",
+       //          "chain": "Ethereum"
+       //        }
+       //      ],
+       //      "twitter": {},
+       //      "discord": {},
+       //      "ga": {}
+       //    }
+       //  }
+       //  if (protocolSlug === "Mocaverse") {
+       //    res = {
+       //      "id": 154,
+       //      "isDemo": false,
+       //      "protocolName": "Mocaverse",
+       //      "protocolSlug": "Mocaverse",
+       //      "logo": "",
+       //      "protocolType": "",
+       //      "tokenAddress": [],
+       //      "nftCollectionAddress": [
+       //        {
+       //          "address": "0x59325733eb952a92e069c87f0a6168b29e80627f",
+       //          "chain": "Ethereum"
+       //        }
+       //      ],
+       //      "twitter": {},
+       //      "discord": {},
+       //      "ga": {}
+       //    }
+       //  }
+       //  if (protocolSlug === "xxx") {
+       //    res = {
+       //      "id": 155,
+       //      "isDemo": false,
+       //      "protocolName": "xxx",
+       //      "protocolSlug": "xxx",
+       //      "logo": "",
+       //      "protocolType": "",
+       //      "tokenAddress": [],
+       //      "nftCollectionAddress": [
+       //        {
+       //          "address": "0x59325733eb952a92e069c87f0a6168b29e80627f",
+       //          "chain": "Ethereum"
+       //        }
+       //      ],
+       //      "twitter": {},
+       //      "discord": {},
+       //      "ga": {}
+       //    }
+       //  }
+       //  if (protocolSlug === "duke") {
+       //    res = {
+       //      "id": 156,
+       //      "isDemo": false,
+       //      "protocolName": "duke",
+       //      "protocolSlug": "duke",
+       //      "logo": "",
+       //      "protocolType": "",
+       //      "tokenAddress": [],
+       //      "nftCollectionAddress": [
+       //        {
+       //          "address": "0x59325733eb952a92e069c87f0a6168b29e80627f",
+       //          "chain": "Ethereum"
+       //        }
+       //      ],
+       //      "twitter": {},
+       //      "discord": {},
+       //      "ga": {}
+       //    }
+       //  }
+       //  if (protocolSlug === "TorqueSquad") {
+       //    res = {
+       //      "id": 157,
+       //      "isDemo": false,
+       //      "protocolName": "TorqueSquad",
+       //      "protocolSlug": "TorqueSquad",
+       //      "logo": "",
+       //      "protocolType": "",
+       //      "tokenAddress": [],
+       //      "nftCollectionAddress": [
+       //        {
+       //          "address": "0x59325733eb952a92e069c87f0a6168b29e80627f",
+       //          "chain": "Ethereum"
+       //        }
+       //      ],
+       //      "twitter": {},
+       //      "discord": {},
+       //      "ga": {}
+       //    }
+       //  }
       } else {
         // res = await GetFgaProjectDetail({
         //   projectId: project_id,

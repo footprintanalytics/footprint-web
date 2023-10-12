@@ -29,7 +29,7 @@ import {
   getGrowthProjectPath,
 } from "../utils/utils";
 import {
-  cohortTips,
+  cohortTips, getUserProfileLink, getWalletProfileLink,
   user_profile_link,
   wallet_profile_link,
 } from "../utils/data";
@@ -37,7 +37,7 @@ import UploadWallets from "./buttons/UploadWallets";
 
 const SegmentListPanel = props => {
   // sourceType: projectUser, potentialUser
-  const { project, router, user, sourceType } = props;
+  const { project, router, user, sourceType, businessType } = props;
   const { isLoading, data, refetch } = useQuery(
     ["getCohort", project],
     async () => {
@@ -70,7 +70,7 @@ const SegmentListPanel = props => {
         return (
           <Link
             disabled={numberOfWallets === 0}
-            to={`${user_profile_link}?cohort_id=${cohortId}&tag=${text}&cohort_title=${text}#from=Segment`}
+            to={`${getUserProfileLink(businessType)}?cohort_id=${cohortId}&tag=${text}&cohort_title=${text}#from=Segment`}
           >
             {title}
           </Link>
@@ -119,13 +119,13 @@ const SegmentListPanel = props => {
         <Space size="middle">
           <Link
             disabled={record.numberOfWallets === 0}
-            to={`${user_profile_link}?cohort_id=${record.cohortId}&tag=${record.title}&cohort_title=${record.title}#from=Segment`}
+            to={`${getUserProfileLink(businessType)}?cohort_id=${record.cohortId}&tag=${record.title}&cohort_title=${record.title}#from=Segment`}
           >
             User Profile
           </Link>
           <Link
             disabled={record.numberOfWallets === 0}
-            to={`/fga/public/dashboard/dce33214-a079-4eb8-b53f-defaabde2eba?cohort_id=${record.cohortId}&cohort_title=${record.title}#from=Segment`}
+            to={`${getWalletProfileLink(businessType)}?cohort_id=${record.cohortId}&cohort_title=${record.title}#from=Segment`}
           >
             Wallet List
           </Link>
@@ -267,7 +267,7 @@ const SegmentListPanel = props => {
   );
 };
 
-const mapStateToProps = state => {
+const mapStateToProps = (state, props) => {
   return {
     user: getUser(state),
     project: getFgaProject(state),

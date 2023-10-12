@@ -5,8 +5,12 @@ import { getChainDataList } from "../../query_builder/components/question/handle
 //public/dashboard/uuid
 export const wallet_profile_link =
   "/fga/public/dashboard/fa040fe5-46b3-483b-b257-aa2373559fab"; //query: wallet_address
+export const getWalletProfileLink = (businessType) =>
+  `/fga/${businessType}/public/dashboard/dce33214-a079-4eb8-b53f-defaabde2eba`; //query: wallet_address
 export const user_profile_link =
   "/fga/public/dashboard/345aa907-c4e9-431a-923a-0dfd36188191"; //query: cohort_title
+export const getUserProfileLink = (businessType) =>
+  `/fga/${businessType}/public/dashboard/345aa907-c4e9-431a-923a-0dfd36188191`; //query: cohort_title
 export const top_protocols = [
   {
     protocolSlug: "the-sandbox",
@@ -365,6 +369,12 @@ export const getDashboardMap = (businessType, project, chain) => {
     ["project_summary", "6fd5b004-29c2-4560-84ab-9894a7567c12"],
     ["project_users", "9d4e9931-5c29-4913-99a4-ec0147712bcb"],
     ["project_transaction", "4a076f7b-4b4f-4060-b36a-8c1b849d3692"],
+    ["monetization", "990050e0-3d86-40d8-9aa4-f0fbab381d83"],
+    ["platform-protocols_slugs", "1b6fbdbe-dcff-4fe2-8b2a-6fc792173b49"],
+    ["game_user_engagement", "f15ab6da-15f7-40c6-8aa4-e3eda6fa430c"],
+    ["game_user_retention", "320e0a60-107c-44cb-83e3-7c8301354968"],
+    ["game_user_acquisition", "e1f2b298-4230-4a25-98ca-cabcd4e2b262"],
+    ["project-holder-overlap", "82e8500d-87c1-4dca-b2b6-b46e0287f156"],
 
 
     ["project_health-platform", "7a275541-580a-4720-8e10-f455335de137"],
@@ -387,76 +397,122 @@ export const fga_menu_data_v2 = (businessType, project, chain) => {
 
   const standardData = {
     "platformMenuTabs": [
-      getItem("Home", "home-platform", ReactIcons.myAnalysisIcon, [
-        getItem("Project Health", "project_health-platform", null),
-      ]),
-      getItem("Users", "users-platform", ReactIcons.userIcon, [
-        //<TeamOutlined />
-        // protocolType !== "NFT" && getItem("Overview", "users_overview-platform", null),
-        getItem("Segmentation", "segment-platform", null),
-        getItem("Members", "members-platform", null),
-        getItem("Journey Explorer", "journey-platform", null),
+      getItem("Overview", "home-platform", ReactIcons.myAnalysisIcon, [
+        getItem("Project List", "platform-protocols_slugs", null),
       ]),
     ],
     "menuTabs": [
-      getItem("Home", "home", ReactIcons.myAnalysisIcon, [
-        getItem("Project Health", "project_health", null),
-        getItem("Project Overlap", "project_overlap", null),
+      getItem("Project Overview", "project_overview", ReactIcons.myAnalysisIcon, [
+        getItem("Project Summary", "project_summary", null),
       ]),
-      getItem("Assets", "assets", ReactIcons.assetIcon, [
-        protocolType !== "GameFi" &&
-        getItem("NFT", "nft", null, [
-            getItem("Summary", "nft_summary", null),
-            getItem("NFT Sales&Mints", "nft_sales_mints", null),
-            getItem("NFT Listing", "listing", null),
-          ]
-        ),
-
-        protocolType !== "NFT" &&
-        getItem("Token", "game_tokenomics", null),
-        getItem("Game", "gaming", null, [
-          getItem("Overview", "gaming_overview", null),
-          getItem("User", "gaming_user", null),
-          getItem("Engagement", "gaming_engagement", null),
-          getItem("Spend", "gaming_spend", null),
-
+      (project?.nftCollectionAddress?.length > 0 || project?.tokenAddress?.length > 0) &&
+        getItem("Assets", "assets", ReactIcons.assetIcon, [
+          project?.nftCollectionAddress?.length > 0 &&
+            getItem("NFT", "nft", null, [
+                getItem("Summary", "nft_summary", null),
+                getItem("NFT Sales & Mints", "nft_sales_mints", null),
+                getItem("NFT Listing", "listing", null),
+                getItem("NFT Holders", "nft_nft_holder", null),
+                getItem("Leaderboard", "nft_leaderboard", null),
+              ]
+            ),
+          project?.tokenAddress?.length > 0 &&
+            getItem("Token", "game_tokenomics", null),
+          // getItem("Momentum", "momentum", null, [
+          //     getItem("Retention", "retention", null),
+          //     getItem("Acquisition", "acquisition", null),
+          //   ]
+          // ),
         ]),
-        getItem("Community", "social_stats", null, [
-            getItem("Twitter", "twitter", null),
-            getItem("Discord", "discord", null),
-          ]
-        ),
-        protocolType !== "GameFi" &&
-        getItem("Holders", "nft_nft_holder", null),
-        getItem("Momentum", "momentum", null, [
-            getItem("Retention", "retention", null),
-            getItem("Acquisition", "acquisition", null),
-          ]
-        ),
-        //  protocolType !== "NFT" && getItem("Active Users", "game_active_users", null),
+      /*getItem("Game", "gaming", ReactIcons.gamingStatIcon, [
+        getItem("Game States", "gaming_overview", null),
+        getItem("Monetization", "monetization", null),
+        getItem("User", "game-user", null, [
+          getItem("User Acquisition", "game_user_acquisition", null),
+          getItem("User Engagement", "game_user_engagement", null),
+          getItem("User Retention", "game_user_retention", null),
+        ]),
       ]),
       getItem("Users", "users", ReactIcons.userIcon, [
-        //<TeamOutlined />
-        // protocolType !== "NFT" && getItem("Overview", "users_overview", null),
-        getItem("Profiles", "user_profile", null),
-        protocolType !== "GameFi" &&
-        getItem("Leaderboard", "nft_leaderboard", null),
+        getItem("Members", "members", null),
         getItem("Journey Explorer", "journey", null),
         getItem("Segmentation", "segment", null),
-      ]),
-      getItem(
+      ]),*/
+      /*getItem(
         "Growth",
         "growth",
         ReactIcons.growthIcon,
         [
           getItem("Wallets Explorer", "members", null),
-          getItem("Snapshot Tools", "snapshot_tools", null),
+          // getItem("Snapshot Tools", "snapshot_tools", null),
           // getItem("Airdrop", "airdrop", null),
           // getItem("Single Wallet Profile", "wallet_profile", null),
           // getItem("Activation", "activation", null),
         ],
         // "group",
-      ),
+      ),*/
+      /*getItem("Settings", "settings", <SettingOutlined />, [
+        getItem("Integration", "integration", null),
+        getItem("Project Info", "general", null),
+        // getItem("Channel", "channel", null),
+      ]),*/
+    ]
+  }
+
+  const gameProjectData = {
+    "platformMenuTabs": [
+        getItem("Project Holder Overlap", "platform-holder_overlap", null),
+    ],
+    "menuTabs": [
+      getItem("Project Overview", "project_overview", ReactIcons.myAnalysisIcon, [
+        getItem("Project Summary", "project_summary", null),
+      ]),
+      (project?.nftCollectionAddress?.length > 0 || project?.tokenAddress?.length > 0) &&
+      getItem("Assets", "assets", ReactIcons.assetIcon, [
+        project?.nftCollectionAddress?.length > 0 &&
+        getItem("NFT", "nft", null, [
+            getItem("Summary", "nft_summary", null),
+            getItem("NFT Sales & Mints", "nft_sales_mints", null),
+            getItem("NFT Listing", "listing", null),
+            getItem("NFT Holders", "nft_nft_holder", null),
+            getItem("Leaderboard", "nft_leaderboard", null),
+          ]
+        ),
+        project?.tokenAddress?.length > 0 &&
+        getItem("Token", "game_tokenomics", null),
+        // getItem("Momentum", "momentum", null, [
+        //     getItem("Retention", "retention", null),
+        //     getItem("Acquisition", "acquisition", null),
+        //   ]
+        // ),
+      ]),
+      getItem("Game", "gaming", ReactIcons.gamingStatIcon, [
+        getItem("Game States", "gaming_overview", null),
+        getItem("Monetization", "monetization", null),
+        getItem("User", "game-user", null, [
+          getItem("User Acquisition", "game_user_acquisition", null),
+          getItem("User Engagement", "game_user_engagement", null),
+          getItem("User Retention", "game_user_retention", null),
+        ]),
+      ]),
+      getItem("Users", "users", ReactIcons.userIcon, [
+        getItem("Members", "members", null),
+        getItem("Journey Explorer", "journey", null),
+        getItem("Segmentation", "segment", null),
+      ]),
+      /*getItem(
+        "Growth",
+        "growth",
+        ReactIcons.growthIcon,
+        [
+          getItem("Wallets Explorer", "members", null),
+          // getItem("Snapshot Tools", "snapshot_tools", null),
+          // getItem("Airdrop", "airdrop", null),
+          // getItem("Single Wallet Profile", "wallet_profile", null),
+          // getItem("Activation", "activation", null),
+        ],
+        // "group",
+      ),*/
       getItem("Settings", "settings", <SettingOutlined />, [
         getItem("Integration", "integration", null),
         getItem("Project Info", "general", null),
@@ -529,10 +585,22 @@ export const fga_menu_data_v2 = (businessType, project, chain) => {
     ]
   }
 
-  const platformMenuTabs = businessType === "public-chain" ? publicChainData.platformMenuTabs : standardData.platformMenuTabs;
-  const menuTabs = businessType === "public-chain" ? publicChainData.menuTabs : standardData.menuTabs;
+  const platformMenuTabsMapping = {
+    "public-chain": publicChainData.platformMenuTabs,
+    "game-project": gameProjectData.platformMenuTabs,
+  }
+  const platformMenuTabs = platformMenuTabsMapping[businessType] || standardData.platformMenuTabs;
 
-  const platformMenuTitle = businessType === "public-chain" ? "Chain" : "Platform";
+  const menuTabsMapping = {
+    "public-chain": publicChainData.menuTabs,
+    "game-project": gameProjectData.menuTabs,
+  }
+  const menuTabs = menuTabsMapping[businessType] || standardData.menuTabs;
+
+  const platformMenuTitleMapping = {
+    "public-chain": "Chain",
+  }
+  const platformMenuTitle = platformMenuTitleMapping[businessType] || "Portfolio";
   const menuTitle = "Project";
 
   const liveKeys = [
@@ -547,8 +615,7 @@ export const fga_menu_data_v2 = (businessType, project, chain) => {
     "game_revenue",
     "nft_revenue",
   ];
-  const toggle_platform_project = localStorage.getItem('toggle_platform_project')
-  const keys = getKeys(toggle_platform_project === "project" ? [...menuTabs, ...platformMenuTabs] : [...platformMenuTabs, ...menuTabs]);
+  const keys = getKeys([...platformMenuTabs, ...menuTabs]);
   return { menuTabs, platformMenuTabs, keys, dashboardMap, liveKeys, menuTitle, platformMenuTitle, };
 };
 
