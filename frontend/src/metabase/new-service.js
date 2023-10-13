@@ -699,21 +699,24 @@ export const getContractSubmittedList = params => {
   return GET(`/api/v1/contract/submitted/list`, params);
 };
 
-export const getRefContractSubmittedList = () => {
-  return GET(`${getRefBaseApi()}/api/v1/protocol/submit/record`);
+export const getRefContractSubmittedList = params => {
+  return GET(`${getRefBaseApi()}/api/v1/protocol/submit/record`, params);
 };
 
 export const submitRefProtocols = params => {
   return POST(`${getRefBaseApi()}/api/v1/protocol/submit`, params);
 };
 
-// get audit list ,status = ['reviewing']
+// get audit list ,status = ['reviewing'] type = contract | protocol
 export const getRefAuditList = params => {
   return GET(`${getRefBaseApi()}/api/v1/protocol/audit/list`, params);
 };
 // {record_id, status:approved/rejected,reason,operator}
 export const doRefAudit = params => {
   return POST(`${getRefBaseApi()}/api/v1/protocol/audit`, params);
+};
+export const doRefContractAudit = params => {
+  return POST(`${getRefBaseApi()}/api/v1/contract/audit`, params);
 };
 
 export const getRefProtocolList = () => {
