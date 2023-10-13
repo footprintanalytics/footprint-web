@@ -530,6 +530,16 @@ const chainData = [
         "value": "sui-overview",
         "publicUuid": "e569cb10-4132-46db-a391-3803feb3a203",
       },
+      {
+        "label": "Nautilus Overview",
+        "value": "nautilus-overview",
+        "publicUuid": "62908ce3-43e2-450f-89c1-a1066ba1e7fe",
+      },
+      {
+        "label": "HOME Verse Overview",
+        "value": "home-verse-overview",
+        "publicUuid": "c79ec4ee-74c3-47ba-942c-5e351f3c2ff3",
+      },
     ],
   },
   {

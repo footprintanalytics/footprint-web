@@ -3,6 +3,7 @@ import React, { Component } from "react";
 import { connect } from "react-redux";
 import { push } from "react-router-redux";
 import cx from "classnames";
+import Link from "metabase/core/components/Link";
 
 import _ from "underscore";
 import {debounce, isArray, startCase} from "lodash";
@@ -48,7 +49,7 @@ import QueryCopyModal from "metabase/components/QueryCopyModal";
 import { getUser } from "metabase/selectors/user";
 import { getSqlAndJumpToDoc, replaceTemplateCardUrl } from "metabase/guest/utils";
 import { trackStructEvent } from "metabase/lib/analytics";
-import { isABPath } from "metabase/ab/utils/utils";
+import { isABPath, isBusinessTypePath } from "metabase/ab/utils/utils";
 
 const mapStateToProps = (state, props) => {
   const user = getUser(state);
@@ -57,6 +58,7 @@ const mapStateToProps = (state, props) => {
   const project = props.project;
   const chain = props.chain;
   const location = props.location;
+  const favoriteList = props.favoriteList;
   const isDataApiStatistics = props.isDataApiStatistics;
   if (project) {
     let currentChain = null;
@@ -70,6 +72,9 @@ const mapStateToProps = (state, props) => {
     updateDashboardPara(parameters, parameterValues, "project_name", [
       project.protocolName,
     ]);
+    if (isABPath() && isBusinessTypePath("game-portfolio") && props.fgaMenu?.includes("platform")) {
+      updateDashboardPara(parameters, parameterValues, "protocol_slugs", favoriteList?.map(item => item.protocolSlug));
+    }
     if (isABPath()) {
       updateDashboardPara(parameters, parameterValues, "chain", [
         chain,
@@ -474,6 +479,8 @@ class PublicDashboard extends Component {
       innerClassName,
       router,
       showRefreshButton,
+      setLoginModalShow,
+      user,
     } = this.props;
     const buttons = !IFRAMED
       ? getDashboardActions(this, { ...this.props, isPublic: true })
@@ -509,6 +516,29 @@ class PublicDashboard extends Component {
     //   header = this.handleFgaMultiAddressUiSelectHeader("asset", keyObjectAsset);
     //   hideParametersForCustom = `${hideParametersForCustom},${keyObjectAsset.slug}`;
     // }
+
+    if (isABPath() && isBusinessTypePath("game-portfolio") && (this.props.favoriteList?.length || 0) === 0) {
+      header = <div style={{ padding: "10px 20px", color: "white" }}>Please select your {" "}
+        <Link
+          className="text-underline text-underline-hover"
+          onClick={event => {
+            if (!user) {
+              event.preventDefault();
+              setLoginModalShow({
+                show: true,
+                from: "dashboard-set-favorite-list",
+                redirect: "/fga/game-portfolio/project-manage",
+                channel: "FGA",
+              });
+            } else {
+              router?.push("/fga/game-portfolio/project-manage");
+            }
+          }}
+        >
+          favorite project list
+        </Link>
+        {" "} and then can analyze your projects.</div>
+    }
     if (
       isFgaPath() &&
       hashData?.from &&

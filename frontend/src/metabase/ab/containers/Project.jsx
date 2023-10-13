@@ -33,11 +33,11 @@ import SocialConnectList from "./SocialConnectList";
 import "../css/index.css";
 import GameList from "./gameList";
 import BindGame from "./bindGame";
-import { getBindGameMapping, getFgaChain, getGamesByRedux } from "metabase/selectors/control";
+import { getBindGameMapping, getFgaChain, getFgaFavoriteList, getGamesByRedux } from "metabase/selectors/control";
 import { setGames } from "metabase/redux/control";
 
 const Project = props => {
-  const { router, location, children, user, menu, projectPath, projectObject, bindGameMapping, businessType, chain, setGames, games } =
+  const { router, location, children, user, menu, projectPath, projectObject, bindGameMapping, businessType, chain, setGames, games, favoriteList } =
     props;
   const [currentMenu, setCurrentMenu] = useState(menu);
   const [gaMenuTabs, setGaMenuTabs] = useState(null);
@@ -201,7 +201,10 @@ const Project = props => {
             params={{ uuid: getDashboardMap(businessType, projectObject, chain)?.get(current_tab) }}
             location={location}
             project={getProjectObject()}
+            router={router}
             chain={chain}
+            fgaMenu={currentMenu}
+            favoriteList={favoriteList}
             isFullscreen={false}
             hideTitle={true}
             key={`${chain}${projectObject?.protocolSlug}`}
@@ -500,6 +503,7 @@ const Project = props => {
           router={router}
           location={location}
           project={getProjectObject()}
+          businessType={businessType}
         ></CohortList>
       );
     }
@@ -609,6 +613,7 @@ const mapStateToProps = (state, props) => {
     menu: props.params?.menu,
     businessType: props.params?.businessType,
     bindGameMapping: getBindGameMapping(state),
+    favoriteList: getFgaFavoriteList(state),
   };
 };
 

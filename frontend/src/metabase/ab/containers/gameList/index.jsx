@@ -9,6 +9,9 @@ import { loadFgaFavoriteList, setGames } from "metabase/redux/control";
 import { getFgaChain, getFgaFavoriteList, getFgaProtocolList, getGamesByRedux } from "metabase/selectors/control";
 import { StarFilled } from "@ant-design/icons";
 import { deleteProtocolFavorite, postProtocolFavorite } from "metabase/new-service";
+import { uniqBy } from "lodash";
+import _ from "underscore";
+import { isBusinessTypePath } from "metabase/ab/utils/utils";
 
 const { Search } = Input;
 
@@ -17,7 +20,7 @@ const projectList = props => {
     props;
   const userId = 158;
   const projectId = 153;
-  console.log("projectList")
+
   const [isSubmitModalOpen, setSubmitModalOpen] = useState({
     open: false,
     param: null,
@@ -90,8 +93,9 @@ const projectList = props => {
   let data;
   if (protocolList) {
     data = protocolList?.sort((a, b) => a.protocolSlug < b.protocolSlug ? -1 : 1)?.filter(item => {
-      return searchKey ? item.protocolSlug.includes(searchKey) || item.protocolName.includes(searchKey) : true;
+      return searchKey ? item.protocolSlug?.includes(searchKey) || item.protocolName?.includes(searchKey) : true;
     });
+    data = [...uniqBy(data, obj => obj.protocolSlug)]
   }
 
   const loadProjectDetail = projectSlug => {
@@ -209,7 +213,9 @@ const projectList = props => {
       {projectObject && (
         <div style={{ width: 800 }}>
           <div className="flex">
-            <h2>Projects ({`${chain}`})</h2>
+            <h2>Projects
+              {isBusinessTypePath("public-chain") && <>({`${chain}`})</>}
+            </h2>
           </div>
           {/*<div className="flex justify-end full-width mb1">
             <Button onClick={() => {
