@@ -23,6 +23,7 @@ import {
   doRefAudit,
   doRefContractAudit,
 } from "metabase/new-service";
+import "./RefAuditTable.css";
 
 const RefAuditTable = ({ operator, type, recordType }) => {
   const [param, setParam] = useState();
@@ -327,15 +328,21 @@ const RefAuditTable = ({ operator, type, recordType }) => {
               return (
                 <div key={index}>
                   <Typography.Paragraph
-                    ellipsis={{ tooltip: true, rows: 4, expandable: false }}
+                    ellipsis={{ tooltip: false, rows: 4, expandable: false }}
                   >
                     {item.name}:{" "}
                     {item.old && (
-                      <>
+                      <Popover content={item.old} title={`Before ${item.name}`}>
                         <code>{item.old}</code> {"->"}
-                      </>
+                      </Popover>
                     )}
-                    <code>{item.new}</code>
+                    <Popover
+                      content={item.new}
+                      title={`After ${item.name}`}
+                      overlayClassName="custom-popover"
+                    >
+                      <code>{item.new}</code>
+                    </Popover>
                   </Typography.Paragraph>
                 </div>
               );

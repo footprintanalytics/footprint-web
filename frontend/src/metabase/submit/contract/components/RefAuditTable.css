@@ -1,0 +1,5 @@
+.custom-popover .ant-popover-inner-content {
+  max-width: 1200px; /* 设置最大宽度 */
+  max-height: 400px; /* 设置最大高度 */
+  overflow: auto;
+}
