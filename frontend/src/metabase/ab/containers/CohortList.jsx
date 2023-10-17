@@ -70,7 +70,7 @@ const CohortList = props => {
 
   return (
     <div style={{ padding: 20 }}>
-      <>
+      {/*<>
         {!infoResult.isLoading ? (
           <StatisticIndex
             data={formatInfoResult(infoResult?.data)}
@@ -83,7 +83,7 @@ const CohortList = props => {
             <LoadingSpinner></LoadingSpinner>
           </div>
         )}
-      </>
+      </>*/}
       <SegmentListPanel
         router={props.router}
         sourceType={"projectUser"}

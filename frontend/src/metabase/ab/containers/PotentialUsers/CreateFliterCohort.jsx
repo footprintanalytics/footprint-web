@@ -244,12 +244,12 @@ const CreateCohort2 = ({
         />
         <div className="mt2" />
         {getPanel()}
-        <div className="mb2" />
+        {/*<div className="mb2" />
         <FilterOut
           options={filterOutOptions}
           defaultValue={filterOutOptions}
           onChange={values => setFilterOutValues(values)}
-        />
+        />*/}
       </Modal>
       {contextHolder}
     </>
