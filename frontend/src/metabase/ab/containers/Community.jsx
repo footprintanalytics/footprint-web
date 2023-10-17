@@ -105,40 +105,48 @@ const Community = props => {
 
   const valueFilterOptionsList = [
     {
-      label: "In-Game Net Worth >=",
-      indicator: "netWorth",
+      label: "NFT Holding Value >=",
+      indicator: "nft_holding_value",
       comparisonSymbol: "gte",
       defaultValue:
-        walletListParams?.filters?.find(item => item.indicator === "netWorth")
+        walletListParams?.filters?.find(item => item.indicator === "nft_holding_value")
           ?.comparisonValue ?? null,
     },
     {
-      label: "In-Game NFT Holding Value >=",
-      indicator: "nftHoldingValue",
+      label: "Token Holding Value >=",
+      indicator: "token_holding_value",
       comparisonSymbol: "gte",
       defaultValue:
-        walletListParams?.filters?.find(
-          item => item.indicator === "nftHoldingValue",
-        )?.comparisonValue ?? null,
+        walletListParams?.filters?.find(item => item.indicator === "token_holding_value")
+          ?.comparisonValue ?? null,
     },
-    {
-      label: "In-Game Token Holding Value >=",
-      indicator: "tokenHoldingValue",
-      comparisonSymbol: "gte",
-      defaultValue:
-        walletListParams?.filters?.find(
-          item => item.indicator === "tokenHoldingValue",
-        )?.comparisonValue ?? null,
-    },
-    {
-      label: "In-Game Trading Value(30D) >=",
-      indicator: "tradingValue",
-      comparisonSymbol: "gte",
-      defaultValue:
-        walletListParams?.filters?.find(
-          item => item.indicator === "tradingValue",
-        )?.comparisonValue ?? null,
-    },
+    // {
+    //   label: "In-Game NFT Holding Value >=",
+    //   indicator: "nftHoldingValue",
+    //   comparisonSymbol: "gte",
+    //   defaultValue:
+    //     walletListParams?.filters?.find(
+    //       item => item.indicator === "nftHoldingValue",
+    //     )?.comparisonValue ?? null,
+    // },
+    // {
+    //   label: "In-Game Token Holding Value >=",
+    //   indicator: "tokenHoldingValue",
+    //   comparisonSymbol: "gte",
+    //   defaultValue:
+    //     walletListParams?.filters?.find(
+    //       item => item.indicator === "tokenHoldingValue",
+    //     )?.comparisonValue ?? null,
+    // },
+    // {
+    //   label: "In-Game Trading Value(30D) >=",
+    //   indicator: "tradingValue",
+    //   comparisonSymbol: "gte",
+    //   defaultValue:
+    //     walletListParams?.filters?.find(
+    //       item => item.indicator === "tradingValue",
+    //     )?.comparisonValue ?? null,
+    // },
     // { label: "Profit >=", indicator: "profit", comparisonSymbol: "gte" },
   ];
 
@@ -162,7 +170,7 @@ const Community = props => {
         />
       ),
     },
-    {
+    /*{
       component: (
         <Button
           type="primary"
@@ -182,13 +190,13 @@ const Community = props => {
       title: "Social Connect", //required
       link: null,
       disabled: false,
-    },
+    },*/
   ];
 
   const tableColumns = [
     {
       title: "Address",
-      dataIndex: "address",
+      dataIndex: "wallet_address",
       key: "address",
       render: (text, { ens }) => (
         <div className="flex flex-row">
@@ -203,7 +211,7 @@ const Community = props => {
         </div>
       ),
     },
-    {
+    /*{
       title: "Tag",
       key: "tags",
       dataIndex: "tags",
@@ -231,29 +239,57 @@ const Community = props => {
           </Tooltip>
         );
       },
-    },
+    },*/
     {
-      title: "In-Game Net Worth",
-      dataIndex: "netWorth",
-      key: "netWorth",
-      align: "right",
-      render: text => (text !== null ? "$" + valueFormat(text) : ""),
-    },
-    {
-      title: "In-Game NFTs",
-      dataIndex: "holdingNFT",
-      key: "holdingNFT",
+      title: "NFT Collections Count",
+      dataIndex: "project_nft_collections_count",
+      key: "project_nft_collections_count",
       align: "right",
       render: text => (text !== null ? valueFormat(text) : ""),
     },
     {
-      title: "In-Game NFT Value",
-      dataIndex: "holdingNFTValue",
-      key: "holdingNFTValue",
+      title: "NFT Items Count",
+      dataIndex: "project_nft_items_count",
+      key: "project_nft_items_count",
+      align: "right",
+      render: text => (text !== null ? valueFormat(text) : ""),
+    },
+    {
+      title: "All NFT Collections Count",
+      dataIndex: "all_nft_collections_count",
+      key: "all_nft_collections_count",
+      align: "right",
+      render: text => (text !== null ? valueFormat(text) : ""),
+    },
+    {
+      title: "All NFT Items Count",
+      dataIndex: "all_nft_items_count",
+      key: "all_nft_items_count",
+      align: "right",
+      render: text => (text !== null ? valueFormat(text) : ""),
+    },
+    {
+      title: "NFT Holding Value",
+      dataIndex: "nft_holding_value",
+      key: "nft_holding_value",
       align: "right",
       render: text => (text !== null ? "$" + valueFormat(text) : ""),
     },
     {
+      title: "Token Holding Count",
+      dataIndex: "token_holding_count",
+      key: "token_holding_count",
+      align: "right",
+      render: text => (text !== null ? valueFormat(text) : ""),
+    },
+    {
+      title: "Token Holding Value",
+      dataIndex: "token_holding_value",
+      key: "token_holding_value",
+      align: "right",
+      render: text => (text !== null ? "$" + valueFormat(text) : ""),
+    },
+    /*{
       title: "In-Game Tokens",
       dataIndex: "holdingToken",
       key: "holdingToken",
@@ -287,8 +323,8 @@ const Community = props => {
       key: "totalTransactions",
       align: "right",
       render: text => (text !== null ? valueFormat(text) : ""),
-    },
-    {
+    },*/
+    /*{
       title: "Social ID",
       dataIndex: "twitterName",
       key: "socialId",
@@ -371,13 +407,13 @@ const Community = props => {
           )}
         </>
       ),
-    },
+    },*/
   ];
 
   const getQuickFilterOptionList = data => {
     return data?.map(option => {
       return {
-        label: `${option.name} (${valueFormat(option.wallets)})`,
+        label: `${option.name}`,
         value: option.name,
       };
     });

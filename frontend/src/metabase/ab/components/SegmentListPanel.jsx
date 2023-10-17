@@ -133,17 +133,17 @@ const SegmentListPanel = props => {
           <Link
             disabled={record.numberOfWallets === 0}
             onClick={() => {
-              message.info("Coming soon...")
-              /*if (checkIsNeedContactUs(modal, project)) {
-                return;
-              }
-              message.info("Download will start soon...");
+              // message.info("Coming soon...")
+              // if (checkIsNeedContactUs(modal, project)) {
+              //   return;
+              // }
+              // message.info("Download will start soon...");
               window
                 .open(
                   `/api/v1/fga/cohort/address/csv?cohortId=${record.cohortId}&projectId=${project?.id}&cohortTitle=${record.title}`,
                   "_blank",
                 )
-                .focus();*/
+                .focus();
             }}
           >
             Download CSV

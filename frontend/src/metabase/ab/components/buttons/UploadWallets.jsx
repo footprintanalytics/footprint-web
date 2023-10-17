@@ -81,17 +81,18 @@ const UploadWallets = ({
       });
       return;
     }
-    const projectId = getLatestGAProjectId();
-    if (!projectId) {
-      setCohortModalOpen(false);
-      message.warning("Please create your project before proceeding.");
-      setCreateFgaProjectModalShowAction({ show: true });
-      return;
-    }
+    //todo
+    // const projectId = getLatestGAProjectId();
+    // if (!projectId) {
+    //   setCohortModalOpen(false);
+    //   message.warning("Please create your project before proceeding.");
+    //   setCreateFgaProjectModalShowAction({ show: true });
+    //   return;
+    // }
     setLoading(true);
     const parms = {
       title: cohortName,
-      projectId: parseInt(projectId, 10),
+      projectId: 153,
       addressList: walletList ?? [],
     };
     try {
