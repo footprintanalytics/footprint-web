@@ -107,7 +107,7 @@ const RefAuditTable = ({ operator, type, recordType }) => {
     return differentFields;
   };
 
-  const formatReason = reasonStr => {
+  const formatReason = (reasonStr, status) => {
     if (!reasonStr || reasonStr?.length === 0) return [];
     const reasonFields = [];
     try {
@@ -116,13 +116,13 @@ const RefAuditTable = ({ operator, type, recordType }) => {
         if (key === "protocol") {
           reasonFields.push({
             name: key,
-            isValid: false,
+            isValid: status === "approved" || false,
             msg: reason[key],
           });
         } else {
           reasonFields.push({
             name: key,
-            isValid: reason[key]["isValid"],
+            isValid: status === "approved" || reason[key]["isValid"],
             msg: reason[key]["msg"],
           });
         }
@@ -130,7 +130,7 @@ const RefAuditTable = ({ operator, type, recordType }) => {
     } catch (e) {
       reasonFields.push({
         name: "reason",
-        isValid: false,
+        isValid: status === "approved" || false,
         msg: reasonStr,
       });
     }
@@ -193,14 +193,17 @@ const RefAuditTable = ({ operator, type, recordType }) => {
       title: "Audit message",
       // width: 240,
       render: (_, record) => {
-        const reason = formatReason(record?.reason);
+        const reason = formatReason(record?.reason, record?.status);
         return (
           <Space size={[0, 8]} wrap className="w-full">
             {reason.map((item, index) => {
               return (
-                <Tag key={index} color={item.isValid ? "success" : "error"}>
-                  {item.msg}
-                </Tag>
+                <Typography.Text
+                  key={index}
+                  type={item.isValid ? "success" : "danger"}
+                >
+                  <code>{item.msg}</code>
+                </Typography.Text>
               );
             })}
           </Space>
@@ -355,14 +358,17 @@ const RefAuditTable = ({ operator, type, recordType }) => {
       title: "Audit message",
       // width: 240,
       render: (_, record) => {
-        const reason = formatReason(record?.reason);
+        const reason = formatReason(record?.reason, record?.status);
         return (
           <Space size={[0, 8]} wrap className="w-full">
             {reason.map((item, index) => {
               return (
-                <Tag key={index} color={item.isValid ? "success" : "error"}>
-                  {item.msg}
-                </Tag>
+                <Typography.Text
+                  key={index}
+                  type={item.isValid ? "success" : "danger"}
+                >
+                  <code>{item.msg}</code>
+                </Typography.Text>
               );
             })}
           </Space>
