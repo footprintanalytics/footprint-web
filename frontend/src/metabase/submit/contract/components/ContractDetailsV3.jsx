@@ -290,7 +290,10 @@ const ContractDetailsV3 = ({ onFinish, user, onClosed }) => {
               setProtocolSlug(protocolSlug);
             }}
             filterOption={(inputValue, option) =>
-              toLower(option.value).indexOf(toLower(inputValue)) !== -1
+              toLower(option.value)
+                .trim()
+                .replace(" ", "")
+                .indexOf(toLower(inputValue).trim().replace(" ", "")) !== -1
             }
           />
         </Form.Item>
