@@ -468,7 +468,7 @@ const Community = props => {
               });
             }}
           />
-          <QuickFilter
+          {/*<QuickFilter
             isLoading={queryType === "quickFilter" && listResult.isLoading}
             optionsList={getQuickFilterOptionList(filterResult?.data?.data)}
             defaultValue={
@@ -484,7 +484,7 @@ const Community = props => {
                 quickFilter: tag ? [tag?.value] : [],
               });
             }}
-          />
+          />*/}
         </>
       )}
       {listResult.isLoading | !project?.id && walletListData === null ? (
