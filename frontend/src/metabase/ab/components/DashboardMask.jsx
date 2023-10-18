@@ -105,18 +105,8 @@ const DashboardMask = props => {
       <div className="flex flex-col justify-center p2" style={{ width: 500 }}>
         <h3 className="text-white">You need to set up connector</h3>
         <Typography.Text className="mt2">
-          This report consists of web2 data, please use connector to upload web2 data first.
+          Please use connector to upload web2 data before you can see the web2 dashboard.
         </Typography.Text>
-        {contact}
-        <div>
-          <Link
-            target="_blank"
-            className="mt2"
-            href="https://t.me/joinchat/4-ocuURAr2thODFh"
-          >
-            Telegram: @dplinnn
-          </Link>
-        </div>
         <div className="flex flex-row items-center justify-end w-full">
           <Button
             type="primary"

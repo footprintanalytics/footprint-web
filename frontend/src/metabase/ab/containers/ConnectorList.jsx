@@ -1,32 +1,15 @@
 /* eslint-disable react/prop-types */
-import React, { useState, useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { connect } from "react-redux";
-import {
-  Drawer,
-  Avatar,
-  List,
-  Modal,
-  Divider,
-  Button,
-  Result,
-  Card,
-  Typography,
-  message,
-  notification,
-  Space,
-} from "antd";
+import { Avatar, Button, Card, Drawer, List, Modal, Space, Typography } from "antd";
 import { ReadOutlined } from "@ant-design/icons";
 import Title from "antd/lib/typography/Title";
 import { useQuery } from "react-query";
 import { QUERY_OPTIONS } from "metabase/containers/dashboards/shared/config";
 import { getAvailableConnectors } from "metabase/new-service";
 import { getUser } from "metabase/selectors/user";
-import {
-  loginModalShowAction,
-  createFgaProjectModalShowAction,
-} from "metabase/redux/control";
+import { createFgaProjectModalShowAction, loginModalShowAction } from "metabase/redux/control";
 import LoadingSpinner from "metabase/components/LoadingSpinner";
-import { isDark } from "metabase/dashboard/components/utils/dark";
 import ConfigConnector from "../components/config_panel/ConfigConnector";
 import "../css/utils.css";
 import { getGrowthProjectPath } from "../utils/utils";
@@ -43,11 +26,12 @@ const ConnectorList = props => {
     setLoginModalShowAction,
     setCreateFgaProjectModalShowAction,
     refetchProject,
+    businessType,
   } = props;
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [openDrawer, setOpenDrawer] = useState({ show: false, connector: {} });
   const [count, setCount] = useState(1);
-  const { isLoading, data } = useQuery(
+  let { isLoading, data } = useQuery(
     ["getAvailableConnectors", projectId, count],
     async () => {
       return await getAvailableConnectors({ projectId: parseInt(projectId) });
@@ -55,8 +39,139 @@ const ConnectorList = props => {
     { ...QUERY_OPTIONS, enabled: !!projectId },
   );
 
+  if (!projectId || project?.protocolSlug === "Project A") {
+    data = {
+      "availableConnectorConfig": [
+      {
+        "group": "Business ",
+        "name": "Users",
+        "businessType": "account_mapping",
+        "icon": "https://static.footprint.network/img_fga_account_mapping.svg",
+        "description": "Users is the process of associating or linking an account in one system or platform with an account in another system or platform to achieve data or identity correspondence and synchronization.",
+        "connectionSpecification": [
+          {
+            "type": "string",
+            "title": "Source Database",
+            "key": "sourceDefinitionId",
+            "required": true,
+            "value": "",
+            "private": false,
+            "description": "",
+            "placeholder": ""
+          }
+        ],
+        "streamConfig": {
+          "min": 0,
+          "max": 0,
+          "default": 0,
+          "list": []
+        },
+        "mode": "normal",
+        "active": project?.protocolSlug === "Project A",
+        "configured": false
+      },
+      {
+        "group": "Business ",
+        "name": "Events",
+        "businessType": "user_event",
+        "description": "Events is a recorded action or interaction performed by a user within a system or application.",
+        "icon": "https://static.footprint.network/img_fga_user_event.svg",
+        "connectionSpecification": [
+          {
+            "type": "string",
+            "title": "Source Database",
+            "key": "sourceDefinitionId",
+            "required": true,
+            "value": "",
+            "private": false,
+            "description": "",
+            "placeholder": ""
+          }
+        ],
+        "streamConfig": {
+          "min": 0,
+          "max": 0,
+          "default": 0,
+          "list": []
+        },
+        "mode": "normal",
+        "active": project?.protocolSlug === "Project A",
+        "configured": false,
+        "connectionId": 119
+      },
+      {
+        "group": "Community",
+        "name": "Twitter",
+        "description": "Twitter lets you analyze the changes and engagement of your followers.",
+        "icon": "https://footprint-imgs.oss-us-east-1.aliyuncs.com/20220516201254.png",
+        "sourceDefinitionId": "897c2972-2bb6-4cb2-97b9-7a5e5a86301c",
+        "connectionSpecification": [
+          {
+            "type": "string",
+            "title": "Username",
+            "key": "screen_name",
+            "required": true,
+            "value": "",
+            "private": false,
+            "placeholder": "Enter the username, such as Footprint_Data"
+          }
+        ],
+        "streamConfig": {
+          "min": 3,
+          "max": 3,
+          "default": 1,
+          "list": []
+        },
+        "mode": "normal",
+        "active": project?.protocolSlug === "Project A",
+        "configured": false
+      },
+      {
+        "group": "Community",
+        "name": "Discord",
+        "description": "Discord lets you analyze the changes and engagement of your guild members.",
+        "icon": "https://footprint-imgs.oss-us-east-1.aliyuncs.com/20220516201343.png",
+        "sourceDefinitionId": "cff37b4b-8786-401b-9484-46dd815b84de",
+        "connectionSpecification": [
+          {
+            "type": "string",
+            "title": "Guild ID",
+            "key": "guild_id",
+            "required": true,
+            "value": "",
+            "private": false,
+            "description": "To get the guild ID, open Discord, go to Settings > Advanced and enable developer mode. Then, right-click on the server title and select \"Copy ID\" to get the guild ID.",
+            "placeholder": "Enter the guild ID"
+          },
+          {
+            "type": "string",
+            "title": "Channel IDs",
+            "key": "channel_ids",
+            "required": true,
+            "value": "",
+            "private": false,
+            "description": "To get the channel ID, open Discord, go to Settings > Advanced and enable developer mode. Then, right-click on the channel title and select \"Copy ID\" to get the channel ID.",
+            "placeholder": "Enter the channel IDs, separated by commas"
+          }
+        ],
+        "streamConfig": {
+          "min": 2,
+          "max": 2,
+          "default": 1,
+          "list": []
+        },
+        "mode": "normal",
+        "active": project?.protocolSlug === "Project A",
+        "configured": false,
+        "docLink": "https://support.discord.com/hc/en-us/articles/206346498-Where-can-I-find-my-User-Server-Message-ID-"
+      }
+    ]
+    }
+  }
+
+  console.log("projectId", projectId)
   useEffect(() => {
-    if (projectId && !isLoading && data) {
+    if ((projectId && !isLoading && data) || (!projectId && data)) {
       console.log("getAvailableIntegrations", data);
       const availableConnectors = data?.availableConnectorConfig;
       const groupMap = new Map();
@@ -174,7 +289,26 @@ const ConnectorList = props => {
                               <Button
                                 key="Detail"
                                 style={{ borderRadius: 5, width: 120 }}
-                                onClick={() => showDrawer(item)}
+                                onClick={() => {
+                                  if (project.protocolSlug === "Project A") {
+                                    Modal.confirm({
+                                      title: "Tip",
+                                      content: (
+                                        <div style={{ marginTop: 20 }}>
+                                          <p>
+                                            {`The sample project can't create a connector, you can choose other project to connect web2.`}
+                                          </p>
+                                        </div>
+                                      ),
+                                      okText: "Select other project",
+                                      onOk() {
+                                        router.push(`/fga/${businessType}/project-manage`);
+                                      },
+                                    });
+                                    return ;
+                                  }
+                                  showDrawer(item)
+                                }}
                               >
                                 Detail
                               </Button>,
@@ -197,6 +331,23 @@ const ConnectorList = props => {
                                 key="Connect"
                                 style={{ borderRadius: 5, width: 120 }}
                                 onClick={() => {
+                                  if (project.protocolSlug === "Project A") {
+                                    Modal.confirm({
+                                      title: "Tip",
+                                      content: (
+                                        <div style={{ marginTop: 20 }}>
+                                          <p>
+                                            {`The sample project can't create a connector, you can choose other project to connect web2.`}
+                                          </p>
+                                        </div>
+                                      ),
+                                      okText: "Select other project",
+                                      onOk() {
+                                        router.push(`/fga/${businessType}/project-manage`);
+                                      },
+                                    });
+                                    return ;
+                                  }
                                   showDrawer(item);
                                 }}
                               >

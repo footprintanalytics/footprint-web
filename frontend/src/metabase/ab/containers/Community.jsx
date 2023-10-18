@@ -22,7 +22,7 @@ import { formatTag, getGrowthProjectPath, valueFormat } from "../utils/utils";
 import { wallet_profile_link } from "../utils/data";
 import { formatTitle } from "metabase/lib/formatting/footprint";
 const Community = props => {
-  const { router, location, children, user, projectPath, menu, project } =
+  const { router, location, children, user, projectPath, menu, project, businessType } =
     props;
 
   const [walletListParams, setWalletListParams] = useState({
@@ -161,6 +161,7 @@ const Community = props => {
           router={router}
           btnText="Save as Segment"
           type="Members"
+          businessType={businessType}
           addressListCount={listResult?.data?.total}
           params={{
             ...walletListParams,

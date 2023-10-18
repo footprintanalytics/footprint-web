@@ -33,6 +33,7 @@ const CreateCohort2 = ({
   type = "Potential User",
   isButtonStyle = true,
   isTagging = false,
+  businessType,
 }) => {
   const [isCohortModalOpen, setCohortModalOpen] = useState(false);
   const [createCohortLoading, setCreateCohortLoading] = useState(false);
@@ -169,6 +170,23 @@ const CreateCohort2 = ({
           type="primary"
           disabled={disable}
           onClick={() => {
+            if (project?.protocolSlug === "Project A") {
+              Modal.confirm({
+                title: "Tip",
+                content: (
+                  <div style={{ marginTop: 20 }}>
+                    <p>
+                      {`The sample project is not able to create a cohort, you can select other project to create a cohort.`}
+                    </p>
+                  </div>
+                ),
+                okText: "Select other project",
+                onOk() {
+                  router.push(`/fga/${businessType}/project-manage`);
+                },
+              });
+              return ;
+            }
             checkIsNeedContactUs(
               modal,
               project,
@@ -185,6 +203,23 @@ const CreateCohort2 = ({
       ) : (
         <div
           onClick={() => {
+            if (project?.protocolSlug === "Project A") {
+              Modal.info({
+                title: "Tip",
+                content: (
+                  <div style={{ marginTop: 20 }}>
+                    <p>
+                      {`The sample project can't create a connector, you can choose other project to connect web2.`}
+                    </p>
+                  </div>
+                ),
+                okText: "Select other project",
+                onOk() {
+                  router.push(`/fga/${businessType}/project-manage`);
+                },
+              });
+              return ;
+            }
             checkIsNeedContactUs(
               modal,
               project,

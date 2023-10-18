@@ -60,17 +60,25 @@ const mapStateToProps = (state, props) => {
   const location = props.location;
   const favoriteList = props.favoriteList;
   const isDataApiStatistics = props.isDataApiStatistics;
+  let projectProtocolSlug = project.protocolSlug;
+  let projectProtocolName = project.protocolName;
+  if (projectProtocolSlug === "Project A") {
+    projectProtocolSlug = "mocaverse";
+  }
+  if (projectProtocolName === "Project A") {
+    projectProtocolName = "Mocaverse";
+  }
   if (project) {
     let currentChain = null;
     // switch protocol
     updateDashboardPara(parameters, parameterValues, "gamefi", [
-      project.protocolSlug,
+      projectProtocolSlug,
     ]);
     updateDashboardPara(parameters, parameterValues, "protocol_slug", [
-      project.protocolSlug,
+      projectProtocolSlug,
     ]);
     updateDashboardPara(parameters, parameterValues, "project_name", [
-      project.protocolName,
+      projectProtocolName,
     ]);
     if (isABPath() && isBusinessTypePath("game-portfolio") && props.fgaMenu?.includes("platform")) {
       updateDashboardPara(parameters, parameterValues, "protocol_slugs", favoriteList?.map(item => item.protocolSlug));

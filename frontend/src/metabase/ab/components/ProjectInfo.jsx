@@ -25,7 +25,7 @@ import UpdateProjectModal from "./Modal/UpdateProjectModal";
 import { getFgaChain } from "metabase/selectors/control";
 
 const ProjectInfo = props => {
-  const { router, project, location, user, chain } = props;
+  const { router, project, location, user, chain, businessType } = props;
   const [currentProject, setCurrentProject] = useState(project);
   const [projectModalShow, setProjectModalShow] = useState({
     show: false,
@@ -103,7 +103,11 @@ const ProjectInfo = props => {
                     message.error("Please login first!");
                     return;
                   }
-                  router?.push({ pathname: "/submit/contract/add" });
+                  if (businessType) {
+                    router?.push({ pathname: `/fga/${businessType}/submit/contract/add` });
+                  } else {
+                    router?.push({ pathname: "/submit/contract/add" });
+                  }
                 }}
               >
                 click here{" "}

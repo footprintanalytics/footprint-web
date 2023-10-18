@@ -400,6 +400,7 @@ const Project = props => {
           router={router}
           project={getProjectObject()}
           projectId={getLatestGAProjectId()}
+          businessType={businessType}
         ></ConnectorList>
       );
     }
@@ -418,6 +419,7 @@ const Project = props => {
         <ProjectInfo
           location={location}
           router={router}
+          businessType={businessType}
           // project={getProjectObject()}
         ></ProjectInfo>
       );
@@ -445,6 +447,7 @@ const Project = props => {
         <Community
           location={location}
           router={router}
+          businessType={businessType}
           project={getProjectObject()}
         ></Community>
       );
