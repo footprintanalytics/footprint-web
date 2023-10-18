@@ -37,8 +37,8 @@ const CreateCohort2 = ({
 }) => {
   const [isCohortModalOpen, setCohortModalOpen] = useState(false);
   const [createCohortLoading, setCreateCohortLoading] = useState(false);
-  const filterOutOptions = ["Bot", "Sybil"];
-  const [filterOutValues, setFilterOutValues] = useState(filterOutOptions);
+  // const filterOutOptions = ["Bot", "Sybil"];
+  const [filterOutValues, setFilterOutValues] = useState([]);
   const [cohortName, setCohortName] = useState();
   const addressList = [];
 
