@@ -6,6 +6,7 @@ import Link from "metabase/core/components/Link/Link";
 import { getUser } from "metabase/selectors/user";
 import "../css/index.css";
 import UpdateProjectModal from "./Modal/UpdateProjectModal"
+import { getGrowthProjectPath } from "metabase/ab/utils/utils";
 
 const DashboardMask = props => {
   let content = ``;
@@ -90,6 +91,31 @@ const DashboardMask = props => {
             }}
           >
             Upgrade Plan
+          </Button>
+        </div>
+      </div>
+    );
+  } else if (
+    ["web2_connect"].includes(
+      props.currentMenu,
+    )
+  ) {
+    // need to upgrade plan
+    content = (
+      <div className="flex flex-col justify-center p2" style={{ width: 500 }}>
+        <h3 className="text-white">You need to set up connector</h3>
+        <Typography.Text className="mt2">
+          Please use connector to upload web2 data before you can see the web2 dashboard.
+        </Typography.Text>
+        <div className="flex flex-row items-center justify-end w-full">
+          <Button
+            type="primary"
+            className="mt2"
+            onClick={() => {
+              props.router.push(getGrowthProjectPath(props.project.protocolSlug,"integration"));
+            }}
+          >
+            Set up connector
           </Button>
         </div>
       </div>

@@ -10,8 +10,9 @@ import { getFgaChain, getFgaFavoriteList, getFgaProtocolList, getGamesByRedux } 
 import { StarFilled } from "@ant-design/icons";
 import { deleteProtocolFavorite, postProtocolFavorite } from "metabase/new-service";
 import { uniqBy } from "lodash";
-import _ from "underscore";
+import Link from "metabase/core/components/Link";
 import { isBusinessTypePath } from "metabase/ab/utils/utils";
+import { getGrowthProjectPath } from "metabase/ab/utils/utils";
 
 const { Search } = Input;
 
@@ -212,10 +213,14 @@ const projectList = props => {
       )}*/}
       {projectObject && (
         <div style={{ width: 800 }}>
-          <div className="flex">
+          <div className="flex justify-between items-center">
             <h2>Projects
               {isBusinessTypePath("public-chain") && <>({`${chain}`})</>}
             </h2>
+            <span className="text-white">Select {" "}
+              <Link to={getGrowthProjectPath("Project A", "project_summary")}>Project A</Link>
+              {" "} to see full Sample.
+            </span>
           </div>
           {/*<div className="flex justify-end full-width mb1">
             <Button onClick={() => {

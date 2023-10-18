@@ -211,9 +211,13 @@ const Project = props => {
             hideFooter
           />
           {/* all dashboart except twitter and discord , need a mask when no protocol */}
-          {getProjectObject()?.origin_protocol_slug === "default" &&
+          {(getProjectObject()?.protocolSlug === "default" || !getProjectObject()?.protocolSlug) &&
           !["twitter", "discord"].includes(currentMenu) && (
             <DashboardMask currentMenu={"set_protocol"} router={router} />
+          )}
+          {businessType === "game-project" && getProjectObject()?.protocolSlug !== "default" && getProjectObject()?.protocolSlug &&
+          ["game_user_acquisition", "game_user_engagement", "game_user_retention", "monetization", "gaming_overview",].includes(currentMenu) && (
+            <DashboardMask currentMenu={"web2_connect"} router={router} project={getProjectObject()}/>
           )}
         </>
       ) : (
@@ -396,6 +400,7 @@ const Project = props => {
           router={router}
           project={getProjectObject()}
           projectId={getLatestGAProjectId()}
+          businessType={businessType}
         ></ConnectorList>
       );
     }
@@ -414,6 +419,7 @@ const Project = props => {
         <ProjectInfo
           location={location}
           router={router}
+          businessType={businessType}
           // project={getProjectObject()}
         ></ProjectInfo>
       );
@@ -441,6 +447,7 @@ const Project = props => {
         <Community
           location={location}
           router={router}
+          businessType={businessType}
           project={getProjectObject()}
         ></Community>
       );

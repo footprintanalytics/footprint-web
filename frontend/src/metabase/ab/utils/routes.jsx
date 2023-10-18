@@ -13,6 +13,22 @@ const getRoutes = (store, IsAuthenticated) => {
         path="/fga/:businessType/public/dashboard/:uuid"
         component={LazyLoad.PublicDashboard}
       />
+      <Route
+        title={t`Submit Contract`}
+        path="/fga/:businessType/submit/contract/add"
+        component={LazyLoad.SubmitContractAddV2}
+      />
+
+      <Route
+        title={t`Submit Contract`}
+        path="/fga/:businessType/submit/contract"
+        component={LazyLoad.SubmitContract}
+      />
+      <Route
+        title={t`Submit Contract`}
+        path="/fga/:businessType/submit/contract/success"
+        component={LazyLoad.SubmitContractSuccess}
+      />
     <Route
       title={t`Growth`}
       path="/fga"
@@ -42,22 +58,7 @@ const getRoutes = (store, IsAuthenticated) => {
           path="/bind-game"
           component={LazyLoad.bindGame}
         />
-        <Route
-          title={t`Submit Contract`}
-          path="/submit/contract/add"
-          component={LazyLoad.SubmitContractAddV2}
-        />
 
-        <Route
-          title={t`Submit Contract`}
-          path="/submit/contract"
-          component={LazyLoad.SubmitContract}
-        />
-        <Route
-          title={t`Submit Contract`}
-          path="/submit/contract/success"
-          component={LazyLoad.SubmitContractSuccess}
-        />
         <Route
           path="/dashboard/:slug"
           title={t`Dashboard`}

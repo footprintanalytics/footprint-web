@@ -202,7 +202,7 @@ const CreateCohort = ({
           <div className="mt2" />
           {getPannel()}
           <div className="mb2" />
-          <FilterOut />
+          {/*<FilterOut />*/}
         </Typography>
       </Modal>
     </>

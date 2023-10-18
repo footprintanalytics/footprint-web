@@ -181,7 +181,21 @@ export const loadFgaProtocolList = createThunkAction(
       if (isBusinessTypePath("public-chain")) {
         return await getProtocolList({ chain });
       }
-      return await getProtocolList( );
+      let result = await getProtocolList();
+      if (result) {
+        return {
+          protocolList: [
+            ...result.protocolList,
+            {
+              "protocolSlug": "Project A",
+              "protocolName": "Project A",
+            }
+          ]
+        };
+      } else {
+        return result;
+      }
+      return result;
     },
 );
 

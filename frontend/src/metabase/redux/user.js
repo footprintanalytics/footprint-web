@@ -297,6 +297,26 @@ export const refreshCurrentFgaProjectNew = createThunkAction(
     try {
       let res
       if (isABPath()) {
+        if (protocolSlug === "Project A") {
+           res = {
+             "id": 153,
+             "isDemo": false,
+             "protocolName": "Project A",
+             "protocolSlug": "Project A",
+             "logo": "",
+             "protocolType": "",
+             "tokenAddress": [],
+             "nftCollectionAddress": [
+               {
+                 "address": "0x59325733eb952a92e069c87f0a6168b29e80627f",
+                 "chain": "Ethereum"
+               }
+             ],
+             "twitter": {},
+             "discord": {},
+             "ga": {}
+           }
+         } else {
           // res = {
           //   // "id": 153,
           //   "protocolName": protocolSlug,
@@ -311,6 +331,7 @@ export const refreshCurrentFgaProjectNew = createThunkAction(
           //   ],
           // }
           res = await getProtocolDetail({ "protocolSlug": protocolSlug });
+        }
         //   const result = await getPublicChainProjectDetail({ "protocolSlug": protocolSlug });
         //   const temp = result.rows?.length > 0 ? {
         //     protocolName: result.rows[0][1],
