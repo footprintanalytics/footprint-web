@@ -26,6 +26,7 @@ import {
   setHistoryGames,
 } from "metabase/redux/control";
 import { getChainDataList } from "metabase/query_builder/components/question/handle";
+import { fga_menu_data_v2 } from "metabase/ab/utils/data";
 
 const GaProjectSearch = props => {
   const {
@@ -73,6 +74,14 @@ const GaProjectSearch = props => {
         protocolName: "The Sandbox",
       }
   }
+
+  useEffect(() => {
+    if (businessType && location.pathname.split("/").length === 3 && projectObject) {
+      const menuData = fga_menu_data_v2(businessType, projectObject, user);
+      const menuKeys = menuData.keys;
+      router.push(getGrowthProjectPath(defaultProject.protocolSlug, menuKeys[0]))
+    }
+  }, [location.pathname])
 
 
   // console.log("currentProject", currentProject)

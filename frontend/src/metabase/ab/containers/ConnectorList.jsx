@@ -13,6 +13,7 @@ import LoadingSpinner from "metabase/components/LoadingSpinner";
 import ConfigConnector from "../components/config_panel/ConfigConnector";
 import "../css/utils.css";
 import { getGrowthProjectPath } from "../utils/utils";
+import Link from "antd/lib/typography/Link";
 
 const { Text } = Typography;
 const ConnectorList = props => {
@@ -31,13 +32,15 @@ const ConnectorList = props => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [openDrawer, setOpenDrawer] = useState({ show: false, connector: {} });
   const [count, setCount] = useState(1);
-  let { isLoading, data } = useQuery(
-    ["getAvailableConnectors", projectId, count],
-    async () => {
-      return await getAvailableConnectors({ projectId: parseInt(projectId) });
-    },
-    { ...QUERY_OPTIONS, enabled: !!projectId },
-  );
+  const isLoading = false;
+  let data;
+  // let { isLoading, data } = useQuery(
+  //   ["getAvailableConnectors", projectId, count],
+  //   async () => {
+  //     return await getAvailableConnectors({ projectId: parseInt(projectId) });
+  //   },
+  //   { ...QUERY_OPTIONS, enabled: !!projectId },
+  // );
 
   if (!projectId || project?.protocolSlug === "Project A") {
     data = {
@@ -67,7 +70,7 @@ const ConnectorList = props => {
           "list": []
         },
         "mode": "normal",
-        "active": project?.protocolSlug === "Project A",
+        "active": true,
         "configured": false
       },
       {
@@ -95,7 +98,7 @@ const ConnectorList = props => {
           "list": []
         },
         "mode": "normal",
-        "active": project?.protocolSlug === "Project A",
+        "active": true,
         "configured": false,
         "connectionId": 119
       },
@@ -123,7 +126,7 @@ const ConnectorList = props => {
           "list": []
         },
         "mode": "normal",
-        "active": project?.protocolSlug === "Project A",
+        "active": true,
         "configured": false
       },
       {
@@ -161,7 +164,7 @@ const ConnectorList = props => {
           "list": []
         },
         "mode": "normal",
-        "active": project?.protocolSlug === "Project A",
+        "active": true,
         "configured": false,
         "docLink": "https://support.discord.com/hc/en-us/articles/206346498-Where-can-I-find-my-User-Server-Message-ID-"
       }
@@ -188,7 +191,7 @@ const ConnectorList = props => {
       });
       setConnectors(availableConnectors);
     }
-  }, [projectId, isLoading, data, user]);
+  }, [user]);
 
   const showDrawer = c => {
     setOpenDrawer({ show: true, connector: c });
@@ -291,7 +294,7 @@ const ConnectorList = props => {
                                 style={{ borderRadius: 5, width: 120 }}
                                 onClick={() => {
                                   if (project.protocolSlug === "Project A") {
-                                    Modal.confirm({
+                                    modal.confirm({
                                       title: "Tip",
                                       content: (
                                         <div style={{ marginTop: 20 }}>
@@ -332,7 +335,7 @@ const ConnectorList = props => {
                                 style={{ borderRadius: 5, width: 120 }}
                                 onClick={() => {
                                   if (project.protocolSlug === "Project A") {
-                                    Modal.confirm({
+                                    modal.confirm({
                                       title: "Tip",
                                       content: (
                                         <div style={{ marginTop: 20 }}>
@@ -347,8 +350,25 @@ const ConnectorList = props => {
                                       },
                                     });
                                     return ;
+                                  } else {
+                                    modal.info({
+                                      title: "Contact Us",
+                                      closable: true,
+                                      content: (
+                                        <>
+                                          <div className=" mt1 text-light">
+                                            If you want to connect web2 data, please contact the bd team.
+                                          </div>
+                                          <div className="mt2">
+                                            <Link target="_blank" href="mailto:sales@footprint.network">
+                                              Email: sales@footprint.network
+                                            </Link>
+                                          </div>
+                                        </>
+                                      ),
+                                    });
                                   }
-                                  showDrawer(item);
+                                  // showDrawer(item);
                                 }}
                               >
                                 Connect

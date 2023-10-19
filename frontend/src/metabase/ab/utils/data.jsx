@@ -479,7 +479,7 @@ export const fga_menu_data_v2 = (businessType, project, chain) => {
             getItem("NFT Sales & Mints", "nft_sales_mints", null),
             getItem("NFT Holders", "nft_nft_holder", null),
             getItem("NFT Leaderboard", "nft_leaderboard", null),
-            getItem("NFT Listing", "listing", null),
+            // getItem("NFT Listing", "listing", null),
           ]
         ),
         project?.tokenAddress?.length > 0 &&

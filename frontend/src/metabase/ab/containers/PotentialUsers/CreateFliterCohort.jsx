@@ -175,7 +175,7 @@ const CreateCohort2 = ({
           disabled={disable}
           onClick={() => {
             if (project?.protocolSlug === "Project A") {
-              Modal.confirm({
+              modal.confirm({
                 title: "Tip",
                 content: (
                   <div style={{ marginTop: 20 }}>
