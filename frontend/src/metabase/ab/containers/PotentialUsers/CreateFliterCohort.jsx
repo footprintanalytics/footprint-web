@@ -143,6 +143,7 @@ const CreateCohort2 = ({
             })
           : await createPotentialUserApi({
               ...omit(params, ["pageSize", "current"]),
+              protocolSlug: project?.protocolSlug,
               title: cohortName,
               filters: filters,
             });

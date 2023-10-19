@@ -38,7 +38,6 @@ import UploadWallets from "./buttons/UploadWallets";
 const SegmentListPanel = props => {
   // sourceType: projectUser, potentialUser
   const { project, router, user, sourceType, businessType } = props;
-  console.log("project", project)
   const protocolSlug = project?.protocolSlug === "Project A" ? "" : project?.protocolSlug;
   const { isLoading, data, refetch } = useQuery(
     ["getCohort", project],
