@@ -215,9 +215,9 @@ const Project = props => {
           !["twitter", "discord"].includes(currentMenu) && (
             <DashboardMask currentMenu={"set_protocol"} router={router} />
           )}
-          {businessType === "game-project" && getProjectObject()?.protocolSlug !== "default" && getProjectObject()?.protocolSlug &&
+          {businessType === "game-project" && getProjectObject()?.protocolSlug !== "Project A" && getProjectObject()?.protocolSlug &&
           ["game_user_acquisition", "game_user_engagement", "game_user_retention", "monetization", "gaming_overview",].includes(currentMenu) && (
-            <DashboardMask currentMenu={"web2_connect"} router={router} project={getProjectObject()}/>
+            <DashboardMask currentMenu={"web2_connect"} originCurrentMenu={currentMenu} router={router} project={getProjectObject()}/>
           )}
         </>
       ) : (

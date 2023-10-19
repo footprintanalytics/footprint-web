@@ -60,15 +60,15 @@ const mapStateToProps = (state, props) => {
   const location = props.location;
   const favoriteList = props.favoriteList;
   const isDataApiStatistics = props.isDataApiStatistics;
-  let projectProtocolSlug = project?.protocolSlug;
-  let projectProtocolName = project?.protocolName;
-  if (projectProtocolSlug === "Project A") {
-    projectProtocolSlug = "mocaverse";
-  }
-  if (projectProtocolName === "Project A") {
-    projectProtocolName = "Mocaverse";
-  }
   if (project) {
+    let projectProtocolSlug = project?.protocolSlug;
+    let projectProtocolName = project?.protocolName;
+    if (projectProtocolSlug === "Project A") {
+      projectProtocolSlug = "mocaverse";
+    }
+    if (projectProtocolName === "Project A") {
+      projectProtocolName = "Mocaverse";
+    }
     let currentChain = null;
     // switch protocol
     updateDashboardPara(parameters, parameterValues, "gamefi", [
