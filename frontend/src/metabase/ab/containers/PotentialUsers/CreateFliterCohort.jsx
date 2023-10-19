@@ -137,11 +137,13 @@ const CreateCohort2 = ({
         type === "Members"
           ? await createCommunityUserCohort({
               ...omit(params, ["pageSize", "current"]),
+              protocolSlug: project?.protocolSlug,
               title: cohortName,
               excludeTags: [...filterOutValues],
             })
           : await createPotentialUserApi({
               ...omit(params, ["pageSize", "current"]),
+              protocolSlug: project?.protocolSlug,
               title: cohortName,
               filters: filters,
             });

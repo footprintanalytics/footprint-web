@@ -217,10 +217,10 @@ const projectList = props => {
             <h2>Projects
               {isBusinessTypePath("public-chain") && <>({`${chain}`})</>}
             </h2>
-            <span className="text-white">Select {" "}
+            {/*<span className="text-white">Select {" "}
               <Link to={getGrowthProjectPath("Project A", "project_summary")}>Project A</Link>
               {" "} to see full Sample.
-            </span>
+            </span>*/}
           </div>
           {/*<div className="flex justify-end full-width mb1">
             <Button onClick={() => {

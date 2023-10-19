@@ -8,9 +8,9 @@ export const wallet_profile_link =
 export const getWalletProfileLink = (businessType) =>
   `/fga/${businessType}/public/dashboard/dce33214-a079-4eb8-b53f-defaabde2eba`; //query: wallet_address
 export const user_profile_link =
-  "/fga/public/dashboard/345aa907-c4e9-431a-923a-0dfd36188191"; //query: cohort_title
+  "/fga/public/dashboard/362dd1a3-6c35-4ce6-a4d3-dab2a436e323"; //query: cohort_title
 export const getUserProfileLink = (businessType) =>
-  `/fga/${businessType}/public/dashboard/345aa907-c4e9-431a-923a-0dfd36188191`; //query: cohort_title
+  `/fga/${businessType}/public/dashboard/362dd1a3-6c35-4ce6-a4d3-dab2a436e323`; //query: cohort_title
 export const top_protocols = [
   {
     protocolSlug: "the-sandbox",
@@ -342,7 +342,7 @@ export const getDashboardMap = (businessType, project, chain) => {
         ? "346f0d3d-5486-404b-a5d2-17ce52150fe1"
         : "2f4f1fe9-7163-4ecf-91db-76c87a9306ed",
     ],
-    ["game_tokenomics", "84dc5fec-fb37-42bd-ae99-b38d4c41425f"],
+    ["game_tokenomics", "20e373cb-cc99-4ab0-9d74-c3c16d17e92a"],
     ["game_revenue", "8932389c-42cc-4ce7-a20f-a6a146cd31a2"],
     ["game_token_holder", "ff4ddbe9-8818-4abf-8a6c-91c3559071af"],
     ["users_overview", "6d84b4a6-ceef-4b30-a9ad-b233038fd8d3"],
@@ -371,10 +371,11 @@ export const getDashboardMap = (businessType, project, chain) => {
     ["project_transaction", "4a076f7b-4b4f-4060-b36a-8c1b849d3692"],
     ["monetization", "990050e0-3d86-40d8-9aa4-f0fbab381d83"],
     ["platform-protocols_slugs", "1b6fbdbe-dcff-4fe2-8b2a-6fc792173b49"],
-    ["game_user_engagement", "f15ab6da-15f7-40c6-8aa4-e3eda6fa430c"],
-    ["game_user_retention", "320e0a60-107c-44cb-83e3-7c8301354968"],
-    ["game_user_acquisition", "e1f2b298-4230-4a25-98ca-cabcd4e2b262"],
+    ["game_user_acquisition", "f0e46f09-0f53-4d00-b350-b399ca70133f"],
+    ["game_user_engagement", "23a1fc28-dba0-4e17-8270-786632ed161d"],
+    ["game_user_retention", "9a19edda-1c4c-4aa5-95fc-921304f8f8fd"],
     ["project-holder-overlap", "82e8500d-87c1-4dca-b2b6-b46e0287f156"],
+    ["financials-nft-revenue", "d5142de8-81e9-4682-a4af-0026c058e9d1"],
 
 
     ["project_health-platform", "7a275541-580a-4720-8e10-f455335de137"],
@@ -467,37 +468,36 @@ export const fga_menu_data_v2 = (businessType, project, chain) => {
       getItem("Project Overview", "project_overview", ReactIcons.myAnalysisIcon, [
         getItem("Project Summary", "project_summary", null),
       ]),
+      getItem("Financials", "financials", ReactIcons.datasetsIcon, [
+        getItem("NFT Revenue", "financials-nft-revenue", null),
+      ]),
       (project?.nftCollectionAddress?.length > 0 || project?.tokenAddress?.length > 0) &&
       getItem("Assets", "assets", ReactIcons.assetIcon, [
         project?.nftCollectionAddress?.length > 0 &&
         getItem("NFT", "nft", null, [
             getItem("Summary", "nft_summary", null),
             getItem("NFT Sales & Mints", "nft_sales_mints", null),
-            getItem("NFT Listing", "listing", null),
             getItem("NFT Holders", "nft_nft_holder", null),
-            getItem("Leaderboard", "nft_leaderboard", null),
+            getItem("NFT Leaderboard", "nft_leaderboard", null),
+            getItem("NFT Listing", "listing", null),
           ]
         ),
         project?.tokenAddress?.length > 0 &&
-        getItem("Token", "game_tokenomics", null),
+          getItem("Token", "game_tokenomics", null),
         // getItem("Momentum", "momentum", null, [
         //     getItem("Retention", "retention", null),
         //     getItem("Acquisition", "acquisition", null),
         //   ]
         // ),
       ]),
-      getItem("Game", "gaming", ReactIcons.gamingStatIcon, [
-        getItem("Game States", "gaming_overview", null),
-        getItem("Monetization", "monetization", null),
-        getItem("User", "game-user", null, [
-          getItem("User Acquisition", "game_user_acquisition", null),
-          getItem("User Engagement", "game_user_engagement", null),
-          getItem("User Retention", "game_user_retention", null),
-        ]),
+      getItem("Users", "game_users", ReactIcons.gamingStatIcon, [
+        getItem("Acquisition", "game_user_acquisition", null),
+        getItem("Engagement", "game_user_engagement", null),
+        getItem("Retention", "game_user_retention", null),
       ]),
-      getItem("Users", "users", ReactIcons.userIcon, [
+      getItem("Exploration", "exploration", ReactIcons.userIcon, [
         getItem("Members", "members", null),
-        getItem("Journey Explorer", "journey", null),
+        // getItem("Journey Explorer", "journey", null),
         getItem("Segmentation", "segment", null),
       ]),
       /*getItem(

@@ -38,10 +38,11 @@ import UploadWallets from "./buttons/UploadWallets";
 const SegmentListPanel = props => {
   // sourceType: projectUser, potentialUser
   const { project, router, user, sourceType, businessType } = props;
+  const protocolSlug = project?.protocolSlug === "Project A" ? "" : project?.protocolSlug;
   const { isLoading, data, refetch } = useQuery(
     ["getCohort", project],
     async () => {
-      return GetFgaCohort({ projectId: project?.id });
+      return GetFgaCohort({ protocolSlug });
     },
     {
       refetchInterval: 5000,
