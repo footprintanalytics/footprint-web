@@ -105,7 +105,7 @@ const DashboardMask = props => {
       <div className="flex flex-col justify-center p2" style={{ width: 500 }}>
         <h3 className="text-white">You need to set up connector</h3>
         <Typography.Text className="mt2">
-          Please use connector to upload web2 data before you can see the web2 dashboard.
+          Please use connector to upload web2 data before you can see the web2 dashboard. You can also see the dashboard of the sample project.
         </Typography.Text>
         <div className="flex flex-row items-center justify-end w-full">
           <Button
@@ -116,6 +116,14 @@ const DashboardMask = props => {
             }}
           >
             Set up connector
+          </Button>
+          <Button
+            className="mt2 ml1"
+            onClick={() => {
+              props.router.push(getGrowthProjectPath("Project A", props.originCurrentMenu));
+            }}
+          >
+            See Sample Project
           </Button>
         </div>
       </div>
