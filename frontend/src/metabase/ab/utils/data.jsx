@@ -8,9 +8,9 @@ export const wallet_profile_link =
 export const getWalletProfileLink = (businessType) =>
   `/fga/${businessType}/public/dashboard/dce33214-a079-4eb8-b53f-defaabde2eba`; //query: wallet_address
 export const user_profile_link =
-  "/fga/public/dashboard/345aa907-c4e9-431a-923a-0dfd36188191"; //query: cohort_title
+  "/fga/public/dashboard/362dd1a3-6c35-4ce6-a4d3-dab2a436e323"; //query: cohort_title
 export const getUserProfileLink = (businessType) =>
-  `/fga/${businessType}/public/dashboard/345aa907-c4e9-431a-923a-0dfd36188191`; //query: cohort_title
+  `/fga/${businessType}/public/dashboard/362dd1a3-6c35-4ce6-a4d3-dab2a436e323`; //query: cohort_title
 export const top_protocols = [
   {
     protocolSlug: "the-sandbox",
@@ -342,7 +342,7 @@ export const getDashboardMap = (businessType, project, chain) => {
         ? "346f0d3d-5486-404b-a5d2-17ce52150fe1"
         : "2f4f1fe9-7163-4ecf-91db-76c87a9306ed",
     ],
-    ["game_tokenomics", "84dc5fec-fb37-42bd-ae99-b38d4c41425f"],
+    ["game_tokenomics", "20e373cb-cc99-4ab0-9d74-c3c16d17e92a"],
     ["game_revenue", "8932389c-42cc-4ce7-a20f-a6a146cd31a2"],
     ["game_token_holder", "ff4ddbe9-8818-4abf-8a6c-91c3559071af"],
     ["users_overview", "6d84b4a6-ceef-4b30-a9ad-b233038fd8d3"],
@@ -468,7 +468,7 @@ export const fga_menu_data_v2 = (businessType, project, chain) => {
       getItem("Project Overview", "project_overview", ReactIcons.myAnalysisIcon, [
         getItem("Project Summary", "project_summary", null),
       ]),
-      getItem("Financials", "financials", ReactIcons.myAnalysisIcon, [
+      getItem("Financials", "financials", ReactIcons.datasetsIcon, [
         getItem("NFT Revenue", "financials-nft-revenue", null),
       ]),
       (project?.nftCollectionAddress?.length > 0 || project?.tokenAddress?.length > 0) &&
