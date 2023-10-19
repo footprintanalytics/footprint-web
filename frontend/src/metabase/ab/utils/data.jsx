@@ -371,10 +371,11 @@ export const getDashboardMap = (businessType, project, chain) => {
     ["project_transaction", "4a076f7b-4b4f-4060-b36a-8c1b849d3692"],
     ["monetization", "990050e0-3d86-40d8-9aa4-f0fbab381d83"],
     ["platform-protocols_slugs", "1b6fbdbe-dcff-4fe2-8b2a-6fc792173b49"],
-    ["game_user_engagement", "f15ab6da-15f7-40c6-8aa4-e3eda6fa430c"],
-    ["game_user_retention", "320e0a60-107c-44cb-83e3-7c8301354968"],
-    ["game_user_acquisition", "e1f2b298-4230-4a25-98ca-cabcd4e2b262"],
+    ["game_user_acquisition", "f0e46f09-0f53-4d00-b350-b399ca70133f"],
+    ["game_user_engagement", "23a1fc28-dba0-4e17-8270-786632ed161d"],
+    ["game_user_retention", "9a19edda-1c4c-4aa5-95fc-921304f8f8fd"],
     ["project-holder-overlap", "82e8500d-87c1-4dca-b2b6-b46e0287f156"],
+    ["financials-nft-revenue", "d5142de8-81e9-4682-a4af-0026c058e9d1"],
 
 
     ["project_health-platform", "7a275541-580a-4720-8e10-f455335de137"],
@@ -467,37 +468,36 @@ export const fga_menu_data_v2 = (businessType, project, chain) => {
       getItem("Project Overview", "project_overview", ReactIcons.myAnalysisIcon, [
         getItem("Project Summary", "project_summary", null),
       ]),
+      getItem("Financials", "financials", ReactIcons.myAnalysisIcon, [
+        getItem("NFT Revenue", "financials-nft-revenue", null),
+      ]),
       (project?.nftCollectionAddress?.length > 0 || project?.tokenAddress?.length > 0) &&
       getItem("Assets", "assets", ReactIcons.assetIcon, [
         project?.nftCollectionAddress?.length > 0 &&
         getItem("NFT", "nft", null, [
             getItem("Summary", "nft_summary", null),
             getItem("NFT Sales & Mints", "nft_sales_mints", null),
-            getItem("NFT Listing", "listing", null),
             getItem("NFT Holders", "nft_nft_holder", null),
-            getItem("Leaderboard", "nft_leaderboard", null),
+            getItem("NFT Leaderboard", "nft_leaderboard", null),
+            getItem("NFT Listing", "listing", null),
           ]
         ),
         project?.tokenAddress?.length > 0 &&
-        getItem("Token", "game_tokenomics", null),
+          getItem("Token", "game_tokenomics", null),
         // getItem("Momentum", "momentum", null, [
         //     getItem("Retention", "retention", null),
         //     getItem("Acquisition", "acquisition", null),
         //   ]
         // ),
       ]),
-      getItem("Game", "gaming", ReactIcons.gamingStatIcon, [
-        getItem("Game States", "gaming_overview", null),
-        getItem("Monetization", "monetization", null),
-        getItem("User", "game-user", null, [
-          getItem("User Acquisition", "game_user_acquisition", null),
-          getItem("User Engagement", "game_user_engagement", null),
-          getItem("User Retention", "game_user_retention", null),
-        ]),
+      getItem("Users", "game_users", ReactIcons.gamingStatIcon, [
+        getItem("Acquisition", "game_user_acquisition", null),
+        getItem("Engagement", "game_user_engagement", null),
+        getItem("Retention", "game_user_retention", null),
       ]),
-      getItem("Users", "users", ReactIcons.userIcon, [
+      getItem("Exploration", "exploration", ReactIcons.userIcon, [
         getItem("Members", "members", null),
-        getItem("Journey Explorer", "journey", null),
+        // getItem("Journey Explorer", "journey", null),
         getItem("Segmentation", "segment", null),
       ]),
       /*getItem(
