@@ -232,6 +232,16 @@ const UploadWallets = ({
       <Button
         type="primary"
         onClick={() => {
+          if (!user) {
+            message.warning(`Kindly login before Upload Wallets`);
+            setLoginModalShowAction({
+              show: true,
+              from: "upload wallets",
+              redirect: location.pathname,
+              channel: "FGA",
+            });
+            return;
+          }
           checkIsNeedContactUs(
             modal,
             project,

@@ -2,42 +2,22 @@
 /* eslint-disable react/prop-types */
 import React from "react";
 import { connect } from "react-redux";
-import {
-  Button,
-  Card,
-  Table,
-  Modal,
-  message,
-  Space,
-  Badge,
-  Tooltip,
-  Tag,
-  Typography,
-  Divider,
-} from "antd";
+import { Badge, Button, Card, Divider, message, Modal, Space, Table, Tooltip, Typography } from "antd";
 import { QuestionCircleOutlined } from "@ant-design/icons";
 import dayjs from "dayjs";
 import { useQuery } from "react-query";
-import { QUERY_OPTIONS } from "metabase/containers/dashboards/shared/config";
-import { getUser, getFgaProject } from "metabase/selectors/user";
-import { GetFgaCohort, downloadCohortAddress } from "metabase/new-service";
+import { getFgaProject, getUser } from "metabase/selectors/user";
+import { GetFgaCohort } from "metabase/new-service";
 import Link from "metabase/core/components/Link/Link";
 import LoadingSpinner from "metabase/components/LoadingSpinner/LoadingSpinner";
-import {
-  checkIsNeedContactUs,
-  formatTag,
-  getGrowthProjectPath,
-} from "../utils/utils";
-import {
-  cohortTips, getUserProfileLink, getWalletProfileLink,
-  user_profile_link,
-  wallet_profile_link,
-} from "../utils/data";
+import { formatTag, getGrowthProjectPath } from "../utils/utils";
+import { cohortTips, getUserProfileLink, getWalletProfileLink } from "../utils/data";
 import UploadWallets from "./buttons/UploadWallets";
+import { loginModalShowAction } from "metabase/redux/control";
 
 const SegmentListPanel = props => {
   // sourceType: projectUser, potentialUser
-  const { project, router, user, sourceType, businessType } = props;
+  const { project, router, user, sourceType, businessType, setLoginModalShowAction } = props;
   const protocolSlug = project?.protocolSlug === "Project A" ? "" : project?.protocolSlug;
   const { isLoading, data, refetch } = useQuery(
     ["getCohort", project],
@@ -139,6 +119,16 @@ const SegmentListPanel = props => {
               //   return;
               // }
               // message.info("Download will start soon...");
+              if (!user) {
+                message.warning(`Kindly login before Download CSV`);
+                setLoginModalShowAction({
+                  show: true,
+                  from: "download csv",
+                  redirect: location.pathname,
+                  channel: "FGA",
+                });
+                return;
+              }
               window
                 .open(
                   `/api/v1/fga/cohort/address/csv?cohortId=${record.cohortId}&projectId=${project?.id}&cohortTitle=${record.title}`,
@@ -275,4 +265,8 @@ const mapStateToProps = (state, props) => {
   };
 };
 
-export default connect(mapStateToProps)(SegmentListPanel);
+const mapDispatchToProps = {
+  setLoginModalShowAction: loginModalShowAction,
+};
+
+export default connect(mapStateToProps, mapDispatchToProps)(SegmentListPanel);

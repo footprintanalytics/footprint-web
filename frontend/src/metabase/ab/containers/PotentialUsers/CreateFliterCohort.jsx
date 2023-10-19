@@ -34,6 +34,8 @@ const CreateCohort2 = ({
   isButtonStyle = true,
   isTagging = false,
   businessType,
+  setLoginModalShowAction,
+  user,
 }) => {
   const [isCohortModalOpen, setCohortModalOpen] = useState(false);
   const [createCohortLoading, setCreateCohortLoading] = useState(false);
@@ -189,6 +191,17 @@ const CreateCohort2 = ({
               });
               return ;
             }
+            if (!user) {
+              message.warning(`Kindly login before ${btnText}`);
+              setLoginModalShowAction({
+                show: true,
+                from: "create cohort",
+                redirect: location.pathname,
+                channel: "FGA",
+              });
+              return;
+            }
+            setCohortModalOpen(false);
             checkIsNeedContactUs(
               modal,
               project,
