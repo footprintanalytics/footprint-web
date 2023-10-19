@@ -94,6 +94,7 @@ const UploadWallets = ({
       title: cohortName,
       projectId: 153,
       addressList: walletList ?? [],
+      protocolSlug: project?.protocolSlug,
     };
     try {
       const result = await (sourceType === "projectUser"

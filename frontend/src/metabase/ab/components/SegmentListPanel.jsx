@@ -114,12 +114,12 @@ const SegmentListPanel = props => {
           <Link
             disabled={record.numberOfWallets === 0}
             onClick={() => {
-              // message.info("Coming soon...")
+              message.info("Coming soon...")
               // if (checkIsNeedContactUs(modal, project)) {
               //   return;
               // }
               // message.info("Download will start soon...");
-              if (!user) {
+              /*if (!user) {
                 message.warning(`Kindly login before Download CSV`);
                 setLoginModalShowAction({
                   show: true,
@@ -129,12 +129,13 @@ const SegmentListPanel = props => {
                 });
                 return;
               }
+              console.log(`/api/v1/fga/cohort/address/csv?cohortId=${record.cohortId}&projectId=${project?.id}&cohortTitle=${record.title}&protocolSlug=${project?.protocolSlug}`)
               window
                 .open(
-                  `/api/v1/fga/cohort/address/csv?cohortId=${record.cohortId}&projectId=${project?.id}&cohortTitle=${record.title}`,
+                  `/api/v1/fga/cohort/address/csv?cohortId=${record.cohortId}&projectId=${project?.id}&cohortTitle=${record.title}&protocolSlug=${project?.protocolSlug}`,
                   "_blank",
                 )
-                .focus();
+                .focus();*/
             }}
           >
             Download CSV
