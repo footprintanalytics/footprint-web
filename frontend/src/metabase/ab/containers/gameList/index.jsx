@@ -13,6 +13,7 @@ import { uniqBy } from "lodash";
 import Link from "metabase/core/components/Link";
 import { isBusinessTypePath } from "metabase/ab/utils/utils";
 import { getGrowthProjectPath } from "metabase/ab/utils/utils";
+import getHeadDataProtocols from "metabase/ab/containers/gameList/data";
 
 const { Search } = Input;
 
@@ -97,9 +98,11 @@ const projectList = props => {
       return searchKey ? item.protocolSlug?.includes(searchKey) || item.protocolName?.includes(searchKey) : true;
     });
     data = [...uniqBy(data, obj => obj.protocolSlug)]
-    // const headData = []
-    // const endData = []
-    // data = [...headData, ...endData]
+    if (isBusinessTypePath("game-project")) {
+      const headData = getHeadDataProtocols().map(item => data.find(i => i.protocolSlug === item));
+      const endData = data.filter(item => !getHeadDataProtocols().includes(item.protocolSlug));
+      data = [...headData, ...endData]
+    }
   }
 
   const loadProjectDetail = projectSlug => {
