@@ -60,6 +60,7 @@ const mapStateToProps = (state, props) => {
   const location = props.location;
   const favoriteList = props.favoriteList;
   const isDataApiStatistics = props.isDataApiStatistics;
+  const filterChainFunction = item => !(isABPath() && isBusinessTypePath("public-chain")) || item.chain === chain;
   if (project) {
     let projectProtocolSlug = project?.protocolSlug;
     let projectProtocolName = project?.protocolName;
@@ -88,9 +89,9 @@ const mapStateToProps = (state, props) => {
         chain,
       ]);
     }
-    if (project.tokenAddress?.filter(item => item.chain === chain)?.length > 0) {
+    if (project.tokenAddress?.filter(filterChainFunction)?.length > 0) {
       const key = "token_address";
-      const data = getFirstAddressByPriory(project.tokenAddress?.filter(item => item.chain === chain));
+      const data = getFirstAddressByPriory(project.tokenAddress?.filter(filterChainFunction));
       let queryCollection = getDefaultDashboardPara(
         parameters,
         parameterValues,
@@ -125,9 +126,9 @@ const mapStateToProps = (state, props) => {
         tags.filter((item, index) => tags.indexOf(item) === index),
       );
     }
-    if (project.nftCollectionAddress?.filter(item => item.chain === chain)?.length > 0) {
+    if (project.nftCollectionAddress?.filter(filterChainFunction)?.length > 0) {
       const firstAddress = getFirstAddressByPriory(
-        project.nftCollectionAddress?.filter(item => item.chain === chain),
+        project.nftCollectionAddress?.filter(filterChainFunction),
       );
       const key = "collection_contract_address";
       let queryCollection = getDefaultDashboardPara(
@@ -137,7 +138,7 @@ const mapStateToProps = (state, props) => {
       );
       queryCollection =
         queryCollection &&
-        project.nftCollectionAddress?.filter(item => item.chain === chain).findIndex(
+        project.nftCollectionAddress?.filter(filterChainFunction).findIndex(
           item => item?.address === queryCollection,
         ) !== -1
           ? queryCollection
@@ -145,7 +146,7 @@ const mapStateToProps = (state, props) => {
       if (
         updateDashboardPara(parameters, parameterValues, key, queryCollection)
       ) {
-        currentChain = project.nftCollectionAddress?.filter(item => item.chain === chain).find(
+        currentChain = project.nftCollectionAddress?.filter(filterChainFunction).find(
           item => item?.address === queryCollection,
         ).chain;
       }
@@ -153,7 +154,7 @@ const mapStateToProps = (state, props) => {
     // mutiple collection
     if (project.nftCollectionAddress?.length > 0) {
       const key = "collection_contract_addresses";
-      const mutipleCollection = project.nftCollectionAddress?.filter(item => item.chain === chain).map(item => {
+      const mutipleCollection = project.nftCollectionAddress?.filter(filterChainFunction).map(item => {
         return item?.address;
       });
       updateDashboardPara(parameters, parameterValues, key, mutipleCollection);
@@ -201,7 +202,7 @@ const mapStateToProps = (state, props) => {
     currentChain =
       currentChain ??
       getFirstAddressByPriory(project.tokenAddress)?.chain ??
-      getFirstAddressByPriory(project.nftCollectionAddress?.filter(item => item.chain === chain))?.chain;
+      getFirstAddressByPriory(project.nftCollectionAddress?.filter(filterChainFunction))?.chain;
     if (currentChain) {
       const key = "chain";
       const defaultQuerryChain = getDefaultDashboardPara(
@@ -210,7 +211,7 @@ const mapStateToProps = (state, props) => {
         key,
       );
       const chainList = [];
-      project.tokenAddress.concat(project.nftCollectionAddress?.filter(item => item.chain === chain)).map(item => {
+      project.tokenAddress.concat(project.nftCollectionAddress?.filter(filterChainFunction)).map(item => {
         if (chainList.findIndex(t => t === item.chain) === -1) {
           chainList.push(item.chain);
         }
@@ -246,6 +247,7 @@ const mapStateToProps = (state, props) => {
     parameters: parameters,
     parameterValues: parameterValues,
     user: getUser(state),
+    filterChainFunction: filterChainFunction,
   };
 };
 
@@ -322,7 +324,7 @@ class PublicDashboard extends Component {
       fetchDashboard,
       setErrorPage,
       location,
-      chain,
+      filterChainFunction,
       params: { dashboardId, uuid, token },
     } = this.props;
     let publicUuid;
@@ -341,7 +343,7 @@ class PublicDashboard extends Component {
 
       const keyObject = this.getFgaMultiKeyObject();
       if (keyObject) {
-        this.props.setParameterValue(keyObject.id, this.props.project.nftCollectionAddress?.filter(item => item.chain === chain)[0]?.address)
+        this.props.setParameterValue(keyObject.id, this.props.project.nftCollectionAddress?.filter(filterChainFunction)[0]?.address)
       }
       const keyObjectToken = this.getFgaMultiKeyObjectToken();
       if (keyObjectToken) {
@@ -437,15 +439,15 @@ class PublicDashboard extends Component {
   handleFgaMultiAddressUiSelectHeader = (type, keyObject) => {
     let {
       project,
-      chain,
+      filterChainFunction,
     } = this.props;
     let data = [];
     if (type === "token") {
-      data = project?.tokenAddress?.filter(item => item.chain === chain)
+      data = project?.tokenAddress?.filter(filterChainFunction)
     } else if (type === "asset") {
-      data = [...(project?.tokenAddress?.filter(item => item.chain === chain) || []), ...(project?.nftCollectionAddress?.filter(item => item.chain === chain) || [])];
+      data = [...(project?.tokenAddress?.filter(filterChainFunction) || []), ...(project?.nftCollectionAddress?.filter(filterChainFunction) || [])];
     } else {
-      data = project?.nftCollectionAddress?.filter(item => item.chain === chain);
+      data = project?.nftCollectionAddress?.filter(filterChainFunction);
     }
     return (<div className="flex flex-column p2" style={{ background: "#0F0F14" }}>
       <span className="text-white" style={{ marginBottom: 4 }}>{startCase(keyObject.slug)}</span>

@@ -330,7 +330,6 @@ function getItem(label, key, icon, children, type, disabled = false) {
 
 export const getDashboardMap = (businessType, project, chain) => {
   let protocolType = project?.protocolType;
-  const chainConfig = getChainDataList({ includeAll: false }).find(item => item.label === chain);
   const dashboardMap = new Map([
     ["transaction_monitor", "5448e85b-442e-44b7-9c88-e22a1bd11d11"],
     ["ecosystem_development", "0b6bbe4d-5480-4e1c-8860-ead23619492b"],
@@ -385,15 +384,9 @@ export const getDashboardMap = (businessType, project, chain) => {
 }
 
 export const fga_menu_data_v2 = (businessType, project, chain) => {
+  console.log("project", project)
   let protocolType = project?.protocolType;
-  const chainConfig = getChainDataList({ includeAll: false }).find(item => item.label === chain);
-  if (project?.nftCollectionAddress?.filter(item => item.chain === chain)?.length > 0) {
-    if (protocolType === "GameFi") {
-      protocolType = "GameFi_NFT";
-    } else {
-      protocolType = "NFT";
-    }
-  }
+  const chainConfig = chain ? getChainDataList({ includeAll: false }).find(item => item.label === chain) : getChainDataList({ includeAll: false });
   const dashboardMap = getDashboardMap(businessType, project, chain);
 
   const standardData = {

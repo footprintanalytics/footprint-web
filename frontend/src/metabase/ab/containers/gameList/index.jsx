@@ -97,6 +97,9 @@ const projectList = props => {
       return searchKey ? item.protocolSlug?.includes(searchKey) || item.protocolName?.includes(searchKey) : true;
     });
     data = [...uniqBy(data, obj => obj.protocolSlug)]
+    // const headData = []
+    // const endData = []
+    // data = [...headData, ...endData]
   }
 
   const loadProjectDetail = projectSlug => {
