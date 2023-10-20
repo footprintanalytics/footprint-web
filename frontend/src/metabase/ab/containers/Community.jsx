@@ -201,14 +201,14 @@ const Community = props => {
       key: "address",
       render: (text, { ens }) => (
         <div className="flex flex-row">
-          <Link
-            to={`${wallet_profile_link}?wallet_address=${text}#from=Community`}
+          <div
+            // to={`${wallet_profile_link}?wallet_address=${text}#from=Community`}
           >
             <div className="flex flex-col">
               {String(text).slice(0, 4) + "..." + String(text).slice(-4)}
               {ens && <Typography.Text type="secondary">{ens}</Typography.Text>}
             </div>
-          </Link>
+          </div>
         </div>
       ),
     },
