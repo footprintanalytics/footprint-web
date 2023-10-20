@@ -384,7 +384,6 @@ export const getDashboardMap = (businessType, project, chain) => {
 }
 
 export const fga_menu_data_v2 = (businessType, project, chain) => {
-  console.log("project", project)
   let protocolType = project?.protocolType;
   const chainConfig = chain ? getChainDataList({ includeAll: false }).find(item => item.label === chain) : getChainDataList({ includeAll: false });
   const dashboardMap = getDashboardMap(businessType, project, chain);
