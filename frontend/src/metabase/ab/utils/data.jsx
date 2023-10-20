@@ -348,7 +348,7 @@ export const getDashboardMap = (businessType, project, chain) => {
     ["users_overview", "6d84b4a6-ceef-4b30-a9ad-b233038fd8d3"],
     ["game_active_users", "6d84b4a6-ceef-4b30-a9ad-b233038fd8d3"],
     ["nft_leaderboard", "21a0555b-4e8b-45cc-858d-ae41861ba9ee"],
-    ["nft_nft_holder", "d13ca440-553a-4759-b120-1b84eb41054f"],
+    ["nft_nft_holder", "9edaeba8-9c3b-4726-b139-73b2ca738c13"],
     ["nft_sales_mints", "9d9e9149-1dbc-4e0e-88a4-f9c64d1c10e1"],
     ["nft_revenue", "b98b0a6b-64cb-4e09-979d-693040ea3ec9"],
     ["twitter", "773e9e27-d131-43a6-ba05-518136a52fd3"],
