@@ -29,9 +29,9 @@ const About = props => {
   } = props;
 
   const defaultDesc =
-    "Footprint Analytics is a data platform blending web2 and web3 data with abstractions. We help analysts, builders, and investors turn blockchain data into insights with accessible visualization tools and a powerful multi-chain API across 20+ chains for NFTs, GameFi and DeFi. We also provide Footprint Growth Analytics to help with effective growth in GameFi and any web3 projects. Explore and share data from Ethereum, Bitcoin, Polygon, BNB Chain, Solana, Arbitrum, Avalanche, Optimism, Fantom and Harmory Chain and more for free.";
-  const keywords = "Footprint Analytics, web3 gaming, web3 gaming analytics, web3 gaming data, NFT game, Web3 marketing, web3 growth marketing, wallet profile, Growth Marketing, cross chain data, blockchain data api, Zero coding analytics";
-  const title = "Footprint Analytics | Power Web3 growth marketing in GameFi, NFT and DeFi";
+    "Footprint Analytics is a blockchain data solutions provider. We leverage cutting-edge AI technology to help analysts, builders, and investors turn blockchain Web3 data(reference data, wallet profile, money flow, Web3 protocol metadata, and more) and combine web2 data into insights with accessible visualization tools and a powerful multi-chain API across 27+ chains for NFTs, GameFi, and DeFi.";
+  const keywords = "Footprint Analytics, Web3 AI, blockchain AI, reference data, wallet profile, money flow, Web3 metadata, Protocol graph, blockchain data, crypto data provider, Web3 data solution, web3 gaming, web3 gaming analytics, web3 gaming data, NFT game, Web3 marketing, web3 growth marketing, Growth Marketing, cross chain data, blockchain data api, Zero coding analytics";
+  const title = "Footprint Analytics | Web3 Data Solution Provider with AI technology. ";
 
   const LazyLoadAbout = ({ children }) => {
     return (
