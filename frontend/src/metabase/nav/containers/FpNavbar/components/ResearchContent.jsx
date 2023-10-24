@@ -166,6 +166,12 @@ const ResearchContent = props => {
               link: "/research/chain/chain-ecosystem/chain-overview",
               icon: ReactIcons.chainOverviewIcon,
             },
+            {
+              title: "Layer 2 Overview",
+              desc: "Data stats of the Layer 2 ecosystem",
+              link: "/@Higi/Total-Lock-Value-in-escrow-contracts-on-Ethereum",
+              icon: ReactIcons.topSalesIcon,
+            },
           ],
         },
         layoutData: [
