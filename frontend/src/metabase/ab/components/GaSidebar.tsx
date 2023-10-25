@@ -101,7 +101,7 @@ const GaSidebar = (props: IGaSidebarProp) => {
   // const isProject = toggle_platform_project === "project"
 
   // @ts-ignore
-  const chainData = getChainDataList({ includeAll: false }).filter(item => !item.noTransactions && !item.noProtocol)
+  const chainData = getChainDataList({ includeAll: false }).filter(item => !item.noProtocol)
     .map(item => {
       return {
         ...item,
@@ -121,12 +121,15 @@ const GaSidebar = (props: IGaSidebarProp) => {
         protocolSlug: "the-sandbox",
         protocolName: "The Sandbox",
       }
-    router.push({
-      pathname: getGrowthProjectPath(
-        hasNewChainData ? projectObject?.protocolSlug : defaultProject?.protocolSlug,
-        hasNewChainData && hasNewChainCurrentMenu ? currentMenu : firstMenu,
-      ),
-    });
+      setTimeout(() => {
+        router.replace({
+          pathname: getGrowthProjectPath(
+            hasNewChainData ? projectObject?.protocolSlug : defaultProject?.protocolSlug,
+            hasNewChainData && hasNewChainCurrentMenu ? currentMenu : firstMenu,
+          ),
+        });
+      }, 1000)
+
   }
 
   const showChainSelect = businessType === "public-chain";
