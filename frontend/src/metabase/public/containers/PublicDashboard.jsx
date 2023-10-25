@@ -64,14 +64,23 @@ const mapStateToProps = (state, props) => {
   if (project) {
     let projectProtocolSlug = project?.protocolSlug;
     let projectProtocolName = project?.protocolName;
+    let id = project?.id;
+    if (projectProtocolName === "Project A") {
+      id = 1;
+    }
     if (projectProtocolSlug === "Project A") {
-      projectProtocolSlug = "mocaverse";
+      projectProtocolSlug = "the-sandbox";
     }
     if (projectProtocolName === "Project A") {
-      projectProtocolName = "Mocaverse";
+      projectProtocolName = "The Sandbox";
     }
     let currentChain = null;
     // switch protocol
+    if (id) {
+      updateDashboardPara(parameters, parameterValues, "project_id", [
+        id,
+      ]);
+    }
     updateDashboardPara(parameters, parameterValues, "gamefi", [
       projectProtocolSlug,
     ]);

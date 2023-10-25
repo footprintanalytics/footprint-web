@@ -299,16 +299,21 @@ export const refreshCurrentFgaProjectNew = createThunkAction(
       if (isABPath()) {
         if (protocolSlug === "Project A") {
            res = {
-             "id": 153,
+             "id": 1,
              "isDemo": false,
              "protocolName": "Project A",
              "protocolSlug": "Project A",
              "logo": "",
              "protocolType": "",
-             "tokenAddress": [],
              "nftCollectionAddress": [
                {
-                 "address": "0x59325733eb952a92e069c87f0a6168b29e80627f",
+                 "address": "0x5cc5b05a8a13e3fbdb0bb9fccd98d38e50f90c38",
+                 "chain": "Ethereum"
+               }
+             ],
+             "tokenAddress": [
+               {
+                 "address": "0x3845badade8e6dff049820680d1f14bd3903a5d0",
                  "chain": "Ethereum"
                }
              ],
