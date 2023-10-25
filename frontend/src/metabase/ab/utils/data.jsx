@@ -534,9 +534,9 @@ export const fga_menu_data_v2 = (businessType, project, chain) => {
   const publicChainData = {
     "platformMenuTabs": [
       getItem("Ecosystem", "ecosystem-home", ReactIcons.myAnalysisIcon, [
-        getItem("Transaction Monitor", "transaction_monitor", null),
+        !chainConfig?.noTransactions ? getItem("Transaction Monitor", "transaction_monitor", null) : null,
         chainConfig?.hasDevelopment ? getItem("Development", "ecosystem_development", null) : null,
-        getItem("Projects", "ecosystem_projects", null),
+        !chainConfig?.noTransactions ? getItem("Projects", "ecosystem_projects", null) : null,
         getItem("Project Directory", "project_directory", null),
       ].filter(i => i))
     ],
