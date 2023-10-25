@@ -94,15 +94,16 @@ const projectList = props => {
 
   let data;
   if (protocolList) {
-    data = protocolList?.sort((a, b) => a.protocolSlug < b.protocolSlug ? -1 : 1)?.filter(item => {
-      return searchKey ? item.protocolSlug?.includes(searchKey) || item.protocolName?.includes(searchKey) : true;
-    });
+    data = protocolList?.sort((a, b) => a.protocolSlug < b.protocolSlug ? -1 : 1)
     data = [...uniqBy(data, obj => obj.protocolSlug)]
     if (isBusinessTypePath("game-project")) {
       const headData = getHeadDataProtocols().map(item => data.find(i => i.protocolSlug === item));
       const endData = data.filter(item => !getHeadDataProtocols().includes(item.protocolSlug));
       data = [...headData, ...endData]
     }
+    data = data?.filter(item => {
+      return searchKey ? item.protocolSlug?.includes(searchKey) || item.protocolName?.includes(searchKey) : true;
+    });
   }
 
   const loadProjectDetail = projectSlug => {
@@ -223,10 +224,10 @@ const projectList = props => {
             <h2>Projects
               {isBusinessTypePath("public-chain") && <>({`${chain}`})</>}
             </h2>
-            {/*<span className="text-white">Select {" "}
+            <span className="text-white">Select {" "}
               <Link to={getGrowthProjectPath("Project A", "project_summary")}>Project A</Link>
               {" "} to see full Sample.
-            </span>*/}
+            </span>
           </div>
           {/*<div className="flex justify-end full-width mb1">
             <Button onClick={() => {
