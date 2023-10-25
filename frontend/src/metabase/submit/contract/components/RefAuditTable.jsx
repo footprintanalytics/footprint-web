@@ -229,9 +229,8 @@ const RefAuditTable = ({ operator, type, recordType }) => {
     },
     {
       title: "Submitted at",
-      dataIndex: "created_at",
-      render: text => {
-        return dayjs(text).format("YYYY-MM-DD HH:mm");
+      render: (_, { created_at, createdAt }) => {
+        return dayjs(createdAt || created_at).format("YYYY-MM-DD HH:mm");
       },
     },
     {
