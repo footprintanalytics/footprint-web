@@ -46,12 +46,12 @@ const data = [
     logo: "img-ark-stream.png",
     name: "ark-stream",
   },
-  {
+  /*{
     type: "logo",
     url: "https://www.redpoint.com",
     logo: "img-redpoint.png",
     name: "Redpoint",
-  },
+  },*/
   {
     type: "logo",
     url: "https://capitalant.com",

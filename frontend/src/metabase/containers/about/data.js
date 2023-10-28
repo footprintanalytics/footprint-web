@@ -137,10 +137,10 @@ const data = {
       url: "https://arkstream.capital/#/Home",
       logo: "img-ark-stream.png",
     },
-    {
+    /*{
       url: "https://www.redpoint.com",
       logo: "img-redpoint.png",
-    },
+    },*/
     {
       url: "https://capitalant.com",
       logo: "img-a-and-t-capital.png",

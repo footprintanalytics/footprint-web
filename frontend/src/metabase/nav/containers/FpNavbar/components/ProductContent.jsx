@@ -28,15 +28,15 @@ const ProductContent = props => {
           desc: "Free API for Web3 developers",
           data: [
             {
-              title: "Wallet Profile API",
-              desc: "Identify wallet age, chain activity, as well as support for domain lookups such as ENS and Unstoppable Domains.",
+              title: "Wallet API",
+              desc: "Access to wallet age, transactions, balance, and more.",
               link: "https://docs.footprint.network/reference/get_v3-address-getwalletage",
               icon: ReactIcons.topSalesIcon,
               externalLink: true,
             },
             {
               title: "Reference Data API",
-              desc: "Check matching of contract addresses, developers, protocols, and wallets, entities, etc.",
+              desc: "Check matching of contract addresses, deployers, protocols, and wallets, entities, etc.",
               link: "https://docs.footprint.network/reference/get_contract-getcontractdeploymentinfo",
               icon: ReactIcons.refDataApiIcon,
               externalLink: true,
