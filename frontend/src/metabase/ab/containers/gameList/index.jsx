@@ -289,7 +289,9 @@ const projectList = props => {
           <Table dataSource={data} columns={columns}/>
         </div>
       )}
-      {enableTour && window.localStorage.getItem("tour_game_list") !== "true" && <Tour open={tourOpen} onClose={() => setTourOpen(false)} steps={steps} />}
+      {enableTour && window.localStorage.getItem("tour_game_list") !== "true" &&
+        <Tour open={tourOpen} onClose={() => setTourOpen(false)} steps={steps}/>
+      }
     </div>
   );
 };

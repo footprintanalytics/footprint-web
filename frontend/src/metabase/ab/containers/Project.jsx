@@ -276,6 +276,9 @@ const Project = props => {
     if (
       current_tab === "journey" || current_tab === "journey-platform"
     ) {
+      if (businessType === "game" && getProjectObject()?.protocolSlug !== "Project A" && getProjectObject()?.protocolSlug) {
+        return <DashboardMask currentMenu={"web2_connect"} originCurrentMenu={currentMenu} router={router} project={getProjectObject()}/>;
+      }
       return (
         <Journey
           location={location}

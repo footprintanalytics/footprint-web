@@ -307,7 +307,9 @@ const ProjectInfo = props => {
           setProjectModalShow({ show: false });
         }}
       ></UpdateProjectModal>
-      {enableTour && window.localStorage.getItem("tour_project_info") !== "true" && <Tour open={tourOpen} onClose={() => setTourOpen(false)} steps={steps} />}
+      {enableTour && window.localStorage.getItem("tour_project_info") !== "true" &&
+        <Tour open={tourOpen} onClose={() => setTourOpen(false)} steps={steps} />
+      }
     </div>
   );
 };
