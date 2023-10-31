@@ -11,6 +11,13 @@ import {
 } from "./data-scanning";
 import "animate.css";
 import { getRefBaseApi, submitRefProtocols } from "metabase/new-service";
+import { isABNeedDark, isDark } from "metabase/dashboard/components/utils/dark";
+import Link from "metabase/core/components/Link";
+import { getGrowthProjectPath } from "metabase/ab/utils/utils";
+import { getFgaProject, getUser } from "metabase/selectors/user";
+import { getFgaChain } from "metabase/selectors/control";
+import { resetFgaProtocolList, setFgaChain } from "metabase/redux/control";
+import { isABPath } from "metabase/ab/utils/utils";
 
 const ContractDecoding = ({ param, onSuccess }) => {
   const ref = useRef();
@@ -161,7 +168,7 @@ const ContractDecoding = ({ param, onSuccess }) => {
           bordered={false}
           className="w-full h-full flex-1"
           style={{
-            backgroundColor: "var(--footprint-color-bg)",
+            backgroundColor: isDark() ? "": "var(--footprint-color-bg)",
             height: 290,
             overflow: "auto",
           }}
@@ -181,7 +188,7 @@ const ContractDecoding = ({ param, onSuccess }) => {
             })}
           </div>
         </Card>
-        <div className=" mt-10 w-full flex flex-row-reverse">
+        {!isABPath() && <div className=" mt-10 w-full flex flex-row-reverse">
           {loadCompleted && (
             <Button
               type="primary"
@@ -194,6 +201,15 @@ const ContractDecoding = ({ param, onSuccess }) => {
             </Button>
           )}
         </div>
+        }
+        {isABPath() && <div className=" mt-10 w-full flex flex-row-reverse">
+          {loadCompleted && (
+            <Typography.Text className="flex-1">
+              Congratulations. The contract was submitted successfully, and you can see your metric <Link to={getGrowthProjectPath("the-sandbox","nft_summary")}>here</Link>.
+            </Typography.Text>
+          )}
+        </div>
+        }
       </div>
     </div>
   );

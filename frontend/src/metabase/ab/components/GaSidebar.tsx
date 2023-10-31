@@ -61,7 +61,7 @@ const GaSidebar = (props: IGaSidebarProp) => {
 
   useEffect(() => {
     if (location.pathname === '/fga' || location.pathname === '/fga/') {
-      router.replace("/fga/public-chain")
+      router.replace("/fga/game")
     }
   }, [location.pathname])
 
@@ -152,7 +152,7 @@ const GaSidebar = (props: IGaSidebarProp) => {
       <>
         {projectObject && items?.length > 0 ? (
           <>
-            {!isBusinessTypePath("game-project") && itemsPlatform.length > 0 && (<>
+            {!isBusinessTypePath("game") && itemsPlatform.length > 0 && (<>
               <div className="ga-side-bar__title">
                 <h3>{platformMenuTitle}</h3>
               </div>
@@ -218,6 +218,7 @@ const GaSidebar = (props: IGaSidebarProp) => {
                 <GaProjectSearch
                   location={location}
                   disableLoadList={true}
+                  enableTour={true}
                 />
                 <Menu
                   style={{
@@ -228,7 +229,7 @@ const GaSidebar = (props: IGaSidebarProp) => {
                   }}
                   theme="light"
                   mode="inline"
-                  openKeys={openKeys}
+                  openKeys={[...openKeys, "settings"]}
                   onOpenChange={onOpenChange}
                   selectedKeys={[currentMenu!]}
                   onSelect={item => {

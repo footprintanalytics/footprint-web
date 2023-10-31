@@ -263,6 +263,14 @@ const academyIcon =
     <path d="M11.6654 18.3337V12.917H8.33203V18.3337" stroke="#6262FF" strokeLinecap="round" strokeLinejoin="round"/>
     <path d="M7.5 18.333H12.5" stroke="#6262FF" strokeLinecap="round" strokeLinejoin="round"/>
   </svg>
+const academyIcon14 =
+  <svg width="14" height="14" viewBox="0 0 20 20" fill="none">
+    <path d="M1.66797 13.7503C1.66797 13.2901 2.04106 12.917 2.5013 12.917H5.0013V10.0003L10.0013 6.66699L15.0013 10.0003V12.917H17.5013C17.9616 12.917 18.3346 13.2901 18.3346 13.7503V17.5003C18.3346 17.9606 17.9616 18.3337 17.5013 18.3337H1.66797V13.7503Z" stroke="#ACAEB4" strokeLinejoin="round"/>
+    <path d="M10 2.5V6.66667" stroke="#ACAEB4" strokeLinecap="round"/>
+    <path d="M15 4.99987V2.49989C15 2.49989 14.375 3.74989 12.5 2.49989C10.625 1.24989 10 2.49989 10 2.49989V4.99987C10 4.99987 10.625 3.74989 12.5 4.99987C14.375 6.24987 15 4.99987 15 4.99987Z" stroke="#ACAEB4" strokeLinecap="round" strokeLinejoin="round"/>
+    <path d="M11.6654 18.3337V12.917H8.33203V18.3337" stroke="#ACAEB4" strokeLinecap="round" strokeLinejoin="round"/>
+    <path d="M7.5 18.333H12.5" stroke="#ACAEB4" strokeLinecap="round" strokeLinejoin="round"/>
+  </svg>
 
 const youtubeIcon =
   <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
@@ -343,6 +351,13 @@ const onBoardIcon =
     <path d="M7.91667 8.33333C9.5275 8.33333 10.8333 7.0275 10.8333 5.41667C10.8333 3.80584 9.5275 2.5 7.91667 2.5C6.30583 2.5 5 3.80584 5 5.41667C5 7.0275 6.30583 8.33333 7.91667 8.33333Z" stroke="#6262FF" strokeLinecap="round" strokeLinejoin="round"/>
     <path d="M1.66602 16.9998V17.4998H14.166V16.9998C14.166 15.133 14.166 14.1996 13.8027 13.4865C13.4831 12.8593 12.9732 12.3494 12.346 12.0298C11.6329 11.6665 10.6995 11.6665 8.83268 11.6665H6.99935C5.13252 11.6665 4.1991 11.6665 3.48605 12.0298C2.85884 12.3494 2.3489 12.8593 2.02933 13.4865C1.66602 14.1996 1.66602 15.133 1.66602 16.9998Z" stroke="#6262FF" strokeLinecap="round" strokeLinejoin="round"/>
     <path d="M15.834 5.4165V10.4165M13.334 7.9165H18.334" stroke="#6262FF" strokeLinecap="round" strokeLinejoin="round"/>
+  </svg>
+
+const onBoardIcon14 =
+  <svg width="14" height="14" viewBox="0 0 20 20" fill="none">
+    <path d="M7.91667 8.33333C9.5275 8.33333 10.8333 7.0275 10.8333 5.41667C10.8333 3.80584 9.5275 2.5 7.91667 2.5C6.30583 2.5 5 3.80584 5 5.41667C5 7.0275 6.30583 8.33333 7.91667 8.33333Z" stroke="#ACAEB4" strokeLinecap="round" strokeLinejoin="round"/>
+    <path d="M1.66602 16.9998V17.4998H14.166V16.9998C14.166 15.133 14.166 14.1996 13.8027 13.4865C13.4831 12.8593 12.9732 12.3494 12.346 12.0298C11.6329 11.6665 10.6995 11.6665 8.83268 11.6665H6.99935C5.13252 11.6665 4.1991 11.6665 3.48605 12.0298C2.85884 12.3494 2.3489 12.8593 2.02933 13.4865C1.66602 14.1996 1.66602 15.133 1.66602 16.9998Z" stroke="#ACAEB4" strokeLinecap="round" strokeLinejoin="round"/>
+    <path d="M15.834 5.4165V10.4165M13.334 7.9165H18.334" stroke="#ACAEB4" strokeLinecap="round" strokeLinejoin="round"/>
   </svg>
 
 const userIcon =
@@ -430,6 +445,7 @@ export const ReactIcons = {
   howOnboardIcon,
   blogIcon,
   academyIcon,
+  academyIcon14,
   youtubeIcon,
   githubIcon,
   myAnalysisIcon,
@@ -439,6 +455,7 @@ export const ReactIcons = {
   solutionIcon2,
   useCaseIcon,
   onBoardIcon,
+  onBoardIcon14,
   userIcon,
   gamingStatIcon,
   assetIcon,
