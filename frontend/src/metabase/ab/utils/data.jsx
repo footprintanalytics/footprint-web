@@ -356,6 +356,7 @@ export const getDashboardMap = (businessType, project, chain) => {
     ["social", "5492ee87-4d65-49e2-878d-8a2aa9d5b745"],
     ["gaming_overview", "878b2412-a464-4286-903f-05a2950a5f6d"],
     ["listing", "dcc2860f-8693-4de3-8123-6c5ba12c0d1c"],
+    ["nft_listing", "dcc2860f-8693-4de3-8123-6c5ba12c0d1c"],
     ["project_overlap", "64f35dd4-89e8-4c27-a2fc-3453ac23254d"],
     ["retention", "73ce13a3-0815-45dd-bc30-59a75ae7e0c0"],
     ["acquisition", "43325414-b798-44cb-ad2d-745d374b22f2"],
@@ -463,39 +464,34 @@ export const fga_menu_data_v2 = (businessType, project, chain) => {
         // getItem("Project Holder Overlap", "platform-holder_overlap", null),
     ],
     "menuTabs": [
-      getItem("Project Overview", "project_overview", ReactIcons.myAnalysisIcon, [
-        getItem("Project Summary", "project_summary", null),
-      ]),
-      getItem("Revenue", "revenue", ReactIcons.datasetsIcon, [
-        getItem("Web3 Revenue", "revenue-web3-revenue", null),
-        getItem("Web2 Revenue", "revenue-web2-revenue", null),
-        getItem("Total Revenue", "revenue-total-revenue", null),
-      ]),
+      // getItem("Project Overview", "project_overview", ReactIcons.myAnalysisIcon, [
+      //   getItem("Project Summary", "project_summary", null),
+      // ]),
       (project?.nftCollectionAddress?.length > 0 || project?.tokenAddress?.length > 0) &&
       getItem("Assets", "assets", ReactIcons.assetIcon, [
         project?.nftCollectionAddress?.length > 0 &&
         getItem("NFT", "nft", null, [
             getItem("Summary", "nft_summary", null),
             getItem("NFT Sales & Mints", "nft_sales_mints", null),
+            getItem("NFT Listing", "nft_listing", null),
             getItem("NFT Holders", "nft_nft_holder", null),
             getItem("NFT Leaderboard", "nft_leaderboard", null),
-            // getItem("NFT Listing", "listing", null),
           ]
         ),
-        project?.tokenAddress?.length > 0 &&
-          getItem("Token", "game_tokenomics", null),
-        // getItem("Momentum", "momentum", null, [
-        //     getItem("Retention", "retention", null),
-        //     getItem("Acquisition", "acquisition", null),
-        //   ]
-        // ),
+        // project?.tokenAddress?.length > 0 &&
+        //   getItem("Token", "game_tokenomics", null),
+      ]),
+      getItem("Revenue", "revenue", ReactIcons.datasetsIcon, [
+        getItem("Web3 Revenue", "revenue-web3-revenue", null),
+        getItem("Web2 Revenue", "revenue-web2-revenue", null),
+        getItem("Total Revenue", "revenue-total-revenue", null),
       ]),
       getItem("User", "game_user", ReactIcons.gamingStatIcon, [
-        getItem("Web3 User", "web3_user", ReactIcons.gamingStatIcon, [
-          getItem("User Acquisition", "web3_user_acquisition", null),
-          getItem("User Engagement", "web3_user_engagement", null),
-          getItem("User Retention", "web3_user_retention", null),
-        ]),
+        // getItem("Web3 User", "web3_user", ReactIcons.gamingStatIcon, [
+        //   getItem("User Acquisition", "web3_user_acquisition", null),
+        //   getItem("User Engagement", "web3_user_engagement", null),
+        //   getItem("User Retention", "web3_user_retention", null),
+        // ]),
         getItem("Web2 User", "web2_user", ReactIcons.gamingStatIcon, [
           getItem("User Acquisition", "web2_user_acquisition", null),
           getItem("User Engagement", "web2_user_engagement", null),
@@ -505,10 +501,15 @@ export const fga_menu_data_v2 = (businessType, project, chain) => {
       getItem("Game", "game", ReactIcons.userIcon, [
         getItem("Web2 Stats", "web2_stats", null),
       ]),
+      getItem("Community", "social_stats", ReactIcons.userIcon, [
+          getItem("Twitter", "twitter", null),
+          getItem("Discord", "discord", null),
+        ]
+      ),
       getItem("Exploration", "exploration", ReactIcons.userIcon, [
         getItem("Members", "members", null),
-        // getItem("Journey Explorer", "journey", null),
         getItem("Segmentation", "segment", null),
+        getItem("Journey Explorer", "journey", null),
       ]),
       /*getItem(
         "Growth",
@@ -597,13 +598,13 @@ export const fga_menu_data_v2 = (businessType, project, chain) => {
 
   const platformMenuTabsMapping = {
     "public-chain": publicChainData.platformMenuTabs,
-    "game-project": gameProjectData.platformMenuTabs,
+    "game": gameProjectData.platformMenuTabs,
   }
   const platformMenuTabs = platformMenuTabsMapping[businessType] || standardData.platformMenuTabs;
 
   const menuTabsMapping = {
     "public-chain": publicChainData.menuTabs,
-    "game-project": gameProjectData.menuTabs,
+    "game": gameProjectData.menuTabs,
   }
   const menuTabs = menuTabsMapping[businessType] || standardData.menuTabs;
 

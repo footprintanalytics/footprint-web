@@ -96,7 +96,7 @@ const projectList = props => {
   if (protocolList) {
     data = protocolList?.sort((a, b) => a.protocolSlug < b.protocolSlug ? -1 : 1)
     data = [...uniqBy(data, obj => obj.protocolSlug)]
-    if (isBusinessTypePath("game-project")) {
+    if (isBusinessTypePath("game")) {
       const headData = getHeadDataProtocols().map(item => data.find(i => i.protocolSlug === item));
       const endData = data.filter(item => !getHeadDataProtocols().includes(item.protocolSlug));
       data = [...headData, ...endData]
