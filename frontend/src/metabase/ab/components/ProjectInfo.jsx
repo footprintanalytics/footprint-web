@@ -1,5 +1,5 @@
 /* eslint-disable react/prop-types */
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useRef } from "react";
 import {
   Avatar,
   List,
@@ -12,6 +12,7 @@ import {
   message,
   Button,
   Typography,
+  Tour,
 } from "antd";
 // import Link from "antd/lib/typography/Link";
 import { connect } from "react-redux";
@@ -27,6 +28,8 @@ import { getFgaChain } from "metabase/selectors/control";
 const ProjectInfo = props => {
   const { router, project, location, user, chain, businessType } = props;
   const [currentProject, setCurrentProject] = useState(project);
+  const [tourOpen, setTourOpen] = useState(false);
+  const ref1 = useRef(null);
   const [projectModalShow, setProjectModalShow] = useState({
     show: false,
     force: false,
@@ -37,6 +40,22 @@ const ProjectInfo = props => {
   const onTabChange = key => {
     console.log(key);
   };
+  const enableTour = true;
+  const steps = [
+    {
+      title: 'Submit Contract',
+      description: 'You can submit more contract. So that you can be analyzed it at FGA.',
+      target: () => ref1?.current,
+    }
+  ]
+
+  useEffect(() => {
+    setTimeout(() => {
+      setTourOpen(true)
+      window.localStorage.setItem("tour_project_info", "true");
+    }, 1000)
+  }, [])
+
   const getScanLink = address => {
     switch (currentProject?.chain) {
       case "Ethereum":
@@ -98,6 +117,7 @@ const ProjectInfo = props => {
             <Typography.Text type="secondary">
               You can{" "}
               <Typography.Link
+                ref={ref1}
                 onClick={() => {
                   if (!user) {
                     message.error("Please login first!");
@@ -163,7 +183,7 @@ const ProjectInfo = props => {
           minHeight: 800,
         }}
       >
-        <div className=" flex flex-row justify-between w-full mb2">
+        <div className=" flex flex-row justify-between w-full mb2" >
           <Title width={"100%"} level={4} style={{ marginBottom: 0 }}>
             General
           </Title>
@@ -287,6 +307,7 @@ const ProjectInfo = props => {
           setProjectModalShow({ show: false });
         }}
       ></UpdateProjectModal>
+      {enableTour && window.localStorage.getItem("tour_project_info") !== "true" && <Tour open={tourOpen} onClose={() => setTourOpen(false)} steps={steps} />}
     </div>
   );
 };

@@ -1,8 +1,8 @@
 /* eslint-disable react/prop-types */
 /* eslint-disable react-hooks/rules-of-hooks */
-import React, { useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { connect } from "react-redux";
-import { Input, message, Space, Table } from "antd";
+import { Input, message, Space, Table, Tour } from "antd";
 import { getFgaProject, getUser } from "metabase/selectors/user";
 import { loadCurrentFgaProjectNew } from "metabase/redux/user";
 import { loadFgaFavoriteList, setGames } from "metabase/redux/control";
@@ -33,6 +33,40 @@ const projectList = props => {
     ecosystemId: 415,
   };
 
+  const ref1 = useRef(null);
+  const ref2 = useRef(null);
+  const ref3 = useRef(null);
+  const ref4 = useRef(null);
+  const [tourOpen, setTourOpen] = useState(false);
+  const enableTour = true;
+  const steps = [
+    {
+      title: 'Switch Project',
+      description: 'You can switch project click this',
+      target: () => ref1?.current,
+    },
+    {
+      title: 'Favorite Project',
+      description: 'You can Favorite a project to quickly find it in the menu next time.',
+      target: () => ref2?.current,
+    },
+    {
+      title: 'Find Projects',
+      description: 'Support search to find projects.',
+      target: () => ref3?.current,
+    },
+    {
+      title: 'Submit your project',
+      description: 'If you can\'t find your project, you can add it to the platform by submitting a contract.',
+      target: () => ref4?.current,
+    },
+  ]
+  useEffect(() => {
+    setTimeout(() => {
+      setTourOpen(true)
+      window.localStorage.setItem("tour_game_list", "true");
+    }, 1000)
+  }, [])
 /*  const { isLoading: isFavoriteLoading, data: favoriteData, refetch: favoriteRefetch } = useQuery(["getProtocolFavorite"],
     () => {
       return getProtocolFavorite();
@@ -152,7 +186,7 @@ const projectList = props => {
       dataIndex: 'protocolName',
       key: 'protocolName',
       render: (_, record) => (
-        <a className="text-underline text-underline-hover" onClick={async () => {
+        <a ref={record.protocolSlug === "revv-racing" ? ref1 : null} className="text-underline text-underline-hover" onClick={async () => {
           await loadProjectDetail(record.protocolSlug);
           router.replace(`/fga/${businessType}/project/${record.protocolSlug}/project_summary`)
         }}>
@@ -181,8 +215,7 @@ const projectList = props => {
       width: 100,
       render: (_, record) => (
         <Space size="middle">
-          <a onClick={() => {
-            console.log("manage-games", games)
+          <a ref={record.protocolSlug === "revv-racing" ? ref2 : null} onClick={() => {
             favoriteAction(record);
             // setTimeout(async () => {
             //   hide();
@@ -224,9 +257,16 @@ const projectList = props => {
             <h2>Projects
               {isBusinessTypePath("public-chain") && <>({`${chain}`})</>}
             </h2>
-            <span className="text-white">Select {" "}
-              <Link to={getGrowthProjectPath("Project A", "project_summary")}>Project A</Link>
-              {" "} to see full Sample.
+            <span ref={ref4} className="text-white">Select {" "}
+              {/*<Link to={getGrowthProjectPath("Project A", "project_summary")}>Project A</Link>*/}
+              {/*{" "} to see full Sample.*/}
+              You can <Link onClick={() => {
+                if (businessType) {
+                  router?.push({ pathname: `/fga/${businessType}/submit/contract/add` });
+                } else {
+                  router?.push({ pathname: "/submit/contract/add" });
+                }
+              }}>click here</Link> to submit more project.
             </span>
           </div>
           {/*<div className="flex justify-end full-width mb1">
@@ -237,7 +277,7 @@ const projectList = props => {
               Add Game
             </Button>
           </div>*/}
-          <div className="flex justify-end mb1">
+          <div className="flex justify-end mb1" ref={ref3}>
             <Search
               placeholder="search name"
               allowClear
@@ -249,6 +289,7 @@ const projectList = props => {
           <Table dataSource={data} columns={columns}/>
         </div>
       )}
+      {enableTour && window.localStorage.getItem("tour_game_list") !== "true" && <Tour open={tourOpen} onClose={() => setTourOpen(false)} steps={steps} />}
     </div>
   );
 };

@@ -2,7 +2,7 @@
 /* eslint-disable react/prop-types */
 import React, { useEffect, useRef, useState } from "react";
 import { connect } from "react-redux";
-import { Button, message, Modal, Select } from "antd";
+import { Button, message, Modal, Select, Tour } from "antd";
 import { withRouter } from "react-router";
 import { getFgaProject, getUser } from "metabase/selectors/user";
 import { loadCurrentFgaProjectNew } from "metabase/redux/user";
@@ -52,6 +52,7 @@ const GaProjectSearch = props => {
     protocolList,
     loadFgaProtocolList,
     disableLoadList,
+    enableTour = false,
   } = props;
   const selectRef = useRef();
   const userId = user?.id;
@@ -59,7 +60,15 @@ const GaProjectSearch = props => {
   const [open, setOpen] = useState(false);
   const [currentProject, setCurrentProject] = useState(projectPath);
   const protocolListLen = protocolList?.length;
-
+  const ref1 = useRef(null);
+  const [tourOpen, setTourOpen] = useState(false);
+  const steps = [
+    {
+      title: 'Switch Project',
+      description: 'You can switch to other projects here to analyze the metrics.',
+      target: () => ref1?.current,
+    }
+  ]
   let defaultProject;
   if (isBusinessTypePath("public-chain")) {
     defaultProject = getChainDataList({ includeAll: false })?.find(item => item.label === chain)?.defaultProject ||
@@ -82,6 +91,15 @@ const GaProjectSearch = props => {
       router.push(getGrowthProjectPath(defaultProject.protocolSlug, menuKeys[0]))
     }
   }, [location.pathname])
+
+  useEffect(() => {
+    if (enableTour && protocolList.length > 0 && userProject) {
+      setTimeout(() => {
+        setTourOpen(true)
+        window.localStorage.setItem("tour_project_search", "true");
+      }, 1000)
+    }
+  }, [enableTour, protocolList, userProject])
 
 
   // console.log("currentProject", currentProject)
@@ -289,7 +307,7 @@ const GaProjectSearch = props => {
   // }
 
   return (
-    <div className="flex flex-column items-center ga-project-search" style={{ minWidth: 218 }}>
+    <div className="flex flex-column items-center ga-project-search" ref={ref1} style={{ minWidth: 218 }}>
         <>
           {userProject?.length > 0 && (
             // <Select
@@ -436,6 +454,7 @@ const GaProjectSearch = props => {
         }}
       />*/}
       {contextHolder}
+      {enableTour && window.localStorage.getItem("tour_project_search") !== "true" && <Tour open={tourOpen} onClose={() => setTourOpen(false)} steps={steps} />}
     </div>
   );
 };

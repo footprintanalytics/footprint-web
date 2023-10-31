@@ -218,6 +218,7 @@ const GaSidebar = (props: IGaSidebarProp) => {
                 <GaProjectSearch
                   location={location}
                   disableLoadList={true}
+                  enableTour={true}
                 />
                 <Menu
                   style={{
@@ -228,7 +229,7 @@ const GaSidebar = (props: IGaSidebarProp) => {
                   }}
                   theme="light"
                   mode="inline"
-                  openKeys={openKeys}
+                  openKeys={[...openKeys, "settings"]}
                   onOpenChange={onOpenChange}
                   selectedKeys={[currentMenu!]}
                   onSelect={item => {
