@@ -454,7 +454,9 @@ const GaProjectSearch = props => {
         }}
       />*/}
       {contextHolder}
-      {enableTour && window.localStorage.getItem("tour_project_search") !== "true" && <Tour open={tourOpen} onClose={() => setTourOpen(false)} steps={steps} />}
+      {enableTour && window.localStorage.getItem("tour_project_search") !== "true" &&
+        <Tour open={tourOpen} onClose={() => setTourOpen(false)} steps={steps} />
+      }
     </div>
   );
 };
