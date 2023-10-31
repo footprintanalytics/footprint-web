@@ -35,6 +35,16 @@ const VipList = props => {
 
   const columns = [
     {
+      title: "userId",
+      key: "userId",
+      width: 120,
+      render: item => (
+        <span >
+          {item.metabaseId}
+        </span>
+      ),
+    },
+    {
       title: "name",
       key: "name",
       width: 200,
