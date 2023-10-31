@@ -188,7 +188,7 @@ const projectList = props => {
       render: (_, record) => (
         <a ref={record.protocolSlug === "revv-racing" ? ref1 : null} className="text-underline text-underline-hover" onClick={async () => {
           await loadProjectDetail(record.protocolSlug);
-          router.replace(`/fga/${businessType}/project/${record.protocolSlug}/project_summary`)
+          router.replace(`/fga/${businessType}/project/${record.protocolSlug}/nft_summary`)
         }}>
           {record.protocolName}
         </a>
