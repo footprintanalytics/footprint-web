@@ -216,7 +216,7 @@ const Project = props => {
             <DashboardMask currentMenu={"set_protocol"} router={router} />
           )}
           {businessType === "game" && getProjectObject()?.protocolSlug !== "Project A" && getProjectObject()?.protocolSlug &&
-          ["revenue-web2-revenue", "revenue-total-revenue", "web2_user_acquisition", "web2_user_engagement", "web2_user_retention", "web2_stats"].includes(currentMenu) && (
+          ["revenue-web2-revenue", "revenue-total-revenue", "web2_user_acquisition", "web2_user_engagement", "web2_user_retention", "web2_stats", "twitter", "discord"].includes(currentMenu) && (
             <DashboardMask currentMenu={"web2_connect"} originCurrentMenu={currentMenu} router={router} project={getProjectObject()}/>
           )}
         </>

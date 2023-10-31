@@ -486,19 +486,19 @@ export const fga_menu_data_v2 = (businessType, project, chain) => {
         getItem("Web2 Revenue", "revenue-web2-revenue", null),
         getItem("Total Revenue", "revenue-total-revenue", null),
       ]),
-      getItem("User", "game_user", ReactIcons.gamingStatIcon, [
+      getItem("User", "game_user", ReactIcons.onBoardIcon14, [
         // getItem("Web3 User", "web3_user", ReactIcons.gamingStatIcon, [
         //   getItem("User Acquisition", "web3_user_acquisition", null),
         //   getItem("User Engagement", "web3_user_engagement", null),
         //   getItem("User Retention", "web3_user_retention", null),
         // ]),
-        getItem("Web2 User", "web2_user", ReactIcons.gamingStatIcon, [
+        getItem("Web2 User", "web2_user", null, [
           getItem("User Acquisition", "web2_user_acquisition", null),
           getItem("User Engagement", "web2_user_engagement", null),
           getItem("User Retention", "web2_user_retention", null),
         ]),
       ]),
-      getItem("Game", "game", ReactIcons.userIcon, [
+      getItem("Game", "game", ReactIcons.gamingStatIcon, [
         getItem("Web2 Stats", "web2_stats", null),
       ]),
       getItem("Community", "social_stats", ReactIcons.userIcon, [
@@ -506,7 +506,7 @@ export const fga_menu_data_v2 = (businessType, project, chain) => {
           getItem("Discord", "discord", null),
         ]
       ),
-      getItem("Exploration", "exploration", ReactIcons.userIcon, [
+      getItem("Exploration", "exploration", ReactIcons.academyIcon14, [
         getItem("Members", "members", null),
         getItem("Segmentation", "segment", null),
         getItem("Journey Explorer", "journey", null),
