@@ -67,6 +67,7 @@ const GaProjectSearch = props => {
       title: 'Switch Project',
       description: 'You can switch to other projects here to analyze the metrics.',
       target: () => ref1?.current,
+      nextButtonProps: {children: <div>ok</div>},
     }
   ]
   let defaultProject;
@@ -88,7 +89,7 @@ const GaProjectSearch = props => {
     if (businessType && location.pathname.split("/").length === 3 && projectObject) {
       const menuData = fga_menu_data_v2(businessType, projectObject, user);
       const menuKeys = menuData.keys;
-      router.push(getGrowthProjectPath(defaultProject.protocolSlug, menuKeys[0]))
+      router.replace(getGrowthProjectPath(defaultProject.protocolSlug, menuKeys[0]))
     }
   }, [location.pathname])
 

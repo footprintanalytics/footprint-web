@@ -13,7 +13,7 @@ const Buttons = props => {
   const projectName = projectObject.protocolSlug;
   if (type === "create") {
     return (
-      <Link className="flex align-center" to={`/fga/public-chain/project/${projectName}/journey-edit`}>
+      <Link className="flex align-center" to={`/fga/game/project/${projectName}/journey-edit`}>
         <Button className="mx1" type="primary">
           <Icon className="mr1" name="add" size={10} />
             Create
@@ -23,7 +23,7 @@ const Buttons = props => {
   }
   if (type === "list") {
     return (
-      <Link to={`/fga/public-chainproject/${projectName}/journey-list`}>
+      <Link to={`/fga/game/project/${projectName}/journey-list`}>
         <Button className="mx1">
           Saved Journey
         </Button>

@@ -144,13 +144,13 @@ export const getRoutes = store => (
           nextState.location.pathname = `/growth${nextPathname}`;
           replace(nextState.location);
         }
-        if (
-          prevPathname.startsWith("/fga") &&
-          !nextPathname.startsWith("/fga")
-        ) {
-          nextState.location.pathname = `/fga${nextPathname}`
-          replace(nextState.location)
-        }
+        // if (
+        //   prevPathname.startsWith("/fga") &&
+        //   !nextPathname.startsWith("/fga")
+        // ) {
+        //   nextState.location.pathname = `/fga${nextPathname}`
+        //   replace(nextState.location)
+        // }
       }}
     >
       <Route path="/" component={LazyLoad.About}>
