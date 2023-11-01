@@ -44,21 +44,25 @@ const projectList = props => {
       title: 'Switch Project',
       description: 'You can switch project click this',
       target: () => ref1?.current,
+      nextButtonProps: {children: <div>ok</div>},
     },
     {
       title: 'Favorite Project',
       description: 'You can Favorite a project to quickly find it in the menu next time.',
       target: () => ref2?.current,
+      nextButtonProps: {children: <div>ok</div>},
     },
     {
       title: 'Find Projects',
       description: 'Support search to find projects.',
       target: () => ref3?.current,
+      nextButtonProps: {children: <div>ok</div>},
     },
     {
       title: 'Submit your project',
       description: 'If you can\'t find your project, you can add it to the platform by submitting a contract.',
       target: () => ref4?.current,
+      nextButtonProps: {children: <div>ok</div>},
     },
   ]
   useEffect(() => {

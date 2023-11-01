@@ -12,11 +12,11 @@ const AppStore = props => {
     //   title: "FGA",
     //   link: "/fga/",
     // },
-    {
+    /*{
       img: "https://static.footprint.network/img-studio-fga-public-chain.png?1=1&image_process=resize,w_600/crop,h_310/format,jpg",
       title: "FGA - Public Chain",
       link: "/fga/public-chain",
-    },
+    },*/
     {
       img: "https://static.footprint.network/img-studio-fga-project.png?1=1&image_process=resize,w_600/crop,h_310/format,jpg",
       title: "FGA - Project",

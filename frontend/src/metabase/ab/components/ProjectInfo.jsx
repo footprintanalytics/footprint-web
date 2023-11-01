@@ -46,6 +46,7 @@ const ProjectInfo = props => {
       title: 'Submit Contract',
       description: 'You can submit more contract. So that you can be analyzed it at FGA.',
       target: () => ref1?.current,
+      nextButtonProps: {children: <div>ok</div>},
     }
   ]
 
