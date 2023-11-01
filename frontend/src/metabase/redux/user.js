@@ -174,8 +174,8 @@ export const refreshCurrentFgaProject = createThunkAction(
       //     res = {
       //       "id": 153,
       //       "isDemo": false,
-      //       "protocolName": "Project A",
-      //       "protocolSlug": "Project A",
+      //       "protocolName": "Demo Project",
+      //       "protocolSlug": "Demo Project",
       //       "logo": "",
       //       "protocolType": "",
       //       "tokenAddress": [],
@@ -297,17 +297,21 @@ export const refreshCurrentFgaProjectNew = createThunkAction(
     try {
       let res
       if (isABPath()) {
-        if (protocolSlug === "Project A") {
+        if (protocolSlug === "Demo Project") {
            res = {
              "id": 1,
              "isDemo": false,
-             "protocolName": "Project A",
-             "protocolSlug": "Project A",
+             "protocolName": "Demo Project",
+             "protocolSlug": "Demo Project",
              "logo": "",
              "protocolType": "",
              "nftCollectionAddress": [
                {
                  "address": "0x5cc5b05a8a13e3fbdb0bb9fccd98d38e50f90c38",
+                 "chain": "Ethereum"
+               },
+               {
+                 "address": "0x50f5474724e0ee42d9a4e711ccfb275809fd6d4a",
                  "chain": "Ethereum"
                }
              ],
@@ -315,6 +319,9 @@ export const refreshCurrentFgaProjectNew = createThunkAction(
                {
                  "address": "0x3845badade8e6dff049820680d1f14bd3903a5d0",
                  "chain": "Ethereum"
+               },{
+                 "address": "0x67b725d7e342d7b611fa85e859df9697d9378b2e",
+                 "chain": "BNB Chain"
                }
              ],
              "twitter": {},
@@ -358,12 +365,12 @@ export const refreshCurrentFgaProjectNew = createThunkAction(
         // }
 
        // else if (isABPath()) {
-       //  if (protocolSlug === "Project A") {
+       //  if (protocolSlug === "Demo Project") {
        //    res = {
        //      "id": 153,
        //      "isDemo": false,
-       //      "protocolName": "Project A",
-       //      "protocolSlug": "Project A",
+       //      "protocolName": "Demo Project",
+       //      "protocolSlug": "Demo Project",
        //      "logo": "",
        //      "protocolType": "",
        //      "tokenAddress": [],

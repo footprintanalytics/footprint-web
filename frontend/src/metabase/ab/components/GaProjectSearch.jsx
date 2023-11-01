@@ -79,8 +79,8 @@ const GaProjectSearch = props => {
   } else {
     defaultProject =
       {
-        protocolSlug: "Project A",
-        protocolName: "Project A",
+        protocolSlug: "Demo Project",
+        protocolName: "Demo Project",
       }
   }
 
@@ -111,8 +111,8 @@ const GaProjectSearch = props => {
   //     //   return {
   //     //     "data": [
   //     //     {
-  //     //       "protocolSlug": "Project A",
-  //     //       "protocolName": "Project A",
+  //     //       "protocolSlug": "Demo Project",
+  //     //       "protocolName": "Demo Project",
   //     //     }
   //     //     ]
   //     //   }
@@ -123,8 +123,8 @@ const GaProjectSearch = props => {
   //     return {
   //       "data": [
   //         {
-  //           "protocolSlug": "Project A",
-  //           "protocolName": "Project A",
+  //           "protocolSlug": "Demo Project",
+  //           "protocolName": "Demo Project",
   //         },
   //         {
   //           "protocolSlug": "Mocaverse",

@@ -187,8 +187,8 @@ export const loadFgaProtocolList = createThunkAction(
           protocolList: [
             ...result.protocolList,
             {
-              "protocolSlug": "Project A",
-              "protocolName": "Project A",
+              "protocolSlug": "Demo Project",
+              "protocolName": "Demo Project",
             }
           ]
         };

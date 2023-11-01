@@ -6,7 +6,7 @@ import cx from "classnames";
 import Link from "metabase/core/components/Link";
 
 import _ from "underscore";
-import {debounce, isArray, startCase} from "lodash";
+import {debounce, isArray, union, startCase} from "lodash";
 import { Breadcrumb, Select } from "antd";
 import { IFRAMED } from "metabase/lib/dom";
 
@@ -65,13 +65,13 @@ const mapStateToProps = (state, props) => {
     let projectProtocolSlug = project?.protocolSlug;
     let projectProtocolName = project?.protocolName;
     let id = project?.id;
-    if (projectProtocolName === "Project A") {
+    if (projectProtocolName === "Demo Project") {
       id = 1;
     }
-    if (projectProtocolSlug === "Project A") {
+    if (projectProtocolSlug === "Demo Project") {
       projectProtocolSlug = "the-sandbox";
     }
-    if (projectProtocolName === "Project A") {
+    if (projectProtocolName === "Demo Project") {
       projectProtocolName = "The Sandbox";
     }
     let currentChain = null;
@@ -468,10 +468,11 @@ class PublicDashboard extends Component {
         onChange={e => {
           this.props.setParameterValue(keyObject.id, e)
         }}
-        options={data?.map(item => {
+        options={union(data?.map(item => item.address))
+          ?.map(item => {
           return {
-            value: item.address,
-            label: item.address,
+            value: item,
+            label: item,
           }
         })}
       />

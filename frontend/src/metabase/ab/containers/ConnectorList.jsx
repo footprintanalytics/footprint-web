@@ -42,7 +42,7 @@ const ConnectorList = props => {
   //   { ...QUERY_OPTIONS, enabled: !!projectId },
   // );
 
-  if (!projectId || project?.protocolSlug === "Project A") {
+  if (!projectId || project?.protocolSlug === "Demo Project") {
     data = {
       "availableConnectorConfig": [
       {
@@ -293,7 +293,7 @@ const ConnectorList = props => {
                                 key="Detail"
                                 style={{ borderRadius: 5, width: 120 }}
                                 onClick={() => {
-                                  if (project.protocolSlug === "Project A") {
+                                  if (project.protocolSlug === "Demo Project") {
                                     modal.confirm({
                                       title: "Tip",
                                       content: (
@@ -334,7 +334,7 @@ const ConnectorList = props => {
                                 key="Connect"
                                 style={{ borderRadius: 5, width: 120 }}
                                 onClick={() => {
-                                  if (project.protocolSlug === "Project A") {
+                                  if (project.protocolSlug === "Demo Project") {
                                     modal.confirm({
                                       title: "Tip",
                                       content: (

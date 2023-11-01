@@ -82,8 +82,8 @@ const projectList = props => {
   //     //   return {
   //     //     "data": [
   //     //     {
-  //     //       "protocolSlug": "Project A",
-  //     //       "protocolName": "Project A",
+  //     //       "protocolSlug": "Demo Project",
+  //     //       "protocolName": "Demo Project",
   //     //     }
   //     //     ]
   //     //   }
@@ -188,7 +188,7 @@ const projectList = props => {
       render: (_, record) => (
         <a ref={record.protocolSlug === "revv-racing" ? ref1 : null} className="text-underline text-underline-hover" onClick={async () => {
           await loadProjectDetail(record.protocolSlug);
-          router.replace(`/fga/${businessType}/project/${record.protocolSlug}/nft_summary`)
+          router.replace(`/fga/${businessType}/project/${record.protocolSlug}/project_summary`)
         }}>
           {record.protocolName}
         </a>
@@ -258,7 +258,7 @@ const projectList = props => {
               {isBusinessTypePath("public-chain") && <>({`${chain}`})</>}
             </h2>
             <span ref={ref4} className="text-white">Select {" "}
-              {/*<Link to={getGrowthProjectPath("Project A", "project_summary")}>Project A</Link>*/}
+              {/*<Link to={getGrowthProjectPath("Demo Project", "project_summary")}>Demo Project</Link>*/}
               {/*{" "} to see full Sample.*/}
               You can <Link onClick={() => {
                 if (businessType) {
