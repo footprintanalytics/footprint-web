@@ -377,7 +377,7 @@ export const getDashboardMap = (businessType, project, chain) => {
     ["revenue-total-revenue", "72b80a56-81c8-4c6b-9661-54bfa77e812f"],
     ["acquisition_wallet", "f0e46f09-0f53-4d00-b350-b399ca70133f"],
     ["acquisition_users", "e1f2b298-4230-4a25-98ca-cabcd4e2b262"],
-    ["wallet_interaction", "23a1fc28-dba0-4e17-8270-786632ed161d"],
+    ["wallet_engagement", "23a1fc28-dba0-4e17-8270-786632ed161d"],
     ["gaming_engagement", "e2695683-3c8c-4462-92db-e32bc6f50050"],
     ["wallet_retention", "9a19edda-1c4c-4aa5-95fc-921304f8f8fd"],
     ["user_retention", "f15ab6da-15f7-40c6-8aa4-e3eda6fa430c"],
@@ -489,7 +489,7 @@ export const fga_menu_data_v2 = (businessType, project, chain) => {
         getItem("Users", "acquisition_users", null),
       ]),
       getItem("Engagement", "engagement", ReactIcons.gamingStatIcon, [
-        getItem("Wallet Interaction", "wallet_interaction", null),
+        getItem("Wallet Engagement", "wallet_engagement", null),
         getItem("Gaming Engagement", "gaming_engagement", null),
       ]),
       getItem("Retention", "retention", ReactIcons.gamingStatIcon, [
