@@ -380,7 +380,7 @@ export const getDashboardMap = (businessType, project, chain) => {
     ["wallet_engagement", "23a1fc28-dba0-4e17-8270-786632ed161d"],
     ["gaming_engagement", "e2695683-3c8c-4462-92db-e32bc6f50050"],
     ["wallet_retention", "9a19edda-1c4c-4aa5-95fc-921304f8f8fd"],
-    ["user_retention", "f15ab6da-15f7-40c6-8aa4-e3eda6fa430c"],
+    ["user_retention", "320e0a60-107c-44cb-83e3-7c8301354968"],
 
     ["project_health-platform", "7a275541-580a-4720-8e10-f455335de137"],
     ["users_overview-platform", "6d84b4a6-ceef-4b30-a9ad-b233038fd8d3"],
