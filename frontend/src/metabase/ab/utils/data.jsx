@@ -375,14 +375,12 @@ export const getDashboardMap = (businessType, project, chain) => {
     ["revenue-web3-revenue", "d5142de8-81e9-4682-a4af-0026c058e9d1"],
     ["revenue-web2-revenue", "2882cb24-1bf2-4c03-80e7-5fd184acc846"],
     ["revenue-total-revenue", "72b80a56-81c8-4c6b-9661-54bfa77e812f"],
-    ["web3_user_acquisition", "f0e46f09-0f53-4d00-b350-b399ca70133f"],
-    ["web3_user_engagement", "23a1fc28-dba0-4e17-8270-786632ed161d"],
-    ["web3_user_retention", "9a19edda-1c4c-4aa5-95fc-921304f8f8fd"],
-    ["web2_user_acquisition", "e1f2b298-4230-4a25-98ca-cabcd4e2b262"],
-    ["web2_user_engagement", "320e0a60-107c-44cb-83e3-7c8301354968"],
-    ["web2_user_retention", "f15ab6da-15f7-40c6-8aa4-e3eda6fa430c"],
-    ["web2_stats", "e2695683-3c8c-4462-92db-e32bc6f50050"],
-
+    ["acquisition_wallet", "f0e46f09-0f53-4d00-b350-b399ca70133f"],
+    ["acquisition_users", "e1f2b298-4230-4a25-98ca-cabcd4e2b262"],
+    ["wallet_interaction", "23a1fc28-dba0-4e17-8270-786632ed161d"],
+    ["gaming_engagement", "e2695683-3c8c-4462-92db-e32bc6f50050"],
+    ["wallet_retention", "9a19edda-1c4c-4aa5-95fc-921304f8f8fd"],
+    ["user_retention", "f15ab6da-15f7-40c6-8aa4-e3eda6fa430c"],
 
     ["project_health-platform", "7a275541-580a-4720-8e10-f455335de137"],
     ["users_overview-platform", "6d84b4a6-ceef-4b30-a9ad-b233038fd8d3"],
@@ -464,9 +462,9 @@ export const fga_menu_data_v2 = (businessType, project, chain) => {
         // getItem("Project Holder Overlap", "platform-holder_overlap", null),
     ],
     "menuTabs": [
-      // getItem("Project Overview", "project_overview", ReactIcons.myAnalysisIcon, [
-      //   getItem("Project Summary", "project_summary", null),
-      // ]),
+      getItem("Project Overview", "project_overview", ReactIcons.myAnalysisIcon, [
+        getItem("Project Summary", "project_summary", null),
+      ]),
       (project?.nftCollectionAddress?.length > 0 || project?.tokenAddress?.length > 0) &&
       getItem("Assets", "assets", ReactIcons.assetIcon, [
         project?.nftCollectionAddress?.length > 0 &&
@@ -478,28 +476,25 @@ export const fga_menu_data_v2 = (businessType, project, chain) => {
             getItem("NFT Leaderboard", "nft_leaderboard", null),
           ]
         ),
-        // project?.tokenAddress?.length > 0 &&
-        //   getItem("Token", "game_tokenomics", null),
+        project?.tokenAddress?.length > 0 &&
+          getItem("Token", "game_tokenomics", null),
       ]),
       getItem("Revenue", "revenue", ReactIcons.datasetsIcon, [
+        getItem("Total Revenue", "revenue-total-revenue", null),
         getItem("Web3 Revenue", "revenue-web3-revenue", null),
         getItem("Web2 Revenue", "revenue-web2-revenue", null),
-        getItem("Total Revenue", "revenue-total-revenue", null),
       ]),
-      getItem("User", "game_user", ReactIcons.onBoardIcon14, [
-        // getItem("Web3 User", "web3_user", ReactIcons.gamingStatIcon, [
-        //   getItem("User Acquisition", "web3_user_acquisition", null),
-        //   getItem("User Engagement", "web3_user_engagement", null),
-        //   getItem("User Retention", "web3_user_retention", null),
-        // ]),
-        getItem("Web2 User", "web2_user", null, [
-          getItem("User Acquisition", "web2_user_acquisition", null),
-          getItem("User Engagement", "web2_user_engagement", null),
-          getItem("User Retention", "web2_user_retention", null),
-        ]),
+      getItem("Acquisition", "acquisition", ReactIcons.onBoardIcon14, [
+        getItem("Wallet", "acquisition_wallet", null),
+        getItem("Users", "acquisition_users", null),
       ]),
-      getItem("Game", "game", ReactIcons.gamingStatIcon, [
-        getItem("Web2 Stats", "web2_stats", null),
+      getItem("Engagement", "engagement", ReactIcons.gamingStatIcon, [
+        getItem("Wallet Interaction", "wallet_interaction", null),
+        getItem("Gaming Engagement", "gaming_engagement", null),
+      ]),
+      getItem("Retention", "retention", ReactIcons.gamingStatIcon, [
+        getItem("Wallet Retention", "wallet_retention", null),
+        getItem("User Retention", "user_retention", null),
       ]),
       getItem("Community", "social_stats", ReactIcons.userIcon, [
           getItem("Twitter", "twitter", null),

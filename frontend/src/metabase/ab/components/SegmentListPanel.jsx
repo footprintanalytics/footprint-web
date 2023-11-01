@@ -18,7 +18,7 @@ import { loginModalShowAction } from "metabase/redux/control";
 const SegmentListPanel = props => {
   // sourceType: projectUser, potentialUser
   const { project, router, user, sourceType, businessType, setLoginModalShowAction } = props;
-  const protocolSlug = project?.protocolSlug === "Project A" ? "" : project?.protocolSlug;
+  const protocolSlug = project?.protocolSlug === "Demo Project" ? "" : project?.protocolSlug;
   const { isLoading, data, refetch } = useQuery(
     ["getCohort", project],
     async () => {

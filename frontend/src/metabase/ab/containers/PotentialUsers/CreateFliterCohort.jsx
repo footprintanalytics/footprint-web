@@ -174,7 +174,7 @@ const CreateCohort2 = ({
           type="primary"
           disabled={disable}
           onClick={() => {
-            if (project?.protocolSlug === "Project A") {
+            if (project?.protocolSlug === "Demo Project") {
               modal.confirm({
                 title: "Tip",
                 content: (
@@ -218,7 +218,7 @@ const CreateCohort2 = ({
       ) : (
         <div
           onClick={() => {
-            if (project?.protocolSlug === "Project A") {
+            if (project?.protocolSlug === "Demo Project") {
               Modal.info({
                 title: "Tip",
                 content: (

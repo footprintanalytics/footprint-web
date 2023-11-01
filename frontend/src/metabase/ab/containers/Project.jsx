@@ -82,7 +82,7 @@ const Project = props => {
     } else {
       setGaMenuTabs(null);
     }
-    /*if (projectPath !== "Project A") {
+    /*if (projectPath !== "Demo Project") {
       localStorage.setItem("twitterEnable", "");
     }*/
   }, [projectObject, user]);
@@ -215,7 +215,7 @@ const Project = props => {
           !["twitter", "discord"].includes(currentMenu) && (
             <DashboardMask currentMenu={"set_protocol"} router={router} />
           )}
-          {businessType === "game" && getProjectObject()?.protocolSlug !== "Project A" && getProjectObject()?.protocolSlug &&
+          {businessType === "game" && getProjectObject()?.protocolSlug !== "Demo Project" && getProjectObject()?.protocolSlug &&
           ["revenue-web2-revenue", "revenue-total-revenue", "web2_user_acquisition", "web2_user_engagement", "web2_user_retention", "web2_stats", "twitter", "discord"].includes(currentMenu) && (
             <DashboardMask currentMenu={"web2_connect"} originCurrentMenu={currentMenu} router={router} project={getProjectObject()}/>
           )}
@@ -276,7 +276,7 @@ const Project = props => {
     if (
       current_tab === "journey" || current_tab === "journey-platform"
     ) {
-      if (businessType === "game" && getProjectObject()?.protocolSlug !== "Project A" && getProjectObject()?.protocolSlug) {
+      if (businessType === "game" && getProjectObject()?.protocolSlug !== "Demo Project" && getProjectObject()?.protocolSlug) {
         return <DashboardMask currentMenu={"web2_connect"} originCurrentMenu={currentMenu} router={router} project={getProjectObject()}/>;
       }
       return (
