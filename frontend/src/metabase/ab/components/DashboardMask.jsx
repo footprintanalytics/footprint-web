@@ -128,6 +128,26 @@ const DashboardMask = props => {
         </div>
       </div>
     );
+  } else if (
+    ["enterprise"].includes(
+      props.currentMenu,
+    )
+  ) {
+    // need to upgrade plan
+    content = (
+      <div className="flex flex-col justify-center p2" style={{ width: 500 }}>
+        <h3 className="text-white">You need to upgrade plan</h3>
+        <Typography.Text className="mt2 mb2">
+          If you wish to view data dashboards related to your own project,
+          please contact our sales team. Thank you.
+        </Typography.Text>
+        <div className="flex flex-row items-center justify-end w-full">
+          <Link target="_blank" href="mailto:sales@footprint.network">
+            Contact us
+          </Link>
+        </div>
+      </div>
+    );
   } else {
     // data is not yet available
     content = (

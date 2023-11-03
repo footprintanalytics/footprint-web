@@ -57,11 +57,11 @@ const Community = props => {
   //   { ...QUERY_OPTIONS, enabled: !!project?.id },
   // );
 
-  const filterResult = useQuery(
-    ["getCommunityQuickFilter", project?.id],
-    async () => getCommunityQuickFilter({ projectId: parseInt(project?.id) }),
-    { ...QUERY_OPTIONS, enabled: !!project?.id },
-  );
+  // const filterResult = useQuery(
+  //   ["getCommunityQuickFilter", project?.id],
+  //   async () => getCommunityQuickFilter({ projectId: parseInt(project?.id) }),
+  //   { ...QUERY_OPTIONS, enabled: !!project?.id },
+  // );
 
   const listResult = useQuery(
     ["getCommunityWalletAddress", project?.id, walletListParams],
@@ -440,14 +440,14 @@ const Community = props => {
           )}
         </>
       )} */}
-      {filterResult.isLoading || !project?.id ? (
-        <div className="w-full p1">
-          <Card className="w-full rounded" style={{ height: 110 }}>
-            <LoadingSpinner />
-          </Card>
-        </div>
-      ) : (
-        <>
+      {/*{filterResult.isLoading || !project?.id ? (*/}
+      {/*  <div className="w-full p1">*/}
+      {/*    <Card className="w-full rounded" style={{ height: 110 }}>*/}
+      {/*      <LoadingSpinner />*/}
+      {/*    </Card>*/}
+      {/*  </div>*/}
+      {/*) : (*/}
+      {/*  <>*/}
           <ValueFilter
             className="mt1"
             isLoading={queryType === "valueFilter" && listResult.isLoading}
@@ -486,8 +486,8 @@ const Community = props => {
               });
             }}
           />*/}
-        </>
-      )}
+      {/*  </>*/}
+      {/*)}*/}
       {listResult.isLoading | !project?.id && walletListData === null ? (
         <div className="w-full p1">
           <Card className="w-full rounded" style={{ height: 650 }}>

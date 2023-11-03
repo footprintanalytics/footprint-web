@@ -12,7 +12,7 @@ import {
   Modal,
   Tooltip,
   Upload,
-  Spin,
+  Spin, Tag,
 } from "antd";
 import { useQuery } from "react-query";
 import slug from "slug";
@@ -305,6 +305,7 @@ const ContractDetailsV3 = ({ onFinish, user, onClosed, hideEmail, protocolCatego
           }
         }}
       >
+        {projectName && (<div style={{ margin: "10px 0" }}>Project: {projectName}</div>)}
         <Form.Item
           hidden={hideProjectName}
           label={

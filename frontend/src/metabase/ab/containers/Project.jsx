@@ -216,9 +216,14 @@ const Project = props => {
           !["twitter", "discord"].includes(currentMenu) && (
             <DashboardMask currentMenu={"set_protocol"} router={router} />
           )}
+          {/*{businessType === "game" && getProjectObject()?.protocolSlug !== "Demo Project" && getProjectObject()?.protocolSlug &&*/}
+          {/*["revenue-web2-revenue", "revenue-total-revenue", "web2_user_acquisition", "web2_user_engagement", "web2_user_retention", "web2_stats", "twitter", "discord"].includes(currentMenu) && (*/}
+          {/*  <DashboardMask currentMenu={"web2_connect"} originCurrentMenu={currentMenu} router={router} project={getProjectObject()}/>*/}
+          {/*)}*/}
+          {/*Enterprise*/}
           {businessType === "game" && getProjectObject()?.protocolSlug !== "Demo Project" && getProjectObject()?.protocolSlug &&
-          ["revenue-web2-revenue", "revenue-total-revenue", "web2_user_acquisition", "web2_user_engagement", "web2_user_retention", "web2_stats", "twitter", "discord"].includes(currentMenu) && (
-            <DashboardMask currentMenu={"web2_connect"} originCurrentMenu={currentMenu} router={router} project={getProjectObject()}/>
+          ["nft_listing", "revenue-web2-revenue", "acquisition_users", "gaming_engagement", "user_retention", "twitter", "discord"].includes(currentMenu) && (
+            <DashboardMask currentMenu={"enterprise"} originCurrentMenu={currentMenu} router={router} project={getProjectObject()}/>
           )}
         </>
       ) : (
