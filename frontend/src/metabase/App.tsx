@@ -119,7 +119,6 @@ function App({
   const hideScrollbar = location.pathname === "/";
   const isFga = window.location.pathname.startsWith("/growth");
   const isAB = window.location.pathname.startsWith("/fga");
-  console.log("xxx", isFga, isAB, location.pathname)
   const handleChannel = () => {
     const channel = location.query.channel || location.query.cnl || "homepage";
     setChannel(channel);

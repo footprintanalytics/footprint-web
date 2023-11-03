@@ -11,7 +11,6 @@ import "../css/index.css";
 import GaSidebar from "./GaSidebar";
 
 const ABLayout = props => {
-  console.log("ABLayout")
   const pathname = location.pathname;
   const isHideSidebar = pathname.includes("/fga/chart");
   return (
