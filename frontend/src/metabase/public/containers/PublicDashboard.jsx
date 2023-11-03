@@ -7,7 +7,7 @@ import Link from "metabase/core/components/Link";
 
 import _ from "underscore";
 import {debounce, isArray, union, startCase} from "lodash";
-import { Breadcrumb, Select } from "antd";
+import { Breadcrumb, Select, Tooltip } from "antd";
 import { IFRAMED } from "metabase/lib/dom";
 
 import LoadingAndErrorWrapper from "metabase/components/LoadingAndErrorWrapper";
@@ -460,6 +460,7 @@ class PublicDashboard extends Component {
     }
     return (<div className="flex flex-column p2" style={{ background: "#0F0F14" }}>
       <span className="text-white" style={{ marginBottom: 4 }}>{startCase(keyObject.slug)}</span>
+      <span><Tooltip title="sss"></Tooltip></span>
       <Select
         defaultValue={data?.[0]?.address}
         style={{

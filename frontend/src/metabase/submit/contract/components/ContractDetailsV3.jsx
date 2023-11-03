@@ -276,9 +276,11 @@ const ContractDetailsV3 = ({ onFinish, user, onClosed, hideEmail, protocolCatego
           // projectCategory: null,
         }}
         onFinish={async values => {
+          console.log("valuesvaluesvalues", values)
+          const protocolName = projectName || values?.protocolName;
           const isNewProtocol = !getProtocolList?.data
             ?.map(item => item.protocol_name ?? item.protocol_slug)
-            ?.includes(values?.protocolName);
+            ?.includes(protocolName);
           const isValidContract = contract.every(item =>
             isValidContractAddress(item.chain, contract),
           );
@@ -286,7 +288,6 @@ const ContractDetailsV3 = ({ onFinish, user, onClosed, hideEmail, protocolCatego
             message.info("Please input valid contract address");
             return;
           }
-
           try {
             const param = {
               ...values,
@@ -295,7 +296,8 @@ const ContractDetailsV3 = ({ onFinish, user, onClosed, hideEmail, protocolCatego
               protocolSlug:
                 protocolSlug ||
                 values.protocolSlug ||
-                slug(values.protocolName),
+                slug(protocolName),
+              protocolName: protocolName,
               isNewProtocol,
             };
             console.log("param", param)
@@ -469,14 +471,17 @@ const ContractDetailsV3 = ({ onFinish, user, onClosed, hideEmail, protocolCatego
                       </div>
                     }
                   >
-                    <div className="mb1">
+                    <div className="mb1" style={{ fontSize: 12, whiteSpace: "pre-line" }}>
                       {
-                        fromFgaAddProject ? "Be sure to add one smart contract per line. Errors could cause your contracts to be rejected! Need to add contract type, separated by commas. For example: 0x59325733eb952a92e069c87f0a6168b29e80627f,ERC1155" :
+                        fromFgaAddProject ? "Please provide the project contract address and standard in the following format. Separate each entry with a comma.\n" +
+                          "\n" +
+                          "Make sure to verify the information is correct before submitting or else there is a chance your request will not go through\n" :
                         "Be sure to add one smart contract per line. Errors could cause your contracts to be rejected!"
                       }
                     </div>
+                    {/*0x1092eb9c78833c6e0b4b9875eb84585814f613cf,ERC1155*/}
                     <Input.TextArea
-                      placeholder={`Input contract address in ${item.chain}`}
+                      placeholder={`0x123456789ABCDEF,ERC1155`}
                       style={{ height: 160 }}
                       onChange={e => {
                         delayedChange(item, e.target.value);

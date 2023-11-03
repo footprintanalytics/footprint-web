@@ -205,7 +205,7 @@ const GaProjectSearch = props => {
         key: `${superKey}-${item.protocolSlug}`,
         label: (
           <div className="flex align-center">
-            {logo && logo !== 'N/A' ? <img src={logo} style={{height: 16, width: 16}} alt={item.protocolSlug}/> : <div style={{height: 16, width: 16, background: "#222"}}/>}
+            {logo && logo !== 'N/A' ? <img src={logo} style={{height: 16, width: 16}} alt={item.protocolSlug}/> : <div style={{height: 16, width: 16, borderRadius: "50%", background: "#6c70FF"}}/>}
             <span className="ml1" style={
               {
                 whiteSpace: "nowrap",
