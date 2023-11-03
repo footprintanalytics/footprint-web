@@ -10,7 +10,7 @@ import {
   animation_complete2,
 } from "./data-scanning";
 import "animate.css";
-import { getRefBaseApi, submitRefProtocols } from "metabase/new-service";
+import { getRefBaseApi, submitFGAProtocols, submitRefProtocols } from "metabase/new-service";
 import { isABNeedDark, isDark } from "metabase/dashboard/components/utils/dark";
 import Link from "metabase/core/components/Link";
 import { getGrowthProjectPath } from "metabase/ab/utils/utils";
@@ -19,8 +19,9 @@ import { getFgaChain } from "metabase/selectors/control";
 import { resetFgaProtocolList, setFgaChain } from "metabase/redux/control";
 import { isABPath } from "metabase/ab/utils/utils";
 
-const ContractDecoding = ({ param, onSuccess }) => {
+const ContractDecoding = ({ param, onSuccess, fromFgaAddProject, backAction }) => {
   const ref = useRef();
+  const [showBack, setShowBack] = useState();
   const [logDatas, setLogDatas] = useState([
     { date: getTimeNow(), message: "start processing..." },
   ]);
@@ -34,7 +35,11 @@ const ContractDecoding = ({ param, onSuccess }) => {
   let animation = null;
   useEffect(() => {
     animation = loadAnimation();
-    handleSocket();
+    if (isABPath()) {
+      handleHttp();
+    } else {
+      handleSocket();
+    }
     return () => {
       socket?.close();
       animation?.destroy();
@@ -43,6 +48,33 @@ const ContractDecoding = ({ param, onSuccess }) => {
 
   function getTimeNow() {
     return dayjs(new Date()).format("HH:mm:ss");
+  }
+
+  const handleHttp = () => {
+    const params = {
+      projectName: param?.protocolName,
+      protocolSlug: param?.protocolSlug,
+      protocolType: param?.projectCategory,
+      website: param?.website,
+      username: param?.username,
+      email: param?.email,
+      twitter: param?.twitter,
+      discord: param?.discord,
+      telegram: param?.telegram,
+      github: param?.github,
+      logo: param?.logo,
+      description: param?.description,
+      contracts: param?.contracts?.map(item => {
+        return {
+          ...item,
+          standard: "ERC1155",
+        }
+      }),
+      source: "web_user",
+    };
+
+    console.log("param?.contracts", param?.contracts)
+    submitByHttpFga(params);
   }
 
   const handleSocket = () => {
@@ -104,6 +136,20 @@ const ContractDecoding = ({ param, onSuccess }) => {
     message.success("protocol process completed.");
     setLoadCompleted(true);
   };
+  const SubmitSuccessFga = (res) => {
+    console.log("SubmitSuccessFga", res)
+    animation = loadAnimation("completed");
+    setTitle(
+      `FGA: Your project is created`,
+    );
+    setLog("FGA: You can view the dashboard.");
+    message.success("protocol process completed.");
+    setLoadCompleted(true);
+
+    setTimeout(() => {
+      onSuccess?.(res.projectName);
+    }, 1000)
+  };
   const setLog = log => {
     setLogDatas(datas => {
       return [
@@ -124,6 +170,21 @@ const ContractDecoding = ({ param, onSuccess }) => {
       .catch(err => {
         setLog("submit protocol by http error.Please retry later");
         console.log("submit protocol by http error=> ", err);
+      })
+      .finally(() => {});
+  };
+  const submitByHttpFga = params => {
+    setLog("start submit protocol by FGA.");
+    submitFGAProtocols(params)
+      .then(res => {
+        SubmitSuccessFga(res);
+      })
+      .catch(err => {
+        setLog(`submit protocol by http error. Please retry later. ${err}`);
+        console.log("submit protocol by http error=> ", err);
+        if (fromFgaAddProject) {
+          setShowBack(true)
+        }
       })
       .finally(() => {});
   };
@@ -202,14 +263,13 @@ const ContractDecoding = ({ param, onSuccess }) => {
           )}
         </div>
         }
-        {isABPath() && <div className=" mt-10 w-full flex flex-row-reverse">
-          {loadCompleted && (
-            <Typography.Text className="flex-1">
-              Congratulations. The contract was submitted successfully, and you can see your metric <Link to={getGrowthProjectPath("the-sandbox","nft_summary")}>here</Link>.
-            </Typography.Text>
-          )}
-        </div>
-        }
+        {showBack && backAction && (
+          <div style={{ width: "100%", display: "flex", justifyContent: "end" }}>
+            <div style={{ width: 120, marginTop: 10 }}>
+              <Button onClick={backAction}>Go Back</Button>
+            </div>
+          </div>
+        )}
       </div>
     </div>
   );

@@ -459,7 +459,8 @@ export const fga_menu_data_v2 = (businessType, project, chain) => {
 
   const gameProjectData = {
     "platformMenuTabs": [
-        // getItem("Project Holder Overlap", "platform-holder_overlap", null),
+        getItem("All Projects", "all-projects", null),
+        getItem("Project Key Metrics", "project_key_metrics", null),
     ],
     "menuTabs": [
       getItem("Project Overview", "project_overview", ReactIcons.myAnalysisIcon, [
@@ -605,6 +606,7 @@ export const fga_menu_data_v2 = (businessType, project, chain) => {
 
   const platformMenuTitleMapping = {
     "public-chain": "Chain",
+    "game": "My Projects"
   }
   const platformMenuTitle = platformMenuTitleMapping[businessType] || "Portfolio";
   const menuTitle = "Project";
@@ -621,7 +623,8 @@ export const fga_menu_data_v2 = (businessType, project, chain) => {
     "game_revenue",
     "nft_revenue",
   ];
-  const keys = getKeys([...platformMenuTabs, ...menuTabs]);
+  const keys = getKeys([...menuTabs, ...platformMenuTabs]);
+  // const keys = getKeys([...platformMenuTabs, ...menuTabs]);
   return { menuTabs, platformMenuTabs, keys, dashboardMap, liveKeys, menuTitle, platformMenuTitle, };
 };
 

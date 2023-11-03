@@ -25,12 +25,13 @@ import {
   SyncOutlined,
   UploadOutlined,
 } from "@ant-design/icons";
-import { debounce, flatten, toLower, union } from "lodash";
+import { debounce, flatten, get, toLower, union } from "lodash";
 import { v4 as uuidv4 } from "uuid";
 import { getRefProtocolList } from "metabase/new-service";
 import { uploadFile } from "metabase/lib/oss";
 import { ossPath } from "metabase/lib/ossPath";
 import ContractDecoding from "./ContractDecoding";
+import InputContractModal from "metabase/submit/contract/components/InputContractModal";
 
 const CHAIN_LIST = [
   { value: "Ethereum", label: "Ethereum" },
@@ -52,7 +53,7 @@ const PROTOCOL_CATEGORY_LIST = [
   { value: "Others", label: "Others" },
 ];
 
-const ContractDetailsV3 = ({ onFinish, user, onClosed }) => {
+const ContractDetailsV3 = ({ onFinish, user, onClosed, hideEmail, protocolCategoryList, hideMoreOptions, hideProjectName, projectName, fromFgaAddProject, backAction }) => {
   const [refresh, setRefresh] = useState(0);
   const [contract, setContract] = useState([]);
   const [isModalOpen, setIsModalOpen] = useState({ open: false, param: null });
@@ -60,7 +61,6 @@ const ContractDetailsV3 = ({ onFinish, user, onClosed }) => {
   const [openAddContractSelect, setOpenAddContractSelect] = useState(false);
   const [protocolSlug, setProtocolSlug] = useState();
   const [isMoreOptions, setMoreOptions] = useState(false);
-
   const getProtocolList = useQuery(
     ["getRefProtocolList"],
     async () => getRefProtocolList(),
@@ -69,6 +69,18 @@ const ContractDetailsV3 = ({ onFinish, user, onClosed }) => {
       retry: 0,
     },
   );
+
+  useEffect(() => {
+    if (getProtocolList?.data && projectName) {
+      form.setFieldsValue({
+        protocolName: projectName,
+      })
+      const protocolSlug = getProtocolList?.data?.find(
+        item => item.protocol_name === projectName,
+      )?.protocol_slug;
+      setProtocolSlug(protocolSlug);
+    }
+  }, [projectName, getProtocolList?.data])
 
   useEffect(() => {
     if (!protocolSlug) {
@@ -112,7 +124,11 @@ const ContractDetailsV3 = ({ onFinish, user, onClosed }) => {
   const isValidAddress = contractAddress => {
     const regex = /^(0x)?[0-9a-fA-F]{40,}$/;
     const array = contractAddress.split("\n");
-    return array.every(address => regex.test(address));
+    return array.every(address => regex.test(get(address.split(","),"[0]")));
+  };
+  const isValidAddressArray = contractAddressArray => {
+    const regex = /^(0x)?[0-9a-fA-F]{40,}$/;
+    return contractAddressArray.map(i => i.contract).every(address => regex.test(address));
   };
 
   const isSameAddress = contractAddress => {
@@ -130,9 +146,13 @@ const ContractDetailsV3 = ({ onFinish, user, onClosed }) => {
     });
     const resultContracts = temp?.map(contract => {
       return contract?.contractAddress?.map(address => {
+        const array = address.split(",");
+        const addr = get(array, "[0]");
+        const standard = get(array, "[1]");
         return {
           chain: contract.chain,
-          contractAddress: address,
+          contractAddress: addr,
+          standard: standard,
         };
       });
     });
@@ -165,6 +185,40 @@ const ContractDetailsV3 = ({ onFinish, user, onClosed }) => {
 
     return null;
   };
+
+  const renderContract = (item) => {
+    const temp = contract.find(i => i.chain === item.chain);
+    return (
+      <div>
+        <Button onClick={() => {
+        }}>Add</Button>
+        {temp.contractAddressArray?.map((c) => {
+          return (
+            <div key={c.contract} className="flex">
+              {c.contract}{"|"}{c.contractType}
+              <Button onClick={() => {
+                temp.contractAddressArray = [...(temp.contractAddressArray?.filter(con => con.contract !== c.contract) || [])];
+                temp.isValid = isValidAddressArray(temp.contractAddressArray);
+                setContract(contract);
+                form.setFieldValue("contracts", contract);
+                setRefresh(refresh + 1);
+              }}>Delete</Button>
+            </div>
+          )
+        })}
+        <InputContractModal open={open} setOpen={setOpen} tableCallback={({contract, contractType}) => {
+          // setContracts()
+
+          temp.contractAddressArray = [...(temp.contractAddressArray || []), {contract, contractType}];
+          temp.isValid = isValidAddressArray(temp.contractAddressArray);
+          setContract((c) => c);
+          console.log("result", contract)
+          form.setFieldValue("contracts", contract);
+          setRefresh(refresh + 1);
+        }}/>
+      </div>
+    )
+  }
 
   const renderError = chain => {
     const error = getError(chain);
@@ -244,6 +298,7 @@ const ContractDetailsV3 = ({ onFinish, user, onClosed }) => {
                 slug(values.protocolName),
               isNewProtocol,
             };
+            console.log("param", param)
             onClosed?.(param);
           } catch (error) {
             console.log("ref submit contracts error:\n", error);
@@ -251,6 +306,7 @@ const ContractDetailsV3 = ({ onFinish, user, onClosed }) => {
         }}
       >
         <Form.Item
+          hidden={hideProjectName}
           label={
             <>
               Project name{" "}
@@ -263,7 +319,7 @@ const ContractDetailsV3 = ({ onFinish, user, onClosed }) => {
               )}
             </>
           }
-          rules={[{ required: true, message: "Select project name" }]}
+          rules={[{ required: !hideProjectName, message: "Select project name" }]}
           name="protocolName"
         >
           <AutoComplete
@@ -304,7 +360,7 @@ const ContractDetailsV3 = ({ onFinish, user, onClosed }) => {
         >
           <Select
             placeholder="Select project category"
-            options={PROTOCOL_CATEGORY_LIST}
+            options={protocolCategoryList || PROTOCOL_CATEGORY_LIST}
           />
         </Form.Item>
         <Form.Item
@@ -331,6 +387,7 @@ const ContractDetailsV3 = ({ onFinish, user, onClosed }) => {
           <Input placeholder="https://project-website.com" />
         </Form.Item>
         <Form.Item
+          hidden={hideEmail}
           label="Your Email Address"
           tooltip="Please provide your email address so that we can notify you when contracts or protocols are successfully decoded and calculate your contribution value."
           name="email"
@@ -355,7 +412,7 @@ const ContractDetailsV3 = ({ onFinish, user, onClosed }) => {
         </Form.Item>
         <Form.Item
           label="Add Contract"
-          // rules={[{ required: true, message: "" }]}
+          rules={[{ required: true, message: "" }]}
           name="chain"
         >
           <Select
@@ -412,8 +469,10 @@ const ContractDetailsV3 = ({ onFinish, user, onClosed }) => {
                     }
                   >
                     <div className="mb1">
-                      Be sure to add one smart contract per line. Errors could
-                      cause your contracts to be rejected!
+                      {
+                        fromFgaAddProject ? "Be sure to add one smart contract per line. Errors could cause your contracts to be rejected! Need to add contract type, separated by commas. For example: 0x59325733eb952a92e069c87f0a6168b29e80627f,ERC1155" :
+                        "Be sure to add one smart contract per line. Errors could cause your contracts to be rejected!"
+                      }
                     </div>
                     <Input.TextArea
                       placeholder={`Input contract address in ${item.chain}`}
@@ -579,10 +638,17 @@ const ContractDetailsV3 = ({ onFinish, user, onClosed }) => {
         )}
         <Form.Item>
           <div className="w-full flex flex-row-reverse justify-between align-center">
-            <Button type="primary" htmlType="submit">
-              Submit
-            </Button>
-            {!isMoreOptions && moreOptionBtn()}
+            <div className="flex align-center gap-2 mt-1">
+              {backAction && (
+                <div style={{ width: 120 }}>
+                  <Button onClick={backAction}>Go Back</Button>
+                </div>
+              )}
+              <Button type="primary" htmlType="submit">
+                Submit
+              </Button>
+            </div>
+            {!hideMoreOptions && !isMoreOptions && moreOptionBtn()}
           </div>
         </Form.Item>
       </Form>

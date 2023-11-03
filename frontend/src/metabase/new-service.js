@@ -260,6 +260,15 @@ export const deleteProtocolFavorite = async params => {
 export const getProtocolList = async params => {
   return GET(`/api/v1/project/protocol/list`, params);
 };
+export const getProjectList = async params => {
+  return GET(`/api/v1/project/list`, params);
+};
+export const postProject = async params => {
+  return POST(`/api/v1/project`, params);
+};
+export const deleteProject = async params => {
+  return DELETE(`/api/v1/project`, { data: params });
+};
 export const getProtocolDetail = async params => {
   return GET(`/api/v1/project/protocol/detail`, params);
 };
@@ -705,6 +714,10 @@ export const getRefContractSubmittedList = params => {
 
 export const submitRefProtocols = params => {
   return POST(`${getRefBaseApi()}/api/v1/protocol/submit`, params);
+};
+
+export const submitFGAProtocols = params => {
+  return POST(`/api/v1/project/protocol/submit`, params);
 };
 
 // get audit list ,status = ['reviewing'] type = contract | protocol

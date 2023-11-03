@@ -1,0 +1,189 @@
+/* eslint-disable react/prop-types */
+/* eslint-disable react-hooks/rules-of-hooks */
+import React, { useEffect, useRef, useState } from "react";
+import { connect } from "react-redux";
+import { Input, message, Space, Table, Tour } from "antd";
+import { getFgaProject, getUser } from "metabase/selectors/user";
+import { loadCurrentFgaProjectNew } from "metabase/redux/user";
+import { loadFgaFavoriteList, setGames } from "metabase/redux/control";
+import { getFgaChain, getFgaFavoriteList, getFgaProtocolList, getGamesByRedux } from "metabase/selectors/control";
+import { DeleteOutlined, SettingOutlined } from "@ant-design/icons";
+import { deleteProject, deleteProtocolFavorite, getProjectList, postProtocolFavorite } from "metabase/new-service";
+import { uniqBy } from "lodash";
+import Link from "metabase/core/components/Link";
+import { isBusinessTypePath } from "metabase/ab/utils/utils";
+import { getGrowthProjectPath } from "metabase/ab/utils/utils";
+import getHeadDataProtocols from "metabase/ab/containers/gameList/data";
+import { useQuery } from "react-query";
+import { QUERY_OPTIONS } from "metabase/containers/about/config";
+
+const { Search } = Input;
+
+const projectList = props => {
+  const { router, location, children, user, projectPath, menu, projectObject, games, setGames, loadCurrentFgaProjectNew, businessType, chain, loadFgaFavoriteList, favoriteList, protocolList } =
+    props;
+  const userId = 158;
+  const projectId = 153;
+
+  const [isSubmitModalOpen, setSubmitModalOpen] = useState({
+    open: false,
+    param: null,
+  });
+  const [searchKey, setSearchKey] = useState();
+
+  const params = {
+    ecosystemId: 415,
+  };
+
+  const { isLoading, data, refetch } = useQuery(["getProjectList"],
+    () => {
+      return getProjectList();
+    },
+    QUERY_OPTIONS,
+  );
+  const filterData = data?.filter(d => !searchKey || d?.protocolSlug?.toLowerCase()?.includes(searchKey))
+
+  const loadProjectDetail = projectSlug => {
+    loadCurrentFgaProjectNew(projectSlug);
+  };
+
+  const deleteAction = async (record) => {
+    const hide = message.loading("Loading...", 20000);
+    await deleteProject({
+      projectId: record.projectId,
+    })
+    await refetch();
+    hide();
+    message.success("Delete project success");
+    console.log("deleteAction", record, projectObject)
+    if (record.protocolSlug === projectObject.protocolSlug) {
+      router.replace(getGrowthProjectPath("Demo Project"))
+    }
+  }
+
+  const columns = [
+    {
+      title: 'Project Name',
+      dataIndex: 'projectName',
+      key: 'projectName',
+      render: (_, record) => (
+        <Link to={getGrowthProjectPath(record.protocolSlug, "project_summary")}>
+          {record.projectName}
+        </Link>
+      ),
+    },
+    // {
+    //   title: 'Protocol Name',
+    //   dataIndex: 'protocolName',
+    //   key: 'protocolName',
+    // },
+    // {
+    //   title: 'Protocol Slug',
+    //   dataIndex: 'protocolSlug',
+    //   key: 'protocolSlug',
+    // },
+    {
+      title: 'Project Category',
+      dataIndex: 'protocolType',
+      key: 'protocolType',
+    },
+    {
+      title: 'Action',
+      key: 'action',
+      width: 100,
+      render: (_, record) => (
+        <Space size="middle">
+          <Link onClick={() => {
+            if (record.protocolSlug !== "Demo Project") {
+              deleteAction(record)
+            } else {
+              message.info("Demo Project can not be deleted")
+            }
+          }}>
+            <DeleteOutlined style={{ fontSize: '16px'}}/>
+          </Link>
+          <Link to={getGrowthProjectPath(record.protocolSlug, "general")}>
+            <SettingOutlined style={{ fontSize: '16px'}}/>
+          </Link>
+        </Space>
+      ),
+    },
+  ];
+
+
+  return (
+    <div className="flex flex-column items-center py4">
+      {/*{!projectObject && (
+        <div className="flex flex-column align-center" style={{ marginTop: 60 }}>
+          <h1>Welcome to GA Tool, first you have to add a game.</h1>
+          <Button
+            style={{ width: 100, marginTop: 40 }}
+            onClick={() => {
+            setSubmitModalOpen({ open: true, param: null });
+            // postProjectApi();
+          }}>
+            Add Game
+          </Button>
+        </div>
+      )}*/}
+      {projectObject && (
+        <div style={{ width: 800 }}>
+          <div className="flex justify-between items-center">
+            <h2>All Projects
+              {isBusinessTypePath("public-chain") && <>({`${chain}`})</>}
+            </h2>
+            {/*<span className="text-white">Select {" "}*/}
+            {/*  /!*<Link to={getGrowthProjectPath("Demo Project", "project_summary")}>Demo Project</Link>*!/*/}
+            {/*  /!*{" "} to see full Sample.*!/*/}
+            {/*  You can <Link onClick={() => {*/}
+            {/*    if (businessType) {*/}
+            {/*      router?.push({ pathname: `/fga/${businessType}/submit/contract/add` });*/}
+            {/*    } else {*/}
+            {/*      router?.push({ pathname: "/submit/contract/add" });*/}
+            {/*    }*/}
+            {/*  }}>click here</Link> to submit more project.*/}
+            {/*</span>*/}
+          </div>
+          {/*<div className="flex justify-end full-width mb1">
+            <Button onClick={() => {
+              setSubmitModalOpen({ open: true, param: null });
+              // postProjectApi();
+            }}>
+              Add Game
+            </Button>
+          </div>*/}
+          <div className="flex justify-end mb1" >
+            <Search
+              placeholder="search project"
+              allowClear
+              enterButton="Search"
+              onChange={e => setSearchKey(e.target.value)}
+              style={{ width: 300, margin: "4px 0" }}
+            />
+          </div>
+          <Table dataSource={filterData} columns={columns} loading={isLoading}/>
+        </div>
+      )}
+    </div>
+  );
+};
+
+const mapDispatchToProps = {
+  setGames: setGames,
+  loadCurrentFgaProjectNew,
+  loadFgaFavoriteList,
+};
+
+const mapStateToProps = (state, props) => {
+  return {
+    user: getUser(state),
+    projectObject: getFgaProject(state),
+    chain: getFgaChain(state),
+    games: getGamesByRedux(state),
+    businessType: props?.params?.businessType || props?.businessType,
+    favoriteList: getFgaFavoriteList(state),
+    protocolList: getFgaProtocolList(state),
+  };
+};
+
+export default connect(mapStateToProps, mapDispatchToProps)(projectList);

@@ -100,7 +100,7 @@ const ProjectInfo = props => {
                 message.error("Please login first!");
                 return;
               }
-              router?.push({ pathname: "/submit/contract/add" });
+              router?.push({ pathname: "/fga/game/submit/contract/add" });
             }}
           >
             Submit Now

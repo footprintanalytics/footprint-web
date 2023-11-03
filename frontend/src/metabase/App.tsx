@@ -117,8 +117,9 @@ function App({
 }: AppProps) {
   const [viewportElement, setViewportElement] = useState<HTMLElement | null>();
   const hideScrollbar = location.pathname === "/";
-  const isFga = location.pathname.startsWith("/growth");
-  const isAB = location.pathname.startsWith("/fga");
+  const isFga = window.location.pathname.startsWith("/growth");
+  const isAB = window.location.pathname.startsWith("/fga");
+  console.log("xxx", isFga, isAB, location.pathname)
   const handleChannel = () => {
     const channel = location.query.channel || location.query.cnl || "homepage";
     setChannel(channel);
