@@ -27,7 +27,7 @@ const ContractDecoding = ({ param, onSuccess, fromFgaAddProject, backAction }) =
   ]);
   const [loadCompleted, setLoadCompleted] = useState(false);
   const [title, setTitle] = useState(
-    `The system is currently processing [${param?.protocolName}]`,
+    fromFgaAddProject ? `Your project, [${param?.protocolName}], is currently being processed and will be completed within a few minutes.`: `The system is currently processing [${param?.protocolName}]`,
   );
 
   const endpoint = `wss://${getRefBaseApi().replace("https://", "")}/ws`;
@@ -130,7 +130,7 @@ const ContractDecoding = ({ param, onSuccess, fromFgaAddProject, backAction }) =
   const SubmitSuccess = () => {
     animation = loadAnimation("completed");
     setTitle(
-      `The system is currently process [${param?.protocolName}] completed.`,
+       `The system is currently process [${param?.protocolName}] completed.`,
     );
     setLog("protocol process completed.");
     message.success("protocol process completed.");
@@ -142,8 +142,8 @@ const ContractDecoding = ({ param, onSuccess, fromFgaAddProject, backAction }) =
     setTitle(
       `FGA: Your project is created`,
     );
-    setLog("FGA: You can view the dashboard.");
-    message.success("protocol process completed.");
+    setLog("Process completed.");
+    // message.success("protocol process completed.");
     setLoadCompleted(true);
 
     setTimeout(() => {
@@ -174,13 +174,12 @@ const ContractDecoding = ({ param, onSuccess, fromFgaAddProject, backAction }) =
       .finally(() => {});
   };
   const submitByHttpFga = params => {
-    setLog("start submit protocol by FGA.");
     submitFGAProtocols(params)
       .then(res => {
         SubmitSuccessFga(res);
       })
       .catch(err => {
-        setLog(`submit protocol by http error. Please retry later. ${err}`);
+        setLog(`Error. Please retry later. ${err}`);
         console.log("submit protocol by http error=> ", err);
         if (fromFgaAddProject) {
           setShowBack(true)
@@ -221,34 +220,38 @@ const ContractDecoding = ({ param, onSuccess, fromFgaAddProject, backAction }) =
       />
       <div className="w-full flex flex-col p3">
         <Typography.Title level={5}>{title}</Typography.Title>
-        <Typography.Text type="secondary">
-          This task may take a few minutes. You can come back later to check the
-          results.
-        </Typography.Text>
-        <Card
-          bordered={false}
-          className="w-full h-full flex-1"
-          style={{
-            backgroundColor: isDark() ? "": "var(--footprint-color-bg)",
-            height: 290,
-            overflow: "auto",
-          }}
-        >
-          <div className="flex flex-column-reverse w-full ">
-            {logDatas?.map((log, index) => {
-              return (
-                <div key={index} className="flex flex-row w-full mb1">
-                  <Typography.Text type="secondary" className="mr1 text-nowrap">
-                    {`${log.date}:`}
-                  </Typography.Text>
-                  <Typography.Text type="success" className="flex-1">
-                    {log.message}
-                  </Typography.Text>
-                </div>
-              );
-            })}
-          </div>
-        </Card>
+        {!fromFgaAddProject && (
+          <Typography.Text type="secondary">
+            This task may take a few minutes. You can come back later to check the
+            results.
+          </Typography.Text>
+          )}
+        {!fromFgaAddProject && (
+          <Card
+            bordered={false}
+            className="w-full h-full flex-1"
+            style={{
+              backgroundColor: isDark() ? "": "var(--footprint-color-bg)",
+              height: 290,
+              overflow: "auto",
+            }}
+          >
+            <div className="flex flex-column-reverse w-full ">
+              {logDatas?.map((log, index) => {
+                return (
+                  <div key={index} className="flex flex-row w-full mb1">
+                    <Typography.Text type="secondary" className="mr1 text-nowrap">
+                      {`${log.date}:`}
+                    </Typography.Text>
+                    <Typography.Text type="success" className="flex-1">
+                      {log.message}
+                    </Typography.Text>
+                  </div>
+                );
+              })}
+            </div>
+          </Card>
+        )}
         {!isABPath() && <div className=" mt-10 w-full flex flex-row-reverse">
           {loadCompleted && (
             <Button

@@ -139,7 +139,7 @@ const DashboardMask = props => {
         <h3 className="text-white">You need to upgrade plan</h3>
         <Typography.Text className="mt2 mb2">
           If you wish to view data dashboards related to your own project,
-          please contact our sales team. Thank you.
+          please contact our BD team. Thank you.
         </Typography.Text>
         <div className="flex flex-row items-center justify-end w-full">
           <Link target="_blank" href="mailto:sales@footprint.network">

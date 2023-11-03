@@ -174,43 +174,44 @@ const CreateCohort2 = ({
           type="primary"
           disabled={disable}
           onClick={() => {
-            if (project?.protocolSlug === "Demo Project") {
-              modal.confirm({
-                title: "Tip",
-                content: (
-                  <div style={{ marginTop: 20 }}>
-                    <p>
-                      {`The sample project is not able to create a cohort, you can select other project to create a cohort.`}
-                    </p>
-                  </div>
-                ),
-                okText: "Select other project",
-                onOk() {
-                  router.push(`/fga/${businessType}/project-manage`);
-                },
-              });
-              return ;
-            }
-            if (!user) {
-              message.warning(`Kindly login before ${btnText}`);
-              setLoginModalShowAction({
-                show: true,
-                from: "create cohort",
-                redirect: location.pathname,
-                channel: "FGA",
-              });
-              return;
-            }
-            setCohortModalOpen(false);
-            checkIsNeedContactUs(
-              modal,
-              project,
-              () => {
-                setCohortModalOpen(true);
-              },
-              () => {},
-              true,
-            );
+            message.info("Coming soon...")
+            // if (project?.protocolSlug === "Demo Project") {
+            //   modal.confirm({
+            //     title: "Tip",
+            //     content: (
+            //       <div style={{ marginTop: 20 }}>
+            //         <p>
+            //           {`The sample project is not able to create a cohort, you can select other project to create a cohort.`}
+            //         </p>
+            //       </div>
+            //     ),
+            //     okText: "Select other project",
+            //     onOk() {
+            //       router.push(`/fga/${businessType}/project-manage`);
+            //     },
+            //   });
+            //   return ;
+            // }
+            // if (!user) {
+            //   message.warning(`Kindly login before ${btnText}`);
+            //   setLoginModalShowAction({
+            //     show: true,
+            //     from: "create cohort",
+            //     redirect: location.pathname,
+            //     channel: "FGA",
+            //   });
+            //   return;
+            // }
+            // setCohortModalOpen(false);
+            // checkIsNeedContactUs(
+            //   modal,
+            //   project,
+            //   () => {
+            //     setCohortModalOpen(true);
+            //   },
+            //   () => {},
+            //   true,
+            // );
           }}
         >
           {btnText}

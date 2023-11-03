@@ -241,6 +241,7 @@ const CreateProjectModal2 = props => {
             { value: "Others", label: "Others" },
           ]}
           onClosed={param => {
+            console.log("param", param)
             setDecodingProcessOpen({ open: true, param: param });
             setState(3);
           }}
@@ -249,25 +250,26 @@ const CreateProjectModal2 = props => {
           }}
         />
       )}
-      {state === 3 && (<ContractDecoding
-        param={isDecodingProcessOpen?.param}
-        fromFgaAddProject={true}
-        backAction={() => setState(2)}
-        onSuccess={(protocol) => {
-          console.log("onsuccessss", protocol)
-          setState(4);
-          setSubmitProtocol(protocol);
-          setDecodingProcessOpen({ open: false, param: null });
-        }}
-      ></ContractDecoding>)}
+      {state === 3 && (
+        <ContractDecoding
+          param={isDecodingProcessOpen?.param}
+          fromFgaAddProject={true}
+          backAction={() => setState(2)}
+          onSuccess={(protocol) => {
+            console.log("onsuccessss", protocol)
+            setState(4);
+            setSubmitProtocol(protocol);
+            setDecodingProcessOpen({ open: false, param: null });
+          }}
+        />
+      )}
       {state === 4 && (
         <div>
           <Result
             status="success"
-            title="Project Info Submit Success!"
+            title="Your project is submitted successfully."
             extra={
               <div className="flex flex-col">
-                {"You have successfully submitted your project's information. From now on, you can view your project summary in the platform."}
                 <Link
                   className="mt3"
                   to={getGrowthProjectPath(submitProtocol, "project_summary")}

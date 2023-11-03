@@ -222,7 +222,7 @@ const Project = props => {
           {/*)}*/}
           {/*Enterprise*/}
           {businessType === "game" && getProjectObject()?.protocolSlug !== "Demo Project" && getProjectObject()?.protocolSlug &&
-          ["nft_listing", "revenue-web2-revenue", "acquisition_users", "gaming_engagement", "user_retention", "twitter", "discord"].includes(currentMenu) && (
+          ["nft_listing", "revenue-web2-revenue", "acquisition_users", "gaming_engagement", "user_retention", "revenue-total-revenue", "twitter", "discord"].includes(currentMenu) && (
             <DashboardMask currentMenu={"enterprise"} originCurrentMenu={currentMenu} router={router} project={getProjectObject()}/>
           )}
         </>
