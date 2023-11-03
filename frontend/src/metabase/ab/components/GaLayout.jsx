@@ -11,6 +11,7 @@ import "../css/index.css";
 import GaSidebar from "./GaSidebar";
 
 const ABLayout = props => {
+  console.log("ABLayout")
   const pathname = location.pathname;
   const isHideSidebar = pathname.includes("/fga/chart");
   return (
@@ -23,8 +24,9 @@ const ABLayout = props => {
 const LayoutView = props => {
   const { isOpenSubMenu } = useContext(StateContext);
   const isGamesManage = window.location.pathname.startsWith("/fga/") && window.location.pathname.includes("project-manage")
+  const isProjectList = window.location.pathname.startsWith("/fga/") && window.location.pathname.includes("project-list")
   const isBindGame = window.location.pathname.startsWith("/fga/") && window.location.pathname.includes("bind-game")
-  const showSidebar = !props.isChart || isGamesManage || isBindGame;
+  const showSidebar = !props.isChart || isGamesManage || isBindGame || isProjectList;
   const defaultDesc =
     "Unlock your growth potential in a web3 world. Dive into data insights and get an edge in your marketing strategy with Footprint GA by bringing all of your Web2 and Wed3 data sources together.";
   const keywords =

@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { Divider, Image, Layout, Menu, Select } from "antd";
+import { Divider, Image, Layout, Menu, Select, Button } from "antd";
 import type { MenuProps } from "antd";
 const { Sider } = Layout;
 import { getChainDataList } from "metabase/query_builder/components/question/handle";
@@ -9,6 +9,7 @@ import { withRouter } from "react-router";
 import { getUser, getFgaProject } from "metabase/selectors/user";
 import LoadingSpinner from "metabase/components/LoadingSpinner";
 import { fga_menu_data_v2 } from "../utils/data";
+import Link from "metabase/core/components/Link";
 import GaProjectSearch from "metabase/ab/components/GaProjectSearch";
 import {
   getGrowthProjectPath,
@@ -152,6 +153,49 @@ const GaSidebar = (props: IGaSidebarProp) => {
       <>
         {projectObject && items?.length > 0 ? (
           <>
+            {isBusinessTypePath("game") && (
+              <>
+                <div className="ga-side-bar__title">
+                  <h3>{platformMenuTitle}</h3>
+                </div>
+               {/* <Link to="/fga/game/project-list" >
+                  <Button type="text" style={{
+                    width: "100%",
+                    display: "flex",
+                    paddingTop: 10,
+                    paddingBottom: 10,
+                    paddingLeft: 26,
+                    height: 40,
+                    margin: "8px 0"
+                  }}>All Projects</Button>
+                </Link>*/}
+                <Menu
+                  key={chain}
+                  className="ga-side-bar-menu"
+                  style={{
+                    borderRight: "0px",
+                    width: "100%",
+                    flex: 1,
+                  }}
+                  theme="light"
+                  mode="inline"
+                  openKeys={openKeys}
+                  onOpenChange={onOpenChange}
+                  selectedKeys={[currentMenu!]}
+                  onSelect={item => {
+                    saveLatestGAMenuTag(item.key);
+                    router.push({
+                      pathname: getGrowthProjectPath(
+                        currentProject ?? getLatestGAProject() ?? "",
+                        item.key,
+                      ),
+                    });
+                  }}
+                  items={itemsPlatform}
+                />
+                <div className="ga__line mt1"/>
+              </>
+            )}
             {!isBusinessTypePath("game") && itemsPlatform.length > 0 && (<>
               <div className="ga-side-bar__title">
                 <h3>{platformMenuTitle}</h3>
@@ -215,11 +259,11 @@ const GaSidebar = (props: IGaSidebarProp) => {
                 <div className="ga-side-bar__title">
                   <h3>{menuTitle}</h3>
                 </div>
-                <GaProjectSearch
+                {/*<GaProjectSearch
                   location={location}
                   disableLoadList={true}
                   enableTour={true}
-                />
+                />*/}
                 <Menu
                   style={{
                     borderRight: "0px",

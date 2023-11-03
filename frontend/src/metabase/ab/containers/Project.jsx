@@ -35,6 +35,7 @@ import GameList from "./gameList";
 import BindGame from "./bindGame";
 import { getBindGameMapping, getFgaChain, getFgaFavoriteList, getGamesByRedux } from "metabase/selectors/control";
 import { setGames } from "metabase/redux/control";
+import ProjectList from "metabase/ab/containers/projectList";
 
 const Project = props => {
   const { router, location, children, user, menu, projectPath, projectObject, bindGameMapping, businessType, chain, setGames, games, favoriteList } =
@@ -163,7 +164,7 @@ const Project = props => {
                 // title="There is currently no data available for this project."
                 // subTitle={`I'm sorry, the content for this ${page} page is not yet ready. You can visit our homepage for now and stay tuned for more high-quality content coming soon. We appreciate your patience.`}
                 subTitle="Coming Soon~"
-                extra={
+                /*extra={
                   <Button
                     type="primary"
                     onClick={() => {
@@ -179,7 +180,7 @@ const Project = props => {
                   >
                     Goto Homepage
                   </Button>
-                }
+                }*/
               />
             ) : (
               <LoadingSpinner message="Loading..." />
@@ -269,6 +270,16 @@ const Project = props => {
         <BindGame
           location={location}
           router={router}
+          // project={getProjectObject()}
+        />
+      );
+    }
+    if (["all-projects"].includes(current_tab)) {
+      return (
+        <ProjectList
+          location={location}
+          router={router}
+          businessType={businessType}
           // project={getProjectObject()}
         />
       );

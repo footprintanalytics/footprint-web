@@ -27,6 +27,9 @@ import {
 } from "metabase/redux/control";
 import { getChainDataList } from "metabase/query_builder/components/question/handle";
 import { fga_menu_data_v2 } from "metabase/ab/utils/data";
+import { getProjectList } from "metabase/new-service";
+import { QUERY_OPTIONS } from "metabase/containers/about/config";
+import { useQuery } from "react-query";
 
 const GaProjectSearch = props => {
   const {
@@ -47,10 +50,6 @@ const GaProjectSearch = props => {
     loadCurrentFgaProjectNew,
     businessType,
     chain,
-    favoriteList,
-    loadFgaFavoriteList,
-    protocolList,
-    loadFgaProtocolList,
     disableLoadList,
     enableTour = false,
   } = props;
@@ -59,7 +58,6 @@ const GaProjectSearch = props => {
   const [userProject, setUserProject] = useState([]);
   const [open, setOpen] = useState(false);
   const [currentProject, setCurrentProject] = useState(projectPath);
-  const protocolListLen = protocolList?.length;
   const ref1 = useRef(null);
   const [tourOpen, setTourOpen] = useState(false);
   const steps = [
@@ -93,72 +91,34 @@ const GaProjectSearch = props => {
     }
   }, [location.pathname])
 
-  useEffect(() => {
-    if (enableTour && protocolList.length > 0 && userProject) {
-      setTimeout(() => {
-        setTourOpen(true)
-        window.localStorage.setItem("tour_project_search", "true");
-      }, 1000)
-    }
-  }, [enableTour, protocolList, userProject])
+  // useEffect(() => {
+  //   if (enableTour && protocolList.length > 0 && userProject) {
+  //     setTimeout(() => {
+  //       setTourOpen(true)
+  //       window.localStorage.setItem("tour_project_search", "true");
+  //     }, 1000)
+  //   }
+  // }, [enableTour, protocolList, userProject])
 
 
   // console.log("currentProject", currentProject)
-  // const { isLoading, data: data2 } = useQuery(
-  //   ["GetFgaProject", user?.id],
-  //   async () => {
-  //     // const toggle_platform_project = localStorage.getItem('toggle_platform_project')
-  //     // if (toggle_platform_project === "project") {
-  //     //   return {
-  //     //     "data": [
-  //     //     {
-  //     //       "protocolSlug": "Demo Project",
-  //     //       "protocolName": "Demo Project",
-  //     //     }
-  //     //     ]
-  //     //   }
-  //     // }
-  //     if (businessType === "public-chain") {
-  //       return await getProtocolList({ chain });
-  //     }
-  //     return {
-  //       "data": [
-  //         {
-  //           "protocolSlug": "Demo Project",
-  //           "protocolName": "Demo Project",
-  //         },
-  //         {
-  //           "protocolSlug": "Mocaverse",
-  //           "protocolName": "Mocaverse",
-  //         },
-  //         {
-  //           "protocolSlug": "xxx",
-  //           "protocolName": "xxx",
-  //         },
-  //         {
-  //           "protocolSlug": "duke",
-  //           "protocolName": "duke",
-  //         },
-  //         {
-  //           "protocolSlug": "TorqueSquad",
-  //           "protocolName": "TorqueSquad",
-  //         },
-  //       ]
-  //     }
-  //     // return await getPublicChainProjects();
-  //   },
-  //   QUERY_OPTIONS,
-  // );
-
+  const { isLoading, data, refetch } = useQuery(
+    ["getProjectList", user?.id],
+    async () => {
+      return await getProjectList();
+    },
+    QUERY_OPTIONS,
+  );
+  console.log("getProjectList", data)
   const loadProjectDetail = protocolSlug => {
     loadCurrentFgaProjectNew(protocolSlug);
   };
 
-  useEffect(() => {
-    if ((!favoriteList || !userId) && !disableLoadList) {
-      loadFgaFavoriteList();
-    }
-  }, [userId, disableLoadList])
+  // useEffect(() => {
+  //   if ((!favoriteList || !userId) && !disableLoadList) {
+  //     loadFgaFavoriteList();
+  //   }
+  // }, [userId, disableLoadList])
 
   useEffect(() => {
     if (projectPath) {
@@ -166,16 +126,16 @@ const GaProjectSearch = props => {
     }
   }, [projectPath])
 
-  useEffect(() => {
-    if (protocolListLen === 0 && !disableLoadList) {
-      loadFgaProtocolList(chain);
-    }
-  }, [disableLoadList, chain, protocolListLen])
+  // useEffect(() => {
+  //   if (protocolListLen === 0 && !disableLoadList) {
+  //     loadFgaProtocolList(chain);
+  //   }
+  // }, [disableLoadList, chain, protocolListLen])
 
 
   useEffect(() => {
-    if (protocolList?.length > 0) {
-      const projects = protocolList;
+    if (data?.length > 0) {
+      const projects = data;
       const index = projects.findIndex(i => i.protocolSlug === currentProject);
       const projectIndex = index === -1 ? 0 : index;
       let project = defaultProject;
@@ -196,7 +156,7 @@ const GaProjectSearch = props => {
         });
       }
     }
-  }, [protocolList]);
+  }, [data]);
 
   useEffect(() => {
     if (projectObject) {
@@ -206,9 +166,10 @@ const GaProjectSearch = props => {
         protocolSlug,
         protocolName,
       }
-      if (!historyGames.find(item => item.protocolSlug === protocolSlug)) {
-        setHistoryGames(take([newObject, ...(historyGames || [])], 2))
-      }
+      // if (!historyGames.find(item => item.protocolSlug === protocolSlug)) {
+      //   setHistoryGames(take([newObject, ...(historyGames || [])], 2))
+      // }
+      // refetch()
     }
   }, [projectObject])
 
@@ -254,21 +215,21 @@ const GaProjectSearch = props => {
     }
   };
 
-  const getProjectLogo = (item) => {
-    if (protocolList?.length > 0) {
-      return protocolList?.find(protocol => item.protocolSlug === protocol.protocolSlug)?.logo
-    }
-    return "";
-  }
+  // const getProjectLogo = (item) => {
+  //   if (protocolList?.length > 0) {
+  //     return protocolList?.find(protocol => item.protocolSlug === protocol.protocolSlug)?.logo
+  //   }
+  //   return "";
+  // }
 
   const selectDataMapFunction = ( superKey) => {
     return (item) => {
-      const logo = getProjectLogo(item);
+      // const logo = getProjectLogo(item);
       return {
         key: `${superKey}-${item.protocolSlug}`,
         label: (
           <div className="flex align-center">
-            {logo && logo !== 'N/A' ? <img src={logo} style={{height: 16, width: 16}} alt={item.protocolSlug}/> : <div style={{height: 16, width: 16, background: "#222"}}/>}
+            {/*{logo && logo !== 'N/A' ? <img src={logo} style={{height: 16, width: 16}} alt={item.protocolSlug}/> : <div style={{height: 16, width: 16, background: "#222"}}/>}*/}
             <span className="ml1" style={
               {
                 whiteSpace: "nowrap",
@@ -276,7 +237,7 @@ const GaProjectSearch = props => {
                 textOverflow: "ellipsis",
                 width: 160,
               }
-            }>{item.protocolName}</span>
+            }>{item.projectName}</span>
           </div>
         ),
         value: item.protocolSlug
@@ -284,90 +245,16 @@ const GaProjectSearch = props => {
     }
   }
 
-  let selectOptions
-
-  // if (isBusinessTypePath("public-chain")) {
-    selectOptions = [
-      historyGames?.length > 0 && {
-        label: "Recent",
-        key: "Recent",
-        options: historyGames.map(selectDataMapFunction("Recent")),
-      },
-      favoriteList?.length > 0 && {
-        label: "My Projects",
-        options: favoriteList.map(selectDataMapFunction("My Projects")),
-      },
-    ].filter(Boolean)
-  // } else {
-  //   selectOptions = [
-  //     {
-  //       value: "the-sandbox",
-  //       label: "The Sandbox",
-  //     }
-  //   ]
-  // }
+  const selectOptions = data?.map(selectDataMapFunction(""))
 
   return (
-    <div className="flex flex-column items-center ga-project-search" ref={ref1} style={{ minWidth: 218 }}>
+    <div className="flex flex-column items-center ga-project-search" ref={ref1} >
         <>
-          {userProject?.length > 0 && (
-            // <Select
-            //   // showSearch
-            //   style={{ width: 218, borderRadius: 4, border: "1px solid #58585B", background: "#1B1B1E" }}
-            //   dropdownStyle={{
-            //     background: "#1C1C1E",
-            //     color: "white",
-            //     border: "1px solid #ffffff20"
-            //   }}
-            //   value={currentProject}
-            //   loading={isLoading}
-            //   defaultOpen={true}
-            //   onChange={handleProjectChange}
-            //   optionLabelProp="optionHighlight"
-            //   placeholder="Search by protocol or nft collection address"
-            //   // optionFilterProp="children"
-            //   // filterOption={(input, option) =>
-            //   //   (option?.label ?? "")
-            //   //     .toLowerCase()
-            //   //     .includes(input.toLowerCase()) ||
-            //   //   (option?.collections_list ?? [])
-            //   //     .join(",")
-            //   //     .includes(input.toLowerCase())
-            //   // }
-            //   dropdownRender={(menu) => (
-            //     <div>
-            //       {menu}
-            //       <Divider className="my2" />
-            //       <div>My Game</div>
-            //       <div className="flex flex-column">
-            //         {cgames.map(item => {
-            //           return `${item}`
-            //         })}
-            //       </div>
-            //       <Divider className="my2" />
-            //       <Button type="text" onClick={() => {}} >Create your project</Button>
-            //       <Link to={"/fga/games-manage"}><Button type="text"  >See other project</Button></Link>
-            //     </div>
-            //   )}
-            // >
-            //   {(userProject?.length > 0 ? userProject : []).map((option, index) => {
-            //     console.log("option", option)
-            //     return (
-            //       <Option key={index} value={option.protocolSlug} optionHighlight={<div>{option.protocolSlug}{`${isClaimGame(option.protocolSlug) ? "(R)": ""}`}</div>}>
-            //       <div className="flex justify-between full-width align-center" >
-            //         <div>
-            //           {option.protocolSlug}
-            //           {isClaimGame(option.protocolSlug) && (<span>(R)</span>)}
-            //         </div>
-            //         {!isClaimGame(option.protocolSlug) && (<Button type="text" onClick={() => {claimGame(option.protocolSlug)}} >Claim</Button>)}
-            //       </div>
-            //     </Option>
-            //   )})}
-            // </Select>
+          {/*{userProject?.length > 0 && (*/}
             <Select
               // showSearch
               ref={selectRef}
-              style={{ width: 218 }}
+              style={{ width: 360 }}
               dropdownStyle={{
                 background: "#1C1C1E",
                 color: "white",
@@ -378,43 +265,6 @@ const GaProjectSearch = props => {
               dropdownRender={(menu) => (
                     <div>
                       {menu}
-                      {/*<Button className="full-width" type="primary" onClick={() => {
-                        if (!user) {
-                          message.warning("Kindly login before to create a project.");
-                          setLoginModalShowAction({
-                            show: true,
-                            from: "create activation",
-                            redirect: location.pathname,
-                            channel: "FGA",
-                          });
-                          return;
-                        }
-                        setOpen(true);
-                      }} >Create your project</Button>*/}
-                      {/*{isBusinessTypePath("public-chain") && (*/}
-                        <>
-                          <div style={{ margin: "6px 0", borderTop: "1px solid #ffffff20" }}/>
-                          <Link
-                            onClick={() => {
-                            if (!user) {
-                              message.warning("Kindly login before see other project.");
-                              setLoginModalShowAction({
-                                show: true,
-                                from: "create activation",
-                                redirect: location.pathname,
-                                channel: "FGA",
-                              });
-                              return;
-                            }
-                            setOpen(false)
-                            setTimeout(() => {
-                              router.push(`/fga/${businessType}/project-manage`)
-                            }, 300)
-                          }}>
-                            <Button className="full-width" type="text" >See other project</Button>
-                          </Link>
-                        </>
-                      {/*)}*/}
                     </div>
                   )}
               value={currentProject}
@@ -431,7 +281,7 @@ const GaProjectSearch = props => {
               }
               options={selectOptions}
             />
-          )}
+          {/*)}*/}
         </>
       {/*<CreateMyProjectModal
         open={open}
@@ -467,8 +317,6 @@ const mapDispatchToProps = {
   setGames: setGames,
   setHistoryGames: setHistoryGames,
   setLoginModalShowAction: loginModalShowAction,
-  loadFgaFavoriteList,
-  loadFgaProtocolList,
 };
 
 const mapStateToProps = (state, props) => {
@@ -482,8 +330,6 @@ const mapStateToProps = (state, props) => {
     historyGames: getHistoryGamesByRedux(state),
     businessType: props.params.businessType,
     chain: getFgaChain(state),
-    favoriteList: getFgaFavoriteList(state),
-    protocolList: getFgaProtocolList(state),
   };
 };
 

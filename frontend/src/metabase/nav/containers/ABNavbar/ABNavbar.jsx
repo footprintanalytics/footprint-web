@@ -47,6 +47,7 @@ import { getContext, getPath, getUser } from "../selectors";
 
 import { isDark } from "../../../dashboard/components/utils/dark";
 import { isBusinessTypePath } from "../../../ab/utils/utils";
+import CreateProjectModal2 from "metabase/ab/components/Modal/CreateProjectModal2";
 
 const mapStateToProps = (state, props) => ({
   path: getPath(state, props),
@@ -461,14 +462,13 @@ class ABNavbar extends Component {
             <div className="flex flex-column" style={{ lineHeight: 1.2 }}>
               <span style={{ color: "white", fontSize: 18, fontWeight: 600 }}>Growth Analytics</span>
               {isBusinessTypePath("public-chain") && (<span style={{ color: "white", fontSize: 11, textAlign: "center" }}>Public Chain</span>)}
-              {isBusinessTypePath("game-portfolio") && (<span style={{ color: "white", fontSize: 11, textAlign: "center" }}>Game Portfolio</span>)}
             </div>
           </Link>
           {/* <LeftMenu /> */}
         </div>
         <React.Fragment>
-          <div className="flex justify-start" style={{ flex: 1, paddingLeft: 30, fontSize: 20, color: "#FFFFFF" }}>{`👏 Welcome`}</div>
-          <div className="Nav__search-bar" style={{display: "none"}}>
+          {/*<div className="flex justify-start" style={{ paddingLeft: 30, fontSize: 20, color: "#FFFFFF" }}>{`👏 Welcome`}</div>*/}
+          <div className="Nav__search-bar" style={{ width: "100%", justifyContent: "center" }}>
             <GaProjectSearch
               location={location}
               logout={this.props.logout}
@@ -476,6 +476,11 @@ class ABNavbar extends Component {
                 setCreateFgaProjectModalShowAction
               }
             ></GaProjectSearch>
+            <Button
+              className="ml1"
+              onClick={() => {
+              setCreateFgaProjectModalShowAction({ show: true });
+            }}>+ Add Project</Button>
           </div>
           <div className="Nav__mobile-logo">
             <Link
@@ -500,7 +505,7 @@ class ABNavbar extends Component {
         {this.renderModal()}
         {this.renderLoginModal()}
         {this.renderCancelFeedbackModal()}
-        <CreateProjectModal
+        <CreateProjectModal2
           open={createFgaProjectModalShow?.show}
           force={createFgaProjectModalShow?.force}
           location={location}
@@ -510,7 +515,7 @@ class ABNavbar extends Component {
           onCancel={() => {
             setCreateFgaProjectModalShowAction({ show: false });
           }}
-        ></CreateProjectModal>
+        ></CreateProjectModal2>
       </div>
     );
   }

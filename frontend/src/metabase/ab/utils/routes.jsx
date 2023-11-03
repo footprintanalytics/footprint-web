@@ -55,6 +55,11 @@ const getRoutes = (store, IsAuthenticated) => {
         />
         <Route
           title={t`Growth`}
+          path="/project-list"
+          component={LazyLoad.projectList}
+        />
+        <Route
+          title={t`Growth`}
           path="/bind-game"
           component={LazyLoad.bindGame}
         />

@@ -297,53 +297,53 @@ export const refreshCurrentFgaProjectNew = createThunkAction(
     try {
       let res
       if (isABPath()) {
-        if (protocolSlug === "Demo Project") {
-           res = {
-             "id": 1,
-             "isDemo": false,
-             "protocolName": "Demo Project",
-             "protocolSlug": "Demo Project",
-             "logo": "",
-             "protocolType": "",
-             "nftCollectionAddress": [
-               {
-                 "address": "0x5cc5b05a8a13e3fbdb0bb9fccd98d38e50f90c38",
-                 "chain": "Ethereum"
-               },
-               {
-                 "address": "0x50f5474724e0ee42d9a4e711ccfb275809fd6d4a",
-                 "chain": "Ethereum"
-               }
-             ],
-             "tokenAddress": [
-               {
-                 "address": "0x3845badade8e6dff049820680d1f14bd3903a5d0",
-                 "chain": "Ethereum"
-               },{
-                 "address": "0x67b725d7e342d7b611fa85e859df9697d9378b2e",
-                 "chain": "BNB Chain"
-               }
-             ],
-             "twitter": {},
-             "discord": {},
-             "ga": {}
-           }
-         } else {
-          // res = {
-          //   // "id": 153,
-          //   "protocolName": protocolSlug,
-          //   "protocolSlug": protocolSlug,
-          //   "protocolType": "",
-          //   "tokenAddress": [],
-          //   "nftCollectionAddress": [
-          //     {
-          //       "address": "0x2ed4db5636835acfc583af96c66cde1d8c2c1a25",
-          //       "chain": "Ethereum"
-          //     }
-          //   ],
-          // }
+        // if (protocolSlug === "Demo Project") {
+        //    res = {
+        //      "id": 1,
+        //      "isDemo": false,
+        //      "protocolName": "Demo Project",
+        //      "protocolSlug": "Demo Project",
+        //      "logo": "",
+        //      "protocolType": "",
+        //      "nftCollectionAddress": [
+        //        {
+        //          "address": "0x5cc5b05a8a13e3fbdb0bb9fccd98d38e50f90c38",
+        //          "chain": "Ethereum"
+        //        },
+        //        {
+        //          "address": "0x50f5474724e0ee42d9a4e711ccfb275809fd6d4a",
+        //          "chain": "Ethereum"
+        //        }
+        //      ],
+        //      "tokenAddress": [
+        //        {
+        //          "address": "0x3845badade8e6dff049820680d1f14bd3903a5d0",
+        //          "chain": "Ethereum"
+        //        },{
+        //          "address": "0x67b725d7e342d7b611fa85e859df9697d9378b2e",
+        //          "chain": "BNB Chain"
+        //        }
+        //      ],
+        //      "twitter": {},
+        //      "discord": {},
+        //      "ga": {}
+        //    }
+        //  } else {
+        //   // res = {
+        //   //   // "id": 153,
+        //   //   "protocolName": protocolSlug,
+        //   //   "protocolSlug": protocolSlug,
+        //   //   "protocolType": "",
+        //   //   "tokenAddress": [],
+        //   //   "nftCollectionAddress": [
+        //   //     {
+        //   //       "address": "0x2ed4db5636835acfc583af96c66cde1d8c2c1a25",
+        //   //       "chain": "Ethereum"
+        //   //     }
+        //   //   ],
+        //   // }
+        // }
           res = await getProtocolDetail({ "protocolSlug": protocolSlug });
-        }
         //   const result = await getPublicChainProjectDetail({ "protocolSlug": protocolSlug });
         //   const temp = result.rows?.length > 0 ? {
         //     protocolName: result.rows[0][1],
@@ -475,7 +475,7 @@ export const refreshCurrentFgaProjectNew = createThunkAction(
       }
       window.localStorage.setItem("IsFgaDemoProject", res?.isDemo);
       window.localStorage.setItem("LatestGAProjectId", res?.id);
-      res.id=153;
+      // res.id=153;
       console.log("res", res)
       return res;
     } catch (e) {
