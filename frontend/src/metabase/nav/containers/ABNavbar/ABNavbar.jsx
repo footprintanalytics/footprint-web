@@ -479,8 +479,13 @@ class ABNavbar extends Component {
             <Button
               className="ml1"
               onClick={() => {
-              setCreateFgaProjectModalShowAction({ show: true });
-            }}>+ Add Project</Button>
+                if (!user) {
+                  setLoginModalShow({ show: true });
+                  return;
+                }
+                setCreateFgaProjectModalShowAction({ show: true });
+              }}
+            >+ Add Project</Button>
           </div>
           <div className="Nav__mobile-logo">
             <Link
