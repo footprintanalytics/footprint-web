@@ -169,7 +169,7 @@ const GaProjectSearch = props => {
       // if (!historyGames.find(item => item.protocolSlug === protocolSlug)) {
       //   setHistoryGames(take([newObject, ...(historyGames || [])], 2))
       // }
-      // refetch()
+      refetch()
     }
   }, [projectObject])
 
@@ -180,23 +180,6 @@ const GaProjectSearch = props => {
       setCurrentProject(projectPath);
       saveLatestGAProject(projectPath);
     }
-    // else {
-    //   const temp_project =
-    //     getLatestGAProject() ??
-    //     (userProject?.length > 0 ? userProject[0].value : null);
-    //   if (temp_project) {
-    //     saveLatestGAProject(temp_project);
-    //     setCurrentProject(temp_project);
-    //     if (
-    //       location.pathname.startsWith("/fga/project") ||
-    //       location.pathname === "/fga"
-    //     ) {
-    //       router?.push({
-    //         pathname: getGrowthProjectPath(temp_project),
-    //       });
-    //     }
-    //   }
-    // }
   }, [projectPath]);
   const handleProjectChange = async (value, uiOption) => {
     const option = userProject.find(item => item.protocolSlug === value) ||
@@ -215,21 +198,14 @@ const GaProjectSearch = props => {
     }
   };
 
-  // const getProjectLogo = (item) => {
-  //   if (protocolList?.length > 0) {
-  //     return protocolList?.find(protocol => item.protocolSlug === protocol.protocolSlug)?.logo
-  //   }
-  //   return "";
-  // }
-
   const selectDataMapFunction = ( superKey) => {
     return (item) => {
-      // const logo = getProjectLogo(item);
+      const logo = item.logo;
       return {
         key: `${superKey}-${item.protocolSlug}`,
         label: (
           <div className="flex align-center">
-            {/*{logo && logo !== 'N/A' ? <img src={logo} style={{height: 16, width: 16}} alt={item.protocolSlug}/> : <div style={{height: 16, width: 16, background: "#222"}}/>}*/}
+            {logo && logo !== 'N/A' ? <img src={logo} style={{height: 16, width: 16}} alt={item.protocolSlug}/> : <div style={{height: 16, width: 16, background: "#222"}}/>}
             <span className="ml1" style={
               {
                 whiteSpace: "nowrap",

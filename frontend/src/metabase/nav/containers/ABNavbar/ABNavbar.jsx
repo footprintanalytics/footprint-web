@@ -459,9 +459,10 @@ class ABNavbar extends Component {
               this.goLink(e, `/fga${path}`);
             }}*/
           >
-            <div className="flex flex-column" style={{ lineHeight: 1.2 }}>
-              <span style={{ color: "white", fontSize: 18, fontWeight: 600 }}>Growth Analytics</span>
-              {isBusinessTypePath("public-chain") && (<span style={{ color: "white", fontSize: 11, textAlign: "center" }}>Public Chain</span>)}
+            <div className="flex align-center" style={{ lineHeight: 1.2 }}>
+              <img style={{ height: 32, width: 32 }} src={getOssUrl("logo80.png")} />
+              <span style={{ color: "white", fontSize: 16, fontWeight: 600, marginLeft: 12 }}>Growth Analytics</span>
+              {/*{isBusinessTypePath("public-chain") && (<span style={{ color: "white", fontSize: 11, textAlign: "center" }}>Public Chain</span>)}*/}
             </div>
           </Link>
           {/* <LeftMenu /> */}
@@ -480,6 +481,7 @@ class ABNavbar extends Component {
               className="ml1"
               onClick={() => {
                 if (!user) {
+                  message.info("Kindly login first, please");
                   setLoginModalShow({ show: true });
                   return;
                 }

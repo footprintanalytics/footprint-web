@@ -24,11 +24,14 @@ import "../css/index.css";
 import Link from "metabase/core/components/Link/Link";
 import UpdateProjectModal from "./Modal/UpdateProjectModal";
 import { getFgaChain } from "metabase/selectors/control";
+import CreateProjectModal2 from "metabase/ab/components/Modal/CreateProjectModal2";
+import ProjectSubmitContactModal from "metabase/ab/components/Modal/ProjectSubmitContactModal";
 
 const ProjectInfo = props => {
   const { router, project, location, user, chain, businessType } = props;
   const [currentProject, setCurrentProject] = useState(project);
   const [tourOpen, setTourOpen] = useState(false);
+  const [submitModal, setSubmitModal] = useState(false);
   const ref1 = useRef(null);
   const [projectModalShow, setProjectModalShow] = useState({
     show: false,
@@ -100,11 +103,24 @@ const ProjectInfo = props => {
                 message.error("Please login first!");
                 return;
               }
-              router?.push({ pathname: "/fga/game/submit/contract/add" });
+              // router?.push({ pathname: "/fga/game/submit/contract/add" });
+              setSubmitModal(true)
             }}
           >
             Submit Now
           </Button>
+          <ProjectSubmitContactModal
+            open={submitModal}
+            force={false}
+            project={project}
+            location={location}
+            onSuccess={() => {
+              setSubmitModal(false);
+            }}
+            onCancel={() => {
+              setSubmitModal(false);
+            }}
+          ></ProjectSubmitContactModal>
         </Empty>
       );
     }

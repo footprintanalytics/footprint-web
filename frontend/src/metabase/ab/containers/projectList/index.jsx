@@ -63,6 +63,15 @@ const projectList = props => {
 
   const columns = [
     {
+      title: 'Logo',
+      dataIndex: 'logo',
+      key: 'logo',
+      width: 60,
+      render: (_, record) => (
+        record.logo && record.logo !== 'N/A' ? <img src={record.logo} style={{height: 32, width: 32}} alt={record.logo}/> : <div style={{height: 32, width: 32, background: "#222"}}/>
+      ),
+    },
+    {
       title: 'Project Name',
       dataIndex: 'projectName',
       key: 'projectName',

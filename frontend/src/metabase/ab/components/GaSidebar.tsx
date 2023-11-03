@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { Divider, Image, Layout, Menu, Select, Button } from "antd";
 import type { MenuProps } from "antd";
+
 const { Sider } = Layout;
 import { getChainDataList } from "metabase/query_builder/components/question/handle";
 import "../css/utils.css";
@@ -45,8 +46,20 @@ interface MenuObjectProp {
   menuTitle: any;
   platformMenuTitle: any;
 }
+
 const GaSidebar = (props: IGaSidebarProp) => {
-  const { currentProject, router, location, currentMenu, projectObject, user, businessType, setFgaChain, chain, resetFgaProtocolList } =
+  const {
+    currentProject,
+    router,
+    location,
+    currentMenu,
+    projectObject,
+    user,
+    businessType,
+    setFgaChain,
+    chain,
+    resetFgaProtocolList,
+  } =
     props;
   const [menuData, setMenuData] = useState<MenuObjectProp>();
   // const [rootSubmenuKeys, setRootSubmenuKeys] = useState<any[]>([]);
@@ -61,10 +74,10 @@ const GaSidebar = (props: IGaSidebarProp) => {
   }, [projectObject, chain]);
 
   useEffect(() => {
-    if (location.pathname === '/fga' || location.pathname === '/fga/') {
-      router.replace("/fga/game")
+    if (location.pathname === "/fga" || location.pathname === "/fga/") {
+      router.replace("/fga/game");
     }
-  }, [location.pathname])
+  }, [location.pathname]);
 
   useEffect(() => {
     if (currentMenu) {
@@ -79,7 +92,7 @@ const GaSidebar = (props: IGaSidebarProp) => {
             } else if (child.children?.length > 0) {
               child.children.map((child2: { key: string }) => {
                 if (child2.key === currentMenu) {
-                  setOpenKeys([i.key,child.key]);
+                  setOpenKeys([i.key, child.key]);
                 }
               });
             }
@@ -98,7 +111,7 @@ const GaSidebar = (props: IGaSidebarProp) => {
     // }
     setOpenKeys(keys);
   };
-  const toggle_platform_project = localStorage.getItem('toggle_platform_project')
+  const toggle_platform_project = localStorage.getItem("toggle_platform_project");
   // const isProject = toggle_platform_project === "project"
 
   // @ts-ignore
@@ -107,7 +120,7 @@ const GaSidebar = (props: IGaSidebarProp) => {
       return {
         ...item,
         value: item.transactionName || item.label,
-      }
+      };
     });
 
   const pushFirstRouter = (chain: string | undefined) => {
@@ -121,17 +134,17 @@ const GaSidebar = (props: IGaSidebarProp) => {
       {
         protocolSlug: "the-sandbox",
         protocolName: "The Sandbox",
-      }
-      setTimeout(() => {
-        router.replace({
-          pathname: getGrowthProjectPath(
-            hasNewChainData ? projectObject?.protocolSlug : defaultProject?.protocolSlug,
-            hasNewChainData && hasNewChainCurrentMenu ? currentMenu : firstMenu,
-          ),
-        });
-      }, 1000)
+      };
+    setTimeout(() => {
+      router.replace({
+        pathname: getGrowthProjectPath(
+          hasNewChainData ? projectObject?.protocolSlug : defaultProject?.protocolSlug,
+          hasNewChainData && hasNewChainCurrentMenu ? currentMenu : firstMenu,
+        ),
+      });
+    }, 1000);
 
-  }
+  };
 
   const showChainSelect = businessType === "public-chain";
 
@@ -150,15 +163,15 @@ const GaSidebar = (props: IGaSidebarProp) => {
         borderRight: "1px solid #ffffff20",
       }}
     >
-      <>
+      <div style={{ display: "relative", height: "100%" }}>
         {projectObject && items?.length > 0 ? (
-          <>
+          <div className="flex flex-column">
             {isBusinessTypePath("game") && (
               <>
                 <div className="ga-side-bar__title">
                   <h3>{platformMenuTitle}</h3>
                 </div>
-               {/* <Link to="/fga/game/project-list" >
+                {/* <Link to="/fga/game/project-list" >
                   <Button type="text" style={{
                     width: "100%",
                     display: "flex",
@@ -193,65 +206,65 @@ const GaSidebar = (props: IGaSidebarProp) => {
                   }}
                   items={itemsPlatform}
                 />
-                <div className="ga__line mt1"/>
+                <div className="ga__line mt1" />
               </>
             )}
             {!isBusinessTypePath("game") && itemsPlatform.length > 0 && (<>
-              <div className="ga-side-bar__title">
-                <h3>{platformMenuTitle}</h3>
-              </div>
+                <div className="ga-side-bar__title">
+                  <h3>{platformMenuTitle}</h3>
+                </div>
                 {showChainSelect && (<div className={"flex justify-center pm2"}>
-                <Select
-                  defaultValue={chain}
-                  style={{ width: 218 }}
-                  dropdownStyle={{
-                    background: "#1C1C1E",
-                    color: "white",
-                    border: "1px solid #ffffff30"
-                  }}
-                  onChange={value => {
-                    pushFirstRouter(value);
-                    setFgaChain(value);
-                    resetFgaProtocolList();
-                  }}
-                >
-                  {chainData.map(n => (
-                    <Select.Option key={`${n.value}-${n.label}`} value={n.value}>
-                      <div className="question-side__chains-item">
-                        <Image src={n.icon} width={20} height={20} preview={false} />
-                        <span className="ml1">{n.label}</span>
-                      </div>
-                    </Select.Option>
-                  ))}
-                </Select>
-              </div>)}
+                  <Select
+                    defaultValue={chain}
+                    style={{ width: 218 }}
+                    dropdownStyle={{
+                      background: "#1C1C1E",
+                      color: "white",
+                      border: "1px solid #ffffff30",
+                    }}
+                    onChange={value => {
+                      pushFirstRouter(value);
+                      setFgaChain(value);
+                      resetFgaProtocolList();
+                    }}
+                  >
+                    {chainData.map(n => (
+                      <Select.Option key={`${n.value}-${n.label}`} value={n.value}>
+                        <div className="question-side__chains-item">
+                          <Image src={n.icon} width={20} height={20} preview={false} />
+                          <span className="ml1">{n.label}</span>
+                        </div>
+                      </Select.Option>
+                    ))}
+                  </Select>
+                </div>)}
 
-              <Menu
-                key={chain}
-                className="ga-side-bar-menu"
-                style={{
-                  borderRight: "0px",
-                  width: "100%",
-                  flex: 1,
-                }}
-                theme="light"
-                mode="inline"
-                openKeys={openKeys}
-                onOpenChange={onOpenChange}
-                selectedKeys={[currentMenu!]}
-                onSelect={item => {
-                  saveLatestGAMenuTag(item.key);
-                  router.push({
-                    pathname: getGrowthProjectPath(
-                      currentProject ?? getLatestGAProject() ?? "",
-                      item.key,
-                    ),
-                  });
-                }}
-                items={itemsPlatform}
-              />
-              <div className="ga__line mt1"/>
-            </>
+                <Menu
+                  key={chain}
+                  className="ga-side-bar-menu"
+                  style={{
+                    borderRight: "0px",
+                    width: "100%",
+                    flex: 1,
+                  }}
+                  theme="light"
+                  mode="inline"
+                  openKeys={openKeys}
+                  onOpenChange={onOpenChange}
+                  selectedKeys={[currentMenu!]}
+                  onSelect={item => {
+                    saveLatestGAMenuTag(item.key);
+                    router.push({
+                      pathname: getGrowthProjectPath(
+                        currentProject ?? getLatestGAProject() ?? "",
+                        item.key,
+                      ),
+                    });
+                  }}
+                  items={itemsPlatform}
+                />
+                <div className="ga__line mt1" />
+              </>
             )}
 
             {items?.length > 0 &&
@@ -289,11 +302,25 @@ const GaSidebar = (props: IGaSidebarProp) => {
                 />
               </>)
             }
-          </>
+          </div>
         ) : (
           <LoadingSpinner message="Loading..." />
         )}
-      </>
+        <div
+          style={{
+            position: "fixed",
+            bottom: "0px",
+            height: 50,
+            lineHeight: "50px",
+            width: "240px",
+            color: "white",
+            textAlign: "center",
+            background: "#1B1B1E"
+          }}
+        >
+          beta v0.1.0
+        </div>
+      </div>
     </Sider>
   );
 };
