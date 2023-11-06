@@ -65,12 +65,7 @@ const ContractDecoding = ({ param, onSuccess, fromFgaAddProject, backAction }) =
       github: param?.github,
       logo: param?.logo,
       description: param?.description,
-      contracts: param?.contracts?.map(item => {
-        return {
-          ...item,
-          standard: "ERC1155",
-        }
-      }),
+      contracts: param?.contracts,
       source: "web_user",
     };
 
