@@ -55,6 +55,7 @@ const ContractDecoding = ({ param, onSuccess, fromFgaAddProject, backAction }) =
       projectName: param?.protocolName,
       protocolSlug: param?.protocolSlug,
       protocolType: param?.projectCategory,
+      projectId: param?.projectId,
       website: param?.website,
       username: param?.username,
       email: param?.email,

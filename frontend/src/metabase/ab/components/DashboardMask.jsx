@@ -160,10 +160,12 @@ const DashboardMask = props => {
       <div className="flex flex-col justify-center p2" style={{ width: 500 }}>
         <h3 className="text-white">No NFT address</h3>
         <Typography.Text className="mt2 mb2">
-          The current project does not contain an nft address, so you can try submitting an nft address for this project.
+          The current project does not contain an NFT address, so you can try submitting an NFT address for this project.
         </Typography.Text>
         <div className="flex flex-row items-center justify-end w-full">
-          <Link>
+          <Link
+            onClick={() => setProjectSubmitModalShowAction({ show: true })}
+          >
             Submit Contract
           </Link>
         </div>
@@ -182,9 +184,9 @@ const DashboardMask = props => {
           The current project does not contain an token address, so you can try submitting an token address for this project.
         </Typography.Text>
         <div className="flex flex-row items-center justify-end w-full">
-          <Link onClick={() => {
-            setProjectSubmitModalShowAction({ show: true })
-          }}>
+          <Link
+            onClick={() => setProjectSubmitModalShowAction({ show: true })}
+          >
             Submit Contract
           </Link>
         </div>

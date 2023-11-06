@@ -10,6 +10,7 @@ import {
   Typography,
   Divider,
   Upload,
+  Tooltip,
 } from "antd";
 import { UploadOutlined } from "@ant-design/icons";
 import { connect } from "react-redux";
@@ -230,32 +231,34 @@ const UploadWallets = ({
   const [modal, contextHolder] = Modal.useModal();
   return (
     <>
-      <Button
-        type="primary"
-        onClick={() => {
-          if (!user) {
-            message.warning(`Kindly login before Upload Wallets`);
-            setLoginModalShowAction({
-              show: true,
-              from: "upload wallets",
-              redirect: location.pathname,
-              channel: "FGA",
-            });
-            return;
-          }
-          checkIsNeedContactUs(
-            modal,
-            project,
-            () => {
-              setCohortModalOpen(true);
-            },
-            () => {},
-            true,
-          );
-        }}
-      >
-        Upload Wallets
-      </Button>
+      <Tooltip title="Upload the wallets in the csv format.">
+        <Button
+          type="primary"
+          onClick={() => {
+            if (!user) {
+              message.warning(`Kindly login before Upload Wallets`);
+              setLoginModalShowAction({
+                show: true,
+                from: "upload wallets",
+                redirect: location.pathname,
+                channel: "FGA",
+              });
+              return;
+            }
+            checkIsNeedContactUs(
+              modal,
+              project,
+              () => {
+                setCohortModalOpen(true);
+              },
+              () => {},
+              true,
+            );
+          }}
+        >
+          Upload Wallets
+        </Button>
+      </Tooltip>
       <Modal
         open={isCohortModalOpen}
         onCancel={() => setCohortModalOpen(false)}

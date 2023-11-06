@@ -17,7 +17,6 @@ const ProjectInfo = props => {
   const { router, project, location, user, chain, businessType, setProjectSubmitModalShowAction } = props;
   const [currentProject, setCurrentProject] = useState(project);
   const [tourOpen, setTourOpen] = useState(false);
-  const [submitModal, setSubmitModal] = useState(false);
   const ref1 = useRef(null);
   const [projectModalShow, setProjectModalShow] = useState({
     show: false,
@@ -93,23 +92,11 @@ const ProjectInfo = props => {
                 message.error("Kindle add your project to submit, please");
               }
               // router?.push({ pathname: "/fga/game/submit/contract/add" });
-              setSubmitModal(true)
+              setProjectSubmitModalShowAction({ show: true })
             }}
           >
             Submit Now
           </Button>
-          <ProjectSubmitContactModal
-            open={submitModal}
-            force={false}
-            project={project}
-            location={location}
-            onSuccess={() => {
-              setSubmitModal(false);
-            }}
-            onCancel={() => {
-              setSubmitModal(false);
-            }}
-          ></ProjectSubmitContactModal>
         </Empty>
       );
     }

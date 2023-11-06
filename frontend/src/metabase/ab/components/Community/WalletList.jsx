@@ -9,11 +9,12 @@ import {
   Card,
   Dropdown,
   Pagination,
-  Spin,
+  Spin, Tooltip,
 } from "antd";
 import { LoadingOutlined } from "@ant-design/icons";
 import { valueFormat } from "metabase/ab/utils/utils";
 import LoadingSpinner from "metabase/components/LoadingSpinner/LoadingSpinner";
+import Icon from "metabase/components/Icon";
 
 export const WalletList = props => {
   const {
@@ -58,6 +59,9 @@ export const WalletList = props => {
     }
     return originalElement;
   };
+
+  const totalFilterTip = "In this demo and free version, features of 10 members are shown. Upgrade your plan to explore more project members !";
+
   return (
     <div className="flex flex-col w-full rounded p1">
       <Card bordered={false} className="">
@@ -67,7 +71,7 @@ export const WalletList = props => {
               <Typography.Text type="secondary">Loading ...</Typography.Text>
             ) : (
               <Typography.Text type="secondary">
-                Filtered {data?.total.toLocaleString("en-US")} Addresses
+                Filtered {data?.total.toLocaleString("en-US")} Addresses <Tooltip title={totalFilterTip}><Icon className="ml1" name={"info"} size={12}/></Tooltip>
               </Typography.Text>
             )}
           </Button>
