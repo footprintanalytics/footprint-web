@@ -508,14 +508,16 @@ export const LOAD_CURRENT_FGA_PROJECT_NEW =
   "metabase/user/LOAD_CURRENT_FGA_PROJECT_NEW";
 export const loadCurrentFgaProjectNew = createThunkAction(
   LOAD_CURRENT_FGA_PROJECT_NEW,
-  (protocolSlug, force = false) =>
+  (protocolSlug, force = false, clearCurrent = true) =>
     async (dispatch, getState) => {
       if (
         force ||
         !getState().currentFgaProject ||
         getState().currentFgaProject?.protocolSlug !== protocolSlug
       ) {
-        dispatch(clearCurrentFgaProject());
+        if (clearCurrent) {
+          dispatch(clearCurrentFgaProject());
+        }
         // await dispatch(refreshCurrentFgaProject(project_id));
         await dispatch(refreshCurrentFgaProjectNew(protocolSlug));
       }

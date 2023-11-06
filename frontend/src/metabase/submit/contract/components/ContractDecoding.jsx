@@ -65,12 +65,7 @@ const ContractDecoding = ({ param, onSuccess, fromFgaAddProject, backAction }) =
       github: param?.github,
       logo: param?.logo,
       description: param?.description,
-      contracts: param?.contracts?.map(item => {
-        return {
-          ...item,
-          standard: "ERC1155",
-        }
-      }),
+      contracts: param?.contracts,
       source: "web_user",
     };
 
@@ -140,9 +135,9 @@ const ContractDecoding = ({ param, onSuccess, fromFgaAddProject, backAction }) =
   const SubmitSuccessFga = (res) => {
     console.log("SubmitSuccessFga", res)
     animation = loadAnimation("completed");
-    setTitle(
-      `FGA: Your project is created`,
-    );
+    // setTitle(
+    //   `FGA: Your project is created`,
+    // );
     setLog("Process completed.");
     // message.success("protocol process completed.");
     setLoadCompleted(true);
