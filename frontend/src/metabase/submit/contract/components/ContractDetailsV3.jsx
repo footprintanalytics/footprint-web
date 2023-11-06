@@ -277,7 +277,6 @@ const ContractDetailsV3 = ({ onFinish, user, onClosed, hideEmail, protocolCatego
           // projectCategory: null,
         }}
         onFinish={async values => {
-          console.log("valuesvaluesvalues", values)
           const protocolName = projectName || values?.protocolName;
           const isNewProtocol = !getProtocolList?.data
             ?.map(item => item.protocol_name ?? item.protocol_slug)
@@ -484,7 +483,7 @@ const ContractDetailsV3 = ({ onFinish, user, onClosed, hideEmail, protocolCatego
                     </div>
                     {/*0x1092eb9c78833c6e0b4b9875eb84585814f613cf,ERC1155*/}
                     <Input.TextArea
-                      placeholder={`0x123456789ABCDEF,ERC1155`}
+                      placeholder={fromFgaAddProject ? `0x123456789ABCDEF,ERC1155` : `Input contract address in ${item.chain}`}
                       style={{ height: 160 }}
                       onChange={e => {
                         delayedChange(item, e.target.value);

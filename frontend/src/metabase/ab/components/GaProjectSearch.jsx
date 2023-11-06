@@ -87,7 +87,6 @@ const GaProjectSearch = props => {
   //   QUERY_OPTIONS,
   // );
   const loadProjectDetail = protocolSlug => {
-  console.log("loadProjectDetail", protocolSlug)
     loadCurrentFgaProjectNew(protocolSlug);
   };
 
