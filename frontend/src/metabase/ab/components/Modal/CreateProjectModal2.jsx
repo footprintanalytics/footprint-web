@@ -125,7 +125,7 @@ const CreateProjectModal2 = props => {
 
   return (
     <Modal
-      title="Create your project"
+      title="Add your project"
       open={open}
       destroyOnClose
       footer={null}
@@ -137,15 +137,6 @@ const CreateProjectModal2 = props => {
     >
       {state === 1 && (<div className="flex flex-col">
           <Divider />
-          {force && (
-            <div style={{ marginBottom: 20 }}>
-              <Typography.Text type="warning">
-                {
-                  "Before embarking on your magical FGA journey, please choose a project that you fancy."
-                }
-              </Typography.Text>
-            </div>
-          )}
           <Form
             {...layout}
             labelAlign="left"
@@ -202,7 +193,7 @@ const CreateProjectModal2 = props => {
               </div>
             </Form.Item>
             {input?.trim() &&
-              <div>{isNewProject ? "You have enter a new project and will need to submit your project info." : " "}</div>}
+              <div>{isNewProject ? "The project you entered is not included yet. Please click \"Next\" to submit your project information." : " "}</div>}
 
             <Form.Item {...tailLayout}>
               <div

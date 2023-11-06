@@ -43,14 +43,15 @@ const SegmentListPanel = props => {
 
   const columns = [
     {
-      title: "Title",
+      title: "Segment Name",
       dataIndex: "title",
       render: (text, { createdBy, numberOfWallets, cohortId }) => {
         // only format tag for system cohorts
         const title = createdBy !== "user" ? formatTag(text) : text;
         return (
           <Link
-            disabled={numberOfWallets === 0}
+            disabled={true}
+            // disabled={numberOfWallets === 0}
             to={`${getUserProfileLink(businessType)}?cohort_id=${cohortId}&tag=${text}&cohort_title=${text}#from=Segment`}
           >
             {title}
@@ -164,21 +165,25 @@ const SegmentListPanel = props => {
     {
       key: "1",
       label: (
-        <Button
-          type="primary"
-          onClick={() =>
-            router?.push({
-              pathname: getGrowthProjectPath(
-                router?.params?.project,
-                sourceType === "projectUser"
-                  ? getMembersUrl()
-                  : "find_potential_wallets",
-              ),
-            })
-          }
+        <Tooltip
+          title="Filter wallets in the Member page"
         >
-          Filter Wallets
-        </Button>
+          <Button
+            type="primary"
+            onClick={() =>
+              router?.push({
+                pathname: getGrowthProjectPath(
+                  router?.params?.project,
+                  sourceType === "projectUser"
+                    ? getMembersUrl()
+                    : "find_potential_wallets",
+                ),
+              })
+            }
+          >
+            Filter Wallets
+          </Button>
+        </Tooltip>
       ),
     },
     {
@@ -208,7 +213,8 @@ const SegmentListPanel = props => {
         className="mt2"
         title={
           <>
-            {sourceType === "projectUser" ? (
+            {"Segment"}
+            {/*{sourceType === "projectUser" ? (
               <Tooltip
                 placement="rightTop"
                 trigger={["click", "hover"]}
@@ -229,7 +235,7 @@ const SegmentListPanel = props => {
               </Tooltip>
             ) : (
               <>{"Segment"}</>
-            )}
+            )}*/}
           </>
         }
         extra={

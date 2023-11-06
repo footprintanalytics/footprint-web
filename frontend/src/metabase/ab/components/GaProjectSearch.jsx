@@ -140,8 +140,6 @@ const GaProjectSearch = props => {
     }
   }, [projectObject, location.pathname])
 
-  const [modal, contextHolder] = Modal.useModal();
-
   useEffect(() => {
     if (projectPath) {
       setCurrentProject(projectPath);
@@ -207,7 +205,10 @@ const GaProjectSearch = props => {
                   <Select.Option key={item.protocolSlug} label={item.projectName} value={item.protocolSlug}>
                     <div className="flex align-center">
                        {logo && logo !== 'N/A' ? (
-                         <img src={logo} style={{height: 16, width: 16}} alt={item.protocolSlug}/>
+                         <Avatar
+                           src={logo}
+                           style={{height: 16, width: 16, borderRadius: "50%", background: "#ffffff"}}
+                         />
                        ) : (
                          <Avatar
                            style={{height: 16, width: 16, borderRadius: "50%", background: "#6c70FF"}}
@@ -251,7 +252,6 @@ const GaProjectSearch = props => {
 
         }}
       />*/}
-      {contextHolder}
       {enableTour && window.localStorage.getItem("tour_project_search") !== "true" &&
         <Tour open={tourOpen} onClose={() => setTourOpen(false)} steps={steps} />
       }

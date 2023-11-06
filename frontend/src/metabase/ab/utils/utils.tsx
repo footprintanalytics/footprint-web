@@ -134,7 +134,7 @@ export function showCohortSuccessModal(
 ) {
   return modalApi.success({
     title: "Segment created successfully",
-    content: "You can view the User Profile of this segment after few mins.",
+    content: "Your segment is creating, click here to view the progress. ",
     onOk() {
       router?.push({
         pathname: getGrowthProjectPath(router?.params?.project, from),
