@@ -17,6 +17,7 @@ import ContractDecoding from "metabase/submit/contract/components/ContractDecodi
 import { toLower } from "lodash";
 import Icon from "metabase/components/Icon";
 import { LoadingOutlined } from "@ant-design/icons";
+import LoadingSpinner from "metabase/components/LoadingSpinner/LoadingSpinner";
 
 const layout = {
   labelCol: { span: 6 },
@@ -159,11 +160,7 @@ const CreateProjectModal2 = props => {
               label={
                 <>Project {" "}
                   {loadingData && (
-                    <Spin
-                      className=" ml-10"
-                      size="small"
-                      indicator={<LoadingOutlined style={{ fontSize: 16 }} spin />}
-                    ></Spin>
+                    <LoadingSpinner />
                   )}
                 </>
               }
@@ -241,7 +238,6 @@ const CreateProjectModal2 = props => {
             { value: "Others", label: "Others" },
           ]}
           onClosed={param => {
-            console.log("param", param)
             setDecodingProcessOpen({ open: true, param: param });
             setState(3);
           }}
@@ -256,7 +252,6 @@ const CreateProjectModal2 = props => {
           fromFgaAddProject={true}
           backAction={() => setState(2)}
           onSuccess={(protocol) => {
-            console.log("onsuccessss", protocol)
             setState(4);
             setSubmitProtocol(protocol);
             setDecodingProcessOpen({ open: false, param: null });

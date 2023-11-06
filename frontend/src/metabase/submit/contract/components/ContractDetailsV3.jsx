@@ -53,8 +53,9 @@ const PROTOCOL_CATEGORY_LIST = [
   { value: "Others", label: "Others" },
 ];
 
-const ContractDetailsV3 = ({ onFinish, user, onClosed, hideEmail, protocolCategoryList, hideMoreOptions, hideProjectName, projectName, fromFgaAddProject, backAction }) => {
+const ContractDetailsV3 = ({ onFinish, user, onClosed, hideEmail, protocolCategoryList, hideMoreOptions, hideProjectName, projectName, projectId, fromFgaAddProject, backAction }) => {
   const [refresh, setRefresh] = useState(0);
+  const [open, setOpen] = useState();
   const [contract, setContract] = useState([]);
   const [isModalOpen, setIsModalOpen] = useState({ open: false, param: null });
   const [form] = Form.useForm();
@@ -284,6 +285,7 @@ const ContractDetailsV3 = ({ onFinish, user, onClosed, hideEmail, protocolCatego
           const isValidContract = contract.every(item =>
             isValidContractAddress(item.chain, contract),
           );
+          const projectIdObject = projectId ? { projectId }: {};
           if (!isValidContract) {
             message.info("Please input valid contract address");
             return;
@@ -298,6 +300,7 @@ const ContractDetailsV3 = ({ onFinish, user, onClosed, hideEmail, protocolCatego
                 values.protocolSlug ||
                 slug(protocolName),
               protocolName: protocolName,
+              ...projectIdObject,
               isNewProtocol,
             };
             console.log("param", param)

@@ -38,7 +38,21 @@ import { setGames } from "metabase/redux/control";
 import ProjectList from "metabase/ab/containers/projectList";
 
 const Project = props => {
-  const { router, location, children, user, menu, projectPath, projectObject, bindGameMapping, businessType, chain, setGames, games, favoriteList } =
+  const {
+    router,
+    location,
+    children,
+    user,
+    menu,
+    projectPath,
+    projectObject,
+    bindGameMapping,
+    chain,
+    setGames,
+    games,
+    favoriteList,
+    businessType,
+  } =
     props;
   const [currentMenu, setCurrentMenu] = useState(menu);
   const [gaMenuTabs, setGaMenuTabs] = useState(null);
@@ -63,7 +77,6 @@ const Project = props => {
         (liveKeys.includes(currentMenu) && !menuKeys.includes(currentMenu))
       ) {
         const firstMenu = menuKeys[0];
-        console.log("useEffect, firstMenu", firstMenu)
         setCurrentMenu(firstMenu);
         router.push({
           pathname: getGrowthProjectPath(
@@ -191,10 +204,34 @@ const Project = props => {
     );
   };
 
-  const getContentPannel = current_tab => {
-    if (!projectObject || !currentMenu || !gaMenuTabs) {
-      return <LoadingSpinner message="Loading..." />;
+  const renderDashboardMask = () => {
+    if (getProjectObject()?.protocolSlug !== "Demo Project" && getProjectObject()?.protocolSlug && projectObject?.nftCollectionAddress?.length === 0 &&
+      ["nft_summary", "nft_sales_mints", "nft_listing", "nft_nft_holder", "nft_leaderboard"].includes(currentMenu)) {
+      return (
+        <DashboardMask currentMenu={"nft"} originCurrentMenu={currentMenu} router={router}
+                       project={getProjectObject()} />
+      );
     }
+    if (getProjectObject()?.protocolSlug !== "Demo Project" && getProjectObject()?.protocolSlug && projectObject?.tokenAddress?.length === 0 &&
+      ["game_tokenomics"].includes(currentMenu)) {
+      return (
+        <DashboardMask currentMenu={"token"} originCurrentMenu={currentMenu} router={router}
+                       project={getProjectObject()} />
+      );
+    }
+    if (getProjectObject()?.protocolSlug !== "Demo Project" && getProjectObject()?.protocolSlug &&
+      ["nft_listing", "revenue-web2-revenue", "acquisition_users", "gaming_engagement", "user_retention", "revenue-total-revenue", "twitter", "discord"].includes(currentMenu)) {
+      return (
+        <DashboardMask currentMenu={"enterprise"} originCurrentMenu={currentMenu} router={router}
+                       project={getProjectObject()} />
+      );
+    }
+  };
+
+  const getContentPanel = current_tab => {
+    // if (!projectObject || !currentMenu || !gaMenuTabs) {
+    //   return <LoadingSpinner message="Loading..." />;
+    // }
     const WrapPublicDashboard = current_tab =>
       getProjectObject()?.protocolSlug ? (
         <>
@@ -212,19 +249,16 @@ const Project = props => {
             hideFooter
           />
           {/* all dashboart except twitter and discord , need a mask when no protocol */}
-          {(getProjectObject()?.protocolSlug === "default" || !getProjectObject()?.protocolSlug) &&
-          !["twitter", "discord"].includes(currentMenu) && (
-            <DashboardMask currentMenu={"set_protocol"} router={router} />
-          )}
+          {/*{(getProjectObject()?.protocolSlug === "default" || !getProjectObject()?.protocolSlug) &&*/}
+          {/*!["twitter", "discord"].includes(currentMenu) && (*/}
+          {/*  <DashboardMask currentMenu={"set_protocol"} router={router} />*/}
+          {/*)}*/}
           {/*{businessType === "game" && getProjectObject()?.protocolSlug !== "Demo Project" && getProjectObject()?.protocolSlug &&*/}
           {/*["revenue-web2-revenue", "revenue-total-revenue", "web2_user_acquisition", "web2_user_engagement", "web2_user_retention", "web2_stats", "twitter", "discord"].includes(currentMenu) && (*/}
           {/*  <DashboardMask currentMenu={"web2_connect"} originCurrentMenu={currentMenu} router={router} project={getProjectObject()}/>*/}
           {/*)}*/}
           {/*Enterprise*/}
-          {businessType === "game" && getProjectObject()?.protocolSlug !== "Demo Project" && getProjectObject()?.protocolSlug &&
-          ["nft_listing", "revenue-web2-revenue", "acquisition_users", "gaming_engagement", "user_retention", "revenue-total-revenue", "twitter", "discord"].includes(currentMenu) && (
-            <DashboardMask currentMenu={"enterprise"} originCurrentMenu={currentMenu} router={router} project={getProjectObject()}/>
-          )}
+          {renderDashboardMask()}
         </>
       ) : (
         <LoadingSpinner message="Loading..." />
@@ -257,7 +291,7 @@ const Project = props => {
       "nft_nft_holder",
       "user_profile",
       "project_health-platform",
-    ].includes(current_tab)) && projectPath === 'duke' && current_tab !== 'integration') {
+    ].includes(current_tab)) && projectPath === "duke" && current_tab !== "integration") {
       return (
         <LoadingDashboard
           router={router}
@@ -292,7 +326,7 @@ const Project = props => {
     if (
       current_tab === "journey" || current_tab === "journey-platform"
     ) {
-      if (businessType === "game" && getProjectObject()?.protocolSlug !== "Demo Project" && getProjectObject()?.protocolSlug) {
+      if (getProjectObject()?.protocolSlug !== "Demo Project" && getProjectObject()?.protocolSlug) {
         return <DashboardMask currentMenu={"web2_connect"} originCurrentMenu={currentMenu} router={router} project={getProjectObject()}/>;
       }
       return (
@@ -523,16 +557,16 @@ const Project = props => {
         ></CampaignDetail>
       );
     }
-    if (["Cohort", "segment", "segment-platform"].includes(current_tab)) {
-      return (
-        <CohortList
-          router={router}
-          location={location}
-          project={getProjectObject()}
-          businessType={businessType}
-        ></CohortList>
-      );
-    }
+    /* if (["Cohort", "segment", "segment-platform"].includes(current_tab)) {
+       return (
+         <CohortList
+           router={router}
+           location={location}
+           project={getProjectObject()}
+           businessType={businessType}
+         ></CohortList>
+       );
+     }*/
 
 
     if (gaMenuTabs?.dashboardMap?.has(current_tab)) {
@@ -598,28 +632,13 @@ const Project = props => {
       {projectObject ? (
         <>
           <div style={{ display: "relative" }}>
-            {currentMenu &&
-            projectObject &&
-            gaMenuTabs &&
-            getContentPannel(currentMenu)}
-            {/* TODO: need to add real user fga vip grade */}
-            {/*{projectObject?.protocolSlug !== "default" &&
-            !checkVipMenuPermisson(
-              projectObject?.protocolSlug === "the-sandbox"
-                ? "Enterprise"
-                : "Free",
-              currentMenu,
-            ) && <DashboardMask currentMenu={currentMenu} router={router} />}
-            {projectObject?.protocolSlug === "default" &&
-            ["members"].includes(currentMenu) && (
-              <DashboardMask currentMenu={"set_protocol"} router={router} />
-            )}*/}
+            {getContentPanel(currentMenu)}
           </div>
         </>
       ) : (
-        <>
-          <LoadingSpinner message="Loading..." />
-        </>
+        <div style={{ marginTop: 40 }}>
+          <LoadingSpinner message="Loading project data..." />
+        </div>
       )}
     </>
   );

@@ -1,19 +1,6 @@
 /* eslint-disable react/prop-types */
-import React, { useEffect, useState, useRef } from "react";
-import {
-  Avatar,
-  List,
-  Tooltip,
-  Empty,
-  Card,
-  Tag,
-  Divider,
-  Tabs,
-  message,
-  Button,
-  Typography,
-  Tour,
-} from "antd";
+import React, { useEffect, useRef, useState } from "react";
+import { Avatar, Button, Card, Empty, List, message, Tabs, Tag, Tooltip, Tour, Typography } from "antd";
 // import Link from "antd/lib/typography/Link";
 import { connect } from "react-redux";
 import Title from "antd/lib/typography/Title";
@@ -21,14 +8,13 @@ import { SwapOutlined } from "@ant-design/icons";
 import CopyToClipboard from "react-copy-to-clipboard";
 import { getFgaProject, getUser } from "metabase/selectors/user";
 import "../css/index.css";
-import Link from "metabase/core/components/Link/Link";
 import UpdateProjectModal from "./Modal/UpdateProjectModal";
 import { getFgaChain } from "metabase/selectors/control";
-import CreateProjectModal2 from "metabase/ab/components/Modal/CreateProjectModal2";
 import ProjectSubmitContactModal from "metabase/ab/components/Modal/ProjectSubmitContactModal";
+import { projectSubmitModalShowAction } from "metabase/redux/control";
 
 const ProjectInfo = props => {
-  const { router, project, location, user, chain, businessType } = props;
+  const { router, project, location, user, chain, businessType, setProjectSubmitModalShowAction } = props;
   const [currentProject, setCurrentProject] = useState(project);
   const [tourOpen, setTourOpen] = useState(false);
   const [submitModal, setSubmitModal] = useState(false);
@@ -100,8 +86,11 @@ const ProjectInfo = props => {
             type="link"
             onClick={() => {
               if (!user) {
-                message.error("Please login first!");
+                message.error("Kindle login first, please");
                 return;
+              }
+              if (project.id === 1) {
+                message.error("Kindle add your project to submit, please");
               }
               // router?.push({ pathname: "/fga/game/submit/contract/add" });
               setSubmitModal(true)
@@ -136,15 +125,16 @@ const ProjectInfo = props => {
               <Typography.Link
                 ref={ref1}
                 onClick={() => {
-                  if (!user) {
-                    message.error("Please login first!");
-                    return;
-                  }
-                  if (businessType) {
-                    router?.push({ pathname: `/fga/${businessType}/submit/contract/add` });
-                  } else {
-                    router?.push({ pathname: "/submit/contract/add" });
-                  }
+                  // if (!user) {
+                  //   message.error("Please login first!");
+                  //   return;
+                  // }
+                  // if (businessType) {
+                  //   router?.push({ pathname: `/fga/${businessType}/submit/contract/add` });
+                  // } else {
+                  //   router?.push({ pathname: "/submit/contract/add" });
+                  // }
+                  setProjectSubmitModalShowAction({ show: true })
                 }}
               >
                 click here{" "}
@@ -339,4 +329,7 @@ const mapStateToProps = state => {
   };
 };
 
-export default connect(mapStateToProps)(ProjectInfo);
+const mapDispatchToProps = {
+  setProjectSubmitModalShowAction: projectSubmitModalShowAction,
+};
+export default connect(mapStateToProps, mapDispatchToProps)(ProjectInfo);

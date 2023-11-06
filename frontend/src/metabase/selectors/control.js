@@ -15,6 +15,17 @@ export const getCreateFgaProjectModalShow = createSelector(
       : null;
   },
 );
+export const getProjectSubmitModalShow = createSelector(
+  [getControl],
+  ({
+     projectSubmitModalShow = false,
+     projectSubmitModalForce = false,
+  }) => {
+    return projectSubmitModalShow
+      ? { show: projectSubmitModalShow, force: projectSubmitModalForce }
+      : null;
+  },
+);
 
 export const getLoginModalShow = createSelector(
   [getControl],
@@ -139,4 +150,8 @@ export const getFgaFavoriteList = createSelector([getControl], (data) => {
 
 export const getFgaProtocolList = createSelector([getControl], (data) => {
   return data?.fgaProtocolList || [];
+});
+
+export const getFgaProjectList = createSelector([getControl], (data) => {
+  return data?.fgaProjectList || [];
 });

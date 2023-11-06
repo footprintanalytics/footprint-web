@@ -32,6 +32,7 @@ import {
   checkIsNeedContactUs,
   parseDashboardLink,
 } from "metabase/ab/utils/utils";
+import LoadingSpinner from "metabase/components/LoadingSpinner/LoadingSpinner";
 
 const AddMyAnalysisModal = props => {
   const { open, onCancel, onSuccess, user, project, item } = props;
@@ -162,9 +163,7 @@ const AddMyAnalysisModal = props => {
             <div>
               Preview:{" "}
               {previewLoading && (
-                <Spin
-                  indicator={<LoadingOutlined style={{ fontSize: 16 }} spin />}
-                />
+                <LoadingSpinner/>
               )}
             </div>
 
@@ -205,11 +204,7 @@ const AddMyAnalysisModal = props => {
                     }}
                   >
                     {previewLoading ? (
-                      <Spin
-                        indicator={
-                          <LoadingOutlined style={{ fontSize: 46 }} spin />
-                        }
-                      />
+                      <LoadingSpinner />
                     ) : (
                       <FileImageOutlined />
                     )}

@@ -272,6 +272,16 @@ const academyIcon14 =
     <path d="M7.5 18.333H12.5" stroke="#ACAEB4" strokeLinecap="round" strokeLinejoin="round"/>
   </svg>
 
+
+const trendingIcon14 =
+  <svg width="14" height="14" viewBox="0 0 20 20" fill="none">
+    <path d="M1.66797 18.3334H18.3346" stroke="#ACAEB4" strokeLinecap="round" strokeLinejoin="round"/>
+    <path d="M1.66797 10.8334L5.0013 11.6667V15.8334H1.66797V10.8334Z" stroke="#6262FF" strokeLinejoin="round"/>
+    <path d="M8.33203 10L11.6654 8.33337V15.8334H8.33203V10Z" stroke="#ACAEB4" strokeLinejoin="round"/>
+    <path d="M15 6.66667L18.3333 5V15.8333H15V6.66667Z" stroke="#ACAEB4" strokeLinejoin="round"/>
+    <path d="M1.66797 7.49996L5.0013 8.33329L18.3346 1.66663H14.168" stroke="#ACAEB4" strokeLinecap="round" strokeLinejoin="round"/>
+  </svg>
+
 const youtubeIcon =
   <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
     <path d="M4.60939 4.33966C6.91905 4.22453 8.71547 4.16699 9.99868 4.16699C11.2821 4.16699 13.0791 4.22458 15.3899 4.3397C16.6408 4.40203 17.6525 5.38028 17.7568 6.62833C17.8625 7.89249 17.9153 9.00591 17.9153 9.96858C17.9153 10.9431 17.8612 12.072 17.7529 13.3554C17.6489 14.588 16.6592 15.5592 15.4249 15.6399C13.4493 15.7691 11.6406 15.8337 9.99868 15.8337C8.35701 15.8337 6.54893 15.7691 4.57443 15.64C3.34056 15.5592 2.35105 14.5886 2.24654 13.3566C2.13687 12.0636 2.08203 10.9342 2.08203 9.96858C2.08203 9.01453 2.13556 7.90074 2.24261 6.62716C2.34748 5.37962 3.35899 4.40199 4.60939 4.33966Z" stroke="#6262FF" strokeLinejoin="round"/>
@@ -461,4 +471,5 @@ export const ReactIcons = {
   assetIcon,
   customAnalysisIcon,
   growthIcon,
+  trendingIcon14,
 }

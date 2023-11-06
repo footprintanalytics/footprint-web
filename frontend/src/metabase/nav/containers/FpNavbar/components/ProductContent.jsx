@@ -176,7 +176,7 @@ const ProductContent = props => {
           desc: "A turnkey solution to connect Web2 and Web3 data for enterprises",
           data: [
             {
-              title: "Project Management",
+              title: "Footprint Growth Analytics",
               link: "/fga",
             },
           ]

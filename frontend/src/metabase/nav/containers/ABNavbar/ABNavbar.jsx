@@ -16,7 +16,7 @@ import {
   getCreateFgaProjectModalShow,
   getLoginModalShow,
   getSubmitAddrZkspaceModal,
-  getLoginModalDefaultRegister,
+  getLoginModalDefaultRegister, getProjectSubmitModalShow,
 } from "metabase/selectors/control";
 import {
   cancelFeedbackAction,
@@ -24,7 +24,7 @@ import {
   loginModalShowAction,
   createFgaProjectModalShowAction,
   setIsCancelFeedbackBlockAction,
-  setSubmitAddrZkspaceModal,
+  setSubmitAddrZkspaceModal, projectSubmitModalShowAction,
 } from "metabase/redux/control";
 import GaProjectSearch from "metabase/ab/components/GaProjectSearch";
 import ProfileLink from "metabase/nav/components/ProfileLink";
@@ -48,14 +48,18 @@ import { getContext, getPath, getUser } from "../selectors";
 import { isDark } from "../../../dashboard/components/utils/dark";
 import { isBusinessTypePath } from "../../../ab/utils/utils";
 import CreateProjectModal2 from "metabase/ab/components/Modal/CreateProjectModal2";
+import ProjectSubmitContactModal from "metabase/ab/components/Modal/ProjectSubmitContactModal";
+import { getFgaProject } from "metabase/selectors/user";
 
 const mapStateToProps = (state, props) => ({
   path: getPath(state, props),
   context: getContext(state, props),
   user: getUser(state),
+  project: getFgaProject(state),
   loginModalShow: getLoginModalShow(state, props),
   loginModalDefaultRegister: getLoginModalDefaultRegister(state, props),
   createFgaProjectModalShow: getCreateFgaProjectModalShow(state, props),
+  projectSubmitModalShow: getProjectSubmitModalShow(state, props),
   loginModalRedirect: getLoginModalRedirect(state, props),
   createModalShow: getCreateModalShow(state, props),
   cancelFeedback: getCancelFeedback(state, props),
@@ -68,6 +72,7 @@ const mapDispatchToProps = {
   onChangeLocation: push,
   setLoginModalShow: loginModalShowAction,
   setCreateFgaProjectModalShowAction: createFgaProjectModalShowAction,
+  setProjectSubmitModalShowAction: projectSubmitModalShowAction,
   setCreateModalShow: createModalShowAction,
   cancelFeedbackAction,
   setIsCancelFeedbackBlockAction,
@@ -297,7 +302,10 @@ class ABNavbar extends Component {
       setCreateModalShow,
       setCreateFgaProjectModalShowAction,
       createFgaProjectModalShow,
+      projectSubmitModalShow,
+      setProjectSubmitModalShowAction,
       location,
+      project,
       onChangeLocation,
     } = this.props;
     const rootDisplay = window.location.pathname.startsWith("/defi360")
@@ -462,7 +470,6 @@ class ABNavbar extends Component {
             <div className="flex align-center" style={{ lineHeight: 1.2 }}>
               <img style={{ height: 32, width: 32 }} src={getOssUrl("logo80.png")} />
               <span style={{ color: "white", fontSize: 16, fontWeight: 600, marginLeft: 12 }}>Growth Analytics</span>
-              {/*{isBusinessTypePath("public-chain") && (<span style={{ color: "white", fontSize: 11, textAlign: "center" }}>Public Chain</span>)}*/}
             </div>
           </Link>
           {/* <LeftMenu /> */}
@@ -522,7 +529,19 @@ class ABNavbar extends Component {
           onCancel={() => {
             setCreateFgaProjectModalShowAction({ show: false });
           }}
-        ></CreateProjectModal2>
+        />
+        <ProjectSubmitContactModal
+          open={projectSubmitModalShow?.show}
+          force={projectSubmitModalShow?.force}
+          location={location}
+          project={project}
+          onSuccess={() => {
+            setProjectSubmitModalShowAction({ show: false });
+          }}
+          onCancel={() => {
+            setProjectSubmitModalShowAction({ show: false });
+          }}
+        />
       </div>
     );
   }
