@@ -8,12 +8,12 @@ import { getUser } from "metabase/selectors/user";
 import { getGrowthProjectPath } from "../../utils/utils";
 import ContractDetailsV3 from "metabase/submit/contract/components/ContractDetailsV3";
 import ContractDecoding from "metabase/submit/contract/components/ContractDecoding";
+import { loadCurrentFgaProjectNew } from "metabase/redux/user";
 
 const ProjectSubmitContactModal = props => {
-  const { open, onCancel, onSuccess, router, project, user, force } = props;
+  const { open, onCancel, onSuccess, router, project, user, force, loadCurrentFgaProjectNew } = props;
   const [form] = Form.useForm();
   const [state, setState] = useState(2);
-  const [submitProtocol, setSubmitProtocol] = useState();
   const [input, setInput] = useState();
   const [isDecodingProcessOpen, setDecodingProcessOpen] = useState({ open: false, param: null });
 
@@ -21,7 +21,6 @@ const ProjectSubmitContactModal = props => {
     if (open) {
     } else {
       setState(2);
-      setSubmitProtocol();
       setInput();
     }
   }, [open]);
@@ -74,9 +73,9 @@ const ProjectSubmitContactModal = props => {
         param={isDecodingProcessOpen?.param}
         fromFgaAddProject={true}
         backAction={() => setState(2)}
-        onSuccess={(protocol) => {
+        onSuccess={(projectName) => {
           setState(4);
-          setSubmitProtocol(protocol);
+          loadCurrentFgaProjectNew(project.protocolSlug, true, false);
           setDecodingProcessOpen({ open: false, param: null });
         }}
       ></ContractDecoding>)}
@@ -89,7 +88,7 @@ const ProjectSubmitContactModal = props => {
               <div className="flex flex-col">
                 <Link
                   className="mt3"
-                  to={getGrowthProjectPath(submitProtocol, "project_summary")}
+                  to={getGrowthProjectPath(project.protocolSlug, "project_summary")}
                   onClick={() => {
                     onCancel()
                   }}
@@ -111,4 +110,7 @@ const mapStateToProps = state => {
   };
 };
 
-export default withRouter(connect(mapStateToProps)(ProjectSubmitContactModal));
+const mapDispatchToProps = {
+  loadCurrentFgaProjectNew: loadCurrentFgaProjectNew,
+};
+export default withRouter(connect(mapStateToProps, mapDispatchToProps)(ProjectSubmitContactModal));

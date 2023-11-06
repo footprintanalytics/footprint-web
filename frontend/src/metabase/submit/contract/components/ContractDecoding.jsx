@@ -140,9 +140,9 @@ const ContractDecoding = ({ param, onSuccess, fromFgaAddProject, backAction }) =
   const SubmitSuccessFga = (res) => {
     console.log("SubmitSuccessFga", res)
     animation = loadAnimation("completed");
-    setTitle(
-      `FGA: Your project is created`,
-    );
+    // setTitle(
+    //   `FGA: Your project is created`,
+    // );
     setLog("Process completed.");
     // message.success("protocol process completed.");
     setLoadCompleted(true);
