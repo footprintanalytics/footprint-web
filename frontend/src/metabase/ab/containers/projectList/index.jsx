@@ -1,58 +1,42 @@
 /* eslint-disable react/prop-types */
 /* eslint-disable react-hooks/rules-of-hooks */
-import React, { useEffect, useRef, useState } from "react";
+import React, { useState } from "react";
 import { connect } from "react-redux";
-import { Input, message, Space, Table, Tour } from "antd";
+import { Avatar, Input, message, Space, Spin, Table } from "antd";
 import { getFgaProject, getUser } from "metabase/selectors/user";
 import { loadCurrentFgaProjectNew } from "metabase/redux/user";
-import { loadFgaFavoriteList, setGames } from "metabase/redux/control";
-import { getFgaChain, getFgaFavoriteList, getFgaProtocolList, getGamesByRedux } from "metabase/selectors/control";
+import { loadFgaFavoriteList, loadFgaProjectList, setGames } from "metabase/redux/control";
+import {
+  getFgaChain,
+  getFgaFavoriteList,
+  getFgaProjectList,
+  getFgaProtocolList,
+  getGamesByRedux,
+} from "metabase/selectors/control";
 import { DeleteOutlined, SettingOutlined } from "@ant-design/icons";
-import { deleteProject, deleteProtocolFavorite, getProjectList, postProtocolFavorite } from "metabase/new-service";
-import { uniqBy } from "lodash";
+import { deleteProject, getProjectList } from "metabase/new-service";
 import Link from "metabase/core/components/Link";
-import { isBusinessTypePath } from "metabase/ab/utils/utils";
 import { getGrowthProjectPath } from "metabase/ab/utils/utils";
-import getHeadDataProtocols from "metabase/ab/containers/gameList/data";
 import { useQuery } from "react-query";
 import { QUERY_OPTIONS } from "metabase/containers/about/config";
+import LoadingSpinner from "metabase/components/LoadingSpinner";
+import { head } from "lodash";
 
 const { Search } = Input;
 
 const projectList = props => {
-  const { router, location, children, user, projectPath, menu, projectObject, games, setGames, loadCurrentFgaProjectNew, businessType, chain, loadFgaFavoriteList, favoriteList, protocolList } =
+  const { router, location, children, user, projectPath, menu, projectObject, fgaProjectList, loadFgaProjectList } =
     props;
-  const userId = 158;
-  const projectId = 153;
-
-  const [isSubmitModalOpen, setSubmitModalOpen] = useState({
-    open: false,
-    param: null,
-  });
   const [searchKey, setSearchKey] = useState();
 
-  const params = {
-    ecosystemId: 415,
-  };
-
-  const { isLoading, data, refetch } = useQuery(["getProjectList"],
-    () => {
-      return getProjectList();
-    },
-    QUERY_OPTIONS,
-  );
-  const filterData = data?.filter(d => !searchKey || d?.protocolSlug?.toLowerCase()?.includes(searchKey))
-
-  const loadProjectDetail = projectSlug => {
-    loadCurrentFgaProjectNew(projectSlug);
-  };
+  const filterData = fgaProjectList?.filter(d => !searchKey || d?.protocolSlug?.toLowerCase()?.includes(searchKey))
 
   const deleteAction = async (record) => {
     const hide = message.loading("Loading...", 20000);
     await deleteProject({
       projectId: record.projectId,
     })
-    await refetch();
+    await loadFgaProjectList();
     hide();
     message.success("Delete project success");
     console.log("deleteAction", record, projectObject)
@@ -68,7 +52,15 @@ const projectList = props => {
       key: 'logo',
       width: 60,
       render: (_, record) => (
-        record.logo && record.logo !== 'N/A' ? <img src={record.logo} style={{height: 32, width: 32}} alt={record.logo}/> : <div style={{height: 32, width: 32, borderRadius: "50%", background: "#6c70FF"}}/>
+        record.logo && record.logo !== 'N/A' ? (
+          <img src={record.logo} style={{height: 32, width: 32}} alt={record.logo}/>
+        ): (
+          <Avatar
+            style={{height: 32, width: 32, borderRadius: "50%", background: "#6c70FF"}}
+          >
+            <div style={{fontSize: 14, lineHeight: "32px"}}>{head(record.projectName)}</div>
+          </Avatar>
+        )
       ),
     },
     {
@@ -138,9 +130,7 @@ const projectList = props => {
       {projectObject && (
         <div style={{ width: 800 }}>
           <div className="flex justify-between items-center">
-            <h2>All Projects
-              {isBusinessTypePath("public-chain") && <>({`${chain}`})</>}
-            </h2>
+            <h2>All Projects</h2>
             {/*<span className="text-white">Select {" "}*/}
             {/*  /!*<Link to={getGrowthProjectPath("Demo Project", "project_summary")}>Demo Project</Link>*!/*/}
             {/*  /!*{" "} to see full Sample.*!/*/}
@@ -170,7 +160,9 @@ const projectList = props => {
               style={{ width: 300, margin: "4px 0" }}
             />
           </div>
-          <Table dataSource={filterData} columns={columns} loading={isLoading}/>
+          {/*<Spin spinning={isLoading} indicator={<LoadingSpinner />} size={"large"} className={"project-list-table-loading"} >*/}
+            <Table dataSource={filterData} columns={columns} />
+          {/*</Spin>*/}
         </div>
       )}
     </div>
@@ -181,6 +173,7 @@ const mapDispatchToProps = {
   setGames: setGames,
   loadCurrentFgaProjectNew,
   loadFgaFavoriteList,
+  loadFgaProjectList: loadFgaProjectList,
 };
 
 const mapStateToProps = (state, props) => {
@@ -192,6 +185,7 @@ const mapStateToProps = (state, props) => {
     businessType: props?.params?.businessType || props?.businessType,
     favoriteList: getFgaFavoriteList(state),
     protocolList: getFgaProtocolList(state),
+    fgaProjectList: getFgaProjectList(state),
   };
 };
 

@@ -90,9 +90,10 @@ const mapStateToProps = (state, props) => {
     updateDashboardPara(parameters, parameterValues, "project_name", [
       projectProtocolName,
     ]);
-    if (isABPath() && isBusinessTypePath("game-portfolio") && props.fgaMenu?.includes("platform")) {
+    //game-portfolio
+    /*if (isABPath() && props.fgaMenu?.includes("platform")) {
       updateDashboardPara(parameters, parameterValues, "protocol_slugs", favoriteList?.map(item => item?.protocolSlug));
-    }
+    }*/
     if (isABPath()) {
       updateDashboardPara(parameters, parameterValues, "chain", [
         chain,
@@ -538,7 +539,8 @@ class PublicDashboard extends Component {
     //   hideParametersForCustom = `${hideParametersForCustom},${keyObjectAsset.slug}`;
     // }
 
-    if (isABPath() && isBusinessTypePath("game-portfolio") && (this.props.favoriteList?.length || 0) === 0) {
+    //game-portfolio
+    /*if (isABPath() && (this.props.favoriteList?.length || 0) === 0) {
       header = <div style={{ padding: "10px 20px", color: "white" }}>Please select your {" "}
         <Link
           className="text-underline text-underline-hover"
@@ -559,7 +561,7 @@ class PublicDashboard extends Component {
           favorite project list
         </Link>
         {" "} and then can analyze your projects.</div>
-    }
+    }*/
     if (
       isFgaPath() &&
       hashData?.from &&

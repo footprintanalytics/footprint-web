@@ -9,12 +9,14 @@ import {
   setShowZkspaceSubmitModal,
 } from "metabase/lib/register-activity";
 import { clearCurrentFgaProject, refreshCurrentFgaProjectNew } from "./user";
-import { getProtocolFavorite, getProtocolList } from "../new-service";
+import { getProjectList, getProtocolFavorite, getProtocolList } from "../new-service";
 import { isBusinessTypePath } from "../ab/utils/utils";
 
 export const LOGIN_MODAL_SHOW = "metabase/control/loginModalShow";
 export const CREATE_FGA_PROJECT_MODAL_SHOW =
   "metabase/control/createFgaProjectModalShow";
+export const PROJECT_SUBMIT_MODAL_SHOW =
+  "metabase/control/projectSubmitModalShow";
 
 export const FEATURES_SIDE_HIDE = "metabase/control/featuresSideHide";
 export const CREATE_MODAL_SHOW = "metabase/control/createModalShow";
@@ -38,6 +40,13 @@ export const SET_FGA_CHAIN = "metabase/control/SET_FGA_CHAIN";
 
 export const createFgaProjectModalShowAction = createThunkAction(
   CREATE_FGA_PROJECT_MODAL_SHOW,
+  ({ show, force = false }) => {
+    return { show: show, force: force };
+  },
+);
+
+export const projectSubmitModalShowAction = createThunkAction(
+  PROJECT_SUBMIT_MODAL_SHOW,
   ({ show, force = false }) => {
     return { show: show, force: force };
   },
@@ -195,6 +204,15 @@ export const loadFgaProtocolList = createThunkAction(
       } else {
         return result;
       }
+    },
+);
+export const LOAD_FGA_PROJECT_LIST =
+  "metabase/user/LOAD_FGA_PROJECT_LIST";
+export const loadFgaProjectList = createThunkAction(
+  LOAD_FGA_PROJECT_LIST,
+  (chain) =>
+    async (dispatch, getState) => {
+      let result = await getProjectList();
       return result;
     },
 );
@@ -215,6 +233,15 @@ export const control = handleActions(
           ...state,
           createFgaProjectModalShow: payload.show,
           createFgaProjectModalForce: payload.force,
+        };
+      },
+    },
+    [PROJECT_SUBMIT_MODAL_SHOW]: {
+      next: (state, { payload }) => {
+        return {
+          ...state,
+          projectSubmitModalShow: payload.show,
+          projectSubmitModalForce: payload.force,
         };
       },
     },
@@ -361,6 +388,14 @@ export const control = handleActions(
         return {
           ...state,
           fgaProtocolList: payload?.protocolList,
+        };
+      },
+    },
+    [LOAD_FGA_PROJECT_LIST]: {
+      next: (state, { payload }) => {
+        return {
+          ...state,
+          fgaProjectList: payload,
         };
       },
     },

@@ -13,6 +13,7 @@ import {
 } from "antd";
 import { LoadingOutlined } from "@ant-design/icons";
 import { valueFormat } from "metabase/ab/utils/utils";
+import LoadingSpinner from "metabase/components/LoadingSpinner/LoadingSpinner";
 
 export const WalletList = props => {
   const {
@@ -50,7 +51,7 @@ export const WalletList = props => {
   const itemRender = (current, type, originalElement, isLoading) => {
     if (type === "page") {
       return current === currentPage && isLoading ? (
-        <Spin indicator={<LoadingOutlined style={{ fontSize: 14 }} spin />} />
+        <LoadingSpinner />
       ) : (
         <a>{valueFormat(current)}</a>
       );

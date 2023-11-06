@@ -23,6 +23,7 @@ const tailLayout = {
 
 const ProjectSubmitContactModal = props => {
   const { open, onCancel, onSuccess, router, project, user, force } = props;
+  console.log("ProjectSubmitContactModal", project)
   const [form] = Form.useForm();
   const [loadingData, setLoadingData] = useState(false);
   const [loading, setLoading] = useState(false);
@@ -117,7 +118,7 @@ const ProjectSubmitContactModal = props => {
 
   return (
     <Modal
-      title="Create your project"
+      title="Submit more contract"
       open={open}
       destroyOnClose
       footer={null}
@@ -134,7 +135,8 @@ const ProjectSubmitContactModal = props => {
           hideEmail={true}
           hideMoreOptions={true}
           hideProjectName={true}
-          projectName={project.protocolName}
+          projectId={project?.id}
+          projectName={project?.protocolName}
           protocolCategoryList={[
             { value: "NFT", label: "NFT" },
             { value: "GameFi", label: "GameFi" },

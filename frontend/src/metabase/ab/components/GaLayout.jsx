@@ -1,5 +1,5 @@
 /* eslint-disable react/prop-types */
-import React, { useContext } from "react";
+import React, { useContext, useEffect } from "react";
 import { connect } from "react-redux";
 import { Layout } from "antd";
 import { Content } from "antd/lib/layout/layout";
@@ -53,7 +53,7 @@ const LayoutView = props => {
         {showSidebar && <GaSidebar />}
         <Content
           className="h-full ga-layout__content"
-          style={{ marginLeft: props.isChart ? 0 : 250 }}
+          // style={{ marginLeft: props.isChart ? 0 : 250 }}
         >
           {props.children}
         </Content>

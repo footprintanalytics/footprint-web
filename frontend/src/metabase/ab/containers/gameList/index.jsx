@@ -18,7 +18,7 @@ import getHeadDataProtocols from "metabase/ab/containers/gameList/data";
 const { Search } = Input;
 
 const projectList = props => {
-  const { router, location, children, user, projectPath, menu, projectObject, games, setGames, loadCurrentFgaProjectNew, businessType, chain, loadFgaFavoriteList, favoriteList, protocolList } =
+  const { router, location, children, user, projectPath, menu, projectObject, games, setGames, loadCurrentFgaProjectNew, chain, businessType, loadFgaFavoriteList, favoriteList, protocolList } =
     props;
   const userId = 158;
   const projectId = 153;
@@ -134,11 +134,9 @@ const projectList = props => {
   if (protocolList) {
     data = protocolList?.sort((a, b) => a.protocolSlug < b.protocolSlug ? -1 : 1)
     data = [...uniqBy(data, obj => obj.protocolSlug)]
-    if (isBusinessTypePath("game")) {
-      const headData = getHeadDataProtocols().map(item => data.find(i => i.protocolSlug === item));
-      const endData = data.filter(item => !getHeadDataProtocols().includes(item.protocolSlug));
-      data = [...headData, ...endData]
-    }
+    const headData = getHeadDataProtocols().map(item => data.find(i => i.protocolSlug === item));
+    const endData = data.filter(item => !getHeadDataProtocols().includes(item.protocolSlug));
+    data = [...headData, ...endData]
     data = data?.filter(item => {
       return searchKey ? item.protocolSlug?.includes(searchKey) || item.protocolName?.includes(searchKey) : true;
     });
@@ -258,9 +256,7 @@ const projectList = props => {
       {projectObject && (
         <div style={{ width: 800 }}>
           <div className="flex justify-between items-center">
-            <h2>Projects
-              {isBusinessTypePath("public-chain") && <>({`${chain}`})</>}
-            </h2>
+            <h2>Projects</h2>
             <span ref={ref4} className="text-white">Select {" "}
               {/*<Link to={getGrowthProjectPath("Demo Project", "project_summary")}>Demo Project</Link>*/}
               {/*{" "} to see full Sample.*/}

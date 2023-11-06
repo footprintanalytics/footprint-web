@@ -2,34 +2,18 @@
 /* eslint-disable react/prop-types */
 import React, { useEffect, useRef, useState } from "react";
 import { connect } from "react-redux";
-import { Button, message, Modal, Select, Tour } from "antd";
+import { Avatar, Modal, Select, Tour } from "antd";
 import { withRouter } from "react-router";
 import { getFgaProject, getUser } from "metabase/selectors/user";
 import { loadCurrentFgaProjectNew } from "metabase/redux/user";
-import Link from "metabase/core/components/Link";
 import "../css/index.css";
-import { take } from "lodash";
+import { head } from "lodash";
 import { getGrowthProjectPath, isBusinessTypePath, saveLatestGAProject } from "../utils/utils";
 import _ from "underscore";
-import {
-  getFgaChain,
-  getFgaFavoriteList,
-  getFgaProtocolList,
-  getGamesByRedux,
-  getHistoryGamesByRedux,
-} from "metabase/selectors/control";
-import {
-  loadFgaFavoriteList,
-  loadFgaProtocolList,
-  loginModalShowAction,
-  setGames,
-  setHistoryGames,
-} from "metabase/redux/control";
+import { getFgaChain, getFgaProjectList, getGamesByRedux, getHistoryGamesByRedux } from "metabase/selectors/control";
+import { loadFgaProjectList, loginModalShowAction, setGames, setHistoryGames } from "metabase/redux/control";
 import { getChainDataList } from "metabase/query_builder/components/question/handle";
 import { fga_menu_data_v2 } from "metabase/ab/utils/data";
-import { getProjectList } from "metabase/new-service";
-import { QUERY_OPTIONS } from "metabase/containers/about/config";
-import { useQuery } from "react-query";
 
 const GaProjectSearch = props => {
   const {
@@ -51,6 +35,8 @@ const GaProjectSearch = props => {
     businessType,
     chain,
     disableLoadList,
+    fgaProjectList,
+    loadFgaProjectList,
     enableTour = false,
   } = props;
   const selectRef = useRef();
@@ -68,20 +54,11 @@ const GaProjectSearch = props => {
       nextButtonProps: {children: <div>ok</div>},
     }
   ]
-  let defaultProject;
-  if (isBusinessTypePath("public-chain")) {
-    defaultProject = getChainDataList({ includeAll: false })?.find(item => item.label === chain)?.defaultProject ||
-      {
-        protocolSlug: "the-sandbox",
-        protocolName: "The Sandbox",
-      }
-  } else {
-    defaultProject =
+  const defaultProject =
       {
         protocolSlug: "Demo Project",
         protocolName: "Demo Project",
       }
-  }
 
   useEffect(() => {
     if (businessType && location.pathname.split("/").length === 3 && projectObject) {
@@ -102,14 +79,13 @@ const GaProjectSearch = props => {
 
 
   // console.log("currentProject", currentProject)
-  const { isLoading, data, refetch } = useQuery(
-    ["getProjectList", user?.id],
-    async () => {
-      return await getProjectList();
-    },
-    QUERY_OPTIONS,
-  );
-  console.log("getProjectList", data)
+  // const { isLoading, data, refetch } = useQuery(
+  //   ["getProjectList", user?.id],
+  //   async () => {
+  //     return await getProjectList();
+  //   },
+  //   QUERY_OPTIONS,
+  // );
   const loadProjectDetail = protocolSlug => {
     loadCurrentFgaProjectNew(protocolSlug);
   };
@@ -134,8 +110,8 @@ const GaProjectSearch = props => {
 
 
   useEffect(() => {
-    if (data?.length > 0) {
-      const projects = data;
+    if (fgaProjectList?.length > 0) {
+      const projects = fgaProjectList;
       const index = projects.findIndex(i => i.protocolSlug === currentProject);
       const projectIndex = index === -1 ? 0 : index;
       let project = defaultProject;
@@ -156,22 +132,13 @@ const GaProjectSearch = props => {
         });
       }
     }
-  }, [data]);
+  }, [fgaProjectList]);
 
   useEffect(() => {
-    if (projectObject) {
-      const protocolSlug = projectObject.protocolSlug;
-      const protocolName = projectObject.protocolName;
-      const newObject = {
-        protocolSlug,
-        protocolName,
-      }
-      // if (!historyGames.find(item => item.protocolSlug === protocolSlug)) {
-      //   setHistoryGames(take([newObject, ...(historyGames || [])], 2))
-      // }
-      refetch()
+    if (projectObject || location.pathname.split("/").length === 3) {
+      loadFgaProjectList()
     }
-  }, [projectObject])
+  }, [projectObject, location.pathname])
 
   const [modal, contextHolder] = Modal.useModal();
 
@@ -193,42 +160,18 @@ const GaProjectSearch = props => {
     // loadProjectDetail(option.protocolSlug);
     if (option.protocolSlug) {
       router?.push({
-        pathname: getGrowthProjectPath(option.protocolSlug),
+        pathname: getGrowthProjectPath(option.protocolSlug, fga_menu_data_v2(businessType, null, null).keys[0]),
       });
     }
   };
 
-  const selectDataMapFunction = ( superKey) => {
-    return (item) => {
-      const logo = item.logo;
-      return {
-        key: `${superKey}-${item.protocolSlug}`,
-        label: (
-          <div className="flex align-center">
-            {logo && logo !== 'N/A' ? <img src={logo} style={{height: 16, width: 16}} alt={item.protocolSlug}/> : <div style={{height: 16, width: 16, borderRadius: "50%", background: "#6c70FF"}}/>}
-            <span className="ml1" style={
-              {
-                whiteSpace: "nowrap",
-                overflow: "hidden",
-                textOverflow: "ellipsis",
-                width: 160,
-              }
-            }>{item.projectName}</span>
-          </div>
-        ),
-        value: item.protocolSlug
-      }
-    }
-  }
-
-  const selectOptions = data?.map(selectDataMapFunction(""))
 
   return (
     <div className="flex flex-column items-center ga-project-search" ref={ref1} >
         <>
           {/*{userProject?.length > 0 && (*/}
             <Select
-              // showSearch
+              showSearch
               ref={selectRef}
               style={{ width: 360 }}
               dropdownStyle={{
@@ -239,10 +182,11 @@ const GaProjectSearch = props => {
               open={open}
               onDropdownVisibleChange={(open) => setOpen(open)}
               dropdownRender={(menu) => (
-                    <div>
-                      {menu}
-                    </div>
-                  )}
+                <div>
+                  {menu}
+                </div>
+              )}
+              loading={!fgaProjectList}
               value={currentProject}
               onChange={handleProjectChange}
               placeholder="Search by protocol or nft collection address"
@@ -255,8 +199,35 @@ const GaProjectSearch = props => {
                   .join(",")
                   .includes(input.toLowerCase())
               }
-              options={selectOptions}
-            />
+              // options={selectOptions}
+            >
+              {fgaProjectList?.map(item => {
+                const logo = item.logo;
+                return (
+                  <Select.Option key={item.protocolSlug} label={item.projectName} value={item.protocolSlug}>
+                    <div className="flex align-center">
+                       {logo && logo !== 'N/A' ? (
+                         <img src={logo} style={{height: 16, width: 16}} alt={item.protocolSlug}/>
+                       ) : (
+                         <Avatar
+                           style={{height: 16, width: 16, borderRadius: "50%", background: "#6c70FF"}}
+                         >
+                           <div style={{fontSize: 12, lineHeight: "16px"}}>{head(item.projectName)}</div>
+                         </Avatar>
+                       )}
+                       <span className="ml1" style={
+                         {
+                          whiteSpace: "nowrap",
+                          overflow: "hidden",
+                          textOverflow: "ellipsis",
+                          width: 160,
+                        }
+                      }>{item.projectName}</span>
+                    </div>
+                  </Select.Option>
+                )
+              })}
+            </Select>
           {/*)}*/}
         </>
       {/*<CreateMyProjectModal
@@ -293,6 +264,7 @@ const mapDispatchToProps = {
   setGames: setGames,
   setHistoryGames: setHistoryGames,
   setLoginModalShowAction: loginModalShowAction,
+  loadFgaProjectList: loadFgaProjectList,
 };
 
 const mapStateToProps = (state, props) => {
@@ -306,6 +278,7 @@ const mapStateToProps = (state, props) => {
     historyGames: getHistoryGamesByRedux(state),
     businessType: props.params.businessType,
     chain: getFgaChain(state),
+    fgaProjectList: getFgaProjectList(state),
   };
 };
 

@@ -294,10 +294,6 @@ export function isBusinessTypePath(businessType: string){
 }
 
 export function getGrowthProjectPath(project: string, menu?: string) {
-  if (isBusinessTypePath("public-chain")) {
-    return `/fga/public-chain/project/${project}/${menu ?? ""}`;
-  }
-
   return `/fga/${location.pathname.split("/")[2]}/project/${project}/${menu ?? ""}`;
 }
 export function getGaMenuTabs(

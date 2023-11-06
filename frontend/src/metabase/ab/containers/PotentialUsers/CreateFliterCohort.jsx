@@ -225,13 +225,13 @@ const CreateCohort2 = ({
                 content: (
                   <div style={{ marginTop: 20 }}>
                     <p>
-                      {`The sample project can't create a connector, you can choose other project to connect web2.`}
+                      {`The Demo Project can't create a connector, you can create your project to connect web2.`}
                     </p>
                   </div>
                 ),
-                okText: "Select other project",
+                okText: "Contact us",
                 onOk() {
-                  router.push(`/fga/${businessType}/project-manage`);
+                  window.open("mailto:sales@footprint.network")
                 },
               });
               return ;
