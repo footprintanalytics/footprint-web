@@ -92,7 +92,6 @@ const bindGame = props => {
         <Space size="middle">
           <Link ></Link>
           <a onClick={() => {
-            console.log("manage-games", games)
             const hide = message.loading("Loading...", 20000);
             setTimeout(async () => {
               hide();

@@ -20,9 +20,6 @@ const SankeyChart = props => {
     runData,
   } = props;
 
-  console.log("SankeyChart nodes", nodes)
-  console.log("SankeyChart links", links)
-
   const projectName = projectObject.protocolSlug
   const ref = React.createRef();
   const [nodeDetail, setNodeDetail] = useState();

@@ -172,7 +172,6 @@ const ConnectorList = props => {
     }
   }
 
-  console.log("projectId", projectId)
   useEffect(() => {
     if ((projectId && !isLoading && data) || (!projectId && data)) {
       console.log("getAvailableIntegrations", data);
