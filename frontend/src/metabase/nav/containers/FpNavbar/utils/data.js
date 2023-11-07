@@ -276,7 +276,7 @@ const academyIcon14 =
 const trendingIcon14 =
   <svg width="14" height="14" viewBox="0 0 20 20" fill="none">
     <path d="M1.66797 18.3334H18.3346" stroke="#ACAEB4" strokeLinecap="round" strokeLinejoin="round"/>
-    <path d="M1.66797 10.8334L5.0013 11.6667V15.8334H1.66797V10.8334Z" stroke="#6262FF" strokeLinejoin="round"/>
+    <path d="M1.66797 10.8334L5.0013 11.6667V15.8334H1.66797V10.8334Z" stroke="#ACAEB4" strokeLinejoin="round"/>
     <path d="M8.33203 10L11.6654 8.33337V15.8334H8.33203V10Z" stroke="#ACAEB4" strokeLinejoin="round"/>
     <path d="M15 6.66667L18.3333 5V15.8333H15V6.66667Z" stroke="#ACAEB4" strokeLinejoin="round"/>
     <path d="M1.66797 7.49996L5.0013 8.33329L18.3346 1.66663H14.168" stroke="#ACAEB4" strokeLinecap="round" strokeLinejoin="round"/>
