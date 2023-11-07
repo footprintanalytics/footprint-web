@@ -38,7 +38,7 @@ const projectList = props => {
     })
     await loadFgaProjectList();
     hide();
-    message.success("Delete project success");
+    message.success("Delete project successfully");
     console.log("deleteAction", record, projectObject)
     if (record.protocolSlug === projectObject.protocolSlug) {
       router.replace(getGrowthProjectPath("Demo Project"))
