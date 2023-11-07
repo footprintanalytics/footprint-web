@@ -126,7 +126,7 @@ const ProjectInfo = props => {
               >
                 click here{" "}
               </Typography.Link>{" "}
-              and submit more contract!
+              and submit more contracts!
             </Typography.Text>
           </div>
         }
@@ -179,7 +179,7 @@ const ProjectInfo = props => {
       >
         <div className=" flex flex-row justify-between w-full mb2" >
           <Title width={"100%"} level={4} style={{ marginBottom: 0 }}>
-            General
+            Project Info
           </Title>
         </div>
 
