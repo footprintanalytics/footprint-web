@@ -108,11 +108,18 @@ const ProductContent = props => {
           externalLink: true,
           data: [
             {
-              title: "APP Directory",
+              title: "Chain Analytics",
               icon: ReactIcons.fpDatasetIcon,
-              link: "https://www.metamosaic.io/Ethereum/protocols",
+              link: "https://www.metamosaic.io/Ethereum",
               externalLink: true,
-              desc: "Provide a holistic view of a chain and protocol with reference data",
+              desc: "One-stop trusted ecosystem analysis dedicated to chains",
+            },
+            {
+              title: "Contract Tracker",
+              icon: ReactIcons.refDataApiIcon,
+              link: "https://www.metamosaic.io/Ethereum/contract_tracker",
+              externalLink: true,
+              desc: "Track newest contracts on chain in minutes",
             }
           ]
         }
@@ -172,14 +179,9 @@ const ProductContent = props => {
           ]
         },
         appBuilderData: {
-          topic: "Growth Analytics Builder",
+          topic: "Footprint Growth Analytics",
           desc: "A turnkey solution to connect Web2 and Web3 data for enterprises",
-          data: [
-            {
-              title: "Footprint Growth Analytics",
-              link: "/fga",
-            },
-          ]
+          link: "/fga",
         },
         connectorData: {
           topic: "Data Connector",
@@ -244,10 +246,10 @@ const ProductContent = props => {
             {MainMenuFunction.renderVerticalMenu({data: tabData?.myAnalysisData, className: "main-menu__vertical-menu3"})}
           </div>
           <div className="ml4 main-menu__data-api-padding-bottom">
-            {MainMenuFunction.renderVerticalMenu({data: tabData?.connectorData})}
+            {MainMenuFunction.renderVerticalMenu({data: tabData?.appBuilderData})}
           </div>
           <div className="ml4 main-menu__data-api-padding-bottom">
-            {MainMenuFunction.renderVerticalMenu({data: tabData?.appBuilderData})}
+            {MainMenuFunction.renderVerticalMenu({data: tabData?.connectorData})}
           </div>
         </>
       );
