@@ -1629,12 +1629,14 @@
 .About__granted-by ul {
   display: flex;
   flex-direction: row;
+  flex-wrap: wrap;
   justify-content: center;
   margin: 60px 0;
+  gap: 15px;
+  padding: 0 100px;
 }
 
 .About__granted-by ul li {
-  margin: 0 10px;
   max-width: 270px;
 }
 

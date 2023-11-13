@@ -552,6 +552,11 @@ const chainData = [
         "publicUuid": "9e0a1aa1-eeae-4608-b77d-cf23271d92a1",
       },
       {
+        "label": "Layer 2 Overview",
+        "value": "layer-2-overview",
+        "publicUuid": "79d8dc98-884b-448f-8d90-7baf3fa91e11",
+      },
+      {
         "label": "Chain Comparison",
         "value": "chain-comparison",
         "publicUuid": "79eaf62d-95ac-4838-b34d-3cfdbdf3fa18",
