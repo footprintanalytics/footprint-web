@@ -82,8 +82,8 @@ const footers = [
         url: "/studio/create",
       },
       {
-        label: "Growth Analytics Builder\n(Coming soon)",
-        url: "",
+        label: "Growth Analytics",
+        url: "/fga",
       },
       {
         label: "Data Connector",
