@@ -26,74 +26,22 @@ const ProductContent = props => {
         restApiData: {
           topic: "REST API",
           desc: "Free API for Web3 developers",
-          data: [
-            {
-              title: "Wallet API",
-              desc: "Access to wallet age, transactions, balance, and more.",
-              link: "https://docs.footprint.network/reference/get_v3-address-getwalletage",
-              icon: ReactIcons.topSalesIcon,
-              externalLink: true,
-            },
-            {
-              title: "Reference Data API",
-              desc: "Check matching of contract addresses, deployers, protocols, and wallets, entities, etc.",
-              link: "https://docs.footprint.network/reference/get_contract-getcontractdeploymentinfo",
-              icon: ReactIcons.refDataApiIcon,
-              externalLink: true,
-            },
-            {
-              title: "Balance API",
-              desc: "Get native, token, and NFT balances by wallet address.",
-              link: "https://docs.footprint.network/reference/get_v3-address-getwalletnativetokenbalance",
-              icon: ReactIcons.balanceApiIcon,
-              externalLink: true,
-            },
-            {
-              title: "Transaction API",
-              desc: "Get real-time transactions data for 27+ chains at your fingertips.",
-              link: "https://docs.footprint.network/reference/get_v2-chain-transactions",
-              icon: ReactIcons.transactionApiIcon,
-              externalLink: true,
-            },
-            {
-              title: "Transfer API",
-              desc: "Get real-time token transfers data for 27+ chains with one line code.",
-              link: "https://docs.footprint.network/reference/get_v2-token-transfers",
-              icon: ReactIcons.transferApiIcon,
-              externalLink: true,
-            },
-            /*{
-              title: "Ownership API",
-              desc: "Identify the owner of an NFT in just a single API call.",
-              link: "https://docs.footprint.network/reference/get_v2-nft-collection-owners",
-              icon: ReactIcons.ownershipApiIcon,
-              externalLink: true,
-            },*/
-            {
-              title: "NFT API",
-              desc: "Get multichain NFT transfers, metadata,price and more.",
-              link: "https://docs.footprint.network/reference/get_v2-nft-collection-info",
-              icon: ReactIcons.nftApiIcon,
-              externalLink: true,
-            },
-            /*{
-              title: "Money Flow API",
-              desc: "Coming soon",
-              link: "",
-              icon: ReactIcons.moneyFlowIcon,
-            },*/
-          ],
+          link: "https://docs.footprint.network/reference/introduction",
+          externalLink: true,
+          icon: ReactIcons.refDataApiIcon,
         },
         sqlApiData: {
           topic: "SQL API",
           desc: "A flexible SQL API customization for robust requirements",
           link: "https://docs.footprint.network/reference/web-application-sql-api",
           externalLink: true,
+          icon: ReactIcons.nftApiIcon,
         },
         batchDownloadData: {
           topic: "Batch Download",
           desc: "Sync blockchain historical data in one batch",
           link: "/batch-download",
+          icon: ReactIcons.transferApiIcon,
         },
       },
     },
@@ -106,10 +54,11 @@ const ProductContent = props => {
           desc: "One-stop turnkey solution for reference data",
           link: "https://www.metamosaic.io/",
           externalLink: true,
+          icon: ReactIcons.transactionApiIcon,
           data: [
             {
               title: "Chain Analytics",
-              icon: ReactIcons.fpDatasetIcon,
+              icon: ReactIcons.balanceApiIcon,
               link: "https://www.metamosaic.io/Ethereum",
               externalLink: true,
               desc: "One-stop trusted ecosystem analysis dedicated to chains",
@@ -126,8 +75,8 @@ const ProductContent = props => {
       }
     },
     {
-      name: "Analytics Studio",
-      value: "analytics-studio",
+      name: "Analytics",
+      value: "analytics",
       data: {
         // studioDescData: {
         //   img: getOssUrl("studio/img-studio-pic.png"),
@@ -135,46 +84,22 @@ const ProductContent = props => {
         // },
         analyticsToolData: {
           topic: "Analytics Tool",
+          icon: ReactIcons.solutionIcon,
           data: [
             {
               title: "Footprint Datasets",
               icon: ReactIcons.fpDatasetIcon,
               link: "/@Footprint/Footprint-Datasets-Data-Dictionary",
-            }
-          ]
-        },
-        createData: {
-          desc: "CREATE",
-          data: [
+            },
             {
-              title: "Zero-coding chart",
+              title: "Create",
               icon: ReactIcons.codingChartIcon,
-              link: Urls.newQuestion({ type: "query" }),
+              link: "/studio/create",
             },
             {
-              title: "SQL chart",
-              icon: ReactIcons.sqlChartIcon,
-              link: Urls.newQuestion({ type: "native", creationType: "native_question" }),
-            },
-            {
-              title: "New dashboard",
-              icon: ReactIcons.newDashboardIcon,
-              link: "dashboard/new",
-            },
-          ]
-        },
-        myAnalysisData: {
-          desc: "MY ANALYSIS",
-          data: [
-            {
-              title: "My dashboards",
+              title: "My Analysis",
               icon: ReactIcons.myDashboardIcon,
               link: "/studio/my-analysis/dashboards",
-            },
-            {
-              title: "My charts",
-              icon: ReactIcons.myChartIcon,
-              link: "/studio/my-analysis/charts",
             }
           ]
         },
@@ -182,11 +107,13 @@ const ProductContent = props => {
           topic: "Footprint Growth Analytics",
           desc: "A turnkey solution to connect Web2 and Web3 data for enterprises",
           link: "/fga",
+          icon: ReactIcons.ownershipApiIcon,
         },
         connectorData: {
           topic: "Data Connector",
           desc: "Seamlessly integrate Web3 and Web2 channels \nwith our data connectors",
           link: "/studio/my-datasets/integration",
+          icon: ReactIcons.trendingIcon,
         },
       }
     },
@@ -228,22 +155,18 @@ const ProductContent = props => {
       return (
         <>
           <div className="ml4 main-menu__data-api-padding">
-            {MainMenuFunction.renderVerticalMenu({data: tabData?.restApiData})}
-          </div>
-          <div className="ml4 main-menu__data-api-padding-bottom">
-            {MainMenuFunction.renderVerticalMenu({data: tabData?.sqlApiData})}
-            {MainMenuFunction.renderVerticalMenu({data: tabData?.batchDownloadData})}
+            {MainMenuFunction.renderVerticalMenu({data: tabData?.restApiData, className: "main-menu__vertical-menu2"})}
+            {MainMenuFunction.renderVerticalMenu({data: tabData?.sqlApiData, className: "main-menu__vertical-menu2"})}
+            {MainMenuFunction.renderVerticalMenu({data: tabData?.batchDownloadData, className: "main-menu__vertical-menu2"})}
           </div>
         </>
       );
     }
-    if (tab === "analytics-studio") {
+    if (tab === "analytics") {
       return (
         <>
           <div className="ml4 main-menu__data-api-padding">
-            {MainMenuFunction.renderVerticalMenu({data: tabData?.analyticsToolData, className: "main-menu__vertical-menu2"})}
-            {MainMenuFunction.renderVerticalMenu({data: tabData?.createData, className: "main-menu__vertical-menu3"})}
-            {MainMenuFunction.renderVerticalMenu({data: tabData?.myAnalysisData, className: "main-menu__vertical-menu3"})}
+            {MainMenuFunction.renderVerticalMenu({data: tabData?.analyticsToolData, className: "main-menu__vertical-menu"})}
           </div>
           <div className="ml4 main-menu__data-api-padding-bottom">
             {MainMenuFunction.renderVerticalMenu({data: tabData?.appBuilderData})}
