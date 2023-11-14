@@ -173,7 +173,7 @@ const GaSidebar = (props) => {
         <div
           className="ga-side-bar__bottom-panel"
         >
-          <div>Beta v0.1.0</div>
+          <div>Beta v0.1.1</div>
           <div>Powered by <img style={{marginRight:2, height: 16, width: 16}} src={getOssUrl("/logo80.png?1=1&image_process=resize,w_16/crop,h_16/format,png")}/><Link to={"/"}>Footprint Analytics</Link></div>
         </div>
       </div>
