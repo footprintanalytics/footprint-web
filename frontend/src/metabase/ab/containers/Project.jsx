@@ -33,7 +33,13 @@ import SocialConnectList from "./SocialConnectList";
 import "../css/index.css";
 import GameList from "./gameList";
 import BindGame from "./bindGame";
-import { getBindGameMapping, getFgaChain, getFgaFavoriteList, getGamesByRedux } from "metabase/selectors/control";
+import {
+  getBindGameMapping,
+  getFgaChain,
+  getFgaFavoriteList,
+  getFgaProjectList,
+  getGamesByRedux,
+} from "metabase/selectors/control";
 import { setGames } from "metabase/redux/control";
 import ProjectList from "metabase/ab/containers/projectList";
 
@@ -51,6 +57,7 @@ const Project = props => {
     setGames,
     games,
     favoriteList,
+    fgaProjectList,
     businessType,
   } =
     props;
@@ -243,6 +250,7 @@ const Project = props => {
             chain={chain}
             fgaMenu={currentMenu}
             favoriteList={favoriteList}
+            projectList={fgaProjectList}
             isFullscreen={false}
             hideTitle={true}
             key={`${chain}${projectObject?.protocolSlug}`}
@@ -659,6 +667,7 @@ const mapStateToProps = (state, props) => {
     businessType: props.params?.businessType,
     bindGameMapping: getBindGameMapping(state),
     favoriteList: getFgaFavoriteList(state),
+    fgaProjectList: getFgaProjectList(state),
   };
 };
 

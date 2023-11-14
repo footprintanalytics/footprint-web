@@ -377,6 +377,8 @@ export const getDashboardMap = (businessType, project, chain) => {
     ["wallet_retention", "9a19edda-1c4c-4aa5-95fc-921304f8f8fd"],
     ["user_retention", "320e0a60-107c-44cb-83e3-7c8301354968"],
 
+    ["project_key_metrics", "159d8c0e-f1b9-4449-a6b1-7ee51de47563"],
+
     ["project_health-platform", "7a275541-580a-4720-8e10-f455335de137"],
     ["users_overview-platform", "6d84b4a6-ceef-4b30-a9ad-b233038fd8d3"],
   ]);
@@ -393,7 +395,7 @@ export const fga_menu_data_v2 = (businessType, project, chain) => {
   const gameProjectData = {
     "platformMenuTabs": [
         getItem("All Projects", "all-projects", null),
-        getItem("Project Key Metrics", "project_key_metrics", null),
+        getItem(getLabel({label: "Project Key Metrics", tip: "Here shows key metrics of selected project, derived from contracts associated with each project."}), "project_key_metrics", null),
     ],
     "menuTabs": [
       getItem("Project Overview", "project_overview", ReactIcons.myAnalysisIcon, [
