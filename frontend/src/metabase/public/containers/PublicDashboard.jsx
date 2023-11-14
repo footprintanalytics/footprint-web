@@ -469,9 +469,9 @@ class PublicDashboard extends Component {
       data = ([...(project?.tokenAddress?.filter(filterChainFunction) || []), ...(project?.nftCollectionAddress?.filter(filterChainFunction) || [])])
         ?.map(item => item?.address);
     } else if (type === "project") {
-      data = this.props.projectList.length > 1 ? ["the-sandbox"]
+      data = this.props.projectList.length > 1 ? projectList
         .filter(i => i.protocolSlug !== "Demo Project")
-        .map(i => i.projectName) : this.props.projectList.map(i => i.projectName);
+        .map(i => i.projectName) : ["the-sandbox"];
     } else {
       data = (project?.nftCollectionAddress?.filter(filterChainFunction))
         ?.map(item => item?.address);
