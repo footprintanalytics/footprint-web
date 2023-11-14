@@ -3,10 +3,9 @@ import React, { Component } from "react";
 import { connect } from "react-redux";
 import { push } from "react-router-redux";
 import cx from "classnames";
-import Link from "metabase/core/components/Link";
 
 import _ from "underscore";
-import {debounce, isArray, union, startCase} from "lodash";
+import { debounce, isArray, startCase, union } from "lodash";
 import { Breadcrumb, Select, Tooltip } from "antd";
 import { IFRAMED } from "metabase/lib/dom";
 
@@ -56,6 +55,7 @@ const mapStateToProps = (state, props) => {
   const parameters = getParameters(state, props);
   const parameterValues = getParameterValues(state, props);
   const project = props.project;
+  const projectList = props.projectList;
   const chain = props.chain;
   const location = props.location;
   const favoriteList = props.favoriteList;
@@ -90,10 +90,7 @@ const mapStateToProps = (state, props) => {
     updateDashboardPara(parameters, parameterValues, "project_name", [
       projectProtocolName,
     ]);
-    //game-portfolio
-    /*if (isABPath() && props.fgaMenu?.includes("platform")) {
-      updateDashboardPara(parameters, parameterValues, "protocol_slugs", favoriteList?.map(item => item?.protocolSlug));
-    }*/
+    // updateDashboardPara(parameters, parameterValues, "protocol_slug_list", projectList?.map(item => item?.protocolSlug));
     if (isABPath()) {
       updateDashboardPara(parameters, parameterValues, "chain", [
         chain,
@@ -311,6 +308,13 @@ class PublicDashboard extends Component {
     }
     return null;
   }
+  getFgaMultiKeyProject = () => {
+    if (isABPath()) {
+      const needMultiSelectHeaderSlugs = ["project_list"];
+      return this.props.parameters.find(item => needMultiSelectHeaderSlugs.includes(item.slug));
+    }
+    return null;
+  }
 
   getFgaMultiKeyObjectAsset = () => {
     if (isABPath()) {
@@ -358,6 +362,11 @@ class PublicDashboard extends Component {
       const keyObjectToken = this.getFgaMultiKeyObjectToken();
       if (keyObjectToken) {
         this.props.setParameterValue(keyObjectToken.id, this.props.project.tokenAddress[0]?.address)
+      }
+      const keyProject = this.getFgaMultiKeyProject();
+      if (keyProject) {
+        const array = this.props.projectList.length > 1 ? this.props.projectList.filter(i => i.protocolSlug !== "Demo Project").map(i => i.protocolSlug) : ["the-sandbox"]
+        this.props.setParameterValue(keyProject.id, array)
       }
       // const keyObjectAsset = this.getFgaMultiKeyObjectAsset();
       // if (keyObjectAsset) {
@@ -450,27 +459,37 @@ class PublicDashboard extends Component {
     let {
       project,
       filterChainFunction,
+      projectList,
     } = this.props;
     let data = [];
     if (type === "token") {
-      data = project?.tokenAddress?.filter(filterChainFunction)
+      data = (project?.tokenAddress?.filter(filterChainFunction))
+        ?.map(item => item?.address)
     } else if (type === "asset") {
-      data = [...(project?.tokenAddress?.filter(filterChainFunction) || []), ...(project?.nftCollectionAddress?.filter(filterChainFunction) || [])];
+      data = ([...(project?.tokenAddress?.filter(filterChainFunction) || []), ...(project?.nftCollectionAddress?.filter(filterChainFunction) || [])])
+        ?.map(item => item?.address);
+    } else if (type === "project") {
+      data = this.props.projectList.length > 1 ? ["the-sandbox"]
+        .filter(i => i.protocolSlug !== "Demo Project")
+        .map(i => i.projectName) : this.props.projectList.map(i => i.projectName);
     } else {
-      data = project?.nftCollectionAddress?.filter(filterChainFunction);
+      data = (project?.nftCollectionAddress?.filter(filterChainFunction))
+        ?.map(item => item?.address);
     }
     return (<div className="flex flex-column p2" style={{ background: "#0F0F14" }}>
       <span className="text-white" style={{ marginBottom: 4 }}>{startCase(keyObject.slug)}</span>
       <span><Tooltip title="sss"></Tooltip></span>
       <Select
-        defaultValue={data?.[0]?.address}
+        mode="multiple"
+        defaultValue={data}
         style={{
           width: 420,
         }}
-        onChange={e => {
-          this.props.setParameterValue(keyObject.id, e)
+        maxTagCount={"responsive"}
+        onChange={value => {
+          this.props.setParameterValue(keyObject.id, value.map(v => projectList?.find(i => i.projectName === v).protocolSlug))
         }}
-        options={union(data?.map(item => item.address))
+        options={union(data)
           ?.map(item => {
           return {
             value: item,
@@ -532,6 +551,11 @@ class PublicDashboard extends Component {
     if (keyObjectToken) {
       header = this.handleFgaMultiAddressUiSelectHeader("token", keyObjectToken);
       hideParametersForCustom = `${hideParametersForCustom},${keyObjectToken.slug}`;
+    }
+    const keyProject = this.getFgaMultiKeyProject();
+    if (keyProject) {
+      header = this.handleFgaMultiAddressUiSelectHeader("project", keyProject);
+      hideParametersForCustom = `${hideParametersForCustom},${keyProject.slug}`;
     }
     // const keyObjectAsset = this.getFgaMultiKeyObjectAsset();
     // if (keyObjectAsset) {
