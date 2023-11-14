@@ -31,6 +31,7 @@ const renderVerticalMenu = ({data, className}) => {
   const desc = data?.desc;
   const topic = data?.topic;
   const link = data?.link;
+  const icon = data?.icon;
   const externalLink = data?.externalLink;
 
   return (
@@ -41,13 +42,19 @@ const renderVerticalMenu = ({data, className}) => {
         target={externalLink ? "_blank" : null}
       >
         <div className="flex flex-column px1">
-          {topic && (<h3>{topic}</h3>)}
+          <div className="flex align-center mb1">
+            {icon && (<div className="main-menu__vertical-menu-icon mr1">{icon}</div>)}
+            {topic && (<h3>{topic}</h3>)}
+          </div>
           {title && (<h5>{title}</h5>)}
           {desc && (<h6>{desc}</h6>)}
         </div>
       </Link>) :
         <div className="flex flex-column px1">
-          {topic && (<h3>{topic}</h3>)}
+          <div className="flex align-center mb1">
+            {icon && (<div className="main-menu__vertical-menu-icon mr1">{icon}</div>)}
+            {topic && (<h3>{topic}</h3>)}
+          </div>
           {title && (<h5>{title}</h5>)}
           {desc && (<h6>{desc}</h6>)}
         </div>

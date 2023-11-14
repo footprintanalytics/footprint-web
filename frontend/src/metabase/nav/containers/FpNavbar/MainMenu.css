@@ -62,6 +62,10 @@
   cursor: pointer;
 }
 
+.main-menu__vertical-menu2 {
+  width: 300px;
+}
+
 .main-menu__vertical-menu3 {
   margin-top: 15px;
 }
@@ -77,7 +81,7 @@
 }
 
 .main-menu__vertical-menu li .Link {
-  padding: 12px 6px;
+  padding: 12px 2px 12px 10px;
 }
 
 .main-menu__vertical-menu li:hover {
@@ -87,7 +91,6 @@
 .main-menu__vertical-menu h3 {
   color: white;
   font-size: 20px;
-  margin-bottom: 4px;
 }
 
 .main-menu__vertical-menu h4 {
@@ -309,7 +312,7 @@
 }
 
 .main-menu__data-api-padding-bottom {
-  padding: 10px 40px 40px 0;
+  padding: 10px 40px 30px 0;
   align-items: center;
   display: grid;
   grid-template-columns: 1fr 1fr;
