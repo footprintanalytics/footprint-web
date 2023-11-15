@@ -7,7 +7,7 @@ import { withRouter } from "react-router";
 import { getFgaProject, getUser } from "metabase/selectors/user";
 import { loadCurrentFgaProjectNew } from "metabase/redux/user";
 import "../css/index.css";
-import { head } from "lodash";
+import { debounce, head } from "lodash";
 import { getGrowthProjectPath, isBusinessTypePath, saveLatestGAProject } from "../utils/utils";
 import _ from "underscore";
 import { getFgaChain, getFgaProjectList, getGamesByRedux, getHistoryGamesByRedux } from "metabase/selectors/control";
@@ -86,9 +86,27 @@ const GaProjectSearch = props => {
   //   },
   //   QUERY_OPTIONS,
   // );
-  const loadProjectDetail = protocolSlug => {
-    loadCurrentFgaProjectNew(protocolSlug);
-  };
+  const loadProjectDetail = debounce(
+    (protocolSlug) => {
+      console.log("loadProjectDetail", new Date())
+      loadCurrentFgaProjectNew(protocolSlug);
+    },
+    1000,
+    {
+      leading: true,
+      trailing: false,
+    },
+  );
+  const loadFgaProjectListDebounce = debounce(
+    () => {
+      loadFgaProjectList();
+    },
+    2000,
+    {
+      leading: true,
+      trailing: false,
+    },
+  );
 
   // useEffect(() => {
   //   if ((!favoriteList || !userId) && !disableLoadList) {
@@ -121,7 +139,9 @@ const GaProjectSearch = props => {
       setCurrentProject(project.protocolSlug);
       saveLatestGAProject(project.protocolSlug);
       // saveLatestGAProjectId(project.id);
-      loadProjectDetail(project.protocolSlug);
+      // if (!projectObject) {
+      //   loadProjectDetail(project.protocolSlug);
+      // }
       setUserProject(projects);
       if (
         index === -1 && location.pathname.startsWith("/fga/") && location.pathname.includes("/project")
@@ -136,9 +156,13 @@ const GaProjectSearch = props => {
 
   useEffect(() => {
     if (projectObject || location.pathname.split("/").length === 3) {
-      loadFgaProjectList()
+      loadFgaProjectListDebounce();
     }
   }, [projectObject, location.pathname])
+
+  useEffect(() => {
+    loadFgaProjectListDebounce();
+  }, [user])
 
   useEffect(() => {
     if (projectPath) {

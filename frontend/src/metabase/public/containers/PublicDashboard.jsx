@@ -480,14 +480,18 @@ class PublicDashboard extends Component {
       <span className="text-white" style={{ marginBottom: 4 }}>{startCase(keyObject.slug)}</span>
       <span><Tooltip title="sss"></Tooltip></span>
       <Select
-        mode="multiple"
+        mode={type === "project" ? "multiple": "" }
         defaultValue={data}
         style={{
           width: 420,
         }}
         maxTagCount={"responsive"}
         onChange={value => {
-          this.props.setParameterValue(keyObject.id, value.map(v => projectList?.find(i => i.projectName === v).protocolSlug))
+          if (type === "project") {
+            this.props.setParameterValue(keyObject.id, value.map(v => projectList?.find(i => i.projectName === v).protocolSlug))
+          } else {
+            this.props.setParameterValue(keyObject.id, value)
+          }
         }}
         options={union(data)
           ?.map(item => {
