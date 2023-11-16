@@ -113,6 +113,7 @@ class ABNavbar extends Component {
   }
 
   componentDidMount() {
+    this.handleRouter();
   }
 
   isActive(path) {
