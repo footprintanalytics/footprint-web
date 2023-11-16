@@ -1,4 +1,12 @@
 import MetabaseUtils from "metabase/lib/utils";
+import { isABPath } from "metabase/ab/utils/utils";
+
+export function formatColor(index, defaultColor) {
+  return isABPath() ? globalColors()[index] : defaultColor;
+}
+export function formatColors(colors) {
+  return isABPath() ? globalColors() : colors;
+}
 
 export function globalColors() {
   return [

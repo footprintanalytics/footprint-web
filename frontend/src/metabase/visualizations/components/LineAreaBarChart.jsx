@@ -34,6 +34,7 @@ import {
 } from "./LineAreaBarChart.styled";
 import LegendLayout from "./legend/LegendLayout";
 import CardRenderer from "./CardRenderer";
+import { formatColors } from "metabase/visualizations/lib/colors";
 
 const MUTE_STYLE = "opacity: 0.25;";
 for (let i = 0; i < MAX_SERIES; i++) {
@@ -386,7 +387,7 @@ export default class LineAreaBarChart extends Component {
         )}
         <LegendLayout
           labels={labels}
-          colors={colors}
+          colors={formatColors(colors)}
           hovered={hovered}
           hasLegend={hasLegend}
           actionButtons={!hasTitle ? actionButtons : undefined}
