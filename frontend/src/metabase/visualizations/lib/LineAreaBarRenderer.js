@@ -66,6 +66,7 @@ import lineAndBarOnRender from "./LineAreaBarPostRender";
 import { lineAddons } from "./graph/addons";
 import { initBrush } from "./graph/brush";
 import { stack, stackOffsetDiverging } from "./graph/stack";
+import { formatColor } from "metabase/visualizations/lib/colors";
 
 const BAR_PADDING_RATIO = 0.2;
 const DEFAULT_INTERPOLATION = "linear";
@@ -480,7 +481,7 @@ function setChartColor({ series, settings, chartType }, chart, groups, index) {
   const group = groups[index];
   const colorsByKey = settings["series_settings.colors"] || {};
   const key = keyForSingleSeries(series[index]);
-  const color = colorsByKey[key] || "black";
+  const color = formatColor(index, colorsByKey[key] || "black");
 
   // multiple series
   if (groups.length > 1 || chartType === "scatter") {
@@ -493,7 +494,7 @@ function setChartColor({ series, settings, chartType }, chart, groups, index) {
     }
   } else {
     chart.ordinalColors(
-      series.map(single => colorsByKey[keyForSingleSeries(single)]),
+      series.map((single, index) => formatColor(index, colorsByKey[keyForSingleSeries(single)])),
     );
   }
 

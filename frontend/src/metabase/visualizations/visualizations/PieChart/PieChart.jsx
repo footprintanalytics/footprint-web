@@ -29,6 +29,7 @@ import ChartTooltip from "../../components/ChartTooltip";
 import styles from "./PieChart.css";
 
 import { PieArc } from "./PieArc";
+import { formatColor } from "metabase/visualizations/lib/colors";
 
 const SIDE_PADDING = 24;
 const MAX_LABEL_FONT_SIZE = 20;
@@ -367,6 +368,10 @@ export default class PieChart extends Component {
       }))
       .partition(d => d.percentage > sliceThreshold)
       .value();
+
+    slices.forEach((s, index) => {
+      s.color = formatColor(index, s.color)
+    })
 
     const otherTotal = others.reduce((acc, o) => acc + o.value, 0);
     // Multiple others get squashed together under the key "Other"
