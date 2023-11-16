@@ -42,7 +42,10 @@ const GaProjectSearch = props => {
     }
   ]
   const defaultProject =
-    newParam
+    {
+      protocolSlug: "Demo Project",
+      protocolName: "Demo Project",
+    }
 
   const loadProjectDetail = protocolSlug => {
     loadCurrentFgaProjectNew(protocolSlug);
