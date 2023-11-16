@@ -1,17 +1,11 @@
-import {
-  combineReducers,
-  createThunkAction,
-  handleActions,
-} from "metabase/lib/redux";
+import { createThunkAction, handleActions } from "metabase/lib/redux";
 import {
   canShowZkspaceSubmitModal,
   setShowZkspaceFinishTask,
   setShowZkspaceSubmitModal,
 } from "metabase/lib/register-activity";
-import { clearCurrentFgaProject, refreshCurrentFgaProjectNew } from "./user";
 import { getProjectList, getProtocolFavorite, getProtocolList } from "../new-service";
 import { isBusinessTypePath } from "../ab/utils/utils";
-import { debounce } from "lodash";
 
 export const LOGIN_MODAL_SHOW = "metabase/control/loginModalShow";
 export const CREATE_FGA_PROJECT_MODAL_SHOW =
