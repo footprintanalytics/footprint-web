@@ -14,10 +14,7 @@ import { getFgaChain, getFgaProjectList, getGamesByRedux, getHistoryGamesByRedux
 import { loadFgaProjectList, loginModalShowAction, setGames, setHistoryGames } from "metabase/redux/control";
 import { fga_menu_data_v2 } from "metabase/ab/utils/data";
 
-const GaProjectSearch = (props, newParam: { protocolName: string, protocolSlug: string } = {
-  protocolSlug: "Demo Project",
-  protocolName: "Demo Project",
-}) => {
+const GaProjectSearch = props => {
   const {
     router,
     location,
