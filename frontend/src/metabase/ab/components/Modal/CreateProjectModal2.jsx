@@ -1,23 +1,18 @@
 /* eslint-disable react/prop-types */
 import React, { useEffect, useState } from "react";
-import { Modal, AutoComplete, Button, Input, Form, message, Divider, Typography, Tooltip, Result, Spin } from "antd";
+import { AutoComplete, Button, Divider, Form, message, Modal, Result, Tooltip } from "antd";
 import { withRouter } from "react-router";
 import { connect } from "react-redux";
 import Link from "metabase/core/components/Link";
-import { CreateFgaProject, getProtocolList, postProject } from "metabase/new-service";
+import { getProtocolList, postProject } from "metabase/new-service";
 import { getUser } from "metabase/selectors/user";
-import {
-  getDashboardDatas,
-  getGrowthProjectPath,
-  saveLatestGAProject,
-  saveLatestGAProjectId,
-} from "../../utils/utils";
+import { getGrowthProjectPath, saveLatestGAProject, saveLatestGAProjectId } from "../../utils/utils";
 import ContractDetailsV3 from "metabase/submit/contract/components/ContractDetailsV3";
 import ContractDecoding from "metabase/submit/contract/components/ContractDecoding";
 import { toLower } from "lodash";
 import Icon from "metabase/components/Icon";
-import { LoadingOutlined } from "@ant-design/icons";
 import LoadingSpinner from "metabase/components/LoadingSpinner/LoadingSpinner";
+import { loadFgaProjectList } from "metabase/redux/control";
 
 const layout = {
   labelCol: { span: 6 },
@@ -28,7 +23,7 @@ const tailLayout = {
 };
 
 const CreateProjectModal2 = props => {
-  const { open, onCancel, onSuccess, router, location, user, force } = props;
+  const { open, onCancel, onSuccess, router, location, user, force, loadFgaProjectList } = props;
   const [form] = Form.useForm();
   const [loadingData, setLoadingData] = useState(false);
   const [loading, setLoading] = useState(false);
@@ -59,7 +54,6 @@ const CreateProjectModal2 = props => {
   }, [open]);
 
   useEffect(() => {
-    console.log("useEffectuseEffectuseEffectuseEffect", state, input)
     if (state === 1) {
       form.setFieldsValue({
         protocol: input,
@@ -92,6 +86,7 @@ const CreateProjectModal2 = props => {
         saveLatestGAProject(result.protocolSlug);
         saveLatestGAProjectId(result.projectId);
         onSuccess?.();
+        loadFgaProjectList();
         router.push(getGrowthProjectPath(result.protocolSlug, "project_summary"));
         return true;
       })
@@ -246,6 +241,7 @@ const CreateProjectModal2 = props => {
             setState(4);
             setSubmitProtocol(protocol);
             setDecodingProcessOpen({ open: false, param: null });
+            loadFgaProjectList();
           }}
         />
       )}
@@ -280,4 +276,8 @@ const mapStateToProps = state => {
   };
 };
 
-export default withRouter(connect(mapStateToProps)(CreateProjectModal2));
+const mapDispatchToProps = {
+  loadFgaProjectList: loadFgaProjectList,
+};
+
+export default withRouter(connect(mapStateToProps, mapDispatchToProps)(CreateProjectModal2));

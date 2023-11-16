@@ -11,6 +11,7 @@ import {
 import { clearCurrentFgaProject, refreshCurrentFgaProjectNew } from "./user";
 import { getProjectList, getProtocolFavorite, getProtocolList } from "../new-service";
 import { isBusinessTypePath } from "../ab/utils/utils";
+import { debounce } from "lodash";
 
 export const LOGIN_MODAL_SHOW = "metabase/control/loginModalShow";
 export const CREATE_FGA_PROJECT_MODAL_SHOW =

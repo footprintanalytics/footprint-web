@@ -60,13 +60,13 @@ const GaProjectSearch = props => {
         protocolName: "Demo Project",
       }
 
-  useEffect(() => {
-    if (businessType && location.pathname.split("/").length === 3 && projectObject) {
-      const menuData = fga_menu_data_v2(businessType, projectObject, user);
-      const menuKeys = menuData.keys;
-      router.replace(getGrowthProjectPath(defaultProject.protocolSlug, menuKeys[0]))
-    }
-  }, [location.pathname])
+  // useEffect(() => {
+  //   if (businessType && location.pathname.split("/").length === 3 && projectObject) {
+  //     const menuData = fga_menu_data_v2(businessType, projectObject, user);
+  //     const menuKeys = menuData.keys;
+  //     router.replace(getGrowthProjectPath(defaultProject.protocolSlug, menuKeys[0]))
+  //   }
+  // }, [location.pathname])
 
   // useEffect(() => {
   //   if (enableTour && protocolList.length > 0 && userProject) {
@@ -86,27 +86,6 @@ const GaProjectSearch = props => {
   //   },
   //   QUERY_OPTIONS,
   // );
-  const loadProjectDetail = debounce(
-    (protocolSlug) => {
-      console.log("loadProjectDetail", new Date())
-      loadCurrentFgaProjectNew(protocolSlug);
-    },
-    1000,
-    {
-      leading: true,
-      trailing: false,
-    },
-  );
-  const loadFgaProjectListDebounce = debounce(
-    () => {
-      loadFgaProjectList();
-    },
-    2000,
-    {
-      leading: true,
-      trailing: false,
-    },
-  );
 
   // useEffect(() => {
   //   if ((!favoriteList || !userId) && !disableLoadList) {
@@ -116,7 +95,7 @@ const GaProjectSearch = props => {
 
   useEffect(() => {
     if (projectPath) {
-      loadProjectDetail(projectPath);
+      loadCurrentFgaProjectNew(projectPath);
     }
   }, [projectPath])
 
@@ -138,8 +117,9 @@ const GaProjectSearch = props => {
       }
       setCurrentProject(project.protocolSlug);
       saveLatestGAProject(project.protocolSlug);
+
       // saveLatestGAProjectId(project.id);
-      // if (!projectObject) {
+      // if (!projectObject && location.pathname.split("/").filter(i => i).length < 3) {
       //   loadProjectDetail(project.protocolSlug);
       // }
       setUserProject(projects);
@@ -154,15 +134,16 @@ const GaProjectSearch = props => {
     }
   }, [fgaProjectList]);
 
-  useEffect(() => {
-    if (projectObject || location.pathname.split("/").length === 3) {
-      loadFgaProjectListDebounce();
-    }
-  }, [projectObject, location.pathname])
+  // useEffect(() => {
+  //   if (projectObject || location.pathname.split("/").length === 3) {
+  //     loadFgaProjectList();
+  //   }
+  // }, [projectObject])
+
 
   useEffect(() => {
-    loadFgaProjectListDebounce();
-  }, [user])
+    loadFgaProjectList();
+  }, [user?.id])
 
   useEffect(() => {
     if (projectPath) {

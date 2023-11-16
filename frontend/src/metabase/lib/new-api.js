@@ -120,7 +120,7 @@ function errorHandle(err) {
 
 export const axiosInstance = axios;
 
-export const GET = async (url, params) => axios.get(url, { params });
+export const GET = async (url, params, headers) => axios.get(url, { params, headers });
 
 export const POST = async (url, params, config) =>
   axios.post(url, params, config);
