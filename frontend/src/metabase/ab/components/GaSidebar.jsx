@@ -38,12 +38,6 @@ const GaSidebar = (props) => {
   const totalItems = [...items, ...itemsPlatform].filter(Boolean);
 
   useEffect(() => {
-    if (location.pathname === "/fga" || location.pathname === "/fga/") {
-      router.replace("/fga/game");
-    }
-  }, [location.pathname]);
-
-  useEffect(() => {
     if (currentMenu && totalItems?.length > 0) {
       totalItems.forEach(i => {
         if (i.key === currentMenu) {

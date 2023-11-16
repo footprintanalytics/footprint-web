@@ -1,6 +1,6 @@
 /* eslint-disable react/prop-types */
 /* eslint-disable react/forbid-component-props */
-import React, { Component } from "react";
+import React, { Component, useEffect } from "react";
 import { connect } from "react-redux";
 import { push, replace } from "react-router-redux";
 import "./ABNavbar.css";
@@ -42,7 +42,7 @@ import EntityMenu from "metabase/components/EntityMenu";
 import UserAvatar from "metabase/components/UserAvatar";
 import VipIcon from "metabase/components/VipIcon";
 import CreateProjectModal from "metabase/ab/components/Modal/CreateProjectModal";
-import { checkIsNeedContactUs, isABPath } from "metabase/ab/utils/utils";
+import { checkIsNeedContactUs, getGrowthProjectPath, isABPath } from "metabase/ab/utils/utils";
 import { getContext, getPath, getUser } from "../selectors";
 
 import { isDark } from "../../../dashboard/components/utils/dark";
@@ -99,19 +99,20 @@ class ABNavbar extends Component {
     // isProjectModalOpen: false,
   };
 
-  forceLogin() {
-    const { user, setLoginModalShow } = this.props;
-    // if (!user) {
-    //   setLoginModalShow({ show: true, from: "navbar_fga_signin" });
-    // }
+  handleRouter() {
+    const pathLength = location.pathname.split("/").filter(i => i).length;
+    if (pathLength === 1) {
+      this.props.replace("/fga/game")
+    } else if (pathLength === 2) {
+      this.props.replace(getGrowthProjectPath("Demo Project"))
+    }
   }
 
   componentDidUpdate() {
-    this.forceLogin();
+    this.handleRouter();
   }
 
   componentDidMount() {
-    this.forceLogin();
   }
 
   isActive(path) {

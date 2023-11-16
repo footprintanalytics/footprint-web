@@ -253,7 +253,7 @@ const Project = props => {
             projectList={fgaProjectList}
             isFullscreen={false}
             hideTitle={true}
-            key={`${chain}${projectObject?.protocolSlug}`}
+            key={`${chain}${projectObject?.protocolSlug}${current_tab}`}
             hideFooter
           />
           {/* all dashboart except twitter and discord , need a mask when no protocol */}
@@ -639,7 +639,7 @@ const Project = props => {
     <>
       {projectObject ? (
         <>
-          <div style={{ display: "relative" }}>
+          <div style={{ display: "relative" }} key={currentMenu}>
             {getContentPanel(currentMenu)}
           </div>
         </>

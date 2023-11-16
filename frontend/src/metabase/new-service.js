@@ -258,7 +258,7 @@ export const deleteProtocolFavorite = async params => {
   return DELETE(`/api/v1/project/protocol/favorite`, { data: params });
 };
 export const getProtocolList = async params => {
-  return GET(`/api/v1/project/protocol/list`, params);
+  return GET(`/api/v1/project/protocol/list`, params, {'Cache-Control': 'max-age=1800'});
 };
 export const getProjectList = async params => {
   return GET(`/api/v1/project/list`, params);

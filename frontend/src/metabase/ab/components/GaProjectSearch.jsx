@@ -2,17 +2,16 @@
 /* eslint-disable react/prop-types */
 import React, { useEffect, useRef, useState } from "react";
 import { connect } from "react-redux";
-import { Avatar, Modal, Select, Tour } from "antd";
+import { Avatar, Select, Tour } from "antd";
 import { withRouter } from "react-router";
 import { getFgaProject, getUser } from "metabase/selectors/user";
 import { loadCurrentFgaProjectNew } from "metabase/redux/user";
 import "../css/index.css";
 import { head } from "lodash";
-import { getGrowthProjectPath, isBusinessTypePath, saveLatestGAProject } from "../utils/utils";
+import { getGrowthProjectPath, saveLatestGAProject } from "../utils/utils";
 import _ from "underscore";
 import { getFgaChain, getFgaProjectList, getGamesByRedux, getHistoryGamesByRedux } from "metabase/selectors/control";
 import { loadFgaProjectList, loginModalShowAction, setGames, setHistoryGames } from "metabase/redux/control";
-import { getChainDataList } from "metabase/query_builder/components/question/handle";
 import { fga_menu_data_v2 } from "metabase/ab/utils/data";
 
 const GaProjectSearch = props => {
@@ -22,25 +21,13 @@ const GaProjectSearch = props => {
     user,
     menu,
     projectPath,
-    setCreateFgaProjectModalShowAction,
-    logout,
-    control,
-    setGames,
-    setHistoryGames,
-    games,
-    historyGames,
-    projectObject,
-    setLoginModalShowAction,
     loadCurrentFgaProjectNew,
     businessType,
-    chain,
-    disableLoadList,
     fgaProjectList,
     loadFgaProjectList,
     enableTour = false,
   } = props;
   const selectRef = useRef();
-  const userId = user?.id;
   const [userProject, setUserProject] = useState([]);
   const [open, setOpen] = useState(false);
   const [currentProject, setCurrentProject] = useState(projectPath);
@@ -55,59 +42,20 @@ const GaProjectSearch = props => {
     }
   ]
   const defaultProject =
-      {
-        protocolSlug: "Demo Project",
-        protocolName: "Demo Project",
-      }
-
-  useEffect(() => {
-    if (businessType && location.pathname.split("/").length === 3 && projectObject) {
-      const menuData = fga_menu_data_v2(businessType, projectObject, user);
-      const menuKeys = menuData.keys;
-      router.replace(getGrowthProjectPath(defaultProject.protocolSlug, menuKeys[0]))
+    {
+      protocolSlug: "Demo Project",
+      protocolName: "Demo Project",
     }
-  }, [location.pathname])
 
-  // useEffect(() => {
-  //   if (enableTour && protocolList.length > 0 && userProject) {
-  //     setTimeout(() => {
-  //       setTourOpen(true)
-  //       window.localStorage.setItem("tour_project_search", "true");
-  //     }, 1000)
-  //   }
-  // }, [enableTour, protocolList, userProject])
-
-
-  // console.log("currentProject", currentProject)
-  // const { isLoading, data, refetch } = useQuery(
-  //   ["getProjectList", user?.id],
-  //   async () => {
-  //     return await getProjectList();
-  //   },
-  //   QUERY_OPTIONS,
-  // );
   const loadProjectDetail = protocolSlug => {
     loadCurrentFgaProjectNew(protocolSlug);
   };
-
-  // useEffect(() => {
-  //   if ((!favoriteList || !userId) && !disableLoadList) {
-  //     loadFgaFavoriteList();
-  //   }
-  // }, [userId, disableLoadList])
 
   useEffect(() => {
     if (projectPath) {
       loadProjectDetail(projectPath);
     }
   }, [projectPath])
-
-  // useEffect(() => {
-  //   if (protocolListLen === 0 && !disableLoadList) {
-  //     loadFgaProtocolList(chain);
-  //   }
-  // }, [disableLoadList, chain, protocolListLen])
-
 
   useEffect(() => {
     if (fgaProjectList?.length > 0) {
@@ -120,8 +68,7 @@ const GaProjectSearch = props => {
       }
       setCurrentProject(project.protocolSlug);
       saveLatestGAProject(project.protocolSlug);
-      // saveLatestGAProjectId(project.id);
-      loadProjectDetail(project.protocolSlug);
+
       setUserProject(projects);
       if (
         index === -1 && location.pathname.startsWith("/fga/") && location.pathname.includes("/project")
@@ -135,10 +82,8 @@ const GaProjectSearch = props => {
   }, [fgaProjectList]);
 
   useEffect(() => {
-    if (projectObject || location.pathname.split("/").length === 3) {
-      loadFgaProjectList()
-    }
-  }, [projectObject, location.pathname])
+    loadFgaProjectList();
+  }, [user?.id])
 
   useEffect(() => {
     if (projectPath) {
