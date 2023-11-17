@@ -270,7 +270,7 @@ const ContractDetailsV3 = ({ onFinish, user, onClosed, hideEmail, protocolCatego
 
   const isValidStandard = (contracts) => {
     const array = ["ERC1155", "ERC721", "ERC20"];
-    return contracts?.map(i => i.standard).every(i => array.includes(i));
+    return contracts?.map(i => i?.standard).every(i => array.includes(i));
   }
 
   return (
