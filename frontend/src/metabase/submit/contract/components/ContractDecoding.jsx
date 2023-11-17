@@ -132,7 +132,7 @@ const ContractDecoding = ({ param, onSuccess, fromFgaAddProject, backAction }) =
     message.success("protocol process completed.");
     setLoadCompleted(true);
   };
-  const SubmitSuccessFga = (res) => {
+  const SubmitSuccessFga = (res, protocolSlug) => {
     console.log("SubmitSuccessFga", res)
     animation = loadAnimation("completed");
     // setTitle(
@@ -143,7 +143,7 @@ const ContractDecoding = ({ param, onSuccess, fromFgaAddProject, backAction }) =
     setLoadCompleted(true);
 
     setTimeout(() => {
-      onSuccess?.(res.projectName);
+      onSuccess?.(protocolSlug);
     }, 1000)
   };
   const setLog = log => {
@@ -172,7 +172,7 @@ const ContractDecoding = ({ param, onSuccess, fromFgaAddProject, backAction }) =
   const submitByHttpFga = params => {
     submitFGAProtocols(params)
       .then(res => {
-        SubmitSuccessFga(res);
+        SubmitSuccessFga(res, params.protocolSlug);
       })
       .catch(err => {
         setLog(`Error. Please retry later. ${err}`);

@@ -267,6 +267,12 @@ const ContractDetailsV3 = ({ onFinish, user, onClosed, hideEmail, protocolCatego
       setImageUploading(false);
     },
   };
+
+  const isValidStandard = (contracts) => {
+    const array = ["ERC1155", "ERC721", "ERC20"];
+    return contracts?.map(i => i.standard).every(i => array.includes(i));
+  }
+
   return (
     <div>
       <Form
@@ -302,6 +308,11 @@ const ContractDetailsV3 = ({ onFinish, user, onClosed, hideEmail, protocolCatego
               ...projectIdObject,
               isNewProtocol,
             };
+
+            if (fromFgaAddProject && !isValidStandard(param.contracts)) {
+              message.info("Please input valid standard. e.g.0x123456789ABCDEF,ERC1155");
+              return;
+            }
             console.log("param", param)
             onClosed?.(param);
           } catch (error) {
@@ -475,7 +486,7 @@ const ContractDetailsV3 = ({ onFinish, user, onClosed, hideEmail, protocolCatego
                   >
                     <div className="mb1" style={{ fontSize: 12, whiteSpace: "pre-line" }}>
                       {
-                        fromFgaAddProject ? "Please provide the project contract address and token standard in the following format. Separate each entry with a comma.\n" +
+                        fromFgaAddProject ? "Please provide the project contract address and token standard in the following format. Separate each entry with a comma. e.g. 0x123456789ABCDEF,ERC1155\n" +
                           "\n" +
                           "Make sure to verify the information is correct before submitting or else there is a chance your request will not go through\n" :
                         "Be sure to add one smart contract per line. Errors could cause your contracts to be rejected!"
