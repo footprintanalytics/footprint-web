@@ -296,6 +296,30 @@ export function isBusinessTypePath(businessType: string){
 export function getGrowthProjectPath(project: string, menu?: string) {
   return `/fga/${location.pathname.split("/")[2]}/project/${project}/${menu ?? ""}`;
 }
+
+export const getAbWeb3DashboardCase = (location: any) => {
+  const pathArray = location?.pathname?.split("/")?.filter(i => i);
+  const pathLength = pathArray?.length;
+  if (isABPath() && pathLength === 5){
+    const web3pathArray = [
+      "nft_summary",
+      "nft_sales_mints",
+      "nft_listing",
+      "nft_nft_holder",
+      "nft_leaderboard",
+      "game_tokenomics",
+      "revenue-web3-revenue",
+      "acquisition_wallet",
+      "wallet_engagement",
+      "wallet_retention",
+    ]
+    if (web3pathArray.includes(pathArray[pathLength - 1])) {
+      return true;
+    }
+  }
+  return false;
+}
+
 export function getGaMenuTabs(
   tabs_data: any[],
   protocol_type?: string,
