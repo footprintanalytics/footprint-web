@@ -53,8 +53,9 @@ import Mode from "metabase-lib/Mode";
 import { memoizeClass } from "metabase-lib/utils";
 import { VisualizationSlowSpinner } from "./Visualization.styled";
 import "./Visualization.css";
-import AboutImage from "metabase/containers/aboutV2/components/AboutImage";
 import ResearchNoData from "metabase/visualizations/components/ResearchNoData";
+import { projectSubmitModalShowAction } from "metabase/redux/control";
+import { getAbWeb3DashboardCase } from "metabase/ab/utils/utils";
 
 // NOTE: pass `CardVisualization` so that we don't include header when providing size to child element
 
@@ -498,6 +499,7 @@ class Visualization extends React.PureComponent {
     const cardId = get(this.props.rawSeries, 0)?.card?.id;
     const isResearch = window.location.pathname.startsWith("/research");
 
+    const isABWeb3Dashboard = getAbWeb3DashboardCase(location);
     const renderNoResult = () => {
       if (isFgaDiscord || isFgaTwitter || isFgaGoogleAnalysis) {
         return (
@@ -509,13 +511,28 @@ class Visualization extends React.PureComponent {
       if (isFga) {
         return (
           <div className="noResults">
-            The data is not yet available, please
+            The data is not yet available, please.
             <br />
-            feel free to contact our{" "}
-            <Link target="_blank" href="mailto:sales@footprint.network">
-              BD team
-            </Link>
-            .
+            {isABWeb3Dashboard ? (<>
+              {" "}
+              <Link onClick={() => {
+                this.props.setProjectSubmitModalShowAction({ show: true })
+              }}>Submit</Link>
+              {" "}more contract
+              or
+              contact {" "}
+              <Link target="_blank" href="mailto:sales@footprint.network">
+                BD team
+              </Link>
+              {" "}
+            </>):
+            (<>
+              contact our{" "}
+              <Link target="_blank" href="mailto:sales@footprint.network">
+                BD team
+              </Link>
+              {" "}
+            </>)}
           </div>
         );
       }
@@ -941,12 +958,15 @@ export const VisualizationShareFoot = ({ location }) => {
 const mapStateToProps = state => ({
   fontFamily: getFont(state),
 });
+const mapDispatchToProps = {
+  setProjectSubmitModalShowAction: projectSubmitModalShowAction,
+};
 
 export default _.compose(
   ExplicitSize({
     selector: ".CardVisualization",
     refreshMode: props => (props.isVisible ? "throttle" : "debounce"),
   }),
-  connect(mapStateToProps),
+  connect(mapStateToProps, mapDispatchToProps),
   memoizeClass("_getQuestionForCardCached"),
 )(Visualization);

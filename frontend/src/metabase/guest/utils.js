@@ -92,6 +92,6 @@ const copyToDoc = (query) => {
   copy(query);
   message.success("Chart SQL already copied.")
   setTimeout(() => {
-    window.open("https://docs.footprint.network/reference/post_native");
+    window.open("https://docs.footprint.network/reference/post_native-async");
   }, 1000)
 }

@@ -16,6 +16,7 @@ import NoData from "metabase/containers/dashboards/components/Dashboards/nodata"
 import Highlighter from "react-highlight-words";
 import { trackStructEvent } from "metabase/lib/analytics";
 import formatDate from "metabase/containers/news/util/date";
+import LoadingAndErrorWrapper from "metabase/components/LoadingAndErrorWrapper";
 
 const SearchResultsModal = ({
   searchText,
@@ -104,7 +105,7 @@ const SearchResultsModal = ({
     return (
       <div className="search-results-modal">
         <Card className="search-results-modal__card" p={3}>
-          <Skeleton active />
+          <LoadingAndErrorWrapper loading />
         </Card>
       </div>
     );
