@@ -35,7 +35,7 @@ function getBoundingClientRectSafe(ref) {
   return ref.current?.getBoundingClientRect?.() ?? {};
 }
 
-function formatCellValueForSorting(value, column) {
+function formatCellValueForSorting(value, column, sortDirection) {
   if (typeof value === "string") {
     if (isID(column) && isPositiveInteger(value)) {
       return parseInt(value, 10);
@@ -44,7 +44,11 @@ function formatCellValueForSorting(value, column) {
     return value.toLowerCase();
   }
   if (value === null) {
-    return undefined;
+    if (sortDirection === "desc") {
+      return "";
+    } else {
+      return undefined
+    }
   }
   return value;
 }
@@ -134,7 +138,7 @@ function TableSimple({
       indexes = _.sortBy(indexes, rowIndex => {
         const value = rows[rowIndex][sortColumn];
         const column = cols[sortColumn];
-        return formatCellValueForSorting(value, column);
+        return formatCellValueForSorting(value, column, sortDirection);
       });
     }
 
