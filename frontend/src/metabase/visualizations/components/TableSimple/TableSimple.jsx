@@ -96,7 +96,6 @@ function TableSimple({
 
   const setSort = useCallback(
     colIndex => {
-      console.log("setSort", sortColumn, colIndex)
       if (sortColumn === colIndex) {
         setSortDirection(direction => (direction === "asc" ? "desc" : "asc"));
       } else {
