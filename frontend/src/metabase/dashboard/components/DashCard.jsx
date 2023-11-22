@@ -329,6 +329,26 @@ class DashCard extends Component {
       || window.location.pathname.startsWith("/studio")
     ;
 
+    const isInIframe = () => {
+      try {
+        return window.self !== window.top;
+      } catch (e) {
+        return true;
+      }
+    };
+
+    const getOuterUrl = () => {
+      let outerUrl;
+      try {
+        outerUrl = window.top.location.href;
+      } catch (e) {
+        outerUrl = document.referrer;
+      }
+      return outerUrl;
+    };
+
+    const isIframeShow = window.location.pathname.startsWith("/public") && isInIframe() && getOuterUrl()?.includes(".footprint.network")
+
     const singleDisplay = isTextDisplay || isImageDisplay || isVideoDisplay || isEmbedDisplay || isMultiEmbedDisplay || isTableauDisplay;
 
     const hideDuplicate = singleDisplay || isPublic;
@@ -337,7 +357,8 @@ class DashCard extends Component {
 
     const showPreview = !isPublic && !showEdit && !singleDisplay;
 
-    const showGetDataViaSqlApi = showEdit || showPreview;
+    const showGetDataViaSqlApi = showEdit || showPreview || isIframeShow;
+    const showDownload = showEdit || showPreview || isIframeShow;
     const showChartInfo = false;
     const showChartRefresh = !isPublic && !singleDisplay;
     const showStatusButton = showChartRefresh;
@@ -492,7 +513,7 @@ class DashCard extends Component {
               </div>
             </Tooltip>
           )}
-          {!isEditing && !isPublic &&
+          {showDownload &&
             QueryDownloadWidget.shouldRender({
               result,
               isResultDirty: false,
