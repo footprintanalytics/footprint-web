@@ -458,6 +458,7 @@ export const fga_menu_data_v2 = (businessType, project, chain) => {
       getItem("Settings", "settings", <SettingOutlined />, [
         getItem("Integration", "integration", null),
         getItem("Project Info", "general", null),
+        getItem("Keys & IDs", "keys-ids", null),
         // getItem("Channel", "channel", null),
       ]),
     ]

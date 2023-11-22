@@ -42,6 +42,7 @@ import {
 } from "metabase/selectors/control";
 import { setGames } from "metabase/redux/control";
 import ProjectList from "metabase/ab/containers/projectList";
+import KeysIds from "metabase/ab/components/KeysIds";
 
 const Project = props => {
   const {
@@ -472,7 +473,7 @@ const Project = props => {
           router={router}
           project={getProjectObject()}
           projectId={getLatestGAProjectId()}
-        ></ChannelList>
+        />
       );
     }
     if (["general", "General"].includes(current_tab)) {
@@ -482,7 +483,16 @@ const Project = props => {
           router={router}
           businessType={businessType}
           // project={getProjectObject()}
-        ></ProjectInfo>
+        />
+      );
+    }
+    if (["keys-ids"].includes(current_tab)) {
+      return (
+        <KeysIds
+          location={location}
+          router={router}
+          businessType={businessType}
+        />
       );
     }
     if (
