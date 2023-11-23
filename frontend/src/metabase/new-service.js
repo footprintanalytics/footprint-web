@@ -273,6 +273,10 @@ export const getProtocolDetail = async params => {
   return GET(`/api/v1/project/protocol/detail`, params);
 };
 
+export const tokenGeneral = params => {
+  return POST(`api/v1/project/token/general`, params);
+};
+
 // FP Api ---------------
 export const UserRegister = async params => {
   return POST("/api/v1/user/signup", params);
