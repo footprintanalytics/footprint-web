@@ -29,10 +29,8 @@ const ProjectInfo = props => {
     }
   }, [project]);
 
-  console.log("currentProject", currentProject)
-  console.log("project", project)
   const onTabChange = key => {
-    console.log(key);
+    // console.log(key);
   };
   const enableTour = true;
   const steps = [
