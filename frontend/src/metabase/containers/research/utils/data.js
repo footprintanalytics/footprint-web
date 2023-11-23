@@ -540,6 +540,11 @@ const chainData = [
         "value": "home-verse-overview",
         "publicUuid": "c79ec4ee-74c3-47ba-942c-5e351f3c2ff3",
       },
+      {
+        "label": "Rootstock Overview",
+        "value": "rootstock-overview",
+        "publicUuid": "5ce34ecd-e67c-49cb-8d1d-e84b0028a592",
+      },
     ],
   },
   {
