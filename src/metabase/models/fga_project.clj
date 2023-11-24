@@ -9,9 +9,9 @@
             [toucan.db :as db]
             [toucan.models :as models]))
 
-(models/defmodel FgaProject :fga_project)
+(models/defmodel Project :fga_project)
 
 (defn schema [schema-id]
   (when schema-id
-    (db/select-field :schema FgaProject :id schema-id  :active true))
+    (db/select-field :schema Project :id schema-id  :active true))
   )
