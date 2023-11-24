@@ -12,20 +12,23 @@ export const isDefi360 = project => {
 export const getLatestGAProjectId = () => {
   // return null;
   const userId = window.localStorage.getItem("GAUserId");
-  const isFgaDemoProject = window.localStorage.getItem("IsFgaDemoProject");
-  if (userId === null || isFgaDemoProject === "true") {
+  // const isFgaDemoProject = window.localStorage.getItem("IsFgaDemoProject");
+  // if (userId === null || isFgaDemoProject === "true") {
+  //   return null;
+  // }
+  console.log("getLatestGAProjectId")
+  // if (!window.location.pathname.startsWith("/growth") && userId !== "6") {
+  //   return null;
+  // }
+  if (!window.location.pathname.startsWith("/fga")) {
     return null;
   }
-  if (!window.location.pathname.startsWith("/growth") && userId !== "6") {
-    return null;
-  }
-  if (window.location.pathname.startsWith("/fga")) {
-    return null;
-  }
+  console.log("getLatestGAProjectId2")
   const projectIdStr = window.localStorage.getItem("LatestGAProjectId");
   let projectId;
   try {
     projectId = projectIdStr && parseInt(projectIdStr);
+    console.log("getLatestGAProjectId", projectId)
   } catch (e) {}
   return projectId;
 };

@@ -310,6 +310,7 @@
      *  The result *rows* of the query must be less than `query-caching-max-kb` when serialized (before compression)."
   [qp]
   (fn maybe-return-cached-results* [{:keys [cache-ttl middleware info], :as query} rff context]
+    (log/info "maybe-return-cached-results" query)
     (if (:refresh-cache middleware)
       (refresh-cache-function query (info :dashboard-id) (info :card-id))
       (if (:get-the-cache-info? middleware)
