@@ -83,7 +83,7 @@
   (let [fga-tables (into [] (get-fga-table-white-list))
         col-format (str/replace col  "\"" "")
         col-format-list (str/split col-format #"\.")
-        fixed-result (last col-format-list)
+        fixed-result (str/trim (last col-format-list))
         is_include (some #(= fixed-result %) fga-tables)]
     (if is_include
       (let [trimTable (str/trim col)
@@ -99,7 +99,7 @@
   (let [fga-tables (into [] (get-fga-table-white-list))
         col-format (str/replace col  "\"" "")
         col-format-list (str/split col-format #"\.")
-        fixed-result (last col-format-list)
+        fixed-result (str/trim(last col-format-list))
         is_include (some #(= fixed-result %) fga-tables)]
     is_include))
 
