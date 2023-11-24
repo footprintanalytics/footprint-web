@@ -488,6 +488,7 @@
   {:added "0.35.0", :arglists '([driver query context respond] [driver sql params max-rows context respond])}
   ([driver {{sql :query, params :params} :native, :as outer-query} context respond]
    {:pre [(string? sql) (seq sql)]}
+   (log/info "outer-queryouter-query" outer-query)
    (let [remark   (qp.util/query->remark driver outer-query)
          sql (if params (:query (driver/splice-parameters-into-native-query driver
                           {:query  sql

@@ -15,7 +15,7 @@
 
 (defn get-fga-schema [schema-id]
   (let [schemas (fga_project/schema schema-id)]
-    (log/info "get-fga-schemas--->>>>>" schemas)
+    (log/info "get-fga-schemas--->>>>>" schemas schema-id)
     (first schemas)
     )
   )
@@ -107,6 +107,7 @@
   (some canConvert sqlTables))
 
 (defn convert-sql [sql schema-id]
+  (log/info "convert-sql0: fga-schema " sql schema-id)
   (let [fga-schema (get-fga-schema schema-id)]
     (log/info "convert-sql: fga-schema " fga-schema)
     (if fga-schema
