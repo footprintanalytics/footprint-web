@@ -75,7 +75,7 @@
         fga-catalog (get-fga-catalog)
         replaceSpaceSQLStr (str/replace sql (str trimTable " ") (str "\"" fga-catalog "\"." "\""  fga-schema "\"." trimTable " "))
         ]
-    (str/replace replaceSpaceSQLStr trimTable (str "\"" fga-catalog "\"." "\"" fga-schema "\"." trimTable "\n"))
+    (str/replace replaceSpaceSQLStr (str trimTable "\n") (str "\"" fga-catalog "\"." "\"" "\"" fga-schema "\"." trimTable "\n"))
     )
   )
 
