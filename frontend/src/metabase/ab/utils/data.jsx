@@ -333,6 +333,7 @@ function getItem(label, key, icon, children, type, disabled = false) {
 export const getDashboardMap = (businessType, project, chain) => {
   let protocolType = project?.protocolType;
   const dashboardMap = new Map([
+    ["user_event", "5983a1e8-00c0-40f2-80e3-8e22aaa2f886"],
     ["transaction_monitor", "5448e85b-442e-44b7-9c88-e22a1bd11d11"],
     ["ecosystem_development", "0b6bbe4d-5480-4e1c-8860-ead23619492b"],
     ["ecosystem_projects", "8750f228-16d7-4b40-91de-92dfb4b7e0c6"],
@@ -396,6 +397,7 @@ export const fga_menu_data_v2 = (businessType, project, chain) => {
   const gameProjectData = {
     "platformMenuTabs": [
         getItem("All Projects", "all-projects", null),
+        getItem("User Event", "user_event", null),
         getItem(getLabel({label: "Project Key Metrics", tip: "Here shows key metrics of selected project, derived from contracts associated with each project."}), "project_key_metrics", null),
         getItem(getLabel({label: "Holder Overlap", tip: "Here shows key metrics of selected project, derived from contracts associated with each project."}), "project_holder_overlap", null),
     ],
