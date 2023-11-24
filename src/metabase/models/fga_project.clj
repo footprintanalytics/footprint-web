@@ -13,5 +13,5 @@
 
 (defn schema [schema-id]
   (when schema-id
-    (db/select-field :schema Project :id schema-id  :active true))
+    (db/select-field :schema Project :id schema-id  :active 1))
   )
