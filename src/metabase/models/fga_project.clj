@@ -9,7 +9,7 @@
             [toucan.db :as db]
             [toucan.models :as models]))
 
-(models/defmodel Project :fga_project)
+(models/defmodel Project :project)
 
 (defn schema [schema-id]
   (when schema-id
