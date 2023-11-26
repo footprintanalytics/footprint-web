@@ -28,6 +28,9 @@ export const getLatestGAProjectId = () => {
   let projectId;
   try {
     projectId = projectIdStr && parseInt(projectIdStr);
+    if (projectId === 1) {
+      return null;
+    }
     console.log("getLatestGAProjectId", projectId)
   } catch (e) {}
   return projectId;
