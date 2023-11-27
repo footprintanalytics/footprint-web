@@ -2,6 +2,7 @@
   "Metabase API endpoints for viewing publicly-accessible Cards and Dashboards."
   (:require [cheshire.core :as json]
             [clojure.core.async :as a]
+            [clojure.tools.logging :as log]
             [compojure.core :refer [GET]]
             [medley.core :as m]
             [metabase.api.common :as api]
@@ -238,7 +239,7 @@
   [uuid card-id dashcard-id parameters ignore_cache fga-schema project-role power-level]
   {parameters (s/maybe su/JSONString)}
   (validation/check-public-sharing-enabled)
-  (println "public dashboard" fga-schema)
+  (log/info "public dashboard" fga-schema)
   (let [dashboard-id (api/check-404 (db/select-one-id Dashboard :public_uuid uuid, :archived false))]
     (public-dashcard-results-async
      :dashboard-id  dashboard-id

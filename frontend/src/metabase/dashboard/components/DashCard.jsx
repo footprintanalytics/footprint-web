@@ -324,23 +324,25 @@ class DashCard extends Component {
     const showEdit = isOwner && !!dashcard.card.id && !isABPath();
     const isPublic = window.location.pathname.startsWith("/public")
       || isFgaPath()
-      || isABPath()
+      // || isABPath()
       || window.location.pathname.startsWith("/data-api/statistics")
       || window.location.pathname.startsWith("/studio")
     ;
 
     const singleDisplay = isTextDisplay || isImageDisplay || isVideoDisplay || isEmbedDisplay || isMultiEmbedDisplay || isTableauDisplay;
 
-    const hideDuplicate = singleDisplay || isPublic;
+    const hideDuplicate = isABPath() || singleDisplay || isPublic;
 
     const hideWatermark = clearWatermark || singleDisplay;
 
-    const showPreview = !isPublic && !showEdit && !singleDisplay;
+    const showPreview = !isABPath() && !isPublic && !showEdit && !singleDisplay;
 
     const showGetDataViaSqlApi = showEdit || showPreview;
     const showChartInfo = false;
     const showChartRefresh = !isPublic && !singleDisplay;
     const showStatusButton = showChartRefresh;
+
+    const showQueryDownload = !isABPath() && !isEditing && !isPublic;
 
     const editAction = card => {
       window.open(`/chart/${card.id}?editingOnLoad=true`);
@@ -370,7 +372,7 @@ class DashCard extends Component {
       && isRealtimeUser;
     const isGrowth = isFgaPath();
     const isAB = isABPath();
-    const showButtons = !isGrowth || !isAB;
+    const showButtons = !isGrowth;
     return (
       <DashCardRoot
         id={id}
@@ -492,7 +494,7 @@ class DashCard extends Component {
               </div>
             </Tooltip>
           )}
-          {!isEditing && !isPublic &&
+          {showQueryDownload &&
             QueryDownloadWidget.shouldRender({
               result,
               isResultDirty: false,

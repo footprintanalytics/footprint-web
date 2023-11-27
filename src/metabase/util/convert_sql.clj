@@ -8,14 +8,14 @@
 
 (defn get-fga-table-white-list []
   (let [table-white-list (fga_replace_table/fga-table-white-list)]
-    (println "get-fga-table-white-list--->>>>>" table-white-list)
+    (log/info "get-fga-table-white-list--->>>>>" table-white-list)
     table-white-list
     )
   )
 
 (defn get-fga-schema [schema-id]
   (let [schemas (fga_project/schema schema-id)]
-    (println "get-fga-schemas--->>>>>" schemas)
+    (log/info "get-fga-schemas--->>>>>" schemas schema-id)
     (first schemas)
     )
   )
@@ -52,7 +52,7 @@
 
 (defn handle-replace-schema [sql col fga-schema]
   "Replace schema if table is special"
-  (println "handle-replace-schema" col)
+  (log/info "handle-replace-schema" col)
   (let [trim-table (str/trim col)
         footprint-catalog (get-footprint-catalog)
         fga-catalog (get-fga-catalog)
@@ -70,7 +70,7 @@
 
 (defn handle-add-schema [sql col fga-schema]
   "Add schema if table is special"
-  (println "handle-add-schema", col)
+  (log/info "handle-add-schema", col)
   (let [trimTable (str/trim col)
         fga-catalog (get-fga-catalog)
         replaceSpaceSQLStr (str/replace sql (str trimTable " ") (str "\"" fga-catalog "\"." "\""  fga-schema "\"." trimTable " "))
@@ -83,7 +83,7 @@
   (let [fga-tables (into [] (get-fga-table-white-list))
         col-format (str/replace col  "\"" "")
         col-format-list (str/split col-format #"\.")
-        fixed-result (last col-format-list)
+        fixed-result (str/trim (last col-format-list))
         is_include (some #(= fixed-result %) fga-tables)]
     (if is_include
       (let [trimTable (str/trim col)
@@ -99,7 +99,7 @@
   (let [fga-tables (into [] (get-fga-table-white-list))
         col-format (str/replace col  "\"" "")
         col-format-list (str/split col-format #"\.")
-        fixed-result (last col-format-list)
+        fixed-result (str/trim(last col-format-list))
         is_include (some #(= fixed-result %) fga-tables)]
     is_include))
 
@@ -107,12 +107,17 @@
   (some canConvert sqlTables))
 
 (defn convert-sql [sql schema-id]
+  (log/info "convert-sql0: fga-schema " sql schema-id)
   (let [fga-schema (get-fga-schema schema-id)]
+    (log/info "convert-sql: fga-schema " fga-schema)
     (if fga-schema
       (let [regex #"(?<=from|join|FROM|JOIN)+(?:\s|`|\")+(?:\w|`|\"|\.)+"
             group-regex #"(?<=from|join|FROM|JOIN)+((?:\s|`|\")+(?:\w|`|\"|\.)+)"
             fix-sql (str/replace sql group-regex "$1 ")
             result (re-seq regex sql)]
+        (log/info "convert-sql: fix-sql " fix-sql)
+        (log/info "convert-sql: result " result)
+        (log/info "convert-sql: (canRunFGAConvert  result) " (canRunFGAConvert  result))
          (if (canRunFGAConvert  result)
            (let [last-sql (reduce #(handle-convert %1 %2 fga-schema) fix-sql result)]
               last-sql
