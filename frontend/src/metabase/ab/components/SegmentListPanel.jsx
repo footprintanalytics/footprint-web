@@ -100,14 +100,20 @@ const SegmentListPanel = props => {
       render: (_, record) => (
         <Space size="middle">
           <Link
-            disabled={record.numberOfWallets === 0}
-            to={`${getUserProfileLink(businessType)}?cohort_id=${record.cohortId}&tag=${record.title}&cohort_title=${record.title}#from=Segment`}
+            // disabled={record.numberOfWallets === 0}
+            // to={`${getUserProfileLink(businessType)}?cohort_id=${record.cohortId}&tag=${record.title}&cohort_title=${record.title}#from=Segment`}
+            onClick={() => {
+              message.info("Coming soon...")
+            }}
           >
             User Profile
           </Link>
           <Link
-            disabled={record.numberOfWallets === 0}
-            to={`${getWalletProfileLink(businessType)}?cohort_id=${record.cohortId}&cohort_title=${record.title}#from=Segment`}
+            // disabled={record.numberOfWallets === 0}
+            // to={`${getWalletProfileLink(businessType)}?cohort_id=${record.cohortId}&cohort_title=${record.title}#from=Segment`}
+            onClick={() => {
+              message.info("Coming soon...")
+            }}
           >
             Wallet List
           </Link>
