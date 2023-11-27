@@ -228,7 +228,7 @@ const Project = props => {
       );
     }
     if (getProjectObject()?.protocolSlug !== "Demo Project" && !getProjectObject()?.existsWeb2Data && getProjectObject()?.protocolSlug &&
-      ["nft_listing", "acquisition_users", "gaming_engagement", "user_retention", "revenue-total-revenue", "twitter", "discord"].includes(currentMenu)) {
+      ["nft_listing", "revenue-web2-revenue", "acquisition_users", "gaming_engagement", "user_retention", "revenue-total-revenue", "twitter", "discord"].includes(currentMenu)) {
       return (
         <DashboardMask currentMenu={"enterprise"} originCurrentMenu={currentMenu} router={router}
                        project={getProjectObject()} />
