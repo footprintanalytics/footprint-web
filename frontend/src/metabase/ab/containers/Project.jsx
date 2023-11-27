@@ -575,7 +575,7 @@ const Project = props => {
         ></CampaignDetail>
       );
     }
-    /* if (["Cohort", "segment", "segment-platform"].includes(current_tab)) {
+     if (["Cohort", "segment", "segment-platform"].includes(current_tab)) {
        return (
          <CohortList
            router={router}
@@ -584,7 +584,7 @@ const Project = props => {
            businessType={businessType}
          ></CohortList>
        );
-     }*/
+     }
 
 
     if (gaMenuTabs?.dashboardMap?.has(current_tab)) {
