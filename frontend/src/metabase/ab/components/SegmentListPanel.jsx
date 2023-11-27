@@ -49,13 +49,13 @@ const SegmentListPanel = props => {
         // only format tag for system cohorts
         const title = createdBy !== "user" ? formatTag(text) : text;
         return (
-          <Link
-            disabled={true}
+          <div
+            // disabled={true}
             // disabled={numberOfWallets === 0}
-            to={`${getUserProfileLink(businessType)}?cohort_id=${cohortId}&tag=${text}&cohort_title=${text}#from=Segment`}
+            // to={`${getUserProfileLink(businessType)}?cohort_id=${cohortId}&tag=${text}&cohort_title=${text}#from=Segment`}
           >
             {title}
-          </Link>
+          </div>
         );
       },
     },
