@@ -423,7 +423,7 @@ export const fga_menu_data_v2 = (businessType, project, chain) => {
         getItem("Web2 Revenue", "revenue-web2-revenue", null),
       ]),
       getItem(getLabel({label: "Acquisition", tip: "Here illustrates the acquisition of Web3 wallets that have interacted with the project's on-chain contracts, as well as Web2 users involved in off-chain activities."}), "acquisition", ReactIcons.onBoardIcon14, [
-        getItem("Wallets", "acquisition_wallet", null),
+        // getItem("Wallets", "acquisition_wallet", null),
         getItem("Users", "acquisition_users", null),
       ]),
       getItem(getLabel({label: "Engagement", tip: "Presented here are the engagement statistics encompassing Web3 wallets that have interacted with the project's on-chain contracts, as well as Web2 users engaged in off-chain in-game activities."}), "engagement", ReactIcons.gamingStatIcon, [
@@ -431,7 +431,7 @@ export const fga_menu_data_v2 = (businessType, project, chain) => {
         getItem("Users", "gaming_engagement", null),
       ]),
       getItem(getLabel({label: "Retention", tip: "Displayed here are the retention statistics pertaining to Web3 wallets that have interacted with the project's on-chain contracts, along with Web2 users who have not connected their wallets."}), "retention", ReactIcons.trendingIcon14, [
-        getItem("Wallets", "wallet_retention", null),
+        // getItem("Wallets", "wallet_retention", null),
         getItem("Users", "user_retention", null),
       ]),
       getItem(getLabel({label: "Community", tip: "Presented below are the metrics illustrating the growth of the Project community on both the Twitter and Discord platforms.\n"}), "social_stats", ReactIcons.userIcon, [
