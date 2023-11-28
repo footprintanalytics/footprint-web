@@ -73,8 +73,9 @@ const CalPrice = ({ user, setLoginModalShow, onCancelSubscription }) => {
   const calTotal = (array) => {
     return sumBy(array, (item) => {
       const priceObject = chainList.find(c => c.chain === item.chain)
-      const bronzePrice = item.bronze?.months * (priceObject.bronze?.incremental || 0) + item.bronze?.archive ? (priceObject.bronze?.historical || 0) : 0;
-      const tracePrice =  item.trace?.months * (priceObject.trace?.incremental || 0) + item.trace?.archive ? (priceObject.trace?.historical || 0) : 0;
+      const bronzePrice = (item.bronze?.archive ? (priceObject.bronze?.historical || 0) : 0) + item.bronze?.months * (priceObject.bronze?.incremental || 0);
+      const tracePrice =  (item.trace?.archive ? (priceObject.trace?.historical || 0) : 0) + item.trace?.months * (priceObject.trace?.incremental || 0);
+      console.log("xxxxx", item, priceObject, item.bronze?.months * (priceObject.bronze?.incremental || 0), item.bronze?.archive ? (priceObject.bronze?.historical || 0) : 0, bronzePrice)
       return bronzePrice + tracePrice;
     });
   };
@@ -183,7 +184,7 @@ const CalPrice = ({ user, setLoginModalShow, onCancelSubscription }) => {
                       onClick={() => {
                         setCalData(array => [...array, createACalData()]);
                       }}
-                    >+Add</Button>
+                    >+</Button>
                   </div>
                 ) : (
                   <div className="cal-price__panel-ul-li">

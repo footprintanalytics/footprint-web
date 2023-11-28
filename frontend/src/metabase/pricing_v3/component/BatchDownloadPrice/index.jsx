@@ -13,12 +13,11 @@ const BatchDownloadPrice = ({ user, setLoginModalShow, onCancelSubscription }) =
 
   return (
     <div className="Pricing flex flex-column align-center">
-      <CalPrice>
-
-      </CalPrice>
       <div style={{ marginTop: 40 }}/>
-      <PriceTable>
-      </PriceTable>
+      <CalPrice />
+
+      <div style={{ marginTop: 80 }}/>
+      <PriceTable />
 
       <div className="flex align-center justify-between" style={{ height: 300, width: 1200 }}>
         <div className="flex flex-col" style={{ gap: 20 }}>
@@ -29,7 +28,7 @@ const BatchDownloadPrice = ({ user, setLoginModalShow, onCancelSubscription }) =
           <Link target="_blank" href="mailto:sales@footprint.network">
             <Button primary>{`Speak with a solutions architect >`}</Button>
           </Link>
-          <Link to="https://www.footprint.network/batch-download">
+          <Link to="/batch-download">
             <Button borderless style={{color: "#3434b2"}}>{`Learn more about Batch Download >`}</Button>
           </Link>
         </div>
