@@ -9,7 +9,6 @@ import CopyToClipboard from "react-copy-to-clipboard";
 import { getFgaProject, getUser } from "metabase/selectors/user";
 import "../css/index.css";
 import UpdateProjectModal from "./Modal/UpdateProjectModal";
-import { getFgaChain } from "metabase/selectors/control";
 import ProjectSubmitContactModal from "metabase/ab/components/Modal/ProjectSubmitContactModal";
 import { projectSubmitModalShowAction } from "metabase/redux/control";
 import InfoGenerate from "metabase/ab/components/InfoGenerate";
