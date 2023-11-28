@@ -9,13 +9,12 @@ import CopyToClipboard from "react-copy-to-clipboard";
 import { getFgaProject, getUser } from "metabase/selectors/user";
 import "../css/index.css";
 import UpdateProjectModal from "./Modal/UpdateProjectModal";
-import { getFgaChain } from "metabase/selectors/control";
 import ProjectSubmitContactModal from "metabase/ab/components/Modal/ProjectSubmitContactModal";
 import { projectSubmitModalShowAction } from "metabase/redux/control";
 import InfoGenerate from "metabase/ab/components/InfoGenerate";
 
 const ProjectInfo = props => {
-  const { router, project, location, user, chain, businessType, setProjectSubmitModalShowAction } = props;
+  const { router, project, location, user, businessType, setProjectSubmitModalShowAction } = props;
   const [currentProject, setCurrentProject] = useState(project);
   const [tourOpen, setTourOpen] = useState(false);
   const ref1 = useRef(null);
@@ -59,13 +58,13 @@ const ProjectInfo = props => {
     let datas = [];
     switch (type) {
       case "NFT":
-        datas = currentProject?.nftCollectionAddress?.filter(item => item.chain === chain);
+        datas = currentProject?.nftCollectionAddress;
         break;
       case "Contract":
         datas = [];
         break;
       case "Token":
-        datas = currentProject?.tokenAddress?.filter(item => item.chain === chain);
+        datas = currentProject?.tokenAddress;
         break;
       default:
         datas = [];
@@ -234,10 +233,10 @@ const ProjectInfo = props => {
                         currentProject?.protocolType !== "NFT" && (
                           <Tag>{currentProject?.protocolType}</Tag>
                         )}
-                      {currentProject?.nftCollectionAddress?.filter(item => item.chain === chain)?.length > 0 && (
+                      {currentProject?.nftCollectionAddress?.length > 0 && (
                         <Tag>NFT</Tag>
                       )}
-                      {currentProject?.tokenAddress?.filter(item => item.chain === chain)?.length > 0 && (
+                      {currentProject?.tokenAddress?.length > 0 && (
                         <Tag>Token</Tag>
                       )}
                     </div>
@@ -318,7 +317,6 @@ const mapStateToProps = state => {
   return {
     user: getUser(state),
     project: getFgaProject(state),
-    chain: getFgaChain(state),
   };
 };
 
