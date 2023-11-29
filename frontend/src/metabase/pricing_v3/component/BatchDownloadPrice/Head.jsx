@@ -33,7 +33,7 @@ const Head = ({ data, user, setLoginModalShow, onCancelSubscription }) => {
                         {subItem.title}
                         {subItem.tooltip && (
                           <Tooltip
-                            title={item.tooltip}
+                            title={subItem.tooltip}
                           >
                             <Icon className="ml1" name={"info"} />
                           </Tooltip>

@@ -7,7 +7,7 @@ import Link from "metabase/core/components/Link";
 import Head from "./Head";
 import Button from "metabase/core/components/Button/Button";
 import { InputNumber, message, Select, Switch } from "antd";
-import { sumBy } from "lodash";
+import { debounce, sumBy } from "lodash";
 import { chainPriceData } from "metabase/pricing_v3/component/BatchDownloadPrice/data";
 import Icon from "metabase/components/Icon";
 import { getOssUrl } from "metabase/lib/image";
@@ -110,7 +110,7 @@ const CalPrice = ({ user, setLoginModalShow, onCancelSubscription }) => {
           bronze_archive: el.bronze.archive,
           trace_months: el.trace.months,
           trace_archive: el.trace.archive,
-          total: calTotal(calData),
+          total: calTotal([el]),
         }
       }))
     }
@@ -118,6 +118,14 @@ const CalPrice = ({ user, setLoginModalShow, onCancelSubscription }) => {
     hide();
     window.open("mailto:sales@footprint.network")
   }
+
+  const debounceEventHandler = (...args) => {
+    const debounced = debounce(...args);
+    return e => {
+      e.stopPropagation();
+      return debounced(e);
+    };
+  };
 
   return (
     <div className="cal-price">
@@ -266,7 +274,7 @@ const CalPrice = ({ user, setLoginModalShow, onCancelSubscription }) => {
                   fontSize: "18px",
                 }}
                 disabled={calTotal(calData) === 0}
-                onClick={onBuyAction}
+                onClick={debounceEventHandler(onBuyAction, 500)}
               >
                 Buy now
               </Button></div>
