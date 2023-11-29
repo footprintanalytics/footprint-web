@@ -110,6 +110,7 @@ const CalPrice = ({ user, setLoginModalShow, onCancelSubscription }) => {
           bronze_archive: el.bronze.archive,
           trace_months: el.trace.months,
           trace_archive: el.trace.archive,
+          total: calTotal(calData),
         }
       }))
     }
