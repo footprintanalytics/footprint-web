@@ -11,6 +11,7 @@ import { sumBy } from "lodash";
 import { chainPriceData } from "metabase/pricing_v3/component/BatchDownloadPrice/data";
 import Icon from "metabase/components/Icon";
 import { getOssUrl } from "metabase/lib/image";
+import { createBudgetRecord } from "metabase/new-service";
 
 const CalPrice = ({ user, setLoginModalShow, onCancelSubscription }) => {
   const chainList = chainPriceData;
@@ -76,7 +77,9 @@ const CalPrice = ({ user, setLoginModalShow, onCancelSubscription }) => {
   const remainingChainList = chainList.filter(i => !calData.map(c => c.chain).includes(i.chain));
   const createACalData = () => {
     const chain = remainingChainList[0].chain;
-    return { chain: chain, bronze: { archive: true, months: 0 }, trace: { archive: true, months: 0 } };
+    const bronzeArchive = !!remainingChainList[0].bronze;
+    const traceArchive = !!remainingChainList[0].trace;
+    return { chain: chain, bronze: { archive: bronzeArchive, months: 0 }, trace: { archive: traceArchive, months: 0 } };
   };
 
   const calTotal = (array) => {
@@ -88,19 +91,29 @@ const CalPrice = ({ user, setLoginModalShow, onCancelSubscription }) => {
     });
   };
 
-  const onBuyAction = () => {
+  const onBuyAction = async () => {
     if (!user) {
       setLoginModalShow({ show: true })
-      return ;
+      return;
     }
     const hide = message.loading("Loading...", 20000);
-    setTimeout(() => {
-      hide();
-      window.open("mailto:sales@footprint.network")
-    }, 2000)
+    const params = {
+      total: calTotal(calData),
+      detail: JSON.stringify(calData.map(el => {
+        return {
+          chain: el.chain,
+          bronze_months: el.bronze.months,
+          bronze_archive: el.bronze.archive,
+          trace_months: el.trace.months,
+          trace_archive: el.trace.archive,
+        }
+      }))
+    }
+    await createBudgetRecord(params)
+    hide();
+    window.open("mailto:sales@footprint.network")
   }
 
-  console.log("calDa ta", calData)
   return (
     <div className="cal-price">
       <h2>Sync blockchain historical data in one batch</h2>
@@ -121,6 +134,19 @@ const CalPrice = ({ user, setLoginModalShow, onCancelSubscription }) => {
                       const array = calData.filter((value, inx) => inx !== index);
                       const object = calData[index];
                       object.chain = value;
+                      const chainValue = chainList.find(c => c.chain === value)
+                      if (!chainValue.trace) {
+                        object.trace = {
+                          archive: false,
+                          months: 0,
+                        }
+                      }
+                      if (!chainValue.bronze) {
+                        object.bronze = {
+                          archive: false,
+                          months: 0,
+                        }
+                      }
                       array.splice(index, 0, object);
                       setCalData(array);
                     }}
@@ -196,7 +222,9 @@ const CalPrice = ({ user, setLoginModalShow, onCancelSubscription }) => {
                     onClick={() => {
                       setCalData(calData.filter((value, inx) => inx !== index));
                     }}
-                  >-</Button>
+                  >
+                    -
+                  </Button>
                 </div>
               </div>
             );
@@ -212,7 +240,9 @@ const CalPrice = ({ user, setLoginModalShow, onCancelSubscription }) => {
               onClick={() => {
                 setCalData(array => [...array, createACalData()]);
               }}
-            >+</Button>
+            >
+              +
+            </Button>
           </div>
           <div className="cal-price__total">
             <div className="flex bold align-center">
@@ -230,6 +260,7 @@ const CalPrice = ({ user, setLoginModalShow, onCancelSubscription }) => {
                   width: "110px",
                   fontSize: "18px",
                 }}
+                disabled={calData.length === 0}
                 onClick={onBuyAction}
               >
                 Buy now
