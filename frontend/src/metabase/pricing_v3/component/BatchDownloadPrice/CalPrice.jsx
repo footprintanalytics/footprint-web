@@ -101,7 +101,6 @@ const CalPrice = ({ user, setLoginModalShow, onCancelSubscription }) => {
       total: calTotal(calData),
       detail: JSON.stringify(calData
         .filter(el => {
-          console.log("xxx", el, calTotal([el]))
           return calTotal([el]) > 0
         })
         .map(el => {
@@ -114,10 +113,9 @@ const CalPrice = ({ user, setLoginModalShow, onCancelSubscription }) => {
         }
       }))
     }
-    console.log("params", params)
-    // await createBudgetRecord(params)
+    await createBudgetRecord(params)
     hide();
-    // window.open("mailto:sales@footprint.network")
+    window.open("mailto:sales@footprint.network")
   }
 
   return (
