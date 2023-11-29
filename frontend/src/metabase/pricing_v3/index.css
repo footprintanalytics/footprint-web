@@ -25,31 +25,40 @@
 }
 
 .pricing-container__tabs {
-  margin: 10px 0 40px;
+  margin: 20px 0 0;
   display: flex;
   height: 70px;
+  gap: 20px;
+  border-bottom: 2px solid #3434b2;
 }
 
 .pricing-container__button-normal {
   width: 300px;
-  border: 0;
-  border-radius: 0;
-  font-size: 24px;
-  font-weight: bold;
-  color: #303440;
-  border-bottom: 1px solid #8f8f94;
+  font-size: 20px;
+  font-weight: normal;
+  color: #2F3440;
+  background: white;
+  border-bottom: 1px solid white;
+  border-radius: 20px 20px 0 0;
+  border-top: 1px solid #D8D8D8;
+  border-right: 1px solid #D8D8D8;
+  border-left: 1px solid #D8D8D8;
 }
 
 .pricing-container__button-normal:hover {
   background: transparent;
-  border-bottom: 2px solid #3434b250;
 }
 
 .pricing-container__button-selected:hover,
 .pricing-container__button-selected {
-  color: #3434b2;
-  font-size: 28px;
-  border-bottom: 2px solid #3434b2;
+  color: #ffffff;
+  font-size: 24px;
+  background: #3334B2;
+  border-bottom: 1px solid #3434b2;
+  border-radius: 20px 20px 0 0;
+  border-top: 1px solid #3434b2;
+  border-right: 1px solid #3434b2;
+  border-left: 1px solid #3434b2;
 }
 
 .pricing-container__bg {

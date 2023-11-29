@@ -18,22 +18,31 @@ const CalPrice = ({ user, setLoginModalShow, onCancelSubscription }) => {
     {
       title: "Chain",
       desc: "",
-      flex: 1,
+      flex: 1.2,
     },
     {
       title: "Bronze tables",
       desc: "",
+      tooltip: "The bronze table includes the followings:\n" +
+        "Chain_blocks\n" +
+        "Chain_transactions\n" +
+        "Chain_token_transfers\n" +
+        "Chain_logs\n" +
+        "\n" +
+        "Notice: Non-EVM chains normally don't have transactions/token transfers tables.",
       subData: [
         {
           title: "Archive",
           desc: "",
+          tooltip: "Access our extensive historical data for a one-time fee.",
         },
         {
           title: "Months",
           desc: "",
+          tooltip: "Subscribe to our monthly plan for access to incremental data updates.",
         },
       ],
-      flex: 2,
+      flex: 1.7,
     },
     {
       title: "Trace tables",
@@ -48,7 +57,7 @@ const CalPrice = ({ user, setLoginModalShow, onCancelSubscription }) => {
           desc: "",
         },
       ],
-      flex: 2,
+      flex: 1.7,
     },
     {
       title: "Sub total",
@@ -75,7 +84,6 @@ const CalPrice = ({ user, setLoginModalShow, onCancelSubscription }) => {
       const priceObject = chainList.find(c => c.chain === item.chain)
       const bronzePrice = (item.bronze?.archive ? (priceObject.bronze?.historical || 0) : 0) + item.bronze?.months * (priceObject.bronze?.incremental || 0);
       const tracePrice =  (item.trace?.archive ? (priceObject.trace?.historical || 0) : 0) + item.trace?.months * (priceObject.trace?.incremental || 0);
-      console.log("xxxxx", item, priceObject, item.bronze?.months * (priceObject.bronze?.incremental || 0), item.bronze?.archive ? (priceObject.bronze?.historical || 0) : 0, bronzePrice)
       return bronzePrice + tracePrice;
     });
   };
@@ -99,12 +107,12 @@ const CalPrice = ({ user, setLoginModalShow, onCancelSubscription }) => {
       <h3>Learn more about <Link className="text-underline text-underline-hover" style={{ color: "#3434b2" }} to="/batch-download">Batch Download</Link></h3>
       <div className="cal-price__panel">
         <Head data={data}></Head>
-        <div className="pt2">{
+        <div className="cal-price__table">{
           calData?.map((item, index) => {
             const priceObject = chainList.find(c => c.chain === item.chain)
             return (
               <div className="cal-price__panel-ul" key={index}>
-                <div className="cal-price__panel-ul-li">
+                <div className="cal-price__panel-ul-li" style={{ flex: 1 }}>
                   <Select
                     value={item.chain}
                     options={remainingChainList.map(r => {return {value: r.chain, label: r.chain}})}
@@ -119,107 +127,114 @@ const CalPrice = ({ user, setLoginModalShow, onCancelSubscription }) => {
                   ></Select>
                 </div>
 
-                <div className="cal-price__panel-ul-li">
-                  <Switch
-                    checked={!!item.bronze?.archive}
-                    onClick={() => {
-                      const array = calData.filter((value, inx) => inx !== index);
-                      const object = calData[index];
-                      object.bronze.archive = !object.bronze.archive;
-                      array.splice(index, 0, object);
-                      setCalData(array);
-                    }}
-                  />
-                </div>
-                <div className="cal-price__panel-ul-li">
-                  <InputNumber
-                    min={0} max={36} value={item.bronze?.months}
-                    onChange={value => {
-                      const array = calData.filter((value, inx) => inx !== index);
-                      const object = calData[index];
-                      object.bronze.months = value;
-                      array.splice(index, 0, object);
-                      setCalData(array);
-                    }
-                    } />
-                </div>
-                <div className="cal-price__panel-ul-li">
-                  {priceObject.trace ? (
+                <div className="cal-price__panel-ul-li" style={{ flex: 2 }}>
+                  <div className="cal-price__panel-ul-li-sub">
                     <Switch
-                      disabled={!priceObject.trace}
-                      checked={!!item.trace?.archive}
+                      checked={!!item.bronze?.archive}
                       onClick={() => {
                         const array = calData.filter((value, inx) => inx !== index);
                         const object = calData[index];
-                        object.trace.archive = !object.trace.archive;
+                        object.bronze.archive = !object.bronze.archive;
                         array.splice(index, 0, object);
                         setCalData(array);
                       }}
                     />
-                  ): (<img src={getOssUrl("icon-price-unavailable.png")} alt={"stop"}/>)}
+                  </div>
+                  <div className="cal-price__panel-ul-li-sub">
+                    <InputNumber
+                      min={0} max={36} value={item.bronze?.months}
+                      onChange={value => {
+                        const array = calData.filter((value, inx) => inx !== index);
+                        const object = calData[index];
+                        object.bronze.months = value;
+                        array.splice(index, 0, object);
+                        setCalData(array);
+                      }}
+                    />
+                  </div>
                 </div>
-                <div className="cal-price__panel-ul-li">
-                  <InputNumber
-                    disabled={!priceObject.trace}
-                    min={0} max={36}
-                    value={item.trace?.months}
-                    onChange={value => {
-                      const array = calData.filter((value, inx) => inx !== index);
-                      const object = calData[index];
-                      object.trace.months = value;
-                      array.splice(index, 0, object);
-                      setCalData(array);
-                    }}
-                  />
+
+                <div className="cal-price__panel-ul-li" style={{ flex: 2 }}>
+                  <div className="cal-price__panel-ul-li-sub">
+                    {priceObject.trace ? (
+                      <Switch
+                        disabled={!priceObject.trace}
+                        checked={!!item.trace?.archive}
+                        onClick={() => {
+                          const array = calData.filter((value, inx) => inx !== index);
+                          const object = calData[index];
+                          object.trace.archive = !object.trace.archive;
+                          array.splice(index, 0, object);
+                          setCalData(array);
+                        }}
+                      />
+                    ): (<img src={getOssUrl("icon-price-unavailable.png")} alt={"stop"}/>)}
+                  </div>
+                  <div className="cal-price__panel-ul-li-sub">
+                    <InputNumber
+                      disabled={!priceObject.trace}
+                      min={0} max={36}
+                      value={item.trace?.months}
+                      onChange={value => {
+                        const array = calData.filter((value, inx) => inx !== index);
+                        const object = calData[index];
+                        object.trace.months = value;
+                        array.splice(index, 0, object);
+                        setCalData(array);
+                      }}
+                    />
+                  </div>
                 </div>
-                <div className="cal-price__panel-ul-li">
+
+                <div className="cal-price__panel-ul-li" style={{ flex: 1 }}>
                   <div style={{ fontSize: 20 }}>{`$${calTotal([item]).toLocaleString()}`}</div>
                 </div>
 
-                {index === calData.length - 1 && remainingChainList.length > 0 ? (
-                  <div className="cal-price__panel-ul-li">
-                    <Button
-                      style={{ height: 40, lineHeight: "10px" }}
-                      primary
-                      onClick={() => {
-                        setCalData(array => [...array, createACalData()]);
-                      }}
-                    >+</Button>
-                  </div>
-                ) : (
-                  <div className="cal-price__panel-ul-li">
-                    <Button
-                      style={{ height: 40, lineHeight: "10px" }}
-                      onClick={() => {
-                        setCalData(calData.filter((value, inx) => inx !== index));
-                      }}
-                    >-</Button>
-                  </div>
-                )}
+                <div className="cal-price__panel-ul-li" style={{ flex: 1 }}>
+                  <Button
+                    style={{ height: 40, lineHeight: "10px" }}
+                    onClick={() => {
+                      setCalData(calData.filter((value, inx) => inx !== index));
+                    }}
+                  >-</Button>
+                </div>
               </div>
             );
           })
         }
         </div>
 
-        <div className="cal-price__total">
-          <div className="flex"><span style={{ width: 120, marginRight: 10, textAlign: "center" }}>Total: </span>
-            <h2>{`$${calTotal(calData).toLocaleString()}`}</h2></div>
-          <div>
-            <Link target="_blank" href="mailto:sales@footprint.network">
-              <span style={{ width: 120, marginRight: 10 }}>{"Contact us >"}</span>
-            </Link>
+        <div className="cal-price__bottom">
+          <div className="cal-price__add-button">
             <Button
+              style={{ height: 40, lineHeight: "10px", width: 150 }}
               primary
-              style={{
-                height: 40,
-                lineHeight: "10px",
-                width: "110px",
+              onClick={() => {
+                setCalData(array => [...array, createACalData()]);
               }}
-              onClick={onBuyAction}
-            >
-              Buy now
-            </Button></div>
+            >+</Button>
+          </div>
+          <div className="cal-price__total">
+            <div className="flex bold align-center">
+              <span style={{ width: 120, marginRight: 10, textAlign: "center" }}>Total: </span>
+              <h2>{`$${calTotal(calData).toLocaleString()}`}</h2></div>
+            <div>
+              <Link target="_blank" href="mailto:sales@footprint.network">
+                <span style={{ width: 120, marginRight: 20 }}>{"Contact us >"}</span>
+              </Link>
+              <Button
+                primary
+                style={{
+                  height: 40,
+                  lineHeight: "10px",
+                  width: "110px",
+                  fontSize: "18px",
+                }}
+                onClick={onBuyAction}
+              >
+                Buy now
+              </Button></div>
+          </div>
         </div>
       </div>
     </div>

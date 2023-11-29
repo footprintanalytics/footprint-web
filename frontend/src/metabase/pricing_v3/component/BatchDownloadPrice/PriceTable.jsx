@@ -16,6 +16,11 @@ const PriceTable = ({ user, setLoginModalShow, onCancelSubscription }) => {
     },
     {
       title: "Bronze tables",
+      tooltip: "Chain_blocks\n" +
+        "Chain_transactions\n" +
+        "Chain_token_transfers\n" +
+        "Chain_logs\n" +
+        "Notice: Non-EVM chains normally don't have transactions/token transfers tables",
       desc: "",
       subData: [
         {
