@@ -99,7 +99,12 @@ const CalPrice = ({ user, setLoginModalShow, onCancelSubscription }) => {
     const hide = message.loading("Loading...", 20000);
     const params = {
       total: calTotal(calData),
-      detail: JSON.stringify(calData.map(el => {
+      detail: JSON.stringify(calData
+        .filter(el => {
+          console.log("xxx", el, calTotal([el]))
+          return calTotal([el]) > 0
+        })
+        .map(el => {
         return {
           chain: el.chain,
           bronze_months: el.bronze.months,
@@ -109,9 +114,10 @@ const CalPrice = ({ user, setLoginModalShow, onCancelSubscription }) => {
         }
       }))
     }
-    await createBudgetRecord(params)
+    console.log("params", params)
+    // await createBudgetRecord(params)
     hide();
-    window.open("mailto:sales@footprint.network")
+    // window.open("mailto:sales@footprint.network")
   }
 
   return (
@@ -260,7 +266,7 @@ const CalPrice = ({ user, setLoginModalShow, onCancelSubscription }) => {
                   width: "110px",
                   fontSize: "18px",
                 }}
-                disabled={calData.length === 0}
+                disabled={calTotal(calData) === 0}
                 onClick={onBuyAction}
               >
                 Buy now
