@@ -357,7 +357,8 @@ export const getDashboardMap = (businessType, project, chain) => {
     ["acquisition", "43325414-b798-44cb-ad2d-745d374b22f2"],
     ["gaming_user", "16d26c02-b0f4-4c78-9385-44a9212a826b"],
     ["nft_summary", "25c5de28-0591-4893-a574-cbe913c80043"],
-    ["nft_sales_mints", project?.protocolSlug !== "Demo Project" ? "354b9c63-8904-4cc9-acea-3fb399748ff8": "aefc83f1-ed4b-4dba-a21f-6f85a1de471c"],
+    ["nft_sales", project?.protocolSlug !== "Demo Project" ? "354b9c63-8904-4cc9-acea-3fb399748ff8": "aefc83f1-ed4b-4dba-a21f-6f85a1de471c"],
+    ["nft_mints", "0934a0a9-29a5-4e44-9fc2-98b0ae5afd83"],
     ["listing", "20ae0361-4a39-4b66-bd56-fb9f012bfd3c"],
     ["gaming_spend", "c86f7c43-41fd-4c75-9d8a-3ebc381ae62e"],
     ["gaming_engagement", "b0eee809-7c27-4c86-adf2-5644fa6a7529"],
@@ -408,7 +409,8 @@ export const fga_menu_data_v2 = (businessType, project, chain) => {
         // project?.nftCollectionAddress?.length > 0 &&
         getItem("NFT", "nft", null, [
             getItem("Summary", "nft_summary", null),
-            getItem("NFT Sales & Mints", "nft_sales_mints", null),
+            getItem("NFT Mints", "nft_mints", null),
+            getItem("NFT Sales", "nft_sales", null),
             getItem("NFT Listing", "nft_listing", null),
             getItem("NFT Holders", "nft_nft_holder", null),
             getItem("NFT Leaderboard", "nft_leaderboard", null),
