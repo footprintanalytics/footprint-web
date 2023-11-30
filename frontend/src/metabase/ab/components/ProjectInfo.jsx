@@ -61,7 +61,7 @@ const ProjectInfo = props => {
         datas = currentProject?.nftCollectionAddress;
         break;
       case "Contract":
-        datas = [];
+        datas = currentProject?.contractAddress;
         break;
       case "Token":
         datas = currentProject?.tokenAddress;
@@ -108,6 +108,9 @@ const ProjectInfo = props => {
         className="demo-loadmore-list"
         itemLayout="horizontal"
         dataSource={datas}
+        pagination={
+          datas?.length > 10 ? { pageSize: 10 } : null
+        }
         footer={
           <div className="w-full text-centered">
             <Typography.Text type="secondary">
