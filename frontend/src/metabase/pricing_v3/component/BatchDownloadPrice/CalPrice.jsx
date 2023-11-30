@@ -12,6 +12,9 @@ import { chainPriceData } from "metabase/pricing_v3/component/BatchDownloadPrice
 import Icon from "metabase/components/Icon";
 import { getOssUrl } from "metabase/lib/image";
 import { createBudgetRecord } from "metabase/new-service";
+import CreateProjectModal2 from "metabase/ab/components/Modal/CreateProjectModal2";
+import BuyModal from "metabase/pricing_v3/component/BatchDownloadPrice/BuyModal";
+import { trackStructEvent } from "metabase/lib/analytics";
 
 const CalPrice = ({ user, setLoginModalShow, onCancelSubscription }) => {
   const chainList = chainPriceData;
@@ -71,15 +74,18 @@ const CalPrice = ({ user, setLoginModalShow, onCancelSubscription }) => {
   ];
   const [calData, setCalData] = useState([{
     chain: "Ethereum",
-    bronze: { archive: true, months: 0 },
-    trace: { archive: true, months: 0 },
+    bronze: { archive: true, months: 12 },
+    trace: { archive: true, months: 12 },
   }]);
+  const [showBuyModal, setShowBuyModal] = useState(false);
   const remainingChainList = chainList.filter(i => !calData.map(c => c.chain).includes(i.chain));
   const createACalData = () => {
     const chain = remainingChainList[0].chain;
     const bronzeArchive = !!remainingChainList[0].bronze;
-    const traceArchive = !!remainingChainList[0].trace;
-    return { chain: chain, bronze: { archive: bronzeArchive, months: 0 }, trace: { archive: traceArchive, months: 0 } };
+    const traceArchive = !!remainingChainList[0].trace
+    const bronzeMonthsInit = bronzeArchive ? 12 : 0
+    const traceMonthsInit = traceArchive ? 12 : 0
+    return { chain: chain, bronze: { archive: bronzeArchive, months: bronzeMonthsInit }, trace: { archive: traceArchive, months: traceMonthsInit } };
   };
 
   const calTotal = (array) => {
@@ -92,31 +98,40 @@ const CalPrice = ({ user, setLoginModalShow, onCancelSubscription }) => {
   };
 
   const onBuyAction = async () => {
+    trackStructEvent(`batch-download-price buy now`);
     if (!user) {
       setLoginModalShow({ show: true })
       return;
     }
+    setShowBuyModal(true);
+  }
+
+  const record = async (email, telegram) => {
     const hide = message.loading("Loading...", 20000);
     const params = {
+      email: email,
+      telegram: telegram || "",
       total: calTotal(calData),
       detail: JSON.stringify(calData
         .filter(el => {
           return calTotal([el]) > 0
         })
         .map(el => {
-        return {
-          chain: el.chain,
-          bronze_months: el.bronze.months,
-          bronze_archive: el.bronze.archive,
-          trace_months: el.trace.months,
-          trace_archive: el.trace.archive,
-          total: calTotal([el]),
-        }
-      }))
+          return {
+            chain: el.chain,
+            bronze_months: el.bronze.months,
+            bronze_archive: el.bronze.archive,
+            trace_months: el.trace.months,
+            trace_archive: el.trace.archive,
+            total: calTotal([el]),
+          }
+        }))
     }
     await createBudgetRecord(params)
     hide();
-    window.open("mailto:sales@footprint.network")
+    setTimeout(() => {
+      message.success("Submit success");
+    }, 500)
   }
 
   const debounceEventHandler = (...args) => {
@@ -251,6 +266,7 @@ const CalPrice = ({ user, setLoginModalShow, onCancelSubscription }) => {
               style={{ height: 40, lineHeight: "10px", width: 150 }}
               primary
               onClick={() => {
+                trackStructEvent(`batch-download-price add button`);
                 setCalData(array => [...array, createACalData()]);
               }}
             >
@@ -274,13 +290,24 @@ const CalPrice = ({ user, setLoginModalShow, onCancelSubscription }) => {
                   fontSize: "18px",
                 }}
                 disabled={calTotal(calData) === 0}
-                onClick={debounceEventHandler(onBuyAction, 500)}
+                onClick={debounceEventHandler(onBuyAction, 200)}
               >
                 Buy now
               </Button></div>
           </div>
         </div>
       </div>
+      <BuyModal
+        open={showBuyModal}
+        force={false}
+        onCancel={() => {
+          setShowBuyModal(false)
+        }}
+        onFinish={(value) => {
+          record(value.email, value.telegram)
+          setShowBuyModal(false)
+        }}
+      />
     </div>
   );
 };

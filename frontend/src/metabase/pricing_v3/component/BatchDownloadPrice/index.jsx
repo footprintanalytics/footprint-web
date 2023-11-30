@@ -1,6 +1,6 @@
 /* eslint-disable curly */
 /* eslint-disable react/prop-types */
-import React from "react";
+import React, {useEffect} from "react";
 import { connect } from "react-redux";
 import Button from "metabase/core/components/Button/Button";
 import { loginModalShowAction } from "metabase/redux/control";
@@ -8,8 +8,13 @@ import CalPrice from "metabase/pricing_v3/component/BatchDownloadPrice/CalPrice"
 import PriceTable from "metabase/pricing_v3/component/BatchDownloadPrice/PriceTable";
 import Link from "metabase/core/components/Link";
 import "./index.css";
+import { trackStructEvent } from "metabase/lib/analytics";
 
 const BatchDownloadPrice = ({ user, setLoginModalShow, onCancelSubscription }) => {
+
+  useEffect(() => {
+    trackStructEvent(`batch-download-price page`);
+  }, []);
 
   return (
     <div className="Pricing flex flex-column align-center">
