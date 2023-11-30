@@ -286,8 +286,8 @@ const CalPrice = ({ user, setLoginModalShow, onCancelSubscription }) => {
                 style={{
                   height: 40,
                   lineHeight: "10px",
-                  width: "110px",
-                  fontSize: "18px",
+                  width: "120px",
+                  fontSize: "16px",
                 }}
                 disabled={calTotal(calData) === 0}
                 onClick={debounceEventHandler(onBuyAction, 200)}
