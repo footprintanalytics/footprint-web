@@ -123,7 +123,11 @@ const SubmitContract = props => {
         Welcome to submit more contracts or protocols to help us better display
         the data you want
       </h1>
-      <span>Submissions normally take a few minutes to get processed.</span>
+      <span>
+        You can resubmit protocols that have been included in Footprint, allowing you to make additions or changes to the information.
+        <br/>
+        Submissions normally take a few minutes to get processed.
+      </span>
       <p>
         {"If you have any questions, please "}
         <Link
