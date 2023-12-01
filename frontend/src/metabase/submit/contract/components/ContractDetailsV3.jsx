@@ -428,7 +428,7 @@ const ContractDetailsV3 = ({ onFinish, user, onClosed, hideEmail, protocolCatego
         </Form.Item>
         <Form.Item
           label="Add Contract"
-          rules={[{ required: true, message: "" }]}
+          rules={[{ required: !!fromFgaAddProject, message: "" }]}
           name="chain"
         >
           <Select
