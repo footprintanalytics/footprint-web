@@ -11,7 +11,7 @@ export const isDark = () => {
 };
 
 export const canShowDarkMode = dashboard => {
-  return dashboard?.creator?.id === 15671 || isDark();
+  return dashboard?.creator?.id === 15671 || dashboard?.creator?.id === 25995 || isDark();
 };
 
 export const isGrowthNeedDark = () => {
