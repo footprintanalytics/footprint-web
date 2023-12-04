@@ -333,16 +333,6 @@ const Project = props => {
         />
       );
     }
-    if (["all-projects"].includes(current_tab)) {
-      return (
-        <ProjectList
-          location={location}
-          router={router}
-          businessType={businessType}
-          // project={getProjectObject()}
-        />
-      );
-    }
     if (["my-submit-project"].includes(current_tab)) {
       return (
         <MySubmitProject
