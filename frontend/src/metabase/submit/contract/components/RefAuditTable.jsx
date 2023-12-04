@@ -476,7 +476,7 @@ const RefAuditTable = ({ operator, type, recordType }) => {
       {openAuditModal?.open && (
         <Modal
           open={openAuditModal?.open}
-          title={`Audit [${openAuditModal?.item?.protocol_slug}]`}
+          title={`Audit [${openAuditModal?.item?.protocol_slug || openAuditModal?.item?.new_contract_obj?.protocol_slug}]`}
           onCancel={() => {
             setOpenAuditModal({ open: false, item: null });
           }}
@@ -511,7 +511,7 @@ const RefAuditTable = ({ operator, type, recordType }) => {
                 type="default"
                 loading={auditing?.isLoading && !auditing?.pass}
                 onClick={() => {
-                  onAudit(openAuditModal?.item, remark, false);
+                  onAudit(openAuditModal?.item, remark, false, openAuditModal?.type);
                 }}
               >
                 Reject

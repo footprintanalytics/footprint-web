@@ -43,6 +43,7 @@ import {
 import { setGames } from "metabase/redux/control";
 import ProjectList from "metabase/ab/containers/projectList";
 import KeysIds from "metabase/ab/components/KeysIds";
+import MySubmitProject from "metabase/ab/containers/MySubmitProject";
 
 const Project = props => {
   const {
@@ -325,6 +326,16 @@ const Project = props => {
     if (["all-projects"].includes(current_tab)) {
       return (
         <ProjectList
+          location={location}
+          router={router}
+          businessType={businessType}
+          // project={getProjectObject()}
+        />
+      );
+    }
+    if (["my-submit-project"].includes(current_tab)) {
+      return (
+        <MySubmitProject
           location={location}
           router={router}
           businessType={businessType}

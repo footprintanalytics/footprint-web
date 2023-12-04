@@ -716,6 +716,10 @@ export const getRefContractSubmittedList = params => {
   return GET(`${getRefBaseApi()}/api/v1/protocol/submit/record`, params);
 };
 
+export const getRefContractSubmittedListByUser = params => {
+  return GET(`${getRefBaseApi()}/api/v1/protocol/submit/record_by_user`, params);
+};
+
 export const submitRefProtocols = params => {
   return POST(`${getRefBaseApi()}/api/v1/protocol/submit`, params);
 };
