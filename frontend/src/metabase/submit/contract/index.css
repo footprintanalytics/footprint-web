@@ -1,5 +1,6 @@
 .SubmitContract {
-  min-height: calc(100vh - 60px);
+  width: 100%;
+  min-height: calc(100vh - 150px);
   padding: 60px;
   background-color: #f0f0ff;
 }
@@ -15,7 +16,7 @@
 }
 
 .dark .SubmitContract {
-  background-color: var(--color-bg-dark);
+  background-color: var(--color-ab-bg-dark);
 }
 
 .dark .SubmitContract span,
@@ -40,4 +41,12 @@
 
 .SubmitContract__back span {
   margin-left: 4px;
+}
+
+.SubmitContract__table-row {
+  height: 40px;
+}
+
+.SubmitContract__table-row-fga {
+  height: 80px;
 }

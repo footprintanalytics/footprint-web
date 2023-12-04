@@ -2,18 +2,13 @@
 /* eslint-disable react/prop-types */
 import "../index.css";
 import React, { useState, useEffect } from "react";
-import { Button, Col, Form, Radio, Row, Table, Tag } from "antd";
+import { Button, Col, Form, Radio, Row, Table } from "antd";
 import { useMutation, useQuery } from "react-query";
 import { connect } from "react-redux";
 import { getUser, getUserIsAdmin } from "metabase/selectors/user";
 import RefContractTable from "metabase/submit/contract/components/RefContractTable";
-import {
-  getContractSubmittedList,
-  getRefContractSubmittedList,
-  reviewContract,
-} from "metabase/new-service";
+import { getRefContractSubmittedList, getRefContractSubmittedListByUser, reviewContract } from "metabase/new-service";
 import Link from "metabase/core/components/Link";
-import ContractTable from "metabase/submit/contract/components/ContractTable";
 import RefAuditTable from "metabase/submit/contract/components/RefAuditTable";
 import LoadingSpinner from "metabase/components/LoadingSpinner/LoadingSpinner";
 import ContractAddModel from "../components/ContractAddModel";
@@ -60,21 +55,30 @@ const SubmitContract = props => {
     param: null,
   });
 
-  const { isAdmin, user } = props;
+  const { isAdmin, user, showAdd = true, headLayout, showActionColumn, tableRowClassName, byUser } = props;
   const isAuditPerson =
     isAdmin || user?.id === 30 || user?.id === 9 || user?.id === 2268; // 30 -> pb, 9 -> alpha in preview ,2268 -> Eason
   const [operator, setOperator] = useState("personal");
   const [status, setStatus] = useState("");
   const [isReviewLoading, setReviewLoading] = useState(false);
+  const [ current, setCurrent ] = useState(0)
+  const pageSize = 10;
   // const params = {
   //   operator: operator,
   //   status: status === "all" ? "" : status,
   // };
 
+  const params = byUser ? { type: currentRecordType, email: user?.email, offset: current, limit: pageSize } : { type: currentRecordType };
+
   const { isLoading, data, refetch } = useQuery(
-    ["getRefContractSubmittedList", currentRecordType],
-    async () => getRefContractSubmittedList({ type: currentRecordType }),
-    { refetchOnWindowFocus: false, retry: 0 },
+    ["getRefContractSubmittedList", params],
+    async () => {
+      if (byUser) {
+        return getRefContractSubmittedListByUser(params)
+      }
+      return getRefContractSubmittedList(params)
+    },
+    { refetchOnWindowFocus: false, retry: 0 }
   );
 
   const reviewMutate = useMutation(reviewContract);
@@ -89,7 +93,12 @@ const SubmitContract = props => {
 
   const renderTable = () => {
     if (operator === "personal") {
-      const tempData = data ?? [];
+      let tempData
+      if (byUser) {
+        tempData = data?.submit_list ?? [];
+      } else {
+        tempData = data ?? [];
+      }
       if (isLoading) {
         return <LoadingSpinner message="Loading..." />;
       }
@@ -104,7 +113,23 @@ const SubmitContract = props => {
         );
       }
       return (
-        <RefContractTable data={tempData} recordType={currentRecordType} />
+        <RefContractTable
+          data={tempData}
+          recordType={currentRecordType}
+          showActionColumn={showActionColumn}
+          tableRowClassName={tableRowClassName}
+          pagination={byUser ? {
+            position: [ "bottomCenter" ],
+            current: current + 1,
+            pageSize,
+            total: data?.count,
+            showSizeChanger: false,
+            onChange: page => {
+              window.scrollTo({ top: 0, behavior: "smooth" });
+              setCurrent(page - 1);
+            },
+          } : false}
+        />
       );
     } else if (operator === "all") {
       return (
@@ -119,44 +144,47 @@ const SubmitContract = props => {
 
   return (
     <div className="SubmitContract">
-      <h1>
-        Welcome to submit more contracts or protocols to help us better display
-        the data you want
-      </h1>
-      <span>
-        You can resubmit protocols that have been included in Footprint, allowing you to make additions or changes to the information.
-        <br/>
-        Submissions normally take a few minutes to get processed.
-      </span>
-      <p>
-        {"If you have any questions, please "}
-        <Link
-          className="text-underline text-underline-hover text-brand"
-          to="https://docs.footprint.network/docs/smart-contracts-decoding"
-          target="_blank"
-        >
-          check out the tutorial
-        </Link>
-        .
-      </p>
-      <Form layout="vertical">
-        <Row gutter={16}>
-          <Col span={16}>
-            <Form.Item>
-              <Button
-                type="primary"
-                onClick={() => {
-                  setSubmitModalOpen({ open: true, param: null });
-                }}
-              >
-                Add contract or protocol
-              </Button>
-            </Form.Item>
-          </Col>
-        </Row>
-      </Form>
-
-      <div className="mb1" style={{ float: "right" }}>
+      {headLayout}
+      {showAdd && (<div className="flex flex-col">
+        <h1>
+          Welcome to submit more contracts or protocols to help us better display
+          the data you want
+        </h1>
+        <span>
+          You can resubmit protocols that have been included in Footprint, allowing you to make additions or changes to the information.
+          <br/>
+          Submissions normally take a few minutes to get processed.
+        </span>
+        <p>
+          {"If you have any questions, please "}
+          <Link
+            className="text-underline text-underline-hover text-brand"
+            to="https://docs.footprint.network/docs/smart-contracts-decoding"
+            target="_blank"
+          >
+            check out the tutorial
+          </Link>
+          .
+        </p>
+        <Form layout="vertical">
+          <Row gutter={16}>
+            <Col span={16}>
+              <Form.Item>
+                <Button
+                  type="primary"
+                  onClick={() => {
+                    setSubmitModalOpen({ open: true, param: null });
+                  }}
+                >
+                  Add contract or protocol
+                </Button>
+              </Form.Item>
+            </Col>
+          </Row>
+        </Form>
+      </div>
+      )}
+      <div className="mb2" style={{ float: "right" }}>
         <Radio.Group
           className="ml3"
           options={recordType}

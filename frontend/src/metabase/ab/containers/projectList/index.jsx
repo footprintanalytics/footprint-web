@@ -134,17 +134,9 @@ const projectList = props => {
         <div style={{ width: 800 }}>
           <div className="flex justify-between items-center">
             <h2>All Projects</h2>
-            {/*<span className="text-white">Select {" "}*/}
-            {/*  /!*<Link to={getGrowthProjectPath("Demo Project", "project_summary")}>Demo Project</Link>*!/*/}
-            {/*  /!*{" "} to see full Sample.*!/*/}
-            {/*  You can <Link onClick={() => {*/}
-            {/*    if (businessType) {*/}
-            {/*      router?.push({ pathname: `/fga/${businessType}/submit/contract/add` });*/}
-            {/*    } else {*/}
-            {/*      router?.push({ pathname: "/submit/contract/add" });*/}
-            {/*    }*/}
-            {/*  }}>click here</Link> to submit more project.*/}
-            {/*</span>*/}
+            <span className="text-white">
+               <Link to={getGrowthProjectPath(projectObject.protocolSlug, "my-submit-project")}>My submitted project records</Link>
+            </span>
           </div>
           {/*<div className="flex justify-end full-width mb1">
             <Button onClick={() => {
