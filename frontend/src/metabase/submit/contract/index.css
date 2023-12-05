@@ -1,6 +1,6 @@
 .SubmitContract {
   width: 100%;
-  min-height: calc(100vh - 150px);
+  height: 100%;
   padding: 60px;
   background-color: #f0f0ff;
 }
