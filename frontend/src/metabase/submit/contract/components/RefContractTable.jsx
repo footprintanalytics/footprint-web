@@ -158,6 +158,8 @@ const RefContractTable = ({ data, recordType, showActionColumn = true, tableRowC
       render: (_, { status, createdAt, error }) => {
         const text = status;
         switch (text) {
+          case "reviewing":
+            return <Tag color="processing">{text}</Tag>;
           case "error":
             return <Tag color="error">{text}</Tag>;
           case "submitted":
@@ -383,6 +385,8 @@ const RefContractTable = ({ data, recordType, showActionColumn = true, tableRowC
       render: (_, { status, createdAt, error }) => {
         const text = status;
         switch (text) {
+          case "reviewing":
+            return <Tag color="processing">{text}</Tag>;
           case "error":
             return <Tag color="error">{text}</Tag>;
           case "submitted":
