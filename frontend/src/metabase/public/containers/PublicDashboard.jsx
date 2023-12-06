@@ -385,15 +385,15 @@ class PublicDashboard extends Component {
       if (event?.data?.startsWith("user=")) {
         this.props.refreshCurrentUser(JSON.parse(event.data.slice(5)))
       }
-      if (event.data.startsWith("action=")) {
+      if (event?.data?.startsWith("action=")) {
         const action = event.data.slice(7)
         switch (action) {
           case "setLoginModalShow":
             this.props.setLoginModalShow({ show: true });
+            break;
         }
       }
     }
-    console.log("event.data", event.data)
   }
   async componentDidMount() {
     this._initialize();

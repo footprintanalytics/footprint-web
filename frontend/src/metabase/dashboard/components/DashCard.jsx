@@ -348,6 +348,7 @@ class DashCard extends Component {
     };
 
     const isIframeShow = window.location.pathname.startsWith("/public")
+      && !window?.top?.location?.pathname?.startsWith("/public")
       && isInIframe()
       && (getOuterUrl()?.includes(".footprint.network") || getOuterUrl()?.includes("localhost"))
 

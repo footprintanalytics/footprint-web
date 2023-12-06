@@ -185,6 +185,24 @@ class Dashboard extends Component {
     SCROLL_THROTTLE_INTERVAL,
   );*/
 
+  parentMessageAction = (event) => {
+    if (event?.origin === window?.location?.origin) {
+      if (event?.data?.startsWith("user=")) {
+        // eslint-disable-next-line react/prop-types
+        this.props.refreshCurrentUser(JSON.parse(event.data.slice(5)))
+      }
+      if (event?.data?.startsWith("action=")) {
+        const action = event.data.slice(7)
+        switch (action) {
+          case "setLoginModalShow":
+            // eslint-disable-next-line react/prop-types
+            this.props.setLoginModalShow({ show: true });
+            break;
+        }
+      }
+    }
+  }
+
   // NOTE: all of these lifecycle methods should be replaced with DashboardData HoC in container
   componentDidMount() {
     const { dashboardId, urlDashboardName, urlUserName } = this.props;
@@ -201,6 +219,7 @@ class Dashboard extends Component {
     main.addEventListener("resize", this.throttleParameterWidgetStickiness, {
       passive: true,
     });*/
+    window.addEventListener('message', this.parentMessageAction);
   }
 
   componentDidUpdate(prevProps) {
@@ -227,6 +246,7 @@ class Dashboard extends Component {
     /*const main = getMainElement();
     main.removeEventListener("scroll", this.throttleParameterWidgetStickiness);
     main.removeEventListener("resize", this.throttleParameterWidgetStickiness);*/
+    window.removeEventListener('message', this.parentMessageAction);
   }
 
   async loadDashboard({ dashboardId, urlDashboardName, urlUserName }) {
