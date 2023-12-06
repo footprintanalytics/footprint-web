@@ -52,7 +52,6 @@ const DownloadButton = ({
     <FormButton
       className="hover-parent hover--inherit"
       onClick={e => {
-        console.log("grrrr", window.OSX)
         if (window.OSX) {
           // prevent form from being submitted normally
           e.preventDefault();
@@ -74,8 +73,8 @@ const DownloadButton = ({
           {renderModal()}
           <div
             onClick={async () => {
-              console.log("vvvvvvvvvvvv", !props.user?.id)
               if (!props.user?.id) {
+                window?.parent?.postMessage("action=setLoginModalShow", window.location.origin);
                 props.setLoginModalShow({ show: true });
                 return;
               }

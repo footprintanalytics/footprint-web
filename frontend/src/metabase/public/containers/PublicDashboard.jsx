@@ -49,6 +49,7 @@ import { getUser } from "metabase/selectors/user";
 import { getSqlAndJumpToDoc, replaceTemplateCardUrl } from "metabase/guest/utils";
 import { trackStructEvent } from "metabase/lib/analytics";
 import { isABPath, isBusinessTypePath } from "metabase/ab/utils/utils";
+import { refreshCurrentUser } from "metabase/redux/user";
 
 const mapStateToProps = (state, props) => {
   const user = getUser(state);
@@ -264,6 +265,7 @@ const mapDispatchToProps = {
   setErrorPage,
   onChangeLocation: push,
   setLoginModalShow: loginModalShowAction,
+  refreshCurrentUser,
 };
 
 // NOTE: this should use DashboardData HoC
@@ -377,13 +379,30 @@ class PublicDashboard extends Component {
       setErrorPage(error);
     }
   };
-
+  parentMessageAction = (event) => {
+    // 可以检查 event.origin 来验证消息的发送者是否可信
+    if (event?.origin === window?.location?.origin) {
+      if (event?.data?.startsWith("user=")) {
+        this.props.refreshCurrentUser(JSON.parse(event.data.slice(5)))
+      }
+      if (event.data.startsWith("action=")) {
+        const action = event.data.slice(7)
+        switch (action) {
+          case "setLoginModalShow":
+            this.props.setLoginModalShow({ show: true });
+        }
+      }
+    }
+    console.log("event.data", event.data)
+  }
   async componentDidMount() {
     this._initialize();
+    window.addEventListener('message', this.parentMessageAction);
   }
 
   componentWillUnmount() {
     this.props.cancelFetchDashboardCardData();
+    window.removeEventListener('message', this.parentMessageAction);
   }
 
   async componentDidUpdate(prevProps) {
@@ -448,6 +467,7 @@ class PublicDashboard extends Component {
     if (this.props.user) {
       getSqlAndJumpToDoc(this.props, { cardId, dashcardId, dashboardId });
     } else {
+      window?.parent?.postMessage("action=setLoginModalShow", window.location.origin);
       this.props.setLoginModalShow({
         show: true,
         from: "publicDashboard_get_data_via_sql_api",

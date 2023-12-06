@@ -347,7 +347,9 @@ class DashCard extends Component {
       return outerUrl;
     };
 
-    const isIframeShow = window.location.pathname.startsWith("/public") && isInIframe() && getOuterUrl()?.includes(".footprint.network")
+    const isIframeShow = window.location.pathname.startsWith("/public")
+      && isInIframe()
+      && (getOuterUrl()?.includes(".footprint.network") || getOuterUrl()?.includes("localhost"))
 
     const singleDisplay = isTextDisplay || isImageDisplay || isVideoDisplay || isEmbedDisplay || isMultiEmbedDisplay || isTableauDisplay;
 
@@ -358,7 +360,7 @@ class DashCard extends Component {
     const showPreview = !isPublic && !showEdit && !singleDisplay;
 
     const showGetDataViaSqlApi = showEdit || showPreview || isIframeShow;
-    const showDownload = true;
+    const showDownload = showEdit || showPreview || isIframeShow;
     const showChartInfo = false;
     const showChartRefresh = !isPublic && !singleDisplay;
     const showStatusButton = showChartRefresh;
