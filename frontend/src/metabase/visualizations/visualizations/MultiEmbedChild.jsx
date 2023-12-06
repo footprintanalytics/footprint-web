@@ -6,7 +6,7 @@ import querystring from "querystring";
 import ItemEmbed from "metabase/containers/dashboards/components/Recommendations/ItemEmbed";
 
 const MultiEmbedChild = props => {
-  const { settings, onChange } = props;
+  const { settings, onChange, user } = props;
   const text = settings.text;
   const search = window.location.search;
   const [items, setItems] = useState();
@@ -45,6 +45,7 @@ const MultiEmbedChild = props => {
             <ItemEmbed
               className="w-full flex-full"
               item={{ mediaUrl: url }}
+              user={user}
             />
           ),
         };

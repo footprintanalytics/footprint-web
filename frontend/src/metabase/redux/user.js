@@ -26,7 +26,10 @@ export const REFRESH_CURRENT_USER = "metabase/user/REFRESH_CURRENT_USER";
 
 export const refreshCurrentUser = createAction(
   REFRESH_CURRENT_USER,
-  async () => {
+  async (configUser) => {
+    if (configUser) {
+      return configUser;
+    }
     try {
       const res = await UserApi.current();
       if (res.id) {

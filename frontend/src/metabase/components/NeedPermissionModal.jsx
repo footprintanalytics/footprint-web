@@ -47,7 +47,11 @@ class NeedPermissionModal extends Component {
                   message.info("Coming soon.");
                   return;
                 }
-                window.location.href = "/pricing";
+                if (window?.parent) {
+                  window?.open("/pricing")
+                } else {
+                  window.location.href = "/pricing";
+                }
                 afterChangeLocation && afterChangeLocation();
               }}
             >

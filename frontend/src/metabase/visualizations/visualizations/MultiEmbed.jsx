@@ -103,6 +103,7 @@ export default class MultiEmbed extends Component {
             <ItemEmbed
               className="w-full flex-full"
               item={{ mediaUrl: item.url }}
+              user={this.props.user}
             />
           ),
         };
@@ -251,7 +252,7 @@ export default class MultiEmbed extends Component {
           style={{ pointerEvents: "all" }}
         >
           {this.props.isPreviewing ? (
-            <MultiEmbedChild settings={settings} onChange={this.onChange}/>
+            <MultiEmbedChild settings={settings} onChange={this.onChange} user={this.props.user}/>
           ) : (
             <div
               className="full flex-full flex flex-column"
@@ -444,7 +445,7 @@ export default class MultiEmbed extends Component {
             pl0: !settings["dashcard.background"],
           })}
         >
-          <MultiEmbedChild settings={settings} onChange={this.onChange}/>
+          <MultiEmbedChild settings={settings} onChange={this.onChange} user={this.props.user}/>
         </div>
       );
     }
