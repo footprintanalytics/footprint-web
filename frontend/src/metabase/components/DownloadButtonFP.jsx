@@ -56,7 +56,6 @@ const DownloadButton = ({
           // prevent form from being submitted normally
           e.preventDefault();
           // download using the API provided by the OS X app
-          console.log("ggggg")
           window.OSX.download(method, url, params, extensions);
         }
       }}
