@@ -9,12 +9,12 @@ import CopyToClipboard from "react-copy-to-clipboard";
 import { getFgaProject, getUser } from "metabase/selectors/user";
 import "../css/index.css";
 import UpdateProjectModal from "./Modal/UpdateProjectModal";
-import { getFgaChain } from "metabase/selectors/control";
 import ProjectSubmitContactModal from "metabase/ab/components/Modal/ProjectSubmitContactModal";
 import { projectSubmitModalShowAction } from "metabase/redux/control";
+import InfoGenerate from "metabase/ab/components/InfoGenerate";
 
 const ProjectInfo = props => {
-  const { router, project, location, user, chain, businessType, setProjectSubmitModalShowAction } = props;
+  const { router, project, location, user, businessType, setProjectSubmitModalShowAction } = props;
   const [currentProject, setCurrentProject] = useState(project);
   const [tourOpen, setTourOpen] = useState(false);
   const ref1 = useRef(null);
@@ -23,10 +23,13 @@ const ProjectInfo = props => {
     force: false,
   });
   useEffect(() => {
-    setCurrentProject(project);
+    if (project) {
+      setCurrentProject(project);
+    }
   }, [project]);
+
   const onTabChange = key => {
-    console.log(key);
+    // console.log(key);
   };
   const enableTour = true;
   const steps = [
@@ -55,13 +58,13 @@ const ProjectInfo = props => {
     let datas = [];
     switch (type) {
       case "NFT":
-        datas = currentProject?.nftCollectionAddress?.filter(item => item.chain === chain);
+        datas = currentProject?.nftCollectionAddress;
         break;
       case "Contract":
-        datas = [];
+        datas = currentProject?.contractAddress;
         break;
       case "Token":
-        datas = currentProject?.tokenAddress?.filter(item => item.chain === chain);
+        datas = currentProject?.tokenAddress;
         break;
       default:
         datas = [];
@@ -105,6 +108,9 @@ const ProjectInfo = props => {
         className="demo-loadmore-list"
         itemLayout="horizontal"
         dataSource={datas}
+        pagination={
+          datas?.length > 10 ? { pageSize: 10 } : null
+        }
         footer={
           <div className="w-full text-centered">
             <Typography.Text type="secondary">
@@ -193,48 +199,50 @@ const ProjectInfo = props => {
         >
           {currentProject?.protocolSlug !== "default" ? (
             <div className="flex flex-col">
-              <div className="flex flex-row">
-                <img
-                  src={
-                    currentProject.logo ??
-                    "https://static.footprint.network/logo80.png"
-                  }
-                  width={80}
-                  height={80}
-                  style={{
-                    borderRadius: 40,
-                    borderWidth: 0.5,
-                    padding: 5,
-                    // borderStyle: "solid",
-                    // borderColor: "#f8fafb",
-                  }}
-                  alt="Project Icon"
-                />
-                <div className="flex flex-col ml3">
-                  <div style={{ fontSize: 22, fontWeight: 500 }}>
-                    {currentProject.protocolName}
-                    <Button
-                      className="ml0"
-                      type="text"
-                      hidden={true}
-                      onClick={() => {
-                        setProjectModalShow({ show: true });
-                      }}
-                    >
-                      <SwapOutlined />
-                    </Button>
-                  </div>
-                  <div className=" mt1">
-                    {currentProject?.protocolType &&
-                      currentProject?.protocolType !== "NFT" && (
-                        <Tag>{currentProject?.protocolType}</Tag>
+              <div className="flex flex-row justify-between">
+                <div className="flex align-center">
+                  <img
+                    src={
+                      currentProject?.logo ??
+                      "https://static.footprint.network/logo80.png"
+                    }
+                    width={80}
+                    height={80}
+                    style={{
+                      borderRadius: 40,
+                      borderWidth: 0.5,
+                      padding: 5,
+                      // borderStyle: "solid",
+                      // borderColor: "#f8fafb",
+                    }}
+                    alt="Project Icon"
+                  />
+                  <div className="flex flex-col ml3">
+                    <div style={{ fontSize: 22, fontWeight: 500 }}>
+                      {currentProject.protocolName}
+                      <Button
+                        className="ml0"
+                        type="text"
+                        hidden={true}
+                        onClick={() => {
+                          setProjectModalShow({ show: true });
+                        }}
+                      >
+                        <SwapOutlined />
+                      </Button>
+                    </div>
+                    <div className=" mt1">
+                      {currentProject?.protocolType &&
+                        currentProject?.protocolType !== "NFT" && (
+                          <Tag>{currentProject?.protocolType}</Tag>
+                        )}
+                      {currentProject?.nftCollectionAddress?.length > 0 && (
+                        <Tag>NFT</Tag>
                       )}
-                    {currentProject?.nftCollectionAddress?.filter(item => item.chain === chain)?.length > 0 && (
-                      <Tag>NFT</Tag>
-                    )}
-                    {currentProject?.tokenAddress?.filter(item => item.chain === chain)?.length > 0 && (
-                      <Tag>Token</Tag>
-                    )}
+                      {currentProject?.tokenAddress?.length > 0 && (
+                        <Tag>Token</Tag>
+                      )}
+                    </div>
                   </div>
                 </div>
               </div>
@@ -312,7 +320,6 @@ const mapStateToProps = state => {
   return {
     user: getUser(state),
     project: getFgaProject(state),
-    chain: getFgaChain(state),
   };
 };
 

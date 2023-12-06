@@ -297,6 +297,11 @@ const ResearchContent = props => {
             img: getOssUrl("studio/img-chain-24.png?1=1"),
             link: "/research/chain/chain-stats/boba-network-overview",
           },
+          {
+            title: "Rootstock",
+            img: getOssUrl("fp-chains/rootstock.png?image_process=resize,w_36/crop,h_36/format,webp"),
+            link: "/research/chain/chain-stats/rootstock-overview",
+          },
         ],
         layout3Data: [
           {

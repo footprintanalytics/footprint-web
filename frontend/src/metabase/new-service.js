@@ -273,6 +273,10 @@ export const getProtocolDetail = async params => {
   return GET(`/api/v1/project/protocol/detail`, params);
 };
 
+export const tokenGeneral = params => {
+  return POST(`api/v1/project/token/general`, params);
+};
+
 // FP Api ---------------
 export const UserRegister = async params => {
   return POST("/api/v1/user/signup", params);
@@ -712,6 +716,10 @@ export const getRefContractSubmittedList = params => {
   return GET(`${getRefBaseApi()}/api/v1/protocol/submit/record`, params);
 };
 
+export const getRefContractSubmittedListByUser = params => {
+  return GET(`${getRefBaseApi()}/api/v1/protocol/submit/record_by_user`, params);
+};
+
 export const submitRefProtocols = params => {
   return POST(`${getRefBaseApi()}/api/v1/protocol/submit`, params);
 };
@@ -794,4 +802,7 @@ export const journeyPathUserDetail = params => {
 
 export const journeyPathUserTrend = params => {
   return POST(`api/v1/ab/user-journey/path-user-trend`, params);
+};
+export const createBudgetRecord = params => {
+  return POST(`api/v1/budget/record`, params);
 };

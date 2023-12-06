@@ -20,7 +20,7 @@ const ContractAddModel = ({ user,open,onClosed}) => {
     >
       <div className="w-full flex flex-col">
         <h1>Submit contracts or protocols</h1>
-        <p>One step to add new contracts or protocols to Footprint</p>
+        <p>One step to add new contracts or protocols to Footprint. You can resubmit protocols that have been included in Footprint, allowing you to make additions or changes to the information.</p>
         <Divider className=" my1"></Divider>
         {!isDecodingProcessOpen?.open&& <ContractDetailsV3
           user={user}

@@ -357,7 +357,8 @@ export const getDashboardMap = (businessType, project, chain) => {
     ["acquisition", "43325414-b798-44cb-ad2d-745d374b22f2"],
     ["gaming_user", "16d26c02-b0f4-4c78-9385-44a9212a826b"],
     ["nft_summary", "25c5de28-0591-4893-a574-cbe913c80043"],
-    ["nft_sales_mints", project?.protocolSlug !== "Demo Project" ? "354b9c63-8904-4cc9-acea-3fb399748ff8": "aefc83f1-ed4b-4dba-a21f-6f85a1de471c"],
+    ["nft_sales", project?.protocolSlug !== "Demo Project" ? "354b9c63-8904-4cc9-acea-3fb399748ff8": "aefc83f1-ed4b-4dba-a21f-6f85a1de471c"],
+    ["nft_mints", "0934a0a9-29a5-4e44-9fc2-98b0ae5afd83"],
     ["listing", "20ae0361-4a39-4b66-bd56-fb9f012bfd3c"],
     ["gaming_spend", "c86f7c43-41fd-4c75-9d8a-3ebc381ae62e"],
     ["gaming_engagement", "b0eee809-7c27-4c86-adf2-5644fa6a7529"],
@@ -378,6 +379,7 @@ export const getDashboardMap = (businessType, project, chain) => {
     ["user_retention", "320e0a60-107c-44cb-83e3-7c8301354968"],
 
     ["project_key_metrics", "159d8c0e-f1b9-4449-a6b1-7ee51de47563"],
+    ["project_holder_overlap", "994ab322-671c-479a-a835-2e28d16b326e"],
 
     ["project_health-platform", "7a275541-580a-4720-8e10-f455335de137"],
     ["users_overview-platform", "6d84b4a6-ceef-4b30-a9ad-b233038fd8d3"],
@@ -396,6 +398,7 @@ export const fga_menu_data_v2 = (businessType, project, chain) => {
     "platformMenuTabs": [
         getItem("All Projects", "all-projects", null),
         getItem(getLabel({label: "Project Key Metrics", tip: "Here shows key metrics of selected project, derived from contracts associated with each project."}), "project_key_metrics", null),
+        getItem(getLabel({label: "Holder Overlap", tip: "Here shows key metrics of selected project, derived from contracts associated with each project."}), "project_holder_overlap", null),
     ],
     "menuTabs": [
       getItem("Project Overview", "project_overview", ReactIcons.myAnalysisIcon, [
@@ -406,7 +409,8 @@ export const fga_menu_data_v2 = (businessType, project, chain) => {
         // project?.nftCollectionAddress?.length > 0 &&
         getItem("NFT", "nft", null, [
             getItem("Summary", "nft_summary", null),
-            getItem("NFT Sales & Mints", "nft_sales_mints", null),
+            getItem("NFT Mints", "nft_mints", null),
+            getItem("NFT Sales", "nft_sales", null),
             getItem("NFT Listing", "nft_listing", null),
             getItem("NFT Holders", "nft_nft_holder", null),
             getItem("NFT Leaderboard", "nft_leaderboard", null),
@@ -421,7 +425,7 @@ export const fga_menu_data_v2 = (businessType, project, chain) => {
         getItem("Web2 Revenue", "revenue-web2-revenue", null),
       ]),
       getItem(getLabel({label: "Acquisition", tip: "Here illustrates the acquisition of Web3 wallets that have interacted with the project's on-chain contracts, as well as Web2 users involved in off-chain activities."}), "acquisition", ReactIcons.onBoardIcon14, [
-        getItem("Wallets", "acquisition_wallet", null),
+        // getItem("Wallets", "acquisition_wallet", null),
         getItem("Users", "acquisition_users", null),
       ]),
       getItem(getLabel({label: "Engagement", tip: "Presented here are the engagement statistics encompassing Web3 wallets that have interacted with the project's on-chain contracts, as well as Web2 users engaged in off-chain in-game activities."}), "engagement", ReactIcons.gamingStatIcon, [
@@ -429,7 +433,7 @@ export const fga_menu_data_v2 = (businessType, project, chain) => {
         getItem("Users", "gaming_engagement", null),
       ]),
       getItem(getLabel({label: "Retention", tip: "Displayed here are the retention statistics pertaining to Web3 wallets that have interacted with the project's on-chain contracts, along with Web2 users who have not connected their wallets."}), "retention", ReactIcons.trendingIcon14, [
-        getItem("Wallets", "wallet_retention", null),
+        // getItem("Wallets", "wallet_retention", null),
         getItem("Users", "user_retention", null),
       ]),
       getItem(getLabel({label: "Community", tip: "Presented below are the metrics illustrating the growth of the Project community on both the Twitter and Discord platforms.\n"}), "social_stats", ReactIcons.userIcon, [
@@ -458,6 +462,7 @@ export const fga_menu_data_v2 = (businessType, project, chain) => {
       getItem("Settings", "settings", <SettingOutlined />, [
         getItem("Integration", "integration", null),
         getItem("Project Info", "general", null),
+        project?.protocolSlug !== "Demo Project" && getItem("Keys & IDs", "keys-ids", null),
         // getItem("Channel", "channel", null),
       ]),
     ]

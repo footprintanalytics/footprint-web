@@ -42,6 +42,8 @@ import {
 } from "metabase/selectors/control";
 import { setGames } from "metabase/redux/control";
 import ProjectList from "metabase/ab/containers/projectList";
+import KeysIds from "metabase/ab/components/KeysIds";
+import MySubmitProject from "metabase/ab/containers/MySubmitProject";
 
 const Project = props => {
   const {
@@ -331,6 +333,16 @@ const Project = props => {
         />
       );
     }
+    if (["my-submit-project"].includes(current_tab)) {
+      return (
+        <MySubmitProject
+          location={location}
+          router={router}
+          businessType={businessType}
+          // project={getProjectObject()}
+        />
+      );
+    }
     if (
       current_tab === "journey" || current_tab === "journey-platform"
     ) {
@@ -472,7 +484,7 @@ const Project = props => {
           router={router}
           project={getProjectObject()}
           projectId={getLatestGAProjectId()}
-        ></ChannelList>
+        />
       );
     }
     if (["general", "General"].includes(current_tab)) {
@@ -482,7 +494,16 @@ const Project = props => {
           router={router}
           businessType={businessType}
           // project={getProjectObject()}
-        ></ProjectInfo>
+        />
+      );
+    }
+    if (["keys-ids"].includes(current_tab)) {
+      return (
+        <KeysIds
+          location={location}
+          router={router}
+          businessType={businessType}
+        />
       );
     }
     if (
@@ -565,7 +586,7 @@ const Project = props => {
         ></CampaignDetail>
       );
     }
-    /* if (["Cohort", "segment", "segment-platform"].includes(current_tab)) {
+     if (["Cohort", "segment", "segment-platform"].includes(current_tab)) {
        return (
          <CohortList
            router={router}
@@ -574,7 +595,7 @@ const Project = props => {
            businessType={businessType}
          ></CohortList>
        );
-     }*/
+     }
 
 
     if (gaMenuTabs?.dashboardMap?.has(current_tab)) {

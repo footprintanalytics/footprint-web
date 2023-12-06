@@ -5,7 +5,7 @@ import { Button, Popover, Space, Table, Tag, Tooltip, Typography } from "antd";
 import { QuestionCircleOutlined, SyncOutlined } from "@ant-design/icons";
 import dayjs from "dayjs";
 
-const RefContractTable = ({ data, recordType }) => {
+const RefContractTable = ({ data, recordType, showActionColumn = true, tableRowClassName, pagination = false }) => {
   function isWithinMins(createdAt, mins = 30) {
     const halfHourAgo = new Date();
     halfHourAgo.setMinutes(halfHourAgo.getMinutes() - mins);
@@ -158,6 +158,8 @@ const RefContractTable = ({ data, recordType }) => {
       render: (_, { status, createdAt, error }) => {
         const text = status;
         switch (text) {
+          case "reviewing":
+            return <Tag color="processing">{text}</Tag>;
           case "error":
             return <Tag color="error">{text}</Tag>;
           case "submitted":
@@ -211,7 +213,7 @@ const RefContractTable = ({ data, recordType }) => {
         return dayjs(text).format("YYYY-MM-DD HH:mm");
       },
     },
-    {
+    showActionColumn ? {
       title: "Actions",
       render: (_, record) => {
         return (
@@ -240,7 +242,7 @@ const RefContractTable = ({ data, recordType }) => {
           </div>
         );
       },
-    },
+    } : null,
   ].filter(i => i);
   const contractColumns = [
     {
@@ -383,6 +385,8 @@ const RefContractTable = ({ data, recordType }) => {
       render: (_, { status, createdAt, error }) => {
         const text = status;
         switch (text) {
+          case "reviewing":
+            return <Tag color="processing">{text}</Tag>;
           case "error":
             return <Tag color="error">{text}</Tag>;
           case "submitted":
@@ -480,7 +484,8 @@ const RefContractTable = ({ data, recordType }) => {
       rowKey="_id"
       columns={recordType === "protocol" ? protocolColumns : contractColumns}
       dataSource={data}
-      pagination={false}
+      pagination={pagination}
+      rowClassName={tableRowClassName || "SubmitContract__table-row"}
     />
   );
 };

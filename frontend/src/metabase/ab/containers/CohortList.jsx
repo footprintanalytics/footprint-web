@@ -11,11 +11,11 @@ import SegmentListPanel from "../components/SegmentListPanel";
 import { StatisticIndex } from "../components/Community/StatisticIndex";
 
 const CohortList = props => {
-  const infoResult = useQuery(
+  /*const infoResult = useQuery(
     ["GetMemberInfo", props.project?.id],
     async () => GetMemberInfo({ projectId: parseInt(props.project?.id) }),
     { ...QUERY_OPTIONS, enabled: !!props.project?.id },
-  );
+  );*/
 
   function formatInfoResult(data) {
     const dataList = [];
