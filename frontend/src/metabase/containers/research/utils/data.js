@@ -593,11 +593,11 @@ const chainData = [
     "label": "Featured Dashboards",
     "value": "featured-dashboards",
     "subMenus": [
-      {
+      /*{
         "label": "Bitcoin Chain Stats",
         "value": "bitcoin-chain-stats",
         "publicUuid": "3211cede-f9d4-4f59-8e4e-393561d38340",
-      },
+      }*/,
       {
         "label": "Harmony Stats",
         "value": "harmony-stats",
