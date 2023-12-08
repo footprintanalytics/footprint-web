@@ -381,7 +381,7 @@ class PublicDashboard extends Component {
   };
   parentMessageAction = (event) => {
     // 可以检查 event.origin 来验证消息的发送者是否可信
-    if (event?.origin === window?.location?.origin) {
+    if (event?.origin === window?.location?.origin && event?.data && (typeof event?.data === "string")) {
       if (event?.data?.startsWith("user=")) {
         this.props.refreshCurrentUser(JSON.parse(event.data.slice(5)))
       }
