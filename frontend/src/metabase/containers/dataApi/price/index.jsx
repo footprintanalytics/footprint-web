@@ -459,7 +459,7 @@ const Index = ({
           detail: {
             title: "Free access to:",
             content: [
-              {
+              /*{
                 title: (
                   <span>
                     <span className="data-api__price-text-highlight">
@@ -468,7 +468,7 @@ const Index = ({
                     calls
                   </span>
                 ),
-              },
+              },*/
               {
                 title: (
                   <span>
@@ -490,6 +490,22 @@ const Index = ({
                   <span>
                     <span className="data-api__price-text-highlight">30</span>{" "}
                     calls per second
+                  </span>
+                ),
+              },
+              {
+                title: (
+                  <span>
+                    <span className="data-api__price-text-highlight">100</span>{" "}
+                    calls per day
+                  </span>
+                ),
+              },
+              {
+                title: (
+                  <span>
+                    <span className="data-api__price-text-highlight">3000</span>{" "}
+                    calls per month
                   </span>
                 ),
               },
