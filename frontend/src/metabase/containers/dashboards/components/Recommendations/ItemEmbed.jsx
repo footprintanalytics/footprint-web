@@ -18,7 +18,7 @@ const ItemEmbed = ({ item, user, test }) => {
         src={item.mediaUrl}
         frameBorder="0"
         allowFullScreen
-        onLoad={sendIframeMessage}
+        // onLoad={sendIframeMessage}
         // scrolling="no"
       />
       <ItemCommon url={item.url} name={item.name} target="_blank" />
