@@ -52,6 +52,7 @@ import QueryStatusButton from "metabase/query_builder/components/QueryStatusButt
 import QueryRefreshButton from "metabase/query_builder/components/QueryRefreshButton";
 import { isFgaPath } from "metabase/growth/utils/utils";
 import { isABPath } from "metabase/ab/utils/utils";
+import { IFRAMED_IN_SELF } from "metabase/lib/dom";
 
 const DATASET_USUALLY_FAST_THRESHOLD = 15 * 1000;
 
@@ -329,28 +330,9 @@ class DashCard extends Component {
       || window.location.pathname.startsWith("/studio")
     ;
 
-    const isInIframe = () => {
-      try {
-        return window.self !== window.top;
-      } catch (e) {
-        return true;
-      }
-    };
-
-    const getOuterUrl = () => {
-      let outerUrl;
-      try {
-        outerUrl = window.top.location.href;
-      } catch (e) {
-        outerUrl = document.referrer;
-      }
-      return outerUrl;
-    };
-
     const isIframeShow = window.location.pathname.startsWith("/public")
       && !window?.top?.location?.pathname?.startsWith("/public")
-      && isInIframe()
-      && (getOuterUrl()?.includes(".footprint.network") || getOuterUrl()?.includes("localhost"))
+      && IFRAMED_IN_SELF
 
     const singleDisplay = isTextDisplay || isImageDisplay || isVideoDisplay || isEmbedDisplay || isMultiEmbedDisplay || isTableauDisplay;
 
