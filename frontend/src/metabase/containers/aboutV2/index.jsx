@@ -51,52 +51,48 @@ const About = props => {
   return (
     <>
       <Meta description={defaultDesc} keywords={keywords} title={title} />
-      <iframe
-        src="https://preview.footprint.network/public/dashboard/contract-info-dashboard-fp-25806320-605e-4a95-8756-bb87b53cf9bd"
-        frameBorder="0" width={800} height={600} allowTransparency
-      />
-      {/*<div className="About">*/}
-      {/*  <AboutStart />*/}
-      {/*  <LazyLoadAbout>*/}
-      {/*    <AboutBanner />*/}
-      {/*  </LazyLoadAbout>*/}
-      {/*  <LazyLoadAbout>*/}
-      {/*    <AboutSolutions />*/}
-      {/*  </LazyLoadAbout>*/}
-      {/*  <LazyLoadAbout>*/}
-      {/*    <AboutDepth />*/}
-      {/*  </LazyLoadAbout>*/}
-      {/*  <LazyLoadAbout>*/}
-      {/*    <AboutDemo />*/}
-      {/*  </LazyLoadAbout>*/}
-      {/*  <LazyLoadAbout>*/}
-      {/*    <AboutDataCoverage />*/}
-      {/*  </LazyLoadAbout>*/}
-      {/*  <LazyLoadAbout>*/}
-      {/*    <AboutDataFeature />*/}
-      {/*  </LazyLoadAbout>*/}
-      {/*  <LazyLoadAbout>*/}
-      {/*    <AboutDataModel />*/}
-      {/*  </LazyLoadAbout>*/}
-      {/*  <LazyLoadAbout>*/}
-      {/*    <AboutBacked list={data.backedList} />*/}
-      {/*  </LazyLoadAbout>*/}
-      {/*  <LazyLoadAbout>*/}
-      {/*    <AboutDataTrusted />*/}
-      {/*  </LazyLoadAbout>*/}
-      {/*  <LazyLoadAbout>*/}
-      {/*    <AboutPartnerV2 list={data.partnerList} />*/}
-      {/*  </LazyLoadAbout>*/}
-      {/*  <LazyLoadAbout>*/}
-      {/*    <AboutGrantedBy />*/}
-      {/*  </LazyLoadAbout>*/}
-      {/*  <div className="About__depth-dividing-line-gray" />*/}
-      {/*  <LazyLoadAbout>*/}
-      {/*    <HomeFooter />*/}
-      {/*  </LazyLoadAbout>*/}
+      <div className="About">
+        <AboutStart />
+        <LazyLoadAbout>
+          <AboutBanner />
+        </LazyLoadAbout>
+        <LazyLoadAbout>
+          <AboutSolutions />
+        </LazyLoadAbout>
+        <LazyLoadAbout>
+          <AboutDepth />
+        </LazyLoadAbout>
+        <LazyLoadAbout>
+          <AboutDemo />
+        </LazyLoadAbout>
+        <LazyLoadAbout>
+          <AboutDataCoverage />
+        </LazyLoadAbout>
+        <LazyLoadAbout>
+          <AboutDataFeature />
+        </LazyLoadAbout>
+        <LazyLoadAbout>
+          <AboutDataModel />
+        </LazyLoadAbout>
+        <LazyLoadAbout>
+          <AboutBacked list={data.backedList} />
+        </LazyLoadAbout>
+        <LazyLoadAbout>
+          <AboutDataTrusted />
+        </LazyLoadAbout>
+        <LazyLoadAbout>
+          <AboutPartnerV2 list={data.partnerList} />
+        </LazyLoadAbout>
+        <LazyLoadAbout>
+          <AboutGrantedBy />
+        </LazyLoadAbout>
+        <div className="About__depth-dividing-line-gray" />
+        <LazyLoadAbout>
+          <HomeFooter />
+        </LazyLoadAbout>
 
-      {/*  {children}*/}
-      {/*</div>*/}
+        {children}
+      </div>
     </>
   );
 };
