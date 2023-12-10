@@ -330,9 +330,19 @@ class DashCard extends Component {
       || window.location.pathname.startsWith("/studio")
     ;
 
+    const getOuterPathname = () => {
+      let outerPathname = "";
+      try {
+        outerPathname = window.top.location.pathname;
+      } catch (e) {
+        outerPathname = document.referrer;
+      }
+      return outerPathname;
+    };
+
     const isIframeShow = window.location.pathname.startsWith("/public")
       && IFRAMED_IN_SELF
-      && !window?.top?.location?.pathname?.startsWith("/public")
+      && !getOuterPathname()?.startsWith("/public")
 
     const singleDisplay = isTextDisplay || isImageDisplay || isVideoDisplay || isEmbedDisplay || isMultiEmbedDisplay || isTableauDisplay;
 
