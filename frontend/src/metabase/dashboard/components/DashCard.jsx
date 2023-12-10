@@ -331,8 +331,8 @@ class DashCard extends Component {
     ;
 
     const isIframeShow = window.location.pathname.startsWith("/public")
-      && !window?.top?.location?.pathname?.startsWith("/public")
       && IFRAMED_IN_SELF
+      && !window?.top?.location?.pathname?.startsWith("/public")
 
     const singleDisplay = isTextDisplay || isImageDisplay || isVideoDisplay || isEmbedDisplay || isMultiEmbedDisplay || isTableauDisplay;
 
