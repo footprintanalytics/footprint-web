@@ -397,12 +397,12 @@ class PublicDashboard extends Component {
   }
   async componentDidMount() {
     this._initialize();
-    // window.addEventListener('message', this.parentMessageAction);
+    window.addEventListener('message', this.parentMessageAction);
   }
 
   componentWillUnmount() {
     this.props.cancelFetchDashboardCardData();
-    // window.removeEventListener('message', this.parentMessageAction);
+    window.removeEventListener('message', this.parentMessageAction);
   }
 
   async componentDidUpdate(prevProps) {

@@ -52,6 +52,7 @@ import QueryStatusButton from "metabase/query_builder/components/QueryStatusButt
 import QueryRefreshButton from "metabase/query_builder/components/QueryRefreshButton";
 import { isFgaPath } from "metabase/growth/utils/utils";
 import { isABPath } from "metabase/ab/utils/utils";
+import { IFRAMED_IN_SELF } from "metabase/lib/dom";
 
 const DATASET_USUALLY_FAST_THRESHOLD = 15 * 1000;
 
@@ -329,28 +330,19 @@ class DashCard extends Component {
       || window.location.pathname.startsWith("/studio")
     ;
 
-    // const isInIframe = () => {
-    //   try {
-    //     return window.self !== window.top;
-    //   } catch (e) {
-    //     return true;
-    //   }
-    // };
+    const getOuterPathname = () => {
+      let outerPathname = "";
+      try {
+        outerPathname = window.top.location.pathname;
+      } catch (e) {
+        outerPathname = document.referrer;
+      }
+      return outerPathname;
+    };
 
-    // const getOuterUrl = () => {
-    //   let outerUrl;
-    //   try {
-    //     outerUrl = window.top.location.href;
-    //   } catch (e) {
-    //     outerUrl = document.referrer;
-    //   }
-    //   return outerUrl;
-    // };
-
-    // const isIframeShow = window.location.pathname.startsWith("/public")
-    //   && !window?.top?.location?.pathname?.startsWith("/public")
-    //   && isInIframe()
-    //   && (getOuterUrl()?.includes(".footprint.network") || getOuterUrl()?.includes("localhost"))
+    const isIframeShow = window.location.pathname.startsWith("/public")
+      && IFRAMED_IN_SELF
+      && !getOuterPathname()?.startsWith("/public")
 
     const singleDisplay = isTextDisplay || isImageDisplay || isVideoDisplay || isEmbedDisplay || isMultiEmbedDisplay || isTableauDisplay;
 
@@ -360,10 +352,8 @@ class DashCard extends Component {
 
     const showPreview = !isPublic && !showEdit && !singleDisplay;
 
-    // const showGetDataViaSqlApi = showEdit || showPreview || isIframeShow;
-    // const showDownload = showEdit || showPreview || isIframeShow;
-    const showGetDataViaSqlApi = showEdit || showPreview;
-    const showDownload = showEdit || showPreview;
+    const showGetDataViaSqlApi = showEdit || showPreview || isIframeShow;
+    const showDownload = showEdit || showPreview || isIframeShow;
     const showChartInfo = false;
     const showChartRefresh = !isPublic && !singleDisplay;
     const showStatusButton = showChartRefresh;
