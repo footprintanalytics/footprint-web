@@ -704,6 +704,7 @@ class Visualization extends React.PureComponent {
       });
       settings["table.columns"] = columns;
     }
+
     return (
       <div
         id="html2canvas-Card"
