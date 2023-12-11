@@ -354,8 +354,6 @@ class DashCard extends Component {
 
     const showGetDataViaSqlApi = showEdit || showPreview || isIframeShow;
     const showDownload = showEdit || showPreview || isIframeShow;
-    // const showGetDataViaSqlApi = showEdit || showPreview;
-    // const showDownload = showEdit || showPreview;
     const showChartInfo = false;
     const showChartRefresh = !isPublic && !singleDisplay;
     const showStatusButton = showChartRefresh;
