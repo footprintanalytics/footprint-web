@@ -57,7 +57,7 @@ class VisualizationResult extends Component {
       timelineEvents,
       selectedTimelineEventIds,
       className,
-      clearWatermark,
+      user,
     } = this.props;
     const { showCreateAlertModal } = this.state;
 
@@ -134,7 +134,7 @@ class VisualizationResult extends Component {
               this.props.onUpdateVisualizationSettings
             }
             query={this.props.query}
-            hideWatermark={clearWatermark}
+            hideWatermark={user?.hideWatermark}
             {...vizSpecificProps}
           />
           {this.props.isObjectDetail && (
@@ -152,7 +152,6 @@ class VisualizationResult extends Component {
 const mapStateToProps = state => {
   return {
     user: state.currentUser,
-    clearWatermark: getUserClearWatermarkPermission(state),
   };
 };
 
