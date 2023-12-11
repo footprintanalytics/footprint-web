@@ -704,7 +704,6 @@ class Visualization extends React.PureComponent {
       });
       settings["table.columns"] = columns;
     }
-    console.log("hideWatermark", hideWatermark)
     return (
       <div
         id="html2canvas-Card"
