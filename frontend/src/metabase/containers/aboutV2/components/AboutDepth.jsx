@@ -68,10 +68,34 @@ const AboutDepth = () => {
       img: "home-v2/img_depth_right_chain_v2.png",
     },
     {
+      icon: "home-v2/img_depth_tab_5.png",
+      label: "Token",
+      title: "Instantly assess information for 100,000+ tokens, \ncovering transfers, balances, and intricate details.",
+      buttons: [
+        {
+          buttonText: "Top Tokens by Market Cap",
+          link: "https://www.footprint.network/research/token/rankings/top-tokens-by-market-cap",
+        },
+        {
+          buttonText: "Token Sectors by Trading Volume",
+          link: "https://www.footprint.network/research/token/rankings/token-sectors-by-trading-volume",
+        },
+        {
+          buttonText: "Stablecoin Master",
+          link: "https://www.footprint.network/research/token/stablecoin/stablecoin-master",
+        },
+      ],
+      img: "home-v2/img_depth_right_5.png",
+    },
+    {
       icon: "home-v2/img_depth_tab_4.png",
       label: "Wallet",
       title: "Track and trace activities, holdings, and profiles over \n100+ million addresses.",
       buttons: [
+        {
+          buttonText: "Wallet Profile",
+          link: "https://www.footprint.network/research/wallet/wallet/wallet-profile",
+        },
         {
           buttonText: "NFT Trades",
           link: "https://www.footprint.network/research/wallet/wallet-tracker/nft-trades-of-wallet",
@@ -86,13 +110,6 @@ const AboutDepth = () => {
         },
       ],
       img: "home-v2/img_depth_right_4.png",
-    },
-    {
-      icon: "home-v2/img_depth_tab_5.png",
-      label: "Token",
-      title: "Instantly assess information for 100,000+ tokens, \ncovering transfers, balances, and intricate details.",
-      desc: "Coming soon",
-      img: "home-v2/img_depth_right_5.png",
     },
   ];
   const current = data[currentInx];

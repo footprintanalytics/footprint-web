@@ -94,6 +94,7 @@ const Index = props => {
               { value: "gamefi", label: "GameFi Research" },
               { value: "nft", label: "NFT Research" },
               { value: "chain", label: "Chain Research" },
+              { value: "token", label: "Token Research" },
               { value: "wallet", label: "Wallet Research" },
             ]
           }
