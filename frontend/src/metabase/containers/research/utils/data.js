@@ -545,6 +545,11 @@ const chainData = [
         "value": "rootstock-overview",
         "publicUuid": "5ce34ecd-e67c-49cb-8d1d-e84b0028a592",
       },
+      {
+        "label": "Combo Overview",
+        "value": "combo-overview",
+        "publicUuid": "be8e0a03-96c3-4f6f-8e3b-871561ba6139",
+      },
     ],
   },
   {
@@ -593,11 +598,6 @@ const chainData = [
     "label": "Featured Dashboards",
     "value": "featured-dashboards",
     "subMenus": [
-      /*{
-        "label": "Bitcoin Chain Stats",
-        "value": "bitcoin-chain-stats",
-        "publicUuid": "3211cede-f9d4-4f59-8e4e-393561d38340",
-      }*/,
       {
         "label": "Harmony Stats",
         "value": "harmony-stats",
@@ -647,7 +647,79 @@ const chainData = [
   },
 ]
 
+const tokenData = [
+  {
+    "label": "Rankings",
+    "value": "rankings",
+    "subMenus": [
+      {
+        "label": "Top Tokens by Market Cap",
+        "value": "top-tokens-by-market-cap",
+        "publicUuid": "d76afe6f-0405-4aea-942e-32debdf83461",
+      },
+      {
+        "label": "Token Exchange Net Flow",
+        "value": "token-exchange-net-flow",
+        "publicUuid": "04dca6c5-272c-4e7f-994d-53127866a9c1",
+      },
+      {
+        "label": "Top Tokens by Volume",
+        "value": "top-tokens-by-volume",
+        "publicUuid": "bd12acce-a17a-4c3a-9508-c753140985f6",
+      },
+      {
+        "label": "Token Sectors by Trading Volume",
+        "value": "token-sectors-by-trading-volume",
+        "publicUuid": "8e6a36c9-a256-4669-938a-9c5e00716cf9",
+      },
+      {
+        "label": "Token Sectors by CEX Net Flow on Ethereum",
+        "value": "token-sectors-by-cex-net-flow-on-ethereum",
+        "publicUuid": "2539c2f1-3bea-458e-89ac-5d0903742c62",
+      },
+    ],
+  },
+  {
+    "label": "Token",
+    "value": "token",
+    "subMenus": [
+      {
+        "label": "Single Token",
+        "value": "single-token",
+        "publicUuid": "e12085c8-a2e4-455d-b9bf-51df33bf78dc",
+      },
+      {
+        "label": "Single Token Sector",
+        "value": "single-token-sector",
+        "publicUuid": "4490df03-7a21-4439-b035-1aaa81ef8b56",
+      },
+    ],
+  },
+  {
+    "label": "Stablecoin",
+    "value": "stablecoin",
+    "subMenus": [
+      {
+        "label": "Stablecoin Master",
+        "value": "stablecoin-master",
+        "publicUuid": "7487deeb-1208-4d9d-95f1-35efb7cd76d5",
+      },
+    ],
+  },
+]
+
 const walletData = [
+  {
+    "label": "Wallet",
+    "value": "wallet",
+    "subMenus": [
+      {
+        "label": "Wallet Profile",
+        "value": "wallet-profile",
+        "publicUuid": "bff3c209-9d4c-4e75-96dd-9676b184bbfa",
+      },
+    ],
+  },
   {
     "label": "Wallet Tracker",
     "value": "wallet-tracker",
@@ -724,6 +796,11 @@ const metaObject = {
     description: "Covering most chains and support from real-time raw data to analytic metrics",
     keywords: "Chain Ecosystem, Chain Research, Blockchain industry, chain transaction data, chain token transfer data, chain events, chain log, Chain Gas Fee",
   },
+  "token": {
+    title: "Wallet Research | Built by researcher for researchers",
+    description: "Covers all the wallets data you need from industry overview to individual wallets with insightful metrics, such as money flow",
+    keywords: "NFT Trades of Wallet, Gamer Profile of Wallet, Money Flow of Wallet",
+  },
   "wallet": {
     title: "Wallet Research | Built by researcher for researchers",
     description: "Covers all the wallets data you need from industry overview to individual wallets with insightful metrics, such as money flow",
@@ -736,6 +813,7 @@ const data = {
   "gamefi": gamefiData,
   "chain": chainData,
   "wallet": walletData,
+  "token": tokenData,
   "custom": customData,
   "metaObject": metaObject,
 }

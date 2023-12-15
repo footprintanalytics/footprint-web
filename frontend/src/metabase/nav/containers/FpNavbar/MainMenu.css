@@ -188,8 +188,8 @@
   border-radius: 12px;
   border: 1px solid #4A5568;
   background: #2A3246;
-  width: 74px;
-  height: 74px;
+  width: 66px;
+  height: 66px;
   display: flex;
   flex-direction: column;
   justify-content: center;
@@ -231,8 +231,8 @@
 }
 
 .main-menu__add-root {
-  width: 74px;
-  height: 74px;
+  width: 66px;
+  height: 66px;
   flex-shrink: 0;
   border-radius: 12px;
   border: 1px dashed #44F;

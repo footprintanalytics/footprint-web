@@ -302,6 +302,11 @@ const ResearchContent = props => {
             img: getOssUrl("fp-chains/rootstock.png?image_process=resize,w_36/crop,h_36/format,webp"),
             link: "/research/chain/chain-stats/rootstock-overview",
           },
+          {
+            title: "Combo",
+            img: getOssUrl("fp-chains/combo.png?image_process=resize,w_36/crop,h_36/format,webp"),
+            link: "/research/chain/chain-stats/combo-overview",
+          },
         ],
         layout3Data: [
           {
@@ -391,9 +396,77 @@ const ResearchContent = props => {
       },
     },
     {
+      name: "Token",
+      value: "token",
+      data: {
+        randingData: {
+          title: "Rankings", data: [
+            {
+              title: "Top Tokens",
+              desc: "Find potential growth tokens.",
+              link: "/research/token/ranks/top-tokens-by-market-cap",
+              icon: ReactIcons.topGameIcon,
+            },
+            {
+              title: "Token Exchange Net Flow",
+              desc: "Money flows transferred to and from exchange wallets to evaluate investors' behavior.",
+              link: "/research/token/ranks/token-exchange-net-flow",
+              icon: ReactIcons.gameMarketIcon,
+            },
+            {
+              title: "Token Sectors",
+              desc: "An index for each cryptocurrency category.",
+              link: "/research/token/ranks/token-sectors-by-trading-volume",
+              icon: ReactIcons.singleGameIcon,
+            },
+          ],
+        },
+        tokenData: {
+          title: "Token", data: [
+            {
+              title: "Single Token",
+              desc: "In-depth stats of the token's price data, exchange inflow and outflow, holder analysis and more.",
+              link: "/research/token/token/single-token",
+              icon: ReactIcons.nftTradesIcon,
+            },
+            {
+              title: "Single Token Sector",
+              desc: "Check out the token performance for each category.",
+              link: "/research/token/token/single-token-sector",
+              icon: ReactIcons.gameProfileIcon,
+            },
+          ],
+        },
+        stablecoinData: {
+          title: "Stablecoin", data: [
+            {
+              title: "Stablecoin Master",
+              desc: "A comprehensive analysis of stablecoins and their performance on exchanges.",
+              link: "/research/token/stablecoin/stablecoin-master",
+              icon: ReactIcons.nftTradesIcon,
+            },
+          ],
+        },
+        // walletDescData: {
+        //   img: getOssUrl("studio/img-menu-wallet.png"),
+        //   title: "Track and trace activities, holdings, and profiles over 100+ million addresses.",
+        // },
+      },
+    },
+    {
       name: "Wallet",
       value: "wallet",
       data: {
+        walletData: {
+          title: "WALLET", data: [
+            {
+              title: "Wallet Profile",
+              desc: "Gain insights into the balance and activity of wallet.",
+              link: "/research/wallet/wallet/wallet-profile",
+              icon: ReactIcons.topGameIcon,
+            },
+          ],
+        },
         walletTrackerData: {
           title: "WALLET TRACKER", data: [
             {
@@ -512,11 +585,21 @@ const ResearchContent = props => {
         </div>
       );
     }
+    if (tab === "token") {
+      return (
+        <div className="main-menu__inner-layout">
+          {MainMenuFunction.renderVerticalMenu({ data: tabData?.randingData })}
+          {MainMenuFunction.renderVerticalMenu({ data: tabData?.tokenData })}
+          {MainMenuFunction.renderVerticalMenu({ data: tabData?.stablecoinData })}
+        </div>
+      );
+    }
     if (tab === "wallet") {
       return (
-        <>
-          {MainMenuFunction.renderVerticalMenu({ data: tabData?.walletTrackerData, className: "main-menu__wallet-padding" })}
-        </>
+        <div className="main-menu__inner-layout">
+          {MainMenuFunction.renderVerticalMenu({ data: tabData?.walletData })}
+          {MainMenuFunction.renderVerticalMenu({ data: tabData?.walletTrackerData })}
+        </div>
       );
     }
   };
