@@ -797,9 +797,9 @@ const metaObject = {
     keywords: "Chain Ecosystem, Chain Research, Blockchain industry, chain transaction data, chain token transfer data, chain events, chain log, Chain Gas Fee",
   },
   "token": {
-    title: "Wallet Research | Built by researcher for researchers",
-    description: "Covers all the wallets data you need from industry overview to individual wallets with insightful metrics, such as money flow",
-    keywords: "NFT Trades of Wallet, Gamer Profile of Wallet, Money Flow of Wallet",
+    title: "Token Research | Stay on top of cryptocurrencies",
+    description: "Discover and track high-potential growth tokens with intuitive data and stay ahead in the cryptocurrency market.",
+    keywords: "cryptocurrency, Token Money Flow, stablecoin, token tracker",
   },
   "wallet": {
     title: "Wallet Research | Built by researcher for researchers",
