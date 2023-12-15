@@ -404,19 +404,19 @@ const ResearchContent = props => {
             {
               title: "Top Tokens",
               desc: "Find potential growth tokens.",
-              link: "/research/token/ranks/top-tokens-by-market-cap",
+              link: "/research/token/rankings/top-tokens-by-market-cap",
               icon: ReactIcons.topGameIcon,
             },
             {
               title: "Token Exchange Net Flow",
               desc: "Money flows transferred to and from exchange wallets to evaluate investors' behavior.",
-              link: "/research/token/ranks/token-exchange-net-flow",
+              link: "/research/token/rankings/token-exchange-net-flow",
               icon: ReactIcons.gameMarketIcon,
             },
             {
               title: "Token Sectors",
               desc: "An index for each cryptocurrency category.",
-              link: "/research/token/ranks/token-sectors-by-trading-volume",
+              link: "/research/token/rankings/token-sectors-by-trading-volume",
               icon: ReactIcons.singleGameIcon,
             },
           ],
