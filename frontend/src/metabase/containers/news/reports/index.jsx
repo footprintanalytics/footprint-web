@@ -29,7 +29,7 @@ const Index = ({ router, type }) => {
         { label: "Monthly Reports", value: "Monthly Reports" },
         { label: "Quarterly Reports", value: "Quarterly Reports" },
         { label: "Yearly Reports", value: "Yearly Reports" },
-        { label: "Co-branded reports", value: "Co-branded reports" },
+        { label: "Co-branded Reports", value: "Co-branded reports" },
       ],
     },
     events: {
