@@ -46,6 +46,7 @@ const CHAIN_LIST = [
   { value: "Sui", label: "Sui" },
   { value: "Combo", label: "Combo" },
   { value: "Rootstock", label: "Rootstock" },
+  { value: "Ronin", label: "Ronin" },
 ];
 const PROTOCOL_CATEGORY_LIST = [
   { value: "NFT", label: "NFT" },
