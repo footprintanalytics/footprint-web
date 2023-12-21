@@ -45,7 +45,7 @@ const CHAIN_LIST = [
   { value: "zkSync Era", label: "zkSync Era" },
   { value: "Sui", label: "Sui" },
   { value: "Combo", label: "Combo" },
-  { value: "RootStock", label: "RootStock" },
+  { value: "Rootstock", label: "Rootstock" },
 ];
 const PROTOCOL_CATEGORY_LIST = [
   { value: "NFT", label: "NFT" },
