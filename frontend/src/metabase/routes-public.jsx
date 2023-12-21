@@ -67,6 +67,20 @@ export const getRoutes = store => (
           <Route path=":menu/:subMenu/:value" />
         </Route>
         <Route
+          path="token"
+          component={props => <LazyLoad.Research {...props} classify="token" />}
+        >
+          <Route path=":menu/:subMenu" />
+          <Route path=":menu/:subMenu/:value" />
+        </Route>
+        <Route
+          path="wallet"
+          component={props => <LazyLoad.Research {...props} classify="wallet" />}
+        >
+          <Route path=":menu/:subMenu" />
+          <Route path=":menu/:subMenu/:value" />
+        </Route>
+        <Route
           path="custom/:partner"
           component={props => <LazyLoad.Research {...props} classify="custom" />}
         >
