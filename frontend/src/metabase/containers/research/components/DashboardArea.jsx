@@ -11,7 +11,7 @@ const DashboardArea = props => {
   const { item, location, hideParameters, all_load, isDataApiStatistics, ignoreCache } = props;
   const uuid = item && item.publicUuid;
 
-  const showRefreshButton = myData["needRefreshDashboard"].includes(uuid)
+  const showRefreshButton = myData["needRefreshDashboard"]?.includes(uuid)
   return (
     <React.Fragment>
       {uuid && (

@@ -270,7 +270,7 @@ class DashboardHeader extends Component {
       user &&
       (user.is_superuser || user.id === dashboard?.creator_id);
     const uuid = MetabaseUtils.isUUID(dashboard?.id) ? dashboard?.id : dashboard?.public_uuid;
-    const canShowRefresh = !!dashboard && myData["needRefreshDashboard"].includes(uuid);
+    const canShowRefresh = canEdit || myData["needRefreshDashboard"]?.includes(uuid);
     const isAdmin = user && user.is_superuser;
     const isMarket = user && user.isMarket;
     const isOwner =
