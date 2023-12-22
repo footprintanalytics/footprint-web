@@ -498,7 +498,7 @@ class DashboardHeader extends Component {
       }
     }
 
-    if (!isEditing && !isEmpty && canEdit) {
+    if (!isEditing && !isEmpty) {
       buttons.push(
         <Tooltip
           key="refreshCache"
@@ -518,6 +518,13 @@ class DashboardHeader extends Component {
             onClick={debounce(
               () => {
                 trackStructEvent("dashboard-click-refresh-cache");
+                if (!user) {
+                  this.props.setLoginModalShow({
+                    show: true,
+                    from: `refresh cache`,
+                  });
+                  return;
+                }
                 if (
                   !lastRefreshTime ||
                   new Date().getTime() - lastRefreshTime > 60000

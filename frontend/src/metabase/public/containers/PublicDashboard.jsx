@@ -6,9 +6,9 @@ import cx from "classnames";
 
 import _ from "underscore";
 import { debounce, isArray, startCase, union } from "lodash";
-import { Breadcrumb, Select, Tooltip } from "antd";
+import { Breadcrumb, Select } from "antd";
 import { IFRAMED } from "metabase/lib/dom";
-
+import Tooltip from "metabase/components/Tooltip";
 import LoadingAndErrorWrapper from "metabase/components/LoadingAndErrorWrapper";
 import DashboardGrid from "metabase/dashboard/components/DashboardGrid";
 import DashboardControls from "metabase/dashboard/hoc/DashboardControls";
@@ -416,22 +416,39 @@ class PublicDashboard extends Component {
 
   renderRefreshButton = () => {
     return (
-      <Button
-        onlyIcon
-        className="Question-header-btn"
-        iconColor="#7A819B"
-        icon={"refresh"}
-        iconSize={16}
-        style={{
-          position: "fixed",
-          right: "40px",
-          top: "100px",
-          zIndex: 2,
-        }}
-        onClick={() => {
-          this._fetchDashboardCardDataRefresh({ ignoreCache: true });
-        }}
-      />
+      <Tooltip
+        key="refreshCache"
+        tooltip={
+          <div className="align-center" style={{ margin: "0 auto" }}>
+            Refresh cache <br />
+            (Once in a minute)
+          </div>
+        }
+      >
+        <Button
+          onlyIcon
+          className="Question-header-btn"
+          iconColor="#7A819B"
+          icon={"refresh"}
+          iconSize={16}
+          style={{
+            position: "fixed",
+            right: "40px",
+            top: "100px",
+            zIndex: 2,
+          }}
+          onClick={() => {
+            if (!this.props.user) {
+              this.props.setLoginModalShow({
+                show: true,
+                from: "research",
+              });
+              return
+            }
+            this._fetchDashboardCardDataRefresh({ ignoreCache: true });
+          }}
+        />
+      </Tooltip>
     );
   };
 
