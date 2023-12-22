@@ -28,6 +28,7 @@ const DashboardArea = props => {
           allLoadOuter={all_load}
           isDataApiStatistics={isDataApiStatistics}
           ignoreCache={ignoreCache}
+          showRefreshButton={true}
         />
       )}
       {!uuid && <NoDashboardData />}
