@@ -6,11 +6,12 @@ import { getUser } from "metabase/selectors/user";
 import NoDashboardData from "metabase/containers/research/components/NoDashboardData";
 import PublicDashboard from "metabase/public/containers/PublicDashboard";
 import "./DashboardArea.css";
-
+import myData from "../utils/data";
 const DashboardArea = props => {
   const { item, location, hideParameters, all_load, isDataApiStatistics, ignoreCache } = props;
   const uuid = item && item.publicUuid;
 
+  const showRefreshButton = myData["needRefreshDashboard"]?.includes(uuid)
   return (
     <React.Fragment>
       {uuid && (
@@ -28,7 +29,7 @@ const DashboardArea = props => {
           allLoadOuter={all_load}
           isDataApiStatistics={isDataApiStatistics}
           ignoreCache={ignoreCache}
-          showRefreshButton={true}
+          showRefreshButton={showRefreshButton}
         />
       )}
       {!uuid && <NoDashboardData />}

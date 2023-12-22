@@ -808,6 +808,20 @@ const metaObject = {
   },
 }
 
+const needRefreshDashboard = [
+  "5ce34ecd-e67c-49cb-8d1d-e84b0028a592",
+  "dd3c5b87-3685-4551-b11e-8a5dc5a00693",
+  "e569cb10-4132-46db-a391-3803feb3a203",
+  "f37919b4-977b-4a35-9b43-ff29c02e6ba9",
+  "d8e8ac13-bc3f-4cc6-9368-4168d52beeb5",
+  "7d946d4e-15c6-41da-ad5c-82ffed7b8a30",
+  "ee0dbd21-8f80-49a1-a02c-686ec1c6eb3d",
+  "f464b6dd-83b5-4f94-a659-737de62b0599",
+  "959b833b-d6a3-4191-bf92-c1a15d785de1",
+  "be8e0a03-96c3-4f6f-8e3b-871561ba6139",
+  "1f882ec5-0fa7-4d9b-aafd-4ba21458e3fb",
+]
+
 const data = {
   "nft": nftData,
   "gamefi": gamefiData,
@@ -816,7 +830,7 @@ const data = {
   "token": tokenData,
   "custom": customData,
   "metaObject": metaObject,
+  "needRefreshDashboard": needRefreshDashboard,
 }
-
 
 export default data;

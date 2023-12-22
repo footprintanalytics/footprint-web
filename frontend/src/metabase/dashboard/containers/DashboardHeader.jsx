@@ -34,6 +34,7 @@ import "./DashboardHeader.css";
 import MetabaseUtils from "metabase/lib/utils";
 import TaggingModal from "metabase/components/TaggingModal";
 import HomePriorityModal from "metabase/components/HomePriorityModal";
+import myData from "metabase/containers/research/utils/data";
 
 const mapStateToProps = (state, props) => {
   const isDataApp = false;
@@ -268,6 +269,8 @@ class DashboardHeader extends Component {
       !!dashboard &&
       user &&
       (user.is_superuser || user.id === dashboard?.creator_id);
+    const uuid = MetabaseUtils.isUUID(dashboard?.id) ? dashboard?.id : dashboard?.public_uuid;
+    const canShowRefresh = canEdit || myData["needRefreshDashboard"]?.includes(uuid);
     const isAdmin = user && user.is_superuser;
     const isMarket = user && user.isMarket;
     const isOwner =
@@ -498,7 +501,7 @@ class DashboardHeader extends Component {
       }
     }
 
-    if (!isEditing && !isEmpty) {
+    if (!isEditing && !isEmpty && canShowRefresh) {
       buttons.push(
         <Tooltip
           key="refreshCache"
