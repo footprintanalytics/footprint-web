@@ -356,13 +356,13 @@ export const getRoutes = store => (
           path="events"
           component={props => <LazyLoad.Reports {...props} type="events" />}
         />
-        <Route
+        {/*<Route
           title={t`Newsletter`}
           path="weekly-letter"
           component={props => (
             <LazyLoad.Articles {...props} type="week-letter" />
           )}
-        />
+        />*/}
         <Route
           title={t`Community insights`}
           path="community-insights"
