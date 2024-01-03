@@ -15,3 +15,8 @@
   (when schema-id
     (db/select-field :schema Project :id schema-id  :active 1))
   )
+
+(defn name [schema-id]
+  (when schema-id
+    (db/select-field :name Project :id schema-id  :active 1))
+  )
