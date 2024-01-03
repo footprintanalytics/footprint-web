@@ -23,9 +23,12 @@
 (defn get-fga-name [schema-id]
   (let [name (fga_project/name schema-id)]
     (log/info "get-fga-name--->>>>>" name schema-id)
-    (-> (first name)
-        (str/lower-case)
-        (str/replace " " "_"))
+    (if (str/blank? name)
+      name
+      (-> (first name)
+          (str/lower-case)
+          (str/replace " " "_"))
+      )
     )
   )
 
