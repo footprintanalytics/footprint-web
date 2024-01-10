@@ -413,12 +413,12 @@ const ResearchContent = props => {
               link: "/research/token/rankings/token-exchange-net-flow",
               icon: ReactIcons.gameMarketIcon,
             },
-            {
+            /*{
               title: "Token Sectors",
               desc: "An index for each cryptocurrency category.",
               link: "/research/token/rankings/token-sectors-by-trading-volume",
               icon: ReactIcons.singleGameIcon,
-            },
+            },*/
           ],
         },
         tokenData: {
@@ -429,12 +429,12 @@ const ResearchContent = props => {
               link: "/research/token/token/single-token",
               icon: ReactIcons.nftTradesIcon,
             },
-            {
+            /*{
               title: "Single Token Sector",
               desc: "Check out the token performance for each category.",
               link: "/research/token/token/single-token-sector",
               icon: ReactIcons.gameProfileIcon,
-            },
+            },*/
           ],
         },
         stablecoinData: {

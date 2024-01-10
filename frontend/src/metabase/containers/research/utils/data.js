@@ -667,7 +667,7 @@ const tokenData = [
         "value": "top-tokens-by-volume",
         "publicUuid": "bd12acce-a17a-4c3a-9508-c753140985f6",
       },
-      {
+      /*{
         "label": "Token Sectors by Trading Volume",
         "value": "token-sectors-by-trading-volume",
         "publicUuid": "8e6a36c9-a256-4669-938a-9c5e00716cf9",
@@ -676,7 +676,7 @@ const tokenData = [
         "label": "Token Sectors by CEX Net Flow on Ethereum",
         "value": "token-sectors-by-cex-net-flow-on-ethereum",
         "publicUuid": "2539c2f1-3bea-458e-89ac-5d0903742c62",
-      },
+      },*/
     ],
   },
   {
@@ -688,11 +688,11 @@ const tokenData = [
         "value": "single-token",
         "publicUuid": "e12085c8-a2e4-455d-b9bf-51df33bf78dc",
       },
-      {
+      /*{
         "label": "Single Token Sector",
         "value": "single-token-sector",
         "publicUuid": "4490df03-7a21-4439-b035-1aaa81ef8b56",
-      },
+      },*/
     ],
   },
   {

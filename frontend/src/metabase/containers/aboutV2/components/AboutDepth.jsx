@@ -76,10 +76,10 @@ const AboutDepth = () => {
           buttonText: "Top Tokens by Market Cap",
           link: "https://www.footprint.network/research/token/rankings/top-tokens-by-market-cap",
         },
-        {
+        /*{
           buttonText: "Token Sectors by Trading Volume",
           link: "https://www.footprint.network/research/token/rankings/token-sectors-by-trading-volume",
-        },
+        },*/
         {
           buttonText: "Stablecoin Master",
           link: "https://www.footprint.network/research/token/stablecoin/stablecoin-master",
