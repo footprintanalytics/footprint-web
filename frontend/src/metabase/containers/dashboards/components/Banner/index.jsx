@@ -21,10 +21,10 @@ const Banner = () => {
             url="https://www.footprint.network/@Footprint/Level"
           />
           <BannerImage
-            src={getOssUrl("footprint-analytics-our-2022-in-review-v3.jpg")}
+            src={getOssUrl("new-era-of-web3.png")}
             width={332}
             height={164}
-            url="https://www.footprint.network/article/footprint-analytics-our-2022-in-review-GfK0XPDo"
+            url="https://www.footprint.network/article/striding-into-the-new-era-of-web3-fp-jMqU8z5f"
           />
         </div>
       </div>
