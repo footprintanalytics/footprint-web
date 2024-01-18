@@ -371,6 +371,13 @@ export const getRoutes = store => (
           )}
         />
         <Route
+          title={t`Pea.AI`}
+          path="pea-ai"
+          component={props => (
+            <LazyLoad.Articles {...props} type="articles" tag="Pea.AI" />
+          )}
+        />
+        <Route
           title={t`Feature Charts`}
           path="feature_charts"
           hidden
