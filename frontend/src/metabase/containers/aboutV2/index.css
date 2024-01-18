@@ -206,6 +206,7 @@
 }
 
 .About__start {
+  position: relative;
   display: flex;
   flex-direction: column;
   padding: 150px 0 46px;
@@ -219,6 +220,27 @@
   background-position: center;
 }
 
+.About__start-pea {
+  position: absolute;
+  font-weight: bold;
+  display: flex;
+  justify-content: center;
+  width: 100%;
+  font-size: 24px;
+  padding: 12px;
+  top: 0;
+  left: 0;
+  background-color: #ffffff24;
+}
+
+
+.About__start-pea img {
+  width: 40px;
+  height: 32px;
+  padding: 2px;
+  border: dashed 1px grey;
+  margin-right: 4px;
+}
 .About__start-title {
   color: #303440;
   margin-left: 15%;

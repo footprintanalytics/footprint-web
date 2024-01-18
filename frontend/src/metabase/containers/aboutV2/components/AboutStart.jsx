@@ -8,7 +8,7 @@ import { getUser } from "metabase/selectors/user";
 import AboutImage from "metabase/containers/aboutV2/components/AboutImage";
 import AboutButton from "metabase/containers/aboutV2/components/AboutButton";
 import { CHAIN_COUNT } from "metabase/lib/constants";
-
+import Link from "metabase/core/components/Link";
 const AboutStart = ({
   user,
   setLoginModalShow,
@@ -27,6 +27,11 @@ const AboutStart = ({
   }
   return (
     <div className="About__start">
+      <div className="About__start-pea">
+        <img src={getOssUrl("icon_pea.png?1=1")} alt="pea" />
+        <span style={{ color: "#B275FF" }}>Pea.AI</span><div><span>: A new way to tailor your crypto investment AI assistant <br/>Early access waitlist is now open.</span>
+        <Link style={{ color: "#B275FF", marginLeft: 4 }} href={"https://www.pea.ai"} target={"_blank"}>Join now {">>"}</Link></div>
+      </div>
       <div className="About__start-title">
         <h1>Empower Decisions <br/>with Unified Web2 <br/>and Web3 Data</h1>
         <ul>
