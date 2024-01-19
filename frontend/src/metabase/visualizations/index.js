@@ -118,6 +118,9 @@ const extractRemappedColumns = data => {
   const rows = data.rows.map((row, rowIndex) =>
     row.filter((value, colIndex) => {
       const col = cols[colIndex];
+      if (!col) {
+        return false;
+      }
       if (col.remapped_from != null) {
         if (
           !cols[col.remapped_from_index] ||
