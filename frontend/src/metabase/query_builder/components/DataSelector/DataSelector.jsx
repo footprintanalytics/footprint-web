@@ -539,7 +539,6 @@ export class UnconnectedDataSelector extends Component {
   };
 
   async hydrateActiveStep() {
-    console.log("hydrateActiveStep", this.props)
     const { steps } = this.props;
     if (this.isSavedQuestionSelected()) {
       await this.switchToStep(TABLE_STEP);
