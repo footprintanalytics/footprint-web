@@ -285,6 +285,7 @@ class PublicQuestion extends Component {
               mode={PublicMode}
               metadata={this.props.metadata}
               onChangeCardAndRun={() => {}}
+              hideWatermark={card?.hideWatermark}
             />
           )}
         </LoadingAndErrorWrapper>
