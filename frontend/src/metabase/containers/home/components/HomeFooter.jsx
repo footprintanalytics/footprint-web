@@ -135,7 +135,7 @@ const footers = [
       },
       {
         label: "Crypto Games Solution",
-        url: "https://docs.google.com/presentation/d/1G1E6MYAEo6X2KUXC4GBaJFcwH-fxmqGt9xjSIO6XxuE/edit#slide=id.g25866ee599b_0_215",
+        url: "https://docs.google.com/presentation/d/1Xmye6BfGWhlde42LnwNkVylRWOaSSXdbY7zfgZHAZOM/edit#slide=id.g2b36d9fc51e_1_0",
       },
       {
         label: "Analyst Solution",
