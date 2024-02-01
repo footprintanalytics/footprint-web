@@ -34,7 +34,7 @@ const News = props => {
     .find(item => item.path === indexPath)
     .childRoutes.filter(item => !item.hidden)
     .map(item => ({
-      label: item.title,
+      label: item.label || item.title,
       path: item.path,
       isHot: item.isHot,
       selected: location.pathname.includes(item.path),

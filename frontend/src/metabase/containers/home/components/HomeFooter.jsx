@@ -100,7 +100,7 @@ const footers = [
       },
       {
         label: "Blog",
-        url: "/news/all",
+        url: "/news/blog",
       },
       {
         label: "Reports",
