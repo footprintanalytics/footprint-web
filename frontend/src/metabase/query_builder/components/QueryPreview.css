@@ -6,7 +6,7 @@
   left: 0;
   right: 0;
   border-top: 8px solid var(--color-bg-light);
-  z-index: 1;
+  z-index: 3;
 }
 
 .query-preview__head {
