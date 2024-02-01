@@ -315,8 +315,15 @@ export const getRoutes = store => (
           component={props => <LazyLoad.Articles {...props} type="all" />}
         />
         <Route
-          title={t`All`}
+          title={t`Blog`}
+          label={"All"}
+          path="blog"
+          component={props => <LazyLoad.Articles {...props} type="all" />}
+        />
+        <Route
+          title={t`Blog`}
           path="all"
+          hidden
           component={props => <LazyLoad.Articles {...props} type="all" />}
         />
         <Route

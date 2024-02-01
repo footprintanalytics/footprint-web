@@ -115,7 +115,7 @@ const leftMenuData = [
         title: "Blog",
         desc: "Analyze the trends of each domain in the Web3 industry",
         icon: ReactIcons.blogIcon,
-        link: "/news/all",
+        link: "/news/blog",
       },
       {
         title: "Academy",
