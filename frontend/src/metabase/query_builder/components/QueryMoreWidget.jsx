@@ -19,6 +19,7 @@ const QueryMoreWidget = ({
   isInner,
   onOpenModal,
   setShowSeoTagging,
+  setTitleExtraInfo,
   card,
   user,
   question,
@@ -106,6 +107,19 @@ const QueryMoreWidget = ({
                 }}
               >
                 Seo tagging
+              </Button>
+            </div>
+          )}
+          {isAdmin && (
+            <div style={{ width: "100%"}}>
+              <Button
+                className="Question-header-btn Question-header-btn--full"
+                icon="data_update"
+                onClick={() => {
+                  setTitleExtraInfo();
+                }}
+              >
+                Title Extra Info
               </Button>
             </div>
           )}

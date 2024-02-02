@@ -2,6 +2,7 @@ import React, { useCallback } from "react";
 import PropTypes from "prop-types";
 import { iconPropTypes } from "metabase/components/Icon";
 import { ChartCaptionRoot } from "./ChartCaption.styled";
+import { Tag } from "antd";
 
 const propTypes = {
   series: PropTypes.array.isRequired,
@@ -9,6 +10,7 @@ const propTypes = {
   icon: PropTypes.shape(iconPropTypes),
   actionButtons: PropTypes.node,
   onChangeCardAndRun: PropTypes.func,
+  titleExtraInfo: PropTypes.string,
 };
 
 const ChartCaption = ({
@@ -17,6 +19,7 @@ const ChartCaption = ({
   icon,
   actionButtons,
   onChangeCardAndRun,
+  titleExtraInfo,
 }) => {
   const title = settings["card.title"] ?? series[0].card.name;
   const description = settings["card.description"];
@@ -37,13 +40,16 @@ const ChartCaption = ({
   }
 
   return (
-    <ChartCaptionRoot
-      title={title}
-      description={description}
-      icon={icon}
-      actionButtons={actionButtons}
-      onSelectTitle={canSelectTitle ? handleSelectTitle : undefined}
-    />
+    <div className="flex align-center">
+      {titleExtraInfo && <Tag style={{ marginRight: 0 }}>{titleExtraInfo}</Tag>}
+      <ChartCaptionRoot
+        title={title}
+        description={description}
+        icon={icon}
+        actionButtons={actionButtons}
+        onSelectTitle={canSelectTitle ? handleSelectTitle : undefined}
+      />
+    </div>
   );
 };
 

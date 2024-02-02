@@ -60,6 +60,7 @@ import QuestionDescription from "./QuestionDescription";
 import { HeadBreadcrumbs } from "./HeaderBreadcrumbs";
 import "./ViewHeader.css";
 import RunButton from "../RunButton";
+import TitleExtraInfoModal from "metabase/components/TitleExtraInfoModal";
 
 const viewTitleHeaderPropTypes = {
   question: PropTypes.object.isRequired,
@@ -112,6 +113,7 @@ export function ViewTitleHeader(props) {
 
   const [confirmModal, setConfirmModal] = useState(false);
   const [showSeoTaggingModal, setShowSeoTaggingModal] = useState(false);
+  const [showTitleExtraInfo, setShowTitleExtraInfo] = useState(false);
 
   useEffect(() => {
     if (!question.isStructured() || !previousQuestion?.isStructured()) {
@@ -220,6 +222,8 @@ export function ViewTitleHeader(props) {
           onExpandFilters={expandFilters}
           onCollapseFilters={collapseFilters}
           onQueryChange={onQueryChange}
+          setShowSeoTaggingModal={setShowSeoTaggingModal}
+          setShowTitleExtraInfo={setShowTitleExtraInfo}
           downloadImageAction={() => {
             snapshot({
               public_uuid: card.public_uuid,
@@ -263,6 +267,13 @@ export function ViewTitleHeader(props) {
           creatorId={card.creator_id}
           tagType="seo"
           type="card"
+        />
+      )}
+      {showTitleExtraInfo && (
+        <TitleExtraInfoModal
+          card={card}
+          onClose={() => setShowTitleExtraInfo(false)}
+          id={card}
         />
       )}
     </>
@@ -604,6 +615,8 @@ ViewTitleHeaderRightSide.propTypes = {
   canNativeQuery: PropTypes.bool,
   router: PropTypes.any,
   downloadImageAction: PropTypes.func,
+  setShowSeoTaggingModal: PropTypes.func,
+  setShowTitleExtraInfo: PropTypes.func,
 };
 
 // eslint-disable-next-line complexity
@@ -653,6 +666,8 @@ function ViewTitleHeaderRightSide(props) {
     cancelQuery,
     downloadImageAction,
     updateQuestion,
+    setShowSeoTaggingModal,
+    setShowTitleExtraInfo,
   } = props;
   const [needPermissionModal, setNeedPermissionModal] = useState();
   const [showSaveChartToUd, setSaveChartToUd] = useState(false);
@@ -882,9 +897,12 @@ function ViewTitleHeaderRightSide(props) {
             isInner={isInner}
             onOpenModal={onOpenModal}
             user={user}
-            /*setShowSeoTagging={() =>
-              this.setState({ showSeoTaggingModal: true })
-            }*/
+            setShowSeoTagging={() =>
+              setShowSeoTaggingModal(true)
+            }
+            setTitleExtraInfo={() =>
+              setShowTitleExtraInfo(true)
+            }
             card={card}
             question={question}
             downloadImageAction={downloadImageAction}
