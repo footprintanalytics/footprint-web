@@ -820,6 +820,8 @@ const needRefreshDashboard = [
   "959b833b-d6a3-4191-bf92-c1a15d785de1",
   "be8e0a03-96c3-4f6f-8e3b-871561ba6139",
   "1f882ec5-0fa7-4d9b-aafd-4ba21458e3fb",
+  "5aca24eb-aae3-44ef-8e4b-a275fee42847",
+  "05628958-0cb8-413c-862e-50b26ffacd6f",
 ]
 
 const data = {
