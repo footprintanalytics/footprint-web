@@ -377,16 +377,13 @@ export default class LineAreaBarChart extends Component {
         isQueryBuilder={isQueryBuilder}
       >
         {hasTitle && (
-          <div className="flex align-center">
-            <ChartLegendCaption
-              title={title}
-              description={description}
-              icon={headerIcon}
-              actionButtons={actionButtons}
-              onSelectTitle={canSelectTitle ? this.handleSelectTitle : undefined}
-            />
-            <div>123</div>
-          </div>
+          <ChartLegendCaption
+            title={title}
+            description={description}
+            icon={headerIcon}
+            actionButtons={actionButtons}
+            onSelectTitle={canSelectTitle ? this.handleSelectTitle : undefined}
+          />
         )}
         <LegendLayout
           labels={labels}

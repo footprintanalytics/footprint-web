@@ -14,8 +14,6 @@ const TitleExtraInfoModal = ({
  }) => {
   const formRef = useRef(null);
   const [loading, setLoading] = useState(false);
-  console.log("card", card)
-  const name = card?.name
 
   const onCancel = () => {
     onClose && onClose();
