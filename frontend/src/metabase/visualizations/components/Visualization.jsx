@@ -375,7 +375,7 @@ class Visualization extends React.PureComponent {
     let noResults = false;
     let isPlaceholder = false;
     const loading = this.isLoading(series);
-
+    console.log("propsprops", this.props)
     // don't try to load settings unless data is loaded
     let settings = this.props.settings || {};
     if (!loading && !error) {
@@ -748,6 +748,7 @@ class Visualization extends React.PureComponent {
               settings={settings}
               icon={headerIcon}
               actionButtons={extra}
+              titleExtraInfo={get(dashcard?.card?.visualization_settings, "common.title_extra_info")}
               onChangeCardAndRun={
                 this.props.onChangeCardAndRun && !replacementContent
                   ? this.handleOnChangeCardAndRun
