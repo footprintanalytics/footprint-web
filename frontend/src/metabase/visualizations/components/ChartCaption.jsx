@@ -41,6 +41,7 @@ const ChartCaption = ({
 
   return (
     <div className="flex align-center">
+      {titleExtraInfo && <Tag style={{ marginRight: 0 }}>{titleExtraInfo}</Tag>}
       <ChartCaptionRoot
         title={title}
         description={description}
@@ -48,7 +49,6 @@ const ChartCaption = ({
         actionButtons={actionButtons}
         onSelectTitle={canSelectTitle ? handleSelectTitle : undefined}
       />
-      {titleExtraInfo && <Tag>{titleExtraInfo}</Tag>}
     </div>
   );
 };
