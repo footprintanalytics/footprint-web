@@ -462,7 +462,7 @@ const ResearchContent = props => {
             {
               title: "Wallet Profile",
               desc: "Gain insights into the balance and activity of wallet.",
-              link: "/research/wallet/wallet/wallet-profile",
+              link: "/research/wallet/wallet/ethereum-wallet-profile",
               icon: ReactIcons.topGameIcon,
             },
           ],
