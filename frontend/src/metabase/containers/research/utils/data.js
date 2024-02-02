@@ -714,9 +714,19 @@ const walletData = [
     "value": "wallet",
     "subMenus": [
       {
-        "label": "Wallet Profile",
-        "value": "wallet-profile",
+        "label": "Ethereum Wallet Profile",
+        "value": "ethereum-wallet-profile",
         "publicUuid": "bff3c209-9d4c-4e75-96dd-9676b184bbfa",
+      },
+      {
+        "label": "BNB Chain Wallet Profile",
+        "value": "bnb-chain-wallet-profile",
+        "publicUuid": "346980c4-84ea-42a0-8c0b-cf689aba72bb",
+      },
+      {
+        "label": "Arbitrum Wallet Profile",
+        "value": "arbitrum-wallet-profile",
+        "publicUuid": "58fadb8b-6865-47ea-b73c-5c0315bcfbe7",
       },
     ],
   },
