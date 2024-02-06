@@ -663,6 +663,11 @@ const tokenData = [
         "publicUuid": "04dca6c5-272c-4e7f-994d-53127866a9c1",
       },
       {
+        "label": "Top Tokens Traded on DEX",
+        "value": "top-tokens-traded-on-dex",
+        "publicUuid": "bd12acce-a17a-4c3a-9508-c753140985f6",
+      },
+      {
         "label": "Top Tokens by Volume",
         "value": "top-tokens-by-volume",
         "publicUuid": "bd12acce-a17a-4c3a-9508-c753140985f6",
@@ -723,14 +728,25 @@ const walletData = [
         "value": "bnb-chain-wallet-profile",
         "publicUuid": "346980c4-84ea-42a0-8c0b-cf689aba72bb",
       },
-      {
-        "label": "Arbitrum Wallet Profile",
-        "value": "arbitrum-wallet-profile",
-        "publicUuid": "58fadb8b-6865-47ea-b73c-5c0315bcfbe7",
-      },
     ],
   },
   {
+    "label": "Wallet Name Service",
+    "value": "wallet-name-service",
+    "subMenus": [
+      {
+        "label": ".bnb Name Service",
+        "value": "bnb-name-service",
+        "publicUuid": "ffa180e2-c6dd-4eee-8af2-6417bbe0e78c",
+      },
+      {
+        "label": ".arb Name Service",
+        "value": "arb-name-service",
+        "publicUuid": "8793a007-adde-4395-a36f-9b777170ee3f",
+      },
+    ],
+  },
+  /*{
     "label": "Wallet Tracker",
     "value": "wallet-tracker",
     "subMenus": [
@@ -750,7 +766,7 @@ const walletData = [
         "publicUuid": "3ed912f6-4c65-464e-93a1-4ad86c656689",
       },
     ],
-  },
+  },*/
 ]
 
 const customData = {
