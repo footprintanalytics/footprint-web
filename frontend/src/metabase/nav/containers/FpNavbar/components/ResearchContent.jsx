@@ -467,7 +467,7 @@ const ResearchContent = props => {
             },
           ],
         },
-        walletTrackerData: {
+        /*walletTrackerData: {
           title: "WALLET TRACKER", data: [
             {
               title: "NFT Trades",
@@ -488,7 +488,7 @@ const ResearchContent = props => {
               icon: ReactIcons.moneyFlowIcon,
             },
           ],
-        },
+        },*/
         // walletDescData: {
         //   img: getOssUrl("studio/img-menu-wallet.png"),
         //   title: "Track and trace activities, holdings, and profiles over 100+ million addresses.",
@@ -598,7 +598,7 @@ const ResearchContent = props => {
       return (
         <div className="main-menu__inner-layout">
           {MainMenuFunction.renderVerticalMenu({ data: tabData?.walletData })}
-          {MainMenuFunction.renderVerticalMenu({ data: tabData?.walletTrackerData })}
+          {/*{MainMenuFunction.renderVerticalMenu({ data: tabData?.walletTrackerData })}*/}
         </div>
       );
     }
