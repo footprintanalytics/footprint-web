@@ -665,7 +665,7 @@ const tokenData = [
       {
         "label": "Top Tokens Traded on DEX",
         "value": "top-tokens-traded-on-dex",
-        "publicUuid": "bd12acce-a17a-4c3a-9508-c753140985f6",
+        "publicUuid": "42412c92-c181-4cac-8c41-e8a1180a9220",
       },
       {
         "label": "Top Tokens by Volume",

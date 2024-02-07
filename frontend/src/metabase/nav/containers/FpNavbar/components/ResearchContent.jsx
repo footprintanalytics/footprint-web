@@ -465,6 +465,12 @@ const ResearchContent = props => {
               link: "/research/wallet/wallet/ethereum-wallet-profile",
               icon: ReactIcons.topGameIcon,
             },
+            {
+              title: "Wallet Name Service",
+              desc: "Check the wallet profile by searching for domain services.",
+              link: "/research/wallet/wallet-name-service/bnb-name-service",
+              icon: ReactIcons.gameProfileIcon,
+            },
           ],
         },
         /*walletTrackerData: {
