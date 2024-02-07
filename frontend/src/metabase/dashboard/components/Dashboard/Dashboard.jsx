@@ -567,7 +567,7 @@ class Dashboard extends Component {
             })}
             image={getOssUrl(
               ossPath(`dashboard/${dashboard.entityId || dashboard.id}.png`),
-              { resize: true },
+              { resize: true, host: "https://static.footprint.network" },
             )}
           />
         )}

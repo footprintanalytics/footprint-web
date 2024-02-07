@@ -10,7 +10,7 @@ export function getOssUrl(fileName, config) {
     return "";
   }
 
-  const releaseHost = staticBucketUrl;
+  const releaseHost = config?.host || staticBucketUrl;
   let url = `${releaseHost}/${fileName}`;
 
   const isFullUrl = fileName.startsWith("http");
