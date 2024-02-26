@@ -5,6 +5,7 @@
             [java-time :as t]
             [metabase.db :as mdb]
             [metabase.models.query-cache :refer [QueryCache]]
+            [metabase.models.query-cache-origin :refer [QueryCacheOrigin]]
             [metabase.query-processor.middleware.cache-backend.interface :as i]
             [metabase.util.date-2 :as u.date]
             [metabase.util.i18n :refer [trs]]
@@ -136,6 +137,34 @@
   (db/select-one-field :status_updated_at QueryCache :query_hash query-hash)
   )
 
+(defn- save-cache-origin-request!
+  "Save the origin request into the db."
+  [^bytes query-hash query dashboard-id card-id sql-hash]
+  (log/info "save-cache-origin-request store cache data to fix doris bug", query-hash dashboard-id card-id sql-hash)
+  (try
+    (or (db/update-where! QueryCacheOrigin {:query_hash query-hash}
+                          :query (pr-str  query)
+                          :sql_hash sql-hash
+                          :dashboard_id dashboard-id
+                          :card_id card-id
+                          :updated_at (t/offset-date-time))
+        (db/insert! QueryCacheOrigin {
+                                      :query (pr-str  query)
+                                      :sql_hash sql-hash
+                                      :query_hash query-hash
+                                      :dashboard_id dashboard-id
+                                      :card_id card-id
+                                      :updated_at (t/offset-date-time)
+                                      :created_at (t/offset-date-time)}))
+    (catch Throwable e
+      (log/error e (trs "Error saving query origin request."))))
+  nil)
+
+(defn getQueryAsyncList []
+  (log/info "getQueryAsyncList  " )
+  (db/select QueryCacheOrigin
+             {:limit 1}))
+
 (defmethod i/cache-backend :db
   [_]
   (reify i/CacheBackend
@@ -149,6 +178,10 @@
     (save-results-v2! [_ query-hash is dashboard-id card-id]
       (save-results-v2! query-hash is dashboard-id card-id)
       nil)
+
+     (save-cache-origin-request! [_ query-hash query dashboard-id card-id sql-hash]
+        (save-cache-origin-request! query-hash query dashboard-id card-id sql-hash)
+        nil)
 
     (update-cache-status! [_ query-hash status]
       (update-cache-status! query-hash status)

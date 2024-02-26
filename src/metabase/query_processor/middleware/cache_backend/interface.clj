@@ -34,6 +34,9 @@
   (update-cache-status! [this ^bytes query-hash status]
     "update the status which is the chart cache updating async data.")
 
+  (save-cache-origin-request! [this ^bytes query-hash query dashboard-id card-id sql-hash]
+                       "update the request of cache so it can be use by a api.")
+
   (purge-old-entries! [this max-age-seconds]
     "Purge all cache entries older than `max-age-seconds`. Will be called periodically when this backend is in use.
   `max-age-seconds` may be floating-point."))

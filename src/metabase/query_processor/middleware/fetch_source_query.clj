@@ -291,6 +291,7 @@
                                                      :query   FullyResolvedQuery}
   "Resolve `card__n`-style `:source-tables` in `query`."
   [{inner-query :query, :as outer-query} :- mbql.s/Query]
+  (log/info "inner-query", inner-query)
   (if-not inner-query
     ;; for non-MBQL queries there's nothing to do since they have nested queries
     {:query outer-query, :card-id nil}
@@ -303,6 +304,7 @@
   `card__n` format."
   [qp]
   (fn [query rff context]
+    (log/info "resolve-card-id-source-tables", query)
     (let [{:keys [query card-id]} (resolve-card-id-source-tables* query)]
       (if card-id
         (let [dataset? (db/select-one-field :dataset Card :id card-id)]

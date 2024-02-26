@@ -92,6 +92,11 @@
   [query]
   (buddy-hash/sha3-256 (json/generate-string (select-keys-for-hashing query))))
 
+(s/defn ^bytes string-hash :- (Class/forName "[B")
+  "Return a 256-bit SHA3 hash of `string` as a key for the cache. (This is returned as a byte array.)"
+  [str]
+  (buddy-hash/sha3-256 str))
+
 
 ;;; --------------------------------------------- Query Source Card IDs ----------------------------------------------
 

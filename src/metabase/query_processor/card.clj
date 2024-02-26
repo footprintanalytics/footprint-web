@@ -11,8 +11,12 @@
             [metabase.models.dashboard :refer [Dashboard]]
             [metabase.models.database :refer [Database]]
             [metabase.models.query :as query]
+            [metabase.query-processor.middleware.cache-backend.interface :as i]
+            [metabase.query-processor.context.default :as context.default]
+            [java-time :as t]
             [metabase.public-settings :as public-settings]
             [metabase.query-processor :as qp]
+            [metabase.query-processor.middleware.cache-backend.db :as cache-backend.db]
             [metabase.query-processor.error-type :as qp.error-type]
             [metabase.query-processor.middleware.constraints :as qp.constraints]
             [metabase.query-processor.middleware.permissions :as qp.perms]
@@ -209,3 +213,43 @@
     (log/tracef "Running query for Card %d:\n%s" card-id
                 (u/pprint-to-str query))
     (run query info)))
+
+(defn replace-escape-chars [s]
+  (-> s
+      (clojure.string/replace "\\\\\"" "\\\"")
+      (clojure.string/replace "\\\\n" "\n")
+      (clojure.string/replace "''day''" "'day'")
+      (clojure.string/replace "''week''" "'week'")
+      ))
+
+(defn run-qp-userland-query [queryAsyncList]
+   (let [
+          dashboardId (:dashboard_id queryAsyncList)
+          cardId (:card_id queryAsyncList)
+          query0 (:query queryAsyncList)
+          query (replace-escape-chars query0) ;handle //" to ///"
+          newQuery (read-string query)
+          newQueryFix (assoc newQuery
+                             :middleware (merge {:refresh-cache true :query-hash (:query_hash queryAsyncList)} (:middleware newQuery)))
+          ]
+     (log/info "run-qp-userland-query-1" query0)
+     (log/info "run-qp-userland-query0" query)
+     (log/info "run-qp-userland-query1" (get-in newQuery [:native :query]))
+     (log/info "run-qp-userland-query2" newQueryFix)
+     (qp/process-userland-query newQueryFix (context.default/default-context))
+     {:dashboardId dashboardId, :cardId cardId}
+     )
+   )
+
+(defn run-query-cache-async-refresh
+  [max]
+  (let [
+        queryAsyncList (cache-backend.db/getQueryAsyncList)
+        result (map run-qp-userland-query queryAsyncList)]
+    (log/info "queryAsyncList", queryAsyncList)
+    {:run (count result)
+     :detail result
+     :now (t/offset-date-time)}
+    )
+  )
+

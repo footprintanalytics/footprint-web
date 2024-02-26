@@ -229,18 +229,23 @@
   [qp {:keys [cache-ttl middleware info], :as query} rff {:keys [reducef], :as context}]
   ;; TODO - Query will already have `info.hash` if it's a userland query. I'm not 100% sure it will be the same hash,
   ;; because this is calculated after normalization, instead of before
-;  (log/info "run-query-with-cache info:" info)
+  (log/info "run-query-with-cache query:" query)
   (let [card-id (info :card-id)
         dashboard-id (info :dashboard-id)
         query-hash (qp.util/query-hash query)
         result     (maybe-reduce-cached-results (:ignore-cached-results? middleware) query-hash cache-ttl rff context)
         erorCallback (fn [] (i/update-cache-status! *backend* query-hash "error"))
+        sql-hash (qp.util/string-hash ((query :native) :query))
+        fix-query (if (= :query(:type query)) (dissoc query :native) query)
+        fix-query (assoc fix-query :info (dissoc (:info fix-query) :query-hash))
         reducef' (fn [rff context metadata rows]
                    (impl/do-with-serialization
                     (fn [in-fn result-fn]
                       (binding [*in-fn*     in-fn
                                 *result-fn* result-fn]
                         (reducef rff context (merge {:aysnc-refresh-cache? true, :erorCallback erorCallback} metadata) rows)))))]
+    (log/info "sxxxxxxxx" ((query :native) :query))
+    (i/save-cache-origin-request! *backend* query-hash fix-query dashboard-id card-id sql-hash)
     (if (= result ::miss)
       (let [start-time-ms (System/currentTimeMillis)]
         (log/trace "Running query and saving cached results (if eligible)...")
@@ -286,3 +291,23 @@
         (if cacheable?
           (run-query-with-cache qp query rff context)
           (qp query rff context))))))
+;[#metabase.models.query_cache_origin.QueryCacheOriginInstance
+; {
+;   :query {:constraints {:max-results 10000, :max-results-bare-rows 10000},
+;           :type :native,
+;           :middleware {:js-int-to-string? true, :ignore-cached-results? false, :power-level "1"},
+;           :user-parameters [{:type :string/=, :slug "project", :name "Project", :value ["Anichess"], :isMultiSelect true, :sectionId "string", :id "566e459b", :target [:dimension [:template-tag "project"]]}],
+;           :native {:query "with twiiter_data as (\\n    select \\n    *\\n    from twitter_daily_stats\\n    where \\"twitter_daily_stats\\".\\"project\\" = ?\\n    \\n)\\n, current_engagement_rate as (\\n    select \\n    on_date\\n    , (total_likes + total_quotes + total_replies + total_retweets + total_bookmarks)* 1.00 / total_impressions as engagement_rate\\n    from twiiter_data\\n    where on_date = (select max(on_date) from twiiter_data)\\n    )\\n, past_engagement_rate_30D as (\\n    select \\n     on_date\\n    ,  (total_likes + total_quotes + total_replies + total_retweets + total_bookmarks)* 1.00 / total_impressions as engagement_rate\\n    from twiiter_data\\n    where on_date = date_add(''day'', -30, (select max(on_date) from twiiter_data))\\n    )\\nselect * from current_engagement_rate\\nunion all \\nselect * from past_engagement_rate_30D\\norder by on_date", :params ["Anichess"]}, :info {:executed-by 24731, :context :public-dashboard, :card-id 44118, :card-name "Engagement Rate", :dashboard-id 8520}, :database 3, :async? true, :cache-ttl 31536000}, :dashboard_id nil, :card_id 44114, :updated_at #t "2024-02-20T15:52:37Z", :created_at #t "2024-02-20T15:52:20Z"}]
+;
+;with twiiter_data as (\n    select \n    *\n    from twitter_daily_stats\n    where \
+;
+;{:constraints {:max-results 10000, :max-results-bare-rows 10000}, :type :native, :middleware {:refresh-cache true, :query-hash #object[[B 0x17d05d04 [B@17d05d04], :js-int-to-string? true, :ignore-cached-results? false, :power-level 1}, :user-parameters [{:type :string/=, :slug project, :name Project, :value [Anichess], :isMultiSelect true, :sectionId string, :id 566e459b, :target [:dimension [:template-tag project]]}], :native {:query select * from duke, twitter_daily_stats \, .\ project, \  = ?\n    \n)\n, current_engagement_rate as (\n    select \n    on_date\n    , (total_likes + total_quotes + total_replies + total_retweets + total_bookmarks)* 1.00 / total_impressions as engagement_rate\n    from twiiter_data\n    where on_date = (select max(on_date) from twiiter_data)\n    )\n, past_engagement_rate_30D as (\n    select \n     on_date\n    ,  (total_likes + total_quotes + total_replies + total_retweets + total_bookmarks)* 1.00 / total_impressions as engagement_rate\n    from twiiter_data\n    where on_date = date_add(''day'', -30, (select max(on_date) from twiiter_data))\n    )\nselect * from current_engagement_rate\nunion all \nselect * from past_engagement_rate_30D\norder by on_date, :params [Anichess]}, :info {:executed-by 24731, :context :public-dashboard, :card-id 44118, :card-name Engagement Rate, :dashboard-id 8520}, :database 3, :async? true, :cache-ttl 31536000}
+
+;{:constraints {:max-results 10000, :max-results-bare-rows 10000},
+; :type :native,
+; :middleware {:js-int-to-string? true, :ignore-cached-results? false, :power-level "1"},
+; :user-parameters [{:type :string/=, :slug "project", :name "Project", :value ["Anichess"], :isMultiSelect true, :sectionId "string", :id "566e459b", :target [:dimension [:template-tag "project"]]}],
+; :native {:query "with twiiter_data as (\\n    select \\n    *\\n    from twitter_daily_stats\\n    where \\"twitter_daily_stats\\".\\"project\\" = ?\\n    \\n)\\n, current_engagement_rate as (\\n    select \\n    on_date\\n    , (total_likes + total_quotes + total_replies + total_retweets + total_bookmarks)* 1.00 / total_impressions as engagement_rate\\n    from twiiter_data\\n    where on_date = (select max(on_date) from twiiter_data)\\n    )\\n, past_engagement_rate_30D as (\\n    select \\n     on_date\\n    ,  (total_likes + total_quotes + total_replies + total_retweets + total_bookmarks)* 1.00 / total_impressions as engagement_rate\\n    from twiiter_data\\n    where on_date = date_add(''day'', -30, (select max(on_date) from twiiter_data))\\n    )\\nselect * from current_engagement_rate\\nunion all \\nselect * from past_engagement_rate_30D\\norder by on_date", :params ["Anichess"]}, :info {:executed-by 24731, :context :public-dashboard, :card-id 44118, :card-name "Engagement Rate", :dashboard-id 8520}, :database 3, :async? true, :cache-ttl 31536000}
+
+
+;[:query [#metabase.models.query_cache_origin.QueryCacheOriginInstance{:query_hash #object[[B 0x7f0c8207 [B@7f0c8207], :sql_hash #object[[B 0x575d873 [B@575d873], :query {:constraints {:max-results 10000, :max-results-bare-rows 10000}, :type :native, :middleware {:js-int-to-string? true, :ignore-cached-results? false, :power-level "1"}, :user-parameters [{:type :string/=, :slug "project", :name "Project", :value ["Anichess"], :isMultiSelect true, :sectionId "string", :id "566e459b", :target [:dimension [:template-tag "project"]]}], :native {:query "with twiiter_data as (\\n    select \\n    *\\n    from twitter_daily_stats\\n    where \\"twitter_daily_stats\\".\\"project\\" = ?\\n    \\n)\\n, current_engagement_rate as (\\n    select \\n    on_date\\n    , (total_likes + total_quotes + total_replies + total_retweets + total_bookmarks)* 1.00 / total_impressions as engagement_rate\\n    from twiiter_data\\n    where on_date = (select max(on_date) from twiiter_data)\\n    )\\n, past_engagement_rate_30D as (\\n    select \\n     on_date\\n    ,  (total_likes + total_quotes + total_replies + total_retweets + total_bookmarks)* 1.00 / total_impressions as engagement_rate\\n    from twiiter_data\\n    where on_date = date_add(''day'', -30, (select max(on_date) from twiiter_data))\\n    )\\nselect * from current_engagement_rate\\nunion all \\nselect * from past_engagement_rate_30D\\norder by on_date", :params ["Anichess"]}, :info {:executed-by 24731, :context :public-dashboard, :card-id 44118, :card-name "Engagement Rate", :dashboard-id 8520}, :database 3, :async? true, :cache-ttl 31536000}, :dashboard_id nil, :card_id 44114, :updated_at #t "2024-02-20T15:52:37Z", :created_at #t "2024-02-20T15:52:20Z"}]]

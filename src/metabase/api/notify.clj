@@ -10,6 +10,7 @@
             [clojure.tools.logging :as log]
             [metabase.sync.sync-metadata.tables :as sync-tables]
             [schema.core :as s]
+            [metabase.query-processor.card :as qp.card]
             [toucan.db :as db]))
 
 (def ^:private ^:dynamic *execute-asynchronously* true)
@@ -69,5 +70,13 @@
                   :else      (execute! #(db-sync-fn database))))
     )
   {:success true})
+
+(api/defendpoint POST "/cache/refresh-test"
+  "Cache refresh from the table query_cache_async. You can set the env `MB_CACHE_REFRESH_INSERT_DB` to control the cache action which inert to db not after query.
+  This endpoint is secured by an API key that needs to be passed as a `X-METABASE-APIKEY` header which needs to be defined in
+  the `MB_API_KEY` [environment variable](https://www.metabase.com/docs/latest/configuring-metabase/environment-variables.html#mb_api_key)"
+  [:as {{:keys [max ]} :body}]
+  {max   (s/maybe su/IntGreaterThanZero)}
+  (qp.card/run-query-cache-async-refresh max))
 
 (api/define-routes)
