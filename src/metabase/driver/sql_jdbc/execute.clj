@@ -10,6 +10,7 @@
             [clojure.tools.logging :as log]
             [java-time :as t]
             [metabase.driver :as driver]
+            [metabase.util.convert_sql :as convert]
             [metabase.driver.sql-jdbc.connection :as sql-jdbc.conn]
             [metabase.driver.sql-jdbc.execute.diagnostic :as sql-jdbc.execute.diagnostic]
             [metabase.driver.sql-jdbc.execute.old-impl :as sql-jdbc.execute.old]
@@ -488,8 +489,27 @@
   ([driver {{sql :query, params :params} :native, :as outer-query} context respond]
    {:pre [(string? sql) (seq sql)]}
    (let [remark   (qp.util/query->remark driver outer-query)
-         sql      (str "-- " remark "\n" sql)
-         max-rows (limit/determine-query-max-rows outer-query)]
+         sql (if params (:query (driver/splice-parameters-into-native-query driver
+                                                                            {:query  sql
+                                                                             :params params})) sql)
+         params nil
+         _sql      (str "-- " remark "\n" sql)
+         max-rows (limit/determine-query-max-rows outer-query)
+         execution-mode (:execution-mode (:middleware outer-query))
+         schema-id (:fga-schema (:middleware outer-query))
+         _convert-sql (convert/convert-sql _sql schema-id)
+         pattern (re-pattern (str "(?i)" "limit"))
+         is-include-limit (not (nil? (re-find pattern _convert-sql)))
+         downloadContexts [:csv-download :xlsx-download :json-download]
+         isDownload (some #(= (:context (:info outer-query)) %) downloadContexts)
+         sql (if (and (= execution-mode  "native") (not is-include-limit) (not isDownload)) (str _convert-sql "\nLIMIT 1000") _convert-sql)
+         ]
+     (log/info "execute sql query --------------")
+     (log/info "source_sql:" _sql)
+     (log/info "after_convert_sql:" (u/format-color 'red'  sql))
+     ;     (log/info "outer-query" outer-query)
+     ;     (log/info  "params" params)
+     ;     (log/info "schema-id" schema-id)
      (execute-reducible-query driver sql params max-rows context respond)))
 
   ([driver sql params max-rows context respond]
