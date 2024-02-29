@@ -550,7 +550,7 @@ class Dashboard extends Component {
       !shouldRenderParametersWidgetInViewMode &&
       (!isEditing || isEditingParameter);
 
-    const { chart_style, theme, from } = {
+    const { chart_style, theme, all_load, from } = {
       ...parseHashOptions(location.hash),
     };
 
@@ -672,6 +672,7 @@ class Dashboard extends Component {
                               navigateToGuestQuery(dashboard, this.props);
                             }
                           }}
+                          allLoad={all_load}
                           chartStyle={chart_style}
                         />
                       ) : (
