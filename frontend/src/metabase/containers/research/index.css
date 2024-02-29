@@ -136,6 +136,17 @@
   background-color: var(--color-bg-dark);
 }
 
+.features-side__chains {
+  padding: 0 0 10px 0 ;
+  text-align: center;
+  margin: 0 auto;
+  background-color: var(--color-bg-dark);
+}
+
+.features-side__chains-item {
+  text-align: left;
+}
+
 .research-time-text {
   color: #ffffff88;
   text-align: center;

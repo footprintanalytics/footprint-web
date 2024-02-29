@@ -12,11 +12,12 @@ import myData from "./utils/data";
 import { push, replace } from "react-router-redux";
 import _ from "underscore";
 import { withRouter } from "react-router";
-import { Select } from "antd";
+import { Image, Select } from "antd";
 import Meta from "metabase/components/Meta";
 import { formatSectionTitle } from "metabase/lib/formatting";
 import title from "metabase/hoc/Title";
 import cx from "classnames";
+import { getOssUrl } from "metabase/lib/image";
 
 const Index = props => {
   const {
@@ -33,6 +34,7 @@ const Index = props => {
   const partnerStr = partner ? `/${partner}` : "";
   const prefixPath = isPublic ? "/public" : "";
   const isCustom = classify === "custom";
+  const isShowChain = classify === "token";
   const researchData = isCustom ? myData[classify][partner] : myData[classify];
   const metaInfo = myData["metaObject"][classify] || {};
   const type = "research";
@@ -103,6 +105,34 @@ const Index = props => {
     )
   }
 
+  const chainData = [
+    {
+      value: "ethereum",
+      label: "Ethereum",
+      icon: getOssUrl("fp-chains/ethereum.webp"),
+    },
+  ]
+
+  const renderChainSelect = () => {
+    return (
+      <div className="features-side__chains">
+        <Select
+          defaultValue={"ethereum"}
+          style={{ width: 200 }}
+        >
+          {chainData.map(n => (
+            <Select.Option key={`${n.value}-${n.label}`} value={n.value}>
+              <div className="features-side__chains-item">
+                <Image src={n.icon} width={20} height={20} preview={false} />
+                <span className="pl1">{n.label}</span>
+              </div>
+            </Select.Option>
+          ))}
+        </Select>
+      </div>
+    )
+  }
+
   const renderBack = () => {
     return (
       <div
@@ -125,6 +155,7 @@ const Index = props => {
         <div className="Features-side">
           <div className="research-time-text">All times shown are in UTC timezone.</div>
           {!isCustom && renderSelectClassify()}
+          {isShowChain && renderChainSelect()}
           {menu && (
             <FeaturesSide
               defaultMenu={menu}
