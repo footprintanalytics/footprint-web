@@ -18,6 +18,7 @@ import {
 
 import { findSize, getMaxFontSize } from "./utils";
 import { LegendDescriptionIcon } from "metabase/visualizations/components/legend/LegendCaption.styled";
+import { Tag } from "antd";
 
 const HORIZONTAL_PADDING = 32;
 
@@ -54,7 +55,7 @@ const ScalarValue = ({
   );
 };
 
-export const ScalarTitle = ({ title, description, onClick }) => (
+export const ScalarTitle = ({ title, description, onClick, titleExtraInfo }) => (
   <ScalarTitleContainer>
     {/*
       This is a hacky spacer so that the h3 is centered correctly.
@@ -67,6 +68,7 @@ export const ScalarTitle = ({ title, description, onClick }) => (
       onClick={onClick}
     >
       <Ellipsified tooltip={title} lines={2} placement="bottom">
+        {titleExtraInfo && <Tag style={{ marginRight: 4, padding: "0 4px" }}>{titleExtraInfo}</Tag>}
         {title}
       </Ellipsified>
     </ScalarTitleContent>

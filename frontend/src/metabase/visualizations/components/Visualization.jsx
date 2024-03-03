@@ -161,6 +161,11 @@ class Visualization extends React.PureComponent {
     const computedSettings = series
       ? getComputedSettingsForSeries(series)
       : null;
+    const storedSettings =
+      (series && series[0] && series[0].card.visualization_settings) || {};
+    if (storedSettings['common.title_extra_info']) {
+      computedSettings['common.title_extra_info'] = storedSettings['common.title_extra_info']
+    }
     this.setState({
       hovered: null,
       //clicked: null,
