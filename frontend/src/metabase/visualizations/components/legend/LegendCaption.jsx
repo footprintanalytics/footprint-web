@@ -10,6 +10,7 @@ import {
   LegendLabel,
   LegendLabelIcon,
 } from "./LegendCaption.styled";
+import { Tag } from "antd";
 
 const propTypes = {
   className: PropTypes.string,
@@ -18,6 +19,7 @@ const propTypes = {
   icon: PropTypes.shape(iconPropTypes),
   actionButtons: PropTypes.node,
   onSelectTitle: PropTypes.func,
+  titleExtraInfo: PropTypes.any,
 };
 
 const LegendCaption = ({
@@ -27,10 +29,12 @@ const LegendCaption = ({
   icon,
   actionButtons,
   onSelectTitle,
+  titleExtraInfo,
 }) => {
   return (
     <LegendCaptionRoot className={className} data-testid="legend-caption">
       {icon && <LegendLabelIcon {...icon} />}
+      {titleExtraInfo && <Tag style={{ marginRight: 4, padding: "0 4px" }}>{titleExtraInfo}</Tag>}
       <LegendLabel
         className="fullscreen-normal-text fullscreen-night-text"
         onClick={onSelectTitle}
