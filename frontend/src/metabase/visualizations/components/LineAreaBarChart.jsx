@@ -383,6 +383,7 @@ export default class LineAreaBarChart extends Component {
             icon={headerIcon}
             actionButtons={actionButtons}
             onSelectTitle={canSelectTitle ? this.handleSelectTitle : undefined}
+            titleExtraInfo={settings["common.title_extra_info"]}
           />
         )}
         <LegendLayout
