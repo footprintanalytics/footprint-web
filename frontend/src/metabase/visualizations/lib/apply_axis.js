@@ -440,7 +440,19 @@ export function applyChartYAxis(chart, series, yExtent, axisName) {
     // elasticY not compatible with log scale
     if (axis.setting("scale") !== "log") {
       // TODO: right axis?
-      chart.elasticY(true);
+      // chart.elasticY(true);
+      const [min, max] = yExtent;
+      const lineSeries = series.every(s => s.card.display === "line");
+      const noBarSeries = series.every(s => _.values(s.card.visualization_settings.series_settings).every(el => el.display !== "area" && el.display !== "bar"));
+      // console.log("lineSeries", lineSeries, noBarSeries, series)
+      if (lineSeries && noBarSeries) {
+        const padding = (max - min) / 5;
+        const newMin = min - padding;
+        const newMax = max + padding;
+        scale.domain([newMin, newMax]);
+      } else {
+        chart.elasticY(true);
+      }
     } else {
       const [min, max] = yExtent;
       if (!((min < 0 && max < 0) || (min > 0 && max > 0))) {
