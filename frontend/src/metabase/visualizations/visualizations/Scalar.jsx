@@ -14,6 +14,8 @@ import ScalarValue, {
 } from "metabase/visualizations/components/ScalarValue";
 import { TYPE } from "metabase-lib/types/constants";
 import { ScalarContainer } from "./Scalar.styled";
+import cx from "classnames";
+import { ChartLegendCaption, LineAreaBarChartRoot } from "metabase/visualizations/components/LineAreaBarChart.styled";
 
 // convert legacy `scalar.*` visualization settings to format options
 function legacyScalarSettingsToFormatOptions(settings) {
@@ -212,48 +214,71 @@ export default class Scalar extends Component {
       settings,
     };
     const isClickable = visualizationIsClickable(clicked);
+    const hasTitle = !!isDashboard;
+    const title = settings["card.title"] || card.name;
+    const description = settings["card.description"];
 
     return (
-      <ScalarWrapper>
-        <div className="Card-title absolute top right p1 px2">
-          {actionButtons}
-        </div>
-        <ScalarContainer
-          className="fullscreen-normal-text fullscreen-night-text"
-          tooltip={fullScalarValue}
-          alwaysShowTooltip={fullScalarValue !== displayValue}
-          isClickable={isClickable}
-        >
-          <span
-            onClick={
-              isClickable &&
-              (() =>
-                this._scalar &&
-                onVisualizationClick({ ...clicked, element: this._scalar }))
-            }
-            ref={scalar => (this._scalar = scalar)}
-          >
-            <ScalarValue
-              value={displayValue}
-              width={width}
-              gridSize={gridSize}
-              totalNumGridCols={totalNumGridCols}
-              fontFamily={fontFamily}
-            />
-          </span>
-        </ScalarContainer>
-        {isDashboard && (
-          <ScalarTitle
-            title={settings["card.title"]}
-            description={settings["card.description"]}
-            titleExtraInfo={settings["common.title_extra_info"]}
-            onClick={
-              onChangeCardAndRun &&
-              (() => onChangeCardAndRun({ nextCard: card }))
-            }
-          />
+      <LineAreaBarChartRoot
+        className={cx(
+          "Scalar",
+          this.props.className,
         )}
-      </ScalarWrapper>
+        style={{ padding: 0 }}
+      >
+        {hasTitle && (
+          <div className="p1 flex-no-shrink" style={{ margin: "0 0.5rem"}}>
+            <ChartLegendCaption
+              title={title}
+              description={description}
+              actionButtons={actionButtons}
+              // onSelectTitle={canSelectTitle ? this.handleSelectTitle : undefined}
+              titleExtraInfo={settings["common.title_extra_info"]}
+              onSelectTitle={
+                onChangeCardAndRun &&
+                (() => onChangeCardAndRun({ nextCard: card }))
+              }
+            />
+          </div>
+        )}
+        <ScalarWrapper>
+          <ScalarContainer
+            className="fullscreen-normal-text fullscreen-night-text"
+            tooltip={fullScalarValue}
+            alwaysShowTooltip={fullScalarValue !== displayValue}
+            isClickable={isClickable}
+          >
+            <span
+              onClick={
+                isClickable &&
+                (() =>
+                  this._scalar &&
+                  onVisualizationClick({ ...clicked, element: this._scalar }))
+              }
+              ref={scalar => (this._scalar = scalar)}
+            >
+              <ScalarValue
+                value={displayValue}
+                width={width}
+                gridSize={gridSize}
+                totalNumGridCols={totalNumGridCols}
+                fontFamily={fontFamily}
+              />
+            </span>
+          </ScalarContainer>
+        </ScalarWrapper>
+        {/*{isDashboard && (*/}
+        {/*  <ScalarTitle*/}
+        {/*    title={settings["card.title"]}*/}
+        {/*    description={settings["card.description"]}*/}
+        {/*    titleExtraInfo={settings["common.title_extra_info"]}*/}
+        {/*    onClick={*/}
+        {/*      onChangeCardAndRun &&*/}
+        {/*      (() => onChangeCardAndRun({ nextCard: card }))*/}
+        {/*    }*/}
+        {/*  />*/}
+        {/*)}*/}
+      </LineAreaBarChartRoot>
     );
   }
 }
