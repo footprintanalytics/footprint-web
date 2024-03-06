@@ -13,3 +13,7 @@ export const ChartLegendCaption = styled(LegendCaption)`
   flex: 0 0 auto;
   margin-bottom: 0.5rem;
 `;
+
+export const ChartLegendCaptionScalar = styled(LegendCaption)`
+  flex: 0 0 auto;
+`;
