@@ -25,14 +25,18 @@ import {
   Variation,
 } from "./SmartScalar.styled";
 import cx from "classnames";
-import { ChartLegendCaption, LineAreaBarChartRoot } from "metabase/visualizations/components/LineAreaBarChart.styled";
+import {
+  ChartLegendCaption,
+  ChartLegendCaptionScalar,
+  LineAreaBarChartRoot,
+} from "metabase/visualizations/components/LineAreaBarChart.styled";
 
 export default class Smart extends React.Component {
   static uiName = t`Trend`;
   static identifier = "smartscalar";
   static iconName = "smartscalar";
 
-  static minSize = { width: 3, height: 3 };
+  static minSize = { width: 3, height: 2 };
 
   static noHeader = true;
 
@@ -174,7 +178,7 @@ export default class Smart extends React.Component {
       >
         {hasTitle && (
           <div className="p1 flex-no-shrink" style={{ margin: "0 0.5rem"}}>
-            <ChartLegendCaption
+            <ChartLegendCaptionScalar
               title={title}
               description={description}
               actionButtons={actionButtons}
@@ -184,6 +188,7 @@ export default class Smart extends React.Component {
                 onChangeCardAndRun &&
                 (() => onChangeCardAndRun({ nextCard: card }))
               }
+              style={{ marginBottom: 0 }}
             />
           </div>
         )}

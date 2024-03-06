@@ -15,7 +15,7 @@ export const ScalarRoot = styled.div`
   align-items: center;
   width: 100%;
   height: 100%;
-  padding-bottom: 30px;
+  padding-bottom: 15px;
 `;
 
 interface ScalarValueWrapperProps {
