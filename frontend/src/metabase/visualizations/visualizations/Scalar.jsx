@@ -255,10 +255,9 @@ export default class Scalar extends Component {
           >
             <span
               onClick={
-                isClickable &&
-                (() =>
-                  this._scalar &&
-                  onVisualizationClick({ ...clicked, element: this._scalar }))
+                () =>
+                  isClickable && this._scalar &&
+                  onVisualizationClick({ ...clicked, element: this._scalar })
               }
               ref={scalar => (this._scalar = scalar)}
             >
