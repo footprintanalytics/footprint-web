@@ -24,6 +24,8 @@ import {
   PreviousValueVariation,
   Variation,
 } from "./SmartScalar.styled";
+import cx from "classnames";
+import { ChartLegendCaption, LineAreaBarChartRoot } from "metabase/visualizations/components/LineAreaBarChart.styled";
 
 export default class Smart extends React.Component {
   static uiName = t`Trend`;
@@ -158,70 +160,94 @@ export default class Smart extends React.Component {
     };
 
     const isClickable = visualizationIsClickable(clicked);
+    const hasTitle = !!isDashboard;
+    const title = settings["card.title"] || card.name;
+    const description = settings["card.description"];
 
     return (
-      <ScalarWrapper>
-        <div className="Card-title absolute top right p1 px2">
-          {actionButtons}
-        </div>
-        <span
-          onClick={
-            isClickable &&
-            (() =>
-              this._scalar &&
-              onVisualizationClick({ ...clicked, element: this._scalar }))
-          }
-          ref={scalar => (this._scalar = scalar)}
-        >
-          <ScalarValue
-            gridSize={gridSize}
-            width={width}
-            totalNumGridCols={totalNumGridCols}
-            fontFamily={fontFamily}
-            value={formatValue(insight["last-value"], settings.column(column))}
-          />
-        </span>
-        {isDashboard && (
-          <ScalarTitle
-            title={settings["card.title"]}
-            description={settings["card.description"]}
-            titleExtraInfo={settings["common.title_extra_info"]}
-            onClick={
-              onChangeCardAndRun &&
-              (() => onChangeCardAndRun({ nextCard: card }))
-            }
-          />
+      <LineAreaBarChartRoot
+        className={cx(
+          "SmartScalar",
+          this.props.className,
         )}
-        <div className="SmartWrapper">
-          {lastChange == null || previousValue == null ? (
-            <div
-              className="text-centered text-bold mt1"
-              style={{ color: color("text-medium"), opacity: 0 }}
-            >
-              {jt`Nothing to compare for the previous ${granularity}.`}
-            </div>
-          ) : lastChange === 0 ? (
-            t`No change from last ${granularity}`
-          ) : (
-            <PreviousValueContainer gridSize={gridSize}>
-              <Variation color={changeColor}>
-                <Icon
-                  size={13}
-                  pr={1}
-                  name={isNegative ? "arrow_down" : "arrow_up"}
-                />
-                {changeDisplay}
-              </Variation>
-              <PreviousValueVariation id="SmartScalar-PreviousValue">
-                {jt`${separator} was ${formatValue(
-                  previousValue,
-                  settings.column(column),
-                )} ${granularityDisplay}`}
-              </PreviousValueVariation>
-            </PreviousValueContainer>
-          )}
-        </div>
-      </ScalarWrapper>
+        style={{ padding: 0 }}
+      >
+        {hasTitle && (
+          <div className="p1 flex-no-shrink" style={{ margin: "0 0.5rem"}}>
+            <ChartLegendCaption
+              title={title}
+              description={description}
+              actionButtons={actionButtons}
+              // onSelectTitle={canSelectTitle ? this.handleSelectTitle : undefined}
+              titleExtraInfo={settings["common.title_extra_info"]}
+              onSelectTitle={
+                onChangeCardAndRun &&
+                (() => onChangeCardAndRun({ nextCard: card }))
+              }
+            />
+          </div>
+        )}
+        <ScalarWrapper>
+          <span
+            onClick={
+              isClickable &&
+              (() =>
+                this._scalar &&
+                onVisualizationClick({ ...clicked, element: this._scalar }))
+            }
+            ref={scalar => (this._scalar = scalar)}
+          >
+            <ScalarValue
+              gridSize={gridSize}
+              width={width}
+              totalNumGridCols={totalNumGridCols}
+              fontFamily={fontFamily}
+              value={formatValue(insight["last-value"], settings.column(column))}
+            />
+          </span>
+
+        {/*{isDashboard && (*/}
+        {/*  <ScalarTitle*/}
+        {/*    title={settings["card.title"]}*/}
+        {/*    description={settings["card.description"]}*/}
+        {/*    titleExtraInfo={settings["common.title_extra_info"]}*/}
+        {/*    onClick={*/}
+        {/*      onChangeCardAndRun &&*/}
+        {/*      (() => onChangeCardAndRun({ nextCard: card }))*/}
+        {/*    }*/}
+        {/*  />*/}
+        {/*)}*/}
+          <div className="SmartWrapper">
+            {lastChange == null || previousValue == null ? (
+              <div
+                className="text-centered text-bold mt1"
+                style={{ color: color("text-medium"), opacity: 0 }}
+              >
+                {jt`Nothing to compare for the previous ${granularity}.`}
+              </div>
+            ) : lastChange === 0 ? (
+              t`No change from last ${granularity}`
+            ) : (
+              <PreviousValueContainer gridSize={gridSize}>
+                <Variation color={changeColor}>
+                  <Icon
+                    size={13}
+                    pr={1}
+                    name={isNegative ? "arrow_down" : "arrow_up"}
+                  />
+                  {changeDisplay}
+                </Variation>
+                <PreviousValueVariation id="SmartScalar-PreviousValue">
+                  {jt`${separator} was ${formatValue(
+                    previousValue,
+                    settings.column(column),
+                  )} ${granularityDisplay}`}
+                </PreviousValueVariation>
+              </PreviousValueContainer>
+            )}
+          </div>
+        </ScalarWrapper>
+      </LineAreaBarChartRoot>
     );
   }
 }

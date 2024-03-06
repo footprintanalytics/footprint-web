@@ -41,7 +41,7 @@ const ChartCaption = ({
 
   return (
     <div className="flex align-center">
-      {titleExtraInfo && <Tag style={{ marginRight: 0 }}>{titleExtraInfo}</Tag>}
+      {titleExtraInfo && <Tag style={{ marginRight: 0, padding: "0 4px" }}>{titleExtraInfo}</Tag>}
       <ChartCaptionRoot
         title={title}
         description={description}
