@@ -8,4 +8,5 @@
     "MCH Verse" "mch_verse",
     "TCG Verse" "tcg_verse",
     "zkSync Era" "zksync_era",
+    "Arbitrum Nova" "arbitrum_nova",
     })
