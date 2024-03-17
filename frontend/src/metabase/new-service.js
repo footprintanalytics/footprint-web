@@ -803,6 +803,15 @@ export const journeyPathUserDetail = params => {
 export const journeyPathUserTrend = params => {
   return POST(`api/v1/ab/user-journey/path-user-trend`, params);
 };
+
 export const createBudgetRecord = params => {
   return POST(`api/v1/budget/record`, params);
+};
+
+export const getDashboardWatermark = params => {
+  return POST(`api/v1/dashboard/getWatermark`, params);
+};
+
+export const postDashboardWatermark = params => {
+  return POST(`api/v1/dashboard/setWatermark`, params);
 };
