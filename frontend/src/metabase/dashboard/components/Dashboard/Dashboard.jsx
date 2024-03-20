@@ -186,20 +186,23 @@ class Dashboard extends Component {
   );*/
 
   parentMessageAction = (event) => {
-    if (event?.origin === window?.location?.origin) {
-      if (event?.data?.startsWith("user=")) {
-        // eslint-disable-next-line react/prop-types
-        this.props.refreshCurrentUser(JSON.parse(event.data.slice(5)))
-      }
-      if (event?.data?.startsWith("action=")) {
-        const action = event.data.slice(7)
-        switch (action) {
-          case "setLoginModalShow":
-            // eslint-disable-next-line react/prop-types
-            this.props.setLoginModalShow({ show: true });
-            break;
+    try {
+      if (event?.origin === window?.location?.origin && event?.data &&  (typeof event?.data === 'string')) {
+        if (event?.data?.startsWith("user=")) {
+          // eslint-disable-next-line react/prop-types
+          this.props.refreshCurrentUser(JSON.parse(event.data.slice(5)))
+        }
+        if (event?.data?.startsWith("action=")) {
+          const action = event.data.slice(7)
+          switch (action) {
+            case "setLoginModalShow":
+              // eslint-disable-next-line react/prop-types
+              this.props.setLoginModalShow({ show: true });
+              break;
+          }
         }
       }
+    } catch (e) {
     }
   }
 

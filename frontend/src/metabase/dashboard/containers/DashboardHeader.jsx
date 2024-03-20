@@ -35,6 +35,7 @@ import MetabaseUtils from "metabase/lib/utils";
 import TaggingModal from "metabase/components/TaggingModal";
 import HomePriorityModal from "metabase/components/HomePriorityModal";
 import myData from "metabase/containers/research/utils/data";
+import WatermarkModal from "metabase/components/WatermarkModal";
 
 const mapStateToProps = (state, props) => {
   const isDataApp = false;
@@ -72,6 +73,7 @@ class DashboardHeader extends Component {
     showMediaModal: false,
     showSeoTaggingModal: false,
     showHomePriorityModal: false,
+    showWatermarkModel: false,
   };
 
   static propTypes = {
@@ -490,6 +492,16 @@ class DashboardHeader extends Component {
           link: `${location.pathname}/move?id=${dashboard.id}`,
           event: "Dashboard;Move",
         });
+        extraButtons.push({
+          title: "Watermark",
+          icon: "",
+          event: "Dashboard;watermark",
+          action: e => {
+            this.setState({
+              showWatermarkModel: true,
+            });
+          },
+        });
       }
       if (canEdit) {
         extraButtons.push({
@@ -774,7 +786,7 @@ class DashboardHeader extends Component {
       setSidebar,
     } = this.props;
 
-    const { showSeoTaggingModal, showHomePriorityModal } = this.state;
+    const { showSeoTaggingModal, showHomePriorityModal, showWatermarkModel } = this.state;
     const dashboardId = MetabaseUtils.isUUID(dashboard.id)
       ? dashboard.entityId
       : dashboard.id;
@@ -836,6 +848,12 @@ class DashboardHeader extends Component {
             onClose={() => this.setState({ showHomePriorityModal: false })}
             id={dashboardId}
             type="dashboard"
+          />
+        )}
+        {showWatermarkModel && (
+          <WatermarkModal
+            onClose={() => this.setState({ showWatermarkModel: false })}
+            id={dashboardId}
           />
         )}
       </>
