@@ -26,8 +26,8 @@ const Index = ({ router, type }) => {
       label: "Research",
       value: "research",
       subMenus: [
-        { label: "Daily Reports", value: "Daily Reports" },
-        { label: "Weekly Reports", value: "Weekly Reports" },
+        // { label: "Daily Reports", value: "Daily Reports" },
+        // { label: "Weekly Reports", value: "Weekly Reports" },
         { label: "Monthly Reports", value: "Monthly Reports" },
         { label: "Quarterly Reports", value: "Quarterly Reports" },
         { label: "Yearly Reports", value: "Yearly Reports" },
