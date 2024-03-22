@@ -34,6 +34,7 @@ const AboutPartnerV2 = () => {
     "home-v2/img_partner_19.png",
     "home-v2/img_partner_20.png",
     "home-v2/img_partner_28.png",
+    "home-v2/img_partner_36.png",
     "home-v2/img_partner_29.png",
     "home-v2/img_partner_30.png",
     "home-v2/img_partner_31.png",
@@ -42,7 +43,7 @@ const AboutPartnerV2 = () => {
   ];
 
   const topData = [...data.slice(0, 16), ...data.slice(0, 16), ]
-  const bottomData = [...data.slice(16, 33), ...data.slice(16, 33), ]
+  const bottomData = [...data.slice(16, data.length), ...data.slice(16, data.length), ]
 
   return (
     <div className="About__partnerV2">
