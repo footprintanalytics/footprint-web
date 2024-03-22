@@ -399,6 +399,15 @@ export function getChainDataList({ includeAll = true }) {
           protocolName: "The Sandbox",
         }
       },
+      {
+        value: "arbitrum nova",
+        label: "Arbitrum Nova",
+        icon: getOssUrl("fp-chains/arbitrum_nova.png?image_process=resize,w_36/crop,h_36/format,webp"),
+        defaultProject: {
+          protocolSlug: "the-sandbox",
+          protocolName: "The Sandbox",
+        }
+      },
       /*{
         value: "wax",
         label: "Wax",
