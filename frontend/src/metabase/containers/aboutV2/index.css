@@ -1669,7 +1669,7 @@
 .About__banner {
   max-width: 1440px;
   height: 280px;
-  margin: -70px auto 0;
+  margin: 0 auto 0;
   background: linear-gradient(135deg, #212A43 0%, #182034 52.28%);
   border-radius: 24px;
   border: 1px solid #ffffff11;
