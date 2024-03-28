@@ -237,6 +237,9 @@ class DashCard extends Component {
         card.query_average_duration < DATASET_USUALLY_FAST_THRESHOLD,
     }));
 
+    const tableLastUpdateInfo = get(series, "[0].tableLastUpdateInfo")
+    const chartUpdatedAt = get(series, "[0].updated_at") || get(series, "[0].started_at")
+
     const loading =
       !(series.length > 0 && _.every(series, s => s.data)) &&
       !isVirtualDashCard(dashcard) &&
@@ -325,7 +328,6 @@ class DashCard extends Component {
     const showEdit = isOwner && !!dashcard.card.id && !isABPath();
     const isPublic = window.location.pathname.startsWith("/public")
       || isFgaPath()
-      || isABPath()
       || window.location.pathname.startsWith("/data-api/statistics")
       || window.location.pathname.startsWith("/studio")
     ;
@@ -346,11 +348,11 @@ class DashCard extends Component {
 
     const singleDisplay = isTextDisplay || isImageDisplay || isVideoDisplay || isEmbedDisplay || isMultiEmbedDisplay || isTableauDisplay;
 
-    const hideDuplicate = singleDisplay || isPublic;
+    const hideDuplicate = singleDisplay || isPublic || isABPath();
 
     const hideWatermark = clearWatermark || singleDisplay;
 
-    const showPreview = !isPublic && !showEdit && !singleDisplay;
+    const showPreview = !isABPath() && !isPublic && !showEdit && !singleDisplay;
 
     const showGetDataViaSqlApi = showEdit || showPreview || isIframeShow;
     const showDownload = showEdit || showPreview || isIframeShow;
@@ -424,6 +426,8 @@ class DashCard extends Component {
               setLoading={(loading) => {
                 this.setState({ loading })
               }}
+              chartUpdatedAt={chartUpdatedAt}
+              tableLastUpdateInfo={tableLastUpdateInfo}
               user={user}
             />
           )}
