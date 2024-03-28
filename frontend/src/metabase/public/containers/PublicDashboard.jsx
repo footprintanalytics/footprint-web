@@ -672,8 +672,7 @@ class PublicDashboard extends Component {
     };
 
     const backgroundColor = bg_color === "black" ? "black": "";
-
-    const isResearchPage = window.location.pathname.startsWith("/research");
+    const showAPITip = this.props.showAPITip;
 
     return (
       <EmbedFrame
@@ -720,8 +719,8 @@ class PublicDashboard extends Component {
                 allLoad={allLoadOuter || !!all_load}
               />
             )}
-            {isResearchPage && (
-              <div className={"flex justify-end pr2"}>
+            {showAPITip && (
+              <div className={"flex justify-end pr2 pb3 pt2"}>
                 <div className="text-white" style={{fontSize: 18}}>Get this data with {" "}
                   <Link to={"https://docs.footprint.network"} className={"text-underline text-underline-hover"} target={"_blank"} style={{fontSize: 20, color: "#6C70FF"}}>
                     Footprint Analytics API
