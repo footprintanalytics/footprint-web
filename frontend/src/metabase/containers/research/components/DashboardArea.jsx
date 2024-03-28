@@ -30,6 +30,7 @@ const DashboardArea = props => {
           isDataApiStatistics={isDataApiStatistics}
           ignoreCache={ignoreCache}
           showRefreshButton={showRefreshButton}
+          showAPITip
         />
       )}
       {!uuid && <NoDashboardData />}
