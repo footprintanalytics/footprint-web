@@ -1,9 +1,17 @@
 /* eslint-disable react/prop-types */
+/* eslint-disable import/order */
 import React from "react";
 import cx from "classnames";
 import { connect } from "react-redux";
 import { fetchCardData } from "metabase/dashboard/actions";
 import "./QueryStatusButton.css";
+import Icon from "metabase/components/Icon";
+import { isABPath } from "metabase/ab/utils/utils";
+import { LoadingOutlined } from "@ant-design/icons";
+import { Popover, Spin } from "antd";
+import dayjs from "dayjs";
+const utc = require('dayjs/plugin/utc'); // 引入 UTC 插件
+dayjs.extend(utc);
 
 const QueryStatusButton = ({
    refreshCardData,
@@ -12,6 +20,8 @@ const QueryStatusButton = ({
    loading,
    setLoading,
    user,
+   chartUpdatedAt,
+   tableLastUpdateInfo,
 }) => {
   const prevLoading = React.useRef(loading);
   const updated_at = data?.updated_at || data?.started_at;
@@ -20,6 +30,8 @@ const QueryStatusButton = ({
   // eslint-disable-next-line react-hooks/exhaustive-deps
   const tableUpdated = new Date(dashcard.card.tableLastUpdated);
   const isInner = user?.groups?.includes("Inner");
+  // 时间戳 chartUpdatedAt utc+8的值，需要转成utc，并且格式为"YYYY-MM-DD HH:mm"
+  const dateStr = chartUpdatedAt ? dayjs.utc(new Date(chartUpdatedAt)).format("YYYY-MM-DD HH:mm") : "";
 
   /*React.useEffect(() => {
     const timeDiff = getTimeDiff(updated_at);
@@ -86,9 +98,44 @@ const QueryStatusButton = ({
   }
 
   return (
-    <div className={cx("query-refresh__root flex align-center", {"query-refresh__normal": !loading, "query-refresh__warning": loading})}>
-      {!loading && (<div>{statusText}</div>)}
-      {loading && (<div>Running...</div>)}
+    <div className={cx("query-refresh__root flex align-center")}>
+      {/*{!loading && (<div style={{ fontSize: 12 }}>{statusText}</div>)}*/}
+      {/*{
+        isABPath() ? (
+          !loading && !statusText && (
+            <Popover
+              content={(
+                <div className="flex flex-column">
+                  <div className="flex flex-column">
+                    <div className="text-bold flex align-center"><Icon className="mr1" name="table2" size={14}/>Table (Last data pull time):</div>
+                    {
+                      tableLastUpdateInfo?.tables?.map((table, index) => {
+                        return (
+                          <div key={index}>
+                            {table.table_name}: {table.latest_updated_time ? dayjs.utc(new Date(table.latest_updated_time)).format("YYYY-MM-DD HH:mm UTC") : "N/A"}
+                          </div>
+                        )
+                      })
+                    }
+                  </div>
+                  <br/>
+                  <div className="flex flex-column">
+                    <div className="text-bold flex align-center"><Icon className="mr1" name="search_chart" size={14}/>Chart (Last data update time):</div>
+                    <div>{`${dateStr} UTC`}</div>
+                  </div>
+                </div>
+              )}
+              title="Chart Info"
+            >
+              <Icon name="time_status_right" size={12} color="green"/>
+            </Popover>
+          )
+        ) : (
+          !loading && statusText && <Icon name="time_status_right" size={12} color="green"/>
+        )
+      }*/}
+      {!loading && statusText && <Icon name="time_status_right" size={12} color="green"/>}
+      {loading && (<Spin indicator={<LoadingOutlined style={{ fontSize: 12, background: "transparent", color: "green" }} spin />}/>)}
       {/*{!!data && !loading && status === "normal" && (<Icon className="ml1" name={"query_finish"} color="#52c41a" size={10} />)}*/}
     </div>
   );
