@@ -43,7 +43,7 @@ const LegendCaption = ({
       </LegendLabel>
       {description && (
         <Tooltip tooltip={description} maxWidth="22em">
-          <LegendDescriptionIcon className="html2canvas-filter"/>
+          <LegendDescriptionIcon className="html2canvas-filter" size={12}/>
         </Tooltip>
       )}
       {actionButtons && <LegendActions>{actionButtons}</LegendActions>}
