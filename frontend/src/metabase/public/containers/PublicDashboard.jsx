@@ -50,6 +50,7 @@ import { getSqlAndJumpToDoc, replaceTemplateCardUrl } from "metabase/guest/utils
 import { trackStructEvent } from "metabase/lib/analytics";
 import { isABPath, isBusinessTypePath } from "metabase/ab/utils/utils";
 import { refreshCurrentUser } from "metabase/redux/user";
+import Link from "metabase/core/components/Link";
 
 const mapStateToProps = (state, props) => {
   const user = getUser(state);
@@ -672,6 +673,8 @@ class PublicDashboard extends Component {
 
     const backgroundColor = bg_color === "black" ? "black": "";
 
+    const isResearchPage = window.location.pathname.startsWith("/research");
+
     return (
       <EmbedFrame
         name={dashboard && dashboard.name}
@@ -716,6 +719,15 @@ class PublicDashboard extends Component {
                 getDataViaSqlApiAction={this.getDataViaSqlApiAction}
                 allLoad={allLoadOuter || !!all_load}
               />
+            )}
+            {isResearchPage && (
+              <div className={"flex justify-end pr2"}>
+                <div className="text-white" style={{fontSize: 18}}>Get this data with {" "}
+                  <Link to={"https://docs.footprint.network"} className={"text-underline text-underline-hover"} target={"_blank"} style={{fontSize: 20, color: "#6C70FF"}}>
+                    Footprint Analytics API
+                  </Link>
+                </div>
+              </div>
             )}
           </LoadingAndErrorWrapper>
           {showRefreshButton && !!dashboard && this.renderRefreshButton()}
