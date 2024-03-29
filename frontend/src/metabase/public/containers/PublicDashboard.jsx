@@ -360,7 +360,7 @@ class PublicDashboard extends Component {
 
       const keyObject = this.getFgaMultiKeyObject();
       if (keyObject) {
-        this.props.setParameterValue(keyObject.id, this.props.project.nftCollectionAddress?.filter(filterChainFunction)[0]?.address)
+        this.props.setParameterValue(keyObject.id, this.getDefaultNftCollectionAddress())
       }
       const keyObjectToken = this.getFgaMultiKeyObjectToken();
       if (keyObjectToken) {
@@ -492,6 +492,19 @@ class PublicDashboard extends Component {
       });
     }
   }
+  getDefaultNftCollectionAddress() {
+    const {
+      project,
+      filterChainFunction,
+    } = this.props
+    const array = project?.nftCollectionAddress?.filter(filterChainFunction)
+    let defaultNftCollectionAddress = array?.[0]?.address
+    const storageAddress = window.localStorage.getItem(`${project?.projectName}-nftCollectionAddress`)
+    if (storageAddress && array?.map(i => i.address)?.includes(storageAddress)) {
+      defaultNftCollectionAddress = storageAddress
+    }
+    return defaultNftCollectionAddress
+  }
 
   handleFgaMultiAddressUiSelectHeader = (type, keyObject) => {
     let {
@@ -500,28 +513,39 @@ class PublicDashboard extends Component {
       projectList,
     } = this.props;
     let data = [];
+    let optionKey = "";
+    let width = 420;
+    let extraInfoKeys = [];
+    let changeCallback = null;
+    let defaultValue = null;
     if (type === "token") {
-      data = (project?.tokenAddress?.filter(filterChainFunction))
-        ?.map(item => item?.address)
+      data = project?.tokenAddress?.filter(filterChainFunction)
+      optionKey = "address";
     } else if (type === "asset") {
-      data = ([...(project?.tokenAddress?.filter(filterChainFunction) || []), ...(project?.nftCollectionAddress?.filter(filterChainFunction) || [])])
-        ?.map(item => item?.address);
+      data = [...(project?.tokenAddress?.filter(filterChainFunction) || []), ...(project?.nftCollectionAddress?.filter(filterChainFunction) || [])];
+      optionKey = "address";
     } else if (type === "project") {
       data = this.props.projectList.length > 1 ? projectList
-        .filter(i => i.protocolSlug !== "Demo Project")
-        .map(i => i.projectName) : ["the-sandbox"];
+        .filter(i => i.protocolSlug !== "Demo Project") : [{projectName: "the-sandbox"}];
+      optionKey = "projectName"
     } else {
-      data = (project?.nftCollectionAddress?.filter(filterChainFunction))
-        ?.map(item => item?.address);
+      data = project?.nftCollectionAddress?.filter(filterChainFunction);
+      extraInfoKeys = ["chain"];
+      optionKey = "address";
+      width = 520;
+      changeCallback = (e) => {
+        window.localStorage.setItem(`${this.props.project?.projectName}-nftCollectionAddress`, e)
+      }
+      defaultValue = this.getDefaultNftCollectionAddress();
     }
     return (<div className="flex flex-column p2" style={{ background: "#0F0F14" }}>
       <span className="text-white" style={{ marginBottom: 4 }}>{startCase(keyObject.slug)}</span>
       <span><Tooltip title="sss"></Tooltip></span>
       <Select
         mode={type === "project" ? "multiple": "" }
-        defaultValue={data}
+        defaultValue={defaultValue || data?.[0]?.[optionKey]}
         style={{
-          width: 420,
+          width: width,
         }}
         maxTagCount={"responsive"}
         onChange={value => {
@@ -530,14 +554,17 @@ class PublicDashboard extends Component {
           } else {
             this.props.setParameterValue(keyObject.id, value)
           }
+          changeCallback?.(value)
         }}
-        options={union(data)
-          ?.map(item => {
+        options={_.uniq(data?.map(item => {
+          const extraInfo = extraInfoKeys.map(key => {
+            return `${item[key]} |`
+          }).join(" ")
           return {
-            value: item,
-            label: item,
+            value: item[optionKey],
+            label: `${extraInfo} ${item[optionKey]}`,
           }
-        })}
+        }), "value")}
       />
     </div>)
   }
