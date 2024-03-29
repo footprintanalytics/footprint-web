@@ -22,7 +22,6 @@ const DashboardArea = props => {
           hideTitle={true}
           disableUpdateTitle={true}
           hideFooter
-          showAPITip
         />
       )}
       {!uuid && <NoDashboardData />}
