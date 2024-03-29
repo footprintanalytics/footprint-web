@@ -333,7 +333,7 @@
 }
 
 .ScalarValue {
-  font-weight: 900;
+  font-weight: 600;
   white-space: pre;
 }
 
@@ -343,7 +343,7 @@
 
 .Dashboard .SmartWrapper {
   position: relative;
-  font-size: inherit;
+  font-size: 0.9em;
 }
 
 .AutomaticDashboard.AutomaticDashboard--withSidebar #SmartScalar-PreviousValue {

@@ -42,6 +42,7 @@ export const PreviousValueVariation = styled.h4`
   align-items: center;
   color: ${color("text-light")};
   display: flex;
+  font-weight: 600;
 
   ${breakpointMaxSmall} {
     text-transform: capitalize;

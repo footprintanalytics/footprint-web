@@ -19,6 +19,7 @@ import {
 import { findSize, getMaxFontSize } from "./utils";
 import { LegendDescriptionIcon } from "metabase/visualizations/components/legend/LegendCaption.styled";
 import { Tag } from "antd";
+import { isABPath } from "metabase/ab/utils/utils";
 
 const HORIZONTAL_PADDING = 32;
 
@@ -33,19 +34,21 @@ const ScalarValue = ({
   totalNumGridCols,
   fontFamily,
 }) => {
+  const isFga = isABPath()
   const fontSize = useMemo(
     () =>
       findSize({
         text: value,
         targetWidth: width - HORIZONTAL_PADDING * 2,
         fontFamily: fontFamily ?? "Lato",
-        fontWeight: 900,
+        fontWeight: 600,
         unit: "rem",
         step: 0.4,
         min: 1,
-        max: gridSize ? getMaxFontSize(gridSize.width, totalNumGridCols) / 1.7 : 4,
+        max:
+          isFga ? 1.6 : (gridSize ? getMaxFontSize(gridSize.width, totalNumGridCols) / 2 : 3),
       }),
-    [fontFamily, gridSize, totalNumGridCols, value, width],
+    [isFga, fontFamily, gridSize, totalNumGridCols, value, width],
   );
 
   return (
