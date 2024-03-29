@@ -100,25 +100,25 @@ const QueryStatusButton = ({
   return (
     <div className={cx("query-refresh__root flex align-center")}>
       {/*{!loading && (<div style={{ fontSize: 12 }}>{statusText}</div>)}*/}
-      {/*{
+      {
         isABPath() ? (
-          !loading && !statusText && (
+          !loading && (
             <Popover
               content={(
                 <div className="flex flex-column">
-                  <div className="flex flex-column">
+                  {/*<div className="flex flex-column">
                     <div className="text-bold flex align-center"><Icon className="mr1" name="table2" size={14}/>Table (Last data pull time):</div>
                     {
                       tableLastUpdateInfo?.tables?.map((table, index) => {
                         return (
                           <div key={index}>
-                            {table.table_name}: {table.latest_updated_time ? dayjs.utc(new Date(table.latest_updated_time)).format("YYYY-MM-DD HH:mm UTC") : "N/A"}
+                            {table.tableName}: {table.tableUpdated ? dayjs.utc(new Date(table.tableUpdated)).format("YYYY-MM-DD HH:mm UTC") : "N/A"}
                           </div>
                         )
                       })
                     }
                   </div>
-                  <br/>
+                  <br/>*/}
                   <div className="flex flex-column">
                     <div className="text-bold flex align-center"><Icon className="mr1" name="search_chart" size={14}/>Chart (Last data update time):</div>
                     <div>{`${dateStr} UTC`}</div>
@@ -133,8 +133,8 @@ const QueryStatusButton = ({
         ) : (
           !loading && statusText && <Icon name="time_status_right" size={12} color="green"/>
         )
-      }*/}
-      {!loading && statusText && <Icon name="time_status_right" size={12} color="green"/>}
+      }
+      {/*{!loading && statusText && <Icon name="time_status_right" size={12} color="green"/>}*/}
       {loading && (<Spin indicator={<LoadingOutlined style={{ fontSize: 12, background: "transparent", color: "green" }} spin />}/>)}
       {/*{!!data && !loading && status === "normal" && (<Icon className="ml1" name={"query_finish"} color="#52c41a" size={10} />)}*/}
     </div>
