@@ -237,9 +237,9 @@ class TagsPanel extends React.Component {
                       }}
                       key={this.getKey(item)}
                       closable={
-                        user &&
+                        (user &&
                         isEditPermission &&
-                        entityNsName === this.state.currentEntityNsName
+                        entityNsName === this.state.currentEntityNsName) || (user.is_superuser && entityNsName === "system")
                       }
                       onClose={() => this.tagRemove(item)}
                     >
