@@ -239,7 +239,7 @@ class TagsPanel extends React.Component {
                       closable={
                         (user &&
                         isEditPermission &&
-                        entityNsName === this.state.currentEntityNsName) || (user.is_superuser && entityNsName === "system")
+                        entityNsName === this.state.currentEntityNsName) || ((user?.is_superuser || user?.isMarket) && entityNsName === "system")
                       }
                       onClose={() => this.tagRemove(item)}
                     >
