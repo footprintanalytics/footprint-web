@@ -293,7 +293,7 @@ class PublicQuestion extends Component {
             {showAPITip && (
               <div className={"flex justify-end pr2 pb3 pt2"}>
                 <div className="text-white" style={{fontSize: 18}}>Get this data with {" "}
-                  <Link to={"https://docs.footprint.network"} className={"text-underline text-underline-hover"} target={"_blank"} style={{fontSize: 20, color: "#6C70FF"}}>
+                  <Link to={"https://docs.footprint.network/reference/introduction"} className={"text-underline text-underline-hover"} target={"_blank"} style={{fontSize: 20, color: "#6C70FF"}}>
                     Footprint Analytics API
                   </Link>
                 </div>
