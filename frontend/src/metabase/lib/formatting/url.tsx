@@ -91,7 +91,11 @@ function getLinkUrl(
   const hasCustomizedUrl = link_url && clicked;
 
   if (isExplicitLink && hasCustomizedUrl) {
-    return renderLinkURLForClick(link_url, getDataFromClicked(clicked) as any);
+    let finalLinkUrl = link_url
+    if (finalLinkUrl?.includes("project/{{project}}")) {
+      finalLinkUrl = finalLinkUrl.replace("project/{{project}}", `project/${encodeURIComponent(localStorage.getItem("LatestGAProject") || "") || ""}`);
+    }
+    return renderLinkURLForClick(finalLinkUrl, getDataFromClicked(clicked) as any);
   }
 
   const protocol = getUrlProtocol(value);
