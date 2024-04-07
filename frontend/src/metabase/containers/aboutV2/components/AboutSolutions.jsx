@@ -39,7 +39,7 @@ const AboutDepth = () => {
   return (
     <div className="About__solutions">
       <div className="About__depth-circle-bg" style={{ left: "8%" }}/>
-      <div className="About__title">Data Solutions for Every Specific Need</div>
+      <h2 className="About__title">Data Solutions for Every Specific Need</h2>
       <div className="About__solutions-inner">
         {
           array.map(item => {

@@ -6,9 +6,9 @@ import AboutImage from "metabase/containers/aboutV2/components/AboutImage";
 const AboutDataModel = () => {
   return (
     <div className="About__data-model">
-      <div className="About__title">
+      <h2 className="About__title">
         Data Model - Versatile and Robust
-      </div>
+      </h2>
       <h4>Standardize Any Web2 & Web3 Data Into Abstractions</h4>
       <AboutImage
         className="About__data-model-image"

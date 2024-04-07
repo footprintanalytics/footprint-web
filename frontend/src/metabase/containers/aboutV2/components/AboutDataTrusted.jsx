@@ -24,9 +24,9 @@ const AboutDataTrusted = () => {
   ]
   return (
     <div className="About__data-trusted">
-      <div className="About__title">
+      <h2 className="About__title">
         Trusted by Industry leaders
-      </div>
+      </h2>
       <div className="About__data-trusted-inner">
         <Carousel dotPosition="bottom" autoplay>
           {data.map(item =>

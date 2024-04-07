@@ -30,9 +30,9 @@ const AboutDataCoverage = () => {
   ];
   return (
     <div className="About__data-coverage">
-      <div className="About__title">
+      <h2 className="About__title">
         Data Coverage
-      </div>
+      </h2>
       <div className="About__data-coverage-chain">
         {`${CHAIN_COUNT}`} Chains
       </div>
