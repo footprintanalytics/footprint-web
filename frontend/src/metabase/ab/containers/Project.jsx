@@ -432,7 +432,7 @@ const Project = props => {
       );
     }
 
-    if (
+    /*if (
       ["Wallet Profile", "WalletProfile", "wallet_profile"].includes(
         current_tab,
       )
@@ -444,7 +444,7 @@ const Project = props => {
           project={getProjectObject()}
         />
       );
-    }
+    }*/
     if (
       ["My Analysis", "MyAnalysis", "my_analysis", "my_analytics"].includes(
         current_tab,
