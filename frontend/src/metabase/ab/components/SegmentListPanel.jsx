@@ -19,7 +19,7 @@ const SegmentListPanel = props => {
   // sourceType: projectUser, potentialUser
   const { project, router, user, sourceType, businessType } = props;
   const protocolSlug = project?.protocolSlug === "Demo Project" ? "" : project?.protocolSlug;
-  const { isLoading, data, refetch } = useQuery(
+  /*const { isLoading, data, refetch } = useQuery(
     ["getCohort", project],
     async () => {
       return GetFgaCohort({ protocolSlug });
@@ -27,7 +27,10 @@ const SegmentListPanel = props => {
     {
       refetchInterval: 5000,
     },
-  );
+  );*/
+  const data = null;
+  const isLoading = null;
+  const refetch = null;
 
   const dataSource = data?.list
     ?.sort(
@@ -260,7 +263,7 @@ const SegmentListPanel = props => {
         ) : (
           <Table
             rowKey="cohortId"
-            loading={isLoading}
+            loading={!!isLoading}
             dataSource={dataSource}
             columns={columns}
             pagination={false}

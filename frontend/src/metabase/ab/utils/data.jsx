@@ -379,6 +379,7 @@ export const getDashboardMap = (businessType, project, chain) => {
     ["gaming_engagement", "e2695683-3c8c-4462-92db-e32bc6f50050"],
     ["wallet_retention", "9a19edda-1c4c-4aa5-95fc-921304f8f8fd"],
     ["user_retention", "320e0a60-107c-44cb-83e3-7c8301354968"],
+    ["wallet_profile", "fa040fe5-46b3-483b-b257-aa2373559fab"],
 
     ["project_key_metrics", "159d8c0e-f1b9-4449-a6b1-7ee51de47563"],
     ["project_holder_overlap", "994ab322-671c-479a-a835-2e28d16b326e"],
@@ -448,6 +449,7 @@ export const fga_menu_data_v2 = (businessType, project, chain) => {
         ]
       ),
       getItem(getLabel({label: "Exploration", tip: "Dive into the exploration of a Project members using our filter features and create your own user segmentation."}), "exploration", ReactIcons.academyIcon14, [
+        getItem("Wallet Profile", "wallet_profile", null),
         getItem("Members", "members", null),
         getItem(getLabel({label: "Segmentation", tip: "Once logged in, you can easily access and view the segment profile you've created."}), "segment", null),
         getItem(getLabel({label: "Journey Explorer", tip: "Here you can create and view your Project user journey from web2 and web3 events."}), "journey", null),
