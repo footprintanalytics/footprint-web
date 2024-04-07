@@ -50,6 +50,7 @@ import UseCasesContent from "./components/UseCasesContent";
 import { ReactIcons } from "./utils/data";
 import * as Urls from "../../../lib/urls";
 import SimpleMenu from "./SImpleMenu";
+import { FooterData } from "metabase/containers/home/data";
 
 const mapStateToProps = (state, props) => ({
   path: getPath(state, props),
@@ -570,6 +571,16 @@ class FpNavbar extends Component {
       );
     };
 
+    const InternalLinks = () => {
+      return (
+        <div id="internal-links" className="display-none">
+          {FooterData.map(item => {
+            return item?.items?.map(i => <Link key={i.label} to={i.url} />)
+          })}
+        </div>
+      )
+    }
+
     const RightMenuPad = () => {
       const color2 = isDark() ? "white" : color("footprint-color-title");
       return (
@@ -649,6 +660,7 @@ class FpNavbar extends Component {
           <React.Fragment>
             <RightMenuMobile />
             <RightMenuPad />
+            <InternalLinks />
           </React.Fragment>
           {user ? (
             // <Link to={`/studio/@${user.name}`}>

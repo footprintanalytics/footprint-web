@@ -143,7 +143,7 @@ const AboutDemo = () => {
   return (
     <div className="About__demo">
       <div className="About__depth-circle-bg" style={{ top: "200px", background: "rgba(68, 68, 255, 0.40)"}}/>
-      <div className="About__title my4">Flagship Products and Services</div>
+      <h2 className="About__title my4">Flagship Products and Services</h2>
 
       <div className="About__demo-analytics-app About__demo-data-api"
            style={{ backgroundSize: "cover", backgroundImage: `url("${getOssUrl("home-v2/img-demo-1-5.png?1=1")}")` }}>

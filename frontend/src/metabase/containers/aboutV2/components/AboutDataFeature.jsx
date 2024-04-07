@@ -29,9 +29,9 @@ const AboutDataFeature = () => {
   ];
   return (
     <div className="About__data-feature">
-      <div className="About__title">
+      <h2 className="About__title">
         Data Features
-      </div>
+      </h2>
       <ul>
         {data.map(item =>
           (<li key={item.title}>

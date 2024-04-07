@@ -23,12 +23,12 @@ const AboutStart = ({
   };
 
   const CreateImage = () => {
-    return <AboutImage src={getOssUrl("home-v2/img_right_icon.png")}/>;
+    return <AboutImage src={getOssUrl("home-v2/img_right_icon.png")} alt={"Arrow Right"}/>;
   }
   return (
     <div className="About__start">
       <div className="About__start-pea">
-        <img src={getOssUrl("icon_pea.png?1=1")} alt="pea" />
+        <img src={getOssUrl("icon_pea.png?1=1")} alt="Pea AI" />
         <span style={{ color: "#B275FF" }}>Pea.AI</span><div><span>: A new way to tailor your crypto investment AI assistant <br/>Early access waitlist is now open.</span>
         <Link style={{ color: "#B275FF", marginLeft: 4 }} href={"https://www.pea.ai"} target={"_blank"}>Join now {">>"}</Link></div>
       </div>

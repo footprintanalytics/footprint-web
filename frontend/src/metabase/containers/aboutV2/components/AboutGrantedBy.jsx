@@ -16,7 +16,7 @@ const AboutGrantedBy = () => {
 
   return (
     <div className="About__granted-by">
-      <h3 className="About__title">Granted by</h3>
+      <h2 className="About__title">Granted by</h2>
       <ul>
         {data.map(item => {
           return (
