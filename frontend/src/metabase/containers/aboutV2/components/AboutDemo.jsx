@@ -71,17 +71,17 @@ const AboutDemo = () => {
         <div className="flex flex-column align-center">
           <AboutImage
             src={getOssUrl("home-v2/img_demo_studio_1.png?1=1")}
-            alt={"studio1"}
+            alt={"Analytics Tool"}
           />
           <div className="mt2" />
           <AboutImage
             src={getOssUrl("home-v2/img_demo_studio_2.png?1=1")}
-            alt={"studio1"}
+            alt={"Data Connectors"}
           />
           <div className="mt2" />
           <AboutImage
             src={getOssUrl("home-v2/img_demo_studio_3.png?1=1")}
-            alt={"studio1"}
+            alt={"No-coding APP Builder"}
           />
         </div>
       )

@@ -6,26 +6,32 @@ const data = {
     {
       url: "https://iosg.vc",
       logo: "home-v2/img_best_1.png",
+      title: "IOSG Ventures",
     },
     {
       url: "https://matrixpartners.com/",
       logo: "home-v2/img_best_2.png",
+      title: "Matrix Partners",
     },
     {
       url: "https://www.ngc.fund",
       logo: "home-v2/img_best_3.png",
+      title: "NGC Ventures",
     },
     {
       url: "https://www.youbicapital.com",
       logo: "home-v2/img_best_4.png",
+      title: "YouBi Capital",
     },
     {
-      url: "http://www.7xvc.com",
+      url: "https://www.7xvc.com",
       logo: "home-v2/img_best_5.png",
+      title: "7X Ventures",
     },
     {
       url: "https://arkstream.capital/#/Home",
       logo: "home-v2/img_best_6.png",
+      title: "Arkstream Capital",
     },
     /*{
       url: "https://www.redpoint.com",
@@ -34,31 +40,38 @@ const data = {
     {
       url: "https://capitalant.com",
       logo: "home-v2/img_best_8.png",
+      title: "Capital Ant",
     },
     {
       url: "https://twitter.com/HashGlobal",
       logo: "home-v2/img_best_9.png",
+      title: "Hash Global",
     },
     {
       url: "http://www.lancergrp.com",
       logo: "home-v2/img_best_10.png",
+      title: "Lancer Group",
     },
     {
       url: "https://twitter.com/waterdripfund",
       logo: "home-v2/img_best_11.png",
+      title: "Waterdrip Capital",
     },
 
     {
       url: "https://puzzle.ventures",
       logo: "home-v2/img_best_12.png",
+      title: "Puzzle Ventures",
     },
     {
       url: "https://twitter.com/0x_nico0",
       logo: "home-v2/img_best_13.png",
+      title: "Nico",
     },
     {
       url: "https://twitter.com/JarylNgan",
       logo: "home-v2/img_best_14.png",
+      title: "Jaryl Ngan",
     },
     /*{
       url: "https://twitter.com/thejewforu",
