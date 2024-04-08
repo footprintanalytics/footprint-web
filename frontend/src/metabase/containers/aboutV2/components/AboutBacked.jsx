@@ -15,7 +15,7 @@ const AboutBacked = ({ list }) => {
               url={item.url}
               onClick={() => trackStructEvent("About", `Backed ${item.url}`)}
             >
-              <img src={getOssUrl(item.logo)} alt={item.url} />
+              <img src={getOssUrl(item.logo)} alt={item.title || item.url} />
             </WrapLink>
           </li>
         ))}

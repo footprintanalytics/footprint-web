@@ -523,12 +523,12 @@ class FpNavbar extends Component {
           {leftMenuData.map((item, index) => {
             if (item.menu || item.content) {
               return (
-                <div key={index}>
+                <h3 key={index}>
                   {this.renderNavEntityMenu({
                     item,
                     className: `text-brand-hover Nav__menu-item Nav__menu-item-color`,
                   })}
-                </div>
+                </h3>
               );
             }
             return (
@@ -660,7 +660,7 @@ class FpNavbar extends Component {
           <React.Fragment>
             <RightMenuMobile />
             <RightMenuPad />
-            <InternalLinks />
+            {/*<InternalLinks />*/}
           </React.Fragment>
           {user ? (
             // <Link to={`/studio/@${user.name}`}>

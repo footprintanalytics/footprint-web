@@ -53,43 +53,19 @@ const About = props => {
       <Meta description={defaultDesc} keywords={keywords} title={title} />
       <div className="About">
         <AboutStart />
-        <LazyLoadAbout>
-          <AboutBanner />
-        </LazyLoadAbout>
-        <LazyLoadAbout>
-          <AboutSolutions />
-        </LazyLoadAbout>
-        <LazyLoadAbout>
-          <AboutDepth />
-        </LazyLoadAbout>
-        <LazyLoadAbout>
-          <AboutDemo />
-        </LazyLoadAbout>
-        <LazyLoadAbout>
-          <AboutDataCoverage />
-        </LazyLoadAbout>
-        <LazyLoadAbout>
-          <AboutDataFeature />
-        </LazyLoadAbout>
-        <LazyLoadAbout>
-          <AboutDataModel />
-        </LazyLoadAbout>
-        <LazyLoadAbout>
-          <AboutBacked list={data.backedList} />
-        </LazyLoadAbout>
-        <LazyLoadAbout>
-          <AboutDataTrusted />
-        </LazyLoadAbout>
-        <LazyLoadAbout>
-          <AboutPartnerV2 list={data.partnerList} />
-        </LazyLoadAbout>
-        <LazyLoadAbout>
-          <AboutGrantedBy />
-        </LazyLoadAbout>
+        <AboutBanner />
+        <AboutSolutions />
+        <AboutDepth />
+        <AboutDemo />
+        <AboutDataCoverage />
+        <AboutDataFeature />
+        <AboutDataModel />
+        <AboutBacked list={data.backedList} />
+        <AboutDataTrusted />
+        <AboutPartnerV2 list={data.partnerList} />
+        <AboutGrantedBy />
         <div className="About__depth-dividing-line-gray" />
-        <LazyLoadAbout>
-          <HomeFooter />
-        </LazyLoadAbout>
+        <HomeFooter />
 
         {children}
       </div>

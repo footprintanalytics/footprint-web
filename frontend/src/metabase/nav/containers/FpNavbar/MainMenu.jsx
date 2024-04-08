@@ -15,7 +15,7 @@ const MainMenu = props => {
     left: 'calc(50% - 570px)',
   };
   return (
-    <div className="main-menu">
+    <nav className="main-menu">
       <Popover
         content={popoverContent || "Coming soon..."}
         overlayClassName="main-menu__popover"
@@ -33,7 +33,7 @@ const MainMenu = props => {
           <Icon className="ml1" name="search_arrow_up" size={10} />
         </Button>
       </Popover>
-    </div>
+    </nav>
   );
 };
 

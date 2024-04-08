@@ -45,10 +45,10 @@ const AboutDepth = () => {
           array.map(item => {
             return (
               <div className="About__solutions-inner-li" key={item.title} style={{ background: `url('${item.background}')` }}>
-                <h4>
+                <h3>
                   <Icon className="mr2" name={item.icon} size={28} style={{ marginRight: "12px", marginTop: "-4px" }}/>
                   {item.title}
-                </h4>
+                </h3>
                 <div className="flex flex-column" style={{ marginLeft: 40 }}>
                   <span>{item.desc}</span>
                   <ul>
