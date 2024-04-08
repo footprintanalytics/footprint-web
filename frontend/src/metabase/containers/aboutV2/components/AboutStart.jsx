@@ -37,15 +37,15 @@ const AboutStart = ({
         <ul>
           <li>
             <CreateImage />
-            <h2>{CHAIN_COUNT} Chains</h2>
+            <span>{CHAIN_COUNT} Chains</span>
           </li>
           <li>
             <CreateImage />
-            <h2>GameFi, NFT, and DeFi sectors</h2>
+            <span>GameFi, NFT, and DeFi sectors</span>
           </li>
           <li>
             <CreateImage />
-            <h2>Off-Chain & On-Chain Data</h2>
+            <span>Off-Chain & On-Chain Data</span>
           </li>
         </ul>
         <div className="flex" style={{ marginTop: 50 }}>

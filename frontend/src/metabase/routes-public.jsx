@@ -9,7 +9,7 @@ import { IndexRoute } from "react-router";
 
 export const getRoutes = store => (
   <Route
-    title={t`Footprint Analytics | Web3 Data Solution Provider with AI technology. `}
+    title={t`Footprint Analytics | Web3 Data Solution Provider with AI Technology. `}
     onEnter={nextState => {
       trackPageView(nextState.location.pathname, "Enter");
     }}
