@@ -31,7 +31,7 @@ const AboutDemo = () => {
           src={getOssUrl(item.img)}
           alt={item.title}
         />
-        <div className="About__demo-block-title">{item.title}</div>
+        <h4 className="About__demo-block-title">{item.title}</h4>
         <div className="About__demo-block-desc">{item.desc}</div>
         <AboutButton buttonText={item.buttonText} link={item.buttonLink}/>
       </div>

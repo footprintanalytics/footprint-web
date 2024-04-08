@@ -700,7 +700,7 @@
   color: white;
 }
 
-.About__depth h5 {
+.About__depth-h5-text {
   font-size: 16px;
   font-weight: normal;
   color: #A0AEC0;
@@ -740,10 +740,11 @@
   border-bottom: 1px solid #4444ff;
 }
 
-.About__depth-tabs li span {
+.About__depth-tabs li h3 {
   text-align: center;
   font-size: 16px;
   margin-left: 10px;
+  font-weight: normal;
 }
 
 .About__depth-panel {
@@ -796,14 +797,14 @@
   align-items: center;
 }
 
-.About__depth-panel-left h3 {
+.About__depth-panel-left-h3-text {
   color: white;
   font-size: 24px;
   white-space: pre-line;
   line-height: 1.5;
 }
 
-.About__depth-panel-left h4 {
+.About__depth-panel-left-h4-text {
   color: #A0AEC0;
   font-size: 16px;
   white-space: pre-line;
@@ -1697,7 +1698,7 @@
   margin: 5px 0 25px 0
 }
 
-.About__banner h4 {
+.About__banner h5 {
   font-size: 16px;
   font-weight: normal;
   margin-top: 30px;

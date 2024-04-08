@@ -118,7 +118,7 @@ const AboutDepth = () => {
       <div className="About__depth-circle-bg"/>
       <h2>Footprint Datasets</h2>
       <h4>200+ datasets, and counting</h4>
-      <h5>We index and structure a wide range of datasets, making it easy for you to explore data and build next-generation applications whenever required.</h5>
+      <span className="About__depth-h5-text">We index and structure a wide range of datasets, making it easy for you to explore data and build next-generation applications whenever required.</span>
       <AboutButton className="About__depth-button" buttonText="Explore Datasets" link={"/@Footprint/Footprint-Datasets-Data-Dictionary"}/>
       <div className="About__depth-panel">
         <div className="About__depth-tabs">
@@ -132,15 +132,15 @@ const AboutDepth = () => {
                 }}
               >
                 <AboutImage src={getOssUrl(item.icon)} alt={item.label} />
-                <span>{item.label}</span>
+                <h3>{item.label}</h3>
               </li>
             )}
           </ul>
         </div>
         <div className="About__depth-panel-inner">
           <div className="About__depth-panel-left">
-            <h3>{current.title}</h3>
-            <h4>{current.desc}</h4>
+            <span className="About__depth-panel-left-h3-text">{current.title}</span>
+            <span className="About__depth-panel-left-h4-text">{current.desc}</span>
             <div className="About__depth-panel-buttons">
               {current.buttons?.map(
                 (item, inx) =>

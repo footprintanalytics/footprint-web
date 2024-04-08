@@ -6,7 +6,7 @@ const AboutDepth = () => {
     <div className="About__banner">
       <div className="About__banner2">
         <div className="About__banner-inner">
-          <h4>Get it from Footprint Analytics</h4>
+          <h5>Get it from Footprint Analytics</h5>
           <h3>Creating tailored solutions for effective data usage is difficult</h3>
           <span>While blockchain data is accessible, customers still need expertise and infrastructure maintenance to build data pipelines. <br/>
             Footprint Analytics strives to provide a seamless and effective solution that eliminates these hurdles.</span>

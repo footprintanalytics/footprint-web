@@ -39,7 +39,7 @@ const AboutDataFeature = () => {
               src={getOssUrl(item.icon)}
               alt={item.title}
             />
-            <span>{item.title}</span>
+            <h3>{item.title}</h3>
           </li>)
         )}
       </ul>
