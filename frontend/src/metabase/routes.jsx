@@ -86,7 +86,7 @@ const CanAccessSettings = MetabaseIsSetup(
 
 export const getRoutes = store => (
   <Route
-    title={t`Footprint Analytics`}
+    title={t`Footprint Analytics | Web3 Data Solution Provider with AI technology. `}
     component={LazyLoad.App}
     onEnter={nextState => {
       trackPageView(nextState.location.pathname, "Enter");
