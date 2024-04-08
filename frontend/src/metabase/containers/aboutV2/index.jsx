@@ -50,7 +50,7 @@ const About = props => {
   };
   return (
     <>
-      <Meta description={defaultDesc} keywords={keywords} title={title} />
+      <Meta description={defaultDesc} keywords={keywords} title={title} link={"https://www.footprint.network/"}/>
       <div className="About">
         <AboutStart />
         <AboutBanner />

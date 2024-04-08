@@ -11,12 +11,13 @@ const Meta = ({
   imageHeight,
   siteName,
   viewport,
+  link,
 }) => {
   return (
     <Helmet>
       {/* title */}
       {title && <meta property="og:title" content={title} />}
-
+      {link && <link rel="canonical" href={link} />}
       {/* description */}
       {description && <meta name="description" content={description} />}
       {description && <meta property="og:description" content={description} />}
