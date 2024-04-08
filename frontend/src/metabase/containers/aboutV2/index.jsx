@@ -57,16 +57,29 @@ const About = props => {
         <AboutSolutions />
         <AboutDepth />
         <AboutDemo />
-        <AboutDataCoverage />
-        <AboutDataFeature />
-        <AboutDataModel />
-        <AboutBacked list={data.backedList} />
-        <AboutDataTrusted />
-        <AboutPartnerV2 list={data.partnerList} />
-        <AboutGrantedBy />
+        <LazyLoadAbout>
+          <AboutDataCoverage />
+        </LazyLoadAbout>
+        <LazyLoadAbout>
+          <AboutDataFeature />
+        </LazyLoadAbout>
+        <LazyLoadAbout>
+          <AboutDataModel />
+        </LazyLoadAbout>
+        <LazyLoadAbout>
+          <AboutBacked list={data.backedList} />
+        </LazyLoadAbout>
+        <LazyLoadAbout>
+          <AboutDataTrusted />
+        </LazyLoadAbout>
+        <LazyLoadAbout>
+          <AboutPartnerV2 list={data.partnerList} />
+        </LazyLoadAbout>
+        <LazyLoadAbout>
+          <AboutGrantedBy />
+        </LazyLoadAbout>
         <div className="About__depth-dividing-line-gray" />
         <HomeFooter />
-
         {children}
       </div>
     </>
