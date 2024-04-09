@@ -454,7 +454,7 @@
   background-position: center;
 }
 
-.About__data-coverage li h3 {
+.About__data-coverage li h4 {
   font-size: 40px;
   font-weight: bold;
   color: white;
@@ -1822,7 +1822,7 @@
     margin: 10px;
   }
 
-  .About__data-coverage li h3 {
+  .About__data-coverage li h4 {
     font-size: 24px;
   }
 
