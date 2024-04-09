@@ -44,7 +44,7 @@ const AboutDataCoverage = () => {
       <ul>
         {data.map(item =>
           <li key={item.label}>
-            <h3>{item.value.toLocaleString()}</h3>
+            <h4>{item.value.toLocaleString()}</h4>
             <span>{item.label}</span>
           </li>
         )}
