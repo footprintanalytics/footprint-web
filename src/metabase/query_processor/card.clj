@@ -229,14 +229,14 @@
           query0 (:query queryAsyncList)
           query (replace-escape-chars query0) ;handle //" to ///"
           newQuery (read-string query)
-          newQueryFix (assoc newQuery
-                             :middleware (merge {:refresh-cache true :query-hash (:query_hash queryAsyncList)} (:middleware newQuery)))
+;          newQueryFix (assoc newQuery
+;                             :middleware (merge {:refresh-cache true :query-hash (:query_hash queryAsyncList)} (:middleware newQuery)))
           ]
      (log/info "run-qp-userland-query-1" query0)
      (log/info "run-qp-userland-query0" query)
-     (log/info "run-qp-userland-query1" (get-in newQuery [:native :query]))
-     (log/info "run-qp-userland-query2" newQueryFix)
-     (qp/process-userland-query newQueryFix (context.default/default-context))
+;     (log/info "run-qp-userland-query1" (get-in newQuery [:native :query]))
+;     (log/info "run-qp-userland-query2" newQueryFix)
+;     (qp/process-userland-query newQueryFix (context.default/default-context))
      {:dashboardId dashboardId, :cardId cardId}
      )
    )

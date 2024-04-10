@@ -238,13 +238,15 @@
         sql-hash (qp.util/string-hash ((query :native) :query))
         fix-query (if (= :query(:type query)) (dissoc query :native) query)
         fix-query (assoc fix-query :info (dissoc (:info fix-query) :query-hash))
+        fix-query (assoc-in query [:info :executed-by] 2)
         reducef' (fn [rff context metadata rows]
                    (impl/do-with-serialization
                     (fn [in-fn result-fn]
                       (binding [*in-fn*     in-fn
                                 *result-fn* result-fn]
                         (reducef rff context (merge {:aysnc-refresh-cache? true, :erorCallback erorCallback} metadata) rows)))))]
-    (log/info "sxxxxxxxx" ((query :native) :query))
+    (log/info "queryqueryquery" query)
+    (log/info "sxxxxxxxx" fix-query)
     (i/save-cache-origin-request! *backend* query-hash fix-query dashboard-id card-id sql-hash)
     (if (= result ::miss)
       (let [start-time-ms (System/currentTimeMillis)]
@@ -270,6 +272,21 @@
   (and (public-settings/enable-query-caching)
        cache-ttl))
 
+(defn- record-origin-request [{:keys [cache-ttl middleware info], :as query}]
+  (let [card-id (info :card-id)
+        dashboard-id (info :dashboard-id)
+        query-hash (qp.util/query-hash query)
+        sql-hash (qp.util/string-hash ((query :native) :query))
+        fix-query (if (= :query(:type query)) (dissoc query :native) query)
+        fix-query (assoc fix-query :info (dissoc (:info fix-query) :query-hash))
+        fix-query (assoc-in fix-query [:info :executed-by] 1)]
+    (if (or card-id dashboard-id)
+      (i/save-cache-origin-request! *backend* query-hash fix-query dashboard-id card-id sql-hash)
+      )
+
+    )
+  )
+
 (defn maybe-return-cached-results
   "Middleware for caching results of a query if applicable.
   In order for a query to be eligible for caching:
@@ -284,6 +301,7 @@
      *  The result *rows* of the query must be less than `query-caching-max-kb` when serialized (before compression)."
   [qp]
   (fn maybe-return-cached-results* [{:keys [cache-ttl middleware info], :as query} rff context]
+;    (record-origin-request query)
     (if (:get-the-cache-info? middleware)
       (qp.context/reducef rff context {:query_hash_base64 (.encodeToString (Base64/getEncoder) (qp.util/query-hash query))} [])
       (let [cacheable? (is-cacheable? query)]

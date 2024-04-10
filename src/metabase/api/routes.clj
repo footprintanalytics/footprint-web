@@ -88,7 +88,7 @@
   (context "/metric"               [] (+auth api.metric/routes))
   (context "/model-action"         [] (+auth api.model-action/routes))
   (context "/native-query-snippet" [] (+auth api.native-query-snippet/routes))
-  (context "/notify"               [] (+apikey api.notify/routes))
+  (context "/notify"               [] api.notify/routes)
   (context "/permissions"          [] (+auth api.permissions/routes))
   (context "/persist"              [] (+auth api.persist/routes))
   (context "/preview_embed"        [] (+auth api.preview-embed/routes))
