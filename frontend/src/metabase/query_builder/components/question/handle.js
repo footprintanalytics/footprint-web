@@ -408,6 +408,15 @@ export function getChainDataList({ includeAll = true }) {
           protocolName: "The Sandbox",
         }
       },
+      {
+        value: "core_",
+        label: "Core",
+        icon: getOssUrl("fp-chains/core-chain.png?image_process=resize,w_36/crop,h_36/format,webp"),
+        defaultProject: {
+          protocolSlug: "the-sandbox",
+          protocolName: "The Sandbox",
+        }
+      },
       /*{
         value: "wax",
         label: "Wax",
