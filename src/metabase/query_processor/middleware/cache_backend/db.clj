@@ -163,7 +163,7 @@
 (defn getQueryAsyncList []
   (log/info "getQueryAsyncList  " )
   (db/select QueryCacheOrigin
-             {:limit 1}))
+             {:limit 2}))
 
 (defmethod i/cache-backend :db
   [_]

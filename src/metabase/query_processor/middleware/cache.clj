@@ -238,7 +238,7 @@
         sql-hash (qp.util/string-hash ((query :native) :query))
         fix-query (if (= :query(:type query)) (dissoc query :native) query)
         fix-query (assoc fix-query :info (dissoc (:info fix-query) :query-hash))
-        fix-query (assoc-in query [:info :executed-by] 2)
+        fix-query (assoc fix-query :info (assoc (:info fix-query) :executed-by 10))
         reducef' (fn [rff context metadata rows]
                    (impl/do-with-serialization
                     (fn [in-fn result-fn]
