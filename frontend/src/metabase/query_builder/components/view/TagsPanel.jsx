@@ -174,6 +174,7 @@ class TagsPanel extends React.Component {
       type,
       showSkeleton,
       isNightMode,
+      seoKeywords,
     } = this.props;
 
     let keywords;
@@ -193,7 +194,7 @@ class TagsPanel extends React.Component {
 
     return (
       <>
-        <Meta keywords={keywords} />
+        <Meta keywords={seoKeywords || keywords} />
         <ConfigProvider theme={{
           algorithm: isNightMode ? darkAlgorithm : defaultAlgorithm,
         }}>
@@ -321,6 +322,7 @@ TagsPanel.propTypes = {
   showSkeleton: PropTypes.bool,
   showSeoTagEntityList: PropTypes.bool,
   isNightMode: PropTypes.bool,
+  seoKeywords: PropTypes.string,
 };
 
 TagsPanel.defaultProps = {
