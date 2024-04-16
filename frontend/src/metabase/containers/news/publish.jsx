@@ -312,6 +312,33 @@ const Publish = props => {
             />
           </Form.Item>
 
+          <Form.Item label="Seo Title" name="seoTitle">
+            <Input.TextArea
+              placeholder="Title"
+              rows={1}
+              showCount
+              allowClear
+            />
+          </Form.Item>
+
+          <Form.Item label="Seo Description" name="seoDescription">
+            <Input.TextArea
+              placeholder="Description"
+              rows={1}
+              showCount
+              allowClear
+            />
+          </Form.Item>
+
+          <Form.Item label="Seo Keywords" name="seoKeywords">
+            <Input.TextArea
+              placeholder="Keywords"
+              rows={1}
+              showCount
+              allowClear
+            />
+          </Form.Item>
+
           <Form.Item label={hasInputUrl ? "" : "Content"} name="content">
             <div id="editor" ref={editorRef} className="markdown" />
           </Form.Item>

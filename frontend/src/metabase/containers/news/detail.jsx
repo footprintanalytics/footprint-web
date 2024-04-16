@@ -135,6 +135,7 @@ const Detail = props => {
         isEditPermission={isMarket || isAdmin}
         type="news"
         canClick={false}
+        seoKeywords={data?.seoKeywords}
       />
     );
   };
@@ -194,8 +195,8 @@ const Detail = props => {
   return (
     <div className="article-detail">
       <Meta
-        title={articleTitle(data)}
-        description={data?.description || articleTitle(data)}
+        title={data?.seoTitle || articleTitle(data)}
+        description={data?.seoDescription || data?.description || articleTitle(data)}
         image={getOssUrl(getOgImage(data), { resize: true })}
       />
       <div className="article-detail__container">
