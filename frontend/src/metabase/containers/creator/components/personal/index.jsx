@@ -17,6 +17,7 @@ import { useGetPaymentSubscriptionDetail } from "metabase/pricing_v2/use";
 import SubscriptionDetailModal from "metabase/containers/creator/components/personal/SubscriptionDetailModal";
 import { isFgaPath } from "metabase/growth/utils/utils";
 import { isABPath } from "metabase/ab/utils/utils";
+import Meta from "metabase/components/Meta";
 
 const Index = ({ router, user, data }) => {
   const [loading, setLoading] = useState(false);
@@ -78,6 +79,9 @@ const Index = ({ router, user, data }) => {
 
   return (
     <div className="creator__personal">
+      <Meta
+        description={`The profile of ${userName}`}
+      />
       <div className="creator__personal-base">
         <IconBack router={router} />
         {logo ? (
@@ -96,13 +100,13 @@ const Index = ({ router, user, data }) => {
         <div className="creator__personal-cell">
           {userName && (
             <div style={{ display: "flex", alignItems: "center" }}>
-              <h3
+              <h1
                 style={{
                   WebkitBoxOrient: "vertical",
                 }}
               >
                 {userName}
-              </h3>
+              </h1>
               <VipIcon
                 vipInfo={data.vipInfo}
                 isOwner={user?.name === get(data, "userInfo.name")}

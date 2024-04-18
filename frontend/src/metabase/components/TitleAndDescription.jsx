@@ -7,7 +7,7 @@ import Tooltip from "metabase/components/Tooltip";
 
 const TitleAndDescription = ({ title, description, className }) => (
   <div className={cx("flex align-center", className)}>
-    <h2 className="h2 mr1 text-wrap">{title}</h2>
+    <h1 className="h2 mr1 text-wrap">{title}</h1>
     {description && (
       <Tooltip tooltip={description} maxWidth="22em">
         <Icon name="info" className="mx1" />

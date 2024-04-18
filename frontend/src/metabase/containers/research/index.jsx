@@ -11,6 +11,7 @@ import { loginModalShowAction } from "metabase/redux/control";
 import myData from "./utils/data";
 import { push, replace } from "react-router-redux";
 import _ from "underscore";
+import { lowerCase } from "lodash";
 import { withRouter } from "react-router";
 import { Image, Select } from "antd";
 import Meta from "metabase/components/Meta";
@@ -153,6 +154,7 @@ const Index = props => {
       <Meta description={metaInfo["description"] || ""} keywords={metaInfo["keywords"] || ""} title={metaInfo["title"] || ""} />
       <div className={cx("bg-gray flex flex", isPublic ? "Features-public" : "Features")}>
         <div className="Features-side">
+          <h1 className="display-none">{lowerCase(menu)} / {lowerCase(subMenu)}</h1>
           <div className="research-time-text">All times shown are in UTC timezone.</div>
           {!isCustom && renderSelectClassify()}
           {isShowChain && renderChainSelect()}

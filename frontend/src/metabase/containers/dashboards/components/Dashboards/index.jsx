@@ -13,7 +13,7 @@ const Dashboards = ({ router, user }) => {
   return (
     <div className="dashboards__container">
       <div className="dashboards__cell" style={{ padding: 0 }}>
-        <h2 className="dashboard-title">Dashboard</h2>
+        <h1 className="dashboard-title">Dashboard</h1>
         <Category router={router} />
       </div>
       <div className="dashboards__filter">{/* <Sort router={router} /> */}</div>
