@@ -149,7 +149,10 @@ export function getDescription({ description, orderedCards }) {
     if (textCard) {
       return textCard.visualization_settings?.text
         ?.replace(/#/g, "") // markdown 标题处理
+        ?.replace(/，/g, ",") // 中文标点标题处理
+        ?.replace(/、/g, ",") // 中文标点处理
         ?.replace(/\s+/g, " ") // 空格处理
+        ?.replace(/[^\u4e00-\u9fa5a-zA-Z0-9\s,.!?'"-]+/g, '')
         ?.trim()
         ?.slice(0, 500); //限制最多 500 长度的desc
     } else {

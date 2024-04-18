@@ -197,7 +197,7 @@ export default ({
       return (
         <Dropdown overlay={menu} placement="bottomRight">
           <div className="dashboards__table-action">
-            <img src={getOssUrl("20220309154118.png")} />
+            <img src={getOssUrl("20220309154118.png")} alt="action"/>
           </div>
         </Dropdown>
       );

@@ -129,6 +129,7 @@ const Creator = () => {
                   <div className="dashboards__creator-list-l">
                     {item.avatar ? (
                       <img
+                        alt={item.user_name}
                         src={
                           item.avatar +
                           `?x-oss-process=image/resize,m_fill,h_120,w_120`

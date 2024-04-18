@@ -70,13 +70,13 @@
   margin-right: 10px;
 }
 
-.creator__personal-cell h3 {
+.creator__personal-cell h1 {
   font-size: 36px;
   font-weight: bold;
   color: var(--footprint-color-title);
 }
 
-.dark .creator__personal-cell h3 {
+.dark .creator__personal-cell h1 {
   color: white;
 }
 

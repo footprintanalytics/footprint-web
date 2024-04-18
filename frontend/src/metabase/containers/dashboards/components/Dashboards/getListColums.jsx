@@ -76,6 +76,7 @@ export default ({
                   get(record, "creator.avatar") +
                   "?x-oss-process=image/resize,m_fill,h_120,w_120"
                 }
+                alt={get(record, "creator.avatar")}
                 className="dashboards__table-name-avatar"
               />
             ) : (
@@ -243,7 +244,7 @@ export default ({
       return (
         <Dropdown overlay={menu} placement="bottomRight">
           <div className="dashboards__table-action">
-            <img src={getOssUrl("20220309154118.png")} alt="" />
+            <img src={getOssUrl("20220309154118.png")} alt="action" />
           </div>
         </Dropdown>
       );

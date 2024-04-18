@@ -923,7 +923,7 @@ export const VisualizationShareFoot = ({ location }) => {
           <ul className="Visualization__share-foot-user-social">
             {user.twitter && (
               <li>
-                <img src={getOssUrl("20220516201254.png")} />
+                <img src={getOssUrl("20220516201254.png")} alt={"twitter"}/>
                 <span>
                   {user.twitter.startsWith("http")
                     ? user.twitter.replace("https://twitter.com/", "@")
@@ -935,7 +935,7 @@ export const VisualizationShareFoot = ({ location }) => {
             )}
             {user.telegram && (
               <li>
-                <img src={getOssUrl("20220516201327.png")} />
+                <img src={getOssUrl("20220516201327.png")} alt={"telegram"}/>
                 <span>
                   {user.telegram.startsWith("@")
                     ? user.telegram
@@ -945,7 +945,7 @@ export const VisualizationShareFoot = ({ location }) => {
             )}
             {user.discord && (
               <li>
-                <img src={getOssUrl("20220516201343.png")} />
+                <img src={getOssUrl("20220516201343.png")} alt={"discord"}/>
                 <span>
                   {user.discord.startsWith("@")
                     ? user.discord

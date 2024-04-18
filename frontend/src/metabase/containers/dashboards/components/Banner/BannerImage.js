@@ -13,6 +13,7 @@ const BannerImage = ({ src, width, height, url }) => {
         width={isMobile ? width / 3 : width}
         height={isMobile ? height / 3 : height}
         preview={false}
+        alt={url}
         placeholder={
           <div
             className="flex justify-center align-center"
