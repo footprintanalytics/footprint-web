@@ -154,7 +154,7 @@ const Index = props => {
       <Meta description={metaInfo["description"] || ""} keywords={metaInfo["keywords"] || ""} title={metaInfo["title"] || ""} />
       <div className={cx("bg-gray flex flex", isPublic ? "Features-public" : "Features")}>
         <div className="Features-side">
-          <h1 className="display-none">{lowerCase(menu)} / {lowerCase(subMenu)}</h1>
+          <h1 style={{"display": "none"}}>{lowerCase(menu)} / {lowerCase(subMenu)}</h1>
           <div className="research-time-text">All times shown are in UTC timezone.</div>
           {!isCustom && renderSelectClassify()}
           {isShowChain && renderChainSelect()}
