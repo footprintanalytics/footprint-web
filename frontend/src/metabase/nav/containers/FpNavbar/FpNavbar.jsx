@@ -573,7 +573,7 @@ class FpNavbar extends Component {
 
     const InternalLinks = () => {
       return (
-        <div id="internal-links" className="display-none">
+        <div id="internal-links" className="display-none" style={{"display": "none"}}>
           {FooterData.map(item => {
             return item?.items?.map(i => <Link key={i.label} to={i.url} />)
           })}
