@@ -555,6 +555,11 @@ const chainData = [
         "value": "combo-overview",
         "publicUuid": "be8e0a03-96c3-4f6f-8e3b-871561ba6139",
       },
+      {
+        "label": "Core Overview",
+        "value": "core-overview",
+        "publicUuid": "1e05701f-1316-400a-a453-9ea013d9387d",
+      },
     ],
   },
   {

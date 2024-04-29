@@ -255,6 +255,11 @@ const ResearchContent = props => {
             img: getOssUrl("fp-chains/nautilus.png?1=1&image_process=resize,w_36/crop,h_36/format,webp"),
             link: "/research/chain/chain-stats/nautilus-overview",
           },
+          {
+            title: "Core",
+            img: getOssUrl("fp-chains/core-chain.png"),
+            link: "/research/chain/chain-stats/core-overview",
+          },
         ],
         layout2Data: [
           {

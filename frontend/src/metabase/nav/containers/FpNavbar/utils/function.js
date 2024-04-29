@@ -140,7 +140,7 @@ const renderChainLayout = ({data, title}) => {
           return (
             <Link key={item.title} to={item.link} target={item.target || ""}>
               <li>
-                <AboutImage src={item.img} alt={item.title} style={{ width: 36, height: 36 }}/>
+                <AboutImage src={item.img} alt={item.title} style={{ width: 36, height: 36 }} imageStyle={{ borderRadius: "50%" }}/>
                 <h4>{item.title}</h4>
                 <span>{item.desc}</span>
               </li>
