@@ -496,9 +496,14 @@ const chainData = [
         "publicUuid": "1a1e160e-4414-417a-a04a-54646f86e42d",
       },*/
       {
-        "label": "Arbitrum Overview",
+        "label": "Arbitrum One Overview",
         "value": "arbitrum-overview",
-        "publicUuid": "1a3b2077-06c7-41a8-9ba3-4598ff5e3b30",
+        "publicUuid": "7b26e0e3-969e-4bbf-93e2-fb470295017b",
+      },
+      {
+        "label": "Arbitrum Nova Overview",
+        "value": "arbitrum-nova-overview",
+        "publicUuid": "79925871-a21b-4df9-b6f2-b2f17b801a67",
       },
       {
         "label": "Cronos Overview",

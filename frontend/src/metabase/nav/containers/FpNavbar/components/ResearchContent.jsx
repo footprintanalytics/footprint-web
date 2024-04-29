@@ -263,9 +263,14 @@ const ResearchContent = props => {
             link: "/research/chain/chain-stats/zksync-era-overview",
           },
           {
-            title: "Arbitrum",
+            title: "Arbitrum One",
             img: getOssUrl("studio/img-chain-32.png"),
             link: "/research/chain/chain-stats/arbitrum-overview",
+          },
+          {
+            title: "Arbitrum Nova",
+            img: getOssUrl("studio/img-chain-50.png?2=2"),
+            link: "/research/chain/chain-stats/arbitrum-nova-overview",
           },
           {
             title: "Optimism",

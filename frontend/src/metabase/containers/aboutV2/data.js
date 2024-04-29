@@ -10,7 +10,7 @@ const data = {
     },
     {
       url: "https://matrixpartners.com/",
-      logo: "home-v2/img_best_2.png",
+      logo: "home-v2/img_best_2.png?1=1",
       title: "Matrix Partners",
     },
     {
@@ -25,7 +25,7 @@ const data = {
     },
     {
       url: "https://www.7xvc.com",
-      logo: "home-v2/img_best_5.png",
+      logo: "home-v2/img_best_5.png?1=1",
       title: "7X Ventures",
     },
     {
@@ -39,22 +39,22 @@ const data = {
     },*/
     {
       url: "https://capitalant.com",
-      logo: "home-v2/img_best_8.png",
+      logo: "home-v2/img_best_8.png?1=1",
       title: "Capital Ant",
     },
     {
       url: "https://twitter.com/HashGlobal",
-      logo: "home-v2/img_best_9.png",
+      logo: "home-v2/img_best_9.png?1=1",
       title: "Hash Global",
     },
     {
       url: "http://www.lancergrp.com",
-      logo: "home-v2/img_best_10.png",
+      logo: "home-v2/img_best_10.png?1=1",
       title: "Lancer Group",
     },
     {
       url: "https://twitter.com/waterdripfund",
-      logo: "home-v2/img_best_11.png",
+      logo: "home-v2/img_best_11.png?1=1",
       title: "Waterdrip Capital",
     },
 
