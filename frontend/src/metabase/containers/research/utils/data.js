@@ -503,7 +503,7 @@ const chainData = [
       {
         "label": "Arbitrum Nova Overview",
         "value": "arbitrum-nova-overview",
-        "publicUuid": "79925871-a21b-4df9-b6f2-b2f17b801a67",
+        "publicUuid": "b3797059-015a-4d9b-89b2-26802736355c",
       },
       {
         "label": "Cronos Overview",
