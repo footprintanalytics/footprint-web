@@ -10,7 +10,7 @@ const data = {
     },
     {
       url: "https://matrixpartners.com/",
-      logo: "home-v2/img_best_2.png?1=1",
+      logo: "home-v2/img_best_2.png?2=2",
       title: "Matrix Partners",
     },
     {
@@ -25,7 +25,7 @@ const data = {
     },
     {
       url: "https://www.7xvc.com",
-      logo: "home-v2/img_best_5.png?1=1",
+      logo: "home-v2/img_best_5.png?2=2",
       title: "7X Ventures",
     },
     {
@@ -44,7 +44,7 @@ const data = {
     },
     {
       url: "https://twitter.com/HashGlobal",
-      logo: "home-v2/img_best_9.png?1=1",
+      logo: "home-v2/img_best_9.png?2=2",
       title: "Hash Global",
     },
     {
