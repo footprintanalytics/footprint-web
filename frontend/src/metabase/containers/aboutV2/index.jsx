@@ -48,6 +48,9 @@ const About = props => {
       </LazyLoad>
     );
   };
+
+  console.log("hello about v2")
+
   return (
     <>
       <Meta description={defaultDesc} keywords={keywords} title={title} link={"https://www.footprint.network/"}/>
