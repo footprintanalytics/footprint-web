@@ -1349,8 +1349,8 @@
 .About__backed img,
 .About__partner img {
   object-fit: scale-down;
-  width: 60%;
-  height: 40%;
+  width: 70%;
+  height: 60%;
 }
 
 .About .home-footer-container {

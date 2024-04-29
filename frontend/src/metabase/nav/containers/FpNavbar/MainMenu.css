@@ -203,7 +203,7 @@
 
 .main-menu__inner-chain-layout h4 {
   color: white;
-  font-size: 10px;
+  font-size: 9px;
   margin-top: 4px;
   font-weight: normal;
 }
@@ -228,11 +228,12 @@
   justify-content: center;
   align-items: flex-start;
   margin-left: 10px;
+  width: 160px;
 }
 
 .main-menu__add-root {
-  width: 66px;
-  height: 66px;
+  width: 60px;
+  height: 60px;
   flex-shrink: 0;
   border-radius: 12px;
   border: 1px dashed #44F;
