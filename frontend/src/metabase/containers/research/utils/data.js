@@ -558,7 +558,7 @@ const chainData = [
       {
         "label": "Core Overview",
         "value": "core-overview",
-        "publicUuid": "1e05701f-1316-400a-a453-9ea013d9387d",
+        "publicUuid": "94c0e936-0ce5-4260-a337-c303221aa2e3",
       },
     ],
   },
