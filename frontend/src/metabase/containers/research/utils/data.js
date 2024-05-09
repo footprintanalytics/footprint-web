@@ -261,7 +261,7 @@ const gamefiData = [
         "label": "Hot Games on Arbitrum",
         "value": "hot-games-on-arbitrum",
         "publicUuid": "b61310f5-7775-4415-b604-6e8b74d44256",
-        "search": "?chain=Arbitrum&date=past7days",
+        "search": "?chain=Arbitrum",
       },
     ],
   },
