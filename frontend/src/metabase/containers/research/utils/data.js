@@ -370,11 +370,11 @@ const gamefiData = [
         "value": "walken-data-overview",
         "publicUuid": "0bc7f1b3-feb1-430a-9596-5a513c3fd216",
       },*/
-      {
+      /*{
         "label": "Era7 Key Metrics",
         "value": "era7-key-metrics",
         "publicUuid": "879d17b3-fa17-477a-a7f4-b21b9381f3c3",
-      },
+      },*/
       /*{
         "label": "Solana GameFi Overview",
         "value": "solana-gamefi-overview",
@@ -565,6 +565,11 @@ const chainData = [
         "label": "Core Overview",
         "value": "core-overview",
         "publicUuid": "94c0e936-0ce5-4260-a337-c303221aa2e3",
+      },
+      {
+        "label": "GalaChain Overview",
+        "value": "gala-chain-overview",
+        "publicUuid": "6bb33916-a512-42ad-9d90-8c834e29e9cf",
       },
     ],
   },
