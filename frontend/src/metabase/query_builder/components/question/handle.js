@@ -417,6 +417,24 @@ export function getChainDataList({ includeAll = true }) {
           protocolName: "The Sandbox",
         }
       },
+      {
+        value: "gala",
+        label: "GalaChain",
+        icon: getOssUrl("fp-chains/gala.webp?image_process=resize,w_36/crop,h_36/format,webp"),
+        defaultProject: {
+          protocolSlug: "the-sandbox",
+          protocolName: "The Sandbox",
+        }
+      },
+      {
+        value: "merlin",
+        label: "Merlin",
+        icon: getOssUrl("fp-chains/merlin.webp?image_process=resize,w_36/crop,h_36/format,webp"),
+        defaultProject: {
+          protocolSlug: "the-sandbox",
+          protocolName: "The Sandbox",
+        }
+      },
       /*{
         value: "wax",
         label: "Wax",
