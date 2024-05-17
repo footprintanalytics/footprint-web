@@ -219,7 +219,6 @@
   display: flex;
   width: fit-content;
   align-items: center;
-  margin-top: 16px;
 }
 
 .main-menu__vertical-menu-standard-show-right {
@@ -228,7 +227,7 @@
   justify-content: center;
   align-items: flex-start;
   margin-left: 10px;
-  width: 160px;
+  width: 200px;
 }
 
 .main-menu__add-root {

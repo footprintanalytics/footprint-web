@@ -131,7 +131,7 @@ const renderVerticalMenuSimple = ({data, className}) => {
   );
 };
 
-const renderChainLayout = ({data, title}) => {
+const renderChainLayout = ({data, title, additionalView}) => {
   return (
     <div>
       <h3>{title}</h3>
@@ -147,6 +147,7 @@ const renderChainLayout = ({data, title}) => {
             </Link>
           )
         })}
+        {additionalView}
       </ul>
     </div>
   )
