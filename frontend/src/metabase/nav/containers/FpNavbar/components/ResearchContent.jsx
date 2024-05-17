@@ -322,6 +322,11 @@ const ResearchContent = props => {
             img: getOssUrl("fp-chains/combo.png?image_process=resize,w_36/crop,h_36/format,webp"),
             link: "/research/chain/chain-stats/combo-overview",
           },
+          {
+            title: "Merlin",
+            img: getOssUrl("fp-chains/merlin.webp?image_process=resize,w_36/crop,h_36/format,webp"),
+            link: "/research/chain/chain-stats/merlin-overview",
+          },
         ],
         layout3Data: [
           {
@@ -596,10 +601,9 @@ const ResearchContent = props => {
         <div className="main-menu__inner-layout">
           {MainMenuFunction.renderVerticalMenu({ data: tabData?.industryData })}
           <div className="main-menu__inner-chain-layout">
-            {MainMenuFunction.renderChainLayout({ data: tabData?.layoutData, title: "PUBLIC CHAIN" })}
+            {MainMenuFunction.renderChainLayout({ data: tabData?.layoutData, title: "PUBLIC CHAIN", additionalView: MainMenuFunction.renderStandardShow({ data: tabData?.addData }) })}
             <div className="flex">
               {MainMenuFunction.renderChainLayout({ data: tabData?.layout2Data, title: "LAYER2" })}
-              {MainMenuFunction.renderStandardShow({ data: tabData?.addData, className: "ml2" })}
             </div>
             {MainMenuFunction.renderChainLayout({ data: tabData?.layout3Data, title: "CONTACT SALES" })}
           </div>

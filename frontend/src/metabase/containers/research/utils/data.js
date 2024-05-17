@@ -571,6 +571,11 @@ const chainData = [
         "value": "gala-chain-overview",
         "publicUuid": "6bb33916-a512-42ad-9d90-8c834e29e9cf",
       },
+      {
+        "label": "Merlin Overview",
+        "value": "merlin-overview",
+        "publicUuid": "61025077-2037-465f-900e-2032eb446f30",
+      },
     ],
   },
   {
