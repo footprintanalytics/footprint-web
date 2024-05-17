@@ -260,6 +260,11 @@ const ResearchContent = props => {
             img: getOssUrl("fp-chains/core-chain.png"),
             link: "/research/chain/chain-stats/core-overview",
           },
+          {
+            title: "GalaChain",
+            img: getOssUrl("fp-chains/gala.webp"),
+            link: "/research/chain/chain-stats/gala-chain-overview",
+          },
         ],
         layout2Data: [
           {
