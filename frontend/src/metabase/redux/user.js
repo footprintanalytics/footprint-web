@@ -414,17 +414,17 @@ export const refreshCurrentFgaProjectNew = createThunkAction(
               },
             ],
             "protocolType": "NFT",
-            "protocolName": "Gaming Demo Project",
+            "protocolName": "NFT Demo Project",
             "twitter": {},
             "discord": {},
             "ga": {},
             "id": 3,
             "existsWeb2Data": true
           }
-        } else if (protocolSlug === "Education Project") {
+        } else if (protocolSlug === "Metaverse Demo Project") {
           res = {
             "isDemo": true,
-            "protocolSlug": "Education Project",
+            "protocolSlug": "Metaverse Demo Project",
             "contractAddress": [
               {
                 "chain": "BNB chain",
@@ -451,7 +451,7 @@ export const refreshCurrentFgaProjectNew = createThunkAction(
               },
             ],
             "protocolType": "NFT",
-            "protocolName": "Gaming Demo Project",
+            "protocolName": "Metaverse Demo Project",
             "twitter": {},
             "discord": {},
             "ga": {},

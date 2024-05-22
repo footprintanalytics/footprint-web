@@ -383,6 +383,7 @@ export const getDashboardMap = (businessType, project, chain) => {
     ["token_leaderboard", "f36c338b-d213-4071-9d92-66c7d575f7cb"],
     ["telegram", "5aa8809b-296f-4ac9-b7c1-4a713abed1df"],
     ["ecosystem_wallet", "9f96361e-d423-4239-9f97-7e6277793829"],
+    ["asset_overview", "f75f67b8-4801-4116-b3b0-f1171b500ba4"],
 
     ["project_key_metrics", "159d8c0e-f1b9-4449-a6b1-7ee51de47563"],
     ["project_holder_overlap", "994ab322-671c-479a-a835-2e28d16b326e"],
@@ -418,25 +419,27 @@ export const fga_menu_data_v2 = (businessType, project, chain) => {
       // (project?.nftCollectionAddress?.length > 0 || project?.tokenAddress?.length > 0) &&
       getItem(getLabel({label: "Assets", tip: "Here showcases the web3 assets associated with the chosen Project, based on the gathered addresses of NFTs and Token contracts."}), "assets", ReactIcons.assetIcon, [
         // project?.nftCollectionAddress?.length > 0 &&
+        getItem("Overview", "asset_overview", null),
         getItem("NFT", "nft", null, [
-            getItem("Summary", "nft_summary", null),
-            getItem("NFT Mints", "nft_mints", null),
-            getItem("NFT Sales", "nft_sales", null),
-            getItem("NFT Listing", "nft_listing", null),
-            getItem("NFT Holders", "nft_nft_holder", null),
-            getItem("NFT Leaderboard", "nft_leaderboard", null),
+            // getItem("Summary", "nft_summary", null),
+            // getItem("NFT Mints", "nft_mints", null),
+            getItem("Sales", "nft_sales", null),
+            getItem("Listing", "nft_listing", null),
+            getItem("Holders", "nft_nft_holder", null),
+            getItem("Leaderboard", "nft_leaderboard", null),
           ]
         ),
         project?.tokenAddress?.length > 0 &&
         getItem("Token", "token", null, [
-          getItem("Token Summary", "game_tokenomics", null),
-          getItem("Token Trading", "token_trading", null),
-          getItem("Token Holders", "token_holders", null),
-          getItem("Token Leaderboard", "token_leaderboard", null),
+          // getItem("Summary", "game_tokenomics", null),
+          getItem("Trading", "token_trading", null),
+          getItem("Holders", "token_holders", null),
+          getItem("Leaderboard", "token_leaderboard", null),
         ]),
       ]),
       getItem(getLabel({label: "Users", tip: "Presented here are the statistics using Web3 wallets that have interacted with the project's on-chain contracts, as well as Web2 users involved in off-chain activities."}), "users", ReactIcons.userIcon, [
         getItem("User Acquisition", "acquisition_users", null),
+        getItem("User Engagement", "gaming_engagement", null),
         getItem("User Retention", "user_retention", null),
         getItem("Wallet Engagement", "wallet_engagement", null),
         getItem("Wallet Retention", "wallet_retention", null),

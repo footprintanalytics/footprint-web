@@ -356,11 +356,11 @@ const Project = props => {
         />
       );
     }
-    if (current_tab === "contact_us") {
+    /*if (current_tab === "contact_us") {
       return (
         <ContactUs />
       )
-    }
+    }*/
     if (
       current_tab === "journey" || current_tab === "journey-platform"
     ) {

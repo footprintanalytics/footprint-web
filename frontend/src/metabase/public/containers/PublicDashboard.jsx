@@ -82,7 +82,7 @@ const mapStateToProps = (state, props) => {
     if (projectProtocolSlug === "NFT Demo Project") {
       projectProtocolSlug = "mocaverse";
     }
-    if (projectProtocolSlug === "Education Project") {
+    if (projectProtocolSlug === "Metaverse Demo Project") {
       projectProtocolSlug = "the-sandbox";
     }
     let currentChain = null;
