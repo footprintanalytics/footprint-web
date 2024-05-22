@@ -7,6 +7,7 @@ import "./ChartCreate.css";
 import { getOssUrl } from "metabase/lib/image";
 import AboutImage from "metabase/containers/aboutV2/components/AboutImage";
 import Link from "metabase/core/components/Link";
+import { isABPath } from "metabase/ab/utils/utils";
 
 const ChartCreate = () => {
   const data = [
@@ -30,12 +31,12 @@ const ChartCreate = () => {
     },
 
   ]
-
+  const showTitle = !isABPath()
   return (
     <>
       <div className={"chart-create"}>
-        <StudioTitle title={"Create"}/>
-        <ul>
+        {showTitle && <StudioTitle title={"Create"}/>}
+        <ul style={{ justifyContent: isABPath() ? "center": ""}}>
           {data.map(item => {
             return (
               <li key={item.title}>

@@ -42,7 +42,7 @@ const ConnectorList = props => {
   //   { ...QUERY_OPTIONS, enabled: !!projectId },
   // );
 
-  if (!projectId || project?.protocolSlug === "Demo Project") {
+  if (!projectId || project?.isDemo) {
     data = {
       "availableConnectorConfig": [
       {
@@ -101,6 +101,14 @@ const ConnectorList = props => {
         "active": true,
         "configured": false,
         "connectionId": 119
+      },
+      {
+        "group": "Community",
+        "name": "Pea.AI",
+        "description": "Pea.AI is an innovative AI platform that enhances knowledge sharing and exchange in crypto investment. Users can customize and monetize their own GPTs, leveraging their expertise to provide unique insights. ",
+        "icon": "https://static.footprint.network/fga/connector/pea.png",
+        "link": "https://docs.pea.ai/docs/community-bot",
+        "active": true,
       },
       {
         "group": "Community",
@@ -167,6 +175,55 @@ const ConnectorList = props => {
         "active": true,
         "configured": false,
         "docLink": "https://support.discord.com/hc/en-us/articles/206346498-Where-can-I-find-my-User-Server-Message-ID-"
+      },
+      {
+        "group": "Data",
+        "name": "Google Analytics 4",
+        "description": "A modern analytics platform by Google for comprehensive user behavior and data analysis.",
+        "icon": "https://static.footprint.network/fga/connector/ga4.svg",
+        "active": true,
+      },
+      {
+        "group": "Data",
+        "name": "Postgres",
+        "description": "A powerful open-source object-relational database system with SQL compliance and advanced features.",
+        "icon": "https://static.footprint.network/fga/connector/postgres.svg",
+        "active": true,
+      },
+      {
+        "group": "Data",
+        "name": "Mysql",
+        "description": "A popular open-source relational database management system used widely for web data storage.",
+        "icon": "https://static.footprint.network/fga/connector/mysql.svg",
+        "active": true,
+      },
+      {
+        "group": "Data",
+        "name": "Bigquery",
+        "description": "Google's serverless and scalable web service for big data handling and analysis.",
+        "icon": "https://static.footprint.network/fga/connector/bigquery.svg",
+        "active": true,
+      },
+      {
+        "group": "Data",
+        "name": "Snowflake",
+        "description": "A cloud-based data warehousing platform for high-performance analytics, offering scalability and efficiency.",
+        "icon": "https://static.footprint.network/fga/connector/snowflake.svg",
+        "active": true,
+      },
+      {
+        "group": "Data",
+        "name": "Amazon S3",
+        "description": "Amazon's object storage service providing scalable, secure, and high-performance data storage and retrieval.",
+        "icon": "https://static.footprint.network/fga/connector/s3.svg",
+        "active": true,
+      },
+      {
+        "group": "Data",
+        "name": "Files (CSV)",
+        "description": "A simple file format for storing tabular data, commonly used for data import and export.",
+        "icon": "https://static.footprint.network/fga/connector/files.svg",
+        "active": true,
       }
     ]
     }
@@ -298,7 +355,7 @@ const ConnectorList = props => {
                                       content: (
                                         <div style={{ marginTop: 20 }}>
                                           <p>
-                                            {`The Demo Project can't create a connector, you can create your project to connect web2.`}
+                                            {`If you wish to connect web2 data using Integrations, please contact our BD team. Thank you.`}
                                           </p>
                                         </div>
                                       ),
@@ -333,7 +390,11 @@ const ConnectorList = props => {
                                 key="Connect"
                                 style={{ borderRadius: 5, width: 120 }}
                                 onClick={() => {
-                                  if (project.protocolSlug === "Demo Project") {
+                                  if (item?.link) {
+                                    window.open(item?.link);
+                                    return
+                                  }
+                                  /*if (project.protocolSlug === "Demo Project") {
                                     modal.confirm({
                                       title: "Tip",
                                       content: (
@@ -349,14 +410,14 @@ const ConnectorList = props => {
                                       },
                                     });
                                     return ;
-                                  } else {
+                                  } else {*/
                                     modal.info({
                                       title: "Contact Us",
                                       closable: true,
                                       content: (
                                         <>
                                           <div className=" mt1 text-light">
-                                            If you want to connect web2 data, please contact the bd team.
+                                            If you wish to connect web2 data using Integrations, please contact our BD team.
                                           </div>
                                           <div className="mt2">
                                             <Link target="_blank" href="mailto:sales@footprint.network">
@@ -366,7 +427,7 @@ const ConnectorList = props => {
                                         </>
                                       ),
                                     });
-                                  }
+                                  // }
                                   // showDrawer(item);
                                 }}
                               >

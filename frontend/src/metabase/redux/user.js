@@ -296,57 +296,184 @@ export const REFRESH_CURRENT_FGA_PROJECT_NEW =
 export const refreshCurrentFgaProjectNew = createThunkAction(
   REFRESH_CURRENT_FGA_PROJECT,
   async protocolSlug => {
-    console.log("refreshCurrentFgaProjectNew", protocolSlug)
     try {
       let res
       if (isABPath()) {
-        // if (protocolSlug === "Demo Project") {
-        //    res = {
-        //      "id": 1,
-        //      "isDemo": false,
-        //      "protocolName": "Demo Project",
-        //      "protocolSlug": "Demo Project",
-        //      "logo": "",
-        //      "protocolType": "",
-        //      "nftCollectionAddress": [
-        //        {
-        //          "address": "0x5cc5b05a8a13e3fbdb0bb9fccd98d38e50f90c38",
-        //          "chain": "Ethereum"
-        //        },
-        //        {
-        //          "address": "0x50f5474724e0ee42d9a4e711ccfb275809fd6d4a",
-        //          "chain": "Ethereum"
-        //        }
-        //      ],
-        //      "tokenAddress": [
-        //        {
-        //          "address": "0x3845badade8e6dff049820680d1f14bd3903a5d0",
-        //          "chain": "Ethereum"
-        //        },{
-        //          "address": "0x67b725d7e342d7b611fa85e859df9697d9378b2e",
-        //          "chain": "BNB Chain"
-        //        }
-        //      ],
-        //      "twitter": {},
-        //      "discord": {},
-        //      "ga": {}
-        //    }
-        //  } else {
-        //   // res = {
-        //   //   // "id": 153,
-        //   //   "protocolName": protocolSlug,
-        //   //   "protocolSlug": protocolSlug,
-        //   //   "protocolType": "",
-        //   //   "tokenAddress": [],
-        //   //   "nftCollectionAddress": [
-        //   //     {
-        //   //       "address": "0x2ed4db5636835acfc583af96c66cde1d8c2c1a25",
-        //   //       "chain": "Ethereum"
-        //   //     }
-        //   //   ],
-        //   // }
-        // }
+        if (protocolSlug === "Demo Project") {
+           res = {
+             "isDemo": true,
+             "protocolSlug": "Demo Project",
+             "contractAddress": [
+               {
+                 "chain": "Ethereum",
+                 "address": "0x5cc5b05a8a13e3fbdb0bb9fccd98d38e50f90c38",
+                 "standard": "ERC721"
+               },
+               {
+                 "chain": "Ethereum",
+                 "address": "0x50f5474724e0ee42d9a4e711ccfb275809fd6d4a",
+                 "standard": "ERC721"
+               },
+               {
+                 "chain": "Ethereum",
+                 "address": "0x3845badade8e6dff049820680d1f14bd3903a5d0",
+                 "standard": "ERC20"
+               },
+               {
+                 "chain": "BNB Chain",
+                 "address": "0x67b725d7e342d7b611fa85e859df9697d9378b2e",
+                 "standard": "ERC20"
+               }
+             ],
+             "tokenAddress": [
+               {
+                 "chain": "Ethereum",
+                 "address": "0x3845badade8e6dff049820680d1f14bd3903a5d0",
+                 "standard": "ERC20"
+               },
+               {
+                 "chain": "BNB Chain",
+                 "address": "0x67b725d7e342d7b611fa85e859df9697d9378b2e",
+                 "standard": "ERC20"
+               }
+             ],
+             "nftCollectionAddress": [
+               {
+                 "chain": "Ethereum",
+                 "address": "0x5cc5b05a8a13e3fbdb0bb9fccd98d38e50f90c38",
+                 "standard": "ERC721"
+               },
+               {
+                 "chain": "Ethereum",
+                 "address": "0x50f5474724e0ee42d9a4e711ccfb275809fd6d4a",
+                 "standard": "ERC721"
+               }
+             ],
+             "protocolType": "NFT",
+             "protocolName": "Demo Project",
+             "twitter": {},
+             "discord": {},
+             "ga": {},
+             "id": 1,
+             "existsWeb2Data": true
+           }
+         } else if (protocolSlug === "Gaming Demo Project") {
+          res = {
+            "isDemo": true,
+            "protocolSlug": "Gaming Demo Project",
+            "contractAddress": [
+              {
+                "chain": "Polygon",
+                "address": "0x5b30cc4def69ae2dfcddbc7ebafea82cedae0190",
+              },
+              {
+                "chain": "Ethereum",
+                "address": "0xd9016a907dc0ecfa3ca425ab20b6b785b42f2373",
+              },
+            ],
+            "tokenAddress": [
+              {
+                "chain": "Ethereum",
+                "address": "0xd9016a907dc0ecfa3ca425ab20b6b785b42f2373",
+                "symbol": "GMEE",
+                "name": "GAMEE"
+              },
+            ],
+            "nftCollectionAddress": [
+              {
+                "chain": "Polygon",
+                "address": "0x5b30cc4def69ae2dfcddbc7ebafea82cedae0190",
+                "standard": "ERC721"
+              },
+            ],
+            "protocolType": "NFT",
+            "protocolName": "Gaming Demo Project",
+            "twitter": {},
+            "discord": {},
+            "ga": {},
+            "id": 2,
+            "existsWeb2Data": true
+          }
+        } else if (protocolSlug === "NFT Demo Project") {
+          res = {
+            "isDemo": true,
+            "protocolSlug": "NFT Demo Project",
+            "contractAddress": [
+              {
+                "chain": "Ethereum",
+                "address": "0x59325733eb952a92e069c87f0a6168b29e80627f",
+              },
+            ],
+            "tokenAddress": [
+            ],
+            "nftCollectionAddress": [
+              {
+                "chain": "Ethereum",
+                "address": "0x59325733eb952a92e069c87f0a6168b29e80627f",
+                "standard": "ERC721"
+              },
+            ],
+            "protocolType": "NFT",
+            "protocolName": "Gaming Demo Project",
+            "twitter": {},
+            "discord": {},
+            "ga": {},
+            "id": 3,
+            "existsWeb2Data": true
+          }
+        } else if (protocolSlug === "Education Project") {
+          res = {
+            "isDemo": true,
+            "protocolSlug": "Education Project",
+            "contractAddress": [
+              {
+                "chain": "BNB chain",
+                "address": "0xa87a7edca1ec2163febae43648eb39d0e88aefb5",
+              },
+              {
+                "chain": "Ethereum",
+                "address": "0xf8173a39c56a554837c4c7f104153a005d284d11",
+              },
+            ],
+            "tokenAddress": [
+              {
+                "chain": "Ethereum",
+                "address": "0xf8173a39c56a554837c4c7f104153a005d284d11",
+                "symbol": "EDU",
+                "name": "EDU Coin"
+              },
+            ],
+            "nftCollectionAddress": [
+              {
+                "chain": "BNB chain",
+                "address": "0xa87a7edca1ec2163febae43648eb39d0e88aefb5",
+                "standard": "ERC721"
+              },
+            ],
+            "protocolType": "NFT",
+            "protocolName": "Gaming Demo Project",
+            "twitter": {},
+            "discord": {},
+            "ga": {},
+            "id": 4,
+            "existsWeb2Data": true
+          }
+        } else {
+          // res = {
+          //   // "id": 153,
+          //   "protocolName": protocolSlug,
+          //   "protocolSlug": protocolSlug,
+          //   "protocolType": "",
+          //   "tokenAddress": [],
+          //   "nftCollectionAddress": [
+          //     {
+          //       "address": "0x2ed4db5636835acfc583af96c66cde1d8c2c1a25",
+          //       "chain": "Ethereum"
+          //     }
+          //   ],
+          // }
           res = await getProtocolDetail({ "protocolSlug": protocolSlug });
+        }
         //   const result = await getPublicChainProjectDetail({ "protocolSlug": protocolSlug });
         //   const temp = result.rows?.length > 0 ? {
         //     protocolName: result.rows[0][1],
@@ -479,7 +606,6 @@ export const refreshCurrentFgaProjectNew = createThunkAction(
       window.localStorage.setItem("IsFgaDemoProject", res?.isDemo);
       window.localStorage.setItem("LatestGAProjectId", res?.id);
       // res.id=153;
-      console.log("res", res)
       return res;
     } catch (e) {
       console.log(e)

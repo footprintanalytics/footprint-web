@@ -122,9 +122,9 @@ export function newQuestion({
   if (isFgaPath()) {
     prefix = "/growth";
   }
-  if (isABPath()) {
+  /*if (isABPath()) {
     prefix = "/fga";
-  }
+  }*/
   if (mode) {
     return prefix + url.replace(/^\/(chart|model)/, `/${entity}\/${mode}`);
   } else {

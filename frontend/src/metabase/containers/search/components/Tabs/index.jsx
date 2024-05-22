@@ -136,7 +136,7 @@ const Index = ({
     // },
   ];
 
-  const showSwitchGraph = (isCreator() || isGrowthPage() || isMyStudio()) && !isMyTablesTab;
+  const showSwitchGraph = (isCreator() || isMyStudio()) && !isMyTablesTab;
 
   const getTab = (key, tab) => {
     const num = data && data[key];

@@ -50,9 +50,10 @@ export default ({
     }
     if (isFga) {
       link = "/growth" + link;
-    } else if (isAB) {
-      link = "/fga" + link;
     }
+    /*else if (isAB) {
+      link = "/fga" + link;
+    }*/
     return link;
   };
   const name = {
