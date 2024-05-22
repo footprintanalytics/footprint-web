@@ -26,6 +26,7 @@ const GaProjectSearch = props => {
     fgaProjectList,
     loadFgaProjectList,
     enableTour = false,
+    projectObject,
   } = props;
   const selectRef = useRef();
   const [userProject, setUserProject] = useState([]);
@@ -43,8 +44,8 @@ const GaProjectSearch = props => {
   ]
   const defaultProject =
     {
-      protocolSlug: "Demo Project",
-      protocolName: "Demo Project",
+      protocolSlug: "Gaming Demo Project",
+      protocolName: "Gaming Demo Project",
     }
 
   const loadProjectDetail = protocolSlug => {
@@ -101,9 +102,12 @@ const GaProjectSearch = props => {
     // setCurrentProject(option.protocolSlug);
     // saveLatestGAProjectId(option.value);
     // loadProjectDetail(option.protocolSlug);
+    const keys = fga_menu_data_v2(businessType, projectObject, null).keys
+    const currentPath = props.menu
+    const path = keys.includes(currentPath) ? currentPath : keys[0]
     if (option.protocolSlug) {
       router?.push({
-        pathname: getGrowthProjectPath(option.protocolSlug, fga_menu_data_v2(businessType, null, null).keys[0]),
+        pathname: getGrowthProjectPath(option.protocolSlug, path),
       });
     }
   };
@@ -166,7 +170,7 @@ const GaProjectSearch = props => {
                           whiteSpace: "nowrap",
                           overflow: "hidden",
                           textOverflow: "ellipsis",
-                          width: 160,
+                          width: 260,
                         }
                       }>{item.projectName}</span>
                     </div>
