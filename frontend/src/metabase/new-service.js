@@ -288,9 +288,9 @@ export const getProjectList = async params => {
       },
       {
         "projectId": 4,
-        "projectName": "Education Project",
-        "protocolName": "Education Project",
-        "protocolSlug": "Education Project",
+        "projectName": "Metaverse Demo Project",
+        "protocolName": "Metaverse Demo Project",
+        "protocolSlug": "Metaverse Demo Project",
         "protocolType": "NFT",
         "logo": ""
       },
