@@ -261,7 +261,42 @@ export const getProtocolList = async params => {
   return GET(`/api/v1/project/protocol/list`, params, {'Cache-Control': 'max-age=1800'});
 };
 export const getProjectList = async params => {
-  return GET(`/api/v1/project/list`, params);
+  return [
+      {
+        "projectId": 1,
+        "projectName": "Demo Project",
+        "protocolName": "Demo Project",
+        "protocolSlug": "Demo Project",
+        "protocolType": "NFT",
+        "logo": ""
+      },
+      {
+        "projectId": 2,
+        "projectName": "Gaming Demo Project",
+        "protocolName": "Gaming Demo Project",
+        "protocolSlug": "Gaming Demo Project",
+        "protocolType": "NFT",
+        "logo": ""
+      },
+      {
+        "projectId": 3,
+        "projectName": "NFT Demo Project",
+        "protocolName": "NFT Demo Project",
+        "protocolSlug": "NFT Demo Project",
+        "protocolType": "NFT",
+        "logo": ""
+      },
+      {
+        "projectId": 4,
+        "projectName": "Education Project",
+        "protocolName": "Education Project",
+        "protocolSlug": "Education Project",
+        "protocolType": "NFT",
+        "logo": ""
+      },
+    ]
+
+  // return GET(`/api/v1/project/list`, params);
 };
 export const postProject = async params => {
   return POST(`/api/v1/project`, params);

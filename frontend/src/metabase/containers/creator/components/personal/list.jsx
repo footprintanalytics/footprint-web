@@ -43,7 +43,7 @@ const List = ({
     <div
       className="search"
       data-nosnippet
-      style={{ background: (isFgaPath() || isABPath()) ? "#121728" : "" }}
+      style={{ background: (isFgaPath() || isABPath()) ? "#101014" : "" }}
     >
       <div
         className="search__wrap search__content"

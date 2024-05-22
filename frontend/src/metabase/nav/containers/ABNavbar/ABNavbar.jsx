@@ -486,7 +486,7 @@ class ABNavbar extends Component {
                 setCreateFgaProjectModalShowAction
               }
             ></GaProjectSearch>
-            <Button
+            {/*<Button
               className="ml1"
               onClick={() => {
                 if (!user) {
@@ -496,7 +496,7 @@ class ABNavbar extends Component {
                 }
                 setCreateFgaProjectModalShowAction({ show: true });
               }}
-            >+ Add Project</Button>
+            >+ Add Project</Button>*/}
           </div>
           <div className="Nav__mobile-logo">
             <Link

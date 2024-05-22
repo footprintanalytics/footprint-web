@@ -67,14 +67,23 @@ const mapStateToProps = (state, props) => {
     let projectProtocolSlug = project?.protocolSlug;
     let projectProtocolName = project?.protocolName;
     let id = project?.id;
-    if (projectProtocolName === "Demo Project") {
+    /*if (projectProtocolName === "Demo Project") {
       id = 1;
-    }
+    }*/
     if (projectProtocolSlug === "Demo Project") {
       projectProtocolSlug = "the-sandbox";
     }
-    if (projectProtocolName === "Demo Project") {
+    /*if (projectProtocolName === "Demo Project") {
       projectProtocolName = "The Sandbox";
+    }*/
+    if (projectProtocolSlug === "Gaming Demo Project") {
+      projectProtocolSlug = "gamee";
+    }
+    if (projectProtocolSlug === "NFT Demo Project") {
+      projectProtocolSlug = "mocaverse";
+    }
+    if (projectProtocolSlug === "Education Project") {
+      projectProtocolSlug = "the-sandbox";
     }
     let currentChain = null;
     // switch protocol
@@ -368,7 +377,7 @@ class PublicDashboard extends Component {
       }
       const keyProject = this.getFgaMultiKeyProject();
       if (keyProject) {
-        const array = this.props.projectList.length > 1 ? this.props.projectList.filter(i => i.protocolSlug !== "Demo Project").map(i => i.protocolSlug) : ["the-sandbox"]
+        const array = this.props.projectList.length > 1 ? this.props.projectList.filter(i => !i.isDemo).map(i => i.protocolSlug) : ["the-sandbox"]
         this.props.setParameterValue(keyProject.id, array)
       }
       // const keyObjectAsset = this.getFgaMultiKeyObjectAsset();
@@ -526,7 +535,7 @@ class PublicDashboard extends Component {
       optionKey = "address";
     } else if (type === "project") {
       data = this.props.projectList.length > 1 ? projectList
-        .filter(i => i.protocolSlug !== "Demo Project") : [{projectName: "the-sandbox"}];
+        .filter(i => !i.isDemo) : [{projectName: "the-sandbox"}];
       optionKey = "projectName"
     } else {
       data = project?.nftCollectionAddress?.filter(filterChainFunction);

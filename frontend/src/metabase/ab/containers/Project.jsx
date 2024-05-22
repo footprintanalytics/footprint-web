@@ -44,6 +44,8 @@ import { setGames } from "metabase/redux/control";
 import ProjectList from "metabase/ab/containers/projectList";
 import KeysIds from "metabase/ab/components/KeysIds";
 import MySubmitProject from "metabase/ab/containers/MySubmitProject";
+import ChartCreate from "metabase/containers/myStudio/Component/ChartCreate";
+import ContactUs from "metabase/ab/containers/ContactUs";
 
 const Project = props => {
   const {
@@ -185,7 +187,7 @@ const Project = props => {
                 }
                 // title="There is currently no data available for this project."
                 // subTitle={`I'm sorry, the content for this ${page} page is not yet ready. You can visit our homepage for now and stay tuned for more high-quality content coming soon. We appreciate your patience.`}
-                subTitle="Coming Soon~"
+                title="Coming Soon~"
                 /*extra={
                   <Button
                     type="primary"
@@ -214,21 +216,21 @@ const Project = props => {
   };
 
   const renderDashboardMask = () => {
-    if (getProjectObject()?.protocolSlug !== "Demo Project" && getProjectObject()?.protocolSlug && projectObject?.nftCollectionAddress?.length === 0 &&
+    if (!getProjectObject()?.isDemo && getProjectObject()?.protocolSlug && projectObject?.nftCollectionAddress?.length === 0 &&
       ["nft_summary", "nft_sales_mints", "nft_listing", "nft_nft_holder", "nft_leaderboard"].includes(currentMenu)) {
       return (
         <DashboardMask currentMenu={"nft"} originCurrentMenu={currentMenu} router={router}
                        project={getProjectObject()} />
       );
     }
-    if (getProjectObject()?.protocolSlug !== "Demo Project" && getProjectObject()?.protocolSlug && projectObject?.tokenAddress?.length === 0 &&
+    if (!getProjectObject()?.isDemo && getProjectObject()?.protocolSlug && projectObject?.tokenAddress?.length === 0 &&
       ["game_tokenomics"].includes(currentMenu)) {
       return (
         <DashboardMask currentMenu={"token"} originCurrentMenu={currentMenu} router={router}
                        project={getProjectObject()} />
       );
     }
-    if (getProjectObject()?.protocolSlug !== "Demo Project" && getProjectObject()?.protocolSlug &&
+    if (!getProjectObject()?.isDemo && getProjectObject()?.protocolSlug &&
       ["nft_listing", "revenue-web2-revenue", "acquisition_users", "gaming_engagement", "user_retention", "revenue-total-revenue", "twitter", "discord"].includes(currentMenu)) {
       return (
         <DashboardMask currentMenu={"enterprise"} originCurrentMenu={currentMenu} router={router}
@@ -314,6 +316,17 @@ const Project = props => {
         </LoadingDashboard>
       );
     }
+    if (
+      ["chart_create"].includes(current_tab)
+    ) {
+      return (
+        <ChartCreate
+          project={getProjectObject()}
+          location={location}
+          router={router}
+        ></ChartCreate>
+      );
+    }
     if (["bind-game"].includes(current_tab)) {
       return (
         <BindGame
@@ -343,10 +356,15 @@ const Project = props => {
         />
       );
     }
+    if (current_tab === "contact_us") {
+      return (
+        <ContactUs />
+      )
+    }
     if (
       current_tab === "journey" || current_tab === "journey-platform"
     ) {
-      if (getProjectObject()?.protocolSlug !== "Demo Project" && getProjectObject()?.protocolSlug) {
+      if (!getProjectObject()?.isDemo && getProjectObject()?.protocolSlug) {
         return <DashboardMask currentMenu={"web2_connect"} originCurrentMenu={currentMenu} router={router} project={getProjectObject()}/>;
       }
       return (

@@ -123,7 +123,8 @@ export const isCreator = () => {
 
 export const isGrowthPage = () => {
   return window.location.pathname.startsWith("/growth/project")
-  || window.location.pathname.startsWith("/fga/project");
+  || window.location.pathname.startsWith("/fga/project")
+    || window.location.pathname.startsWith("/fga/game/project");
 };
 
 export const isMyStudio = () => {
