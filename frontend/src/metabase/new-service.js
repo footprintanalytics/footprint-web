@@ -262,14 +262,14 @@ export const getProtocolList = async params => {
 };
 export const getProjectList = async params => {
   return [
-      {
+      /*{
         "projectId": 1,
         "projectName": "Demo Project",
         "protocolName": "Demo Project",
         "protocolSlug": "Demo Project",
         "protocolType": "NFT",
         "logo": ""
-      },
+      },*/
       {
         "projectId": 2,
         "projectName": "Gaming Demo Project",
