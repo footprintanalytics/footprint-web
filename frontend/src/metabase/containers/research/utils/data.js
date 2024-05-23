@@ -754,6 +754,26 @@ const walletData = [
         "value": "bnb-chain-wallet-profile",
         "publicUuid": "346980c4-84ea-42a0-8c0b-cf689aba72bb",
       },
+      {
+        "label": "Polygon Wallet Profile",
+        "value": "polygon-wallet-profile",
+        "publicUuid": "13e8e383-4912-4ead-8ae8-926ddba7e89b",
+      },
+      {
+        "label": "Arbitrum Wallet Profile",
+        "value": "arbitrum-wallet-profile",
+        "publicUuid": "fc2ad6e1-b4bd-40b7-bd01-e3f50eb40686",
+      },
+      {
+        "label": "Arbitrum Nova Wallet Profile",
+        "value": "arbitrum-nova-wallet-profile",
+        "publicUuid": "ae5dc07f-2c39-49b5-8fe9-73a22cc54f53",
+      },
+      {
+        "label": "Core Wallet Profile",
+        "value": "core-wallet-profile",
+        "publicUuid": "83e787a8-47e3-4411-898a-973ee3ef575d",
+      },
     ],
   },
   {
