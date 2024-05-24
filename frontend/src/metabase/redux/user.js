@@ -365,10 +365,28 @@ export const refreshCurrentFgaProjectNew = createThunkAction(
               {
                 "chain": "Polygon",
                 "address": "0x5b30cc4def69ae2dfcddbc7ebafea82cedae0190",
+                "standard": "ERC721"
+              },
+              {
+                "chain": "Polygon",
+                "address": "0x3a85ac1a9344a5940c614b4b79fe74b40469f936",
+                "standard": "ERC721"
+              },
+              {
+                "chain": "Ethereum",
+                "address": "0x1fe1ffffef6b4dca417d321ccd37e081f604d1c7",
+                "standard": "ERC721"
+              },
+              {
+                "chain": "Polygon",
+                "address": "0x60adeeabe344d34eb0473350192d7efef7176610",
+                "standard": "ERC721"
               },
               {
                 "chain": "Ethereum",
                 "address": "0xd9016a907dc0ecfa3ca425ab20b6b785b42f2373",
+                "symbol": "GMEE",
+                "name": "GAMEE"
               },
             ],
             "tokenAddress": [
@@ -383,6 +401,21 @@ export const refreshCurrentFgaProjectNew = createThunkAction(
               {
                 "chain": "Polygon",
                 "address": "0x5b30cc4def69ae2dfcddbc7ebafea82cedae0190",
+                "standard": "ERC721"
+              },
+              {
+                "chain": "Polygon",
+                "address": "0x3a85ac1a9344a5940c614b4b79fe74b40469f936",
+                "standard": "ERC721"
+              },
+              {
+                "chain": "Ethereum",
+                "address": "0x1fe1ffffef6b4dca417d321ccd37e081f604d1c7",
+                "standard": "ERC721"
+              },
+              {
+                "chain": "Polygon",
+                "address": "0x60adeeabe344d34eb0473350192d7efef7176610",
                 "standard": "ERC721"
               },
             ],
@@ -402,15 +435,88 @@ export const refreshCurrentFgaProjectNew = createThunkAction(
             "contractAddress": [
               {
                 "chain": "Polygon",
-                "address": "0xdfce1e99a31c4597a3f8a8945cbfa9037655e335",
+                "address": "0x95fcb7f46f1e652fdf23db087c0f24011775be00",
+                "standard": "ERC721"
+              },
+              {
+                "chain": "Polygon",
+                "address": "0x97e114d21063a331312bea8cf00db2b580238003",
+                "standard": "ERC721"
+              },
+              {
+                "chain": "Polygon",
+                "address": "0x2ed9bdbf99c28082e3565395cbce61623b2689b9",
+                "standard": "ERC721"
+              },
+              {
+                "chain": "Polygon",
+                "address": "0x0686113b494851402389e6371ca7c76da4ed0875",
+                "standard": "ERC721"
+              },
+              {
+                "chain": "Polygon",
+                "address": "0x7e4522f8ec18ba87326caaeac4bdd0dd9323f505",
+                "standard": "ERC721"
+              },
+              {
+                "chain": "Polygon",
+                "address": "0xbd662d0d765428a79aee9ae7b003e7037d77f041",
+                "standard": "ERC721"
+              },
+              {
+                "chain": "Ethereum",
+                "address": "0x39fa15e7dffd76bdeec83c9a1a8ef023661c9b6c",
+                "standard": "ERC721"
+              },
+              {
+                "chain": "Ethereum",
+                "address": "0x97bbbc5d96875fb78d2f14b7ff8d7a3a74106f17",
+                "symbol": "ASTRAFER",
+                "name": "Astrafer"
               },
             ],
             "tokenAddress": [
+              {
+                "chain": "Ethereum",
+                "address": "0x97bbbc5d96875fb78d2f14b7ff8d7a3a74106f17",
+                "symbol": "ASTRAFER",
+                "name": "Astrafer"
+              },
             ],
             "nftCollectionAddress": [
               {
                 "chain": "Polygon",
                 "address": "0x95fcb7f46f1e652fdf23db087c0f24011775be00",
+                "standard": "ERC721"
+              },
+              {
+                "chain": "Polygon",
+                "address": "0x97e114d21063a331312bea8cf00db2b580238003",
+                "standard": "ERC721"
+              },
+              {
+                "chain": "Polygon",
+                "address": "0x2ed9bdbf99c28082e3565395cbce61623b2689b9",
+                "standard": "ERC721"
+              },
+              {
+                "chain": "Polygon",
+                "address": "0x0686113b494851402389e6371ca7c76da4ed0875",
+                "standard": "ERC721"
+              },
+              {
+                "chain": "Polygon",
+                "address": "0x7e4522f8ec18ba87326caaeac4bdd0dd9323f505",
+                "standard": "ERC721"
+              },
+              {
+                "chain": "Polygon",
+                "address": "0xbd662d0d765428a79aee9ae7b003e7037d77f041",
+                "standard": "ERC721"
+              },
+              {
+                "chain": "Ethereum",
+                "address": "0x39fa15e7dffd76bdeec83c9a1a8ef023661c9b6c",
                 "standard": "ERC721"
               },
             ],
@@ -429,12 +535,25 @@ export const refreshCurrentFgaProjectNew = createThunkAction(
             "protocolSlug": "Metaverse Demo Project",
             "contractAddress": [
               {
-                "chain": "BNB chain",
+                "chain": "Ethereum",
                 "address": "0xa87a7edca1ec2163febae43648eb39d0e88aefb5",
+                "standard": "ERC721"
+              },
+              {
+                "chain": "Ethereum",
+                "address": "0x5cc5b05a8a13e3fbdb0bb9fccd98d38e50f90c38",
+                "standard": "ERC721"
+              },
+              {
+                "chain": "Polygon",
+                "address": "0x9d305a42a3975ee4c1c57555bed5919889dce63f",
+                "standard": "ERC721"
               },
               {
                 "chain": "Ethereum",
                 "address": "0xf8173a39c56a554837c4c7f104153a005d284d11",
+                "symbol": "EDU",
+                "name": "EDU Coin"
               },
             ],
             "tokenAddress": [
@@ -447,8 +566,18 @@ export const refreshCurrentFgaProjectNew = createThunkAction(
             ],
             "nftCollectionAddress": [
               {
-                "chain": "BNB chain",
+                "chain": "Ethereum",
                 "address": "0xa87a7edca1ec2163febae43648eb39d0e88aefb5",
+                "standard": "ERC721"
+              },
+              {
+                "chain": "Ethereum",
+                "address": "0x5cc5b05a8a13e3fbdb0bb9fccd98d38e50f90c38",
+                "standard": "ERC721"
+              },
+              {
+                "chain": "Polygon",
+                "address": "0x9d305a42a3975ee4c1c57555bed5919889dce63f",
                 "standard": "ERC721"
               },
             ],
