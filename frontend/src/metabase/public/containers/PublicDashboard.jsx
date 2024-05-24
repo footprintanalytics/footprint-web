@@ -79,11 +79,16 @@ const mapStateToProps = (state, props) => {
     if (projectProtocolSlug === "Gaming Demo Project") {
       projectProtocolSlug = "gamee";
     }
-    if (projectProtocolSlug === "NFT Demo Project") {
-      projectProtocolSlug = "mocaverse";
+    if (projectProtocolSlug === "Gaming Demo Project 2") {
+      projectProtocolSlug = "phantom-galaxies";
     }
     if (projectProtocolSlug === "Metaverse Demo Project") {
       projectProtocolSlug = "the-sandbox";
+    }
+    if (props.project?.walletRetentionChain && location?.pathname?.includes("wallet_retention")) {
+      updateDashboardPara(parameters, parameterValues, "chain", [
+        props.project?.walletRetentionChain,
+      ]);
     }
     let currentChain = null;
     // switch protocol
@@ -102,11 +107,11 @@ const mapStateToProps = (state, props) => {
       projectProtocolName,
     ]);
     // updateDashboardPara(parameters, parameterValues, "protocol_slug_list", projectList?.map(item => item?.protocolSlug));
-    if (isABPath()) {
+    /*if (isABPath()) {
       updateDashboardPara(parameters, parameterValues, "chain", [
         chain,
       ]);
-    }
+    }*/
     if (project.tokenAddress?.filter(filterChainFunction)?.length > 0) {
       const key = "token_address";
       const data = getFirstAddressByPriory(project.tokenAddress?.filter(filterChainFunction));

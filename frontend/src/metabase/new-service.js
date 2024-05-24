@@ -280,9 +280,9 @@ export const getProjectList = async params => {
       },
       {
         "projectId": 3,
-        "projectName": "NFT Demo Project",
-        "protocolName": "NFT Demo Project",
-        "protocolSlug": "NFT Demo Project",
+        "projectName": "Gaming Demo Project 2",
+        "protocolName": "Gaming Demo Project 2",
+        "protocolSlug": "Gaming Demo Project 2",
         "protocolType": "NFT",
         "logo": ""
       },

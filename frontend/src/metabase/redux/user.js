@@ -392,34 +392,36 @@ export const refreshCurrentFgaProjectNew = createThunkAction(
             "discord": {},
             "ga": {},
             "id": 2,
-            "existsWeb2Data": true
+            "existsWeb2Data": true,
+            "walletRetentionChain": "Ethereum"
           }
-        } else if (protocolSlug === "NFT Demo Project") {
+        } else if (protocolSlug === "Gaming Demo Project 2") {
           res = {
             "isDemo": true,
-            "protocolSlug": "NFT Demo Project",
+            "protocolSlug": "Gaming Demo Project 2",
             "contractAddress": [
               {
-                "chain": "Ethereum",
-                "address": "0x59325733eb952a92e069c87f0a6168b29e80627f",
+                "chain": "Polygon",
+                "address": "0xdfce1e99a31c4597a3f8a8945cbfa9037655e335",
               },
             ],
             "tokenAddress": [
             ],
             "nftCollectionAddress": [
               {
-                "chain": "Ethereum",
-                "address": "0x59325733eb952a92e069c87f0a6168b29e80627f",
+                "chain": "Polygon",
+                "address": "0x95fcb7f46f1e652fdf23db087c0f24011775be00",
                 "standard": "ERC721"
               },
             ],
             "protocolType": "NFT",
-            "protocolName": "NFT Demo Project",
+            "protocolName": "Gaming Demo Project 2",
             "twitter": {},
             "discord": {},
             "ga": {},
             "id": 3,
-            "existsWeb2Data": true
+            "existsWeb2Data": true,
+            "walletRetentionChain": "Polygon"
           }
         } else if (protocolSlug === "Metaverse Demo Project") {
           res = {
@@ -456,7 +458,8 @@ export const refreshCurrentFgaProjectNew = createThunkAction(
             "discord": {},
             "ga": {},
             "id": 4,
-            "existsWeb2Data": true
+            "existsWeb2Data": true,
+            "walletRetentionChain": "Ethereum"
           }
         } else {
           // res = {
