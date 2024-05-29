@@ -9,11 +9,11 @@ const DataStaticTooltip = ({ type }) => {
       <Tooltip title={
         <ul>
           <div>Reference Data</div>
-          <li>protocol_info</li>
+          {/*<li>protocol_info</li>*/}
           <li>contract_info</li>
-          <li>token_info</li>
-          <li>nft_collection_info</li>
-          <li>nft_info</li>
+          {/*<li>token_info</li>*/}
+          {/*<li>nft_collection_info</li>*/}
+          {/*<li>nft_info</li>*/}
           <li>entity_tag</li>
           <li>transaction_entity_tag</li>
           <li>address_tag</li>
