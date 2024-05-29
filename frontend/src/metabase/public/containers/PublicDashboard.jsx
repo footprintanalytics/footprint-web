@@ -453,6 +453,7 @@ class PublicDashboard extends Component {
             zIndex: 2,
           }}
           onClick={() => {
+            console.log("vvvv", this.props.user)
             if (!this.props.user) {
               this.props.setLoginModalShow({
                 show: true,
@@ -610,7 +611,7 @@ class PublicDashboard extends Component {
       ? getDashboardActions(this, { ...this.props, isPublic: true })
       : [];
 
-    const { chart_style } = {
+    const { chart_style, refreshButton } = {
       ...parseHashOptions(location.hash),
     };
 
@@ -773,7 +774,7 @@ class PublicDashboard extends Component {
               </>
             )}
           </LoadingAndErrorWrapper>
-          {showRefreshButton && !!dashboard && this.renderRefreshButton()}
+          {(showRefreshButton || refreshButton) && !!dashboard && this.renderRefreshButton()}
           <QueryCopyModal
             open={this.state.cardId}
             cardId={this.state.cardId}
