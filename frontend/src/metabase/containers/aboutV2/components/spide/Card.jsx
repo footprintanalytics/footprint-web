@@ -1,6 +1,6 @@
 /* eslint-disable react/prop-types */
 /* eslint-disable react/react-in-jsx-scope */
-import Styles from "./Card.module.css";
+import "./Card.module.css";
 import React, { useState } from "react";
 import { useSpring, animated } from "react-spring";
 
@@ -15,7 +15,6 @@ function Card({ imagen, title, reports }) {
   });
   return (
     <animated.div
-      className={Styles.card}
       style={props3}
       onMouseEnter={() => setShown(true)}
       onMouseLeave={() => setShown(false)}
