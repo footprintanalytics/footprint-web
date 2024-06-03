@@ -10,7 +10,7 @@ const AboutDataTrusted = () => {
       name: "Heetae Lyu",
       desc: "NHN Corporation",
       post: "CTO",
-      img: "home-v2/img_trusted_pebble.png",
+      img: "home-v2/img_trusted_nhn.png",
       detail: "NHN has maintained a successful social casino service in the Web2 area through data analysis for over 30 years.\n" +
         "In the process of preparing the Pebble project to expand into Web3, we are receiving a lot of help from Footprint's outstanding data processing and analysis know-how in the Web3 area. We are looking forward for a smooth project launch with their active real-time support.\n"
     },
