@@ -4,19 +4,19 @@ export const FooterData = [
     items: [
       {
         label: "Games",
-        url: "",
+        url: "https://docs.google.com/presentation/d/1Xmye6BfGWhlde42LnwNkVylRWOaSSXdbY7zfgZHAZOM/edit#slide=id.g2b36d9fc51e_1_0",
       },
       {
         label: "Blockchains",
-        url: "",
+        url: "https://docs.google.com/presentation/d/1vKXAHaKqp7oUBnQP1qxmr84WpFX1pmXChGIl6R9Fle4/edit#slide=id.g128e0ee6714_0_0",
       },
       {
         label: "Marketing & Consulting",
-        url: "",
+        url: "https://docs.google.com/presentation/d/1UXiE1dvMIKhsUHwwVpzixc4v7lVHJNzG3WIYgpfw0AU/edit#slide=id.g25c23df782d_0_0",
       },
       {
         label: "Community",
-        url: "",
+        url: "https://pea.ai/",
       },
     ],
   },
@@ -25,15 +25,15 @@ export const FooterData = [
     items: [
       {
         label: "Data Room",
-        url: "",
+        url: "https://www.footprint.network/@Footprint/Footprint-Datasets-Data-Dictionary",
       },
       {
         label: "Analytics",
-        url: "",
+        url: "https://www.footprint.network/dashboards",
       },
       {
         label: "Growth Analytics",
-        url: "",
+        url: "https://www.footprint.network/fga",
       },
       {
         label: "Pricing",
@@ -42,6 +42,7 @@ export const FooterData = [
       {
         label: "Submit Contract",
         url: "/submit/contract",
+        startNewPanel: true,
       },
     ],
   },
@@ -71,7 +72,7 @@ export const FooterData = [
     ],
   },
   {
-    title: "Community",
+    title: "Social",
     items: [
       {
         label: "X (Twitter)",
@@ -91,14 +92,14 @@ export const FooterData = [
       },
       {
         label: "GitHub",
-        url: "https://www.linkedin.com/company/footprintanalytics",
+        url: "https://github.com/footprintanalytics",
       },
       {
         label: "LinkedIn",
         url: "https://www.linkedin.com/company/footprintanalytics",
       },
       {
-        label: "Youtube",
+        label: "YouTube",
         url: "https://www.youtube.com/channel/UCKwZbKyuhWveetGhZcNtSTg",
       },
     ],

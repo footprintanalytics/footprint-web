@@ -5,15 +5,15 @@ import AboutImage from "metabase/containers/aboutV2/components/AboutImage";
 
 const AboutPartnerV2 = () => {
   const data = [
+    { image: "home-v2/partner/img_partner_v2_consulting_group.png", title: "" },
     { image: "home-v2/partner/img_partner_v2_ABGA.png", title: "ABGA" },
-    { image: "home-v2/partner/img_partner_v2_animoca Brands.png", title: "" },
+    // { image: "home-v2/partner/img_partner_v2_animoca Brands.png", title: "" },
     { image: "home-v2/partner/img_partner_v2_arbitrum.png", title: "" },
     { image: "home-v2/partner/img_partner_v2_beosin.png", title: "" },
     { image: "home-v2/partner/img_partner_v2_bloomberg.png", title: "" },
     { image: "home-v2/partner/img_partner_v2_coinGecko.png", title: "" },
     { image: "home-v2/partner/img_partner_v2_coinMarketCap.png", title: "" },
     { image: "home-v2/partner/img_partner_v2_combo.png", title: "" },
-    { image: "home-v2/partner/img_partner_v2_consulting_group.png", title: "" },
     { image: "home-v2/partner/img_partner_v2_core_chain.png", title: "" },
     { image: "home-v2/partner/img_partner_v2_cronos.png", title: "" },
     { image: "home-v2/partner/img_partner_v2_crypto_times.png", title: "" },
@@ -53,7 +53,7 @@ const AboutPartnerV2 = () => {
           {topData.map((item, index) =>
             <li key={index}>
               <div className="About__partnerV2-list-item">
-                <AboutImage src={getOssUrl(item.image)} alt={item.title} placeholder={null}/>
+                <img src={getOssUrl(item.image)} alt={item.title} placeholder={null}/>
               </div>
             </li>
           )}
@@ -64,7 +64,7 @@ const AboutPartnerV2 = () => {
           {bottomData.map((item, index) =>
             <li key={index}>
               <div className="About__partnerV2-list-item">
-                <AboutImage src={getOssUrl(item.image)} alt={item.title} placeholder={null}/>
+                <img src={getOssUrl(item.image)} alt={item.title} placeholder={null}/>
               </div>
             </li>
           )}

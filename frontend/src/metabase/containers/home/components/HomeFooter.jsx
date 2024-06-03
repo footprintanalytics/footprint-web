@@ -39,7 +39,7 @@ const HomeFooter = props => {
               <Link to={"https://static.footprint.network/site/terms-of-service.html"} target="_blank">
                 <span>Terms of Service</span>
               </Link>
-              <Link to={"analytics@footprint.network"} target="_blank">
+              <Link to={"sales@footprint.network"} target="_blank">
                 <span>Contact Us</span>
               </Link>
             </div>

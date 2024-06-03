@@ -295,6 +295,7 @@
   flex-direction: column;
   align-items: center;
   justify-content: center;
+  position: relative;
   max-width: 1920px;
   margin: -80px auto 0;
   padding: 0 0 40px 0;
@@ -396,6 +397,10 @@
   gap: 40px;
   -webkit-animation: 120s swipe-left linear infinite normal;
   animation: 120s swipe-left linear infinite normal;
+}
+
+.About__data-trusted-inner ul:hover {
+  animation-play-state: paused;
 }
 
 .About__data-trusted-carousel {
@@ -919,8 +924,8 @@
 }
 @keyframes swipe-right {
   0% {
-    -webkit-transform: translate3d(-3400px, 0, 0);
-    transform: translate3d(-3400px, 0, 0);
+    -webkit-transform: translate3d(-5000px, 0, 0);
+    transform: translate3d(-5000px, 0, 0);
   }
   100% {
     -webkit-transform: translate3d(0, 0, 0);
@@ -941,6 +946,7 @@
   overflow: hidden;
   display: flex;
   white-space: nowrap;
+  gap: 40px;
 }
 
 .About__partnerV2-list-top li {
@@ -960,7 +966,6 @@
 }
 
 .About__partnerV2-list-item {
-  width: 300px;
   display: flex;
   justify-content: center;
   align-items: center;
@@ -971,13 +976,8 @@
 }
 
 .About__partnerV2-list-item img {
-  object-fit: scale-down;
-  width: 80%;
-  height: 50%;
   margin: 0 auto;
 }
-
-
 
 .About__see {
   position: relative;

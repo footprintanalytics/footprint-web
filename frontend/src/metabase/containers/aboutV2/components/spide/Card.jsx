@@ -4,7 +4,7 @@ import "./Card.module.css";
 import React, { useState } from "react";
 import { useSpring, animated } from "react-spring";
 
-function Card({ imagen, title, reports }) {
+function Card({ imagen, title, reports, chart }) {
   const [show, setShown] = useState(false);
 
   const props3 = useSpring({
@@ -20,7 +20,7 @@ function Card({ imagen, title, reports }) {
       onMouseLeave={() => setShown(false)}
     >
       {reports && (
-        <div className="flex flex-column gap-4" style={{height: 560, width: 800, background: "white", padding: 20}}>
+        <div className="flex flex-column gap-4" style={{height: 560, width: 800, background: "white", padding: 20, borderRadius: 8, overflow: "hidden"}}>
           {reports.map((r, index) => {
             return (
               <div className="flex" key={index}>
@@ -34,7 +34,10 @@ function Card({ imagen, title, reports }) {
           })}
         </div>
       )}
-      {imagen && <img src={imagen} alt="" style={{height: 560, width: 800}}/>}
+      {chart &&
+        <iframe src={chart} frameBorder="0" width={780} height={410} allowTransparency/>
+      }
+      {/*{imagen && <img src={imagen} alt="" style={{height: 560, width: 800}}/>}*/}
     </animated.div>
   );
 }

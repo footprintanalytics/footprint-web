@@ -11,12 +11,12 @@ const AboutDataTrusted = () => {
       desc: "NHN Corporation",
       post: "CTO",
       img: "home-v2/img_trusted_pebble.png",
-      detail: "NHN has maintained a successful social casino service in the Web2 area through data analysis for over 20 years.\n" +
+      detail: "NHN has maintained a successful social casino service in the Web2 area through data analysis for over 30 years.\n" +
         "In the process of preparing the Pebble project to expand into Web3, we are receiving a lot of help from Footprint's outstanding data processing and analysis know-how in the Web3 area. We are looking forward for a smooth project launch with their active real-time support.\n"
     },
     {
-      name: "Trusta",
-      desc: "Simon",
+      name: "Simon",
+      desc: "Trusta",
       post: "Founder & CTO",
       img: "home-v2/img_trusted_trusta.png",
       detail: "Without the on-chain data supported by Footprint, we cannot deliver our TrustScan, an AI-powered Sybil resistance product in just two months. We appreciate Footprint for their data coverage of over 20 chains, high-quality and structured data, and the instant tech support by Footprint engineers."
@@ -25,7 +25,7 @@ const AboutDataTrusted = () => {
       name: "Jeffrey Espejo",
       desc: "Gala",
       post: "VP of Blockchain",
-      img: "home-v2/img_trusted_gala.png",
+      img: "home-v2/img_trusted_gala.png?1=1",
       detail: "It's amazing what Footprint is doing for the blockchain space as a whole. Working with the team to integrate GalaChain to their platform has been an amazing experience!"
     },
     {
@@ -37,8 +37,8 @@ const AboutDataTrusted = () => {
         "We look forward to continuing our collaboration and exploring new opportunities together."
     },
     {
-      name: "Agave",
-      desc: "Isaac Dubuque",
+      name: "Isaac Dubuque",
+      desc: "Agave",
       post: "CEO & Co-founder",
       img: "home-v2/img_trusted_agave.png",
       detail: "Thanks to Footprint's SQL API, we have been able to efficiently access vast amounts of well-structured blockchain and market data across multiple chains. This has enabled us to power our analysis of Web3 gaming data and discover valuable insights.\n" +
