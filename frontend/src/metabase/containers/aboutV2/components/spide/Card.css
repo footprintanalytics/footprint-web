@@ -1,0 +1,19 @@
+.iframe-container {
+  position: relative;
+  width: 100%;
+  height: 500px; /* Adjust as needed */
+}
+
+.iframe-container iframe {
+  width: 100%;
+  height: 100%;
+}
+
+.iframe-container .iframe-overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 10;
+}

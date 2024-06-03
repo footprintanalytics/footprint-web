@@ -23,7 +23,7 @@ const AboutStart = ({
   };
 
   const CreateImage = () => {
-    return <AboutImage src={getOssUrl("home-v2/img_right_icon.png")} alt={"Arrow Right"}/>;
+    return <img height={28} width={28} src={getOssUrl("home-v2/img_right_icon.png")} alt={"Arrow Right"}/>;
   }
   return (
     <div className="About__start">

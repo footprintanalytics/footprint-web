@@ -17,8 +17,8 @@
 .home-footer-left {
   display: flex;
   flex-direction: column;
-  margin-right: 60px;
-  width: 30%;
+  margin-right: 100px;
+  width: 50%;
   margin-bottom: 20px;
 }
 

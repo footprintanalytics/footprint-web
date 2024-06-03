@@ -37,6 +37,12 @@ const studioTelegramIcon =
 
 export const socialData = [
   {
+    icon: "twitter",
+    label: "Twitter",
+    url: "https://twitter.com/Footprint_Data",
+    svg: twitterIcon,
+  },
+  {
     icon: "discord",
     label: "Discord",
     url: "https://discord.gg/3HYaR6USM7",
@@ -47,12 +53,6 @@ export const socialData = [
     label: "Telegram",
     url: "https://t.me/joinchat/4-ocuURAr2thODFh",
     svg: telegramIcon,
-  },
-  {
-    icon: "twitter",
-    label: "Twitter",
-    url: "https://twitter.com/Footprint_Data",
-    svg: twitterIcon,
   },
   {
     label: "Docs",

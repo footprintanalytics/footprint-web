@@ -1,75 +1,58 @@
 /* eslint-disable react/prop-types */
 import React from "react";
 import { getOssUrl } from "metabase/lib/image";
-import Icon from "metabase/components/Icon";
+import { Image } from "antd";
 
 const AboutDepth = () => {
 
   const array = [
     {
-      title: "Development",
-      desc: "Reliable for efficient product \ndevelopment across domains.",
-      advantage: ["High-quality", "Scalable", "Real-time"],
-      background: getOssUrl("home-v2/img_solution_1.png?1=1"),
-      icon: "home_solutions_1",
+      title: "Games",
+      desc: "Unify and unlock the power of your game data.",
+      img: getOssUrl("home-v2/img-solutions-games.png"),
+      icon: getOssUrl("home-v2/icon_home_solution1.png"),
     },
     {
-      title: "Research and Analysis",
-      desc: "Effortless for cross-chain Web3 \ninsights.",
-      advantage: ["Comprehensive", "Structured", "Curated"],
-      background: getOssUrl("home-v2/img_solution_2.png"),
-      icon: "home_solutions_2",
+      title: "Blockchains",
+      desc: "Expand ecosystem reach and presence.",
+      img: getOssUrl("home-v2/img-solutions-blockchain.png"),
+      icon: getOssUrl("home-v2/icon_home_solution2.png"),
     },
     {
-      title: "Marketing and Promotion",
-      desc: "Easy for user identification and \ncampaign performance evaluation.",
-      advantage: ["Informative", "Accurate", "Traceable"],
-      background: getOssUrl("home-v2/img_solution_3.png"),
-      icon: "home_solutions_3",
+      title: "Marketing & Consulting",
+      desc: "Conduct comprehensive wallet analysis for data-driven customer acquisition.",
+      img: getOssUrl("home-v2/img-solutions-marketing.png"),
+      icon: getOssUrl("home-v2/icon_home_solution3.png"),
     },
     {
-      title: "Financial Services",
-      desc: "Timely for massive crypto assets \nand entities' money flow.",
-      advantage: ["Standard", "Integrated", "Complete"],
-      background: getOssUrl("home-v2/img_solution_4.png"),
-      icon: "home_solutions_4",
+      title: "Community",
+      desc: "Boost community growth with intelligent tools and contribution tracking.",
+      img: getOssUrl("home-v2/img-solutions-community.png"),
+      icon: getOssUrl("home-v2/icon_home_solution4.png"),
     },
   ]
 
   return (
     <div className="About__solutions">
       <div className="About__depth-circle-bg" style={{ left: "8%" }}/>
-      <h2 className="About__title">Data Solutions for Every Specific Need</h2>
+      <h2 className="About__title">Tailored Blockchain Data Solutions</h2>
+      <h3 className="mt4 About__sub-title">Pioneering Data and Analytics Solutions Purpose-Built for Multiple Verticals</h3>
+      <div className="About__solutions-line" />
       <div className="About__solutions-inner">
         {
           array.map(item => {
             return (
-              <div className="About__solutions-inner-li" key={item.title} style={{ background: `url('${item.background}')` }}>
-                <h3>
-                  <Icon className="mr2" name={item.icon} size={28} style={{ marginRight: "12px", marginTop: "-4px" }}/>
-                  {item.title}
-                </h3>
-                <div className="flex flex-column" style={{ marginLeft: 40 }}>
-                  <span>{item.desc}</span>
-                  <ul>
-                    {item.advantage.map(a => {
-                      return (
-                        <li key={a}>
-                          <div style={{
-                            width: 16,
-                            height: 16,
-                            background: "#2FD6B8",
-                            paddingLeft: "1px",
-                            lineHeight: "20px",
-                            marginRight: "12px",
-                          }}>
-                            <Icon name="home_solutions_li" color="white" size={14}/>
-                          </div>
-                          {a}
-                        </li>
-                      )
-                    })}
-                  </ul>
+              <div className="About__solutions-inner-li" key={item.title}>
+                {/*<Image src={item.icon}/>*/}
+                <img src={item.img} />
+                <div className="flex flex-col" style={{ padding: "30px 40px" }}>
+                  <div className="flex mb1">
+                    <img src={item.icon} className="mr2"/><h3>{item.title}</h3>
+                  </div>
+                  <span style={{ height: 70 }}>{item.desc}</span>
+                  <div className="learn-more">
+                    <div>Learn More {"->"}</div>
+                  </div>
                 </div>
               </div>
             )
