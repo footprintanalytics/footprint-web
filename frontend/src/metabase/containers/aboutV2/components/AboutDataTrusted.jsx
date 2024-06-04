@@ -1,6 +1,8 @@
 /* eslint-disable react/prop-types */
 import React, { useRef } from "react";
 import 'react-indiana-drag-scroll/dist/style.css'
+import AboutImage from "metabase/containers/aboutV2/components/AboutImage";
+import { getOssUrl } from "metabase/lib/image";
 const AboutDataTrusted = () => {
   const data = [
     {
