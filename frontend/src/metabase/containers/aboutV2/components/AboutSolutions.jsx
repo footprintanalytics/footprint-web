@@ -10,32 +10,44 @@ const AboutDepth = () => {
     {
       title: "Games",
       desc: "Unify and unlock the power of your game data.",
-      img: getOssUrl("home-v2/img-solutions-games.png"),
+      img: getOssUrl("home-v2/icon_home_solution_games.png"),
       icon: getOssUrl("home-v2/icon_home_solution1.png"),
       link: "https://docs.google.com/presentation/d/1Xmye6BfGWhlde42LnwNkVylRWOaSSXdbY7zfgZHAZOM/edit#slide=id.g2b36d9fc51e_1_0",
     },
     {
       title: "Blockchains",
       desc: "Expand ecosystem reach and presence.",
-      img: getOssUrl("home-v2/img-solutions-blockchain.png"),
+      img: getOssUrl("home-v2/icon_home_solution_blockchain.png"),
       icon: getOssUrl("home-v2/icon_home_solution2.png"),
       link: "https://docs.google.com/presentation/d/1vKXAHaKqp7oUBnQP1qxmr84WpFX1pmXChGIl6R9Fle4/edit#slide=id.g128e0ee6714_0_0",
     },
     {
       title: "Marketing & Consulting",
       desc: "Conduct comprehensive wallet analysis for data-driven customer acquisition.",
-      img: getOssUrl("home-v2/img-solutions-marketing.png"),
+      img: getOssUrl("home-v2/icon_home_solution_marketing.png"),
       icon: getOssUrl("home-v2/icon_home_solution3.png"),
       link: "https://docs.google.com/presentation/d/1UXiE1dvMIKhsUHwwVpzixc4v7lVHJNzG3WIYgpfw0AU/edit#slide=id.g25c23df782d_0_0",
     },
     {
       title: "Community",
       desc: "Boost community growth with intelligent tools and contribution tracking.",
-      img: getOssUrl("home-v2/img-solutions-community.png"),
+      img: getOssUrl("home-v2/icon_home_solution_community.png"),
       icon: getOssUrl("home-v2/icon_home_solution4.png"),
       link: "https://pea.ai/",
     },
   ]
+  const MoreIcon =
+    <svg width="141px" height="32px" viewBox="0 0 141 32" version="1.1" xmlns="http://www.w3.org/2000/svg">
+      <g id="编组-8" stroke="none" strokeWidth="1" fill="none" fillRule="evenodd">
+        <rect id="矩形" fill="#F8F8FF" x="0" y="0" width="141" height="32" rx="16"></rect>
+        <g id="Group-767" transform="translate(16.000000, 8.000000)" fill="#182034">
+          <text id="Learn-More" fontFamily="Inter-SemiBold, Inter" fontSize="16" fontWeight="500" lineSpacing="16">
+            <tspan x="0" y="15">Learn More</tspan>
+          </text>
+          <path id="Arrow-19" d="M101.783312,3.7449172 L109.748461,8.30632071 L110.519819,8.7480549 L109.741756,9.17787046 L101.707379,13.6162007 L101.223836,12.7408798 L107.586,9.225 L101.503742,9.17871525 L95.996154,9.13634919 L96.003846,8.13637878 L101.511434,8.17874483 L107.594,8.225 L101.286361,4.61269582 L101.783312,3.7449172 Z" fill-rule="nonzero"></path>
+        </g>
+      </g>
+    </svg>
 
   return (
     <div className="About__solutions">
@@ -49,15 +61,15 @@ const AboutDepth = () => {
             return (
               <div className="About__solutions-inner-li" key={item.title}>
                 {/*<Image src={item.icon}/>*/}
-                <img src={item.img} />
-                <div className="flex flex-col" style={{ padding: "30px 40px" }}>
-                  <div className="flex mb1">
-                    <img src={item.icon} className="mr2"/><h3>{item.title}</h3>
+                <img className="absolute" src={item.img} />
+                <div className="flex flex-col justify-center absolute" style={{ padding: "30px 28px", height: "100%" }}>
+                  <div className="flex mb1 ">
+                    <img src={item.icon} className="mr1"/><h3>{item.title}</h3>
                   </div>
-                  <span style={{ height: 70 }}>{item.desc}</span>
+                  <span style={{ width: 250 }}>{item.desc}</span>
                   <div className="learn-more">
-                    <Link className="text-underline text-underline-hover" to={item.link}>
-                      <div>Learn More {"->"}</div>
+                    <Link className="text-underline text-underline-hover" to={item.link} target="_blank">
+                      {MoreIcon}
                     </Link>
                   </div>
                 </div>

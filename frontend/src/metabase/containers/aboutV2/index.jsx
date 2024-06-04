@@ -60,7 +60,9 @@ const About = props => {
         {/*<AboutDepth />*/}
         <AboutDemo />
         <AboutDataCoverage />
-        <AboutDataFeature />
+        <LazyLoadAbout>
+          <AboutDataFeature />
+        </LazyLoadAbout>
         <AboutDataModel />
         <AboutDataTrusted />
         <AboutBacked list={data.backedList} />

@@ -904,6 +904,7 @@
   filter: blur(75px);
   position: absolute;
   top: 16%;
+  z-index: 0;
 }
 
 .About__partnerV2 {
@@ -1797,27 +1798,28 @@
 
 .About__solutions-inner-li {
   width: 620px;
-  height: 500px;
+  height: 300px;
   /*border: 1px solid #f0f0f003;*/
   border-radius: 20px;
   background: linear-gradient(135deg, #203C79, #182034);
   overflow: hidden;
+  position: relative;
 }
 
 .About__solutions-inner-li .learn-more {
-  text-align: right;
   width: 100%;
+  margin-top: 12px
 }
 
 .About__solutions-inner-li h3 {
-  font-size: 24px;
+  font-size: 30px;
   display: flex;
   align-items: center;
 }
 
 .About__solutions-inner-li span {
   color: #A0AEC0;
-  font-size: 16px;
+  font-size: 20px;
   white-space: pre-line;
 }
 

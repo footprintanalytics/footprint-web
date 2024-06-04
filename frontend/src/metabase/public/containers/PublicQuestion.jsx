@@ -194,6 +194,7 @@ class PublicQuestion extends Component {
       className,
       hideFooter,
       isNightMode,
+      hideAllParameters,
     } = this.props;
     const { card, result, initialized, parameterValues } = this.state;
     // const publicUuid = uuid || parseTitleId(titleAndId).id;
@@ -251,6 +252,7 @@ class PublicQuestion extends Component {
         // actionButtons={actionButtons}
         parameters={initialized ? parameters : []}
         headerLayout={header}
+        hideAllParameters={hideAllParameters}
         parameterValues={parameterValues}
         hideTitle={hideTitle || hashData?.hide_title}
         isNightMode={shouldRenderAsNightMode}
