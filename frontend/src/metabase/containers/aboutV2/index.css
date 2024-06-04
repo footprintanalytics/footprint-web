@@ -346,7 +346,7 @@
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  padding: 10px 0 20px 0;
+  padding: 50px 0 20px 0;
   background-image: url("https://static.footprint.network/home-v2/img_hexagon_bg_7.png");
   background-size: 580px 150px;
   background-repeat: no-repeat;
@@ -930,7 +930,7 @@
 
 .About__partnerV2 {
   max-width: 1280px;
-  margin: -280px auto 0;
+  margin: -270px auto 0;
   padding: 20px 0 100px 0;
 }
 
@@ -974,7 +974,7 @@
 .About__partnerV2-list-top li {
   position: relative;
   white-space: break-spaces;
-  margin: 20px 0;
+  margin: 10px 0;
   display: flex;
   animation: 100s swipe-left linear infinite normal;
 }
@@ -982,7 +982,7 @@
 .About__partnerV2-list-bottom li {
   position: relative;
   white-space: break-spaces;
-  margin: 20px 0;
+  margin: 10px 0;
   display: flex;
   animation: 100s swipe-right linear infinite normal;
 }

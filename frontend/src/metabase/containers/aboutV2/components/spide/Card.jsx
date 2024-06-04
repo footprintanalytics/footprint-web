@@ -15,7 +15,7 @@ function Card({ imagen, title, link }) {
   });
   const renderResult = () => {
     return (<animated.div
-      className={"card2 cursor-pointer"}
+      className={`card2 ${link ? "cursor-pointer": ""}`}
       style={props3}
       onMouseEnter={() => setShown(true)}
       onMouseLeave={() => setShown(false)}

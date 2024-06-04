@@ -11,9 +11,9 @@ export default function Carroussel(props) {
 
   const [offsetRadius, setOffsetRadius] = useState(2);
   const [showArrows, setShowArrows] = useState(false);
-  const [goToSlide, setGoToSlide] = useState(null);
+  const [goToSlide, setGoToSlide] = useState(0);
   const [cards, setCards] = useState(table);
-
+  console.log("goToSlide", goToSlide)
   useEffect(() => {
     setOffsetRadius(props.offset);
     setShowArrows(props.showArrows);
@@ -32,7 +32,7 @@ export default function Carroussel(props) {
   return (
     // eslint-disable-next-line react/react-in-jsx-scope
     <div
-      style={{ width: props.width, height: props.height, margin: props.margin }}
+      style={{ width: props.width, height: props.height, margin: props.margin, zIndex: 1 }}
     >
       <Carousel
         slides={cards}
@@ -41,6 +41,26 @@ export default function Carroussel(props) {
         showNavigation={showArrows}
         animationConfig={config.gentle}
       />
+      <div className="flex justify-center align-center">
+        {cards.map((slide, index) => (
+          <span
+            key={slide.id}
+            style={{
+              display: 'inline-block',
+              width: goToSlide === index ? '10px': '8px',
+              height: goToSlide === index ? '10px': '8px',
+              margin: '7px 5px',
+              borderRadius: '50%',
+              backgroundColor: goToSlide === index ? '#FFF' : '#ffffff40',
+              cursor: 'pointer',
+            }}
+            onClick={() => {
+              console.log("index", index)
+              setGoToSlide(index)
+            }}
+          />
+        ))}
+      </div>
     </div>
   );
 }

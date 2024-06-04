@@ -16,7 +16,7 @@ const AboutDataFeature = () => {
       title: "Games",
       desc: "Explore 3,000+ games with detailed data on gamers, revenue, in-game assets, and more.",
       content: (
-        <Card imagen="https://static.footprint.network/home-v2/img_Insights_games.png" title={"Games"}
+        <Card imagen="https://static.footprint.network/home-v2/img_insight_1.jpg" title={"Games"}
               link={current === 0 ? "https://www.footprint.network/research/gamefi/game-rankings/top-games": ""}/>
       ),
       link: "https://www.footprint.network/research/gamefi/game-rankings/top-games",
@@ -26,7 +26,7 @@ const AboutDataFeature = () => {
       title: "Chain",
       desc: "Embark on a journey across 30+ blockchains, unlocking real-time and comprehensive blockchain network data.",
       content: (
-        <Card imagen="https://static.footprint.network/home-v2/img_Insights_chain.png" title={"Chain"}
+        <Card imagen="https://static.footprint.network/home-v2/img_insight_2.jpg" title={"Chain"}
               link={current === 1 ? "https://www.footprint.network/research/chain/chain-rankings/top-chains": ""}/>
       ),
       link: "https://www.footprint.network/research/chain/chain-rankings/top-chains",
@@ -36,7 +36,7 @@ const AboutDataFeature = () => {
       title: "Wallet",
       desc: "Track and trace activities, historical balance, and profiles over 100+ million addresses.",
       content: (
-        <Card imagen="https://static.footprint.network/home-v2/img_Insights_wallet.png" title={"Wallet"}
+        <Card imagen="https://static.footprint.network/home-v2/img_insight_3.jpg" title={"Wallet"}
               link={current === 2 ? "https://www.footprint.network/research/wallet": ""}/>
       ),
       link: "https://www.footprint.network/research/wallet",
@@ -46,7 +46,7 @@ const AboutDataFeature = () => {
       title: "Token",
       desc: "Instantly assess information for 100,000+ tokens, covering money flow, holders, and intricate details.",
       content: (
-        <Card imagen="https://static.footprint.network/home-v2/img_Insights_token.png" title={"Token"}
+        <Card imagen="https://static.footprint.network/home-v2/img_insight_4.jpg" title={"Token"}
               link={current === 3 ? "https://www.footprint.network/research/token/rankings/token-exchange-net-flow": ""}/>
       ),
       link: "https://www.footprint.network/research/token/rankings/token-exchange-net-flow",
@@ -56,7 +56,7 @@ const AboutDataFeature = () => {
       title: "NFT",
       desc: "Fetch NFT data from ownerships to sales to metadata for more than 2 million NFTs.",
       content: (
-        <Card imagen="https://static.footprint.network/home-v2/img_Insights_NFT.png" title={"NFT"}
+        <Card imagen="https://static.footprint.network/home-v2/img_insight_5.jpg" title={"NFT"}
               link={current === 4 ? "https://www.footprint.network/research/nft/nft-rankings/top-marketplaces?date=past30days~": ""}/>
       ),
       link: "https://www.footprint.network/research/nft/nft-rankings/top-marketplaces?date=past30days~",
@@ -75,7 +75,7 @@ const AboutDataFeature = () => {
 
   return (
     <div className="About__data-feature">
-      <div className="About__depth-circle-bg" />
+      <div className="About__depth-circle-bg" style={{ zIndex: 0 }}/>
       <h2 className="About__title">
         Expand Your Insights with Comprehensive <br/>Blockchain Data Analysis
       </h2>
@@ -87,11 +87,12 @@ const AboutDataFeature = () => {
       </div>
       <Carroussel
         cards={cards}
-        height="500px"
+        height="520px"
         width="30%"
         margin="0 auto"
         offset={2}
         showArrows={false}
+        current={current}
         onChangeSlide={(slide) => {
           if (slide !== null) {
             setCurrent(slide)
