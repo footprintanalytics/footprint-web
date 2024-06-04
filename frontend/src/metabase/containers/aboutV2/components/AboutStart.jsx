@@ -48,7 +48,7 @@ const AboutStart = ({
             <span>Off-Chain & On-Chain Data</span>
           </li>
         </ul>
-        <div className="flex" style={{ marginTop: 50 }}>
+        <div className="flex" style={{ marginTop: 40 }}>
           <AboutButton
             buttonText={user ? "View Docs" : "Try for Free"}
             onClick={(e) => {

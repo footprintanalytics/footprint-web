@@ -118,12 +118,12 @@ const AboutDemo = () => {
   return (
     <div className="About__demo">
       <div className="About__depth-circle-bg" style={{ top: "100px", background: "rgba(68, 68, 255, 0.40)"}}/>
-      <h2 className="About__title my4">Data Products Suite</h2>
+      <h2 className="About__title">Data Products Suite</h2>
 
       <div className="About__demo-data-api">
-        <div className="About__demo-top" style={{ paddingLeft: 60 }}>
+        <div className="About__demo-top" style={{ paddingLeft: 60, paddingBottom: 50 }}>
           <h3>Data Room</h3>
-          <h4>Structured, Human-Readable Simple Blockchain Data.</h4>
+          <h4>Structured, Simple, and Semantic Business Blockchain Data.</h4>
           <span>Gain access to a wide array of abstracted datasets, <br/>facilitating effortless data exploration and empowering the creation of <br/>next-generation applications whenever required.</span>
           <ul>
             {advantage.map(a => {

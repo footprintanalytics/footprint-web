@@ -3,42 +3,34 @@
 import "./Card.module.css";
 import React, { useState } from "react";
 import { useSpring, animated } from "react-spring";
-
-function Card({ imagen, title, reports, chart }) {
+import Link from "metabase/core/components/Link";
+function Card({ imagen, title, link }) {
   const [show, setShown] = useState(false);
 
   const props3 = useSpring({
     transform: show ? "scale(1.03)" : "scale(1)",
     boxShadow: show
       ? "0 20px 25px rgb(0 0 0 / 25%)"
-      : "0 2px 10px rgb(0 0 0 / 8%)"
+      : "0 2px 10px rgb(0 0 0 / 8%)",
   });
-  return (
-    <animated.div
+  const renderResult = () => {
+    return (<animated.div
+      className={"card2 cursor-pointer"}
       style={props3}
       onMouseEnter={() => setShown(true)}
       onMouseLeave={() => setShown(false)}
     >
-      {reports && (
-        <div className="flex flex-column gap-4" style={{height: 560, width: 800, background: "white", padding: 20, borderRadius: 8, overflow: "hidden"}}>
-          {reports.map((r, index) => {
-            return (
-              <div className="flex" key={index}>
-                <div className={"flex flex-column"} style={{ flex: 1 }}>
-                  <h4 style={{color: "#000000", fontSize: 18}}>{r.title}</h4>
-                  <p style={{color: "#888888", fontSize: 14}}>{r.desc}</p>
-                </div>
-                <img src={r.image} style = {{width: 300, marginLeft: 10}} alt={r.title}/>
-              </div>
-            );
-          })}
-        </div>
-      )}
-      {chart &&
-        <iframe src={chart} frameBorder="0" width={780} height={410} allowTransparency/>
-      }
-      {/*{imagen && <img src={imagen} alt="" style={{height: 560, width: 800}}/>}*/}
-    </animated.div>
+      {imagen && <img src={imagen} alt=""
+                      style={{ height: 410, width: 780, overflow: "hidden", borderRadius: 8, objectFit: "cover" }} />}
+    </animated.div>)
+  }
+  if (!link) {
+    return <>{renderResult()}</>
+  }
+  return (
+    <Link to={link} target={"_blank"}>
+      {renderResult()}
+    </Link>
   );
 }
 

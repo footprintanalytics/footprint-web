@@ -12,8 +12,8 @@ export default function Carroussel(props) {
   const [offsetRadius, setOffsetRadius] = useState(2);
   const [showArrows, setShowArrows] = useState(false);
   const [goToSlide, setGoToSlide] = useState(null);
-  const [cards] = useState(table);
-  console.log("cards", cards)
+  const [cards, setCards] = useState(table);
+
   useEffect(() => {
     setOffsetRadius(props.offset);
     setShowArrows(props.showArrows);
@@ -22,6 +22,12 @@ export default function Carroussel(props) {
   useEffect(() => {
     props.onChangeSlide(goToSlide)
   }, [goToSlide]);
+  useEffect(() => {
+    const table = props.cards.map((element, index) => {
+      return { ...element, onClick: () => setGoToSlide(index) };
+    });
+    setCards(table);
+  }, [props.cards]);
 
   return (
     // eslint-disable-next-line react/react-in-jsx-scope

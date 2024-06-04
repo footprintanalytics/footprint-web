@@ -3,9 +3,6 @@
   flex-direction: column;
   /* align-items: center; */
   justify-content: center;
-  background-color: bisque;
-  width: 16rem;
   height: fit-content;
-  padding: 0 2rem 2rem 2rem;
-  border-radius: 10px;
+  border-radius: 8px;
 }

@@ -53,8 +53,7 @@ const AboutDepth = () => {
     <div className="About__solutions">
       <div className="About__depth-circle-bg" style={{ left: "8%" }}/>
       <h2 className="About__title">Tailored Blockchain Data Solutions</h2>
-      <h3 className="mt4 About__sub-title">Pioneering Data and Analytics Solutions Purpose-Built for Multiple Verticals</h3>
-      <div className="About__solutions-line" />
+      <h3 className="mt1 About__sub-title" style={{color: "#A0AEC0"}}>Pioneering Data and Analytics Solutions Purpose-Built for Multiple Verticals</h3>
       <div className="About__solutions-inner">
         {
           array.map(item => {
