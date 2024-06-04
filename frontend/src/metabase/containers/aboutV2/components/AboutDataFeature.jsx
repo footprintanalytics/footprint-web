@@ -31,7 +31,8 @@ const AboutDataFeature = () => {
         <Card imagen="https://static.footprint.network/home-v2/img_Insights_games.png" title={"Games"} chart={"https://www.footprint.network/public/chart/Blockchain-Games-Active-Users-fp-435743d2-58cf-4397-9bf0-689b8db107d2#theme=night"}/>
       ),
       link: "https://www.footprint.network/research/gamefi/game-rankings/top-games",
-      uuid: "435743d2-58cf-4397-9bf0-689b8db107d2",
+      uuid: "f466d2e3-ad64-4944-8fc8-6e6edf96bb77",
+      // uuid: "435743d2-58cf-4397-9bf0-689b8db107d2",
     },
     {
       key: 2,
@@ -41,7 +42,8 @@ const AboutDataFeature = () => {
         <Card imagen="https://static.footprint.network/home-v2/img_Insights_chain.png" title={"Chain"} chart={"https://www.footprint.network/public/chart/Cross-Chains-Daily-Active-Addresses-fp-361d2d61-1f4a-4bfb-923d-feb240c5a085#theme=night"}/>
       ),
       link: "https://www.footprint.network/research/chain/chain-rankings/top-chains",
-      uuid: "361d2d61-1f4a-4bfb-923d-feb240c5a085",
+      // uuid: "361d2d61-1f4a-4bfb-923d-feb240c5a085",
+      uuid: "f03f1dfc-2066-4a72-a9f5-e1552b78de6d",
     },
     {
       key: 3,
@@ -51,7 +53,8 @@ const AboutDataFeature = () => {
         <Card imagen="https://static.footprint.network/home-v2/img_Insights_wallet.png" title={"Wallet"} chart={"https://www.footprint.network/public/chart/Historical-Token-Balances-for-Wallet-fp-764ccace-e9f7-4850-98db-908996ceb164?chain=Ethereum&wallet_address=0xd8dA6BF26964aF9D7eEd9e03E53415D37aA96045#theme=night"}/>
       ),
       link: "https://www.footprint.network/research/wallet",
-      uuid: "764ccace-e9f7-4850-98db-908996ceb164",
+      // uuid: "764ccace-e9f7-4850-98db-908996ceb164",
+      uuid: "8459b154-59d9-4955-9e30-0cee3bdf8abf",
     },
     {
       key: 4,
@@ -61,7 +64,8 @@ const AboutDataFeature = () => {
         <Card imagen="https://static.footprint.network/home-v2/img_Insights_token.png" title={"Token"} chart={"https://www.footprint.network/public/chart/Daily-Token-Trading-Value-in-CEXs-fp-0f9ed0c3-5283-4d5f-85d2-5fcff588d2ef#theme=night"}/>
       ),
       link: "https://www.footprint.network/research/token/rankings/token-exchange-net-flow",
-      uuid: "0f9ed0c3-5283-4d5f-85d2-5fcff588d2ef",
+      // uuid: "0f9ed0c3-5283-4d5f-85d2-5fcff588d2ef",
+      uuid: "9dcfb087-a247-41a4-90dd-9ecc99757c20",
     },
     {
       key: 5,
@@ -71,30 +75,21 @@ const AboutDataFeature = () => {
         <Card imagen="https://static.footprint.network/home-v2/img_Insights_NFT.png" title={"NFT"} chart={"https://www.footprint.network/public/chart/Weekly-Volume-by-Marketplace-fp-ca99b5e9-2ffa-4dce-834d-b646514b2d7e#theme=night"}/>
       ),
       link: "https://www.footprint.network/research/nft/nft-rankings/top-marketplaces?date=past30days~",
-      uuid: "ca99b5e9-2ffa-4dce-834d-b646514b2d7e",
+      // uuid: "ca99b5e9-2ffa-4dce-834d-b646514b2d7e",
+      uuid: "40da07e9-4406-460d-8428-ef7dc8d881db",
     },
-    // {
-    //   key: 6,
-    //   title: "Reports",
-    //   desc: "Stay ahead of the trend in blockchain industry. ",
-    //   content: (
-    //     <Card
-    //       reports={[
-    //         {
-    //           title: "Pea.AI and Ladder Protocol Unite to Energize the Blockchain and NFT Community",
-    //           desc: "Pea.AI and Ladder Protocol Unite to Energize the Blockchain and NFT Community",
-    //           image: "https://statichk.footprint.network/article/b98a81de-f56b-4804-8e8d-7fdb4117bcc8.jpg",
-    //         },
-    //         {
-    //           title: "April 2024 Public Chain Update: Bitcoin Halving, Market Declines, and Key Advancements",
-    //           desc: "This report highlights key developments in the April public chain sector, including the impact of the Bitcoin Halving, market downturns, and advancements in TON and Base.",
-    //           image: "https://statichk.footprint.network/article/616c97da-eeca-4043-b42b-54947476e3be.png",
-    //         }
-    //       ]}
-    //       title={"Reports"}/>
-    //   ),
-    //   link: "https://www.footprint.network/news/blog",
-    // }
+    {
+      key: 6,
+      title: "Reports",
+      desc: "Stay ahead of the trend in blockchain industry. ",
+      content: (
+        <Card
+          imagen={"https://statichk.footprint.network/article/80933845-7ac9-4322-91f8-999617408153.png"}
+          title={"Reports"}/>
+      ),
+      image: "https://statichk.footprint.network/article/80933845-7ac9-4322-91f8-999617408153.png",
+      link: "https://www.footprint.network/news/blog",
+    }
   ];
   const pagination = {
     clickable: true,
@@ -124,7 +119,7 @@ const AboutDataFeature = () => {
         lazy={true}
         navigation={true}
         autoplay={{
-          delay: 5000,
+          delay: 10000,
           disableOnInteraction: true,
         }}
         onSlideChange={(swiper) => setCurrent(swiper?.activeIndex)}
@@ -132,7 +127,7 @@ const AboutDataFeature = () => {
       >
         {cards.map((card, index) => (
           <SwiperSlide key={card.key}>
-            {current >= index - 1 && current <= index + 1  && <PublicQuestion
+            {card.uuid && current >= index - 1 && current <= index + 1  && <PublicQuestion
               className="feature__public-dashboard"
               params={{ uuid: card.uuid }}
               location={location}
@@ -142,60 +137,9 @@ const AboutDataFeature = () => {
               hideAllParameters
               hideFooter
             />}
+            {card.image && <img src={card.image} alt={card.title} className="w-full"/>}
           </SwiperSlide>
         ))}
-          {/*<SwiperSlide virtualIndex={2}>*/}
-          {/*  <PublicQuestion*/}
-          {/*    key={"361d2d61-1f4a-4bfb-923d-feb240c5a085"}*/}
-          {/*    className="feature__public-dashboard"*/}
-          {/*    params={{ uuid: "361d2d61-1f4a-4bfb-923d-feb240c5a085" }}*/}
-          {/*    location={location}*/}
-          {/*    isFullscreen={false}*/}
-          {/*    hideTitle={true}*/}
-          {/*    disableUpdateTitle={true}*/}
-          {/*    hideAllParameters*/}
-          {/*    hideFooter*/}
-          {/*  />*/}
-          {/*</SwiperSlide>*/}
-          {/*<SwiperSlide >*/}
-          {/*  <PublicQuestion*/}
-          {/*    key={3}*/}
-          {/*    className="feature__public-dashboard"*/}
-          {/*    params={{ uuid: "ca99b5e9-2ffa-4dce-834d-b646514b2d7e" }}*/}
-          {/*    location={location}*/}
-          {/*    isFullscreen={false}*/}
-          {/*    hideTitle={true}*/}
-          {/*    disableUpdateTitle={true}*/}
-          {/*    hideAllParameters*/}
-          {/*    hideFooter*/}
-          {/*  />*/}
-          {/*</SwiperSlide>*/}
-          {/*<SwiperSlide >*/}
-          {/*  <PublicQuestion*/}
-          {/*    key={3}*/}
-          {/*    className="feature__public-dashboard"*/}
-          {/*    params={{ uuid: "764ccace-e9f7-4850-98db-908996ceb164" }}*/}
-          {/*    location={location}*/}
-          {/*    isFullscreen={false}*/}
-          {/*    hideTitle={true}*/}
-          {/*    disableUpdateTitle={true}*/}
-          {/*    hideAllParameters*/}
-          {/*    hideFooter*/}
-          {/*  />*/}
-          {/*</SwiperSlide>*/}
-          {/*<SwiperSlide >*/}
-          {/*  <PublicQuestion*/}
-          {/*    key={3}*/}
-          {/*    className="feature__public-dashboard"*/}
-          {/*    params={{ uuid: "ca99b5e9-2ffa-4dce-834d-b646514b2d7e" }}*/}
-          {/*    location={location}*/}
-          {/*    isFullscreen={false}*/}
-          {/*    hideTitle={true}*/}
-          {/*    disableUpdateTitle={true}*/}
-          {/*    hideAllParameters*/}
-          {/*    hideFooter*/}
-          {/*  />*/}
-          {/*</SwiperSlide>*/}
       </Swiper>
       <div className="About__depth-circle-bg"/>
     </div>
