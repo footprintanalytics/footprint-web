@@ -66,7 +66,7 @@ const AboutDepth = () => {
                   <div className="flex mb1 ">
                     <img src={item.icon} className="mr1"/><h3>{item.title}</h3>
                   </div>
-                  <span style={{ width: 250 }}>{item.desc}</span>
+                  <span style={{ width: 280 }}>{item.desc}</span>
                   <div className="learn-more">
                     <Link className="text-underline text-underline-hover" to={item.link} target="_blank">
                       {MoreIcon}
