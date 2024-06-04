@@ -54,7 +54,7 @@ const AboutDataTrusted = () => {
               <div key={index} className="About__data-trusted-carousel">
                 <div className={"About__data-trusted-detail"}>{item.detail}</div>
                 <div className="About__data-trusted-carousel-left">
-                  {/*<AboutImage alt={item.name} src={getOssUrl(item.img)} style={{ height: 70, width: 70 }}/>*/}
+                  <AboutImage alt={item.name} src={getOssUrl(item.img)} style={{ height: 70, width: 70 }}/>
                   <div className="flex flex-col">
                     <h3>{item.name}</h3>
                     <div className={"flex justify-center align-center"}><span>{`${item.desc}  |  ${item.post}`}</span></div>
