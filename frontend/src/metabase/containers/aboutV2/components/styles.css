@@ -10,6 +10,8 @@
   background-size: cover;
   width: 780px;
   height: 410px;
+  border-radius: 8px;
+  overflow: hidden;
 }
 
 .swiper-slide img {
@@ -18,7 +20,7 @@
 }
 
 .feature__public-dashboard {
-  padding: 20px;
+  padding: 0 20px 20px;
   width: 780px;
   height: 410px;
 }

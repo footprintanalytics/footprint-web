@@ -17,7 +17,7 @@ import 'swiper/css/pagination';
 import './styles.css';
 
 // import required modules
-import { EffectCoverflow, Pagination } from 'swiper/modules';
+import { Autoplay, Pagination, Navigation } from 'swiper/modules';
 import PublicQuestion from "metabase/public/containers/PublicQuestion";
 const AboutDataFeature = () => {
   const [current, setCurrent] = React.useState(0);
@@ -33,7 +33,7 @@ const AboutDataFeature = () => {
       link: "https://www.footprint.network/research/gamefi/game-rankings/top-games",
       uuid: "435743d2-58cf-4397-9bf0-689b8db107d2",
     },
-    /*{
+    {
       key: 2,
       title: "Chain",
       desc: "Embark on a journey across 30+ blockchains, unlocking real-time and comprehensive blockchain network data.",
@@ -42,17 +42,17 @@ const AboutDataFeature = () => {
       ),
       link: "https://www.footprint.network/research/chain/chain-rankings/top-chains",
       uuid: "361d2d61-1f4a-4bfb-923d-feb240c5a085",
-    },*/
-    // {
-    //   key: 3,
-    //   title: "Wallet",
-    //   desc: "Track and trace activities, historical balance, and profiles over 100+ million addresses.",
-    //   content: (
-    //     <Card imagen="https://static.footprint.network/home-v2/img_Insights_wallet.png" title={"Wallet"} chart={"https://www.footprint.network/public/chart/Historical-Token-Balances-for-Wallet-fp-764ccace-e9f7-4850-98db-908996ceb164?chain=Ethereum&wallet_address=0xd8dA6BF26964aF9D7eEd9e03E53415D37aA96045#theme=night"}/>
-    //   ),
-    //   link: "https://www.footprint.network/research/wallet",
-    //   uuid: "764ccace-e9f7-4850-98db-908996ceb164",
-    // },
+    },
+    {
+      key: 3,
+      title: "Wallet",
+      desc: "Track and trace activities, historical balance, and profiles over 100+ million addresses.",
+      content: (
+        <Card imagen="https://static.footprint.network/home-v2/img_Insights_wallet.png" title={"Wallet"} chart={"https://www.footprint.network/public/chart/Historical-Token-Balances-for-Wallet-fp-764ccace-e9f7-4850-98db-908996ceb164?chain=Ethereum&wallet_address=0xd8dA6BF26964aF9D7eEd9e03E53415D37aA96045#theme=night"}/>
+      ),
+      link: "https://www.footprint.network/research/wallet",
+      uuid: "764ccace-e9f7-4850-98db-908996ceb164",
+    },
     {
       key: 4,
       title: "Token",
@@ -116,9 +116,17 @@ const AboutDataFeature = () => {
       </div>
 
       <Swiper
-        pagination={pagination}
-        modules={[Pagination]}
+        pagination={{
+          clickable: true,
+        }}
+        spaceBetween={30}
+        modules={[Autoplay, Pagination, Navigation]}
         lazy={true}
+        navigation={true}
+        autoplay={{
+          delay: 5000,
+          disableOnInteraction: true,
+        }}
         onSlideChange={(swiper) => setCurrent(swiper?.activeIndex)}
         className="mySwiper"
       >
