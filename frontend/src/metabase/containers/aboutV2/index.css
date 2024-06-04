@@ -468,10 +468,32 @@
   width: fit-content;
   font-size: 64px;
   margin-top: 20px;
+  margin-bottom: 20px;
   font-weight: bold;
   background: linear-gradient(90deg, #FFFFFF 0%, #4444FF 100%), #FFFFFF;
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
+}
+
+.About__chain-layout {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 35px;
+  flex-wrap: wrap;
+  width: 100%;
+  max-width: 1280px;
+}
+
+.About__chain-layout-item {
+  width: 68px;
+  height: 68px;
+}
+
+.About__chain-layout-item img {
+  width: 68px;
+  height: 68px;
+  border-radius: 50%;
 }
 
 .About__data-image {
@@ -481,7 +503,7 @@
 .About__data-coverage ul {
   display: flex;
   justify-content: center;
-  margin: 40px 0 40px 0;
+  margin: 80px 0 40px 0;
 }
 
 .About__data-coverage li {
