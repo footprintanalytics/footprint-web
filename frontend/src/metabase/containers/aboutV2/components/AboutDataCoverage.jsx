@@ -24,12 +24,12 @@ const AboutDataCoverage = () => {
   const chainList = [
     {
       title: "Ethereum",
-      img: getOssUrl("studio/img-chain-1.png"),
+      img: getOssUrl("home-v2/chain/img-chain-Ethereum.png?image_process=resize,w_68/crop,h_68/format,png"),
       link: "/research/chain/chain-stats/ethereum-overview",
     },
     {
       title: "Ronin",
-      img: getOssUrl("studio/img-chain-12.png"),
+      img: getOssUrl("home-v2/chain/img-chain-Ronin.png?image_process=resize,w_68/crop,h_68/format,png"),
       link: "/research/chain/chain-stats/ronin-overview",
     },
     {
@@ -39,12 +39,12 @@ const AboutDataCoverage = () => {
     },
     {
       title: "BNB Chain",
-      img: getOssUrl("studio/img-chain-2.png"),
+      img: getOssUrl("home-v2/chain/img-chain-BNB-chain.png?image_process=resize,w_68/crop,h_68/format,png"),
       link: "/research/chain/chain-stats/bnb-chain-overview",
     },
     {
       title: "Polygon",
-      img: getOssUrl("studio/img-chain-34.png"),
+      img: getOssUrl("home-v2/chain/img-chain-Polygon.png?image_process=resize,w_68/crop,h_68/format,png"),
       link: "/research/chain/chain-stats/polygon-overview",
     },
     {
@@ -54,12 +54,12 @@ const AboutDataCoverage = () => {
     },
     {
       title: "Arbitrum One",
-      img: getOssUrl("studio/img-chain-32.png"),
+      img: getOssUrl("home-v2/chain/img-chain-Arbitrum.png?image_process=resize,w_68/crop,h_68/format,png"),
       link: "/research/chain/chain-stats/arbitrum-overview",
     },
     {
       title: "Optimism",
-      img: getOssUrl("studio/img-chain-33.png"),
+      img: getOssUrl("home-v2/chain/img-chain-Optimism.png?image_process=resize,w_68/crop,h_68/format,png"),
       link: "/research/chain/chain-stats/optimism-overview",
     },
     {
@@ -79,17 +79,17 @@ const AboutDataCoverage = () => {
     },
     {
       title: "Oasys",
-      img: getOssUrl("studio/img-chain-13.png"),
+      img: getOssUrl("home-v2/chain/img-chain-Oasys.png?image_process=resize,w_68/crop,h_68/format,png"),
       link: "/research/chain/chain-stats/oasys-overview",
     },
     {
       title: "MCH Verse",
-      img: getOssUrl("studio/img-chain-36.png"),
+      img: getOssUrl("home-v2/chain/img-chain-MCH-Verse.png?image_process=resize,w_68/crop,h_68/format,png"),
       link: "/research/chain/chain-stats/mch-verse-gamefi-overview",
     },
     {
       title: "HOME Verse",
-      img: getOssUrl("studio/img-chain-35.png?image_process=resize,w_36/crop,h_36/format,png"),
+      img: getOssUrl("home-v2/chain/img-chain-HOME-Verse.png?image_process=resize,w_68/crop,h_68/format,png"),
       link: "/research/chain/chain-stats/home-verse-overview",
     },
     {
@@ -114,22 +114,22 @@ const AboutDataCoverage = () => {
     },
     {
       title: "Cronos",
-      img: getOssUrl("studio/img-chain-6.png?image_process=resize,w_36/crop,h_36/format,png"),
+      img: getOssUrl("home-v2/chain/img-chain-Cronos.png?image_process=resize,w_68/crop,h_68/format,png"),
       link: "/research/chain/chain-stats/cronos-overview",
     },
     {
       title: "Fantom",
-      img: getOssUrl("studio/img-chain-5.png"),
+      img: getOssUrl("home-v2/chain/img-chain-Fantom.png?image_process=resize,w_68/crop,h_68/format,png"),
       link: "/research/chain/chain-stats/fantom-overview",
     },
     {
       title: "Avalanche",
-      img: getOssUrl("studio/img-chain-3.png"),
+      img: getOssUrl("home-v2/chain/img-chain-Avalanche.png?image_process=resize,w_68/crop,h_68/format,png"),
       link: "/research/chain/chain-stats/avalanche-overview",
     },
     {
       title: "Boba",
-      img: getOssUrl("studio/img-chain-24.png?1=1"),
+      img: getOssUrl("home-v2/chain/img-chain-Boba.png?image_process=resize,w_68/crop,h_68/format,png"),
       link: "/research/chain/chain-stats/boba-network-overview",
     },
     {
@@ -139,7 +139,7 @@ const AboutDataCoverage = () => {
     },
     {
       title: "ThunderCore",
-      img: getOssUrl("studio/img-chain-17.png?image_process=resize,w_36/crop,h_36/format,png"),
+      img: getOssUrl("home-v2/chain/img-chain-ThunderCore.png?image_process=resize,w_68/crop,h_68/format,png"),
       link: "/research/chain/chain-stats/thundercore-overview",
     },
     {
@@ -159,17 +159,17 @@ const AboutDataCoverage = () => {
     },
     {
       title: "Harmony",
-      img: getOssUrl("studio/img-chain-4.png"),
+      img: getOssUrl("home-v2/chain/img-chain-Harmony.png?image_process=resize,w_68/crop,h_68/format,png"),
       link: "/research/chain/chain-stats/harmony-overview",
     },
     {
       title: "Moonbeam",
-      img: getOssUrl("studio/img-chain-14.png?1=1"),
+      img: getOssUrl("home-v2/chain/img-chain-Moonbeam.png?image_process=resize,w_68/crop,h_68/format,png"),
       link: "/research/chain/chain-stats/moonbeam-overview",
     },
     {
       title: "Moonriver",
-      img: getOssUrl("studio/img-chain-15.png?1=1"),
+      img: getOssUrl("home-v2/chain/img-chain-Moonriver.png?image_process=resize,w_68/crop,h_68/format,png"),
       link: "/research/chain/chain-stats/moonriver-overview",
     },
   ]
