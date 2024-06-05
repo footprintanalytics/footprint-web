@@ -13,7 +13,6 @@ export default function Carroussel(props) {
   const [showArrows, setShowArrows] = useState(false);
   const [goToSlide, setGoToSlide] = useState(0);
   const [cards, setCards] = useState(table);
-  console.log("goToSlide", goToSlide)
   useEffect(() => {
     setOffsetRadius(props.offset);
     setShowArrows(props.showArrows);
@@ -55,7 +54,6 @@ export default function Carroussel(props) {
               cursor: 'pointer',
             }}
             onClick={() => {
-              console.log("index", index)
               setGoToSlide(index)
             }}
           />

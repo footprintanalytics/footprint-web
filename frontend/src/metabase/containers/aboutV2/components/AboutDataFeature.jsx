@@ -1,15 +1,11 @@
 /* eslint-disable react/prop-types */
 import React from "react";
-import { getOssUrl } from "metabase/lib/image";
-import AboutButton from "metabase/containers/aboutV2/components/AboutButton";
-import AboutImage from "metabase/containers/aboutV2/components/AboutImage";
 import Carroussel from "metabase/containers/aboutV2/components/spide/Carroussel";
 import Card from "metabase/containers/aboutV2/components/spide/Card";
 import Link from "metabase/core/components/Link";
 
 const AboutDataFeature = () => {
   const [current, setCurrent] = React.useState(0);
-  console.log("current", current)
   let cards = [
     {
       key: 1,
