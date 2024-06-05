@@ -25,9 +25,9 @@ const AboutGrantedBy = () => {
     <div className="About__granted-by">
       <h2 className="About__title">Granted by</h2>
       <ul>
-        {data.map(item => {
+        {data.map((item, index) => {
           return (
-            <li key={item.title}>
+            <li key={index}>
               <Link to={item.link} target="_blank">
                 <img src={getOssUrl(item.image)} alt={item.title}/>
               </Link>

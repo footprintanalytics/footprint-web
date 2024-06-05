@@ -46,6 +46,7 @@ class EmbedFrame extends Component {
       isNightMode,
       innerClassName,
       allLoadOuter,
+      hideAllParameters,
     } = this.props;
     const { innerScroll } = this.state;
 
@@ -92,7 +93,7 @@ class EmbedFrame extends Component {
                   className="my2"
                 />
               )}
-              {parameters?.length > 0 ? (
+              {!hideAllParameters && parameters?.length > 0 ? (
                 <div className="flex">
                   <SyncedParametersList
                     className="mt1"

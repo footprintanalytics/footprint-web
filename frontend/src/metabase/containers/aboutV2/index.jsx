@@ -54,16 +54,18 @@ const About = props => {
       <Meta description={defaultDesc} keywords={keywords} title={title} link={"https://www.footprint.network/"}/>
       <div className="About">
         <AboutStart />
+        <AboutPartnerV2 list={data.partnerList} />
         <AboutBanner />
         <AboutSolutions />
-        <AboutDepth />
+        {/*<AboutDepth />*/}
         <AboutDemo />
         <AboutDataCoverage />
-        <AboutDataFeature />
+        <LazyLoadAbout>
+          <AboutDataFeature />
+        </LazyLoadAbout>
         <AboutDataModel />
-        <AboutBacked list={data.backedList} />
         <AboutDataTrusted />
-        <AboutPartnerV2 list={data.partnerList} />
+        <AboutBacked list={data.backedList} />
         <AboutGrantedBy />
         <div className="About__depth-dividing-line-gray" />
         <HomeFooter />

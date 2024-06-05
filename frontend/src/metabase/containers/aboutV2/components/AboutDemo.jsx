@@ -56,80 +56,55 @@ const AboutDemo = () => {
   }
   const data = [
     {
-      title: "Analytics Studio",
-      desc: "Zero-coding analytics as Tableau for crypto",
-      content: <span>Use Footprint real-time on-chain and uploaded data to showcase cutting-edge <br/>insights using a drag-and-drop interface or SQL. Build a website in minutes to <br/>brand yourself.</span>,
+      title: "Analytics",
+      desc: "Zero-Coding Analytics as Tableau for Crypto",
+      content: <span>Use Footprint’s real-time on-chain and uploaded data to showcase cutting-edge <br/>insights using a drag-and-drop interface or SQL. </span>,
       buttons: [
         {
-          buttonText: "Explore Analytics Studio",
-          link: "https://www.footprint.network/studio/create",
+          buttonText: "Explore Dashboards",
+          link: "https://www.footprint.network/dashboards",
         }
       ],
       image: "home-v2/img-demo-3-1.png",
-      bg: "home-v2/img-demo-3-2.png",
+      bg: "home-v2/img-data-analytics.png",
       render: (
         <div className="flex flex-column align-center">
-          <AboutImage
-            src={getOssUrl("home-v2/img_demo_studio_1.png?1=1")}
-            alt={"Analytics Tool"}
-          />
-          <div className="mt2" />
-          <AboutImage
-            src={getOssUrl("home-v2/img_demo_studio_2.png?1=1")}
-            alt={"Data Connectors"}
-          />
-          <div className="mt2" />
-          <AboutImage
-            src={getOssUrl("home-v2/img_demo_studio_3.png?1=1")}
-            alt={"No-coding APP Builder"}
-          />
         </div>
       )
     },
     {
-      title: "Tools",
+      title: "Growth Analytics",
+      desc: "All-In-One Analytics That Catalyze Growth.",
+      content: <span>Integrate Web3 and Web2 data seamlessly with our automated workflows.</span>,
       image: "home-v2/img-demo-4-1.png",
-      bg: "home-v2/img-demo-4-2.png?1=1",
+      bg: "home-v2/img-data-growth-analytics.png",
+      buttons: [
+        {
+          buttonText: "Explore Growth Analytics",
+          link: "https://www.footprint.network/fga",
+        }
+      ],
       render: (
         <div>
-          {
-            toolsData?.map(item => {
-              return (
-                <div key={item.title}>
-                  {renderToolBlock({item})}
-                </div>
-              )
-            })
-          }
         </div>
       )
     },
   ];
 
   const advantage = [
-    "Balance API",
-    "Money Flow API",
-    "Transaction API",
-    "Transfer API",
-    "Ownership API",
-    "NFT API",
-    "Reference Data API",
+    "Cross-Chain",
+    "Real-Time",
+    "Full Historical Data",
+    "Ease of Use Abstraction",
   ]
 
   const blockData = [
     {
-      "img": getOssUrl("home-v2/img_demo_1.png"),
+      "img": getOssUrl("home-v2/img_demo_2.png"),
       "title": "REST API",
-      "desc": "One unified API for Web3 developers",
+      "desc": "Everything you need to build in Web3.",
       "buttonText": "Explore Data API",
       "buttonLink": "https://docs.footprint.network/reference/introduction",
-    },
-    {
-      "img": getOssUrl("home-v2/img_demo_2.png"),
-      "title": "SQL API",
-      "desc": "A flexible SQL API customization for robust requirements",
-      "buttonText": "Explore SQL API",
-      "buttonLink": "https://docs.footprint.network/reference/web-application-sql-api",
     },
     {
       "img": getOssUrl("home-v2/img_demo_3.png"),
@@ -142,15 +117,14 @@ const AboutDemo = () => {
 
   return (
     <div className="About__demo">
-      <div className="About__depth-circle-bg" style={{ top: "200px", background: "rgba(68, 68, 255, 0.40)"}}/>
-      <h2 className="About__title my4">Flagship Products and Services</h2>
+      <div className="About__depth-circle-bg" style={{ top: "100px", background: "rgba(68, 68, 255, 0.40)"}}/>
+      <h2 className="About__title">Data Products Suite</h2>
 
-      <div className="About__demo-analytics-app About__demo-data-api"
-           style={{ backgroundSize: "cover", backgroundImage: `url("${getOssUrl("home-v2/img-demo-1-5.png?1=1")}")` }}>
-        <div className="About__demo-top" style={{ paddingLeft: 60 }}>
-          <h3>Data API</h3>
-          <h4>Build your application with the Data API</h4>
-          <span>Everything you need to build in Web3</span>
+      <div className="About__demo-data-api">
+        <div className="About__demo-top" style={{ paddingLeft: 60, paddingBottom: 50 }}>
+          <h3>Data Room</h3>
+          <h4>Structured, Simple, and Semantic Business Blockchain Data.</h4>
+          <span>Gain access to a wide array of abstracted datasets, <br/>facilitating effortless data exploration and empowering the creation of <br/>next-generation applications whenever required.</span>
           <ul>
             {advantage.map(a => {
               return (
@@ -172,10 +146,9 @@ const AboutDemo = () => {
           </ul>
         </div>
         <div className="About__demo-top-right">
-          {renderBlock({ item: blockData[0] })}
+          {renderBlock({ item: blockData[0], style: { marginRight: "200px" }})}
           <div className="About__demo-top-right-bottom" style={{ marginTop: "40px" }}>
-            {renderBlock({ item: blockData[1] })}
-            {renderBlock({ item: blockData[2], style: { marginLeft: "40px" } })}
+            {renderBlock({ item: blockData[1], style: { marginLeft: "200px" } })}
           </div>
         </div>
       </div>
@@ -187,7 +160,7 @@ const AboutDemo = () => {
               <div style={{ paddingLeft: 60 }}>
                 {item.title && (<h3>{item.title}</h3>)}
                 {item.desc && (<h4>{item.desc}</h4>)}
-                {item.content}
+                <div className="About__demo-data-api-content">{item.content}</div>
                 <div className="About__demo-data-api-buttons">
                   {item.buttons?.map(button => {
                     return (

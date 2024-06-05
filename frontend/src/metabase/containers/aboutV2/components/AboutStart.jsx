@@ -23,15 +23,15 @@ const AboutStart = ({
   };
 
   const CreateImage = () => {
-    return <AboutImage src={getOssUrl("home-v2/img_right_icon.png")} alt={"Arrow Right"}/>;
+    return <img height={28} width={28} src={getOssUrl("home-v2/img_right_icon.png")} alt={"Arrow Right"}/>;
   }
   return (
     <div className="About__start">
-      <div className="About__start-pea">
+      {/*<div className="About__start-pea">
         <img src={getOssUrl("icon_pea.png?1=1")} alt="Pea AI" />
         <span style={{ color: "#B275FF" }}>Pea.AI</span><div><span>: The first GPT creation platform based on crypto vertical LLM! <br/>Go and earn Points by contributing data. </span>
         <Link style={{ color: "#B275FF", marginLeft: 4 }} href={"https://www.pea.ai"} target={"_blank"}>Join now {">>"}</Link></div>
-      </div>
+      </div>*/}
       <div className="About__start-title">
         <h1>Empower Decisions <br/>with Unified Web2 <br/>and Web3 Data</h1>
         <ul>
@@ -48,7 +48,7 @@ const AboutStart = ({
             <span>Off-Chain & On-Chain Data</span>
           </li>
         </ul>
-        <div className="flex" style={{ marginTop: 50 }}>
+        <div className="flex" style={{ marginTop: 40 }}>
           <AboutButton
             buttonText={user ? "View Docs" : "Try for Free"}
             onClick={(e) => {

@@ -25,13 +25,25 @@ const HomeFooter = props => {
             alt="Footprint analytics"
           />
           <span data-nosnippet>
-            Footprint Analytics is a data platform blending web2 and web3 data with abstractions. We help analysts, builders, and investors turn blockchain data into insights with accessible visualization tools and a powerful multi-chain API across 20+ chains for NFTs, GameFi, and DeFi. We also provide Footprint Growth Analytics to help with effective growth in GameFi and any web3 projects.
+            Footprint Analytics is a blockchain data solutions provider. We leverage cutting-edge AI technology to help analysts, builders, and investors turn blockchain data and combine Web2 data into insights with accessible visualization tools and a powerful multi-chain API across 30+ chains for NFTs, games, wallet profiles, and money flow data.
           </span>
           <span data-nosnippet>
-            Disclaimer: All data and articles on Footprint Analytics are for
-            informational purposes only, and do not constitute any investment
-            advice.
+            Disclaimer: All data and articles on Footprint Analytics are for informational purposes only, and do not constitute any investment advice.
           </span>
+          <div className="flex align-baseline" style={{ gap: 24 }}>
+            <span>© 2024 Footprint Analytics</span>
+            <div className="flex" style={{ gap: 16 }}>
+              <Link to={"https://static.footprint.network/site/privacy-policy.html"} target="_blank">
+                <span>Privacy Policy</span>
+              </Link>
+              <Link to={"https://static.footprint.network/site/terms-of-service.html"} target="_blank">
+                <span>Terms of Service</span>
+              </Link>
+              <Link to={"mailto:sales@footprint.network"} target="_blank">
+                <span>Contact Us</span>
+              </Link>
+            </div>
+          </div>
           {/* {!user && (
             <div className="home-footer-left-email">
               <input

@@ -26,7 +26,7 @@
 }
 
 .About__container {
-  width: 1200px;
+  width: 1280px;
   margin: 0 auto;
 }
 
@@ -58,6 +58,13 @@
 .About__desc {
   color: #A0AEC0;
   font-size: 14px;
+  line-height: 1;
+  text-align: center;
+}
+
+.About__sub-title {
+  color: #A0AEC088;
+  font-size: 16px;
   line-height: 1;
   text-align: center;
 }
@@ -209,15 +216,15 @@
   position: relative;
   display: flex;
   flex-direction: column;
-  padding: 150px 0 46px;
-  height: 1080px;
+  padding: 60px 0 46px;
+  height: 960px;
   max-width: 1920px;
   margin: 0 auto;
   background-image:
     url("https://static.footprint.network/home-v2/img_start_bg.webp");
   background-size: cover;
   background-repeat: no-repeat;
-  background-position: center;
+  background-position: top;
 }
 
 .About__start-pea {
@@ -241,7 +248,8 @@
 }
 .About__start-title {
   color: #303440;
-  margin-left: 15%;
+  margin-left: 16%;
+  padding-left: 10px;
 }
 
 .About__start-title h1 {
@@ -251,8 +259,12 @@
   color: white;
 }
 
+.About__start img {
+  margin-right: 8px;
+}
+
 .About__start ul {
-  margin-top: 30px;
+  margin-top: 40px;
 }
 
 .About__start li {
@@ -283,9 +295,23 @@
   flex-direction: column;
   align-items: center;
   justify-content: center;
+  position: relative;
   max-width: 1920px;
-  margin: 0 auto;
-  padding: 160px 0 40px 0;
+  margin: -80px auto 0;
+  padding: 0 0 80px 0;
+}
+
+.About__data-feature h3 {
+  font-size: 32px;
+  color: white;
+  margin-top: 60px;
+  font-weight: normal;
+}
+
+.About__data-feature h4 {
+  font-size: 18px;
+  color: #A0AEC0;
+  font-weight: normal;
 }
 
 .About__data-feature ul {
@@ -314,13 +340,13 @@
 }
 
 .About__data-model {
-  max-width: 1920px;
+  max-width: 1280px;
   margin: 0 auto;
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  padding: 150px 0 50px 0;
+  padding: 50px 0 20px 0;
   background-image: url("https://static.footprint.network/home-v2/img_hexagon_bg_7.png");
   background-size: 580px 150px;
   background-repeat: no-repeat;
@@ -329,7 +355,7 @@
 
 .About__data-model-image {
   text-align: center;
-  margin: 60px 0;
+  margin: 20px 0 0;
 }
 
 .About__data-model h4 {
@@ -340,39 +366,68 @@
 }
 
 .About__data-trusted {
-  padding: 80px 0;
-  background-image: url("https://static.footprint.network/home-v2/img_trusted_bg_1.png");
-  background-size: 1920px 355px;
-  background-repeat: no-repeat;
-  background-position: bottom center;
+  padding: 120px 0 80px 0;
+}
+
+.About__data-trusted .ant-carousel .slick-list .slick-slide >div>div {
+  height: 410px;
+}
+
+.About__data-trusted-detail {
+  width: 588px;
+  white-space: break-spaces;
+  overflow: auto;
+  line-height: 1.5;
 }
 
 .About__data-trusted-inner {
-  width: 1200px;
-  background: #4444FF;
-  margin: 60px auto;
+  width: 100%;
+  height: 488px;
+  margin: 0px auto;
   border-radius: 20px;
-  padding: 20px 0 40px;
+  padding: 40px 0;
+  display: flex;
+}
+
+.About__data-trusted-inner ul {
+  width: 100%;
+  position: relative;
+  display: flex;
+  white-space: nowrap;
+  gap: 40px;
+  -webkit-animation: 120s swipe-left linear infinite normal;
+  animation: 120s swipe-left linear infinite normal;
+}
+
+.About__data-trusted-inner ul:hover {
+  animation-play-state: paused;
 }
 
 .About__data-trusted-carousel {
-  height: 350px;
-  width: 1000px;
-  color: white;
+  width: 688px;
+  height: 488px;
+  background: #182034;
+  color: #ffffffa0;
   display: flex !important;
-  justify-content: center;
-  align-items: center;
+  justify-content: space-between;
+  flex-direction: column;
   padding: 40px;
+  font-size: 22px;
+  border-radius: 20px;
+
+  position: relative;
+  white-space: break-spaces;
+  margin: 20px 0;
+  display: flex;
+
 }
 
 .About__data-trusted-carousel-left {
-  width: 200px;
-  margin-right: 20px;
+  width: 100%;
   display: flex;
-  flex-direction: column;
-  justify-content: center;
   align-items: center;
   color: white;
+  gap: 20px;
 }
 
 .About__data-trusted-carousel-right {
@@ -386,58 +441,69 @@
   color: white;
   font-size: 18px;
   white-space: pre-line;
-  background-image: url("https://static.footprint.network/home-v2/img_trusted_left_quota.png"),
-    url("https://static.footprint.network/home-v2/img_trusted_right_quota.png");
-  background-size: 49px 40px, 48px 40px;
-  background-repeat: no-repeat, no-repeat;
-  background-position: top 13% left 0, bottom 2% right 5%;
 }
 
 .About__data-trusted-carousel-left h3 {
-  font-size: 24px;
+  font-size: 28px;
   color: white;
-}
-
-.About__data-trusted-carousel-left h4 {
-  font-size: 20px;
-  color: white;
-  line-height: 1.1;
 }
 
 .About__data-trusted-carousel-left span {
-  font-size: 14px;
+  font-size: 18px;
 }
 
 .About__data-coverage {
+  height: 960px;
   display: flex;
   flex-direction: column;
   align-items: center;
-  justify-content: center;
-  padding: 80px 0 0 0;
   background-image: url("https://static.footprint.network/home-v2/img_data_coverage_bg.png");
   background-size: 1920px 960px;
   background-repeat: no-repeat;
   background-position: bottom center;
+  padding: 100px 0;
 }
 
 .About__data-coverage-chain {
   width: fit-content;
   font-size: 64px;
-  margin-top: 30px;
+  margin-top: 20px;
+  margin-bottom: 20px;
   font-weight: bold;
   background: linear-gradient(90deg, #FFFFFF 0%, #4444FF 100%), #FFFFFF;
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
 }
 
+.About__chain-layout {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 35px;
+  flex-wrap: wrap;
+  width: 100%;
+  max-width: 1280px;
+}
+
+.About__chain-layout-item {
+  width: 68px;
+  height: 68px;
+}
+
+.About__chain-layout-item img {
+  width: 68px;
+  height: 68px;
+  border-radius: 50%;
+}
+
 .About__data-image {
-  margin: 60px 0;
+  margin: 40px 0;
 }
 
 .About__data-coverage ul {
   display: flex;
   justify-content: center;
-  margin: 0 0 40px 0;
+  margin: 80px 0 80px 0;
 }
 
 .About__data-coverage li {
@@ -468,13 +534,12 @@
 }
 
 .About__demo {
-  max-width: 1920px;
+  max-width: 1280px;
   margin: 0 auto;
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  padding: 120px 0 100px 0;
   position: relative;
 }
 
@@ -489,7 +554,6 @@
 }
 
 .About__demo-top {
-  height: 640px;
   display: flex;
   flex-direction: column;
   justify-content: center;
@@ -517,21 +581,22 @@
   font-size: 14px;
   font-style: normal;
   font-weight: 500;
+  height: 40px;
   line-height: normal;
-  margin-bottom: 20px;
+  margin-bottom: 15px;
 }
 
-.About__demo-analytics-app {
+.About__demo-analytics-app, .About__demo-data-api {
   filter: brightness(1);
 }
 
-.About__demo-analytics-app ul {
+.About__demo-analytics-app ul, .About__demo-data-api ul {
   display: flex;
   flex-direction: column;
-  margin-top: 10px;
+  margin-top: 60px;
 }
 
-.About__demo-analytics-app li {
+.About__demo-analytics-app li, .About__demo-data-api li {
   font-size: 16px;
   font-weight: bold;
   color: white;
@@ -544,8 +609,8 @@
   display: flex;
   flex-direction: column;
   align-items: center;
-  margin-right: 110px;
-  margin-top: 30px;
+  margin-right: 40px;
+  margin-top: 100px;
 }
 
 .About__demo-top-right-bottom {
@@ -630,7 +695,7 @@
 }
 
 .About__demo-bottom {
-  width: 1440px;
+  width: 1280px;
   display: flex;
   flex-direction: row;
   justify-content: center;
@@ -647,20 +712,47 @@
   flex: 1;
   background-color: #182034ee;
   padding: 80px 0 0 0;
-  height: 700px;
+  height: 620px;
   border-radius: 30px;
-  background-size: 700px 700px;
+  background-repeat: no-repeat;
+  background-position: bottom center;
+}
+
+.About__demo-data-api-content {
+  height: 60px;
+}
+
+.About__demo-analytics-app2 {
+  display: flex;
+  flex-direction: column;
+  min-width: calc((100% - 100px) / 2);
+  background-color: #182034ee;
+  padding: 80px 0 0 0;
+  height: 620px;
+  border-radius: 30px;
   background-repeat: no-repeat;
   background-position: bottom center;
 }
 
 .About__demo-data-api {
-  width: 1440px;
-  height: 640px;
+  width: 1280px;
+  height: 700px;
   padding: 0;
   margin-top: 20px;
   flex-direction: row;
   justify-content: space-between;
+  background-image:
+    url("https://static.footprint.network/home-v2/img-data-batch-download.png"),
+    url("https://static.footprint.network/home-v2/img-data-data-api.png"),
+    url("https://static.footprint.network/home-v2/img-demo-1-5.png");
+  background-size: 376px 244px, 206px 205px, cover;
+  background-repeat: no-repeat, no-repeat, no-repeat;
+  background-position: bottom right 45%, top 30% right 2%, center;
+
+  display: flex;
+  min-width: calc((100% - 100px) / 2);
+  background-color: #182034ee;
+  border-radius: 30px;
 }
 
 .About__demo-data-api-buttons {
@@ -827,21 +919,19 @@
 
 .About__depth-circle-bg {
   width: 1200px;
-  height: 600px;
+  height: 800px;
   border-radius: 1200px;
   background: linear-gradient(270deg, rgba(68, 68, 255, 0.40) 0%, rgba(124, 184, 255, 0.40) 100%);
   filter: blur(75px);
   position: absolute;
+  top: 16%;
+  z-index: 0;
 }
 
 .About__partnerV2 {
-  max-width: 1920px;
-  margin: 0 auto;
-  padding: 20px 0 160px 0;
-  background-image: url("https://static.footprint.network/home-v2/img_trusted_bg_2.png");
-  background-size: 1920px 256px;
-  background-repeat: no-repeat;
-  background-position: top center;
+  max-width: 1280px;
+  margin: -270px auto 0;
+  padding: 20px 0 100px 0;
 }
 
 @keyframes swipe-left {
@@ -850,14 +940,14 @@
     transform: translate3d(0, 0, 0);
   }
   100% {
-    -webkit-transform: translate3d(-3400px, 0, 0);
-    transform: translate3d(-3400px, 0, 0);
+    -webkit-transform: translate3d(-5000px, 0, 0);
+    transform: translate3d(-5000px, 0, 0);
   }
 }
 @keyframes swipe-right {
   0% {
-    -webkit-transform: translate3d(-3400px, 0, 0);
-    transform: translate3d(-3400px, 0, 0);
+    -webkit-transform: translate3d(-5000px, 0, 0);
+    transform: translate3d(-5000px, 0, 0);
   }
   100% {
     -webkit-transform: translate3d(0, 0, 0);
@@ -878,29 +968,27 @@
   overflow: hidden;
   display: flex;
   white-space: nowrap;
+  gap: 40px;
 }
 
 .About__partnerV2-list-top li {
   position: relative;
   white-space: break-spaces;
-  margin: 20px;
-  display: inline-block;
-  animation: 60s swipe-left linear infinite normal;
+  margin: 10px 0;
+  display: flex;
+  animation: 100s swipe-left linear infinite normal;
 }
 
 .About__partnerV2-list-bottom li {
   position: relative;
   white-space: break-spaces;
-  margin: 20px;
-  display: inline-block;
-  animation: 60s swipe-right linear infinite normal;
+  margin: 10px 0;
+  display: flex;
+  animation: 100s swipe-right linear infinite normal;
 }
 
 .About__partnerV2-list-item {
-  width: 300px;
-  height: 200px;
   display: flex;
-  background: #182034;
   justify-content: center;
   align-items: center;
 }
@@ -910,13 +998,8 @@
 }
 
 .About__partnerV2-list-item img {
-  object-fit: scale-down;
-  width: 80%;
-  height: 50%;
   margin: 0 auto;
 }
-
-
 
 .About__see {
   position: relative;
@@ -1312,7 +1395,7 @@
 }
 
 .About__backed {
-  padding: 100px 0;
+  padding: 100px 0 120px;
 }
 
 .About__partner {
@@ -1321,7 +1404,7 @@
 
 .About__backed ul,
 .About__partner ul {
-  margin-top: 48px;
+  margin-top: 60px;
   display: grid;
   grid-template-columns: repeat(5, 1fr);
   grid-gap: 20px;
@@ -1652,7 +1735,7 @@
   flex-direction: row;
   flex-wrap: wrap;
   justify-content: center;
-  margin: 60px 0;
+  margin: 60px 0 80px;
   gap: 15px;
   padding: 0 100px;
 }
@@ -1668,7 +1751,7 @@
 }
 
 .About__banner {
-  max-width: 1440px;
+  max-width: 1280px;
   height: 280px;
   margin: 0 auto 0;
   background: linear-gradient(135deg, #212A43 0%, #182034 52.28%);
@@ -1707,15 +1790,22 @@
 }
 
 .About__banner span {
-  font-size: 14px;
+  font-size: 20px;
   color: #A0AEC0;
 }
 
 .About__solutions {
-  max-width: 1440px;
-  padding: 160px 0;
+  max-width: 1280px;
+  padding: 120px 0;
   margin: 0 auto;
   position: relative;
+}
+
+.About__solutions-line {
+  background: #D8D8D820;
+  height: 1px;
+  width: 100%;
+  margin-top: 30px;
 }
 
 .About__solutions-inner {
@@ -1728,20 +1818,29 @@
 }
 
 .About__solutions-inner-li {
-  width: 700px;
-  height: 310px;
-  padding: 40px 30px;
+  width: 620px;
+  height: 300px;
+  /*border: 1px solid #f0f0f003;*/
+  border-radius: 20px;
+  background: linear-gradient(135deg, #203C79, #182034);
+  overflow: hidden;
+  position: relative;
+}
+
+.About__solutions-inner-li .learn-more {
+  width: 100%;
+  margin-top: 12px
 }
 
 .About__solutions-inner-li h3 {
-  font-size: 24px;
+  font-size: 30px;
   display: flex;
   align-items: center;
 }
 
 .About__solutions-inner-li span {
   color: #A0AEC0;
-  font-size: 16px;
+  font-size: 20px;
   white-space: pre-line;
 }
 

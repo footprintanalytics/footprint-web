@@ -5,44 +5,46 @@ import AboutImage from "metabase/containers/aboutV2/components/AboutImage";
 
 const AboutPartnerV2 = () => {
   const data = [
-    { image: "home-v2/img_partner_1.png", title: "near" },
-    { image: "home-v2/img_partner_2.png", title: "getblock" },
-    { image: "home-v2/img_partner_3.png", title: "CryptoSlate" },
-    { image: "home-v2/img_partner_4.png", title: "GMX" },
-    { image: "home-v2/img_partner_5.png", title: "ABGA" },
-    { image: "home-v2/img_partner_6.png", title: "G+" },
-    { image: "home-v2/img_partner_34.png", title: "GAME MINE" },
-    { image: "home-v2/img_partner_21.png", title: "Bloomberg" },
-    { image: "home-v2/img_partner_22.png", title: "animoca brands" },
-    { image: "home-v2/img_partner_23.png", title: "scopely" },
-    { image: "home-v2/img_partner_24.png", title: "polemos" },
-    { image: "home-v2/img_partner_25.png", title: "tokens.com" },
-    { image: "home-v2/img_partner_26.png", title: "talentum" },
-    { image: "home-v2/img_partner_27.png", title: "particle network" },
-    { image: "home-v2/img_partner_7.png", title: "walken" },
-    { image: "home-v2/img_partner_8.png", title: "BA7" },
-    { image: "home-v2/img_partner_9.png", title: "elven" },
-    { image: "home-v2/img_partner_10.png", title: "Cordy" },
-    { image: "home-v2/img_partner_11.png", title: "Ginoa.io" },
-    { image: "home-v2/img_partner_12.png", title: "TRUSTA" },
-    { image: "home-v2/img_partner_13.png", title: "ALIS" },
-    { image: "home-v2/img_partner_14.png", title: "PLANETIX" },
-    { image: "home-v2/img_partner_15.png", title: "GAVE" },
-    { image: "home-v2/img_partner_17.png", title: "polygon" },
-    { image: "home-v2/img_partner_18.png", title: "cronos" },
-    { image: "home-v2/img_partner_19.png", title: "Harmony" },
-    { image: "home-v2/img_partner_20.png", title: "HIVE" },
-    { image: "home-v2/img_partner_28.png", title: "BEOSIN" },
-    { image: "home-v2/img_partner_36.png", title: "Pebble" },
-    { image: "home-v2/img_partner_29.png", title: "Moonbeam" },
-    { image: "home-v2/img_partner_30.png", title: "SEPTENI INCUBATE" },
-    { image: "home-v2/img_partner_31.png", title: "Crypto Times" },
-    { image: "home-v2/img_partner_32.png", title: "NFT Plazas" },
-    { image: "home-v2/img_partner_33.png", title: "NFTb" },
+    { image: "home-v2/partner/img_partner_v2_consulting_group.png", title: "" },
+    { image: "home-v2/partner/img_partner_v2_ABGA.png", title: "ABGA" },
+    // { image: "home-v2/partner/img_partner_v2_animoca Brands.png", title: "" },
+    { image: "home-v2/partner/img_partner_v2_arbitrum.png?1=1", title: "" },
+    { image: "home-v2/partner/img_partner_v2_beosin.png?1=1", title: "" },
+    { image: "home-v2/partner/img_partner_v2_bloomberg.png", title: "" },
+    { image: "home-v2/partner/img_partner_v2_coinGecko.png?1=1", title: "" },
+    { image: "home-v2/partner/img_partner_v2_coinMarketCap.png?1=1", title: "" },
+    { image: "home-v2/partner/img_partner_v2_combo.png", title: "" },
+    { image: "home-v2/partner/img_partner_v2_core_chain.png?1=1", title: "" },
+    { image: "home-v2/partner/img_partner_v2_cronos.png?1=1", title: "" },
+    { image: "home-v2/partner/img_partner_v2_crypto_times.png?1=1", title: "" },
+    { image: "home-v2/partner/img_partner_v2_cryptoSlate.png", title: "" },
+    { image: "home-v2/partner/img_partner_v2_delphi_digital.png?1=1", title: "" },
+    { image: "home-v2/partner/img_partner_v2_double_jump.png?1=1", title: "" },
+    { image: "home-v2/partner/img_partner_v2_galachain.png", title: "" },
+    { image: "home-v2/partner/img_partner_v2_goplus.png", title: "" },
+    { image: "home-v2/partner/img_partner_v2_harmony.png", title: "" },
+    { image: "home-v2/partner/img_partner_v2_icp.png", title: "" },
+    { image: "home-v2/partner/img_partner_v2_merlin_chain.png", title: "" },
+    { image: "home-v2/partner/img_partner_v2_nautilus_chain.png", title: "" },
+    { image: "home-v2/partner/img_partner_v2_oasys.png", title: "" },
+    { image: "home-v2/partner/img_partner_v2_optimism.png", title: "" },
+    { image: "home-v2/partner/img_partner_v2_pebble.png", title: "" },
+    { image: "home-v2/partner/img_partner_v2_planet_IX.png", title: "" },
+    { image: "home-v2/partner/img_partner_v2_polygon.png", title: "" },
+    { image: "home-v2/partner/img_partner_v2_ronin.png?1=1", title: "" },
+    { image: "home-v2/partner/img_partner_v2_rootstock.png", title: "" },
+    { image: "home-v2/partner/img_partner_v2_space_id.png", title: "" },
+    { image: "home-v2/partner/img_partner_v2_starknet.png", title: "" },
+    { image: "home-v2/partner/img_partner_v2_sui.png", title: "" },
+    { image: "home-v2/partner/img_partner_v2_taiko.png", title: "" },
+    { image: "home-v2/partner/img_partner_v2_trusta.png", title: "" },
+    { image: "home-v2/partner/img_partner_v2_walken.png", title: "" },
+    { image: "home-v2/partner/img_partner_v2_xangle.png", title: "" }
+
     ];
 
-  const topData = [...data.slice(0, 16), ...data.slice(0, 16), ]
-  const bottomData = [...data.slice(16, data.length), ...data.slice(16, data.length), ]
+  const topData = [...data.slice(0, 17), ...data.slice(0, 17), ]
+  const bottomData = [...data.slice(17, data.length), ...data.slice(17, data.length), ].reverse()
 
   return (
     <div className="About__partnerV2">
@@ -51,7 +53,7 @@ const AboutPartnerV2 = () => {
           {topData.map((item, index) =>
             <li key={index}>
               <div className="About__partnerV2-list-item">
-                <AboutImage src={getOssUrl(item.image)} alt={item.title} placeholder={null}/>
+                <img src={getOssUrl(item.image)} alt={item.title} placeholder={null}/>
               </div>
             </li>
           )}
@@ -62,7 +64,7 @@ const AboutPartnerV2 = () => {
           {bottomData.map((item, index) =>
             <li key={index}>
               <div className="About__partnerV2-list-item">
-                <AboutImage src={getOssUrl(item.image)} alt={item.title} placeholder={null}/>
+                <img src={getOssUrl(item.image)} alt={item.title} placeholder={null}/>
               </div>
             </li>
           )}
