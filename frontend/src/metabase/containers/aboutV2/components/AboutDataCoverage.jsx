@@ -159,7 +159,7 @@ const AboutDataCoverage = () => {
     },
     {
       title: "Harmony",
-      img: getOssUrl("home-v2/chain/img-chain-Harmony.png?image_process=resize,w_68/crop,h_68/format,png"),
+      img: getOssUrl("home-v2/chain/img-chain-Harmony.png?1=1&image_process=resize,w_68/crop,h_68/format,png"),
       link: "/research/chain/chain-stats/harmony-overview",
     },
     {
