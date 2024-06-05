@@ -1753,7 +1753,7 @@
 .About__banner {
   max-width: 1280px;
   height: 280px;
-  margin: 0 auto 0;
+  margin: 20px auto 0;
   background: linear-gradient(135deg, #212A43 0%, #182034 52.28%);
   border-radius: 24px;
   border: 1px solid #ffffff11;
