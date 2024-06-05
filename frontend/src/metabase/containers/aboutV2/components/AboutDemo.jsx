@@ -58,7 +58,7 @@ const AboutDemo = () => {
     {
       title: "Analytics",
       desc: "Zero-Coding Analytics as Tableau for Crypto",
-      content: <span>Use Footprint real-time on-chain and uploaded data to showcase cutting-edge <br/>insights using a drag-and-drop interface or SQL. </span>,
+      content: <span>Use Footprint’s real-time on-chain and uploaded data to showcase cutting-edge <br/>insights using a drag-and-drop interface or SQL. </span>,
       buttons: [
         {
           buttonText: "Explore Dashboards",

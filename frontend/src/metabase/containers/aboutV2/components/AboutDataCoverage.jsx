@@ -34,7 +34,7 @@ const AboutDataCoverage = () => {
     },
     {
       title: "Sui",
-      img: getOssUrl("studio/img-chain-27.png"),
+      img: getOssUrl("home-v2/chain/img-chain-sui.png?image_process=resize,w_68/crop,h_68/format,png"),
       link: "/research/chain/chain-stats/sui-overview",
     },
     {
@@ -49,7 +49,7 @@ const AboutDataCoverage = () => {
     },
     {
       title: "Starknet",
-      img: getOssUrl("studio/img-chain-38.png"),
+      img: getOssUrl("home-v2/chain/img-chain-Starnet.png?image_process=resize,w_68/crop,h_68/format,png"),
       link: "/research/chain/chain-stats/starknet-overview",
     },
     {
@@ -69,7 +69,7 @@ const AboutDataCoverage = () => {
     },
     {
       title: "zkSync Era",
-      img: getOssUrl("studio/img-chain-31.png"),
+      img: getOssUrl("home-v2/chain/img-chain-ZkSync-Era.png?image_process=resize,w_68/crop,h_68/format,png"),
       link: "/research/chain/chain-stats/zksync-era-overview",
     },
     {
@@ -94,17 +94,17 @@ const AboutDataCoverage = () => {
     },
     {
       title: "TCG Verse",
-      img: getOssUrl("studio/img-chain-37.png"),
+      img: getOssUrl("home-v2/chain/img-chain-TCG-Verse.png?image_process=resize,w_68/crop,h_68/format,png"),
       link: "/research/chain/chain-rankings/top-chains",
     },
     {
       title: "Merlin",
-      img: getOssUrl("fp-chains/merlin.webp?image_process=resize,w_36/crop,h_36/format,webp"),
+      img: getOssUrl("home-v2/chain/img-chain-merlin.png?image_process=resize,w_68/crop,h_68/format,png"),
       link: "/research/chain/chain-stats/merlin-overview",
     },
     {
       title: "Rootstock",
-      img: getOssUrl("fp-chains/rootstock.png?image_process=resize,w_36/crop,h_36/format,webp"),
+      img: getOssUrl("home-v2/chain/img-chain-Rootstock.png?image_process=resize,w_68/crop,h_68/format,png"),
       link: "/research/chain/chain-stats/rootstock-overview",
     },
     {
@@ -134,7 +134,7 @@ const AboutDataCoverage = () => {
     },
     {
       title: "Combo",
-      img: getOssUrl("fp-chains/combo.png?image_process=resize,w_36/crop,h_36/format,webp"),
+      img: getOssUrl("home-v2/chain/img-chain-Combo.png?image_process=resize,w_68/crop,h_68/format,png"),
       link: "/research/chain/chain-stats/combo-overview",
     },
     {
@@ -144,17 +144,17 @@ const AboutDataCoverage = () => {
     },
     {
       title: "Celo",
-      img: getOssUrl("studio/img-chain-16.png"),
+      img: getOssUrl("home-v2/chain/img-chain-Celo.png?image_process=resize,w_68/crop,h_68/format,png"),
       link: "/research/chain/chain-stats/celo-overview",
     },
     {
       title: "DFK",
-      img: getOssUrl("studio/img-chain-11.png"),
+      img: getOssUrl("home-v2/chain/img-chain-DFK.png?image_process=resize,w_68/crop,h_68/format,png"),
       link: "/research/chain/chain-stats/dfk-overview",
     },
     {
       title: "Nautilus",
-      img: getOssUrl("fp-chains/nautilus.png?1=1&image_process=resize,w_36/crop,h_36/format,webp"),
+      img: getOssUrl("home-v2/chain/img-chain-Nautilus.png?image_process=resize,w_68/crop,h_68/format,png"),
       link: "/research/chain/chain-stats/nautilus-overview",
     },
     {
