@@ -41,7 +41,7 @@ const AboutStart = ({
           </li>
           <li>
             <CreateImage />
-            <span>GameFi, NFT, and DeFi sectors</span>
+            <span>GameFi, NFT, and DeFi Sectors</span>
           </li>
           <li>
             <CreateImage />
