@@ -51,6 +51,7 @@ import { ReactIcons } from "./utils/data";
 import * as Urls from "../../../lib/urls";
 import SimpleMenu from "./SImpleMenu";
 import { FooterData } from "metabase/containers/home/data";
+import ResearchContent2 from "metabase/nav/containers/FpNavbar/components/ResearchContent2";
 
 const mapStateToProps = (state, props) => ({
   path: getPath(state, props),
@@ -80,63 +81,70 @@ const leftMenuData = [
   {
     name: "Research",
     icon: "protocols",
-    content: <ResearchContent />
+    content: <ResearchContent2 />
   },
   {
     name: "Products",
     icon: "protocols",
-    content: <ProductContent />
-  },
-  {
-    name: "Use Cases",
-    icon: "protocols",
-    content: <UseCasesContent />
-  },
-  /*{
-    name: "Data",
-    icon: "protocols",
     menu: [
       {
-        title: "Data Overview",
-        desc: "Check the data coverage of most comprehensive data provider",
-        link: "/@Footprint/Footprint-Data-Overview",
-      },
-      {
-        title: "Data Dictionary",
-        desc: "Quick access to each data table definitions and metadata",
+        title: "Data Room",
         link: "/@Footprint/Footprint-Datasets-Data-Dictionary",
       },
+      {
+        title: "Analytics",
+        link: "/dashboards",
+      },
+      {
+        title: "Growth Analytics",
+        link: "/fga",
+      },
     ],
-  },*/
+  },
   {
-    name: "Learn",
+    name: "Solutions",
     icon: "protocols",
     menu: [
       {
-        title: "Blog",
+        title: "Games",
+        link: "https://docs.google.com/presentation/d/1Xmye6BfGWhlde42LnwNkVylRWOaSSXdbY7zfgZHAZOM/edit#slide=id.g2b36d9fc51e_1_0",
+        externalLink: true,
+      },
+      {
+        title: "Blockchains",
+        link: "https://docs.google.com/presentation/d/1vKXAHaKqp7oUBnQP1qxmr84WpFX1pmXChGIl6R9Fle4/edit#slide=id.g128e0ee6714_0_0",
+        externalLink: true,
+      },
+      {
+        title: "Marketing & Consulting",
+        link: "https://docs.google.com/presentation/d/1UXiE1dvMIKhsUHwwVpzixc4v7lVHJNzG3WIYgpfw0AU/edit#slide=id.g25c23df782d_0_0",
+        externalLink: true,
+      },
+      {
+        title: "Community",
+        link: "https://pea.ai/",
+        externalLink: true,
+      },
+    ],
+  },
+  {
+    name: "Reports",
+    icon: "protocols",
+    menu: [
+      {
+        title: "Reports",
+        link: "/news/reports",
         desc: "Analyze the trends of each domain in the Web3 industry",
-        icon: ReactIcons.blogIcon,
+      },
+      {
+        title: "Blog",
         link: "/news/blog",
+        desc: "Stay updated with our latest announcements, events, use cases, and more",
       },
       {
         title: "Academy",
-        desc: "The premier Web3 education platform with industry leading courses",
-        icon: ReactIcons.academyIcon,
         link: "/news/academy",
-      },
-      {
-        title: "YouTube",
-        desc: "Unravel Web3 and learn how to do analysis and build dapps via Videos",
-        icon: ReactIcons.youtubeIcon,
-        link: "https://www.youtube.com/@FootprintAnalytics",
-        externalLink: true,
-      },
-      {
-        title: "GitHub",
-        desc: "Open source community welcomes you to join and become a contributor",
-        icon: ReactIcons.githubIcon,
-        link: "https://github.com/footprintanalytics",
-        externalLink: true,
+        desc: "The premier Web3 education platform with industry leading courses",
       },
     ],
   },

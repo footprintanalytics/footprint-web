@@ -71,7 +71,7 @@ const renderVerticalMenu = ({data, className}) => {
                 {item.icon && (<div className="main-menu__vertical-menu-icon">{item.icon}</div>)}
                 <div className="main-menu__vertical-menu-right">
                   {item.title && (<h4>{item.title}</h4>)}
-                  {item.desc && (<span>{item.desc}</span>)}
+                  {item.desc && (<span className="main-menu__vertical-menu-desc">{item.desc}</span>)}
                 </div>
               </Link>
             </li>
@@ -120,7 +120,7 @@ const renderVerticalMenuSimple = ({data, className}) => {
                 {item.icon && (<div className="main-menu__vertical-menu-icon">{item.icon}</div>)}
                 <div className="main-menu__vertical-menu-right">
                   {item.title && (<h4>{item.title}</h4>)}
-                  {item.desc && (<span>{item.desc}</span>)}
+                  {item.desc && (<span className="main-menu__vertical-menu-desc">{item.desc}</span>)}
                 </div>
               </Link>
             </li>
