@@ -54,11 +54,13 @@ const ResearchContent2 = props => {
         },
         {
           title: "Cross Chain",
+          desc: "Monitor and analyze data across multiple blockchains.",
           link: "/@Higi/Cross-Chain-Dashboard?series_date=past90days~#type=dashboard",
           icon: ReactIcons.crossChainIcon,
         },
         {
           title: "Single Chain Stats",
+          desc: "Charts & statistics for a blockchain.",
           link: "/research/chain/chain-stats/ethereum-overview?chain=Ethereum&series_date-85136=past90days~",
           icon: ReactIcons.singleGameIcon,
         },
@@ -75,6 +77,7 @@ const ResearchContent2 = props => {
         },
         {
           title: "Wallet Profit Leaderboard",
+          desc: "Top wallets ranked by profitable performance on DEX.",
           link: "/@rogerD/Token-DEX-Profit-Leaderboard",
           icon: ReactIcons.hotGamesIcon,
         },
@@ -91,6 +94,7 @@ const ResearchContent2 = props => {
         },
         {
           title: "Top Tokens Traded on DEX",
+          desc: "Find the most actively traded tokens.",
           link: "/research/token/rankings/top-tokens-traded-on-dex?past_days=1",
           icon: ReactIcons.topGameIcon,
         },

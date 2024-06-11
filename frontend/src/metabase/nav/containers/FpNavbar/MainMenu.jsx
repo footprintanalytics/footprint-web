@@ -11,10 +11,10 @@ const MainMenu = props => {
   const overlayRef = useRef(null);
   const popoverContent = content ? content : (<SimpleContent menu={menu} title={title}/>)
   const popoverStyle = {
-    paddingLeft: "20px"
-    // position: 'fixed',
-    // top: '50px',
-    // left: '50%',
+    // paddingLeft: "20px"
+    position: 'fixed',
+    top: '50px',
+    left: 'calc(50% - 720px)',
     // transform: 'translate(-50%, 0)'
   };
   return (
@@ -23,8 +23,8 @@ const MainMenu = props => {
         content={popoverContent || "Coming soon..."}
         overlayClassName="main-menu__popover"
         color="#182034"
-        overlayStyle={popoverStyle}
-        // overlayStyle={menu ? {} : popoverStyle}
+        // overlayStyle={popoverStyle}
+        overlayStyle={menu ? {} : popoverStyle}
         getPopupContainer={() => overlayRef.current}
         arrow={false}
         overlayInnerStyle={{

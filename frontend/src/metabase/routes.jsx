@@ -314,23 +314,23 @@ export const getRoutes = store => (
         <IndexRoute
           component={props => <LazyLoad.Articles {...props} type="all" />}
         />
-        <Route
+        {/*<Route
           title={t`Blog`}
           label={"All"}
           path="blog"
           component={props => <LazyLoad.Articles {...props} type="all" />}
-        />
+        />*/}
         <Route
           title={t`Blog`}
           path="all"
           hidden
           component={props => <LazyLoad.Articles {...props} type="all" />}
         />
-        <Route
+        {/*<Route
           title={t`Articles`}
           path="articles"
           component={props => <LazyLoad.Reports {...props} type="articles" />}
-        />
+        />*/}
         <Route
           title={t`Reports`}
           path="reports"
@@ -343,14 +343,14 @@ export const getRoutes = store => (
           path="featured"
           component={LazyLoad.Featured}
         />
-        <Route
+        {/*<Route
           title={t`Company`}
           path="company"
           component={props => <LazyLoad.Articles {...props} type="company" />}
-        />
+        />*/}
         <Route
-          title={t`Product`}
-          path="product"
+          title={t`Blog`}
+          path="blog"
           component={props => <LazyLoad.Reports {...props} type="product" />}
         />
         <Route
@@ -358,11 +358,11 @@ export const getRoutes = store => (
           path="academy"
           component={props => <LazyLoad.Reports {...props} type="academy" />}
         />
-        <Route
+        {/*<Route
           title={t`Events`}
           path="events"
           component={props => <LazyLoad.Reports {...props} type="events" />}
-        />
+        />*/}
         {/*<Route
           title={t`Newsletter`}
           path="weekly-letter"
@@ -370,20 +370,20 @@ export const getRoutes = store => (
             <LazyLoad.Articles {...props} type="week-letter" />
           )}
         />*/}
-        <Route
+        {/*<Route
           title={t`Community insights`}
           path="community-insights"
           component={props => (
             <LazyLoad.Articles {...props} type="community-insights" />
           )}
-        />
-        <Route
+        />*/}
+        {/*<Route
           title={t`Pea.AI`}
           path="pea-ai"
           component={props => (
             <LazyLoad.Articles {...props} type="articles" tag="Pea.AI" />
           )}
-        />
+        />*/}
         <Route
           title={t`Feature Charts`}
           path="feature_charts"
