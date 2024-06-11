@@ -134,14 +134,17 @@ const leftMenuData = [
       {
         title: "Reports",
         link: "/news/reports",
+        desc: "Analyze the trends of each domain in the Web3 industry",
       },
       {
         title: "Blog",
         link: "/news/blog",
+        desc: "Stay updated with our latest announcements, events, use cases, and more",
       },
       {
         title: "Academy",
         link: "/news/academy",
+        desc: "The premier Web3 education platform with industry leading courses",
       },
     ],
   },
