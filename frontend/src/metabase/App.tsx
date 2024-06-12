@@ -140,7 +140,7 @@ function App({
         image={getOssUrl("Footprint_v2.jpeg")}
         imageWidth={1200}
         imageHeight={630}
-        siteName="Footprint"
+        siteName="Footprint Analytics"
         viewport={0.3}
         description={undefined}
         keywords={undefined}
