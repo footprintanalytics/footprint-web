@@ -89,14 +89,17 @@ const leftMenuData = [
     menu: [
       {
         title: "Data Room",
+        desc: "Access structured, simple blockchain data for next-gen applications.",
         link: "/@Footprint/Footprint-Datasets-Data-Dictionary",
       },
       {
         title: "Analytics",
+        desc: <span>Zero-coding crypto analytics with <br/>real-time data.</span>,
         link: "/dashboards",
       },
       {
         title: "Growth Analytics",
+        desc: "All-in-one analytics integrating Web3 and Web2 for growth.",
         link: "/fga",
       },
     ],
@@ -107,21 +110,25 @@ const leftMenuData = [
     menu: [
       {
         title: "Games",
+        desc: "Unify and unlock the power of your game data.",
         link: "https://docs.google.com/presentation/d/1Xmye6BfGWhlde42LnwNkVylRWOaSSXdbY7zfgZHAZOM/edit#slide=id.g2b36d9fc51e_1_0",
         externalLink: true,
       },
       {
         title: "Blockchains",
+        desc: "Expand ecosystem reach and presence.",
         link: "https://docs.google.com/presentation/d/1vKXAHaKqp7oUBnQP1qxmr84WpFX1pmXChGIl6R9Fle4/edit#slide=id.g128e0ee6714_0_0",
         externalLink: true,
       },
       {
         title: "Marketing & Consulting",
+        desc: "Conduct comprehensive wallet analysis for data-driven customer acquisition.",
         link: "https://docs.google.com/presentation/d/1UXiE1dvMIKhsUHwwVpzixc4v7lVHJNzG3WIYgpfw0AU/edit#slide=id.g25c23df782d_0_0",
         externalLink: true,
       },
       {
         title: "Community",
+        desc: "Boost community growth with intelligent tools and contribution tracking.",
         link: "https://pea.ai/",
         externalLink: true,
       },
