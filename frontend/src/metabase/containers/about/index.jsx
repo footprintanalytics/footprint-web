@@ -162,7 +162,7 @@ const About = props => {
               type="card"
               title="Explore Footprint"
               list={news}
-              more="/news/featured"
+              more="/news"
             />
             <AboutBacked list={data.backedList} />
             <AboutPartner list={data.partnerList} />
