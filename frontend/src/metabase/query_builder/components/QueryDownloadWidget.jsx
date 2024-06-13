@@ -28,7 +28,7 @@ const EXPORT_FORMATS = Urls.exportFormats;
 
 const getLimitedDownloadSizeText = result =>
   PLUGIN_FEATURE_LEVEL_PERMISSIONS.getDownloadWidgetMessageOverride(result) ??
-  t`The maximum download size is 1 million rows.`;
+  t`The maximum download size is 100k rows. If you need to download more data, please download in segments.`;
 
 const QueryDownloadWidget = ({
   className,
