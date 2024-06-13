@@ -86,7 +86,7 @@ const HomeArticles = props => {
           className="home-article-head"
           img={getOssUrl("img_home_articles.png")}
           title="News"
-          link="news/featured"
+          link="news"
         />
         <ul role="link" className="home-article-list">
           {mediaInfos.map(item => (

@@ -107,7 +107,7 @@ const Articles = props => {
                   if (item.url) {
                     return window.open(item.url);
                   }
-                  window.open(urlAddChannel(articleDetailUrl(item), channel));
+                  onChangeLocation(urlAddChannel(articleDetailUrl(item), channel));
                 }}
               >
                 <div className="news-articles__item-left">

@@ -74,7 +74,7 @@ const Detail = props => {
   };
 
   const removeSuccess = () => {
-    onReplaceLocation(`news/featured`);
+    onReplaceLocation(`news`);
   };
 
   const errorDataPanel = () => {
@@ -88,7 +88,7 @@ const Detail = props => {
         <Button
           onClick={() => {
             trackStructEvent("news detail errordata click back");
-            onReplaceLocation("/news/featured");
+            onReplaceLocation("/news");
           }}
         >
           Back
@@ -175,9 +175,7 @@ const Detail = props => {
           <header>
             <IconBack
               router={router}
-              url={`news/${
-                data.type === "dailyNews" ? "daily-news" : "featured"
-              }`}
+              url={"/news"}
             />
             <h1 className="article-detail__title">{articleTitle(data)}</h1>
           </header>

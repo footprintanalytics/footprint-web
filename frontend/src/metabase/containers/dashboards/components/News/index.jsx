@@ -55,7 +55,7 @@ const News = ({ model = "news", title = "News" }) => {
     <div className="dashboards__news">
       <div className="dashboards__area">
         <Link
-          href="/news/featured"
+          href="/news"
           onClick={() => trackStructEvent("Dashboards News", "See all")}
         >
           <div className="dashboards__cell">
