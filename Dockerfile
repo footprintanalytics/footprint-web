@@ -2,7 +2,7 @@
 # STAGE 1: builder
 ###################
 
-FROM metabase/ci:java-11-clj-1.11.0.1100.04-2022-build as builder
+FROM footprint-registry.tencentcloudcr.com/mexl/metabase-ci:java-11-clj-1.11.0.1100.04-2022-build as builder
 
 ARG MB_EDITION=oss
 ARG CDN
@@ -105,7 +105,7 @@ RUN INTERACTIVE=false CI=true MB_EDITION=$MB_EDITION bin/build uberjar
 ## jar from the previous stage rather than the local build
 ## we're not yet there to provide an ARM runner till https://github.com/adoptium/adoptium/issues/96 is ready
 
-FROM --platform=linux/amd64 eclipse-temurin:11-jre-alpine as runner
+FROM --platform=linux/amd64 footprint-registry.tencentcloudcr.com/mexl/eclipse-temurin:11-jre-alpine as runner
 
 ARG CDN
 ARG PROD_URL
