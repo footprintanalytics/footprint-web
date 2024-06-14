@@ -233,7 +233,7 @@ const gamefiData = [
         "value": "gamefi-market-leaderboard",
         "publicUuid": "9c2cf0ca-de0a-4699-9a6c-cd24ffd6252c",
       },
-      {
+      /*{
         "label": "Hot Games on Polygon",
         "value": "hot-games-on-polygon",
         "publicUuid": "b61310f5-7775-4415-b604-6e8b74d44256",
@@ -262,7 +262,7 @@ const gamefiData = [
         "value": "hot-games-on-arbitrum",
         "publicUuid": "b61310f5-7775-4415-b604-6e8b74d44256",
         "search": "?chain=Arbitrum",
-      },
+      },*/
     ],
   },
   {
