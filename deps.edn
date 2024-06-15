@@ -1,7 +1,7 @@
 ;; -*- comment-column: 80; -*-
 {
   :mvn/repos
-  {"central" {:url "https://mirrors.cloud.tencent.com/nexus/content/groups/public"}
+  {"central" {:url "https://maven.aliyun.com/repository/public"}
    "clojars" {:url "https://clojars.org/repo"}}
   :deps
  ;; !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
