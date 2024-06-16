@@ -1,5 +1,9 @@
 ;; -*- comment-column: 80; -*-
-{:deps
+{
+  :mvn/repos
+  {"central" {:url "https://maven.aliyun.com/repository/public"}
+   "clojars" {:url "https://clojars.org/repo"}}
+  :deps
  ;; !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
  ;; !!                                   PLEASE KEEP THESE ORGANIZED ALPHABETICALLY                                  !!
  ;; !!                                   AND ADD A COMMENT EXPLAINING THEIR PURPOSE                                  !!
