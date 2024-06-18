@@ -7,7 +7,7 @@ const AboutPartnerV2 = () => {
   const data = [
     { image: "home-v2/partner/img_partner_v2_consulting_group.png", title: "" },
     { image: "home-v2/partner/img_partner_v2_ABGA.png", title: "ABGA" },
-    // { image: "home-v2/partner/img_partner_v2_animoca Brands.png", title: "" },
+    { image: "home-v2/partner/img_partner_v2_animoca.png", title: "" },
     { image: "home-v2/partner/img_partner_v2_arbitrum.png?1=1", title: "" },
     { image: "home-v2/partner/img_partner_v2_beosin.png?1=1", title: "" },
     { image: "home-v2/partner/img_partner_v2_bloomberg.png", title: "" },
