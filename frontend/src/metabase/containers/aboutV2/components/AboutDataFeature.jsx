@@ -62,7 +62,7 @@ const AboutDataFeature = () => {
       title: "Reports",
       desc: "Stay ahead of the trend in blockchain industry. ",
       content: (
-        <Card imagen={"https://statichk.footprint.network/article/80933845-7ac9-4322-91f8-999617408153.png"} title={"Reports"}
+        <Card imagen={"https://statichk.footprint.network/article/dca3b292-7abf-4d05-b5d2-f470ff37f186.png"} title={"Reports"}
               link={current === 5 ? "https://www.footprint.network/news/reports": ""}/>
       ),
       link: "https://www.footprint.network/news/reports",
