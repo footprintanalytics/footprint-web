@@ -47,28 +47,36 @@
 .solution__button-black {
   width: 160px;
   height: 48px;
+  line-height: 48px;
   background: #1E1E1E;
   border: 1px solid white;
   color: white;
   font-weight: bold;
+  border-radius: 4px;
+  text-align: center;
+  font-size: 16px;
 }
 
 .solution__button-white {
   height: 48px;
-  line-height: 24px;
+  line-height: 48px;
   padding: 0 20px;
   background: white;
   color: black;
   font-size: 20px;
+  border-radius: 4px;
 }
 
 .solution__button-bland {
   width: 220px;
   height: 48px;
+  line-height: 48px;
   background: #4444FF;
   color: white;
   font-weight: bold;
   border: 0;
+  border-radius: 4px;
+  text-align: center;
 }
 
 .solution__start h1 {

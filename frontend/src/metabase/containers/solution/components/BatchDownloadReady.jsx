@@ -11,7 +11,7 @@ const BatchDownloadReady = () => {
       <div className="solution__ready-inner">
         <h2>{"Don't Wait, Get Started Today!"}</h2>
         <Link className="mt4" href="https://calendly.com/partners-79/footprint-analytics-jimmy" target="_blank" style={{ width: "fit-content" }}>
-          <Button className="solution__button-white">Speak With a Solutions Architect</Button>
+          <div className="solution__button-white">Speak With a Solutions Architect</div>
         </Link>
       </div>
     </div>
