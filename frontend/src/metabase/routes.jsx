@@ -230,6 +230,10 @@ export const getRoutes = store => (
         <IndexRoute component={LazyLoad.batchDownload} />
       </Route>
 
+      <Route path="/solution/community">
+        <IndexRoute component={LazyLoad.community} />
+      </Route>
+
       <Route
         title={t`Protocols`}
         path="/protocols"

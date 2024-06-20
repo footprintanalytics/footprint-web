@@ -75,6 +75,10 @@
   flex-direction: column;
 }
 
+.home-footer-right-section .footprint-title2 {
+  color: white;
+}
+
 .home-footer-right-section span {
   /* font-weight: 800; */
   /* font-size: 18px; */

@@ -120,6 +120,7 @@ export default {
   About: loadable(() => import("metabase/containers/aboutV2")),
   NftPage: loadable(() => import("metabase/containers/nftPage")),
   batchDownload: loadable(() => import("metabase/containers/batchDownload")),
+  community: loadable(() => import("metabase/containers/solution/Community")),
   dataApi: loadable(() => import("metabase/containers/dataApi")),
   dataApiPrice: loadable(() => import("metabase/containers/dataApi/price")),
   dataApiProduct: loadable(() => import("metabase/containers/dataApi/product")),
