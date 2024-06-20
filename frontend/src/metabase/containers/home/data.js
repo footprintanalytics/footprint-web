@@ -4,7 +4,7 @@ export const FooterData = [
     items: [
       {
         label: "Games",
-        url: "/solution/community",
+        url: "https://docs.google.com/presentation/d/1Xmye6BfGWhlde42LnwNkVylRWOaSSXdbY7zfgZHAZOM/edit#slide=id.g2b36d9fc51e_1_0",
       },
       {
         label: "Blockchains",
@@ -16,7 +16,7 @@ export const FooterData = [
       },
       {
         label: "Community",
-        url: "https://pea.ai/",
+        url: "/solution/community",
       },
     ],
   },
