@@ -19,7 +19,7 @@ const BatchDownloadButtons = ({
           target="_blank"
           href="https://calendly.com/partners-79/footprint-analytics-jimmy"
         >
-          <Button className="solution__button-bland">{blandButtonText}</Button>
+          <div className="solution__button-bland">{blandButtonText}</div>
         </Link>
       </div>
     </div>
