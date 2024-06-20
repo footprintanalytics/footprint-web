@@ -1,7 +1,7 @@
 .solution__about {
   min-height: calc(100vh - 60px);
   font-family: roboto;
-  background: #06061E;
+  background: #121828;
 }
 
 .solution__start {
@@ -492,11 +492,11 @@
 
 .solution__enable {
   background-color: #121729;
-  background-image: url(https://static.footprint.network/solution/img-enable.png?1=1);
-  background-size: 1920px 869px;
+  background-image: url(https://static.footprint.network/solution/img-enable3.jpg?1=1);
+  background-size: 1920px 841px;
   background-position: center;
   background-repeat: no-repeat;
-  height: 869px;
+  height: 841px;
 }
 
 .solution__user-growth {
