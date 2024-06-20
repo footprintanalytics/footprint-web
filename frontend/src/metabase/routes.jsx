@@ -822,11 +822,11 @@ export const getRoutes = store => (
 
         {/*<Route path="/auto/dashboard/*" component={AutomaticDashboardApp} />*/}
 
-        <Route
+        {/*<Route
           title={t`Submit Contract`}
           path="/submit/contract"
           component={LazyLoad.SubmitContract}
-        />
+        />*/}
         <Route
           title={t`Submit Contract`}
           path="/submit/contract/add-v1"
@@ -836,6 +836,16 @@ export const getRoutes = store => (
           title={t`Submit Contract`}
           path="/submit/contract/add"
           component={LazyLoad.SubmitContractAddV2}
+        />
+        <Route
+          title={t`Submit Contract`}
+          path="/submit/contract"
+          component={LazyLoad.SubmitContractAddV3}
+        />
+        <Route
+          title={t`Submit Contract`}
+          path="/submit/contract/mine"
+          component={props => <LazyLoad.SubmitContract {...props} showAdd={false} showMyContractTitle={true} />}
         />
         <Route
           title={t`Submit Contract`}

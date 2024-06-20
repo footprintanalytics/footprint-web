@@ -5,6 +5,12 @@
   background-color: #f0f0ff;
 }
 
+.SubmitContract__add-v3 {
+  width: 100%;
+  padding: 60px;
+  background-color: #f0f0ff;
+}
+
 .SubmitContract__steps {
   margin-top: 10px;
   margin-bottom: 20px;

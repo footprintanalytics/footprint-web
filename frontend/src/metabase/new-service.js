@@ -9,7 +9,7 @@ export const apiGet = async api => {
 export const getRefBaseApi = () => {
   const domain = window.location.hostname;
   return domain === "localhost" || domain === "preview.footprint.network"
-    ? "https://beta-footprint-ref-data.footprint.network" // local test
+    ? "https://ref-api-adapter-dev.footprint.network" // local test
     : "https://ref-api-adapter.footprint.network"; // production
 };
 

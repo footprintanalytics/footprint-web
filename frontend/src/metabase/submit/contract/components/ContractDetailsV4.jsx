@@ -1,37 +1,26 @@
 /* eslint-disable react/prop-types */
 /* eslint-disable curly */
-import React, { useState, useEffect } from "react";
-import {
-  AutoComplete,
-  Button,
-  Form,
-  Input,
-  message,
-  Select,
-  Tabs,
-  Modal,
-  Tooltip,
-  Upload,
-  Spin, Tag,
-} from "antd";
+import React, { useEffect, useState } from "react";
+import { AutoComplete, Button, Form, Input, message, Modal, Select, Spin, Tabs, Tooltip, Upload } from "antd";
 import { useQuery } from "react-query";
 import slug from "slug";
 import {
   CheckOutlined,
-  LoadingOutlined,
-  ExclamationCircleOutlined,
   DownOutlined,
-  UpOutlined,
+  ExclamationCircleOutlined,
+  LoadingOutlined,
   SyncOutlined,
   UploadOutlined,
+  UpOutlined,
 } from "@ant-design/icons";
-import { debounce, flatten, get, toLower, union } from "lodash";
+import { debounce, flatten, get, toLower, union, isEmpty, some } from "lodash";
 import { v4 as uuidv4 } from "uuid";
 import { getRefProtocolList } from "metabase/new-service";
 import { uploadFile } from "metabase/lib/oss";
 import { ossPath } from "metabase/lib/ossPath";
 import ContractDecoding from "./ContractDecoding";
 import InputContractModal from "metabase/submit/contract/components/InputContractModal";
+import ContractInput from "metabase/submit/contract/components/ContractInput";
 
 const CHAIN_LIST = [
   { value: "Ethereum", label: "Ethereum" },
@@ -56,7 +45,7 @@ const PROTOCOL_CATEGORY_LIST = [
   { value: "Others", label: "Others" },
 ];
 
-const ContractDetailsV3 = ({ onFinish, user, onClosed, hideEmail, protocolCategoryList, hideMoreOptions, hideProjectName, projectName, projectId, fromFgaAddProject, backAction }) => {
+const ContractDetailsV4 = ({ onFinish, user, onClosed, hideEmail, protocolCategoryList, hideMoreOptions, hideProjectName, projectName, projectId, fromFgaAddProject, backAction }) => {
   const [refresh, setRefresh] = useState(0);
   const [open, setOpen] = useState();
   const [contract, setContract] = useState([]);
@@ -108,21 +97,21 @@ const ContractDetailsV3 = ({ onFinish, user, onClosed, hideEmail, protocolCatego
   }, [protocolSlug]);
 
   const isValidContractAddress = chain => {
-    const contractAddress =
-      contract?.find(item => item.chain === chain)?.contractAddress || "";
-    if (!contractAddress) {
+    const contractData =
+      contract?.find(item => item.chain === chain)?.contractData || [];
+    if (some(contractData, i => !i.address)) {
       return false;
     }
-    return isValidAddress(contractAddress);
+    return isValidAddress(contractData?.map(i => i.address).join("\n"));
   };
 
   const isSameContractAddress = chain => {
-    const contractAddress =
-      contract?.find(item => item.chain === chain)?.contractAddress || "";
-    if (!contractAddress) {
+    const contractData =
+      contract?.find(item => item.chain === chain)?.contractData || [];
+    if (some(contractData, i => !i.address)) {
       return false;
     }
-    return isSameAddress(contractAddress);
+    return isSameAddress(contractData?.map(i => i.address).join("\n"));
   };
 
   const isValidAddress = contractAddress => {
@@ -141,7 +130,21 @@ const ContractDetailsV3 = ({ onFinish, user, onClosed, hideEmail, protocolCatego
     return result.length !== array.length && array.length > 1;
   };
 
+  function createAbi(abi) {
+    let abiStringArray = null;
+    try {
+      const abiArray = JSON.parse(abi);
+      // 遍历数组，将每个对象改为string，得到string[]
+      abiStringArray = abiArray.map(item => {
+        return JSON.stringify(item);
+      });
+    } catch (e) {
+    }
+    return abiStringArray;
+  }
+
   const formatContracts = contracts => {
+    console.log("contractscontractscontracts", contracts)
     const temp = contracts?.map(item => {
       return {
         ...item,
@@ -149,24 +152,23 @@ const ContractDetailsV3 = ({ onFinish, user, onClosed, hideEmail, protocolCatego
       };
     });
     const resultContracts = temp?.map(contract => {
-      return contract?.contractAddress?.map(address => {
-        const array = address.split(",");
-        const addr = get(array, "[0]");
-        const standard = get(array, "[1]");
+      return contract?.contractData?.map(item => {
         return {
           chain: contract.chain,
-          contractAddress: addr,
-          standard: standard,
+          contractAddress: item.address,
+          contractName: item.name,
+          standard: item.standard,
+          abi: createAbi(item.abi),
         };
       });
     });
     return flatten(resultContracts) ?? [];
   };
 
-  const delayedChange = debounce((item, value) => {
+  const delayedChange = debounce((item, contractData) => {
     const temp = contract.find(i => i.chain === item.chain);
-    temp.contractAddress = value;
-    temp.isValid = isValidAddress(value);
+    temp.contractData = contractData;
+    temp.isValid = isValidAddress(contractData[0].address);
     setContract(contract);
     form.setFieldValue("contracts", contract);
     setRefresh(refresh + 1);
@@ -174,12 +176,13 @@ const ContractDetailsV3 = ({ onFinish, user, onClosed, hideEmail, protocolCatego
 
   const getError = chain => {
     const temp = contract?.find(i => i.chain === chain);
+    // console.log("temptemptemp", temp, temp?.chain, temp?.contractData, temp?.contractData?.filter(i => !isEmpty(i.address)))
     if (!temp) {
       return null;
     }
-    if (!temp.contractAddress) {
-      return "You must provide at least one smart contract address for each chain selected.";
-    }
+    // if (temp?.contractData?.filter(i => !isEmpty(i.address))?.length > 0) {
+    //   return "You must provide at least one smart contract address for each chain selected.";
+    // }
     if (!isValidContractAddress(chain)) {
       return `The smart contract does not look correct on the ${chain} protocol. Please check your submission and try again.`;
     }
@@ -216,7 +219,6 @@ const ContractDetailsV3 = ({ onFinish, user, onClosed, hideEmail, protocolCatego
           temp.contractAddressArray = [...(temp.contractAddressArray || []), {contract, contractType}];
           temp.isValid = isValidAddressArray(temp.contractAddressArray);
           setContract((c) => c);
-          console.log("result", contract)
           form.setFieldValue("contracts", contract);
           setRefresh(refresh + 1);
         }}/>
@@ -290,14 +292,14 @@ const ContractDetailsV3 = ({ onFinish, user, onClosed, hideEmail, protocolCatego
           const isNewProtocol = !getProtocolList?.data
             ?.map(item => item.protocol_name ?? item.protocol_slug)
             ?.includes(protocolName);
-          const isValidContract = contract.every(item =>
-            isValidContractAddress(item.chain, contract),
-          );
+          // const isValidContract = contract.every(item =>
+          //   isValidContractAddress(item.chain, contract),
+          // );
           const projectIdObject = projectId ? { projectId }: {};
-          if (!isValidContract) {
-            message.info("Please input valid contract address");
-            return;
-          }
+          // if (!isValidContract) {
+          //   message.info("Please input valid contract address");
+          //   return;
+          // }
           try {
             const param = {
               ...values,
@@ -360,7 +362,6 @@ const ContractDetailsV3 = ({ onFinish, user, onClosed, hideEmail, protocolCatego
               const protocolSlug = getProtocolList?.data?.find(
                 item => item.protocol_name === value,
               )?.protocol_slug;
-              console.log("select protocolSlug => ", value, protocolSlug);
               // form.setFieldValue("protocolSlug", protocolSlug);
               setProtocolSlug(protocolSlug);
             }}
@@ -496,11 +497,10 @@ const ContractDetailsV3 = ({ onFinish, user, onClosed, hideEmail, protocolCatego
                       }
                     </div>
                     {/*0x1092eb9c78833c6e0b4b9875eb84585814f613cf,ERC1155*/}
-                    <Input.TextArea
-                      placeholder={fromFgaAddProject ? `0x123456789ABCDEF,ERC1155` : `Input contract address in ${item.chain}`}
-                      style={{ height: 160 }}
-                      onChange={e => {
-                        delayedChange(item, e.target.value);
+                    <ContractInput
+                      item={item}
+                      onChange={contractData => {
+                        delayedChange(item, contractData);
                       }}
                     />
                     {renderError(item.chain)}
@@ -695,4 +695,4 @@ const ContractDetailsV3 = ({ onFinish, user, onClosed, hideEmail, protocolCatego
   );
 };
 
-export default ContractDetailsV3;
+export default ContractDetailsV4;
