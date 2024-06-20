@@ -190,6 +190,28 @@ const RefContractTable = ({ data, recordType, showActionColumn = true, tableRowC
       },
     },
     {
+      title: "Decode Status",
+      render: (_, { decode_status, createdAt, error }) => {
+        const text = decode_status;
+        switch (text) {
+          case "holding":
+          case "pending":
+          case "decoding":
+            return <Tag color="processing">{text}</Tag>;
+          case "decoded_failed":
+            return <Tag color="error">{text}</Tag>;
+          case "decoded_completed":
+            return (
+              <Tag color="success">{text}</Tag>
+            );
+          default:
+            return (
+              <>{" "}</>
+            );
+        }
+      },
+    },
+    {
       title: "Submitted by",
       // width: 240,
       render: (_, record) => {
