@@ -111,7 +111,7 @@ const SubmitContract = props => {
           //   pagination={false}
           //   locale={locale}
           // />
-          <div className="flex justify-center" style={{marginTop: 120, fontSize: 24}}>{"No submission records, you can try"}<Link to={"/submit/contract"} className="text-underline text-underline-hover ml1">submitting your own contract</Link>.</div>
+          <div className="flex justify-center" style={{marginTop: 120, fontSize: 24}}>{"No submission records, you can try"}<Link to={"/submit/contract"} className="text-underline text-underline-hover ml1" style={{ color: "#3434b2" }}>submitting your own contract</Link>.</div>
         );
       }
       return (
