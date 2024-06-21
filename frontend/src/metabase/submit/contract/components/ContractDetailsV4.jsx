@@ -131,9 +131,12 @@ const ContractDetailsV4 = ({ onFinish, user, onClosed, hideEmail, protocolCatego
   };
 
   const isValidAddress = contractAddress => {
+    if (!contractAddress) {
+      return false
+    }
     const regex = /^(0x)?[0-9a-fA-F]{40,}$/;
-    const array = contractAddress.split("\n");
-    return array.every(address => regex.test(get(address.split(","),"[0]")));
+    const array = contractAddress?.split("\n");
+    return array.every(address => regex.test(get(address?.split(","),"[0]")));
   };
   const isValidAddressArray = contractAddressArray => {
     const regex = /^(0x)?[0-9a-fA-F]{40,}$/;
@@ -141,29 +144,25 @@ const ContractDetailsV4 = ({ onFinish, user, onClosed, hideEmail, protocolCatego
   };
 
   const isSameAddress = contractAddress => {
-    const array = contractAddress.split("\n").map(i => i.toLowerCase());
+    const array = contractAddress?.split("\n").map(i => i.toLowerCase());
     const result = union(array);
     return result.length !== array.length && array.length > 1;
   };
 
   function createAbi(abi) {
-    let abiStringArray = null;
+    let abiArray = null;
     try {
-      const abiArray = JSON.parse(abi);
-      // 遍历数组，将每个对象改为string，得到string[]
-      abiStringArray = abiArray.map(item => {
-        return JSON.stringify(item);
-      });
+      abiArray = JSON.parse(abi);
     } catch (e) {
     }
-    return abiStringArray;
+    return abiArray;
   }
 
   const formatContracts = contracts => {
     const temp = contracts?.map(item => {
       return {
         ...item,
-        contractAddress: item.contractAddress.trim().split("\n"),
+        contractAddress: item.contractAddress?.trim()?.split("\n"),
       };
     });
     const resultContracts = temp?.map(contract => {
