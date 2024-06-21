@@ -129,8 +129,7 @@ const leftMenuData = [
       {
         title: "Community",
         desc: "Boost community growth with intelligent tools and contribution tracking.",
-        link: "https://pea.ai/",
-        externalLink: true,
+        link: "/solution/community",
       },
     ],
   },

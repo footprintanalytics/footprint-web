@@ -16,7 +16,7 @@ export const FooterData = [
       },
       {
         label: "Community",
-        url: "https://pea.ai/",
+        url: "/solution/community",
       },
     ],
   },

@@ -33,7 +33,7 @@ const AboutDepth = () => {
       desc: "Boost community growth with intelligent tools and contribution tracking.",
       img: getOssUrl("home-v2/icon_home_solution_community.png"),
       icon: getOssUrl("home-v2/icon_home_solution4.png"),
-      link: "https://pea.ai/",
+      link: "/solution/community",
     },
   ]
   const MoreIcon =
@@ -67,7 +67,7 @@ const AboutDepth = () => {
                   </div>
                   <span style={{ width: 280 }}>{item.desc}</span>
                   <div className="learn-more">
-                    <Link className="text-underline text-underline-hover" to={item.link} target="_blank">
+                    <Link className="text-underline text-underline-hover" to={item.link} target={item.link?.startsWith("http") ? "_blank": ""}>
                       {MoreIcon}
                     </Link>
                   </div>
