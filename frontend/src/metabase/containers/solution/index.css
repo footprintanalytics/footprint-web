@@ -5,7 +5,6 @@
 }
 
 .solution__start {
-  background-color: #00061D;
   height: 589px;
   display: flex;
   justify-content: center;
@@ -634,10 +633,10 @@
 }
 
 .solution__engine img {
-  width: 1139px;
-  height: 472px;
+  width: 1217px;
+  height: 504px;
   object-fit: scale-down;
-  margin: 60px 0 100px 0;
+  margin: 50px 0 100px 0;
   z-index: 1;
 }
 
@@ -654,7 +653,7 @@
   color: #FFFFFF;
   line-height: 40px;
   font-style: normal;
-  padding: 40px 0 4px 0;
+  padding: 20px 0 4px 0;
 }
 
 .solution__drive {
@@ -738,9 +737,10 @@
 }
 
 .solution__drive-inner-li-left-box span::before {
-  content: "✔";
+  content: url("https://static.footprint.network/solution/icon-correct.svg");
   margin-right: 16px;
   color: #90F999;
+  vertical-align: sub;
 }
 
 .solution__drive-circle-bg1 {
