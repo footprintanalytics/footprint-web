@@ -12,6 +12,8 @@ import CaseShow from "metabase/containers/solution/components/CaseShow";
 import { getOssUrl } from "metabase/lib/image";
 import UserGrowth from "metabase/containers/solution/components/UserGrowth";
 import Overview from "metabase/containers/solution/components/Overview";
+import Engine from "metabase/containers/solution/components/Engine";
+import Drive from "metabase/containers/solution/components/Drive";
 
 const Community = () => {
   // const defaultDesc =
@@ -24,15 +26,14 @@ const Community = () => {
       {/*<Meta description={defaultDesc} keywords={keywords} title={title} />*/}
       <div className="solution__about">
         <BatchDownloadStart
-          title={<>A Long-term Incentive <br/>Program for Users, <br/>Projects, and Ecosystems.</>}
-          desc={<>Footprint provides a robust framework to build <br />and manage communities.</>}
-          image={"https://static.footprint.network/solution/img-head0.png"}
+          title={<>Unlock Your Potential <br/>With Data-Driven Customer<br/>Acquisition</>}
+          desc={<>Comprehensive wallet analysis for precise, <br />high-quality user acquisition and retention.</>}
+          image={"https://static.footprint.network/solution/img-marketing-head.png"}
         />
-        <UserGrowth type={"community"}/>
-        <Overview />
-        <CaseShow/>
-        <BatchDownloadData />
-        <BatchDownloadReady title={"Don't Wait, Get Started Today!"}/>
+        <UserGrowth type={"marketing"}/>
+        <Engine />
+        <Drive />
+        <BatchDownloadReady title={"Let’s Get Started! Contact Our\nExperts Now!"}/>
         <div style={{ height: 100, background: "#06061E" }}/>
         <div className="solution__dividing-line-gray" />
         <HomeFooter />
