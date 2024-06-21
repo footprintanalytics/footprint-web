@@ -429,6 +429,28 @@ const RefAuditTable = ({ operator, type, recordType }) => {
       },
     },
     {
+      title: "Decode Status",
+      render: (_, { decode_status }) => {
+        const text = decode_status;
+        switch (text) {
+          // case "holding":
+          case "pending":
+          case "decoding":
+            return <Tag color="processing">{text}</Tag>;
+          case "decoded_failed":
+            return <Tag color="error">{text}</Tag>;
+          case "decoded_completed":
+            return (
+              <Tag color="success">{text}</Tag>
+            );
+          default:
+            return (
+              <>{"-"}</>
+            );
+        }
+      },
+    },
+    {
       title: "Audit by",
       // width: 240,
       render: (_, { audit_by }) => {
