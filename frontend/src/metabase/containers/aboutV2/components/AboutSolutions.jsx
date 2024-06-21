@@ -26,7 +26,7 @@ const AboutDepth = () => {
       desc: "Conduct comprehensive wallet analysis for data-driven customer acquisition.",
       img: getOssUrl("home-v2/icon_home_solution_marketing.png"),
       icon: getOssUrl("home-v2/icon_home_solution3.png"),
-      link: "https://docs.google.com/presentation/d/1UXiE1dvMIKhsUHwwVpzixc4v7lVHJNzG3WIYgpfw0AU/edit#slide=id.g25c23df782d_0_0",
+      link: "/solution/marketing",
     },
     {
       title: "Community",

@@ -12,7 +12,7 @@ export const FooterData = [
       },
       {
         label: "Marketing & Consulting",
-        url: "https://docs.google.com/presentation/d/1UXiE1dvMIKhsUHwwVpzixc4v7lVHJNzG3WIYgpfw0AU/edit#slide=id.g25c23df782d_0_0",
+        url: "/solution/marketing",
       },
       {
         label: "Community",

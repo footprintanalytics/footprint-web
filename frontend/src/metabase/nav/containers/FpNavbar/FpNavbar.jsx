@@ -123,8 +123,7 @@ const leftMenuData = [
       {
         title: "Marketing & Consulting",
         desc: "Conduct comprehensive wallet analysis for data-driven customer acquisition.",
-        link: "https://docs.google.com/presentation/d/1UXiE1dvMIKhsUHwwVpzixc4v7lVHJNzG3WIYgpfw0AU/edit#slide=id.g25c23df782d_0_0",
-        externalLink: true,
+        link: "/solution/marketing",
       },
       {
         title: "Community",
