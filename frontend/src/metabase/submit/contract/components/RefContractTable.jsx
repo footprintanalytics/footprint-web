@@ -493,6 +493,16 @@ const RefContractTable = ({ data, recordType, showActionColumn = true, tableRowC
                 Detail
               </Button>
             )}
+            {record?.data?.protocol_slug && (
+              <Button
+                type="link"
+                size="small"
+                href={`/@Bond/Chain-Decoded-Events?contract_address=${record?.data?.contract_address}`}
+                target={"_blank"}
+              >
+                Events
+              </Button>
+            )}
             <Button
               type="link"
               size="small"
