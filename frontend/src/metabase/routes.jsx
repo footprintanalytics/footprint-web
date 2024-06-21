@@ -233,6 +233,9 @@ export const getRoutes = store => (
       <Route path="/solution/community">
         <IndexRoute component={LazyLoad.community} />
       </Route>
+      <Route path="/solution/marketing">
+        <IndexRoute component={LazyLoad.marketing} />
+      </Route>
 
       <Route
         title={t`Protocols`}
