@@ -55,20 +55,20 @@ const SubmitContract = props => {
     param: null,
   });
 
-  const { isAdmin, user, showAdd = true, headLayout, showActionColumn, tableRowClassName, byUser } = props;
+  const { isAdmin, user, showAdd = true, headLayout, showActionColumn, tableRowClassName, byUser, showMyContractTitle } = props;
   const isAuditPerson =
     isAdmin || user?.id === 30 || user?.id === 9 || user?.id === 2268; // 30 -> pb, 9 -> alpha in preview ,2268 -> Eason
   const [operator, setOperator] = useState("personal");
   const [status, setStatus] = useState("");
   const [isReviewLoading, setReviewLoading] = useState(false);
   const [ current, setCurrent ] = useState(0)
-  const pageSize = 10;
+  const pageSize = 50;
   // const params = {
   //   operator: operator,
   //   status: status === "all" ? "" : status,
   // };
 
-  const params = byUser ? { type: currentRecordType, email: user?.email, offset: current, limit: pageSize } : { type: currentRecordType };
+  const params = isAdmin ? { type: currentRecordType }: { type: currentRecordType, email: user?.email, offset: current, limit: pageSize }
 
   const { isLoading, data, refetch } = useQuery(
     ["getRefContractSubmittedList", params],
@@ -145,6 +145,11 @@ const SubmitContract = props => {
   return (
     <div className="SubmitContract">
       {headLayout}
+      {showMyContractTitle && (<div>
+        <h1>
+          My Contracts
+        </h1>
+      </div>)}
       {showAdd && (<div className="flex flex-col">
         <h1>
           Welcome to submit more contracts or protocols to help us better display
