@@ -17,7 +17,7 @@ const BatchDownloadButtons = ({
       <div className="flex flex-column">
         <Link
           target="_blank"
-          href="https://calendly.com/partners-79/footprint-analytics-jimmy"
+          href="https://calendly.com/partners-79/footprint-analytics-45mins"
         >
           <div className="solution__button-bland">{blandButtonText}</div>
         </Link>
