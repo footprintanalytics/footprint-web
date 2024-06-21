@@ -10,7 +10,7 @@ const Engine = () => {
     <div className="solution__engine">
       <h2>{title} <span className="solution__user-growth-title-primary">{desc}</span></h2>
       <h4>Get a comprehensive understanding of users, projects, and competitive landscapes to feed growth.</h4>
-      <img src={getOssUrl("solution/img-engine.png?1=1")} alt={"engine"} />
+      <img src={getOssUrl("solution/img-engine.png?2=2")} alt={"engine"} />
       <div className={"solution__drive-circle-bg1"}/>
     </div>
   );

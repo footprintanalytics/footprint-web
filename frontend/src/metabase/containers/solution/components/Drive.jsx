@@ -44,7 +44,7 @@ const Drive = () => {
     },
     {
       topic: "Token",
-      img: getOssUrl("solution/img-token.png"),
+      img: getOssUrl("solution/img-token.png?1=1"),
       content: [
         {
           type: "Tokenomics",
