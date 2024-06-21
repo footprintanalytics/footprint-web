@@ -111,7 +111,8 @@ const leftMenuData = [
       {
         title: "Games",
         desc: "Unify and unlock the power of your game data.",
-        link: "/solution/community",
+        link: "https://docs.google.com/presentation/d/1Xmye6BfGWhlde42LnwNkVylRWOaSSXdbY7zfgZHAZOM/edit#slide=id.g2b36d9fc51e_1_0",
+        externalLink: true,
       },
       {
         title: "Blockchains",
@@ -128,8 +129,7 @@ const leftMenuData = [
       {
         title: "Community",
         desc: "Boost community growth with intelligent tools and contribution tracking.",
-        link: "https://pea.ai/",
-        externalLink: true,
+        link: "/solution/community",
       },
     ],
   },
