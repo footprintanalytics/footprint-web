@@ -530,7 +530,7 @@
   color: #FFFFFF;
   line-height: 40px;
   font-style: normal;
-  padding: 40px 0 44px 0;
+  padding: 35px 0 35px 0;
 }
 
 .solution__user-growth li h3 {
@@ -561,7 +561,7 @@
   grid-auto-flow: dense;
   gap: 80px;
   justify-content: center;
-  margin: 20px auto;
+  margin: 15px auto;
 }
 
 .solution__user-growth-second-ul {
@@ -570,7 +570,7 @@
   grid-auto-flow: dense;
   gap: 200px;
   justify-content: center;
-  margin: 20px auto;
+  margin: 15px auto;
 }
 
 .solution__user-growth li {
