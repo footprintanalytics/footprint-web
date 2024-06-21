@@ -4,6 +4,7 @@ import React from "react";
 import { Button, Popover, Space, Table, Tag, Tooltip, Typography } from "antd";
 import { QuestionCircleOutlined, SyncOutlined } from "@ant-design/icons";
 import dayjs from "dayjs";
+import Link from "metabase/core/components/Link";
 
 const RefContractTable = ({ data, recordType, showActionColumn = true, tableRowClassName, pagination = false }) => {
   function isWithinMins(createdAt, mins = 30) {

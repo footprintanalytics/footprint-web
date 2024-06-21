@@ -104,12 +104,14 @@ const SubmitContract = props => {
       }
       if (!tempData || tempData?.length === 0) {
         return (
-          <Table
-            size="small"
-            rowKey="_id"
-            dataSource={null}
-            pagination={false}
-          />
+          // <Table
+          //   size="small"
+          //   rowKey="_id"
+          //   dataSource={null}
+          //   pagination={false}
+          //   locale={locale}
+          // />
+          <div className="flex justify-center" style={{marginTop: 120, fontSize: 24}}>{"No submission records, you can try"}<Link to={"/submit/contract"} className="text-underline text-underline-hover ml1">submitting your own contract</Link>.</div>
         );
       }
       return (
