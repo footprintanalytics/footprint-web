@@ -22,14 +22,16 @@ const Marketing = () => {
       {/*<Meta description={defaultDesc} keywords={keywords} title={title} />*/}
       <div className="solution__about">
         <BatchDownloadStart
-          title={<>Unlock Your Potential <br/>With Data-Driven Customer<br/>Acquisition</>}
+          title={<>Unlock Your Potential With <br/>Data-Driven Customer<br/>Acquisition</>}
           desc={<>Comprehensive wallet analysis for precise, <br />high-quality user acquisition and retention.</>}
           image={"https://static.footprint.network/solution/img-marketing-head.png"}
+          marginRight={480}
+          descColor={"#ffffff"}
         />
-        <UserGrowth type={"marketing"}/>
+        <UserGrowth type={"marketing"} gap={190}/>
         <Engine />
         <Drive />
-        <BatchDownloadReady title={"Let’s Get Started! Contact Our\nExperts Now!"}/>
+        <BatchDownloadReady title={"Let’s Get Started! Contact Our\nExperts Now!"} paddingRight={500}/>
         <div style={{ height: 100, background: "#06061E" }}/>
         <div className="solution__dividing-line-gray" />
         <HomeFooter />

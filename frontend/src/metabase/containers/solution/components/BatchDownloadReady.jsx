@@ -5,10 +5,10 @@ import Link from "metabase/core/components/Link";
 import Button from "metabase/core/components/Button/Button";
 
 const BatchDownloadReady = props => {
-  const { title } = props;
+  const { title, paddingRight } = props;
   return (
     <div className="solution__ready">
-      <div className="solution__ready-inner">
+      <div className="solution__ready-inner" style={{paddingRight: paddingRight}}>
         <h2>{title}</h2>
         <Link className="mt4" href="https://calendly.com/partners-79/footprint-analytics-jimmy" target="_blank" style={{ width: "fit-content" }}>
           <div className="solution__button-white">Speak With a Solutions Architect</div>

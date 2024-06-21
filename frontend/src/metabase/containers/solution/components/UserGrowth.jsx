@@ -5,7 +5,7 @@ import BatchDownloadButtons from "metabase/containers/solution/components/batchD
 import { getOssUrl } from "metabase/lib/image";
 
 const UserGrowth = props => {
-  const { type } = props
+  const { type, gap } = props
   const communityData = [
     {
       "title": "Ready-To-Use",
@@ -86,7 +86,7 @@ const UserGrowth = props => {
   return (
     <div className="solution__user-growth">
       <h2>{title} <span className="solution__user-growth-title-primary">{desc}</span></h2>
-      <ul className="solution__user-growth-first-ul">
+      <ul className="solution__user-growth-first-ul" style={{gap: gap}}>
         {data.map((item, index) => {
           return (
             <li key={index} >
