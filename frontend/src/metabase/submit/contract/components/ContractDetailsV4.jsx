@@ -96,6 +96,22 @@ const ContractDetailsV4 = ({ onFinish, user, onClosed, hideEmail, protocolCatego
     }
   }, [protocolSlug]);
 
+  const isValidABI = chain => {
+    const contractData =
+      contract?.find(item => item.chain === chain)?.contractData || [];
+    return contractData?.every(i => {
+      if (isEmpty(i.abi)) {
+        return true;
+      }
+      try {
+        JSON.parse(i.abi);
+        return true;
+      } catch (e) {
+        return false;
+      }
+    });
+  }
+
   const isValidContractAddress = chain => {
     const contractData =
       contract?.find(item => item.chain === chain)?.contractData || [];
@@ -144,7 +160,6 @@ const ContractDetailsV4 = ({ onFinish, user, onClosed, hideEmail, protocolCatego
   }
 
   const formatContracts = contracts => {
-    console.log("contractscontractscontracts", contracts)
     const temp = contracts?.map(item => {
       return {
         ...item,
@@ -292,14 +307,21 @@ const ContractDetailsV4 = ({ onFinish, user, onClosed, hideEmail, protocolCatego
           const isNewProtocol = !getProtocolList?.data
             ?.map(item => item.protocol_name ?? item.protocol_slug)
             ?.includes(protocolName);
-          // const isValidContract = contract.every(item =>
-          //   isValidContractAddress(item.chain, contract),
-          // );
+          const isValidContract = contract.every(item =>
+            isValidContractAddress(item.chain, contract),
+          );
           const projectIdObject = projectId ? { projectId }: {};
-          // if (!isValidContract) {
-          //   message.info("Please input valid contract address");
-          //   return;
-          // }
+          if (!isValidContract) {
+            message.info("Please input valid contract address");
+            return;
+          }
+          const isValidABIs = contract.every(item =>
+            isValidABI(item.chain, contract),
+          );
+          if (!isValidABIs) {
+            message.info("Please input valid ABI (JSON)");
+            return;
+          }
           try {
             const param = {
               ...values,
