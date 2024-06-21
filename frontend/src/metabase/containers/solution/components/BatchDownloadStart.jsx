@@ -3,16 +3,16 @@ import React from "react";
 import "../index.css";
 import BatchDownloadButtons from "metabase/containers/solution/components/batchDownloadButtons";
 
-const BatchDownloadStart = () => {
+const BatchDownloadStart = props => {
+  const { title, desc, image, marginRight, descColor } = props;
   return (
-    <div className="solution__start solution__start-bg">
-      <div className="solution__start-container">
+    <div className="solution__start solution__start-bg" style={{backgroundImage: `url(${image})`}}>
+      <div className="solution__start-container" style={{marginRight: marginRight}}>
         <h1>
-          A Long-term Incentive <br/>Program for Users, <br/>Projects, and Ecosystems.
+          {title}
         </h1>
-        <h2>
-          Footprint provides a robust framework to build <br />and
-          manage communities.
+        <h2 style={{ color: descColor }}>
+          {desc}
         </h2>
         <BatchDownloadButtons />
       </div>

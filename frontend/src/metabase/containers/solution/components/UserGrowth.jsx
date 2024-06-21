@@ -4,8 +4,9 @@ import "../index.css";
 import BatchDownloadButtons from "metabase/containers/solution/components/batchDownloadButtons";
 import { getOssUrl } from "metabase/lib/image";
 
-const UserGrowth = () => {
-  const data = [
+const UserGrowth = props => {
+  const { type, gap } = props
+  const communityData = [
     {
       "title": "Ready-To-Use",
       "desc": "Out-of-the-box functionality",
@@ -22,7 +23,24 @@ const UserGrowth = () => {
       "image": getOssUrl("solution/icon-growth3.png"),
     },
   ]
-  const data2 = [
+  const marketingData = [
+    {
+      "title": "Full Historical",
+      "desc": "Complete data of Wallets",
+      "image": getOssUrl("solution/icon-growth1.png"),
+    },
+    {
+      "title": "Real-Time",
+      "desc": "Instantaneous data updates",
+      "image": getOssUrl("solution/icon-growth2.png"),
+    },
+    {
+      "title": "Cross-chain Compatibility",
+      "desc": "Support for 30+ chains",
+      "image": getOssUrl("solution/icon-growth3.png"),
+    },
+  ]
+  const communityData2 = [
     {
       "title": "Comprehensive Approach",
       "desc": "From individual users to projects and \nentire ecosystems",
@@ -34,10 +52,41 @@ const UserGrowth = () => {
       "image": getOssUrl("solution/icon-growth5.png"),
     },
   ]
+  const marketingData2 = [
+    {
+      "title": "Snapshots at Any Block",
+      "desc": "Capture blockchain states at any block.",
+      "image": getOssUrl("solution/icon-growth4.png"),
+    },
+    {
+      "title": "White Label Supported",
+      "desc": "Cost-efficient and ready for integration",
+      "image": getOssUrl("solution/icon-growth5.png"),
+    },
+  ]
+  const mappingData = {
+    "community": {
+      data: communityData,
+      data2: communityData2,
+      title: "User Growth & Loyalty Solution ",
+      desc: "Powered by AI",
+    },
+    "marketing": {
+      data: marketingData,
+      data2: marketingData2,
+      title: "Web3 Growth Hacking With ",
+      desc: "Advanced Data Support",
+    },
+  }
+  const title = mappingData[type].title
+  const desc = mappingData[type].desc
+  const data = mappingData[type].data
+  const data2 = mappingData[type].data2
+
   return (
     <div className="solution__user-growth">
-      <h2>User Growth & Loyalty Solution <span className="solution__user-growth-title-primary">Powered by AI</span></h2>
-      <ul className="solution__user-growth-first-ul">
+      <h2>{title} <span className="solution__user-growth-title-primary">{desc}</span></h2>
+      <ul className="solution__user-growth-first-ul" style={{gap: gap}}>
         {data.map((item, index) => {
           return (
             <li key={index} >
