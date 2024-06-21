@@ -160,20 +160,24 @@ export const fetchDashboard = createThunkAction(
       const optionsHash = getOptionsHash();
       if (dashboardType === "public") {
         const secret = optionsHash && optionsHash.secret;
-        const { data } = await PublicApi.dashboard({
+        const responseData = await PublicApi.dashboard({
           uuid: dashId,
           secret: secret,
         });
-        result = data;
-        result = {
-          ...result,
-          entityId: result.id,
-          id: dashId,
-          ordered_cards: result.ordered_cards.map(dc => ({
-            ...dc,
-            dashboard_id: dashId,
-          })),
-        };
+        if (responseData?.data) {
+          result = responseData.data
+          result = {
+            ...(responseData.data || {}),
+            entityId: result.id,
+            id: dashId,
+            ordered_cards: result.ordered_cards.map(dc => ({
+              ...dc,
+              dashboard_id: dashId,
+            })),
+          };
+        } else {
+          result = responseData
+        }
       } else if (dashboardType === "embed") {
         result = await EmbedApi.dashboard({ token: dashId });
         result = {
