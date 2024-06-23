@@ -44,7 +44,7 @@ const SubmitContractAddV3 = props => {
             // props.router.push("/submit/contract/success");
           }}
         />
-        {isDecodingProcessOpen?.open&& (
+        {isDecodingProcessOpen?.open && (
           <Modal
             title="Submit contracts or protocols"
             open={true}
@@ -53,9 +53,14 @@ const SubmitContractAddV3 = props => {
             footer={null}
             closable={false}
             maskClosable={false}
+            width={600}
           >
             <ContractDecoding
               param={isDecodingProcessOpen?.param}
+              toMyContracts={() => {
+                setDecodingProcessOpen({ open: false, param: null });
+                replace("/submit/contract/mine")
+              }}
               onSuccess={() => {
                 setDecodingProcessOpen({ open: false, param: null });
                 replace("/submit/contract/mine")

@@ -13,7 +13,7 @@ import {
   UploadOutlined,
   UpOutlined,
 } from "@ant-design/icons";
-import { debounce, flatten, get, toLower, union, isEmpty, some } from "lodash";
+import { debounce, flatten, get, isEmpty, some, toLower, union } from "lodash";
 import { v4 as uuidv4 } from "uuid";
 import { getRefProtocolList } from "metabase/new-service";
 import { uploadFile } from "metabase/lib/oss";
@@ -103,6 +103,9 @@ const ContractDetailsV4 = ({ onFinish, user, onClosed, hideEmail, protocolCatego
       if (isEmpty(i.abi)) {
         return true;
       }
+      if (!i.abi.startsWith("[")) {
+        return false
+      }
       try {
         JSON.parse(i.abi);
         return true;
@@ -111,6 +114,15 @@ const ContractDetailsV4 = ({ onFinish, user, onClosed, hideEmail, protocolCatego
       }
     });
   }
+
+  const isFillContractAddress = chain => {
+    const contractData =
+      contract?.find(item => item.chain === chain)?.contractData || [];
+    if (some(contractData, i => i.address)) {
+      return true;
+    }
+    return false;
+  };
 
   const isValidContractAddress = chain => {
     const contractData =
@@ -194,6 +206,9 @@ const ContractDetailsV4 = ({ onFinish, user, onClosed, hideEmail, protocolCatego
     if (!temp) {
       return null;
     }
+    if (!isFillContractAddress(chain)) {
+      return "Please fill in the new contract address.";
+    }
     // if (temp?.contractData?.filter(i => !isEmpty(i.address))?.length > 0) {
     //   return "You must provide at least one smart contract address for each chain selected.";
     // }
@@ -240,13 +255,13 @@ const ContractDetailsV4 = ({ onFinish, user, onClosed, hideEmail, protocolCatego
     )
   }
 
-  const renderError = chain => {
+  /*const renderError = chain => {
     const error = getError(chain);
     if (error) {
       return <div style={{ color: "#ff4d4f" }}>{error}</div>;
     }
     return null;
-  };
+  };*/
   const moreOptionBtn = () => {
     return (
       <Button
@@ -524,7 +539,7 @@ const ContractDetailsV4 = ({ onFinish, user, onClosed, hideEmail, protocolCatego
                         delayedChange(item, contractData);
                       }}
                     />
-                    {renderError(item.chain)}
+                    {/*{renderError(item.chain)}*/}
                   </Tabs.TabPane>
                 );
               })}

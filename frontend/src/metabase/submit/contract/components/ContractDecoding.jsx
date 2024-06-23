@@ -1,25 +1,17 @@
 /* eslint-disable react/prop-types */
 /* eslint-disable curly */
-import React, { useState, useRef, useEffect } from "react";
-import { Typography, Card, message, Button } from "antd";
+import React, { useEffect, useRef, useState } from "react";
+import { Button, Card, message, Typography } from "antd";
 import lottie from "lottie-web/build/player/lottie_svg";
 import dayjs from "dayjs";
-import {
-  data_scanning,
-  animation_complete,
-  animation_complete2,
-} from "./data-scanning";
+import { animation_complete2, data_scanning } from "./data-scanning";
 import "animate.css";
 import { getRefBaseApi, submitFGAProtocols, submitRefProtocols } from "metabase/new-service";
-import { isABNeedDark, isDark } from "metabase/dashboard/components/utils/dark";
+import { isDark } from "metabase/dashboard/components/utils/dark";
 import Link from "metabase/core/components/Link";
-import { getGrowthProjectPath } from "metabase/ab/utils/utils";
-import { getFgaProject, getUser } from "metabase/selectors/user";
-import { getFgaChain } from "metabase/selectors/control";
-import { resetFgaProtocolList, setFgaChain } from "metabase/redux/control";
 import { isABPath } from "metabase/ab/utils/utils";
 
-const ContractDecoding = ({ param, onSuccess, fromFgaAddProject, backAction }) => {
+const ContractDecoding = ({ param, onSuccess, fromFgaAddProject, backAction, toMyContracts }) => {
   const ref = useRef();
   const [showBack, setShowBack] = useState();
   const [logDatas, setLogDatas] = useState([
@@ -218,8 +210,7 @@ const ContractDecoding = ({ param, onSuccess, fromFgaAddProject, backAction }) =
         <Typography.Title level={5}>{title}</Typography.Title>
         {!fromFgaAddProject && (
           <Typography.Text type="secondary">
-            This task may take a few minutes. You can come back later to check the
-            results.
+            This task may take a few minutes. You can check the results later by going to the <Link className="text-underline text-underline-hover" onClick={() => {toMyContracts?.()}}>My Contracts</Link>.
           </Typography.Text>
           )}
         {!fromFgaAddProject && (
@@ -252,12 +243,11 @@ const ContractDecoding = ({ param, onSuccess, fromFgaAddProject, backAction }) =
           {loadCompleted && (
             <Button
               type="primary"
-              style={{ width: 100 }}
               onClick={() => {
                 onSuccess?.();
               }}
             >
-              Close
+              My Contracts
             </Button>
           )}
         </div>
