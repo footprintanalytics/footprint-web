@@ -101,7 +101,6 @@ const ContractInput = ({ item, onChange }) => {
     <div className="contract-input">
       <div className="contract-input__table">{
         contractData?.map((item, index) => {
-          console.log("item" + index, item)
           return (
             <div className="contract-input__table-inner" key={index}>
               <div className="flex justify-between">

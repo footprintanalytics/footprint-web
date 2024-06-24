@@ -370,7 +370,6 @@ const ContractDetailsV4 = ({ onFinish, user, onClosed, hideEmail, protocolCatego
               message.info("Please input valid standard. e.g.0x123456789ABCDEF,ERC1155");
               return;
             }
-            console.log("param", param)
             onClosed?.(param);
           } catch (error) {
             console.log("ref submit contracts error:\n", error);

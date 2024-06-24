@@ -46,7 +46,6 @@ const RefAuditTable = ({ operator, type, recordType }) => {
       }
     }
   }, [type, recordType]);
-  console.log("param", param)
   const { isLoading, data, refetch } = useQuery(
     ["getRefAuditList", param],
     async () => {
