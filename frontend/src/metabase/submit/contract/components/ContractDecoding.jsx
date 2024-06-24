@@ -210,7 +210,7 @@ const ContractDecoding = ({ param, onSuccess, fromFgaAddProject, backAction, toM
         <Typography.Title level={5}>{title}</Typography.Title>
         {!fromFgaAddProject && (
           <Typography.Text type="secondary">
-            This task may take a few minutes. You can check the results later by going to the <Link className="text-underline text-underline-hover" onClick={() => {toMyContracts?.()}}>My Submits</Link>.
+            This task may take a few minutes. You can check the results later by going to the <Link className="text-underline text-underline-hover" onClick={() => {toMyContracts?.()}}>My Submissions</Link>.
           </Typography.Text>
           )}
         {!fromFgaAddProject && (
@@ -247,7 +247,7 @@ const ContractDecoding = ({ param, onSuccess, fromFgaAddProject, backAction, toM
                 onSuccess?.();
               }}
             >
-              My Submits
+              My Submissions
             </Button>
           )}
         </div>

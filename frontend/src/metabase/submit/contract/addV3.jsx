@@ -31,7 +31,7 @@ const SubmitContractAddV3 = props => {
         </p>
         <Link to={"/submit/contract/mine"}>
           <Button type="primary" htmlType="submit">
-            My Submits
+            My Submissions
           </Button>
         </Link>
         <Divider className=" my1"></Divider>
