@@ -497,7 +497,7 @@ const RefContractTable = ({ data, recordType, showActionColumn = true, tableRowC
               <Button
                 type="link"
                 size="small"
-                href={`/@Bond/Chain-Decoded-Events?contract_address=${record?.data?.contract_address}`}
+                href={`/@Bond/Chain-Decoded-Events?contract_address=${record?.data?.contract_address}&chain=${record?.data?.chain}`}
                 target={"_blank"}
               >
                 Events
