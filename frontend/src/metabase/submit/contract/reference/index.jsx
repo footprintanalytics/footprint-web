@@ -147,10 +147,11 @@ const SubmitContract = props => {
   return (
     <div className="SubmitContract">
       {headLayout}
-      {showMyContractTitle && (<div>
+      {showMyContractTitle && (<div className="flex justify-between">
         <h1>
-          My Contracts
+          My Submits
         </h1>
+        <Link className="text-underline-hover text-underline" to={"/submit/contract"}>Submit Your Own Contract</Link>
       </div>)}
       {showAdd && (<div className="flex flex-col">
         <h1>

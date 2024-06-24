@@ -36,7 +36,21 @@ const CHAIN_LIST = [
   { value: "Combo", label: "Combo" },
   { value: "Rootstock", label: "Rootstock" },
   { value: "Ronin", label: "Ronin" },
+  { value: "Nautilus", label: "Nautilus" },
+  { value: "opBNB", label: "opBNB" },
+  { value: "Fantom", label: "Fantom" },
+  { value: "Celo", label: "Celo" },
+  { value: "DFK", label: "DFK" },
+  { value: "Moonriver", label: "Moonriver" },
+  { value: "Moonbeam", label: "Moonbeam" },
+  { value: "Boba", label: "Boba" },
+  { value: "ThunderCore", label: "ThunderCore" },
+  { value: "Home Verse", label: "Home Verse" },
+  { value: "MCH Verse", label: "MCH Verse" },
+  { value: "Oasys", label: "Oasys" },
+  { value: "Merlin", label: "Merlin" },
 ];
+
 const PROTOCOL_CATEGORY_LIST = [
   { value: "NFT", label: "NFT" },
   { value: "DeFi", label: "DeFi" },
@@ -45,7 +59,7 @@ const PROTOCOL_CATEGORY_LIST = [
   { value: "Others", label: "Others" },
 ];
 
-const ContractDetailsV4 = ({ onFinish, user, onClosed, hideEmail, protocolCategoryList, hideMoreOptions, hideProjectName, projectName, projectId, fromFgaAddProject, backAction }) => {
+const ContractDetailsV4 = ({ onFinish, user, onClosed, hideEmail, protocolCategoryList, hideMoreOptions, hideProjectName, projectName, projectId, fromFgaAddProject, backAction, key }) => {
   const [refresh, setRefresh] = useState(0);
   const [open, setOpen] = useState();
   const [contract, setContract] = useState([]);
@@ -308,7 +322,7 @@ const ContractDetailsV4 = ({ onFinish, user, onClosed, hideEmail, protocolCatego
   }
 
   return (
-    <div>
+    <div key={key}>
       <Form
         form={form}
         layout="vertical"
@@ -529,7 +543,7 @@ const ContractDetailsV4 = ({ onFinish, user, onClosed, hideEmail, protocolCatego
                         fromFgaAddProject ? "Please provide the project contract address and token standard in the following format. Separate each entry with a comma. e.g. 0x123456789ABCDEF,ERC1155\n" +
                           "\n" +
                           "Make sure to verify the information is correct before submitting or else there is a chance your request will not go through\n" :
-                        "Be sure to add one smart contract per line. Errors could cause your contracts to be rejected!"
+                        "Be sure to add smart contracts. Errors could cause your contracts to be rejected!"
                       }
                     </div>
                     {/*0x1092eb9c78833c6e0b4b9875eb84585814f613cf,ERC1155*/}

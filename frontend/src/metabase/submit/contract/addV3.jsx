@@ -12,10 +12,10 @@ import { connect } from "react-redux";
 
 const SubmitContractAddV3 = props => {
   const {user, replace} = props;
+  const [key, setKey] = useState(0);
   const [isDecodingProcessOpen, setDecodingProcessOpen] = useState({open:false,param:null});
-
   return (
-    <div className="SubmitContract__add-v3">
+    <div className="SubmitContract__add-v3" >
       <div className="SubmitContract__add">
         <h1>Welcome to submit more contracts or protocols to help us better display the data you need. </h1>
         <p>
@@ -31,11 +31,12 @@ const SubmitContractAddV3 = props => {
         </p>
         <Link to={"/submit/contract/mine"}>
           <Button type="primary" htmlType="submit">
-            My Contracts
+            My Submits
           </Button>
         </Link>
         <Divider className=" my1"></Divider>
         <ContractDetailsV4
+          key={key}
           user={user}
           onClosed={param => {
             setDecodingProcessOpen({ open: true, param: param });
@@ -49,13 +50,16 @@ const SubmitContractAddV3 = props => {
             title="Submit contracts or protocols"
             open={true}
             onOk={false}
-            onCancel={() => setDecodingProcessOpen({ open: false, param: null })}
+            onCancel={() => {
+              setDecodingProcessOpen({ open: false, param: null });
+              setKey(key=> key+1)
+            }}
             footer={null}
-            closable={false}
             maskClosable={false}
             width={600}
           >
             <ContractDecoding
+              key={key}
               param={isDecodingProcessOpen?.param}
               toMyContracts={() => {
                 setDecodingProcessOpen({ open: false, param: null });
