@@ -516,10 +516,10 @@
 
 .solution__data-driven-bg {
   background-image:
-    url(https://static.footprint.network/solution/img-circle-blur-bg.png),
+    url(https://static.footprint.network/solution/img-circle-blur-bg.svg),
     url(https://static.footprint.network/solution/img-circle-blur-bg2.png);
   background-size: 930px 931px, 830px 830px;
-  background-position: top 13% left 5%, bottom 21% right 29%;
+  background-position: top 13% left 2%, bottom 21% right 29%;
   background-repeat: no-repeat, no-repeat;
 }
 
