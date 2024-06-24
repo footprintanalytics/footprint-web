@@ -80,7 +80,7 @@ const getMyStudioData = ({ name, params, router, user, onLogout }) => {
       }, {
         "label": "My Contracts",
         "value": "my-contracts",
-        "url": "submit/contract",
+        "url": "submit/contract/mine",
       }
       ],
     },

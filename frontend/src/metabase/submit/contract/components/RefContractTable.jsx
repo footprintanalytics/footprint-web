@@ -417,6 +417,34 @@ const RefContractTable = ({ data, recordType, showActionColumn = true, tableRowC
       },
     },
     {
+      title: (
+        <Tooltip title={<div dangerouslySetInnerHTML={{ __html:
+            "Decode Status <br/>pending: Waiting for decode<br/>decoding: Decode in progress<br/>decoded_failed: Decode Failed<br/>decoded_completed: Decode Successful"
+        }} />}>
+          Decode Status <QuestionCircleOutlined />
+        </Tooltip>
+      ),
+      render: (_, { decode_status }) => {
+        const text = decode_status;
+        switch (text) {
+          // case "holding":
+          case "pending":
+          case "decoding":
+            return <Tag color="processing">{text}</Tag>;
+          case "decoded_failed":
+            return <Tag color="error">{text}</Tag>;
+          case "decoded_completed":
+            return (
+              <Tag color="success">{text}</Tag>
+            );
+          default:
+            return (
+              <>{"-"}</>
+            );
+        }
+      },
+    },
+    {
       title: "Submitted by",
       // width: 240,
       render: (_, record) => {
@@ -463,6 +491,16 @@ const RefContractTable = ({ data, recordType, showActionColumn = true, tableRowC
                 target={"_blank"}
               >
                 Detail
+              </Button>
+            )}
+            {record?.data?.protocol_slug && (
+              <Button
+                type="link"
+                size="small"
+                href={`/@Bond/Chain-Decoded-Events?contract_address=${record?.data?.contract_address}`}
+                target={"_blank"}
+              >
+                Events
               </Button>
             )}
             <Button

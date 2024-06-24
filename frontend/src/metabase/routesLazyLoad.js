@@ -1,6 +1,7 @@
 import loadable from "@loadable/component";
 import React from "react";
 import { DashboardLoadingAndErrorWrapper } from "metabase/dashboard/components/Dashboard/Dashboard.styled";
+import SubmitContractAddV3 from "metabase/submit/contract/addV3";
 
 const options = {
   fallback: (
@@ -192,6 +193,7 @@ export default {
   // SubmitContractAddV2: loadable(() => import("metabase/submit/contract/addV2")),
   SubmitContract: loadable(() => import("metabase/submit/contract/reference/index")),
   SubmitContractAddV2: loadable(() => import("metabase/submit/contract/reference/index")),
+  SubmitContractAddV3: loadable(() => import("metabase/submit/contract/addV3")),
   SubmitRefContractAdd: loadable(() => import("metabase/submit/contract/reference/add")),
   SubmitRefContract: loadable(() => import("metabase/submit/contract/reference/index")),
   SubmitContractSuccess: loadable(() =>
