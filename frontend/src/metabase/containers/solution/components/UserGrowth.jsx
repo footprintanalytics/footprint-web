@@ -44,17 +44,17 @@ const UserGrowth = props => {
     {
       "title": "Expanded Adoption",
       "desc": "Low-barrier analysis tools and content \nsupport help users understand the \necosystem and onboard effortlessly.",
-      "image": getOssUrl("solution/icon-growth1.png"),
+      "image": getOssUrl("solution/icon-grow20.png"),
     },
     {
       "title": "Accelerate Dapp Development",
       "desc": "Empower developers to build DApps more \nefficiently.",
-      "image": getOssUrl("solution/icon-growth2.png"),
+      "image": getOssUrl("solution/icon-grow21.png"),
     },
     {
       "title": "Monitor Ecosystem Health",
       "desc": "Enable understanding and \nmonitoring of ecosystem trends.",
-      "image": getOssUrl("solution/icon-growth3.png"),
+      "image": getOssUrl("solution/icon-grow22.png"),
     },
   ]
   const communityData2 = [
