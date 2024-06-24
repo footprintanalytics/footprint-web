@@ -40,6 +40,23 @@ const UserGrowth = props => {
       "image": getOssUrl("solution/icon-growth3.png"),
     },
   ]
+  const blockchainData = [
+    {
+      "title": "Expanded Adoption",
+      "desc": "Low-barrier analysis tools and content \nsupport help users understand the \necosystem and onboard effortlessly.",
+      "image": getOssUrl("solution/icon-growth1.png"),
+    },
+    {
+      "title": "Accelerate Dapp Development",
+      "desc": "Empower developers to build DApps more \nefficiently.",
+      "image": getOssUrl("solution/icon-growth2.png"),
+    },
+    {
+      "title": "Monitor Ecosystem Health",
+      "desc": "Enable understanding and \nmonitoring of ecosystem trends.",
+      "image": getOssUrl("solution/icon-growth3.png"),
+    },
+  ]
   const communityData2 = [
     {
       "title": "Comprehensive Approach",
@@ -77,6 +94,11 @@ const UserGrowth = props => {
       title: "Web3 Growth Hacking With ",
       desc: "Advanced Data Support",
     },
+    "blockchain": {
+      data: blockchainData,
+      title: "Build Blockchain Magic and ",
+      desc: "Accelerate Ecosystem Growth",
+    },
   }
   const title = mappingData[type].title
   const desc = mappingData[type].desc
@@ -87,7 +109,7 @@ const UserGrowth = props => {
     <div className="solution__user-growth">
       <h2>{title} <span className="solution__user-growth-title-primary">{desc}</span></h2>
       <ul className="solution__user-growth-first-ul" style={{gap: gap}}>
-        {data.map((item, index) => {
+        {data?.map((item, index) => {
           return (
             <li key={index} >
               <div className="flex align-center">
@@ -100,7 +122,7 @@ const UserGrowth = props => {
         })}
       </ul>
       <ul className="solution__user-growth-second-ul">
-        {data2.map((item, index) => {
+        {data2?.map((item, index) => {
           return (
             <li key={index} >
               <div className="flex align-center">

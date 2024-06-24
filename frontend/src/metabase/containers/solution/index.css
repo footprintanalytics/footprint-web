@@ -355,9 +355,19 @@
   justify-content: center;
   background-color: #3334B2;
   padding: 80px 0 100px;
+}
+
+.solution__ready-bg {
   background-image: url(https://static.footprint.network/solution/img_get_start_pic.png);
   background-position: bottom 40% right 20%;
   background-size: 415px 300px;
+  background-repeat: no-repeat;
+}
+
+.solution__ready-bg2 {
+  background-image: url(https://static.footprint.network/solution/img-blockchain-index.png);
+  background-position: bottom 40% right 20%;
+  background-size: 399px 276px;
   background-repeat: no-repeat;
 }
 
@@ -499,6 +509,60 @@
   margin-top: 10px;
 }
 
+.solution__data-driven {
+  background: #121728;
+  padding: 120px 0 100px;
+}
+
+.solution__data-driven-bg {
+  background-image:
+    url(https://static.footprint.network/solution/img-circle-blur-bg.png),
+    url(https://static.footprint.network/solution/img-circle-blur-bg2.png);
+  background-size: 930px 931px, 830px 830px;
+  background-position: top 13% left 5%, bottom 21% right 29%;
+  background-repeat: no-repeat, no-repeat;
+}
+
+.solution__data-driven ul {
+  display: flex;
+  flex-direction: column;
+  gap: 120px;
+  align-items: center;
+  margin-top: 70px;
+}
+
+.solution__data-driven li {
+  display: flex;
+}
+
+.solution__data-driven h3 {
+  font-weight: bold;
+  font-size: 32px;
+  color: #FFFFFF;
+  line-height: 36px;
+  text-align: left;
+  font-style: normal;
+  text-transform: none;
+  white-space: pre-wrap;
+}
+
+.solution__data-driven h4 {
+  font-size: 20px;
+  color: #F8F8FF;
+  line-height: 30px;
+  white-space: pre-wrap;
+  margin-top: 20px;
+}
+
+.solution__data-driven ul span {
+  font-weight: 400;
+  font-size: 20px;
+  color: rgba(248,248,255,0.6);
+  line-height: 30px;
+  white-space: pre-wrap;
+  margin-top: 20px;
+}
+
 .solution__enable {
   background-color: #121729;
   background-image: url(https://static.footprint.network/solution/img-enable3.jpg?1=1);
@@ -530,7 +594,7 @@
   color: #FFFFFF;
   line-height: 40px;
   font-style: normal;
-  padding: 35px 0 35px 0;
+  padding: 30px 0 35px 0;
 }
 
 .solution__user-growth li h3 {
@@ -609,6 +673,58 @@
   font-style: normal;
   text-transform: none;
   padding: 10px;
+}
+
+.solution__build-magic {
+  text-align: center;
+  margin: 30px 0 0 0;
+}
+
+.solution__build-magic-head {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.solution__build-magic h2 {
+  font-weight: bold;
+  font-size: 36px;
+  color: #FFFFFF;
+  line-height: 40px;
+  font-style: normal;
+  text-transform: none;
+}
+
+.solution__build-magic h3 {
+  font-weight: bold;
+  font-size: 36px;
+  color: #FFFFFF;
+  line-height: 40px;
+  font-style: normal;
+  text-transform: none;
+  background: linear-gradient(180deg, #4747FD 0%, #49B1FC 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+.solution__build-magic span {
+  font-weight: 500;
+  font-size: 16px;
+  color: #A0AEC0;
+  line-height: 16px;
+  font-style: normal;
+  text-transform: none;
+  padding: 10px;
+}
+
+.solution__build-magic-image {
+  background-color: #121728;
+  background-image: url(https://static.footprint.network/solution/img-tools.png?1=1);
+  background-size: 1223px 463px;
+  background-position: center;
+  background-repeat: no-repeat;
+  height: 463px;
+  margin: 60px 0 0 0;
 }
 
 .solution__case-li-all-image {
@@ -773,6 +889,44 @@
   filter: blur(50px);
   left: 50%;
   top: 15%;
+}
+
+
+.solution__title-head {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.solution__title-main {
+  font-weight: bold;
+  font-size: 36px;
+  color: #FFFFFF;
+  line-height: 40px;
+  font-style: normal;
+  text-transform: none;
+}
+
+.solution__title-highlight {
+  font-weight: bold;
+  font-size: 36px;
+  color: #FFFFFF;
+  line-height: 40px;
+  font-style: normal;
+  text-transform: none;
+  background: linear-gradient(180deg, #4747FD 0%, #49B1FC 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+.solution__title-desc {
+  font-weight: 500;
+  font-size: 16px;
+  color: #A0AEC0;
+  line-height: 16px;
+  font-style: normal;
+  text-transform: none;
+  padding: 10px;
 }
 
 @media screen and (--footprint-breakpoint-max-home-width) {

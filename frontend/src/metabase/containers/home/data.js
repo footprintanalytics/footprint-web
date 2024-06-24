@@ -8,7 +8,7 @@ export const FooterData = [
       },
       {
         label: "Blockchains",
-        url: "https://docs.google.com/presentation/d/1vKXAHaKqp7oUBnQP1qxmr84WpFX1pmXChGIl6R9Fle4/edit#slide=id.g128e0ee6714_0_0",
+        url: "/solution/blockchain",
       },
       {
         label: "Marketing & Consulting",

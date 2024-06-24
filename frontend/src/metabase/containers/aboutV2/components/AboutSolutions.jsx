@@ -19,7 +19,7 @@ const AboutDepth = () => {
       desc: "Expand ecosystem reach and presence.",
       img: getOssUrl("home-v2/icon_home_solution_blockchain.png"),
       icon: getOssUrl("home-v2/icon_home_solution2.png"),
-      link: "https://docs.google.com/presentation/d/1vKXAHaKqp7oUBnQP1qxmr84WpFX1pmXChGIl6R9Fle4/edit#slide=id.g128e0ee6714_0_0",
+      link: "/solution/blockchain",
     },
     {
       title: "Marketing & Consulting",

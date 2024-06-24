@@ -117,8 +117,7 @@ const leftMenuData = [
       {
         title: "Blockchains",
         desc: "Expand ecosystem reach and presence.",
-        link: "https://docs.google.com/presentation/d/1vKXAHaKqp7oUBnQP1qxmr84WpFX1pmXChGIl6R9Fle4/edit#slide=id.g128e0ee6714_0_0",
-        externalLink: true,
+        link: "/solution/blockchain",
       },
       {
         title: "Marketing & Consulting",
