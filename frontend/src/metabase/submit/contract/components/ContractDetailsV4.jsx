@@ -49,6 +49,8 @@ const CHAIN_LIST = [
   { value: "MCH Verse", label: "MCH Verse" },
   { value: "Oasys", label: "Oasys" },
   { value: "Merlin", label: "Merlin" },
+  { value: "Rootstock", label: "Rootstock" },
+  { value: "Core", label: "Core" },
 ];
 
 const PROTOCOL_CATEGORY_LIST = [
