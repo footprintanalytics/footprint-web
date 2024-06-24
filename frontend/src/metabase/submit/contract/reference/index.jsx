@@ -55,20 +55,20 @@ const SubmitContract = props => {
     param: null,
   });
 
-  const { isAdmin, user, showAdd = true, headLayout, showActionColumn, tableRowClassName, byUser } = props;
+  const { isAdmin, user, showAdd = true, headLayout, showActionColumn, tableRowClassName, byUser, showMyContractTitle } = props;
   const isAuditPerson =
     isAdmin || user?.id === 30 || user?.id === 9 || user?.id === 2268; // 30 -> pb, 9 -> alpha in preview ,2268 -> Eason
   const [operator, setOperator] = useState("personal");
   const [status, setStatus] = useState("");
   const [isReviewLoading, setReviewLoading] = useState(false);
   const [ current, setCurrent ] = useState(0)
-  const pageSize = 10;
+  const pageSize = 50;
   // const params = {
   //   operator: operator,
   //   status: status === "all" ? "" : status,
   // };
 
-  const params = byUser ? { type: currentRecordType, email: user?.email, offset: current, limit: pageSize } : { type: currentRecordType };
+  const params = isAdmin ? { type: currentRecordType }: { type: currentRecordType, email: user?.email, offset: current, limit: pageSize }
 
   const { isLoading, data, refetch } = useQuery(
     ["getRefContractSubmittedList", params],
@@ -104,12 +104,14 @@ const SubmitContract = props => {
       }
       if (!tempData || tempData?.length === 0) {
         return (
-          <Table
-            size="small"
-            rowKey="_id"
-            dataSource={null}
-            pagination={false}
-          />
+          // <Table
+          //   size="small"
+          //   rowKey="_id"
+          //   dataSource={null}
+          //   pagination={false}
+          //   locale={locale}
+          // />
+          <div className="flex justify-center" style={{marginTop: 120, fontSize: 24}}>{"There are no submission records available. Please feel free to"}<Link to={"/submit/contract"} className="text-underline text-underline-hover ml1" style={{ color: "#3434b2" }}>submit your own contract</Link>.</div>
         );
       }
       return (
@@ -145,6 +147,12 @@ const SubmitContract = props => {
   return (
     <div className="SubmitContract">
       {headLayout}
+      {showMyContractTitle && (<div className="flex justify-between">
+        <h1>
+          My Submissions
+        </h1>
+        <Link className="text-underline-hover text-underline" to={"/submit/contract"}>Submit Your Own Contract</Link>
+      </div>)}
       {showAdd && (<div className="flex flex-col">
         <h1>
           Welcome to submit more contracts or protocols to help us better display

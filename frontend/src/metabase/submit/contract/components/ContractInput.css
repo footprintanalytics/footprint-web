@@ -1,0 +1,49 @@
+.contract-input {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  border: 1px solid #00000010;
+  border-radius: 4px;
+  margin-bottom: 10px;
+  padding: 10px;
+}
+
+.contract-input__table {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.contract-input__table-inner {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.contract-input__table-ul {
+  display: flex;
+  gap: 4px;
+}
+
+.contract-input__table-ul-li {
+  display: flex;
+}
+
+.contract-input__bottom {
+  margin: 10px 0 0;
+}
+
+.contract-input__add-button {
+
+}
+
+.form-required::before {
+  display: inline-block;
+  margin-inline-end: 4px;
+  color: #ff4d4f;
+  font-size: 14px;
+  font-family: SimSun, sans-serif;
+  line-height: 1;
+  content: "*";
+  margin-right: 4px;
+}

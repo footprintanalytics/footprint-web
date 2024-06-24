@@ -1,37 +1,26 @@
 /* eslint-disable react/prop-types */
 /* eslint-disable curly */
-import React, { useState, useEffect } from "react";
-import {
-  AutoComplete,
-  Button,
-  Form,
-  Input,
-  message,
-  Select,
-  Tabs,
-  Modal,
-  Tooltip,
-  Upload,
-  Spin, Tag,
-} from "antd";
+import React, { useEffect, useState } from "react";
+import { AutoComplete, Button, Form, Input, message, Modal, Select, Spin, Tabs, Tooltip, Upload } from "antd";
 import { useQuery } from "react-query";
 import slug from "slug";
 import {
   CheckOutlined,
-  LoadingOutlined,
-  ExclamationCircleOutlined,
   DownOutlined,
-  UpOutlined,
+  ExclamationCircleOutlined,
+  LoadingOutlined,
   SyncOutlined,
   UploadOutlined,
+  UpOutlined,
 } from "@ant-design/icons";
-import { debounce, flatten, get, toLower, union } from "lodash";
+import { debounce, flatten, get, isEmpty, some, toLower, union } from "lodash";
 import { v4 as uuidv4 } from "uuid";
 import { getRefProtocolList } from "metabase/new-service";
 import { uploadFile } from "metabase/lib/oss";
 import { ossPath } from "metabase/lib/ossPath";
 import ContractDecoding from "./ContractDecoding";
 import InputContractModal from "metabase/submit/contract/components/InputContractModal";
+import ContractInput from "metabase/submit/contract/components/ContractInput";
 
 const CHAIN_LIST = [
   { value: "Ethereum", label: "Ethereum" },
@@ -47,7 +36,23 @@ const CHAIN_LIST = [
   { value: "Combo", label: "Combo" },
   { value: "Rootstock", label: "Rootstock" },
   { value: "Ronin", label: "Ronin" },
+  { value: "Nautilus", label: "Nautilus" },
+  { value: "opBNB", label: "opBNB" },
+  { value: "Fantom", label: "Fantom" },
+  { value: "Celo", label: "Celo" },
+  { value: "DFK", label: "DFK" },
+  { value: "Moonriver", label: "Moonriver" },
+  { value: "Moonbeam", label: "Moonbeam" },
+  { value: "Boba", label: "Boba" },
+  { value: "ThunderCore", label: "ThunderCore" },
+  { value: "Home Verse", label: "Home Verse" },
+  { value: "MCH Verse", label: "MCH Verse" },
+  { value: "Oasys", label: "Oasys" },
+  { value: "Merlin", label: "Merlin" },
+  { value: "Rootstock", label: "Rootstock" },
+  { value: "Core", label: "Core" },
 ];
+
 const PROTOCOL_CATEGORY_LIST = [
   { value: "NFT", label: "NFT" },
   { value: "DeFi", label: "DeFi" },
@@ -56,7 +61,7 @@ const PROTOCOL_CATEGORY_LIST = [
   { value: "Others", label: "Others" },
 ];
 
-const ContractDetailsV3 = ({ onFinish, user, onClosed, hideEmail, protocolCategoryList, hideMoreOptions, hideProjectName, projectName, projectId, fromFgaAddProject, backAction }) => {
+const ContractDetailsV4 = ({ onFinish, user, onClosed, hideEmail, protocolCategoryList, hideMoreOptions, hideProjectName, projectName, projectId, fromFgaAddProject, backAction, key }) => {
   const [refresh, setRefresh] = useState(0);
   const [open, setOpen] = useState();
   const [contract, setContract] = useState([]);
@@ -107,28 +112,59 @@ const ContractDetailsV3 = ({ onFinish, user, onClosed, hideEmail, protocolCatego
     }
   }, [protocolSlug]);
 
+  const isValidABI = chain => {
+    const contractData =
+      contract?.find(item => item.chain === chain)?.contractData || [];
+    return contractData?.every(i => {
+      if (isEmpty(i.abi)) {
+        return true;
+      }
+      if (!i.abi.startsWith("[")) {
+        return false
+      }
+      try {
+        JSON.parse(i.abi);
+        return true;
+      } catch (e) {
+        return false;
+      }
+    });
+  }
+
+  const isFillContractAddress = chain => {
+    const contractData =
+      contract?.find(item => item.chain === chain)?.contractData || [];
+    if (some(contractData, i => i.address)) {
+      return true;
+    }
+    return false;
+  };
+
   const isValidContractAddress = chain => {
-    const contractAddress =
-      contract?.find(item => item.chain === chain)?.contractAddress || "";
-    if (!contractAddress) {
+    const contractData =
+      contract?.find(item => item.chain === chain)?.contractData || [];
+    if (some(contractData, i => !i.address)) {
       return false;
     }
-    return isValidAddress(contractAddress);
+    return isValidAddress(contractData?.map(i => i.address).join("\n"));
   };
 
   const isSameContractAddress = chain => {
-    const contractAddress =
-      contract?.find(item => item.chain === chain)?.contractAddress || "";
-    if (!contractAddress) {
+    const contractData =
+      contract?.find(item => item.chain === chain)?.contractData || [];
+    if (some(contractData, i => !i.address)) {
       return false;
     }
-    return isSameAddress(contractAddress);
+    return isSameAddress(contractData?.map(i => i.address).join("\n"));
   };
 
   const isValidAddress = contractAddress => {
+    if (!contractAddress) {
+      return false
+    }
     const regex = /^(0x)?[0-9a-fA-F]{40,}$/;
-    const array = contractAddress.split("\n");
-    return array.every(address => regex.test(get(address.split(","),"[0]")));
+    const array = contractAddress?.split("\n");
+    return array.every(address => regex.test(get(address?.split(","),"[0]")));
   };
   const isValidAddressArray = contractAddressArray => {
     const regex = /^(0x)?[0-9a-fA-F]{40,}$/;
@@ -136,37 +172,45 @@ const ContractDetailsV3 = ({ onFinish, user, onClosed, hideEmail, protocolCatego
   };
 
   const isSameAddress = contractAddress => {
-    const array = contractAddress.split("\n").map(i => i.toLowerCase());
+    const array = contractAddress?.split("\n").map(i => i.toLowerCase());
     const result = union(array);
     return result.length !== array.length && array.length > 1;
   };
+
+  function createAbi(abi) {
+    let abiArray = null;
+    try {
+      abiArray = JSON.parse(abi);
+    } catch (e) {
+    }
+    return abiArray;
+  }
 
   const formatContracts = contracts => {
     const temp = contracts?.map(item => {
       return {
         ...item,
-        contractAddress: item.contractAddress.trim().split("\n"),
+        contractAddress: item.contractAddress?.trim()?.split("\n"),
       };
     });
     const resultContracts = temp?.map(contract => {
-      return contract?.contractAddress?.map(address => {
-        const array = address.split(",");
-        const addr = get(array, "[0]");
-        const standard = get(array, "[1]");
+      return contract?.contractData?.map(item => {
         return {
           chain: contract.chain,
-          contractAddress: addr,
-          standard: standard,
+          contractAddress: item.address,
+          contractName: item.name,
+          standard: item.standard,
+          abi: createAbi(item.abi),
         };
       });
     });
     return flatten(resultContracts) ?? [];
   };
 
-  const delayedChange = debounce((item, value) => {
+  const delayedChange = debounce((item, contractData) => {
     const temp = contract.find(i => i.chain === item.chain);
-    temp.contractAddress = value;
-    temp.isValid = isValidAddress(value);
+    temp.contractData = contractData;
+    temp.isValid = isValidAddress(contractData[0].address);
     setContract(contract);
     form.setFieldValue("contracts", contract);
     setRefresh(refresh + 1);
@@ -174,12 +218,16 @@ const ContractDetailsV3 = ({ onFinish, user, onClosed, hideEmail, protocolCatego
 
   const getError = chain => {
     const temp = contract?.find(i => i.chain === chain);
+    // console.log("temptemptemp", temp, temp?.chain, temp?.contractData, temp?.contractData?.filter(i => !isEmpty(i.address)))
     if (!temp) {
       return null;
     }
-    if (!temp.contractAddress) {
-      return "You must provide at least one smart contract address for each chain selected.";
+    if (!isFillContractAddress(chain)) {
+      return "Please fill in the new contract address.";
     }
+    // if (temp?.contractData?.filter(i => !isEmpty(i.address))?.length > 0) {
+    //   return "You must provide at least one smart contract address for each chain selected.";
+    // }
     if (!isValidContractAddress(chain)) {
       return `The smart contract does not look correct on the ${chain} protocol. Please check your submission and try again.`;
     }
@@ -216,7 +264,6 @@ const ContractDetailsV3 = ({ onFinish, user, onClosed, hideEmail, protocolCatego
           temp.contractAddressArray = [...(temp.contractAddressArray || []), {contract, contractType}];
           temp.isValid = isValidAddressArray(temp.contractAddressArray);
           setContract((c) => c);
-          console.log("result", contract)
           form.setFieldValue("contracts", contract);
           setRefresh(refresh + 1);
         }}/>
@@ -224,13 +271,13 @@ const ContractDetailsV3 = ({ onFinish, user, onClosed, hideEmail, protocolCatego
     )
   }
 
-  const renderError = chain => {
+  /*const renderError = chain => {
     const error = getError(chain);
     if (error) {
       return <div style={{ color: "#ff4d4f" }}>{error}</div>;
     }
     return null;
-  };
+  };*/
   const moreOptionBtn = () => {
     return (
       <Button
@@ -277,7 +324,7 @@ const ContractDetailsV3 = ({ onFinish, user, onClosed, hideEmail, protocolCatego
   }
 
   return (
-    <div>
+    <div key={key}>
       <Form
         form={form}
         layout="vertical"
@@ -298,6 +345,13 @@ const ContractDetailsV3 = ({ onFinish, user, onClosed, hideEmail, protocolCatego
             message.info("Please input valid contract address");
             return;
           }
+          const isValidABIs = contract.every(item =>
+            isValidABI(item.chain, contract),
+          );
+          if (!isValidABIs) {
+            message.info("Please input valid ABI (JSON)");
+            return;
+          }
           try {
             const param = {
               ...values,
@@ -316,7 +370,6 @@ const ContractDetailsV3 = ({ onFinish, user, onClosed, hideEmail, protocolCatego
               message.info("Please input valid standard. e.g.0x123456789ABCDEF,ERC1155");
               return;
             }
-            console.log("param", param)
             onClosed?.(param);
           } catch (error) {
             console.log("ref submit contracts error:\n", error);
@@ -360,7 +413,6 @@ const ContractDetailsV3 = ({ onFinish, user, onClosed, hideEmail, protocolCatego
               const protocolSlug = getProtocolList?.data?.find(
                 item => item.protocol_name === value,
               )?.protocol_slug;
-              console.log("select protocolSlug => ", value, protocolSlug);
               // form.setFieldValue("protocolSlug", protocolSlug);
               setProtocolSlug(protocolSlug);
             }}
@@ -492,18 +544,17 @@ const ContractDetailsV3 = ({ onFinish, user, onClosed, hideEmail, protocolCatego
                         fromFgaAddProject ? "Please provide the project contract address and token standard in the following format. Separate each entry with a comma. e.g. 0x123456789ABCDEF,ERC1155\n" +
                           "\n" +
                           "Make sure to verify the information is correct before submitting or else there is a chance your request will not go through\n" :
-                        "Be sure to add one smart contract per line. Errors could cause your contracts to be rejected!"
+                        "Be sure to add smart contracts. Errors could cause your contracts to be rejected!"
                       }
                     </div>
                     {/*0x1092eb9c78833c6e0b4b9875eb84585814f613cf,ERC1155*/}
-                    <Input.TextArea
-                      placeholder={fromFgaAddProject ? `0x123456789ABCDEF,ERC1155` : `Input contract address in ${item.chain}`}
-                      style={{ height: 160 }}
-                      onChange={e => {
-                        delayedChange(item, e.target.value);
+                    <ContractInput
+                      item={item}
+                      onChange={contractData => {
+                        delayedChange(item, contractData);
                       }}
                     />
-                    {renderError(item.chain)}
+                    {/*{renderError(item.chain)}*/}
                   </Tabs.TabPane>
                 );
               })}
@@ -695,4 +746,4 @@ const ContractDetailsV3 = ({ onFinish, user, onClosed, hideEmail, protocolCatego
   );
 };
 
-export default ContractDetailsV3;
+export default ContractDetailsV4;
