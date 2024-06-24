@@ -121,7 +121,7 @@ const ContractInput = ({ item, onChange }) => {
                 </div>
               </div>
               <div className="contract-input__table-ul">
-                <div className="contract-input__table-ul-li form-required" style={{ flex: 3 }}>
+                <div className="contract-input__table-ul-li form-required" style={{ flex: 3.5 }}>
                   <Input
                     placeholder="Address (Required)"
                     value={item.address}
