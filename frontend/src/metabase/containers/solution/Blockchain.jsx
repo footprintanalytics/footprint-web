@@ -38,22 +38,19 @@ const Blockchain = () => {
         <BatchDownloadData practices={
           [
             {
-              title: "Ronin",
+              title: "Introducing Ronin Network: the Blockchain for Gaming",
               img: "https://statichk.footprint.network/article/85a03753-98a3-44d2-9ad8-69bee501e9e3.png",
               link: "https://www.footprint.network/article/introducing-ronin-network-the-blockchain-for-gaming-GEURjEyl",
-              height: 286,
             },
             {
-              title: "Merlin",
+              title: "Forging a More Transparent Bitcoin Ecosystem Powered by Data",
               img: getOssUrl("solution/img-merlin-article-1.jpeg"),
               link: "https://x.com/Footprint_Data/status/1795787071380238831",
-              height: 286,
             },
             {
-              title: "Core",
+              title: "Exploring Core Chain and Its Core Competency",
               img: "https://statichk.footprint.network/article/435e8363-367f-49fe-8885-cb1d49752186.jpeg",
               link: "https://www.footprint.network/article/exploring-core-chain-and-its-core-competency-rJ6oHpgr",
-              height: 286,
             },
           ]
         }/>

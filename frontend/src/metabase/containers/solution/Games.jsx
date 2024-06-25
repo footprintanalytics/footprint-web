@@ -11,6 +11,7 @@ import HomeFooter from "metabase/containers/home/components/HomeFooter";
 import UserGrowth from "metabase/containers/solution/components/UserGrowth";
 import GainView from "metabase/containers/solution/components/GainView";
 import DataDrivenGame from "metabase/containers/solution/components/DataDrivenGame";
+import { getOssUrl } from "metabase/lib/image";
 
 const Games = () => {
   // const defaultDesc =
@@ -30,6 +31,25 @@ const Games = () => {
         <UserGrowth type={"games"}/>
         <GainView />
         <DataDrivenGame />
+        <BatchDownloadData practices={
+          [
+            {
+              title: "How Mocaverse Used Data to Launch Its Metaverse",
+              img: "https://static.footprint.network/article/57aa4d64-c876-4cf0-a368-207ac0be8558.png",
+              link: "https://www.footprint.network/article/how-mocaverse-used-data-to-launch-its-metaverse-CrcJLIkf",
+            },
+            {
+              title: "Footprint Analytics Partners with Pebble to Pioneer Data-Driven Web3 Gaming",
+              img: "https://statichk.footprint.network/article/1b9f8908-0a99-42ae-a10b-1ee11bd3672e.jpeg",
+              link: "https://www.footprint.network/article/footprint-analytics-partners-with-pebble-to-pioneer-data-driven-web3-gaming-vqzsq2DA",
+            },
+            {
+              title: "Footprint Analytics X Planet IX : Establishing Strategic Partnerships",
+              img: "https://static.footprint.network/article/44e0cb60-a5df-448a-9cca-40c74ac93c92.jpeg",
+              link: "https://www.footprint.network/article/footprint-analytics-x-planet-ix-establishing-strategic-partnerships-pgWsQqV3",
+            },
+          ]
+        }/>
         <BatchDownloadReady title={"Don't Wait, Get Started \nToday!"} bg={"solution__ready-games-bg"}/>
         <div style={{ height: 100, background: "#06061E" }}/>
         <div className="solution__dividing-line-gray" />
