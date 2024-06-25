@@ -57,6 +57,35 @@ const UserGrowth = props => {
       "image": getOssUrl("solution/icon-grow22.png"),
     },
   ]
+  const gamesData = [
+    {
+      "title": "Comprehensive",
+      "desc": "Supports 30+ chains, simplifying \ncross-chain analysis.",
+      "image": getOssUrl("solution/Icon-comprehensivet-1x.png"),
+    },
+    {
+      "title": "Advanced Action Tools",
+      "desc": "Integrated Quest bot for efficient marketing \nmanagement and channel tracking.",
+      "image": getOssUrl("solution/Icon-tools-1x.png"),
+    },
+    {
+      "title": "Versatile Client Support",
+      "desc": "From early startups to \nmature ecosystems.",
+      "image": getOssUrl("solution/Icon-client-1x.png"),
+    },
+  ]
+  const gamesData2 = [
+    {
+      "title": "Demand-Driven Customization",
+      "desc": "Flexible solutions to meet specific needs \nand requirements.",
+      "image": getOssUrl("solution/Icon-customization-1x.png"),
+    },
+    {
+      "title": "80% of Self-Build Cost",
+      "desc": "Highly economical, offering \nexceptional value and cost savings.",
+      "image": getOssUrl("solution/Icon-cost-1x.png"),
+    },
+  ]
   const communityData2 = [
     {
       "title": "Comprehensive Approach",
@@ -98,6 +127,12 @@ const UserGrowth = props => {
       data: blockchainData,
       title: "Build Blockchain Magic and ",
       desc: "Accelerate Ecosystem Growth",
+    },
+    "games": {
+      data: gamesData,
+      data2: gamesData2,
+      title: "Bridging Analysis and Action for ",
+      desc: "Real Results",
     },
   }
   const title = mappingData[type].title

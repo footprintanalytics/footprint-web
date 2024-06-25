@@ -124,6 +124,7 @@ export default {
   community: loadable(() => import("metabase/containers/solution/Community")),
   marketing: loadable(() => import("metabase/containers/solution/Marketing")),
   blockchain: loadable(() => import("metabase/containers/solution/Blockchain")),
+  games: loadable(() => import("metabase/containers/solution/Games")),
   dataApi: loadable(() => import("metabase/containers/dataApi")),
   dataApiPrice: loadable(() => import("metabase/containers/dataApi/price")),
   dataApiProduct: loadable(() => import("metabase/containers/dataApi/product")),

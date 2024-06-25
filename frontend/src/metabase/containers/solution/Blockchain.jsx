@@ -12,6 +12,8 @@ import Engine from "metabase/containers/solution/components/Engine";
 import Drive from "metabase/containers/solution/components/Drive";
 import BuildMagic from "metabase/containers/solution/components/BuildMagic";
 import DataDriven from "metabase/containers/solution/components/DataDriven";
+import BatchDownloadData from "metabase/containers/solution/components/BatchDownloadData";
+import { getOssUrl } from "metabase/lib/image";
 
 const Blockchain = () => {
   // const defaultDesc =
@@ -33,6 +35,28 @@ const Blockchain = () => {
         <UserGrowth type={"blockchain"} gap={140}/>
         <BuildMagic />
         <DataDriven />
+        <BatchDownloadData practices={
+          [
+            {
+              title: "Ronin",
+              img: "https://statichk.footprint.network/article/85a03753-98a3-44d2-9ad8-69bee501e9e3.png",
+              link: "https://www.footprint.network/article/introducing-ronin-network-the-blockchain-for-gaming-GEURjEyl",
+              height: 286,
+            },
+            {
+              title: "Merlin",
+              img: getOssUrl("solution/img-merlin-article-1.jpeg"),
+              link: "https://x.com/Footprint_Data/status/1795787071380238831",
+              height: 286,
+            },
+            {
+              title: "Core",
+              img: "https://statichk.footprint.network/article/435e8363-367f-49fe-8885-cb1d49752186.jpeg",
+              link: "https://www.footprint.network/article/exploring-core-chain-and-its-core-competency-rJ6oHpgr",
+              height: 286,
+            },
+          ]
+        }/>
         <BatchDownloadReady title={"Contact Us for Blockchain \nIndexing!"} paddingRight={500} bg={"solution__ready-bg2"}/>
         <div style={{ height: 100, background: "#06061E" }}/>
         <div className="solution__dividing-line-gray" />

@@ -239,6 +239,9 @@ export const getRoutes = store => (
       <Route path="/solution/blockchain">
         <IndexRoute component={LazyLoad.blockchain} />
       </Route>
+      <Route path="/solution/games">
+        <IndexRoute component={LazyLoad.games} />
+      </Route>
 
       <Route
         title={t`Protocols`}
