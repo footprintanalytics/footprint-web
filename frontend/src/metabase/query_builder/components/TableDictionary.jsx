@@ -17,7 +17,7 @@ const TableDictionary = ({ tableName, tableId, tableConfigList, mode }) => {
   const dictionaryLink = `https://www.footprint.network/@Footprint/Table-Info-Dashboard?table_name=${tableName}`;
 
   // beta table can't be seen the dictionary entrance.
-  if (betaTable) {
+  if (betaTable && !tableName?.includes("merlin")) {
     return null;
   }
 
