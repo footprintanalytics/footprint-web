@@ -38,9 +38,9 @@ const Blockchain = () => {
         <BatchDownloadData practices={
           [
             {
-              title: "Introducing Ronin Network: the Blockchain for Gaming",
-              img: "https://statichk.footprint.network/article/85a03753-98a3-44d2-9ad8-69bee501e9e3.png",
-              link: "https://www.footprint.network/article/introducing-ronin-network-the-blockchain-for-gaming-GEURjEyl",
+              title: "Footprint Analytics Integrates Data Solutions on Ronin Network",
+              img: "https://statichk.footprint.network/article/50e53359-6bd9-4793-8c64-9610056c421f.png",
+              link: "https://www.footprint.network/article/footprint-analytics-integrates-data-solutions-on-ronin-network-KgAq6WGF",
             },
             {
               title: "Forging a More Transparent Bitcoin Ecosystem Powered by Data",
@@ -48,9 +48,9 @@ const Blockchain = () => {
               link: "https://x.com/Footprint_Data/status/1795787071380238831",
             },
             {
-              title: "Exploring Core Chain and Its Core Competency",
+              title: "Footprint Analytics Joins Forces with Core Chain to Elevate Blockchain Infrastructure and Innovation",
               img: "https://statichk.footprint.network/article/435e8363-367f-49fe-8885-cb1d49752186.jpeg",
-              link: "https://www.footprint.network/article/exploring-core-chain-and-its-core-competency-rJ6oHpgr",
+              link: "https://www.footprint.network/article/footprint-analytics-joins-forces-with-core-chain-to-elevate-blockchain-infrastructure-and-innovation-3FhfKU85",
             },
           ]
         }/>

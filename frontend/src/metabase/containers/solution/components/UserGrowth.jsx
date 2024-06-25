@@ -83,7 +83,7 @@ const UserGrowth = props => {
     {
       "title": "80% of Self-Build Cost",
       "desc": "Highly economical, offering \nexceptional value and cost savings.",
-      "image": getOssUrl("solution/Icon-cost-1x.png"),
+      "image": getOssUrl("solution/Icon-cost-1x.png?2=2"),
     },
   ]
   const communityData2 = [

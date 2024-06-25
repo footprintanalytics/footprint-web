@@ -17,7 +17,7 @@ const DataDrivenGame = () => {
     {
       "title": <div className="flex flex-column"><h4>Unified Analytics </h4><span className="flex align-center" style={{gap: 6}}><h4>Platform for</h4><h3>Centralizing</h3></span><h3>All Gaming Data</h3></div>,
       "content": "Seamlessly integrate off-chain and \non-chain data using our 30+ \nready-made connectors and SDK \nto build data pipelines without an \nin-house data team.",
-      "image": getOssUrl("solution/img-games-drive-data2.png"),
+      "image": getOssUrl("solution/img-games-drive-data2.png?2=3"),
       "imageWidth": "794px",
       "imageHeight": "389px",
       "align": "right",
