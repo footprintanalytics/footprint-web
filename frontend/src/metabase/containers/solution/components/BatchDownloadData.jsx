@@ -4,25 +4,26 @@ import "../index.css";
 import Link from "metabase/core/components/Link";
 import { getOssUrl } from "metabase/lib/image";
 
-const BatchDownloadData = () => {
-
-  const practices = [
-    {
-      title: "Ronin",
-      desc: "Educational GPT",
-      img: "solution/img-data-ronin.jpg",
-    },
-    {
-      title: "Phantom Arena",
-      desc: "Airdrop Campaign",
-      img: "solution/img-data-phantom-arena.jpg",
-    },
-    {
-      title: "BEVM",
-      desc: "Visionary Builder Quest",
-      img: "solution/img-data-bevm.jpg",
-    },
-  ]
+const BatchDownloadData = props => {
+  const {
+    practices = [
+      {
+        title: "Ronin",
+        desc: "Educational GPT",
+        img: getOssUrl("solution/img-data-ronin.jpg"),
+      },
+      {
+        title: "Phantom Arena",
+        desc: "Airdrop Campaign",
+        img: getOssUrl("solution/img-data-phantom-arena.jpg"),
+      },
+      {
+        title: "BEVM",
+        desc: "Visionary Builder Quest",
+        img: getOssUrl("solution/img-data-bevm.jpg"),
+      },
+    ]
+  } = props;
 
   return (
     <div className="solution__data">
@@ -36,13 +37,15 @@ const BatchDownloadData = () => {
           {practices.map(item => {
             return (
               <div key={item.title}>
-                <li>
-                  <img src={getOssUrl(item.img)} alt={item.title} />
-                  <div className={"solution__best-bottom"}>
-                    <h3>{item.title}</h3>
-                    <h3>{item.desc}</h3>
-                  </div>
-                </li>
+                <Link to={item.link} target="_blank">
+                  <li style={{height: item.height || 322}}>
+                    <img src={item.img} alt={item.title} />
+                    <div className={"solution__best-bottom"}>
+                      <h3>{item.title}</h3>
+                      <h3>{item.desc}</h3>
+                    </div>
+                  </li>
+                </Link>
               </div>
             );
           })}

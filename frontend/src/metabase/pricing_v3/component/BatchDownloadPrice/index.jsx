@@ -30,8 +30,8 @@ const BatchDownloadPrice = ({ user, setLoginModalShow, onCancelSubscription }) =
           <span style={{ fontSize: 16, color: "#303440" }}>Get started with Footprint Analytics Enterprise and experience the benefits of<br/>reliable, flexible, and cost-effective multi-chain scaling.</span>
         </div>
         <div className="flex flex-col align-center justify-center" style={{ gap: 10, paddingRight: 20 }}>
-          <Link target="_blank" href="mailto:sales@footprint.network">
-            <Button primary>{`Speak with a solutions architect >`}</Button>
+          <Link target="_blank" href="https://calendly.com/partners-79/footprint-analytics-45mins">
+            <Button primary>{`Schedule an Intro Call >`}</Button>
           </Link>
           <Link to="/batch-download">
             <Button borderless style={{color: "#3434b2"}}>{`Learn more about Batch Download >`}</Button>

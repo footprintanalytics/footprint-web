@@ -4,7 +4,7 @@ export const FooterData = [
     items: [
       {
         label: "Games",
-        url: "https://docs.google.com/presentation/d/1Xmye6BfGWhlde42LnwNkVylRWOaSSXdbY7zfgZHAZOM/edit#slide=id.g2b36d9fc51e_1_0",
+        url: "/solution/games",
       },
       {
         label: "Blockchains",

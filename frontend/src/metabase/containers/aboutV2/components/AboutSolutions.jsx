@@ -12,7 +12,7 @@ const AboutDepth = () => {
       desc: "Unify and unlock the power of your game data.",
       img: getOssUrl("home-v2/icon_home_solution_games.png"),
       icon: getOssUrl("home-v2/icon_home_solution1.png"),
-      link: "https://docs.google.com/presentation/d/1Xmye6BfGWhlde42LnwNkVylRWOaSSXdbY7zfgZHAZOM/edit#slide=id.g2b36d9fc51e_1_0",
+      link: "/solution/games",
     },
     {
       title: "Blockchains",
