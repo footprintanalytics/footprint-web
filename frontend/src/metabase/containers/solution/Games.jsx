@@ -35,7 +35,7 @@ const Games = () => {
           [
             {
               title: "How Mocaverse Used Data to Launch Its Metaverse",
-              img: "https://static.footprint.network/article/57aa4d64-c876-4cf0-a368-207ac0be8558.png",
+              img: "https://static.footprint.network/solution/img-banner-Mocaverse.png",
               link: "https://www.footprint.network/article/how-mocaverse-used-data-to-launch-its-metaverse-CrcJLIkf",
             },
             {

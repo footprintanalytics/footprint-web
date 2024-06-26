@@ -278,8 +278,8 @@ const CalPrice = ({ user, setLoginModalShow, onCancelSubscription }) => {
               <span style={{ width: 120, marginRight: 10, textAlign: "center" }}>Total: </span>
               <h2>{`$${calTotal(calData).toLocaleString()}`}</h2></div>
             <div>
-              <Link target="_blank" href="mailto:sales@footprint.network">
-                <span style={{ width: 120, marginRight: 20 }}>{"Contact us >"}</span>
+              <Link target="_blank" href="https://calendly.com/partners-79/footprint-analytics-45mins">
+                <span style={{ width: 120, marginRight: 20 }}>{"Schedule an Intro Call >"}</span>
               </Link>
               <Button
                 primary
