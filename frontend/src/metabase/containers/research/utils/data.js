@@ -576,6 +576,11 @@ const chainData = [
         "value": "merlin-overview",
         "publicUuid": "61025077-2037-465f-900e-2032eb446f30",
       },
+      {
+        "label": "Taiko Overview",
+        "value": "taiko-overview",
+        "publicUuid": "6e219d31-0601-43c0-90ca-b570f6c90584",
+      },
     ],
   },
   {

@@ -26,8 +26,8 @@ const Blockchain = () => {
       {/*<Meta description={defaultDesc} keywords={keywords} title={title} />*/}
       <div className="solution__about">
         <BatchDownloadStart
-          title={<>Integrate Blockchain <br/>Into Footprint at <br/>Lightning Speed</>}
-          desc={<>Footprint combines the most powerful web3 products <br/>and tools with resources, community and support.</>}
+          title={<>Integrate Blockchain Data<br/>Into Footprint Analytics at <br/>Lightning Speed</>}
+          desc={<>Footprint Analytics combines the most powerful web3 products <br/>and tools with resources, community and support.</>}
           image={"https://static.footprint.network/solution/img-blockchain-head.png"}
           marginRight={630}
           descColor={"#ffffff"}
