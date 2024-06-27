@@ -172,6 +172,11 @@ const AboutDataCoverage = () => {
       img: getOssUrl("home-v2/chain/img-chain-Moonriver.png?image_process=resize,w_68/crop,h_68/format,png"),
       link: "/research/chain/chain-stats/moonriver-overview",
     },
+    {
+      title: "Taiko",
+      img: getOssUrl("home-v2/chain/img-chain-taiko.svg"),
+      link: "/research/chain/chain-stats/taiko-overview",
+    },
   ]
 
   const renderChainLayout = () => {

@@ -34,7 +34,8 @@ const DataDrivenGame = () => {
       "paddingTop": 100,
       "imageMarginLeft": -120,
       "textColor": "#ffffff90",
-      "liPaddingTop": 25,
+      "liPaddingTop": 30,
+      "liPaddingBottom": 40,
       "bgClass": "solution__data-game-bg",
     },
 
@@ -47,7 +48,7 @@ const DataDrivenGame = () => {
       <ul>
       {data.map((item, index) => {
         return (
-          <li key={index} className={cx(item["li-class"], item.bgClass)} style={{ flexDirection: item.align === "left" ? "row" : "row-reverse", marginTop: item.liMarginTop || 0, paddingTop: item.liPaddingTop || 0 }}>
+          <li key={index} className={cx(item["li-class"], item.bgClass)} style={{ flexDirection: item.align === "left" ? "row" : "row-reverse", marginTop: item.liMarginTop || 0, paddingTop: item.liPaddingTop || 0, paddingBottom: item.liPaddingBottom || 0 }}>
             {item.title? (
               <>
                 <div className={`flex flex-column ${item["text-layout-class"] || ""}`} style={{paddingTop: item.paddingTop || 0}}>
