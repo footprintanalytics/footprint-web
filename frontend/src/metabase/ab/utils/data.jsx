@@ -6,13 +6,13 @@ import { getChainDataList } from "../../query_builder/components/question/handle
 import { Tooltip } from "antd";
 //public/dashboard/uuid
 export const wallet_profile_link =
-  "/fga/public/dashboard/fa040fe5-46b3-483b-b257-aa2373559fab"; //query: wallet_address
+  "/fga/public/dashboard/fdcf253d-24b4-4f6e-839e-3880242041a8"; //query: wallet_address
 export const getWalletProfileLink = (businessType) =>
   `/fga/${businessType}/public/dashboard/dce33214-a079-4eb8-b53f-defaabde2eba`; //query: wallet_address
 export const user_profile_link =
   "/fga/public/dashboard/362dd1a3-6c35-4ce6-a4d3-dab2a436e323"; //query: cohort_title
 export const getUserProfileLink = (businessType) =>
-  `/fga/${businessType}/public/dashboard/362dd1a3-6c35-4ce6-a4d3-dab2a436e323`; //query: cohort_title
+  `/fga/${businessType}/public/dashboard/fdcf253d-24b4-4f6e-839e-3880242041a8`; //query: cohort_title
 export const top_protocols = [
   {
     protocolSlug: "the-sandbox",
@@ -379,7 +379,7 @@ export const getDashboardMap = (businessType, project, chain) => {
     ["gaming_engagement", "e2695683-3c8c-4462-92db-e32bc6f50050"],
     ["wallet_retention", "9a19edda-1c4c-4aa5-95fc-921304f8f8fd"],
     ["user_retention", "320e0a60-107c-44cb-83e3-7c8301354968"],
-    ["wallet_profile", "fa040fe5-46b3-483b-b257-aa2373559fab"],
+    // ["wallet_profile", "fa040fe5-46b3-483b-b257-aa2373559fab"],
     ["token_leaderboard", "f36c338b-d213-4071-9d92-66c7d575f7cb"],
     ["telegram", "5aa8809b-296f-4ac9-b7c1-4a713abed1df"],
     ["ecosystem_wallet", "9f96361e-d423-4239-9f97-7e6277793829"],
@@ -390,6 +390,8 @@ export const getDashboardMap = (businessType, project, chain) => {
 
     ["project_health-platform", "7a275541-580a-4720-8e10-f455335de137"],
     ["users_overview-platform", "6d84b4a6-ceef-4b30-a9ad-b233038fd8d3"],
+    ["wallet_profile", "fdcf253d-24b4-4f6e-839e-3880242041a8"],
+    ["quest_dashboard", "12d8d743-8622-440a-90af-99efd6c5281a"],
   ]);
   return dashboardMap;
 }
@@ -464,6 +466,12 @@ export const fga_menu_data_v2 = (businessType, project, chain) => {
       getItem(getLabel({label: "Community", tip: "Presented below are the metrics illustrating the growth of the Project community on both the Telegram and Discord platforms.\n"}), "social_stats", <ShrinkOutlined />, [
           getItem("Telegram", "telegram", null),
           getItem("Discord", "discord", null),
+        ]
+      ),
+      getItem("Growth", "campaign", <ShrinkOutlined />, [
+          getItem("Campaign", "quest", null),
+          getItem("Segmentation", "members", null),
+          getItem("Wallet Profile", "wallet_profile", null),
         ]
       ),
       getItem(getLabel({label: "Custom Analysis", tip: "Users can create their own metrics in FGA and easily find their personalized dashboard and charts."}), "exploration", ReactIcons.academyIcon14, [
