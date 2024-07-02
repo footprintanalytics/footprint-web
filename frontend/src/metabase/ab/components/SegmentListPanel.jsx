@@ -100,18 +100,20 @@ const SegmentListPanel = props => {
     {
       title: "Action",
       key: "action",
-      render: (_, record) => (
-        <Space size="middle">
-          <Link
-            // disabled={record.numberOfWallets === 0}
-            to={`${getUserProfileLink(businessType)}?cohort_id=${record.cohortId}&tag=${record.title}&cohort_title=${record.title}#from=Segment`}
-            // onClick={() => {
-            //   message.info("Coming soon...")
-            // }}
-          >
-            User Profile
-          </Link>
-          {/*<Link
+      render: (_, record) =>
+      {
+        return (
+          <Space size="middle">
+            <Link
+              // disabled={record.numberOfWallets === 0}
+              to={`${getUserProfileLink(businessType)}?segment=${record.cohortId}&tag=${record.title}&cohort_title=${record.title}#from=Segment`}
+              // onClick={() => {
+              //   message.info("Coming soon...")
+              // }}
+            >
+              User Profile
+            </Link>
+            {/*<Link
             // disabled={record.numberOfWallets === 0}
             to={`${getWalletProfileLink(businessType)}?cohort_id=${record.cohortId}&cohort_title=${record.title}#from=Segment`}
             // onClick={() => {
@@ -121,36 +123,36 @@ const SegmentListPanel = props => {
             Wallet List
           </Link>*/}
 
-          <Link
-            disabled={record.numberOfWallets === 0}
-            onClick={() => {
-              message.info("Coming soon...")
-              // if (checkIsNeedContactUs(modal, project)) {
-              //   return;
-              // }
-              // message.info("Download will start soon...");
-              /*if (!user) {
-                message.warning(`Kindly login before Download CSV`);
-                setLoginModalShowAction({
-                  show: true,
-                  from: "download csv",
-                  redirect: location.pathname,
-                  channel: "FGA",
-                });
-                return;
-              }
-              console.log(`/api/v1/fga/cohort/address/csv?cohortId=${record.cohortId}&projectId=${project?.id}&cohortTitle=${record.title}&protocolSlug=${project?.protocolSlug}`)
-              window
-                .open(
-                  `/api/v1/fga/cohort/address/csv?cohortId=${record.cohortId}&projectId=${project?.id}&cohortTitle=${record.title}&protocolSlug=${project?.protocolSlug}`,
-                  "_blank",
-                )
-                .focus();*/
-            }}
-          >
-            Download CSV
-          </Link>
-          {/*<Link
+            <Link
+              disabled={record.numberOfWallets === 0}
+              onClick={() => {
+                message.info("Coming soon...")
+                // if (checkIsNeedContactUs(modal, project)) {
+                //   return;
+                // }
+                // message.info("Download will start soon...");
+                /*if (!user) {
+                  message.warning(`Kindly login before Download CSV`);
+                  setLoginModalShowAction({
+                    show: true,
+                    from: "download csv",
+                    redirect: location.pathname,
+                    channel: "FGA",
+                  });
+                  return;
+                }
+                console.log(`/api/v1/fga/cohort/address/csv?cohortId=${record.cohortId}&projectId=${project?.id}&cohortTitle=${record.title}&protocolSlug=${project?.protocolSlug}`)
+                window
+                  .open(
+                    `/api/v1/fga/cohort/address/csv?cohortId=${record.cohortId}&projectId=${project?.id}&cohortTitle=${record.title}&protocolSlug=${project?.protocolSlug}`,
+                    "_blank",
+                  )
+                  .focus();*/
+              }}
+            >
+              Download CSV
+            </Link>
+            {/*<Link
             to={getGrowthProjectPath(
               router?.params?.project,
               "CreateActivation",
@@ -158,8 +160,9 @@ const SegmentListPanel = props => {
           >
             Create Activation
           </Link>*/}
-        </Space>
-      ),
+          </Space>
+        )
+      },
     },
   ];
 
