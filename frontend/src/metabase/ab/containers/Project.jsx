@@ -82,7 +82,7 @@ const Project = props => {
 
   useEffect(() => {
     if (projectObject) {
-      const menuData = fga_menu_data_v2(businessType, projectObject, chain);
+      const menuData = fga_menu_data_v2(businessType, projectObject, chain, user);
       const menuKeys = menuData.keys;
       const liveKeys = menuData.liveKeys;
       setGaMenuTabs(menuData);
