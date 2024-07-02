@@ -152,7 +152,7 @@ const Community = props => {
   ];
 
   const actions = [
-    {
+    /*{
       title: "Create Campaigns",
       disabled: false,
       component: (
@@ -172,7 +172,7 @@ const Community = props => {
           </Button>
         </Tooltip>
       ),
-    },
+    },*/
     {
       title: "Create Segment",
       disabled: false,
