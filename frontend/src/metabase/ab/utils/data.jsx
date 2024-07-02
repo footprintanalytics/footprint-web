@@ -471,7 +471,6 @@ export const fga_menu_data_v2 = (businessType, project, chain, user) => {
       (user?.is_superuser || user?.groups?.includes("Inner")) && getItem("Growth", "campaign", <FireOutlined />, [
           getItem("Campaign", "quest", null),
           getItem("Segmentation", "members", null),
-          getItem("Wallet Profile", "wallet_profile", null),
         ]
       ),
       getItem(getLabel({label: "Custom Analysis", tip: "Users can create their own metrics in FGA and easily find their personalized dashboard and charts."}), "exploration", ReactIcons.academyIcon14, [

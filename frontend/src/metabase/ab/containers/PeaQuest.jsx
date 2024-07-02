@@ -49,7 +49,7 @@ const PeaQuest = props => {
       {loading && <div style={{width: "100%", height: iframeHeight, padding: 40}}><Skeleton active /></div>}
       <iframe
         ref={iframeRef}
-        src={"https://test.pea.ai/admin/quest/list?token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI2NjgyNjkzMTdlZmYwMzAwMTE1MGU3MGUiLCJpYXQiOjE3MTk4MjI2NDEsImV4cCI6MTcyMjQxNDY0MX0.Ga4I9KBvCxU4tRJYIv2J9ETrNmYSdoW3CxGCYIaKGqc"}
+        src={"https://test.pea.ai/admin/quest/list?partner_id=fga&token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI2NjgyNjkzMTdlZmYwMzAwMTE1MGU3MGUiLCJpYXQiOjE3MTk4MjI2NDEsImV4cCI6MTcyMjQxNDY0MX0.Ga4I9KBvCxU4tRJYIv2J9ETrNmYSdoW3CxGCYIaKGqc"}
         style={{ border: 'none', width: '100%', height: iframeHeight, display: loading ? 'none' : 'block' }}
         onLoad={handleIframeLoad}
       />

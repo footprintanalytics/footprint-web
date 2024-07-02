@@ -152,6 +152,27 @@ const Community = props => {
   ];
 
   const actions = [
+    /*{
+      title: "Create Campaigns",
+      disabled: false,
+      component: (
+        <Tooltip title="Create campaigns using the filtered users.">
+          <Button
+            type="primary"
+            onClick={() => {
+              router.push({
+                pathname: getGrowthProjectPath(
+                  protocolSlug,
+                  "quest",
+                ),
+              });
+            }}
+          >
+            <div>Create Campaigns</div>
+          </Button>
+        </Tooltip>
+      ),
+    },*/
     {
       title: "Create Campaigns",
       disabled: false,
