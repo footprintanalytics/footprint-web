@@ -18,8 +18,8 @@ import { loginModalShowAction } from "metabase/redux/control";
 const SegmentListPanel = props => {
   // sourceType: projectUser, potentialUser
   const { project, router, user, sourceType, businessType } = props;
-  const protocolSlug = project?.protocolSlug === "Demo Project" ? "" : project?.protocolSlug;
-  /*const { isLoading, data, refetch } = useQuery(
+  const protocolSlug = project?.protocolSlug;
+  const { isLoading, data, refetch } = useQuery(
     ["getCohort", project],
     async () => {
       return GetFgaCohort({ protocolSlug });
@@ -27,10 +27,10 @@ const SegmentListPanel = props => {
     {
       refetchInterval: 5000,
     },
-  );*/
-  const data = null;
-  const isLoading = null;
-  const refetch = null;
+  );
+  // const data = null;
+  // const isLoading = null;
+  // const refetch = null;
 
   const dataSource = data?.list
     ?.sort(
@@ -104,22 +104,22 @@ const SegmentListPanel = props => {
         <Space size="middle">
           <Link
             // disabled={record.numberOfWallets === 0}
-            // to={`${getUserProfileLink(businessType)}?cohort_id=${record.cohortId}&tag=${record.title}&cohort_title=${record.title}#from=Segment`}
-            onClick={() => {
-              message.info("Coming soon...")
-            }}
+            to={`${getUserProfileLink(businessType)}?cohort_id=${record.cohortId}&tag=${record.title}&cohort_title=${record.title}#from=Segment`}
+            // onClick={() => {
+            //   message.info("Coming soon...")
+            // }}
           >
             User Profile
           </Link>
-          <Link
+          {/*<Link
             // disabled={record.numberOfWallets === 0}
-            // to={`${getWalletProfileLink(businessType)}?cohort_id=${record.cohortId}&cohort_title=${record.title}#from=Segment`}
-            onClick={() => {
-              message.info("Coming soon...")
-            }}
+            to={`${getWalletProfileLink(businessType)}?cohort_id=${record.cohortId}&cohort_title=${record.title}#from=Segment`}
+            // onClick={() => {
+            //   message.info("Coming soon...")
+            // }}
           >
             Wallet List
-          </Link>
+          </Link>*/}
 
           <Link
             disabled={record.numberOfWallets === 0}

@@ -1,6 +1,6 @@
 /* eslint-disable react/prop-types */
 import React, { useState } from "react";
-import { AutoComplete, Button, Divider, message, Modal, Tag } from "antd";
+import { AutoComplete, Button, Divider, message, Modal, Tag, Tooltip } from "antd";
 import { connect } from "react-redux";
 import { push } from "react-router-redux";
 import { omit, isArray, keys } from "lodash";
@@ -170,52 +170,55 @@ const CreateCohort2 = ({
     <>
       {contextHolder}
       {isButtonStyle ? (
-        <Button
-          type="primary"
-          disabled={disable}
-          onClick={() => {
-            message.info("Coming soon...")
-            // if (project?.protocolSlug === "Demo Project") {
-            //   modal.confirm({
-            //     title: "Tip",
-            //     content: (
-            //       <div style={{ marginTop: 20 }}>
-            //         <p>
-            //           {`The sample project is not able to create a cohort, you can select other project to create a cohort.`}
-            //         </p>
-            //       </div>
-            //     ),
-            //     okText: "Select other project",
-            //     onOk() {
-            //       router.push(`/fga/${businessType}/project-manage`);
-            //     },
-            //   });
-            //   return ;
-            // }
-            // if (!user) {
-            //   message.warning(`Kindly login before ${btnText}`);
-            //   setLoginModalShowAction({
-            //     show: true,
-            //     from: "create cohort",
-            //     redirect: location.pathname,
-            //     channel: "FGA",
-            //   });
-            //   return;
-            // }
-            // setCohortModalOpen(false);
-            // checkIsNeedContactUs(
-            //   modal,
-            //   project,
-            //   () => {
-            //     setCohortModalOpen(true);
-            //   },
-            //   () => {},
-            //   true,
-            // );
-          }}
-        >
-          {btnText}
-        </Button>
+        <Tooltip title="Save the filtered users as segments.">
+          <Button
+            type="primary"
+            disabled={disable}
+            onClick={() => {
+              // message.info("Coming soon...")
+              if (project?.protocolSlug === "Demo Project") {
+                modal.confirm({
+                  title: "Tip",
+                  content: (
+                    <div style={{ marginTop: 20 }}>
+                      <p>
+                        {`The sample project is not able to create a cohort, you can select other project to create a cohort.`}
+                      </p>
+                    </div>
+                  ),
+                  okText: "Select other project",
+                  onOk() {
+                    router.push(`/fga/${businessType}/project-manage`);
+                  },
+                });
+                return ;
+              }
+              if (!user) {
+                message.warning(`Kindly login before ${btnText}`);
+                setLoginModalShowAction({
+                  show: true,
+                  from: "create cohort",
+                  redirect: location.pathname,
+                  channel: "FGA",
+                });
+                return;
+              }
+              setCohortModalOpen(true);
+              // setCohortModalOpen(false);
+              // checkIsNeedContactUs(
+              //   modal,
+              //   project,
+              //   () => {
+              //     setCohortModalOpen(true);
+              //   },
+              //   () => {},
+              //   true,
+              // );
+            }}
+          >
+            {btnText}
+          </Button>
+        </Tooltip>
       ) : (
         <div
           onClick={() => {

@@ -102,7 +102,7 @@ const GaProjectSearch = props => {
     // setCurrentProject(option.protocolSlug);
     // saveLatestGAProjectId(option.value);
     // loadProjectDetail(option.protocolSlug);
-    const keys = fga_menu_data_v2(businessType, projectObject, null).keys
+    const keys = fga_menu_data_v2(businessType, projectObject, null, user).keys
     const currentPath = props.menu
     const path = keys.includes(currentPath) ? currentPath : keys[0]
     if (option.protocolSlug) {

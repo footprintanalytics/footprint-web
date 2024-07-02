@@ -16,6 +16,7 @@ import ChannelList from "./ChannelList";
 import WalletProfile from "./WalletProfile";
 import MyAnalysis from "./MyAnalysis";
 import Airdrop from "./Airdrop";
+import { get } from "lodash";
 import CampaignDetail from "./CampaignDetail";
 import CampaignListNew from "./CampaignListNew";
 import CustomAnalysis from "./CustomAnalysis";
@@ -26,6 +27,7 @@ import Journey from "./Journey";
 import JourneyEdit from "./Journey/component/edit";
 import JourneyList from "./Journey/component/list";
 import CohortList from "./CohortList";
+import PeaQuest from "./PeaQuest";
 import Community from "./Community";
 import UserProfile from "./UserProfile";
 import MyAnalysisList from "./MyAnalysisList";
@@ -69,17 +71,18 @@ const Project = props => {
   const [gaMenuTabs, setGaMenuTabs] = useState(null);
   useEffect(() => {
     if (menu && menu !== currentMenu && projectObject) {
-      if (menu === "funnel") {
+      let fixMenu = get(menu.split("?"), [0]);
+      if (fixMenu === "funnel") {
         router.replace("/fga/dashboard/@0xABS/User-Journey-of-Mocaverse-FGA?series_date=past30days#type=dashboard&hide_edit");
         return;
       }
-      setCurrentMenu(menu);
+      setCurrentMenu(fixMenu);
     }
   }, [menu]);
 
   useEffect(() => {
     if (projectObject) {
-      const menuData = fga_menu_data_v2(businessType, projectObject, chain);
+      const menuData = fga_menu_data_v2(businessType, projectObject, chain, user);
       const menuKeys = menuData.keys;
       const liveKeys = menuData.liveKeys;
       setGaMenuTabs(menuData);
@@ -604,6 +607,17 @@ const Project = props => {
         ></CampaignDetail>
       );
     }
+     if (["quest"].includes(current_tab)) {
+       return (
+         <PeaQuest
+           router={router}
+           location={location}
+           project={getProjectObject()}
+           businessType={businessType}
+         />
+       );
+     }
+
      if (["Cohort", "segment", "segment-platform"].includes(current_tab)) {
        return (
          <CohortList

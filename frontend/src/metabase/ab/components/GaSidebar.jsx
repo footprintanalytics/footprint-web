@@ -30,7 +30,7 @@ const GaSidebar = (props) => {
     resetFgaProtocolList,
   } = props;
   const [openKeys, setOpenKeys] = useState([currentMenu]);
-  const menuData = fga_menu_data_v2(businessType, projectObject, chain);
+  const menuData = fga_menu_data_v2(businessType, projectObject, chain, user);
   const menuTitle = menuData?.menuTitle;
   const platformMenuTitle = menuData?.platformMenuTitle;
   const items = menuData?.menuTabs || [];
@@ -74,7 +74,7 @@ const GaSidebar = (props) => {
     });
 
   const pushFirstRouter = (chain) => {
-    const menuData = fga_menu_data_v2(businessType, projectObject, chain);
+    const menuData = fga_menu_data_v2(businessType, projectObject, chain, user);
     const menuKeys = menuData.keys;
     const firstMenu = menuKeys[0];
     const hasNewChainData = projectObject?.contractAddress?.find((item) => item.chain === chain);

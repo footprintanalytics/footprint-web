@@ -24,7 +24,8 @@ import { formatTitle } from "metabase/lib/formatting/footprint";
 const Community = props => {
   const { router, location, children, user, projectPath, menu, project, businessType } =
     props;
-
+  const projectId = "1"
+  const protocolSlug = project?.protocolSlug
   const [walletListParams, setWalletListParams] = useState({
     pageSize: location.query?.pageSize
       ? parseInt(location.query?.pageSize)
@@ -64,13 +65,13 @@ const Community = props => {
   // );
 
   const listResult = useQuery(
-    ["getCommunityWalletAddress", project?.id, walletListParams],
+    ["getCommunityWalletAddress", projectId, walletListParams],
     async () =>
       getCommunityWalletAddress({
         ...walletListParams,
-        projectId: parseInt(project?.id),
+        projectId: parseInt(projectId),
       }),
-    { ...QUERY_OPTIONS, enabled: !!project?.id },
+    { ...QUERY_OPTIONS, enabled: !!projectId },
   );
 
   useEffect(() => {
@@ -105,19 +106,19 @@ const Community = props => {
 
   const valueFilterOptionsList = [
     {
-      label: "NFT Holding Value >=",
-      indicator: "nft_holding_value",
+      label: "Wallet Age >=",
+      indicator: "walletAge",
       comparisonSymbol: "gte",
       defaultValue:
-        walletListParams?.filters?.find(item => item.indicator === "nft_holding_value")
+        walletListParams?.filters?.find(item => item.indicator === "walletAge")
           ?.comparisonValue ?? null,
     },
     {
-      label: "Token Holding Value >=",
-      indicator: "token_holding_value",
+      label: "Total Value >=",
+      indicator: "totalValue",
       comparisonSymbol: "gte",
       defaultValue:
-        walletListParams?.filters?.find(item => item.indicator === "token_holding_value")
+        walletListParams?.filters?.find(item => item.indicator === "totalValue")
           ?.comparisonValue ?? null,
     },
     // {
@@ -152,23 +153,66 @@ const Community = props => {
 
   const actions = [
     {
+      title: "Create Campaigns",
+      disabled: false,
+      component: (
+        <Tooltip title="Create campaigns using the filtered users.">
+          <Button
+            type="primary"
+            onClick={() => {
+              router.push({
+                pathname: getGrowthProjectPath(
+                  protocolSlug,
+                  "quest",
+                ),
+              });
+            }}
+          >
+            <div>Create Campaigns</div>
+          </Button>
+        </Tooltip>
+      ),
+    },
+    {
       title: "Create Segment",
       disabled: false,
       component: (
-        <CreateCohort2
-          disable={false}
-          project={project}
-          router={router}
-          btnText="Save as Segment"
-          type="Members"
-          businessType={businessType}
-          addressListCount={listResult?.data?.total}
-          params={{
-            ...walletListParams,
-            projectId: parseInt(project?.id),
-          }}
-          isButtonStyle={true}
-        />
+
+          <CreateCohort2
+            disable={false}
+            project={project}
+            router={router}
+            btnText="Save as Segment"
+            type="Members"
+            businessType={businessType}
+            addressListCount={listResult?.data?.total}
+            params={{
+              ...walletListParams,
+              projectId: parseInt(projectId),
+            }}
+            isButtonStyle={true}
+          />
+      ),
+    },
+    {
+      title: "My Segments",
+      disabled: false,
+      component: (
+        <Tooltip title="Display our segment records.">
+          <Button
+            type="primary"
+            onClick={() => {
+              router.push({
+                pathname: getGrowthProjectPath(
+                  protocolSlug,
+                  "segment",
+                ),
+              });
+            }}
+          >
+            <div>My Segments</div>
+          </Button>
+        </Tooltip>
       ),
     },
     /*{
@@ -193,11 +237,10 @@ const Community = props => {
       disabled: false,
     },*/
   ];
-
   const tableColumns = [
     {
       title: "Address",
-      dataIndex: "wallet_address",
+      dataIndex: "address",
       key: "address",
       render: (text, { ens }) => (
         <div className="flex flex-row">
@@ -242,51 +285,58 @@ const Community = props => {
       },
     },*/
     {
-      title: "NFT Collections Count",
-      dataIndex: "project_nft_collections_count",
-      key: "project_nft_collections_count",
+      title: "Not Active Days",
+      dataIndex: "not_active_days",
+      key: "not_active_days",
       align: "right",
       render: text => (text !== null ? valueFormat(text) : ""),
     },
     {
-      title: "NFT Items Count",
-      dataIndex: "project_nft_items_count",
-      key: "project_nft_items_count",
+      title: "Wallet Age",
+      dataIndex: "wallet_age",
+      key: "wallet_age",
       align: "right",
       render: text => (text !== null ? valueFormat(text) : ""),
     },
     {
-      title: "All NFT Collections Count",
-      dataIndex: "all_nft_collections_count",
-      key: "all_nft_collections_count",
+      title: "Total Value",
+      dataIndex: "total_value",
+      key: "total_value",
       align: "right",
       render: text => (text !== null ? valueFormat(text) : ""),
     },
     {
-      title: "All NFT Items Count",
-      dataIndex: "all_nft_items_count",
-      key: "all_nft_items_count",
+      title: "Total Altcoin Token Value",
+      dataIndex: "total_altcoin_token_value",
+      key: "total_altcoin_token_value",
       align: "right",
       render: text => (text !== null ? valueFormat(text) : ""),
     },
     {
-      title: "NFT Holding Value",
-      dataIndex: "nft_holding_value",
-      key: "nft_holding_value",
-      align: "right",
-      render: text => (text !== null ? "$" + valueFormat(text) : ""),
-    },
-    {
-      title: "Token Holding Count",
-      dataIndex: "token_holding_count",
-      key: "token_holding_count",
+      title: "Total Native Token Value",
+      dataIndex: "total_native_token_value",
+      key: "total_native_token_value",
       align: "right",
       render: text => (text !== null ? valueFormat(text) : ""),
     },
     {
-      title: "Token Holding Value",
-      dataIndex: "token_holding_value",
-      key: "token_holding_value",
+      title: "Total NFT Value",
+      dataIndex: "total_nft_value",
+      key: "total_nft_value",
+      align: "right",
+      render: text => (text !== null ? valueFormat(text) : ""),
+    },
+    {
+      title: "Number of Txn",
+      dataIndex: "number_of_txn",
+      key: "number_of_txn",
+      align: "right",
+      render: text => (text !== null ? valueFormat(text) : ""),
+    },
+    {
+      title: "Total Gas Fee Spent in USD",
+      dataIndex: "total_gas_fee_spent_in_usd",
+      key: "total_gas_fee_spent_in_usd",
       align: "right",
       render: text => (text !== null ? "$" + valueFormat(text) : ""),
     },
@@ -488,7 +538,7 @@ const Community = props => {
           />*/}
       {/*  </>*/}
       {/*)}*/}
-      {listResult.isLoading | !project?.id && walletListData === null ? (
+      {listResult.isLoading | !projectId && walletListData === null ? (
         <div className="w-full p1">
           <Card className="w-full rounded" style={{ height: 650 }}>
             <LoadingSpinner />
