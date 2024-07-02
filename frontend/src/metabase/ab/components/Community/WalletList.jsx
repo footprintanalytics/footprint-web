@@ -52,7 +52,7 @@ export const WalletList = props => {
   const itemRender = (current, type, originalElement, isLoading) => {
     if (type === "page") {
       return current === currentPage && isLoading ? (
-        <LoadingSpinner />
+        <LoadingOutlined />
       ) : (
         <a>{valueFormat(current)}</a>
       );
