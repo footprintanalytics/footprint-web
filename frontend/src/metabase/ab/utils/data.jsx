@@ -468,7 +468,7 @@ export const fga_menu_data_v2 = (businessType, project, chain, user) => {
           getItem("Discord", "discord", null),
         ]
       ),
-      (user?.is_superuser || user?.groups?.includes("Inner")) && getItem("Growth", "campaign", <FireOutlined />, [
+      getItem("Growth", "campaign", <FireOutlined />, [
           getItem("Campaign", "quest", null),
           getItem("Segmentation", "members", null),
         ]

@@ -193,7 +193,7 @@ const CreateCohort2 = ({
                 });
                 return ;
               }
-              if (!user) {
+              /*if (!user) {
                 message.warning(`Kindly login before ${btnText}`);
                 setLoginModalShowAction({
                   show: true,
@@ -202,7 +202,7 @@ const CreateCohort2 = ({
                   channel: "FGA",
                 });
                 return;
-              }
+              }*/
               setCohortModalOpen(true);
               // setCohortModalOpen(false);
               // checkIsNeedContactUs(

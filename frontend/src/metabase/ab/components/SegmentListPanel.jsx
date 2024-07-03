@@ -22,7 +22,7 @@ const SegmentListPanel = props => {
   const { isLoading, data, refetch } = useQuery(
     ["getCohort", project],
     async () => {
-      return GetFgaCohort({ protocolSlug });
+      return GetFgaCohort({ projectId: 53 });
     },
     {
       refetchInterval: 5000,
