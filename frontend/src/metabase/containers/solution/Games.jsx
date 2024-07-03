@@ -24,7 +24,7 @@ const Games = () => {
       {/*<Meta description={defaultDesc} keywords={keywords} title={title} />*/}
       <div className="solution__about">
         <BatchDownloadStart
-          title={<>The Ultimate Gaming <br/>Solution Powers Data-<br/>Decisions.</>}
+          title={<>The Ultimate Gaming <br/>Solution Powers <br/>Data-Driven Decisions.</>}
           desc={<>Gain unparalleled insights with a comprehensive <br />view of on-chain and off-chain data to build, engage, <br />and optimize your games.</>}
           image={"https://static.footprint.network/solution/img-header-games.jpg"}
         />
