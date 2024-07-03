@@ -122,7 +122,7 @@ const DashboardMask = props => {
           <Button
             className="mt2 ml1"
             onClick={() => {
-              props.router.push(getGrowthProjectPath("Demo Project", props.originCurrentMenu));
+              props.router.push(getGrowthProjectPath("Gaming Demo Project", props.originCurrentMenu));
             }}
           >
             See Sample Project

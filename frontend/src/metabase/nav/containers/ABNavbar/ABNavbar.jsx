@@ -104,7 +104,7 @@ class ABNavbar extends Component {
     if (pathLength === 1) {
       this.props.replace("/fga/game")
     } else if (pathLength === 2) {
-      this.props.replace(getGrowthProjectPath("Demo Project"))
+      this.props.replace(getGrowthProjectPath("Gaming Demo Project"))
     }
   }
 
