@@ -188,7 +188,7 @@ const Community = props => {
             addressListCount={listResult?.data?.total}
             params={{
               ...walletListParams,
-              projectId: parseInt(projectId),
+              projectId: 53,
             }}
             isButtonStyle={true}
           />
