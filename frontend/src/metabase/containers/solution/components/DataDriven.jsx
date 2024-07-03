@@ -52,7 +52,7 @@ const DataDriven = () => {
   return (
     <div className="solution__data-driven solution__data-driven-bg">
       <div className="solution__title-head">
-        <div className="flex align-center"><h2 className="solution__title-main">Data-Driven Blockchain Solutions</h2><h3 className="solution__title-highlight"> or Ecosystem Excellence</h3></div>
+        <div className="flex align-center"><h2 className="solution__title-main">Data-Driven Blockchain Solutions</h2><h3 className="solution__title-highlight"> for Ecosystem Excellence</h3></div>
         <span className="solution__title-desc">Comprehensive solutions for seamless data exploration, ecosystem understanding, and community education.</span>
       </div>
       <ul >

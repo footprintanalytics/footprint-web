@@ -22,7 +22,7 @@ const Drive = () => {
         },
         {
           type: "Optimize",
-          title: "Segment wallet addresses for targeted operations",
+          title: "Segment Wallet Addresses for Targeted Operations",
           list: [
             "Wallet cohort analysis based on an up-to-date perspective",
             "Assign customized scores and labels to wallet addresses",
