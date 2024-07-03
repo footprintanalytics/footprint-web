@@ -24,7 +24,7 @@ const Community = () => {
       {/*<Meta description={defaultDesc} keywords={keywords} title={title} />*/}
       <div className="solution__about">
         <BatchDownloadStart
-          title={<>A Long-term Incentive <br/>Program for Users, <br/>Projects, and Ecosystems.</>}
+          title={<>A Long-term Incentive <br/>Program for Users, <br/>Projects, and Ecosystems</>}
           desc={<>Footprint Analytics provides a robust framework to build <br />and manage communities.</>}
           image={"https://static.footprint.network/solution/img-head0.png"}
         />
