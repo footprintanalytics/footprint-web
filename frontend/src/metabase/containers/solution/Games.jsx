@@ -12,16 +12,17 @@ import UserGrowth from "metabase/containers/solution/components/UserGrowth";
 import GainView from "metabase/containers/solution/components/GainView";
 import DataDrivenGame from "metabase/containers/solution/components/DataDrivenGame";
 import { getOssUrl } from "metabase/lib/image";
+import Meta from "metabase/components/Meta";
 
 const Games = () => {
-  // const defaultDesc =
-  //   "Download blockchain historical data in one batch. Start building DApps immediately, not in months. Built for money tracking, backtesting, machine learning, and more.";
-  // const keywords = "Footprint Analytics, historical data, blockchain data, cryptocurrency data, NFT data, Ethereum data, BNB chain data, polygon chain data, web3 gaming, web3 gaming analytics, web3 gaming data, NFT game, blockchain AML, wallet profile, Growth Marketing, cross chain data, blockchain data api";
-  // const title = "Download blockchain historical data in one batch| A faster and more affordable way to access blockchain data";
+  const defaultDesc =
+    "Gain unparalleled insights with a comprehensive view of on-chain and off-chain data to build, engage, and optimize your games.";
+  const keywords = "Blockchain Game, Web3 Game, Game Data, Data Solution, On-chain Data, Off-chain Data";
+  const title = "Tailored Blockchain Data Solutions for Games | Footprint Analytics";
 
   return (
     <>
-      {/*<Meta description={defaultDesc} keywords={keywords} title={title} />*/}
+      <Meta description={defaultDesc} keywords={keywords} title={title} image={getOssUrl("home-v2/img-seo-Games.jpg", { resize: true })}/>
       <div className="solution__about">
         <BatchDownloadStart
           title={<>The Ultimate Gaming <br/>Solution Powers <br/>Data-Driven Decisions</>}

@@ -12,16 +12,17 @@ import CaseShow from "metabase/containers/solution/components/CaseShow";
 import { getOssUrl } from "metabase/lib/image";
 import UserGrowth from "metabase/containers/solution/components/UserGrowth";
 import Overview from "metabase/containers/solution/components/Overview";
+import Meta from "metabase/components/Meta";
 
 const Community = () => {
-  // const defaultDesc =
-  //   "Download blockchain historical data in one batch. Start building DApps immediately, not in months. Built for money tracking, backtesting, machine learning, and more.";
-  // const keywords = "Footprint Analytics, historical data, blockchain data, cryptocurrency data, NFT data, Ethereum data, BNB chain data, polygon chain data, web3 gaming, web3 gaming analytics, web3 gaming data, NFT game, blockchain AML, wallet profile, Growth Marketing, cross chain data, blockchain data api";
-  // const title = "Download blockchain historical data in one batch| A faster and more affordable way to access blockchain data";
+  const defaultDesc =
+    "Footprint Analytics provides a robust framework to build and manage communities.";
+  const keywords = "Web3 Growth, Web3 Community, User Growth, Loyalty Incentive System, AI Assistant, User Score";
+  const title = "Tailored Blockchain Data Solution for Community Growth | Footprint Analytics";
 
   return (
     <>
-      {/*<Meta description={defaultDesc} keywords={keywords} title={title} />*/}
+      <Meta description={defaultDesc} keywords={keywords} title={title} image={getOssUrl("home-v2/img-seo-Community.jpg", { resize: true })}/>
       <div className="solution__about">
         <BatchDownloadStart
           title={<>A Long-term Incentive <br/>Program for Users, <br/>Projects, and Ecosystems</>}

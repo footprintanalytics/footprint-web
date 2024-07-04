@@ -8,22 +8,21 @@ import BatchDownloadStart from "metabase/containers/solution/components/BatchDow
 import BatchDownloadReady from "metabase/containers/solution/components/BatchDownloadReady";
 import HomeFooter from "metabase/containers/home/components/HomeFooter";
 import UserGrowth from "metabase/containers/solution/components/UserGrowth";
-import Engine from "metabase/containers/solution/components/Engine";
-import Drive from "metabase/containers/solution/components/Drive";
 import BuildMagic from "metabase/containers/solution/components/BuildMagic";
 import DataDriven from "metabase/containers/solution/components/DataDriven";
 import BatchDownloadData from "metabase/containers/solution/components/BatchDownloadData";
 import { getOssUrl } from "metabase/lib/image";
+import Meta from "metabase/components/Meta";
 
 const Blockchain = () => {
-  // const defaultDesc =
-  //   "Download blockchain historical data in one batch. Start building DApps immediately, not in months. Built for money tracking, backtesting, machine learning, and more.";
-  // const keywords = "Footprint Analytics, historical data, blockchain data, cryptocurrency data, NFT data, Ethereum data, BNB chain data, polygon chain data, web3 gaming, web3 gaming analytics, web3 gaming data, NFT game, blockchain AML, wallet profile, Growth Marketing, cross chain data, blockchain data api";
-  // const title = "Download blockchain historical data in one batch| A faster and more affordable way to access blockchain data";
+  const defaultDesc =
+    "Gain unparalleled insights with a comprehensive view of on-chain and off-chain data to build, engage, and optimize your games.";
+  const keywords = "Blockchains, Blockchain Infrastructure, Public Chains, Data Solution, Blockchain Ecosystem";
+  const title = "Tailored Blockchain Data Solutions for Blockchains | Footprint Analytics";
 
   return (
     <>
-      {/*<Meta description={defaultDesc} keywords={keywords} title={title} />*/}
+      <Meta description={defaultDesc} keywords={keywords} title={title} image={getOssUrl("home-v2/img-seo-Blockchain.jpg", { resize: true })}/>
       <div className="solution__about">
         <BatchDownloadStart
           title={<>Integrate Blockchain Data<br/>Into Footprint Analytics at <br/>Lightning Speed</>}
