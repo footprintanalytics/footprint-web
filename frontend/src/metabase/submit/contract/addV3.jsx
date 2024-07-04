@@ -9,6 +9,7 @@ import ContractDecoding from "metabase/submit/contract/components/ContractDecodi
 import { replace } from "react-router-redux";
 import _ from "underscore";
 import { connect } from "react-redux";
+import { getUser } from "metabase/selectors/user";
 
 const SubmitContractAddV3 = props => {
   const {user, replace} = props;
@@ -77,8 +78,12 @@ const SubmitContractAddV3 = props => {
   );
 };
 
+const mapStateToProps = (state, props) => ({
+  user: getUser(state),
+});
+
 export default _.compose(
-  connect(null, {
+  connect(mapStateToProps, {
     replace: replace,
   }),
 )(SubmitContractAddV3);

@@ -123,8 +123,13 @@ const ContractDetailsV4 = ({ onFinish, user, onClosed, hideEmail, protocolCatego
         return false
       }
       try {
-        JSON.parse(i.abi);
-        return true;
+        const data = JSON.parse(i.abi);
+        for (const item of data) {
+          // eslint-disable-next-line no-prototype-builtins
+          if (item.hasOwnProperty('inputs') && item.hasOwnProperty('outputs') && item.hasOwnProperty('name')) {
+            return true
+          }
+        }
       } catch (e) {
         return false;
       }
@@ -323,6 +328,53 @@ const ContractDetailsV4 = ({ onFinish, user, onClosed, hideEmail, protocolCatego
     return contracts?.map(i => i?.standard).every(i => array.includes(i));
   }
 
+  const getEmail = () => {
+    return user?.email;
+  }
+
+  const eventChains = [
+    'Ethereum',
+    'Cronos',
+    'Core',
+    'Arbitrum',
+    'Avalanche',
+    'BNB Chain',
+    'Harmony',
+    'Merlin',
+    'Optimism',
+    'Polygon',
+    'Oasys',
+    'Fantom',
+    'zkSync Era',
+    'Ronin',
+    'Rootstock',
+  ]
+
+  const callChains = [
+    'Ethereum',
+    'Polygon',
+    'BNB Chain',
+    'Arbitrum',
+    'Fantom',
+    'Merlin',
+    'Optimism',
+    'zkSync Era',
+  ]
+
+  const getABITip = (chain) => {
+    console.log("bbbbbb", callChains.includes(chain))
+    if (eventChains.includes(chain) && callChains.includes(chain)) {
+      return `\nAfter submitting ${chain}'s ABI, you can use events & calls. `
+    }
+    if (eventChains.includes(chain)) {
+      return `\nAfter submitting ${chain}'s ABI, you can use events. `
+    }
+    if (callChains.includes(chain)) {
+      return `\nAfter submitting ${chain}'s ABI, you can use calls. `
+    }
+    return ""
+  }
+
   return (
     <div key={key}>
       <Form
@@ -356,6 +408,7 @@ const ContractDetailsV4 = ({ onFinish, user, onClosed, hideEmail, protocolCatego
             const param = {
               ...values,
               username: user?.name,
+              email: getEmail(),
               contracts: formatContracts(values.contracts),
               protocolSlug:
                 protocolSlug ||
@@ -457,7 +510,7 @@ const ContractDetailsV4 = ({ onFinish, user, onClosed, hideEmail, protocolCatego
         >
           <Input placeholder="https://project-website.com" />
         </Form.Item>
-        <Form.Item
+        {/*<Form.Item
           hidden={hideEmail}
           label="Your Email Address"
           tooltip="Please provide your email address so that we can notify you when contracts or protocols are successfully decoded and calculate your contribution value."
@@ -480,7 +533,7 @@ const ContractDetailsV4 = ({ onFinish, user, onClosed, hideEmail, protocolCatego
           ]}
         >
           <Input placeholder="Please input your email address." />
-        </Form.Item>
+        </Form.Item>*/}
         <Form.Item
           label="Add Contract"
           rules={[{ required: !!fromFgaAddProject, message: "" }]}
@@ -544,7 +597,7 @@ const ContractDetailsV4 = ({ onFinish, user, onClosed, hideEmail, protocolCatego
                         fromFgaAddProject ? "Please provide the project contract address and token standard in the following format. Separate each entry with a comma. e.g. 0x123456789ABCDEF,ERC1155\n" +
                           "\n" +
                           "Make sure to verify the information is correct before submitting or else there is a chance your request will not go through\n" :
-                        "Be sure to add smart contracts. Errors could cause your contracts to be rejected!"
+                        "Be sure to add smart contracts. Errors could cause your contracts to be rejected!" + getABITip(item.chain)
                       }
                     </div>
                     {/*0x1092eb9c78833c6e0b4b9875eb84585814f613cf,ERC1155*/}
