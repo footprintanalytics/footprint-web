@@ -37,13 +37,21 @@ const ContractInput = ({ item, onChange }) => {
 
   const isValidABI = (abi) => {
     if (!abi) {
+      return true;
+    }
+    if (!abi.startsWith("[")) {
       return false;
     }
     try {
-      JSON.parse(abi);
-      return false;
+      const data = JSON.parse(abi);
+      for (const item of data) {
+        // eslint-disable-next-line no-prototype-builtins
+        if (item.hasOwnProperty('inputs') && item.hasOwnProperty('outputs') && item.hasOwnProperty('name')) {
+          return true
+        }
+      }
     } catch (e) {
-      return true;
+      return false;
     }
   }
 
@@ -82,7 +90,7 @@ const ContractInput = ({ item, onChange }) => {
     if (isStringABI(contract.abi)) {
       return "ABI expects an array input. Please provide data in array format.";
     }
-    if (isValidABI(contract.abi)) {
+    if (!isValidABI(contract.abi)) {
       return "The ABI is not formatted correctly. It should be entered as a JSON.";
     }
 
@@ -180,7 +188,7 @@ const ContractInput = ({ item, onChange }) => {
               </div>
               <div style={{padding: "0 0 0 10px"}}>
                 <Input.TextArea
-                  placeholder="ABI (JSON)"
+                  placeholder={`ABI (JSON) ,e.g., [{"inputs":[],"outputs":[],"name":""}`}
                   value={item.abi}
                   rows={3}
                   spellCheck={false}
