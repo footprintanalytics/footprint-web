@@ -13,6 +13,7 @@ import { cancelSubscription } from "metabase/new-service";
 import "./index.css";
 import Meta from "metabase/components/Meta";
 import BatchDownloadPrice from "metabase/pricing_v3/component/BatchDownloadPrice";
+import HomeFooter from "metabase/containers/home/components/HomeFooter";
 
 const PricingContainer = ({ location, user, setLoginModalShow }) => {
   const dataApiList = ["data-api", "data-api-before-0801"];
@@ -114,6 +115,7 @@ const PricingContainer = ({ location, user, setLoginModalShow }) => {
             />
           )}
         </div>
+        <HomeFooter style={{ width: "100%", zIndex: 1 }}/>
       </div>
     </>
   );
