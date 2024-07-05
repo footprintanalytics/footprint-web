@@ -69,6 +69,10 @@ export const FooterData = [
         label: "Media Kit",
         url: "https://docs.footprint.network/docs/press-kit",
       },
+      {
+        label: "Service Status",
+        url: "https://status.footprint.network/status/monitoring",
+      },
     ],
   },
   {
