@@ -940,9 +940,9 @@ const metaObject = {
     keywords: "NFT Trades of Wallet, Gamer Profile of Wallet, Money Flow of Wallet",
   },
   "defi": {
-    title: "Wallet Research | Built by researcher for researchers",
-    description: "Covers all the wallets data you need from industry overview to individual wallets with insightful metrics, such as money flow",
-    keywords: "NFT Trades of Wallet, Gamer Profile of Wallet, Money Flow of Wallet",
+    title: "DeFi Research | Unleash the power of decentralized finance",
+    description: "Provides comprehensive DeFi data from industry overviews to individual protocols with insightful metrics, such as Total Value Locked (TVL), Yield Farming, Staking, Liquidity Pools, and more.",
+    keywords: "DeFi Research, DeFi data, Total Value Locked, Yield Farming, DeFi Staking, Liquidity Pools, DeFi Protocols, DeFi Analytics, DeFi Markets, DeFi Tokens",
   },
 }
 
