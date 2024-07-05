@@ -11,7 +11,8 @@ const nftData = [
         "label": "Top Marketplaces",
         "value": "top-marketplaces",
         "publicUuid": "4566e4ff-636d-4e9b-b479-e330eb0bec01",
-      }, {
+      },
+      /*{
         "label": "Top Chains",
         "value": "top-chains",
         "publicUuid": "694e6a3d-7b4c-4863-8b0a-87f517f1c48b",
@@ -31,7 +32,8 @@ const nftData = [
         "publicUuid": "0d409482-14df-4de0-a3be-862aca1021c2",
         "type": "chart",
         "search": "block_timestamp=past7days",
-      }, {
+      },*/
+      {
         "label": "Top Buyers List",
         "value": "top-buyers-list",
         "publicUuid": "341c99ec-f226-4fc9-8f4f-3ab54bda92e7",
@@ -44,7 +46,7 @@ const nftData = [
       },
     ],
   },
-  {
+  /*{
     "label": "NFT Signals",
     "value": "nft-signals",
     "subMenus": [
@@ -66,7 +68,7 @@ const nftData = [
         "publicUuid": "41f7fb51-cc98-48ef-b481-ec5675eeb1d2",
       },
     ],
-  },
+  },*/
   {
     "label": "NFT Market",
     "value": "nft-market",
@@ -79,19 +81,23 @@ const nftData = [
         "label": "Chains Stats",
         "value": "chains-stats",
         "publicUuid": "abdf77b3-c267-4ef8-917d-29eba13f5832",
-      }, {
-        "label": "Single Chain",
-        "value": "single-chain",
-        "publicUuid": "ee0dbd21-8f80-49a1-a02c-686ec1c6eb3d",
-      }, {
+      },
+      {
         "label": "Marketplaces",
         "value": "marketplaces",
         "publicUuid": "80872681-40b2-4344-8c8b-c4b68826c184",
-      }, {
+      },
+      {
+        "label": "Single Chain",
+        "value": "single-chain",
+        "publicUuid": "ee0dbd21-8f80-49a1-a02c-686ec1c6eb3d",
+      },
+      /*{
         "label": "Collections",
         "value": "collections",
         "publicUuid": "2538542f-efcf-4399-bc3d-d0bfe97e33a8",
-      }, {
+      }, */
+      {
         "label": "Royalty",
         "value": "royalty",
         "publicUuid": "c485c035-5688-4371-9943-0752d1152bce",
@@ -152,7 +158,7 @@ const nftData = [
         "value": "top-wash-trading-wallet-addresses",
         "publicUuid": "3e83bba9-6b4f-4ac3-b8ab-01d07467c89d",
       },
-      {
+      /*{
         "label": "Wash Trading on Marketplaces",
         "value": "wash-trading-on-marketplaces",
         "resources": [
@@ -175,7 +181,7 @@ const nftData = [
             "image": "dashboard/7206.png",
           },
         ],
-      },
+      },*/
     ],
   },
   /*{
@@ -195,7 +201,7 @@ const nftData = [
       },
     ],
   },*/
-  {
+  /*{
     "label": "Themetic analysis",
     "value": "themetic-analysis",
     "subMenus": [
@@ -210,7 +216,7 @@ const nftData = [
         "publicUuid": "d277320d-bd8c-4261-a15d-f1230e0acc40",
       },
     ],
-  },
+  },*/
 ];
 
 const gamefiData = [
@@ -229,7 +235,7 @@ const gamefiData = [
         "publicUuid": "db808eeb-3709-4a75-8a9b-418236b5b707",
       },
       {
-        "label": "GameFi Market Leaderboard",
+        "label": "Games Token Leaderboard",
         "value": "gamefi-market-leaderboard",
         "publicUuid": "9c2cf0ca-de0a-4699-9a6c-cd24ffd6252c",
       },
@@ -365,6 +371,26 @@ const gamefiData = [
         "value": "planetix-assets-tracker",
         "publicUuid": "be1e7872-0c20-4188-b683-dbe429fc961d",
       },
+      {
+        "label": "Matr1X Dashboard",
+        "value": "matr1x-dashboard",
+        "publicUuid": "776a8b27-e444-4bac-9545-2d90c6b1cb84",
+      },
+      {
+        "label": "Pixels",
+        "value": "pixels",
+        "publicUuid": "58aac148-93d3-4c03-b870-c38cd58a22dd",
+      },
+      {
+        "label": "Pixels-Token",
+        "value": "pixels-token",
+        "publicUuid": "f574f7f2-07cd-4cd7-91b7-4b95e29f523f",
+      },
+      {
+        "label": "Axie Infinity",
+        "value": "axie-infinity",
+        "publicUuid": "f574f7f2-07cd-4cd7-91b7-4b95e29f523f",
+      },
       /*{
         "label": "Walken Data Overview",
         "value": "walken-data-overview",
@@ -380,7 +406,7 @@ const gamefiData = [
         "value": "solana-gamefi-overview",
         "publicUuid": "022aa15f-40c7-4dc2-95be-bc498c9114fd",
       },*/
-      {
+      /*{
         "label": "GAMEE Health",
         "value": "gamee-health",
         "publicUuid": "83cb8c4e-6755-4e9a-9dc1-2c96979f8e95",
@@ -399,7 +425,7 @@ const gamefiData = [
         "label": "GameFi Metrics",
         "value": "gamefi-metrics",
         "publicUuid": "e4a95701-0f0b-4593-bd6e-2a441660c555",
-      },
+      },*/
     ],
   },
 ]
@@ -418,9 +444,35 @@ const chainData = [
     ],
   },
   {
+    "label": "Chain Ecosystem",
+    "value": "chain-ecosystem",
+    "subMenus": [
+      {
+        "label": "Chain Overview",
+        "value": "chain-overview",
+        "publicUuid": "9e0a1aa1-eeae-4608-b77d-cf23271d92a1",
+      },
+      {
+        "label": "Cross Chains",
+        "value": "cross-chains",
+        "publicUuid": "514f0b14-dac6-4cb1-88aa-f74c3423e531",
+      },
+      {
+        "label": "Layer 2 Overview",
+        "value": "layer-2-overview",
+        "publicUuid": "79d8dc98-884b-448f-8d90-7baf3fa91e11",
+      },
+    ],
+  },
+  {
     "label": "Chain Stats",
     "value": "chain-stats",
     "subMenus": [
+      {
+        "label": "Ronin Overview",
+        "value": "ronin-overview",
+        "publicUuid": "a903e63d-f71c-4ea1-87b1-827d1faccb46",
+      },
       {
         "label": "Ethereum Overview",
         "value": "ethereum-overview",
@@ -451,13 +503,73 @@ const chainData = [
         "value": "starknet-overview",
         "publicUuid": "d3e53215-fa4f-4264-a012-71952b5ecb6c",
       },
+      /*{
+        "label": "IoTex Overview",
+        "value": "iotex-overview",
+        "publicUuid": "1a1e160e-4414-417a-a04a-54646f86e42d",
+      },*/
+      {
+        "label": "Oasys Chain Overview",
+        "value": "oasys-overview",
+        "publicUuid": "8feb911d-0055-4dae-9d12-e0e05860df07",
+      },
+      /*{
+        "label": "Hive Overview",
+        "value": "hive-overview",
+        "publicUuid": "3cf8c067-c63b-4a88-a74e-cc34096d0af5",
+      },*/
+      {
+        "label": "zkSync Era Overview",
+        "value": "zksync-era-overview",
+        "publicUuid": "89b91903-fcfc-4122-978b-62c7a3ba3f41",
+      },
+      {
+        "label": "Sui Overview",
+        "value": "sui-overview",
+        "publicUuid": "e569cb10-4132-46db-a391-3803feb3a203",
+      },
+      {
+        "label": "Rootstock Overview",
+        "value": "rootstock-overview",
+        "publicUuid": "5ce34ecd-e67c-49cb-8d1d-e84b0028a592",
+      },
+      {
+        "label": "Taiko Overview",
+        "value": "taiko-overview",
+        "publicUuid": "6e219d31-0601-43c0-90ca-b570f6c90584",
+      },
+      {
+        "label": "Arbitrum One Overview",
+        "value": "arbitrum-overview",
+        "publicUuid": "7b26e0e3-969e-4bbf-93e2-fb470295017b",
+      },
+      {
+        "label": "Arbitrum Nova Overview",
+        "value": "arbitrum-nova-overview",
+        "publicUuid": "b3797059-015a-4d9b-89b2-26802736355c",
+      },
+      {
+        "label": "Core Chain Overview",
+        "value": "core-chain-overview",
+        "publicUuid": "94c0e936-0ce5-4260-a337-c303221aa2e3",
+      },
+      {
+        "label": "Merlin Overview",
+        "value": "merlin-overview",
+        "publicUuid": "61025077-2037-465f-900e-2032eb446f30",
+      },
+      {
+        "label": "GalaChain Overview",
+        "value": "gala-chain-overview",
+        "publicUuid": "6bb33916-a512-42ad-9d90-8c834e29e9cf",
+      },
       {
         "label": "Fantom Overview",
         "value": "fantom-overview",
         "publicUuid": "3117dbba-0872-448a-bce5-7dd3454046c6",
       },
       {
-        "label": "Boba Network Overview",
+        "label": "Boba Overview",
         "value": "boba-network-overview",
         "publicUuid": "f46cb011-db68-4228-9f3d-ce8f20e6819b",
       },
@@ -487,29 +599,9 @@ const chainData = [
         "publicUuid": "cce7e0b7-2d7e-4454-8f2a-64afe9e99ade",
       },
       {
-        "label": "Ronin Overview",
-        "value": "ronin-overview",
-        "publicUuid": "a903e63d-f71c-4ea1-87b1-827d1faccb46",
-      },
-      {
         "label": "MCH Verse GameFi Overview",
         "value": "mch-verse-gamefi-overview",
         "publicUuid": "f0b59b4a-9b38-4745-9a15-1e1c47052d2d",
-      },
-      /*{
-        "label": "IoTex Overview",
-        "value": "iotex-overview",
-        "publicUuid": "1a1e160e-4414-417a-a04a-54646f86e42d",
-      },*/
-      {
-        "label": "Arbitrum One Overview",
-        "value": "arbitrum-overview",
-        "publicUuid": "7b26e0e3-969e-4bbf-93e2-fb470295017b",
-      },
-      {
-        "label": "Arbitrum Nova Overview",
-        "value": "arbitrum-nova-overview",
-        "publicUuid": "b3797059-015a-4d9b-89b2-26802736355c",
       },
       {
         "label": "Cronos Overview",
@@ -522,26 +614,6 @@ const chainData = [
         "publicUuid": "912bb075-9468-49f9-8c04-542c84cc20ef",
       },
       {
-        "label": "Oasys Overview",
-        "value": "oasys-overview",
-        "publicUuid": "e7547583-dacc-4794-9c09-deab7364c9fb",
-      },
-      /*{
-        "label": "Hive Overview",
-        "value": "hive-overview",
-        "publicUuid": "3cf8c067-c63b-4a88-a74e-cc34096d0af5",
-      },*/
-      {
-        "label": "zkSync Era Overview",
-        "value": "zksync-era-overview",
-        "publicUuid": "89b91903-fcfc-4122-978b-62c7a3ba3f41",
-      },
-      {
-        "label": "Sui Overview",
-        "value": "sui-overview",
-        "publicUuid": "e569cb10-4132-46db-a391-3803feb3a203",
-      },
-      {
         "label": "Nautilus Overview",
         "value": "nautilus-overview",
         "publicUuid": "62908ce3-43e2-450f-89c1-a1066ba1e7fe",
@@ -552,59 +624,13 @@ const chainData = [
         "publicUuid": "c79ec4ee-74c3-47ba-942c-5e351f3c2ff3",
       },
       {
-        "label": "Rootstock Overview",
-        "value": "rootstock-overview",
-        "publicUuid": "5ce34ecd-e67c-49cb-8d1d-e84b0028a592",
-      },
-      {
         "label": "Combo Overview",
         "value": "combo-overview",
         "publicUuid": "be8e0a03-96c3-4f6f-8e3b-871561ba6139",
       },
-      {
-        "label": "Core Overview",
-        "value": "core-overview",
-        "publicUuid": "94c0e936-0ce5-4260-a337-c303221aa2e3",
-      },
-      {
-        "label": "GalaChain Overview",
-        "value": "gala-chain-overview",
-        "publicUuid": "6bb33916-a512-42ad-9d90-8c834e29e9cf",
-      },
-      {
-        "label": "Merlin Overview",
-        "value": "merlin-overview",
-        "publicUuid": "61025077-2037-465f-900e-2032eb446f30",
-      },
-      {
-        "label": "Taiko Overview",
-        "value": "taiko-overview",
-        "publicUuid": "6e219d31-0601-43c0-90ca-b570f6c90584",
-      },
     ],
   },
-  {
-    "label": "Chain Ecosystem",
-    "value": "chain-ecosystem",
-    "subMenus": [
-      {
-        "label": "Chain Overview",
-        "value": "chain-overview",
-        "publicUuid": "9e0a1aa1-eeae-4608-b77d-cf23271d92a1",
-      },
-      {
-        "label": "Layer 2 Overview",
-        "value": "layer-2-overview",
-        "publicUuid": "79d8dc98-884b-448f-8d90-7baf3fa91e11",
-      },
-      {
-        "label": "Chain Comparison",
-        "value": "chain-comparison",
-        "publicUuid": "79eaf62d-95ac-4838-b34d-3cfdbdf3fa18",
-      },
-    ],
-  },
-  {
+  /*{
     "label": "Bridge Stats",
     "value": "bridge-stats",
     "subMenus": [
@@ -624,21 +650,21 @@ const chainData = [
         "publicUuid": "e35d6071-5f1d-4c62-8ba9-6c2e41c67c52",
       },
     ],
-  },
+  },*/
   {
     "label": "Featured Dashboards",
     "value": "featured-dashboards",
     "subMenus": [
-      {
+      /*{
         "label": "Harmony Stats",
         "value": "harmony-stats",
         "publicUuid": "280fd659-a3bf-4183-97bf-e6d9be075870",
       },
-      /*{
+      {
         "label": "Solana GameFi Overview",
         "value": "solana-gamefi-overview",
         "publicUuid": "022aa15f-40c7-4dc2-95be-bc498c9114fd",
-      },*/
+      },
       {
         "label": "Polygon Deep Dive",
         "value": "polygon-deep-dive",
@@ -673,6 +699,11 @@ const chainData = [
         "label": "OASYS Stats",
         "value": "oasys-stats",
         "publicUuid": "b9554960-7f9a-4052-ac12-ccb026ff823d",
+      },*/
+      {
+        "label": "Chain Comparison",
+        "value": "chain-comparison",
+        "publicUuid": "79eaf62d-95ac-4838-b34d-3cfdbdf3fa18",
       },
     ],
   },
@@ -731,7 +762,7 @@ const tokenData = [
       },*/
     ],
   },
-  {
+  /*{
     "label": "Stablecoin",
     "value": "stablecoin",
     "subMenus": [
@@ -741,7 +772,7 @@ const tokenData = [
         "publicUuid": "7487deeb-1208-4d9d-95f1-35efb7cd76d5",
       },
     ],
-  },
+  },*/
 ]
 
 const walletData = [
@@ -820,6 +851,31 @@ const walletData = [
   },*/
 ]
 
+const defiData = [
+  {
+    "label": "Single Protocol",
+    "value": "single-protocol",
+    "subMenus": [
+      {
+        "label": "DEX Protocol",
+        "value": "dex-protocol",
+        "publicUuid": "b10579d9-8bf0-4502-87e5-51daf839d837",
+      }
+    ]
+  },
+  {
+    "label": "DEX Overview",
+    "value": "dex-overview",
+    "subMenus": [
+      {
+        "label": "DEX Metrics",
+        "value": "dex-metrics",
+        "publicUuid": "ff96c810-28c0-40a0-87bc-75f6335b9807",
+      }
+    ]
+  }
+]
+
 const customData = {
   partner: [
     {
@@ -883,6 +939,11 @@ const metaObject = {
     description: "Covers all the wallets data you need from industry overview to individual wallets with insightful metrics, such as money flow",
     keywords: "NFT Trades of Wallet, Gamer Profile of Wallet, Money Flow of Wallet",
   },
+  "defi": {
+    title: "Wallet Research | Built by researcher for researchers",
+    description: "Covers all the wallets data you need from industry overview to individual wallets with insightful metrics, such as money flow",
+    keywords: "NFT Trades of Wallet, Gamer Profile of Wallet, Money Flow of Wallet",
+  },
 }
 
 const needRefreshDashboard = [
@@ -907,6 +968,7 @@ const data = {
   "chain": chainData,
   "wallet": walletData,
   "token": tokenData,
+  "defi": defiData,
   "custom": customData,
   "metaObject": metaObject,
   "needRefreshDashboard": needRefreshDashboard,

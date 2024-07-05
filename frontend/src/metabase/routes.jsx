@@ -212,6 +212,15 @@ export const getRoutes = store => (
           <Route path=":menu/:subMenu" />
           <Route path=":menu/:subMenu/:value" />
         </Route>
+        <Route
+          path="defi"
+          component={props => (
+            <LazyLoad.Research {...props} classify="defi" />
+          )}
+        >
+          <Route path=":menu/:subMenu" />
+          <Route path=":menu/:subMenu/:value" />
+        </Route>
       </Route>
 
       <Route path="/dashboards" component={LazyLoad.Dashboards} />
