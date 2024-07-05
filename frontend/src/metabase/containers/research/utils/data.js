@@ -201,7 +201,7 @@ const nftData = [
       },
     ],
   },*/
-  /*{
+  {
     "label": "Themetic analysis",
     "value": "themetic-analysis",
     "subMenus": [
@@ -210,13 +210,13 @@ const nftData = [
         "value": "blur-airdrop",
         "publicUuid": "37c8520e-bd79-4fe1-8667-5c4ab73cf79b",
       },
-      {
+      /*{
         "label": "NFT Airdrop Monitoring",
         "value": "nft-airdrop-monitoring",
         "publicUuid": "d277320d-bd8c-4261-a15d-f1230e0acc40",
-      },
+      },*/
     ],
-  },*/
+  },
 ];
 
 const gamefiData = [
@@ -341,7 +341,7 @@ const gamefiData = [
       },
     ],
   },*/
-  {
+  /*{
     "label": "Themetic analysis",
     "value": "themetic-analysis",
     "subMenus": [
@@ -356,7 +356,7 @@ const gamefiData = [
         "publicUuid": "eb7d6ff7-6c76-4160-ba88-62a42232f86b",
       },
     ],
-  },
+  },*/
   {
     "label": "Featured Dashboards",
     "value": "featured-dashboards",
