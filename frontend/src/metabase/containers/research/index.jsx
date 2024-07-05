@@ -94,11 +94,12 @@ const Index = props => {
           }}
           options={
             [
-              { value: "gamefi", label: "GameFi Research" },
-              { value: "nft", label: "NFT Research" },
+              { value: "gamefi", label: "Games Research" },
               { value: "chain", label: "Chain Research" },
               { value: "token", label: "Token Research" },
               { value: "wallet", label: "Wallet Research" },
+              { value: "defi", label: "DeFi Research" },
+              { value: "nft", label: "NFT Research" },
             ]
           }
         />
