@@ -40,9 +40,9 @@ const Games = () => {
               link: "https://www.footprint.network/article/how-mocaverse-used-data-to-launch-its-metaverse-CrcJLIkf",
             },
             {
-              title: "Footprint Analytics Partners with Pebble to Pioneer Data-Driven Web3 Gaming",
-              img: "https://statichk.footprint.network/article/1b9f8908-0a99-42ae-a10b-1ee11bd3672e.jpeg",
-              link: "https://www.footprint.network/article/footprint-analytics-partners-with-pebble-to-pioneer-data-driven-web3-gaming-vqzsq2DA",
+              title: "Pebble and Footprint Analytics Redefine Blockchain Gaming with Rapid Integration and Strategic Data Solutions",
+              img: "https://statichk.footprint.network/home-v2/img-banner-Pebble-Client-Story.jpg?image_process=resize,w_768/crop,h_432/format,jpg",
+              link: "https://www.footprint.network/article/pebble-and-footprint-analytics-redefine-blockchain-gaming-with-rapid-integration-and-strategic-data-solutions-fp-xyOaOMCi",
             },
             {
               title: "Footprint Analytics X Planet IX : Establishing Strategic Partnerships",
