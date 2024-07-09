@@ -110,7 +110,7 @@ const AboutDataCoverage = () => {
     {
       title: "Core",
       img: getOssUrl("fp-chains/core-chain.png"),
-      link: "/research/chain/chain-stats/core-overview",
+      link: "/research/chain/chain-stats/core-chain-overview",
     },
     {
       title: "Cronos",
