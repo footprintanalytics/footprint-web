@@ -2,7 +2,7 @@
   background: white;
   height: calc(100vh - 60px);
   overflow: auto;
-  padding: 40px 0;
+  padding: 0;
 }
 
 .article-detail .article-recommend {

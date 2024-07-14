@@ -27,6 +27,13 @@ const AboutDataTrusted = () => {
       detail: "It's amazing what Footprint is doing for the blockchain space as a whole. Working with the team to integrate GalaChain to their platform has been an amazing experience!"
     },
     {
+      name: "Ongun Özdemir",
+      desc: "Rootstock",
+      post: "Sr. Venture Associate",
+      img: "home-v2/img_trusted_rootstock.png?1=1",
+      detail: "Footprint analytics has been transformational for many facets of the Rootstock ecosystem. From developers to the largest dApps, we’ve managed to derive actionable insights to grow our community and execute our strategy."
+    },
+    {
       name: "Nilah",
       desc: "SPACE ID",
       post: "Senior Community Manager",

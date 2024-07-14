@@ -3,7 +3,7 @@ import { useQuery } from "react-query";
 import { mediaList, tutorialsMenuDetail } from "metabase/new-service";
 import { QUERY_OPTIONS_ARTICLE } from "metabase/containers/dashboards/shared/config";
 
-export const useMediaList = ({ type, tag, currentPage, sortBy, sortDirection }) => {
+export const useMediaList = ({ type, tag, currentPage, sortBy, sortDirection, pageSize = 10 }) => {
   const [mediaData, setMediaData] = useState([]);
   const [mediaTotal, setMediaTotal] = useState(undefined);
 
@@ -12,11 +12,11 @@ export const useMediaList = ({ type, tag, currentPage, sortBy, sortDirection }) 
       ? {
           menu: "Reports",
           subMenu: "Weekly Reports",
-          pageSize: 10,
+          pageSize: pageSize,
           current: currentPage,
         }
       : {
-          pageSize: type ? 10 : 30,
+          pageSize: pageSize,
           current: currentPage,
           type: tag ? null : type,
           tag,

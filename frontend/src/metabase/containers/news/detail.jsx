@@ -26,6 +26,7 @@ import { IconBack } from "metabase/components/IconBack";
 import TagsPanel from "metabase/query_builder/components/view/TagsPanel";
 import { compose } from "underscore";
 import MetaViewportControls from "metabase/dashboard/hoc/MetaViewportControls";
+import HomeFooter from "metabase/containers/home/components/HomeFooter";
 
 const Detail = props => {
   const {
@@ -208,6 +209,7 @@ const Detail = props => {
 
         {data && <ArticleHot tags={data?.title?.split(" ")} />}
       </div>
+      <HomeFooter />
     </div>
   );
 };
