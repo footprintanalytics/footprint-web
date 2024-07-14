@@ -3,7 +3,7 @@ import React, { useState } from "react";
 import { push } from "react-router-redux";
 import connect from "react-redux/lib/connect/connect";
 import InfiniteScroll from "react-infinite-scroll-component";
-import { Skeleton } from "antd";
+import { Pagination, Skeleton } from "antd";
 import { capitalize } from "lodash";
 import DashboardCardDisplayInfo from "metabase/components/DashboardCardDisplayInfo";
 import { useMediaList } from "metabase/containers/news/use";
@@ -34,7 +34,7 @@ const Articles = props => {
     canShowHot = true,
   } = props;
   const [currentPage, setCurrentPage] = useState(1);
-
+  const pageSize = 15;
   const { mediaData, setMediaData, mediaTotal, isLoading } = useMediaList({
     type: type,
     tag: tag,
@@ -42,21 +42,15 @@ const Articles = props => {
     user,
     sortBy,
     sortDirection,
+    pageSize,
   });
-  const [hasMore, setHasMore] = useState(
-    mediaData && mediaTotal && mediaData.length < mediaTotal,
-  );
   const showHot = !!mediaTotal && mediaTotal > 0 && canShowHot;
-
-  const loadMore = () => {
-    setCurrentPage(currentPage + 1);
-  };
 
   const removeSuccess = mediaInfoId => {
     setMediaData(mediaData.filter(item => item.mediaInfoId !== mediaInfoId));
   };
 
-  if (isLoading && currentPage === 1) {
+  if (isLoading) {
     return (
       <div className="news-articles__container">
         <div style={{ width: "100%", padding: "0 40px" }}>
@@ -75,21 +69,7 @@ const Articles = props => {
       return <NoData title="No Data" />;
     }
     return (
-      <InfiniteScroll
-        className="news-articles__list"
-        scrollableTarget="app-content"
-        dataLength={mediaData.length}
-        next={loadMore}
-        hasMore={hasMore}
-        loader={<h4 className="my2">Loading...</h4>}
-        onScroll={() => {
-          const isActive = location?.pathname === window?.location?.pathname;
-          const canLoadMore = isActive && mediaData.length < mediaTotal;
-          if (canLoadMore !== hasMore) {
-            setHasMore(canLoadMore);
-          }
-        }}
-      >
+      <div>
         {mediaData.map(item => {
           const isCreator = user && item && user.id === item.creator.id;
           const isMarket = user && user.isMarket;
@@ -159,7 +139,18 @@ const Articles = props => {
             </article>
           );
         })}
-      </InfiniteScroll>
+        <Pagination
+          style={{ textAlign: "right", marginTop: 40 }}
+          defaultCurrent={currentPage}
+          total={mediaTotal}
+          pageSize={pageSize}
+          onChange={(page, pageSize) => {
+            const element = document.getElementById("app-content"); // 获取元素
+            element.scrollTo(0, 0);
+            setCurrentPage(page)
+          }
+        }/>
+      </div>
     );
   };
 
