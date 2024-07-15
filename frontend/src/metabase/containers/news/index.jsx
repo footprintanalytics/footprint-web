@@ -13,6 +13,7 @@ import { loginModalShowAction } from "metabase/redux/control";
 import { compose } from "underscore";
 import MetaViewportControls from "metabase/dashboard/hoc/MetaViewportControls";
 import Link from "metabase/core/components/Link";
+import HomeFooter from "metabase/containers/home/components/HomeFooter";
 
 const News = props => {
   const {
@@ -102,6 +103,7 @@ const News = props => {
       <div className="news__wrap">
         <div className="news__body">{children}</div>
       </div>
+      <HomeFooter />
       {modal && (
         <SubscribeModal
           onClose={() => {
