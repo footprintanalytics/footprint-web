@@ -1,5 +1,4 @@
 .news {
-  padding-bottom: 30px;
   min-height: 100vh;
   background: white;
 }
@@ -25,6 +24,7 @@
 
 .news__wrap {
   padding-top: 60px;
+  padding-bottom: 30px;
 }
 
 .news__body {
