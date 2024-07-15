@@ -144,6 +144,7 @@ const Articles = props => {
           defaultCurrent={currentPage}
           total={mediaTotal}
           pageSize={pageSize}
+          showSizeChanger={false}
           onChange={(page, pageSize) => {
             const element = document.getElementById("app-content"); // 获取元素
             element.scrollTo(0, 0);
