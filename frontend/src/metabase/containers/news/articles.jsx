@@ -59,7 +59,7 @@ const Articles = props => {
       </div>
     );
   }
-
+  console.log("mediaData", mediaData.length)
   const renderList = () => {
     if (mediaTotal === undefined) {
       return <Skeleton active />;
