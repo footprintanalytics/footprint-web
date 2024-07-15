@@ -45,7 +45,8 @@ export const useMediaList = ({ type, tag, currentPage, sortBy, sortDirection, pa
   useEffect(() => {
     if (data) {
       const res = data;
-      setMediaData(value => [...value, ...res.data]);
+      // setMediaData(value => [...value, ...res.data]);
+      setMediaData(value => [...res.data]);
       setMediaTotal(res.total);
     }
   }, [data]);
