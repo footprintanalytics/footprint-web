@@ -434,12 +434,14 @@ export const fga_menu_data_v2 = (businessType, project, chain, user) => {
           getItem("Discord", "discord", null),
           getItem("Telegram", "telegram", null),
           getItem("Twitter", "twitter", null),
+          getItem("Community Keyword Alert", "alert", null),
         ]),
         getItem("Funding", "funding", ReactIcons.growthIcon, [
           getItem("Announcement", "new-fundraising-announcement", null),
         ]),
         getItem("News Feed", "news-feed", ReactIcons.trendingIcon14, [
           getItem("Announcement", "news-feeds-keyword", null),
+          getItem("CEXs Listing", "cexs-listing", null),
         ]),
       ],
       menuTitle: "Portfolio",

@@ -4,7 +4,7 @@ import { connect } from "react-redux";
 import { getFgaProject, getUser } from "metabase/selectors/user";
 import GaSidebar from "metabase/ab/components/GaSidebar";
 import { Content } from "antd/lib/layout/layout";
-import { Layout } from "antd";
+import { Image, Layout, Result } from "antd";
 import { fga_menu_data_v2, getDashboardMap } from "metabase/ab/utils/data";
 import PublicDashboard from "metabase/public/containers/PublicDashboard";
 
@@ -31,17 +31,45 @@ const VcIndex = props => {
         }}
       />
       <Content
-        className="h-full ga-layout__content"
+        className="h-full ga-layout__content flex justify-center"
         // style={{ marginLeft: props.isChart ? 0 : 250 }}
       >
-        <PublicDashboard
+        {uuid && <PublicDashboard
           params={{ uuid }}
           location={location}
           router={router}
           isFullscreen={false}
           hideTitle={true}
           hideFooter
+        />}
+        {!uuid && <Result
+          style={{
+            margin: 0,
+            width: "50%",
+            minWidth: 400,
+            maxWidth: 600,
+          }}
+          icon={
+            <Image
+              preview={false}
+              style={{
+                height: "50%",
+                width: "50%",
+                minHeight: 30,
+                minWidth: 50,
+                maxHeight: 500,
+                maxWidth: 550,
+              }}
+              src={
+                "https://footprint-imgs.oss-us-east-1.aliyuncs.com/no-data01.svg"
+              }
+            />
+          }
+          // title="There is currently no data available for this project."
+          // subTitle={`I'm sorry, the content for this ${page} page is not yet ready. You can visit our homepage for now and stay tuned for more high-quality content coming soon. We appreciate your patience.`}
+          title="Coming Soon~"
         />
+        }
       </Content>
     </Layout>
   );
