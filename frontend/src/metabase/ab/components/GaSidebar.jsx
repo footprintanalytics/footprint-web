@@ -9,7 +9,13 @@ import LoadingSpinner from "metabase/components/LoadingSpinner";
 import Link from "metabase/core/components/Link";
 import { getChainDataList } from "metabase/query_builder/components/question/handle";
 import { fga_menu_data_v2 } from "../utils/data";
-import { getGrowthProjectPath, getLatestGAProject, isBusinessTypePath, saveLatestGAMenuTag } from "../utils/utils";
+import {
+  getGrowthProjectPath,
+  getLatestGAProject,
+  isABPath,
+  isBusinessTypePath,
+  saveLatestGAMenuTag,
+} from "../utils/utils";
 import { getFgaChain } from "../../selectors/control";
 import { resetFgaProtocolList, setFgaChain } from "../../redux/control";
 import { getOssUrl } from "metabase/lib/image";
@@ -28,14 +34,17 @@ const GaSidebar = (props) => {
     setFgaChain,
     chain,
     resetFgaProtocolList,
+    selectCallback,
   } = props;
   const [openKeys, setOpenKeys] = useState([currentMenu]);
+
   const menuData = fga_menu_data_v2(businessType, projectObject, chain, user);
   const menuTitle = menuData?.menuTitle;
   const platformMenuTitle = menuData?.platformMenuTitle;
   const items = menuData?.menuTabs || [];
   const itemsPlatform = menuData?.platformMenuTabs || [];
   const totalItems = [...items, ...itemsPlatform].filter(Boolean);
+  const showPlatform = isABPath()
 
   useEffect(() => {
     if (currentMenu && totalItems?.length > 0) {
@@ -105,38 +114,42 @@ const GaSidebar = (props) => {
       <div style={{ display: "relative", height: "100%" }}>
         {items?.length > 0 ? (
           <div className="flex flex-column ">
-            <div className="ga-side-bar__title">
-              <h3>{platformMenuTitle}</h3>
-            </div>
-            <Menu
-              key={chain}
-              className="ga-side-bar-menu"
-              style={{
-                borderRight: "0px",
-                width: "100%",
-                flex: 1,
-              }}
-              theme="light"
-              mode="inline"
-              openKeys={openKeys}
-              onOpenChange={onOpenChange}
-              selectedKeys={[currentMenu]}
-              onSelect={item => {
-                saveLatestGAMenuTag(item.key);
-                router.push({
-                  pathname: getGrowthProjectPath(
-                    currentProject ?? getLatestGAProject() ?? "",
-                    item.key,
-                  ),
-                });
-              }}
-              items={itemsPlatform}
-            />
-            <div className="ga__line mt1" />
-
-            <div className="ga-side-bar__title">
+            {showPlatform &&<>
+              {platformMenuTitle && <div className="ga-side-bar__title">
+                <h3>{platformMenuTitle}</h3>
+              </div>
+              }
+              <Menu
+                key={chain}
+                className="ga-side-bar-menu"
+                style={{
+                  borderRight: "0px",
+                  width: "100%",
+                  flex: 1,
+                }}
+                theme="light"
+                mode="inline"
+                openKeys={openKeys}
+                onOpenChange={onOpenChange}
+                selectedKeys={[currentMenu]}
+                onSelect={item => {
+                  saveLatestGAMenuTag(item.key);
+                  router.push({
+                    pathname: getGrowthProjectPath(
+                      currentProject ?? getLatestGAProject() ?? "",
+                      item.key,
+                    ),
+                  });
+                }}
+                items={itemsPlatform}
+              />
+              <div className="ga__line mt1" />
+            </>
+            }
+            {menuTitle && <div className="ga-side-bar__title">
               <h3>{menuTitle}</h3>
             </div>
+            }
             <Menu
               style={{
                 borderRight: "0px",
@@ -151,12 +164,16 @@ const GaSidebar = (props) => {
               selectedKeys={[currentMenu]}
               onSelect={item => {
                 saveLatestGAMenuTag(item.key);
-                router.push({
-                  pathname: getGrowthProjectPath(
-                    currentProject ?? getLatestGAProject() ?? "",
-                    item.key,
-                  ),
-                });
+                if (isABPath()) {
+                  router.push({
+                    pathname: getGrowthProjectPath(
+                      currentProject ?? getLatestGAProject() ?? "",
+                      item.key,
+                    ),
+                  });
+                } else {
+                  selectCallback?.(item)
+                }
               }}
               items={items}
             />
@@ -164,12 +181,13 @@ const GaSidebar = (props) => {
         ) : (
           <LoadingSpinner message="Loading..." />
         )}
-        <div
+        {isABPath() && <div
           className="ga-side-bar__bottom-panel"
         >
           <div>Beta v0.1.2</div>
           <div>Powered by <img style={{marginRight:2, height: 16, width: 16}} src={getOssUrl("/logo80.png?1=1&image_process=resize,w_16/crop,h_16/format,png")}/><Link to={"/"}>Footprint Analytics</Link></div>
         </div>
+        }
       </div>
     </Sider>
   );
@@ -180,8 +198,8 @@ const mapStateToProps = (state, props) => {
     user: getUser(state),
     projectObject: getFgaProject(state),
     currentProject: props.params.project,
-    currentMenu: props.params.menu,
-    businessType: props.params.businessType,
+    currentMenu: props.currentMenu || props.params.menu,
+    businessType: props.businessType || props.params.businessType,
     chain: getFgaChain(state),
   };
 };

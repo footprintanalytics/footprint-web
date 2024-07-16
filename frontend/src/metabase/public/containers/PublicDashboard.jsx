@@ -48,7 +48,7 @@ import QueryCopyModal from "metabase/components/QueryCopyModal";
 import { getUser } from "metabase/selectors/user";
 import { getSqlAndJumpToDoc, replaceTemplateCardUrl } from "metabase/guest/utils";
 import { trackStructEvent } from "metabase/lib/analytics";
-import { isABPath, isBusinessTypePath } from "metabase/ab/utils/utils";
+import { isABPath, isBusinessTypePath, isFGAVCPath } from "metabase/ab/utils/utils";
 import { refreshCurrentUser } from "metabase/redux/user";
 import Link from "metabase/core/components/Link";
 
@@ -731,8 +731,8 @@ class PublicDashboard extends Component {
           buttons.length > 0 && <div className="flex">{buttons}</div>
         }
         isNightMode={shouldRenderAsNightMode}
-        hideFooter={hideFooter || isFgaPath() || isABPath()}
-        className={cx(className, (isFgaPath() || isABPath()) && "ml-250 mt-60")}
+        hideFooter={hideFooter || isFgaPath() || isABPath() || isFGAVCPath()}
+        className={cx(className, (isFgaPath() || isABPath() || isFGAVCPath()) && "ml-250 mt-60")}
         innerClassName={cx(innerClassName)}
         allLoadOuter={allLoadOuter}
       >
@@ -753,7 +753,7 @@ class PublicDashboard extends Component {
                 mode={PublicMode}
                 metadata={this.props.metadata}
                 navigateToNewCardFromDashboard={() => {}}
-                hideWatermark={isABPath() || (dashboard && dashboard.hideWatermark)}
+                hideWatermark={isABPath() || isFGAVCPath() || (dashboard && dashboard.hideWatermark)}
                 chartStyle={chart_style}
                 isNightMode={shouldRenderAsNightMode}
                 duplicateAction={this.duplicateAction}

@@ -146,8 +146,8 @@
   overflow: auto;
   height: 100%;
   position: fixed;
-  background: #1B1B1E;
-  border-right: 1px solid #ffffff20;
+  background: #1B1B1E !important;;
+  border-right: 1px solid #38383A
 }
 
 .project-list-table-loading .LoadingSpinner {

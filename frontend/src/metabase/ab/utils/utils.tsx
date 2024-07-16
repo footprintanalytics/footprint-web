@@ -289,6 +289,10 @@ export function isABPath(){
   return location.pathname.startsWith("/fga");
 }
 
+export function isFGAVCPath(){
+  return location.pathname.startsWith("/portfolio-fga");
+}
+
 export function isBusinessTypePath(businessType: string){
   return location.pathname.startsWith(`/fga/${businessType}`);
 }

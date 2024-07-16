@@ -51,7 +51,7 @@ import { getRealtimeList } from "metabase/selectors/config";
 import QueryStatusButton from "metabase/query_builder/components/QueryStatusButton";
 import QueryRefreshButton from "metabase/query_builder/components/QueryRefreshButton";
 import { isFgaPath } from "metabase/growth/utils/utils";
-import { isABPath } from "metabase/ab/utils/utils";
+import { isABPath, isFGAVCPath } from "metabase/ab/utils/utils";
 import { IFRAMED_IN_SELF } from "metabase/lib/dom";
 
 const DATASET_USUALLY_FAST_THRESHOLD = 15 * 1000;
@@ -325,7 +325,7 @@ class DashCard extends Component {
     //   mainCard.display === "text" ||
     //   mainCard.display === "image" ||
     //   mainCard.display === "video";
-    const showEdit = isOwner && !!dashcard.card.id && !isABPath();
+    const showEdit = isOwner && !!dashcard.card.id && !isABPath() && !isFGAVCPath();
     const isPublic = window.location.pathname.startsWith("/public")
       || isFgaPath()
       || window.location.pathname.startsWith("/data-api/statistics")
@@ -348,11 +348,11 @@ class DashCard extends Component {
 
     const singleDisplay = isTextDisplay || isImageDisplay || isVideoDisplay || isEmbedDisplay || isMultiEmbedDisplay || isTableauDisplay;
 
-    const hideDuplicate = singleDisplay || isPublic || isABPath();
+    const hideDuplicate = singleDisplay || isPublic || isABPath() || isFGAVCPath();
 
     const hideWatermark = clearWatermark || singleDisplay;
 
-    const showPreview = !isABPath() && !isPublic && !showEdit && !singleDisplay;
+    const showPreview = !isABPath() && !isFGAVCPath() && !isPublic && !showEdit && !singleDisplay;
 
     const showGetDataViaSqlApi = showEdit || showPreview || isIframeShow;
     const showDownload = showEdit || showPreview || isIframeShow;
@@ -387,7 +387,7 @@ class DashCard extends Component {
       && includeRealtimeTable
       && isRealtimeUser;
     const isGrowth = isFgaPath();
-    const isAB = isABPath();
+    const isAB = isABPath() || isFGAVCPath();
     const showButtons = !isGrowth || !isAB;
     return (
       <DashCardRoot

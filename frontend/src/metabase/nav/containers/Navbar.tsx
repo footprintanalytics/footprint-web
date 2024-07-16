@@ -43,11 +43,15 @@ function Navbar({ isOpen, user, location, params, adminPaths }: NavbarProps) {
     return location.pathname.startsWith("/fga");
   }, [location.pathname]);
 
+  const isFGAVCApp = useMemo(() => {
+    return location.pathname.startsWith("/portfolio-fga");
+  }, [location.pathname]);
+
   if (isAdminApp && user) {
     return <AdminNavbar user={user} path={location.pathname} adminPaths={adminPaths} />;
   }
 
-  if (isABApp) {
+  if (isABApp || isFGAVCApp) {
     return <ABNavbar isOpen={isOpen} location={location} params={params} />;
   }
 
