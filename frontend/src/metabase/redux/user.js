@@ -53,6 +53,12 @@ export const refreshCurrentUser = createAction(
             disabled: ["refreshCache"].includes(res.name),
           });
         }
+        if (window.fgaSDK) {
+          window.fgaSDK.setUserProperties({
+            userId: res.id,
+            userName: res.name,
+          })
+        }
       }
       return res;
     } catch (e) {
