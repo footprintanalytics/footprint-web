@@ -405,6 +405,46 @@ const getLabel = ({label, tip}) => {
 }
 
 export const fga_menu_data_v2 = (businessType, project, chain, user) => {
+  if (businessType === "vc") {
+    return {
+      dashboardMap: new Map([
+        ["defi_ranking", "1188d812-d694-4351-890b-96ca1f3cbca9"],
+        ["single-defi-project", "ca452892-cbe6-4db9-8e0d-e44d808ee7ab"],
+        ["gamefi-ranking", "55ddecea-1340-42ef-a9ef-b58e0fbcd72a"],
+        ["single-gamefi-project", "3ffa94a9-f511-41e7-966a-028fdb50c1ee"],
+        ["discord", "0d6f82b3-21cf-4b9c-9766-775454b8d7d2"],
+        ["telegram", "5aa8809b-296f-4ac9-b7c1-4a713abed1df"],
+        ["twitter", "2ed49a96-9786-4027-9b51-c807d69f993b"],
+        ["news", "6a14842a-e8c3-4401-8373-080d7c90c15d"],
+        ["news-feeds-keyword", "6a14842a-e8c3-4401-8373-080d7c90c15d"],
+        ["new-fundraising-announcement", "34f216ff-4a2a-443f-9225-8ff91a8e4b75"],
+        ]
+      ),
+      menuTabs: [
+        getItem("DeFi", "defi", ReactIcons.assetIcon, [
+          // project?.nftCollectionAddress?.length > 0 &&
+          getItem("Ranking", "defi_ranking", null),
+          getItem("Single Project", "single-defi-project", null),
+        ]),
+        getItem("Gaming", "gaming", ReactIcons.myAnalysisIcon, [
+          getItem("Ranking", "gamefi-ranking", null),
+          getItem("Single Project", "single-gamefi-project", null),
+        ]),
+        getItem("Community", "community", ReactIcons.userIcon, [
+          getItem("Discord", "discord", null),
+          getItem("Telegram", "telegram", null),
+          getItem("Twitter", "twitter", null),
+        ]),
+        getItem("Funding", "funding", ReactIcons.growthIcon, [
+          getItem("Announcement", "new-fundraising-announcement", null),
+        ]),
+        getItem("News Feed", "news-feed", ReactIcons.trendingIcon14, [
+          getItem("Announcement", "news-feeds-keyword", null),
+        ]),
+      ],
+      menuTitle: "Portfolio",
+    }
+  }
   const dashboardMap = getDashboardMap(project, chain);
 
   const gameProjectData = {

@@ -109,11 +109,15 @@ class ABNavbar extends Component {
   }
 
   componentDidUpdate() {
-    this.handleRouter();
+    if (isABPath()) {
+      this.handleRouter();
+    }
   }
 
   componentDidMount() {
-    this.handleRouter();
+    if (isABPath()) {
+      this.handleRouter();
+    }
   }
 
   isActive(path) {
@@ -454,6 +458,7 @@ class ABNavbar extends Component {
         </div>
       );
     };
+    const showSearch = window.location.pathname.startsWith("/fga")
 // className={ "dark"}
     return (
       <div className="fga-Nav" style={{ display: rootDisplay,backgroundColor:'#1B1B1E' }}>
@@ -479,13 +484,14 @@ class ABNavbar extends Component {
         <React.Fragment>
           {/*<div className="flex justify-start" style={{ paddingLeft: 30, fontSize: 20, color: "#FFFFFF" }}>{`👏 Welcome`}</div>*/}
           <div className="Nav__search-bar" style={{ width: "100%", justifyContent: "center" }}>
-            <GaProjectSearch
+            {showSearch && (<GaProjectSearch
               location={location}
               logout={this.props.logout}
               setCreateFgaProjectModalShowAction={
                 setCreateFgaProjectModalShowAction
               }
-            ></GaProjectSearch>
+            />
+            )}
             {/*<Button
               className="ml1"
               onClick={() => {

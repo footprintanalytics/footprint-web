@@ -10,6 +10,7 @@ import { trackStructEvent } from "metabase/lib/analytics";
 import Link from "metabase/core/components/Link";
 import { deviceInfo } from "metabase-lib/lib/Device";
 import { socialData } from "metabase/components/GlobalContactPanel/data";
+import { isFGAVCPath } from "metabase/ab/utils/utils";
 
 const Index = () => {
   const [mouseOver, setMouseOver] = useState(false);
@@ -28,6 +29,7 @@ const Index = () => {
     && !deviceInfo.isMobile
     && !isGrowth
     && !isAB
+    && !isFGAVCPath()
     && !isMyStudio
     && !isResearch;
   const showHelpButtonPanel = false;
