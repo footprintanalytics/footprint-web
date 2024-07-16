@@ -1,4 +1,4 @@
-import React, { ErrorInfo, ReactNode, useState } from "react";
+import React, { ErrorInfo, ReactNode, useState, useEffect } from "react";
 import { connect } from "react-redux";
 import { Location } from "history";
 import Meta from "metabase/components/Meta";

@@ -13,6 +13,7 @@ import api from "metabase/lib/api";
 
 import { setErrorPage } from "metabase/redux/app";
 import { clearCurrentUser } from "metabase/redux/user";
+import "./lib/fgasdk.js"
 
 // If any of these receives a 403, we should display the "not authorized" page.
 const NOT_AUTHORIZED_TRIGGERS = [
