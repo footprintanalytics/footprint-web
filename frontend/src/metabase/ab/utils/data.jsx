@@ -418,6 +418,7 @@ export const fga_menu_data_v2 = (businessType, project, chain, user) => {
         ["news", "6a14842a-e8c3-4401-8373-080d7c90c15d"],
         ["news-feeds-keyword", "6a14842a-e8c3-4401-8373-080d7c90c15d"],
         ["new-fundraising-announcement", "34f216ff-4a2a-443f-9225-8ff91a8e4b75"],
+        ["alert", "442f3e03-48a5-4477-b1db-8dd71cd4c0cc"],
         ]
       ),
       menuTabs: [
