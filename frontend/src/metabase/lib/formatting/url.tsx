@@ -40,7 +40,7 @@ export function formatUrl(value: string, options: OptionsType = {}) {
     const targetObject = IFRAMED ? { target: "_blank" } : {};
     let formatedURL = formatUrl2Growth(location?.pathname, url);
     formatedURL = formatUrl2AB(location?.pathname, formatedURL);
-    if (formatedURL.startsWith("/fga")) {
+    if (formatedURL.startsWith("/fga") || formatedURL.startsWith('/portfolio-fga')) {
       return (
         <Link
           to={formatedURL}
