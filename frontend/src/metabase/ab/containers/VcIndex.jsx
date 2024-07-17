@@ -1,5 +1,5 @@
 /* eslint-disable react/prop-types */
-import React, {useState} from "react";
+import React, {useState, useEffect} from "react";
 import { connect } from "react-redux";
 import { getFgaProject, getUser } from "metabase/selectors/user";
 import GaSidebar from "metabase/ab/components/GaSidebar";
@@ -7,14 +7,24 @@ import { Content } from "antd/lib/layout/layout";
 import { Image, Layout, Result } from "antd";
 import { fga_menu_data_v2, getDashboardMap } from "metabase/ab/utils/data";
 import PublicDashboard from "metabase/public/containers/PublicDashboard";
+import { push } from "react-router-redux";
 
 const VcIndex = props => {
-  const { router, location, children, user,  } =
+  const { router, location, currentMenu, user, onChangeLocation } =
     props;
   const data = fga_menu_data_v2("vc", null, null, user)
   const [uuid, setUuid] = useState("1188d812-d694-4351-890b-96ca1f3cbca9");
   const [menu, setMenu] = useState("defi_ranking");
   const dashboardMapping = data.dashboardMap;
+  useEffect(() => {
+    if (currentMenu) {
+      setUuid(dashboardMapping.get(currentMenu))
+      setMenu(currentMenu)
+    } else {
+      setUuid("1188d812-d694-4351-890b-96ca1f3cbca9")
+      setMenu("defi_ranking")
+    }
+  }, [currentMenu, dashboardMapping]);
   return (
     <Layout
       hasSider
@@ -25,9 +35,7 @@ const VcIndex = props => {
         businessType="vc"
         currentMenu={menu}
         selectCallback={(data) => {
-          setUuid(dashboardMapping.get(data.key))
-          setMenu(data.key)
-          console.log("data", data)
+          onChangeLocation(`/portfolio-fga/${data.key}`)
         }}
       />
       <Content
@@ -79,7 +87,10 @@ const mapStateToProps = (state, props) => {
   return {
     user: getUser(state),
     projectPath: props.params.project,
+    currentMenu: props.params.menu,
   };
 };
-
-export default connect(mapStateToProps)(VcIndex);
+const mapDispatchToProps = {
+  onChangeLocation: push,
+};
+export default connect(mapStateToProps, mapDispatchToProps)(VcIndex);
