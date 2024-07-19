@@ -20676,10 +20676,10 @@ fflate@^0.7.4:
   resolved "https://registry.npmjs.org/fflate/-/fflate-0.7.4.tgz"
   integrity sha512-5u2V/CDW15QM1XbbgS+0DfPxVB+jUKhWEKuuFuHncbk3tEEqzmoXL+2KyOFuKGqOnmdIy0/davWF1CkuwtibCw==
 
-fga-sdk-web@^1.1.3:
-  version "1.1.3"
-  resolved "https://registry.yarnpkg.com/fga-sdk-web/-/fga-sdk-web-1.1.3.tgz#a99d7f86b4c0376ecf626969065c563d02c6d1c8"
-  integrity sha512-xKWmfxUvWLnkCZ65990RT0F+kBtlkLoDkVhWda8FAln7Act+gDUijrEGXe4woj3YuNz22HaDQMbEQHN96+2mjA==
+fga-sdk-web@^1.1.7:
+  version "1.1.7"
+  resolved "https://registry.yarnpkg.com/fga-sdk-web/-/fga-sdk-web-1.1.7.tgz#a6f38f997f8f3cfc90414a34f89364f75f9b2324"
+  integrity sha512-/EaXPO8rVFVmTPORVC845EhWM0WtuEcrkbuwR/zttj7PeA3PDheZXloCIhgyJH5ABJLBV5FJAbH92J7JsvOY/Q==
   dependencies:
     fga-sdk "^0.1.2"
     uuid "^10.0.0"
