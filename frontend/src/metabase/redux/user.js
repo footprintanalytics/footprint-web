@@ -53,10 +53,12 @@ export const refreshCurrentUser = createAction(
             disabled: ["refreshCache"].includes(res.name),
           });
         }
+        const fistLogin = res?.first_login ? Math.floor(new Date(res.first_login).getTime() / 1000) : Math.floor(new Date() / 1000)
         if (window.fgaSDK) {
           window.fgaSDK.setUserProperties({
             userId: res.id,
             userName: res.name,
+            signUpAt: fistLogin,
           })
         }
       }
