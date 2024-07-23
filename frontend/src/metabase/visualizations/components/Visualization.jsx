@@ -610,7 +610,7 @@ class Visualization extends React.PureComponent {
           </div>
         )
       }
-      if (isFga && error.indexOf("iceberg.footprint.") && error.indexOf("_address_nft_latest_balance") && error.indexOf("does not exist")) {
+      if (isFga && _.isString(error) && error.indexOf("iceberg.footprint.") && error.indexOf("_address_nft_latest_balance") && error.indexOf("does not exist")) {
         return (
           <div className="noResults">
             The data is not yet available, please
@@ -623,9 +623,19 @@ class Visualization extends React.PureComponent {
           </div>
         );
       }
+      let errorText = "";
+      if (_.isString(error)) {
+        errorText = error;
+      } else if (_.isObject(error)) {
+        if (error?.status === 431) {
+          errorText = "Request Header Fields Too Large";
+        } else {
+          errorText = error?.message || JSON.stringify(error);
+        }
+      }
       return (
         <>
-          <Tooltip tooltip={error?.message || error} isEnabled={small}>
+          <Tooltip tooltip={errorText} isEnabled={small}>
             <Icon
               className="mb2"
               name={errorIcon || "warning"}
@@ -645,7 +655,7 @@ class Visualization extends React.PureComponent {
                   margin: "0 auto",
                 }}
               >
-                {error?.message || error}
+                {errorText}
               </div>
               {errorIcon !== "key" && <ErrorGuide cardId={cardId} />}
             </div>
