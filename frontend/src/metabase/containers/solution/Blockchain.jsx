@@ -37,6 +37,11 @@ const Blockchain = () => {
         <BatchDownloadData practices={
           [
             {
+              title: "Footprint Analytics Joins Forces with Core Chain to Elevate Blockchain Infrastructure and Innovation",
+              img: "https://statichk.footprint.network/home-v2/FootprintCORE.jpg",
+              link: "https://www.footprint.network/article/footprint-analytics-boosts-core-s-data-efficiency-in-the-bitcoin-ecosystem-fp-WUQqSVqU",
+            },
+            {
               title: "Footprint Analytics Integrates Data Solutions on Ronin Network",
               img: "https://statichk.footprint.network/article/50e53359-6bd9-4793-8c64-9610056c421f.png",
               link: "https://www.footprint.network/article/footprint-analytics-integrates-data-solutions-on-ronin-network-KgAq6WGF",
@@ -45,11 +50,6 @@ const Blockchain = () => {
               title: "Forging a More Transparent Bitcoin Ecosystem Powered by Data",
               img: getOssUrl("solution/img-merlin-article-1.jpeg"),
               link: "https://x.com/Footprint_Data/status/1795787071380238831",
-            },
-            {
-              title: "Footprint Analytics Joins Forces with Core Chain to Elevate Blockchain Infrastructure and Innovation",
-              img: "https://statichk.footprint.network/article/435e8363-367f-49fe-8885-cb1d49752186.jpeg",
-              link: "https://www.footprint.network/article/footprint-analytics-joins-forces-with-core-chain-to-elevate-blockchain-infrastructure-and-innovation-3FhfKU85",
             },
           ]
         }/>
