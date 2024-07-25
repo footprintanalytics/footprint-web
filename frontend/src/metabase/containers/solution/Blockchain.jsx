@@ -37,7 +37,7 @@ const Blockchain = () => {
         <BatchDownloadData practices={
           [
             {
-              title: "Footprint Analytics Joins Forces with Core Chain to Elevate Blockchain Infrastructure and Innovation",
+              title: "Footprint Analytics Boosts Core’s Data Efficiency in the Bitcoin Ecosystem",
               img: "https://statichk.footprint.network/home-v2/FootprintCORE.jpg",
               link: "https://www.footprint.network/article/footprint-analytics-boosts-core-s-data-efficiency-in-the-bitcoin-ecosystem-fp-WUQqSVqU",
             },
