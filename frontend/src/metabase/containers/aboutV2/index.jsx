@@ -22,7 +22,8 @@ import AboutStart from "./components/AboutStart";
 import AboutBanner from "./components/AboutBanner";
 import AboutSolutions from "./components/AboutSolutions";
 import AboutGrantedBy from "./components/AboutGrantedBy";
-
+// import { TaskList, Community } from '@pea-ai/growth-sdk'
+// import '@pea-ai/growth-sdk/dist/style.css'
 const About = props => {
   const {
     children,
@@ -33,43 +34,19 @@ const About = props => {
   const keywords = "Footprint Analytics, Web3 AI, blockchain AI, reference data, wallet profile, money flow, Web3 metadata, Protocol graph, blockchain data, crypto data provider, Web3 data solution, web3 gaming, web3 gaming analytics, web3 gaming data, NFT game, Web3 marketing, web3 growth marketing, Growth Marketing, cross chain data, blockchain data api, Zero coding analytics";
   const title = "Footprint Analytics | Web3 Data Solution Provider with AI Technology. ";
 
-  const LazyLoadAbout = ({ children }) => {
-    return (
-      <LazyLoad
-        className="full-height"
-        scrollContainer="#app-content"
-        placeholder={
-          <div style={{ padding: 20 }}>
-            <Skeleton active />
-          </div>
-        }
-      >
-        {children}
-      </LazyLoad>
-    );
-  };
+  const values = {
+    questId: '66a2427aefe7f900111f0a74',
+    token: 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI2Njc1NDhkYzlmYTNkMDAwMTE1NWI3NDEiLCJpYXQiOjE3MjE4OTI2MjIsImV4cCI6MTcyNDQ4NDYyMn0.7fv0mh3Lfv6utnMFwV9KAyaAvLK54QpsKsT9cM5HCZo',
+    theme: 'dark',
+    handle: 'bevm',
+  }
 
   return (
     <>
       <Meta description={defaultDesc} keywords={keywords} title={title} link={"https://www.footprint.network/"}/>
       <div className="About">
-        <AboutStart />
-        <AboutPartnerV2 list={data.partnerList} />
-        <AboutBanner />
-        <AboutSolutions />
-        {/*<AboutDepth />*/}
-        <AboutDemo />
-        <AboutDataCoverage />
-        <LazyLoadAbout>
-          <AboutDataFeature />
-        </LazyLoadAbout>
-        <AboutDataModel />
-        <AboutDataTrusted />
-        <AboutBacked list={data.backedList} />
-        <AboutGrantedBy />
-        <div className="About__depth-dividing-line-gray" />
-        <HomeFooter />
-        {children}
+        {/*<TaskList questId={values.questId} token={values.token} theme={values.theme} />*/}
+        {/*<Community handle={values.handle} theme={values.theme} />*/}
       </div>
     </>
   );

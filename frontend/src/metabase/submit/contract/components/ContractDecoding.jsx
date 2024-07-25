@@ -5,7 +5,7 @@ import { Button, Card, message, Typography } from "antd";
 import lottie from "lottie-web/build/player/lottie_svg";
 import dayjs from "dayjs";
 import { animation_complete2, data_scanning } from "./data-scanning";
-import "animate.css";
+// import "animate.css";
 import { getRefBaseApi, submitFGAProtocols, submitRefProtocols } from "metabase/new-service";
 import { isDark } from "metabase/dashboard/components/utils/dark";
 import Link from "metabase/core/components/Link";

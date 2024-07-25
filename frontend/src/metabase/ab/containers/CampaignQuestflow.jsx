@@ -3,7 +3,7 @@ import React, { useEffect, useState } from "react";
 import { Modal } from "antd";
 import { connect } from "react-redux";
 import { useQuery } from "react-query";
-import Canvas from "@questflow/canvas";
+// import Canvas from "@questflow/canvas";
 import { QUERY_OPTIONS } from "metabase/containers/dashboards/shared/config";
 import { loginQuestflow, createQuestflowCampaign } from "metabase/new-service";
 import { getUser, getFgaProject } from "metabase/selectors/user";
@@ -149,7 +149,7 @@ const CampaignQuestflow = props => {
       <div className="flex flex-column items-center w-full h-full">
         {data?.idToken && (
           <div className="w-full h-full">
-            <Canvas
+            {/*<Canvas
               flowName={"Footprint Growth Analytics Email Flow"}
               flowDescription={"Footprint Growth Analytics Email Flow"}
               theme="dark"
@@ -163,7 +163,7 @@ const CampaignQuestflow = props => {
               }}
               showSave={false}
               showPublish={true}
-            />
+            />*/}
           </div>
         )}
       </div>
