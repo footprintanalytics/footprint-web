@@ -22,8 +22,8 @@ import AboutStart from "./components/AboutStart";
 import AboutBanner from "./components/AboutBanner";
 import AboutSolutions from "./components/AboutSolutions";
 import AboutGrantedBy from "./components/AboutGrantedBy";
-// import { TaskList, Community } from '@pea-ai/growth-sdk'
-// import '@pea-ai/growth-sdk/dist/style.css'
+import { TaskList, Community } from '@pea-ai/growth-sdk'
+import '@pea-ai/growth-sdk/dist/style.css'
 const About = props => {
   const {
     children,
@@ -45,8 +45,8 @@ const About = props => {
     <>
       <Meta description={defaultDesc} keywords={keywords} title={title} link={"https://www.footprint.network/"}/>
       <div className="About">
-        {/*<TaskList questId={values.questId} token={values.token} theme={values.theme} />*/}
-        {/*<Community handle={values.handle} theme={values.theme} />*/}
+        <TaskList questId={values.questId} token={values.token} theme={values.theme} />
+        <Community handle={values.handle} theme={values.theme} />
       </div>
     </>
   );
