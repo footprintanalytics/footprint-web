@@ -389,7 +389,7 @@ const gamefiData = [
       {
         "label": "Axie Infinity",
         "value": "axie-infinity",
-        "publicUuid": "f574f7f2-07cd-4cd7-91b7-4b95e29f523f",
+        "publicUuid": "93405c28-9073-430a-ac9f-6a038752d866",
       },
       /*{
         "label": "Walken Data Overview",
@@ -809,6 +809,16 @@ const walletData = [
         "label": "Core Wallet Profile",
         "value": "core-wallet-profile",
         "publicUuid": "83e787a8-47e3-4411-898a-973ee3ef575d",
+      },
+      {
+        "label": "Rootstock Wallet Profile",
+        "value": "rootstock-wallet-profile",
+        "publicUuid": "dcffd5a2-4eea-4c5d-9ea6-a2b83aadc620",
+      },
+      {
+        "label": "Ronin Wallet Profile",
+        "value": "ronin-wallet-profile",
+        "publicUuid": "0057d3c9-1286-40a3-8f56-43fecfb67793",
       },
     ],
   },
