@@ -448,6 +448,41 @@ export const fga_menu_data_v2 = (businessType, project, chain, user) => {
       menuTitle: "Portfolio",
     }
   }
+  if (businessType === "growth") {
+    return {
+      dashboardMap: new Map([
+        ["c-create", "/admin/community/create"],
+        ["c-detail", "/community/duke"],
+        ["q-create", "/admin/quest/create"],
+        ["q-list", "/admin/quest/list"],
+        ["q-detail", "/app/quest/lucky_money?id=66a7743358394c0011e69ce9"],
+        ["p-asset", "/profile"],
+        ["p-deposit", "/profile/deposit"],
+        ["p-withdraw", "/profile/withdraw"],
+        ["p-wallet", "/profile/wallet"],
+        ]
+      ),
+      menuTabs: [
+        getItem("Community", "community", ReactIcons.assetIcon, [
+          // project?.nftCollectionAddress?.length > 0 &&
+          getItem("create", "c-create", null),
+          getItem("detail", "c-detail", null),
+        ]),
+        getItem("Quest", "quest", ReactIcons.userIcon, [
+          // getItem("Create", "q-create", null),
+          getItem("List", "q-list", null),
+          // getItem("Detail", "q-detail", null),
+        ]),
+        getItem("Profile", "profile", ReactIcons.growthIcon, [
+          getItem("Asset", "p-asset", null),
+          // getItem("Deposit", "p-deposit", null),
+          // getItem("Withdraw", "p-withdraw", null),
+          // getItem("Wallet", "p-wallet", null),
+        ]),
+      ],
+      menuTitle: "",
+    }
+  }
   const dashboardMap = getDashboardMap(project, chain);
 
   const gameProjectData = {

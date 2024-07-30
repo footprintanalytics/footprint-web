@@ -357,6 +357,9 @@ export default {
   VcIndex: loadable(() =>
     import("metabase/ab/containers/VcIndex"),
   ),
+  GrowthIndex: loadable(() =>
+    import("metabase/ab/containers/GrowthIndex"),
+  ),
   bindGame: loadable(() =>
     import("metabase/ab/containers/bindGame"),
   ),

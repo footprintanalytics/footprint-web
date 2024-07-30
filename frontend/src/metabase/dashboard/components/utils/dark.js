@@ -3,13 +3,14 @@ import { parseHashOptions } from "../../../lib/browser";
 export const isDark = () => {
   const options = parseHashOptions(location.hash);
   const isFgaVC = window.location.pathname.startsWith("/portfolio-fga");
+  const isFgaGrowth = window.location.pathname.startsWith("/growth-fga");
   const isLandPage = window.location.pathname === ("/") ||
     window.location.pathname.startsWith("/solution/");
   const isMyStudio = window.location.pathname.startsWith("/studio");
   const isGrowth = isGrowthNeedDark() || isABNeedDark();
   const isResearch = window.location.pathname.startsWith("/research") || window.location.pathname.startsWith("/public/research");
   const isPublicDashboardNight = options?.theme === 'night' && window.location.pathname.startsWith("/public/dashboard");
-  return isLandPage || isGrowth || isResearch || isMyStudio || isPublicDashboardNight || isFgaVC;
+  return isLandPage || isGrowth || isResearch || isMyStudio || isPublicDashboardNight || isFgaVC || isFgaGrowth;
 };
 
 export const canShowDarkMode = dashboard => {

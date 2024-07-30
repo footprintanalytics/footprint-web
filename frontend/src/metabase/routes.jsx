@@ -692,6 +692,16 @@ export const getRoutes = store => (
           component={LazyLoad.VcIndex}
         />
       </Route>
+      <Route
+        title={t`FGA-Growth`}
+        path="/growth-fga"
+        component={LazyLoad.GrowthIndex}
+      >
+        <Route
+          path=":menu"
+          component={LazyLoad.VcIndex}
+        />
+      </Route>
       {getFGARoutes(store, IsAuthenticated)}
       {/* ----------- AB Analytics 👆 --------- */}
 

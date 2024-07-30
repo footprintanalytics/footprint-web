@@ -850,3 +850,7 @@ export const getDashboardWatermark = params => {
 export const postDashboardWatermark = params => {
   return POST(`api/v1/dashboard/setWatermark`, params);
 };
+
+export const getPeaToken = params => {
+  return POST(`api/v1/user/getPeaToken`, params);
+};

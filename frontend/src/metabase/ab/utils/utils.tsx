@@ -293,6 +293,10 @@ export function isFGAVCPath(){
   return location.pathname.startsWith("/portfolio-fga");
 }
 
+export function isFGAGrowthPath(){
+  return location.pathname.startsWith("/growth-fga");
+}
+
 export function isBusinessTypePath(businessType: string){
   return location.pathname.startsWith(`/fga/${businessType}`);
 }
