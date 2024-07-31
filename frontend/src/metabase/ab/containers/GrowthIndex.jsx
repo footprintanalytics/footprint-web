@@ -76,7 +76,11 @@ const GrowthIndex = props => {
         className="h-full ga-layout__content flex justify-center"
         // style={{ marginLeft: props.isChart ? 0 : 250 }}
       >
-        {uuid && <PeaPage url={url}/>}
+        {uuid && <PeaPage
+          router={router}
+          location={location}
+          url={url}
+        />}
         {!uuid && <Result
           style={{
             margin: 0,

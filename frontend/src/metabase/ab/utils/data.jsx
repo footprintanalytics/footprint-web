@@ -451,12 +451,12 @@ export const fga_menu_data_v2 = (businessType, project, chain, user) => {
   if (businessType === "growth") {
     return {
       dashboardMap: new Map([
-        ["c-create", "/admin/community/create"],
+        ["my-community", "/admin/community/create"],
         ["c-detail", "/community/duke"],
         ["q-create", "/admin/quest/create"],
-        ["q-list", "/admin/quest/list"],
+        ["my-quest", "/admin/quest/list"],
         ["q-detail", "/app/quest/lucky_money?id=66a7743358394c0011e69ce9"],
-        ["p-asset", "/profile"],
+        ["my-profile", "/profile"],
         ["p-deposit", "/profile/deposit"],
         ["p-withdraw", "/profile/withdraw"],
         ["p-wallet", "/profile/wallet"],
@@ -465,8 +465,8 @@ export const fga_menu_data_v2 = (businessType, project, chain, user) => {
       menuTabs: [
         getItem("Community", "community", <ShrinkOutlined />, [
           // project?.nftCollectionAddress?.length > 0 &&
-          getItem("My Community", "c-create", null),
-          getItem("My Quest", "q-list", null),
+          getItem("My Community", "my-community", null),
+          getItem("My Quest", "my-quest", null),
           // getItem("detail", "c-detail", null),
         ]),
         // getItem("Quest", "quest", ReactIcons.userIcon, [
@@ -474,7 +474,7 @@ export const fga_menu_data_v2 = (businessType, project, chain, user) => {
         //   // getItem("Detail", "q-detail", null),
         // ]),
         getItem("Analysis", "analysis", ReactIcons.growthIcon, [
-          getItem("Quest Analysis", "x2", null),
+          getItem("Quest Analysis", "quest_dashboard", null),
           getItem("Referral Analysis", "x3", null),
           getItem("User/Wallet Features", "x4", null),
           getItem("Community Analysis", "x5", null),
@@ -483,7 +483,7 @@ export const fga_menu_data_v2 = (businessType, project, chain, user) => {
           // getItem("Wallet", "p-wallet", null),
         ]),
         getItem("Setting", "profile", <SettingOutlined />, [
-          getItem("My Profile", "p-asset", null),
+          getItem("My Profile", "my-profile", null),
           // getItem("Deposit", "p-deposit", null),
           // getItem("Withdraw", "p-withdraw", null),
           // getItem("Wallet", "p-wallet", null),

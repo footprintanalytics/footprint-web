@@ -28,7 +28,8 @@ const PeaPage = props => {
           ),
         });
       } else if (event?.data?.event === "campaign_analysis") {
-        router.push(`/fga/game/project/${project?.protocolSlug}/quest_dashboard?campaign_id=${event?.data?.payload?.campaign_id}`);
+        console.log("xxxxxx", `/growth-fga/quest_dashboard?campaign_id=${event?.data?.payload?.campaign_id}`)
+        router.push(`/growth-fga/quest_dashboard?campaign_id=${event?.data?.payload?.campaign_id}`);
       }
     };
     window.addEventListener('message', handleMessage);
