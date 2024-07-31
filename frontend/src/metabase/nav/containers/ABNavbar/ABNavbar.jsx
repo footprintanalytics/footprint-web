@@ -459,6 +459,7 @@ class ABNavbar extends Component {
       );
     };
     const showSearch = window.location.pathname.startsWith("/fga")
+    const isGrowthFga = window.location.pathname.startsWith("/growth-fga")
 // className={ "dark"}
     return (
       <div className="fga-Nav" style={{ display: rootDisplay,backgroundColor:'#1B1B1E' }}>
@@ -523,7 +524,7 @@ class ABNavbar extends Component {
             </Link>
           </div>
         </React.Fragment>
-        <RightMenu />
+        {!isGrowthFga && <RightMenu />}
         {this.renderModal()}
         {this.renderLoginModal()}
         {this.renderCancelFeedbackModal()}

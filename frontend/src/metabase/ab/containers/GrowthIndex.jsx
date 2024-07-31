@@ -44,12 +44,12 @@ const GrowthIndex = props => {
   const pageParam = `?partner_id=fga&token=${peaToken}`;
   const url = `https://test.pea.ai/${uuid}${pageParam}`
   if (isLoading) {
-    return <div className={"p4"}><Skeleton /></div>
+    return <div className={"p4 h-full"} style={{ backgroundColor: "#101014" }}><Skeleton /></div>
   }
 
   if (!user) {
     return (
-      <div className={"w-full h-full flex justify-center align-center" }>
+      <div className={"w-full h-full flex justify-center align-center" } style={{ backgroundColor: "#101014" }}>
         <Button onClick={() => {
           setLoginModalShow({
             show: true,
