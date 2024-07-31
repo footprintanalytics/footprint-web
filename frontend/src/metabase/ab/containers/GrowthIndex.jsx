@@ -21,11 +21,7 @@ const GrowthIndex = props => {
   const [uuid, setUuid] = useState("/community/bevm");
   const [menu, setMenu] = useState("c-detail");
   const dashboardMapping = data.dashboardMap;
-  const pageParam = "?partner_id=fga&token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI2NmE4YjVkNDI0ODk5YTAwMTJkNDVjYzAiLCJhcHBLZXkiOiJmeVNFNVNtaXpGdE53YjY3WEVzNWc3QWpnSDFmekFZa1lZb0kwdDd0RGwiLCJvcGVuSWQiOiI2MGYxMmEwOTJiZDI4NDAwMWUzM2FlNWMiLCJpYXQiOjE3MjIzMzI2MjgsImV4cCI6MTcyNDkyNDYyOH0.wJh5j8wXeUit3VF8sp5Zxsj0PVauwkhh2OM2UWuUHrQ";
-  const url = `https://test.pea.ai/${uuid}${pageParam}`
 
-  console.log("vvvvvvvv1", uuid)
-  console.log("vvvvvvvv33333", url)
   useEffect(() => {
     if (currentMenu) {
       setUuid(dashboardMapping.get(currentMenu))
@@ -36,14 +32,15 @@ const GrowthIndex = props => {
     }
   }, [currentMenu, dashboardMapping]);
 
-  const { isLoading, data: peaData } = useQuery(
+  const { isLoading, data: peaToken } = useQuery(
     ["getPeaToken"],
     async () => {
       return await getPeaToken();
     },
     {...QUERY_OPTIONS_NORMAL, enabled: !!user },
   );
-  console.log("xxxxxxmenu", menu)
+  const pageParam = `?partner_id=fga&token=${peaToken}`;
+  const url = `https://test.pea.ai/${uuid}${pageParam}`
   if (isLoading) {
     return <div className={"p4"}><Skeleton /></div>
   }
