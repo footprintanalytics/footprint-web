@@ -463,18 +463,27 @@ export const fga_menu_data_v2 = (businessType, project, chain, user) => {
         ]
       ),
       menuTabs: [
-        getItem("Community", "community", ReactIcons.assetIcon, [
+        getItem("Community", "community", <ShrinkOutlined />, [
           // project?.nftCollectionAddress?.length > 0 &&
-          getItem("create", "c-create", null),
-          getItem("detail", "c-detail", null),
+          getItem("My Community", "c-create", null),
+          getItem("My Quest", "q-list", null),
+          // getItem("detail", "c-detail", null),
         ]),
-        getItem("Quest", "quest", ReactIcons.userIcon, [
-          // getItem("Create", "q-create", null),
-          getItem("List", "q-list", null),
-          // getItem("Detail", "q-detail", null),
+        // getItem("Quest", "quest", ReactIcons.userIcon, [
+        //   // getItem("Create", "q-create", null),
+        //   // getItem("Detail", "q-detail", null),
+        // ]),
+        getItem("Analysis", "analysis", ReactIcons.growthIcon, [
+          getItem("Quest Analysis", "x2", null),
+          getItem("Referral Analysis", "x3", null),
+          getItem("User/Wallet Features", "x4", null),
+          getItem("Community Analysis", "x5", null),
+          // getItem("Deposit", "p-deposit", null),
+          // getItem("Withdraw", "p-withdraw", null),
+          // getItem("Wallet", "p-wallet", null),
         ]),
-        getItem("Profile", "profile", ReactIcons.growthIcon, [
-          getItem("Asset", "p-asset", null),
+        getItem("Setting", "profile", <SettingOutlined />, [
+          getItem("My Profile", "p-asset", null),
           // getItem("Deposit", "p-deposit", null),
           // getItem("Withdraw", "p-withdraw", null),
           // getItem("Wallet", "p-wallet", null),

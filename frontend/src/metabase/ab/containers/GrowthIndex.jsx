@@ -20,8 +20,8 @@ const GrowthIndex = props => {
     props;
   const data = fga_menu_data_v2("growth", null, null, user)
 
-  const [uuid, setUuid] = useState("/community/bevm");
-  const [menu, setMenu] = useState("c-detail");
+  const [uuid, setUuid] = useState("/admin/community/create");
+  const [menu, setMenu] = useState("c-create");
   const dashboardMapping = data.dashboardMap;
 
   useEffect(() => {
@@ -29,8 +29,8 @@ const GrowthIndex = props => {
       setUuid(dashboardMapping.get(currentMenu))
       setMenu(currentMenu)
     } else {
-      setUuid("/community/bevm")
-      setMenu("c-detail")
+      setUuid("/admin/community/create")
+      setMenu("c-create")
     }
   }, [currentMenu, dashboardMapping]);
 
@@ -76,43 +76,35 @@ const GrowthIndex = props => {
         className="h-full ga-layout__content flex justify-center"
         // style={{ marginLeft: props.isChart ? 0 : 250 }}
       >
-        <PeaPage url={url}/>
-        {/*{uuid && <PublicDashboard*/}
-        {/*  params={{ uuid }}*/}
-        {/*  location={location}*/}
-        {/*  router={router}*/}
-        {/*  isFullscreen={false}*/}
-        {/*  hideTitle={true}*/}
-        {/*  hideFooter*/}
-        {/*/>}*/}
-        {/*{!uuid && <Result*/}
-        {/*  style={{*/}
-        {/*    margin: 0,*/}
-        {/*    width: "50%",*/}
-        {/*    minWidth: 400,*/}
-        {/*    maxWidth: 600,*/}
-        {/*  }}*/}
-        {/*  icon={*/}
-        {/*    <Image*/}
-        {/*      preview={false}*/}
-        {/*      style={{*/}
-        {/*        height: "50%",*/}
-        {/*        width: "50%",*/}
-        {/*        minHeight: 30,*/}
-        {/*        minWidth: 50,*/}
-        {/*        maxHeight: 500,*/}
-        {/*        maxWidth: 550,*/}
-        {/*      }}*/}
-        {/*      src={*/}
-        {/*        "https://footprint-imgs.oss-us-east-1.aliyuncs.com/no-data01.svg"*/}
-        {/*      }*/}
-        {/*    />*/}
-        {/*  }*/}
-        {/*  // title="There is currently no data available for this project."*/}
-        {/*  // subTitle={`I'm sorry, the content for this ${page} page is not yet ready. You can visit our homepage for now and stay tuned for more high-quality content coming soon. We appreciate your patience.`}*/}
-        {/*  title="Coming Soon~"*/}
-        {/*/>*/}
-        {/*}*/}
+        {uuid && <PeaPage url={url}/>}
+        {!uuid && <Result
+          style={{
+            margin: 0,
+            width: "50%",
+            minWidth: 400,
+            maxWidth: 600,
+          }}
+          icon={
+            <Image
+              preview={false}
+              style={{
+                height: "50%",
+                width: "50%",
+                minHeight: 30,
+                minWidth: 50,
+                maxHeight: 500,
+                maxWidth: 550,
+              }}
+              src={
+                "https://footprint-imgs.oss-us-east-1.aliyuncs.com/no-data01.svg"
+              }
+            />
+          }
+          // title="There is currently no data available for this project."
+          // subTitle={`I'm sorry, the content for this ${page} page is not yet ready. You can visit our homepage for now and stay tuned for more high-quality content coming soon. We appreciate your patience.`}
+          title="Coming Soon~"
+        />
+        }
       </Content>
     </Layout>
   );
