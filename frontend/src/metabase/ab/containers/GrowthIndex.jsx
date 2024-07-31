@@ -12,9 +12,11 @@ import { useQuery } from "react-query";
 import { getPeaToken, publicDashboard } from "metabase/new-service";
 import { QUERY_OPTIONS_NORMAL } from "metabase/containers/dashboards/shared/config";
 import PeaPage from "metabase/ab/containers/PeaPage";
+import Button from "metabase/core/components/Button";
+import { loginModalShowAction } from "metabase/redux/control";
 
 const GrowthIndex = props => {
-  const { router, location, currentMenu, user, onChangeLocation } =
+  const { router, location, currentMenu, user, onChangeLocation, setLoginModalShow } =
     props;
   const data = fga_menu_data_v2("growth", null, null, user)
 
@@ -45,6 +47,18 @@ const GrowthIndex = props => {
     return <div className={"p4"}><Skeleton /></div>
   }
 
+  if (!user) {
+    return (
+      <div className={"w-full h-full flex justify-center align-center" }>
+        <Button onClick={() => {
+          setLoginModalShow({
+            show: true,
+            from: "growth-fga",
+          });
+        }}>Login Growth FGA</Button>
+      </div>
+    );
+  }
   return (
     <Layout
       hasSider
@@ -113,5 +127,6 @@ const mapStateToProps = (state, props) => {
 };
 const mapDispatchToProps = {
   onChangeLocation: push,
+  setLoginModalShow: loginModalShowAction,
 };
 export default connect(mapStateToProps, mapDispatchToProps)(GrowthIndex);
