@@ -182,7 +182,7 @@ const GaSidebar = (props) => {
           <LoadingSpinner message="Loading..." />
         )}
         {businessType === "growth" && <div className="ga-side-bar__bottom-panel cursor-pointer" style={{color: "white"}} onClick={() => {
-          window.open("/growth-fga/detail", "_blank")
+          window.open("/growth-fga/campaign/detail", "_blank")
         }}>Quest Detail</div>}
         {isABPath() && <div
           className="ga-side-bar__bottom-panel"
