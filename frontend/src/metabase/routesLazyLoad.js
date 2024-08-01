@@ -360,6 +360,9 @@ export default {
   GrowthIndex: loadable(() =>
     import("metabase/ab/containers/GrowthIndex"),
   ),
+  QuestDetail: loadable(() =>
+    import("metabase/ab/containers/QuestDetail"),
+  ),
   bindGame: loadable(() =>
     import("metabase/ab/containers/bindGame"),
   ),

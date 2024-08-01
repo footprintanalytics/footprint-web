@@ -467,13 +467,14 @@ class ABNavbar extends Component {
           <MobileMenuIcon />
           <Link
             className="Nav__logo"
-            to="/fga"
-            /*onClick={e => {
+            onClick={e => {
               e.preventDefault();
               trackStructEvent(`navbar-click-logo`);
-              const path = location.pathname.includes("public-chain") ? "/public-chain" : "";
-              this.goLink(e, `/fga${path}`);
-            }}*/
+              console.log("location.pathname", location.pathname)
+              const path = isGrowthFga ? "/growth-fga" : "/fga";
+              this.goLink(e, `${path}`);
+              console.log("`${path}`", `${path}`)
+            }}
           >
             <div className="flex align-center" style={{ lineHeight: 1.2 }}>
               <img style={{ height: 32, width: 32 }} src={getOssUrl("logo80.png")} />
@@ -508,11 +509,12 @@ class ABNavbar extends Component {
           <div className="Nav__mobile-logo">
             <Link
               className="Nav__logo"
-              to="/fga"
               onClick={e => {
                 e.preventDefault();
                 trackStructEvent(`navbar-click-logo`);
-                this.goLink(e, "/fga");
+                console.log("location.pathname", location.pathname)
+                const path = location.pathname.startsWith("growth-fga/") ? "/growth-fga" : "/fga";
+                this.goLink(e, `${path}`);
               }}
             >
               <img
@@ -524,7 +526,7 @@ class ABNavbar extends Component {
             </Link>
           </div>
         </React.Fragment>
-        {!isGrowthFga && <RightMenu />}
+        {<RightMenu />}
         {this.renderModal()}
         {this.renderLoginModal()}
         {this.renderCancelFeedbackModal()}

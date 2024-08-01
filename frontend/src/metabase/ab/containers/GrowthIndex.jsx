@@ -59,6 +59,10 @@ const GrowthIndex = props => {
       </div>
     );
   }
+  const isDashboardUuid = uuid => {
+    console.log("xxxxx", uuid)
+    return uuid?.length === 36 && !uuid.startsWith("/")
+  }
   return (
     <Layout
       hasSider
@@ -76,6 +80,15 @@ const GrowthIndex = props => {
         className="h-full ga-layout__content flex justify-center"
         // style={{ marginLeft: props.isChart ? 0 : 250 }}
       >
+
+        {isDashboardUuid(uuid) && <PublicDashboard
+          params={{ uuid }}
+          location={location}
+          router={router}
+          isFullscreen={false}
+          hideTitle={true}
+          hideFooter
+        />}
         {uuid && <PeaPage
           router={router}
           location={location}
