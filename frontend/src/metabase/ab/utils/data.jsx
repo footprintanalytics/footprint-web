@@ -482,14 +482,16 @@ export const fga_menu_data_v2 = (businessType, project, chain, user) => {
         getItem("Analysis", "analysis", ReactIcons.growthIcon, [
           getItem("Quest Analysis", "quest-analysis", null),
           getItem("Referral Analysis", "referral-analysis", null),
-          getItem("User/Wallet Features", "user-feature", null),
           getItem("Community Analysis", "community-analysis", null),
           // getItem("Deposit", "p-deposit", null),
           // getItem("Withdraw", "p-withdraw", null),
           // getItem("Wallet", "p-wallet", null),
         ]),
-        getItem("Point", "point", ReactIcons.assetIcon, [
-          getItem("Point Setting", "point-setting", null),
+        getItem("Segment", "segment", ReactIcons.assetIcon, [
+          getItem("User/Wallet Features", "user-feature", null),
+        ]),
+        getItem("Points", "points", ReactIcons.assetIcon, [
+          getItem("Points Setting", "point-setting", null),
           getItem("Community Leaderboard", "community-leaderboard", null),
         ]),
         getItem("Setting", "profile", <SettingOutlined />, [
