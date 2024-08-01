@@ -22,7 +22,6 @@ const GrowthIndex = props => {
   const [uuid, setUuid] = useState("/community");
   const [menu, setMenu] = useState("community-list");
   const dashboardMapping = data.dashboardMap;
-
   useEffect(() => {
     if (currentMenu) {
       setUuid(dashboardMapping.get(currentMenu))
@@ -40,7 +39,7 @@ const GrowthIndex = props => {
     },
     {...QUERY_OPTIONS_NORMAL, enabled: !!user },
   );
-  const pageParam = `?partner_id=fga${peaToken ? "" : "&logout=true" }&token=${peaToken || ""}`;
+  const pageParam = `?partner_id=fga${user ? "" : "&logout=true" }&token=${(user ? peaToken : "") || ""}`;
   const url = `https://test.pea.ai/${uuid}${pageParam}`
   if (isLoading) {
     return <div className={"p4 h-full"} style={{ backgroundColor: "#101014" }}><Skeleton /></div>
