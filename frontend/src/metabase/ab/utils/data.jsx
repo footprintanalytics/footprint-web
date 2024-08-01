@@ -461,14 +461,14 @@ export const fga_menu_data_v2 = (businessType, project, chain, user) => {
         ["p-deposit", "/profile/deposit"],
         ["p-withdraw", "/profile/withdraw"],
         ["p-wallet", "/profile/wallet"],
-        ['quest-dashboard', "d8e8ac13-bc3f-4cc6-9368-4168d52beeb5"],
+        ['quest-analysis', "d8e8ac13-bc3f-4cc6-9368-4168d52beeb5"],
         ['referral-analysis', ""],
         ['user-feature', ""],
         ['community-analysis', ""],
         ]
       ),
       menuTabs: [
-        getItem("Community", "community", <ShrinkOutlined />, [
+        getItem("Community", "community", <FireOutlined />, [
           // project?.nftCollectionAddress?.length > 0 &&
           getItem("Community List", "community-list", null),
           getItem("My Community", "my-community", null),
@@ -480,13 +480,17 @@ export const fga_menu_data_v2 = (businessType, project, chain, user) => {
         //   // getItem("Detail", "q-detail", null),
         // ]),
         getItem("Analysis", "analysis", ReactIcons.growthIcon, [
-          getItem("Quest Analysis", "quest-dashboard", null),
+          getItem("Quest Analysis", "quest-analysis", null),
           getItem("Referral Analysis", "referral-analysis", null),
           getItem("User/Wallet Features", "user-feature", null),
           getItem("Community Analysis", "community-analysis", null),
           // getItem("Deposit", "p-deposit", null),
           // getItem("Withdraw", "p-withdraw", null),
           // getItem("Wallet", "p-wallet", null),
+        ]),
+        getItem("Point", "point", ReactIcons.assetIcon, [
+          getItem("Point Setting", "point-setting", null),
+          getItem("Community leaderboard", "community-leaderboard", null),
         ]),
         getItem("Setting", "profile", <SettingOutlined />, [
           getItem("My Profile", "my-profile", null),

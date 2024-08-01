@@ -28,8 +28,9 @@ const PeaPage = props => {
           ),
         });
       } else if (event?.data?.event === "campaign_analysis") {
-        console.log("xxxxxx", `/growth-fga/quest_dashboard?campaign_id=${event?.data?.payload?.campaign_id}`)
-        router.push(`/growth-fga/quest_dashboard?campaign_id=${event?.data?.payload?.campaign_id}`);
+        router.push(`/growth-fga/quest-analysis?campaign_id=${event?.data?.payload?.campaign_id}`);
+      } else if (event?.data?.event === "referral_analysis") {
+        router.push(`/growth-fga/referral-analysis?campaign_id=${event?.data?.payload?.campaign_id}`);
       } else if (event?.data?.event === "to_login") {
         toLoginCallback?.()
       }
