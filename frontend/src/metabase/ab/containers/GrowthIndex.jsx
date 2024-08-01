@@ -40,7 +40,7 @@ const GrowthIndex = props => {
     },
     {...QUERY_OPTIONS_NORMAL, enabled: !!user },
   );
-  const pageParam = `?partner_id=fga&token=${peaToken || ""}`;
+  const pageParam = `?partner_id=fga${peaToken ? "" : "&logout=true" }&token=${peaToken || ""}`;
   const url = `https://test.pea.ai/${uuid}${pageParam}`
   if (isLoading) {
     return <div className={"p4 h-full"} style={{ backgroundColor: "#101014" }}><Skeleton /></div>
