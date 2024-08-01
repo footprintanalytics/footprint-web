@@ -490,7 +490,7 @@ export const fga_menu_data_v2 = (businessType, project, chain, user) => {
         ]),
         getItem("Point", "point", ReactIcons.assetIcon, [
           getItem("Point Setting", "point-setting", null),
-          getItem("Community leaderboard", "community-leaderboard", null),
+          getItem("Community Leaderboard", "community-leaderboard", null),
         ]),
         getItem("Setting", "profile", <SettingOutlined />, [
           getItem("My Profile", "my-profile", null),
