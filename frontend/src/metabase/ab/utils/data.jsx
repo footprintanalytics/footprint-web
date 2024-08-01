@@ -451,11 +451,11 @@ export const fga_menu_data_v2 = (businessType, project, chain, user) => {
   if (businessType === "growth") {
     return {
       dashboardMap: new Map([
+        ["my-quest", "/admin/quest/list"],
         ["my-community", "/admin/community/create"],
         ["c-detail", "/community/duke"],
         ["community-list", "/community"],
         ["q-create", "/admin/quest/create"],
-        ["my-quest", "/admin/quest/list"],
         ["q-detail", "/app/quest/lucky_money?id=66a7743358394c0011e69ce9"],
         ["my-profile", "/profile"],
         ["p-deposit", "/profile/deposit"],

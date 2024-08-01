@@ -7,7 +7,7 @@ import { getGrowthProjectPath } from "metabase/ab/utils/utils";
 import { Skeleton } from "antd";
 
 const PeaPage = props => {
-  const {router, project, url} = props
+  const {router, project, url, toLoginCallback} = props
   const protocolSlug = project?.protocolSlug
   const ref = React.useRef();
   const iframeRef = useRef(null);
@@ -30,6 +30,8 @@ const PeaPage = props => {
       } else if (event?.data?.event === "campaign_analysis") {
         console.log("xxxxxx", `/growth-fga/quest_dashboard?campaign_id=${event?.data?.payload?.campaign_id}`)
         router.push(`/growth-fga/quest_dashboard?campaign_id=${event?.data?.payload?.campaign_id}`);
+      } else if (event?.data?.event === "to_login") {
+        toLoginCallback?.()
       }
     };
     window.addEventListener('message', handleMessage);
