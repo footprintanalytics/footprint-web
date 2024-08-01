@@ -67,6 +67,9 @@ const GrowthIndex = props => {
     if (!uuid) {
       return null
     }
+    if (uuid.length === 36) {
+      return null
+    }
     if (menu !== "community-list" && !user) {
 
       const tips = [
@@ -83,9 +86,15 @@ const GrowthIndex = props => {
       ]
 
       return (
-        <div className={"w-full h-full flex justify-center align-center" } style={{ backgroundColor: "#101014" }}>
+        <div className={"w-full h-full flex justify-center" } style={{ backgroundColor: "#101014" }}>
           <Result
             status="success"
+            style={{
+              margin: 0,
+              width: "50%",
+              minWidth: 400,
+              maxWidth: 600,
+            }}
             title={tips.find(i => i.menu === menu)?.title || "Join us! Login to enjoy the community."}
             extra={
               <Button type="primary" key="console" onClick={() => {
