@@ -20,7 +20,7 @@ const GrowthIndex = props => {
   const data = fga_menu_data_v2("growth", null, null, user)
 
   const [uuid, setUuid] = useState("/community");
-  const [menu, setMenu] = useState("community-list");
+  const [menu, setMenu] = useState("communities");
   const dashboardMapping = data.dashboardMap;
   useEffect(() => {
     if (currentMenu) {
@@ -28,7 +28,7 @@ const GrowthIndex = props => {
       setMenu(currentMenu)
     } else {
       setUuid("/community")
-      setMenu("community-list")
+      setMenu("Communities")
     }
   }, [currentMenu, dashboardMapping]);
 
@@ -40,7 +40,7 @@ const GrowthIndex = props => {
     {...QUERY_OPTIONS_NORMAL, enabled: !!user },
   );
   const pageParam = `?partner_id=fga${user ? "" : "&logout=true" }&token=${(user ? peaToken : "") || ""}`;
-  const url = `https://test.pea.ai/${uuid}${pageParam}`
+  const url = `https://test.pea.ai${uuid}${pageParam}`
   if (isLoading) {
     return <div className={"p4 h-full"} style={{ backgroundColor: "#101014" }}><Skeleton /></div>
   }

@@ -451,18 +451,18 @@ export const fga_menu_data_v2 = (businessType, project, chain, user) => {
   if (businessType === "growth") {
     return {
       dashboardMap: new Map([
-        ["my-quest", "/admin/quest/list"],
+        ["my-quests", "/admin/quest/list"],
         ["my-community", "/admin/community/create"],
         ["c-detail", "/community/duke"],
-        ["community-list", "/community"],
+        ["communities", "/community"],
         ["q-create", "/admin/quest/create"],
         ["q-detail", "/app/quest/lucky_money?id=66a7743358394c0011e69ce9"],
         ["my-profile", "/profile"],
         ["p-deposit", "/profile/deposit"],
         ["p-withdraw", "/profile/withdraw"],
         ["p-wallet", "/profile/wallet"],
-        ['quest-analysis', "d8e8ac13-bc3f-4cc6-9368-4168d52beeb5"],
-        ['referral-analysis', ""],
+        ['quest-analytics', "d8e8ac13-bc3f-4cc6-9368-4168d52beeb5"],
+        ['referral-analytics', ""],
         ['user-feature', ""],
         ['community-analysis', ""],
         ]
@@ -470,19 +470,19 @@ export const fga_menu_data_v2 = (businessType, project, chain, user) => {
       menuTabs: [
         getItem("Community", "community", <FireOutlined />, [
           // project?.nftCollectionAddress?.length > 0 &&
-          getItem("Community List", "community-list", null),
+          getItem("Communities", "communities", null),
           getItem("My Community", "my-community", null),
-          getItem("My Quest", "my-quest", null),
+          getItem("My Quests", "my-quests", null),
           // getItem("detail", "c-detail", null),
         ]),
         // getItem("Quest", "quest", ReactIcons.userIcon, [
         //   // getItem("Create", "q-create", null),
         //   // getItem("Detail", "q-detail", null),
         // ]),
-        getItem("Analysis", "analysis", ReactIcons.growthIcon, [
-          getItem("Quest Analysis", "quest-analysis", null),
-          getItem("Referral Analysis", "referral-analysis", null),
-          getItem("Community Analysis", "community-analysis", null),
+        getItem("Analytics", "analytics", ReactIcons.growthIcon, [
+          getItem("Quest", "quest-analytics", null),
+          getItem("Referral", "referral-analytics", null),
+          getItem("Community", "community-analytics", null),
           // getItem("Deposit", "p-deposit", null),
           // getItem("Withdraw", "p-withdraw", null),
           // getItem("Wallet", "p-wallet", null),
@@ -492,7 +492,6 @@ export const fga_menu_data_v2 = (businessType, project, chain, user) => {
         ]),
         getItem("Points", "points", ReactIcons.assetIcon, [
           getItem("Points Setting", "point-setting", null),
-          getItem("Community Leaderboard", "community-leaderboard", null),
         ]),
         getItem("Setting", "profile", <SettingOutlined />, [
           getItem("My Profile", "my-profile", null),
