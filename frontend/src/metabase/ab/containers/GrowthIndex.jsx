@@ -28,7 +28,7 @@ const GrowthIndex = props => {
       setMenu(currentMenu)
     } else {
       setUuid("/community")
-      setMenu("Communities")
+      setMenu("communities")
     }
   }, [currentMenu, dashboardMapping]);
 
