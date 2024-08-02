@@ -35,6 +35,7 @@ const GaSidebar = (props) => {
     chain,
     resetFgaProtocolList,
     selectCallback,
+    style,
   } = props;
   const [openKeys, setOpenKeys] = useState([currentMenu]);
 
@@ -110,6 +111,7 @@ const GaSidebar = (props) => {
       className="ga-side-bar"
       trigger={null}
       width="250px"
+      style={style}
     >
       <div style={{ display: "relative", height: "100%" }}>
         {items?.length > 0 ? (
@@ -181,6 +183,9 @@ const GaSidebar = (props) => {
         ) : (
           <LoadingSpinner message="Loading..." />
         )}
+        {/*{businessType === "growth" && <div className="ga-side-bar__bottom-panel cursor-pointer" style={{color: "white"}} onClick={() => {
+          window.open("/growth-fga/campaign/detail", "_blank")
+        }}>Quest Detail</div>}*/}
         {isABPath() && <div
           className="ga-side-bar__bottom-panel"
         >

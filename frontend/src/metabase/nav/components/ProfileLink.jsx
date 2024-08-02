@@ -27,7 +27,7 @@ export default connect(mapStateToProps)(ProfileLink);
 function ProfileLink({ user, adminItems, onLogout, trigger }) {
   const [modalOpen, setModalOpen] = useState(null);
   // const [bugReportDetails, setBugReportDetails] = useState(null);
-  const isFga = location.pathname.includes("/growth");
+  const isFga = location.pathname.includes("/growth/");
   const isAB =  location.pathname.includes("/fga");
   const openModal = modalName => {
     setModalOpen(modalName);

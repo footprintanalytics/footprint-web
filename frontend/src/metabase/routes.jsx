@@ -138,8 +138,8 @@ export const getRoutes = store => (
           nextPathname = "/" + nextPathname;
         }
         if (
-          prevPathname.startsWith("/growth") &&
-          !nextPathname.startsWith("/growth")
+          prevPathname.startsWith("/growth/") &&
+          !nextPathname.startsWith("/growth/")
         ) {
           nextState.location.pathname = `/growth${nextPathname}`;
           replace(nextState.location);
@@ -690,6 +690,21 @@ export const getRoutes = store => (
         <Route
           path=":menu"
           component={LazyLoad.VcIndex}
+        />
+      </Route>
+      <Route
+        title={t`FGA-Growth-campaign`}
+        path="/growth-fga/campaign/detail"
+        component={LazyLoad.QuestDetail}
+      />
+      <Route
+        title={t`FGA-Growth`}
+        path="/growth-fga"
+        component={LazyLoad.GrowthIndex}
+      >
+        <Route
+          path="/growth-fga/:menu"
+          component={LazyLoad.GrowthIndex}
         />
       </Route>
       {getFGARoutes(store, IsAuthenticated)}

@@ -17,7 +17,7 @@ const GOOGLE_AUTH_ERRORS = {
 };
 
 const mapStateToProps = (state, props) => {
-  const isFga = props.location.pathname.includes("/growth");
+  const isFga = props.location.pathname.includes("/growth/");
   return {
     channel: isFga ? "FGA" : getChannel(state, props),
   };

@@ -459,6 +459,7 @@ class ABNavbar extends Component {
       );
     };
     const showSearch = window.location.pathname.startsWith("/fga")
+    const isGrowthFga = window.location.pathname.startsWith("/growth-fga")
 // className={ "dark"}
     return (
       <div className="fga-Nav" style={{ display: rootDisplay,backgroundColor:'#1B1B1E' }}>
@@ -466,13 +467,12 @@ class ABNavbar extends Component {
           <MobileMenuIcon />
           <Link
             className="Nav__logo"
-            to="/fga"
-            /*onClick={e => {
+            onClick={e => {
               e.preventDefault();
               trackStructEvent(`navbar-click-logo`);
-              const path = location.pathname.includes("public-chain") ? "/public-chain" : "";
-              this.goLink(e, `/fga${path}`);
-            }}*/
+              const path = isGrowthFga ? "/growth-fga" : "/fga";
+              this.goLink(e, `${path}`);
+            }}
           >
             <div className="flex align-center" style={{ lineHeight: 1.2 }}>
               <img style={{ height: 32, width: 32 }} src={getOssUrl("logo80.png")} />
@@ -507,11 +507,11 @@ class ABNavbar extends Component {
           <div className="Nav__mobile-logo">
             <Link
               className="Nav__logo"
-              to="/fga"
               onClick={e => {
                 e.preventDefault();
                 trackStructEvent(`navbar-click-logo`);
-                this.goLink(e, "/fga");
+                const path = location.pathname.startsWith("growth-fga/") ? "/growth-fga" : "/fga";
+                this.goLink(e, `${path}`);
               }}
             >
               <img
@@ -523,7 +523,7 @@ class ABNavbar extends Component {
             </Link>
           </div>
         </React.Fragment>
-        <RightMenu />
+        {<RightMenu />}
         {this.renderModal()}
         {this.renderLoginModal()}
         {this.renderCancelFeedbackModal()}

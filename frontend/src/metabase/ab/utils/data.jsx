@@ -448,6 +448,61 @@ export const fga_menu_data_v2 = (businessType, project, chain, user) => {
       menuTitle: "Portfolio",
     }
   }
+  if (businessType === "growth") {
+    return {
+      dashboardMap: new Map([
+        ["my-quests", "/admin/quest/list"],
+        ["my-community", "/admin/community/create"],
+        ["c-detail", "/community/duke"],
+        ["communities", "/community"],
+        ["q-create", "/admin/quest/create"],
+        ["q-detail", "/app/quest/lucky_money?id=66a7743358394c0011e69ce9"],
+        ["my-profile", "/profile"],
+        ["p-deposit", "/profile/deposit"],
+        ["p-withdraw", "/profile/withdraw"],
+        ["p-wallet", "/profile/wallet"],
+        ['quest-analytics', "26880a05-26bf-4e97-9902-9054df2c4a44"],
+        ['referral-analytics', "8a2f0679-bc33-406c-b5cc-34357d8e2c02"],
+        ['user-feature', ""],
+        ['community-analysis', ""],
+        ]
+      ),
+      menuTabs: [
+        getItem("Community", "community", <FireOutlined />, [
+          // project?.nftCollectionAddress?.length > 0 &&
+          getItem("Communities", "communities", null),
+          getItem("My Community", "my-community", null),
+          getItem("My Quests", "my-quests", null),
+          // getItem("detail", "c-detail", null),
+        ]),
+        // getItem("Quest", "quest", ReactIcons.userIcon, [
+        //   // getItem("Create", "q-create", null),
+        //   // getItem("Detail", "q-detail", null),
+        // ]),
+        getItem("Analytics", "analytics", ReactIcons.growthIcon, [
+          getItem("Quest", "quest-analytics", null),
+          getItem("Referral", "referral-analytics", null),
+          getItem("Community", "community-analytics", null),
+          // getItem("Deposit", "p-deposit", null),
+          // getItem("Withdraw", "p-withdraw", null),
+          // getItem("Wallet", "p-wallet", null),
+        ]),
+        getItem("Segment", "segment", ReactIcons.assetIcon, [
+          getItem("User/Wallet Features", "user-feature", null),
+        ]),
+        getItem("Points", "points", ReactIcons.assetIcon, [
+          getItem("Points Setting", "point-setting", null),
+        ]),
+        getItem("Setting", "profile", <SettingOutlined />, [
+          getItem("My Profile", "my-profile", null),
+          // getItem("Deposit", "p-deposit", null),
+          // getItem("Withdraw", "p-withdraw", null),
+          // getItem("Wallet", "p-wallet", null),
+        ]),
+      ],
+      menuTitle: "",
+    }
+  }
   const dashboardMap = getDashboardMap(project, chain);
 
   const gameProjectData = {
