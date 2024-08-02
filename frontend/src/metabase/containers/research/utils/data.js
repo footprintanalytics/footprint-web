@@ -479,6 +479,11 @@ const chainData = [
         "publicUuid": "9996a833-d601-4cab-9685-283ae1f7ea3c",
       },
       {
+        "label": "Bitcoin Overview",
+        "value": "bitcoin-overview",
+        "publicUuid": "27a3407e-97f0-4e2e-9ad8-2953281246e9",
+      },
+      {
         "label": "BNB Chain Overview",
         "value": "bnb-chain-overview",
         "publicUuid": "f0ab345a-e86c-45c9-ae5f-6be93e717012",
@@ -820,6 +825,11 @@ const walletData = [
         "value": "ronin-wallet-profile",
         "publicUuid": "0057d3c9-1286-40a3-8f56-43fecfb67793",
       },
+      {
+        "label": "Starknet Wallet Profile",
+        "value": "starknet-wallet-profile",
+        "publicUuid": "ceec92e6-79b7-4048-a840-b82766aac48d",
+      },
     ],
   },
   {
@@ -870,6 +880,24 @@ const defiData = [
         "label": "DEX Protocol",
         "value": "dex-protocol",
         "publicUuid": "b10579d9-8bf0-4502-87e5-51daf839d837",
+      }
+    ]
+  },
+  {
+    "label": "DEX Metrics by Chain",
+    "value": "dex-metrics-by-chain",
+    "subMenus": [
+      {
+        "label": "DEXes on Merlin",
+        "value": "dexes-on-merlin",
+        "publicUuid": "ff96c810-28c0-40a0-87bc-75f6335b9807",
+        "search": "?chain=Merlin",
+      },
+      {
+        "label": "DEXes on Rootstock",
+        "value": "dexes-on-rootstock",
+        "publicUuid": "ff96c810-28c0-40a0-87bc-75f6335b9807",
+        "search": "?chain=Rootstock",
       }
     ]
   },
