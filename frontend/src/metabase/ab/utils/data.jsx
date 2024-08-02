@@ -461,8 +461,8 @@ export const fga_menu_data_v2 = (businessType, project, chain, user) => {
         ["p-deposit", "/profile/deposit"],
         ["p-withdraw", "/profile/withdraw"],
         ["p-wallet", "/profile/wallet"],
-        ['quest-analytics', "26880a05-26bf-4e97-9902-9054df2c4a44"],
-        ['referral-analytics', "8a2f0679-bc33-406c-b5cc-34357d8e2c02"],
+        ['quest-analytics', ""],
+        ['referral-analytics', ""],
         ['user-feature', ""],
         ['community-analysis', ""],
         ]
