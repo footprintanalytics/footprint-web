@@ -470,10 +470,8 @@ class ABNavbar extends Component {
             onClick={e => {
               e.preventDefault();
               trackStructEvent(`navbar-click-logo`);
-              console.log("location.pathname", location.pathname)
               const path = isGrowthFga ? "/growth-fga" : "/fga";
               this.goLink(e, `${path}`);
-              console.log("`${path}`", `${path}`)
             }}
           >
             <div className="flex align-center" style={{ lineHeight: 1.2 }}>
@@ -512,7 +510,6 @@ class ABNavbar extends Component {
               onClick={e => {
                 e.preventDefault();
                 trackStructEvent(`navbar-click-logo`);
-                console.log("location.pathname", location.pathname)
                 const path = location.pathname.startsWith("growth-fga/") ? "/growth-fga" : "/fga";
                 this.goLink(e, `${path}`);
               }}

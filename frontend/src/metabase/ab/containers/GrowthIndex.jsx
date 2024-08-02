@@ -58,7 +58,6 @@ const GrowthIndex = props => {
     );
   }*/
   const isDashboardUuid = uuid => {
-    console.log("xxxxx", uuid)
     return uuid?.length === 36 && !uuid.startsWith("/")
   }
 
