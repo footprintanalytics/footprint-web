@@ -28,7 +28,7 @@ const AboutDataTrusted = () => {
     },
     {
       name: "Ongun Özdemir",
-      desc: "Rootstock",
+      desc: "RootstockLabs",
       post: "Sr. Venture Associate",
       img: "home-v2/img_trusted_rootstock.png?1=1",
       detail: "Footprint analytics has been transformational for many facets of the Rootstock ecosystem. From developers to the largest dApps, we’ve managed to derive actionable insights to grow our community and execute our strategy."
@@ -48,6 +48,13 @@ const AboutDataTrusted = () => {
       img: "home-v2/img_trusted_agave.png",
       detail: "Thanks to Footprint's SQL API, we have been able to efficiently access vast amounts of well-structured blockchain and market data across multiple chains. This has enabled us to power our analysis of Web3 gaming data and discover valuable insights.\n" +
         "Above is API focused, but I've really appreciated the Footprint teams' support. The team is always quick to help and resolve any issues we have. This is a great part of using Footprint services."
+    },
+    {
+      name: "Gabriela Castillo Areco",
+      desc: "RootstockLabs",
+      post: "Data Lead",
+      img: "home-v2/img_trusted_rootstock.png?1=1",
+      detail: "Footprint Analytics’ SQL service is incredibly intuitive, with well-crafted documentation and a top-notch tool for contract submission and decoding, excelling in both speed and completeness. The team is highly professional and technical, consistently providing thorough and effective answers to any questions."
     }
   ]
   const newData = Array(30).fill().map(() => JSON.parse(JSON.stringify(data))).flat()
@@ -65,7 +72,7 @@ const AboutDataTrusted = () => {
                   <AboutImage alt={item.name} src={getOssUrl(item.img)} style={{ height: 70, width: 70 }}/>
                   <div className="flex flex-col">
                     <h3>{item.name}</h3>
-                    <div className={"flex justify-center align-center"}><span>{`${item.desc}  |  ${item.post}`}</span></div>
+                    <div className={"flex justify-left align-center"}><span>{`${item.desc}  |  ${item.post}`}</span></div>
                   </div>
                 </div>
               </div>
