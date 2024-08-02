@@ -490,7 +490,7 @@ export const fga_menu_data_v2 = (businessType, project, chain, user) => {
         getItem("Segment", "segment", ReactIcons.assetIcon, [
           getItem("User/Wallet Features", "user-feature", null),
         ]),
-        getItem("Points", "points", ReactIcons.assetIcon, [
+        getItem("Points", "points", ReactIcons.academyIcon14, [
           getItem("Points Setting", "point-setting", null),
         ]),
         getItem("Setting", "profile", <SettingOutlined />, [
