@@ -366,6 +366,9 @@ export default {
   GrowthApp: loadable(() =>
     import("metabase/ab/app"),
   ),
+  GrowthApp2: loadable(() =>
+    import("metabase/ab/app/index2"),
+  ),
   bindGame: loadable(() =>
     import("metabase/ab/containers/bindGame"),
   ),
