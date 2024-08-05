@@ -54,6 +54,7 @@
                                     "'unsafe-inline'"
                                     "https://apis.google.com"
                                     "https://*.googleapis.com"
+                                   "test.pea.ai"
                                     "https://www.googletagmanager.com"
                                     "*.gstatic.com"
                                    "'unsafe-eval'" ; TODO - we keep working towards removing this entirely
@@ -74,11 +75,13 @@
                                  )
                   :child-src    ["*"
                                  "blob:"
+                                 "test.pea.ai"
                                  "'self'"
                                  ;; TODO - double check that we actually need this for Google Auth
                                  "https://docs.google.com"
                                  "https://accounts.google.com"]
                   :worker-src   ["*"
+                                 "test.pea.ai"
                                  "blob:"]
                   :style-src    ["*"
                                  "'self'"
@@ -98,6 +101,7 @@
                                  "accounts.google.com"
                                  "docs.google.com"
                                  "www.youtube.com"
+                                 "test.pea.ai"
                                  "*"]
                   :connect-src  ["*"
                                  "'self' data:"
