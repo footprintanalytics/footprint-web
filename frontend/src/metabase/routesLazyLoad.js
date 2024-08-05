@@ -363,6 +363,9 @@ export default {
   QuestDetail: loadable(() =>
     import("metabase/ab/containers/QuestDetail"),
   ),
+  GrowthApp: loadable(() =>
+    import("metabase/ab/app"),
+  ),
   bindGame: loadable(() =>
     import("metabase/ab/containers/bindGame"),
   ),

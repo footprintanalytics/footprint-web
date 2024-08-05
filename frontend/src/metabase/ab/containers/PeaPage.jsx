@@ -7,7 +7,7 @@ import { getGrowthProjectPath } from "metabase/ab/utils/utils";
 import { Skeleton } from "antd";
 
 const PeaPage = props => {
-  const {router, project, url, toLoginCallback} = props
+  const {router, project, url, toLoginCallback, outerIframeHeight} = props
   const protocolSlug = project?.protocolSlug
   const ref = React.useRef();
   const iframeRef = useRef(null);
@@ -49,11 +49,11 @@ const PeaPage = props => {
 
   return (
     <div ref={ref} style={{width: "100%"}}>
-      {loading && <div style={{width: "100%", height: iframeHeight, padding: 40}}><Skeleton active /></div>}
+      {loading && <div style={{width: "100%", height: outerIframeHeight || iframeHeight, padding: 40}}><Skeleton active /></div>}
       <iframe
         ref={iframeRef}
         src={url}
-        style={{ border: 'none', width: '100%', height: iframeHeight, display: loading ? 'none' : 'block' }}
+        style={{ border: 'none', width: '100%', height: outerIframeHeight || iframeHeight, display: loading ? 'none' : 'block' }}
         onLoad={handleIframeLoad}
       />
     </div>

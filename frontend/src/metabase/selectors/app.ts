@@ -91,6 +91,10 @@ export const getIsNavBarVisible = createSelector(
     getEmbedOptions,
   ],
   (currentUser, path, isEditingDashboard, isEmbedded, embedOptions) => {
+    const isGrowthFgaApp = path.startsWith("/growth-fga/app")
+    if (isGrowthFgaApp) {
+      return false;
+    }
     /*if (!currentUser || isEditingDashboard) {
       return false;
     }*/

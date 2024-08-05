@@ -1,0 +1,11 @@
+.fga-bottom-tabs {
+  width: 100%;
+  display: flex;
+}
+
+.fga-bottom-tabs .ant-radio-button-wrapper {
+  flex: 1;
+  height: 60px !important;
+  line-height: 60px !important;
+  text-align: center;
+}

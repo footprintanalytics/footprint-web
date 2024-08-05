@@ -693,6 +693,11 @@ export const getRoutes = store => (
         />
       </Route>
       <Route
+        title={t`FGA Growth APP`}
+        path="/growth-fga/app"
+        component={LazyLoad.GrowthApp}
+      />
+      <Route
         title={t`FGA-Growth-campaign`}
         path="/growth-fga/campaign/detail"
         component={LazyLoad.QuestDetail}
