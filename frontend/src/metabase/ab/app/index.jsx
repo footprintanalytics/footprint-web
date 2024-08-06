@@ -29,12 +29,12 @@ const Index = ({router, location, onChangeLocation, peaToken, loginTelegram}) =>
       value: 'plaza',
       url: `https://test.pea.ai/app?tab=plaza&${other}`
     },
-    {
+    /*{
       icon: <ShoppingOutlined />,
       name: 'Community',
       value: 'community',
       url: `https://test.pea.ai/community?${other}`
-    },
+    },*/
     {
       icon: <UserOutlined />,
       name: 'Account',
