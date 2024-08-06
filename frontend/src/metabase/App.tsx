@@ -137,7 +137,7 @@ function App({
       <Meta
         title="Footprint Analytics | Web3 Data Solution Provider with AI Technology. "
         // description="Explore Cross-Chain Web3.0 Data about NFTs, GameFi, Metaverse and DeFi(Decentralized Finance) DApps here. A platform for discovering and visualizing blockchain data without coding."
-        image={getOssUrl("home-v2/img-seo-home.jpg")}
+        image={getOssUrl("home-v2/img-seo-home-v2.jpg")}
         imageWidth={600}
         imageHeight={315}
         siteName="Footprint Analytics"
