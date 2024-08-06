@@ -141,7 +141,13 @@ function App({
   useEffect(() => {
     if (tgWebAppData) {
       console.log("tgWebAppDatatgWebAppData", tgWebAppData)
-      loginTelegram(tgWebAppData)
+      loginTelegram({
+        auth_date: tgWebAppData["auth_date"],
+        hash: tgWebAppData["hash"],
+        channel: "telegram",
+        projectRole: "footprint",
+        ...user,
+      })
     }
   }, [tgWebAppData]);
 

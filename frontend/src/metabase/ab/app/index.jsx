@@ -21,7 +21,7 @@ const Index = ({router, location, onChangeLocation, peaToken, loginTelegram}) =>
   const [activeKey, setActiveKey] = useState("plaza");
   const queryParams = new URLSearchParams(location.search);
   const type = queryParams.get('type');
-  const other = `app_name=fga&token=${peaToken}`
+  const other = `app_name=fga&token=${peaToken || "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI2NjgyNjkzMTdlZmYwMzAwMTE1MGU3MGUiLCJpYXQiOjE3MjI0ODE4MTAsImV4cCI6MTcyNTA3MzgxMH0.LlqLB3LSPEB8BBJVGlJ6MLAap1hj0zD_HChKvyon2hA"}`
   const tgAppTabs = [
     {
       icon: <GiftOutlined />,
@@ -77,9 +77,9 @@ const Index = ({router, location, onChangeLocation, peaToken, loginTelegram}) =>
     onChangeLocation(`/growth-fga/app?type=${value}`);
   };
 
-  if (!peaToken) {
+/*  if (!peaToken) {
     return (<div className={"full-width full-height p4"}><Skeleton /></div>)
-  }
+  }*/
   return (
     <div>
       <div style={{ display: 'flex', flexDirection: 'column', height: '100vh', paddingBottom: 1 }}>
