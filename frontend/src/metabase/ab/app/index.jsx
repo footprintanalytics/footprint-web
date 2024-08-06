@@ -50,6 +50,10 @@ const Index = ({router, location, onChangeLocation}) => {
   useEffect(() => {
     setTimeout(() => {
       setHeight(window.visualViewport ? window.visualViewport.height - 48 : window.innerHeight - 48);
+      const app = window?.Telegram?.WebApp
+      if (app) {
+        console.log("window?.Telegram?.WebApp", app.initData)
+      }
     }, 10)
   }, [])
 
