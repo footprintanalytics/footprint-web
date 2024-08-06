@@ -21,7 +21,8 @@ const Index = ({router, location, onChangeLocation, peaToken, loginTelegram}) =>
   const [activeKey, setActiveKey] = useState("plaza");
   const queryParams = new URLSearchParams(location.search);
   const type = queryParams.get('type');
-  const other = `app_name=fga&token=${peaToken || "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI2NjgyNjkzMTdlZmYwMzAwMTE1MGU3MGUiLCJpYXQiOjE3MjI0ODE4MTAsImV4cCI6MTcyNTA3MzgxMH0.LlqLB3LSPEB8BBJVGlJ6MLAap1hj0zD_HChKvyon2hA"}`
+  // const other = `app_name=fga&token=${peaToken || "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI2NjgyNjkzMTdlZmYwMzAwMTE1MGU3MGUiLCJpYXQiOjE3MjI0ODE4MTAsImV4cCI6MTcyNTA3MzgxMH0.LlqLB3LSPEB8BBJVGlJ6MLAap1hj0zD_HChKvyon2hA"}`
+  const other = `app_name=fga&token=${peaToken}`
   const tgAppTabs = [
     {
       icon: <GiftOutlined />,

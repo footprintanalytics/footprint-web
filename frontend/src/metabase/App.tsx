@@ -146,7 +146,7 @@ function App({
         hash: tgWebAppData["hash"],
         channel: "telegram",
         projectRole: "footprint",
-        ...user,
+        ...tgWebAppData.user,
       })
     }
   }, [tgWebAppData]);
