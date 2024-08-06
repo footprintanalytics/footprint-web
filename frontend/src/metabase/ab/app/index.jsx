@@ -5,14 +5,18 @@ import { compose } from "underscore";
 import MetaViewportControls from "metabase/dashboard/hoc/MetaViewportControls";
 import title from "metabase/hoc/Title";
 import Link from "metabase/core/components/Link";
-import { Radio, Tabs } from "antd";
+import { Radio, Tabs, Segmented, Badge } from "antd";
 import { push } from "react-router-redux";
 import { connect } from "react-redux";
 import { State } from "metabase-types/store";
 import { getUser } from "metabase/selectors/user";
 import "./index.css"
 import PeaPage from "metabase/ab/containers/PeaPage";
-
+import {
+  GiftOutlined,
+  ShoppingOutlined,
+  UserOutlined,
+} from "@ant-design/icons";
 const { TabPane } = Tabs;
 
 const Index = ({router, location, onChangeLocation}) => {
@@ -22,24 +26,30 @@ const Index = ({router, location, onChangeLocation}) => {
   const queryParams = new URLSearchParams(location.search);
   const type = queryParams.get('type');
   const other = "app_name=fga&token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI2NjgyNjkzMTdlZmYwMzAwMTE1MGU3MGUiLCJpYXQiOjE3MjI0ODE4MTAsImV4cCI6MTcyNTA3MzgxMH0.LlqLB3LSPEB8BBJVGlJ6MLAap1hj0zD_HChKvyon2hA"
-  const data = {
-    "plaza": {
-      "title": "plaza",
-      "url": `https://test.pea.ai/app?tab=plaza&${other}`
+  const tgAppTabs = [
+    {
+      icon: <GiftOutlined />,
+      name: 'Plaza',
+      value: 'plaza',
+      url: `https://test.pea.ai/app?tab=plaza&${other}`
     },
-    "community": {
-      "title": "community",
-      "url": `https://test.pea.ai/community?${other}`
+    {
+      icon: <ShoppingOutlined />,
+      name: 'Community',
+      value: 'community',
+      url: `https://test.pea.ai/community?${other}`
     },
-    "account": {
-      "title": "account",
-      "url": `https://test.pea.ai/app?tab=account&${other}`
-    }
-  }
+    {
+      icon: <UserOutlined />,
+      name: 'Account',
+      value: 'account',
+      url: `https://test.pea.ai/app?tab=account&${other}`
+    },
+  ]
 
   useEffect(() => {
     setTimeout(() => {
-      setHeight(window.visualViewport ? window.visualViewport.height - 66 : window.innerHeight - 66);
+      setHeight(window.visualViewport ? window.visualViewport.height - 48 : window.innerHeight - 48);
     }, 10)
   }, [])
 
@@ -50,7 +60,7 @@ const Index = ({router, location, onChangeLocation}) => {
   const TabContent = () => {
     const queryParams = new URLSearchParams(location.search);
     const type = queryParams.get('type') || "plaza";
-    const url = data[type].url
+    const url = tgAppTabs.find(i => i.value === type).url
     if (!height) {
       return <div>Loading...</div>
     }
@@ -63,22 +73,42 @@ const Index = ({router, location, onChangeLocation}) => {
       />
     );
   };
-  const onChange = (e) => {
-    onChangeLocation(`/growth-fga/app?type=${e.target.value}`);
+  const onChange = (value) => {
+    onChangeLocation(`/growth-fga/app?type=${value}`);
   };
   return (
     <div>
-      <div style={{ display: 'flex', flexDirection: 'column', height: '100vh' }}>
+      <div style={{ display: 'flex', flexDirection: 'column', height: '100vh', paddingBottom: 1 }}>
         <div style={{ flex: 1 }}>
             <TabContent />
         </div>
 
         <div >
-          <Radio.Group rootClassName={"fga-bottom-tabs"} value={activeKey} onChange={onChange} >
+          {/*<Radio.Group rootClassName={"fga-bottom-tabs"} value={activeKey} onChange={onChange} >
             <Radio.Button value="plaza">Plaza</Radio.Button>
             <Radio.Button value="community">Community</Radio.Button>
             <Radio.Button value="account">Account</Radio.Button>
-          </Radio.Group>
+          </Radio.Group>*/}
+          <Segmented
+            block
+            className="w-full fga-bottom-tabs"
+            size="small"
+            value={activeKey}
+            onChange={onChange}
+            options={tgAppTabs?.map((tab) => {
+              return {
+                label: (
+                  <div style={{ fontSize: 14 }} className={` ${tab.value === activeKey ? ' text-indigo-600' : ''}`}>
+                    {tab.icon}
+                    <div className={`-mt-0 ${tab.value === activeKey ? 'text-indigo-600' : ''}`} style={{ fontSize: 10 }}>
+                      {tab.name}
+                    </div>
+                  </div>
+                ),
+                value: tab.value,
+              }
+            })}
+          />
         </div>
       </div>
     </div>
