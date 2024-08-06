@@ -6,7 +6,7 @@ import { useRouter } from 'next/router'
 export const TelegramContext = createContext({})
 // docs: https://core.telegram.org/bots/webapps
 // 用来获取在 Telegram WebApp 中的用户信息以及操作对象 Telegram WebApp，只在 Telegram WebApp 中有效
-export const TelegramProvider = ({ children, tgWebAppData, setTgWebAppData }) => {
+export const TelegramProvider = ({ location, children, tgWebAppData, setTgWebAppData }) => {
   const router = useRouter()
   const [webApp, setWebApp] = useState(null)
   const [initData, setInitData] = useState(null)
@@ -139,24 +139,28 @@ export const TelegramProvider = ({ children, tgWebAppData, setTgWebAppData }) =>
   }, [isInTelegram])*/
 
   useEffect(() => {
-    // console.log('TelegramProvider routeChange :', pageHistory)
-    setTimeout(() => {
+    console.log('TelegramProvider routeChange :', location);
+
+    const updateBackButton = () => {
       if (webApp) {
-        // webApp.SettingsButton?.show()
-        if (window?.location?.pathname === '/growth-fga/app') {
-          webApp.BackButton?.hide()
+        if (window.location.pathname === '/growth-fga/app') {
+          webApp.BackButton?.hide();
         } else {
-          // webApp.MainButton?.hide()
-          webApp.BackButton?.onClick(() => {
-            if (window?.location?.pathname !== '/growth-fga/app') {
-              router?.goBack();
-            }
-          })
-          webApp.BackButton?.show()
+          const canGoBack = router?.history.length > 1; // 检查是否可以回退
+          if (canGoBack) {
+            webApp.BackButton?.onClick(() => router.goBack());
+            webApp.BackButton?.show();
+          } else {
+            webApp.BackButton?.hide(); // 如果不能回退，隐藏后退按钮
+          }
         }
       }
-    }, 500)
-  }, [router, webApp])
+    };
+
+    const timeoutId = setTimeout(updateBackButton, 500);
+
+    return () => clearTimeout(timeoutId); // 清理定时器
+  }, [location, webApp, router]);
 
   const value = useMemo(
     () => ({

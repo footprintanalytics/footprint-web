@@ -165,7 +165,7 @@ function App({
         keywords={undefined}
       />
       <ConfigProvider theme={getThemeConfig()}>
-        <TelegramProvider tgWebAppData={tgWebAppData} setTgWebAppData={setTgWebAppData}>
+        <TelegramProvider location={location} tgWebAppData={tgWebAppData} setTgWebAppData={setTgWebAppData}>
           <ErrorBoundary onError={onError}>
             <ScrollToTop>
               <AppContainer className="spread">
