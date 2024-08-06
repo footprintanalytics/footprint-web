@@ -213,7 +213,7 @@ export const loginTelegram = createThunkAction(
         console.log("loginTelegram", result)
         MetabaseAnalytics.trackStructEvent("Auth", "Telegram Auth Login");
         handleLogin(dispatch, redirectUrl);
-        const peaToken = await dispatch(await getPeaTokenAPI(null, {headers: {"Cookie": `metabase.SESSION=${result.sessionId}`}}))
+        const peaToken = await dispatch(await getPeaTokenAPI({xxx: "xxx"}, {headers: {"Cookie": `metabase.SESSION=${result?.sessionId}`}}))
         console.log("peaToken", peaToken)
         await dispatch(setPeaToken(peaToken))
         return result;

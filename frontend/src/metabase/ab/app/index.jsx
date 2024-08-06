@@ -13,6 +13,7 @@ import "./index.css";
 import PeaPage from "metabase/ab/containers/PeaPage";
 import { GiftOutlined, ShoppingOutlined, UserOutlined } from "@ant-design/icons";
 import { loginTelegram } from "metabase/auth/actions";
+import { getPeaTokenAPI } from "metabase/new-service";
 const { TabPane } = Tabs;
 
 const Index = ({router, location, onChangeLocation, peaToken, loginTelegram}) => {
@@ -87,7 +88,9 @@ const Index = ({router, location, onChangeLocation, peaToken, loginTelegram}) =>
         <div style={{ flex: 1 }}>
             <TabContent />
         </div>
-
+        <div onClick={() => {
+          getPeaTokenAPI()
+        }}>Test</div>
         <div >
           {/*<Radio.Group rootClassName={"fga-bottom-tabs"} value={activeKey} onChange={onChange} >
             <Radio.Button value="plaza">Plaza</Radio.Button>
