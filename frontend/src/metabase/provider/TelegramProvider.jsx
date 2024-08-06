@@ -142,16 +142,16 @@ export const TelegramProvider = ({ location, children, tgWebAppData, setTgWebApp
     console.log('TelegramProvider routeChange :', location);
 
     const updateBackButton = () => {
-      if (webApp) {
+      if (window?.Telegram?.WebApp) {
         if (window.location.pathname === '/growth-fga/app') {
-          webApp.BackButton?.hide();
+          window?.Telegram?.WebApp.BackButton?.hide();
         } else {
           const canGoBack = router?.history.length > 1; // 检查是否可以回退
           if (canGoBack) {
-            webApp.BackButton?.onClick(() => router.goBack());
-            webApp.BackButton?.show();
+            window?.Telegram?.WebApp.BackButton?.onClick(() => router.goBack());
+            window?.Telegram?.WebApp.BackButton?.show();
           } else {
-            webApp.BackButton?.hide(); // 如果不能回退，隐藏后退按钮
+            window?.Telegram?.WebApp.BackButton?.hide(); // 如果不能回退，隐藏后退按钮
           }
         }
       }

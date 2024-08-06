@@ -855,6 +855,6 @@ export const postDashboardWatermark = params => {
   return POST(`api/v1/dashboard/setWatermark`, params);
 };
 
-export const getPeaTokenAPI = params => {
-  return POST(`api/v1/user/getPeaToken`, params);
+export const getPeaTokenAPI = (params, config) => {
+  return POST(`api/v1/user/getPeaToken`, params, config);
 };
