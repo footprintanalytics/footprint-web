@@ -144,6 +144,10 @@ export const getFgaChain = createSelector([getControl], ({ chain }) => {
   return chain || "Ethereum";
 });
 
+export const getPeaToken = createSelector([getControl], ({ peaToken }) => {
+  return peaToken || "";
+});
+
 export const getFgaFavoriteList = createSelector([getControl], (data) => {
   return data?.fgaFavoriteList;
 });

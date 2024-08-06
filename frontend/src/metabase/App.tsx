@@ -39,6 +39,7 @@ import { ConfigProvider, theme } from "antd";
 import { isDark } from "./dashboard/components/utils/dark";
 import getThemeConfig from "./theme-helper";
 import { TelegramProvider } from "metabase/provider/TelegramProvider";
+import { loginTelegram } from "metabase/auth/actions";
 
 const getErrorComponent = ({ status, data, context }: AppErrorDescriptor) => {
   if (status === 403 || data?.error_code === "unauthorized") {
@@ -63,6 +64,7 @@ interface AppStateProps {
   bannerMessageDescriptor?: string;
   isAppBarVisible: boolean;
   isNavBarVisible: boolean;
+  loginTelegram?: any;
 }
 
 interface AppDispatchProps {
@@ -89,6 +91,7 @@ const mapStateToProps = (
 });
 
 const mapDispatchToProps: AppDispatchProps = {
+  loginTelegram,
   onError: setErrorPage,
   setChannel,
 };
@@ -115,6 +118,7 @@ function App({
   location,
   setChannel,
   user,
+  loginTelegram,
 }: AppProps) {
   const [viewportElement, setViewportElement] = useState<HTMLElement | null>();
   const [tgWebAppData, setTgWebAppData] = useState()
@@ -135,7 +139,10 @@ function App({
   });
 
   useEffect(() => {
-    console.log("tgWebAppDatatgWebAppData", tgWebAppData)
+    if (tgWebAppData) {
+      console.log("tgWebAppDatatgWebAppData", tgWebAppData)
+      loginTelegram(tgWebAppData)
+    }
   }, [tgWebAppData]);
 
   return (

@@ -4,28 +4,24 @@ import React, { useEffect, useState } from "react";
 import { compose } from "underscore";
 import MetaViewportControls from "metabase/dashboard/hoc/MetaViewportControls";
 import title from "metabase/hoc/Title";
-import Link from "metabase/core/components/Link";
-import { Radio, Tabs, Segmented, Badge } from "antd";
+import { Segmented, Tabs, Skeleton } from "antd";
 import { push } from "react-router-redux";
 import { connect } from "react-redux";
-import { State } from "metabase-types/store";
 import { getUser } from "metabase/selectors/user";
-import "./index.css"
+import { getPeaToken } from "metabase/selectors/control";
+import "./index.css";
 import PeaPage from "metabase/ab/containers/PeaPage";
-import {
-  GiftOutlined,
-  ShoppingOutlined,
-  UserOutlined,
-} from "@ant-design/icons";
+import { GiftOutlined, ShoppingOutlined, UserOutlined } from "@ant-design/icons";
+import { loginTelegram } from "metabase/auth/actions";
 const { TabPane } = Tabs;
 
-const Index = ({router, location, onChangeLocation}) => {
+const Index = ({router, location, onChangeLocation, peaToken, loginTelegram}) => {
   const [height, setHeight] = useState(0);
   console.log("window", window, height)
   const [activeKey, setActiveKey] = useState("plaza");
   const queryParams = new URLSearchParams(location.search);
   const type = queryParams.get('type');
-  const other = "app_name=fga&token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI2NjgyNjkzMTdlZmYwMzAwMTE1MGU3MGUiLCJpYXQiOjE3MjI0ODE4MTAsImV4cCI6MTcyNTA3MzgxMH0.LlqLB3LSPEB8BBJVGlJ6MLAap1hj0zD_HChKvyon2hA"
+  const other = `app_name=fga&token=${peaToken}`
   const tgAppTabs = [
     {
       icon: <GiftOutlined />,
@@ -80,6 +76,10 @@ const Index = ({router, location, onChangeLocation}) => {
   const onChange = (value) => {
     onChangeLocation(`/growth-fga/app?type=${value}`);
   };
+
+  if (!peaToken) {
+    return (<div className={"full-width full-height p4"}><Skeleton /></div>)
+  }
   return (
     <div>
       <div style={{ display: 'flex', flexDirection: 'column', height: '100vh', paddingBottom: 1 }}>
@@ -121,10 +121,12 @@ const Index = ({router, location, onChangeLocation}) => {
 
 const mapStateToProps = (state) => ({
   user: getUser(state),
+  peaToken: getPeaToken(state)
 });
 
 const mapDispatchToProps = {
   onChangeLocation: push,
+  loginTelegram,
 };
 
 export default compose(

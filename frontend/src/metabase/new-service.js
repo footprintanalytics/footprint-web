@@ -329,6 +329,10 @@ export const WalletAddressLogin = async params => {
   return POST("/api/v1/user/address/login", params);
 };
 
+export const TelegramLogin = async params => {
+  return POST("/api/v1/telegram/login", params);
+};
+
 export const SendEmailCode = async params => {
   return POST("/api/v1/user/sendEmailCode", params);
 };
@@ -851,6 +855,6 @@ export const postDashboardWatermark = params => {
   return POST(`api/v1/dashboard/setWatermark`, params);
 };
 
-export const getPeaToken = params => {
+export const getPeaTokenAPI = params => {
   return POST(`api/v1/user/getPeaToken`, params);
 };

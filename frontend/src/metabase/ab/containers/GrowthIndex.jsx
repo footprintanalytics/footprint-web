@@ -9,7 +9,7 @@ import { fga_menu_data_v2, getDashboardMap } from "metabase/ab/utils/data";
 import PublicDashboard from "metabase/public/containers/PublicDashboard";
 import { push } from "react-router-redux";
 import { useQuery } from "react-query";
-import { getPeaToken, publicDashboard } from "metabase/new-service";
+import { getPeaTokenAPI } from "metabase/new-service";
 import { QUERY_OPTIONS_NORMAL } from "metabase/containers/dashboards/shared/config";
 import PeaPage from "metabase/ab/containers/PeaPage";
 import { loginModalShowAction } from "metabase/redux/control";
@@ -33,9 +33,9 @@ const GrowthIndex = props => {
   }, [currentMenu, dashboardMapping]);
 
   const { isLoading, data: peaToken } = useQuery(
-    ["getPeaToken"],
+    ["getPeaTokenAPI"],
     async () => {
-      return await getPeaToken();
+      return await getPeaTokenAPI();
     },
     {...QUERY_OPTIONS_NORMAL, enabled: !!user },
   );
