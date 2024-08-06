@@ -38,6 +38,7 @@ import cx from "classnames";
 import { ConfigProvider, theme } from "antd";
 import { isDark } from "./dashboard/components/utils/dark";
 import getThemeConfig from "./theme-helper";
+import { TelegramProvider } from "metabase/provider/TelegramProvider";
 
 const getErrorComponent = ({ status, data, context }: AppErrorDescriptor) => {
   if (status === 403 || data?.error_code === "unauthorized") {
@@ -116,6 +117,7 @@ function App({
   user,
 }: AppProps) {
   const [viewportElement, setViewportElement] = useState<HTMLElement | null>();
+  const [tgWebAppData, setTgWebAppData] = useState()
   const hideScrollbar = location.pathname === "/";
   const isFga = window.location.pathname.startsWith("/growth/");
   const isAB = window.location.pathname.startsWith("/fga");
@@ -132,6 +134,10 @@ function App({
     handleChannel();
   });
 
+  useEffect(() => {
+    console.log("tgWebAppDatatgWebAppData", tgWebAppData)
+  }, [tgWebAppData]);
+
   return (
     <React.Fragment>
       <Meta
@@ -146,50 +152,52 @@ function App({
         keywords={undefined}
       />
       <ConfigProvider theme={getThemeConfig()}>
-        <ErrorBoundary onError={onError}>
-          <ScrollToTop>
-            <AppContainer className="spread">
-              {/*<AppBanner />*/}
-              {/*{isAppBarVisible && <AppBar isNavBarVisible={isNavBarVisible} />}*/}
-              <AppContentContainer
-                // className={ "dark"}
-                className={isDark() ? "dark" : ""}
-                isAdminApp={isAdminApp}
-              >
-                {isNavBarVisible && <Navbar location={location} />}
-
-                <AppContent
-                  className={cx({ "scroll-hide-all": hideScrollbar })}
-                  id="app-content"
-                  ref={setViewportElement}
-                  key={`${user?.id}`}
-                  style={{
-                    backgroundColor: isDark() ? "#121828" : "transparent",
-                  }}
-                >
-                  <ContentViewportContext.Provider
-                    value={viewportElement ?? null}
+        <TelegramProvider tgWebAppData={tgWebAppData} setTgWebAppData={setTgWebAppData}>
+          <ErrorBoundary onError={onError}>
+            <ScrollToTop>
+              <AppContainer className="spread">
+                {/*<AppBanner />*/}
+                {/*{isAppBarVisible && <AppBar isNavBarVisible={isNavBarVisible} />}*/}
+                  <AppContentContainer
+                    // className={ "dark"}
+                    className={isDark() ? "dark" : ""}
+                    isAdminApp={isAdminApp}
                   >
-                    {isAB ? (
-                      <ABLayout>
-                        {errorPage ? getErrorComponent(errorPage) : children}
-                      </ABLayout>
-                    ) : isFga ? (
-                      <GaLayout>
-                        {errorPage ? getErrorComponent(errorPage) : children}
-                      </GaLayout>
-                    ) : (
-                      <>{errorPage ? getErrorComponent(errorPage) : children}</>
-                    )}
-                  </ContentViewportContext.Provider>
-                </AppContent>
-                <UndoListing />
-                <GlobalContactPanel />
-                <StatusListing />
-              </AppContentContainer>
-            </AppContainer>
-          </ScrollToTop>
-        </ErrorBoundary>
+                    {isNavBarVisible && <Navbar location={location} />}
+
+                    <AppContent
+                      className={cx({ "scroll-hide-all": hideScrollbar })}
+                      id="app-content"
+                      ref={setViewportElement}
+                      key={`${user?.id}`}
+                      style={{
+                        backgroundColor: isDark() ? "#121828" : "transparent",
+                      }}
+                    >
+                      <ContentViewportContext.Provider
+                        value={viewportElement ?? null}
+                      >
+                        {isAB ? (
+                          <ABLayout>
+                            {errorPage ? getErrorComponent(errorPage) : children}
+                          </ABLayout>
+                        ) : isFga ? (
+                          <GaLayout>
+                            {errorPage ? getErrorComponent(errorPage) : children}
+                          </GaLayout>
+                        ) : (
+                          <>{errorPage ? getErrorComponent(errorPage) : children}</>
+                        )}
+                      </ContentViewportContext.Provider>
+                    </AppContent>
+                    <UndoListing />
+                    <GlobalContactPanel />
+                    <StatusListing />
+                  </AppContentContainer>
+              </AppContainer>
+            </ScrollToTop>
+          </ErrorBoundary>
+        </TelegramProvider>
       </ConfigProvider>
     </React.Fragment>
   );
