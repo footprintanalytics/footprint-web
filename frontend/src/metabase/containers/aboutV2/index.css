@@ -248,8 +248,9 @@
 }
 .About__start-title {
   color: #303440;
-  margin-left: 16%;
   padding-left: 10px;
+  width: 1280px;
+  margin: 0 auto;
 }
 
 .About__start-title h1 {
