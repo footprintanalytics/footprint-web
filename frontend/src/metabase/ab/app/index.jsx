@@ -89,9 +89,6 @@ const Index = ({router, location, onChangeLocation, peaToken, loginTelegram}) =>
         <div style={{ flex: 1 }}>
             <TabContent />
         </div>
-        <div onClick={() => {
-          getPeaTokenAPI()
-        }}>Test</div>
         <div >
           {/*<Radio.Group rootClassName={"fga-bottom-tabs"} value={activeKey} onChange={onChange} >
             <Radio.Button value="plaza">Plaza</Radio.Button>
