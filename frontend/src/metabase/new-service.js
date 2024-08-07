@@ -858,3 +858,7 @@ export const postDashboardWatermark = params => {
 export const getPeaTokenAPI = (params, config) => {
   return POST(`api/v1/user/getPeaToken`, params, config);
 };
+
+export const getPeaTokenForTGAPI = (params, config) => {
+  return POST(`api/v1/user/getPeaTokenForTG`, params, config);
+};

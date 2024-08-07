@@ -21,7 +21,7 @@ import { message } from "antd";
 import {
   WalletAddressLogin,
   UserRegister,
-  SendEmailCode, TelegramLogin, getPeaTokenAPI,
+  SendEmailCode, TelegramLogin, getPeaTokenAPI, getPeaTokenForTGAPI,
 } from "metabase/new-service";
 import {
   trackLogin,
@@ -213,7 +213,7 @@ export const loginTelegram = createThunkAction(
         console.log("loginTelegram", result)
         MetabaseAnalytics.trackStructEvent("Auth", "Telegram Auth Login");
         handleLogin(dispatch, redirectUrl);
-        const peaToken = await dispatch(await getPeaTokenAPI({xxx: "xxx"}, {headers: {"Cookie": `metabase.SESSION=${result?.sessionId}`}}))
+        const peaToken = await dispatch(await getPeaTokenForTGAPI({_metabaseId: result?.userId}))
         console.log("peaToken", peaToken)
         await dispatch(setPeaToken(peaToken))
         return result;
