@@ -24,6 +24,7 @@ const Index = ({router, location, onChangeLocation, peaToken, loginTelegram}) =>
   const type = queryParams.get('type');
   // const other = `app_name=fga&token=${peaToken || "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI2NjgyNjkzMTdlZmYwMzAwMTE1MGU3MGUiLCJpYXQiOjE3MjI0ODE4MTAsImV4cCI6MTcyNTA3MzgxMH0.LlqLB3LSPEB8BBJVGlJ6MLAap1hj0zD_HChKvyon2hA"}`
   const other = `app_name=fga&token=${peaToken}`
+  console.log("peaTokenpeaToken", peaToken)
   const tgAppTabs = [
     {
       icon: <GiftOutlined />,
