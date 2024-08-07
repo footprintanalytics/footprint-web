@@ -213,8 +213,8 @@ export const loginTelegram = createThunkAction(
         console.log("loginTelegram", result)
         MetabaseAnalytics.trackStructEvent("Auth", "Telegram Auth Login");
         handleLogin(dispatch, redirectUrl);
-        const peaToken = await dispatch(await getPeaTokenForTGAPI({_metabaseId: result?.userId}))
-        console.log("peaToken", peaToken)
+        const peaToken = await getPeaTokenForTGAPI({_metabaseId: result?.userId})
+        console.log("xxxxxxxxx", peaToken)
         await dispatch(setPeaToken(peaToken))
         return result;
       } catch (error: any) {

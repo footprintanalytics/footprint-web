@@ -17,65 +17,65 @@ export const TelegramProvider = ({ location, children, tgWebAppData, setTgWebApp
   // webApp?.initDataUnsafe 是 Telegram WebApp 初始化时传入的数据，包含用户信息等，解析后的对象类型
   const initTgConfig = () => {
     const app = window?.Telegram?.WebApp
-    // setTgWebAppData({
-    //   auth_date: 1722957370,
-    //   hash: "21fac6b42723ef49458989cdd6a06e1d71c41d4420bfbaba1743f41136d8c098",
-    //   user: {
-    //     first_name: "Duke",
-    //     id: 1894350904,
-    //     last_name: "",
-    //     username: "DukeYu22",
+    setTgWebAppData({
+      auth_date: 1722957370,
+      hash: "21fac6b42723ef49458989cdd6a06e1d71c41d4420bfbaba1743f41136d8c098",
+      user: {
+        first_name: "Duke",
+        id: 1894350904,
+        last_name: "",
+        username: "DukeYu22",
+      }
+    })
+    // if (app) {
+    //   setInitData(app.initData)
+    //   console.log('FGA TelegramProvider app.initData:', {
+    //     webapp: TelegramProvider,
+    //     initDataUnsafe: app.initDataUnsafe,
+    //     initData: app.initData,
+    //   })
+    //   if (app.initData?.length > 0) {
+    //     setIsInTelegram(true)
     //   }
-    // })
-    if (app) {
-      setInitData(app.initData)
-      console.log('FGA TelegramProvider app.initData:', {
-        webapp: TelegramProvider,
-        initDataUnsafe: app.initDataUnsafe,
-        initData: app.initData,
-      })
-      if (app.initData?.length > 0) {
-        setIsInTelegram(true)
-      }
-      /*if (app.initDataUnsafe?.start_param) {
-        setTimeout(() => {
-          processTgAppStartParam(app.initDataUnsafe.start_param)
-        }, 0)
-      }*/
-      if (app.initDataUnsafe?.user) {
-        setTimeout(() => {
-          // !tgWebAppData && setTgWebAppData(app.initDataUnsafe)
-          setTgWebAppData(app.initDataUnsafe)
-        }, 0)
-        window.localStorage('tgWebAppData', app.initDataUnsafe)
-      }
-      app.isVerticalSwipesEnabled = false
-      app.disableVerticalSwipes()
-      app.isClosingConfirmationEnabled = true
-      app.enableClosingConfirmation()
-
-      //Returns true if the user's app supports a version of the Bot API that is equal to or higher than the version passed as the parameter.
-      // app.isVersionAtLeast()
-
-      //A method that shows a native popup requesting permission for the bot to send messages to the user. If an optional callback parameter was passed, the callback function will be called when the popup is closed and the first argument will be a boolean indicating whether the user granted this access.
-      // app.requestWriteAccess()
-
-      app.ready()
-      // 默认展开 Telegram WebApp
-      app.expand()
-      setWebApp(app)
-    } else {
-      console.log('FGA TelegramProvider app is null, retryCount:', retryCount)
-      if (retryCount < 3) {
-        setTimeout(() => {
-          retryCount++
-          initTgConfig()
-        }, 1000)
-      } else {
-        // 重试 3 次后，仍然没有初始化成功，可能是 Telegram WebApp 未加载成功
-        decodeTgWebAppDataFromUrl()
-      }
-    }
+    //   /*if (app.initDataUnsafe?.start_param) {
+    //     setTimeout(() => {
+    //       processTgAppStartParam(app.initDataUnsafe.start_param)
+    //     }, 0)
+    //   }*/
+    //   if (app.initDataUnsafe?.user) {
+    //     setTimeout(() => {
+    //       // !tgWebAppData && setTgWebAppData(app.initDataUnsafe)
+    //       setTgWebAppData(app.initDataUnsafe)
+    //     }, 0)
+    //     window.localStorage('tgWebAppData', app.initDataUnsafe)
+    //   }
+    //   app.isVerticalSwipesEnabled = false
+    //   app.disableVerticalSwipes()
+    //   app.isClosingConfirmationEnabled = true
+    //   app.enableClosingConfirmation()
+    //
+    //   //Returns true if the user's app supports a version of the Bot API that is equal to or higher than the version passed as the parameter.
+    //   // app.isVersionAtLeast()
+    //
+    //   //A method that shows a native popup requesting permission for the bot to send messages to the user. If an optional callback parameter was passed, the callback function will be called when the popup is closed and the first argument will be a boolean indicating whether the user granted this access.
+    //   // app.requestWriteAccess()
+    //
+    //   app.ready()
+    //   // 默认展开 Telegram WebApp
+    //   app.expand()
+    //   setWebApp(app)
+    // } else {
+    //   console.log('FGA TelegramProvider app is null, retryCount:', retryCount)
+    //   if (retryCount < 3) {
+    //     setTimeout(() => {
+    //       retryCount++
+    //       initTgConfig()
+    //     }, 1000)
+    //   } else {
+    //     // 重试 3 次后，仍然没有初始化成功，可能是 Telegram WebApp 未加载成功
+    //     decodeTgWebAppDataFromUrl()
+    //   }
+    // }
   }
 
   const handleUrlParamHashData = (hashData) => {

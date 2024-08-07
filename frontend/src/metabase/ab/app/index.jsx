@@ -80,9 +80,9 @@ const Index = ({router, location, onChangeLocation, peaToken, loginTelegram}) =>
     onChangeLocation(`/growth-fga/app?type=${value}`);
   };
 
-/*  if (!peaToken) {
+  if (!peaToken) {
     return (<div className={"full-width full-height p4"}><Skeleton /></div>)
-  }*/
+  }
   return (
     <div>
       <div style={{ display: 'flex', flexDirection: 'column', height: '100vh', paddingBottom: 1 }}>
