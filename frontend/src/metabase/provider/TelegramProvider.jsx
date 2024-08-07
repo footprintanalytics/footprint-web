@@ -3,6 +3,7 @@
 import React, { createContext, useContext, useEffect, useMemo, useState } from 'react'
 import Script from 'next/script'
 import { useRouter } from 'next/router'
+import "./telegram-web-app"
 export const TelegramContext = createContext({})
 // docs: https://core.telegram.org/bots/webapps
 // 用来获取在 Telegram WebApp 中的用户信息以及操作对象 Telegram WebApp，只在 Telegram WebApp 中有效
@@ -149,7 +150,7 @@ export const TelegramProvider = ({ location, children, tgWebAppData, setTgWebApp
   }, [isInTelegram])*/
 
   useEffect(() => {
-    console.log('TelegramProvider routeChange :', location);
+    console.log('TelegramProvider routeChange :', location, window?.Telegram?.WebApp);
 
     const updateBackButton = () => {
       if (window?.Telegram?.WebApp) {
@@ -185,7 +186,6 @@ export const TelegramProvider = ({ location, children, tgWebAppData, setTgWebApp
 
   return (
     <TelegramContext.Provider value={value}>
-      <Script src="https://telegram.org/js/telegram-web-app.js" strategy="beforeInteractive" />
       {children}
     </TelegramContext.Provider>
   )
