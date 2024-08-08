@@ -215,7 +215,7 @@ export const loginTelegram = createThunkAction(
         handleLogin(dispatch, redirectUrl);
         const peaToken = await getPeaTokenForTGAPI({_metabaseId: result?.userId})
         console.log("xxxxxxxxx", peaToken)
-        await dispatch(setPeaToken(peaToken))
+        // await dispatch(setPeaToken(peaToken))
         return result;
       } catch (error: any) {
         return { error: error.message ? error.message : error };
