@@ -123,8 +123,8 @@ const Index = ({router, location, onChangeLocation, peaToken, loginTelegram}) =>
 
 const mapStateToProps = (state) => ({
   user: getUser(state),
-  peaToken: "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI2NmIxZjhjNDk0YzIzYjAwMTE3NmZkNTkiLCJhcHBLZXkiOiJmeVNFNVNtaXpGdE53YjY3WEVzNWc3QWpnSDFmekFZa1lZb0kwdDd0RGwiLCJvcGVuSWQiOiIyNjkxMyIsImlhdCI6MTcyMjkzOTU4OCwiZXhwIjoxNzI1NTMxNTg4fQ.xBjqXOd9Y3h_caVhLKDIjlxhXZuouGDiOXGPYriXWxA",
-  // peaToken: getPeaToken(state)
+  // peaToken: "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI2NmIxZjhjNDk0YzIzYjAwMTE3NmZkNTkiLCJhcHBLZXkiOiJmeVNFNVNtaXpGdE53YjY3WEVzNWc3QWpnSDFmekFZa1lZb0kwdDd0RGwiLCJvcGVuSWQiOiIyNjkxMyIsImlhdCI6MTcyMjkzOTU4OCwiZXhwIjoxNzI1NTMxNTg4fQ.xBjqXOd9Y3h_caVhLKDIjlxhXZuouGDiOXGPYriXWxA",
+  peaToken: getPeaToken(state)
 });
 
 const mapDispatchToProps = {
