@@ -177,16 +177,35 @@ const AboutDataCoverage = () => {
       img: getOssUrl("home-v2/chain/img-chain-taiko.svg"),
       link: "/research/chain/chain-stats/taiko-overview",
     },
+    {
+      title: "BTC",
+      img: getOssUrl("home-v2/chain/img-chain-btc.png"),
+      link: "/research/chain/chain-stats/bitcoin-overview",
+    },
+    {
+      title: "Solana",
+      img: getOssUrl("home-v2/chain/img-chain-solana.png"),
+      link: "",
+    },
   ]
+
+  const renderChainImg = (chain) => {
+    return (
+      <img src={chain.img} alt={chain.title} />
+    )
+  }
 
   const renderChainLayout = () => {
     return (
       <div className={"About__chain-layout"}>
         {chainList.map((chain, index) => (
           <div key={index} className="About__chain-layout-item">
-            <a href={chain.link} target="_blank" rel="noopener noreferrer">
-              <img src={chain.img} alt={chain.title} />
-            </a>
+            {chain.link ? (
+              <a href={chain.link} target="_blank" rel="noopener noreferrer">
+                {renderChainImg(chain)}
+              </a>
+            ) : renderChainImg(chain)}
+
           </div>
         ))}
       </div>
