@@ -136,7 +136,7 @@ const GrowthIndex = props => {
         style={{paddingTop: 20}}
         currentMenu={menu}
         selectCallback={(data) => {
-          onChangeLocation(`/growth-fga/${data.key}`)
+          onChangeLocation(`/growthly/${data.key}`)
         }}
       />
       <Content

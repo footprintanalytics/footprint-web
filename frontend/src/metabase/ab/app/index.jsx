@@ -77,7 +77,7 @@ const Index = ({router, location, onChangeLocation, peaToken, loginTelegram}) =>
     );
   };
   const onChange = (value) => {
-    onChangeLocation(`/growth-fga/app?type=${value}`);
+    onChangeLocation(`/growthly/app?type=${value}`);
   };
 
   if (!peaToken) {

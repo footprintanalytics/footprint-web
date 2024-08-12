@@ -153,7 +153,7 @@ export const TelegramProvider = ({ location, children, tgWebAppData, setTgWebApp
 
     const updateBackButton = () => {
       if (window?.Telegram?.WebApp) {
-        if (window.location.pathname === '/growth-fga/app') {
+        if (window.location.pathname === '/growthly/app') {
           window?.Telegram?.WebApp.BackButton?.hide();
         } else {
           const canGoBack = router?.history.length > 1; // 检查是否可以回退

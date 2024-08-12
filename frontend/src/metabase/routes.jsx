@@ -694,26 +694,26 @@ export const getRoutes = store => (
       </Route>
       <Route
         title={t`Growthly APP`}
-        path="/growth-fga/app"
+        path="/growthly/app"
         component={LazyLoad.GrowthApp}
       />
       <Route
         title={t`Growthly APP`}
-        path="/growth-fga/hub"
+        path="/growthly/hub"
         component={LazyLoad.Hub}
       />
       <Route
         title={t`Growthly Actvity`}
-        path="/growth-fga/activity"
+        path="/growthly/activity"
         component={LazyLoad.QuestDetail}
       />
       <Route
         title={t`Growthly`}
-        path="/growth-fga"
+        path="/growthly"
         component={LazyLoad.GrowthIndex}
       >
         <Route
-          path="/growth-fga/:menu"
+          path="/growthly/:menu"
           component={LazyLoad.GrowthIndex}
         />
       </Route>

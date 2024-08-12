@@ -294,7 +294,7 @@ export function isFGAVCPath(){
 }
 
 export function isFGAGrowthPath(){
-  return location.pathname.startsWith("/growth-fga");
+  return location.pathname.startsWith("/growthly");
 }
 
 export function isBusinessTypePath(businessType: string){

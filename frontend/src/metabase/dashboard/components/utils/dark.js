@@ -3,7 +3,7 @@ import { parseHashOptions } from "../../../lib/browser";
 export const isDark = () => {
   const options = parseHashOptions(location.hash);
   const isFgaVC = window.location.pathname.startsWith("/portfolio-fga");
-  const isFgaGrowth = window.location.pathname.startsWith("/growth-fga");
+  const isFgaGrowth = window.location.pathname.startsWith("/growthly");
   const isLandPage = window.location.pathname === ("/") ||
     window.location.pathname.startsWith("/solution/");
   const isMyStudio = window.location.pathname.startsWith("/studio");

@@ -42,7 +42,7 @@ export function formatUrl(value: string, options: OptionsType = {}) {
     formatedURL = formatUrl2AB(location?.pathname, formatedURL);
     if (formatedURL.startsWith("/fga")
       || formatedURL.startsWith('/portfolio-fga')
-      || formatedURL.startsWith('/growth-fga')
+      || formatedURL.startsWith('/growthly')
     ) {
       return (
         <Link
