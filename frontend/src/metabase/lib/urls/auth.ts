@@ -4,8 +4,8 @@ export const login = (redirectUrl?: string) => {
   if (redirectUrl?.startsWith("/growth/")) {
     return "/growth";
   }
-  if (redirectUrl?.startsWith("/growth-fga")) {
-    return "/growth-fga";
+  if (redirectUrl?.startsWith("/growthly")) {
+    return "/growthly";
   }
   if (redirectUrl?.startsWith("/fga")) {
     const array = redirectUrl.split("/")

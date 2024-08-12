@@ -9,10 +9,11 @@ import { fga_menu_data_v2, getDashboardMap } from "metabase/ab/utils/data";
 import PublicDashboard from "metabase/public/containers/PublicDashboard";
 import { push } from "react-router-redux";
 import { useQuery } from "react-query";
-import { getPeaToken, publicDashboard } from "metabase/new-service";
+import { getPeaTokenAPI } from "metabase/new-service";
 import { QUERY_OPTIONS_NORMAL } from "metabase/containers/dashboards/shared/config";
 import PeaPage from "metabase/ab/containers/PeaPage";
 import { loginModalShowAction } from "metabase/redux/control";
+import { getPeaHost } from "metabase/ab/utils/utils";
 
 const GrowthIndex = props => {
   const { router, location, currentMenu, user, onChangeLocation, setLoginModalShow } =
@@ -33,14 +34,14 @@ const GrowthIndex = props => {
   }, [currentMenu, dashboardMapping]);
 
   const { isLoading, data: peaToken } = useQuery(
-    ["getPeaToken"],
+    ["getPeaTokenAPI"],
     async () => {
-      return await getPeaToken();
+      return await getPeaTokenAPI();
     },
     {...QUERY_OPTIONS_NORMAL, enabled: !!user },
   );
   const pageParam = `?app_name=fga${user ? "" : "&logout=true" }&token=${(user ? peaToken : "") || ""}`;
-  const url = `https://app.pea.ai${uuid}${pageParam}`
+  const url = `${getPeaHost()}${uuid}${pageParam}`
   if (isLoading) {
     return <div className={"p4 h-full"} style={{ backgroundColor: "#101014" }}><Skeleton /></div>
   }
@@ -136,7 +137,7 @@ const GrowthIndex = props => {
         style={{paddingTop: 20}}
         currentMenu={menu}
         selectCallback={(data) => {
-          onChangeLocation(`/growth-fga/${data.key}`)
+          onChangeLocation(`/growthly/${data.key}`)
         }}
       />
       <Content

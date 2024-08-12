@@ -164,7 +164,7 @@
     ;; Prevent Flash / PDF files from including content from site.
     "X-Permitted-Cross-Domain-Policies" "none"
     ;; Tell browser not to use MIME sniffing to guess types of files -- protect against MIME type confusion attacks
-    "X-Content-Type-Options"            "nosniff"}))
+    "X-Content-Type-Options" "nosniff"}))
 
 (defn- add-security-headers* [request response]
   (update response :headers merge (security-headers

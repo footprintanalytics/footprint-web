@@ -459,7 +459,7 @@ class ABNavbar extends Component {
       );
     };
     const showSearch = window.location.pathname.startsWith("/fga")
-    const isGrowthFga = window.location.pathname.startsWith("/growth-fga")
+    const isGrowthFga = window.location.pathname.startsWith("/growthly")
 // className={ "dark"}
     return (
       <div className="fga-Nav" style={{ display: rootDisplay,backgroundColor:'#1B1B1E' }}>
@@ -470,7 +470,7 @@ class ABNavbar extends Component {
             onClick={e => {
               e.preventDefault();
               trackStructEvent(`navbar-click-logo`);
-              const path = isGrowthFga ? "/growth-fga" : "/fga";
+              const path = isGrowthFga ? "/growthly" : "/fga";
               this.goLink(e, `${path}`);
             }}
           >
@@ -510,7 +510,7 @@ class ABNavbar extends Component {
               onClick={e => {
                 e.preventDefault();
                 trackStructEvent(`navbar-click-logo`);
-                const path = location.pathname.startsWith("growth-fga/") ? "/growth-fga" : "/fga";
+                const path = location.pathname.startsWith("growth-fga/") ? "/growthly" : "/fga";
                 this.goLink(e, `${path}`);
               }}
             >

@@ -21,7 +21,7 @@ import { message } from "antd";
 import {
   WalletAddressLogin,
   UserRegister,
-  SendEmailCode,
+  SendEmailCode, TelegramLogin, getPeaTokenAPI, getPeaTokenForTGAPI,
 } from "metabase/new-service";
 import {
   trackLogin,
@@ -31,6 +31,7 @@ import {
 } from "./analytics";
 import { LoginData } from "./types";
 import * as MetabaseAnalytics from "metabase/lib/analytics";
+import { setPeaToken } from "metabase/redux/control";
 
 export const REFRESH_LOCALE = "metabase/user/REFRESH_LOCALE";
 export const refreshLocale = createThunkAction(
@@ -202,6 +203,25 @@ export const loginWallet = createThunkAction(
     };
   },
 );
+export const LOGIN_TELEGRAM = "metabase/auth/LOGIN_TELEGRAM";
+export const loginTelegram = createThunkAction(
+  LOGIN_TELEGRAM,
+  function (loginParam: any, redirectUrl: string) {
+    return async function (dispatch: any, getState: any) {
+      try {
+        const result = await TelegramLogin(loginParam);
+        console.log("loginTelegram", result)
+        MetabaseAnalytics.trackStructEvent("Auth", "Telegram Auth Login");
+        handleLogin(dispatch, redirectUrl);
+        const peaToken = await getPeaTokenForTGAPI({_metabaseId: result?.userId})
+        await dispatch(setPeaToken(peaToken))
+        return result;
+      } catch (error: any) {
+        return { error: error.message ? error.message : error };
+      }
+    };
+  },
+)
 
 export const LOGOUT = "metabase/auth/LOGOUT";
 export const logout = createThunkAction(LOGOUT, (redirectUrl: string) => {

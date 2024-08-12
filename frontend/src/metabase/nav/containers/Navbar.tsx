@@ -49,7 +49,7 @@ function Navbar({ isOpen, user, location, params, adminPaths }: NavbarProps) {
 
 
   const isFGAGrowthApp = useMemo(() => {
-    return location.pathname.startsWith("/growth-fga");
+    return location.pathname.startsWith("/growthly");
   }, [location.pathname]);
 
   if (isAdminApp && user) {
