@@ -22,7 +22,7 @@ const ActivityHub = props => {
     },
     {...QUERY_OPTIONS_NORMAL, enabled: !!user },
   );
-  const url = `${host}${paramsSearch}&token=${(user ? peaToken : "") || ""}`
+  const url = `${host}${paramsSearch}&app_name=fga&token=${(user ? peaToken : "") || ""}`
   if (isLoading) {
     return (<Skeleton />)
   }
