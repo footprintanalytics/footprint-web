@@ -57,6 +57,7 @@
                                    "test.pea.ai"
                                    "app.pea.ai"
                                    "https://t.me"
+                                   "https://web.telegram.org"
                                     "https://www.googletagmanager.com"
                                     "*.gstatic.com"
                                    "'unsafe-eval'" ; TODO - we keep working towards removing this entirely
@@ -88,10 +89,15 @@
                                  "test.pea.ai"
                                  "app.pea.ai"
                                  "https://t.me"
+                                 "https://web.telegram.org"
                                  "blob:"]
                   :style-src    ["*"
                                  "'self'"
                                  "'unsafe-inline'"
+                                 "test.pea.ai"
+                                 "app.pea.ai"
+                                 "https://t.me"
+                                 "https://web.telegram.org"
                                  "https://docs.google.com"
                                  "https://accounts.google.com"]
                   :font-src     ["*"
@@ -100,6 +106,10 @@
                                  "blob:"
                                  "'self' data:"
                                  "docs.google.com"
+                                 "test.pea.ai"
+                                 "app.pea.ai"
+                                 "https://t.me"
+                                 "https://web.telegram.org"
                                  "www.googletagmanager.com"]
                   :frame-src    ["'self'"
                                  "www.footprint.network"
@@ -110,6 +120,7 @@
                                  "test.pea.ai"
                                  "app.pea.ai"
                                  "https://t.me"
+                                 "https://web.telegram.org"
                                  "*"]
                   :connect-src  ["*"
                                  "'self' data:"
@@ -118,6 +129,10 @@
                                  "https://docs.google.com"
                                  ;; MailChimp. So people can sign up for the Metabase mailing list in the sign up process
                                  "metabase.us10.list-manage.com"
+                                 "test.pea.ai"
+                                 "app.pea.ai"
+                                 "https://t.me"
+                                 "https://web.telegram.org"
                                  ;; Google analytics
                                  (when (public-settings/anon-tracking-enabled)
                                    "www.google-analytics.com")
