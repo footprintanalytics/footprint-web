@@ -153,7 +153,8 @@
      (cache-far-future-headers)
      (cache-prevention-headers))
    strict-transport-security-header
-   (content-security-policy-header-with-frame-ancestors allow-iframes?)
+;   (content-security-policy-header-with-frame-ancestors allow-iframes?)
+   (content-security-policy-header)
    (when-not allow-iframes?
      ;; Tell browsers not to render our site as an iframe (prevent clickjacking)
      {"X-Frame-Options"                 (if (embedding-app-origin)
