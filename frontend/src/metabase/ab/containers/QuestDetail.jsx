@@ -10,11 +10,11 @@ import { QUERY_OPTIONS_NORMAL } from "metabase/containers/dashboards/shared/conf
 import { Skeleton, Button } from "antd";
 import { loginModalShowAction } from "metabase/redux/control";
 import { push } from "react-router-redux";
+import { getPeaHost } from "metabase/ab/utils/utils";
 
 const ActivityHub = props => {
   const {router, location, user, setLoginModalShow} = props
   const paramsSearch = location.query.params ? decodeURIComponent(location.query.params) : "1=1"
-  const host = "https://test.pea.ai"
   const { isLoading, data: peaToken } = useQuery(
     ["getPeaTokenAPI"],
     async () => {
@@ -22,7 +22,7 @@ const ActivityHub = props => {
     },
     {...QUERY_OPTIONS_NORMAL, enabled: !!user },
   );
-  const url = `${host}${paramsSearch}&app_name=fga&token=${(user ? peaToken : "") || ""}`
+  const url = `${getPeaHost()}${paramsSearch}&app_name=fga&token=${(user ? peaToken : "") || ""}`
   if (isLoading) {
     return (<Skeleton />)
   }

@@ -5,6 +5,7 @@ import { notification, Button, Modal } from "antd";
 import Link from "antd/lib/typography/Link";
 import { PublicApi, maybeUsePivotEndpoint } from "metabase/services";
 import { dashboardIdInfo } from "metabase/new-service";
+import { isProduction } from "metabase/env";
 
 export function getFirstAddressByPriory(datas:{address: string, chain: string}[]) {
   if (datas.length === 0) return null;
@@ -484,4 +485,8 @@ export function getGAFavoritedTemplate() {
   return localStorage.getItem("GAFavoritedTemplate")
     ? JSON.parse(localStorage.getItem("GAFavoritedTemplate")!)
     : [];
+}
+
+export function getPeaHost() {
+  return isProduction ? "https://app.pea.ai" : "https://test.pea.ai";
 }

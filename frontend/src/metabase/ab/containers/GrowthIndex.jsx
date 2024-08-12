@@ -13,6 +13,7 @@ import { getPeaTokenAPI } from "metabase/new-service";
 import { QUERY_OPTIONS_NORMAL } from "metabase/containers/dashboards/shared/config";
 import PeaPage from "metabase/ab/containers/PeaPage";
 import { loginModalShowAction } from "metabase/redux/control";
+import { getPeaHost } from "metabase/ab/utils/utils";
 
 const GrowthIndex = props => {
   const { router, location, currentMenu, user, onChangeLocation, setLoginModalShow } =
@@ -40,7 +41,7 @@ const GrowthIndex = props => {
     {...QUERY_OPTIONS_NORMAL, enabled: !!user },
   );
   const pageParam = `?app_name=fga${user ? "" : "&logout=true" }&token=${(user ? peaToken : "") || ""}`;
-  const url = `https://test.pea.ai${uuid}${pageParam}`
+  const url = `${getPeaHost()}${uuid}${pageParam}`
   if (isLoading) {
     return <div className={"p4 h-full"} style={{ backgroundColor: "#101014" }}><Skeleton /></div>
   }

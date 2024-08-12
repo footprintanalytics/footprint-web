@@ -14,6 +14,7 @@ import PeaPage from "metabase/ab/containers/PeaPage";
 import { GiftOutlined, ShoppingOutlined, UserOutlined } from "@ant-design/icons";
 import { loginTelegram } from "metabase/auth/actions";
 import { getPeaTokenAPI } from "metabase/new-service";
+import { getPeaHost } from "metabase/ab/utils/utils";
 const { TabPane } = Tabs;
 
 const Index = ({router, location, onChangeLocation, peaToken, loginTelegram}) => {
@@ -30,19 +31,19 @@ const Index = ({router, location, onChangeLocation, peaToken, loginTelegram}) =>
       icon: <GiftOutlined />,
       name: 'Plaza',
       value: 'plaza',
-      url: `https://test.pea.ai/app?tab=plaza&${other}`
+      url: `${getPeaHost()}/app?tab=plaza&${other}`
     },
     {
       icon: <ShoppingOutlined />,
       name: 'Community',
       value: 'community',
-      url: `https://test.pea.ai/community?${other}`
+      url: `${getPeaHost()}/community?${other}`
     },
     {
       icon: <UserOutlined />,
       name: 'Account',
       value: 'account',
-      url: `https://test.pea.ai/app?tab=account&${other}`
+      url: `${getPeaHost()}/app?tab=account&${other}`
     },
   ]
 

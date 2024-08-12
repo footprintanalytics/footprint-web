@@ -12,6 +12,7 @@ import { getPeaToken } from "metabase/selectors/control";
 import "./index.css";
 import PeaPage from "metabase/ab/containers/PeaPage";
 import { loginTelegram } from "metabase/auth/actions";
+import { getPeaHost } from "metabase/ab/utils/utils";
 
 const Hub = ({router, location, onChangeLocation, peaToken, loginTelegram}) => {
   const [height, setHeight] = useState(0);
@@ -37,7 +38,7 @@ const Hub = ({router, location, onChangeLocation, peaToken, loginTelegram}) => {
     }
   }
   const questUrl = getQuestWebUrl(type)
-  const url = `${peaHost}${questUrl}?tgWebAppStartParam=${tgWebAppStartParam}&${other}`
+  const url = `${getPeaHost()}${questUrl}?tgWebAppStartParam=${tgWebAppStartParam}&${other}`
 
   useEffect(() => {
     setTimeout(() => {
