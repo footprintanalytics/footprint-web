@@ -147,14 +147,13 @@
 (defn security-headers
   "Fetch a map of security headers that should be added to a response based on the passed options."
   [& {:keys [allow-iframes? allow-cache?]
-      :or   {allow-iframes? false, allow-cache? false}}]
+      :or   {allow-iframes? true, allow-cache? false}}]
   (merge
    (if allow-cache?
      (cache-far-future-headers)
      (cache-prevention-headers))
    strict-transport-security-header
-;   (content-security-policy-header-with-frame-ancestors allow-iframes?)
-   (content-security-policy-header)
+   (content-security-policy-header-with-frame-ancestors allow-iframes?)
    (when-not allow-iframes?
      ;; Tell browsers not to render our site as an iframe (prevent clickjacking)
      {"X-Frame-Options"                 (if (embedding-app-origin)
