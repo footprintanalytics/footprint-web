@@ -18,10 +18,7 @@ const Hub = ({router, location, onChangeLocation, peaToken, loginTelegram}) => {
   const [height, setHeight] = useState(0);
   const tgWebAppStartParam = location?.query?.tgWebAppStartParam
   const type = location?.query?.type
-  const peaHost = "https://test.pea.ai"
   console.log("tgWebAppStartParam", tgWebAppStartParam)
-  console.log("typetypetype", type)
-  // const other = `app_name=fga&token=${peaToken || "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI2NjgyNjkzMTdlZmYwMzAwMTE1MGU3MGUiLCJpYXQiOjE3MjI0ODE4MTAsImV4cCI6MTcyNTA3MzgxMH0.LlqLB3LSPEB8BBJVGlJ6MLAap1hj0zD_HChKvyon2hA"}`
   const other = `app_name=fga&token=${peaToken}`
   console.log("peaTokenpeaToken", peaToken)
   const getQuestWebUrl = () => {
@@ -69,8 +66,7 @@ const Hub = ({router, location, onChangeLocation, peaToken, loginTelegram}) => {
 
 const mapStateToProps = (state) => ({
   user: getUser(state),
-  peaToken: "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI2NmIxZjhjNDk0YzIzYjAwMTE3NmZkNTkiLCJhcHBLZXkiOiJmeVNFNVNtaXpGdE53YjY3WEVzNWc3QWpnSDFmekFZa1lZb0kwdDd0RGwiLCJvcGVuSWQiOiIyNjkxMyIsImlhdCI6MTcyMjkzOTU4OCwiZXhwIjoxNzI1NTMxNTg4fQ.xBjqXOd9Y3h_caVhLKDIjlxhXZuouGDiOXGPYriXWxA",
-  // peaToken: getPeaToken(state)
+  peaToken: getPeaToken(state)
 });
 
 const mapDispatchToProps = {

@@ -17,16 +17,6 @@ export const TelegramProvider = ({ location, children, tgWebAppData, setTgWebApp
   // webApp?.initDataUnsafe 是 Telegram WebApp 初始化时传入的数据，包含用户信息等，解析后的对象类型
   const initTgConfig = () => {
     const app = window?.Telegram?.WebApp
-    // setTgWebAppData({
-    //   auth_date: 1722957370,
-    //   hash: "21fac6b42723ef49458989cdd6a06e1d71c41d4420bfbaba1743f41136d8c098",
-    //   user: {
-    //     first_name: "Duke",
-    //     id: 1894350904,
-    //     last_name: "",
-    //     username: "DukeYu22",
-    //   }
-    // })
     if (app) {
       setInitData(app.initData)
       console.log('FGA TelegramProvider app.initData:', {

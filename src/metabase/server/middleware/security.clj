@@ -153,8 +153,8 @@
      (cache-far-future-headers)
      (cache-prevention-headers))
    strict-transport-security-header
-;   (content-security-policy-header-with-frame-ancestors allow-iframes?)
-   (when-not true
+   (content-security-policy-header-with-frame-ancestors allow-iframes?)
+   (when-not allow-iframes?
      ;; Tell browsers not to render our site as an iframe (prevent clickjacking)
      {"X-Frame-Options"                 (if (embedding-app-origin)
                                           (format "ALLOW-FROM %s" (first-embedding-app-origin))
@@ -164,8 +164,7 @@
     ;; Prevent Flash / PDF files from including content from site.
     "X-Permitted-Cross-Domain-Policies" "none"
     ;; Tell browser not to use MIME sniffing to guess types of files -- protect against MIME type confusion attacks
-    "X-Content-Type-Options"            "nosniff"})
-  )
+    "X-Content-Type-Options" "nosniff"}))
 
 (defn- add-security-headers* [request response]
   (update response :headers merge (security-headers

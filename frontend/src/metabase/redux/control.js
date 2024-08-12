@@ -164,7 +164,6 @@ export const setFgaChain = createThunkAction(SET_FGA_CHAIN, chain => {
 });
 
 export const setPeaToken = createThunkAction(SET_PEA_TOKEN, token => {
-  console.log("setPeaToken", token)
   return token;
 });
 
@@ -378,7 +377,6 @@ export const control = handleActions(
     },
     [SET_PEA_TOKEN]: {
       next: (state, { payload }) => {
-        console.log("xxxxxxxx", payload)
         return {
           ...state,
           peaToken: payload,
