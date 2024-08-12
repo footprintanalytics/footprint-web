@@ -40,6 +40,7 @@ import { isDark } from "./dashboard/components/utils/dark";
 import getThemeConfig from "./theme-helper";
 import { TelegramProvider } from "metabase/provider/TelegramProvider";
 import { loginTelegram } from "metabase/auth/actions";
+import { get } from "lodash";
 
 const getErrorComponent = ({ status, data, context }: AppErrorDescriptor) => {
   if (status === 403 || data?.error_code === "unauthorized") {
@@ -139,7 +140,7 @@ function App({
   });
 
   useEffect(() => {
-    if (tgWebAppData) {
+    if (tgWebAppData && get(tgWebAppData, "user")) {
       console.log("tgWebAppDatatgWebAppData", tgWebAppData)
       loginTelegram({
         auth_date: tgWebAppData["auth_date"],
