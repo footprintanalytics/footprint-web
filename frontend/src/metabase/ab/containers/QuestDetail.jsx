@@ -11,9 +11,10 @@ import { Skeleton, Button } from "antd";
 import { loginModalShowAction } from "metabase/redux/control";
 import { push } from "react-router-redux";
 
-const QuestDetail = props => {
+const ActivityHub = props => {
   const {router, location, user, setLoginModalShow} = props
-  const host = "https://test.pea.ai/campaign/detail"
+  const paramsSearch = location.query.params ? decodeURIComponent(location.query.params) : "1=1"
+  const host = "https://test.pea.ai"
   const { isLoading, data: peaToken } = useQuery(
     ["getPeaTokenAPI"],
     async () => {
@@ -21,8 +22,7 @@ const QuestDetail = props => {
     },
     {...QUERY_OPTIONS_NORMAL, enabled: !!user },
   );
-  const search = location.search
-  const url = `${host}${search}&token=${(user ? peaToken : "") || ""}`
+  const url = `${host}${paramsSearch}&token=${(user ? peaToken : "") || ""}`
   if (isLoading) {
     return (<Skeleton />)
   }
@@ -55,4 +55,4 @@ const mapDispatchToProps = {
   setLoginModalShow: loginModalShowAction,
 };
 
-export default connect(mapStateToProps, mapDispatchToProps)(QuestDetail);
+export default connect(mapStateToProps, mapDispatchToProps)(ActivityHub);
