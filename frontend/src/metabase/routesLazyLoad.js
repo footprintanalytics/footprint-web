@@ -366,14 +366,8 @@ export default {
   GrowthApp: loadable(() =>
     import("metabase/ab/app"),
   ),
-  GrowthApp2: loadable(() =>
-    import("metabase/ab/app/index2"),
-  ),
   Hub: loadable(() =>
     import("metabase/ab/app/hub"),
-  ),
-  Fission: loadable(() =>
-    import("metabase/ab/app/fission"),
   ),
   bindGame: loadable(() =>
     import("metabase/ab/containers/bindGame"),
