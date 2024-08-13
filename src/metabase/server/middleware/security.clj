@@ -54,6 +54,10 @@
                                     "'unsafe-inline'"
                                     "https://apis.google.com"
                                     "https://*.googleapis.com"
+                                   "test.pea.ai"
+                                   "app.pea.ai"
+                                   "https://t.me"
+                                   "https://web.telegram.org"
                                     "https://www.googletagmanager.com"
                                     "*.gstatic.com"
                                    "'unsafe-eval'" ; TODO - we keep working towards removing this entirely
@@ -74,15 +78,27 @@
                                  )
                   :child-src    ["*"
                                  "blob:"
+                                 "test.pea.ai"
+                                 "app.pea.ai"
+                                 "https://t.me"
+                                 "https://web.telegram.org"
                                  "'self'"
                                  ;; TODO - double check that we actually need this for Google Auth
                                  "https://docs.google.com"
                                  "https://accounts.google.com"]
                   :worker-src   ["*"
+                                 "test.pea.ai"
+                                 "app.pea.ai"
+                                 "https://t.me"
+                                 "https://web.telegram.org"
                                  "blob:"]
                   :style-src    ["*"
                                  "'self'"
                                  "'unsafe-inline'"
+                                 "test.pea.ai"
+                                 "app.pea.ai"
+                                 "https://t.me"
+                                 "https://web.telegram.org"
                                  "https://docs.google.com"
                                  "https://accounts.google.com"]
                   :font-src     ["*"
@@ -91,6 +107,10 @@
                                  "blob:"
                                  "'self' data:"
                                  "docs.google.com"
+                                 "test.pea.ai"
+                                 "app.pea.ai"
+                                 "https://t.me"
+                                 "https://web.telegram.org"
                                  "www.googletagmanager.com"]
                   :frame-src    ["'self'"
                                  "www.footprint.network"
@@ -98,6 +118,10 @@
                                  "accounts.google.com"
                                  "docs.google.com"
                                  "www.youtube.com"
+                                 "test.pea.ai"
+                                 "app.pea.ai"
+                                 "https://t.me"
+                                 "https://web.telegram.org"
                                  "*"]
                   :connect-src  ["*"
                                  "'self' data:"
@@ -106,6 +130,10 @@
                                  "https://docs.google.com"
                                  ;; MailChimp. So people can sign up for the Metabase mailing list in the sign up process
                                  "metabase.us10.list-manage.com"
+                                 "test.pea.ai"
+                                 "app.pea.ai"
+                                 "https://t.me"
+                                 "https://web.telegram.org"
                                  ;; Google analytics
                                  (when (public-settings/anon-tracking-enabled)
                                    "www.google-analytics.com")
@@ -153,8 +181,9 @@
      (cache-far-future-headers)
      (cache-prevention-headers))
    strict-transport-security-header
-   (content-security-policy-header-with-frame-ancestors allow-iframes?)
-   (when-not allow-iframes?
+;   (content-security-policy-header-with-frame-ancestors allow-iframes?)
+   (content-security-policy-header)
+   (when-not true
      ;; Tell browsers not to render our site as an iframe (prevent clickjacking)
      {"X-Frame-Options"                 (if (embedding-app-origin)
                                           (format "ALLOW-FROM %s" (first-embedding-app-origin))
