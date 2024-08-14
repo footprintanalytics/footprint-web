@@ -11,7 +11,7 @@ import { getUser } from "metabase/selectors/user";
 import { getPeaToken } from "metabase/selectors/control";
 import "./index.css";
 import PeaPage from "metabase/ab/containers/PeaPage";
-import { GiftOutlined, ShoppingOutlined, UserOutlined } from "@ant-design/icons";
+import { GiftOutlined, ShoppingOutlined, UserOutlined, SlidersOutlined } from "@ant-design/icons";
 import { loginTelegram } from "metabase/auth/actions";
 import { getPeaTokenAPI } from "metabase/new-service";
 import { getPeaHost } from "metabase/ab/utils/utils";
@@ -32,10 +32,16 @@ const Index = ({router, location, onChangeLocation, peaToken, loginTelegram}) =>
       url: `${getPeaHost()}/app?tab=plaza&${other}`
     },
     {
-      icon: <ShoppingOutlined />,
+      icon: <SlidersOutlined />,
       name: 'Community',
       value: 'community',
       url: `${getPeaHost()}/community?${other}`
+    },
+    {
+      icon: <ShoppingOutlined />,
+      name: 'Earn',
+      value: 'earn',
+      url: `${getPeaHost()}/app?tab=earn&${other}`
     },
     {
       icon: <UserOutlined />,
