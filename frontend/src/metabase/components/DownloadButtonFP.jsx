@@ -73,7 +73,7 @@ const DownloadButton = ({
           <div
             onClick={async () => {
               if (!props.user?.id) {
-                window?.parent?.postMessage("action=setLoginModalShow", window.location.origin);
+                // window?.parent?.postMessage("action=setLoginModalShow", window.location.origin);
                 props.setLoginModalShow({ show: true });
                 return;
               }
