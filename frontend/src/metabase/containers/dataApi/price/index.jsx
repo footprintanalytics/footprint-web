@@ -488,7 +488,7 @@ const Index = ({
               {
                 title: (
                   <span>
-                    <span className="data-api__price-text-highlight">30</span>{" "}
+                    <span className="data-api__price-text-highlight">1</span>{" "}
                     calls per second
                   </span>
                 ),
@@ -517,7 +517,7 @@ const Index = ({
                   </span>
                 ),
               },
-              {
+              /*{
                 title: (
                   <span className="data-api__price-text-highlight">
                     SQL API
@@ -526,7 +526,7 @@ const Index = ({
                 basic: true,
                 url: "https://docs.footprint.network/reference/post_native-async",
                 open: true,
-              },
+              },*/
               {
                 title: "Community support",
               },
