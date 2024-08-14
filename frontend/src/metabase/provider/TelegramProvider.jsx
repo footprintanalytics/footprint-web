@@ -139,19 +139,20 @@ export const TelegramProvider = ({ location, children, tgWebAppData, setTgWebApp
   }, [isInTelegram])*/
 
   useEffect(() => {
-    console.log('TelegramProvider routeChange :', location, window?.Telegram?.WebApp);
+    console.log('TelegramProvider routeChange :', location, "--", webApp);
 
     const updateBackButton = () => {
-      if (window?.Telegram?.WebApp) {
-        if (window.location.pathname === '/growthly/app') {
-          window?.Telegram?.WebApp.BackButton?.hide();
+      if (webApp) {
+        if (location.pathname === '/growthly/app') {
+          webApp?.BackButton?.hide();
         } else {
-          const canGoBack = router?.history.length > 1; // 检查是否可以回退
+          console.log("router?.history.length", router?.history.length)
+          const canGoBack = router?.history.length > 0; // 检查是否可以回退
           if (canGoBack) {
-            window?.Telegram?.WebApp.BackButton?.onClick(() => router.goBack());
-            window?.Telegram?.WebApp.BackButton?.show();
+            webApp?.BackButton?.onClick(() => router.goBack());
+            webApp?.BackButton?.show();
           } else {
-            window?.Telegram?.WebApp.BackButton?.hide(); // 如果不能回退，隐藏后退按钮
+            webApp?.BackButton?.hide(); // 如果不能回退，隐藏后退按钮
           }
         }
       }
