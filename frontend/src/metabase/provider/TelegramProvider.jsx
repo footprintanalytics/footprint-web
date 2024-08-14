@@ -138,7 +138,7 @@ export const TelegramProvider = ({ router, location, children, tgWebAppData, set
   }, [isInTelegram])*/
 
   useEffect(() => {
-    console.log('TelegramProvider routeChange :', location, "--", webApp);
+    console.log('TelegramProvider routeChange :', location, "--", webApp, "--", router);
     const getLocationUrl = (router) => {
       return `${router.location.pathname}${router.location.search}`;
     }
