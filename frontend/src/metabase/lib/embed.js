@@ -58,7 +58,7 @@ function sendMessage(message) {
   //  2) The risk should be very low because
   //      - the data we sent is not sensitive data (frame size, current URL)
   //      - we are already using frame ancestor policy to limit domains that can embed metabase
-  // window.parent.postMessage({ metabase: message }, "*");
+  window.parent.postMessage({ metabase: message }, "*");
 }
 
 function getFrameSpec() {

@@ -143,7 +143,7 @@ function App({
     if (tgWebAppData && get(tgWebAppData, "user")) {
       console.log("tgWebAppDatatgWebAppData", tgWebAppData)
       loginTelegram({
-        auth_date: tgWebAppData["auth_date"],
+        auth_date: parseInt(tgWebAppData["auth_date"]),
         hash: tgWebAppData["hash"],
         channel: "telegram",
         projectRole: "footprint",

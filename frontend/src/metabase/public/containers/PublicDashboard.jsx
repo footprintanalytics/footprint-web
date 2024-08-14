@@ -502,7 +502,7 @@ class PublicDashboard extends Component {
     if (this.props.user) {
       getSqlAndJumpToDoc(this.props, { cardId, dashcardId, dashboardId });
     } else {
-      // window?.parent?.postMessage("action=setLoginModalShow", window.location.origin);
+      window?.parent?.postMessage("action=setLoginModalShow", window.location.origin);
       this.props.setLoginModalShow({
         show: true,
         from: "publicDashboard_get_data_via_sql_api",

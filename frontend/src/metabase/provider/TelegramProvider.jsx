@@ -37,7 +37,7 @@ export const TelegramProvider = ({ location, children, tgWebAppData, setTgWebApp
           // !tgWebAppData && setTgWebAppData(app.initDataUnsafe)
           setTgWebAppData(app.initDataUnsafe)
         }, 0)
-        window.localStorage('tgWebAppData', app.initDataUnsafe)
+        window.localStorage.setItem('tgWebAppData', app.initDataUnsafe)
       }
       app.isVerticalSwipesEnabled = false
       app.disableVerticalSwipes()

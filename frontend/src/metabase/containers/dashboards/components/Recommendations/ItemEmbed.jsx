@@ -6,7 +6,7 @@ const ItemEmbed = ({ item, user, test }) => {
   const ref = useRef();
   const sendIframeMessage = () => {
     if (window?.location?.origin?.includes("footprint.network") || window?.location?.origin?.includes("localhost")) {
-      // ref?.current?.contentWindow?.postMessage(`user=${JSON.stringify(user)}`, window.location.origin);
+      ref?.current?.contentWindow?.postMessage(`user=${JSON.stringify(user)}`, window.location.origin);
     }
   }
   return (
