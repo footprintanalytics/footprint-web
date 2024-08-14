@@ -146,7 +146,7 @@ export const TelegramProvider = ({ location, children, tgWebAppData, setTgWebApp
         if (location.pathname === '/growthly/app') {
           webApp?.BackButton?.hide();
         } else {
-          console.log("router?.history.length", router?.history.length)
+          console.log("router?.history.length", router)
           const canGoBack = router?.history.length > 0; // 检查是否可以回退
           if (canGoBack) {
             webApp?.BackButton?.onClick(() => router.goBack());
