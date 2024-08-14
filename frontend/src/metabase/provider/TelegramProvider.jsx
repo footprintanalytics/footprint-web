@@ -6,8 +6,7 @@ import { useRouter } from 'next/router'
 export const TelegramContext = createContext({})
 // docs: https://core.telegram.org/bots/webapps
 // 用来获取在 Telegram WebApp 中的用户信息以及操作对象 Telegram WebApp，只在 Telegram WebApp 中有效
-export const TelegramProvider = ({ location, children, tgWebAppData, setTgWebAppData }) => {
-  const router = useRouter()
+export const TelegramProvider = ({ router, location, children, tgWebAppData, setTgWebAppData }) => {
   const [webApp, setWebApp] = useState(null)
   const [initData, setInitData] = useState(null)
   const [isInTelegram, setIsInTelegram] = useState(false)
@@ -140,21 +139,23 @@ export const TelegramProvider = ({ location, children, tgWebAppData, setTgWebApp
 
   useEffect(() => {
     console.log('TelegramProvider routeChange :', location, "--", webApp);
+    const getLocationUrl = (router) => {
+      return `${router.location.pathname}${router.location.search}`;
+    }
 
     const updateBackButton = () => {
       if (webApp) {
-        if (location.pathname === '/growthly/app') {
-          webApp?.BackButton?.hide();
-        } else {
-          console.log("router?.history.length", router)
-          const canGoBack = router?.history.length > 0; // 检查是否可以回退
-          if (canGoBack) {
-            webApp?.BackButton?.onClick(() => router.goBack());
-            webApp?.BackButton?.show();
-          } else {
-            webApp?.BackButton?.hide(); // 如果不能回退，隐藏后退按钮
-          }
-        }
+        webApp?.BackButton?.onClick(() => {
+          router.goBack()
+          const oldLocationUrl = getLocationUrl(router);
+          setTimeout(() => {
+            const newLocationUrl = getLocationUrl(router);
+            if (oldLocationUrl === newLocationUrl) {
+              router.replace("/growthly/app");
+            }
+          }, 500)
+        });
+        webApp?.BackButton?.show();
       }
     };
 
