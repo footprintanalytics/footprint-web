@@ -144,7 +144,10 @@ export const TelegramProvider = ({ router, location, children, tgWebAppData, set
     }
 
     const updateBackButton = () => {
-      if (webApp) {
+      const isShowCloseButton = location?.pathname === "/growthly/app" && location?.action === "REPLACE"
+      if (isShowCloseButton) {
+        webApp?.BackButton?.hide();
+      } else {
         webApp?.BackButton?.onClick(() => {
           router.goBack()
           const oldLocationUrl = getLocationUrl(router);
