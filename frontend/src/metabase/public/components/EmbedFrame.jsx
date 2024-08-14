@@ -26,7 +26,7 @@ class EmbedFrame extends Component {
   };
 
   UNSAFE_componentWillMount() {
-    initializeIframeResizer(() => this.setState({ innerScroll: false }));
+    // initializeIframeResizer(() => this.setState({ innerScroll: false }));
   }
 
   render() {
