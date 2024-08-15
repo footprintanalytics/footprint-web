@@ -6,8 +6,7 @@ import { useRouter } from 'next/router'
 export const TelegramContext = createContext({})
 // docs: https://core.telegram.org/bots/webapps
 // 用来获取在 Telegram WebApp 中的用户信息以及操作对象 Telegram WebApp，只在 Telegram WebApp 中有效
-export const TelegramProvider = ({ location, children, tgWebAppData, setTgWebAppData }) => {
-  const router = useRouter()
+export const TelegramProvider = ({ router, location, children, tgWebAppData, setTgWebAppData }) => {
   const [webApp, setWebApp] = useState(null)
   const [initData, setInitData] = useState(null)
   const [isInTelegram, setIsInTelegram] = useState(false)
@@ -37,7 +36,7 @@ export const TelegramProvider = ({ location, children, tgWebAppData, setTgWebApp
           // !tgWebAppData && setTgWebAppData(app.initDataUnsafe)
           setTgWebAppData(app.initDataUnsafe)
         }, 0)
-        window.localStorage('tgWebAppData', app.initDataUnsafe)
+        window.localStorage.setItem('tgWebAppData', app.initDataUnsafe)
       }
       app.isVerticalSwipesEnabled = false
       app.disableVerticalSwipes()
@@ -139,21 +138,27 @@ export const TelegramProvider = ({ location, children, tgWebAppData, setTgWebApp
   }, [isInTelegram])*/
 
   useEffect(() => {
-    console.log('TelegramProvider routeChange :', location, window?.Telegram?.WebApp);
+    console.log('TelegramProvider routeChange :', location, "--", webApp, "--", router);
+    const getLocationUrl = (router) => {
+      return `${router.location.pathname}${router.location.search}`;
+    }
 
     const updateBackButton = () => {
-      if (window?.Telegram?.WebApp) {
-        if (window.location.pathname === '/growthly/app') {
-          window?.Telegram?.WebApp.BackButton?.hide();
-        } else {
-          const canGoBack = router?.history.length > 1; // 检查是否可以回退
-          if (canGoBack) {
-            window?.Telegram?.WebApp.BackButton?.onClick(() => router.goBack());
-            window?.Telegram?.WebApp.BackButton?.show();
-          } else {
-            window?.Telegram?.WebApp.BackButton?.hide(); // 如果不能回退，隐藏后退按钮
-          }
-        }
+      const isShowCloseButton = location?.pathname === "/growthly/app" && location?.action === "REPLACE"
+      if (isShowCloseButton) {
+        webApp?.BackButton?.hide();
+      } else {
+        webApp?.BackButton?.onClick(() => {
+          router.goBack()
+          const oldLocationUrl = getLocationUrl(router);
+          setTimeout(() => {
+            const newLocationUrl = getLocationUrl(router);
+            if (oldLocationUrl === newLocationUrl) {
+              router.replace("/growthly/app");
+            }
+          }, 500)
+        });
+        webApp?.BackButton?.show();
       }
     };
 

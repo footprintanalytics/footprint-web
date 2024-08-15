@@ -66,6 +66,7 @@ interface AppStateProps {
   isAppBarVisible: boolean;
   isNavBarVisible: boolean;
   loginTelegram?: any;
+  router?: any;
 }
 
 interface AppDispatchProps {
@@ -119,6 +120,7 @@ function App({
   location,
   setChannel,
   user,
+  router,
   loginTelegram,
 }: AppProps) {
   const [viewportElement, setViewportElement] = useState<HTMLElement | null>();
@@ -143,7 +145,7 @@ function App({
     if (tgWebAppData && get(tgWebAppData, "user")) {
       console.log("tgWebAppDatatgWebAppData", tgWebAppData)
       loginTelegram({
-        auth_date: tgWebAppData["auth_date"],
+        auth_date: parseInt(tgWebAppData["auth_date"]),
         hash: tgWebAppData["hash"],
         channel: "telegram",
         projectRole: "footprint",
@@ -166,7 +168,7 @@ function App({
         keywords={undefined}
       />
       <ConfigProvider theme={getThemeConfig()}>
-        <TelegramProvider location={location} tgWebAppData={tgWebAppData} setTgWebAppData={setTgWebAppData}>
+        <TelegramProvider router={router} location={location} tgWebAppData={tgWebAppData} setTgWebAppData={setTgWebAppData}>
           <ErrorBoundary onError={onError}>
             <ScrollToTop>
               <AppContainer className="spread">
