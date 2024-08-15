@@ -27,9 +27,9 @@ const PeaPage = props => {
           ),
         });
       } else if (event?.data?.event === "campaign_analysis") {
-        router.push(`/growthly/quest-analytics?campaign_id=${event?.data?.payload?.campaign_id}`);
+        router.push(`/growthly/quest-analytics?quest_id=${event?.data?.payload?.campaign_id}`);
       } else if (event?.data?.event === "referral_analysis") {
-        router.push(`/growthly/referral-analytics?campaign_id=${event?.data?.payload?.campaign_id}`);
+        router.push(`/growthly/referral-analytics?quest_id=${event?.data?.payload?.campaign_id}`);
       } else if (event?.data?.event === "to_login") {
         toLoginCallback?.()
       }
