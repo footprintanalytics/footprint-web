@@ -66,7 +66,7 @@ interface AppStateProps {
   isAppBarVisible: boolean;
   isNavBarVisible: boolean;
   loginTelegram?: any;
-  router?: anhy;
+  router?: any;
 }
 
 interface AppDispatchProps {
@@ -137,7 +137,7 @@ function App({
   };
 
   useOnMount(() => {
-    // initializeIframeResizer();
+    initializeIframeResizer();
     handleChannel();
   });
 
