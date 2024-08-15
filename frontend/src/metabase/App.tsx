@@ -137,7 +137,7 @@ function App({
   };
 
   useOnMount(() => {
-    initializeIframeResizer();
+    // initializeIframeResizer();
     handleChannel();
   });
 
