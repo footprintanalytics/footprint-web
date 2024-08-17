@@ -458,15 +458,61 @@ const chainData = [
         "publicUuid": "514f0b14-dac6-4cb1-88aa-f74c3423e531",
       },
       {
-        "label": "Layer 2 Overview",
+        "label": "Ethereum L2 Bridge Stats",
         "value": "layer-2-overview",
         "publicUuid": "79d8dc98-884b-448f-8d90-7baf3fa91e11",
+      },
+      {
+        "label": "Bitcoin Sidechains",
+        "value": "bitcoin-sidechains",
+        "publicUuid": "5564237c-e6be-4293-b18b-acc28c11891d",
+      },
+      {
+        "label": "Bitcoin Bridge Overview",
+        "value": "bitcoin-bridge-overview",
+        "publicUuid": "c1a9c758-013b-4935-8209-89d14719289b",
+      },
+      {
+        "label": "Ordinals_Inscriptions",
+        "value": "ordinals-inscriptions",
+        "publicUuid": "a68d736b-10f1-4dc5-9353-abf725b4f853",
+      },
+      {
+        "label": "Bitcoin Runes",
+        "value": "bitcoin-runes",
+        "publicUuid": "d7759176-6d7b-4bae-b875-cc1307162bfd",
       },
     ],
   },
   {
-    "label": "Chain Stats",
-    "value": "chain-stats",
+    "label": "BTC Ecosystem Stats",
+    "value": "btc-ecosystem-stats",
+    "subMenus": [
+      {
+        "label": "Bitcoin Overview",
+        "value": "bitcoin-overview",
+        "publicUuid": "27a3407e-97f0-4e2e-9ad8-2953281246e9",
+      },
+      {
+        "label": "Rootstock Overview",
+        "value": "rootstock-overview",
+        "publicUuid": "5ce34ecd-e67c-49cb-8d1d-e84b0028a592",
+      },
+      {
+        "label": "Merlin Overview",
+        "value": "merlin-overview",
+        "publicUuid": "61025077-2037-465f-900e-2032eb446f30",
+      },
+      {
+        "label": "Core Chain Overview",
+        "value": "core-chain-overview",
+        "publicUuid": "94c0e936-0ce5-4260-a337-c303221aa2e3",
+      },
+    ],
+  },
+  {
+    "label": "EVM Chain Stats",
+    "value": "evm-chain-stats",
     "subMenus": [
       {
         "label": "Ronin Overview",
@@ -479,14 +525,14 @@ const chainData = [
         "publicUuid": "9996a833-d601-4cab-9685-283ae1f7ea3c",
       },
       {
-        "label": "Bitcoin Overview",
-        "value": "bitcoin-overview",
-        "publicUuid": "27a3407e-97f0-4e2e-9ad8-2953281246e9",
-      },
-      {
         "label": "BNB Chain Overview",
         "value": "bnb-chain-overview",
         "publicUuid": "f0ab345a-e86c-45c9-ae5f-6be93e717012",
+      },
+      {
+        "label": "Merlin Overview",
+        "value": "merlin-overview",
+        "publicUuid": "61025077-2037-465f-900e-2032eb446f30",
       },
       {
         "label": "Avalanche Overview",
@@ -503,18 +549,13 @@ const chainData = [
         "value": "optimism-overview",
         "publicUuid": "075e8eab-bc83-4b46-9051-08acdd65a91d",
       },
-      {
-        "label": "Starknet Overview",
-        "value": "starknet-overview",
-        "publicUuid": "d3e53215-fa4f-4264-a012-71952b5ecb6c",
-      },
       /*{
         "label": "IoTex Overview",
         "value": "iotex-overview",
         "publicUuid": "1a1e160e-4414-417a-a04a-54646f86e42d",
       },*/
       {
-        "label": "Oasys Chain Overview",
+        "label": "Oasys Overview",
         "value": "oasys-overview",
         "publicUuid": "8feb911d-0055-4dae-9d12-e0e05860df07",
       },
@@ -528,16 +569,7 @@ const chainData = [
         "value": "zksync-era-overview",
         "publicUuid": "89b91903-fcfc-4122-978b-62c7a3ba3f41",
       },
-      {
-        "label": "Sui Overview",
-        "value": "sui-overview",
-        "publicUuid": "e569cb10-4132-46db-a391-3803feb3a203",
-      },
-      {
-        "label": "Rootstock Overview",
-        "value": "rootstock-overview",
-        "publicUuid": "5ce34ecd-e67c-49cb-8d1d-e84b0028a592",
-      },
+
       {
         "label": "Taiko Overview",
         "value": "taiko-overview",
@@ -558,16 +590,8 @@ const chainData = [
         "value": "core-chain-overview",
         "publicUuid": "94c0e936-0ce5-4260-a337-c303221aa2e3",
       },
-      {
-        "label": "Merlin Overview",
-        "value": "merlin-overview",
-        "publicUuid": "61025077-2037-465f-900e-2032eb446f30",
-      },
-      {
-        "label": "GalaChain Overview",
-        "value": "gala-chain-overview",
-        "publicUuid": "6bb33916-a512-42ad-9d90-8c834e29e9cf",
-      },
+
+
       {
         "label": "Fantom Overview",
         "value": "fantom-overview",
@@ -624,7 +648,7 @@ const chainData = [
         "publicUuid": "62908ce3-43e2-450f-89c1-a1066ba1e7fe",
       },
       {
-        "label": "HOME Verse Overview",
+        "label": "Home Verse Overview",
         "value": "home-verse-overview",
         "publicUuid": "c79ec4ee-74c3-47ba-942c-5e351f3c2ff3",
       },
@@ -632,6 +656,32 @@ const chainData = [
         "label": "Combo Overview",
         "value": "combo-overview",
         "publicUuid": "be8e0a03-96c3-4f6f-8e3b-871561ba6139",
+      },
+    ],
+  },
+  {
+    "label": "Non-EVM Stats",
+    "value": "non-evm-stats",
+    "subMenus": [
+      {
+        "label": "Sui Overview",
+        "value": "sui-overview",
+        "publicUuid": "e569cb10-4132-46db-a391-3803feb3a203",
+      },
+      {
+        "label": "Starknet Overview",
+        "value": "starknet-overview",
+        "publicUuid": "d3e53215-fa4f-4264-a012-71952b5ecb6c",
+      },
+      {
+        "label": "Rootstock Overview",
+        "value": "rootstock-overview",
+        "publicUuid": "5ce34ecd-e67c-49cb-8d1d-e84b0028a592",
+      },
+      {
+        "label": "GalaChain Overview",
+        "value": "gala-chain-overview",
+        "publicUuid": "6bb33916-a512-42ad-9d90-8c834e29e9cf",
       },
     ],
   },

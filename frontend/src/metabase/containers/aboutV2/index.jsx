@@ -22,6 +22,7 @@ import AboutStart from "./components/AboutStart";
 import AboutBanner from "./components/AboutBanner";
 import AboutSolutions from "./components/AboutSolutions";
 import AboutGrantedBy from "./components/AboutGrantedBy";
+import ResearchContent2 from "metabase/nav/containers/FpNavbar/components/ResearchContent2";
 
 const About = props => {
   const {
