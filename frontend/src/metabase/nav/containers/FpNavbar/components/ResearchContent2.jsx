@@ -41,15 +41,9 @@ const ResearchContent2 = props => {
       title: "Chains",
       data: [
         {
-          title: "Chain Overview",
-          desc: "Overview of blockchain ecosystem data.",
-          link: "/research/chain/chain-ecosystem/chain-overview",
-          icon: ReactIcons.chainOverviewIcon,
-        },
-        {
-          title: "Layer 2 Overview",
-          desc: "Data stats of the Layer 2 ecosystem.",
-          link: "/research/chain/chain-ecosystem/layer-2-overview",
+          title: "Bitcoin Sidechains",
+          desc: "Built on Bitcoin.",
+          link: "/research/chain/chain-ecosystem/bitcoin-sidechains",
           icon: ReactIcons.layerIcon,
         },
         {
@@ -59,10 +53,45 @@ const ResearchContent2 = props => {
           icon: ReactIcons.crossChainIcon,
         },
         {
+          title: "Chain Overview",
+          desc: "Overview of blockchain ecosystem data.",
+          link: "/research/chain/chain-ecosystem/chain-overview",
+          icon: ReactIcons.chainOverviewIcon,
+        },
+        {
           title: "Single Chain Stats",
           desc: "Charts & statistics for a blockchain.",
           link: "/research/chain/chain-stats/ethereum-overview?chain=Ethereum&series_date-85136=past90days~",
           icon: ReactIcons.singleGameIcon,
+        },
+      ],
+    },
+    {
+      title: "DeFI",
+      data: [
+        {
+          title: "Bitcoin Bridge Overview",
+          desc: "Assess bridged BTC balance on BTC sidechains.",
+          link: "/research/chain/chain-ecosystem/bitcoin-bridge-overview",
+          icon: ReactIcons.gameTokensIcon,
+        },
+        {
+          title: "Layer 2 Overview (Ethereum L2 Bridge Stats)",
+          desc: "Explore the major L2 solutions and their official bridge activities. ",
+          link: "/research/chain/chain-ecosystem/layer-2-overview",
+          icon: ReactIcons.topGameIcon,
+        },
+        {
+          title: "DEX Metrics",
+          desc: "Track trends in key DEX metrics.",
+          link: "/research/defi/dex-overview/dex-metrics",
+          icon: ReactIcons.gameMarketIcon,
+        },
+        {
+          title: "DEX Protocol",
+          desc: "Drill down to a specific dex and analyze it.",
+          link: "/research/defi/single-protocol/dex-protocol",
+          icon: ReactIcons.nftTradesIcon,
         },
       ],
     },
@@ -84,7 +113,7 @@ const ResearchContent2 = props => {
       ],
     },
     {
-      title: "Tokens",
+      title: "Tokens & NFTs",
       data: [
         {
           title: "Token Exchange Net Flow",
@@ -93,45 +122,22 @@ const ResearchContent2 = props => {
           icon: ReactIcons.gameTokensIcon,
         },
         {
-          title: "Top Tokens Traded on DEX",
-          desc: "Find the most actively traded tokens.",
-          link: "/research/token/rankings/top-tokens-traded-on-dex?past_days=1",
-          icon: ReactIcons.topGameIcon,
-        },
-        {
           title: "Single Token",
           desc: "In-depth stats of the token's price data, exchange inflow and outflow, holder analysis and more.",
           link: "/research/token/token/single-token",
           icon: ReactIcons.nftTradesIcon,
         },
-      ],
-    },
-    {
-      title: "NFTs",
-      data: [
+        {
+          title: "Top NFT Marketplaces",
+          desc: "High-value collections with key metrics",
+          link: "/research/nft/nft-rankings/top-marketplaces",
+          icon: ReactIcons.topGameIcon,
+        },
         {
           title: "Top Collections",
           desc: "High-value collections with key metrics",
           link: "/research/nft/nft-rankings/top-collections",
-          icon: ReactIcons.topGameIcon,
-        },
-        {
-          title: "NFT Market",
-          desc: "Overview of the whole NFT market data",
-          link: "/research/nft/nft-market/market-overview",
-          icon: ReactIcons.gameMarketIcon,
-        },
-        {
-          title: "Top Marketplaces",
-          desc: "Stats and leaderboard of NFT Marketplace.",
-          link: "/research/nft/nft-rankings/top-marketplaces?date=past30days~",
           icon: ReactIcons.topMarketplacesIcon,
-        },
-        {
-          title: "Single Collection",
-          desc: "In-depth stats of the NFT's transaction, token, NFT etc.",
-          link: "/research/nft/nft-collections/single-collection",
-          icon: ReactIcons.topCollectionsByRoyaltyIcon,
         },
       ],
     },
