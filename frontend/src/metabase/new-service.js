@@ -862,3 +862,7 @@ export const getPeaTokenAPI = (params, config) => {
 export const getPeaTokenForTGAPI = (params, config) => {
   return POST(`api/v1/user/getPeaTokenForTG`, params, config);
 };
+
+export const getMediaTagTop = (params, config) => {
+  return POST(`api/v1/media/tagTop`, params, { silentFp: true, silent: true });
+};

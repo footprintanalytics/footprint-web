@@ -21,12 +21,21 @@ export default function Carroussel(props) {
   useEffect(() => {
     props.onChangeSlide(goToSlide)
   }, [goToSlide]);
+
   useEffect(() => {
     const table = props.cards.map((element, index) => {
       return { ...element, onClick: () => setGoToSlide(index) };
     });
     setCards(table);
   }, [props.cards]);
+
+  useEffect(() => {
+    const interval = setInterval(() => {
+      setGoToSlide((prevIndex) => (prevIndex + 1) % cards.length);
+    }, 5000);
+
+    return () => clearInterval(interval);
+  }, [cards.length]);
 
   return (
     // eslint-disable-next-line react/react-in-jsx-scope

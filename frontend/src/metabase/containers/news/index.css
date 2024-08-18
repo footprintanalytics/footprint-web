@@ -23,6 +23,7 @@
 }
 
 .news__wrap {
+  min-height: calc(100vh - 60px);
   padding-top: 60px;
   padding-bottom: 30px;
 }
@@ -275,6 +276,7 @@
   justify-content: center;
   max-width: 1350px;
   margin: 40px auto;
+  min-height: calc(100vh - 60px);
 }
 
 .news .edu__root {

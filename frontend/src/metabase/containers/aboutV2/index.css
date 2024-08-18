@@ -396,6 +396,9 @@
   display: flex;
   white-space: nowrap;
   gap: 40px;
+}
+
+.About__data-trusted-inner-anim {
   -webkit-animation: 120s swipe-left linear infinite normal;
   animation: 120s swipe-left linear infinite normal;
 }

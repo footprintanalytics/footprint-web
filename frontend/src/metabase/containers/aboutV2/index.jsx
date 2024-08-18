@@ -13,7 +13,6 @@ import AboutDataModel from "metabase/containers/aboutV2/components/AboutDataMode
 import AboutDataTrusted from "metabase/containers/aboutV2/components/AboutDataTrusted";
 import AboutDataCoverage from "metabase/containers/aboutV2/components/AboutDataCoverage";
 import AboutDemo from "metabase/containers/aboutV2/components/AboutDemo";
-import AboutDepth from "metabase/containers/aboutV2/components/AboutDepth";
 import AboutPartnerV2 from "metabase/containers/aboutV2/components/AboutPartnerV2";
 import HomeFooter from "../home/components/HomeFooter";
 import data from "./data";
@@ -22,12 +21,22 @@ import AboutStart from "./components/AboutStart";
 import AboutBanner from "./components/AboutBanner";
 import AboutSolutions from "./components/AboutSolutions";
 import AboutGrantedBy from "./components/AboutGrantedBy";
-import ResearchContent2 from "metabase/nav/containers/FpNavbar/components/ResearchContent2";
-
+import { useQuery } from "react-query";
+import { getMediaTagTop } from "metabase/new-service";
+import { QUERY_OPTIONS_NORMAL } from "metabase/containers/dashboards/shared/config";
+import { get } from "lodash";
 const About = props => {
   const {
     children,
   } = props;
+
+  const { data: articleTopData } = useQuery(
+    ["getMediaTagTop"],
+    async () => {
+      return await getMediaTagTop({ tag: "Monthly Reports" });
+    },
+    {...QUERY_OPTIONS_NORMAL },
+  );
 
   const defaultDesc =
     "Footprint Analytics is a blockchain data solutions provider. We leverage cutting-edge AI technology to help analysts, builders, and investors turn blockchain data and combine Web2 data into insights with accessible visualization tools and a powerful multi-chain API across 30+ chains for NFTs, games, wallet profiles, and money flow data.";
@@ -50,6 +59,8 @@ const About = props => {
     );
   };
 
+  const articleThumbnail = get(articleTopData, "[0].thumbnail")
+
   return (
     <>
       <Meta description={defaultDesc} keywords={keywords} title={title} link={"https://www.footprint.network/"}/>
@@ -62,7 +73,7 @@ const About = props => {
         <AboutDemo />
         <AboutDataCoverage />
         <LazyLoadAbout>
-          <AboutDataFeature />
+          <AboutDataFeature thumbnail={articleThumbnail}/>
         </LazyLoadAbout>
         <AboutDataModel />
         <AboutDataTrusted />
