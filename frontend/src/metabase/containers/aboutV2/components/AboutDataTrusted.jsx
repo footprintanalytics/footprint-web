@@ -1,9 +1,9 @@
 /* eslint-disable react/prop-types */
-import React, { useRef } from "react";
+import React, { useRef, useEffect, useState } from "react";
 import AboutImage from "metabase/containers/aboutV2/components/AboutImage";
 import { getOssUrl } from "metabase/lib/image";
 const AboutDataTrusted = () => {
-  const data = [
+  let data = [
     {
       name: "Heetae Lyu",
       desc: "NHN Corporation",
@@ -57,14 +57,40 @@ const AboutDataTrusted = () => {
       detail: "Footprint Analytics’ SQL service is incredibly intuitive, with well-crafted documentation and a top-notch tool for contract submission and decoding, excelling in both speed and completeness. The team is highly professional and technical, consistently providing thorough and effective answers to any questions."
     }
   ]
+  data = [data[data.length - 1], ...data]
   const newData = Array(30).fill().map(() => JSON.parse(JSON.stringify(data))).flat()
+
+  const [hasVisited, setHasVisited] = useState(false);
+  const ref = useRef(null);
+
+  useEffect(() => {
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach((entry) => {
+        if (entry.isIntersecting && !hasVisited) {
+          setHasVisited(true);
+          observer.unobserve(ref.current);
+        }
+      });
+    });
+
+    if (ref.current) {
+      observer.observe(ref.current);
+    }
+
+    return () => {
+      if (ref.current) {
+        observer.unobserve(ref.current);
+      }
+    };
+  }, [hasVisited]);
+
   return (
-    <div className="About__data-trusted">
+    <div className="About__data-trusted" ref={ref}>
       <h2 className="About__title">
         What Our Partners Are Saying
       </h2>
       <div className="About__data-trusted-inner">
-          <ul >
+          <ul className={`${hasVisited? "About__data-trusted-inner-anim" : ""}`}>
             {newData.map((item, index) =>
               <div key={index} className="About__data-trusted-carousel">
                 <div className={"About__data-trusted-detail"}>{item.detail}</div>

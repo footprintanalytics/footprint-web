@@ -4,9 +4,10 @@ import Carroussel from "metabase/containers/aboutV2/components/spide/Carroussel"
 import Card from "metabase/containers/aboutV2/components/spide/Card";
 import Link from "metabase/core/components/Link";
 
-const AboutDataFeature = () => {
+const AboutDataFeature = ({thumbnail}) => {
   const [current, setCurrent] = React.useState(0);
-  let cards = [
+  const articleThumbnail = thumbnail || "https://statichk.footprint.network/article/dca3b292-7abf-4d05-b5d2-f470ff37f186.png"
+  const cards = [
     {
       key: 1,
       title: "Games",
@@ -62,7 +63,7 @@ const AboutDataFeature = () => {
       title: "Reports",
       desc: "Stay ahead of the trend in blockchain industry. ",
       content: (
-        <Card imagen={"https://statichk.footprint.network/article/dca3b292-7abf-4d05-b5d2-f470ff37f186.png"} title={"Reports"}
+        <Card imagen={`${articleThumbnail}?x-oss-process=image/format,jpg/quality,q_80/resize,m_fill,h_410,w_780`} title={"Reports"}
               link={current === 5 ? "https://www.footprint.network/news/reports": ""}/>
       ),
       link: "https://www.footprint.network/news/reports",
