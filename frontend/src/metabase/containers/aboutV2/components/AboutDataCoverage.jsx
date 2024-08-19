@@ -25,12 +25,12 @@ const AboutDataCoverage = () => {
     {
       title: "Ethereum",
       img: getOssUrl("home-v2/chain/img-chain-Ethereum.png?image_process=resize,w_68/crop,h_68/format,png"),
-      link: "/research/chain/evm-evm-chain-stats/ethereum-overview",
+      link: "/research/chain/evm-chain-stats/ethereum-overview",
     },
     {
       title: "Ronin",
       img: getOssUrl("home-v2/chain/img-chain-Ronin.png?image_process=resize,w_68/crop,h_68/format,png"),
-      link: "/research/chain/evm-evm-chain-stats/ronin-overview",
+      link: "/research/chain/evm-chain-stats/ronin-overview",
     },
     {
       title: "Sui",
@@ -40,7 +40,7 @@ const AboutDataCoverage = () => {
     {
       title: "BNB Chain",
       img: getOssUrl("home-v2/chain/img-chain-BNB-chain.png?image_process=resize,w_68/crop,h_68/format,png"),
-      link: "/research/chain/evm-evm-chain-stats/bnb-chain-overview",
+      link: "/research/chain/evm-chain-stats/bnb-chain-overview",
     },
     {
       title: "Polygon",
@@ -100,7 +100,7 @@ const AboutDataCoverage = () => {
     {
       title: "Merlin",
       img: getOssUrl("home-v2/chain/img-chain-merlin.png?image_process=resize,w_68/crop,h_68/format,png"),
-      link: "/research/chain/evm-evm-chain-stats/merlin-overview",
+      link: "/research/chain/evm-chain-stats/merlin-overview",
     },
     {
       title: "Rootstock",
