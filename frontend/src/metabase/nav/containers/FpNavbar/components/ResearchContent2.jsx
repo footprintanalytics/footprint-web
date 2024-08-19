@@ -41,7 +41,7 @@ const ResearchContent2 = props => {
       title: "Chains",
       data: [
         {
-          title: "Bitcoin Sidechains",
+          title: "Bitcoin Sidechains 🔥",
           desc: "Built on Bitcoin.",
           link: "/research/chain/chain-ecosystem/bitcoin-sidechains",
           icon: ReactIcons.layerIcon,
@@ -61,22 +61,22 @@ const ResearchContent2 = props => {
         {
           title: "Single Chain Stats",
           desc: "Charts & statistics for a blockchain.",
-          link: "/research/chain/chain-stats/ethereum-overview?chain=Ethereum&series_date-85136=past90days~",
+          link: "/research/chain/evm-chain-stats/ethereum-overview?chain=Ethereum&series_date-85136=past90days~",
           icon: ReactIcons.singleGameIcon,
         },
       ],
     },
     {
-      title: "DeFI",
+      title: "DeFi",
       data: [
         {
-          title: "Bitcoin Bridge Overview",
+          title: "Bitcoin Bridge Overview 🔥",
           desc: "Assess bridged BTC balance on BTC sidechains.",
           link: "/research/chain/chain-ecosystem/bitcoin-bridge-overview",
           icon: ReactIcons.gameTokensIcon,
         },
         {
-          title: "Layer 2 Overview (Ethereum L2 Bridge Stats)",
+          title: "Ethereum L2 Bridge Stats",
           desc: "Explore the major L2 solutions and their official bridge activities. ",
           link: "/research/chain/chain-ecosystem/layer-2-overview",
           icon: ReactIcons.topGameIcon,
