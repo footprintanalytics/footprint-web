@@ -473,7 +473,7 @@ const chainData = [
         "publicUuid": "c1a9c758-013b-4935-8209-89d14719289b",
       },
       {
-        "label": "Ordinals_Inscriptions",
+        "label": "Ordinals Inscriptions",
         "value": "ordinals-inscriptions",
         "publicUuid": "a68d736b-10f1-4dc5-9353-abf725b4f853",
       },
