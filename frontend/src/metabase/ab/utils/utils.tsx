@@ -488,5 +488,5 @@ export function getGAFavoritedTemplate() {
 }
 
 export function getPeaHost() {
-  return isProduction ? "https://app.pea.ai" : "https://test.pea.ai";
+  return isProduction ? "https://app.pea.ai" : "https://dev.pea.ai";
 }
