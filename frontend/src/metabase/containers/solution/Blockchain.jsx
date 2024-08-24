@@ -47,9 +47,9 @@ const Blockchain = () => {
               link: "https://www.footprint.network/article/rootstock-and-footprint-analytics-powering-defi-ecosystem-growth-with-data-driven-insights-fp-7WupJH8I",
             },
             {
-              title: "Footprint Analytics Integrates Data Solutions on Ronin Network",
-              img: "https://statichk.footprint.network/article/50e53359-6bd9-4793-8c64-9610056c421f.png",
-              link: "https://www.footprint.network/article/footprint-analytics-integrates-data-solutions-on-ronin-network-KgAq6WGF",
+              title: "Footprint Analytics Enhances Data Insights for the Arbitrum Ecosystem",
+              img: "https://statichk.footprint.network/article/74e9aa49-c510-4fbd-a7d5-3e58eee7e76d.png?image_process=resize,w_378/crop,h_214/format,png",
+              link: "https://www.footprint.network/article/footprint-analytics-enhances-data-insights-for-the-arbitrum-ecosystem-7zphDrd9",
             },
           ]
         }/>
