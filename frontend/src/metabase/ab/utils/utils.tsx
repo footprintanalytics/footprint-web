@@ -488,5 +488,5 @@ export function getGAFavoritedTemplate() {
 }
 
 export function getPeaHost() {
-  return isProduction ? "https://app.ton.ai" : "https://growthly-dev.footprint.network";
+  return isProduction ? "https://growthly.footprint.network" : "https://dev-growthly.footprint.network";
 }
