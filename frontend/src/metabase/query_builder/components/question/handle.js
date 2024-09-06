@@ -462,6 +462,15 @@ export function getChainDataList({ includeAll = true }) {
           protocolName: "The Sandbox",
         }
       },
+      {
+        value: "gravity",
+        label: "Gravity",
+        icon: getOssUrl("fp-chains/gravity.png?image_process=resize,w_36/crop,h_36/format,webp"),
+        defaultProject: {
+          protocolSlug: "the-sandbox",
+          protocolName: "The Sandbox",
+        }
+      },
       /*{
         value: "wax",
         label: "Wax",
