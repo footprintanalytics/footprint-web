@@ -270,14 +270,14 @@ export const getProjectList = async params => {
         "protocolType": "NFT",
         "logo": ""
       },*/
-      {
+      /*{
         "projectId": 2,
         "projectName": "Gaming Demo Project",
         "protocolName": "Gaming Demo Project",
         "protocolSlug": "Gaming Demo Project",
         "protocolType": "NFT",
         "logo": ""
-      },
+      },*/
       {
         "projectId": 3,
         "projectName": "Gaming Demo Project 2",
@@ -286,14 +286,14 @@ export const getProjectList = async params => {
         "protocolType": "NFT",
         "logo": ""
       },
-      {
+      /*{
         "projectId": 4,
         "projectName": "Metaverse Demo Project",
         "protocolName": "Metaverse Demo Project",
         "protocolSlug": "Metaverse Demo Project",
         "protocolType": "NFT",
         "logo": ""
-      },
+      },*/
     ]
 
   // return GET(`/api/v1/project/list`, params);

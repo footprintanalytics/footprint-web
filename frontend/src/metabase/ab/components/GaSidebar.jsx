@@ -45,7 +45,7 @@ const GaSidebar = (props) => {
   const items = menuData?.menuTabs || [];
   const itemsPlatform = menuData?.platformMenuTabs || [];
   const totalItems = [...items, ...itemsPlatform].filter(Boolean);
-  const showPlatform = isABPath()
+  const showPlatform = false
 
   useEffect(() => {
     if (currentMenu && totalItems?.length > 0) {
