@@ -383,7 +383,7 @@ export const getDashboardMap = (businessType, project, chain) => {
     ["token_leaderboard", "f36c338b-d213-4071-9d92-66c7d575f7cb"],
     ["telegram", "5aa8809b-296f-4ac9-b7c1-4a713abed1df"],
     ["ecosystem_wallet", "9f96361e-d423-4239-9f97-7e6277793829"],
-    ["asset_overview", "f75f67b8-4801-4116-b3b0-f1171b500ba4"],
+    ["asset_overview", "4ae6d57f-1c69-4a86-bc78-9b4d5dde69ee"],
 
     ["project_key_metrics", "159d8c0e-f1b9-4449-a6b1-7ee51de47563"],
     ["project_holder_overlap", "994ab322-671c-479a-a835-2e28d16b326e"],
