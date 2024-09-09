@@ -44,8 +44,8 @@ const GaProjectSearch = props => {
   ]
   const defaultProject =
     {
-      protocolSlug: "Gaming Demo Project",
-      protocolName: "Gaming Demo Project",
+      protocolSlug: "Gaming Demo Project 2",
+      protocolName: "Gaming Demo Project 2",
     }
 
   const loadProjectDetail = protocolSlug => {
