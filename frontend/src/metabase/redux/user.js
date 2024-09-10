@@ -442,8 +442,8 @@ export const refreshCurrentFgaProjectNew = createThunkAction(
             "protocolSlug": "Gaming Demo Project 2",
             "contractAddress": [
               {
-                "chain": "Polygon",
-                "address": "0x95fcb7f46f1e652fdf23db087c0f24011775be00",
+                "chain": "Ethereum",
+                "address": "0x59325733eb952a92e069C87F0A6168b29E80627f",
                 "standard": "ERC721"
               },
               {
@@ -486,7 +486,7 @@ export const refreshCurrentFgaProjectNew = createThunkAction(
             "tokenAddress": [
               {
                 "chain": "Ethereum",
-                "address": "0x97bbbc5d96875fb78d2f14b7ff8d7a3a74106f17",
+                "address": "0x1f9840a85d5af5bf1d1762f925bdaddc4201f984",
                 "symbol": "ASTRAFER",
                 "name": "Astrafer"
               },
@@ -494,7 +494,7 @@ export const refreshCurrentFgaProjectNew = createThunkAction(
             "nftCollectionAddress": [
               {
                 "chain": "Polygon",
-                "address": "0x95fcb7f46f1e652fdf23db087c0f24011775be00",
+                "address": "0x59325733eb952a92e069C87F0A6168b29E80627f",
                 "standard": "ERC721"
               },
               {

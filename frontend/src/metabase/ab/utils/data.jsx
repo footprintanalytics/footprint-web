@@ -379,7 +379,7 @@ export const getDashboardMap = (businessType, project, chain) => {
     ["gaming_engagement", "e2695683-3c8c-4462-92db-e32bc6f50050"],
     ["wallet_retention", "9a19edda-1c4c-4aa5-95fc-921304f8f8fd"],
     ["user_retention", "320e0a60-107c-44cb-83e3-7c8301354968"],
-    ["wallet_profile2", "fa040fe5-46b3-483b-b257-aa2373559fab"],
+    ["wallet_profile2", "bff3c209-9d4c-4e75-96dd-9676b184bbfa"],
     ["token_leaderboard", "f36c338b-d213-4071-9d92-66c7d575f7cb"],
     ["telegram", "5aa8809b-296f-4ac9-b7c1-4a713abed1df"],
     ["ecosystem_wallet", "9f96361e-d423-4239-9f97-7e6277793829"],
