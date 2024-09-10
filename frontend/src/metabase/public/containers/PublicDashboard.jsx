@@ -80,7 +80,8 @@ const mapStateToProps = (state, props) => {
       projectProtocolSlug = "gamee";
     }
     if (projectProtocolSlug === "Gaming Demo Project 2") {
-      projectProtocolSlug = "phantom-galaxies";
+      // projectProtocolSlug = "phantom-galaxies";
+      projectProtocolSlug = "the-sandbox";
     }
     if (projectProtocolSlug === "Metaverse Demo Project") {
       projectProtocolSlug = "the-sandbox";
