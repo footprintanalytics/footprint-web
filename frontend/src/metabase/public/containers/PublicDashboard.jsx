@@ -517,10 +517,10 @@ class PublicDashboard extends Component {
     } = this.props
     const array = project?.nftCollectionAddress?.filter(filterChainFunction)
     let defaultNftCollectionAddress = array?.[0]?.address
-    const storageAddress = window.localStorage.getItem(`${project?.projectName}-nftCollectionAddress`)
+    /*const storageAddress = window.localStorage.getItem(`${project?.projectName}-nftCollectionAddress`)
     if (storageAddress && array?.map(i => i.address)?.includes(storageAddress)) {
       defaultNftCollectionAddress = storageAddress
-    }
+    }*/
     return defaultNftCollectionAddress
   }
 
