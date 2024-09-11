@@ -446,7 +446,7 @@ export const refreshCurrentFgaProjectNew = createThunkAction(
                 "address": "0x59325733eb952a92e069C87F0A6168b29E80627f",
                 "standard": "ERC721"
               },
-              {
+              /*{
                 "chain": "Polygon",
                 "address": "0x97e114d21063a331312bea8cf00db2b580238003",
                 "standard": "ERC721"
@@ -481,7 +481,7 @@ export const refreshCurrentFgaProjectNew = createThunkAction(
                 "address": "0x97bbbc5d96875fb78d2f14b7ff8d7a3a74106f17",
                 "symbol": "ASTRAFER",
                 "name": "Astrafer"
-              },
+              },*/
             ],
             "tokenAddress": [
               {
@@ -498,11 +498,11 @@ export const refreshCurrentFgaProjectNew = createThunkAction(
                 "standard": "ERC721"
               },
               {
-                "chain": "Polygon",
-                "address": "0x97e114d21063a331312bea8cf00db2b580238003",
+                "chain": "Ethereum",
+                "address": "0x1f9840a85d5af5bf1d1762f925bdaddc4201f984",
                 "standard": "ERC721"
               },
-              {
+              /*{
                 "chain": "Polygon",
                 "address": "0x2ed9bdbf99c28082e3565395cbce61623b2689b9",
                 "standard": "ERC721"
@@ -526,7 +526,7 @@ export const refreshCurrentFgaProjectNew = createThunkAction(
                 "chain": "Ethereum",
                 "address": "0x39fa15e7dffd76bdeec83c9a1a8ef023661c9b6c",
                 "standard": "ERC721"
-              },
+              },*/
             ],
             "protocolType": "NFT",
             "protocolName": "Gaming Demo Project 2",
