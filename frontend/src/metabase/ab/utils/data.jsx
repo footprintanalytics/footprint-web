@@ -405,6 +405,16 @@ const getLabel = ({label, tip}) => {
   return <div className="flex align-center">{label}{tip && <Tooltip title={tip}><Icon className="ml1" name={"info"} size={12}/></Tooltip>}</div>
 }
 
+// eslint-disable-next-line react/prop-types
+const GaIconLayout = ({children}) => {
+  return (
+    <div className="flex align-center" style={{gap: 6}}>
+      {children}
+      <Icon name="ga" size={16}/>
+    </div>
+  )
+}
+
 export const fga_menu_data_v2 = (businessType, project, chain, user) => {
   if (businessType === "vc") {
     return {
@@ -524,9 +534,9 @@ export const fga_menu_data_v2 = (businessType, project, chain, user) => {
       // (project?.nftCollectionAddress?.length > 0 || project?.tokenAddress?.length > 0) &&
       getItem("Project Overview", "asset_overview", null),
       getItem(getLabel({label: "Users", tip: "Presented here are the statistics using Web3 wallets that have interacted with the project's on-chain contracts, as well as Web2 users involved in off-chain activities."}), "users", ReactIcons.userIcon, [
-        getItem("User Acquisition", "acquisition_users", null),
-        getItem("User Engagement", "gaming_engagement", null),
-        getItem("User Retention", "user_retention", null),
+        getItem(<GaIconLayout>User Acquisition</GaIconLayout>, "acquisition_users", null),
+        getItem(<GaIconLayout>User Engagement</GaIconLayout>, "gaming_engagement", null),
+        getItem(<GaIconLayout>User Retention</GaIconLayout>, "user_retention", null),
         getItem("Wallet Engagement", "wallet_engagement", null),
         getItem("Wallet Retention", "wallet_retention", null),
         getItem("Wallet Profile", "wallet_profile2", null),
