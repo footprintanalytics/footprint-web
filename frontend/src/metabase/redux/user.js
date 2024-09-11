@@ -493,7 +493,7 @@ export const refreshCurrentFgaProjectNew = createThunkAction(
             ],
             "nftCollectionAddress": [
               {
-                "chain": "Polygon",
+                "chain": "Ethereum",
                 "address": "0x59325733eb952a92e069C87F0A6168b29E80627f",
                 "standard": "ERC721"
               },
