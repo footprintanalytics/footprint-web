@@ -4,6 +4,7 @@ import { ReactIcons } from "../../nav/containers/FpNavbar/utils/data";
 import Icon from "metabase/components/Icon";
 import { getChainDataList } from "../../query_builder/components/question/handle";
 import { Tooltip } from "antd";
+import GAIcon from "metabase/ab/utils/GAIcon";
 //public/dashboard/uuid
 export const wallet_profile_link =
   "/fga/public/dashboard/fdcf253d-24b4-4f6e-839e-3880242041a8"; //query: wallet_address
@@ -410,7 +411,7 @@ const GaIconLayout = ({children}) => {
   return (
     <div className="flex align-center" style={{gap: 6}}>
       {children}
-      <Icon name="ga" size={16}/>
+      <GAIcon />
     </div>
   )
 }
