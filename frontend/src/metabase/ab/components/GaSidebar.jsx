@@ -167,6 +167,11 @@ const GaSidebar = (props) => {
               onSelect={item => {
                 saveLatestGAMenuTag(item.key);
                 if (isABPath()) {
+                  if (item.key === 'quest') {
+                    window.open('https://t.me/GrowthlyBot/App', '_blank')
+                    return
+                  }
+
                   router.push({
                     pathname: getGrowthProjectPath(
                       currentProject ?? getLatestGAProject() ?? "",
