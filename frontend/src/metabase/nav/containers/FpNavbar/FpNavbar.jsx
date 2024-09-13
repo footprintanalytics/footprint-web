@@ -102,6 +102,12 @@ const leftMenuData = [
         desc: "All-in-one analytics integrating Web3 and Web2 for growth.",
         link: "/fga",
       },
+      {
+        title: "Growthly",
+        desc: "White-label Telegram quest tool.",
+        link: "https://t.me/GrowthlyBot/App",
+        externalLink: true,
+      },
     ],
   },
   {
