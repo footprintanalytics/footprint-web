@@ -168,7 +168,7 @@ const GaSidebar = (props) => {
                 saveLatestGAMenuTag(item.key);
                 if (isABPath()) {
                   if (item.key === 'quest') {
-                    window.open('https://t.me/GrowthlyBot/App', '_blank')
+                    window.open('https://app.ton.ai/app', '_blank')
                     return
                   }
 
