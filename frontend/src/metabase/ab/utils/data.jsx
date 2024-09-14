@@ -582,7 +582,7 @@ export const fga_menu_data_v2 = (businessType, project, chain, user) => {
         getItem("Users", "user_retention", null),
       ]),*/
       getItem(getLabel({label: "Community", tip: "Presented below are the metrics illustrating the growth of the Project community on both the Telegram and Discord platforms.\n"}), "social_stats", <ShrinkOutlined />, [
-          getItem("Community sentiment", "community_sentiment", null),
+          getItem("Community Sentiment", "community_sentiment", null),
           getItem("Telegram", "telegram", null),
           getItem("Discord", "discord", null),
         ]
