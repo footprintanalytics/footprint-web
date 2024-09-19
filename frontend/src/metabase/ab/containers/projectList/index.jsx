@@ -41,7 +41,7 @@ const projectList = props => {
     message.success("Delete project successfully");
     console.log("deleteAction", record, projectObject)
     if (record.protocolSlug === projectObject.protocolSlug) {
-      router.replace(getGrowthProjectPath("Gaming Demo Project"))
+      router.replace(getGrowthProjectPath("Gaming Demo Project 2"))
     }
   }
 
