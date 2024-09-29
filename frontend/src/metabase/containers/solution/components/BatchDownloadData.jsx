@@ -32,7 +32,7 @@ const BatchDownloadData = props => {
         <div className="solution__best-header">
           <span className="solution__best-header-text">Case Studies :</span>
           <Link to="/news/blog?category=product&subMenu=Use%20Case">
-            <span className="solution__best-header-text">{"More / All >"}</span>
+            <span className="solution__best-header-text">{"View More >"}</span>
           </Link>
         </div>
         <ul>
