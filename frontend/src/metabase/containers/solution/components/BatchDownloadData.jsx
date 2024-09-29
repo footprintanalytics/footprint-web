@@ -31,7 +31,9 @@ const BatchDownloadData = props => {
       <div className="solution__best-practices">
         <div className="solution__best-header">
           <span className="solution__best-header-text">Case Studies :</span>
-          {/*<span className="solution__best-header-text">{"View All >"}</span>*/}
+          <Link to="/news/blog?category=product&subMenu=Use%20Case">
+            <span className="solution__best-header-text">{"More / All >"}</span>
+          </Link>
         </div>
         <ul>
           {practices.map(item => {
