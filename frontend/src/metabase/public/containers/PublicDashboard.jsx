@@ -51,6 +51,7 @@ import { trackStructEvent } from "metabase/lib/analytics";
 import { isABPath, isBusinessTypePath, isFGAVCPath } from "metabase/ab/utils/utils";
 import { refreshCurrentUser } from "metabase/redux/user";
 import Link from "metabase/core/components/Link";
+import MetaViewportControls from "metabase/dashboard/hoc/MetaViewportControls";
 
 const mapStateToProps = (state, props) => {
   const user = getUser(state);
@@ -800,5 +801,6 @@ export default _.compose(
     ({ disableUpdateTitle, dashboard }) =>
       !disableUpdateTitle && dashboard && dashboard.name,
   ),
+  MetaViewportControls,
   DashboardControls,
 )(PublicDashboard);
